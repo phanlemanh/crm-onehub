@@ -1,0 +1,132 @@
+schema_version: 1
+slug: mien-so-chup-bo-okr-mau
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.msb_xanh
+    paths: [apps/**, packages/**, _acceptance/so-okr-tu-chay/rang/soi-ma.mjs, _acceptance/config.yaml, _acceptance/mien-so-chup-bo-okr-mau/rang/xanh.mjs]
+    expected: >-
+      exit 0. Script suy gốc kho từ vị trí của nó, đọc nguyên văn lệnh của E8 từ khoá
+      executors.script.sot_soi_chi_them trong _acceptance/config.yaml (không chép tay lệnh), chạy nó làm
+      tiến trình con trên cây thật. Khẳng định, mỗi điều một dòng "dat|HONG <điều>": mã con == 0;
+      dòng bắt đầu "chot mien bo mau:" === "chot mien bo mau: C1 dat · C2 dat · C3 dat · C4 dat";
+      số dòng bắt đầu "mien " === 2 và tập của chúng === {"mien apps/api/scripts/okr-mau/nap.ts:<d1>
+      createMany trong napTrong", "mien apps/api/scripts/okr-mau/nap.ts:<d2> deleteMany trong xoaTrong"}
+      với d1, d2 rút bằng tìm dòng chứa "okrSoChup.createMany" / "okrSoChup.deleteMany" trong nap.ts
+      (mỗi chuỗi đúng một dòng — khác một → "KHONG DO DUOC", exit 2); số dòng bắt đầu "tao " === 3 và
+      tập (tệp, hàm) === {(okr-chup.ts, ghiBangTinh), (okr-so.service.ts, ghiSoKr), (okr-chi-so.ts,
+      chupKrCrm)}; có "vi pham: 0". Một điều HONG → exit 1. CHIỀU ĐỎ của cùng lệnh nằm ở E2, E3.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.msb_do_ngoai
+    paths: [_acceptance/so-okr-tu-chay/rang/soi-ma.mjs, _acceptance/config.yaml, _acceptance/mien-so-chup-bo-okr-mau/rang/do-mien.mjs, apps/api/scripts/okr-mau.ts, apps/api/scripts/okr-mau/**]
+    expected: >-
+      exit 0. Script suy gốc kho từ vị trí của nó, đọc lệnh E8 từ config, chép tệp thật vào tmpdir,
+      phá bản sao, gọi lệnh E8 kèm "--thay <tệp trong kho>=<bản sao>" làm tiến trình con. ĐỐI CHỨNG
+      DƯƠNG trước (không --thay): mã 0, đúng hai dòng "mien", chốt bốn "dat" — hỏng thì "DOI CHUNG
+      HONG", exit 1. MA TRẬN viết trước, mười ô (số ô in ra phải == 10): n1 nap.ts hàm mới gọi
+      tx.okrSoChup.deleteMany → "(deleteMany)"; n2 nap-canh-kr.ts hàm mới gọi deleteMany →
+      "(deleteMany)"; n3 updateMany trong xoaTrong → "(updateMany)"; n4 tx.$executeRaw DELETE FROM
+      "okrSoChup" trong xoaTrong → "(SQL thô $executeRaw)"; n5 createMany trong xoaTrong → "tạo ngoài
+      chỗ được phép … (createMany trong xoaTrong)"; n6 createMany trong hàm mới của nap.ts → "(createMany
+      trong <hàm>)"; n7 deleteMany trong napTrong → "(deleteMany)"; n8 delete một hàng trong xoaTrong →
+      "(delete)"; n9 upsert trong napTrong → "(upsert)"; n10 "soChup: { create: … }" lồng trong napTrong
+      → "(soChup.create trong napTrong)". Mỗi ô: mã con == 1; stdout chứa câu ghim nguyên văn với
+      "<bản sao>:<dòng>" là dòng của lời gọi chèn tính trên bản sao; tập dòng "mien" bằng đúng hai dòng
+      của đối chứng (số dòng tính lại trên bản sao); dòng chốt bốn "dat". In "ngoai: <bắt>/10 bi bat";
+      ô lọt → "LOT <ô>: <điều sai>", exit 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.msb_do_chot
+    paths: [_acceptance/so-okr-tu-chay/rang/soi-ma.mjs, _acceptance/config.yaml, _acceptance/mien-so-chup-bo-okr-mau/rang/do-mien.mjs, apps/api/scripts/okr-mau.ts, apps/api/scripts/okr-mau/**, apps/api/src/okr/okr-so.service.ts]
+    expected: >-
+      exit 0. Cùng khung với E2 (đối chứng dương trước, lệnh E8 đọc từ config + --thay). MA TRẬN
+      viết trước, mười ba ô, mỗi ô vỡ đúng một vế (số ô in ra phải == 13): c1a deleteMany của okrSoChup
+      trong xoaTrong thành "deleteMany({})"; c1b thành "deleteMany()"; c2a okr-mau.ts thay
+      "kiemDuocNap(process.env)" bằng một object hằng; c2b bỏ khối "if (!chan.cho) { … }"; c2c thêm
+      'import "./okr-mau/lenh";' tĩnh ở đầu okr-mau.ts; c3a bỏ "await kiemOkrThat(tx);" trong xoaBoOkrMau;
+      c3b bỏ nó trong napBoOkrMau; c3c thêm "const f = xoaTrong;" ở cuối nap.ts; c3d lenh.ts nhập
+      xoaTrong từ "./nap" và gọi nó trong một hàm mới; c4a..c4d okr-so.service.ts thêm lần lượt nhập
+      tĩnh, import() động trong một hàm, require, "export { xoaTrong } from" tới
+      "../../scripts/okr-mau/nap". Mỗi ô: mã con == 1; dòng chốt === dòng kỳ vọng có đúng chốt của ô
+      là "vo", ba chốt kia "dat"; câu ghim nguyên văn: c1* "miễn bộ mẫu không áp: deleteMany trong
+      xoaTrong không lọc keyResultId"; c2* "miễn bộ mẫu không áp: apps/api/scripts/okr-mau.ts không chặn
+      bằng kiemDuocNap trước khi nạp ./okr-mau/lenh"; c3a "miễn bộ mẫu không áp: xoaBoOkrMau gọi
+      xoaTrong mà không gọi kiemOkrThat trước"; c3b "… napBoOkrMau gọi xoaTrong mà không gọi kiemOkrThat
+      trước"; c3c "miễn bộ mẫu không áp: <bản sao nap.ts>:<dòng> dùng xoaTrong ngoài lời gọi có chốt";
+      c3d "… <bản sao lenh.ts>:<dòng gọi> dùng xoaTrong ngoài lời gọi có chốt"; c4* "miễn bộ mẫu không
+      áp: <bản sao okr-so.service.ts> nhập okr-mau/nap từ ngoài công cụ okr:mau". Quan hệ: ô c2*, c3*,
+      c4* → stdout có CẢ "okrSoChup bị sửa: …nap.ts:<d2> (deleteMany)" VÀ "okrSoChup tạo ngoài chỗ được
+      phép: …nap.ts:<d1> (createMany trong napTrong)" và 0 dòng "mien"; ô c1* → có "bị sửa …
+      (deleteMany)" và đúng một dòng "mien … createMany trong napTrong". In "chot: <bắt>/13 bi bat";
+      ô lọt → "LOT <ô>: <điều sai>", exit 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.msb_do_cu
+    paths: [_acceptance/so-okr-tu-chay/rang/soi-ma.mjs, _acceptance/mien-so-chup-bo-okr-mau/rang/do-mien.mjs]
+    expected: >-
+      exit 0. Script chạy "soi-ma.mjs --ca chi-them --chieu-do" và đòi mã 1 cùng dòng
+      "chieu do: 2/2 ban sao bi bat"; chạy "soi-ma.mjs" không --ca và "--ca la" và đòi mã 2 cùng
+      chuỗi "KHONG DO DUOC". In "cu: 3/3 giu hanh vi"; lệch → "LECH <lệnh>: ma <m>", exit 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.msb_van_ban
+    paths: [_acceptance/so-okr-tu-chay/contract.md, _acceptance/so-okr-tu-chay/evals.yaml, _acceptance/so-okr-tu-chay/rang/soi-ma.mjs, docs/api.md, _acceptance/mien-so-chup-bo-okr-mau/rang/van-ban.mjs]
+    expected: >-
+      exit 0. Script rút tập (tệp, hàm) từ hằng DUOC_TAO và MIEN_BO_MAU trong mã nguồn soi-ma.mjs
+      (không chép tay danh sách). Kiểm, ghi một dòng mỗi điều: mọi tệp của hai bảng có trong câu AC-4
+      hoặc AC-14 của hợp đồng so-okr-tu-chay VÀ trong đoạn docs/api.md bắt đầu "**`okrSoChup` is
+      append-only history.**" (tới gạch đầu dòng kế); "okr:mau", "kiemDuocNap", "kiemOkrThat" có trong
+      câu AC-4 của hợp đồng, trong expected của E8, và trong đoạn docs; đoạn docs không chứa "three
+      places only" (so sau khi gộp khoảng trắng); Notes của hợp đồng có "mien-so-chup-bo-okr-mau". CHIỀU
+      ĐỎ trên fixture thật: cùng hàm kiểm chạy trên bản ba tệp ở commit 9c65f368 (git show) phải đỏ và
+      in các câu ghim "thieu <tep|hàm|chữ> o <hop-dong AC-4|E8|docs>" cùng "con 'three places only' o
+      docs"; bản cũ mà xanh → "CHIEU DO LOT", exit 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: judgment
+    question: >-
+      Chỉ đọc đoạn bắt đầu "**`okrSoChup` is append-only history.**" trong docs/api.md (tới gạch đầu
+      dòng kế) và hai câu AC-4, AC-14 trong mục Criteria của hợp đồng so-okr-tu-chay — bỏ qua mọi phần
+      khác của hai tệp. Một kỹ sư không mở thước có hiểu đúng bốn điều không: (1) bảng okrSoChup chỉ
+      thêm và ba chỗ sản phẩm được tạo hàng; (2) công cụ dev okr:mau được tạo và xoá bản chụp của KR
+      mẫu; (3) vì sao điều đó không đụng lịch sử số thật — chỉ chạy trên máy cục bộ (kiemDuocNap) và chỉ
+      trên kho chưa có OKR thật (kiemOkrThat); (4) miễn mất khi một chốt vỡ. Câu sửa có nới lời hứa về
+      lịch sử số thật của sản phẩm ở chỗ nào không?
+    inputs: [docs/api.md, _acceptance/so-okr-tu-chay/contract.md]
+    expected: >-
+      PASS khi đoạn và hai câu đủ bốn ý và không chỗ nào nới lời hứa cho dữ liệu thật; FAIL nêu chỗ và
+      ý thiếu hoặc câu nới.
+    evidence_required: [run_id, verdict, rationale]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.msb_pham_vi
+    paths: [_acceptance/mien-so-chup-bo-okr-mau/**]
+    expected: >-
+      exit 0. Hai nguồn tệp, mỗi nguồn in danh sách của nó: (i) "git log --no-merges --name-only --
+      _acceptance/mien-so-chup-bo-okr-mau" — mọi commit chạm hồ sơ này, gom MỌI tệp chúng đổi (không lọc
+      theo thông điệp); 0 commit → "KHONG DO DUOC: khong commit nao cham ho so", exit 2; (ii) khi
+      "git merge-base HEAD origin/onehub" khác HEAD: "git diff --name-only <merge-base> HEAD"; bằng HEAD
+      (đã gộp) → in "nhanh da gop — (ii) rong" và chỉ (i) chống lưng. Tệp nào dưới apps/ hay packages/ ở
+      (i) hoặc (ii) → "CHAM MA SAN PHAM: <tệp>", exit 1. ĐỐI CHỨNG ÂM trên fixture thật: cùng hàm phân
+      loại chạy trên danh sách tệp của commit e3e2f252f (git show --name-only) phải nêu "CHAM MA SAN
+      PHAM: apps/api/scripts/okr-mau/nap.ts" — không nêu → "DOI CHUNG LOT", exit 1.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

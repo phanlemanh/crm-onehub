@@ -1015,6 +1015,12 @@ executors:
     kto_ngan_ui: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/sheet-khung.dom.tsx'
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
+    msb_xanh: bun _acceptance/mien-so-chup-bo-okr-mau/rang/xanh.mjs
+    msb_do_ngoai: bun _acceptance/mien-so-chup-bo-okr-mau/rang/do-mien.mjs --ca ngoai
+    msb_do_chot: bun _acceptance/mien-so-chup-bo-okr-mau/rang/do-mien.mjs --ca chot
+    msb_do_cu: bun _acceptance/mien-so-chup-bo-okr-mau/rang/do-mien.mjs --ca cu
+    msb_van_ban: bun _acceptance/mien-so-chup-bo-okr-mau/rang/van-ban.mjs
+    msb_pham_vi: bun _acceptance/mien-so-chup-bo-okr-mau/rang/pham-vi.mjs
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
     htbt_man_thanh: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hydrat-thanh-bieu-tuong/rang/man-thanh.mjs"'
