@@ -29,6 +29,7 @@ import {
 	moHoiCrm,
 	type Nguoi,
 	trangDaDuyet,
+	type VaoCongCu,
 } from "./support/tro-ly-kho-gia";
 
 const BANG = "| Tầng 2 | 2 – 10 tỷ | 1,2% |";
@@ -357,6 +358,39 @@ describe("tlk-tu-choi", () => {
 		const h = await db.taiLieuHoi.findUniqueOrThrow({ where: { id: hang.id } });
 		expect(h.trangThai).toBe("TU_CHOI");
 		expect(h.cauHoi).toBe("Thử việc có hoa hồng không?");
+	});
+
+	test("tlk-tu-choi: cau Zalo dong trich-truot giu chu cau hoi; khuon nop doi cauHoi o ca hai loai", async () => {
+		const khuon = nopTraLoi.inputSchema as unknown as {
+			safeParse: (v: VaoCongCu) => { success: boolean };
+		};
+		const cau = [
+			{
+				chu: "Tầng 9 hưởng 9%.",
+				trich: [{ slug: hoaHong.slug, phienBan: 1, doan: BANG }],
+			},
+		];
+		expect(
+			khuon.safeParse({ loai: "tra-loi", cau }).success,
+			"tlk-tu-choi: tra-loi thieu cauHoi van qua khuon",
+		).toBe(false);
+		expect(
+			khuon.safeParse({ loai: "khong-biet" }).success,
+			"tlk-tu-choi: khong-biet thieu cauHoi van qua khuon",
+		).toBe(false);
+		const phienGoc = ma("ses-zalo");
+		const hang = await db.taiLieuHoi.create({
+			data: { nguoiHoiId: quanTri.id, kenh: "ZALO", phienId: phienGoc },
+		});
+		const cauHoi = "Tầng 9 hưởng bao nhiêu phần trăm?";
+		for (let k = 0; k < TAI_LIEU_AGENT.hoi.tranBac; k += 1) {
+			const vao = { loai: "tra-loi", cauHoi, cau };
+			expect(khuon.safeParse(vao).success).toBe(true);
+			await goiCongCu(nopTraLoi, vao, ctxConCua(phienGoc));
+		}
+		const h = await db.taiLieuHoi.findUniqueOrThrow({ where: { id: hang.id } });
+		expect(`${h.trangThai} ${h.lyDo}`).toBe("TU_CHOI trich-truot");
+		expect(h.cauHoi, "tlk-tu-choi: cau Zalo trich-truot mat chu").toBe(cauHoi);
 	});
 });
 
