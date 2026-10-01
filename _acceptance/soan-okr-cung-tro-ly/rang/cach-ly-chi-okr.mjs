@@ -223,14 +223,21 @@ async function doiVai(url, userId, vai) {
 }
 
 function cuaTrung({ cong = 0, dichCong, doiDau }) {
-	const may = createServer((req, res) => {
+	const may = createServer(async (req, res) => {
+		const phan = [];
+		for await (const c of req) phan.push(c);
+		const than = Buffer.concat(phan);
+		const dauVao = { ...doiDau(req.headers) };
+		delete dauVao["transfer-encoding"];
+		delete dauVao["content-length"];
+		if (than.length > 0) dauVao["content-length"] = String(than.length);
 		const ra = yeuCau(
 			{
 				host: "127.0.0.1",
 				port: dichCong,
 				path: req.url,
 				method: req.method,
-				headers: doiDau(req.headers),
+				headers: dauVao,
 			},
 			(tra) => {
 				const dau = { ...tra.headers };
@@ -243,7 +250,7 @@ function cuaTrung({ cong = 0, dichCong, doiDau }) {
 			if (!res.headersSent) res.writeHead(502);
 			res.end(`${e?.message ?? e}`);
 		});
-		req.pipe(ra);
+		ra.end(than);
 	});
 	return new Promise((xong, hong) => {
 		may.once("error", hong);
