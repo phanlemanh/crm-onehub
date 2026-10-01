@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { LocaleProvider } from "@crm/ui/components/locale-provider";
 import { TAI_LIEU_HOI } from "@crm/validation/tai-lieu-hoi";
+import { WORKSPACE_ROLES } from "@crm/validation/vai-workspace";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -162,6 +163,7 @@ mock.module("@/app/(app)/[slug]/tai-lieu/danh-sach-trang", () => ({
 
 const { HoiKho } = await import("@/app/(app)/[slug]/tai-lieu/hoi");
 const { DanhSach } = await import("@/app/(app)/[slug]/tai-lieu/danh-sach");
+const { coHoiCuaVai } = await import("@/app/(app)/[slug]/tai-lieu/co-hoi");
 
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
@@ -396,10 +398,10 @@ describe("tlk-man-hoi", () => {
 
 	test("tlk-man-hoi: vai okr khong co tab Hoi, vai khac co", async () => {
 		const luaChon = { toiId: "u1", chuTrang: [], donVi: [], trangDangDung: [] };
-		const tab = async (coHoi: boolean) => {
+		const tab = async (vai: string | null) => {
 			const goc = await mo(
 				<DanhSach
-					coHoi={coHoi}
+					coHoi={coHoiCuaVai(vai)}
 					loai={null}
 					luaChon={luaChon}
 					page={1}
@@ -413,7 +415,14 @@ describe("tlk-man-hoi", () => {
 			root = null;
 			return ten;
 		};
-		expect(await tab(false)).not.toContain("Hỏi");
-		expect(await tab(true)).toContain("Hỏi");
+		const thay: string[] = [];
+		for (const vai of [...WORKSPACE_ROLES, null]) {
+			if ((await tab(vai)).includes("Hỏi")) thay.push(String(vai));
+		}
+		expect(thay, "tlk-man-hoi: tab Hoi theo vai sai").toEqual([
+			"owner",
+			"admin",
+			"member",
+		]);
 	});
 });

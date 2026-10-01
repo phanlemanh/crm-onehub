@@ -1,4 +1,3 @@
-import { laVaiChiOkr, toWorkspaceRole } from "@crm/validation/vai-workspace";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShell } from "@/components/page-shell";
@@ -8,6 +7,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { coHoiCuaVai } from "./co-hoi";
 import { DangTaiDanhSach } from "./dang-tai";
 import { DanhSach } from "./danh-sach";
 import type { LuaChonTai } from "./hop-tai-nguon";
@@ -76,8 +76,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 			? queryClient.prefetchQuery(trpc.taiLieuNguon.list.queryOptions())
 			: null,
 	]);
-	const vai = workspace?.viewerRole;
-	const coHoi = vai ? !laVaiChiOkr(toWorkspaceRole(vai)) : false;
+	const coHoi = coHoiCuaVai(workspace?.viewerRole);
 	const luaChon: LuaChonTai = {
 		toiId: session.user.id,
 		...chonNguoi,
