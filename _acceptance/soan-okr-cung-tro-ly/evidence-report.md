@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: soan-okr-cung-tro-ly
-verdict: REJECT
-failed_evals: [E26]
+verdict: PENDING-JUDGMENT
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 62560bfc9ca841cc09ac3d314fa7ee9be9666192
+verified_commit: d233ae402ac2b74af562f2f807bc67317ddeb151
 human_signoff:
 ---
 
@@ -38,7 +38,7 @@ human_signoff:
 | E23 | AC-13 | test | PASS |
 | E24 | AC-13 | judgment | UNCERTAIN |
 | E25 | AC-14 | test | PASS |
-| E26 | AC-15 | script | FAIL |
+| E26 | AC-15 | script | PASS |
 | E27 | AC-15 | script | PASS |
 | E28 | AC-7 | script | PASS |
 | E29 | AC-15 | judgment | UNCERTAIN |
@@ -47,27 +47,59 @@ không chạy theo hồ sơ: E21, E22
 
 ## Evidence
 
+Vòng 4 chạy lại ba eval máy (E12, E26, E27) và bảy lệnh suite. Các eval còn lại được mang sang từ vòng gốc vì delta không chạm paths của chúng.
+
+- eval: E12
+  run_id: minted-soan-okr-cung-tro-ly-E12-r4
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.soan_man_trang_thai
+  verified_at: 2026-10-01T23:15:43Z
+  output: |
+    Ran 86 tests across 1 file. [7.93s]
+    __EXIT=0
+
+- eval: E26
+  run_id: minted-soan-okr-cung-tro-ly-E26-r4
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.soan_tai_lieu
+  verified_at: 2026-10-01T23:15:43Z
+  output: |
+    KET LUAN: that xanh, chieu do 37/37 — ma thoat 0
+    __EXIT=0
+
+- eval: E27
+  run_id: minted-soan-okr-cung-tro-ly-E27-r4
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.luat_kho_cay_du
+  verified_at: 2026-10-01T23:15:43Z
+  output: |
+    __EXIT=0
+
 - eval: E1
   run_id: minted-soan-okr-cung-tro-ly-E1-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.soan_quyen
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    test-run: dropped crm_mupt08gge54t_test
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E2
   run_id: minted-soan-okr-cung-tro-ly-E2-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.soan_cua
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    test-run: dropped crm_mupt07mkyvc7_test
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-soan-okr-cung-tro-ly-E3-r2
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_goi
   verified_at: 2026-10-01T08:44:54Z
   carried_from_round: 2
@@ -76,6 +108,7 @@ không chạy theo hồ sơ: E21, E22
 - eval: E4
   run_id: minted-soan-okr-cung-tro-ly-E4-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_to_chuc
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
@@ -84,6 +117,7 @@ không chạy theo hồ sơ: E21, E22
 - eval: E5
   run_id: minted-soan-okr-cung-tro-ly-E5-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_man_to_chuc
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
@@ -92,6 +126,7 @@ không chạy theo hồ sơ: E21, E22
 - eval: E6
   run_id: minted-soan-okr-cung-tro-ly-E6-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_trang_chien_luoc
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
@@ -100,6 +135,7 @@ không chạy theo hồ sơ: E21, E22
 - eval: E7
   run_id: minted-soan-okr-cung-tro-ly-E7-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_man_kho
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
@@ -108,24 +144,25 @@ không chạy theo hồ sơ: E21, E22
 - eval: E8
   run_id: minted-soan-okr-cung-tro-ly-E8-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.soan_app_rieng
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    test-run: dropped crm_mupt09tv6j8z_test
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E9
   run_id: minted-soan-okr-cung-tro-ly-E9-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.soan_tran
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    test-run: dropped crm_mupt105uc5qr_test
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E10
   run_id: minted-soan-okr-cung-tro-ly-E10-r2
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_bo_kiem
   verified_at: 2026-10-01T08:44:54Z
   carried_from_round: 2
@@ -134,42 +171,34 @@ không chạy theo hồ sơ: E21, E22
 - eval: E11
   run_id: minted-soan-okr-cung-tro-ly-E11-r2
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_nop_ghi
   verified_at: 2026-10-01T08:44:54Z
   carried_from_round: 2
   note: carry-forward tu round 2 — delta khong cham paths cua eval
 
-- eval: E12
-  run_id: minted-soan-okr-cung-tro-ly-E12-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.soan_man_trang_thai
-  verified_at: 2026-10-01T17:22:22Z
-  output: |
-    Ran 86 tests across 1 file. [10.36s]
-
 - eval: E13
   run_id: E13-r3-20261002-0025
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.script.soan_man_that
   verified_at: 2026-10-01T17:22:22Z
-  screenshot: evidence/E13-r3-step1-soan-nut-1440.png   # 26 frames E13-r3-step1..step26 trong evidence/; ban goc o .acceptance-runs/soan-okr-cung-tro-ly/man/ST-*.png
-  observed: |
-    Da mo tung khung bang Read. Nut «Soạn OKR cùng Trợ lý» nam trong thanh nut o 1440 va 390, khong tran; sheet mo dau co 3 cau hoi + 6 chip goi y, o 390 co hai tab Tro chuyen/Ban nhap; ban nhap, dong sua, dong da quyet, thieu dich (nut Dua vao mo + dong chan duoi), sua qua chat (nhan «vừa thêm», «đã bỏ»), hop xac nhan, the «Đã tạo 1 Mục tiêu nháp» voi nut «Xem ở Theo đơn vị» khong de len chu, danh sach cuoc («1/3 cuộc», trang thai «Đã đưa vào») khong con bi cat mep, va so do Bat/An o Cai dat deu hien dung chu va dieu khien o ca hai khung. Khong buoc nao tran ngang; so Muc tieu nhap doc lai (1) bang so dong Muc tieu da nhan (1), OkrTrail soan-okr co 4 hang, chieu do 0 sang 1 dat. Ghi nhan cho nguoi quyet o Cong 2: (a) buoc 8 chi kiem bang DOM, khong co anh rieng; (b) o 390 mot bong tron noi o goc phai-duoi che mot phan dong phu duoi nut Dua vao; (c) khung 390 sau khi dua vao hien o Khoi diem/Dich rong co nhan do vi trang hep duoc mo lai sau luot.
-  network_observed: n-a (driver)
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval; frame goc xem round 3 trong Iterations
 
 - eval: E14
   run_id: minted-soan-okr-cung-tro-ly-E14-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.soan_quyet_dua_vao
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    bai soan-okr-dua-vao.spec.ts xanh, khong con dong do
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E15
   run_id: minted-soan-okr-cung-tro-ly-E15-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_cuoc
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
@@ -178,24 +207,25 @@ không chạy theo hồ sơ: E21, E22
 - eval: E16
   run_id: minted-soan-okr-cung-tro-ly-E16-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.soan_nac
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    test-run: dropped crm_mupt08sg3e1p_test
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E17
   run_id: minted-soan-okr-cung-tro-ly-E17-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.soan_man_cai_dat
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    Ran 5 tests across 1 file. [1.58s]
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E18
   run_id: minted-soan-okr-cung-tro-ly-E18-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_so_do
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
@@ -204,6 +234,7 @@ không chạy theo hồ sơ: E21, E22
 - eval: E19
   run_id: minted-soan-okr-cung-tro-ly-E19-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_man_so_do
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
@@ -212,129 +243,109 @@ không chạy theo hồ sơ: E21, E22
 - eval: E20
   run_id: minted-soan-okr-cung-tro-ly-E20-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.soan_hong_chen
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    bai tich hop apps/agent-okr (hong-chen) va bai DOM soan-okr-hong.dom.tsx deu xanh
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
 
 - eval: E23
   run_id: minted-soan-okr-cung-tro-ly-E23-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_judge_zdr
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
   note: carry-forward tu round 1 — delta khong cham paths cua eval
 
-- eval: E24
-  judged_by: judge-subagent (fresh context)
-  verdict: UNCERTAIN
-  rationale: Bang cuoi muc «Chấm của chủ kho (E24)» trong evidence/eval-soan.md con trong cot «Người chọn» va «Khớp» o ca 5 cap; cot «Judge chọn» chi tro toi evidence/eval-soan-khoa.json (ngoai danh sach input). Chua co lua chon nao cua chu kho de so, nen khong tinh duoc ty le khop toi thieu 80 % (voi 5 cap la it nhat 4 cap khop). Con so 100 % (9/9) trong evidence la ty le ban co goi thang judge mu, khong phai muc khop giua judge va chu kho.
-  required_evidence:
-    - Cot «Người chọn» cua 5 cap trong bang cuoi muc «Chấm của chủ kho (E24)» o evidence/eval-soan.md, do chu kho dien A hoac B (chi nguoi cham dien duoc).
-    - Cot «Judge chọn» cua cung bang dien bang ket qua judge mu lay tu evidence/eval-soan-khoa.json (hoac dua tep do vao danh sach input), kem cot «Khớp» de dem so cap khop; PASS neu it nhat 4 tren 5 cap khop.
-  human_override:  # chi nguoi ghi
-
 - eval: E25
   run_id: minted-soan-okr-cung-tro-ly-E25-r1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.soan_bo_mau
   verified_at: 2026-10-01T07:47:23Z
   carried_from_round: 1
   note: carry-forward tu round 1 — delta khong cham paths cua eval
 
-- eval: E26
-  run_id: minted-soan-okr-cung-tro-ly-E26-r3
-  exit_code: 1
-  baseline: red
-  verifier: config:executors.script.soan_tai_lieu
-  verified_at: 2026-10-01T17:22:22Z
-  output: |
-    docs/chat-ui.md: tieu de «What is in the tree today» khong ghi «— 7» (dang ghi: ### What is in the tree today — 8)
-    docs/chat-ui.md: muc so khong ghi «exactly seven files»
-    tai-lieu: 2 loi
-    doi chung: SAI — chieu do chi bat 31/33 (hai chieu do pha-chat-ui-so-tieu-de va pha-chat-ui-so-cau khong doi duoc docs/chat-ui.md)
-    KET LUAN: thuoc bao do, chieu do 31/33
-  note: lenh do gan voi E26 (node _acceptance/soan-okr-cung-tro-ly/rang/tai-lieu.mjs); khong co lenh nao do ngoai eval nay
-
-- eval: E27
-  run_id: minted-soan-okr-cung-tro-ly-E27-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.luat_kho_cay_du
-  verified_at: 2026-10-01T17:22:22Z
-  output: |
-    KET LUAN: cay xanh (6/6 luat ap dung xanh, 0 khong ap dung, doi du luat), chieu do 32/32 — ma thoat 0
-
 - eval: E28
   run_id: minted-soan-okr-cung-tro-ly-E28-r3
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.soan_san_thiet_ke
   verified_at: 2026-10-01T17:22:22Z
-  output: |
-    KET LUAN 41 DUNG, 0 SAI — ma thoat 0
+  carried_from_round: 3
+  note: carry-forward tu round 3 — delta khong cham paths cua eval
+
+### Judgment (đề xuất panel — human_override để trống cho người quyết ở Cổng 2)
+
+- eval: E24
+  judged_by: judge-subagent (fresh context)
+  verdict: UNCERTAIN
+  rationale: panel giu nguyen tu round 3 — inputs khong doi, khong cham lai; rationale xem round do
+  panel_votes:
+    - domain-correctness: UNCERTAIN (r3)
+    - operational-feasibility: UNCERTAIN (r3)
+    - spec-alignment: UNCERTAIN (r3)
+  required_evidence:
+    - Cột «Người chọn» của bảng cuối mục «Chấm của chủ kho (E24)» trong _acceptance/soan-okr-cung-tro-ly/evidence/eval-soan.md, do chủ kho điền A hoặc B cho cả 5 cặp (chỉ người chấm điền được).
+    - Cột «Judge chọn» của cùng bảng điền bằng kết quả judge mù lấy từ evidence/eval-soan-khoa.json (hoặc đưa tệp đó vào input) để đếm số cặp khớp; ngưỡng đạt là ít nhất 4 trên 5.
+  human_override:  # chi nguoi ghi
 
 - eval: E29
   judged_by: judge-subagent (fresh context)
   verdict: UNCERTAIN
-  rationale: Ve con so tinh chinh thi sach — moi tran, nguong, han deu nam trong TRO_LY_OKR_SOAN, OKR.soan, TRO_LY_OKR_TRAN, BAN_NHAP_TRAN hay CUA_OKR; chi con ma trang thai HTTP va chi so thut le cua JSON.stringify viet thang, khong phai so tinh chinh. Ve khuon du lieu chua ket luan duoc: co cac kieu viet tay (CuocSoan, DonViCuoc, KyTruoc, CapTrenVaNgangCap, DongSoCrm) va zod TU_TIN khai o packages/db, ketQuaNop khai o apps/agent-okr; ba goc nhin deu khong biet AC-15 co tinh cac khuon nay hay khong, hoac co nguoi dung thu hai ngoai hai goi hay khong.
+  rationale: Cả ba người chấm đều thấy các con số tinh chỉnh sạch (nằm trong TRO_LY_OKR_SOAN, TRO_LY_OKR_TRAN, CUA_OKR, BAN_NHAP_TRAN, OKR.soan) nhưng không phân xử được phần khuôn dữ liệu, vì không có định nghĩa AC-15 nói kiểu TypeScript khai tay chiếu từ dòng Prisma ở packages/db/src (CuocSoan, DonViCuoc, KyTruoc, DongSoCrm, CapTrenVaNgangCap) có tính là khuôn phải để ở packages/validation/src hay không. Đề xuất panel là UNCERTAIN, người quyết ở Cổng 2.
+  panel_votes:
+    - domain-correctness: UNCERTAIN — Về con số tinh chỉnh thì sạch: ngưỡng, thời gian chờ, hệ số cắt, trần lượt, số ngày công bố đều nằm trong TRO_LY_OKR_SOAN, CUA_OKR hoặc TRO_LY_OKR_TRAN, chỗ dùng chỉ có phép suy ra từ đó. Về khuôn dữ liệu thì có dấu hiệu nhưng không đủ chứng cứ trong các tệp được phép đọc. packages/db/src/okr-goi-soan.ts khai tay KyTruoc, MucTieuKyDoc, KrKyDoc, CapTrenVaNgangCap, DongSoCrm và agent-okr nhận qua gói db; goi-soan.ts lại gán chúng vào MucTieuKy của validation. packages/db/src/okr-cuoc-soan.ts khai LOAI_DONG_NHAP có đúng ba giá trị "muc-tieu-moi", "kr-moi", "can-chinh-moi" mà validation cũng dùng làm DongSoan.loai. Không đọc được hai tệp validation đó thì không phân biệt được trùng khai thật với việc dẫn xuất từ một nguồn. Không có hợp đồng AC-15 thì cũng không biết kiểu TS khai tay đọc từ Prisma có tính là khuôn phải để ở validation hay không.
+    - operational-feasibility: UNCERTAIN — Các con số tinh chỉnh đều lấy từ object cấu hình (TRO_LY_OKR_SOAN, TRO_LY_OKR_TRAN, OKR.soan, CUA_OKR, BAN_NHAP_TRAN); không thấy số tinh chỉnh nào viết thẳng ở chỗ dùng, chỉ có mã HTTP, indent và slice(0,10). Về khuôn dữ liệu thì có hai chỗ mơ hồ: kiểu CapTrenVaNgangCap, KyTruoc, DongSoCrm, ChamVaTran, DonViCuoc khai ở packages/db/src/okr-goi-soan.ts rồi goi-soan.ts của agent-okr dùng; ketQuaNop khai trong agent-okr/nop-ban-nhap.ts. Danh sách tệp không cho thấy ai khác đọc chúng, và không có định nghĩa AC-15 nói kiểu suy ra từ truy vấn có tính là khuôn qua gói hay không, nên không đủ căn cứ để phán PASS hay FAIL.
+    - spec-alignment: UNCERTAIN — Về con số tinh chỉnh thì sạch: các tệp đọc đều lấy số từ TRO_LY_OKR_SOAN, TRO_LY_OKR_TRAN, BAN_NHAP_TRAN, OKR.soan hay CUA_OKR, còn số viết thẳng chỉ là mã trạng thái HTTP, slice(0,10) của ngày ISO và min(1). Về khuôn dữ liệu thì có một nhóm kiểu viết tay nằm ở packages/db/src (CuocSoan, DonViCuocSoan, DonViCuoc, KyTruoc, DongSoCrm, CapTrenVaNgangCap), đi từ gói db sang apps/api và apps/agent-okr. Chúng là phép chiếu dòng Prisma có kiểu chứ không phải payload hay cột Json (cột Json daCat đã có khuôn trong validation), nên không rõ AC-15 có tính chúng là khuôn phải đặt ở packages/validation/src hay không.
   required_evidence:
-    - Nguyen van AC-15 trong contract.md: luat «khuon di qua hai goi/hai app phai o packages/validation/src» co ap cho kieu viet tay suy tu Prisma trong packages/db/src (CuocSoan, DonViCuoc, KyTruoc, DongSoCrm, CAP_CUOC) hay chi cho Json/payload chua phan tich; neu ap thi doi thanh FAIL, neu chi ap cho Json/payload thi thanh PASS.
-    - Ket qua grep ketQuaNop / KetQuaNop / DongGiuNguyen tren apps va packages: neu co tep ngoai apps/agent-okr dung khuon nay thi FAIL; neu chi agent-okr dung thi khong vi pham.
-    - Ket qua grep TU_TIN va bo ba cao/vua/thap o packages va apps: neu packages/validation da co enum tuong duong thi ban TU_TIN trong packages/db/src/okr-goi-soan.ts la khuon khai trung ngoai validation.
-    - Doi chieu MucTieuKy/KrKyDoc o packages/validation/src/okr-tom-gon-ky.ts voi MucTieuKyDoc/KrKyDoc o packages/db/src/okr-goi-soan.ts, LOAI_DONG_NHAP voi LOAI_DONG_SOAN, va OKR.mau.moc voi SO_KR_MOC: neu hai ben khai song song doc lap thi FAIL.
-    - Mot cau trong contract.md hoac docs/api.md neu ro ma trang thai HTTP khong phai «con so tinh chinh».
+    - (domain-correctness) packages/validation/src/okr-tom-gon-ky.ts (đọc type MucTieuKy): nếu nó tự khai ten/diem/dieuHocDuoc/kr độc lập với MucTieuKyDoc và KrKyDoc trong packages/db/src/okr-goi-soan.ts, thì cùng một khuôn nằm ở hai gói và kết luận đổi thành không đạt; nếu db import hay dẫn xuất từ nó thì phần này đạt.
+    - (domain-correctness) packages/validation/src/okr-tro-ly.ts (đọc LOAI_DONG_SOAN và union DongSoan) kèm kết quả grep LOAI_DONG_NHAP trong toàn kho: nếu LOAI_DONG_NHAP có ba giá trị trùng LOAI_DONG_SOAN mà không dẫn xuất từ nhau thì không đạt; nếu không có chỗ nào dùng hoặc đã bị loại thì phần này đạt.
+    - (domain-correctness) Điều khoản AC-15 trong contract.md cho biết kiểu TS khai tay đọc từ Prisma như CuocSoan, DonViCuoc, CapTrenVaNgangCap trong packages/db/src có phải ở packages/validation/src hay không: nếu phải thì CuocSoan và các kiểu goi-soan không đạt ngay; nếu chỉ áp cho dữ liệu Json hay payload chưa định kiểu thì phần này đạt.
+    - (operational-feasibility) Văn bản AC-15 trong contract.md nói rõ «khuôn dữ liệu đi qua hai gói» có gồm kiểu TypeScript suy từ truy vấn Prisma (như CapTrenVaNgangCap, KyTruoc, DongSoCrm ở packages/db/src/okr-goi-soan.ts) hay chỉ gồm dữ liệu chưa định kiểu (cột Json, thân webhook) phải parse bằng Zod. Nếu chỉ tính dữ liệu chưa định kiểu thì kết luận thành đạt; nếu tính cả kiểu thì thành không đạt.
+    - (operational-feasibility) Kết quả grep -rnE "ketQuaNop|KetQuaNop" apps packages --include=*.ts --include=*.tsx ở gốc cây friendly-liskov-8d4458. Nếu có tệp trong apps/api hoặc apps/app nhập lại khuôn Zod ketQuaNop khai ở apps/agent-okr/agent/lib/nop-ban-nhap.ts thì đó là khuôn qua hai app khai ngoài packages/validation/src và kết luận thành không đạt. Nếu chỉ mình agent-okr dùng thì mục này không làm đổi kết luận.
+    - (operational-feasibility) Nội dung apps/api/src/okr/okr-config.ts (OKR.mau.moc, OKR.soan) và packages/validation/src/okr-kr.ts (SO_KR_MOC), để xác nhận hai nơi khai giá trị mốc startValue/targetValue (soan-dua-vao.ts dùng OKR.mau.moc, okr-cuoc-soan.ts dùng SO_KR_MOC) không lệch nhau. Nếu lệch hoặc khai trùng độc lập thì đó là con số tinh chỉnh có hai nguồn.
+    - (spec-alignment) Đoạn chữ của AC-15 trong contract.md (và mục cùng ý trong AGENTS.md) nói rõ «khuôn dữ liệu đi qua hai gói» có gồm kiểu viết tay chiếu từ dòng Prisma ở packages/db/src (CuocSoan, DonViCuoc, KyTruoc, DongSoCrm, CapTrenVaNgangCap) hay chỉ tính dữ liệu chưa có kiểu như cột Json và payload. Nếu chỉ tính dữ liệu chưa có kiểu thì kết luận là đạt, nếu tính cả phép chiếu có kiểu thì là không đạt.
+    - (spec-alignment) Danh sách nơi import ketQuaNop (apps/agent-okr/agent/lib/nop-ban-nhap.ts) và ThuocTinhPhien (apps/agent-okr/agent/lib/phien.ts), lấy bằng grep trên cây hiện tại, để biết hai khuôn này có bị app hay gói thứ hai đọc hay không. Nếu có thì chúng phải chuyển sang packages/validation/src.
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_test_filter_api-r3
+  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_test_filter_api-r4
   exit_code: 0
-  verified_at: 2026-10-01T17:22:22Z
+  verified_at: 2026-10-01T23:15:43Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
+  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_test_filter_app_filter_crm_ui-r4
   exit_code: 0
-  verified_at: 2026-10-01T17:22:22Z
+  verified_at: 2026-10-01T23:15:43Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
+  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_test_filter_agent_filter_crm_aut-r4
   exit_code: 0
-  verified_at: 2026-10-01T17:22:22Z
+  verified_at: 2026-10-01T23:15:43Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
+  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_test_filter_agent_okr_filter_crm-r4
   exit_code: 0
-  verified_at: 2026-10-01T17:22:22Z
+  verified_at: 2026-10-01T23:15:43Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-soan-okr-cung-tro-ly-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-soan-okr-cung-tro-ly-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-10-01T17:22:22Z
+  verified_at: 2026-10-01T23:15:43Z
 
 - cmd: bun run lint:slop
-  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_lint_slop-r3
+  run_id: minted-soan-okr-cung-tro-ly-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-10-01T17:22:22Z
+  verified_at: 2026-10-01T23:15:43Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-soan-okr-cung-tro-ly-SUITE-bunx_turbo_run_build_force-r3
+  run_id: minted-soan-okr-cung-tro-ly-SUITE-bunx_turbo_run_build_force-r4
   exit_code: 0
-  verified_at: 2026-10-01T17:22:22Z
-
-## Judge panels (đề xuất — human_override để trống)
-
-E24 — đề xuất: UNCERTAIN. Ba góc nhìn cùng thiếu một căn cứ: cột «Người chọn» của chủ kho chưa điền và cột «Judge chọn» chưa có số.
-- domain-correctness: UNCERTAIN — bảng cuối mục «Chấm của chủ kho (E24)» để trống «Người chọn» và «Khớp»; «Judge chọn» chỉ trỏ sang tệp ngoài danh sách input. Con số 9/9 là tỷ lệ bản có gói thắng judge mù, không phải mức khớp giữa judge và chủ kho.
-- operational-feasibility: UNCERTAIN — chưa có lựa chọn nào của chủ kho để so; với 5 cặp, ngưỡng 80 % nghĩa là khớp ít nhất 4 trên 5.
-- spec-alignment: UNCERTAIN — lựa chọn của judge nằm ngoài các tệp được phép đọc; từ 4 cặp khớp trở lên thì PASS, từ 3 cặp trở xuống thì không đạt.
-
-E29 — đề xuất: UNCERTAIN. Con số tinh chỉnh sạch; khuôn dữ liệu còn phụ thuộc cách đọc AC-15.
-- domain-correctness: UNCERTAIN — số tinh chỉnh đều nằm trong object cấu hình; khuôn dùng chung khai ngoài packages/validation chưa kết luận được.
-- operational-feasibility: UNCERTAIN — các kiểu suy từ Prisma trong packages/db/src là ứng viên, nhưng danh sách tệp không cho biết AC-15 có tính chúng không.
-- spec-alignment: UNCERTAIN — không có căn cứ trong danh sách tệp để biết các khuôn này thuộc phạm vi luật «đi qua hai gói thì ở packages/validation/src».
+  verified_at: 2026-10-01T23:15:43Z
 
 ## Known limits
 
@@ -342,7 +353,9 @@ E29 — đề xuất: UNCERTAIN. Con số tinh chỉnh sạch; khuôn dữ liệ
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet)
+carried tu round 3 — baseline khong do lai round nay
+
+Không có eval không-phân-biệt: danh sách rỗng. Mọi eval trong báo cáo này ghi baseline n-a vì vòng 4 không đo lại; lệnh suite xanh ở cả hai phía là regression-guard bình thường, không liệt kê.
 
 ## Variance
 
@@ -352,4 +365,5 @@ none — every multi-run eval is uniform
 
 Round 1: BLOCKED. E13 không đo được (lượt trợ lý không xong, quá 45 giây không có hồi âm), E26 không có kết quả (agent kiểm bị bỏ qua hoặc chết); lệnh suite toàn kho đỏ vì máy chủ eve dev của cây đang chạy chặn bài app-rieng. Cần chạy lại E13 và E26; E24 và E29 chờ người chốt ở Cổng 2.
 Round 2: BLOCKED. E13 chạy được (84 DUNG, 0 SAI) nhưng đọc ảnh thấy lỗi bố cục (tràn và cắt chữ ở soan-mo-dau-390, bảng cuộc bị cắt mép, nút «Xem ở Theo đơn vị» đè chữ, thiếu khung soan-sua-qua-chat ở 390) nên không đạt; E26 đạt 33/33; lệnh suite bị chặn vì eve dev bị tiến trình khác chiếm. Returned to implementation.
-Round 3: E26 failed — thước đo docs/chat-ui.md: tiêu đề «What is in the tree today» nay ghi «— 8» chứ không phải «— 7», mục số không còn câu «exactly seven files», và hai chiều đo gài (pha-chat-ui-so-tieu-de, pha-chat-ui-so-cau) không đổi được tệp nên thước chỉ bắt 31/33 chiều đo. E13 nay đạt (26 khung, đã đọc từng khung, bố cục vòng 2 đã sửa); bảy lệnh suite xanh; E24 vẫn chờ chủ kho điền cột «Người chọn»; E29 chờ người quyết cách hiểu AC-15. Đây là vòng 3 — chuyển người quyết: sửa docs/chat-ui.md cho khớp thước (hoặc sửa thước nếu «8 tệp» là đúng) rồi chấm lại.
+Round 3: E26 failed — thước đo docs/chat-ui.md lệch với tệp (tiêu đề «What is in the tree today» nay ghi «— 8», mục số không còn câu «exactly seven files», hai chiều đo gài không đổi được tệp nên thước chỉ bắt 31/33 chiều đo). E13 nay đạt (26 khung, đã đọc từng khung); bảy lệnh suite xanh; E24 chờ chủ kho điền cột «Người chọn»; E29 chờ người quyết cách hiểu AC-15. Chuyển người quyết: sửa docs/chat-ui.md cho khớp thước rồi chấm lại.
+Round 4: E26 nay xanh với chiều đo 37/37, E12 (86 ca) và E27 xanh, bảy lệnh suite xanh; các eval còn lại mang sang từ vòng gốc. Không eval nào đỏ. Verdict PENDING-JUDGMENT vì E24 (chờ chủ kho điền cột «Người chọn», panel giữ nguyên từ vòng 3) và E29 (cả ba người chấm chưa phân xử được cách hiểu AC-15 về kiểu khai tay ở packages/db/src) chờ người quyết ở Cổng 2. E21, E22 không chạy theo hồ sơ.
