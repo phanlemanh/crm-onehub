@@ -1,144 +1,45 @@
 {
-  "feature_plain": "Nhân viên hỏi về quy định, chính sách, quy trình, biểu mẫu bằng lời thường — ở tab «Hỏi» của Kho tài liệu hay qua bot Zalo — và nhận câu trả lời có trích trang, phiên bản, đoạn nguyên văn; không có trang nào trả lời thì trợ lý AI nói thẳng là chưa có.",
-  "will_do": [
-    {
-      "id": "AC-1",
-      "p": "Sẽ chỉ tìm trong bản đang dùng của các trang; chữ của bản đề xuất, bản bị trả lại hay trang chưa duyệt không bao giờ ra kết quả, gõ có dấu hay không dấu đều như nhau."
-    },
-    {
-      "id": "AC-2",
-      "p": "Sẽ chỉ đọc bản đang dùng của một trang; trang chưa duyệt và trang không tồn tại trả lời giống hệt nhau; chữ trong trang chỉ là dữ liệu, không thành lệnh cho trợ lý."
-    },
-    {
-      "id": "AC-3",
-      "p": "Sẽ để máy chủ kiểm từng câu trả lời trước khi tới người hỏi: đoạn trích phải có nguyên văn trong bản đang dùng, đúng phiên bản, và mọi con số trong câu phải có trọn vẹn trong đoạn trích của chính câu đó."
-    },
-    {
-      "id": "AC-5",
-      "p": "Sẽ kèm cảnh báo khi trang được trích đã quá hạn xác minh, nêu tên trang, ngày và chủ trang để người hỏi biết hỏi ai."
-    },
-    {
-      "id": "AC-6",
-      "p": "Sẽ cho chủ trang và quản trị đặt hạn «Xác minh đến ngày» ngay trên màn đọc trang; người khác không đặt được."
-    },
-    {
-      "id": "AC-7",
-      "p": "Sẽ có tab «Hỏi» trong Kho tài liệu: gõ câu, chờ trợ lý đọc kho, nhận câu trả lời với trích dẫn bấm được tới trang; người vai «chỉ OKR» không thấy tab này."
-    },
-    {
-      "id": "AC-8",
-      "p": "Sẽ trả lời câu quy định qua bot Zalo bằng đúng câu trả lời đã kiểm, kèm tên trang và phiên bản; câu hỏi về thoả thuận trong CRM vẫn trả lời như hôm nay."
-    },
-    {
-      "id": "AC-9",
-      "p": "Sẽ ghi mỗi câu hỏi một dòng nhật ký để đếm tỉ lệ «trả lời có trích» cho chạy thật; câu đã trả lời không giữ lại chữ câu hỏi."
-    },
-    {
-      "id": "AC-10",
-      "p": "Sẽ đưa câu chưa trả lời được vào tab Sức khoẻ cho quản trị và chủ trang của trang gần nhất, không kèm tên người hỏi, có nút «Đã xử lý»."
-    },
-    {
-      "id": "AC-11",
-      "p": "Sẽ cho người hỏi bấm «Báo sai»: mỗi trang được trích thành một việc cho chủ trang đó; chủ trang đóng việc bằng kết luận trợ lý sai hay đúng."
-    },
-    {
-      "id": "AC-12",
-      "p": "Sẽ chạy trợ lý đọc kho riêng: chỉ ba cửa đọc kho và nộp câu trả lời, khoá AI riêng của kho, nhà cung cấp cam kết không lưu dữ liệu, sổ chi phí riêng."
-    },
-    {
-      "id": "AC-13",
-      "p": "Sẽ báo rõ khi trợ lý không trả lời được: hết hạn mức tháng thì nói đúng thế, lỗi khác thì «chưa trả lời được lúc này»; không câu nào treo mãi."
-    },
-    {
-      "id": "AC-14",
-      "p": "Sẽ giới hạn số câu hỏi ở tab «Hỏi» theo người mỗi ngày và cả công ty mỗi tháng, giới hạn Zalo giữ như cũ."
-    }
-  ],
-  "wont_do": [
-    {
-      "id": "AC-4",
-      "p": "Sẽ KHÔNG đoán: không có trang nào trả lời được thì người hỏi nhận một câu từ chối cố định do máy viết sẵn, kèm tối đa ba trang gần nhất, và câu hỏi vào hàng «chưa trả lời được»."
-    },
-    {
-      "id": "OOS-1",
-      "p": "Người vai «chỉ OKR» chưa hỏi được kho ở lượt này."
-    },
-    {
-      "id": "OOS-2",
-      "p": "Chưa báo sai được qua Zalo, chưa nhắc chủ trang qua Zalo hay email."
-    },
-    {
-      "id": "OOS-3",
-      "p": "Chưa hỏi nối tiếp theo câu trước, chưa tự tính tiền từ tỉ lệ trong trang."
-    },
-    {
-      "id": "OOS-4",
-      "p": "Chưa lọc trang lưu trữ — kho chưa có trạng thái lưu trữ, việc của lượt 3b."
-    },
-    {
-      "id": "OOS-5",
-      "p": "Chưa xử lý hiệu lực theo ngày hay trang bị thay thế; không dựng bộ đo lớn của nghiên cứu."
-    },
-    {
-      "id": "OOS-6",
-      "p": "Không tìm theo nghĩa (vector), không sửa lỗi gõ sai."
-    },
-    {
-      "id": "OOS-7",
-      "p": "Chưa hỏi kho được trong tab Agent của khung công ty, liên hệ, thoả thuận."
-    }
-  ],
-  "scope_plain": "Những việc dưới đây cố ý để ngoài lượt này:",
-  "coverage_plain": [
-    {
-      "i": 0,
-      "p": "Hỏi ở đâu: tab «Hỏi» (AC-7 màn hỏi, AC-14 giới hạn) và bot Zalo (AC-8); tab Agent của khung bản ghi để sau."
-    },
-    {
-      "i": 1,
-      "p": "Một câu kết thúc thế nào: trả lời có trích (AC-3, AC-7), từ chối (AC-4), lỗi hay hết tiền (AC-13), quá giới hạn (AC-14), không có quyền hỏi (AC-7 vai «chỉ OKR»)."
-    },
-    {
-      "i": 2,
-      "p": "Trang ở trạng thái nào: còn hạn, quá hạn xác minh (AC-5, AC-6), chỉ có bản đề xuất (AC-1, AC-2, AC-3), đổi giữa lúc đọc và lúc nộp (AC-3), không tồn tại, trang chứa lệnh giả (AC-2); trang lưu trữ thuộc lượt 3b."
-    },
-    {
-      "i": 3,
-      "p": "Sau câu trả lời: báo sai (AC-11), chủ trang xử lý câu chưa trả lời được (AC-10), đặt hạn xác minh (AC-6), đếm số cho chạy thật (AC-9)."
-    },
-    {
-      "i": 4,
-      "p": "Áp mọi nơi: trợ lý kho có tiền và nơi gửi riêng (AC-12), không chữ nào chưa kiểm tới người hỏi (AC-3, AC-4, AC-8), đúng người thấy đúng việc (AC-6, AC-7, AC-10, AC-11), lỗi hiện là lỗi (AC-7, AC-10, AC-13)."
-    },
-    {
-      "i": 5,
-      "p": "Giả định chờ anh gạch: trợ lý ở Zalo nhận ra câu quy định đủ thường xuyên — đo bằng lượt Zalo của bộ câu đo (AC-15), không đo được bằng bảng."
-    },
-    {
-      "i": 6,
-      "p": "Giả định chờ anh gạch: giới hạn 20 câu mỗi người mỗi ngày và 600 câu cả công ty mỗi tháng đủ cho hai tuần chạy thật."
-    }
-  ],
-  "gap_probe_plain": [
-    {
-      "i": 0,
-      "p": "Ở Zalo, trợ lý kho không có chỗ biết mình đang trả lời câu nào, và hết hạn mức ngay bước đầu thì không có dòng nào để báo lỗi. Đã sửa: dòng câu hỏi Zalo được tạo trước bước đầu tiên của trợ lý kho; thêm phép đo cho cả hai ca."
-    },
-    {
-      "i": 1,
-      "p": "Phép đo «không nhận trích từ bản đề xuất chưa duyệt» không thể đỏ dù có lỗi. Đã sửa: đo trên bản đề xuất thật trong cơ sở dữ liệu."
-    },
-    {
-      "i": 2,
-      "p": "Phép kiểm con số chỉ có một ca, nên «20%» lọt qua nhờ «2026», và số mượn từ đoạn trích của câu khác cũng lọt. Đã sửa: thêm ca biên và ca mượn số, mỗi ca có chiều đỏ riêng."
-    },
-    {
-      "i": 3,
-      "p": "Không phép đo nào biết trợ lý ở Zalo có chuyển câu quy định cho trợ lý kho hay không. Đã sửa: bộ câu đo thêm một lượt hỏi qua Zalo với model thật, đếm chuyển và chuyển nhầm."
-    },
-    {
-      "i": 4,
-      "p": "Ngưỡng «báo sai được chủ trang xác nhận» không có số nào để đọc. Đã sửa: chủ trang đóng việc bằng kết luận sai hay đúng, máy đếm được."
-    }
-  ]
+ "feature_plain": "Nhân viên hỏi bằng lời thường, ở tab «Hỏi» của Kho tài liệu hay qua Zalo, và được trả lời có trích trang, phiên bản cùng đoạn nguyên văn; kho không có trang nào trả lời thì trợ lý nói không biết.",
+ "decisions": [
+  {
+   "id": "E15j",
+   "q": "Câu trả lời của bộ câu đo có trung thực với trang được trích không?",
+   "why": "Hội đồng đọc cả hai lượt: câu có trang đều trích đúng ý, sáu câu không có trang đều bị từ chối, Zalo chuyển đủ 30 câu quy định và giữ lại 10 câu không phải quy định."
+  },
+  {
+   "id": "E16j",
+   "q": "Nhân viên văn phòng nhìn ảnh tab «Hỏi» có hiểu ngay câu trả lời không?",
+   "why": "Ở khổ 390 và 1440: tên trang, phiên bản, ngày duyệt hiện rõ; khung cảnh báo quá hạn nêu ngày và chủ trang; chip gợi ý xuống dòng, không cuộn ngang."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20261001T060746Z-19",
+   "p": "Câu nộp của trợ lý được kiểm ở máy chủ rồi mới ghi — đổi lại, trợ lý phải nộp lại nếu một đoạn trích không khớp trang."
+  },
+  {
+   "id": "d-20261001T060746Z-34",
+   "p": "Dấu ranh giới trang bị gỡ khỏi chữ trang ở cả dạng thô lẫn dạng mã hoá — đổi lại, trang không giữ được hai chuỗi đó nguyên văn."
+  },
+  {
+   "id": "d-20261001T060746Z-36",
+   "p": "Câu hỏi kho không đi vào làn nghiên cứu nền — đổi lại, nó có hàng gửi riêng của mình."
+  },
+  {
+   "id": "d-20261001T060746Z-40",
+   "p": "Ghi chú tài liệu về việc lưu chữ câu Zalo bị từ chối dời xuống bước cập nhật tài liệu cuối vòng — không đổi hành vi."
+  },
+  {
+   "id": "d-20261001T060746Z-51",
+   "p": "Hạn xác minh hiện thành một nhãn cạnh nút sửa trang, đặt bằng ô chọn ngày — đổi lại, lưu xong trang tải lại dữ liệu từ máy chủ."
+  },
+  {
+   "id": "d-20261001T060746Z-52",
+   "p": "Hai khối việc mới ở tab Sức khoẻ hiện cho mọi vai, danh sách rỗng khi người xem không có việc nào — đổi lại, người không có quyền thấy khối rỗng."
+  },
+  {
+   "id": "d-20261001T060746Z-59",
+   "p": "Dòng «khoá undefined» trong bằng chứng cũ là lỗi đọc của bộ chấm, đã sửa; bằng chứng cũ giữ nguyên chữ máy in."
+  }
+ ]
 }
