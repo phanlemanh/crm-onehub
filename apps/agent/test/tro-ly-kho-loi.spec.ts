@@ -23,6 +23,8 @@ import {
 	donTroLyKho,
 	gieoNguoi,
 	goiCongCu,
+	type KetQuaConEve,
+	ketQuaConEve,
 	ma,
 	type NguCanhGoi,
 	type Nguoi,
@@ -56,8 +58,8 @@ type SuKienKetQua = {
 		result: {
 			kind: string;
 			subagentName: string;
-			isError: boolean;
-			output: { message: string } | { hoiId: string; ketQua: string };
+			isError?: boolean;
+			output: KetQuaConEve["output"];
 		};
 	};
 };
@@ -99,21 +101,13 @@ function xuLyKetQuaCua<T>(): T {
 
 type XuLy = (e: SuKienKetQua, c: NguCanhKho) => Promise<void>;
 type BatDau = (e: { type: "session.started" }, c: NguCanhGoi) => Promise<void>;
-async function ketQuaCon(ctx: NguCanhKho, isError: boolean, message?: string) {
-	await xuLyKetQuaCua<XuLy>()(
-		{
-			type: "action.result",
-			data: {
-				result: {
-					kind: "subagent-result",
-					subagentName: "tro_ly_kho",
-					isError,
-					output: message ? { message } : { hoiId: "x", ketQua: "TRA_LOI" },
-				},
-			},
-		},
-		ctx,
-	);
+async function ketQuaCon(
+	ctx: NguCanhKho,
+	hoiId: string,
+	loi?: string,
+): Promise<void> {
+	const result = ketQuaConEve(hoiId, loi);
+	await xuLyKetQuaCua<XuLy>()({ type: "action.result", data: { result } }, ctx);
 }
 
 describe("tlk-loi", () => {
@@ -125,16 +119,16 @@ describe("tlk-loi", () => {
 		][] = [
 			[
 				"402 het tin dung",
-				(h) => ketQuaCon(h.ctx, true, LOI.hetTinDung),
+				(h) => ketQuaCon(h.ctx, h.hoiId, LOI.hetTinDung),
 				"het-tran",
 			],
 			[
 				"het ngan sach thang",
-				(h) => ketQuaCon(h.ctx, true, LOI.hetNganSachThang),
+				(h) => ketQuaCon(h.ctx, h.hoiId, LOI.hetNganSachThang),
 				"het-tran",
 			],
-			["loi 500", (h) => ketQuaCon(h.ctx, true, LOI.loiKhac), "loi-model"],
-			["xong khong nop", (h) => ketQuaCon(h.ctx, false), "loi-model"],
+			["loi 500", (h) => ketQuaCon(h.ctx, h.hoiId, LOI.loiKhac), "loi-model"],
+			["xong khong nop", (h) => ketQuaCon(h.ctx, h.hoiId), "loi-model"],
 			[
 				"turn.failed het tran",
 				async (h) => {
@@ -157,8 +151,13 @@ describe("tlk-loi", () => {
 			expect(`tlk-loi: ${ten}: ${hang.trangThai} ${hang.lyDo}`).toBe(
 				`tlk-loi: ${ten}: LOI ${lyDo}`,
 			);
-			expect(cauLoiHoi(lyDo as "het-tran")).toBe(
-				lyDo === "het-tran" ? TAI_LIEU_HOI.hetTran : TAI_LIEU_HOI.chuaTraLoi,
+			const ra = await new TaiLieuHoiService(
+				db,
+				new AgentTriggerService(db),
+			).ketQua(quanTri, h.hoiId);
+			const cau = ra.trangThai === "LOI" ? cauLoiHoi(ra.lyDo) : "";
+			expect(`tlk-loi: cau ${ten}: ${cau}`).toBe(
+				`tlk-loi: cau ${ten}: ${lyDo === "het-tran" ? TAI_LIEU_HOI.hetTran : TAI_LIEU_HOI.chuaTraLoi}`,
 			);
 		}
 		expect(phanLoaiLoi("budget")).toBe("loi-model");

@@ -1,3 +1,5 @@
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
 import { TaiLieuService } from "../../../api/src/tai-lieu/tai-lieu.service";
@@ -173,4 +175,57 @@ export async function donTroLyKho(): Promise<void> {
 	await db.zaloHoi.deleteMany({ where: { crmUserId: cuaNguoiThu } });
 	await db.member.deleteMany({ where: { userId: cuaNguoiThu } });
 	await db.user.deleteMany({ where: { id: cuaNguoiThu } });
+}
+
+export type KetQuaConEve = {
+	callId: string;
+	kind: string;
+	subagentName: string;
+	isError?: boolean;
+	output: { hoiId: string; ketQua: string } | { code: string; message: string };
+};
+
+type TrangThaiCon = {
+	"eve.channel": {
+		kind: string;
+		state: { callId: string; subagentName: string };
+	};
+};
+
+const goiEve = dirname(
+	createRequire(import.meta.url).resolve("eve/package.json"),
+);
+const eveKetQua = (await import(
+	join(goiEve, "dist/src/execution/delegated-parent-result.js")
+)) as {
+	createDelegatedSubagentSuccessResult: (
+		trangThai: TrangThaiCon,
+		ra: { hoiId: string; ketQua: string },
+	) => KetQuaConEve;
+	createDelegatedSubagentErrorResult: (
+		trangThai: TrangThaiCon,
+		loi: Error,
+	) => KetQuaConEve;
+};
+const { SUBAGENT_ADAPTER_KIND } = (await import(
+	join(goiEve, "dist/src/execution/subagent-adapter-state.js")
+)) as { SUBAGENT_ADAPTER_KIND: string };
+
+const TRANG_THAI_CON: TrangThaiCon = {
+	"eve.channel": {
+		kind: SUBAGENT_ADAPTER_KIND,
+		state: { callId: "goi-tlk", subagentName: "tro_ly_kho" },
+	},
+};
+
+export function ketQuaConEve(hoiId: string, loi?: string): KetQuaConEve {
+	return loi
+		? eveKetQua.createDelegatedSubagentErrorResult(
+				TRANG_THAI_CON,
+				new Error(loi),
+			)
+		: eveKetQua.createDelegatedSubagentSuccessResult(TRANG_THAI_CON, {
+				hoiId,
+				ketQua: "TRA_LOI",
+			});
 }

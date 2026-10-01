@@ -183,7 +183,7 @@ export const ketQuaTroLyKho = z.object({
 	result: z.object({
 		kind: z.literal("subagent-result"),
 		subagentName: z.literal("tro_ly_kho"),
-		isError: z.boolean(),
+		isError: z.boolean().optional(),
 		output: z.object({ message: z.string() }).nullable().catch(null),
 	}),
 });

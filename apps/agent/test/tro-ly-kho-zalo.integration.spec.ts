@@ -29,6 +29,8 @@ import {
 	donTroLyKho,
 	gieoNguoi,
 	goiCongCu,
+	type KetQuaConEve,
+	ketQuaConEve,
 	ma,
 	type Nguoi,
 	trangDaDuyet,
@@ -129,8 +131,8 @@ type SuKienKetQua = {
 		result: {
 			kind: string;
 			subagentName: string;
-			isError: boolean;
-			output: { message: string };
+			isError?: boolean;
+			output: KetQuaConEve["output"];
 		};
 	};
 };
@@ -290,12 +292,7 @@ describe("tlk-zalo", () => {
 				{
 					type: "action.result",
 					data: {
-						result: {
-							kind: "subagent-result",
-							subagentName: "tro_ly_kho",
-							isError: true,
-							output: { message: LOI.hetTinDung },
-						},
+						result: ketQuaConEve(c.zaloHoiId, LOI.hetTinDung),
 					},
 				},
 				ctxGoc(c),
@@ -317,5 +314,33 @@ describe("tlk-zalo", () => {
 				TAI_LIEU_HOI.hetTran,
 			]);
 		}
+	});
+
+	test("tlk-zalo: phien con xong ma chua nop tren Zalo, hang dong LOI loi-model, tin gui la cau chua tra loi", async () => {
+		moMayChu();
+		const c = await cauZalo();
+		await moTroLy(c.goc);
+		const hangDau = await db.taiLieuHoi.findUniqueOrThrow({
+			where: { zaloHoiId: c.zaloHoiId },
+		});
+		await xuLyKetQuaCua<XuLyKetQua>()(
+			{
+				type: "action.result",
+				data: { result: ketQuaConEve(hangDau.id) },
+			},
+			ctxGoc(c),
+		);
+		const hang = await db.taiLieuHoi.findUniqueOrThrow({
+			where: { zaloHoiId: c.zaloHoiId },
+		});
+		expect(`tlk-zalo: xong chua nop: ${hang.trangThai} ${hang.lyDo}`).toBe(
+			"tlk-zalo: xong chua nop: LOI loi-model",
+		);
+		await suKien(
+			"message.completed",
+			{ message: GOC, finishReason: "stop" },
+			c,
+		);
+		expect(guiToi(c.chatId)).toEqual([TAI_LIEU_HOI.chuaTraLoi]);
 	});
 });
