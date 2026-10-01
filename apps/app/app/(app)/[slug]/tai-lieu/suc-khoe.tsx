@@ -13,6 +13,7 @@ import {
 } from "@crm/ui/components/card";
 import {
 	Item,
+	ItemActions,
 	ItemContent,
 	ItemDescription,
 	ItemGroup,
@@ -28,12 +29,14 @@ import { duongTrang, ngayTaiLieu } from "@/lib/tai-lieu-man";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { DangTaiDanhSach } from "./dang-tai";
+import { NutXuLyBaoSai, NutXuLyChuaTraLoi } from "./suc-khoe-viec";
 
 export type DongSucKhoe = {
 	khoa: string;
 	ten: string;
 	href: string | null;
 	moTa: ReactNode;
+	hanhDong?: ReactNode;
 };
 
 function Khoi({
@@ -65,7 +68,17 @@ function Khoi({
 				) : (
 					<ItemGroup>
 						{dong.map((d) =>
-							d.href ? (
+							d.hanhDong ? (
+								<Item data-viec={d.khoa} key={d.khoa} variant="outline">
+									<ItemContent>
+										<ItemTitle translate="no">
+											{d.href ? <Link href={d.href}>{d.ten}</Link> : d.ten}
+										</ItemTitle>
+										<ItemDescription>{d.moTa}</ItemDescription>
+									</ItemContent>
+									<ItemActions>{d.hanhDong}</ItemActions>
+								</Item>
+							) : d.href ? (
 								<Item asChild key={d.khoa} variant="outline">
 									<Link href={d.href}>
 										<ItemContent>
@@ -119,7 +132,7 @@ export function SucKhoe() {
 	}
 	if (!sk.data) return <DangTaiDanhSach />;
 
-	const { quaHan, choDuyet, gay, chuaCo, moCoi } = sk.data;
+	const { quaHan, choDuyet, gay, chuaCo, moCoi, chuaTraLoi, baoSai } = sk.data;
 	const toiTrang = (slug: string) => url(duongTrang(slug));
 
 	return (
@@ -208,6 +221,58 @@ export function SucKhoe() {
 				rong={m.rong}
 				tieuDe={m.moCoi}
 				tong={moCoi.total}
+			/>
+			<Khoi
+				dong={chuaTraLoi.rows.map((r) => ({
+					khoa: r.hoiId,
+					ten: r.cauHoi,
+					href: null,
+					moTa:
+						r.ganNhat.length > 0 ? (
+							<>
+								{m.ganNhat}{" "}
+								{r.ganNhat.map((g, i) => (
+									<span key={g.slug}>
+										{i > 0 ? ", " : null}
+										<Link href={toiTrang(g.slug)} translate="no">
+											{g.ten}
+										</Link>
+									</span>
+								))}
+							</>
+						) : (
+							m.khongGanNhat
+						),
+					hanhDong: <NutXuLyChuaTraLoi hoiId={r.hoiId} />,
+				}))}
+				id="chua-tra-loi"
+				rong={m.rongViec}
+				tieuDe={m.chuaTraLoi}
+				tong={chuaTraLoi.total}
+			/>
+			<Khoi
+				dong={baoSai.rows.map((r) => ({
+					khoa: r.id,
+					ten: r.ten,
+					href: toiTrang(r.slug),
+					moTa: (
+						<>
+							{dien(m.phienBan, { so: r.phienBan })} ·{" "}
+							<span translate="no">«{r.cauHoi}»</span>
+							{r.ghiChu ? (
+								<>
+									{" · "}
+									{m.ghiChu} <span translate="no">{r.ghiChu}</span>
+								</>
+							) : null}
+						</>
+					),
+					hanhDong: <NutXuLyBaoSai id={r.id} />,
+				}))}
+				id="bao-sai"
+				rong={m.rongViec}
+				tieuDe={m.baoSai}
+				tong={baoSai.total}
 			/>
 		</div>
 	);

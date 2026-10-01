@@ -84,3 +84,12 @@ export function ngayTaiLieu(iso: string, locale: Locale): string {
 		timeZone: TAI_LIEU_MAN.muiGio,
 	}).format(new Date(iso));
 }
+
+export function ngayVn(iso: string): string {
+	return new Intl.DateTimeFormat("en-CA", {
+		day: "2-digit",
+		month: "2-digit",
+		year: "numeric",
+		timeZone: TAI_LIEU_MAN.muiGio,
+	}).format(new Date(iso));
+}

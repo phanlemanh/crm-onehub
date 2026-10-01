@@ -51,6 +51,8 @@ const DU = {
 		],
 		total: 1,
 	},
+	chuaTraLoi: { rows: [], total: 0 },
+	baoSai: { rows: [], total: 0 },
 };
 
 const canh = { loi: false, goi: 0 };
@@ -146,6 +148,8 @@ describe("man-suc-khoe", () => {
 			{ id: "gay", so: "1" },
 			{ id: "chua-co", so: "2" },
 			{ id: "mo-coi", so: "1" },
+			{ id: "chua-tra-loi", so: "0" },
+			{ id: "bao-sai", so: "0" },
 		]);
 		const chu = goc.textContent ?? "";
 		for (const tieuDe of [
@@ -190,6 +194,6 @@ describe("man-suc-khoe", () => {
 		});
 		await cho();
 		expect(canh.goi).toBe(truoc + 1);
-		expect(goc.querySelectorAll("[data-khoi-suc-khoe]")).toHaveLength(5);
+		expect(goc.querySelectorAll("[data-khoi-suc-khoe]")).toHaveLength(7);
 	});
 });
