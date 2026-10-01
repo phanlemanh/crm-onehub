@@ -69,3 +69,4 @@ Quét tay theo bốn việc chủ kho đã chốt, không qua `morphological-sca
 ## Notes
 
 - Sau khi gộp và deploy, chủ kho soát thẻ Trợ lý OKR trên prod lên «Sẵn sàng · qua Vercel» trong khoảng 10 phút; không lên thì giả định đầu tiên của Coverage sai và vòng mở lại.
+- Sau khi thước luật kho dùng chung (`scripts/luat-kho/do-cay.mjs`, khoá `executors.script.luat_kho_cay`, nhánh feat/soan-okr-cung-tro-ly) lên `onehub`, vòng kế trỏ E16 sang `luat_kho_cay` và bỏ `rang/luat-kho.mjs`, không nuôi hai bản.

@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: va-tro-ly-okr-sau-thu
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed51ad33cec6ed4d78b62fb542db1af1acc60262
+verified_commit: 0bcf848412d35a1f2a14cfe7175787dd669bff07
 human_signoff:
 ---
 
 # Evidence Report: va-tro-ly-okr-sau-thu
-
-Vòng 2. Bốn lệnh suite hồi quy đều xanh (vòng 1 chỉ đỏ một lệnh suite, `bun run test`). Mười bốn eval máy và ui-check được mang từ vòng 1 vì delta không chạm paths của chúng. Verdict PENDING-JUDGMENT vì E14 (judgment) còn UNCERTAIN, cần người xác nhận ở Cổng Bằng chứng.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -30,191 +28,185 @@ Vòng 2. Bốn lệnh suite hồi quy đều xanh (vòng 1 chỉ đỏ một l�
 | E11 | AC-10 | test | PASS |
 | E12 | AC-11 | test | PASS |
 | E13 | AC-12 | ui-check | PASS |
-| E14 | AC-13 | judgment | UNCERTAIN |
 | E15 | AC-10 | script | PASS |
+| E16 | AC-13 | script | PASS |
+| E17 | AC-13 | judgment | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-va-tro-ly-okr-sau-thu-E1-r1
+  run_id: minted-va-tro-ly-okr-sau-thu-E1-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.vtl_nguon_khoa
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 4 tests across 1 file. [114.00ms]
 
 - eval: E2
-  run_id: minted-va-tro-ly-okr-sau-thu-E2-r1
+  run_id: minted-va-tro-ly-okr-sau-thu-E2-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.vtl_san_sang_oidc
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_muovgh2iwrnw_test
 
 - eval: E3
-  run_id: minted-va-tro-ly-okr-sau-thu-E3-r1
+  run_id: minted-va-tro-ly-okr-sau-thu-E3-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.vtl_kiem_lai_oidc
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_muovgfk0nput_test
 
 - eval: E4
-  run_id: minted-va-tro-ly-okr-sau-thu-E4-r1
+  run_id: minted-va-tro-ly-okr-sau-thu-E4-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.vtl_nang_luc
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_muovgdimyer6_test
 
 - eval: E5
   run_id: minted-va-tro-ly-okr-sau-thu-E5-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.vtl_model_rieng
   verified_at: 2026-09-30T23:21:48Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
-  run_id: minted-va-tro-ly-okr-sau-thu-E6-r1
+  run_id: minted-va-tro-ly-okr-sau-thu-E6-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.vtl_bien_bon_nha
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    bon nha du
 
 - eval: E7
-  run_id: minted-va-tro-ly-okr-sau-thu-E7-r1
+  run_id: minted-va-tro-ly-okr-sau-thu-E7-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.vtl_ai_chi_tieu_nguon
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    bài API tro-ly-okr-nguon-khoa.spec.ts chạy xong, không có dòng tóm tắt riêng
 
 - eval: E8
-  run_id: minted-va-tro-ly-okr-sau-thu-E8-r1
+  run_id: minted-va-tro-ly-okr-sau-thu-E8-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.vtl_the_nguon
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    Ran 1 test across 1 file. [1258.00ms]
 
 - eval: E9
   run_id: muor0xyqu5vz
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.vtl_nhanh_can_chinh
   verified_at: 2026-09-30T23:21:48Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E10
   run_id: minted-va-tro-ly-okr-sau-thu-E10-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.vtl_dong_tu
   verified_at: 2026-09-30T23:21:48Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E11
   run_id: minted-va-tro-ly-okr-sau-thu-E11-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.vtl_hai_giong
   verified_at: 2026-09-30T23:21:48Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E12
   run_id: minted-va-tro-ly-okr-sau-thu-E12-r1
   exit_code: 0
-  baseline: n-a
   verifier: config:executors.test.vtl_chu_nho
   verified_at: 2026-09-30T23:21:48Z
   carried_from_round: 1
-  output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E13
-  run_id: E13-2026-10-01-lan-do-man-that
+  run_id: E13-2026-10-01-ui-verifier-run
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vtl_man_that
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
+  screenshot: evidence/E13-step1.png
+  observed: |
+    E13-step1.png (hộp Sửa KR, 1440): tiêu đề «Sửa KR», ô Tên KR = «Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng»; dòng xu hướng «Theo các lần cập nhật gần nhất (+0,47/tuần), cuối kỳ ước khoảng 6,61 tỷ đồng» có «tỷ đồng»; không có câu «Câu này đọc như một việc làm…»; không tràn ngang.
+    E13-step2.png (hộp Sửa KR, 390): cùng tên KR, cùng dòng xu hướng đủ «6,61 tỷ đồng», không có câu «đọc như một việc làm», một cột, không tràn ngang.
+    E13-step3.png (Cài đặt › Chương trình OKR, 1440, đăng nhập le-hai-dang): thẻ «Trợ lý OKR» có chấm xanh và dòng «Sẵn sàng · khoá chung của tác tử», công tắc «Bật Trợ lý OKR» bật, «Góp ý khi bấm» = «Toàn công ty», khớp sanSangNguon['khoa-chung'].
+    E13-step4.png (cùng màn, 390): cùng dòng «Sẵn sàng · khoá chung của tác tử», công tắc bật, «Toàn công ty», không tràn ngang. Cả bốn frame khớp Expected, không mâu thuẫn.
   network_observed: n-a (driver)
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval (frame goc xem round 1 trong Iterations)
-
-- eval: E14
-  judged_by: judge-subagent (fresh context)
-  verdict: UNCERTAIN
-  rationale: Cả ba lăng kính chỉ xác nhận được phần tài liệu của AC-13 (docs/agent.md có mục «Chỗ rẽ: Trợ lý OKR» nêu hàm nguonKhoaMoHinh, thứ tự riêng, chung, OIDC và khoá riêng; docs/environment.md có dòng OKR_AI_GATEWAY_API_KEY). Các vế còn lại (không chú thích mới, API không đọc khoá, hằng ở TRO_LY_OKR/OKR_KIEM, parse ở biên, không thành phần giao diện mới, chữ «tác tử» trên màn) cần đọc diff hoặc mã, mà danh sách Input của eval không khai và lượt chấm bị cấm đọc, nên không đủ căn cứ để PASS và cũng không có căn cứ để FAIL.
-  required_evidence:
-    - Đầu ra `git diff origin/onehub...HEAD -- . ':!_acceptance'` ở worktree va-tro-ly-okr-sau-thu, lọc dòng thêm có `//`, `/*` hoặc `{/*` trong mã .ts/.tsx của apps/ và packages/; rỗng thì vế «không chú thích mới» đạt.
-    - Kết quả `grep -rnE 'AI_GATEWAY_API_KEY|createGateway|getVercelOidcToken|@ai-sdk/gateway' apps/api/src` phải rỗng, và `grep -rn 'process.env.*AI_GATEWAY' apps/agent/agent` chỉ còn các tệp đọc khoá đã có (mo-hinh-khoa.ts, tai-lieu-model.ts, ai-doi-soat), để chứng minh API không đọc khoá và mọi đọc khoá của Trợ lý đi qua nguonKhoaMoHinh.
-    - Nội dung TRO_LY_OKR.khoa (apps/agent/agent/lib/okr/config) và OKR_KIEM.dongTuViec (packages/validation/src/okr-kiem.ts), cùng `grep -rn 'OKR_AI_GATEWAY_API_KEY' apps packages --include=*.ts --include=*.tsx` chỉ trúng tệp cấu hình, để chứng minh tên biến và danh sách động từ không bị lặp chuỗi.
-    - Nội dung KET_QUA_KIEM_SAN_SANG (packages/db/src/okr-tro-ly-danh-muc.ts), schema aiChiTieuOutput và các chỗ đọc outcome, nguonKhoa, cùng kết quả tìm `Record<string, unknown>` trong các dòng diff thêm phải rỗng, để xác nhận parse ở biên.
-    - `git diff --stat origin/onehub...HEAD -- apps/app packages/ui`, `grep -n className` trên các dòng thêm của thẻ Trợ lý OKR và cột góp ý, và tìm «tác nhân» trong chữ hiển thị thêm mới phải rỗng, để xác nhận không có thành phần giao diện mới ngoài packages/ui, không className đè kiểu và chữ trên màn dùng «tác tử».
-  panel_votes: (đề xuất của hội đồng, chưa có người chốt)
-    - domain-correctness: UNCERTAIN — chỉ phần tài liệu (docs/agent.md, docs/environment.md) kiểm được và đạt; các vế còn lại cần diff hoặc mã mà blind-grading cùng danh sách Input không cho đọc.
-    - operational-feasibility: UNCERTAIN — phần tài liệu và dùng «tác tử» trong thiết kế đạt; các vế về chú thích, API không đọc khoá, tên biến không lặp, parse ở biên, className đè kiểu, chữ trên màn chỉ kiểm được bằng diff hoặc mã, không có trong Input.
-    - spec-alignment: UNCERTAIN — phần tài liệu đạt; sáu vế còn lại cần diff và mã không nằm trong Input, không có căn cứ để FAIL cũng không đủ căn cứ để PASS.
-  human_override:  # chi nguoi ghi
+    scrollWidth <= clientWidth: DUNG ở cả 4 ảnh (trang 1440/1440, hộp 978/978 và 383/383; trang 390/390, hộp 390/390 và 292/292; cài đặt 1440/1440 và 390/390).
+    KET LUAN: 11 DUNG, 0 SAI.
 
 - eval: E15
-  run_id: design-gate-40c3acc13b
+  run_id: minted-va-tro-ly-okr-sau-thu-E15-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.vtl_san_thiet_ke
-  verified_at: 2026-09-30T23:21:48Z
-  carried_from_round: 1
+  verified_at: 2026-10-01T01:44:37Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    design-gate --mode static chạy trên bốn tệp giao diện (cot-gop-y, hop-thoai-kr, hop-thoai-muc-tieu, the-tro-ly-okr): không tệp nào có P0.
+
+- eval: E16
+  run_id: minted-va-tro-ly-okr-sau-thu-E16-r3
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.vtl_luat_kho
+  verified_at: 2026-10-01T01:44:37Z
+  output: |
+    luat kho du: sau luat, khong vi pham; mien tru da dung 2
+
+### Judgment
+
+- eval: E17
+  judged_by: judge-subagent (fresh context)
+  verdict: PASS
+  rationale: Cả ba góc nhìn thấy docs/agent.md (mục «Chỗ rẽ: Trợ lý OKR», dòng 1187-1226) nêu nguonKhoaMoHinh là nơi duy nhất biết đường tới model với thứ tự OKR_AI_GATEWAY_API_KEY, AI_GATEWAY_API_KEY, vé OIDC của Vercel, và docs/environment.md (dòng 132) có dòng khai OKR_AI_GATEWAY_API_KEY kèm lý do tách chi phí. Điểm yếu nhỏ: agent.md không nói thẳng lý do tính tiền riêng, lý do nằm ở environment.md.
+  human_override:  # chi nguoi ghi
+
+Hội đồng chấm đề xuất cho E17 (đề xuất PASS; human_override để trống cho người quyết ở Cổng Bằng chứng):
+
+- domain-correctness: PASS — Mục "Chỗ rẽ: Trợ lý OKR" trong docs/agent.md (dòng 1187-1226) nêu nguonKhoaMoHinh là nơi duy nhất biết đường tới model. Thứ tự được ghi đúng là OKR_AI_GATEWAY_API_KEY rồi AI_GATEWAY_API_KEY rồi vé OIDC của Vercel. Khoá riêng được nói là "chỉ Trợ lý OKR" và dùng để dựng nhà Gateway riêng của Trợ lý; agent.md không nêu lý do tách chi phí. docs/environment.md (dòng 132) có dòng khai OKR_AI_GATEWAY_API_KEY kèm mô tả: khoá riêng chỉ cho Trợ lý OKR, tính tiền riêng, có trần tháng riêng, và thiếu thì rơi về khoá chung hoặc OIDC.
+- operational-feasibility: PASS — docs/agent.md (mục "Chỗ rẽ: Trợ lý OKR — đường tới model và khoá riêng") nêu nguonKhoaMoHinh là nơi duy nhất biết đường tới model, thứ tự OKR_AI_GATEWAY_API_KEY (chỉ Trợ lý OKR), AI_GATEWAY_API_KEY, vé OIDC của Vercel, và khoá riêng dùng để dựng Gateway riêng cho Trợ lý (createGateway({ apiKey })). docs/environment.md có dòng OKR_AI_GATEWAY_API_KEY kèm mô tả đầy đủ (tính chi phí riêng, ngân sách riêng, thiếu thì rơi về AI_GATEWAY_API_KEY hoặc OIDC). Điểm yếu nhỏ: agent.md chỉ nói khoá riêng là "chỉ Trợ lý OKR" chứ không nói thẳng lý do tính tiền riêng; lý do đó nằm ở environment.md.
+- spec-alignment: PASS — docs/agent.md, mục "Chỗ rẽ: Trợ lý OKR — đường tới model và khoá riêng" (dòng 1187-1210), nêu nguonKhoaMoHinh là nơi duy nhất biết đường tới model. Mục này ghi thứ tự OKR_AI_GATEWAY_API_KEY, AI_GATEWAY_API_KEY, vé OIDC của Vercel, và nói khoá riêng chỉ dùng cho Trợ lý OKR (có khoá riêng thì dựng createGateway({ apiKey })). Lý do chi tiêu tách riêng không nằm trong agent.md mà nằm ở dòng khai biến trong docs/environment.md (dòng 132, kèm mô tả đầy đủ). Dòng này nói khoá chỉ Trợ lý OKR dùng, chi phí tính riêng và có thể mang ngân sách tháng riêng.
 
 ### Lệnh suite (hồi quy)
 
-Cả bốn lệnh suite chạy lại ở vòng này trên commit ed51ad33 và đều kết thúc sạch. `bun run test` kết thúc với dòng dọn kho kiểm (`test-run: dropped crm_muorc7plycmu_test`); `bunx turbo run lint --force`, `bun run lint:slop` (2309 tệp, 9 luật) và `bunx turbo run build --force` đều xanh.
-
 - cmd: bun run test
-  run_id: minted-va-tro-ly-okr-sau-thu-SUITE-bun_run_test-r2
+  run_id: minted-va-tro-ly-okr-sau-thu-SUITE-bun_run_test-r3
   exit_code: 0
-  verified_at: 2026-09-30T23:49:27Z
+  verified_at: 2026-10-01T01:44:37Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-va-tro-ly-okr-sau-thu-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-va-tro-ly-okr-sau-thu-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-09-30T23:49:27Z
+  verified_at: 2026-10-01T01:44:37Z
 
 - cmd: bun run lint:slop
-  run_id: minted-va-tro-ly-okr-sau-thu-SUITE-bun_run_lint_slop-r2
+  run_id: minted-va-tro-ly-okr-sau-thu-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-09-30T23:49:27Z
+  verified_at: 2026-10-01T01:44:37Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-va-tro-ly-okr-sau-thu-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-va-tro-ly-okr-sau-thu-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-09-30T23:49:27Z
+  verified_at: 2026-10-01T01:44:37Z
 
 ## Known limits
 
@@ -222,15 +214,14 @@ Cả bốn lệnh suite chạy lại ở vòng này trên commit ed51ad33 và đ
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi; field baseline cua tung eval ghi n-a).
-
-Eval không phân biệt (xanh ở cả HEAD lẫn baseline, theo lần đo round 1): E15 — design-gate --mode static trên bốn tệp giao diện lượt này chạm (cot-gop-y.tsx, hop-thoai-kr.tsx, hop-thoai-muc-tieu.tsx, the-tro-ly-okr.tsx). Đây là bộ ca của chính kit chạy trên tệp tính năng; xanh cả hai phía nên nó chứng minh cổng thiết kế không bị vi phạm, không chứng minh hành vi mới. Giữ làm regression-guard có chủ ý, không viết lại. Các lệnh suite xanh ở cả hai phía là regression-guard bình thường, không liệt kê.
+none — moi eval feature deu red tren baseline (co phan biet)
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy một lần; không eval nào mang cờ phương sai).
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: không eval nào của tính năng đỏ; lệnh suite `bun run test` đỏ ở gói app#test (một ca trong nhóm «kho chuoi cua vong ③a»), không gắn eval nào; E14 còn UNCERTAIN. Returned to implementation.
-Round 2: commit ed51ad33 ghim chữ câu xu hướng có đơn vị trong bài canh chữ; bốn lệnh suite xanh. Mười bốn eval máy và ui-check (E1 đến E13, E15) mang từ round 1 vì delta không chạm paths của chúng. E14 vẫn UNCERTAIN chờ người điền human_override ở Cổng Bằng chứng, nên verdict là PENDING-JUDGMENT.
+Round 1: E5, E9, E10, E11, E12 đạt; run_id và verified_at của chúng được giữ nguyên và carry-forward sang round 3 vì delta không chạm paths của các eval này.
+Round 2: toàn bộ eval máy xanh nhưng verdict là PENDING-JUDGMENT vì E14 (judgment gộp luật kho và tài liệu) chưa chắc; E13 được chạy lại ở màn thật.
+Round 3: E14 được tách thành E16 (script đo luật kho) và E17 (judgment tài liệu) — sửa thước, không đổi tiêu chí; E1-E4, E6-E8, E13, E15, E16 chạy lại, bốn lệnh suite chạy lại, tất cả đạt. Verdict PASS.

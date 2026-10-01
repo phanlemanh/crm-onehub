@@ -1,16 +1,22 @@
-# Review findings: va-tro-ly-okr-sau-thu (vòng 2)
+# Review findings: va-tro-ly-okr-sau-thu (round 3)
 
 ## Trong hợp đồng
 
-Không có.
+(không có)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The 'AI model' capability now gives the agent false information, and the new OKR key has no capability entry of its own (r1)**
-  Người dùng thấy gì: Người tự dựng hệ thống chỉ cắm khoá riêng của Trợ lý OKR sẽ thấy danh sách năng lực của tác tử báo lời mô tả cũ, nói rằng việc của Trợ lý OKR bị đóng ngay, trong khi thực tế vẫn chạy bình thường. Chỉ là chữ mô tả sai, không làm hỏng việc.
-  file: `apps/agent/agent/lib/capabilities.ts`
+- **Hai import mới trong okr-tro-ly.ts không dùng tới (MINUTE_MS, TRO_LY_OKR_KHOA)**
+  Người dùng thấy gì: Có hai dòng khai báo thừa trong mã, người dùng không thấy khác biệt nào và không có gì chạy sai. Chỉ là dọn dẹp cho gọn, có thể làm lúc tiện tay.
+  file: `packages/validation/src/okr-tro-ly.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 3 (chỉ kiểm chuỗi có mặt, không kiểm quan hệ giữa các giá trị): không phép đo nào kiểm số phút và thứ tự tên biến mà thẻ Cài đặt lấy từ danh mục chung**
+  Người dùng thấy gì: Khi chưa có khoá mô hình, thẻ Trợ lý OKR ở Cài đặt nói với quản trị viên nên cắm biến nào và bao lâu thì kiểm lại. Hiện chưa có phép đo nào bắt được nếu sau này hai tên biến bị đảo chỗ hoặc số phút bị tính sai, nên quản trị viên có thể bị chỉ nhầm biến mà không ai hay.
+  file: `apps/app/test/messages-guard.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
@@ -20,22 +26,10 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **On-screen text hard-codes the tunable re-check interval and the env variable names (r1)**
-  Người dùng thấy gì: Dòng hướng dẫn trên thẻ Trợ lý OKR ghi cứng «khoảng 10 phút» và tên biến. Nếu sau này đổi thời gian kiểm lại hoặc đổi tên biến mà quên sửa chữ, màn hình sẽ nói sai nhưng chức năng vẫn chạy.
-  file: `apps/app/lib/messages/tro-ly-okr.ts`
-  severity: low
-  Đề xuất: known-limits
-
 - **Screen check expects the shared key but lets the run start when only Trợ lý OKR's own key is set, then fails as a real regression (r1)**
   Người dùng thấy gì: Nếu máy đo có cắm khoá riêng của Trợ lý OKR, phép đo màn hình sẽ báo hỏng giả ở thẻ Cài đặt và làm người duyệt tưởng sản phẩm lỗi. Sản phẩm thật không sai.
   file: `_acceptance/va-tro-ly-okr-sau-thu/rang/man-that.mjs`
   severity: medium
-  Đề xuất: known-limits
-
-- **New readiness results break the old code, so an agent/API version skew or a rollback turns every Trợ lý OKR readiness read into an exception (r1)**
-  Người dùng thấy gì: Nếu triển khai phần tác tử trước phần máy chủ, hoặc lùi bản máy chủ sau đó, trạng thái sẵn sàng của Trợ lý OKR và thẻ Cài đặt có thể báo lỗi cho tới khi triển khai lại đúng bản mới. Chỉ xảy ra trong khoảng triển khai lệch.
-  file: `packages/db/src/okr-tro-ly-danh-muc.ts`
-  severity: low
   Đề xuất: known-limits
 
 - **Hình dạng 3 (assert «chuỗi có mặt» thay cho quan hệ): ca ST-caidat-thieu-khoa không đo được việc có nêu AI_GATEWAY_API_KEY (r1)**

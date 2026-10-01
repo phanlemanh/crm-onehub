@@ -1,11 +1,11 @@
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-phien-do: kho crm_va_tro_ly_okr_sau_thu_do · app http://localhost:4191 · api http://localhost:4528
+phien-do: kho crm_va_tro_ly_okr_sau_thu_do · app http://localhost:4311 · api http://localhost:4549
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 -- API cua phien nay khong noi tac tu (thieu AGENT_BRIDGE_SECRET/AGENT_URL) — mo phien do rieng co tac tu
--- phien do co tac tu: cay va-tro-ly-okr-sau-thu-tro-ly · tac tu cong 55915
-phien-do: kho crm_va_tro_ly_okr_sau_thu_tro_ly_do · app http://localhost:4556 · api http://localhost:4469
+-- phien do co tac tu: cay va-tro-ly-okr-sau-thu-tro-ly · tac tu cong 52681
+phien-do: kho crm_va_tro_ly_okr_sau_thu_tro_ly_do · app http://localhost:4239 · api http://localhost:4727
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
