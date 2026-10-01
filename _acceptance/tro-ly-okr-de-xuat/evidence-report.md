@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 70c74a80470265a4b28893e9c30fe5c26feb0792
+verified_commit: 499acb5f83f48ea18ec04b829326a0c66dd5dcbf
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -381,3 +381,7 @@ sha: a8af896d4f715b6d413bf3cb36faadf81ce95631 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-30, do ghim lại sau lượt 8c: 8c chặn đường đọc của trợ lý bằng luật xem
 run_id: repin-20260930T002736Z-41953
 sha: 70c74a80470265a4b28893e9c30fe5c26feb0792 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E25, E28 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 5 — 2026-10-01, do hoá cũ do PR #225 (va-tro-ly-okr-sau-thu) chạm mã trong vùng đo
+run_id: repin-20261001T031526Z-29828
+sha: 499acb5f83f48ea18ec04b829326a0c66dd5dcbf · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E25, E28 — chưa chứng lại, đi vòng S4 delta
