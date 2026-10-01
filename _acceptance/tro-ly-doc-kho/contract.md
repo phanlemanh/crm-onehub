@@ -5,7 +5,7 @@ slug: tro-ly-doc-kho
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-01-tro-ly-doc-kho-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-01
@@ -115,3 +115,15 @@ trả lời được.
 - Luật `docs/agent.md` «Khi nào thêm mã, tool, skill, subagent» áp: kiểm trích và số là mã (1), `tro_ly_kho` là `subagent` vì ranh giới tiền và nơi gửi khác (2), quyền nằm trong từng tool (4), khuôn không đệ quy (6), hỏng hiện là hỏng (7), sổ chi phí riêng (8).
 - Ngưỡng Cổng Đáng của lượt ở `opportunity.md`; ngưỡng cả sản phẩm ở lộ trình mục 5.
 - Bộ câu đo (chủ kho chọn ở Cổng Phạm vi 2026-10-01): vòng chấm lượt này dùng bộ «tạm» máy soạn từ trang mẫu của kho đo, nằm trong git ở `_acceptance/tro-ly-doc-kho/bo-do/`, chỉ đo cơ chế trích dẫn, câu từ chối và việc chuyển câu ở Zalo — không phải câu thật, không gọi là câu thật. 50 câu thật chủ kho gom theo `kho-tai-lieu-bo-vang.md`, giữ ở tệp ngoài kho trên máy chủ kho; chủ kho tự chạy `cham-bo-do.ts --bo <tệp>` lần đầu trong tuần đầu chạy thật, khi đã có trang thật — phiên máy không đọc đáp án. Kết quả bộ thật không chặn lượt này; nó vào phiên nghiệm thu.
+
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-02):**
+  - Ngoài-2 — Người dùng chọn giao diện tiếng Anh vẫn thấy câu từ chối, câu báo lỗi và cảnh báo trang quá hạn bằng tiếng Việt, xen giữa các nhãn tiếng Anh. Nội dung vẫn đúng, chỉ lệch ngôn ngữ.
+  - Ngoài-5 — Khi trợ lý không gửi được câu hỏi đi, nhân viên chỉ thấy câu chung chung là chưa trả lời được lúc này. Người vận hành không có dấu vết nào cho biết vì sao, nên khó tìm nguyên nhân khi lỗi lặp lại.
+  - Ngoài-6 — Nếu việc đóng câu hỏi hoặc ghi chi phí hỏng, nhật ký chỉ ghi tên lỗi chung chung nên khó biết lý do. Câu hỏi sẽ tự đóng là quá hạn sau ba phút, và chi phí có thể bị đếm thiếu mà không ai hay.
+  - Ngoài-7 — Nếu câu hỏi phải chờ hàng đợi một lúc, trợ lý còn ít hơn ba phút để trả lời. Hiếm khi một câu trả lời đúng đã soạn xong vẫn bị bỏ vì đã quá hạn, người hỏi nhận câu chưa trả lời được lúc này.
+  - Ngoài-8 — Phép kiểm cho danh sách trang gần nhất chỉ xác nhận có mặt trang đúng, không xác nhận đúng thứ tự tìm được. Nếu sau này thứ tự trang gợi ý bị đảo, phép kiểm vẫn báo xanh.
+  - Ngoài-9 — Phép kiểm khẳng định trợ lý kho không trả nội dung trang về cho trợ lý chính thực ra không thể báo đỏ, vì dữ liệu vào của nó không bao giờ chứa nội dung đó. Việc không rò chữ trang hiện chỉ được bảo đảm một phần.
+  - Ngoài-10 — Phép kiểm chỉ xác nhận hàng nhật ký câu hỏi Zalo có được tạo, chứ không xác nhận nó được tạo trước khi trợ lý bắt đầu đọc kho. Nếu thứ tự bị đổi, câu hỏi Zalo có thể không được ghi đúng lúc mà phép kiểm không báo.
+  - Ngoài-11 — Phép kiểm màn Hỏi không phân biệt được phần ý trả lời với phần đoạn trích vì dữ liệu giả cho hai phần giống hệt nhau. Nếu màn bỏ mất dòng ý trả lời, phép kiểm vẫn qua.
+  - Ngoài-12 — Phép thử chứng minh script chấm bộ câu đo biết báo lỗi luôn báo lỗi với bất kỳ bộ ba câu nào, kể cả khi dữ liệu đúng. Nó không chứng minh được script thật sự phát hiện sai trang.
+  - Ngoài-14 — Lời hứa nhật ký không chứa chữ câu hỏi chỉ được thử thật trên một trong mười câu mẫu. Chưa thấy câu hỏi nào lọt vào nhật ký, nhưng phần lớn các đường khác chưa được kiểm.

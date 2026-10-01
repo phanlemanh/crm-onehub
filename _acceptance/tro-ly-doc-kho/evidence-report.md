@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: tro-ly-doc-kho
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 7e6178de2b30735f03367e87e60e2cf53982ea37
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-02
 ---
 
 # Evidence Report: tro-ly-doc-kho
@@ -258,7 +258,7 @@ Round 4. Mọi eval máy, eval ui-check và bốn lệnh suite đều xanh trên
     - domain-correctness: PASS — c01-c20 và c27-c30 lượt một đều có trích khớp ý; ngưỡng 20 triệu ở c11, ngoại lệ nghỉ việc ở c13 và hai trang ở c16-c20 không bị khẳng định vượt trang. Sáu câu c21-c26 bị từ chối đúng ở cả hai lượt. Lượt Zalo: 30 câu quy định đều chuyển, 10 câu không phải quy định (kể cả câu có tên khách c36, c37) đều không chuyển. Chỉ c17 trên Zalo thiếu ngày đối soát nhưng không khẳng định điều trang không nói.
     - operational-feasibility: PASS — mọi câu trả lời nhóm có trang nằm trong trích dẫn ghi kèm; sáu câu không có trang bị từ chối ở cả hai lượt; 0 trên 10 câu không phải quy định bị chuyển nhầm và 0 câu quy định bị giữ lại. Khuyết điểm nhỏ: Zalo c17 bỏ phần ngày, c32 và c38 trả lỗi.
     - spec-alignment: PASS — các câu nhóm kho (kể cả c27 không dấu) đều có trích và nội dung khớp trích (ngưỡng 20 triệu, 500.000 đồng, 10 triệu, ngoại lệ nghỉ việc, hai trang c16-c20). Sáu câu không có trang bị từ chối ở cả hai lượt; lượt Zalo 30 câu quy định đều chuyển và 10 câu còn lại đều không chuyển, không có kiểu nhầm lặp lại.
-  human_override:  # chi nguoi ghi
+  human_override: đạt — Phan Le Manh 2026-10-02
 
 - eval: E16j
   judged_by: judge panel (3 lens, fresh context) — đề xuất PASS
@@ -268,7 +268,7 @@ Round 4. Mọi eval máy, eval ui-check và bốn lệnh suite đều xanh trên
     - domain-correctness: PASS — tên trang, Phiên bản 1 và ngày duyệt hiện rõ ở cả hai khổ; ca quá hạn nêu ngày hạn và tên chủ trang Lê Thu Trang. Nhãn khớp CONTEXT.md; tlk-hoi-cuon-390.txt ghi scrollWidth 390 bằng innerWidth 390 cho cả năm trạng thái, không phần tử nào tràn mép.
     - operational-feasibility: PASS — mỗi câu trả lời ghi "Trợ lý AI · theo bản đang dùng", tên trang, Phiên bản N, ngày duyệt và đoạn trích nguyên văn; ca quá hạn nêu tên chủ trang. Chip và tab xuống dòng vừa khổ. Chỗ nhỏ: ở trạng thái trả lời thường màn không hiện ngày xác minh đến (chỉ hiện khi quá hạn), và fixture ghi duyệt 02/10 nhưng quá hạn từ 01/10.
     - spec-alignment: PASS — câu trả lời có trích hiện đủ tên trang, Phiên bản 1 và ngày duyệt dưới nhãn "Trợ lý AI · theo bản đang dùng"; ca quá hạn ghi rõ hạn và "hỏi chủ trang Lê Thu Trang trước khi làm theo". Nhãn khớp CONTEXT.md; ảnh 390 không có chữ chồng nhau.
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Phan Le Manh 2026-10-02
 
 ## Known limits
 
