@@ -18,7 +18,9 @@ const HO_SO = join(GOC, "_acceptance", "tro-ly-doc-kho");
 const AGENT = join(GOC, "apps", "agent");
 const BO_MAC_DINH = join(HO_SO, "bo-do", "mam-tam.json");
 const TRANG_MAU = join(HO_SO, "bo-do", "trang-mau");
-const THU_MUC_BANG_CHUNG = join(HO_SO, "evidence");
+const THU_MUC_BANG_CHUNG =
+	process.env.BANG_CHUNG ??
+	join(GOC, ".acceptance-runs", "tro-ly-doc-kho", "evidence");
 const NHAN_BO_TAM = "tam";
 const NGUONG = {
 	dungTrang: 0.8,

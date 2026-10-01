@@ -426,7 +426,8 @@ evals:
       tong. Luot hai: gui lai moi cau, cong mau 10 cau KHONG phai quy dinh (thoa thuan, OKR, chao
       hoi) viet truoc trong bo, qua phien agent goc purpose zalo voi model that va Zalo gia; in moi
       cau mot dong "<id> chuyen|khong-chuyen" theo co hang TaiLieuHoi kenh ZALO hay khong. Ghi ca hai
-      luot vao _acceptance/tro-ly-doc-kho/evidence/cham-bo-do.md. Nguong [de xuat]: >= 80% cau co
+      luot vao .acceptance-runs/tro-ly-doc-kho/evidence/cham-bo-do.md (bien BANG_CHUNG), vong S4
+      chep sang _acceptance/tro-ly-doc-kho/evidence/cham-bo-do.md cho E15j. Nguong [de xuat]: >= 80% cau co
       trang mong doi duoc tra loi co trich trang do; >= 80% cau "khong-co" bi tu choi; >= 90% cau quy
       dinh qua Zalo duoc chuyen; <= 10% cau khong phai quy dinh bi chuyen; 0 cau tra loi co trich
       khong qua kiem (do ma bao dam, script dem lai).
