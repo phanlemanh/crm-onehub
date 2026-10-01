@@ -41,10 +41,9 @@ export async function timTrangKho(q: string): Promise<DongTimKho[]> {
 	}));
 }
 
-export function bocChuTrang(noiDung: string): {
-	chu: string;
-	biDongCat: boolean;
-} {
+export type ChuTrangBoc = { chu: string; biDongCat: boolean };
+
+export function bocChuTrang(noiDung: string): ChuTrangBoc {
 	const sach = noiDung.replace(DAU_LA, "");
 	const biDongCat = sach.length > HOI.docToiDa;
 	const than = biDongCat ? sach.slice(0, HOI.docToiDa) : sach;

@@ -23,6 +23,7 @@ import {
 	gieoNguoi,
 	goiCongCu,
 	ma,
+	type NguCanhGoi,
 	type Nguoi,
 	trangDaDuyet,
 } from "./support/tro-ly-kho-gia";
@@ -37,7 +38,30 @@ afterAll(async () => {
 	await donTroLyKho();
 });
 
-async function hangKho(): Promise<{ hoiId: string; ctx: unknown }> {
+type NguCanhKho = {
+	session: {
+		id: string;
+		auth: {
+			current: { attributes: Record<string, string> };
+			initiator: { attributes: Record<string, string> };
+		};
+	};
+	channel: { kind: string; continuationToken: string };
+};
+
+type SuKienKetQua = {
+	type: "action.result";
+	data: {
+		result: {
+			kind: string;
+			subagentName: string;
+			isError: boolean;
+			output: { message: string } | { hoiId: string; ketQua: string };
+		};
+	};
+};
+
+async function hangKho(): Promise<{ hoiId: string; ctx: NguCanhKho }> {
 	const phienGoc = ma("ses-goc");
 	const hang = await db.taiLieuHoi.create({
 		data: {
@@ -66,8 +90,9 @@ async function hangKho(): Promise<{ hoiId: string; ctx: unknown }> {
 	};
 }
 
-type XuLy = (e: unknown, c: unknown) => Promise<void>;
-async function ketQuaCon(ctx: unknown, isError: boolean, message?: string) {
+type XuLy = (e: SuKienKetQua, c: NguCanhKho) => Promise<void>;
+type BatDau = (e: { type: "session.started" }, c: NguCanhGoi) => Promise<void>;
+async function ketQuaCon(ctx: NguCanhKho, isError: boolean, message?: string) {
 	await (hookDong.events?.["action.result"] as unknown as XuLy)(
 		{
 			type: "action.result",
@@ -88,7 +113,7 @@ describe("tlk-loi", () => {
 	test("tlk-loi: sau ca dong dung ly do va cau cho nguoi hoi", async () => {
 		const ca: [
 			string,
-			(h: { hoiId: string; ctx: unknown }) => Promise<void>,
+			(h: { hoiId: string; ctx: NguCanhKho }) => Promise<void>,
 			string,
 		][] = [
 			[
@@ -199,9 +224,9 @@ describe("tlk-hoi-dau-cuoi", () => {
 		expect(viec.finishedAt).not.toBeNull();
 
 		const con = ctxConCua(`ses-goc-${hoiId}`);
-		await (loiDan as unknown as { events: { "session.started": XuLy } }).events[
-			"session.started"
-		]({ type: "session.started" }, con);
+		await (
+			loiDan as unknown as { events: { "session.started": BatDau } }
+		).events["session.started"]({ type: "session.started" }, con);
 		const doc = await goiCongCu<{ phienBan: number }>(
 			readPage,
 			{ slug: trang.slug },

@@ -107,17 +107,36 @@ export async function moHoiCrm(
 	return { hoiId: hang.id, ctx: ctxConCua(phienGoc) };
 }
 
+type GiaTri =
+	| string
+	| number
+	| boolean
+	| null
+	| GiaTri[]
+	| { [k: string]: GiaTri };
+export type VaoCongCu = { [k: string]: GiaTri };
+
+export type NguCanhGoi = {
+	session: {
+		id: string;
+		parent?: { sessionId: string; rootSessionId: string };
+		auth: {
+			current: { attributes: Record<string, string> };
+			initiator: { attributes: Record<string, string> };
+		};
+	};
+};
+
 type CongCu = { execute: unknown };
+type Execute<T> = (vao: VaoCongCu, ctx: NguCanhGoi) => Promise<T>;
 
 export async function goiCongCu<T>(
 	congCu: CongCu,
-	vao: unknown,
-	ctx: unknown,
+	vao: VaoCongCu,
+	ctx: NguCanhGoi,
 ): Promise<{ ok: true; ra: T } | { ok: false; loi: string }> {
 	try {
-		const ra = (await (
-			congCu.execute as (v: unknown, c: unknown) => Promise<T>
-		)(vao, ctx)) as T;
+		const ra = await (congCu.execute as Execute<T>)(vao, ctx);
 		return { ok: true, ra };
 	} catch (loi) {
 		return { ok: false, loi: loi instanceof Error ? loi.message : String(loi) };

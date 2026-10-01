@@ -92,13 +92,13 @@ describe("tlk-chua-tra-loi", () => {
 		const q3 = await tao("Câu Q3?", gan([a, b]));
 		const q4 = await tao("Câu Q4?", []);
 		const cuaToi = new Set([q1, q2, q3, q4]);
-		const mong: Record<string, string[]> = {
+		const mong = {
 			owner: [q1, q2, q3, q4],
 			admin: [q1, q2, q3, q4],
 			chu: [q1, q3],
 			tao: [q2, q3],
 			khac: [],
-		};
+		} satisfies Record<string, string[]>;
 		const nguoiHoi = await db.user.findUniqueOrThrow({
 			where: { id: phien.khac.nguoi },
 			select: { name: true },
@@ -192,13 +192,13 @@ describe("tlk-bao-sai", () => {
 		const idX = viec.find((v) => v.trangId === x.trangId)?.id ?? "";
 		const idY = viec.find((v) => v.trangId === y.trangId)?.id ?? "";
 		const cuaToi = new Set([idX, idY]);
-		const mong: Record<string, string[]> = {
+		const mong = {
 			chu: [idX],
 			tao: [idY],
 			owner: [idX, idY],
 			admin: [idX, idY],
 			khac: [],
-		};
+		} satisfies Record<string, string[]>;
 		for (const [ai, ky] of Object.entries(mong)) {
 			const sk = await sucKhoe(ai as Ai);
 			const thay = sk.baoSai.rows

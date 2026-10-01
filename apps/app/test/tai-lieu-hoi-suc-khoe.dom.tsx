@@ -87,8 +87,8 @@ mock.module("@/lib/trpc/client", () => ({
 				}),
 			},
 			xuLyChuaTraLoi: {
-				mutationOptions: (o?: object) => ({
-					...o,
+				mutationOptions: (chon?: { onSuccess?: () => void }) => ({
+					...chon,
 					mutationFn: async (v: { hoiId: string }) => {
 						canh.xuLyChua.push(v);
 						canh.chua = canh.chua.filter((r) => r.hoiId !== v.hoiId);
@@ -97,8 +97,8 @@ mock.module("@/lib/trpc/client", () => ({
 				}),
 			},
 			xuLyBaoSai: {
-				mutationOptions: (o?: object) => ({
-					...o,
+				mutationOptions: (chon?: { onSuccess?: () => void }) => ({
+					...chon,
 					mutationFn: async (v: { id: string }) => {
 						canh.xuLyBao.push(v);
 						canh.bao = canh.bao.filter((r) => r.id !== v.id);

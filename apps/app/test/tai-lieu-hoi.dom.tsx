@@ -66,70 +66,70 @@ const TU_CHOI = {
 };
 
 type LoiTrpc = Error & { data?: { httpStatus?: number; code?: string } };
-
-const canh: {
-	ketQua: unknown;
+type KetQuaGia =
+	| typeof TRA_LOI
+	| typeof QUA_HAN
+	| typeof TU_CHOI
+	| { trangThai: "LOI"; lyDo: "het-tran" };
+type BaoSaiVao = { hoiId: string; cauHoi: string; ghiChu?: string };
+type ChonMutation = { onSuccess?: () => void };
+type Canh = {
+	ketQua: KetQuaGia | null;
 	loiHoi: LoiTrpc | null;
 	goiHoi: string[];
-	goiBaoSai: unknown[];
-} = { ketQua: null, loiHoi: null, goiHoi: [], goiBaoSai: [] };
+	goiBaoSai: BaoSaiVao[];
+};
+
+function canhMoi(): Canh {
+	return { ketQua: null, loiHoi: null, goiHoi: [], goiBaoSai: [] };
+}
+
+const canh = canhMoi();
 
 const treo = () => new Promise<never>(() => {});
 
-function tamTrpc(duong: string[]): unknown {
-	return new Proxy(() => {}, {
-		get(_, k: string) {
-			if (k === "queryOptions")
-				return (vao?: unknown) => ({
-					queryKey: [duong.join("."), vao],
-					queryFn: treo,
-				});
-			if (k === "mutationOptions")
-				return (o?: object) => ({ ...o, mutationFn: treo });
-			if (k === "queryKey") return () => [duong.join(".")];
-			return tamTrpc([...duong, k]);
-		},
-	});
-}
-
 mock.module("@/lib/trpc/client", () => ({
-	useTRPC: () =>
-		new Proxy(
-			{
-				hoiKho: {
-					hoi: {
-						mutationOptions: (o?: object) => ({
-							...o,
-							mutationFn: async (v: { cauHoi: string }) => {
-								canh.goiHoi.push(v.cauHoi);
-								if (canh.loiHoi) throw canh.loiHoi;
-								return { hoiId: `h${canh.goiHoi.length}` };
-							},
-						}),
-					},
-					ketQua: {
-						queryOptions: (vao: { hoiId: string }) => ({
-							queryKey: ["hoiKho.ketQua", vao],
-							queryFn: async () => canh.ketQua ?? { trangThai: "DANG_HOI" },
-						}),
-					},
-					baoSai: {
-						mutationOptions: (o?: object) => ({
-							...o,
-							mutationFn: async (v: unknown) => {
-								canh.goiBaoSai.push(v);
-								return { soViec: 1 };
-							},
-						}),
-					},
-				},
-			} as Record<string, unknown>,
-			{
-				get(dich, k: string) {
-					return k in dich ? dich[k] : tamTrpc([k]);
-				},
+	useTRPC: () => ({
+		taiLieu: {
+			proposals: {
+				queryKey: () => ["taiLieu.proposals"],
+				queryOptions: () => ({
+					queryKey: ["taiLieu.proposals"],
+					queryFn: treo,
+				}),
 			},
-		),
+		},
+		hoiKho: {
+			hoi: {
+				mutationOptions: (chon?: ChonMutation) => ({
+					...chon,
+					mutationFn: async (v: { cauHoi: string }) => {
+						canh.goiHoi.push(v.cauHoi);
+						if (canh.loiHoi) throw canh.loiHoi;
+						return { hoiId: `h${canh.goiHoi.length}` };
+					},
+				}),
+			},
+			ketQua: {
+				queryOptions: (vao: { hoiId: string }) => ({
+					queryKey: ["hoiKho.ketQua", vao],
+					queryFn: async () => canh.ketQua ?? { trangThai: "DANG_HOI" },
+				}),
+			},
+			baoSai: {
+				mutationOptions: (chon?: ChonMutation) => ({
+					...chon,
+					mutationFn: async (v: BaoSaiVao) => {
+						canh.goiBaoSai.push(v);
+						return { soViec: 1 };
+					},
+				}),
+			},
+		},
+	}),
+}));
+mock.module("@/app/(app)/[slug]/tai-lieu/hop-tai-nguon", () => ({
+	NutTaiNguon: () => null,
 }));
 mock.module("next/navigation", () => ({
 	useParams: () => ({ slug: "ws" }),
@@ -172,10 +172,7 @@ afterEach(() => {
 	root = null;
 	khung = null;
 	document.body.innerHTML = "";
-	canh.ketQua = null;
-	canh.loiHoi = null;
-	canh.goiHoi = [];
-	canh.goiBaoSai = [];
+	Object.assign(canh, canhMoi());
 });
 
 const nhip = () => new Promise((r) => setTimeout(r, 30));

@@ -143,7 +143,7 @@ export async function dongHoiKhoKhiPhienHong(
 	return true;
 }
 
-const ketQuaCon = z.object({
+export const ketQuaTroLyKho = z.object({
 	result: z.object({
 		kind: z.literal("subagent-result"),
 		subagentName: z.literal("tro_ly_kho"),
@@ -151,6 +151,7 @@ const ketQuaCon = z.object({
 		output: z.object({ message: z.string() }).nullable().catch(null),
 	}),
 });
+export type KetQuaTroLyKho = z.infer<typeof ketQuaTroLyKho>;
 
 async function hoiCuaPhienGoc(ctx: PurposeContext): Promise<string | null> {
 	const purpose = purposeOf(ctx);
@@ -166,15 +167,13 @@ async function hoiCuaPhienGoc(ctx: PurposeContext): Promise<string | null> {
 }
 
 export async function dongTheoKetQuaCon(
-	data: unknown,
+	kq: KetQuaTroLyKho,
 	ctx: PurposeContext,
 ): Promise<void> {
-	const kq = ketQuaCon.safeParse(data);
-	if (!kq.success) return;
 	const hoiId = await hoiCuaPhienGoc(ctx);
 	if (!hoiId) return;
-	if (kq.data.result.isError) {
-		await dongLoi(hoiId, phanLoaiLoi(kq.data.result.output?.message ?? ""));
+	if (kq.result.isError) {
+		await dongLoi(hoiId, phanLoaiLoi(kq.result.output?.message ?? ""));
 		return;
 	}
 	await dongLoi(hoiId, "loi-model");

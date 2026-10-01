@@ -24,6 +24,7 @@ import nopTraLoi from "../agent/subagents/tro_ly_kho/tools/nop_tra_loi";
 import readPage from "../agent/subagents/tro_ly_kho/tools/read_page";
 import LOI from "./fixtures/loi-gateway.json";
 import {
+	type CtxCon,
 	ctxConCua,
 	donTroLyKho,
 	gieoNguoi,
@@ -117,13 +118,30 @@ function ctxGoc(c: { zaloHoiId: string; chatId: string; goc: string }) {
 	};
 }
 
-type XuLy = (d: unknown, kenh: unknown, ctx?: unknown) => Promise<void>;
+type DuLieuTin = { message?: string; finishReason?: string };
+type KenhGia = { continuationToken: string; setContinuationToken: () => void };
+type NguCanhGoc = ReturnType<typeof ctxGoc>;
+type XuLyKenh = (d: DuLieuTin, kenh: KenhGia, ctx: NguCanhGoc) => Promise<void>;
+type BatDau = (e: { type: "session.started" }, c: CtxCon) => Promise<void>;
+type SuKienKetQua = {
+	type: "action.result";
+	data: {
+		result: {
+			kind: string;
+			subagentName: string;
+			isError: boolean;
+			output: { message: string };
+		};
+	};
+};
+type XuLyKetQua = (e: SuKienKetQua, c: NguCanhGoc) => Promise<void>;
+
 async function suKien(
 	ten: string,
-	data: unknown,
+	data: DuLieuTin,
 	c: { zaloHoiId: string; chatId: string; goc: string },
 ) {
-	const xuLy = (zaloEvents as unknown as Record<string, XuLy>)[ten];
+	const xuLy = (zaloEvents as unknown as Record<string, XuLyKenh>)[ten];
 	if (!xuLy) throw new Error(`thieu su kien ${ten}`);
 	await xuLy(
 		data,
@@ -137,7 +155,7 @@ async function suKien(
 
 async function moTroLy(goc: string) {
 	const con = ctxConCua(goc);
-	await (loiDan as unknown as { events: { "session.started": XuLy } }).events[
+	await (loiDan as unknown as { events: { "session.started": BatDau } }).events[
 		"session.started"
 	]({ type: "session.started" }, con);
 	return con;
@@ -262,7 +280,7 @@ describe("tlk-zalo", () => {
 		for (const duong of ["message.completed", "turn.failed"] as const) {
 			const c = await cauZalo();
 			await moTroLy(c.goc);
-			await (hookDong.events?.["action.result"] as unknown as XuLy)(
+			await (hookDong.events?.["action.result"] as unknown as XuLyKetQua)(
 				{
 					type: "action.result",
 					data: {

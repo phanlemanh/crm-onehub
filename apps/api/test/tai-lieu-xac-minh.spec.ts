@@ -32,7 +32,7 @@ describe("tlk-xac-minh", () => {
 			"tao",
 			"tao",
 		);
-		const mong: Record<string, Record<Ai, number>> = {
+		const mong = {
 			[p1.slug]: {
 				chu: 200,
 				owner: 200,
@@ -49,7 +49,7 @@ describe("tlk-xac-minh", () => {
 				okr: 404,
 				tao: 200,
 			},
-		};
+		} satisfies Record<string, Record<Ai, number>>;
 		let o = 0;
 		for (const trang of [p1, p2]) {
 			for (const ai of NGUOI) {

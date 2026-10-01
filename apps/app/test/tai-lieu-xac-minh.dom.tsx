@@ -10,61 +10,39 @@ import {
 import { createRoot, type Root } from "react-dom/client";
 
 type LoiTrpc = Error & { data?: { httpStatus?: number } };
+type DatXacMinhVao = { slug: string; den: string | null };
+type ChonMutation = { onSuccess?: () => void };
+type Canh = { goi: DatXacMinhVao[]; loi: LoiTrpc | null; lamMoi: number };
 
-const canh: { goi: unknown[]; loi: LoiTrpc | null; lamMoi: number } = {
-	goi: [],
-	loi: null,
-	lamMoi: 0,
-};
+function canhMoi(): Canh {
+	return { goi: [], loi: null, lamMoi: 0 };
+}
+
+const canh = canhMoi();
 
 const treo = () => new Promise<never>(() => {});
 
-function tamTrpc(duong: string[]): unknown {
-	return new Proxy(() => {}, {
-		get(_, k: string) {
-			if (k === "queryOptions")
-				return (vao?: unknown) => ({
-					queryKey: [duong.join("."), vao],
-					queryFn: treo,
-				});
-			if (k === "mutationOptions")
-				return (o?: object) => ({ ...o, mutationFn: treo });
-			if (k === "queryKey") return () => [duong.join(".")];
-			return tamTrpc([...duong, k]);
-		},
-	});
-}
-
 mock.module("@/lib/trpc/client", () => ({
-	useTRPC: () =>
-		new Proxy(
-			{
-				taiLieu: new Proxy(
-					{
-						datXacMinh: {
-							mutationOptions: (o?: object) => ({
-								...o,
-								mutationFn: async (v: unknown) => {
-									canh.goi.push(v);
-									if (canh.loi) throw canh.loi;
-									return { ok: true };
-								},
-							}),
-						},
-					} as Record<string, unknown>,
-					{
-						get(dich, k: string) {
-							return k in dich ? dich[k] : tamTrpc(["taiLieu", k]);
-						},
-					},
-				),
-			} as Record<string, unknown>,
-			{
-				get(dich, k: string) {
-					return k in dich ? dich[k] : tamTrpc([k]);
-				},
+	useTRPC: () => ({
+		taiLieu: {
+			nhacToi: {
+				queryOptions: (vao: { slug: string }) => ({
+					queryKey: ["taiLieu.nhacToi", vao],
+					queryFn: treo,
+				}),
 			},
-		),
+			datXacMinh: {
+				mutationOptions: (chon?: ChonMutation) => ({
+					...chon,
+					mutationFn: async (v: DatXacMinhVao) => {
+						canh.goi.push(v);
+						if (canh.loi) throw canh.loi;
+						return { ok: true };
+					},
+				}),
+			},
+		},
+	}),
 }));
 mock.module("next/navigation", () => ({
 	useRouter: () => ({
@@ -135,9 +113,7 @@ afterEach(() => {
 	root = null;
 	khung = null;
 	document.body.innerHTML = "";
-	canh.goi = [];
-	canh.loi = null;
-	canh.lamMoi = 0;
+	Object.assign(canh, canhMoi());
 });
 
 const nhip = () => new Promise((r) => setTimeout(r, 30));

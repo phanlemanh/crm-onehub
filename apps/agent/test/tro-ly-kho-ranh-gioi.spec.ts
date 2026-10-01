@@ -10,6 +10,7 @@ import { modelTaiLieu, nhanKhoaTaiLieu } from "../agent/lib/tai-lieu-model";
 import troLyKho from "../agent/subagents/tro_ly_kho/agent";
 import hookSo from "../agent/subagents/tro_ly_kho/hooks/so-chi-phi";
 import {
+	type CtxCon,
 	donTroLyKho,
 	gieoNguoi,
 	moHoiCrm,
@@ -27,6 +28,15 @@ const THU_MUC_MAY_SOAN = join(
 const TOOL_SONG = ["nop_tra_loi", "read_page", "search_pages"] as const;
 const IMPORT_CAM = [/app-?setting/i, /model-theo-vai/i, /modelTheoVai/];
 const BIEN = TAI_LIEU_AGENT.hoi.bienKhoaRieng;
+
+type KetQuaThu = { hoiId: string; ketQua: string; traLoi?: string };
+type KhuonRa = { safeParse: (v: KetQuaThu) => { success: boolean } };
+type SuKienBuoc = {
+	type: "step.completed";
+	meta: { id: string; at: string };
+	data: { usage: { inputTokens: number; outputTokens: number } };
+};
+type XuLy = (e: SuKienBuoc, c: CtxCon) => Promise<void>;
 const MOC = "NOIDUNG-TRANG-MOC";
 
 type PhanLoai = { song: string[]; tat: string[] };
@@ -146,9 +156,7 @@ describe("tlk-ranh-gioi", () => {
 	});
 
 	test("tlk-ranh-gioi: ket qua tra agent goc chi la ma hang va ket qua, khong chu trang", () => {
-		const khuon = troLyKho.outputSchema as unknown as {
-			safeParse: (v: unknown) => { success: boolean };
-		};
+		const khuon = troLyKho.outputSchema as unknown as KhuonRa;
 		expect(
 			khuon.safeParse({ hoiId: "cmup14vbv000as4tylgu149qg", ketQua: "TRA_LOI" })
 				.success,
@@ -169,7 +177,6 @@ describe("tlk-ranh-gioi", () => {
 
 	test("tlk-ranh-gioi: moi buoc model cong token, chi phi vao hang va ghi so chi phi tai-lieu.tro-ly", async () => {
 		const { hoiId, ctx } = await moHoiCrm(quanTri);
-		type XuLy = (e: unknown, c: unknown) => Promise<void>;
 		const xuLy = hookSo.events?.["step.completed"] as unknown as XuLy;
 		for (const [i, u] of [
 			[1, { inputTokens: 1000, outputTokens: 300 }],
