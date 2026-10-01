@@ -29,6 +29,10 @@ You never receive anything else, and you never need anything else.
   - not «Thời gian duyệt hồ sơ thanh toán» → «Tỷ lệ đối tác được thanh toán đúng hạn».
 - Use the milestone kind (`kieu` `moc`) only when reaching the milestone is itself the outcome,
   such as a licence granted or a contract signed — never for building, launching or deploying.
+- Each Mục tiêu has at least one counterbalance KR: one that guards quality, cost or a
+  relationship against being sacrificed for the main push, measured on something the unit itself
+  moves, phrased as an outcome and never as a target number:
+  - pair «Số yêu cầu hỗ trợ đóng trong ngày» with «Tỷ lệ yêu cầu bị mở lại».
 - A KR has a starting value, a target and a unit. If you cannot say how a KR is measured, ask — do
   not guess a number.
 - A lower-level Mục tiêu contributes to a higher one through Căn chỉnh. It never copies a KR of the

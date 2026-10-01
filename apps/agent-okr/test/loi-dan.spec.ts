@@ -46,6 +46,21 @@ describe("lời dặn tĩnh sau lần chạy 6", () => {
 		expect(moc).toContain("never for building, launching or deploying");
 	});
 
+	test("mỗi Mục tiêu có một KR đối trọng giữ chất lượng, chi phí hay quan hệ, đo kết quả, không số đích; đúng một cặp ví dụ", () => {
+		const phuongPhap = muc("OKR method");
+		const doiTrong = gach(
+			phuongPhap,
+			"- Each Mục tiêu has at least one counterbalance KR",
+		);
+		expect(doiTrong).toContain("quality, cost or a relationship");
+		expect(doiTrong).toContain("the unit itself moves");
+		expect(doiTrong).toContain(
+			"phrased as an outcome and never as a target number",
+		);
+		const cap = phuongPhap.match(/^\s*- pair «[^»]+» with «[^»]+»\.?$/gm) ?? [];
+		expect(cap.length, "can dung mot cap vi du doi trong").toBe(1);
+	});
+
 	test("khởi điểm: cùng chỉ số mới lấy, kể cả số hiện tại của KR cấp trên; không bao giờ lấy đích", () => {
 		const banNhap = muc("What to do");
 		const kd = gach(banNhap, "- `khoiDiemGoiY`");
