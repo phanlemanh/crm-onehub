@@ -5,6 +5,7 @@ import {
 	QueryClientProvider,
 	skipToken,
 } from "@tanstack/react-query";
+import type { SessionSnapshot } from "eve/client";
 import type { EveMessage } from "eve/react";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
@@ -196,12 +197,39 @@ export let threadGia: Thread = { status: "offline", events: [] };
 export function datThread(t: Thread): void {
 	threadGia = t;
 }
+
+export type LuongEve = SessionSnapshot;
+let luongGia: LuongEve | null = null;
+export const daPhanLoai: Thread["status"][] = [];
+export function datLuong(l: LuongEve): void {
+	luongGia = l;
+}
+
+const clientThat = await import("eve/client");
+mock.module("eve/client", () => ({
+	...clientThat,
+	Client: class {
+		session() {
+			return {
+				snapshot: async (): Promise<SessionSnapshot> => {
+					if (!luongGia) throw new Error("chua dat luong eve gia");
+					return luongGia;
+				},
+			};
+		}
+	},
+}));
+
 const phienThat = await import("../lib/agent-session");
+const loadThreadThat = phienThat.loadThread;
 mock.module("@/lib/agent-session", () => ({
 	...phienThat,
-	loadThread: async (sessionId: string) => {
-		daTaiLuong.push(sessionId);
-		return threadGia;
+	loadThread: async (...thamSo: Parameters<typeof loadThreadThat>) => {
+		daTaiLuong.push(thamSo[0]);
+		if (!luongGia) return threadGia;
+		const t = await loadThreadThat(...thamSo);
+		daPhanLoai.push(t.status);
+		return t;
 	},
 }));
 
@@ -360,6 +388,8 @@ export function datLai(): void {
 	duLieu.clear();
 	agentGia = AGENT_DAU;
 	threadGia = { status: "offline", events: [] };
+	luongGia = null;
+	daPhanLoai.length = 0;
 	danhSach = { cuoc: CUOC, dong: [], thieuBoiCanh: false, lyDo: null };
 	dat("okr.soanDanhSach", () => danhSach);
 	dat("okr.soanQuyet", () => ({ ok: true }));

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import type { MessageStreamEvent } from "eve/client";
 import {
 	bam,
 	batDongHoGia,
@@ -7,8 +8,10 @@ import {
 	chu,
 	daDung,
 	daGui,
+	daPhanLoai,
 	datAgent,
 	datLai,
+	datLuong,
 	datThread,
 	don,
 	go,
@@ -34,14 +37,69 @@ const TIN_CU = {
 const coLoi = () =>
 	chu('[data-luot="loi"] [data-slot="alert-title"]') === m.hoiThoai.loi;
 
+const CHET_SAU_MS = 5_000;
+const LUOT = "luot-1";
+const CHET_PHAI_RA_ENDED =
+	"luong cua tac nhan chet sau 5 giay phai duoc classify xep la ended";
+
+const luc = (batDau: number, sau: number, so: number) => ({
+	at: new Date(batDau + sau).toISOString(),
+	id: `su-kien-${so}`,
+});
+
+function luongDangChay(batDau: number): MessageStreamEvent[] {
+	return [
+		{ type: "session.started", data: {}, meta: luc(batDau, 0, 1) },
+		{
+			type: "message.received",
+			data: { message: MO_DAU, sequence: 1, turnId: LUOT },
+			meta: luc(batDau, 0, 2),
+		},
+		{
+			type: "turn.started",
+			data: { sequence: 2, turnId: LUOT },
+			meta: luc(batDau, 0, 3),
+		},
+		{
+			type: "step.started",
+			data: { sequence: 3, stepIndex: 0, turnId: LUOT },
+			meta: luc(batDau, 0, 4),
+		},
+	];
+}
+
+function luongChetSau5Giay(batDau: number): MessageStreamEvent[] {
+	const loi = { code: "AGENT_DIED", message: "agent process exited" };
+	return [
+		...luongDangChay(batDau),
+		{
+			type: "step.failed",
+			data: { ...loi, sequence: 4, stepIndex: 0, turnId: LUOT },
+			meta: luc(batDau, CHET_SAU_MS, 5),
+		},
+		{
+			type: "turn.failed",
+			data: { ...loi, sequence: 5, turnId: LUOT },
+			meta: luc(batDau, CHET_SAU_MS, 6),
+		},
+		{
+			type: "session.failed",
+			data: { ...loi, sessionId: CUOC.sessionId },
+			meta: luc(batDau, CHET_SAU_MS, 7),
+		},
+	];
+}
+
+const phienKhongTiepNoi = (events: MessageStreamEvent[]) => ({
+	session: { sessionId: CUOC.sessionId, streamIndex: events.length },
+	events,
+});
+
 describe("hong — tac nhan chet giua chung", () => {
 	test("(a) phiên đã kết thúc mà cuộc còn đang soạn: báo lỗi và có Thử lại", async () => {
-		datThread({
-			status: "ended",
-			session: { sessionId: "phien-1", streamIndex: 3 },
-			events: [TIN_CU] as never,
-		});
+		datLuong(phienKhongTiepNoi(luongChetSau5Giay(Date.now() - CHET_SAU_MS)));
 		await moMan();
+		expect(daPhanLoai.at(-1), CHET_PHAI_RA_ENDED).toBe("ended");
 		expect(coLoi()).toBe(true);
 		expect(chu('[data-luot="loi"] [data-slot="alert-description"]')).toBe(
 			m.hoiThoai.loiMoTaKhac,
@@ -51,13 +109,16 @@ describe("hong — tac nhan chet giua chung", () => {
 	});
 
 	test("(a) tác nhân chết 5 giây sau khi bắt đầu lượt: báo lỗi và có Thử lại", async () => {
+		batDongHoGia();
+		const batDau = Date.now();
+		datLuong(phienKhongTiepNoi(luongDangChay(batDau)));
 		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
 		await moMan();
-		batDongHoGia();
-		await datAgent({ status: "streaming", events: [{ type: "turn.started" }] });
-		await troi(5_000);
+		await troi(CHET_SAU_MS);
 		expect(coLoi()).toBe(false);
-		await datAgent({ status: "error", error: new Error("session ended") });
+		datLuong(phienKhongTiepNoi(luongChetSau5Giay(batDau)));
+		await troi(SOAN_UI.hoiLuongMs + 200);
+		expect(daPhanLoai.at(-1), CHET_PHAI_RA_ENDED).toBe("ended");
 		expect(coLoi()).toBe(true);
 		expect(q('[data-nut="thu-lai"]')).not.toBeNull();
 		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
