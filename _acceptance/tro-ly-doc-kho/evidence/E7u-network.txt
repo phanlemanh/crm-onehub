@@ -1,2 +1,4 @@
-E7u network: driver la puppeteer-core trong man-hoi.mjs, khong co duong doc network/console -> n-a (driver).
-Lan 1 (run1) tien de that bai tam thoi: app / tra 200 khong Location -> ma 2 (khong phai ket qua do); lan 2 va chieu-do deu chay xong.
+E7u network truth: n-a (driver)
+Driver = Playwright script (man-hoi.mjs via mot-luot.sh -> tien-de.mjs phien do rieng); khong co tool doc network/console tu browser tool ben ngoai.
+Phien do: app localhost:4255, api localhost:4624 (cong tu do, tu dong dung/don).
+Run chinh: exit 0, 6 dong 'buoc N: dat', 'man-hoi: dat'. Chieu do: 'buoc 1: khong thay tab Hỏi', ma 1, 'DO DUNG GHIM'.
