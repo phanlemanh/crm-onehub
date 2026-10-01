@@ -14,6 +14,8 @@ import { restMeta } from "../trpc/openapi";
 import { docPhamViYeuCau } from "../trpc/pham-vi-yeu-cau";
 import type { NguoiGoi } from "./quyen";
 import {
+	taiLieuBaoSaiInput,
+	taiLieuBaoSaiOutput,
 	taiLieuHoiInput,
 	taiLieuHoiKetQuaInput,
 	taiLieuHoiKetQuaOutput,
@@ -56,5 +58,17 @@ export class HoiKhoRouter {
 		@Input() input: z.infer<typeof taiLieuHoiKetQuaInput>,
 	) {
 		return this.hoiKho.ketQua(nguoiGoi(ctx), input.hoiId);
+	}
+
+	@Mutation({
+		input: taiLieuBaoSaiInput,
+		output: taiLieuBaoSaiOutput,
+		meta: restMeta("POST", "/tai-lieu/hoi/{hoiId}/bao-sai", TAG),
+	})
+	baoSai(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuBaoSaiInput>,
+	) {
+		return this.hoiKho.baoSai(nguoiGoi(ctx), input);
 	}
 }

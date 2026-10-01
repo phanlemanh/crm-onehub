@@ -5,7 +5,7 @@ import { type HangTimKho, timTrangDangDung } from "@crm/db/tai-lieu-tim";
 import { type LoaiTrang, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { cauChuaLienKet, chuThuong } from "@crm/validation/tai-lieu-markdown";
 import { doanTrich, dungTruyVan } from "@crm/validation/tai-lieu-tim";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type { NguoiGoi } from "./quyen";
 import type {
@@ -15,6 +15,7 @@ import type {
 	TaiLieuTimOutput,
 } from "./tai-lieu.contracts";
 import { TAI_LIEU_API } from "./tai-lieu-config";
+import { TaiLieuHoiService } from "./tai-lieu-hoi.service";
 
 const TIM = TAI_LIEU.tim;
 
@@ -46,7 +47,10 @@ function trichCua(
 
 @Injectable()
 export class TaiLieuTimService {
-	constructor(@InjectDatabase() private readonly db: Db) {}
+	constructor(
+		@InjectDatabase() private readonly db: Db,
+		@Inject(TaiLieuHoiService) private readonly hoiKho: TaiLieuHoiService,
+	) {}
 
 	async tim(q: string): Promise<TaiLieuTimOutput> {
 		const truyVan = dungTruyVan(q);
@@ -139,6 +143,10 @@ export class TaiLieuTimService {
 	}
 
 	async sucKhoe(nguoi: NguoiGoi): Promise<TaiLieuSucKhoeOutput> {
+		const [chuaTraLoi, baoSai] = await Promise.all([
+			this.hoiKho.danhSachChuaTraLoi(nguoi),
+			this.hoiKho.danhSachBaoSai(nguoi),
+		]);
 		const [dangDung, lienKet, cho] = await Promise.all([
 			this.db.taiLieuTrang.findMany({
 				where: { banDangDungId: { not: null } },
@@ -217,6 +225,8 @@ export class TaiLieuTimService {
 						duyetLuc: (t.banDangDung?.duyetLuc ?? new Date(0)).toISOString(),
 					})),
 			),
+			chuaTraLoi,
+			baoSai,
 		};
 	}
 
