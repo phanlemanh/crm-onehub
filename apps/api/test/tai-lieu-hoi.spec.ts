@@ -139,11 +139,24 @@ describe("tlk-nhat-ky", () => {
 			(_, i) => `Câu nhật ký số ${i + 1}?`,
 		);
 		const ghiLog: string[] = [];
-		const bat = (["log", "warn", "error"] as const).map((m) =>
-			spyOn(Logger.prototype, m).mockImplementation((...a: unknown[]) => {
-				ghiLog.push(JSON.stringify(a));
-			}),
+		const bat = [
+			...(["log", "warn", "error", "debug", "verbose"] as const).map((m) =>
+				spyOn(Logger.prototype, m).mockImplementation((...a: string[]) => {
+					ghiLog.push(JSON.stringify(a));
+				}),
+			),
+			...(["log", "info", "warn", "error", "debug"] as const).map((m) =>
+				spyOn(console, m).mockImplementation((...a: string[]) => {
+					ghiLog.push(JSON.stringify(a));
+				}),
+			),
+		];
+		const quaHttp = "Câu nhật ký gửi qua HTTP thật?";
+		const { hoiId: hoiHttp } = ok<{ hoiId: string }>(
+			await hoiKho(quaHttp, "owner"),
+			"hoi qua http",
 		);
+		ok(await hoi("hoiKho.ketQua", { hoiId: hoiHttp }, "owner"), "ket qua");
 		const id: string[] = [];
 		for (const [i, c] of cauHoi.entries()) {
 			const hang = await db.taiLieuHoi.create({
@@ -203,8 +216,14 @@ describe("tlk-nhat-ky", () => {
 			expect(theoId.get(ma(i))?.cauHoi).toBe(cauHoi[i]);
 		const so = await demHoiKho(db, goc, new Date(goc.getTime() + 600_000));
 		expect(so).toEqual({ traLoi: 4, tuChoi: 3, loi: 2, tiLe: 4 / 7 });
-		for (const c of cauHoi)
-			expect(ghiLog.some((l) => l.includes(c))).toBe(false);
+		expect(
+			ghiLog.some((l) => l.includes("hoiKho.hoi")),
+			"tlk-nhat-ky: bo bat log khong thu duoc dong nao cua duong hoiKho.hoi",
+		).toBe(true);
+		const lot = [...cauHoi, quaHttp].filter((c) =>
+			ghiLog.some((l) => l.includes(c)),
+		);
+		expect(lot, "tlk-nhat-ky: log mang chu cau hoi").toEqual([]);
 	});
 });
 
