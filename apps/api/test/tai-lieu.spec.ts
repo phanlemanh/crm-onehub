@@ -402,7 +402,12 @@ describe("so-va-dat", () => {
 		const cu = await db.taiLieuSuKien.findMany({
 			where: { trangId, loai: "CU" },
 		});
-		expect(cu.map((c) => parseSuKienChiTiet(c.chiTiet).deXuatId)).toContain(d);
+		expect(
+			cu.map((c) => {
+				const chiTiet = parseSuKienChiTiet(c.chiTiet);
+				return "deXuatId" in chiTiet ? chiTiet.deXuatId : null;
+			}),
+		).toContain(d);
 	});
 
 	test("so-va-dat: doi chung duong, hash dung va ban goc dung thi duyet duoc", async () => {
