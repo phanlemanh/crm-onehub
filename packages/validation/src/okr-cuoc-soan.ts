@@ -53,27 +53,6 @@ export function parseBanNhap(value: unknown): BanNhap {
 	return r.data;
 }
 
-const NOI_DAU_LAN_NOP = ":";
-
-const dauLanNop = z
-	.string()
-	.regex(/^\d+:\d+:.+$/)
-	.transform((chuoi) => {
-		const [luot, thu] = chuoi.split(NOI_DAU_LAN_NOP).map(Number);
-		return { luot: luot ?? 0, thu: thu ?? 0 };
-	});
-
-export type DauLanNop = z.infer<typeof dauLanNop>;
-
-export function docDauLanNop(lanNop: string | null): DauLanNop | null {
-	const r = dauLanNop.safeParse(lanNop);
-	return r.success ? r.data : null;
-}
-
-export function vietDauLanNop(dau: DauLanNop & { id: string }): string {
-	return [dau.luot, dau.thu, dau.id].join(NOI_DAU_LAN_NOP);
-}
-
 export const soanDuaVaoInput = z.object({
 	cuocSoanId: z.string().min(1),
 	kr: z.array(

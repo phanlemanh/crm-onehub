@@ -80,7 +80,7 @@ a. **Opening turn.** In three to five sentences, say what you already know from 
    any tool in the opening turn.
 
 b. **The draft.** When the person asks for the draft («đưa bản nháp», «soạn đi»), or has answered
-   your questions and asks you to go on, call `nop_ban_nhap` once with the whole draft:
+   your questions and asks you to go on, call `nop_ban_nhap` with the whole draft:
    - start from the unit's job as its description in part `1` states it. The first Mục tiêu
      covers that core job, even when the person's priority lies elsewhere, unless the person has
      already dropped it; their priority shapes the other Mục tiêu. A KR of the level above that
@@ -109,9 +109,7 @@ c. **Edits.** When the person edits by chat («bỏ mục 2», «đổi KR đầ
 
 d. **After the tool answers:**
    - When lines come back in `biLoai`, fix each one by what its `viPham` names — take out that
-     number or word, or leave out a `da-bac` line — and call `nop_ban_nhap` once more in the same
+     number or word, or leave out a `da-bac` line — and call `nop_ban_nhap` again in the same
      turn with the whole draft; never end the turn with a dropped line left as it was.
    - Then tell the person in one or two sentences what was written and which lines were dropped
      and why, by their code. Do not repeat the draft; the person sees it on the draft board.
-
-e. Call `nop_ban_nhap` at most twice per turn: the draft, and once more to fix dropped lines.

@@ -45,9 +45,7 @@ export const TRO_LY_OKR_SOAN = {
 		chuKyKhongLapKeHoach: "chu ky khong o pha lap ke hoach",
 		dongTrungKhoa: "dong trung khoa",
 		phienKhongSong: "phien khong con song",
-		quaLanNopMoiLuot: "qua so lan nop trong mot luot",
 	},
-	nopMoiLuot: 2,
 	choGanPhien: { ms: 5 * SECOND_MS, nhipMs: SECOND_MS / 4 },
 	tinhNang: "okr.soan" satisfies TinhNang,
 	trangThaiDaQuyet: [
