@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { GOC } from "./chung.mjs";
+import { GOC, ketThuc } from "./chung.mjs";
 
 const MOC_CU = "9c65f368";
 const TEP = {
@@ -141,4 +141,7 @@ console.log(
 	`chieu do: ${ghim.length - lot.length}/${ghim.length} cau ghim bat tren ban ${MOC_CU}`,
 );
 
-process.exit(nay.length === 0 && lot.length === 0 ? 0 : 1);
+ketThuc(
+	nay.length === 0 && lot.length === 0 ? 0 : 1,
+	`ban hien tai ${nay.length} cho thieu, chieu do ${ghim.length - lot.length}/${ghim.length}`,
+);

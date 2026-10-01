@@ -1,6 +1,14 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { CHOT_DAT, chay, dongCo, dongCua, GOC, TEP_NAP } from "./chung.mjs";
+import {
+	CHOT_DAT,
+	chay,
+	dongCo,
+	dongCua,
+	GOC,
+	ketThuc,
+	TEP_NAP,
+} from "./chung.mjs";
 
 const nap = readFileSync(join(GOC, TEP_NAP), "utf8");
 const d1 = dongCua(nap, "okrSoChup.createMany");
@@ -49,4 +57,4 @@ for (const [ten, dat] of dieu) console.log(`${dat ? "dat " : "HONG"} ${ten}`);
 const hong = dieu.filter(([, d]) => !d).length;
 console.log(`xanh: ${dieu.length - hong}/${dieu.length} dieu dat`);
 if (hong) console.log(ra);
-process.exit(hong ? 1 : 0);
+ketThuc(hong ? 1 : 0, `${dieu.length - hong}/${dieu.length} dieu dat`);

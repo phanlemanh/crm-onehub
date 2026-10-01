@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { GOC } from "./chung.mjs";
+import { GOC, ketThuc } from "./chung.mjs";
 
 const HO_SO = "_acceptance/mien-so-chup-bo-okr-mau";
 const DOI_CHUNG = "e3e2f252f";
@@ -52,4 +52,7 @@ console.log(
 		? `doi chung am ${DOI_CHUNG}: CHAM MA SAN PHAM: ${TEP_DOI_CHUNG}`
 		: `DOI CHUNG LOT: ${DOI_CHUNG} khong neu ${TEP_DOI_CHUNG}`,
 );
-process.exit(vi.length === 0 && bat ? 0 : 1);
+ketThuc(
+	vi.length === 0 && bat ? 0 : 1,
+	`${vi.length} tep ma san pham, doi chung am ${bat ? "bat" : "LOT"}`,
+);

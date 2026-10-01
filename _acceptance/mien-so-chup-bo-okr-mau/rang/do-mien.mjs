@@ -8,6 +8,7 @@ import {
 	dongCo,
 	dongCua,
 	GOC,
+	ketThuc,
 	lenhE8,
 	TEP_NAP,
 } from "./chung.mjs";
@@ -465,7 +466,7 @@ function chamBang(nhan, bang) {
 		);
 	}
 	console.log(`${nhan}: ${bat}/${bang.length} bi bat`);
-	process.exit(bat === bang.length ? 0 : 1);
+	ketThuc(bat === bang.length ? 0 : 1, `${nhan} ${bat}/${bang.length} bi bat`);
 }
 
 function chamCu() {
@@ -507,7 +508,7 @@ function chamCu() {
 		);
 	}
 	console.log(`cu: ${giu}/${cac.length} giu hanh vi`);
-	process.exit(giu === cac.length ? 0 : 1);
+	ketThuc(giu === cac.length ? 0 : 1, `cu ${giu}/${cac.length} giu hanh vi`);
 }
 
 const i = process.argv.indexOf("--ca");

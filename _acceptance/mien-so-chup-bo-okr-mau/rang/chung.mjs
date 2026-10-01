@@ -49,3 +49,8 @@ export function dongCua(chu, doan) {
 }
 
 export const CHOT_DAT = "chot mien bo mau: C1 dat · C2 dat · C3 dat · C4 dat";
+
+export function ketThuc(ma, tom) {
+	console.log(`KET LUAN: ${tom} — ma thoat ${ma}`);
+	process.exit(ma);
+}
