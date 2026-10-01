@@ -142,11 +142,11 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			pr: [],
 			cau_giao:
 				"«Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết»",
-			buoc_ke: "Máy thi công 12 task rồi chấm S4; anh ký Cổng Đáng khi tiện",
+			buoc_ke: "Chạm trần 3 round S4 — anh chọn hướng: mở round 4 có tên, hoặc ghi Known limits rồi sang Cổng Bằng chứng; anh ký Cổng Đáng khi tiện",
 			chan_boi: ["cb"],
 			cho_anh: true,
 			ghi_chu:
-				"Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 01/10: vòng mở trên nhánh feat/tro-ly-doc-kho; lên T3 vì cần hai bảng mới (nhật ký hỏi, việc «báo sai») — kho chưa có bảng việc nào dùng được. Anh chốt: hỏi ở tab «Hỏi» của Kho; Zalo do trợ lý AI tự nhận ra; thêm ô đặt «Xác minh đến ngày» (cột này chưa có đường ghi nào); chỉ lưu chữ câu từ chối và câu bị báo sai. S1 xong: 15 AC, 22 eval, gap-probe 1 P0 + 4 P1 đã sửa, design-pass 6 ảnh, hai hình quyết định. Chỉ AC-15 chờ bộ câu đo. 01/10: anh duyệt Cổng Phạm vi, bộ câu đo theo ngả máy khuyên (bộ «tạm» cho vòng chấm, 50 câu thật gom song song, chạy tuần đầu chạy thật); Cổng Đáng chưa ký; vào S2. Kế hoạch 12 task chờ Cổng 1.5. Anh duyệt kế hoạch, thi công tuần tự; vào S3.",
+				"Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 01/10: vòng mở trên nhánh feat/tro-ly-doc-kho; lên T3 vì cần hai bảng mới (nhật ký hỏi, việc «báo sai») — kho chưa có bảng việc nào dùng được. Anh chốt: hỏi ở tab «Hỏi» của Kho; Zalo do trợ lý AI tự nhận ra; thêm ô đặt «Xác minh đến ngày» (cột này chưa có đường ghi nào); chỉ lưu chữ câu từ chối và câu bị báo sai. S1 xong: 15 AC, 22 eval, gap-probe 1 P0 + 4 P1 đã sửa, design-pass 6 ảnh, hai hình quyết định. Chỉ AC-15 chờ bộ câu đo. 01/10: anh duyệt Cổng Phạm vi, bộ câu đo theo ngả máy khuyên (bộ «tạm» cho vòng chấm, 50 câu thật gom song song, chạy tuần đầu chạy thật); Cổng Đáng chưa ký; vào S2. Kế hoạch 12 task chờ Cổng 1.5. Anh duyệt kế hoạch, thi công tuần tự; vào S3. S4: round 1 không đạt, round 2 dừng-vá; anh chọn đổi khuôn E15 sang eval chạy trên máy chủ eve thật, khuôn mới bắt và đã sửa lỗi câu quy định qua Zalo không tới trợ lý kho. 02/10: round 3 không đạt — 19/19 eval máy đạt, nhưng hội đồng chê ảnh 390 (chip gợi ý bị cắt, biểu tượng nổi đè ô soạn) và E12 còn đo ZDR chưa tới bộ chọn model của agent. Chạm trần 3 round, chờ anh chọn hướng.",
 		},
 		{
 			id: "ct",
