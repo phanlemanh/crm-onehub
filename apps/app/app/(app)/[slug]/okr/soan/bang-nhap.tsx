@@ -78,7 +78,7 @@ function DaDuaVao({
 		<Alert role="status" data-da-dua-vao>
 			<AlertTitle>{m.banNhap.daTao(String(soMucTieu))}</AlertTitle>
 			<AlertDescription>{m.banNhap.daTaoMoTa(String(soKr))}</AlertDescription>
-			<AlertAction>
+			<AlertAction placement="below">
 				<Button asChild size="sm" variant="outline">
 					<Link
 						href={duongTheoDonVi(slug, donViCua(cuoc))}

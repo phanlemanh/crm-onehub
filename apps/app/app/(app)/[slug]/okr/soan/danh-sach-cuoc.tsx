@@ -10,6 +10,14 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { FieldDescription } from "@crm/ui/components/field";
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemDescription,
+	ItemGroup,
+	ItemTitle,
+} from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Sheet,
@@ -19,11 +27,6 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from "@crm/ui/components/sheet";
-import {
-	SimpleTable,
-	SimpleTableCell,
-	SimpleTableRow,
-} from "@crm/ui/components/simple-table";
 import { Spinner } from "@crm/ui/components/spinner";
 import {
 	StatusIndicator,
@@ -79,7 +82,7 @@ function NutMoCuoc({
 	);
 }
 
-function BangCuoc({
+function DanhSachDong({
 	cuoc,
 	mo,
 	m,
@@ -98,38 +101,38 @@ function BangCuoc({
 	});
 	const so = new Intl.NumberFormat(locale);
 	return (
-		<SimpleTable
-			surface="page"
-			columns={[
-				{ id: "ngay", header: m.cuoc.cotNgay, width: "w-28" },
-				{ id: "nguoi", header: m.cuoc.cotNguoi },
-				{ id: "dong", header: m.cuoc.cotDong, width: "w-24", align: "right" },
-				{ id: "trang-thai", header: m.cuoc.cotTrangThai, width: "w-28" },
-				{ id: "mo", srLabel: m.cuoc.cotMo, width: "w-20" },
-			]}
-		>
+		<ItemGroup aria-label={m.cuoc.nhan} data-ds-cuoc>
 			{cuoc.map((c) => {
 				const moLuc = ngay.format(new Date(c.moLuc));
 				const viec = c.trangThai === "dang" ? m.cuoc.tiep : m.cuoc.xem;
 				return (
-					<SimpleTableRow key={c.id} data-cuoc-id={c.id}>
-						<SimpleTableCell>
-							<span className="tabular-nums">{moLuc}</span>
-						</SimpleTableCell>
-						<SimpleTableCell>
-							<span translate="no">{c.nguoiMo.name}</span>
-						</SimpleTableCell>
-						<SimpleTableCell numeric>
-							{so.format(c.soDongNhan)}/{so.format(c.soDongTong)}
-						</SimpleTableCell>
-						<SimpleTableCell>
+					<Item
+						key={c.id}
+						size="sm"
+						variant="outline"
+						role="listitem"
+						data-cuoc-id={c.id}
+					>
+						<ItemContent>
+							<ItemTitle>
+								<span className="tabular-nums">{moLuc}</span>
+							</ItemTitle>
+							<ItemDescription>
+								{m.cuoc.nguoiMo} <span translate="no">{c.nguoiMo.name}</span> ·{" "}
+								<span className="tabular-nums" data-dong-nhan>
+									{m.cuoc.dongNhan(
+										so.format(c.soDongNhan),
+										so.format(c.soDongTong),
+									)}
+								</span>
+							</ItemDescription>
 							<StatusIndicator
 								size="sm"
 								tone={TONE_CUOC[c.trangThai]}
 								label={m.cuoc.trangThai[c.trangThai]}
 							/>
-						</SimpleTableCell>
-						<SimpleTableCell align="right">
+						</ItemContent>
+						<ItemActions>
 							<Button
 								size="sm"
 								variant="outline"
@@ -139,11 +142,11 @@ function BangCuoc({
 							>
 								{viec}
 							</Button>
-						</SimpleTableCell>
-					</SimpleTableRow>
+						</ItemActions>
+					</Item>
 				);
 			})}
-		</SimpleTable>
+		</ItemGroup>
 	);
 }
 
@@ -207,7 +210,7 @@ export function DanhSachCuoc({
 							<NutMoCuoc donVi={donVi} mo={mo} m={m} />
 						</Empty>
 					) : (
-						<BangCuoc cuoc={cuoc} mo={mo} m={m} locale={locale} />
+						<DanhSachDong cuoc={cuoc} mo={mo} m={m} locale={locale} />
 					)}
 				</SheetBody>
 			</SheetContent>

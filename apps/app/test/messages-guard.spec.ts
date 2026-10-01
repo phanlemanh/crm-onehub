@@ -293,6 +293,7 @@ const GHIM_OKR_SOAN = {
 	],
 	"okr-soan:cuoc.dem": ["1/A cuộc", "12/A cuộc"],
 	"okr-soan:cuoc.nutCuoc": ["1 cuộc A", "12 cuộc A"],
+	"okr-soan:cuoc.dongNhan": ["1/A dòng nhận", "12/A dòng nhận"],
 	"okr-soan:cuoc.rongMoTa": [
 		"Mỗi chu kỳ có 1 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
 		"Mỗi chu kỳ có 12 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",

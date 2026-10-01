@@ -210,9 +210,9 @@ function SheetBody({
 			className={cn(
 				"min-h-0 flex-1 overflow-y-auto overscroll-contain px-4",
 				split &&
-					"grid content-start gap-6 lg:grid-cols-[minmax(0,1fr)_var(--container-assist-rail)] lg:items-start",
+					"grid grid-cols-[minmax(0,1fr)] content-start gap-6 lg:grid-cols-[minmax(0,1fr)_var(--container-assist-rail)] lg:items-start",
 				cuonRieng &&
-					"grid content-stretch items-stretch overflow-hidden pb-4 *:min-h-0",
+					"grid grid-cols-[minmax(0,1fr)] content-stretch items-stretch overflow-hidden pb-4 *:min-h-0",
 				cuonRieng &&
 					(split
 						? "grid-rows-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:items-stretch"

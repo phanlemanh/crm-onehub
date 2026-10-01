@@ -47,6 +47,7 @@ import {
 	troi,
 	tuyChonAgent,
 } from "./khung-soan-okr";
+import { chuoiToTien, type KieuThat, kieuThat, ranhChanDay } from "./kieu-that";
 
 async function nhanTab(o: Element | undefined): Promise<void> {
 	if (!o) throw new Error("khong thay tab");
@@ -1019,15 +1020,20 @@ const CA = {
 			<DanhSachCuoc donVi={DV} dong={() => {}} mo={(id) => mo_.push(id)} />,
 		);
 		await cho(
-			() => q('[data-cuoc="danh-sach"] tbody tr') !== null,
-			"bang cuoc",
+			() => q('[data-cuoc="danh-sach"] [data-cuoc-id]') !== null,
+			"danh sach cuoc",
 		);
-		const hang = qa('[data-cuoc="danh-sach"] tbody tr');
+		const hang = qa('[data-cuoc="danh-sach"] [role="listitem"]');
 		expect(hang.map((h) => h.getAttribute("data-cuoc-id"))).toEqual([
 			"c-moi",
 			"c-cu",
 		]);
-		expect(hang[1]?.textContent).toContain("5/9");
+		expect(hang[1]?.querySelector("[data-dong-nhan]")?.textContent).toBe(
+			m.cuoc.dongNhan("5", "9"),
+		);
+		expect(hang[1]?.querySelector('[translate="no"]')?.textContent).toBe(
+			CUOC.nguoiMo.name,
+		);
 		expect(hang[1]?.textContent).toContain(m.cuoc.trangThai["da-dua-vao"]);
 		const nutMo = hang[0]?.querySelector('[data-nut="mo-cuoc"]');
 		expect(nutMo?.getAttribute("aria-label")).toBe(
@@ -1127,4 +1133,168 @@ describe("bang nhap doc lai theo luot", () => {
 		expect(tagCua("33b")).toBeUndefined();
 		expect(q('[data-dong="2"]')).toBeNull();
 	});
+});
+
+const HEP_PX = 390;
+const RONG_PX = 1440;
+const NGAN = '[data-slot="sheet-content"]';
+const THAN_NGAN = '[data-slot="sheet-body"]';
+const CAT_NGANG = new Set(["auto", "scroll", "hidden", "clip"]);
+
+const tenO = (o: Element) =>
+	o.getAttribute("data-slot") ?? o.getAttribute("data-cot") ?? o.tagName;
+
+const tranNgang = (k: KieuThat) =>
+	CAT_NGANG.has(k.get("overflow-x") ?? k.get("overflow") ?? "visible");
+
+async function oLuoiKhongChan(tu: Element, rong: number): Promise<string[]> {
+	const loi: string[] = [];
+	let con = tu;
+	for (const cha of chuoiToTien(tu, NGAN)) {
+		const kCha = await kieuThat(cha, rong);
+		if (kCha.get("display")?.endsWith("grid")) {
+			const kCon = await kieuThat(con, rong);
+			const conCo0 = kCon.get("min-width") === "0px" || tranNgang(kCon);
+			if (!ranhChanDay(kCha.get("grid-template-columns")) && !conCo0)
+				loi.push(
+					`${rong}px ${tenO(cha)} > ${tenO(con)}: cot luoi ${kCha.get("grid-template-columns") ?? "auto"} gian theo chu`,
+				);
+		}
+		con = cha;
+	}
+	return loi;
+}
+
+async function hangKhongXuongDong(
+	tu: Element,
+	rong: number,
+): Promise<string[]> {
+	const loi: string[] = [];
+	let coHangXuongDong = false;
+	for (const cha of chuoiToTien(tu, THAN_NGAN)) {
+		if (cha.matches(THAN_NGAN)) break;
+		const k = await kieuThat(cha, rong);
+		if (k.get("white-space") === "nowrap")
+			loi.push(`${rong}px ${tenO(cha)}: giu mot dong`);
+		if (tranNgang(k)) loi.push(`${rong}px ${tenO(cha)}: cuon ngang, cat mep`);
+		if (k.get("display")?.endsWith("flex") && k.get("flex-wrap") === "wrap")
+			coHangXuongDong = true;
+	}
+	if (!coHangXuongDong)
+		loi.push(`${rong}px ${tenO(tu)}: khong co hang tu xuong dong`);
+	return loi;
+}
+
+function khoHep(bat: boolean): () => void {
+	const goc = window.matchMedia;
+	Object.defineProperty(window, "matchMedia", {
+		value: (truyVan: string) => ({
+			...goc(truyVan),
+			matches: bat && truyVan === SOAN_UI.khoHep,
+		}),
+		configurable: true,
+		writable: true,
+	});
+	return () =>
+		Object.defineProperty(window, "matchMedia", {
+			value: goc,
+			configurable: true,
+			writable: true,
+		});
+}
+
+const TRAN_NGAN_HEP =
+	"ngan soan o 390px: cot luoi chua thanh tab va tro chuyen gian theo chu, tab Ban nhap bi cat";
+const BANG_CUOC_CAT =
+	"danh sach cuoc: hang khong tu xuong dong, nut Xem va trang thai bi cat o mep";
+const NUT_DE_CHU = "thong bao da dua vao: nut Xem o Theo don vi noi de len chu";
+
+describe("bo tri — khong tran, khong cat, khong de chu (E13)", () => {
+	test("ngăn soạn ở 390 px: thanh tab và trò chuyện không giãn quá ngăn", async () => {
+		const tra = khoHep(true);
+		try {
+			datDanhSach({ dong: BAN_NHAP });
+			await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
+			await moMan();
+			const goc = [
+				...qa('[data-khong="hep"] [role="tab"]'),
+				...qa("[data-goi-y]"),
+			];
+			expect(goc.length).toBeGreaterThan(2);
+			const loi = (
+				await Promise.all(goc.map((o) => oLuoiKhongChan(o, HEP_PX)))
+			).flat();
+			expect([...new Set(loi)], TRAN_NGAN_HEP).toEqual([]);
+		} finally {
+			tra();
+		}
+	});
+
+	test("ngăn soạn ở 1440 px: cột trò chuyện không giãn quá ngăn", async () => {
+		datDanhSach({ dong: BAN_NHAP });
+		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
+		await moMan();
+		const goc = qa("[data-goi-y]");
+		expect(goc.length).toBeGreaterThan(0);
+		const loi = (
+			await Promise.all(goc.map((o) => oLuoiKhongChan(o, RONG_PX)))
+		).flat();
+		expect([...new Set(loi)], TRAN_NGAN_HEP).toEqual([]);
+	});
+
+	test("danh sách cuộc ở 390 và 1440 px: hàng tự xuống dòng, không vùng cuộn ngang cắt nút", async () => {
+		dat("okr.soanDanhSachCuoc", () => ({
+			cuoc: [
+				{ ...CUOC, id: "c-cu", trangThai: "da-dua-vao" },
+				{ ...CUOC, id: "c-moi", moLuc: "2026-12-01T03:00:00.000Z" },
+			],
+			tranCuoc: 3,
+		}));
+		await mo(<DanhSachCuoc donVi={DV} dong={() => {}} mo={() => {}} />);
+		await cho(
+			() => q('[data-cuoc="danh-sach"] [data-nut="mo-cuoc"]') !== null,
+			"danh sach cuoc",
+		);
+		const goc = [
+			...qa('[data-cuoc="danh-sach"] [data-nut="mo-cuoc"]'),
+			...qa('[data-cuoc="danh-sach"] [data-slot="status-indicator"]'),
+		];
+		expect(goc).toHaveLength(4);
+		const loi: string[] = [];
+		for (const rong of [HEP_PX, RONG_PX])
+			for (const o of goc) loi.push(...(await hangKhongXuongDong(o, rong)));
+		expect([...new Set(loi)], BANG_CUOC_CAT).toEqual([]);
+	});
+
+	for (const hep of [true, false])
+		test(`đã đưa vào ở ${hep ? HEP_PX : RONG_PX} px: nút Xem ở Theo đơn vị nằm trong luồng, không đè chữ`, async () => {
+			const tra = khoHep(hep);
+			try {
+				datDanhSach({ dong: DA_NHAN });
+				await moMan();
+				if (hep) {
+					await nhanTab(qa('[data-khong="hep"] [role="tab"]')[1]);
+					await cho(() => q("#dich-11") !== null, "tab ban nhap");
+				}
+				await go(q("#dich-11"), "10");
+				await go(q("#dich-14"), "8");
+				await bam(q('[data-nut="dua-vao"]'));
+				await bam(
+					nut(
+						m.banNhap.xacNhan.nut,
+						q('[role="alertdialog"]') ?? document.body,
+					),
+				);
+				await cho(() => q("[data-da-dua-vao]") !== null, "da dua vao");
+				const hanhDong = q('[data-da-dua-vao] [data-slot="alert-action"]');
+				if (!hanhDong) throw new Error("khong thay nut cua thong bao");
+				expect(
+					hanhDong.querySelector('[data-nut="xem-theo-don-vi"]'),
+				).not.toBeNull();
+				const k = await kieuThat(hanhDong, hep ? HEP_PX : RONG_PX);
+				expect(k.get("position") ?? "static", NUT_DE_CHU).toBe("static");
+			} finally {
+				tra();
+			}
+		});
 });
