@@ -2,6 +2,7 @@ import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import {
 	TRANG_THAI_DA_NHAN,
 	TRANG_THAI_GIU_KHOA,
+	TRO_LY_OKR_KHOA,
 } from "@crm/db/okr-tro-ly-danh-muc";
 import { BAN_NHAP_TRAN, type BuocCat } from "@crm/validation/okr-cuoc-soan";
 import type { MaLoaiBanNhap } from "@crm/validation/okr-kiem-ban-nhap";
@@ -24,7 +25,12 @@ export const TRO_LY_OKR_SOAN = {
 		tranRaMoiLoiGoi: 2_000,
 		soLanThu: 3,
 	},
-	khoaMoHinh: ["AI_GATEWAY_API_KEY", "VERCEL_OIDC_TOKEN"],
+	khoa: TRO_LY_OKR_KHOA,
+	khoaMoHinh: [
+		TRO_LY_OKR_KHOA.rieng,
+		TRO_LY_OKR_KHOA.chung,
+		"VERCEL_OIDC_TOKEN",
+	],
 	tranRaMoiLoiGoi: 3_000,
 	cuaSoNguCanh: 1_048_576,
 	limits: {

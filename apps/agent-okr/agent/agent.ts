@@ -9,6 +9,7 @@ export default defineAgent({
 		modelId: TRO_LY_OKR_SOAN.model,
 		tags: TRO_LY_OKR_SOAN.tags,
 		tranRaMoiLoiGoi: TRO_LY_OKR_SOAN.tranRaMoiLoiGoi,
+		khoa: process.env[TRO_LY_OKR_SOAN.khoa.rieng],
 	}),
 	modelContextWindowTokens: TRO_LY_OKR_SOAN.cuaSoNguCanh,
 	limits: TRO_LY_OKR_SOAN.limits,

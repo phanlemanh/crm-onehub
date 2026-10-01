@@ -5,6 +5,7 @@ import { xepViecTroLy } from "@crm/db/okr-tro-ly";
 import type { CaGopY } from "@crm/validation/okr-ca-gop-y";
 import { defineEval } from "eve/evals";
 import { equals, satisfies } from "eve/evals/expect";
+import { nguonKhoaMoHinh } from "../../agent/lib/mo-hinh-khoa";
 import { TRO_LY_OKR } from "../../agent/lib/okr/config";
 import { docBoCaGopY, THU_MUC_CA_MAU } from "./ca-gop-y";
 import {
@@ -258,7 +259,7 @@ function motCa(ca: CaGopY, stt: number) {
 				);
 				return;
 			}
-			if (!TRO_LY_OKR.khoaMoHinh.some((k) => process.env[k]?.trim())) {
+			if ((await nguonKhoaMoHinh()) === null) {
 				t.skip("thieu khoa mo hinh");
 				return;
 			}

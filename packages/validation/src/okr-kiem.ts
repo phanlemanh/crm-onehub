@@ -27,21 +27,21 @@ export type MucTieuKiem = {
 
 export const OKR_KIEM = {
 	dongTuViec: [
-		"goi",
-		"gui",
-		"to chuc",
-		"trien khai",
-		"hoan thanh",
-		"hoan thien",
-		"xay dung",
-		"thuc hien",
-		"lam",
-		"viet",
-		"hop",
+		"gọi",
+		"gửi",
+		"tổ chức",
+		"triển khai",
+		"hoàn thành",
+		"hoàn thiện",
+		"xây dựng",
+		"thực hiện",
+		"làm",
+		"viết",
+		"họp",
 		"tham gia",
-		"dao tao",
-		"chay",
-		"ra mat",
+		"đào tạo",
+		"chạy",
+		"ra mắt",
 		"launch",
 		"build",
 		"call",
@@ -89,9 +89,20 @@ export function coCum(van: string, cum: string): boolean {
 	return cum !== "" && ` ${van} `.includes(` ${cum} `);
 }
 
+const chuThuong = (s: string) =>
+	s.normalize("NFC").toLocaleLowerCase("vi").trim();
+
+const coDau = (s: string) => boDau(s) !== chuThuong(s).replace(/đ/g, "d");
+
+const batDau = (t: string, v: string) => t === v || t.startsWith(`${v} `);
+
 function laViec(title: string): boolean {
+	if (coDau(title)) {
+		const t = chuThuong(title);
+		return OKR_KIEM.dongTuViec.some((v) => batDau(t, v));
+	}
 	const t = boDau(title);
-	return OKR_KIEM.dongTuViec.some((v) => t === v || t.startsWith(`${v} `));
+	return OKR_KIEM.dongTuViec.some((v) => batDau(t, boDau(v)));
 }
 
 const co = <T extends string>(ds: readonly T[], x: string): boolean =>

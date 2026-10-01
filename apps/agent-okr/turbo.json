@@ -12,6 +12,7 @@
 			"passThroughEnv": [
 				"OKR_AGENT_BRIDGE_SECRET",
 				"AI_GATEWAY_API_KEY",
+				"OKR_AI_GATEWAY_API_KEY",
 				"DATABASE_URL"
 			]
 		},
@@ -22,6 +23,7 @@
 			"passThroughEnv": [
 				"OKR_AGENT_BRIDGE_SECRET",
 				"AI_GATEWAY_API_KEY",
+				"OKR_AI_GATEWAY_API_KEY",
 				"DATABASE_URL"
 			]
 		},

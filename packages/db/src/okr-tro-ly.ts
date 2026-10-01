@@ -163,11 +163,12 @@ export async function ketQuaKiemGanNhat(
 
 export async function canKiemLaiKhoa(
 	db: DbHoacTx,
-	now: Date = new Date(),
+	now: Date,
+	hienTai: KetQuaKiemSanSang,
 ): Promise<boolean> {
 	if (!(await cauHinhAiLuc(db, now)).aiOn) return false;
 	const kq = await ketQuaKiemGanNhat(db, now);
-	if (kq?.ketQua !== "chua-co-khoa-mo-hinh") return false;
+	if (!kq || kq.ketQua === hienTai) return false;
 	if (now.getTime() - kq.luc.getTime() <= TRO_LY_OKR_TRAN.hanKiemKhoaMs) {
 		return false;
 	}

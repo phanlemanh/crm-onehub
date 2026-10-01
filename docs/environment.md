@@ -129,6 +129,7 @@ single place that knows what is set.
 | `KHO_TAI_LIEU_BLOB_TOKEN` | Keeps the Word and PDF sources of the document library in a private Blob store and reads them back for drafting. Without it nothing can be uploaded to the library |
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
 | `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document-drafting machine (`may_soan`), so its spend is billed apart. Without it drafting runs on the key above |
+| `OKR_AI_GATEWAY_API_KEY` | A separate AI Gateway key used only by Trợ lý OKR (suggestions, weekly summaries and the drafting chat in `apps/agent-okr`), so its spend is billed apart and the key can carry its own monthly budget. Without it Trợ lý OKR runs on `AI_GATEWAY_API_KEY`, or on Vercel OIDC |
 | `AGENT_BRIDGE_SECRET` | The rep-facing Agent panel — see `agent.md` |
 | `OKR_AGENT_URL` | Where the app forwards the OKR drafting chat (`/eve/agents/okr/eve/v1/*`); `apps/agent-okr` on `127.0.0.1:2100` by default |
 | `OKR_AGENT_BRIDGE_SECRET` | Signs the OKR gate's two-minute token (audience `crm-okr-agent`); deliberately not `AGENT_BRIDGE_SECRET` — see `agent.md` «App eve thứ hai» |
@@ -152,8 +153,8 @@ are not in `env.validation.ts`. Both are in `turbo.json` `globalPassThroughEnv` 
 The API learns Zalo is on from `appSetting.zaloBotName`, which the agent writes
 each tick.
 
-`KHO_TAI_LIEU_AI_GATEWAY_API_KEY` is read by `apps/agent` only, so it is not in
-`env.validation.ts`. It is a secret: `turbo.json` `globalPassThroughEnv` and the agent's
+`KHO_TAI_LIEU_AI_GATEWAY_API_KEY` and `OKR_AI_GATEWAY_API_KEY` are read by `apps/agent`
+(and the latter also by `apps/agent-okr`, whose `dev` pass-through carries it), never by the API, so they are not in `env.validation.ts`. It is a secret: `turbo.json` `globalPassThroughEnv` and the agent's
 `dev` pass-through, never `env` (`_acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs`
 checks all three homes).
 

@@ -1,5 +1,5 @@
 import {
-	gateway,
+	createGateway,
 	type LanguageModel,
 	type LanguageModelMiddleware,
 	wrapLanguageModel,
@@ -26,8 +26,14 @@ export type TuyChonZdr = {
 	tranRaMoiLoiGoi: number;
 };
 
+export type TaoNha = (cauHinh?: {
+	apiKey?: string;
+}) => (modelId: string) => ModelCoSan;
+
 export type XuongModelZdr = TuyChonZdr & {
 	modelId: string;
+	khoa?: string;
+	tao?: TaoNha;
 };
 
 export function tuyChonZdr(tags: readonly string[]) {
@@ -118,9 +124,17 @@ export function bocModelZdr(
 	});
 }
 
+export function nhaGateway(
+	khoa: string | undefined,
+	tao: TaoNha = createGateway,
+): (modelId: string) => ModelCoSan {
+	const k = khoa?.trim();
+	return k ? tao({ apiKey: k }) : tao();
+}
+
 export function xuongModelZdr(v: XuongModelZdr): ModelCoSan {
 	return wrapLanguageModel({
-		model: gateway(v.modelId),
+		model: nhaGateway(v.khoa, v.tao)(v.modelId),
 		middleware: middlewareZdr(v),
 		modelId: v.modelId,
 	});

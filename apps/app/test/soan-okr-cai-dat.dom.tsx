@@ -105,6 +105,7 @@ const chiTieu = (): AiChiTieuOutput => {
 		tongUsd: theoNhom.reduce((s, n) => s + n.usd, 0),
 		troLyOkr: { chiUsd: rong ? 0 : 2.42, tranUsd: 9, phanTram: rong ? 0 : 27 },
 		sanSang,
+		nguonKhoa: null,
 		dangKiem: false,
 		doiSoat,
 	};

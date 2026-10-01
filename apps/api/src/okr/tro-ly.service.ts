@@ -15,6 +15,7 @@ import {
 	cauHinhAiLuc,
 	donViCuaMucTieu,
 	KHONG_XEM_DUOC,
+	ketQuaKiemGanNhat,
 	tranThangCuaThang,
 	troLyOkrSanSang,
 	xepViecTroLy,
@@ -22,6 +23,7 @@ import {
 import {
 	type LyDoKhongSanSang,
 	nacCuaDonVi,
+	nguonCuaKetQua,
 	TRO_LY_OKR_TRAN,
 } from "@crm/db/okr-tro-ly-danh-muc";
 import { docDiemXuHuong, xuHuongKr as tinhXuHuong } from "@crm/db/okr-xu-huong";
@@ -167,7 +169,7 @@ export class TroLyOkrService {
 	async aiChiTieu(userId: string, now = new Date()): Promise<AiChiTieuOutput> {
 		await this.quyenOkr.assertQuanTri(userId);
 		const thang = thangVN(now);
-		const [chi, cauHinh, sanSang, dangKiem, doiSoat] = await Promise.all([
+		const [chi, cauHinh, sanSang, dangKiem, doiSoat, kiem] = await Promise.all([
 			chiTieuThang(this.db, thang, now),
 			cauHinhAiLuc(this.db, now),
 			troLyOkrSanSang(this.db, {
@@ -180,6 +182,7 @@ export class TroLyOkrService {
 				where: { kind: "okr-kiem-san-sang", finishedAt: null },
 			}),
 			doiSoatGanNhat(this.db, now),
+			ketQuaKiemGanNhat(this.db, now),
 		]);
 		const theoNhom = NHOM_VIEC_AI.map((nhom) => {
 			const cua = TINH_NANG.filter((t) => NHOM_CUA_TINH_NANG[t] === nhom);
@@ -200,6 +203,7 @@ export class TroLyOkrService {
 				phanTram: phanTramTran(chi.troLyOkrUsd, tranUsd),
 			},
 			sanSang,
+			nguonKhoa: kiem ? nguonCuaKetQua(kiem.ketQua) : null,
 			dangKiem: dangKiem > 0,
 			doiSoat,
 		};

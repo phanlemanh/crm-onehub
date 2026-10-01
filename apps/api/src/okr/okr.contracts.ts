@@ -35,6 +35,7 @@ import {
 	lyDoKhongSanSang,
 	MA_VAN_DE,
 	maLoaiDeXuat,
+	nguonKhoaHien,
 	TRUONG_VIET_LAI,
 	trangThaiDeXuat,
 	troLySanSang,
@@ -112,6 +113,7 @@ export const aiChiTieuOutput = z.object({
 		phanTram: z.number().nonnegative(),
 	}),
 	sanSang: troLySanSang,
+	nguonKhoa: nguonKhoaHien,
 	dangKiem: z.boolean(),
 	doiSoat: doiSoat.nullable(),
 });

@@ -2,6 +2,7 @@ import { db } from "@crm/db";
 import { laViecTroLyOkr, soLanThuToiDa, VIEC_OKR } from "@crm/db/agent-tasks";
 import { troLyOkrSanSang } from "@crm/db/okr-tro-ly";
 import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
+import { nguonKhoaMoHinh } from "../mo-hinh-khoa";
 import type { LeasedTask } from "../tasks";
 import { completeTask } from "../tasks";
 import { TRO_LY_OKR } from "./config";
@@ -9,8 +10,8 @@ import { nguoiYeuCauXemDuoc } from "./doc";
 
 export { laViecTroLyOkr };
 
-export function coKhoaMoHinh(): boolean {
-	return TRO_LY_OKR.khoaMoHinh.some((k) => Boolean(process.env[k]?.trim()));
+export async function coKhoaMoHinh(): Promise<boolean> {
+	return (await nguonKhoaMoHinh()) !== null;
 }
 
 export async function lyDoChanTruocKhiGui(
@@ -26,7 +27,7 @@ export async function lyDoChanTruocKhiGui(
 		!(await nguoiYeuCauXemDuoc(viec.data.objectiveId, viec.data.nguoiYeuCau))
 	)
 		return TRO_LY_OKR.ketThuc.khongXemDuoc;
-	if (!coKhoaMoHinh()) return TRO_LY_OKR.ketThuc.chuaCoKhoa;
+	if (!(await coKhoaMoHinh())) return TRO_LY_OKR.ketThuc.chuaCoKhoa;
 	const san = await troLyOkrSanSang(db, {
 		viec: viec.data.viec,
 		objectiveId:

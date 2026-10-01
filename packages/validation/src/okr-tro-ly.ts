@@ -3,8 +3,11 @@ import {
 	KET_QUA_KIEM_SAN_SANG,
 	LY_DO_KHONG_SAN_SANG,
 	MA_LOAI_DE_XUAT,
+	MINUTE_MS,
 	NAC_TRO_LY,
+	NGUON_KHOA,
 	TRANG_THAI_DE_XUAT,
+	TRO_LY_OKR_KHOA,
 	TRO_LY_OKR_TRAN,
 	TRUONG_VIET_LAI,
 	VIEC_TRO_LY,
@@ -32,11 +35,16 @@ export {
 	type LyDoKhongSanSang,
 	MA_LOAI_DE_XUAT,
 	type MaLoaiDeXuat,
+	MINUTE_MS,
 	NAC_TRO_LY,
 	type NacTroLy,
+	NGUON_KHOA,
+	type NguonKhoaDb,
 	nacCuaDonVi,
+	nguonCuaKetQua,
 	phamViCuaViec,
 	TRANG_THAI_DE_XUAT,
+	TRO_LY_OKR_KHOA,
 	TRO_LY_OKR_TRAN,
 	TRUONG_VIET_LAI,
 	type TroLySanSang,
@@ -63,6 +71,10 @@ export const troLySanSang = z.discriminatedUnion("bat", [
 ]);
 
 export const ketQuaKiemSanSang = z.enum(KET_QUA_KIEM_SAN_SANG);
+
+export const nguonKhoaHien = z.enum([...NGUON_KHOA, "chua-ro"]).nullable();
+
+export type NguonKhoaHien = z.infer<typeof nguonKhoaHien>;
 
 export const okrTroLyViec = z.discriminatedUnion("viec", [
 	z.object({

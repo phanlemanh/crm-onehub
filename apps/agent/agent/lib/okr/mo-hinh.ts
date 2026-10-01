@@ -1,3 +1,4 @@
+import type { createGateway } from "@ai-sdk/gateway";
 import {
 	middlewareZdr,
 	tronTuyChon as tronChung,
@@ -24,8 +25,17 @@ export const kepTranRaMoiLoiGoi: LanguageModelMiddleware = middlewareZdr({
 	tranRaMoiLoiGoi: TRO_LY_OKR.tranRaMoiLoiGoi,
 });
 
-export const MO_HINH_TRO_LY_OKR: LanguageModel = xuongModelZdr({
-	modelId: TRO_LY_OKR.model,
-	tags: TRO_LY_OKR.tags,
-	tranRaMoiLoiGoi: TRO_LY_OKR.tranRaMoiLoiGoi,
-});
+export function moHinhTroLyOkr(
+	env: Readonly<Record<string, string | undefined>> = process.env,
+	tao?: typeof createGateway,
+): LanguageModel {
+	return xuongModelZdr({
+		modelId: TRO_LY_OKR.model,
+		tags: TRO_LY_OKR.tags,
+		tranRaMoiLoiGoi: TRO_LY_OKR.tranRaMoiLoiGoi,
+		khoa: env[TRO_LY_OKR.khoa.rieng],
+		tao,
+	});
+}
+
+export const MO_HINH_TRO_LY_OKR: LanguageModel = moHinhTroLyOkr();

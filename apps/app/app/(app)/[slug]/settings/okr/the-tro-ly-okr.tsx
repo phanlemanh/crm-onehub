@@ -41,7 +41,13 @@ import {
 	docTranDatOkrUsd,
 	okrProgram,
 } from "@crm/validation/okr-chuong-trinh";
-import { AI_PHAM_VI, type AiPhamVi } from "@crm/validation/okr-tro-ly";
+import {
+	AI_PHAM_VI,
+	type AiPhamVi,
+	MINUTE_MS,
+	TRO_LY_OKR_KHOA,
+	TRO_LY_OKR_TRAN,
+} from "@crm/validation/okr-tro-ly";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useId, useState } from "react";
 import { toast } from "sonner";
@@ -223,15 +229,24 @@ function thangSau(thang: string): string {
 		: `${nam}-${String(so + 1).padStart(2, "0")}`;
 }
 
+export type NguonKhoaHienThi =
+	| "khoa-rieng"
+	| "khoa-chung"
+	| "oidc"
+	| "chua-ro"
+	| null;
+
 export function ChiBaoSanSang({
 	aiOn,
 	dangKiem,
 	sanSang,
+	nguonKhoa,
 	thang,
 }: {
 	aiOn: boolean;
 	dangKiem: boolean;
 	sanSang: SanSangHien;
+	nguonKhoa: NguonKhoaHienThi;
 	thang: string;
 }) {
 	const s = troLyOkrMessages(useLocale()).troLy.sanSang;
@@ -249,18 +264,35 @@ export function ChiBaoSanSang({
 		);
 	}
 	if (sanSang.bat) {
-		return <StatusIndicator size="sm" tone="success" label={s.sanSang} />;
+		const nhan =
+			nguonKhoa === null || nguonKhoa === "chua-ro"
+				? s.sanSang
+				: s.sanSangNguon[nguonKhoa];
+		return <StatusIndicator size="sm" tone="success" label={nhan} />;
 	}
 	if (sanSang.lyDo === "het-tran-thang") {
 		const ngay = `01/${thangHien(thangSau(thang)).slice(0, 2)}`;
 		return <StatusIndicator size="sm" tone="error" label={s.hetTran(ngay)} />;
 	}
-	return (
+	const chiBao = (
 		<StatusIndicator
 			size="sm"
 			tone="warning"
 			label={s.chuaSanSang(s.lyDo[sanSang.lyDo])}
 		/>
+	);
+	if (sanSang.lyDo !== "chua-co-khoa-mo-hinh") return chiBao;
+	return (
+		<Field>
+			{chiBao}
+			<FieldDescription data-thieu-khoa>
+				{s.thieuKhoaMoTa(
+					TRO_LY_OKR_KHOA.rieng,
+					TRO_LY_OKR_KHOA.chung,
+					String(TRO_LY_OKR_TRAN.hanKiemKhoaMs / MINUTE_MS),
+				)}
+			</FieldDescription>
+		</Field>
 	);
 }
 
@@ -524,6 +556,7 @@ export function TheTroLyOkr() {
 							aiOn={daLuu.aiOn}
 							dangKiem={so.data.dangKiem}
 							sanSang={so.data.sanSang}
+							nguonKhoa={so.data.nguonKhoa}
 							thang={so.data.thang}
 						/>
 					</div>

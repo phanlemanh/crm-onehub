@@ -27,6 +27,7 @@
 		"@crm/env": "workspace:*",
 		"@crm/telemetry": "workspace:*",
 		"@crm/validation": "workspace:*",
+		"@vercel/oidc": "3.2.0",
 		"ai": "^7.0.85",
 		"context.dev": "2.10.0",
 		"eve": "^0.29.4",

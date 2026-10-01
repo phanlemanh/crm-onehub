@@ -1180,6 +1180,45 @@ thường vẫn chờ, nên độ trễ của một lượt ẩn không có gì 
 Dưới `eve dev` không có cron: hàng ẩn được xếp ngay trong `updateObjective` và
 nằm chờ tới lần gọi `/internal/crm/dispatch` kế tiếp (phép đo E4 tự gọi).
 
+## Chỗ rẽ: Trợ lý OKR — đường tới model và khoá riêng
+
+Đường tới model của Trợ lý OKR có một nơi biết: `nguonKhoaMoHinh` ở
+`apps/agent/agent/lib/mo-hinh-khoa.ts`. Nó hỏi đúng thứ tự Gateway dùng:
+`OKR_AI_GATEWAY_API_KEY` (chỉ Trợ lý OKR) → `AI_GATEWAY_API_KEY` → vé OIDC của
+Vercel qua `getVercelOidcToken` của `@vercel/oidc` (header `x-vercel-oidc-token`
+của lượt gọi, rồi biến `VERCEL_OIDC_TOKEN`). Không gọi model, không ném; vé hết
+hạn hay sai khuôn là «không có». Trên Vercel không cắm khoá nào cũng chạy: vé
+đến theo từng lượt gọi, không nằm trong biến môi trường.
+
+- Việc `okr-kiem-san-sang` ghi nguồn vào kết quả: `san-sang-khoa-rieng` ·
+  `san-sang-khoa-chung` · `san-sang-oidc` · `chua-co-khoa-mo-hinh`; hàng cũ
+  `san-sang` vẫn đọc được. `okr.aiChiTieu` trả `nguonKhoa` để thẻ Trợ lý OKR ở
+  Cài đặt nói đang chạy bằng khoá nào; không có ô nhập khoá.
+- Nhịp điều phối xếp kiểm lại khi nguồn hiện tại khác kết quả đã ghi và kết quả
+  cũ hơn `hanKiemKhoaMs`; trùng nguồn thì không xếp, nên cắm hay gỡ khoá, bật
+  OIDC, tự hiện lên thẻ trong khoảng mười phút.
+- `lyDoChanTruocKhiGui` đóng việc góp ý và tóm tắt tuần bằng
+  `khong-chay:chua-co-khoa-mo-hinh` khi hàm trả không có.
+- Mục năng lực «AI model» hỏi hàm ở chế độ bỏ qua khoá riêng
+  (`{ rieng: false }`): mục nói về mọi việc AI, khoá riêng không được che khoá
+  chung hay vé OIDC đứng sau nó.
+- Model của Trợ lý dựng tĩnh ở `lib/okr/mo-hinh.ts`: có khoá riêng thì
+  `createGateway({ apiKey })`, không thì Gateway mặc định; lớp giữa giữ ZDR, nhãn
+  `onehub:tro-ly-okr` và trần ra ở cả hai nhánh.
+
+Tệp của hãng lượt này chạm — `git diff` của nhánh giao với danh sách tệp có ở
+`origin/release`:
+
+- `apps/agent/agent/lib/capabilities.ts` — mục `MO_HINH_AI` nhận cờ từ
+  `nguonKhoaMoHinh` thay vì đọc hai biến; `capabilitiesFrom` thêm tham số
+  `coMoHinh`.
+- `apps/agent/test/capabilities.spec.ts` — ma trận bảy ô của mục «AI model»; ca
+  «mọi thứ bật» truyền cờ mô hình.
+- `apps/agent/package.json`, `bun.lock` — `@vercel/oidc` ghim `3.2.0`, đúng bản
+  `@ai-sdk/gateway` 4.0.69 dùng.
+- `.env.example`, `turbo.json`, `apps/agent/turbo.json`, `docs/environment.md` —
+  biến `OKR_AI_GATEWAY_API_KEY`.
+
 ## Chỗ rẽ: Máy soạn của Kho tài liệu (lượt 2)
 
 Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
@@ -1283,7 +1322,9 @@ soạn OKR cùng trưởng đơn vị. Nó tồn tại vì phép thử N0 cho th
 cách ly duy nhất tin được là **không có gì để rò**:
 
 - Một tác nhân gốc (`agent/agent.ts`), model tĩnh ghim ZDR qua xưởng `@crm/ai-okr`
-  (`xuongModelZdr`; `apps/agent` cũng dùng xưởng này), `thinkingLevel: low`, trần phiên
+  (`xuongModelZdr`; `apps/agent` cũng dùng xưởng này), cùng khoá riêng
+  `OKR_AI_GATEWAY_API_KEY` với Trợ lý OKR (`TRO_LY_OKR_KHOA`), vắng thì đi đường mặc
+  định của Gateway, `thinkingLevel: low`, trần phiên
   60 nghìn token vào · 8 nghìn ra · 30 phút, trần ra mỗi lời gọi 3 nghìn
   (`agent/lib/config.ts`).
 - Một tool duy nhất, `nop_ban_nhap`; mười một tool dựng sẵn của eve tắt bằng
