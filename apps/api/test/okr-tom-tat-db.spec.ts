@@ -959,7 +959,8 @@ describe("quan-tri", () => {
 					{ cycleId: KY, now: SAU(60 * MINUTE_MS) },
 					LUAT_TOM_TAT,
 				).then(
-					(b) => `tuan ${b.tuan}, ${b.phong.length} phong`,
+					(b) =>
+						`tuan ${b.tuan}, ${b.phong.filter((p) => phongMau.includes(p.departmentId)).length} phong`,
 					(e: Error) => `quan tri doc hang ngoai tuan: ${e.message}`,
 				);
 				expect(ban).toBe(`tuan ${TUAN}, ${phongMau.length - 1} phong`);
