@@ -17,12 +17,17 @@ import {
 	type MucTieuMau,
 	STATE,
 } from "./du-lieu";
+import { DauKara } from "./kara";
 
 function NhanGopYCho({ so }: { so: number }) {
 	return (
-		<Badge asChild variant="outline" data-nhan-gop-y-cho={so}>
-			<Link href={`?state=${STATE.bChiTiet}`}>{so} góp ý chờ</Link>
-		</Badge>
+		<Link
+			href={`?state=${STATE.bChiTiet}`}
+			className="underline-offset-2 hover:underline focus-visible:underline"
+			data-nhan-gop-y-cho={so}
+		>
+			<DauKara chu={`Kara · ${so} góp ý`} />
+		</Link>
 	);
 }
 

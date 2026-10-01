@@ -23,11 +23,13 @@ export function BangKrMau({
 	keyResults,
 	lePhanTram,
 	tenSau,
+	dauSau,
 	duoiDong,
 }: {
 	keyResults: KrMau[];
 	lePhanTram: number;
 	tenSau?: ReadonlyMap<string, string>;
+	dauSau?: ReactNode;
 	duoiDong?: (kr: KrMau) => ReactNode;
 }) {
 	return (
@@ -41,6 +43,7 @@ export function BangKrMau({
 								<span className="whitespace-normal" translate="no">
 									{tenSau?.get(kr.id) ?? kr.ten}
 								</span>
+								{tenSau?.has(kr.id) ? dauSau : null}
 								<span className="text-muted-foreground text-xs">{kr.kieu}</span>
 							</span>
 						</TableCell>

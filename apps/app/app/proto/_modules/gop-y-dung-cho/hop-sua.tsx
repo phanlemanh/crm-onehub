@@ -1,7 +1,6 @@
 "use client";
 
 import Close from "@carbon/icons-react/es/Close";
-import Sparkle from "@carbon/icons-react/es/MagicWand";
 import { Button } from "@crm/ui/components/button";
 import {
 	Field,
@@ -42,6 +41,7 @@ import {
 import { Textarea } from "@crm/ui/components/textarea";
 import Link from "next/link";
 import { GOP_Y, MUC_TIEU, STATE } from "./du-lieu";
+import { DauKara } from "./kara";
 
 const KHONG_LAM = () => undefined;
 
@@ -167,14 +167,11 @@ function CotGopYHienTai() {
 
 function DongDanSangMucTieu() {
 	return (
-		<Item size="sm" variant="outline" data-dan-sang-muc-tieu>
-			<ItemMedia variant="icon">
-				<Icon icon={Sparkle} />
-			</ItemMedia>
+		<Item size="sm" data-dan-sang-muc-tieu>
 			<ItemContent>
-				<ItemTitle>2 góp ý của Trợ lý OKR đang chờ</ItemTitle>
+				<DauKara chu="Kara · 2 góp ý đang chờ" />
 				<ItemDescription>
-					Quyết ở trang Mục tiêu, nơi có đủ các KR.
+					Góp ý chạm cả KR nên nằm ở trang Mục tiêu, cạnh từng KR.
 				</ItemDescription>
 			</ItemContent>
 			<ItemActions>

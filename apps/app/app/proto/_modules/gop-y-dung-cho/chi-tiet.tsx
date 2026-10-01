@@ -5,11 +5,6 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { EntityLogo } from "@crm/ui/components/entity-logo";
 import { Icon } from "@crm/ui/components/icon";
-import {
-	ProposedChange,
-	type ProposedChangeAction,
-	type ProposedChangeDecision,
-} from "@crm/ui/components/proposed-change";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -24,75 +19,79 @@ import {
 } from "@/components/detail-sheet";
 import { BangKrMau } from "./bang-kr";
 import { GOP_Y, type GopYMau, MUC_TIEU, STATE } from "./du-lieu";
+import { BienNhan, DauKara, DeXuatNeo, DiffTen, NhanKara } from "./kara";
 
-type Quyet = Partial<Record<string, ProposedChangeDecision>>;
+type Ket = "nhan" | "bo-qua";
+type Quyet = Partial<Record<string, Ket>>;
 
-const CHU_KET = {
-	accepted: "Đã nhận · Hoàn tác trong 7 ngày ở tab Vết",
-	dismissed: "Đã bác",
-	skipped: "Đã bỏ qua",
-} as const satisfies Record<ProposedChangeDecision, string>;
+const VI_SAO =
+	"Kara đọc tên, «vì sao lúc này» và 1 KR của Mục tiêu này lúc 09:12 hôm nay. Kara chỉ đọc dữ liệu OKR.";
 
-function nutCua(
-	g: GopYMau,
-	quyet: (d: ProposedChangeDecision) => void,
-): ProposedChangeAction[] {
-	if (g.kind === "question") {
-		return [
-			{
-				id: "them-kr",
-				label: "Thêm KR đối trọng",
-				tone: "secondary",
-				onClick: () => quyet("accepted"),
-			},
-			{
-				id: "bo-qua",
-				label: "Bỏ qua",
-				tone: "quiet",
-				onClick: () => quyet("skipped"),
-			},
-		];
-	}
-	return [
-		{
-			id: "nhan",
-			label: "Nhận",
-			tone: "primary",
-			onClick: () => quyet("accepted"),
-		},
-		{ id: "sua", label: "Sửa", tone: "secondary", onClick: () => undefined },
-		{
-			id: "bac",
-			label: "Bác",
-			tone: "quiet",
-			onClick: () => quyet("dismissed"),
-		},
-	];
+function chuBienNhan(g: GopYMau, ket: Ket): string {
+	if (ket === "bo-qua") return "Đã bỏ qua góp ý của Kara";
+	return g.kind === "rewrite"
+		? "Đã đổi tên KR theo Kara"
+		: "Đã mở KR mới theo góp ý của Kara";
 }
 
-function TheGopY({
+function MotGopY({
 	g,
 	ket,
 	quyet,
 }: {
 	g: GopYMau;
-	ket: ProposedChangeDecision | undefined;
-	quyet: (d: ProposedChangeDecision) => void;
+	ket: Ket | undefined;
+	quyet: (k: Ket | undefined) => void;
 }) {
+	if (ket) {
+		return (
+			<BienNhan
+				chu={chuBienNhan(g, ket)}
+				daNhan={ket === "nhan"}
+				hoanTac={() => quyet(undefined)}
+			/>
+		);
+	}
+	if (g.kind === "rewrite") {
+		return (
+			<DeXuatNeo
+				noiDung={<DiffTen truoc={g.truoc ?? ""} sau={g.sau} />}
+				lyDo={g.lyDo}
+				nut={[
+					{
+						id: "doi-ten",
+						nhan: "Đổi tên KR",
+						kieu: "chinh",
+						bam: () => quyet("nhan"),
+					},
+					{ id: "sua", nhan: "Sửa", kieu: "phu", bam: () => undefined },
+					{
+						id: "bo-qua",
+						nhan: "Bỏ qua",
+						kieu: "nhe",
+						bam: () => quyet("bo-qua"),
+					},
+				]}
+			/>
+		);
+	}
 	return (
-		<ProposedChange
-			kind={ket ? "compact" : g.kind}
-			label={
-				g.kind === "rewrite"
-					? "Trợ lý OKR · viết lại tên KR này"
-					: "Trợ lý OKR · câu hỏi về cả bộ KR"
-			}
-			before={g.truoc}
-			value={g.sau}
-			rationale={g.lyDo}
-			decided={ket ? { decision: ket, text: CHU_KET[ket] } : undefined}
-			actions={nutCua(g, quyet)}
-			data-gop-y={g.id}
+		<DeXuatNeo
+			noiDung={g.sau}
+			nut={[
+				{
+					id: "them-kr",
+					nhan: "Thêm KR đối trọng",
+					kieu: "phu",
+					bam: () => quyet("nhan"),
+				},
+				{
+					id: "bo-qua",
+					nhan: "Bỏ qua",
+					kieu: "nhe",
+					bam: () => quyet("bo-qua"),
+				},
+			]}
 		/>
 	);
 }
@@ -102,29 +101,41 @@ function TabKr({
 	quyet,
 }: {
 	ketCua: Quyet;
-	quyet: (id: string, d: ProposedChangeDecision) => void;
+	quyet: (id: string, k: Ket | undefined) => void;
 }) {
+	const conCho = GOP_Y.filter((g) => ketCua[g.id] === undefined).length;
 	const capMucTieu = GOP_Y.filter((g) => g.krId === null);
 	const tenSau = new Map(
-		GOP_Y.filter((g) => g.krId !== null && ketCua[g.id] === "accepted").map(
-			(g) => [g.krId ?? "", g.sau],
-		),
+		GOP_Y.filter((g) => g.krId !== null && ketCua[g.id] === "nhan").map((g) => [
+			g.krId ?? "",
+			g.sau,
+		]),
 	);
 	return (
 		<DetailSheetBody>
-			{capMucTieu.map((g) => (
-				<div className="px-5 py-3" key={g.id}>
-					<TheGopY g={g} ket={ketCua[g.id]} quyet={(d) => quyet(g.id, d)} />
-				</div>
-			))}
+			<DetailSheetSection>
+				<NhanKara
+					chu={conCho > 0 ? `Kara · ${conCho} góp ý` : "Kara · đã xem hết"}
+					viSao={VI_SAO}
+				/>
+				{capMucTieu.map((g) => (
+					<MotGopY
+						key={g.id}
+						g={g}
+						ket={ketCua[g.id]}
+						quyet={(k) => quyet(g.id, k)}
+					/>
+				))}
+			</DetailSheetSection>
 			<BangKrMau
 				keyResults={MUC_TIEU.kr}
 				lePhanTram={MUC_TIEU.lePhanTram}
 				tenSau={tenSau}
+				dauSau={<DauKara chu="theo Kara" />}
 				duoiDong={(kr) => {
 					const g = GOP_Y.find((x) => x.krId === kr.id);
 					return g ? (
-						<TheGopY g={g} ket={ketCua[g.id]} quyet={(d) => quyet(g.id, d)} />
+						<MotGopY g={g} ket={ketCua[g.id]} quyet={(k) => quyet(g.id, k)} />
 					) : null;
 				}}
 			/>
@@ -136,9 +147,8 @@ export function ChiTietMucTieu() {
 	const mt = MUC_TIEU;
 	const [tab, setTab] = useState("kr");
 	const [ketCua, setKetCua] = useState<Quyet>({});
-	const conCho = GOP_Y.filter((g) => ketCua[g.id] === undefined).length;
-	const quyet = (id: string, d: ProposedChangeDecision) =>
-		setKetCua((cu) => ({ ...cu, [id]: d }));
+	const quyet = (id: string, k: Ket | undefined) =>
+		setKetCua((cu) => ({ ...cu, [id]: k }));
 	const tabs: DetailSheetTab[] = [
 		{
 			value: "kr",
@@ -168,7 +178,7 @@ export function ChiTietMucTieu() {
 				<DetailSheetBody>
 					<DetailSheetSection>
 						<p className="text-muted-foreground text-sm">
-							Vết sửa của Mục tiêu và KR.
+							Mỗi lần nhận góp ý để lại một dòng «theo đề xuất của Kara».
 						</p>
 					</DetailSheetSection>
 				</DetailSheetBody>
@@ -189,11 +199,6 @@ export function ChiTietMucTieu() {
 					<>
 						<Badge variant="outline">{mt.loai}</Badge>
 						<Badge variant="secondary">{mt.trangThai}</Badge>
-						{conCho > 0 ? (
-							<Badge variant="outline" data-con-cho={conCho}>
-								{conCho} góp ý chờ
-							</Badge>
-						) : null}
 					</>
 				}
 				actions={
