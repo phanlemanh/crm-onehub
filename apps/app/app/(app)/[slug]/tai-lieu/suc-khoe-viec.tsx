@@ -28,20 +28,20 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
-import { type TaiLieuMessages, taiLieuMessages } from "@/lib/messages/tai-lieu";
+import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { useTRPC } from "@/lib/trpc/client";
 
 const MA_LOI_MAY_CHU = 500;
 
 type LoiTrpc = { message: string; data?: { httpStatus?: number } | null };
 
-function cauLoi(m: TaiLieuMessages["sucKhoe"], loi: LoiTrpc | null) {
+function cauLoi(mau: string, mayChu: string, loi: LoiTrpc | null) {
 	if (!loi) return null;
-	return dien(m.chuaXuLy, {
+	return dien(mau, {
 		loi:
 			loi.data?.httpStatus !== undefined && loi.data.httpStatus < MA_LOI_MAY_CHU
 				? loi.message
-				: m.mayChu,
+				: mayChu,
 	});
 }
 
@@ -59,7 +59,7 @@ export function NutXuLyChuaTraLoi({ hoiId }: { hoiId: string }) {
 	const xuLy = useMutation(
 		trpc.taiLieu.xuLyChuaTraLoi.mutationOptions({ onSuccess: lamMoi }),
 	);
-	const loi = cauLoi(m, xuLy.error);
+	const loi = cauLoi(m.chuaXuLy, m.mayChu, xuLy.error);
 	return (
 		<div className="flex flex-col items-end gap-1">
 			<Button
@@ -100,7 +100,7 @@ export function NutXuLyBaoSai({ id }: { id: string }) {
 			},
 		}),
 	);
-	const loi = cauLoi(m, xuLy.error);
+	const loi = cauLoi(m.chuaXuLy, m.mayChu, xuLy.error);
 
 	const doiMo = (tiep: boolean) => {
 		setMo(tiep);
