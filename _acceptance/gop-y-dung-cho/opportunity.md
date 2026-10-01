@@ -3,10 +3,10 @@ schema_version: 1
 slug: gop-y-dung-cho
 feature: Góp ý của Kara ở khu OKR đặt đúng chỗ — «Kara · N góp ý» trên thẻ Mục tiêu, đề xuất neo ngay dưới từng KR ở khung chi tiết với biên nhận có Hoàn tác, hộp Sửa chỉ còn một dòng dẫn sang
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Manh Phan
+decided_at: 2026-10-01T17:19:47Z
 prototype:
   base_commit: 53a707de267eeb3b3f8c02b23597a62075c406b6
   disposition:

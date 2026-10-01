@@ -181,7 +181,7 @@ cái khảo sát này muốn chặn.
 ## 7. Đã quyết — 2026-10-01 (Manh Phan)
 
 1. **Một tên duy nhất: Kara** — thay mọi tên AI trên màn. «Tác nhân» vẫn là vật
-   đội dựng ra, Kara chạy nó (cách hiểu của phiên máy, chờ chủ kho xác nhận).
+   đội dựng ra, Kara chạy nó (chủ kho xác nhận 2026-10-02).
 2. **Dấu tia sáng** — `AiGenerate` của Carbon.
 3. **Áp luật «ghi vào bản ghi = đề xuất»** cho cả tab bản ghi — lượt
    `tac-tu-xin-duyet` (T3) vào lộ trình.
