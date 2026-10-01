@@ -49,7 +49,7 @@ export function OTienDo({
 
 export function dongSoKr(kr: KrMau): string {
 	if (kr.kieu === "moc") return giaTri(kr);
-	return `${giaTri(kr)} · đích ${giaTri(kr, kr.dich)}`;
+	return `${giaTri(kr)} / ${giaTri(kr, kr.dich)}`;
 }
 
 export function moTaKr(kr: KrMau): string {

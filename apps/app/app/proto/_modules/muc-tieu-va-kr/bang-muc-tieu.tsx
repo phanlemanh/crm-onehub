@@ -57,7 +57,7 @@ function TienDoMucTieuO({ mt }: { mt: MucTieuDu }) {
 	return (
 		<OTienDo
 			coVach
-			dong={`Trung bình ${mt.kr.length} KR`}
+			dong={`Tính từ ${mt.kr.length} KR`}
 			nhan
 			nhip={nhipCua(phanTram, mt.loai)}
 			phanTram={phanTram}
@@ -81,11 +81,10 @@ function HangMucTieu({
 		<SimpleTableRow
 			clickable
 			data-hang-muc-tieu={mt.id}
-			data-muc-tieu={mt.id}
 			expandable
 			onClick={doiMo}
 		>
-			<SimpleTableCell className="py-3 align-top">
+			<SimpleTableCell className="w-12 py-3 align-top">
 				<Button
 					aria-expanded={mo}
 					aria-label={`${mo ? "Thu gọn" : "Mở"} KR của «${mt.ten}»`}
@@ -97,13 +96,16 @@ function HangMucTieu({
 					variant="ghost"
 				>
 					<Icon
-						className={cn("transition-transform", mo && "rotate-90")}
+						className={cn(
+							"transition-transform motion-reduce:transition-none",
+							mo && "rotate-90",
+						)}
 						icon={ChevronRight}
 					/>
 				</Button>
 			</SimpleTableCell>
 			<SimpleTableCell className="whitespace-normal py-3 align-top">
-				<div className="flex min-w-0 flex-col gap-1">
+				<div className="flex min-w-0 flex-1 flex-col gap-1">
 					<div className="flex flex-wrap items-center gap-x-2 gap-y-1">
 						<Link
 							className="font-medium underline-offset-2 hover:underline focus-visible:underline"
@@ -128,15 +130,15 @@ function HangMucTieu({
 							<span translate="no">{mt.phuTrach.ten}</span>
 						</span>
 					</span>
-					<div className="pt-1 md:hidden">
+					<div className="w-full pt-1 md:hidden">
 						<TienDoMucTieuO mt={mt} />
 					</div>
 				</div>
 			</SimpleTableCell>
-			<SimpleTableCell className={cn(AN_DUOI_MD, "py-3 align-top")}>
+			<SimpleTableCell className={cn(AN_DUOI_MD, "w-48 py-3 align-top")}>
 				<TenNguoi ten={mt.phuTrach.ten} />
 			</SimpleTableCell>
-			<SimpleTableCell className={cn(AN_DUOI_MD, "py-3 align-top")}>
+			<SimpleTableCell className={cn(AN_DUOI_MD, "w-64 py-3 align-top")}>
 				<TienDoMucTieuO mt={mt} />
 			</SimpleTableCell>
 		</SimpleTableRow>
@@ -168,7 +170,7 @@ function HangKr({
 					<span className="w-8 shrink-0 pt-px text-muted-foreground text-xs tabular-nums">
 						KR{thuTu}
 					</span>
-					<div className="flex min-w-0 flex-col gap-1">
+					<div className="flex min-w-0 flex-1 flex-col gap-1">
 						<span className="flex flex-wrap items-center gap-x-2 gap-y-1">
 							<span translate="no">{kr.ten}</span>
 							{coNoiDung(sauTen) ? sauTen : null}
@@ -180,7 +182,7 @@ function HangKr({
 								<span translate="no">{kr.phuTrach.ten}</span>
 							</span>
 						</span>
-						<div className="pt-1 md:hidden">
+						<div className="w-full pt-1 md:hidden">
 							<TienDoKrMau kr={kr} loai={mt.loai} />
 						</div>
 					</div>
@@ -268,52 +270,57 @@ export function BangMucTieu({
 		});
 	const doiMo = onDoiMo ?? doiMoTrong;
 	return (
-		<SimpleTable columns={COT}>
+		<div className="flex flex-col gap-3">
 			{ds.map((mt) => {
 				const moHang = mo.has(mt.id);
 				const duoiMt = moHang ? diemCam.duoiMucTieu?.(mt) : null;
 				return (
-					<Fragment key={mt.id}>
-						<HangMucTieu
-							doiMo={() => doiMo(mt.id)}
-							mo={moHang}
-							mt={mt}
-							nhan={diemCam.nhanMucTieu?.(mt)}
-						/>
-						{coNoiDung(duoiMt) ? (
-							<HangTraiCot
-								dinhTren={false}
-								neo={{ "data-duoi-muc-tieu": mt.id }}
-							>
-								{duoiMt}
-							</HangTraiCot>
-						) : null}
-						{moHang && mt.kr.length === 0 ? <HangChuaCoKr mt={mt} /> : null}
-						{moHang
-							? mt.kr.map((kr, i) => {
-									const duoi = diemCam.duoiKr?.(kr, mt);
-									const coDuoi = coNoiDung(duoi);
-									return (
-										<Fragment key={kr.id}>
-											<HangKr
-												dinhDuoi={coDuoi}
-												kr={kr}
-												mt={mt}
-												sauTen={diemCam.sauTenKr?.(kr, mt)}
-												thuTu={i + 1}
-											/>
-											{coDuoi ? (
-												<HangTraiCot dinhTren neo={{ "data-duoi-kr": kr.id }}>
-													{duoi}
-												</HangTraiCot>
-											) : null}
-										</Fragment>
-									);
-								})
-							: null}
-					</Fragment>
+					<div data-muc-tieu={mt.id} key={mt.id}>
+						<SimpleTable
+							columns={COT}
+							headerClassName="sr-only"
+						>
+							<HangMucTieu
+								doiMo={() => doiMo(mt.id)}
+								mo={moHang}
+								mt={mt}
+								nhan={diemCam.nhanMucTieu?.(mt)}
+							/>
+							{coNoiDung(duoiMt) ? (
+								<HangTraiCot
+									dinhTren={false}
+									neo={{ "data-duoi-muc-tieu": mt.id }}
+								>
+									{duoiMt}
+								</HangTraiCot>
+							) : null}
+							{moHang && mt.kr.length === 0 ? <HangChuaCoKr mt={mt} /> : null}
+							{moHang
+								? mt.kr.map((kr, i) => {
+										const duoi = diemCam.duoiKr?.(kr, mt);
+										const coDuoi = coNoiDung(duoi);
+										return (
+											<Fragment key={kr.id}>
+												<HangKr
+													dinhDuoi={coDuoi}
+													kr={kr}
+													mt={mt}
+													sauTen={diemCam.sauTenKr?.(kr, mt)}
+													thuTu={i + 1}
+												/>
+												{coDuoi ? (
+													<HangTraiCot dinhTren neo={{ "data-duoi-kr": kr.id }}>
+														{duoi}
+													</HangTraiCot>
+												) : null}
+											</Fragment>
+										);
+									})
+								: null}
+						</SimpleTable>
+					</div>
 				);
 			})}
-		</SimpleTable>
+		</div>
 	);
 }

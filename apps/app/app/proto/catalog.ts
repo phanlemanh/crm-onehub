@@ -764,6 +764,7 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 			{ id: "ST-chi-tiet", nhan: "Đề xuất — Chi tiết mục tiêu" },
 			{ id: "ST-chua-co-kr", nhan: "Đề xuất — Mục tiêu nháp chưa có KR" },
+			{ id: "ST-cham", nhan: "Đề xuất — Chấm điểm, mục tiêu trong khung" },
 			{ id: "ST-dang-tai", nhan: "Đang tải" },
 			{ id: "ST-hien-tai", nhan: "Bản đang chạy — để so" },
 		],

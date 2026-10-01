@@ -197,8 +197,8 @@ function TabKr({
 					) : null}
 					<BangKrChiTiet diemCam={diemCam} mt={mt} />
 					<p className="text-muted-foreground text-xs">
-						Tiến độ mục tiêu {phanTram}% là trung bình {mt.kr.length} KR. Vạch
-						đứng: lẽ ra đã tới {KY.kyVong}% vào {KY.homNay}.
+						Tiến độ mục tiêu {phanTram}% tính từ {mt.kr.length} KR. Vạch đứng:
+						lẽ ra đã tới {KY.kyVong}% vào {KY.homNay}.
 					</p>
 				</div>
 			</DetailSheetSection>

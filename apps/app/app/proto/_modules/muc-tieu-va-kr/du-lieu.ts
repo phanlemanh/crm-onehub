@@ -20,6 +20,7 @@ export const STATE = {
 	chiTiet: "ST-chi-tiet",
 	chuaCoKr: "ST-chua-co-kr",
 	dangTai: "ST-dang-tai",
+	cham: "ST-cham",
 } as const;
 
 export type TrangThaiMau = "nhap" | "cho-duyet" | "cong-bo";
