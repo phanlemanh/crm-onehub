@@ -1,9 +1,16 @@
 import { z } from "zod";
+import { chuanNfc } from "./tai-lieu";
+import { coSoTronVen, rutSoChu } from "./tai-lieu-so";
 
 export const KENH_HOI = ["CRM", "ZALO"] as const;
 export type KenhHoi = (typeof KENH_HOI)[number];
 
-export const TRANG_THAI_HOI = ["DANG_HOI", "TRA_LOI", "TU_CHOI", "LOI"] as const;
+export const TRANG_THAI_HOI = [
+	"DANG_HOI",
+	"TRA_LOI",
+	"TU_CHOI",
+	"LOI",
+] as const;
 export type TrangThaiHoi = (typeof TRANG_THAI_HOI)[number];
 
 export const LY_DO_TU_CHOI = ["khong-co-trang", "trich-truot"] as const;
@@ -82,4 +89,184 @@ export function parseGanNhat(v: unknown): GanNhat {
 	if (!r.success)
 		throw new Error(`trang gần nhất không đọc được: ${r.error.message}`);
 	return r.data;
+}
+
+export type BanDangDung = {
+	slug: string;
+	ten: string;
+	phienBan: number;
+	duyetLuc: string;
+	noiDung: string;
+	xacMinhDen: string | null;
+	chuTrang: string;
+};
+
+export type BanNop = {
+	cau: {
+		chu: string;
+		trich: { slug: string; phienBan: number; doan: string }[];
+	}[];
+};
+
+export type LoiKiem = {
+	loai:
+		| "qua-nhieu"
+		| "cau-khong-trich"
+		| "trang-khong-co"
+		| "phien-ban-cu"
+		| "trich-ngan"
+		| "trich-khong-co"
+		| "so-khong-trich";
+	chi: string;
+};
+
+export type KetQuaKiemTraLoi =
+	| { ok: true; traLoi: TraLoiDaKiem }
+	| { ok: false; loi: LoiKiem[] };
+
+export function canhBaoQuaHan(
+	trang: readonly BanDangDung[],
+	dauHomNay: Date,
+): TrangQuaHan[] {
+	const da = new Set<string>();
+	const ra: TrangQuaHan[] = [];
+	for (const t of trang) {
+		if (da.has(t.slug) || t.xacMinhDen === null) continue;
+		if (new Date(t.xacMinhDen).getTime() >= dauHomNay.getTime()) continue;
+		da.add(t.slug);
+		ra.push({
+			slug: t.slug,
+			ten: t.ten,
+			xacMinhDen: t.xacMinhDen,
+			chuTrang: t.chuTrang,
+		});
+	}
+	return ra;
+}
+
+function kiemMotTrich(
+	t: { slug: string; phienBan: number; doan: string },
+	trang: ReadonlyMap<string, BanDangDung>,
+): LoiKiem | null {
+	const ban = trang.get(t.slug);
+	if (!ban) return { loai: "trang-khong-co", chi: t.slug };
+	if (t.phienBan !== ban.phienBan)
+		return {
+			loai: "phien-ban-cu",
+			chi: `${t.slug}: bản đang dùng là ${ban.phienBan}`,
+		};
+	const doan = chuanNfc(t.doan).trim();
+	if (doan.length < TAI_LIEU_HOI.trich.toiThieu)
+		return { loai: "trich-ngan", chi: doan };
+	if (!chuanNfc(ban.noiDung).includes(doan))
+		return { loai: "trich-khong-co", chi: doan };
+	return null;
+}
+
+export function kiemTraLoi(
+	ban: BanNop,
+	trang: ReadonlyMap<string, BanDangDung>,
+	dauHomNay: Date,
+): KetQuaKiemTraLoi {
+	const T = TAI_LIEU_HOI.trich;
+	if (ban.cau.length === 0 || ban.cau.length > T.cauToiDa)
+		return {
+			ok: false,
+			loi: [{ loai: "qua-nhieu", chi: `từ 1 tới ${T.cauToiDa} câu` }],
+		};
+	const loi: LoiKiem[] = [];
+	ban.cau.forEach((cau, i) => {
+		const ten = `câu ${i + 1}`;
+		if (cau.trich.length === 0) {
+			loi.push({ loai: "cau-khong-trich", chi: ten });
+			return;
+		}
+		if (cau.trich.length > T.trichMoiCau || cau.chu.length > T.chuToiDa) {
+			loi.push({ loai: "qua-nhieu", chi: ten });
+			return;
+		}
+		const loiTrich = cau.trich
+			.map((t) => kiemMotTrich(t, trang))
+			.filter((l): l is LoiKiem => l !== null);
+		loi.push(...loiTrich);
+		if (loiTrich.length > 0) return;
+		const doan = cau.trich.map((t) => chuanNfc(t.doan).trim());
+		for (const so of rutSoChu(cau.chu)) {
+			if (!doan.some((d) => coSoTronVen(d, so)))
+				loi.push({ loai: "so-khong-trich", chi: `${ten}: ${so}` });
+		}
+	});
+	if (loi.length > 0) return { ok: false, loi };
+	const duocTrich: BanDangDung[] = [];
+	const cau = ban.cau.map((c) => ({
+		chu: chuanNfc(c.chu).trim(),
+		trich: c.trich.map((t) => {
+			const b = trang.get(t.slug) as BanDangDung;
+			duocTrich.push(b);
+			return {
+				slug: b.slug,
+				ten: b.ten,
+				phienBan: b.phienBan,
+				duyetLuc: b.duyetLuc,
+				doan: chuanNfc(t.doan).trim(),
+			};
+		}),
+	}));
+	return {
+		ok: true,
+		traLoi: { cau, quaHan: canhBaoQuaHan(duocTrich, dauHomNay) },
+	};
+}
+
+function dien(mau: string, gia: Record<string, string>): string {
+	return mau.replace(/\{(\w+)\}/g, (_, k: string) => gia[k] ?? "");
+}
+
+function dongQuaHan(
+	t: TraLoiDaKiem,
+	fmtNgay: (iso: string) => string,
+): string[] {
+	return t.quaHan.map((q) =>
+		dien(TAI_LIEU_HOI.quaHan, {
+			ten: q.ten,
+			ngay: fmtNgay(q.xacMinhDen),
+			chu: q.chuTrang,
+		}),
+	);
+}
+
+export function dungTraLoi(
+	t: TraLoiDaKiem,
+	fmtNgay: (iso: string) => string,
+): string {
+	const than = t.cau.map((c) =>
+		[
+			c.chu,
+			...c.trich.map(
+				(x) =>
+					`— «${x.doan}» (${x.ten}, phiên bản ${x.phienBan}, duyệt ${fmtNgay(x.duyetLuc)})`,
+			),
+		].join("\n"),
+	);
+	return [...dongQuaHan(t, fmtNgay), ...than].join("\n\n");
+}
+
+export function dungTraLoiZalo(
+	t: TraLoiDaKiem,
+	fmtNgay: (iso: string) => string,
+): string {
+	const than = t.cau.map((c) =>
+		[
+			c.chu.replace(/\*\*|__|`/g, ""),
+			...c.trich.map((x) => `«${x.doan}» — ${x.ten}, phiên bản ${x.phienBan}`),
+		].join("\n"),
+	);
+	return [...dongQuaHan(t, fmtNgay), ...than].join("\n\n");
+}
+
+export function dungTuChoi(gan: readonly { ten: string }[]): string {
+	if (gan.length === 0) return TAI_LIEU_HOI.tuChoi;
+	return `${TAI_LIEU_HOI.tuChoi}\n${dien(TAI_LIEU_HOI.ganNhat, {
+		ten: gan.map((g) => g.ten).join(", "),
+	})}`;
 }

@@ -1,8 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import {
-	LOAI_SU_KIEN,
-	parseSuKienChiTiet,
-} from "../src/tai-lieu";
+import { LOAI_SU_KIEN, parseSuKienChiTiet } from "../src/tai-lieu";
 import {
 	parseGanNhat,
 	parseTraLoi,
@@ -56,9 +53,9 @@ describe("khuon-tra-loi", () => {
 
 	test("sự kiện XAC_MINH ghi được và đọc lại được", () => {
 		expect(LOAI_SU_KIEN).toContain("XAC_MINH");
-		expect(
-			parseSuKienChiTiet({ loai: "XAC_MINH", den: "2026-12-20" }),
-		).toEqual({ loai: "XAC_MINH", den: "2026-12-20" });
+		expect(parseSuKienChiTiet({ loai: "XAC_MINH", den: "2026-12-20" })).toEqual(
+			{ loai: "XAC_MINH", den: "2026-12-20" },
+		);
 		expect(parseSuKienChiTiet({ loai: "XAC_MINH", den: null })).toEqual({
 			loai: "XAC_MINH",
 			den: null,
