@@ -1,5 +1,5 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
-	chup_luc: "2026-09-30T09:30:00+07:00",
+	chup_luc: "2026-10-01T09:15:00+07:00",
 	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8",
 	moc: [
 		{
@@ -91,12 +91,11 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			pr: [194, 195, 196, 197, 198, 200],
 			cau_giao:
 				"«Tôi tải tệp quy định đang có lên, máy soạn thành trang, tôi sửa và duyệt»",
-			buoc_ke:
-				"Anh thử tải một tệp Word thật trên production, rồi chạy phiên nghiệm thu",
+			buoc_ke: "Phiên nghiệm thu máy soạn",
 			cho_anh: true,
 			chan_boi: [],
 			ghi_chu:
-				"Merge 8b76152a ngày 28/09, sớm tám ngày so với đề xuất. Chấm năm vòng: round 2 BLOCKED ở E2t vì thiếu Blob thật; Cổng Bằng chứng mở lại Cổng Phạm vi thêm AC-16 (thủ tục nhận nguồn có thể xoá tệp của nguồn đã có); round 3 REJECT chạm trần ba vòng; round 5 đạt, E2t chạy trên kho Blob riêng tư thật kho-tai-lieu-nguon (sin1, chưa gắn dự án). Bốn hạn chế đã biết ở Notes của hợp đồng. migration 20261003010000_may_soan_de_xuat. Sau merge: #195 vùng kéo-thả dựng trên móc ReUI; #196 sửa câu gợi ý; #197 kho nguồn đọc khoá riêng KHO_TAI_LIEU_BLOB_TOKEN (đặt tay trên Production của api và agent, kho không gắn dự án); #198 diff bỏ vòng Myers mức khối, hết sát trần CI; #200 thước màn chữ theo khoá mới. Hộp «Tải nguồn lên» đã mở trên production, chưa tải tệp thật nào.",
+				"Merge 8b76152a ngày 28/09, sớm tám ngày so với đề xuất. Chấm năm vòng: round 2 BLOCKED ở E2t vì thiếu Blob thật; Cổng Bằng chứng mở lại Cổng Phạm vi thêm AC-16 (thủ tục nhận nguồn có thể xoá tệp của nguồn đã có); round 3 REJECT chạm trần ba vòng; round 5 đạt, E2t chạy trên kho Blob riêng tư thật kho-tai-lieu-nguon (sin1, chưa gắn dự án). Bốn hạn chế đã biết ở Notes của hợp đồng. migration 20261003010000_may_soan_de_xuat. Sau merge: #195 vùng kéo-thả dựng trên móc ReUI; #196 sửa câu gợi ý; #197 kho nguồn đọc khoá riêng KHO_TAI_LIEU_BLOB_TOKEN (đặt tay trên Production của api và agent, kho không gắn dự án); #198 diff bỏ vòng Myers mức khối, hết sát trần CI; #200 thước màn chữ theo khoá mới. Hộp «Tải nguồn lên» đã mở trên production, chưa tải tệp thật nào. 29/09 đã có tệp thật tải lên production (trang «Chính sách nhân viên», dẫn tới sự việc 404 sửa ở #208).",
 		},
 		{
 			id: "l3",
@@ -112,7 +111,7 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			buoc_ke: "Phiên nghiệm thu lượt 3; Cổng Giá trị đóng ở đợt chạy thật",
 			chan_boi: [],
 			ghi_chu:
-				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b; ký Cổng Đáng build, ngưỡng giữ như đề xuất. 29/09: S3 xong, năm lệnh xanh. S4 round 1 BLOCKED kèm một phát hiện trong hợp đồng (nhắc sáng tự tính lại luật duyệt) và hội đồng ảnh thấy tiêu đề bị nút đè ở 390; đã sửa, kể cả đầu trang dùng chung. Round 2 PENDING-JUDGMENT: 25 eval và bốn suite xanh, hội đồng ảnh UNCERTAIN, bảy mục ngoài hợp đồng. Anh ký Cổng Bằng chứng 29/09 (E12j Đạt); gộp onehub, ghim lại xanh, mở PR #205. CI xanh, merge vào onehub 29/09, lên production.",
+				"Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b; ký Cổng Đáng build, ngưỡng giữ như đề xuất. 29/09: S3 xong, năm lệnh xanh. S4 round 1 BLOCKED kèm một phát hiện trong hợp đồng (nhắc sáng tự tính lại luật duyệt) và hội đồng ảnh thấy tiêu đề bị nút đè ở 390; đã sửa, kể cả đầu trang dùng chung. Round 2 PENDING-JUDGMENT: 25 eval và bốn suite xanh, hội đồng ảnh UNCERTAIN, bảy mục ngoài hợp đồng. Anh ký Cổng Bằng chứng 29/09 (E12j Đạt); gộp onehub, ghim lại xanh, mở PR #205. CI xanh, merge vào onehub 29/09, lên production. Còn treo (soát 01/10): phiên nghiệm thu; ba hợp đồng mới — màn chi tiết agent lệch bố cục trên điện thoại vì PageShell đổi lưới (đã lên production), hộp chèn liên kết báo «không có trang nào khớp» khi tìm bị lỗi, test chèn liên kết không đo tiền tố /<ws>/; xacMinhDen chưa có đường ghi nên «Quá hạn xác minh» rỗng trên bản thật.",
 			cho_anh: true,
 		},
 		{
@@ -246,12 +245,16 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			hang_muc: "l3",
 		},
 		{
-			viec: "Mở lượt 3b lich-su-va-luu-tru-trang (T3)",
-			hang_muc: "l3b",
+			viec: "Mở hợp đồng sửa màn chi tiết agent lệch bố cục trên điện thoại (lỗi lượt 3, đã lên production)",
+			hang_muc: "l3",
 		},
 		{
-			viec: "Thử tải một tệp Word quy định thật lên production: lần ghi vào kho riêng tư đầu tiên chưa được đo ở production",
-			hang_muc: "l2",
+			viec: "Mở lại «Chính sách nhân viên» trên production bằng vai owner để xác nhận bản sửa #208",
+			hang_muc: "s208",
+		},
+		{
+			viec: "Mở lượt 3b lich-su-va-luu-tru-trang (T3)",
+			hang_muc: "l3b",
 		},
 		{
 			viec: "Chạy phiên nghiệm thu máy soạn (uat-session may-soan-de-xuat)",
@@ -309,6 +312,10 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-10-01",
+			viec: "Soát tiến độ: lượt 3 còn ba hợp đồng mới (một lỗi điện thoại đã lên production); đã có tệp thật tải lên production 29/09",
+		},
 		{
 			ngay: "2026-09-29",
 			viec: "Sửa lên onehub (PR #208): trang chưa có bản đề xuất mở được; màn đọc nói đang chờ gì và chỉ lối viết tay. Lên production 12:15",
