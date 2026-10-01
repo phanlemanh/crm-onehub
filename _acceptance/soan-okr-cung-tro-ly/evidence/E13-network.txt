@@ -1,1 +1,2 @@
-n-a (driver): puppeteer script, no browser-tool network reader
+E13 network: driver = puppeteer script (man-soan.mjs) via tien-de; no read_network_requests tool available. networkObserved = n-a (driver).
+Script log: 84 DUNG, 0 SAI, exit 0 (EXIT=0).
