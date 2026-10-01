@@ -5,7 +5,7 @@ slug: mien-so-chup-bo-okr-mau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, docs]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-01T07:27:20Z
 design_doc: docs/superpowers/specs/2026-10-01-mien-so-chup-bo-okr-mau-design.md
