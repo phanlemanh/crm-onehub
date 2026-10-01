@@ -246,7 +246,14 @@ export async function goiSoan(
 	return goi;
 }
 
-type ChuVaSo = { chu: string[]; so: number[] };
+type ChuVaSo = {
+	chu: string[];
+	so: number[];
+	dich: number[];
+	khoiDiem: number[];
+};
+
+const laSo = (n: number | null): n is number => n !== null;
 
 function chuVaSoCuaGoi(goi: GoiSoan): ChuVaSo {
 	const chu: string[] = [
@@ -257,11 +264,15 @@ function chuVaSoCuaGoi(goi: GoiSoan): ChuVaSo {
 		...goi.lop3.mangSang,
 	];
 	const so: (number | null)[] = [goi.cham.objectiveCap, goi.cham.krCap];
+	const dich: number[] = [];
+	const khoiDiem: (number | null)[] = [];
 	for (const m of goi.lop2a.capTren) {
 		chu.push(m.ten, m.viSaoLucNay);
 		for (const k of m.kr) {
 			chu.push(k.ten);
 			so.push(k.khoiDiem, k.dich, k.hienTai, k.tienDo);
+			dich.push(k.dich);
+			khoiDiem.push(k.khoiDiem, k.hienTai);
 		}
 	}
 	for (const m of goi.lop3.mucTieu) {
@@ -276,17 +287,27 @@ function chuVaSoCuaGoi(goi: GoiSoan): ChuVaSo {
 				k.diem,
 				...k.capNhat.map((c) => c.giaTri),
 			);
+			dich.push(k.dich);
+			khoiDiem.push(k.khoiDiem, k.soChot, ...k.capNhat.map((c) => c.giaTri));
 		}
 	}
-	for (const c of goi.lop4.chiSo) so.push(c.quyTruoc, c.quyNay);
-	return { chu, so: so.filter((n): n is number => n !== null) };
+	for (const c of goi.lop4.chiSo) {
+		so.push(c.quyTruoc, c.quyNay);
+		khoiDiem.push(c.quyTruoc, c.quyNay);
+	}
+	return {
+		chu,
+		so: so.filter(laSo),
+		dich,
+		khoiDiem: khoiDiem.filter(laSo),
+	};
 }
 
 export async function goiKiemTu(
 	goi: GoiSoan,
 	them: { soNguoiGo: Set<string> },
 ): Promise<GoiKiemSoan> {
-	const { chu, so } = chuVaSoCuaGoi(goi);
+	const { chu, so, dich, khoiDiem } = chuVaSoCuaGoi(goi);
 	const soTrongGoi = new Set([
 		...so.map(String),
 		...chu.flatMap((c) => trichSo(c)).map(String),
@@ -297,6 +318,8 @@ export async function goiKiemTu(
 	]);
 	return {
 		soTrongGoi,
+		soDich: new Set(dich.map(String)),
+		soKhoiDiem: new Set(khoiDiem.map(String)),
 		soNguoiGo: them.soNguoiGo,
 		tenThanhVien,
 		tuCam: goi.cham.tuCam,

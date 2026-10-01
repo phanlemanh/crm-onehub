@@ -10,7 +10,9 @@ import {
 import { khoaDong } from "../src/okr-kiem-de-xuat";
 
 const GOI: GoiKiemSoan = {
-	soTrongGoi: new Set(["82", "11", "14000000000", "25"]),
+	soTrongGoi: new Set(["82", "11", "14000000000", "25", "85"]),
+	soDich: new Set(["85", "25"]),
+	soKhoiDiem: new Set(["82", "11", "25"]),
 	soNguoiGo: new Set(["30"]),
 	tenThanhVien: ["Nguyễn Thị Hồng Nhung", "Trần Văn Bình"],
 	tuCam: ["thưởng", "xếp hạng", "KPI", "deal"],
@@ -122,6 +124,11 @@ const BANG: Ca[] = [
 		}),
 	},
 	{ ma: "khong-don-vi", do: kr({ donVi: "" }), lanh: kr({ donVi: "đối tác" }) },
+	{
+		ma: "khoi-diem-la-dich",
+		do: kr({ khoiDiemGoiY: 85 }),
+		lanh: kr({ khoiDiemGoiY: 82 }),
+	},
 ];
 
 describe("kiem-ban-nhap", () => {
@@ -160,6 +167,25 @@ describe("kiem-ban-nhap", () => {
 		expect(
 			kiemDongBanNhap(mt({ viSaoLucNay: "Thu mười bốn tỷ từ đại lý" }), GOI),
 		).toEqual({ qua: true });
+	});
+
+	test("khoi-diem-la-dich: số vừa là đích vừa là số đo thật, hay do người gõ, thì qua; khởi điểm ngoài gói vẫn là so-moi", () => {
+		expect(kiemDongBanNhap(kr({ khoiDiemGoiY: 25 }), GOI)).toEqual({
+			qua: true,
+		});
+		expect(
+			kiemDongBanNhap(kr({ khoiDiemGoiY: 85 }), {
+				...GOI,
+				soNguoiGo: new Set(["85"]),
+			}),
+		).toEqual({ qua: true });
+		expect(kiemDongBanNhap(kr({ khoiDiemGoiY: 63 }), GOI)).toEqual({
+			qua: false,
+			maLoai: "so-moi",
+		});
+		expect(
+			kiemDongBanNhap(kr({ kieu: "moc", donVi: "mốc", khoiDiemGoiY: 85 }), GOI),
+		).toEqual({ qua: false, maLoai: "moc-co-dich-so" });
 	});
 
 	test("id-ngoai-goi: căn chỉnh tới KR cấp trên trong gói qua, tới KR lạ bị loại", () => {

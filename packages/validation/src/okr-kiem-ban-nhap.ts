@@ -12,6 +12,7 @@ export const MA_LOAI_BAN_NHAP = [
 	"da-bac",
 	"moc-co-dich-so",
 	"khong-don-vi",
+	"khoi-diem-la-dich",
 ] as const;
 
 export type MaLoaiBanNhap = (typeof MA_LOAI_BAN_NHAP)[number];
@@ -24,6 +25,8 @@ export type DongKiemSoan =
 
 export type GoiKiemSoan = {
 	soTrongGoi: Set<string>;
+	soDich: Set<string>;
+	soKhoiDiem: Set<string>;
 	soNguoiGo: Set<string>;
 	tenThanhVien: string[];
 	tuCam: readonly string[];
@@ -65,6 +68,14 @@ function soMoi(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
 		return true;
 	return chuCuaDong(d).some((c) =>
 		trichSo(c).some((s) => !phep.has(String(s))),
+	);
+}
+
+function khoiDiemLaDich(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
+	if (d.loai !== "kr-moi" || d.khoiDiemGoiY === null) return false;
+	const so = String(d.khoiDiemGoiY);
+	return (
+		goi.soDich.has(so) && !goi.soKhoiDiem.has(so) && !goi.soNguoiGo.has(so)
 	);
 }
 
@@ -129,6 +140,7 @@ const LUAT: readonly (readonly [
 	["tu-cam", tuCam],
 	["noi-ve-nguoi", noiVeNguoi],
 	["chep-cap-tren", chepCapTren],
+	["khoi-diem-la-dich", khoiDiemLaDich],
 	["so-moi", soMoi],
 ];
 

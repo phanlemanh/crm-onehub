@@ -6,6 +6,7 @@ import { docCuoc } from "@crm/db/okr-cuoc-soan";
 import { docTenThanhVien } from "@crm/db/okr-goi-soan";
 import { parseDaCat } from "@crm/validation/okr-cuoc-soan";
 import { chuanHoa } from "@crm/validation/okr-kiem";
+import { kiemDongBanNhap } from "@crm/validation/okr-kiem-ban-nhap";
 import loiDanGoi from "../agent/instructions/goi";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
 import {
@@ -345,6 +346,32 @@ describe("goi-soan", () => {
 		const kiem = await goiKiemTu(goi, { soNguoiGo: new Set(["7"]) });
 		for (const so of ["85", "70", "18", "31", "3", "5"])
 			expect(kiem.soTrongGoi.has(so), `thieu so trong goi: ${so}`).toBe(true);
+		expect(kiem.soDich.has("85"), "dich cap tren thieu trong soDich").toBe(
+			true,
+		);
+		expect(kiem.soKhoiDiem.has("85"), "dich cap tren lot vao soKhoiDiem").toBe(
+			false,
+		);
+		for (const so of ["60", "70", String(canh.soChotKyTruoc)])
+			expect(kiem.soKhoiDiem.has(so), `thieu khoi diem: ${so}`).toBe(true);
+		const kr = (khoiDiemGoiY: number) =>
+			kiemDongBanNhap(
+				{
+					loai: "kr-moi",
+					khoa: "k1",
+					chaKhoa: "m1",
+					ten: "Tỷ lệ lấp đầy của phòng",
+					viSao: "Đo kết quả",
+					kieu: "tang-toi",
+					donVi: "%",
+					khoiDiemGoiY,
+					dich: null,
+					cuocSoanId: canh.cuocSoanId,
+				},
+				kiem,
+			);
+		expect(kr(85)).toEqual({ qua: false, maLoai: "khoi-diem-la-dich" });
+		expect(kr(70)).toEqual({ qua: true });
 		expect([...kiem.idCanChinh].sort()).toEqual([...canh.idCapTren].sort());
 		expect(kiem.soNguoiGo).toEqual(new Set(["7"]));
 		expect(kiem.tenThanhVien.length).toBeGreaterThanOrEqual(40);
