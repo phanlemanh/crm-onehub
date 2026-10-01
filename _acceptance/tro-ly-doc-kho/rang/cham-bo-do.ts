@@ -38,6 +38,7 @@ const EVE = join(AGENT, "node_modules", ".bin", "eve");
 const BAI_EVAL = "tro-ly-kho/cham-bo-do";
 const TRAN_EVE_MS = 100 * 60_000;
 const TEN_ZALO = "Người đo";
+const SONG_SONG = "2";
 
 const doiSo = process.argv.slice(2);
 const viTriBo = doiSo.indexOf("--bo");
@@ -289,12 +290,15 @@ async function nhanHai(
 }
 
 async function chayEve(env: Record<string, string>, nhatKy: string) {
-	const tienTrinh = Bun.spawn([EVE, "eval", BAI_EVAL, "--verbose"], {
-		cwd: AGENT,
-		env: { ...process.env, ...env },
-		stdout: "pipe",
-		stderr: "pipe",
-	});
+	const tienTrinh = Bun.spawn(
+		[EVE, "eval", BAI_EVAL, "--verbose", "--max-concurrency", SONG_SONG],
+		{
+			cwd: AGENT,
+			env: { ...process.env, ...env },
+			stdout: "pipe",
+			stderr: "pipe",
+		},
+	);
 	const hen = setTimeout(() => tienTrinh.kill(), TRAN_EVE_MS);
 	const [ra, loi, ma] = await Promise.all([
 		new Response(tienTrinh.stdout).text(),
