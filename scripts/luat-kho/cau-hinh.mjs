@@ -11,6 +11,11 @@ export const LUAT_KHO_CAY = {
 		/\.dom\.tsx$/,
 		/\.eval\.ts$/,
 	],
+	ungDung: {
+		goc: "apps",
+		agent: { goi: "eve", tep: "agent/agent.ts" },
+		nest: { goi: "@nestjs/core" },
+	},
 	luat: {
 		chuThich: {
 			ten: "khong-chu-thich",
@@ -20,9 +25,6 @@ export const LUAT_KHO_CAY = {
 		},
 		triKhon: {
 			ten: "tri-khon-o-agent",
-			api: "apps/api",
-			canThuMuc: ["apps/api"],
-			goiApi: "apps/api/package.json",
 			goiCam: [
 				"ai",
 				"@ai-sdk/",
@@ -40,8 +42,6 @@ export const LUAT_KHO_CAY = {
 				"groq-sdk",
 				"@openrouter/",
 			],
-			goiAppAgent: ["apps/agent/package.json", "apps/agent-okr/package.json"],
-			thuMucAgent: ["apps/agent", "apps/agent-okr"],
 		},
 		kieuLong: {
 			ten: "parse-o-bien",
@@ -77,11 +77,6 @@ export const LUAT_KHO_CAY = {
 		},
 		cachLy: {
 			ten: "cach-ly-hai-agent",
-			canThuMuc: ["apps/agent", "apps/agent-okr"],
-			cap: [
-				{ tu: "apps/agent-okr", den: "apps/agent" },
-				{ tu: "apps/agent", den: "apps/agent-okr" },
-			],
 		},
 	},
 	nen: {
