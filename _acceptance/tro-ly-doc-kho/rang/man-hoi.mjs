@@ -85,21 +85,51 @@ const TRANG = {
 const d = await moDo();
 const CUON = [];
 
+const LOP_DEV = "nextjs-portal, .tsqd-parent-container, .tsqd-open-btn-container";
+
+async function goLopDev(t) {
+	await t.evaluate((chon) => {
+		for (const e of document.querySelectorAll(chon)) e.remove();
+	}, LOP_DEV);
+}
+
+async function chup(t, ten) {
+	await goLopDev(t);
+	await d.chup(t, ten);
+}
+
 async function chup390(t, ten, phaiThay) {
 	if (t.viewport()?.width !== HEP)
 		await t.setViewport({ width: HEP, height: 844, deviceScaleFactor: 1 });
 	await cho(800);
+	await goLopDev(t);
 	const tran = await d.cuonNgang(t);
 	const so = await t.evaluate(() => ({
 		sw: document.documentElement.scrollWidth,
 		iw: window.innerWidth,
 	}));
 	const thay = await t.evaluate((s) => window.__tim(s).length > 0, phaiThay);
+	const catNgang = await t.evaluate((s) => {
+		const ra = [];
+		for (const goc of window.__tim(s))
+			for (const e of [goc, ...goc.querySelectorAll("*")]) {
+				const r = e.getBoundingClientRect();
+				if (r.width > 0 && (r.right > window.innerWidth + 1 || r.left < -1))
+					ra.push(
+						`${e.tagName.toLowerCase()} «${(e.textContent ?? "").trim().slice(0, 40)}» ${Math.round(r.left)}..${Math.round(r.right)}`,
+					);
+			}
+		return ra;
+	}, phaiThay);
 	CUON.push(
-		`${ten}: scrollWidth ${so.sw} innerWidth ${so.iw} ${tran.length === 0 ? "khong cuon ngang" : `CUON NGANG ${tran.join(", ")}`} · ${phaiThay} ${thay ? "hien" : "KHONG HIEN"}`,
+		`${ten}: scrollWidth ${so.sw} innerWidth ${so.iw} ${tran.length === 0 ? "khong cuon ngang" : `CUON NGANG ${tran.join(", ")}`} · ${phaiThay} ${thay ? "hien" : "KHONG HIEN"} · ${catNgang.length === 0 ? "khong phan tu nao tran mep" : `TRAN MEP ${catNgang.join("; ")}`}`,
 	);
 	await d.chup(t, ten);
-	return thay ? tran : [...tran, `390 khong hien ${phaiThay}`];
+	return [
+		...tran,
+		...(thay ? [] : [`390 khong hien ${phaiThay}`]),
+		...catNgang.map((c) => `390 ${phaiThay} tran mep: ${c}`),
+	];
 }
 
 async function choHang(nguoiId, truoc) {
@@ -207,7 +237,7 @@ try {
 		await d.chayBuoc(1, async () => {
 			const { t, coTab } = await moHoi(nguoi, RONG);
 			if (!coTab) {
-				await d.chup(t, "tlk-hoi-trong-1440.png");
+				await chup(t, "tlk-hoi-trong-1440.png");
 				await t.close();
 				d.dat(1, false, "khong thay tab Hỏi");
 				return;
@@ -216,7 +246,7 @@ try {
 			const goiY = await t.evaluate(
 				() => window.__tim("[data-goi-y] button").length,
 			);
-			await d.chup(t, "tlk-hoi-trong-1440.png");
+			await chup(t, "tlk-hoi-trong-1440.png");
 			const tran = await chup390(t, "tlk-hoi-trong-390.png", "[data-goi-y]");
 			await t.close();
 			const okr = await d.nguoiMoi("o", "okr", "Trần Văn Mục Tiêu");
@@ -256,7 +286,7 @@ try {
 					ten: a?.innerText.trim() ?? "",
 				};
 			});
-			await d.chup(t, "tlk-hoi-tra-loi-1440.png");
+			await chup(t, "tlk-hoi-tra-loi-1440.png");
 			const loi = [];
 			if (!trich.chu.includes(TRANG.hoaHong.cau)) loi.push("thieu y tra loi");
 			if (!trich.chu.includes("Phiên bản 1")) loi.push("thieu phien ban");
@@ -288,7 +318,7 @@ try {
 			const chu = await t.evaluate(
 				() => window.__tim("[data-tu-choi]")[0]?.innerText ?? "",
 			);
-			await d.chup(t, "tlk-hoi-tu-choi-1440.png");
+			await chup(t, "tlk-hoi-tu-choi-1440.png");
 			const tran = await chup390(
 				t,
 				"tlk-hoi-tu-choi-390.png",
@@ -318,7 +348,7 @@ try {
 			const canhBao = await t.evaluate(
 				() => window.__tim("[data-qua-han]")[0]?.innerText ?? "",
 			);
-			await d.chup(t, "tlk-hoi-qua-han-1440.png");
+			await chup(t, "tlk-hoi-qua-han-1440.png");
 			const tran = await chup390(
 				t,
 				"tlk-hoi-qua-han-390.png",
@@ -376,7 +406,7 @@ try {
 				window.__theoChu("button", "Đã báo sai").some((b) => b.disabled),
 			);
 			await cho(500);
-			await d.chup(t, "tlk-bao-sai-1440.png");
+			await chup(t, "tlk-bao-sai-1440.png");
 			const tran = await chup390(
 				t,
 				"tlk-bao-sai-390.png",

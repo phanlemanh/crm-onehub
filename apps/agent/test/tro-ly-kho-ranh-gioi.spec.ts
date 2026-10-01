@@ -7,7 +7,11 @@ import { db } from "@crm/db";
 import { MockLanguageModelV4 } from "ai/test";
 import ts from "typescript";
 import { MOT_TRIEU, TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
-import { modelTaiLieu, nhanKhoaTaiLieu } from "../agent/lib/tai-lieu-model";
+import {
+	type ModelMaySoan,
+	modelTaiLieu,
+	nhanKhoaTaiLieu,
+} from "../agent/lib/tai-lieu-model";
 import troLyKho from "../agent/subagents/tro_ly_kho/agent";
 import hookSo from "../agent/subagents/tro_ly_kho/hooks/so-chi-phi";
 import nopTraLoi from "../agent/subagents/tro_ly_kho/tools/nop_tra_loi";
@@ -230,6 +234,67 @@ describe("tlk-ranh-gioi", () => {
 				loi.push(`tlk-ranh-gioi: khoa sai ${ten}`);
 			if (nhanKhoaTaiLieu("hoi", env) !== ten)
 				loi.push(`tlk-ranh-gioi: nhan khoa sai ${ten}`);
+		}
+		expect(loi).toEqual([]);
+	});
+
+	test("tlk-ranh-gioi: bo chon model step.started cua tro_ly_kho gui ZDR va khoa dung o moi loi goi", async () => {
+		type BoChon = { events: { "step.started": () => ModelMaySoan } };
+		const chon = (troLyKho.model as unknown as BoChon).events["step.started"];
+		const goc = {
+			rieng: process.env[BIEN],
+			chung: process.env.AI_GATEWAY_API_KEY,
+		};
+		const fetchGoc = globalThis.fetch;
+		const loi: string[] = [];
+		try {
+			for (const [ten, khoa] of [
+				["rieng", "khoa-gia-tlk"],
+				["chung", "khoa-chung-gia"],
+			] as const) {
+				if (ten === "rieng") process.env[BIEN] = khoa;
+				else delete process.env[BIEN];
+				process.env.AI_GATEWAY_API_KEY = "khoa-chung-gia";
+				const yeuCau: { than: string; khoa: string }[] = [];
+				globalThis.fetch = (async (
+					_url: string | URL | Request,
+					init?: RequestInit,
+				) => {
+					yeuCau.push({
+						than: String(init?.body ?? ""),
+						khoa: new Headers(init?.headers).get("authorization") ?? "",
+					});
+					return new Response("{}", { status: 500 });
+				}) as typeof fetch;
+				const { model } = chon();
+				for (let lan = 0; lan < 2; lan += 1)
+					await (model as unknown as MockLanguageModelV4)
+						.doGenerate({
+							prompt: [
+								{ role: "user", content: [{ type: "text", text: "câu thử" }] },
+							],
+						})
+						.catch(() => null);
+				if (yeuCau.length < 2)
+					loi.push(`tlk-ranh-gioi: bo chon khong goi gateway ${ten}`);
+				for (const [i, y] of yeuCau.entries()) {
+					const than = JSON.parse(y.than) as {
+						providerOptions?: { gateway?: { zeroDataRetention?: boolean } };
+					};
+					if (than.providerOptions?.gateway?.zeroDataRetention !== true)
+						loi.push(
+							`tlk-ranh-gioi: bo chon gui loi goi ${i + 1} thieu ZDR ${ten}`,
+						);
+					if (!y.khoa.includes(khoa))
+						loi.push(`tlk-ranh-gioi: bo chon gui khoa sai ${ten}`);
+				}
+			}
+		} finally {
+			globalThis.fetch = fetchGoc;
+			if (goc.rieng === undefined) delete process.env[BIEN];
+			else process.env[BIEN] = goc.rieng;
+			if (goc.chung === undefined) delete process.env.AI_GATEWAY_API_KEY;
+			else process.env.AI_GATEWAY_API_KEY = goc.chung;
 		}
 		expect(loi).toEqual([]);
 	});

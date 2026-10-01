@@ -101,7 +101,7 @@ function NoiDungHoi() {
 					<p className="text-muted-foreground text-sm">
 						{m.moDau} {m.gioiThieu}
 					</p>
-					<Suggestions data-goi-y="">
+					<Suggestions data-goi-y="" xuongDong>
 						{m.goiY.map((cau) => (
 							<Suggestion
 								disabled={choGui || khoa}

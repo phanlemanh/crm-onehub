@@ -331,15 +331,23 @@ kèm lý do.
 
 **Tệp:** `packages/ui/src/components/ai-elements/suggestion.tsx`
 
-**Số dòng khác:** 2
+**Số dòng khác:** 30
 
-**Vân tay lệch:** `e460d49635371257`
+**Vân tay lệch:** `75d7eb7499e73dc8`
 
-**Đổi gì:** Kéo cùng lượt với `prompt-input` (01/10). Hai dòng khác là một bản vá:
-`Suggestion` bỏ `rounded-full` trong lớp của `Button`, để nút dùng `rounded-md`
-của chính `Button`.
+**Đổi gì:** Kéo cùng lượt với `prompt-input` (01/10). Hai bản vá:
 
-**Vì sao:** Bán kính chỉ từ thang của `docs/design.md`; nút là `rounded-md`.
+- `Suggestion` bỏ `rounded-full` trong lớp của `Button`, để nút dùng `rounded-md`
+  của chính `Button`.
+- `Suggestions` thêm biến thể `xuongDong` (round 4 của `tro-ly-doc-kho`, 02/10):
+  thay hàng `ScrollArea` cuộn ngang `w-max` bằng một hàng `flex-wrap` rộng đúng
+  khung, và cho mỗi nút con cao theo chữ (`h-auto`, `whitespace-normal`,
+  `max-w-full`). Mặc định vẫn là hàng cuộn ngang của thượng nguồn.
+
+**Vì sao:** Bán kính chỉ từ thang của `docs/design.md`; nút là `rounded-md`. Ở
+khổ 390, hàng cuộn ngang giấu chip thứ hai và thứ ba sau mép phải mà trang không
+cuộn ngang, nên người dùng điện thoại không biết còn gợi ý; biến thể mới được dựng
+ở `packages/ui` thay vì đè lớp ở chỗ gọi.
 
 ## Ca đã trả giá: `conversation.tsx`, 06/09 và 09/09
 
