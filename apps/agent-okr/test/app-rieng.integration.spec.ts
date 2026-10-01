@@ -12,9 +12,11 @@ import { gieoCanhGoi } from "./support/gieo-goi";
 import {
 	APP,
 	giuKhoaEve,
+	KHOI_DONG,
 	khoiDongEve,
 	type MayEve,
 	moiTruongModelTacGia,
+	traKhoaEve,
 } from "./support/khoi-dong";
 import { type AppGia, chepAppGia, KICH_BAN } from "./support/mo-hinh-gia";
 import { clientCua } from "./support/phien-cua";
@@ -35,15 +37,24 @@ if (!CHAY_AGENT_CU) {
 	);
 }
 
-beforeAll(async () => {
-	await giuKhoaEve(CHAY_AGENT_CU ? [APP, GOC_AGENT_CU] : [APP]);
-	may = await khoiDongEve();
-	if (CHAY_AGENT_CU) mayCu = await khoiDongEve({ goc: GOC_AGENT_CU });
-}, 300_000);
+const GOC_CAN = CHAY_AGENT_CU ? [APP, GOC_AGENT_CU] : [APP];
+
+beforeAll(
+	async () => {
+		await giuKhoaEve(GOC_CAN);
+		may = await khoiDongEve();
+		if (CHAY_AGENT_CU) mayCu = await khoiDongEve({ goc: GOC_AGENT_CU });
+	},
+	KHOI_DONG.khoa.choMs + GOC_CAN.length * KHOI_DONG.choMs,
+);
 
 afterAll(async () => {
-	await may?.dung();
-	await mayCu?.dung();
+	try {
+		await may?.dung();
+		await mayCu?.dung();
+	} finally {
+		traKhoaEve(GOC_CAN);
+	}
 });
 
 describe("app-rieng", () => {

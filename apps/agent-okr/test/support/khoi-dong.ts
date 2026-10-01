@@ -10,8 +10,7 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { type AddressInfo, createServer } from "node:net";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	databaseName,
@@ -35,9 +34,9 @@ export const KHOI_DONG = {
 	},
 	congBan: { dau: "EADDRINUSE", soLanThu: 3 },
 	khoa: {
-		tienTo: "crm-eve-khoa-",
-		tep: "pid",
-		choMs: 3 * MINUTE_MS,
+		thuMuc: [APP, "..", "..", "node_modules", ".cache", "crm-eve-khoa"],
+		tep: "chu.json",
+		choMs: 5 * MINUTE_MS,
 		nhipMs: 500,
 	},
 } as const;
@@ -97,6 +96,11 @@ export type TuyChonKhoiDong = {
 };
 
 const trangThaiEve = z.object({ url: z.string().url() });
+const chuKhoaEve = z.object({
+	pid: z.number().int().positive(),
+	tep: z.string(),
+});
+type ChuKhoaEve = z.infer<typeof chuKhoaEve>;
 
 const khoaDangGiu = new Map<string, string>();
 const gocDangChay = new Set<string>();
@@ -110,7 +114,7 @@ const thatCua = (goc: string) => realpathSync(goc);
 
 function duongKhoa(that: string): string {
 	const bam = createHash("sha256").update(that).digest("hex").slice(0, 16);
-	return join(tmpdir(), `${KHOI_DONG.khoa.tienTo}${bam}`);
+	return join(...KHOI_DONG.khoa.thuMuc, bam);
 }
 
 function songCon(pid: number): boolean {
@@ -122,10 +126,11 @@ function songCon(pid: number): boolean {
 	}
 }
 
-function chuKhoa(khoa: string): number | null {
+function chuKhoa(khoa: string): ChuKhoaEve | null {
 	try {
-		const pid = Number(readFileSync(join(khoa, KHOI_DONG.khoa.tep), "utf8"));
-		return Number.isInteger(pid) ? pid : null;
+		return chuKhoaEve.parse(
+			JSON.parse(readFileSync(join(khoa, KHOI_DONG.khoa.tep), "utf8")),
+		);
 	} catch {
 		return null;
 	}
@@ -133,8 +138,8 @@ function chuKhoa(khoa: string): number | null {
 
 function khoaCu(khoa: string): boolean {
 	try {
-		const pid = chuKhoa(khoa);
-		if (pid !== null) return !songCon(pid);
+		const chu = chuKhoa(khoa);
+		if (chu !== null) return !songCon(chu.pid);
 		return Date.now() - statSync(khoa).mtimeMs > KHOI_DONG.khoa.nhipMs;
 	} catch {
 		return false;
@@ -143,11 +148,16 @@ function khoaCu(khoa: string): boolean {
 
 async function giuMot(that: string): Promise<void> {
 	const khoa = duongKhoa(that);
-	const het = Date.now() + KHOI_DONG.khoa.choMs;
-	while (Date.now() < het) {
+	mkdirSync(join(...KHOI_DONG.khoa.thuMuc), { recursive: true });
+	const batDau = Date.now();
+	while (Date.now() - batDau < KHOI_DONG.khoa.choMs) {
 		try {
 			mkdirSync(khoa);
-			writeFileSync(join(khoa, KHOI_DONG.khoa.tep), String(process.pid));
+			const chu: ChuKhoaEve = {
+				pid: process.pid,
+				tep: basename(process.argv[1] ?? "?"),
+			};
+			writeFileSync(join(khoa, KHOI_DONG.khoa.tep), JSON.stringify(chu));
 			khoaDangGiu.set(that, khoa);
 			return;
 		} catch {
@@ -155,8 +165,9 @@ async function giuMot(that: string): Promise<void> {
 			else await Bun.sleep(KHOI_DONG.khoa.nhipMs);
 		}
 	}
+	const chu = chuKhoa(khoa);
 	throw new Error(
-		`goc ${that} van bi bai thu khac giu (pid ${chuKhoa(khoa) ?? "?"}) sau ${KHOI_DONG.khoa.choMs} ms`,
+		`goc ${that} van bi giu boi pid ${chu?.pid ?? "?"} (${chu?.tep ?? "?"}) sau ${Math.round((Date.now() - batDau) / 1000)} s cho`,
 	);
 }
 
@@ -302,11 +313,12 @@ export async function khoiDongEve(v: TuyChonKhoiDong = {}): Promise<MayEve> {
 		throw new Error(
 			`goc ${goc} dang co eve cua chinh tien trinh nay (pid ${process.pid}); dung may cu truoc khi khoi dong lai`,
 		);
+	const tuGiu = !khoaDangGiu.has(that);
 	await giuKhoaEve([goc]);
 	gocDangChay.add(that);
 	const xong = () => {
 		gocDangChay.delete(that);
-		traKhoa(that);
+		if (tuGiu) traKhoa(that);
 	};
 	try {
 		const lan = await moEveDoiCong(EVE, goc, v);
