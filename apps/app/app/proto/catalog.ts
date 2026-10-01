@@ -729,6 +729,19 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "gop-y-dung-cho",
+		ten: "Kara — góp ý đặt đúng chỗ: hiện tại, A báo trên thẻ Mục tiêu, B neo dưới từng KR",
+		states: [
+			{ id: "ST-hien-tai", nhan: "Hiện tại — cột Trợ lý OKR trong hộp Sửa" },
+			{ id: "ST-a-danh-sach", nhan: "A — «Kara · 2 góp ý» trên thẻ Mục tiêu" },
+			{
+				id: "ST-b-chi-tiet",
+				nhan: "B — góp ý neo dưới KR, biên nhận có Hoàn tác",
+			},
+			{ id: "ST-b-hop-sua", nhan: "B — hộp Sửa chỉ còn dòng dẫn sang" },
+		],
+	},
+	{
 		slug: "sua-an-chu-ky-okr",
 		ten: "Cài đặt › Chương trình OKR — sửa, gỡ, ẩn chu kỳ tạo nhầm",
 		states: [
