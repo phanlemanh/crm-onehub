@@ -1,4 +1,4 @@
-import { execFileSync, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import {
 	mkdirSync,
 	mkdtempSync,
@@ -15,7 +15,7 @@ const TEP = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP), "..", "..", "..");
 const THU_MUC = "packages/db/prisma/migrations";
 const TEP_SCHEMA = "packages/db/prisma/schema.prisma";
-const MOC = "origin/onehub";
+const MIGRATION_TINH_NANG = ["20261008010000_okr_hien_thi_duyet"];
 const MODEL_MOI = ["OkrNguoiXem"];
 const BANG_MOI = ["okrNguoiXem"];
 const COT_THEM_VIET_TRUOC = [
@@ -33,20 +33,10 @@ const KHOA_NGOAI_VIET_TRUOC = [
 const GHIM = Object.freeze({
 	addColumn: "migration khong chi them: ADD COLUMN",
 	dropIndex: "migration khong chi them: DROP INDEX",
-	lienKhoi: "nam model moi khong lien cuoi schema",
+	coMat: "model moi khong co mat dung mot lan trong schema",
 	khoaSai: "bang khoa ngoai rut tu SQL khong khop tap viet truoc",
 	cotSai: "cot them ngoai tap viet truoc",
 });
-
-const git = (...d) =>
-	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
-
-const TRUOC = git("merge-base", "HEAD", MOC);
-const lietKeTruoc = () =>
-	git("ls-tree", "--name-only", `${TRUOC}:${THU_MUC}`)
-		.split("\n")
-		.filter((t) => t !== "" && t !== "migration_lock.toml");
-const cu = new Set(lietKeTruoc());
 
 function cauLenh(sql) {
 	return sql
@@ -186,12 +176,10 @@ function soatTinh({ moi, docSql, schema }) {
 		);
 
 	const models = [...schema.matchAll(/^model (\w+) \{/gm)].map((m) => m[1]);
-	const cuoi = models.slice(-MODEL_MOI.length);
-	const lechCuoi = MODEL_MOI.filter((m) => !cuoi.includes(m));
-	if (lechCuoi.length > 0)
-		hong.push(
-			`${GHIM.lienKhoi}: ${MODEL_MOI.length} model cuoi la ${cuoi.join(", ")}; ${lechCuoi.join(", ")} nam cho khac${lechCuoi.some((m) => !models.includes(m)) ? " hoac khong co" : ""}`,
-		);
+	for (const m of MODEL_MOI) {
+		const soLan = models.filter((x) => x === m).length;
+		if (soLan !== 1) hong.push(`${GHIM.coMat}: ${m} co ${soLan} lan`);
+	}
 	return { hong, dem, soKhoa: khoaRut.length };
 }
 
@@ -257,11 +245,11 @@ ALTER TABLE "okrNguoiXem" ADD CONSTRAINT "okrNguoiXem_createdById_fkey" FOREIGN 
 			ghim: GHIM.dropIndex,
 		},
 		{
-			nhan: "OkrNguoiXem khong con la model cuoi",
+			nhan: "schema thieu model OkrNguoiXem",
 			sql: DUNG,
-			schema: schemaXenGiua(schema),
+			schema: schemaBoModel(schema),
 			ma: 1,
-			ghim: GHIM.lienKhoi,
+			ghim: GHIM.coMat,
 		},
 		{
 			nhan: "dung nhu that",
@@ -302,14 +290,11 @@ ALTER TABLE "okrNguoiXem" ADD CONSTRAINT "okrNguoiXem_createdById_fkey" FOREIGN 
 	process.exit(dung === bo.length ? 1 : 0);
 }
 
-function schemaXenGiua(schema) {
+function schemaBoModel(schema) {
 	const khoi = schema.match(/^model OkrNguoiXem \{[\s\S]*?^\}\n?/m)?.[0];
 	if (!khoi)
 		throw new Error("schema khong co model OkrNguoiXem de dung tep gia");
-	const bo = schema.replace(khoi, "");
-	const cacModel = [...bo.matchAll(/^model \w+ \{/gm)];
-	const giua = cacModel[Math.floor(cacModel.length / 2)].index;
-	return `${bo.slice(0, giua)}${khoi}\n${bo.slice(giua)}`;
+	return schema.replace(khoi, "");
 }
 
 if (process.argv[2] === "--chieu-do") chieuDo();
@@ -330,10 +315,19 @@ if (process.argv[2] === "--gia") {
 	process.exit(hong.length === 0 ? 0 : 1);
 }
 
-const moi = readdirSync(join(GOC, THU_MUC), { withFileTypes: true })
-	.filter((d) => d.isDirectory() && !cu.has(d.name))
-	.map((d) => d.name)
-	.sort();
+const coThat = new Set(
+	readdirSync(join(GOC, THU_MUC), { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name),
+);
+const thieu = MIGRATION_TINH_NANG.filter((t) => !coThat.has(t));
+if (thieu.length > 0) {
+	console.log(
+		`KHONG DO DUOC: khong thay migration cua tinh nang: ${thieu.join(", ")}`,
+	);
+	process.exit(2);
+}
+const moi = [...MIGRATION_TINH_NANG];
 const docSql = (t) =>
 	readFileSync(join(GOC, THU_MUC, t, "migration.sql"), "utf8");
 const { hong, dem, soKhoa } = soatTinh({
@@ -343,10 +337,10 @@ const { hong, dem, soKhoa } = soatTinh({
 });
 
 console.log(
-	`goc so sanh: ${MOC} (${TRUOC.slice(0, 8)}) · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem} · khoa ngoai viet truoc khop: ${soKhoa}/${KHOA_NGOAI_VIET_TRUOC.length}`,
+	`migration cua tinh nang: ${moi.join(", ")} · so cau lenh: ${dem} · khoa ngoai viet truoc khop: ${soKhoa}/${KHOA_NGOAI_VIET_TRUOC.length}`,
 );
 if (moi.length === 0 || dem === 0) {
-	console.log(`KHONG DO DUOC: khong co migration moi nao so voi ${MOC}`);
+	console.log(`KHONG DO DUOC: migration cua tinh nang khong co cau lenh nao`);
 	process.exit(2);
 }
 for (const h of hong) console.log(h);

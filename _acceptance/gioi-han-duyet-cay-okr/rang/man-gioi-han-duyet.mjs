@@ -220,6 +220,9 @@ const { okrTaiCoCauMessages } = await import(
 	"../../../apps/app/lib/messages/okr-tai-co-cau.ts"
 );
 const { okrMessages } = await import("../../../apps/app/lib/messages/okr.ts");
+const { TO_CHUC } = await import(
+	"../../../apps/api/src/to-chuc/to-chuc-config.ts"
+);
 const { toChucMessages } = await import(
 	"../../../apps/app/lib/messages/to-chuc.ts"
 );
@@ -1687,6 +1690,14 @@ async function buocLuuTruVaChuyen() {
 			window.__tim("[data-hop='luu-tru-chan']").length > 0 ||
 			window.__tim("[role='alertdialog']").length > 0,
 	);
+	await doi(
+		a,
+		`${nhom}: hop luu tru kiem xong dieu kien`,
+		() =>
+			window.__tim("[role='alertdialog']").length > 0 ||
+			(window.__tim("[data-hop='luu-tru-chan']").length > 0 &&
+				window.__tim("[data-dang-kiem-luu-tru]").length === 0),
+	);
 	const chan = await a.evaluate(() => {
 		const hop = window.__tim("[data-hop='luu-tru-chan']")[0];
 		const xacNhan = window.__tim("[role='alertdialog']")[0];
@@ -1697,7 +1708,9 @@ async function buocLuuTruVaChuyen() {
 			: null;
 		return {
 			hop: hop !== undefined,
-			lyDo: hop?.querySelector("[data-ly-do-chan]")?.innerText?.trim() ?? null,
+			lyDo:
+				hop?.querySelector("[data-ly-do-chan='okr']")?.innerText?.trim() ??
+				null,
 			khoa: hop?.querySelector("[data-nut='luu-tru-khoa']")?.disabled ?? null,
 			chuyen: hop?.querySelector("[data-nut='chuyen-okr-tu-luu-tru']") !== null,
 			nutXacNhanBat: nutXn ? !nutXn.disabled : false,
@@ -1708,7 +1721,7 @@ async function buocLuuTruVaChuyen() {
 		console.log(
 			`  E18 buoc-luu-tru-chan: nut luu tru bat (${chan.nutXacNhanBat ? "hop xac nhan co nut Luu tru bam duoc" : "khong co hop chan"})`,
 		);
-	const mongLyDo = CHU_TCC.toChuc.chan.lyDo["phong-ban"](mo.length);
+	const mongLyDo = TO_CHUC.thongDiep.phongBanConOkrMo(mo.length);
 	kiem(
 		`${nhom}: hop noi ly do «${mongLyDo}», nut luu tru khoa, co «${CHU_TCC.toChuc.chuyenOkr}» (thay ${JSON.stringify(chan)})`,
 		chan.hop && chan.lyDo === mongLyDo && chan.khoa === true && chan.chuyen,

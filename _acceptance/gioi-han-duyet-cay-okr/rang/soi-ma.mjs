@@ -237,7 +237,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "createObjective",
+		ham: "taoMucTieuTrongTx",
 		bang: "okrObjective",
 		lyDo: "ghi: đếm vị trí trong chu kỳ, không trả hàng nào",
 	},
@@ -525,7 +525,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr-tai-co-cau.service.ts",
-		ham: "canhBaoTran",
+		ham: "vuotTran",
 		bang: "okrObjective",
 		lyDo: "ghi: quản trị chuyển OKR, đếm mục tiêu của đơn vị nhận theo chu kỳ để so trần chương trình như kiemTranMucTieu — trần tính cả mục tiêu giới hạn; chỉ ra số",
 	},
@@ -636,6 +636,24 @@ const MIEN_XEM = [
 		ham: "troLyQuyet",
 		bang: "tho:okrObjective",
 		lyDo: "khoá hàng FOR UPDATE theo mã mục tiêu của dòng đề xuất, không đọc cột nào; điều kiện xem hỏi ngay sau (xemDuoc) — không xem được thì 404 cùng câu với mã đề xuất không có",
+	},
+	{
+		tep: "apps/api/src/okr/tro-ly.service.ts",
+		ham: "troLyQuyet",
+		bang: "okrObjective",
+		lyDo: "ghi: lấy id và cycleId của mục tiêu theo dòng đề xuất để kiểm kỳ chưa ẩn và khoá hàng; không trả ra ngoài, xemDuoc chặn ngay sau bằng 404",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "cycles",
+		bang: "okrTrail",
+		lyDo: "đọc vết an-chu-ky theo mã chu kỳ để nói lý do ẩn chu kỳ; dòng vết cấp chu kỳ, không mang mã hay tiêu đề mục tiêu",
+	},
+	{
+		tep: "apps/api/src/okr/okr-hoi-y.service.ts",
+		ham: "tinhTrangCongBo",
+		bang: "okrObjective",
+		lyDo: "đếm mục tiêu cấp công ty trong chu kỳ để so trần chương trình như kiemTranMucTieu — trần tính cả mục tiêu giới hạn; chỉ ra số",
 	},
 	{
 		tep: "apps/api/src/okr/tro-ly.service.ts",
