@@ -1,5 +1,5 @@
+import { createGateway } from "@ai-sdk/gateway";
 import {
-	gateway,
 	type LanguageModel,
 	type LanguageModelMiddleware,
 	wrapLanguageModel,
@@ -42,7 +42,7 @@ export type MoHinhSong = Exclude<LanguageModel, string>;
 
 export function dungMoHinh(
 	kep: LanguageModelMiddleware,
-	goc: MoHinhSong = gateway(TRO_LY_OKR.model),
+	goc: MoHinhSong,
 ): MoHinhSong {
 	return wrapLanguageModel({
 		model: goc,
@@ -55,6 +55,20 @@ export const kepTranRaMoiLoiGoi = dungKepTran(TRO_LY_OKR.tranRaMoiLoiGoi);
 
 export const kepTranTomTat = dungKepTran(TRO_LY_OKR.tranRaTomTatMoiLoiGoi);
 
-export const MO_HINH_TRO_LY_OKR: MoHinhSong = dungMoHinh(kepTranRaMoiLoiGoi);
+export function moHinhTroLyOkr(
+	env: Readonly<Record<string, string | undefined>> = process.env,
+	tao: typeof createGateway = createGateway,
+	kep: LanguageModelMiddleware = kepTranRaMoiLoiGoi,
+): MoHinhSong {
+	const khoa = env[TRO_LY_OKR.khoa.rieng]?.trim();
+	const nha = khoa ? tao({ apiKey: khoa }) : tao();
+	return dungMoHinh(kep, nha(TRO_LY_OKR.model));
+}
 
-export const MO_HINH_TOM_TAT: MoHinhSong = dungMoHinh(kepTranTomTat);
+export const MO_HINH_TRO_LY_OKR: MoHinhSong = moHinhTroLyOkr();
+
+export const MO_HINH_TOM_TAT: MoHinhSong = moHinhTroLyOkr(
+	process.env,
+	createGateway,
+	kepTranTomTat,
+);

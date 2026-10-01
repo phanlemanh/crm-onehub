@@ -96,6 +96,12 @@ export async function docMucTieu(objectiveId: string, nguoiYeuCau: string) {
 					unit: true,
 				},
 			},
+			alignments: {
+				select: {
+					targetObjectiveId: true,
+					targetKeyResult: { select: { objectiveId: true } },
+				},
+			},
 		},
 	});
 }

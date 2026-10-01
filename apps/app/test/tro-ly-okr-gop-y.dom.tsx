@@ -864,7 +864,7 @@ const CA = {
 		);
 		const dong = document.body.querySelector("[data-xu-huong]");
 		expect(chu(dong)).toBe(
-			"Theo các lần cập nhật gần nhất (+12/tuần), cuối kỳ ước khoảng 180",
+			`Theo các lần cập nhật gần nhất (+12/tuần), cuối kỳ ước khoảng 180 ${KR_1.unit}`,
 		);
 		expect(dong?.getAttribute("data-variant")).toBe("hoi");
 		const oDich = hopKr()?.querySelector("[data-o-dich]");
@@ -1177,5 +1177,114 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		).toBe("Lưu hoặc hoàn lại ô này trước");
 		await bam(nhanSua);
 		expect(goiCua("okr.troLyQuyet")).toHaveLength(0);
+	});
+});
+
+const KR_KHONG_VIEC: KrOutput = {
+	...KR_1,
+	id: "kr-khong-viec",
+	title: "Khách mới hẹn gặp được đạt 30",
+	startValue: 5,
+	targetValue: 30,
+	currentValue: 12,
+	unit: "",
+};
+
+const KR_THIEU_KHOI: KrOutput = {
+	...KR_KHONG_VIEC,
+	id: "kr-thieu-khoi",
+	startValue: 0,
+};
+
+async function moHopKrVoi(kr: KrOutput): Promise<void> {
+	await mo(
+		<HopThoaiKr
+			objectiveId={MT.id}
+			mucTieu={MT}
+			kr={kr}
+			chuMacDinh={HAI.id}
+			suaDuocCot
+			dong={() => {}}
+		/>,
+	);
+	await cho(() => hopKr() !== null, "hop KR mo");
+}
+
+const moTaRong = () =>
+	chu(cot()?.querySelector('[data-slot="empty-description"]') ?? null);
+
+describe("hai-giong", () => {
+	const CA_KR = [
+		{ ten: "kr la viec", kr: KR_1, goiY: true },
+		{ ten: "kr khong viec", kr: KR_KHONG_VIEC, goiY: false },
+		{ ten: "kr thieu khoi diem", kr: KR_THIEU_KHOI, goiY: true },
+	] as const;
+
+	for (const ca of CA_KR) {
+		test(`hai-giong: ${ca.ten}`, async () => {
+			sauKhiBam = xong([]);
+			await moHopKrVoi(ca.kr);
+			const coGoiY =
+				(hopKr()?.querySelectorAll("[data-hoi-chat-luong]").length ?? 0) > 0;
+			expect(coGoiY, `goi y tinh: ${ca.ten}`).toBe(ca.goiY);
+			await bamNho();
+			await cho(() => chu(cot()).includes(m.cot.rong), "cot rong");
+			const moTa = moTaRong();
+			if (ca.goiY && moTa === m.cot.rongMoTaKr)
+				throw new Error("hai giong: kr");
+			expect(moTa).toBe(ca.goiY ? m.cot.rongCoGoiY : m.cot.rongMoTaKr);
+		});
+	}
+
+	test("hai-giong: hop Muc tieu khong co goi y tinh, giu loi cu", async () => {
+		sauKhiBam = xong([]);
+		await moHopMucTieu();
+		await bamNho();
+		await cho(() => chu(cot()).includes(m.cot.rong), "cot rong");
+		expect(moTaRong()).toBe(m.cot.rongMoTa);
+	});
+});
+
+describe("chu-nho", () => {
+	test("chu-nho: dong xu huong kem don vi cua KR", async () => {
+		dat("okr.xuHuongKr", () => ({ moiTuan: 12, uocCuoiKy: 180 }));
+		await moHopKr();
+		await cho(
+			() => document.body.querySelector("[data-xu-huong]") !== null,
+			"dong xu huong",
+		);
+		const dong = chu(document.body.querySelector("[data-xu-huong]"));
+		if (!dong.endsWith(`180 ${KR_1.unit}`))
+			throw new Error("xu huong thieu don vi");
+		expect(dong).toBe(
+			`Theo các lần cập nhật gần nhất (+12/tuần), cuối kỳ ước khoảng 180 ${KR_1.unit}`,
+		);
+	});
+
+	test("chu-nho: KR khong don vi thi khong them gi", async () => {
+		dat("okr.xuHuongKr", () => ({ moiTuan: 12, uocCuoiKy: 180 }));
+		await moHopKrVoi(KR_KHONG_VIEC);
+		await cho(
+			() => document.body.querySelector("[data-xu-huong]") !== null,
+			"dong xu huong",
+		);
+		const dong =
+			document.body.querySelector("[data-xu-huong]")?.textContent ?? "";
+		expect(dong.endsWith("khoảng 180")).toBe(true);
+	});
+
+	test("chu-nho: quyet het dong thi dau cot noi da quyet het", async () => {
+		sauKhiBam = xong([D_HOI]);
+		await moHopMucTieu();
+		await bamNho();
+		await cho(() => dongCua(D_HOI.id) !== null, "cot co dong hoi");
+		expect(chu(cot())).toContain(m.cot.soDong("1"));
+		const boQua = [
+			...(dongCua(D_HOI.id)?.querySelectorAll("button") ?? []),
+		].find((b) => b.textContent?.trim() === m.dong.boQua);
+		if (!boQua) throw new Error("khong thay nut Bo qua");
+		await bam(boQua);
+		await cho(() => chu(cot()).includes(m.cot.daQuyetHet), "da quyet het");
+		expect(chu(cot())).not.toContain(m.cot.soDong("0"));
 	});
 });

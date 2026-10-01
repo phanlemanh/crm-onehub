@@ -16,9 +16,12 @@ const vi = {
 		dangDocKr: "Trợ lý OKR đang đọc KR này…",
 		soDong: (n: string) =>
 			`${n} đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».`,
+		daQuyetHet:
+			"Đã quyết hết đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
 		rong: "Trợ lý OKR không thấy chỗ nào cần sửa",
 		rongMoTa: "Tên, «vì sao lúc này» và các KR đã đọc ổn.",
 		rongMoTaKr: "Tên KR đã đọc ổn.",
+		rongCoGoiY: "Trợ lý OKR không có góp ý thêm ngoài gợi ý dưới ô.",
 		loi: "Trợ lý OKR chưa trả lời được, thử lại sau",
 		thuLai: "Thử lại",
 	},
@@ -56,8 +59,8 @@ const vi = {
 		hoanTac: "Hoàn tác",
 		daHoanTac: "Đã hoàn tác",
 	},
-	xuHuong: (moiTuan: string, uoc: string) =>
-		`Theo các lần cập nhật gần nhất (${moiTuan}/tuần), cuối kỳ ước khoảng ${uoc}`,
+	xuHuong: (moiTuan: string, uoc: string, donVi: string) =>
+		`Theo các lần cập nhật gần nhất (${moiTuan}/tuần), cuối kỳ ước khoảng ${[uoc, donVi.trim()].filter(Boolean).join(" ")}`,
 	vet: {
 		theoTroLy: "theo đề xuất của Trợ lý OKR",
 		suaTruong: (truong: string) => `Sửa ${truong}`,
@@ -82,9 +85,13 @@ const en: OkrGopYMessages = {
 		dangDocKr: "The OKR assistant is reading this KR…",
 		soDong: (n: string) =>
 			`${n} suggestions. Accepting saves right away, with a trail entry “suggested by the OKR assistant”.`,
+		daQuyetHet:
+			"Every suggestion is decided. Accepting saves right away, with a trail entry “suggested by the OKR assistant”.",
 		rong: "The OKR assistant found nothing to change",
 		rongMoTa: "The title, “why now” and the KRs read well.",
 		rongMoTaKr: "The KR title reads well.",
+		rongCoGoiY:
+			"The OKR assistant has nothing to add beyond the hint under the field.",
 		loi: "The OKR assistant couldn't answer, try again later",
 		thuLai: "Try again",
 	},
@@ -122,8 +129,8 @@ const en: OkrGopYMessages = {
 		hoanTac: "Undo",
 		daHoanTac: "Undone",
 	},
-	xuHuong: (moiTuan: string, uoc: string) =>
-		`Based on the latest updates (${moiTuan}/week), the period should end around ${uoc}`,
+	xuHuong: (moiTuan: string, uoc: string, donVi: string) =>
+		`Based on the latest updates (${moiTuan}/week), the period should end around ${[uoc, donVi.trim()].filter(Boolean).join(" ")}`,
 	vet: {
 		theoTroLy: "suggested by the OKR assistant",
 		suaTruong: (truong: string) => `Edited ${truong}`,

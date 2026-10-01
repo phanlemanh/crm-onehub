@@ -105,6 +105,11 @@ export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
 
 export type MucTuTin = (typeof MUC_TU_TIN)[number];
 
+export const TRO_LY_OKR_KHOA = {
+	rieng: "OKR_AI_GATEWAY_API_KEY",
+	chung: "AI_GATEWAY_API_KEY",
+} as const;
+
 export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan"] as const;
 
 export type ViecTroLy = (typeof VIEC_TRO_LY)[number];
@@ -164,12 +169,36 @@ export type TroLySanSang =
 	| { bat: true; conLaiUsd: number }
 	| { bat: false; lyDo: LyDoKhongSanSang };
 
+export const NGUON_KHOA = ["khoa-rieng", "khoa-chung", "oidc"] as const;
+
+export type NguonKhoaDb = (typeof NGUON_KHOA)[number];
+
 export const KET_QUA_KIEM_SAN_SANG = [
 	"san-sang",
+	"san-sang-khoa-rieng",
+	"san-sang-khoa-chung",
+	"san-sang-oidc",
 	"chua-co-khoa-mo-hinh",
 ] as const;
 
 export type KetQuaKiemSanSang = (typeof KET_QUA_KIEM_SAN_SANG)[number];
+
+const KET_QUA_CUA_NGUON = {
+	"khoa-rieng": "san-sang-khoa-rieng",
+	"khoa-chung": "san-sang-khoa-chung",
+	oidc: "san-sang-oidc",
+} as const satisfies Record<NguonKhoaDb, KetQuaKiemSanSang>;
+
+export function ketQuaCuaNguon(nguon: NguonKhoaDb | null): KetQuaKiemSanSang {
+	return nguon === null ? "chua-co-khoa-mo-hinh" : KET_QUA_CUA_NGUON[nguon];
+}
+
+export function nguonCuaKetQua(
+	ketQua: KetQuaKiemSanSang,
+): NguonKhoaDb | "chua-ro" | null {
+	if (ketQua === "san-sang") return "chua-ro";
+	return NGUON_KHOA.find((n) => KET_QUA_CUA_NGUON[n] === ketQua) ?? null;
+}
 
 export const DON_VI_ONEHUB = "onehub";
 
