@@ -1,24 +1,26 @@
-import { type ChildProcess, spawn } from "node:child_process";
+import { type ChildProcess, spawn, spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
-	cpSync,
 	existsSync,
 	mkdirSync,
-	readdirSync,
 	readFileSync,
+	realpathSync,
 	rmSync,
 	statSync,
 	writeFileSync,
 } from "node:fs";
 import { type AddressInfo, createServer } from "node:net";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	databaseName,
 	runScopedUrl,
 	TEST_DATABASE,
 } from "@crm/db/test-database";
+import { z } from "zod";
 
-const SECOND_MS = 1_000;
-const MINUTE_MS = 60 * SECOND_MS;
+const SECOND_MS = MINUTE_MS / 60;
 
 export const APP = join(import.meta.dir, "..", "..");
 export const KHOI_DONG = {
@@ -28,14 +30,12 @@ export const KHOI_DONG = {
 	dungMs: 5 * SECOND_MS,
 	trung: {
 		dau: "A dev server is already running for this eve agent.",
-		thuMuc: [".scratch", "eve-tach"],
-		boQua: ["node_modules", ".eve", ".output", ".turbo", "test", ".scratch"],
 		trangThai: [".eve", "dev-server-state.v1.json"],
 		choTrangThaiMs: 10 * SECOND_MS,
 	},
 	congBan: { dau: "EADDRINUSE", soLanThu: 3 },
 	khoa: {
-		ten: "khoa-khoi-dong",
+		tienTo: "crm-eve-khoa-",
 		tep: "pid",
 		choMs: 3 * MINUTE_MS,
 		nhipMs: 500,
@@ -96,6 +96,23 @@ export type TuyChonKhoiDong = {
 	cong?: number;
 };
 
+const trangThaiEve = z.object({ url: z.string().url() });
+
+const khoaDangGiu = new Map<string, string>();
+const gocDangChay = new Set<string>();
+
+process.once("exit", () => {
+	for (const khoa of khoaDangGiu.values())
+		rmSync(khoa, { recursive: true, force: true });
+});
+
+const thatCua = (goc: string) => realpathSync(goc);
+
+function duongKhoa(that: string): string {
+	const bam = createHash("sha256").update(that).digest("hex").slice(0, 16);
+	return join(tmpdir(), `${KHOI_DONG.khoa.tienTo}${bam}`);
+}
+
 function songCon(pid: number): boolean {
 	try {
 		process.kill(pid, 0);
@@ -105,50 +122,83 @@ function songCon(pid: number): boolean {
 	}
 }
 
+function chuKhoa(khoa: string): number | null {
+	try {
+		const pid = Number(readFileSync(join(khoa, KHOI_DONG.khoa.tep), "utf8"));
+		return Number.isInteger(pid) ? pid : null;
+	} catch {
+		return null;
+	}
+}
+
 function khoaCu(khoa: string): boolean {
 	try {
-		const tuoi = Date.now() - statSync(khoa).mtimeMs;
-		if (tuoi > KHOI_DONG.khoa.choMs) return true;
-		const tep = join(khoa, KHOI_DONG.khoa.tep);
-		if (!existsSync(tep)) return tuoi > KHOI_DONG.khoa.nhipMs;
-		const pid = Number(readFileSync(tep, "utf8"));
-		return !Number.isInteger(pid) || !songCon(pid);
+		const pid = chuKhoa(khoa);
+		if (pid !== null) return !songCon(pid);
+		return Date.now() - statSync(khoa).mtimeMs > KHOI_DONG.khoa.nhipMs;
 	} catch {
 		return false;
 	}
 }
 
-async function giuKhoa(goc: string): Promise<() => void> {
-	const eve = join(goc, ".eve");
-	const khoa = join(eve, KHOI_DONG.khoa.ten);
-	mkdirSync(eve, { recursive: true });
+async function giuMot(that: string): Promise<void> {
+	const khoa = duongKhoa(that);
 	const het = Date.now() + KHOI_DONG.khoa.choMs;
 	while (Date.now() < het) {
 		try {
 			mkdirSync(khoa);
 			writeFileSync(join(khoa, KHOI_DONG.khoa.tep), String(process.pid));
-			return () => rmSync(khoa, { recursive: true, force: true });
+			khoaDangGiu.set(that, khoa);
+			return;
 		} catch {
 			if (khoaCu(khoa)) rmSync(khoa, { recursive: true, force: true });
 			else await Bun.sleep(KHOI_DONG.khoa.nhipMs);
 		}
 	}
 	throw new Error(
-		`khoa khoi dong eve van bi giu sau ${KHOI_DONG.khoa.choMs} ms: ${khoa}`,
+		`goc ${that} van bi bai thu khac giu (pid ${chuKhoa(khoa) ?? "?"}) sau ${KHOI_DONG.khoa.choMs} ms`,
 	);
 }
 
-function banTach(goc: string) {
-	const tach = join(goc, ...KHOI_DONG.trung.thuMuc, crypto.randomUUID());
-	mkdirSync(tach, { recursive: true });
-	const boQua: readonly string[] = KHOI_DONG.trung.boQua;
-	for (const ten of readdirSync(goc))
-		if (!boQua.includes(ten))
-			cpSync(join(goc, ten), join(tach, ten), { recursive: true });
-	return {
-		goc: tach,
-		don: () => rmSync(tach, { recursive: true, force: true }),
-	};
+function traKhoa(that: string): void {
+	const khoa = khoaDangGiu.get(that);
+	if (!khoa) return;
+	khoaDangGiu.delete(that);
+	rmSync(khoa, { recursive: true, force: true });
+}
+
+export async function giuKhoaEve(cacGoc: readonly string[]): Promise<void> {
+	const can = [...new Set(cacGoc.map(thatCua))]
+		.filter((that) => !khoaDangGiu.has(that))
+		.sort();
+	const lon = [...khoaDangGiu.keys()].sort().at(-1);
+	const truoc = can[0];
+	if (lon !== undefined && truoc !== undefined && truoc < lon)
+		throw new Error(
+			`lay khoa eve sai thu tu: dang giu ${lon}, can ${truoc}; goi giuKhoaEve voi moi goc can dung truoc khi khoi dong`,
+		);
+	for (const that of can) await giuMot(that);
+}
+
+function pidNghe(url: string): string {
+	const cong = new URL(url).port;
+	const r = spawnSync("lsof", ["-nP", `-iTCP:${cong}`, "-sTCP:LISTEN", "-t"], {
+		encoding: "utf8",
+	});
+	return r.stdout?.trim().split("\n")[0] || "?";
+}
+
+function loiEveNgoai(goc: string, log: string): Error {
+	let url = "?";
+	try {
+		url = trangThaiEve.parse(
+			JSON.parse(readFileSync(join(goc, ...KHOI_DONG.trung.trangThai), "utf8")),
+		).url;
+	} catch {}
+	const pid = url === "?" ? "?" : pidNghe(url);
+	return new Error(
+		`goc ${goc} dang co eve dev khong phai cua bai thu (pid ${pid}, ${url}); dung no bang: kill ${pid} — roi chay lai.\n${log}`,
+	);
 }
 
 async function hoi(url: string): Promise<boolean> {
@@ -243,34 +293,33 @@ async function moEveDoiCong(
 export async function khoiDongEve(v: TuyChonKhoiDong = {}): Promise<MayEve> {
 	if (!EVE) throw new Error("khong thay eve trong node_modules/.bin");
 	const goc = v.goc ?? APP;
-	const traKhoa = await giuKhoa(goc);
-	let lan: Exclude<LanKhoiDong, { kieu: "cong-ban" }>;
-	try {
-		lan = await moEveDoiCong(EVE, goc, v);
-	} finally {
-		traKhoa();
-	}
-	if (lan.kieu === "song") return lan.may;
-	const tach = banTach(goc);
-	try {
-		const lanTach = await moEveDoiCong(EVE, tach.goc, v);
-		if (lanTach.kieu === "trung")
-			throw new Error(
-				`eve van bao trung o ban tach ${tach.goc}:\n${lanTach.log}`,
-			);
-		const may = lanTach.may;
-		may.log.unshift(
-			`tach sang ${tach.goc} vi ${goc} da co eve dev:\n${lan.log}`,
+	const that = thatCua(goc);
+	if (gocDangChay.has(that))
+		throw new Error(
+			`goc ${goc} dang co eve cua chinh tien trinh nay (pid ${process.pid}); dung may cu truoc khi khoi dong lai`,
 		);
+	await giuKhoaEve([goc]);
+	gocDangChay.add(that);
+	const xong = () => {
+		gocDangChay.delete(that);
+		traKhoa(that);
+	};
+	try {
+		const lan = await moEveDoiCong(EVE, goc, v);
+		if (lan.kieu === "trung") throw loiEveNgoai(goc, lan.log);
+		const may = lan.may;
 		return {
 			...may,
 			dung: async () => {
-				await may.dung();
-				tach.don();
+				try {
+					await may.dung();
+				} finally {
+					xong();
+				}
 			},
 		};
 	} catch (loi) {
-		tach.don();
+		xong();
 		throw loi;
 	}
 }

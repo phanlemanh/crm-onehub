@@ -11,6 +11,7 @@ import { donDep, moXuong } from "./support/gieo";
 import { gieoCanhGoi } from "./support/gieo-goi";
 import {
 	APP,
+	giuKhoaEve,
 	khoiDongEve,
 	type MayEve,
 	moiTruongModelTacGia,
@@ -35,6 +36,7 @@ if (!CHAY_AGENT_CU) {
 }
 
 beforeAll(async () => {
+	await giuKhoaEve(CHAY_AGENT_CU ? [APP, GOC_AGENT_CU] : [APP]);
 	may = await khoiDongEve();
 	if (CHAY_AGENT_CU) mayCu = await khoiDongEve({ goc: GOC_AGENT_CU });
 }, 300_000);
