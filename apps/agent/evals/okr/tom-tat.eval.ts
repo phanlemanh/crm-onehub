@@ -13,6 +13,7 @@ import { parseNoiDungTomTat } from "@crm/validation/okr-tom-tat";
 import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { defineEval } from "eve/evals";
 import { satisfies } from "eve/evals/expect";
+import { nguonKhoaMoHinh } from "../../agent/lib/mo-hinh-khoa";
 import { TRO_LY_OKR } from "../../agent/lib/okr/config";
 import { chayXepTomTat } from "../../agent/lib/okr/lich-tom-tat";
 
@@ -204,7 +205,7 @@ export default defineEval({
 			);
 			return;
 		}
-		if (!TRO_LY_OKR.khoaMoHinh.some((k) => process.env[k]?.trim())) {
+		if ((await nguonKhoaMoHinh()) === null) {
 			t.skip("thieu khoa mo hinh");
 			return;
 		}
