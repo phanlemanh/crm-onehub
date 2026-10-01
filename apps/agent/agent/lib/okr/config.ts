@@ -1,6 +1,7 @@
 import {
 	MA_LOAI_DE_XUAT,
 	type MaLoaiDeXuat,
+	TRO_LY_OKR_KHOA,
 } from "@crm/db/okr-tro-ly-danh-muc";
 
 const SECOND_MS = 1_000;
@@ -49,7 +50,7 @@ export const TRO_LY_OKR = {
 	chiDanGoc:
 		'This session runs one Trợ lý OKR task. Call the tool tro_ly_okr exactly once with the message "run". Do not call any other tool and do not do the work yourself. When it returns, reply "done".',
 	tinNhanGoc: "run",
-	khoa: { rieng: "OKR_AI_GATEWAY_API_KEY", chung: "AI_GATEWAY_API_KEY" },
+	khoa: TRO_LY_OKR_KHOA,
 	timViecCon: { soLan: 8, cachMs: 250 },
 	khoaKiemLai: "agent-task:okr-kiem-san-sang",
 	congCuChan: {

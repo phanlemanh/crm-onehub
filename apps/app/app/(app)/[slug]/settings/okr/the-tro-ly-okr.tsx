@@ -37,7 +37,13 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { Switch } from "@crm/ui/components/switch";
 import { DON_VI_ONEHUB, okrProgram } from "@crm/validation/okr-chuong-trinh";
-import { AI_PHAM_VI, type AiPhamVi } from "@crm/validation/okr-tro-ly";
+import {
+	AI_PHAM_VI,
+	type AiPhamVi,
+	MINUTE_MS,
+	TRO_LY_OKR_KHOA,
+	TRO_LY_OKR_TRAN,
+} from "@crm/validation/okr-tro-ly";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useId, useState } from "react";
 import { toast } from "sonner";
@@ -241,7 +247,13 @@ export function ChiBaoSanSang({
 	return (
 		<Field>
 			{chiBao}
-			<FieldDescription data-thieu-khoa>{s.thieuKhoaMoTa}</FieldDescription>
+			<FieldDescription data-thieu-khoa>
+				{s.thieuKhoaMoTa(
+					TRO_LY_OKR_KHOA.rieng,
+					TRO_LY_OKR_KHOA.chung,
+					String(TRO_LY_OKR_TRAN.hanKiemKhoaMs / MINUTE_MS),
+				)}
+			</FieldDescription>
 		</Field>
 	);
 }

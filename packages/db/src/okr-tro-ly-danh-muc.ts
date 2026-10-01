@@ -77,6 +77,11 @@ export const TRO_LY_OKR_TRAN = {
 	hoanTacNgay: 7,
 } as const;
 
+export const TRO_LY_OKR_KHOA = {
+	rieng: "OKR_AI_GATEWAY_API_KEY",
+	chung: "AI_GATEWAY_API_KEY",
+} as const;
+
 export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan"] as const;
 
 export type ViecTroLy = (typeof VIEC_TRO_LY)[number];

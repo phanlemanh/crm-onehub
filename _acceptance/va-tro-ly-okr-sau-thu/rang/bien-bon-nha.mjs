@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 
 const TEP = {
-	cauHinh: "apps/agent/agent/lib/okr/config.ts",
+	cauHinh: "packages/db/src/okr-tro-ly-danh-muc.ts",
 	envMau: ".env.example",
 	turbo: "turbo.json",
 	turboTacTu: "apps/agent/turbo.json",
@@ -65,8 +65,8 @@ const docJsonc = (tep) =>
 
 function tenBien(goc) {
 	const nguon = readFileSync(join(goc, TEP.cauHinh), "utf8");
-	const khop = nguon.match(/khoa:\s*\{\s*rieng:\s*"([A-Z_]+)"/);
-	if (!khop) throw new Error("khong doc duoc TRO_LY_OKR.khoa.rieng");
+	const khop = nguon.match(/TRO_LY_OKR_KHOA\s*=\s*\{\s*rieng:\s*"([A-Z_]+)"/);
+	if (!khop) throw new Error("khong doc duoc TRO_LY_OKR_KHOA.rieng");
 	return khop[1];
 }
 

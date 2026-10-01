@@ -205,6 +205,10 @@ const GHIM_TRO_LY_OKR = {
 		"Đã chạm trần tháng — tạm nghỉ tới 1",
 		"Đã chạm trần tháng — tạm nghỉ tới 12",
 	],
+	"tro-ly-okr:troLy.sanSang.thieuKhoaMoTa": [
+		"Cắm 1 (hoặc A) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng B phút.",
+		"Cắm 12 (hoặc A) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng B phút.",
+	],
 } satisfies Record<string, [string, string]>;
 
 const GHIM_OKR_GOP_Y = {

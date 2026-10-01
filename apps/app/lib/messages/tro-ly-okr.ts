@@ -66,8 +66,8 @@ const vi = {
 				"khoa-chung": "Sẵn sàng · khoá chung của tác tử",
 				oidc: "Sẵn sàng · qua Vercel",
 			},
-			thieuKhoaMoTa:
-				"Cắm OKR_AI_GATEWAY_API_KEY (hoặc AI_GATEWAY_API_KEY) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng 10 phút.",
+			thieuKhoaMoTa: (rieng: string, chung: string, phut: string) =>
+				`Cắm ${rieng} (hoặc ${chung}) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng ${phut} phút.`,
 			chuaSanSang: (lyDo: string) => `Chưa sẵn sàng — ${lyDo}`,
 			hetTran: (ngay: string) => `Đã chạm trần tháng — tạm nghỉ tới ${ngay}`,
 			dangKiem: "Đang kiểm tra…",
@@ -254,8 +254,8 @@ const en: TroLyOkrMessages = {
 				"khoa-chung": "Ready · the agent's shared key",
 				oidc: "Ready · through Vercel",
 			},
-			thieuKhoaMoTa:
-				"Set OKR_AI_GATEWAY_API_KEY (or AI_GATEWAY_API_KEY) on the agent project, or turn on that project's OIDC on Vercel. The agent checks again within about 10 minutes.",
+			thieuKhoaMoTa: (rieng: string, chung: string, phut: string) =>
+				`Set ${rieng} (or ${chung}) on the agent project, or turn on that project's OIDC on Vercel. The agent checks again within about ${phut} minutes.`,
 			chuaSanSang: (lyDo: string) => `Not ready — ${lyDo}`,
 			hetTran: (ngay: string) => `Monthly cap reached — paused until ${ngay}`,
 			dangKiem: "Checking…",

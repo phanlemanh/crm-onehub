@@ -2,6 +2,7 @@ import "@crm/env/load";
 
 import { db } from "@crm/db";
 import { BLOB_NGUON } from "@crm/db/blob-nguon";
+import { TRO_LY_OKR_KHOA } from "@crm/db/okr-tro-ly-danh-muc";
 import { readContextDevKey } from "@crm/db/settings";
 import { nguonKhoaMoHinh } from "./mo-hinh-khoa";
 
@@ -103,7 +104,7 @@ export function capabilitiesFrom(
 		},
 		{
 			id: "MO_HINH_AI",
-			from: "AI_GATEWAY_API_KEY or Vercel OIDC",
+			from: `${TRO_LY_OKR_KHOA.chung} or Vercel OIDC`,
 			label: "AI model",
 			gives:
 				"every model call, including Trợ lý OKR. Without it Trợ lý OKR tasks close at once as «chua-co-khoa-mo-hinh» and no session opens",
