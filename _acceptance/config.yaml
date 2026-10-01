@@ -1644,6 +1644,13 @@ risk_tiers:
     # API_URL, nên đổi cổng ở đây không dịch chuyển được kết quả đo nào.
     # Khai T1 ngày 17/09 sau khi cổng chặn một PR chỉ thêm hai mục cổng.
     - ".claude/launch.json"
+    # Trần thời gian và bước chạy của CI: .github/workflows/ci.yml chỉ điều khiển
+    # máy chạy bộ kiểm, không phải mã sản phẩm — không bản dựng nào đọc nó, và
+    # kết quả của nó tự hiện trên chính PR đổi nó. Khai đích danh MỘT tệp, không
+    # glob cả thư mục: acceptance.yml là chính cổng nghiệm thu nên vẫn phải qua
+    # hồ sơ. Khai T1 ngày 01/10 (chủ kho duyệt) khi nới trần job từ 20 lên 30 phút
+    # — PR #216 đã bị cổng chặn hai ngày vì đúng lớp «đổi cấu hình, không hồ sơ».
+    - ".github/workflows/ci.yml"
   t3_paths:
     - "packages/auth/**"
     - "packages/db/prisma/**"
