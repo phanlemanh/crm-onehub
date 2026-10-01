@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 858f1967383b3bd27de9be8c90ce53db7f3a32c3
+verified_commit: 58f8fb3ff0bedc55cea6a773c79628a69fb5f838
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -227,3 +227,7 @@ sha: fde37c8be543e5144ad9060eedd074aaad6cbdb8 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 8 — 2026-10-01, do PR 226: gộp onehub sau #225 chạm mã trong vùng của hồ sơ
 run_id: repin-20261001T072708Z-93351
 sha: 858f1967383b3bd27de9be8c90ce53db7f3a32c3 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 9 — 2026-10-01, do hoa cu sau khi gop onehub (#230) va thuoc bi cham boi tro-ly-doc-kho
+run_id: repin-20261001T234016Z-88835
+sha: 58f8fb3ff0bedc55cea6a773c79628a69fb5f838 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
