@@ -1,11 +1,4 @@
 {
   "feature_plain": "Trợ lý OKR chạy được khi dự án tác tử chỉ có vé Vercel hoặc có khoá riêng, không còn đề xuất Căn chỉnh chồng nhau, không bắt nhầm KR doanh thu là «một việc», và hộp sửa KR chỉ nói một giọng.",
-  "decisions": [
-    {
-      "id": "E14",
-      "q": "Mã của lượt này có giữ đúng luật chung của kho không?",
-      "why": "Ba giám khảo chỉ được đọc tài liệu, không được đọc mã, nên chỉ xác nhận được phần tài liệu và trả «chưa chắc». Máy đã gom năm bằng chứng họ xin: không có dòng chú thích mới; phần máy chủ không đọc khoá; không có kiểu dữ liệu thả nổi mới; không đè kiểu giao diện; không dùng chữ «tác nhân». Còn vướng một chỗ: câu hướng dẫn trên thẻ Cài đặt ghi lại tên hai biến khoá bằng chữ trần thay vì lấy từ tệp cấu hình (trùng mục Ngoài-3)."
-    }
-  ],
   "scope_plain": "Sáu việc đã cắt ở Cổng Phạm vi, giữ nguyên:"
 }
