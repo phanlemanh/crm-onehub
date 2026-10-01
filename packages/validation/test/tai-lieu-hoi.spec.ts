@@ -198,6 +198,25 @@ describe("tlk-kiem", () => {
 		expect(kq.ok).toBe(true);
 	});
 
+	test("tlk-kiem: bang luu co dem khoang trang van khop doan go mot khoang trang", () => {
+		const dem: BanDangDung = {
+			...HOA_HONG,
+			noiDung: "| Tầng   | Hoa hồng |\n| ------ | -------- |\n| Tầng 2 | 1,2%     |",
+		};
+		const kq = kiemTraLoi(
+			mot("Tầng 2 hưởng 1,2%.", "| Tầng 2 | 1,2% |"),
+			new Map([[dem.slug, dem]]),
+			DAU_HOM_NAY,
+		);
+		expect(kq.ok, "tlk-kiem: bang co dem bi bac").toBe(true);
+		const sai = kiemTraLoi(
+			mot("Tầng 2 hưởng 1,2%.", "| Tầng 2 | 1,3% |"),
+			new Map([[dem.slug, dem]]),
+			DAU_HOM_NAY,
+		);
+		expect(sai.ok).toBe(false);
+	});
+
 	test("ban nhan giu anh chup ten, phien ban, ngay duyet luc nop", () => {
 		const kq = kiemTraLoi(mot("Tầng 2 hưởng 1,2%.", BANG), TRANG, DAU_HOM_NAY);
 		if (!kq.ok) throw new Error("tlk-kiem: ca a bi bac");
