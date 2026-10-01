@@ -5,7 +5,7 @@ slug: soan-okr-cung-tro-ly
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: approved
+status: implemented
 approved_by: Manh Phan
 approved_at: 2026-10-01T11:15:27Z
 design_doc: docs/superpowers/specs/2026-09-30-soan-okr-cung-tro-ly-design.md
