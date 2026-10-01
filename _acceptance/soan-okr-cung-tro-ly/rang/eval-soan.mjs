@@ -220,7 +220,7 @@ if (!lanChay)
 
 const {
 	docSuKienHong,
-	docTomTat,
+	docTomTatTep,
 	docTongKet,
 	ketLuanHaTang,
 	bangTieuChi,
@@ -229,11 +229,15 @@ const {
 	phanLoaiHaTang,
 	phanLoaiHong,
 	soChotHong,
+	thieuKetQua,
 	thongKeJudge,
 } = await import(join(APP, "evals", "okr-soan", "tong-ket.ts"));
-const tomTat = docTomTat(
-	readFileSync(join(thuMucChay, lanChay, "summary.json"), "utf8"),
-);
+const docTom = docTomTatTep(join(thuMucChay, lanChay, "summary.json"));
+if ("ketLuan" in docTom) {
+	await db.$disconnect();
+	thoat(docTom.ketLuan.ma, docTom.ketLuan.cau);
+}
+const tomTat = docTom.tom;
 const { khoangWilson, phanVi, phanViTheoLoaiLuot, tyLeThang, xaoTron } =
 	await import(join(APP, "evals", "okr-soan", "tinh.ts"));
 const dong = docTongKet(readFileSync(tongKet, "utf8"));
@@ -278,13 +282,15 @@ const judgeCua = (ca) =>
 	tomTat.evals
 		.flatMap((e) => e.assertions)
 		.find((a) => a.name.includes(`[${nhan}:${ca}]`)) ?? null;
-const boiCanhTatCa = dong
-	.filter((d) => d.loai === "boi-canh")
-	.map((d) => {
-		const a = judgeCua(d.ca);
-		const daCham = (a?.metadata?.choice ?? null) !== null;
-		return { ...d, aThang: daCham ? a.score >= 0.5 : null };
-	});
+const boiCanhTatCa = [
+	...new Map(
+		dong.filter((d) => d.loai === "boi-canh").map((d) => [d.ca, d]),
+	).values(),
+].map((d) => {
+	const a = judgeCua(d.ca);
+	const daCham = (a?.metadata?.choice ?? null) !== null;
+	return { ...d, aThang: daCham ? a.score >= 0.5 : null };
+});
 const boiCanh = boiCanhTatCa.filter((d) => d.aThang !== null);
 const khongCham = boiCanhTatCa
 	.filter((d) => d.aThang === null)
@@ -299,11 +305,11 @@ const demAB = {
 };
 const ab = ketQuaAB(demAB, DG.boiCanh.tyLeThang);
 const { boCa, soCapAB } = await import(join(APP, "evals", "okr-soan", "ca.ts"));
-const du = [
-	{ eval: "soan", co: soan.length, can: boCa().length },
-	{ eval: "soan-boi-canh", co: boiCanhTatCa.length, can: soCapAB() },
-	{ eval: "soan-do-tre", co: doTre.length, can: DG.doTre.soCuoc },
-];
+const thieu = thieuKetQua(tomTat, {
+	soan: boCa().length,
+	boiCanh: soCapAB(),
+	doTre: DG.doTre.soCuoc,
+});
 const tieuChi = bangTieuChi(tomTat);
 const luotCham = doTre
 	.flatMap((d) =>
@@ -460,7 +466,7 @@ const ketLuan = ketLuanThuoc({
 	maEve: ket.status,
 	haTang,
 	soChotHong: soChotHong(tomTat),
-	du,
+	thieu,
 });
 if (ketLuan.cau) thoat(ketLuan.ma, ketLuan.cau);
 process.exit(ketLuan.ma);

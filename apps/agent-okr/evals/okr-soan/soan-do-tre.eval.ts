@@ -12,7 +12,7 @@ import {
 	moCuocVaPhien,
 } from "./phien";
 import { loiChiPhi, phanVi, type TachLuot, tachLuot } from "./tinh";
-import { ghiTongKet } from "./tong-ket";
+import { CHOT_DO_TRE, ghiTongKet } from "./tong-ket";
 
 const DT = TRO_LY_OKR_SOAN.danhGia.doTre;
 const DG = TRO_LY_OKR_SOAN.danhGia;
@@ -70,10 +70,7 @@ function motCuoc(ca: CaSoan, stt: number) {
 			ghiTongKet({ loai: "do-tre", ca: ca.id, cuoc: stt + 1, ms, tach, usd });
 			t.check(
 				usd,
-				satisfies<number>(
-					(u) => u > 0 && u <= DT.usdMoiCuoc,
-					`0 < chi phi moi cuoc <= ${DT.usdMoiCuoc} usd`,
-				),
+				satisfies<number>((u) => u > 0 && u <= DT.usdMoiCuoc, CHOT_DO_TRE.usd),
 			);
 			if (stt !== DT.soCuoc - 1) return;
 			const tatCa = daDo.flatMap((d) => d.ms);
@@ -91,11 +88,11 @@ function motCuoc(ca: CaSoan, stt: number) {
 			t.check(daDo.length, equals(DT.soCuoc)).label("du cuoc da do");
 			t.check(
 				p50 ?? Number.POSITIVE_INFINITY,
-				satisfies<number>((v) => v <= DT.p50Ms, `p50 <= ${DT.p50Ms} ms`),
+				satisfies<number>((v) => v <= DT.p50Ms, CHOT_DO_TRE.p50),
 			);
 			t.check(
 				p90 ?? Number.POSITIVE_INFINITY,
-				satisfies<number>((v) => v <= DT.p90Ms, `p90 <= ${DT.p90Ms} ms`),
+				satisfies<number>((v) => v <= DT.p90Ms, CHOT_DO_TRE.p90),
 			);
 		},
 	});

@@ -6,6 +6,7 @@ import { wrapLanguageModel } from "ai";
 import { MockLanguageModelV4 } from "ai/test";
 import { z } from "zod";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
+import { boCa } from "../evals/okr-soan/ca";
 import {
 	type LanJudge,
 	loiTraLoiJudge,
@@ -14,9 +15,11 @@ import {
 import { phanViTheoLoaiLuot } from "../evals/okr-soan/tinh";
 import {
 	bangTieuChi,
+	CHOT_DO_TRE,
 	docSuKienHong,
 	docTinDung,
 	docTomTat,
+	docTomTatTep,
 	docTongKet,
 	KHONG_HA_TANG,
 	ketLuanThuoc,
@@ -26,7 +29,9 @@ import {
 	phanLoaiHaTang,
 	phanLoaiHong,
 	soChotHong,
+	THIEU_TOM_TAT,
 	type TomTatChay,
+	thieuKetQua,
 	thongKeJudge,
 } from "../evals/okr-soan/tong-ket";
 
@@ -293,11 +298,7 @@ const CO_BAN = {
 	maEve: 1,
 	haTang: KHONG_HA_TANG,
 	soChotHong: 0,
-	du: [
-		{ eval: "soan", co: 5, can: 5 },
-		{ eval: "soan-boi-canh", co: 15, can: 15 },
-		{ eval: "soan-do-tre", co: 10, can: 10 },
-	],
+	thieu: [],
 };
 
 describe("eval-soan: tách judge hỏng khỏi chốt mã hỏng", () => {
@@ -777,24 +778,6 @@ describe("eval-soan: mã thoát theo hợp đồng (AC-13 / E22)", () => {
 		).toBe(1);
 	});
 
-	test("thiếu kết quả độ trễ (eve chết giữa chừng) → mã 2 «thieu ket qua», dù A/B đạt", () => {
-		const kl = ketLuanThuoc({
-			phan,
-			...CO_BAN,
-			ab: { thang: 14, daCham: 14, khongCham: 1 },
-			soChotHong: soChotHong(TOM_TAT_HOP_DONG),
-			du: [
-				{ eval: "soan", co: 5, can: 5 },
-				{ eval: "soan-boi-canh", co: 15, can: 15 },
-				{ eval: "soan-do-tre", co: 0, can: 10 },
-			],
-		});
-		expect(kl).toEqual({
-			ma: 2,
-			cau: "thieu ket qua: soan-do-tre 0/10 — khong xanh, chay lai",
-		});
-	});
-
 	test("cùng khuôn mà 5 cặp không chấm được, gói thắng 7/10 → mã 2, kết luận có thể đổi", () => {
 		const kl = ketLuanThuoc({
 			phan,
@@ -854,5 +837,140 @@ describe("eval-soan: mã thoát theo hợp đồng (AC-13 / E22)", () => {
 			{ ca: "pb-kd-bac", diem: [null, 0, 1, 0, 1, 0] },
 			{ ca: "pb-kho-van", diem: [0, 0, 1, 0, 1, 1] },
 		]);
+	});
+});
+
+const CAN_KET_QUA = {
+	soan: boCa().length,
+	boiCanh: TRO_LY_OKR_SOAN.danhGia.boiCanh.soCapMacDinh,
+	doTre: TRO_LY_OKR_SOAN.danhGia.doTre.soCuoc,
+};
+const so4 = (i: number) => String(i).padStart(4, "0");
+const chotQua = (moTa: string) => ({
+	name: `satisfies(${moTa})`,
+	score: 1,
+	severity: "gate",
+	passed: true,
+});
+
+function tomTatDu(): TomTatChay {
+	const evals: TomTatChay["evals"] = [
+		...Array.from({ length: CAN_KET_QUA.soan }, (_, i) => ({
+			id: `okr-soan/soan/${so4(i)}`,
+			verdict: "passed",
+			assertions: [chotQua("co ban nhap")],
+		})),
+		...Array.from({ length: CAN_KET_QUA.boiCanh }, (_, i) => ({
+			id: `okr-soan/soan-boi-canh/${so4(i)}`,
+			verdict: i === 2 ? "failed" : "passed",
+			assertions: [
+				i === 2
+					? {
+							name: `judge.autoevals.closedQA [boi-canh:ca#v${i}]`,
+							score: 0,
+							severity: "gate",
+							passed: false,
+							message: LOI_JUDGE,
+						}
+					: {
+							name: `judge.autoevals.closedQA [boi-canh:ca#v${i}]`,
+							score: 1,
+							severity: "soft",
+							passed: true,
+							metadata: { choice: "Y" },
+						},
+			],
+		})),
+		...Array.from({ length: CAN_KET_QUA.doTre }, (_, i) => ({
+			id: `okr-soan/soan-do-tre/${so4(i)}`,
+			verdict: "passed",
+			assertions: [
+				chotQua(CHOT_DO_TRE.usd),
+				...(i === CAN_KET_QUA.doTre - 1
+					? [chotQua(CHOT_DO_TRE.p50), chotQua(CHOT_DO_TRE.p90)]
+					: []),
+			],
+		})),
+	];
+	return {
+		totalEvals: evals.length,
+		passed: evals.length - 1,
+		failed: 1,
+		scored: 0,
+		skipped: 0,
+		evals,
+	};
+}
+
+function ketLuanCua(tom: TomTatChay) {
+	return ketLuanThuoc({
+		phan: phanLoaiHong(tom),
+		...CO_BAN,
+		ab: { thang: 14, daCham: 14, khongCham: 1 },
+		soChotHong: soChotHong(tom),
+		thieu: thieuKetQua(tom, CAN_KET_QUA),
+	});
+}
+
+const ID_CUOI = `okr-soan/soan-do-tre/${so4(CAN_KET_QUA.doTre - 1)}`;
+
+describe("eval-soan: đủ kết quả theo id eval trong summary", () => {
+	test("đủ 5 soạn, 15 A/B, 10 độ trễ, có p50/p90/chi phí → mã 0", () => {
+		expect(thieuKetQua(tomTatDu(), CAN_KET_QUA)).toEqual([]);
+		expect(ketLuanCua(tomTatDu())).toEqual({ ma: 0, cau: null });
+	});
+
+	test("mất eval độ trễ cuối → mã 2, gọi tên id và hai chốt p50/p90", () => {
+		const tom = tomTatDu();
+		tom.evals = tom.evals.filter((e) => e.id !== ID_CUOI);
+		const kl = ketLuanCua(tom);
+		expect(kl.ma).toBe(2);
+		expect(kl.cau).toContain(`thieu ket qua: ${ID_CUOI}`);
+		expect(kl.cau).toContain(CHOT_DO_TRE.p50);
+		expect(kl.cau).toContain(CHOT_DO_TRE.p90);
+	});
+
+	test("còn eval cuối mà thiếu chốt p50/p90 → mã 2, gọi tên hai chốt", () => {
+		const tom = tomTatDu();
+		const cuoi = tom.evals.find((e) => e.id === ID_CUOI);
+		if (cuoi)
+			cuoi.assertions = cuoi.assertions.filter(
+				(a) => !a.name.includes("p50") && !a.name.includes("p90"),
+			);
+		expect(thieuKetQua(tom, CAN_KET_QUA)).toEqual([
+			`okr-soan/soan-do-tre/ ${CHOT_DO_TRE.p50}`,
+			`okr-soan/soan-do-tre/ ${CHOT_DO_TRE.p90}`,
+		]);
+		expect(ketLuanCua(tom).ma).toBe(2);
+	});
+
+	test("11 dòng độ trễ, một dòng lặp và mất dòng thứ 10 → mã 2", () => {
+		const tom = tomTatDu();
+		const lap = tom.evals.find((e) => e.id === "okr-soan/soan-do-tre/0008");
+		tom.evals = tom.evals.filter((e) => e.id !== ID_CUOI);
+		if (lap) tom.evals.push(structuredClone(lap), structuredClone(lap));
+		expect(
+			tom.evals.filter((e) => e.id.startsWith("okr-soan/soan-do-tre/")).length,
+		).toBe(11);
+		const kl = ketLuanCua(tom);
+		expect(kl.ma).toBe(2);
+		expect(kl.cau).toContain(ID_CUOI);
+	});
+
+	test("một eval độ trễ thiếu chốt chi phí → mã 2", () => {
+		const tom = tomTatDu();
+		const dau = tom.evals.find((e) => e.id === "okr-soan/soan-do-tre/0000");
+		if (dau) dau.assertions = [];
+		expect(thieuKetQua(tom, CAN_KET_QUA)).toEqual([
+			`okr-soan/soan-do-tre/0000 ${CHOT_DO_TRE.usd}`,
+		]);
+	});
+
+	test("không có summary.json → mã 2 «thieu ket qua: summary.json»", () => {
+		expect(
+			docTomTatTep(join(import.meta.dir, "khong-co", "summary.json")),
+		).toEqual({ ketLuan: THIEU_TOM_TAT });
+		expect(THIEU_TOM_TAT.ma).toBe(2);
+		expect(THIEU_TOM_TAT.cau).toStartWith("thieu ket qua: summary.json");
 	});
 });

@@ -1,4 +1,4 @@
-import { appendFileSync } from "node:fs";
+import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import { z } from "zod";
 import { TRO_LY_OKR_SOAN } from "../../agent/lib/config";
 
@@ -362,7 +362,68 @@ export function ketQuaAB(ab: DemAB, nguong: number): KetQuaAB {
 const phanTram = (v: number | null) =>
 	v === null ? "—" : `${Math.round(v * 100)}`;
 
-export type DuKetQua = { eval: string; co: number; can: number };
+const DT = TRO_LY_OKR_SOAN.danhGia.doTre;
+const DO_DAI_SO_EVAL = 4;
+
+export const CHOT_DO_TRE = {
+	p50: `p50 <= ${DT.p50Ms} ms`,
+	p90: `p90 <= ${DT.p90Ms} ms`,
+	usd: `0 < chi phi moi cuoc <= ${DT.usdMoiCuoc} usd`,
+} as const;
+
+export const TIEN_TO_EVAL = {
+	soan: "okr-soan/soan/",
+	boiCanh: "okr-soan/soan-boi-canh/",
+	doTre: "okr-soan/soan-do-tre/",
+} as const;
+
+export type CanKetQua = { soan: number; boiCanh: number; doTre: number };
+
+function idEval(tienTo: string, so: number): string[] {
+	return Array.from(
+		{ length: so },
+		(_, i) => `${tienTo}${String(i).padStart(DO_DAI_SO_EVAL, "0")}`,
+	);
+}
+
+function coChot(e: TomTatChay["evals"][number], moTa: string): boolean {
+	return e.assertions.some((a) => a.name.startsWith(`satisfies(${moTa})`));
+}
+
+export function thieuKetQua(tom: TomTatChay, can: CanKetQua): string[] {
+	const co = new Map(tom.evals.map((e) => [e.id, e]));
+	const doTre = idEval(TIEN_TO_EVAL.doTre, can.doTre);
+	const thieu = [
+		...idEval(TIEN_TO_EVAL.soan, can.soan),
+		...idEval(TIEN_TO_EVAL.boiCanh, can.boiCanh),
+		...doTre,
+	].filter((id) => !co.has(id));
+	for (const id of doTre) {
+		const e = co.get(id);
+		if (e && !coChot(e, CHOT_DO_TRE.usd))
+			thieu.push(`${id} ${CHOT_DO_TRE.usd}`);
+	}
+	const daDo = doTre.flatMap((id) => {
+		const e = co.get(id);
+		return e ? [e] : [];
+	});
+	for (const moTa of [CHOT_DO_TRE.p50, CHOT_DO_TRE.p90])
+		if (!daDo.some((e) => coChot(e, moTa)))
+			thieu.push(`${TIEN_TO_EVAL.doTre} ${moTa}`);
+	return thieu;
+}
+
+export const THIEU_TOM_TAT: KetLuan = {
+	ma: 2,
+	cau: "thieu ket qua: summary.json — khong xanh, chay lai",
+};
+
+export function docTomTatTep(
+	duong: string,
+): { tom: TomTatChay } | { ketLuan: KetLuan } {
+	if (!existsSync(duong)) return { ketLuan: THIEU_TOM_TAT };
+	return { tom: docTomTat(readFileSync(duong, "utf8")) };
+}
 
 export function soChotHong(tom: TomTatChay): number {
 	return tom.evals.flatMap((e) => e.assertions).filter((a) => !a.passed).length;
@@ -378,7 +439,7 @@ export function ketLuanThuoc(v: {
 	maEve: number | null;
 	haTang: HaTang;
 	soChotHong: number;
-	du: readonly DuKetQua[];
+	thieu: readonly string[];
 }): KetLuan {
 	const { phan } = v;
 	const haTang = ketLuanHaTang(phan, v.haTang);
@@ -388,11 +449,10 @@ export function ketLuanThuoc(v: {
 			ma: 1,
 			cau: `chot ma hong ${phan.chotMa.length}: ${phan.chotMa.map((h) => `${h.id} ${h.ten}`).join("; ")}${v.haTang.soPhien > 0 ? ` (kem ${moTaHaTang(v.haTang)}; ${v.haTang.phienKhac} phien hong khong do ha tang)` : ""}`,
 		};
-	const thieu = v.du.filter((d) => d.co < d.can);
-	if (thieu.length > 0)
+	if (v.thieu.length > 0)
 		return {
 			ma: 2,
-			cau: `thieu ket qua: ${thieu.map((d) => `${d.eval} ${d.co}/${d.can}`).join(", ")} — khong xanh, chay lai`,
+			cau: `thieu ket qua: ${v.thieu.join(", ")} — khong xanh, chay lai`,
 		};
 	if (v.khongGia > 0)
 		return {
