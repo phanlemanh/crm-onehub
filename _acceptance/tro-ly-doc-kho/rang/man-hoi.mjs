@@ -85,19 +85,21 @@ const TRANG = {
 const d = await moDo();
 const CUON = [];
 
-async function chup390(t, ten) {
-	await t.setViewport({ width: HEP, height: 844, deviceScaleFactor: 1 });
+async function chup390(t, ten, phaiThay) {
+	if (t.viewport()?.width !== HEP)
+		await t.setViewport({ width: HEP, height: 844, deviceScaleFactor: 1 });
 	await cho(800);
 	const tran = await d.cuonNgang(t);
 	const so = await t.evaluate(() => ({
 		sw: document.documentElement.scrollWidth,
 		iw: window.innerWidth,
 	}));
+	const thay = await t.evaluate((s) => window.__tim(s).length > 0, phaiThay);
 	CUON.push(
-		`${ten}: scrollWidth ${so.sw} innerWidth ${so.iw} ${tran.length === 0 ? "khong cuon ngang" : `CUON NGANG ${tran.join(", ")}`}`,
+		`${ten}: scrollWidth ${so.sw} innerWidth ${so.iw} ${tran.length === 0 ? "khong cuon ngang" : `CUON NGANG ${tran.join(", ")}`} · ${phaiThay} ${thay ? "hien" : "KHONG HIEN"}`,
 	);
 	await d.chup(t, ten);
-	return tran;
+	return thay ? tran : [...tran, `390 khong hien ${phaiThay}`];
 }
 
 async function choHang(nguoiId, truoc) {
@@ -215,14 +217,14 @@ try {
 				() => window.__tim("[data-goi-y] button").length,
 			);
 			await d.chup(t, "tlk-hoi-trong-1440.png");
-			const tran = await chup390(t, "tlk-hoi-trong-390.png");
+			const tran = await chup390(t, "tlk-hoi-trong-390.png", "[data-goi-y]");
 			await t.close();
 			const okr = await d.nguoiMoi("o", "okr", "Trần Văn Mục Tiêu");
 			const to = await d.moTrang(okr.cookie, RONG, "/tai-lieu");
 			const okrThayTab = (await to.$("[data-tab-hoi]")) !== null;
 			await to.close();
 			const loi = [];
-			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
+			if (tran.length > 0) loi.push(`390: ${tran.join(", ")}`);
 			if (okrThayTab) loi.push("vai okr thay tab Hỏi");
 			if (
 				!chu.includes(
@@ -287,10 +289,14 @@ try {
 				() => window.__tim("[data-tu-choi]")[0]?.innerText ?? "",
 			);
 			await d.chup(t, "tlk-hoi-tu-choi-1440.png");
-			const tran = await chup390(t, "tlk-hoi-tu-choi-390.png");
+			const tran = await chup390(
+				t,
+				"tlk-hoi-tu-choi-390.png",
+				"[data-tu-choi]",
+			);
 			await t.close();
 			const loi = [];
-			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
+			if (tran.length > 0) loi.push(`390: ${tran.join(", ")}`);
 			if (!chu.includes(TAI_LIEU_HOI.tuChoi)) loi.push("thieu cau tu choi");
 			if (!chu.includes("Trang gần nhất")) loi.push("thieu Trang gan nhat");
 			if (!chu.includes(TRANG.thuViec.ten))
@@ -313,10 +319,14 @@ try {
 				() => window.__tim("[data-qua-han]")[0]?.innerText ?? "",
 			);
 			await d.chup(t, "tlk-hoi-qua-han-1440.png");
-			const tran = await chup390(t, "tlk-hoi-qua-han-390.png");
+			const tran = await chup390(
+				t,
+				"tlk-hoi-qua-han-390.png",
+				"[data-qua-han]",
+			);
 			await t.close();
 			const loi = [];
-			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
+			if (tran.length > 0) loi.push(`390: ${tran.join(", ")}`);
 			if (!canhBao.includes(TRANG.thuViec.ten))
 				loi.push("Alert thieu ten trang");
 			if (!canhBao.includes("quá hạn xác minh"))
@@ -335,9 +345,13 @@ try {
 				slug.hoaHong,
 				"hoaHong",
 			);
-			const tran = await chup390(t, "tlk-hoi-tra-loi-390.png");
+			const tran = await chup390(
+				t,
+				"tlk-hoi-tra-loi-390.png",
+				"[data-y-tra-loi]",
+			);
 			await t.close();
-			d.dat(5, tran.length === 0, `390 cuon ngang: ${tran.join(", ")}`);
+			d.dat(5, tran.length === 0, `390: ${tran.join(", ")}`);
 		});
 
 	if (chay(6))
@@ -363,14 +377,18 @@ try {
 			);
 			await cho(500);
 			await d.chup(t, "tlk-bao-sai-1440.png");
-			const tran = await chup390(t, "tlk-bao-sai-390.png");
+			const tran = await chup390(
+				t,
+				"tlk-bao-sai-390.png",
+				'[data-bao-sai="da-gui"]',
+			);
 			await t.close();
 			const bao = await d.db.taiLieuBaoSai.findMany({
 				where: { hoiId },
 				select: { trangId: true, ghiChu: true },
 			});
 			const loi = [];
-			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
+			if (tran.length > 0) loi.push(`390: ${tran.join(", ")}`);
 			if (bao.length !== 1) loi.push(`${bao.length} hang bao sai`);
 			if (bao[0]?.ghiChu !== "Mức mới từ tháng 10 là 350.000 đồng.")
 				loi.push("ghi chu khong luu");
