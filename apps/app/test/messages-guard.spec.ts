@@ -205,6 +205,10 @@ const GHIM_TRO_LY_OKR = {
 		"Đã chạm trần tháng — tạm nghỉ tới 1",
 		"Đã chạm trần tháng — tạm nghỉ tới 12",
 	],
+	"tro-ly-okr:troLy.sanSang.thieuKhoaMoTa": [
+		"Cắm 1 (hoặc A) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng B phút.",
+		"Cắm 12 (hoặc A) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng B phút.",
+	],
 } satisfies Record<string, [string, string]>;
 
 const GHIM_OKR_GOP_Y = {
@@ -218,8 +222,8 @@ const GHIM_OKR_GOP_Y = {
 		"12 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
 	],
 	"okr-gop-y:xuHuong": [
-		"Theo các lần cập nhật gần nhất (1/tuần), cuối kỳ ước khoảng A",
-		"Theo các lần cập nhật gần nhất (12/tuần), cuối kỳ ước khoảng A",
+		"Theo các lần cập nhật gần nhất (1/tuần), cuối kỳ ước khoảng A B",
+		"Theo các lần cập nhật gần nhất (12/tuần), cuối kỳ ước khoảng A B",
 	],
 	"okr-gop-y:vet.suaTruong": ["Sửa 1", "Sửa 12"],
 	"okr-gop-y:dong.gopVao": ["Góp vào «1»", "Góp vào «12»"],

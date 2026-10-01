@@ -1,5 +1,5 @@
+import { createGateway } from "@ai-sdk/gateway";
 import {
-	gateway,
 	type LanguageModel,
 	type LanguageModelMiddleware,
 	wrapLanguageModel,
@@ -39,8 +39,17 @@ export const kepTranRaMoiLoiGoi: LanguageModelMiddleware = {
 	}),
 };
 
-export const MO_HINH_TRO_LY_OKR: LanguageModel = wrapLanguageModel({
-	model: gateway(TRO_LY_OKR.model),
-	middleware: kepTranRaMoiLoiGoi,
-	modelId: TRO_LY_OKR.model,
-});
+export function moHinhTroLyOkr(
+	env: Readonly<Record<string, string | undefined>> = process.env,
+	tao: typeof createGateway = createGateway,
+): LanguageModel {
+	const khoa = env[TRO_LY_OKR.khoa.rieng]?.trim();
+	const nha = khoa ? tao({ apiKey: khoa }) : tao();
+	return wrapLanguageModel({
+		model: nha(TRO_LY_OKR.model),
+		middleware: kepTranRaMoiLoiGoi,
+		modelId: TRO_LY_OKR.model,
+	});
+}
+
+export const MO_HINH_TRO_LY_OKR: LanguageModel = moHinhTroLyOkr();

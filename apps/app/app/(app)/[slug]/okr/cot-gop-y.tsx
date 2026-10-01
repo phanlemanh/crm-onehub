@@ -433,9 +433,11 @@ function KhungCot({
 export function CotGopY({
 	gopY,
 	oDangSua,
+	coGoiYTinh,
 }: {
 	gopY: GopY;
 	oDangSua: ReadonlySet<TruongVietLai>;
+	coGoiYTinh?: boolean;
 }) {
 	const m = okrGopYMessages(useLocale());
 	if (gopY.hong) {
@@ -479,7 +481,11 @@ export function CotGopY({
 					<EmptyHeader>
 						<EmptyTitle>{m.cot.rong}</EmptyTitle>
 						<EmptyDescription>
-							{gopY.laKr ? m.cot.rongMoTaKr : m.cot.rongMoTa}
+							{gopY.laKr
+								? coGoiYTinh
+									? m.cot.rongCoGoiY
+									: m.cot.rongMoTaKr
+								: m.cot.rongMoTa}
 						</EmptyDescription>
 					</EmptyHeader>
 				</Empty>
@@ -489,7 +495,11 @@ export function CotGopY({
 	const conCho = gopY.dong.filter((d) => gopY.ketCua(d.id) === undefined);
 	return (
 		<KhungCot gopY={gopY} ban={gopY.dangSoan}>
-			<ItemDescription>{m.cot.soDong(String(conCho.length))}</ItemDescription>
+			<ItemDescription>
+				{conCho.length === 0
+					? m.cot.daQuyetHet
+					: m.cot.soDong(String(conCho.length))}
+			</ItemDescription>
 			<ItemGroup>
 				{gopY.dong.map((d) => (
 					<TheGopY
