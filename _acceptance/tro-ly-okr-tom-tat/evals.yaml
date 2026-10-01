@@ -182,19 +182,16 @@ evals:
     executor: judgment
     question: >-
       Đọc mục Tóm tắt tuần của CONTEXT.md, đoạn tóm tắt ở docs/api.md §OKR và mục chỗ rẽ 9c
-      của docs/agent.md, rồi diff của lượt: một người trong đội không đọc mã có hiểu đúng
-      rằng tóm tắt chạy sáng hôm sau ngày cập nhật, chỉ cho phòng ban, câu bị bỏ khi lệch số,
-      bản quá 30% câu bị bỏ không hiện cho ai, và chế độ ẩn chỉ quản trị chương trình thấy
-      không? Diff có giữ luật kho: trí khôn ở apps/agent (API chỉ đọc bảng tóm tắt và ghi
-      phản hồi), khuôn parse ở biên trong packages/validation, không chú thích trong mã, hằng
-      tinh chỉnh ở một tệp cấu hình mỗi khu, thành phần mới ở packages/ui không đè class ở
-      chỗ gọi?
-    inputs: [docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md, _acceptance/tro-ly-okr-tom-tat/contract.md, CONTEXT.md, docs/api.md, docs/agent.md, _acceptance/tro-ly-okr-tom-tat/evidence/luat-kho.md]
+      của docs/agent.md: một người trong đội không đọc mã có hiểu đúng rằng tóm tắt chạy
+      sáng hôm sau ngày cập nhật, chỉ cho phòng ban, câu bị bỏ khi lệch số, bản quá 30% câu
+      bị bỏ không hiện cho ai, và chế độ ẩn chỉ quản trị chương trình thấy không? Ba tài liệu
+      có nói cùng một điều với hợp đồng không?
+    inputs: [_acceptance/tro-ly-okr-tom-tat/contract.md, CONTEXT.md, docs/api.md, docs/agent.md]
     expected: >-
-      PASS khi mọi ý đúng và không vi phạm luật kho nào có trích dẫn tệp:dòng; FAIL nêu đúng
-      câu sai hoặc tệp vi phạm; UNCERTAIN khi thiếu bằng chứng, kèm danh sách bằng chứng cần thêm.
+      PASS khi mọi ý đúng và khớp hợp đồng, có trích dẫn tệp:dòng; FAIL nêu đúng câu sai hoặc
+      câu lệch hợp đồng; UNCERTAIN khi thiếu bằng chứng trong bốn tệp, kèm danh sách cần thêm.
     evidence_required: [run_id, verifier, verified_at, output]
-    paths: [CONTEXT.md, docs/api.md, docs/agent.md, "apps/agent/agent/**", "apps/api/src/okr/**", "packages/validation/src/**", "packages/db/src/**", "packages/ui/src/components/**"]
+    paths: [CONTEXT.md, docs/api.md, docs/agent.md]
 
   - id: E21
     criterion: AC-6
@@ -212,3 +209,12 @@ evals:
     expected: "exit 0; bài API apps/api/test/tro-ly-okr-tom-tat-doc.spec.ts -t trang-thai trên bộ OKR mẫu: việc okr-tom-tat-tuan của tuần do chayXepTomTat ghi, chưa xả → troLyTomTat trả dangSoan true; markRunning → vẫn true; đóng da-nop với bản → dangSoan false và có bản; chu kỳ không có OkrCheckIn nào trong 7 ngày → chuaCapNhat true, không bản; người xem không xem được Mục tiêu nào của các nguồn → bản khác null với danh sách câu rỗng (đối chứng: người xem được nhận đủ câu). Chiều đỏ: bản sao chỉ đặt dangSoan khi việc đang chạy → ô 'chưa xả' đỏ với thông điệp 'dang soan lech: cho-xa'; bản sao trả null khi lọc hết → 'loc het thanh null'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/tro-ly.service.ts, packages/db/src/okr-tom-tat.ts, apps/api/test/tro-ly-okr-tom-tat-doc.spec.ts]
+
+  - id: E23
+    criterion: AC-15
+    executor: script
+    status: not-run
+    cmd: config:executors.script.luat_kho_cay
+    expected: "exit 0; thước dùng chung scripts/luat-kho/do-cay.mjs (đến từ lượt soạn OKR, commit 39779f90) đo TRẠNG THÁI cây apps/ và packages/, không đọc diff, không gọi model: sáu luật — không chú thích, trí khôn ở app agent, parse ở biên, thời lượng tinh chỉnh ở tệp cấu hình, UI từ @crm/ui, hai app agent không nhập chéo — mỗi luật 0 vi phạm mới ngoài nền theo tệp. Chiều đỏ ghim: mỗi lượt tự gài 20 ca trên bản gương tmpdir, một ca không bắt → mã 2 'thuoc hong, khong tin duoc'. Khai not-run: nhánh này chưa có apps/agent-okr nên thước báo 'KHONG DO DUOC' (mã 2); bỏ khai khi nhánh gộp onehub đã có thước, rồi chạy ở lượt ghim lại."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/**", "packages/**", scripts/luat-kho/**]
