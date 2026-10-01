@@ -1165,6 +1165,75 @@ async function oLuoiKhongChan(tu: Element, rong: number): Promise<string[]> {
 	return loi;
 }
 
+const THANH_TAB = '[data-khong="hep"] [role="tablist"]';
+const KHUNG_CHAT = '[data-khong="hep"] [data-cot="hoi-thoai"]';
+const NHAN_TAB = '[role="tab"]';
+const CO_TAB = 2;
+const PX_MOI_REM = 16;
+const PX_MOI_KHOANG = 4;
+const DAI = {
+	px: /^([\d.]+)px$/,
+	rem: /^([\d.]+)rem$/,
+	khoang: /^calc\(var\(--spacing\)\s*\*\s*([\d.]+)\)$/,
+	phanTram: /^(?:calc\()?([\d.]+)%\)?$/,
+	phanSo: /^calc\(([\d.]+)\s*\/\s*([\d.]+)\s*\*\s*100%\)$/,
+	theoChu: new Set(["max-content"]),
+};
+
+function doDai(gia: string | undefined, cha: number): number | null {
+	if (!gia) return null;
+	if (DAI.theoChu.has(gia)) return Number.POSITIVE_INFINITY;
+	const so = (m: RegExpExecArray | null, i = 1) => Number(m?.[i]);
+	const px = DAI.px.exec(gia);
+	if (px) return so(px);
+	const rem = DAI.rem.exec(gia);
+	if (rem) return so(rem) * PX_MOI_REM;
+	const khoang = DAI.khoang.exec(gia);
+	if (khoang) return so(khoang) * PX_MOI_KHOANG;
+	const phanTram = DAI.phanTram.exec(gia);
+	if (phanTram) return (so(phanTram) / 100) * cha;
+	const phanSo = DAI.phanSo.exec(gia);
+	if (phanSo) return (so(phanSo) / so(phanSo, 2)) * cha;
+	return null;
+}
+
+async function rongNgan(ngan: Element, rong: number): Promise<number> {
+	const k = await kieuThat(ngan, rong);
+	return Math.min(
+		doDai(k.get("width"), rong) ?? rong,
+		doDai(k.get("max-width"), rong) ?? rong,
+	);
+}
+
+async function anDi(o: Element, rong: number): Promise<string | null> {
+	for (const c of [o, ...chuoiToTien(o, NGAN)]) {
+		if (c.hasAttribute("hidden")) return `${tenO(c)} co hidden`;
+		const k = await kieuThat(c, rong);
+		if (k.get("display") === "none" || k.get("visibility") === "hidden")
+			return `${tenO(c)} khong hien`;
+	}
+	return null;
+}
+
+async function rongVuotNgan(o: Element, rong: number): Promise<string[]> {
+	const chuoi = chuoiToTien(o, NGAN);
+	const ngan = chuoi[chuoi.length - 1];
+	if (!ngan) throw new Error("khong thay ngan");
+	const tran = await rongNgan(ngan, rong);
+	const loi: string[] = [];
+	for (const c of [o, ...chuoi.slice(0, -1)]) {
+		const k = await kieuThat(c, rong);
+		for (const thuocTinh of ["width", "min-width"]) {
+			const d = doDai(k.get(thuocTinh), tran);
+			if (d !== null && d > tran)
+				loi.push(
+					`${rong}px ${tenO(c)}: ${thuocTinh} ${k.get(thuocTinh)} > ngan ${tran}px`,
+				);
+		}
+	}
+	return loi;
+}
+
 async function hangKhongXuongDong(
 	tu: Element,
 	rong: number,
@@ -1203,6 +1272,12 @@ function khoHep(bat: boolean): () => void {
 		});
 }
 
+const THIEU_THANH_TAB =
+	"ngan soan o 390px: khong thay thanh tab Tro chuyen/Ban nhap dang hien";
+const THIEU_KHUNG_CHAT =
+	"ngan soan o 390px: khong thay khung tro chuyen dang hien";
+const VUOT_NGAN_HEP =
+	"ngan soan o 390px: thanh tab hoac khung tro chuyen rong hon ngan";
 const TRAN_NGAN_HEP =
 	"ngan soan o 390px: cot luoi chua thanh tab va tro chuyen gian theo chu, tab Ban nhap bi cat";
 const BANG_CUOC_CAT =
@@ -1216,11 +1291,26 @@ describe("bo tri — khong tran, khong cat, khong de chu (E13)", () => {
 			datDanhSach({ dong: BAN_NHAP });
 			await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
 			await moMan();
+			const thanhTab = q(THANH_TAB);
+			if (!thanhTab) throw new Error(THIEU_THANH_TAB);
+			expect(thanhTab.querySelectorAll(NHAN_TAB), THIEU_THANH_TAB).toHaveLength(
+				CO_TAB,
+			);
+			expect(await anDi(thanhTab, HEP_PX), THIEU_THANH_TAB).toBeNull();
+			const khungChat = q(KHUNG_CHAT);
+			if (!khungChat) throw new Error(THIEU_KHUNG_CHAT);
+			expect(await anDi(khungChat, HEP_PX), THIEU_KHUNG_CHAT).toBeNull();
+			const vuot = [
+				...(await rongVuotNgan(thanhTab, HEP_PX)),
+				...(await rongVuotNgan(khungChat, HEP_PX)),
+			];
+			expect(vuot, VUOT_NGAN_HEP).toEqual([]);
 			const goc = [
-				...qa('[data-khong="hep"] [role="tab"]'),
+				thanhTab,
+				khungChat,
+				...thanhTab.querySelectorAll(NHAN_TAB),
 				...qa("[data-goi-y]"),
 			];
-			expect(goc.length).toBeGreaterThan(2);
 			const loi = (
 				await Promise.all(goc.map((o) => oLuoiKhongChan(o, HEP_PX)))
 			).flat();
