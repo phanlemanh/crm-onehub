@@ -44,6 +44,12 @@ import { dongViecOkr, laHangTroLyOkr } from "../lib/okr/viec";
 import { createSlackChannel } from "../lib/slack-membership";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 import {
+	dongHoiKhoKhiPhienHong,
+	dongHoiKhoKhiPhienXong,
+	drainHoiKho,
+	guiHoiKho,
+} from "../lib/tai-lieu-hoi-phien";
+import {
 	dongKhiPhienHong,
 	dongKhiPhienXong,
 	drainMaySoan,
@@ -74,12 +80,14 @@ const receiveTarget = z
 		runId: z.string().nullable().catch(null),
 		taskId: z.string().nullable().catch(null),
 		nguonId: z.string().nullable().catch(null),
+		hoiId: z.string().nullable().catch(null),
 	})
 	.catch({
 		builderSubmissionId: null,
 		runId: null,
 		taskId: null,
 		nguonId: null,
+		hoiId: null,
 	});
 
 export function taskToken(taskId: string): string {
@@ -169,6 +177,7 @@ export const crmEvents: ChannelEvents = {
 		const reason =
 			eveTurnFailure.parse(data).message ?? "The agent turn failed.";
 		if (await dongKhiPhienHong(channel.continuationToken, reason)) return;
+		if (await dongHoiKhoKhiPhienHong(channel.continuationToken, reason)) return;
 
 		if (taskId) {
 			if (await laHangTroLyOkr(taskId)) {
@@ -204,6 +213,7 @@ export const crmEvents: ChannelEvents = {
 
 	async "session.completed"(_data, channel) {
 		if (await dongKhiPhienXong(channel.continuationToken)) return;
+		if (await dongHoiKhoKhiPhienXong(channel.continuationToken)) return;
 		if (await dongViecOkrChuaNop(channel.continuationToken)) return;
 		if (await closeTask(channel.continuationToken, "ran")) return;
 
@@ -259,6 +269,9 @@ export const crmEvents: ChannelEvents = {
 
 	async "session.failed"(data, channel) {
 		if (await dongKhiPhienHong(channel.continuationToken, data.message)) {
+			return;
+		}
+		if (await dongHoiKhoKhiPhienHong(channel.continuationToken, data.message)) {
 			return;
 		}
 		const conversationId = builderIdFromToken(channel.continuationToken);
@@ -334,6 +347,7 @@ export default defineChannel({
 					);
 					await drainAgentRuns(send);
 					await drainMaySoan(send);
+					await drainHoiKho(send);
 				})(),
 			);
 
@@ -444,6 +458,13 @@ export default defineChannel({
 		if (target.nguonId) {
 			assertInternalDispatchAuth(input.auth);
 			return guiMaySoan(target.nguonId, send);
+		}
+
+		if (target.hoiId) {
+			assertInternalDispatchAuth(input.auth);
+			const phien = await guiHoiKho(target.hoiId, send);
+			if (!phien) throw new Error("This question is not waiting to be sent.");
+			return phien;
 		}
 
 		const tuyChon: SendOptions = {

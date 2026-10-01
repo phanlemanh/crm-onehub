@@ -1,0 +1,234 @@
+import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { db } from "@crm/db";
+import { cauLoiHoi, TAI_LIEU_HOI } from "@crm/validation/tai-lieu-hoi";
+import type { SendFn } from "eve/channels";
+import { AgentTriggerService } from "../../api/src/agent/agent-trigger.service";
+import { TaiLieuHoiService } from "../../api/src/tai-lieu/tai-lieu-hoi.service";
+import hookDong from "../agent/hooks/dong-tro-ly-kho";
+import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
+import {
+	dongHoiKhoKhiPhienHong,
+	dongHoiKhoQuaHan,
+	drainHoiKho,
+	phanLoaiLoi,
+	tokenHoiKho,
+} from "../agent/lib/tai-lieu-hoi-phien";
+import loiDan from "../agent/subagents/tro_ly_kho/instructions";
+import nopTraLoi from "../agent/subagents/tro_ly_kho/tools/nop_tra_loi";
+import readPage from "../agent/subagents/tro_ly_kho/tools/read_page";
+import LOI from "./fixtures/loi-gateway.json";
+import {
+	ctxConCua,
+	donTroLyKho,
+	gieoNguoi,
+	goiCongCu,
+	ma,
+	type Nguoi,
+	trangDaDuyet,
+} from "./support/tro-ly-kho-gia";
+
+let quanTri: Nguoi;
+
+beforeAll(async () => {
+	quanTri = await gieoNguoi("owner");
+});
+
+afterAll(async () => {
+	await donTroLyKho();
+});
+
+async function hangKho(): Promise<{ hoiId: string; ctx: unknown }> {
+	const phienGoc = ma("ses-goc");
+	const hang = await db.taiLieuHoi.create({
+		data: {
+			nguoiHoiId: quanTri.id,
+			kenh: "CRM",
+			cauHoi: "Câu lỗi?",
+			phienId: phienGoc,
+		},
+	});
+	const thuocTinh = { purpose: "kho", hoiId: hang.id };
+	return {
+		hoiId: hang.id,
+		ctx: {
+			session: {
+				id: phienGoc,
+				auth: {
+					current: { attributes: thuocTinh },
+					initiator: { attributes: thuocTinh },
+				},
+			},
+			channel: {
+				kind: "crm",
+				continuationToken: `crm:${tokenHoiKho(hang.id)}`,
+			},
+		},
+	};
+}
+
+type XuLy = (e: unknown, c: unknown) => Promise<void>;
+async function ketQuaCon(ctx: unknown, isError: boolean, message?: string) {
+	await (hookDong.events?.["action.result"] as unknown as XuLy)(
+		{
+			type: "action.result",
+			data: {
+				result: {
+					kind: "subagent-result",
+					subagentName: "tro_ly_kho",
+					isError,
+					output: message ? { message } : { hoiId: "x", ketQua: "TRA_LOI" },
+				},
+			},
+		},
+		ctx,
+	);
+}
+
+describe("tlk-loi", () => {
+	test("tlk-loi: sau ca dong dung ly do va cau cho nguoi hoi", async () => {
+		const ca: [
+			string,
+			(h: { hoiId: string; ctx: unknown }) => Promise<void>,
+			string,
+		][] = [
+			[
+				"402 het tin dung",
+				(h) => ketQuaCon(h.ctx, true, LOI.hetTinDung),
+				"het-tran",
+			],
+			[
+				"het ngan sach thang",
+				(h) => ketQuaCon(h.ctx, true, LOI.hetNganSachThang),
+				"het-tran",
+			],
+			["loi 500", (h) => ketQuaCon(h.ctx, true, LOI.loiKhac), "loi-model"],
+			["xong khong nop", (h) => ketQuaCon(h.ctx, false), "loi-model"],
+			[
+				"turn.failed het tran",
+				async (h) => {
+					expect(
+						await dongHoiKhoKhiPhienHong(
+							`crm:${tokenHoiKho(h.hoiId)}`,
+							LOI.hetNganSachThang,
+						),
+					).toBe(true);
+				},
+				"het-tran",
+			],
+		];
+		for (const [ten, lam, lyDo] of ca) {
+			const h = await hangKho();
+			await lam(h);
+			const hang = await db.taiLieuHoi.findUniqueOrThrow({
+				where: { id: h.hoiId },
+			});
+			expect(`tlk-loi: ${ten}: ${hang.trangThai} ${hang.lyDo}`).toBe(
+				`tlk-loi: ${ten}: LOI ${lyDo}`,
+			);
+			expect(cauLoiHoi(lyDo as "het-tran")).toBe(
+				lyDo === "het-tran" ? TAI_LIEU_HOI.hetTran : TAI_LIEU_HOI.chuaTraLoi,
+			);
+		}
+		expect(phanLoaiLoi("budget")).toBe("loi-model");
+	});
+
+	test("tlk-loi: hang dang hoi qua han dong qua-han o nhip dispatch", async () => {
+		const cu = await db.taiLieuHoi.create({
+			data: {
+				nguoiHoiId: quanTri.id,
+				kenh: "CRM",
+				hoiLuc: new Date(Date.now() - TAI_LIEU_AGENT.hoi.hanTraLoiMs - 60_000),
+			},
+		});
+		await dongHoiKhoQuaHan(new Date());
+		const hang = await db.taiLieuHoi.findUniqueOrThrow({
+			where: { id: cu.id },
+		});
+		expect(hang.trangThai).toBe("LOI");
+		expect(hang.lyDo).toBe("qua-han");
+		const conLai = await db.taiLieuHoi.count({
+			where: {
+				trangThai: "DANG_HOI",
+				hoiLuc: { lt: new Date(Date.now() - TAI_LIEU_AGENT.hoi.hanTraLoiMs) },
+			},
+		});
+		expect(conLai, "tlk-loi: con 1 hang DANG_HOI qua han").toBe(0);
+	});
+});
+
+describe("tlk-hoi-dau-cuoi", () => {
+	test("tlk-hoi-dau-cuoi: hoi qua API, drainHoiKho mo phien kho, tro ly nop, ket qua da tra loi", async () => {
+		const trang = await trangDaDuyet(
+			quanTri,
+			`Nghỉ phép năm ${ma("np")}`,
+			"## Số ngày\n\nMỗi năm có mười hai ngày nghỉ phép.",
+		);
+		const api = new TaiLieuHoiService(db, new AgentTriggerService(db));
+		const { hoiId } = await api.hoi(quanTri, {
+			cauHoi: "Nghỉ phép năm bao nhiêu ngày?",
+		});
+		const gui: {
+			tin: string;
+			thuocTinh: Record<string, string>;
+			token: string;
+		}[] = [];
+		const send = (async (
+			tin: string,
+			tuyChon: {
+				auth: { attributes: Record<string, string> };
+				continuationToken: string;
+			},
+		) => {
+			gui.push({
+				tin,
+				thuocTinh: tuyChon.auth.attributes,
+				token: tuyChon.continuationToken,
+			});
+			return { id: `ses-goc-${hoiId}` };
+		}) as unknown as SendFn;
+		await drainHoiKho(send);
+		await drainHoiKho(send);
+		const cuaToi = gui.filter((g) => g.thuocTinh.hoiId === hoiId);
+		expect(cuaToi.length).toBe(1);
+		expect(cuaToi[0]?.thuocTinh.purpose).toBe("kho");
+		expect(cuaToi[0]?.token).toBe(tokenHoiKho(hoiId));
+		expect(cuaToi[0]?.tin).toBe("Nghỉ phép năm bao nhiêu ngày?");
+		const viec = await db.agentTask.findFirstOrThrow({
+			where: { kind: "hoi-kho", payload: { path: ["hoiId"], equals: hoiId } },
+		});
+		expect(viec.finishedAt).not.toBeNull();
+
+		const con = ctxConCua(`ses-goc-${hoiId}`);
+		await (loiDan as unknown as { events: { "session.started": XuLy } }).events[
+			"session.started"
+		]({ type: "session.started" }, con);
+		const doc = await goiCongCu<{ phienBan: number }>(
+			readPage,
+			{ slug: trang.slug },
+			con,
+		);
+		if (!doc.ok) throw new Error(doc.loi);
+		const nop = await goiCongCu(
+			nopTraLoi,
+			{
+				loai: "tra-loi",
+				cau: [
+					{
+						chu: "Mỗi năm có mười hai ngày.",
+						trich: [
+							{
+								slug: trang.slug,
+								phienBan: doc.ra.phienBan,
+								doan: "Mỗi năm có mười hai ngày nghỉ phép.",
+							},
+						],
+					},
+				],
+			},
+			con,
+		);
+		expect(nop.ok).toBe(true);
+		const kq = await api.ketQua(quanTri, hoiId);
+		expect(kq.trangThai).toBe("TRA_LOI");
+	});
+});

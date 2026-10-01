@@ -1,0 +1,6 @@
+{
+	"nguon": "memory ai-gateway-het-ngan-sach-thang (29/09/2026): tac-tu.log của phiên đo lượt 9b và lượt the-gop-y-okr",
+	"hetNganSachThang": "GatewayInternalServerError: Team budget exceeded. Current spend: $20.01, limit: $20.00",
+	"hetTinDung": "402 insufficient_funds — A positive credit balance is required for all requests, including BYOK",
+	"loiKhac": "GatewayInternalServerError: Internal Server Error"
+}

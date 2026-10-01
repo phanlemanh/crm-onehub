@@ -35,6 +35,7 @@ export const TAI_LIEU_AGENT = {
 			sessionTimeoutMs: 3 * MINUTE_MS,
 		},
 		timHoi: { soLan: 8, cachMs: 250 },
+		loGui: 6,
 		dauTrang: { mo: "<<<TRANG-BAT-DAU>>>", dong: "<<<TRANG-HET>>>" },
 	},
 	bangGia: {

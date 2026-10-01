@@ -11,6 +11,7 @@ import { brief, drainAll, taskAuth } from "../lib/dispatch";
 import { lenLichNhac } from "../lib/nhac-ke-hoach";
 import { chupSoOkr } from "../lib/okr-chup";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
+import { dongHoiKhoQuaHan, hoiKhoCho } from "../lib/tai-lieu-hoi-phien";
 import { dongMaySoanQuaHan, nguonChoSoan } from "../lib/tai-lieu-phien";
 import { kiemBot } from "../lib/zalo-bot";
 import { dongHoiQuaHan } from "../lib/zalo-hoi";
@@ -27,6 +28,7 @@ export default defineSchedule({
 				kiemBot(),
 				dongHoiQuaHan(),
 				dongMaySoanQuaHan(),
+				dongHoiKhoQuaHan(),
 
 				(async () => {
 					await reconcileStaleTasks();
@@ -38,10 +40,11 @@ export default defineSchedule({
 						}),
 					);
 					await queueDueAgentRuns();
-					const [builderIds, runIds, nguonIds] = await Promise.all([
+					const [builderIds, runIds, nguonIds, hoiIds] = await Promise.all([
 						pendingBuilderSubmissionIds(),
 						pendingAgentRunIds(),
 						nguonChoSoan(),
+						hoiKhoCho(),
 					]);
 
 					await Promise.all([
@@ -63,6 +66,13 @@ export default defineSchedule({
 							receive(crm, {
 								message: "Draft a queued document source.",
 								target: { nguonId },
+								auth: appAuth,
+							}),
+						),
+						...hoiIds.map((hoiId) =>
+							receive(crm, {
+								message: "Answer a queued document library question.",
+								target: { hoiId },
 								auth: appAuth,
 							}),
 						),

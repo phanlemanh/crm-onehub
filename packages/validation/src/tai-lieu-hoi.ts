@@ -274,3 +274,7 @@ export function dungTuChoi(gan: readonly { ten: string }[]): string {
 		ten: gan.map((g) => g.ten).join(", "),
 	})}`;
 }
+
+export function cauLoiHoi(lyDo: LyDoLoi): string {
+	return lyDo === "het-tran" ? TAI_LIEU_HOI.hetTran : TAI_LIEU_HOI.chuaTraLoi;
+}
