@@ -12,6 +12,18 @@ import { TAI_LIEU_AGENT } from "./tai-lieu-config";
 
 const HOI = TAI_LIEU_AGENT.hoi;
 const DAU_LA = /(?:<|&lt;){3}[^<>&\n]*?(?:>|&gt;){3}/g;
+const BA_MO = /(?:<|&lt;){3,}/g;
+const BA_DONG = /(?:>|&gt;){3,}/g;
+
+function xoaDau(chu: string): string {
+	let truoc = "";
+	let sau = chu;
+	while (sau !== truoc) {
+		truoc = sau;
+		sau = sau.replace(DAU_LA, "");
+	}
+	return sau.replace(BA_MO, "").replace(BA_DONG, "");
+}
 
 export type DongTimKho = {
 	slug: string;
@@ -44,7 +56,7 @@ export async function timTrangKho(q: string): Promise<DongTimKho[]> {
 export type ChuTrangBoc = { chu: string; biDongCat: boolean };
 
 export function bocChuTrang(noiDung: string): ChuTrangBoc {
-	const sach = noiDung.replace(DAU_LA, "");
+	const sach = xoaDau(noiDung);
 	const biDongCat = sach.length > HOI.docToiDa;
 	const than = biDongCat ? sach.slice(0, HOI.docToiDa) : sach;
 	return {
