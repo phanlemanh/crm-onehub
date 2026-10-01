@@ -4,6 +4,10 @@ import { mkdirSync, openSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { TRO_LY_OKR_SOAN } from "../../../apps/agent-okr/agent/lib/config.ts";
 import {
+	giuKhoaEve,
+	traKhoaEve,
+} from "../../../apps/agent-okr/test/support/khoi-dong.ts";
+import {
 	currentTree,
 	treeSlug,
 } from "../../../packages/db/src/measure-database.ts";
@@ -100,6 +104,7 @@ export async function batAgentOkr({ cong, thuMuc, env = process.env }) {
 	mkdirSync(thuMuc, { recursive: true });
 	const nhatKy = join(thuMuc, "agent-okr.log");
 	const fd = openSync(nhatKy, "w");
+	await giuKhoaEve([AGENT_OKR]);
 	const con = spawn(
 		join(AGENT_OKR, "node_modules/.bin/eve"),
 		["dev", "--no-ui", "--port", String(cong)],
@@ -119,14 +124,21 @@ export async function batAgentOkr({ cong, thuMuc, env = process.env }) {
 	const nghe = Object.entries(PHIEN_SOAN.maNgat).map(([tin, ma]) => {
 		const khiNgat = () => {
 			console.error(`-- nhan ${tin}: tat agent-okr nhom ${con.pid}`);
-			void tatNhom(con.pid).finally(() => process.exit(ma));
+			void tatNhom(con.pid).finally(() => {
+				traKhoaEve([AGENT_OKR]);
+				process.exit(ma);
+			});
 		};
 		process.once(tin, khiNgat);
 		return [tin, khiNgat];
 	});
 	const dung = async () => {
 		for (const [tin, khiNgat] of nghe) process.off(tin, khiNgat);
-		return tatNhom(con.pid);
+		try {
+			return await tatNhom(con.pid);
+		} finally {
+			traKhoaEve([AGENT_OKR]);
+		}
 	};
 	const url = `http://127.0.0.1:${cong}`;
 	const can = dauMocCay();

@@ -167,6 +167,10 @@ function traKhoa(that: string): void {
 	rmSync(khoa, { recursive: true, force: true });
 }
 
+export function traKhoaEve(cacGoc: readonly string[]): void {
+	for (const that of new Set(cacGoc.map(thatCua))) traKhoa(that);
+}
+
 export async function giuKhoaEve(cacGoc: readonly string[]): Promise<void> {
 	const can = [...new Set(cacGoc.map(thatCua))]
 		.filter((that) => !khoaDangGiu.has(that))
