@@ -1566,6 +1566,7 @@ executors:
     tln_so_phien_con_that: bun _acceptance/tro-ly-okr-nen/rang/so-phien-con-that.mjs
     tdx_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tro-ly-okr-de-xuat/rang/man-gop-y.mjs"'
     vtl_bien_bon_nha: 'node _acceptance/va-tro-ly-okr-sau-thu/rang/bien-bon-nha.mjs'
+    vtl_luat_kho: 'node _acceptance/va-tro-ly-okr-sau-thu/rang/luat-kho.mjs'
     vtl_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/va-tro-ly-okr-sau-thu/rang/man-that.mjs"'
     vtl_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     tdx_eval_gop_y: 'bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs'

@@ -117,21 +117,39 @@ evals:
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/messages/tro-ly-okr.ts, packages/validation/src/okr-kiem.ts, _acceptance/va-tro-ly-okr-sau-thu/rang/man-that.mjs]
 
-  - id: E14
+  - id: E16
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.vtl_luat_kho
+    expected: >-
+      exit 0; _acceptance/va-tro-ly-okr-sau-thu/rang/luat-kho.mjs đo TRẠNG THÁI 19 tệp mã (không phải
+      test) mà lượt này chạm, khai đích danh trong script, theo sáu luật: không chú thích (quét cú pháp
+      // và /* ngoài chuỗi); tệp apps/api không đọc AI_GATEWAY_API_KEY, VERCEL_OIDC_TOKEN, không gọi
+      createGateway, getVercelOidcToken, @ai-sdk/gateway; hai tên biến khoá (đọc từ TRO_LY_OKR_KHOA
+      trong packages/db/src/okr-tro-ly-danh-muc.ts) không xuất hiện trong chuỗi nào của tệp khác;
+      động từ của OKR_KIEM.dongTuViec không thành chuỗi riêng ở tệp khác; không Record<string,
+      unknown>; không chuỗi nào chứa «tác nhân». In «luat kho du: sau luat, khong vi pham». Bản khai
+      miễn trừ theo (luật, tệp, giá trị, lý do) có bánh cóc hai chiều: dòng miễn trừ hết khớp thì đỏ
+      «mien-thua». Chiều đỏ ghim trong script trên bản sao ở tmpdir: bản lành phải xanh trước, rồi
+      bảy phép phá (thêm chú thích, đọc khoá ở API, chép tên biến, chép động từ, Record thả nổi, chữ
+      «Tác nhân», bỏ hit của dòng miễn trừ) mỗi phép phải ra đúng mã luật của nó; phép phá nào không
+      đỏ thì mã 2 «THUOC HONG». Luật className đè kiểu không đo ở đây: E15 (design-gate) đo trên bốn
+      tệp giao diện. Known limit: biến thể chữ không dấu hay gạch nối của «tác nhân» không bắt; tái
+      lập bằng `grep -rniE "tac[ -]?nhan" apps/app/lib/messages`.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/capabilities.ts, apps/agent/agent/lib/mo-hinh-khoa.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/agent/lib/okr/doc.ts, apps/agent/agent/lib/okr/goi-ngu-canh.ts, apps/agent/agent/lib/okr/kiem-san-sang.ts, apps/agent/agent/lib/okr/mo-hinh.ts, apps/agent/agent/lib/okr/viec.ts, apps/api/src/okr/okr.contracts.ts, apps/api/src/okr/tro-ly.service.ts, "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/messages/tro-ly-okr.ts, packages/db/src/okr-tro-ly-danh-muc.ts, packages/db/src/okr-tro-ly.ts, packages/validation/src/okr-kiem.ts, packages/validation/src/okr-tro-ly.ts, _acceptance/va-tro-ly-okr-sau-thu/rang/luat-kho.mjs]
+
+  - id: E17
     criterion: AC-13
     executor: judgment
     question: >-
-      Đọc diff của lượt (git diff diffBase...HEAD, loại _acceptance/**) cùng docs/agent.md,
-      docs/environment.md và CONTEXT.md: diff có giữ luật kho không — không dòng chú thích mới
-      trong mã; mọi đọc khoá mô hình đi qua nguonKhoaMoHinh ở apps/agent, API không đọc khoá và
-      không gọi Gateway; tên biến khoá và danh sách động từ nằm trong tệp cấu hình của khu
-      (TRO_LY_OKR, OKR_KIEM), không lặp chuỗi; outcome mới parse ở biên qua
-      KET_QUA_KIEM_SAN_SANG và aiChiTieuOutput, không Record<string, unknown>; không thành phần
-      giao diện mới ngoài packages/ui, không className đè kiểu; docs/agent.md nói hàm nguồn khoá,
-      thứ tự nguồn và khoá riêng; chữ trên màn dùng «tác tử», không «tác nhân»?
-    inputs: [docs/superpowers/specs/2026-10-01-va-tro-ly-okr-sau-thu-design.md, _acceptance/va-tro-ly-okr-sau-thu/contract.md, docs/agent.md, docs/environment.md, CONTEXT.md, AGENTS.md]
+      docs/agent.md có nói rõ cho người vận hành ba điều không: Trợ lý OKR lấy khoá mô hình qua một
+      hàm nguồn khoá duy nhất; thứ tự thử nguồn là khoá riêng của Trợ lý OKR, rồi khoá chung của tác
+      tử, rồi vé OIDC của Vercel; và khoá riêng dùng để làm gì. docs/environment.md có dòng khai biến
+      khoá riêng kèm mô tả không?
+    inputs: [docs/agent.md, docs/environment.md, _acceptance/va-tro-ly-okr-sau-thu/contract.md]
     expected: >-
-      PASS khi mọi ý đạt; FAIL nêu tệp và dòng của ý trượt.
+      PASS khi cả hai tài liệu nói đủ các ý; FAIL nêu tài liệu và ý còn thiếu.
     evidence_required: [run_id, verdict, rationale]
 
   - id: E15
