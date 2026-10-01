@@ -10,8 +10,8 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>115 việc"]
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>116 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>25 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -32,7 +32,6 @@ flowchart TD
 
 ## Đang làm
 
-- Luật «sổ chụp chỉ thêm» của so-okr-tu-chay miễn cho công cụ dev okr:mau khi bốn chốt an toàn còn đứng — thước chi-them xanh lại trên onehub mà không mở lỗ cho lối ghi nào khác (`mien-so-chup-bo-okr-mau`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -130,6 +129,7 @@ flowchart TD
 - Màn Cài đặt nói tiếng Việt — cụm General và Currencies đọc đúng tiếng của người quản trị, kể cả ở những trạng thái màn hình không tự mở ra (`man-cai-dat-noi-tieng-viet`)
 - Thước màn chữ E6u của bo-chu-lap-keo-tha mở hộp tải nguồn bằng khoá kho nguồn KHO_TAI_LIEU_BLOB_TOKEN sau khi PR (`man-chu-theo-khoa-kho-nguon`)
 - Màn xin quyền có răng — /grant-access được đo trên trình duyệt thật, không chỉ bằng quét cú pháp (`man-xin-quyen-co-rang`)
+- Luật «sổ chụp chỉ thêm» của so-okr-tu-chay miễn cho công cụ dev okr:mau khi bốn chốt an toàn còn đứng — thước chi-them xanh lại trên onehub mà không mở lỗ cho lối ghi nào khác (`mien-so-chup-bo-okr-mau`)
 - Mọi bài kiểm DOM (*.dom.tsx) của apps/app và packages/ui chạy trong bun run test, mỗi tệp một tiến trình (`moi-bai-kiem-dom-deu-chay`)
 - Một đường ghi phòng ban — mọi thao tác ghi phòng ban đi qua org.* với một bộ luật; gỡ đường ghi onboarding.*Department; điều kiện «xoá hẳn được» tính một nơi (`mot-duong-ghi-phong-ban`)
 - Nền chat AI Elements — dọn 19 component mồ côi, dựng lớp chuyển kiểu eve→AI SDK, chuẩn hoá phần còn lại, đặt răng chống tái phát (`nen-chat-ai-elements`)

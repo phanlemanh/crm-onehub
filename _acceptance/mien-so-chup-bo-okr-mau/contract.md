@@ -5,7 +5,7 @@ slug: mien-so-chup-bo-okr-mau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci, docs]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-01T07:27:20Z
 design_doc: docs/superpowers/specs/2026-10-01-mien-so-chup-bo-okr-mau-design.md
@@ -63,3 +63,12 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
   `AGENTS.md` không có tài liệu cho `_acceptance/**`; vòng không chạm `apps/` nên không cần `docs/agent.md`.
 - Sau khi gộp `onehub`: chạy `repin-lane.mjs --slug so-okr-tu-chay --write` ở đỉnh. E12/E14 (gần đầu
   quý) và E23/E25 (đo `diff` vòng cũ) có thể làm làn không xanh — báo chủ kho, không vượt.
+
+Known limits — Cổng Bằng chứng (Phan Le Manh 2026-10-01, định đoạt mục ngoài hợp đồng của vòng chấm 1–3; sổ d-20261001T082016Z-7 … -15):
+
+- Ngoài-1 (`docs/api.md`): Tài liệu API, tiêu chí AC-4 và E8 của «Số OKR tự chảy» nói hễ một chốt an toàn hỏng thì cả hai lệnh ghi của công cụ dev mất quyền miễn; thực tế khi chốt «xoá có lọc» hỏng thì lệnh thêm vẫn được miễn. Thước vẫn đỏ nên không lọt lỗi; người đọc tài liệu hiểu lệch phạm vi bị chặn.
+- Ngoài-2 (`docs/api.md`): Tài liệu nói không có gì ngoài công cụ dev nhập mã nạp mẫu, nhưng các tệp kiểm thử thì có nhập và gọi thẳng hàm nạp/xoá. Chỉ là câu chữ thiếu vế ngoại trừ kiểm thử, không mở lỗ nào cho mã sản phẩm.
+- Ngoài-5 (`_acceptance/so-okr-tu-chay/rang/soi-ma.mjs`): Chốt chặn chạy trên máy thật chỉ được kiểm là có tồn tại, chưa kiểm là có thật sự phụ thuộc vào kết quả kiểm; ai cố tình thay điều kiện chặn bằng điều kiện luôn sai thì thước vẫn xanh.
+- Ngoài-6 (`_acceptance/so-okr-tu-chay/rang/soi-ma.mjs`): Lệnh xoá của công cụ dev chỉ cần có điều kiện theo KR là qua chốt, kể cả khi điều kiện đó rộng tới mọi KR.
+- Ngoài-7 (`_acceptance/mien-so-chup-bo-okr-mau/rang/do-mien.mjs`): Phép đo in «10/10» và «13/13» nhưng không tự đòi bảng có đúng 10 và 13 ô; xoá bớt ô trong script thì phép đo vẫn xanh với số nhỏ hơn.
+- Ngoài-3 và Ngoài-4 mở hợp đồng mới: tệp lối vào `okr-mau.ts` không được chốt C3/C4 soi; C4 lọt với đuôi `.js` và tệp ngoài `.ts/.tsx`, C2 lọt với `export * from`.
