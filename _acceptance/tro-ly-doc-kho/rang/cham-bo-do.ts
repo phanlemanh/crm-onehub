@@ -108,7 +108,7 @@ const { chuThuong } = await import(
 const { dauNgayVN } = await import(
 	join(GOC, "packages/db/src/onboarding-nhac.ts")
 );
-const { gieoNguoi, moHoiCrm, trangDaDuyet } = await import(
+const { ctxConCua, gieoNguoi, ma, moHoiCrm, trangDaDuyet } = await import(
 	join(AGENT, "test/support/tro-ly-kho-gia.ts")
 );
 const { LOI_DAN } = await import(
@@ -117,7 +117,6 @@ const { LOI_DAN } = await import(
 const { modelTaiLieu, nhanKhoaTaiLieu } = await import(
 	join(AGENT, "agent/lib/tai-lieu-model.ts")
 );
-const { CHI_DAN_ZALO } = await import(join(AGENT, "agent/lib/zalo-chi-dan.ts"));
 const { ZALO } = await import(join(AGENT, "agent/lib/zalo-config.ts"));
 const { modelTheoVai } = await import(join(AGENT, "agent/lib/model.ts"));
 const { DEFAULT_AGENT_MODEL } = await import(
@@ -362,23 +361,86 @@ async function congCuGoc() {
 	return Object.fromEntries(tools);
 }
 
+type NguCanhGocZalo = {
+	session: {
+		id: string;
+		auth: {
+			current: { attributes: Record<string, string> };
+			initiator: { attributes: Record<string, string> };
+		};
+	};
+};
+type BatDauPhien = (
+	e: { type: "session.started" },
+	c: NguCanhGocZalo | ReturnType<typeof ctxConCua>,
+) => Promise<{ markdown?: string } | null>;
+
+const chiDanTinh = readFileSync(join(AGENT, "agent/instructions.md"), "utf8");
+const chiDanDong = (
+	(await import(join(AGENT, "agent/instructions/task.ts"))).default as {
+		events: { "session.started": BatDauPhien };
+	}
+).events["session.started"];
+const moTroLy = (
+	(await import(join(AGENT, "agent/subagents/tro_ly_kho/instructions.ts")))
+		.default as { events: { "session.started": BatDauPhien } }
+).events["session.started"];
+
 async function luotHai(
 	c: Cau,
 	model: ReturnType<ReturnType<typeof createGateway>>,
 	tools: Record<string, ReturnType<typeof ai.tool>>,
+	nguoi: { id: string },
 ): Promise<Luot2> {
-	const kq = await ai.generateText({
+	const goc = ma("ses-zalo");
+	const hoi = await db.zaloHoi.create({
+		data: {
+			messageId: ma("msg"),
+			crmUserId: nguoi.id,
+			zaloChatId: ma("chat"),
+			sessionId: goc,
+			ketQua: "dang-hoi",
+		},
+	});
+	const thuocTinh = {
+		purpose: ZALO.hoi.purpose,
+		hoiId: hoi.id,
+		zaloChatId: hoi.zaloChatId,
+		userId: nguoi.id,
+	};
+	const ctxGoc: NguCanhGocZalo = {
+		session: {
+			id: goc,
+			auth: {
+				current: { attributes: thuocTinh },
+				initiator: { attributes: thuocTinh },
+			},
+		},
+	};
+	const dong = await chiDanDong({ type: "session.started" }, ctxGoc);
+	const conTroLy = ai.tool({
+		description: tools.tro_ly_kho?.description ?? "",
+		inputSchema: ai.jsonSchema({
+			type: "object",
+			properties: { message: { type: "string" } },
+			required: ["message"],
+			additionalProperties: false,
+		}),
+		execute: async () => {
+			await moTroLy({ type: "session.started" }, ctxConCua(goc));
+			return { daNhan: true };
+		},
+	});
+	await ai.generateText({
 		model,
-		system: CHI_DAN_ZALO,
+		system: `${chiDanTinh}\n\n${dong?.markdown ?? ""}`,
 		prompt: c.cau,
-		tools,
+		tools: { ...tools, tro_ly_kho: conTroLy },
 		stopWhen: ai.stepCountIs(1),
 	});
-	const goi = kq.steps.flatMap((s) => s.toolCalls.map((t) => t.toolName));
-	return {
-		cau: c,
-		nhan: goi.includes("tro_ly_kho") ? "chuyen" : "khong-chuyen",
-	};
+	const coHang =
+		(await db.taiLieuHoi.count({ where: { zaloHoiId: hoi.id } })) > 0;
+	return { cau: c, nhan: coHang ? "chuyen" : "khong-chuyen" };
 }
 
 const tiLe = (tu: number, mau: number) => (mau === 0 ? 0 : tu / mau);
@@ -423,7 +485,7 @@ try {
 	const tools = await congCuGoc();
 	const hai: Luot2[] = [];
 	for (const c of bo.cau) {
-		const r = await luotHai(c, gw(modelGoc), tools);
+		const r = await luotHai(c, gw(modelGoc), tools, nguoi);
 		hai.push(r);
 		console.log(`${c.id} ${r.nhan}`);
 	}
@@ -474,7 +536,7 @@ try {
 		"",
 		`Bộ: \`${isAbsolute(tepBo) ? relative(GOC, tepBo) : tepBo}\` (nhãn \`${bo.nhan}\`). ${bo.nguon}`,
 		"",
-		`Lượt một: model \`${modelTaiLieu("hoi").model.modelId}\`, khoá ${nhanKhoaTaiLieu("hoi")}. Lượt hai: model agent gốc \`${modelGoc}\`, chỉ dẫn \`CHI_DAN_ZALO\`.`,
+		`Lượt một: model \`${modelTaiLieu("hoi").model.modelId}\`, khoá ${nhanKhoaTaiLieu("hoi")}. Lượt hai: model agent gốc \`${modelGoc}\`, chỉ dẫn \`instructions.md\` + \`instructions/task.ts\` (purpose zalo); «chuyển» = có hàng TaiLieuHoi kênh ZALO do \`session.started\` thật của tro_ly_kho tạo.`,
 		"",
 		"## Tổng",
 		"",

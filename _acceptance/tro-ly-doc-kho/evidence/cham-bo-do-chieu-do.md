@@ -1,8 +1,8 @@
-# Chấm bộ câu đo — 2026-10-01T05:29:30.293Z
+# Chấm bộ câu đo — 2026-10-01T06:45:05.694Z
 
 Bộ: `_acceptance/tro-ly-doc-kho/bo-do/chieu-do-3-cau.json` (nhãn `chieu-do`). Chiều đỏ của E15: ba câu của mam-tam.json (c01, c02, c06) bị đổi trang mong đợi sang một trang không trả lời câu đó. Script chấm phải in ba dòng «sai» và thoát mã 1.
 
-Lượt một: model `zai/glm-5.2-fast`, khoá undefined. Lượt hai: model agent gốc `zai/glm-5.2-fast`, chỉ dẫn `CHI_DAN_ZALO`.
+Lượt một: model `zai/glm-5.2-fast`, khoá rieng. Lượt hai: model agent gốc `zai/glm-5.2-fast`, chỉ dẫn `instructions.md` + `instructions/task.ts` (purpose zalo); «chuyển» = có hàng TaiLieuHoi kênh ZALO do `session.started` thật của tro_ly_kho tạo.
 
 ## Tổng
 

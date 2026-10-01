@@ -1,0 +1,5 @@
+tlk-hoi-trong-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang
+tlk-hoi-tu-choi-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang
+tlk-hoi-qua-han-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang
+tlk-hoi-tra-loi-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang
+tlk-bao-sai-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang

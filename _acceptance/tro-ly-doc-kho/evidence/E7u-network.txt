@@ -1,0 +1,2 @@
+E7u network: driver la puppeteer-core trong man-hoi.mjs, khong co duong doc network/console -> n-a (driver).
+Lan 1 (run1) tien de that bai tam thoi: app / tra 200 khong Location -> ma 2 (khong phai ket qua do); lan 2 va chieu-do deu chay xong.

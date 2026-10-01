@@ -450,6 +450,11 @@ evals:
       - "_acceptance/tro-ly-doc-kho/evidence/tlk-hoi-qua-han-1440.png"
       - "_acceptance/tro-ly-doc-kho/evidence/tlk-hoi-tra-loi-390.png"
       - "_acceptance/tro-ly-doc-kho/evidence/tlk-bao-sai-1440.png"
+      - "_acceptance/tro-ly-doc-kho/evidence/tlk-hoi-trong-390.png"
+      - "_acceptance/tro-ly-doc-kho/evidence/tlk-hoi-tu-choi-390.png"
+      - "_acceptance/tro-ly-doc-kho/evidence/tlk-hoi-qua-han-390.png"
+      - "_acceptance/tro-ly-doc-kho/evidence/tlk-bao-sai-390.png"
+      - "_acceptance/tro-ly-doc-kho/evidence/tlk-hoi-cuon-390.txt"
 
   - id: E17
     criterion: AC-7

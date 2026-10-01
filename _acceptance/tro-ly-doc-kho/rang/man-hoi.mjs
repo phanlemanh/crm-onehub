@@ -1,3 +1,4 @@
+import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -82,6 +83,22 @@ const TRANG = {
 };
 
 const d = await moDo();
+const CUON = [];
+
+async function chup390(t, ten) {
+	await t.setViewport({ width: HEP, height: 844, deviceScaleFactor: 1 });
+	await cho(800);
+	const tran = await d.cuonNgang(t);
+	const so = await t.evaluate(() => ({
+		sw: document.documentElement.scrollWidth,
+		iw: window.innerWidth,
+	}));
+	CUON.push(
+		`${ten}: scrollWidth ${so.sw} innerWidth ${so.iw} ${tran.length === 0 ? "khong cuon ngang" : `CUON NGANG ${tran.join(", ")}`}`,
+	);
+	await d.chup(t, ten);
+	return tran;
+}
 
 async function choHang(nguoiId, truoc) {
 	const het = Date.now() + CHO_HANG_MS;
@@ -198,8 +215,15 @@ try {
 				() => window.__tim("[data-goi-y] button").length,
 			);
 			await d.chup(t, "tlk-hoi-trong-1440.png");
+			const tran = await chup390(t, "tlk-hoi-trong-390.png");
 			await t.close();
+			const okr = await d.nguoiMoi("o", "okr", "Trần Văn Mục Tiêu");
+			const to = await d.moTrang(okr.cookie, RONG, "/tai-lieu");
+			const okrThayTab = (await to.$("[data-tab-hoi]")) !== null;
+			await to.close();
 			const loi = [];
+			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
+			if (okrThayTab) loi.push("vai okr thay tab Hỏi");
 			if (
 				!chu.includes(
 					"Hỏi về quy định, chính sách, quy trình hay biểu mẫu của OneHub.",
@@ -263,8 +287,10 @@ try {
 				() => window.__tim("[data-tu-choi]")[0]?.innerText ?? "",
 			);
 			await d.chup(t, "tlk-hoi-tu-choi-1440.png");
+			const tran = await chup390(t, "tlk-hoi-tu-choi-390.png");
 			await t.close();
 			const loi = [];
+			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
 			if (!chu.includes(TAI_LIEU_HOI.tuChoi)) loi.push("thieu cau tu choi");
 			if (!chu.includes("Trang gần nhất")) loi.push("thieu Trang gan nhat");
 			if (!chu.includes(TRANG.thuViec.ten))
@@ -287,8 +313,10 @@ try {
 				() => window.__tim("[data-qua-han]")[0]?.innerText ?? "",
 			);
 			await d.chup(t, "tlk-hoi-qua-han-1440.png");
+			const tran = await chup390(t, "tlk-hoi-qua-han-390.png");
 			await t.close();
 			const loi = [];
+			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
 			if (!canhBao.includes(TRANG.thuViec.ten))
 				loi.push("Alert thieu ten trang");
 			if (!canhBao.includes("quá hạn xác minh"))
@@ -307,8 +335,7 @@ try {
 				slug.hoaHong,
 				"hoaHong",
 			);
-			const tran = await d.cuonNgang(t);
-			await d.chup(t, "tlk-hoi-tra-loi-390.png");
+			const tran = await chup390(t, "tlk-hoi-tra-loi-390.png");
 			await t.close();
 			d.dat(5, tran.length === 0, `390 cuon ngang: ${tran.join(", ")}`);
 		});
@@ -336,18 +363,25 @@ try {
 			);
 			await cho(500);
 			await d.chup(t, "tlk-bao-sai-1440.png");
+			const tran = await chup390(t, "tlk-bao-sai-390.png");
 			await t.close();
 			const bao = await d.db.taiLieuBaoSai.findMany({
 				where: { hoiId },
 				select: { trangId: true, ghiChu: true },
 			});
 			const loi = [];
+			if (tran.length > 0) loi.push(`390 cuon ngang: ${tran.join(", ")}`);
 			if (bao.length !== 1) loi.push(`${bao.length} hang bao sai`);
 			if (bao[0]?.ghiChu !== "Mức mới từ tháng 10 là 350.000 đồng.")
 				loi.push("ghi chu khong luu");
 			d.dat(6, loi.length === 0, loi.join(" · "));
 		});
 
+	writeFileSync(
+		join(process.env.BANG_CHUNG, "tlk-hoi-cuon-390.txt"),
+		`${CUON.join("\n")}\n`,
+	);
+	console.log("  so do tlk-hoi-cuon-390.txt");
 	await d.ket("man-hoi");
 } catch (e) {
 	await d.khongDoDuoc(e);
