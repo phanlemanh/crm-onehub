@@ -182,6 +182,18 @@ const TAI_LIEU = {
 	goiMoHinh:
 		/\b(generateText|streamText|generateObject|streamObject)\s*\(|from\s+["'](ai|@ai-sdk\/[^"']+|openai|@anthropic-ai\/[^"']+|@google\/[^"']+)["']/,
 	tienToTam: "soan-tai-lieu-",
+	suite: {
+		config: "_acceptance/config.yaml",
+		khoiCha: "feature_loop:",
+		khoa: /^\s+suite_keys:\s*\[(.*)\]\s*$/,
+		tienTo: "executors.test.",
+		khoiLenh: ["executors:", "test:"],
+		dongLenh: /^ {4}([A-Za-z0-9_]+):\s*(.*)$/,
+		loc: /--filter=(?:"([^"]+)"|'([^']+)'|([^\s'"]+))/g,
+		thuMucGoi: ["apps", "packages"],
+		goiThu: { thuMuc: "packages/zz", ten: "@crm/zz" },
+		lenhLap: { khoa: "suite_app_ui", them: "api" },
+	},
 };
 
 class KhongDo extends Error {}
@@ -523,6 +535,103 @@ function kiemNhapCheo(goc) {
 	return loi;
 }
 
+function boNhay(gia) {
+	const t = gia.trim();
+	const m = /^'(.*)'$|^"(.*)"$/.exec(t);
+	return m ? (m[1] ?? m[2]) : t;
+}
+
+function khoiCon(dong, tu, ten, thut) {
+	const dau = " ".repeat(thut);
+	const bat = dong.findIndex((d, i) => i >= tu && d === `${dau}${ten}`);
+	if (bat === -1) return null;
+	const ket = dong.findIndex(
+		(d, i) => i > bat && d.trim() !== "" && !d.startsWith(`${dau} `),
+	);
+	return { bat, ket: ket === -1 ? dong.length : ket };
+}
+
+function lenhSuite(goc) {
+	const S = TAI_LIEU.suite;
+	const dong = doc(goc, S.config).split("\n");
+	const cha = khoiCon(dong, 0, S.khoiCha, 0);
+	if (cha === null) khongDo(`${S.config} thieu ${S.khoiCha}`);
+	const dongKhoa = dong
+		.slice(cha.bat + 1, cha.ket)
+		.map((d) => S.khoa.exec(d))
+		.find(Boolean);
+	if (!dongKhoa) khongDo(`${S.config} feature_loop.suite_keys khong doc duoc`);
+	const khoa = dongKhoa[1]
+		.split(",")
+		.map((k) => boNhay(k))
+		.filter((k) => k.startsWith(S.tienTo))
+		.map((k) => k.slice(S.tienTo.length));
+	if (khoa.length === 0)
+		khongDo(`${S.config} suite_keys khong co lenh ${S.tienTo}*`);
+	const ex = khoiCon(dong, 0, S.khoiLenh[0], 0);
+	const test = ex && khoiCon(dong, ex.bat + 1, S.khoiLenh[1], 2);
+	if (!test) khongDo(`${S.config} thieu executors.test`);
+	const lenh = new Map();
+	for (const d of dong.slice(test.bat + 1, test.ket)) {
+		const m = S.dongLenh.exec(d);
+		if (m) lenh.set(m[1], boNhay(m[2]));
+	}
+	return khoa.map((k) => ({ khoa: k, lenh: lenh.get(k) }));
+}
+
+function goiCoTest(goc) {
+	const ra = [];
+	for (const cha of TAI_LIEU.suite.thuMucGoi) {
+		const tuyet = join(goc, cha);
+		if (!existsSync(tuyet)) khongDo(`thieu thu muc: ${cha}`);
+		for (const m of readdirSync(tuyet, { withFileTypes: true })) {
+			const tep = `${cha}/${m.name}/package.json`;
+			if (!m.isDirectory() || !existsSync(join(goc, tep))) continue;
+			const goi = docJson(goc, tep);
+			if (goi.scripts?.test) ra.push(goi.name);
+		}
+	}
+	return ra.sort();
+}
+
+function tepGoi(goc) {
+	return TAI_LIEU.suite.thuMucGoi.flatMap((cha) =>
+		readdirSync(join(goc, cha), { withFileTypes: true })
+			.filter((m) => m.isDirectory())
+			.map((m) => `${cha}/${m.name}/package.json`)
+			.filter((t) => existsSync(join(goc, t))),
+	);
+}
+
+function kiemSuite(goc) {
+	const loi = [];
+	const dem = new Map();
+	for (const { khoa, lenh } of lenhSuite(goc)) {
+		if (lenh === undefined) {
+			loi.push(`khoa suite khong co lenh: executors.test.${khoa}`);
+			continue;
+		}
+		for (const m of lenh.matchAll(TAI_LIEU.suite.loc)) {
+			const ten = m[1] ?? m[2] ?? m[3];
+			dem.set(ten, (dem.get(ten) ?? 0) + 1);
+		}
+	}
+	const goi = goiCoTest(goc);
+	return [
+		...loi,
+		...goi.filter((t) => !dem.has(t)).map((t) => `goi thieu trong suite: ${t}`),
+		...[...dem]
+			.filter(([, n]) => n > 1)
+			.map(([t]) => t)
+			.sort()
+			.map((t) => `goi lap trong suite: ${t}`),
+		...[...dem.keys()]
+			.filter((t) => !goi.includes(t))
+			.sort()
+			.map((t) => `loc suite khong khop goi co test: ${t}`),
+	];
+}
+
 function kiemTinh(goc) {
 	return [
 		...kiemContext(goc),
@@ -537,6 +646,7 @@ function kiemTinh(goc) {
 		...kiemClient(goc),
 		...kiemApi(goc),
 		...kiemNhapCheo(goc),
+		...kiemSuite(goc),
 	];
 }
 
@@ -935,6 +1045,29 @@ const PHA = [
 			),
 	},
 	{
+		ten: "suite-thieu-goi",
+		ghim: `goi thieu trong suite: ${TAI_LIEU.suite.goiThu.ten}`,
+		lam: (g) => {
+			const { thuMuc, ten } = TAI_LIEU.suite.goiThu;
+			mkdirSync(join(g, thuMuc), { recursive: true });
+			writeFileSync(
+				join(g, thuMuc, "package.json"),
+				JSON.stringify({ name: ten, scripts: { test: "bun test" } }),
+			);
+		},
+	},
+	{
+		ten: "suite-lap-goi",
+		ghim: `goi lap trong suite: ${TAI_LIEU.suite.lenhLap.them}`,
+		lam: (g) =>
+			ghi(g, TAI_LIEU.suite.config, (c) =>
+				c.replace(
+					new RegExp(`^( {4}${TAI_LIEU.suite.lenhLap.khoa}: '[^'\\n]*)'$`, "m"),
+					`$1 --filter=${TAI_LIEU.suite.lenhLap.them}'`,
+				),
+			),
+	},
+	{
 		ten: "thieu-tep",
 		ghim: `KHONG DO DUOC: thieu tep: ${TAI_LIEU.tep.setup}`,
 		ma: 2,
@@ -946,6 +1079,8 @@ function tepNguon() {
 	const tep = [
 		...Object.values(TAI_LIEU.tep),
 		...tepAiElements(GOC).map((t) => `${TAI_LIEU.soChatUi.thuMuc}/${t}`),
+		TAI_LIEU.suite.config,
+		...tepGoi(GOC),
 		...tapTep(GOC, [
 			...TAI_LIEU.vung.moi,
 			...TAI_LIEU.vung.api,
@@ -1019,7 +1154,7 @@ function chayThat() {
 		return 1;
 	}
 	console.log(
-		`tai-lieu: du ${TAI_LIEU.muc.context.length} muc tu dien, ${thuTucTuRouter(GOC).size} thu tuc soan*, 4 nha cho ${TAI_LIEU.bien.length} bien, so AI Elements ${tepAiElements(GOC).length} tep, phien do, lo trinh, ${TAI_LIEU.tepHang.length} tep hang; ${tepMa(GOC, TAI_LIEU.vung.moi).length} tep moi khong chu thich va khong Record<string, unknown>, client khong nhap @crm/db/@crm/auth, apps/api khong goi model, ${tapTep(GOC, TAI_LIEU.vung.agentOkr).length} tep apps/agent-okr khong nhap cheo.`,
+		`tai-lieu: du ${TAI_LIEU.muc.context.length} muc tu dien, ${thuTucTuRouter(GOC).size} thu tuc soan*, 4 nha cho ${TAI_LIEU.bien.length} bien, so AI Elements ${tepAiElements(GOC).length} tep, phien do, lo trinh, ${TAI_LIEU.tepHang.length} tep hang; ${tepMa(GOC, TAI_LIEU.vung.moi).length} tep moi khong chu thich va khong Record<string, unknown>, client khong nhap @crm/db/@crm/auth, apps/api khong goi model, ${tapTep(GOC, TAI_LIEU.vung.agentOkr).length} tep apps/agent-okr khong nhap cheo, ${goiCoTest(GOC).length} goi co test deu nam dung mot lan trong ${lenhSuite(GOC).length} lenh suite.`,
 	);
 	return 0;
 }
