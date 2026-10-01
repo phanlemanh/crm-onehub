@@ -1329,6 +1329,10 @@ Sau khi nhánh gộp vào `onehub`, merge-base đổi nên phép giao rỗng —
   làm mới khi lưu OKR; thêm `cache.tomTat()` cho lần lưu phản hồi.
 - `packages/db/package.json` — hai subpath export mới: `./okr-hop-tuan`,
   `./okr-tom-tat`.
+- `packages/db/src/agent-tasks.ts` — `VIEC_OKR` thêm `leaseTomTatMs` (3 phút) cạnh
+  `leaseMs` 30 giây của các việc OKR khác, và `LOAI_VIEC_TOM_TAT_TUAN` để chọn
+  lease theo loại việc: một lời gọi tóm tắt có lúc nghĩ gần 30 giây rồi eve gọi lại
+  một lần, vượt lease 30 giây nên việc đóng `hong:het-lease`.
 - `packages/ui/src/components/popover.tsx` — biến thể `size="panel"` thêm
   `max-w-(--radix-popover-content-available-width)`, để thẻ trích dẫn rộng 360 px
   không vượt khung màn 390 px. Đây là một sửa nên gửi lên hãng.
