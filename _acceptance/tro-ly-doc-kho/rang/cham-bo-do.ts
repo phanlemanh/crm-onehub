@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { randomBytes } from "node:crypto";
 import {
 	existsSync,
 	mkdirSync,
@@ -26,8 +27,17 @@ const NGUONG = {
 	chuyenNhamToiDa: 0.1,
 	traLoiKhongQuaKiem: 0,
 } as const;
-const SO_BUOC_TOI_DA = 12;
-const LOI_CHUA_NOP = "phien ket thuc ma chua goi nop_tra_loi";
+const KHO_DO = /\/crm_[a-z0-9_]+_do(\?|$)/;
+const THU_MUC_CHAY = join(
+	GOC,
+	".acceptance-runs",
+	"tro-ly-doc-kho",
+	"cham-bo-do",
+);
+const EVE = join(AGENT, "node_modules", ".bin", "eve");
+const BAI_EVAL = "tro-ly-kho/cham-bo-do";
+const TRAN_EVE_MS = 100 * 60_000;
+const TEN_ZALO = "Người đo";
 
 const doiSo = process.argv.slice(2);
 const viTriBo = doiSo.indexOf("--bo");
@@ -62,10 +72,6 @@ if (!existsSync(tepBo)) khongDo(`khong co bo cau ${tepBo}`);
 
 const yeuCau = createRequire(join(AGENT, "package.json"));
 const { z } = yeuCau("zod") as typeof import("zod");
-const ai = yeuCau("ai") as typeof import("ai");
-const { createGateway } = yeuCau(
-	"@ai-sdk/gateway",
-) as typeof import("@ai-sdk/gateway");
 
 const khuonCau = z.object({
 	id: z.string().min(1),
@@ -93,7 +99,7 @@ for (const c of bo.cau) {
 }
 
 const { db } = await import(join(GOC, "packages/db/src/index.ts"));
-const { ghiKetQuaHoi, demHoiKho } = await import(
+const { demHoiKho } = await import(
 	join(GOC, "packages/db/src/tai-lieu-hoi.ts")
 );
 const { docNhieuBanDangDung } = await import(
@@ -108,118 +114,43 @@ const { chuThuong } = await import(
 const { dauNgayVN } = await import(
 	join(GOC, "packages/db/src/onboarding-nhac.ts")
 );
-const { ctxConCua, gieoNguoi, ma, moHoiCrm, trangDaDuyet } = await import(
+const { gieoNguoi, ma, trangDaDuyet } = await import(
 	join(AGENT, "test/support/tro-ly-kho-gia.ts")
 );
-const { LOI_DAN } = await import(
-	join(AGENT, "agent/subagents/tro_ly_kho/instructions.ts")
+const { thanWebhook } = await import(join(AGENT, "test/support/zalo-tin.ts"));
+const { zaloMayChu } = await import(
+	join(AGENT, "test/support/zalo-may-chu.ts")
+);
+const { CHAM_BO_DO_ENV, docKetQua } = await import(
+	join(AGENT, "evals/tro-ly-kho/ke-hoach.ts")
+);
+const { TAI_LIEU_AGENT } = await import(
+	join(AGENT, "agent/lib/tai-lieu-config.ts")
 );
 const { modelTaiLieu, nhanKhoaTaiLieu } = await import(
 	join(AGENT, "agent/lib/tai-lieu-model.ts")
 );
-const { ZALO } = await import(join(AGENT, "agent/lib/zalo-config.ts"));
 const { modelTheoVai } = await import(join(AGENT, "agent/lib/model.ts"));
 const { DEFAULT_AGENT_MODEL } = await import(
 	join(GOC, "packages/db/src/settings.ts")
 );
 
-type KhuonChuan = {
-	"~standard": { jsonSchema: { input: (o: { target: string }) => object } };
-};
-type GiaTri =
-	| string
-	| number
-	| boolean
-	| null
-	| GiaTri[]
-	| { [k: string]: GiaTri };
-type VaoCongCu = { [k: string]: GiaTri };
-type NguCanh = { session: { id: string } };
-type CongCuEve = {
-	description: string;
-	inputSchema: KhuonChuan;
-	execute: (vao: VaoCongCu, ctx: NguCanh) => Promise<GiaTri>;
-};
-
-const khuonJson = (k: KhuonChuan) =>
-	ai.jsonSchema(k["~standard"].jsonSchema.input({ target: "draft-07" }));
-
-async function congCu(duong: string): Promise<CongCuEve> {
-	return (await import(join(AGENT, duong))).default as CongCuEve;
-}
-
-const congCuKho = {
-	search_pages: await congCu(
-		"agent/subagents/tro_ly_kho/tools/search_pages.ts",
-	),
-	read_page: await congCu("agent/subagents/tro_ly_kho/tools/read_page.ts"),
-	nop_tra_loi: await congCu("agent/subagents/tro_ly_kho/tools/nop_tra_loi.ts"),
-};
-
+type KetQua = Awaited<ReturnType<typeof docKetQua>>[number];
+type KetMot = Extract<KetQua, { luot: 1 }>;
+type KetHai = Extract<KetQua, { luot: 2 }>;
 type Luot1 = {
 	cau: Cau;
 	nhan: "dung-trang" | "tu-choi-dung" | "sai";
 	trangThai: string;
 	chiTiet: string;
 };
-type Luot2 = { cau: Cau; nhan: "chuyen" | "khong-chuyen" };
-
-async function hoiTroLy(
-	c: Cau,
-	nguoi: { id: string },
-): Promise<{ hoiId: string; loi: string | null }> {
-	const { hoiId, ctx } = await moHoiCrm(nguoi, c.cau);
-	const tools = Object.fromEntries(
-		Object.entries(congCuKho).map(([ten, t]) => [
-			ten,
-			ai.tool({
-				description: t.description,
-				inputSchema: khuonJson(t.inputSchema),
-				execute: async (vao: VaoCongCu) => {
-					try {
-						return await t.execute(vao, ctx);
-					} catch (e) {
-						return { loi: e instanceof Error ? e.message : String(e) };
-					}
-				},
-			}),
-		]),
-	);
-	const conDangHoi = async () =>
-		(
-			await db.taiLieuHoi.findUniqueOrThrow({
-				where: { id: hoiId },
-				select: { trangThai: true },
-			})
-		).trangThai === "DANG_HOI";
-	const dongChuaNop = async (loi: string) => {
-		if (await conDangHoi())
-			await ghiKetQuaHoi(
-				db,
-				hoiId,
-				{ trangThai: "LOI", lyDo: "loi-model" },
-				new Date(),
-			);
-		return { hoiId, loi };
-	};
-	try {
-		await ai.generateText({
-			model: modelTaiLieu("hoi").model,
-			system: `${LOI_DAN}\n\nQuestion id: ${hoiId}`,
-			prompt: c.cau,
-			tools,
-			stopWhen: [
-				ai.stepCountIs(SO_BUOC_TOI_DA),
-				async () => !(await conDangHoi()),
-			],
-		});
-		return (await conDangHoi())
-			? dongChuaNop(LOI_CHUA_NOP)
-			: { hoiId, loi: null };
-	} catch (e) {
-		return dongChuaNop(e instanceof Error ? e.message : String(e));
-	}
-}
+type Luot2 = {
+	cau: Cau;
+	nhan: "chuyen" | "khong-chuyen";
+	conGoi: string;
+	ketQua: string;
+	traLoi: string;
+};
 
 function trichCua(traLoi: ReturnType<typeof parseTraLoi>): Set<string> {
 	return new Set(traLoi.cau.flatMap((c) => c.trich.map((t) => t.slug)));
@@ -271,21 +202,31 @@ async function kiemLai(
 	return kq.ok;
 }
 
-async function luotMot(
+async function nhanMot(
 	c: Cau,
-	nguoi: { id: string },
+	k: KetMot | undefined,
 	slugCua: Map<string, string>,
-): Promise<Luot1 & { khongQuaKiem: boolean; traLoi: string }> {
-	const { hoiId, loi } = await hoiTroLy(c, nguoi);
+): Promise<Luot1 & { khongQuaKiem: boolean; traLoi: string; conGoi: string }> {
+	if (!k)
+		return {
+			cau: c,
+			nhan: "sai",
+			trangThai: "khong co ket qua eval",
+			chiTiet: "",
+			khongQuaKiem: false,
+			traLoi: "",
+			conGoi: "",
+		};
 	const hang = await db.taiLieuHoi.findUniqueOrThrow({
-		where: { id: hoiId },
+		where: { id: k.hoiId },
 		select: { trangThai: true, lyDo: true, traLoi: true, soLanBac: true },
 	});
+	const conGoi = k.conGoi.join(", ") || "—";
 	if (hang.trangThai === "TRA_LOI") {
 		const traLoi = parseTraLoi(hang.traLoi);
 		const daTrich = trichCua(traLoi);
 		const du = (c.mong ?? []).every((nhom) =>
-			nhom.some((k) => daTrich.has(slugCua.get(k) ?? `?${k}`)),
+			nhom.some((x) => daTrich.has(slugCua.get(x) ?? `?${x}`)),
 		);
 		const qua = await kiemLai(traLoi);
 		const chuTraLoi = traLoi.cau
@@ -301,6 +242,7 @@ async function luotMot(
 			chiTiet: `trich ${[...daTrich].join(", ")}; bac ${hang.soLanBac}`,
 			khongQuaKiem: !qua,
 			traLoi: chuTraLoi,
+			conGoi,
 		};
 	}
 	const trangThai = hang.lyDo
@@ -313,142 +255,66 @@ async function luotMot(
 				? "tu-choi-dung"
 				: "sai",
 		trangThai,
-		chiTiet: `${loi ? `loi: ${loi.slice(0, 160)}; ` : ""}bac ${hang.soLanBac}`,
+		chiTiet: `${k.loi ? `eval: ${k.loi}; ` : ""}bac ${hang.soLanBac}`,
 		khongQuaKiem: false,
 		traLoi: "",
+		conGoi,
 	};
 }
 
-async function congCuGoc() {
-	const tools = new Map<string, ReturnType<typeof ai.tool>>();
-	for (const ten of ZALO.hoi.congCu.doc) {
-		const t = await congCu(`agent/tools/${ten}.ts`);
-		const moTa = z.string().safeParse(t.description);
-		if (!moTa.success) continue;
-		tools.set(
-			ten,
-			ai.tool({
-				description: moTa.data,
-				inputSchema: khuonJson(t.inputSchema),
-			}),
-		);
-	}
-	const vaoTuChoi = ai.jsonSchema({
-		type: "object",
-		additionalProperties: true,
-	});
-	for (const ten of [...ZALO.hoi.congCu.ghi, ...ZALO.hoi.congCu.coSanChan])
-		tools.set(
-			ten,
-			ai.tool({
-				description: ZALO.hoi.tuChoiGhi,
-				inputSchema: vaoTuChoi,
-			}),
-		);
-	const vaoCon = ai.jsonSchema({
-		type: "object",
-		properties: { message: { type: "string" } },
-		required: ["message"],
-		additionalProperties: false,
-	});
-	const thuMucCon = join(AGENT, "agent", "subagents");
-	for (const ten of readdirSync(thuMucCon)) {
-		const nguon = readFileSync(join(thuMucCon, ten, "agent.ts"), "utf8");
-		const moTa = nguon.match(/description:\s*"((?:[^"\\]|\\.)*)"/)?.[1];
-		if (!moTa) khongDo(`khong doc duoc description cua subagent ${ten}`);
-		tools.set(ten, ai.tool({ description: moTa, inputSchema: vaoCon }));
-	}
-	return Object.fromEntries(tools);
-}
-
-type NguCanhGocZalo = {
-	session: {
-		id: string;
-		auth: {
-			current: { attributes: Record<string, string> };
-			initiator: { attributes: Record<string, string> };
-		};
-	};
-};
-type BatDauPhien = (
-	e: { type: "session.started" },
-	c: NguCanhGocZalo | ReturnType<typeof ctxConCua>,
-) => Promise<{ markdown?: string } | null>;
-
-const chiDanTinh = readFileSync(join(AGENT, "agent/instructions.md"), "utf8");
-const chiDanDong = (
-	(await import(join(AGENT, "agent/instructions/task.ts"))).default as {
-		events: { "session.started": BatDauPhien };
-	}
-).events["session.started"];
-const moTroLy = (
-	(await import(join(AGENT, "agent/subagents/tro_ly_kho/instructions.ts")))
-		.default as { events: { "session.started": BatDauPhien } }
-).events["session.started"];
-
-async function luotHai(
+async function nhanHai(
 	c: Cau,
-	model: ReturnType<ReturnType<typeof createGateway>>,
-	tools: Record<string, ReturnType<typeof ai.tool>>,
-	nguoi: { id: string },
+	k: KetHai | undefined,
+	traLoiCua: (messageId: string) => string,
 ): Promise<Luot2> {
-	const goc = ma("ses-zalo");
-	const hoi = await db.zaloHoi.create({
-		data: {
-			messageId: ma("msg"),
-			crmUserId: nguoi.id,
-			zaloChatId: ma("chat"),
-			sessionId: goc,
-			ketQua: "dang-hoi",
-		},
-	});
-	const thuocTinh = {
-		purpose: ZALO.hoi.purpose,
-		hoiId: hoi.id,
-		zaloChatId: hoi.zaloChatId,
-		userId: nguoi.id,
-	};
-	const ctxGoc: NguCanhGocZalo = {
-		session: {
-			id: goc,
-			auth: {
-				current: { attributes: thuocTinh },
-				initiator: { attributes: thuocTinh },
-			},
-		},
-	};
-	const dong = await chiDanDong({ type: "session.started" }, ctxGoc);
-	const conTroLy = ai.tool({
-		description: tools.tro_ly_kho?.description ?? "",
-		inputSchema: ai.jsonSchema({
-			type: "object",
-			properties: { message: { type: "string" } },
-			required: ["message"],
-			additionalProperties: false,
-		}),
-		execute: async () => {
-			await moTroLy({ type: "session.started" }, ctxConCua(goc));
-			return { daNhan: true };
-		},
-	});
-	await ai.generateText({
-		model,
-		system: `${chiDanTinh}\n\n${dong?.markdown ?? ""}`,
-		prompt: c.cau,
-		tools: { ...tools, tro_ly_kho: conTroLy },
-		stopWhen: ai.stepCountIs(1),
-	});
+	if (!k?.zaloHoiId)
+		return {
+			cau: c,
+			nhan: "khong-chuyen",
+			conGoi: "—",
+			ketQua: k?.loi ?? "khong co ket qua eval",
+			traLoi: "",
+		};
 	const coHang =
-		(await db.taiLieuHoi.count({ where: { zaloHoiId: hoi.id } })) > 0;
-	return { cau: c, nhan: coHang ? "chuyen" : "khong-chuyen" };
+		(await db.taiLieuHoi.count({
+			where: { zaloHoiId: k.zaloHoiId, kenh: "ZALO" },
+		})) > 0;
+	return {
+		cau: c,
+		nhan: coHang ? "chuyen" : "khong-chuyen",
+		conGoi: k.conGoi.join(", ") || "—",
+		ketQua: `${k.ketQua ?? "?"}${k.loi ? ` (${k.loi})` : ""}`,
+		traLoi: traLoiCua(k.messageId),
+	};
+}
+
+async function chayEve(env: Record<string, string>, nhatKy: string) {
+	const tienTrinh = Bun.spawn([EVE, "eval", BAI_EVAL, "--verbose"], {
+		cwd: AGENT,
+		env: { ...process.env, ...env },
+		stdout: "pipe",
+		stderr: "pipe",
+	});
+	const hen = setTimeout(() => tienTrinh.kill(), TRAN_EVE_MS);
+	const [ra, loi, ma] = await Promise.all([
+		new Response(tienTrinh.stdout).text(),
+		new Response(tienTrinh.stderr).text(),
+		tienTrinh.exited,
+	]);
+	clearTimeout(hen);
+	writeFileSync(nhatKy, `${ra}\n${loi}`);
+	return { ma, ra };
 }
 
 const tiLe = (tu: number, mau: number) => (mau === 0 ? 0 : tu / mau);
 const phanTram = (x: number) => `${(x * 100).toFixed(1)}%`;
+const o = (x: string) => x.replaceAll("|", "/").replaceAll("\n", " ");
 
+const mayChu = zaloMayChu();
 try {
+	if (!KHO_DO.test(process.env.DATABASE_URL ?? ""))
+		khongDo("DATABASE_URL khong phai kho do dung-mot-lan crm_<cay>_do");
 	const quanTri = await gieoNguoi("owner");
-	const nguoi = await gieoNguoi("member");
 	const slugCua = new Map<string, string>();
 	for (const f of readdirSync(TRANG_MAU)
 		.filter((x) => x.endsWith(".md"))
@@ -464,28 +330,106 @@ try {
 			for (const k of nhom)
 				if (!slugCua.has(k))
 					khongDo(`cau ${c.id} mong trang ${k} khong co trong trang-mau`);
+	await db.appSetting.updateMany({
+		data: { zaloBotToken: null, zaloWebhookSecret: null },
+	});
+
+	const nguoiCua = new Map<string, { id: string; zaloUserId: string }>();
+	for (const c of bo.cau) {
+		const nguoi = await gieoNguoi("member");
+		const zaloUserId = ma("zalo");
+		await db.zaloLink.create({
+			data: { crmUserId: nguoi.id, zaloUserId, zaloDisplayName: TEN_ZALO },
+		});
+		nguoiCua.set(c.id, { id: nguoi.id, zaloUserId });
+	}
+	const cuaCau = (c: Cau) => {
+		const n = nguoiCua.get(c.id);
+		if (!n) khongDo(`cau ${c.id} khong co nguoi hoi`);
+		return n;
+	};
+	const keHoach = {
+		lo: TAI_LIEU_AGENT.hoi.loGui,
+		mot: bo.cau
+			.filter((c) => c.nhom !== "khong-phai-quy-dinh")
+			.map((c) => ({ id: c.id, cau: c.cau, nguoiId: cuaCau(c).id })),
+		hai: bo.cau.map((c) => {
+			const n = cuaCau(c);
+			const messageId = ma("msg");
+			return {
+				id: c.id,
+				cau: c.cau,
+				nguoiId: n.id,
+				messageId,
+				than: JSON.stringify(
+					thanWebhook({
+						messageId,
+						fromId: n.zaloUserId,
+						ten: TEN_ZALO,
+						text: c.cau,
+					}),
+				),
+			};
+		}),
+	};
 	console.log(
 		`-- bo ${relative(GOC, tepBo)} (${bo.nhan}): ${bo.cau.length} cau; gieo ${slugCua.size} trang`,
 	);
 
+	mkdirSync(THU_MUC_CHAY, { recursive: true });
+	const tepKeHoach = join(THU_MUC_CHAY, "ke-hoach.json");
+	const tepKetQua = join(THU_MUC_CHAY, "ket-qua.jsonl");
+	const nhatKy = join(THU_MUC_CHAY, "eve.log");
+	writeFileSync(tepKeHoach, JSON.stringify(keHoach));
+	writeFileSync(tepKetQua, "");
+	const zaloToken = randomBytes(16).toString("hex");
 	const tu = new Date();
-	const mot: Awaited<ReturnType<typeof luotMot>>[] = [];
+	const eve = await chayEve(
+		{
+			AGENT_BRIDGE_SECRET: randomBytes(24).toString("hex"),
+			ZALO_BOT_TOKEN: zaloToken,
+			ZALO_WEBHOOK_SECRET: randomBytes(24).toString("hex"),
+			ZALO_API_URL: mayChu.url,
+			CRM_TELEMETRY_DISABLED: "1",
+			[CHAM_BO_DO_ENV.keHoach]: tepKeHoach,
+			[CHAM_BO_DO_ENV.ketQua]: tepKetQua,
+		},
+		nhatKy,
+	);
+	const den = new Date();
+	const ket = docKetQua(readFileSync(tepKetQua, "utf8"));
+	const ketMot = new Map(
+		ket.flatMap((k) => (k.luot === 1 ? [[k.id, k] as const] : [])),
+	);
+	const ketHai = new Map(
+		ket.flatMap((k) => (k.luot === 2 ? [[k.id, k] as const] : [])),
+	);
+	if (ketMot.size !== keHoach.mot.length || ketHai.size !== keHoach.hai.length)
+		khongDo(
+			`eve eval ma ${eve.ma}: ${ketMot.size}/${keHoach.mot.length} cau luot mot, ${ketHai.size}/${keHoach.hai.length} cau luot hai co ket qua — xem ${relative(GOC, nhatKy)}`,
+		);
+
+	const chatCua = new Map(keHoach.hai.map((h) => [h.messageId, h.id]));
+	const traLoiCua = (messageId: string) => {
+		const id = chatCua.get(messageId);
+		const zaloUserId = id ? nguoiCua.get(id)?.zaloUserId : undefined;
+		return mayChu.goi
+			.filter(
+				(g) => g.method === "sendMessage" && g.body.chat_id === zaloUserId,
+			)
+			.map((g) => g.body.text ?? "")
+			.join(" / ");
+	};
+
+	const mot: Awaited<ReturnType<typeof nhanMot>>[] = [];
 	for (const c of bo.cau.filter((x) => x.nhom !== "khong-phai-quy-dinh")) {
-		const r = await luotMot(c, nguoi, slugCua);
+		const r = await nhanMot(c, ketMot.get(c.id), slugCua);
 		mot.push(r);
 		console.log(`${c.id} ${r.nhan}`);
 	}
-	const den = new Date();
-
-	const modelGoc =
-		(await modelTheoVai("tro-ly"))?.model ?? DEFAULT_AGENT_MODEL.id;
-	const gw = createGateway({
-		apiKey: process.env.AI_GATEWAY_API_KEY?.trim() || undefined,
-	});
-	const tools = await congCuGoc();
 	const hai: Luot2[] = [];
 	for (const c of bo.cau) {
-		const r = await luotHai(c, gw(modelGoc), tools, nguoi);
+		const r = await nhanHai(c, ketHai.get(c.id), traLoiCua);
 		hai.push(r);
 		console.log(`${c.id} ${r.nhan}`);
 	}
@@ -528,15 +472,18 @@ try {
 		`Zalo chuyen nham cau khong phai quy dinh: ${phanTram(so.chuyenNham)} (nguong <= ${phanTram(NGUONG.chuyenNhamToiDa)}) ${dat.chuyenNham ? "dat" : "KHONG DAT"}`,
 		`tra loi co trich khong qua kiem (dem lai): ${so.traLoiKhongQuaKiem} ${dat.traLoiKhongQuaKiem ? "dat" : "KHONG DAT"}`,
 		`demHoiKho cua cua so chay: traLoi ${dem.traLoi}, tuChoi ${dem.tuChoi}, loi ${dem.loi}, tiLe ${dem.tiLe === null ? "—" : phanTram(dem.tiLe)}`,
+		`eve eval ${BAI_EVAL}: ma thoat ${eve.ma}`,
 	];
 	for (const d of tong) console.log(d);
 
+	const modelGoc =
+		(await modelTheoVai("tro-ly"))?.model ?? DEFAULT_AGENT_MODEL.id;
 	const banHoi = [
 		`# Chấm bộ câu đo — ${new Date().toISOString()}`,
 		"",
 		`Bộ: \`${isAbsolute(tepBo) ? relative(GOC, tepBo) : tepBo}\` (nhãn \`${bo.nhan}\`). ${bo.nguon}`,
 		"",
-		`Lượt một: model \`${modelTaiLieu("hoi").model.modelId}\`, khoá ${nhanKhoaTaiLieu("hoi")}. Lượt hai: model agent gốc \`${modelGoc}\`, chỉ dẫn \`instructions.md\` + \`instructions/task.ts\` (purpose zalo); «chuyển» = có hàng TaiLieuHoi kênh ZALO do \`session.started\` thật của tro_ly_kho tạo.`,
+		`Cả hai lượt chạy bằng \`eve eval ${BAI_EVAL}\`: máy chủ eve thật của \`apps/agent\`, chỉ dẫn và tool đúng như eve gửi, phiên con thật. Lượt một: mỗi câu là một hàng TaiLieuHoi kênh CRM, \`/internal/crm/dispatch\` mở phiên purpose kho; model \`${modelTaiLieu("hoi").model.modelId}\`, khoá ${nhanKhoaTaiLieu("hoi")}. Lượt hai: mỗi câu là một tin Zalo qua \`/zalo/webhook\` (Zalo giả nhận câu trả lời) của một người đã nối Zalo; model agent gốc \`${modelGoc}\`; «chuyển» = có hàng TaiLieuHoi kênh ZALO gắn với hàng ZaloHoi của tin đó.`,
 		"",
 		"## Tổng",
 		"",
@@ -544,19 +491,20 @@ try {
 		"",
 		"## Lượt một — hỏi qua tro_ly_kho",
 		"",
-		"| id | nhóm | câu | nhãn | trạng thái | chi tiết | câu trả lời |",
-		"| --- | --- | --- | --- | --- | --- | --- |",
+		"| id | nhóm | câu | nhãn | trạng thái | chi tiết | phiên con | câu trả lời |",
+		"| --- | --- | --- | --- | --- | --- | --- | --- |",
 		...mot.map(
 			(r) =>
-				`| ${r.cau.id} | ${r.cau.nhom}${r.cau.kho ? ` (${r.cau.kho})` : ""} | ${r.cau.cau} | ${r.nhan} | ${r.trangThai} | ${r.chiTiet.replaceAll("|", "/")} | ${r.traLoi.replaceAll("|", "/")} |`,
+				`| ${r.cau.id} | ${r.cau.nhom}${r.cau.kho ? ` (${r.cau.kho})` : ""} | ${r.cau.cau} | ${r.nhan} | ${r.trangThai} | ${o(r.chiTiet)} | ${r.conGoi} | ${o(r.traLoi)} |`,
 		),
 		"",
 		"## Lượt hai — hỏi qua agent gốc purpose zalo",
 		"",
-		"| id | nhóm | câu | nhãn |",
-		"| --- | --- | --- | --- |",
+		"| id | nhóm | câu | nhãn | phiên con | ZaloHoi | trả lời trên Zalo |",
+		"| --- | --- | --- | --- | --- | --- | --- |",
 		...hai.map(
-			(r) => `| ${r.cau.id} | ${r.cau.nhom} | ${r.cau.cau} | ${r.nhan} |`,
+			(r) =>
+				`| ${r.cau.id} | ${r.cau.nhom} | ${r.cau.cau} | ${r.nhan} | ${r.conGoi} | ${o(r.ketQua)} | ${o(r.traLoi)} |`,
 		),
 		"",
 	].join("\n");
@@ -567,9 +515,11 @@ try {
 	mkdirSync(THU_MUC_BANG_CHUNG, { recursive: true });
 	writeFileSync(bangChung, banHoi);
 	console.log(`ghi ${relative(GOC, bangChung)}`);
+	mayChu.dung();
 	await db.$disconnect();
 	process.exit(Object.values(dat).every(Boolean) ? 0 : 1);
 } catch (e) {
+	mayChu.dung();
 	await db.$disconnect().catch(() => null);
 	khongDo(
 		String(e instanceof Error ? (e.stack ?? e.message) : e).slice(0, 800),

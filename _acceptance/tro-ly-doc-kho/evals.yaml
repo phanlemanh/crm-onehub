@@ -410,6 +410,7 @@ evals:
       - "packages/validation/src/tai-lieu-hoi.ts"
       - "_acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts"
       - "_acceptance/tro-ly-doc-kho/bo-do/**"
+      - "apps/agent/evals/tro-ly-kho/**"
     expected: |
       Bo cau "tam" (chu kho chon o Cong Pham vi 2026-10-01): _acceptance/tro-ly-doc-kho/bo-do/mam-tam.json,
       may soan tu cac trang mau _acceptance/tro-ly-doc-kho/bo-do/trang-mau/*.md; moi cau mang tam: true.
