@@ -53,6 +53,20 @@ const DUOC_TAO = new Map([
 ]);
 const TEP_CHUP = "apps/agent/agent/lib/okr-chup.ts";
 
+const TEP_NAP_MAU = "apps/api/scripts/okr-mau/nap.ts";
+const TEP_LOI_VAO_MAU = "apps/api/scripts/okr-mau.ts";
+const THU_MUC_MAU = "apps/api/scripts/okr-mau/";
+const MIEN_BO_MAU = [
+	{ tep: TEP_NAP_MAU, ham: "napTrong", cach: TAO },
+	{ tep: TEP_NAP_MAU, ham: "xoaTrong", cach: new Set(["deleteMany"]) },
+];
+const TEN_CHOT = new Set(["xoaTrong", "napTrong"]);
+const DUONG_MAU = /okr-mau\/(nap|lenh)(\.ts)?$/;
+const LENH_MAU = /^\.\/okr-mau\/(nap|lenh)(\.ts)?$/;
+const KHONG_AP = "miễn bộ mẫu không áp:";
+const CAU_C1 = `${KHONG_AP} deleteMany trong xoaTrong không lọc keyResultId`;
+const CAU_C2 = `${KHONG_AP} ${TEP_LOI_VAO_MAU} không chặn bằng kiemDuocNap trước khi nạp ./okr-mau/lenh`;
+
 const VUNG_APP = /^apps\/app\/(?!app\/proto\/).+\.tsx$/;
 const VUNG_MOI =
 	/^(apps|packages|scripts|_acceptance\/[^/]+\/rang)\/.+\.(ts|tsx|mts|mjs|js)$/;
@@ -149,32 +163,72 @@ function tenGoi(n) {
 	return tenThuoc(e) ?? (ts.isIdentifier(e) ? e.text : null);
 }
 
-function soiChiThem(duong, vaiTro, ten) {
+const laMien = (vaiTro, ham, cach) =>
+	MIEN_BO_MAU.some(
+		(m) => m.tep === vaiTro && m.ham === ham && m.cach.has(cach),
+	);
+
+function locKeyResult(a, sf) {
+	if (!a || !ts.isObjectLiteralExpression(a)) return false;
+	return a.properties.some(
+		(p) =>
+			ts.isPropertyAssignment(p) &&
+			p.name.getText(sf) === "where" &&
+			ts.isObjectLiteralExpression(p.initializer) &&
+			p.initializer.properties.some(
+				(q) =>
+					(ts.isPropertyAssignment(q) ||
+						ts.isShorthandPropertyAssignment(q)) &&
+					q.name.getText(sf) === "keyResultId",
+			),
+	);
+}
+
+function soiChiThem(duong, vaiTro, ten, apMien) {
 	const chu = readFileSync(duong, "utf8");
-	if (!/okrSoChup|soChup/.test(chu)) return { hong: [], tao: [] };
+	if (!/okrSoChup|soChup/.test(chu))
+		return { hong: [], tao: [], mien: [], c1Vo: false };
 	const sf = cay(duong, chu);
 	const hong = [];
 	const tao = [];
+	const mien = [];
+	let c1Vo = false;
 	const duoc = DUOC_TAO.has(vaiTro) ? DUOC_TAO.get(vaiTro) : undefined;
 	const ghiTao = (n, cach) => {
 		const ham = hamBaoQuanh(n);
 		const o = `${ten}:${dongCua(sf, n.getStart(sf))}`;
-		const hopLe = duoc !== undefined && (duoc === null || duoc.has(ham));
-		tao.push({ tep: ten, o, cach, ham, hopLe });
+		const laO = apMien && laMien(vaiTro, ham, cach);
+		const hopLe =
+			laO || (duoc !== undefined && (duoc === null || duoc.has(ham)));
+		tao.push({ tep: ten, o, cach, ham, hopLe, mien: laO });
+		if (laO) mien.push({ o, cach, ham });
 		if (!hopLe)
 			hong.push(
 				`okrSoChup tạo ngoài chỗ được phép: ${o} (${cach} trong ${ham})`,
 			);
+	};
+	const ghiSua = (n, cach) => {
+		const ham = hamBaoQuanh(n);
+		const o = `${ten}:${dongCua(sf, n.getStart(sf))}`;
+		if (laMien(vaiTro, ham, cach)) {
+			const loc = locKeyResult(n.arguments[0], sf);
+			if (!loc) {
+				c1Vo = true;
+				hong.push(CAU_C1);
+			}
+			if (loc && apMien) {
+				mien.push({ o, cach, ham });
+				return;
+			}
+		}
+		hong.push(`okrSoChup bị sửa: ${o} (${cach})`);
 	};
 	const di = (n) => {
 		if (ts.isCallExpression(n)) {
 			const ham = tenThuoc(n.expression);
 			const dt = doiTuongCua(n.expression);
 			if (ham && dt && tenThuoc(dt) === "okrSoChup") {
-				if (SUA.has(ham))
-					hong.push(
-						`okrSoChup bị sửa: ${ten}:${dongCua(sf, n.getStart(sf))} (${ham})`,
-					);
+				if (SUA.has(ham)) ghiSua(n, ham);
 				else if (TAO.has(ham)) ghiTao(n, ham);
 			}
 		}
@@ -208,7 +262,161 @@ function soiChiThem(duong, vaiTro, ten) {
 		ts.forEachChild(n, di);
 	};
 	di(sf);
-	return { hong, tao };
+	return { hong, tao, mien, c1Vo };
+}
+
+const laImportDong = (n) =>
+	ts.isCallExpression(n) && n.expression.kind === ts.SyntaxKind.ImportKeyword;
+
+const chuoiDau = (n) => {
+	const a = n.arguments?.[0];
+	return a && ts.isStringLiteralLike(a) ? a.text : null;
+};
+
+const laGoiTen = (n, ten) =>
+	ts.isCallExpression(n) &&
+	ts.isIdentifier(n.expression) &&
+	n.expression.text === ten;
+
+const laProcessExit = (n) =>
+	ts.isCallExpression(n) &&
+	ts.isPropertyAccessExpression(n.expression) &&
+	n.expression.getText() === "process.exit";
+
+function moiNut(goc) {
+	const ra = [];
+	const di = (n) => {
+		ra.push(n);
+		ts.forEachChild(n, di);
+	};
+	di(goc);
+	return ra;
+}
+
+function kiemC2(duong) {
+	if (!existsSync(duong)) return [CAU_C2];
+	const sf = cay(duong);
+	const nut = moiNut(sf);
+	const nhapTinh = sf.statements.some(
+		(st) =>
+			ts.isImportDeclaration(st) &&
+			ts.isStringLiteralLike(st.moduleSpecifier) &&
+			LENH_MAU.test(st.moduleSpecifier.text),
+	);
+	const napLenh = nut.find(
+		(n) => laImportDong(n) && /^\.\/okr-mau\/lenh(\.ts)?$/.test(chuoiDau(n)),
+	);
+	const kiem = nut.find((n) => laGoiTen(n, "kiemDuocNap"));
+	const chan = sf.statements.find(
+		(st) => ts.isIfStatement(st) && moiNut(st.thenStatement).some(laProcessExit),
+	);
+	const dat =
+		!nhapTinh &&
+		napLenh &&
+		kiem &&
+		chan &&
+		kiem.getStart(sf) < napLenh.getStart(sf) &&
+		chan.getStart(sf) < napLenh.getStart(sf);
+	return dat ? [] : [CAU_C2];
+}
+
+const hamGan = (n) => {
+	for (let p = n.parent; p; p = p.parent) if (ts.isFunctionLike(p)) return p;
+	return null;
+};
+
+function dungNgoai(sf, ten, daXet) {
+	return moiNut(sf)
+		.filter(
+			(n) =>
+				ts.isIdentifier(n) &&
+				TEN_CHOT.has(n.text) &&
+				!daXet.has(n) &&
+				!(ts.isFunctionDeclaration(n.parent) && n.parent.name === n),
+		)
+		.map(
+			(n) =>
+				`${KHONG_AP} ${ten}:${dongCua(sf, n.getStart(sf))} dùng ${n.text} ngoài lời gọi có chốt`,
+		);
+}
+
+function kiemC3(napDuong, napTen, khac) {
+	const ly = [];
+	if (existsSync(napDuong)) {
+		const sf = cay(napDuong);
+		const nut = moiNut(sf);
+		const daXet = new Set();
+		for (const n of nut) {
+			if (
+				!ts.isCallExpression(n) ||
+				!ts.isIdentifier(n.expression) ||
+				!TEN_CHOT.has(n.expression.text)
+			)
+				continue;
+			daXet.add(n.expression);
+			const h = hamGan(n);
+			const coKiem =
+				h &&
+				moiNut(h).some(
+					(c) =>
+						laGoiTen(c, "kiemOkrThat") &&
+						hamGan(c) === h &&
+						c.getStart(sf) < n.getStart(sf),
+				);
+			if (!coKiem)
+				ly.push(
+					`${KHONG_AP} ${hamBaoQuanh(n)} gọi ${n.expression.text} mà không gọi kiemOkrThat trước`,
+				);
+		}
+		ly.push(...dungNgoai(sf, napTen, daXet));
+	}
+	for (const { duong, ten } of khac) {
+		const chu = readFileSync(duong, "utf8");
+		if (![...TEN_CHOT].some((t) => chu.includes(t))) continue;
+		ly.push(...dungNgoai(cay(duong, chu), ten, new Set()));
+	}
+	return ly;
+}
+
+function kiemC4(tep) {
+	const ly = [];
+	for (const { duong, ten } of tep) {
+		const chu = readFileSync(duong, "utf8");
+		if (!chu.includes("okr-mau")) continue;
+		const sf = cay(duong, chu);
+		const nhap = new Set();
+		for (const n of moiNut(sf)) {
+			let dich = null;
+			if (
+				(ts.isImportDeclaration(n) || ts.isExportDeclaration(n)) &&
+				n.moduleSpecifier &&
+				ts.isStringLiteralLike(n.moduleSpecifier)
+			)
+				dich = n.moduleSpecifier.text;
+			else if (laImportDong(n) || laGoiTen(n, "require")) dich = chuoiDau(n);
+			const m = dich?.match(DUONG_MAU);
+			if (m) nhap.add(m[1]);
+		}
+		for (const m of nhap)
+			ly.push(`${KHONG_AP} ${ten} nhập okr-mau/${m} từ ngoài công cụ okr:mau`);
+	}
+	return ly;
+}
+
+function kiemChot(tep, thay) {
+	const that = (vai) => thay.get(vai) ?? join(GOC, vai);
+	const trong = (v) => v === TEP_LOI_VAO_MAU || v.startsWith(THU_MUC_MAU);
+	const khacMau = tep
+		.filter((v) => v.startsWith(THU_MUC_MAU) && v !== TEP_NAP_MAU)
+		.map((v) => ({ duong: that(v), ten: tuongDoi(that(v)) }));
+	const ngoai = tep
+		.filter((v) => !trong(v))
+		.map((v) => ({ duong: that(v), ten: tuongDoi(that(v)) }));
+	return {
+		C2: kiemC2(that(TEP_LOI_VAO_MAU)),
+		C3: kiemC3(that(TEP_NAP_MAU), tuongDoi(that(TEP_NAP_MAU)), khacMau),
+		C4: kiemC4(ngoai),
+	};
 }
 
 function caChiThem(thay = new Map()) {
@@ -216,18 +424,40 @@ function caChiThem(thay = new Map()) {
 		...diCay(join(GOC, "apps"), /\.tsx?$/, []),
 		...diCay(join(GOC, "packages"), /\.tsx?$/, []),
 	];
-	const hong = [];
+	const vai = tep.map(tuongDoi);
+	for (const k of thay.keys())
+		if (!vai.includes(k)) {
+			console.log(`KHONG DO DUOC: --thay ${k} khong phai tep duoc soi`);
+			process.exit(2);
+		}
+	const coMau = vai.includes(TEP_NAP_MAU);
+	const chot = coMau ? kiemChot(vai, thay) : { C2: [], C3: [], C4: [] };
+	const apMien = coMau && Object.values(chot).every((l) => l.length === 0);
+	const hong = [...chot.C2, ...chot.C3, ...chot.C4];
 	const tao = [];
-	for (const duong of tep) {
-		const vaiTro = tuongDoi(duong);
-		const that = thay.get(vaiTro) ?? duong;
-		const r = soiChiThem(that, vaiTro, tuongDoi(that));
+	const mien = [];
+	let c1Vo = false;
+	for (const v of vai) {
+		const that = thay.get(v) ?? join(GOC, v);
+		const r = soiChiThem(that, v, tuongDoi(that), apMien);
 		hong.push(...r.hong);
 		tao.push(...r.tao);
+		mien.push(...r.mien);
+		c1Vo ||= r.c1Vo;
 	}
 	console.log(`so tep .ts/.tsx da soi (tru test/): ${tep.length}`);
+	const trangThai = (l) => (l.length === 0 ? "dat" : "vo");
+	console.log(
+		coMau
+			? `chot mien bo mau: C1 ${c1Vo ? "vo" : "dat"} · C2 ${trangThai(chot.C2)} · C3 ${trangThai(chot.C3)} · C4 ${trangThai(chot.C4)}`
+			: "chot mien bo mau: khong ap (khong co nap.ts)",
+	);
 	for (const t of tao)
-		console.log(`${t.hopLe ? "tao " : "HONG"} ${t.o} ${t.cach} trong ${t.ham}`);
+		console.log(
+			`${t.mien ? "mien" : t.hopLe ? "tao " : "HONG"} ${t.o} ${t.cach} trong ${t.ham}`,
+		);
+	for (const m of mien.filter((x) => !TAO.has(x.cach)))
+		console.log(`mien ${m.o} ${m.cach} trong ${m.ham}`);
 	const theoTep = new Map();
 	for (const t of tao) theoTep.set(t.tep, (theoTep.get(t.tep) ?? 0) + 1);
 	for (const [t, n] of theoTep)
@@ -554,7 +784,18 @@ if (ca !== "chi-them" && ca !== "thiet-ke") {
 const chieuDo = process.argv.includes("--chieu-do");
 
 if (ca === "chi-them" && !chieuDo) {
-	const { hong, tao } = caChiThem();
+	const thay = new Map();
+	process.argv.forEach((a, i) => {
+		if (a !== "--thay") return;
+		const cap = process.argv[i + 1] ?? "";
+		const k = cap.indexOf("=");
+		if (k <= 0) {
+			console.log(`KHONG DO DUOC: --thay can <tep trong kho>=<duong that>, nhan «${cap}»`);
+			process.exit(2);
+		}
+		thay.set(cap.slice(0, k), cap.slice(k + 1));
+	});
+	const { hong, tao } = caChiThem(thay);
 	if (tao.length === 0) {
 		console.log(
 			"KHONG DO DUOC: khong tim thay loi goi tao okrSoChup nao — soi sai thu muc?",
