@@ -1,7 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { kiemOkr, MA_LUAT_OKR, type MucTieuKiem } from "../src/okr-kiem";
+import {
+	boDau,
+	kiemOkr,
+	MA_LUAT_OKR,
+	type MucTieuKiem,
+	OKR_KIEM,
+} from "../src/okr-kiem";
 
 const kr = (
 	title: string,
@@ -171,5 +177,56 @@ describe("okr-kiem", () => {
 		);
 		for (const cam of ["@crm/db", "prisma", "fetch(", "node:"])
 			expect(nguon.includes(cam)).toBe(false);
+	});
+});
+
+describe("dong-tu", () => {
+	const laViecKr = (title: string) =>
+		kiemOkr(mt(kr(title, "tang-toi"))).some((c) => c.ma === "kr-la-viec");
+	const ASCII = {
+		test: (s: string) => [...s].every((c) => (c.codePointAt(0) ?? 0) < 128),
+	};
+
+	test("dong-tu: moi dong tu mot cap co dau va go khong dau, deu la viec", () => {
+		let so = 0;
+		for (const v of OKR_KIEM.dongTuViec) {
+			const coDau = `${v} 20 đầu việc trong quý`;
+			const khongDau = boDau(coDau);
+			if (!ASCII.test(khongDau))
+				throw new Error(`khong dau con ky tu: ${khongDau}`);
+			expect(laViecKr(coDau), `co dau: ${v}`).toBe(true);
+			expect(laViecKr(khongDau), `khong dau: ${v}`).toBe(true);
+			so += 1;
+		}
+		if (so !== OKR_KIEM.dongTuViec.length)
+			throw new Error(`dong tu chua co cap: ${so}`);
+	});
+
+	test("dong-tu: cau go tay khong dau van la viec", () => {
+		for (const cau of [
+			"dao tao 50 nhan su",
+			"to chuc 4 hoi thao",
+			"xay dung bo tai lieu",
+		]) {
+			if (!ASCII.test(cau)) throw new Error(`khong dau con ky tu: ${cau}`);
+			expect(laViecKr(cau), cau).toBe(true);
+		}
+	});
+
+	test("dong-tu: trung mat chu khi bo dau thi khong bat nham", () => {
+		for (const [cau, viec] of [
+			["Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng", false],
+			["Gói dịch vụ bán kèm đạt 40%", false],
+			["Lâm Đồng đạt 12 đại lý", false],
+			["Họp giao ban đủ 12 buổi", true],
+			["Gọi 50 đối tác", true],
+			["Làm mới 20 hồ sơ", true],
+			["Launch cổng đối tác mới", true],
+			["HỌP GIAO BAN ĐỦ 12 BUỔI", true],
+		] as const) {
+			if (cau.startsWith("Hợp") && laViecKr(cau))
+				throw new Error("trung mat: hop");
+			expect(laViecKr(cau), cau).toBe(viec);
+		}
 	});
 });

@@ -2,7 +2,9 @@ import "@crm/env/load";
 
 import { db } from "@crm/db";
 import { BLOB_NGUON } from "@crm/db/blob-nguon";
+import { TRO_LY_OKR_KHOA } from "@crm/db/okr-tro-ly-danh-muc";
 import { readContextDevKey } from "@crm/db/settings";
+import { nguonKhoaMoHinh } from "./mo-hinh-khoa";
 
 export const CONTEXT_DEV = "CONTEXT_DEV";
 
@@ -35,11 +37,16 @@ export async function contextDevKey(): Promise<string | null> {
 export const LUU_NGUON = "LUU_NGUON";
 
 export async function capabilities(): Promise<readonly Capability[]> {
-	return capabilitiesFrom(await contextDevKey());
+	const [contextDev, nguon] = await Promise.all([
+		contextDevKey(),
+		nguonKhoaMoHinh({ rieng: false }),
+	]);
+	return capabilitiesFrom(contextDev, nguon !== null);
 }
 
 export function capabilitiesFrom(
 	contextDev: string | null,
+	coMoHinh = false,
 ): readonly Capability[] {
 	const fromEnv = (id: string) => ({
 		id,
@@ -97,14 +104,11 @@ export function capabilitiesFrom(
 		},
 		{
 			id: "MO_HINH_AI",
-			from: "AI_GATEWAY_API_KEY or VERCEL_OIDC_TOKEN",
+			from: `${TRO_LY_OKR_KHOA.chung} or Vercel OIDC`,
 			label: "AI model",
 			gives:
 				"every model call, including Trợ lý OKR. Without it Trợ lý OKR tasks close at once as «chua-co-khoa-mo-hinh» and no session opens",
-			enabled: Boolean(
-				process.env.AI_GATEWAY_API_KEY?.trim() ||
-					process.env.VERCEL_OIDC_TOKEN?.trim(),
-			),
+			enabled: coMoHinh,
 		},
 		{
 			id: "GOOGLE_SHEETS_KHOA",

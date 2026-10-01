@@ -49,11 +49,11 @@ export const PHIEN_TRO_LY = {
 export const tre = (ms) => new Promise((xong) => setTimeout(xong, ms));
 
 export function coKhoaMoHinh() {
-	return TRO_LY_OKR.khoaMoHinh.some((k) => process.env[k]?.trim());
+	return Object.values(TRO_LY_OKR.khoa).some((k) => process.env[k]?.trim());
 }
 
 export function cauThieuKhoa() {
-	return `${PHIEN_TRO_LY.thongDiep.thieuKhoa} (${TRO_LY_OKR.khoaMoHinh.join(" hoac ")})`;
+	return `${PHIEN_TRO_LY.thongDiep.thieuKhoa} (${Object.values(TRO_LY_OKR.khoa).join(" hoac ")})`;
 }
 
 export function duongPath() {

@@ -1,14 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { readFileSync } from "node:fs";
 import {
 	CONTEXT_DEV,
 	CONTEXT_DEV_PEOPLE,
 	CONTEXT_DEV_SOURCE,
+	capabilities,
 	capabilitiesFrom,
 	enabled,
 	LUU_NGUON,
 	markdownFor,
 	unavailable,
 } from "../agent/lib/capabilities";
+import {
+	mayKhongLienKet,
+	trongRequest,
+	veOidc,
+	voiEnv,
+} from "./support/ve-oidc";
 
 const KEYS = [
 	"PERPLEXITY_API_KEY",
@@ -224,8 +232,76 @@ describe("the capability briefing", () => {
 	it("does not warn about missing sources when everything is on", () => {
 		for (const key of KEYS) process.env[key] = "key";
 
-		expect(markdownFor(capabilitiesFrom("ctx"))).not.toContain(
+		expect(markdownFor(capabilitiesFrom("ctx", true))).not.toContain(
 			"Not configured here",
 		);
+	});
+});
+
+describe("mo-hinh-ai", () => {
+	const O_NANG_LUC = [
+		{ o: "chi-header-oidc", env: {}, header: true, bat: true },
+		{ o: "khong-gi", env: {}, header: false, bat: false },
+		{
+			o: "chi-khoa-chung",
+			env: { AI_GATEWAY_API_KEY: "c" },
+			header: false,
+			bat: true,
+		},
+		{
+			o: "chi-khoa-rieng",
+			env: { OKR_AI_GATEWAY_API_KEY: "r" },
+			header: false,
+			bat: false,
+		},
+		{
+			o: "rieng-va-chung",
+			env: { OKR_AI_GATEWAY_API_KEY: "r", AI_GATEWAY_API_KEY: "c" },
+			header: false,
+			bat: true,
+		},
+		{
+			o: "rieng-va-header",
+			env: { OKR_AI_GATEWAY_API_KEY: "r" },
+			header: true,
+			bat: true,
+		},
+		{
+			o: "rieng-va-bien-oidc",
+			env: { OKR_AI_GATEWAY_API_KEY: "r", VERCEL_OIDC_TOKEN: veOidc() },
+			header: false,
+			bat: true,
+		},
+	] as const;
+
+	it("ma tran bay o viet truoc", async () => {
+		let so = 0;
+		for (const o of O_NANG_LUC) {
+			const bang = await mayKhongLienKet(() =>
+				voiEnv(o.env, () =>
+					trongRequest(o.header ? veOidc() : null, () => capabilities()),
+				),
+			);
+			const muc = bang.find((c) => c.id === "MO_HINH_AI");
+			const coRieng = "OKR_AI_GATEWAY_API_KEY" in o.env;
+			if (o.header && !coRieng && !muc?.enabled)
+				throw new Error("nang luc lech nguon khoa");
+			if (o.bat && coRieng && !muc?.enabled)
+				throw new Error(`nang luc bi khoa rieng che: o ${o.o}`);
+			expect(muc?.enabled, `o ${o.o}`).toBe(o.bat);
+			so += 1;
+		}
+		console.log(`mo-hinh-ai: ${so}/${O_NANG_LUC.length} o`);
+		expect(so).toBe(O_NANG_LUC.length);
+	}, 30_000);
+
+	it("muc khong doc bien khoa truc tiep", () => {
+		const nguon = readFileSync(
+			new URL("../agent/lib/capabilities.ts", import.meta.url),
+			"utf8",
+		);
+		expect(nguon).not.toContain("process.env.VERCEL_OIDC_TOKEN");
+		expect(nguon).not.toContain("process.env.AI_GATEWAY_API_KEY");
+		expect(nguon).toContain("nguonKhoaMoHinh({ rieng: false })");
 	});
 });
