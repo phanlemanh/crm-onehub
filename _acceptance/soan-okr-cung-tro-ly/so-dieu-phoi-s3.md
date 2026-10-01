@@ -237,3 +237,50 @@ Tự nhất quán từng việc: mỗi việc trong năm phần có test đỏ �
 - **Trình Cổng 2:** luật «mỗi Mục tiêu có ít nhất một KR đối trọng» do điều phối thêm (khớp tiêu chí chấm đã duyệt), chưa qua chủ kho.
 - Chờ chủ kho: cho chạy eval lần 7 (~1,3–1,5 USD) để biết bản vá có ăn thua.
 - Eval lần 7 (1c59cb35): khoá onehub-crm-local chạm trần riêng 20 USD («API key budget exceeded») → mọi phiên failed, 0,045 USD; bằng chứng lần 6 khôi phục. 12834832: thước xếp lỗi hạ tầng (trần khoá, 402, 429, 5xx) thành «khong do duoc» mã 2, đọc /v1/credits trước khi chạy. Không thêm biến id khoá (hỏng sau 3 phút, rẻ). Mốc I trên 12834832: NĂM LỆNH XANH (test 13/13, check-types, lint, lint:slop, build). Chờ chủ kho nâng trần khoá rồi chạy eval lần 7.
+
+## Chỗ đổi thứ chín cho gói ký lại Cổng Phạm vi — E27
+
+Vì sao đổi: E27 hiện là `judgment` «Người đọc diff và ba luật kho…» nhưng `inputs` chỉ có bốn tài liệu. Người chấm bị khoá vào `inputs`, không đọc được `diff`, không chạy được lệnh, nên ra UNCERTAIN mọi vòng bất kể mã ra sao — chín hồ sơ OKR trước mắc cùng lỗi. Thước đời trước (`_acceptance/tro-ly-okr-de-xuat/rang/luat-kho*.mjs`) so với `origin/onehub` nên hỏng sau mỗi lần gộp.
+
+Thước mới dùng chung, không thuộc hồ sơ nào: `scripts/luat-kho/do-cay.mjs` (hằng và nền ở `scripts/luat-kho/cau-hinh.mjs`), khoá `executors.script.luat_kho_cay`. Đo **trạng thái cây** `apps/` và `packages/`, không đọc `diff`, không gọi mô hình, khoảng 5 giây. Bỏ qua theo đúng `ignorePatterns` của `.oxlintrc.json` (đọc lúc chạy), trừ `packages/ui/src/components/**` vì kho tự viết thành phần mới ở đó; thêm `fixtures/` và `next-env.d.ts` (Next sinh). Mỗi lần chạy tự chứng hai chiều trên bản gương trong tmpdir: 20 ca gài, mỗi ca phải làm đúng luật của nó đỏ ở đúng `tệp:dòng` mà năm luật kia giữ màu; ba ca đối chứng phải không đỏ (URL và regex có `//` trong chuỗi, `4 * 60_000` trong tệp config). Chiều đo hỏng → exit 2.
+
+Sáu luật, trên HEAD 38191c57 đều XANH:
+
+| Luật | Đo gì | Nền có sẵn từ onehub |
+| --- | --- | --- |
+| `khong-chu-thich` | chú thích `//`, `/* */`, `{/* */}` trong `.ts/.tsx/.mjs` (đọc bằng bộ phân tích TypeScript, chuỗi/regex/chữ JSX không tính); cho qua `biome-ignore`, `@ts-expect-error`, `oxlint-disable`, `/// <reference` | 26 tệp, 55 dòng |
+| `tri-khon-o-agent` | `apps/api` (trừ test) nhập gói mà app agent dùng còn API không khai — rút từ `package.json` của `apps/agent`, `apps/agent-okr`, `packages/ai-okr`: `ai`, `@ai-sdk/gateway`, `@crm/ai-okr`, `context.dev`, `eve`, `mammoth`, `unpdf`, tên hai app — cộng họ SDK mô hình (`openai`, `@anthropic-ai/`, `@ai-sdk/`, `@google/genai`…), hoặc đường tương đối vào hai app agent | 0 |
+| `parse-o-bien` | `Record<string, unknown\|any>`, `as unknown as` / `as any as`; miễn theo đúng `overrides` của `.oxlintrc.json` (test được ép kép; telemetry, logging, fields được kiểu từ điển) | 1 tệp (`packages/ui/src/components/markdown-reader.tsx`) |
+| `hang-so-o-cau-hinh` | chuỗi nhân toàn số có đơn vị phút (`60_000` hoặc `60` và `1000`) kèm một thừa số tinh chỉnh (`5 * 60_000`, `30 * 24 * 60 * 60_000`) ngoài tệp tên chứa `config`, `cau-hinh`, `danh-muc`, ngoài test | 5 tệp, 7 dòng |
+| `ui-tu-crm-ui` | thư mục `components/ui` ngoài `packages/ui`; nhập `radix-ui`, `@radix-ui/`, `vaul`, `cmdk`, `class-variance-authority`… ngoài `packages/ui`; `components.json` ngoài `packages/ui` có `aliases.ui` không trỏ `@crm/ui` | 0 |
+| `cach-ly-hai-agent` | `apps/agent-okr` nhập vào `apps/agent` và ngược lại (đường tương đối đã giải, hoặc tên gói) | 0 |
+
+Nền: mọi dòng nền có cùng số đếm ở `origin/onehub` (bb558531) và ở mốc gộp 9ee65d12 — không dòng nào do lượt này thêm. Nền tính theo tệp và số đếm: thêm một vi phạm vào tệp nền là đỏ; tệp nền đã sạch in `NEN THUA` để siết, không đỏ.
+
+Luật số 4 chỉ đo được nửa: không bắt số tinh chỉnh không phải thời lượng (trần, số lần thử, độ dài cắt) và không bắt đơn vị viết lại thay vì dẫn từ `MINUTE_MS` (`tuanMs: 7 * 24 * 60 * 60 * 1000` trong `packages/validation/src/okr-tom-gon-ky.ts` là đơn vị, không đỏ). Ý «khuôn đi qua hai gói phải ở `packages/validation`» không máy hoá được. Hai phần đó vào E29 dưới đây.
+
+Đề xuất thay E27 và thêm E29:
+
+```yaml
+  - id: E27
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.luat_kho_cay
+    expected: "exit 0; scripts/luat-kho/do-cay.mjs đo trạng thái cây apps/ và packages/ (không diff), in sáu dòng XANH: khong-chu-thich, tri-khon-o-agent, parse-o-bien, hang-so-o-cau-hinh, ui-tu-crm-ui, cach-ly-hai-agent; vi phạm có sẵn từ onehub chỉ qua được nhờ nền theo tệp trong scripts/luat-kho/cau-hinh.mjs; dòng KET LUAN ghi chieu do 20/20. Chiều đỏ: một vi phạm mới in «DO <luật>: <tệp>:<dòng>» và exit 1 — chú thích // hay /* */ hay {/* */} (kể cả vượt số đếm của tệp nền); apps/api nhập ai, @ai-sdk/*, context.dev, @crm/ai-okr, eve hay đường vào apps/agent, apps/agent-okr; Record<string, unknown> hay as unknown as; N * 60_000 hay N * 60 * 1000 ngoài tệp config/cau-hinh/danh-muc; thư mục components/ui, nhập radix-ui/vaul/cmdk ngoài packages/ui, components.json trỏ ui ra ngoài @crm/ui; apps/agent-okr và apps/agent nhập chéo. Thước không đo được (thiếu .oxlintrc.json, một app không còn tệp mã, chiều đo không bắt đủ) → exit 2."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/**, packages/**, scripts/luat-kho/**, .oxlintrc.json]
+
+  - id: E29
+    criterion: AC-15
+    executor: judgment
+    inputs: [AGENTS.md, apps/agent-okr/agent/lib/config.ts, apps/agent-okr/agent/lib/phien.ts, apps/agent-okr/agent/lib/kenh-cua.ts, apps/agent-okr/agent/hooks/chi-phi.ts, apps/agent-okr/agent/lib/goi-soan.ts, apps/agent-okr/agent/lib/nop-ban-nhap.ts, apps/api/src/okr/soan.service.ts, apps/api/src/okr/soan-so-do.service.ts, apps/api/src/okr/soan-ban-nhap.ts, apps/api/src/okr/soan-dua-vao.ts, packages/db/src/okr-cuoc-soan.ts, packages/db/src/okr-goi-soan.ts, packages/validation/src/okr-cuoc-soan.ts, packages/validation/src/okr-kiem-ban-nhap.ts, apps/app/lib/cua-okr-config.ts]
+    expected: "Người chấm đọc hai mục «Constants belong in one file per area» và «Parse at the boundary» của AGENTS.md, rồi đọc nội dung các tệp nguồn kèm theo đúng như chúng đang có. Trả lời hai câu, mỗi chỗ vi phạm nêu tệp:dòng và vì sao: (1) có khuôn Zod nào mô tả dữ liệu mà hai gói hay hai app cùng đọc hoặc một bên ghi bên kia đọc (cột Json, thân yêu cầu giữa app web và apps/agent-okr, sự kiện phiên) nhưng được khai ngoài packages/validation/src không; (2) có con số tinh chỉnh nào (trần, số lần thử, độ dài cắt, ngưỡng, khoảng chờ) viết thẳng ở chỗ dùng thay vì nằm trong object cấu hình của khu — đơn vị (1000, 60, 24, 7, 100) và giới hạn do khuôn dữ liệu quy định không tính. Không có chỗ nào → PASS; có → FAIL kèm danh sách."
+    evidence_required: [run_id, verifier, verified_at, output]
+    paths: [apps/agent-okr/agent/**, apps/api/src/okr/soan*.ts, packages/db/src/okr-cuoc-soan.ts, packages/db/src/okr-goi-soan.ts, packages/validation/src/**, apps/app/lib/cua-okr-config.ts]
+```
+
+E26: `luat_kho_cay` phủ rộng hơn bốn mục luật trong `rang/tai-lieu.mjs` — `kiemNhapCheo` (thêm chiều ngược, giải đường thật), `kiemChuThich` và `kiemKieuLong` (cả cây thay vì danh sách tệp mới), `kiemApi` (gói rút từ `package.json` thay vì danh sách tay). Khi chủ kho ký lại có thể bỏ bốn mục đó khỏi lời E26; `kiemClient` (thành phần client nhập `@crm/db`/`@crm/auth`) không có trong thước chung, giữ ở E26. Lượt này chưa sửa E26.
+
+Còn treo từ E5: câu «chiều tệp mới chưa khai» từng định giao cho E27 (tệp rẽ khỏi `release` mà chưa ghi ở `docs/agent.md` mục chỗ rẽ). Đó là so với `release`, không phải luật kho — E27 mới không gánh; nếu cần thì đặt vào E26 cạnh `kiemRelease`.
+
+`feature_loop.suite_keys`: chưa thêm. Nên thêm `executors.script.luat_kho_cay` sau khi lượt này lên `onehub` — thước rẻ, không mô hình, đo trạng thái nên không hỏng sau gộp. Trước khi lên `onehub` thì đừng: cây không có `apps/agent-okr` cho exit 2. Quyết định này thuộc chủ kho vì chạm mọi hồ sơ.
