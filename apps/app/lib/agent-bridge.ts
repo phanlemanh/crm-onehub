@@ -1,9 +1,12 @@
+import {
+	OKR_PHIEN_SOAN,
+	parseThuocTinhPhienSoan,
+	type ThuocTinhPhienSoan,
+} from "@crm/validation/okr-phien-soan";
 import type { WorkspaceRole } from "@crm/validation/vai-workspace";
-import { OKR_SOAN_CUA } from "@/lib/okr-soan-record";
 
 const ISSUER = "crm-app";
 const AUDIENCE = "crm-agent";
-const OKR_AUDIENCE = "crm-okr-agent";
 
 const TTL_SECONDS = 120;
 
@@ -38,15 +41,10 @@ type BridgeClaims = {
 	exp: number;
 };
 
-type OkrBridgeClaims = {
+type OkrBridgeClaims = ThuocTinhPhienSoan & {
 	iss: string;
 	aud: string;
 	sub: string;
-	email: string;
-	name: string;
-	purpose: typeof OKR_SOAN_CUA.purpose;
-	cuocSoanId: string;
-	vai: WorkspaceRole;
 	iat: number;
 	nbf: number;
 	exp: number;
@@ -93,14 +91,16 @@ export async function mintOkrBridgeToken(
 	const now = Math.floor(Date.now() / 1000);
 
 	const payload: OkrBridgeClaims = {
-		iss: ISSUER,
-		aud: OKR_AUDIENCE,
+		iss: OKR_PHIEN_SOAN.issuer,
+		aud: OKR_PHIEN_SOAN.audience,
 		sub: user.id,
-		email: user.email,
-		name: user.name,
-		purpose: OKR_SOAN_CUA.purpose,
-		cuocSoanId: cuoc.cuocSoanId,
-		vai: cuoc.vai,
+		...parseThuocTinhPhienSoan({
+			purpose: OKR_PHIEN_SOAN.purpose,
+			cuocSoanId: cuoc.cuocSoanId,
+			vai: cuoc.vai,
+			email: user.email,
+			name: user.name,
+		}),
 		iat: now,
 		nbf: now - 5,
 		exp: now + TTL_SECONDS,

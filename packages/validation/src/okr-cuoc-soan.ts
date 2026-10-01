@@ -9,6 +9,7 @@ export const BAN_NHAP_TRAN = {
 	kr: { min: 2, max: 4 },
 	khoa: 40,
 	donVi: 24,
+	tenToiThieu: 3,
 } as const;
 
 export const khoaNhap = z.string().trim().min(1).max(BAN_NHAP_TRAN.khoa);
@@ -17,7 +18,11 @@ const viSao = z.string().trim().min(1).max(TRO_LY_OKR_TRAN.chu.viSao);
 
 export const krNhap = z.object({
 	khoa: khoaNhap,
-	ten: z.string().trim().min(3).max(TRO_LY_OKR_TRAN.chu.tenKr),
+	ten: z
+		.string()
+		.trim()
+		.min(BAN_NHAP_TRAN.tenToiThieu)
+		.max(TRO_LY_OKR_TRAN.chu.tenKr),
 	kieu: z.enum(KIEU_KR),
 	donVi: z.string().trim().max(BAN_NHAP_TRAN.donVi),
 	khoiDiemGoiY: z.number().finite().nullable().optional(),
@@ -27,7 +32,11 @@ export const krNhap = z.object({
 
 export const mucTieuNhap = z.object({
 	khoa: khoaNhap,
-	ten: z.string().trim().min(3).max(TRO_LY_OKR_TRAN.chu.tenMucTieu),
+	ten: z
+		.string()
+		.trim()
+		.min(BAN_NHAP_TRAN.tenToiThieu)
+		.max(TRO_LY_OKR_TRAN.chu.tenMucTieu),
 	viSaoLucNay: z.string().trim().max(TRO_LY_OKR_TRAN.chu.viSao),
 	loai: z.enum(LOAI_MUC_TIEU_NHAP),
 	viSao,

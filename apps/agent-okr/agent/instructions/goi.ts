@@ -1,11 +1,11 @@
+import { thuocTinhPhienSoan } from "@crm/validation/okr-phien-soan";
 import { defineDynamic, defineInstructions } from "eve/instructions";
 import { goiSoan, goiThanhChiDan } from "../lib/goi-soan";
-import { phienSoan } from "../lib/phien";
 
 export default defineDynamic({
 	events: {
 		"session.started": async (_event, ctx) => {
-			const phien = phienSoan.safeParse(
+			const phien = thuocTinhPhienSoan.safeParse(
 				ctx.session.auth.initiator?.attributes ?? {},
 			);
 			if (!phien.success) return null;

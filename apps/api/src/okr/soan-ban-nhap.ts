@@ -1,5 +1,6 @@
 import type { Db, Prisma } from "@crm/db";
 import { dieuKienXemMucTieu, type NguCanhXem } from "@crm/db/okr-hien-thi";
+import { TRANG_THAI_GIU_KHOA } from "@crm/db/okr-tro-ly-danh-muc";
 import { MA_LOAI_BAN_NHAP } from "@crm/validation/okr-kiem-ban-nhap";
 import { khoaDong, khoaModel } from "@crm/validation/okr-kiem-de-xuat";
 import {
@@ -37,7 +38,7 @@ export type TuChoiCha = Extract<SoanQuyetOutput, { ok: false }>;
 
 const T = OKR.thongDiep.soan;
 const maLoai = z.enum(MA_LOAI_BAN_NHAP).nullable();
-const DA_QUYET: ReadonlySet<string> = new Set(["nhan", "sua", "bac"]);
+const DA_QUYET: ReadonlySet<string> = new Set(TRANG_THAI_GIU_KHOA);
 const TEN_SUA = {
 	"muc-tieu-moi": {
 		khuon: dongMucTieuMoi.shape.ten,

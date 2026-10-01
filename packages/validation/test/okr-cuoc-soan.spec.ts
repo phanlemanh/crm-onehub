@@ -42,6 +42,7 @@ describe("ban-nhap", () => {
 			kr: { min: 2, max: 4 },
 			khoa: 40,
 			donVi: 24,
+			tenToiThieu: 3,
 		});
 		expect(
 			banNhap.safeParse({ mucTieu: [mucTieu(1)] }).success,

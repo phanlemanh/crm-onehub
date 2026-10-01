@@ -12,6 +12,7 @@ import {
 import { KY_CON_HIEN } from "./okr-chu-ky-hien";
 import { CAP_CUOC, type CuocSoan } from "./okr-cuoc-soan";
 import { boGioiHan } from "./okr-hien-thi";
+import { TRANG_THAI_DA_BAC, TRO_LY_OKR_TRAN } from "./okr-tro-ly-danh-muc";
 import { ngayVN } from "./onboarding-nhac";
 import { WORKSPACE_ID } from "./workspace";
 
@@ -43,13 +44,9 @@ export const DANH_SACH_DOC_GOI = [
 
 const TIEN_DO_CHUA_CO = null;
 
-const VAI_KHONG_DOC_SO_DOI_TAC = "okr";
-
-const BAC_GHI_DANH_TRONG_GOI: BacGhiDanh = "giao-dich-dau";
+const GOI = TRO_LY_OKR_TRAN.goiSoan;
 
 const TU_TIN = z.enum(["cao", "vua", "thap"]);
-
-const MOC_DIEM_LAM_TRON = 100;
 
 type DonViSoan =
 	| { cap: "onehub" }
@@ -81,7 +78,7 @@ function locMucTieuCuaDonVi(don: DonViSoan): Prisma.OkrObjectiveWhereInput {
 }
 
 export function vaiDocDuocSoDoiTac(role: string): boolean {
-	return role !== VAI_KHONG_DOC_SO_DOI_TAC;
+	return role !== GOI.vaiKhongDocSoDoiTac;
 }
 
 export function capDichCua(level: CuocSoan["level"]): CuocSoan["level"][] {
@@ -219,7 +216,9 @@ function tienDo(k: {
 		k.targetValue.toNumber(),
 		k.currentValue.toNumber(),
 	];
-	return b === a ? TIEN_DO_CHUA_CO : Math.round(((c - a) / (b - a)) * 100);
+	return b === a
+		? TIEN_DO_CHUA_CO
+		: Math.round(((c - a) / (b - a)) * GOI.thangTienDo);
 }
 
 async function chuKyCuaCuoc(db: DbHoacTx, cuoc: CuocSoan) {
@@ -395,7 +394,7 @@ function diemGop(diem: (number | null)[]): number | null {
 	const cham = diem.filter((d): d is number => d !== null);
 	if (cham.length === 0) return null;
 	const tb = cham.reduce((a, b) => a + b, 0) / cham.length;
-	return Math.round(tb * MOC_DIEM_LAM_TRON) / MOC_DIEM_LAM_TRON;
+	return Math.round(tb * GOI.lamTronDiem) / GOI.lamTronDiem;
 }
 
 export async function docKyTruoc(
@@ -513,7 +512,7 @@ export async function docSoCrmDonVi(
 	const nayBatDau = homNay >= ngayCua(ky.startsOn);
 	return Promise.all(
 		MA_CHI_SO.map(async (ma) => {
-			const bac = ma === "ghi-danh-dat-bac" ? BAC_GHI_DANH_TRONG_GOI : null;
+			const bac = ma === "ghi-danh-dat-bac" ? GOI.bacGhiDanh : null;
 			const dn: DinhNghiaDem = { chiSo: ma, phamVi, bac: bac ?? undefined };
 			const quyTruoc = truoc
 				? await demChiSo(
@@ -558,8 +557,6 @@ export async function docChamVaTran(db: DbHoacTx): Promise<ChamVaTran | null> {
 		: null;
 }
 
-const TRANG_THAI_DA_BAC = ["bac", "bo-qua"];
-
 export type HangDaBac = {
 	loai: string;
 	cuocSoanId: string | null;
@@ -573,7 +570,7 @@ export async function docHangDaBac(
 	cuocSoanId: string,
 ): Promise<HangDaBac[]> {
 	return db.okrDeXuat.findMany({
-		where: { cuocSoanId, trangThai: { in: TRANG_THAI_DA_BAC } },
+		where: { cuocSoanId, trangThai: { in: [...TRANG_THAI_DA_BAC] } },
 		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 		select: {
 			loai: true,

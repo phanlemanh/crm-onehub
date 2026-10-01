@@ -1,6 +1,10 @@
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
+	theCuaPhienSoan,
+	thuocTinhPhienSoan,
+} from "@crm/validation/okr-phien-soan";
+import {
 	type AuthFn,
 	extractBearerToken,
 	ForbiddenError,
@@ -12,13 +16,6 @@ import { TRO_LY_OKR_SOAN } from "./config";
 
 export const BRIDGE_ISSUER_OKR = TRO_LY_OKR_SOAN.issuer;
 export const BRIDGE_AUDIENCE_OKR = TRO_LY_OKR_SOAN.audience;
-
-const thuocTinhCua = z.object({
-	purpose: z.literal(TRO_LY_OKR_SOAN.purpose),
-	cuocSoanId: z.string().trim().min(1),
-	email: z.string().optional(),
-	name: z.string().optional(),
-});
 
 const vaiDuocVao = z.enum(TRO_LY_OKR_SOAN.vaiDuocVao);
 
@@ -53,7 +50,7 @@ export function repTuCuaOkr(
 			if (!kq.ok || !token || !coHanDung(token)) return null;
 			const userId = kq.sessionAuth.subject;
 			if (!userId) return null;
-			const thuoc = thuocTinhCua.safeParse(kq.sessionAuth.attributes ?? {});
+			const thuoc = theCuaPhienSoan.safeParse(kq.sessionAuth.attributes ?? {});
 			if (!thuoc.success) return null;
 			const member = await client.member.findUnique({
 				where: {
@@ -81,7 +78,7 @@ export function repTuCuaOkr(
 				authenticator: "crm-okr-cua",
 				principalId: userId,
 				principalType: "user",
-				attributes: { ...thuoc.data, vai: vai.data },
+				attributes: thuocTinhPhienSoan.parse({ ...thuoc.data, vai: vai.data }),
 			};
 		},
 		[{ scheme: "Bearer" }],

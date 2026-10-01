@@ -1265,7 +1265,8 @@ gộp gánh; phép đo E26 ghi rõ chiều này.
 - `packages/ui/src/components/sheet.tsx` — prop `cuonRieng` của `SheetBody`: ngăn tự
   cuộn bên trong, để khung hội thoại và bảng nháp mỗi bên cuộn riêng.
 - `packages/validation/package.json` — subpath export mới: `./okr-cuoc-soan`,
-  `./to-chuc`, `./okr-kiem-ban-nhap`, `./okr-tom-gon-ky`.
+  `./to-chuc`, `./okr-kiem-ban-nhap`, `./okr-tom-gon-ky`, `./okr-phien-soan` (khuôn
+  thuộc tính phiên cầu nối mà `mintOkrBridgeToken` ghi và `apps/agent-okr` đọc).
 - `turbo.json` — `OKR_AGENT_URL`, `OKR_AGENT_BRIDGE_SECRET` trong `globalPassThroughEnv`.
 
 Phần việc lớn nằm ở tệp OneHub tự dựng, không có đường dẫn trùng ở `release`:

@@ -1,7 +1,10 @@
+import type { BacGhiDanh } from "./okr-chi-so-danh-muc";
+
 export const MINUTE_MS = 60_000;
 export const NGAY_MS = 24 * 60 * MINUTE_MS;
 
 const SECOND_MS = MINUTE_MS / 60;
+const PHAN_TRAM = 100;
 
 const TU_CAM_NHAN_SU = [
 	"lương",
@@ -83,6 +86,12 @@ export const TRO_LY_OKR_TRAN = {
 	tranChoMs: 30 * SECOND_MS,
 	diemXuHuongToiThieu: 3,
 	hoanTacNgay: 7,
+	goiSoan: {
+		thangTienDo: PHAN_TRAM,
+		lamTronDiem: 100,
+		vaiKhongDocSoDoiTac: "okr",
+		bacGhiDanh: "giao-dich-dau" satisfies BacGhiDanh,
+	},
 } as const;
 
 export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan", "soan"] as const;
@@ -111,6 +120,16 @@ export const TRANG_THAI_DE_XUAT = [
 export const TRANG_THAI_DA_NHAN = [
 	"nhan",
 	"sua",
+] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][];
+
+export const TRANG_THAI_GIU_KHOA = [
+	...TRANG_THAI_DA_NHAN,
+	"bac",
+] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][];
+
+export const TRANG_THAI_DA_BAC = [
+	"bac",
+	"bo-qua",
 ] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][];
 
 export function daNhanDeXuat(trangThai: string): boolean {
