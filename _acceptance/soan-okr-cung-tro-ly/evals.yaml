@@ -214,6 +214,7 @@ evals:
   - id: E24
     criterion: AC-13
     executor: judgment
+    question: "Ở các cặp chủ kho đã chấm trong mục «Chấm của chủ kho (E24)» của evidence/eval-soan.md, judge mù chọn cùng bản với chủ kho ở ít nhất 80 % số cặp không?"
     inputs: [_acceptance/soan-okr-cung-tro-ly/evidence/eval-soan.md, docs/reports/2026-09-26-tro-ly-okr/N-soan-ket-qua.md, _acceptance/soan-okr-cung-tro-ly/contract.md]
     expected: "Chủ kho chấm 10 bản nháp ngẫu nhiên của soan.eval (5 có gói, 5 không, mù): judge khớp với người ≥ 80 %; kết quả ghi vào evidence/eval-soan.md do rang/eval-soan.mjs sinh."
     evidence_required: [run_id, verifier, verified_at, output]
@@ -256,6 +257,7 @@ evals:
   - id: E29
     criterion: AC-15
     executor: judgment
+    question: "Trong các tệp nguồn kèm theo, có khuôn dữ liệu đi qua hai gói hay hai app nào khai ngoài packages/validation/src, hay con số tinh chỉnh nào viết thẳng ở chỗ dùng thay vì nằm trong object cấu hình của khu không?"
     inputs: [AGENTS.md, apps/agent-okr/agent/lib/config.ts, apps/agent-okr/agent/lib/phien.ts, apps/agent-okr/agent/lib/kenh-cua.ts, apps/agent-okr/agent/hooks/chi-phi.ts, apps/agent-okr/agent/lib/goi-soan.ts, apps/agent-okr/agent/lib/nop-ban-nhap.ts, apps/api/src/okr/soan.service.ts, apps/api/src/okr/soan-so-do.service.ts, apps/api/src/okr/soan-ban-nhap.ts, apps/api/src/okr/soan-dua-vao.ts, apps/api/src/okr/soan-vet.ts, packages/db/src/okr-cuoc-soan.ts, packages/db/src/okr-goi-soan.ts, packages/validation/src/okr-cuoc-soan.ts, packages/validation/src/okr-kiem-ban-nhap.ts, apps/app/lib/cua-okr-config.ts, "apps/app/app/eve/agents/okr/eve/v1/[...path]/route.ts"]
     expected: "Người chấm đọc hai mục «Constants belong in one file per area» và «Parse at the boundary» của AGENTS.md, rồi đọc nội dung các tệp nguồn kèm theo đúng như chúng đang có. Trả lời hai câu, mỗi chỗ vi phạm nêu tệp:dòng và vì sao: (1) có khuôn Zod nào mô tả dữ liệu mà hai gói hay hai app cùng đọc hoặc một bên ghi bên kia đọc (cột Json, thân yêu cầu giữa app web và apps/agent-okr, sự kiện phiên) nhưng được khai ngoài packages/validation/src không; (2) có con số tinh chỉnh nào (trần, số lần thử, độ dài cắt, ngưỡng, khoảng chờ) viết thẳng ở chỗ dùng thay vì nằm trong object cấu hình của khu — đơn vị (1000, 60, 24, 7, 100) và giới hạn do khuôn dữ liệu quy định không tính. Không có chỗ nào → PASS; có → FAIL kèm danh sách."
     evidence_required: [run_id, verifier, verified_at, output]
