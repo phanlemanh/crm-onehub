@@ -139,9 +139,78 @@ async function moiKho(cookie, lam) {
 	}
 }
 
-async function chup({ p, rong }, ten) {
+async function duaVaoKhung(p, chons) {
+	return p.evaluate(async (dsChon) => {
+		const khungDoc = (n) => {
+			for (let x = n.parentElement; x; x = x.parentElement) {
+				const o = getComputedStyle(x).overflowY;
+				if ((o === "auto" || o === "scroll") && x.scrollHeight > x.clientHeight)
+					return x;
+			}
+			return document.scrollingElement;
+		};
+		const veTrang = () =>
+			new Promise((xong) =>
+				requestAnimationFrame(() => requestAnimationFrame(xong)),
+			);
+		const dsNut = dsChon.map((c) => document.querySelector(c));
+		if (dsNut.some((n) => n === null))
+			return dsChon.map((c, i) => ({
+				chon: c,
+				thay: dsNut[i] !== null,
+				vuaKhung: false,
+			}));
+		const goc = khungDoc(dsNut[0]);
+		const cuaSo = () => {
+			const r =
+				goc === document.scrollingElement
+					? { top: 0, bottom: innerHeight }
+					: goc.getBoundingClientRect();
+			return {
+				top: Math.max(0, r.top),
+				bottom: Math.min(innerHeight, r.bottom),
+			};
+		};
+		const hop = () => {
+			const rs = dsNut.map((n) => n.getBoundingClientRect());
+			return {
+				top: Math.min(...rs.map((r) => r.top)),
+				bottom: Math.max(...rs.map((r) => r.bottom)),
+			};
+		};
+		dsNut[0].scrollIntoView({ block: "center", behavior: "instant" });
+		await veTrang();
+		const h = hop();
+		const k = cuaSo();
+		const lech =
+			h.bottom - h.top > k.bottom - k.top
+				? h.top - k.top
+				: (h.top + h.bottom) / 2 - (k.top + k.bottom) / 2;
+		goc.scrollBy({ top: lech, behavior: "instant" });
+		await veTrang();
+		const k2 = cuaSo();
+		return dsChon.map((c, i) => {
+			const r = dsNut[i].getBoundingClientRect();
+			return {
+				chon: c,
+				thay: true,
+				vuaKhung: r.top >= k2.top - 1 && r.bottom <= k2.bottom + 1,
+			};
+		});
+	}, chons);
+}
+
+async function chup({ p, rong }, ten, vung = []) {
 	await tre(E9.cho.lamMoiMs);
 	await p.evaluate(() => document.fonts.ready);
+	if (vung.length > 0) {
+		const kq = await duaVaoKhung(p, vung);
+		kiem(
+			`${ten} ${rong}: anh chua tron ${kq.map((k) => `${k.chon} ${k.vuaKhung}`).join(", ")}`,
+			kq.every((k) => k.thay && k.vuaKhung),
+		);
+		await tre(E9.cho.lamMoiMs);
+	}
 	const tran = await p.evaluate(() => {
 		const goc = document.documentElement;
 		const hop = [
@@ -153,7 +222,10 @@ async function chup({ p, rong }, ten) {
 		];
 	});
 	const tep = join(THU_MUC, `${ten}-${rong}.png`);
-	await p.screenshot({ path: tep, fullPage: !tran.some((t) => t.o === "hop") });
+	await p.screenshot({
+		path: tep,
+		fullPage: vung.length === 0 && !tran.some((t) => t.o === "hop"),
+	});
 	dong.push(`ANH ${tep.slice(GOC.length + 1)}`);
 	kiem(
 		`${ten} ${rong}: scrollWidth <= clientWidth (${tran.map((t) => `${t.o} ${t.sw}/${t.cw}`).join(", ")})`,
@@ -427,7 +499,7 @@ async function buocKhoi(tlA, url, api) {
 			`ST-tomtat-da-phan-hoi ${t.rong}: nut da chon, «${m.daGhi}»`,
 			await hien(t.p, `${KHOI} [data-trang-thai="ST-tomtat-da-phan-hoi"]`),
 		);
-		await chup(t, "ST-tomtat-da-phan-hoi");
+		await chup(t, "ST-tomtat-da-phan-hoi", [`${KHOI} [data-phan-hoi]`]);
 	});
 	const [ph] = await truyVan(
 		url,
@@ -614,7 +686,10 @@ async function buocQuanTri(qt) {
 			`ST-suckhoe-tomtat-co ${t.rong}: khoi ${co}, phong A Bat ${a}, phong B An ${b}`,
 			co && a && b,
 		);
-		await chup(t, "ST-suckhoe-tomtat-co");
+		await chup(t, "ST-suckhoe-tomtat-co", [
+			`[data-phong="${PB.a}"]`,
+			`[data-phong="${PB.b}"]`,
+		]);
 		await bam(t.p, `[data-mo-ban="${PB.b}"]`);
 		kiem(
 			`ST-suckhoe-tomtat-ngan ${t.rong}: ngan ban phong B mo`,
