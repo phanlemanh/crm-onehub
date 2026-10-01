@@ -290,6 +290,8 @@ describe("chu-man", () => {
 		slackDuoc: false,
 		kenhSeDung: null,
 		lech: false,
+		dongTroLyOkr: true,
+		laTruongPhong: false,
 	};
 
 	const LY_DO: [string, Partial<ZaloCuaToi>][] = [

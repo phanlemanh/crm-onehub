@@ -47,6 +47,14 @@ import {
 } from "@crm/validation/okr-khep";
 import { taoTuMauInput } from "@crm/validation/okr-mau";
 import {
+	troLyTomTatInput,
+	troLyTomTatOutput,
+	troLyTomTatPhanHoiInput,
+	troLyTomTatPhanHoiOutput,
+	troLyTomTatQuanTriInput,
+	troLyTomTatQuanTriOutput,
+} from "@crm/validation/okr-tom-tat";
+import {
 	addCommentInput,
 	commentsInput,
 	followInput,
@@ -397,6 +405,42 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof troLySoDoInput>,
 	) {
 		return this.troLy.troLySoDo(ctx.user.id, input);
+	}
+
+	@Query({
+		input: troLyTomTatInput,
+		output: troLyTomTatOutput,
+		meta: restMeta("GET", "/okr/weekly-summary", TAG),
+	})
+	troLyTomTat(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLyTomTatInput>,
+	) {
+		return this.troLy.troLyTomTat(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: troLyTomTatPhanHoiInput,
+		output: troLyTomTatPhanHoiOutput,
+		meta: restMeta("POST", "/okr/weekly-summary/{tomTatId}/feedback", TAG),
+	})
+	troLyTomTatPhanHoi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLyTomTatPhanHoiInput>,
+	) {
+		return this.troLy.troLyTomTatPhanHoi(ctx.user.id, input);
+	}
+
+	@Query({
+		input: troLyTomTatQuanTriInput,
+		output: troLyTomTatQuanTriOutput,
+		meta: restMeta("GET", "/okr/weekly-summary/admin", TAG),
+	})
+	troLyTomTatQuanTri(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof troLyTomTatQuanTriInput>,
+	) {
+		return this.troLy.troLyTomTatQuanTri(ctx.user.id, input);
 	}
 
 	@Query({

@@ -11,6 +11,12 @@ import {
 	type TrangThaiMucTieu,
 } from "@crm/validation/okr-muc-tieu";
 import {
+	CACH_XEM_OKR,
+	type CachXemOkr,
+	type DonChonOkr,
+	khoaDonOkr,
+} from "@crm/validation/okr-tham-so";
+import {
 	createLoader,
 	createParser,
 	parseAsArrayOf,
@@ -19,19 +25,14 @@ import {
 } from "nuqs/server";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 
-export type DonChonOkr =
-	| { loai: "goc" }
-	| { loai: "bp"; id: string }
-	| { loai: "pb"; id: string }
-	| { loai: "nguoi"; id: string };
+export type { DonChonOkr };
 
-export const CACH_XEM = ["danh-sach", "cay", "hop-tuan", "cham"] as const;
-export type CachXem = (typeof CACH_XEM)[number];
+export const CACH_XEM = CACH_XEM_OKR;
+export type CachXem = CachXemOkr;
 
 export const KY_HIEN_TAI = "current";
 
-export const khoaDon = (d: DonChonOkr): string =>
-	d.loai === "goc" ? d.loai : `${d.loai}:${d.id}`;
+export const khoaDon = khoaDonOkr;
 
 export const parseAsDonOkr = createParser<DonChonOkr>({
 	parse: (v) => {

@@ -602,6 +602,40 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tro-ly-okr-tom-tat",
+		ten: "Tóm tắt tuần — khối trên bảng họp tuần, trích dẫn, Sức khoẻ, nhắc buổi sáng",
+		states: [
+			{ id: "ST-tomtat-co-cau", nhan: "Họp tuần — tóm tắt có câu" },
+			{
+				id: "ST-tomtat-trich-dan",
+				nhan: "Họp tuần — thẻ trích dẫn mở, hai nguồn",
+			},
+			{ id: "ST-tomtat-dang-soan", nhan: "Họp tuần — đang soạn" },
+			{
+				id: "ST-tomtat-chua-cap-nhat",
+				nhan: "Họp tuần — tuần chưa có cập nhật",
+			},
+			{ id: "ST-tomtat-loc-het", nhan: "Họp tuần — mọi câu bị lọc" },
+			{ id: "ST-tomtat-da-phan-hoi", nhan: "Họp tuần — đã bấm Hữu ích" },
+			{ id: "ST-tomtat-loi", nhan: "Họp tuần — tải tóm tắt hỏng" },
+			{ id: "ST-tomtat-dang-tai", nhan: "Họp tuần — đang tải" },
+			{ id: "ST-suckhoe-tomtat-co", nhan: "Sức khoẻ — bảng theo phòng ban" },
+			{ id: "ST-suckhoe-tomtat-rong", nhan: "Sức khoẻ — tuần chưa có tóm tắt" },
+			{
+				id: "ST-suckhoe-tomtat-ngan",
+				nhan: "Sức khoẻ — ngăn một bản bị giữ lại",
+			},
+			{
+				id: "ST-nhac-dong-tomtat",
+				nhan: "Nhắc buổi sáng — công tắc dòng tóm tắt",
+			},
+			{
+				id: "ST-nhac-tin-mau",
+				nhan: "Nhắc buổi sáng — chỗ dòng tóm tắt trong tin",
+			},
+		],
+	},
+	{
 		slug: "dot-hoi-y-tuong-okr",
 		ten: "Hỏi ý mục tiêu — góp, gom, chọn, báo lại",
 		states: [

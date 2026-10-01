@@ -237,7 +237,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr.service.ts",
-		ham: "createObjective",
+		ham: "taoMucTieuTrongTx",
 		bang: "okrObjective",
 		lyDo: "ghi: đếm vị trí trong chu kỳ, không trả hàng nào",
 	},
@@ -525,7 +525,7 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/okr-tai-co-cau.service.ts",
-		ham: "canhBaoTran",
+		ham: "vuotTran",
 		bang: "okrObjective",
 		lyDo: "ghi: quản trị chuyển OKR, đếm mục tiêu của đơn vị nhận theo chu kỳ để so trần chương trình như kiemTranMucTieu — trần tính cả mục tiêu giới hạn; chỉ ra số",
 	},
@@ -639,6 +639,24 @@ const MIEN_XEM = [
 	},
 	{
 		tep: "apps/api/src/okr/tro-ly.service.ts",
+		ham: "troLyQuyet",
+		bang: "okrObjective",
+		lyDo: "ghi: lấy id và cycleId của mục tiêu theo dòng đề xuất để kiểm kỳ chưa ẩn và khoá hàng; không trả ra ngoài, xemDuoc chặn ngay sau bằng 404",
+	},
+	{
+		tep: "apps/api/src/okr/okr.service.ts",
+		ham: "cycles",
+		bang: "okrTrail",
+		lyDo: "đọc vết an-chu-ky theo mã chu kỳ để nói lý do ẩn chu kỳ; dòng vết cấp chu kỳ, không mang mã hay tiêu đề mục tiêu",
+	},
+	{
+		tep: "apps/api/src/okr/okr-hoi-y.service.ts",
+		ham: "tinhTrangCongBo",
+		bang: "okrObjective",
+		lyDo: "đếm mục tiêu cấp công ty trong chu kỳ để so trần chương trình như kiemTranMucTieu — trần tính cả mục tiêu giới hạn; chỉ ra số",
+	},
+	{
+		tep: "apps/api/src/okr/tro-ly.service.ts",
 		ham: "assertConHieuLuc",
 		bang: "okrObjective",
 		lyDo: "ghi: đọc tiêu đề hiện hành để so với dòng đề xuất sau khi troLyQuyet đã qua xemDuoc và assertSuaDong; không trả ra ngoài",
@@ -678,6 +696,36 @@ const MIEN_XEM = [
 		ham: "ghiBangTinh",
 		bang: "okrSoChup",
 		lyDo: "máy chụp số hằng ngày: đếm hàng mới hơn để quyết ghi currentValue",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "demLanTrongCuaSo",
+		bang: "okrCheckIn",
+		lyDo: "đếm lần cập nhật trong cửa sổ của một phòng; mucTieuTrongGoi lọc Mục tiêu công khai (boGioiHan), đã công bố, của đúng phòng; chỉ ra số",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "krSoTrongGoi",
+		bang: "okrKeyResult",
+		lyDo: "đọc KR cho gói tóm tắt của máy, không có người xem; cùng hàm phụ mucTieuTrongGoi lọc công khai (boGioiHan), đã công bố, của đúng phòng",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "nguonHienTai",
+		bang: "okrCheckIn",
+		lyDo: "đọc lần cập nhật nguồn lúc hiện; docTomTatChoNguoiXem lọc theo người xem bằng dieuKienXemMucTieu (xemDuoc) trước khi trả câu",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "nguonHienTai",
+		bang: "okrKeyResult",
+		lyDo: "đọc KR của nguồn lúc hiện; docTomTatChoNguoiXem bỏ câu có nguồn thuộc Mục tiêu người xem không xem được (dieuKienXemMucTieu) trước khi trả",
+	},
+	{
+		tep: "packages/db/src/okr-tom-tat.ts",
+		ham: "banTuanChoQuanTri",
+		bang: "okrCheckIn",
+		lyDo: "khối tóm tắt ở Sức khoẻ chương trình; troLyTomTatQuanTri chặn mọi vai trừ quản trị chương trình (quanTriChuongTrinh) trước khi gọi",
 	},
 ];
 

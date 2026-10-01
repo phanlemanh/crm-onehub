@@ -1,6 +1,8 @@
 import { dinhUsd } from "@crm/db/ai-chi-phi-danh-muc";
-import type { ViecAi } from "@crm/db/ai-nhac";
+import { LOAI_NHAC_AI, type ViecAi } from "@crm/db/ai-nhac";
 import type { ViecOkr } from "@crm/db/okr-nhac";
+import type { ViecTomTat } from "@crm/db/okr-tom-tat";
+import { OKR_TOM_TAT } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	gioVN,
 	laBuoiSang,
@@ -29,6 +31,7 @@ export const TIEU_DE = {
 	"okr-theo-doi": "Đang theo dõi",
 	"okr-hoi-y-gop": "Hỏi ý mục tiêu",
 	"okr-hoi-y-cong-bo": "Hỏi ý đã công bố",
+	"okr-tom-tat": "Trợ lý OKR",
 	"tai-lieu-cho-duyet": "Kho tài liệu",
 	"ai-tran": "Ngân sách AI",
 	"ai-doi-soat-lech": "Đối soát AI",
@@ -180,10 +183,46 @@ function dongTaiLieu(
 	return `• ${chu}${url ? ` — <${url}|mở tab Chờ duyệt>` : ""}`;
 }
 
+const DONG_TOM_TAT = "Tóm tắt tuần";
+
+function dongTomTat(
+	v: ViecTomTat,
+	so: number,
+	url: string | null,
+	khuon: KhuonTin,
+): string {
+	const chu = (ten: string) =>
+		`${DONG_TOM_TAT} Phòng ${ten} · ${v.soKrDangBan} KR đáng bàn`;
+	if (khuon === "tron")
+		return `${so}. ${chu(v.phongTen)}${url ? ` — ${url}` : ""}`;
+	return `• ${chu(thoat(v.phongTen))}${url ? ` — <${url}|mở>` : ""}`;
+}
+
+const LOAI_DONG_MAY: readonly LoaiTin[] = [...LOAI_NHAC_AI, "okr-tom-tat"];
+
+function laDongMay(v: ViecNhac): boolean {
+	return LOAI_DONG_MAY.includes(v.loai);
+}
+
+export function truKrIm(ds: ViecNhac[]): ViecNhac[] {
+	const im = new Set(
+		ds.flatMap((v) => (v.loai === "okr-kr-im" ? [v.keyResultId] : [])),
+	);
+	return ds.map((v) =>
+		v.loai === "okr-tom-tat"
+			? {
+					...v,
+					soKrDangBan: v.krDangBan.filter((id) => !im.has(id)).length,
+				}
+			: v,
+	);
+}
+
 function dong(v: ViecNhac, so: number, lienKet: LienKet, khuon: KhuonTin) {
 	const url = lienKet(v);
 	if ("planId" in v) return dongKeHoach(v, so, url, khuon);
 	if (v.loai === "tai-lieu-cho-duyet") return dongTaiLieu(v, so, url, khuon);
+	if (v.loai === "okr-tom-tat") return dongTomTat(v, so, url, khuon);
 	if (v.loai === "ai-tran" || v.loai === "ai-doi-soat-lech") {
 		return dongAi(v, so, url, khuon);
 	}
@@ -206,9 +245,13 @@ export function dungTin(
 	if (la) {
 		throw new Error(`loại nhắc không có thứ tự trong tin: ${la.loai}`);
 	}
-	const theoThuTu = THU_TU_NHAC.flatMap((loai) =>
+	const theoLoai = THU_TU_NHAC.flatMap((loai) =>
 		viec.filter((v) => v.loai === loai),
 	);
+	const theoThuTu = [
+		...theoLoai.filter((v) => !laDongMay(v)),
+		...theoLoai.filter(laDongMay).slice(0, OKR_TOM_TAT.dongBaoAiToiDa),
+	];
 	const tieuDe = (loai: LoaiTin) =>
 		khuon === "tron" ? TIEU_DE[loai] : `*${TIEU_DE[loai]}*`;
 	const tenHien = khuon === "tron" ? ten : thoat(ten);
@@ -217,14 +260,14 @@ export function dungTin(
 	const chao = coOkr
 		? `Chào ${tenHien}, ${buoi} có ${theoThuTu.length} việc cần bạn để ý.`
 		: `Chào ${tenHien}, ${buoi} có ${theoThuTu.length} việc 30 ngày đầu cần bạn để ý.`;
-	const ve = (daGui: ViecNhac[]) => {
-		const nhom = THU_TU_NHAC.flatMap((loai) => {
-			const ds = daGui.filter((v) => v.loai === loai);
-			if (ds.length === 0) return [];
+	const ve = (ds: ViecNhac[]) => {
+		const daGui = truKrIm(ds);
+		const nhom = [...new Set(daGui.map((v) => v.loai))].flatMap((loai) => {
+			const cungLoai = daGui.filter((v) => v.loai === loai);
 			return [
 				"",
 				tieuDe(loai),
-				...ds.map((v) => dong(v, daGui.indexOf(v) + 1, lienKet, khuon)),
+				...cungLoai.map((v) => dong(v, daGui.indexOf(v) + 1, lienKet, khuon)),
 			];
 		});
 		const conLai = theoThuTu.length - daGui.length;
@@ -236,5 +279,5 @@ export function dungTin(
 	while (daGui.length > 0 && ve(daGui).length > tranKyTu) {
 		daGui = daGui.slice(0, -1);
 	}
-	return { text: ve(daGui), daGui };
+	return { text: ve(daGui), daGui: truKrIm(daGui) };
 }

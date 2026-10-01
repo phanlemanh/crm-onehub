@@ -133,14 +133,31 @@ export class ZaloService {
 		return { channel };
 	}
 
+	async luuDongTroLyOkr(userId: string, bat: boolean) {
+		await this.access.assertMember(userId);
+		await this.db.notificationPreference.upsert({
+			where: { userId },
+			create: { userId, dongTroLyOkr: bat },
+			update: { dongTroLyOkr: bat },
+		});
+		return { bat };
+	}
+
 	async cuaToi(userId: string, now: Date = new Date()): Promise<ZaloCuaToi> {
 		await this.access.assertMember(userId);
-		const [k, lienKet, caiDat] = await Promise.all([
+		const [k, lienKet, caiDat, uuTien, soPhongTruong] = await Promise.all([
 			kenhSeDungCua(this.db, userId, { coToken: true }),
 			trangThaiLienKet(this.db, userId, now),
 			this.db.appSetting.findUnique({
 				where: { id: SETTINGS_ID },
 				select: { zaloBotName: true },
+			}),
+			this.db.notificationPreference.findUnique({
+				where: { userId },
+				select: { dongTroLyOkr: true },
+			}),
+			this.db.department.count({
+				where: { headUserId: userId, archivedAt: null },
 			}),
 		]);
 		return {
@@ -152,6 +169,8 @@ export class ZaloService {
 			slackDuoc: k.slackDuoc,
 			kenhSeDung: k.kenh,
 			lech: k.lech,
+			dongTroLyOkr: uuTien?.dongTroLyOkr ?? true,
+			laTruongPhong: soPhongTruong > 0,
 		};
 	}
 

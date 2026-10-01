@@ -44,27 +44,36 @@ const SO_DON = new Map([
 
 const SO_SAU_CHUC = new Map([...SO_DON, ["mốt", 1], ["tư", 4], ["lăm", 5]]);
 
-const HE_SO = new Map([
+export const HE_SO_NGHIN = 1e3;
+
+export const HE_SO_DON_VI = new Map([
 	["tỷ", 1e9],
 	["tỉ", 1e9],
 	["triệu", 1e6],
-	["nghìn", 1e3],
-	["ngàn", 1e3],
-	["%", 1],
+	["nghìn", HE_SO_NGHIN],
+	["ngàn", HE_SO_NGHIN],
 ]);
+
+const HE_SO = new Map([...HE_SO_DON_VI, ["%", 1]]);
 
 const DAU_TY = new Set(["tỷ", "tỉ"]);
 
 const SAU_TY_KHONG_PHAI_SO = new Set(["lệ", "trọng", "suất"]);
 
-const CHU_SO_CHINH_XAC = 15;
+export const CHU_SO_CHINH_XAC = 15;
 
 const SO_BANG_CHU = TRO_LY_OKR_TRAN.soBangChu;
 const CHU_CAN_NGU_CANH = new Set(["một", "năm"]);
 const NAM_LICH = /^\d{4}$/;
 const DAU_CAU = new Set<string>(SO_BANG_CHU.dauCau);
 
-type SoDoc = { giaTri: number; goc: number; heSo: number };
+export type SoDoc = {
+	giaTri: number;
+	goc: number;
+	heSo: number;
+	dau: number;
+	het: number;
+};
 type Doc = { giaTri: number; het: number };
 
 function tachSo(chu: string): string[] {
@@ -156,7 +165,7 @@ function docHeSo(t: string[], j: number) {
 	return heSo === undefined ? { heSo: 1, het: j } : { heSo, het: j + 1 };
 }
 
-function docSo(chu: string): SoDoc[] {
+export function docSo(chu: string): SoDoc[] {
 	const t = tachSo(chu);
 	const ra: SoDoc[] = [];
 	let i = 0;
@@ -171,6 +180,8 @@ function docSo(chu: string): SoDoc[] {
 			giaTri: Number((so.giaTri * heSo).toPrecision(CHU_SO_CHINH_XAC)),
 			goc: so.giaTri,
 			heSo,
+			dau: i,
+			het,
 		});
 		i = het;
 	}

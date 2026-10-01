@@ -55,6 +55,8 @@ const MIEN_GIA_TRI = {
 			sm: "cỡ Button — nút nhỏ của hàng hành động Confirmation",
 			default:
 				"biến thể Button — nút tô màu chính của nút gửi ở PromptInputSubmit",
+			secondary: "biến thể Badge — chip xám của nút trích dẫn trong InlineCitation",
+			panel: "cỡ PopoverContent — khung không đệm của thẻ trích dẫn InlineCitation",
 		},
 	},
 	"enum-may": {
@@ -82,6 +84,8 @@ const MIEN_GIA_TRI = {
 			submitted: "giá trị ChatStatus của AI SDK",
 			streaming: "giá trị ChatStatus của AI SDK",
 			error: "giá trị ChatStatus của AI SDK",
+			mouse: "giá trị PointerEvent.pointerType — chỉ chuột mới mở thẻ trích dẫn theo đường di chuột, chạm thì không",
+			select: "tên sự kiện của Embla mà InlineCitationCarouselIndex đăng ký để đếm nguồn",
 		},
 	},
 	"ten-the": {

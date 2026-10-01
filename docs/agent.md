@@ -69,9 +69,89 @@ agent and the API both need it.
 Trợ lý OKR thêm năm loại. `okr-kiem-san-sang` (có khoá mô hình không),
 `okr-tom-tat-xep` và `ai-doi-soat` (đối soát sổ chi phí với báo cáo AI Gateway, ngày 2
 mỗi tháng) là việc trực tiếp, không mở phiên. `okr-de-xuat` và `okr-tom-tat-tuan` đi
-làn nghiên cứu với `purpose: "okr"`: một lần thử, lease 30 giây do hook gia hạn, kiểm
-lại trần và công tắc ngay trước khi gửi, hỏng là đóng với mã (`VIEC_OKR`,
-`lib/okr/viec.ts`).
+làn nghiên cứu với `purpose: "okr"`: một lần thử, lease do hook gia hạn (30 giây cho góp
+ý, 3 phút cho tóm tắt tuần), kiểm lại trần và công tắc ngay trước khi gửi, hỏng là đóng
+với mã (`VIEC_OKR`, `lib/okr/viec.ts`).
+
+**Tóm tắt tuần đến sáng hôm sau ngày cập nhật, và chỉ cho phòng ban** (lượt 9c). Mỗi
+sáng 06:00 giờ VN (`OKR_TOM_TAT.gioXep`) việc `okr-tom-tat-xep` chạy trên làn trực
+tiếp, không gọi model (`chayXepTomTat`, `lib/okr/lich-tom-tat.ts`). Nó tìm các chu kỳ
+đang chạy có ngày cập nhật là **hôm qua** — chu kỳ cập nhật thứ Hai thì tóm tắt đến
+sáng thứ Ba; cập nhật Chủ nhật thì sáng thứ Hai, và tuần của bản vẫn là thứ Hai của
+tuần chứa Chủ nhật đó. Với mỗi chu kỳ đó và mỗi phòng ban chưa lưu trữ đang ở nấc bật
+hay chế độ ẩn có ít nhất một Cập nhật tuần trong 7 ngày trước giờ chạy
+(`OKR_TOM_TAT.cuaSoNgay`), nó ghi đúng một việc `okr-tom-tat-tuan`, payload mang
+`nac` của phòng. Bộ phận, OneHub và Mục tiêu cá nhân không có tóm tắt. Ô đã có bản
+của tuần đó, hay đang có việc tóm tắt chưa xong, thì bỏ qua. Trợ lý chưa sẵn sàng
+(`troLyOkrSanSang`: hết trần tháng, chưa có khoá mô hình…) thì dừng cả vòng và đóng
+`khong-chay:<lý do>:<số việc đã xếp>`; xong vòng thì `da-xep:<n>`.
+
+- **Ghi ngày kế trước, trong giao dịch riêng.** `chayXepTomTat` ghi việc xếp của
+  ngày sau ngày hạn (`subject` `okr-tom-tat-xep:<ngày VN>`, `dueAt` 06:00, khoá theo
+  chính `subject` đó) và commit, rồi mới chạy vòng phòng ban trong giao dịch thứ hai
+  khoá theo ngày hạn của việc xếp đang chạy. Một lần cập nhật hỏng khuôn ở giữa vòng làm cả vòng của ngày đó
+  lùi lại — không phòng nào có việc, việc xếp hỏng qua `runDirect` — nhưng không cắt
+  chuỗi. Hai lượt chạy chồng nhau cho đúng một việc kế và không trùng việc tóm tắt.
+- **Nhịp dispatch nối lại chuỗi.** `drainAll` gọi `damBaoLichTomTat` ngay sau
+  `xepKiemLaiKhoa`, lỗi chỉ ghi log: tóm tắt đang bật hay ẩn ở đâu đó mà không còn
+  việc xếp nào mở thì ghi một cho 06:00 kế tiếp. Tắt tóm tắt ở mọi đơn vị thì việc
+  xếp đóng `khong-chay:<tat|viec-tat>:0` và không nối ngày mai; bật lại thì nhịp
+  dispatch kế nối.
+- **«Hôm qua» neo vào hạn của việc xếp, không vào giờ chạy.** Tác tử tắt qua 06:00
+  rồi chạy lại lúc 10:00 thì việc xếp vẫn chạy cho ngày đó; bản ghi sau 08:30 vào tin
+  nhắc sáng hôm sau. Việc xếp hạn 06:00 ngày D mà chạy lúc 00:30 ngày D+1 vẫn tóm tắt
+  chu kỳ có ngày cập nhật là D−1 và nối việc cho 06:00 ngày D+1 — ngày, khoá và ngày kế
+  đều tính từ `dueAt`. Cửa sổ 7 ngày của gói và `moc` vẫn là giờ chạy. Tác tử tắt quá
+  nhiều ngày thì các việc xếp nối nhau chạy bù từng ngày, mỗi ngày trên dữ liệu của
+  lúc chạy.
+- **Cửa trước khi gửi biết nấc và đơn vị.** `lyDoChanTruocKhiGui` truyền `nac` của
+  payload cho cả hai loại việc, và với việc tóm tắt thêm đơn vị của phòng (bộ phận,
+  phòng ban): phòng bị tắt giữa lúc xếp và lúc gửi thì đóng
+  `khong-chay:don-vi-chua-bat`; việc chế độ ẩn của phòng đang ở chế độ ẩn vẫn đi;
+  phòng đã lưu trữ thì đóng `khong-chay:phong-luu-tru`
+  (`TRO_LY_OKR.ketThuc.phongLuuTru`) và không mở phiên; phòng không còn thì đóng
+  `hong:…`.
+
+**Phiên của việc tóm tắt: một phòng ban một tuần, nộp một lần.** Gốc chuyển việc
+`okr-tom-tat-tuan` cho `tro_ly_okr` đúng một lần như 9a. Chỉ dẫn động
+(`subagents/tro_ly_okr/instructions/viec.ts`) tìm việc qua phiên gốc rồi rẽ theo
+`kind`: việc góp ý nhận đúng gói của 9b; việc tóm tắt nhận lời dặn `MUC_TOM_TAT`
+(`lib/okr/chi-dan-tom-tat.ts`) rồi gói. Lời dặn tóm tắt chỉ nằm ở nhánh động này —
+`instructions.md` giữ nguyên bản 9b, vì phiên góp ý đã đo bằng model thật và lời dặn
+của nó không đổi khi chưa đo lại — nên đoạn dặn mở bằng câu gạt lệnh góp ý của lời
+dặn tĩnh («never call `nop_de_xuat`»).
+
+- **Gói neo vào `moc` = `createdAt` của hàng việc**, cùng mốc bộ xếp đã băm vào
+  `inputHash`, nên gói lúc dựng chỉ dẫn và lúc nộp giống hệt nhau. `dungGoiTomTat`
+  (`@crm/db/okr-tom-tat`) chỉ lấy Mục tiêu công khai đã công bố của phòng trong chu
+  kỳ: mỗi KR mang cờ đáng bàn (`lyDoCua`), các lần cập nhật trong 7 ngày trước `moc`
+  (id, ngày, giá trị, lần trước, chênh lệch, tiến độ tính từ giá trị của chính lần
+  đó, mức tự tin trước và sau, ghi chú). Không họ tên, không người phụ trách.
+- **`nop_tom_tat` là tool sống thứ hai, một lần nộp.** Model viết tối đa
+  `TRO_LY_OKR_TRAN.soCauTomTat` câu, mỗi câu dẫn 1–`soNguonMoiCau` id lần cập nhật
+  trong gói. Tool (`lib/okr/nop-tom-tat.ts`) từ chối không ghi (`tu-choi`) khi phiên
+  không phải phiên OKR, việc không phải `okr-tom-tat-tuan` đang chạy, payload hỏng,
+  hay việc đã có bản; phòng đã lưu trữ thì `thieu-du-lieu`. `nop_de_xuat` vẫn từ
+  chối việc tóm tắt. Phiên con báo `da-nop` mà việc tóm tắt không có hàng `OkrTomTat`
+  nào thì hook uỷ quyền đóng `khong-lam-duoc:khong-nop`
+  (`TRO_LY_OKR.ketThuc.tomTatKhongNop`, `ketThucCuaViec`); việc góp ý giữ cách đóng
+  của 9b.
+- **Câu lệch số bị bỏ; bỏ quá 30% thì cả bản bị giữ lại.** `ghiTomTat` chạy bộ kiểm
+  câu (`kiemBanTomTat`, `@crm/validation/okr-kiem-tom-tat`, hàm thuần dùng chung với
+  lúc hiện): câu trượt luật đầu tiên thì bị bỏ với mã — `nguon-ngoai-goi`,
+  `so-lech`, `sai-chieu`, `noi-ve-nguoi`, `tu-cam`, `trung-cau`. Bỏ quá
+  `OKR_TOM_TAT.tyLeGiuLai` (30%) số câu, hay không còn câu nào, thì bản thành
+  `can-xem`: không hiện cho ai, kể cả dòng báo; chỉ quản trị chương trình thấy ở
+  Sức khoẻ chương trình. Câu bị bỏ không được mời nộp lại.
+- **Tiền của phiên con vào nhóm `okr.tom-tat`.** Bước của phiên con không mang thuộc
+  tính phiên, nên `lib/so-chi-phi.ts` tìm việc qua phiên gốc (cùng lối `giu-viec`)
+  và đọc loại việc từ `kind` của hàng (`okrViecCuaLoai`,
+  `@crm/db/ai-chi-phi-danh-muc`), nối `taskId` về việc; trước lượt này bước tóm tắt
+  rơi nhầm vào `okr.de-xuat`. Tra việc lỗi thì chỉ ghi cảnh báo, dòng chi phí vẫn
+  ghi; không tìm được việc thì bước vào `okr.chuyen-tiep` chứ không mặc định
+  `okr.de-xuat`, để trần tháng của Trợ lý OKR vẫn đếm đủ. Bước chuyển tiếp của phiên gốc giữ `okr.chuyen-tiep`
+  như 9b; thước `chi-phi-tom-tat.sql` cộng `okr.tom-tat` với các dòng
+  `okr.chuyen-tiep` có `taskId` là việc `okr-tom-tat-tuan`.
 
 Mục tiêu giới hạn (xem `docs/api.md`, «Who sees an objective») không lọt vào Trợ lý
 OKR qua hai chặn, cùng một điều kiện `dieuKienXemMucTieu` với ngữ cảnh dựng bằng
@@ -266,8 +346,8 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   viên khi `congBoLuc` rơi trong cửa sổ sự kiện; trạng thái lần hỏi ý đọc từ
   `trangThaiHoiY` (`@crm/db/okr-hoi-y-trang-thai`), số truy vấn cố định dù bao nhiêu
   lần hỏi ý hay thành viên. Đường mở là `<APP_URL>/<slug>/okr/hoi-y?kyOkr=<cycleId>`
-  (`duongMo`, khoá tham số là `THAM_SO_KY_OKR` của `@crm/validation/okr-chu-ky`, cùng
-  khoá màn đọc): mục nhắc mang `cycleId` của lần hỏi ý, nên người mở nhắc «đã công bố»
+  (`duongMo`, khoá tham số là `THAM_SO_OKR.ky` của `@crm/validation/okr-tham-so` —
+  cùng giá trị `THAM_SO_KY_OKR` của `@crm/validation/okr-chu-ky` mà màn đọc): mục nhắc mang `cycleId` của lần hỏi ý, nên người mở nhắc «đã công bố»
   sau khi chu kỳ đã sang «đang chạy» vẫn tới đúng chu kỳ, không rơi về quý hiện tại;
   dòng «Việc của bạn» dựng cùng đường. Trần
   `NHAC.tran` và trần ký tự Zalo áp cho cả tin. Tin có việc OKR chào «Chào X, sáng
@@ -295,7 +375,8 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   `{loai: "okr-kr-im", keyResultId}`, `{loai: "okr-duoc-giao", objectiveId,
   keyResultId?}`, `{loai: "okr-nhac-ten", commentId}`,
   `{loai: "okr-ghi-nhan", ghiNhanId}`, `{loai: "okr-theo-doi", objectiveId}`; Kho tài
-  liệu có `{loai: "tai-lieu-cho-duyet", so}` với `so` là số nguyên dương.
+  liệu có `{loai: "tai-lieu-cho-duyet", so}` với `so` là số nguyên dương; Tóm tắt tuần
+  có `{loai: "okr-tom-tat", tomTatId, departmentId, cycleId, soKrDangBan}`.
   Đọc `payload.muc`/`daGui` phải khớp đúng nhánh theo `loai`, không suy trường của
   nhánh này sang nhánh khác.
 - **Ghi nhận đến người nhận thành một dòng «Ghi nhận» riêng.** `viecTraoDoi`
@@ -311,11 +392,40 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   khi số lớn hơn 0. Nhóm «Kho tài liệu» đứng sau «Đang theo dõi» trong `THU_TU_NHAC`. Tin
   không mang tên trang hay nội dung bản đề xuất. `xong <n>` trỏ vào dòng này bị từ chối
   như dòng OKR: không có bước nào để đánh dấu.
+- **Tóm tắt tuần thành một dòng cho Trưởng phòng ban** (lượt 9c). Chữ do luật viết,
+  số do luật đếm, không câu nào của model vào tin: nhóm «Trợ lý OKR», dòng «Tóm tắt
+  tuần Phòng <tên> · <n> KR đáng bàn — mở». `viecTomTatCanNhac`
+  (`@crm/db/okr-tom-tat`) chỉ chạy với `cuaSo: "buoi-sang"` — thẻ «Việc của bạn» và
+  Tổng quan không có dòng này — và đọc bản `trangThai = "hien"`, `cau.nac = "bat"`,
+  `createdAt` trong cửa sổ sự kiện của tin sáng đó. Cửa sổ lấy từ `cuaSoSuKien`
+  (`@crm/db/okr-nhac`), nguồn chung với `viecOkrCanNhac`, nên bản ghi sau 08:30 vào
+  tin sáng hôm sau và không lặp. Phòng phải chưa lưu trữ, có trưởng và đang ở nấc
+  bật; người nhận là trưởng phòng còn là thành viên, trừ người đã tắt dòng
+  (`NotificationPreference.dongTroLyOkr = false`, ghi từ trang Nhắc buổi sáng; thiếu
+  hàng là bật). Bản giữ lại (`can-xem`), bản chế độ ẩn và phòng chưa có trưởng không
+  sinh dòng nào, và không lỗi.
+  - **n** là số KR có lý do đáng bàn (`lyDoCua`) trong đúng tập KR của gói, trừ những
+    KR đã có dòng «KR im» trong cùng tin (`truKrIm`, áp ở `payload.muc` khi
+    `lenLichNhac` ghi hàng và ở `daGui` khi dựng tin). n tính theo giờ dựng tin, còn
+    gói của bản tính theo `moc` của bản, nên n có thể khác điều bản tóm tắt nói.
+  - **Tối đa hai dòng của máy mỗi tin** (`OKR_TOM_TAT.dongBaoAiToiDa`). Dòng máy là
+    `okr-tom-tat` cộng các dòng ngân sách AI; `okr-tom-tat` đứng sau
+    `tai-lieu-cho-duyet`, trước `ai-tran` và `ai-doi-soat-lech` trong `THU_TU_NHAC`.
+    Hai bước cắt: trước hết dòng máy chỉ giữ lại hai; rồi cả tin cắt theo
+    `NHAC.tran` và trần ký tự Zalo. Mọi dòng của người đứng trước, dòng máy đứng cuối
+    nên rơi trước — tin đã có đủ việc của người thì dòng tóm tắt rơi, và không gửi bù
+    sáng hôm sau. Dòng tóm tắt đứng một mình vẫn đủ để gửi tin (`da-gui:1`).
+  - `xong <n>` trỏ vào dòng này bị từ chối như dòng OKR, câu trả lời nêu nhóm «Trợ lý
+    OKR».
 - **`APP_URL` là tuỳ chọn.** Có thì mỗi dòng mang đường mở: kế hoạch
   `<APP_URL>/<slug>?record=plan:<id>`, cập nhật tuần
   `<APP_URL>/<slug>/okr/cap-nhat-tuan?tu=nhac`, việc OKR khác
   `<APP_URL>/<slug>/okr?record=objective:<id>`, kho tài liệu
-  `<APP_URL>/<slug>/tai-lieu?tabTaiLieu=cho-duyet`; vắng thì tin vẫn gửi, không liên kết.
+  `<APP_URL>/<slug>/tai-lieu?tabTaiLieu=cho-duyet`, tóm tắt tuần mở Họp tuần của phòng
+  `<APP_URL>/<slug>/okr/theo-don-vi?xemOkr=hop-tuan&donOkr=pb%3A<departmentId>&kyOkr=<cycleId>`
+  (khoá từ `THAM_SO_OKR`, giá trị đơn vị từ `khoaDonOkr` của
+  `@crm/validation/okr-tham-so` — cùng module màn đọc, dời ra từ `apps/app` ở lượt
+  9c); vắng thì tin vẫn gửi, không liên kết.
 - **`payload.daGui` là thứ thước đọc**, không phải `payload.muc`. `muc` là danh sách
   lúc quét; `daGui` là đúng các dòng đã có trong tin sau khi cắt. Hai câu truy vấn
   đường đo ở `_acceptance/may-nhac-truoc-nguoi/rang/` đọc tập này. `payload` chỉ giữ
@@ -806,7 +916,7 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 | --- | --- | --- |
 | Nghiên cứu danh bạ, hỏi CRM qua Zalo | Agent gốc, cộng `tool` và `skill` | 3, 4, 5 — cùng phạm vi đối tác |
 | Dựng và chạy Tác nhân | `subagent` `agent_builder` và `agent_runner` | 2 |
-| Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — từ 9a chỉ có một tool sống `nop_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng; 9b, 9c thêm `skill` phương pháp OKR và mã kiểm số | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
+| Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — tool sống `nop_de_xuat` (9a), `nop_tom_tat` (9c), mọi tool dựng sẵn tắt, sandbox chặn mạng; không có `skill` nào (`load_skill` tắt) — phương pháp OKR nằm trong lời dặn tĩnh `instructions.md`; 9b, 9c thêm mã kiểm số ở `packages/validation` | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
 | Máy soạn bản đề xuất của Kho tài liệu (lượt 2) | Mã đọc chữ trong việc trực tiếp; `subagent` `may_soan` chỉ có một tool sống `nop_ban_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng, mọi lời gọi mang ZDR; mã kiểm số và trích đoạn ở `packages/validation` | 1, 2, 6, 7 — không duyệt, không ghi bản đang dùng |
 | Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
 | Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
@@ -1113,6 +1223,20 @@ Ba điều đo được trên eve 0.29.4 ở lượt này, đừng thiết kế 
   ZDR, thẻ và `thinkingLevel` trong middleware. Với lời gọi eve dựng cho phiên con,
   Gemini 3.8 Flash có lúc suy nghĩ tới trần 2.000 token rồi trả rỗng (5/8); câu «Act at
   once…» đầu phần việc trong `instructions.md` đưa về 0/24.
+- **Trần và lease theo loại việc (lượt 9c).** Việc góp ý (`okr-de-xuat`) giữ 2.000 token
+  mỗi lời gọi và lease 30 giây. Việc tóm tắt (`okr-tom-tat-tuan`) được 8.000 token mỗi
+  lời gọi, 16.000 mỗi phiên, lease 3 phút (`VIEC_OKR.leaseTomTatMs`). Vì sao: Gemini 3.8
+  Flash nghĩ gần hết trần rồi trả rỗng (2.000: dừng `MAX_TOKENS` khi chưa viết chữ nào;
+  4.000: nghĩ 3.845 token mất 28 giây, eve gọi lại một lần, vượt lease 30 giây nên việc
+  đóng `hong:het-lease`). Trần mỗi phiên là trần chung của tác tử (eve chỉ cho khai một),
+  nên phiên góp ý cũng được 16.000, nhưng mỗi lời gọi góp ý vẫn bị kẹp 2.000. Lease theo
+  loại việc nằm trong `giaHanLease` (một câu lệnh chọn theo `kind`), nên hai hook
+  (`hooks/okr-uy-quyen.ts`, `subagents/tro_ly_okr/hooks/giu-viec.ts`) và `beginResearch`
+  đều ăn theo mà không phải biết loại việc. Hai model là cùng một model, cùng ZDR, thẻ và
+  `thinkingLevel`, chỉ khác middleware kẹp trần (`lib/okr/mo-hinh.ts`). Phiên con chọn
+  giữa hai cái ở `step.started` (`lib/okr/chon-mo-hinh.ts`), vì chỉ bước đó mới được trả
+  đối tượng model sống; không tìm được việc hay việc không phải tóm tắt thì eve dùng
+  `fallback`, tức trần 2.000. Mọi đường gọi model đều qua một trong hai middleware.
 
 Gỡ khi hãng có bản tương đương: hook chi phí trong subagent và số lần thử theo loại
 việc là phần nên gửi lên hãng — chưa gửi ở lượt này.
@@ -1179,6 +1303,68 @@ dùng và không poke dispatch; nó chờ đúng nhịp quét mà `okr-de-xuat` 
 thường vẫn chờ, nên độ trễ của một lượt ẩn không có gì đảm bảo ngoài nhịp đó.
 Dưới `eve dev` không có cron: hàng ẩn được xếp ngay trong `updateObjective` và
 nằm chờ tới lần gọi `/internal/crm/dispatch` kế tiếp (phép đo E4 tự gọi).
+
+## Chỗ rẽ: Trợ lý OKR (lượt 9c)
+
+Danh sách dưới đây là tệp của hãng lượt 9c «Tóm tắt tuần» chạm thêm — rút bằng
+`git diff` giữa merge-base của nhánh với `origin/onehub` và `HEAD`, giao với danh
+sách tệp có ở `origin/release`, như 9b. `_acceptance/tro-ly-okr-tom-tat/rang/tai-lieu.mjs`
+tính lại đúng phép giao đó mỗi lần chạy và so với mục này; không hơn, không kém.
+Sau khi nhánh gộp vào `onehub`, merge-base đổi nên phép giao rỗng — chạy lại với
+`--goc <merge-base cũ>`.
+
+- `apps/agent/agent/lib/dispatch.ts` — `handleDirect` thêm nhánh `okr-tom-tat-xep`
+  gọi `chayXepTomTat`; `drainAll` gọi `damBaoLichTomTat` ngay sau `xepKiemLaiKhoa`,
+  lỗi chỉ ghi log, cùng khuôn với móc của 9a và 9b.
+- `apps/api/src/generated/server.ts` — sinh lại khi ba thủ tục `okr.troLyTomTat*`
+  và `zalo.luuDongTroLyOkr` vào router; không sửa tay.
+- `apps/app/lib/search-param-keys.ts` — ba khoá `okr.ky`, `okr.don`, `okr.xem` nay
+  đọc từ `THAM_SO_OKR` của `@crm/validation/okr-tham-so`, để tác tử dựng đường mở Họp
+  tuần bằng đúng khoá màn đọc; giá trị không đổi.
+- `apps/app/lib/trpc/cache.ts` — `troLyTomTat`, `troLyTomTatQuanTri` vào danh sách
+  làm mới khi lưu OKR; thêm `cache.tomTat()` cho lần lưu phản hồi.
+- `packages/db/package.json` — hai subpath export mới: `./okr-hop-tuan`,
+  `./okr-tom-tat`.
+- `packages/db/src/agent-tasks.ts` — `VIEC_OKR` thêm `leaseTomTatMs` (3 phút) cạnh
+  `leaseMs` 30 giây của các việc OKR khác, và `LOAI_VIEC_TOM_TAT_TUAN` để chọn
+  lease theo loại việc: một lời gọi tóm tắt có lúc nghĩ gần 30 giây rồi eve gọi lại
+  một lần, vượt lease 30 giây nên việc đóng `hong:het-lease`.
+- `packages/ui/src/components/popover.tsx` — biến thể `size="panel"` thêm
+  `max-w-(--radix-popover-content-available-width)`, để thẻ trích dẫn rộng 360 px
+  không vượt khung màn 390 px. Đây là một sửa nên gửi lên hãng.
+- `packages/validation/package.json` — ba subpath export mới: `./okr-tham-so`,
+  `./okr-tom-tat`, `./okr-kiem-tom-tat`.
+- `docs/api.md` — có đường dẫn ở `release`, nhưng OneHub đã thay hẳn nội dung;
+  vào danh sách chỉ vì phép giao thấy đường dẫn trùng, như ở 9b.
+- `docs/agent.md` — chính tệp đang đọc; cùng lý do với `docs/api.md` ngay trên.
+
+Phần việc lớn của lượt này nằm ở tệp OneHub tự dựng, không có đường dẫn trùng ở
+`release` nên không vào bảng trên. Tác tử: `apps/agent/agent/lib/okr/lich-tom-tat.ts`,
+`nop-tom-tat.ts`, `chi-dan-tom-tat.ts` (mới), `viec.ts`, `doc.ts`, `config.ts`,
+`goi-ngu-canh.ts` (9a đã mở, 9c sửa thêm), `hooks/okr-uy-quyen.ts` (đóng `da-nop`
+của việc tóm tắt chỉ khi có bản), `apps/agent/agent/lib/so-chi-phi.ts`, `tin-nhac.ts`,
+`nhac-ke-hoach.ts`, `tra-loi-nhac.ts`, và trong `subagents/tro_ly_okr/`:
+`tools/nop_tom_tat.ts` (mới), `instructions/viec.ts`, `agent.ts` (mô tả thêm việc
+tóm tắt; model chọn theo việc ở `step.started`, xem `lib/okr/chon-mo-hinh.ts`).
+`instructions.md` không đổi. Gói dùng chung: `packages/db/src/okr-tom-tat.ts`
+(gói, ghi, đọc cho người xem và cho quản trị, dòng nhắc), `okr-hop-tuan.ts` (luật
+«đáng bàn», dời nguyên từ `apps/api/src/okr/hop-tuan.ts`), `okr-nhac.ts`
+(`cuaSoSuKien`), `onboarding-nhac.ts` (`thuTrongTuan` dùng chung với lịch tóm tắt),
+`okr-tro-ly-danh-muc.ts` (`OKR_TOM_TAT`, `GIO_MS`),
+`ai-chi-phi-danh-muc.ts`; `packages/validation/src/okr-tom-tat.ts`,
+`okr-kiem-tom-tat.ts`, `okr-tham-so.ts`. Thành phần `inline-citation` của AI Elements
+cài bằng CLI vào `packages/ui/src/components/ai-elements/` — bản rẽ của nó ghi ở
+`docs/chat-ui.md`, không ở đây.
+
+Lượt này không thêm `migration` và không thêm biến môi trường: bảng `OkrTomTat`,
+`OkrTomTatPhanHoi`, cột `NotificationPreference.dongTroLyOkr` có từ 9a, hai cột chế
+độ ẩn của việc tóm tắt có từ 9b; nấc của một bản và câu bị bỏ nằm trong cột Json
+`cau`, parse lúc đọc bằng `noiDungTomTat`.
+
+Chế độ ẩn của việc tóm tắt đi đúng đường của nấc bật — cùng giờ xếp, cùng phiên, cùng
+bộ kiểm, cùng sổ chi phí và trần tháng — chỉ khác ở chỗ hiện: bản mang `nac: "an"`
+không bao giờ tới bảng họp tuần hay tin nhắc; chỉ quản trị chương trình đọc nó ở
+Sức khoẻ chương trình (`okr.troLyTomTatQuanTri`).
 
 ## Chỗ rẽ: Trợ lý OKR — đường tới model và khoá riêng
 

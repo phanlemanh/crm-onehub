@@ -747,9 +747,14 @@ _Avoid_: gợi ý, khuyến nghị, suggestion
 Vì sao: «Gợi ý» đã là câu hướng xử lý đi kèm nhắc kế hoạch im; «khuyến nghị» nghe như
 đã được duyệt.
 
-**Tóm tắt tuần**: vài câu Trợ lý OKR viết cho một phòng ban sau ngày cập nhật, gom các
-lần Cập nhật tuần của tuần đó. Câu nào cũng dẫn tới lần cập nhật gốc; số nào cũng được
-máy kiểm lại, sai thì câu bị bỏ. Hiện ở đầu Họp tuần; không nêu tên người.
+**Tóm tắt tuần**: vài câu Trợ lý OKR viết cho một phòng ban vào sáng hôm sau ngày cập
+nhật, gom các lần Cập nhật tuần của tuần đó trên Mục tiêu công khai của phòng. Câu nào
+cũng dẫn tới lần cập nhật gốc; số nào cũng được máy kiểm lại lúc ghi và lúc hiện, sai
+thì câu bị bỏ; bỏ quá 30% số câu thì cả bản bị giữ lại — không hiện cho ai, chỉ quản trị
+chương trình thấy ở Sức khoẻ chương trình. Hiện ở đầu Họp tuần, chỉ bản của tuần mới
+nhất: tuần đó bị giữ lại, không làm được hay chưa có cập nhật thì Họp tuần không mượn
+bản của tuần trước. Không nêu tên người. Bộ phận, OneHub và Mục tiêu cá nhân không có
+tóm tắt.
 _Avoid_: báo cáo tuần, bản tin tuần, digest
 Vì sao: «báo cáo tuần» là thứ người viết gửi lên để duyệt; «bản tin» gợi một tin gửi đi
 cho nhiều người, còn tóm tắt nằm trên màn và lọc theo người xem.
@@ -873,8 +878,8 @@ trong hộp đó; «cấp bậc» gợi thang lương, thứ không có trong CR
 
 **Chế độ ẩn**: nấc giữa của công tắc Trợ lý OKR, giữa tắt và bật. Ở nấc này máy vẫn làm
 việc trên OKR thật — góp ý khi một Mục tiêu được lưu, tóm tắt sau ngày cập nhật — ghi sổ
-chi phí và số đo, nhưng người dùng không thấy gì; chỉ quản trị đọc kết quả ở Cài đặt ›
-Chương trình OKR. Tiền của nấc này là tiền thật, tính vào trần tháng. Quản trị chọn đơn vị
+chi phí và số đo, nhưng người dùng không thấy gì; chỉ quản trị đọc kết quả — góp ý ở
+Cài đặt › Chương trình OKR, tóm tắt ở Sức khoẻ chương trình. Tiền của nấc này là tiền thật, tính vào trần tháng. Quản trị chọn đơn vị
 ở chế độ ẩn cho từng việc; đơn vị đã bật thì không ở chế độ ẩn. Chốt 2026-09-28 (Manh
 Phan).
 _Avoid_: chạy bóng, shadow mode, thử nghiệm, beta

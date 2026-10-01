@@ -129,9 +129,9 @@ so both surfaces share one card.
 started: `lib/agent-transcript.ts` already exports `sourcesOf()`, it is covered
 by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 
-### What is in the tree today — 7
+### What is in the tree today — 8
 
-`packages/ui/src/components/ai-elements/` holds exactly seven files:
+`packages/ui/src/components/ai-elements/` holds exactly eight files:
 
 | File | Why it is here |
 | --- | --- |
@@ -140,14 +140,15 @@ by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 | `reasoning.tsx` | imported by the builder |
 | `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |
 | `conversation.tsx` | imported by `apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx` (`Conversation`, `ConversationContent`, `ConversationEmptyState`) — the orphan gate's exemption for the scroll measurement is gone (`MIEN_TRU` in `mo-coi.mjs` is empty) |
+| `inline-citation.tsx` | trích dẫn của khối Tóm tắt tuần — the weekly summary block on the OKR board cites the KRs and updates behind each sentence. Pulled back by the CLI in `tro-ly-okr-tom-tat`; the card is a `Popover` that opens on click, tap, Enter and Space, and still on hover for a mouse, and the trigger shows a given label instead of a URL hostname |
 | `prompt-input.tsx` | `PromptInput`, `PromptInputBody`, `PromptInputTextarea`, `PromptInputFooter`, `PromptInputTools`, `PromptInputSubmit` — the composer of `okr/soan/hoi-thoai-soan.tsx`; pulled 2026-09-30 with the CLI; its strings are in `messages.ts` under `promptInput` |
 | `suggestion.tsx` | `Suggestions` and `Suggestion` — the answer chips under an assistant question in the OKR drafting chat; pulled 2026-09-30 with `prompt-input.tsx`. The accept · edit · reject card that once lived at `packages/ui/src/components/suggestion.tsx` is gone (`proposed-change.tsx` replaced it) |
 
-Of the 19 vendored files deleted in the `nen-chat-ai-elements` round, 17 are still
-gone — seven of them Adopted (`artifact`, `inline-citation`, `model-selector`,
-`plan`, `sources`, `task`, `tool`), the rest Available or Not-for-this-product.
-`prompt-input` and `suggestion`, the other two Adopted, were pulled back on
-2026-09-30 for the OKR drafting screen and are in the table above. None of the 19 was
+Of the 19 vendored files deleted in the `nen-chat-ai-elements` round, 16 are still
+gone — six of them Adopted (`artifact`, `model-selector`, `plan`, `sources`,
+`task`, `tool`), the rest Available or Not-for-this-product. `prompt-input` and
+`suggestion` were pulled back on 2026-09-30 for the OKR drafting screen, and
+`inline-citation` for the weekly summary block; all three are in the table above. None of the 19 was
 reachable from `apps/**`, and carrying 21 unreachable files was the cost the round
 was opened to remove.
 
@@ -198,14 +199,14 @@ present is not evidence that it is supported. `ThinkingIndicator` —
 ## Local divergence, and re-applying it
 
 Several vendored files need edits to satisfy `docs/design.md` and
-`locale-provider`. The counts below are for the five files that were in the tree
-before 2026-09-30; `prompt-input` and `suggestion` carry their own entries in the ledger;
+`locale-provider`. The counts below are for the six files other than `prompt-input` and
+`suggestion`, which carry their own entries in the ledger;
 the divergence ledger of record is
 `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`, which carries one entry per
 file with a fingerprint of the diverging lines:
 
-- 16 English strings routed through `packages/ui/src/lib/messages.ts` — `message`
-  (10), `reasoning` (4), `conversation` (2). They arrive in **four shapes**: text
+- 18 English strings routed through `packages/ui/src/lib/messages.ts` — `message`
+  (10), `reasoning` (4), `conversation` (2), `inline-citation` (2). They arrive in **four shapes**: text
   between tags, display attributes, parameter defaults, and intermediate
   variables. A scan that lists syntax shapes misses a new one every time; the
   string gate uses a closed allow-list instead.
@@ -224,6 +225,11 @@ file with a fingerprint of the diverging lines:
   upstream comments are dropped, and `suggestion` loses its `rounded-full` so the radius
   stays on the scale of `docs/design.md`. Each has its own entry in
   `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`.
+- `inline-citation` swaps `HoverCard` for `Popover` so the card opens on click,
+  tap and keyboard, takes `nhan` instead of deriving a hostname from `sources`,
+  drops the upstream `rounded-full` on the trigger rather than replacing it,
+  names the card with `aria-label`, and uses `Button` and Carbon icons for its
+  previous and next controls.
 
 Whichever files a later phase pulls back in bring their own divergences, and
 they belong in that same ledger.

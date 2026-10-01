@@ -91,6 +91,7 @@ export const okrTroLyViec = z.discriminatedUnion("viec", [
 		cycleId: z.string().min(1),
 		tuan: ngayLich,
 		inputHash: z.string().min(1),
+		nac: z.enum(["an", "bat"]),
 	}),
 ]);
 
@@ -363,9 +364,13 @@ export const cauTomTat = z.object({
 	nguon: z.array(z.string().min(1)).min(1).max(TRO_LY_OKR_TRAN.soNguonMoiCau),
 });
 
+export type CauTomTat = z.infer<typeof cauTomTat>;
+
 export const nopTomTat = z.object({
 	cau: z.array(cauTomTat).max(TRO_LY_OKR_TRAN.soCauTomTat),
 });
+
+export type NopTomTat = z.infer<typeof nopTomTat>;
 
 export const MA_LOI_TRO_LY = [
 	"thieu-du-lieu",

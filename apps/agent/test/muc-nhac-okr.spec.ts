@@ -114,6 +114,15 @@ const MAU = {
 		nhan: "Năm 2027",
 	},
 	"tai-lieu-cho-duyet": { loai: "tai-lieu-cho-duyet", so: 2 },
+	"okr-tom-tat": {
+		loai: "okr-tom-tat",
+		tomTatId: "tt-1",
+		departmentId: "pb-1",
+		cycleId: "ky-1",
+		phongTen: "Kinh doanh",
+		krDangBan: ["kr-1", "kr-2"],
+		soKrDangBan: 2,
+	},
 } satisfies {
 	[K in Exclude<ViecNhac["loai"], "ai-tran" | "ai-doi-soat-lech">]: Extract<
 		ViecNhac,

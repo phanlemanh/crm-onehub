@@ -11,6 +11,7 @@ import { markRunning, settle } from "./enrichment";
 import { chayNhac, LOAI_VIEC_NHAC } from "./nhac-ke-hoach";
 import { TRO_LY_OKR } from "./okr/config";
 import { chayKiemSanSang, xepKiemLaiKhoa } from "./okr/kiem-san-sang";
+import { chayXepTomTat, damBaoLichTomTat } from "./okr/lich-tom-tat";
 import {
 	giaHanLease,
 	laViecTroLyOkr,
@@ -158,6 +159,11 @@ async function handleDirect(task: LeasedTask): Promise<void> {
 
 	if (task.kind === "okr-kiem-san-sang") {
 		await chayKiemSanSang(task);
+		return;
+	}
+
+	if (task.kind === "okr-tom-tat-xep") {
+		await chayXepTomTat(task);
 		return;
 	}
 
@@ -386,6 +392,12 @@ export const drainAll = collapsing(
 		await xepKiemLaiKhoa().catch((error) => {
 			console.error(
 				`[agent] Could not queue a fresh AI model key check: ${reasonOf(error)}`,
+			);
+		});
+
+		await damBaoLichTomTat().catch((error) => {
+			console.error(
+				`[agent] Could not keep the weekly OKR summary schedule: ${reasonOf(error)}`,
 			);
 		});
 

@@ -29,6 +29,7 @@ export type CrmCache = {
 	workTransferred(options?: Options): Promise<void>;
 	okr(id?: string, options?: Options): Promise<void>;
 	hoiY(options?: Options): Promise<void>;
+	tomTat(options?: Options): Promise<void>;
 	taiLieu(slug?: string, options?: Options): Promise<void>;
 	campaign(id?: string, options?: Options): Promise<void>;
 	campaignList(options?: Options): Promise<void>;
@@ -291,6 +292,8 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.xuHuongKr.queryKey(),
 					trpc.okr.troLySoDo.queryKey(),
 					trpc.okr.troLyAn.queryKey(),
+					trpc.okr.troLyTomTat.queryKey(),
+					trpc.okr.troLyTomTatQuanTri.queryKey(),
 					trpc.okr.canhKr.queryKey(),
 					trpc.okr.mau.queryKey(),
 					trpc.okr.hoiY.queryKey(),
@@ -303,6 +306,13 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.soanSoDo.queryKey(),
 					trpc.okr.soanAn.queryKey(),
 				],
+				options,
+			),
+
+		tomTat: (options) =>
+			run(
+				[trpc.okr.troLyTomTat.queryKey()],
+				[trpc.okr.troLyTomTatQuanTri.queryKey()],
 				options,
 			),
 
