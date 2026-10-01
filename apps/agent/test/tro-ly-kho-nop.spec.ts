@@ -211,6 +211,66 @@ describe("tlk-kiem", () => {
 	});
 });
 
+describe("tlk-kiem-chu-thuong", () => {
+	test("tlk-kiem-chu-thuong: cau rong bi bac, hang van dang hoi va doc lai duoc", async () => {
+		const { hoiId, ctx } = await moHoiCrm(quanTri);
+		const nop = await goiCongCu(
+			nopTraLoi,
+			{
+				loai: "tra-loi",
+				cau: [
+					{
+						chu: "   ",
+						trich: [{ slug: hoaHong.slug, phienBan: 1, doan: BANG }],
+					},
+				],
+			},
+			ctx,
+		);
+		expect(nop.ok, "tlk-kiem-chu-thuong: cau rong duoc nhan").toBe(false);
+		const hang = await db.taiLieuHoi.findUniqueOrThrow({
+			where: { id: hoiId },
+		});
+		expect(hang.trangThai).toBe("DANG_HOI");
+	});
+
+	test("tlk-kiem-chu-thuong: trang co ky hieu, doan luu va doc lai la chu thuong", async () => {
+		const kyHieu = await trangDaDuyet(
+			quanTri,
+			`Phí dịch vụ ${ma("kh")}`,
+			"## Mức\n\nDoanh số > 100 triệu & phí A_B được **miễn**.",
+		);
+		const { hoiId, ctx } = await moHoiCrm(quanTri);
+		const nop = await goiCongCu(
+			nopTraLoi,
+			{
+				loai: "tra-loi",
+				cau: [
+					{
+						chu: "Doanh số trên 100 triệu được miễn phí.",
+						trich: [
+							{
+								slug: kyHieu.slug,
+								phienBan: 1,
+								doan: "Doanh số > 100 triệu & phí A_B được miễn.",
+							},
+						],
+					},
+				],
+			},
+			ctx,
+		);
+		if (!nop.ok) throw new Error(`tlk-kiem-chu-thuong: bac ${nop.loi}`);
+		const hang = await db.taiLieuHoi.findUniqueOrThrow({
+			where: { id: hoiId },
+		});
+		expect(hang.trangThai).toBe("TRA_LOI");
+		expect(parseTraLoi(hang.traLoi).cau[0]?.trich[0]?.doan).toBe(
+			"Doanh số > 100 triệu & phí A_B được miễn.",
+		);
+	});
+});
+
 describe("tlk-tu-choi", () => {
 	test("tlk-tu-choi: ba ca, cau dung bang hang, khong chu model, giu chu cau hoi", async () => {
 		const MOC = "MODEL-VIET-XYZ";

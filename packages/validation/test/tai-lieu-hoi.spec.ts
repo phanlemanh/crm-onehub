@@ -9,6 +9,7 @@ import {
 	kiemTraLoi,
 	TAI_LIEU_HOI,
 } from "../src/tai-lieu-hoi";
+import { chuanHoa, chuThuong } from "../src/tai-lieu-markdown";
 
 const NOI_DUNG = [
 	"## Mức hoa hồng theo tầng",
@@ -164,7 +165,7 @@ describe("tlk-kiem", () => {
 	test("ma tran viet truoc: dung 13 o, ma loi va thong diep tung o", () => {
 		let dem = 0;
 		for (const ca of MA_TRAN) {
-			const kq = kiemTraLoi(ca.ban, TRANG, DAU_HOM_NAY);
+			const kq = kiemTraLoi(ca.ban, TRANG, DAU_HOM_NAY, chuThuong);
 			if (ca.loai === null) {
 				expect(kq.ok, ca.ten).toBe(true);
 			} else {
@@ -194,6 +195,7 @@ describe("tlk-kiem", () => {
 			),
 			TRANG,
 			DAU_HOM_NAY,
+			chuThuong,
 		);
 		expect(kq.ok).toBe(true);
 	});
@@ -208,18 +210,25 @@ describe("tlk-kiem", () => {
 			mot("Tầng 2 hưởng 1,2%.", "| Tầng 2 | 1,2% |"),
 			new Map([[dem.slug, dem]]),
 			DAU_HOM_NAY,
+			chuThuong,
 		);
 		expect(kq.ok, "tlk-kiem: bang co dem bi bac").toBe(true);
 		const sai = kiemTraLoi(
 			mot("Tầng 2 hưởng 1,2%.", "| Tầng 2 | 1,3% |"),
 			new Map([[dem.slug, dem]]),
 			DAU_HOM_NAY,
+			chuThuong,
 		);
 		expect(sai.ok).toBe(false);
 	});
 
 	test("ban nhan giu anh chup ten, phien ban, ngay duyet luc nop", () => {
-		const kq = kiemTraLoi(mot("Tầng 2 hưởng 1,2%.", BANG), TRANG, DAU_HOM_NAY);
+		const kq = kiemTraLoi(
+			mot("Tầng 2 hưởng 1,2%.", BANG),
+			TRANG,
+			DAU_HOM_NAY,
+			chuThuong,
+		);
 		if (!kq.ok) throw new Error("tlk-kiem: ca a bi bac");
 		expect(kq.traLoi.cau[0].trich[0]).toEqual({
 			slug: "hoa-hong",
@@ -237,7 +246,7 @@ describe("tlk-kiem", () => {
 				trich: [{ slug: "hoa-hong", phienBan: 5, doan: BANG }],
 			})),
 		};
-		const kq = kiemTraLoi(nhieu, TRANG, DAU_HOM_NAY);
+		const kq = kiemTraLoi(nhieu, TRANG, DAU_HOM_NAY, chuThuong);
 		expect(kq.ok).toBe(false);
 		if (!kq.ok) expect(kq.loi[0].loai).toBe("qua-nhieu");
 	});
@@ -317,5 +326,59 @@ describe("tlk-dung-cau", () => {
 		expect(zalo).toContain(`«${BANG}»`);
 		expect(zalo).toContain("Chính sách hoa hồng, phiên bản 5");
 		expect(zalo).not.toContain("**");
+	});
+});
+
+describe("tlk-kiem-chu-thuong", () => {
+	const MD = chuanHoa(
+		"## Mức\n\nDoanh số > 100 triệu & phí A_B được **miễn**.",
+	);
+	const TRANG_KY_HIEU = new Map([
+		[HOA_HONG.slug, { ...HOA_HONG, noiDung: MD }],
+	]);
+	const THUONG = "Doanh số > 100 triệu & phí A_B được miễn.";
+
+	test("tlk-kiem-chu-thuong: trang luu thuc the va dau thoat that su", () => {
+		expect(MD).toContain("&gt;");
+		expect(MD).toContain("\\_");
+	});
+
+	test("tlk-kiem-chu-thuong: doan chep chu thuong duoc nhan, luu chu thuong", () => {
+		const kq = kiemTraLoi(
+			mot("Doanh số trên 100 triệu được miễn phí.", THUONG),
+			TRANG_KY_HIEU,
+			DAU_HOM_NAY,
+			chuThuong,
+		);
+		if (!kq.ok)
+			throw new Error(
+				`tlk-kiem-chu-thuong: bac chu thuong ${JSON.stringify(kq.loi)}`,
+			);
+		expect(kq.traLoi.cau[0]?.trich[0]?.doan).toBe(THUONG);
+	});
+
+	test("tlk-kiem-chu-thuong: doan chep markdown tho duoc nhan nhung luu chu thuong", () => {
+		const kq = kiemTraLoi(
+			mot(
+				"Doanh số trên 100 triệu được miễn phí.",
+				"Doanh số &gt; 100 triệu &amp; phí A\\_B được **miễn**.",
+			),
+			TRANG_KY_HIEU,
+			DAU_HOM_NAY,
+			chuThuong,
+		);
+		if (!kq.ok) throw new Error("tlk-kiem-chu-thuong: bac ban tho");
+		const doan = kq.traLoi.cau[0]?.trich[0]?.doan ?? "";
+		expect(doan).toBe(THUONG);
+		expect(doan).not.toContain("&amp;");
+		expect(doan).not.toContain("&gt;");
+		expect(doan).not.toContain("**");
+	});
+
+	test("tlk-kiem-chu-thuong: cau rong sau trim bi bac", () => {
+		const kq = kiemTraLoi(mot("   ", BANG), TRANG, DAU_HOM_NAY, chuThuong);
+		expect(kq.ok, "tlk-kiem-chu-thuong: cau rong duoc nhan").toBe(false);
+		if (kq.ok) return;
+		expect(kq.loi.map((l) => l.loai)).toContain("cau-rong");
 	});
 });

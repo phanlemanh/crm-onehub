@@ -9,7 +9,9 @@ import {
 	type LoiKiem,
 	parseGanNhat,
 	TAI_LIEU_HOI,
+	traLoiDaKiem,
 } from "@crm/validation/tai-lieu-hoi";
+import { chuThuong } from "@crm/validation/tai-lieu-markdown";
 import { type NguCanhKenh, phienGocCua } from "./phien-con";
 import { TAI_LIEU_AGENT } from "./tai-lieu-config";
 import type { DongTimKho } from "./tai-lieu-kho-doc";
@@ -187,13 +189,14 @@ export async function nopTraLoi(
 		{ cau: vao.cau },
 		new Map(ban.map((b) => [b.slug, banCua(b)])),
 		dauNgayVN(now),
+		chuThuong,
 	);
 	if (kq.ok) {
 		if (
 			!(await ghiKetQuaHoi(
 				db,
 				hoiId,
-				{ trangThai: "TRA_LOI", traLoi: kq.traLoi },
+				{ trangThai: "TRA_LOI", traLoi: traLoiDaKiem.parse(kq.traLoi) },
 				now,
 			))
 		)

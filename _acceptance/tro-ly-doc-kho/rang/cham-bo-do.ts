@@ -102,6 +102,9 @@ const { docNhieuBanDangDung } = await import(
 const { kiemTraLoi, parseTraLoi } = await import(
 	join(GOC, "packages/validation/src/tai-lieu-hoi.ts")
 );
+const { chuThuong } = await import(
+	join(GOC, "packages/validation/src/tai-lieu-markdown.ts")
+);
 const { dauNgayVN } = await import(
 	join(GOC, "packages/db/src/onboarding-nhac.ts")
 );
@@ -264,6 +267,7 @@ async function kiemLai(
 		},
 		bangBan,
 		dauNgayVN(new Date()),
+		chuThuong,
 	);
 	return kq.ok;
 }

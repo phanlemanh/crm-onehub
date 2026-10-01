@@ -111,6 +111,7 @@ export type BanNop = {
 export type LoiKiem = {
 	loai:
 		| "qua-nhieu"
+		| "cau-rong"
 		| "cau-khong-trich"
 		| "trang-khong-co"
 		| "phien-ban-cu"
@@ -148,9 +149,12 @@ export function chuanTrich(s: string): string {
 	return chuanNfc(s).replace(/\s+/g, " ").trim();
 }
 
+export type ChuThuong = (md: string) => string;
+
 function kiemMotTrich(
 	t: { slug: string; phienBan: number; doan: string },
 	trang: ReadonlyMap<string, BanDangDung>,
+	chuThuong: ChuThuong,
 ): LoiKiem | null {
 	const ban = trang.get(t.slug);
 	if (!ban) return { loai: "trang-khong-co", chi: t.slug };
@@ -159,11 +163,13 @@ function kiemMotTrich(
 			loai: "phien-ban-cu",
 			chi: `${t.slug}: bản đang dùng là ${ban.phienBan}`,
 		};
-	const doan = chuanTrich(t.doan);
-	if (doan.length < TAI_LIEU_HOI.trich.toiThieu)
-		return { loai: "trich-ngan", chi: doan };
-	if (!chuanTrich(ban.noiDung).includes(doan))
-		return { loai: "trich-khong-co", chi: doan };
+	const tho = chuanTrich(t.doan);
+	const thuong = chuanTrich(chuThuong(t.doan));
+	if (thuong.length < TAI_LIEU_HOI.trich.toiThieu)
+		return { loai: "trich-ngan", chi: tho };
+	const khopTho = chuanTrich(ban.noiDung).includes(tho);
+	const khopThuong = chuanTrich(chuThuong(ban.noiDung)).includes(thuong);
+	if (!khopTho && !khopThuong) return { loai: "trich-khong-co", chi: tho };
 	return null;
 }
 
@@ -171,7 +177,9 @@ export function kiemTraLoi(
 	ban: BanNop,
 	trang: ReadonlyMap<string, BanDangDung>,
 	dauHomNay: Date,
+	chuThuong: ChuThuong,
 ): KetQuaKiemTraLoi {
+	const hien = (doan: string) => chuanTrich(chuThuong(doan));
 	const T = TAI_LIEU_HOI.trich;
 	if (ban.cau.length === 0 || ban.cau.length > T.cauToiDa)
 		return {
@@ -181,6 +189,10 @@ export function kiemTraLoi(
 	const loi: LoiKiem[] = [];
 	ban.cau.forEach((cau, i) => {
 		const ten = `câu ${i + 1}`;
+		if (chuanNfc(cau.chu).trim().length === 0) {
+			loi.push({ loai: "cau-rong", chi: ten });
+			return;
+		}
 		if (cau.trich.length === 0) {
 			loi.push({ loai: "cau-khong-trich", chi: ten });
 			return;
@@ -190,11 +202,11 @@ export function kiemTraLoi(
 			return;
 		}
 		const loiTrich = cau.trich
-			.map((t) => kiemMotTrich(t, trang))
+			.map((t) => kiemMotTrich(t, trang, chuThuong))
 			.filter((l): l is LoiKiem => l !== null);
 		loi.push(...loiTrich);
 		if (loiTrich.length > 0) return;
-		const doan = cau.trich.map((t) => chuanTrich(t.doan));
+		const doan = cau.trich.map((t) => hien(t.doan));
 		for (const so of rutSoChu(cau.chu)) {
 			if (!doan.some((d) => coSoTronVen(d, so)))
 				loi.push({ loai: "so-khong-trich", chi: `${ten}: ${so}` });
@@ -212,7 +224,7 @@ export function kiemTraLoi(
 				ten: b.ten,
 				phienBan: b.phienBan,
 				duyetLuc: b.duyetLuc,
-				doan: chuanTrich(t.doan),
+				doan: hien(t.doan),
 			};
 		}),
 	}));
