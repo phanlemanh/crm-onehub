@@ -96,3 +96,7 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 - Làn A đang bận 9c: thiết kế chạy song song; viết mã và chấm S4 hỏi chủ kho trước.
 - Migration chỉ thêm; mốc migration dời sau production khi gộp (như 9a).
 - Tắt khi gộp; bật cấp OneHub cho mùa OKR năm 2027 là việc của chủ kho trên trang theo dõi.
+- Thước quyền xem của hồ sơ `gioi-han-duyet-cay-okr` (`rang/soi-ma.mjs --ca xem`) sẽ đỏ thêm 2 dòng trên `onehub` sau khi PR này gộp, cho tới khi hai dòng miễn dưới đây được nhận (gom ở PR theo sau, không sửa hồ sơ đã ký kia trong PR này). Hai lời đọc ở thẻ số đo việc soạn, chỉ quản trị gọi (`soDo` sau `assertQuanTri`), chỉ ra số đếm; thêm luật xem không đổi gì với quản trị và `boGioiHan` sẽ trái AC-11 (đếm cả Mục tiêu giới hạn):
+  - `{ tep: "apps/api/src/okr/soan-so-do.service.ts", ham: "mucTieuTuNhap", bang: "okrTrail", lyDo: "số đo việc soạn chỉ quản trị gọi (soDo sau assertQuanTri): đọc objectiveId và note của vết «tao» mang tiền tố cuộc soạn để nối Mục tiêu với cuộc; chỉ ra số đếm" }`
+  - `{ tep: "apps/api/src/okr/soan-so-do.service.ts", ham: "mucTieuTuNhap", bang: "okrObjective", lyDo: "số đo việc soạn chỉ quản trị gọi (soDo sau assertQuanTri): đọc id, createdAt, publishedAt để đếm công bố trong 14 ngày, kể cả mục tiêu giới hạn như rang/nhap-cong-bo.sql; không trả nội dung" }`
+- Giới hạn có tên (chủ kho chốt 2026-10-01, dừng-vá E20(a)): tác nhân chết im: người dùng chờ tới 45 giây mới thấy báo lỗi.

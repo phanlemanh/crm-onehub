@@ -165,6 +165,7 @@ Chưa dựng (thước chưa có trong cây; dựng xong mới tới lượt xin
 - Bật cho người dùng: nấc «ẩn» trước, «bật» theo đơn vị ở Cài đặt › Chương trình OKR;
   trần tháng đặt OKR do chủ kho quyết sau N-soạn.
 - Chưa gửi lên hãng: bộ tạo model ZDR và khuôn app eve thứ hai — ghi ở mục chỗ rẽ.
+- **Thước quyền xem của `gioi-han-duyet-cay-okr` sẽ đỏ thêm 2 dòng trên `onehub` sau khi PR này gộp**, cho tới khi hai dòng miễn được nhận ở PR theo sau: `soan-so-do.service.ts · mucTieuTuNhap · okrTrail` và `· okrObjective` — số đo việc soạn chỉ quản trị gọi, chỉ ra số đếm (nguyên văn hai dòng ở Notes của hợp đồng).
 - **Luật cho commit cuối trước gộp** — làm trong cùng một commit:
   (a) dòng 11 mục 10 `docs/plan/lo-trinh-okr.md`: ô Trạng thái thành «đã lên `onehub`»,
   ô Ngày thành ngày của commit đó, ô PR thành `#<số>`; cột Ghi chú chỉ nối thêm
