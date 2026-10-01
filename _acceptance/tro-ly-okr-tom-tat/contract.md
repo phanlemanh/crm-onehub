@@ -5,7 +5,7 @@ slug: tro-ly-okr-tom-tat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-09-30T14:53:45Z
 design_doc: docs/superpowers/specs/2026-09-30-tro-ly-okr-tom-tat-design.md
@@ -88,5 +88,11 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 - E17 có thêm chốt «mọi việc tóm tắt của lượt đo đóng `da-nop`». Phòng không có gì để nói — không có Cập nhật tuần nào trong 7 ngày — không bao giờ có việc, nên một việc đóng khác `da-nop` là Trợ lý hỏng hay không nộp, không phải phòng im lặng.
 - Chi phí tóm tắt = bước của Trợ lý (nhóm `okr.tom-tat`) cộng bước chuyển tiếp của phiên gốc (nhóm `okr.chuyen-tiep`) nối qua mã việc — phán quyết R13 (`d-20260930T163030Z-11`). Bước chuyển tiếp giữ nhóm của nó như 9b; `rang/chi-phi-tom-tat.sql` cộng cả hai.
+- known-limits (Ngoài-1, Cổng 2 ngày 01/10): người dùng trình đọc màn hình không nhảy tới được khối «Trợ lý OKR» ở trang nhắc và hai tiêu đề con trong thẻ tóm tắt quản trị bằng phím tắt tiêu đề — `CardTitle` (một `div`) thay `h2`/`h3` ở `khoi-kenh.tsx` và `tom-tat-quan-tri.tsx`; chữ vẫn hiện bình thường.
+- known-limits (Ngoài-2, Cổng 2 ngày 01/10): ca «beginResearch thật giữ việc tóm tắt 3 phút» không đỏ được khi `beginResearch` thôi gia hạn; bỏ bước rút về 3 phút thì không bài nào báo, việc tóm tắt bị đứt sẽ chờ lâu hơn mới chạy lại.
+- known-limits (Ngoài-3, Cổng 2 ngày 01/10): bài đó tự nhận việc với đúng 3 phút nó định đo, nên không chứng hệ thống thật tự rút xuống 3 phút.
+- known-limits (Ngoài-4, Cổng 2 ngày 01/10): bài «model tóm tắt kẹp 8.000» đo lớp kẹp rời, không đo đúng model tóm tắt tác tử dùng; cấu hình nhầm trần của model đó thì bài vẫn xanh.
+- known-limits (Ngoài-5, Cổng 2 ngày 01/10): đường chọn model riêng cho việc tóm tắt chỉ được thử ca trả về mặc định; hỏng im lặng thì tóm tắt chạy với trần nhỏ hơn dự định mà không cảnh báo.
+- known-limits (Ngoài-6, Cổng 2 ngày 01/10): bài thước số lệch đọc số ca tự kiểm từ chính thước, bảng sáu đơn vị chép tay không ghim vào bảng nguồn.
 
 ## Iterations
