@@ -794,19 +794,39 @@ async function buocSuaQuaChat(tl, A, giu) {
 				coAnhHep = true;
 			} else
 				dong.push(
-					`GHI ST-soan-sua-qua-chat ${B.rong}: trang hep mo truoc luot khong doc lai sau luot — anh hep chup o trang hep mo moi`,
+					`GHI ST-soan-sua-qua-chat ${B.rong}: trang hep mo truoc luot khong doc lai sau luot — anh hep chup tren trang rong thu ve 390`,
 				);
 			await A.p.bringToFront();
 		}
 	} finally {
 		await B.ctx.close();
 	}
-	if (!coAnhHep)
-		await anhHep(tl, "ST-soan-sua-qua-chat", {
-			tab: "ban-nhap",
-			cho: daBo,
-			toi: hang,
+	if (!coAnhHep) {
+		const H = { ...A, rong: E13.kho.hep.rong };
+		await A.p.setViewport({
+			width: E13.kho.hep.rong,
+			height: E13.kho.hep.cao,
+			deviceScaleFactor: 1,
 		});
+		try {
+			kiem(
+				`ST-soan-sua-qua-chat ${H.rong}: tab ban-nhap`,
+				await bamTab(A.p, "ban-nhap"),
+			);
+			kiem(
+				`ST-soan-sua-qua-chat ${H.rong}: ${daBo} hien`,
+				await hien(A.p, daBo),
+			);
+			await chup(H, "ST-soan-sua-qua-chat", hang);
+		} finally {
+			await A.p.setViewport({
+				width: E13.kho.rong.rong,
+				height: E13.kho.rong.cao,
+				deviceScaleFactor: 1,
+			});
+			await hien(A.p, '[data-khong="rong"] [data-cot="ban-nhap"]');
+		}
+	}
 	const them = await dienSo(A.p, tl);
 	if (them.length > 0)
 		dong.push(
