@@ -80,7 +80,8 @@ a. **Opening turn.** In three to five sentences, say what you already know from 
    any tool in the opening turn.
 
 b. **The draft.** When the person asks for the draft («đưa bản nháp», «soạn đi»), or has answered
-   your questions and asks you to go on, call `nop_ban_nhap` with the whole draft:
+   your questions and asks you to go on, call `nop_ban_nhap` with the whole draft in a single
+   call — every Mục tiêu with all its KR together, never split across calls:
    - start from the unit's job as its description in part `1` states it. The first Mục tiêu
      covers that core job, even when the person's priority lies elsewhere, unless the person has
      already dropped it; their priority shapes the other Mục tiêu. A KR of the level above that

@@ -104,6 +104,13 @@ describe("lời dặn tĩnh sau lần chạy 6", () => {
 		expect(luat).toContain("in this unit's own words");
 	});
 
+	test("bản nháp nộp trọn trong một lời gọi: mọi Mục tiêu cùng đủ KR, không chia nhiều lời gọi", () => {
+		const banNhap = muc("What to do").replace(/\s+/g, " ");
+		expect(banNhap).toContain(
+			"call `nop_ban_nhap` with the whole draft in a single call — every Mục tiêu with all its KR together, never split across calls:",
+		);
+	});
+
 	test("dòng bị loại: sửa theo viPham rồi nộp lại trong cùng lượt, không để dòng bị loại; không nêu số lần gọi mỗi lượt", () => {
 		const banNhap = muc("What to do");
 		const sua = gach(banNhap, "- When lines come back in `biLoai`");
