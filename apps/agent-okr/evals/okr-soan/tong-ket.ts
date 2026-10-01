@@ -110,6 +110,11 @@ export type PhanLoaiHong = {
 	duoiNguong: DuoiNguong[];
 };
 
+const VERDICT_HONG = ["failed", "errored"];
+const NHAN_CHAN_DOAN = new RegExp(
+	`^(${TRO_LY_OKR_SOAN.danhGia.boiCanh.nhan}:.+|.+ tc\\d+)$`,
+);
+
 function nhanCua(ten: string): string {
 	return ten.match(NHAN_JUDGE)?.[1] ?? ten;
 }
@@ -119,7 +124,10 @@ export function phanLoaiHong(tom: TomTatChay): PhanLoaiHong {
 	for (const e of tom.evals) {
 		const hong = e.assertions.filter((a) => !a.passed);
 		for (const a of hong) {
-			if (!a.name.startsWith(TIEN_TO_JUDGE))
+			if (
+				!a.name.startsWith(TIEN_TO_JUDGE) ||
+				!NHAN_CHAN_DOAN.test(nhanCua(a.name))
+			)
 				ra.chotMa.push({
 					id: e.id,
 					ten: a.name,
@@ -136,8 +144,15 @@ export function phanLoaiHong(tom: TomTatChay): PhanLoaiHong {
 			else
 				ra.duoiNguong.push({ id: e.id, nhan: nhanCua(a.name), diem: a.score });
 		}
-		if (e.error !== undefined && hong.length === 0)
-			ra.chotMa.push({ id: e.id, ten: `loi: ${e.error}`, phienHong: false });
+		if (
+			hong.length === 0 &&
+			(e.error !== undefined || VERDICT_HONG.includes(e.verdict))
+		)
+			ra.chotMa.push({
+				id: e.id,
+				ten: `loi: ${e.error ?? e.verdict}`,
+				phienHong: false,
+			});
 	}
 	return ra;
 }
@@ -347,6 +362,12 @@ export function ketQuaAB(ab: DemAB, nguong: number): KetQuaAB {
 const phanTram = (v: number | null) =>
 	v === null ? "—" : `${Math.round(v * 100)}`;
 
+export type DuKetQua = { eval: string; co: number; can: number };
+
+export function soChotHong(tom: TomTatChay): number {
+	return tom.evals.flatMap((e) => e.assertions).filter((a) => !a.passed).length;
+}
+
 export function ketLuanThuoc(v: {
 	phan: PhanLoaiHong;
 	soLanThu: number;
@@ -356,6 +377,8 @@ export function ketLuanThuoc(v: {
 	tyLeNguong: number;
 	maEve: number | null;
 	haTang: HaTang;
+	soChotHong: number;
+	du: readonly DuKetQua[];
 }): KetLuan {
 	const { phan } = v;
 	const haTang = ketLuanHaTang(phan, v.haTang);
@@ -364,6 +387,12 @@ export function ketLuanThuoc(v: {
 		return {
 			ma: 1,
 			cau: `chot ma hong ${phan.chotMa.length}: ${phan.chotMa.map((h) => `${h.id} ${h.ten}`).join("; ")}${v.haTang.soPhien > 0 ? ` (kem ${moTaHaTang(v.haTang)}; ${v.haTang.phienKhac} phien hong khong do ha tang)` : ""}`,
+		};
+	const thieu = v.du.filter((d) => d.co < d.can);
+	if (thieu.length > 0)
+		return {
+			ma: 2,
+			cau: `thieu ket qua: ${thieu.map((d) => `${d.eval} ${d.co}/${d.can}`).join(", ")} — khong xanh, chay lai`,
 		};
 	if (v.khongGia > 0)
 		return {
@@ -383,11 +412,11 @@ export function ketLuanThuoc(v: {
 			ma: 1,
 			cau: `ban co goi thang ${v.ab.thang}/${v.ab.daCham + v.ab.khongCham} cap (${phanTram(ab.tyLeXauNhat)} %) < ${nguong} %, ke ca khi moi cap khong cham duoc deu thang`,
 		};
-	if (
-		v.maEve !== 0 &&
-		phan.judgeHong.length === 0 &&
-		phan.duoiNguong.length === 0
-	)
-		return { ma: 1, cau: `eve eval ma ${v.maEve} ma khong ro nguyen nhan` };
+	const soChanDoan = phan.judgeHong.length + phan.duoiNguong.length;
+	if (v.maEve !== 0 && (soChanDoan === 0 || v.soChotHong !== soChanDoan))
+		return {
+			ma: 1,
+			cau: `eve eval ma ${v.maEve} ma khong ro nguyen nhan: ${v.soChotHong} chot hong trong summary, ${soChanDoan} da xep la judge chan doan`,
+		};
 	return { ma: 0, cau: null };
 }

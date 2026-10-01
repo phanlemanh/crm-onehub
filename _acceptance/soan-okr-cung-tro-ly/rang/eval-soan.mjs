@@ -228,6 +228,7 @@ const {
 	ketQuaAB,
 	phanLoaiHaTang,
 	phanLoaiHong,
+	soChotHong,
 	thongKeJudge,
 } = await import(join(APP, "evals", "okr-soan", "tong-ket.ts"));
 const tomTat = docTomTat(
@@ -297,6 +298,12 @@ const demAB = {
 	khongCham: khongCham.length,
 };
 const ab = ketQuaAB(demAB, DG.boiCanh.tyLeThang);
+const { boCa, soCapAB } = await import(join(APP, "evals", "okr-soan", "ca.ts"));
+const du = [
+	{ eval: "soan", co: soan.length, can: boCa().length },
+	{ eval: "soan-boi-canh", co: boiCanhTatCa.length, can: soCapAB() },
+	{ eval: "soan-do-tre", co: doTre.length, can: DG.doTre.soCuoc },
+];
 const tieuChi = bangTieuChi(tomTat);
 const luotCham = doTre
 	.flatMap((d) =>
@@ -452,6 +459,8 @@ const ketLuan = ketLuanThuoc({
 	tyLeNguong: DG.boiCanh.tyLeThang,
 	maEve: ket.status,
 	haTang,
+	soChotHong: soChotHong(tomTat),
+	du,
 });
 if (ketLuan.cau) thoat(ketLuan.ma, ketLuan.cau);
 process.exit(ketLuan.ma);

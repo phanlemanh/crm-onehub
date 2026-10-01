@@ -25,6 +25,7 @@ import {
 	loaiHaTang,
 	phanLoaiHaTang,
 	phanLoaiHong,
+	soChotHong,
 	type TomTatChay,
 	thongKeJudge,
 } from "../evals/okr-soan/tong-ket";
@@ -291,6 +292,12 @@ const CO_BAN = {
 	tyLeNguong: TRO_LY_OKR_SOAN.danhGia.boiCanh.tyLeThang,
 	maEve: 1,
 	haTang: KHONG_HA_TANG,
+	soChotHong: 0,
+	du: [
+		{ eval: "soan", co: 5, can: 5 },
+		{ eval: "soan-boi-canh", co: 15, can: 15 },
+		{ eval: "soan-do-tre", co: 10, can: 10 },
+	],
 };
 
 describe("eval-soan: tách judge hỏng khỏi chốt mã hỏng", () => {
@@ -715,8 +722,77 @@ describe("eval-soan: mã thoát theo hợp đồng (AC-13 / E22)", () => {
 				phan,
 				...CO_BAN,
 				ab: { thang: 14, daCham: 14, khongCham: 1 },
+				soChotHong: soChotHong(TOM_TAT_HOP_DONG),
 			}),
 		).toEqual({ ma: 0, cau: null });
+	});
+
+	test("khuôn lần chạy 7 thêm một chốt hỏng không xếp được → mã 1", () => {
+		const tom = structuredClone(TOM_TAT_HOP_DONG);
+		tom.evals[0]?.assertions.push({
+			name: "judge.autoevals.factuality [la]",
+			score: 0,
+			severity: "soft",
+			passed: false,
+			metadata: { choice: "C" },
+		});
+		const phanThem = phanLoaiHong(tom);
+		expect(phanThem.chotMa.map((c) => c.ten)).toEqual([
+			"judge.autoevals.factuality [la]",
+		]);
+		const kl = ketLuanThuoc({
+			phan: phanThem,
+			...CO_BAN,
+			ab: { thang: 14, daCham: 14, khongCham: 1 },
+			soChotHong: soChotHong(tom),
+		});
+		expect(kl.ma).toBe(1);
+	});
+
+	test("eve thoát khác 0 mà số chốt hỏng trong summary khác số đã xếp chẩn đoán → mã 1", () => {
+		const kl = ketLuanThuoc({
+			phan,
+			...CO_BAN,
+			ab: { thang: 14, daCham: 14, khongCham: 1 },
+			soChotHong: soChotHong(TOM_TAT_HOP_DONG) + 1,
+		});
+		expect(kl.ma).toBe(1);
+		expect(kl.cau).toContain("khong ro nguyen nhan: 8 chot hong");
+	});
+
+	test("eval hỏng mà không có chốt nào đỏ → chốt mã hỏng, mã 1", () => {
+		const tom = structuredClone(TOM_TAT_HOP_DONG);
+		tom.evals.push({
+			id: "okr-soan/soan-do-tre/0009",
+			verdict: "failed",
+			assertions: [],
+		});
+		expect(
+			ketLuanThuoc({
+				phan: phanLoaiHong(tom),
+				...CO_BAN,
+				ab: { thang: 14, daCham: 14, khongCham: 1 },
+				soChotHong: soChotHong(tom),
+			}).ma,
+		).toBe(1);
+	});
+
+	test("thiếu kết quả độ trễ (eve chết giữa chừng) → mã 2 «thieu ket qua», dù A/B đạt", () => {
+		const kl = ketLuanThuoc({
+			phan,
+			...CO_BAN,
+			ab: { thang: 14, daCham: 14, khongCham: 1 },
+			soChotHong: soChotHong(TOM_TAT_HOP_DONG),
+			du: [
+				{ eval: "soan", co: 5, can: 5 },
+				{ eval: "soan-boi-canh", co: 15, can: 15 },
+				{ eval: "soan-do-tre", co: 0, can: 10 },
+			],
+		});
+		expect(kl).toEqual({
+			ma: 2,
+			cau: "thieu ket qua: soan-do-tre 0/10 — khong xanh, chay lai",
+		});
 	});
 
 	test("cùng khuôn mà 5 cặp không chấm được, gói thắng 7/10 → mã 2, kết luận có thể đổi", () => {
