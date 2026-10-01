@@ -811,13 +811,27 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
 - **`okrSoChup` is append-only history.** One row per KR per day for `crm` and
   `bang-tinh` (the partial unique index `okrSoChup_may_mot_ngay`), any number per day for `api` (the newest is
   that day's number). Each row copies the definition it was counted with (`chiSo`,
-  `phamVi`, `bac`), so history describes itself after the source changes. Nothing
-  updates or deletes a row: the foreign key to the KR is `ON DELETE RESTRICT`,
-  `removeKeyResult` refuses a KR that has a snapshot (`OKR.thongDiep.so.krDaCoSoChup`),
-  and `_acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca chi-them` fails on any
-  `okrSoChup.update*` / `delete*` or raw SQL that does either outside tests. Rows are
-  written in three places only: the agent's daily snapshot, the shared `chupKrCrm`, and
-  `ghiSoKr`.
+  `phamVi`, `bac`), so history describes itself after the source changes. Nothing in
+  the product updates or deletes a row: the foreign key to the KR is `ON DELETE RESTRICT`,
+  `removeKeyResult` refuses a KR that has a snapshot (`OKR.thongDiep.so.krDaCoSoChup`).
+  The product creates rows in exactly three places: the agent's daily snapshot
+  (`apps/agent/agent/lib/okr-chup.ts`), the shared `chupKrCrm`
+  (`packages/db/src/okr-chi-so.ts`), and `ghiSoKr` (`apps/api/src/okr/okr-so.service.ts`).
+  - **One exemption: the dev tool `okr:mau`.** The sample OKR set needs snapshot
+    history and must be removable, so `apps/api/scripts/okr-mau/nap.ts` creates rows
+    in `napTrong` and deletes them in `xoaTrong`. It never touches real history: the
+    entry `apps/api/scripts/okr-mau.ts` exits through `kiemDuocNap` unless the database
+    is on this machine, and `kiemOkrThat` refuses any workspace with a real cycle,
+    objective or KR before either function runs — so the only snapshots it can reach
+    belong to sample KRs.
+  - `_acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca chi-them` fails on any
+    `okrSoChup.update*` / `delete*` or raw SQL that does either outside tests, and on any
+    create outside the three places. It exempts exactly those two calls (`MIEN_BO_MAU`),
+    and only while four checks hold: the delete filters on `keyResultId`, the entry
+    calls `kiemDuocNap` and exits before importing `./okr-mau/lenh`, every call of
+    `xoaTrong`/`napTrong` follows a `kiemOkrThat`, and nothing outside the tool imports
+    `okr-mau/nap` or `okr-mau/lenh`. One check breaking turns both calls back into
+    violations — a new caller has to keep the guards, not widen the exemption.
 - **Another system writes a number with an API key.** `okr.ghiSoKr` is also
   `POST /rest/okr/key-results/{id}/value` with `x-api-key` — a member's key
   (`enableSessionForAPIKeys`); the service checks that member with
