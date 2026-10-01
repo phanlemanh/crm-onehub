@@ -201,7 +201,8 @@ describe("tlk-kiem", () => {
 	test("tlk-kiem: bang luu co dem khoang trang van khop doan go mot khoang trang", () => {
 		const dem: BanDangDung = {
 			...HOA_HONG,
-			noiDung: "| Tầng   | Hoa hồng |\n| ------ | -------- |\n| Tầng 2 | 1,2%     |",
+			noiDung:
+				"| Tầng   | Hoa hồng |\n| ------ | -------- |\n| Tầng 2 | 1,2%     |",
 		};
 		const kq = kiemTraLoi(
 			mot("Tầng 2 hưởng 1,2%.", "| Tầng 2 | 1,2% |"),
