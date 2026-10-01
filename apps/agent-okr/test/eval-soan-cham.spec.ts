@@ -13,6 +13,7 @@ import {
 } from "../evals/okr-soan/judge";
 import { phanViTheoLoaiLuot } from "../evals/okr-soan/tinh";
 import {
+	bangTieuChi,
 	docSuKienHong,
 	docTinDung,
 	docTomTat,
@@ -20,6 +21,7 @@ import {
 	KHONG_HA_TANG,
 	ketLuanThuoc,
 	ketLuanTinDung,
+	ketQuaAB,
 	loaiHaTang,
 	phanLoaiHaTang,
 	phanLoaiHong,
@@ -285,7 +287,7 @@ const CO_BAN = {
 	soLanThu: SO_LAN,
 	khongGia: 0,
 	boQua: 0,
-	tyLe: 1,
+	ab: { thang: 15, daCham: 15, khongCham: 0 },
 	tyLeNguong: TRO_LY_OKR_SOAN.danhGia.boiCanh.tyLeThang,
 	maEve: 1,
 	haTang: KHONG_HA_TANG,
@@ -307,7 +309,13 @@ describe("eval-soan: tách judge hỏng khỏi chốt mã hỏng", () => {
 			{ id: "okr-soan/soan/0002", nhan: "pb-kd-bac tc4", diem: 0 },
 			{ id: "okr-soan/soan/0003", nhan: "pb-kho-van tc2", diem: 0 },
 		]);
-		expect(ketLuanThuoc({ phan, ...CO_BAN }).ma).toBe(2);
+		expect(
+			ketLuanThuoc({
+				phan,
+				...CO_BAN,
+				ab: { thang: 7, daCham: 10, khongCham: 5 },
+			}).ma,
+		).toBe(2);
 	});
 
 	test("một chốt mã đỏ thắng judge hỏng: mã 1, gọi tên chốt", () => {
@@ -351,20 +359,22 @@ describe("eval-soan: tách judge hỏng khỏi chốt mã hỏng", () => {
 		]);
 	});
 
-	test("không judge hỏng: dưới ngưỡng và tỷ lệ thắng thấp là mã 1; sạch là mã 0", () => {
+	test("không judge hỏng: tỷ lệ thắng thấp là mã 1, eval bỏ qua là mã 2, sạch là mã 0", () => {
 		const phan = { chotMa: [], judgeHong: [], duoiNguong: [] };
 		expect(ketLuanThuoc({ phan, ...CO_BAN, maEve: 0 })).toEqual({
 			ma: 0,
 			cau: null,
 		});
-		expect(ketLuanThuoc({ phan, ...CO_BAN, maEve: 0, tyLe: 0.6 }).ma).toBe(1);
-		expect(ketLuanThuoc({ phan, ...CO_BAN, maEve: 0, boQua: 1 }).ma).toBe(2);
 		expect(
 			ketLuanThuoc({
-				phan: { ...phan, duoiNguong: [{ id: "x", nhan: "tc2", diem: 0 }] },
+				phan,
 				...CO_BAN,
+				maEve: 0,
+				ab: { thang: 9, daCham: 15, khongCham: 0 },
 			}).ma,
 		).toBe(1);
+		expect(ketLuanThuoc({ phan, ...CO_BAN, maEve: 0, boQua: 1 }).ma).toBe(2);
+		expect(ketLuanThuoc({ phan, ...CO_BAN, maEve: 1 }).ma).toBe(1);
 	});
 });
 
@@ -630,5 +640,143 @@ describe("eval-soan: đọc tín dụng gateway trước khi chạy", () => {
 		expect(() =>
 			docTinDung(JSON.stringify({ balance: "abc", total_used: "1" })),
 		).toThrow();
+	});
+});
+
+const tieuChiLan7 = (ca: string, duoi: number[]) =>
+	TRO_LY_OKR_SOAN.danhGia.boiCanh.tieuChi.map((_, i) => ({
+		name: `judge.autoevals.closedQA [${ca} tc${i + 1}]`,
+		score: duoi.includes(i + 1) ? 0 : 1,
+		severity: "soft",
+		passed: !duoi.includes(i + 1),
+		metadata: { choice: duoi.includes(i + 1) ? "N" : "Y" },
+	}));
+
+const TOM_TAT_HOP_DONG: TomTatChay = {
+	totalEvals: 3,
+	passed: 1,
+	failed: 1,
+	scored: 1,
+	skipped: 0,
+	evals: [
+		{
+			id: "okr-soan/soan/0002",
+			verdict: "scored",
+			assertions: [
+				{
+					name: "equals [dich null]",
+					score: 1,
+					severity: "gate",
+					passed: true,
+				},
+				...tieuChiLan7("pb-kd-bac", [2, 4, 6]),
+			],
+		},
+		{
+			id: "okr-soan/soan/0003",
+			verdict: "scored",
+			assertions: [
+				{
+					name: "equals [dich null]",
+					score: 1,
+					severity: "gate",
+					passed: true,
+				},
+				...tieuChiLan7("pb-kho-van", [1, 2, 4]),
+			],
+		},
+		{
+			id: "okr-soan/soan-boi-canh/0002",
+			verdict: "failed",
+			assertions: [
+				{
+					name: "judge.autoevals.closedQA [boi-canh:pb-kd-bac#v1]",
+					score: 0,
+					severity: "gate",
+					passed: false,
+					message: LOI_JUDGE,
+				},
+			],
+		},
+	],
+};
+
+describe("eval-soan: mã thoát theo hợp đồng (AC-13 / E22)", () => {
+	const phan = phanLoaiHong(TOM_TAT_HOP_DONG);
+
+	test("khuôn lần chạy 7: 0 chốt mã hỏng, 14/15 cặp chấm được đều thắng, 6 tiêu chí dưới ngưỡng → mã 0", () => {
+		expect(phan.chotMa).toEqual([]);
+		expect(phan.duoiNguong.length).toBe(6);
+		expect(phan.judgeHong.map((h) => h.nhan)).toEqual([
+			"boi-canh:pb-kd-bac#v1",
+		]);
+		expect(
+			ketLuanThuoc({
+				phan,
+				...CO_BAN,
+				ab: { thang: 14, daCham: 14, khongCham: 1 },
+			}),
+		).toEqual({ ma: 0, cau: null });
+	});
+
+	test("cùng khuôn mà 5 cặp không chấm được, gói thắng 7/10 → mã 2, kết luận có thể đổi", () => {
+		const kl = ketLuanThuoc({
+			phan,
+			...CO_BAN,
+			ab: { thang: 7, daCham: 10, khongCham: 5 },
+		});
+		expect(kl.ma).toBe(2);
+		expect(kl.cau).toStartWith("judge hong, ket luan co the doi");
+		expect(kl.cau).toContain("xau nhat 47 %, tot nhat 80 %");
+	});
+
+	test("không chấm được mà dù thắng hết vẫn dưới 70 % → mã 1", () => {
+		expect(
+			ketLuanThuoc({
+				phan,
+				...CO_BAN,
+				ab: { thang: 4, daCham: 12, khongCham: 3 },
+			}).ma,
+		).toBe(1);
+	});
+
+	test("một chốt mã đỏ → mã 1 dù A/B đạt", () => {
+		const tom = structuredClone(TOM_TAT_HOP_DONG);
+		tom.evals[0]?.assertions.push({
+			name: "equals [khong ma loai con lai]",
+			score: 0,
+			severity: "gate",
+			passed: false,
+		});
+		const kl = ketLuanThuoc({
+			phan: phanLoaiHong(tom),
+			...CO_BAN,
+			ab: { thang: 14, daCham: 14, khongCham: 1 },
+		});
+		expect(kl.ma).toBe(1);
+		expect(kl.cau).toContain("equals [khong ma loai con lai]");
+	});
+
+	test("ketQuaAB: tỷ lệ trên cặp chấm được, xấu nhất và tốt nhất", () => {
+		expect(ketQuaAB({ thang: 14, daCham: 14, khongCham: 1 }, 0.7)).toEqual({
+			tyLeDaCham: 1,
+			tyLeXauNhat: 14 / 15,
+			tyLeTotNhat: 1,
+			dat: true,
+			coTheDoi: false,
+		});
+		expect(ketQuaAB({ thang: 0, daCham: 0, khongCham: 0 }, 0.7).dat).toBe(
+			false,
+		);
+	});
+
+	test("bangTieuChi in sáu cột mỗi ca, judge hỏng thành ô trống", () => {
+		const tom = structuredClone(TOM_TAT_HOP_DONG);
+		const dau = tom.evals[0]?.assertions[1];
+		if (dau) dau.metadata = null;
+		expect(bangTieuChi(tom)).toEqual([
+			{ ca: "pb-kd-bac", diem: [null, 0, 1, 0, 1, 0] },
+			{ ca: "pb-kho-van", diem: [0, 0, 1, 0, 1, 1] },
+		]);
 	});
 });

@@ -301,12 +301,58 @@ export function ketLuanTinDung(t: TinDung): KetLuan {
 			};
 }
 
+const TIEU_CHI = /^(.+) tc(\d+)$/;
+
+export type DongTieuChi = { ca: string; diem: (number | null)[] };
+
+export function bangTieuChi(tom: TomTatChay): DongTieuChi[] {
+	const so = TRO_LY_OKR_SOAN.danhGia.boiCanh.tieuChi.length;
+	const bang = new Map<string, (number | null)[]>();
+	for (const a of tom.evals.flatMap((e) => e.assertions)) {
+		if (!a.name.startsWith(TIEN_TO_JUDGE)) continue;
+		const m = nhanCua(a.name).match(TIEU_CHI);
+		if (!m?.[1] || !m[2]) continue;
+		const dong = bang.get(m[1]) ?? Array.from({ length: so }, () => null);
+		dong[Number(m[2]) - 1] =
+			(a.metadata?.choice ?? null) === null ? null : a.score;
+		bang.set(m[1], dong);
+	}
+	return [...bang].map(([ca, diem]) => ({ ca, diem }));
+}
+
+export type DemAB = { thang: number; daCham: number; khongCham: number };
+
+export type KetQuaAB = {
+	tyLeDaCham: number | null;
+	tyLeXauNhat: number | null;
+	tyLeTotNhat: number | null;
+	dat: boolean;
+	coTheDoi: boolean;
+};
+
+export function ketQuaAB(ab: DemAB, nguong: number): KetQuaAB {
+	const tong = ab.daCham + ab.khongCham;
+	const tyLeXauNhat = tong === 0 ? null : ab.thang / tong;
+	const tyLeTotNhat = tong === 0 ? null : (ab.thang + ab.khongCham) / tong;
+	const dat = tyLeXauNhat !== null && tyLeXauNhat >= nguong;
+	return {
+		tyLeDaCham: ab.daCham === 0 ? null : ab.thang / ab.daCham,
+		tyLeXauNhat,
+		tyLeTotNhat,
+		dat,
+		coTheDoi: !dat && tyLeTotNhat !== null && tyLeTotNhat >= nguong,
+	};
+}
+
+const phanTram = (v: number | null) =>
+	v === null ? "—" : `${Math.round(v * 100)}`;
+
 export function ketLuanThuoc(v: {
 	phan: PhanLoaiHong;
 	soLanThu: number;
 	khongGia: number;
 	boQua: number;
-	tyLe: number | null;
+	ab: DemAB;
 	tyLeNguong: number;
 	maEve: number | null;
 	haTang: HaTang;
@@ -319,28 +365,29 @@ export function ketLuanThuoc(v: {
 			ma: 1,
 			cau: `chot ma hong ${phan.chotMa.length}: ${phan.chotMa.map((h) => `${h.id} ${h.ten}`).join("; ")}${v.haTang.soPhien > 0 ? ` (kem ${moTaHaTang(v.haTang)}; ${v.haTang.phienKhac} phien hong khong do ha tang)` : ""}`,
 		};
-	if (phan.judgeHong.length > 0)
-		return {
-			ma: 2,
-			cau: `judge khong cham duoc ${phan.judgeHong.length} ca sau ${v.soLanThu} lan thu (${phan.judgeHong.map((h) => h.nhan).join(", ")}) — khong xanh, chay lai`,
-		};
 	if (v.khongGia > 0)
 		return {
 			ma: 2,
 			cau: `chi phi khong do duoc: ${v.khongGia} dong AiChiPhi costUsd null — khong xanh`,
 		};
 	if (v.boQua > 0) return { ma: 2, cau: `${v.boQua} eval bo qua — khong xanh` };
-	if (phan.duoiNguong.length > 0)
+	const ab = ketQuaAB(v.ab, v.tyLeNguong);
+	const nguong = v.tyLeNguong * 100;
+	if (!ab.dat && ab.coTheDoi)
+		return {
+			ma: 2,
+			cau: `judge hong, ket luan co the doi: ${v.ab.khongCham} cap A/B khong cham duoc sau ${v.soLanThu} lan thu; goi thang ${v.ab.thang}/${v.ab.daCham} cap da cham, xau nhat ${phanTram(ab.tyLeXauNhat)} %, tot nhat ${phanTram(ab.tyLeTotNhat)} % so voi ${nguong} % — chay lai`,
+		};
+	if (!ab.dat)
 		return {
 			ma: 1,
-			cau: `judge cham duoi nguong ${phan.duoiNguong.length}: ${phan.duoiNguong.map((h) => `${h.nhan} ${h.diem}`).join(", ")}`,
+			cau: `ban co goi thang ${v.ab.thang}/${v.ab.daCham + v.ab.khongCham} cap (${phanTram(ab.tyLeXauNhat)} %) < ${nguong} %, ke ca khi moi cap khong cham duoc deu thang`,
 		};
-	if (v.tyLe === null || v.tyLe < v.tyLeNguong)
-		return {
-			ma: 1,
-			cau: `ban co goi thang ${v.tyLe === null ? "—" : Math.round(v.tyLe * 100)} % < ${v.tyLeNguong * 100} %`,
-		};
-	if (v.maEve !== 0)
+	if (
+		v.maEve !== 0 &&
+		phan.judgeHong.length === 0 &&
+		phan.duoiNguong.length === 0
+	)
 		return { ma: 1, cau: `eve eval ma ${v.maEve} ma khong ro nguyen nhan` };
 	return { ma: 0, cau: null };
 }

@@ -223,7 +223,9 @@ const {
 	docTomTat,
 	docTongKet,
 	ketLuanHaTang,
+	bangTieuChi,
 	ketLuanThuoc,
+	ketQuaAB,
 	phanLoaiHaTang,
 	phanLoaiHong,
 	thongKeJudge,
@@ -289,6 +291,13 @@ const khongCham = boiCanhTatCa
 const tyLe = tyLeThang(boiCanh);
 const soThang = tyLe === null ? 0 : Math.round(tyLe * boiCanh.length);
 const khoang = khoangWilson(soThang, boiCanh.length);
+const demAB = {
+	thang: soThang,
+	daCham: boiCanh.length,
+	khongCham: khongCham.length,
+};
+const ab = ketQuaAB(demAB, DG.boiCanh.tyLeThang);
+const tieuChi = bangTieuChi(tomTat);
 const luotCham = doTre
 	.flatMap((d) =>
 		d.ms.map((ms, i) => ({
@@ -341,6 +350,8 @@ writeFileSync(
 		"",
 		`Phân loại chỗ hỏng: ${phan.chotMa.length} chốt mã hỏng · ${phan.judgeHong.length} judge hỏng (không chấm được sau ${TRO_LY_OKR_SOAN.judge.soLanThu} lần thử, không tính là trượt) · ${phan.duoiNguong.length} judge chấm dưới ngưỡng`,
 		"",
+		`Mã thoát theo hợp đồng (AC-13 / E22): mọi chốt mã đạt ở mọi ca; bản có gói thắng judge mù ≥ ${DG.boiCanh.tyLeThang * 100} % số cặp, tính cả khi mọi cặp không chấm được đều thua; p50 ≤ ${DG.doTre.p50Ms / 1000} s, p90 ≤ ${DG.doTre.p90Ms / 1000} s mỗi lượt; ≤ ${DG.doTre.usdMoiCuoc} USD mỗi cuộc. Sáu tiêu chí judge của từng bản nháp là chẩn đoán: in ra, không đổi mã thoát. ${DG.boiCanh.soCapMacDinh} cặp A/B là cỡ mẫu của thước (\`${DG.env.soCapAB}\`), không phải ngưỡng hợp đồng.`,
+		"",
 		"| Eval | Kết quả | Ghi chú |",
 		"|---|---|---|",
 		...tomTat.evals.map(
@@ -357,12 +368,26 @@ writeFileSync(
 		`| chi phí lớn nhất mỗi cuộc (USD) | ${so(usdMax, 4)} | ≤ ${DG.doTre.usdMoiCuoc} |`,
 		`| p50 / p90 lượt hỏi–đáp, không nộp bản nháp (ms) | ${loaiLuot(theoLoai.hoiDap)} | — |`,
 		`| p50 / p90 lượt nộp bản nháp (ms) | ${loaiLuot(theoLoai.nopBanNhap)} | — |`,
-		`| tỷ lệ bản có gói thắng judge mù | ${tyLe === null ? "—" : `${so(tyLe * 100)} % (${soThang}/${boiCanh.length} ca chấm được; khoảng tin cậy 95 % ${so((khoang?.duoi ?? 0) * 100)}–${so((khoang?.tren ?? 0) * 100)} %)`} | ≥ ${DG.boiCanh.tyLeThang * 100} % |`,
-		`| số cặp A/B judge mù (đã chạy / chấm được) | ${boiCanhTatCa.length} / ${boiCanh.length} | ≥ ${DG.boiCanh.soCapMacDinh} (\`${DG.env.soCapAB}\`, ước ${DG.boiCanh.usdMoiCapUoc} USD/cặp) |`,
-		`| ca judge không chấm được (cặp A/B) | ${khongCham.join(", ") || "0"} | 0 |`,
+		`| tỷ lệ bản có gói thắng judge mù, trên cặp chấm được | ${tyLe === null ? "—" : `${so(tyLe * 100)} % (${soThang}/${boiCanh.length}; khoảng tin cậy 95 % ${so((khoang?.duoi ?? 0) * 100)}–${so((khoang?.tren ?? 0) * 100)} %)`} | — |`,
+		`| tỷ lệ bản có gói thắng judge mù, xấu nhất (cặp không chấm được tính là thua) | ${ab.tyLeXauNhat === null ? "—" : `${so(ab.tyLeXauNhat * 100)} % (${soThang}/${boiCanhTatCa.length})`} | ≥ ${DG.boiCanh.tyLeThang * 100} % |`,
+		`| số cặp A/B judge mù (đã chạy / chấm được) | ${boiCanhTatCa.length} / ${boiCanh.length} | cỡ mẫu ${DG.boiCanh.soCapMacDinh} (\`${DG.env.soCapAB}\`, không phải ngưỡng; ước ${DG.boiCanh.usdMoiCapUoc} USD/cặp) |`,
+		`| ca judge không chấm được (cặp A/B) | ${khongCham.join(", ") || "0"} | — |`,
 		`| lời gọi judge: tổng / phải thử lại / hỏng sau ${TRO_LY_OKR_SOAN.judge.soLanThu} lần | ${judgeGoi.soLoiGoi} / ${judgeGoi.phaiThuLai} / ${judgeGoi.hongSauCung} | hỏng 0 |`,
 		`| lần thử judge: tổng / nhiều nhất một lời gọi | ${judgeGoi.tongLanThu} / ${judgeGoi.lanThuNhieuNhat} | ≤ ${TRO_LY_OKR_SOAN.judge.soLanThu} |`,
 		`| tổng chi phí tác nhân của lượt đo (USD, AiChiPhi: soạn + A/B + độ trễ; chưa gồm judge) | ${so(tongUsd, 4)} | trần ${process.env[DG.env.tranUsd] ?? DG.tranUsdMacDinh} |`,
+		"",
+		"## Sáu tiêu chí của từng bản nháp (chẩn đoán, không đổi mã thoát)",
+		"",
+		`Ngưỡng hiển thị ${TRO_LY_OKR_SOAN.judge.nguong}; «—» là judge không chấm được. Tiêu chí: ${DG.boiCanh.tieuChi.map((t, i) => `tc${i + 1} ${t}`).join("; ")}.`,
+		"",
+		`| Ca | ${DG.boiCanh.tieuChi.map((_, i) => `tc${i + 1}`).join(" | ")} |`,
+		`|---|${DG.boiCanh.tieuChi.map(() => "---").join("|")}|`,
+		...tieuChi.map(
+			(d) =>
+				`| ${d.ca} | ${d.diem.map((x) => (x === null ? "—" : so(x, 2))).join(" | ")} |`,
+		),
+		"",
+		`Dưới ngưỡng: ${phan.duoiNguong.map((h) => `${h.nhan} (${so(h.diem, 2)})`).join(", ") || "không có"}.`,
 		"",
 		"## Lượt chậm hơn ngưỡng p90",
 		"",
@@ -409,6 +434,12 @@ writeFileSync(
 	].join("\n"),
 );
 console.log(`eval-soan: da ghi ${CHUNG_CU}`);
+console.log(
+	`eval-soan: sau tieu chi (chan doan, khong doi ma thoat) duoi nguong: ${phan.duoiNguong.map((h) => `${h.nhan} ${h.diem}`).join(", ") || "khong co"}`,
+);
+console.log(
+	`eval-soan: goi thang ${soThang}/${boiCanh.length} cap da cham (${tyLe === null ? "—" : so(tyLe * 100)} %), xau nhat ${soThang}/${boiCanhTatCa.length} (${ab.tyLeXauNhat === null ? "—" : so(ab.tyLeXauNhat * 100)} %)`,
+);
 
 const khongGia = await db.aiChiPhi.count({ where: { costUsd: null } });
 await db.$disconnect();
@@ -417,7 +448,7 @@ const ketLuan = ketLuanThuoc({
 	soLanThu: TRO_LY_OKR_SOAN.judge.soLanThu,
 	khongGia,
 	boQua: tomTat.skipped,
-	tyLe,
+	ab: demAB,
 	tyLeNguong: DG.boiCanh.tyLeThang,
 	maEve: ket.status,
 	haTang,
