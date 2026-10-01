@@ -199,6 +199,7 @@ evals:
     criterion: AC-13
     executor: script
     cmd: config:executors.script.soan_eval
+    status: not-run
     expected: "exit 0; chạy ba eval của apps/agent-okr/evals với model thật có ZDR và judge ZDR, trần tiền TDX_TRAN_USD: soan.eval — mọi ca (≥ 5 đơn vị × chu kỳ của bộ mẫu) đạt mọi chốt mã (khuôn, đích null, không mã loại còn lại, Căn chỉnh trong tập); soan-boi-canh.eval — bản có gói thắng judge mù ở ≥ 70 % ca (in từng ca A/B và phía nào là gói); soan-do-tre.eval — 10 cuộc 4 lượt: p50 mỗi lượt ≤ 12 s, p90 ≤ 20 s, chi phí mỗi cuộc ≤ 0,25 USD (đọc AiChiPhi). In bảng số. Thiếu khoá → mã 2, không xanh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/agent-okr/evals/**, apps/agent-okr/agent/**, _acceptance/soan-okr-cung-tro-ly/rang/eval-soan.mjs]
