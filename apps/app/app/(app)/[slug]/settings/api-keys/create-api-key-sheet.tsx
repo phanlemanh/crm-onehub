@@ -176,6 +176,9 @@ function CreateApiKeyForm() {
 					</form>
 
 					<SheetFooter>
+						<SheetClose asChild>
+							<Button variant="outline">{t.tao.huy}</Button>
+						</SheetClose>
 						<Button
 							type="submit"
 							form={FORM}
@@ -184,9 +187,6 @@ function CreateApiKeyForm() {
 							{create.isPending ? <Spinner /> : null}
 							{t.tao.taoKhoa}
 						</Button>
-						<SheetClose asChild>
-							<Button variant="outline">{t.tao.huy}</Button>
-						</SheetClose>
 					</SheetFooter>
 				</SheetContent>
 			</Sheet>

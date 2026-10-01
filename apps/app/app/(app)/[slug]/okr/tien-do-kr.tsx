@@ -18,6 +18,7 @@ import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 
 const TONE_TRANG_THAI = {
 	nhap: "neutral",
+	"cho-duyet": "warning",
 	"cong-bo": "success",
 	"da-bo": "neutral",
 } satisfies Record<TrangThaiMucTieu, StatusTone>;

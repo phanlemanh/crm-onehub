@@ -1,0 +1,212 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+  building crm_kto_e5__mau_do: migrate deploy + seed (once per source fingerprint)
+phien-do: kho crm_kto_e5_do · app http://localhost:4326 · api http://localhost:4495
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+NAP okr:mau --moc 2026-09-30: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-09-30T05:00:00.000Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ.
+GHI workspace onehub-center · muc tieu mau-okr-mt-q4-kd-bac-1 (3 KR) · KR sua mau-okr-kr-q4-kd-bac-1-k1
+GHI okr.troLySanSang mau-okr-mt-q4-kd-bac-1: {"bat":true,"conLaiUsd":9}
+GHI 1440 deal: ngan 1056,0 384x900 · data-size sm · tieu de top 16 · chan 836-900 · «Huỷ» 1255.2-1299.2/852 · chinh «Thêm thoả thuận» 1307.2-1424/852
+DUNG E3 1440 deal: data-side=right · right 1440 == innerWidth 1440
+DUNG E3 1440 deal: top 0 == 0
+DUNG E3 1440 deal: height 900 == innerHeight 900
+DUNG E3 1440 deal: dung mot vung cuon doc la than ngan form va khong chua chan (1: form (than) sh 743/ch 743)
+DUNG E3 1440 deal: bottom chan 900 == bottom ngan 900
+DUNG E3 1440 deal: khong tran ngang trong ngan (ngan sw 383/cw 383 · than sw 383/cw 383 · con xa nhat div[data-slot=sheet-header] right 1440 <= ngan right 1440 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1440-deal.png
+DUNG E5 1440 deal: chan co «Huỷ» va nut chinh («Thêm thoả thuận» variant default)
+DUNG E5 1440 deal: «Huỷ».right 1299.2 <= nut chinh.left 1307.2
+DUNG E5 1440 deal: top hai nut chenh 0 < 2
+DUNG E5 1440 deal: nut chinh right 1424 cach chan right 1440 = 16 <= 24
+DUNG E5 1440 deal: ngan tao rong co nut gui «Thêm thoả thuận» disabled=true
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-1440-deal.png
+GHI 1440 tao-muc-tieu: ngan 1056,0 384x900 · data-size sm · tieu de top 16 · chan 836-900 · «Huỷ» 1277.6-1321.6/852 · chinh «Tạo mục tiêu» 1329.6-1424/852
+DUNG E3 1440 tao-muc-tieu: data-side=right · right 1440 == innerWidth 1440
+DUNG E3 1440 tao-muc-tieu: top 0 == 0
+DUNG E3 1440 tao-muc-tieu: height 900 == innerHeight 900
+DUNG E3 1440 tao-muc-tieu: be ngang 384 chenh ngan deal 384 = 0 <= 1
+DUNG E3 1440 tao-muc-tieu: top tieu de 16 chenh ngan deal 16 = 0 <= 1
+DUNG E3 1440 tao-muc-tieu: dung mot vung cuon doc la than ngan div[data-slot=sheet-body] va khong chua chan (1: div[data-slot=sheet-body] (than) sh 784/ch 784)
+DUNG E3 1440 tao-muc-tieu: bottom chan 900 == bottom ngan 900
+DUNG E3 1440 tao-muc-tieu: khong tran ngang trong ngan (ngan sw 383/cw 383 · than sw 383/cw 383 · con xa nhat div[data-slot=sheet-header] right 1440 <= ngan right 1440 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1440-tao-muc-tieu.png
+DUNG E5 1440 tao-muc-tieu: chan co «Huỷ» va nut chinh («Tạo mục tiêu» variant default)
+DUNG E5 1440 tao-muc-tieu: «Huỷ».right 1321.6 <= nut chinh.left 1329.6
+DUNG E5 1440 tao-muc-tieu: top hai nut chenh 0 < 2
+DUNG E5 1440 tao-muc-tieu: nut chinh right 1424 cach chan right 1440 = 16 <= 24
+DUNG E5 1440 tao-muc-tieu: ngan tao rong co nut gui «Tạo mục tiêu» disabled=true
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-1440-tao-muc-tieu.png
+GHI 1440 sua-muc-tieu: ngan 1056,0 384x900 · data-size sm · tieu de top 16 · chan 836-900 · «Huỷ» 1328.8-1372.9/852 · chinh «Lưu» 1380.9-1424/852
+DUNG E3 1440 sua-muc-tieu: data-side=right · right 1440 == innerWidth 1440
+DUNG E3 1440 sua-muc-tieu: top 0 == 0
+DUNG E3 1440 sua-muc-tieu: height 900 == innerHeight 900
+DUNG E3 1440 sua-muc-tieu: be ngang 384 chenh ngan deal 384 = 0 <= 1
+DUNG E3 1440 sua-muc-tieu: top tieu de 16 chenh ngan deal 16 = 0 <= 1
+DUNG E3 1440 sua-muc-tieu: dung mot vung cuon doc la than ngan div[data-slot=sheet-body] va khong chua chan (1: div[data-slot=sheet-body] (than) sh 784/ch 784)
+DUNG E3 1440 sua-muc-tieu: bottom chan 900 == bottom ngan 900
+DUNG E3 1440 sua-muc-tieu: khong tran ngang trong ngan (ngan sw 383/cw 383 · than sw 383/cw 383 · con xa nhat div[data-slot=sheet-header] right 1440 <= ngan right 1440 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1440-sua-muc-tieu.png
+DUNG E5 1440 sua-muc-tieu: chan co «Huỷ» va nut chinh («Lưu» variant default)
+DUNG E5 1440 sua-muc-tieu: «Huỷ».right 1372.9 <= nut chinh.left 1380.9
+DUNG E5 1440 sua-muc-tieu: top hai nut chenh 0 < 2
+DUNG E5 1440 sua-muc-tieu: nut chinh right 1424 cach chan right 1440 = 16 <= 24
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-1440-sua-muc-tieu.png
+GHI 1440 them-kr: ngan 1056,0 384x900 · data-size sm · tieu de top 16 · chan 836-900 · «Huỷ» 1300.3-1344.3/852 · chinh «Thêm KR» 1352.3-1424/852
+DUNG E3 1440 them-kr: data-side=right · right 1440 == innerWidth 1440
+DUNG E3 1440 them-kr: top 0 == 0
+DUNG E3 1440 them-kr: height 900 == innerHeight 900
+DUNG E3 1440 them-kr: be ngang 384 chenh ngan deal 384 = 0 <= 1
+DUNG E3 1440 them-kr: top tieu de 16 chenh ngan deal 16 = 0 <= 1
+DUNG E3 1440 them-kr: dung mot vung cuon doc la than ngan div[data-slot=sheet-body] va khong chua chan (1: div[data-slot=sheet-body] (than) sh 763/ch 763)
+DUNG E3 1440 them-kr: bottom chan 900 == bottom ngan 900
+DUNG E3 1440 them-kr: khong tran ngang trong ngan (ngan sw 383/cw 383 · than sw 383/cw 383 · con xa nhat div[data-slot=sheet-header] right 1440 <= ngan right 1440 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1440-them-kr.png
+DUNG E5 1440 them-kr: chan co «Huỷ» va nut chinh («Thêm KR» variant default)
+DUNG E5 1440 them-kr: «Huỷ».right 1344.3 <= nut chinh.left 1352.3
+DUNG E5 1440 them-kr: top hai nut chenh 0 < 2
+DUNG E5 1440 them-kr: nut chinh right 1424 cach chan right 1440 = 16 <= 24
+DUNG E5 1440 them-kr: ngan tao rong co nut gui «Thêm KR» disabled=true
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-1440-them-kr.png
+GHI 1440 sua-kr: ngan 1056,0 384x900 · data-size sm · tieu de top 16 · chan 836-900 · «Huỷ» 1328.8-1372.9/852 · chinh «Lưu» 1380.9-1424/852
+DUNG E3 1440 sua-kr: data-side=right · right 1440 == innerWidth 1440
+DUNG E3 1440 sua-kr: top 0 == 0
+DUNG E3 1440 sua-kr: height 900 == innerHeight 900
+DUNG E3 1440 sua-kr: be ngang 384 chenh ngan deal 384 = 0 <= 1
+DUNG E3 1440 sua-kr: top tieu de 16 chenh ngan deal 16 = 0 <= 1
+DUNG E3 1440 sua-kr: dung mot vung cuon doc la than ngan div[data-slot=sheet-body] va khong chua chan (1: div[data-slot=sheet-body] (than) sh 1020/ch 763)
+DUNG E3 1440 sua-kr: bottom chan 900 == bottom ngan 900
+DUNG E3 1440 sua-kr: khong tran ngang trong ngan (ngan sw 383/cw 383 · than sw 383/cw 383 · con xa nhat div[data-slot=sheet-header] right 1440 <= ngan right 1440 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1440-sua-kr.png
+DUNG E5 1440 sua-kr: chan co «Huỷ» va nut chinh («Lưu» variant default)
+DUNG E5 1440 sua-kr: «Huỷ».right 1372.9 <= nut chinh.left 1380.9
+DUNG E5 1440 sua-kr: top hai nut chenh 0 < 2
+DUNG E5 1440 sua-kr: nut chinh right 1424 cach chan right 1440 = 16 <= 24
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-1440-sua-kr.png
+GHI 390 deal: ngan 97.5,0 292.5x844 · data-size sm · tieu de top 16 · chan 740-844 · «Huỷ» 114.5-374/796 · chinh «Thêm thoả thuận» 114.5-374/756
+DUNG E3 390 deal: data-side=right · right 390 == innerWidth 390
+DUNG E3 390 deal: top 0 == 0
+DUNG E3 390 deal: height 844 == innerHeight 844
+DUNG E3 390 deal: dung mot vung cuon doc la than ngan form va khong chua chan (1: form (than) sh 647/ch 647)
+DUNG E3 390 deal: bottom chan 844 == bottom ngan 844
+DUNG E3 390 deal: khong tran ngang trong ngan (ngan sw 292/cw 292 · than sw 292/cw 292 · con xa nhat div[data-slot=sheet-header] right 390 <= ngan right 390 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-390-deal.png
+DUNG E5 390 deal: chan co «Huỷ» va nut chinh («Thêm thoả thuận» variant default)
+DUNG E5 390 deal: nut chinh bottom 788 <= «Huỷ» top 796
+DUNG E5 390 deal: ngan tao rong co nut gui «Thêm thoả thuận» disabled=true
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-390-deal.png
+GHI 390 tao-muc-tieu: ngan 97.5,0 292.5x844 · data-size sm · tieu de top 16 · chan 740-844 · «Huỷ» 114.5-374/796 · chinh «Tạo mục tiêu» 114.5-374/756
+DUNG E3 390 tao-muc-tieu: data-side=right · right 390 == innerWidth 390
+DUNG E3 390 tao-muc-tieu: top 0 == 0
+DUNG E3 390 tao-muc-tieu: height 844 == innerHeight 844
+DUNG E3 390 tao-muc-tieu: be ngang 292.5 chenh ngan deal 292.5 = 0 <= 1
+DUNG E3 390 tao-muc-tieu: top tieu de 16 chenh ngan deal 16 = 0 <= 1
+DUNG E3 390 tao-muc-tieu: dung mot vung cuon doc la than ngan div[data-slot=sheet-body] va khong chua chan (1: div[data-slot=sheet-body] (than) sh 688/ch 688)
+DUNG E3 390 tao-muc-tieu: bottom chan 844 == bottom ngan 844
+DUNG E3 390 tao-muc-tieu: khong tran ngang trong ngan (ngan sw 292/cw 292 · than sw 292/cw 292 · con xa nhat div[data-slot=sheet-header] right 390 <= ngan right 390 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-390-tao-muc-tieu.png
+DUNG E5 390 tao-muc-tieu: chan co «Huỷ» va nut chinh («Tạo mục tiêu» variant default)
+DUNG E5 390 tao-muc-tieu: nut chinh bottom 788 <= «Huỷ» top 796
+DUNG E5 390 tao-muc-tieu: ngan tao rong co nut gui «Tạo mục tiêu» disabled=true
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-390-tao-muc-tieu.png
+GHI 390 sua-muc-tieu: ngan 97.5,0 292.5x844 · data-size sm · tieu de top 16 · chan 740-844 · «Huỷ» 114.5-374/796 · chinh «Lưu» 114.5-374/756
+DUNG E3 390 sua-muc-tieu: data-side=right · right 390 == innerWidth 390
+DUNG E3 390 sua-muc-tieu: top 0 == 0
+DUNG E3 390 sua-muc-tieu: height 844 == innerHeight 844
+DUNG E3 390 sua-muc-tieu: be ngang 292.5 chenh ngan deal 292.5 = 0 <= 1
+DUNG E3 390 sua-muc-tieu: top tieu de 16 chenh ngan deal 16 = 0 <= 1
+DUNG E3 390 sua-muc-tieu: dung mot vung cuon doc la than ngan div[data-slot=sheet-body] va khong chua chan (1: div[data-slot=sheet-body] (than) sh 688/ch 688)
+DUNG E3 390 sua-muc-tieu: bottom chan 844 == bottom ngan 844
+DUNG E3 390 sua-muc-tieu: khong tran ngang trong ngan (ngan sw 292/cw 292 · than sw 292/cw 292 · con xa nhat div[data-slot=sheet-header] right 390 <= ngan right 390 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-390-sua-muc-tieu.png
+DUNG E5 390 sua-muc-tieu: chan co «Huỷ» va nut chinh («Lưu» variant default)
+DUNG E5 390 sua-muc-tieu: nut chinh bottom 788 <= «Huỷ» top 796
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-390-sua-muc-tieu.png
+GHI 390 them-kr: ngan 97.5,0 292.5x844 · data-size sm · tieu de top 16 · chan 740-844 · «Huỷ» 114.5-374/796 · chinh «Thêm KR» 114.5-374/756
+DUNG E3 390 them-kr: data-side=right · right 390 == innerWidth 390
+DUNG E3 390 them-kr: top 0 == 0
+DUNG E3 390 them-kr: height 844 == innerHeight 844
+DUNG E3 390 them-kr: be ngang 292.5 chenh ngan deal 292.5 = 0 <= 1
+DUNG E3 390 them-kr: top tieu de 16 chenh ngan deal 16 = 0 <= 1
+DUNG E3 390 them-kr: dung mot vung cuon doc la than ngan div[data-slot=sheet-body] va khong chua chan (1: div[data-slot=sheet-body] (than) sh 877/ch 667)
+DUNG E3 390 them-kr: bottom chan 844 == bottom ngan 844
+DUNG E3 390 them-kr: khong tran ngang trong ngan (ngan sw 292/cw 292 · than sw 292/cw 292 · con xa nhat div[data-slot=sheet-header] right 390 <= ngan right 390 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-390-them-kr.png
+DUNG E5 390 them-kr: chan co «Huỷ» va nut chinh («Thêm KR» variant default)
+DUNG E5 390 them-kr: nut chinh bottom 788 <= «Huỷ» top 796
+DUNG E5 390 them-kr: ngan tao rong co nut gui «Thêm KR» disabled=true
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-390-them-kr.png
+GHI 390 sua-kr: ngan 97.5,0 292.5x844 · data-size sm · tieu de top 16 · chan 740-844 · «Huỷ» 114.5-374/796 · chinh «Lưu» 114.5-374/756
+DUNG E3 390 sua-kr: data-side=right · right 390 == innerWidth 390
+DUNG E3 390 sua-kr: top 0 == 0
+DUNG E3 390 sua-kr: height 844 == innerHeight 844
+DUNG E3 390 sua-kr: be ngang 292.5 chenh ngan deal 292.5 = 0 <= 1
+DUNG E3 390 sua-kr: top tieu de 16 chenh ngan deal 16 = 0 <= 1
+DUNG E3 390 sua-kr: dung mot vung cuon doc la than ngan div[data-slot=sheet-body] va khong chua chan (1: div[data-slot=sheet-body] (than) sh 1310/ch 667)
+DUNG E3 390 sua-kr: bottom chan 844 == bottom ngan 844
+DUNG E3 390 sua-kr: khong tran ngang trong ngan (ngan sw 292/cw 292 · than sw 292/cw 292 · con xa nhat div[data-slot=sheet-header] right 390 <= ngan right 390 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-390-sua-kr.png
+DUNG E5 390 sua-kr: chan co «Huỷ» va nut chinh («Lưu» variant default)
+DUNG E5 390 sua-kr: nut chinh bottom 788 <= «Huỷ» top 796
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-390-sua-kr.png
+DUNG E5 1440 mo-chu-ky: chan co «Huỷ» va nut chinh («Mở chu kỳ» variant default)
+DUNG E5 1440 mo-chu-ky: «Huỷ».right 1335.9 <= nut chinh.left 1343.9
+DUNG E5 1440 mo-chu-ky: top hai nut chenh 0 < 2
+DUNG E5 1440 mo-chu-ky: nut chinh right 1424 cach chan right 1440 = 16 <= 24
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-1440-mo-chu-ky.png
+DUNG E5 390 mo-chu-ky: chan co «Huỷ» va nut chinh («Mở chu kỳ» variant default)
+DUNG E5 390 mo-chu-ky: nut chinh bottom 788 <= «Huỷ» top 796
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E5-390-mo-chu-ky.png
+GHI E3 rong 1440 sua-muc-tieu: bam nut gop y (nho)
+DUNG E3 rong 1440 sua-muc-tieu: data-size=assist
+DUNG E3 rong 1440 sua-muc-tieu: co form va cot gop y
+DUNG E3 rong 1440 sua-muc-tieu: cot cung hang form (top cot 52 · top form 52 · lech 0 < 8) · rong ngan 800 · form 363 · cot 380
+DUNG E3 rong 1440 sua-muc-tieu: khong tran ngang trong ngan (ngan sw 799/cw 799 · than sw 799/cw 799 · con xa nhat div[data-slot=sheet-header] right 1440 <= ngan right 1440 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1440-cot-muc-tieu.png
+GHI E3 rong 1440 sua-kr: cot da mo san khi vao
+DUNG E3 rong 1440 sua-kr: data-size=assist
+DUNG E3 rong 1440 sua-kr: co form va cot gop y
+DUNG E3 rong 1440 sua-kr: cot cung hang form (top cot 73.5 · top form 73.5 · lech 0 < 8) · rong ngan 800 · form 363 · cot 380
+DUNG E3 rong 1440 sua-kr: khong tran ngang trong ngan (ngan sw 799/cw 799 · than sw 799/cw 799 · con xa nhat div[data-slot=sheet-header] right 1440 <= ngan right 1440 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1440-cot-kr.png
+GHI E3 rong 1024 sua-muc-tieu: cot da mo san khi vao
+DUNG E3 rong 1024 sua-muc-tieu: data-size=assist
+DUNG E3 rong 1024 sua-muc-tieu: co form va cot gop y
+DUNG E3 rong 1024 sua-muc-tieu: cot cung hang form (top cot 52 · top form 52 · lech 0 < 8) · rong ngan 800 · form 363 · cot 380
+DUNG E3 rong 1024 sua-muc-tieu: khong tran ngang trong ngan (ngan sw 799/cw 799 · than sw 799/cw 799 · con xa nhat div[data-slot=sheet-header] right 1024 <= ngan right 1024 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1024-cot-muc-tieu.png
+GHI E3 rong 1024 sua-kr: cot da mo san khi vao
+DUNG E3 rong 1024 sua-kr: data-size=assist
+DUNG E3 rong 1024 sua-kr: co form va cot gop y
+DUNG E3 rong 1024 sua-kr: cot cung hang form (top cot 73.5 · top form 73.5 · lech 0 < 8) · rong ngan 800 · form 363 · cot 380
+DUNG E3 rong 1024 sua-kr: khong tran ngang trong ngan (ngan sw 799/cw 799 · than sw 799/cw 799 · con xa nhat div[data-slot=sheet-header] right 1024 <= ngan right 1024 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1024-cot-kr.png
+GHI E3 rong 1023 sua-muc-tieu: cot da mo san khi vao
+DUNG E3 rong 1023 sua-muc-tieu: data-size=assist
+DUNG E3 rong 1023 sua-muc-tieu: co form va cot gop y
+DUNG E3 rong 1023 sua-muc-tieu: cot duoi form (top cot 536 >= bottom form 512 - 2) · rong ngan 640 · form 607 · cot 607
+DUNG E3 rong 1023 sua-muc-tieu: khong tran ngang trong ngan (ngan sw 639/cw 639 · than sw 639/cw 639 · con xa nhat div[data-slot=sheet-header] right 1023 <= ngan right 1023 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1023-cot-muc-tieu.png
+GHI E3 rong 1023 sua-kr: cot da mo san khi vao
+DUNG E3 rong 1023 sua-kr: data-size=assist
+DUNG E3 rong 1023 sua-kr: co form va cot gop y
+DUNG E3 rong 1023 sua-kr: cot duoi form (top cot 536.5 >= bottom form 512.5 - 2) · rong ngan 640 · form 607 · cot 607
+DUNG E3 rong 1023 sua-kr: khong tran ngang trong ngan (ngan sw 639/cw 639 · than sw 639/cw 639 · con xa nhat div[data-slot=sheet-header] right 1023 <= ngan right 1023 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-1023-cot-kr.png
+GHI E3 rong 390 sua-muc-tieu: cot da mo san khi vao
+DUNG E3 rong 390 sua-muc-tieu: data-size=assist
+DUNG E3 rong 390 sua-muc-tieu: co form va cot gop y
+DUNG E3 rong 390 sua-muc-tieu: cot duoi form (top cot 440 >= bottom form 416 - 2) · rong ngan 292.5 · form 259.5 · cot 259.5
+DUNG E3 rong 390 sua-muc-tieu: khong tran ngang trong ngan (ngan sw 292/cw 292 · than sw 292/cw 292 · con xa nhat div[data-slot=sheet-header] right 390 <= ngan right 390 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-390-cot-muc-tieu.png
+GHI E3 rong 390 sua-kr: cot da mo san khi vao
+DUNG E3 rong 390 sua-kr: data-size=assist
+DUNG E3 rong 390 sua-kr: co form va cot gop y
+DUNG E3 rong 390 sua-kr: cot duoi form (top cot 440.5 >= bottom form 416.5 - 2) · rong ngan 292.5 · form 259.5 · cot 259.5
+DUNG E3 rong 390 sua-kr: khong tran ngang trong ngan (ngan sw 292/cw 292 · than sw 292/cw 292 · con xa nhat div[data-slot=sheet-header] right 390 <= ngan right 390 + 1)
+ANH _acceptance/khung-tao-okr-nhu-deal/evidence/E3-390-cot-kr.png
+KET LUAN: 150 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0

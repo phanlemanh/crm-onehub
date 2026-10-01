@@ -6,6 +6,8 @@ import Link from "@carbon/icons-react/es/Link";
 import Notification from "@carbon/icons-react/es/Notification";
 import NotificationFilled from "@carbon/icons-react/es/NotificationFilled";
 import OverflowMenuHorizontal from "@carbon/icons-react/es/OverflowMenuHorizontal";
+import Renew from "@carbon/icons-react/es/Renew";
+import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
@@ -25,7 +27,6 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
-import { ghiDuocOPha } from "@crm/validation/okr-chu-ky";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -40,6 +41,11 @@ import { HopThoaiKr } from "@/app/(app)/[slug]/okr/hop-thoai-kr";
 import { HopThoaiMucTieu } from "@/app/(app)/[slug]/okr/hop-thoai-muc-tieu";
 import { CELL, type KetQua } from "@/app/(app)/[slug]/okr/kieu";
 import {
+	BoKhoaUrl,
+	khoaHopOkr,
+	useHopOkr,
+} from "@/app/(app)/[slug]/okr/ngan-okr-url";
+import {
 	NhanTinhTrang,
 	NhanTrangThai,
 } from "@/app/(app)/[slug]/okr/tien-do-kr";
@@ -47,31 +53,45 @@ import { OwnerCell } from "@/components/crm/owner-cell";
 import {
 	DetailSheetBody,
 	DetailSheetEmpty,
+	DetailSheetSection,
 	DetailSheetStat,
 	DetailSheetStats,
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
+import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { TabDienBien } from "./objective-dien-bien";
+import {
+	coDaiDuyet,
+	DaiDuyet,
+	DongLyDoGuiKhoa,
+	khoaGuiDuyet,
+	NutGuiDuyet,
+} from "./objective-duyet";
+import { HopMucHienThi } from "./objective-hien-thi";
 import { TabTraoDoi } from "./objective-trao-doi";
 import { dien } from "./plan-copy";
 import { RecordSheetFrame } from "./record-parts";
-import { useRecordSheetView } from "./record-stack";
+import { useRecordSheetView, useRecordStack } from "./record-stack";
 
 type ChiTiet = RouterOutputs["okr"]["objective"];
 type NoiGop = ChiTiet["alignments"][number];
 
 const TRANG_THAI_SHEET = {
 	nhap: "ST-sheet-nhap",
+	"cho-duyet": "ST-sheet-choduyet",
 	"cong-bo": "ST-sheet-congbo",
 	"da-bo": "ST-sheet-dabo",
 } as const satisfies Record<ChiTiet["status"], string>;
 
 const ghiDuoc = (mt: ChiTiet) => mt.canEdit && mt.status !== "da-bo";
+
+const suaNoiDung = (mt: ChiTiet) => ghiDuoc(mt) && mt.choDuyet === null;
 
 function useXong(objectiveId: string, baoXong: string, sau: () => void) {
 	const cache = useCrmCache();
@@ -118,13 +138,21 @@ function NutTheoDoi({ mt }: { mt: ChiTiet }) {
 	);
 }
 
-function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
-	const m = okrMessages(useLocale()).sheet;
+function HanhDongMucTieu({
+	mt,
+	moHienThi,
+}: {
+	mt: ChiTiet;
+	moHienThi: () => void;
+}) {
+	const locale = useLocale();
+	const m = okrMessages(locale).sheet;
+	const g = okrGioiHanMessages(locale);
 	const trpc = useTRPC();
-	const [hoi, setHoi] = useState<"cong-bo" | "bo" | "sua" | null>(null);
-	const [krMo, setKrMo] = useState<string | null>(null);
+	const toi = useQuery(trpc.users.me.queryOptions());
+	const [hoi, setHoi] = useState<"cong-bo" | "bo" | null>(null);
+	const [, datHop] = useHopOkr();
 	const dongHoi = () => setHoi(null);
-	const krDangMo = mt.keyResults.find((k) => k.id === krMo) ?? null;
 	const congBo = useMutation(
 		trpc.okr.publishObjective.mutationOptions(
 			useXong(mt.id, m.daCongBo, dongHoi),
@@ -134,13 +162,28 @@ function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 		trpc.okr.dropObjective.mutationOptions(useXong(mt.id, m.daBo, dongHoi)),
 	);
 
+	const vuaTraLai =
+		mt.traLaiGanNhat?.nguoi?.id !== undefined &&
+		mt.traLaiGanNhat.nguoi.id === toi.data?.id;
+
 	if (!ghiDuoc(mt)) return null;
 
 	return (
 		<>
-			{mt.status === "nhap" ? (
+			{mt.quyen.guiDuyet ? (
+				mt.traLaiGanNhat === null ? (
+					<NutGuiDuyet
+						objectiveId={mt.id}
+						soKr={mt.keyResults.length}
+						nguoiDuyet={mt.nguoiDuyetDuKien}
+						lyDo="dong-rieng"
+					/>
+				) : null
+			) : mt.quyen.congBo && !mt.quyen.duyet ? (
 				<Button
 					size="sm"
+					variant={vuaTraLai ? "outline" : "default"}
+					data-variant={vuaTraLai ? "outline" : "default"}
 					data-nut="cong-bo"
 					disabled={congBo.isPending}
 					onClick={() => setHoi("cong-bo")}
@@ -155,8 +198,18 @@ function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
-					<DropdownMenuItem onSelect={() => setHoi("sua")}>
+					<DropdownMenuItem
+						disabled={!suaNoiDung(mt)}
+						onSelect={() => void datHop({ loai: "muc-tieu" })}
+					>
 						{m.sua}
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						data-muc="muc-hien-thi"
+						disabled={!mt.quyen.datHienThi}
+						onSelect={moHienThi}
+					>
+						{g.menuMucHienThi}
 					</DropdownMenuItem>
 					<DropdownMenuItem variant="destructive" onSelect={() => setHoi("bo")}>
 						{m.bo}
@@ -192,26 +245,6 @@ function HanhDongMucTieu({ mt }: { mt: ChiTiet }) {
 					if (!bo.isPending) bo.mutate({ id: mt.id });
 				}}
 			/>
-			{hoi === "sua" ? (
-				<HopThoaiMucTieu
-					yeuCau={{ loai: "sua", mucTieu: mt }}
-					dong={dongHoi}
-					moKr={(id) => {
-						setHoi(null);
-						setKrMo(id);
-					}}
-				/>
-			) : null}
-			{krDangMo ? (
-				<HopThoaiKr
-					objectiveId={mt.id}
-					mucTieu={mt}
-					kr={krDangMo}
-					chuMacDinh={mt.owner.id}
-					suaDuocCot={mt.canEdit}
-					dong={() => setKrMo(null)}
-				/>
-			) : null}
 		</>
 	);
 }
@@ -231,8 +264,11 @@ function MenuKr({
 }) {
 	const m = okrMessages(useLocale()).sheet;
 	const capNhatDuoc = kr.hienTaiQuaCapNhat && mt.canEditKr.includes(kr.id);
-	const suaDuoc = mt.status !== "da-bo" && mt.canEditKr.includes(kr.id);
-	const xoaDuoc = ghiDuoc(mt);
+	const suaDuoc =
+		mt.status !== "da-bo" &&
+		mt.choDuyet === null &&
+		mt.canEditKr.includes(kr.id);
+	const xoaDuoc = suaNoiDung(mt);
 	if (!capNhatDuoc && !suaDuoc && !xoaDuoc) return null;
 	return (
 		<DropdownMenu>
@@ -266,10 +302,7 @@ function MenuKr({
 	);
 }
 
-function demCanh(
-	mt: ChiTiet,
-	kyGhiDuoc: boolean,
-): ReadonlyMap<string, DemCanhKr> {
+function demCanh(mt: ChiTiet): ReadonlyMap<string, DemCanhKr> {
 	return new Map(
 		mt.keyResults.map((k) => [
 			k.id,
@@ -279,24 +312,64 @@ function demCanh(
 				sangKien: k.soSangKien,
 				coBangChung: k.coBangChung,
 				suaDuoc:
-					kyGhiDuoc && mt.status !== "da-bo" && mt.canEditKr.includes(k.id),
+					mt.kyGhiDuoc &&
+					mt.status !== "da-bo" &&
+					mt.choDuyet === null &&
+					mt.canEditKr.includes(k.id),
 			},
 		]),
 	);
 }
 
-type HopKr =
-	| { loai: "tao" }
-	| { loai: "sua"; kr: KetQua }
-	| { loai: "cap-nhat"; kr: KetQua; sessionId: string | null };
+type HopKr = { loai: "cap-nhat"; kr: KetQua; sessionId: string | null };
+
+function NganOkr({ mt }: { mt: ChiTiet }) {
+	const [hop, datHop] = useHopOkr();
+	const kr =
+		hop?.loai === "kr"
+			? (mt.keyResults.find((k) => k.id === hop.id) ?? null)
+			: null;
+	const duoc =
+		hop === null
+			? false
+			: hop.loai === "kr"
+				? kr !== null &&
+					mt.status !== "da-bo" &&
+					mt.choDuyet === null &&
+					mt.canEditKr.includes(kr.id)
+				: suaNoiDung(mt);
+	if (hop === null) return null;
+	if (!duoc)
+		return <BoKhoaUrl key={khoaHopOkr(hop)} bo={() => void datHop(null)} />;
+	const dong = () => void datHop(null);
+	if (hop.loai === "muc-tieu") {
+		return (
+			<HopThoaiMucTieu
+				key={khoaHopOkr(hop)}
+				yeuCau={{ loai: "sua", mucTieu: mt }}
+				dong={dong}
+				moKr={(id) => void datHop({ loai: "kr", id })}
+			/>
+		);
+	}
+	return (
+		<HopThoaiKr
+			key={khoaHopOkr(hop)}
+			objectiveId={mt.id}
+			mucTieu={mt}
+			kr={kr}
+			chuMacDinh={mt.owner.id}
+			suaDuocCot={mt.canEdit}
+			dong={dong}
+		/>
+	);
+}
 
 function TabKr({ mt }: { mt: ChiTiet }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
-	const cycles = useQuery(trpc.okr.cycles.queryOptions());
-	const ky = cycles.data?.cycles.find((c) => c.id === mt.cycleId) ?? null;
-	const kyGhiDuoc = ky !== null && ghiDuocOPha(ky.phase);
 	const [hop, setHop] = useState<HopKr | null>(null);
+	const [, datHopOkr] = useHopOkr();
 	const moPhien = useMutation(trpc.okr.moCapNhat.mutationOptions());
 	const moCapNhat = (kr: KetQua) => {
 		setHop({ loai: "cap-nhat", kr, sessionId: null });
@@ -304,11 +377,7 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 			{ entry: "sheet" },
 			{
 				onSuccess: ({ sessionId }) =>
-					setHop((cu) =>
-						cu?.loai === "cap-nhat" && cu.kr.id === kr.id
-							? { ...cu, sessionId }
-							: cu,
-					),
+					setHop((cu) => (cu?.kr.id === kr.id ? { ...cu, sessionId } : cu)),
 			},
 		);
 	};
@@ -328,8 +397,8 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 				kind={mt.kind}
 				expected={mt.expected}
 				danhDauCuaToi={false}
-				hoiDoiTrong={ghiDuoc(mt)}
-				canh={demCanh(mt, kyGhiDuoc)}
+				hoiDoiTrong={suaNoiDung(mt)}
+				canh={demCanh(mt)}
 				nhanHanhDong={m.cotThaoTac}
 				hanhDong={
 					coMenu
@@ -338,28 +407,28 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 									mt={mt}
 									kr={kr}
 									capNhat={() => moCapNhat(kr)}
-									sua={() => setHop({ loai: "sua", kr })}
+									sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
 									xoa={() => setXoa(kr)}
 								/>
 							)
 						: undefined
 				}
 			/>
-			{ghiDuoc(mt) ? (
+			{suaNoiDung(mt) ? (
 				<div className="px-5 py-3">
 					<Button
 						size="sm"
 						variant="outline"
 						data-nut="them-kr"
 						aria-haspopup="dialog"
-						onClick={() => setHop({ loai: "tao" })}
+						onClick={() => void datHopOkr({ loai: "kr-moi" })}
 					>
 						<Icon icon={Add} data-icon="inline-start" />
 						{m.themKr}
 					</Button>
 				</div>
 			) : null}
-			{hop?.loai === "cap-nhat" ? (
+			{hop ? (
 				<HopThoaiCapNhatKr
 					kr={krCapNhatTuSheet(mt, hop.kr)}
 					chuTen={hop.kr.owner.name}
@@ -367,15 +436,6 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 					sessionId={hop.sessionId}
 					loiMo={moPhien.isError}
 					moLai={() => moCapNhat(hop.kr)}
-					dong={() => setHop(null)}
-				/>
-			) : hop ? (
-				<HopThoaiKr
-					objectiveId={mt.id}
-					mucTieu={mt}
-					kr={hop.loai === "sua" ? hop.kr : null}
-					chuMacDinh={mt.owner.id}
-					suaDuocCot={mt.canEdit}
 					dong={() => setHop(null)}
 				/>
 			) : null}
@@ -408,7 +468,7 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 			useXong(mt.id, m.daGo, () => setGoDi(null)),
 		),
 	);
-	const sua = ghiDuoc(mt);
+	const sua = suaNoiDung(mt);
 	const tenNoi = (g: NoiGop) => g.keyResultTitle ?? g.objectiveTitle;
 
 	const nutGan = sua ? (
@@ -539,6 +599,51 @@ function SoMucTieu({ mt }: { mt: ChiTiet }) {
 	);
 }
 
+function dauKhung(mt: ChiTiet): string {
+	if (mt.choDuyet) return mt.quyen.duyet ? "cho-nguoi-duyet" : "cho-nguoi-gui";
+	if (mt.traLaiGanNhat) return "bi-tra-lai";
+	return mt.hienThi;
+}
+
+function LoiKhung({
+	khongThay,
+	thuLai,
+}: {
+	khongThay: boolean;
+	thuLai: () => void;
+}) {
+	const m = okrGioiHanMessages(useLocale());
+	const { close } = useRecordStack();
+	return khongThay ? (
+		<div className="contents" data-khung-khong-thay>
+			<DetailSheetEmpty
+				icon={WarningAlt}
+				title={m.khongThay.tieuDe}
+				description={m.khongThay.moTa}
+				action={
+					<Button size="sm" variant="outline" onClick={close}>
+						{m.khongThay.dong}
+					</Button>
+				}
+			/>
+		</div>
+	) : (
+		<div className="contents" data-khung-loi>
+			<DetailSheetEmpty
+				icon={WarningAlt}
+				title={m.loiTai.tieuDe}
+				description={m.loiTai.moTa}
+				action={
+					<Button size="sm" variant="outline" onClick={thuLai}>
+						<Icon icon={Renew} data-icon="inline-start" />
+						{m.loiTai.thuLai}
+					</Button>
+				}
+			/>
+		</div>
+	);
+}
+
 export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 	const locale = useLocale();
 	const t = okrMessages(locale);
@@ -548,7 +653,9 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 	const { tab, setTab } = useRecordSheetView("kr");
 	const query = useQuery(trpc.okr.objective.queryOptions({ id: objectiveId }));
 	const binhLuan = useQuery(trpc.okr.comments.queryOptions({ objectiveId }));
-	const mt = query.data;
+	const [hopHienThi, setHopHienThi] = useState(false);
+	const khongThay = query.error?.data?.code === "NOT_FOUND";
+	const mt = khongThay ? undefined : query.data;
 	const tenKy = mt?.cycleName;
 
 	const tabs: DetailSheetTab[] = mt
@@ -615,10 +722,19 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 			className="contents"
 			data-okr-sheet={objectiveId}
 			data-trang-thai={mt ? TRANG_THAI_SHEET[mt.status] : undefined}
+			data-dau-khung={mt ? dauKhung(mt) : undefined}
 		>
 			<RecordSheetFrame
 				loading={query.isPending}
-				error={query.error?.message ?? null}
+				error={mt ? null : (query.error?.message ?? null)}
+				errorView={
+					query.error ? (
+						<LoiKhung
+							khongThay={khongThay}
+							thuLai={() => void query.refetch()}
+						/>
+					) : null
+				}
 				title={mt ? <span translate="no">{mt.title}</span> : m.tieuDePhu}
 				description={
 					mt ? (
@@ -638,6 +754,12 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 						<>
 							<Badge variant="outline">{t.loai[mt.kind]}</Badge>
 							<NhanTrangThai status={mt.status} />
+							{mt.hienThi === "gioi-han" ? (
+								<NhanGioiHan
+									soNguoiXem={mt.nguoiXem.length}
+									moHop={mt.quyen.datHienThi ? () => setHopHienThi(true) : null}
+								/>
+							) : null}
 						</>
 					) : null
 				}
@@ -646,15 +768,53 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					mt ? (
 						<>
 							<NutTheoDoi mt={mt} />
-							{ghiDuoc(mt) ? <HanhDongMucTieu mt={mt} /> : null}
+							{ghiDuoc(mt) ? (
+								<HanhDongMucTieu
+									mt={mt}
+									moHienThi={() => setHopHienThi(true)}
+								/>
+							) : null}
 						</>
 					) : null
 				}
-				stats={mt ? <SoMucTieu mt={mt} /> : null}
+				stats={
+					mt ? (
+						<>
+							{coDaiDuyet(mt) ? (
+								<DetailSheetSection>
+									<DaiDuyet mucTieu={mt} />
+								</DetailSheetSection>
+							) : null}
+							{ghiDuoc(mt) && khoaGuiDuyet(mt) ? (
+								<DetailSheetSection>
+									<DongLyDoGuiKhoa objectiveId={mt.id} />
+								</DetailSheetSection>
+							) : null}
+							<SoMucTieu mt={mt} />
+						</>
+					) : null
+				}
 				tabs={tabs}
 				tab={tab}
 				onTabChange={setTab}
 			/>
+			{mt ? <NganOkr mt={mt} /> : null}
+			{mt && hopHienThi ? (
+				<HopMucHienThi
+					mucTieu={{
+						id: mt.id,
+						title: mt.title,
+						hienThi: mt.hienThi,
+						nguoiXem: mt.nguoiXem,
+						coCanChinh: mt.alignments.length > 0,
+					}}
+					dong={() => setHopHienThi(false)}
+					moCanChinh={() => {
+						setHopHienThi(false);
+						setTab("can-chinh");
+					}}
+				/>
+			) : null}
 		</div>
 	);
 }

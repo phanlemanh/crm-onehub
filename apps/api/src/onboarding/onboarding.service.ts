@@ -1,5 +1,6 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { demOkrTheoDonVi } from "@crm/db/okr-don-vi";
 import {
 	type OnboardingTemplateStep,
 	parseOnboardingTemplateSteps,
@@ -81,7 +82,11 @@ type HangBoPhan = {
 
 type KhuonNhac = { name: string; archived: boolean };
 
-function boPhanRa(row: HangBoPhan, khuon: KhuonNhac[]): DepartmentOutput {
+function boPhanRa(
+	row: HangBoPhan,
+	khuon: KhuonNhac[],
+	okrLichSu: number,
+): DepartmentOutput {
 	return {
 		id: row.id,
 		name: row.name,
@@ -94,6 +99,7 @@ function boPhanRa(row: HangBoPhan, khuon: KhuonNhac[]): DepartmentOutput {
 				stepCount: row._count.steps,
 				primaryCount: row._count.primaryOf,
 				khuon: khuon.map((k) => k.name),
+				okrLichSu,
 			}) === null,
 	};
 }
@@ -222,8 +228,17 @@ export class OnboardingService {
 			orderBy: { position: "asc" },
 			select: CHON_BO_PHAN,
 		});
-		const banDo = await this.banDoKhuon();
-		return rows.map((row) => boPhanRa(row, banDo.get(row.id) ?? []));
+		const [banDo, okr] = await Promise.all([
+			this.banDoKhuon(),
+			demOkrTheoDonVi(this.db),
+		]);
+		return rows.map((row) =>
+			boPhanRa(
+				row,
+				banDo.get(row.id) ?? [],
+				okr.phongBan.get(row.id)?.lichSu ?? 0,
+			),
+		);
 	}
 
 	async listTemplates(

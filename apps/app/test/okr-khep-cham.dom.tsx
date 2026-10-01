@@ -17,7 +17,9 @@ mock.module("next/navigation", () => ({
 	usePathname: () => "/ws/okr/theo-don-vi",
 }));
 
-const { ChamDiemBang } = await import("@/app/(app)/[slug]/okr/cham-diem");
+const { ChamDiemBang, kyKeCua } = await import(
+	"@/app/(app)/[slug]/okr/cham-diem"
+);
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { okrKhepMessages } = await import("@/lib/messages/okr-khep");
@@ -309,6 +311,67 @@ describe("kko_bang_cham_dom", () => {
 		);
 		expect(document.body.querySelector("[data-o-hoc] textarea")).toBeNull();
 		expect(document.body.querySelector("[data-nut='luu-diem']")).toBeNull();
+	});
+
+	test("ky-ke-bo-ky-an: nhan mang sang goi ten quy ke chua an, bo quy da an nhu may chu", () => {
+		const quy = (
+			id: string,
+			name: string,
+			startsOn: string,
+			endsOn: string,
+			phase: "dang-chay" | "lap-ke-hoach" | "cham-diem",
+			anLuc: string | null,
+		) => ({
+			id,
+			kind: "quy" as const,
+			name,
+			parentId: null,
+			startsOn,
+			endsOn,
+			phase,
+			breakStartsOn: null,
+			breakEndsOn: null,
+			updateWeekday: 1,
+			cuaSoRa: null,
+			anLuc,
+			anLyDo: anLuc ? "Tạo nhầm quý, đã có quý đúng" : null,
+			quyConHien: 0,
+			viec: {
+				suaMoiO: false,
+				suaTen: false,
+				go: false,
+				an: false,
+				hienLai: false,
+			},
+		});
+		const q3 = quy(
+			"q3",
+			"Quý 3/2026",
+			"2026-07-01",
+			"2026-09-30",
+			"cham-diem",
+			null,
+		);
+		const q4An = quy(
+			"q4-an",
+			"Quý 4/2026 tạo nhầm",
+			"2026-10-01",
+			"2026-12-31",
+			"lap-ke-hoach",
+			"2026-09-30T03:00:00.000Z",
+		);
+		const q4 = quy(
+			"q4",
+			"Quý 4/2026",
+			"2026-10-02",
+			"2026-12-31",
+			"lap-ke-hoach",
+			null,
+		);
+		expect({
+			coQuyHien: kyKeCua(q3, [q3, q4An, q4])?.id ?? null,
+			chiQuyAn: kyKeCua(q3, [q3, q4An])?.id ?? null,
+		}).toEqual({ coQuyHien: "q4", chiQuyAn: null });
 	});
 
 	test("hop thoai mang sang noi ky ke, KR chep va KR khong chep", async () => {

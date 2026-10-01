@@ -5,17 +5,21 @@ import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
 import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
 import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DoiTenOnehubCenterMau } from "./_modules/doi-ten-onehub-center";
+import { DotHoiYTuongOkrMau } from "./_modules/dot-hoi-y-tuong-okr";
 import { DuongProtoMau } from "./_modules/duong-proto";
 import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
+import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
 import { KhepKyOkrMau } from "./_modules/khep-ky-okr";
 import { KhoTaiLieuMau } from "./_modules/kho-tai-lieu";
+import { KhungTaoOkrNhuDealMau } from "./_modules/khung-tao-okr-nhu-deal";
 import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
 import { NhacQuaZaloMau } from "./_modules/nhac-qua-zalo";
 import { NoiZaloChoNguoiMoiMau } from "./_modules/noi-zalo-cho-nguoi-moi";
+import { SuaAnChuKyOkrMau } from "./_modules/sua-an-chu-ky-okr";
 import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet";
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
 import { TroLyOkrDeXuatMau } from "./_modules/tro-ly-okr-de-xuat";
@@ -33,7 +37,9 @@ const BANG_GHEP = {
 	"cua-vao-dang-nhap": CuaVaoDangNhapMau,
 	"dieu-phoi-30-ngay-dau": DieuPhoi30NgayDauMau,
 	"doi-ten-onehub-center": DoiTenOnehubCenterMau,
+	"dot-hoi-y-tuong-okr": DotHoiYTuongOkrMau,
 	"duong-proto-cho-design-pass": DuongProtoMau,
+	"gioi-han-duyet-cay-okr": GioiHanDuyetCayOkrMau,
 	"ke-hoach-la-mot-ban-ghi": KeHoachLaMotBanGhiMau,
 	"keo-tha-thoa-thuan": KeoThaThoaThuanMau,
 	"khep-ky-okr": KhepKyOkrMau,
@@ -43,12 +49,14 @@ const BANG_GHEP = {
 	"tim-va-dieu-huong-kho": KhoTaiLieuMau,
 	"to-chuc-danh-sach-chi-tiet": ToChucDanhSachChiTietMau,
 	"toan-canh-okr": ToanCanhOkrMau,
+	"khung-tao-okr-nhu-deal": KhungTaoOkrNhuDealMau,
 	"tro-ly-okr-de-xuat": TroLyOkrDeXuatMau,
 	"tro-ly-okr-nen": TroLyOkrNenMau,
 	"may-nhac-truoc-nguoi": MayNhacTruocNguoiMau,
 	"moi-phia-deu-thay-ke-hoach": MoiPhiaDeuThayKeHoachMau,
 	"nhac-qua-zalo": NhacQuaZaloMau,
 	"noi-zalo-cho-nguoi-moi": NoiZaloChoNguoiMoiMau,
+	"sua-an-chu-ky-okr": SuaAnChuKyOkrMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 } satisfies Record<string, ProtoComponent>;
 

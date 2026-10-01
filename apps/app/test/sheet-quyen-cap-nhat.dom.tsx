@@ -29,6 +29,16 @@ const QUY: ChuKyOutput = {
 	breakEndsOn: null,
 	updateWeekday: 1,
 	cuaSoRa: null,
+	anLuc: null,
+	anLyDo: null,
+	quyConHien: 0,
+	viec: {
+		suaMoiO: false,
+		suaTen: false,
+		go: false,
+		an: false,
+		hienLai: false,
+	},
 };
 
 function kr(thay: Partial<KrOutput>): KrCanhOutput {
@@ -67,6 +77,7 @@ function mucTieu(
 		id: "mt-1",
 		cycleId: QUY.id,
 		cycleName: QUY.name,
+		kyGhiDuoc: true,
 		mangSangToi: null,
 		mangSangTu: null,
 		level: "phong-ban",
@@ -88,8 +99,21 @@ function mucTieu(
 		following: false,
 		followerCount: 0,
 		theoDoi: false,
+		soNguoiXem: 0,
 		trail: [],
 		canEditKr: [],
+		hienThi: "cong-khai",
+		nguoiXem: [],
+		nguoiDuyetDuKien: null,
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: false,
+			congBo: false,
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
 		...thay,
 	};
 }

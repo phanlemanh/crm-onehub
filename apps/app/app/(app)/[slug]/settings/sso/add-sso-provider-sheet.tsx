@@ -242,6 +242,9 @@ function AddSsoProviderForm() {
 				</form>
 
 				<SheetFooter>
+					<SheetClose asChild>
+						<Button variant="outline">{t.them.huy}</Button>
+					</SheetClose>
 					<Button
 						type="submit"
 						form={FORM}
@@ -250,9 +253,6 @@ function AddSsoProviderForm() {
 						{register.isPending ? <Spinner /> : null}
 						{t.them.nut}
 					</Button>
-					<SheetClose asChild>
-						<Button variant="outline">{t.them.huy}</Button>
-					</SheetClose>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>

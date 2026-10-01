@@ -1,6 +1,5 @@
 "use client";
 
-import Add from "@carbon/icons-react/es/Add";
 import DocumentImport from "@carbon/icons-react/es/DocumentImport";
 import { Button } from "@crm/ui/components/button";
 import {
@@ -25,13 +24,13 @@ import { CayCanChinh } from "../cay-can-chinh";
 import { CayDonVi } from "../cay-don-vi";
 import { ChamDiem } from "../cham-diem";
 import { useChuKy } from "../chon-chu-ky";
-import { HopThoaiMucTieu } from "../hop-thoai-muc-tieu";
 import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
 import { HopTuan } from "../hop-tuan";
 import { KhoiKrCuaToi } from "../khoi-kr-cua-toi";
 import { KhoiMucTieu } from "../khoi-muc-tieu";
 import type { CayDuLieu, MucTieu } from "../kieu";
 import { coLoc, KhongKhop, LocOkr, type LocOkrGiaTri } from "../loc-okr";
+import { NganTaoMucTieu, NutThemMucTieu } from "../ngan-okr-url";
 import {
 	CACH_XEM,
 	type CachXem,
@@ -139,6 +138,9 @@ function XemCay({
 	);
 }
 
+const dangCho = (q: { isPending: boolean; isPlaceholderData: boolean }) =>
+	q.isPending || q.isPlaceholderData;
+
 export function TheoDonVi() {
 	const locale = useLocale();
 	const m = okrMessages(locale);
@@ -169,7 +171,6 @@ export function TheoDonVi() {
 	const coCham = phaKy !== null && PHA_CO_CHAM.includes(phaKy);
 	const xinXem: CachXem = url[SEARCH_PARAM.okr.xem] ?? "danh-sach";
 	const xem: CachXem = xinXem === "cham" && !coCham ? "danh-sach" : xinXem;
-	const [themMo, setThemMo] = useState(false);
 	const [nhapMo, setNhapMo] = useState(false);
 	const cay = useQuery(trpc.org.tree.queryOptions());
 	const access = useQuery(trpc.okr.access.queryOptions());
@@ -235,7 +236,7 @@ export function TheoDonVi() {
 		);
 	} else if (xem === "cay") {
 		noiDung = <XemCay cycleId={currentId} tenGoc={tenGoc} tenKy={tenKy} />;
-	} else if (byUnit.isPending) noiDung = <DangTai />;
+	} else if (dangCho(byUnit)) noiDung = <DangTai />;
 	else if (byUnit.isError) noiDung = <Loi thuLai={thuLai} />;
 	else if (objectives.length === 0 && coLoc(loc))
 		noiDung = <KhongKhop boLoc={boLoc} />;
@@ -337,34 +338,19 @@ export function TheoDonVi() {
 										{m.nhapBangTinh}
 									</Button>
 								) : null}
-								{byUnit.data?.canEdit ? (
-									<Button
-										size="sm"
-										aria-haspopup="dialog"
-										data-nut="them-muc-tieu"
-										onClick={() => setThemMo(true)}
-									>
-										<Icon icon={Add} data-icon="inline-start" />
-										{m.themMucTieu}
-									</Button>
-								) : null}
+								<NutThemMucTieu suaDuoc={byUnit.data?.canEdit} />
 							</div>
 						</Card>
 						{don.loai === "nguoi" && xem === "danh-sach" ? (
 							<KhoiKrCuaToi cycleId={currentId} userId={don.id} />
 						) : null}
 						{noiDung}
-						{themMo ? (
-							<HopThoaiMucTieu
-								yeuCau={{
-									loai: "tao",
-									cycleId: currentId,
-									don,
-									tenDon: dv.ten,
-								}}
-								dong={() => setThemMo(false)}
-							/>
-						) : null}
+						<NganTaoMucTieu
+							suaDuoc={byUnit.data?.canEdit}
+							cycleId={currentId}
+							don={don}
+							tenDon={dv.ten}
+						/>
 						{nhapMo ? (
 							<HopThoaiNhapOkr
 								cycleId={currentId}

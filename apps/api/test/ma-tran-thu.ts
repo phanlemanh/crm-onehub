@@ -1,5 +1,6 @@
 import { auth } from "@crm/auth";
 import { db } from "@crm/db";
+import type { INestApplication } from "@nestjs/common";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import type { AnyProcedure } from "@trpc/server";
 import { hashPassword } from "better-auth/crypto";
@@ -33,7 +34,7 @@ const khaiRest = z
 	.object({ openapi: z.object({ method: z.string(), path: z.string() }) })
 	.transform((m) => m.openapi);
 
-export function soThuTuc(app: NestExpressApplication): ThuTuc[] {
+export function soThuTuc(app: INestApplication): ThuTuc[] {
 	const { appRouter } = app.get(AppRouterHost);
 	const procs = appRouter._def.procedures as Record<string, AnyProcedure>;
 	return Object.entries(procs)

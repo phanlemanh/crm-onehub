@@ -1,0 +1,79 @@
+schema_version: 1
+slug: gioi-han-tep-dom
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: unit
+    cmd: config:executors.test.gtd_qua_gio
+    paths:
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "packages/ui/test/chay-dom-config.ts"
+      - "packages/ui/test/chay-tung-tep-dom.spec.ts"
+    expected: |
+      Thư mục tạm test/ = [a-xanh, b-treo (Atomics.wait trần 60 s — dài hơn đồng hồ riêng — chặn đồng bộ), c-xanh (ghi tệp
+      dấu c.dau khi chạy)], giới hạn 1500 ms. Hàm chayTungTep chạy trong tiến trình con (bun -e)
+      bằng spawn detached của node:child_process, đồng hồ riêng 30 s giết cả nhóm; ca khai timeout 45 s.
+      Ghim: mã thoát == CHAY_DOM.tep.maQuaGio (import từ module cấu hình, không viết tay 124);
+      stderr chứa "chay-dom: test/b-treo.dom.tsx quá 1.5 s — đã cắt tiến trình"; stdout chứa dòng
+      xanh của a-xanh; c.dau KHÔNG tồn tại; thời gian thật < 1500 + 8000 ms; đồng hồ riêng không
+      phải cắt (nếu phải cắt: đỏ với thông điệp ghim "trình chạy không tự dừng"); sau đó không còn
+      tiến trình nào có dòng lệnh chứa thư mục tạm (pgrep -f).
+      Đối chứng dương cùng fixture bỏ b-treo: mã 0, hai dòng xanh, c.dau tồn tại.
+      ĐỘT BIẾN (bản sao, chạy một lần ở S3): bỏ tùy chọn timeout → đỏ với "trình chạy không tự dừng"
+      trong khoảng 30 s + biên, không tiến trình mồ côi.
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: unit
+    cmd: config:executors.test.gtd_thoi_luong
+    paths:
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "packages/ui/test/chay-dom-config.ts"
+      - "packages/ui/test/chay-tung-tep-dom.spec.ts"
+    expected: |
+      Thư mục tạm test/ = [a-xanh, b-ngu (await Bun.sleep(300) ở cấp module, ngoài test()), c-xanh]. Mã 0.
+      Dòng xanh (stdout) khớp /^chay-dom: test\/(.+) xanh sau (\d+\.\d) s$/; danh sách tên theo
+      thứ tự toEqual ["a-xanh.dom.tsx","b-ngu.dom.tsx","c-xanh.dom.tsx"] (đúng 3 phần tử — đếm,
+      không chỉ có mặt). Số giây của b-ngu >= 0.3. Dòng tổng khớp
+      /^chay-dom: 3 tệp xanh sau \d+\.\d s \(giới hạn mỗi tệp 1\.5 s\)$/. Dòng "chậm nhất" liệt đúng
+      min(CHAY_DOM.tongKet.soTepChamNhat, 3) tên, theo thứ tự giây giảm dần rút từ các dòng xanh, tên
+      đầu là b-ngu.dom.tsx.
+      ĐỘT BIẾN: đo thời gian bằng số bun tự báo thay vì đồng hồ quanh spawnSync → b-ngu < 0.3 đỏ
+      nếu bun không tính thời gian nạp module (S3 ghi lại kết quả thật của lượt phá này).
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: unit
+    cmd: config:executors.test.gtd_do
+    paths:
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "packages/ui/test/chay-tung-tep-dom.spec.ts"
+    expected: |
+      Thư mục tạm test/ = [a-xanh, b-do (expect(1).toBe(2)), c-xanh (ghi c.dau)]. Mã thoát bằng
+      đúng mã bun test trả khi chạy riêng b-do trong cùng thư mục (đối chứng cùng fixture, không
+      ghim số viết tay). stderr khớp /chay-dom: test\/b-do\.dom\.tsx đỏ \(mã \d+\) sau \d+\.\d s/;
+      c.dau KHÔNG tồn tại.
+  - id: E4
+    criterion: AC-4
+    executor: script
+    layer: integration
+    cmd: config:executors.script.gtd_bo_that
+    paths:
+      - "packages/ui/test/chay-tung-tep-dom.ts"
+      - "packages/ui/test/chay-dom-config.ts"
+      - "packages/ui/package.json"
+      - "apps/app/package.json"
+      - "_acceptance/gioi-han-tep-dom/rang/bo-that.mjs"
+    expected: |
+      Chạy "bun run test:dom" trong apps/app và "bun run test" trong packages/ui (lệnh thật của
+      package.json), lưu stdout vào .acceptance-runs/gioi-han-tep-dom/. Gốc kho suy từ vị trí script.
+      Mỗi gói: mã 0; số dòng xanh = số tệp *.dom.tsx trong test/ của gói (đếm bằng readdir); tập tên
+      trong dòng xanh = tập tên tệp; đúng một dòng tổng; giới hạn in trong dòng tổng ("giới hạn mỗi
+      tệp <s> s") bằng CHAY_DOM.tep.tranMs / 1000 đọc từ module cấu hình bằng bun -e (quan hệ, không
+      so chuỗi hằng); dòng "chậm nhất" có đúng min(CHAY_DOM.tongKet.soTepChamNhat, số tệp) mục, tập
+      tên bằng đúng N tệp có số giây lớn nhất theo các dòng xanh, thứ tự giảm dần. In "E4 đạt" hoặc
+      lý do đỏ, thoát khác 0 khi đỏ.
+      ĐỘT BIẾN (bản sao, S3): viết thẳng 60_000 thay cho cấu hình khi cấu hình đổi → đỏ "giới hạn
+      không đọc từ cấu hình"; viết thẳng slice(0, 3) → đỏ "số mục chậm nhất lệch cấu hình".

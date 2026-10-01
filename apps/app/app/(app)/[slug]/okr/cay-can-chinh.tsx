@@ -6,6 +6,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { TreeNav, type TreeNavNode } from "@crm/ui/components/tree-nav";
 import { useState } from "react";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -58,6 +59,13 @@ function NhanNut({ nut }: { nut: NutDayDu }) {
 				{laKr ? null : (
 					<span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground text-xs">
 						<span translate="no">{nut.unitName}</span>
+						{nut.hienThi === "gioi-han" ? (
+							<NhanGioiHan
+								focusable={false}
+								moHop={null}
+								soNguoiXem={nut.soNguoiXem}
+							/>
+						) : null}
 						{nut.gop > 1 ? (
 							<Badge variant="outline">{m.gopVao(nut.gop)}</Badge>
 						) : null}

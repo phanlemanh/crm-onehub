@@ -4,7 +4,10 @@ import type {
 	NutCanChinh,
 } from "./okr.contracts";
 
-export function dungCayCanChinh(mts: MucTieuOutput[]): AlignmentTreeOutput {
+export function dungCayCanChinh(
+	mts: MucTieuOutput[],
+	gioiHan: ReadonlySet<string> = new Set(),
+): AlignmentTreeOutput {
 	const coMat = new Set(
 		mts.flatMap((m) => [m.id, ...m.keyResults.map((k) => k.id)]),
 	);
@@ -29,6 +32,8 @@ export function dungCayCanChinh(mts: MucTieuOutput[]): AlignmentTreeOutput {
 			kind: m.kind,
 			gop: m.alignments.length,
 			lapLai,
+			hienThi: m.hienThi,
+			soNguoiXem: m.soNguoiXem,
 			children: lapLai
 				? []
 				: [
@@ -44,6 +49,8 @@ export function dungCayCanChinh(mts: MucTieuOutput[]): AlignmentTreeOutput {
 								kind: m.kind,
 								gop: 0,
 								lapLai: false,
+								hienThi: m.hienThi,
+								soNguoiXem: m.soNguoiXem,
 								children: (gopVao.get(k.id) ?? []).map(nutMt),
 							}),
 						),
@@ -57,7 +64,7 @@ export function dungCayCanChinh(mts: MucTieuOutput[]): AlignmentTreeOutput {
 		);
 	const roots = mts.filter((m) => m.level === "onehub").map(nutMt);
 	const chuaCanChinh = mts
-		.filter((m) => m.level !== "onehub" && !coDich(m))
+		.filter((m) => m.level !== "onehub" && !coDich(m) && !gioiHan.has(m.id))
 		.map(nutMt);
 	return { roots, chuaCanChinh };
 }

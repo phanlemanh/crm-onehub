@@ -1,5 +1,11 @@
 import { db } from "@crm/db";
 import { LOAI_VIEC_TRO_LY_OKR } from "@crm/db/agent-tasks";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
+import {
+	boGioiHan,
+	dieuKienXemMucTieu,
+	nguCanhXemOkr,
+} from "@crm/db/okr-hien-thi";
 import {
 	capDichCanChinh,
 	chuKyDichCanChinh,
@@ -31,15 +37,35 @@ export async function docViecTheoPhienGoc(sessionId: string) {
 	});
 }
 
-export async function docMucTieu(objectiveId: string) {
-	return db.okrObjective.findUnique({
-		where: { id: objectiveId },
+async function nguCanhCuaNguoi(nguoiYeuCau: string) {
+	return (await nguCanhXemOkr(db, [nguoiYeuCau])).get(nguoiYeuCau) ?? null;
+}
+
+export async function nguoiYeuCauXemDuoc(
+	objectiveId: string,
+	nguoiYeuCau: string,
+): Promise<boolean> {
+	const nc = await nguCanhCuaNguoi(nguoiYeuCau);
+	if (!nc) return false;
+	return (
+		(await db.okrObjective.count({
+			where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
+		})) > 0
+	);
+}
+
+export async function docMucTieu(objectiveId: string, nguoiYeuCau: string) {
+	const nc = await nguCanhCuaNguoi(nguoiYeuCau);
+	if (!nc) return null;
+	return db.okrObjective.findFirst({
+		where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
 		select: {
 			id: true,
 			level: true,
 			status: true,
 			title: true,
 			whyNow: true,
+			hienThi: true,
 			cycleId: true,
 			cycle: { select: { parentId: true } },
 			keyResults: {
@@ -63,9 +89,15 @@ export type MucTieuDoc = NonNullable<Awaited<ReturnType<typeof docMucTieu>>>;
 export async function docDichCanChinh(nguon: NguonCanChinh) {
 	return db.okrObjective.findMany({
 		where: {
-			status: "cong-bo",
-			level: { in: capDichCanChinh(nguon.level) },
-			cycleId: { in: chuKyDichCanChinh(nguon) },
+			AND: [
+				{
+					status: "cong-bo",
+					level: { in: capDichCanChinh(nguon.level) },
+					cycleId: { in: chuKyDichCanChinh(nguon) },
+					cycle: KY_CON_HIEN,
+				},
+				boGioiHan,
+			],
 		},
 		select: {
 			id: true,

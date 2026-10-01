@@ -2,9 +2,18 @@ import { afterAll, beforeAll, expect } from "bun:test";
 import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
 import type { INestApplication } from "@nestjs/common";
-import { Test, type TestingModule } from "@nestjs/testing";
+import {
+	Test,
+	type TestingModule,
+	type TestingModuleBuilder,
+} from "@nestjs/testing";
+import type { NextFunction, Request, Response } from "express";
+import { AppRouterHost } from "nestjs-trpc";
 import request from "supertest";
+import { createOpenApiExpressMiddleware } from "trpc-to-openapi";
 import type { TreeOutput } from "../src/to-chuc/to-chuc.contracts";
+import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
+import { createBaseTrpcContext } from "../src/trpc/trpc.context";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 export const TIEN_TO = `dok${(process.env.TEST_RUN_ID ?? "").slice(0, 8)}`;
@@ -151,6 +160,7 @@ export const CHUONG_TRINH_RONG = {
 	scoreScale: "0-100",
 	weightsOn: false,
 	personalOn: true,
+	duyetCongBo: false,
 } as const;
 
 export const taoNam = (ten: string, nam: number) =>
@@ -202,14 +212,34 @@ export async function kyDangChay(ten: string): Promise<string> {
 
 const DON_SAN_MS = 30_000;
 
-export function dungSan(): void {
+export function dungSan(
+	sua: (b: TestingModuleBuilder) => TestingModuleBuilder = (b) => b,
+	tuy: { rest?: boolean } = {},
+): void {
 	beforeAll(async () => {
 		const { AppModule } = await import("../src/app.module");
-		const modul: TestingModule = await Test.createTestingModule({
-			imports: [AppModule],
-		}).compile();
+		const modul: TestingModule = await sua(
+			Test.createTestingModule({ imports: [AppModule] }),
+		).compile();
 		app = modul.createNestApplication({ bodyParser: false });
+		let cau: ((req: Request, res: Response) => Promise<void>) | undefined;
+		if (tuy.rest)
+			app.use(
+				REST_BRIDGE_PATH,
+				(req: Request, res: Response, next: NextFunction) => {
+					if (!cau) {
+						next();
+						return;
+					}
+					void cau(req, res);
+				},
+			);
 		await app.init();
+		if (tuy.rest)
+			cau = createOpenApiExpressMiddleware({
+				router: app.get(AppRouterHost).appRouter,
+				createContext: ({ req }) => createBaseTrpcContext(req),
+			});
 		for (const [khoa, vai] of [
 			["quan", "admin"],
 			["thuong", "member"],
@@ -229,6 +259,12 @@ export function dungSan(): void {
 		const mucTieu = (
 			await db.okrObjective.findMany({ where: cuaSan, select: { id: true } })
 		).map((m) => m.id);
+		const hoiYSan = { hoiY: cuaSan };
+		await db.okrHoiYHieu.deleteMany({ where: hoiYSan });
+		await db.okrY.deleteMany({ where: hoiYSan });
+		await db.okrChuDe.deleteMany({ where: hoiYSan });
+		await db.okrHoiYBanTruoc.deleteMany({ where: hoiYSan });
+		await db.okrHoiY.deleteMany({ where: cuaSan });
 		await db.okrGhiNhanNhan.deleteMany({
 			where: { ghiNhan: { objectiveId: { in: mucTieu } } },
 		});

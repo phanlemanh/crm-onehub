@@ -23,8 +23,10 @@ export function DatePicker({
 	onChange,
 	placeholder,
 	variant,
+	disabled,
 }: {
 	id?: string;
+	disabled?: boolean;
 	value: string | null | undefined;
 	onChange: (next: string) => void;
 	placeholder?: string;
@@ -41,11 +43,13 @@ export function DatePicker({
 	};
 
 	return (
-		<Popover open={open} onOpenChange={setOpen}>
+		<Popover open={open && !disabled} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
 				<button
 					type="button"
 					id={id}
+					disabled={disabled}
+					data-disabled={disabled ? "" : undefined}
 					data-slot="date-picker-trigger"
 					data-size="default"
 					data-placeholder={selected ? undefined : ""}

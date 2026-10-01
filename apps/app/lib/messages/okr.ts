@@ -1,4 +1,7 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import { OKR_KHEP } from "@crm/validation/okr-khep";
+
+const LY_DO_AN = OKR_KHEP.lyDo;
 
 const vi = {
 	tabNhan: "Khu mục tiêu",
@@ -7,12 +10,15 @@ const vi = {
 		"cap-nhat-tuan": "Cập nhật tuần",
 		"theo-don-vi": "Theo đơn vị",
 		"toan-canh": "Toàn cảnh",
+		"hoi-y": "Hỏi ý",
 	},
+	nhanHoiYMoi: "Mới",
 	tieuDe: {
 		"cua-toi": "OKR của tôi",
 		"cap-nhat-tuan": "Cập nhật tuần của tôi",
 		"theo-don-vi": "OKR theo đơn vị",
 		"toan-canh": "Toàn cảnh OKR",
+		"hoi-y": "Hỏi ý mục tiêu",
 	},
 	moTa: {
 		"cua-toi":
@@ -22,6 +28,7 @@ const vi = {
 		"theo-don-vi":
 			"Bộ OKR của từng đơn vị trong chu kỳ, và cách chúng góp vào nhau.",
 		"toan-canh": "Cả công ty trong một màn.",
+		"hoi-y": "Cả công ty góp ý cho mục tiêu kỳ tới, trước khi đặt OKR.",
 	},
 	chuKy: "Chu kỳ",
 	loaiChuKy: { nam: "Năm", quy: "Quý" },
@@ -55,7 +62,12 @@ const vi = {
 		"phan-tram": "Phần trăm",
 	},
 	loai: { "cam-ket": "Cam kết", "tham-vong": "Tham vọng" },
-	trangThai: { nhap: "Nháp", "cong-bo": "Đã công bố", "da-bo": "Đã bỏ" },
+	trangThai: {
+		nhap: "Nháp",
+		"cho-duyet": "Chờ duyệt",
+		"cong-bo": "Đã công bố",
+		"da-bo": "Đã bỏ",
+	},
 	moc: {
 		xong: "Xong",
 		chuaXong: "Chưa xong",
@@ -219,6 +231,10 @@ const vi = {
 	},
 	hanhDong: {
 		"tao-chu-ky": "Mở chu kỳ",
+		"sua-chu-ky": "Sửa chu kỳ",
+		"go-chu-ky": "Gỡ chu kỳ",
+		"an-chu-ky": "Ẩn chu kỳ",
+		"hien-chu-ky": "Hiện lại chu kỳ",
 		"doi-pha": "Chuyển pha",
 		"cau-hinh": "Đổi cấu hình",
 		tao: "Tạo mục tiêu",
@@ -256,6 +272,17 @@ const vi = {
 		"ghi-nhan": "Ghi nhận",
 		"go-ghi-nhan": "Gỡ ghi nhận",
 		"sua-mau": "Sửa mẫu OKR",
+		"mo-hoi-y": "Mở hỏi ý",
+		"sua-hoi-y": "Sửa hỏi ý",
+		"doi-nguoi-chon": "Đổi người chọn",
+		"niem-phong": "Niêm phong bản viết trước",
+		"cong-bo-hoi-y": "Công bố hỏi ý",
+		"doi-hien-thi": "Đổi mức hiển thị",
+		"gui-duyet": "Gửi duyệt",
+		duyet: "Duyệt",
+		"tra-lai": "Trả lại",
+		"rut-duyet": "Rút lại",
+		"chuyen-don-vi": "Chuyển OKR sang đơn vị",
 	},
 	vet: {
 		cot: {
@@ -357,6 +384,40 @@ const vi = {
 				cancel: "Huỷ",
 			},
 			daChuyen: (ten: string, pha: string) => `${ten} đã sang ${pha}.`,
+			daAn: "Đã ẩn",
+			dongAn: (ngay: string, pha: string) => `Ẩn ${ngay} lúc pha ${pha}`,
+			viec: {
+				sua: "Sửa chu kỳ",
+				go: "Gỡ chu kỳ",
+				an: "Ẩn chu kỳ",
+				hienLai: "Hiện lại",
+			},
+			anKhoa: (n: string) => `Còn ${n} quý đang hiện — ẩn hoặc gỡ quý trước`,
+			go: {
+				tieuDe: (ten: string) => `Gỡ ${ten}?`,
+				than: (ten: string) =>
+					`${ten} chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.`,
+				nut: "Gỡ chu kỳ",
+				huy: "Huỷ",
+				xong: (ten: string) => `Đã gỡ ${ten}.`,
+			},
+			an: {
+				tieuDe: (ten: string) => `Ẩn ${ten}?`,
+				moTa: "Chu kỳ biến khỏi ô chọn kỳ, không nhận ghi mới, không sinh nhắc, không làm đích mang sang. Dữ liệu bên trong giữ nguyên; hiện lại được từ bảng này.",
+				nhan: "Lý do ẩn",
+				moTaO: `Từ ${LY_DO_AN.toiThieu} đến ${LY_DO_AN.toiDa} ký tự. Lý do nằm trong vết của chu kỳ.`,
+				nut: "Ẩn chu kỳ",
+				huy: "Huỷ",
+				xong: (ten: string) => `Đã ẩn ${ten}.`,
+			},
+			hienLai: {
+				tieuDe: (ten: string) => `Hiện lại ${ten}?`,
+				than: (pha: string) =>
+					`Chu kỳ quay lại ô chọn kỳ với pha như lúc ẩn (${pha}), nhận ghi và nhắc lại.`,
+				nut: "Hiện lại",
+				huy: "Huỷ",
+				xong: (ten: string) => `Đã hiện lại ${ten}.`,
+			},
 		},
 		mo: {
 			tieuDe: "Mở chu kỳ",
@@ -391,6 +452,21 @@ const vi = {
 			huy: "Huỷ",
 			gui: "Mở chu kỳ",
 			daMo: (ten: string) => `Đã mở ${ten}.`,
+		},
+		sua: {
+			tieuDe: (ten: string) => `Sửa ${ten}`,
+			moTaMoiO: (ten: string) =>
+				`${ten} chưa có dữ liệu — sửa được mọi ô trừ loại và năm.`,
+			moTaCoDuLieu: (ten: string) =>
+				`${ten} đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật tuần giữ nguyên để số đã tính không lệch.`,
+			moTaRoiKeHoach: (ten: string) =>
+				`${ten} đã rời pha Lập kế hoạch — chỉ sửa được tên.`,
+			khoaCoDuLieu:
+				"Khoá vì chu kỳ đã có dữ liệu. Sai ngày thì ẩn chu kỳ này rồi mở chu kỳ đúng.",
+			khoaRoiKeHoach:
+				"Khoá vì chu kỳ đã rời pha Lập kế hoạch. Sai ngày thì gỡ chu kỳ này rồi mở chu kỳ đúng.",
+			luu: "Lưu",
+			xong: (ten: string) => `Đã sửa ${ten}.`,
 		},
 		cauHinh: {
 			tieuDe: "Cấu hình",
@@ -515,9 +591,12 @@ const vi = {
 			theoDoi: "{capNhat} cập nhật, {binhLuan} bình luận mới",
 			theoDoiCapNhat: "{capNhat} cập nhật mới",
 			theoDoiBinhLuan: "{binhLuan} bình luận mới",
+			hoiYGop: "Hỏi ý mục tiêu đang chờ bạn góp",
+			hoiYCongBo: "Hỏi ý mục tiêu đã công bố — xem ý của bạn đi đâu",
 		},
 		capNhatTuan: "Cập nhật tuần",
 		moMucTieu: "Mở mục tiêu",
+		moHoiY: "Mở Hỏi ý",
 		rong: "Hôm nay OKR không cần gì từ bạn",
 		loi: {
 			title: "Không lấy được việc OKR của bạn",
@@ -555,12 +634,15 @@ const en: OkrMessages = {
 		"cap-nhat-tuan": "Weekly update",
 		"theo-don-vi": "By unit",
 		"toan-canh": "Overview",
+		"hoi-y": "Call for ideas",
 	},
+	nhanHoiYMoi: "New",
 	tieuDe: {
 		"cua-toi": "My OKRs",
 		"cap-nhat-tuan": "My weekly update",
 		"theo-don-vi": "OKRs by unit",
 		"toan-canh": "OKR overview",
+		"hoi-y": "Call for ideas on objectives",
 	},
 	moTa: {
 		"cua-toi":
@@ -570,6 +652,8 @@ const en: OkrMessages = {
 		"theo-don-vi":
 			"Each unit's OKRs for the cycle, and how they contribute to each other.",
 		"toan-canh": "The whole company on one screen.",
+		"hoi-y":
+			"The whole company gives ideas for next period's objectives before OKRs are set.",
 	},
 	chuKy: "Cycle",
 	loaiChuKy: { nam: "Year", quy: "Quarter" },
@@ -606,7 +690,12 @@ const en: OkrMessages = {
 		"phan-tram": "Percentage",
 	},
 	loai: { "cam-ket": "Committed", "tham-vong": "Aspirational" },
-	trangThai: { nhap: "Draft", "cong-bo": "Published", "da-bo": "Dropped" },
+	trangThai: {
+		nhap: "Draft",
+		"cho-duyet": "Awaiting approval",
+		"cong-bo": "Published",
+		"da-bo": "Dropped",
+	},
 	moc: {
 		xong: "Done",
 		chuaXong: "Not done",
@@ -770,6 +859,10 @@ const en: OkrMessages = {
 	},
 	hanhDong: {
 		"tao-chu-ky": "Opened cycle",
+		"sua-chu-ky": "Edited cycle",
+		"go-chu-ky": "Removed cycle",
+		"an-chu-ky": "Hid cycle",
+		"hien-chu-ky": "Unhid cycle",
 		"doi-pha": "Changed phase",
 		"cau-hinh": "Changed settings",
 		tao: "Created objective",
@@ -807,6 +900,17 @@ const en: OkrMessages = {
 		"ghi-nhan": "Recognition",
 		"go-ghi-nhan": "Remove recognition",
 		"sua-mau": "Edit OKR template",
+		"mo-hoi-y": "Opened call for ideas",
+		"sua-hoi-y": "Edited call for ideas",
+		"doi-nguoi-chon": "Changed decider",
+		"niem-phong": "Sealed what was written first",
+		"cong-bo-hoi-y": "Published call for ideas",
+		"doi-hien-thi": "Change visibility",
+		"gui-duyet": "Submit for approval",
+		duyet: "Approve",
+		"tra-lai": "Send back",
+		"rut-duyet": "Withdraw",
+		"chuyen-don-vi": "Move OKR to unit",
 	},
 	vet: {
 		cot: {
@@ -908,6 +1012,41 @@ const en: OkrMessages = {
 				cancel: "Cancel",
 			},
 			daChuyen: (ten: string, pha: string) => `${ten} is now ${pha}.`,
+			daAn: "Hidden",
+			dongAn: (ngay: string, pha: string) => `Hidden ${ngay} during ${pha}`,
+			viec: {
+				sua: "Edit cycle",
+				go: "Remove cycle",
+				an: "Hide cycle",
+				hienLai: "Show again",
+			},
+			anKhoa: (n: string) =>
+				`${n} quarter(s) still showing — hide or remove them first`,
+			go: {
+				tieuDe: (ten: string) => `Remove ${ten}?`,
+				than: (ten: string) =>
+					`${ten} has no objective, check-in or quarter. Once removed it leaves this table; the trail keeps both its creation and its removal.`,
+				nut: "Remove cycle",
+				huy: "Cancel",
+				xong: (ten: string) => `Removed ${ten}.`,
+			},
+			an: {
+				tieuDe: (ten: string) => `Hide ${ten}?`,
+				moTa: "The cycle leaves every cycle picker, takes no new writes, sends no reminders and is never a carry-over target. Everything inside it stays; you can show it again from this table.",
+				nhan: "Reason for hiding",
+				moTaO: `${LY_DO_AN.toiThieu} to ${LY_DO_AN.toiDa} characters. The reason goes into the cycle's trail.`,
+				nut: "Hide cycle",
+				huy: "Cancel",
+				xong: (ten: string) => `Hid ${ten}.`,
+			},
+			hienLai: {
+				tieuDe: (ten: string) => `Show ${ten} again?`,
+				than: (pha: string) =>
+					`The cycle comes back to the cycle pickers in the phase it had when hidden (${pha}), and takes writes and reminders again.`,
+				nut: "Show again",
+				huy: "Cancel",
+				xong: (ten: string) => `${ten} is showing again.`,
+			},
 		},
 		mo: {
 			tieuDe: "Open cycle",
@@ -942,6 +1081,21 @@ const en: OkrMessages = {
 			huy: "Cancel",
 			gui: "Open cycle",
 			daMo: (ten: string) => `Opened ${ten}.`,
+		},
+		sua: {
+			tieuDe: (ten: string) => `Edit ${ten}`,
+			moTaMoiO: (ten: string) =>
+				`${ten} has no data yet — every field except kind and year can change.`,
+			moTaCoDuLieu: (ten: string) =>
+				`${ten} already has data — only the name can change. Dates, break and weekly update day stay so the numbers already computed do not shift.`,
+			moTaRoiKeHoach: (ten: string) =>
+				`${ten} has left Planning — only the name can change.`,
+			khoaCoDuLieu:
+				"Locked because the cycle has data. Wrong dates: hide this cycle and open the right one.",
+			khoaRoiKeHoach:
+				"Locked because the cycle has left Planning. Wrong dates: remove this cycle and open the right one.",
+			luu: "Save",
+			xong: (ten: string) => `Saved ${ten}.`,
 		},
 		cauHinh: {
 			tieuDe: "Configuration",
@@ -1067,9 +1221,12 @@ const en: OkrMessages = {
 			theoDoi: "New: {capNhat} updates, {binhLuan} comments",
 			theoDoiCapNhat: "New updates: {capNhat}",
 			theoDoiBinhLuan: "New comments: {binhLuan}",
+			hoiYGop: "The call for ideas on objectives is waiting for yours",
+			hoiYCongBo: "The call for ideas is published — see where your ideas went",
 		},
 		capNhatTuan: "Weekly update",
 		moMucTieu: "Open objective",
+		moHoiY: "Open the call for ideas",
 		rong: "Nothing in OKR needs you today",
 		loi: {
 			title: "Couldn't load your OKR to-dos",

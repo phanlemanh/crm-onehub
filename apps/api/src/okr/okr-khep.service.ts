@@ -1,4 +1,6 @@
 import type { Db, Prisma } from "@crm/db";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
+import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { PHA_GHI_DUOC } from "@crm/validation/okr-chu-ky";
 import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
@@ -32,9 +34,15 @@ import {
 import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { tenDonVi } from "./don-vi";
-import { kiemDongKy, ngayLuu, PHA_CO_DIEM, PHA_NHIN_LAI } from "./khep";
+import { locXemTrongVet } from "./hien-thi";
+import { dongKyChoNguoiXem, ngayLuu, PHA_CO_DIEM, PHA_NHIN_LAI } from "./khep";
 import { OkrService } from "./okr.service";
-import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
+import {
+	chonDonVi,
+	donViCua,
+	OkrAccessService,
+	type Quyen,
+} from "./okr-access.service";
 import { OKR } from "./okr-config";
 import {
 	type BangChamInput,
@@ -273,7 +281,7 @@ export class OkrKhepService {
 		const kr = await this.quyenOkr.assertSuaKr(userId, input.keyResultId);
 		const cycleId = kr.objective.cycleId;
 		return this.db.$transaction(async (tx) => {
-			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${cycleId} FOR SHARE`;
+			await this.okr.assertKyChuaAn(tx, cycleId);
 			const c = await tx.okrCycle.findUniqueOrThrow({
 				where: { id: cycleId },
 				select: { phase: true },
@@ -326,7 +334,7 @@ export class OkrKhepService {
 	async ghiDieuHocDuoc(userId: string, input: GhiDieuHocDuocInput) {
 		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId);
 		return this.db.$transaction(async (tx) => {
-			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${mt.cycleId} FOR SHARE`;
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			const c = await tx.okrCycle.findUniqueOrThrow({
 				where: { id: mt.cycleId },
 				select: { phase: true },
@@ -362,6 +370,7 @@ export class OkrKhepService {
 		await this.quyenOkr.assertQuanTri(userId);
 		return this.db.$transaction(async (tx) => {
 			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${input.id} FOR UPDATE`;
+			await this.okr.assertKyChuaAn(tx, input.id);
 			const c = await tx.okrCycle.findUnique({
 				where: { id: input.id },
 				select: { phase: true },
@@ -392,6 +401,22 @@ export class OkrKhepService {
 	): Promise<MangSangOutput> {
 		const mt = await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId);
 		return this.db.$transaction(async (tx) => {
+			const kyNguon = await tx.okrCycle.findUniqueOrThrow({
+				where: { id: mt.cycleId },
+				select: { kind: true, endsOn: true },
+			});
+			const dich = await tx.okrCycle.findFirst({
+				where: {
+					kind: kyNguon.kind,
+					startsOn: { gt: kyNguon.endsOn },
+					phase: { in: [...PHA_GHI_DUOC] },
+					...KY_CON_HIEN,
+				},
+				orderBy: [{ startsOn: "asc" }, { createdAt: "asc" }],
+				select: { id: true },
+			});
+			for (const id of [mt.cycleId, ...(dich ? [dich.id] : [])].sort())
+				await this.okr.assertKyChuaAn(tx, id);
 			await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${mt.id} FOR UPDATE`;
 			const nguon = await tx.okrObjective.findUniqueOrThrow({
 				where: { id: mt.id },
@@ -401,8 +426,10 @@ export class OkrKhepService {
 					title: true,
 					whyNow: true,
 					ownerUserId: true,
+					hienThi: true,
 					participants: { select: { userId: true } },
-					cycle: { select: { kind: true, endsOn: true, phase: true } },
+					nguoiXem: { select: { userId: true } },
+					cycle: { select: { phase: true } },
 					keyResults: {
 						where: { diemKr: { isNot: null } },
 						orderBy: [{ position: "asc" }, { createdAt: "asc" }],
@@ -423,17 +450,7 @@ export class OkrKhepService {
 				throw new BadRequestException(T.khep.mangSangChiCongBo);
 			if (!PHA_CO_DIEM.includes(nguon.cycle.phase))
 				throw new BadRequestException(T.khep.mangSangChiKhi);
-			const dich = await tx.okrCycle.findFirst({
-				where: {
-					kind: nguon.cycle.kind,
-					startsOn: { gt: nguon.cycle.endsOn },
-					phase: { in: [...PHA_GHI_DUOC] },
-				},
-				orderBy: [{ startsOn: "asc" }, { createdAt: "asc" }],
-				select: { id: true },
-			});
 			if (!dich) throw new BadRequestException(T.khep.chuaCoKyKe);
-			await tx.$queryRaw`SELECT id FROM "okrCycle" WHERE id = ${dich.id} FOR SHARE`;
 			const daCo = await tx.okrMangSang.findUnique({
 				where: {
 					tuObjectiveId_sangCycleId: {
@@ -452,6 +469,10 @@ export class OkrKhepService {
 			const { giu: thamGia, bo: boThamGia } = await this.okr.locThanhVien(
 				tx,
 				nguon.participants.map((p) => p.userId),
+			);
+			const { giu: nguoiXem } = await this.okr.locThanhVien(
+				tx,
+				nguon.nguoiXem.map((x) => x.userId),
 			);
 			const { bo: roiKr } = await this.okr.locThanhVien(
 				tx,
@@ -473,8 +494,12 @@ export class OkrKhepService {
 					kind: nguon.kind,
 					title: nguon.title,
 					whyNow: nguon.whyNow,
+					hienThi: nguon.hienThi,
 					position: viTri,
 					participants: { create: thamGia.map((u) => ({ userId: u })) },
+					nguoiXem: {
+						create: nguoiXem.map((u) => ({ userId: u, createdById: userId })),
+					},
 				},
 			});
 			const chep: string[] = [];
@@ -568,7 +593,15 @@ export class OkrKhepService {
 		userId: string,
 		input: BangChamInput,
 	): Promise<BangChamOutput> {
-		const q = await this.quyenOkr.quyen(userId);
+		return this.bangChamCua(userId, await this.quyenOkr.quyen(userId), input);
+	}
+
+	private async bangChamCua(
+		userId: string,
+		q: Quyen,
+		input: BangChamInput,
+	): Promise<BangChamOutput> {
+		const nc = this.quyenOkr.nguCanhXem(q, userId);
 		const c = await this.db.okrCycle.findUnique({
 			where: { id: input.cycleId },
 			select: { phase: true },
@@ -584,7 +617,7 @@ export class OkrKhepService {
 		};
 		const [mts, dauDong, dongKy] = await Promise.all([
 			this.db.okrObjective.findMany({
-				where,
+				where: { AND: [where, dieuKienXemMucTieu(nc)] },
 				orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 				select: chonBangCham,
 			}),
@@ -592,9 +625,18 @@ export class OkrKhepService {
 				where: { cycleId: input.cycleId },
 				select: { thang: true },
 			}),
-			kiemDongKy(this.db, input.cycleId),
+			dongKyChoNguoiXem(this.db, input.cycleId, nc),
 		]);
 		const thangKy = dauDong ? thangCham.parse(dauDong.thang) : null;
+		const { xemDuoc } = await locXemTrongVet(
+			this.db,
+			nc,
+			[],
+			mts.flatMap((m) => [
+				...m.mangSangDi.map((d) => d.sangObjectiveId),
+				...(m.mangSangTu ? [m.mangSangTu.tuObjectiveId] : []),
+			]),
+		);
 		const mucTieu = mts
 			.map((m): MucTieuCham & { hang: number } => {
 				const dv = donViCua(m);
@@ -642,7 +684,7 @@ export class OkrKhepService {
 					dau?.trongSoBat ?? false,
 				);
 				const thang: ThangCham | null = dau?.thang ?? thangKy;
-				const toi = m.mangSangDi[0];
+				const toi = m.mangSangDi.find((d) => xemDuoc(d.sangObjectiveId));
 				return {
 					hang: HANG_CAP[dv.level],
 					id: m.id,
@@ -660,12 +702,13 @@ export class OkrKhepService {
 								cycleName: toi.sangCycle.name,
 							}
 						: null,
-					mangSangTu: m.mangSangTu
-						? {
-								objectiveId: m.mangSangTu.tuObjectiveId,
-								cycleName: m.mangSangTu.tuObjective.cycle.name,
-							}
-						: null,
+					mangSangTu:
+						m.mangSangTu && xemDuoc(m.mangSangTu.tuObjectiveId)
+							? {
+									objectiveId: m.mangSangTu.tuObjectiveId,
+									cycleName: m.mangSangTu.tuObjective.cycle.name,
+								}
+							: null,
 					krs: krs.map((k) => k.ra),
 				};
 			})
@@ -687,12 +730,19 @@ export class OkrKhepService {
 		if (!c) throw new NotFoundException(T.khongCoChuKy(input.cycleId));
 		if (c.phase !== "da-dong")
 			throw new BadRequestException(T.khep.xuatChiKhiDong);
+		const q = await this.quyenOkr.quyen(userId);
+		const nc = this.quyenOkr.nguCanhXem(q, userId);
 		const [bang, mts] = await Promise.all([
-			this.bangCham(userId, { cycleId: input.cycleId }),
+			this.bangChamCua(userId, q, { cycleId: input.cycleId }),
 			this.db.okrObjective.findMany({
 				where: {
-					cycleId: input.cycleId,
-					status: { in: ["cong-bo", "da-bo"] },
+					AND: [
+						{
+							cycleId: input.cycleId,
+							status: { in: ["cong-bo", "da-bo"] },
+						},
+						dieuKienXemMucTieu(nc),
+					],
 				},
 				orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 				select: chonXuat,

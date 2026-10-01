@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
-import { LOAI_NHAC_OKR } from "@crm/db/okr-nhac";
+import { LOAI_NHAC_OKR, type LoaiNhacOkr } from "@crm/db/okr-nhac";
 import { mocNhac, viecCanNhac } from "@crm/db/onboarding-nhac";
 import {
 	guiCapNhatInput,
@@ -27,6 +27,7 @@ import {
 	ok,
 	pbMoi,
 	phienCua,
+	taoNam,
 	truongMoi,
 	ungDung,
 } from "./okr-san";
@@ -517,6 +518,9 @@ describe("the-truc-tiep", () => {
 	);
 });
 
+const LOAI_CO_DUONG_RIENG: LoaiNhacOkr[] = ["okr-hoi-y-cong-bo"];
+const HAN_HOI_Y_GIO = 48;
+
 describe("du-duong", () => {
 	test(
 		"du-duong: sau loai muc OKR do duong ghi that tao, okr.viecCuaToi tra du sau loai va qua khuon dau ra",
@@ -591,9 +595,57 @@ describe("du-duong", () => {
 				"tp cap nhat k3",
 			);
 
+			const nguoiChon = await nguoiMoi("dd-chon", "admin");
+			const kyKe = await taoNam("dd-hoi-y", new Date().getUTCFullYear() + 1);
+			ok(
+				await goi("okr.moHoiY", {
+					cycleId: kyKe,
+					cauHoi: "Năm tới công ty nên dồn sức vào điều gì trước tiên?",
+					loiMo: "",
+					soLieu: [{ nhan: "Doanh thu năm", giaTri: "186 tỷ", ghiChu: "" }],
+					hanLuc: new Date(Date.now() + HAN_HOI_Y_GIO * GIO_MS).toISOString(),
+					nguoiChonUserId: nguoiChon,
+				}),
+				"mo hoi y cho X gop",
+			);
+			ok(await goi("okr.setProgram", { duyetCongBo: true }), "bat duyet");
+			const bp = await bpMoi("dd-bp");
+			ok(
+				await goi("org.setHead", { kind: "division", id: bp, userId: X }),
+				"X truong bo phan",
+			);
+			const pbDuoi = await pbMoi("dd-p-duoi", bp);
+			const td = await truongMoi("department", pbDuoi, "dd-td");
+			const o4 = await mucTieu(
+				quy,
+				{ level: "phong-ban", departmentId: pbDuoi },
+				td.nguoi,
+				td.cookie,
+			);
+			await taoKr(o4, td.nguoi, td.cookie);
+			ok(await goi("okr.guiDuyet", { id: o4 }, td.cookie), "td gui duyet o4");
+			const o5 = await mucTieu(
+				quy,
+				{ level: "ca-nhan", personUserId: X },
+				X,
+				cX,
+			);
+			await taoKr(o5, X, cX);
+			ok(await goi("okr.guiDuyet", { id: o5 }, cX), "X gui duyet o5");
+			ok(
+				await goi("okr.traLaiMucTieu", {
+					objectiveId: o5,
+					lyDo: "Chưa có KR đo kết quả cuối",
+				}),
+				"quan tri tra lai o5",
+			);
+			ok(await goi("okr.setProgram", { duyetCongBo: false }), "tat duyet");
+
 			const quaTrpc = await doc<ViecCuaToiOutput>("okr.viecCuaToi", cX);
 			const loai = [...new Set(quaTrpc.viec.map((v) => v.loai))].sort();
-			const mong = [...LOAI_NHAC_OKR].sort();
+			const mong = LOAI_NHAC_OKR.filter(
+				(l) => !LOAI_CO_DUONG_RIENG.includes(l),
+			).sort();
 			if (JSON.stringify(loai) !== JSON.stringify(mong)) {
 				throw new Error(
 					`du-duong: thieu ${mong.filter((l) => !loai.includes(l)).join(", ")}`,

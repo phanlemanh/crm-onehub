@@ -1,0 +1,3 @@
+driver: puppeteer script (man-khung.mjs) via tien-de.mjs; khong co read_network_requests/read_console_messages
+networkObserved: n-a (driver)
+phien do: app http://localhost:4326, api http://localhost:4495 (tien-de tu dung va tu don)

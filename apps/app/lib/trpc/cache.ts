@@ -28,6 +28,7 @@ export type CrmCache = {
 	plan(id?: string, options?: Options): Promise<void>;
 	workTransferred(options?: Options): Promise<void>;
 	okr(id?: string, options?: Options): Promise<void>;
+	hoiY(options?: Options): Promise<void>;
 	taiLieu(slug?: string, options?: Options): Promise<void>;
 	campaign(id?: string, options?: Options): Promise<void>;
 	campaignList(options?: Options): Promise<void>;
@@ -292,7 +293,18 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.troLyAn.queryKey(),
 					trpc.okr.canhKr.queryKey(),
 					trpc.okr.mau.queryKey(),
+					trpc.okr.hoiY.queryKey(),
+					trpc.okr.hoiYNhan.queryKey(),
+					trpc.okr.hoiYDoPhu.queryKey(),
+					trpc.okr.moCoi.queryKey(),
 				],
+				options,
+			),
+
+		hoiY: (options) =>
+			run(
+				[trpc.okr.hoiY.queryKey(), trpc.okr.hoiYNhan.queryKey()],
+				[trpc.okr.hoiYDoPhu.queryKey(), trpc.okr.viecCuaToi.queryKey()],
 				options,
 			),
 

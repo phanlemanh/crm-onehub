@@ -60,6 +60,7 @@ import {
 	type OkrCanhKrMessages,
 	okrCanhKrMessages,
 } from "@/lib/messages/okr-canh-kr";
+import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { dien } from "./plan-copy";
 
@@ -328,7 +329,7 @@ function DongViecHang({
 }) {
 	const m = okrCanhKrMessages(useLocale());
 	const danhDuoc = !canh.khoa && (canh.quyen.suaDuoc || v.laNguoiLam);
-	const suaDuoc = !canh.khoa && canh.quyen.suaDuoc;
+	const suaDuoc = !canh.khoa && !canh.choDuyet && canh.quyen.suaDuoc;
 	return (
 		<Item
 			size="sm"
@@ -426,7 +427,8 @@ function DongSangKienHang({
 	const lk = s.lienKet;
 	const ten = lk.coQuyen ? (lk.ten ?? m.sangKien.daXoa[s.loai]) : "";
 	const moDuoc = lk.coQuyen && lk.id !== null && lk.trangThai !== "da-xoa";
-	const goDuoc = lk.coQuyen && !canh.khoa && canh.quyen.suaDuoc;
+	const goDuoc =
+		lk.coQuyen && !canh.khoa && !canh.choDuyet && canh.quyen.suaDuoc;
 	return (
 		<Item
 			size="sm"
@@ -506,7 +508,7 @@ function NutGhi({
 				size="sm"
 				variant="outline"
 				data-nut="them-viec"
-				disabled={canh.khoa || them}
+				disabled={canh.khoa || canh.choDuyet || them}
 				onClick={onThem}
 			>
 				<Icon icon={Add} data-icon="inline-start" />
@@ -519,7 +521,7 @@ function NutGhi({
 							size="sm"
 							variant="outline"
 							data-nut="gan-sang-kien"
-							disabled={canh.khoa}
+							disabled={canh.khoa || canh.choDuyet}
 						>
 							{m.gan}
 						</Button>
@@ -620,7 +622,9 @@ function DanhSach({
 	nguoiMacDinh: string;
 	hanhDong: KrViecHanhDong;
 }) {
-	const m = okrCanhKrMessages(useLocale());
+	const locale = useLocale();
+	const m = okrCanhKrMessages(locale);
+	const g = okrGioiHanMessages(locale).canhKrChoDuyet;
 	const [them, setThem] = useState(false);
 	const [sua, setSua] = useState<string | null>(null);
 	const [hoiGo, setHoiGo] = useState<HoiGo | null>(null);
@@ -667,9 +671,11 @@ function DanhSach({
 					description={
 						canh.khoa
 							? m.khung.khoa
-							: canh.quyen.suaDuoc
-								? m.khung.rong.moTa
-								: m.khung.rong.moTaChiDoc
+							: canh.choDuyet
+								? g
+								: canh.quyen.suaDuoc
+									? m.khung.rong.moTa
+									: m.khung.rong.moTaChiDoc
 					}
 					action={canh.quyen.suaDuoc ? nut : undefined}
 				/>
@@ -680,6 +686,11 @@ function DanhSach({
 							<Alert data-khoa-viec>
 								<Icon icon={Locked} />
 								<AlertDescription>{m.khung.khoa}</AlertDescription>
+							</Alert>
+						) : canh.choDuyet ? (
+							<Alert data-khoa-viec="cho-duyet">
+								<Icon icon={Locked} />
+								<AlertDescription>{g}</AlertDescription>
 							</Alert>
 						) : null}
 						<ItemGroup>

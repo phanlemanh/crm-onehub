@@ -173,6 +173,8 @@ const MT: MucTieuOutput = {
 	following: false,
 	followerCount: 0,
 	theoDoi: false,
+	hienThi: "cong-khai",
+	soNguoiXem: 0,
 };
 
 const RONG_DONG = {
@@ -614,7 +616,7 @@ const CA = {
 		const form = hopMucTieu()?.querySelector("form");
 		expect(form?.querySelector("button")).toBe(b);
 		expect(cot()).toBeNull();
-		expect(hopMucTieu()?.getAttribute("data-size")).toBe("default");
+		expect(hopMucTieu()?.getAttribute("data-size")).toBe("sm");
 	},
 
 	"ST-muctieu-nut-khoa-sua": async () => {
@@ -940,7 +942,7 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		const sauDong = goiCua("okr.troLyDanhSach").length;
 		await troi(9000);
 		expect(goiCua("okr.troLyDanhSach").length).toBe(sauDong);
-		expect(hopMucTieu()?.getAttribute("data-size")).toBe("default");
+		expect(hopMucTieu()?.getAttribute("data-size")).toBe("sm");
 	});
 
 	test("trang-thai hoan-tac: Hoan tac tren toast gui dung mot updateObjective voi title = truoc", async () => {
@@ -1019,7 +1021,7 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 			"Bác",
 		]);
 		await bamEsc(
-			hopMucTieu()?.querySelector('[data-slot="dialog-title"]') ?? null,
+			hopMucTieu()?.querySelector('[data-slot="sheet-title"]') ?? null,
 		);
 		expect(daDong).toBe(1);
 	});
@@ -1070,7 +1072,7 @@ describe("trang-thai hoi lai, tran cho, hoan tac, o dang sua", () => {
 		await cho(() => goiCua("okr.troLyQuyet").length === 1, "quyet sua");
 		await nhip(5);
 		const huy = hopMucTieu()?.querySelector<HTMLButtonElement>(
-			'[data-slot="dialog-footer"] button',
+			'[data-slot="sheet-footer"] button',
 		);
 		if (!huy) throw new Error("khong thay nut Huy cua hop");
 		await bam(huy);

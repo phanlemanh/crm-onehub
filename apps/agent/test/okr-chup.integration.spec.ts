@@ -883,3 +883,40 @@ describe("lich-su-khong-doi", () => {
 		}).toEqual({ chinh: 0, kyCu: 3 });
 	});
 });
+
+describe("ky-an", () => {
+	test("ky-an: KR nguồn máy ở chu kỳ ẩn X không có dòng chụp, KR ở V có; hiện lại X thì lượt sau có dòng của X", async () => {
+		setSystemTime(NHIP_20_10_0005);
+		const s = await sanThoaThuan();
+		const X = await gieoChuKy(
+			"dang-chay",
+			1,
+			undefined,
+			vn("2026-10-08T09:00:00"),
+		);
+		const V = await gieoChuKy("dang-chay");
+		const krCua = (cycleId: string) =>
+			krCo({
+				cycleId,
+				chu: s.a,
+				nguon: chotDuoc(phongBan(s.P1)),
+				source: "crm",
+			});
+		const kX = await krCua(X);
+		const kV = await krCua(V);
+		const coDong = async () =>
+			(
+				await db.okrSoChup.findMany({
+					where: { keyResultId: { in: [kX, kV] } },
+					select: { keyResultId: true },
+				})
+			)
+				.map((r) => r.keyResultId)
+				.sort();
+		await chupSoOkr(NHIP_20_10_0005, docGia({ giaTri: 0 }));
+		expect(await coDong(), "chu ky an").toEqual([kV]);
+		await db.okrCycle.update({ where: { id: X }, data: { anLuc: null } });
+		await chupSoOkr(NHIP_20_10_0005, docGia({ giaTri: 0 }));
+		expect(await coDong(), "hien lai X").toEqual([kX, kV].sort());
+	});
+});

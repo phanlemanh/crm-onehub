@@ -1,9 +1,7 @@
-import {
-	canManageOnboarding,
-	isWorkspaceAdmin,
-	workspaceRoleOf,
-} from "@crm/auth";
+import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
+import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { laViecOkr, lienQuanOkr } from "@crm/db/okr-nhac";
 import { viecCanNhac } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
@@ -31,16 +29,16 @@ import type {
 	ViecCuaToiOutput,
 } from "./okr.contracts";
 import { OkrService } from "./okr.service";
+import { OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
 
 const T = OKR.thongDiep;
-type Tx = Prisma.TransactionClient;
 const chonNguoi = { id: true, name: true, email: true } as const;
 
 function dieuKienChuyen(fromUserId: string) {
 	const conGhi = {
 		status: { not: "da-bo" },
-		cycle: { phase: { in: [...PHA_GHI_DUOC] } },
+		cycle: { phase: { in: [...PHA_GHI_DUOC] }, ...KY_CON_HIEN },
 	} satisfies Prisma.OkrObjectiveWhereInput;
 	const krConGhi = {
 		objective: {
@@ -70,16 +68,8 @@ export class OkrTraoDoiService {
 	constructor(
 		@InjectDatabase() private readonly db: Db,
 		@Inject(OkrService) private readonly okr: OkrService,
+		@Inject(OkrAccessService) private readonly quyenOkr: OkrAccessService,
 	) {}
-
-	private async mucTieuCo(tx: Tx | Db, objectiveId: string) {
-		const mt = await tx.okrObjective.findUnique({
-			where: { id: objectiveId },
-			select: { id: true },
-		});
-		if (!mt) throw new NotFoundException(T.khongCoMucTieu(objectiveId));
-		return mt;
-	}
 
 	async thanhVien(): Promise<ThanhVienOutput> {
 		const rows = await this.db.member.findMany({
@@ -96,10 +86,10 @@ export class OkrTraoDoiService {
 	}
 
 	async comments(userId: string, objectiveId: string): Promise<CommentsOutput> {
-		await this.mucTieuCo(this.db, objectiveId);
-		const [rows, ghiNhan, role] = await Promise.all([
+		const { q, nc } = await this.quyenOkr.assertXemMucTieu(userId, objectiveId);
+		const [rows, ghiNhan] = await Promise.all([
 			this.db.okrComment.findMany({
-				where: { objectiveId },
+				where: { objectiveId, objective: dieuKienXemMucTieu(nc) },
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 				include: {
 					keyResult: { select: { title: true } },
@@ -107,7 +97,7 @@ export class OkrTraoDoiService {
 				},
 			}),
 			this.db.okrGhiNhan.findMany({
-				where: { objectiveId },
+				where: { objectiveId, objective: dieuKienXemMucTieu(nc) },
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 				select: {
 					id: true,
@@ -119,7 +109,6 @@ export class OkrTraoDoiService {
 					nhan: { select: { userId: true } },
 				},
 			}),
-			workspaceRoleOf(userId),
 		]);
 		const ids = [
 			...new Set([
@@ -145,7 +134,7 @@ export class OkrTraoDoiService {
 			};
 		const theoTen = (a: { name: string }, b: { name: string }) =>
 			a.name.localeCompare(b.name, "vi");
-		const quanTri = isWorkspaceAdmin(role);
+		const quanTri = q.quanTri;
 		const dong: DongTraoDoi[] = [
 			...rows.map(
 				(r): DongTraoDoi => ({
@@ -184,11 +173,18 @@ export class OkrTraoDoiService {
 
 	async addComment(userId: string, input: AddCommentInput, now = new Date()) {
 		const nhac = [...new Set(input.mentionUserIds)];
+		const { q, nc, mt } = await this.quyenOkr.assertXemMucTieu(
+			userId,
+			input.objectiveId,
+		);
 		return this.db.$transaction(async (tx) => {
-			await this.mucTieuCo(tx, input.objectiveId);
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			if (input.keyResultId !== undefined) {
-				const kr = await tx.okrKeyResult.findUnique({
-					where: { id: input.keyResultId },
+				const kr = await tx.okrKeyResult.findFirst({
+					where: {
+						id: input.keyResultId,
+						objective: dieuKienXemMucTieu(nc),
+					},
 					select: { objectiveId: true },
 				});
 				if (!kr) throw new NotFoundException(T.khongCoKr(input.keyResultId));
@@ -199,6 +195,12 @@ export class OkrTraoDoiService {
 				tx,
 				nhac,
 				() => T.traoDoi.nhacKhongConThanhVien,
+			);
+			await this.quyenOkr.assertXemDuocHet(
+				q,
+				input.objectiveId,
+				nhac,
+				T.traoDoi.nhacKhongXemDuoc,
 			);
 			const c = await tx.okrComment.create({
 				data: {
@@ -230,8 +232,12 @@ export class OkrTraoDoiService {
 	}
 
 	async follow(userId: string, input: FollowInput): Promise<FollowOutput> {
+		const { nc, mt } = await this.quyenOkr.assertXemMucTieu(
+			userId,
+			input.objectiveId,
+		);
 		return this.db.$transaction(async (tx) => {
-			await this.mucTieuCo(tx, input.objectiveId);
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			const doi = input.on
 				? (
 						await tx.okrFollow.createMany({
@@ -254,7 +260,10 @@ export class OkrTraoDoiService {
 					null,
 				);
 			const followerCount = await tx.okrFollow.count({
-				where: { objectiveId: input.objectiveId },
+				where: {
+					objectiveId: input.objectiveId,
+					objective: dieuKienXemMucTieu(nc),
+				},
 			});
 			return { following: input.on, followerCount };
 		});

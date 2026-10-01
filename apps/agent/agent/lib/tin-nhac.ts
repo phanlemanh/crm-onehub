@@ -2,8 +2,10 @@ import { dinhUsd } from "@crm/db/ai-chi-phi-danh-muc";
 import type { ViecAi } from "@crm/db/ai-nhac";
 import type { ViecOkr } from "@crm/db/okr-nhac";
 import {
+	gioVN,
 	laBuoiSang,
 	NHAC,
+	ngayVN,
 	THU_TU_NHAC,
 	type ViecKeHoach,
 	type ViecNhac,
@@ -18,11 +20,15 @@ export const TIEU_DE = {
 	"ke-hoach-im": "Kế hoạch im",
 	"moc-ngay": "Mốc ngày",
 	"okr-cap-nhat": "Cập nhật tuần",
+	"okr-cho-duyet": "Chờ bạn duyệt",
+	"okr-tra-lai": "Bị trả lại",
 	"okr-kr-im": "KR im",
 	"okr-duoc-giao": "Được giao",
 	"okr-nhac-ten": "Nhắc tên",
 	"okr-ghi-nhan": "Ghi nhận",
 	"okr-theo-doi": "Đang theo dõi",
+	"okr-hoi-y-gop": "Hỏi ý mục tiêu",
+	"okr-hoi-y-cong-bo": "Hỏi ý đã công bố",
 	"tai-lieu-cho-duyet": "Kho tài liệu",
 	"ai-tran": "Ngân sách AI",
 	"ai-doi-soat-lech": "Đối soát AI",
@@ -38,6 +44,11 @@ function thoat(chu: string): string {
 function ngayThang(han: string): string {
 	const [, thang, ngay] = han.split("-");
 	return `${ngay}/${thang}`;
+}
+
+function gioHan(hanLuc: string): string {
+	const han = new Date(hanLuc);
+	return `${gioVN(han)} ${ngayThang(ngayVN(han))}`;
 }
 
 function phanDau(v: ViecKeHoach): string {
@@ -83,6 +94,16 @@ function noiDungOkr(v: ViecOkr, chu: (s: string) => string): string {
 			return `${chu(v.nguoiGui)} ghi nhận bạn ở «${chu(v.nhan)}»`;
 		case "okr-theo-doi":
 			return `«${chu(v.nhan)}» có ${v.capNhat} cập nhật, ${v.binhLuan} bình luận mới`;
+		case "okr-cho-duyet":
+			return v.nguoiGui === null
+				? `Mục tiêu «${chu(v.nhan)}» chờ bạn duyệt`
+				: `${chu(v.nguoiGui)} gửi duyệt mục tiêu «${chu(v.nhan)}»`;
+		case "okr-tra-lai":
+			return `${chu(v.nguoiTraLai)} trả lại mục tiêu «${chu(v.nhan)}»: ${chu(v.lyDo)}`;
+		case "okr-hoi-y-gop":
+			return `Công ty đang hỏi ý cho mục tiêu ${chu(v.nhan)} — hạn ${gioHan(v.hanLuc)}`;
+		case "okr-hoi-y-cong-bo":
+			return `Mục tiêu ${chu(v.nhan)} đã công bố — xem ý của bạn đi đâu`;
 	}
 }
 
@@ -120,6 +141,19 @@ function dongAi(
 	return `• ${thoat(noiDungAi(v))}${mo}`;
 }
 
+const NHAN_LIEN_KET_OKR = {
+	"okr-cap-nhat": "mở cập nhật tuần",
+	"okr-kr-im": "mở mục tiêu",
+	"okr-duoc-giao": "mở mục tiêu",
+	"okr-nhac-ten": "mở mục tiêu",
+	"okr-ghi-nhan": "mở mục tiêu",
+	"okr-theo-doi": "mở mục tiêu",
+	"okr-cho-duyet": "mở mục tiêu",
+	"okr-tra-lai": "mở mục tiêu",
+	"okr-hoi-y-gop": "mở hỏi ý",
+	"okr-hoi-y-cong-bo": "mở hỏi ý",
+} as const satisfies { [K in ViecOkr["loai"]]: string };
+
 function dongOkr(
 	v: ViecOkr,
 	so: number,
@@ -130,7 +164,7 @@ function dongOkr(
 		const mo = url ? ` — ${url}` : "";
 		return `${so}. ${noiDungOkr(v, (s) => s)}${mo}`;
 	}
-	const nhan = v.loai === "okr-cap-nhat" ? "mở cập nhật tuần" : "mở mục tiêu";
+	const nhan = NHAN_LIEN_KET_OKR[v.loai];
 	const mo = url ? ` — <${url}|${nhan}>` : "";
 	return `• ${noiDungOkr(v, thoat)}${mo}`;
 }

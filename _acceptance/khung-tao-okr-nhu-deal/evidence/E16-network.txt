@@ -1,0 +1,1 @@
+driver: script (puppeteer via man-gop-y.mjs), khong co read_network_requests -> n-a (driver)

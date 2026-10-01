@@ -5,15 +5,6 @@ import Close from "@carbon/icons-react/es/Close";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@crm/ui/components/dialog";
-import {
 	Empty,
 	EmptyContent,
 	EmptyDescription,
@@ -36,6 +27,16 @@ import {
 	ItemDescription,
 	ItemGroup,
 } from "@crm/ui/components/item";
+import {
+	Sheet,
+	SheetBody,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+} from "@crm/ui/components/sheet";
 import { Shimmer } from "@crm/ui/components/shimmer";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { Textarea } from "@crm/ui/components/textarea";
@@ -314,68 +315,64 @@ export function HopThoaiMucTieu({ hinh }: { hinh: HinhHop }) {
 	if (hinh === "huong-chuyen-man") return <HuongChuyenMan />;
 	const coCot = CO_COT.includes(hinh);
 	return (
-		<Dialog open>
-			<DialogContent size={coCot ? "wide" : "default"}>
-				<DialogHeader>
-					<DialogTitle>Sửa Mục tiêu</DialogTitle>
-				</DialogHeader>
-				<div
-					className={
-						coCot
-							? "-m-1 grid max-h-[70svh] gap-6 overflow-y-auto p-1 sm:grid-cols-2"
-							: "-m-1 max-h-[70svh] overflow-y-auto p-1"
-					}
-				>
+		<Sheet open modal={false}>
+			<SheetContent side="right" size={coCot ? "assist" : undefined}>
+				<SheetHeader>
+					<SheetTitle>Sửa Mục tiêu</SheetTitle>
+				</SheetHeader>
+				<SheetBody split={coCot}>
 					<FormMucTieu hinh={hinh} />
 					{coCot ? <CotGopY hinh={hinh} /> : null}
-				</div>
-				<DialogFooter>
-					<DialogClose asChild>
+				</SheetBody>
+				<SheetFooter>
+					<SheetClose asChild>
 						<Button variant="outline">Huỷ</Button>
-					</DialogClose>
+					</SheetClose>
 					<Button disabled={hinh !== "nut-khoa-sua"}>Lưu</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
 	);
 }
 
 function HuongChuyenMan() {
 	return (
-		<Dialog open>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Trợ lý OKR góp ý</DialogTitle>
-					<DialogDescription translate="no">{MUC_TIEU.ten}</DialogDescription>
-				</DialogHeader>
-				<Alert>
-					<AlertTitle>
-						Hướng «Chuyển màn trong hộp» — máy không khuyên
-					</AlertTitle>
-					<AlertDescription>
-						Động cơ: hộp giữ bề rộng cũ, điện thoại không phải xếp hai cột. Đánh
-						đổi: người không thấy ô sắp đổi; nhận xong phải quay lại form mới
-						thấy câu mới nằm đâu. Máy khuyên «Cột cạnh form» (các trạng thái
-						khác).
-					</AlertDescription>
-				</Alert>
-				<Button variant="ghost" size="sm" className="w-fit">
-					<Icon icon={ArrowLeft} />
-					Quay lại sửa
-				</Button>
-				<ItemGroup>
-					{DONG.slice(0, 2).map((d) => (
-						<DongDeXuat
-							key={d.id}
-							dong={d}
-							sua={false}
-							daQuyet={null}
-							loiNhan={false}
-						/>
-					))}
-				</ItemGroup>
-			</DialogContent>
-		</Dialog>
+		<Sheet open modal={false}>
+			<SheetContent side="right">
+				<SheetHeader>
+					<SheetTitle>Trợ lý OKR góp ý</SheetTitle>
+					<SheetDescription translate="no">{MUC_TIEU.ten}</SheetDescription>
+				</SheetHeader>
+				<SheetBody>
+					<Alert>
+						<AlertTitle>
+							Hướng «Chuyển màn trong hộp» — máy không khuyên
+						</AlertTitle>
+						<AlertDescription>
+							Động cơ: hộp giữ bề rộng cũ, điện thoại không phải xếp hai cột.
+							Đánh đổi: người không thấy ô sắp đổi; nhận xong phải quay lại form
+							mới thấy câu mới nằm đâu. Máy khuyên «Cột cạnh form» (các trạng
+							thái khác).
+						</AlertDescription>
+					</Alert>
+					<Button variant="ghost" size="sm" className="w-fit">
+						<Icon icon={ArrowLeft} />
+						Quay lại sửa
+					</Button>
+					<ItemGroup>
+						{DONG.slice(0, 2).map((d) => (
+							<DongDeXuat
+								key={d.id}
+								dong={d}
+								sua={false}
+								daQuyet={null}
+								loiNhan={false}
+							/>
+						))}
+					</ItemGroup>
+				</SheetBody>
+			</SheetContent>
+		</Sheet>
 	);
 }
 
@@ -385,19 +382,13 @@ export function HopThoaiKr({ hinh }: { hinh: HinhKr }) {
 	const coCot = hinh === "cot";
 	const dong = DONG.filter((d) => d.id === "d2");
 	return (
-		<Dialog open>
-			<DialogContent size={coCot ? "wide" : "default"}>
-				<DialogHeader>
-					<DialogTitle>Sửa KR</DialogTitle>
-					<DialogDescription translate="no">{MUC_TIEU.ten}</DialogDescription>
-				</DialogHeader>
-				<div
-					className={
-						coCot
-							? "-m-1 grid max-h-[70svh] gap-6 overflow-y-auto p-1 sm:grid-cols-2"
-							: "-m-1 max-h-[70svh] overflow-y-auto p-1"
-					}
-				>
+		<Sheet open modal={false}>
+			<SheetContent side="right" size={coCot ? "assist" : undefined}>
+				<SheetHeader>
+					<SheetTitle>Sửa KR</SheetTitle>
+					<SheetDescription translate="no">{MUC_TIEU.ten}</SheetDescription>
+				</SheetHeader>
+				<SheetBody split={coCot}>
 					<FieldGroup>
 						<Button variant="outline" className="w-fit">
 							Nhờ Trợ lý OKR góp ý
@@ -448,14 +439,14 @@ export function HopThoaiKr({ hinh }: { hinh: HinhKr }) {
 							</ItemGroup>
 						</section>
 					) : null}
-				</div>
-				<DialogFooter>
-					<DialogClose asChild>
+				</SheetBody>
+				<SheetFooter>
+					<SheetClose asChild>
 						<Button variant="outline">Huỷ</Button>
-					</DialogClose>
+					</SheetClose>
 					<Button disabled>Lưu</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
 	);
 }

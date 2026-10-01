@@ -1,6 +1,15 @@
 import { z } from "zod";
 import type { Db } from "./client";
 import type { JsonValue } from "./json";
+import { KY_CON_HIEN } from "./okr-chu-ky-hien";
+import {
+	CHO_DUYET,
+	nguoiDuyetMucTieu,
+	nguoiNhanDuyet,
+	PHA_GHI_DUOC,
+} from "./okr-duyet";
+import { dieuKienXemMucTieu, docCayOkr, nguCanhXemOkr } from "./okr-hien-thi";
+import { trangThaiHoiY } from "./okr-hoi-y-trang-thai";
 import { parseOkrVet } from "./okr-vet";
 import {
 	type CuaSoNhac,
@@ -10,6 +19,7 @@ import {
 	ngayVN,
 	soNgayVN,
 } from "./onboarding-nhac";
+import { WORKSPACE_ID } from "./workspace";
 
 export const OKR_NHAC = {
 	imNgay: 14,
@@ -61,6 +71,32 @@ export const viecOkr = z.discriminatedUnion("loai", [
 		capNhat: z.number(),
 		binhLuan: z.number(),
 	}),
+	z.object({
+		loai: z.literal("okr-cho-duyet"),
+		objectiveId: maMuc,
+		nhan: z.string(),
+		nguoiGui: z.string().nullable(),
+	}),
+	z.object({
+		loai: z.literal("okr-tra-lai"),
+		objectiveId: maMuc,
+		nhan: z.string(),
+		nguoiTraLai: z.string(),
+		lyDo: z.string(),
+	}),
+	z.object({
+		loai: z.literal("okr-hoi-y-gop"),
+		hoiYId: maMuc,
+		cycleId: maMuc,
+		nhan: z.string(),
+		hanLuc: z.iso.datetime(),
+	}),
+	z.object({
+		loai: z.literal("okr-hoi-y-cong-bo"),
+		hoiYId: maMuc,
+		cycleId: maMuc,
+		nhan: z.string(),
+	}),
 ]);
 
 export type ViecOkr = z.infer<typeof viecOkr>;
@@ -74,6 +110,10 @@ export const KHOA_MUC_OKR = {
 	"okr-nhac-ten": { loai: true, commentId: true },
 	"okr-ghi-nhan": { loai: true, ghiNhanId: true },
 	"okr-theo-doi": { loai: true, objectiveId: true },
+	"okr-cho-duyet": { loai: true, objectiveId: true },
+	"okr-tra-lai": { loai: true, objectiveId: true },
+	"okr-hoi-y-gop": { loai: true, hoiYId: true, cycleId: true },
+	"okr-hoi-y-cong-bo": { loai: true, hoiYId: true, cycleId: true },
 } as const satisfies {
 	[K in LoaiNhacOkr]: {
 		readonly [P in keyof Extract<ViecOkr, { loai: K }>]?: true;
@@ -113,6 +153,12 @@ const VET_GIAO = ["tao", "sua", "tao-kr", "sua-kr", "chuyen-viec"];
 
 const VET_TAO = ["tao", "tao-kr"];
 
+const GUI_DUYET = "gui-duyet";
+
+const TRA_LAI = "tra-lai";
+
+const NHAP = "nhap";
+
 type Gui = { userId: string; viec: ViecOkr };
 
 function thuTrongTuan(now: Date): number {
@@ -127,7 +173,9 @@ const DON_VI = {
 
 function docKr(db: Db) {
 	return db.okrKeyResult.findMany({
-		where: { objective: { status: CONG_BO, cycle: CHAY } },
+		where: {
+			objective: { status: CONG_BO, cycle: { ...CHAY, ...KY_CON_HIEN } },
+		},
 		select: {
 			id: true,
 			title: true,
@@ -466,6 +514,191 @@ async function viecTraoDoi(
 	return [...nhacTen, ...duocGhiNhan, ...theo];
 }
 
+async function viecHoiY(
+	db: Db,
+	now: Date,
+	cuaSo: { gt: Date; lte: Date },
+	userIds: string[] | undefined,
+): Promise<Gui[]> {
+	const lan = await db.okrHoiY.findMany({
+		where: {
+			OR: [{ congBoLuc: null }, { congBoLuc: cuaSo }],
+			cycle: KY_CON_HIEN,
+		},
+		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+		select: {
+			id: true,
+			hanLuc: true,
+			congBoLuc: true,
+			nguoiChonUserId: true,
+			cycleId: true,
+			cycle: { select: { name: true } },
+		},
+	});
+	const dangMo = lan.filter((h) => trangThaiHoiY(h, now) === "dang-mo");
+	const daCongBo = lan.filter((h) => trangThaiHoiY(h, now) === "da-cong-bo");
+	if (dangMo.length + daCongBo.length === 0) return [];
+	const chiNguoi = userIds && { in: userIds };
+	const [y, thanhVien] = await Promise.all([
+		db.okrY.findMany({
+			where: {
+				hoiYId: { in: [...dangMo, ...daCongBo].map((h) => h.id) },
+				tacGiaUserId: chiNguoi,
+			},
+			distinct: ["hoiYId", "tacGiaUserId"],
+			select: { hoiYId: true, tacGiaUserId: true },
+		}),
+		db.member.findMany({
+			where: {
+				organizationId: WORKSPACE_ID,
+				userId: chiNguoi,
+			},
+			select: { userId: true },
+		}),
+	]);
+	const daGop = new Set(y.map((r) => `${r.hoiYId}:${r.tacGiaUserId}`));
+	const gop = dangMo.flatMap((h) =>
+		thanhVien
+			.filter(
+				(m) =>
+					m.userId !== h.nguoiChonUserId && !daGop.has(`${h.id}:${m.userId}`),
+			)
+			.map(
+				(m): Gui => ({
+					userId: m.userId,
+					viec: {
+						loai: "okr-hoi-y-gop",
+						hoiYId: h.id,
+						cycleId: h.cycleId,
+						nhan: h.cycle.name,
+						hanLuc: h.hanLuc.toISOString(),
+					},
+				}),
+			),
+	);
+	const congBo = daCongBo.flatMap((h) =>
+		thanhVien
+			.filter((m) => daGop.has(`${h.id}:${m.userId}`))
+			.map(
+				(m): Gui => ({
+					userId: m.userId,
+					viec: {
+						loai: "okr-hoi-y-cong-bo",
+						hoiYId: h.id,
+						cycleId: h.cycleId,
+						nhan: h.cycle.name,
+					},
+				}),
+			),
+	);
+	return [...gop, ...congBo];
+}
+
+async function tenNguoi(db: Db, ids: string[]): Promise<Map<string, string>> {
+	const nguoi = await db.user.findMany({
+		where: { id: { in: [...new Set(ids)] } },
+		select: { id: true, name: true },
+	});
+	return new Map(nguoi.map((n) => [n.id, n.name]));
+}
+
+async function viecChoDuyet(db: Db): Promise<Gui[]> {
+	const mts = await db.okrObjective.findMany({
+		where: {
+			status: CHO_DUYET,
+			cycle: { phase: { in: [...PHA_GHI_DUOC] }, ...KY_CON_HIEN },
+		},
+		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+		select: {
+			id: true,
+			title: true,
+			level: true,
+			departmentId: true,
+			personUserId: true,
+		},
+	});
+	if (mts.length === 0) return [];
+	const [cay, gui] = await Promise.all([
+		docCayOkr(db),
+		db.okrTrail.findMany({
+			where: { objectiveId: { in: mts.map((m) => m.id) }, action: GUI_DUYET },
+			orderBy: [{ at: "desc" }, { id: "desc" }],
+			distinct: ["objectiveId"],
+			select: { objectiveId: true, actorUserId: true },
+		}),
+	]);
+	const ten = await tenNguoi(
+		db,
+		gui.map((g) => g.actorUserId),
+	);
+	return mts.flatMap((m) => {
+		const nguoiGui = gui.find((g) => g.objectiveId === m.id)?.actorUserId;
+		return nguoiNhanDuyet(cay, nguoiDuyetMucTieu(cay, m)).map(
+			(userId): Gui => ({
+				userId,
+				viec: {
+					loai: "okr-cho-duyet",
+					objectiveId: m.id,
+					nhan: m.title,
+					nguoiGui: nguoiGui === undefined ? null : (ten.get(nguoiGui) ?? null),
+				},
+			}),
+		);
+	});
+}
+
+async function viecTraLai(
+	db: Db,
+	cuaSo: { gt: Date; lte: Date },
+): Promise<Gui[]> {
+	const traLai = await db.okrTrail.findMany({
+		where: { at: cuaSo, action: TRA_LAI },
+		orderBy: [{ at: "desc" }, { id: "desc" }],
+		select: { at: true, actorUserId: true, objectiveId: true, note: true },
+	});
+	const ids = [
+		...new Set(traLai.flatMap((t) => (t.objectiveId ? [t.objectiveId] : []))),
+	];
+	if (ids.length === 0) return [];
+	const [mts, gui] = await Promise.all([
+		db.okrObjective.findMany({
+			where: { id: { in: ids }, status: NHAP },
+			select: { id: true, title: true },
+		}),
+		db.okrTrail.findMany({
+			where: { objectiveId: { in: ids }, action: GUI_DUYET },
+			orderBy: [{ at: "desc" }, { id: "desc" }],
+			select: { at: true, actorUserId: true, objectiveId: true },
+		}),
+	]);
+	const ten = await tenNguoi(
+		db,
+		traLai.map((t) => t.actorUserId),
+	);
+	const daCo = new Set<string>();
+	return traLai.flatMap((t): Gui[] => {
+		const mt = mts.find((m) => m.id === t.objectiveId);
+		if (!mt || daCo.has(mt.id)) return [];
+		daCo.add(mt.id);
+		const cuaMt = gui.filter((g) => g.objectiveId === mt.id);
+		if (cuaMt.some((g) => g.at > t.at)) return [];
+		const nguoiGui = cuaMt.find((g) => g.at <= t.at)?.actorUserId;
+		if (nguoiGui === undefined || nguoiGui === t.actorUserId) return [];
+		return [
+			{
+				userId: nguoiGui,
+				viec: {
+					loai: "okr-tra-lai",
+					objectiveId: mt.id,
+					nhan: mt.title,
+					nguoiTraLai: ten.get(t.actorUserId) ?? "",
+					lyDo: t.note ?? "",
+				},
+			},
+		];
+	});
+}
+
 export async function viecOkrCanNhac(
 	db: Db,
 	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
@@ -479,29 +712,92 @@ export async function viecOkrCanNhac(
 		viecKr(db, chon.now),
 		viecGiao(db, cuaSo),
 		viecTraoDoi(db, cuaSo),
+		viecChoDuyet(db),
+		viecTraLai(db, cuaSo),
+		viecHoiY(
+			db,
+			chon.now,
+			cuaSo,
+			chon.userId === undefined ? undefined : [chon.userId],
+		),
 	]);
 	const ket = new Map<string, ViecOkr[]>();
 	for (const g of phan.flat()) {
 		if (chon.userId !== undefined && g.userId !== chon.userId) continue;
 		ket.set(g.userId, [...(ket.get(g.userId) ?? []), g.viec]);
 	}
-	return ket;
+	return locTheoQuyenXem(db, ket);
+}
+
+function mucTieuCua(v: ViecOkr): string | null {
+	return v.loai === "okr-cap-nhat" ||
+		v.loai === "okr-hoi-y-gop" ||
+		v.loai === "okr-hoi-y-cong-bo"
+		? null
+		: v.objectiveId;
+}
+
+async function locTheoQuyenXem(
+	db: Db,
+	ket: Map<string, ViecOkr[]>,
+): Promise<Map<string, ViecOkr[]>> {
+	const nguoi = [...ket]
+		.filter(([, ds]) => ds.some((v) => mucTieuCua(v) !== null))
+		.map(([userId]) => userId);
+	const nguCanh = await nguCanhXemOkr(db, nguoi);
+	const xemDuoc = new Map(
+		await Promise.all(
+			nguoi.map(async (userId): Promise<[string, Set<string>]> => {
+				const nc = nguCanh.get(userId);
+				const ids = [
+					...new Set(
+						(ket.get(userId) ?? []).flatMap((v) => mucTieuCua(v) ?? []),
+					),
+				];
+				if (!nc) return [userId, new Set()];
+				const thay = await db.okrObjective.findMany({
+					where: { AND: [{ id: { in: ids } }, dieuKienXemMucTieu(nc)] },
+					select: { id: true },
+				});
+				return [userId, new Set(thay.map((m) => m.id))];
+			}),
+		),
+	);
+	const ra = new Map<string, ViecOkr[]>();
+	for (const [userId, ds] of ket) {
+		const thay = xemDuoc.get(userId);
+		const giu = ds.filter((v) => {
+			const mt = mucTieuCua(v);
+			return mt === null || (thay?.has(mt) ?? false);
+		});
+		if (giu.length > 0) ra.set(userId, giu);
+	}
+	return ra;
 }
 
 export async function lienQuanOkr(db: Db, userId: string): Promise<boolean> {
 	const chay = { phase: "dang-chay" };
 	const [coChuKy, kr, mt, theo, truong] = await Promise.all([
-		db.okrCycle.count({ where: chay }),
+		db.okrCycle.count({ where: { ...chay, ...KY_CON_HIEN } }),
 		db.okrKeyResult.count({
 			where: {
 				ownerUserId: userId,
-				objective: { status: { not: "da-bo" }, cycle: chay },
+				objective: {
+					status: { not: "da-bo" },
+					cycle: { ...chay, ...KY_CON_HIEN },
+				},
 			},
 		}),
 		db.okrObjective.count({
-			where: { ownerUserId: userId, status: { not: "da-bo" }, cycle: chay },
+			where: {
+				ownerUserId: userId,
+				status: { not: "da-bo" },
+				cycle: { ...chay, ...KY_CON_HIEN },
+			},
 		}),
-		db.okrFollow.count({ where: { userId, objective: { cycle: chay } } }),
+		db.okrFollow.count({
+			where: { userId, objective: { cycle: { ...chay, ...KY_CON_HIEN } } },
+		}),
 		Promise.all([
 			db.department.count({ where: { headUserId: userId, archivedAt: null } }),
 			db.division.count({ where: { headUserId: userId, archivedAt: null } }),

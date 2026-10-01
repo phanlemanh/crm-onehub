@@ -41,6 +41,7 @@ import { PeriodSelect } from "../src/components/period-select";
 import { Progress } from "../src/components/progress";
 import { ProposedChange } from "../src/components/proposed-change";
 import { Reasoning } from "../src/components/reasoning";
+import { SaveBar } from "../src/components/save-bar";
 import { Sheet, SheetContent, SheetTitle } from "../src/components/sheet";
 import { SkeletonSwap } from "../src/components/skeleton-swap";
 import { Toaster } from "../src/components/sonner";
@@ -210,6 +211,16 @@ const CA: Ca[] = [
 				columns={[{ id: "a", label: "01/11" }]}
 				rows={[{ id: "r", label: DU_LIEU.tenCongTy }]}
 				values={[[null]]}
+			/>
+		),
+	},
+	{
+		ten: "SaveBar",
+		ve: () => (
+			<SaveBar
+				items={[{ id: "a", label: DU_LIEU.cot, href: "#a" }]}
+				open
+				title={DU_LIEU.tieuDeHopThoai}
 			/>
 		),
 	},

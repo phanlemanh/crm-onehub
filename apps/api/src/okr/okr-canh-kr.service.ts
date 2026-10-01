@@ -1,5 +1,6 @@
 import { docDuocPhamVi } from "@crm/auth";
 import { type Db, Prisma } from "@crm/db";
+import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
 	type BangChungVao,
@@ -67,7 +68,11 @@ export class OkrCanhKrService {
 		@Inject(OkrAccessService) private readonly access: OkrAccessService,
 	) {}
 
-	private async krDeGhi(tx: Tx, keyResultId: string) {
+	private async krDeGhi(
+		tx: Tx,
+		keyResultId: string,
+		ghi: "noi-dung" | "tien-do" = "noi-dung",
+	) {
 		const kr = await tx.okrKeyResult.findUnique({
 			where: { id: keyResultId },
 			select: {
@@ -80,6 +85,8 @@ export class OkrCanhKrService {
 		await this.okr.assertKyGhiDuoc(tx, kr.objective.cycleId);
 		if (kr.objective.status === "da-bo")
 			throw new BadRequestException(T.canhKr.mucTieuDaBo);
+		if (ghi === "noi-dung" && kr.objective.status === "cho-duyet")
+			throw new BadRequestException(T.dangChoDuyet);
 		return { ...kr, objective: donViCua(kr.objective) };
 	}
 
@@ -120,8 +127,10 @@ export class OkrCanhKrService {
 		keyResultId: string,
 		now = new Date(),
 	): Promise<CanhKrOutput> {
-		const kr = await this.db.okrKeyResult.findUnique({
-			where: { id: keyResultId },
+		const q = await this.access.quyen(userId);
+		const nc = this.access.nguCanhXem(q, userId);
+		const kr = await this.db.okrKeyResult.findFirst({
+			where: { id: keyResultId, objective: dieuKienXemMucTieu(nc) },
 			select: {
 				id: true,
 				title: true,
@@ -131,20 +140,28 @@ export class OkrCanhKrService {
 				ownerUserId: true,
 				owner: { select: { name: true } },
 				objective: {
-					select: { ...chonDonVi, cycle: { select: { phase: true } } },
+					select: {
+						...chonDonVi,
+						cycle: { select: { phase: true, anLuc: true } },
+					},
 				},
 			},
 		});
-		if (!kr) throw new NotFoundException(T.khongCoKr(keyResultId));
-		const [q, viec, bangChung] = await Promise.all([
-			this.access.quyen(userId),
+		if (!kr) throw new NotFoundException(T.khongThayMucTieu);
+		const [viec, bangChung] = await Promise.all([
 			this.db.okrViecKr.findMany({
-				where: { keyResultId },
+				where: {
+					keyResultId,
+					keyResult: { objective: dieuKienXemMucTieu(nc) },
+				},
 				orderBy: [{ position: "asc" }, { createdAt: "asc" }, { id: "asc" }],
 				select: chonHangCanh,
 			}),
 			this.db.okrBangChung.findMany({
-				where: { keyResultId },
+				where: {
+					keyResultId,
+					keyResult: { objective: dieuKienXemMucTieu(nc) },
+				},
 				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 				select: {
 					id: true,
@@ -213,8 +230,10 @@ export class OkrCanhKrService {
 				ganDuoc: suaDuoc && docDuocPhamVi(q.role, "doi-tac"),
 			},
 			khoa:
+				kr.objective.cycle.anLuc !== null ||
 				!ghiDuocOPha(phaChuKy.parse(kr.objective.cycle.phase)) ||
 				objective.status === "da-bo",
+			choDuyet: objective.status === "cho-duyet",
 		};
 	}
 
@@ -366,7 +385,7 @@ export class OkrCanhKrService {
 		const q = await this.access.quyen(userId);
 		return this.db.$transaction(async (tx) => {
 			const cu = await this.viecTuGo(tx, input.id);
-			const kr = await this.krDeGhi(tx, cu.keyResultId);
+			const kr = await this.krDeGhi(tx, cu.keyResultId, "tien-do");
 			if (cu.nguoiLamUserId !== userId) this.assertGhiDuoc(q, userId, kr);
 			await tx.okrViecKr.update({
 				where: { id: cu.id },
@@ -461,19 +480,22 @@ export class OkrCanhKrService {
 		input: GuiGhiNhanInput,
 		now = new Date(),
 	): Promise<{ id: string }> {
+		const { q, nc, mt } = await this.access.assertXemMucTieu(
+			userId,
+			input.objectiveId,
+		);
 		return this.db.$transaction(async (tx) => {
-			const mt = await tx.okrObjective.findUnique({
-				where: { id: input.objectiveId },
-				select: { id: true, status: true },
-			});
-			if (!mt) throw new NotFoundException(T.khongCoMucTieu(input.objectiveId));
+			await this.okr.assertKyChuaAn(tx, mt.cycleId);
 			if (mt.status !== "cong-bo")
 				throw new BadRequestException(T.canhKr.ghiNhanChiCongBo);
 			if (input.nguoiNhan.includes(userId))
 				throw new BadRequestException(T.canhKr.tuGhiNhan);
 			if (input.keyResultId !== null) {
-				const kr = await tx.okrKeyResult.findUnique({
-					where: { id: input.keyResultId },
+				const kr = await tx.okrKeyResult.findFirst({
+					where: {
+						id: input.keyResultId,
+						objective: dieuKienXemMucTieu(nc),
+					},
 					select: { objectiveId: true },
 				});
 				if (!kr) throw new NotFoundException(T.khongCoKr(input.keyResultId));
@@ -484,6 +506,12 @@ export class OkrCanhKrService {
 				tx,
 				input.nguoiNhan,
 				() => T.canhKr.nguoiNhanKhongConThanhVien,
+			);
+			await this.access.assertXemDuocHet(
+				q,
+				mt.id,
+				input.nguoiNhan,
+				T.canhKr.nguoiNhanKhongXemDuoc,
 			);
 			const row = await tx.okrGhiNhan.create({
 				data: {
@@ -521,10 +549,12 @@ export class OkrCanhKrService {
 					objectiveId: true,
 					keyResultId: true,
 					tacGiaUserId: true,
+					objective: { select: { cycleId: true } },
 					nhan: { select: { userId: true }, orderBy: { userId: "asc" } },
 				},
 			});
 			if (!row) throw new NotFoundException(T.canhKr.khongCoGhiNhan(input.id));
+			await this.okr.assertKyChuaAn(tx, row.objective.cycleId);
 			if (row.tacGiaUserId !== userId && !q.quanTri)
 				throw new ForbiddenException(T.canhKr.khongGoDuocGhiNhan);
 			await tx.okrGhiNhan.delete({ where: { id: row.id } });

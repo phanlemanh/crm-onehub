@@ -7,6 +7,7 @@ import { cn } from "@crm/ui/lib/utils";
 
 export type HeatmapRow = { id: string; label: React.ReactNode; indent?: boolean };
 export type HeatmapColumn = { id: string; label: string; current?: boolean };
+export type HeatmapLegend = { cao: string; trong: string };
 
 const BAC_NHIET = [
 	{ toi: 0, nen: "bg-foreground/5", chu: "text-foreground" },
@@ -26,6 +27,7 @@ function Heatmap({
 	columns,
 	values,
 	formatValue,
+	legend,
 	className,
 }: {
 	caption: string;
@@ -33,6 +35,7 @@ function Heatmap({
 	columns: HeatmapColumn[];
 	values: (number | null)[][];
 	formatValue?: (v: number) => string;
+	legend?: HeatmapLegend;
 	className?: string;
 }) {
 	const msg = useMessages();
@@ -121,8 +124,11 @@ function Heatmap({
 					</tbody>
 				</table>
 			</div>
-			<div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-xs">
-				<span>{msg.heatmap.chuGiai}</span>
+			<div
+				className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-xs"
+				data-slot="heatmap-legend"
+			>
+				<span>{legend?.cao ?? msg.heatmap.chuGiai}</span>
 				<span aria-hidden="true" className="flex items-center gap-1">
 					{BAC_NHIET.map((b) => (
 						<span className={cn("size-3 rounded-sm", b.nen)} key={b.nen} />
@@ -130,7 +136,7 @@ function Heatmap({
 				</span>
 				<span className="flex items-center gap-1">
 					<span aria-hidden="true" className="size-3 rounded-sm border border-dashed" />
-					{msg.heatmap.oRong}
+					{legend?.trong ?? msg.heatmap.oRong}
 				</span>
 			</div>
 		</div>

@@ -1,0 +1,27 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+  building crm_kto_e23__mau_do: migrate deploy + seed (once per source fingerprint)
+phien-do: kho crm_kto_e23_do · app http://localhost:4454 · api http://localhost:4418
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+man-khep-ky: chi chay E3, E7
+$ bun scripts/dev-session.ts "aknn6mn0@thu.test"
+$ bun scripts/dev-session.ts "tknn6mn0@thu.test"
+$ bun scripts/dev-session.ts "dknn6mn0@thu.test"
+$ bun scripts/dev-session.ts "oknn6mn0@thu.test"
+  gieo: quy cmunn6p930003kbcfm80yj8q9 2026-07-01..2026-09-30, N=cmunn6pch0006kbcfinzumctz (nhap), M=cmunn6pe10008kbcfb2w0vk4o (cong-bo, 3 KR tang toi)
+  E3 cau hoi: ten={"chu":"Câu này đọc như một việc làm. Làm xong thì con số nào đổi?","bien":"hoi","slot":"field-description"} khoi={"chu":"Khởi điểm 0 là số thật, hay chưa đo?","bien":"hoi","slot":"field-description"}
+  E4 DB KR cua N: [{"title":"Gọi điện chào mừng mọi đối tác mới","start":0,"target":40}]
+  nhom E3/E4: 21 s
+  E7 DB okrDoiDich sau Luu ngoai ra: []
+  E7 DB okrDoiDich sau Luu trong ra: [{"truoc":30,"sau":40,"ngoaiRa":false,"lyDo":"","tacGia":"truong"}]
+  nhom E7: 71 s
+man-khep-ky: 41 khang dinh, 4 hong, 6 anh (buoc-hoi.png, buoc-hoi-390.png, buoc-doi-trong.png, buoc-ly-do-dich.png, buoc-dai-ra.png, buoc-dai-ra-390.png), 95 s
+  anh o .acceptance-runs/khep-ky-okr/evidence/
+  HONG: E7 buoc 3: go ly do 12 ky tu -> Luu bat: het 30000ms van chua thay
+  HONG: E7 buoc 3: Luu -> hop thoai dong (loi may chu: khong)
+  HONG: E7: DB co dung mot dong okrDoiDich ngoaiRa true mang ly do da go (thay [])
+  HONG: E7 buoc 4: DB them mot dong okrDoiDich ngoaiRa false (thay [{"truoc":30,"sau":40,"ngoaiRa":false,"lyDo":"","tacGia":"truong"}])
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1

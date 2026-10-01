@@ -693,7 +693,7 @@ async function buoc6() {
 	t = await moMucTieu(cookie.truong, RONG, K.A);
 	await bamSel(t, `${NGAN} button[aria-label='${CHU.menuMucTieu}']`);
 	await bamChu(t, "[role='menuitem']", CHU.suaMucTieu);
-	await kiemHop("hop muc tieu", t, HOP);
+	await kiemHop("hop muc tieu", t, "[data-hop-thoai-muc-tieu]");
 	await chup(t, "hg-muc-tieu-chi-doi-o-chon.png");
 	await t.close();
 	t = await moTrang(cookie.admin, RONG, `/settings/organization?don=pb:${K.P}`);

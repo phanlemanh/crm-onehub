@@ -1,0 +1,37 @@
+{
+	"nguon": "79168cbe0800c306965300b3043932de716db9b7",
+	"payload": {
+		"okr.createObjective": {
+			"cycleId": "q4",
+			"unit": {
+				"level": "onehub"
+			},
+			"title": "Không thoả thuận nào của miền Bắc bị mất dấu",
+			"kind": "cam-ket",
+			"ownerUserId": "hai",
+			"participantIds": [],
+			"whyNow": "Đầu quý 1 là mùa ký lại hợp đồng năm.",
+			"hienThi": "cong-khai"
+		},
+		"okr.updateObjective": {
+			"id": "mt-1",
+			"title": "Không thoả thuận nào của miền Bắc bị mất dấu"
+		},
+		"okr.createKeyResult": {
+			"title": "Khách mới hẹn gặp sau cuộc gọi đầu",
+			"kind": "tang-toi",
+			"ownerUserId": "hai",
+			"startValue": 0,
+			"targetValue": 20,
+			"currentValue": 0,
+			"unit": "",
+			"dueOn": null,
+			"weight": 1,
+			"objectiveId": "mt-1"
+		},
+		"okr.updateKeyResult": {
+			"title": "Gọi 60 cuộc mỗi tuần",
+			"id": "kr-1"
+		}
+	}
+}

@@ -364,6 +364,7 @@ describe("viec-vong-doi", () => {
 			expect(cuaB.kr.id).toBe(san.kr);
 			expect(cuaB.kr.objectiveId).toBe(san.mt);
 			expect(cuaB.khoa).toBe(false);
+			expect(cuaB.choDuyet).toBe(false);
 			expect(cuaB.dong.find((d) => d.id === id)).toEqual({
 				id,
 				loai: "viec",

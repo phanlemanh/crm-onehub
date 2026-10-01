@@ -10,6 +10,8 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@crm/ui/components/alert-dialog";
+import { Button } from "@crm/ui/components/button";
+import type { ReactNode } from "react";
 
 export function ConfirmDialog({
 	tieuDe,
@@ -22,6 +24,8 @@ export function ConfirmDialog({
 	pending,
 	tone,
 	onCloseAutoFocus,
+	noiDung,
+	nutPhu,
 }: {
 	tieuDe: string;
 	than: string;
@@ -33,6 +37,8 @@ export function ConfirmDialog({
 	pending: boolean;
 	tone?: "destructive" | "default";
 	onCloseAutoFocus?: (event: Event) => void;
+	noiDung?: ReactNode;
+	nutPhu?: { nut: string; onClick: () => void } | null;
 }) {
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -41,8 +47,19 @@ export function ConfirmDialog({
 					<AlertDialogTitle>{tieuDe}</AlertDialogTitle>
 					<AlertDialogDescription>{than}</AlertDialogDescription>
 				</AlertDialogHeader>
+				{noiDung}
 				<AlertDialogFooter>
 					<AlertDialogCancel disabled={pending}>{thoi}</AlertDialogCancel>
+					{nutPhu ? (
+						<Button
+							aria-haspopup="dialog"
+							data-nut-phu
+							disabled={pending}
+							onClick={nutPhu.onClick}
+						>
+							{nutPhu.nut}
+						</Button>
+					) : null}
 					<AlertDialogAction
 						variant={tone ?? "destructive"}
 						data-variant={tone ?? "destructive"}

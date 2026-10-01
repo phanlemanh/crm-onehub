@@ -1,0 +1,122 @@
+{
+	"ghiChu": "Mọi chỗ đọc chu kỳ không theo id ở apps/api/src, packages/db/src, apps/agent/agent, do bài soi mã suy từ AST: khoá cycle (trừ khi giá trị chỉ có select/include), startsOn/endsOn dưới khoá cycle kể cả trong select, cycleId: { in }, okrCycle.findMany/findFirst/count/groupBy, $queryRaw có okrCycle mà không chỉ WHERE id =. E11 so TẬP (tệp, hàm) soi được với tập này; nhóm lọc mỗi chỗ phải có KY_CON_HIEN (lời gọi okrCycle chỉ theo khoá id được miễn phần này).",
+	"loc": [
+		{
+			"tep": "apps/api/src/okr/okr.service.ts",
+			"ham": "createCycle",
+			"vi": "kiểm quý chồng bỏ quý đã ẩn; năm cha đã ẩn thì từ chối"
+		},
+		{
+			"tep": "apps/api/src/okr/okr.service.ts",
+			"ham": "alignmentTargets",
+			"vi": "đích căn chỉnh không ở chu kỳ đã ẩn"
+		},
+		{
+			"tep": "apps/api/src/okr/okr.service.ts",
+			"ham": "mucTieuCuaCay",
+			"vi": "cây căn chỉnh của một năm bỏ quý con đã ẩn"
+		},
+		{
+			"tep": "packages/db/src/okr-chu-ky-hien.ts",
+			"ham": "tinhTrangGiu",
+			"vi": "đếm quý con còn hiện của một năm để chặn ẩn; đọc quan hệ giữ chu kỳ thì theo id"
+		},
+		{
+			"tep": "apps/api/src/okr/okr-khep.service.ts",
+			"ham": "mangSang",
+			"vi": "kỳ đích mang sang là kỳ kế chưa ẩn"
+		},
+		{
+			"tep": "apps/api/src/okr/okr-cap-nhat.service.ts",
+			"ham": "capNhatTuan",
+			"vi": "cập nhật tuần của tôi chỉ KR ở kỳ đang chạy chưa ẩn"
+		},
+		{
+			"tep": "apps/api/src/okr/okr-trao-doi.service.ts",
+			"ham": "dieuKienChuyen",
+			"vi": "chuyển việc khi người rời bỏ chu kỳ đã ẩn"
+		},
+		{
+			"tep": "packages/db/src/okr-don-vi.ts",
+			"ham": "dieuKienOkrMo",
+			"vi": "OKR còn mở chặn lưu trữ, chuyển đơn vị: bỏ chu kỳ đã ẩn"
+		},
+		{
+			"tep": "packages/db/src/okr-nhac.ts",
+			"ham": "docKr",
+			"vi": "nhắc cập nhật tuần"
+		},
+		{
+			"tep": "packages/db/src/okr-nhac.ts",
+			"ham": "viecHoiY",
+			"vi": "nhắc Hỏi ý: lần hỏi ý của chu kỳ đã ẩn không nhắc"
+		},
+		{
+			"tep": "packages/db/src/okr-nhac.ts",
+			"ham": "viecChoDuyet",
+			"vi": "nhắc mục tiêu chờ duyệt"
+		},
+		{
+			"tep": "packages/db/src/okr-nhac.ts",
+			"ham": "lienQuanOkr",
+			"vi": "người có liên quan OKR hay không"
+		},
+		{
+			"tep": "apps/agent/agent/lib/okr-chup.ts",
+			"ham": "chupSoOkr",
+			"vi": "chụp số hằng ngày"
+		},
+		{
+			"tep": "apps/agent/agent/lib/okr/doc.ts",
+			"ham": "docDichCanChinh",
+			"vi": "tác tử Trợ lý OKR không đề xuất căn chỉnh vào chu kỳ đã ẩn"
+		}
+	],
+	"mien": [
+		{
+			"tep": "apps/api/src/okr/okr.service.ts",
+			"ham": "cycles",
+			"lyDo": "trả cả chu kỳ đã ẩn cho bảng Cài đặt; currentId chọn trong bộ nhớ bỏ chu kỳ đã ẩn; đọc vết ẩn theo cycleId"
+		},
+		{
+			"tep": "apps/api/src/okr/okr.service.ts",
+			"ham": "chonMucTieu",
+			"lyDo": "chỉ select ngày kết thúc của chu kỳ qua mục tiêu đã có id"
+		},
+		{
+			"tep": "apps/api/src/okr/okr.service.ts",
+			"ham": "khoaHoNam",
+			"lyDo": "khoá cả họ năm theo id và parentId để kiểm luật; quý đã ẩn vẫn phải bị khoá, việc lọc nằm ở các kiểm tra sau khoá"
+		},
+		{
+			"tep": "apps/api/src/okr/okr-chu-ky.service.ts",
+			"ham": "khoaChuKy",
+			"lyDo": "đọc quý anh em theo parentId đã khoá để kiểm luật rỗng và chồng ngày; phải thấy cả quý đã ẩn"
+		},
+		{
+			"tep": "apps/api/src/okr/okr-tai-co-cau.service.ts",
+			"ham": "vuotTran",
+			"lyDo": "cycleId in lấy từ chính các mục tiêu đang chuyển — theo id (onehub #219 đổi tên canhBaoTran thành vuotTran)"
+		},
+		{
+			"tep": "apps/api/src/okr/okr-so.service.ts",
+			"ham": "*",
+			"lyDo": "chỉ select ngày của chu kỳ qua mục tiêu đã có id"
+		},
+		{
+			"tep": "apps/api/src/okr/okr-xem.service.ts",
+			"ham": "*",
+			"lyDo": "đọc theo cycleId truyền vào — dữ liệu chu kỳ ẩn vẫn tra được bằng đường dẫn cũ (d-20260930T053653Z-4)"
+		},
+		{
+			"tep": "packages/db/src/okr-chi-so.ts",
+			"ham": "*",
+			"lyDo": "chỉ select ngày của chu kỳ qua KR đã có id"
+		},
+		{
+			"tep": "packages/db/src/okr-xu-huong.ts",
+			"ham": "*",
+			"lyDo": "chỉ select ngày của chu kỳ qua KR đã có id"
+		}
+	]
+}

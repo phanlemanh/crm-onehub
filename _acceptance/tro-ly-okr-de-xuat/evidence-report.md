@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a8af896d4f715b6d413bf3cb36faadf81ce95631
+verified_commit: 70c74a80470265a4b28893e9c30fe5c26feb0792
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -377,3 +377,7 @@ sha: f63d4435403654846778fdaecc002407e6cefe79 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-29, do gộp onehub (#208–#211) vào nhánh thẻ góp ý OKR
 run_id: repin-20260929T165336Z-18491
 sha: a8af896d4f715b6d413bf3cb36faadf81ce95631 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E28 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 4 — 2026-09-30, do ghim lại sau lượt 8c: 8c chặn đường đọc của trợ lý bằng luật xem
+run_id: repin-20260930T002736Z-41953
+sha: 70c74a80470265a4b28893e9c30fe5c26feb0792 · suites: 4 lệnh exit 0 · evals: 26/26 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E24=1 · ngoài làn máy: E4, E25, E28 · diff chạm vật đo ngoài làn máy: E4, E25, E28 — chưa chứng lại, đi vòng S4 delta

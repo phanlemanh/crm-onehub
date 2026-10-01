@@ -1,5 +1,6 @@
 "use client";
 
+import Checkmark from "@carbon/icons-react/es/Checkmark";
 import Help from "@carbon/icons-react/es/Help";
 import { Icon } from "@crm/ui/components/icon";
 import { Label } from "@crm/ui/components/label";
@@ -141,6 +142,7 @@ const fieldDescriptionVariants = cva(
 			variant: {
 				default: "",
 				hoi: "[&>svg]:mr-1 [&>svg]:inline [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:align-text-bottom",
+				xong: "[&>svg]:mr-1 [&>svg]:inline [&>svg]:size-3.5 [&>svg]:shrink-0 [&>svg]:align-text-bottom",
 			},
 		},
 		defaultVariants: {
@@ -170,6 +172,7 @@ function FieldDescription({
 			{...props}
 		>
 			{bien === "hoi" && <Icon icon={Help} motion="none" />}
+			{bien === "xong" && <Icon icon={Checkmark} motion="none" />}
 			{children}
 		</p>
 	);
