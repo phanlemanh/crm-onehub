@@ -44,7 +44,7 @@ async function hangDangHoi(phienGoc: string): Promise<string | null> {
 
 export async function hoiCuaPhien(ctx: NguCanhKenh): Promise<string> {
 	const goc = phienGocCua(ctx);
-	if (!goc || !ctx.session?.parent) throw new Error(KHONG_PHAI_HOI);
+	if (!goc) throw new Error(KHONG_PHAI_HOI);
 	const id = await lap(() => hangDangHoi(goc));
 	if (!id) throw new Error(KHONG_PHAI_HOI);
 	return id;
@@ -52,7 +52,7 @@ export async function hoiCuaPhien(ctx: NguCanhKenh): Promise<string> {
 
 export async function hangCuaPhien(ctx: NguCanhKenh): Promise<string> {
 	const goc = phienGocCua(ctx);
-	if (!goc || !ctx.session?.parent) throw new Error(KHONG_PHAI_HOI);
+	if (!goc) throw new Error(KHONG_PHAI_HOI);
 	const hang = await db.taiLieuHoi.findFirst({
 		where: { phienId: goc },
 		orderBy: { hoiLuc: "desc" },
@@ -85,7 +85,7 @@ async function moHoiZalo(goc: string): Promise<string | null> {
 
 export async function moHoi(ctx: NguCanhKenh): Promise<string> {
 	const goc = phienGocCua(ctx);
-	if (!goc || !ctx.session?.parent) throw new Error(KHONG_PHAI_HOI);
+	if (!goc) throw new Error(KHONG_PHAI_HOI);
 	const id = await lap(
 		async () => (await hangDangHoi(goc)) ?? (await moHoiZalo(goc)),
 	);

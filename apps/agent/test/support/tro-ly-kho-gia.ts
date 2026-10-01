@@ -1,7 +1,9 @@
+import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
+import { z } from "zod";
 import { TaiLieuService } from "../../../api/src/tai-lieu/tai-lieu.service";
 import { gieoThanhVien } from "../../../api/test/phien-thu";
 
@@ -94,6 +96,47 @@ export function ctxConCua(phienGoc: string): CtxCon {
 			id: `ses-con-${phienGoc}-${demPhien}`,
 			parent: { sessionId: phienGoc, rootSessionId: phienGoc },
 			auth: { current: { attributes: {} }, initiator: { attributes: {} } },
+		},
+	};
+}
+
+const khuonCtxEve = z.object({
+	ten: z.string(),
+	ctx: z.object({
+		session: z.object({
+			id: z.string(),
+			auth: z.object({
+				current: z.object({ attributes: z.record(z.string(), z.string()) }),
+				initiator: z.object({ attributes: z.record(z.string(), z.string()) }),
+			}),
+		}),
+		channel: z.object({ kind: z.string(), continuationToken: z.string() }),
+	}),
+});
+
+export type CtxBatDauEve = z.infer<typeof khuonCtxEve>["ctx"];
+
+const TEP_CTX_EVE = join(
+	import.meta.dir,
+	"..",
+	"fixtures",
+	"so-chi-phi-that.json",
+);
+
+export function ctxBatDauThat(phienGoc: string): CtxBatDauEve {
+	const ghi = z
+		.array(khuonCtxEve)
+		.parse(JSON.parse(readFileSync(TEP_CTX_EVE, "utf8")));
+	const goc = ghi.find((g) => g.ten === "goc")?.ctx.session.id;
+	const con = ghi.find((g) => g.ten === "con_tro_ly")?.ctx;
+	if (!goc || !con)
+		throw new Error("fixture eve thieu phien goc hay con_tro_ly");
+	demPhien += 1;
+	return {
+		session: { ...con.session, id: `ses-con-${phienGoc}-${demPhien}` },
+		channel: {
+			...con.channel,
+			continuationToken: con.channel.continuationToken.replace(goc, phienGoc),
 		},
 	};
 }
