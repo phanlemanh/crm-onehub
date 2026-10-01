@@ -356,7 +356,10 @@ evals:
       TaiLieuHoi tang tokenVao, va mot dong aiChiPhi tinhNang "tai-lieu.tro-ly". khuon-di-dong.spec.ts
       quet moi tool moi khong co $ref. CHIEU DO: ban sao them web_fetch song -> do ghim
       "tlk-ranh-gioi: tool la web_fetch"; ban sao bo ganZdr -> do ghim "tlk-ranh-gioi: loi goi 1
-      thieu ZDR"; ban sao outputSchema tra traLoi -> do ghim "tlk-ranh-gioi: chu trang toi agent goc".
+      thieu ZDR"; ban sao outputSchema tra traLoi -> do ghim "tlk-ranh-gioi: chu trang toi agent goc";
+      ban sao cho bo chon model step.started cua agent.ts tra model gateway tran (khong qua
+      modelTaiLieu) -> do ghim "tlk-ranh-gioi: bo chon gui loi goi 1 thieu ZDR" (do tren than yeu
+      cau that gui toi gateway, hai loi goi moi khoa).
 
   - id: E13
     criterion: AC-13
