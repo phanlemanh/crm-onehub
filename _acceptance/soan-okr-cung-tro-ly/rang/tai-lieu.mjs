@@ -59,7 +59,37 @@ const TAI_LIEU = {
 		"OKR_AGENT_BRIDGE_SECRET",
 		"nop_ban_nhap",
 	],
-	soChatUi: { tieuDe: "— 7", cau: "exactly seven files" },
+	soChatUi: {
+		thuMuc: "packages/ui/src/components/ai-elements",
+		tieuDe: (n) => `— ${n}`,
+		cau: (chu) => `exactly ${chu} files`,
+		chu: [
+			"zero",
+			"one",
+			"two",
+			"three",
+			"four",
+			"five",
+			"six",
+			"seven",
+			"eight",
+			"nine",
+			"ten",
+			"eleven",
+			"twelve",
+			"thirteen",
+			"fourteen",
+			"fifteen",
+			"sixteen",
+			"seventeen",
+			"eighteen",
+			"nineteen",
+			"twenty",
+		],
+		hangBang: /^\| `([^`]+)` \|/gm,
+		tepThu: "zz-thu.tsx",
+		tepBo: "shimmer.tsx",
+	},
 	chatUi: [
 		"Conversation",
 		"ConversationEmptyState",
@@ -278,18 +308,66 @@ function kiemAgentMd(goc) {
 	];
 }
 
+function tepAiElements(goc) {
+	const thuMuc = TAI_LIEU.soChatUi.thuMuc;
+	const tuyet = join(goc, thuMuc);
+	if (!existsSync(tuyet) || !statSync(tuyet).isDirectory())
+		khongDo(`thieu thu muc: ${thuMuc}`);
+	return readdirSync(tuyet, { withFileTypes: true })
+		.filter((m) => m.isFile())
+		.map((m) => m.name)
+		.sort();
+}
+
+function soChuChatUi(n) {
+	const chu = TAI_LIEU.soChatUi.chu[n];
+	if (chu === undefined)
+		khongDo(`${TAI_LIEU.soChatUi.thuMuc} co ${n} tep, ngoai bang so chu`);
+	return chu;
+}
+
+const tieuDeChatUi = (goc) =>
+	TAI_LIEU.soChatUi.tieuDe(tepAiElements(goc).length);
+const cauChatUi = (goc) =>
+	TAI_LIEU.soChatUi.cau(soChuChatUi(tepAiElements(goc).length));
+
 function kiemChatUi(goc) {
 	const doan = mucTieuDe(doc(goc, TAI_LIEU.tep.chatUi), TAI_LIEU.muc.trongCay);
 	if (doan === null)
 		return [`docs/chat-ui.md thieu muc «${TAI_LIEU.muc.trongCay}»`];
+	const tep = tepAiElements(goc);
+	const tieuDe = tieuDeChatUi(goc);
+	const cau = cauChatUi(goc);
 	const dauMuc = doan.split("\n")[0];
 	const loi = [];
-	if (!dauMuc.endsWith(TAI_LIEU.soChatUi.tieuDe))
+	if (!dauMuc.endsWith(tieuDe))
 		loi.push(
-			`docs/chat-ui.md tieu de «What is in the tree today» khong ghi «${TAI_LIEU.soChatUi.tieuDe}»: ${dauMuc}`,
+			`docs/chat-ui.md tieu de «What is in the tree today» khong ghi «${tieuDe}»: ${dauMuc}`,
 		);
-	if (!doan.includes(TAI_LIEU.soChatUi.cau))
-		loi.push(`docs/chat-ui.md muc so khong ghi «${TAI_LIEU.soChatUi.cau}»`);
+	if (!doan.includes(cau))
+		loi.push(`docs/chat-ui.md muc so khong ghi «${cau}»`);
+	if (!doan.includes(`\`${TAI_LIEU.soChatUi.thuMuc}/\``))
+		loi.push(
+			`docs/chat-ui.md muc so khong nhac thu muc ${TAI_LIEU.soChatUi.thuMuc}/`,
+		);
+	const bang = new Set(
+		[...doan.matchAll(TAI_LIEU.soChatUi.hangBang)].map((m) => m[1]),
+	);
+	loi.push(
+		...tep
+			.filter((t) => !bang.has(t))
+			.map(
+				(t) =>
+					`docs/chat-ui.md bang «What is in the tree today» thieu tep: ${t}`,
+			),
+		...[...bang]
+			.filter((t) => !tep.includes(t))
+			.sort()
+			.map(
+				(t) =>
+					`docs/chat-ui.md bang «What is in the tree today» thua tep: ${t}`,
+			),
+	);
 	return [
 		...loi,
 		...TAI_LIEU.chatUi
@@ -611,21 +689,41 @@ const PHA = [
 	},
 	{
 		ten: "chat-ui-so-tieu-de",
-		ghim: `docs/chat-ui.md tieu de «What is in the tree today» khong ghi «${TAI_LIEU.soChatUi.tieuDe}»`,
-		...doiTieuDe(
-			TAI_LIEU.tep.chatUi,
-			`${TAI_LIEU.muc.trongCay} ${TAI_LIEU.soChatUi.tieuDe}`,
-			`${TAI_LIEU.muc.trongCay} — 8`,
-		),
+		ghimTheo: (g) =>
+			`docs/chat-ui.md tieu de «What is in the tree today» khong ghi «${tieuDeChatUi(g)}»`,
+		lam: (g) =>
+			ghi(g, TAI_LIEU.tep.chatUi, (c) =>
+				c.replace(
+					`${TAI_LIEU.muc.trongCay} ${tieuDeChatUi(g)}`,
+					`${TAI_LIEU.muc.trongCay} ${TAI_LIEU.soChatUi.tieuDe(tepAiElements(g).length + 1)}`,
+				),
+			),
 	},
 	{
 		ten: "chat-ui-so-cau",
-		ghim: `docs/chat-ui.md muc so khong ghi «${TAI_LIEU.soChatUi.cau}»`,
-		...doiTieuDe(
-			TAI_LIEU.tep.chatUi,
-			TAI_LIEU.soChatUi.cau,
-			"exactly eight files",
-		),
+		ghimTheo: (g) => `docs/chat-ui.md muc so khong ghi «${cauChatUi(g)}»`,
+		lam: (g) =>
+			ghi(g, TAI_LIEU.tep.chatUi, (c) =>
+				c.replace(
+					cauChatUi(g),
+					TAI_LIEU.soChatUi.cau(soChuChatUi(tepAiElements(g).length + 1)),
+				),
+			),
+	},
+	{
+		ten: "chat-ui-them-tep",
+		ghim: `docs/chat-ui.md bang «What is in the tree today» thieu tep: ${TAI_LIEU.soChatUi.tepThu}`,
+		lam: (g) =>
+			writeFileSync(
+				join(g, TAI_LIEU.soChatUi.thuMuc, TAI_LIEU.soChatUi.tepThu),
+				"export const thu = 1;\n",
+			),
+	},
+	{
+		ten: "chat-ui-bo-tep",
+		ghim: `docs/chat-ui.md bang «What is in the tree today» thua tep: ${TAI_LIEU.soChatUi.tepBo}`,
+		lam: (g) =>
+			rmSync(join(g, TAI_LIEU.soChatUi.thuMuc, TAI_LIEU.soChatUi.tepBo)),
 	},
 	{
 		ten: "setup-thieu-h3",
@@ -847,6 +945,7 @@ const PHA = [
 function tepNguon() {
 	const tep = [
 		...Object.values(TAI_LIEU.tep),
+		...tepAiElements(GOC).map((t) => `${TAI_LIEU.soChatUi.thuMuc}/${t}`),
 		...tapTep(GOC, [
 			...TAI_LIEU.vung.moi,
 			...TAI_LIEU.vung.api,
@@ -890,13 +989,14 @@ function chieuDo(inRa) {
 				encoding: "utf8",
 			});
 			const dong = (r.stdout ?? "").split("\n");
-			const trung = dong.find((d) => d.startsWith(ca.ghim));
+			const ghim = ca.ghimTheo ? ca.ghimTheo(GOC) : ca.ghim;
+			const trung = dong.find((d) => d.startsWith(ghim));
 			const dung = r.status === (ca.ma ?? 1) && trung !== undefined;
 			if (dung) bat += 1;
 			inRa(
 				dung
 					? `DUNG pha-${ca.ten}: exit ${r.status} · ${trung}`
-					: `SAI pha-${ca.ten}: exit ${r.status} · KHONG BAT «${ca.ghim}» (${dong.filter(Boolean).slice(-3).join(" | ")})`,
+					: `SAI pha-${ca.ten}: exit ${r.status} · KHONG BAT «${ghim}» (${dong.filter(Boolean).slice(-3).join(" | ")})`,
 			);
 		} finally {
 			if (tam) rmSync(tam, { recursive: true, force: true });
@@ -919,7 +1019,7 @@ function chayThat() {
 		return 1;
 	}
 	console.log(
-		`tai-lieu: du ${TAI_LIEU.muc.context.length} muc tu dien, ${thuTucTuRouter(GOC).size} thu tuc soan*, 4 nha cho ${TAI_LIEU.bien.length} bien, so AI Elements, phien do, lo trinh, ${TAI_LIEU.tepHang.length} tep hang; ${tepMa(GOC, TAI_LIEU.vung.moi).length} tep moi khong chu thich va khong Record<string, unknown>, client khong nhap @crm/db/@crm/auth, apps/api khong goi model, ${tapTep(GOC, TAI_LIEU.vung.agentOkr).length} tep apps/agent-okr khong nhap cheo.`,
+		`tai-lieu: du ${TAI_LIEU.muc.context.length} muc tu dien, ${thuTucTuRouter(GOC).size} thu tuc soan*, 4 nha cho ${TAI_LIEU.bien.length} bien, so AI Elements ${tepAiElements(GOC).length} tep, phien do, lo trinh, ${TAI_LIEU.tepHang.length} tep hang; ${tepMa(GOC, TAI_LIEU.vung.moi).length} tep moi khong chu thich va khong Record<string, unknown>, client khong nhap @crm/db/@crm/auth, apps/api khong goi model, ${tapTep(GOC, TAI_LIEU.vung.agentOkr).length} tep apps/agent-okr khong nhap cheo.`,
 	);
 	return 0;
 }
