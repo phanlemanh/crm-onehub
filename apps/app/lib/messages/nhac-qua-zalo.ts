@@ -61,6 +61,11 @@ const en = {
 			"The channel you chose cannot be used right now, so the reminder takes the other one and you do not miss anything.",
 		luuLoi: "Could not save your choice. Try again.",
 	},
+	troLy: {
+		tieuDe: "OKR assistant",
+		dongTomTat: "The OKR assistant's weekly summary line",
+		dongTomTatMoTa: "One line a week, when your department has a new summary",
+	},
 	ketNoi: {
 		moTa: "The Zalo bot sends each person on the team their morning reminder.",
 		mangVe: "Brings in",
@@ -180,6 +185,11 @@ const vi = {
 		lechMoTa:
 			"Kênh bạn chọn đang chưa dùng được, nên tin đi đường còn lại để bạn không lỡ việc.",
 		luuLoi: "Không lưu được lựa chọn. Thử lại.",
+	},
+	troLy: {
+		tieuDe: "Trợ lý OKR",
+		dongTomTat: "Dòng Tóm tắt tuần của Trợ lý OKR",
+		dongTomTatMoTa: "Mỗi tuần một dòng, khi phòng bạn có tóm tắt mới",
 	},
 	ketNoi: {
 		moTa: "Bot Zalo gửi nhắc việc buổi sáng cho từng người trong đội.",

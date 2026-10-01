@@ -122,6 +122,7 @@ const DAU_VAO_HOP_LE = {
 	"zalo.go": {},
 	"zalo.guiThu": {},
 	"zalo.luuUuTien": { channel: "ZALO" },
+	"zalo.luuDongTroLyOkr": { bat: false },
 	"zalo.luuBot": { token: "thu" },
 	"settings.setAgentModel": { modelId: null },
 	"settings.setResearchKey": { apiKey: "ctx_thu_khong_that_du_dai_1234567890" },
@@ -412,6 +413,11 @@ const THU_TUC_OKR_LUOT_TRO_LY = [
 	"troLySoDo",
 	"xuHuongKr",
 ].map((t) => `okr.${t}`);
+const THU_TUC_OKR_LUOT_TOM_TAT = [
+	"troLyTomTat",
+	"troLyTomTatPhanHoi",
+	"troLyTomTatQuanTri",
+].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_UX_8D = ["chuyenDonViXemTruoc"].map((t) => `okr.${t}`);
 const THU_TUC_OKR_LUOT_HOI_Y = Object.keys(THU_TUC_HOI_Y);
 const THU_TUC_SUA_AN_CHU_KY = {
@@ -452,6 +458,7 @@ const TU_PHUC_VU = [
 	"zalo.taoMa",
 	"zalo.go",
 	"zalo.luuUuTien",
+	"zalo.luuDongTroLyOkr",
 	"zalo.guiThu",
 ];
 const KHAI_2XX = [
@@ -1511,6 +1518,7 @@ describe("sang-kien-an", () => {
 				...THU_TUC_OKR_LUOT_CANH_KR,
 				...THU_TUC_OKR_LUOT_GIOI_HAN,
 				...THU_TUC_OKR_LUOT_TRO_LY,
+				...THU_TUC_OKR_LUOT_TOM_TAT,
 				...THU_TUC_OKR_LUOT_UX_8D,
 				...THU_TUC_OKR_LUOT_HOI_Y,
 				...Object.keys(THU_TUC_SUA_AN_CHU_KY),
@@ -2024,6 +2032,17 @@ const THU_TU_DOC_OKR = {
 		K: "vang",
 		khac: 200,
 		chiQuanTri: OKR.thongDiep.canQuyenQuanTri,
+	},
+	"okr.troLyTomTat": {
+		vao: (s) => ({ cycleId: s.ky, departmentId: s.pb }),
+		K: "vang",
+		khac: 200,
+	},
+	"okr.troLyTomTatQuanTri": {
+		vao: cuaKy,
+		K: "vang",
+		khac: 200,
+		chiQuanTri: OKR_XEM.thongDiep.chiQuanTri,
 	},
 	"okr.viecCuaToi": {
 		vao: () => undefined,

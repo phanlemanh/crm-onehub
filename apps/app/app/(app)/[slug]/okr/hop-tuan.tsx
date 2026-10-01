@@ -26,10 +26,12 @@ import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import { useMoDienBien } from "@/components/crm/record-sheet/dien-bien-kr";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { KhoiTomTat } from "./khoi-tom-tat";
 import type { DonChonOkr } from "./okr-search-params";
 import { ThanhTienDo } from "./tien-do-kr";
 import { LoiXem } from "./toan-canh/toan-canh";
@@ -201,15 +203,28 @@ export function HopTuan({
 	useMountEffect(() => {
 		mo.mutate({ cycleId, unit });
 	});
+	const khoi =
+		unit.loai === "pb" ? (
+			<KhoiTomTat cycleId={cycleId} departmentId={unit.id} />
+		) : null;
+	const boc = (than: ReactNode) =>
+		khoi ? (
+			<div className="flex flex-col gap-6">
+				{khoi}
+				{than}
+			</div>
+		) : (
+			than
+		);
 
-	if (ht.isPending) return <DangTai />;
+	if (ht.isPending) return boc(<DangTai />);
 	if (ht.isError)
-		return (
+		return boc(
 			<LoiXem
 				cau={mt.hopTuan.loi}
 				thuLai={() => void ht.refetch()}
 				trangThai="ST-hoptuan-loi"
-			/>
+			/>,
 		);
 	const d = ht.data;
 	const dauMuc = (
@@ -221,7 +236,7 @@ export function HopTuan({
 	);
 
 	if (d.tuanDau)
-		return (
+		return boc(
 			<div className="flex flex-col gap-3" data-trang-thai="ST-hoptuan-tuandau">
 				{dauMuc}
 				<Empty>
@@ -230,11 +245,11 @@ export function HopTuan({
 						<EmptyDescription>{mt.hopTuan.tuanDauMoTa}</EmptyDescription>
 					</EmptyHeader>
 				</Empty>
-			</div>
+			</div>,
 		);
 
 	if (d.dangBan.length === 0)
-		return (
+		return boc(
 			<div className="flex flex-col gap-3" data-trang-thai="ST-hoptuan-yenang">
 				{dauMuc}
 				<Empty>
@@ -244,10 +259,10 @@ export function HopTuan({
 					</EmptyHeader>
 				</Empty>
 				<PhanConLai dong={d.conLai} />
-			</div>
+			</div>,
 		);
 
-	return (
+	return boc(
 		<section
 			aria-labelledby="dang-ban"
 			className="flex flex-col gap-3"
@@ -263,6 +278,6 @@ export function HopTuan({
 			<p className="text-muted-foreground text-xs">{mt.hopTuan.xepTheo}</p>
 			<BangBan dong={d.dangBan} />
 			<PhanConLai dong={d.conLai} />
-		</section>
+		</section>,
 	);
 }

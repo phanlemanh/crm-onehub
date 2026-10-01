@@ -1,3 +1,4 @@
+import { LOAI_VIEC_TOM_TAT_TUAN } from "@crm/db/agent-tasks";
 import {
 	MA_LOAI_DE_XUAT,
 	type MaLoaiDeXuat,
@@ -6,6 +7,7 @@ import {
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
+const NGHIN_TOKEN = 1_000;
 const MO_HINH = "google/gemini-3.8-flash";
 const MO_HINH_JUDGE = "zai/glm-5.2-fast";
 const THE = ["onehub:tro-ly-okr"] as const;
@@ -39,10 +41,12 @@ export const TRO_LY_OKR = {
 		},
 	},
 	cuaSoNguCanh: 1_048_576,
-	tranRaMoiLoiGoi: 2_000,
+	tranRaMoiLoiGoi: 2 * NGHIN_TOKEN,
+	tranRaTomTatMoiLoiGoi: 8 * NGHIN_TOKEN,
+	loaiViecTomTat: LOAI_VIEC_TOM_TAT_TUAN,
 	limits: {
-		maxInputTokensPerSession: 40_000,
-		maxOutputTokensPerSession: 4_000,
+		maxInputTokensPerSession: 40 * NGHIN_TOKEN,
+		maxOutputTokensPerSession: 16 * NGHIN_TOKEN,
 		sessionTimeoutMs: 10 * MINUTE_MS,
 	},
 	tags: THE,
@@ -104,5 +108,7 @@ export const TRO_LY_OKR = {
 		payloadHong: "hong:payload",
 		chuaCoKhoa: "khong-chay:chua-co-khoa-mo-hinh",
 		khongXemDuoc: "khong-chay:khong-xem-duoc",
+		phongLuuTru: "khong-chay:phong-luu-tru",
+		tomTatKhongNop: "khong-lam-duoc:khong-nop",
 	},
 } as const;

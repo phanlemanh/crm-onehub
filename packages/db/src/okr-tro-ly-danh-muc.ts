@@ -1,5 +1,7 @@
 export const MINUTE_MS = 60_000;
-export const NGAY_MS = 24 * 60 * MINUTE_MS;
+export const GIO_MS = 60 * MINUTE_MS;
+export const NGAY_MS = 24 * GIO_MS;
+export const TUAN_MS = 7 * NGAY_MS;
 
 const SECOND_MS = MINUTE_MS / 60;
 
@@ -76,6 +78,32 @@ export const TRO_LY_OKR_TRAN = {
 	diemXuHuongToiThieu: 3,
 	hoanTacNgay: 7,
 } as const;
+
+export const OKR_TOM_TAT = {
+	gioXep: { gio: 6, phut: 0 },
+	cuaSoNgay: 7,
+	tyLeGiuLai: 0.3,
+	hienTrongNgay: 8,
+	hoiLaiMs: 5 * SECOND_MS,
+	tranChoMs: 2 * MINUTE_MS,
+	dongBaoAiToiDa: 2,
+	giaoDichXepMs: MINUTE_MS,
+} as const;
+
+export const TRANG_THAI_QUAN_TRI_TOM_TAT = [
+	"hien",
+	"can-xem",
+	"khong-lam-duoc",
+	"dang-soan",
+	"chua-cap-nhat",
+] as const;
+
+export type TrangThaiQuanTriTomTat =
+	(typeof TRANG_THAI_QUAN_TRI_TOM_TAT)[number];
+
+export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
+
+export type MucTuTin = (typeof MUC_TU_TIN)[number];
 
 export const TRO_LY_OKR_KHOA = {
 	rieng: "OKR_AI_GATEWAY_API_KEY",

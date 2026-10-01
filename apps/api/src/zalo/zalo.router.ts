@@ -17,6 +17,8 @@ import {
 	zaloGuiThuOutput,
 	zaloLuuBotInput,
 	zaloLuuBotOutput,
+	zaloLuuDongTroLyOkrInput,
+	zaloLuuDongTroLyOkrOutput,
 	zaloLuuUuTienInput,
 	zaloLuuUuTienOutput,
 	zaloTaoMaOutput,
@@ -55,6 +57,18 @@ export class ZaloRouter {
 		@Input() input: z.infer<typeof zaloLuuUuTienInput>,
 	) {
 		return this.zalo.luuUuTien(ctx.user.id, input.channel);
+	}
+
+	@Mutation({
+		input: zaloLuuDongTroLyOkrInput,
+		output: zaloLuuDongTroLyOkrOutput,
+		meta: restMeta("PUT", "/zalo/preference/okr-weekly-summary", ["Zalo"]),
+	})
+	luuDongTroLyOkr(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof zaloLuuDongTroLyOkrInput>,
+	) {
+		return this.zalo.luuDongTroLyOkr(ctx.user.id, input.bat);
 	}
 
 	@Mutation({

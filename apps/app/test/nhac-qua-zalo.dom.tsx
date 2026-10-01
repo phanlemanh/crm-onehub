@@ -107,6 +107,8 @@ const GOC: ZaloCuaToi = {
 	slackDuoc: false,
 	kenhSeDung: null,
 	lech: false,
+	dongTroLyOkr: true,
+	laTruongPhong: false,
 };
 
 function cuaToi(thay: Partial<ZaloCuaToi>): unknown {

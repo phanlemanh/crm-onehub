@@ -1,7 +1,7 @@
+import { cuoiTrongTuan, type KrSo } from "@crm/db/okr-hop-tuan";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import type { MucTuTin } from "@crm/validation/okr-cap-nhat";
 import type { KieuKr } from "@crm/validation/okr-kr";
-import { cuoiTrongTuan, type KrSo } from "./hop-tuan";
 
 export type DiemDienBien = {
 	tuan: string;

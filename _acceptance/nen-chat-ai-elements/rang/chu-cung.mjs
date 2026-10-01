@@ -53,6 +53,8 @@ const MIEN_GIA_TRI = {
 			icon: "cỡ Button — ô vuông vừa đúng một icon",
 			"icon-sm": "cỡ Button — ô vuông nhỏ",
 			sm: "cỡ Button — nút nhỏ của hàng hành động Confirmation",
+			secondary: "biến thể Badge — chip xám của nút trích dẫn trong InlineCitation",
+			panel: "cỡ PopoverContent — khung không đệm của thẻ trích dẫn InlineCitation",
 		},
 	},
 	"enum-may": {
@@ -63,6 +65,8 @@ const MIEN_GIA_TRI = {
 			log: "giá trị vai trò ARIA role=log",
 			horizontal: "hướng của ButtonGroup",
 			smooth: "giá trị prop initial và resize của StickToBottom",
+			mouse: "giá trị PointerEvent.pointerType — chỉ chuột mới mở thẻ trích dẫn theo đường di chuột, chạm thì không",
+			select: "tên sự kiện của Embla mà InlineCitationCarouselIndex đăng ký để đếm nguồn",
 		},
 	},
 	"ten-the": {

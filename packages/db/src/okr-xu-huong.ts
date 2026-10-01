@@ -5,6 +5,7 @@ import {
 	motTrong,
 	NGAY_MS,
 	TRO_LY_OKR_TRAN,
+	TUAN_MS,
 } from "./okr-tro-ly-danh-muc";
 
 type DbHoacTx = Db | Prisma.TransactionClient;
@@ -29,8 +30,6 @@ export type DiemCuaKr = {
 	ketThucKy: Date;
 	kieu: KieuKr;
 };
-
-const TUAN_MS = 7 * NGAY_MS;
 
 const TRAM = 100;
 

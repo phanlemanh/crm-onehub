@@ -2368,6 +2368,8 @@ const MIEN_GHI = {
 	khoiPhucMau: "mẫu OKR không thuộc chu kỳ nào",
 	moCapNhat:
 		"chỉ mở phiên cập nhật của người gọi — phiên không trỏ tới chu kỳ hay KR; KR được ghi ở guiCapNhat, có dòng riêng",
+	troLyTomTatPhanHoi:
+		"chỉ nhận tomTatId và ghi một hàng OkrTomTatPhanHoi của chính người gọi — không phải bản ghi OKR (ngoài luật vết), không đổi Mục tiêu, KR hay Cập nhật của chu kỳ nào; docTomTatChoNguoiXem không xét chu kỳ ẩn, nên bản của chu kỳ ẩn vẫn nhận phản hồi",
 	transferWork:
 		"không nhận id chu kỳ, mục tiêu hay KR; chỉ đổi người trên các bản ghi dieuKienChuyen tự tìm, đã lọc KY_CON_HIEN — ca chuyen-viec giữ KR của X",
 	suaChuKy: "thủ tục của chính chu kỳ, luật chu kỳ ẩn ở bài sua-moi-o, sua-ten",

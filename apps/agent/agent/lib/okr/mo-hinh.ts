@@ -28,28 +28,47 @@ export function tronTuyChon(cu: ProviderOptions | undefined): ProviderOptions {
 	);
 }
 
-export const kepTranRaMoiLoiGoi: LanguageModelMiddleware = {
-	transformParams: async ({ params }) => ({
-		...params,
-		maxOutputTokens: Math.min(
-			params.maxOutputTokens ?? TRO_LY_OKR.tranRaMoiLoiGoi,
-			TRO_LY_OKR.tranRaMoiLoiGoi,
-		),
-		providerOptions: tronTuyChon(params.providerOptions),
-	}),
-};
+export function dungKepTran(tran: number): LanguageModelMiddleware {
+	return {
+		transformParams: async ({ params }) => ({
+			...params,
+			maxOutputTokens: Math.min(params.maxOutputTokens ?? tran, tran),
+			providerOptions: tronTuyChon(params.providerOptions),
+		}),
+	};
+}
 
-export function moHinhTroLyOkr(
-	env: Readonly<Record<string, string | undefined>> = process.env,
-	tao: typeof createGateway = createGateway,
-): LanguageModel {
-	const khoa = env[TRO_LY_OKR.khoa.rieng]?.trim();
-	const nha = khoa ? tao({ apiKey: khoa }) : tao();
+export type MoHinhSong = Exclude<LanguageModel, string>;
+
+export function dungMoHinh(
+	kep: LanguageModelMiddleware,
+	goc: MoHinhSong,
+): MoHinhSong {
 	return wrapLanguageModel({
-		model: nha(TRO_LY_OKR.model),
-		middleware: kepTranRaMoiLoiGoi,
+		model: goc,
+		middleware: kep,
 		modelId: TRO_LY_OKR.model,
 	});
 }
 
-export const MO_HINH_TRO_LY_OKR: LanguageModel = moHinhTroLyOkr();
+export const kepTranRaMoiLoiGoi = dungKepTran(TRO_LY_OKR.tranRaMoiLoiGoi);
+
+export const kepTranTomTat = dungKepTran(TRO_LY_OKR.tranRaTomTatMoiLoiGoi);
+
+export function moHinhTroLyOkr(
+	env: Readonly<Record<string, string | undefined>> = process.env,
+	tao: typeof createGateway = createGateway,
+	kep: LanguageModelMiddleware = kepTranRaMoiLoiGoi,
+): MoHinhSong {
+	const khoa = env[TRO_LY_OKR.khoa.rieng]?.trim();
+	const nha = khoa ? tao({ apiKey: khoa }) : tao();
+	return dungMoHinh(kep, nha(TRO_LY_OKR.model));
+}
+
+export const MO_HINH_TRO_LY_OKR: MoHinhSong = moHinhTroLyOkr();
+
+export const MO_HINH_TOM_TAT: MoHinhSong = moHinhTroLyOkr(
+	process.env,
+	createGateway,
+	kepTranTomTat,
+);

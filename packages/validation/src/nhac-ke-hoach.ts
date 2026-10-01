@@ -48,6 +48,15 @@ export const mucNhac = z.union([
 			muc: z.union([z.literal(80), z.literal(100)]),
 		})
 		.strict(),
+	z
+		.object({
+			loai: z.literal("okr-tom-tat"),
+			tomTatId: ma,
+			departmentId: ma,
+			cycleId: ma,
+			soKrDangBan: z.number().int().nonnegative(),
+		})
+		.strict(),
 	z.object({ loai: z.literal("ai-doi-soat-lech"), thang: thangMa }).strict(),
 	z
 		.object({
