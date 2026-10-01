@@ -108,3 +108,60 @@ wall: 585s
 - **claude-sonnet-5-5**: 27 agent · 106 calls · out 42,528 · in 212 · cache_read 7,942,488 · cache_create 1,714,689
 - **claude-opus-5-5**: 3 agent · 50 calls · out 4,716 · in 100 · cache_read 5,240,054 · cache_create 307,455
 
+### S4 round 3 — wf_7ba92bc3-cd3 (35 agent, 117,859 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| baseline:diffBase | claude-sonnet-5-5 | 20 | 17,115 | 40 | 1,972,162 | 220 |
+| ui:E9 | claude-sonnet-5-5 | 21 | 16,752 | 42 | 2,349,269 | 332 |
+| synthesize:report | claude-sonnet-5-5 | 3 | 14,466 | 6 | 243,251 | 93 |
+| review:bugs | claude-opus-5-5 | 29 | 13,546 | 58 | 3,681,351 | 154 |
+| review:measurement | claude-opus-5-5 | 13 | 12,032 | 26 | 1,502,026 | 122 |
+| review:conventions | claude-opus-5-5 | 17 | 8,818 | 34 | 2,021,516 | 97 |
+| judge:E20:operational-feasibility | claude-sonnet-5-5 | 6 | 5,081 | 12 | 628,021 | 40 |
+| judge:E20:domain-correctness | claude-sonnet-5-5 | 5 | 5,026 | 10 | 449,545 | 39 |
+| judge:E20:spec-alignment | claude-sonnet-5-5 | 6 | 3,894 | 12 | 633,802 | 32 |
+| triage | claude-sonnet-5-5 | 2 | 2,772 | 4 | 88,785 | 22 |
+| machine:bun _acceptance/tro-ly-okr-tom-tat/rang/ | claude-sonnet-5-5 | 2 | 2,345 | 4 | 114,258 | 187 |
+| machine:for t in "apps/app/app/(app)/[slug]/okr/ | claude-sonnet-5-5 | 4 | 2,115 | 8 | 296,410 | 16 |
+| machine:bunx turbo run lint --force | claude-sonnet-5-5 | 2 | 1,172 | 4 | 114,208 | 8 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 832 | 4 | 114,248 | 12 |
+| machine:bun run test | claude-sonnet-5-5 | 2 | 819 | 4 | 30,041 | 483 |
+| machine:bunx turbo run build --force | claude-sonnet-5-5 | 2 | 790 | 4 | 114,206 | 28 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 724 | 4 | 114,274 | 16 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 672 | 4 | 114,294 | 12 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 667 | 4 | 114,293 | 16 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 659 | 4 | 114,276 | 16 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-sonnet-5-5 | 2 | 653 | 4 | 114,271 | 8 |
+| capture:provenance | claude-sonnet-5-5 | 3 | 645 | 6 | 172,779 | 8 |
+| machine:cd apps/agent && CRM_TELEMETRY_DISABLED= | claude-sonnet-5-5 | 2 | 606 | 4 | 114,273 | 5 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 596 | 4 | 114,324 | 11 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 593 | 4 | 114,299 | 11 |
+| machine:cd apps/agent && CRM_TELEMETRY_DISABLED= | claude-sonnet-5-5 | 2 | 582 | 4 | 114,265 | 7 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 536 | 4 | 114,246 | 15 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 497 | 4 | 114,253 | 9 |
+| machine:cd packages/db && bun test test/okr-hop- | claude-sonnet-5-5 | 2 | 486 | 4 | 114,231 | 5 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 484 | 4 | 114,250 | 15 |
+| machine:cd packages/validation && bun test test/ | claude-sonnet-5-5 | 2 | 462 | 4 | 114,230 | 4 |
+| machine:bun run lint:slop | claude-sonnet-5-5 | 2 | 441 | 4 | 114,202 | 6 |
+| machine:node _acceptance/tro-ly-okr-tom-tat/rang | claude-sonnet-5-5 | 2 | 426 | 4 | 114,245 | 6 |
+| machine:bun run test -- "cd apps/api && bun test | claude-sonnet-5-5 | 2 | 345 | 4 | 114,350 | 57 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-sonnet-5-5 | 2 | 210 | 4 | 114,291 | 10 |
+
+
+wall: 647s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 17,115 | 1,972,162 | 220 | 01:29:12 | 01:32:52 |
+| machine | 24 | 17,712 | 2,840,238 | 525 | 01:29:12 | 01:37:57 |
+| ui | 1 | 16,752 | 2,349,269 | 332 | 01:29:30 | 01:35:02 |
+| judge | 3 | 14,001 | 1,711,368 | 43 | 01:29:31 | 01:30:15 |
+| review | 3 | 34,396 | 7,204,893 | 155 | 01:29:36 | 01:32:11 |
+| triage | 1 | 2,772 | 88,785 | 22 | 01:37:57 | 01:38:19 |
+| capture | 1 | 645 | 172,779 | 8 | 01:38:19 | 01:38:26 |
+| synthesize | 1 | 14,466 | 243,251 | 93 | 01:38:26 | 01:39:59 |
+
+- **claude-sonnet-5-5**: 32 agent · 116 calls · out 83,463 · in 232 · cache_read 9,377,852 · cache_create 2,528,437
+- **claude-opus-5-5**: 3 agent · 59 calls · out 34,396 · in 118 · cache_read 7,204,893 · cache_create 376,410
+
