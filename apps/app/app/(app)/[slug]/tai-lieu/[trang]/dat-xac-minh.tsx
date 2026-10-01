@@ -87,6 +87,15 @@ export function DatXacMinh({
 					{loi ? <FieldError>{loi}</FieldError> : null}
 				</Field>
 				<DialogFooter>
+					{den ? (
+						<Button
+							disabled={luu.isPending}
+							onClick={() => luu.mutate({ slug, den: null })}
+							variant="ghost"
+						>
+							{m.goHan}
+						</Button>
+					) : null}
 					<DialogClose asChild>
 						<Button disabled={luu.isPending} variant="outline">
 							{m.huy}

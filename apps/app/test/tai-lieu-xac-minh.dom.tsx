@@ -216,6 +216,23 @@ describe("tlk-man-xac-minh", () => {
 		expect(canh.lamMoi).toBe(1);
 	});
 
+	test("tlk-man-xac-minh: o 6 go han: mutation goi den null, hop dong, trang lam moi", async () => {
+		const goc = await mo(trangVoi(TUONG_LAI));
+		await bam(nut(goc, "Đặt hạn xác minh"));
+		const go = nut(document.body, "Gỡ hạn");
+		if (!go) throw new Error("tlk-man-xac-minh: o 6 khong co nut go han");
+		await bam(go);
+		expect(canh.goi).toEqual([{ slug: SLUG, den: null }]);
+		expect(document.body.querySelector("[role=dialog]")).toBeNull();
+		expect(canh.lamMoi).toBe(1);
+	});
+
+	test("tlk-man-xac-minh: o 7 chua co han thi khong co nut go han", async () => {
+		const goc = await mo(trangVoi({ den: null, quaHan: false, coQuyen: true }));
+		await bam(nut(goc, "Đặt hạn xác minh"));
+		expect(nut(document.body, "Gỡ hạn")).toBeUndefined();
+	});
+
 	test("tlk-man-xac-minh: o 5 mutation loi: hien loi, hop van mo", async () => {
 		canh.loi = Object.assign(
 			new Error("Không có quyền đặt hạn xác minh trang này."),
