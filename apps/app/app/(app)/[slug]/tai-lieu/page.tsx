@@ -1,3 +1,4 @@
+import { laVaiChiOkr, toWorkspaceRole } from "@crm/validation/vai-workspace";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShell } from "@/components/page-shell";
@@ -45,11 +46,12 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 	const page = Math.max(1, thamSo[SEARCH_PARAM.list.page]);
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
-	const [trangThai, chonNguoi] = await Promise.all([
+	const [trangThai, chonNguoi, workspace] = await Promise.all([
 		queryClient
 			.fetchQuery(trpc.taiLieuNguon.trangThai.queryOptions())
 			.catch(() => null),
 		chuTrangVaDonVi(session.user),
+		queryClient.fetchQuery(trpc.workspace.get.queryOptions()).catch(() => null),
 		queryClient.prefetchQuery(
 			trpc.taiLieu.list.queryOptions({
 				loai: loai ?? undefined,
@@ -74,6 +76,8 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 			? queryClient.prefetchQuery(trpc.taiLieuNguon.list.queryOptions())
 			: null,
 	]);
+	const vai = workspace?.viewerRole;
+	const coHoi = vai ? !laVaiChiOkr(toWorkspaceRole(vai)) : false;
 	const luaChon: LuaChonTai = {
 		toiId: session.user.id,
 		...chonNguoi,
@@ -84,6 +88,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 		<HydrateClient>
 			<DanhSach
 				chu={chu}
+				coHoi={coHoi}
 				donVi={donVi}
 				loai={loai}
 				luaChon={luaChon}

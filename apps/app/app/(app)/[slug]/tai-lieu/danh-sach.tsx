@@ -25,6 +25,7 @@ import { BangNguon } from "./bang-nguon";
 import { ChoDuyet } from "./cho-duyet";
 import { BO_LOC_TRONG, type Loc, moTimNhanh, thamSo } from "./danh-sach-loc";
 import { DanhSachTrang } from "./danh-sach-trang";
+import { HoiKho } from "./hoi";
 import { type LuaChonTai, NutTaiNguon } from "./hop-tai-nguon";
 import { SucKhoe } from "./suc-khoe";
 
@@ -36,8 +37,12 @@ export function DanhSach({
 	nhom = "cho",
 	page,
 	luaChon,
+	coHoi = false,
 }: Pick<Loc, "tab" | "loai" | "page"> &
-	Partial<Pick<Loc, "donVi" | "chu" | "nhom">> & { luaChon: LuaChonTai }) {
+	Partial<Pick<Loc, "donVi" | "chu" | "nhom">> & {
+		luaChon: LuaChonTai;
+		coHoi?: boolean;
+	}) {
 	const locale = useLocale();
 	const m = taiLieuMessages(locale);
 	const trpc = useTRPC();
@@ -121,6 +126,17 @@ export function DanhSach({
 							{m.tab.sucKhoe}
 						</Link>
 					</TabsTrigger>
+					{coHoi ? (
+						<TabsTrigger asChild value="hoi">
+							<Link
+								aria-current={tab === "hoi" ? "page" : undefined}
+								data-tab-hoi=""
+								href={toi({ ...BO_LOC_TRONG, tab: "hoi" })}
+							>
+								{m.tab.hoi}
+							</Link>
+						</TabsTrigger>
+					) : null}
 				</TabsList>
 			</Tabs>
 			<PageShellContent>
@@ -130,6 +146,8 @@ export function DanhSach({
 					<SucKhoe />
 				) : tab === "nguon" ? (
 					<BangNguon />
+				) : tab === "hoi" && coHoi ? (
+					<HoiKho />
 				) : (
 					<DanhSachTrang
 						chu={chu}

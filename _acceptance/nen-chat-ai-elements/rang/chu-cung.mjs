@@ -53,6 +53,9 @@ const MIEN_GIA_TRI = {
 			icon: "cỡ Button — ô vuông vừa đúng một icon",
 			"icon-sm": "cỡ Button — ô vuông nhỏ",
 			sm: "cỡ Button — nút nhỏ của hàng hành động Confirmation",
+			default:
+				"biến thể Button mặc định của PromptInputSubmit — nút tô primary",
+			secondary: "biến thể Badge của InlineCitationCardTrigger",
 		},
 	},
 	"enum-may": {
@@ -63,6 +66,23 @@ const MIEN_GIA_TRI = {
 			log: "giá trị vai trò ARIA role=log",
 			horizontal: "hướng của ButtonGroup",
 			smooth: "giá trị prop initial và resize của StickToBottom",
+			submit: "giá trị thuộc tính type của nút gửi trong PromptInput",
+			start: "giá trị prop align của DropdownMenuContent và HoverCardContent",
+			top: "giá trị prop side mặc định của tooltip PromptInputButton",
+			"block-end":
+				"giá trị prop align của InputGroupAddon trong PromptInputHeader và PromptInputFooter",
+			dragover: "tên sự kiện DOM đem đi addEventListener cho thả tệp",
+			drop: "tên sự kiện DOM đem đi addEventListener cho thả tệp",
+			select: "tên sự kiện của Embla carousel trong InlineCitationCarousel",
+			Enter:
+				"giá trị KeyboardEvent.key đem đi so sánh trong PromptInputTextarea",
+			Backspace:
+				"giá trị KeyboardEvent.key đem đi so sánh trong PromptInputTextarea",
+			submitted:
+				"giá trị ChatStatus của AI SDK, PromptInputSubmit đem đi so sánh",
+			streaming:
+				"giá trị ChatStatus của AI SDK, PromptInputSubmit đem đi so sánh",
+			error: "giá trị ChatStatus của AI SDK, PromptInputSubmit đem đi so sánh",
 		},
 	},
 	"ten-the": {
@@ -71,6 +91,10 @@ const MIEN_GIA_TRI = {
 		muc: {
 			p: "thẻ mặc định của Shimmer khi không ai truyền as",
 			a: "thẻ dựng tạm để kích hoạt tải tệp rồi gỡ ngay",
+			video:
+				"thẻ dựng tạm trong captureScreenshot để đọc khung hình, không gắn vào cây",
+			canvas:
+				"thẻ dựng tạm trong captureScreenshot để vẽ khung hình, không gắn vào cây",
 		},
 	},
 	"khoa-ky-thuat": {
@@ -83,14 +107,51 @@ const MIEN_GIA_TRI = {
 			file: "nhãn nội bộ phân loại tệp đính kèm",
 			"image/": "tiền tố MIME đem đi startsWith",
 			"text/markdown": "MIME của blob hội thoại tải về",
-			"input-streaming": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
-			"input-available": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
-			"approval-requested": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
-			"approval-responded": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
-			"output-denied": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
-			"output-available": "trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"input-streaming":
+				"trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"input-available":
+				"trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"approval-requested":
+				"trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"approval-responded":
+				"trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"output-denied":
+				"trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			"output-available":
+				"trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
 			"conversation.md":
 				"tên tệp máy đọc của bản tải về. Nó CÓ thể hiện ở thanh tải của trình duyệt; miễn ở đây là quyết định có ý thức vì nó là định danh tập tin kèm đuôi, không phải câu trên màn.",
+			message:
+				"tên trường của textarea trong form PromptInput, đọc lại bằng FormData.get",
+			number: "kết quả toán tử typeof đem đi so sánh",
+			string: "kết quả toán tử typeof đem đi so sánh",
+			undefined: "kết quả toán tử typeof đem đi so sánh",
+			Files: "giá trị DataTransfer.types báo có tệp đang được kéo",
+			accept: "mã lỗi máy đọc truyền cho onError của PromptInput",
+			max_file_size: "mã lỗi máy đọc truyền cho onError của PromptInput",
+			max_files: "mã lỗi máy đọc truyền cho onError của PromptInput",
+			"blob:": "tiền tố URL đem đi startsWith",
+			NotAllowedError:
+				"tên DOMException đem đi so sánh khi người dùng từ chối chia sẻ màn hình",
+			AbortError:
+				"tên DOMException đem đi so sánh khi người dùng huỷ chia sẻ màn hình",
+			"2d": "tên ngữ cảnh vẽ của canvas.getContext",
+			"image/png": "MIME của ảnh chụp màn hình",
+			T: "ký tự ngăn ngày giờ của ISO 8601 đem đi replace khi đặt tên tệp chụp",
+			Z: "ký tự múi giờ của ISO 8601 đem đi replace khi đặt tên tệp chụp",
+			'button[type="submit"]':
+				"bộ chọn CSS đem đi querySelector để tìm nút gửi",
+			"screenshot-":
+				"tiền tố tên tệp của ảnh chụp màn hình. Nó CÓ thể hiện ở chip đính kèm; miễn là quyết định có ý thức cùng lớp với conversation.md — định danh tập tin, không phải câu trên màn.",
+			".png": "đuôi tên tệp của ảnh chụp màn hình",
+		},
+	},
+	"loi-khong-len-man": {
+		vi_sao:
+			"Thông điệp của một Error do hàm nội bộ reject. Lời gọi duy nhất ném lại nó trong trình xử lý sự kiện, không nhánh render nào đọc message của nó.",
+		muc: {
+			"Failed to load screen stream":
+				"captureScreenshot reject khi thẻ video không nạp được luồng màn hình; PromptInputActionAddScreenshot ném lại",
 		},
 	},
 	"gia-tri-css": {
@@ -165,7 +226,12 @@ function tenThuocTinh(a) {
 function thuocTinhBao(n) {
 	const cha = n.parent;
 	if (cha && ts.isJsxAttribute(cha)) return tenThuocTinh(cha);
-	if (cha && ts.isJsxExpression(cha) && cha.parent && ts.isJsxAttribute(cha.parent)) {
+	if (
+		cha &&
+		ts.isJsxExpression(cha) &&
+		cha.parent &&
+		ts.isJsxAttribute(cha.parent)
+	) {
 		return tenThuocTinh(cha.parent);
 	}
 	return null;

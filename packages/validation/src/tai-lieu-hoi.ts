@@ -226,7 +226,7 @@ function dien(mau: string, gia: Record<string, string>): string {
 	return mau.replace(/\{(\w+)\}/g, (_, k: string) => gia[k] ?? "");
 }
 
-function dongQuaHan(
+export function dongQuaHan(
 	t: TraLoiDaKiem,
 	fmtNgay: (iso: string) => string,
 ): string[] {

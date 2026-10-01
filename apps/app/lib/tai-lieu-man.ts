@@ -9,6 +9,7 @@ export const TAB_TAI_LIEU = [
 	"cho-duyet",
 	"nguon",
 	"suc-khoe",
+	"hoi",
 ] as const;
 export type TabTaiLieu = (typeof TAB_TAI_LIEU)[number];
 
@@ -29,6 +30,7 @@ export const TAI_LIEU_MAN = {
 		neo: "nguon-",
 		lamMoiMs: 5 * GIAY_MS,
 	},
+	hoi: { thamDoMs: 2 * GIAY_MS },
 } as const;
 
 export function duongDanhSach(): string {

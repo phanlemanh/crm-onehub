@@ -178,6 +178,20 @@ const en = {
 		anDanhSach: "Hide the list",
 		cuonThem: "Scroll the list to see the rest",
 	},
+	promptInput: {
+		themTep: "Add photos or files",
+		chupManHinh: "Take screenshot",
+		taiTepLen: "Upload files",
+		goiY: "What would you like to know?",
+		dung: "Stop",
+		gui: "Submit",
+		tepSaiKieu: "No files match the accepted types.",
+		tepQuaCo: "All files exceed the maximum size.",
+		quaNhieuTep: "Too many files. Some were not added.",
+	},
+	inlineCitation: {
+		khongRoNguon: "unknown",
+	},
 };
 
 export type Messages = typeof en;
@@ -358,6 +372,20 @@ const vi = {
 		hienDanhSach: "Xem danh sách",
 		anDanhSach: "Ẩn danh sách",
 		cuonThem: "Cuộn danh sách để xem phần còn lại",
+	},
+	promptInput: {
+		themTep: "Thêm ảnh hoặc tệp",
+		chupManHinh: "Chụp màn hình",
+		taiTepLen: "Tải tệp lên",
+		goiY: "Bạn muốn biết điều gì?",
+		dung: "Dừng",
+		gui: "Gửi",
+		tepSaiKieu: "Không tệp nào đúng loại được nhận.",
+		tepQuaCo: "Mọi tệp đều vượt cỡ tối đa.",
+		quaNhieuTep: "Quá nhiều tệp. Một số tệp chưa được thêm.",
+	},
+	inlineCitation: {
+		khongRoNguon: "không rõ nguồn",
 	},
 } satisfies Messages;
 

@@ -56,7 +56,7 @@ Mỗi mục dưới đây tách hai thứ hoàn toàn khác nhau:
 
 Gộp hai loại vào một dòng là cách nhanh nhất để lần sau chép nhầm.
 
-## Bốn tệp
+## Các tệp
 
 ### conversation.tsx
 
@@ -249,6 +249,72 @@ làm, nhưng nó vẫn phải đi qua đúng nghi thức ở cuối sổ, vì `r
 đổi cỡ và khoảng cách của một component `@crm/ui` tại chỗ gọi; cỡ nhỏ đã có sẵn
 thành biến thể `sm` của `Button`. Tệp không có chữ hiện trên màn: các chuỗi còn
 lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-cung.mjs`.
+
+### prompt-input.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/prompt-input.tsx`
+
+**Số dòng khác:** 118
+
+**Vân tay lệch:** `290614e826061141`
+
+**Đổi gì:** Kéo bằng CLI ngày 01/10 ở lượt `tro-ly-doc-kho`, trong sân tạm có
+`components.json` của kho, cùng lượt với `inline-citation` và `suggestion`; chỉ
+chép ba tệp này vào cây. CLI còn đòi gói `nanoid`, gói này đã khai tay vào
+`packages/ui/package.json` (`^6.0.1`, cùng bản đã có trong `bun.lock`); gói `cn`
+nó đòi thì không cài. Toàn bộ 118 dòng khác là bản vá của kho:
+
+- Bỏ 65 dòng chú thích `//` và hai khối `/** … */` của thượng nguồn, kể cả các
+  dòng `oxlint-disable` (thư mục này nằm ngoài `oxlint` và `biome`).
+- Chín chuỗi tiếng Anh về `useMessages()`, khối `promptInput` của
+  `packages/ui/src/lib/messages.ts`: hai nhãn mặc định của mục menu thêm tệp và
+  chụp màn hình (tham số `label`), `aria-label` và `title` của ô chọn tệp ẩn, chữ
+  gợi ý mặc định của `PromptInputTextarea` (tham số `placeholder`), `aria-label`
+  «Stop»/«Submit» của `PromptInputSubmit`, ba thông điệp lỗi truyền cho `onError`.
+  Tham số mặc định đổi thành `label ?? msg…` / `placeholder ?? msg…` ngay chỗ dùng.
+- Hai mảng phụ thuộc của `useCallback` thêm `msg`.
+
+**Vì sao:** `AGENTS.md` cấm chú thích trong mã. Chữ hiện cho người dùng phải qua
+bảng chuỗi (`docs/chat-ui.md`, mục lệch). Các chuỗi máy còn lại — mã lỗi
+`accept`/`max_files`/`max_file_size`, tên sự kiện, `typeof`, MIME, tên phím, bộ
+chọn CSS, thông điệp reject nội bộ của `captureScreenshot` — đã khai miễn từng mục
+trong `chu-cung.mjs`, có lý do.
+
+### inline-citation.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/inline-citation.tsx`
+
+**Số dòng khác:** 18
+
+**Vân tay lệch:** `554b68e8d83903ea`
+
+**Đổi gì:** Kéo cùng lượt với `prompt-input` (01/10). Toàn bộ 18 dòng khác là bản
+vá của kho:
+
+- `InlineCitationCardTrigger` thành thân khối để gọi `useMessages()`; chữ dự phòng
+  «unknown» khi không có nguồn về `inlineCitation.khongRoNguon`.
+- `aria-label` «Previous»/«Next» của hai nút carousel về `carousel.previousSlide`
+  và `carousel.nextSlide` đã có sẵn trong bảng chuỗi.
+- `Badge` của trigger bỏ `rounded-full`, dùng bán kính của chính `Badge`.
+
+**Vì sao:** Chữ hiện cho người dùng phải qua bảng chuỗi. Bán kính chỉ từ thang của
+`docs/design.md`; `rounded-full` không nằm trong thang. Lượt này chỉ dùng
+`InlineCitationSource` và `InlineCitationQuote` (trích dẫn mở sẵn dưới từng ý);
+phần thẻ nổi và carousel vẫn được vá để tệp sạch cả khi một màn sau dùng tới.
+
+### suggestion.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/suggestion.tsx`
+
+**Số dòng khác:** 2
+
+**Vân tay lệch:** `e460d49635371257`
+
+**Đổi gì:** Kéo cùng lượt với `prompt-input` (01/10). Hai dòng khác là một bản vá:
+`Suggestion` bỏ `rounded-full` trong lớp của `Button`, để nút dùng `rounded-md`
+của chính `Button`.
+
+**Vì sao:** Bán kính chỉ từ thang của `docs/design.md`; nút là `rounded-md`.
 
 ## Ca đã trả giá: `conversation.tsx`, 06/09 và 09/09
 
