@@ -251,6 +251,9 @@ describe("tlk-man-hoi", () => {
 		expect(goc.textContent).toContain(
 			"Hỏi về quy định, chính sách, quy trình hay biểu mẫu của OneHub.",
 		);
+		expect(goc.textContent).toContain(
+			"Trợ lý AI chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
+		);
 		expect(goc.querySelectorAll("[data-goi-y] button")).toHaveLength(3);
 		expect(oNhap(goc).disabled).toBe(false);
 	});
@@ -290,6 +293,9 @@ describe("tlk-man-hoi", () => {
 			expect(khoi?.textContent).toContain(`«${t.doan}»`);
 		});
 		expect(y[0]?.textContent).toContain("05/09/2026");
+		expect(goc.querySelector("[data-nhan-tra-loi]")?.textContent).toBe(
+			"Trợ lý AI · theo bản đang dùng",
+		);
 		expect(goc.querySelector("[aria-live=polite]")?.textContent).toContain(
 			TRA_LOI.traLoi.cau[0]?.chu ?? "x",
 		);

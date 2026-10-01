@@ -98,7 +98,9 @@ function NoiDungHoi() {
 		<div className="flex flex-col gap-4" data-hoi-kho="">
 			{luot.length === 0 ? (
 				<div className="flex flex-col gap-3">
-					<p className="text-muted-foreground text-sm">{m.moDau}</p>
+					<p className="text-muted-foreground text-sm">
+						{m.moDau} {m.gioiThieu}
+					</p>
 					<Suggestions data-goi-y="">
 						{m.goiY.map((cau) => (
 							<Suggestion

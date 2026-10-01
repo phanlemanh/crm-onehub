@@ -341,6 +341,9 @@ const en = {
 	hoi: {
 		nhan: "Ask the documents",
 		moDau: "Ask about OneHub's rules, policies, processes or forms.",
+		gioiThieu:
+			"The AI assistant answers only from the version in use of approved pages.",
+		nhanTraLoi: "AI assistant · from the version in use",
 		goiY: [
 			"Do staff on probation earn commission?",
 			"How do I request annual leave?",
@@ -700,6 +703,8 @@ const vi: TaiLieuMessages = {
 	hoi: {
 		nhan: "Hỏi kho tài liệu",
 		moDau: "Hỏi về quy định, chính sách, quy trình hay biểu mẫu của OneHub.",
+		gioiThieu: "Trợ lý AI chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
+		nhanTraLoi: "Trợ lý AI · theo bản đang dùng",
 		goiY: [
 			"Thử việc có được hưởng hoa hồng không?",
 			"Xin nghỉ phép năm thế nào?",

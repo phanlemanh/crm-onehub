@@ -112,6 +112,9 @@ function TraLoi({
 
 	return (
 		<MessageContent>
+			<p className="text-muted-foreground text-xs" data-nhan-tra-loi="">
+				{m.hoi.nhanTraLoi}
+			</p>
 			{quaHan.length > 0 ? (
 				<Alert data-qua-han="" variant="warning">
 					{quaHan.map((dong) => (
