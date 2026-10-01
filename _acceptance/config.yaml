@@ -4,11 +4,7 @@ gap_probe: advisory
 recheck: strict
 feature_loop:
   ui_standards_skill: web-design-guidelines
-  suite_keys:
-    - executors.test.api
-    - executors.script.lint_khong_cache
-    - executors.script.lint_slop
-    - executors.script.build_khong_cache
+  suite_keys: [executors.test.suite_api, executors.test.suite_app_ui, executors.test.suite_agent_db, executors.test.suite_okr_goi, executors.script.lint_khong_cache, executors.script.lint_slop, executors.script.build_khong_cache]
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
@@ -1050,6 +1046,10 @@ executors:
     kto_gui_dung: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-tao-okr.dom.tsx -t gui-dung'
     kto_bai_cu: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-gop-y.dom.tsx ./test/the-gop-y-okr.dom.tsx ./test/okr-sheet.dom.tsx ./test/okr-canh-kr.dom.tsx'
     kto_ngan_ui: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/sheet-khung.dom.tsx'
+    suite_api: 'bun run test -- --filter=api'
+    suite_app_ui: 'bun run test -- --filter=app --filter=@crm/ui'
+    suite_agent_db: 'bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db'
+    suite_okr_goi: 'bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation'
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
