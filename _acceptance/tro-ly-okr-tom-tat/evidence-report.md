@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8fa89fe50f884a461be5514e055bb16b55311eca
+verified_commit: 858f1967383b3bd27de9be8c90ce53db7f3a32c3
 human_signoff: Manh Phan 2026-10-01
 ---
 
@@ -292,3 +292,7 @@ Round 4: sửa danh sách chỗ rẽ, thước E9 cuộn tới phần tử trư�
 ### Re-pin lần 1 — 2026-10-01, do PR 226: vòng 9c chạm mã trong vùng của hồ sơ; sửa bài bảng quản trị đếm phòng bộ mẫu
 run_id: repin-20261001T035438Z-57515
 sha: 8fa89fe50f884a461be5514e055bb16b55311eca · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20
+
+### Re-pin lần 2 — 2026-10-01, do PR 226: gộp onehub sau #225 chạm mã trong vùng của hồ sơ
+run_id: repin-20261001T071828Z-69614
+sha: 858f1967383b3bd27de9be8c90ce53db7f3a32c3 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9, E20 — chưa chứng lại, đi vòng S4 delta
