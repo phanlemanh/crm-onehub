@@ -9,6 +9,10 @@ because its audit is still accurate, not as a plan to execute.
 Until that migration lands the tree is mixed, so this file describes the target,
 and every change to a chat surface moves toward it — never away.
 
+The AI is named **Kara** on every screen, and the rules for anything Kara says,
+proposes or writes outside the conversation — name, mark, approval levels, undo,
+states — live in `docs/ai-ux.md`. Read it with this file.
+
 This extends `docs/design.md`. Everything there still holds: the radius scale,
 the two filled colours, and no overriding component styles with `className`.
 
