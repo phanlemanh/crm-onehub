@@ -103,4 +103,35 @@ describe("lời dặn tĩnh sau lần chạy 6", () => {
 		expect(luat).toContain("unless the person has already dropped it");
 		expect(luat).toContain("in this unit's own words");
 	});
+
+	test("luật judge và tiêu chí khởi điểm liệt kê đúng nguồn khởi điểm của lời dặn, cấm số đích", () => {
+		const DG = TRO_LY_OKR_SOAN.danhGia;
+		const NGUON = [
+			"lời người",
+			"số chốt kỳ trước",
+			"số CRM",
+			"số hiện tại của KR cấp trên cùng chỉ số",
+			"hồ sơ công ty hay trang chiến lược",
+		];
+		const tieuChiKhoiDiem = DG.boiCanh.tieuChi[1];
+		for (const chu of [DG.luatJudge, tieuChiKhoiDiem]) {
+			let truoc = -1;
+			for (const nguon of NGUON) {
+				const o = chu.indexOf(nguon);
+				expect(o, `thieu nguon khoi diem: ${nguon}`).toBeGreaterThan(truoc);
+				truoc = o;
+			}
+			expect(chu).toContain("không bao giờ là một số đích");
+			expect(chu).toContain("đúng chỉ số đó");
+		}
+		const kd = gach(muc("What to do"), "- `khoiDiemGoiY`");
+		for (const nguon of [
+			"person's own messages",
+			"part `3`",
+			"part `4`",
+			"`hienTai`",
+			"strategy page",
+		])
+			expect(kd).toContain(nguon);
+	});
 });

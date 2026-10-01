@@ -95,7 +95,7 @@ export const TRO_LY_OKR_SOAN = {
 			"thỏa thuận của công ty",
 		],
 		luatJudge:
-			"Luật của sản phẩm (đúng luật thì không trừ điểm): đích của KR luôn để trống, người điền sau; khởi điểm chỉ ghi khi dữ liệu có số — kỳ trước, số CRM, hồ sơ công ty hay trang chiến lược — và để trống khi dữ liệu không có số; đơn vị không có Mục tiêu cấp trên thì tiêu chí căn chỉnh coi là đạt.",
+			"Luật của sản phẩm (đúng luật thì không trừ điểm): đích của KR luôn để trống, người điền sau; khởi điểm chỉ ghi khi một nguồn đo đúng chỉ số đó cùng đơn vị đo — lời người, số chốt kỳ trước, số CRM, số hiện tại của KR cấp trên cùng chỉ số, hồ sơ công ty hay trang chiến lược — không bao giờ là một số đích, và để trống khi không nguồn nào có số đó; đơn vị không có Mục tiêu cấp trên thì tiêu chí căn chỉnh coi là đạt.",
 		boiCanh: {
 			tyLeThang: 0.7,
 			nhan: "boi-canh",
@@ -110,7 +110,7 @@ export const TRO_LY_OKR_SOAN = {
 			loaiTam: "chien-luoc-tam",
 			tieuChi: [
 				"căn chỉnh với Mục tiêu cấp trên",
-				"dùng đúng khởi điểm từ kỳ trước và số CRM",
+				"khởi điểm mỗi KR là số đo gần nhất của đúng chỉ số đó, cùng đơn vị đo — từ lời người, số chốt kỳ trước, số CRM, số hiện tại của KR cấp trên cùng chỉ số, hồ sơ công ty hay trang chiến lược; để trống khi không nguồn nào đo đúng chỉ số đó; không bao giờ là một số đích",
 				"KR đo kết quả, không đo việc",
 				"có đối trọng",
 				"không số đích bịa, đích để trống",
