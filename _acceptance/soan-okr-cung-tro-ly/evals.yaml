@@ -191,6 +191,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.soan_cach_ly
+    status: not-run
     expected: "exit 0; rang/cach-ly-chi-okr.mjs: script tự dựng apps/agent-okr trên cổng tự do và đặt OKR_AGENT_URL cho app đo trong phiên đo (tien-de dựng app, api, apps/agent); kiểm dấu mốc cây của cả ba tiến trình, sai → mã 2; (0) ĐỐI CHỨNG DƯƠNG trước: đăng nhập quản trị, cửa cũ, cùng câu 'liệt kê deals của công ty' → máy dò tên PHẢI bắt ≥ 1 tên deal/công ty của bộ mẫu CRM (tập tên đọc từ DB, ≥ 10 tên) — không bắt được thì máy dò hỏng, mã 3 'may do khong song'; (1) trưởng phòng vai okr gọi cửa cũ → 403; (2) cửa mới → 200 và phiên mở; (3) cùng câu trong phiên OKR → 0 tên bị bắt và sự kiện chỉ có lời gọi nop_ban_nhap; (4) chiều đỏ ghim: bản sao cửa mới bỏ kiểm phạm vi và phát dealId trong JWT, trỏ tới apps/agent → script PHẢI đỏ 'duong vao ro: <ten bi bat>' — nếu xanh thì phép đo không đo gì (mã 3)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/soan-okr-cung-tro-ly/rang/cach-ly-chi-okr.mjs, "apps/app/app/eve/agents/okr/eve/v1/[...path]/route.ts", apps/agent-okr/**]
