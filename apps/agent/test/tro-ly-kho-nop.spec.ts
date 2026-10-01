@@ -15,6 +15,8 @@ import {
 	parseTraLoi,
 	TAI_LIEU_HOI,
 } from "@crm/validation/tai-lieu-hoi";
+import { AgentTriggerService } from "../../api/src/agent/agent-trigger.service";
+import { TaiLieuHoiService } from "../../api/src/tai-lieu/tai-lieu-hoi.service";
 import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
 import nopTraLoi from "../agent/subagents/tro_ly_kho/tools/nop_tra_loi";
 import searchPages from "../agent/subagents/tro_ly_kho/tools/search_pages";
@@ -310,11 +312,7 @@ describe("tlk-tu-choi", () => {
 		expect(gan.length).toBeGreaterThan(0);
 		expect(gan.length).toBeLessThanOrEqual(TAI_LIEU_HOI.ganNhatToiDa);
 		expect(gan.map((g) => g.slug)).toContain(hoaHong.slug);
-		const cauII = dungTuChoi(gan);
-		expect(cauII.startsWith(TAI_LIEU_HOI.tuChoi)).toBe(true);
-		expect(cauII.includes(MOC), "tlk-tu-choi: MODEL-VIET-XYZ lot ra").toBe(
-			false,
-		);
+		expect(dungTuChoi(gan).startsWith(TAI_LIEU_HOI.tuChoi)).toBe(true);
 		expect(hii.cauHoi, "tlk-tu-choi: mat chu cau hoi").toBe(
 			"Câu có trang gần?",
 		);
@@ -343,6 +341,31 @@ describe("tlk-tu-choi", () => {
 			iii.ctx,
 		);
 		expect(sau.ok).toBe(false);
+
+		const api = new TaiLieuHoiService(db, new AgentTriggerService(db));
+		const nhan = async (hoiId: string) =>
+			JSON.stringify(await api.ketQua(quanTri, hoiId));
+		const lot = [];
+		for (const [ten, hoiId] of [
+			["i", i.hoiId],
+			["ii", ii.hoiId],
+			["iii", iii.hoiId],
+		]) {
+			if ((await nhan(hoiId)).includes(MOC)) lot.push(ten);
+		}
+		expect(lot, "tlk-tu-choi: MODEL-VIET-XYZ lot ra").toEqual([]);
+
+		const doiChung = await moHoiCrm(quanTri, "Đối chứng chữ model?");
+		const rdc = await goiCongCu(
+			nopTraLoi,
+			ban(`${MOC} Tầng 2 hưởng 1,2%.`, BANG, hoaHong.slug, so),
+			doiChung.ctx,
+		);
+		expect(rdc.ok).toBe(true);
+		expect(
+			(await nhan(doiChung.hoiId)).includes(MOC),
+			"tlk-tu-choi: doi chung khong thay chu model",
+		).toBe(true);
 	});
 
 	test("tlk-tu-choi: cau Zalo bi tu choi luu chu cau hoi tro ly nop", async () => {
