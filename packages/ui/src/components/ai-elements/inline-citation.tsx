@@ -1,28 +1,70 @@
 "use client";
 
+import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
+import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import { Badge } from "@crm/ui/components/badge";
+import { Button } from "@crm/ui/components/button";
 import type { CarouselApi } from "@crm/ui/components/carousel";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@crm/ui/components/carousel";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@crm/ui/components/hover-card";
+import { Icon } from "@crm/ui/components/icon";
 import { useMessages } from "@crm/ui/components/locale-provider";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@crm/ui/components/popover";
 import { cn } from "@crm/ui/lib/utils";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
-import type { ComponentProps } from "react";
+import { useControllableState } from "@radix-ui/react-use-controllable-state";
+import type {
+  ComponentProps,
+  MouseEvent,
+  PointerEvent,
+} from "react";
 import {
   createContext,
   useCallback,
   useContext,
   useEffect,
+  useMemo,
+  useRef,
   useState,
 } from "react";
+
+const DI_CHUOT = { dongSauMs: 150 } as const;
+
+const CACH_MO = { chuot: 1, bam: 2 } as const;
+
+type CachMo = (typeof CACH_MO)[keyof typeof CACH_MO];
+
+type InlineCitationCardContextValue = {
+  moBangChuot: () => void;
+  henDongChuot: () => void;
+  giuMo: () => void;
+  ghimNeuDangMoBangChuot: () => boolean;
+  moBangChuotLucNay: () => boolean;
+  dongTuChuot: () => boolean;
+};
+
+const InlineCitationCardContext =
+  createContext<InlineCitationCardContextValue | null>(null);
+
+const useInlineCitationCard = () => {
+  const context = useContext(InlineCitationCardContext);
+
+  if (!context) {
+    throw new Error(
+      "InlineCitationCard components must be used within InlineCitationCard"
+    );
+  }
+
+  return context;
+};
+
+const laChuot = (event: PointerEvent) => event.pointerType === "mouse";
 
 export type InlineCitationProps = ComponentProps<"span">;
 
@@ -48,50 +90,187 @@ export const InlineCitationText = ({
   />
 );
 
-export type InlineCitationCardProps = ComponentProps<typeof HoverCard>;
+export type InlineCitationCardProps = ComponentProps<typeof Popover>;
 
-export const InlineCitationCard = (props: InlineCitationCardProps) => (
-  <HoverCard closeDelay={0} openDelay={0} {...props} />
-);
-
-export type InlineCitationCardTriggerProps = ComponentProps<typeof Badge> & {
-  sources: string[];
-};
-
-export const InlineCitationCardTrigger = ({
-  sources,
-  className,
+export const InlineCitationCard = ({
+  open,
+  defaultOpen,
+  onOpenChange,
   ...props
-}: InlineCitationCardTriggerProps) => {
-  const msg = useMessages();
+}: InlineCitationCardProps) => {
+  const [mo, datMo] = useControllableState({
+    prop: open,
+    defaultProp: defaultOpen ?? false,
+    onChange: onOpenChange,
+  });
+  const cachMo = useRef<CachMo | null>(null);
+  const vuaDongTuChuot = useRef(false);
+  const henDong = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const huyHen = useCallback(() => {
+    if (henDong.current) {
+      clearTimeout(henDong.current);
+      henDong.current = null;
+    }
+  }, []);
+
+  useEffect(() => huyHen, [huyHen]);
+
+  const doiMo = useCallback(
+    (tiep: boolean) => {
+      huyHen();
+      vuaDongTuChuot.current = false;
+      cachMo.current = tiep ? CACH_MO.bam : null;
+      datMo(tiep);
+    },
+    [datMo, huyHen]
+  );
+
+  const context = useMemo<InlineCitationCardContextValue>(
+    () => ({
+      moBangChuot: () => {
+        huyHen();
+        if (cachMo.current) {
+          return;
+        }
+        vuaDongTuChuot.current = false;
+        cachMo.current = CACH_MO.chuot;
+        datMo(true);
+      },
+      henDongChuot: () => {
+        if (cachMo.current !== CACH_MO.chuot) {
+          return;
+        }
+        huyHen();
+        henDong.current = setTimeout(() => {
+          henDong.current = null;
+          cachMo.current = null;
+          vuaDongTuChuot.current = true;
+          datMo(false);
+        }, DI_CHUOT.dongSauMs);
+      },
+      giuMo: huyHen,
+      ghimNeuDangMoBangChuot: () => {
+        if (cachMo.current !== CACH_MO.chuot) {
+          return false;
+        }
+        huyHen();
+        cachMo.current = CACH_MO.bam;
+        return true;
+      },
+      moBangChuotLucNay: () => cachMo.current === CACH_MO.chuot,
+      dongTuChuot: () => {
+        const vua = vuaDongTuChuot.current;
+        vuaDongTuChuot.current = false;
+        return vua;
+      },
+    }),
+    [datMo, huyHen]
+  );
+
   return (
-  <HoverCardTrigger asChild>
-    <Badge
-      className={cn("ml-1", className)}
-      variant="secondary"
-      {...props}
-    >
-      {sources[0] ? (
-        <>
-          {new URL(sources[0]).hostname}{" "}
-          {sources.length > 1 && `+${sources.length - 1}`}
-        </>
-      ) : (
-        msg.inlineCitation.khongRoNguon
-      )}
-    </Badge>
-  </HoverCardTrigger>
+    <InlineCitationCardContext.Provider value={context}>
+      <Popover onOpenChange={doiMo} open={mo} {...props} />
+    </InlineCitationCardContext.Provider>
   );
 };
 
-export type InlineCitationCardBodyProps = ComponentProps<"div">;
+export type InlineCitationCardTriggerProps = ComponentProps<typeof Badge> & {
+  nhan: string;
+};
+
+export const InlineCitationCardTrigger = ({
+  nhan,
+  className,
+  onClick,
+  onPointerEnter,
+  onPointerLeave,
+  ...props
+}: InlineCitationCardTriggerProps) => {
+  const the = useInlineCitationCard();
+
+  const handleClick = (event: MouseEvent<HTMLSpanElement>) => {
+    onClick?.(event);
+    if (the.ghimNeuDangMoBangChuot()) {
+      event.preventDefault();
+    }
+  };
+
+  const handlePointerEnter = (event: PointerEvent<HTMLSpanElement>) => {
+    onPointerEnter?.(event);
+    if (laChuot(event)) {
+      the.moBangChuot();
+    }
+  };
+
+  const handlePointerLeave = (event: PointerEvent<HTMLSpanElement>) => {
+    onPointerLeave?.(event);
+    if (laChuot(event)) {
+      the.henDongChuot();
+    }
+  };
+
+  return (
+    <PopoverTrigger asChild>
+      <Badge
+        asChild
+        className={cn("ml-1", className)}
+        onClick={handleClick}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        variant="secondary"
+        {...props}
+      >
+        <button type="button">{nhan}</button>
+      </Badge>
+    </PopoverTrigger>
+  );
+};
+
+export type InlineCitationCardBodyProps = ComponentProps<typeof PopoverContent>;
 
 export const InlineCitationCardBody = ({
-  className,
+  onOpenAutoFocus,
+  onCloseAutoFocus,
+  onPointerEnter,
+  onPointerLeave,
   ...props
-}: InlineCitationCardBodyProps) => (
-  <HoverCardContent className={cn("relative w-80 p-0", className)} {...props} />
-);
+}: InlineCitationCardBodyProps) => {
+  const msg = useMessages();
+  const the = useInlineCitationCard();
+
+  return (
+    <PopoverContent
+      aria-label={msg.inlineCitation.sources}
+      onCloseAutoFocus={(event) => {
+        onCloseAutoFocus?.(event);
+        if (the.dongTuChuot()) {
+          event.preventDefault();
+        }
+      }}
+      onOpenAutoFocus={(event) => {
+        onOpenAutoFocus?.(event);
+        if (the.moBangChuotLucNay()) {
+          event.preventDefault();
+        }
+      }}
+      onPointerEnter={(event) => {
+        onPointerEnter?.(event);
+        if (laChuot(event)) {
+          the.giuMo();
+        }
+      }}
+      onPointerLeave={(event) => {
+        onPointerLeave?.(event);
+        if (laChuot(event)) {
+          the.henDongChuot();
+        }
+      }}
+      size="panel"
+      {...props}
+    />
+  );
+};
 
 const CarouselApiContext = createContext<CarouselApi | undefined>(undefined);
 
@@ -197,14 +376,13 @@ export const InlineCitationCarouselIndex = ({
   );
 };
 
-export type InlineCitationCarouselPrevProps = ComponentProps<"button">;
+export type InlineCitationCarouselPrevProps = ComponentProps<typeof Button>;
 
-export const InlineCitationCarouselPrev = ({
-  className,
-  ...props
-}: InlineCitationCarouselPrevProps) => {
-  const api = useCarouselApi();
+export const InlineCitationCarouselPrev = (
+  props: InlineCitationCarouselPrevProps
+) => {
   const msg = useMessages();
+  const api = useCarouselApi();
 
   const handleClick = useCallback(() => {
     if (api) {
@@ -213,26 +391,26 @@ export const InlineCitationCarouselPrev = ({
   }, [api]);
 
   return (
-    <button
-      aria-label={msg.carousel.previousSlide}
-      className={cn("shrink-0", className)}
+    <Button
+      aria-label={msg.inlineCitation.previousSource}
       onClick={handleClick}
+      size="icon-sm"
       type="button"
+      variant="ghost"
       {...props}
     >
-      <ArrowLeftIcon className="size-4 text-muted-foreground" />
-    </button>
+      <Icon icon={ArrowLeft} />
+    </Button>
   );
 };
 
-export type InlineCitationCarouselNextProps = ComponentProps<"button">;
+export type InlineCitationCarouselNextProps = ComponentProps<typeof Button>;
 
-export const InlineCitationCarouselNext = ({
-  className,
-  ...props
-}: InlineCitationCarouselNextProps) => {
-  const api = useCarouselApi();
+export const InlineCitationCarouselNext = (
+  props: InlineCitationCarouselNextProps
+) => {
   const msg = useMessages();
+  const api = useCarouselApi();
 
   const handleClick = useCallback(() => {
     if (api) {
@@ -241,15 +419,16 @@ export const InlineCitationCarouselNext = ({
   }, [api]);
 
   return (
-    <button
-      aria-label={msg.carousel.nextSlide}
-      className={cn("shrink-0", className)}
+    <Button
+      aria-label={msg.inlineCitation.nextSource}
       onClick={handleClick}
+      size="icon-sm"
       type="button"
+      variant="ghost"
       {...props}
     >
-      <ArrowRightIcon className="size-4 text-muted-foreground" />
-    </button>
+      <Icon icon={ArrowRight} />
+    </Button>
   );
 };
 
@@ -269,7 +448,7 @@ export const InlineCitationSource = ({
 }: InlineCitationSourceProps) => (
   <div className={cn("space-y-1", className)} {...props}>
     {title && (
-      <h4 className="truncate font-medium text-sm leading-tight">{title}</h4>
+      <h4 className="wrap-break-word font-medium text-sm leading-tight">{title}</h4>
     )}
     {url && (
       <p className="truncate break-all text-muted-foreground text-xs">{url}</p>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ai thấy bản tóm tắt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap&subset=vietnamese" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper: #fafafa;
+      --color-ink: #171717;
+      --color-muted: #575757;
+      --font-sans: 'Geist', system-ui, sans-serif;
+      --font-serif: 'Lora', serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1440px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1100px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Ma trận · AC-5 · AC-7 · AC-9 · AC-11</p>
+    <h1>Ai thấy bản tóm tắt, theo nấc và trạng thái</h1>
+
+    <svg viewBox="0 40 1440 520" xmlns="http://www.w3.org/2000/svg" font-family="'Geist', sans-serif">
+      <rect y="40" width="100%" height="100%" fill="#fafafa"/>
+      <text x="32" y="68" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NẤC CỦA PHÒNG · TRẠNG THÁI BẢN</text>
+      <text x="32" y="86" fill="#666666" font-size="10">ai thấy gì, ở đâu →</text>
+      <text x="368" y="68" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">BẢNG HỌP TUẦN</text>
+      <text x="368" y="86" fill="#666666" font-size="10">thành viên, vai «chỉ OKR»</text>
+      <text x="720" y="68" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">NHẮC BUỔI SÁNG</text>
+      <text x="720" y="86" fill="#666666" font-size="10">Trưởng phòng ban</text>
+      <text x="1072" y="68" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">MÀN SỨC KHOẺ</text>
+      <text x="1072" y="86" fill="#666666" font-size="10">quản trị chương trình</text>
+      <line x1="32" y1="104" x2="1400" y2="104" stroke="rgba(23,23,23,0.24)" stroke-width="1"/>
+      <line x1="32" y1="184" x2="1400" y2="184" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="32" y1="264" x2="1400" y2="264" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="32" y1="344" x2="1400" y2="344" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="32" y1="424" x2="1400" y2="424" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="344" y1="52" x2="344" y2="424" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="696" y1="52" x2="696" y2="424" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="1048" y1="52" x2="1048" y2="424" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="140" fill="#171717" font-size="12" font-weight="600">Tắt</text>
+      <text x="32" y="156" fill="#666666" font-size="10">không việc nào chạy</text>
+      <text x="32" y="220" fill="#171717" font-size="12" font-weight="600">Chế độ ẩn</text>
+      <text x="32" y="236" fill="#666666" font-size="10">máy viết đủ, người dùng chưa thấy</text>
+      <text x="32" y="300" fill="#171717" font-size="12" font-weight="600">Bật · bản «hiện»</text>
+      <text x="32" y="316" fill="#666666" font-size="10">qua bộ kiểm, bỏ không quá 30%</text>
+      <text x="32" y="380" fill="#171717" font-size="12" font-weight="600">Bật · bản «cần xem»</text>
+      <text x="32" y="396" fill="#666666" font-size="10">bỏ quá 30% hay hết câu</text>
+      <text x="388" y="141" fill="#666666" font-size="12" text-anchor="middle">—</text>
+      <text x="740" y="141" fill="#666666" font-size="12" text-anchor="middle">—</text>
+      <text x="1092" y="141" fill="#666666" font-size="12" text-anchor="middle">—</text>
+      <text x="420" y="140" fill="#666666" font-size="12">không ai thấy gì, không có bản nào</text>
+      <text x="388" y="221" fill="#666666" font-size="12" text-anchor="middle">—</text>
+      <text x="740" y="221" fill="#666666" font-size="12" text-anchor="middle">—</text>
+      <rect x="1072" y="208" width="40" height="16" rx="4" fill="#171717"/>
+      <text x="1092" y="219" fill="#fafafa" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.08em">THẤY</text>
+      <text x="1124" y="220" fill="#171717" font-size="12">mọi bản của tuần</text>
+      <text x="1124" y="236" fill="#575757" font-size="10">kể cả câu bị bỏ và lý do</text>
+      <rect x="368" y="288" width="40" height="16" rx="4" fill="#171717"/>
+      <text x="388" y="299" fill="#fafafa" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.08em">THẤY</text>
+      <text x="420" y="300" fill="#171717" font-size="12">khối tóm tắt ở đầu bảng</text>
+      <text x="420" y="316" fill="#575757" font-size="10">mỗi người chỉ thấy câu có nguồn mình xem được</text>
+      <rect x="720" y="288" width="40" height="16" rx="4" fill="#171717"/>
+      <text x="740" y="299" fill="#fafafa" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.08em">THẤY</text>
+      <text x="772" y="300" fill="#171717" font-size="12">một dòng báo, không kèm câu</text>
+      <text x="772" y="316" fill="#575757" font-size="10">trừ người đã tắt dòng; thành viên thường không nhận</text>
+      <rect x="1072" y="288" width="40" height="16" rx="4" fill="#171717"/>
+      <text x="1092" y="299" fill="#fafafa" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.08em">THẤY</text>
+      <text x="1124" y="300" fill="#171717" font-size="12">mọi bản của tuần</text>
+      <text x="1124" y="316" fill="#575757" font-size="10">kể cả câu bị bỏ và lý do</text>
+      <text x="388" y="381" fill="#666666" font-size="12" text-anchor="middle">—</text>
+      <text x="740" y="381" fill="#666666" font-size="12" text-anchor="middle">—</text>
+      <rect x="1056" y="352" width="336" height="64" rx="4" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="1072" y="368" width="40" height="16" rx="4" fill="#171717"/>
+      <text x="1092" y="379" fill="#fafafa" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.08em">THẤY</text>
+      <text x="1124" y="380" fill="#171717" font-size="12">chỉ quản trị thấy bản này</text>
+      <text x="1124" y="396" fill="#575757" font-size="10">kể cả câu bị bỏ và lý do</text>
+      <path d="M 1224 432 L 1224 444" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="1400" y="464" fill="#006B4F" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">Bản chưa qua kiểm không lọt vào bảng họp hay tin nhắc — chỉ nằm ở màn Sức khoẻ.</text>
+      <line x1="32" y1="488" x2="1400" y2="488" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="508" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="32" y="520" width="40" height="16" rx="4" fill="#171717"/>
+      <text x="52" y="531" fill="#fafafa" font-size="8" font-family="'Geist Mono', monospace" font-weight="600" text-anchor="middle" letter-spacing="0.08em">THẤY</text>
+      <text x="84" y="532" fill="#575757" font-size="10">thấy bản ở chỗ này</text>
+      <text x="240" y="533" fill="#666666" font-size="12" text-anchor="middle">—</text>
+      <text x="256" y="532" fill="#575757" font-size="10">không thấy gì ở chỗ này</text>
+      <rect x="420" y="522" width="16" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="444" y="532" fill="#575757" font-size="10">ô cần soát kỹ nhất</text>
+      <text x="600" y="532" fill="#575757" font-size="10">Người không phải quản trị mở màn Sức khoẻ: không có khối tóm tắt.</text>
+    </svg>
+  </div>
+</body>
+</html>

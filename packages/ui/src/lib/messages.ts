@@ -65,6 +65,11 @@ const en = {
 		previousSlide: "Previous item",
 		nextSlide: "Next item",
 	},
+	inlineCitation: {
+		previousSource: "Previous source",
+		nextSource: "Next source",
+		sources: "Sources",
+	},
 	proposedChange: {
 		edit: "Edit",
 	},
@@ -189,9 +194,6 @@ const en = {
 		tepQuaCo: "All files exceed the maximum size.",
 		quaNhieuTep: "Too many files. Some were not added.",
 	},
-	inlineCitation: {
-		khongRoNguon: "unknown",
-	},
 };
 
 export type Messages = typeof en;
@@ -260,6 +262,11 @@ const vi = {
 		itemRole: "mục",
 		previousSlide: "Mục trước",
 		nextSlide: "Mục sau",
+	},
+	inlineCitation: {
+		previousSource: "Nguồn trước",
+		nextSource: "Nguồn sau",
+		sources: "Nguồn",
 	},
 	proposedChange: {
 		edit: "Sửa",
@@ -383,9 +390,6 @@ const vi = {
 		tepSaiKieu: "Không tệp nào đúng loại được nhận.",
 		tepQuaCo: "Mọi tệp đều vượt cỡ tối đa.",
 		quaNhieuTep: "Quá nhiều tệp. Một số tệp chưa được thêm.",
-	},
-	inlineCitation: {
-		khongRoNguon: "không rõ nguồn",
 	},
 } satisfies Messages;
 

@@ -284,23 +284,48 @@ trong `chu-cung.mjs`, có lý do.
 
 **Tệp:** `packages/ui/src/components/ai-elements/inline-citation.tsx`
 
-**Số dòng khác:** 18
+**Số dòng khác:** 297
 
-**Vân tay lệch:** `554b68e8d83903ea`
+**Vân tay lệch:** `77b994bdc6112870`
 
-**Đổi gì:** Kéo cùng lượt với `prompt-input` (01/10). Toàn bộ 18 dòng khác là bản
-vá của kho:
+**Đổi gì:** Kéo bằng CLI ngày 01/10 ở lượt `tro-ly-okr-tom-tat` (Task 8), chạy
+thẳng trong `packages/ui` với `git status` sạch; bốn câu hỏi ghi đè `badge.tsx`,
+`button.tsx`, `hover-card.tsx`, `carousel.tsx` đều trả lời không. CLI thêm gói
+`cn` và xếp lại khối `@tiptap/*` trong `packages/ui/package.json`, sửa `bun.lock`;
+cả hai đã hoàn nguyên. Toàn bộ 297 dòng khác là bản vá của kho — tệp vừa kéo, không
+có phần cũ hơn thượng nguồn:
 
-- `InlineCitationCardTrigger` thành thân khối để gọi `useMessages()`; chữ dự phòng
-  «unknown» khi không có nguồn về `inlineCitation.khongRoNguon`.
-- `aria-label` «Previous»/«Next» của hai nút carousel về `carousel.previousSlide`
-  và `carousel.nextSlide` đã có sẵn trong bảng chuỗi.
-- `Badge` của trigger bỏ `rounded-full`, dùng bán kính của chính `Badge`.
+- `InlineCitationCard` đổi từ `HoverCard` sang `Popover` có trạng thái mở điều
+  khiển được (`useControllableState`) và một ngữ cảnh riêng: bấm hay chạm mở và
+  ghim thẻ; Esc và bấm ra ngoài đóng. Chuột (`pointerType` là `mouse`) vẫn mở khi
+  di vào nút, rời nút và rời thẻ thì đóng sau `DI_CHUOT.dongSauMs`; đang mở bằng
+  chuột mà bấm thì ghim chứ không đóng. Mở bằng chuột không kéo tiêu điểm vào thẻ,
+  đóng bằng chuột không trả tiêu điểm về nút.
+- `InlineCitationCardTrigger` bỏ prop `sources` và nhánh suy tên miền
+  `new URL(sources[0]).hostname` · `+N` · `"unknown"`; nhận `nhan: string` và hiện
+  đúng chuỗi đó. Nút là `Badge asChild` bọc `<button type="button">`, nên Enter
+  và Space mở thẻ bằng kích hoạt gốc của trình duyệt — tệp không tự bắt phím. Bỏ
+  `rounded-full` (ngoài thang), không thay bằng bán kính khác; giữ `ml-1`.
+- `InlineCitationCardBody` dùng `PopoverContent size="panel"` thay cho
+  `HoverCardContent className="relative w-80 p-0"`, và đặt
+  `aria-label={msg.inlineCitation.sources}` để hộp thoại có tên truy cập.
+- `InlineCitationCarouselPrev` · `Next` đổi từ `<button>` trần với icon Lucide sang
+  `Button variant="ghost" size="icon-sm"` với `ArrowLeft` · `ArrowRight` của
+  Carbon qua `Icon`; hai `aria-label` "Previous" · "Next" về
+  `msg.inlineCitation.previousSource` · `.nextSource`. Kiểu props đổi sang
+  `ComponentProps<typeof Button>`.
+- `InlineCitationSource` đổi `truncate` của tiêu đề nguồn thành `wrap-break-word`
+  (đợt sửa cuối lượt `tro-ly-okr-tom-tat`, 01/10): tiêu đề ở đây là tên KR, dài
+  tới 200 ký tự, và cắt một dòng ở khung 390 px thì người đọc không biết thẻ
+  đang nói KR nào. Tiêu đề xuống dòng, đọc đủ chữ.
 
-**Vì sao:** Chữ hiện cho người dùng phải qua bảng chuỗi. Bán kính chỉ từ thang của
-`docs/design.md`; `rounded-full` không nằm trong thang. Lượt này chỉ dùng
-`InlineCitationSource` và `InlineCitationQuote` (trích dẫn mở sẵn dưới từng ý);
-phần thẻ nổi và carousel vẫn được vá để tệp sạch cả khi một màn sau dùng tới.
+**Vì sao:** Thẻ trích dẫn của khối Tóm tắt tuần phải mở được trên điện thoại và
+bằng bàn phím; `HoverCard` chỉ mở khi di chuột, nên người chạm màn và người dùng
+bàn phím không bao giờ thấy nguồn. Nhãn thay tên miền vì nguồn ở đây là KR và cập
+nhật trong kho, không phải URL. Bán kính theo thang, icon Carbon, chuỗi qua bảng
+chuỗi là luật của `docs/design.md` và `docs/reui.md`. Bốn chuỗi máy mới
+(`secondary`, `panel`, `mouse`, `select`) đã khai miễn trong `chu-cung.mjs`
+kèm lý do.
 
 ### suggestion.tsx
 

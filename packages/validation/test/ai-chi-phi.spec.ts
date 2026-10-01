@@ -5,6 +5,7 @@ import {
 	type NguonBuoc,
 	NHOM_CUA_TINH_NANG,
 	TINH_NANG,
+	TINH_NANG_TRO_LY_OKR,
 	type TinhNang,
 	tinhNangCua,
 } from "../src/ai-chi-phi";
@@ -155,6 +156,19 @@ describe("ma-tran-viec", () => {
 	test("thêm một mục đích chưa có dòng suy việc thì bảng kỳ vọng đỏ có tên", () => {
 		expect(() => kiemMaTran([...SESSION_PURPOSES, "thu-nghiem"])).toThrow(
 			"thieu dong suy viec: thu-nghiem",
+		);
+	});
+
+	test("phiên con tro_ly_okr chưa tìm được việc rơi vào nhóm chuyển tiếp, vẫn tính trần Trợ lý OKR", () => {
+		const nhom = tinhNangCua({
+			kenh: "crm",
+			purpose: null,
+			subagent: "tro_ly_okr",
+			okrViec: null,
+		});
+		expect(nhom).toBe("okr.chuyen-tiep");
+		expect((TINH_NANG_TRO_LY_OKR as readonly string[]).includes(nhom)).toBe(
+			true,
 		);
 	});
 

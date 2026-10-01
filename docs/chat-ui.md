@@ -141,7 +141,7 @@ by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 | `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |
 | `conversation.tsx` | the transcript of the Documents «Ask» tab (`tai-lieu/hoi.tsx`); the orphan-gate exemption it carried until then is gone |
 | `prompt-input.tsx` | the composer of the Documents «Ask» tab, used through `PromptInputProvider` so a failed send keeps the typed question |
-| `inline-citation.tsx` | the quotes under each sentence of an «Ask» answer — `InlineCitationSource` and `InlineCitationQuote`, shown open rather than in the hover card |
+| `inline-citation.tsx` | trích dẫn của khối Tóm tắt tuần — the weekly summary block on the OKR board cites the KRs and updates behind each sentence. Pulled back by the CLI in `tro-ly-okr-tom-tat`; the card is a `Popover` that opens on click, tap, Enter and Space, and still on hover for a mouse, and the trigger shows a given label instead of a URL hostname. The Documents «Ask» tab uses only `InlineCitationSource` and `InlineCitationQuote`, shown open under each sentence |
 | `suggestion.tsx` | the three starter questions of the empty «Ask» tab |
 
 The other 19 vendored files were deleted in the `nen-chat-ai-elements` round —
@@ -197,13 +197,13 @@ present is not evidence that it is supported. `ThinkingIndicator` —
 ## Local divergence, and re-applying it
 
 Several vendored files need edits to satisfy `docs/design.md` and
-`locale-provider`. The counts below are for the five files that were in the tree before the «Ask» tab (01/10); the three pulled for it are itemised in the ledger;
+`locale-provider`. The counts below are for the files that were in the tree before the «Ask» tab and the weekly summary (01/10); the files pulled for them are itemised in the ledger;
 the divergence ledger of record is
 `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`, which carries one entry per
 file with a fingerprint of the diverging lines:
 
-- 16 English strings routed through `packages/ui/src/lib/messages.ts` — `message`
-  (10), `reasoning` (4), `conversation` (2). They arrive in **four shapes**: text
+- 18 English strings routed through `packages/ui/src/lib/messages.ts` — `message`
+  (10), `reasoning` (4), `conversation` (2), `inline-citation` (2). They arrive in **four shapes**: text
   between tags, display attributes, parameter defaults, and intermediate
   variables. A scan that lists syntax shapes misses a new one every time; the
   string gate uses a closed allow-list instead.
@@ -217,6 +217,11 @@ file with a fingerprint of the diverging lines:
   pulled in a scratch directory with this repo's `components.json`, because
   running `add` in `packages/ui` stops to ask about overwriting `alert.tsx` and
   `button.tsx`.
+- `inline-citation` swaps `HoverCard` for `Popover` so the card opens on click,
+  tap and keyboard, takes `nhan` instead of deriving a hostname from `sources`,
+  drops the upstream `rounded-full` on the trigger rather than replacing it,
+  names the card with `aria-label`, and uses `Button` and Carbon icons for its
+  previous and next controls.
 
 Whichever files a later phase pulls back in bring their own divergences, and
 they belong in that same ledger.

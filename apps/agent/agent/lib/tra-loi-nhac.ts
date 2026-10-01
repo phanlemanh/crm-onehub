@@ -1,8 +1,7 @@
 import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
-import type { ViecNhac } from "@crm/db/onboarding-nhac";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { DbGhi } from "@crm/db/zalo-lien-ket";
-import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
+import { type MucNhac, parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
 import {
 	type OnboardingActivityMeta,
 	vet,
@@ -24,7 +23,7 @@ export type KetTraLoi =
 	| { loai: "ngoai-dai"; sai: number[]; tran: number }
 	| {
 			loai: "khong-phai-buoc";
-			muc: { so: number; loai: ViecNhac["loai"]; url: string | null }[];
+			muc: { so: number; loai: MucNhac["loai"]; url: string | null }[];
 	  }
 	| { loai: "buoc-doi"; muc: { so: number; lyDo: LyDoDoi }[] }
 	| { loai: "xong"; vua: MucXong[]; truoc: MucXong[] };

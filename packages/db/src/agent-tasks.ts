@@ -103,9 +103,16 @@ export const LOAI_VIEC_TRO_LY_OKR = [
 	"okr-tom-tat-tuan",
 ] as const;
 
+const SECOND_MS = 1_000;
+const MINUTE_MS = 60 * SECOND_MS;
+
+export const LOAI_VIEC_TOM_TAT_TUAN =
+	"okr-tom-tat-tuan" satisfies (typeof LOAI_VIEC_TRO_LY_OKR)[number];
+
 export const VIEC_OKR = {
 	soLanThu: 1,
-	leaseMs: 30 * 1000,
+	leaseMs: 30 * SECOND_MS,
+	leaseTomTatMs: 3 * MINUTE_MS,
 } as const;
 
 export function laViecTroLyOkr(kind: string): boolean {

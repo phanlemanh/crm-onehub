@@ -55,7 +55,10 @@ const MIEN_GIA_TRI = {
 			sm: "cỡ Button — nút nhỏ của hàng hành động Confirmation",
 			default:
 				"biến thể Button mặc định của PromptInputSubmit — nút tô primary",
-			secondary: "biến thể Badge của InlineCitationCardTrigger",
+			secondary:
+				"biến thể Badge — chip xám của nút trích dẫn trong InlineCitation",
+			panel:
+				"cỡ PopoverContent — khung không đệm của thẻ trích dẫn InlineCitation",
 		},
 	},
 	"enum-may": {
@@ -73,7 +76,6 @@ const MIEN_GIA_TRI = {
 				"giá trị prop align của InputGroupAddon trong PromptInputHeader và PromptInputFooter",
 			dragover: "tên sự kiện DOM đem đi addEventListener cho thả tệp",
 			drop: "tên sự kiện DOM đem đi addEventListener cho thả tệp",
-			select: "tên sự kiện của Embla carousel trong InlineCitationCarousel",
 			Enter:
 				"giá trị KeyboardEvent.key đem đi so sánh trong PromptInputTextarea",
 			Backspace:
@@ -83,6 +85,10 @@ const MIEN_GIA_TRI = {
 			streaming:
 				"giá trị ChatStatus của AI SDK, PromptInputSubmit đem đi so sánh",
 			error: "giá trị ChatStatus của AI SDK, PromptInputSubmit đem đi so sánh",
+			mouse:
+				"giá trị PointerEvent.pointerType — chỉ chuột mới mở thẻ trích dẫn theo đường di chuột, chạm thì không",
+			select:
+				"tên sự kiện của Embla mà InlineCitationCarouselIndex đăng ký để đếm nguồn",
 		},
 	},
 	"ten-the": {

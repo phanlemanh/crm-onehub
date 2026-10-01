@@ -1,12 +1,12 @@
-import { dauTuanVN } from "@crm/db/onboarding-nhac";
-import type { CapMucTieu } from "@crm/validation/okr-muc-tieu";
 import {
 	congTuan,
 	type KrSo,
 	moiNhat,
 	moiNhatDenTuan,
 	soTuanCuaNhom,
-} from "./hop-tuan";
+} from "@crm/db/okr-hop-tuan";
+import { dauTuanVN } from "@crm/db/onboarding-nhac";
+import type { CapMucTieu } from "@crm/validation/okr-muc-tieu";
 import type {
 	HangSucKhoe,
 	HangToanCanh,
