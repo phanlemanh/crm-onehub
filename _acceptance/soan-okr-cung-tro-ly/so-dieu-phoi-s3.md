@@ -224,3 +224,15 @@ Tự nhất quán từng việc: mỗi việc trong năm phần có test đỏ �
 - Mốc G: app#test đỏ = DOM noi-man-buoc «lich khong mo ra o ngay 2026-09-25» (phụ thuộc ngày thật, như kr-may); unit app 558/0 qua wrapper. Ruling: ghim ngày như kr-may, commit riêng; giao tác nhân gộp-2.
 - ke-hoach-sheet.dom.tsx ghim ngày 64071ea9 (mã sản phẩm không đổi; onehub đỏ cùng lý do). Mốc H chạy nền.
 - Mốc H trên 64071ea9: NĂM LỆNH XANH. S3 xong trừ D8, E1 (chờ chủ kho cho tiêu tiền). Trình chủ kho gói quyết định 2026-10-01.
+
+## 2026-10-01 sáng — tiếp sau khi đổi tài khoản (phiên điều phối mới)
+
+- Phiên cũ dừng 05:27 (hạn mức tuần tài khoản cũ); ba tác tử B9/D8/E1 chết giữa việc. Máy khởi động lại: Docker/Postgres tắt (đã bật), /tmp mất log. Tín dụng AI Gateway team âm (402) → chủ kho nạp 50 USD.
+- B9 (không gọi mô hình): 254ba5ce bằng chứng lần 5; 6889fa36 judge thử lại ≤3 lần, tách chốt mã hỏng / judge hỏng / dưới ngưỡng, độ trễ theo loại lượt, chi phí gồm cặp A/B. Lần 5: 8 judge hỏng đều «không chọn đáp án», 0 do 402.
+- D8 chạy thật trên 4777b2f5: 84 DUNG / 0 SAI, mã 0, 0,0261 USD.
+- E1: 4777b2f5 thước; 7cc07052 (cửa 202 + đọc luồng), 5a4d868e (máy soi gom thân yêu cầu). Lượt thật 3: mã 0, 0,05 USD — (0) bắt 6 tên, (1) 403, (3) 0 tên/19 sự kiện, công cụ {nop_ban_nhap}, (4a) lớp kênh giữ 401, (4b) bắt «đường vào rò».
+- Eval lần 6 (6889fa36, 15 cặp): mã 1 — A/B 15/15 (Wilson 80–100 %), p90 18,3 s, judge 45 lời gọi / 10 thử lại / 0 hỏng, 1,15 USD tác nhân. Dưới ngưỡng: onehub tc3, tai-chinh tc3 (KR đo việc), bp-kinh-doanh tc2 (khởi điểm trống), tc6 (bỏ việc cốt lõi). Bằng chứng 3f5eb56b.
+- Vá lời dặn soạn: 05e927a3 (KR đo kết quả, thứ tự nguồn khởi điểm, việc cốt lõi), a9a7bc20 (đối trọng — điều phối quyết, chủ kho có thể bác), de155122 (ví dụ ngoài miền mẫu, «trừ khi người đã bỏ»), a8e4f900 (mã loại `khoi-diem-la-dich`). Soát lại: Approved.
+- **Trình Cổng 2 (đánh đổi):** mã `khoi-diem-la-dich` không coi số trong văn tự do là số đo thật; một số đo thật trên trang chiến lược mà trùng một số đích trong gói (mẫu: «120 xe tải» = đích 120) bị loại làm khởi điểm cả dòng, dù luật judge đã duyệt kể trang chiến lược là nguồn hợp lệ. Người vẫn gõ được số đó. Còn hở: số mục tiêu viết trong trang chiến lược (vd «giao đúng hẹn 96%») lấy làm khởi điểm vẫn lọt — chỉ lời dặn giữ.
+- **Trình Cổng 2:** luật «mỗi Mục tiêu có ít nhất một KR đối trọng» do điều phối thêm (khớp tiêu chí chấm đã duyệt), chưa qua chủ kho.
+- Chờ chủ kho: cho chạy eval lần 7 (~1,3–1,5 USD) để biết bản vá có ăn thua.
