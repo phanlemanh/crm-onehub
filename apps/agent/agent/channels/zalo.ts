@@ -7,6 +7,7 @@ import { type ChannelEvents, defineChannel, POST } from "eve/channels";
 import { z } from "zod";
 import { authorised } from "../lib/cau-noi-auth";
 import { attribute, type PurposeContext } from "../lib/session-purpose";
+import { cauKhoChoZalo } from "../lib/tai-lieu-hoi-zalo";
 import { datBot, guiThu } from "../lib/zalo-bot-xuong";
 import { ZALO } from "../lib/zalo-config";
 import { chatCuaToken } from "../lib/zalo-hoi";
@@ -48,8 +49,12 @@ function suKien(
 export const zaloEvents: ChannelEvents = {
 	async "message.completed"(data, channel, ctx) {
 		const { message, finishReason } = loiNhan.parse(data);
-		if (!message?.trim() || finishReason === ZALO.hoi.giuaLuot) return;
-		await traLoiVe(suKien(channel, ctx), message);
+		if (finishReason === ZALO.hoi.giuaLuot) return;
+		const sk = suKien(channel, ctx);
+		const cauKho = await cauKhoChoZalo(sk.hoiId);
+		const text = cauKho ?? message;
+		if (!text?.trim()) return;
+		await traLoiVe(sk, text);
 	},
 	async "input.requested"(_data, channel, ctx) {
 		await canHoiLai(suKien(channel, ctx), (token) =>
@@ -60,7 +65,13 @@ export const zaloEvents: ChannelEvents = {
 		await capNhatToken(suKien(channel, ctx));
 	},
 	async "turn.failed"(_data, channel, ctx) {
-		await loiVe(suKien(channel, ctx));
+		const sk = suKien(channel, ctx);
+		const cauKho = await cauKhoChoZalo(sk.hoiId);
+		if (cauKho) {
+			await traLoiVe(sk, cauKho);
+			return;
+		}
+		await loiVe(sk);
 	},
 	async "session.failed"(_data, channel) {
 		console.error(
