@@ -91,10 +91,16 @@ async function hangKho(): Promise<{ hoiId: string; ctx: NguCanhKho }> {
 	};
 }
 
+function xuLyKetQuaCua<T>(): T {
+	const xuLy = hookDong.events?.["action.result"];
+	if (!xuLy) throw new Error("hook dong-tro-ly-kho thieu action.result");
+	return xuLy as unknown as T;
+}
+
 type XuLy = (e: SuKienKetQua, c: NguCanhKho) => Promise<void>;
 type BatDau = (e: { type: "session.started" }, c: NguCanhGoi) => Promise<void>;
 async function ketQuaCon(ctx: NguCanhKho, isError: boolean, message?: string) {
-	await (hookDong.events?.["action.result"] as unknown as XuLy)(
+	await xuLyKetQuaCua<XuLy>()(
 		{
 			type: "action.result",
 			data: {

@@ -134,6 +134,12 @@ type SuKienKetQua = {
 		};
 	};
 };
+function xuLyKetQuaCua<T>(): T {
+	const xuLy = hookDong.events?.["action.result"];
+	if (!xuLy) throw new Error("hook dong-tro-ly-kho thieu action.result");
+	return xuLy as unknown as T;
+}
+
 type XuLyKetQua = (e: SuKienKetQua, c: NguCanhGoc) => Promise<void>;
 
 async function suKien(
@@ -280,7 +286,7 @@ describe("tlk-zalo", () => {
 		for (const duong of ["message.completed", "turn.failed"] as const) {
 			const c = await cauZalo();
 			await moTroLy(c.goc);
-			await (hookDong.events?.["action.result"] as unknown as XuLyKetQua)(
+			await xuLyKetQuaCua<XuLyKetQua>()(
 				{
 					type: "action.result",
 					data: {

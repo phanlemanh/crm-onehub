@@ -170,4 +170,7 @@ export async function donTroLyKho(): Promise<void> {
 	await db.taiLieuPhienBan.deleteMany({ where: { trangId } });
 	await db.taiLieuDeXuat.deleteMany({ where: { trangId } });
 	await db.taiLieuTrang.deleteMany({ where: { id: trangId } });
+	await db.zaloHoi.deleteMany({ where: { crmUserId: cuaNguoiThu } });
+	await db.member.deleteMany({ where: { userId: cuaNguoiThu } });
+	await db.user.deleteMany({ where: { id: cuaNguoiThu } });
 }

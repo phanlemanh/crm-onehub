@@ -1,8 +1,5 @@
 import { defineHook } from "eve/hooks";
-import {
-	dongTheoKetQuaCon,
-	ketQuaTroLyKho,
-} from "../lib/tai-lieu-hoi-phien";
+import { dongTheoKetQuaCon, ketQuaTroLyKho } from "../lib/tai-lieu-hoi-phien";
 
 export default defineHook({
 	events: {
