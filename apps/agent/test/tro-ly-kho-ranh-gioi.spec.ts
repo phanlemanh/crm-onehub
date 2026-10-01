@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
-import { readdirSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import * as gateway from "@ai-sdk/gateway";
 import { db } from "@crm/db";
@@ -9,22 +10,28 @@ import { MOT_TRIEU, TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
 import { modelTaiLieu, nhanKhoaTaiLieu } from "../agent/lib/tai-lieu-model";
 import troLyKho from "../agent/subagents/tro_ly_kho/agent";
 import hookSo from "../agent/subagents/tro_ly_kho/hooks/so-chi-phi";
+import nopTraLoi from "../agent/subagents/tro_ly_kho/tools/nop_tra_loi";
+import readPage from "../agent/subagents/tro_ly_kho/tools/read_page";
+import searchPages from "../agent/subagents/tro_ly_kho/tools/search_pages";
+import LOI from "./fixtures/loi-gateway.json";
+import {
+	banDungCon,
+	danhMucDungSan,
+	TRAN_BIEN_DICH_MS,
+} from "./support/eve-ban-dung";
 import {
 	type CtxCon,
 	donTroLyKho,
 	gieoNguoi,
+	goiCongCu,
+	ketQuaConEve,
+	ma,
 	moHoiCrm,
 	type Nguoi,
+	trangDaDuyet,
 } from "./support/tro-ly-kho-gia";
 
 const THU_MUC = join(import.meta.dir, "..", "agent", "subagents", "tro_ly_kho");
-const THU_MUC_MAY_SOAN = join(
-	import.meta.dir,
-	"..",
-	"agent",
-	"subagents",
-	"may_soan",
-);
 const TOOL_SONG = ["nop_tra_loi", "read_page", "search_pages"] as const;
 const IMPORT_CAM = [/app-?setting/i, /model-theo-vai/i, /modelTheoVai/];
 const BIEN = TAI_LIEU_AGENT.hoi.bienKhoaRieng;
@@ -39,33 +46,69 @@ type SuKienBuoc = {
 type XuLy = (e: SuKienBuoc, c: CtxCon) => Promise<void>;
 const MOC = "NOIDUNG-TRANG-MOC";
 
-type PhanLoai = { song: string[]; tat: string[] };
-
-async function phanLoai(thuMuc: string): Promise<PhanLoai> {
-	const song: string[] = [];
-	const tat: string[] = [];
-	for (const f of readdirSync(join(thuMuc, "tools"))
-		.filter((t) => t.endsWith(".ts"))
-		.sort()) {
-		const mod = await import(join(thuMuc, "tools", f));
-		const ten = f.replace(/\.ts$/, "");
-		if (mod.default.kind === "eve:disabled-tool") tat.push(ten);
-		else song.push(ten);
-	}
-	return { song, tat };
+function chuaTat(
+	danhMuc: readonly string[],
+	daTat: readonly string[],
+	coSkill: boolean,
+): string[] {
+	return danhMuc
+		.filter((t) => !daTat.includes(t) && !(t === "load_skill" && !coSkill))
+		.map((t) => `tlk-ranh-gioi: tool dung san chua tat ${t}`);
 }
 
-function loiTap(tap: PhanLoai, tatPhaiCo: readonly string[]): string[] {
-	const loi: string[] = [];
-	for (const t of tap.song)
-		if (!(TOOL_SONG as readonly string[]).includes(t))
-			loi.push(`tlk-ranh-gioi: tool la ${t}`);
-	for (const t of TOOL_SONG)
-		if (!tap.song.includes(t)) loi.push(`tlk-ranh-gioi: thieu tool ${t}`);
-	for (const t of tatPhaiCo)
-		if (!tap.tat.includes(t))
-			loi.push(`tlk-ranh-gioi: tool dung san chua tat ${t}`);
-	return loi;
+type ChinhSach =
+	| Record<"docker" | "microsandbox" | "vercel", string>
+	| {
+			loi: string;
+	  };
+
+function goiHam(n: ts.Node | undefined, ten: string): ts.CallExpression | null {
+	if (!n || !ts.isCallExpression(n)) return null;
+	return ts.isIdentifier(n.expression) && n.expression.text === ten ? n : null;
+}
+
+function chinhSachMang(nguon: string): ChinhSach {
+	const sf = ts.createSourceFile(
+		"sandbox.ts",
+		nguon,
+		ts.ScriptTarget.Latest,
+		true,
+	);
+	const lenh = sf.statements.filter((x) => !ts.isImportDeclaration(x));
+	const xuat = lenh[0];
+	if (lenh.length !== 1 || !xuat || !ts.isExportAssignment(xuat))
+		return { loi: "tlk-ranh-gioi: sandbox co cau lenh la" };
+	const doi = goiHam(xuat.expression, "defineSandbox")?.arguments[0];
+	if (!doi || !ts.isObjectLiteralExpression(doi) || doi.properties.length !== 1)
+		return { loi: "tlk-ranh-gioi: defineSandbox la" };
+	const backend = doi.properties[0];
+	if (!backend || !ts.isPropertyAssignment(backend))
+		return { loi: "tlk-ranh-gioi: backend la" };
+	const cauHinh = goiHam(backend.initializer, "defaultBackend")?.arguments[0];
+	if (!cauHinh || !ts.isObjectLiteralExpression(cauHinh))
+		return { loi: "tlk-ranh-gioi: defaultBackend la" };
+	const ra: Record<string, string> = {};
+	for (const p of cauHinh.properties) {
+		if (
+			!ts.isPropertyAssignment(p) ||
+			!ts.isObjectLiteralExpression(p.initializer)
+		)
+			return { loi: "tlk-ranh-gioi: backend co trai hay gia tri la" };
+		const mang = p.initializer.properties.find(
+			(x) => ts.isPropertyAssignment(x) && x.name.getText() === "networkPolicy",
+		);
+		if (
+			!mang ||
+			!ts.isPropertyAssignment(mang) ||
+			!ts.isStringLiteral(mang.initializer) ||
+			p.initializer.properties.length !== 1
+		)
+			return {
+				loi: `tlk-ranh-gioi: ${p.name.getText()} khong ro networkPolicy`,
+			};
+		ra[p.name.getText()] = mang.initializer.text;
+	}
+	return ra as ChinhSach;
 }
 
 let quanTri: Nguoi;
@@ -79,44 +122,80 @@ afterAll(async () => {
 });
 
 describe("tlk-ranh-gioi", () => {
-	test("tlk-ranh-gioi: dung ba tool song, moi tool dung san ma may soan tat thi tro ly kho cung tat", async () => {
-		const tap = await phanLoai(THU_MUC);
-		const tatCuaMaySoan = (await phanLoai(THU_MUC_MAY_SOAN)).tat;
-		expect(tatCuaMaySoan.length).toBeGreaterThan(0);
-		expect(tap.song).toEqual([...TOOL_SONG]);
-		expect(loiTap(tap, tatCuaMaySoan)).toEqual([]);
-		expect(
-			loiTap(
-				{
-					song: [...tap.song, "web_fetch"],
-					tat: tap.tat.filter((t) => t !== "web_fetch"),
-				},
-				tatCuaMaySoan,
-			),
-		).toContain("tlk-ranh-gioi: tool la web_fetch");
-	});
+	test(
+		"tlk-ranh-gioi: ban dung eve co dung ba tool song, moi tool dung san cua eve deu tat",
+		async () => {
+			const con = await banDungCon("tro_ly_kho");
+			expect(con.agent.tools.map((t) => t.name).sort()).toEqual([...TOOL_SONG]);
+			const danhMuc = await danhMucDungSan();
+			expect(danhMuc.length).toBeGreaterThan(5);
+			const coSkill = con.agent.skills.length > 0;
+			expect(
+				chuaTat(danhMuc, con.agent.disabledFrameworkTools, coSkill),
+			).toEqual([]);
+			expect(
+				chuaTat(
+					danhMuc,
+					con.agent.disabledFrameworkTools.filter((t) => t !== "web_fetch"),
+					coSkill,
+				),
+			).toEqual(["tlk-ranh-gioi: tool dung san chua tat web_fetch"]);
+			expect(chuaTat(["load_skill"], [], true)).toEqual([
+				"tlk-ranh-gioi: tool dung san chua tat load_skill",
+			]);
+		},
+		TRAN_BIEN_DICH_MS,
+	);
 
-	test("tlk-ranh-gioi: sandbox deny-all o ca ba backend, agent.ts khong doc AppSetting", () => {
-		const s = readFileSync(join(THU_MUC, "sandbox/sandbox.ts"), "utf8");
-		expect(s.match(/networkPolicy: "deny-all"/g)?.length).toBe(3);
-		const nguon = ts.createSourceFile(
-			"agent.ts",
-			readFileSync(join(THU_MUC, "agent.ts"), "utf8"),
-			ts.ScriptTarget.Latest,
-			true,
-		);
-		const imports: string[] = [];
-		nguon.forEachChild((n) => {
-			if (ts.isImportDeclaration(n) && ts.isStringLiteral(n.moduleSpecifier))
-				imports.push(n.moduleSpecifier.text);
-		});
-		expect(imports.filter((i) => IMPORT_CAM.some((r) => r.test(i)))).toEqual(
-			[],
-		);
-		expect((troLyKho.model as unknown as { fallback: string }).fallback).toBe(
-			TAI_LIEU_AGENT.hoi.maModel,
-		);
-	});
+	test(
+		"tlk-ranh-gioi: sandbox eve nap la tep nay, ca ba backend deny-all; agent.ts khong doc AppSetting",
+		async () => {
+			const con = await banDungCon("tro_ly_kho");
+			const sb = con.agent.sandbox;
+			if (!sb) throw new Error("tlk-ranh-gioi: ban dung khong co sandbox");
+			const nguonSb = readFileSync(
+				join(con.agent.agentRoot, sb.logicalPath),
+				"utf8",
+			);
+			expect(createHash("sha256").update(nguonSb).digest("hex")).toBe(
+				sb.sourceHash,
+			);
+			expect(chinhSachMang(nguonSb)).toEqual({
+				docker: "deny-all",
+				microsandbox: "deny-all",
+				vercel: "deny-all",
+			});
+			expect(
+				chinhSachMang(
+					nguonSb.replace(
+						'docker: { networkPolicy: "deny-all" }',
+						'docker: { networkPolicy: "allow-all" }',
+					),
+				).docker,
+			).toBe("allow-all");
+			expect(
+				chinhSachMang(`const x = { networkPolicy: "deny-all" };\n${nguonSb}`),
+			).toEqual({ loi: "tlk-ranh-gioi: sandbox co cau lenh la" });
+			const nguon = ts.createSourceFile(
+				"agent.ts",
+				readFileSync(join(THU_MUC, "agent.ts"), "utf8"),
+				ts.ScriptTarget.Latest,
+				true,
+			);
+			const imports: string[] = [];
+			nguon.forEachChild((n) => {
+				if (ts.isImportDeclaration(n) && ts.isStringLiteral(n.moduleSpecifier))
+					imports.push(n.moduleSpecifier.text);
+			});
+			expect(imports.filter((i) => IMPORT_CAM.some((r) => r.test(i)))).toEqual(
+				[],
+			);
+			expect((troLyKho.model as unknown as { fallback: string }).fallback).toBe(
+				TAI_LIEU_AGENT.hoi.maModel,
+			);
+		},
+		TRAN_BIEN_DICH_MS,
+	);
 
 	test("tlk-ranh-gioi: moi loi goi mang ZDR voi khoa rieng va khoa chung, nhan khoa dung", async () => {
 		const loi: string[] = [];
@@ -155,24 +234,65 @@ describe("tlk-ranh-gioi", () => {
 		expect(loi).toEqual([]);
 	});
 
-	test("tlk-ranh-gioi: ket qua tra agent goc chi la ma hang va ket qua, khong chu trang", () => {
+	test("tlk-ranh-gioi: ket qua tra agent goc chi la ma hang va ket qua, khong chu trang", async () => {
+		const trang = await trangDaDuyet(
+			quanTri,
+			`Trang mốc ${ma("moc")}`,
+			`## Mức\n\n${MOC} Tầng 2 hưởng 1,2%.`,
+		);
+		const { hoiId, ctx } = await moHoiCrm(quanTri, "Tầng 2 hưởng bao nhiêu?");
+		const tim = await goiCongCu(searchPages, { query: "tầng" }, ctx);
+		const doc = await goiCongCu<{ noiDung: string; phienBan: number }>(
+			readPage,
+			{ slug: trang.slug },
+			ctx,
+		);
+		if (!doc.ok) throw new Error(doc.loi);
+		expect(doc.ra.noiDung).toContain(MOC);
+		const nop = await goiCongCu<{ hoiId: string; ketQua: string }>(
+			nopTraLoi,
+			{
+				loai: "tra-loi",
+				cauHoi: "Tầng 2 hưởng bao nhiêu?",
+				cau: [
+					{
+						chu: "Tầng 2 hưởng 1,2%.",
+						trich: [
+							{
+								slug: trang.slug,
+								phienBan: doc.ra.phienBan,
+								doan: `${MOC} Tầng 2 hưởng 1,2%.`,
+							},
+						],
+					},
+				],
+			},
+			ctx,
+		);
+		if (!nop.ok) throw new Error(nop.loi);
 		const khuon = troLyKho.outputSchema as unknown as KhuonRa;
-		expect(
-			khuon.safeParse({ hoiId: "cmup14vbv000as4tylgu149qg", ketQua: "TRA_LOI" })
-				.success,
-		).toBe(true);
-		expect(
-			khuon.safeParse({ hoiId: `${MOC} Tầng 2 hưởng 1,2%.`, ketQua: "TRA_LOI" })
-				.success,
-			"tlk-ranh-gioi: chu trang toi agent goc",
-		).toBe(false);
-		expect(
-			khuon.safeParse({
-				hoiId: "cmup14vbv000as4tylgu149qg",
-				ketQua: "TRA_LOI",
-				traLoi: MOC,
-			}).success,
-		).toBe(false);
+		const daThay = [
+			JSON.stringify(tim),
+			JSON.stringify(doc),
+			JSON.stringify(nop),
+		];
+		expect(daThay.some((x) => x.includes(MOC))).toBe(true);
+		const dungHang = { hoiId: nop.ra.hoiId, ketQua: nop.ra.ketQua };
+		const ungVien: KetQuaThu[] = [
+			dungHang,
+			{ ...dungHang, hoiId: doc.ra.noiDung },
+			{ ...dungHang, ketQua: MOC },
+			{ ...dungHang, traLoi: doc.ra.noiDung },
+			...daThay.map((x) => ({ ...dungHang, traLoi: x })),
+		];
+		const qua = ungVien.filter((u) => khuon.safeParse(u).success);
+		expect(qua, "tlk-ranh-gioi: chu trang toi agent goc").toEqual([dungHang]);
+		expect(hoiId).toBe(dungHang.hoiId);
+		const toiGoc = [
+			ketQuaConEve(dungHang.hoiId),
+			...Object.values(LOI).map((l) => ketQuaConEve(dungHang.hoiId, l)),
+		].map((r) => JSON.stringify(r));
+		expect(toiGoc.filter((r) => r.includes(MOC))).toEqual([]);
 	});
 
 	test("tlk-ranh-gioi: moi buoc model cong token, chi phi vao hang va ghi so chi phi tai-lieu.tro-ly", async () => {
