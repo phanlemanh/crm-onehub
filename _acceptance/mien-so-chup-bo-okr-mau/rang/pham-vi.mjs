@@ -8,10 +8,16 @@ const MA_SAN_PHAM = /^(apps|packages)\//;
 
 const git = (...d) =>
 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
-const dong = (s) => s.split("\n").map((x) => x.trim()).filter(Boolean);
+const dong = (s) =>
+	s
+		.split("\n")
+		.map((x) => x.trim())
+		.filter(Boolean);
 const chamMa = (tep) => tep.filter((t) => MA_SAN_PHAM.test(t));
 
-const nhatKy = dong(git("log", "--no-merges", "--name-only", "--format=@@%h", "--", HO_SO));
+const nhatKy = dong(
+	git("log", "--no-merges", "--name-only", "--format=@@%h", "--", HO_SO),
+);
 const commit = nhatKy.filter((x) => x.startsWith("@@")).map((x) => x.slice(2));
 if (commit.length === 0) {
 	console.log("KHONG DO DUOC: khong commit nao cham ho so");
@@ -37,7 +43,9 @@ if (goc && goc !== git("rev-parse", "HEAD")) {
 const vi = [...new Set([...chamMa(tepHoSo), ...chamMa(tepNhanh)])];
 for (const t of vi) console.log(`CHAM MA SAN PHAM: ${t}`);
 
-const doiChung = chamMa(dong(git("show", "--name-only", "--format=", DOI_CHUNG)));
+const doiChung = chamMa(
+	dong(git("show", "--name-only", "--format=", DOI_CHUNG)),
+);
 const bat = doiChung.includes(TEP_DOI_CHUNG);
 console.log(
 	bat

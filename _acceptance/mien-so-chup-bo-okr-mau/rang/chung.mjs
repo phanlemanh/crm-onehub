@@ -3,17 +3,25 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+export const GOC = join(
+	dirname(fileURLToPath(import.meta.url)),
+	"..",
+	"..",
+	"..",
+);
 export const TEP_NAP = "apps/api/scripts/okr-mau/nap.ts";
 
 export function lenhE8() {
 	const cau = readFileSync(join(GOC, "_acceptance/config.yaml"), "utf8");
 	const m = cau.match(/^\s+sot_soi_chi_them:\s*"([^"]+)"\s*$/m);
 	if (!m) {
-		console.log("KHONG DO DUOC: khong doc duoc executors.script.sot_soi_chi_them");
+		console.log(
+			"KHONG DO DUOC: khong doc duoc executors.script.sot_soi_chi_them",
+		);
 		process.exit(2);
 	}
-	const thuoc = process.env.SOI_MA;
+	const i = process.argv.indexOf("--thuoc");
+	const thuoc = i === -1 ? null : process.argv[i + 1];
 	return thuoc
 		? m[1].replace("_acceptance/so-okr-tu-chay/rang/soi-ma.mjs", thuoc)
 		: m[1];

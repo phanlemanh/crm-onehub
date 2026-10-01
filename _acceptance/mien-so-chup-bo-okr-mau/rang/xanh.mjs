@@ -6,7 +6,9 @@ const nap = readFileSync(join(GOC, TEP_NAP), "utf8");
 const d1 = dongCua(nap, "okrSoChup.createMany");
 const d2 = dongCua(nap, "okrSoChup.deleteMany");
 if (d1 === null || d2 === null) {
-	console.log(`KHONG DO DUOC: ${TEP_NAP} phai co dung mot okrSoChup.createMany va mot okrSoChup.deleteMany`);
+	console.log(
+		`KHONG DO DUOC: ${TEP_NAP} phai co dung mot okrSoChup.createMany va mot okrSoChup.deleteMany`,
+	);
 	process.exit(2);
 }
 
@@ -23,15 +25,23 @@ const kyTao = [
 	["packages/db/src/okr-chi-so.ts", "chupKrCrm"],
 ];
 const khop = (dong, [tep, ham]) =>
-	new RegExp(`^tao  ${tep.replaceAll(".", "\\.")}:\\d+ \\S+ trong ${ham}$`).test(dong);
+	new RegExp(
+		`^tao  ${tep.replaceAll(".", "\\.")}:\\d+ \\S+ trong ${ham}$`,
+	).test(dong);
 
 const dieu = [
 	[`ma thoat 0 (nhan ${ma})`, ma === 0],
-	[`dong chot === «${CHOT_DAT}»`, dongCo(ra, "chot mien bo mau:").join("|") === CHOT_DAT],
+	[
+		`dong chot === «${CHOT_DAT}»`,
+		dongCo(ra, "chot mien bo mau:").join("|") === CHOT_DAT,
+	],
 	[`dung 2 dong mien (nhan ${mien.length})`, mien.length === 2],
 	...kyMien.map((k) => [`co «${k}»`, mien.includes(k)]),
 	[`dung 3 dong tao (nhan ${tao.length})`, tao.length === 3],
-	...kyTao.map((k) => [`tao ${k[0]} trong ${k[1]}`, tao.some((d) => khop(d, k))]),
+	...kyTao.map((k) => [
+		`tao ${k[0]} trong ${k[1]}`,
+		tao.some((d) => khop(d, k)),
+	]),
 	["co «vi pham: 0»", ra.split("\n").includes("vi pham: 0")],
 	["khong dong HONG", dongCo(ra, "HONG").length === 0],
 ];

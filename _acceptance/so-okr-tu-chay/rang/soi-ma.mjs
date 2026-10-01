@@ -177,8 +177,7 @@ function locKeyResult(a, sf) {
 			ts.isObjectLiteralExpression(p.initializer) &&
 			p.initializer.properties.some(
 				(q) =>
-					(ts.isPropertyAssignment(q) ||
-						ts.isShorthandPropertyAssignment(q)) &&
+					(ts.isPropertyAssignment(q) || ts.isShorthandPropertyAssignment(q)) &&
 					q.name.getText(sf) === "keyResultId",
 			),
 	);
@@ -308,7 +307,8 @@ function kiemC2(duong) {
 	);
 	const kiem = nut.find((n) => laGoiTen(n, "kiemDuocNap"));
 	const chan = sf.statements.find(
-		(st) => ts.isIfStatement(st) && moiNut(st.thenStatement).some(laProcessExit),
+		(st) =>
+			ts.isIfStatement(st) && moiNut(st.thenStatement).some(laProcessExit),
 	);
 	const dat =
 		!nhapTinh &&
@@ -790,7 +790,9 @@ if (ca === "chi-them" && !chieuDo) {
 		const cap = process.argv[i + 1] ?? "";
 		const k = cap.indexOf("=");
 		if (k <= 0) {
-			console.log(`KHONG DO DUOC: --thay can <tep trong kho>=<duong that>, nhan «${cap}»`);
+			console.log(
+				`KHONG DO DUOC: --thay can <tep trong kho>=<duong that>, nhan «${cap}»`,
+			);
 			process.exit(2);
 		}
 		thay.set(cap.slice(0, k), cap.slice(k + 1));

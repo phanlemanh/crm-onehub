@@ -61,7 +61,7 @@
 
 - [ ] Khung chung: đọc lệnh E8 từ config; `chay(thay)` → `{ma, ra}`; `banSao(vai, bienDoi)` chép tệp vào `mkdtempSync`, áp `bienDoi(chu)` trả `{chu, moc}` (moc = chuỗi duy nhất để tính dòng); bienDoi không thay đổi gì → ném «BIEN DOI KHONG AP: <ô>».
 - [ ] Đối chứng dương rồi ma trận: `--ca ngoai` mười ô n1…n10, `--ca chot` mười ba ô c1a…c4d, `--ca cu` ba lệnh; mỗi ô kiểm mã, câu ghim (dòng tính trên bản sao), tập dòng `mien`, dòng chốt.
-- [ ] Verify: ba ca chạy → exit 0, in `ngoai: 10/10`, `chot: 13/13`, `cu: 3/3`; phá-thử: tạm bỏ C3 khỏi thước trong bản sao (`--thay` không áp cho thước) — thay vào đó chạy `do-mien.mjs` với biến môi trường `SOI_MA=<bản sao thước đã bỏ một chốt>` để chứng ô lọt in `LOT`.
+- [ ] Verify: ba ca chạy → exit 0, in `ngoai: 10/10`, `chot: 13/13`, `cu: 3/3`; phá-thử: tạm bỏ C3 khỏi thước trong bản sao (`--thay` không áp cho thước) — thay vào đó chạy `do-mien.mjs --thuoc <bản sao thước đã bỏ một chốt>` để chứng ô lọt in `LOT`.
 - [ ] Commit.
 
 ### Task 4: Văn bản bốn nơi + `rang/van-ban.mjs` (E5, E6)
