@@ -719,7 +719,21 @@ Vì sao: «nhóm» đã dành cho người (bộ phận, phòng ban); «quyền�
 đọc/ghi trong khi đây là một ranh trọn phần; «scope» lẫn với quyền OAuth của hộp
 thư ngay trong cùng màn.
 
-**Trợ lý AI**: người nghiên cứu tự động trong tab Agent của khung bản ghi và ở
+**Kara**: tên duy nhất của AI trong OneHub Center, chốt 2026-10-01 (Manh Phan). Mọi
+chỗ AI nói, đề xuất, tóm tắt hay soạn trên màn đều ký tên Kara — tab của khung bản
+ghi, hội thoại, góp ý và tóm tắt tuần ở khu OKR, thông tin đề xuất của liên hệ, tra
+cứu, bản soạn của Tài liệu, câu trả lời qua bot Zalo. Một tên, một dấu tia sáng; phạm
+vi dữ liệu thì theo chỗ gọi: ở khu OKR Kara chỉ đọc OKR, ở Tài liệu chỉ đọc tệp nguồn,
+ở khung bản ghi đọc dữ liệu đối tác theo quyền người hỏi. Khi cần phân biệt phần chạy
+(cài đặt, sổ chi phí) thì ghi theo phạm vi: «Kara · OKR», «Kara · hồ sơ», «Kara · Tài
+liệu». Kara chạy các **Tác nhân** đội dựng ra, nhưng tác nhân là vật, không phải tên
+của AI. Luật giao diện ở `docs/ai-ux.md`.
+_Avoid_: Agent, trợ lý AI, Trợ lý OKR, máy, máy soạn, máy góp ý, bot (khi nói về AI)
+Vì sao: bảy tên cho cùng một thứ (khảo sát `docs/plan/ux-ai-thong-nhat-2026-10-01.md`)
+làm người dùng không biết đang nói với ai, và mỗi lượt lại đặt thêm một tên. Một tên
+riêng thì không lẫn với danh từ chung nào trong CRM.
+
+**Trợ lý AI**: (trên màn hình là **Kara** từ 2026-10-01; mục này giữ nghĩa kỹ thuật của phần chạy) người nghiên cứu tự động trong tab Agent của khung bản ghi và ở
 khung hội thoại — đọc lịch sử công ty, thoả thuận, tìm trong CRM và nghiên cứu
 đối tác theo yêu cầu của một người dùng đang đăng nhập. Là một phần của phạm vi
 dữ liệu đối tác: vai «chỉ OKR» không gọi được nó. Khác **Tác nhân** (việc tự động
@@ -729,7 +743,7 @@ _Avoid_: agent, eve, bot, chatbot
 Vì sao: «agent» và «eve» là tên kỹ thuật trong mã; «bot» đã là bot Zalo; «trợ lý»
 một mình thì lẫn với hai thứ kia — luôn viết đủ «trợ lý AI».
 
-**Trợ lý OKR**: phần AI của khu OKR — góp ý khi người bấm trên một Mục tiêu hay KR, và
+**Trợ lý OKR**: (trên màn hình là **Kara** từ 2026-10-01; mục này giữ nghĩa kỹ thuật của phần chạy) phần AI của khu OKR — góp ý khi người bấm trên một Mục tiêu hay KR, và
 tóm tắt tuần cho phòng ban. Chạy riêng khỏi trợ lý AI: chỉ đọc dữ liệu OKR, không đọc
 được dữ liệu đối tác, không tự ghi vào OKR — mọi thay đổi là người bấm nhận. Nội dung
 OKR chỉ gửi tới nhà cung cấp model có cam kết không lưu dữ liệu (ZDR). Quản trị bật theo
@@ -914,7 +928,7 @@ chủ trang duyệt. Không ai đọc được nó ngoài người duyệt; tr�
 _Avoid_: bản nháp, draft, proposal
 Vì sao: «bản nháp» gợi thứ còn đang viết dở; bản đề xuất đã xong và đang chờ quyết.
 
-**Máy soạn**: phần của tác tử đọc chữ một nguồn rồi soạn một bản đề xuất cho trang
+**Máy soạn**: (trên màn hình là **Kara** từ 2026-10-01; mục này giữ nghĩa kỹ thuật của phần chạy) phần của tác tử đọc chữ một nguồn rồi soạn một bản đề xuất cho trang
 đích, mỗi con số mới kèm đoạn nguồn chứa nó. Máy soạn không duyệt, không đọc gì ngoài
 nguồn, bản đang dùng của trang đích và trang «Quy tắc viết». Trên màn: «Máy đang soạn»,
 «Bản máy soạn». Chốt 2026-09-28 tại Cổng Phạm vi của `may-soan-de-xuat`.
