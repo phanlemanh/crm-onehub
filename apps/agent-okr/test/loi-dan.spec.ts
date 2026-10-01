@@ -104,6 +104,17 @@ describe("lời dặn tĩnh sau lần chạy 6", () => {
 		expect(luat).toContain("in this unit's own words");
 	});
 
+	test("dòng bị loại: sửa theo viPham rồi nộp lại đúng một lần trong cùng lượt, không để dòng bị loại; không còn luật một lời gọi mỗi lượt", () => {
+		const banNhap = muc("What to do");
+		const sua = gach(banNhap, "- When lines come back in `biLoai`");
+		expect(sua).toContain("`viPham`");
+		expect(sua).toContain("call `nop_ban_nhap` once more in the same turn");
+		expect(sua).toContain("never end the turn with a dropped line");
+		expect(sua).toContain("`da-bac`");
+		expect(LOI_DAN).not.toContain("at most once per turn");
+		expect(banNhap).toContain("at most twice per turn");
+	});
+
 	test("luật judge và tiêu chí khởi điểm liệt kê đúng nguồn khởi điểm của lời dặn, cấm số đích", () => {
 		const DG = TRO_LY_OKR_SOAN.danhGia;
 		const NGUON = [

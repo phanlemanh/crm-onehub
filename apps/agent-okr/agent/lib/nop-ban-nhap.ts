@@ -10,6 +10,9 @@ import {
 import { type BanNhap, laChoGiuPhien } from "@crm/validation/okr-cuoc-soan";
 import {
 	type DongKiemSoan,
+	dongBiLoaiSoan,
+	type GoiKiemSoan,
+	giaTriViPham,
 	kiemBanNhap,
 	type MaLoaiBanNhap,
 } from "@crm/validation/okr-kiem-ban-nhap";
@@ -25,21 +28,30 @@ import { type GoiSoan, goiKiemTu, goiSoan } from "./goi-soan";
 import { type NguCanhPhien, thuocTinhPhien } from "./phien";
 import { docSoNguoiGo } from "./so-nguoi-go";
 
-export type DongBiLoai = { khoa: string; ten: string; maLoai: MaLoaiBanNhap };
-
 type TrangThaiHang = (typeof TRANG_THAI_DE_XUAT)[number];
 
 type TrangThaiGiu = (typeof TRO_LY_OKR_SOAN.trangThaiGiuKhoa)[number];
 
-type MaGiu =
-	(typeof TRO_LY_OKR_SOAN.giuNguyen)[keyof typeof TRO_LY_OKR_SOAN.giuNguyen];
+const GIU = TRO_LY_OKR_SOAN.giuNguyen;
 
-export type DongGiuNguyen = {
-	khoa: string;
-	ten: string;
-	trangThai: TrangThaiGiu;
-	ma: MaGiu;
-};
+export const ketQuaNop = z.object({
+	ketQua: z.enum(["da-ghi", "tu-choi"]),
+	lyDo: z.string(),
+	soDong: z.number().int(),
+	biLoai: z.array(dongBiLoaiSoan),
+	giuNguyen: z.array(
+		z.object({
+			khoa: z.string(),
+			ten: z.string(),
+			trangThai: z.enum(TRO_LY_OKR_SOAN.trangThaiGiuKhoa),
+			ma: z.enum([GIU.daQuyet, GIU.khacTen]),
+		}),
+	),
+});
+
+export type KetQuaNop = z.infer<typeof ketQuaNop>;
+
+export type DongGiuNguyen = KetQuaNop["giuNguyen"][number];
 
 type DongDaLuu = {
 	khoa: string;
@@ -51,14 +63,6 @@ type DongDaLuu = {
 type DaQuyet = {
 	theoKhoaDong: ReadonlyMap<string, DongDaLuu>;
 	theoKhoaModel: ReadonlyMap<string, DongDaLuu>;
-};
-
-export type KetQuaNop = {
-	ketQua: "da-ghi" | "tu-choi";
-	lyDo: string;
-	soDong: number;
-	biLoai: DongBiLoai[];
-	giuNguyen: DongGiuNguyen[];
 };
 
 const TU_CHOI = TRO_LY_OKR_SOAN.tuChoi;
@@ -142,7 +146,6 @@ function chanTrungKhoa(dongs: readonly DongKiemSoan[]): void {
 	}
 }
 
-const GIU = TRO_LY_OKR_SOAN.giuNguyen;
 const QUYET_GIU_TEN: ReadonlySet<TrangThaiGiu> = new Set(
 	TRO_LY_OKR_SOAN.trangThaiDaQuyet,
 );
@@ -215,6 +218,20 @@ function giuTheo(d: DongKiemSoan, daQuyet: DaQuyet): DongGiuNguyen | null {
 	if (!cungKhoa || cungKhoa.khoaDong === khoaCua(d)) return null;
 	const { khoa, ten, trangThai } = cungKhoa;
 	return { khoa, ten, trangThai, ma: GIU.khacTen };
+}
+
+const VI_PHAM = TRO_LY_OKR_SOAN.viPham;
+
+function viPhamCua(
+	d: DongKiemSoan,
+	kiem: GoiKiemSoan,
+	maLoai: MaLoaiBanNhap,
+): string {
+	const giaTri = giaTriViPham(d, kiem, maLoai);
+	const nhan = VI_PHAM.nhan[maLoai];
+	return giaTri.length
+		? `${nhan}${VI_PHAM.noiNhan}${giaTri.join(VI_PHAM.noiGiaTri)}`
+		: nhan;
 }
 
 async function laPhienSong(
@@ -307,7 +324,16 @@ export async function nopBanNhap(
 		}),
 	]);
 	const biLoai = daKiem.flatMap(({ dong, kq }) =>
-		kq.qua ? [] : [{ khoa: dong.khoa, ten: tenCua(dong), maLoai: kq.maLoai }],
+		kq.qua
+			? []
+			: [
+					{
+						khoa: dong.khoa,
+						ten: tenCua(dong),
+						maLoai: kq.maLoai,
+						viPham: viPhamCua(dong, kiem, kq.maLoai),
+					},
+				],
 	);
 	return {
 		ketQua: "da-ghi",

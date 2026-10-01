@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { chuanHoa, coCum, khongDau } from "./okr-kiem";
 import { khoaDong, trichSo } from "./okr-kiem-de-xuat";
 import { type DongSoan, TRO_LY_OKR_TRAN } from "./okr-tro-ly";
@@ -35,6 +36,15 @@ export type GoiKiemSoan = {
 	khoaDaBac: Set<string>;
 };
 
+export const dongBiLoaiSoan = z.object({
+	khoa: z.string(),
+	ten: z.string(),
+	maLoai: z.enum(MA_LOAI_BAN_NHAP),
+	viPham: z.string(),
+});
+
+export type DongBiLoaiSoan = z.infer<typeof dongBiLoaiSoan>;
+
 export type KetQuaKiemBanNhap =
 	| { qua: true }
 	| { qua: false; maLoai: MaLoaiBanNhap };
@@ -57,30 +67,37 @@ function khoaCua(d: DongKiemSoan): string {
 	return khoaDong(d.loai === "kr-moi" ? { ...d, dich: null } : d);
 }
 
-function soMoi(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
-	if (d.loai === "can-chinh-moi") return false;
+function soMoiCua(d: DongKiemSoan, goi: GoiKiemSoan): string[] {
+	if (d.loai === "can-chinh-moi") return [];
 	const phep = new Set([...goi.soTrongGoi, ...goi.soNguoiGo]);
-	if (
-		d.loai === "kr-moi" &&
-		d.khoiDiemGoiY !== null &&
-		!phep.has(String(d.khoiDiemGoiY))
-	)
-		return true;
-	return chuCuaDong(d).some((c) =>
-		trichSo(c).some((s) => !phep.has(String(s))),
-	);
+	const khoiDiem =
+		d.loai === "kr-moi" && d.khoiDiemGoiY !== null ? [d.khoiDiemGoiY] : [];
+	const so = [...khoiDiem, ...chuCuaDong(d).flatMap(trichSo)].map(String);
+	return [...new Set(so.filter((s) => !phep.has(s)))];
+}
+
+function soMoi(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
+	return soMoiCua(d, goi).length > 0;
+}
+
+function khoiDiemLaDichCua(d: DongKiemSoan, goi: GoiKiemSoan): string[] {
+	if (d.loai !== "kr-moi" || d.khoiDiemGoiY === null) return [];
+	const so = String(d.khoiDiemGoiY);
+	return goi.soDich.has(so) && !goi.soKhoiDiem.has(so) && !goi.soNguoiGo.has(so)
+		? [so]
+		: [];
 }
 
 function khoiDiemLaDich(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
-	if (d.loai !== "kr-moi" || d.khoiDiemGoiY === null) return false;
-	const so = String(d.khoiDiemGoiY);
-	return (
-		goi.soDich.has(so) && !goi.soKhoiDiem.has(so) && !goi.soNguoiGo.has(so)
-	);
+	return khoiDiemLaDichCua(d, goi).length > 0;
+}
+
+function dichCua(d: DongKiemSoan): string[] {
+	return d.loai === "kr-moi" && d.dich !== null ? [String(d.dich)] : [];
 }
 
 function dichKhongTrong(d: DongKiemSoan): boolean {
-	return d.loai === "kr-moi" && d.dich !== null;
+	return dichCua(d).length > 0;
 }
 
 function noiVeNguoi(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
@@ -93,9 +110,13 @@ function noiVeNguoi(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
 		.some((ten) => chu.some((c) => coCum(c, ten)));
 }
 
-function tuCam(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
+function tuCamCua(d: DongKiemSoan, goi: GoiKiemSoan): string[] {
 	const chu = chuCuaDong(d).map(chuanHoa);
-	return goi.tuCam.some((tu) => chu.some((c) => coCum(c, chuanHoa(tu))));
+	return goi.tuCam.filter((tu) => chu.some((c) => coCum(c, chuanHoa(tu))));
+}
+
+function tuCam(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
+	return tuCamCua(d, goi).length > 0;
 }
 
 function chepCapTren(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
@@ -110,18 +131,26 @@ function idNgoaiGoi(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
 	return dich === null || !goi.idCanChinh.has(dich);
 }
 
+function idNgoaiGoiCua(d: DongKiemSoan, goi: GoiKiemSoan): string[] {
+	if (!idNgoaiGoi(d, goi) || d.loai !== "can-chinh-moi") return [];
+	const dich = d.targetObjectiveId ?? d.targetKeyResultId;
+	return dich === null ? [] : [dich];
+}
+
 function daBac(d: DongKiemSoan, goi: GoiKiemSoan): boolean {
 	return goi.khoaDaBac.has(khoaCua(d));
 }
 
+function mocCoDichSoCua(d: DongKiemSoan): string[] {
+	if (d.loai !== "kr-moi" || d.kieu !== KIEU_MOC) return [];
+	return [
+		...(d.khoiDiemGoiY === null ? [] : [String(d.khoiDiemGoiY)]),
+		...[d.ten, d.viSao].flatMap((c) => c.match(DICH_TRONG_CHU)?.[0] ?? []),
+	];
+}
+
 function mocCoDichSo(d: DongKiemSoan): boolean {
-	return (
-		d.loai === "kr-moi" &&
-		d.kieu === KIEU_MOC &&
-		(d.khoiDiemGoiY !== null ||
-			DICH_TRONG_CHU.test(d.ten) ||
-			DICH_TRONG_CHU.test(d.viSao))
-	);
+	return mocCoDichSoCua(d).length > 0;
 }
 
 function khongDonVi(d: DongKiemSoan): boolean {
@@ -143,6 +172,32 @@ const LUAT: readonly (readonly [
 	["khoi-diem-la-dich", khoiDiemLaDich],
 	["so-moi", soMoi],
 ];
+
+const KHONG_NEU_GIA_TRI = (): string[] => [];
+
+const GIA_TRI_VI_PHAM = {
+	"so-moi": soMoiCua,
+	"khoi-diem-la-dich": khoiDiemLaDichCua,
+	"dich-khong-trong": dichCua,
+	"moc-co-dich-so": mocCoDichSoCua,
+	"tu-cam": tuCamCua,
+	"id-ngoai-goi": idNgoaiGoiCua,
+	"noi-ve-nguoi": KHONG_NEU_GIA_TRI,
+	"chep-cap-tren": KHONG_NEU_GIA_TRI,
+	"da-bac": KHONG_NEU_GIA_TRI,
+	"khong-don-vi": KHONG_NEU_GIA_TRI,
+} satisfies Record<
+	MaLoaiBanNhap,
+	(d: DongKiemSoan, g: GoiKiemSoan) => string[]
+>;
+
+export function giaTriViPham(
+	d: DongKiemSoan,
+	goi: GoiKiemSoan,
+	maLoai: MaLoaiBanNhap,
+): string[] {
+	return GIA_TRI_VI_PHAM[maLoai](d, goi);
+}
 
 export function kiemDongBanNhap(
 	d: DongKiemSoan,

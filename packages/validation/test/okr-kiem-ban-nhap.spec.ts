@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
 	type DongKiemSoan,
 	type GoiKiemSoan,
+	giaTriViPham,
 	kiemBanNhap,
 	kiemDongBanNhap,
 	MA_LOAI_BAN_NHAP,
@@ -64,49 +65,67 @@ const cc = (p: Partial<Cc> = {}): DongKiemSoan => ({
 	...p,
 });
 
-type Ca = { ma: MaLoaiBanNhap; do: DongKiemSoan; lanh: DongKiemSoan };
+type Ca = {
+	ma: MaLoaiBanNhap;
+	do: DongKiemSoan;
+	lanh: DongKiemSoan;
+	giaTri: string[];
+};
 
 const BANG: Ca[] = [
 	{
 		ma: "so-moi",
 		do: kr({ ten: "Đạt 100 % đối tác gia hạn" }),
 		lanh: kr({ ten: "Đối tác gia hạn đạt 82 %" }),
+		giaTri: ["100"],
 	},
 	{
 		ma: "so-moi",
 		do: mt({ ten: "Doanh thu đại lý lên 20 tỷ" }),
 		lanh: mt({ ten: "Doanh thu đại lý giữ mức 14 tỷ" }),
+		giaTri: ["20000000000"],
 	},
 	{
 		ma: "so-moi",
 		do: kr({ viSao: "Cần tăng 99 % trong quý" }),
 		lanh: kr({ viSao: "Người gõ muốn 30 đối tác mới" }),
+		giaTri: ["99"],
 	},
-	{ ma: "dich-khong-trong", do: kr({ dich: 95 }), lanh: kr({ dich: null }) },
+	{
+		ma: "dich-khong-trong",
+		do: kr({ dich: 95 }),
+		lanh: kr({ dich: null }),
+		giaTri: ["95"],
+	},
 	{
 		ma: "noi-ve-nguoi",
 		do: kr({ viSao: "Giao Trần Văn Bình theo dõi" }),
 		lanh: kr({ viSao: "Giao trưởng nhóm theo dõi" }),
+		giaTri: [],
 	},
 	{
 		ma: "tu-cam",
 		do: kr({ ten: "KPI gia hạn của phòng" }),
 		lanh: kr({ ten: "Số hợp đồng gia hạn của phòng" }),
+		giaTri: ["KPI"],
 	},
 	{
 		ma: "chep-cap-tren",
 		do: mt({ ten: "Giữ chân đối tác lớn qua mùa Tết" }),
 		lanh: mt(),
+		giaTri: [],
 	},
 	{
 		ma: "id-ngoai-goi",
 		do: cc({ targetObjectiveId: "mt-la" }),
 		lanh: cc(),
+		giaTri: ["mt-la"],
 	},
 	{
 		ma: "da-bac",
 		do: mt({ ten: "Mở rộng kênh đại lý miền Trung" }),
 		lanh: mt(),
+		giaTri: [],
 	},
 	{
 		ma: "moc-co-dich-so",
@@ -122,12 +141,19 @@ const BANG: Ca[] = [
 			donVi: "mốc",
 			khoiDiemGoiY: null,
 		}),
+		giaTri: ["đích: 1"],
 	},
-	{ ma: "khong-don-vi", do: kr({ donVi: "" }), lanh: kr({ donVi: "đối tác" }) },
+	{
+		ma: "khong-don-vi",
+		do: kr({ donVi: "" }),
+		lanh: kr({ donVi: "đối tác" }),
+		giaTri: [],
+	},
 	{
 		ma: "khoi-diem-la-dich",
 		do: kr({ khoiDiemGoiY: 85 }),
 		lanh: kr({ khoiDiemGoiY: 82 }),
+		giaTri: ["85"],
 	},
 ];
 
@@ -147,6 +173,14 @@ describe("kiem-ban-nhap", () => {
 		({ ma, do: d, lanh }) => {
 			expect(kiemDongBanNhap(d, GOI)).toEqual({ qua: false, maLoai: ma });
 			expect(kiemDongBanNhap(lanh, GOI)).toEqual({ qua: true });
+		},
+	);
+
+	test.each(BANG)(
+		"mã $ma: dòng đỏ trả đúng giá trị vi phạm, không bao giờ tên người; dòng lành không có",
+		({ ma, do: d, lanh, giaTri }) => {
+			expect(giaTriViPham(d, GOI, ma)).toEqual(giaTri);
+			expect(giaTriViPham(lanh, GOI, ma)).toEqual([]);
 		},
 	);
 

@@ -1,6 +1,7 @@
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import type { TRANG_THAI_DE_XUAT } from "@crm/db/okr-tro-ly-danh-muc";
 import type { BuocCat } from "@crm/validation/okr-cuoc-soan";
+import type { MaLoaiBanNhap } from "@crm/validation/okr-kiem-ban-nhap";
 
 const SECOND_MS = 1_000;
 const MINUTE_MS = 60 * SECOND_MS;
@@ -57,6 +58,22 @@ export const TRO_LY_OKR_SOAN = {
 		"bac",
 	] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][],
 	giuNguyen: { daQuyet: "da-quyet", khacTen: "da-quyet-khac-ten" },
+	viPham: {
+		nhan: {
+			"so-moi": "số mới",
+			"dich-khong-trong": "đích phải để trống",
+			"noi-ve-nguoi": "nhắc tên một người",
+			"tu-cam": "từ cấm",
+			"chep-cap-tren": "chép tên Mục tiêu hay KR cấp trên",
+			"id-ngoai-goi": "id ngoài ungVienCanChinh",
+			"da-bac": "người đã bác dòng này",
+			"moc-co-dich-so": "KR mốc mang số",
+			"khong-don-vi": "thiếu đơn vị đo",
+			"khoi-diem-la-dich": "khởi điểm là một số đích",
+		} satisfies Record<MaLoaiBanNhap, string>,
+		noiNhan: ": ",
+		noiGiaTri: ", ",
+	},
 	suKien: {
 		nguoiGo: "message.received",
 		duoiChiTruyen: ".appended",

@@ -21,17 +21,22 @@ const TEN_NGANG_CAP = "Giữ chân đối tác lưu trú phía Nam";
 const TEN_ONEHUB = "Trở thành lựa chọn lưu trú đầu tiên của doanh nghiệp";
 const SO_CHOT_KY_TRUOC = 31;
 
+export const NAM_CHI_TRONG_TEN_TRANG = 2027;
+export const NGAY_XAC_MINH_TRANG = "2029-06-30";
+
 const DAI = (cau: string, lan: number) => Array(lan).fill(cau).join(" ");
 
 const TRANG = [
 	{
 		ma: "cl1",
 		ten: `${TIEN_TO_TRANG}Chiến lược năm 2032`,
+		xacMinhDen: null,
 		noiDung: `Năm 2032 công ty ưu tiên lấp đầy 85% phòng vào mùa thấp điểm. ${THE_CHEN} ${DAI("Mỗi đơn vị giữ tỷ lệ huỷ dưới 4% và đo trải nghiệm sau mỗi kỳ lưu trú.", 12)}`,
 	},
 	{
 		ma: "cl2",
-		ten: `${TIEN_TO_TRANG}Định hướng vận hành 2032`,
+		ten: `${TIEN_TO_TRANG}Định hướng vận hành ${NAM_CHI_TRONG_TEN_TRANG}`,
+		xacMinhDen: NGAY_XAC_MINH_TRANG,
 		noiDung: `Vận hành gọn: một quy trình nhận phòng cho mọi cơ sở. ${CAU_CHEN}. ${DAI("Rút thời gian nhận phòng xuống còn 3 phút ở các cơ sở lớn.", 10)}`,
 	},
 ] as const;
@@ -84,19 +89,25 @@ async function gieoTrangChung(): Promise<void> {
 	});
 	if (co > 0) return;
 	const chu = await gieoNguoi("Chủ trang tài liệu", null);
-	const trang = (ma: string, ten: string, loai: string) =>
+	const trang = (
+		ma: string,
+		ten: string,
+		loai: string,
+		xacMinhDen: string | null = null,
+	) =>
 		db.taiLieuTrang.create({
 			data: {
 				id: `${TIEN_TO_TRANG}${ma}`,
 				slug: `${TIEN_TO_TRANG}${ma}`,
 				ten,
 				loai,
+				xacMinhDen: xacMinhDen ? new Date(`${xacMinhDen}T00:00:00Z`) : null,
 				chuTrangId: chu.id,
 				taoBoiId: chu.id,
 			},
 		});
 	for (const t of TRANG) {
-		await trang(t.ma, t.ten, "chien-luoc");
+		await trang(t.ma, t.ten, "chien-luoc", t.xacMinhDen);
 		await banDangDung(`${TIEN_TO_TRANG}${t.ma}`, t.noiDung, chu.id);
 	}
 	await db.taiLieuDeXuat.create({

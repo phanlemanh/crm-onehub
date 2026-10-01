@@ -136,15 +136,20 @@ function chuLop4(chiSo: DongSoCrm[]): string {
 	].join("\n");
 }
 
+function chuCacLop(goi: GoiSoan) {
+	return {
+		"0-5": chuLop05(goi.lop05),
+		"1": JSON.stringify(goi.lop1, null, 1),
+		"2a": JSON.stringify(goi.lop2a, null, 1),
+		"3": chuLop3(goi.lop3),
+		"4": chuLop4(goi.lop4.chiSo),
+		cham: JSON.stringify(goi.cham, null, 1),
+	} satisfies Record<Lop, string>;
+}
+
 export function goiThanhChiDan(goi: GoiSoan): string {
-	return [
-		the("0-5", chuLop05(goi.lop05)),
-		the("1", JSON.stringify(goi.lop1, null, 1)),
-		the("2a", JSON.stringify(goi.lop2a, null, 1)),
-		the("3", chuLop3(goi.lop3)),
-		the("4", chuLop4(goi.lop4.chiSo)),
-		the("cham", JSON.stringify(goi.cham, null, 1)),
-	].join("\n\n");
+	const chu = chuCacLop(goi);
+	return LOP.map((lop) => the(lop, chu[lop])).join("\n\n");
 }
 
 const BUOC = {
@@ -255,31 +260,35 @@ type ChuVaSo = {
 
 const laSo = (n: number | null): n is number => n !== null;
 
-function chuVaSoCuaGoi(goi: GoiSoan): ChuVaSo {
-	const chu: string[] = [
-		...goi.lop05.map((t) => t.noiDung),
-		goi.lop1.donVi.moTa,
-		goi.lop1.cha?.moTa ?? "",
-		...goi.lop2a.ngangCap,
-		...goi.lop3.mangSang,
+function idCuaGoi(goi: GoiSoan): string[] {
+	return [
+		...goi.lop2a.capTren.flatMap((m) => [m.id, ...m.kr.map((k) => k.id)]),
+		...goi.lop2a.ungVienCanChinh.map((u) => u.id),
 	];
+}
+
+function chuCuaGoi(goi: GoiSoan): string[] {
+	const id = idCuaGoi(goi);
+	return Object.values(chuCacLop(goi)).map((chu) =>
+		id.reduce((con, i) => con.replaceAll(i, ""), chu),
+	);
+}
+
+function chuVaSoCuaGoi(goi: GoiSoan): ChuVaSo {
+	const chu = chuCuaGoi(goi);
 	const so: (number | null)[] = [goi.cham.objectiveCap, goi.cham.krCap];
 	const dich: number[] = [];
 	const khoiDiem: (number | null)[] = [];
 	for (const m of goi.lop2a.capTren) {
-		chu.push(m.ten, m.viSaoLucNay);
 		for (const k of m.kr) {
-			chu.push(k.ten);
 			so.push(k.khoiDiem, k.dich, k.hienTai, k.tienDo);
 			dich.push(k.dich);
 			khoiDiem.push(k.khoiDiem, k.hienTai);
 		}
 	}
 	for (const m of goi.lop3.mucTieu) {
-		chu.push(m.ten, m.dieuHocDuoc);
 		so.push(m.diem);
 		for (const k of m.kr) {
-			chu.push(k.ten, k.lyDo, ...k.capNhat.map((c) => c.ghiChu));
 			so.push(
 				k.khoiDiem,
 				k.dich,

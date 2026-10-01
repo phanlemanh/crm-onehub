@@ -107,8 +107,11 @@ c. **Edits.** When the person edits by chat («bỏ mục 2», «đổi KR đầ
    person asked you to change a line they had already decided — tell them to change it on the
    board, and give any genuinely new line a new `khoa`.
 
-d. **After the tool answers,** tell the person in one or two sentences what was written and which
-   lines were dropped and why, by their code. Do not repeat the draft; the person sees it on the
-   draft board.
+d. **After the tool answers:**
+   - When lines come back in `biLoai`, fix each one by what its `viPham` names — take out that
+     number or word, or leave out a `da-bac` line — and call `nop_ban_nhap` once more in the same
+     turn with the whole draft; never end the turn with a dropped line left as it was.
+   - Then tell the person in one or two sentences what was written and which lines were dropped
+     and why, by their code. Do not repeat the draft; the person sees it on the draft board.
 
-e. Call `nop_ban_nhap` at most once per turn.
+e. Call `nop_ban_nhap` at most twice per turn: the draft, and once more to fix dropped lines.

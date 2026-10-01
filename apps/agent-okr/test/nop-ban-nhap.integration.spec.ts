@@ -16,7 +16,11 @@ import {
 	moXuong,
 	TIEN_TO,
 } from "./support/gieo";
-import { gieoCanhGoi } from "./support/gieo-goi";
+import {
+	gieoCanhGoi,
+	NAM_CHI_TRONG_TEN_TRANG,
+	NGAY_XAC_MINH_TRANG,
+} from "./support/gieo-goi";
 
 type CongCu = {
 	execute: (input: BanNhap, ctx: NguCanhPhien) => Promise<KetQuaNop>;
@@ -327,6 +331,63 @@ describe("nop-ban-nhap", () => {
 		});
 		const daGo = m3(await nop(lai, ctx));
 		expect({ chuaGo, daGo }).toEqual({ chuaGo: "so-moi", daGo: undefined });
+	});
+
+	test("so-moi đọc mọi chữ gói cho mô hình xem: số chỉ có trong tên trang hay ngày xác minh thì qua, số không ở đâu trong gói bị loại kèm tên số", async () => {
+		const phien = `${TIEN_TO}phien-ten-trang`;
+		const cuoc = await gieoCuoc({
+			cycleId: canh.chuKy.nay,
+			departmentId: canh.phong.id,
+			nguoiMoUserId: canh.nguoiMo.id,
+			sessionId: phien,
+		});
+		const kr = (khoa: string, ten: string, viSao: string) => ({
+			khoa,
+			ten,
+			kieu: "tang-toi" as const,
+			donVi: "%",
+			viSao,
+		});
+		const ra = await nop(
+			{
+				mucTieu: [
+					{
+						khoa: "m1",
+						ten: "Lưu trú doanh nghiệp bám định hướng vận hành",
+						viSaoLucNay: "Trang chiến lược vừa được xác minh lại",
+						loai: "cam-ket",
+						viSao: "Theo định hướng vận hành",
+						kr: [
+							kr(
+								"k1",
+								"Tỷ lệ cơ sở theo một quy trình nhận phòng",
+								`Bám định hướng vận hành ${NAM_CHI_TRONG_TEN_TRANG}`,
+							),
+							kr(
+								"k2",
+								"Tỷ lệ khách nhận phòng đúng giờ",
+								`Trang chiến lược xác minh đến ${NGAY_XAC_MINH_TRANG.slice(0, 4)}`,
+							),
+							kr(
+								"k3",
+								"Tỷ lệ khách quay lại lưu trú",
+								"Bám định hướng vận hành 2031",
+							),
+						],
+					},
+				],
+			},
+			nguCanh(phien, canh.nguoiMo.id, cuoc.id),
+		);
+		expect(ra.biLoai).toEqual([
+			{
+				khoa: "k3",
+				ten: "Tỷ lệ khách quay lại lưu trú",
+				maLoai: "so-moi",
+				viPham: "số mới: 2031",
+			},
+		]);
+		expect(ra.soDong).toBe(3);
 	});
 
 	test("mỗi lần nộp một inputHash riêng cho mọi hàng của lần đó, kể cả hai bản giống hệt", async () => {
