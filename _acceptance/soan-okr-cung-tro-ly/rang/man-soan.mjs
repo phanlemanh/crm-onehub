@@ -756,6 +756,7 @@ async function buocSuaQuaChat(tl, A, giu) {
 	const hang = `[data-cot="ban-nhap"] [data-dong="${giu.id}"]`;
 	const daBo = `${hang}[data-decided="dismissed"] [data-nhan="da-bo"]`;
 	const B = await trang(tl, E13.kho.hep);
+	let coAnhHep = false;
 	try {
 		const moB = await moLaiCuoc(B.p, true);
 		const tabB = moB && (await bamTab(B.p, "ban-nhap"));
@@ -790,15 +791,22 @@ async function buocSuaQuaChat(tl, A, giu) {
 			if (await hien(B.p, daBo)) {
 				kiem(`ST-soan-sua-qua-chat ${B.rong}: nhan da bo`, true);
 				await chup(B, "ST-soan-sua-qua-chat", hang);
+				coAnhHep = true;
 			} else
 				dong.push(
-					`GHI ST-soan-sua-qua-chat ${B.rong}: trang hep mo truoc luot khong doc lai sau luot — khong co anh hep`,
+					`GHI ST-soan-sua-qua-chat ${B.rong}: trang hep mo truoc luot khong doc lai sau luot — anh hep chup o trang hep mo moi`,
 				);
 			await A.p.bringToFront();
 		}
 	} finally {
 		await B.ctx.close();
 	}
+	if (!coAnhHep)
+		await anhHep(tl, "ST-soan-sua-qua-chat", {
+			tab: "ban-nhap",
+			cho: daBo,
+			toi: hang,
+		});
 	const them = await dienSo(A.p, tl);
 	if (them.length > 0)
 		dong.push(
