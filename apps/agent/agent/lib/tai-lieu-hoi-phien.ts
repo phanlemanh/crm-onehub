@@ -13,6 +13,8 @@ const HOI = TAI_LIEU_AGENT.hoi;
 
 export const PURPOSE_KHO = "kho";
 const TIEN_TO_TOKEN = "kho:";
+const VIEC_DONG_THEO_HANG = "Câu kho đã đóng trước khi gửi.";
+const payloadHoiKho = z.object({ hoiId: z.string().min(1) });
 const HET_TRAN = /budget exceeded|insufficient_funds|credit balance|\b402\b/i;
 
 export function tokenHoiKho(hoiId: string): string {
@@ -53,6 +55,36 @@ async function nhanHoi(
 	return { cauHoi: h.cauHoi, nguoiHoiId: h.nguoiHoiId };
 }
 
+async function dongViecMoCoi(chiHoi?: readonly string[]): Promise<void> {
+	const viec = await db.agentTask.findMany({
+		where: { kind: { in: [...HOI_KHO_KINDS] }, finishedAt: null },
+		select: { id: true, payload: true },
+	});
+	const theoHoi = new Map<string, string[]>();
+	for (const v of viec) {
+		const hoiId = payloadHoiKho.safeParse(v.payload);
+		if (!hoiId.success) continue;
+		if (chiHoi && !chiHoi.includes(hoiId.data.hoiId)) continue;
+		theoHoi.set(hoiId.data.hoiId, [
+			...(theoHoi.get(hoiId.data.hoiId) ?? []),
+			v.id,
+		]);
+	}
+	if (theoHoi.size === 0) return;
+	const conMo = await db.taiLieuHoi.findMany({
+		where: {
+			id: { in: [...theoHoi.keys()] },
+			trangThai: "DANG_HOI",
+		},
+		select: { id: true },
+	});
+	const giu = new Set(conMo.map((h) => h.id));
+	for (const [hoiId, ids] of theoHoi) {
+		if (giu.has(hoiId)) continue;
+		for (const id of ids) await completeTask(id, VIEC_DONG_THEO_HANG);
+	}
+}
+
 async function dongViecCua(hoiId: string, ketQua: string): Promise<void> {
 	const viec = await db.agentTask.findMany({
 		where: {
@@ -70,7 +102,10 @@ export async function guiHoiKho(
 	send: SendFn,
 ): Promise<Awaited<ReturnType<SendFn>> | null> {
 	const h = await nhanHoi(hoiId);
-	if (!h) return null;
+	if (!h) {
+		await dongViecMoCoi([hoiId]);
+		return null;
+	}
 	try {
 		const phien = await send(h.cauHoi, {
 			auth: {
@@ -114,6 +149,7 @@ export async function dongHoiKhoQuaHan(
 		},
 		data: { trangThai: "LOI", lyDo: "qua-han", xongLuc: now },
 	});
+	await dongViecMoCoi();
 	return count;
 }
 

@@ -10,6 +10,7 @@ import {
 	dongHoiKhoKhiPhienHong,
 	dongHoiKhoQuaHan,
 	drainHoiKho,
+	guiHoiKho,
 	phanLoaiLoi,
 	tokenHoiKho,
 } from "../agent/lib/tai-lieu-hoi-phien";
@@ -178,6 +179,41 @@ describe("tlk-loi", () => {
 			},
 		});
 		expect(conLai, "tlk-loi: con 1 hang DANG_HOI qua han").toBe(0);
+	});
+
+	test("tlk-loi: viec hoi-kho dong theo hang da dong, khong mo coi", async () => {
+		const api = new TaiLieuHoiService(db, new AgentTriggerService(db));
+		const viecCua = (hoiId: string) =>
+			db.agentTask.findFirstOrThrow({
+				where: { kind: "hoi-kho", payload: { path: ["hoiId"], equals: hoiId } },
+				select: { finishedAt: true },
+			});
+		const a = await api.hoi(quanTri, { cauHoi: "Câu quá hạn chưa gửi?" });
+		await db.taiLieuHoi.update({
+			where: { id: a.hoiId },
+			data: {
+				hoiLuc: new Date(Date.now() - TAI_LIEU_AGENT.hoi.hanTraLoiMs - 60_000),
+			},
+		});
+		await dongHoiKhoQuaHan(new Date());
+		expect(
+			(await viecCua(a.hoiId)).finishedAt,
+			"tlk-loi: viec cua hang qua han mo coi",
+		).not.toBeNull();
+
+		const b = await api.hoi(quanTri, { cauHoi: "Câu đã đóng trước khi gửi?" });
+		await db.taiLieuHoi.update({
+			where: { id: b.hoiId },
+			data: { trangThai: "LOI", lyDo: "loi-model", xongLuc: new Date() },
+		});
+		const send = (async () => {
+			throw new Error("khong duoc gui");
+		}) as unknown as SendFn;
+		expect(await guiHoiKho(b.hoiId, send)).toBeNull();
+		expect(
+			(await viecCua(b.hoiId)).finishedAt,
+			"tlk-loi: viec cua hang da dong mo coi",
+		).not.toBeNull();
 	});
 });
 
