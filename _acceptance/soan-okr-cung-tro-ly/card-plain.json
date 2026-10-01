@@ -158,6 +158,17 @@
     }
   ],
   "decisions_plain": [],
-  "decisions": [],
+  "decisions": [
+    {
+      "id": "E24",
+      "q": "Giao việc soạn ở nấc tắt khi tốc độ trả lời chưa ổn định?",
+      "why": "Ba lần đo, mỗi lượt Trợ lý trả lời chậm nhất 19,1 · 20,3 · 34,3 giây so với hứa 20 giây; chậm do mô hình và đến theo cơn. Phần so sánh «có bối cảnh thắng không có» thắng mọi cặp chấm được (31/31) nhưng lần 3 bên chấm hỏng 6/15 cặp nên chưa kết luận. Bật cho người dùng là một quyết định riêng sau khi đo lại tốc độ và sửa bên chấm."
+    },
+    {
+      "id": "E29",
+      "q": "Hai danh sách khai trùng ở hai gói có chặn giao lượt này?",
+      "why": "Luật kho được giữ: số tinh chỉnh nằm trong tệp cấu hình, khuôn thẻ phiên soạn nằm một chỗ và cả hai bên đều đọc từ đó. Còn hai chỗ khai lặp: ba loại dòng nháp, và khuôn Mục tiêu kỳ trước. Một chỗ trình biên dịch tự bắt khi hai bên lệch; chỗ kia chỉ có bài kiểm ghim giá trị. Hội đồng không phân xử được vì luật viết cho dữ liệu chưa có kiểu."
+    }
+  ],
   "analyst_plain": ""
 }
