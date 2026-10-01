@@ -13,9 +13,15 @@ import {
 } from "../evals/okr-soan/judge";
 import { phanViTheoLoaiLuot } from "../evals/okr-soan/tinh";
 import {
+	docSuKienHong,
+	docTinDung,
 	docTomTat,
 	docTongKet,
+	KHONG_HA_TANG,
 	ketLuanThuoc,
+	ketLuanTinDung,
+	loaiHaTang,
+	phanLoaiHaTang,
 	phanLoaiHong,
 	type TomTatChay,
 	thongKeJudge,
@@ -282,6 +288,7 @@ const CO_BAN = {
 	tyLe: 1,
 	tyLeNguong: TRO_LY_OKR_SOAN.danhGia.boiCanh.tyLeThang,
 	maEve: 1,
+	haTang: KHONG_HA_TANG,
 };
 
 describe("eval-soan: tách judge hỏng khỏi chốt mã hỏng", () => {
@@ -315,6 +322,7 @@ describe("eval-soan: tách judge hỏng khỏi chốt mã hỏng", () => {
 			{
 				id: "okr-soan/soan/0000",
 				ten: "equals [muc tieu da nhan khong co hang moi cung khoa]",
+				phienHong: false,
 			},
 		]);
 		const kl = ketLuanThuoc({ phan, ...CO_BAN });
@@ -339,7 +347,7 @@ describe("eval-soan: tách judge hỏng khỏi chốt mã hỏng", () => {
 			),
 		);
 		expect(phan.chotMa).toEqual([
-			{ id: "okr-soan/soan/0001", ten: "loi: ket noi dong" },
+			{ id: "okr-soan/soan/0001", ten: "loi: ket noi dong", phienHong: false },
 		]);
 	});
 
@@ -400,5 +408,227 @@ describe("eval-soan: số judge và độ trễ theo loại lượt", () => {
 		expect(kq.hoiDap).toEqual({ n: 2, p50: 17_000, p90: 27_400 });
 		expect(kq.nopBanNhap.n).toBe(3);
 		expect(kq.nopBanNhap.p50).toBe(11_000);
+	});
+});
+
+const HT = TRO_LY_OKR_SOAN.danhGia.haTang;
+const CAU_NGAN_SACH =
+	"API key budget exceeded. Current spend: $20.00, limit: $20.00. Team owners can edit this budget in AI Gateway Budgets & Spend.";
+const CHI_TIET_LAN_7 = {
+	apiErrorMessage: CAU_NGAN_SACH,
+	gatewayName: "GatewayInternalServerError",
+	gatewayType: "internal_server_error",
+	statusCode: 402,
+	upstreamStatusCode: 402,
+	upstreamType: "quota_for_entity_exceeded",
+	upstreamMessage: CAU_NGAN_SACH,
+	responseBodySnippet: `{"error":{"message":"${CAU_NGAN_SACH}","type":"quota_for_entity_exceeded"}}`,
+};
+
+function hangHong(sessionId: string, details: Record<string, string | number>) {
+	const data = {
+		code: "MODEL_CALL_FAILED",
+		details,
+		message: `GatewayInternalServerError: ${details.apiErrorMessage ?? "loi"}`,
+	};
+	return HT.suKienHong.map((type) => ({
+		sessionId,
+		type,
+		data:
+			type === "session.failed"
+				? { ...data, sessionId }
+				: { ...data, sequence: 0, turnId: "turn_0" },
+	}));
+}
+
+const EVAL_LAN_7 = [
+	...Array.from(
+		{ length: 14 },
+		(_, i) => `okr-soan/soan-boi-canh/${String(i + 1).padStart(4, "0")}`,
+	),
+	...Array.from(
+		{ length: 10 },
+		(_, i) => `okr-soan/soan-do-tre/${String(i).padStart(4, "0")}`,
+	),
+	...Array.from(
+		{ length: 5 },
+		(_, i) => `okr-soan/soan/${String(i).padStart(4, "0")}`,
+	),
+];
+
+const TOM_TAT_LAN_7 = {
+	target: "http://127.0.0.1:64048/",
+	passed: 1,
+	failed: 29,
+	scored: 0,
+	skipped: 0,
+	errored: 0,
+	totalEvals: 30,
+	evals: [
+		{
+			id: "okr-soan/soan-boi-canh/0000",
+			verdict: "passed",
+			status: "completed",
+			assertions: [
+				{ name: "equals", score: 1, severity: "gate", passed: true },
+			],
+		},
+		...EVAL_LAN_7.map((id) => ({
+			id,
+			verdict: "failed",
+			status: "completed",
+			assertions: [
+				{
+					name: "equals",
+					score: 0,
+					severity: "gate",
+					passed: false,
+					message: 'expected "waiting"; received "failed"',
+					metadata: { actual: "failed", expected: "waiting" },
+				},
+			],
+		})),
+	],
+};
+
+const SU_KIEN_LAN_7 = EVAL_LAN_7.flatMap((id, i) =>
+	id.includes("boi-canh")
+		? [
+				...hangHong(`wrun_${i}a`, CHI_TIET_LAN_7),
+				...hangHong(`wrun_${i}b`, CHI_TIET_LAN_7),
+			]
+		: hangHong(`wrun_${i}`, CHI_TIET_LAN_7),
+);
+
+describe("eval-soan: hỏng hạ tầng gateway không phải chốt mã hỏng", () => {
+	test("khuôn lần chạy 7: hết ngân sách khoá → mã 2 «khong do duoc», không gọi là chốt mã hỏng", () => {
+		const phan = phanLoaiHong(docTomTat(JSON.stringify(TOM_TAT_LAN_7)));
+		expect(phan.chotMa.length).toBe(29);
+		expect(phan.chotMa.every((c) => c.phienHong)).toBe(true);
+		const haTang = phanLoaiHaTang(docSuKienHong(SU_KIEN_LAN_7));
+		expect(haTang.soPhien).toBe(43);
+		expect(haTang.phienKhac).toBe(0);
+		expect(haTang.theoLoai.map((l) => [l.loai, l.soPhien])).toEqual([
+			[HT.loai.nganSachKhoa, 43],
+		]);
+		const kl = ketLuanThuoc({ phan, ...CO_BAN, haTang });
+		expect(kl.ma).toBe(2);
+		expect(kl.cau).toStartWith(
+			`khong do duoc: ${HT.loai.nganSachKhoa} (43 phien)`,
+		);
+		expect(kl.cau).not.toContain("chot ma hong");
+	});
+
+	test("cùng lần chạy mà có một chốt thật đỏ → vẫn mã 1, gọi tên chốt", () => {
+		const tom = docTomTat(JSON.stringify(TOM_TAT_LAN_7));
+		tom.evals[0]?.assertions.push({
+			name: "equals [khong ma loai con lai]",
+			score: 0,
+			severity: "gate",
+			passed: false,
+		});
+		const phan = phanLoaiHong(tom);
+		const haTang = phanLoaiHaTang(docSuKienHong(SU_KIEN_LAN_7));
+		const kl = ketLuanThuoc({ phan, ...CO_BAN, haTang });
+		expect(kl.ma).toBe(1);
+		expect(kl.cau).toContain("chot ma hong 30");
+		expect(kl.cau).toContain("equals [khong ma loai con lai]");
+	});
+
+	test("phiên hỏng mà không có dấu hạ tầng → mã 1 như cũ", () => {
+		const phan = phanLoaiHong(docTomTat(JSON.stringify(TOM_TAT_LAN_7)));
+		expect(ketLuanThuoc({ phan, ...CO_BAN }).ma).toBe(1);
+		const loiMa = phanLoaiHaTang(
+			docSuKienHong(
+				EVAL_LAN_7.flatMap((_, i) =>
+					hangHong(`wrun_${i}`, {
+						apiErrorMessage: "nop_ban_nhap nem loi",
+					}).map((h) => ({ ...h, data: { ...h.data, code: "TOOL_FAILED" } })),
+				),
+			),
+		);
+		expect(loiMa.soPhien).toBe(0);
+		expect(loiMa.phienKhac).toBe(29);
+		expect(ketLuanThuoc({ phan, ...CO_BAN, haTang: loiMa }).ma).toBe(1);
+	});
+
+	test("một phiên hỏng vì mã lẫn trong phiên hết ngân sách → mã 1", () => {
+		const phan = phanLoaiHong(docTomTat(JSON.stringify(TOM_TAT_LAN_7)));
+		const haTang = phanLoaiHaTang(
+			docSuKienHong([
+				...SU_KIEN_LAN_7,
+				...hangHong("wrun_ma", { apiErrorMessage: "schema sai" }),
+			]),
+		);
+		expect(haTang.phienKhac).toBe(1);
+		expect(ketLuanThuoc({ phan, ...CO_BAN, haTang }).ma).toBe(1);
+	});
+
+	test("hạ tầng có hỏng nhưng không eval nào dừng vì phiên → không chặn", () => {
+		const phan = { chotMa: [], judgeHong: [], duoiNguong: [] };
+		const haTang = phanLoaiHaTang(
+			docSuKienHong(hangHong("wrun_x", CHI_TIET_LAN_7)),
+		);
+		expect(ketLuanThuoc({ phan, ...CO_BAN, maEve: 0, haTang })).toEqual({
+			ma: 0,
+			cau: null,
+		});
+	});
+
+	test("phân loại: 402 insufficient_funds, 429, 5xx là hạ tầng; 400 thì không", () => {
+		const mot = (details: Record<string, string | number>) => {
+			const [dau] = docSuKienHong(hangHong("wrun_1", details));
+			if (!dau) throw new Error("thieu su kien");
+			return loaiHaTang(dau);
+		};
+		expect(mot(CHI_TIET_LAN_7)).toBe(HT.loai.nganSachKhoa);
+		expect(
+			mot({
+				statusCode: 402,
+				upstreamType: "insufficient_funds",
+				apiErrorMessage: "Insufficient funds",
+			}),
+		).toBe(HT.loai.tinDung);
+		expect(mot({ statusCode: 402, apiErrorMessage: "payment required" })).toBe(
+			HT.loai.tinDung,
+		);
+		expect(mot({ statusCode: 429, upstreamType: "rate_limit_exceeded" })).toBe(
+			HT.loai.gioiHan,
+		);
+		expect(
+			mot({ statusCode: 503, apiErrorMessage: "upstream unavailable" }),
+		).toBe(HT.loai.mayChu);
+		expect(
+			mot({ statusCode: 400, gatewayType: "invalid_request_error" }),
+		).toBeNull();
+	});
+
+	test("hàng sự kiện sai khuôn là lỗi thật, không nuốt", () => {
+		expect(() =>
+			docSuKienHong([
+				{ sessionId: "wrun_1", type: "session.failed", data: {} },
+			]),
+		).toThrow();
+	});
+});
+
+describe("eval-soan: đọc tín dụng gateway trước khi chạy", () => {
+	test("số dư dạng chuỗi; 0 → mã 2 «het tin dung», còn tiền → đi tiếp", () => {
+		const het = ketLuanTinDung(
+			docTinDung(JSON.stringify({ balance: "0.00", total_used: "20.00" })),
+		);
+		expect(het.ma).toBe(2);
+		expect(het.cau).toStartWith(`khong do duoc: ${HT.loai.tinDung}`);
+		expect(
+			ketLuanTinDung(
+				docTinDung(JSON.stringify({ balance: "3.50", total_used: "16.50" })),
+			),
+		).toEqual({
+			ma: 0,
+			cau: null,
+		});
+		expect(() =>
+			docTinDung(JSON.stringify({ balance: "abc", total_used: "1" })),
+		).toThrow();
 	});
 });

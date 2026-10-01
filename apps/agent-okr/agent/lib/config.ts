@@ -127,6 +127,29 @@ export const TRO_LY_OKR_SOAN = {
 		},
 		chamNguoi: { soCap: 5 },
 		timeoutMs: 6 * MINUTE_MS,
+		haTang: {
+			urlTinDung: "https://ai-gateway.vercel.sh/v1/credits",
+			choTinDungMs: 10 * SECOND_MS,
+			suKienHong: ["step.failed", "turn.failed", "session.failed"],
+			trangThaiPhien: { cho: "waiting", hong: "failed" },
+			ma: { hetTien: 402, gioiHan: 429, mayChuTu: 500 },
+			kieu: {
+				nganSachKhoa: ["quota_for_entity_exceeded"],
+				tinDung: ["insufficient_funds"],
+				gioiHan: ["rate_limit_exceeded"],
+			},
+			chu: {
+				nganSachKhoa: /api key budget exceeded/i,
+				tinDung: /insufficient[_ ]funds/i,
+			},
+			loai: {
+				nganSachKhoa: "het ngan sach khoa",
+				tinDung: "het tin dung",
+				gioiHan: "gioi han toc do",
+				mayChu: "gateway loi 5xx",
+			},
+			tranCauMau: 120,
+		},
 	},
 	congCu: {
 		song: ["nop_ban_nhap"],

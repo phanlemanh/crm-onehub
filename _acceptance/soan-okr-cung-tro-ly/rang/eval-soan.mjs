@@ -46,6 +46,36 @@ if (!process.env[TRO_LY_OKR_SOAN.env.biMat]?.trim())
 	thoat(2, `thieu ${TRO_LY_OKR_SOAN.env.biMat} — ma 2, khong xanh`);
 if (!EVE) thoat(2, "khong thay eve trong node_modules/.bin — ma 2");
 
+const HT = DG.haTang;
+const { docTinDung, ketLuanTinDung } = await import(
+	join(APP, "evals", "okr-soan", "tong-ket.ts")
+);
+const khoaGateway = TRO_LY_OKR_SOAN.khoaMoHinh
+	.map((k) => process.env[k]?.trim())
+	.find(Boolean);
+try {
+	const tra = await fetch(HT.urlTinDung, {
+		headers: { authorization: `Bearer ${khoaGateway}` },
+		signal: AbortSignal.timeout(HT.choTinDungMs),
+	});
+	if (!tra.ok)
+		console.log(
+			`eval-soan: khong doc duoc tin dung gateway (HTTP ${tra.status}) — chi phan loai sau lan chay`,
+		);
+	else {
+		const tin = docTinDung(await tra.text());
+		console.log(
+			`eval-soan: tin dung nhom tren gateway con ${tin.balance} USD (da dung ${tin.total_used}); ngan sach rieng cua khoa khong doc o day — het thi phan loai sau lan chay`,
+		);
+		const kl = ketLuanTinDung(tin);
+		if (kl.cau) thoat(kl.ma, kl.cau);
+	}
+} catch (loi) {
+	console.log(
+		`eval-soan: khong doc duoc tin dung gateway (${loi instanceof Error ? loi.message : String(loi)}) — chi phan loai sau lan chay`,
+	);
+}
+
 const { databaseName } = await import(
 	join(GOC, "packages", "db", "src", "test-database.ts")
 );
@@ -154,6 +184,7 @@ writeFileSync(tongKet, "");
 process.on("exit", () => rmSync(tongKet, { force: true }));
 const thuMucChay = join(APP, ".eve", "evals");
 const truoc = new Set(existsSync(thuMucChay) ? readdirSync(thuMucChay) : []);
+const batDauEval = new Date();
 const ket = spawnSync(
 	EVE,
 	[
@@ -187,8 +218,16 @@ const lanChay = moi.at(-1);
 if (!lanChay)
 	thoat(2, `eve eval khong de lai thu muc lan chay (ma ${ket.status}) — ma 2`);
 
-const { docTomTat, docTongKet, ketLuanThuoc, phanLoaiHong, thongKeJudge } =
-	await import(join(APP, "evals", "okr-soan", "tong-ket.ts"));
+const {
+	docSuKienHong,
+	docTomTat,
+	docTongKet,
+	ketLuanHaTang,
+	ketLuanThuoc,
+	phanLoaiHaTang,
+	phanLoaiHong,
+	thongKeJudge,
+} = await import(join(APP, "evals", "okr-soan", "tong-ket.ts"));
 const tomTat = docTomTat(
 	readFileSync(join(thuMucChay, lanChay, "summary.json"), "utf8"),
 );
@@ -199,6 +238,26 @@ const soan = dong.filter((d) => d.loai === "soan");
 const doTre = dong.filter((d) => d.loai === "do-tre");
 const judgeGoi = thongKeJudge(dong.filter((d) => d.loai === "judge"));
 const phan = phanLoaiHong(tomTat);
+const haTang = phanLoaiHaTang(
+	docSuKienHong(
+		await db.agentEvent.findMany({
+			where: {
+				type: { in: [...HT.suKienHong] },
+				emittedAt: { gte: batDauEval },
+			},
+			orderBy: [{ emittedAt: "asc" }, { id: "asc" }],
+			select: { sessionId: true, type: true, data: true },
+		}),
+	),
+);
+const chanHaTang = ketLuanHaTang(phan, haTang);
+if (chanHaTang) {
+	await db.$disconnect();
+	thoat(
+		chanHaTang.ma,
+		`${chanHaTang.cau} — khong ghi de evidence; lan chay o apps/agent-okr/.eve/evals/${lanChay}`,
+	);
+}
 const ghiChu = (id) =>
 	[
 		...phan.chotMa
@@ -361,6 +420,7 @@ const ketLuan = ketLuanThuoc({
 	tyLe,
 	tyLeNguong: DG.boiCanh.tyLeThang,
 	maEve: ket.status,
+	haTang,
 });
 if (ketLuan.cau) thoat(ketLuan.ma, ketLuan.cau);
 process.exit(ketLuan.ma);
