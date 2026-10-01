@@ -1,35 +1,3 @@
 {
-  "feature_plain": "Phép kiểm «lịch sử số OKR chỉ được thêm, không được sửa hay xoá» thôi báo đỏ oan vì công cụ nạp bộ OKR mẫu trên máy dev, nhưng vẫn bắt mọi lối ghi khác như trước.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho phép kiểm xanh lại trên nhánh chính, và vẫn in rõ hai chỗ được miễn (nạp và xoá bản chụp của bộ mẫu) cùng bốn chốt an toàn đều đạt — không chỗ nào bị giấu."},
-    {"id": "AC-2", "p": "Sẽ vẫn báo đỏ, gọi đúng dòng, cho mười lối ghi khác vào lịch sử số — kể cả lối nằm ngay trong công cụ mẫu nhưng sai hàm hay sai kiểu ghi."},
-    {"id": "AC-3", "p": "Sẽ rút miễn ngay khi một trong bốn chốt an toàn vỡ (chỉ máy cục bộ · kho chưa có OKR thật · xoá có lọc theo KR mẫu · không ai ngoài công cụ gọi vào), và gọi tên đúng chốt đã vỡ — mười ba ca thử."},
-    {"id": "AC-4", "p": "Sẽ giữ nguyên hai ca thử đỏ cũ của phép kiểm và cách nó từ chối khi gọi sai."},
-    {"id": "AC-5", "p": "Sẽ sửa cả bốn nơi đang chép luật (hai tiêu chí và ghi chú của hồ sơ «Số OKR tự chảy», phép đo E8 của nó, tài liệu API) cho nói cùng một luật mới, đối chiếu thẳng với bảng trong phép kiểm."},
-    {"id": "AC-6", "p": "Sẽ để một kỹ sư chỉ đọc tài liệu API hiểu được: luật chỉ-thêm, chỗ miễn, vì sao miễn không đụng số thật, và khi nào miễn mất."}
-  ],
-  "wont_do": [
-    {"id": "AC-7", "p": "Sẽ KHÔNG chạm một dòng mã sản phẩm nào — công cụ nạp mẫu giữ nguyên, nên ~22 hồ sơ đã ký đo mã sản phẩm không bị hoá cũ."},
-    {"id": "OOS-1", "p": "Không sửa công cụ nạp bộ mẫu hay mã sản phẩm — hướng (b) anh đã loại ngày 01/10."},
-    {"id": "OOS-2", "p": "Không miễn cho công cụ dev nào khác, cũng không miễn cả thư mục công cụ."},
-    {"id": "OOS-3", "p": "Không đo lại bên trong hai chốt chặn production và chặn OKR thật — hồ sơ Bộ OKR mẫu đã đo chúng."},
-    {"id": "OOS-4", "p": "Không làm xanh bốn phép đo màn và phạm vi cũ của «Số OKR tự chảy» (đỏ vì lịch đầu quý và vì đo diff của vòng cũ)."}
-  ],
-  "scope_plain": "Bốn mục để ngoài — chủ yếu để vòng này nhỏ và không làm hoá cũ hồ sơ khác:",
-  "coverage_plain": [
-    {"i": 0, "p": "Mọi kiểu ghi vào lịch sử số (thêm, xoá, sửa, câu SQL thô, ghi lồng) đều có ca thử — AC-1 (đường xanh), AC-2 (lối khác vẫn đỏ)."},
-    {"i": 1, "p": "Mọi chỗ một lời ghi có thể đứng (hàm được miễn, hàm khác, tệp khác của công cụ, ngoài công cụ) đều có ca thử — AC-1, AC-2, AC-3."},
-    {"i": 2, "p": "Bốn chốt an toàn, mỗi chốt có ca đạt và ca vỡ; chốt đứng thay hai lời hứa đã đo của Bộ OKR mẫu, theo nếp Rails/Laravel chặn môi trường trước khi gieo — AC-1, AC-3."},
-    {"i": 3, "p": "Bốn nơi nói luật được đối chiếu bằng máy và đọc bằng mắt người chấm — AC-5 (đối chiếu), AC-6 (đọc hiểu)."},
-    {"i": 4, "p": "Phép kiểm cũ giữ hành vi (AC-4); vòng không chạm mã sản phẩm (AC-7); mọi ca thử chạy đúng lệnh của E8 trên bản sao tạm."},
-    {"i": 5, "p": "Giả định cần anh gạch: chốt «kho chưa có OKR thật» chỉ được đo là CÓ GỌI trước khi ghi; hàm đó làm đúng hay không thì tin phép đo của Bộ OKR mẫu."},
-    {"i": 6, "p": "Giả định cần anh gạch: chốt «xoá có lọc» chỉ đòi lệnh xoá có điều kiện theo KR, không truy ngược xem danh sách KR có đúng toàn KR mẫu không."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Ca thử bốn chốt quá thưa (một ca mỗi chốt) nên bản cài chỉ làm nửa chốt vẫn qua — đã sửa: mười ba ca, mỗi vế một ca."},
-    {"i": 1, "p": "Ca thử lối ghi khác chỉ có bốn và chỉ phía xoá/sửa — đã sửa: mười ca, gồm cả thêm sai hàm, xoá một hàng, ghi lồng; mọi ca kiểm hai chỗ miễn vẫn còn."},
-    {"i": 2, "p": "Phép đo «không chạm mã sản phẩm» dựa vào tên trong lời commit — đã sửa: đo theo tệp thật mà commit chạm, cộng diff của nhánh khi chưa gộp."},
-    {"i": 3, "p": "Người chấm đọc hiểu được đưa cả bản thiết kế nên có thể tự lấp chỗ tài liệu thiếu — đã sửa phần chính (chỉ đưa tài liệu và hợp đồng); hoãn ca chứng đỏ riêng cho người chấm vì phép đo máy E5 đã chứng đỏ trên bản cũ."},
-    {"i": 4, "p": "Đường xanh và dòng chốt được so bằng mắt — đã sửa: máy rút số dòng thật từ tệp và so nguyên dòng chốt."}
-  ]
+  "feature_plain": "Phép kiểm «lịch sử số OKR chỉ được thêm» của hồ sơ Số OKR tự chảy thôi báo đỏ oan vì công cụ nạp bộ OKR mẫu trên máy dev — miễn đúng hai lệnh của công cụ đó khi bốn chốt an toàn còn đứng — và vẫn bắt mọi lối ghi khác."
 }
