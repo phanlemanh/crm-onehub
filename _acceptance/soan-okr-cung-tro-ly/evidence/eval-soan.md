@@ -1,21 +1,23 @@
-# Bằng chứng eval soạn OKR — 2026-09-30T22:26:22.150Z
+# Bằng chứng eval soạn OKR — 2026-10-01T00:08:09.608Z
 
-Lần chạy: `apps/agent-okr/.eve/evals/2026-09-30T22-26-21` · mã thoát eve eval: 1 · 21 đạt · 7 hỏng · 2 dưới ngưỡng · 0 bỏ qua / 30
+Lần chạy: `apps/agent-okr/.eve/evals/2026-10-01T00-08-09` · mã thoát eve eval: 1 · 27 đạt · 0 hỏng · 3 dưới ngưỡng · 0 bỏ qua / 30
+
+Phân loại chỗ hỏng: 0 chốt mã hỏng · 0 judge hỏng (không chấm được sau 3 lần thử, không tính là trượt) · 4 judge chấm dưới ngưỡng
 
 | Eval | Kết quả | Ghi chú |
 |---|---|---|
-| okr-soan/soan-boi-canh/0000 | failed |  |
+| okr-soan/soan-boi-canh/0000 | passed |  |
 | okr-soan/soan-boi-canh/0001 | passed |  |
 | okr-soan/soan-boi-canh/0002 | passed |  |
-| okr-soan/soan-boi-canh/0003 | failed |  |
+| okr-soan/soan-boi-canh/0003 | passed |  |
 | okr-soan/soan-boi-canh/0004 | passed |  |
 | okr-soan/soan-boi-canh/0005 | passed |  |
 | okr-soan/soan-boi-canh/0006 | passed |  |
-| okr-soan/soan-boi-canh/0007 | failed |  |
-| okr-soan/soan-boi-canh/0008 | failed |  |
+| okr-soan/soan-boi-canh/0007 | passed |  |
+| okr-soan/soan-boi-canh/0008 | passed |  |
 | okr-soan/soan-boi-canh/0009 | passed |  |
 | okr-soan/soan-boi-canh/0010 | passed |  |
-| okr-soan/soan-boi-canh/0011 | failed |  |
+| okr-soan/soan-boi-canh/0011 | passed |  |
 | okr-soan/soan-boi-canh/0012 | passed |  |
 | okr-soan/soan-boi-canh/0013 | passed |  |
 | okr-soan/soan-boi-canh/0014 | passed |  |
@@ -29,179 +31,185 @@ Lần chạy: `apps/agent-okr/.eve/evals/2026-09-30T22-26-21` · mã thoát eve 
 | okr-soan/soan-do-tre/0007 | passed |  |
 | okr-soan/soan-do-tre/0008 | passed |  |
 | okr-soan/soan-do-tre/0009 | passed |  |
-| okr-soan/soan/0000 | passed |  |
-| okr-soan/soan/0001 | failed |  |
-| okr-soan/soan/0002 | failed |  |
-| okr-soan/soan/0003 | scored |  |
-| okr-soan/soan/0004 | scored |  |
+| okr-soan/soan/0000 | scored | dưới ngưỡng: onehub tc3 0 |
+| okr-soan/soan/0001 | scored | dưới ngưỡng: bp-kinh-doanh tc2 0; dưới ngưỡng: bp-kinh-doanh tc6 0 |
+| okr-soan/soan/0002 | passed |  |
+| okr-soan/soan/0003 | passed |  |
+| okr-soan/soan/0004 | scored | dưới ngưỡng: pb-tai-chinh tc3 0 |
 
 ## Bảng số
 
 | Số đo | Giá trị | Ngưỡng |
 |---|---|---|
-| p50 mỗi lượt (ms) | 9273 | ≤ 12000 |
-| p90 mỗi lượt (ms) | 19692 | ≤ 20000 |
-| chi phí lớn nhất mỗi cuộc (USD) | 0.0371 | ≤ 0.25 |
-| p90 lượt 1–2 / lượt 3–4 (ms) | 20279 / 15562 | — |
-| tỷ lệ bản có gói thắng judge mù | 100 % (10/10 ca chấm được; khoảng tin cậy 95 % 72–100 %) | ≥ 70 % |
-| số cặp A/B judge mù (đã chạy / chấm được) | 15 / 10 | ≥ 15 (`TDX_SO_CAP_AB`, ước 0.07 USD/cặp) |
-| ca judge không chấm được | onehub#v1, pb-kho-van#v1, pb-kd-bac#v2, pb-kho-van#v2, bp-kinh-doanh#v3 | 0 |
-| tổng chi phí tác nhân của lượt đo (USD, AiChiPhi; chưa gồm judge) | 0.4983 | trần 2 |
+| p50 mỗi lượt (ms) | 8700 | ≤ 12000 |
+| p90 mỗi lượt (ms) | 18304 | ≤ 20000 |
+| chi phí lớn nhất mỗi cuộc (USD) | 0.0500 | ≤ 0.25 |
+| p50 / p90 lượt hỏi–đáp, không nộp bản nháp (ms) | 4646 / 5799 (12 lượt) | — |
+| p50 / p90 lượt nộp bản nháp (ms) | 9576 / 18314 (28 lượt) | — |
+| tỷ lệ bản có gói thắng judge mù | 100 % (15/15 ca chấm được; khoảng tin cậy 95 % 80–100 %) | ≥ 70 % |
+| số cặp A/B judge mù (đã chạy / chấm được) | 15 / 15 | ≥ 15 (`TDX_SO_CAP_AB`, ước 0.07 USD/cặp) |
+| ca judge không chấm được (cặp A/B) | 0 | 0 |
+| lời gọi judge: tổng / phải thử lại / hỏng sau 3 lần | 45 / 10 / 0 | hỏng 0 |
+| lần thử judge: tổng / nhiều nhất một lời gọi | 58 / 3 | ≤ 3 |
+| tổng chi phí tác nhân của lượt đo (USD, AiChiPhi: soạn + A/B + độ trễ; chưa gồm judge) | 1.1498 | trần 2 |
 
 ## Lượt chậm hơn ngưỡng p90
 
 | Cuộc | Ca | Lượt | ms | Số bước | Mô hình (ms) | Công cụ (ms) | Còn lại (ms) |
 |---|---|---|---|---|---|---|---|
-| 3 | pb-kd-bac | 4 | 67650 | 2 | 67501 | 30 | 119 |
-| 5 | pb-tai-chinh | 2 | 24122 | 2 | 24001 | 36 | 85 |
-| 10 | pb-tai-chinh | 1 | 30911 | 1 | 30739 | 0 | 172 |
+| 5 | pb-tai-chinh | 4 | 32111 | 2 | 31808 | 42 | 261 |
+| 8 | pb-kd-bac | 1 | 21595 | 1 | 21370 | 0 | 225 |
 
 ## Soạn theo đơn vị
 
 | Ca | Cuộc | USD | Dòng bị loại |
 |---|---|---|---|
-| onehub | cmuoo6toe001as9cfafrmverc | 0.0345 | 0 |
-| bp-kinh-doanh | cmuoo7vqj001bs9cfvfek909c | 0.0328 | 0 |
-| pb-kd-bac | cmuoo9avq001cs9cfm1ehvi5b | 0.0331 | 0 |
-| pb-kho-van | cmuooams3001ds9cfw2qcj0yo | 0.0328 | 0 |
-| pb-tai-chinh | cmuoobssj001es9cfaeq9h3x3 | 0.0287 | 0 |
+| onehub | cmuorssgo001a97cfjk9gbu1g | 0.0348 | 0 |
+| bp-kinh-doanh | cmuortojz001b97cfsmb0p27c | 0.0336 | 0 |
+| pb-kd-bac | cmuorv728001c97cf3ehu9dwl | 0.0324 | 0 |
+| pb-kho-van | cmuorwbhg001d97cf01lms14d | 0.0321 | 0 |
+| pb-tai-chinh | cmuorxt6j001e97cfww21d7jv | 0.0351 | 0 |
 
 ## Chấm của chủ kho (E24)
 
 Mỗi cặp dưới đây là hai bản nháp cho cùng đơn vị: một bản có gói bối cảnh, một bản không. Chọn bản tốt hơn theo sáu tiêu chí (căn chỉnh với Mục tiêu cấp trên; dùng đúng khởi điểm từ kỳ trước và số CRM; KR đo kết quả, không đo việc; có đối trọng; không số đích bịa, đích để trống; phù hợp đơn vị). Phía có gói và lựa chọn của judge nằm ở `evidence/eval-soan-khoa.json` — mở sau khi chấm.
 
-### Cặp 1 — pb-tai-chinh#v1
+### Cặp 1 — pb-kho-van#v3
 
 **A**
 
 ```
-Mục tiêu (cam-ket): Kiểm soát chặt chẽ công nợ và dòng tiền để giữ chân các đối tác gắn bó lâu dài — vì sao lúc này: Kỳ trước công nợ quá hạn còn ở mức 12% do các đối tác lớn trả chậm, cần giải tỏa áp lực dòng tiền mà không phát sinh thêm chi phí. — Quản trị dòng tiền minh bạch và nhịp nhàng hỗ trợ trực tiếp cho cam kết duy trì tỷ lệ đối tác gia hạn.
-  - Căn chỉnh tới: Giữ tỷ lệ đối tác gia hạn trên 85%
-  - KR: Tỷ lệ công nợ quá hạn của các đối tác lớn giảm xuống (giam-xuong, %, khởi điểm 12) — Rút kinh nghiệm từ quý trước để nhắc nợ sớm trước hạn và giữ tỷ lệ thanh toán lành mạnh.
-  - KR: Thời gian hoàn tất đối soát công nợ với đối tác mỗi kỳ giữ dưới mức quy định (giu-duoi, ngày) — Đối soát nhanh và chuẩn xác giúp giải quyết vướng mắc chứng từ để đối tác yên tâm tiếp tục đồng hành.
-Mục tiêu (cam-ket): Tối ưu quy trình kế toán quản trị để hỗ trợ vận hành đúng hạn và tiết giảm chi phí — vì sao lúc này: Khối văn phòng không bổ sung nhân sự nên cần giữ quy trình chuẩn mực và ngân sách ổn định như kỳ trước. — Cung cấp dữ liệu chi phí kịp thời giúp toàn hệ thống theo dõi chi phí chuyến và tối ưu hiệu quả giao nhận.
-  - Căn chỉnh tới: Chi phí vận tải trên mỗi đơn giảm từ 42 xuống 36 nghìn đồng
-  - KR: Thời gian chốt sổ kế toán tháng giữ dưới mốc quy định (giu-duoi, ngày, khởi điểm 5) — Duy trì kỷ luật chốt sổ đã đạt được từ quý trước để ban điều hành có số liệu điều phối kịp thời.
-  - KR: Tỷ lệ vượt ngân sách chi phí vận hành khối văn phòng giữ dưới ngưỡng cho phép (giu-duoi, %) — Kiểm soát chi phí theo đúng ngân sách quý trước để đáp ứng yêu cầu vận hành gọn mà không tuyển thêm nhân sự.
+Mục tiêu (cam-ket): Mở rộng mạng lưới đối tác mới nhằm củng cố mảng hoạt động còn yếu — vì sao lúc này: Mảng hoạt động này cần bổ sung năng lực kịp thời từ bên ngoài trong điều kiện tối ưu chi phí. — Gia tăng liên kết với các đối tác mới giúp bổ khuyết năng lực tại mảng còn hạn chế.
+  - KR: Số đối tác ký kết hợp tác mới ở mảng cần tăng cường (tang-toi, đối tác) — Mở rộng mạng lưới đối tác trực tiếp bù đắp mảng đơn vị đang yếu.
+  - KR: Tỷ lệ thỏa thuận hợp tác được chốt qua kênh liên hệ trực tiếp (phan-tram, %) — Đảm bảo phát triển đối tác hiệu quả mà không tăng ngân sách quảng bá.
+Mục tiêu (cam-ket): Chuẩn hóa quy trình vận hành và nâng cao năng lực triển khai cùng đối tác mới — vì sao lúc này: Cần nhanh chóng đưa các hợp tác mới vào vận hành ổn định mà không phát sinh thêm chi phí tiếp thị. — Xây dựng nền tảng vững chắc để việc hợp tác mới đi vào thực chất và đem lại giá trị.
+  - KR: Hoàn thành quy trình phối hợp tiếp nhận và chuyển giao với đối tác mới (moc, mốc) — Đảm bảo quá trình tiếp nhận đối tác mới diễn ra trôi chảy và hiệu quả.
+  - KR: Tỷ lệ đơn hàng phối hợp xử lý thành công đúng cam kết với đối tác mới (phan-tram, %) — Khẳng định chất lượng vận hành khi triển khai hợp tác chung.
 ```
 
 **B**
 
 ```
-Mục tiêu (cam-ket): Đảm bảo đồng hành bền chặt với các đối tác lớn thông qua vận hành tài chính chuẩn xác và đúng hạn — vì sao lúc này: Cần duy trì sự ổn định và tín nhiệm từ các đối tác lớn trong bối cảnh nguồn lực không đổi. — Giữ chân đối tác lớn là ưu tiên hàng đầu của đơn vị trong chu kỳ này.
-  - KR: Tỷ lệ hợp tác tiếp tục duy trì sau kỳ hạn (phan-tram, %) — Đo lường mức độ tin tưởng và sự gắn bó lâu dài của các đối tác trọng điểm.
-  - KR: Tỷ lệ đối soát và thanh toán hoàn tất đúng hẹn (phan-tram, %) — Giữ vững cam kết về thời gian để củng cố uy tín với các đối tác lớn.
-Mục tiêu (cam-ket): Tối ưu hóa hiệu quả vận hành tài chính trong phạm vi nguồn lực và ngân sách hiện tại — vì sao lúc này: Đơn vị hoạt động dưới ràng buộc nghiêm ngặt về nhân sự và chi phí quý này. — Đáp ứng khối lượng công việc và chất lượng cam kết mà không làm tăng định biên hay ngân sách.
-  - KR: Tỷ lệ chênh lệch chi phí so với ngân sách quý trước (giu-duoi, %) — Đảm bảo hoạt động trong trần ngân sách hiện có như yêu cầu.
-  - KR: Quy trình vận hành phối hợp nội bộ được tinh giản và thống nhất áp dụng (moc, moc) — Nâng cao năng suất xử lý mà không cần bổ sung nhân sự.
-```
-
-### Cặp 2 — pb-kho-van#v2
-
-**A**
-
-```
-Mục tiêu (cam-ket): Tối ưu hóa hiệu quả và chi phí trên từng chuyến vận chuyển với đội xe hiện hữu — vì sao lúc này: Cần kiểm soát chi phí vận hành ngay trong kỳ này để tạo nền tảng hiệu quả lâu dài cho đội xe. — Giúp đơn vị giảm bớt gánh nặng chi phí vận hành mà vẫn tận dụng tối đa năng lực vận tải sẵn có.
-  - KR: Tỷ lệ lấp đầy thể tích phương tiện trên mỗi chuyến vận chuyển (phan-tram, %) — Nâng cao hệ số sử dụng phương tiện giúp chuyên chở được nhiều hơn trong cùng một lượt di chuyển.
-  - KR: Chi phí vận hành bình quân trên mỗi chuyến xe (giam-xuong, đồng/chuyến) — Trực tiếp đo lường kết quả tiết kiệm chi phí chuyến với đội xe hiện có.
-  - KR: Quãng đường di chuyển bình quân cho mỗi lượt giao hàng hoàn tất (giam-xuong, km/chuyến) — Tối ưu lộ trình giúp rút ngắn cự ly di chuyển và tiết kiệm nhiên liệu.
-Mục tiêu (cam-ket): Bảo đảm chất lượng dịch vụ giao hàng ổn định trong quá trình tinh gọn vận hành — vì sao lúc này: Song hành với việc tiết kiệm chi phí, tiêu chuẩn giao hàng cần được bảo vệ để không gây gián đoạn chuỗi cung ứng. — Đảm bảo việc cắt giảm chi phí chuyến không làm giảm sút uy tín và cam kết tiến độ.
-  - KR: Tỷ lệ chuyến hàng được bàn giao đúng giờ theo lịch hẹn (giu-tren, %) — Đảm bảo việc siết chặt chi phí không ảnh hưởng đến độ tin cậy và tốc độ giao hàng.
-  - KR: Tỷ lệ hàng hóa bàn giao nguyên vẹn không phát sinh hư hỏng, thất thoát (giu-tren, %) — Bảo vệ tiêu chuẩn bảo quản và an toàn hàng hóa trong suốt hành trình.
-  - KR: Tỷ lệ đơn hàng phát sinh khiếu nại về chất lượng vận chuyển (giu-duoi, %) — Theo dõi phản hồi để kịp thời khắc phục các sự cố phát sinh ngoài ý muốn.
-```
-
-**B**
-
-```
-Mục tiêu (cam-ket): Tối ưu hóa quy trình kho nhằm hỗ trợ hạ chi phí chuyến xe mà vẫn bảo đảm chuẩn bảo quản — vì sao lúc này: Đơn vị cần phối hợp cùng mục tiêu hạ chi phí trên mỗi đơn của cấp trên trong điều kiện giữ nguyên đội xe. — Hoạt động kho trơn tru và chuẩn xác giúp giảm chi phí chung mà không ảnh hưởng chất lượng.
-  - Căn chỉnh tới: Chi phí vận tải trên mỗi đơn giảm từ 42 xuống 36 nghìn đồng
-  - KR: Thời gian xuất kho trung bình mỗi chuyến (giam-xuong, phút, khởi điểm 36) — Rút ngắn thời gian xử lý tại kho giúp xe xuất bến nhanh và tối ưu chi phí vận hành.
-  - KR: Tỷ lệ hao hụt hàng hóa tại ba kho lạnh (giu-duoi, %, khởi điểm 0.8) — Hạn chế hư hỏng và giữ vững chất lượng bảo quản trong suốt thời gian lưu kho.
-  - KR: Tỷ lệ lệch tồn kho qua kiểm kê cuốn chiếu hằng ngày (giu-duoi, %, khởi điểm 0.4) — Duy trì số liệu tồn kho chính xác để việc xếp hàng lên xe không bị chậm trễ.
-Mục tiêu (tham-vong): Bảo đảm tiến độ xuất hàng chuẩn xác tuyệt đối để giữ nhịp giao đúng hẹn — vì sao lúc này: Giao đúng hẹn là cam kết hàng đầu giúp giữ chân đối tác lâu dài ở cả hai miền. — Thời gian chuẩn bị hàng tại kho quyết định lớn tới tỷ lệ giao hàng đúng giờ của toàn hệ thống.
-  - Căn chỉnh tới: Tỷ lệ đơn giao đúng hẹn
-  - KR: Tỷ lệ chuyến xe hoàn tất bốc dỡ và xuất kho đúng khung giờ hẹn (phan-tram, %) — Xe rời kho đúng giờ là điều kiện tiên quyết để hành trình giao hàng không bị trễ.
-  - KR: Số sự cố gián đoạn nhiệt độ bảo quản tại ba kho lạnh (giu-duoi, sự cố) — Đảm bảo chuỗi lạnh liền mạch ngay từ khâu lưu trữ và bốc dỡ lên xe.
-```
-
-### Cặp 3 — bp-kinh-doanh#v3
-
-**A**
-
-```
-Mục tiêu (cam-ket): Mở rộng tệp đối tác vận tải lạnh tại hai miền — vì sao lúc này: Mảng vận chuyển lạnh đang mở ra triển vọng lớn sau khi đối thủ rút lui và cần phát triển ngay trong quý này. — Tập trung phát triển đối tác mới trong mảng vận chuyển lạnh nhằm nắm bắt thời cơ thị trường.
+Mục tiêu (cam-ket): Nâng cao tốc độ và độ chuẩn xác trong xử lý hàng tại kho — vì sao lúc này: Chu kỳ trước thời gian xuất kho mới chạm mức 36 phút và cấp trên đang ưu tiên tỷ lệ giao đúng hẹn. — Thời gian xuất kho nhanh và chuẩn xác là nền tảng trực tiếp để đội xe giao đúng hẹn ở mọi tuyến.
+  - Căn chỉnh tới: Giao đúng hẹn ở mọi tuyến
+  - KR: Thời gian xuất kho trung bình (giam-xuong, phút, khởi điểm 36) — Rút ngắn thời gian xử lý tại kho để hỗ trợ đội xe kịp giờ giao hàng.
+  - KR: Giữ tỷ lệ lệch tồn kho dưới mức quy định (giu-duoi, %, khởi điểm 0.4) — Duy trì kiểm kê cuốn chiếu hằng ngày để không phát sinh sai sót số lượng hàng.
+Mục tiêu (cam-ket): Bảo đảm chất lượng chuỗi lạnh đạt chuẩn nghiêm ngặt để tạo lợi thế đón đối tác mới — vì sao lúc này: Sự cố mất điện chu kỳ trước làm tăng hao hụt, cần củng cố quy trình vận hành trước khi nhận thêm lượng hàng mới. — Kiểm soát nhiệt độ và giảm hao hụt giúp đơn vị cạnh tranh mở rộng hợp tác mà không cần tăng chi phí tiếp thị.
   - Căn chỉnh tới: Số đối tác hàng lạnh đang chạy tăng từ 12 lên 30
-  - KR: Số đối tác mới ký kết hợp đồng trong phân khúc hàng lạnh (tang-toi, đối tác) — Đo lường trực tiếp kết quả phát triển tệp đối tác ở mảng hàng lạnh trọng điểm.
-  - KR: Số chuỗi bán lẻ và cửa hàng tiện lợi mới bắt đầu vận hành thử nghiệm (tang-toi, chuỗi) — Gia tăng số lượng chuỗi bán lẻ theo định hướng ưu tiên của công ty.
-Mục tiêu (tham-vong): Gia tăng hiệu quả chuyển đổi hợp đồng mới tối ưu chi phí tiếp thị — vì sao lúc này: Đơn vị cần tìm kiếm phương thức phát triển đối tác hiệu quả trong điều kiện ngân sách marketing được giữ cố định. — Khai thác tối đa nguồn liên hệ hiện hữu và mạng lưới giới thiệu để tăng trưởng hợp đồng mà không tăng ngân sách.
-  - Căn chỉnh tới: Doanh thu hợp đồng mới đạt 48 tỷ đồng
-  - KR: Tỷ lệ chuyển đổi từ liên hệ hợp tác ban đầu sang hợp đồng chính thức (tang-toi, %) — Tối ưu hóa năng lực chuyển đổi từ nguồn tiếp cận sẵn có mà không phát sinh thêm chi phí quảng bá.
-  - KR: Tỷ lệ hợp đồng ký mới đến từ sự giới thiệu của đối tác hiện hữu (tang-toi, %) — Tận dụng uy tín sẵn có để có thêm hợp đồng mới mà không tốn chi phí tiếp thị.
+  - KR: Tỷ lệ hao hụt hàng lạnh tại ba kho (giam-xuong, %, khởi điểm 0.8) — Hạn chế tổn thất hàng hóa để nâng cao độ tin cậy với các đối tác chuỗi bán lẻ mới.
+  - KR: Giữ số khiếu nại về biến động nhiệt độ kho dưới mức cho phép (giu-duoi, khiếu nại) — Đảm bảo chất lượng bảo quản lạnh liền mạch từ khâu lưu trữ.
+Mục tiêu (cam-ket): Kiện toàn đội ngũ vận hành tại ba kho lạnh sẵn sàng cho giai đoạn cao điểm — vì sao lúc này: Cấp trên đang yêu cầu chuẩn bị đủ người, đủ sức cho mùa cao điểm sắp tới. — Nhân sự kho vững vàng quy trình giúp duy trì nhịp vận hành ổn định và không làm chậm đơn.
+  - Căn chỉnh tới: Đội ngũ đủ người, đủ sức cho mùa cao điểm
+  - KR: Bổ sung đủ nhân sự vận hành kho được đào tạo quy trình lạnh (tang-toi, người) — Đảm bảo lực lượng sẵn sàng đáp ứng lưu lượng xuất nhập tăng cao.
+  - KR: Giữ tỷ lệ biến động nhân sự kho dưới mức trần (giu-duoi, %) — Ổn định đội ngũ nòng cốt tại các kho Bắc Ninh, Đà Nẵng và Long An trong giai đoạn cao điểm.
+```
+
+### Cặp 2 — bp-kinh-doanh#v2
+
+**A**
+
+```
+Mục tiêu (cam-ket): Tối ưu hóa chi phí vận hành mỗi chuyến đi mà vẫn duy trì chất lượng dịch vụ vận chuyển — vì sao lúc này: Đơn vị cần tìm giải pháp kiểm soát chi phí ngay trong chu kỳ này trong điều kiện giữ nguyên quy mô đội xe. — Giảm chi phí vận hành trên từng chuyến giúp nâng cao hiệu quả tổng thể mà không cần mở rộng đội ngũ phương tiện hiện tại.
+  - KR: Chi phí bình quân trên mỗi chuyến vận chuyển giảm xuống (giam-xuong, đồng/chuyến) — Đo lường trực tiếp mức độ tối ưu hóa chi phí trên từng chuyến.
+  - KR: Tỉ lệ các chuyến hoàn thành đúng hạn duy trì ổn định (giu-tren, %) — Đảm bảo thời gian chuyển phát không bị ảnh hưởng khi thực hiện cắt giảm chi phí.
+  - KR: Hoàn thành áp dụng mô hình điều phối tuyến đường tối ưu cho toàn bộ đội xe hiện có (moc, mốc) — Tăng hiệu quả sắp xếp tuyến nhằm tiết kiệm chi phí mà không cần bổ sung phương tiện.
+Mục tiêu (cam-ket): Bảo đảm chất lượng dịch vụ giao nhận và độ tin cậy của các chuyến xe — vì sao lúc này: Việc siết chặt chi phí có thể gây rủi ro về chất lượng nếu không có biện pháp theo dõi sát sao ngay từ đầu. — Chất lượng giao hàng là yếu tố quyết định uy tín của đơn vị khi thực hiện các bài toán cắt giảm chi phí.
+  - KR: Tỉ lệ kiện hàng vận chuyển an toàn và nguyên vẹn duy trì ở mức cao (giu-tren, %) — Chất lượng hàng hóa đến nơi phản ánh trực tiếp chất lượng giao nhận của khối.
+  - KR: Tỉ lệ phản hồi khiếu nại về dịch vụ vận chuyển trên tổng số chuyến (giam-xuong, %) — Kiểm soát và giảm thiểu các vấn đề phát sinh từ khâu vận hành chuyển phát.
 ```
 
 **B**
 
 ```
-Mục tiêu (cam-ket): Mở rộng mạng lưới đối tác mới ở mảng còn yếu mà không gia tăng chi phí tiếp thị — vì sao lúc này: Đơn vị cần bổ sung năng lực cho mảng còn yếu ngay trong quý mà vẫn kiểm soát chặt chẽ ngân sách. — Tạo bước đột phá cho mảng trọng điểm và tối ưu hóa nguồn lực sẵn có của đơn vị.
-  - KR: Số lượng đối tác mới ký kết hợp tác ở mảng còn yếu (tang-toi, đối tác) — Đo lường trực tiếp kết quả mở rộng đối tác theo đúng trọng tâm ưu tiên.
-  - KR: Số cuộc trao đổi chuyên sâu được thiết lập với các đối tác tiềm năng (tang-toi, cuộc hẹn) — Đảm bảo nguồn tiếp cận đầu vào chất lượng trước khi đi đến thỏa thuận.
-  - KR: Tỉ lệ đối tác tiềm năng chuyển đổi thành đối tác chính thức (phan-tram, tỉ lệ %) — Tối ưu hiệu quả tiếp cận để không cần phụ thuộc vào việc tăng ngân sách truyền thông.
-Mục tiêu (tham-vong): Nâng cao năng lực tiếp cận tự thân và hiệu suất chốt hợp tác của đội ngũ — vì sao lúc này: Quy trình tinh gọn và năng lực nội tại vững vàng là chìa khóa để duy trì đà tăng trưởng bền vững. — Giúp đội ngũ tự chủ khai thác đối tác mới hiệu quả trong điều kiện ngân sách giữ nguyên.
-  - KR: Thời gian phản hồi và hoàn thiện thỏa thuận hợp tác với đối tác (giam-xuong, ngày) — Rút ngắn thời gian xúc tiến nhằm nâng cao trải nghiệm hợp tác và tăng tốc độ chốt kết quả.
-  - KR: Hoàn thành bộ tài liệu và quy trình tiếp cận chuẩn dành riêng cho mảng mới (moc, mốc) — Chuẩn hóa tài liệu để đội ngũ tiếp cận đối tác hiệu quả mà không cần chi tiêu tiếp thị thêm.
-```
-
-### Cặp 4 — pb-tai-chinh#v3
-
-**A**
-
-```
-Mục tiêu (cam-ket): Bảo đảm dòng tiền và kiểm soát chặt chẽ công nợ đối tác mới — vì sao lúc này: Công nợ quá hạn chu kỳ trước còn ở mức 12%, cần kiểm soát chặt khi đưa thêm các đối tác mới vào vận hành. — Dòng tiền thông suốt tạo nguồn lực trực tiếp để công ty mở rộng thị phần mà không phụ thuộc vào tăng ngân sách.
+Mục tiêu (cam-ket): Tối ưu chi phí mỗi chuyến vận chuyển với đội xe hiện hữu — vì sao lúc này: Chi phí vận hành cần được kiểm soát ngay để bảo đảm hiệu quả chung mà không tăng tải phương tiện. — Giúp đơn vị giảm giá thành chuyến đi mà vẫn giữ vững cam kết về độ tin cậy và chất lượng.
+  - Căn chỉnh tới: Giao đúng hẹn ở mọi tuyến
+  - KR: Chi phí vận tải bình quân trên mỗi chuyến vận chuyển (giam-xuong, nghìn đồng) — Đo lường mức độ tối ưu hóa chi phí vận hành trực tiếp trên từng chuyến.
+  - KR: Tỷ lệ giao hàng đúng hẹn trên toàn mạng lưới (giu-tren, %) — Đảm bảo chất lượng cam kết không bị suy giảm khi siết chặt chi phí.
+  - KR: Tỷ lệ lấp đầy thùng xe bình quân mỗi chiều chạy (tang-toi, %) — Tận dụng tối đa tải trọng của đội xe hiện hữu mà không cần bổ sung phương tiện.
+Mục tiêu (cam-ket): Bảo vệ sự gắn kết và niềm tin của tệp đối tác hiện có — vì sao lúc này: Giữ chân đối tác hiện hữu giúp ổn định tần suất chuyến và tránh phát sinh chi phí tìm kiếm mới. — Duy trì dòng hợp đồng ổn định là nền tảng để tối ưu hóa tuyến chạy của đội xe.
   - Căn chỉnh tới: Trở thành đối tác logistics được chọn đầu tiên ở hai miền
-  - KR: Tỷ lệ công nợ quá hạn của các đối tác mới và hiện hữu giảm xuống (giam-xuong, %, khởi điểm 12) — Kiểm soát dòng tiền về đúng hạn từ các hợp đồng mới mà không làm phát sinh rủi ro nợ xấu.
-  - KR: Thời gian thẩm định và phê duyệt điều khoản thanh toán cho đối tác mới giữ dưới mức quy định (giu-duoi, ngày) — Hỗ trợ ký kết nhanh các đối tác ở mảng trọng điểm nhưng vẫn đảm bảo an toàn tài chính.
-Mục tiêu (cam-ket): Kiểm soát hiệu quả chi phí vận hành để hỗ trợ mở rộng đối tác — vì sao lúc này: Cấp trên đang đặt trọng tâm giao đúng hẹn đi kèm giảm chi phí đơn, cần số liệu quản trị chặt chẽ. — Giúp công ty phát triển các mảng mới trên nền tảng chi phí gọn gàng và không tăng thêm ngân sách.
-  - Căn chỉnh tới: Giao đúng hẹn ở mọi tuyến
-  - KR: Chi phí vận tải trên mỗi đơn giảm xuống (giam-xuong, nghìn đồng) — Tối ưu hóa định mức chi phí vận hành để bù đắp việc không tăng ngân sách xúc tiến.
-  - KR: Thời gian hoàn thành chốt sổ kế toán và báo cáo quản trị chi phí mỗi tháng giữ dưới mốc quy định (giu-duoi, ngày làm việc, khởi điểm 5) — Cung cấp số liệu chi phí kịp thời để ban điều hành nhận diện điểm yếu và điều chỉnh phân bổ ngân sách.
+  - KR: Tỷ lệ đối tác hiện hữu ký tiếp hợp đồng vận chuyển (giu-tren, %) — Khẳng định sự hài lòng và tin cậy của các đối tác đang hợp tác.
+  - KR: Số khiếu nại về thời gian và chất lượng giao hàng mỗi tháng (giu-duoi, khiếu nại) — Theo dõi sát trải nghiệm dịch vụ để ngăn ngừa rủi ro mất đối tác.
 ```
 
-**B**
-
-```
-Mục tiêu (tham-vong): Mở rộng mạng lưới đối tác mới tại mảng chiến lược còn yếu — vì sao lúc này: Mảng chiến lược đang yếu cần nhanh chóng có đối tác đồng hành để tạo đà phát triển. — Tập trung nguồn lực phát triển các mối quan hệ hợp tác mới để bù đắp điểm yếu của đơn vị.
-  - KR: Số lượng đối tác mới được thiết lập hợp tác thành công (tang-toi, đối tác) — Đo lường trực tiếp kết quả mở rộng mạng lưới hợp tác tại mảng còn yếu.
-  - KR: Hoàn thành khung tiêu chuẩn đánh giá và kết nối đối tác mới (moc, mốc) — Tạo cơ sở lựa chọn và làm việc hiệu quả với các bên hợp tác.
-Mục tiêu (cam-ket): Kiểm soát chặt chẽ ngân sách marketing trong quá trình mở rộng đối tác — vì sao lúc này: Cần kiểm soát chi tiêu ngay từ đầu kỳ khi triển khai mở rộng mạng lưới đối tác mới. — Đảm bảo kỷ luật tài chính và tối ưu hiệu quả nguồn vốn sẵn có mà không làm tăng chi phí.
-  - KR: Ngân sách marketing thực tế sử dụng được duy trì dưới mức trần quy định (giu-duoi, đồng) — Đảm bảo tuân thủ nghiêm ngặt ràng buộc không tăng chi phí quảng bá.
-  - KR: Số đối tác mới kết nối thành công qua kênh hợp tác không tốn phí (tang-toi, đối tác) — Tận dụng tối đa nguồn lực sẵn có và các mối liên kết tự nhiên mà không phát sinh thêm chi phí.
-```
-
-### Cặp 5 — pb-kho-van#v1
+### Cặp 3 — pb-kd-bac#v2
 
 **A**
 
 ```
-Mục tiêu (cam-ket): Tối ưu tốc độ xuất kho và kiểm soát hàng hóa để đáp ứng giờ giao — vì sao lúc này: Đơn vị cần giữ cam kết giao đúng hẹn với các đối tác lớn trong điều kiện nguồn lực nhân sự giữ nguyên. — Rút ngắn thời gian vận hành kho là điều kiện tiên quyết để giữ đúng hẹn giao mà không cần bổ sung nhân sự.
-  - Căn chỉnh tới: Giao đúng hẹn ở mọi tuyến
-  - KR: Thời gian xuất kho trung bình tại ba kho lạnh (giam-xuong, phút, khởi điểm 36) — Rút ngắn thời gian xử lý tại kho giúp xe xuất bến kịp giờ để bảo đảm tỷ lệ giao đúng hẹn.
-  - KR: Tỷ lệ lệch tồn kho qua kiểm kê cuốn chiếu mỗi ngày (giu-duoi, %, khởi điểm 0.4) — Kiểm soát tồn kho chính xác giúp việc soạn hàng không bị gián đoạn và hạn chế giao trễ.
-Mục tiêu (cam-ket): Bảo đảm an toàn chuỗi lạnh để giữ vững sự tin tưởng của đối tác lớn — vì sao lúc này: Chiến lược năm yêu cầu chuỗi lạnh liền mạch và kiểm soát hao hụt kho chặt chẽ nhằm duy trì tỷ lệ gia hạn. — Chất lượng bảo quản lạnh ổn định là yếu tố then chốt giúp các đối tác tiếp tục gắn bó lâu dài.
-  - Căn chỉnh tới: Giữ tỷ lệ đối tác gia hạn trên 85%
-  - KR: Tỷ lệ hao hụt kho lạnh tính trên giá trị hàng (giam-xuong, %, khởi điểm 0.8) — Giảm tổn thất do nhiệt độ giúp bảo đảm chất lượng hàng cho các đối tác lớn.
-  - KR: Số lượng khiếu nại liên quan đến nhiệt độ và bảo quản kho mỗi tháng (giu-duoi, khiếu nại) — Giữ khiếu nại ở mức thấp củng cố lòng tin để các bên tiếp tục gia hạn hợp đồng.
+Mục tiêu (cam-ket): Mở rộng mạng lưới đối tác bán lẻ và chuỗi cửa hàng tại miền Bắc — vì sao lúc này: Phân khúc chuỗi bán lẻ đang có nhu cầu lớn và cấp trên ưu tiên tăng số đối tác đang chạy. — Đối tác bán lẻ ra quyết định nhanh khi có phương án tuyến rõ ràng và là trọng tâm tăng trưởng của khối.
+  - Căn chỉnh tới: Số đối tác hàng lạnh đang chạy tăng từ 12 lên 30
+  - KR: Số hợp đồng bán lẻ mới ký thành công (tang-toi, hợp đồng, khởi điểm 0) — Mở rộng tệp đối tác bán lẻ miền Bắc theo đúng định hướng chiến lược.
+  - KR: Giá trị hợp đồng mới đạt mức kỳ vọng (tang-toi, tỷ đồng, khởi điểm 0) — Đảm bảo quy mô doanh thu từ các đối tác chuỗi bán lẻ mới.
+Mục tiêu (cam-ket): Tối ưu chi phí mỗi chuyến vận chuyển song hành cùng chất lượng dịch vụ — vì sao lúc này: Cấp trên đang thúc đẩy giảm chi phí vận chuyển trên mỗi đơn nhằm nâng cao hiệu quả. — Tiết kiệm chi phí vận hành chuyến trong điều kiện giữ nguyên đội xe hiện có.
+  - Căn chỉnh tới: Chi phí vận tải trên mỗi đơn giảm từ 42 xuống 36 nghìn đồng
+  - KR: Chi phí vận chuyển trung bình trên mỗi đơn hàng (giam-xuong, nghìn đồng) — Đo lường mức giảm chi phí trực tiếp trên từng chuyến mà vẫn giữ nguyên đội xe.
+  - KR: Giữ tỷ lệ giao hàng đúng hẹn trên các tuyến miền Bắc (giu-tren, %) — Bảo đảm chất lượng dịch vụ cam kết không bị ảnh hưởng khi tối ưu chi phí.
 ```
 
 **B**
 
 ```
-Mục tiêu (cam-ket): Nâng cao độ chuẩn xác và tốc độ xử lý xuất kho nhằm đảm bảo đúng hạn cho các đối tác lớn — vì sao lúc này: Quý này cần ưu tiên giữ chân đối tác lớn trong bối cảnh nguồn lực nhân sự giữ nguyên. — Giao hàng đúng hẹn là yếu tố then chốt để duy trì uy tín và sự gắn kết với đối tác quan trọng.
-  - KR: Tỷ lệ đơn hàng giao đúng hạn cho các đối tác lớn (phan-tram, %) — Đo lường trực tiếp độ tin cậy và khả năng đáp ứng thời gian cam kết.
-  - KR: Thời gian xử lý và hoàn tất thủ tục xuất kho bình quân (giam-xuong, giờ) — Rút ngắn khâu chuẩn bị nội bộ giúp giữ đúng hạn mà không cần tăng nhân sự.
-Mục tiêu (cam-ket): Tối ưu hóa quy trình vận hành kho để duy trì hiệu suất ổn định với nguồn lực hiện tại — vì sao lúc này: Ràng buộc về chi phí và con người đòi hỏi phải tinh gọn từng bước xử lý ngay từ bây giờ. — Cần hoạt động hiệu quả trong điều kiện không bổ sung nhân sự và ngân sách như quý trước.
-  - KR: Tỷ lệ đơn hàng xuất kho không phát sinh khiếu nại hay sai sót (phan-tram, %) — Giảm thiểu sai sót giúp giảm chi phí khắc phục và duy trì chất lượng dịch vụ ổn định.
-  - KR: Tỷ lệ chi phí vận hành kho trên mỗi đơn hàng so với định mức ngân sách cũ (giu-duoi, %) — Bảo đảm hoạt động vận hành trơn tru trong giới hạn ngân sách không tăng thêm.
+Mục tiêu (cam-ket): Tối ưu hóa chi phí vận hành trên mỗi chuyến xe với quy mô đội xe hiện tại — vì sao lúc này: Đơn vị cần siết chặt hiệu quả chi phí chuyến ngay trong chu kỳ này trong điều kiện không mở rộng đội xe. — Giúp giảm gánh nặng chi phí trên từng lượt vận chuyển mà vẫn giữ nguyên số lượng phương tiện.
+  - KR: Chi phí bình quân trên mỗi chuyến giao (giam-xuong, nghìn đồng) — Đo lường trực tiếp mức độ tiết giảm chi phí vận hành trên từng chuyến xe.
+  - KR: Tỷ lệ lấp đầy tải trọng bình quân trên mỗi chuyến xe (tang-toi, %) — Tối ưu sức chứa hiện có của đội xe để giảm phát sinh thêm lượt di chuyển.
+  - KR: Mức tiêu hao nhiên liệu bình quân trên mỗi chuyến (giam-xuong, %) — Kiểm soát hao phí vận hành trực tiếp của phương tiện mà không làm tăng số lượng xe.
+Mục tiêu (cam-ket): Duy trì và bảo đảm chuẩn mực chất lượng vận chuyển hàng hóa — vì sao lúc này: Cần đặt chất lượng làm chốt chặn song hành ngay khi tiến hành các biện pháp thắt chặt chi phí. — Bảo đảm việc hạ thấp chi phí mỗi chuyến không làm suy giảm uy tín và tiêu chuẩn giao vận.
+  - KR: Tỷ lệ chuyến giao hàng đúng thời gian quy định (giu-tren, %) — Bảo đảm việc tiết giảm chi phí không ảnh hưởng đến tính chuẩn xác về giờ giấc.
+  - KR: Tỷ lệ bưu phẩm giao đến nơi an toàn nguyên vẹn (giu-tren, %) — Giữ vững tiêu chuẩn vận chuyển an toàn trong suốt quá trình tinh gọn chuyến.
+  - KR: Tỷ lệ phản hồi tích cực về chất lượng dịch vụ vận chuyển (tang-toi, %) — Đảm bảo trải nghiệm nhận dịch vụ vẫn được duy trì hoặc cải thiện tốt hơn.
+```
+
+### Cặp 4 — pb-kd-bac#v1
+
+**A**
+
+```
+Mục tiêu (cam-ket): Giữ vững niềm tin và tỷ lệ gắn bó của các đối tác lớn miền Bắc — vì sao lúc này: Trong bối cảnh không tăng nhân sự và giữ nguyên ngân sách, việc giữ chân đối tác cũ mang lại hiệu quả cao nhất. — Tập trung nguồn lực hiện có để chăm sóc và duy trì các đối tác lớn mang lại giá trị bền vững.
+  - Căn chỉnh tới: Giữ tỷ lệ đối tác gia hạn trên 85%
+  - KR: Tỷ lệ đối tác gia hạn hợp đồng (giu-tren, %) — Bảo đảm duy trì lượng đối tác ổn định trong điều kiện ngân sách và nhân sự giữ nguyên.
+  - KR: Số đối tác chuỗi bán lẻ lớn duy trì chạy tuyến liên tục (giu-tren, đối tác) — Giữ chân các đối tác trọng điểm miền Bắc không để gián đoạn dịch vụ.
+Mục tiêu (cam-ket): Bảo đảm chất lượng dịch vụ và cam kết giao đúng hẹn cho các tuyến — vì sao lúc này: Giao đúng hẹn là lý do hàng đầu đối tác quyết định tiếp tục gắn bó trong giai đoạn này. — Giao đúng hẹn giúp củng cố sự hài lòng và ngăn ngừa nguy cơ đối tác rời đi.
+  - Căn chỉnh tới: Tỷ lệ đơn giao đúng hẹn
+  - KR: Tỷ lệ chuyến hàng giao đúng mốc giờ thỏa thuận (phan-tram, %) — Đúng hẹn là cam kết quan trọng nhất để giữ chân đối tác bán lẻ.
+  - KR: Số khiếu nại về giao trễ từ đối tác mỗi tháng (giu-duoi, khiếu nại) — Kiểm soát sự cố phát sinh nhằm bảo vệ uy tín dịch vụ của đơn vị.
+```
+
+**B**
+
+```
+Mục tiêu (cam-ket): Bảo vệ và củng cố vững chắc mối quan hệ hợp tác với các đối tác lớn — vì sao lúc này: Đơn vị cần tập trung tối đa nguồn lực sẵn có để giữ vững mạng lưới đối tác hiện tại thay vì dàn trải tìm kiếm mới. — Giữ chân các đối tác trọng điểm giúp đơn vị duy trì nguồn thu ổn định trong bối cảnh nhân sự và ngân sách không đổi.
+  - KR: Tỷ lệ tái ký thỏa thuận hợp tác với các đối tác lớn (phan-tram, %) — Đo lường mức độ gắn kết và khả năng giữ chân các đối tác trọng điểm mà không tốn thêm nguồn lực.
+  - KR: Điểm số mức độ hài lòng từ các đối tác lớn qua khảo sát định kỳ (giu-tren, điểm) — Đảm bảo chất lượng phục vụ và mối quan hệ bền vững trong điều kiện giữ nguyên ngân sách.
+Mục tiêu (cam-ket): Nâng cao năng lực thực thi nhằm đảm bảo tiến độ bàn giao chuẩn xác cho đối tác — vì sao lúc này: Việc kiểm soát chặt chẽ tiến độ giúp tối ưu hóa hiệu suất làm việc của đội ngũ hiện tại trong khung ngân sách cũ. — Đúng hẹn giao là yếu tố then chốt để xây dựng niềm tin dài hạn mà không phát sinh thêm chi phí hay nhân sự.
+  - KR: Tỷ lệ các mốc bàn giao và cam kết hoàn thành đúng hạn (phan-tram, %) — Đo lường năng lực thực thi và cam kết chất lượng của đội ngũ khi khối lượng công việc giữ nguyên số người.
+  - KR: Số lượng thỏa thuận có phản ánh chậm trễ trong quá trình phối hợp bàn giao (giam-xuong, thỏa thuận) — Giảm thiểu tối đa tình trạng trễ hẹn để bảo vệ uy tín thương hiệu tại thị trường miền Bắc.
+```
+
+### Cặp 5 — pb-tai-chinh#v1
+
+**A**
+
+```
+Mục tiêu (cam-ket): Bảo đảm dòng tiền lành mạnh và đồng hành bền chặt cùng đối tác lớn — vì sao lúc này: Giữ chân các đối tác trọng điểm đòi hỏi quy trình công nợ minh bạch và không gây áp lực vận hành. — Duy trì dòng tiền thu đúng hạn giúp đơn vị giữ vững cam kết dịch vụ lâu dài với đối tác.
+  - Căn chỉnh tới: Giữ tỷ lệ đối tác gia hạn trên 85%
+  - KR: Tỷ lệ công nợ quá hạn của các đối tác lớn (giam-xuong, %, khởi điểm 12) — Đối soát và nhắc thanh toán sớm giúp bảo toàn dòng tiền mà không làm gián đoạn hợp tác.
+  - KR: Thời gian hoàn tất đối soát công nợ định kỳ mỗi tháng (giu-duoi, ngày) — Rút ngắn thời gian đối soát để đối tác yên tâm tiếp tục vận chuyển đúng cam kết.
+Mục tiêu (cam-ket): Kiểm soát chặt chẽ chi phí vận hành trong khuôn khổ ngân sách hiện có — vì sao lúc này: Ngân sách giữ nguyên và không bổ sung người đòi hỏi quản trị chi phí bám sát từng chuyến xe. — Giữ chi phí trong định mức giúp duy trì chất lượng giao đúng hẹn mà không cần bổ sung nhân sự.
+  - Căn chỉnh tới: Chi phí vận tải trên mỗi đơn giảm từ 42 xuống 36 nghìn đồng
+  - KR: Tỷ lệ chi phí vận hành biến đổi trên mỗi chuyến (giu-duoi, %) — Kiểm soát chặt chi phí từng chuyến để giữ nguyên định mức ngân sách mà cấp trên phân bổ.
+  - KR: Thời gian hoàn thành chốt sổ kế toán hằng tháng (giu-duoi, ngày, khởi điểm 5) — Chốt sổ kịp thời giúp phát hiện sai lệch chi phí để điều chỉnh ngay với nguồn lực hiện có.
+```
+
+**B**
+
+```
+Mục tiêu (cam-ket): Củng cố sự gắn kết và duy trì hợp tác bền vững với các đối tác lớn — vì sao lúc này: Đơn vị cần tập trung nguồn lực hiện có để giữ chân đối tác quan trọng trong bối cảnh nguồn lực cố định. — Giữ vững các mối quan hệ then chốt là nền tảng bảo đảm sự ổn định và phát triển của tổ chức.
+  - KR: Tỷ lệ duy trì các đối tác lớn tiếp tục đồng hành trong chu kỳ (phan-tram, %) — Đo lường mức độ giữ chân các đối tác quan trọng theo đúng trọng tâm đề ra.
+  - KR: Tỷ lệ phản hồi và xử lý các yêu cầu tài chính từ đối tác lớn đúng hạn thỏa thuận (phan-tram, %) — Bảo đảm chất lượng dịch vụ tài chính hỗ trợ tối đa việc duy trì hợp tác bền chặt.
+Mục tiêu (cam-ket): Đảm bảo tiến độ giao việc tài chính đúng hạn trong giới hạn nguồn lực hiện tại — vì sao lúc này: Ràng buộc không tăng nhân sự và ngân sách đòi hỏi đơn vị phải tối ưu hóa năng suất giao việc đúng hạn. — Duy trì kỷ luật vận hành chuẩn xác mà không cần bổ sung nhân sự hay gia tăng ngân sách.
+  - KR: Tỷ lệ các hồ sơ và khoản thanh toán được xử lý đúng hạn cam kết (phan-tram, %) — Đảm bảo tiến độ xử lý chứng từ và thanh toán đáp ứng đúng hạn giao.
+  - KR: Tỷ lệ chi phí vận hành phòng ban duy trì trong hạn mức ngân sách quý trước (phan-tram, %) — Kiểm soát chặt chẽ ngân sách trong điều kiện không phát sinh thêm chi phí và nhân sự.
 ```
 
 | Cặp | Judge chọn | Người chọn | Khớp |
