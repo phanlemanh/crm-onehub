@@ -7,7 +7,12 @@ import {
 	nacCuaDonVi,
 	type TRANG_THAI_DE_XUAT,
 } from "@crm/db/okr-tro-ly-danh-muc";
-import { type BanNhap, laChoGiuPhien } from "@crm/validation/okr-cuoc-soan";
+import {
+	type BanNhap,
+	docDauLanNop,
+	laChoGiuPhien,
+	vietDauLanNop,
+} from "@crm/validation/okr-cuoc-soan";
 import {
 	type DongKiemSoan,
 	dongBiLoaiSoan,
@@ -281,6 +286,9 @@ export async function nopBanNhap(
 		await donViAiCuaCuoc(db, cuoc),
 	);
 	if (nac !== "bat" && nac !== "an") return tuChoi(TU_CHOI.donViChuaBat);
+	const truoc = docDauLanNop(cuoc.lanNopMoiNhat);
+	const thu = truoc?.luot === cuoc.soLuot ? truoc.thu + 1 : 1;
+	if (thu > TRO_LY_OKR_SOAN.nopMoiLuot) return tuChoi(TU_CHOI.quaLanNopMoiLuot);
 	const goi = await goiSoan(cuocSoanId, { vai });
 	if (!goi) return tuChoi(TU_CHOI.cuocKhongDang);
 	const dung = { cuocSoanId, idKr: idKrCua(goi) };
@@ -301,7 +309,7 @@ export async function nopBanNhap(
 		]),
 	});
 	const daKiem = kiemBanNhap(conLai, kiem);
-	const lanNop = randomUUID();
+	const lanNop = vietDauLanNop({ luot: cuoc.soLuot, thu, id: randomUUID() });
 	await db.$transaction([
 		db.okrDeXuat.createMany({
 			data: daKiem.map(({ dong, kq }) => {
@@ -319,7 +327,7 @@ export async function nopBanNhap(
 			}),
 		}),
 		db.okrCuocSoan.update({
-			where: { id: cuocSoanId },
+			where: { id: cuocSoanId, lanNopMoiNhat: cuoc.lanNopMoiNhat },
 			data: { lanNopMoiNhat: lanNop },
 		}),
 	]);

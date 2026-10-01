@@ -251,14 +251,15 @@ export async function goiSoan(
 	return goi;
 }
 
-type ChuVaSo = {
-	chu: string[];
-	so: number[];
-	dich: number[];
-	khoiDiem: number[];
+type SoCuaGoi = {
+	trongGoi: Set<string>;
+	dich: Set<string>;
+	khoiDiem: Set<string>;
 };
 
 const laSo = (n: number | null): n is number => n !== null;
+
+const SO_IN_NGUYEN = /(?<![\d.])-?\d+(?:\.\d+)?/g;
 
 function idCuaGoi(goi: GoiSoan): string[] {
 	return [
@@ -274,8 +275,20 @@ function chuCuaGoi(goi: GoiSoan): string[] {
 	);
 }
 
-function chuVaSoCuaGoi(goi: GoiSoan): ChuVaSo {
+function soCuaGoi(goi: GoiSoan): SoCuaGoi {
 	const chu = chuCuaGoi(goi);
+	const doc = chu.flatMap((c) => trichSo(c)).map(String);
+	const nguyen = new Set(
+		chu
+			.flatMap((c) => c.match(SO_IN_NGUYEN) ?? [])
+			.map((t) => String(Number(t))),
+	);
+	const daIn = new Set([...doc, ...nguyen]);
+	const chiDaIn = (ds: (number | null)[]) =>
+		ds
+			.filter(laSo)
+			.map(String)
+			.filter((s) => daIn.has(s));
 	const so: (number | null)[] = [goi.cham.objectiveCap, goi.cham.krCap];
 	const dich: number[] = [];
 	const khoiDiem: (number | null)[] = [];
@@ -289,15 +302,9 @@ function chuVaSoCuaGoi(goi: GoiSoan): ChuVaSo {
 	for (const m of goi.lop3.mucTieu) {
 		so.push(m.diem);
 		for (const k of m.kr) {
-			so.push(
-				k.khoiDiem,
-				k.dich,
-				k.soChot,
-				k.diem,
-				...k.capNhat.map((c) => c.giaTri),
-			);
+			so.push(k.khoiDiem, k.dich, k.soChot, k.diem);
 			dich.push(k.dich);
-			khoiDiem.push(k.khoiDiem, k.soChot, ...k.capNhat.map((c) => c.giaTri));
+			khoiDiem.push(k.khoiDiem, k.soChot);
 		}
 	}
 	for (const c of goi.lop4.chiSo) {
@@ -305,10 +312,9 @@ function chuVaSoCuaGoi(goi: GoiSoan): ChuVaSo {
 		khoiDiem.push(c.quyTruoc, c.quyNay);
 	}
 	return {
-		chu,
-		so: so.filter(laSo),
-		dich,
-		khoiDiem: khoiDiem.filter(laSo),
+		trongGoi: new Set([...doc, ...chiDaIn(so)]),
+		dich: new Set(chiDaIn(dich)),
+		khoiDiem: new Set(chiDaIn(khoiDiem)),
 	};
 }
 
@@ -316,19 +322,15 @@ export async function goiKiemTu(
 	goi: GoiSoan,
 	them: { soNguoiGo: Set<string> },
 ): Promise<GoiKiemSoan> {
-	const { chu, so, dich, khoiDiem } = chuVaSoCuaGoi(goi);
-	const soTrongGoi = new Set([
-		...so.map(String),
-		...chu.flatMap((c) => trichSo(c)).map(String),
-	]);
+	const so = soCuaGoi(goi);
 	const [tenThanhVien, khoaDaBac] = await Promise.all([
 		docTenThanhVien(db),
 		docKhoaDaBac(db, goi.cuocSoanId, (hang) => khoaDong(dongSoanTuHang(hang))),
 	]);
 	return {
-		soTrongGoi,
-		soDich: new Set(dich.map(String)),
-		soKhoiDiem: new Set(khoiDiem.map(String)),
+		soTrongGoi: so.trongGoi,
+		soDich: so.dich,
+		soKhoiDiem: so.khoiDiem,
 		soNguoiGo: them.soNguoiGo,
 		tenThanhVien,
 		tuCam: goi.cham.tuCam,

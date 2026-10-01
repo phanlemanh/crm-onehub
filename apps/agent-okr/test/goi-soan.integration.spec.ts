@@ -372,6 +372,38 @@ describe("goi-soan", () => {
 			);
 		expect(kr(85)).toEqual({ qua: false, maLoai: "khoi-diem-la-dich" });
 		expect(kr(70)).toEqual({ qua: true });
+		expect(goiThanhChiDan(goi)).not.toMatch(/\b26\b/);
+		expect(kiem.soTrongGoi.has("26"), "so cap nhat tuan khong in lot").toBe(
+			false,
+		);
+		expect(kiem.soKhoiDiem.has("26")).toBe(false);
+		expect(kr(26)).toEqual({ qua: false, maLoai: "so-moi" });
+		const inRa: typeof goi = {
+			...goi,
+			lop3: {
+				...goi.lop3,
+				mangSang: [...goi.lop3.mangSang, "Tuần giữa kỳ đạt 26 %"],
+			},
+		};
+		const kiemInRa = await goiKiemTu(inRa, { soNguoiGo: new Set() });
+		expect(goiThanhChiDan(inRa)).toMatch(/\b26\b/);
+		expect(
+			kiemDongBanNhap(
+				{
+					loai: "kr-moi",
+					khoa: "k1",
+					chaKhoa: "m1",
+					ten: "Tỷ lệ lấp đầy của phòng",
+					viSao: "Đo kết quả",
+					kieu: "tang-toi",
+					donVi: "%",
+					khoiDiemGoiY: 26,
+					dich: null,
+					cuocSoanId: canh.cuocSoanId,
+				},
+				kiemInRa,
+			),
+		).toEqual({ qua: true });
 		expect([...kiem.idCanChinh].sort()).toEqual([...canh.idCapTren].sort());
 		expect(kiem.soNguoiGo).toEqual(new Set(["7"]));
 		expect(kiem.tenThanhVien.length).toBeGreaterThanOrEqual(40);

@@ -25,8 +25,22 @@ import {
 type CongCu = {
 	execute: (input: BanNhap, ctx: NguCanhPhien) => Promise<KetQuaNop>;
 };
-const nop = (input: BanNhap, ctx: NguCanhPhien) =>
+const nopCungLuot = (input: BanNhap, ctx: NguCanhPhien) =>
 	(nopBanNhap as unknown as CongCu).execute(input, ctx);
+
+const cuocCua = (ctx: NguCanhPhien) =>
+	String(ctx.session.auth.initiator?.attributes.cuocSoanId ?? "");
+
+const luotMoi = (cuocSoanId: string) =>
+	db.okrCuocSoan.updateMany({
+		where: { id: cuocSoanId },
+		data: { soLuot: { increment: 1 } },
+	});
+
+async function nop(input: BanNhap, ctx: NguCanhPhien): Promise<KetQuaNop> {
+	await luotMoi(cuocCua(ctx));
+	return nopCungLuot(input, ctx);
+}
 
 const PHIEN_1 = `${TIEN_TO}phien-1`;
 const SO_NGUOI_GO = 37;
@@ -206,7 +220,7 @@ describe("nop-ban-nhap", () => {
 			where: { id: canh.cuocSoanId },
 			select: { soLuot: true },
 		});
-		const ra = await nop(
+		const ra = await nopCungLuot(
 			tron(),
 			nguCanh(PHIEN_1, canh.nguoiMo.id, canh.cuocSoanId),
 		);
@@ -388,6 +402,41 @@ describe("nop-ban-nhap", () => {
 			},
 		]);
 		expect(ra.soDong).toBe(3);
+	});
+
+	test("trần lần nộp mỗi lượt: lần 2 trong một lượt được ghi, lần 3 bị từ chối có tên và không ghi gì; lượt mới nộp lại được", async () => {
+		const phien = `${TIEN_TO}phien-tran-nop`;
+		const cuoc = await gieoCuoc({
+			cycleId: canh.chuKy.nay,
+			departmentId: canh.phong.id,
+			nguoiMoUserId: canh.nguoiMo.id,
+			sessionId: phien,
+		});
+		const ctx = nguCanh(phien, canh.nguoiMo.id, cuoc.id);
+		const ban = banNhapLai("Kênh đại lý miền Trung có mặt");
+		const anh = async () => ({
+			hang: await db.okrDeXuat.count({ where: { cuocSoanId: cuoc.id } }),
+			cuoc: await db.okrCuocSoan.findUniqueOrThrow({
+				where: { id: cuoc.id },
+				select: { lanNopMoiNhat: true, soLuot: true },
+			}),
+		});
+		await luotMoi(cuoc.id);
+		expect((await nopCungLuot(ban, ctx)).ketQua).toBe("da-ghi");
+		const lan2 = await nopCungLuot(ban, ctx);
+		expect(lan2.ketQua).toBe("da-ghi");
+		const truoc = await anh();
+		const lan3 = await nopCungLuot(ban, ctx);
+		expect(lan3).toEqual({
+			ketQua: "tu-choi",
+			lyDo: "qua so lan nop trong mot luot",
+			soDong: 0,
+			biLoai: [],
+			giuNguyen: [],
+		});
+		expect(await anh()).toEqual(truoc);
+		await luotMoi(cuoc.id);
+		expect((await nopCungLuot(ban, ctx)).ketQua).toBe("da-ghi");
 	});
 
 	test("mỗi lần nộp một inputHash riêng cho mọi hàng của lần đó, kể cả hai bản giống hệt", async () => {
