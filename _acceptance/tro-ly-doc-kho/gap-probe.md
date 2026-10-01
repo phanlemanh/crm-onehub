@@ -1,0 +1,16 @@
+---
+slug: tro-ly-doc-kho
+at: 2026-10-01T03:24:36Z
+verdict: findings
+p0: 1
+p1: 4
+p2: 0
+---
+## Findings
+| Sev | Artifact | Thiếu gì | Kịch bản fail | Thước đo | Xử lý |
+|---|---|---|---|---|---|
+| P0 | design | Luồng Zalo tự mâu thuẫn: tool đòi hàng `DANG_HOI` có sẵn, nhưng hàng Zalo chỉ sinh lúc `nop_tra_loi`; phiên con ở Zalo không có chỗ lấy `hoiId` | Câu quy định qua Zalo, `search_pages` gọi trước khi nộp nên tool ném, E8 đỏ hoặc phép kiểm bị nới; 402 ở bước model đầu tiên ở Zalo không có hàng nào để đóng, AC-13 và AC-9 hỏng | Chốt thời điểm sinh hàng Zalo và cách truyền `hoiId`; E8 khẳng định hàng có trước bước đầu; E13 thêm ca 402 ở bước model đầu tiên ở Zalo | fixed: thiết kế mục Ranh giới thêm hook `session.started` của `tro_ly_kho` giải `hoiId` trước lời gọi model đầu tiên (CRM từ token, Zalo tạo hàng nối `zaloHoiId @unique`), mục Luồng Zalo sửa theo; AC-8, AC-13 thêm vế; E8 ghim hàng có trước lời gọi model đầu tiên và gọi hai lần một hàng; E13 lên 6 ca có 402 ở Zalo bước đầu |
+| P1 | evals | Chiều đỏ ca (d) của E3 không thể đỏ vì tầng một nhận `noiDung` do test đưa, tầng hai không có ca (d) | Bản cài `nop_tra_loi` đọc `TaiLieuDeXuat` chờ duyệt vẫn để E3 xanh; production nhận trích từ chữ chưa duyệt | Tầng hai thêm ca (d) trên Postgres thật, chiều đỏ chạy ở tầng hai | fixed: E3 tầng hai thêm ca (d) tạo bản chờ qua `taoDeXuatTaiLieu`, chiều đỏ «đọc bản mới nhất» chuyển xuống tầng hai; AC-3 nói rõ (d) chạy trên bản đề xuất thật |
+| P1 | evals | Kiểm số ca (f) chỉ một ô, không biên số, không ca số nằm trong đoạn của câu khác [may-soan-de-xuat#F1] | Model viết «20%», trích «01/10/2026»; bản cài bằng `includes` vẫn nhận; câu 1 dùng số chỉ có trong đoạn câu 2 vẫn nhận | Nhóm ô biên viết trước và ô số từ đoạn câu khác, hai chiều đỏ có ghim | fixed: AC-3 thêm (f2) khớp một phần và (f3) số từ đoạn câu khác; thiết kế bước 4 viết «trọn vẹn, có biên, của chính câu đó»; E3 tầng một lên 11 ca với ba ô biên và hai chiều đỏ «so khop mot phan: 20%», «so lay tu doan cau khac» |
+| P1 | evals | «Trợ lý AI tự nhận ra» ở Zalo không có đường dữ liệu đo; E8 dùng model giả, E15 hỏi thẳng `tro_ly_kho`, E15j không có đầu vào chuyển hay không | Agent gốc Zalo với model thật tự trả lời câu quy định không trích; không eval nào đỏ; `tiLe` chỉ đếm câu đã chuyển nên cao hơn thật | E15 thêm lượt qua agent gốc `purpose zalo` với model thật, in «chuyen/khong-chuyen», ngưỡng viết trước; E15j đọc đúng dòng đó | fixed: AC-15 thêm lượt Zalo và mẫu câu không phải quy định; E15 lượt hai in «chuyen/khong-chuyen» vào `cham-bo-do.md`, ngưỡng đề xuất ≥ 90% chuyển đúng, ≤ 10% chuyển nhầm; E15j hỏi trên các dòng đó; Đường đo thêm dòng tỉ lệ chuyển, thiết kế ghi bảng không đếm được câu không chuyển |
+| P1 | contract | Ngưỡng CHẾT «báo sai được chủ trang xác nhận» và SỐNG «≥ 50% đã xử lý» không có đường đo; `TaiLieuBaoSai` không ghi kết luận | Phiên nghiệm thu không trả lời được bằng số có việc nào chủ trang xác nhận trợ lý bịa; ngưỡng CHẾT quyết bằng trí nhớ | Kết luận khi đóng việc, có dòng Đường đo, eval đo | fixed: AC-11 bắt kết luận «Trợ lý trả lời sai» hay «đúng theo trang» khi đóng, `demBaoSai` trả tổng, đã xử lý, xác nhận sai; thiết kế thêm cột `ketLuan`; E11 thêm ô đóng thiếu kết luận và đếm `demBaoSai`; E10d thêm hộp kết luận; Đường đo viết lại dòng báo sai |

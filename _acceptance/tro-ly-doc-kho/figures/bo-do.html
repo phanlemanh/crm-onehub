@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bộ câu đo AC-15</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:  #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+  .frame { max-width: 1480px; width: 100%; }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1200px; display: block; }
+  footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="card">
+  <svg viewBox="0 0 1464 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ma trận hai hàng cho bộ câu đo của AC-15: hàng Nguồn câu có A chủ kho gom 50 câu thật, B mầm tạm máy soạn, C ghép A và B, D tách AC-15 khỏi lượt; hàng Nơi giữ có (i) tệp ngoài kho trên máy chủ kho, (ii) bí mật GitHub và workflow chạy tay, (iii) trong git không niêm phong. Máy khuyên B giữ trong git cho S4 lượt này, và A gom song song giữ ở (i), chạy lần đầu tuần 1 chạy thật">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+      </marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+      </marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+      </marker>
+    </defs>
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <text x="32" y="32" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">CỔNG PHẠM VI · HÌNH 2/2 · BỘ CÂU ĐO · AC-15 · QUYẾT ĐỊNH CÒN MỞ</text>
+    <text x="32" y="64" fill="#171717" font-size="24" font-family="'Lora', Georgia, serif">Bộ câu đo của AC-15 — câu lấy từ đâu, giữ ở đâu</text>
+    <text x="32" y="88" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Mỗi ô một dòng đánh đổi. Ô viền xanh là ô máy khuyên; chủ kho vẫn chọn được mọi ô khác.</text>
+
+    <text x="32" y="116" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HÀNG</text>
+    <text x="176" y="116" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LỰA CHỌN</text>
+    <line x1="32" y1="124" x2="1432" y2="124" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <line x1="32" y1="292" x2="1432" y2="292" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <line x1="32" y1="420" x2="1432" y2="420" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+
+    <text x="32" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Nguồn câu</text>
+    <text x="32" y="188" fill="#666666" font-size="8" font-family="'Geist Mono', monospace">thước: giờ chủ kho,</text>
+    <text x="32" y="200" fill="#666666" font-size="8" font-family="'Geist Mono', monospace">độ thật, chặn merge</text>
+
+    <text x="32" y="340" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Nơi giữ</text>
+    <text x="32" y="356" fill="#666666" font-size="8" font-family="'Geist Mono', monospace">thước: máy đọc được</text>
+    <text x="32" y="368" fill="#666666" font-size="8" font-family="'Geist Mono', monospace">đáp án, chặn merge</text>
+
+    <path d="M644,236 V256 Q644,264 652,264 H956 Q964,264 964,272 V306" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <rect x="752" y="242" width="104" height="12" rx="2" fill="#fafafa"/>
+    <text x="804" y="251" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">① S4 LƯỢT NÀY</text>
+
+    <line x1="324" y1="236" x2="324" y2="306" stroke="#006B4F" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+    <rect x="332" y="260" width="140" height="12" rx="2" fill="#fafafa"/>
+    <text x="336" y="269" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.06em">② SONG SONG · TUẦN 1</text>
+
+    <rect x="176" y="140" width="296" height="96" rx="6" fill="#fafafa"/>
+    <rect x="176" y="140" width="296" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="188" y="152" width="28" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+    <text x="202" y="164" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">A</text>
+    <text x="228" y="165" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chủ kho gom 50 câu thật</text>
+    <text x="228" y="181" fill="#575757" font-size="10" font-family="'Geist', sans-serif">theo lộ trình</text>
+    <line x1="188" y1="196" x2="460" y2="196" stroke="rgba(0,107,79,0.25)" stroke-width="0.8"/>
+    <text x="188" y="218" fill="#171717" font-size="9" font-family="'Geist', sans-serif">thật nhất · tốn giờ chủ kho · chờ gom xong mới merge được</text>
+    <rect x="352" y="132" width="108" height="16" rx="2" fill="#fafafa" stroke="#006B4F" stroke-width="0.8"/>
+    <text x="406" y="143" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY KHUYÊN ②</text>
+
+    <rect x="496" y="140" width="296" height="96" rx="6" fill="#fafafa"/>
+    <rect x="496" y="140" width="296" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="508" y="152" width="28" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+    <text x="522" y="164" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">B</text>
+    <text x="548" y="165" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Mầm tạm do máy soạn</text>
+    <text x="548" y="181" fill="#575757" font-size="10" font-family="'Geist', sans-serif">từ trang mẫu của kho đo, nhãn «tạm»</text>
+    <line x1="508" y1="196" x2="780" y2="196" stroke="rgba(0,107,79,0.25)" stroke-width="0.8"/>
+    <text x="508" y="218" fill="#171717" font-size="9" font-family="'Geist', sans-serif">không tốn giờ chủ kho · ít thật, chỉ đo cơ chế · không chặn merge</text>
+    <rect x="672" y="132" width="108" height="16" rx="2" fill="#fafafa" stroke="#006B4F" stroke-width="0.8"/>
+    <text x="726" y="143" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY KHUYÊN ①</text>
+
+    <rect x="816" y="140" width="296" height="96" rx="6" fill="#fafafa"/>
+    <rect x="816" y="140" width="296" height="96" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <rect x="828" y="152" width="28" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.20)" stroke-width="0.8"/>
+    <text x="842" y="164" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">C</text>
+    <text x="868" y="165" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Ghép A + B</text>
+    <text x="868" y="181" fill="#575757" font-size="10" font-family="'Geist', sans-serif">một bộ chung</text>
+    <line x1="828" y1="196" x2="1100" y2="196" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="828" y="218" fill="#171717" font-size="9" font-family="'Geist', sans-serif">thật hơn B · vẫn tốn giờ chủ kho · phần A chặn merge</text>
+
+    <rect x="1136" y="140" width="296" height="96" rx="6" fill="#fafafa"/>
+    <rect x="1136" y="140" width="296" height="96" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <rect x="1148" y="152" width="28" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.20)" stroke-width="0.8"/>
+    <text x="1162" y="164" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">D</text>
+    <text x="1188" y="165" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Tách AC-15 khỏi lượt</text>
+    <text x="1188" y="181" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chạy trong tuần đầu chạy thật</text>
+    <line x1="1148" y1="196" x2="1420" y2="196" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="1148" y="218" fill="#171717" font-size="9" font-family="'Geist', sans-serif">không chặn merge · lên production khi chưa đo chất lượng</text>
+
+    <rect x="176" y="308" width="296" height="96" rx="6" fill="#fafafa"/>
+    <rect x="176" y="308" width="296" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="188" y="320" width="28" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+    <text x="202" y="332" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">(i)</text>
+    <text x="228" y="333" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Tệp ngoài kho, trên máy chủ kho</text>
+    <text x="228" y="349" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chủ kho tự chạy script</text>
+    <line x1="188" y1="364" x2="460" y2="364" stroke="rgba(0,107,79,0.25)" stroke-width="0.8"/>
+    <text x="188" y="386" fill="#171717" font-size="9" font-family="'Geist', sans-serif">máy không đọc được đáp án · tốn giờ chủ kho · không chặn merge</text>
+    <rect x="352" y="300" width="108" height="16" rx="2" fill="#fafafa" stroke="#006B4F" stroke-width="0.8"/>
+    <text x="406" y="311" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY KHUYÊN ②</text>
+
+    <rect x="496" y="308" width="296" height="96" rx="6" fill="#fafafa"/>
+    <rect x="496" y="308" width="296" height="96" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <rect x="508" y="320" width="28" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.20)" stroke-width="0.8"/>
+    <text x="522" y="332" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">(ii)</text>
+    <text x="548" y="333" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Bí mật GitHub + workflow chạy tay</text>
+    <text x="548" y="349" fill="#575757" font-size="10" font-family="'Geist', sans-serif">log chỉ in tổng</text>
+    <line x1="508" y1="364" x2="780" y2="364" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="508" y="386" fill="#171717" font-size="9" font-family="'Geist', sans-serif">máy không đọc được đáp án · thêm workflow · không tự chặn merge</text>
+
+    <rect x="816" y="308" width="296" height="96" rx="6" fill="#fafafa"/>
+    <rect x="816" y="308" width="296" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="828" y="320" width="28" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+    <text x="842" y="332" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">(iii)</text>
+    <text x="868" y="333" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Trong git</text>
+    <text x="868" y="349" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không niêm phong</text>
+    <line x1="828" y1="364" x2="1100" y2="364" stroke="rgba(0,107,79,0.25)" stroke-width="0.8"/>
+    <text x="828" y="386" fill="#171717" font-size="9" font-family="'Geist', sans-serif">máy đọc được đáp án · không tốn giờ chủ kho · chặn merge ở S4</text>
+    <rect x="992" y="300" width="108" height="16" rx="2" fill="#fafafa" stroke="#006B4F" stroke-width="0.8"/>
+    <text x="1046" y="311" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MÁY KHUYÊN ①</text>
+
+    <text x="32" y="452" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">MÁY KHUYÊN</text>
+    <text x="32" y="476" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">① B cho S4 lượt này: giữ trong git, nhãn «tạm», chỉ đo cơ chế và câu từ chối.</text>
+    <text x="32" y="500" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">② A gom song song: chạy lần đầu ở tuần 1 chạy thật, trên trang thật, giữ ở (i).</text>
+    <text x="32" y="524" fill="#575757" font-size="11" font-family="'Geist', sans-serif">Lượt Zalo của bộ câu đo cũng đo giả định «agent gốc Zalo nhận đủ câu». «Máy» ở đây là trợ lý AI viết code và chấm.</text>
+
+    <line x1="32" y1="548" x2="1432" y2="548" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="32" y="572" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+    <rect x="112" y="562" width="28" height="14" rx="3" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <text x="148" y="573" fill="#575757" font-size="9" font-family="'Geist', sans-serif">ô máy khuyên</text>
+    <rect x="248" y="562" width="28" height="14" rx="3" fill="#ffffff" stroke="rgba(23,23,23,0.20)" stroke-width="1"/>
+    <text x="284" y="573" fill="#575757" font-size="9" font-family="'Geist', sans-serif">phương án khác, vẫn chọn được</text>
+    <line x1="460" y1="569" x2="492" y2="569" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <text x="504" y="573" fill="#575757" font-size="9" font-family="'Geist', sans-serif">① ghép cho S4 lượt này</text>
+    <line x1="640" y1="569" x2="672" y2="569" stroke="#006B4F" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+    <text x="684" y="573" fill="#575757" font-size="9" font-family="'Geist', sans-serif">② ghép song song, chạy tuần 1 chạy thật</text>
+  </svg>
+  </div>
+
+  <footer>Hình 2 / 2 · điểm quyết định tại Cổng Phạm vi · hồ sơ tro-ly-doc-kho · nguồn: figures/index.md đề bài bo-do; contract.md AC-15; evals.yaml E15, E15j</footer>
+</div>
+</body>
+</html>

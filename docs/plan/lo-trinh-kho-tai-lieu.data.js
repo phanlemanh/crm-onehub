@@ -1,5 +1,5 @@
 window.LO_TRINH_KHO_TAI_LIEU = {
-	chup_luc: "2026-09-29T14:55:00+07:00",
+	chup_luc: "2026-10-01T11:30:00+07:00",
 	nguon: "docs/plan/lo-trinh-kho-tai-lieu.md mục 8",
 	moc: [
 		{
@@ -136,16 +136,18 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			dong: 4,
 			ten: "Lượt 4",
 			slug: "tro-ly-doc-kho",
-			hang: "T2",
-			trang_thai: "chưa mở",
-			ngay: "",
+			hang: "T3",
+			trang_thai: "Cổng Đáng",
+			ngay: "2026-10-01",
 			pr: [],
 			cau_giao:
 				"«Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết»",
-			buoc_ke: "Lượt 3 đã lên; còn chờ 50 câu hỏi thật",
+			buoc_ke:
+				"Anh ký Cổng Đáng, chọn bộ câu đo của AC-15, duyệt Cổng Phạm vi; rồi Cổng 1.5",
 			chan_boi: ["cb"],
+			cho_anh: true,
 			ghi_chu:
-				"Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2.",
+				"Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 01/10: vòng mở trên nhánh feat/tro-ly-doc-kho; lên T3 vì cần hai bảng mới (nhật ký hỏi, việc «báo sai») — kho chưa có bảng việc nào dùng được. Anh chốt: hỏi ở tab «Hỏi» của Kho; Zalo do trợ lý AI tự nhận ra; thêm ô đặt «Xác minh đến ngày» (cột này chưa có đường ghi nào); chỉ lưu chữ câu từ chối và câu bị báo sai. S1 xong: 15 AC, 22 eval, gap-probe 1 P0 + 4 P1 đã sửa, design-pass 6 ảnh, hai hình quyết định. Chỉ AC-15 chờ bộ câu đo.",
 		},
 		{
 			id: "ct",
@@ -253,6 +255,10 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			viec: "Gom 50 câu hỏi thật theo kho-tai-lieu-bo-vang.md trước lượt 4",
 			hang_muc: "cb",
 		},
+		{
+			viec: "Lượt 4: ký Cổng Đáng (ba trường trong opportunity.md), chọn bộ câu đo của AC-15, duyệt Cổng Phạm vi",
+			hang_muc: "l4",
+		},
 	],
 	da_chot: [
 		{
@@ -291,8 +297,16 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			ngay: "2026-09-29",
 			viec: "Tách lịch sử, khôi phục, lưu trữ sang lượt 3b (T3); lượt 3 giữ T2, không migration",
 		},
+		{
+			ngay: "2026-10-01",
+			viec: "Lượt 4: hỏi ở tab «Hỏi» của Kho; Zalo do trợ lý AI tự nhận ra; thêm ô đặt «Xác minh đến ngày»; chỉ lưu chữ câu từ chối và câu bị báo sai",
+		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-10-01",
+			viec: "Lượt 4 mở (T3): S1 xong, 15 AC, 22 eval; chờ Cổng Đáng, bộ câu đo và Cổng Phạm vi",
+		},
 		{
 			ngay: "2026-09-29",
 			viec: "Lượt 3 lên onehub (PR #205): ⌘K tìm kho, trang nhắc tới, lọc, tab Sức khoẻ, dòng nhắc sáng",
