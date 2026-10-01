@@ -3,8 +3,11 @@ import {
 	KET_QUA_KIEM_SAN_SANG,
 	LY_DO_KHONG_SAN_SANG,
 	MA_LOAI_DE_XUAT,
+	MINUTE_MS,
 	NAC_TRO_LY,
+	NGUON_KHOA,
 	TRANG_THAI_DE_XUAT,
+	TRO_LY_OKR_KHOA,
 	TRO_LY_OKR_TRAN,
 	TRUONG_VIET_LAI,
 	VIEC_TRO_LY,
@@ -24,11 +27,16 @@ export {
 	type LyDoKhongSanSang,
 	MA_LOAI_DE_XUAT,
 	type MaLoaiDeXuat,
+	MINUTE_MS,
 	NAC_TRO_LY,
 	type NacTroLy,
+	NGUON_KHOA,
+	type NguonKhoaDb,
 	nacCuaDonVi,
+	nguonCuaKetQua,
 	phamViCuaViec,
 	TRANG_THAI_DE_XUAT,
+	TRO_LY_OKR_KHOA,
 	TRO_LY_OKR_TRAN,
 	TRUONG_VIET_LAI,
 	type TroLySanSang,
@@ -56,6 +64,10 @@ export const troLySanSang = z.discriminatedUnion("bat", [
 
 export const ketQuaKiemSanSang = z.enum(KET_QUA_KIEM_SAN_SANG);
 
+export const nguonKhoaHien = z.enum([...NGUON_KHOA, "chua-ro"]).nullable();
+
+export type NguonKhoaHien = z.infer<typeof nguonKhoaHien>;
+
 export const okrTroLyViec = z.discriminatedUnion("viec", [
 	z.object({
 		viec: z.literal("de-xuat"),
@@ -71,6 +83,7 @@ export const okrTroLyViec = z.discriminatedUnion("viec", [
 		cycleId: z.string().min(1),
 		tuan: ngayLich,
 		inputHash: z.string().min(1),
+		nac: z.enum(["an", "bat"]),
 	}),
 ]);
 
@@ -171,9 +184,13 @@ export const cauTomTat = z.object({
 	nguon: z.array(z.string().min(1)).min(1).max(TRO_LY_OKR_TRAN.soNguonMoiCau),
 });
 
+export type CauTomTat = z.infer<typeof cauTomTat>;
+
 export const nopTomTat = z.object({
 	cau: z.array(cauTomTat).max(TRO_LY_OKR_TRAN.soCauTomTat),
 });
+
+export type NopTomTat = z.infer<typeof nopTomTat>;
 
 export const MA_LOI_TRO_LY = [
 	"thieu-du-lieu",

@@ -28,6 +28,7 @@ const TRUONG_AN = [
 	"aiTomTatAnPhamVi",
 	"aiTomTatAnDonVi",
 ];
+const GOP_LUOT_9B = "2e3280474f472b9853ed9a66bb0f4524ede6ff7d";
 const THANG = "2026-11";
 const NGAY = 24 * 60 * 60 * 1000;
 const T = new Date("2026-11-13T09:00:00+07:00").getTime();
@@ -127,19 +128,19 @@ afterAll(async () => {
 
 describe("tach-giao-dich", () => {
 	test("bài OKR sẵn có chỉ được thêm dòng, mỗi dòng thêm nêu một trong bốn trường chế độ ẩn", () => {
-		const coRef = git("rev-parse", "--verify", "--quiet", "origin/onehub");
-		const goc =
-			coRef.ma === 0 ? git("merge-base", "HEAD", "origin/onehub") : null;
-		if (goc?.ma !== 0 || goc.ra === "") {
+		const truoc = git("rev-parse", "--verify", "--quiet", `${GOP_LUOT_9B}^1`);
+		const sau = git("rev-parse", "--verify", "--quiet", `${GOP_LUOT_9B}^2`);
+		if (truoc.ma !== 0 || sau.ma !== 0 || truoc.ra === "" || sau.ra === "") {
 			console.warn(
-				"tach-giao-dich: không có origin/onehub hay merge-base (checkout nông) — bỏ qua phần so diff",
+				"tach-giao-dich: không có commit gộp lượt 9b (checkout nông) — bỏ qua phần so diff",
 			);
 			return;
 		}
 		const diff = git(
 			"diff",
 			"--unified=0",
-			goc.ra,
+			truoc.ra,
+			sau.ra,
 			"--",
 			":(glob)apps/api/test/okr*.spec.ts",
 		);

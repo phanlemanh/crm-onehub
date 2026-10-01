@@ -3,12 +3,19 @@ import {
 	MUC_TU_TIN,
 	type MucTuTin,
 } from "@crm/validation/okr-cap-nhat";
+import type { LoaiChuKy, PhaChuKy } from "@crm/validation/okr-chu-ky";
 import {
 	LOAI_MUC_TIEU,
 	type LoaiMucTieu,
 	TRANG_THAI_MUC_TIEU,
 	type TrangThaiMucTieu,
 } from "@crm/validation/okr-muc-tieu";
+import {
+	CACH_XEM_OKR,
+	type CachXemOkr,
+	type DonChonOkr,
+	khoaDonOkr,
+} from "@crm/validation/okr-tham-so";
 import {
 	createLoader,
 	createParser,
@@ -18,19 +25,14 @@ import {
 } from "nuqs/server";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 
-export type DonChonOkr =
-	| { loai: "goc" }
-	| { loai: "bp"; id: string }
-	| { loai: "pb"; id: string }
-	| { loai: "nguoi"; id: string };
+export type { DonChonOkr };
 
-export const CACH_XEM = ["danh-sach", "cay", "hop-tuan", "cham"] as const;
-export type CachXem = (typeof CACH_XEM)[number];
+export const CACH_XEM = CACH_XEM_OKR;
+export type CachXem = CachXemOkr;
 
 export const KY_HIEN_TAI = "current";
 
-export const khoaDon = (d: DonChonOkr): string =>
-	d.loai === "goc" ? d.loai : `${d.loai}:${d.id}`;
+export const khoaDon = khoaDonOkr;
 
 export const parseAsDonOkr = createParser<DonChonOkr>({
 	parse: (v) => {
@@ -81,15 +83,60 @@ export function locOkr(v: {
 	};
 }
 
+type ChuKyGiai = {
+	id: string;
+	kind: LoaiChuKy;
+	phase: PhaChuKy;
+	startsOn: string;
+	anLuc: string | null;
+};
+
+export function kyTrongOChon<T extends { anLuc: string | null }>(
+	cycles: readonly T[],
+): T[] {
+	return cycles.filter((c) => c.anLuc === null);
+}
+
+const PHA_HOI_Y = "lap-ke-hoach" satisfies PhaChuKy;
+const LOAI_UU_TIEN = "nam" satisfies LoaiChuKy;
+
+export function kyMacDinhHoiY(cycles: {
+	cycles: ChuKyGiai[];
+	currentId: string | null;
+}): string | null {
+	const keHoach = kyTrongOChon(cycles.cycles)
+		.filter((c) => c.phase === PHA_HOI_Y)
+		.sort(
+			(a, b) =>
+				a.startsOn.localeCompare(b.startsOn) ||
+				(a.kind === b.kind ? 0 : a.kind === LOAI_UU_TIEN ? -1 : 1),
+		);
+	return keHoach[0]?.id ?? cycles.currentId;
+}
+
+export function giaiKyHoiY(
+	ky: string | null,
+	cycles: { cycles: ChuKyGiai[]; currentId: string | null } | null,
+): string | null {
+	if (!cycles) return null;
+	if (ky === KY_HIEN_TAI) return cycles.currentId;
+	if (ky !== null && kyTrongOChon(cycles.cycles).some((c) => c.id === ky))
+		return ky;
+	return kyMacDinhHoiY(cycles);
+}
+
 export function giaiKy(
 	ky: string | null,
-	cycles: { cycles: { id: string }[]; currentId: string | null } | null,
+	cycles: {
+		cycles: { id: string; anLuc: string | null }[];
+		currentId: string | null;
+	} | null,
 ): string | null {
 	if (!cycles) return null;
 	if (
 		ky !== null &&
 		ky !== KY_HIEN_TAI &&
-		cycles.cycles.some((c) => c.id === ky)
+		kyTrongOChon(cycles.cycles).some((c) => c.id === ky)
 	)
 		return ky;
 	return cycles.currentId;

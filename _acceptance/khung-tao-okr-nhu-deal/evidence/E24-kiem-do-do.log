@@ -1,0 +1,21 @@
+DUNG E24 doi-chung: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 doi-chung: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 doi-chung: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 doi-chung: dong mo ta 12px khong to hon tieu de 14px
+DUNG E24 doi-chung: tam hang tieu de cot lech tam nut dau form 0 <= 2
+DUNG E24 doi-chung: hai dau X cach nhau 10 >= 8
+SAI dau cot lech trai: 11 (gia-thut)
+DUNG E24 gia-thut: dau X dong cot bam mep phai (lech 0 <= 1)
+DUNG E24 gia-thut: tieu de cot cung co chu tieu de ngan (14px/500)
+DUNG E24 gia-thut: dong mo ta 12px khong to hon tieu de 14px
+DUNG E24 gia-thut: tam hang tieu de cot lech tam nut dau form 0 <= 2
+DUNG E24 gia-thut: hai dau X cach nhau 10 >= 8
+DUNG E24 gia-co-chu: tieu de bam mep trai (lech mo ta 0 · lech phan tu dau 0)
+DUNG E24 gia-co-chu: dau X dong cot bam mep phai (lech 0 <= 1)
+SAI dau cot khac co chu: cot 12px/500 · ngan 14px/500 (gia-co-chu)
+DUNG E24 gia-co-chu: dong mo ta 12px khong to hon tieu de 12px
+DUNG E24 gia-co-chu: tam hang tieu de cot lech tam nut dau form 0 <= 2
+DUNG E24 gia-co-chu: hai dau X cach nhau 10 >= 8
+KIEM DO DO dau-cot: doi chung xanh · «dau cot lech trai: 11» co · «dau cot khac co chu» co
+KET LUAN: 16 DUNG, 2 SAI — ma thoat 1
+EXIT=1

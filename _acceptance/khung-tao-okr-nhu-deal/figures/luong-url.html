@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mở ngăn OKR qua URL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap&subset=vietnamese" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper: #fafafa;
+      --color-ink: #171717;
+      --color-muted: #575757;
+      --font-sans: 'Geist', system-ui, sans-serif;
+      --font-serif: 'Lora', serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1440px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1100px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ trạng thái · AC-1 · AC-2 · AC-7</p>
+    <h1>Mở ngăn OKR qua URL</h1>
+
+    <svg viewBox="0 72 1440 608" xmlns="http://www.w3.org/2000/svg" font-family="'Geist', sans-serif">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-soft" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8a8a8a"/></marker>
+      </defs>
+
+      <rect y="72" width="100%" height="100%" fill="#fafafa"/>
+
+      <!-- Transitions -->
+      <path d="M 56 300 L 88 300" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 268 300 L 448 300" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 648 300 L 828 300" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 880 200 L 880 160 Q 880 152 872 152 L 186 152 Q 178 152 178 160 L 178 252" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 1008 216 L 1040 216 Q 1048 216 1048 208 L 1048 140 Q 1048 132 1056 132 L 1168 132" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 1168 156 L 1080 156 Q 1072 156 1072 164 L 1072 232 Q 1072 240 1064 240 L 1008 240" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 1008 284 L 1168 284" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 1168 316 L 1008 316" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 1008 360 L 1064 360 Q 1072 360 1072 368 L 1072 436 Q 1072 444 1080 444 L 1168 444" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 1168 468 L 1056 468 Q 1048 468 1048 460 L 1048 392 Q 1048 384 1040 384 L 1008 384" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M 1360 192 L 1360 252" fill="none" stroke="#006B4F" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+
+      <path d="M 178 348 L 178 528 Q 178 536 186 536 L 404 536" fill="none" stroke="#8a8a8a" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-soft)"/>
+      <path d="M 918 400 L 918 528 Q 918 536 910 536 L 692 536" fill="none" stroke="#8a8a8a" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-soft)"/>
+
+      <!-- Transition labels -->
+      <rect x="276" y="252" width="164" height="36" rx="2" fill="#fafafa"/>
+      <text x="358" y="266" fill="#575757" font-size="12" text-anchor="middle">bấm Thêm mục tiêu /</text>
+      <text x="358" y="283" fill="#575757" font-size="12" text-anchor="middle">dán URL</text>
+
+      <rect x="656" y="252" width="164" height="36" rx="2" fill="#fafafa"/>
+      <text x="738" y="266" fill="#575757" font-size="12" text-anchor="middle">tạo xong: bỏ new,</text>
+      <text x="738" y="283" fill="#575757" font-size="12" text-anchor="middle">mở khung</text>
+
+      <rect x="408" y="124" width="280" height="20" rx="2" fill="#fafafa"/>
+      <text x="548" y="138" fill="#575757" font-size="12" text-anchor="middle">đóng khung: xoá record và hopOkr</text>
+
+      <rect x="1024" y="256" width="128" height="20" rx="2" fill="#fafafa"/>
+      <text x="1088" y="270" fill="#575757" font-size="12" text-anchor="middle">bấm hoặc dán URL</text>
+
+      <rect x="1024" y="324" width="128" height="20" rx="2" fill="#fafafa"/>
+      <text x="1088" y="338" fill="#575757" font-size="12" text-anchor="middle">đóng: xoá hopOkr</text>
+
+      <rect x="1188" y="212" width="160" height="20" rx="2" fill="#fafafa"/>
+      <text x="1348" y="226" fill="#006B4F" font-size="12" font-weight="500" text-anchor="end">Mở KR này: đổi hopOkr</text>
+
+      <rect x="344" y="460" width="408" height="20" rx="2" fill="#fafafa"/>
+      <text x="548" y="474" fill="#575757" font-size="12" text-anchor="middle">Dán URL mà không sửa được đích, hoặc KR không còn</text>
+
+      <!-- Start -->
+      <circle cx="48" cy="300" r="6" fill="#171717"/>
+
+      <!-- Trang Theo đơn vị -->
+      <rect x="88" y="252" width="180" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="96" y="260" width="52" height="20" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="122" y="274" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">TRANG</text>
+      <text x="178" y="316" fill="#171717" font-size="16" font-weight="600" text-anchor="middle">Trang Theo đơn vị</text>
+
+      <!-- Ngăn Thêm mục tiêu -->
+      <rect x="448" y="252" width="200" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="456" y="260" width="48" height="20" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="480" y="274" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGĂN</text>
+      <text x="548" y="308" fill="#171717" font-size="16" font-weight="600" text-anchor="middle">Ngăn Thêm mục tiêu</text>
+      <text x="548" y="328" fill="#575757" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">(URL: new)</text>
+
+      <!-- Khung Mục tiêu (focal) -->
+      <rect x="828" y="200" width="180" height="200" rx="8" fill="#ffffff"/>
+      <rect x="828" y="200" width="180" height="200" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="836" y="208" width="52" height="20" rx="2" fill="none" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="862" y="222" fill="#006B4F" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHUNG</text>
+      <text x="918" y="296" fill="#171717" font-size="16" font-weight="600" text-anchor="middle">Khung Mục tiêu</text>
+      <text x="918" y="316" fill="#575757" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">(URL: record)</text>
+
+      <!-- Ngăn Sửa mục tiêu -->
+      <rect x="1168" y="96" width="232" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="1176" y="104" width="48" height="20" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1200" y="118" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGĂN</text>
+      <text x="1284" y="152" fill="#171717" font-size="16" font-weight="600" text-anchor="middle">Ngăn Sửa mục tiêu</text>
+      <text x="1284" y="172" fill="#575757" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">(hopOkr=muc-tieu)</text>
+
+      <!-- Ngăn Sửa KR -->
+      <rect x="1168" y="252" width="232" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="1176" y="260" width="48" height="20" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1200" y="274" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGĂN</text>
+      <text x="1284" y="308" fill="#171717" font-size="16" font-weight="600" text-anchor="middle">Ngăn Sửa KR</text>
+      <text x="1284" y="328" fill="#575757" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">(hopOkr=kr:&lt;id&gt;)</text>
+
+      <!-- Ngăn Thêm KR -->
+      <rect x="1168" y="408" width="232" height="96" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="1176" y="416" width="48" height="20" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="1200" y="430" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGĂN</text>
+      <text x="1284" y="464" fill="#171717" font-size="16" font-weight="600" text-anchor="middle">Ngăn Thêm KR</text>
+      <text x="1284" y="484" fill="#575757" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">(hopOkr=kr-moi)</text>
+
+      <!-- Nhánh chặn -->
+      <rect x="404" y="496" width="288" height="80" rx="8" fill="#fafafa"/>
+      <rect x="404" y="496" width="288" height="80" rx="8" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="412" y="504" width="48" height="20" rx="2" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="0.8"/>
+      <text x="436" y="518" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CHẶN</text>
+      <text x="548" y="556" fill="#575757" font-size="16" font-weight="500" text-anchor="middle">không ngăn nào mở, khoá bị xoá</text>
+
+      <!-- Legend -->
+      <line x1="40" y1="616" x2="1400" y2="616" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="648" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <line x1="140" y1="644" x2="184" y2="644" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="196" y="648" fill="#575757" font-size="12">chuyển trạng thái, URL đổi theo</text>
+      <line x1="420" y1="644" x2="464" y2="644" stroke="#006B4F" stroke-width="1.6" marker-end="url(#arrow-accent)"/>
+      <text x="476" y="648" fill="#575757" font-size="12">đổi ngăn tại chỗ, không qua khung</text>
+      <line x1="712" y1="644" x2="756" y2="644" stroke="#8a8a8a" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-soft)"/>
+      <text x="768" y="648" fill="#575757" font-size="12">nhánh chặn</text>
+      <text x="880" y="648" fill="#575757" font-size="12">Nhãn ở cặp mũi tên giữa khung và ngăn dùng chung cho cả ba ngăn.</text>
+    </svg>
+  </div>
+</body>
+</html>

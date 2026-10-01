@@ -40,8 +40,13 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 		queryClient.fetchQuery(trpc.okr.access.queryOptions()).catch(() => null),
 	]);
 	const cycleId = giaiKy(thamSo[SEARCH_PARAM.okr.ky], cycles);
-	if (cycleId && access?.canManageProgram)
-		await queryClient.prefetchQuery(trpc.okr.sucKhoe.queryOptions({ cycleId }));
+	if (access?.canManageProgram)
+		await Promise.all([
+			cycleId
+				? queryClient.prefetchQuery(trpc.okr.sucKhoe.queryOptions({ cycleId }))
+				: null,
+			queryClient.prefetchQuery(trpc.okr.moCoi.queryOptions({})),
+		]);
 
 	return (
 		<HydrateClient>

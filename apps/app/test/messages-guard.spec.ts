@@ -44,6 +44,7 @@ function phang(o: Nhanh, tien = ""): [string, GiaTri][] {
 
 const KHONG_DAU = new Set([
 	"dong.soKr",
+	"chuyen.dongMoTa",
 	"hopThoaiChoPhep.choDoi",
 	"chiaSe.xong",
 	"tep.kiloByte",
@@ -124,6 +125,7 @@ const KHONG_DAU = new Set([
 	"cham.mangSang",
 	"mangSang.xacNhan",
 	"hop.onehub",
+	"vietTruoc.tenChuDe",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -203,6 +205,10 @@ const GHIM_TRO_LY_OKR = {
 		"Đã chạm trần tháng — tạm nghỉ tới 1",
 		"Đã chạm trần tháng — tạm nghỉ tới 12",
 	],
+	"tro-ly-okr:troLy.sanSang.thieuKhoaMoTa": [
+		"Cắm 1 (hoặc A) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng B phút.",
+		"Cắm 12 (hoặc A) vào dự án tác tử, hoặc bật OIDC của dự án đó trên Vercel. Tác tử tự kiểm lại trong khoảng B phút.",
+	],
 } satisfies Record<string, [string, string]>;
 
 const GHIM_OKR_GOP_Y = {
@@ -216,8 +222,8 @@ const GHIM_OKR_GOP_Y = {
 		"12 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
 	],
 	"okr-gop-y:xuHuong": [
-		"Theo các lần cập nhật gần nhất (1/tuần), cuối kỳ ước khoảng A",
-		"Theo các lần cập nhật gần nhất (12/tuần), cuối kỳ ước khoảng A",
+		"Theo các lần cập nhật gần nhất (1/tuần), cuối kỳ ước khoảng A B",
+		"Theo các lần cập nhật gần nhất (12/tuần), cuối kỳ ước khoảng A B",
 	],
 	"okr-gop-y:vet.suaTruong": ["Sửa 1", "Sửa 12"],
 	"okr-gop-y:dong.gopVao": ["Góp vào «1»", "Góp vào «12»"],
@@ -656,6 +662,39 @@ const GHIM = {
 	"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
 	"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
 	"okr:caiDat.mo.daMo": ["Đã mở 1.", "Đã mở 12."],
+	"okr:caiDat.chuKy.dongAn": ["Ẩn 1 lúc pha A", "Ẩn 12 lúc pha A"],
+	"okr:caiDat.chuKy.anKhoa": [
+		"Còn 1 quý đang hiện — ẩn hoặc gỡ quý trước",
+		"Còn 12 quý đang hiện — ẩn hoặc gỡ quý trước",
+	],
+	"okr:caiDat.chuKy.go.tieuDe": ["Gỡ 1?", "Gỡ 12?"],
+	"okr:caiDat.chuKy.go.than": [
+		"1 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+		"12 chưa có mục tiêu, lần hỏi ý hay quý nào. Gỡ xong chu kỳ biến khỏi bảng; vết tạo và gỡ vẫn còn trong sổ vết.",
+	],
+	"okr:caiDat.chuKy.go.xong": ["Đã gỡ 1.", "Đã gỡ 12."],
+	"okr:caiDat.chuKy.an.tieuDe": ["Ẩn 1?", "Ẩn 12?"],
+	"okr:caiDat.chuKy.an.xong": ["Đã ẩn 1.", "Đã ẩn 12."],
+	"okr:caiDat.chuKy.hienLai.tieuDe": ["Hiện lại 1?", "Hiện lại 12?"],
+	"okr:caiDat.chuKy.hienLai.than": [
+		"Chu kỳ quay lại ô chọn kỳ với pha như lúc ẩn (1), nhận ghi và nhắc lại.",
+		"Chu kỳ quay lại ô chọn kỳ với pha như lúc ẩn (12), nhận ghi và nhắc lại.",
+	],
+	"okr:caiDat.chuKy.hienLai.xong": ["Đã hiện lại 1.", "Đã hiện lại 12."],
+	"okr:caiDat.sua.tieuDe": ["Sửa 1", "Sửa 12"],
+	"okr:caiDat.sua.moTaMoiO": [
+		"1 chưa có dữ liệu — sửa được mọi ô trừ loại và năm.",
+		"12 chưa có dữ liệu — sửa được mọi ô trừ loại và năm.",
+	],
+	"okr:caiDat.sua.moTaCoDuLieu": [
+		"1 đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật tuần giữ nguyên để số đã tính không lệch.",
+		"12 đã có dữ liệu — chỉ sửa được tên. Ngày, khoảng nghỉ và ngày cập nhật tuần giữ nguyên để số đã tính không lệch.",
+	],
+	"okr:caiDat.sua.moTaRoiKeHoach": [
+		"1 đã rời pha Lập kế hoạch — chỉ sửa được tên.",
+		"12 đã rời pha Lập kế hoạch — chỉ sửa được tên.",
+	],
+	"okr:caiDat.sua.xong": ["Đã sửa 1.", "Đã sửa 12."],
 	"cua-vao:buoc.choPhep.moTa": ["Ở 1.", "Ở 12."],
 	"cua-vao:buoc.nutNgoai.tieuDe": [
 		"Đăng nhập bằng 1, đúng địa chỉ đó",
@@ -735,6 +774,21 @@ const GHIM = {
 		"Đường giá trị và mức tự tin hiện ở đây từ lần cập nhật đầu tiên, tuần bắt đầu Thứ Hai 12.",
 	],
 	"okr-toan-canh:khoiCuaToi.conNua": ["và 1 KR khác", "và 12 KR khác"],
+	"okr-toan-canh:tomTat.dongNguon": [
+		"Trợ lý OKR tóm tắt từ 1 lần cập nhật · tuần A",
+		"Trợ lý OKR tóm tắt từ 12 lần cập nhật · tuần A",
+	],
+	"okr-toan-canh:tomTat.nhanTrichDan": ["Cập nhật 1", "Cập nhật 12"],
+	"okr-toan-canh:tomTat.nhanTrichDanThem": ["Cập nhật 1 +A", "Cập nhật 12 +A"],
+	"okr-toan-canh:quanTri.moTa": [
+		"Tuần 1 · mọi phòng ban có việc tóm tắt, cả nấc bật và chế độ ẩn. Bấm một phòng để xem câu còn lại và câu bị bỏ.",
+		"Tuần 12 · mọi phòng ban có việc tóm tắt, cả nấc bật và chế độ ẩn. Bấm một phòng để xem câu còn lại và câu bị bỏ.",
+	],
+	"okr-toan-canh:quanTri.boNgan": ["bỏ 1", "bỏ 12"],
+	"okr-toan-canh:quanTri.tuanNgan": ["tuần 1", "tuần 12"],
+	"okr-toan-canh:quanTri.boTrenTong": ["bỏ 1/A câu", "bỏ 12/A câu"],
+	"okr-toan-canh:quanTri.cauCon": ["Câu còn lại · 1", "Câu còn lại · 12"],
+	"okr-toan-canh:quanTri.cauBo": ["Câu bị bỏ · 1", "Câu bị bỏ · 12"],
 	"agent-builder-tro-chuyen:tacNhanSong.chuLaDoi": [
 		"Cả đội · 1",
 		"Cả đội · 12",
@@ -829,6 +883,32 @@ const GHIM = {
 	"okr-khep:caiDat.moLai.daMo": [
 		"1 đã về pha chấm điểm.",
 		"12 đã về pha chấm điểm.",
+	],
+	"okr-tai-co-cau:toChuc.okrMo": [
+		"OKR: 1 mục tiêu ở kỳ đang mở",
+		"OKR: 12 mục tiêu ở kỳ đang mở",
+	],
+	"okr-tai-co-cau:toChuc.chan.lyDo.phong-ban": [
+		"Phòng ban còn 1 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+		"Phòng ban còn 12 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+	],
+	"okr-tai-co-cau:toChuc.chan.lyDo.bo-phan": [
+		"Bộ phận còn 1 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+		"Bộ phận còn 12 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+	],
+	"okr-tai-co-cau:chuyen.danhSach": [
+		"Mục tiêu ở kỳ đang mở (1)",
+		"Mục tiêu ở kỳ đang mở (12)",
+	],
+	"okr-tai-co-cau:chuyen.dongMoTa": ["1 KR · A · B", "12 KR · A · B"],
+	"okr-tai-co-cau:chuyen.quaTran": [
+		"Mỗi lần chuyển tối đa 1 mục tiêu — bỏ chọn bớt rồi chuyển.",
+		"Mỗi lần chuyển tối đa 12 mục tiêu — bỏ chọn bớt rồi chuyển.",
+	],
+	"okr-tai-co-cau:chuyen.nut": ["Chuyển 1 mục tiêu", "Chuyển 12 mục tiêu"],
+	"okr-tai-co-cau:chuyen.xong": [
+		"Đã chuyển 1 mục tiêu sang A.",
+		"Đã chuyển 12 mục tiêu sang A.",
 	],
 } satisfies Record<string, [string, string]>;
 

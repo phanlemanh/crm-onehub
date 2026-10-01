@@ -491,7 +491,7 @@ describe("the-gop-y-okr — bấm trong cột không đóng hộp", () => {
 		expect(soCa).toBeGreaterThan(20);
 
 		const hop = await moHopMucTieu([D_TEN]);
-		const lop = document.querySelector('[data-slot="dialog-overlay"]');
+		const lop = document.querySelector('[data-slot="sheet-overlay"]');
 		if (!lop) throw new Error("khong thay lop phu");
 		await act(async () => {
 			lop.dispatchEvent(

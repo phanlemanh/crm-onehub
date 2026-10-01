@@ -1,4 +1,6 @@
 import type { Db, Prisma } from "@crm/db";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
+import { dieuKienXemMucTieu } from "@crm/db/okr-hien-thi";
 import { dauTuanVN } from "@crm/db/onboarding-nhac";
 import {
 	type GuiCapNhatInput,
@@ -48,10 +50,22 @@ export class OkrCapNhatService {
 		now = new Date(),
 	): Promise<CapNhatTuanOutput> {
 		const tuan = dauTuanVN(now);
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
 		const krs = await this.db.okrKeyResult.findMany({
 			where: {
 				ownerUserId: userId,
-				objective: { status: "cong-bo", cycle: { phase: "dang-chay" } },
+				objective: {
+					AND: [
+						{
+							status: "cong-bo",
+							cycle: { phase: "dang-chay", ...KY_CON_HIEN },
+						},
+						dieuKienXemMucTieu(nc),
+					],
+				},
 			},
 			include: {
 				objective: {
@@ -70,7 +84,10 @@ export class OkrCapNhatService {
 			],
 		});
 		const lan = await this.db.okrCheckIn.findMany({
-			where: { keyResultId: { in: krs.map((k) => k.id) } },
+			where: {
+				keyResultId: { in: krs.map((k) => k.id) },
+				keyResult: { objective: dieuKienXemMucTieu(nc) },
+			},
 			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 			distinct: ["keyResultId"],
 		});
@@ -129,6 +146,10 @@ export class OkrCapNhatService {
 					},
 				},
 			});
+			for (const cycleId of [
+				...new Set(krs.map((k) => k.objective.cycleId)),
+			].sort())
+				await this.okr.assertKyChuaAn(tx, cycleId);
 			const q = await this.quyenOkr.quyen(userId);
 			const ke = input.items.map((m) => {
 				const kr = krs.find((k) => k.id === m.keyResultId);

@@ -45,6 +45,8 @@ import { useChuKy } from "../../chon-chu-ky";
 import { okrParsers } from "../../okr-search-params";
 import { ChuaChuKy, DangTai } from "../../trang-thai-okr";
 import { LoiXem } from "../toan-canh";
+import { KhoiMoCoi } from "./okr-mo-coi";
+import { TomTatQuanTri } from "./tom-tat-quan-tri";
 
 type HangSucKhoe = RouterOutputs["okr"]["sucKhoe"]["hang"][number];
 
@@ -237,6 +239,10 @@ export function SucKhoe() {
 		<div className="flex flex-col gap-6">
 			{dau}
 			{than}
+			{quanTri && currentId !== null ? (
+				<TomTatQuanTri cycleId={currentId} key={currentId} />
+			) : null}
+			{quanTri ? <KhoiMoCoi /> : null}
 		</div>
 	);
 }

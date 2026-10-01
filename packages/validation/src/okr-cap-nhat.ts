@@ -1,9 +1,9 @@
+import { MUC_TU_TIN, type MucTuTin } from "@crm/db/okr-tro-ly-danh-muc";
 import { z } from "zod";
 import { bangChungVao } from "./okr-canh-kr";
 import { type KieuKr, soKr } from "./okr-kr";
 
-export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
-export type MucTuTin = (typeof MUC_TU_TIN)[number];
+export { MUC_TU_TIN, type MucTuTin };
 export const LOI_VAO = ["nhac", "viec-cua-toi", "tab", "sheet"] as const;
 export type LoiVao = (typeof LOI_VAO)[number];
 export const KENH_CAP_NHAT = ["web"] as const;

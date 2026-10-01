@@ -1,6 +1,7 @@
 import { type LoaiNhacAi, type ViecAi, viecAiCanNhac } from "./ai-nhac";
 import type { Db } from "./client";
 import { type LoaiNhacOkr, type ViecOkr, viecOkrCanNhac } from "./okr-nhac";
+import { type ViecTomTat, viecTomTatCanNhac } from "./okr-tom-tat";
 import {
 	type LoaiNhacTaiLieu,
 	type ViecTaiLieu,
@@ -19,19 +20,25 @@ export type LoaiNhac = (typeof LOAI_NHAC)[number];
 
 export const THU_TU_NHAC = [
 	"okr-cap-nhat",
+	"okr-cho-duyet",
+	"okr-tra-lai",
+	"okr-hoi-y-gop",
 	...LOAI_NHAC,
 	"okr-kr-im",
 	"okr-duoc-giao",
 	"okr-nhac-ten",
 	"okr-ghi-nhan",
+	"okr-hoi-y-cong-bo",
 	"okr-theo-doi",
 	"tai-lieu-cho-duyet",
+	"okr-tom-tat",
 	"ai-tran",
 	"ai-doi-soat-lech",
 ] as const satisfies readonly (
 	| LoaiNhac
 	| LoaiNhacOkr
 	| LoaiNhacTaiLieu
+	| ViecTomTat["loai"]
 	| LoaiNhacAi
 )[];
 
@@ -100,6 +107,10 @@ function lechPhut(d: Date): number {
 	return dau === "-" ? -lech : lech;
 }
 
+export function gioVN(d: Date): string {
+	return dinhGio.format(d);
+}
+
 export function dauNgayVN(now: Date): Date {
 	const nuaDemUtc = Date.parse(`${ngayVN(now)}T00:00:00Z`);
 	return new Date(nuaDemUtc - lechPhut(new Date(nuaDemUtc)) * PHUT_MS);
@@ -108,6 +119,13 @@ export function dauNgayVN(now: Date): Date {
 export function soNgayVN(tu: Date, den: Date): number {
 	const dau = (d: Date) => Date.parse(`${ngayVN(d)}T00:00:00Z`);
 	return Math.round((dau(den) - dau(tu)) / DAY_MS);
+}
+
+const NGAY_MOI_TUAN = 7;
+
+export function thuTrongTuan(luc: Date): number {
+	const thu = new Date(`${ngayVN(luc)}T00:00:00Z`).getUTCDay();
+	return ((thu + NGAY_MOI_TUAN - 1) % NGAY_MOI_TUAN) + 1;
 }
 
 export function dauTuanVN(now: Date): string {
@@ -155,7 +173,12 @@ export type ViecKeHoach = {
 	targetDays?: number;
 };
 
-export type ViecNhac = ViecKeHoach | ViecOkr | ViecTaiLieu | ViecAi;
+export type ViecNhac =
+	| ViecKeHoach
+	| ViecOkr
+	| ViecTaiLieu
+	| ViecTomTat
+	| ViecAi;
 
 function docKeHoach(db: Db, userId: string | undefined) {
 	return db.onboardingPlan.findMany({
@@ -316,6 +339,7 @@ function gop(
 	keHoach: Map<string, ViecKeHoach[]>,
 	okr: Map<string, ViecOkr[]>,
 	taiLieu: Map<string, ViecTaiLieu[]>,
+	tomTat: Map<string, ViecTomTat[]>,
 	ai: Map<string, ViecAi[]>,
 	thanhVien: Set<string>,
 ): Map<string, ViecNhac[]> {
@@ -324,6 +348,7 @@ function gop(
 			...keHoach.keys(),
 			...okr.keys(),
 			...taiLieu.keys(),
+			...tomTat.keys(),
 			...ai.keys(),
 		]),
 	].filter((u) => thanhVien.has(u));
@@ -333,6 +358,7 @@ function gop(
 				...(keHoach.get(userId) ?? []),
 				...(okr.get(userId) ?? []),
 				...(taiLieu.get(userId) ?? []),
+				...(tomTat.get(userId) ?? []),
 				...(ai.get(userId) ?? []),
 			];
 			return [userId, ds.sort(soSanh)];
@@ -344,7 +370,7 @@ export async function viecCanNhac(
 	db: Db,
 	chon: { now: Date; userId?: string; cuaSo: CuaSoNhac },
 ): Promise<Map<string, ViecNhac[]>> {
-	const [keHoach, thanhVien, okr, taiLieu, ai] = await Promise.all([
+	const [keHoach, thanhVien, okr, taiLieu, tomTat, ai] = await Promise.all([
 		docKeHoach(db, chon.userId),
 		db.member.findMany({
 			where: {
@@ -355,6 +381,13 @@ export async function viecCanNhac(
 		}),
 		viecOkrCanNhac(db, chon),
 		viecTaiLieuCanNhac(db, chon),
+		chon.cuaSo === "buoi-sang"
+			? viecTomTatCanNhac(db, {
+					now: chon.now,
+					userId: chon.userId,
+					cuaSo: "buoi-sang",
+				})
+			: new Map<string, ViecTomTat[]>(),
 		viecAiCanNhac(db, chon),
 	]);
 	const tap = new Set(thanhVien.map((m) => m.userId));
@@ -362,6 +395,7 @@ export async function viecCanNhac(
 		gom(keHoach.flatMap((k) => guiCua(k, tap, chon.now))),
 		okr,
 		taiLieu,
+		tomTat,
 		ai,
 		tap,
 	);

@@ -4,6 +4,7 @@ import { chiTieuThang, thangVN } from "./ai-chi-phi";
 import type { Db } from "./client";
 import type { Prisma } from "./generated/prisma/client";
 import { lockIdempotencyKey } from "./idempotency";
+import { dieuKienXemMucTieu, nguCanhXemOkr } from "./okr-hien-thi";
 import {
 	AI_PHAM_VI,
 	type CauHinhAi,
@@ -143,11 +144,12 @@ export async function ketQuaKiemGanNhat(
 
 export async function canKiemLaiKhoa(
 	db: DbHoacTx,
-	now: Date = new Date(),
+	now: Date,
+	hienTai: KetQuaKiemSanSang,
 ): Promise<boolean> {
 	if (!(await cauHinhAiLuc(db, now)).aiOn) return false;
 	const kq = await ketQuaKiemGanNhat(db, now);
-	if (kq?.ketQua !== "chua-co-khoa-mo-hinh") return false;
+	if (!kq || kq.ketQua === hienTai) return false;
 	if (now.getTime() - kq.luc.getTime() <= TRO_LY_OKR_TRAN.hanKiemKhoaMs) {
 		return false;
 	}
@@ -331,9 +333,25 @@ async function taoViecDeXuat<L extends string>(
 	});
 }
 
+export const KHONG_XEM_DUOC = "khong-xem-duoc" as const;
+
 export type XepViec =
 	| { bat: true; taskId: string; dungLai: boolean }
-	| { bat: false; lyDo: LyDoKhongSanSang };
+	| { bat: false; lyDo: LyDoKhongSanSang | typeof KHONG_XEM_DUOC };
+
+async function nguoiXemDuocMucTieu(
+	db: DbHoacTx,
+	objectiveId: string,
+	userId: string,
+): Promise<boolean> {
+	const nc = (await nguCanhXemOkr(db, [userId])).get(userId);
+	if (!nc) return false;
+	return (
+		(await db.okrObjective.count({
+			where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
+		})) > 0
+	);
+}
 
 export async function xepViecTroLy(
 	db: Db,
@@ -347,6 +365,8 @@ export async function xepViecTroLy(
 	},
 ): Promise<XepViec> {
 	const now = v.now ?? new Date();
+	if (!(await nguoiXemDuocMucTieu(db, v.objectiveId, v.nguoiYeuCau)))
+		return { bat: false, lyDo: KHONG_XEM_DUOC };
 	const ct = await cauHinhAiLuc(db, now);
 	const nac = await nacCuaMucTieu(db, ct, v.viec, {
 		objectiveId: v.objectiveId,

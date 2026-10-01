@@ -7,14 +7,28 @@ import {
 } from "@crm/db/ai-chi-phi-danh-muc";
 import { danhSachDeXuat } from "@crm/db/okr-de-xuat";
 import {
+	boGioiHan,
+	dieuKienXemMucTieu,
+	type NguCanhXem,
+} from "@crm/db/okr-hien-thi";
+import {
+	banTuanChoQuanTri,
+	docTomTatChoNguoiXem,
+	nacTomTatPhong,
+	trangThaiTuan,
+} from "@crm/db/okr-tom-tat";
+import {
 	cauHinhAiLuc,
 	donViCuaMucTieu,
+	KHONG_XEM_DUOC,
+	ketQuaKiemGanNhat,
 	troLyOkrSanSang,
 	xepViecTroLy,
 } from "@crm/db/okr-tro-ly";
 import {
 	type LyDoKhongSanSang,
 	nacCuaDonVi,
+	nguonCuaKetQua,
 	TRO_LY_OKR_TRAN,
 } from "@crm/db/okr-tro-ly-danh-muc";
 import { docDiemXuHuong, xuHuongKr as tinhXuHuong } from "@crm/db/okr-xu-huong";
@@ -24,7 +38,16 @@ import {
 	khoaDong,
 	kiemDongDeXuat,
 } from "@crm/validation/okr-kiem-de-xuat";
+import { LUAT_TOM_TAT } from "@crm/validation/okr-kiem-tom-tat";
 import { kieuKr } from "@crm/validation/okr-kr";
+import type {
+	TroLyTomTatInput,
+	TroLyTomTatOutput,
+	TroLyTomTatPhanHoiInput,
+	TroLyTomTatPhanHoiOutput,
+	TroLyTomTatQuanTriInput,
+	TroLyTomTatQuanTriOutput,
+} from "@crm/validation/okr-tom-tat";
 import {
 	type DongDeXuat,
 	dongTuHang,
@@ -63,6 +86,7 @@ import {
 import { OkrService } from "./okr.service";
 import { chonDonVi, donViCua, OkrAccessService } from "./okr-access.service";
 import { OKR } from "./okr-config";
+import { OKR_XEM } from "./okr-xem.config";
 import {
 	docThang,
 	doTreMs,
@@ -160,7 +184,7 @@ export class TroLyOkrService {
 	async aiChiTieu(userId: string, now = new Date()): Promise<AiChiTieuOutput> {
 		await this.quyenOkr.assertQuanTri(userId);
 		const thang = thangVN(now);
-		const [chi, cauHinh, sanSang, dangKiem, doiSoat] = await Promise.all([
+		const [chi, cauHinh, sanSang, dangKiem, doiSoat, kiem] = await Promise.all([
 			chiTieuThang(this.db, thang, now),
 			cauHinhAiLuc(this.db, now),
 			troLyOkrSanSang(this.db, {
@@ -173,6 +197,7 @@ export class TroLyOkrService {
 				where: { kind: "okr-kiem-san-sang", finishedAt: null },
 			}),
 			doiSoatGanNhat(this.db, now),
+			ketQuaKiemGanNhat(this.db, now),
 		]);
 		const theoNhom = NHOM_VIEC_AI.map((nhom) => {
 			const cua = TINH_NANG.filter((t) => NHOM_CUA_TINH_NANG[t] === nhom);
@@ -193,19 +218,28 @@ export class TroLyOkrService {
 				phanTram: phanTramTran(chi.troLyOkrUsd, tranUsd),
 			},
 			sanSang,
+			nguonKhoa: kiem ? nguonCuaKetQua(kiem.ketQua) : null,
 			dangKiem: dangKiem > 0,
 			doiSoat,
 		};
 	}
 
-	private async assertSuaDich(userId: string, dich: TroLyDichInput) {
+	private async assertSuaDich(
+		userId: string,
+		dich: TroLyDichInput,
+	): Promise<{ cycleId: string }> {
+		const { mt } = await this.quyenOkr.assertXemMucTieu(
+			userId,
+			dich.objectiveId,
+		);
 		if (!dich.keyResultId) {
 			await this.quyenOkr.assertSuaMucTieu(userId, dich.objectiveId);
-			return;
+			return { cycleId: mt.cycleId };
 		}
 		const kr = await this.quyenOkr.assertSuaKr(userId, dich.keyResultId);
 		if (kr.objectiveId !== dich.objectiveId)
 			throw new BadRequestException(T.troLy.krKhacMucTieu);
+		return { cycleId: mt.cycleId };
 	}
 
 	private async lyDoNac(
@@ -238,7 +272,8 @@ export class TroLyOkrService {
 		dich: TroLyDichInput,
 		now = new Date(),
 	): Promise<TroLyDeXuatOutput> {
-		await this.assertSuaDich(userId, dich);
+		const { cycleId } = await this.assertSuaDich(userId, dich);
+		await this.okr.assertKyChuaAn(this.db, cycleId);
 		const kq = await xepViecTroLy(this.db, {
 			viec: "de-xuat",
 			objectiveId: dich.objectiveId,
@@ -247,18 +282,24 @@ export class TroLyOkrService {
 			nac: "bat",
 			now,
 		});
-		if (kq.bat && !kq.dungLai) this.trigger.troLyOkrDaXep();
+		if (!kq.bat) {
+			if (kq.lyDo === KHONG_XEM_DUOC)
+				throw new NotFoundException(T.khongThayMucTieu);
+			return { bat: false, lyDo: kq.lyDo };
+		}
+		if (!kq.dungLai) this.trigger.troLyOkrDaXep();
 		return kq;
 	}
 
-	private async goiKiem(objectiveId: string) {
-		const [mt, hang, thanhVien, dich] = await Promise.all([
-			this.db.okrObjective.findUniqueOrThrow({
-				where: { id: objectiveId },
+	private async goiKiem(userId: string, nc: NguCanhXem, objectiveId: string) {
+		const [mt, hang, thanhVien] = await Promise.all([
+			this.db.okrObjective.findFirstOrThrow({
+				where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
 				select: {
 					id: true,
 					title: true,
 					whyNow: true,
+					hienThi: true,
 					keyResults: {
 						orderBy: { position: "asc" },
 						select: {
@@ -278,8 +319,11 @@ export class TroLyOkrService {
 				orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 			}),
 			this.db.member.findMany({ select: { user: { select: { name: true } } } }),
-			this.okr.alignmentTargets(objectiveId),
 		]);
+		const dich =
+			mt.hienThi === boGioiHan.hienThi
+				? await this.okr.alignmentTargets(userId, objectiveId)
+				: { targets: [] };
 		const daBac = hang
 			.map((h) => dongTuHang(h))
 			.filter((d) => conHieuLuc(mt, d));
@@ -365,8 +409,12 @@ export class TroLyOkrService {
 			maKetThuc: null,
 			lyDo,
 		});
-		const mt = await this.db.okrObjective.findUnique({
-			where: { id: dich.objectiveId },
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
+		const mt = await this.db.okrObjective.findFirst({
+			where: { AND: [{ id: dich.objectiveId }, dieuKienXemMucTieu(nc)] },
 			select: {
 				...chonDonVi,
 				keyResults: { select: { id: true, ownerUserId: true } },
@@ -378,7 +426,7 @@ export class TroLyOkrService {
 		if (mt.status === "da-bo") return rong(null);
 		const lyDo = await this.lyDoNac(this.db, mt.id, now);
 		if (lyDo !== null) return rong(lyDo);
-		const goi = await this.goiKiem(mt.id);
+		const goi = await this.goiKiem(userId, nc, mt.id);
 		const ds = await danhSachDeXuat(this.db, {
 			objectiveId: mt.id,
 			keyResultIds: tap,
@@ -400,6 +448,21 @@ export class TroLyOkrService {
 			maKetThuc: ds.maKetThuc,
 			lyDo: null,
 		};
+	}
+
+	private async xemDuoc(
+		tx: Tx,
+		userId: string,
+		objectiveId: string,
+	): Promise<boolean> {
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
+		const dem = await tx.okrObjective.count({
+			where: { AND: [{ id: objectiveId }, dieuKienXemMucTieu(nc)] },
+		});
+		return dem > 0;
 	}
 
 	private async assertSuaDong(tx: Tx, userId: string, dong: DongDeXuat) {
@@ -476,12 +539,23 @@ export class TroLyOkrService {
 				where: { id: input.deXuatId },
 				select: { objectiveId: true },
 			});
-			if (moc)
-				await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${moc.objectiveId} FOR UPDATE`;
+			const mt = moc
+				? await tx.okrObjective.findUnique({
+						where: { id: moc.objectiveId },
+						select: { id: true, cycleId: true },
+					})
+				: null;
+			if (mt) {
+				await this.okr.assertKyChuaAn(tx, mt.cycleId);
+				await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${mt.id} FOR UPDATE`;
+			}
 			const hang = await tx.okrDeXuat.findUnique({
 				where: { id: input.deXuatId },
 			});
-			if (hang?.nac !== "bat")
+			if (
+				hang?.nac !== "bat" ||
+				!(await this.xemDuoc(tx, userId, hang.objectiveId))
+			)
 				throw new NotFoundException(T.troLy.khongCoDeXuat(input.deXuatId));
 			const dong = dongTuHang(hang);
 			await this.assertSuaDong(tx, userId, dong);
@@ -573,15 +647,87 @@ export class TroLyOkrService {
 		return { thang, bat: soDoCua(so, "bat"), an: soDoCua(so, "an") };
 	}
 
+	async troLyTomTat(
+		userId: string,
+		input: TroLyTomTatInput,
+		now = new Date(),
+	): Promise<TroLyTomTatOutput> {
+		await this.quyenOkr.quyen(userId);
+		const nac = await nacTomTatPhong(this.db, {
+			departmentId: input.departmentId,
+			now,
+		});
+		if (nac !== "bat")
+			return { ban: null, dangSoan: false, chuaCapNhat: false };
+		const v = { cycleId: input.cycleId, departmentId: input.departmentId, now };
+		const [ban, tuan] = await Promise.all([
+			docTomTatChoNguoiXem(this.db, { ...v, nguoiXem: userId }, LUAT_TOM_TAT),
+			trangThaiTuan(this.db, v, LUAT_TOM_TAT),
+		]);
+		return { ban, ...tuan };
+	}
+
+	async troLyTomTatPhanHoi(
+		userId: string,
+		input: TroLyTomTatPhanHoiInput,
+		now = new Date(),
+	): Promise<TroLyTomTatPhanHoiOutput> {
+		await this.quyenOkr.quyen(userId);
+		const hang = await this.db.okrTomTat.findUnique({
+			where: { id: input.tomTatId },
+			select: { cycleId: true, departmentId: true },
+		});
+		const ban = hang
+			? await docTomTatChoNguoiXem(
+					this.db,
+					{ ...hang, nguoiXem: userId, now },
+					LUAT_TOM_TAT,
+				)
+			: null;
+		if (ban?.id !== input.tomTatId)
+			throw new NotFoundException(T.troLy.khongCoTomTat(input.tomTatId));
+		await this.db.okrTomTatPhanHoi.upsert({
+			where: { tomTatId_userId: { tomTatId: input.tomTatId, userId } },
+			create: {
+				tomTatId: input.tomTatId,
+				userId,
+				huuIch: input.huuIch,
+				luc: now,
+			},
+			update: { huuIch: input.huuIch, luc: now },
+		});
+		return { ok: true };
+	}
+
+	async troLyTomTatQuanTri(
+		userId: string,
+		input: TroLyTomTatQuanTriInput,
+		now = new Date(),
+	): Promise<TroLyTomTatQuanTriOutput> {
+		const q = await this.quyenOkr.quyen(userId);
+		if (!q.quanTriChuongTrinh)
+			throw new ForbiddenException(OKR_XEM.thongDiep.chiQuanTri);
+		return banTuanChoQuanTri(
+			this.db,
+			{ cycleId: input.cycleId, now },
+			LUAT_TOM_TAT,
+		);
+	}
+
 	async xuHuongKr(
+		userId: string,
 		keyResultId: string,
 		now = new Date(),
 	): Promise<XuHuongKrOutput> {
-		const kr = await this.db.okrKeyResult.findUnique({
-			where: { id: keyResultId },
+		const nc = this.quyenOkr.nguCanhXem(
+			await this.quyenOkr.quyen(userId),
+			userId,
+		);
+		const kr = await this.db.okrKeyResult.findFirst({
+			where: { id: keyResultId, objective: dieuKienXemMucTieu(nc) },
 			select: { objectiveId: true },
 		});
-		if (!kr) throw new NotFoundException(T.khongCoKr(keyResultId));
+		if (!kr) throw new NotFoundException(T.khongThayMucTieu);
 		if ((await this.lyDoNac(this.db, kr.objectiveId, now)) !== null)
 			return null;
 		const diem = await docDiemXuHuong(this.db, keyResultId);

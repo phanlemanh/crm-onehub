@@ -1,5 +1,7 @@
 export const MINUTE_MS = 60_000;
-export const NGAY_MS = 24 * 60 * MINUTE_MS;
+export const GIO_MS = 60 * MINUTE_MS;
+export const NGAY_MS = 24 * GIO_MS;
+export const TUAN_MS = 7 * NGAY_MS;
 
 const SECOND_MS = MINUTE_MS / 60;
 
@@ -77,6 +79,37 @@ export const TRO_LY_OKR_TRAN = {
 	hoanTacNgay: 7,
 } as const;
 
+export const OKR_TOM_TAT = {
+	gioXep: { gio: 6, phut: 0 },
+	cuaSoNgay: 7,
+	tyLeGiuLai: 0.3,
+	hienTrongNgay: 8,
+	hoiLaiMs: 5 * SECOND_MS,
+	tranChoMs: 2 * MINUTE_MS,
+	dongBaoAiToiDa: 2,
+	giaoDichXepMs: MINUTE_MS,
+} as const;
+
+export const TRANG_THAI_QUAN_TRI_TOM_TAT = [
+	"hien",
+	"can-xem",
+	"khong-lam-duoc",
+	"dang-soan",
+	"chua-cap-nhat",
+] as const;
+
+export type TrangThaiQuanTriTomTat =
+	(typeof TRANG_THAI_QUAN_TRI_TOM_TAT)[number];
+
+export const MUC_TU_TIN = ["cao", "vua", "thap"] as const;
+
+export type MucTuTin = (typeof MUC_TU_TIN)[number];
+
+export const TRO_LY_OKR_KHOA = {
+	rieng: "OKR_AI_GATEWAY_API_KEY",
+	chung: "AI_GATEWAY_API_KEY",
+} as const;
+
 export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan"] as const;
 
 export type ViecTroLy = (typeof VIEC_TRO_LY)[number];
@@ -136,12 +169,36 @@ export type TroLySanSang =
 	| { bat: true; conLaiUsd: number }
 	| { bat: false; lyDo: LyDoKhongSanSang };
 
+export const NGUON_KHOA = ["khoa-rieng", "khoa-chung", "oidc"] as const;
+
+export type NguonKhoaDb = (typeof NGUON_KHOA)[number];
+
 export const KET_QUA_KIEM_SAN_SANG = [
 	"san-sang",
+	"san-sang-khoa-rieng",
+	"san-sang-khoa-chung",
+	"san-sang-oidc",
 	"chua-co-khoa-mo-hinh",
 ] as const;
 
 export type KetQuaKiemSanSang = (typeof KET_QUA_KIEM_SAN_SANG)[number];
+
+const KET_QUA_CUA_NGUON = {
+	"khoa-rieng": "san-sang-khoa-rieng",
+	"khoa-chung": "san-sang-khoa-chung",
+	oidc: "san-sang-oidc",
+} as const satisfies Record<NguonKhoaDb, KetQuaKiemSanSang>;
+
+export function ketQuaCuaNguon(nguon: NguonKhoaDb | null): KetQuaKiemSanSang {
+	return nguon === null ? "chua-co-khoa-mo-hinh" : KET_QUA_CUA_NGUON[nguon];
+}
+
+export function nguonCuaKetQua(
+	ketQua: KetQuaKiemSanSang,
+): NguonKhoaDb | "chua-ro" | null {
+	if (ketQua === "san-sang") return "chua-ro";
+	return NGUON_KHOA.find((n) => KET_QUA_CUA_NGUON[n] === ketQua) ?? null;
+}
 
 export const DON_VI_ONEHUB = "onehub";
 

@@ -9,7 +9,12 @@ import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
-import { MenuDong, TieuDeChiTiet, TieuDeMuc } from "./chi-tiet-chung";
+import {
+	DongOkrMo,
+	MenuDong,
+	TieuDeChiTiet,
+	TieuDeMuc,
+} from "./chi-tiet-chung";
 import { DanhSachKeo } from "./danh-sach-keo";
 import {
 	type BoPhanDuLieu,
@@ -77,6 +82,12 @@ export function ChiTietBoPhan({
 						]}
 					/>
 				}
+			/>
+			<DongOkrMo
+				level="bo-phan"
+				okrMo={bp.okrMo}
+				sua={hd.sua}
+				moChuyen={() => hd.moChuyenOkr({ level: "bo-phan", id: bp.id })}
 			/>
 			<OTruong
 				kind="division"

@@ -65,6 +65,11 @@ const en = {
 		previousSlide: "Previous item",
 		nextSlide: "Next item",
 	},
+	inlineCitation: {
+		previousSource: "Previous source",
+		nextSource: "Next source",
+		sources: "Sources",
+	},
 	proposedChange: {
 		edit: "Edit",
 	},
@@ -173,6 +178,11 @@ const en = {
 		chuGiai:
 			"Solid line: value at each weekly update. Dashed line: expected by then. Horizontal line: target.",
 	},
+	saveBar: {
+		hienDanhSach: "Show the list",
+		anDanhSach: "Hide the list",
+		cuonThem: "Scroll the list to see the rest",
+	},
 };
 
 export type Messages = typeof en;
@@ -241,6 +251,11 @@ const vi = {
 		itemRole: "mục",
 		previousSlide: "Mục trước",
 		nextSlide: "Mục sau",
+	},
+	inlineCitation: {
+		previousSource: "Nguồn trước",
+		nextSource: "Nguồn sau",
+		sources: "Nguồn",
 	},
 	proposedChange: {
 		edit: "Sửa",
@@ -348,6 +363,11 @@ const vi = {
 		tuan: "Tuần",
 		chuGiai:
 			"Đường liền: giá trị mỗi lần cập nhật tuần. Đường đứt: lẽ ra đã tới. Vạch ngang: đích.",
+	},
+	saveBar: {
+		hienDanhSach: "Xem danh sách",
+		anDanhSach: "Ẩn danh sách",
+		cuonThem: "Cuộn danh sách để xem phần còn lại",
 	},
 } satisfies Messages;
 

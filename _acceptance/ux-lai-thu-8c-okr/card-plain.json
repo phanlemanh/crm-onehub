@@ -1,0 +1,85 @@
+{
+ "feature_plain": "Sau buổi lái thử lượt 8c: mục tiêu kín có nhãn «Giới hạn» ở mọi danh sách, gỡ người được báo trước OKR đang phụ trách, các điều kiện chặn hiện ra trước khi bấm, và luồng duyệt rõ ai duyệt, trả lại lần trước ra sao.",
+ "decisions_plain": [
+  {
+   "id": "d-20260930T030133Z-1",
+   "p": "KHÔNG quét thêm tiêu chí ngoài tám điểm chủ kho chốt — đổi lại phạm vi đóng đúng báo cáo lái thử."
+  },
+  {
+   "id": "d-20260930T030133Z-2",
+   "p": "KHÔNG dựng bản mẫu bấm được trước khi duyệt — đổi lại đối chiếu bằng 24 ảnh lái thử và bộ ảnh chụp lại mọi trạng thái."
+  },
+  {
+   "id": "d-20260930T030133Z-3",
+   "p": "Gỡ người còn OKR thì báo trước và mời chuyển OKR, không chặn gỡ — đổi lại người quản trị vẫn gỡ được nếu muốn."
+  },
+  {
+   "id": "d-20260930T030133Z-4",
+   "p": "Số trên cây đơn vị đếm theo những gì người đang xem được mở; số thống kê giữ luật cũ — đổi lại hai người có thể thấy số trên cây khác nhau."
+  },
+  {
+   "id": "d-20260930T030133Z-5",
+   "p": "Nút «Công bố» sau khi chính người đó vừa trả lại thì hạ thành nút phụ, không ẩn — đổi lại vẫn bấm được nếu cần."
+  },
+  {
+   "id": "d-20260930T030133Z-6",
+   "p": "Nhãn «Giới hạn» thành một thành phần dùng chung trước khi gắn vào năm danh sách — đổi lại mọi nơi hiện nhãn giống nhau."
+  },
+  {
+   "id": "d-20260930T030133Z-7",
+   "p": "«Gửi duyệt» khoá khi chưa có KR, kèm dòng lý do đọc được — đổi lại người biết lý do trước khi bấm."
+  },
+  {
+   "id": "d-20260930T030133Z-8",
+   "p": "Cảnh báo vượt trần trong hộp chuyển OKR lấy từ đúng phép kiểm của lệnh chuyển — đổi lại thêm một lần hỏi máy chủ khi đổi lựa chọn."
+  },
+  {
+   "id": "d-20260930T031857Z-10",
+   "p": "Số trên cây so với số mục đã công bố trong danh sách, không so tổng số thẻ — vì danh sách còn hiện nháp, chờ duyệt và mục đã bỏ."
+  },
+  {
+   "id": "d-20260930T032023Z-11",
+   "p": "Chuyển OKR vượt trần chỉ cảnh báo, kể cả khi chương trình đặt «chặn» — giữ đúng luật đang chạy; áp luật chặn để việc sau."
+  },
+  {
+   "id": "d-20260930T032023Z-12",
+   "p": "Hộp lưu trữ phòng ban hỏi máy chủ đủ ba lý do chặn (khuôn, người, OKR) bằng chính phép kiểm khi lưu trữ — đổi lại thêm một lần hỏi khi mở hộp."
+  },
+  {
+   "id": "d-20260930T032129Z-13",
+   "p": "Trang Theo đơn vị đo trên đúng danh sách người dùng thấy; khung trống khi tải là do màn giữ dữ liệu đơn vị trước — đã sửa tận gốc."
+  },
+  {
+   "id": "d-20260930T032420Z-14",
+   "p": "Xem trước việc chuyển OKR tính thử mà không khoá dữ liệu — đổi lại có rủi ro lệch nhỏ với lúc chuyển thật, đã có bài so hai đường."
+  },
+  {
+   "id": "d-20260930T032643Z-15",
+   "p": "Họp tuần KHÔNG gắn nhãn «Giới hạn» vì Họp tuần vốn không hiện mục giới hạn cho ai — nếu sau này hiện thì phải thêm nhãn."
+  },
+  {
+   "id": "d-20260930T034143Z-16",
+   "p": "Xem trước chuyển OKR trả con số để màn ghép câu «… sẽ có N mục tiêu» — đổi lại khác khuôn so với bản đặc tả đã duyệt."
+  },
+  {
+   "id": "d-20260930T040019Z-17",
+   "p": "Bài kiểm giao diện đặt vào bốn tệp sẵn có của từng màn thay vì một tệp mới — đổi lại màn «Của tôi» chỉ được đo qua thẻ dùng chung."
+  },
+  {
+   "id": "d-20260930T041105Z-18",
+   "p": "Dòng lý do khoá «Gửi duyệt» ở đầu khung thành một dòng riêng, vì trên điện thoại nó ép tiêu đề thành cột một chữ — AC-4 sửa chữ cho khớp."
+  },
+  {
+   "id": "d-20260930T041630Z-19",
+   "p": "Bài kiểm số gộp của lượt 8c đổi theo luật đếm mới của cây đơn vị — đổi lại lần ghim lại sau này của hồ sơ 8c sẽ chứng theo luật mới."
+  },
+  {
+   "id": "d-20260930T050738Z-20",
+   "p": "Thêm bài kiểm phía máy chủ cho hộp gỡ người (vòng chấm 1 thấy thiếu hẳn) — dùng người và phòng ban gieo riêng để không đổi số của bài khác."
+  },
+  {
+   "id": "d-20260930T050738Z-21",
+   "p": "Bộ ảnh kiểm tra giao diện thêm phép so ngược và đếm số độc lập từ dữ liệu; chữ hai bài đo đổi cho khớp — trình ở cổng này vì đổi sau Cổng Phạm vi."
+  }
+ ]
+}

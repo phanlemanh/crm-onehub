@@ -70,7 +70,7 @@ const TGY = {
 	thongDiep: { nhanKhongDoi: "nhan khong doi gi" },
 };
 
-const ANH = join(GOC, "_acceptance/the-gop-y-okr/evidence");
+const ANH = join(GOC, process.env.BANG_CHUNG ?? "_acceptance/the-gop-y-okr/evidence");
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
 const m = okrMessages("vi");
@@ -131,7 +131,7 @@ function doBoCuc(chonHop) {
 		sw: document.documentElement.scrollWidth,
 		iw: window.innerWidth,
 		soHop: document.querySelectorAll(
-			'[role="dialog"][data-slot="dialog-content"]',
+			"[data-hop-thoai-muc-tieu],[data-hop-thoai-kr]",
 		).length,
 	};
 }
@@ -203,10 +203,10 @@ async function chup(p, ten) {
 async function kiemMotHop(p, nhan) {
 	const so = await p.evaluate(
 		() =>
-			document.querySelectorAll('[role="dialog"][data-slot="dialog-content"]')
+			document.querySelectorAll("[data-hop-thoai-muc-tieu],[data-hop-thoai-kr]")
 				.length,
 	);
-	kiem(`${nhan}: con dung mot hop thoai role=dialog (${so})`, so === 1);
+	kiem(`${nhan}: con dung mot hop OKR (${so})`, so === 1);
 }
 
 async function kiemDoDo() {

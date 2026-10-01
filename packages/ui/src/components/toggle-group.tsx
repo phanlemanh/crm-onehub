@@ -1,6 +1,6 @@
 "use client";
 
-import { toggleVariants } from "@crm/ui/components/toggle";
+import { ToggleMark, toggleVariants } from "@crm/ui/components/toggle";
 import { cn } from "@crm/ui/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import { ToggleGroup as ToggleGroupPrimitive } from "radix-ui";
@@ -66,6 +66,7 @@ function ToggleGroupItem({
 	children,
 	variant = "default",
 	size = "default",
+	asChild,
 	...props
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &
 	VariantProps<typeof toggleVariants>) {
@@ -85,9 +86,17 @@ function ToggleGroupItem({
 				}),
 				className,
 			)}
+			asChild={asChild}
 			{...props}
 		>
-			{children}
+			{asChild ? (
+				children
+			) : (
+				<>
+					<ToggleMark variant={context.variant || variant} />
+					{children}
+				</>
+			)}
 		</ToggleGroupPrimitive.Item>
 	);
 }

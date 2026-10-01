@@ -15,10 +15,15 @@ import {
 	mucNhac,
 	parseNhacPayload,
 } from "@crm/validation/nhac-ke-hoach";
+import {
+	type CachXemOkr,
+	khoaDonOkr,
+	THAM_SO_OKR,
+} from "@crm/validation/okr-tham-so";
 import { sendSlackMessage } from "./run-runtime";
 import { slackAccessToken } from "./slack-connection";
 import { completeTask } from "./tasks";
-import { dungTin, type LienKet } from "./tin-nhac";
+import { dungTin, type LienKet, truKrIm } from "./tin-nhac";
 import { guiZalo, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
 
@@ -27,6 +32,8 @@ export const LOAI_VIEC_NHAC = "nhac-ke-hoach";
 const LY_DO = "nhắc buổi sáng";
 
 const DUONG_CHO_DUYET = "tabTaiLieu=cho-duyet";
+
+const CACH_XEM_HOP_TUAN = "hop-tuan" satisfies CachXemOkr;
 
 const CHU_DE = /^user:(.+):\d{4}-\d{2}-\d{2}$/;
 
@@ -61,6 +68,15 @@ function maViec(v: ViecNhac): MucNhac {
 	if (v.loai === "tai-lieu-cho-duyet") {
 		return mucNhac.parse({ loai: v.loai, so: v.so });
 	}
+	if (v.loai === "okr-tom-tat") {
+		return mucNhac.parse({
+			loai: v.loai,
+			tomTatId: v.tomTatId,
+			departmentId: v.departmentId,
+			cycleId: v.cycleId,
+			soKrDangBan: v.soKrDangBan,
+		});
+	}
 	if (!laViecOkr(v)) {
 		return mucNhac.parse({ loai: v.loai, planId: v.planId, stepId: v.stepId });
 	}
@@ -85,7 +101,7 @@ export async function lenLichNhac(now = new Date()): Promise<{ ghi: number }> {
 			subject: chuDeNhac(userId, now),
 			dueAt: now,
 			priority: PRIORITY.nhac,
-			payload: { muc: maCua(ds) },
+			payload: { muc: maCua(truKrIm(ds)) },
 		})),
 		skipDuplicates: true,
 	});
@@ -122,6 +138,18 @@ async function duongMo(appUrl: string | null): Promise<LienKet> {
 		}
 		if (v.loai === "okr-cap-nhat") {
 			return `${ctx.appUrl}/${ctx.slug}/okr/cap-nhat-tuan?tu=nhac`;
+		}
+		if (v.loai === "okr-hoi-y-gop" || v.loai === "okr-hoi-y-cong-bo") {
+			const thamSo = new URLSearchParams({ [THAM_SO_OKR.ky]: v.cycleId });
+			return `${ctx.appUrl}/${ctx.slug}/okr/hoi-y?${thamSo}`;
+		}
+		if (v.loai === "okr-tom-tat") {
+			const thamSo = new URLSearchParams({
+				[THAM_SO_OKR.xem]: CACH_XEM_HOP_TUAN,
+				[THAM_SO_OKR.don]: khoaDonOkr({ loai: "pb", id: v.departmentId }),
+				[THAM_SO_OKR.ky]: v.cycleId,
+			});
+			return `${ctx.appUrl}/${ctx.slug}/okr/theo-don-vi?${thamSo}`;
 		}
 		return `${ctx.appUrl}/${ctx.slug}/okr?record=objective:${v.objectiveId}`;
 	};

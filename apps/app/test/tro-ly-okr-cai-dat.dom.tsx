@@ -37,6 +37,7 @@ const chuongTrinh = () => ({
 	aiTomTatAnPhamVi: "tat",
 	aiTomTatAnDonVi: [],
 	aiTranThangUsd: 9,
+	duyetCongBo: false,
 	...cauHinh,
 	version: 4,
 	canManage: coQuyen,
@@ -100,6 +101,7 @@ const chiTieu = (): AiChiTieuOutput => {
 		tongUsd: theoNhom.reduce((s, n) => s + n.usd, 0),
 		troLyOkr: { chiUsd: rong ? 0 : 2.42, tranUsd: 9, phanTram: rong ? 0 : 27 },
 		sanSang,
+		nguonKhoa: null,
 		dangKiem: false,
 		doiSoat,
 	};

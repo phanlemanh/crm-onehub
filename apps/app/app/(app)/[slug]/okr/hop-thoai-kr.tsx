@@ -4,15 +4,6 @@ import { Button } from "@crm/ui/components/button";
 import { Combobox } from "@crm/ui/components/combobox";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import {
-	Dialog,
-	DialogAssistBody,
-	DialogClose,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@crm/ui/components/dialog";
-import {
 	Field,
 	FieldDescription,
 	FieldError,
@@ -28,6 +19,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@crm/ui/components/select";
+import {
+	Sheet,
+	SheetBody,
+	SheetClose,
+	SheetContent,
+	SheetDescription,
+	SheetFooter,
+	SheetHeader,
+	SheetTitle,
+} from "@crm/ui/components/sheet";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import type { Locale } from "@crm/ui/lib/locale";
@@ -118,7 +119,13 @@ function oKrKhac(a: OKr, b: OKr): boolean {
 	);
 }
 
-function DongXuHuong({ keyResultId }: { keyResultId: string }) {
+function DongXuHuong({
+	keyResultId,
+	donVi,
+}: {
+	keyResultId: string;
+	donVi: string;
+}) {
 	const locale = useLocale();
 	const trpc = useTRPC();
 	const xuHuong = useQuery(trpc.okr.xuHuongKr.queryOptions({ keyResultId }));
@@ -127,7 +134,11 @@ function DongXuHuong({ keyResultId }: { keyResultId: string }) {
 	const moiTuan = `${x.moiTuan > 0 ? "+" : ""}${hienSo(x.moiTuan, locale)}`;
 	return (
 		<FieldDescription variant="hoi" data-xu-huong>
-			{okrGopYMessages(locale).xuHuong(moiTuan, hienSo(x.uocCuoiKy, locale))}
+			{okrGopYMessages(locale).xuHuong(
+				moiTuan,
+				hienSo(x.uocCuoiKy, locale),
+				donVi,
+			)}
 		</FieldDescription>
 	);
 }
@@ -376,21 +387,23 @@ export function HopThoaiKr({
 		chuSo.trim() !== "" && docSoOkr(chuSo) === null;
 
 	return (
-		<Dialog
+		<Sheet
 			open
 			onOpenChange={(mo) => {
 				if (!mo && !dangLuu) dong();
 			}}
 			coThayDoi={coThayDoi}
 		>
-			<DialogContent
+			<SheetContent
+				side="right"
 				data-hop-thoai-kr={n.krId ?? "moi"}
-				size={gopY.cotMo ? "assist" : "default"}
+				size={gopY.cotMo ? "assist" : undefined}
 			>
-				<DialogHeader>
-					<DialogTitle>{n.krId ? h.suaKr : h.themKr}</DialogTitle>
-				</DialogHeader>
-				<DialogAssistBody split={gopY.cotMo} data-cuon-hop>
+				<SheetHeader>
+					<SheetTitle>{n.krId ? h.suaKr : h.themKr}</SheetTitle>
+					<SheetDescription translate="no">{mucTieu.title}</SheetDescription>
+				</SheetHeader>
+				<SheetBody split={gopY.cotMo} data-cuon-hop>
 					<form
 						id={`${ma}-form`}
 						onSubmit={(e) => {
@@ -481,7 +494,9 @@ export function HopThoaiKr({
 										</FieldDescription>
 									) : null}
 									{hoiDuoi("targetValue")}
-									{n.krId ? <DongXuHuong keyResultId={n.krId} /> : null}
+									{n.krId ? (
+										<DongXuHuong keyResultId={n.krId} donVi={dau.donVi} />
+									) : null}
 								</Field>
 								<Field>
 									<FieldLabel htmlFor={`${ma}-hien`}>{h.hienTai}</FieldLabel>
@@ -617,14 +632,20 @@ export function HopThoaiKr({
 							{loi ? <FieldError data-loi-may-chu>{loi}</FieldError> : null}
 						</FieldGroup>
 					</form>
-					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
-				</DialogAssistBody>
-				<DialogFooter>
-					<DialogClose asChild dongNgay={daLuuMot && !coThayDoi}>
+					{gopY.cotMo ? (
+						<CotGopY
+							gopY={gopY}
+							oDangSua={oDangSua}
+							coGoiYTinh={hoi.length > 0}
+						/>
+					) : null}
+				</SheetBody>
+				<SheetFooter>
+					<SheetClose asChild dongNgay={daLuuMot && !coThayDoi}>
 						<Button variant="outline" disabled={dangLuu}>
 							{daLuuMot ? so.trangThai.hopThoai.dong : h.huy}
 						</Button>
-					</DialogClose>
+					</SheetClose>
 					<Button
 						type="submit"
 						form={`${ma}-form`}
@@ -634,8 +655,8 @@ export function HopThoaiKr({
 						{dangLuu ? <Spinner /> : null}
 						{n.krId ? h.luu : h.themKr}
 					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
 	);
 }

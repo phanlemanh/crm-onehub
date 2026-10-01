@@ -1,0 +1,1 @@
+driver: bun script (puppeteer) qua tien-de.mjs, phien do rieng app :4675/:4750 api :4820/:4306; khong co read_network_requests -> n-a (driver). Lan chay 2026-09-30 ma 0, 56 DUNG 0 SAI.

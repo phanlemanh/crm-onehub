@@ -81,6 +81,8 @@ const DA_NOI: ZaloCuaToi = {
 	slackDuoc: false,
 	kenhSeDung: "zalo",
 	lech: false,
+	dongTroLyOkr: true,
+	laTruongPhong: false,
 };
 
 const CAU_API = "Zalo chưa nhận tin thử. Thử lại sau ít phút.";

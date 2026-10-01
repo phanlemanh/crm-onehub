@@ -87,7 +87,42 @@ const MAU = {
 		capNhat: 1,
 		binhLuan: 2,
 	},
+	"okr-cho-duyet": {
+		loai: "okr-cho-duyet",
+		objectiveId: "mt-6",
+		nhan: "Mở rộng kho",
+		nguoiGui: "Trần Hà",
+	},
+	"okr-tra-lai": {
+		loai: "okr-tra-lai",
+		objectiveId: "mt-7",
+		nhan: "Khách mới",
+		nguoiTraLai: "Lê Minh",
+		lyDo: "Chưa có KR đo khách hàng mới",
+	},
+	"okr-hoi-y-gop": {
+		loai: "okr-hoi-y-gop",
+		hoiYId: "hy-1",
+		cycleId: "ky-1",
+		nhan: "Năm 2027",
+		hanLuc: "2026-10-30T10:00:00.000Z",
+	},
+	"okr-hoi-y-cong-bo": {
+		loai: "okr-hoi-y-cong-bo",
+		hoiYId: "hy-1",
+		cycleId: "ky-1",
+		nhan: "Năm 2027",
+	},
 	"tai-lieu-cho-duyet": { loai: "tai-lieu-cho-duyet", so: 2 },
+	"okr-tom-tat": {
+		loai: "okr-tom-tat",
+		tomTatId: "tt-1",
+		departmentId: "pb-1",
+		cycleId: "ky-1",
+		phongTen: "Kinh doanh",
+		krDangBan: ["kr-1", "kr-2"],
+		soKrDangBan: 2,
+	},
 } satisfies {
 	[K in Exclude<ViecNhac["loai"], "ai-tran" | "ai-doi-soat-lech">]: Extract<
 		ViecNhac,

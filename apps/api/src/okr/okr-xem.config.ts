@@ -3,11 +3,10 @@ const NGAY_MS = 24 * 60 * PHUT_MS;
 
 export const OKR_XEM = {
 	loc: { toiDaMoiMat: 50 },
-	thoiGian: { phutMs: PHUT_MS, ngayMs: NGAY_MS, soNgayTuan: 7 },
+	thoiGian: { phutMs: PHUT_MS, ngayMs: NGAY_MS },
 	moHopTuan: { gopMs: 30 * PHUT_MS },
 	khoiCuaToi: { toiDa: 5 },
 	thongDiep: {
 		chiQuanTri: "Chỉ quản trị xem được sức khoẻ chương trình.",
-		khongCoKr: "Không có KR này.",
 	},
 } as const;

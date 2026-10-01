@@ -1,0 +1,97 @@
+{
+  "feature_plain": "Người đặt mục tiêu giấu được mục tiêu nhạy cảm khỏi người không liên quan, chương trình bật được bước trưởng cấp trên duyệt trước khi mục tiêu chạy, và tái cơ cấu phòng ban giữa kỳ không còn để OKR không ai trả lời.",
+  "decisions": [
+    {
+      "id": "E25",
+      "q": "Mã và tài liệu có đúng cách thiết kế đã duyệt không?",
+      "why": "Hội đồng chỉ có số dòng đổi, không có thân diff; máy đã gom đủ bốn bằng chứng họ đòi — từ điển, tài liệu API, cây tổ chức không nhập khu OKR, và nơi dùng luật xem."
+    }
+  ],
+  "analyst_plain": "",
+  "decisions_plain": [
+    {
+      "id": "d-20260929T011119Z-1",
+      "p": "Đã chọn hai mức hiển thị theo Perdoo — đổi lại mục tiêu giới hạn không góp vào mục tiêu cấp trên và không vào số của đơn vị."
+    },
+    {
+      "id": "d-20260929T011119Z-2",
+      "p": "Đã chọn một luật xem dùng chung cho màn, nhắc và trợ lý — đổi lại cần một phép đo giữ hai nơi suy trưởng khớp nhau."
+    },
+    {
+      "id": "d-20260929T011119Z-3",
+      "p": "Đã chọn suy người duyệt từ cây lúc đọc — trưởng đổi thì mục chờ đi theo; đổi lại chỉ vết ghi ai là người duyệt lúc gửi."
+    },
+    {
+      "id": "d-20260929T011119Z-4",
+      "p": "Đã chọn thêm hai ô có mặc định vào bảng cũ để giữ tốc độ toàn cảnh — đổi lại rời nếp «không cột mới trên bảng cũ» của lượt 8a."
+    },
+    {
+      "id": "d-20260929T011119Z-5",
+      "p": "KHÔNG cho quản trị sửa OKR của đơn vị không trưởng — đổi lại kỳ có thể trôi vài ngày khi chậm đặt trưởng."
+    },
+    {
+      "id": "d-20260929T011119Z-6",
+      "p": "Đã chọn chặn lưu trữ cả khi kỳ đang chấm điểm — đổi lại quản trị phải chuyển OKR hay đợi đóng kỳ."
+    },
+    {
+      "id": "d-20260929T011119Z-7",
+      "p": "KHÔNG đụng hộp gỡ thành viên — đổi lại quản trị biết OKR mồ côi sau khi gỡ, không trước."
+    },
+    {
+      "id": "d-20260929T011119Z-8",
+      "p": "Đã chọn dựng bản mẫu bấm được không đồng bộ để duyệt trên màn — tốn một lượt dựng."
+    },
+    {
+      "id": "d-20260929T052628Z-10",
+      "p": "Đã chọn: máy chủ suy «ai thấy» từ chính cây nó dùng để quyết quyền sửa, còn tin nhắc và trợ lý dùng hàm riêng ở tầng dữ liệu — đổi lại có hai nơi suy trưởng, một phép đo giữ chúng khớp."
+    },
+    {
+      "id": "d-20260929T052628Z-11",
+      "p": "Đã chọn thi công tuần tự phần máy chủ, mỗi việc một người soát — đổi lại chậm hơn chạy song song."
+    },
+    {
+      "id": "d-20260929T063314Z-12",
+      "p": "Đã chọn: ba màn chỉ quản trị (sổ chi phí AI, sức khoẻ, xem trước chuyển việc) được đo là «từ chối» với người thường, kèm một lượt quản trị đối chứng — chữ của phép đo E3 lệch với cách khai này."
+    },
+    {
+      "id": "d-20260929T063314Z-13",
+      "p": "Đã chọn: bảng họp tuần bỏ mục tiêu giới hạn với mọi người, kể cả trưởng — đổi lại trưởng bàn mục tiêu đó ngoài bảng họp."
+    },
+    {
+      "id": "d-20260929T082318Z-14",
+      "p": "CÒN MỞ: mục tiêu cá nhân của người đã nghỉ nằm mãi ở danh sách mồ côi, không ai sửa hay bỏ được — ngưỡng «0 mồ côi» có thể báo oan; lối ra: cho quản trị bỏ nó, hoặc không tính lớp này."
+    },
+    {
+      "id": "d-20260929T111218Z-15",
+      "p": "Gộp lượt 9b: đổi mốc migration của lượt này để chạy sau migration của 9b — kho nào đã chạy tên cũ phải làm lại."
+    },
+    {
+      "id": "d-20260929T111218Z-16",
+      "p": "Gộp lượt 9b: hàng đợi trợ lý theo khuôn mới của 9b, vẫn từ chối người không xem được mục tiêu."
+    },
+    {
+      "id": "d-20260929T111218Z-17",
+      "p": "Gộp lượt 9b: trợ lý kiểm lại quyền xem của người yêu cầu trước khi đọc mục tiêu."
+    },
+    {
+      "id": "d-20260929T111218Z-18",
+      "p": "Gộp lượt 9b: danh sách đề xuất của trợ lý trả rỗng (không trả «không tìm thấy») cho người không xem được, theo cách 9b đã ghim."
+    },
+    {
+      "id": "d-20260929T111218Z-19",
+      "p": "Gộp lượt 9b: năm màn đọc của trợ lý vào ma trận «không lộ» của lượt này."
+    },
+    {
+      "id": "d-20260929T111218Z-20",
+      "p": "CÒN MỞ: sửa một phép đo của hồ sơ 9b đã ký — nó so với nhánh gốc nên sau khi gộp sẽ cắn mọi lượt sửa bài OKR; nay ghim vào đúng thay đổi của 9b."
+    },
+    {
+      "id": "d-20260929T113825Z-21",
+      "p": "Sửa sau vòng chấm 1: một khoá chữ bộ soi không thấy, hộp «Rút lại» theo khuôn hỏi lại chung, phép đo «không lộ» kiểm thêm người xem được."
+    },
+    {
+      "id": "d-20260929T130542Z-22",
+      "p": "Sửa sau vòng chấm 2: phép đo màn chọn người xem chắc chắn khi máy chịu tải — sản phẩm không đổi."
+    }
+  ]
+}
