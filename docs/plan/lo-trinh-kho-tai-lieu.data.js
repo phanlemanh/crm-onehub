@@ -142,12 +142,11 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			pr: [],
 			cau_giao:
 				"«Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết»",
-			buoc_ke:
-				"Anh ký Cổng Đáng, chọn bộ câu đo của AC-15, duyệt Cổng Phạm vi; rồi Cổng 1.5",
+			buoc_ke: "Anh ký Cổng Đáng; máy lập kế hoạch rồi dừng ở Cổng 1.5",
 			chan_boi: ["cb"],
 			cho_anh: true,
 			ghi_chu:
-				"Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 01/10: vòng mở trên nhánh feat/tro-ly-doc-kho; lên T3 vì cần hai bảng mới (nhật ký hỏi, việc «báo sai») — kho chưa có bảng việc nào dùng được. Anh chốt: hỏi ở tab «Hỏi» của Kho; Zalo do trợ lý AI tự nhận ra; thêm ô đặt «Xác minh đến ngày» (cột này chưa có đường ghi nào); chỉ lưu chữ câu từ chối và câu bị báo sai. S1 xong: 15 AC, 22 eval, gap-probe 1 P0 + 4 P1 đã sửa, design-pass 6 ảnh, hai hình quyết định. Chỉ AC-15 chờ bộ câu đo.",
+				"Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 01/10: vòng mở trên nhánh feat/tro-ly-doc-kho; lên T3 vì cần hai bảng mới (nhật ký hỏi, việc «báo sai») — kho chưa có bảng việc nào dùng được. Anh chốt: hỏi ở tab «Hỏi» của Kho; Zalo do trợ lý AI tự nhận ra; thêm ô đặt «Xác minh đến ngày» (cột này chưa có đường ghi nào); chỉ lưu chữ câu từ chối và câu bị báo sai. S1 xong: 15 AC, 22 eval, gap-probe 1 P0 + 4 P1 đã sửa, design-pass 6 ảnh, hai hình quyết định. Chỉ AC-15 chờ bộ câu đo. 01/10: anh duyệt Cổng Phạm vi, bộ câu đo theo ngả máy khuyên (bộ «tạm» cho vòng chấm, 50 câu thật gom song song, chạy tuần đầu chạy thật); Cổng Đáng chưa ký; vào S2.",
 		},
 		{
 			id: "ct",
@@ -256,7 +255,7 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 			hang_muc: "cb",
 		},
 		{
-			viec: "Lượt 4: ký Cổng Đáng (ba trường trong opportunity.md), chọn bộ câu đo của AC-15, duyệt Cổng Phạm vi",
+			viec: "Lượt 4: ký Cổng Đáng (ba trường trong opportunity.md); gom 50 câu hỏi thật, giữ ngoài kho",
 			hang_muc: "l4",
 		},
 	],
@@ -303,6 +302,10 @@ window.LO_TRINH_KHO_TAI_LIEU = {
 		},
 	],
 	nhat_ky: [
+		{
+			ngay: "2026-10-01",
+			viec: "Lượt 4: anh duyệt Cổng Phạm vi, bộ câu đo theo ngả máy khuyên; vào S2",
+		},
 		{
 			ngay: "2026-10-01",
 			viec: "Lượt 4 mở (T3): S1 xong, 15 AC, 22 eval; chờ Cổng Đáng, bộ câu đo và Cổng Phạm vi",

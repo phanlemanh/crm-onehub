@@ -154,7 +154,7 @@ evals:
   - id: E6d
     criterion: AC-6
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tlk_man_xac_minh
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/[trang]/**"
@@ -191,7 +191,7 @@ evals:
   - id: E7d
     criterion: AC-7
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tlk_man_hoi
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/hoi*.tsx"
@@ -298,7 +298,7 @@ evals:
   - id: E10d
     criterion: AC-10
     executor: test
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.test.tlk_man_suc_khoe_hoi
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/suc-khoe*.tsx"
@@ -403,17 +403,21 @@ evals:
     criterion: AC-15
     executor: script
     layer: backend-effect
-    status: not-run
     cmd: config:executors.script.tlk_cham_bo_do
     paths:
       - "apps/agent/agent/subagents/tro_ly_kho/**"
       - "packages/db/src/tai-lieu-tim.ts"
       - "packages/validation/src/tai-lieu-hoi.ts"
       - "_acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts"
+      - "_acceptance/tro-ly-doc-kho/bo-do/**"
     expected: |
-      [CHO CHU KHO CHON BO DO O CONG PHAM VI — nguon cau va noi giu bo niem phong; xem gap-probe
-      va the Cong 1.] Script nap bo cau (moi cau: id, cau hoi nguyen van, slug mong doi hoac
-      "khong-co"), dung kho do rieng co cac trang tuong ung, hoi tung cau qua dung duong
+      Bo cau "tam" (chu kho chon o Cong Pham vi 2026-10-01): _acceptance/tro-ly-doc-kho/bo-do/mam-tam.json,
+      may soan tu cac trang mau _acceptance/tro-ly-doc-kho/bo-do/trang-mau/*.md; moi cau mang tam: true.
+      Thanh phan viet truoc: 20 cau co trang mong doi (trong do 5 can hai trang, 5 ngoai le hay nguong),
+      6 cau "khong-co", 4 bien the khong dau cua cau co trang, va 10 cau KHONG phai quy dinh cho luot
+      Zalo. Script nap bo cau tu --bo (mac dinh tep tren; bo cau that cua chu kho chay bang --bo <tep
+      ngoai kho> trong chay that, khong o S4), dung kho do rieng (tien-de.mjs), gieo cac trang mau qua
+      duong duyet that, hoi tung cau qua dung duong
       tro_ly_kho (khoa va model that), in moi cau mot dong "<id> dung-trang|tu-choi-dung|sai" va
       tong. Luot hai: gui lai moi cau, cong mau 10 cau KHONG phai quy dinh (thoa thuan, OKR, chao
       hoi) viet truoc trong bo, qua phien agent goc purpose zalo voi model that va Zalo gia; in moi
@@ -450,7 +454,7 @@ evals:
   - id: E17
     criterion: AC-7
     executor: script
-    layer: ui-observed
+    layer: ui
     cmd: config:executors.script.tlk_san_thiet_ke
     paths:
       - "apps/app/app/(app)/[slug]/tai-lieu/**"
