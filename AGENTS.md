@@ -14,6 +14,7 @@ context until you read them, and the rules in them are not optional.
 | Bản mẫu giao diện dưới `/proto`, thêm một proto cho phiên design-pass | `docs/proto.md` |
 | Cài hay dùng một thành phần, ví dụ hay block ReUI (`@reui/…`) | `docs/reui.md` |
 | Agent chat UI — AI Elements owns the conversation; check its register before building anything | `docs/chat-ui.md` |
+| Bất cứ chỗ nào AI (Kara) nói, đề xuất, tóm tắt hay ghi — tên, dấu, mức duyệt, hoàn tác, trạng thái | `docs/ai-ux.md` |
 | Deal amounts, totals, charts, exchange rates | `docs/currency.md` |
 | The record sheet's Agent tab | `docs/agent-panel.md` |
 | `/settings/connections`, integrations, the intake endpoint | `docs/connections.md` |

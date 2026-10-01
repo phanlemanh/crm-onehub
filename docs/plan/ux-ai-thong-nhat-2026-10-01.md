@@ -178,7 +178,19 @@ ai-ux giữ mọi chỗ AI khác và phần chung). Mỗi luật có một thàn
 Lượt 1 phải đi trước lượt 2, nếu không A và B lại dựng thêm một kiểu riêng — đúng
 cái khảo sát này muốn chặn.
 
-## 7. Năm câu chủ kho quyết
+## 7. Đã quyết — 2026-10-01 (Manh Phan)
+
+1. **Một tên duy nhất: Kara** — thay mọi tên AI trên màn. «Tác nhân» vẫn là vật
+   đội dựng ra, Kara chạy nó (cách hiểu của phiên máy, chờ chủ kho xác nhận).
+2. **Dấu tia sáng** — `AiGenerate` của Carbon.
+3. **Áp luật «ghi vào bản ghi = đề xuất»** cho cả tab bản ghi — lượt
+   `tac-tu-xin-duyet` (T3) vào lộ trình.
+4. **Biên nhận tại chỗ** là chỗ hoàn tác chính.
+5. **Lộ trình theo mục 6**, lượt nền tách trước.
+
+Luật đã chốt sống ở `docs/ai-ux.md`; mục 4 dưới đây là bản đề xuất gốc.
+
+## Năm câu đã hỏi
 
 1. Hai tên «Trợ lý» và «Tác nhân» như luật 1 — hay một tên duy nhất?
 2. Dấu AI: `AiGenerate` (tia sáng) hay `AiLabel` (chữ «AI» trong khung)?
