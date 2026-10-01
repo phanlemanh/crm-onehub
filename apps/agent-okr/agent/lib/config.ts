@@ -145,6 +145,7 @@ export const TRO_LY_OKR_SOAN = {
 		],
 	},
 	bangGhiDuoc: ["okrDeXuat", "okrCuocSoan", "aiChiPhi", "agentEvent"],
+	loiDanTinh: { tranKyTu: 8_000 },
 	goi: {
 		heSoKyTu: 2.6,
 		tranTong: 17_000,
