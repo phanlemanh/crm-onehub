@@ -4,6 +4,7 @@ import { demBaoSai } from "@crm/db/tai-lieu-hoi";
 import type { TraLoiDaKiem } from "@crm/validation/tai-lieu-hoi";
 import {
 	type Ai,
+	deXuat,
 	dungSan,
 	duyet,
 	goi,
@@ -46,7 +47,9 @@ async function trangDaDuyet(ten: string, chu: Ai) {
 	return { ...t, ten: hang.ten };
 }
 
-function traLoiTrich(trang: { slug: string; ten: string }[]): TraLoiDaKiem {
+function traLoiTrich(
+	trang: { slug: string; ten: string; phienBan?: number }[],
+): TraLoiDaKiem {
 	return {
 		cau: [
 			{
@@ -54,7 +57,7 @@ function traLoiTrich(trang: { slug: string; ten: string }[]): TraLoiDaKiem {
 				trich: trang.map((t) => ({
 					slug: t.slug,
 					ten: t.ten,
-					phienBan: 1,
+					phienBan: t.phienBan ?? 1,
 					duyetLuc: new Date().toISOString(),
 					doan: `Nội dung ${t.ten}.`,
 				})),
@@ -141,12 +144,25 @@ describe("tlk-bao-sai", () => {
 		const tu = new Date(Date.now() - 1000);
 		const x = await trangDaDuyet("Bao sai X", "chu");
 		const y = await trangDaDuyet("Bao sai Y", "tao");
+		const daTrich = { x: 1, y: 1 };
+		await duyet(
+			await deXuat(x.slug, "## Bao sai X\n\nBản mới hơn bản đã trích.", "chu"),
+			"chu",
+		);
+		const banX = await db.taiLieuTrang.findUniqueOrThrow({
+			where: { id: x.trangId },
+			select: { banDangDung: { select: { so: true } } },
+		});
+		expect(banX.banDangDung?.so).toBeGreaterThan(daTrich.x);
 		const q = await db.taiLieuHoi.create({
 			data: {
 				nguoiHoiId: phien.khac.nguoi,
 				kenh: "CRM",
 				trangThai: "TRA_LOI",
-				traLoi: traLoiTrich([x, y]),
+				traLoi: traLoiTrich([
+					{ ...x, phienBan: daTrich.x },
+					{ ...y, phienBan: daTrich.y },
+				]),
 				xongLuc: new Date(),
 			},
 		});
@@ -162,8 +178,13 @@ describe("tlk-bao-sai", () => {
 		for (const v of viec) {
 			expect(v.cauHoi).toBe("Hoa hồng tầng 2?");
 			expect(v.ghiChu).toBe("Sai số.");
-			expect(v.phienBan).toBe(1);
 		}
+		const banCua = Object.fromEntries(viec.map((v) => [v.trangId, v.phienBan]));
+		expect(
+			banCua[x.trangId],
+			"tlk-bao-sai: phien ban bao sai khong phai ban da trich",
+		).toBe(daTrich.x);
+		expect(banCua[y.trangId]).toBe(daTrich.y);
 		expect(
 			ok<{ soViec: number }>(await goi("hoiKho.baoSai", vao, "khac"), "bao 2")
 				.soViec,
