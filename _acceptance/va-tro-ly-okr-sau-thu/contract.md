@@ -5,7 +5,7 @@ slug: va-tro-ly-okr-sau-thu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -70,3 +70,9 @@ Quét tay theo bốn việc chủ kho đã chốt, không qua `morphological-sca
 
 - Sau khi gộp và deploy, chủ kho soát thẻ Trợ lý OKR trên prod lên «Sẵn sàng · qua Vercel» trong khoảng 10 phút; không lên thì giả định đầu tiên của Coverage sai và vòng mở lại.
 - Sau khi thước luật kho dùng chung (`scripts/luat-kho/do-cay.mjs`, khoá `executors.script.luat_kho_cay`, nhánh feat/soan-okr-cung-tro-ly) lên `onehub`, vòng kế trỏ E16 sang `luat_kho_cay` và bỏ `rang/luat-kho.mjs`, không nuôi hai bản.
+- Known limit (Ngoài-2, ký 2026-10-01): chưa phép đo nào ghim thứ tự hai tên biến khoá và số phút trong câu hướng dẫn thiếu khoá của thẻ Trợ lý OKR ở Cài đặt; đảo đối số hay chia sai đơn vị vẫn qua xanh.
+- Known limit (Ngoài-3, ký 2026-10-01): hai ca «không có khoá» của bài tích hợp sẵn sàng không cô lập OKR_AI_GATEWAY_API_KEY và việc làm mới vé OIDC; trên máy đã có khoá riêng hoặc đã liên kết Vercel chúng có thể đỏ giả.
+- Known limit (Ngoài-4, ký 2026-10-01): phép đo màn thật (rang/man-that.mjs) vẫn chạy khi máy đo chỉ có khoá riêng OKR rồi báo hỏng giả ở thẻ Cài đặt.
+- Known limit (Ngoài-5, ký 2026-10-01): ca ST-caidat-thieu-khoa chỉ kiểm chuỗi có mặt; AI_GATEWAY_API_KEY là chuỗi con của OKR_AI_GATEWAY_API_KEY nên mất lời hướng dẫn khoá chung không bị bắt.
+- Known limit (Ngoài-6, ký 2026-10-01): bước đọc hộp KR trên màn thật không có đối chứng dương cho gợi ý «đọc như một việc»; gợi ý hỏng hẳn vẫn báo đạt.
+- Known limit (Ngoài-7, ký 2026-10-01): ca oidc của E2 tự tạo hàng okr-kiem-san-sang thay vì đi qua xepKiemLaiKhoa; đổi đường xếp việc mà không đổi bài vẫn xanh giả.
