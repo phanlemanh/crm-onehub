@@ -103,14 +103,15 @@ function tepNguon(goc, ox) {
 }
 
 function tenGoi(goc, tep) {
+	if (!existsSync(join(goc, tep))) return null;
 	const goi = docJson(goc, tep);
 	if (!goi.name) khongDo(`${tep} thieu name`);
-	return goi;
+	return goi.name;
 }
 
 function goiCam(goc) {
 	const t = L.triKhon;
-	const tenApp = t.goiAppAgent.map((p) => tenGoi(goc, p).name);
+	const tenApp = t.goiAppAgent.map((p) => tenGoi(goc, p)).filter(Boolean);
 	return [...new Set([...t.goiCam, ...tenApp])].sort();
 }
 
@@ -320,7 +321,11 @@ const HAM_LUAT = {
 		L.cachLy.cap
 			.filter((c) => trong(t, c.tu))
 			.flatMap((c) =>
-				dong(t, nhapSang(t, p, [c.den], [nc.tenApp[c.den]]), nhapIn),
+				dong(
+					t,
+					nhapSang(t, p, [c.den], [nc.tenApp[c.den]].filter(Boolean)),
+					nhapIn,
+				),
 			),
 };
 
@@ -338,21 +343,27 @@ function kiemShadcn(goc) {
 		}));
 }
 
+const LUAT_CAN = Object.fromEntries(
+	Object.values(L).map((l) => [l.ten, l.canThuMuc ?? []]),
+);
+
 function kiemCay(goc) {
 	const ox = docOxlint(goc);
 	const tep = tepNguon(goc, ox);
 	if (tep.length === 0) khongDo("khong co tep nguon nao");
-	for (const thuMuc of [...L.cachLy.cap.map((c) => c.tu), L.triKhon.api])
-		if (!tep.some((t) => trong(t, thuMuc)))
-			khongDo(`${thuMuc} khong co tep ma nao`);
+	const vang = Object.fromEntries(
+		THU_TU.map((ten) => [
+			ten,
+			LUAT_CAN[ten].filter((d) => !tep.some((t) => trong(t, d))),
+		]),
+	);
+	const apDung = THU_TU.filter((ten) => vang[ten].length === 0);
+	if (apDung.length === 0) khongDo("khong luat nao ap dung duoc");
 	const nc = {
 		ox,
 		cam: goiCam(goc),
 		tenApp: Object.fromEntries(
-			L.cachLy.cap.map((c) => [
-				c.den,
-				tenGoi(goc, `${c.den}/package.json`).name,
-			]),
+			L.cachLy.cap.map((c) => [c.den, tenGoi(goc, `${c.den}/package.json`)]),
 		),
 	};
 	const viPham = Object.fromEntries(THU_TU.map((t) => [t, []]));
@@ -360,7 +371,7 @@ function kiemCay(goc) {
 		const chu = readFileSync(join(goc, t), "utf8");
 		const p = phanTich(t, chu);
 		const dongChu = chu.split("\n");
-		for (const ten of THU_TU)
+		for (const ten of apDung)
 			viPham[ten].push(
 				...HAM_LUAT[ten](t, p, nc).map((v) => ({
 					...v,
@@ -368,8 +379,9 @@ function kiemCay(goc) {
 				})),
 			);
 	}
-	viPham[L.uiChung.ten].push(...kiemShadcn(goc));
-	return { tep: tep.length, cam: nc.cam, viPham };
+	if (apDung.includes(L.uiChung.ten))
+		viPham[L.uiChung.ten].push(...kiemShadcn(goc));
+	return { tep: tep.length, cam: nc.cam, viPham, vang };
 }
 
 const chuanHoa = (d) => d.trim().replace(/\s+/g, " ");
@@ -411,13 +423,20 @@ function ketQua(goc, nen = LUAT_KHO_CAY.nen) {
 	const d = kiemCay(goc);
 	const luat = THU_TU.map((ten) => ({
 		ten,
-		...apNen(ten, d.viPham[ten], nen),
+		vang: d.vang[ten],
+		...(d.vang[ten].length > 0
+			? { moi: [], trongNen: 0, soTepNen: 0, thua: [] }
+			: apNen(ten, d.viPham[ten], nen)),
 	}));
 	return { ...d, luat, ma: luat.some((l) => l.moi.length > 0) ? 1 : 0 };
 }
 
 function inKetQua(kq, inRa) {
 	for (const l of kq.luat) {
+		if (l.vang.length > 0) {
+			inRa(`KHONG AP DUNG: ${l.ten} — ${l.vang.join(", ")} vắng`);
+			continue;
+		}
 		const nen =
 			l.soTepNen > 0 ? ` (nen ${l.soTepNen} tep, ${l.trongNen} dong cu)` : "";
 		if (l.moi.length === 0)
@@ -427,254 +446,248 @@ function inKetQua(kq, inRa) {
 	}
 }
 
-function chepGuong() {
-	const ox = docOxlint(GOC);
+function chepGuong(goc) {
+	const ox = docOxlint(goc);
 	const tep = [
 		LUAT_KHO_CAY.oxlint,
 		L.triKhon.goiApi,
 		...L.triKhon.goiAppAgent,
 		...L.cachLy.cap.map((c) => `${c.den}/package.json`),
 		...LUAT_KHO_CAY.vung.flatMap((v) =>
-			lietKe(GOC, v, (n) => n === L.uiChung.tepShadcn),
+			lietKe(goc, v, (n) => n === L.uiChung.tepShadcn),
 		),
-		...tepNguon(GOC, ox),
-	];
+		...tepNguon(goc, ox),
+	].filter((t) => existsSync(join(goc, t)));
 	const tam = mkdtempSync(join(tmpdir(), LUAT_KHO_CAY.tienToTam));
 	for (const t of new Set(tep)) {
 		mkdirSync(dirname(join(tam, t)), { recursive: true });
-		cpSync(join(GOC, t), join(tam, t));
+		cpSync(join(goc, t), join(tam, t));
 	}
 	return tam;
 }
 
-function soDongCuoi(chu) {
-	return chu.endsWith("\n")
-		? chu.split("\n").length
-		: chu.split("\n").length + 1;
-}
-
-const canCo = (tep, cu) => {
-	if (cu === null) khongDo(`pha: thieu ${tep}`);
+const THU = {
+	chung: `packages/${LUAT_KHO_CAY.thuMucThu}/src`,
+	api: `apps/api/src/${LUAT_KHO_CAY.thuMucThu}`,
+	app: `apps/${LUAT_KHO_CAY.thuMucThu}`,
+	okr: `apps/agent-okr/agent/${LUAT_KHO_CAY.thuMucThu}`,
+	agent: `apps/agent/agent/${LUAT_KHO_CAY.thuMucThu}`,
 };
 
-const noiCuoi = (tep, dongThem) => ({
-	tep,
-	doi: (cu) => {
-		canCo(tep, cu);
-		return {
-			moi: `${cu.endsWith("\n") ? cu : `${cu}\n`}${dongThem}\n`,
-			ghim: `${tep}:${soDongCuoi(cu)}`,
-		};
-	},
-});
-
-const chenDau = (tep, dongThem) => ({
-	tep,
-	doi: (cu) => {
-		canCo(tep, cu);
-		return { moi: `${dongThem}\n${cu}`, ghim: `${tep}:1` };
-	},
-});
-
-const tepMoi = (tep, chu) => ({
+const tepMoi = (tep, chu, so = 1) => ({
 	tep,
 	doi: (cu) => {
 		if (cu !== null) khongDo(`pha: ${tep} da co`);
-		return { moi: chu, ghim: `${tep}:1` };
+		return { moi: chu, ghim: `${tep}:${so}` };
 	},
 });
+
+const goiCo = (tep, ten, them = {}) => ({
+	tep,
+	doi: (cu) => {
+		const j = cu === null ? { name: ten } : JSON.parse(cu);
+		j.dependencies = { ...j.dependencies, ...them };
+		return { moi: JSON.stringify(j, null, "\t"), ghim: null };
+	},
+});
+
+const NEN_THU = {
+	[L.chuThich.ten]: { [`${THU.chung}/nen.ts`]: ["// cu"] },
+};
+
+const neoOkr = tepMoi(`${THU.okr}/neo.ts`, "export const neo = 1;\n");
+const neoAgent = tepMoi(`${THU.agent}/neo.ts`, "export const neo = 1;\n");
 
 const PHA = [
 	{
 		ten: "chu-thich-dong",
 		luat: L.chuThich.ten,
-		...noiCuoi("apps/agent-okr/agent/agent.ts", "const thu = 1; // thu"),
+		...tepMoi(
+			`${THU.chung}/chu-thich-dong.ts`,
+			"export const thu = 1; // thu\n",
+		),
 	},
 	{
 		ten: "chu-thich-khoi",
 		luat: L.chuThich.ten,
-		...noiCuoi("apps/api/src/okr/soan.service.ts", "/* thu */"),
+		...tepMoi(
+			`${THU.chung}/chu-thich-khoi.ts`,
+			"export const thu = 1;\n/* thu */\n",
+			2,
+		),
 	},
 	{
 		ten: "chu-thich-jsx",
 		luat: L.chuThich.ten,
 		...tepMoi(
-			"apps/app/components/thu-chu-thich.tsx",
+			`${THU.app}/chu-thich-jsx.tsx`,
 			"export const Thu = () => <div>{/* thu */}</div>;\n",
 		),
 	},
 	{
-		ten: "chu-thich-vuot-nen",
-		luat: L.chuThich.ten,
-		...noiCuoi("apps/api/src/create-app.ts", "// thu"),
-	},
-	{
-		ten: "doi-chung-url-trong-chuoi",
+		ten: "doi-chung-url-va-regex",
 		luat: L.chuThich.ten,
 		xanh: true,
-		...noiCuoi(
-			"apps/agent-okr/agent/agent.ts",
-			'export const thuUrl = "https://vi.du/a//b"; export const thuRe = /\\/\\//;',
+		...tepMoi(
+			`${THU.chung}/url.ts`,
+			'export const thuUrl = "https://vi.du/a//b";\nexport const thuRe = /\\/\\//;\n',
 		),
+	},
+	{
+		ten: "doi-chung-dong-nen-giu-nguyen",
+		luat: L.chuThich.ten,
+		xanh: true,
+		nenThem: NEN_THU,
+		...tepMoi(`${THU.chung}/nen.ts`, "// cu\nexport const a = 1;\n"),
+	},
+	{
+		ten: "nen-them-dong-trung",
+		luat: L.chuThich.ten,
+		nenThem: NEN_THU,
+		...tepMoi(`${THU.chung}/nen.ts`, "// cu\n// cu\nexport const a = 1;\n", 2),
+	},
+	{
+		ten: "nen-doi-chu-thich-cung-so-dem",
+		luat: L.chuThich.ten,
+		nenThem: NEN_THU,
+		...tepMoi(`${THU.chung}/nen.ts`, "// khac\nexport const a = 1;\n"),
 	},
 	{
 		ten: "api-nhap-sdk-model",
 		luat: L.triKhon.ten,
-		...chenDau(
-			"apps/api/src/okr/soan.service.ts",
-			'import { generateText } from "ai";',
+		...tepMoi(
+			`${THU.api}/nhap-ai.ts`,
+			'import { generateText } from "ai";\nexport const thu = generateText;\n',
 		),
 	},
 	{
 		ten: "api-nhap-vendor",
 		luat: L.triKhon.ten,
-		...chenDau(
-			"apps/api/src/okr/soan.service.ts",
-			'import ContextDev from "context.dev";',
-		),
-	},
-	{
-		ten: "api-nhap-dong-agent",
-		luat: L.triKhon.ten,
-		...noiCuoi(
-			"apps/api/src/okr/soan.service.ts",
-			'export const thu = () => import("../../../agent/agent/lib/dispatch-config");',
-		),
-	},
-	{
-		ten: "record-unknown",
-		luat: L.kieuLong.ten,
-		...noiCuoi(
-			"packages/validation/src/okr-cuoc-soan.ts",
-			"export type Thu = Record<string, unknown>;",
-		),
-	},
-	{
-		ten: "as-unknown-as",
-		luat: L.kieuLong.ten,
-		...noiCuoi(
-			"apps/api/src/okr/soan.service.ts",
-			"export const thu = (1 as unknown as string);",
-		),
-	},
-	{
-		ten: "thoi-luong-ngoai-cau-hinh",
-		luat: L.hangSo.ten,
-		...noiCuoi(
-			"apps/agent-okr/agent/agent.ts",
-			"export const thu = 4 * 60_000;",
-		),
-	},
-	{
-		ten: "thoi-luong-giay-nhan-phut",
-		luat: L.hangSo.ten,
-		...noiCuoi(
-			"apps/api/src/okr/soan.service.ts",
-			"export const thu = 5 * 60 * 1000;",
-		),
-	},
-	{
-		ten: "doi-chung-thoi-luong-trong-config",
-		luat: L.hangSo.ten,
-		xanh: true,
-		...noiCuoi(
-			"apps/agent-okr/agent/lib/config.ts",
-			"export const thu = 4 * 60_000;",
-		),
-	},
-	{
-		ten: "thu-muc-components-ui",
-		luat: L.uiChung.ten,
 		...tepMoi(
-			"apps/app/components/ui/button.tsx",
-			"export const Button = () => null;\n",
-		),
-	},
-	{
-		ten: "nhap-radix-ngoai-ui",
-		luat: L.uiChung.ten,
-		...chenDau(
-			"apps/app/components/agent-builder/agent-builder-chat.tsx",
-			'import { Dialog } from "radix-ui";',
-		),
-	},
-	{
-		ten: "components-json-tro-sai",
-		luat: L.uiChung.ten,
-		tep: "apps/app/components.json",
-		doi: (cu) => {
-			const j = JSON.parse(cu);
-			j.aliases.ui = "@/components/ui";
-			return {
-				moi: JSON.stringify(j, null, "\t"),
-				ghim: "apps/app/components.json:1",
-			};
-		},
-	},
-	{
-		ten: "okr-nhap-agent",
-		luat: L.cachLy.ten,
-		...chenDau(
-			"apps/agent-okr/agent/lib/config.ts",
-			'import { DISPATCH } from "../../../agent/agent/lib/dispatch-config";',
-		),
-	},
-	{
-		ten: "agent-nhap-okr",
-		luat: L.cachLy.ten,
-		...chenDau(
-			"apps/agent/agent/lib/dispatch-config.ts",
-			'import { x } from "../../../agent-okr/agent/lib/config";',
-		),
-	},
-	{
-		ten: "okr-nhap-ten-goi-agent",
-		luat: L.cachLy.ten,
-		...chenDau(
-			"apps/agent-okr/agent/lib/config.ts",
-			'import x from "agent/agent";',
+			`${THU.api}/nhap-vendor.ts`,
+			'import ContextDev from "context.dev";\nexport const thu = ContextDev;\n',
 		),
 	},
 	{
 		ten: "api-khai-goi-roi-nhap",
 		luat: L.triKhon.ten,
 		buoc: [
-			{
-				tep: L.triKhon.goiApi,
-				doi: (cu) => {
-					canCo(L.triKhon.goiApi, cu);
-					const j = JSON.parse(cu);
-					j.dependencies = {
-						...j.dependencies,
-						ai: "^7.0.0",
-						"context.dev": "2.10.0",
-					};
-					return { moi: JSON.stringify(j, null, "\t"), ghim: null };
-				},
-			},
-			chenDau(
-				"apps/api/src/okr/soan.service.ts",
-				'import ContextDev from "context.dev";',
+			goiCo(L.triKhon.goiApi, "api", { ai: "^7.0.0", "context.dev": "2.10.0" }),
+			tepMoi(
+				`${THU.api}/khai-roi-nhap.ts`,
+				'import ContextDev from "context.dev";\nexport const thu = ContextDev;\n',
 			),
 		],
 	},
 	{
-		ten: "nen-doi-chu-thich-cung-so-dem",
-		luat: L.chuThich.ten,
-		tep: "apps/api/src/create-app.ts",
-		doi: (cu) => {
-			canCo("apps/api/src/create-app.ts", cu);
-			const dong = cu.split("\n");
-			const i = dong.findIndex(
-				(d) => d.trim().startsWith("//") && !L.chuThich.chiThi.test(d.trim()),
-			);
-			if (i === -1) khongDo("pha: create-app.ts khong con chu thich nen");
-			dong[i] = dong[i].replace(/\/\/.*$/, "// thu doi chu thich khac");
-			return {
-				moi: dong.join("\n"),
-				ghim: `apps/api/src/create-app.ts:${i + 1}`,
-			};
-		},
+		ten: "api-nhap-dong-agent",
+		luat: L.triKhon.ten,
+		...tepMoi(
+			`${THU.api}/nhap-dong.ts`,
+			'export const thu = () => import("../../../agent/agent/lib/x");\n',
+		),
+	},
+	{
+		ten: "record-unknown",
+		luat: L.kieuLong.ten,
+		...tepMoi(
+			`${THU.chung}/record.ts`,
+			"export type Thu = Record<string, unknown>;\n",
+		),
+	},
+	{
+		ten: "as-unknown-as",
+		luat: L.kieuLong.ten,
+		...tepMoi(
+			`${THU.chung}/ep-kep.ts`,
+			"export const thu = 1 as unknown as string;\n",
+		),
+	},
+	{
+		ten: "thoi-luong-ngoai-cau-hinh",
+		luat: L.hangSo.ten,
+		...tepMoi(`${THU.chung}/thoi-luong.ts`, "export const thu = 4 * 60_000;\n"),
+	},
+	{
+		ten: "thoi-luong-giay-nhan-phut",
+		luat: L.hangSo.ten,
+		...tepMoi(
+			`${THU.api}/thoi-luong.ts`,
+			"export const thu = 5 * 60 * 1000;\n",
+		),
+	},
+	{
+		ten: "doi-chung-thoi-luong-trong-config",
+		luat: L.hangSo.ten,
+		xanh: true,
+		...tepMoi(`${THU.chung}/thu-config.ts`, "export const thu = 4 * 60_000;\n"),
+	},
+	{
+		ten: "doi-chung-don-vi-tuan",
+		luat: L.hangSo.ten,
+		xanh: true,
+		...tepMoi(
+			`${THU.chung}/don-vi.ts`,
+			"export const tuanMs = 7 * 24 * 60 * 60 * 1000;\n",
+		),
+	},
+	{
+		ten: "thu-muc-components-ui",
+		luat: L.uiChung.ten,
+		...tepMoi(
+			`${THU.app}/components/ui/button.tsx`,
+			"export const Button = () => null;\n",
+		),
+	},
+	{
+		ten: "nhap-radix-ngoai-ui",
+		luat: L.uiChung.ten,
+		...tepMoi(
+			`${THU.app}/radix.tsx`,
+			'import { Dialog } from "radix-ui";\nexport const Thu = Dialog;\n',
+		),
+	},
+	{
+		ten: "components-json-tro-sai",
+		luat: L.uiChung.ten,
+		...tepMoi(
+			`${THU.app}/components.json`,
+			JSON.stringify({ aliases: { ui: "@/components/ui" } }, null, "\t"),
+		),
+	},
+	{
+		ten: "okr-nhap-agent",
+		luat: L.cachLy.ten,
+		buoc: [
+			neoAgent,
+			tepMoi(
+				`${THU.okr}/nhap.ts`,
+				'import { neo } from "../../../agent/agent/__do__/neo";\nexport const thu = neo;\n',
+			),
+		],
+	},
+	{
+		ten: "agent-nhap-okr",
+		luat: L.cachLy.ten,
+		buoc: [
+			neoOkr,
+			tepMoi(
+				`${THU.agent}/nhap.ts`,
+				'import { neo } from "../../../agent-okr/agent/__do__/neo";\nexport const thu = neo;\n',
+			),
+		],
+	},
+	{
+		ten: "okr-nhap-ten-goi-agent",
+		luat: L.cachLy.ten,
+		buoc: [
+			goiCo("apps/agent/package.json", "agent"),
+			neoAgent,
+			tepMoi(
+				`${THU.okr}/ten-goi.ts`,
+				'import { neo } from "agent/agent/__do__/neo";\nexport const thu = neo;\n',
+			),
+		],
 	},
 	{
 		ten: "khong-nap-duoc-typescript",
@@ -710,6 +723,9 @@ function lamPha(tam, ca) {
 	const daLam = [];
 	const hoan = () => {
 		for (const x of daLam.reverse()) x.hoan();
+		rmSync(join(tam, THU.chung, ".."), { recursive: true, force: true });
+		for (const d of [THU.api, THU.app, THU.okr, THU.agent])
+			rmSync(join(tam, d), { recursive: true, force: true });
 	};
 	try {
 		for (const buoc of ca.buoc ?? [ca]) daLam.push(lamBuoc(tam, buoc));
@@ -718,6 +734,13 @@ function lamPha(tam, ca) {
 		throw e;
 	}
 	return { hoan, ghim: daLam.at(-1).ghim };
+}
+
+function ganNen(them) {
+	const nen = { ...LUAT_KHO_CAY.nen };
+	for (const [luat, tep] of Object.entries(them ?? {}))
+		nen[luat] = { ...nen[luat], ...tep };
+	return nen;
 }
 
 function mauLuat(kq) {
@@ -729,14 +752,21 @@ function chamPha(ca, ghim, kq, mauGoc) {
 		return kq === null ? "exit 2" : `KHONG BAT: van do duoc (ma ${kq.ma})`;
 	if (kq === null) return "KHONG BAT: khong do duoc";
 	const l = kq.luat.find((x) => x.ten === ca.luat);
-	const trungGhim = l.moi.find((v) => `${v.tep}:${v.so}` === ghim);
+	if (l.vang.length > 0)
+		return `KHONG BAT: ${ca.luat} khong ap dung, ${l.vang.join(", ")} vắng`;
 	const khac = kq.luat.filter(
-		(x) => x.ten !== ca.luat && x.moi.length > 0 !== mauGoc[x.ten],
+		(x) => x.ten !== ca.luat && x.moi.length > 0 && !mauGoc[x.ten],
 	);
 	if (khac.length > 0)
 		return `KHONG BAT: luat khac doi mau ${khac.map((x) => x.ten).join(", ")}`;
-	if (ca.xanh)
-		return trungGhim ? `KHONG BAT: do gia ${ghim}` : `khong do tai ${ghim}`;
+	if (ca.xanh) {
+		const tep = ghim.slice(0, ghim.lastIndexOf(":"));
+		const gia = l.moi.filter((v) => v.tep === tep);
+		return gia.length > 0
+			? `KHONG BAT: do gia ${gia.map((v) => `${v.tep}:${v.so}`).join(", ")}`
+			: `khong do trong ${tep}`;
+	}
+	const trungGhim = l.moi.find((v) => `${v.tep}:${v.so}` === ghim);
 	return trungGhim
 		? `exit ${kq.ma} · DO ${ca.luat}: ${ghim} ${trungGhim.chu}`
 		: `KHONG BAT: ${ca.luat} khong nem ${ghim}`;
@@ -750,7 +780,7 @@ function thuThieuTs(tam) {
 		const { NODE_PATH, ...env } = process.env;
 		const r = spawnSync(
 			process.execPath,
-			[join(rieng, "do-cay.mjs"), "--goc", tam],
+			[join(rieng, "do-cay.mjs"), "--chi-do", tam],
 			{ encoding: "utf8", env },
 		);
 		const dong = (r.stdout ?? "")
@@ -764,35 +794,32 @@ function thuThieuTs(tam) {
 	}
 }
 
-function chieuDo(mauGoc, inRa) {
-	const tam = chepGuong();
+function chamMotPha(tam, ca, mauGoc) {
+	if (ca.thieuTs) return thuThieuTs(tam);
+	let lam;
+	try {
+		lam = lamPha(tam, ca);
+	} catch (e) {
+		if (!(e instanceof KhongDo)) throw e;
+		return `KHONG BAT: ${e.message}`;
+	}
+	let kq = null;
+	try {
+		kq = ketQua(tam, ganNen(ca.nenThem));
+	} catch (e) {
+		if (!(e instanceof KhongDo)) throw e;
+	} finally {
+		lam.hoan();
+	}
+	return chamPha(ca, lam.ghim, kq, mauGoc);
+}
+
+function chieuDo(goc, mauGoc, inRa) {
+	const tam = chepGuong(goc);
 	let bat = 0;
 	try {
 		for (const ca of PHA) {
-			if (ca.thieuTs) {
-				const cham = thuThieuTs(tam);
-				const dung = !cham.startsWith("KHONG BAT");
-				if (dung) bat += 1;
-				inRa(`${dung ? "DUNG" : "SAI"} pha-${ca.ten}: ${cham}`);
-				continue;
-			}
-			let lam;
-			try {
-				lam = lamPha(tam, ca);
-			} catch (e) {
-				if (!(e instanceof KhongDo)) throw e;
-				inRa(`SAI pha-${ca.ten}: ${e.message}`);
-				continue;
-			}
-			let kq = null;
-			try {
-				kq = ketQua(tam);
-			} catch (e) {
-				if (!(e instanceof KhongDo)) throw e;
-			} finally {
-				lam.hoan();
-			}
-			const cham = chamPha(ca, lam.ghim, kq, mauGoc);
+			const cham = chamMotPha(tam, ca, mauGoc);
 			const dung = !cham.startsWith("KHONG BAT");
 			if (dung) bat += 1;
 			inRa(`${dung ? "DUNG" : "SAI"} pha-${ca.ten}: ${cham}`);
@@ -803,6 +830,20 @@ function chieuDo(mauGoc, inRa) {
 	return bat;
 }
 
+function chayDu(goc) {
+	const kq = ketQua(goc);
+	inKetQua(kq, (d) => console.log(d));
+	console.log(`goi cam trong ${L.triKhon.api}: ${kq.cam.join(", ")}`);
+	const bat = chieuDo(goc, mauLuat(kq), (d) => console.log(`chieu do -> ${d}`));
+	const duPha = bat === PHA.length;
+	const ma = duPha ? kq.ma : 2;
+	const apDung = kq.luat.filter((l) => l.vang.length === 0);
+	console.log(
+		`KET LUAN: cay ${kq.ma === 0 ? "xanh" : "do"} (${apDung.filter((l) => l.moi.length === 0).length}/${apDung.length} luat ap dung xanh, ${kq.luat.length - apDung.length} khong ap dung), chieu do ${bat}/${PHA.length}${duPha ? "" : " — thuoc hong, khong tin duoc"} — ma thoat ${ma}`,
+	);
+	return ma;
+}
+
 function main() {
 	const [, , cheDo, duong] = process.argv;
 	try {
@@ -811,21 +852,13 @@ function main() {
 			console.log(JSON.stringify(nenTuCay(ketQua(duong, {})), null, "\t"));
 			return 0;
 		}
-		if (cheDo === "--goc" || cheDo === "--tho") {
+		if (cheDo === "--chi-do" || cheDo === "--tho") {
 			const kq = ketQua(duong, cheDo === "--tho" ? {} : LUAT_KHO_CAY.nen);
 			inKetQua(kq, (d) => console.log(d));
 			return kq.ma;
 		}
-		const kq = ketQua(GOC);
-		inKetQua(kq, (d) => console.log(d));
-		console.log(`goi cam trong ${L.triKhon.api}: ${kq.cam.join(", ")}`);
-		const bat = chieuDo(mauLuat(kq), (d) => console.log(`chieu do -> ${d}`));
-		const duPha = bat === PHA.length;
-		const ma = duPha ? kq.ma : 2;
-		console.log(
-			`KET LUAN: cay ${kq.ma === 0 ? "xanh" : "do"} (${kq.luat.filter((l) => l.moi.length === 0).length}/${kq.luat.length} luat xanh), chieu do ${bat}/${PHA.length}${duPha ? "" : " — thuoc hong, khong tin duoc"} — ma thoat ${ma}`,
-		);
-		return ma;
+		if (cheDo === "--goc") return chayDu(duong);
+		return chayDu(GOC);
 	} catch (e) {
 		const lyDo = e instanceof KhongDo ? e.message : `loi bat ngo: ${e.message}`;
 		console.log(`KHONG DO DUOC: ${lyDo}`);

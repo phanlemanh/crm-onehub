@@ -21,6 +21,7 @@ export const LUAT_KHO_CAY = {
 		triKhon: {
 			ten: "tri-khon-o-agent",
 			api: "apps/api",
+			canThuMuc: ["apps/api"],
 			goiApi: "apps/api/package.json",
 			goiCam: [
 				"ai",
@@ -76,6 +77,7 @@ export const LUAT_KHO_CAY = {
 		},
 		cachLy: {
 			ten: "cach-ly-hai-agent",
+			canThuMuc: ["apps/agent", "apps/agent-okr"],
 			cap: [
 				{ tu: "apps/agent-okr", den: "apps/agent" },
 				{ tu: "apps/agent", den: "apps/agent-okr" },
@@ -190,4 +192,5 @@ export const LUAT_KHO_CAY = {
 		},
 	},
 	tienToTam: "luat-kho-cay-",
+	thuMucThu: "__do__",
 };
