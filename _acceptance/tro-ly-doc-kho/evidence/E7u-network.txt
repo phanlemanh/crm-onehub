@@ -1,4 +1,4 @@
-E7u network truth: n-a (driver)
-Driver = Playwright script (man-hoi.mjs via mot-luot.sh -> tien-de.mjs phien do rieng); khong co tool doc network/console tu browser tool ben ngoai.
-Phien do: app localhost:4255, api localhost:4624 (cong tu do, tu dong dung/don).
-Run chinh: exit 0, 6 dong 'buoc N: dat', 'man-hoi: dat'. Chieu do: 'buoc 1: khong thay tab Hỏi', ma 1, 'DO DUNG GHIM'.
+E7u network truth: driver = playwright chay trong rang/man-hoi.mjs (qua man-lib.mjs), khong phai browser tool co read_network_requests.
+networkObserved: n-a (driver) - khong co dump request/console tho tu driver.
+Run 2026-10-02 (verifier doc lap): mot-luot.sh -> phien do crm_frosty_hermann_f35b13_do, app :4425, api :4300; man-hoi: dat, phien-do xong ma 0; 6 buoc dat.
+Chieu do --chieu-do: phien do crm_tlk_man_hoi_chieu_do_do app :4599 api :4161; in "buoc 1: khong thay tab Hỏi", ma 1, "DO DUNG GHIM".

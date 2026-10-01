@@ -5,7 +5,7 @@ slug: tro-ly-doc-kho
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-01-tro-ly-doc-kho-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-01

@@ -1,131 +1,95 @@
-# Review findings: tro-ly-doc-kho (round 3)
+# Review findings: tro-ly-doc-kho (round 4)
 
 ## Trong hợp đồng
 
-- **Shape 1 (measures the helper/config, not the output): E12 ZDR never runs the tro_ly_kho model, only modelTaiLieu() directly**
-  AC: AC-12
-  file:line: `apps/agent/test/tro-ly-kho-ranh-gioi.spec.ts:200`
-  severity: high
-  source: measurement
-  detail: E12 promises "Chay mot phien tren model gia ghi lai params: moi loi goi co providerOptions.gateway.zeroDataRetention === true". The test at lines 200-235 calls `modelTaiLieu("hoi", env, tao)` itself and runs one bare `doGenerate({prompt: []})` on it. The only check on the real agent is line 193: `troLyKho.model.fallback === TAI_LIEU_AGENT.hoi.maModel`. agent.ts declares `model: defineDynamic({ fallback: maModel, events: { "step.started": () => modelTaiLieu("hoi") } })`, and the test never calls that `step.started` resolver and never runs a session. Failing case: change agent.ts so step.started returns the bare string `TAI_LIEU_AGENT.hoi.maModel`, or drop the events key so the plain fallback id is used. Every production call then goes out without ZDR, and all of tlk-ranh-gioi stays green. Only the call that `daGoi[0]` records is checked, and it is the test's own call, not a call the agent made.
-  rationale: AC-12 hứa chạy một phiên trên model giả và mọi lời gọi model mang ZDR; phép đo chỉ gọi hàm dựng model trực tiếp, nên đổi cách agent chọn model vẫn xanh, tức AC-12 chưa được chứng minh.
+(không có)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **nop_tra_loi and the other tro_ly_kho tools hardcode limits that TAI_LIEU_HOI already owns, and they disagree with it**
-  Người dùng thấy gì: Một số giới hạn độ dài của trợ lý kho nằm rải ở nhiều chỗ và có chỗ lệch nhau. Sau này chỉnh giới hạn ở một nơi có thể quên nơi khác, nhưng hiện chưa làm người dùng thấy sai.
+- **nop_tra_loi tool schema hardcodes caps that duplicate TAI_LIEU_HOI.trich**
+  Người dùng thấy gì: Giới hạn số câu và độ dài đoạn trích của trợ lý đang ghi ở hai chỗ. Nếu sau này ai đó đổi một chỗ mà quên chỗ kia, trợ lý sẽ bị từ chối với thông báo chung chung thay vì lời giải thích rõ; hôm nay mọi thứ vẫn chạy đúng.
   file: `apps/agent/agent/subagents/tro_ly_kho/tools/nop_tra_loi.ts`
+  severity: medium
+  Đề xuất: wont-fix
+
+- **Ask tab shows Vietnamese-only sentences in English, skipping taiLieuMessages(locale)**
+  Người dùng thấy gì: Người dùng chọn giao diện tiếng Anh vẫn thấy câu từ chối, câu báo lỗi và cảnh báo trang quá hạn bằng tiếng Việt, xen giữa các nhãn tiếng Anh. Nội dung vẫn đúng, chỉ lệch ngôn ngữ.
+  file: `apps/app/app/(app)/[slug]/tai-lieu/hoi-tra-loi.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **New tai-lieu mutations refresh the cache by listing query keys at the call site instead of going through useCrmCache**
-  Người dùng thấy gì: Sau khi đặt hạn xác minh cho một trang, tab Sức khoẻ đang mở sẵn có thể chưa hiện trang đó trong mục Quá hạn xác minh cho tới khi tải lại trang.
-  file: `apps/app/app/(app)/[slug]/tai-lieu/suc-khoe-viec.tsx`
-  severity: medium
-  Đề xuất: new-contract
-
-- **MA_LOI_MAY_CHU = 500 and the 'server message or generic' error logic are copied into four new files**
-  Người dùng thấy gì: Cùng một đoạn xử lý thông báo lỗi bị chép ở bốn màn Kho tài liệu. Người dùng không thấy khác biệt; chỉ tốn công bảo trì.
-  file: `apps/app/app/(app)/[slug]/tai-lieu/hoi.tsx`
+- **HE_SO_NFD declared a second time instead of reusing the area config**
+  Người dùng thấy gì: Một hệ số giới hạn độ dài câu hỏi được khai hai lần. Nếu ai đó đổi một nơi, giới hạn câu hỏi và ghi chú có thể lệch giới hạn chung của Kho tài liệu; hôm nay hai giá trị đang bằng nhau.
+  file: `apps/api/src/tai-lieu/tai-lieu-hoi.contracts.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **The stored taiLieuHoi.lyDo shape is parsed by separate local schemas in the API and the agent, not one exported parser**
-  Người dùng thấy gì: Lý do một câu hỏi bị từ chối hoặc lỗi được đọc theo hai cách viết riêng ở hai nơi. Nếu sau này đổi danh sách lý do mà quên một nơi, câu hỏi có thể báo lỗi lạ.
-  file: `apps/api/src/tai-lieu/tai-lieu-hoi.service.ts`
-  severity: low
-  Đề xuất: known-limits
-
-- **Some «Ask» tab text comes from Vietnamese-only constants in @crm/validation, skipping the en/vi message catalog**
-  Người dùng thấy gì: Người dùng chọn tiếng Anh vẫn thấy câu từ chối, câu báo lỗi và cảnh báo quá hạn bằng tiếng Việt trong tab Hỏi.
-  file: `apps/app/app/(app)/[slug]/tai-lieu/hoi-tra-loi.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-- **Câu hỏi kho bị xếp sau cả lượt drainAll, hết hạn 3 phút trước khi kịp gửi**
-  Người dùng thấy gì: Khi hệ thống đang bận xử lý nhiều việc nền, câu hỏi vừa gõ ở tab Hỏi hoặc qua Zalo có thể chờ quá lâu và chỉ nhận lại câu Chưa trả lời được lúc này dù trang có đáp án.
-  file: `apps/agent/agent/channels/crm.ts`
+- **tro_ly_kho is offered to every root session but always fails outside a kho/Zalo question**
+  Người dùng thấy gì: Khi nhân viên hỏi về quy định ngay trong khung chat riêng của CRM, trợ lý có thể thử chuyển sang trợ lý kho rồi thất bại sau vài giây, tốn chi phí mà không trả lời được. Hỏi quy định hiện chỉ chạy đúng ở tab Hỏi và ở Zalo.
+  file: `apps/agent/agent/subagents/tro_ly_kho/instructions.ts`
   severity: medium
   Đề xuất: new-contract
 
-- **Hook đóng câu và hook ghi chi phí của trợ lý kho chỉ log error.name, mất nguyên nhân**
-  Người dùng thấy gì: Khi việc đóng câu hỏi hoặc ghi chi phí bị hỏng, người vận hành không có đủ thông tin trong log để biết vì sao.
-  file: `apps/agent/agent/hooks/dong-tro-ly-kho.ts`
-  severity: low
-  Đề xuất: known-limits
-
-- **drainHoiKho nuốt lý do từ chối của guiHoiKho**
-  Người dùng thấy gì: Khi một câu hỏi không mở được phiên trả lời, người dùng thấy Chưa trả lời được nhưng người vận hành không có dấu vết nào để tìm nguyên nhân.
+- **drainHoiKho drops the error from every failed send**
+  Người dùng thấy gì: Khi trợ lý không gửi được câu hỏi đi, nhân viên chỉ thấy câu chung chung là chưa trả lời được lúc này. Người vận hành không có dấu vết nào cho biết vì sao, nên khó tìm nguyên nhân khi lỗi lặp lại.
   file: `apps/agent/agent/lib/tai-lieu-hoi-phien.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Nút Thử lại sau khi «Hỏi lại» thất bại gửi nội dung ô nhập, không gửi câu đang hỏi lại**
-  Người dùng thấy gì: Nếu bấm Hỏi lại mà gặp lỗi mạng, nút Thử lại có thể không làm gì, hoặc gửi nhầm câu đang soạn dở thay cho câu cần hỏi lại.
-  file: `apps/app/app/(app)/[slug]/tai-lieu/hoi.tsx`
+- **Close and spend hooks log only error.name and drop the message**
+  Người dùng thấy gì: Nếu việc đóng câu hỏi hoặc ghi chi phí hỏng, nhật ký chỉ ghi tên lỗi chung chung nên khó biết lý do. Câu hỏi sẽ tự đóng là quá hạn sau ba phút, và chi phí có thể bị đếm thiếu mà không ai hay.
+  file: `apps/agent/agent/hooks/dong-tro-ly-kho.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Lỗi workspace.get bị .catch(() => null) làm tab Hỏi biến mất không báo**
-  Người dùng thấy gì: Nếu lúc mở Kho tài liệu có một lỗi tạm thời, tab Hỏi biến mất mà không có thông báo, người dùng tưởng mình mất quyền hỏi.
-  file: `apps/app/app/(app)/[slug]/tai-lieu/page.tsx`
+- **3-minute qua-han deadline starts at ask time, but the subagent's 3-minute timeout starts at send**
+  Người dùng thấy gì: Nếu câu hỏi phải chờ hàng đợi một lúc, trợ lý còn ít hơn ba phút để trả lời. Hiếm khi một câu trả lời đúng đã soạn xong vẫn bị bỏ vì đã quá hạn, người hỏi nhận câu chưa trả lời được lúc này.
+  file: `apps/agent/agent/lib/tai-lieu-hoi-phien.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 1 (Đo CHỈ DẪN thay vì ĐẦU RA) / Shape 4 (assertion that cannot fail): E15 red run exits 1 only because the 3-question set has no 'khong-co' questions**
-  Người dùng thấy gì: Kiểm tra chứng minh bộ chấm biết báo đỏ khi trợ lý trả lời sai trang thực ra luôn đỏ vì bộ câu thử thiếu câu phải từ chối, nên chưa chứng minh được bộ chấm bắt lỗi trong bộ câu thật.
-  file: `_acceptance/tro-ly-doc-kho/bo-do/chieu-do-3-cau.json`
-  severity: high
-  Đề xuất: new-contract
+- **Hình dạng 3 — assert «chuỗi có mặt» trong khi lời hứa E4(ii) là QUAN HỆ thứ tự ganNhat == 2 slug đầu của search_pages**
+  Người dùng thấy gì: Phép kiểm cho danh sách trang gần nhất chỉ xác nhận có mặt trang đúng, không xác nhận đúng thứ tự tìm được. Nếu sau này thứ tự trang gợi ý bị đảo, phép kiểm vẫn báo xanh.
+  file: `apps/agent/test/tro-ly-kho-nop.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
 
-- **Shape 4 (assertion that cannot fail): E12 'result to the root agent has no page text' is built from hoiId only**
-  Người dùng thấy gì: Bài kiểm tra không thể phát hiện nếu kết quả trợ lý kho trả về agent chính có lẫn chữ trong trang; việc chặn hiện dựa vào lớp lọc khác.
+- **Hình dạng 4 — khẳng định âm-tính một mình, không thể đỏ: kết quả gửi agent gốc không chứa NOIDUNG-TRANG-MOC**
+  Người dùng thấy gì: Phép kiểm khẳng định trợ lý kho không trả nội dung trang về cho trợ lý chính thực ra không thể báo đỏ, vì dữ liệu vào của nó không bao giờ chứa nội dung đó. Việc không rò chữ trang hiện chỉ được bảo đảm một phần.
   file: `apps/agent/test/tro-ly-kho-ranh-gioi.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 4 (assertion that cannot fail): E8 cases (1) and (3) never measure the root agent's routing, so 'no TaiLieuHoi row for c3' is vacuous**
-  Người dùng thấy gì: Bài kiểm tra Zalo không thật sự thử việc bot tự nhận ra câu về quy định hay câu về thoả thuận, nên chưa chứng minh được bot chuyển đúng loại câu.
+- **Hình dạng 3 — chỉ assert hàng có mặt, trong khi lời hứa E8 là quan hệ thứ tự (hàng có TRƯỚC lời gọi model đầu tiên và TRƯỚC search_pages)**
+  Người dùng thấy gì: Phép kiểm chỉ xác nhận hàng nhật ký câu hỏi Zalo có được tạo, chứ không xác nhận nó được tạo trước khi trợ lý bắt đầu đọc kho. Nếu thứ tự bị đổi, câu hỏi Zalo có thể không được ghi đúng lúc mà phép kiểm không báo.
   file: `apps/agent/test/tro-ly-kho-zalo.integration.spec.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 3 (asserts presence while the promise is a relation): E4 case (ii) checks 'contains hoaHong' instead of 'ganNhat == search_pages results in order'**
-  Người dùng thấy gì: Danh sách trang gần nhất kèm câu từ chối có thể sai thứ tự hoặc thiếu trang mà bài kiểm tra vẫn không phát hiện.
-  file: `apps/agent/test/tro-ly-kho-nop.spec.ts`
-  severity: medium
+- **Hình dạng 3 — trong E7u bước 2, «ý trả lời» và «đoạn trích» là cùng một chuỗi, nên assert có mặt không tách được hai giá trị**
+  Người dùng thấy gì: Phép kiểm màn Hỏi không phân biệt được phần ý trả lời với phần đoạn trích vì dữ liệu giả cho hai phần giống hệt nhau. Nếu màn bỏ mất dòng ý trả lời, phép kiểm vẫn qua.
+  file: `_acceptance/tro-ly-doc-kho/rang/man-hoi.mjs`
+  severity: low
   Đề xuất: known-limits
 
-- **Shape 3 (relation promised, presence asserted): E5 uses one owner for all four pages, so 'the name of THIS page's owner' cannot be told apart**
-  Người dùng thấy gì: Bài kiểm tra cảnh báo quá hạn dùng cùng một chủ trang cho mọi trang, nên không bắt được lỗi nêu nhầm tên chủ trang khác.
-  file: `apps/agent/test/tro-ly-kho-nop.spec.ts`
-  severity: medium
+- **Hình dạng 4 — chiều đỏ của E15 thoát mã 1 bất kể slug có bị đổi hay không (mẫu số rỗng)**
+  Người dùng thấy gì: Phép thử chứng minh script chấm bộ câu đo biết báo lỗi luôn báo lỗi với bất kỳ bộ ba câu nào, kể cả khi dữ liệu đúng. Nó không chứng minh được script thật sự phát hiện sai trang.
+  file: `_acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts`
+  severity: low
   Đề xuất: known-limits
 
-- **Shape 2 (hand-written fixture in the reader's shape): ctxConCua invents `session.parent`, which real eve child contexts do not have**
-  Người dùng thấy gì: Bài kiểm tra các công cụ của trợ lý kho dùng ngữ cảnh phiên không giống thật, nên một số lỗi nhận biết phiên con có thể lọt qua.
-  file: `apps/agent/test/support/tro-ly-kho-gia.ts`
-  severity: medium
+- **Hình dạng 2 — fixture viết tay theo khuôn của bên đọc, mang trường `goc` mà khuôn của bên ghi (taiLieuHoiKetQuaOutput) không có**
+  Người dùng thấy gì: Một vế trong phép kiểm màn Hỏi đo một trường dữ liệu không bao giờ tới được trình duyệt. Hành vi thật của màn không bị ảnh hưởng, chỉ là phép kiểm có một chỗ thừa.
+  file: `apps/app/test/tai-lieu-hoi.dom.tsx`
+  severity: low
   Đề xuất: wont-fix
 
-- **Shape 4 (negative assertion alone, no pinned message): E10 and E11 negative cells carry none of the contract's red pins**
-  Người dùng thấy gì: Khi bài kiểm tra quyền xem câu chưa trả lời được hoặc báo sai đỏ, thông báo lỗi không nói rõ lỗi nào, khó đối chiếu với hợp đồng.
-  file: `apps/api/test/tai-lieu-hoi-suc-khoe.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Shape 5 (claims the full matrix, asserts a subset): E9 promises non-null tokenVao/tokenRa/chiPhiUsd/nhanKhoa on the 4 TRA_LOI rows, and the test never asserts it**
-  Người dùng thấy gì: Bài kiểm tra nhật ký hỏi không kiểm tra từng câu trả lời có ghi token, chi phí và nhãn khoá, nên thiếu số liệu chi phí có thể không bị phát hiện.
+- **Hình dạng 4 — khẳng định «log không mang chữ câu hỏi» bỏ trống với 9/10 chuỗi: chúng được gieo thẳng vào DB, không đi qua đường nào có log**
+  Người dùng thấy gì: Lời hứa nhật ký không chứa chữ câu hỏi chỉ được thử thật trên một trong mười câu mẫu. Chưa thấy câu hỏi nào lọt vào nhật ký, nhưng phần lớn các đường khác chưa được kiểm.
   file: `apps/api/test/tai-lieu-hoi.spec.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 5 (matrix cell asserts fewer properties than promised): E2 never compares duyetLuc or xacMinhDen, and there is no 5-cell count**
-  Người dùng thấy gì: Bài kiểm tra đọc trang không kiểm tra ngày duyệt và hạn xác minh trả về, nên sai ngày trong câu trả lời có thể không bị phát hiện.
-  file: `apps/agent/test/tro-ly-kho-tim-doc.spec.ts`
-  severity: low
-  Đề xuất: known-limits
-
-⚠ Cụm ngoài vùng phủ: 2/20 lỗi rơi vào file không bộ đo nào phủ (apps/agent/agent/channels/crm.ts, apps/agent/test/support/tro-ly-kho-gia.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
