@@ -222,6 +222,27 @@ export async function donTaiLieu(where: {
 		select: { id: true },
 	});
 	const trangId = { in: trang.map((t) => t.id) };
+	const cuaNguoiThu = { startsWith: TIEN_TO };
+	await db.taiLieuBaoSai.deleteMany({
+		where: {
+			OR: [
+				{ trangId },
+				{ nguoiBaoId: cuaNguoiThu },
+				{ hoi: { nguoiHoiId: cuaNguoiThu } },
+			],
+		},
+	});
+	const hoi = await db.taiLieuHoi.findMany({
+		where: { nguoiHoiId: cuaNguoiThu },
+		select: { id: true },
+	});
+	await db.agentTask.deleteMany({
+		where: {
+			kind: "hoi-kho",
+			OR: hoi.map((h) => ({ payload: { path: ["hoiId"], equals: h.id } })),
+		},
+	});
+	await db.taiLieuHoi.deleteMany({ where: { nguoiHoiId: cuaNguoiThu } });
 	await db.taiLieuLienKet.deleteMany({ where: { tuTrangId: trangId } });
 	await db.taiLieuSuKien.deleteMany({ where: { trangId } });
 	await db.taiLieuTrang.updateMany({

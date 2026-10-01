@@ -47,6 +47,7 @@
 		"./slack-inventory": "./src/slack-inventory.ts",
 		"./tai-lieu-de-xuat": "./src/tai-lieu-de-xuat.ts",
 		"./tai-lieu-nhac": "./src/tai-lieu-nhac.ts",
+		"./tai-lieu-hoi": "./src/tai-lieu-hoi.ts",
 		"./tai-lieu-quyen": "./src/tai-lieu-quyen.ts",
 		"./tai-lieu-tim": "./src/tai-lieu-tim.ts",
 		"./tracking": "./src/tracking.ts",
