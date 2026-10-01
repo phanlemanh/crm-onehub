@@ -3,6 +3,9 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
 
+const MIEN_BO_MAU =
+	/đối tác|thanh toán|công nợ|tạm ứng|chuyến|giao hàng|kho hàng|kho lạnh|vận chuyển|hỗ trợ/iu;
+
 const LOI_DAN = readFileSync(
 	join(import.meta.dir, "..", "agent", "instructions.md"),
 	"utf8",
@@ -59,6 +62,21 @@ describe("lời dặn tĩnh sau lần chạy 6", () => {
 		);
 		const cap = phuongPhap.match(/^\s*- pair «[^»]+» with «[^»]+»\.?$/gm) ?? [];
 		expect(cap.length, "can dung mot cap vi du doi trong").toBe(1);
+		const hai = cap[0]?.match(/«([^»]+)»/g) ?? [];
+		expect(hai.length).toBe(2);
+		for (const nua of hai)
+			expect(nua, `vi du doi trong la dem viec: ${nua}`).not.toMatch(
+				/^«(Số|Thời gian)\s/u,
+			);
+	});
+
+	test("ví dụ trong lời dặn không lấy từ miền của bộ mẫu (hậu cần, tài chính, đối tác)", () => {
+		const viDu = muc("OKR method")
+			.split("\n")
+			.filter((d) => /^\s*- (not|pair) «/.test(d));
+		expect(viDu.length).toBe(2);
+		for (const d of viDu)
+			expect(d, `vi du trong mien bo mau: ${d}`).not.toMatch(MIEN_BO_MAU);
 	});
 
 	test("khởi điểm: cùng chỉ số mới lấy, kể cả số hiện tại của KR cấp trên; không bao giờ lấy đích", () => {
@@ -82,6 +100,7 @@ describe("lời dặn tĩnh sau lần chạy 6", () => {
 		expect(luat).toContain("part `1`");
 		expect(luat).toContain("The first Mục tiêu");
 		expect(luat).toContain("even when the person's priority lies elsewhere");
+		expect(luat).toContain("unless the person has already dropped it");
 		expect(luat).toContain("in this unit's own words");
 	});
 });
