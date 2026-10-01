@@ -121,8 +121,13 @@ Sheet: `duoiMucTieu` đầu khu bảng KR; `duoiKr`, `sauTenKr` như danh sách.
 | ST-mtkr-sheet | Sheet chi tiết | Vì sao lúc này · Góp vào · KR đánh số · «X% tính từ N KR» | sửa KR, thêm KR |
 | ST-mtkr-sheet-khong-ly-do | Sheet chi tiết | không có khu «Vì sao lúc này» khi `whyNow` trống | — |
 | ST-mtkr-cham | Chấm điểm | mục tiêu là hàng đầu bảng trong khung; KR đánh số; học + mang sang trong khung | chấm, ghi học |
+| ST-cuatoi-codulieu | Của tôi | `data-trang-thai` của vùng danh sách có dữ liệu (giữ nguyên) | — |
+| ST-donvi-danhsach | Theo đơn vị | `data-trang-thai` của vùng danh sách có dữ liệu (giữ nguyên) | — |
 | ST-cuatoi-rong | Của tôi | trạng thái rỗng sẵn có (giữ nguyên) | sang Theo đơn vị |
-| ST-mtkr-dang-tai | Của tôi, Theo đơn vị | khung xương sẵn có (giữ nguyên) | chờ |
+| ST-donvi-rong | Theo đơn vị | trạng thái rỗng sẵn có của đơn vị (giữ nguyên) | gán trưởng / đặt mục tiêu |
+| ST-donvi-dangtai | Của tôi, Theo đơn vị | khung xương sẵn có, dùng chung hai màn (giữ nguyên) | chờ |
+| ST-donvi-loi | Của tôi, Theo đơn vị | trạng thái lỗi sẵn có, nút «Thử lại» (giữ nguyên) | bấm Thử lại |
+| ST-donvi-chuakychay | Của tôi, Theo đơn vị | chưa có chu kỳ đang chạy (giữ nguyên) | quản trị mở chu kỳ |
 <!-- UX-STATE-TABLE>>> -->
 
 ### 4. Hành vi

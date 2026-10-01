@@ -67,8 +67,11 @@ Source input: prompt (phiên «Phân tích và hoàn thiện OKR», 02/10) + pro
   hàng hay khoảng trống thừa so với khi không có tính năng điểm cắm; When truyền đủ sáu điểm
   cắm, Then nội dung nằm đúng chỗ (cuối hàng nhãn tiêu đề; một hàng trước KR1; một hàng dính
   ngay dưới đúng KR không có vạch giữa; ngay sau tên KR), mở/thu nghe theo `dangMo`/`onDoiMo`,
-  và hàng mục tiêu mang `data-muc-tieu`, hàng KR mang `data-kr`.
-- AC-10: Given khung 375 px, When mở «Của tôi», «Theo đơn vị», sheet chi tiết và «Chấm điểm»,
+  và khối bao mỗi mục tiêu mang `data-muc-tieu` (đúng một khối mỗi mục tiêu), hàng mục tiêu
+  trong khối mang `data-hang-muc-tieu`, hàng KR mang `data-kr` và nằm trong đúng khối của mục tiêu
+  mình.
+- AC-10: Given khung 375 px và dữ liệu có ≥ 2 mục tiêu, mỗi mục tiêu ≥ 2 KR, cùng một chu kỳ
+  đang ở pha chấm điểm, When mở «Của tôi», «Theo đơn vị», sheet chi tiết và «Chấm điểm»,
   Then không màn nào tràn ngang (`scrollWidth == innerWidth`), và tiến độ của mục tiêu và KR
   nằm dưới tên chứ không thành cột riêng.
 - AC-11: Given các hồ sơ đã ký có eval đo những tệp vòng này sửa, When chạy lại các eval máy
@@ -78,7 +81,9 @@ Source input: prompt (phiên «Phân tích và hoàn thiện OKR», 02/10) + pro
   người chưa xem proto nhìn, Then họ chỉ ra đúng KR nào thuộc mục tiêu nào và tiến độ của mục
   tiêu là bao nhiêu mà không cần đọc mã. (judgment)
 - AC-13: Given «Của tôi» và «Theo đơn vị», When dữ liệu đang tải, tải lỗi hoặc rỗng, Then trạng
-  thái đang tải, lỗi (nút Thử lại) và rỗng sẵn có vẫn hiện như trước, cùng mã `data-trang-thai`.
+  thái đang tải, lỗi (nút Thử lại) và rỗng sẵn có vẫn hiện như trước, cùng mã `data-trang-thai`
+  đang có trên onehub (`ST-donvi-dangtai`, `ST-donvi-loi`, `ST-cuatoi-rong`, `ST-donvi-rong`,
+  `ST-donvi-chuakychay`), và nút Thử lại gọi tải lại đúng một lần.
 
 ## Coverage
 

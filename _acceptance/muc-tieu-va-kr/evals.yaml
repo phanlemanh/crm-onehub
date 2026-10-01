@@ -65,7 +65,7 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.mtkr_chua_co_kr
-    expected: "exit 0; mục tiêu keyResults rỗng: ngay sau hàng [data-muc-tieu] là hàng [data-chua-co-kr] mang chữ okrMessages('vi').chuaCoKr; ô tiến độ của hàng mục tiêu mang «Chưa có KR để tính»; không có [data-kr]. Đối chứng dương: mục tiêu có KR không có [data-chua-co-kr]. Chiều đỏ ghim: bản sao không vẽ hàng rỗng phải làm bài đỏ 'thieu hang chua co kr'."
+    expected: "exit 0; mục tiêu keyResults rỗng: trong khối [data-muc-tieu] của nó, ngay sau hàng [data-hang-muc-tieu] là hàng [data-chua-co-kr] mang chữ okrMessages('vi').chuaCoKr; ô tiến độ của hàng mục tiêu mang «Chưa có KR để tính»; không có [data-kr]. Đối chứng dương: mục tiêu có KR không có [data-chua-co-kr]. Chiều đỏ ghim: bản sao không vẽ hàng rỗng phải làm bài đỏ 'thieu hang chua co kr'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
 
@@ -106,7 +106,7 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.mtkr_diem_cam
-    expected: "exit 0; (a) BangMucTieu không điểm cắm: số tr trong tbody bằng đúng số mục tiêu + số KR (+ số hàng chưa-có-KR); (b) đủ sáu điểm cắm trả phần tử có data-test riêng: nhanMucTieu nằm trong ô tiêu đề hàng mục tiêu; duoiMucTieu là tr ngay trước hàng KR1; duoiKr là tr ngay sau đúng hàng KR được chọn và hàng KR đó mang data-joined; sauTenKr nằm trong ô tên KR; dangMo rỗng + onDoiMo ghi lời gọi → không hàng KR nào, bấm mũi tên gọi onDoiMo(id) đúng một lần; (c) cùng (b) cho bảng KR của ObjectiveSheet với duoiMucTieu, duoiKr, sauTenKr. Chiều đỏ ghim: hàm điểm cắm trả null phải cho số tr như (a) — bản sao vẽ tr rỗng khi null làm bài đỏ 'hang thua khi diem cam null'."
+    expected: "exit 0; (a) BangMucTieu không điểm cắm: số tr trong các tbody bằng đúng số mục tiêu + số KR (+ số hàng chưa-có-KR); số [data-muc-tieu] bằng đúng số mục tiêu; mỗi [data-kr] có closest('[data-muc-tieu]') mang đúng id mục tiêu của KR đó (ma trận toàn phần mọi KR của fixture, in số đã so); (b) đủ sáu điểm cắm trả phần tử có data-test riêng: nhanMucTieu nằm trong ô tiêu đề của hàng [data-hang-muc-tieu]; duoiMucTieu là tr ngay trước hàng KR1; duoiKr là tr ngay sau đúng hàng KR được chọn và hàng KR đó mang data-joined; sauTenKr nằm trong ô tên KR; dangMo rỗng + onDoiMo ghi lời gọi → không hàng KR nào, bấm mũi tên gọi onDoiMo(id) đúng một lần; (c) cùng (b) cho bảng KR của ObjectiveSheet với duoiMucTieu, duoiKr, sauTenKr. Chiều đỏ ghim: hàm điểm cắm trả null phải cho số tr như (a) — bản sao vẽ tr rỗng khi null làm bài đỏ 'hang thua khi diem cam null'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/app/(app)/[slug]/okr/diem-cam.ts", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
 
@@ -116,11 +116,11 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.mtkr_man_that
     steps:
-      - "Cùng phiên E1; khung 375×812"
-      - "Mở /okr, /okr/theo-don-vi, sheet chi tiết (bấm tên mục tiêu), /okr với xem=cham ở chu kỳ đang chấm; mỗi màn đo scrollWidth và innerWidth"
-      - "Mỗi hàng mục tiêu/KR: [data-o-tien-do] hiển thị nằm trong cùng ô với tên (closest('td') trùng), cột tiến độ riêng display:none"
-      - "Ảnh E13-375-<man> sáng và tối"
-    expected: "exit 0; ở 375 px, bốn màn: document.documentElement.scrollWidth == innerWidth; mỗi hàng mục tiêu và KR có đúng một [data-o-tien-do] đang hiển thị (offsetParent khác null) và nó nằm trong cùng td với tên. Ảnh evidence/E13-375-*.png. Chiều đỏ ghim: --kiem-do-do chèn một phần tử 500 px phải in 'tran ngang' và mã 1."
+      - "Cùng phiên E1; trong kho đo gieo thêm một chu kỳ ở pha chấm điểm có ≥ 2 mục tiêu, mỗi mục tiêu ≥ 2 KR, người đăng nhập chấm được (qua thủ tục OKR thật như bộ mẫu của khep-ky-okr)"
+      - "Khung 375×812; ma trận viết trước bốn màn {/okr, /okr/theo-don-vi, sheet chi tiết, chấm điểm}, mỗi màn số hàng tối thiểu {mục tiêu ≥ 2 (sheet: 1), KR ≥ 4 (sheet: 2)}"
+      - "Mỗi màn: đo scrollWidth và innerWidth; đếm hàng; ba màn đầu: mỗi hàng mục tiêu/KR có đúng một [data-o-tien-do] hiển thị cùng td với tên; chấm điểm: mỗi hàng mục tiêu có ô điểm hoặc «Đã chấm k/n» hiển thị, mỗi hàng KR có ô điểm hiển thị cùng td với tên"
+      - "Ảnh E13-375-<man>-<sang|toi>"
+    expected: "exit 0; ở 375 px, bốn màn: document.documentElement.scrollWidth == innerWidth; in số hàng đo mỗi màn, màn nào dưới mức tối thiểu đã khai thì in 'man rong: <man>' và mã 1; ba màn đầu: mỗi hàng mục tiêu và KR có đúng một [data-o-tien-do] hiển thị (offsetParent khác null) cùng td với tên; chấm điểm: ô điểm hoặc «Đã chấm k/n» hiển thị cùng td với tên. Ảnh evidence/E13-375-*.png. Chiều đỏ ghim: --kiem-do-do chèn một phần tử 500 px phải in 'tran ngang' và mã 1; --kiem-do-do-rong mở chấm điểm ở chu kỳ không đang chấm phải in 'man rong: cham' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
     paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs"]
 
@@ -128,9 +128,9 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.mtkr_ho_so_cham
-    expected: "exit 0; rang/ho-so-cham.mjs (theo mẫu tra-loi-tin-nhac, gốc suy từ vị trí script): B = merge-base(HEAD, origin/onehub); D = diff B..HEAD bỏ _acceptance/**; tập hồ sơ signed-off/machine-cleared (trừ chính hồ sơ này) có glob paths khớp một tệp của D — in tập và số (> 0); chạy repin-lane.mjs không --write trên tập ở HEAD và ở bản sao tại B; quan hệ: không eval nào đỏ ở HEAD mà xanh ở B (in từng eval đổi màu); eval đỏ ở cả hai in 'do san o B: <slug>/<E>' và không làm hỏng. Chiều đỏ ghim: chạy với cờ --kiem-do-do trên bản sao HEAD xoá thuộc tính data-muc-tieu khỏi hàng mục tiêu phải in 'hoi quy: <slug>/<E>' và mã 1 nếu có eval đã ký bám data-muc-tieu, hoặc in 'khong eval da ky nao bam data-muc-tieu' (khai, không phải xanh im)."
+    expected: "exit 0; rang/ho-so-cham.mjs (theo mẫu tra-loi-tin-nhac, gốc suy từ vị trí script) mang danh sách (hồ sơ, eval) VIẾT TRƯỚC rút từ mục «Móc DOM phải giữ» của design doc — gồm cả eval ui-check chạy bằng rang/*.mjs qua phiên đo (dat-okr-trong-crm E11 E12 E13 E20, so-okr-tu-chay E11 E12 E13, canh-kr-okr E11 E12 E13, khep-ky-okr E3 E4 E7, cap-nhat-tuan-okr E18 E29, gioi-han-duyet-cay-okr E15 E17, ux-lai-thu-8c-okr E2 E3 E5 E6 E9 E13 E14 E15, toan-canh-okr E2 E3 E7 E14 E23, no-sau-luot-5-okr E10, no-sau-luot-4-okr E8, khung-tao-okr-nhu-deal E2 E11 E12 E18 E22, hop-thoai-giu-cho-dang-nhap E8 E9, okr-soat-anh-luot-3 E1 E2 E12 E13, các eval soi-ma của thanh-vien-hai-khoi-cung-khuon) cộng mọi hồ sơ signed-off/machine-cleared khác có glob paths khớp diff merge-base..HEAD (in phần cộng thêm); chạy đúng cmd đã khai của từng eval ở HEAD và ở bản sao tại B = merge-base(HEAD, origin/onehub), tuần tự; in số eval đã chạy, phải bằng độ dài danh sách; quan hệ: không eval nào đỏ ở HEAD mà xanh ở B (eval đổi màu chạy lại một lần ở HEAD để lọc chập chờn, vẫn đỏ thì in 'hoi quy: <slug>/<E>' và mã 1); eval đỏ ở cả hai in 'do san o B: <slug>/<E>' và không làm hỏng. Chiều đỏ ghim, không lối thoát: cờ --kiem-do-do chạy cùng danh sách trên một bản sao HEAD đã xoá thuộc tính data-muc-tieu khỏi khoi-muc-tieu.tsx phải in ít nhất một dòng 'hoi quy: <slug>/<E>' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "packages/ui/src/components/simple-table.tsx", "_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "packages/ui/src/components/simple-table.tsx", "packages/ui/src/lib/row-accent.ts", "_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs"]
 
   - id: E15
     criterion: AC-12
@@ -140,10 +140,10 @@ evals:
       trên ảnh: những KR nào thuộc về nó, và tiến độ của mục tiêu là bao nhiêu? Có chỗ nào một KR
       trông như thuộc mục tiêu khác, hoặc tiến độ mục tiêu không thấy được không? So với ảnh bản cũ
       (E16-hien-tai), liên kết mục tiêu–KR rõ hơn hay không?
-    inputs: [_acceptance/muc-tieu-va-kr/evidence/E1-1440-sang.png, _acceptance/muc-tieu-va-kr/evidence/E1-1440-toi.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-theo-don-vi.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-sheet.png, _acceptance/muc-tieu-va-kr/evidence/E16-hien-tai.png]
+    inputs: [_acceptance/muc-tieu-va-kr/evidence/E1-1440-sang.png, _acceptance/muc-tieu-va-kr/evidence/E1-1440-toi.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-theo-don-vi-sang.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-theo-don-vi-toi.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-sheet-sang.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-sheet-toi.png, _acceptance/muc-tieu-va-kr/evidence/E16-hien-tai.png]
     expected: >-
       PASS khi với mọi mục tiêu trên ảnh, người chấm kể đúng tập KR của nó và đọc được % của nó, và
-      không có KR nào nằm lửng giữa hai mục tiêu; FAIL nêu ảnh và mục tiêu gây nhầm; UNCERTAIN khi thiếu ảnh.
+      không có KR nào nằm lửng giữa hai mục tiêu, ở cả ảnh sáng lẫn tối; FAIL nêu ảnh và mục tiêu gây nhầm; UNCERTAIN khi thiếu bất kỳ ảnh nào trong bảy ảnh.
     evidence_required: [run_id, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx"]
 
@@ -154,9 +154,9 @@ evals:
     cmd: config:executors.script.mtkr_man_that
     steps:
       - "Cùng phiên E1; 1440 px sáng/tối"
-      - "Mở /okr/theo-don-vi của đơn vị có ≥ 3 mục tiêu → ảnh E16-1440-theo-don-vi; mở sheet mục tiêu có whyNow + góp vào → ảnh E16-1440-sheet"
+      - "Mở /okr/theo-don-vi của đơn vị có ≥ 3 mục tiêu → ảnh E16-1440-theo-don-vi-<sang|toi>; mở sheet mục tiêu có whyNow + góp vào → ảnh E16-1440-sheet-<sang|toi> (mỗi theme một lượt)"
       - "Mở /proto/muc-tieu-va-kr?state=ST-hien-tai → ảnh E16-hien-tai (bản cũ để so)"
-    expected: "exit 0; ba ảnh tồn tại và không rỗng (kích thước tệp > 10 KB); sheet trong ảnh có [data-khu=vi-sao] và [data-khu=gop-vao] hiển thị. Chiều đỏ ghim: --kiem-do-do mở sheet của mục tiêu không có whyNow phải in 'thieu khu vi-sao trong anh' và mã 1."
+    expected: "exit 0; năm ảnh (theo-don-vi sáng/tối, sheet sáng/tối, hien-tai) tồn tại, mỗi ảnh > 10 KB, sha256 ảnh sáng khác ảnh tối của cùng màn (in hai cặp băm); sheet trong ảnh có [data-khu=vi-sao] và [data-khu=gop-vao] hiển thị. Chiều đỏ ghim: --kiem-do-do mở sheet của mục tiêu không có whyNow phải in 'thieu khu vi-sao trong anh' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs"]
 
@@ -164,7 +164,7 @@ evals:
     criterion: AC-13
     executor: test
     cmd: config:executors.test.mtkr_trang_thai_cu
-    expected: "exit 0; bài rút danh sách id ST-mtkr-* và ST-cuatoi-* từ bảng UX-STATE-TABLE của design doc lúc chạy (đường suy từ vị trí bài); mỗi id có đúng một ca dựng trạng thái đó và khẳng định chữ/điều khiển của dòng bảng; ST-mtkr-hep là bố cục, bài khai giao cho E13 (in 'giao E13: ST-mtkr-hep'); id trong bảng thiếu ca → đỏ 'thieu ca: <id>'; ca không có id → đỏ 'ca la: <id>'; riêng đang tải và lỗi: [data-trang-thai] mang đúng giá trị sẵn có và nút Thử lại gọi refetch. Chiều đỏ ghim: thêm dòng ST-mtkr-gia vào bản sao design doc phải làm bài đỏ 'thieu ca: ST-mtkr-gia'."
+    expected: "exit 0; bài rút danh sách id ST-mtkr-*, ST-cuatoi-* và ST-donvi-* từ bảng UX-STATE-TABLE của design doc lúc chạy (đường suy từ vị trí bài); mỗi id có đúng một ca dựng trạng thái đó và khẳng định chữ/điều khiển của dòng bảng; ST-mtkr-hep là bố cục, bài khai giao cho E13 (in 'giao E13: ST-mtkr-hep'); id trong bảng thiếu ca → đỏ 'thieu ca: <id>'; ca không có id → đỏ 'ca la: <id>'; mỗi dòng bảng mang mã data-trang-thai thật (ST-donvi-dangtai, ST-donvi-loi, ST-cuatoi-rong, ST-donvi-rong, ST-donvi-chuakychay, ST-cuatoi-codulieu, ST-donvi-danhsach) thì ca khẳng định đúng chuỗi đó trên [data-trang-thai] của màn; lỗi trên Của tôi và trên Theo đơn vị: bấm Thử lại → đếm đúng 1 lần gọi lại thủ tục đã lỗi trên từng màn. Chiều đỏ ghim: thêm dòng ST-mtkr-gia vào bản sao design doc phải làm bài đỏ 'thieu ca: ST-mtkr-gia'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md", "apps/app/app/(app)/[slug]/okr/cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
 

@@ -1,6 +1,6 @@
 ---
 slug: muc-tieu-va-kr
-at: 2026-10-01T23:55:00Z
+at: 2026-10-01T23:27:00Z
 route: http://localhost:3420/proto/muc-tieu-va-kr
 material: real-components
 context: host-embedded
