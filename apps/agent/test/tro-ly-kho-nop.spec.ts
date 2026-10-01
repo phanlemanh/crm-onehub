@@ -10,6 +10,7 @@ import {
 import { db } from "@crm/db";
 import { ghiKetQuaHoi } from "@crm/db/tai-lieu-hoi";
 import {
+	dungTraLoiZalo,
 	dungTuChoi,
 	parseGanNhat,
 	parseTraLoi,
@@ -17,7 +18,9 @@ import {
 } from "@crm/validation/tai-lieu-hoi";
 import { AgentTriggerService } from "../../api/src/agent/agent-trigger.service";
 import { TaiLieuHoiService } from "../../api/src/tai-lieu/tai-lieu-hoi.service";
+import { TaiLieuTimService } from "../../api/src/tai-lieu/tai-lieu-tim.service";
 import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
+import { ngayVnTuIso } from "../agent/lib/tai-lieu-hoi-zalo";
 import nopTraLoi from "../agent/subagents/tro_ly_kho/tools/nop_tra_loi";
 import searchPages from "../agent/subagents/tro_ly_kho/tools/search_pages";
 import {
@@ -30,6 +33,7 @@ import {
 	ma,
 	moHoiCrm,
 	type Nguoi,
+	taiLieu,
 	trangDaDuyet,
 	type VaoCongCu,
 } from "./support/tro-ly-kho-gia";
@@ -434,12 +438,7 @@ describe("tlk-qua-han", () => {
 				`## Q\n\nĐiều khoản số ${i} của trang.`,
 				chu,
 			);
-			await db.taiLieuTrang.update({
-				where: { id: t.trangId },
-				data: {
-					xacMinhDen: den === null ? null : new Date(`${den}T12:00:00+07:00`),
-				},
-			});
+			await taiLieu().datXacMinh(quanTri, { slug: t.slug, den });
 			trang.push({ ...t, i });
 		}
 		const h = await moHoiCrm(quanTri);
@@ -470,5 +469,29 @@ describe("tlk-qua-han", () => {
 			select: { name: true },
 		});
 		expect(quaHan[0]?.chuTrang).toBe(nguoiChu.name);
+
+		const cuaToi = new Set(trang.map((t) => t.slug));
+		const sk = await new TaiLieuTimService(
+			db,
+			new TaiLieuHoiService(db, new AgentTriggerService(db)),
+		).sucKhoe(quanTri);
+		const tuSucKhoe = sk.quaHan.rows
+			.map((r) => r.slug)
+			.filter((slug) => cuaToi.has(slug))
+			.sort();
+		expect(
+			`tlk-qua-han: suc khoe ${tuSucKhoe.join(",")}`,
+			"tlk-qua-han: canh bao lech danh sach Qua han xac minh",
+		).toBe(
+			`tlk-qua-han: suc khoe ${quaHan
+				.map((q) => q.slug)
+				.sort()
+				.join(",")}`,
+		);
+		const tin = dungTraLoiZalo(parseTraLoi(hang.traLoi), ngayVnTuIso);
+		expect(
+			tin,
+			"tlk-qua-han: dong canh bao khong co ngay 14/10/2026",
+		).toContain("quá hạn xác minh từ 14/10/2026");
 	});
 });
