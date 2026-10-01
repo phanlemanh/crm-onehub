@@ -299,6 +299,33 @@ describe("tlk-man-hoi", () => {
 		expect(daBao?.disabled).toBe(true);
 	});
 
+	test("tlk-man-hoi: chu y la chu thuong, khong dung link hay anh model viet", async () => {
+		const cau0 = TRA_LOI.traLoi.cau[0];
+		if (!cau0) throw new Error("tlk-man-hoi: thieu cau mau");
+		canh.ketQua = {
+			...TRA_LOI,
+			traLoi: {
+				...TRA_LOI.traLoi,
+				cau: [
+					{
+						...cau0,
+						chu: "Xem [ở đây](https://ngoai.test/x) ![ảnh](https://ngoai.test/a.png) nhé.",
+					},
+				],
+			},
+		};
+		const goc = await mo(<HoiKho />);
+		await hoiGoiY(goc);
+		const y = goc.querySelector("[data-chu-y]");
+		if (
+			y?.querySelector('a[href^="https://ngoai.test"]') ||
+			y?.querySelector("img")
+		) {
+			throw new Error("tlk-man-hoi: dung link hay anh cua model");
+		}
+		expect(y?.textContent).toContain("[ở đây](https://ngoai.test/x)");
+	});
+
 	test("tlk-man-hoi: ST-hoi-qua-han co Alert ten trang qua han", async () => {
 		canh.ketQua = QUA_HAN;
 		const goc = await mo(<HoiKho />);

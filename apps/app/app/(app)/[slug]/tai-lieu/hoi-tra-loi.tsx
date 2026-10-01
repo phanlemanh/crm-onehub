@@ -8,7 +8,6 @@ import {
 	Message,
 	MessageActions,
 	MessageContent,
-	MessageResponse,
 } from "@crm/ui/components/ai-elements/message";
 import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
@@ -142,9 +141,9 @@ function Y({
 	const url = useWorkspaceUrl();
 	return (
 		<div className="flex flex-col gap-2" data-y-tra-loi="">
-			<div data-chu-y="">
-				<MessageResponse>{cau.chu}</MessageResponse>
-			</div>
+			<p className="whitespace-pre-line" data-chu-y="">
+				{cau.chu}
+			</p>
 			{cau.trich.map((t) => (
 				<InlineCitationSource key={`${t.slug}-${t.doan}`}>
 					<p className="flex flex-wrap gap-x-2 text-muted-foreground text-xs">
