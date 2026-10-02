@@ -170,9 +170,13 @@ export function TienDoGon({
 	return (
 		<div className="flex min-w-0 flex-col gap-1.5" data-o-tien-do>
 			<div className="flex items-baseline justify-between gap-3 text-xs">
-				<span className="min-w-0 truncate tabular-nums" translate="no">
-					{dong}
-				</span>
+				{dong ? (
+					<span className="min-w-0 truncate tabular-nums" translate="no">
+						{dong}
+					</span>
+				) : (
+					<span />
+				)}
 				<span className="tabular-nums">{progress}%</span>
 			</div>
 			<ThanhTienDo

@@ -441,30 +441,32 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 		<DetailSheetBody>
 			<KhuViSao mt={mt} />
 			<KhuGopVao mt={mt} />
-			<BangKr
-				diemCam={diemCam}
-				mucTieu={mt}
-				keyResults={mt.keyResults}
-				kind={mt.kind}
-				expected={mt.expected}
-				danhDauCuaToi={false}
-				hoiDoiTrong={suaNoiDung(mt)}
-				canh={demCanh(mt)}
-				nhanHanhDong={m.cotThaoTac}
-				hanhDong={
-					coMenu
-						? (kr) => (
-								<MenuKr
-									mt={mt}
-									kr={kr}
-									capNhat={() => moCapNhat(kr)}
-									sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
-									xoa={() => setXoa(kr)}
-								/>
-							)
-						: undefined
-				}
-			/>
+			<div>
+				<BangKr
+					diemCam={diemCam}
+					mucTieu={mt}
+					keyResults={mt.keyResults}
+					kind={mt.kind}
+					expected={mt.expected}
+					danhDauCuaToi={false}
+					hoiDoiTrong={suaNoiDung(mt)}
+					canh={demCanh(mt)}
+					nhanHanhDong={m.cotThaoTac}
+					hanhDong={
+						coMenu
+							? (kr) => (
+									<MenuKr
+										mt={mt}
+										kr={kr}
+										capNhat={() => moCapNhat(kr)}
+										sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
+										xoa={() => setXoa(kr)}
+									/>
+								)
+							: undefined
+					}
+				/>
+			</div>
 			{mt.keyResults.length > 0 ? (
 				<p className="px-5 pt-2 text-muted-foreground text-xs" data-tien-do-tu>
 					{dien(m.tienDoTu, {

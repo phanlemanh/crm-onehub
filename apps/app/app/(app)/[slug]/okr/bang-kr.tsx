@@ -79,7 +79,16 @@ function chuChuaCoSo(may: NguonMay | null, s: OkrSoMessages): string | null {
 	return CHUP_THEO_NHIP.includes(may) ? s.trangThai.bangKr.chuaChup : null;
 }
 
-function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
+function SoCuaKr({
+	kr,
+	xem,
+	moc = true,
+}: {
+	kr: KetQua;
+	xem: XemBanGhi;
+	moc?: boolean;
+}) {
+	const neo = (ten: string, gia: string) => (moc ? { [ten]: gia } : {});
 	const locale = useLocale();
 	const s = okrSoMessages(locale);
 	const moSo = useOpenRecord();
@@ -110,20 +119,20 @@ function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 		<span className="inline-flex flex-col items-end gap-1">
 			<span className="inline-flex flex-wrap items-center justify-end gap-2">
 				{may ? (
-					<Badge variant="outline" data-dau-nguon={may}>
+					<Badge variant="outline" {...neo("data-dau-nguon", may)}>
 						{s.dau[KHOA_DAU[may]]}
 					</Badge>
 				) : null}
 				<span>
 					{xem === "chua-biet" ? (
-						<span data-so-kr-cho={kr.id}>{hienSo}</span>
+						<span {...neo("data-so-kr-cho", kr.id)}>{hienSo}</span>
 					) : xem === "duoc" ? (
 						<Tooltip>
 							<TooltipTrigger asChild>
 								<Button
 									variant="link"
 									size="xs"
-									data-so-kr={kr.id}
+									{...neo("data-so-kr", kr.id)}
 									onClick={() => moSo({ kind: "so-kr", id: kr.id })}
 								>
 									{hienSo}
@@ -136,7 +145,7 @@ function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 					) : (
 						<Tooltip>
 							<TooltipTrigger asChild>
-								<span data-so-kr-tran={kr.id}>{hienSo}</span>
+								<span {...neo("data-so-kr-tran", kr.id)}>{hienSo}</span>
 							</TooltipTrigger>
 							<TooltipContent>{s.trangThai.bangKr.chiOkr}</TooltipContent>
 						</Tooltip>
@@ -150,7 +159,9 @@ function SoCuaKr({ kr, xem }: { kr: KetQua; xem: XemBanGhi }) {
 				</span>
 			</span>
 			{chuaCoSo ? (
-				<SimpleTableNote data-chua-chup>{chuaCoSo}</SimpleTableNote>
+				<SimpleTableNote {...neo("data-chua-chup", "")}>
+					{chuaCoSo}
+				</SimpleTableNote>
 			) : null}
 		</span>
 	);
@@ -270,11 +281,6 @@ function dongPhu(kr: KetQua, locale: Locale): string {
 	return m.khoiMucTieu.tuKhoiDiem(kieu, giaTri(kr, kr.startValue, locale));
 }
 
-function dongSoGon(kr: KetQua, locale: Locale): string {
-	if (kr.kind === "moc") return giaTri(kr, kr.currentValue, locale);
-	return `${giaTri(kr, kr.currentValue, locale)} / ${giaTri(kr, kr.targetValue, locale)}`;
-}
-
 function OTienDoKr({
 	kr,
 	kind,
@@ -368,14 +374,17 @@ function HangKr({
 							) : null}
 						</span>
 						<span className="w-full pt-1 md:hidden">
-							<TienDoGon
-								dong={dongSoGon(kr, locale)}
-								expected={expected}
-								kind={kind}
-								laMoc={kr.kind === "moc"}
-								progress={kr.progress}
-								ten={kr.title}
-							/>
+							<span className="flex min-w-0 flex-col gap-1.5" data-o-tien-do>
+								<SoCuaKr kr={kr} moc={false} xem={xem} />
+								<TienDoGon
+									dong=""
+									expected={expected}
+									kind={kind}
+									laMoc={kr.kind === "moc"}
+									progress={kr.progress}
+									ten={kr.title}
+								/>
+							</span>
 						</span>
 					</span>
 				</span>

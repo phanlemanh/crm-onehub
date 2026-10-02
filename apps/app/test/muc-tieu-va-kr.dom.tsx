@@ -1206,6 +1206,42 @@ describe("o-tien-do", () => {
 		);
 		console.log("so ca o-tien-do so-kr: 1");
 	});
+
+	test("o-tien-do: ban duoi ten cua KR may giu dau nguon, so do canh, chua chup va khong mang moc do trung", async () => {
+		const MOC_TRUNG =
+			"[data-so-kr],[data-so-kr-tran],[data-so-kr-cho],[data-dau-nguon],[data-chua-chup],[data-tinh-trang]";
+		const CA = ["may-chua-co-so", "may-do-canh"] as const;
+		expect.assertions(CA.length);
+		await dungBang([mtO()]);
+		for (const id of CA) {
+			const hang = hangKr(id);
+			const day = hang?.querySelector("td[data-nguon]");
+			const gon = hang?.querySelector("td:not([data-nguon]) [data-o-tien-do]");
+			const dau = day?.querySelector("[data-dau-nguon]")?.textContent ?? "";
+			const chup = day?.querySelector("[data-chua-chup]")?.textContent ?? "";
+			const soDay =
+				day?.querySelector("[data-so-kr],[data-so-kr-tran],[data-so-kr-cho]")
+					?.textContent ?? "";
+			const chu = gon?.textContent ?? "";
+			expect(
+				{
+					coBanGon: gon !== null && gon !== undefined,
+					dau: dau !== "" && chu.includes(dau),
+					so: soDay !== "" && chu.includes(soDay),
+					chup: chup === "" || chu.includes(chup),
+					mocTrung: gon?.querySelectorAll(MOC_TRUNG).length ?? -1,
+				},
+				`ban dien thoai mat thong tin may: ${id}`,
+			).toEqual({
+				coBanGon: true,
+				dau: true,
+				so: true,
+				chup: true,
+				mocTrung: 0,
+			});
+		}
+		console.log(`so ca o-tien-do ban gon may: ${CA.length}`);
+	});
 });
 
 describe("chua-co-kr", () => {
