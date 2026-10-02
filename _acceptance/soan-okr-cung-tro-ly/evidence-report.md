@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d233ae402ac2b74af562f2f807bc67317ddeb151
+verified_commit: 728c0f8c5bdc0382ace2bde62629e1d15251ad53
 human_signoff: Manh Phan 2026-10-02
 ---
 
@@ -367,3 +367,7 @@ Round 1: BLOCKED. E13 không đo được (lượt trợ lý không xong, quá 4
 Round 2: BLOCKED. E13 chạy được (84 DUNG, 0 SAI) nhưng đọc ảnh thấy lỗi bố cục (tràn và cắt chữ ở soan-mo-dau-390, bảng cuộc bị cắt mép, nút «Xem ở Theo đơn vị» đè chữ, thiếu khung soan-sua-qua-chat ở 390) nên không đạt; E26 đạt 33/33; lệnh suite bị chặn vì eve dev bị tiến trình khác chiếm. Returned to implementation.
 Round 3: E26 failed — thước đo docs/chat-ui.md lệch với tệp (tiêu đề «What is in the tree today» nay ghi «— 8», mục số không còn câu «exactly seven files», hai chiều đo gài không đổi được tệp nên thước chỉ bắt 31/33 chiều đo). E13 nay đạt (26 khung, đã đọc từng khung); bảy lệnh suite xanh; E24 chờ chủ kho điền cột «Người chọn»; E29 chờ người quyết cách hiểu AC-15. Chuyển người quyết: sửa docs/chat-ui.md cho khớp thước rồi chấm lại.
 Round 4: E26 nay xanh với chiều đo 37/37, E12 (86 ca) và E27 xanh, bảy lệnh suite xanh; các eval còn lại mang sang từ vòng gốc. Không eval nào đỏ. Verdict PENDING-JUDGMENT vì E24 (chờ chủ kho điền cột «Người chọn», panel giữ nguyên từ vòng 3) và E29 (cả ba người chấm chưa phân xử được cách hiểu AC-15 về kiểu khai tay ở packages/db/src) chờ người quyết ở Cổng 2. E21, E22 không chạy theo hồ sơ.
+
+### Re-pin lần 1 — 2026-10-02, do gỡ not-run E21 sau chữ ký Cổng 2, ghim trên HEAD gộp onehub 923f5717
+run_id: repin-20261002T010648Z-44783
+sha: 728c0f8c5bdc0382ace2bde62629e1d15251ad53 · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29
