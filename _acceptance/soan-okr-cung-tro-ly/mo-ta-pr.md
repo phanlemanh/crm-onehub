@@ -6,7 +6,7 @@ của bản nháp, rồi gõ khởi điểm và đích và bấm «Đưa vào b�
 không công bố; người mang vai «chỉ OKR» dùng được mà không đọc được dữ liệu đối tác.
 
 Hồ sơ `_acceptance/soan-okr-cung-tro-ly`: Cổng Đáng và Cổng Phạm vi ký 2026-09-30,
-Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-okr.md`.
+Cổng Phạm vi ký lại lần ba 2026-10-01; Cổng Bằng chứng ký 2026-10-02 (Manh Phan) sau bốn vòng chấm. Dòng 11 của mục 10 `docs/plan/lo-trinh-okr.md`.
 
 ## Người dùng thấy
 
@@ -59,7 +59,7 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 - Ô soạn và gợi ý trả lời — dừng ở bậc 1 theo đường riêng của khung chat: hội thoại
   thuộc AI Elements (`docs/chat-ui.md`), không đi thang shadcn gốc; `PromptInput`,
   `Suggestion` kéo bằng CLI của AI Elements vào `packages/ui/src/components/ai-elements`
-  (sổ thành phần 5 → 7).
+  (sổ thành phần nay 8 tệp sau khi gộp `onehub`).
 - Thẻ dòng nháp «Mục tiêu mới» có KR con, ô khởi điểm/đích trong thẻ, nhãn «vừa sửa ·
   vừa chuyển» — dừng ở bậc 1, thêm biến thể `fields`, `tag` cho `ProposedChange` trong
   `packages/ui`. Lúc dựng không ghi câu tìm; tra ReUI lúc viết mô tả này («nested card
@@ -85,32 +85,6 @@ Cổng Bằng chứng ký <ngày>. Dòng 11 của mục 10 `docs/plan/lo-trinh-o
 - Loại trang «Chiến lược» và cảnh báo khi duyệt — dừng ở bậc 1 (`Select`,
   `FieldDescription`, `Alert`).
 
-## Cần chủ kho xem: chỗ lệch khỏi kế hoạch hay hợp đồng đã ký
-
-Điều phối đã quyết những chỗ dưới đây trong lúc làm; mỗi chỗ đổi lời của hợp đồng hay
-phép đo đã ký, nên gom lại để ký lại Cổng Phạm vi một lần.
-
-1. **Ở API, người không có quyền vào một cuộc soạn thấy đúng câu «không có» như khi mã
-   không tồn tại** (404, không phải 403), theo nguyên tắc của lượt 8c «không phân biệt được
-   với không có». Cửa gọi Trợ lý vẫn trả 403. Hợp đồng AC-1 và phép đo E1 còn ghi 403; ma
-   trận quyền đổi 126 ô từ 403 sang 404.
-2. **Phép đo «0 số đích máy ghi» đọc vết tạo KR**, không đọc đích hiện tại: người sửa
-   đích sau khi đưa vào sẽ làm thước đỏ giả. Lúc đưa vào, vết tạo ghi thêm hai số người
-   đã gõ. Hợp đồng dòng 79 cần sửa lời theo.
-3. **Phép đo E15**: lời ghi trưởng phòng B thấy «hai» cuộc; đúng là **một** (quản trị
-   thấy hai).
-4. **KR mốc không nhận số** khởi điểm hay đích — theo mô hình KR mốc đang có; gửi số thì
-   bị từ chối. Hợp đồng dòng 71 cần một câu ngoại lệ.
-5. **Phép đo E28 (sàn thiết kế) thu hẹp lời**: thước bắt sáu mẫu vẽ tay rõ ràng (góc lạ,
-   màu hex, bảng tự dựng, đường kẻ chia dòng tự dựng, chép vào bộ nhớ tạm bằng tay, chấm
-   trạng thái tự vẽ) cộng design-gate của bộ nghiệm thu; không bắt «`className` trên thành
-   phần dùng chung» vì mơ hồ với lớp bố cục hợp lệ.
-6. **Phép đo E28 đổi đường của màn Tổ chức** từ `settings/to-chuc` sang đường thật
-   `settings/organization`.
-7. **Phép đo E26 (thước tài liệu)** ghi «bảy thủ tục soạn»; router có chín, thước đòi tối
-   thiểu chín. Lời «không nhập chéo từ app Trợ lý gốc» được chấm theo đường thật, không so
-   chữ.
-
 ## Việc ngoài kế hoạch
 
 - **H1 — theo lượt 8c sau khi gộp `onehub`**: gói bối cảnh gửi Trợ lý và tên đích
@@ -124,36 +98,26 @@ phép đo đã ký, nên gom lại để ký lại Cổng Phạm vi một lần.
   được vào cuộc vẫn được đếm chi phí. «Mở cuộc mới» khi hết lượt bỏ cuộc đang dở và mở
   cuộc mới trong cùng một bước; cuộc bỏ vẫn đếm vào trần kỳ.
 
-## Ba phép đo cần model thật: một đã dựng và chờ tiền, hai chưa dựng
+- **Sửa một lỗi có sẵn trên `onehub` (chủ kho cho phép 02/10)**: lịch tóm tắt tuần của Trợ lý OKR xếp tóm tắt cho cả chu kỳ đã ẩn. Nay lọc chu kỳ ẩn; bài hồi quy «chu-ky-an» đỏ trước khi sửa. Lỗi lộ ra khi thước của hồ sơ `sua-an-chu-ky-okr` phải chạy lại. Bằng chứng đã ký của `tro-ly-okr-tom-tat` cũ đi im lặng vì tệp nó đo đổi sau chữ ký; bài hồi quy mới nằm trong bộ kiểm chung nên hành vi vẫn có thước canh.
+- **Sửa thước của hồ sơ đã ký `sua-an-chu-ky-okr`**: thước sàn thiết kế neo vào mốc gộp #222 thay vì `onehub` hiện tại (cùng cách #211), nên không chấm mã của lượt sau; vế «dòng lượt đó thêm» thành bản ghi đóng băng, các vế trạng thái cây vẫn đo cây hiện tại. Ghi sổ quyết định của hồ sơ đó.
 
-S4 chưa chạy. Năm lệnh chứng và các thước máy đã dựng xanh ở các mốc giữa lượt. Ba phép
-đo dưới đây gọi model thật có ZDR; thiếu khoá thì dừng mã 2, không xanh.
+## Kết quả nghiệm thu
 
-Đã dựng, chờ chủ kho cho phép tiêu (ước 1–1,5 USD, trần 2 USD; khoá Gateway có trần
-5 USD trọn đời):
+29 phép đo cho 15 tiêu chí: 21 bài kiểm, 5 thước, 1 lượt đo màn thật, 2 phần người chấm.
 
-- **Eval soạn**: câu hỏi mở đầu đúng khuôn (2–4 câu, mỗi câu hai gợi ý); bản nháp đầu
-  không có dòng bị loại, đích để trống, Căn chỉnh chỉ vào đích được phép; lượt sửa bỏ
-  đúng dòng đã bác; bản có gói bối cảnh thắng bản không gói ở ≥ 70 % ca khi judge chấm
-  mù; mười cuộc bốn lượt có p50 ≤ 12 s, p90 ≤ 20 s mỗi lượt và ≤ 0,25 USD mỗi cuộc. Sau
-  đó chủ kho chấm mù mười bản nháp để xem judge khớp người ≥ 80 %.
-
-Chưa dựng (thước chưa có trong cây; dựng xong mới tới lượt xin tiền):
-
-- **Đo màn thật**: đi trọn luồng trên màn — mở cuộc, trả lời, nhận · sửa · bác, sửa qua
-  chat, đưa vào — chụp mỗi bước ở 1440 và 390, không bước nào tràn ngang, và «Đưa vào»
-  thật sự tạo đúng số Mục tiêu nháp đã nhận.
-- **Đo cách ly vai «chỉ OKR»**: có đối chứng dương trước (quản trị hỏi qua Trợ lý CRM thì
-  máy dò bắt được tên deal hay công ty của bộ mẫu), rồi người vai «chỉ OKR» hỏi cùng câu
-  qua Trợ lý OKR không nhận được tên nào; gỡ lớp chặn trên kho đo thì máy dò phải bắt.
+- **Máy chấm:** 26/26 phép đo máy đạt. E21 (cách ly vai «chỉ OKR») đo ở lượt ghim lại sau chữ ký, chạy nối tiếp, mã 0. Bảy lệnh hồi quy xanh.
+- **Người chấm:** E24 và E29 chủ kho phán Đạt tại Cổng Bằng chứng.
+- **Không chạy theo hồ sơ — E22 (tốc độ và chất lượng với model thật):** đo ba lần ngoài lượt chấm, chưa lần nào xanh trọn. Trình ở Cổng Bằng chứng là **chưa đạt ổn định**, giao ở nấc tắt:
+  - mỗi lượt chậm nhất (p90) 19,1 · 20,3 · 34,3 giây so với hứa 20 giây; chậm do thời gian mô hình, đến theo cơn;
+  - bản có gói bối cảnh thắng mọi cặp chấm được (31/31 qua ba lần), nhưng lần 3 bên chấm hỏng 6/15 cặp nên vế này chưa kết luận.
+- **Trước khi BẬT cho người dùng:** đo lại độ trễ; sửa bên chấm rồi đọc lại vế gói thắng. Câu hỏi mở: lượt vượt hạn vé 120 giây của cửa thì người dùng thấy gì.
+- **Giới hạn có tên:** tác nhân chết im thì người dùng chờ tới 45 giây mới thấy báo lỗi. Mười giới hạn đã biết khác ở mục Notes của hợp đồng.
+- **Tách việc riêng (ba hợp đồng mới):** đổi tên AI trên màn soạn sang Kara theo luật mới của `onehub`; nút Thử lại báo đúng lý do lỗi; không trừ lượt khi Trợ lý không liên lạc được.
 
 ## Lưu ý cho người gộp
 
-- **Hai hồ sơ đã ký phải ghim lại trước khi gộp** (làn máy):
-  - `the-gop-y-okr`: thước tên gọi nay bỏ qua thư mục AI Elements khi tìm tên cũ
-    `Suggestion`, vì lượt này kéo đúng thành phần đó vào.
-  - `nen-chat-ai-elements`: sổ thành phần AI Elements nay có bảy tệp, chữ «bốn tệp» ở
-    `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs:395` phải thành bảy.
+- **Bốn hồ sơ đã ký được ghim lại trên nhánh này** (làn máy, đều xanh): `soan-okr-cung-tro-ly`, `nen-chat-ai-elements`, `the-gop-y-okr`, `sua-an-chu-ky-okr`.
+- **Tên trên màn còn «Trợ lý OKR»**: `onehub` vừa chốt Kara là tên duy nhất của AI trên màn (#230). Hợp đồng đã ký trước luật đó; việc đổi chữ đi ở hợp đồng riêng.
 - **Sự cố, chờ chủ kho dọn**: 2026-09-30 10:08 UTC một script gỡ lỗi chạy nhầm vào kho
   dữ liệu chung `crm` và để lại hàng mang tiền tố `sokr-`: ba trang tài liệu (hai trang
   chiến lược đang dùng, cả hai mang câu chèn thử; trang thứ ba thuộc loại khác), bốn đề
@@ -166,23 +130,12 @@ Chưa dựng (thước chưa có trong cây; dựng xong mới tới lượt xin
   trần tháng đặt OKR do chủ kho quyết sau N-soạn.
 - Chưa gửi lên hãng: bộ tạo model ZDR và khuôn app eve thứ hai — ghi ở mục chỗ rẽ.
 - **Thước quyền xem của `gioi-han-duyet-cay-okr` sẽ đỏ thêm 2 dòng trên `onehub` sau khi PR này gộp**, cho tới khi hai dòng miễn được nhận ở PR theo sau: `soan-so-do.service.ts · mucTieuTuNhap · okrTrail` và `· okrObjective` — số đo việc soạn chỉ quản trị gọi, chỉ ra số đếm (nguyên văn hai dòng ở Notes của hợp đồng).
-- **Luật cho commit cuối trước gộp** — làm trong cùng một commit:
-  (a) dòng 11 mục 10 `docs/plan/lo-trinh-okr.md`: ô Trạng thái thành «đã lên `onehub`»,
-  ô Ngày thành ngày của commit đó, ô PR thành `#<số>`; cột Ghi chú chỉ nối thêm
-  «· <ngày>: Cổng Bằng chứng ký (<người>), <n>/28 phép đo xanh, <m> phép đo phán quyết»,
-  không sửa chữ cũ;
-  (b) điền các ô `<…>` của tệp này, xoá ô nào không dùng, rồi dán làm mô tả PR;
-  (c) chạy lại `node _acceptance/soan-okr-cung-tro-ly/rang/tai-lieu.mjs` → mã 0.
-  Tệp dưới `docs/` được miễn luật bằng chứng cũ nên không phải ký lại Cổng Bằng chứng.
 
 ## Bằng chứng
 
-- 28 phép đo của hồ sơ: `_acceptance/soan-okr-cung-tro-ly/evidence/` — <n>/28 xanh,
-  <m> phép đo phán quyết.
-- Phép thử «app Trợ lý thứ hai dựng và chạy cạnh app thứ nhất» đạt 2026-09-30 ở việc đầu
-  tiên của S3; chạy lại trong S4 <ngày>.
-- Thước tài liệu và thước sàn thiết kế chạy chiều đỏ trước khi đo (33/33 và 7/7 ca gài
-  bị bắt).
+- Gói bằng chứng: `_acceptance/soan-okr-cung-tro-ly/evidence-report.md` (vòng 4 + ghim lại), ảnh chụp và nhật ký ở `evidence/`, bốn vòng chấm có ba bằng chứng bản nhúng tham số (`evidence/s4-r*-nhung-tham-so.txt`).
+- E22 ba lần đo ngoài lượt: `evidence/eval-ngoai-luot-r1.log` … `r3.log`; E21 đo ngoài lượt vòng 3: `evidence/e21-ngoai-luot-r3.log`.
+- Phép thử «app Trợ lý thứ hai dựng và chạy cạnh app thứ nhất» đạt 2026-09-30 ở việc đầu tiên của S3.
 
 ## Cách chứng
 
@@ -196,9 +149,6 @@ bun run lint:slop
 bun run build
 ```
 
-Hồ sơ có 28 phép đo: 21 bài kiểm (`test`), 4 thước (`script`: cách ly vai «chỉ OKR» —
-chưa dựng, eval với model thật, thước tài liệu, sàn thiết kế), 1 lượt đo màn thật
-(`ui-check`, chưa dựng) và 2
-phần người chấm (`judgment`: chủ kho chấm mù bản nháp; người đọc diff theo ba luật kho).
+Hồ sơ có 29 phép đo: 21 bài kiểm (`test`), 5 thước (`script`: cách ly vai «chỉ OKR», eval với model thật, thước tài liệu, luật kho, sàn thiết kế), 1 lượt đo màn thật (`ui-check`) và 2 phần người chấm (`judgment`).
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
