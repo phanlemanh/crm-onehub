@@ -13,7 +13,7 @@ const VUNG = {
 	thuMuc: "apps/app/app/(app)/[slug]/okr",
 	tep: ["apps/app/components/crm/record-sheet/objective-sheet.tsx"],
 	the: "SimpleTableRow",
-	lopCam: /^-?(bg-|border-|rounded)/,
+	lopCam: /^-?(bg-|border(-|$)|rounded)/,
 };
 
 const MA_TRAN = [
@@ -24,6 +24,8 @@ const MA_TRAN = [
 	{ dang: "dieu kien", ma: `<SimpleTableRow className={x ? "w-12" : "border-t"} />`, do: true },
 	{ dang: "bien the ngoac vuong", ma: `<SimpleTableRow className="[&>td]:bg-muted" />`, do: true },
 	{ dang: "bien the data-[]", ma: `<SimpleTableRow className="data-[state=open]:border-t" />`, do: true },
+	{ dang: "vien tran", ma: `<SimpleTableRow className={cn("p-2", "border")} />`, do: true },
+	{ dang: "vien tran quan trong", ma: `<SimpleTableRow className="!border" />`, do: true },
 	{ dang: "lop sach", ma: `<SimpleTableRow className={cn("w-12", "text-sm")} />`, do: false },
 	{ dang: "lop sach ngoac vuong", ma: `<SimpleTableRow className="[&_svg]:size-4 w-[calc(100%-1rem)]" />`, do: false },
 ];
