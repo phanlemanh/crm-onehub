@@ -23,6 +23,7 @@ const { HopThoaiMucTieu } = await import(
 const { FactSuggestion } = await import("@/components/crm/facts");
 const { KhoiTomTat } = await import("@/app/(app)/[slug]/okr/khoi-tom-tat");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
+const { messages } = await import("@crm/ui/lib/messages");
 const { okrGopYMessages } = await import("@/lib/messages/okr-gop-y");
 type ContactFact = import("@/lib/contact-facts").ContactFact;
 
@@ -63,10 +64,7 @@ describe("man-cu", () => {
 		await bam(nut(g.nut.nho));
 		await cho(() => dongCua(D_TEN.id) !== null, "the viet lai");
 		const the = dongCua(D_TEN.id);
-		kiemThe(
-			the?.closest('[data-slot="proposed-change"]') ?? null,
-			"the gop y",
-		);
+		kiemThe(the?.closest('[data-slot="proposed-change"]') ?? null, "the gop y");
 	});
 
 	test("man-cu: thông tin liên hệ vẫn là thẻ", async () => {
@@ -82,6 +80,8 @@ describe("man-cu", () => {
 });
 
 const t = okrToanCanhMessages("vi").tomTat;
+const phanHoi = messages("vi").aiFeedback;
+const CHU_NUT_TRUOC_LUOT = ["Hữu ích", "Không hữu ích"];
 
 const NGUON = {
 	id: "n-1",
@@ -138,18 +138,29 @@ describe("tom-tat", () => {
 	test("tom-tat: khối tóm tắt tuần dùng AiFeedback, giữ chữ, gửi đúng", async () => {
 		datTomTat();
 		await mo(<KhoiTomTat cycleId="q4" departmentId="pb-1" />);
-		await cho(() => document.querySelector("[data-phan-hoi]") !== null, "vung phan hoi");
+		await cho(
+			() => document.querySelector("[data-phan-hoi]") !== null,
+			"vung phan hoi",
+		);
 		const v = vung();
 		expect(v.querySelector('[data-slot="ai-feedback"]')).not.toBeNull();
 		expect(v.querySelectorAll('[data-slot="toggle-group"]').length).toBe(1);
 		expect(v.querySelectorAll('[role="status"]').length).toBe(1);
-		expect(v.querySelector('[data-slot="toggle-group"]')?.getAttribute("aria-label")).toBe(t.phanHoiNhom);
-		expect(nutPhanHoi(t.huuIch)).toBeDefined();
-		expect(nutPhanHoi(t.khongHuuIch)).toBeDefined();
-		await bam(nutPhanHoi(t.huuIch));
+		expect(
+			v.querySelector('[data-slot="toggle-group"]')?.getAttribute("aria-label"),
+		).toBe(t.phanHoiNhom);
+		expect(
+			[...v.querySelectorAll('[data-slot="toggle-group-item"]')].map((b) =>
+				b.textContent?.trim(),
+			),
+		).toEqual(CHU_NUT_TRUOC_LUOT);
+		await bam(nutPhanHoi(phanHoi.useful));
 		await cho(() => goiCua("okr.troLyTomTatPhanHoi").length === 1, "da gui");
 		troLyTomTatPhanHoiInput.parse(goiCua("okr.troLyTomTatPhanHoi")[0]?.dauVao);
-		await cho(() => vung().getAttribute("data-phan-hoi") === "huu-ich", "da chon");
+		await cho(
+			() => vung().getAttribute("data-phan-hoi") === "huu-ich",
+			"da chon",
+		);
 		await choDen(
 			() => vung().querySelector('[role="status"]')?.textContent === t.daGhi,
 			"chu cam on doi",
@@ -162,13 +173,16 @@ describe("tom-tat", () => {
 			throw new Error("hong");
 		});
 		await mo(<KhoiTomTat cycleId="q4" departmentId="pb-1" />);
-		await cho(() => document.querySelector("[data-phan-hoi]") !== null, "vung phan hoi");
-		await bam(nutPhanHoi(t.khongHuuIch));
+		await cho(
+			() => document.querySelector("[data-phan-hoi]") !== null,
+			"vung phan hoi",
+		);
+		await bam(nutPhanHoi(phanHoi.notUseful));
 		await cho(() => goiCua("okr.troLyTomTatPhanHoi").length === 1, "da gui");
 		await choDen(
 			() =>
 				vung().getAttribute("data-phan-hoi") === "" &&
-				nutPhanHoi(t.khongHuuIch).getAttribute("data-state") !== "on",
+				nutPhanHoi(phanHoi.notUseful).getAttribute("data-state") !== "on",
 			"khong lui khi loi",
 		);
 	});

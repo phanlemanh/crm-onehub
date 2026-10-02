@@ -13,10 +13,10 @@ import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	ProposedChange,
 	type ProposedChangeAction,
-	ProposedChangeReceipt,
 	type ProposedChangeDecision,
 	type ProposedChangeDensity,
 	type ProposedChangeProps,
+	ProposedChangeReceipt,
 } from "../src/components/proposed-change";
 import type { Locale } from "../src/lib/locale";
 import { TEN_RIENG } from "./du-lieu";
@@ -33,7 +33,9 @@ function ve(cay: ReactElement, locale: Locale = "vi"): HTMLElement {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	root = createRoot(o);
-	act(() => root?.render(<LocaleProvider locale={locale}>{cay}</LocaleProvider>));
+	act(() =>
+		root?.render(<LocaleProvider locale={locale}>{cay}</LocaleProvider>),
+	);
 	return o;
 }
 
@@ -103,24 +105,30 @@ describe("nk-vi-sao", () => {
 	function dungHang() {
 		const dem = { bam: 0, phim: 0 };
 		const goc = ve(
-			<div
-				onClick={() => {
-					dem.bam += 1;
-				}}
-				onKeyDown={() => {
-					dem.phim += 1;
-				}}
-				role="row"
-				tabIndex={-1}
-			>
-				<KaraLabel
-					scope="OKR"
-					text="2 góp ý"
-					reason="Ba KR chưa có đích"
-					readAt="09:12"
-				/>
-				<button type="button">khac</button>
-			</div>,
+			<table>
+				<tbody>
+					<tr
+						onClick={() => {
+							dem.bam += 1;
+						}}
+						onKeyDown={() => {
+							dem.phim += 1;
+						}}
+					>
+						<td>
+							<KaraLabel
+								scope="OKR"
+								text="2 góp ý"
+								reason="Ba KR chưa có đích"
+								readAt="09:12"
+							/>
+						</td>
+						<td>
+							<button type="button">khac</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>,
 		);
 		return { goc, dem };
 	}
@@ -241,10 +249,22 @@ describe("nk-inline", () => {
 					el.getAttribute("data-slot") === "card",
 			);
 			if (hop.length > 0) throw new Error("inline co alert");
-			expect(g.querySelector("del")?.closest("[translate]")?.getAttribute("translate")).toBe("no");
-			expect(g.querySelector("ins")?.closest("[translate]")?.getAttribute("translate")).toBe("no");
+			expect(
+				g
+					.querySelector("del")
+					?.closest("[translate]")
+					?.getAttribute("translate"),
+			).toBe("no");
+			expect(
+				g
+					.querySelector("ins")
+					?.closest("[translate]")
+					?.getAttribute("translate"),
+			).toBe("no");
 			expect(thuTuKhoi(g)).toEqual(["nhan", "cu", "moi", "ly-do", "nut"]);
-			expect(g.querySelectorAll('button[data-variant="default"]').length).toBe(1);
+			expect(g.querySelectorAll('button[data-variant="default"]').length).toBe(
+				1,
+			);
 			don();
 		}
 	});
@@ -269,7 +289,7 @@ describe("nk-hai-do-day", () => {
 					const khoa = [...g.querySelectorAll("button[aria-describedby]")];
 					const id = khoa[0]?.getAttribute("aria-describedby");
 					const lyDo = id ? document.getElementById(id) : null;
-					if (!lyDo || lyDo.textContent !== "Lưu thay đổi của KR trước") {
+					if (lyDo?.textContent !== "Lưu thay đổi của KR trước") {
 						throw new Error(`khoa mat o ${g.getAttribute("data-density")}`);
 					}
 				},
@@ -278,14 +298,18 @@ describe("nk-hai-do-day", () => {
 				ten: "loi",
 				them: { error: "Kara chưa ghi được" },
 				kiem: (g) => {
-					expect(g.querySelector('[data-slot="field-error"]')?.textContent).toContain("Kara chưa ghi được");
+					expect(
+						g.querySelector('[data-slot="field-error"]')?.textContent,
+					).toContain("Kara chưa ghi được");
 				},
 			},
 			{
 				ten: "dang-sua",
 				them: {},
 				kiem: (g, huy) => {
-					const o = g.querySelector<HTMLTextAreaElement>('textarea[data-slot="proposed-change-edit"]');
+					const o = g.querySelector<HTMLTextAreaElement>(
+						'textarea[data-slot="proposed-change-edit"]',
+					);
 					if (!o) throw new Error("khong thay o sua");
 					phim(o, "keydown", "Escape");
 					expect(huy()).toBe(1);
@@ -337,7 +361,11 @@ describe("nk-hai-do-day", () => {
 describe("nk-bien-nhan", () => {
 	test("nk-bien-nhan: ba quyết định × có/không hoàn tác × hai độ dày thu về một dòng", () => {
 		const p = propsThe(DONG_VIET_LAI, { m });
-		const QUYET: readonly ProposedChangeDecision[] = ["accepted", "dismissed", "skipped"];
+		const QUYET: readonly ProposedChangeDecision[] = [
+			"accepted",
+			"dismissed",
+			"skipped",
+		];
 		let soO = 0;
 		for (const decision of QUYET) {
 			for (const coHoanTac of [true, false]) {
@@ -361,8 +389,12 @@ describe("nk-bien-nhan", () => {
 							/>,
 						),
 					);
-					expect(g.querySelector('[data-slot="proposed-change-actions"]')).toBeNull();
-					const dong = g.querySelectorAll('[data-slot="proposed-change-decided"]');
+					expect(
+						g.querySelector('[data-slot="proposed-change-actions"]'),
+					).toBeNull();
+					const dong = g.querySelectorAll(
+						'[data-slot="proposed-change-decided"]',
+					);
 					expect(dong.length).toBe(1);
 					expect(dong[0]?.textContent).toBe(`Đã quyết ${decision}`);
 					expect(dong[0]?.closest('[role="status"]')).not.toBeNull();
@@ -373,12 +405,15 @@ describe("nk-bien-nhan", () => {
 					if (coHoanTac) {
 						expect(hoanTac.length).toBe(1);
 						act(() => hoanTac[0]?.click());
-						if (soLanHoanTac !== 1) throw new Error(`hoan tac khong goi: ${soLanHoanTac}`);
+						if (soLanHoanTac !== 1)
+							throw new Error(`hoan tac khong goi: ${soLanHoanTac}`);
 					} else {
 						expect(hoanTac.length).toBe(0);
 					}
 					if (decision !== "accepted") {
-						expect(dong[0]?.classList.contains("text-muted-foreground")).toBe(true);
+						expect(dong[0]?.classList.contains("text-muted-foreground")).toBe(
+							true,
+						);
 					}
 					soO += 1;
 					don();
@@ -429,13 +464,20 @@ describe("nk-phan-hoi", () => {
 		const g = o.querySelector('[data-slot="ai-feedback"]');
 		if (!g) throw new Error("khong thay ai-feedback");
 		expect(g.querySelector('[role="status"]')?.textContent).toBe("");
-		expect(g.querySelector('[data-slot="toggle-group"]')?.getAttribute("aria-label")).toBe("Có hữu ích không");
+		expect(
+			g.querySelector('[data-slot="toggle-group"]')?.getAttribute("aria-label"),
+		).toBe("Có hữu ích không");
 		act(() => nutPhanHoi(o, "Hữu ích").click());
 		act(() => nutPhanHoi(o, "Không hữu ích").click());
-		if (ghi.join(",") !== "true,false") throw new Error(`phan hoi dao: ${ghi.join(",")}`);
-		expect(nutPhanHoi(o, "Không hữu ích").getAttribute("data-state")).toBe("on");
+		if (ghi.join(",") !== "true,false")
+			throw new Error(`phan hoi dao: ${ghi.join(",")}`);
+		expect(nutPhanHoi(o, "Không hữu ích").getAttribute("data-state")).toBe(
+			"on",
+		);
 		expect(nutPhanHoi(o, "Hữu ích").getAttribute("data-state")).toBe("off");
-		expect(g.querySelector('[role="status"]')?.textContent).toBe("Cảm ơn, đã ghi");
+		expect(g.querySelector('[role="status"]')?.textContent).toBe(
+			"Cảm ơn, đã ghi",
+		);
 		don();
 		const o2 = ve(<PhanHoiThu ghi={[]} pending dau />);
 		expect(o2.querySelector('[role="status"]')?.textContent).toBe("");
@@ -448,7 +490,10 @@ function chuTuDat(): string[] {
 	const ra: string[] = [];
 	const di = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
 	for (let n = di.nextNode(); n; n = di.nextNode()) {
-		const t = (n.textContent ?? "").replace(DAU, "").replace(/\s+/g, " ").trim();
+		const t = (n.textContent ?? "")
+			.replace(DAU, "")
+			.replace(/\s+/g, " ")
+			.trim();
 		if (t && /\p{L}/u.test(t)) ra.push(t);
 	}
 	return ra;
@@ -490,7 +535,11 @@ describe("nk-hai-tieng", () => {
 			{
 				ten: "ProposedChangeReceipt",
 				ve: () => (
-					<ProposedChangeReceipt decision="accepted" text="§1" onUndo={() => {}} />
+					<ProposedChangeReceipt
+						decision="accepted"
+						text="§1"
+						onUndo={() => {}}
+					/>
 				),
 			},
 			{
@@ -502,7 +551,7 @@ describe("nk-hai-tieng", () => {
 		];
 		let soCho = 0;
 		for (const ca of CA) {
-			const theoTieng: Record<Locale, string[]> = { vi: [], en: [] };
+			const theoTieng = { vi: [] as string[], en: [] as string[] };
 			for (const locale of ["vi", "en"] as const) {
 				ve(ca.ve(), locale);
 				ca.mo?.();

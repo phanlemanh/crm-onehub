@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import puppeteer from "puppeteer-core";
 import { okrToanCanhMessages } from "../../../apps/app/lib/messages/okr-toan-canh.ts";
+import { messages } from "../../../packages/ui/src/lib/messages.ts";
 import {
 	batTacTu,
 	cauThieuKhoa,
@@ -63,6 +64,7 @@ const THU_MUC = join(GOC, ".acceptance-runs/tro-ly-okr-tom-tat/man");
 const APP = process.env.APP_URL ?? "http://localhost:3000";
 const API = process.env.API_URL ?? "http://localhost:3001";
 const m = okrToanCanhMessages("vi").tomTat;
+const phanHoi = messages("vi").aiFeedback;
 const KY = idMau("chu-ky", E9.chuKy);
 const PB = { a: idMau("pb", E9.phong.a), b: idMau("pb", E9.phong.b) };
 const bo = JSON.parse(
@@ -491,8 +493,8 @@ async function buocKhoi(tlA, url, api) {
 			const huuIch = await Promise.all(
 				nut.map((b) => b.evaluate((x) => x.textContent?.trim() ?? "")),
 			);
-			const i = huuIch.indexOf(m.huuIch);
-			if (i < 0) throw new Error(`khong thay nut «${m.huuIch}»`);
+			const i = huuIch.indexOf(phanHoi.useful);
+			if (i < 0) throw new Error(`khong thay nut «${phanHoi.useful}»`);
 			await nut[i].click();
 		}
 		kiem(

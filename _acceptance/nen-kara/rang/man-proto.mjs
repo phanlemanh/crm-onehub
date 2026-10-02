@@ -50,7 +50,8 @@ function trangThaiTuDesign() {
 	const chu = readFileSync(join(GOC, NK.designDoc), "utf8");
 	const dau = chu.indexOf("<!-- <<<UX-STATE-TABLE -->");
 	const cuoi = chu.indexOf("<!-- UX-STATE-TABLE>>> -->");
-	if (dau === -1 || cuoi === -1) khongDoDuoc("design doc khong co khoi UX-STATE-TABLE");
+	if (dau === -1 || cuoi === -1)
+		khongDoDuoc("design doc khong co khoi UX-STATE-TABLE");
 	return [...chu.slice(dau, cuoi).matchAll(/^\|\s*(ST-[\w-]+)\s*\|/gm)]
 		.map((m) => m[1])
 		.filter((id) => id.startsWith(NK.trangThaiTien));
@@ -76,7 +77,10 @@ function doTrongTrang(kiemDo) {
 	const alpha = (mau) => {
 		if (!mau || mau === "transparent") return 0;
 		const cheo = mau.match(/\/\s*([\d.]+%?)\s*\)$/);
-		if (cheo) return cheo[1].endsWith("%") ? Number.parseFloat(cheo[1]) / 100 : Number(cheo[1]);
+		if (cheo)
+			return cheo[1].endsWith("%")
+				? Number.parseFloat(cheo[1]) / 100
+				: Number(cheo[1]);
 		const rgba = mau.match(/^rgba\([^,]+,[^,]+,[^,]+,\s*([\d.]+)\)$/);
 		if (rgba) return Number(rgba[1]);
 		return 1;
@@ -93,15 +97,20 @@ function doTrongTrang(kiemDo) {
 	};
 	const nenThay = (el) => alpha(getComputedStyle(el).backgroundColor) > 0;
 	const inline = [
-		...document.querySelectorAll('[data-slot="proposed-change"][data-density="inline"]'),
+		...document.querySelectorAll(
+			'[data-slot="proposed-change"][data-density="inline"]',
+		),
 	];
-	if (kiemDo === "vien" && inline[0]) inline[0].style.border = "1px solid rgb(200, 0, 0)";
+	if (kiemDo === "vien" && inline[0])
+		inline[0].style.border = "1px solid rgb(200, 0, 0)";
 	if (kiemDo === "hop-con" && inline[0]) {
 		const hop = document.createElement("div");
 		hop.style.border = "1px solid rgb(200, 0, 0)";
 		hop.style.background = "rgb(240, 240, 240)";
 		hop.textContent = "hop";
-		(inline[0].querySelector('[data-slot="item-content"]') ?? inline[0]).appendChild(hop);
+		(
+			inline[0].querySelector('[data-slot="item-content"]') ?? inline[0]
+		).appendChild(hop);
 	}
 	const loiInline = [];
 	for (const g of inline) {
@@ -114,7 +123,11 @@ function doTrongTrang(kiemDo) {
 			}
 		}
 	}
-	const the = [...document.querySelectorAll('[data-slot="proposed-change"][data-density="card"]')];
+	const the = [
+		...document.querySelectorAll(
+			'[data-slot="proposed-change"][data-density="card"]',
+		),
+	];
 	const theKhongVien = the.filter((g) => !vienThay(g)).length;
 	return {
 		soInline: inline.length,
@@ -127,7 +140,11 @@ function doTrongTrang(kiemDo) {
 
 async function goLopPhu(trang) {
 	await trang.evaluate(() => {
-		for (const s of ["nextjs-portal", ".tsqd-parent-container", ".tsqd-open-btn-container"]) {
+		for (const s of [
+			"nextjs-portal",
+			".tsqd-parent-container",
+			".tsqd-open-btn-container",
+		]) {
 			for (const el of document.querySelectorAll(s)) el.remove();
 		}
 	});
@@ -136,7 +153,9 @@ async function goLopPhu(trang) {
 async function bamNut(trang, chon, chu) {
 	return trang.evaluate(
 		(c, t) => {
-			const nut = [...document.querySelectorAll(c)].find((b) => b.textContent?.trim() === t);
+			const nut = [...document.querySelectorAll(c)].find(
+				(b) => b.textContent?.trim() === t,
+			);
 			if (!nut) return false;
 			nut.click();
 			return true;
@@ -148,20 +167,47 @@ async function bamNut(trang, chon, chu) {
 
 async function tuongTac(trang, id, nhan) {
 	if (id === "ST-nenkara-nhan") {
-		const bam = await bamNut(trang, '[data-slot="kara-label"] button', NK.chuViSao);
-		const mo = bam && (await cho(trang, (t) => document.querySelector('[data-slot="popover-content"]')?.textContent?.includes(t) ?? false, NK.tieuDeViSao));
+		const bam = await bamNut(
+			trang,
+			'[data-slot="kara-label"] button',
+			NK.chuViSao,
+		);
+		const mo =
+			bam &&
+			(await cho(
+				trang,
+				(t) =>
+					document
+						.querySelector('[data-slot="popover-content"]')
+						?.textContent?.includes(t) ?? false,
+				NK.tieuDeViSao,
+			));
 		ghi(mo, `${nhan}: o Vi sao mo voi «${NK.tieuDeViSao}»`);
 		await trang.keyboard.press("Escape");
 	}
 	if (id === "ST-nenkara-bien-nhan") {
-		const bam = await bamNut(trang, '[data-slot="proposed-change"][data-decided="accepted"] button', NK.chuHoanTac);
-		const ve = bam && (await cho(trang, () => document.querySelector('[data-slot="proposed-change"]:not([data-decided]) button[data-variant="default"]') !== null));
+		const bam = await bamNut(
+			trang,
+			'[data-slot="proposed-change"][data-decided="accepted"] button',
+			NK.chuHoanTac,
+		);
+		const ve =
+			bam &&
+			(await cho(
+				trang,
+				() =>
+					document.querySelector(
+						'[data-slot="proposed-change"]:not([data-decided]) button[data-variant="default"]',
+					) !== null,
+			));
 		ghi(ve, `${nhan}: Hoan tac dua de xuat ve cho`);
 	}
 }
 
 const tapDesign = trangThaiTuDesign();
-const { PROTO_CATALOG } = await import(join(GOC, "apps/app/app/proto/catalog.ts"));
+const { PROTO_CATALOG } = await import(
+	join(GOC, "apps/app/app/proto/catalog.ts")
+);
 const muc = PROTO_CATALOG.find((m) => m.slug === SLUG);
 if (!muc) khongDoDuoc(`catalog khong co ${SLUG}`);
 const tapCatalog = muc.states.map((s) => s.id);
@@ -171,21 +217,33 @@ if (tapDesign.length === 0) khongDoDuoc("bang trang thai rong");
 
 const puppeteer = napPuppeteer();
 mkdirSync(ANH, { recursive: true });
-const trinhDuyet = await puppeteer.launch({ executablePath: NK.chrome, headless: true });
+const trinhDuyet = await puppeteer.launch({
+	executablePath: NK.chrome,
+	headless: true,
+});
 let soO = 0;
 try {
 	const trang = await trinhDuyet.newPage();
 	await trang.setCookie({ name: "lang", value: "vi", url: APP });
 	for (const nen of NK.nen) {
-		await trang.emulateMediaFeatures([{ name: "prefers-color-scheme", value: nen }]);
+		await trang.emulateMediaFeatures([
+			{ name: "prefers-color-scheme", value: nen },
+		]);
 		for (const kho of NK.kho) {
 			await trang.setViewport({ width: kho.rong, height: kho.cao });
 			for (const id of tapDesign.filter((x) => tapCatalog.includes(x))) {
 				const nhan = `${id} ${kho.ten} ${nen}`;
 				const url = `${APP}/proto/${SLUG}?state=${id}`;
-				const r = await trang.goto(url, { waitUntil: "networkidle0", timeout: NK.cho.manMs });
+				const r = await trang.goto(url, {
+					waitUntil: "networkidle0",
+					timeout: NK.cho.manMs,
+				});
 				if (!r?.ok()) khongDoDuoc(`${r?.status()} ${url}`);
-				const san = await cho(trang, (s) => document.querySelector(`main[data-state="${s}"]`) !== null, id);
+				const san = await cho(
+					trang,
+					(s) => document.querySelector(`main[data-state="${s}"]`) !== null,
+					id,
+				);
 				if (!san) khongDoDuoc(`${nhan}: man khong dung`);
 				await goLopPhu(trang);
 				await new Promise((ok) => setTimeout(ok, NK.cho.lacMs));
@@ -194,9 +252,14 @@ try {
 				await trang.screenshot({ path: tep, fullPage: true });
 				soO += 1;
 				for (const l of so.loiInline) ghi(false, `${nhan}: ${l}`);
-				ghi(so.theKhongVien === 0, `${nhan}: the co vien (${so.soThe - so.theKhongVien}/${so.soThe})`);
+				ghi(
+					so.theKhongVien === 0,
+					`${nhan}: the co vien (${so.soThe - so.theKhongVien}/${so.soThe})`,
+				);
 				ghi(so.tranNgang <= 0, `${nhan}: tran ngang ${so.tranNgang}px`);
-				dong.push(`    ${nhan}: inline ${so.soInline}, the ${so.soThe}, anh ${relative(GOC, tep)}`);
+				dong.push(
+					`    ${nhan}: inline ${so.soInline}, the ${so.soThe}, anh ${relative(GOC, tep)}`,
+				);
 				await tuongTac(trang, id, nhan);
 			}
 		}
@@ -206,8 +269,12 @@ try {
 }
 
 const can = tapDesign.length * NK.kho.length * NK.nen.length;
-ghi(soO === can, `so o da do ${soO} = ${tapDesign.length} trang thai x ${NK.kho.length} kho x ${NK.nen.length} nen = ${can}`);
-for (const t of NK.inputsE13) ghi(existsSync(join(ANH, t)), `inputs E13 co mat: ${t}`);
+ghi(
+	soO === can,
+	`so o da do ${soO} = ${tapDesign.length} trang thai x ${NK.kho.length} kho x ${NK.nen.length} nen = ${can}`,
+);
+for (const t of NK.inputsE13)
+	ghi(existsSync(join(ANH, t)), `inputs E13 co mat: ${t}`);
 for (const d of dong) console.log(d);
 console.log(sai === 0 ? "XANH" : `DO: ${sai} dong sai`);
 process.exit(sai === 0 ? 0 : 1);

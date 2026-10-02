@@ -4,6 +4,7 @@ import type { ReactElement } from "react";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
+import { AiFeedback } from "../src/components/ai-feedback";
 import { AsyncButtonContent } from "../src/components/async-action";
 import { AttendeeList } from "../src/components/attendee-list";
 import { Board } from "../src/components/board";
@@ -27,6 +28,7 @@ import {
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
 import { Heatmap } from "../src/components/heatmap";
+import { KaraLabel } from "../src/components/kara";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	MessageScrollerButton,
@@ -39,8 +41,6 @@ import {
 } from "../src/components/okr-status";
 import { PeriodSelect } from "../src/components/period-select";
 import { Progress } from "../src/components/progress";
-import { AiFeedback } from "../src/components/ai-feedback";
-import { KaraLabel } from "../src/components/kara";
 import { ProposedChange } from "../src/components/proposed-change";
 import { Reasoning } from "../src/components/reasoning";
 import { SaveBar } from "../src/components/save-bar";

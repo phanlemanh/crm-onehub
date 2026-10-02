@@ -3,7 +3,6 @@
 import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import Renew from "@carbon/icons-react/es/Renew";
 import Warning from "@carbon/icons-react/es/Warning";
-import { AiFeedback } from "@crm/ui/components/ai-feedback";
 import {
 	InlineCitation,
 	InlineCitationCard,
@@ -20,6 +19,7 @@ import {
 	InlineCitationSource,
 	InlineCitationText,
 } from "@crm/ui/components/ai-elements/inline-citation";
+import { AiFeedback } from "@crm/ui/components/ai-feedback";
 import {
 	Alert,
 	AlertAction,

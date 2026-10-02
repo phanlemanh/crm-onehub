@@ -115,7 +115,12 @@ function DeXuatDangSua() {
 					tone: "primary",
 					onClick: KHONG_LAM,
 				},
-				{ id: "huy-sua", label: DE_XUAT.huy, tone: "quiet", onClick: KHONG_LAM },
+				{
+					id: "huy-sua",
+					label: DE_XUAT.huy,
+					tone: "quiet",
+					onClick: KHONG_LAM,
+				},
 			]}
 		/>
 	);
@@ -228,7 +233,9 @@ function NoiDung({ state }: { state: string }) {
 				duoiKr2={
 					<>
 						<DeXuatCoBienNhan />
-						<DeXuatNeo decided={{ decision: "dismissed", text: DE_XUAT.daBoQua }} />
+						<DeXuatNeo
+							decided={{ decision: "dismissed", text: DE_XUAT.daBoQua }}
+						/>
 					</>
 				}
 			/>

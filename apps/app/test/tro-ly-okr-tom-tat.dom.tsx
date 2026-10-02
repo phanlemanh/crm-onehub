@@ -105,6 +105,7 @@ const { messages } = await import("@crm/ui/lib/messages");
 
 const mt = okrToanCanhMessages("vi");
 const m = mt.tomTat;
+const phanHoi = messages("vi").aiFeedback;
 const msgUi = messages("vi");
 
 const DUONG_THIET_KE = join(
@@ -508,8 +509,8 @@ const CA = {
 		expect(van).toEqual([CAU_1, CAU_2]);
 		expect(chu(nutTrichDan(1))).toBe("Cập nhật 12/10");
 		expect(chu(nutTrichDan(2))).toBe("Cập nhật 13/10 +2");
-		expect(dangNhan(m.huuIch)).toBe(false);
-		expect(dangNhan(m.khongHuuIch)).toBe(false);
+		expect(dangNhan(phanHoi.useful)).toBe(false);
+		expect(dangNhan(phanHoi.notUseful)).toBe(false);
 		expect(chu(k.querySelector('[role="status"]'))).toBe("");
 		const dangBan = document.getElementById("dang-ban");
 		if (!dangBan) throw new Error("mat bang dang ban");
@@ -577,12 +578,12 @@ const CA = {
 		tomTatHienTai = () => ban({ phanHoiCuaToi: true });
 		await moBang();
 		await cho(() => trangThai("ST-tomtat-da-phan-hoi") !== null, "da phan hoi");
-		expect(dangNhan(m.huuIch)).toBe(true);
-		expect(dangNhan(m.khongHuuIch)).toBe(false);
+		expect(dangNhan(phanHoi.useful)).toBe(true);
+		expect(dangNhan(phanHoi.notUseful)).toBe(false);
 		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(
 			"Cảm ơn, đã ghi",
 		);
-		await bam(nutPhanHoi(m.khongHuuIch));
+		await bam(nutPhanHoi(phanHoi.notUseful));
 		await cho(
 			() => goiCua("okr.troLyTomTatPhanHoi").length === 1,
 			"goi phan hoi",
@@ -591,8 +592,8 @@ const CA = {
 			tomTatId: "tt-1",
 			huuIch: false,
 		});
-		await cho(() => dangNhan(m.khongHuuIch), "doi y");
-		expect(dangNhan(m.huuIch)).toBe(false);
+		await cho(() => dangNhan(phanHoi.notUseful), "doi y");
+		expect(dangNhan(phanHoi.useful)).toBe(false);
 		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(
 			"Cảm ơn, đã ghi",
 		);
@@ -689,7 +690,7 @@ describe("nhan trich dan", () => {
 describe("phan hoi", () => {
 	test("mot cham Huu ich ghi true va hien Cam on", async () => {
 		await moCoCau();
-		await bam(nutPhanHoi(m.huuIch));
+		await bam(nutPhanHoi(phanHoi.useful));
 		await cho(
 			() => goiCua("okr.troLyTomTatPhanHoi").length === 1,
 			"goi phan hoi",
@@ -702,7 +703,7 @@ describe("phan hoi", () => {
 			() => chu(khoi()?.querySelector('[role="status"]') ?? null) === m.daGhi,
 			"cam on",
 		);
-		expect(dangNhan(m.huuIch)).toBe(true);
+		expect(dangNhan(phanHoi.useful)).toBe(true);
 	});
 
 	test("gui hong thi nut ve trang thai cu va bao loi", async () => {
@@ -710,13 +711,13 @@ describe("phan hoi", () => {
 			throw new Error("hong");
 		});
 		await moCoCau();
-		await bam(nutPhanHoi(m.khongHuuIch));
+		await bam(nutPhanHoi(phanHoi.notUseful));
 		await cho(
 			() => document.body.textContent?.includes(m.phanHoiLoi) ?? false,
 			"toast loi",
 		);
-		expect(dangNhan(m.khongHuuIch)).toBe(false);
-		expect(dangNhan(m.huuIch)).toBe(false);
+		expect(dangNhan(phanHoi.notUseful)).toBe(false);
+		expect(dangNhan(phanHoi.useful)).toBe(false);
 	});
 });
 

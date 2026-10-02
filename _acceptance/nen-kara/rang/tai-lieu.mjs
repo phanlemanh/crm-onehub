@@ -93,7 +93,8 @@ for (const [luat, can] of Object.entries(TL.thanhPhan)) {
 	for (const cu of TL.chuaCo) {
 		ghi(!chu.includes(cu), `muc 10 luat ${luat}: khong con «${cu}»`);
 	}
-	for (const ten of can) ghi(chu.includes(ten), `muc 10 luat ${luat}: neu ${ten}`);
+	for (const ten of can)
+		ghi(chu.includes(ten), `muc 10 luat ${luat}: neu ${ten}`);
 }
 
 const loTrinh = bangSau(aiUx, TL.loTrinh);
@@ -103,16 +104,19 @@ ghi(iKhung !== -1, `lo trinh co hang ${TL.khung}`);
 ghi(iGopY !== -1, `lo trinh co hang ${TL.gopY}`);
 if (iKhung !== -1 && iGopY !== -1) {
 	if (iKhung >= iGopY) ghi(false, "lo trinh sai thu tu");
-	else ghi(true, `lo trinh: ${TL.khung} (${iKhung}) truoc ${TL.gopY} (${iGopY})`);
+	else
+		ghi(true, `lo trinh: ${TL.khung} (${iKhung}) truoc ${TL.gopY} (${iGopY})`);
 	const lam = (loTrinh[iGopY].at(-1) ?? "").replaceAll("`", "");
-	for (const ten of TL.diemCam) ghi(lam.includes(ten), `hang ${TL.gopY} neu ${ten}`);
+	for (const ten of TL.diemCam)
+		ghi(lam.includes(ten), `hang ${TL.gopY} neu ${ten}`);
 }
 
 const chatUi = doc(tepChatUi);
 const cay = bangSau(chatUi, TL.trongCay);
 const hConf = cay.find((o) => o[0].includes("confirmation.tsx"));
 ghi(Boolean(hConf), "chat-ui co hang confirmation.tsx");
-if (hConf) ghi(hConf.join(" ").includes("card"), "hang confirmation.tsx neu card");
+if (hConf)
+	ghi(hConf.join(" ").includes("card"), "hang confirmation.tsx neu card");
 
 for (const d of dong) console.log(d);
 console.log(sai === 0 ? "XANH" : `DO: ${sai} dong sai`);
