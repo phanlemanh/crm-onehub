@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 728c0f8c5bdc0382ace2bde62629e1d15251ad53
+verified_commit: 255a3688eaa146901ac98df58fc8957d22dba7e9
 human_signoff: Manh Phan 2026-10-02
 ---
 
@@ -371,3 +371,7 @@ Round 4: E26 nay xanh với chiều đo 37/37, E12 (86 ca) và E27 xanh, bảy l
 ### Re-pin lần 1 — 2026-10-02, do gỡ not-run E21 sau chữ ký Cổng 2, ghim trên HEAD gộp onehub 923f5717
 run_id: repin-20261002T010648Z-44783
 sha: 728c0f8c5bdc0382ace2bde62629e1d15251ad53 · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29
+
+### Re-pin lần 2 — 2026-10-02, do hoá cũ do sửa lịch tóm tắt tuần lọc chu kỳ ẩn (405fe2da) trong PR soan-okr-cung-tro-ly
+run_id: repin-20261002T031659Z-45883
+sha: 255a3688eaa146901ac98df58fc8957d22dba7e9 · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29
