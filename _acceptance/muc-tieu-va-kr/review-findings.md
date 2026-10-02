@@ -2,64 +2,64 @@
 
 ## Trong hợp đồng
 
-Không có finding nào map được vào AC.
+Không có finding nào được map vào AC.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **NhipGon copies PaceIndicator from packages/ui instead of adding a variant there**
-  Người dùng thấy gì: Dấu nhịp ở bản gọn (danh sách và điện thoại) là một bản chép riêng. Hôm nay hai nơi hiện giống hệt nhau, nhưng nếu sau này đổi chữ hay màu của nhịp ở một nơi thì nơi kia có thể lệch.
+- **Below md (e.g. the 390 px sheet), the KR number button no longer carries data-so-kr, so the signed-off check so-okr-tu-chay E11 step 10 breaks**
+  Người dùng thấy gì: Trên màn điện thoại, nút mở số liệu của KR vẫn bấm được, nhưng phép kiểm tự động của sổ số không còn tìm ra nó. Nếu sau này nút này hỏng ở màn điện thoại thì sẽ không ai được báo.
+  file: `apps/app/app/(app)/[slug]/okr/bang-kr.tsx`
+  severity: high
+  Đề xuất: new-contract
+
+- **NhipGon copies PaceIndicator at the call site instead of adding a variant in packages/ui**
+  Người dùng thấy gì: Dấu nhịp của KR trên màn điện thoại là một bản chép riêng. Sau này nếu thêm hoặc đổi tên một mức nhịp, màn điện thoại và màn máy tính có thể hiện chữ hoặc màu khác nhau cho cùng một KR.
   file: `apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **English sheet.tienDoTu ignores plural: 'from 1 KRs'**
-  Người dùng thấy gì: Ở bản tiếng Anh, mục tiêu chỉ có một KR sẽ hiện câu «from 1 KRs», sai số ít. Người dùng vẫn hiểu đúng, chỉ là câu chưa chuẩn.
-  file: `apps/app/lib/messages/okr.ts`
-  severity: low
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): bộ đếm «số eval thật đã chạy» của ho-so-cham cộng độ dài danh sách, không đếm lượt chạy thật**
+  Người dùng thấy gì: Phép kiểm báo đã chạy đủ các eval cũ có thể vẫn báo đủ khi một eval bị bỏ sót hoặc chỉ dùng lại kết quả cũ, nên một hồi quy có thể lọt qua mà vẫn hiện xanh.
+  file: `_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs`
+  severity: medium
   Đề xuất: known-limits
 
-- **AN_DUOI_MD defined twice with different values in the same OKR area**
-  Người dùng thấy gì: Không ảnh hưởng gì tới người dùng hôm nay. Chỉ là nếu sau này đổi điểm ẩn cột ở một nơi mà quên nơi kia thì bảng có thể ẩn cột lệch nhau.
+- **Hình dạng 5 (tuyên quét lớp nhưng chỉ có điểm-case): ca ST-mtkr-kr-moc và ST-mtkr-kr-may chỉ đo một hai màn, trong khi dòng bảng ghi «mọi màn»**
+  Người dùng thấy gì: Với KR kiểu mốc và KR lấy từ máy, bài kiểm chỉ thử trên một hai màn. Nếu có lỗi chỉ xảy ra ở Theo đơn vị hoặc Chấm điểm thì bài kiểm vẫn xanh.
+  file: `apps/app/test/muc-tieu-va-kr.dom.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5/4: kiểm «bảng không cuộn ngang» trên màn Chấm điểm ở E13 chạy mà không có dữ liệu gây áp lực (tên KR 120 ký tự) như ba màn kia**
+  Người dùng thấy gì: Màn Chấm điểm trên điện thoại chưa được thử với tên KR rất dài, nên nếu tên dài làm bảng tràn ngang ở màn này thì phép kiểm hiện tại không phát hiện được.
+  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Breakpoint for hiding columns is defined twice: header in bang-kr.tsx, row cells in khoi-muc-tieu.tsx**
+  Người dùng thấy gì: Ngưỡng độ rộng màn hình để ẩn cột nằm ở hai nơi. Hôm nay hai nơi khớp nhau nên người dùng không thấy gì, nhưng nếu sau này chỉnh một nơi quên nơi kia thì hàng mục tiêu và hàng tiêu đề có thể lệch cột ở một dải độ rộng.
   file: `apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx`
   severity: low
   Đề xuất: wont-fix
 
-- **nhanKr hardcodes the 'KR' label outside the messages module**
-  Người dùng thấy gì: Nhãn KR1, KR2… hiện đúng ở mọi màn. Chữ «KR» chưa đi qua bộ từ điển tiếng Việt/Anh nên nếu sau này muốn đổi cách gọi thì phải sửa thêm một chỗ.
-  file: `apps/app/app/(app)/[slug]/okr/kieu.ts`
+- **Proto overrides the row background with className although the new `nested` variant exists**
+  Người dùng thấy gì: Bản mẫu giao diện dùng nền hàng tự đặt thay vì kiểu hàng con mới. Sản phẩm thật không bị ảnh hưởng, nhưng nếu đổi màu hàng con sau này thì bản mẫu sẽ không còn giống bản thật.
+  file: `apps/app/app/proto/_modules/muc-tieu-va-kr/cham.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (khẳng định âm tính một mình): kiểm reduced-motion của E5 chỉ đòi transition-duration 0s, còn đối chứng no-preference chỉ được ghi ra chứ không được kiểm**
+  Người dùng thấy gì: Phép kiểm chế độ giảm chuyển động chỉ chứng minh mũi tên đứng yên khi người dùng xin giảm, chưa chứng minh nó vẫn chuyển động ở chế độ thường. Người dùng không bị ảnh hưởng, chỉ là phép kiểm yếu hơn mức lý tưởng.
+  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 4 (đối chứng đỏ rỗng): chiều đỏ của E1 bật vì bộ chọn không thấy gì, không phải vì KR nằm ngoài khung**
-  Người dùng thấy gì: Phép kiểm kiểm tra «KR có nằm trong cùng khung với mục tiêu không» được chứng minh là bắt được lỗi bằng một trường hợp quá dễ. Màn hình thật không bị ảnh hưởng, nhưng phép kiểm có thể bỏ sót một kiểu xếp sai tinh vi hơn trong tương lai.
-  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 (âm tính đứng một mình): E13 kết luận «không cuộn ngang/dọc» mà không khẳng định tên KR 120 ký tự có mặt trên màn; màn chấm điểm chắc chắn không có tên đó**
-  Người dùng thấy gì: Phép kiểm «điện thoại không bị tràn ngang» chưa thật sự thử với một tên KR rất dài, nên nếu có tên dài làm vỡ bố cục thì phép kiểm hiện tại chưa chắc báo. Chưa có bằng chứng màn hình thật bị tràn.
-  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 (âm tính đo qua vật thay): E8 ca (c) khẳng định «không [data-khu=gop-vao]» bằng số dòng [data-gop-vao] = [], nên khu vẫn hiện mà rỗng cũng xanh**
-  Người dùng thấy gì: Phép kiểm «mục tiêu không góp vào đâu thì không hiện khu Góp vào» chỉ đếm số dòng, nên nếu sau này khu đó hiện ra với tiêu đề mà không có dòng nào thì phép kiểm vẫn xanh.
-  file: `apps/app/test/muc-tieu-va-kr.dom.tsx`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 3 (chuỗi có mặt thay cho giá trị): E13 màn chấm nhận mục tiêu đã có điểm chỉ cần nhãn «Điểm » ở đầu**
-  Người dùng thấy gì: Trên điện thoại, nếu số điểm của một mục tiêu bị cắt mất mà chữ «Điểm» vẫn còn thì phép kiểm hiện tại vẫn báo đạt. Chưa có bằng chứng số điểm đang bị mất.
-  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 5 (tuyên lớp, đo điểm): dòng ST-mtkr-kr-may và ST-mtkr-kr-moc khai «mọi màn» nhưng ca chỉ dựng Của tôi (và sheet)**
-  Người dùng thấy gì: Hiển thị KR nguồn máy và KR dạng mốc mới được kiểm ở «Của tôi» và sheet, chưa kiểm ở «Theo đơn vị» và «Chấm điểm». Nếu chỉ riêng hai màn đó hỏng ở hai loại KR này thì kiểm tra tự động chưa bắt được.
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): «mũi tên chỉ phải» của ST-mtkr-da-thu được đo bằng sự có mặt của chuỗi lớp Tailwind, không phải bằng phép xoay đã vẽ**
+  Người dùng thấy gì: Hướng mũi tên khi thu gọn mục tiêu chỉ được kiểm bằng tên lớp trong mã, không phải bằng hình đã vẽ. Nếu kiểu xoay không được áp dụng thì mũi tên không xoay mà bài kiểm vẫn xanh.
   file: `apps/app/test/muc-tieu-va-kr.dom.tsx`
   severity: low
-  Đề xuất: known-limits
+  Đề xuất: wont-fix
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
