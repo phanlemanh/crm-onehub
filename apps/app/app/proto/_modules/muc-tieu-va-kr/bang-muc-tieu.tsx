@@ -36,10 +36,6 @@ const COT: SimpleTableColumn[] = [
 	{ id: "tienDo", header: "Tiến độ", width: "w-64", className: AN_DUOI_MD },
 ];
 
-const DONG_CON = "bg-muted/30";
-
-const DINH_DUOI = "border-b-0";
-
 function moTaMucTieu(mt: MucTieuDu): string {
 	const phan = [mt.donVi, `${mt.kr.length} KR`];
 	if (mt.gopVao.length > 0) phan.push(`góp vào ${mt.gopVao.length} chỗ`);
@@ -160,7 +156,8 @@ function HangKr({
 }) {
 	return (
 		<SimpleTableRow
-			className={cn(DONG_CON, dinhDuoi && DINH_DUOI)}
+			joined={dinhDuoi}
+			nested
 			data-hang-kr={kr.id}
 			data-kr={kr.id}
 		>
@@ -208,7 +205,7 @@ function HangTraiCot({
 	dinhTren: boolean;
 }) {
 	return (
-		<SimpleTableRow className={DONG_CON} {...neo}>
+		<SimpleTableRow nested {...neo}>
 			<SimpleTableCell />
 			<SimpleTableCell
 				className={cn("whitespace-normal pb-3", dinhTren ? "pt-0" : "pt-3")}
@@ -222,7 +219,7 @@ function HangTraiCot({
 
 function HangChuaCoKr({ mt }: { mt: MucTieuDu }) {
 	return (
-		<SimpleTableRow className={DONG_CON} data-chua-co-kr={mt.id}>
+		<SimpleTableRow data-chua-co-kr={mt.id} nested>
 			<SimpleTableCell />
 			<SimpleTableCell className="whitespace-normal py-3" colSpan={3}>
 				<div className="flex flex-wrap items-center gap-3">
@@ -276,10 +273,7 @@ export function BangMucTieu({
 				const duoiMt = moHang ? diemCam.duoiMucTieu?.(mt) : null;
 				return (
 					<div data-muc-tieu={mt.id} key={mt.id}>
-						<SimpleTable
-							columns={COT}
-							headerClassName="sr-only"
-						>
+						<SimpleTable columns={COT} header="sr-only">
 							<HangMucTieu
 								doiMo={() => doiMo(mt.id)}
 								mo={moHang}
