@@ -51,3 +51,61 @@ wall: 979s
 - **claude-opus-5-5**: 3 agent · 75 calls · out 7,426 · in 150 · cache_read 12,507,776 · cache_create 545,358
 - **claude-haiku-4-5-20251001**: 19 agent · 39 calls · out 17,177 · in 350 · cache_read 2,335,322 · cache_create 1,349,346
 
+### S4 round 2 — wf_d70f0372-e0d (34 agent, 51,854 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 5 | 9,574 | 10 | 606,566 | 88 |
+| triage | claude-sonnet-5-5 | 2 | 3,419 | 4 | 120,340 | 28 |
+| ui:E10 | claude-sonnet-5-5 | 11 | 3,301 | 22 | 1,382,716 | 255 |
+| review:measurement | claude-opus-5-5 | 10 | 3,025 | 20 | 1,476,827 | 168 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 2,983 | 18 | 119,221 | 47 |
+| baseline:diffBase | claude-sonnet-5-5 | 9 | 2,480 | 18 | 1,039,000 | 86 |
+| judge:E13:domain-correctness | claude-sonnet-5-5 | 2 | 2,264 | 4 | 116,503 | 19 |
+| judge:E13:spec-alignment | claude-sonnet-5-5 | 2 | 2,193 | 4 | 151,200 | 19 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-4-5-20251001 | 2 | 1,992 | 18 | 119,398 | 90 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-4-5-20251001 | 2 | 1,541 | 18 | 119,372 | 182 |
+| machine:bun run test -- --filter=api | claude-haiku-4-5-20251001 | 2 | 1,528 | 18 | 90,520 | 220 |
+| refute:nen-kara.dom.tsx | claude-sonnet-5-5 | 6 | 1,421 | 12 | 678,375 | 36 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-4-5-20251001 | 2 | 1,344 | 18 | 119,366 | 160 |
+| review:conventions | claude-opus-5-5 | 17 | 1,256 | 34 | 2,523,870 | 145 |
+| review:bugs | claude-opus-5-5 | 21 | 1,231 | 42 | 3,320,237 | 169 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 1,113 | 18 | 119,221 | 23 |
+| machine:node _acceptance/nen-chat-ai-elements/ra | claude-haiku-4-5-20251001 | 2 | 1,082 | 18 | 119,265 | 25 |
+| refute:nen-kara.dom.tsx | claude-sonnet-5-5 | 7 | 1,014 | 14 | 809,550 | 40 |
+| machine:node _acceptance/nen-kara/rang/tai-lieu. | claude-haiku-4-5-20251001 | 2 | 913 | 18 | 119,238 | 17 |
+| refute:nen-kara-man-cu.dom.tsx | claude-sonnet-5-5 | 3 | 773 | 6 | 283,828 | 18 |
+| refute:man-proto.mjs | claude-sonnet-5-5 | 4 | 751 | 8 | 371,941 | 18 |
+| judge:E13:operational-feasibility | claude-sonnet-5-5 | 2 | 690 | 4 | 151,202 | 16 |
+| machine:{ printf "%s\n" "packages/ui/src/compone | claude-haiku-4-5-20251001 | 2 | 687 | 18 | 119,437 | 19 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 683 | 18 | 119,275 | 16 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 677 | 18 | 119,293 | 28 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 638 | 18 | 119,334 | 21 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 578 | 18 | 119,289 | 16 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 514 | 18 | 119,275 | 20 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 490 | 18 | 119,276 | 16 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 458 | 18 | 119,272 | 17 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 412 | 18 | 119,276 | 15 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 355 | 18 | 119,219 | 13 |
+| machine:cd packages/ui && TZ=Asia/Ho_Chi_Minh bu | claude-haiku-4-5-20251001 | 2 | 324 | 18 | 119,273 | 13 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 150 | 4 | 115,570 | 8 |
+
+
+wall: 918s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 2,480 | 1,039,000 | 86 | 18:07:16 | 18:08:41 |
+| machine | 19 | 18,312 | 2,237,820 | 745 | 18:07:16 | 18:19:41 |
+| ui | 1 | 3,301 | 1,382,716 | 255 | 18:07:35 | 18:11:51 |
+| judge | 3 | 5,147 | 418,905 | 20 | 18:07:35 | 18:07:56 |
+| review | 3 | 5,512 | 7,320,934 | 173 | 18:07:39 | 18:10:33 |
+| triage | 1 | 3,419 | 120,340 | 28 | 18:19:43 | 18:20:11 |
+| refute | 4 | 3,959 | 2,143,694 | 41 | 18:20:12 | 18:20:54 |
+| capture | 1 | 150 | 115,570 | 8 | 18:20:55 | 18:21:04 |
+| synthesize | 1 | 9,574 | 606,566 | 88 | 18:21:05 | 18:22:34 |
+
+- **claude-sonnet-5-5**: 12 agent · 55 calls · out 28,030 · in 110 · cache_read 5,826,791 · cache_create 1,485,835
+- **claude-opus-5-5**: 3 agent · 48 calls · out 5,512 · in 96 · cache_read 7,320,934 · cache_create 492,467
+- **claude-haiku-4-5-20251001**: 19 agent · 38 calls · out 18,312 · in 342 · cache_read 2,237,820 · cache_create 1,347,353
+

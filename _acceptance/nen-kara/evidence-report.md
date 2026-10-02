@@ -2,214 +2,212 @@
 schema_version: 2
 feature_slug: nen-kara
 verdict: REJECT
-failed_evals: ["E3","E10"]
-reason:
+failed_evals: [E8]
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c337f10d96d096239db8ae2b4ae7357cb6b5fed7
+verified_commit: d56f3bec890e90dbb5101fa3ad95aefc264198ae
 human_signoff:
 ---
 
 # Evidence Report: nen-kara
 
+Round 2. Kết luận REJECT vì một eval máy đỏ: E8 (lệnh gồm hai nửa, nửa thứ hai không chạy được). Mười ba eval còn lại xanh.
+
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
 | E1 | AC-1 | test | PASS |
-| E2 | AC-2 | test | FAIL-NOT-RUN-CLEAN: PASS |
-| E3 | AC-3 | test | REJECT (đỏ) |
+| E2 | AC-2 | test | PASS |
+| E3 | AC-3 | test | PASS |
 | E4 | AC-4 | test | PASS |
 | E5 | AC-5 | test | PASS |
 | E6 | AC-6 | test | PASS |
 | E7 | AC-7 | test | PASS |
-| E8 | AC-7 | test | PASS |
+| E8 | AC-7 | test | FAIL |
 | E9 | AC-8 | test | PASS |
-| E10 | AC-9 | ui-check | REJECT (đỏ) |
+| E10 | AC-9 | ui-check | PASS |
 | E11 | AC-10 | script | PASS |
 | E12 | AC-11 | script | PASS |
-| E13 | AC-12 | judgment | PASS (đề xuất của hội đồng, chờ người quyết ở Cổng 2) |
+| E13 | AC-12 | judgment | PASS |
 | E14 | AC-13 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-nen-kara-E1-r1
+  run_id: minted-nen-kara-E1-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.nk_inline
-  verified_at: 2026-10-02T12:23:03Z
-  output: |
-    Ran 1 test across 1 file. [522.00ms]
-
-- eval: E2
-  run_id: minted-nen-kara-E2-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.nk_hai_do_day
-  verified_at: 2026-10-02T12:23:03Z
-  output: |
-    Ran 1 test across 1 file. [485.00ms]
-
-- eval: E3
-  run_id: minted-nen-kara-E3-r1
-  exit_code: 1
-  baseline: red
-  verifier: config:executors.test.nk_man_cu
-  verified_at: 2026-10-02T12:23:03Z
-  output: |
-    Lệnh nối hai bài bằng &&. Bài thứ nhất (nen-kara-man-cu.dom.tsx -t man-cu): 2 pass, 2 filtered out, 0 fail.
-    Bài thứ hai (the-gop-y-okr.dom.tsx) không chạy được: bun báo lỗi
-    error: preload not found "../../packages/ui/test/the-gop-y-okr.dom.tsx"
-    Tệp apps/app/test/the-gop-y-okr.dom.tsx có tồn tại trong cây; bun không nhận nó làm tệp kiểm trong lệnh này.
-    Vì lệnh thoát với mã 1, kỳ vọng «nguyên bài the-gop-y-okr.dom.tsx xanh» chưa được chứng minh.
-
-- eval: E4
-  run_id: minted-nen-kara-E4-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.nk_bien_nhan
-  verified_at: 2026-10-02T12:23:03Z
-  output: |
-    Ran 1 test across 1 file. [390.00ms]
-
-- eval: E5
-  run_id: minted-nen-kara-E5-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.nk_dau
-  verified_at: 2026-10-02T12:23:03Z
-  output: |
-    Ran 1 test across 1 file. [504.00ms]
-
-- eval: E6
-  run_id: minted-nen-kara-E6-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.nk_vi_sao
-  verified_at: 2026-10-02T12:23:03Z
-  output: |
-    Ran 2 tests across 1 file. [608.00ms]
-
-- eval: E7
-  run_id: minted-nen-kara-E7-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.nk_phan_hoi
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
   output: |
     Ran 1 test across 1 file. [647.00ms]
 
-- eval: E8
-  run_id: minted-nen-kara-E8-r1
+- eval: E2
+  run_id: minted-nen-kara-E2-r2
   exit_code: 0
   baseline: red
-  verifier: config:executors.test.nk_tom_tat
-  verified_at: 2026-10-02T12:23:03Z
+  verifier: config:executors.test.nk_hai_do_day
+  verified_at: 2026-10-02T18:06:53Z
   output: |
-    Ran 24 tests across 1 file. [2.00s]
+    Ran 1 test across 1 file. [844.00ms]
+
+- eval: E3
+  run_id: minted-nen-kara-E3-r2
+  exit_code: 0
+  baseline: green
+  verifier: config:executors.test.nk_man_cu
+  verified_at: 2026-10-02T18:06:53Z
+  output: |
+    Ran 17 tests across 2 files. [11.57s]
+
+- eval: E4
+  run_id: minted-nen-kara-E4-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nk_bien_nhan
+  verified_at: 2026-10-02T18:06:53Z
+  output: |
+    Ran 1 test across 1 file. [911.00ms]
+
+- eval: E5
+  run_id: minted-nen-kara-E5-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nk_dau
+  verified_at: 2026-10-02T18:06:53Z
+  output: |
+    Ran 1 test across 1 file. [487.00ms]
+
+- eval: E6
+  run_id: minted-nen-kara-E6-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nk_vi_sao
+  verified_at: 2026-10-02T18:06:53Z
+  output: |
+    Ran 2 tests across 1 file. [793.00ms]
+
+- eval: E7
+  run_id: minted-nen-kara-E7-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.nk_phan_hoi
+  verified_at: 2026-10-02T18:06:53Z
+  output: |
+    Ran 1 test across 1 file. [839.00ms]
+
+- eval: E8
+  run_id: minted-nen-kara-E8-r2
+  exit_code: 1
+  baseline: red
+  verifier: config:executors.test.nk_tom_tat
+  verified_at: 2026-10-02T18:06:53Z
+  output: |
+    Nửa đầu (nen-kara-man-cu.dom.tsx -t tom-tat): 2 pass, 2 filtered out, 0 fail, 5 expect() calls.
+    Nửa sau (tro-ly-okr-tom-tat.dom.tsx): bun báo "preload not found" với đường dẫn ../../packages/ui/test/tro-ly-okr-tom-tat.dom.tsx, lệnh dừng ở đây.
+    Tệp apps/app/test/tro-ly-okr-tom-tat.dom.tsx có thật trong kho. Chạy lại riêng nửa sau, chỉ đọc, ngoài lượt đo: 24 pass, 0 fail, 75 expect() calls.
+    Kết quả tính cho eval vẫn là đỏ theo mã thoát của lần chạy máy; người quyết xem lệnh có phải trục trặc khi gọi bun không.
 
 - eval: E9
-  run_id: minted-nen-kara-E9-r1
+  run_id: minted-nen-kara-E9-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.nk_hai_tieng
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
   output: |
-    Ran 5 tests across 1 file. [7.00ms]
+    Ran 5 tests across 1 file. [13.00ms]
 
 - eval: E10
-  run_id: minted-nen-kara-E10-r1
-  exit_code: 1
+  run_id: minted-nen-kara-E10-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.nk_man_proto
-  verified_at: 2026-10-02T12:23:03Z
-  output: |
-    Lệnh chính (tiền cảnh, timeout 600000): man-proto.mjs trong phiên đo riêng kho crm_nen_kara_do, app :4146, api :4515, in XANH, 77 dòng OK, không dòng SAI.
-    Số ô đã đo 32 = 8 trạng thái x 2 khổ x 2 nền; mọi ô «tran ngang 0px»; không có 'inline co vien' hay 'inline co hop con'; không có 'thieu trang thai'; 4 tệp inputs E13 có mặt.
-    Chiều đỏ hop-con (--kiem-do-do hop-con): thoát mã 1, 20 dòng 'inline co hop con', đạt yêu cầu.
-    Chiều đỏ vien (--kiem-do-do vien): thoát mã 0, in XANH, 0 dòng 'inline co vien'. Expected đòi in 'inline co vien' và mã 1, nên chiều đỏ này KHÔNG đạt.
-    Tái lập ở bản sao gỡ lỗi (scratchpad): sau khi chèn style.border='1px solid rgb(200,0,0)' lên gốc inline, getComputedStyle trả borderTopWidth 1px, borderTopStyle solid nhưng borderTopColor rgba(0,0,0,0) và vienThay() sai, vì Item (packages/ui/src/components/item.tsx) có `transition-colors duration-100` + `border-transparent`, màu viền còn đang chuyển khi đọc đồng bộ. Lỗi nằm ở thước rang/man-proto.mjs (cần tắt transition hoặc đọc sau khi hết chuyển), không ở sản phẩm.
+  verified_at: 2026-10-02T18:06:53Z
   screenshot: evidence/E10-ST-nenkara-nhan-1440-light.png
   observed: |
-    Đã mở cả 32 ảnh E10-ST-nenkara-<state>-<1440|390>-<light|dark>.png. 1440 light/dark (1000 cao, toàn trang): nền trắng/đen tương ứng, hàng nút chọn state, tiêu đề «Khách hàng doanh nghiệp miền Bắc chọn OneHub làm nền tảng chính», nhãn «Kara · OKR · 2 góp ý · Vì sao?» với dấu AI, một thẻ ngoài chứa ba KR (62%, 40%, 71%). ST-nenkara-nhan: chỉ nhãn, chưa mở popover khi chụp (popover được kiểm bằng DOM sau chụp). ST-nenkara-inline-cho: dưới KR thứ hai có đề xuất «Đổi tên KR» với dòng cũ gạch đỏ, dòng mới nền xanh nhạt, một nút chính xanh «Đổi tên KR» + «Sửa» + «Bỏ qua», không khung riêng quanh đề xuất, nằm liền mạch trong dòng KR. inline-khoa: nút chính mờ + dòng «Lưu thay đổi của KR trước khi nhận». inline-loi: nút chính + dòng đỏ «Kara chưa ghi được — thử lại». inline-sua: textarea có viền focus xanh, nút «Nhận bản đã sửa» + «Huỷ». bien-nhan: dòng biên nhận «✓ Đã đổi tên theo Kara · Hoàn tác» và «Đã bỏ qua» (chụp trước khi bấm Hoàn tác; Hoàn tác kiểm sau bằng DOM, đạt). the: bố cục hai cột, bên phải thẻ có viền «Thêm KR đối trọng» với một nút chính «Thêm KR đối trọng», «Sửa», «Bỏ qua», và dòng biên nhận có viền «Đã đổi tên theo Kara · Hoàn tác». phan-hoi: «Tóm tắt tuần», nút «Hữu ích» (viền xanh, đã chọn)/«Không hữu ích», «Cảm ơn, đã ghi». 390 light/dark: cùng nội dung xếp một cột, hàng nút state xếp dọc, các KR ngắt dòng hợp lý, câu đề xuất đọc liền (ngắt 2 dòng), không tràn ngang, nút hành động nằm trong khung; ở thẻ 390 thẻ xếp dưới danh sách KR. Dark: nền đen, chữ sáng, nút chính xanh lục, đỏ/xanh nhạt vẫn đọc được, không phần tử nào vỡ. Không frame nào mâu thuẫn expected cho lượt chính; nhưng chiều đỏ 'vien' không in 'inline co vien' (không có frame cho chiều đỏ) nên khẳng định đó không đạt.
+    Đã mở 8 frame bằng Read, mọi frame khớp expected: ở 1440 và 390, đề xuất inline nằm liền dưới dòng KR, không viền, câu cũ gạch, câu mới tô nền nhạt, một nút chính màu xanh.
+    Thẻ card ở cột phải có viền, biên nhận "Đã đổi tên theo Kara · Hoàn tác" thu lại tại chỗ; nút "Hữu ích" và "Không hữu ích" hiện đúng; không frame nào tràn ngang.
   network_observed: n-a (driver)
+  output: |
+    rang/man-proto.mjs đo 32 ô (8 trạng thái, 2 khổ, 2 nền), 0 ô sai.
+    Chiều đỏ --kiem-do-do vien in "inline co vien" và dừng không thành công, đúng kỳ vọng.
+    Chiều đỏ --kiem-do-do hop-con in "inline co hop con" (20 dòng, "DO: 20 dong sai") và dừng không thành công, đúng kỳ vọng.
+    32 ảnh E10-*.png do chính man-proto.mjs chụp bằng puppeteer; không có E10-network.txt vì driver không đọc được network.
 
 - eval: E11
-  run_id: minted-nen-kara-E11-r1
+  run_id: minted-nen-kara-E11-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.script.nk_mo_coi
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
   output: |
     RĂNG TÊN GỌI XANH
 
 - eval: E12
-  run_id: minted-nen-kara-E12-r1
+  run_id: minted-nen-kara-E12-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.nk_tai_lieu
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
   output: |
     XANH
 
-- eval: E14
-  run_id: minted-nen-kara-E14-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.nk_san_thiet_ke
-  verified_at: 2026-10-02T12:23:03Z
-  output: |
-    design-gate.mjs --mode static chạy trên từng tệp trong danh sách (kara.tsx, proposed-change.tsx, ai-feedback.tsx, khoi-tom-tat.tsx, the-gop-y.tsx, facts.tsx và mọi .tsx dưới proto/_modules/nen-kara); vòng lặp hoàn tất.
-    Dòng cuối của đầu ra: }
-
-### Judgment
-
 - eval: E13
-  judged_by: hội đồng ba góc nhìn (domain-correctness, operational-feasibility, spec-alignment), ngữ cảnh sạch
+  judged_by: judge panel (3 lens, fresh context)
   verdict: PASS
-  rationale: Cả ba góc nhìn đề xuất PASS. Hội đồng đọc ảnh E10 ở 1440 và 390; kết quả là đề xuất, người quyết ở Cổng 2.
+  proposal: PASS
+  rationale: Cả ba lens cùng chấm đạt trên ảnh E10 và luật docs/ai-ux.md; đây là đề xuất của hội đồng, người quyết ở Gate 2.
   votes:
-    - domain-correctness: PASS — Ở 1440 và 390, đề xuất inline là một dòng con không viền ngay dưới dòng KR mà nó sửa, có chữ cũ gạch, chữ mới tô nền chèn và một dòng lý do, đúng mục 5; mỗi đề xuất (inline và card) có đúng một nút tô xanh gọi đúng hậu quả ("Đổi tên KR", "Thêm KR đối trọng"), "Sửa" viền, "Bỏ qua" là chữ. Ở 390 câu mới chỉ xuống dòng tự nhiên ở lề, không bị bẻ vụn, và biên nhận "Đã đổi tên theo Kara · Hoàn tác" thu thành một dòng tại chỗ đúng mục 6.
-    - operational-feasibility: PASS — Đề xuất inline không viền, nằm ngay dưới dòng KR "Gọi điện cho đối tác mới mỗi tuần" với chữ cũ gạch và chữ mới tô nền, nên đọc như phần của dòng đó. Mỗi đề xuất chỉ có một nút tô xanh gọi đúng hậu quả ("Đổi tên KR", "Thêm KR đối trọng"), "Sửa" viền, "Bỏ qua" là chữ, đúng mục 5. Ở khổ 390 câu mới chỉ xuống dòng một lần ("…sau / cuộc gọi đầu tiên"), vẫn đọc liền một mạch. Dòng biên nhận "Đã đổi tên theo Kara · Hoàn tác" thu tại chỗ, đúng mục 6.
-    - spec-alignment: PASS — Ở 1440 và 390, đề xuất inline nằm không viền ngay dưới dòng KR nó sửa, trong cùng khung bảng, có chữ cũ gạch, chữ mới tô nền và một dòng lý do, đúng mục 5 và không giống một hộp riêng. Mỗi đề xuất (inline «Đổi tên KR», card «Thêm KR đối trọng») chỉ có một nút tô xanh, «Sửa» viền, «Bỏ qua» là chữ; dòng biên nhận «Đã đổi tên theo Kara · Hoàn tác» và dòng «Đã bỏ qua» mờ đúng mục 6. Ở 390 câu mới chỉ ngắt thành hai dòng ở ranh giới cụm từ («…sau / cuộc gọi đầu tiên»), vẫn đọc liền một mạch.
+    - domain-correctness: PASS — (1) Ở 1440 và 390, đề xuất inline không viền, nằm ngay dưới dòng KR "Gọi điện cho đối tác mới mỗi tuần", thụt lề cùng cột chữ KR, hiện ra như dòng con của bảng (khớp mục 5). Card nằm trong cột riêng và biên nhận "Đã đổi tên theo Kara · Hoàn tác" thu lại tại chỗ, đúng mục 5 và 6. (2) Mỗi đề xuất chỉ có một nút tô xanh gọi đúng hậu quả ("Đổi tên KR", "Thêm KR đối trọng"), "Sửa" viền, "Bỏ qua" là chữ. (3) Ở 390, câu mới "Đối tác mới hẹn gặp được sau cuộc gọi đầu tiên" bẻ hai dòng liền mạch, chữ cũ gạch một dòng, lý do hai dòng, ba nút nằm chung một hàng.
+    - operational-feasibility: PASS — (1) Đề xuất inline (1440 và 390) không viền, nằm ngay dưới dòng KR "Gọi điện cho đối tác mới mỗi tuần" bên trong cùng khung bảng, là một dòng con với diff gạch cũ/tô mới, đúng mục 5 của ai-ux.md. (2) Mỗi đề xuất có đúng một nút tô màu ("Đổi tên KR", "Thêm KR đối trọng"), "Sửa" viền, "Bỏ qua" chữ; dòng biên nhận chỉ có "Hoàn tác" dạng chữ, đúng mục 6. (3) Ở 390 câu mới "Đối tác mới hẹn gặp được sau cuộc gọi đầu tiên" chỉ xuống dòng một lần nhưng vẫn nằm trong một khối nền chèn liền mạch, lý do và hàng nút cũng không bị bẻ vụn.
+    - spec-alignment: PASS — (1) Ở cả 1440 và 390, đề xuất inline không viền, nằm ngay dưới dòng KR "Gọi điện cho đối tác mới mỗi tuần" trong cùng khung bảng, và chữ gạch ở thân trùng đúng chữ của dòng đó, nên đọc như dòng con của nó chứ không phải hộp riêng (đúng mục 5). (2) Mỗi đề xuất có một nút tô xanh ("Đổi tên KR" ở inline, "Thêm KR đối trọng" ở card), "Sửa" viền và "Bỏ qua" chỉ là chữ; dòng biên nhận "Đã đổi tên theo Kara · Hoàn tác" thu gọn tại chỗ và "Hoàn tác" là chữ, đúng mục 6. (3) Ở 390, câu mới và dòng lý do chỉ xuống dòng ở ranh giới từ, thành hai đoạn đọc liền mạch, nút vẫn nằm trên một hàng.
   human_override:  # chi nguoi ghi
+
+- eval: E14
+  run_id: minted-nen-kara-E14-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.nk_san_thiet_ke
+  verified_at: 2026-10-02T18:06:53Z
+  output: |
+    design-gate.mjs --mode static chạy lần lượt trên sáu tệp màn của lượt và mọi .tsx dưới proto/_modules/nen-kara, không tệp nào bị chặn.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-nen-kara-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-nen-kara-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-nen-kara-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-nen-kara-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-nen-kara-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-nen-kara-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-nen-kara-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-nen-kara-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-nen-kara-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-nen-kara-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
 
 - cmd: bun run lint:slop
-  run_id: minted-nen-kara-SUITE-bun_run_lint_slop-r1
+  run_id: minted-nen-kara-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-nen-kara-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-nen-kara-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-02T12:23:03Z
+  verified_at: 2026-10-02T18:06:53Z
 
 ## Known limits
 
@@ -217,12 +215,18 @@ human_signoff:
 
 ## Analyst
 
-Eval không phân biệt (xanh cả trên HEAD lẫn baseline): E11 (`node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs && node _acceptance/the-gop-y-okr/rang/ten-goi.mjs`). Đây là răng không-hồi-quy của hồ sơ đã ký, chứng minh khung đo chứ không chứng minh tính năng; cần xác nhận là regression-guard có chủ ý hoặc viết lại để khẳng định hành vi mới.
+Hai eval xanh cả trên bản trước lượt lẫn bản hiện tại (baseline green), nên chúng chứng minh bộ đo chứ không chứng minh tính năng mới. Cả hai là hàng rào hồi quy có chủ ý:
+
+- E3 (AC-3): hai màn cũ vẫn ra bản card như trước. Lưu ý finding t6 ở review-findings.md: đối chứng dương trên merge-base mà expected hứa chưa chạy được vì bản trước lượt không có thuộc tính data-density.
+- E11 (AC-10): hai thước mồ côi và tên gọi sẵn có, xanh cả hai phía.
+
+Lệnh fail không gắn eval: không có. Lệnh duy nhất đỏ là lệnh của E8.
 
 ## Variance
 
-none — mọi eval nhiều lượt chạy đều đồng nhất (mọi eval chỉ chạy một lượt, xác định).
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E3 và E10 đỏ. E3: bài thứ hai của lệnh (the-gop-y-okr.dom.tsx) không chạy được vì bun báo lỗi preload not found, nên vế «chạy nguyên bài hồ sơ đã ký, xanh» chưa được chứng minh. E10: chiều đỏ --kiem-do-do vien in XANH thay vì 'inline co vien', vì thước đọc màu viền khi Item còn đang chuyển sắc (transition-colors) nên không bắt được viền thật; lỗi ở rang/man-proto.mjs. Trả về triển khai. Các lỗi nằm ngoài hợp đồng ghi ở review-findings.md.
+Round 1: REJECT, E10 đỏ ở chiều đỏ của script đo (đã vá ở commit 475d8177), kèm các finding trong sổ quyết định S4-r1.
+Round 2: E8 đỏ, lệnh gồm hai nửa; nửa đầu xanh (2 pass), nửa sau không chạy vì bun báo không tìm thấy preload với đường dẫn ../../packages/ui/test/tro-ly-okr-tom-tat.dom.tsx. Chạy lại riêng nửa sau ngoài lượt đo thấy 24 pass, nên nghi lỗi khi gọi bun hoặc lệnh trong config chứ chưa chắc lỗi mã tính năng. Quay lại bước thực thi để người quyết xem lại lệnh nk_tom_tat.
