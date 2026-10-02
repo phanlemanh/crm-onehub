@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7e6178de2b30735f03367e87e60e2cf53982ea37
+verified_commit: cf7483a9aa8edf819b0f402386627a6213869019
 human_signoff: Phan Le Manh 2026-10-02
 ---
 
@@ -288,3 +288,7 @@ Round 1: xem run-log.jsonl và commit s4-r1; vòng đầu chưa đạt.
 Round 2: xem run-log.jsonl và commit s4-r2; vẫn còn eval chưa xanh, trả về thực thi.
 Round 3: REJECT, chạm trần 3 round (commit be805aef, e6eb9f7a).
 Round 4: toàn bộ eval máy, ui-check và bốn lệnh suite xanh trên commit 7e6178de; E15j và E16j chờ người ở Cổng 2 nên verdict là PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-10-02, do hoa cu sau khi gop onehub (#230); bo cham E15 ghi ra .acceptance-runs
+run_id: repin-20261002T000703Z-46501
+sha: cf7483a9aa8edf819b0f402386627a6213869019 · suites: 4 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths)
