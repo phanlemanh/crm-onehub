@@ -345,7 +345,7 @@ function HangKr({
 					</span>
 					<span className="flex min-w-0 flex-1 flex-col gap-1">
 						<span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-							<span className="whitespace-normal" translate="no">
+							<span className="wrap-anywhere whitespace-normal" translate="no">
 								{kr.title}
 							</span>
 							{coNoiDung(sauTen) ? sauTen : null}

@@ -76,7 +76,7 @@ function HangMucTieu({
 				>
 					<Icon
 						className={cn(
-							"transition-transform motion-reduce:transition-none",
+							"transition-transform motion-reduce:transition-none motion-reduce:duration-0",
 							mo && "rotate-90",
 						)}
 						icon={ChevronRight}
@@ -88,7 +88,7 @@ function HangMucTieu({
 					<span className="flex flex-wrap items-center gap-x-2 gap-y-1">
 						<button
 							type="button"
-							className="text-start font-medium underline-offset-2 hover:underline focus-visible:underline"
+							className="wrap-anywhere text-start font-medium underline-offset-2 hover:underline focus-visible:underline"
 							translate="no"
 							data-mo-muc-tieu={mucTieu.id}
 							onClick={(e) => {
