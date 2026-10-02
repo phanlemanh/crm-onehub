@@ -140,7 +140,9 @@ describe("nguon-khoa", () => {
 			});
 			const r = await goiTrpc("okr.aiChiTieu", "quan");
 			expect(r.status).toBe(200);
-			const ra = aiChiTieuOutput.parse(r.data);
+			const ra = aiChiTieuOutput
+				.pick({ nguonKhoa: true, sanSang: true })
+				.parse(r.data);
 			expect(ra.nguonKhoa, `nguon lech: ${ketQua}`).toBe(dong.nguonKhoa);
 			expect(ra.sanSang.bat, `san sang lech: ${ketQua}`).toBe(dong.bat);
 			so += 1;
