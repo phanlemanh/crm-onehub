@@ -1,0 +1,27 @@
+#!/bin/zsh
+cd /Users/manhphan/dev/crm/.claude/worktrees/friendly-liskov-8d4458 || exit 9
+O=.acceptance-runs/soan-okr-cung-tro-ly/buoc4
+mkdir -p $O
+ban() { pgrep -f "happy-rubin.*(turbo run test|bun run test)|turbo run test.*happy-rubin" >/dev/null || pgrep -f "epic-swartz-dc9195.*run-tests.sh|run-tests.sh.*epic-swartz" >/dev/null || ps -axo command | grep -E "^.*(turbo run test|bun run test)" | grep -v grep | grep -q happy-rubin; }
+yen=0; n=0
+while [ $yen -lt 2 ] && [ $n -lt 60 ]; do if ban; then yen=0; else yen=$((yen+1)); fi; sleep 60; n=$((n+1)); done
+echo "cho_may_yen_phut=$n yen_lien_tiep=$yen" > $O/tom-tat.txt
+[ $yen -lt 2 ] && { echo "HET CHO — may van ban" >> $O/tom-tat.txt; exit 3; }
+echo "HEAD $(git rev-parse HEAD) bat_dau $(date -u +%H:%M:%SZ)" >> $O/tom-tat.txt
+( while true; do echo "tai $(date -u +%H:%M:%SZ): $(sysctl -n vm.loadavg) | khac=$(pgrep -fl 'bun test|bun run test|turbo run|tien-de|phien-do|run-tests.sh' | grep -v friendly-liskov | wc -l | tr -d ' ')" >> $O/tai.txt; sleep 30; done ) & SP=$!
+t0=$(date +%s)
+( s=$(date +%s); OKR_AGENT_BRIDGE_SECRET="$(openssl rand -hex 32)" bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/soan-okr-cung-tro-ly/rang/man-soan.mjs" > $O/e13.log 2>&1; echo "EXIT=$? giay=$(( $(date +%s)-s ))" >> $O/e13.log ) &
+P1=$!
+( s=$(date +%s); OKR_AGENT_BRIDGE_SECRET="$(openssl rand -hex 32)" bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/soan-okr-cung-tro-ly/rang/cach-ly-chi-okr.mjs" > $O/e21.log 2>&1; echo "EXIT=$? giay=$(( $(date +%s)-s ))" >> $O/e21.log ) &
+P2=$!
+( s=$(date +%s); bun run test > $O/suite.log 2>&1; echo "EXIT=$? giay=$(( $(date +%s)-s ))" >> $O/suite.log ) &
+P3=$!
+wait $P1 $P2 $P3
+kill $SP 2>/dev/null
+echo "ba_viec_xong $(date -u +%H:%M:%SZ) tong_giay=$(( $(date +%s)-t0 ))" >> $O/tom-tat.txt
+for f in e13 e21 suite; do echo "$f: $(tail -1 $O/$f.log)" >> $O/tom-tat.txt; done
+( s=$(date +%s); bun run test -- "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-hong.dom.tsx" > $O/e20-dom.log 2>&1; echo "EXIT=$? giay=$(( $(date +%s)-s ))" >> $O/e20-dom.log )
+bun run check-types > $O/check-types.log 2>&1; echo "check-types EXIT=$?" >> $O/tom-tat.txt
+bun run lint > $O/lint.log 2>&1; echo "lint EXIT=$?" >> $O/tom-tat.txt
+echo "e20-dom: $(tail -1 $O/e20-dom.log)" >> $O/tom-tat.txt
+echo "HEAD_sau $(git rev-parse HEAD) cay_ban=$(git status --short | grep -v '_acceptance/soan-okr-cung-tro-ly/evidence' | wc -l | tr -d ' ')" >> $O/tom-tat.txt

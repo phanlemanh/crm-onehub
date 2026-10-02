@@ -4,7 +4,7 @@ import { SortableItem, SortableList } from "@crm/ui/components/sortable-list";
 import { useState } from "react";
 import { MenuDong, type MucMenu } from "./chi-tiet-chung";
 
-export type MucKeo = { id: string; name: string; phu: string };
+export type MucKeo = { id: string; name: string; moTa: string; phu: string };
 
 export function DanhSachKeo({
 	loai,

@@ -1,0 +1,174 @@
+{
+  "feature_plain": "Trưởng đơn vị mở một cuộc trò chuyện với Trợ lý OKR đã biết công ty, chiến lược, đơn vị và kỳ trước; Trợ lý hỏi vài câu rồi đưa bản nháp bộ OKR lên bảng cạnh chat; người nhận, sửa hay bác từng dòng, tự điền đích, rồi «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp để công bố như thường.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ chỉ cho người sửa được OKR của đơn vị mở cuộc soạn, ở đơn vị đang bật (hoặc chế độ ẩn nếu là quản trị); mọi người khác bị từ chối theo một bảng viết trước — hỏi theo đơn vị thì báo «không được phép», hỏi vào một cuộc mình không được vào thì báo như cuộc đó không tồn tại, để người ngoài không đoán được ai đang soạn; người vai «chỉ OKR» đi qua đường chat mới mà không thấy dữ liệu đối tác."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ đưa vào cuộc đúng bảy lớp bối cảnh theo thứ tự cố định (hồ sơ công ty và chiến lược, đơn vị với mô tả và chức danh, cấp trên và ngang cấp, kỳ trước tóm gọn, số CRM dạng tổng), không tên người nào, số CRM rỗng với vai «chỉ OKR», và khi gói quá dài thì cắt kỳ trước và ngang cấp trước, không bao giờ cắt hồ sơ công ty, chiến lược, đơn vị."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ cho quản trị ghi một đoạn mô tả cho từng bộ phận, phòng ban và chức danh cho từng người ở màn Cây tổ chức, có trần độ dài; mọi người đọc được, chỉ quản trị sửa được."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ chạy cuộc trò chuyện trên một app Trợ lý riêng, giữ lịch sử qua các lượt, chỉ gửi tới nhà cung cấp có ZDR, không có công cụ đối tác nào, ghi sổ chi phí từng lượt, và dừng đúng chỗ khi hết 12 lượt một cuộc, hết 3 cuộc một kỳ, hay chạm trần tháng — trần riêng của tháng đặt OKR chỉ áp trong ba tháng trước và suốt một chu kỳ đang lập kế hoạch."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ chỉ hiện dòng nháp đã qua bộ kiểm: không số bịa (kể cả trong tên KR), đích để trống, không lấy số đích của cấp trên làm khởi điểm, không tên người, không từ về lương thưởng, không chép KR cấp trên, không dòng đã bác; dòng bị loại được ghi lại kèm lý do."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ hiện màn soạn theo đúng bảng trạng thái đã duyệt trên bản bấm được — mở đầu có gợi ý trả lời, bảng nháp sống cạnh chat, nhãn «vừa sửa · vừa chuyển · đã bỏ», lỗi có Thử lại, khổ điện thoại hai tab — không tràn ngang."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ ghi từng quyết định nhận · sửa · bác; chỉ khi mọi KR đã nhận có khởi điểm và đích người điền thì «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp trong một lần — KR dạng mốc không có ô số và vào bộ như mọi KR mốc; có vết nối từng dòng nháp tới Mục tiêu/KR đã tạo; bấm hai lần chỉ tạo một lần; bộ nháp công bố được như mọi OKR."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ lưu các cuộc theo đơn vị, cho tiếp nối cuộc đang dở đúng phiên cũ, và kỳ sau đọc được «dòng nháp nào đã thành Mục tiêu/KR nào» cùng chi phí đủ mọi phiên của cuộc."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ cho quản trị đặt việc soạn theo ba nấc tắt · chế độ ẩn · bật cho từng đơn vị và một trần tháng riêng cho tháng đặt OKR — tháng đặt OKR là từ ba tháng trước tới hết một chu kỳ đang lập kế hoạch; ở chế độ ẩn chỉ quản trị mở được cuộc và số đo tách cột riêng."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ cho quản trị đọc thẻ số đo của việc soạn — cuộc mở, cuộc hoàn tất, dòng nhận/sửa/bác, Mục tiêu nháp được công bố trong 14 ngày, chi phí mỗi cuộc, độ trễ — đúng bằng số đo được từ dữ liệu."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ hiện «Trợ lý OKR chưa trả lời được» với Thử lại khi phiên chết hay quá 45 giây, không mở hai phiên cho một cuộc; và một câu chèn trong trang chiến lược không đổi được hành vi của Trợ lý — có phép đo đỏ-xanh chứng máy dò còn sống."
+    },
+    {
+      "id": "AC-14",
+      "p": "Sẽ nạp bộ OKR mẫu đủ để thử: quý trước có ghi chú và mức tự tin trôi, hai trang chiến lược đã duyệt, mô tả và chức danh cho mọi đơn vị và người; nạp lại sạch, không bao giờ chạy trên production."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-4",
+      "p": "Chặn duyệt trang chiến lược dài quá 20.000 ký tự; cảnh báo (không chặn) khi trang có chữ về lương, thưởng, xếp hạng; Trợ lý chỉ đọc bản đang dùng, không đọc bản đề xuất."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Sẽ KHÔNG thêm tab Trợ lý trên khung Mục tiêu, không soạn cho Mục tiêu cá nhân, không soạn qua Zalo hay Slack."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Sẽ KHÔNG đọc Hỏi ý mục tiêu — làm ở một lượt nhỏ khi hạng mục đó lên onehub."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Sẽ KHÔNG đọc nhiều kỳ trước, không tìm toàn văn, không tìm KR tương tự, không có quyền theo trang tài liệu."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Sẽ KHÔNG để Trợ lý ghi đích, mức tự tin hay công bố; không chép KR cấp trên thành Mục tiêu."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Sẽ KHÔNG có bộ nhớ chéo giữa các cuộc ngoài dữ liệu OKR và sổ đề xuất."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Sẽ KHÔNG dựng hỏi đáp OKR — hạng mục C dùng lại nền chat này ở lượt riêng."
+    },
+    {
+      "id": "OOS-7",
+      "p": "Sẽ KHÔNG dựng vỏ ngăn trượt cho tạo/sửa Mục tiêu và KR — đó là hạng mục riêng đang chạy."
+    },
+    {
+      "id": "OOS-8",
+      "p": "Sẽ KHÔNG đưa phần lương thưởng và bảng điểm theo vai của tài liệu Operating System vào trang chiến lược hay vào gói."
+    }
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để ngoài lượt này, mỗi việc có lý do trong sổ quyết định.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Trục lớp bối cảnh: tám lớp từ hồ sơ công ty tới chiến lược đều có chỗ trong hợp đồng (AC-2 gói bối cảnh, AC-3 mô tả và chức danh, AC-4 trang chiến lược); bằng chứng đủ là bảng lớp của tài liệu bối cảnh đã duyệt và cách Tability, Cascade neo OKR vào bối cảnh đội và chiến lược."
+    },
+    {
+      "i": 1,
+      "p": "Trục vòng đời một cuộc soạn: từ mở cuộc tới đo đều có tiêu chí (AC-1 mở, AC-5 đối thoại, AC-6 bản nháp, AC-7 màn, AC-8 quyết và đưa vào, AC-9 lưu, AC-11 đo); thước là khuôn vòng đời của bộ quét và luật sổ đề xuất đã có từ 9b."
+    },
+    {
+      "i": 2,
+      "p": "Trục người × nấc: bảy loại người nhân ba nấc được viết thành bảng trước (AC-1 quyền, AC-10 nấc); thước là luật quyền hiện có của khu OKR và luật «mỗi đường vào của vai chỉ OKR một phép đo»."
+    },
+    {
+      "i": 3,
+      "p": "Trục kiểu hỏng: sai, chết, chậm, rò, vượt tiền, trùng, không ai dùng — mỗi kiểu có tiêu chí (AC-6 sai, AC-12 chết và rò, AC-13 chậm, AC-5 vượt tiền, AC-8 trùng, đường đo cho không ai dùng); thước là bảng tiền-mortem và hạn chế đã biết của hai lượt trước."
+    },
+    {
+      "i": 4,
+      "p": "Chân ngành: đối chiếu với Tability (mô tả đội, hỏi lại, đưa cả bộ) và Perdoo, Cascade (OKR neo vào chiến lược) — các ô để sau hay bỏ đều có tên trong bản quét."
+    },
+    {
+      "i": 5,
+      "p": "Giả định để anh gạch: «chế độ ẩn» của việc soạn nghĩa là chỉ quản trị mở được cuộc trên đơn vị đó."
+    },
+    {
+      "i": 6,
+      "p": "Giả định để anh gạch: 12 lượt một cuộc, 3 cuộc một đơn vị mỗi kỳ; trần tháng riêng áp từ ba tháng trước tới hết một chu kỳ đang lập kế hoạch."
+    },
+    {
+      "i": 7,
+      "p": "Giả định để anh gạch: một trang chiến lược tối đa 20.000 ký tự; ước token bằng ký tự chia 2,6."
+    },
+    {
+      "i": 8,
+      "p": "Giả định để anh gạch: điểm vào duy nhất là nút ở khung đơn vị, không thêm tab trên khung Mục tiêu."
+    },
+    {
+      "i": 9,
+      "p": "Giả định để anh gạch: mỗi lượt Trợ lý trả lời trong 12 giây ở giữa và 20 giây ở đuôi (9b đo 11,3 giây cho một lời gọi cỡ tương đương)."
+    },
+    {
+      "i": 10,
+      "p": "Giả định để anh gạch: KR kiểu mốc thì máy không đề xuất số và người cũng không điền — nó vào bộ OKR như mọi KR mốc; KR kiểu khác thì người điền khởi điểm và đích trên thẻ."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Thiếu: hợp đồng để ngỏ «KR nháp không có đích thì lưu thế nào», mà cột đích là bắt buộc — một nhánh phải đổi cột, nhánh kia để máy ghi số tạm. Đã xử: người điền khởi điểm và đích ngay trên thẻ KR, nút Đưa vào khoá tới khi đủ; không đổi cột, máy không ghi số; thước «0 số đích máy ghi» có đối chứng dương."
+    },
+    {
+      "i": 1,
+      "p": "Thiếu: chi phí chỉ nối với phiên hiện tại của cuộc, nên cuộc từng Thử lại đổi phiên bị đếm thiếu tiền. Đã xử: cuộc giữ danh sách mọi phiên của nó, số đo cộng đủ, phép đo dựng cảnh có Thử lại thật."
+    },
+    {
+      "i": 2,
+      "p": "Thiếu: vết chỉ ghi mã cuộc, không ghi dòng nháp nào thành Mục tiêu/KR nào — cặp đó phải đoán theo tên. Đã xử: mỗi dòng nháp ghi thẳng bản ghi nó tạo ra; phép đo đếm cặp bằng số dòng đã nhận."
+    },
+    {
+      "i": 3,
+      "p": "Thiếu: phép đo quyền hứa ma trận toàn phần nhưng không ô nào có giá trị viết sẵn, ô nào cũng «hoặc». Đã xử: bảng 378 ô viết trước với giá trị đóng, thêm ô chế độ ẩn và vai «chỉ OKR» ở cấp cao; bài đọc bảng lúc chạy."
+    },
+    {
+      "i": 4,
+      "p": "Thiếu: ba phép đo phủ định (không lọt tên đối tác, không tên người, không nghe lệnh chèn) không có đối chứng chứng minh máy dò còn sống; phiên đo chưa dựng app Trợ lý riêng. Đã xử: mỗi phép đo có đối chứng dương và chiều đỏ có tên; các phép đo tự dựng app riêng trên cổng tự do; thiết kế đọc thêm hai tài liệu về phiên đo và biến môi trường."
+    }
+  ],
+  "decisions_plain": [],
+  "decisions": [
+    {
+      "id": "E24",
+      "q": "Giao việc soạn ở nấc tắt khi tốc độ trả lời chưa ổn định?",
+      "why": "Ba lần đo, mỗi lượt Trợ lý trả lời chậm nhất 19,1 · 20,3 · 34,3 giây so với hứa 20 giây; chậm do mô hình và đến theo cơn. Phần so sánh «có bối cảnh thắng không có» thắng mọi cặp chấm được (31/31) nhưng lần 3 bên chấm hỏng 6/15 cặp nên chưa kết luận. Bật cho người dùng là một quyết định riêng sau khi đo lại tốc độ và sửa bên chấm."
+    },
+    {
+      "id": "E29",
+      "q": "Hai danh sách khai trùng ở hai gói có chặn giao lượt này?",
+      "why": "Luật kho được giữ: số tinh chỉnh nằm trong tệp cấu hình, khuôn thẻ phiên soạn nằm một chỗ và cả hai bên đều đọc từ đó. Còn hai chỗ khai lặp: ba loại dòng nháp, và khuôn Mục tiêu kỳ trước. Một chỗ trình biên dịch tự bắt khi hai bên lệch; chỗ kia chỉ có bài kiểm ghim giá trị. Hội đồng không phân xử được vì luật viết cho dữ liệu chưa có kiểu."
+    }
+  ],
+  "analyst_plain": ""
+}

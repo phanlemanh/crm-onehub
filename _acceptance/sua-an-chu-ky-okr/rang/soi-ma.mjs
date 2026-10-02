@@ -1,6 +1,7 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import {
 	existsSync,
+	mkdirSync,
 	mkdtempSync,
 	readdirSync,
 	readFileSync,
@@ -660,6 +661,22 @@ async function chieuDoKyConHien() {
 }
 
 const MOC = "origin/onehub";
+const MOC_GOP = "9ee65d12047522795b43ae1a1440bc2b227cb9b5";
+let NEO = null;
+function daGop() {
+	NEO ??=
+		spawnSync("git", [
+			"-C",
+			GOC,
+			"merge-base",
+			"--is-ancestor",
+			MOC_GOP,
+			"HEAD",
+		]).status === 0;
+	return NEO;
+}
+const daiSoSanh = () =>
+	daGop() ? `${MOC_GOP}^1..${MOC_GOP}` : `${MOC}...HEAD`;
 const VUNG_APP = /^apps\/app\/.+\.tsx$/;
 const VUNG_MA =
 	/^(apps|packages|scripts|_acceptance\/[^/]+\/rang)\/.+\.(ts|tsx|mts|mjs|js)$/;
@@ -807,7 +824,9 @@ function nutHuy(duong, ten, them) {
 
 let GOC_SO = null;
 function dongThem(t, duong) {
-	GOC_SO ??= git("merge-base", "HEAD", MOC);
+	GOC_SO ??= daGop()
+		? git("rev-parse", `${MOC_GOP}^1`)
+		: git("merge-base", "HEAD", MOC);
 	const thu = mkdtempSync(join(tmpdir(), "soi-dong-them-"));
 	try {
 		const cu = join(thu, "cu");
@@ -864,7 +883,7 @@ function tepDiff(loc) {
 		"--name-only",
 		"--no-renames",
 		`--diff-filter=${loc}`,
-		`${MOC}...HEAD`,
+		daiSoSanh(),
 	)
 		.split("\n")
 		.filter(Boolean);
@@ -974,11 +993,11 @@ function goiChuVaEn(duong) {
 		: null;
 }
 
-function chuViEnKhac(tepChu, them) {
+function chuViEnKhac(tepChu, them, duongCua) {
 	const hong = [];
 	let soMoi = 0;
 	for (const t of tepChu) {
-		const cap = goiChuVaEn(join(GOC, t));
+		const cap = goiChuVaEn(duongCua(t));
 		if (!cap) continue;
 		const tuNao = them.get(t);
 		for (const [duong, v] of cap.vi) {
@@ -1018,11 +1037,23 @@ function soiTaiLieu() {
 }
 
 async function caThietKe(thay = new Map()) {
-	console.log(`dai so sanh: ${MOC}...HEAD (--no-renames)`);
-	const duongCua = (t) => thay.get(t) ?? join(GOC, t);
-	const tenCua = (t) => thay.get(t) ?? t;
+	console.log(`dai so sanh: ${daiSoSanh()} (--no-renames)`);
+	const banGop = new Map();
+	const thuGop = daGop() ? mkdtempSync(join(tmpdir(), "soi-ban-gop-")) : null;
 	const moi = new Set(tepDiff("A"));
-	const doi = tepDiff("AM").filter((t) => existsSync(join(GOC, t)));
+	const doi = tepDiff("AM").filter((t) =>
+		thuGop ? true : existsSync(join(GOC, t)),
+	);
+	if (thuGop)
+		doi.forEach((t, i) => {
+			const thu = join(thuGop, String(i));
+			mkdirSync(thu);
+			const duong = join(thu, basename(t));
+			writeFileSync(duong, `${git("show", `${MOC_GOP}:${t}`)}\n`);
+			banGop.set(t, duong);
+		});
+	const duongCua = (t) => thay.get(t) ?? banGop.get(t) ?? join(GOC, t);
+	const tenCua = (t) => thay.get(t) ?? t;
 	const khongThu = (t) =>
 		!t.split("/").some((p) => THU_MUC_THU.has(p)) && !LA_THU.test(t);
 	const khongSinh = (t) => !t.split("/").some((p) => LOAI_TRU.has(p));
@@ -1058,7 +1089,7 @@ async function caThietKe(thay = new Map()) {
 			[
 				join(kit, "scripts", "design-gate.mjs"),
 				"--target",
-				thay.has(t) ? duongCua(t) : t,
+				thay.has(t) || banGop.has(t) ? duongCua(t) : t,
 				"--mode",
 				"static",
 			],
@@ -1090,10 +1121,11 @@ async function caThietKe(thay = new Map()) {
 		hong.push(...chuThichThem(duongCua(t), tenCua(t), them.get(t)));
 	for (const t of tepMoi) hong.push(...soiTepMoi(duongCua(t), tenCua(t)));
 	hong.push(...moiDinhDanhMotNoi());
-	hong.push(...chuViEnKhac(tepChu, them));
+	hong.push(...chuViEnKhac(tepChu, them, duongCua));
 	hong.push(...soiTaiLieu());
 	const soTep = new Set([...app, ...tepMa]).size;
 	console.log(`tong tep da soi: ${soTep}`);
+	if (thuGop) rmSync(thuGop, { recursive: true, force: true });
 	return { hong, soTep };
 }
 

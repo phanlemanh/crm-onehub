@@ -118,6 +118,7 @@ const KHONG_DAU = new Set([
 	"moc.xong",
 	"mucTuTin.cao",
 	"dem",
+	"donVi.dem",
 	"bangTinh.nhan",
 	"dau.crm",
 	"dau.api",
@@ -126,6 +127,9 @@ const KHONG_DAU = new Set([
 	"mangSang.xacNhan",
 	"hop.onehub",
 	"vietTruoc.tenChuDe",
+	"banNhap.kr",
+	"loaiDong.kr-moi",
+	"cuoc.xem",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -133,8 +137,14 @@ function mienDau(khoa: string): boolean {
 	return KHONG_DAU.has(khoa) || KHONG_DAU.has(phan.slice(-2).join("."));
 }
 
+const DOI_SO_HIEN = ["X", "Y", "Z", "W"];
+const DOI_SO_GHIM = [
+	["1", "A", "B", "C"],
+	["12", "A", "B", "C"],
+] as const;
+
 function hienRa(v: GiaTri): string {
-	return v instanceof Function ? v("X", "Y", "Z") : v;
+	return v instanceof Function ? v(...DOI_SO_HIEN.slice(0, v.length)) : v;
 }
 
 const CHUA_NOI_KHAI: readonly string[] = [
@@ -229,9 +239,77 @@ const GHIM_OKR_GOP_Y = {
 	"okr-gop-y:dong.gopVao": ["Góp vào «1»", "Góp vào «12»"],
 } satisfies Record<string, [string, string]>;
 
+const GHIM_OKR_SOAN = {
+	"okr-soan:nut.tiepMoTa": [
+		"Mở 1 · A lượt · B dòng chưa quyết",
+		"Mở 12 · A lượt · B dòng chưa quyết",
+	],
+	"okr-soan:nut.hetCuoc": [
+		"Đã dùng hết 1 cuộc soạn kỳ này",
+		"Đã dùng hết 12 cuộc soạn kỳ này",
+	],
+	"okr-soan:nut.tamNghi": [
+		"Trợ lý OKR tạm nghỉ tới 1",
+		"Trợ lý OKR tạm nghỉ tới 12",
+	],
+	"okr-soan:nut.dsCuoc": ["1/A cuộc", "12/A cuộc"],
+	"okr-soan:man.luot": ["lượt 1/A", "lượt 12/A"],
+	"okr-soan:man.tabBanNhap": ["Bản nháp (1)", "Bản nháp (12)"],
+	"okr-soan:man.soDong": ["1 dòng", "12 dòng"],
+	"okr-soan:hoiThoai.goiY": ["Gợi ý trả lời: 1", "Gợi ý trả lời: 12"],
+	"okr-soan:hoiThoai.hetLuot": [
+		"Đã dùng hết 1 lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới",
+		"Đã dùng hết 12 lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới",
+	],
+	"okr-soan:banNhap.mucTieu": ["Mục tiêu 1", "Mục tiêu 12"],
+	"okr-soan:banNhap.viSaoLucNay": ["Vì sao lúc này: 1", "Vì sao lúc này: 12"],
+	"okr-soan:banNhap.canChinh": ["Góp vào «1»", "Góp vào «12»"],
+	"okr-soan:banNhap.doBang": ["đo bằng 1", "đo bằng 12"],
+	"okr-soan:banNhap.goiYKhoiDiem": ["khởi điểm gợi ý 1", "khởi điểm gợi ý 12"],
+	"okr-soan:banNhap.bacCon": ["1 dòng con thu gọn", "12 dòng con thu gọn"],
+	"okr-soan:banNhap.duaVao": [
+		"Đưa vào bộ OKR · 1 Mục tiêu, A KR",
+		"Đưa vào bộ OKR · 12 Mục tiêu, A KR",
+	],
+	"okr-soan:banNhap.thieuDich": [
+		"Điền khởi điểm và đích cho 1 KR đã nhận trước khi đưa vào",
+		"Điền khởi điểm và đích cho 12 KR đã nhận trước khi đưa vào",
+	],
+	"okr-soan:banNhap.duaVaoMoTa": [
+		"Tạo ở trạng thái nháp cho 1, A. Dòng đã bác không đưa vào; đích do bạn đặt.",
+		"Tạo ở trạng thái nháp cho 12, A. Dòng đã bác không đưa vào; đích do bạn đặt.",
+	],
+	"okr-soan:banNhap.xacNhan.than": [
+		"Tạo 1 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, C?",
+		"Tạo 12 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, C?",
+	],
+	"okr-soan:banNhap.daTao": [
+		"Đã tạo 1 Mục tiêu nháp",
+		"Đã tạo 12 Mục tiêu nháp",
+	],
+	"okr-soan:banNhap.daTaoMoTa": [
+		"1 KR đi kèm; đích bạn đã điền được giữ. Công bố như mọi OKR ở Theo đơn vị.",
+		"12 KR đi kèm; đích bạn đã điền được giữ. Công bố như mọi OKR ở Theo đơn vị.",
+	],
+	"okr-soan:cuoc.tieuDe": [
+		"Cuộc soạn cùng Trợ lý · 1",
+		"Cuộc soạn cùng Trợ lý · 12",
+	],
+	"okr-soan:cuoc.dem": ["1/A cuộc", "12/A cuộc"],
+	"okr-soan:cuoc.nutCuoc": ["1 cuộc A", "12 cuộc A"],
+	"okr-soan:cuoc.dongNhan": ["1/A dòng nhận", "12/A dòng nhận"],
+	"okr-soan:cuoc.rongMoTa": [
+		"Mỗi chu kỳ có 1 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
+		"Mỗi chu kỳ có 12 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
+	],
+	"okr-soan:soDo.luot": ["1 lượt", "12 lượt"],
+	"okr-soan:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
+} satisfies Record<string, [string, string]>;
+
 const GHIM = {
 	...GHIM_TRO_LY_OKR,
 	...GHIM_OKR_GOP_Y,
+	...GHIM_OKR_SOAN,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
@@ -954,8 +1032,9 @@ describe("kho chuoi cua vong ③a", () => {
 			if (!lay) throw new Error(`khong co module ${ten}`);
 			const f = phang(lay("vi")).find(([k]) => k === duong)?.[1];
 			if (!(f instanceof Function)) throw new Error(`${khoa} khong phai ham`);
-			expect(f("1", "A", "B")).toBe(mot);
-			expect(f("12", "A", "B")).toBe(nhieu);
+			expect(f.length).toBeLessThanOrEqual(DOI_SO_GHIM[0].length);
+			expect(f(...DOI_SO_GHIM[0].slice(0, f.length))).toBe(mot);
+			expect(f(...DOI_SO_GHIM[1].slice(0, f.length))).toBe(nhieu);
 		}
 	});
 });

@@ -1,0 +1,192 @@
+export const LUAT_KHO_CAY = {
+	vung: ["apps", "packages"],
+	duoi: /\.(ts|tsx|mjs)$/,
+	oxlint: ".oxlintrc.json",
+	khongLayTuOxlint: ["packages/ui/src/components/**"],
+	boThem: [/(^|\/)fixtures?\//, /(^|\/)next-env\.d\.ts$/],
+	laKiem: [
+		/(^|\/)tests?\//,
+		/(^|\/)evals\//,
+		/\.spec\.tsx?$/,
+		/\.dom\.tsx$/,
+		/\.eval\.ts$/,
+	],
+	ungDung: {
+		goc: "apps",
+		agent: { goi: "eve", tep: "agent/agent.ts" },
+		nest: { goi: "@nestjs/core" },
+	},
+	luat: {
+		chuThich: {
+			ten: "khong-chu-thich",
+			chiThi:
+				/^(\/\/\/\s*<reference\b|\/\/\s*biome-ignore\b|\/\/\s*@ts-expect-error\b|\/\/\s*oxlint-disable|\/\*\s*oxlint-disable|\/\*\s*@vite-ignore\s*\*\/$|\/\*\s*webpackIgnore:)/,
+			catChu: 60,
+		},
+		triKhon: {
+			ten: "tri-khon-o-agent",
+			goiCam: [
+				"ai",
+				"@ai-sdk/",
+				"@crm/ai-okr",
+				"context.dev",
+				"eve",
+				"mammoth",
+				"unpdf",
+				"openai",
+				"@anthropic-ai/",
+				"@google/genai",
+				"@google/generative-ai",
+				"@mistralai/",
+				"cohere-ai",
+				"groq-sdk",
+				"@openrouter/",
+			],
+		},
+		kieuLong: {
+			ten: "parse-o-bien",
+			quyTacRecord: "anti-slop/no-unsafe-dictionary-type",
+			quyTacEpKep: "anti-slop/no-chained-type-assertions",
+		},
+		hangSo: {
+			ten: "hang-so-o-cau-hinh",
+			tepCauHinh: /(config|cau-hinh|danh-muc)[^/]*$/i,
+			phutMs: 60_000,
+			giayMs: 1_000,
+			giayMoiPhut: 60,
+			thuaSoDonVi: [60_000, 60, 1_000, 24, 7],
+		},
+		uiChung: {
+			ten: "ui-tu-crm-ui",
+			goc: "packages/ui",
+			thuMucCam: "components/ui",
+			tepShadcn: "components.json",
+			aliasUi: /^@crm\/ui(\/|$)/,
+			nenShadcn: [
+				"radix-ui",
+				"@radix-ui/",
+				"vaul",
+				"cmdk",
+				"class-variance-authority",
+				"react-day-picker",
+				"embla-carousel-react",
+				"input-otp",
+				"react-resizable-panels",
+				"@shadcn/",
+			],
+		},
+		cachLy: {
+			ten: "cach-ly-hai-agent",
+			thuMucTest: "test",
+		},
+	},
+	nen: {
+		"khong-chu-thich": {
+			"apps/agent/agent/lib/context-dev.ts": ["/**"],
+			"apps/agent/agent/lib/preamble.ts": [
+				"/** Set only for a `field-backfill` task — the custom field key(s) still blank on this record. */",
+			],
+			"apps/agent/test/keyless-brand.integration.spec.ts": ["/**"],
+			"apps/agent/test/model.integration.spec.ts": ["/**"],
+			"apps/api/src/agent/bridge.ts": ["/**"],
+			"apps/api/src/agent/research-key.service.ts": ["/**"],
+			"apps/api/src/backfill/backfill.service.ts": [
+				"/**",
+				"/**",
+				"// `AgentTask.contactId` is a bare column with no Prisma relation, so this",
+				"// cannot be a nested `some`. Two queries, and the id list is bounded by",
+				"// the number of contacts we have already looked for.",
+			],
+			"apps/api/src/create-app.ts": [
+				"// SwaggerModule.setup() registers its Express routes synchronously, so it must",
+				"// happen before app.init() the same way the REST bridge does — Nest's own",
+				"// routing (wired up during init) otherwise shadows anything registered after",
+				"// it. The factory form defers building the document (which needs the tRPC",
+				"// router, only available post-init) to first request instead.",
+			],
+			"apps/api/src/fields/fields.service.ts": [
+				"/** Every agent-filled field is inherently blank on a record that was just created. */",
+				"/**",
+				"/**",
+				"/** Translates selected filter values (by field key) into `FieldValue` `AND` conditions. */",
+			],
+			"apps/api/src/settings/settings.service.ts": [
+				"// Every company added while there was no key is still PENDING, because a",
+				"// brand task with nowhere to look leaves the record alone. The sign-in",
+				"// sweep would find them, but the person who just fixed it is standing",
+				"// here — so pick the work up now rather than on their next sign-in.",
+			],
+			"apps/api/src/trpc/error-formatter.ts": [
+				"/**",
+				'// Zod\'s own defaults ("Required", "Invalid input") name nothing, so they are',
+				"// only useful with the field in front of them. Ours are whole sentences.",
+			],
+			"apps/app/components/agent-builder/agent-builder-chat.tsx": [
+				"// Tiêu đề đến từ HAI nguồn khác hẳn nhau: tên tác nhân / tiêu đề hội thoại là",
+				"// DỮ LIỆU người nhập hoặc máy sinh (không được dịch), còn nhãn dự phòng là CHỮ",
+				'// GIAO DIỆN (phải dịch). Trước đây cả hai dùng chung một `translate="no"`, nên',
+				"// khi rơi về nhãn dự phòng thì một phần tử tự xưng «đừng dịch» lại vẽ ra hai",
+				"// chuỗi khác nhau ở hai thứ tiếng.",
+			],
+			"apps/app/components/crm/fields/field-facets.tsx": ["/**"],
+			"apps/app/components/landing/ask-card.tsx": ["/**"],
+			"apps/app/components/landing/chip.tsx": ["/**"],
+			"apps/app/components/landing/product-shot/companies-page.tsx": ["/**"],
+			"apps/app/components/landing/product-shot/company-mark.tsx": ["/**"],
+			"apps/app/components/landing/product-shot/company-sheet.tsx": [
+				"/**",
+				"/**",
+			],
+			"apps/app/components/landing/setup-prompt-button.tsx": ["/**"],
+			"apps/app/proxy.ts": [
+				"// Both answers, every time, and concurrently — so the gate costs one round",
+				"// trip rather than two, and neither answer can be stale.",
+			],
+			"apps/app/test/onboarding-gate.spec.ts": [
+				"/** Answers both gate procedures, counting the calls to each. */",
+				"// A reset database, a removed key: the browser is carrying nothing that",
+				"// could keep saying the gate was satisfied.",
+			],
+			"packages/db/prisma/seed.ts": ["/**", "/**", "/**"],
+			"packages/ui/src/components/ai-elements/message.tsx": [
+				"// Use useEffect to update branches when they change",
+				"// Don't render if there's only one branch",
+			],
+			"packages/ui/src/components/ai-elements/reasoning.tsx": [
+				"// Track duration when streaming starts and ends",
+				"// Auto-open when streaming starts, auto-close when streaming ends (once only)",
+				"// Add a small delay before closing to allow user to see the content",
+			],
+			"packages/ui/src/components/data-table.tsx": [
+				"{/* `lg:contents` so the controls join the search on one row on desktop",
+			],
+			"packages/ui/src/components/link.tsx": ["/**"],
+		},
+		"parse-o-bien": {
+			"packages/ui/src/components/markdown-reader.tsx": [
+				"properties?: Record<string, unknown>;",
+			],
+		},
+		"hang-so-o-cau-hinh": {
+			"apps/api/src/auth/auth.service.ts": [
+				"const PROFILE_TTL_MS = 5 * 60_000;",
+			],
+			"apps/api/src/backfill/backfill.service.ts": [
+				"const AUTO_EVERY_MS = 5 * 60_000;",
+				"const RECHECK_PHOTO_AFTER_MS = 30 * 24 * 60 * 60_000;",
+				"const RECHECK_BRAND_AFTER_MS = 30 * 24 * 60 * 60_000;",
+			],
+			"apps/api/src/mailbox/mailbox-api.client.ts": [
+				"const MAX_BACKOFF_MS = 15 * 60_000;",
+			],
+			"apps/api/src/settings/model-catalog.service.ts": [
+				"const CATALOG_TTL_MS = 30 * 60_000;",
+			],
+			"packages/db/src/tracking.ts": [
+				"export const VERIFY_WINDOW_MS = 5 * 60_000;",
+			],
+		},
+	},
+	tienToTam: "luat-kho-cay-",
+	thuMucThu: "__do__",
+};

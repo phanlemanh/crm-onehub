@@ -10,7 +10,7 @@ import {
 import { kieuKr } from "@crm/validation/okr-kr";
 import { CAP_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import {
-	type DongDeXuat,
+	type DongGopY,
 	dongTuHang,
 	type HangDeXuat,
 	type NacTroLy,
@@ -65,13 +65,13 @@ export type GoiDeXuat = {
 
 type HangConTacDung = Awaited<ReturnType<typeof docDeXuatConTacDung>>[number];
 
-function giaTriHienTai(mt: MucTieuDoc, dong: DongDeXuat): string | null {
+function giaTriHienTai(mt: MucTieuDoc, dong: DongGopY): string | null {
 	if (dong.truong === "title") return mt.title;
 	if (dong.truong === "whyNow") return mt.whyNow;
 	return mt.keyResults.find((k) => k.id === dong.keyResultId)?.title ?? null;
 }
 
-function conHieuLuc(mt: MucTieuDoc, dong: DongDeXuat): boolean {
+function conHieuLuc(mt: MucTieuDoc, dong: DongGopY): boolean {
 	return dong.loai !== "viet-lai" || dong.truoc === giaTriHienTai(mt, dong);
 }
 

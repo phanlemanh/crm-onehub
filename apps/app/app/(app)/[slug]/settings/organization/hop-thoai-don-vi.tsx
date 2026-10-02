@@ -9,7 +9,13 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@crm/ui/components/dialog";
-import { Field, FieldError, FieldLabel } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -20,6 +26,8 @@ import {
 	SelectValue,
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
+import { Textarea } from "@crm/ui/components/textarea";
+import { TO_CHUC_TRAN } from "@crm/validation/to-chuc";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -58,15 +66,17 @@ export function HopThoaiDonVi({
 			: undefined;
 	const [dau] = useState(() => ({
 		ten: yeuCau.loai === "doi-ten" ? yeuCau.name : "",
+		moTa: yeuCau.loai === "doi-ten" ? yeuCau.moTa : "",
 		chon:
 			yeuCau.loai === "chuyen"
 				? (yeuCau.divisionId ?? KHONG_CHON)
 				: (truongHienTai ?? KHONG_CHON),
 	}));
 	const [ten, setTen] = useState(dau.ten);
+	const [moTa, setMoTa] = useState(dau.moTa);
 	const [loi, setLoi] = useState<string | null>(null);
 	const [chon, setChon] = useState<string>(dau.chon);
-	const coThayDoi = ten !== dau.ten || chon !== dau.chon;
+	const coThayDoi = ten !== dau.ten || moTa !== dau.moTa || chon !== dau.chon;
 
 	useEffect(() => {
 		if (loi) document.getElementById(maO)?.focus();
@@ -116,7 +126,8 @@ export function HopThoaiDonVi({
 		yeuCau.loai === "tao-bo-phan" ||
 		((yeuCau.loai === "doi-ten" || yeuCau.loai === "truong") &&
 			yeuCau.don === "bo-phan");
-	const sanSang = laTen ? ten.trim() !== "" : true;
+	const moTaQua = moTa.length > TO_CHUC_TRAN.moTa;
+	const sanSang = laTen ? ten.trim() !== "" && !moTaQua : true;
 
 	const tieuDe = (() => {
 		switch (yeuCau.loai) {
@@ -154,8 +165,8 @@ export function HopThoaiDonVi({
 				return;
 			case "doi-ten":
 				if (yeuCau.don === "bo-phan")
-					tenBp.mutate({ id: yeuCau.id, name: ten }, opt);
-				else tenPb.mutate({ id: yeuCau.id, name: ten }, opt);
+					tenBp.mutate({ id: yeuCau.id, name: ten, moTa }, opt);
+				else tenPb.mutate({ id: yeuCau.id, name: ten, moTa }, opt);
 				return;
 			case "truong":
 				truong.mutate(
@@ -193,21 +204,50 @@ export function HopThoaiDonVi({
 					}}
 				>
 					{laTen ? (
-						<Field>
-							<FieldLabel htmlFor={maO}>
-								{laBoPhan ? m.tenBoPhan : m.tenPhongBan}
-							</FieldLabel>
-							<Input
-								id={maO}
-								value={ten}
-								maxLength={80}
-								autoComplete="off"
-								translate="no"
-								aria-invalid={loi !== null}
-								onChange={(e) => setTen(e.target.value)}
-							/>
-							{loi ? <FieldError role="alert">{loi}</FieldError> : null}
-						</Field>
+						<FieldGroup>
+							<Field>
+								<FieldLabel htmlFor={maO}>
+									{laBoPhan ? m.tenBoPhan : m.tenPhongBan}
+								</FieldLabel>
+								<Input
+									id={maO}
+									value={ten}
+									maxLength={80}
+									autoComplete="off"
+									translate="no"
+									aria-invalid={loi !== null}
+									onChange={(e) => setTen(e.target.value)}
+								/>
+								{loi ? <FieldError role="alert">{loi}</FieldError> : null}
+							</Field>
+							{yeuCau.loai === "doi-ten" ? (
+								<Field data-invalid={moTaQua}>
+									<FieldLabel htmlFor={`${maO}-mo-ta`}>{m.moTa}</FieldLabel>
+									<Textarea
+										id={`${maO}-mo-ta`}
+										value={moTa}
+										maxLength={TO_CHUC_TRAN.moTa}
+										translate="no"
+										aria-invalid={moTaQua}
+										data-o-mo-ta
+										onChange={(e) => setMoTa(e.target.value)}
+									/>
+									<FieldDescription data-dem-mo-ta>
+										{dien(m.dem, { n: moTa.length, max: TO_CHUC_TRAN.moTa })}
+									</FieldDescription>
+									{moTaQua ? (
+										<FieldError>
+											{dien(m.moTaDai, {
+												n: moTa.length,
+												max: TO_CHUC_TRAN.moTa,
+											})}
+										</FieldError>
+									) : (
+										<FieldDescription>{m.moTaGoiY}</FieldDescription>
+									)}
+								</Field>
+							) : null}
+						</FieldGroup>
 					) : (
 						<Field>
 							<FieldLabel htmlFor={maO}>{tieuDe}</FieldLabel>

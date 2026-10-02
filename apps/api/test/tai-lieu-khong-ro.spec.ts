@@ -185,6 +185,7 @@ describe("khong-ro", () => {
 				"chinh-sach": 0,
 				"quy-trinh": 0,
 				"bieu-mau": 0,
+				"chien-luoc": 0,
 			} satisfies Record<LoaiTrang, number>;
 			for (const s of TRANG_THAI) {
 				const mong = thay(THAY_TRANG, ai, s);

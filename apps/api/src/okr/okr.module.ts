@@ -18,6 +18,7 @@ import { OkrSoService } from "./okr-so.service";
 import { OkrTaiCoCauService } from "./okr-tai-co-cau.service";
 import { OkrTraoDoiService } from "./okr-trao-doi.service";
 import { OkrXemService } from "./okr-xem.service";
+import { SoanService } from "./soan.service";
 import { TroLyOkrService } from "./tro-ly.service";
 
 @Module({
@@ -33,6 +34,7 @@ import { TroLyOkrService } from "./tro-ly.service";
 		OkrKhepService,
 		OkrCanhKrService,
 		OkrMauService,
+		SoanService,
 		OkrHoiYService,
 		{ provide: DONG_HO_HOI_Y, useValue: () => new Date() },
 		OkrChuKyService,

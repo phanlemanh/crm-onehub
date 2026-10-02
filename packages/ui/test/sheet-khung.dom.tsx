@@ -38,12 +38,20 @@ async function cho() {
 	});
 }
 
-function Ngan({ rong, split }: { rong: boolean; split: boolean }) {
+function Ngan({
+	rong,
+	split,
+	cuonRieng,
+}: {
+	rong: boolean;
+	split: boolean;
+	cuonRieng?: boolean;
+}) {
 	return (
 		<Sheet open>
 			<SheetContent side="right" size={rong ? "assist" : undefined}>
 				<SheetTitle>Ngăn thử</SheetTitle>
-				<SheetBody split={split}>
+				<SheetBody split={split} cuonRieng={cuonRieng}>
 					<form data-khoi="form" />
 					<section data-khoi="cot" />
 				</SheetBody>
@@ -92,6 +100,27 @@ describe("Ngăn chung", () => {
 		dung(<Ngan rong={false} split={false} />);
 		await cho();
 		expect(than()?.getAttribute("data-split")).toBe("false");
+	});
+
+	test("cuonRieng: thân không cuộn, hai cột chia chiều cao và tự cuộn", async () => {
+		dung(<Ngan rong split cuonRieng />);
+		await cho();
+		const lop = new Set(than()?.className.split(/\s+/));
+		expect(than()?.getAttribute("data-cuon-rieng")).toBe("true");
+		expect(lop.has("overflow-hidden")).toBe(true);
+		expect(lop.has("overflow-y-auto")).toBe(false);
+		expect(lop.has("lg:grid-rows-[minmax(0,1fr)]")).toBe(true);
+		expect(lop.has("lg:items-start")).toBe(false);
+		expect(lop.has("content-start")).toBe(false);
+	});
+
+	test("không cuonRieng thì thân vẫn cuộn như cũ", async () => {
+		dung(<Ngan rong split />);
+		await cho();
+		const lop = new Set(than()?.className.split(/\s+/));
+		expect(than()?.getAttribute("data-cuon-rieng")).toBe("false");
+		expect(lop.has("overflow-y-auto")).toBe(true);
+		expect(lop.has("overflow-hidden")).toBe(false);
 	});
 
 	test("chân giữ thứ tự truyền vào và xếp như chân hộp thoại", async () => {

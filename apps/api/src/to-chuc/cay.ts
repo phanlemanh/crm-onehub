@@ -8,6 +8,7 @@ export type CayTho = {
 	divisions: {
 		id: string;
 		name: string;
+		moTa: string;
 		position: number;
 		headUserId: string | null;
 		archivedAt: Date | null;
@@ -16,6 +17,7 @@ export type CayTho = {
 	departments: {
 		id: string;
 		name: string;
+		moTa: string;
 		position: number;
 		divisionId: string | null;
 		headUserId: string | null;
@@ -26,6 +28,7 @@ export type CayTho = {
 		userId: string;
 		primaryDepartmentId: string | null;
 		managerUserId: string | null;
+		chucDanh: string;
 	}[];
 	secondaries: { userId: string; departmentId: string }[];
 	khuonCuaPhongBan: ReadonlyMap<string, readonly string[]>;
@@ -89,6 +92,7 @@ export function dungCay(tho: CayTho): TreeOutput {
 	const nodePb = (d: CayTho["departments"][number]) => ({
 		id: d.id,
 		name: d.name,
+		moTa: d.moTa,
 		position: d.position,
 		divisionId:
 			d.divisionId !== null && bpSongIds.has(d.divisionId)
@@ -122,6 +126,7 @@ export function dungCay(tho: CayTho): TreeOutput {
 	const divisions = [...bpSong].sort(theoViTri).map((b) => ({
 		id: b.id,
 		name: b.name,
+		moTa: b.moTa,
 		position: b.position,
 		head: nguoi.get(truongBp.get(b.id) ?? "") ?? null,
 		okrMo: okrBp(b.id).mo,
@@ -140,8 +145,8 @@ export function dungCay(tho: CayTho): TreeOutput {
 	};
 	const people = [...tho.members].sort(theoTen).map((m) => {
 		const ql = quanLyTrucTiep(m.id, ngCanh);
-		const tay =
-			tho.placements.find((p) => p.userId === m.id)?.managerUserId ?? null;
+		const vt = tho.placements.find((p) => p.userId === m.id);
+		const tay = vt?.managerUserId ?? null;
 		return {
 			...m,
 			primaryDepartmentId: coChinhSong(m.id)
@@ -154,6 +159,7 @@ export function dungCay(tho: CayTho): TreeOutput {
 				tay !== null && hieuLuc.has(tay) && tay !== m.id ? tay : null,
 			manager: ql.managerId === null ? null : (nguoi.get(ql.managerId) ?? null),
 			managerSource: ql.source,
+			chucDanh: vt?.chucDanh ?? "",
 		};
 	});
 	const soChinh = new Map<string, number>();

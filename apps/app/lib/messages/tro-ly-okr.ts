@@ -31,6 +31,12 @@ const vi = {
 				moTa: "Mỗi phòng ban nhận một Tóm tắt tuần ở đầu Họp tuần.",
 				moTaAn: "Máy tóm tắt sau ngày cập nhật; chỉ quản trị thấy kết quả.",
 			},
+			soan: {
+				nhan: "Soạn OKR",
+				moTa: "Trưởng đơn vị mở «Soạn OKR cùng Trợ lý» cho đơn vị và chu kỳ đang lập kế hoạch; bản nháp do người nhận, sửa, bác.",
+				moTaAn:
+					"Chỉ quản trị mở được cuộc soạn trên đơn vị; số đo tách cột Ẩn.",
+			},
 		},
 		khoaAn: "Mọi đơn vị đã bật — không còn đơn vị nào để chế độ ẩn.",
 		donViCua: (nac: string, viec: string) =>
@@ -58,6 +64,11 @@ const vi = {
 		tranMoTa:
 			"Chạm trần thì Trợ lý OKR tạm nghỉ tới đầu tháng sau. Quản trị được báo ở 80% và 100%.",
 		tranHong: "Trần là một số từ 0, tối đa hai chữ số sau dấu phẩy.",
+		tranDatOkr: "Trần tháng đặt OKR (USD)",
+		tranDatOkrMoTa:
+			"Trống = bằng trần thường; áp cho tháng có chu kỳ ở pha lập kế hoạch.",
+		tranDatOkrHong:
+			"Trần tháng đặt OKR là một số từ 0, tối đa hai chữ số sau dấu phẩy, hoặc để trống.",
 		sanSang: {
 			dangTat: "Đang tắt",
 			sanSang: "Sẵn sàng",
@@ -219,6 +230,12 @@ const en: TroLyOkrMessages = {
 				moTa: "Each department gets a weekly summary at the top of its weekly meeting.",
 				moTaAn: "Summaries run after update day; only admins see the results.",
 			},
+			soan: {
+				nhan: "Draft OKRs",
+				moTa: "A unit head opens “Draft OKRs with the assistant” for a unit and a cycle in planning; people accept, edit or reject every line.",
+				moTaAn:
+					"Only admins can open a drafting session on the unit; metrics go to the Hidden column.",
+			},
 		},
 		khoaAn: "Every unit is already on — none is left for hidden mode.",
 		donViCua: (nac: string, viec: string) =>
@@ -246,6 +263,11 @@ const en: TroLyOkrMessages = {
 		tranMoTa:
 			"At the cap the OKR assistant pauses until next month. Admins are told at 80% and 100%.",
 		tranHong: "The cap is a number from 0, with at most two decimals.",
+		tranDatOkr: "Monthly cap in OKR-setting months (USD)",
+		tranDatOkrMoTa:
+			"Empty = same as the regular cap; applies to months with a cycle in planning.",
+		tranDatOkrHong:
+			"The cap is a number from 0 with at most two decimals, or empty.",
 		sanSang: {
 			dangTat: "Off",
 			sanSang: "Ready",

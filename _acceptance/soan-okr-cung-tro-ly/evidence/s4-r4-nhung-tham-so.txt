@@ -1,0 +1,10 @@
+== vong 4 (HEAD sau gop onehub)
+so dong khac: 1
+sha256 ban plugin: 6b32575607a93f297d885e65e74e3a32510c785d74ab95665070bd329bd6d72e
+sha256 ban nhung : 2700ad213bf300f8dfc90d8a134f6d89f70201c13ddc49a2fb37bf28946913bc
+sha256 nhung: 5b03aa10b53c6705589f3babb8e0de0c7f5801e1806f212b60e7549c7ef327e2
+sha256 tep  : 5b03aa10b53c6705589f3babb8e0de0c7f5801e1806f212b60e7549c7ef327e2
+KHOP
+generated_sha: d233ae402ac2b74af562f2f807bc67317ddeb151
+HEAD         : d233ae402ac2b74af562f2f807bc67317ddeb151
+cay_sach=0

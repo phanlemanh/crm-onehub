@@ -98,6 +98,7 @@ export function kyTrongOChon<T extends { anLuc: string | null }>(
 }
 
 const PHA_HOI_Y = "lap-ke-hoach" satisfies PhaChuKy;
+const PHA_SOAN = "lap-ke-hoach" satisfies PhaChuKy;
 const LOAI_UU_TIEN = "nam" satisfies LoaiChuKy;
 
 export function kyMacDinhHoiY(cycles: {
@@ -112,6 +113,20 @@ export function kyMacDinhHoiY(cycles: {
 				(a.kind === b.kind ? 0 : a.kind === LOAI_UU_TIEN ? -1 : 1),
 		);
 	return keHoach[0]?.id ?? cycles.currentId;
+}
+
+export function kySoDoSoan<
+	T extends { id: string; phase: PhaChuKy; anLuc: string | null },
+>(
+	cycles: { cycles: readonly T[]; currentId: string | null } | undefined,
+): T | null {
+	if (!cycles) return null;
+	const hien = kyTrongOChon(cycles.cycles);
+	return (
+		hien.find((c) => c.phase === PHA_SOAN) ??
+		hien.find((c) => c.id === cycles.currentId) ??
+		null
+	);
 }
 
 export function giaiKyHoiY(

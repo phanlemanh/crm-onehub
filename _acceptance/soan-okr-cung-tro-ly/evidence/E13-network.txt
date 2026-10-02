@@ -1,0 +1,2 @@
+E13 round 3 network: driver = puppeteer script (man-soan.mjs) via tien-de; no read_network_requests/read_console_messages tool used. networkObserved = n-a (driver).
+Script log: 88 DUNG, 0 SAI, exit 0 (EXIT=0). Log: _acceptance/soan-okr-cung-tro-ly/evidence/E13-run-r3.log
