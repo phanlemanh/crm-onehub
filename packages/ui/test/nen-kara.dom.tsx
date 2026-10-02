@@ -499,14 +499,20 @@ function chuTuDat(): string[] {
 	return ra;
 }
 
-type CaTieng = { ten: string; ve: () => ReactElement; mo?: () => void };
+type CaTieng = {
+	ten: string;
+	so: number;
+	ve: () => ReactElement;
+	mo?: () => void;
+};
 
 describe("nk-hai-tieng", () => {
 	test("nk-hai-tieng: mọi chữ thành phần tự đặt đổi theo tiếng, trừ tên Kara", () => {
 		const CA: readonly CaTieng[] = [
-			{ ten: "KaraMark", ve: () => <KaraMark scope="§1" /> },
+			{ ten: "KaraMark", so: 1, ve: () => <KaraMark scope="§1" /> },
 			{
 				ten: "KaraLabel",
+				so: 4,
 				ve: () => <KaraLabel scope="§1" text="§2" reason="§3" readAt="§4" />,
 				mo: () => {
 					const nut = document.body.querySelector<HTMLButtonElement>(
@@ -518,6 +524,7 @@ describe("nk-hai-tieng", () => {
 			},
 			{
 				ten: "ProposedChange",
+				so: 0,
 				ve: () => (
 					<ProposedChange
 						kind="rewrite"
@@ -534,6 +541,7 @@ describe("nk-hai-tieng", () => {
 			},
 			{
 				ten: "ProposedChangeReceipt",
+				so: 1,
 				ve: () => (
 					<ProposedChangeReceipt
 						decision="accepted"
@@ -544,6 +552,7 @@ describe("nk-hai-tieng", () => {
 			},
 			{
 				ten: "AiFeedback",
+				so: 2,
 				ve: () => (
 					<AiFeedback value onChange={() => {}} label="§1" thanks="§2" />
 				),
@@ -557,15 +566,19 @@ describe("nk-hai-tieng", () => {
 				ca.mo?.();
 				theoTieng[locale] = chuTuDat();
 				don();
+				const n = theoTieng[locale].length;
+				if (n !== ca.so) {
+					throw new Error(`so cho sai: ${ca.ten} ${locale} ${n} != ${ca.so}`);
+				}
 			}
-			expect(theoTieng.vi.length).toBe(theoTieng.en.length);
 			theoTieng.vi.forEach((vi, i) => {
 				soCho += 1;
-				if (TEN_RIENG.has(vi) || vi === "·") return;
+				if (TEN_RIENG.has(vi)) return;
 				if (vi === theoTieng.en[i]) throw new Error(`chu cung: ${vi}`);
 			});
 		}
-		console.info(`nk-hai-tieng: ${soCho} cho da so`);
-		expect(soCho).toBeGreaterThan(0);
+		const can = CA.reduce((tong, ca) => tong + ca.so, 0);
+		console.info(`nk-hai-tieng: ${soCho} cho da so / ${can} cho ghi truoc`);
+		expect(soCho).toBe(can);
 	});
 });

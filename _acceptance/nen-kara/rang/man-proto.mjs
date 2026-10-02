@@ -20,6 +20,16 @@ const NK = {
 	chuViSao: "Vì sao?",
 	tieuDeViSao: "Kara dựa trên gì",
 	chuHoanTac: "Hoàn tác",
+	soPhanTu: {
+		"ST-nenkara-nhan": { inline: 0, the: 0 },
+		"ST-nenkara-inline-cho": { inline: 1, the: 0 },
+		"ST-nenkara-inline-khoa": { inline: 1, the: 0 },
+		"ST-nenkara-inline-loi": { inline: 1, the: 0 },
+		"ST-nenkara-inline-sua": { inline: 1, the: 0 },
+		"ST-nenkara-bien-nhan": { inline: 2, the: 0 },
+		"ST-nenkara-the": { inline: 0, the: 2 },
+		"ST-nenkara-phan-hoi": { inline: 0, the: 0 },
+	},
 	inputsE13: [
 		"E10-ST-nenkara-inline-cho-1440-light.png",
 		"E10-ST-nenkara-inline-cho-390-light.png",
@@ -74,10 +84,19 @@ async function cho(trang, ham, ...doiSo) {
 }
 
 function chenLoi(kiemDo) {
+	if (kiemDo === "the-khong-vien") {
+		const the = document.querySelector(
+			'[data-slot="proposed-change"][data-density="card"]',
+		);
+		if (!the) return false;
+		the.style.borderWidth = "0px";
+		return true;
+	}
 	const dau = document.querySelector(
 		'[data-slot="proposed-change"][data-density="inline"]',
 	);
 	if (!dau) return false;
+	if (kiemDo === "mat-phan-tu") dau.removeAttribute("data-density");
 	if (kiemDo === "vien") dau.style.border = "1px solid rgb(200, 0, 0)";
 	if (kiemDo === "hop-con") {
 		const hop = document.createElement("div");
@@ -217,6 +236,9 @@ const muc = PROTO_CATALOG.find((m) => m.slug === SLUG);
 if (!muc) khongDoDuoc(`catalog khong co ${SLUG}`);
 const tapCatalog = muc.states.map((s) => s.id);
 const thieu = tapDesign.filter((id) => !tapCatalog.includes(id));
+for (const id of tapDesign.filter((x) => !(x in NK.soPhanTu))) {
+	ghi(false, `thieu so phan tu ghi truoc: ${id}`);
+}
 for (const id of thieu) ghi(false, `thieu trang thai: ${id}`);
 if (tapDesign.length === 0) khongDoDuoc("bang trang thai rong");
 
@@ -260,9 +282,14 @@ try {
 				await trang.screenshot({ path: tep, fullPage: true });
 				soO += 1;
 				for (const l of so.loiInline) ghi(false, `${nhan}: ${l}`);
+				const kv = NK.soPhanTu[id];
+				ghi(
+					so.soInline === kv.inline && so.soThe === kv.the,
+					`${nhan}: ${so.soInline === kv.inline && so.soThe === kv.the ? "so phan tu" : "so phan tu sai"} inline ${so.soInline}/${kv.inline}, the ${so.soThe}/${kv.the}`,
+				);
 				ghi(
 					so.theKhongVien === 0,
-					`${nhan}: the co vien (${so.soThe - so.theKhongVien}/${so.soThe})`,
+					`${nhan}: ${so.theKhongVien === 0 ? "the co vien" : "the khong vien"} (${so.soThe - so.theKhongVien}/${so.soThe})`,
 				);
 				ghi(so.tranNgang <= 0, `${nhan}: tran ngang ${so.tranNgang}px`);
 				dong.push(

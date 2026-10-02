@@ -1054,7 +1054,7 @@ executors:
     nk_phan_hoi: 'cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/nen-kara.dom.tsx -t nk-phan-hoi'
     nk_hai_tieng: 'cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/nen-kara.dom.tsx -t nk-hai-tieng && bun test ./test/messages-guard.spec.ts'
     nk_man_cu: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nen-kara-man-cu.dom.tsx ./test/the-gop-y-okr.dom.tsx'
-    nk_tom_tat: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/nen-kara-man-cu.dom.tsx -t tom-tat && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-tom-tat.dom.tsx'
+    nk_tom_tat: 'bash _acceptance/nen-kara/rang/tom-tat.sh'
     suite_api: 'bun run test -- --filter=api'
     suite_app_ui: 'bun run test -- --filter=app --filter=@crm/ui'
     suite_agent_db: 'bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db'

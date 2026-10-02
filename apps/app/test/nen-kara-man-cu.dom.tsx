@@ -21,6 +21,7 @@ const { HopThoaiMucTieu } = await import(
 	"@/app/(app)/[slug]/okr/hop-thoai-muc-tieu"
 );
 const { FactSuggestion } = await import("@/components/crm/facts");
+const { ProposedChange } = await import("@crm/ui/components/proposed-change");
 const { KhoiTomTat } = await import("@/app/(app)/[slug]/okr/khoi-tom-tat");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 const { messages } = await import("@crm/ui/lib/messages");
@@ -54,6 +55,33 @@ function kiemThe(goc: Element | null, ten: string): void {
 }
 
 describe("man-cu", () => {
+	test("man-cu: đối chứng — bộ chọn nhận bản thẻ và bắt bản liền dòng", async () => {
+		const deXuat = (density: "card" | "inline") => (
+			<ProposedChange
+				density={density}
+				kind="compact"
+				value="Giám đốc kinh doanh"
+				actions={[
+					{ id: "nhan", label: "Nhận", tone: "primary", onClick: () => {} },
+				]}
+			/>
+		);
+		datMacDinh([]);
+		await mo(deXuat("card"));
+		kiemThe(
+			document.querySelector('[data-slot="proposed-change"]'),
+			"doi chung",
+		);
+		await dongHet();
+		await mo(deXuat("inline"));
+		expect(() =>
+			kiemThe(
+				document.querySelector('[data-slot="proposed-change"]'),
+				"doi chung",
+			),
+		).toThrow("doi chung doi sang inline");
+	});
+
 	test("man-cu: cột góp ý OKR vẫn là thẻ", async () => {
 		datMacDinh([D_TEN]);
 		await mo(
