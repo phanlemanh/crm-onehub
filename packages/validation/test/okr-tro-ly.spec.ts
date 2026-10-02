@@ -10,8 +10,15 @@ import {
 	okrProgram,
 	okrProgramSua,
 } from "../src/okr-chuong-trinh";
+import { khoaDong } from "../src/okr-kiem-de-xuat";
 import { KIEU_KR } from "../src/okr-kr";
 import {
+	type DongSoan,
+	dongDeXuat,
+	dongSoan,
+	dongSoanTuHang,
+	HANG_SOAN,
+	hangTuDongSoan,
 	ketQuaTroLy,
 	nopDeXuat,
 	okrTroLyViec,
@@ -61,6 +68,15 @@ describe("mac-dinh", () => {
 		expect(okrProgram.parse(HANG_CU)).toEqual(OKR_PROGRAM_MAC_DINH);
 		expect(OKR_PROGRAM_MAC_DINH.aiOn).toBe(false);
 		expect(OKR_PROGRAM_MAC_DINH.aiTranThangUsd).toBe(9);
+		expect(okrProgram.parse(HANG_CU), "hang cu doc len soan tat").toMatchObject(
+			{
+				aiSoanPhamVi: "tat",
+				aiSoanDonVi: [],
+				aiSoanAnPhamVi: "tat",
+				aiSoanAnDonVi: [],
+				aiTranThangDatOkrUsd: null,
+			},
+		);
 	});
 
 	test("parse hỏng nêu tên trường, không nuốt thành rỗng", () => {
@@ -254,23 +270,30 @@ describe("nac", () => {
 	): OkrProgram => {
 		const b = PHAM_VI[bat];
 		const a = PHAM_VI[an];
-		return viec === "de-xuat"
-			? {
-					...OKR_PROGRAM_MAC_DINH,
-					aiOn,
-					aiDeXuatPhamVi: b.phamVi,
-					aiDeXuatDonVi: [...b.donVi],
-					aiDeXuatAnPhamVi: a.phamVi,
-					aiDeXuatAnDonVi: [...a.donVi],
-				}
-			: {
-					...OKR_PROGRAM_MAC_DINH,
-					aiOn,
-					aiTomTatPhamVi: b.phamVi,
-					aiTomTatDonVi: [...b.donVi],
-					aiTomTatAnPhamVi: a.phamVi,
-					aiTomTatAnDonVi: [...a.donVi],
-				};
+		const goc = { ...OKR_PROGRAM_MAC_DINH, aiOn };
+		if (viec === "de-xuat")
+			return {
+				...goc,
+				aiDeXuatPhamVi: b.phamVi,
+				aiDeXuatDonVi: [...b.donVi],
+				aiDeXuatAnPhamVi: a.phamVi,
+				aiDeXuatAnDonVi: [...a.donVi],
+			};
+		if (viec === "tom-tat-tuan")
+			return {
+				...goc,
+				aiTomTatPhamVi: b.phamVi,
+				aiTomTatDonVi: [...b.donVi],
+				aiTomTatAnPhamVi: a.phamVi,
+				aiTomTatAnDonVi: [...a.donVi],
+			};
+		return {
+			...goc,
+			aiSoanPhamVi: b.phamVi,
+			aiSoanDonVi: [...b.donVi],
+			aiSoanAnPhamVi: a.phamVi,
+			aiSoanAnDonVi: [...a.donVi],
+		};
 	};
 
 	test("nac: ma trận toàn phần aiOn × Bật cho × Chế độ ẩn cho × đơn vị, bật thắng ẩn", () => {
@@ -356,5 +379,87 @@ describe("nac", () => {
 describe("kieu-kr", () => {
 	test("sáu kiểu KR của hàm xu hướng khớp khuôn KR", () => {
 		expect([...KIEU_KR_DB]).toEqual([...KIEU_KR]);
+	});
+});
+
+describe("dong-soan", () => {
+	const mtMoi: DongSoan = {
+		loai: "muc-tieu-moi",
+		cuocSoanId: "cs1",
+		khoa: "mt-1",
+		ten: "Giao hàng đúng hẹn trên tuyến Bắc",
+		viSaoLucNay: "Quý này mở thêm kho vệ tinh.",
+		loaiMucTieu: "cam-ket",
+		viSao: "Đúng hẹn là điều đối tác nhắc nhiều nhất.",
+		canChinhId: null,
+		dich: null,
+	};
+	const krMoi: DongSoan = {
+		loai: "kr-moi",
+		cuocSoanId: "cs1",
+		khoa: "kr-1",
+		chaKhoa: "mt-1",
+		ten: "Giảm thời gian giao trung bình",
+		kieu: "giam-xuong",
+		donVi: "giờ",
+		khoiDiemGoiY: 36,
+		viSao: "Kỳ trước chốt 36 giờ.",
+		dich: null,
+	};
+	const ccMoi: DongSoan = {
+		loai: "can-chinh-moi",
+		cuocSoanId: "cs1",
+		khoa: "cc-1",
+		chaKhoa: "mt-1",
+		targetObjectiveId: "mt-cap-tren",
+		targetKeyResultId: null,
+		viSao: "Nối vào Mục tiêu tăng trưởng miền Bắc của Khối.",
+		dich: null,
+	};
+
+	test("ba loại dòng mới qua dongDeXuat; đích luôn null; căn chỉnh mới cần đúng một đích", () => {
+		for (const d of [mtMoi, krMoi, ccMoi])
+			expect(dongDeXuat.parse(d)).toEqual(d);
+		expect(
+			dongSoan.safeParse({ ...krMoi, dich: 10 }).success,
+			"dich khac null lot",
+		).toBe(false);
+		expect(
+			dongSoan.safeParse({ ...ccMoi, targetKeyResultId: "kr-x" }).success,
+			"can chinh hai dich lot",
+		).toBe(false);
+		expect(
+			dongSoan.safeParse({ ...krMoi, donVi: "" }).success,
+			"kr-moi thieu don vi phai parse duoc de ghi bi-loai",
+		).toBe(true);
+	});
+
+	test("khoaDong: muc-tieu-moi và kr-moi theo tên chuẩn hoá, can-chinh-moi theo cha và đích", () => {
+		expect(khoaDong(mtMoi)).toBe(
+			"muc-tieu-moi:giao hàng đúng hẹn trên tuyến bắc",
+		);
+		expect(
+			khoaDong({ ...krMoi, ten: "  GIẢM   thời gian giao trung bình " }),
+		).toBe("kr-moi:giảm thời gian giao trung bình");
+		expect(khoaDong(ccMoi)).toBe("can-chinh-moi:mt-1:mt-cap-tren");
+	});
+
+	test("hangTuDongSoan ↔ dongSoanTuHang: đi một vòng không mất trường; hàng soạn không có Mục tiêu và việc", () => {
+		for (const d of [mtMoi, krMoi, ccMoi]) {
+			const hang = hangTuDongSoan(d, "phien-eve-1");
+			expect(hang.objectiveId, "objectiveId phai la chuoi rong").toBe(
+				HANG_SOAN.objectiveId,
+			);
+			expect(hang.taskId).toBe("phien-eve-1");
+			expect(hang.dich).toBeNull();
+			expect(hang.lyDo).toBe(d.viSao);
+			expect(dongSoanTuHang(hang)).toEqual(d);
+		}
+		expect(() =>
+			dongSoanTuHang({
+				...hangTuDongSoan(krMoi, "phien-eve-1"),
+				loai: "muc-tieu-moi",
+			}),
+		).toThrow(/hang soan lech/);
 	});
 });

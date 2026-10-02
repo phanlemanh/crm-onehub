@@ -12,8 +12,8 @@ import {
 	trichSo,
 } from "../src/okr-kiem-de-xuat";
 import {
-	type DongDeXuat,
-	dongDeXuat,
+	type DongGopY,
+	dongGopY,
 	MA_LOAI_DE_XUAT,
 	MA_VAN_DE,
 	type MaLoaiDeXuat,
@@ -92,11 +92,10 @@ const CA_LUAT = caDau(
 	"ca co luat luot 7 trung ma van de",
 );
 
-type DauVaoDong = Partial<DongDeXuat> &
-	Pick<DongDeXuat, "loai" | "objectiveId">;
+type DauVaoDong = Partial<DongGopY> & Pick<DongGopY, "loai" | "objectiveId">;
 
-function dong(d: DauVaoDong): DongDeXuat {
-	return dongDeXuat.parse({
+function dong(d: DauVaoDong): DongGopY {
+	return dongGopY.parse({
 		keyResultId: null,
 		truong: null,
 		truoc: null,
@@ -109,7 +108,7 @@ function dong(d: DauVaoDong): DongDeXuat {
 	});
 }
 
-function vietLaiTen(goi: GoiKiem, sau: string, them: Partial<DongDeXuat> = {}) {
+function vietLaiTen(goi: GoiKiem, sau: string, them: Partial<DongGopY> = {}) {
 	return dong({
 		loai: "viet-lai",
 		objectiveId: goi.mucTieu.id,
@@ -156,7 +155,7 @@ function doiKr(goi: GoiKiem, sua: Partial<GoiKiem["krs"][number]>): GoiKiem {
 	return { ...goi, krs: goi.krs.map((k) => ({ ...k, ...sua })) };
 }
 
-type Cap = { ma: MaLoaiDeXuat; goi: GoiKiem; do: DongDeXuat; lanh: DongDeXuat };
+type Cap = { ma: MaLoaiDeXuat; goi: GoiKiem; do: DongGopY; lanh: DongGopY };
 
 const G = goiTuCa(CA_NG);
 const SAU_LANH = "Đối tác ký mới mang về 14 tỷ đồng doanh thu";
@@ -338,8 +337,8 @@ describe("so-viet-kieu-viet", () => {
 	const dang: {
 		ten: string;
 		goi: GoiKiem;
-		do: DongDeXuat;
-		lanh: DongDeXuat;
+		do: DongGopY;
+		lanh: DongGopY;
 	}[] = [
 		{
 			ten: "5 tỷ",
@@ -463,52 +462,48 @@ describe("so-doi-co", () => {
 		),
 	});
 
-	const cap: { ten: string; goi: GoiKiem; do: DongDeXuat; lanh: DongDeXuat }[] =
-		[
-			{
-				ten: "14 tỷ thành 14 triệu",
-				goi: G,
-				do: vietLaiTen(G, "Doanh thu hợp đồng mới đạt 14 triệu đồng"),
-				lanh: vietLaiTen(G, SAU_LANH),
-			},
-			{
-				ten: "14 tỷ thành 14%",
-				goi: G,
-				do: vietLaiTen(G, "Doanh thu hợp đồng mới tăng 14%"),
-				lanh: vietLaiTen(G, SAU_LANH),
-			},
-			{
-				ten: "ô số KR đếm cuộc không cho số tỷ",
-				goi: L,
-				do: vietLaiKr(L, "Mang về 50 tỷ đồng từ đối tác mới"),
-				lanh: vietLaiKr(L, "Đối tác mới nhận 50 cuộc gọi mỗi tuần"),
-			},
-			{
-				ten: `${krTy?.targetValue} tỷ khi KR ghi ${krTy?.targetValue}, đơn vị tỷ`,
-				goi: K,
-				do: vietLaiKr(
-					K,
-					`${krTy?.title} đạt ${krTy?.targetValue} triệu đồng`,
-					thuKrTy,
-				),
-				lanh: vietLaiKr(
-					K,
-					`${krTy?.title} đạt ${krTy?.targetValue} tỷ đồng`,
-					thuKrTy,
-				),
-			},
-			{
-				ten: "năm trăm triệu",
-				goi: G500TR,
-				do: vietLaiKr(G500TR, "Doanh thu hợp đồng mới đạt năm trăm tỷ đồng"),
-				lanh: vietLaiKr(
-					G500TR,
-					"Doanh thu hợp đồng mới đạt năm trăm triệu đồng",
-				),
-			},
-			capTyLe(T, "KR phần trăm tên «Tỷ lệ» không cho số tỷ"),
-			capTyLe(TKhongDonVi, "KR tên «Tỷ lệ» không đơn vị không cho số tỷ"),
-		];
+	const cap: { ten: string; goi: GoiKiem; do: DongGopY; lanh: DongGopY }[] = [
+		{
+			ten: "14 tỷ thành 14 triệu",
+			goi: G,
+			do: vietLaiTen(G, "Doanh thu hợp đồng mới đạt 14 triệu đồng"),
+			lanh: vietLaiTen(G, SAU_LANH),
+		},
+		{
+			ten: "14 tỷ thành 14%",
+			goi: G,
+			do: vietLaiTen(G, "Doanh thu hợp đồng mới tăng 14%"),
+			lanh: vietLaiTen(G, SAU_LANH),
+		},
+		{
+			ten: "ô số KR đếm cuộc không cho số tỷ",
+			goi: L,
+			do: vietLaiKr(L, "Mang về 50 tỷ đồng từ đối tác mới"),
+			lanh: vietLaiKr(L, "Đối tác mới nhận 50 cuộc gọi mỗi tuần"),
+		},
+		{
+			ten: `${krTy?.targetValue} tỷ khi KR ghi ${krTy?.targetValue}, đơn vị tỷ`,
+			goi: K,
+			do: vietLaiKr(
+				K,
+				`${krTy?.title} đạt ${krTy?.targetValue} triệu đồng`,
+				thuKrTy,
+			),
+			lanh: vietLaiKr(
+				K,
+				`${krTy?.title} đạt ${krTy?.targetValue} tỷ đồng`,
+				thuKrTy,
+			),
+		},
+		{
+			ten: "năm trăm triệu",
+			goi: G500TR,
+			do: vietLaiKr(G500TR, "Doanh thu hợp đồng mới đạt năm trăm tỷ đồng"),
+			lanh: vietLaiKr(G500TR, "Doanh thu hợp đồng mới đạt năm trăm triệu đồng"),
+		},
+		capTyLe(T, "KR phần trăm tên «Tỷ lệ» không cho số tỷ"),
+		capTyLe(TKhongDonVi, "KR tên «Tỷ lệ» không đơn vị không cho số tỷ"),
+	];
 
 	test("số đổi cỡ là số mới; số gốc chỉ khớp ô KR có đơn vị cùng cỡ", () => {
 		expect(krTy).toBeDefined();

@@ -1,0 +1,14 @@
+== (a) diff ban plugin <-> ban nhung
+so dong khac: 1
+11a12
+> if (args === "__EMBED__") args = {   "generated_at": "2026
+sha256 ban plugin: 6b32575607a93f297d885e65e74e3a32510c785d74ab95665070bd329bd6d72e
+sha256 ban nhung : bd48779b013a368d79c8f9e21accc59e0d9800efdb300c78ea16e7391e227fd3
+== (b) JSON nhung == tep s4-args
+sha256 nhung: 58cc66517393ca46ae61549ebbf42e52ba3d7c7b9b6a3b99fc6435b70c10e66d
+sha256 tep  : 58cc66517393ca46ae61549ebbf42e52ba3d7c7b9b6a3b99fc6435b70c10e66d
+KHOP
+== (c) generated_sha == HEAD
+generated_sha: 241d872477cc27a49a29623ffefa7a981b7ce932
+HEAD         : 241d872477cc27a49a29623ffefa7a981b7ce932
+cay_sach=0

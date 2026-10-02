@@ -63,6 +63,7 @@ export type DeXuatDuyet = {
 	khoi: KhoiDoi[];
 	dai: SoDoi[];
 	may?: BanMay;
+	chienLuoc?: { soKyTu: number; tranKyTu: number; canhBaoTuCam: string[] };
 };
 
 type LoiMay = {
@@ -75,6 +76,11 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 	const t = taiLieuMessages(locale);
 	const m = t.duyet;
 	const mm = t.duyetMay;
+	const soVi = new Intl.NumberFormat(locale === "vi" ? "vi-VN" : "en-US");
+	const chienLuoc = deXuat.chienLuoc;
+	const quaTran =
+		chienLuoc !== undefined && chienLuoc.soKyTu > chienLuoc.tranKyTu;
+	const tuCam = chienLuoc?.canhBaoTuCam ?? [];
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const router = useRouter();
@@ -142,7 +148,7 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 	const hienKhoaDuyet = chuaTickHet && choDuyet && !deXuat.cu;
 
 	const bamDuyet = async () => {
-		if (dangLam || deXuat.cu || chuaTickHet) return;
+		if (quaTran || dangLam || deXuat.cu || chuaTickHet) return;
 		setThongBao(null);
 		setDangTinh(true);
 		const hash = await diffHash(deXuat.khoi);
@@ -239,6 +245,25 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 							<AlertTitle>{m.daDuyet}</AlertTitle>
 						</Alert>
 					) : null}
+					{quaTran && chienLuoc ? (
+						<Alert data-qua-tran="" role="alert" variant="destructive">
+							<Icon icon={WarningAlt} />
+							<AlertTitle>
+								{dien(m.chienLuoc.quaTran, {
+									tran: soVi.format(chienLuoc.tranKyTu),
+									so: soVi.format(chienLuoc.soKyTu),
+								})}
+							</AlertTitle>
+						</Alert>
+					) : null}
+					{tuCam.length > 0 ? (
+						<Alert data-canh-bao-tu-cam="" role="note" variant="warning">
+							<Icon icon={WarningAlt} />
+							<AlertTitle>
+								{dien(m.chienLuoc.canhBao, { tu: tuCam.join(", ") })}
+							</AlertTitle>
+						</Alert>
+					) : null}
 					{may ? (
 						<BanMayDuyet
 							banTrinhBay={
@@ -298,15 +323,17 @@ export function ManDuyet({ deXuat }: { deXuat: DeXuatDuyet }) {
 								) : null}
 							</Field>
 							<div className="flex flex-wrap items-center gap-2">
-								<Button
-									aria-describedby={hienKhoaDuyet ? idKhoaDuyet : undefined}
-									data-nut-duyet=""
-									disabled={deXuat.cu || !choDuyet || dangLam || chuaTickHet}
-									onClick={bamDuyet}
-									variant={may ? "outline" : "default"}
-								>
-									{duyet.isPending || dangTinh ? m.dangDuyet : m.duyet}
-								</Button>
+								{quaTran ? null : (
+									<Button
+										aria-describedby={hienKhoaDuyet ? idKhoaDuyet : undefined}
+										data-nut-duyet=""
+										disabled={deXuat.cu || !choDuyet || dangLam || chuaTickHet}
+										onClick={bamDuyet}
+										variant={may ? "outline" : "default"}
+									>
+										{duyet.isPending || dangTinh ? m.dangDuyet : m.duyet}
+									</Button>
+								)}
 								<Button
 									data-nut-tra-lai=""
 									disabled={!choDuyet || dangLam}

@@ -18,17 +18,20 @@
 		{
 			"ma": "kinh-doanh",
 			"ten": "Khối Kinh doanh",
-			"truong": "tran-quoc-bao"
+			"truong": "tran-quoc-bao",
+			"moTa": "Ký hợp đồng vận chuyển với đối tác bán lẻ, sản xuất và thương mại điện tử ở hai miền; giữ và mở rộng tệp đối tác qua chăm sóc và marketing."
 		},
 		{
 			"ma": "van-hanh",
 			"ten": "Khối Vận hành",
-			"truong": "chu-van-hung"
+			"truong": "chu-van-hung",
+			"moTa": "Vận hành kho lạnh, điều phối đội xe và tuyến, và xây phần mềm theo dõi đơn hàng cho đối tác."
 		},
 		{
 			"ma": "ho-tro",
 			"ten": "Khối Hỗ trợ",
-			"truong": "doan-thi-thu"
+			"truong": "doan-thi-thu",
+			"moTa": "Tài chính, nhân sự và pháp chế — giữ dòng tiền, con người và hợp đồng đúng luật để hai khối kia chạy."
 		}
 	],
 	"phongBan": [
@@ -36,61 +39,71 @@
 			"ma": "kd-bac",
 			"ten": "Kinh doanh miền Bắc",
 			"boPhan": "kinh-doanh",
-			"truong": "nguyen-thi-lan"
+			"truong": "nguyen-thi-lan",
+			"moTa": "Bán dịch vụ vận chuyển cho đối tác miền Bắc; trọng tâm quý này là bán lẻ và chuỗi cửa hàng."
 		},
 		{
 			"ma": "kd-nam",
 			"ten": "Kinh doanh miền Nam",
 			"boPhan": "kinh-doanh",
-			"truong": "ly-thanh-tam"
+			"truong": "ly-thanh-tam",
+			"moTa": "Bán dịch vụ vận chuyển cho đối tác miền Nam; nhiều đối tác sản xuất và thương mại điện tử."
 		},
 		{
 			"ma": "cham-soc",
 			"ten": "Chăm sóc đối tác",
 			"boPhan": "kinh-doanh",
-			"truong": "vu-thu-ha"
+			"truong": "vu-thu-ha",
+			"moTa": "Giữ đối tác đang dùng dịch vụ: xử lý phản hồi, gia hạn, tăng tuyến."
 		},
 		{
 			"ma": "marketing",
 			"ten": "Marketing",
 			"boPhan": "kinh-doanh",
-			"truong": "trinh-hoai-nam"
+			"truong": "trinh-hoai-nam",
+			"moTa": "Tạo nguồn đối tác mới qua nội dung, quảng cáo số và sự kiện ngành."
 		},
 		{
 			"ma": "kho-van",
 			"ten": "Kho vận",
 			"boPhan": "van-hanh",
-			"truong": "dinh-cong-son"
+			"truong": "dinh-cong-son",
+			"moTa": "Vận hành ba kho lạnh và kiểm kê; giảm hao hụt và thời gian xuất kho."
 		},
 		{
 			"ma": "dieu-phoi",
 			"ten": "Điều phối vận tải",
 			"boPhan": "van-hanh",
-			"truong": "nghiem-thu-uyen"
+			"truong": "nghiem-thu-uyen",
+			"moTa": "Xếp xe và tuyến mỗi ngày; giữ tỷ lệ giao đúng hẹn và chi phí mỗi chuyến."
 		},
 		{
 			"ma": "san-pham",
 			"ten": "Sản phẩm số",
 			"boPhan": "van-hanh",
-			"truong": "pham-thu-trang"
+			"truong": "pham-thu-trang",
+			"moTa": "Xây và vận hành cổng theo dõi đơn hàng cho đối tác; số hoá quy trình nội bộ."
 		},
 		{
 			"ma": "tai-chinh",
 			"ten": "Tài chính",
 			"boPhan": "ho-tro",
-			"truong": "thai-minh-chau"
+			"truong": "thai-minh-chau",
+			"moTa": "Kế toán, dòng tiền, công nợ đối tác và báo cáo quản trị hằng tháng."
 		},
 		{
 			"ma": "nhan-su",
 			"ten": "Nhân sự",
 			"boPhan": "ho-tro",
-			"truong": "tong-bich-ngoc"
+			"truong": "tong-bich-ngoc",
+			"moTa": "Tuyển, đào tạo và giữ tài xế, nhân viên kho và khối văn phòng."
 		},
 		{
 			"ma": "phap-che",
 			"ten": "Pháp chế",
 			"boPhan": "ho-tro",
-			"truong": "an-khanh-linh"
+			"truong": "an-khanh-linh",
+			"moTa": "Soạn và rà hợp đồng vận chuyển, bảo hiểm hàng hoá, tuân thủ vận tải."
 		}
 	],
 	"phongBanLuuTru": [
@@ -105,241 +118,321 @@
 			"ma": "le-hai-dang",
 			"ten": "Lê Hải Đăng",
 			"vai": "admin",
-			"phongBan": "san-pham"
+			"phongBan": "san-pham",
+			"chucDanh": "Tổng giám đốc",
+			"quanLy": "doan-thi-thu"
 		},
 		{
 			"ma": "pham-thu-trang",
 			"ten": "Phạm Thu Trang",
 			"vai": "member",
-			"phongBan": "san-pham"
+			"phongBan": "san-pham",
+			"chucDanh": "Trưởng phòng Sản phẩm số",
+			"quanLy": "chu-van-hung"
 		},
 		{
 			"ma": "vo-duc-anh",
 			"ten": "Võ Đức Anh",
 			"vai": "member",
-			"phongBan": "san-pham"
+			"phongBan": "san-pham",
+			"chucDanh": "Kỹ sư phần mềm",
+			"quanLy": "pham-thu-trang"
 		},
 		{
 			"ma": "dang-ngoc-mai",
 			"ten": "Đặng Ngọc Mai",
 			"vai": "member",
-			"phongBan": "san-pham"
+			"phongBan": "san-pham",
+			"chucDanh": "Thiết kế sản phẩm",
+			"quanLy": "pham-thu-trang"
 		},
 		{
 			"ma": "bui-quang-huy",
 			"ten": "Bùi Quang Huy",
 			"vai": "member",
-			"phongBan": "san-pham"
+			"phongBan": "san-pham",
+			"chucDanh": "Kỹ sư dữ liệu",
+			"quanLy": "pham-thu-trang"
 		},
 		{
 			"ma": "tran-quoc-bao",
 			"ten": "Trần Quốc Bảo",
 			"vai": "member",
-			"phongBan": "kd-bac"
+			"phongBan": "kd-bac",
+			"chucDanh": "Giám đốc Khối Kinh doanh",
+			"quanLy": "le-hai-dang"
 		},
 		{
 			"ma": "nguyen-thi-lan",
 			"ten": "Nguyễn Thị Lan",
 			"vai": "member",
-			"phongBan": "kd-bac"
+			"phongBan": "kd-bac",
+			"chucDanh": "Trưởng phòng Kinh doanh miền Bắc",
+			"quanLy": "tran-quoc-bao"
 		},
 		{
 			"ma": "do-minh-khoa",
 			"ten": "Đỗ Minh Khoa",
 			"vai": "member",
-			"phongBan": "kd-bac"
+			"phongBan": "kd-bac",
+			"chucDanh": "Chuyên viên kinh doanh",
+			"quanLy": "nguyen-thi-lan"
 		},
 		{
 			"ma": "hoang-yen-nhi",
 			"ten": "Hoàng Yến Nhi",
 			"vai": "member",
-			"phongBan": "kd-bac"
+			"phongBan": "kd-bac",
+			"chucDanh": "Chuyên viên kinh doanh",
+			"quanLy": "nguyen-thi-lan"
 		},
 		{
 			"ma": "ngo-van-toan",
 			"ten": "Ngô Văn Toàn",
 			"vai": "member",
-			"phongBan": "kd-bac"
+			"phongBan": "kd-bac",
+			"chucDanh": "Chuyên viên phát triển tuyến",
+			"quanLy": "nguyen-thi-lan"
 		},
 		{
 			"ma": "ly-thanh-tam",
 			"ten": "Lý Thanh Tâm",
 			"vai": "member",
-			"phongBan": "kd-nam"
+			"phongBan": "kd-nam",
+			"chucDanh": "Trưởng phòng Kinh doanh miền Nam",
+			"quanLy": "tran-quoc-bao"
 		},
 		{
 			"ma": "truong-bao-ngoc",
 			"ten": "Trương Bảo Ngọc",
 			"vai": "member",
-			"phongBan": "kd-nam"
+			"phongBan": "kd-nam",
+			"chucDanh": "Chuyên viên kinh doanh",
+			"quanLy": "ly-thanh-tam"
 		},
 		{
 			"ma": "huynh-gia-phuc",
 			"ten": "Huỳnh Gia Phúc",
 			"vai": "member",
-			"phongBan": "kd-nam"
+			"phongBan": "kd-nam",
+			"chucDanh": "Chuyên viên kinh doanh",
+			"quanLy": "ly-thanh-tam"
 		},
 		{
 			"ma": "phan-kim-chi",
 			"ten": "Phan Kim Chi",
 			"vai": "member",
-			"phongBan": "kd-nam"
+			"phongBan": "kd-nam",
+			"chucDanh": "Chuyên viên đấu thầu",
+			"quanLy": "ly-thanh-tam"
 		},
 		{
 			"ma": "duong-tuan-kiet",
 			"ten": "Dương Tuấn Kiệt",
 			"vai": "member",
-			"phongBan": "kd-nam"
+			"phongBan": "kd-nam",
+			"chucDanh": "Chuyên viên phát triển tuyến",
+			"quanLy": "ly-thanh-tam"
 		},
 		{
 			"ma": "vu-thu-ha",
 			"ten": "Vũ Thu Hà",
 			"vai": "member",
-			"phongBan": "cham-soc"
+			"phongBan": "cham-soc",
+			"chucDanh": "Trưởng phòng Chăm sóc đối tác",
+			"quanLy": "tran-quoc-bao"
 		},
 		{
 			"ma": "mai-duc-long",
 			"ten": "Mai Đức Long",
 			"vai": "member",
-			"phongBan": "cham-soc"
+			"phongBan": "cham-soc",
+			"chucDanh": "Chuyên viên chăm sóc đối tác",
+			"quanLy": "vu-thu-ha"
 		},
 		{
 			"ma": "cao-thanh-van",
 			"ten": "Cao Thanh Vân",
 			"vai": "member",
-			"phongBan": "cham-soc"
+			"phongBan": "cham-soc",
+			"chucDanh": "Chuyên viên chăm sóc đối tác",
+			"quanLy": "vu-thu-ha"
 		},
 		{
 			"ma": "lam-quynh-anh",
 			"ten": "Lâm Quỳnh Anh",
 			"vai": "member",
-			"phongBan": "cham-soc"
+			"phongBan": "cham-soc",
+			"chucDanh": "Điều phối viên hỗ trợ",
+			"quanLy": "vu-thu-ha"
 		},
 		{
 			"ma": "trinh-hoai-nam",
 			"ten": "Trịnh Hoài Nam",
 			"vai": "member",
-			"phongBan": "marketing"
+			"phongBan": "marketing",
+			"chucDanh": "Trưởng phòng Marketing",
+			"quanLy": "tran-quoc-bao"
 		},
 		{
 			"ma": "ta-my-linh",
 			"ten": "Tạ Mỹ Linh",
 			"vai": "member",
-			"phongBan": "marketing"
+			"phongBan": "marketing",
+			"chucDanh": "Chuyên viên nội dung",
+			"quanLy": "trinh-hoai-nam"
 		},
 		{
 			"ma": "kieu-anh-tuan",
 			"ten": "Kiều Anh Tuấn",
 			"vai": "member",
-			"phongBan": "marketing"
+			"phongBan": "marketing",
+			"chucDanh": "Chuyên viên quảng cáo số",
+			"quanLy": "trinh-hoai-nam"
 		},
 		{
 			"ma": "luu-phuong-thao",
 			"ten": "Lưu Phương Thảo",
 			"vai": "member",
-			"phongBan": "marketing"
+			"phongBan": "marketing",
+			"chucDanh": "Chuyên viên sự kiện",
+			"quanLy": "trinh-hoai-nam"
 		},
 		{
 			"ma": "dinh-cong-son",
 			"ten": "Đinh Công Sơn",
 			"vai": "member",
-			"phongBan": "kho-van"
+			"phongBan": "kho-van",
+			"chucDanh": "Trưởng phòng Kho vận",
+			"quanLy": "chu-van-hung"
 		},
 		{
 			"ma": "ha-van-thanh",
 			"ten": "Hà Văn Thành",
 			"vai": "member",
-			"phongBan": "kho-van"
+			"phongBan": "kho-van",
+			"chucDanh": "Giám sát kho",
+			"quanLy": "dinh-cong-son"
 		},
 		{
 			"ma": "to-thi-hong",
 			"ten": "Tô Thị Hồng",
 			"vai": "member",
-			"phongBan": "kho-van"
+			"phongBan": "kho-van",
+			"chucDanh": "Nhân viên kiểm kê",
+			"quanLy": "dinh-cong-son"
 		},
 		{
 			"ma": "quach-minh-tri",
 			"ten": "Quách Minh Trí",
 			"vai": "member",
-			"phongBan": "kho-van"
+			"phongBan": "kho-van",
+			"chucDanh": "Nhân viên vận hành kho",
+			"quanLy": "dinh-cong-son"
 		},
 		{
 			"ma": "la-hoang-phuc",
 			"ten": "La Hoàng Phúc",
 			"vai": "member",
-			"phongBan": "kho-van"
+			"phongBan": "kho-van",
+			"chucDanh": "Nhân viên xếp dỡ",
+			"quanLy": "dinh-cong-son"
 		},
 		{
 			"ma": "chu-van-hung",
 			"ten": "Chu Văn Hùng",
 			"vai": "member",
-			"phongBan": "dieu-phoi"
+			"phongBan": "dieu-phoi",
+			"chucDanh": "Giám đốc Khối Vận hành",
+			"quanLy": "le-hai-dang"
 		},
 		{
 			"ma": "nghiem-thu-uyen",
 			"ten": "Nghiêm Thu Uyên",
 			"vai": "member",
-			"phongBan": "dieu-phoi"
+			"phongBan": "dieu-phoi",
+			"chucDanh": "Trưởng phòng Điều phối vận tải",
+			"quanLy": "chu-van-hung"
 		},
 		{
 			"ma": "khuc-dinh-nam",
 			"ten": "Khúc Đình Nam",
 			"vai": "member",
-			"phongBan": "dieu-phoi"
+			"phongBan": "dieu-phoi",
+			"chucDanh": "Điều phối viên tuyến",
+			"quanLy": "nghiem-thu-uyen"
 		},
 		{
 			"ma": "au-gia-bao",
 			"ten": "Âu Gia Bảo",
 			"vai": "member",
-			"phongBan": "dieu-phoi"
+			"phongBan": "dieu-phoi",
+			"chucDanh": "Điều phối viên tuyến",
+			"quanLy": "nghiem-thu-uyen"
 		},
 		{
 			"ma": "doan-thi-thu",
 			"ten": "Đoàn Thị Thu",
 			"vai": "okr",
-			"phongBan": "tai-chinh"
+			"phongBan": "tai-chinh",
+			"chucDanh": "Giám đốc Khối Hỗ trợ",
+			"quanLy": "le-hai-dang"
 		},
 		{
 			"ma": "thai-minh-chau",
 			"ten": "Thái Minh Châu",
 			"vai": "okr",
-			"phongBan": "tai-chinh"
+			"phongBan": "tai-chinh",
+			"chucDanh": "Trưởng phòng Tài chính",
+			"quanLy": "doan-thi-thu"
 		},
 		{
 			"ma": "giang-hai-yen",
 			"ten": "Giang Hải Yến",
 			"vai": "okr",
-			"phongBan": "tai-chinh"
+			"phongBan": "tai-chinh",
+			"chucDanh": "Kế toán tổng hợp",
+			"quanLy": "thai-minh-chau"
 		},
 		{
 			"ma": "tong-bich-ngoc",
 			"ten": "Tống Bích Ngọc",
 			"vai": "okr",
-			"phongBan": "nhan-su"
+			"phongBan": "nhan-su",
+			"chucDanh": "Trưởng phòng Nhân sự",
+			"quanLy": "doan-thi-thu"
 		},
 		{
 			"ma": "vuong-duc-tai",
 			"ten": "Vương Đức Tài",
 			"vai": "okr",
-			"phongBan": "nhan-su"
+			"phongBan": "nhan-su",
+			"chucDanh": "Chuyên viên tuyển dụng",
+			"quanLy": "tong-bich-ngoc"
 		},
 		{
 			"ma": "ninh-thao-vy",
 			"ten": "Ninh Thảo Vy",
 			"vai": "okr",
-			"phongBan": "nhan-su"
+			"phongBan": "nhan-su",
+			"chucDanh": "Chuyên viên đào tạo",
+			"quanLy": "tong-bich-ngoc"
 		},
 		{
 			"ma": "an-khanh-linh",
 			"ten": "An Khánh Linh",
 			"vai": "okr",
-			"phongBan": "phap-che"
+			"phongBan": "phap-che",
+			"chucDanh": "Trưởng phòng Pháp chế",
+			"quanLy": "doan-thi-thu"
 		},
 		{
 			"ma": "lu-quoc-viet",
 			"ten": "Lữ Quốc Việt",
 			"vai": "okr",
-			"phongBan": "phap-che"
+			"phongBan": "phap-che",
+			"chucDanh": "Chuyên viên pháp chế",
+			"quanLy": "an-khanh-linh"
 		}
 	],
 	"mucTieu": [
@@ -487,7 +580,12 @@
 					"dich": 15,
 					"donVi": "hợp đồng",
 					"chot": 11,
-					"diem": 0.7
+					"diem": 0.7,
+					"kichBanQuy3": "troi",
+					"ghiChu": {
+						"6": "Hai chuỗi lớn lùi ký sang tháng sau.",
+						"13": "Chốt 11/15 — bảng giá theo tuyến gửi muộn."
+					}
 				},
 				{
 					"ma": "q3-kd-bac-k2",
@@ -522,7 +620,12 @@
 					"dich": 8,
 					"donVi": "đối tác",
 					"chot": 5,
-					"diem": 0.6
+					"diem": 0.6,
+					"kichBanQuy3": "troi",
+					"ghiChu": {
+						"6": "Đối tác sản xuất đòi thêm điều khoản bảo hiểm.",
+						"13": "Còn ba hợp đồng treo ở pháp chế."
+					}
 				},
 				{
 					"ma": "q3-kd-nam-k2",
@@ -568,7 +671,13 @@
 					"dich": 2,
 					"donVi": "giờ",
 					"chot": 3.4,
-					"diem": 0.8
+					"diem": 0.8,
+					"kichBanQuy3": "troi",
+					"ghiChu": {
+						"6": "Phản hồi tăng sau đợt đổi tuyến giao.",
+						"9": "Đã bù chuyến cho ba đối tác lớn.",
+						"13": "Chưa về mức đích, còn cao hơn khởi điểm."
+					}
 				},
 				{
 					"ma": "q3-cham-soc-k2",
@@ -615,7 +724,12 @@
 					"donVi": "%",
 					"chot": 14,
 					"diem": 0.5,
-					"lyDo": "Tỷ lệ tính trên cả khách rác từ quảng cáo; trên khách thật tỷ lệ là 21%, nên đội chấm cao hơn gợi ý."
+					"lyDo": "Tỷ lệ tính trên cả khách rác từ quảng cáo; trên khách thật tỷ lệ là 21%, nên đội chấm cao hơn gợi ý.",
+					"kichBanQuy3": "troi",
+					"ghiChu": {
+						"6": "Chiến dịch số bị tạm dừng một tuần.",
+						"13": "Tỷ lệ thấp hơn đích vì đổi thông điệp giữa quý."
+					}
 				}
 			],
 			"donVi": "marketing",
@@ -650,7 +764,13 @@
 					"dich": 30,
 					"donVi": "phút",
 					"chot": 36,
-					"diem": 0.7
+					"diem": 0.7,
+					"kichBanQuy3": "troi",
+					"ghiChu": {
+						"3": "Kho 2 lắp xong máy quét mới.",
+						"6": "Hao hụt tăng lại ở kho 3 sau mất điện.",
+						"13": "Không giảm được như dự tính."
+					}
 				}
 			],
 			"donVi": "kho-van",
@@ -685,7 +805,12 @@
 					"dich": 25,
 					"donVi": "%",
 					"chot": 31,
-					"diem": 0.6
+					"diem": 0.6,
+					"kichBanQuy3": "troi",
+					"ghiChu": {
+						"6": "Thiếu tài xế tuyến đêm.",
+						"13": "Chi phí mỗi chuyến vẫn cao do giá dầu."
+					}
 				}
 			],
 			"donVi": "dieu-phoi",
@@ -745,7 +870,12 @@
 					"dich": 10,
 					"donVi": "%",
 					"chot": 12,
-					"diem": 0.8
+					"diem": 0.8,
+					"kichBanQuy3": "troi",
+					"ghiChu": {
+						"6": "Hai đối tác lớn trả chậm 30 ngày.",
+						"13": "Công nợ quá hạn còn cao hơn đích."
+					}
 				},
 				{
 					"ma": "q3-tai-chinh-k2",
@@ -2219,6 +2349,22 @@
 			}
 		]
 	},
+	"taiLieu": [
+		{
+			"ma": "ho-so-cong-ty",
+			"ten": "Hồ sơ công ty Hải Đăng Logistics",
+			"loai": "chien-luoc",
+			"chuTrang": "le-hai-dang",
+			"noiDung": "## Chúng tôi là ai\n\nHải Đăng Logistics vận chuyển hàng lạnh và hàng khô cho đối tác bán lẻ, sản xuất và thương mại điện tử ở hai miền. Ba kho lạnh (Bắc Ninh, Đà Nẵng, Long An), 120 xe tải và 180 tài xế; 40 người ở khối văn phòng.\n\n## Chúng tôi phục vụ ai\n\n- Chuỗi bán lẻ và cửa hàng tiện lợi cần giao hàng lạnh mỗi ngày.\n- Nhà sản xuất thực phẩm cần kho lạnh và tuyến cố định.\n- Sàn thương mại điện tử cần giao chặng cuối theo cụm.\n\n## Điều làm chúng tôi khác\n\n- Giao đúng hẹn là lời hứa số một; mọi đơn có mốc giờ và được theo dõi trên cổng đối tác.\n- Chuỗi lạnh liền mạch: nhiệt độ ghi từ kho tới xe tới tay người nhận.\n- Giá theo tuyến, minh bạch, không phụ phí ẩn.\n\n## Cách chúng tôi làm việc\n\n- Mỗi quý mỗi đơn vị có OKR; cập nhật tuần vào sáng thứ Hai.\n- Số của đối tác và tuyến đọc từ CRM, không chép tay.\n- Sai sót được nói ra sớm để cả đội bù, không để đến cuối quý.\n\n## Con số nền 2026\n\n- Doanh thu 9 tháng đầu năm: 410 tỷ đồng, tăng 18% so với cùng kỳ.\n- Tỷ lệ giao đúng hẹn: 93,5%.\n- Hao hụt kho lạnh: 0,8% giá trị hàng.\n- Tỷ lệ đối tác gia hạn: 87%."
+		},
+		{
+			"ma": "chien-luoc-nam",
+			"ten": "Chiến lược năm 2027",
+			"loai": "chien-luoc",
+			"chuTrang": "le-hai-dang",
+			"noiDung": "## Đích của năm\n\nTrở thành đơn vị vận chuyển hàng lạnh được đối tác bán lẻ miền Bắc và miền Nam chọn đầu tiên: doanh thu 620 tỷ đồng, giao đúng hẹn 96%, hao hụt dưới 0,5%.\n\n## Ba hướng ưu tiên\n\n1. **Bán lẻ và chuỗi cửa hàng** — mở thêm 40 chuỗi ở hai miền, ưu tiên chuỗi có trên 30 điểm giao.\n2. **Chuỗi lạnh liền mạch** — cảm biến nhiệt trên 100% xe lạnh; cổng đối tác hiện nhiệt độ theo chuyến.\n3. **Vận hành gọn** — chi phí mỗi chuyến giảm 8% nhờ xếp tuyến bằng phần mềm và giảm chuyến rỗng.\n\n## Điều không làm trong năm\n\n- Không mở kho mới ngoài ba kho hiện có.\n- Không nhận hàng nguy hiểm.\n- Không giảm giá dưới giá tuyến để lấy hợp đồng.\n\n## Mốc theo quý\n\n- Quý 1: ký 10 chuỗi mới; cảm biến trên 40% xe; cổng đối tác bản 2.\n- Quý 2: ký thêm 10 chuỗi; cảm biến 70% xe; giảm 3% chi phí mỗi chuyến.\n- Quý 3: ký thêm 10 chuỗi; cảm biến 100% xe; hao hụt dưới 0,6%.\n- Quý 4: ký thêm 10 chuỗi; giao đúng hẹn 96%; hao hụt dưới 0,5%.\n\n## Cách đo\n\nMỗi phòng ban đặt OKR quý bám ba hướng trên; KR lấy số từ CRM khi có (đối tác mới, tuyến, chuyến); mức tự tin cập nhật hằng tuần và được đọc ở Họp tuần."
+		}
+	],
 	"hoiY": {
 		"nguoiChon": "le-hai-dang",
 		"cauHoi": "Năm tới Hải Đăng nên dồn sức vào điều gì để khách hàng quay lại nhiều hơn?",

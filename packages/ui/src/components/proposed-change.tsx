@@ -9,6 +9,7 @@ import {
 	ConfirmationRejected,
 	ConfirmationRequest,
 } from "@crm/ui/components/ai-elements/confirmation";
+import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
@@ -69,6 +70,8 @@ export type ProposedChangeProps = Omit<
 	before?: ReactNode;
 	value: ReactNode;
 	rationale?: ReactNode;
+	fields?: ReactNode;
+	tag?: ReactNode;
 	pending?: boolean;
 	decided?: ProposedChangeDecided;
 	error?: ReactNode;
@@ -194,19 +197,33 @@ function ThanDeXuat({
 	before,
 	value,
 	rationale,
+	fields,
+	tag,
 	editing,
 }: Pick<
 	ProposedChangeProps,
-	"kind" | "label" | "before" | "value" | "rationale" | "editing"
+	| "kind"
+	| "label"
+	| "before"
+	| "value"
+	| "rationale"
+	| "fields"
+	| "tag"
+	| "editing"
 > & { density: ProposedChangeDensity }) {
 	return (
 		<div data-slot="proposed-change-body" className="flex flex-col gap-1">
-			{label ? (
+			{label || tag ? (
 				<p
 					data-slot="proposed-change-label"
-					className="font-medium text-foreground"
+					className="flex flex-wrap items-center gap-2 font-medium text-foreground"
 				>
 					{label}
+					{tag ? (
+						<Badge variant="outline" data-slot="proposed-change-tag">
+							{tag}
+						</Badge>
+					) : null}
 				</p>
 			) : null}
 			{before !== undefined ? (
@@ -220,6 +237,11 @@ function ThanDeXuat({
 			) : null}
 			{rationale && density === "card" ? (
 				<p className="text-muted-foreground text-pretty">{rationale}</p>
+			) : null}
+			{fields ? (
+				<div data-slot="proposed-change-fields" className="flex flex-col gap-2">
+					{fields}
+				</div>
 			) : null}
 		</div>
 	);
@@ -270,6 +292,8 @@ export function ProposedChange({
 	before,
 	value,
 	rationale,
+	fields,
+	tag,
 	pending = false,
 	decided,
 	error,
@@ -290,6 +314,8 @@ export function ProposedChange({
 			before={before}
 			value={value}
 			rationale={rationale}
+			fields={fields}
+			tag={tag}
 			editing={editing}
 		/>
 	);

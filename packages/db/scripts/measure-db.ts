@@ -2,11 +2,13 @@ import "@crm/env/load";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { basename, join, resolve } from "node:path";
+import { join, resolve } from "node:path";
 import pg from "pg";
 import {
+	currentTree,
 	lastTouched,
 	MEASURE_DATABASE,
+	MeasureDatabaseError,
 	measureDatabaseName,
 	parseMeasureComment,
 	sessionComment,
@@ -15,6 +17,8 @@ import {
 } from "../src/measure-database";
 import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 import { dropDatabase, withMaintenance } from "./test-db-admin";
+
+export { currentTree, MeasureDatabaseError };
 
 const PACKAGE = resolve(import.meta.dirname, "..");
 const MIGRATIONS = join(PACKAGE, "prisma", "migrations");
@@ -36,8 +40,6 @@ interface DatabaseRow {
 	description: string | null;
 	backends: string;
 }
-
-export class MeasureDatabaseError extends Error {}
 
 export function serverUrl(source = process.env.DATABASE_URL): string {
 	if (!source) {
@@ -62,24 +64,6 @@ export function databaseUrl(base: string, name: string): string {
 	url.pathname = `/${name}`;
 
 	return url.toString();
-}
-
-export function currentTree(cwd = process.cwd()): string {
-	const named = process.env[MEASURE_DATABASE.treeVariable]?.trim();
-	if (named) return named;
-
-	const top = spawnSync("git", ["rev-parse", "--show-toplevel"], {
-		cwd,
-		encoding: "utf8",
-	});
-
-	if (top.status !== 0) {
-		throw new MeasureDatabaseError(
-			`${cwd} is not inside a git checkout, so there is no tree to name a measure database after. Set ${MEASURE_DATABASE.treeVariable}.`,
-		);
-	}
-
-	return basename(top.stdout.trim());
 }
 
 export interface FingerprintSources {

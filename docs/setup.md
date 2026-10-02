@@ -122,6 +122,11 @@ AGENT_BRIDGE_SECRET="$(openssl rand -base64 32)"
 | `401` | The two processes hold different secrets, **or** `passThroughEnv` in `apps/app/turbo.json` / `apps/agent/turbo.json` is missing the pair (Turbo is strict-env) |
 | `502` | Agent not running, or `AGENT_URL` wrong |
 
+The OKR drafting chat has its own pair, `OKR_AGENT_URL` (default `127.0.0.1:2100`)
+and `OKR_AGENT_BRIDGE_SECRET`, and its own gate at `/eve/agents/okr/eve/v1/*`; the
+same three errors apply to the «Soạn OKR cùng Trợ lý» screen, with `apps/agent-okr`
+in place of the agent. Run it with `bun run --filter=agent-okr dev` (port 2100).
+
 `localDev()` accepts any loopback request, so `curl 127.0.0.1` proves nothing about
 the bridge — send `-H 'Host: agent.example.com'`. `GET /eve/v1/info` is the whole
 inventory, including a `diagnostics` count that finds files eve silently ignored.
@@ -326,6 +331,27 @@ So a measurement now runs in a **measure session** on a database of its own tree
   or `repin-lane` gets a clean database and its own servers without any change to the
   eval. The ports an eval names (`${APP_URL:-http://localhost:3910}`) are only
   defaults; the session's `APP_URL` wins.
+- A measurement that needs a chat agent boots it itself, inside the session.
+  `_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs` does this for `apps/agent`: it
+  picks a free port, sets `AGENT_URL` and `AGENT_BRIDGE_SECRET` **before** starting the
+  session under a sibling tree name (`<tree>-tro-ly`), because the app reads those
+  variables once at start, then starts `apps/agent` on that port. The app is checked
+  with `_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs`.
+- The session also boots `apps/agent-okr`, the OKR drafting agent, when a measurement
+  needs it: `_acceptance/soan-okr-cung-tro-ly/rang/phien-soan.mjs`. `chayTrongPhienSoan`
+  asks the operating system for a free port (port 0, not the 4100–4899 range), sets
+  `OKR_AGENT_URL` and a fresh `OKR_AGENT_BRIDGE_SECRET` **before** the session starts,
+  and runs it under the sibling tree name `<tree>-soan`: when `tien-de` wrapped the
+  command, a session of `<tree>` already holds that tree's lock, so reusing the name
+  would wait on itself. `batAgentOkr` then starts `eve dev --no-ui` of `apps/agent-okr`
+  on that port with `NODE_ENV=development` (under `test` eve swaps the real model for
+  its mock) and the session's `DATABASE_URL`, so cost rows (`AiChiPhi`) land in the
+  measure database and vanish with it. It prints the Node version first and refuses
+  one below 24. `apps/agent-okr` answers `GET /health` with `cay`, and the ruler
+  compares it with its own `treeSlug(currentTree())`: an agent on that port started by
+  another tree or session is exit 2 naming both, not a measurement. The drafting-screen
+  ruler `rang/man-soan.mjs` uses it; the isolation ruler `rang/cach-ly-chi-okr.mjs`
+  (task E1) is meant to reuse it rather than boot its own.
 
 To measure a whole lane in one session — one database, one server start — wrap it:
 `bun run do:man --chay "node <feature-loop>/scripts/repin-lane.mjs --root . --slug <s>"`.

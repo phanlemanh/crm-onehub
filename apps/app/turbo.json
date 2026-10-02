@@ -15,7 +15,9 @@
 				"BETTER_AUTH_SECRET",
 				"BETTER_AUTH_URL",
 				"DATABASE_URL",
-				"IS_MARKETING"
+				"IS_MARKETING",
+				"OKR_AGENT_BRIDGE_SECRET",
+				"OKR_AGENT_URL"
 			]
 		},
 		"check-types": {
@@ -40,7 +42,9 @@
 				"DATABASE_URL",
 				"IS_MARKETING",
 				"NEXT_PUBLIC_API_URL",
-				"NEXT_PUBLIC_AUTH_URL"
+				"NEXT_PUBLIC_AUTH_URL",
+				"OKR_AGENT_BRIDGE_SECRET",
+				"OKR_AGENT_URL"
 			]
 		}
 	}

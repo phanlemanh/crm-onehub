@@ -81,6 +81,7 @@ describe("tai-lieu", () => {
 			"chinh-sach",
 			"quy-trinh",
 			"bieu-mau",
+			"chien-luoc",
 		]);
 		expect(TRANG_THAI_DE_XUAT).toEqual([
 			"CHO_DUYET",

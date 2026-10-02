@@ -517,6 +517,30 @@ describe("review focus", () => {
 	);
 
 	test(
+		"chu-ky-an: chu ky dang chay da an khong duoc xep tom tat du co cap nhat",
+		async () => {
+			await donViec();
+			await db.okrCycle.update({
+				where: { id: KY.nam },
+				data: { updateWeekday: 7, anLuc: luc("2026-11-28T09:00:00") },
+			});
+			try {
+				await capNhat("nam", PHONG.batCo, luc("2026-11-29T20:00:00"));
+				const now = sau6("2026-11-30");
+				const xep = await viecXep("2026-11-30");
+				expect(await chayXepTomTat(xep, now)).toBe("da-xep:0");
+				expect(await oMoi(now)).toEqual([]);
+			} finally {
+				await db.okrCycle.update({
+					where: { id: KY.nam },
+					data: { updateWeekday: 4, anLuc: null },
+				});
+			}
+		},
+		CHO_DB,
+	);
+
+	test(
 		"xep-muon: tac tu chay 10:00 van xep cho ngay do va noi viec ke luc 06:00 ngay mai",
 		async () => {
 			await donViec();

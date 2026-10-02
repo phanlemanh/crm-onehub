@@ -84,11 +84,14 @@ function tenXuat(duong) {
 
 console.log(`RĂNG TÊN GỌI — the-gop-y-okr (gốc: ${GOC})`);
 
-const tepXuatCu = liet(THANH_PHAN).filter((t) => tenXuat(t).includes(TEN_CU));
+const THU_MUC_AI = join(THANH_PHAN, "ai-elements") + "/";
+const tepXuatCu = liet(THANH_PHAN)
+	.filter((t) => !t.startsWith(THU_MUC_AI))
+	.filter((t) => tenXuat(t).includes(TEN_CU));
 kiem(
 	tepXuatCu.length === 0,
 	tepXuatCu.length === 0
-		? `packages/ui/src/components không còn export tên ${TEN_CU}`
+		? `packages/ui/src/components (ngoài ai-elements) không còn export tên ${TEN_CU}`
 		: `con export ${TEN_CU}: ${tepXuatCu.map((t) => relative(GOC, t)).join(", ")}`,
 );
 

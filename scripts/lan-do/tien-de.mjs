@@ -132,7 +132,11 @@ try {
 		);
 	}
 
-	const ra = spawnSync("bash", ["-lc", lenh], { stdio: "inherit" });
+	const ra = spawnSync(
+		"bash",
+		["-lc", `PATH=${JSON.stringify(process.env.PATH ?? "")} ${lenh}`],
+		{ stdio: "inherit" },
+	);
 	process.exitCode = ra.status === null ? 2 : ra.status;
 } finally {
 	if (daDat) {

@@ -1,6 +1,6 @@
 # Sổ lệch chuẩn — `packages/ui/src/components/ai-elements/`
 
-Bốn tệp trong thư mục này là bản vendored của AI Elements. Chúng là một bản rẽ
+Bảy tệp trong thư mục này là bản vendored của AI Elements. Chúng là một bản rẽ
 nằm bên trong `packages/ui`: mỗi tệp đều khác bản thượng nguồn, và cái khác đó
 sẽ biến mất không kêu nếu ai đó chạy lại lệnh thêm của CLI.
 
@@ -13,7 +13,7 @@ Răng đối chiếu: `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs`.
 
 ## Cách sổ này chịu chiều đỏ
 
-Răng **không** đọc sổ để biết tệp nào lệch. Nó kéo bản CLI tươi của cả bốn tệp
+Răng **không** đọc sổ để biết tệp nào lệch. Nó kéo bản CLI tươi của cả bảy tệp
 vào một sân tạm rồi so từng dòng với bản trong cây. Tập tệp lệch đo được và tập
 mục trong sổ phải trùng nhau — không thiếu, không thừa. Suy "tệp lệch" từ chính
 sổ thì hai tập luôn bằng nhau và phép đo xanh vĩnh viễn; đó là lỗi khuôn mà răng
@@ -56,7 +56,7 @@ Mỗi mục dưới đây tách hai thứ hoàn toàn khác nhau:
 
 Gộp hai loại vào một dòng là cách nhanh nhất để lần sau chép nhầm.
 
-## Bốn tệp
+## Bảy tệp
 
 ### conversation.tsx
 
@@ -249,6 +249,76 @@ làm, nhưng nó vẫn phải đi qua đúng nghi thức ở cuối sổ, vì `r
 đổi cỡ và khoảng cách của một component `@crm/ui` tại chỗ gọi; cỡ nhỏ đã có sẵn
 thành biến thể `sm` của `Button`. Tệp không có chữ hiện trên màn: các chuỗi còn
 lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-cung.mjs`.
+
+### suggestion.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/suggestion.tsx`
+
+**Số dòng khác:** 2
+
+**Vân tay lệch:** `98b9edf62e06310b`
+
+**Đổi gì:** Kéo bằng CLI ngày 30/09 ở lượt `soan-okr-cung-tro-ly`, trong một sân
+tạm có `components.json` và `tsconfig.json` của kho, rồi chép riêng hai tệp
+`suggestion.tsx` và `prompt-input.tsx` vào cây. Toàn bộ 2 dòng khác là bản vá của
+kho, **không có phần cũ hơn thượng nguồn**:
+
+- `Suggestion` bỏ `className` khỏi danh sách tham số tách riêng và bỏ chuỗi
+  `cn("cursor-pointer rounded-full px-4", className)` ở `Button`; `className`
+  của người gọi đi thẳng vào `Button` qua `...props`.
+
+**Vì sao:** `rounded-full` không có trong thang bán kính của `docs/design.md`
+(AC-6, `mau-ban-kinh.mjs` đỏ đích danh dòng này). `px-4` là khoảng cách tự đặt
+đè lên cỡ `sm` của `Button`, và `cursor-pointer` đã nằm sẵn trong `buttonVariants`
+của kho. Nút gợi ý là chip viền cỡ `sm` của `Button` — hình dạng của một gợi ý
+do biến thể quyết, không do chỗ gọi.
+
+### prompt-input.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/prompt-input.tsx`
+
+**Số dòng khác:** 115
+
+**Vân tay lệch:** `f68462a33fa0b590`
+
+**Đổi gì:** Kéo cùng đợt với `suggestion.tsx`. Toàn bộ dòng khác là bản vá của
+kho, **không có phần cũ hơn thượng nguồn**:
+
+- Bỏ mọi chú thích: các dòng `//` (kể cả khung `// =====` chia mục và các dòng
+  `// oxlint-disable-next-line …`) và hai khối `/** … */`. `AGENTS.md` cấm chú
+  thích trong mã. Bỏ các dòng `oxlint-disable` là có chủ ý: `bun run lint:slop`
+  chạy sau đó vẫn xanh.
+- Thêm `import { useMessages } from "@crm/ui/components/locale-provider"`.
+- Chín chuỗi tiếng Anh về `msg.promptInput.*`: hai giá trị mặc định của
+  tham số `label` — "Add photos or files" và "Take screenshot" — bỏ khỏi tham số
+  rồi đọc `label ?? msg.promptInput.addAttachments` · `.takeScreenshot` trong
+  thân; ba thông điệp `onError` — "No files match the accepted types.",
+  "All files exceed the maximum size.", "Too many files. Some were not added." —
+  mỗi câu xuất hiện **hai lần** vì tệp thượng nguồn có hai đường thêm tệp
+  (`addLocal` và `addWithProviderValidation`), nên hai mảng phụ thuộc của
+  `useCallback` thêm `msg`; `aria-label` và `title` "Upload files" của ô chọn tệp
+  ẩn; giá trị mặc định `placeholder = "What would you like to know?"` của
+  `PromptInputTextarea` bỏ khỏi tham số rồi đọc `placeholder ?? msg.promptInput.placeholder`;
+  và `aria-label` "Stop" · "Submit" của `PromptInputSubmit`.
+- `PromptInput`, `PromptInputTextarea`, `PromptInputSubmit`, hai mục menu tệp:
+  thêm dòng `const msg = useMessages();` đầu thân hàm.
+
+Không có bán kính nào phải đổi: bản thượng nguồn không có `rounded-full` hay
+`rounded-xl` ở tệp này.
+
+**Vì sao:** Chuỗi hiển thị phải đi qua `useMessages()` (AC-5, `chu-cung.mjs`).
+Các giá trị mặc định của tham số là lớp lệch khó thấy nhất — xem mục «Ca đã trả
+giá» bên dưới — nên chúng bị bỏ khỏi chữ ký chứ không đổi thành chuỗi tiếng Việt
+cứng. Người gọi vẫn truyền `label`, `placeholder`, `aria-label` của riêng mình
+được, và khi không truyền thì bảng chuỗi quyết theo ngôn ngữ đang chọn.
+Các chuỗi kỹ thuật còn lại trong tệp (`"dragover"`, `"Enter"`, `"max_files"`,
+`"image/png"` …) không tới mắt người dùng; chúng nằm trong danh sách trắng theo
+giá trị của `chu-cung.mjs`, mỗi mục kèm lý do, chứ không bị sửa trong tệp.
+
+Về phụ thuộc: CLI ghi `nanoid` và gói `cn` của người khác vào `package.json` của
+sân tạm. Chỉ `nanoid` được giữ — thêm bằng `bun add nanoid` vào
+`packages/ui/package.json` và `bun.lock` ở lượt này; `cn` bị bỏ, như mục cảnh báo
+vận hành bên dưới đã nói.
 
 ### inline-citation.tsx
 

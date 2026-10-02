@@ -4,14 +4,12 @@ import type {
 	LuatTomTat,
 	NguonGoi,
 } from "@crm/db/okr-tom-tat";
+import { chuanHoa, coCum, khongDau } from "./okr-kiem";
 import {
 	CHU_SO_CHINH_XAC,
-	chuanHoa,
-	coCum,
 	docSo,
 	HE_SO_DON_VI,
 	HE_SO_NGHIN,
-	khongDau,
 	type SoDoc,
 } from "./okr-kiem-de-xuat";
 import { docSoOkr, tienDoKr } from "./okr-kr";
