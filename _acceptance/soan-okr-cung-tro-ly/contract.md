@@ -5,7 +5,7 @@ slug: soan-okr-cung-tro-ly
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-01T11:15:27Z
 design_doc: docs/superpowers/specs/2026-09-30-soan-okr-cung-tro-ly-design.md
@@ -100,3 +100,13 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
   - `{ tep: "apps/api/src/okr/soan-so-do.service.ts", ham: "mucTieuTuNhap", bang: "okrTrail", lyDo: "số đo việc soạn chỉ quản trị gọi (soDo sau assertQuanTri): đọc objectiveId và note của vết «tao» mang tiền tố cuộc soạn để nối Mục tiêu với cuộc; chỉ ra số đếm" }`
   - `{ tep: "apps/api/src/okr/soan-so-do.service.ts", ham: "mucTieuTuNhap", bang: "okrObjective", lyDo: "số đo việc soạn chỉ quản trị gọi (soDo sau assertQuanTri): đọc id, createdAt, publishedAt để đếm công bố trong 14 ngày, kể cả mục tiêu giới hạn như rang/nhap-cong-bo.sql; không trả nội dung" }`
 - Giới hạn có tên (chủ kho chốt 2026-10-01, dừng-vá E20(a)): tác nhân chết im: người dùng chờ tới 45 giây mới thấy báo lỗi.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-2): Phép kiểm tự động xem màn soạn có bị tràn ngang trên điện thoại hẹp có thể bỏ sót một số kiểu chỉnh độ rộng thêm vào sau này. Hiện chưa thấy màn nào tràn, nhưng nếu sau này ai đó sửa theo kiểu đó thì phép kiểm vẫn báo xanh và người dùng điện thoại có thể gặp màn bị kéo ngang.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-3): Nếu sau này có thêm một phần mới của sản phẩm kèm bài kiểm tra, bước nghiệm thu có thể bỏ sót nó mà báo cáo vẫn ghi là đạt. Hôm nay chưa sót phần nào, nhưng không có gì canh để việc đó không xảy ra.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-4): Người tự cài hệ thống đọc ghi chú về khoá này sẽ tưởng nó chỉ dùng cho góp ý và tóm tắt tuần, không biết nó còn gánh chi phí của cuộc soạn OKR cùng Trợ lý. Họ có thể đặt trần chi phí sai chỗ.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-6): Khi hai phép đo cách ly dữ liệu và bộ kiểm toàn kho chạy cùng lúc, một trong hai có thể báo đỏ giả. Người ký có thể thấy màu đỏ mà sản phẩm không hề hỏng.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-8): Nếu sau này đổi thông số của thẻ phiên soạn, bộ đo chất lượng Trợ lý sẽ báo lỗi giả như thể Trợ lý hỏng, dù người dùng không bị ảnh hưởng gì.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-9): Chưa có phép thử nào chứng minh tên và email người soạn đi nguyên vẹn qua thẻ phiên tới Trợ lý; nếu hỏng, Trợ lý có thể nhận thiếu thông tin người dùng mà bài thử vẫn xanh.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-10): Chưa có bài thử nào cho thấy khi thẻ phiên ghi một vai khác với vai thật của người dùng thì hệ thống vẫn lấy vai thật; hiện thẻ do chính ứng dụng cấp nên rủi ro thấp.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-11): Người tự dựng hệ thống đọc tệp mẫu cấu hình sẽ không biết có thể đổi cổng của Trợ lý OKR. Mặc định vẫn chạy bình thường.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-14): Kiểm tra tự động cho việc hai cột tự cuộn chỉ xem lớp trang trí. Nếu hai cột không cuộn thật, người dùng trên màn thấp có thể thấy nội dung bị cắt mà không có kiểm tra nào báo.
+- Known limits (Cổng Bằng chứng 2026-10-02, Manh Phan — Ngoài-15): Một kiểm tra phụ chỉ xem chữ «KR» có mặt, nên nếu phần đọc kỳ trước đổi dạng dữ liệu mà vẫn đúng kiểu thì kiểm tra này không bắt được. Tóm tắt kỳ trước trong gói có thể lệch mà không ai thấy.

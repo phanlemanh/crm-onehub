@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: soan-okr-cung-tro-ly
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: d233ae402ac2b74af562f2f807bc67317ddeb151
-human_signoff:
+human_signoff: Manh Phan 2026-10-02
 ---
 
 # Evidence Report: soan-okr-cung-tro-ly
@@ -289,7 +289,7 @@ Vòng 4 chạy lại ba eval máy (E12, E26, E27) và bảy lệnh suite. Các e
   required_evidence:
     - Cột «Người chọn» của bảng cuối mục «Chấm của chủ kho (E24)» trong _acceptance/soan-okr-cung-tro-ly/evidence/eval-soan.md, do chủ kho điền A hoặc B cho cả 5 cặp (chỉ người chấm điền được).
     - Cột «Judge chọn» của cùng bảng điền bằng kết quả judge mù lấy từ evidence/eval-soan-khoa.json (hoặc đưa tệp đó vào input) để đếm số cặp khớp; ngưỡng đạt là ít nhất 4 trên 5.
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-10-02 — Đạt
 
 - eval: E29
   judged_by: judge-subagent (fresh context)
@@ -308,7 +308,7 @@ Vòng 4 chạy lại ba eval máy (E12, E26, E27) và bảy lệnh suite. Các e
     - (operational-feasibility) Nội dung apps/api/src/okr/okr-config.ts (OKR.mau.moc, OKR.soan) và packages/validation/src/okr-kr.ts (SO_KR_MOC), để xác nhận hai nơi khai giá trị mốc startValue/targetValue (soan-dua-vao.ts dùng OKR.mau.moc, okr-cuoc-soan.ts dùng SO_KR_MOC) không lệch nhau. Nếu lệch hoặc khai trùng độc lập thì đó là con số tinh chỉnh có hai nguồn.
     - (spec-alignment) Đoạn chữ của AC-15 trong contract.md (và mục cùng ý trong AGENTS.md) nói rõ «khuôn dữ liệu đi qua hai gói» có gồm kiểu viết tay chiếu từ dòng Prisma ở packages/db/src (CuocSoan, DonViCuoc, KyTruoc, DongSoCrm, CapTrenVaNgangCap) hay chỉ tính dữ liệu chưa có kiểu như cột Json và payload. Nếu chỉ tính dữ liệu chưa có kiểu thì kết luận là đạt, nếu tính cả phép chiếu có kiểu thì là không đạt.
     - (spec-alignment) Danh sách nơi import ketQuaNop (apps/agent-okr/agent/lib/nop-ban-nhap.ts) và ThuocTinhPhien (apps/agent-okr/agent/lib/phien.ts), lấy bằng grep trên cây hiện tại, để biết hai khuôn này có bị app hay gói thứ hai đọc hay không. Nếu có thì chúng phải chuyển sang packages/validation/src.
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-10-02 — Đạt
 
 ### Lệnh suite (hồi quy)
 
