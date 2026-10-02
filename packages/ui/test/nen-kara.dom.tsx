@@ -13,11 +13,13 @@ import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	ProposedChange,
 	type ProposedChangeAction,
+	ProposedChangeReceipt,
 	type ProposedChangeDecision,
 	type ProposedChangeDensity,
 	type ProposedChangeProps,
 } from "../src/components/proposed-change";
 import type { Locale } from "../src/lib/locale";
+import { TEN_RIENG } from "./du-lieu";
 
 let root: Root | null = null;
 
@@ -437,5 +439,84 @@ describe("nk-phan-hoi", () => {
 		don();
 		const o2 = ve(<PhanHoiThu ghi={[]} pending dau />);
 		expect(o2.querySelector('[role="status"]')?.textContent).toBe("");
+	});
+});
+
+const DAU = /§\d+/g;
+
+function chuTuDat(): string[] {
+	const ra: string[] = [];
+	const di = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+	for (let n = di.nextNode(); n; n = di.nextNode()) {
+		const t = (n.textContent ?? "").replace(DAU, "").replace(/\s+/g, " ").trim();
+		if (t && /\p{L}/u.test(t)) ra.push(t);
+	}
+	return ra;
+}
+
+type CaTieng = { ten: string; ve: () => ReactElement; mo?: () => void };
+
+describe("nk-hai-tieng", () => {
+	test("nk-hai-tieng: mọi chữ thành phần tự đặt đổi theo tiếng, trừ tên Kara", () => {
+		const CA: readonly CaTieng[] = [
+			{ ten: "KaraMark", ve: () => <KaraMark scope="§1" /> },
+			{
+				ten: "KaraLabel",
+				ve: () => <KaraLabel scope="§1" text="§2" reason="§3" readAt="§4" />,
+				mo: () => {
+					const nut = document.body.querySelector<HTMLButtonElement>(
+						"[data-slot='kara-label'] button",
+					);
+					if (!nut) throw new Error("khong thay nut vi sao");
+					act(() => nut.click());
+				},
+			},
+			{
+				ten: "ProposedChange",
+				ve: () => (
+					<ProposedChange
+						kind="rewrite"
+						label="§1"
+						before="§2"
+						value="§3"
+						rationale="§4"
+						actions={[
+							{ id: "a", label: "§5", tone: "primary", onClick: () => {} },
+							{ id: "b", label: "§6", tone: "quiet", onClick: () => {} },
+						]}
+					/>
+				),
+			},
+			{
+				ten: "ProposedChangeReceipt",
+				ve: () => (
+					<ProposedChangeReceipt decision="accepted" text="§1" onUndo={() => {}} />
+				),
+			},
+			{
+				ten: "AiFeedback",
+				ve: () => (
+					<AiFeedback value onChange={() => {}} label="§1" thanks="§2" />
+				),
+			},
+		];
+		let soCho = 0;
+		for (const ca of CA) {
+			const theoTieng: Record<Locale, string[]> = { vi: [], en: [] };
+			for (const locale of ["vi", "en"] as const) {
+				ve(ca.ve(), locale);
+				ca.mo?.();
+				theoTieng[locale] = chuTuDat();
+				don();
+			}
+			expect(theoTieng.vi.length).toBe(theoTieng.en.length);
+			theoTieng.vi.forEach((vi, i) => {
+				soCho += 1;
+				if (TEN_RIENG.has(vi) || vi === "·") return;
+				if (vi === theoTieng.en[i]) throw new Error(`chu cung: ${vi}`);
+			});
+		}
+		console.info(`nk-hai-tieng: ${soCho} cho da so`);
+		expect(soCho).toBeGreaterThan(0);
 	});
 });
