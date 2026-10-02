@@ -1,0 +1,45 @@
+{
+  "feature_plain": "Mọi chỗ Kara đề xuất, ghi nhãn hay xin phản hồi sẽ dùng chung một bộ thành phần, và đề xuất đặt ngay dưới thứ nó sửa mà không thêm khung — người dùng hôm nay chưa thấy gì khác.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho đề xuất của Kara một dạng nằm liền dưới dòng nó sửa: không khung, không viền, chữ cũ gạch rồi chữ mới, đúng một nút chính."},
+    {"id": "AC-2", "p": "Sẽ giữ y nguyên các nút, lý do khoá, dòng lỗi và ô sửa ở cả dạng liền dòng lẫn dạng thẻ."},
+    {"id": "AC-3", "p": "Sẽ giữ cột góp ý OKR và thẻ thông tin liên hệ đúng như hôm nay (dạng thẻ)."},
+    {"id": "AC-4", "p": "Sẽ thu đề xuất đã nhận thành một dòng «Đã … · Hoàn tác» tại chỗ; bỏ qua thì dòng mờ, không biến mất."},
+    {"id": "AC-5", "p": "Sẽ có một dấu Kara: tia sáng cùng chữ «Kara», màu chữ phụ, không tô xanh thương hiệu."},
+    {"id": "AC-6", "p": "Sẽ có nhãn «Kara · 2 góp ý» kèm ô «Vì sao?» mở bằng chuột hay phím, mà bấm nó không bật hàng chứa nó."},
+    {"id": "AC-7", "p": "Sẽ có một nút phản hồi «Hữu ích / Không hữu ích» dùng chung; tóm tắt tuần chuyển sang dùng nó mà chữ và cách lùi khi lỗi giữ nguyên."},
+    {"id": "AC-10", "p": "Sẽ giữ khối duyệt của AI Elements còn được dùng, để cổng chống tệp bỏ hoang và hồ sơ thẻ góp ý đã ký vẫn xanh."},
+    {"id": "AC-11", "p": "Sẽ ghi vào luật Kara những gì đã có, và lộ trình: khung Mục tiêu–KR đi trước, góp ý OKR dựng trên sáu điểm cắm của nó."},
+    {"id": "AC-12", "p": "Sẽ để một người ngoài nhìn ảnh mà thấy đề xuất là một phần của dòng, và nhận ra ngay nút chính."},
+    {"id": "AC-13", "p": "Sẽ qua sàn thiết kế tĩnh của kho, không lỗi nền nào."}
+  ],
+  "wont_do": [
+    {"id": "AC-8", "p": "Chặn chữ viết cứng: mọi chữ thành phần tự đặt đổi theo tiếng Việt/Anh, trừ tên «Kara»."},
+    {"id": "AC-9", "p": "Chặn khung lén: trên trình duyệt thật ở khổ máy tính và điện thoại, sáng và tối, dạng liền dòng không có viền hay nền riêng ở bất kỳ lớp nào, và trang không tràn ngang."},
+    {"id": "OOS-1", "p": "KHÔNG đổi màn thật nào sang dạng liền dòng — để lượt góp ý OKR và lượt thống nhất từ vựng."},
+    {"id": "OOS-2", "p": "KHÔNG làm dấu nhỏ trên giá trị đã nhận, cũng chưa ghi vết «theo đề xuất của Kara»."},
+    {"id": "OOS-3", "p": "KHÔNG đổi chữ cảm ơn của tóm tắt tuần, KHÔNG thay tên «Trợ lý OKR» trên màn."},
+    {"id": "OOS-4", "p": "KHÔNG chạm bảng và vạch màu hàng — hai tệp đó thuộc lượt khung Mục tiêu–KR."},
+    {"id": "OOS-5", "p": "KHÔNG gỡ khối duyệt của AI Elements, KHÔNG đổi sổ thành phần AI Elements."}
+  ],
+  "scope_plain": "Lượt này chỉ dựng nền; màn nào chuyển sang dùng nền là việc của các lượt sau.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ cả sáu món của bảng luật mục 10: dấu, nhãn có ô vì sao, đề xuất liền dòng, đề xuất dạng thẻ, dòng biên nhận, phản hồi."},
+    {"i": 1, "p": "Đề xuất được thử ở mọi trạng thái: chờ, đang gửi, khoá, lỗi, đang sửa, đã nhận có hay không hoàn tác, bỏ qua — AC-2 (hai dạng như nhau), AC-4 (dòng biên nhận)."},
+    {"i": 2, "p": "Chỗ đặt và khổ: trong hàng bấm được, cột riêng, máy tính 1440, điện thoại 390, nền sáng và tối — AC-6, AC-9 (đo trên trình duyệt thật)."},
+    {"i": 3, "p": "Cách dùng: chuột, phím, trình đọc màn hình, hai tiếng — AC-6 (phím), AC-4 (đọc «Đã …»), AC-8 (hai tiếng)."},
+    {"i": 4, "p": "Làm ngay: mọi trạng thái ở cả hai dạng, hai màn cũ, dấu và nhãn, phản hồi, hai tiếng, khổ và nền."},
+    {"i": 5, "p": "Để sau: dấu trên giá trị đã nhận, chữ cảm ơn nói điều gì sẽ xảy ra, dòng «Kara đang …»."},
+    {"i": 6, "p": "Không bao giờ: dạng liền dòng có khung, dấu tô xanh thương hiệu, nhãn thành nút gọi Kara làm lại."},
+    {"i": 7, "p": "Giả định chờ anh gạch: dạng mặc định là liền dòng, hai màn cũ ghi dạng thẻ."},
+    {"i": 8, "p": "Giả định chờ anh gạch: tên bốn thành phần mới là KaraMark, KaraLabel, ProposedChangeReceipt, AiFeedback."},
+    {"i": 9, "p": "Giả định chờ anh gạch: «Hoàn tác» chỉ báo cho màn; lùi giá trị thật là việc của màn đó."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ba phép đo đòi cùng một phần tử mang hai tên một lúc, nên sẽ đỏ dù làm đúng — đã đổi sang đo dấu thật mà mỗi khối để lại, và thử bộ đo trên bản trước lượt."},
+    {"i": 1, "p": "Phép đo trình duyệt lấy danh sách trạng thái từ chính bản mẫu nên bỏ sót cũng không biết — nay rút đủ 8 trạng thái từ bảng viết trước, 32 ô đo, tên ảnh ghim khớp phần chấm bằng mắt."},
+    {"i": 2, "p": "Chưa đo khung lén bên trong đề xuất liền dòng — nay đo viền và nền của mọi lớp con, có ca phá thử."},
+    {"i": 3, "p": "Chưa đo phím Enter/Space trên «Vì sao?» có bật nhầm hàng không — nay đo cả bấm lẫn phím, có đối chứng."},
+    {"i": 4, "p": "Chưa đo chữ cảm ơn và tên nhóm của tóm tắt tuần có giữ nguyên không — nay so với chữ cũ và chạy lại bài kiểm sẵn có của khối đó."}
+  ]
+}

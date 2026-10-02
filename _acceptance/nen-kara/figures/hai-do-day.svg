@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1200 688" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Lora:ital,wght@0,400;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">HAI ĐỘ DÀY · d-1 GIỮ CONFIRMATION CHO CARD · d-2 MẶC ĐỊNH INLINE · AC-1 AC-2 AC-3 AC-4 AC-10</text>
+
+      <path d="M520 160 L520 184 Q520 192 512 192 L288 192 Q280 192 280 200 L280 230" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M680 160 L680 184 Q680 192 688 192 L912 192 Q920 192 920 200 L920 230" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <text x="268" y="216" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.08em">INLINE · MẶC ĐỊNH</text>
+      <text x="932" y="216" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.08em">CARD · GHI TƯỜNG MINH</text>
+
+      <path d="M400 276 L498 276" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M800 276 L702 276" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="416" y="250" width="68" height="16" rx="2" fill="#fafafa"/>
+      <text x="450" y="261" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ QUYẾT</text>
+      <rect x="716" y="250" width="68" height="16" rx="2" fill="#fafafa"/>
+      <text x="750" y="261" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐÃ QUYẾT</text>
+
+      <path d="M256 320 L256 336 Q256 344 248 344 L176 344 Q168 344 168 352 L168 376" fill="none" stroke="#575757" stroke-width="1"/>
+      <path d="M304 320 L304 336 Q304 344 312 344 L384 344 Q392 344 392 352 L392 376" fill="none" stroke="#575757" stroke-width="1"/>
+      <path d="M896 320 L896 336 Q896 344 888 344 L816 344 Q808 344 808 352 L808 376" fill="none" stroke="#575757" stroke-width="1"/>
+      <path d="M944 320 L944 336 Q944 344 952 344 L1024 344 Q1032 344 1032 352 L1032 376" fill="none" stroke="#575757" stroke-width="1"/>
+
+      <path d="M1040 276 L1152 276 Q1160 276 1160 284 L1160 488 Q1160 496 1152 496 L728 496 Q720 496 720 504 L720 526" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="1072" y="250" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="1100" y="261" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">NẾU BỎ</text>
+      <path d="M840 568 L886 568" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+
+      <rect x="440" y="72" width="320" height="88" rx="6" fill="#fafafa"/>
+      <rect x="440" y="72" width="320" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="456" y="80" width="100" height="16" rx="2" fill="#fafafa" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="506" y="91.5" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MỞ RỘNG · AC-2</text>
+      <text x="456" y="120" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">ProposedChange</text>
+      <text x="456" y="138" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">packages/ui · proposed-change.tsx</text>
+      <text x="456" y="152" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">density?: "inline" | "card"</text>
+
+      <rect x="160" y="232" width="240" height="88" rx="6" fill="#fafafa"/>
+      <rect x="160" y="232" width="240" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="176" y="240" width="124" height="16" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="238" y="251.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">THÂN INLINE · AC-1</text>
+      <text x="176" y="278" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Item</text>
+      <text x="176" y="296" fill="#575757" font-size="11" font-family="'Geist', sans-serif">biến thể mặc định, không viền</text>
+      <text x="176" y="312" fill="#575757" font-size="11" font-family="'Geist', sans-serif">không Alert, không Card</text>
+
+      <rect x="500" y="232" width="200" height="88" rx="6" fill="#fafafa"/>
+      <rect x="500" y="232" width="200" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="516" y="240" width="100" height="16" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="566" y="251.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">TẠO MỚI · AC-4</text>
+      <text x="516" y="278" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">ProposedChangeReceipt</text>
+      <text x="516" y="296" fill="#575757" font-size="11" font-family="'Geist', sans-serif">«✓ Đã … · Hoàn tác»</text>
+      <text x="516" y="312" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">role="status"</text>
+
+      <rect x="800" y="232" width="240" height="88" rx="6" fill="#fafafa"/>
+      <rect x="800" y="232" width="240" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="816" y="240" width="148" height="16" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="890" y="251.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GIỮ · THÂN CARD · AC-3</text>
+      <text x="816" y="278" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Confirmation</text>
+      <text x="816" y="296" fill="#575757" font-size="11" font-family="'Geist', sans-serif">AI Elements, như hôm nay</text>
+      <text x="816" y="312" fill="#575757" font-size="11" font-family="'Geist', sans-serif">bọc Alert có viền</text>
+
+      <rect x="68" y="376" width="200" height="88" rx="6" fill="#fafafa"/>
+      <rect x="68" y="376" width="200" height="88" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="84" y="384" width="64" height="16" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="116" y="395.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LƯỢT SAU</text>
+      <text x="84" y="422" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Màn mới khu OKR</text>
+      <text x="84" y="440" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">gop-y-dung-cho</text>
+      <text x="84" y="456" fill="#575757" font-size="11" font-family="'Geist', sans-serif">không ghi prop → inline</text>
+
+      <rect x="292" y="376" width="200" height="88" rx="6" fill="#fafafa"/>
+      <rect x="292" y="376" width="200" height="88" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <rect x="308" y="384" width="64" height="16" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="340" y="395.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">LƯỢT SAU</text>
+      <text x="308" y="422" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thông tin liên hệ</text>
+      <text x="308" y="440" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">tu-vung-tac-tu</text>
+      <text x="308" y="456" fill="#575757" font-size="11" font-family="'Geist', sans-serif">bỏ <tspan font-family="'Geist Mono', monospace" font-size="10">density="card"</tspan> → inline</text>
+
+      <rect x="708" y="376" width="200" height="88" rx="6" fill="#fafafa"/>
+      <rect x="708" y="376" width="200" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="724" y="384" width="56" height="16" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="752" y="395.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HÔM NAY</text>
+      <text x="724" y="422" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Cột góp ý OKR</text>
+      <text x="724" y="440" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">okr/the-gop-y.tsx</text>
+      <text x="724" y="456" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">density="card"</text>
+
+      <rect x="932" y="376" width="200" height="88" rx="6" fill="#fafafa"/>
+      <rect x="932" y="376" width="200" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="948" y="384" width="56" height="16" rx="2" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="976" y="395.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HÔM NAY</text>
+      <text x="948" y="422" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Thông tin liên hệ</text>
+      <text x="948" y="440" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">crm/facts.tsx</text>
+      <text x="948" y="456" fill="#575757" font-size="10" font-family="'Geist Mono', monospace">density="card"</text>
+
+      <text x="40" y="540" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">VÌ SAO MẶC ĐỊNH INLINE · d-2</text>
+      <text x="40" y="564" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">docs/ai-ux.md mục 5 gọi inline là mặc định. Mã theo đúng luật,</text>
+      <text x="40" y="584" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">nên màn mới quên prop vẫn ra đúng kiểu. Hai màn cũ ghi card</text>
+      <text x="40" y="604" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">tường minh: không màn thật nào đổi điều người dùng thấy.</text>
+
+      <rect x="600" y="528" width="240" height="80" rx="6" fill="#fafafa"/>
+      <rect x="600" y="528" width="240" height="80" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="616" y="536" width="76" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="654" y="547.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHÔNG CHỌN</text>
+      <text x="616" y="576" fill="#171717" font-size="11" font-weight="500" font-family="'Geist Mono', monospace">confirmation.tsx</text>
+      <text x="616" y="596" fill="#575757" font-size="11" font-family="'Geist', sans-serif">mồ côi: không màn nào dùng tới</text>
+
+      <rect x="888" y="528" width="240" height="80" rx="6" fill="#fafafa"/>
+      <rect x="888" y="528" width="240" height="80" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="904" y="536" width="132" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="970" y="547.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HAI CỔNG ĐỎ · AC-10</text>
+      <text x="904" y="576" fill="#171717" font-size="11" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-weight="500">mo-coi.mjs</tspan> đỏ</text>
+      <text x="904" y="596" fill="#171717" font-size="11" font-family="'Geist', sans-serif">AC-12 của <tspan font-family="'Geist Mono', monospace" font-weight="500">the-gop-y-okr</tspan> hỏng</text>
+
+      <line x1="40" y1="636" x2="1160" y2="636" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="664" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="128" y="655" width="16" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="152" y="664" fill="#575757" font-size="11" font-family="'Geist', sans-serif">lượt này mở rộng</text>
+      <rect x="268" y="655" width="16" height="10" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="292" y="664" fill="#575757" font-size="11" font-family="'Geist', sans-serif">có ngay sau lượt</text>
+      <rect x="404" y="655" width="16" height="10" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text x="428" y="664" fill="#575757" font-size="11" font-family="'Geist', sans-serif">màn ở lượt sau</text>
+      <rect x="532" y="655" width="16" height="10" rx="2" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="556" y="664" fill="#575757" font-size="11" font-family="'Geist', sans-serif">nhánh không chọn</text>
+      <line x1="676" y1="660" x2="704" y2="660" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="712" y="664" fill="#575757" font-size="11" font-family="'Geist', sans-serif">mặc định</text>
+      <line x1="784" y1="660" x2="812" y2="660" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="820" y="664" fill="#575757" font-size="11" font-family="'Geist', sans-serif">rẽ theo density, hay khi đã quyết</text>
+      <line x1="1012" y1="660" x2="1040" y2="660" stroke="#575757" stroke-width="1"/>
+      <text x="1048" y="664" fill="#575757" font-size="11" font-family="'Geist', sans-serif">dùng bởi</text>
+    </svg>
