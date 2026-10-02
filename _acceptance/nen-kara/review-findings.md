@@ -1,51 +1,52 @@
-# Review findings: nen-kara (round 2)
+# Review findings: nen-kara (round 3)
 
 ## Trong hợp đồng
 
-- **Hình dạng 4 (assertion âm tính một mình): kiểm «thẻ có viền» và «inline không viền» ở E10 tự xanh khi không có phần tử nào để đo**
-  file: `_acceptance/nen-kara/rang/man-proto.mjs:263`
-  severity: medium
-  AC: AC-9
-  source: measurement
-  detail: Dòng 263-266 là `ghi(so.theKhongVien === 0, ...)`, với theKhongVien = the.filter(g => !vienThay(g)).length (dòng 136). Script không đòi soThe > 0 ở đâu cả, kể cả ở ST-nenkara-the, trạng thái duy nhất có bản card. Số soThe và soInline chỉ được in ra (dòng 268-270), không được khẳng định. Vì vậy nếu `[data-density=card]` không còn hiện (đổi tên thuộc tính, proto thôi dựng card), cả 32 ô vẫn in OK cho vế «bản card có viền» của AC-9, mà vế card lại không có chiều đỏ nào (--kiem-do-do chỉ chèn lỗi vào inline). Vòng lặp kiểm inline cũng vậy (dòng 121-130): một trạng thái inline-* không dựng phần tử inline nào sẽ cho loiInline rỗng và xanh. Chiều đỏ chenLoi chỉ chứng minh trang có ít nhất một phần tử inline ở đâu đó, không phải ở từng trạng thái. Không có đối chứng dương theo từng ô, kiểu soThe ≥ 1 ở ST-nenkara-the và soInline ≥ 1 ở năm trạng thái inline/biên nhận.
-  lý do vào hợp đồng: AC-9 hứa bản card có viền và inline không viền ở từng trạng thái; phép đo không đòi có ít nhất một phần tử card/inline nên vế này có thể xanh vì không đo gì.
-
-- **Hình dạng 5 (tuyên quét lớp nhưng chỉ chốt tổng > 0): nk-hai-tieng không ghim số chỗ so theo từng thành phần**
-  file: `packages/ui/test/nen-kara.dom.tsx:569`
-  severity: medium
+- **Hình dạng 5 (tuyên quét lớp, chỉ có điểm): nk-hai-tieng nói «mọi chữ thành phần tự đặt» nhưng ProposedChange chỉ đo ở trạng thái không có chữ tự đặt nào**
+  file: `packages/ui/test/nen-kara.dom.tsx:526`
+  severity: low
   AC: AC-8
+  detail: AC-8 hứa mọi chữ do thành phần tự đặt đều đổi theo tiếng. Hàm `chuTuDat` (dòng 489-500) chỉ duyệt nút chữ (NodeFilter.SHOW_TEXT), không đọc thuộc tính. Ca ProposedChange (dòng 526-541) dựng ở trạng thái chờ, không pending, không editing, và ghi trước `so: 0`. Trong khi đó chữ tự đặt của ProposedChange đều nằm ở trạng thái khác và đều là thuộc tính: `aria-label={msg.proposedChange.edit}` của ô sửa (proposed-change.tsx:128) và `aria-label={msg.spinner.loading}` của Spinner lúc đang gửi (spinner.tsx:35). Ô ProposedChange của ma trận vì thế không đo được gì: nếu một trong hai nhãn đó bị viết cứng tiếng Việt, bài vẫn xanh với 0 = 0. Phạm vi lớp được tuyên lớn hơn phần được đo.
   source: measurement
-  detail: E9 hứa một ma trận viết trước gồm năm thành phần, mỗi thành phần dựng ở vi và en. Bài chỉ khẳng định `expect(soCho).toBeGreaterThan(0)` trên tổng cộng dồn (dòng 552-569), và `expect(theoTieng.vi.length).toBe(theoTieng.en.length)` (dòng 561) đúng cả khi hai bên cùng bằng 0. Một thành phần không còn chữ tự đặt nào được so, hoặc một bước `mo` không mở được ô Vì sao nên chữ trong popover («Kara dựa trên gì», «Đọc lúc …») không được thu, vẫn qua bài, miễn thành phần khác góp ít nhất một chỗ. Số khẳng định không bằng số phần tử của ma trận (mẫu P105). Thiếu số chỗ kỳ vọng ghi trước cho từng ca, hoặc ít nhất mỗi ca phải có > 0 chỗ không được miễn. Ngoài ra dòng 564 còn miễn thêm «·», trong khi lời hứa là «trừ đúng tập {Kara}».
-  lý do vào hợp đồng: AC-8 hứa mọi chữ do thành phần tự đặt đổi theo tiếng trừ «Kara»; bài chỉ chốt tổng chỗ so lớn hơn 0 và miễn thêm ký tự, nên một thành phần có thể không được so mà vẫn qua.
-
-- **Hình dạng 4 (không đối chứng dương): đối chứng dương của E3 trên merge-base không thể xanh với bộ chọn kiemThe**
-  file: `apps/app/test/nen-kara-man-cu.dom.tsx:50`
-  severity: medium
-  AC: AC-3
-  source: measurement
-  detail: Mục expected của E3 trong evals.yaml ghi «đối chứng dương: bộ chọn này chạy trên onehub trước lượt (bản sao proposed-change.tsx của merge-base) cũng xanh». Nhưng kiemThe (dòng 49-53) đòi `goc.getAttribute("data-density") === "card"`, và proposed-change.tsx ở merge-base 9660bf6c không hề có thuộc tính data-density (grep chỉ thấy data-slot; data-density mới xuất hiện ở dòng 338/373 của bản HEAD). Chạy trên merge-base, bộ chọn này sẽ ném lỗi «doi sang inline», nên đối chứng dương như đã tuyên là không đạt được. Trong tệp kiểm cũng không có ca đối chứng nào. Bằng chứng duy nhất cho thấy bộ chọn phân biệt card với inline là chiều đỏ facts.tsx. Chưa có gì chứng minh dấu group/alert thật sự là dấu của bản trước lượt như lời hứa «như trước lượt».
-  lý do vào hợp đồng: AC-3 hứa hai màn cũ ra bản card như trước lượt; bộ chọn đòi data-density mà bản trước lượt không có, nên lời hứa «như trước lượt» chưa được chứng minh bằng đối chứng dương.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The inline ProposedChange draws its own AI icon instead of using KaraMark, so the mark now lives in two places**
-  Người dùng thấy gì: Đề xuất của Kara dạng một dòng đang tự vẽ biểu tượng tia sáng riêng thay vì dùng chung một dấu Kara. Hôm nay người dùng thấy đúng; nhưng nếu sau này đổi hình dấu Kara thì dòng này sẽ không đổi theo và hai nơi có thể lệch nhau.
-  file: `packages/ui/src/components/proposed-change.tsx`
+- **The «2 góp ý» count on the Kara label is hardcoded and contradicts the pending proposals in most states**
+  Người dùng thấy gì: Trên trang mẫu, nhãn Kara luôn ghi «2 góp ý» dù có lúc không còn góp ý nào đang chờ. Chỉ là trang xem thử, màn thật chưa dùng, nhưng con số này không phải mẫu tốt để màn sau chép theo.
+  file: `apps/app/app/proto/_modules/nen-kara/index.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **New TEN_RIENG exemption set has no size-pinning test, unlike the other exemption lists in du-lieu.ts**
+  Người dùng thấy gì: Danh sách chữ được miễn dịch (hiện chỉ có tên Kara) không có chốt chặn nào. Sau này ai đó có thể thêm một chữ chưa dịch vào đó và bài kiểm tra hai tiếng sẽ bỏ qua, nên người dùng có thể thấy chữ sai tiếng mà không ai hay.
+  file: `packages/ui/test/du-lieu.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **man-proto.mjs crashes before printing 'thieu so phan tu ghi truoc', so the eval's promised message never appears**
+  Người dùng thấy gì: Công cụ đo màn hình có thể sập thay vì báo rõ lý do khi ai đó thêm một trạng thái mới mà quên khai số liệu. Người dùng cuối không bị ảnh hưởng, người làm chỉ mất lời nhắn dễ hiểu.
+  file: `_acceptance/nen-kara/rang/man-proto.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 5 (tuyên quét lớp nhưng ma trận không viết trước): E10 suy số ô từ bảng của design doc, không ghim 32**
+  Người dùng thấy gì: Nếu một trạng thái bị gỡ khỏi cả tài liệu thiết kế lẫn danh mục, phép kiểm tra màn hình vẫn báo xanh dù đo thiếu ô. Hiện chưa có ô nào bị thiếu, nhưng lời hứa «đo đủ 32 ô» chưa có gì giữ chắc.
+  file: `_acceptance/nen-kara/rang/man-proto.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **docs/ai-ux.md tells the next round to build on a file and components that are not in the repo**
-  Người dùng thấy gì: Tài liệu hướng dẫn cho lượt sau nhắc tới một khối giao diện mà hiện chưa có trong sản phẩm vì nó thuộc một lượt làm khác chưa gộp. Người đọc tài liệu có thể đi tìm thứ chưa tồn tại cho đến khi lượt kia xong.
-  file: `docs/ai-ux.md`
+- **Hình dạng 3 (khẳng định có mặt, trong khi lời hứa là quan hệ): E10 soát ảnh đầu vào E13 bằng existsSync, trong khi ảnh đã commit sẵn**
+  Người dùng thấy gì: Phép kiểm tra chỉ xem ảnh chụp có tồn tại, không xem ảnh có do lượt chạy này chụp hay không. Người chấm có thể đang xem ảnh cũ mà không biết.
+  file: `_acceptance/nen-kara/rang/man-proto.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **nk_san_thiet_ke ignores a failing find, so the proto files can be skipped without any error**
-  Người dùng thấy gì: Bước kiểm tra giao diện tự động có thể lặng lẽ bỏ qua các màn mẫu nếu thư mục của chúng bị đổi tên hay dời đi, và vẫn báo đạt. Hiện thư mục còn nguyên nên chưa ảnh hưởng gì tới người dùng.
-  file: `_acceptance/config.yaml`
+- **Hình dạng 3 (khẳng định có chuỗi, trong khi lời hứa là quan hệ): E12 mục (c) chỉ grep chữ «card» trong hàng confirmation.tsx**
+  Người dùng thấy gì: Phép kiểm tra tài liệu có thể chấp nhận một dòng ghi nhầm ý miễn là có chữ «card». Người đọc tài liệu có thể gặp mô tả sai mà bài kiểm tra vẫn xanh, nhưng tài liệu hiện tại chưa thấy sai.
+  file: `_acceptance/nen-kara/rang/tai-lieu.mjs`
   severity: low
-  Đề xuất: known-limits
+  Đề xuất: wont-fix
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
