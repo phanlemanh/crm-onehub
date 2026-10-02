@@ -1,9 +1,12 @@
 import { execFileSync, spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
+	appendFileSync,
 	existsSync,
 	mkdirSync,
 	readdirSync,
 	readFileSync,
+	rmSync,
 	writeFileSync,
 } from "node:fs";
 import { createRequire } from "node:module";
@@ -46,6 +49,12 @@ const HSC = {
 		tep: "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx",
 		tu: "<div data-muc-tieu={mucTieu.id}>",
 		thanh: "<div>",
+	},
+	mien: {
+		"cap-nhat-tuan-okr/E25": {
+			tep: ["packages/ui/src/components/simple-table.tsx"],
+			lyDo: "luat rieng cua vong cap-nhat-tuan-okr (diff vong do khong sua packages/ui); vong nay sua simple-table.tsx theo AC-8",
+		},
 	},
 	ra: ".acceptance-runs/muc-tieu-va-kr/ho-so-cham",
 	tranMs: 40 * 60 * 1000,
@@ -204,14 +213,34 @@ for (const { slug, id } of can.values()) {
 }
 for (const b of boQua) console.log(`khong chay duoc trong lan may: ${b}`);
 const soEval = [...theoLenh.values()].reduce((s, d) => s + d.length, 0);
-console.log(`se chay ${soEval} eval qua ${theoLenh.size} lenh rieng`);
+console.log(
+	`danh sach ${can.size} eval = se chay ${soEval} (qua ${theoLenh.size} lenh rieng) + khong chay duoc ${boQua.length}`,
+);
+if (soEval + boQua.length !== can.size)
+	dung(2, `lech dem: ${soEval} + ${boQua.length} != ${can.size}`);
+for (const e of Object.keys(HSC.mien))
+	if (!can.has(e)) dung(2, `mien khai cho eval ngoai danh sach: ${e}`);
 if (process.argv.includes("--chi-liet")) {
 	for (const [lenh, evs] of theoLenh) console.log(`- ${evs.join(", ")} :: ${lenh.slice(0, 140)}`);
 	ket(0);
 }
-
 const thuMucRa = join(GOC_THAT, HSC.ra);
 mkdirSync(thuMucRa, { recursive: true });
+const sha = git(GOC_THAT, "rev-parse", "HEAD").trim();
+const luot = process.env.HSC_LUOT ?? `tu-do-${process.pid}`;
+const soKetQua = join(thuMucRa, `ket-qua-${sha.slice(0, 12)}-${luot}.jsonl`);
+const daCo = new Map();
+if (!kiemDoDo && existsSync(soKetQua))
+	for (const dong of readFileSync(soKetQua, "utf8").split("\n"))
+		if (dong.trim()) {
+			const d = JSON.parse(dong);
+			daCo.set(d.khoa, d.ma);
+		}
+console.log(
+	`dinh ${sha.slice(0, 12)} · luot ${luot} · ${daCo.size} ket qua da co trong ${HSC.ra}`,
+);
+
+const bam = (lenh) => createHash("sha256").update(lenh).digest("hex").slice(0, 10);
 
 function chay(lenh, cwd, nhan) {
 	const r = spawnSync("bash", ["-c", lenh], {
@@ -229,10 +258,21 @@ function chay(lenh, cwd, nhan) {
 	return ma;
 }
 
-function datCay(ten, sha) {
+function chayGhi(lenh, cwd, loai) {
+	const khoa = `${loai}-${bam(lenh)}`;
+	if (daCo.has(khoa)) return { ma: daCo.get(khoa), cu: true };
+	const ma = chay(lenh, cwd, khoa);
+	daCo.set(khoa, ma);
+	if (!kiemDoDo) appendFileSync(soKetQua, `${JSON.stringify({ khoa, ma })}\n`);
+	return { ma, cu: false };
+}
+
+function datCay(ten, moc) {
 	const cay = join(GOC_THAT, ".acceptance-runs", HSC.slug, ten);
 	spawnSync("git", ["-C", GOC_THAT, "worktree", "remove", "--force", cay]);
-	git(GOC_THAT, "worktree", "add", "--detach", cay, sha);
+	rmSync(cay, { recursive: true, force: true });
+	git(GOC_THAT, "worktree", "add", "--detach", cay, moc);
+	caySao.push(cay);
 	spawnSync("ln", ["-s", join(GOC_THAT, ".env"), join(cay, ".env")]);
 	for (const buoc of [["install"], ["run", "db:generate"]]) {
 		const r = spawnSync("bun", buoc, { cwd: cay, encoding: "utf8" });
@@ -242,65 +282,99 @@ function datCay(ten, sha) {
 	return cay;
 }
 
-let cayHead = GOC;
-if (kiemDoDo) {
-	cayHead = datCay("pha-thu", "HEAD");
-	caySao.push(cayHead);
-	const tep = join(cayHead, HSC.phaThu.tep);
-	const goc = readFileSync(tep, "utf8");
-	if (!goc.includes(HSC.phaThu.tu))
-		dung(2, `khong thay cho pha thu trong ${HSC.phaThu.tep}`);
-	writeFileSync(tep, goc.replace(HSC.phaThu.tu, HSC.phaThu.thanh));
-	console.log(
-		`kiem do do: da xoa data-muc-tieu khoi ${HSC.phaThu.tep} trong ban sao`,
-	);
-}
-const doHead = [];
-let i = 0;
 const vietTruoc = (evs) =>
 	evs.some((e) => HSC.danhSach[e.split("/")[0]]?.includes(e.split("/")[1]));
 const hang = ([lenh, evs]) =>
 	Number(lenh.includes("tien-de")) * 2 + Number(!vietTruoc(evs));
 const lenhXep = [...theoLenh.entries()].sort((a, b) => hang(a) - hang(b));
+
+const cayHead = datCay("head", sha);
+console.log(`cay dong bang o ${sha.slice(0, 12)}: ${cayHead}`);
+
+if (kiemDoDo) {
+	const cayPha = datCay("pha-thu", sha);
+	const tep = join(cayPha, HSC.phaThu.tep);
+	const goc = readFileSync(tep, "utf8");
+	if (!goc.includes(HSC.phaThu.tu))
+		dung(2, `khong thay cho pha thu trong ${HSC.phaThu.tep}`);
+	writeFileSync(tep, goc.replace(HSC.phaThu.tu, HSC.phaThu.thanh));
+	console.log(`kiem do do: da xoa data-muc-tieu khoi ${HSC.phaThu.tep} trong ban sao`);
+	let k = 0;
+	for (const [lenh, evs] of lenhXep.filter(([, evs]) => vietTruoc(evs))) {
+		k += 1;
+		const maPha = chay(lenh, cayPha, `pha-${k}`);
+		console.log(`[pha ${k}] ban pha exit ${maPha}: ${evs.join(", ")}`);
+		if (maPha === 0) continue;
+		const maNguyen = chay(lenh, cayHead, `nguyen-${k}`);
+		console.log(`[pha ${k}] HEAD nguyen exit ${maNguyen}`);
+		if (maNguyen !== 0) {
+			console.log(`khong quy duoc cho phan bi pha (do ca tren HEAD nguyen): ${evs.join(", ")}`);
+			continue;
+		}
+		for (const e of evs) console.log(`hoi quy: ${e}`);
+		console.log("kiem do do: thuoc bat duoc hoi quy, quy dung cho phan bi pha");
+		ket(1);
+	}
+	dung(3, "kiem do do: khong eval viet truoc nao do vi phan bi pha — thuoc khong bat duoc hoi quy");
+}
+
+const doHead = [];
+let daChay = 0;
+let i = 0;
 for (const [lenh, evs] of lenhXep) {
 	i += 1;
-	const ma = chay(lenh, cayHead, `head-${i}`);
-	console.log(`[${i}/${theoLenh.size}] HEAD exit ${ma}: ${evs.join(", ")}`);
-	if (ma !== 0) doHead.push({ lenh, evs, ma, i });
-	if (kiemDoDo && doHead.length > 0) break;
+	const { ma, cu } = chayGhi(lenh, cayHead, "head");
+	daChay += evs.length;
+	console.log(`[${i}/${theoLenh.size}] HEAD exit ${ma}${cu ? " (da co)" : ""}: ${evs.join(", ")}`);
+	if (ma !== 0) doHead.push({ lenh, evs, ma });
 }
-console.log(
-	`da chay ${kiemDoDo ? "(dung som)" : soEval} eval; do o HEAD: ${doHead.length} lenh`,
-);
-if (doHead.length === 0) {
-	if (kiemDoDo)
-		dung(
-			1,
-			"kiem do do: ban sao bi pha van xanh — thuoc khong bat duoc hoi quy",
-		);
-	console.log("khong eval nao do o HEAD");
-	ket(0);
-}
-const cayB = datCay("goc", coSo);
-caySao.push(cayB);
+console.log(`da chay ${daChay}/${soEval} eval; do o HEAD: ${doHead.length} lenh`);
+if (daChay !== soEval) dung(2, `lech dem: da chay ${daChay} != ${soEval}`);
+
+const dem = { hoiQuy: 0, doSan: 0, chapChon: 0, mien: 0 };
 const hoiQuy = [];
+let cayB = null;
+let cayMien = null;
 for (const d of doHead) {
-	const lai = kiemDoDo ? d.ma : chay(d.lenh, cayHead, `head-lai-${d.i}`);
-	const maB = chay(d.lenh, cayB, `goc-${d.i}`);
-	console.log(
-		`lenh ${d.i}: HEAD ${d.ma} · HEAD chay lai ${lai} · merge-base ${maB}`,
-	);
+	const lai = chayGhi(d.lenh, cayHead, "head-lai").ma;
 	if (lai === 0) {
+		dem.chapChon += d.evs.length;
 		console.log(`chap chon: ${d.evs.join(", ")}`);
 		continue;
 	}
+	cayB ??= datCay("goc", coSo);
+	const maB = chayGhi(d.lenh, cayB, "goc").ma;
+	console.log(`HEAD ${d.ma} · HEAD chay lai ${lai} · merge-base ${maB}: ${d.evs.join(", ")}`);
 	for (const e of d.evs) {
-		if (maB === 0) {
+		if (maB !== 0) {
+			dem.doSan += 1;
+			console.log(`do san o B: ${e}`);
+			continue;
+		}
+		const m = HSC.mien[e];
+		if (!m) {
+			dem.hoiQuy += 1;
 			hoiQuy.push(e);
 			console.log(`hoi quy: ${e}`);
-		} else console.log(`do san o B: ${e}`);
+			continue;
+		}
+		cayMien ??= datCay("mien", sha);
+		git(cayMien, "checkout", sha, "--", ".");
+		git(cayMien, "checkout", coSo, "--", ...m.tep);
+		const maMien = chay(d.lenh, cayMien, `mien-${bam(d.lenh)}`);
+		if (maMien === 0) {
+			dem.mien += 1;
+			console.log(`mien: ${e} — ${m.lyDo} (xanh khi tra ${m.tep.join(", ")} ve ${coSo.slice(0, 8)})`);
+		} else {
+			dem.hoiQuy += 1;
+			hoiQuy.push(e);
+			console.log(`hoi quy: ${e} (mien khong du: van do ma ${maMien} khi tra ${m.tep.join(", ")} ve ${coSo.slice(0, 8)})`);
+		}
 	}
 }
+console.log(
+	`tong ${soEval} eval: xanh o HEAD ${soEval - doHead.reduce((s, d) => s + d.evs.length, 0)} · chap chon ${dem.chapChon} · do san o B ${dem.doSan} · mien ${dem.mien} · hoi quy ${dem.hoiQuy}`,
+);
 if (hoiQuy.length > 0) ket(1);
-console.log(`khong eval nao do o HEAD ma xanh o ${coSo.slice(0, 8)}`);
+console.log(`khong eval nao do o HEAD ma xanh o ${coSo.slice(0, 8)} ngoai muc mien`);
 ket(0);
