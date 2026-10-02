@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 255a3688eaa146901ac98df58fc8957d22dba7e9
+verified_commit: 68478e877021999d6c540e4dd4a93e6d57549890
 human_signoff: Manh Phan 2026-10-02
 ---
 
@@ -375,3 +375,7 @@ sha: 728c0f8c5bdc0382ace2bde62629e1d15251ad53 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-02, do hoá cũ do sửa lịch tóm tắt tuần lọc chu kỳ ẩn (405fe2da) trong PR soan-okr-cung-tro-ly
 run_id: repin-20261002T031659Z-45883
 sha: 255a3688eaa146901ac98df58fc8957d22dba7e9 · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29
+
+### Re-pin lần 3 — 2026-10-02, do hoá cũ do sửa mã kiểm (agent-okr Node 24, api nguon-khoa) cho CI PR #232
+run_id: repin-20261002T070749Z-51832
+sha: 68478e877021999d6c540e4dd4a93e6d57549890 · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta

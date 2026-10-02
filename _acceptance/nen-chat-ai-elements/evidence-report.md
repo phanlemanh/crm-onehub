@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 255a3688eaa146901ac98df58fc8957d22dba7e9
+verified_commit: 68478e877021999d6c540e4dd4a93e6d57549890
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -235,3 +235,7 @@ sha: 6b618bff86a078e61a0ed42321a2ca28d8a8e66e · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 10 — 2026-10-02, do hoá cũ do sửa lịch tóm tắt tuần lọc chu kỳ ẩn (405fe2da) trong PR soan-okr-cung-tro-ly
 run_id: repin-20261002T031659Z-45883
 sha: 255a3688eaa146901ac98df58fc8957d22dba7e9 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 11 — 2026-10-02, do hoá cũ do sửa mã kiểm (agent-okr Node 24, api nguon-khoa) cho CI PR #232
+run_id: repin-20261002T070749Z-51832
+sha: 68478e877021999d6c540e4dd4a93e6d57549890 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
