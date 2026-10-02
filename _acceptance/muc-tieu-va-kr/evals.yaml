@@ -82,7 +82,7 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.mtkr_cham
-    expected: "exit 0; dựng bảng Chấm điểm thật với dữ liệu khép kỳ parse bằng schema output thật: mỗi mục tiêu có đúng một table; hàng đầu tbody mang [data-muc-tieu-cham] với tên, người phụ trách và điểm hoặc «đã chấm k/n»; KR theo sau mang KR1…KRn; [data-o-hoc] và nút mang sang cùng nằm trong phần tử [data-khoi-cham=<id>] chứa table đó; không [data-slot=card-header] ngoài khối. Bấm lưu điểm và lưu học gọi đúng thủ tục như trước (payload parse bằng schema input thật). Chiều đỏ ghim: bản sao đặt tiêu đề mục tiêu trong CardHeader phải làm bài đỏ 'muc tieu cham ngoai khung'."
+    expected: "exit 0; dựng bảng Chấm điểm thật với dữ liệu khép kỳ parse bằng schema output thật: mỗi khối [data-muc-tieu-cham=<id>] chứa đúng một table; hàng đầu tbody mang [data-hang-muc-tieu-cham=<id>] với tên, người phụ trách và điểm hoặc «đã chấm k/n»; KR theo sau mang KR1…KRn; [data-o-hoc] và nút [data-nut=mang-sang] (hoặc [data-da-mang-sang]) nằm trong chính khối [data-muc-tieu-cham=<id>] đó; không [data-slot=card-header] ngoài khối. Bấm lưu điểm và lưu học gọi đúng thủ tục như trước (payload parse bằng schema input thật). Chiều đỏ ghim: bản sao đặt tiêu đề mục tiêu trong CardHeader phải làm bài đỏ 'muc tieu cham ngoai khung'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
 

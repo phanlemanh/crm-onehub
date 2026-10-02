@@ -5,14 +5,6 @@ import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@crm/ui/components/card";
-import {
 	Empty,
 	EmptyDescription,
 	EmptyHeader,
@@ -49,6 +41,7 @@ import { luoiDiem, OKR_KHEP, type ThangCham } from "@crm/validation/okr-khep";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
+import { okrMessages } from "@/lib/messages/okr";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { homNayVn } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -219,6 +212,7 @@ function DongKr({
 	luoi,
 	onCham,
 	locale,
+	thuTu,
 }: {
 	k: KrCham;
 	suaDuoc: boolean;
@@ -226,6 +220,7 @@ function DongKr({
 	luoi: number[];
 	onCham: ChamDiemBangProps["onCham"];
 	locale: Locale;
+	thuTu: number;
 }) {
 	const mk = okrKhepMessages(locale).cham;
 	const [tt, setTt] = useState<TrangThaiDong>(() => ({
@@ -277,21 +272,26 @@ function DongKr({
 		</span>
 	);
 	return (
-		<SimpleTableRow data-kr-cham={k.id}>
+		<SimpleTableRow data-kr-cham={k.id} nested>
 			<TableCell className="px-3 py-3 align-top whitespace-normal">
-				<div className="flex flex-col gap-1.5">
-					<span className="text-sm" translate="no">
-						{k.title}
+				<div className="flex min-w-0 gap-3">
+					<span className="w-8 shrink-0 pt-px text-muted-foreground text-xs tabular-nums">
+						{okrMessages(locale).khoiMucTieu.nhanKr(thuTu)}
 					</span>
-					<span className="text-muted-foreground text-xs">
-						{mk.phuTrach} <span translate="no">{k.ownerName}</span>
-					</span>
-					<span className="md:hidden">{so}</span>
-					<span className="text-muted-foreground text-xs md:hidden">
-						{mk.cot.goiY} {chuSo(k.diemGoiY, locale)}
-					</span>
-					<NhanDoiDich k={k} locale={locale} />
-					<span className="md:hidden">{oDiem("nho")}</span>
+					<div className="flex min-w-0 flex-1 flex-col gap-1.5">
+						<span className="text-sm" translate="no">
+							{k.title}
+						</span>
+						<span className="text-muted-foreground text-xs">
+							{mk.phuTrach} <span translate="no">{k.ownerName}</span>
+						</span>
+						<span className="md:hidden">{so}</span>
+						<span className="text-muted-foreground text-xs md:hidden">
+							{mk.cot.goiY} {chuSo(k.diemGoiY, locale)}
+						</span>
+						<NhanDoiDich k={k} locale={locale} />
+						<span className="md:hidden">{oDiem("nho")}</span>
+					</div>
 				</div>
 			</TableCell>
 			<TableCell className="hidden px-3 py-3 align-top md:table-cell">
@@ -363,6 +363,25 @@ function DieuHocDuoc({
 	);
 }
 
+function DiemMucTieuCham({ mt, locale }: { mt: MucTieuCham; locale: Locale }) {
+	const m = okrKhepMessages(locale);
+	const mk = m.cham;
+	const daCham = mt.krs.filter((k) => k.diem !== null).length;
+	return mt.diem === null || mt.cachDoc === null ? (
+		<StatusIndicator
+			label={mk.daCham(String(daCham), String(mt.krs.length))}
+			size="sm"
+			tone="warning"
+		/>
+	) : (
+		<StatusIndicator
+			label={`${mk.cot.diem} ${chuSo(mt.diem, locale)} · ${m.cachDoc[mt.cachDoc]}`}
+			size="sm"
+			tone="neutral"
+		/>
+	);
+}
+
 function KhoiMucTieuCham({
 	mt,
 	p,
@@ -378,7 +397,6 @@ function KhoiMucTieuCham({
 }) {
 	const m = okrKhepMessages(locale);
 	const mk = m.cham;
-	const daCham = mt.krs.filter((k) => k.diem !== null).length;
 	const cot: SimpleTableColumn[] = [
 		{ id: "kr", header: mk.cot.kr },
 		{
@@ -402,72 +420,77 @@ function KhoiMucTieuCham({
 	];
 	const coChan = mt.mangSangToi !== null || (mt.suaDuoc && p.kyKe !== null);
 	return (
-		<Card data-muc-tieu-cham={mt.id}>
-			<CardHeader>
-				<CardTitle>
-					<span translate="no">{mt.title}</span>
-				</CardTitle>
-				<CardDescription>
-					{mk.phuTrach} <span translate="no">{mt.ownerName}</span>
-				</CardDescription>
-				<div>
-					{mt.diem === null || mt.cachDoc === null ? (
-						<StatusIndicator
-							label={mk.daCham(String(daCham), String(mt.krs.length))}
-							size="sm"
-							tone="warning"
-						/>
-					) : (
-						<StatusIndicator
-							label={`${mk.cot.diem} ${chuSo(mt.diem, locale)} · ${m.cachDoc[mt.cachDoc]}`}
-							size="sm"
-							tone="neutral"
-						/>
-					)}
-				</div>
-			</CardHeader>
-			<CardContent className="flex flex-col gap-4">
-				<SimpleTable columns={cot}>
-					{mt.krs.map((k) => (
-						<DongKr
-							daDong={p.daDong}
-							k={k}
-							key={k.id}
-							locale={locale}
-							luoi={luoi}
-							onCham={p.onCham}
-							suaDuoc={k.suaDuoc && !p.daDong}
-						/>
-					))}
-				</SimpleTable>
-				<DieuHocDuoc
-					locale={locale}
-					mt={mt}
-					onGhiHoc={p.onGhiHoc}
-					suaDuoc={mt.suaDuoc && !p.daDong}
-				/>
-			</CardContent>
-			{coChan ? (
-				<CardFooter className="flex flex-wrap gap-2">
-					{mt.mangSangToi ? (
-						<p className="text-sm" data-da-mang-sang>
-							{mk.daMangSang}{" "}
-							<span translate="no">{mt.mangSangToi.cycleName}</span>
-						</p>
-					) : (
-						<Button
-							aria-haspopup="dialog"
-							data-nut="mang-sang"
-							size="sm"
-							variant="outline"
-							onClick={() => moMangSang(mt.id)}
-						>
-							{mk.mangSang} <span translate="no">{p.kyKe}</span>
-						</Button>
-					)}
-				</CardFooter>
-			) : null}
-		</Card>
+		<div data-muc-tieu-cham={mt.id}>
+			<SimpleTable columns={cot}>
+				<SimpleTableRow data-hang-muc-tieu-cham={mt.id}>
+					<TableCell className="px-3 py-3 align-top whitespace-normal">
+						<div className="flex min-w-0 flex-col gap-1">
+							<span className="font-medium text-sm" translate="no">
+								{mt.title}
+							</span>
+							<span className="text-muted-foreground text-xs">
+								{mk.phuTrach} <span translate="no">{mt.ownerName}</span>
+							</span>
+							<span className="pt-1 md:hidden">
+								<DiemMucTieuCham locale={locale} mt={mt} />
+							</span>
+						</div>
+					</TableCell>
+					<TableCell className="hidden md:table-cell" />
+					<TableCell className="hidden md:table-cell" />
+					<TableCell className="hidden px-3 py-3 align-top md:table-cell">
+						<DiemMucTieuCham locale={locale} mt={mt} />
+					</TableCell>
+				</SimpleTableRow>
+				{mt.krs.map((k, i) => (
+					<DongKr
+						daDong={p.daDong}
+						k={k}
+						key={k.id}
+						locale={locale}
+						luoi={luoi}
+						onCham={p.onCham}
+						suaDuoc={k.suaDuoc && !p.daDong}
+						thuTu={i + 1}
+					/>
+				))}
+				<SimpleTableRow data-hang-hoc={mt.id} nested>
+					<TableCell
+						className="px-3 py-3 align-top whitespace-normal"
+						colSpan={cot.length}
+					>
+						<div className="flex flex-col gap-4">
+							<DieuHocDuoc
+								locale={locale}
+								mt={mt}
+								onGhiHoc={p.onGhiHoc}
+								suaDuoc={mt.suaDuoc && !p.daDong}
+							/>
+							{coChan ? (
+								<div className="flex flex-wrap gap-2">
+									{mt.mangSangToi ? (
+										<p className="text-sm" data-da-mang-sang>
+											{mk.daMangSang}{" "}
+											<span translate="no">{mt.mangSangToi.cycleName}</span>
+										</p>
+									) : (
+										<Button
+											aria-haspopup="dialog"
+											data-nut="mang-sang"
+											size="sm"
+											variant="outline"
+											onClick={() => moMangSang(mt.id)}
+										>
+											{mk.mangSang} <span translate="no">{p.kyKe}</span>
+										</Button>
+									)}
+								</div>
+							) : null}
+						</div>
+					</TableCell>
+				</SimpleTableRow>
+			</SimpleTable>
+		</div>
 	);
 }
 
