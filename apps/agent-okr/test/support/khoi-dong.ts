@@ -40,13 +40,26 @@ export const KHOI_DONG = {
 		nhipMs: 500,
 	},
 	nodeToiThieu: 24,
+	bienBatBuoc: "CRM_EVE_BAT_BUOC",
 } as const;
+
+export function kiemNodeEve(phienBan: string, batBuoc: boolean): boolean {
+	const du =
+		Number(phienBan.match(/^v(\d+)/)?.[1] ?? 0) >= KHOI_DONG.nodeToiThieu;
+	if (!du && batBuoc)
+		throw new Error(
+			`${KHOI_DONG.bienBatBuoc}=1 nhung eve can Node >= ${KHOI_DONG.nodeToiThieu}, may nay chay ${phienBan || "khong co node"}`,
+		);
+	return du;
+}
 
 const NODE_CUA_EVE =
 	spawnSync("node", ["--version"], { encoding: "utf8" }).stdout?.trim() ?? "";
 
-export const EVE_CHAY_DUOC =
-	Number(NODE_CUA_EVE.match(/^v(\d+)/)?.[1] ?? 0) >= KHOI_DONG.nodeToiThieu;
+export const EVE_CHAY_DUOC = kiemNodeEve(
+	NODE_CUA_EVE,
+	process.env.CRM_EVE_BAT_BUOC === "1",
+);
 if (!EVE_CHAY_DUOC)
 	console.warn(
 		`bo qua bai can eve dev: eve can Node >= ${KHOI_DONG.nodeToiThieu}, may nay chay ${NODE_CUA_EVE || "khong co node"}`,

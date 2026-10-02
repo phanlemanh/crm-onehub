@@ -92,6 +92,7 @@ jobs:
       APP_URL: http://localhost:3000
       GOOGLE_CLIENT_ID: ci-only-google-client-id
       GOOGLE_CLIENT_SECRET: ci-only-google-client-secret
+      CRM_EVE_BAT_BUOC: "1"
 
     steps:
       - uses: actions/checkout@v5
