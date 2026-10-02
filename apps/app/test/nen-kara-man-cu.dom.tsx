@@ -12,6 +12,7 @@ import {
 	hopMucTieu,
 	MT,
 	mo,
+	nhip,
 	nut,
 	nutCo,
 } from "./khung-gop-y";
@@ -111,6 +112,14 @@ function datTomTat(): void {
 	dat("okr.troLyTomTatPhanHoi", () => ({ ok: true }));
 }
 
+async function choDen(xong: () => boolean, thongDiep: string): Promise<void> {
+	for (let vong = 0; vong < 120; vong += 1) {
+		if (xong()) return;
+		await nhip();
+	}
+	throw new Error(thongDiep);
+}
+
 function vung(): HTMLElement {
 	const v = document.querySelector<HTMLElement>("[data-phan-hoi]");
 	if (!v) throw new Error("khong thay vung phan hoi");
@@ -141,13 +150,10 @@ describe("tom-tat", () => {
 		await cho(() => goiCua("okr.troLyTomTatPhanHoi").length === 1, "da gui");
 		troLyTomTatPhanHoiInput.parse(goiCua("okr.troLyTomTatPhanHoi")[0]?.dauVao);
 		await cho(() => vung().getAttribute("data-phan-hoi") === "huu-ich", "da chon");
-		await cho(
+		await choDen(
 			() => vung().querySelector('[role="status"]')?.textContent === t.daGhi,
-			"chu cam on",
+			"chu cam on doi",
 		);
-		if (vung().querySelector('[role="status"]')?.textContent !== t.daGhi) {
-			throw new Error("chu cam on doi");
-		}
 	});
 
 	test("tom-tat: gửi lỗi thì lựa chọn lùi về trước", async () => {
@@ -159,9 +165,11 @@ describe("tom-tat", () => {
 		await cho(() => document.querySelector("[data-phan-hoi]") !== null, "vung phan hoi");
 		await bam(nutPhanHoi(t.khongHuuIch));
 		await cho(() => goiCua("okr.troLyTomTatPhanHoi").length === 1, "da gui");
-		await cho(() => vung().getAttribute("data-phan-hoi") === "", "lui ve");
-		if (nutPhanHoi(t.khongHuuIch).getAttribute("data-state") === "on") {
-			throw new Error("khong lui khi loi");
-		}
+		await choDen(
+			() =>
+				vung().getAttribute("data-phan-hoi") === "" &&
+				nutPhanHoi(t.khongHuuIch).getAttribute("data-state") !== "on",
+			"khong lui khi loi",
+		);
 	});
 });
