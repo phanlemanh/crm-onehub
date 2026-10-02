@@ -80,6 +80,11 @@
 			"tep": "packages/db/src/okr-goi-soan.ts",
 			"ham": "kyDaDongGanNhat",
 			"vi": "kỳ trước của gói soạn OKR bỏ chu kỳ đã ẩn"
+		},
+		{
+			"tep": "apps/agent/agent/lib/okr/lich-tom-tat.ts",
+			"ham": "xepTrongNgay",
+			"vi": "lịch tóm tắt tuần chỉ xếp tóm tắt cho chu kỳ đang chạy còn hiện"
 		}
 	],
 	"mien": [
