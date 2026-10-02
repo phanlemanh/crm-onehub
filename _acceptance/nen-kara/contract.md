@@ -5,7 +5,7 @@ slug: nen-kara
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-02
 design_doc: docs/superpowers/specs/2026-10-02-nen-kara-design.md
@@ -71,3 +71,11 @@ changes, Notion AI].
 
 - Chạm `packages/ui/**`, `proposed-change.tsx`, `facts.tsx`, `khoi-tom-tat.tsx`, `messages.ts`, `proto/catalog.ts` làm hoá cũ khoảng 30 hồ sơ đã ký; ghim lại một lượt ở commit cuối sau khi hợp nhất `onehub`.
 - S4 xếp tuần tự với lượt khung `muc-tieu-va-kr`; nhắn phiên «Phân tích và hoàn thiện OKR» trước khi chạy.
+
+### Known limits (Cổng Bằng chứng, 2026-10-03)
+
+- AC-8 (round 3, trong hợp đồng): ô `ProposedChange` của bài hai tiếng chỉ dựng ở trạng thái chờ, nên hai nhãn ẩn của nó — tên ô sửa (`proposedChange.edit`) và nhãn đang tải lúc gửi (`spinner.loading`) — không được bài này đo; hai nhãn vẫn đi qua `messages.ts` và có bài gác messages. Vòng đã chạm trần ba lượt chấm.
+- Ngoài-1: trang mẫu `/proto/nen-kara` luôn ghi «2 góp ý» trên nhãn Kara, kể cả khi không còn đề xuất nào chờ; luật mục 6 đòi số đếm suy từ đề xuất còn chờ — lượt `gop-y-dung-cho` không chép con số cứng này.
+- Ngoài-2: tập miễn dịch `TEN_RIENG` (hiện chỉ có «Kara») chưa có bài ghim cỡ như các danh sách miễn khác.
+- Ngoài-4: thước màn E10 suy số ô cần đo từ chính bảng trạng thái nó duyệt; gỡ một trạng thái khỏi cả bảng lẫn mục lục proto thì thước vẫn xanh với ít ô hơn.
+- Ngoài-5: thước màn E10 chỉ kiểm bốn ảnh đầu vào của E13 có tồn tại, không kiểm ảnh có do lượt chạy này chụp.

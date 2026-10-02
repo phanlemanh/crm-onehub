@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 4394fdcc2240f1a60896dae52363f1c26d7fa3de
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-03
 ---
 
 # Evidence Report: nen-kara
