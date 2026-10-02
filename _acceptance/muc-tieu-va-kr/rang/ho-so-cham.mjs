@@ -216,6 +216,7 @@ mkdirSync(thuMucRa, { recursive: true });
 function chay(lenh, cwd, nhan) {
 	const r = spawnSync("bash", ["-c", lenh], {
 		cwd,
+		env: { ...process.env, PHIEN_DO_TEN_CAY: `hsc-${nhan}` },
 		encoding: "utf8",
 		timeout: HSC.tranMs,
 		maxBuffer: 256 * 1024 * 1024,
