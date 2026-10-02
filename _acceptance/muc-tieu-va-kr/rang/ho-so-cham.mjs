@@ -55,9 +55,30 @@ const HSC = {
 			tep: ["packages/ui/src/components/simple-table.tsx"],
 			lyDo: "luat rieng cua vong cap-nhat-tuan-okr (diff vong do khong sua packages/ui); vong nay sua simple-table.tsx theo AC-8",
 		},
+	},
+	mienDong: {
+		"do-man-tren-kho-rieng/E11": {
+			lyDo: "luat rieng cua vong do-man-tren-kho-rieng (diff vong do khong cham ho so khac); tep bi cham chi nam trong ho so cua vong nay",
+			dongDo: /^\s*SAI\s/,
+			choPhep: [/^\s*SAI\s+khong tep nao cua ho so khac hay canh-cay\.mjs bi cham \(\d+ tep doi\)$/],
+			tepCham: { dong: /^\s*cham: (\S+)$/, trong: ["_acceptance/muc-tieu-va-kr/"] },
+		},
 		"doi-ten-onehub-center/E14": {
-			tep: ["apps/app/app/proto/_modules/muc-tieu-va-kr"],
 			lyDo: "luat rieng cua vong doi-ten-onehub-center (diff vong do khong cham proto khac); docs/proto.md: ban mau o lai kho vinh vien, vong nay them proto muc-tieu-va-kr cho design-pass",
+			dongDo: /^SAI /,
+			choPhep: [/^SAI \(e\) diff cham danh sach cam: apps\/app\/app\/proto\/_modules\/muc-tieu-va-kr\/\S+$/],
+		},
+		"slack-thieu-quyen-email/E10": {
+			lyDo: "luat rieng cua vong slack-thieu-quyen-email (moi commit chua len onehub phai mang ten ho so do); cac commit bi neu deu thuoc nhanh nay",
+			dongDo: /^(COMMIT KHONG TEN|TEP HANG|KHONG THAY COMMIT|SAI)\b/,
+			choPhep: [/^COMMIT KHONG TEN: [0-9a-f]{40}$/],
+			commitCuaNhanh: /^COMMIT KHONG TEN: ([0-9a-f]{40})$/,
+		},
+		"neo-dan-so-khong-cung/E7": {
+			lyDo: "dan-so da do san tren onehub (vuot moc ghim); diff vong nay kich hoat lenh dem o ca pham-vi — chi tha khi so dem o HEAD khong cao hon merge-base",
+			dongDo: /^SAI /,
+			choPhep: [/^SAI that — cl_(dan_so|tieng_viet_den_man): thoat 1 · /],
+			soDanSo: "node _acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs dan-so",
 		},
 	},
 	ra: ".acceptance-runs/muc-tieu-va-kr/ho-so-cham",
@@ -225,7 +246,7 @@ console.log(
 );
 if (soEval + boQua.length !== can.size)
 	dung(2, `lech dem: ${soEval} + ${boQua.length} != ${can.size}`);
-for (const e of Object.keys(HSC.mien))
+for (const e of [...Object.keys(HSC.mien), ...Object.keys(HSC.mienDong)])
 	if (!can.has(e)) dung(2, `mien khai cho eval ngoai danh sach: ${e}`);
 if (process.argv.includes("--chi-liet")) {
 	for (const [lenh, evs] of theoLenh) console.log(`- ${evs.join(", ")} :: ${lenh.slice(0, 140)}`);
@@ -282,6 +303,38 @@ function chay(lenh, cwd, nhan) {
 		`$ ${lenh}\n${r.stdout ?? ""}${r.stderr ?? ""}\nEXIT ${ma}\n`,
 	);
 	return ma;
+}
+
+function kiemMienDong(e, m, logHead, cayH, cayGoc) {
+	const dong = readFileSync(logHead, "utf8").split("\n");
+	const do_ = dong.filter((d) => m.dongDo.test(d));
+	if (do_.length === 0) return `khong thay dong do nao khop dongDo`;
+	const la = do_.filter((d) => !m.choPhep.some((r) => r.test(d)));
+	if (la.length > 0) return `dong do ngoai mau da khai: ${la[0].trim().slice(0, 160)}`;
+	if (m.tepCham) {
+		const tep = dong.map((d) => d.match(m.tepCham.dong)?.[1]).filter(Boolean);
+		if (tep.length === 0) return "khong thay dong tep bi cham nao";
+		const ngoai = tep.filter((t) => !m.tepCham.trong.some((g) => t.startsWith(g)));
+		if (ngoai.length > 0) return `tep bi cham ngoai ho so vong nay: ${ngoai[0]}`;
+	}
+	if (m.commitCuaNhanh) {
+		const cua = new Set(git(cayH, "rev-list", `${coSo}..${sha}`).split("\n").filter(Boolean));
+		const sha_ = dong.map((d) => d.match(m.commitCuaNhanh)?.[1]).filter(Boolean);
+		const la2 = sha_.filter((x) => !cua.has(x));
+		if (la2.length > 0) return `commit khong thuoc nhanh nay: ${la2[0]}`;
+	}
+	if (m.soDanSo) {
+		const dem = (cay) => {
+			const r = spawnSync("bash", ["-c", m.soDanSo], { cwd: cay, encoding: "utf8" });
+			const t = `${r.stdout}${r.stderr}`;
+			return Number(t.match(/gia tri mac dinh la chuoi co chu: (\d+)/)?.[1] ?? Number.NaN);
+		};
+		const h = dem(cayH);
+		const b = dem(cayGoc());
+		if (!(h <= b)) return `so dem dan-so o HEAD ${h} cao hon merge-base ${b}`;
+		return `ok (dan-so HEAD ${h} <= merge-base ${b})`;
+	}
+	return "ok";
 }
 
 function lamSach(cay) {
@@ -378,6 +431,10 @@ if (daChay !== soEval) dung(2, `lech dem: da chay ${daChay} != ${soEval}`);
 const dem = { hoiQuy: 0, doSan: 0, chapChon: 0, mien: 0 };
 const hoiQuy = [];
 let cayB = null;
+const layB = () => {
+	cayB ??= datCay("goc", coSo);
+	return cayB;
+};
 let cayMien = null;
 for (const d of doHead) {
 	const lai = chayGhi(d.lenh, cayHead, "head-lai").ma;
@@ -386,19 +443,25 @@ for (const d of doHead) {
 		console.log(`chap chon: ${d.evs.join(", ")}`);
 		continue;
 	}
-	const maB = chayGhi(
-		d.lenh,
-		() => {
-			cayB ??= datCay("goc", coSo);
-			return cayB;
-		},
-		"goc",
-	).ma;
+	const maB = chayGhi(d.lenh, layB, "goc").ma;
 	console.log(`HEAD ${d.ma} · HEAD chay lai ${lai} · merge-base ${maB}: ${d.evs.join(", ")}`);
 	for (const e of d.evs) {
 		if (maB !== 0) {
 			dem.doSan += 1;
 			console.log(`do san o B: ${e}`);
+			continue;
+		}
+		const md = HSC.mienDong[e];
+		if (md) {
+			const kq = kiemMienDong(e, md, join(thuMucRa, `head-lai-${bam(d.lenh)}.log`), cayHead(), layB);
+			if (kq.startsWith("ok")) {
+				dem.mien += 1;
+				console.log(`mien: ${e} — ${md.lyDo} (moi dong do khop mau da khai; ${kq})`);
+			} else {
+				dem.hoiQuy += 1;
+				hoiQuy.push(e);
+				console.log(`hoi quy: ${e} (mien theo dong khong du: ${kq})`);
+			}
 			continue;
 		}
 		const m = HSC.mien[e];
