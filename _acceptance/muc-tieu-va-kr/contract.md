@@ -114,6 +114,9 @@ Source input: prompt (phiên «Phân tích và hoàn thiện OKR», 02/10) + pro
 - Chuyển `DataTable` sang dùng `SimpleTableRow nested`.
 - Nội dung Kara (nhãn góp ý, hàng góp ý) — lượt `gop-y-dung-cho`; vòng này chỉ chừa điểm cắm.
 - Bấm hàng KR để mở sheet KR (hiện chỉ bấm số mở sổ số).
+- AC-11 không đo, có tên ở Notes: phần cộng theo glob `paths` của mọi hồ sơ đã ký (193 eval),
+  eval tự chạy eval của hồ sơ khác, và luật phạm vi diff/commit của vòng khác; 14 eval viết sẵn
+  vốn đỏ ở merge-base là Known limits, xử ở đợt ghim lại theo mốc.
 
 ## Notes
 
