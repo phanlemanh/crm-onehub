@@ -5,16 +5,17 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { SimpleTableRow } from "@crm/ui/components/simple-table";
-import { TableCell } from "@crm/ui/components/table";
-import { cn } from "@crm/ui/lib/utils";
+import {
+	SimpleTableCell,
+	SimpleTableRow,
+} from "@crm/ui/components/simple-table";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { BangKr } from "./bang-kr";
 import { coNoiDung, type DiemCam } from "./diem-cam";
-import { CELL, type MucTieu } from "./kieu";
+import type { MucTieu } from "./kieu";
 import {
 	NhanTrangThai,
 	nhipCua,
@@ -22,7 +23,7 @@ import {
 	TienDoMucTieuGon,
 } from "./tien-do-kr";
 
-const AN_DUOI_MD = "hidden md:table-cell";
+const AN_DUOI_MD = "hidden align-top md:table-cell";
 
 function demCham(mt: MucTieu): number {
 	return mt.keyResults.filter((kr) => {
@@ -63,9 +64,10 @@ function HangMucTieu({
 			expandable
 			onClick={doiMo}
 		>
-			<TableCell className={cn(CELL, "w-12 align-top")}>
+			<SimpleTableCell className="w-12 align-top">
 				<Button
 					aria-expanded={mo}
+					className="group"
 					aria-label={mo ? k.thuGon(mucTieu.title) : k.moRa(mucTieu.title)}
 					onClick={(e) => {
 						e.stopPropagation();
@@ -75,15 +77,12 @@ function HangMucTieu({
 					variant="ghost"
 				>
 					<Icon
-						className={cn(
-							"transition-transform motion-reduce:transition-none motion-reduce:duration-0",
-							mo && "rotate-90",
-						)}
+						className="transition-transform group-aria-expanded:rotate-90 motion-reduce:transition-none motion-reduce:duration-0"
 						icon={ChevronRight}
 					/>
 				</Button>
-			</TableCell>
-			<TableCell className={cn(CELL, "whitespace-normal align-top")}>
+			</SimpleTableCell>
+			<SimpleTableCell className="whitespace-normal align-top">
 				<span className="flex min-w-0 flex-col gap-1">
 					<span className="flex flex-wrap items-center gap-x-2 gap-y-1">
 						<button
@@ -126,15 +125,15 @@ function HangMucTieu({
 						<TienDoMucTieuGon {...tienDo} />
 					</span>
 				</span>
-			</TableCell>
-			<TableCell className={cn(CELL, AN_DUOI_MD, "w-48 align-top")}>
+			</SimpleTableCell>
+			<SimpleTableCell className={`${AN_DUOI_MD} w-48`}>
 				<span translate="no">
 					<OwnerCell owner={{ ...mucTieu.owner, image: null }} />
 				</span>
-			</TableCell>
-			<TableCell className={cn(CELL, AN_DUOI_MD, "w-64 align-top")}>
+			</SimpleTableCell>
+			<SimpleTableCell className={`${AN_DUOI_MD} w-64`}>
 				<TienDoMucTieu {...tienDo} />
-			</TableCell>
+			</SimpleTableCell>
 		</SimpleTableRow>
 	);
 }
@@ -143,13 +142,10 @@ function HangChuaCoKr({ mucTieu }: { mucTieu: MucTieu }) {
 	const m = okrMessages(useLocale());
 	return (
 		<SimpleTableRow data-chua-co-kr={mucTieu.id} nested>
-			<TableCell className={CELL} />
-			<TableCell
-				className={cn(CELL, "whitespace-normal text-muted-foreground")}
-				colSpan={3}
-			>
-				{m.chuaCoKr}
-			</TableCell>
+			<SimpleTableCell />
+			<SimpleTableCell className="whitespace-normal" colSpan={3}>
+				<span className="text-muted-foreground">{m.chuaCoKr}</span>
+			</SimpleTableCell>
 		</SimpleTableRow>
 	);
 }

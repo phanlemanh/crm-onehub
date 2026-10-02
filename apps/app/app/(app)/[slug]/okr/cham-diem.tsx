@@ -27,6 +27,7 @@ import {
 } from "@crm/ui/components/select";
 import {
 	SimpleTable,
+	SimpleTableCell,
 	type SimpleTableColumn,
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
@@ -41,7 +42,6 @@ import { luoiDiem, OKR_KHEP, type ThangCham } from "@crm/validation/okr-khep";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
-import { okrMessages } from "@/lib/messages/okr";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { homNayVn } from "@/lib/okr-chu-ky-nhan";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -50,6 +50,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import { giaTri } from "./bang-kr";
 import { useChuKy } from "./chon-chu-ky";
 import { HopThoaiMangSang } from "./hop-thoai-mang-sang";
+import { nhanKr } from "./kieu";
 import { chuSo } from "./nguon-so";
 import type { DonChonOkr } from "./okr-search-params";
 import { LoiXem } from "./toan-canh/toan-canh";
@@ -276,7 +277,7 @@ function DongKr({
 			<TableCell className="px-3 py-3 align-top whitespace-normal">
 				<div className="flex min-w-0 gap-3">
 					<span className="w-8 shrink-0 pt-px text-muted-foreground text-xs tabular-nums">
-						{okrMessages(locale).khoiMucTieu.nhanKr(thuTu)}
+						{nhanKr(thuTu)}
 					</span>
 					<div className="flex min-w-0 flex-1 flex-col gap-1.5">
 						<span className="text-sm" translate="no">
@@ -423,7 +424,7 @@ function KhoiMucTieuCham({
 		<div data-muc-tieu-cham={mt.id}>
 			<SimpleTable columns={cot}>
 				<SimpleTableRow data-hang-muc-tieu-cham={mt.id}>
-					<TableCell className="px-3 py-3 align-top whitespace-normal">
+					<SimpleTableCell className="whitespace-normal align-top">
 						<div className="flex min-w-0 flex-col gap-1">
 							<span className="font-medium text-sm" translate="no">
 								{mt.title}
@@ -435,12 +436,12 @@ function KhoiMucTieuCham({
 								<DiemMucTieuCham locale={locale} mt={mt} />
 							</span>
 						</div>
-					</TableCell>
-					<TableCell className="hidden md:table-cell" />
-					<TableCell className="hidden md:table-cell" />
-					<TableCell className="hidden px-3 py-3 align-top md:table-cell">
+					</SimpleTableCell>
+					<SimpleTableCell className="hidden md:table-cell" />
+					<SimpleTableCell className="hidden md:table-cell" />
+					<SimpleTableCell className="hidden align-top md:table-cell">
 						<DiemMucTieuCham locale={locale} mt={mt} />
-					</TableCell>
+					</SimpleTableCell>
 				</SimpleTableRow>
 				{mt.krs.map((k, i) => (
 					<DongKr
@@ -455,8 +456,8 @@ function KhoiMucTieuCham({
 					/>
 				))}
 				<SimpleTableRow data-hang-hoc={mt.id} nested>
-					<TableCell
-						className="px-3 py-3 align-top whitespace-normal"
+					<SimpleTableCell
+						className="whitespace-normal align-top"
 						colSpan={cot.length}
 					>
 						<div className="flex flex-col gap-4">
@@ -487,7 +488,7 @@ function KhoiMucTieuCham({
 								</div>
 							) : null}
 						</div>
-					</TableCell>
+					</SimpleTableCell>
 				</SimpleTableRow>
 			</SimpleTable>
 		</div>

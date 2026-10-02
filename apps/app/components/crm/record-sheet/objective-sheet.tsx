@@ -20,6 +20,13 @@ import {
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { EntityLogo } from "@crm/ui/components/entity-logo";
 import { Icon } from "@crm/ui/components/icon";
+import {
+	Item,
+	ItemContent,
+	ItemDescription,
+	ItemGroup,
+	ItemTitle,
+} from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -386,27 +393,31 @@ function KhuGopVao({ mt }: { mt: ChiTiet }) {
 	return (
 		<div data-khu="gop-vao">
 			<DetailSheetSection title={m.khuGopVao}>
-				<ul className="flex flex-col gap-2">
+				<ItemGroup>
 					{mt.alignments.map((g) => (
-						<li
-							className="flex min-w-0 flex-wrap items-baseline gap-x-1 text-sm"
+						<Item
 							data-gop-vao={g.alignmentId}
 							key={g.alignmentId}
+							role="listitem"
+							size="xs"
 						>
-							<span translate="no">{g.objectiveTitle}</span>
-							<span className="text-muted-foreground">
-								{" · "}
-								<span translate="no">{g.unitName}</span>
-								{g.keyResultTitle ? (
-									<>
-										{" · "}
-										{dien(m.quaKr, { ten: g.keyResultTitle })}
-									</>
-								) : null}
-							</span>
-						</li>
+							<ItemContent>
+								<ItemTitle title={g.objectiveTitle} translate="no">
+									{g.objectiveTitle}
+								</ItemTitle>
+								<ItemDescription unclamped>
+									<span translate="no">{g.unitName}</span>
+									{g.keyResultTitle ? (
+										<>
+											{" · "}
+											{dien(m.quaKr, { ten: g.keyResultTitle })}
+										</>
+									) : null}
+								</ItemDescription>
+							</ItemContent>
+						</Item>
 					))}
-				</ul>
+				</ItemGroup>
 			</DetailSheetSection>
 		</div>
 	);

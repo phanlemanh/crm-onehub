@@ -1332,8 +1332,13 @@ function docSheet() {
 			[viSao, gopVao].filter((x) => x !== null).length < 2 ||
 			(sau(viSao, gopVao) && sau(gopVao, bangKr) && sau(bangKr, tienDoTu)),
 		viSao: viSao?.querySelector("p[translate='no']")?.textContent ?? null,
-		gopVao: [...(gopVao?.querySelectorAll("li") ?? [])].map(
-			(li) => li.textContent ?? "",
+		gopVao: [...(gopVao?.querySelectorAll("[data-gop-vao]") ?? [])].map(
+			(dong) =>
+				[
+					dong.querySelector("[data-slot='item-title']")?.textContent ?? "",
+					dong.querySelector("[data-slot='item-description']")?.textContent ??
+						"",
+				].join(" · "),
 		),
 		nhanKr: [...b.querySelectorAll("[data-kr]")].map(nhanKr),
 		tienDoTu: tienDoTu?.textContent ?? null,
@@ -1884,22 +1889,21 @@ const CA_TRANG_THAI = {
 					hang: hangTbody(khoi("mt-a") ?? document.body).map(khoaHang),
 					ariaExpanded: nutMo("mt-a")?.getAttribute("aria-expanded") ?? null,
 					nhanNut: nutMo("mt-a")?.getAttribute("aria-label") ?? null,
-					muiTenXoay:
-						nutMo("mt-a")
+					muiTenTheoNut:
+						(nutMo("mt-a")?.classList.contains("group") ?? false) &&
+						(nutMo("mt-a")
 							?.querySelector("svg")
-							?.classList.contains("rotate-90") ?? null,
-					doiChungMo:
-						nutMo("mt-b")
-							?.querySelector("svg")
-							?.classList.contains("rotate-90") ?? null,
+							?.classList.contains("group-aria-expanded:rotate-90") ??
+							false),
+					doiChungMo: nutMo("mt-b")?.getAttribute("aria-expanded") ?? null,
 					url: san.url().get("thuMucTieu"),
 				},
 				{
 					hang: ["mt-a"],
 					ariaExpanded: "false",
 					nhanNut: m.khoiMucTieu.moRa("Mục tiêu mt-a"),
-					muiTenXoay: false,
-					doiChungMo: true,
+					muiTenTheoNut: true,
+					doiChungMo: "true",
 					url: "mt-a",
 				},
 				(truong) => `ST-mtkr-da-thu sai o ${man}: ${truong}`,

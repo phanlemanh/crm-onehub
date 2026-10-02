@@ -12,6 +12,7 @@ import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
+	SimpleTableCell,
 	type SimpleTableColumn,
 	SimpleTableNote,
 	SimpleTableRow,
@@ -23,7 +24,6 @@ import {
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
 import type { Locale } from "@crm/ui/lib/locale";
-import { cn } from "@crm/ui/lib/utils";
 import { kiemOkr } from "@crm/validation/okr-kiem";
 import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
 import { Fragment, type ReactNode } from "react";
@@ -35,7 +35,7 @@ import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { type OkrSoMessages, okrSoMessages } from "@/lib/messages/okr-so";
 import { coNoiDung, type DiemCam } from "./diem-cam";
-import { CELL, type KetQua, type MucTieu } from "./kieu";
+import { type KetQua, type MucTieu, nhanKr } from "./kieu";
 import {
 	chuSo,
 	KHOA_DAU,
@@ -343,11 +343,11 @@ function HangKr({
 			joined={joined}
 			nested={nested}
 		>
-			{cotMo ? <TableCell className={CELL} /> : null}
-			<TableCell className={cn(CELL, "whitespace-normal align-top")}>
+			{cotMo ? <SimpleTableCell /> : null}
+			<SimpleTableCell className="whitespace-normal align-top">
 				<span className="flex min-w-0 gap-3">
 					<span className="w-8 shrink-0 pt-px text-muted-foreground text-xs tabular-nums">
-						{m.khoiMucTieu.nhanKr(thuTu)}
+						{nhanKr(thuTu)}
 					</span>
 					<span className="flex min-w-0 flex-1 flex-col gap-1">
 						<span className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -388,25 +388,25 @@ function HangKr({
 						</span>
 					</span>
 				</span>
-			</TableCell>
-			<TableCell className={cn(CELL, AN_DUOI_MD, "align-top")}>
+			</SimpleTableCell>
+			<SimpleTableCell className={`${AN_DUOI_MD} align-top`}>
 				<span translate="no">
 					<OwnerCell owner={{ ...kr.owner, image: null }} />
 				</span>
-			</TableCell>
-			<TableCell
-				className={cn(CELL, AN_DUOI_MD, "align-top")}
+			</SimpleTableCell>
+			<SimpleTableCell
+				className={`${AN_DUOI_MD} align-top`}
 				data-nguon={kr.source}
 				data-do-canh={kr.doCanh ? "" : undefined}
 			>
 				<OTienDoKr expected={expected} kind={kind} kr={kr} xem={xem} />
-			</TableCell>
+			</SimpleTableCell>
 			{canh ? (
-				<TableCell className={CELL} data-cot-viec={kr.id}>
+				<SimpleTableCell data-cot-viec={kr.id}>
 					<SoViecKr kr={kr} dem={canh.get(kr.id) ?? DEM_TRONG} />
-				</TableCell>
+				</SimpleTableCell>
 			) : null}
-			{hanhDong ? <TableCell className={CELL}>{hanhDong(kr)}</TableCell> : null}
+			{hanhDong ? <SimpleTableCell>{hanhDong(kr)}</SimpleTableCell> : null}
 		</SimpleTableRow>
 	);
 }
@@ -416,29 +416,23 @@ function HangTraiCot({
 	soCot,
 	cotMo,
 	nested,
-	dinhTren,
 	neo,
 }: {
 	children: ReactNode;
 	soCot: number;
 	cotMo: boolean;
 	nested: boolean;
-	dinhTren: boolean;
 	neo: { "data-duoi-muc-tieu": string } | { "data-duoi-kr": string };
 }) {
 	return (
 		<SimpleTableRow nested={nested} {...neo}>
-			{cotMo ? <TableCell className={CELL} /> : null}
-			<TableCell
-				className={cn(
-					CELL,
-					"whitespace-normal pb-3",
-					dinhTren ? "pt-0" : "pt-3",
-				)}
+			{cotMo ? <SimpleTableCell /> : null}
+			<SimpleTableCell
+				className="whitespace-normal"
 				colSpan={cotMo ? soCot - 1 : soCot}
 			>
 				{children}
-			</TableCell>
+			</SimpleTableCell>
 		</SimpleTableRow>
 	);
 }
@@ -515,7 +509,6 @@ export function BangKr({
 				{coNoiDung(duoiMt) && mucTieu ? (
 					<HangTraiCot
 						cotMo={cotMo}
-						dinhTren={false}
 						neo={{ "data-duoi-muc-tieu": mucTieu.id }}
 						nested={nested}
 						soCot={cot.length}
@@ -548,7 +541,6 @@ export function BangKr({
 									{coDuoi ? (
 										<HangTraiCot
 											cotMo={cotMo}
-											dinhTren
 											neo={{ "data-duoi-kr": kr.id }}
 											nested={nested}
 											soCot={cot.length}
