@@ -73,7 +73,23 @@ async function cho(trang, ham, ...doiSo) {
 	return false;
 }
 
-function doTrongTrang(kiemDo) {
+function chenLoi(kiemDo) {
+	const dau = document.querySelector(
+		'[data-slot="proposed-change"][data-density="inline"]',
+	);
+	if (!dau) return false;
+	if (kiemDo === "vien") dau.style.border = "1px solid rgb(200, 0, 0)";
+	if (kiemDo === "hop-con") {
+		const hop = document.createElement("div");
+		hop.style.border = "1px solid rgb(200, 0, 0)";
+		hop.style.background = "rgb(240, 240, 240)";
+		hop.textContent = "hop";
+		(dau.querySelector('[data-slot="item-content"]') ?? dau).appendChild(hop);
+	}
+	return true;
+}
+
+function doTrongTrang() {
 	const alpha = (mau) => {
 		if (!mau || mau === "transparent") return 0;
 		const cheo = mau.match(/\/\s*([\d.]+%?)\s*\)$/);
@@ -101,17 +117,6 @@ function doTrongTrang(kiemDo) {
 			'[data-slot="proposed-change"][data-density="inline"]',
 		),
 	];
-	if (kiemDo === "vien" && inline[0])
-		inline[0].style.border = "1px solid rgb(200, 0, 0)";
-	if (kiemDo === "hop-con" && inline[0]) {
-		const hop = document.createElement("div");
-		hop.style.border = "1px solid rgb(200, 0, 0)";
-		hop.style.background = "rgb(240, 240, 240)";
-		hop.textContent = "hop";
-		(
-			inline[0].querySelector('[data-slot="item-content"]') ?? inline[0]
-		).appendChild(hop);
-	}
 	const loiInline = [];
 	for (const g of inline) {
 		if (vienThay(g) || nenThay(g)) loiInline.push("inline co vien");
@@ -247,7 +252,10 @@ try {
 				if (!san) khongDoDuoc(`${nhan}: man khong dung`);
 				await goLopPhu(trang);
 				await new Promise((ok) => setTimeout(ok, NK.cho.lacMs));
-				const so = await trang.evaluate(doTrongTrang, KIEM_DO);
+				if (KIEM_DO && (await trang.evaluate(chenLoi, KIEM_DO))) {
+					await new Promise((ok) => setTimeout(ok, NK.cho.lacMs));
+				}
+				const so = await trang.evaluate(doTrongTrang);
 				const tep = join(ANH, `E10-${id}-${kho.ten}-${nen}.png`);
 				await trang.screenshot({ path: tep, fullPage: true });
 				soO += 1;
