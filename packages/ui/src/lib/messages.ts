@@ -72,6 +72,16 @@ const en = {
 	},
 	proposedChange: {
 		edit: "Edit",
+		undo: "Undo",
+	},
+	kara: {
+		why: "Why?",
+		whyTitle: "What Kara based this on",
+		readAt: (t: string) => `Read at ${t}`,
+	},
+	aiFeedback: {
+		useful: "Useful",
+		notUseful: "Not useful",
 	},
 	spinner: {
 		loading: "Loading",
@@ -259,6 +269,16 @@ const vi = {
 	},
 	proposedChange: {
 		edit: "Sửa",
+		undo: "Hoàn tác",
+	},
+	kara: {
+		why: "Vì sao?",
+		whyTitle: "Kara dựa trên gì",
+		readAt: (t: string) => `Đọc lúc ${t}`,
+	},
+	aiFeedback: {
+		useful: "Hữu ích",
+		notUseful: "Không hữu ích",
 	},
 	spinner: {
 		loading: "Đang tải",
