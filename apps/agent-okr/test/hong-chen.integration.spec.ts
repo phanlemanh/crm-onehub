@@ -11,6 +11,7 @@ import { donDep, gieoCuoc, moXuong } from "./support/gieo";
 import { CAU_CHEN, gieoCanhGoi } from "./support/gieo-goi";
 import {
 	APP,
+	EVE_CHAY_DUOC,
 	khoiDongEve,
 	type MayEve,
 	moiTruongModelTacGia,
@@ -44,6 +45,7 @@ let sessionId = "";
 let maThoat = 0;
 
 beforeAll(async () => {
+	if (!EVE_CHAY_DUOC) return;
 	await moXuong();
 	canh = await gieoCanhGoi({ vaiNguoiMo: "member" });
 	appGia = chepAppGia();
@@ -60,6 +62,7 @@ beforeAll(async () => {
 }, 300_000);
 
 afterAll(async () => {
+	if (!EVE_CHAY_DUOC) return;
 	try {
 		await may?.dung();
 	} finally {
@@ -82,7 +85,7 @@ afterAll(async () => {
 	}
 });
 
-describe("hong-chen", () => {
+describe.skipIf(!EVE_CHAY_DUOC)("hong-chen", () => {
 	test("(d) câu chèn trong trang chiến lược đang dùng nằm trong thẻ dữ liệu lớp 0-5 của gói; thiếu thẻ → không chứng được bằng mã, mã 3", async () => {
 		const goi = await goiSoan(canh.cuocSoanId, { vai: "member" });
 		if (!goi) throw new Error("khong dung duoc goi");

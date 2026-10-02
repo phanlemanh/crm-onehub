@@ -11,6 +11,7 @@ import { donDep, moXuong } from "./support/gieo";
 import { gieoCanhGoi } from "./support/gieo-goi";
 import {
 	APP,
+	EVE_CHAY_DUOC,
 	giuKhoaEve,
 	KHOI_DONG,
 	khoiDongEve,
@@ -41,6 +42,7 @@ const GOC_CAN = CHAY_AGENT_CU ? [APP, GOC_AGENT_CU] : [APP];
 
 beforeAll(
 	async () => {
+		if (!EVE_CHAY_DUOC) return;
 		await giuKhoaEve(GOC_CAN);
 		may = await khoiDongEve();
 		if (CHAY_AGENT_CU) mayCu = await khoiDongEve({ goc: GOC_AGENT_CU });
@@ -49,6 +51,7 @@ beforeAll(
 );
 
 afterAll(async () => {
+	if (!EVE_CHAY_DUOC) return;
 	try {
 		await may?.dung();
 		await mayCu?.dung();
@@ -57,7 +60,7 @@ afterAll(async () => {
 	}
 });
 
-describe("app-rieng", () => {
+describe.skipIf(!EVE_CHAY_DUOC)("app-rieng", () => {
 	test("khởi động trên cổng tự do, không dùng 2100, có .eve riêng", async () => {
 		expect(may.cong).not.toBe(2100);
 		expect(existsSync(join(APP, ".eve"))).toBe(true);
@@ -117,7 +120,7 @@ const goiCongCu = z.object({
 	),
 });
 
-describe("app-rieng: bốn lượt", () => {
+describe.skipIf(!EVE_CHAY_DUOC)("app-rieng: bốn lượt", () => {
 	let mayGia: MayEve | null = null;
 	let appGia: AppGia | null = null;
 	let canh: Awaited<ReturnType<typeof gieoCanhGoi>>;

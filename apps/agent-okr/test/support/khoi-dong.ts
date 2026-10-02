@@ -39,7 +39,18 @@ export const KHOI_DONG = {
 		choMs: 5 * MINUTE_MS,
 		nhipMs: 500,
 	},
+	nodeToiThieu: 24,
 } as const;
+
+const NODE_CUA_EVE =
+	spawnSync("node", ["--version"], { encoding: "utf8" }).stdout?.trim() ?? "";
+
+export const EVE_CHAY_DUOC =
+	Number(NODE_CUA_EVE.match(/^v(\d+)/)?.[1] ?? 0) >= KHOI_DONG.nodeToiThieu;
+if (!EVE_CHAY_DUOC)
+	console.warn(
+		`bo qua bai can eve dev: eve can Node >= ${KHOI_DONG.nodeToiThieu}, may nay chay ${NODE_CUA_EVE || "khong co node"}`,
+	);
 const EVE = [
 	join(APP, "node_modules", ".bin", "eve"),
 	join(APP, "..", "..", "node_modules", ".bin", "eve"),
