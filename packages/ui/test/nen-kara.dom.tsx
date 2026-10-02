@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { act, type ReactElement } from "react";
+import { act, type ReactElement, useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import {
 	type DongHien,
@@ -7,6 +7,7 @@ import {
 	propsThe,
 } from "../../../apps/app/app/(app)/[slug]/okr/the-gop-y-props";
 import { okrGopYMessages } from "../../../apps/app/lib/messages/okr-gop-y";
+import { AiFeedback } from "../src/components/ai-feedback";
 import { KaraLabel, KaraMark } from "../src/components/kara";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
@@ -384,5 +385,57 @@ describe("nk-bien-nhan", () => {
 		}
 		console.info(`nk-bien-nhan: ${soO} o`);
 		expect(soO).toBe(12);
+	});
+});
+
+describe("nk-phan-hoi", () => {
+	function PhanHoiThu({
+		ghi,
+		pending = false,
+		dau = null,
+	}: {
+		ghi: boolean[];
+		pending?: boolean;
+		dau?: boolean | null;
+	}) {
+		const [v, setV] = useState<boolean | null>(dau);
+		return (
+			<AiFeedback
+				value={v}
+				pending={pending}
+				label="Có hữu ích không"
+				thanks="Cảm ơn, đã ghi"
+				onChange={(moi) => {
+					ghi.push(moi);
+					setV(moi);
+				}}
+			/>
+		);
+	}
+
+	function nutPhanHoi(o: ParentNode, nhan: string): HTMLElement {
+		const nut = [
+			...o.querySelectorAll<HTMLElement>('[data-slot="toggle-group-item"]'),
+		].find((b) => b.textContent?.trim() === nhan);
+		if (!nut) throw new Error(`khong thay nut ${nhan}`);
+		return nut;
+	}
+
+	test("nk-phan-hoi: chọn lần lượt, trạng thái bật, dòng cảm ơn", () => {
+		const ghi: boolean[] = [];
+		const o = ve(<PhanHoiThu ghi={ghi} />);
+		const g = o.querySelector('[data-slot="ai-feedback"]');
+		if (!g) throw new Error("khong thay ai-feedback");
+		expect(g.querySelector('[role="status"]')?.textContent).toBe("");
+		expect(g.querySelector('[data-slot="toggle-group"]')?.getAttribute("aria-label")).toBe("Có hữu ích không");
+		act(() => nutPhanHoi(o, "Hữu ích").click());
+		act(() => nutPhanHoi(o, "Không hữu ích").click());
+		if (ghi.join(",") !== "true,false") throw new Error(`phan hoi dao: ${ghi.join(",")}`);
+		expect(nutPhanHoi(o, "Không hữu ích").getAttribute("data-state")).toBe("on");
+		expect(nutPhanHoi(o, "Hữu ích").getAttribute("data-state")).toBe("off");
+		expect(g.querySelector('[role="status"]')?.textContent).toBe("Cảm ơn, đã ghi");
+		don();
+		const o2 = ve(<PhanHoiThu ghi={[]} pending dau />);
+		expect(o2.querySelector('[role="status"]')?.textContent).toBe("");
 	});
 });

@@ -39,6 +39,7 @@ import {
 } from "../src/components/okr-status";
 import { PeriodSelect } from "../src/components/period-select";
 import { Progress } from "../src/components/progress";
+import { AiFeedback } from "../src/components/ai-feedback";
 import { KaraLabel } from "../src/components/kara";
 import { ProposedChange } from "../src/components/proposed-change";
 import { Reasoning } from "../src/components/reasoning";
@@ -327,6 +328,17 @@ const CA: Ca[] = [
 				value="Đất Xanh"
 				editing={{ value: "Đất Xanh", onChange: () => {}, onCancel: () => {} }}
 				actions={[]}
+			/>
+		),
+	},
+	{
+		ten: "AiFeedback",
+		ve: () => (
+			<AiFeedback
+				value
+				onChange={() => {}}
+				label={DU_LIEU.nhomLoc}
+				thanks={DU_LIEU.tieuDeHopThoai}
 			/>
 		),
 	},
