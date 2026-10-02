@@ -5,7 +5,7 @@ slug: muc-tieu-va-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-02T22:20:41Z
 design_doc: docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md
