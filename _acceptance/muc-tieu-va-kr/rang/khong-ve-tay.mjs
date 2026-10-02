@@ -13,7 +13,7 @@ const VUNG = {
 	thuMuc: "apps/app/app/(app)/[slug]/okr",
 	tep: ["apps/app/components/crm/record-sheet/objective-sheet.tsx"],
 	the: "SimpleTableRow",
-	lopCam: /^(?:[\w-]+:)*!?(bg-|border-|rounded)/,
+	lopCam: /^-?(bg-|border-|rounded)/,
 };
 
 const MA_TRAN = [
@@ -22,7 +22,10 @@ const MA_TRAN = [
 	{ dang: "template", ma: "<SimpleTableRow className={`rounded-md ${x}`} />", do: true },
 	{ dang: "cn(...)", ma: `<SimpleTableRow className={cn("p-2", x && "hover:bg-muted")} />`, do: true },
 	{ dang: "dieu kien", ma: `<SimpleTableRow className={x ? "w-12" : "border-t"} />`, do: true },
+	{ dang: "bien the ngoac vuong", ma: `<SimpleTableRow className="[&>td]:bg-muted" />`, do: true },
+	{ dang: "bien the data-[]", ma: `<SimpleTableRow className="data-[state=open]:border-t" />`, do: true },
 	{ dang: "lop sach", ma: `<SimpleTableRow className={cn("w-12", "text-sm")} />`, do: false },
+	{ dang: "lop sach ngoac vuong", ma: `<SimpleTableRow className="[&_svg]:size-4 w-[calc(100%-1rem)]" />`, do: false },
 ];
 
 function tepTsx(thuMuc) {
@@ -48,11 +51,22 @@ function chuHang(n) {
 	return ra;
 }
 
+function goc(lop) {
+	let sau = 0;
+	let tang = 0;
+	for (let i = 0; i < lop.length; i += 1) {
+		if (lop[i] === "[") tang += 1;
+		else if (lop[i] === "]") tang -= 1;
+		else if (lop[i] === ":" && tang === 0) sau = i + 1;
+	}
+	return lop.slice(sau).replace(/^!/, "");
+}
+
 function lopViPham(gt) {
 	if (!gt) return [];
 	return chuHang(gt)
 		.flatMap((chu) => chu.split(/\s+/))
-		.filter((lop) => VUNG.lopCam.test(lop));
+		.filter((lop) => VUNG.lopCam.test(goc(lop)));
 }
 
 function quet(ten, ma) {

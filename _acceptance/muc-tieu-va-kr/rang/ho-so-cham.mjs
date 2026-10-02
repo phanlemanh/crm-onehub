@@ -20,9 +20,9 @@ const GOC_THAT = join(
 	"..",
 );
 const GOC = process.env.GOC_KHO ?? GOC_THAT;
-const { parseEvals } = createRequire(import.meta.url)(
-	join(GOC_THAT, "lib/eval-yaml.cjs"),
-);
+const nap = createRequire(import.meta.url);
+const { parseEvals } = nap(join(GOC_THAT, "lib/eval-yaml.cjs"));
+const { parseFlowValue } = nap(join(GOC_THAT, "lib/evidence-core.cjs"));
 
 const HSC = {
 	slug: "muc-tieu-va-kr",
@@ -55,6 +55,10 @@ const HSC = {
 			tep: ["packages/ui/src/components/simple-table.tsx"],
 			lyDo: "luat rieng cua vong cap-nhat-tuan-okr (diff vong do khong sua packages/ui); vong nay sua simple-table.tsx theo AC-8",
 		},
+		"doi-ten-onehub-center/E14": {
+			tep: ["apps/app/app/proto/_modules/muc-tieu-va-kr"],
+			lyDo: "luat rieng cua vong doi-ten-onehub-center (diff vong do khong cham proto khac); docs/proto.md: ban mau o lai kho vinh vien, vong nay them proto muc-tieu-va-kr cho design-pass",
+		},
 	},
 	ra: ".acceptance-runs/muc-tieu-va-kr/ho-so-cham",
 	tranMs: 40 * 60 * 1000,
@@ -70,8 +74,10 @@ const git = (cwd, ...a) =>
 	execFileSync("git", ["-C", cwd, ...a], { encoding: "utf8" });
 
 const caySao = [];
+const viecDon = [];
 
 function ket(ma) {
+	for (const v of viecDon) v();
 	for (const c of caySao)
 		spawnSync("git", ["-C", GOC_THAT, "worktree", "remove", "--force", c]);
 	process.exit(ma);
@@ -94,11 +100,12 @@ function khuon(glob) {
 }
 
 function duongCua(khoi) {
-	const motDong = khoi.match(/^\s*paths:\s*\[(.*)\]\s*$/m);
-	if (motDong)
-		return [...motDong[1].matchAll(/"([^"]+)"|'([^']+)'/g)].map(
-			(m) => m[1] ?? m[2],
-		);
+	const motDong = khoi.match(/^\s*paths:\s*(\[.*\])\s*$/m);
+	if (motDong) {
+		const pv = parseFlowValue(motDong[1]);
+		if (pv.kind !== "seq") dung(2, `khong doc duoc paths: ${motDong[1].slice(0, 80)}`);
+		return pv.items;
+	}
 	const ra = [];
 	let thut = -1;
 	for (const dong of khoi.split("\n")) {
@@ -108,8 +115,8 @@ function duongCua(khoi) {
 			continue;
 		}
 		if (thut < 0) continue;
-		const muc = dong.match(/^(\s*)-\s+"?([^"#]+?)"?\s*$/);
-		if (muc && muc[1].length >= thut) ra.push(muc[2]);
+		const muc = dong.match(/^(\s*)-\s+(.+?)\s*$/);
+		if (muc && muc[1].length >= thut) ra.push(parseFlowValue(muc[2]).value);
 		else thut = -1;
 	}
 	return ra;
@@ -227,8 +234,27 @@ if (process.argv.includes("--chi-liet")) {
 const thuMucRa = join(GOC_THAT, HSC.ra);
 mkdirSync(thuMucRa, { recursive: true });
 const sha = git(GOC_THAT, "rev-parse", "HEAD").trim();
-const luot = process.env.HSC_LUOT ?? `tu-do-${process.pid}`;
+const luot = process.env.HSC_LUOT ?? "mac-dinh";
 const soKetQua = join(thuMucRa, `ket-qua-${sha.slice(0, 12)}-${luot}.jsonl`);
+const khoaChay = join(thuMucRa, `dang-chay-${sha.slice(0, 12)}-${luot}.pid`);
+const conSong = (pid) => {
+	try {
+		process.kill(pid, 0);
+		return true;
+	} catch {
+		return false;
+	}
+};
+if (!kiemDoDo) {
+	while (existsSync(khoaChay)) {
+		const pid = Number(readFileSync(khoaChay, "utf8").trim());
+		if (!conSong(pid) || pid === process.pid) break;
+		console.log(`dang co luot khac chay (pid ${pid}) cung dinh va luot — cho no xong roi doc so`);
+		spawnSync("sleep", ["30"]);
+	}
+	writeFileSync(khoaChay, String(process.pid));
+	viecDon.push(() => rmSync(khoaChay, { force: true }));
+}
 const daCo = new Map();
 if (!kiemDoDo && existsSync(soKetQua))
 	for (const dong of readFileSync(soKetQua, "utf8").split("\n"))
@@ -258,9 +284,16 @@ function chay(lenh, cwd, nhan) {
 	return ma;
 }
 
-function chayGhi(lenh, cwd, loai) {
+function lamSach(cay) {
+	git(cay, "checkout", "-q", "--", ".");
+	git(cay, "clean", "-fdq");
+}
+
+function chayGhi(lenh, layCay, loai) {
 	const khoa = `${loai}-${bam(lenh)}`;
 	if (daCo.has(khoa)) return { ma: daCo.get(khoa), cu: true };
+	const cwd = layCay();
+	lamSach(cwd);
 	const ma = chay(lenh, cwd, khoa);
 	daCo.set(khoa, ma);
 	if (!kiemDoDo) appendFileSync(soKetQua, `${JSON.stringify({ khoa, ma })}\n`);
@@ -288,8 +321,14 @@ const hang = ([lenh, evs]) =>
 	Number(lenh.includes("tien-de")) * 2 + Number(!vietTruoc(evs));
 const lenhXep = [...theoLenh.entries()].sort((a, b) => hang(a) - hang(b));
 
-const cayHead = datCay("head", sha);
-console.log(`cay dong bang o ${sha.slice(0, 12)}: ${cayHead}`);
+let cayHeadDung = null;
+const cayHead = () => {
+	if (!cayHeadDung) {
+		cayHeadDung = datCay("head", sha);
+		console.log(`cay dong bang o ${sha.slice(0, 12)}: ${cayHeadDung}`);
+	}
+	return cayHeadDung;
+};
 
 if (kiemDoDo) {
 	const cayPha = datCay("pha-thu", sha);
@@ -297,15 +336,20 @@ if (kiemDoDo) {
 	const goc = readFileSync(tep, "utf8");
 	if (!goc.includes(HSC.phaThu.tu))
 		dung(2, `khong thay cho pha thu trong ${HSC.phaThu.tep}`);
-	writeFileSync(tep, goc.replace(HSC.phaThu.tu, HSC.phaThu.thanh));
-	console.log(`kiem do do: da xoa data-muc-tieu khoi ${HSC.phaThu.tep} trong ban sao`);
+	const pha = () => {
+		lamSach(cayPha);
+		writeFileSync(tep, goc.replace(HSC.phaThu.tu, HSC.phaThu.thanh));
+	};
+	console.log(`kiem do do: xoa data-muc-tieu khoi ${HSC.phaThu.tep} trong ban sao truoc moi lenh`);
 	let k = 0;
 	for (const [lenh, evs] of lenhXep.filter(([, evs]) => vietTruoc(evs))) {
 		k += 1;
+		pha();
 		const maPha = chay(lenh, cayPha, `pha-${k}`);
 		console.log(`[pha ${k}] ban pha exit ${maPha}: ${evs.join(", ")}`);
 		if (maPha === 0) continue;
-		const maNguyen = chay(lenh, cayHead, `nguyen-${k}`);
+		lamSach(cayHead());
+		const maNguyen = chay(lenh, cayHead(), `nguyen-${k}`);
 		console.log(`[pha ${k}] HEAD nguyen exit ${maNguyen}`);
 		if (maNguyen !== 0) {
 			console.log(`khong quy duoc cho phan bi pha (do ca tren HEAD nguyen): ${evs.join(", ")}`);
@@ -342,8 +386,14 @@ for (const d of doHead) {
 		console.log(`chap chon: ${d.evs.join(", ")}`);
 		continue;
 	}
-	cayB ??= datCay("goc", coSo);
-	const maB = chayGhi(d.lenh, cayB, "goc").ma;
+	const maB = chayGhi(
+		d.lenh,
+		() => {
+			cayB ??= datCay("goc", coSo);
+			return cayB;
+		},
+		"goc",
+	).ma;
 	console.log(`HEAD ${d.ma} · HEAD chay lai ${lai} · merge-base ${maB}: ${d.evs.join(", ")}`);
 	for (const e of d.evs) {
 		if (maB !== 0) {
@@ -359,8 +409,12 @@ for (const d of doHead) {
 			continue;
 		}
 		cayMien ??= datCay("mien", sha);
-		git(cayMien, "checkout", sha, "--", ".");
-		git(cayMien, "checkout", coSo, "--", ...m.tep);
+		lamSach(cayMien);
+		for (const t of m.tep) {
+			rmSync(join(cayMien, t), { recursive: true, force: true });
+			const coO = spawnSync("git", ["-C", cayMien, "cat-file", "-e", `${coSo}:${t}`]).status === 0;
+			if (coO) git(cayMien, "checkout", coSo, "--", t);
+		}
 		const maMien = chay(d.lenh, cayMien, `mien-${bam(d.lenh)}`);
 		if (maMien === 0) {
 			dem.mien += 1;
