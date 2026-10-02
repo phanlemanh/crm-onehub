@@ -32,6 +32,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
+import type { DiemCam } from "@/app/(app)/[slug]/okr/diem-cam";
 import { HopThoaiCanChinh } from "@/app/(app)/[slug]/okr/hop-thoai-can-chinh";
 import {
 	HopThoaiCapNhatKr,
@@ -365,7 +366,53 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 	);
 }
 
-function TabKr({ mt }: { mt: ChiTiet }) {
+function KhuViSao({ mt }: { mt: ChiTiet }) {
+	const m = okrMessages(useLocale()).sheet;
+	if (mt.whyNow.trim() === "") return null;
+	return (
+		<div data-khu="vi-sao">
+			<DetailSheetSection title={m.khuViSao}>
+				<p className="text-pretty text-sm" translate="no">
+					{mt.whyNow}
+				</p>
+			</DetailSheetSection>
+		</div>
+	);
+}
+
+function KhuGopVao({ mt }: { mt: ChiTiet }) {
+	const m = okrMessages(useLocale()).sheet;
+	if (mt.alignments.length === 0) return null;
+	return (
+		<div data-khu="gop-vao">
+			<DetailSheetSection title={m.khuGopVao}>
+				<ul className="flex flex-col gap-2">
+					{mt.alignments.map((g) => (
+						<li
+							className="flex min-w-0 flex-wrap items-baseline gap-x-1 text-sm"
+							data-gop-vao={g.alignmentId}
+							key={g.alignmentId}
+						>
+							<span translate="no">{g.objectiveTitle}</span>
+							<span className="text-muted-foreground">
+								{" · "}
+								<span translate="no">{g.unitName}</span>
+								{g.keyResultTitle ? (
+									<>
+										{" · "}
+										{dien(m.quaKr, { ten: g.keyResultTitle })}
+									</>
+								) : null}
+							</span>
+						</li>
+					))}
+				</ul>
+			</DetailSheetSection>
+		</div>
+	);
+}
+
+function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
 	const [hop, setHop] = useState<HopKr | null>(null);
@@ -392,7 +439,11 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 
 	return (
 		<DetailSheetBody>
+			<KhuViSao mt={mt} />
+			<KhuGopVao mt={mt} />
 			<BangKr
+				diemCam={diemCam}
+				mucTieu={mt}
 				keyResults={mt.keyResults}
 				kind={mt.kind}
 				expected={mt.expected}
@@ -414,6 +465,14 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 						: undefined
 				}
 			/>
+			{mt.keyResults.length > 0 ? (
+				<p className="px-5 pt-2 text-muted-foreground text-xs" data-tien-do-tu>
+					{dien(m.tienDoTu, {
+						x: String(mt.progress),
+						n: String(mt.keyResults.length),
+					})}
+				</p>
+			) : null}
 			{suaNoiDung(mt) ? (
 				<div className="px-5 py-3">
 					<Button
@@ -644,7 +703,13 @@ function LoiKhung({
 	);
 }
 
-export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
+export function ObjectiveSheet({
+	objectiveId,
+	diemCam,
+}: {
+	objectiveId: string;
+	diemCam?: DiemCam;
+}) {
 	const locale = useLocale();
 	const t = okrMessages(locale);
 	const m = t.sheet;
@@ -664,7 +729,7 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					value: "kr",
 					label: m.tabKr,
 					count: mt.keyResults.length,
-					content: <TabKr mt={mt} />,
+					content: <TabKr diemCam={diemCam} mt={mt} />,
 				},
 				{
 					value: "can-chinh",
