@@ -374,17 +374,15 @@ function HangKr({
 							) : null}
 						</span>
 						<span className="w-full pt-1 md:hidden">
-							<span className="flex min-w-0 flex-col gap-1.5" data-o-tien-do>
-								<SoCuaKr kr={kr} moc={false} xem={xem} />
-								<TienDoGon
-									dong=""
-									expected={expected}
-									kind={kind}
-									laMoc={kr.kind === "moc"}
-									progress={kr.progress}
-									ten={kr.title}
-								/>
-							</span>
+							<TienDoGon
+								dong=""
+								expected={expected}
+								kind={kind}
+								laMoc={kr.kind === "moc"}
+								progress={kr.progress}
+								ten={kr.title}
+								tren={<SoCuaKr kr={kr} moc={false} xem={xem} />}
+							/>
 						</span>
 					</span>
 				</span>

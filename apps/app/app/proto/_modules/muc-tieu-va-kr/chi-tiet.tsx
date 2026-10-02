@@ -69,10 +69,9 @@ function GopVao({ mt }: { mt: MucTieuDu }) {
 						className="flex min-w-0 items-start gap-2 text-sm"
 						key={`${g.donVi}-${g.mucTieu}`}
 					>
-						<Icon
-							className="mt-0.5 shrink-0 text-muted-foreground"
-							icon={ArrowUpRight}
-						/>
+						<span className="mt-0.5 shrink-0 text-muted-foreground">
+							<Icon icon={ArrowUpRight} />
+						</span>
 						<span className="min-w-0">
 							<span translate="no">{g.mucTieu}</span>
 							<span className="text-muted-foreground">

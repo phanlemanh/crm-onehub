@@ -1230,6 +1230,7 @@ describe("o-tien-do", () => {
 					so: soDay !== "" && chu.includes(soDay),
 					chup: chup === "" || chu.includes(chup),
 					mocTrung: gon?.querySelectorAll(MOC_TRUNG).length ?? -1,
+					oLong: gon?.querySelectorAll("[data-o-tien-do]").length ?? -1,
 				},
 				`ban dien thoai mat thong tin may: ${id}`,
 			).toEqual({
@@ -1238,6 +1239,7 @@ describe("o-tien-do", () => {
 				so: true,
 				chup: true,
 				mocTrung: 0,
+				oLong: 0,
 			});
 		}
 		console.log(`so ca o-tien-do ban gon may: ${CA.length}`);

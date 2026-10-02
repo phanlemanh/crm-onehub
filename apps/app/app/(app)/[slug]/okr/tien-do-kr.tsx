@@ -17,6 +17,7 @@ import {
 	type TrangThaiMucTieu,
 	tinhTrang,
 } from "@crm/validation/okr-muc-tieu";
+import type { ReactNode } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 
@@ -159,6 +160,7 @@ export function TienDoGon({
 	expected,
 	kind,
 	laMoc = false,
+	tren,
 }: {
 	ten: string;
 	dong: string;
@@ -166,9 +168,11 @@ export function TienDoGon({
 	expected: number | null;
 	kind: LoaiMucTieu;
 	laMoc?: boolean;
+	tren?: ReactNode;
 }) {
 	return (
 		<div className="flex min-w-0 flex-col gap-1.5" data-o-tien-do>
+			{tren}
 			<div className="flex items-baseline justify-between gap-3 text-xs">
 				{dong ? (
 					<span className="min-w-0 truncate tabular-nums" translate="no">
