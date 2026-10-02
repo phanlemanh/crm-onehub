@@ -446,7 +446,7 @@ export function BangKr({
 	canh,
 	dau,
 	cotMo = false,
-	header = "visible",
+	header,
 	an = false,
 	nested = false,
 	diemCam,

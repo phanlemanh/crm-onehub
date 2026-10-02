@@ -49,7 +49,7 @@ export function SimpleTable({
 	children,
 	variant = "default",
 	surface = "popover",
-	header = "visible",
+	header,
 	className,
 	containerClassName,
 	headerClassName,
