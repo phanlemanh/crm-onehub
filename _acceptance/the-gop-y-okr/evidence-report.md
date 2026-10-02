@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1d4312c2d5d0fae6e9f66254a7c3634f756e9798
+verified_commit: d6fe85037147097194a3d0b80bc50e4a382af04a
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -243,3 +243,7 @@ sha: 21b20e9fc9789a48272e69d636391a3544ec3e95 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-30, do gộp onehub (#219) trước khi gộp PR #220
 run_id: repin-20260930T090606Z-76836
 sha: 1d4312c2d5d0fae6e9f66254a7c3634f756e9798 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E1, E11, E13, E14 · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13, AC-14
+
+### Re-pin lần 4 — 2026-10-02, do hoá cũ do soan-okr-cung-tro-ly (gộp onehub 923f5717)
+run_id: repin-20261002T015945Z-89793
+sha: d6fe85037147097194a3d0b80bc50e4a382af04a · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E1, E11, E13, E14 · diff chạm vật đo ngoài làn máy: E1, E11, E13, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13, AC-14
