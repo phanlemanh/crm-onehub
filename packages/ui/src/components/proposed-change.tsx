@@ -12,7 +12,12 @@ import {
 import { Button } from "@crm/ui/components/button";
 import { FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
-import { Item, ItemContent, ItemMedia } from "@crm/ui/components/item";
+import {
+	Item,
+	ItemContent,
+	ItemDescription,
+	ItemMedia,
+} from "@crm/ui/components/item";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
@@ -183,6 +188,7 @@ export function ProposedChangeReceipt({
 }
 
 function ThanDeXuat({
+	density,
 	kind,
 	label,
 	before,
@@ -192,7 +198,7 @@ function ThanDeXuat({
 }: Pick<
 	ProposedChangeProps,
 	"kind" | "label" | "before" | "value" | "rationale" | "editing"
->) {
+> & { density: ProposedChangeDensity }) {
 	return (
 		<div data-slot="proposed-change-body" className="flex flex-col gap-1">
 			{label ? (
@@ -209,7 +215,10 @@ function ThanDeXuat({
 				</p>
 			) : null}
 			<GiaTri kind={kind} value={value} editing={editing} />
-			{rationale ? (
+			{rationale && density === "inline" ? (
+				<ItemDescription unclamped>{rationale}</ItemDescription>
+			) : null}
+			{rationale && density === "card" ? (
 				<p className="text-muted-foreground text-pretty">{rationale}</p>
 			) : null}
 		</div>
@@ -275,6 +284,7 @@ export function ProposedChange({
 	const describedBy = lockedReason ? idKhoa : undefined;
 	const than = (
 		<ThanDeXuat
+			density={density}
 			kind={kind}
 			label={label}
 			before={before}
