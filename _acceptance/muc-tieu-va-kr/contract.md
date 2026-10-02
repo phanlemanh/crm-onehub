@@ -5,9 +5,9 @@ slug: muc-tieu-va-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-10-01T23:53:47Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md
 ---
 
@@ -74,9 +74,11 @@ Source input: prompt (phiên «Phân tích và hoàn thiện OKR», 02/10) + pro
   đang ở pha chấm điểm, When mở «Của tôi», «Theo đơn vị», sheet chi tiết và «Chấm điểm»,
   Then không màn nào tràn ngang (`scrollWidth == innerWidth`), và tiến độ của mục tiêu và KR
   nằm dưới tên chứ không thành cột riêng.
-- AC-11: Given các hồ sơ đã ký có eval đo những tệp vòng này sửa, When chạy lại các eval máy
-  của chúng tại đỉnh nhánh, Then mọi eval đó vẫn đạt kỳ vọng — móc DOM, chữ và mã mà chúng bám
-  không bị vòng này làm gãy.
+- AC-11: Given danh sách viết sẵn ở mục «Móc DOM phải giữ» của design doc — 41 eval máy
+  của 14 hồ sơ OKR đã ký đo móc DOM, chữ và mã mà vòng này sửa (bỏ ra có tên ba eval, xem
+  Notes), When chạy lại đúng lệnh đã khai của chúng ở đỉnh nhánh và, cho eval nào đỏ, ở
+  merge-base với onehub, Then không eval nào đỏ ở đỉnh mà xanh ở merge-base sau một lần chạy
+  lại ở đỉnh.
 - AC-12: Given ảnh «Của tôi», «Theo đơn vị» và sheet chi tiết ở 1440 px cả hai theme, When một
   người chưa xem proto nhìn, Then họ chỉ ra đúng KR nào thuộc mục tiêu nào và tiến độ của mục
   tiêu là bao nhiêu mà không cần đọc mã. (judgment)
@@ -115,6 +117,22 @@ Source input: prompt (phiên «Phân tích và hoàn thiện OKR», 02/10) + pro
 
 ## Notes
 
+- AC-11 thu hẹp ngày 03/10 theo quyết định của chủ kho, sau bốn lượt S4 mà E14 chiếm ~9,6 giờ
+  máy và không ra hồi quy sản phẩm nào (lượt 4, sha 934ee26d: 5 «hoi quy» = 4 luật phạm vi
+  vòng của hồ sơ khác + 1 lỗi dựng môi trường). Bỏ khỏi phép đo, có tên:
+  - Phần cộng theo glob `paths` của mọi hồ sơ đã ký (193 eval, 68 trong đó vốn không xanh).
+  - Eval tự chạy eval của hồ sơ khác: tra-loi-tin-nhac (ho-so-cham), hai bản khong-hoi-quy
+    của khung-trang-cai-dat, một lượt repin-lane, khung-tao-okr-nhu-deal/E18 (thuoc-cu).
+  - Luật phạm vi diff/commit của vòng khác, đỏ trên mọi nhánh tính năng:
+    do-man-tren-kho-rieng/E11, doi-ten-onehub-center/E14, slack-thieu-quyen-email/E10,
+    neo-dan-so-khong-cung/E7, okr-soat-anh-luot-3/E12, okr-soat-anh-luot-3/E13,
+    cap-nhat-tuan-okr/E25.
+- Known limits của AC-11: 14 eval của danh sách viết sẵn không xanh ở merge-base 923f5717
+  (dat-okr-trong-crm E11 E12 E13 E20, so-okr-tu-chay E11 E12 E13, cap-nhat-tuan-okr E18 E29,
+  toan-canh-okr E2 E3 E14 E23, hop-thoai-giu-cho-dang-nhap E9), nên E14 không chứng được
+  AC-11 cho chúng; chúng được xử ở đợt ghim lại theo mốc, không ở vòng này.
+- E14 mới: ~10–15 phút máy ở đỉnh; lượt đầu thêm ~10–15 phút cho merge-base, kết quả
+  merge-base ghi sổ theo sha của B nên không chạy lại khi B không đổi.
 - Hướng ở bậc 1 của «Vẽ tay là bậc cuối» (`SimpleTable` mở rộng); ReUI tra «table with grouped
   parent rows and nested child rows» không có bảng nhóm.
 - Móc DOM và chuỗi mã mà các hồ sơ đã ký đang đo: design doc mục «Móc DOM phải giữ» — AC-11.
