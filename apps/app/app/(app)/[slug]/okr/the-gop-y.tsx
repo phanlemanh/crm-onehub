@@ -110,6 +110,7 @@ export function TheGopY({
 	return (
 		<ProposedChange
 			{...p.the}
+			density="card"
 			actions={actions}
 			editing={
 				dangSua && cho

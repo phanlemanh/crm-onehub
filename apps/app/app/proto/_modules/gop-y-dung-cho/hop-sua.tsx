@@ -122,6 +122,7 @@ function CotGopYHienTai() {
 				{GOP_Y.map((g) => (
 					<ProposedChange
 						key={g.id}
+						density="card"
 						kind={g.kind}
 						label={g.nhan}
 						before={g.truoc}

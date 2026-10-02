@@ -26,10 +26,8 @@ export function KaraMark({ scope }: KaraMarkProps) {
 			className="inline-flex items-center gap-1 text-muted-foreground text-xs"
 		>
 			<Icon icon={AiGenerate} />
-			<span>
-				{KARA.ten}
-				{scope ? <> · {scope}</> : null}
-			</span>
+			<span translate="no">{KARA.ten}</span>
+			{scope ? <span> · {scope}</span> : null}
 		</span>
 	);
 }

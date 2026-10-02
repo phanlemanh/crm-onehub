@@ -1,8 +1,21 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import {
+	type DongHien,
+	type NutThe,
+	propsThe,
+} from "../../../apps/app/app/(app)/[slug]/okr/the-gop-y-props";
+import { okrGopYMessages } from "../../../apps/app/lib/messages/okr-gop-y";
 import { KaraLabel, KaraMark } from "../src/components/kara";
 import { LocaleProvider } from "../src/components/locale-provider";
+import {
+	ProposedChange,
+	type ProposedChangeAction,
+	type ProposedChangeDecision,
+	type ProposedChangeDensity,
+	type ProposedChangeProps,
+} from "../src/components/proposed-change";
 import type { Locale } from "../src/lib/locale";
 
 let root: Root | null = null;
@@ -141,5 +154,235 @@ describe("nk-vi-sao", () => {
 		act(() => khac.focus());
 		phim(khac, "keydown", "Enter");
 		expect(dem.phim).toBe(1);
+	});
+});
+
+const m = okrGopYMessages("vi");
+
+const DONG_VIET_LAI: DongHien = {
+	id: "dx-1",
+	loai: "viet-lai",
+	objectiveId: "mt-1",
+	keyResultId: null,
+	truong: "title",
+	truoc: "Tăng doanh thu",
+	sau: "Khách hàng doanh nghiệp chọn OneHub làm nền tảng chính",
+	maVanDe: null,
+	targetObjectiveId: null,
+	targetKeyResultId: null,
+	lyDo: "Tên cũ là con số, không nói vì sao khách chọn mình.",
+	tenDich: null,
+};
+
+const HAI_DO_DAY: readonly ProposedChangeDensity[] = ["inline", "card"];
+
+function hanhDong(nut: NutThe[]): ProposedChangeAction[] {
+	return nut.map((n) => ({ ...n, onClick: () => {} }));
+}
+
+function goc(o: ParentNode): HTMLElement {
+	const g = o.querySelector<HTMLElement>('[data-slot="proposed-change"]');
+	if (!g) throw new Error("khong thay de xuat");
+	return g;
+}
+
+function don() {
+	act(() => root?.unmount());
+	root = null;
+	document.body.innerHTML = "";
+}
+
+function hangNut(g: ParentNode) {
+	return [...g.querySelectorAll<HTMLButtonElement>("button")].map((b) => ({
+		chu: b.textContent,
+		kieu: b.getAttribute("data-variant"),
+		khoa: b.disabled,
+	}));
+}
+
+function thuTuKhoi(g: HTMLElement): string[] {
+	return [
+		...g.querySelectorAll(
+			'[data-slot="proposed-change-label"], del, ins, [data-slot="proposed-change-body"] > p:last-child, [data-slot="proposed-change-actions"]',
+		),
+	].map((k) => {
+		if (k.matches('[data-slot="proposed-change-label"]')) return "nhan";
+		if (k.tagName === "DEL") return "cu";
+		if (k.tagName === "INS") return "moi";
+		if (k.matches('[data-slot="proposed-change-actions"]')) return "nut";
+		return "ly-do";
+	});
+}
+
+describe("nk-inline", () => {
+	test("nk-inline: không truyền density và density=inline ra Item, không Alert", () => {
+		const p = propsThe(DONG_VIET_LAI, { m });
+		for (const density of [undefined, "inline"] as const) {
+			const g = goc(
+				ve(
+					<ProposedChange
+						{...p.the}
+						density={density}
+						actions={hanhDong(p.nut)}
+					/>,
+				),
+			);
+			expect(g.getAttribute("data-density")).toBe("inline");
+			expect(g.getAttribute("data-variant")).toBe("default");
+			expect(g.hasAttribute("data-size")).toBe(true);
+			expect(g.classList.contains("group/item")).toBe(true);
+			expect(g.getAttribute("role")).not.toBe("alert");
+			const hop = [...g.querySelectorAll("*"), g].filter(
+				(el) =>
+					el.classList.contains("group/alert") ||
+					el.getAttribute("data-slot") === "card",
+			);
+			if (hop.length > 0) throw new Error("inline co alert");
+			expect(g.querySelector("del")?.closest("[translate]")?.getAttribute("translate")).toBe("no");
+			expect(g.querySelector("ins")?.closest("[translate]")?.getAttribute("translate")).toBe("no");
+			expect(thuTuKhoi(g)).toEqual(["nhan", "cu", "moi", "ly-do", "nut"]);
+			expect(g.querySelectorAll('button[data-variant="default"]').length).toBe(1);
+			don();
+		}
+	});
+});
+
+type TrangThai = {
+	ten: string;
+	them: Partial<ProposedChangeProps>;
+	kiem: (g: HTMLElement, huy: () => number) => void;
+};
+
+describe("nk-hai-do-day", () => {
+	test("nk-hai-do-day: năm trạng thái × hai độ dày cho cùng nút, khoá, lỗi, ô sửa", () => {
+		const p = propsThe(DONG_VIET_LAI, { m });
+		const TRANG_THAI: readonly TrangThai[] = [
+			{ ten: "cho", them: {}, kiem: () => {} },
+			{ ten: "dang-gui", them: { pending: true }, kiem: () => {} },
+			{
+				ten: "khoa",
+				them: { lockedReason: "Lưu thay đổi của KR trước" },
+				kiem: (g) => {
+					const khoa = [...g.querySelectorAll("button[aria-describedby]")];
+					const id = khoa[0]?.getAttribute("aria-describedby");
+					const lyDo = id ? document.getElementById(id) : null;
+					if (!lyDo || lyDo.textContent !== "Lưu thay đổi của KR trước") {
+						throw new Error(`khoa mat o ${g.getAttribute("data-density")}`);
+					}
+				},
+			},
+			{
+				ten: "loi",
+				them: { error: "Kara chưa ghi được" },
+				kiem: (g) => {
+					expect(g.querySelector('[data-slot="field-error"]')?.textContent).toContain("Kara chưa ghi được");
+				},
+			},
+			{
+				ten: "dang-sua",
+				them: {},
+				kiem: (g, huy) => {
+					const o = g.querySelector<HTMLTextAreaElement>('textarea[data-slot="proposed-change-edit"]');
+					if (!o) throw new Error("khong thay o sua");
+					phim(o, "keydown", "Escape");
+					expect(huy()).toBe(1);
+				},
+			},
+		];
+		const nutKhoa = p.nut.map((n) =>
+			n.tone === "primary" ? { ...n, disabled: true } : n,
+		);
+		let soO = 0;
+		for (const t of TRANG_THAI) {
+			const bo: Record<string, ReturnType<typeof hangNut>> = {};
+			for (const density of HAI_DO_DAY) {
+				let soLanHuy = 0;
+				const editing =
+					t.ten === "dang-sua"
+						? {
+								value: "Bản sửa",
+								onChange: () => {},
+								onCancel: () => {
+									soLanHuy += 1;
+								},
+							}
+						: undefined;
+				const g = goc(
+					ve(
+						<ProposedChange
+							{...p.the}
+							{...t.them}
+							density={density}
+							editing={editing}
+							actions={hanhDong(t.ten === "khoa" ? nutKhoa : p.nut)}
+						/>,
+					),
+				);
+				expect(g.getAttribute("data-density")).toBe(density);
+				bo[density] = hangNut(g);
+				t.kiem(g, () => soLanHuy);
+				soO += 1;
+				don();
+			}
+			expect(bo.inline).toEqual(bo.card);
+		}
+		console.info(`nk-hai-do-day: ${soO} o`);
+		expect(soO).toBe(10);
+	});
+});
+
+describe("nk-bien-nhan", () => {
+	test("nk-bien-nhan: ba quyết định × có/không hoàn tác × hai độ dày thu về một dòng", () => {
+		const p = propsThe(DONG_VIET_LAI, { m });
+		const QUYET: readonly ProposedChangeDecision[] = ["accepted", "dismissed", "skipped"];
+		let soO = 0;
+		for (const decision of QUYET) {
+			for (const coHoanTac of [true, false]) {
+				for (const density of HAI_DO_DAY) {
+					let soLanHoanTac = 0;
+					const g = goc(
+						ve(
+							<ProposedChange
+								{...p.the}
+								density={density}
+								decided={{
+									decision,
+									text: `Đã quyết ${decision}`,
+									onUndo: coHoanTac
+										? () => {
+												soLanHoanTac += 1;
+											}
+										: undefined,
+								}}
+								actions={hanhDong(p.nut)}
+							/>,
+						),
+					);
+					expect(g.querySelector('[data-slot="proposed-change-actions"]')).toBeNull();
+					const dong = g.querySelectorAll('[data-slot="proposed-change-decided"]');
+					expect(dong.length).toBe(1);
+					expect(dong[0]?.textContent).toBe(`Đã quyết ${decision}`);
+					expect(dong[0]?.closest('[role="status"]')).not.toBeNull();
+					expect(g.getAttribute("data-decided")).toBe(decision);
+					const hoanTac = [...g.querySelectorAll("button")].filter(
+						(b) => b.textContent === "Hoàn tác",
+					);
+					if (coHoanTac) {
+						expect(hoanTac.length).toBe(1);
+						act(() => hoanTac[0]?.click());
+						if (soLanHoanTac !== 1) throw new Error(`hoan tac khong goi: ${soLanHoanTac}`);
+					} else {
+						expect(hoanTac.length).toBe(0);
+					}
+					if (decision !== "accepted") {
+						expect(dong[0]?.classList.contains("text-muted-foreground")).toBe(true);
+					}
+					soO += 1;
+					don();
+				}
+			}
+		}
+		console.info(`nk-bien-nhan: ${soO} o`);
+		expect(soO).toBe(12);
 	});
 });

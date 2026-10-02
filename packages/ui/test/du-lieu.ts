@@ -1,3 +1,5 @@
+import { KARA } from "../src/lib/kara";
+
 export const DU_LIEU = {
 	tenCongTy: "Đất Xanh",
 	tenNguoi: "Lan",
@@ -19,3 +21,5 @@ export const KHONG_DAU_CHO_PHEP: readonly string[] = [];
 
 export const DAU_TIENG_VIET =
 	/[ăâđêôơưáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i;
+
+export const TEN_RIENG: ReadonlySet<string> = new Set([KARA.ten]);

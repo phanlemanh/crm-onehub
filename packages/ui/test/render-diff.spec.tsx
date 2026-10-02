@@ -39,6 +39,7 @@ import {
 } from "../src/components/okr-status";
 import { PeriodSelect } from "../src/components/period-select";
 import { Progress } from "../src/components/progress";
+import { KaraLabel } from "../src/components/kara";
 import { ProposedChange } from "../src/components/proposed-change";
 import { Reasoning } from "../src/components/reasoning";
 import { SaveBar } from "../src/components/save-bar";
@@ -54,7 +55,7 @@ import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
 import { DEFAULT_LOCALE, type Locale } from "../src/lib/locale";
 import type { TableQueryState } from "../src/lib/table-query";
-import { DU_LIEU, TRUNG_TINH } from "./du-lieu";
+import { DU_LIEU, TEN_RIENG, TRUNG_TINH } from "./du-lieu";
 
 const DOC_NGHE_DUOC = [
 	"title",
@@ -330,6 +331,17 @@ const CA: Ca[] = [
 		),
 	},
 	{
+		ten: "Kara",
+		ve: () => (
+			<KaraLabel
+				text={DU_LIEU.tenCongTy}
+				reason={DU_LIEU.tieuDeHopThoai}
+				readAt={DU_LIEU.ngayVi}
+			/>
+		),
+		bam: () => document.querySelector("[data-slot='kara-label'] button"),
+	},
+	{
 		ten: "Carousel",
 		ve: () => (
 			<Carousel>
@@ -570,7 +582,9 @@ async function chungNhau(
 	const en = await chuNguoiDoc(await ve(ca, "en", mo, trong));
 	const vi = await chuNguoiDoc(await ve(ca, "vi", mo, trong));
 	if (en.size === 0) throw new Error(`${ca.ten}: bản vẽ không có chữ nào`);
-	return [...en].filter((s) => vi.has(s) && !TRUNG_TINH.has(s));
+	return [...en].filter(
+		(s) => vi.has(s) && !TRUNG_TINH.has(s) && !TEN_RIENG.has(s),
+	);
 }
 
 describe("AC-5 — chấm bản vẽ, không chấm mã", () => {

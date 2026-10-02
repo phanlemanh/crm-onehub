@@ -1,5 +1,7 @@
 "use client";
 
+import AiGenerate from "@carbon/icons-react/es/AiGenerate";
+import Checkmark from "@carbon/icons-react/es/Checkmark";
 import {
 	Confirmation,
 	ConfirmationAccepted,
@@ -9,6 +11,8 @@ import {
 } from "@crm/ui/components/ai-elements/confirmation";
 import { Button } from "@crm/ui/components/button";
 import { FieldError } from "@crm/ui/components/field";
+import { Icon } from "@crm/ui/components/icon";
+import { Item, ItemContent, ItemMedia } from "@crm/ui/components/item";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
@@ -41,18 +45,27 @@ export type ProposedChangeEditing = {
 
 export type ProposedChangeKind = "rewrite" | "compact" | "question";
 
+export type ProposedChangeDensity = "inline" | "card";
+
+export type ProposedChangeDecided = {
+	decision: ProposedChangeDecision;
+	text: ReactNode;
+	onUndo?: () => void;
+};
+
 export type ProposedChangeProps = Omit<
 	ComponentProps<"div">,
 	"children" | "role"
 > & {
 	id?: string;
+	density?: ProposedChangeDensity;
 	kind: ProposedChangeKind;
 	label?: ReactNode;
 	before?: ReactNode;
 	value: ReactNode;
 	rationale?: ReactNode;
 	pending?: boolean;
-	decided?: { decision: ProposedChangeDecision; text: ReactNode };
+	decided?: ProposedChangeDecided;
 	error?: ReactNode;
 	lockedReason?: ReactNode;
 	editing?: ProposedChangeEditing;
@@ -140,8 +153,109 @@ function GiaTri({
 	);
 }
 
+export function ProposedChangeReceipt({
+	decision,
+	text,
+	onUndo,
+}: ProposedChangeDecided) {
+	const msg = useMessages();
+	const daNhan = decision === "accepted";
+	return (
+		<div
+			role="status"
+			data-slot="proposed-change-receipt"
+			className="flex flex-wrap items-center gap-2"
+		>
+			{daNhan ? <Icon icon={Checkmark} /> : null}
+			<p
+				data-slot="proposed-change-decided"
+				className={daNhan ? undefined : "text-muted-foreground"}
+			>
+				{text}
+			</p>
+			{onUndo ? (
+				<Button size="xs" variant="ghost" type="button" onClick={onUndo}>
+					{msg.proposedChange.undo}
+				</Button>
+			) : null}
+		</div>
+	);
+}
+
+function ThanDeXuat({
+	kind,
+	label,
+	before,
+	value,
+	rationale,
+	editing,
+}: Pick<
+	ProposedChangeProps,
+	"kind" | "label" | "before" | "value" | "rationale" | "editing"
+>) {
+	return (
+		<div data-slot="proposed-change-body" className="flex flex-col gap-1">
+			{label ? (
+				<p
+					data-slot="proposed-change-label"
+					className="font-medium text-foreground"
+				>
+					{label}
+				</p>
+			) : null}
+			{before !== undefined ? (
+				<p translate="no" className="text-muted-foreground wrap-anywhere">
+					<del className="line-through decoration-diff-bo">{before}</del>
+				</p>
+			) : null}
+			<GiaTri kind={kind} value={value} editing={editing} />
+			{rationale ? (
+				<p className="text-muted-foreground text-pretty">{rationale}</p>
+			) : null}
+		</div>
+	);
+}
+
+function NhomNut({
+	actions,
+	pending,
+	describedBy,
+}: {
+	actions: readonly ProposedChangeAction[];
+	pending: boolean;
+	describedBy: string | undefined;
+}) {
+	const chinh = actions.filter((a) => a.tone !== "quiet");
+	const phu = actions.filter((a) => a.tone === "quiet");
+	return (
+		<>
+			{chinh.map((a) => (
+				<NutHanhDong
+					key={a.id}
+					action={a}
+					pending={pending}
+					describedBy={describedBy}
+				/>
+			))}
+			{phu.length > 0 ? (
+				<div className="ms-auto flex items-center gap-2">
+					{phu.map((a) => (
+						<NutHanhDong
+							key={a.id}
+							action={a}
+							pending={pending}
+							describedBy={describedBy}
+						/>
+					))}
+				</div>
+			) : null}
+		</>
+	);
+}
+
 export function ProposedChange({
 	id,
+	density = "inline",
 	kind,
 	label,
 	before,
@@ -158,81 +272,97 @@ export function ProposedChange({
 	const maTuSinh = useId();
 	const ma = id ?? maTuSinh;
 	const idKhoa = `${ma}-khoa`;
-	const chinh = actions.filter((a) => a.tone !== "quiet");
-	const phu = actions.filter((a) => a.tone === "quiet");
 	const describedBy = lockedReason ? idKhoa : undefined;
+	const than = (
+		<ThanDeXuat
+			kind={kind}
+			label={label}
+			before={before}
+			value={value}
+			rationale={rationale}
+			editing={editing}
+		/>
+	);
+	const khoa =
+		!decided && lockedReason ? (
+			<p id={idKhoa} className="text-muted-foreground">
+				{lockedReason}
+			</p>
+		) : null;
+	const loi = error ? <FieldError>{error}</FieldError> : null;
+	const nut = (
+		<NhomNut actions={actions} pending={pending} describedBy={describedBy} />
+	);
+
+	if (density === "card") {
+		return (
+			<Confirmation
+				role="group"
+				data-slot="proposed-change"
+				data-density="card"
+				data-kind={kind}
+				data-decided={decided?.decision}
+				approval={
+					decided
+						? { id: ma, approved: decided.decision === "accepted" }
+						: { id: ma }
+				}
+				state={decided ? "approval-responded" : "approval-requested"}
+				{...props}
+			>
+				<ConfirmationAccepted>
+					{decided ? <ProposedChangeReceipt {...decided} /> : null}
+				</ConfirmationAccepted>
+				<ConfirmationRejected>
+					{decided ? <ProposedChangeReceipt {...decided} /> : null}
+				</ConfirmationRejected>
+				<ConfirmationRequest>{than}</ConfirmationRequest>
+				<ConfirmationActions
+					data-slot="proposed-change-actions"
+					className="flex-wrap justify-start self-stretch"
+				>
+					{nut}
+				</ConfirmationActions>
+				{khoa}
+				{loi}
+			</Confirmation>
+		);
+	}
+
 	return (
-		<Confirmation
+		<Item
 			role="group"
+			size={decided ? "xs" : "sm"}
 			data-slot="proposed-change"
+			data-density="inline"
 			data-kind={kind}
 			data-decided={decided?.decision}
-			approval={
-				decided
-					? { id: ma, approved: decided.decision === "accepted" }
-					: { id: ma }
-			}
-			state={decided ? "approval-responded" : "approval-requested"}
 			{...props}
 		>
-			<ConfirmationAccepted>
-				<p data-slot="proposed-change-decided">{decided?.text}</p>
-			</ConfirmationAccepted>
-			<ConfirmationRejected>
-				<p data-slot="proposed-change-decided">{decided?.text}</p>
-			</ConfirmationRejected>
-			<ConfirmationRequest>
-				<div data-slot="proposed-change-body" className="flex flex-col gap-1">
-					{label ? (
-						<p
-							data-slot="proposed-change-label"
-							className="font-medium text-foreground"
+			{decided ? null : (
+				<ItemMedia>
+					<span className="text-muted-foreground">
+						<Icon icon={AiGenerate} />
+					</span>
+				</ItemMedia>
+			)}
+			<ItemContent>
+				{decided ? (
+					<ProposedChangeReceipt {...decided} />
+				) : (
+					<>
+						{than}
+						<div
+							data-slot="proposed-change-actions"
+							className="flex flex-wrap items-center gap-2"
 						>
-							{label}
-						</p>
-					) : null}
-					{before !== undefined ? (
-						<p translate="no" className="text-muted-foreground wrap-anywhere">
-							<del className="line-through decoration-diff-bo">{before}</del>
-						</p>
-					) : null}
-					<GiaTri kind={kind} value={value} editing={editing} />
-					{rationale ? (
-						<p className="text-muted-foreground text-pretty">{rationale}</p>
-					) : null}
-				</div>
-			</ConfirmationRequest>
-			<ConfirmationActions
-				data-slot="proposed-change-actions"
-				className="flex-wrap justify-start self-stretch"
-			>
-				{chinh.map((a) => (
-					<NutHanhDong
-						key={a.id}
-						action={a}
-						pending={pending}
-						describedBy={describedBy}
-					/>
-				))}
-				{phu.length > 0 ? (
-					<div className="ms-auto flex items-center gap-2">
-						{phu.map((a) => (
-							<NutHanhDong
-								key={a.id}
-								action={a}
-								pending={pending}
-								describedBy={describedBy}
-							/>
-						))}
-					</div>
-				) : null}
-			</ConfirmationActions>
-			{!decided && lockedReason ? (
-				<p id={idKhoa} className="text-muted-foreground">
-					{lockedReason}
-				</p>
-			) : null}
-			{error ? <FieldError>{error}</FieldError> : null}
-		</Confirmation>
+							{nut}
+						</div>
+					</>
+				)}
+				{khoa}
+				{loi}
+			</ItemContent>
+		</Item>
 	);
 }
