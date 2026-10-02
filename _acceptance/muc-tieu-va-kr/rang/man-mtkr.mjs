@@ -100,6 +100,7 @@ const MTKR = {
 		reloadMat: "reload mat trang thai thu",
 		tranNgang: "tran ngang",
 		bangCuon: "bang cuon ngang",
+		bangCuonDoc: "bang cuon doc",
 		manRong: "man rong",
 		thieuViSao: "thieu khu vi-sao trong anh",
 		thieuGopVao: "thieu khu gop-vao trong anh",
@@ -621,6 +622,23 @@ function docMan(cauHinh) {
 					"table-container",
 				du: o.scrollWidth - o.clientWidth,
 			})),
+		cuonDoc: [...document.querySelectorAll('[data-slot="table-container"]')]
+			.filter(
+				(o) =>
+					hien(o) &&
+					o.closest(cauHinh.khoiCuon) !== null &&
+					o.scrollHeight > o.clientHeight + 1,
+			)
+			.map((o) => ({
+				the:
+					o
+						.closest("[data-muc-tieu],[data-okr-sheet],[data-muc-tieu-cham]")
+						?.getAttributeNames()
+						.filter((a) => a.startsWith("data-"))
+						.map((a) => `${a}=${o.closest(`[${a}]`)?.getAttribute(a)}`)[0] ??
+					"table-container",
+				du: o.scrollHeight - o.clientHeight,
+			})),
 		ngoaiMan: [...hangMt, ...hangKr]
 			.flatMap((h) => [...h.querySelectorAll('[translate="no"]')])
 			.filter(
@@ -678,6 +696,12 @@ function kiemCuon(man, so, nhan) {
 			? `${nhan}: 0/${so.soBang} table-container trong khoi cuon ngang (scrollWidth <= clientWidth + 1)`
 			: `${T.bangCuon}: ${man} (${nhan}: ${so.cuon.length}/${so.soBang} table-container — ${so.cuon.map((c) => `${c.the} +${c.du}px`).join(", ")})`,
 		so.cuon.length === 0,
+	);
+	kiem(
+		so.cuonDoc.length === 0
+			? `${nhan}: 0/${so.soBang} table-container trong khoi cuon doc (scrollHeight <= clientHeight + 1)`
+			: `${T.bangCuonDoc}: ${man} (${nhan}: ${so.cuonDoc.length}/${so.soBang} table-container — ${so.cuonDoc.map((c) => `${c.the} +${c.du}px`).join(", ")})`,
+		so.cuonDoc.length === 0,
 	);
 	ghi(
 		`${nhan}: ${so.ngoaiMan.length} chu ten vuot mep phai${so.ngoaiMan.length > 0 ? ` (${so.ngoaiMan.map((c) => `«${c.chu}…» phai ${c.phai}`).join(", ")})` : ""}`,

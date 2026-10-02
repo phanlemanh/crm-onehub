@@ -13,8 +13,17 @@ const VUNG = {
 	thuMuc: "apps/app/app/(app)/[slug]/okr",
 	tep: ["apps/app/components/crm/record-sheet/objective-sheet.tsx"],
 	the: "SimpleTableRow",
-	lopCam: /(^|\s|:)(bg-|border-|rounded)/,
+	lopCam: /^(?:[\w-]+:)*!?(bg-|border-|rounded)/,
 };
+
+const MA_TRAN = [
+	{ dang: "chuoi tran", ma: `<SimpleTableRow className="bg-muted/30" />`, do: true },
+	{ dang: "chuoi trong ngoac", ma: `<SimpleTableRow className={"border-b-0"} />`, do: true },
+	{ dang: "template", ma: "<SimpleTableRow className={`rounded-md ${x}`} />", do: true },
+	{ dang: "cn(...)", ma: `<SimpleTableRow className={cn("p-2", x && "hover:bg-muted")} />`, do: true },
+	{ dang: "dieu kien", ma: `<SimpleTableRow className={x ? "w-12" : "border-t"} />`, do: true },
+	{ dang: "lop sach", ma: `<SimpleTableRow className={cn("w-12", "text-sm")} />`, do: false },
+];
 
 function tepTsx(thuMuc) {
 	const ra = [];
@@ -26,45 +35,71 @@ function tepTsx(thuMuc) {
 	return ra;
 }
 
-function chuoiLop(gt) {
-	if (!gt) return "";
-	if (ts.isStringLiteral(gt)) return gt.text;
-	if (ts.isJsxExpression(gt) && gt.expression) return gt.expression.getText();
-	return gt.getText();
+function chuHang(n) {
+	if (ts.isStringLiteralLike(n)) return [n.text];
+	if (ts.isTemplateExpression(n))
+		return [n.head.text, ...n.templateSpans.map((s) => s.literal.text)].concat(
+			n.templateSpans.flatMap((s) => chuHang(s.expression)),
+		);
+	const ra = [];
+	ts.forEachChild(n, (con) => {
+		ra.push(...chuHang(con));
+	});
+	return ra;
 }
 
-const tep = [
-	...tepTsx(join(GOC, VUNG.thuMuc)),
-	...VUNG.tep.map((t) => join(GOC, t)),
-];
-let soThe = 0;
-const viPham = [];
-for (const duong of tep) {
-	const sf = ts.createSourceFile(
-		duong,
-		readFileSync(duong, "utf8"),
-		ts.ScriptTarget.Latest,
-		true,
-		ts.ScriptKind.TSX,
-	);
+function lopViPham(gt) {
+	if (!gt) return [];
+	return chuHang(gt)
+		.flatMap((chu) => chu.split(/\s+/))
+		.filter((lop) => VUNG.lopCam.test(lop));
+}
+
+function quet(ten, ma) {
+	const sf = ts.createSourceFile(ten, ma, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+	let soThe = 0;
+	const viPham = [];
 	const di = (n) => {
 		if (
 			(ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) &&
 			n.tagName.getText() === VUNG.the
 		) {
 			soThe += 1;
-			const lop = n.attributes.properties.find(
+			const thuocTinh = n.attributes.properties.find(
 				(p) => ts.isJsxAttribute(p) && p.name.getText() === "className",
 			);
-			const chu = lop ? chuoiLop(lop.initializer) : "";
-			if (VUNG.lopCam.test(chu)) {
+			const lop = thuocTinh ? lopViPham(thuocTinh.initializer) : [];
+			if (lop.length > 0) {
 				const dong = sf.getLineAndCharacterOfPosition(n.getStart()).line + 1;
-				viPham.push(`${relative(GOC, duong)}:${dong} ${chu}`);
+				viPham.push(`${dong} ${lop.join(" ")}`);
 			}
 		}
 		ts.forEachChild(n, di);
 	};
 	di(sf);
+	return { soThe, viPham };
+}
+
+let muc = 0;
+for (const ca of MA_TRAN) {
+	const { soThe, viPham } = quet("ma-tran.tsx", `const a = ${ca.ma};`);
+	const bat = viPham.length > 0;
+	const dung = soThe === 1 && bat === ca.do;
+	console.log(`ma tran ${ca.dang}: ${bat ? "bat" : "khong bat"} — ${dung ? "dung" : "SAI"}`);
+	if (!dung) muc += 1;
+}
+if (muc > 0) {
+	console.log(`thuoc mu: ${muc}/${MA_TRAN.length} dang trong ma tran sai`);
+	process.exit(3);
+}
+
+const tep = [...tepTsx(join(GOC, VUNG.thuMuc)), ...VUNG.tep.map((t) => join(GOC, t))];
+let soThe = 0;
+const viPham = [];
+for (const duong of tep) {
+	const kq = quet(duong, readFileSync(duong, "utf8"));
+	soThe += kq.soThe;
+	for (const v of kq.viPham) viPham.push(`${relative(GOC, duong)}:${v}`);
 }
 
 console.log(`tep da quet: ${tep.length}, ${VUNG.the} da quet: ${soThe}`);
