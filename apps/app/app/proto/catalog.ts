@@ -731,6 +731,20 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "nen-kara",
+		ten: "Nền Kara — dấu, nhãn có ô Vì sao, đề xuất hai độ dày, biên nhận, phản hồi",
+		states: [
+			{ id: "ST-nenkara-nhan", nhan: "Nhãn «Kara · OKR · 2 góp ý» và ô Vì sao" },
+			{ id: "ST-nenkara-inline-cho", nhan: "Đề xuất liền dòng dưới KR — chờ" },
+			{ id: "ST-nenkara-inline-khoa", nhan: "Đề xuất liền dòng — nút chính khoá kèm lý do" },
+			{ id: "ST-nenkara-inline-loi", nhan: "Đề xuất liền dòng — Kara chưa ghi được" },
+			{ id: "ST-nenkara-inline-sua", nhan: "Đề xuất liền dòng — đang sửa" },
+			{ id: "ST-nenkara-bien-nhan", nhan: "Biên nhận «Đã … · Hoàn tác» và dòng đã bỏ qua" },
+			{ id: "ST-nenkara-the", nhan: "Đề xuất dạng thẻ trong cột riêng" },
+			{ id: "ST-nenkara-phan-hoi", nhan: "Phản hồi Hữu ích / Không hữu ích" },
+		],
+	},
+	{
 		slug: "sua-an-chu-ky-okr",
 		ten: "Cài đặt › Chương trình OKR — sửa, gỡ, ẩn chu kỳ tạo nhầm",
 		states: [
