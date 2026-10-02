@@ -77,6 +77,7 @@ function ket(ma) {
 	for (const v of viecDon) v();
 	for (const c of caySao)
 		spawnSync("git", ["-C", GOC_THAT, "worktree", "remove", "--force", c]);
+	if (process.env.HSC_DONG_KET) appendFileSync(process.env.HSC_DONG_KET, `EXIT ${ma}\n`);
 	process.exit(ma);
 }
 
