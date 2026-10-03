@@ -1017,6 +1017,16 @@ executors:
     tgy_cot_trang_thai: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t trang-thai'
     tgy_co_hop: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t co-hop'
     tgy_thong_tin: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/the-gop-y-okr.dom.tsx -t thong-tin'
+    mtkr_hang_ui: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/simple-table-hang.dom.tsx ./test/simple-table-hang-phu.dom.tsx ./test/luoi-va-khong-dich.dom.tsx'
+    mtkr_bang_co_du_lieu: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t co-du-lieu'
+    mtkr_theo_don_vi: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t theo-don-vi'
+    mtkr_thu_mo: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t thu-mo'
+    mtkr_o_tien_do: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t o-tien-do'
+    mtkr_chua_co_kr: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t chua-co-kr'
+    mtkr_sheet: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t sheet-chi-tiet'
+    mtkr_cham: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t cham-diem'
+    mtkr_diem_cam: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t diem-cam'
+    mtkr_trang_thai_cu: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t trang-thai'
     soan_quyen: bun run test -- "cd apps/api && bun test test/soan-okr-quyen.spec.ts"
     soan_cua: bun run test -- "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/cua-okr.spec.ts"
     soan_goi: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/goi-soan.integration.spec.ts"
@@ -1647,6 +1657,10 @@ executors:
     tgy_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"'
     tgy_ten_goi: 'node _acceptance/the-gop-y-okr/rang/ten-goi.mjs'
     tgy_san_thiet_ke: 'for t in "packages/ui/src/components/proposed-change.tsx" "packages/ui/src/components/ai-elements/confirmation.tsx" "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/components/crm/facts.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    mtkr_man_that: 'PROTO_ROUTE=1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs"'
+    mtkr_khong_ve_tay: 'node _acceptance/muc-tieu-va-kr/rang/khong-ve-tay.mjs'
+    mtkr_ho_so_cham: 'node _acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs'
+    mtkr_san_thiet_ke: 'for t in "packages/ui/src/components/simple-table.tsx" "apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/bang-kr.tsx" "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx" "apps/app/app/(app)/[slug]/okr/cham-diem.tsx" "apps/app/components/crm/record-sheet/objective-sheet.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     soan_man_that: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/soan-okr-cung-tro-ly/rang/man-soan.mjs"
     soan_cach_ly: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/soan-okr-cung-tro-ly/rang/cach-ly-chi-okr.mjs"
     soan_eval: bun _acceptance/soan-okr-cung-tro-ly/rang/eval-soan.mjs

@@ -13,6 +13,8 @@ export const KHO_HEP = "(max-width: 1023px)";
 
 export const CELL = "px-3 py-2.5 align-middle";
 
+export const nhanKr = (thuTu: number): string => `KR${thuTu}`;
+
 export const THUT_CAY = { dauRem: 1, moiCapRem: 1.25 } as const;
 
 export const CANH_KR = { soGoiY: 20 } as const;

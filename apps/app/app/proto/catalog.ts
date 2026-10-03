@@ -861,6 +861,22 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-khong-quyen", nhan: "Thành viên thường — menu khoá" },
 		],
 	},
+	{
+		slug: "muc-tieu-va-kr",
+		ten: "Mục tiêu và KR trong cùng một khung — danh sách và chi tiết",
+		states: [
+			{ id: "ST-cua-toi", nhan: "Đề xuất — Của tôi, mục tiêu là hàng cha" },
+			{
+				id: "ST-theo-don-vi",
+				nhan: "Đề xuất — Theo đơn vị, nhiều mục tiêu thu gọn",
+			},
+			{ id: "ST-chi-tiet", nhan: "Đề xuất — Chi tiết mục tiêu" },
+			{ id: "ST-chua-co-kr", nhan: "Đề xuất — Mục tiêu nháp chưa có KR" },
+			{ id: "ST-cham", nhan: "Đề xuất — Chấm điểm, mục tiêu trong khung" },
+			{ id: "ST-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-hien-tai", nhan: "Bản đang chạy — để so" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

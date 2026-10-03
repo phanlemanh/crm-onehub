@@ -69,6 +69,12 @@ export const okrParsers = {
 
 export const loadOkrSearchParams = createLoader(okrParsers);
 
+export const parseAsThuMucTieu = parseAsArrayOf(parseAsString).withDefault([]);
+
+export function chuanThuMucTieu(ids: readonly string[]): string[] {
+	return [...new Set(ids.map((id) => id.trim()).filter((id) => id !== ""))];
+}
+
 export function locOkr(v: {
 	[SEARCH_PARAM.okr.phuTrach]: string[];
 	[SEARCH_PARAM.okr.loai]: LoaiMucTieu[];

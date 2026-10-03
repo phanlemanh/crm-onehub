@@ -20,6 +20,13 @@ import {
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { EntityLogo } from "@crm/ui/components/entity-logo";
 import { Icon } from "@crm/ui/components/icon";
+import {
+	Item,
+	ItemContent,
+	ItemDescription,
+	ItemGroup,
+	ItemTitle,
+} from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -32,6 +39,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
+import type { DiemCam } from "@/app/(app)/[slug]/okr/diem-cam";
 import { HopThoaiCanChinh } from "@/app/(app)/[slug]/okr/hop-thoai-can-chinh";
 import {
 	HopThoaiCapNhatKr,
@@ -365,7 +373,57 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 	);
 }
 
-function TabKr({ mt }: { mt: ChiTiet }) {
+function KhuViSao({ mt }: { mt: ChiTiet }) {
+	const m = okrMessages(useLocale()).sheet;
+	if (mt.whyNow.trim() === "") return null;
+	return (
+		<div data-khu="vi-sao">
+			<DetailSheetSection title={m.khuViSao}>
+				<p className="text-pretty text-sm" translate="no">
+					{mt.whyNow}
+				</p>
+			</DetailSheetSection>
+		</div>
+	);
+}
+
+function KhuGopVao({ mt }: { mt: ChiTiet }) {
+	const m = okrMessages(useLocale()).sheet;
+	if (mt.alignments.length === 0) return null;
+	return (
+		<div data-khu="gop-vao">
+			<DetailSheetSection title={m.khuGopVao}>
+				<ItemGroup>
+					{mt.alignments.map((g) => (
+						<Item
+							data-gop-vao={g.alignmentId}
+							key={g.alignmentId}
+							role="listitem"
+							size="xs"
+						>
+							<ItemContent>
+								<ItemTitle title={g.objectiveTitle} translate="no">
+									{g.objectiveTitle}
+								</ItemTitle>
+								<ItemDescription unclamped>
+									<span translate="no">{g.unitName}</span>
+									{g.keyResultTitle ? (
+										<>
+											{" · "}
+											{dien(m.quaKr, { ten: g.keyResultTitle })}
+										</>
+									) : null}
+								</ItemDescription>
+							</ItemContent>
+						</Item>
+					))}
+				</ItemGroup>
+			</DetailSheetSection>
+		</div>
+	);
+}
+
+function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
 	const [hop, setHop] = useState<HopKr | null>(null);
@@ -392,28 +450,42 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 
 	return (
 		<DetailSheetBody>
-			<BangKr
-				keyResults={mt.keyResults}
-				kind={mt.kind}
-				expected={mt.expected}
-				danhDauCuaToi={false}
-				hoiDoiTrong={suaNoiDung(mt)}
-				canh={demCanh(mt)}
-				nhanHanhDong={m.cotThaoTac}
-				hanhDong={
-					coMenu
-						? (kr) => (
-								<MenuKr
-									mt={mt}
-									kr={kr}
-									capNhat={() => moCapNhat(kr)}
-									sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
-									xoa={() => setXoa(kr)}
-								/>
-							)
-						: undefined
-				}
-			/>
+			<KhuViSao mt={mt} />
+			<KhuGopVao mt={mt} />
+			<div>
+				<BangKr
+					diemCam={diemCam}
+					mucTieu={mt}
+					keyResults={mt.keyResults}
+					kind={mt.kind}
+					expected={mt.expected}
+					danhDauCuaToi={false}
+					hoiDoiTrong={suaNoiDung(mt)}
+					canh={demCanh(mt)}
+					nhanHanhDong={m.cotThaoTac}
+					hanhDong={
+						coMenu
+							? (kr) => (
+									<MenuKr
+										mt={mt}
+										kr={kr}
+										capNhat={() => moCapNhat(kr)}
+										sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
+										xoa={() => setXoa(kr)}
+									/>
+								)
+							: undefined
+					}
+				/>
+			</div>
+			{mt.keyResults.length > 0 ? (
+				<p className="px-5 pt-2 text-muted-foreground text-xs" data-tien-do-tu>
+					{dien(m.tienDoTu, {
+						x: String(mt.progress),
+						n: String(mt.keyResults.length),
+					})}
+				</p>
+			) : null}
 			{suaNoiDung(mt) ? (
 				<div className="px-5 py-3">
 					<Button
@@ -644,7 +716,13 @@ function LoiKhung({
 	);
 }
 
-export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
+export function ObjectiveSheet({
+	objectiveId,
+	diemCam,
+}: {
+	objectiveId: string;
+	diemCam?: DiemCam;
+}) {
 	const locale = useLocale();
 	const t = okrMessages(locale);
 	const m = t.sheet;
@@ -664,7 +742,7 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					value: "kr",
 					label: m.tabKr,
 					count: mt.keyResults.length,
-					content: <TabKr mt={mt} />,
+					content: <TabKr diemCam={diemCam} mt={mt} />,
 				},
 				{
 					value: "can-chinh",

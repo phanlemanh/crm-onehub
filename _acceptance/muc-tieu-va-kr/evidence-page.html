@@ -1,0 +1,229 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · muc-tieu-va-kr</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Mục tiêu và KR trong cùng một khung — danh sách, sheet chi tiết và Chấm điểm</h1><div class="sub">Trang bằng chứng · <span class="mono">muc-tieu-va-kr</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E1-20261003T082959Z</td><td class="mono">2026-10-03T08:29:59Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E2-20261003T081803Z</td><td class="mono">2026-10-03T08:18:03Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E3-20261003T081805Z</td><td class="mono">2026-10-03T08:18:05Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E4-20261003T081806Z</td><td class="mono">2026-10-03T08:18:06Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-3</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E5-20261003T082959Z</td><td class="mono">2026-10-03T08:29:59Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E6-20261003T081813Z</td><td class="mono">2026-10-03T08:18:13Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E7-20261003T081814Z</td><td class="mono">2026-10-03T08:18:14Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E8-20261003T081815Z</td><td class="mono">2026-10-03T08:18:15Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E9-20261003T081816Z</td><td class="mono">2026-10-03T08:18:16Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-8</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E10-20261003T081825Z</td><td class="mono">2026-10-03T08:18:25Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E11-20261003T081825Z</td><td class="mono">2026-10-03T08:18:25Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-9</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E12-20261003T081825Z</td><td class="mono">2026-10-03T08:18:25Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-10</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E13-20261003T082959Z</td><td class="mono">2026-10-03T08:29:59Z</td></tr>
+<tr><td><a href="#E14">E14</a></td><td>AC-11</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E14-20261003T083116Z</td><td class="mono">2026-10-03T08:31:16Z</td></tr>
+<tr><td><a href="#E15">E15</a></td><td>AC-12</td><td>judgment</td><td><span class="badge pass">PASS</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+<tr><td><a href="#E16">E16</a></td><td>AC-12</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E16-20261003T082959Z</td><td class="mono">2026-10-03T08:29:59Z</td></tr>
+<tr><td><a href="#E17">E17</a></td><td>AC-13</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">muc-tieu-va-kr-E17-20261003T081834Z</td><td class="mono">2026-10-03T08:18:34Z</td></tr>
+<tr><td><a href="#E18">E18</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">design-gate-23fb210b4e</td><td class="mono">2026-10-03T08:18:36Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · ui-check</h3><p class="crit">AC-1: Given người dùng phụ trách một mục tiêu đã công bố có ≥ 2 KR trong chu kỳ hiện tại,</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E1-20261003T082959Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.mtkr_man_that</b></span><span>verified_at <b>2026-10-03T08:29:59Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="shot slide" data-n="2"><div class="frame"><img src="evidence/E1-1440-sang.png" alt="frame 1" loading="lazy"></div><div class="frame"><img src="evidence/E1-1440-toi.png" alt="frame 2" loading="lazy"></div></div><div class="slidebar"><button class="btn" data-toggle>⏸ Tạm dừng</button><span>2 frame · chạy như GIF</span></div>
+<pre class="out">GHI TIEN DE okr.mine tran-quoc-bao: 2 muc tieu (mau-okr-mt-q4-kd:cong-bo:2KR, cmus4t4o4000041tyaqxpc2pq:cong-bo:2KR)
+DUNG E1 1440 sang: vung danh sach co 0 [data-slot=card-header] (can 0)
+DUNG E1 1440 sang mau-okr-mt-q4-kd: mot table chua hang muc tieu va 2/2 hang KR
+DUNG E1 1440 sang mau-okr-mt-q4-kd: chu 75% == progress 75 cua API
+DUNG E1 1440 sang mau-okr-mt-q4-kd: vach [data-expected]=44 == expected 44 (lam tron 44)
+DUNG E1 1440 sang cmus4t4o4000041tyaqxpc2pq: vach [data-expected]=null == expected 0 (vang)
+GHI E1 1440 toi: ma tran 2 muc tieu (nguon) · 2 khoi tren trang · 4 KR da so
+KET LUAN: 86 DUNG, 0 SAI — ma thoat 0</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-1: Given người dùng phụ trách một mục tiêu đã công bố có ≥ 2 KR trong chu kỳ hiện tại,</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E2-20261003T081803Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_bang_co_du_lieu</b></span><span>verified_at <b>2026-10-03T08:18:03Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so ca co-du-lieu progress-api: 1
+so ca co-du-lieu: 2
+so ca co-du-lieu ky-vong: 3
+ 3 pass
+ 0 fail
+Ran 3 tests across 1 file.</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-2: Given một đơn vị có ≥ 3 mục tiêu, When mở «Theo đơn vị», Then mỗi mục tiêu là một</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E3-20261003T081805Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_theo_don_vi</b></span><span>verified_at <b>2026-10-03T08:18:05Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so ca theo-don-vi: 3
+ 1 pass
+ 0 fail
+Ran 1 test across 1 file.</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-3: Given danh sách đang mở mọi mục tiêu, When người bấm nút mũi tên (hoặc nhấn Enter/Space</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E4-20261003T081806Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_thu_mo</b></span><span>verified_at <b>2026-10-03T08:18:06Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so ca thu-mo: 6
+so ca thu-mo mo-lai: 2
+so ca thu-mo id-la: 2
+so ca thu-mo trung-rong: 2
+so ca thu-mo bam-ten: 1
+ 6 pass
+ 0 fail</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · ui-check</h3><p class="crit">AC-3: Given danh sách đang mở mọi mục tiêu, When người bấm nút mũi tên (hoặc nhấn Enter/Space</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E5-20261003T082959Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.mtkr_man_that</b></span><span>verified_at <b>2026-10-03T08:29:59Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="shot slide" data-n="2"><div class="frame"><img src="evidence/E5-da-thu.png" alt="frame 1" loading="lazy"></div><div class="frame"><img src="evidence/E5-step1.png" alt="frame 2" loading="lazy"></div></div><div class="slidebar"><button class="btn" data-toggle>⏸ Tạm dừng</button><span>2 frame · chạy như GIF</span></div>
+<pre class="out">DUNG E5 1440 mau-okr-mt-q4-kd: sau bam con 0 hang [data-kr] (can 0)
+DUNG E5 1440 mau-okr-mt-q4-kd: aria-expanded=false (can false)
+GHI E5 1440: location.search sau bam «?thuMucTieu=mau-okr-mt-q4-kd»
+DUNG E5 1440 mau-okr-mt-q4-kd: sau tai lai con 0 hang [data-kr]
+DUNG E5 1440 mau-okr-mt-q4-kd: mo lai (true) → location.search «» khong con thuMucTieu
+GHI E5 no-preference: icon transition-duration 0.24s · property transform
+DUNG E5 prefers-reduced-motion reduce: icon transition-duration 0s (can 0s) · property none
+KET LUAN: 86 DUNG, 0 SAI — ma thoat 0</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-4: Given các KR kiểu tăng tới, giảm xuống có khởi điểm ≠ 0, mốc, và KR nguồn máy, When</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E6-20261003T081813Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_o_tien_do</b></span><span>verified_at <b>2026-10-03T08:18:13Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so khang dinh o-tien-do: 7
+so ca o-tien-do thead: 1
+so ca o-tien-do so-kr: 1
+so ca o-tien-do ban gon may: 2
+ 4 pass
+ 0 fail</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-5: Given một mục tiêu chưa có KR, When danh sách vẽ, Then dưới hàng mục tiêu có một hàng</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E7-20261003T081814Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_chua_co_kr</b></span><span>verified_at <b>2026-10-03T08:18:14Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so ca chua-co-kr: 2
+ 1 pass
+ 0 fail
+Ran 1 test across 1 file.</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · test</h3><p class="crit">AC-6: Given một mục tiêu có `whyNow`, góp vào một mục tiêu khác qua một KR, và có ≥ 2 KR, When</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E8-20261003T081815Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_sheet</b></span><span>verified_at <b>2026-10-03T08:18:15Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so ca sheet-chi-tiet a: 1/4
+so ca sheet-chi-tiet b: 1/4
+so ca sheet-chi-tiet c: 1/4
+so ca sheet-chi-tiet chi-doc: 1/4
+ 4 pass
+ 0 fail</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · test</h3><p class="crit">AC-7: Given một chu kỳ ở pha chấm điểm, When mở «Chấm điểm», Then mỗi mục tiêu là hàng đầu</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E9-20261003T081816Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_cham</b></span><span>verified_at <b>2026-10-03T08:18:16Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so ca cham-diem: 2
+so ca cham-diem doi-chung: 1
+so ca cham-diem luu: 2
+ 3 pass
+ 0 fail</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · test</h3><p class="crit">AC-8: Given `SimpleTable`/`SimpleTableRow` của `packages/ui`, When một hàng mang `nested`</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E10-20261003T081825Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_hang_ui</b></span><span>verified_at <b>2026-10-03T08:18:25Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so ca hang: 4
+ 10 pass
+ 0 fail
+Ran 10 tests across 3 files.</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-8: Given `SimpleTable`/`SimpleTableRow` của `packages/ui`, When một hàng mang `nested`</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E11-20261003T081825Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.mtkr_khong_ve_tay</b></span><span>verified_at <b>2026-10-03T08:18:25Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">ma tran dieu kien: bat — dung
+ma tran bien the ngoac vuong: bat — dung
+ma tran bien the data-[]: bat — dung
+ma tran vien tran: bat — dung
+ma tran lop sach: khong bat — dung
+tep da quet: 61, SimpleTableRow da quet: 17</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · test</h3><p class="crit">AC-9: Given `BangMucTieu` và bảng KR của sheet, When không truyền điểm cắm nào, Then không có</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E12-20261003T081825Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_diem_cam</b></span><span>verified_at <b>2026-10-03T08:18:25Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">so ca diem-cam a: 2 bien x (tr + khoi + 5 KR) = 14
+so ca diem-cam b: 12
+so ca diem-cam dang-mo: 1
+so ca diem-cam sheet: 6
+ 4 pass
+ 0 fail</pre>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge pass">PASS</span> &nbsp;E13 · ui-check</h3><p class="crit">AC-10: Given khung 375 px và dữ liệu có ≥ 2 mục tiêu, mỗi mục tiêu ≥ 2 KR, cùng một chu kỳ</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E13-20261003T082959Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.mtkr_man_that</b></span><span>verified_at <b>2026-10-03T08:29:59Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="shot slide" data-n="8"><div class="frame"><img src="evidence/E13-375-cua-toi-sang.png" alt="frame 1" loading="lazy"></div><div class="frame"><img src="evidence/E13-375-cham-sang.png" alt="frame 2" loading="lazy"></div><div class="frame"><img src="evidence/E13-375-cham-toi.png" alt="frame 3" loading="lazy"></div><div class="frame"><img src="evidence/E13-375-cua-toi-toi.png" alt="frame 4" loading="lazy"></div><div class="frame"><img src="evidence/E13-375-sheet-sang.png" alt="frame 5" loading="lazy"></div><div class="frame"><img src="evidence/E13-375-sheet-toi.png" alt="frame 6" loading="lazy"></div><div class="frame"><img src="evidence/E13-375-theo-don-vi-sang.png" alt="frame 7" loading="lazy"></div><div class="frame"><img src="evidence/E13-375-theo-don-vi-toi.png" alt="frame 8" loading="lazy"></div></div><div class="slidebar"><button class="btn" data-toggle>⏸ Tạm dừng</button><span>8 frame · chạy như GIF</span></div>
+<pre class="out">DUNG E13 375 cua-toi sang: scrollWidth 375 == innerWidth 375
+DUNG E13 375 cua-toi sang: 4/4 hang KR co tien do/diem hien cung td voi ten
+GHI E13 375 theo-don-vi sang: 12 hang muc tieu · 25 hang KR (toi thieu 2 · 4)
+DUNG E13 375 sheet toi: scrollWidth 375 == innerWidth 375
+GHI E13 375 cham sang: 4 hang muc tieu · 9 hang KR (toi thieu 2 · 4)
+DUNG E13 375 cham toi: 9/9 hang KR co tien do/diem hien cung td voi ten
+KET LUAN: 86 DUNG, 0 SAI — ma thoat 0</pre>
+</div>
+<div class="card eval" id="E14"><h3><span class="badge pass">PASS</span> &nbsp;E14 · script</h3><p class="crit">AC-11: Given danh sách viết sẵn ở mục «Móc DOM phải giữ» của design doc — 41 eval máy</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E14-20261003T083116Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.mtkr_ho_so_cham</b></span><span>verified_at <b>2026-10-03T08:31:16Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">bo ra: khung-tao-okr-nhu-deal/E18 — thuoc chay thuoc: rang/thuoc-cu.mjs tu chay eval cua ba ho so khac
+bo ra: okr-soat-anh-luot-3/E12 — luat pham vi vong: rang/san-thiet-ke.mjs do diff merge-base cua vong do
+bo ra: okr-soat-anh-luot-3/E13 — luat pham vi vong: rang/soi-ma.mjs do dong moi trong diff merge-base cua vong do
+merge-base 9660bf6c · dinh 03861afa6417 · danh sach 41 eval = se chay 41 (qua 22 lenh rieng) + khong chay duoc 0 · bo ra 3
+da chay 41/41 eval
+do san o B (14): toan-canh-okr E2 E3 E14 E23 · hop-thoai-giu-cho-dang-nhap E9 · dat-okr-trong-crm E11 E12 E13 E20 · so-okr-tu-chay E11 E12 E13 · cap-nhat-tuan-okr E18 E29
+tong 41 eval: xanh o HEAD 27 · chap chon 0 · do san o B 14 · hoi quy 0
+khong eval nao do o HEAD ma xanh o 9660bf6c</pre>
+</div>
+<div class="card eval" id="E15"><h3><span class="badge pass">PASS</span> &nbsp;E15 · judgment</h3><p class="crit">AC-12: Given ảnh «Của tôi», «Theo đơn vị» và sheet chi tiết ở 1440 px cả hai theme, When một</p>
+<div class="kv"><span>judged_by <b>ba giám khảo riêng context sạch (domain-correctness, operational-feasibility, spec-alignment), Acceptance Judge v1, chỉ đọc contract.md và bảy ảnh round 10</b></span></div>
+<p class="note"><b>Phán đoán:</b> Cả ba giám khảo PASS. Ở cả ảnh sáng lẫn tối, mỗi mục tiêu là hàng đầu của một khung riêng mang % (75/33 ở Của tôi; 75/24/48 ở Theo đơn vị; 35 ở sheet) kèm «Tính từ N KR», các KR1…KRn nằm gọn trong khung, giữa các khung có khoảng trống nên không KR nào lửng giữa hai mục tiêu; số KR khớp «3 mục tiêu · 5 KR»; so với E16-hien-tai (tiêu đề ngoài khung, không có %) liên kết rõ hơn hẳn. Ghi chú không đổi phán quyết: ở theme tối nền hàng mục tiêu gần nền hàng KR, nhóm tách nhờ khung và khoảng cách; chữ «qua KR «…»» ở khu Góp vào có thể khiến người mới đọc hai lần.</p>
+<div class="ov">human_override: CHƯA điền (việc của bạn ở Gate 2)</div>
+</div>
+<div class="card eval" id="E16"><h3><span class="badge pass">PASS</span> &nbsp;E16 · ui-check</h3><p class="crit">AC-12: Given ảnh «Của tôi», «Theo đơn vị» và sheet chi tiết ở 1440 px cả hai theme, When một</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E16-20261003T082959Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.mtkr_man_that</b></span><span>verified_at <b>2026-10-03T08:29:59Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="shot slide" data-n="5"><div class="frame"><img src="evidence/E16-1440-theo-don-vi-sang.png" alt="frame 1" loading="lazy"></div><div class="frame"><img src="evidence/E16-1440-sheet-sang.png" alt="frame 2" loading="lazy"></div><div class="frame"><img src="evidence/E16-1440-sheet-toi.png" alt="frame 3" loading="lazy"></div><div class="frame"><img src="evidence/E16-1440-theo-don-vi-toi.png" alt="frame 4" loading="lazy"></div><div class="frame"><img src="evidence/E16-hien-tai.png" alt="frame 5" loading="lazy"></div></div><div class="slidebar"><button class="btn" data-toggle>⏸ Tạm dừng</button><span>5 frame · chạy như GIF</span></div>
+<pre class="out">DUNG E16 theo-don-vi sang: don vi co 3 muc tieu (&gt;= 3)
+DUNG E16 theo-don-vi: sha256 sang 9cc017e809c24d18… != toi 5450a65c46cb263c…
+DUNG E16 sheet mau-okr-mt-q4-kd-bac-1 sang: [data-khu=vi-sao] hien trong anh
+DUNG E16 sheet mau-okr-mt-q4-kd-bac-1 toi: [data-khu=gop-vao] hien trong anh
+DUNG E16 sheet: sha256 sang 95fe221cc6f9cf84… != toi 47816caa5da3842f…
+DUNG E16 hien-tai: _acceptance/muc-tieu-va-kr/evidence/E16-hien-tai.png 114 KB &gt; 10 KB
+KET LUAN: 86 DUNG, 0 SAI — ma thoat 0</pre>
+</div>
+<div class="card eval" id="E17"><h3><span class="badge pass">PASS</span> &nbsp;E17 · test</h3><p class="crit">AC-13: Given «Của tôi» và «Theo đơn vị», When dữ liệu đang tải, tải lỗi hoặc rỗng, Then trạng</p>
+<div class="kv"><span>run_id <b>muc-tieu-va-kr-E17-20261003T081834Z</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.mtkr_trang_thai_cu</b></span><span>verified_at <b>2026-10-03T08:18:34Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">trang-thai: 16 id tu docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md
+giao E13: ST-mtkr-hep
+trang-thai da so: ST-cuatoi-rong
+trang-thai da so: ST-donvi-dangtai
+trang-thai da so: ST-donvi-loi
+trang-thai da so: ST-donvi-chuakychay
+ 17 pass
+ 0 fail</pre>
+</div>
+<div class="card eval" id="E18"><h3><span class="badge pass">PASS</span> &nbsp;E18 · script</h3><p class="crit">AC-8: Given `SimpleTable`/`SimpleTableRow` của `packages/ui`, When một hàng mang `nested`</p>
+<div class="kv"><span>run_id <b>design-gate-23fb210b4e</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.mtkr_san_thiet_ke</b></span><span>verified_at <b>2026-10-03T08:18:36Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">simple-table.tsx verdict PASS p0_count 0 (run design-gate-23fb210b4e)
+bang-muc-tieu.tsx verdict PASS p0_count 0
+khoi-muc-tieu.tsx verdict PASS p0_count 0
+bang-kr.tsx verdict PASS p0_count 0
+tien-do-kr.tsx verdict PASS p0_count 0
+cham-diem.tsx verdict PASS p0_count 0
+objective-sheet.tsx verdict PASS p0_count 0</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">Baseline không đo lại ở round này; trường baseline của từng khối ghi n-a. Mang từ round 5: E10 xanh cả ở nhánh lẫn baseline (không phân biệt) — cần viết lại để khẳng định hành vi mới, hoặc xác nhận đó là chốt chống hồi quy có chủ ý.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1–4: trước khi thu hẹp AC-11; E14 chiếm ~9,6 giờ máy và không ra hồi quy sản phẩm nào.</li><li>Round 5 (sau Cổng Phạm vi duyệt lại 03/10): BLOCKED/REJECT vì ca api nguon-khoa cũ.</li><li>Round 6: REJECT vì ux-lai-thu-8c-okr/E15 đỏ dưới tải.</li><li>Round 7–9: BLOCKED vì agent chết. Nhánh đã gộp onehub 9660bf6c có bản vá nguon-khoa.</li><li>Round 10: mọi eval máy và ui-check xanh, bảy suite xanh lần đầu, E14 hoi quy 0 (14 eval đỏ sẵn ở merge-base đúng danh sách Known limits của hợp đồng); E15 chưa chấm → PENDING-JUDGMENT.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>
