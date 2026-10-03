@@ -1,5 +1,5 @@
 {
-  "feature_plain": "Trên màn OKR, mỗi mục tiêu nằm chung một khung với các KR đo nó và hiện luôn tiến độ của chính nó, để người đọc thấy ngay KR nào thuộc mục tiêu nào và cộng lại ra bao nhiêu.",
+  "feature_plain": "Mục tiêu và các KR của nó nay nằm trong cùng một khung ở «Của tôi», «Theo đơn vị», sheet chi tiết và «Chấm điểm»; hàng mục tiêu có % lấy từ hệ thống, KR đánh số, và sheet có thêm «Vì sao lúc này» và «Góp vào».",
   "will_do": [
     {
       "id": "AC-1",
@@ -136,5 +136,6 @@
       "i": 4,
       "p": "Bảng trạng thái thiếu trạng thái lỗi, rỗng, đang tải của Theo đơn vị — đã thêm đủ, ghim đúng mã trạng thái đang có, và đếm nút Thử lại gọi tải lại đúng một lần."
     }
-  ]
+  ],
+  "analyst_plain": "Không có phép đo nào chỉ ra «đạt» mà không phân biệt được bản đúng và bản sai — mọi chiều đỏ đã chứng trên bản phá."
 }
