@@ -18,6 +18,7 @@ import { KhungTaoOkrNhuDealMau } from "./_modules/khung-tao-okr-nhu-deal";
 import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
+import { MucTieuVaKrMau } from "./_modules/muc-tieu-va-kr";
 import { NhacQuaZaloMau } from "./_modules/nhac-qua-zalo";
 import { NoiZaloChoNguoiMoiMau } from "./_modules/noi-zalo-cho-nguoi-moi";
 import { SoanOkrCungTroLyMau } from "./_modules/soan-okr-cung-tro-ly";
@@ -59,6 +60,7 @@ const BANG_GHEP = {
 	"tro-ly-okr-tom-tat": TroLyOkrTomTatMau,
 	"may-nhac-truoc-nguoi": MayNhacTruocNguoiMau,
 	"moi-phia-deu-thay-ke-hoach": MoiPhiaDeuThayKeHoachMau,
+	"muc-tieu-va-kr": MucTieuVaKrMau,
 	"nhac-qua-zalo": NhacQuaZaloMau,
 	"soan-okr-cung-tro-ly": SoanOkrCungTroLyMau,
 	"noi-zalo-cho-nguoi-moi": NoiZaloChoNguoiMoiMau,

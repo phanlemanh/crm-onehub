@@ -20,6 +20,7 @@ import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
+import { BangMucTieu } from "../bang-muc-tieu";
 import { CayCanChinh } from "../cay-can-chinh";
 import { CayDonVi } from "../cay-don-vi";
 import { ChamDiem } from "../cham-diem";
@@ -27,7 +28,6 @@ import { useChuKy } from "../chon-chu-ky";
 import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
 import { HopTuan } from "../hop-tuan";
 import { KhoiKrCuaToi } from "../khoi-kr-cua-toi";
-import { KhoiMucTieu } from "../khoi-muc-tieu";
 import type { CayDuLieu, MucTieu } from "../kieu";
 import { coLoc, KhongKhop, LocOkr, type LocOkrGiaTri } from "../loc-okr";
 import { NganTaoMucTieu, NutThemMucTieu } from "../ngan-okr-url";
@@ -99,15 +99,8 @@ function viTriNguoi(cay: CayDuLieu, id: string) {
 
 function DanhSach({ objectives }: { objectives: MucTieu[] }) {
 	return (
-		<div className="flex flex-col gap-6" data-trang-thai="ST-donvi-danhsach">
-			{objectives.map((mt) => (
-				<KhoiMucTieu
-					key={mt.id}
-					mucTieu={mt}
-					hienDonVi={false}
-					danhDauCuaToi={false}
-				/>
-			))}
+		<div data-trang-thai="ST-donvi-danhsach">
+			<BangMucTieu danhDauCuaToi={false} ds={objectives} hienDonVi={false} />
 		</div>
 	);
 }
