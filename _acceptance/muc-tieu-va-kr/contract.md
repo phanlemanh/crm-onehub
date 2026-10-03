@@ -5,7 +5,7 @@ slug: muc-tieu-va-kr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-02T22:20:41Z
 design_doc: docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md
@@ -120,6 +120,15 @@ Source input: prompt (phiên «Phân tích và hoàn thiện OKR», 02/10) + pro
 
 ## Notes
 
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-1): Dấu nhịp trên màn hình nhỏ được dựng lại riêng thay vì dùng chung một thành phần. Người dùng thấy giống hệt, nhưng sau này sửa nhãn hay màu nhịp phải sửa ở hai nơi, dễ lệch.
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-3): Trang bản mẫu nội bộ vẫn tự đặt màu nền và viền hàng thay vì dùng kiểu chung. Sản phẩm thật không bị ảnh hưởng, nhưng bản mẫu có thể dần lệch so với màn thật khi kiểu chung đổi.
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-5): Phép kiểm tự báo động khi số bài đo thực chạy khác số dự kiến thực ra không bao giờ báo. Người dùng cuối không thấy gì, nhưng nếu một bài đo bị bỏ sót thì kết quả vẫn trông đầy đủ.
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-6): Phép thử đỏ của bài đo gom hai kiểu lỗi khác nhau vào một thông báo, nên chưa chứng minh được nó bắt đúng trường hợp KR nằm ngoài khung. Màn hình thật không đổi, nhưng bài đo kém tin cậy hơn ở chiều bắt lỗi.
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-8): Khi trình duyệt bật tự dịch, tên KR do người dùng đặt trong khu «Góp vào» có thể bị dịch, trong khi cùng tên đó ở chỗ khác thì giữ nguyên.
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-9): Ở giao diện tiếng Anh, mục tiêu chỉ có một KR hiện câu «from 1 KRs». Số liệu đúng, chỉ câu chữ sai số ít.
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-10): Phép đo giữ móc của các việc đã ký chưa chạy lại phép đo màn của «Thẻ góp ý OKR», dù việc đó dùng menu KR mà vòng này viết lại — nếu menu KR hỏng với việc đó thì vòng này không thấy.
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-11): Khi máy gặp sự cố môi trường, công cụ kiểm hồi quy có thể thoát như thể đã tìm thấy hồi quy (hoặc như chiều đỏ đã chứng) và để lại thư mục tạm. Sản phẩm không bị ảnh hưởng.
+- Known limits (Cổng Bằng chứng 03/10, Ngoài-12): Phép kiểm máy cho việc bảng có cuộn dọc lạ hay không có thể báo xanh dù không thấy bảng nào để đo, nên một lỗi cuộn có thể lọt.
 - AC-11 thu hẹp ngày 03/10 theo quyết định của chủ kho, sau bốn lượt S4 mà E14 chiếm ~9,6 giờ
   máy và không ra hồi quy sản phẩm nào (lượt 4, sha 934ee26d: 5 «hoi quy» = 4 luật phạm vi
   vòng của hồ sơ khác + 1 lỗi dựng môi trường). Bỏ khỏi phép đo, có tên:
