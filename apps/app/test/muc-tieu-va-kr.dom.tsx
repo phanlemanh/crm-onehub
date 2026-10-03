@@ -188,7 +188,13 @@ const danhSachTu = (ds: MucTieuOutput[]) =>
 	danhSachOutput.parse({
 		rows: ds.map((mt) => ({ ...mt, krKhop: [] })),
 		total: ds.length,
-		facetCounts: { phuTrach: [], loai: [], trangThai: [], tuTin: [] },
+		facetCounts: {
+			phuTrach: [],
+			loai: [],
+			trangThai: [],
+			tuTin: [],
+			gopY: [],
+		},
 		canEdit: false,
 	});
 

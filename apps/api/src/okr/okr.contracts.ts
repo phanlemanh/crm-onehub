@@ -154,6 +154,7 @@ export const troLyDanhSachOutput = z.object({
 	dong: z.array(dongHien),
 	dangSoan: z.boolean(),
 	maKetThuc: z.string().nullable(),
+	docLuc: z.string().nullable(),
 	lyDo: lyDoKhongSanSang.nullable(),
 });
 export const troLyQuyetInput = z.object({

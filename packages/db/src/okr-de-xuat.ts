@@ -12,6 +12,7 @@ export type DanhSachDeXuat = {
 	dong: OkrDeXuat[];
 	dangSoan: boolean;
 	maKetThuc: string | null;
+	docLuc: Date | null;
 };
 
 export type MucTieuHienTai = {
@@ -81,6 +82,7 @@ export async function danhSachDeXuat(
 	const trangThaiViec = {
 		dangSoan: viec !== null && viec.finishedAt === null,
 		maKetThuc: viec?.outcome ?? null,
+		docLuc: viec?.finishedAt ?? null,
 	};
 	if (!mt) return { dong: [], ...trangThaiViec };
 	const hetHan = hang.filter((h) => hetHieuLuc(mt, h));

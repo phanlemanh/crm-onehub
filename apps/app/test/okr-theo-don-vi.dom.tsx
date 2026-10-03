@@ -173,7 +173,6 @@ function nut(
 		lapLai: false,
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
-		soGopYCho: 0,
 		expected: 25,
 		children,
 	};

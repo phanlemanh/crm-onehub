@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { db } from "@crm/db";
 import { krTheoKara, type VetTen } from "@crm/validation/okr-theo-kara";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { z } from "zod";
 import { idMau } from "../scripts/okr-mau/nap";
 import { OkrXemService } from "../src/okr/okr-xem.service";
 import {
@@ -54,25 +55,25 @@ type DanhSach = {
 
 let app: NestExpressApplication;
 let cycleId = "";
-const cookie: Record<Nguoi, string> = {
+const cookie = {
 	truong: "",
 	"phu-trach-kr2": "",
 	"chi-doc": "",
 	"truong-nam": "",
 	"truong-bo-phan": "",
 	"quan-tri": "",
-};
+} satisfies Record<Nguoi, string>;
 const id = { tenMt: "", tenK1: "", tenK2: "", viSao: "", canChinh: "" };
 const id2 = { ten: "", tenK1: "", hoi: "" };
 
-const DON_VI: Record<Nguoi, { loai: "pb" | "bp"; id: string }> = {
+const DON_VI = {
 	truong: { loai: "pb", id: PB_BAC },
 	"phu-trach-kr2": { loai: "pb", id: PB_BAC },
 	"chi-doc": { loai: "pb", id: PB_BAC },
 	"truong-nam": { loai: "pb", id: PB_NAM },
 	"truong-bo-phan": { loai: "bp", id: BP_KD },
 	"quan-tri": { loai: "bp", id: BP_KD },
-};
+} satisfies Record<Nguoi, { loai: "pb" | "bp"; id: string }>;
 
 async function danhSach(ai: Nguoi, gopY: "cho"[] = []): Promise<DanhSach> {
 	return ok<DanhSach>(
@@ -299,11 +300,7 @@ describe("dem-chip", () => {
 			const deXuat = new Proxy(goc.okrDeXuat, {
 				get(dich, khoa, nhan) {
 					const v = Reflect.get(dich, khoa, nhan);
-					if (
-						typeof khoa === "string" &&
-						DEM.has(khoa) &&
-						typeof v === "function"
-					)
+					if (DEM.has(String(khoa)) && v instanceof Function)
 						return (...vao: unknown[]) => {
 							lan += 1;
 							return v.apply(dich, vao);
@@ -532,17 +529,33 @@ describe("bo-qua", () => {
 				createdAt: t("2030-01-14T00:00:00Z"),
 				quyetLuc: null,
 			});
-			const chay = (sql: string, ngay: string) =>
-				db.$queryRawUnsafe<Record<string, unknown>[]>(
-					sql.replaceAll(":ngay_len", `'${ngay}'::timestamptz`),
-				);
-			const tiLe = await chay(veHai, "2030-01-01T00:00:00Z");
+			const chay = async <T extends z.ZodType>(
+				sql: string,
+				ngay: string,
+				dong: T,
+			) =>
+				z
+					.array(dong)
+					.parse(
+						await db.$queryRawUnsafe<unknown[]>(
+							sql.replaceAll(":ngay_len", `'${ngay}'::timestamptz`),
+						),
+					);
+			const tiLe = await chay(
+				veHai,
+				"2030-01-01T00:00:00Z",
+				z.object({ cap_muc_tieu: z.boolean(), "?column?": z.number() }),
+			);
 			const theoNhom = Object.fromEntries(
-				tiLe.map((r) => [String(r.cap_muc_tieu), Number(Object.values(r)[1])]),
+				tiLe.map((r) => [String(r.cap_muc_tieu), r["?column?"]]),
 			);
 			expect(theoNhom).toEqual({ true: 1, false: 1 });
-			const mocRa = await chay(moc, "2030-02-01T00:00:00Z");
-			expect(Number(Object.values(mocRa[0] ?? {})[0])).toBeCloseTo(2 / 3, 5);
+			const mocRa = await chay(
+				moc,
+				"2030-02-01T00:00:00Z",
+				z.object({ "?column?": z.number() }),
+			);
+			expect(mocRa[0]?.["?column?"] ?? -1).toBeCloseTo(2 / 3, 5);
 		},
 		CHO_DB,
 	);

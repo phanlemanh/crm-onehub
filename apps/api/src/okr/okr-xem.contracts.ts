@@ -5,14 +5,13 @@ import {
 	LOAI_MUC_TIEU,
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
+import { LOC_GOP_Y } from "@crm/validation/okr-tham-so";
 import { z } from "zod";
 import { donViChon, mucTieuOutput, type NutCanChinh } from "./okr.contracts";
 import { OKR_XEM } from "./okr-xem.config";
 
 const ma = z.string().trim().min(1).max(120);
 const toiDa = OKR_XEM.loc.toiDaMoiMat;
-
-export const LOC_GOP_Y = ["cho"] as const;
 
 export const locDanhSach = z.object({
 	phuTrach: z.array(ma).max(toiDa),

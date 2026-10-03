@@ -20,6 +20,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { BangMucTieu } from "./bang-muc-tieu";
 import { useChuKy } from "./chon-chu-ky";
+import { DIEM_CAM_GOP_Y } from "./chip-gop-y";
 import { ChuaChuKy, DangTai, Loi } from "./trang-thai-okr";
 import { ViecOkrCuaToi } from "./viec-cua-toi";
 
@@ -90,7 +91,12 @@ function MucTieuCuaToi() {
 
 	return (
 		<div data-trang-thai="ST-cuatoi-codulieu">
-			<BangMucTieu danhDauCuaToi ds={ds} hienDonVi />
+			<BangMucTieu
+				danhDauCuaToi
+				diemCam={DIEM_CAM_GOP_Y}
+				ds={ds}
+				hienDonVi
+			/>
 		</div>
 	);
 }

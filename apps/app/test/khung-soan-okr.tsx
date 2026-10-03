@@ -238,7 +238,7 @@ export const { DanhSachCuoc } = await import(
 	"@/app/(app)/[slug]/okr/soan/danh-sach-cuoc"
 );
 export const { SOAN_UI } = await import("@/app/(app)/[slug]/okr/soan/cau-hinh");
-export const { dauThangSau } = await import("@/app/(app)/[slug]/okr/cot-gop-y");
+export const { dauThangSau } = await import("@/lib/okr-chu-ky-nhan");
 export const { homNayVn } = await import("@/lib/okr-chu-ky-nhan");
 export const { donViSoanCua } = await import(
 	"@/app/(app)/[slug]/okr/soan/nut-soan"

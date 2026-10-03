@@ -21,6 +21,7 @@ import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { BangMucTieu } from "../bang-muc-tieu";
+import { DIEM_CAM_GOP_Y } from "../chip-gop-y";
 import { CayCanChinh } from "../cay-can-chinh";
 import { CayDonVi } from "../cay-don-vi";
 import { ChamDiem } from "../cham-diem";
@@ -100,7 +101,12 @@ function viTriNguoi(cay: CayDuLieu, id: string) {
 function DanhSach({ objectives }: { objectives: MucTieu[] }) {
 	return (
 		<div data-trang-thai="ST-donvi-danhsach">
-			<BangMucTieu danhDauCuaToi={false} ds={objectives} hienDonVi={false} />
+			<BangMucTieu
+				danhDauCuaToi={false}
+				diemCam={DIEM_CAM_GOP_Y}
+				ds={objectives}
+				hienDonVi={false}
+			/>
 		</div>
 	);
 }
@@ -150,6 +156,7 @@ export function TheoDonVi() {
 			[SEARCH_PARAM.okr.loai]: giaTriLoc(thay.loai ?? loc.loai),
 			[SEARCH_PARAM.okr.trangThai]: giaTriLoc(thay.trangThai ?? loc.trangThai),
 			[SEARCH_PARAM.okr.tuTin]: giaTriLoc(thay.tuTin ?? loc.tuTin),
+			[SEARCH_PARAM.okr.gopY]: giaTriLoc(thay.gopY ?? loc.gopY),
 		});
 	const boLoc = () =>
 		void datUrl({
@@ -157,6 +164,7 @@ export function TheoDonVi() {
 			[SEARCH_PARAM.okr.loai]: null,
 			[SEARCH_PARAM.okr.trangThai]: null,
 			[SEARCH_PARAM.okr.tuTin]: null,
+			[SEARCH_PARAM.okr.gopY]: null,
 		});
 	const don = url[SEARCH_PARAM.okr.don] ?? GOC;
 	const { cycles, currentId } = useChuKy();

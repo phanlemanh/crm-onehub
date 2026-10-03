@@ -5,11 +5,8 @@ import {
 	TRANG_THAI_MUC_TIEU,
 	type TrangThaiMucTieu,
 } from "@crm/validation/okr-muc-tieu";
-import {
-	type DanhSachOutput,
-	LOC_GOP_Y,
-	type LocDanhSach,
-} from "./okr-xem.contracts";
+import { LOC_GOP_Y } from "@crm/validation/okr-tham-so";
+import type { DanhSachOutput, LocDanhSach } from "./okr-xem.contracts";
 
 type NguoiGon = { id: string; name: string };
 

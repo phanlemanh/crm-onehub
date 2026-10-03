@@ -3,32 +3,20 @@ import { troLyTomTatPhanHoiInput } from "@crm/validation/okr-tom-tat";
 import {
 	bam,
 	cho,
-	D_TEN,
 	dat,
 	datMacDinh,
-	dongCua,
 	dongHet,
 	goiCua,
-	hopMucTieu,
-	MT,
 	mo,
 	nhip,
-	nut,
-	nutCo,
 } from "./khung-gop-y";
 
-const { HopThoaiMucTieu } = await import(
-	"@/app/(app)/[slug]/okr/hop-thoai-muc-tieu"
-);
 const { FactSuggestion } = await import("@/components/crm/facts");
 const { ProposedChange } = await import("@crm/ui/components/proposed-change");
 const { KhoiTomTat } = await import("@/app/(app)/[slug]/okr/khoi-tom-tat");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 const { messages } = await import("@crm/ui/lib/messages");
-const { okrGopYMessages } = await import("@/lib/messages/okr-gop-y");
 type ContactFact = import("@/lib/contact-facts").ContactFact;
-
-const g = okrGopYMessages("vi");
 
 afterEach(dongHet);
 
@@ -80,19 +68,6 @@ describe("man-cu", () => {
 				"doi chung",
 			),
 		).toThrow("doi chung doi sang inline");
-	});
-
-	test("man-cu: cột góp ý OKR vẫn là thẻ", async () => {
-		datMacDinh([D_TEN]);
-		await mo(
-			<HopThoaiMucTieu yeuCau={{ loai: "sua", mucTieu: MT }} dong={() => {}} />,
-		);
-		await cho(() => hopMucTieu() !== null, "hop Muc tieu mo");
-		await cho(() => nutCo(g.nut.nho) !== null, "nut nho gop y");
-		await bam(nut(g.nut.nho));
-		await cho(() => dongCua(D_TEN.id) !== null, "the viet lai");
-		const the = dongCua(D_TEN.id);
-		kiemThe(the?.closest('[data-slot="proposed-change"]') ?? null, "the gop y");
 	});
 
 	test("man-cu: thông tin liên hệ vẫn là thẻ", async () => {

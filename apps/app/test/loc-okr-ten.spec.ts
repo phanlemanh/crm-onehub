@@ -8,6 +8,7 @@ const DEM = {
 	loai: [],
 	trangThai: [],
 	tuTin: [],
+	gopY: [],
 } satisfies RouterOutputs["okr"]["danhSach"]["facetCounts"];
 
 const TEN = new Map([

@@ -232,6 +232,16 @@ function doc(duong: string): Json | ObjectiveOutput | ViecCuaToiOutput {
 			};
 		case "workspace.get":
 			return { viewerRole: "member" };
+		case "okr.troLySanSang":
+			return { bat: false, lyDo: "tat" };
+		case "okr.troLyDanhSach":
+			return {
+				dong: [],
+				dangSoan: false,
+				maKetThuc: null,
+				docLuc: null,
+				lyDo: "tat",
+			};
 		default:
 			return null;
 	}

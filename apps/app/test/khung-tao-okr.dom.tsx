@@ -7,10 +7,6 @@ import type { DongHien } from "../../api/src/okr/okr.contracts";
 import {
 	bam,
 	cho,
-	cot,
-	D_HOI_KR,
-	D_KR,
-	D_TEN,
 	dat,
 	datMacDinh,
 	dongHet,
@@ -24,7 +20,6 @@ import {
 	mo,
 	nhip,
 	nut,
-	nutCo,
 	phim,
 } from "./khung-gop-y";
 import {
@@ -40,11 +35,9 @@ const { HopThoaiKr } = await import("@/app/(app)/[slug]/okr/hop-thoai-kr");
 const { CreateDealSheet } = await import(
 	"@/app/(app)/[slug]/deals/create-deal-sheet"
 );
-const { okrGopYMessages } = await import("@/lib/messages/okr-gop-y");
 const { okrMessages } = await import("@/lib/messages/okr");
 const { messages: uiMessages } = await import("@crm/ui/lib/messages");
 
-const mg = okrGopYMessages("vi");
 const h = okrMessages("vi").hopThoai;
 const tenDong = uiMessages("vi").dialog.close;
 
@@ -195,54 +188,6 @@ async function dongBang(
 	if (duong === "huy") await bam(nut(h.huy, ngan(hop) ?? document.body));
 	if (duong === "x") await bam(nutX(hop));
 }
-
-describe("khung-tao-okr — cỡ ngăn", () => {
-	test("co-ngan: cột đóng cùng cỡ ngăn deal; cột mở thì assist và thân chứa cả form lẫn cột", async () => {
-		const coDeal = await dataSizeNganDeal();
-		const ca: { ten: string; moNgan: () => Promise<void>; dau: string }[] = [
-			{
-				ten: "muc tieu",
-				moNgan: async () => {
-					await moNgan(BON_NGAN[1], [D_TEN]);
-				},
-				dau: D_TEN.id,
-			},
-			{
-				ten: "kr",
-				moNgan: async () => {
-					await moNgan(BON_NGAN[3], [D_KR]);
-				},
-				dau: D_KR.id,
-			},
-		];
-		for (const c of ca) {
-			await c.moNgan();
-			const hop = c.ten === "kr" ? hopKr : hopMucTieu;
-			if (hop()?.getAttribute("data-size") !== coDeal)
-				throw new Error(
-					`co ngan ${c.ten}: dong cot ${hop()?.getAttribute("data-size")} != ${coDeal}`,
-				);
-			await cho(() => nutCo(mg.nut.nho) !== null, "nut nho gop y");
-			await bam(nut(mg.nut.nho));
-			await cho(() => cot() !== null, `cot ${c.ten}`);
-			if (hop()?.getAttribute("data-size") !== "assist")
-				throw new Error(`co ngan ${c.ten}`);
-			const than = hop()?.querySelector('[data-slot="sheet-body"]');
-			expect(than?.getAttribute("data-split")).toBe("true");
-			expect(than?.querySelector("form")).not.toBeNull();
-			expect(than?.querySelector("[data-cot-gop-y]")).not.toBeNull();
-			const dongCot = cot()?.querySelector<HTMLButtonElement>(
-				`button[aria-label="${mg.cot.dong}"]`,
-			);
-			if (!dongCot) throw new Error(`khong thay nut dong cot ${c.ten}`);
-			await bam(dongCot);
-			await cho(() => cot() === null, `dong cot ${c.ten}`);
-			if (hop()?.getAttribute("data-size") !== coDeal)
-				throw new Error(`co ngan ${c.ten}: ket o assist sau khi dong cot`);
-			await dongHet();
-		}
-	}, 60_000);
-});
 
 describe("khung-tao-okr — giữ chữ đang sửa", () => {
 	test("giu: bốn ngăn × bốn đường đóng × có hay không có sửa", async () => {
@@ -624,24 +569,4 @@ describe("khung-tao-okr — ngăn trong khung Mục tiêu trên URL", () => {
 		console.log(`so khang dinh: ${soKhang}`);
 		expect(soKhang).toBe(8 + 3 + 3);
 	}, 300_000);
-});
-
-describe("khung-tao-okr — Mở KR này đổi khoá URL", () => {
-	test("mo-kr-url: từ ngăn Sửa mục tiêu mở đúng ngăn Sửa KR và ghi hopOkr của KR đó", async () => {
-		const nk2 = nhatKyUrl();
-		await moKhung(`record=objective:${MT.id}&hopOkr=muc-tieu`, nk2, [D_HOI_KR]);
-		await cho(() => hopMucTieu() !== null, "ngan muc tieu");
-		await cho(() => nutCo(mg.nut.nho) !== null, "nut nho");
-		await bam(nut(mg.nut.nho));
-		await cho(() => nutCo(mg.dong.moKr) !== null, "nut mo kr");
-		await bam(nut(mg.dong.moKr));
-		await cho(() => hopKr() !== null, "ngan kr");
-		expect(hopMucTieu()).toBeNull();
-		if (hopKr()?.getAttribute("data-hop-thoai-kr") !== KR_2.id)
-			throw new Error(
-				`mo sai kr: ${hopKr()?.getAttribute("data-hop-thoai-kr")}`,
-			);
-		expect(oTen(hopKr())?.value).toBe(KR_2.title);
-		expect(nk2.cuoi().get("hopOkr")).toBe(`kr:${KR_2.id}`);
-	}, 120_000);
 });

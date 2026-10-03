@@ -187,6 +187,19 @@ mock.module("@/lib/trpc/client", () => ({
 			follow: thuTuc("okr.follow"),
 			moCapNhat: thuTuc("okr.moCapNhat"),
 			guiCapNhat: thuTuc("okr.guiCapNhat"),
+			troLySanSang: thuTuc("okr.troLySanSang", () => ({
+				bat: false,
+				lyDo: "tat",
+			})),
+			troLyDanhSach: thuTuc("okr.troLyDanhSach", () => ({
+				dong: [],
+				dangSoan: false,
+				maKetThuc: null,
+				docLuc: null,
+				lyDo: "tat",
+			})),
+			troLyDeXuat: thuTuc("okr.troLyDeXuat"),
+			troLyQuyet: thuTuc("okr.troLyQuyet"),
 		},
 		workspace: {
 			get: thuTuc("workspace.get", () => ({ viewerRole: "member" })),
