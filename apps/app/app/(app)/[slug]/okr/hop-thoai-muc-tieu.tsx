@@ -49,12 +49,12 @@ import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrMessages } from "@/lib/messages/okr";
-import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { okrCanhKrMessages } from "@/lib/messages/okr-canh-kr";
 import {
 	type OkrGioiHanMessages,
 	okrGioiHanMessages,
 } from "@/lib/messages/okr-gioi-han";
+import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { DongDanGopY } from "./dong-dan-gop-y";
@@ -160,7 +160,7 @@ export function HopThoaiMucTieu({
 		yeuCau.loai === "sua"
 			? yeuCau.mucTieu.level
 			: CAP_THEO_DON[yeuCau.don.loai];
-	const [dau, setDau] = useState(() => ({
+	const [dau] = useState(() => ({
 		cap: capGoc,
 		ten: cu?.title ?? "",
 		loai: cu?.kind ?? "cam-ket",

@@ -27,6 +27,7 @@ import {
 	ItemGroup,
 	ItemTitle,
 } from "@crm/ui/components/item";
+import { KaraTrace } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -34,7 +35,6 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
-import { KaraTrace } from "@crm/ui/components/kara";
 import { krTheoKara } from "@crm/validation/okr-theo-kara";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
@@ -53,16 +53,16 @@ import { HopThoaiKr } from "@/app/(app)/[slug]/okr/hop-thoai-kr";
 import { HopThoaiMucTieu } from "@/app/(app)/[slug]/okr/hop-thoai-muc-tieu";
 import { CELL, type KetQua } from "@/app/(app)/[slug]/okr/kieu";
 import {
+	BoKhoaUrl,
+	khoaHopOkr,
+	useHopOkr,
+} from "@/app/(app)/[slug]/okr/ngan-okr-url";
+import {
 	DeXuatNeo,
 	type LoiDiKr,
 	VungKara,
 } from "@/app/(app)/[slug]/okr/nhom-kara";
 import { parseAsNeoGopY } from "@/app/(app)/[slug]/okr/okr-search-params";
-import {
-	BoKhoaUrl,
-	khoaHopOkr,
-	useHopOkr,
-} from "@/app/(app)/[slug]/okr/ngan-okr-url";
 import {
 	NhanTinhTrang,
 	NhanTrangThai,
@@ -485,10 +485,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 		sauTenKr: (kr) => (theoKara.has(kr.id) ? <KaraTrace /> : null),
 	};
 	const vung = useRef<HTMLDivElement>(null);
-	const [neo, setNeo] = useQueryState(
-		SEARCH_PARAM.okr.neoGopY,
-		parseAsNeoGopY,
-	);
+	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
 	useEffect(() => {
 		if (!neo) return;
 		const giam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

@@ -388,10 +388,7 @@ export function HopThoaiKr({
 			}}
 			coThayDoi={coThayDoi}
 		>
-			<SheetContent
-				side="right"
-				data-hop-thoai-kr={n.krId ?? "moi"}
-			>
+			<SheetContent side="right" data-hop-thoai-kr={n.krId ?? "moi"}>
 				<SheetHeader>
 					<SheetTitle>{n.krId ? h.suaKr : h.themKr}</SheetTitle>
 					<SheetDescription translate="no">{mucTieu.title}</SheetDescription>

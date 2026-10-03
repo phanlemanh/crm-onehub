@@ -36,7 +36,7 @@ function nut(goc: ParentNode, ten: string): HTMLButtonElement {
 	return b;
 }
 
-function DeXuatThu({ onEsc }: { onEsc: () => void }) {
+function DeXuatThu() {
 	const [sua, setSua] = useState<string | null>(null);
 	const [quyet, setQuyet] = useState<ProposedChangeDecided | undefined>();
 	const actions: ProposedChangeAction[] = sua
@@ -76,32 +76,30 @@ function DeXuatThu({ onEsc }: { onEsc: () => void }) {
 				},
 			];
 	return (
-		<div
-			onKeyDown={(su) => {
-				if (su.key === "Escape") onEsc();
-			}}
-		>
-			<ProposedChange
-				actions={actions}
-				before="Đạt số giao dịch"
-				decided={quyet}
-				editing={
-					sua === null
-						? undefined
-						: { value: sua, onChange: setSua, onCancel: () => setSua(null) }
-				}
-				kind="rewrite"
-				rationale="Tên chưa có đích."
-				value="Đạt 1.000 giao dịch trong quý"
-			/>
-		</div>
+		<ProposedChange
+			actions={actions}
+			before="Đạt số giao dịch"
+			decided={quyet}
+			editing={
+				sua === null
+					? undefined
+					: { value: sua, onChange: setSua, onCancel: () => setSua(null) }
+			}
+			kind="rewrite"
+			rationale="Tên chưa có đích."
+			value="Đạt 1.000 giao dịch trong quý"
+		/>
 	);
 }
 
 describe("focus", () => {
 	test("bốn chuyển trạng thái giữ focus đúng chỗ, Esc không nổi tới cha", () => {
 		let escCha = 0;
-		const o = ve(<DeXuatThu onEsc={() => (escCha += 1)} />);
+		const nghe = (su: KeyboardEvent) => {
+			if (su.key === "Escape") escCha += 1;
+		};
+		document.body.addEventListener("keydown", nghe);
+		const o = ve(<DeXuatThu />);
 		const daQua: string[] = [];
 
 		act(() => nut(o, "Sửa").click());
@@ -121,6 +119,7 @@ describe("focus", () => {
 		if (document.activeElement !== o.querySelector('[data-hanh-dong="sua"]'))
 			throw new Error("focus roi: esc");
 		expect(escCha).toBe(0);
+		document.body.removeEventListener("keydown", nghe);
 		daQua.push("esc");
 
 		act(() => nut(o, "Sửa").click());

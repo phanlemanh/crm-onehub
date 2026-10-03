@@ -1,11 +1,11 @@
 "use client";
 
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	ketQuaTroLy,
 	type LyDoKhongSanSang,
 	TRO_LY_OKR_TRAN,
 } from "@crm/validation/okr-tro-ly";
-import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { troLyOkrMessages } from "@/lib/messages/tro-ly-okr";

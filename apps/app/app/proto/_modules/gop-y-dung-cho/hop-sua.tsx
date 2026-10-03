@@ -210,10 +210,7 @@ export function HopSuaMucTieu({ kieu }: { kieu: "hien-tai" | "b" }) {
 									</Button>
 								</div>
 							) : (
-								<DongDanSang
-									noi="Quyết ngay dưới từng KR."
-									so={GOP_Y.length}
-								/>
+								<DongDanSang noi="Quyết ngay dưới từng KR." so={GOP_Y.length} />
 							)
 						}
 					/>
@@ -263,10 +260,7 @@ export function HopSuaKr({
 					<form onSubmit={(e) => e.preventDefault()}>
 						<FieldGroup>
 							{laSua && soGopY > 0 ? (
-								<DongDanSang
-									noi="Quyết ngay dưới KR này."
-									so={soGopY}
-								/>
+								<DongDanSang noi="Quyết ngay dưới KR này." so={soGopY} />
 							) : null}
 							<Field>
 								<FieldLabel htmlFor="kr-ten">Tên KR</FieldLabel>

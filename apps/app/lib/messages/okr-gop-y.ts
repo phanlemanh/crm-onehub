@@ -117,7 +117,8 @@ const en: OkrGopYMessages = {
 		loi: "Kara couldn't read this objective",
 		loiMoTa: "The read was interrupted. Nothing was written to the objective.",
 		thuLai: "Try again",
-		hetLuot: "You have used today's feedback requests. They reopen at 00:00 tomorrow.",
+		hetLuot:
+			"You have used today's feedback requests. They reopen at 00:00 tomorrow.",
 		tamNghi: (ngay: string) => `Kara is paused until ${ngay}.`,
 	},
 	de: {
