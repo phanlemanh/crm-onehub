@@ -89,7 +89,7 @@ function kiemChoRe(agentMd) {
 	const diff = tapTepHang();
 	const tapDiff = [...diff.tap].sort();
 	console.log(
-		`tai-lieu: diff ${diff.goc.slice(0, 14)}..${diff.dinh.slice(0, 12)} giao ${diff.release}: ${tapDiff.length} tep — ${tapDiff.join(", ")}`,
+		`tai-lieu: diff ${diff.goc.replace(/^([0-9a-f]{12})[0-9a-f]*/, "$1")}..${diff.dinh.slice(0, 12)} giao ${diff.release}: ${tapDiff.length} tep — ${tapDiff.join(", ")}`,
 	);
 	if (doan === null) {
 		console.log(`tai-lieu: docs/agent.md chua co muc «${TAI_LIEU.muc.choRe}»`);
