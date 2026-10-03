@@ -20,7 +20,9 @@ import {
 	TRANG_THAI_MUC_TIEU,
 	type TrangThaiMucTieu,
 } from "@crm/validation/okr-muc-tieu";
+import { LOC_GOP_Y, type LocGopY } from "@crm/validation/okr-tham-so";
 import { okrMessages } from "@/lib/messages/okr";
+import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
@@ -31,19 +33,24 @@ export type LocOkrGiaTri = {
 	loai: LoaiMucTieu[];
 	trangThai: TrangThaiMucTieu[];
 	tuTin: MucTuTin[];
+	gopY: LocGopY[];
 };
 
 export type MatLocOkr = keyof LocOkrGiaTri;
 
+const MAT_LOC: readonly MatLocOkr[] = [
+	"phuTrach",
+	"loai",
+	"trangThai",
+	"tuTin",
+	"gopY",
+];
+
 const laMat = (id: string): id is MatLocOkr =>
-	id === "phuTrach" || id === "loai" || id === "trangThai" || id === "tuTin";
+	MAT_LOC.some((mat) => mat === id);
 
 export const coLoc = (loc: LocOkrGiaTri) =>
-	loc.phuTrach.length +
-		loc.loai.length +
-		loc.trangThai.length +
-		loc.tuTin.length >
-	0;
+	MAT_LOC.some((mat) => loc[mat].length > 0);
 
 export function chuanLoc(
 	id: MatLocOkr,
@@ -62,6 +69,8 @@ export function chuanLoc(
 			};
 		case "tuTin":
 			return { tuTin: MUC_TU_TIN.filter((v) => values.includes(v)) };
+		case "gopY":
+			return { gopY: LOC_GOP_Y.filter((v) => values.includes(v)) };
 	}
 }
 
@@ -102,6 +111,7 @@ export function LocOkr({
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
+	const mg = okrGopYMessages(locale);
 	const ui = useMessages();
 	const tenMuc = {
 		cao: ui.okr.tuTinCao,
@@ -145,6 +155,14 @@ export function LocOkr({
 				label: `${tenMuc[v]} · ${soCua(dem?.tuTin ?? [], v)}`,
 			})),
 		},
+		{
+			id: "gopY",
+			label: mg.loc.mat,
+			options: LOC_GOP_Y.map((v) => ({
+				value: v,
+				label: mg.loc.coCho(String(soCua(dem?.gopY ?? [], v))),
+			})),
+		},
 	];
 
 	return (
@@ -156,6 +174,7 @@ export function LocOkr({
 					loai: loc.loai,
 					trangThai: loc.trangThai,
 					tuTin: loc.tuTin,
+					gopY: loc.gopY,
 				}}
 				onFilterChange={(id, values) => {
 					if (laMat(id)) doiLoc(chuanLoc(id, values));

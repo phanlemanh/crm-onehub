@@ -224,15 +224,46 @@ const GHIM_TRO_LY_OKR = {
 } satisfies Record<string, [string, string]>;
 
 const GHIM_OKR_GOP_Y = {
-	"okr-gop-y:nut.dangCho": ["1 đề xuất đang chờ", "12 đề xuất đang chờ"],
-	"okr-gop-y:nut.tamNghi": [
-		"Trợ lý OKR tạm nghỉ tới 1",
-		"Trợ lý OKR tạm nghỉ tới 12",
+	"okr-gop-y:vung.soCho": ["1 góp ý chờ", "12 góp ý chờ"],
+	"okr-gop-y:vung.lyDo": [
+		"Kara đọc tên, «vì sao lúc này» và 1 KR của Mục tiêu này. Kara chỉ đọc dữ liệu OKR.",
+		"Kara đọc tên, «vì sao lúc này» và 12 KR của Mục tiêu này. Kara chỉ đọc dữ liệu OKR.",
 	],
-	"okr-gop-y:cot.soDong": [
-		"1 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
-		"12 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
+	"okr-gop-y:vung.rongMoTa": [
+		"Tên, «vì sao lúc này» và các KR đã đọc ổn lúc 1. Sửa xong thì nhờ Kara đọc lại.",
+		"Tên, «vì sao lúc này» và các KR đã đọc ổn lúc 12. Sửa xong thì nhờ Kara đọc lại.",
 	],
+	"okr-gop-y:vung.tamNghi": ["Kara tạm nghỉ tới 1.", "Kara tạm nghỉ tới 12."],
+	"okr-gop-y:bienNhan.hoanTacKr": [
+		"Đã hoàn tác — tên KR trở lại «1»",
+		"Đã hoàn tác — tên KR trở lại «12»",
+	],
+	"okr-gop-y:bienNhan.hoanTacMucTieu": [
+		"Đã hoàn tác — tên Mục tiêu trở lại «1»",
+		"Đã hoàn tác — tên Mục tiêu trở lại «12»",
+	],
+	"okr-gop-y:bienNhan.boQuaTen": [
+		"Đã bỏ qua tên Kara đề xuất: «1»",
+		"Đã bỏ qua tên Kara đề xuất: «12»",
+	],
+	"okr-gop-y:bienNhan.boQuaCau": [
+		"Đã bỏ qua câu Kara đề xuất: «1»",
+		"Đã bỏ qua câu Kara đề xuất: «12»",
+	],
+	"okr-gop-y:bienNhan.boQuaCanChinh": [
+		"Đã bỏ qua góp ý góp vào «1»",
+		"Đã bỏ qua góp ý góp vào «12»",
+	],
+	"okr-gop-y:bienNhan.boQuaHoi": [
+		"Đã bỏ qua câu hỏi của Kara: 1",
+		"Đã bỏ qua câu hỏi của Kara: 12",
+	],
+	"okr-gop-y:chip": ["1 góp ý", "12 góp ý"],
+	"okr-gop-y:chipAria": [
+		"Kara có 1 góp ý chờ cho «A», mở khung chi tiết",
+		"Kara có 12 góp ý chờ cho «A», mở khung chi tiết",
+	],
+	"okr-gop-y:loc.coCho": ["Có góp ý chờ · 1", "Có góp ý chờ · 12"],
 	"okr-gop-y:xuHuong": [
 		"Theo các lần cập nhật gần nhất (1/tuần), cuối kỳ ước khoảng A B",
 		"Theo các lần cập nhật gần nhất (12/tuần), cuối kỳ ước khoảng A B",

@@ -1,146 +1,48 @@
 "use client";
 
 import AiGenerate from "@carbon/icons-react/es/AiGenerate";
-import Checkmark from "@carbon/icons-react/es/Checkmark";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
-import {
-	Item,
-	ItemActions,
-	ItemContent,
-	ItemDescription,
-	ItemMedia,
-	ItemTitle,
-} from "@crm/ui/components/item";
-import {
-	Popover,
-	PopoverContent,
-	PopoverDescription,
-	PopoverHeader,
-	PopoverTitle,
-	PopoverTrigger,
-} from "@crm/ui/components/popover";
-import type { ReactNode } from "react";
+import { KaraMark } from "@crm/ui/components/kara";
+import Link from "next/link";
+import type { MouseEvent } from "react";
+import type { MucTieuDu } from "../muc-tieu-va-kr/du-lieu";
+import { STATE, soGopYCho } from "./du-lieu";
 
-export function DauKara({ chu }: { chu: ReactNode }) {
+function chanNoiBot(su: MouseEvent) {
+	su.stopPropagation();
+}
+
+export function ChipGopY({ mt }: { mt: MucTieuDu }) {
+	const so = soGopYCho(mt.id);
+	if (so === 0) return null;
+	return (
+		<Button
+			asChild
+			data-chip-gop-y={mt.id}
+			onClick={chanNoiBot}
+			size="xs"
+			variant="outline"
+		>
+			<Link
+				aria-label={`Kara có ${so} góp ý chờ cho «${mt.ten}» — mở khung chi tiết`}
+				href={`?state=${STATE.bChiTiet}`}
+			>
+				<KaraMark scope={`${so} góp ý`} />
+			</Link>
+		</Button>
+	);
+}
+
+export function DauTheoKara() {
 	return (
 		<span
 			className="inline-flex items-center gap-1 text-muted-foreground text-xs"
-			data-dau-kara
+			data-theo-kara
+			title="Tên này đổi theo đề xuất của Kara. Dấu mất khi có người sửa tay."
 		>
 			<Icon icon={AiGenerate} />
-			{chu}
+			theo Kara
 		</span>
-	);
-}
-
-export function NhanKara({ chu, viSao }: { chu: ReactNode; viSao: ReactNode }) {
-	return (
-		<div className="flex items-center gap-2" data-nhan-kara>
-			<DauKara chu={chu} />
-			<Popover>
-				<PopoverTrigger asChild>
-					<Button size="xs" variant="ghost">
-						Vì sao?
-					</Button>
-				</PopoverTrigger>
-				<PopoverContent align="start">
-					<PopoverHeader>
-						<PopoverTitle>Kara dựa trên gì</PopoverTitle>
-						<PopoverDescription>{viSao}</PopoverDescription>
-					</PopoverHeader>
-				</PopoverContent>
-			</Popover>
-		</div>
-	);
-}
-
-export type NutDeXuat = {
-	id: string;
-	nhan: string;
-	kieu: "chinh" | "phu" | "nhe";
-	bam: () => void;
-};
-
-const BIEN_THE = {
-	chinh: "default",
-	phu: "outline",
-	nhe: "ghost",
-} as const;
-
-export function DeXuatNeo({
-	noiDung,
-	lyDo,
-	nut,
-}: {
-	noiDung: ReactNode;
-	lyDo?: ReactNode;
-	nut: NutDeXuat[];
-}) {
-	return (
-		<Item size="sm" data-de-xuat-neo>
-			<ItemMedia>
-				<span className="text-muted-foreground">
-					<Icon icon={AiGenerate} />
-				</span>
-			</ItemMedia>
-			<ItemContent>
-				<ItemTitle>{noiDung}</ItemTitle>
-				{lyDo ? <ItemDescription>{lyDo}</ItemDescription> : null}
-			</ItemContent>
-			<ItemActions>
-				{nut.map((n) => (
-					<Button
-						key={n.id}
-						size="sm"
-						variant={BIEN_THE[n.kieu]}
-						data-hanh-dong={n.id}
-						onClick={n.bam}
-					>
-						{n.nhan}
-					</Button>
-				))}
-			</ItemActions>
-		</Item>
-	);
-}
-
-export function DiffTen({ truoc, sau }: { truoc: string; sau: string }) {
-	return (
-		<span translate="no">
-			<del className="text-muted-foreground line-through decoration-diff-bo">
-				{truoc}
-			</del>
-			{" → "}
-			<ins className="bg-diff-them/15 no-underline">{sau}</ins>
-		</span>
-	);
-}
-
-export function BienNhan({
-	chu,
-	daNhan,
-	hoanTac,
-}: {
-	chu: ReactNode;
-	daNhan: boolean;
-	hoanTac: () => void;
-}) {
-	return (
-		<Item size="xs" data-bien-nhan={daNhan ? "nhan" : "bo-qua"}>
-			<ItemContent>
-				<ItemDescription>
-					<span className="inline-flex items-center gap-1.5">
-						{daNhan ? <Icon icon={Checkmark} /> : null}
-						{chu}
-					</span>
-				</ItemDescription>
-			</ItemContent>
-			<ItemActions>
-				<Button size="xs" variant="ghost" onClick={hoanTac}>
-					Hoàn tác
-				</Button>
-			</ItemActions>
-		</Item>
 	);
 }

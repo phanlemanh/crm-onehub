@@ -18,3 +18,6 @@ export type DonChonOkr =
 
 export const khoaDonOkr = (d: DonChonOkr): string =>
 	d.loai === "goc" ? d.loai : `${d.loai}:${d.id}`;
+
+export const LOC_GOP_Y = ["cho"] as const;
+export type LocGopY = (typeof LOC_GOP_Y)[number];

@@ -8,6 +8,7 @@ import { OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
 import { SO_KR_MOC } from "@crm/validation/okr-kr";
 import { OKR_MAU } from "@crm/validation/okr-mau";
+import { TIEN_TO_VET_KARA } from "@crm/validation/okr-theo-kara";
 import type { MaThieu } from "./hoi-y";
 
 export const OKR = {
@@ -21,7 +22,7 @@ export const OKR = {
 		viSao: 500,
 	},
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
-	troLy: { soLuotGanDay: 50, ghiChuVet: "tro-ly-okr:" },
+	troLy: { soLuotGanDay: 50, ghiChuVet: TIEN_TO_VET_KARA },
 	soan: {
 		ghiChuVet: "soan-okr:",
 		soCuocGanDay: 50,

@@ -101,27 +101,44 @@ export async function cauHinhAiLuc(
 	};
 }
 
+export const chonDonViMucTieu = {
+	level: true,
+	divisionId: true,
+	department: { select: { id: true, divisionId: true } },
+	person: {
+		select: {
+			orgPlacement: {
+				select: {
+					primaryDepartment: { select: { id: true, divisionId: true } },
+				},
+			},
+		},
+	},
+} as const;
+
+type PhongCuaDonVi = { id: string; divisionId: string | null } | null;
+
+export type HangDonViMucTieu = {
+	level: string;
+	divisionId: string | null;
+	department: PhongCuaDonVi;
+	person: {
+		orgPlacement: { primaryDepartment: PhongCuaDonVi } | null;
+	} | null;
+};
+
 export async function donViCuaMucTieu(
 	db: DbHoacTx,
 	objectiveId: string,
 ): Promise<DonViMucTieu> {
 	const mt = await db.okrObjective.findUniqueOrThrow({
 		where: { id: objectiveId },
-		select: {
-			level: true,
-			divisionId: true,
-			department: { select: { id: true, divisionId: true } },
-			person: {
-				select: {
-					orgPlacement: {
-						select: {
-							primaryDepartment: { select: { id: true, divisionId: true } },
-						},
-					},
-				},
-			},
-		},
+		select: chonDonViMucTieu,
 	});
+	return donViTuHang(mt);
+}
+
+export function donViTuHang(mt: HangDonViMucTieu): DonViMucTieu {
 	if (mt.level === "onehub") {
 		return { onehub: true, boPhanId: null, phongBanId: null };
 	}

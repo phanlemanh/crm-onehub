@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Góp ý của Kara cho OKR hiện đúng chỗ: trên danh sách có chip đếm và bộ lọc «có góp ý chờ», trong khung chi tiết mỗi góp ý nằm ngay dưới KR nó nói tới, nhận hay bỏ qua đều có biên nhận và Hoàn tác, còn hộp Sửa chỉ giữ một dòng dẫn sang.",
+  "decisions": [
+    {
+      "id": "E26",
+      "q": "Nhìn ảnh, người dùng có biết bấm nút nào thì ghi gì?",
+      "why": "Máy chấm đọc rõ chip, ba góp ý và trạng thái sau khi quyết. Riêng hai góp ý có nút trung tính («Thêm KR đối trọng», «Sửa KR này») thì sáu ảnh khai sẵn không cho thấy bấm xong sẽ ghi gì; ảnh mở hai hộp đó có trong trang bằng chứng (E2-chi-tiet-doi-trong, E2-chi-tiet-sua-kr3) nhưng không nằm trong đầu vào của máy chấm."
+    }
+  ],
+  "decisions_plain": [
+    {
+      "id": "d-20261003T162137Z-13",
+      "p": "Tab Vết đọc tên trước/sau của Mục tiêu và KR theo một dạng tự khai ở phía giao diện, không mượn kiểu của máy chủ — đổi lại, nếu máy chủ đổi dạng bản ghi vết thì phía giao diện không bị báo lỗi lúc dựng."
+    }
+  ]
+}

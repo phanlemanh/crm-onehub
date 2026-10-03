@@ -15,11 +15,14 @@ import {
 	type CachXemOkr,
 	type DonChonOkr,
 	khoaDonOkr,
+	LOC_GOP_Y,
+	type LocGopY,
 } from "@crm/validation/okr-tham-so";
 import {
 	createLoader,
 	createParser,
 	parseAsArrayOf,
+	parseAsBoolean,
 	parseAsString,
 	parseAsStringLiteral,
 } from "nuqs/server";
@@ -65,7 +68,12 @@ export const okrParsers = {
 		parseAsStringLiteral(MUC_TU_TIN),
 	).withDefault([]),
 	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO).withDefault("tab"),
+	[SEARCH_PARAM.okr.gopY]: parseAsArrayOf(
+		parseAsStringLiteral(LOC_GOP_Y),
+	).withDefault([]),
 };
+
+export const parseAsNeoGopY = parseAsBoolean;
 
 export const loadOkrSearchParams = createLoader(okrParsers);
 
@@ -80,12 +88,14 @@ export function locOkr(v: {
 	[SEARCH_PARAM.okr.loai]: LoaiMucTieu[];
 	[SEARCH_PARAM.okr.trangThai]: TrangThaiMucTieu[];
 	[SEARCH_PARAM.okr.tuTin]: MucTuTin[];
+	[SEARCH_PARAM.okr.gopY]: LocGopY[];
 }) {
 	return {
 		phuTrach: v[SEARCH_PARAM.okr.phuTrach],
 		loai: v[SEARCH_PARAM.okr.loai],
 		trangThai: v[SEARCH_PARAM.okr.trangThai],
 		tuTin: v[SEARCH_PARAM.okr.tuTin],
+		gopY: v[SEARCH_PARAM.okr.gopY],
 	};
 }
 

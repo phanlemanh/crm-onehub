@@ -31,6 +31,7 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { dungCayCanChinh } from "./can-chinh";
 import { demMatLoc, type MucTieuGon } from "./danh-sach";
+import { demGopYCho } from "./dem-gop-y";
 import { dienBienKr, tuanCapNhatDau } from "./dien-bien";
 import type { PhamDoc } from "./hien-thi";
 import type { DonViChon, MucTieuOutput, NutCanChinh } from "./okr.contracts";
@@ -258,27 +259,50 @@ export class OkrXemService {
 			input.loc.tuTin.length > 0
 				? [{ keyResults: { some: { id: { in: krTuTin } } } }]
 				: [];
-		const [mucTieu, gon] = await Promise.all([
-			this.okr.docMucTieu(
-				this.db,
-				{ AND: [...goc.AND, ...this.dieuKienLoc(input.loc), ...locTuTin] },
-				userId,
-				q,
-				{ nguCanh: nc },
-			),
-			this.db.okrObjective.findMany({
-				where: { AND: [goc, dieuKienXemMucTieu(nc)] },
-				select: {
-					id: true,
-					kind: true,
-					status: true,
-					owner: { select: chonNguoiGon },
-					keyResults: {
-						select: { id: true, owner: { select: chonNguoiGon } },
-					},
+		const gon = await this.db.okrObjective.findMany({
+			where: { AND: [goc, dieuKienXemMucTieu(nc)] },
+			select: {
+				id: true,
+				kind: true,
+				status: true,
+				owner: { select: chonNguoiGon },
+				keyResults: {
+					select: { id: true, owner: { select: chonNguoiGon } },
 				},
-			}),
-		]);
+			},
+		});
+		const soGopY = await demGopYCho(
+			this.db,
+			gon.map((m) => m.id),
+			{ viewerId: userId, q, access: this.quyenOkr },
+		);
+		const locGopY: Prisma.OkrObjectiveWhereInput[] = input.loc.gopY.includes(
+			"cho",
+		)
+			? [
+					{
+						id: {
+							in: [...soGopY].filter(([, so]) => so > 0).map(([id]) => id),
+						},
+					},
+				]
+			: [];
+		const mucTieu = await this.okr.docMucTieu(
+			this.db,
+			{
+				AND: [
+					...goc.AND,
+					...this.dieuKienLoc(input.loc),
+					...locTuTin,
+					...locGopY,
+				],
+			},
+			userId,
+			q,
+			{ nguCanh: nc },
+			undefined,
+			soGopY,
+		);
 		const ds: MucTieuGon[] = gon.map((m) => ({
 			id: m.id,
 			owner: m.owner,
@@ -289,6 +313,7 @@ export class OkrXemService {
 				const t = tuTinMoi.get(k.id);
 				return t ? [t] : [];
 			}),
+			coGopYCho: (soGopY.get(m.id) ?? 0) > 0,
 		}));
 		const coLocKr = input.loc.phuTrach.length > 0 || input.loc.tuTin.length > 0;
 		const khopKr = (k: { id: string; owner: { id: string } }) =>

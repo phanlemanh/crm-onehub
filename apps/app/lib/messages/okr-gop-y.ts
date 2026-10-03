@@ -1,29 +1,69 @@
 import type { Locale } from "@crm/ui/lib/locale";
 
 const vi = {
-	nut: {
-		nho: "Nhờ Trợ lý OKR góp ý",
-		dangCho: (n: string) => `${n} đề xuất đang chờ`,
-		khoaSua: "Lưu thay đổi trước khi nhờ góp ý",
-		tamNghi: (ngay: string) => `Trợ lý OKR tạm nghỉ tới ${ngay}`,
-		hetLuot: "Bạn đã dùng hết lượt góp ý hôm nay",
-	},
-	cot: {
-		tieuDe: "Trợ lý OKR",
-		tieuDeKr: "Trợ lý OKR · chỉ KR này",
-		dong: "Đóng cột Trợ lý OKR",
-		dangDocMucTieu: "Trợ lý OKR đang đọc Mục tiêu này…",
-		dangDocKr: "Trợ lý OKR đang đọc KR này…",
-		soDong: (n: string) =>
-			`${n} đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».`,
-		daQuyetHet:
-			"Đã quyết hết đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
-		rong: "Trợ lý OKR không thấy chỗ nào cần sửa",
-		rongMoTa: "Tên, «vì sao lúc này» và các KR đã đọc ổn.",
-		rongMoTaKr: "Tên KR đã đọc ổn.",
-		rongCoGoiY: "Trợ lý OKR không có góp ý thêm ngoài gợi ý dưới ô.",
-		loi: "Trợ lý OKR chưa trả lời được, thử lại sau",
+	vung: {
+		soCho: (n: string) => `${n} góp ý chờ`,
+		daXemHet: "đã xem hết góp ý",
+		lyDo: (soKr: string) =>
+			`Kara đọc tên, «vì sao lúc này» và ${soKr} KR của Mục tiêu này. Kara chỉ đọc dữ liệu OKR.`,
+		moTaChuaGoi:
+			"Kara đọc tên, «vì sao lúc này» và các KR, rồi đặt góp ý ngay dưới chỗ cần sửa.",
+		nho: "Nhờ Kara góp ý",
+		docLai: "Nhờ Kara đọc lại",
+		dangDoc: "Kara đang đọc Mục tiêu này…",
+		rong: "Kara không thấy chỗ nào cần sửa",
+		rongMoTa: (gio: string) =>
+			`Tên, «vì sao lúc này» và các KR đã đọc ổn lúc ${gio}. Sửa xong thì nhờ Kara đọc lại.`,
+		loi: "Kara chưa đọc được Mục tiêu này",
+		loiMoTa: "Lượt đọc bị ngắt giữa chừng. Chưa có gì bị ghi vào Mục tiêu.",
 		thuLai: "Thử lại",
+		hetLuot: "Bạn đã dùng hết lượt góp ý hôm nay. Mở lại lúc 00:00 ngày mai.",
+		tamNghi: (ngay: string) => `Kara tạm nghỉ tới ${ngay}.`,
+	},
+	de: {
+		doiTenKr: "Đổi tên KR",
+		doiTenMucTieu: "Đổi tên Mục tiêu",
+		thayViSao: "Thay câu",
+		sua: "Sửa",
+		boQua: "Bỏ qua",
+		huy: "Huỷ",
+		themDoiTrong: "Thêm KR đối trọng",
+		suaKrNay: "Sửa KR này",
+		suaMucTieu: "Sửa Mục tiêu",
+		khoaSua: "Mục tiêu đang khoá sửa nên chưa quyết được góp ý này.",
+	},
+	bienNhan: {
+		daDoiTenKr: "Đã đổi tên KR theo Kara",
+		daDoiTenMucTieu: "Đã đổi tên Mục tiêu theo Kara",
+		daThayViSao: "Đã thay «vì sao lúc này» theo Kara",
+		daCanChinh: "Đã góp vào mục tiêu theo Kara",
+		hoanTacKr: (cu: string) => `Đã hoàn tác — tên KR trở lại «${cu}»`,
+		hoanTacMucTieu: (cu: string) =>
+			`Đã hoàn tác — tên Mục tiêu trở lại «${cu}»`,
+		hoanTacViSao: "Đã hoàn tác — câu cũ trở lại",
+		boQuaTen: (sau: string) => `Đã bỏ qua tên Kara đề xuất: «${sau}»`,
+		boQuaCau: (sau: string) => `Đã bỏ qua câu Kara đề xuất: «${sau}»`,
+		boQuaCanChinh: (ten: string) => `Đã bỏ qua góp ý góp vào «${ten}»`,
+		boQuaHoi: (tomTat: string) => `Đã bỏ qua câu hỏi của Kara: ${tomTat}`,
+	},
+	tomTat: {
+		"kr-la-viec": "KR này là việc, chưa phải kết quả",
+		"thieu-doi-trong": "bộ KR thiếu KR đối trọng",
+		"khong-do-duoc": "chưa đo được",
+		"trung-y": "hai KR trùng ý",
+		"muc-tieu-la-so": "Mục tiêu đang là một con số",
+	},
+	chip: (n: string) => `${n} góp ý`,
+	chipAria: (n: string, ten: string) =>
+		`Kara có ${n} góp ý chờ cho «${ten}», mở khung chi tiết`,
+	danSang: {
+		moTaMucTieu: "Quyết ngay dưới từng KR.",
+		moTaKr: "Quyết ngay dưới KR này.",
+		xem: "Xem góp ý",
+	},
+	loc: {
+		mat: "Góp ý của Kara",
+		coCho: (n: string) => `Có góp ý chờ · ${n}`,
 	},
 	dong: {
 		loai: {
@@ -44,25 +84,17 @@ const vi = {
 		huySua: "Huỷ",
 		canChinh: "Căn chỉnh",
 		moKr: "Mở KR này",
-		khoaMoKr: "Lưu thay đổi của Mục tiêu trước khi mở KR",
 		gopVao: (ten: string) => `Góp vào «${ten}»`,
 		ket: {
 			accepted: "Đã nhận",
 			dismissed: "Đã bác",
 			skipped: "Đã bỏ qua",
 		},
-		khoaODangSua: "Lưu hoặc hoàn lại ô này trước",
-		dangGhiKhac: "Đang ghi một đề xuất khác",
-	},
-	toast: {
-		daNhan: "Đã nhận",
-		hoanTac: "Hoàn tác",
-		daHoanTac: "Đã hoàn tác",
 	},
 	xuHuong: (moiTuan: string, uoc: string, donVi: string) =>
 		`Theo các lần cập nhật gần nhất (${moiTuan}/tuần), cuối kỳ ước khoảng ${[uoc, donVi.trim()].filter(Boolean).join(" ")}`,
 	vet: {
-		theoTroLy: "theo đề xuất của Trợ lý OKR",
+		theoKara: "theo đề xuất của Kara",
 		suaTruong: (truong: string) => `Sửa ${truong}`,
 	},
 };
@@ -70,30 +102,71 @@ const vi = {
 export type OkrGopYMessages = typeof vi;
 
 const en: OkrGopYMessages = {
-	nut: {
-		nho: "Ask the OKR assistant for feedback",
-		dangCho: (n: string) => `${n} suggestions waiting`,
-		khoaSua: "Save your changes before asking for feedback",
-		tamNghi: (ngay: string) => `The OKR assistant is paused until ${ngay}`,
-		hetLuot: "You have used today's feedback requests",
-	},
-	cot: {
-		tieuDe: "OKR assistant",
-		tieuDeKr: "OKR assistant · this KR only",
-		dong: "Close the OKR assistant column",
-		dangDocMucTieu: "The OKR assistant is reading this objective…",
-		dangDocKr: "The OKR assistant is reading this KR…",
-		soDong: (n: string) =>
-			`${n} suggestions. Accepting saves right away, with a trail entry “suggested by the OKR assistant”.`,
-		daQuyetHet:
-			"Every suggestion is decided. Accepting saves right away, with a trail entry “suggested by the OKR assistant”.",
-		rong: "The OKR assistant found nothing to change",
-		rongMoTa: "The title, “why now” and the KRs read well.",
-		rongMoTaKr: "The KR title reads well.",
-		rongCoGoiY:
-			"The OKR assistant has nothing to add beyond the hint under the field.",
-		loi: "The OKR assistant couldn't answer, try again later",
+	vung: {
+		soCho: (n: string) => `${n} suggestions waiting`,
+		daXemHet: "all suggestions reviewed",
+		lyDo: (soKr: string) =>
+			`Kara read the title, “why now” and ${soKr} KRs of this objective. Kara reads OKR data only.`,
+		moTaChuaGoi:
+			"Kara reads the title, “why now” and the KRs, then places each suggestion right under what it changes.",
+		nho: "Ask Kara for feedback",
+		docLai: "Ask Kara to read again",
+		dangDoc: "Kara is reading this objective…",
+		rong: "Kara found nothing to change",
+		rongMoTa: (gio: string) =>
+			`The title, “why now” and the KRs read well at ${gio}. Ask Kara again after you edit.`,
+		loi: "Kara couldn't read this objective",
+		loiMoTa: "The read was interrupted. Nothing was written to the objective.",
 		thuLai: "Try again",
+		hetLuot:
+			"You have used today's feedback requests. They reopen at 00:00 tomorrow.",
+		tamNghi: (ngay: string) => `Kara is paused until ${ngay}.`,
+	},
+	de: {
+		doiTenKr: "Rename KR",
+		doiTenMucTieu: "Rename objective",
+		thayViSao: "Replace sentence",
+		sua: "Edit",
+		boQua: "Skip",
+		huy: "Cancel",
+		themDoiTrong: "Add a counterbalance KR",
+		suaKrNay: "Edit this KR",
+		suaMucTieu: "Edit objective",
+		khoaSua:
+			"This objective is locked for editing, so the suggestion can't be decided yet.",
+	},
+	bienNhan: {
+		daDoiTenKr: "KR renamed from Kara's suggestion",
+		daDoiTenMucTieu: "Objective renamed from Kara's suggestion",
+		daThayViSao: "“Why now” replaced from Kara's suggestion",
+		daCanChinh: "Aligned from Kara's suggestion",
+		hoanTacKr: (cu: string) => `Undone — the KR name is back to “${cu}”`,
+		hoanTacMucTieu: (cu: string) =>
+			`Undone — the Objective name is back to “${cu}”`,
+		hoanTacViSao: "Undone — the previous wording is back",
+		boQuaTen: (sau: string) => `Skipped the name Kara suggested: “${sau}”`,
+		boQuaCau: (sau: string) => `Skipped Kara's wording: “${sau}”`,
+		boQuaCanChinh: (ten: string) => `Skipped aligning to “${ten}”`,
+		boQuaHoi: (tomTat: string) => `Skipped Kara's question: ${tomTat}`,
+	},
+	tomTat: {
+		"kr-la-viec": "this KR is a task, not a result",
+		"thieu-doi-trong": "the KRs lack a counterbalance",
+		"khong-do-duoc": "not measurable yet",
+		"trung-y": "two KRs say the same thing",
+		"muc-tieu-la-so": "the objective is a number",
+	},
+	chip: (n: string) => `${n} suggestions`,
+	chipAria: (n: string, ten: string) =>
+		`Kara has ${n} suggestions waiting for “${ten}”, open details`,
+	danSang: {
+		moTaMucTieu: "Decide right under each KR.",
+		moTaKr: "Decide right under this KR.",
+		xem: "See suggestions",
+	},
+	loc: {
+		mat: "Kara suggestions",
+		coCho: (n: string) => `Has suggestions waiting · ${n}`,
 	},
 	dong: {
 		loai: {
@@ -114,25 +187,17 @@ const en: OkrGopYMessages = {
 		huySua: "Cancel",
 		canChinh: "Align",
 		moKr: "Open this KR",
-		khoaMoKr: "Save the objective changes before opening the KR",
 		gopVao: (ten: string) => `Contributes to “${ten}”`,
 		ket: {
 			accepted: "Accepted",
 			dismissed: "Rejected",
 			skipped: "Skipped",
 		},
-		khoaODangSua: "Save or revert this field first",
-		dangGhiKhac: "Saving another suggestion",
-	},
-	toast: {
-		daNhan: "Accepted",
-		hoanTac: "Undo",
-		daHoanTac: "Undone",
 	},
 	xuHuong: (moiTuan: string, uoc: string, donVi: string) =>
 		`Based on the latest updates (${moiTuan}/week), the period should end around ${[uoc, donVi.trim()].filter(Boolean).join(" ")}`,
 	vet: {
-		theoTroLy: "suggested by the OKR assistant",
+		theoKara: "suggested by Kara",
 		suaTruong: (truong: string) => `Edited ${truong}`,
 	},
 };

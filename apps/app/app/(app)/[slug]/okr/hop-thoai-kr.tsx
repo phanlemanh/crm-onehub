@@ -42,7 +42,6 @@ import {
 	krInput,
 } from "@crm/validation/okr-kr";
 import { crmHopKieu } from "@crm/validation/okr-nguon";
-import type { TruongVietLai } from "@crm/validation/okr-tro-ly";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useId, useState } from "react";
@@ -54,7 +53,7 @@ import { okrSoMessages } from "@/lib/messages/okr-so";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
-import { CotGopY, type GiaTriDaNhan, NutGopY, useGopY } from "./cot-gop-y";
+import { DongDanGopY } from "./dong-dan-gop-y";
 import type { KetQua } from "./kieu";
 import { KHOA_NGUON } from "./nguon-so";
 import { nhapNguonKhac } from "./nguon-so-luat";
@@ -205,9 +204,7 @@ export function HopThoaiKr({
 	const [loi, setLoi] = useState<string | null>(null);
 	const n = useNguonSo({ objectiveId, kr, mucTieu, baoLoi: setLoi });
 	const [nguonDau, setNguonDau] = useState(n.gia);
-	const [tenDaLuu, setTenDaLuu] = useState<string | null>(null);
-	const goc =
-		n.goc && tenDaLuu !== null ? { ...n.goc, title: tenDaLuu } : n.goc;
+	const goc = n.goc;
 	const oHienTai: OKr = {
 		ten,
 		kieu,
@@ -221,19 +218,16 @@ export function HopThoaiKr({
 	};
 	const coThayDoi =
 		oKrKhac(dau, oHienTai) || nhapNguonKhac(nguonDau, n.gia) || lyDo !== "";
-	const oDangSua = new Set<TruongVietLai>(ten !== dau.ten ? ["kr.title"] : []);
-	const nhanGiaTri = ({ truong, giaTri }: GiaTriDaNhan) => {
-		if (truong !== "kr.title") return;
-		setTen(giaTri);
-		setDau((d) => ({ ...d, ten: giaTri }));
-		setTenDaLuu(giaTri);
-	};
-	const gopY = useGopY({
-		objectiveId: n.krId ? objectiveId : null,
-		keyResultId: n.krId ?? undefined,
-		coSuaChuaLuu: coThayDoi,
-		onDaNhan: nhanGiaTri,
+	const gopYKr = useQuery({
+		...trpc.okr.troLyDanhSach.queryOptions({
+			objectiveId,
+			keyResultId: n.krId ?? "",
+		}),
+		enabled: n.krId !== null,
+		retry: false,
 	});
+	const soGopYKr =
+		gopYKr.data && gopYKr.data.lyDo === null ? gopYKr.data.dong.length : 0;
 
 	const tao = useMutation(trpc.okr.createKeyResult.mutationOptions());
 	const sua = useMutation(trpc.okr.updateKeyResult.mutationOptions());
@@ -394,16 +388,12 @@ export function HopThoaiKr({
 			}}
 			coThayDoi={coThayDoi}
 		>
-			<SheetContent
-				side="right"
-				data-hop-thoai-kr={n.krId ?? "moi"}
-				size={gopY.cotMo ? "assist" : undefined}
-			>
+			<SheetContent side="right" data-hop-thoai-kr={n.krId ?? "moi"}>
 				<SheetHeader>
 					<SheetTitle>{n.krId ? h.suaKr : h.themKr}</SheetTitle>
 					<SheetDescription translate="no">{mucTieu.title}</SheetDescription>
 				</SheetHeader>
-				<SheetBody split={gopY.cotMo} data-cuon-hop>
+				<SheetBody data-cuon-hop>
 					<form
 						id={`${ma}-form`}
 						onSubmit={(e) => {
@@ -412,12 +402,17 @@ export function HopThoaiKr({
 						}}
 					>
 						<FieldGroup>
-							<NutGopY gopY={gopY} />
+							{n.krId ? (
+								<DongDanGopY
+									moTa={okrGopYMessages(locale).danSang.moTaKr}
+									objectiveId={objectiveId}
+									so={soGopYKr}
+								/>
+							) : null}
 							<Field>
 								<FieldLabel htmlFor={`${ma}-ten`}>{h.tenKr}</FieldLabel>
 								<Input
 									id={`${ma}-ten`}
-									data-duoc-chi={gopY.oDuocChi === "kr.title" || undefined}
 									value={ten}
 									maxLength={200}
 									autoComplete="off"
@@ -632,13 +627,6 @@ export function HopThoaiKr({
 							{loi ? <FieldError data-loi-may-chu>{loi}</FieldError> : null}
 						</FieldGroup>
 					</form>
-					{gopY.cotMo ? (
-						<CotGopY
-							gopY={gopY}
-							oDangSua={oDangSua}
-							coGoiYTinh={hoi.length > 0}
-						/>
-					) : null}
 				</SheetBody>
 				<SheetFooter>
 					<SheetClose asChild dongNgay={daLuuMot && !coThayDoi}>

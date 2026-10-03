@@ -43,7 +43,6 @@ import {
 	type LoaiMucTieu,
 	mucTieuInput,
 } from "@crm/validation/okr-muc-tieu";
-import type { TruongVietLai } from "@crm/validation/okr-tro-ly";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { toast } from "sonner";
@@ -55,9 +54,10 @@ import {
 	type OkrGioiHanMessages,
 	okrGioiHanMessages,
 } from "@/lib/messages/okr-gioi-han";
+import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
-import { CotGopY, type GiaTriDaNhan, NutGopY, useGopY } from "./cot-gop-y";
+import { DongDanGopY } from "./dong-dan-gop-y";
 import type { MucTieu } from "./kieu";
 import type { DonChonOkr } from "./okr-search-params";
 import { KhungTuMau, NutBatDauTuMau, NutTaoTuMau, useTuMau } from "./tu-mau";
@@ -138,11 +138,9 @@ function OMucHienThi({
 export function HopThoaiMucTieu({
 	yeuCau,
 	dong,
-	moKr,
 }: {
 	yeuCau: YeuCauMucTieu;
 	dong: () => void;
-	moKr?: (keyResultId: string) => void;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
@@ -157,13 +155,12 @@ export function HopThoaiMucTieu({
 	const me = useQuery(trpc.users.me.queryOptions());
 	const program = useQuery(trpc.okr.program.queryOptions());
 
-	const [daLuu, setDaLuu] = useState<{ title?: string; whyNow?: string }>({});
-	const cu = yeuCau.loai === "sua" ? { ...yeuCau.mucTieu, ...daLuu } : null;
+	const cu = yeuCau.loai === "sua" ? yeuCau.mucTieu : null;
 	const capGoc =
 		yeuCau.loai === "sua"
 			? yeuCau.mucTieu.level
 			: CAP_THEO_DON[yeuCau.don.loai];
-	const [dau, setDau] = useState(() => ({
+	const [dau] = useState(() => ({
 		cap: capGoc,
 		ten: cu?.title ?? "",
 		loai: cu?.kind ?? "cam-ket",
@@ -187,29 +184,6 @@ export function HopThoaiMucTieu({
 		!cungTapHop(thamGia, dau.thamGia) ||
 		viSao !== dau.viSao ||
 		hienThi !== "cong-khai";
-	const oDangSua = new Set<TruongVietLai>([
-		...(ten !== dau.ten ? (["title"] as const) : []),
-		...(viSao !== dau.viSao ? (["whyNow"] as const) : []),
-	]);
-	const nhanGiaTri = ({ truong, giaTri }: GiaTriDaNhan) => {
-		if (truong === "title") {
-			setTen(giaTri);
-			setDau((d) => ({ ...d, ten: giaTri }));
-			setDaLuu((l) => ({ ...l, title: giaTri }));
-		}
-		if (truong === "whyNow") {
-			setViSao(giaTri);
-			setDau((d) => ({ ...d, viSao: giaTri }));
-			setDaLuu((l) => ({ ...l, whyNow: giaTri }));
-		}
-	};
-	const gopY = useGopY({
-		objectiveId: cu?.id ?? null,
-		coSuaChuaLuu: coThayDoi,
-		onDaNhan: nhanGiaTri,
-		moKr,
-	});
-
 	const chu = chuChon || me.data?.id || "";
 	const tenNguoi = (id: string) =>
 		users.data?.find((u) => u.id === id)?.name ?? "";
@@ -334,14 +308,13 @@ export function HopThoaiMucTieu({
 				side="right"
 				data-hop-thoai-muc-tieu={cu?.id ?? "moi"}
 				aria-describedby={undefined}
-				size={gopY.cotMo ? "assist" : undefined}
 			>
 				<SheetHeader>
 					<SheetTitle>
 						{yeuCau.loai === "sua" ? h.suaMucTieu : m.themMucTieu}
 					</SheetTitle>
 				</SheetHeader>
-				<SheetBody split={gopY.cotMo} data-cuon-hop>
+				<SheetBody data-cuon-hop>
 					{tuMau.dangMo ? (
 						<KhungTuMau
 							tuMau={tuMau}
@@ -359,7 +332,13 @@ export function HopThoaiMucTieu({
 						>
 							<FieldGroup>
 								<NutBatDauTuMau tuMau={tuMau} />
-								<NutGopY gopY={gopY} />
+								{cu ? (
+									<DongDanGopY
+										moTa={okrGopYMessages(locale).danSang.moTaMucTieu}
+										objectiveId={cu.id}
+										so={cu.soGopYCho}
+									/>
+								) : null}
 								<div className="grid grid-cols-2 gap-3">
 									<Field data-disabled={capChon.length === 1}>
 										<FieldLabel htmlFor={`${ma}-cap`}>{h.cap}</FieldLabel>
@@ -402,7 +381,6 @@ export function HopThoaiMucTieu({
 									<FieldLabel htmlFor={`${ma}-ten`}>{h.tenMucTieu}</FieldLabel>
 									<Input
 										id={`${ma}-ten`}
-										data-duoc-chi={gopY.oDuocChi === "title" || undefined}
 										value={ten}
 										maxLength={200}
 										autoComplete="off"
@@ -495,7 +473,6 @@ export function HopThoaiMucTieu({
 									<FieldLabel htmlFor={`${ma}-vi-sao`}>{h.viSao}</FieldLabel>
 									<Textarea
 										id={`${ma}-vi-sao`}
-										data-duoc-chi={gopY.oDuocChi === "whyNow" || undefined}
 										value={viSao}
 										maxLength={500}
 										translate="no"
@@ -513,7 +490,6 @@ export function HopThoaiMucTieu({
 							</FieldGroup>
 						</form>
 					)}
-					{gopY.cotMo ? <CotGopY gopY={gopY} oDangSua={oDangSua} /> : null}
 				</SheetBody>
 				<SheetFooter>
 					<SheetClose asChild>

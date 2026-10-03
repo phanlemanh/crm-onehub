@@ -2,7 +2,13 @@ export const OKR_CHU_KY = {
 	muiGio: "Asia/Ho_Chi_Minh",
 	soQuy: 4,
 	thangMoiQuy: 3,
+	thangMoiNam: 12,
 } as const;
+
+export function dauThangSau(homNay: string): string {
+	const thang = (Number(homNay.slice(5, 7)) % OKR_CHU_KY.thangMoiNam) + 1;
+	return `01/${String(thang).padStart(2, "0")}`;
+}
 
 export type GoiYChuKy = { nam: number; quy: { so: number; nam: number } };
 

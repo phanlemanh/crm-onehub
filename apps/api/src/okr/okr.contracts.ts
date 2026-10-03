@@ -154,6 +154,7 @@ export const troLyDanhSachOutput = z.object({
 	dong: z.array(dongHien),
 	dangSoan: z.boolean(),
 	maKetThuc: z.string().nullable(),
+	docLuc: z.string().nullable(),
 	lyDo: lyDoKhongSanSang.nullable(),
 });
 export const troLyQuyetInput = z.object({
@@ -313,6 +314,7 @@ export const mucTieuOutput = z.object({
 	theoDoi: z.boolean(),
 	hienThi: z.enum(MUC_HIEN_THI),
 	soNguoiXem: z.number(),
+	soGopYCho: z.number().int().min(0),
 });
 export const vetOutput = z.object({
 	id: z.string(),

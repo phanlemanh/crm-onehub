@@ -110,6 +110,7 @@ function mucTieu(doi: Partial<ObjectiveOutput>): ObjectiveOutput {
 		followerCount: 0,
 		theoDoi: false,
 		soNguoiXem: 0,
+		soGopYCho: 0,
 		trail: [],
 		canEditKr: ["kr-1"],
 		hienThi: "cong-khai",
@@ -231,6 +232,16 @@ function doc(duong: string): Json | ObjectiveOutput | ViecCuaToiOutput {
 			};
 		case "workspace.get":
 			return { viewerRole: "member" };
+		case "okr.troLySanSang":
+			return { bat: false, lyDo: "tat" };
+		case "okr.troLyDanhSach":
+			return {
+				dong: [],
+				dangSoan: false,
+				maKetThuc: null,
+				docLuc: null,
+				lyDo: "tat",
+			};
 		default:
 			return null;
 	}

@@ -26,12 +26,12 @@ describe("loc-okr-tai-truoc", () => {
 		{
 			ten: "khong-loc",
 			q: "",
-			ra: { phuTrach: [], loai: [], trangThai: [], tuTin: [] },
+			ra: { phuTrach: [], loai: [], trangThai: [], tuTin: [], gopY: [] },
 		},
 		{
 			ten: "chi-tu-tin",
 			q: "tuTinOkr=thap",
-			ra: { phuTrach: [], loai: [], trangThai: [], tuTin: ["thap"] },
+			ra: { phuTrach: [], loai: [], trangThai: [], tuTin: ["thap"], gopY: [] },
 		},
 		{
 			ten: "du-bon-mat",
@@ -41,6 +41,7 @@ describe("loc-okr-tai-truoc", () => {
 				loai: ["cam-ket"],
 				trangThai: ["cong-bo"],
 				tuTin: ["thap", "cao"],
+				gopY: [],
 			},
 		},
 	];

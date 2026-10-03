@@ -408,6 +408,7 @@ export class TroLyOkrService {
 			dong: [],
 			dangSoan: false,
 			maKetThuc: null,
+			docLuc: null,
 			lyDo,
 		});
 		const nc = this.quyenOkr.nguCanhXem(
@@ -447,6 +448,7 @@ export class TroLyOkrService {
 			}),
 			dangSoan: ds.dangSoan,
 			maKetThuc: ds.maKetThuc,
+			docLuc: ds.docLuc?.toISOString() ?? null,
 			lyDo: null,
 		};
 	}

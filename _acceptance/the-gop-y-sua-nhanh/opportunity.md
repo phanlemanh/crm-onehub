@@ -45,3 +45,7 @@ Buổi lái thử thẻ góp ý trên mã production (onehub 0553e0ce, 30/09/202
 - Dấu «được chỉ» là nền nhấn nhạt hay vạch trái màu thương hiệu?
 - Dòng đã quyết: trích câu mới hay tên trường + kết quả; có nhóm xuống cuối cột không?
 - Gộp Ngoài-9 vào lượt này hay để riêng?
+
+## Gộp
+
+Gộp vào: gop-y-dung-cho (chủ kho quyết 03/10/2026). Phần tự hết vì lượt đó bỏ cột góp ý khỏi hai hộp Sửa và phần thành AC ghi ở `_acceptance/gop-y-dung-cho/contract.md` mục Notes.
