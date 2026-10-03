@@ -85,13 +85,14 @@ tỉ lệ bỏ qua của góp ý về KR không cao hơn góp ý về Mục tiê
 
 ### `packages/ui`
 
-- `ProposedChange`: dòng biên nhận có đúng một tên slot, `proposed-change-receipt` (phần tử bao; chữ
-  bên trong không mang slot riêng nữa) — E11, E15, E21 cùng dùng tên này. (F) focus — Esc/Huỷ trong ô sửa → nút «Sửa»; vừa quyết (có `decided`) →
+- `ProposedChange`: dòng biên nhận là `proposed-change-receipt` (phần tử bao, E11, E15, E21 cùng
+  dùng); chữ bên trong giữ slot `proposed-change-decided` vì `nen-kara` (đã ký) đo nó — E21 quét cả
+  cây con nên lớp cỡ chữ ở tầng trong cũng bị bắt. (F) focus — Esc/Huỷ trong ô sửa → nút «Sửa»; vừa quyết (có `decided`) →
   nút «Hoàn tác» của biên nhận nếu có, không thì chính dòng biên nhận (`tabIndex=-1`); bấm
   Hoàn tác → chính dòng biên nhận, nay đọc «Đã hoàn tác» (đề xuất không hiện lại: dòng
   `OkrDeXuat` đã là `nhan`, nhận lần nữa không có nghĩa); (G) `inline` bỏ `text-sm` cố định ở thân và biên nhận,
   thừa cỡ chữ cha; (H) `inline` không đẩy nút lặng sang `ms-auto`.
-- `kara.tsx`: (I) `KaraTrace` — dấu tia sáng + chữ «theo Kara», `text-muted-foreground`
+- `kara.tsx`: (I) `KaraTrace` — dấu tia sáng + chữ «đổi theo Kara», `text-muted-foreground`
   `text-xs`, mô tả cho trình đọc màn hình («Tên này đổi theo đề xuất của Kara»).
 
 <!-- <<<UX-SPEC-TEMPLATE -->
