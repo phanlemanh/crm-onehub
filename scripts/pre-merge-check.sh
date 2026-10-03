@@ -86,6 +86,9 @@ BASE="${PRE_MERGE_BASE:-}"
 # mọi repo tiêu thụ đang chạy — biến một sửa lỗi thành lỗ fail-open hàng loạt.
 T1_ESCAPE=1
 RECHECK_ALL=0
+# Hoá cũ theo paths (hồ sơ lan-ghim-lai-theo-paths): khoá risk_tiers.stale_scope + cờ chiến dịch.
+STALE_SCOPE=all
+STALE_ALL=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --slug)
@@ -113,6 +116,11 @@ while [ $# -gt 0 ]; do
     --no-t1-escape)
       # Không nhận tham số — `reason` là hằng, giữ ranh giới "không thêm cờ nào khác".
       T1_ESCAPE=0; shift ;;
+    --stale-all)
+      # Chiến dịch mốc: ép luật hoá cũ CŨ bất kể risk_tiers.stale_scope — chiến dịch chọn hồ sơ
+      # bằng chính lưới này (--base <tag mốc trước>), và `paths` của kho tiêu thụ hiếm khi trỏ vào
+      # engine đã chép vào: không cờ này thì chiến dịch chọn gần 0 hồ sơ (lan-ghim-lai-theo-paths AC-6).
+      STALE_ALL=1; shift ;;
     --recheck-all)
       # Ép re-check TOÀN BỘ hồ sơ, kể cả ngoài phạm vi diff. Đây là đường CỨU
       # cho cái mà việc thu phạm vi làm mất: thước thôi hồi tố. Siết bar trong
@@ -256,6 +264,16 @@ if [ -f "$ACC/config.yaml" ]; then
   # off là off toàn cục (tiền lệ hook) — sổ luật tắt theo, không dòng nào
   # (AC-11); warn/strict/không-khớp đều GIỮ sổ bật.
   case "$cfg_enf" in off) LEDGER_ENABLED=0 ;; esac
+  # risk_tiers.stale_scope — vắng/all = luật cũ; paths = bộ lọc theo paths (CHỈ THU); giá trị khác là
+  # VIOLATION gọi tên, không âm thầm rơi về luật nào (cùng nếp gap_probe ngay dưới).
+  cfg_ss="$(sed -n 's/^[[:space:]]*stale_scope:[[:space:]]*//p' "$ACC/config.yaml" | head -1 \
+    | sed -e 's/[[:space:]]*#.*$//' -e 's/^["'"'"']//' -e 's/["'"'"']$//' -e 's/[[:space:]]*$//')"
+  case "$cfg_ss" in
+  ''|all) STALE_SCOPE=all ;;
+  paths) STALE_SCOPE=paths ;;
+  *) echo "VIOLATION [config]: risk_tiers.stale_scope: \"$cfg_ss\" không hợp lệ — dùng paths | all (khoá vắng = all)"
+     violations=$((violations+1)); STALE_SCOPE=all ;;
+  esac
   cfg_gp="$(sed -n 's/^[[:space:]]*gap_probe:[[:space:]]*//p' "$ACC/config.yaml" | head -1 \
     | sed -e 's/[[:space:]]*#.*$//' -e 's/^["'"'"']//' -e 's/["'"'"']$//' -e 's/[[:space:]]*$//' \
     | tr '[:upper:]' '[:lower:]')"
@@ -1344,6 +1362,42 @@ XLACS
     echo "NOTE [$slug]: verified_commit $vc not found in this SHALLOW clone (fetch-depth) — staleness unverifiable here; a full clone decides"
   else
     stale="$(stale_files "$ROOT" "$vc")"
+    # Bộ lọc hoá cũ theo paths (lan-ghim-lai-theo-paths): đặt SAU luật cũ, chỉ BỚT tệp — kho bật
+    # khoá không thể đỏ ở chỗ hôm nay xanh. Hàm một nguồn `staleByPaths` (lib/evidence-core.cjs) cũng
+    # là vị từ --skip-unchanged của repin-lane.mjs. Không chạy được → giữ danh sách cũ + NOTE nói vì sao.
+    if [ -n "$stale" ] && [ "$STALE_SCOPE" = paths ] && [ "$STALE_ALL" -eq 0 ]; then
+      _sbp_pre="$(git -C "$ROOT" rev-parse --show-prefix 2>/dev/null)"
+      # stderr của node đi RIÊNG (lượt chấm 1, t4): trộn vào stdout thì một cảnh báo của node làm
+      # bước đọc thứ hai sập, danh sách hoá cũ rỗng và cổng xanh im lặng — đúng chiều AC-5 cấm.
+      _sbp_ok=0; _sbp=""; _sbp_ly="thiếu node hoặc lib/evidence-core.cjs"
+      if command -v node >/dev/null 2>&1 && [ -f "$CHU_KY_LIB" ]; then
+        _sbp_ef="$(mktemp 2>/dev/null || echo "/tmp/pmc-sbp.$$")"
+        if _sbp="$(printf '%s\n' "$stale" | node -e '
+          const l=require(process.argv[1]),fs=require("fs");
+          const files=fs.readFileSync(0,"utf8").split("\n").filter(Boolean);
+          let ev=null; try{ev=fs.readFileSync(process.argv[2],"utf8")}catch(_){}
+          process.stdout.write(JSON.stringify(l.staleByPaths(files,ev,{prefix:process.argv[3]})));' "$CHU_KY_LIB" "$dir/evals.yaml" "$_sbp_pre" 2>"$_sbp_ef")"; then
+          _sbp_ok=1; _sbp_ly="đầu ra không đọc được"
+        else _sbp_ly="$(head -1 "$_sbp_ef" 2>/dev/null | cut -c1-160)"; fi
+        rm -f "$_sbp_ef"
+      fi
+      _sbp_out=""
+      [ "$_sbp_ok" -eq 1 ] && _sbp_out="$(printf '%s' "$_sbp" | node -e '
+          const r=JSON.parse(require("fs").readFileSync(0,"utf8"));
+          if(!r.apply){process.stdout.write("APPLY=0\n"+r.reason+"\n");process.exit(0)}
+          process.stdout.write("APPLY=1\n"+r.skipped.length+"\n"+r.skipped.slice(0,10).join(", ")+"\n"+r.kept.join("\n"));' 2>/dev/null)"
+      _sbp_dau="$(printf '%s\n' "$_sbp_out" | sed -n 1p)"
+      if [ "$_sbp_dau" = "APPLY=0" ]; then
+        echo "NOTE [$slug]: bộ lọc paths không áp ($(printf '%s\n' "$_sbp_out" | sed -n 2p)) — giữ luật cũ"
+      elif [ "$_sbp_dau" = "APPLY=1" ]; then
+        _sbp_n="$(printf '%s\n' "$_sbp_out" | sed -n 2p)"
+        [ "$_sbp_n" -gt 0 ] && echo "NOTE [$slug]: hoá cũ theo luật cũ, bỏ qua theo paths: $_sbp_n tệp — $(printf '%s\n' "$_sbp_out" | sed -n 3p)"
+        stale="$(printf '%s\n' "$_sbp_out" | sed -n '4,$p')"
+      else
+        # Mọi đầu ra khác (rỗng, hỏng, lỗi) = GIỮ luật cũ. Chỉ «APPLY=1» đọc được mới được bớt tệp.
+        echo "NOTE [$slug]: bộ lọc paths không chạy được (${_sbp_ly:-không rõ}) — giữ luật cũ"
+      fi
+    fi
     if [ -n "$stale" ]; then
       echo "VIOLATION [$slug]: evidence is stale — code changed after verify (verified_commit $vc); re-run verify before merge. Changed:"
       printf '%s\n' "$stale" | head -10 | sed 's/^/    /'
