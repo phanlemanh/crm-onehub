@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4394fdcc2240f1a60896dae52363f1c26d7fa3de
+verified_commit: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d
 human_signoff: Phan Le Manh 2026-10-03
 ---
 
@@ -226,3 +226,7 @@ none — every multi-run eval is uniform
 Round 1: REJECT, E10 đỏ ở chiều đỏ của script đo (đã vá ở commit 475d8177), kèm các finding trong sổ quyết định S4-r1.
 Round 2: REJECT, E8 đỏ vì lệnh gồm hai nửa mà nửa sau không chạy được; khuôn đo được đổi sang lệnh ngắn rang/tom-tat.sh.
 Round 3: PASS, mọi eval máy xanh, E10 đo 32 ô, E13 giữ nguyên từ round 2.
+
+### Re-pin lần 1 — 2026-10-03, do hoá cũ sau khi gộp onehub có #234 muc-tieu-va-kr
+run_id: repin-20261003T095736Z-43153
+sha: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E10, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9, AC-12
