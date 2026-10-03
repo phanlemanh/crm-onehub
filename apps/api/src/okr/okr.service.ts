@@ -82,6 +82,7 @@ import {
 	hangViec,
 	vetSangKienChoVai,
 } from "./canh-kr";
+import { demGopYCho } from "./dem-gop-y";
 import { khoaDonViDong, tenDonVi } from "./don-vi";
 import { MOC_SAU_KHOA_CHU_KY, type MocSauKhoa } from "./dong-ho";
 import { locXemTrongVet, type PhamDoc, vetChoNguoiXem } from "./hien-thi";
@@ -1569,6 +1570,7 @@ export class OkrService {
 		q: Quyen,
 		pham: PhamDoc,
 		homNay = new Date(),
+		soGopY?: ReadonlyMap<string, number>,
 	): Promise<MucTieuOutput[]> {
 		const ct = await this.program(tx);
 		const rows = await tx.okrObjective.findMany({
@@ -1585,6 +1587,13 @@ export class OkrService {
 			},
 			orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 		});
+		const dem =
+			soGopY ??
+			(await demGopYCho(
+				tx,
+				rows.map((r) => r.id),
+				{ viewerId, q, access: this.quyenOkr },
+			));
 		return rows.map((r) => {
 			const level = capMucTieu.parse(r.level);
 			const hienTaiQuaCapNhat =
@@ -1673,6 +1682,7 @@ export class OkrService {
 				theoDoi: following,
 				hienThi: mucHienThi.parse(r.hienThi),
 				soNguoiXem: r._count.nguoiXem,
+				soGopYCho: dem.get(r.id) ?? 0,
 			};
 		});
 	}

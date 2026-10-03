@@ -169,13 +169,13 @@ in the Objective Details view») — rút: quyết tại khung chi tiết, khôn
 
 Vòng này không đổi cột nào của `OkrDeXuat`; mọi quyết định trên màn mới đi qua `troLyQuyet`
 nên `trangThai` và `quyetLuc` vẫn được ghi (AC-7, AC-8). Hai thước của `opportunity.md` đọc
-thẳng từ bảng (bảng không `@@map`, tên bảng là `"OkrDeXuat"`), `:ngay_len` là ngày lên
+thẳng từ bảng (model `OkrDeXuat` có `@@map("okrDeXuat")`, cột giữ tên trường), `:ngay_len` là ngày lên
 production:
 
 ```sql
 -- SỐNG vế 1: % góp ý còn "cho" quá 7 ngày, trong số góp ý đã đủ 7 ngày tuổi
 SELECT count(*) FILTER (WHERE "trangThai" = 'cho')::float / nullif(count(*), 0)
-FROM "OkrDeXuat"
+FROM "okrDeXuat"
 WHERE nac = 'bat' AND "cuocSoanId" IS NULL
   AND "createdAt" >= :ngay_len AND "createdAt" < now() - interval '7 days';
 
@@ -183,7 +183,7 @@ WHERE nac = 'bat' AND "cuocSoanId" IS NULL
 SELECT ("keyResultId" IS NULL) AS cap_muc_tieu,
        count(*) FILTER (WHERE "trangThai" IN ('bac', 'bo-qua'))::float
          / nullif(count(*) FILTER (WHERE "trangThai" IN ('nhan', 'sua', 'bac', 'bo-qua')), 0)
-FROM "OkrDeXuat"
+FROM "okrDeXuat"
 WHERE nac = 'bat' AND "cuocSoanId" IS NULL AND "createdAt" >= :ngay_len
 GROUP BY 1;
 ```
@@ -194,7 +194,7 @@ GROUP BY 1;
 SELECT count(*) FILTER (
          WHERE "trangThai" = 'cho' OR ("quyetLuc" IS NOT NULL AND "quyetLuc" >= :ngay_len)
        )::float / nullif(count(*), 0)
-FROM "OkrDeXuat"
+FROM "okrDeXuat"
 WHERE nac = 'bat' AND "cuocSoanId" IS NULL
   AND "createdAt" >= :ngay_len - interval '30 days'
   AND "createdAt" <  :ngay_len - interval '7 days';

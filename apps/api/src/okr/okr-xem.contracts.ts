@@ -12,11 +12,14 @@ import { OKR_XEM } from "./okr-xem.config";
 const ma = z.string().trim().min(1).max(120);
 const toiDa = OKR_XEM.loc.toiDaMoiMat;
 
+export const LOC_GOP_Y = ["cho"] as const;
+
 export const locDanhSach = z.object({
 	phuTrach: z.array(ma).max(toiDa),
 	loai: z.array(z.enum(LOAI_MUC_TIEU)).max(toiDa),
 	trangThai: z.array(z.enum(TRANG_THAI_MUC_TIEU)).max(toiDa),
 	tuTin: z.array(z.enum(MUC_TU_TIN)).max(toiDa).default([]),
+	gopY: z.array(z.enum(LOC_GOP_Y)).max(LOC_GOP_Y.length).default([]),
 });
 
 export const danhSachInput = z.object({
@@ -39,6 +42,7 @@ export const danhSachOutput = z.object({
 		loai: z.array(demGiaTri),
 		trangThai: z.array(demGiaTri),
 		tuTin: z.array(demGiaTri),
+		gopY: z.array(z.object({ value: z.enum(LOC_GOP_Y), count: z.number() })),
 	}),
 	canEdit: z.boolean(),
 });

@@ -313,6 +313,7 @@ export const mucTieuOutput = z.object({
 	theoDoi: z.boolean(),
 	hienThi: z.enum(MUC_HIEN_THI),
 	soNguoiXem: z.number(),
+	soGopYCho: z.number().int().min(0),
 });
 export const vetOutput = z.object({
 	id: z.string(),

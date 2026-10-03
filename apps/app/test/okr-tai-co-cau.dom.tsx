@@ -98,6 +98,7 @@ function mucTieu(
 		theoDoi: false,
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
+		soGopYCho: 0,
 	};
 }
 
@@ -779,6 +780,7 @@ const MO_COI: MucMoCoi[] = [
 		lyDo: ["don-vi-luu-tru"],
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
+		soGopYCho: 0,
 	},
 	{
 		objectiveId: "o10",
@@ -787,6 +789,7 @@ const MO_COI: MucMoCoi[] = [
 		lyDo: ["khong-ai-sua", "kr-phu-trach-roi"],
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
+		soGopYCho: 0,
 	},
 	{
 		objectiveId: "o11",
@@ -795,6 +798,7 @@ const MO_COI: MucMoCoi[] = [
 		lyDo: ["khong-ai-sua", "phu-trach-roi"],
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
+		soGopYCho: 0,
 	},
 ];
 

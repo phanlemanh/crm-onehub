@@ -1009,6 +1009,16 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `troLySoDo` (`GET /okr/assistant/metrics`) chỉ quản trị, như `aiChiTieu`.
   `xuHuongKr` (`GET .../key-results/{keyResultId}/trend`) mọi vai OKR gọi được,
   và trả `null` — không phải lỗi — khi đơn vị của KR chưa ở nấc `bat`.
+- **`soGopYCho` là số góp ý chờ người xem thấy được, đếm lúc đọc.** Mọi đường trả
+  `mucTieuOutput` (`docMucTieu`: `okr.mine`, `okr.danhSach`, `okr.objective`…) điền nó qua
+  `demGopYCho` (`dem-gop-y.ts`): MỘT `okrDeXuat.findMany` cho cả trang, luật của
+  `troLyDanhSach` — đơn vị phải ở nấc `bat`, Mục tiêu chưa bỏ, người xem sửa được đơn vị thì
+  đếm mọi dòng, không thì chỉ dòng của KR mình `ghiDuocKr`, người chỉ đọc đếm 0; dòng viết lại
+  đã hết hiệu lực (`hetHieuLuc` của `@crm/db/okr-de-xuat`) không đếm. `kiemDongDeXuat` KHÔNG
+  chạy ở đây, nên số có thể lớn hơn số `troLyDanhSach` trả; màn khung chi tiết làm mới danh
+  sách khi lệch. `okr.danhSach` đếm một lần cho cả đơn vị, truyền xuống `docMucTieu`, và mặt
+  lọc `loc.gopY: ["cho"]` lọc Mục tiêu có `soGopYCho > 0` trước khi tính `total`;
+  `facetCounts.gopY` đếm như ba mặt sẵn có. Không lưu cột số đếm nào.
 - **Chế độ ẩn kích từ chính lần lưu, không từ lịch.** `OkrService.updateObjective`,
   `updateKeyResult` và `createKeyResult` gọi `kichLuotAn` sau khi transaction của
   lần lưu đã commit; hàm này gọi `xepLuotAnSauKhiLuu` (`@crm/db/okr-tro-ly`) và

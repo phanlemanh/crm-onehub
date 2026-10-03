@@ -121,6 +121,7 @@ function mucTieu(
 		followerCount: 0,
 		theoDoi: false,
 		soNguoiXem: 0,
+		soGopYCho: 0,
 		trail: [],
 		canEditKr: ["kr-1"],
 		hienThi: "cong-khai",

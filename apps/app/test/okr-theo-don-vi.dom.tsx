@@ -149,6 +149,7 @@ function mucTieu(id: string, soKr: number): MucTieuOutput {
 		theoDoi: false,
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
+		soGopYCho: 0,
 	};
 }
 
@@ -172,6 +173,7 @@ function nut(
 		lapLai: false,
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
+		soGopYCho: 0,
 		expected: 25,
 		children,
 	};
