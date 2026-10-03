@@ -613,10 +613,11 @@ nên sửa dòng sau khi ký Cổng Bằng chứng không phải ký lại. Khi 
 `PRODUCT-MAP.md` lệch nhau về cổng của một hồ sơ, theo `PRODUCT-MAP.md` — máy vẽ
 nó từ hồ sơ — rồi sửa dòng.
 
-Trang theo dõi `docs/plan/lo-trinh-okr.html` vẽ sổ này thành một trang: đếm ngược
-tới ngày mở, việc chờ chủ kho, thứ tự chạy, mốc triển khai. Kéo kho về rồi mở tệp
-bằng trình duyệt là xem được; trang đọc bản chụp `docs/plan/lo-trinh-okr.data.js`
-và chỉ để xem. Bản sống, nơi chủ kho đánh dấu việc và ghi chú, ở
+**Từ 03/10 (kit 2.21.0) trạng thái sống của từng hàng nằm ở `LO-TRINH.html` ở gốc kho**: kit đọc tệp
+ý định `docs/plan/lo-trinh-okr.json` và suy trạng thái từ hồ sơ `_acceptance/` mỗi lần vẽ lại bản đồ,
+thẻ `/acceptance-gate:start` in hàng kế. Cột Trạng thái của bảng dưới THÔI cập nhật — bảng giữ làm sử
+liệu và ghi chú. Đổi kế hoạch (thêm hàng, đổi thứ tự, gắn mốc) thì sửa tệp JSON bằng PR. Trang dựng tay
+`lo-trinh-okr.html` và bản chụp `lo-trinh-okr.data.js` đã gỡ. Bản sống, nơi chủ kho đánh dấu việc và ghi chú, ở
 https://claude.ai/artifact/X2YjeuJfqBESPHQPQP7y2b — riêng tư, chủ kho mở được trên
 mọi máy đã đăng nhập. Bản chụp do máy sinh, không sửa tay, và không chép ghi chú
 riêng của chủ kho.
