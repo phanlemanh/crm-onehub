@@ -30,6 +30,8 @@ export type NoiDungKara =
 	| "loi"
 	| "co-gop-y";
 
+export type DocLaiKara = "yen" | "dang-doc" | "loi";
+
 export type NutKara =
 	| { loai: "an" }
 	| { loai: "mo" }
@@ -215,9 +217,16 @@ export function useGopYMucTieu({
 		return "chua-goi";
 	})();
 
+	const docLai: DocLaiKara = (() => {
+		if (batDau === null) return "yen";
+		if (dangSoan && !quaHan) return "dang-doc";
+		if (quaHan || (maKetThuc !== null && maKetThuc !== DA_NOP)) return "loi";
+		return "yen";
+	})();
+
 	const nut: NutKara = (() => {
 		const s = sanSang.data;
-		if (!s || dangSoan || !ghiDuoc) return { loai: "an" };
+		if (!s || (dangSoan && !quaHan) || !ghiDuoc) return { loai: "an" };
 		if (s.bat) return { loai: "mo" };
 		const vi = KHOA_KHI_CHUA_SAN_SANG[s.lyDo];
 		return vi === null ? { loai: "an" } : { loai: "khoa", vi };
@@ -325,6 +334,7 @@ export function useGopYMucTieu({
 		),
 		docLuc: ds?.docLuc ?? null,
 		ghiDuoc,
+		docLai,
 		daTai: !coDich || !nhoDuoc || danhSach.isError || ds !== undefined,
 	};
 }

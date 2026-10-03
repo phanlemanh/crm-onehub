@@ -500,6 +500,7 @@ export const { LocaleProvider } = await import(
 	"@crm/ui/components/locale-provider"
 );
 export const { TooltipProvider } = await import("@crm/ui/components/tooltip");
+export const { Toaster } = await import("@crm/ui/components/sonner");
 export const { messages: uiMessages } = await import("@crm/ui/lib/messages");
 export const { okrGopYMessages } = await import("@/lib/messages/okr-gop-y");
 export const { okrMessages } = await import("@/lib/messages/okr");
@@ -536,7 +537,10 @@ export async function dung(man: ReactElement, thamSo = ""): Promise<San> {
 		>
 			<QueryClientProvider client={client}>
 				<LocaleProvider locale="vi">
-					<TooltipProvider>{noiDung}</TooltipProvider>
+					<TooltipProvider>
+						{noiDung}
+						<Toaster />
+					</TooltipProvider>
 				</LocaleProvider>
 			</QueryClientProvider>
 		</NuqsTestingAdapter>

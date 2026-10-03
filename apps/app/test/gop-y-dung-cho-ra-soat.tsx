@@ -1,4 +1,6 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, setSystemTime, test } from "bun:test";
+import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
+import { act } from "react";
 import {
 	bamChuot,
 	chiTietTu,
@@ -15,6 +17,7 @@ import {
 	dung,
 	dungSheet,
 	dungSheetCoGopY,
+	goiCua,
 	HUNG,
 	kho,
 	MT_ID,
@@ -23,6 +26,7 @@ import {
 	nhip,
 	nhom,
 	nut,
+	nutCo,
 	ObjectiveSheet,
 	qs,
 	qsa,
@@ -186,5 +190,106 @@ describe("neo", () => {
 		} finally {
 			HTMLElement.prototype.scrollIntoView = goc;
 		}
+	});
+});
+
+const choLau = async (xong: () => boolean, moTa: string, hanMs = 8000) => {
+	const het = Date.now() + hanMs;
+	while (Date.now() < het) {
+		if (xong()) return;
+		await nhip(1);
+		await new Promise((r) => setTimeout(r, 40));
+	}
+	throw new Error(`khong toi: ${moTa}`);
+};
+
+describe("trang-thai-kara", () => {
+	test("doc qua han thi Thu lai mo duoc va nho lai Kara", async () => {
+		let pha: "chua" | "soan" = "chua";
+		let tha: (() => void) | null = null;
+		kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 0 }));
+		kho.troLy = () =>
+			pha === "chua"
+				? dsTroLy([], { maKetThuc: null, docLuc: null })
+				: new Promise((r) => {
+						tha = () =>
+							r(dsTroLy([], { dangSoan: true, maKetThuc: null, docLuc: null }));
+					});
+		kho.ghiRieng.set("okr.troLyDeXuat", async () => {
+			pha = "soan";
+			return { bat: true, taskId: "t-1", dungLai: false };
+		});
+		await dungSheet();
+		await cho(() => qs("[data-nut=nho-kara]") !== null, "nut nho Kara");
+		await bamChuot(qs("[data-nut=nho-kara]") ?? document.body);
+		await cho(() => tha !== null, "doc lai sau khi nho");
+		try {
+			setSystemTime(new Date(Date.now() + TRO_LY_OKR_TRAN.tranChoMs + 1000));
+			await act(async () => tha?.());
+			await cho(
+				() => nhom()?.getAttribute("data-nhom-kara") === "loi",
+				"trang thai loi qua han",
+			);
+			const thuLai = nut(m.vung.thuLai, nhom() ?? document);
+			if ((thuLai as HTMLButtonElement).disabled)
+				throw new Error("thu lai bi khoa khi qua han");
+			await bamChuot(thuLai);
+			await cho(
+				() => goiCua("okr.troLyDeXuat").length === 2,
+				"nho lai Kara sau Thu lai",
+			);
+		} finally {
+			setSystemTime();
+		}
+	});
+
+	test("quyet het roi nho Kara doc lai thi hien dang doc va bao loi khi lan doc lai hong", async () => {
+		let pha: "cho" | "da-quyet" | "soan" | "loi" = "cho";
+		kho.chiTiet = () =>
+			chiTietTu(mtSheet({ soGopYCho: pha === "cho" ? 1 : 0 }));
+		kho.troLy = () => {
+			if (pha === "cho") return dsTroLy([D_TEN]);
+			if (pha === "da-quyet") return dsTroLy([]);
+			if (pha === "soan")
+				return dsTroLy([], { dangSoan: true, maKetThuc: null });
+			return dsTroLy([], { maKetThuc: "loi" });
+		};
+		kho.ghiRieng.set("okr.troLyQuyet", async () => {
+			pha = "da-quyet";
+			return { ok: true };
+		});
+		kho.ghiRieng.set("okr.troLyDeXuat", async () => {
+			pha = "soan";
+			return { bat: true, taskId: "t-2", dungLai: false };
+		});
+		await dungSheet();
+		await cho(
+			() => nhom()?.getAttribute("data-nhom-kara") === "co-gop-y",
+			"nhom kara co gop y",
+		);
+		await bamChuot(nut(m.de.boQua, deXuat(D_TEN.id) ?? document));
+		await cho(
+			() => nutCo(m.vung.docLai, nhom() ?? document) !== null,
+			"nut doc lai",
+		);
+		await bamChuot(nut(m.vung.docLai, nhom() ?? document));
+		await cho(
+			() => goiCua("okr.troLyDeXuat").length === 1,
+			"goi nho Kara doc lai",
+		);
+		await nhip(10);
+		if (!nhom()?.textContent?.includes(m.vung.dangDoc))
+			throw new Error("doc lai khong hien dang doc");
+		pha = "loi";
+		await choLau(
+			() => nhom()?.textContent?.includes(m.vung.loi) === true,
+			"doc lai hong khong bao loi",
+		);
+		expect(
+			(nut(m.vung.thuLai, nhom() ?? document) as HTMLButtonElement).disabled,
+		).toBe(false);
+		expect(
+			qs(`[data-gop-y="${D_TEN.id}"] [data-slot=proposed-change-receipt]`),
+		).not.toBeNull();
 	});
 });

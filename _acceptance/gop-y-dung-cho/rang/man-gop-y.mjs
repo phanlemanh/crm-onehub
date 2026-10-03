@@ -251,6 +251,20 @@ async function buocE2(ctx, theme) {
 			truoc !== null && truoc === sau,
 		);
 		await chup(t, `E2-chi-tiet-1440-${theme}`);
+		await moLoiDi(
+			t,
+			ctx.g.dong.doiTrong,
+			m.de.themDoiTrong,
+			'[data-hop-thoai-kr="moi"]',
+			`E2-chi-tiet-doi-trong-1440-${theme}`,
+		);
+		await moLoiDi(
+			t,
+			ctx.g.dong.hoiKr3,
+			m.de.suaKrNay,
+			`[data-hop-thoai-kr="${ctx.g.kr3}"]`,
+			`E2-chi-tiet-sua-kr3-1440-${theme}`,
+		);
 		await t.p.keyboard.press("Escape");
 		const daDong = await t.p
 			.waitForFunction(() => !document.querySelector("[data-okr-sheet]"), {
@@ -305,6 +319,31 @@ async function buocE2Thap(ctx) {
 	} finally {
 		await t.ctx.close();
 	}
+}
+
+async function chupPhan(t, chon, ten) {
+	await tre(GY.cho.lamMoiMs);
+	const o = await t.p.$(chon);
+	if (!o) throw new Error(`khong thay ${chon} de chup`);
+	const tep = join(ANH, `${ten}.png`);
+	await o.screenshot({ path: tep });
+	dong.push(`ANH ${tep.slice(GOC.length + 1)}`);
+}
+
+async function moLoiDi(t, idGopY, chu, hop, ten) {
+	await bamTrong(t.p, idGopY, chu);
+	await t.p.waitForSelector(hop, { timeout: GY.cho.manMs });
+	await tre(GY.cho.yenMs);
+	await chup(t, ten);
+	await t.p.keyboard.press("Escape");
+	await t.p
+		.waitForFunction(
+			(h) => !document.querySelector(h),
+			{ timeout: GY.cho.bamMs },
+			hop,
+		)
+		.catch(() => ghi(`${ten}: hop chua dong sau Escape`));
+	await tre(GY.cho.lamMoiMs);
 }
 
 async function bamTrong(p, idGopY, chu) {
@@ -440,7 +479,24 @@ function doO() {
 				`«${b.innerText.trim().slice(0, 20)}» ${Math.round(r.left)}-${Math.round(r.right)} ngoai ${Math.round(vung.trai)}-${Math.round(vung.phai)}`,
 			);
 	}
-	return { sw, iw, soNut: nut.length, cat };
+	const tranKhung = [
+		...document.querySelectorAll('[data-slot="sheet-content"]'),
+	]
+		.flatMap((k) => [k, ...k.querySelectorAll("*")])
+		.filter((o) => {
+			if (!o.checkVisibility()) return false;
+			const s = getComputedStyle(o);
+			return (
+				o.matches('[data-slot="sheet-content"]') ||
+				/(auto|scroll)/.test(s.overflowY)
+			);
+		})
+		.filter((o) => o.scrollWidth > o.clientWidth + 1)
+		.map(
+			(o) =>
+				`${o.getAttribute("data-slot") ?? o.tagName.toLowerCase()} ${o.scrollWidth}/${o.clientWidth}`,
+		);
+	return { sw, iw, soNut: nut.length, cat, tranKhung };
 }
 
 function kiemO(so, nhan) {
@@ -451,12 +507,18 @@ function kiemO(so, nhan) {
 		so.sw === so.iw,
 	);
 	kiem(
+		so.tranKhung.length === 0
+			? `${nhan}: vung cuon trong khung khong tran ngang`
+			: `${T.tranNgang} trong khung ${nhan}: ${so.tranKhung.join("; ")}`,
+		so.tranKhung.length === 0,
+	);
+	kiem(
 		so.cat.length === 0
 			? `${nhan}: 0/${so.soNut} nut bi cat`
 			: `${T.nutBiCat} ${nhan}: ${so.cat.length}/${so.soNut} — ${so.cat.join("; ")}`,
 		so.cat.length === 0,
 	);
-	return `${nhan.padEnd(34)} sw ${so.sw}/${so.iw} · ${so.soNut} nut · ${so.cat.length} cat`;
+	return `${nhan.padEnd(34)} sw ${so.sw}/${so.iw} · khung tran ${so.tranKhung.length} · ${so.soNut} nut · ${so.cat.length} cat`;
 }
 
 function manE23(ctx) {
@@ -510,6 +572,42 @@ function manE23(ctx) {
 	];
 }
 
+async function sauQuyet(ctx, t, theme) {
+	const so = (await docDanhSach(ctx)).find((r) => r.id === ctx.g.a)?.so;
+	const p2 = await t.ctx.newPage();
+	await p2.setViewport({
+		width: GY.kho[1440].rong,
+		height: GY.kho[1440].cao,
+		deviceScaleFactor: 1,
+	});
+	await p2.emulateMediaFeatures([
+		{ name: "prefers-color-scheme", value: GY.theme[theme] },
+	]);
+	const t2 = { ...t, p: p2 };
+	await moTrang(t2, duongDs(ctx), `[data-chip-gop-y="${ctx.g.a}"]`);
+	const chip = (await p2.evaluate(docChip))[ctx.g.a];
+	const mong = `Kara · ${m.chip(String(so))}`;
+	kiem(
+		`E2 sau quyet ${theme}: chip A «${chip}» == so API ${so} (con 1 sau mot lan nhan, mot lan bo qua)`,
+		chip === mong && so === 1,
+	);
+	await chup(t2, `E2-danh-sach-sau-quyet-1440-${theme}`);
+	ghi(
+		`E2 sau quyet ${theme}: so «Vet» tren anh tang 2 dong moi o bien nhan truoc do (nhan doi ten KR1 + dat lai ten qua okr.updateKeyResult), nen sang va toi khac nhau`,
+	);
+	await p2.close();
+}
+
+async function docDanhSach(ctx) {
+	const ky = await trpc(API, ctx.tr).hoi("okr.cycles");
+	const ds = await trpc(API, ctx.tr).hoi("okr.danhSach", {
+		cycleId: ky.currentId,
+		unit: { loai: "pb", id: ctx.g.phongBan },
+		loc: { phuTrach: [], loai: [], trangThai: [], tuTin: [], gopY: [] },
+	});
+	return ds.rows.map((r) => ({ id: r.id, so: r.soGopYCho }));
+}
+
 async function buocE23(ctx) {
 	const bang = [];
 	for (const kho of [375, 1440])
@@ -520,8 +618,15 @@ async function buocE23(ctx) {
 					await moTrang(t, man.duong, man.cho);
 					if (man.lam) await man.lam(t.p);
 					await chup(t, `E23-${man.ten}-${kho}-${theme}`);
-					if (man.ten === "khung-bien-nhan" && kho === 1440)
+					if (man.ten === "khung-bien-nhan" && kho === 1440) {
 						await chup(t, `E2-chi-tiet-bien-nhan-1440-${theme}`);
+						await chupPhan(
+							t,
+							`[data-gop-y="${ctx.g.dong.hoiKr3}"]`,
+							`E2-bo-qua-kr3-1440-${theme}`,
+						);
+						await sauQuyet(ctx, t, theme);
+					}
 					bang.push(
 						kiemO(await t.p.evaluate(doO), `E23 ${man.ten} ${kho} ${theme}`),
 					);
@@ -591,13 +696,7 @@ async function chuanBi() {
 	ghi(
 		`GIEO A ${g.a}: 3 dong cho (doi trong ${g.dong.doiTrong}, viet lai KR1 ${g.dong.vietLaiKr1}, kr-la-viec KR3 ${g.dong.hoiKr3}); B ${g.b}: luot rong`,
 	);
-	const ky = await trpc(API, tr).hoi("okr.cycles");
-	const ds = await trpc(API, tr).hoi("okr.danhSach", {
-		cycleId: ky.currentId,
-		unit: { loai: "pb", id: g.phongBan },
-		loc: { phuTrach: [], loai: [], trangThai: [], tuTin: [], gopY: [] },
-	});
-	const nguon = ds.rows.map((r) => ({ id: r.id, so: r.soGopYCho }));
+	const nguon = await docDanhSach({ tr, g });
 	ghi(
 		`TIEN DE okr.danhSach pb:${SAN.ma.phongBan}: ${nguon.map((r) => `${r.id}=${r.so}`).join(", ")}`,
 	);

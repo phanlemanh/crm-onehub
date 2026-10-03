@@ -258,6 +258,45 @@ function NutNhoKara({ gopY, nhan }: { gopY: GopYMucTieu; nhan: string }) {
 	);
 }
 
+function KhoiLoi({ gopY, laVung }: { gopY: GopYMucTieu; laVung?: boolean }) {
+	const m = okrGopYMessages(useLocale());
+	return (
+		<Empty
+			border="solid"
+			data-nhom-kara={laVung ? "loi" : undefined}
+			size="compact"
+		>
+			<EmptyHeader>
+				<EmptyTitle>{m.vung.loi}</EmptyTitle>
+				<EmptyDescription>{m.vung.loiMoTa}</EmptyDescription>
+			</EmptyHeader>
+			<EmptyContent>
+				<Button
+					disabled={gopY.nut.loai !== "mo" || gopY.dangGui}
+					onClick={gopY.nho}
+					size="sm"
+					type="button"
+					variant="outline"
+				>
+					{m.vung.thuLai}
+				</Button>
+			</EmptyContent>
+		</Empty>
+	);
+}
+
+function SauKhiQuyetHet({ gopY }: { gopY: GopYMucTieu }) {
+	const m = okrGopYMessages(useLocale());
+	if (gopY.docLai === "dang-doc")
+		return <ThinkingIndicator label={m.vung.dangDoc} />;
+	if (gopY.docLai === "loi") return <KhoiLoi gopY={gopY} />;
+	return (
+		<div>
+			<NutNhoKara gopY={gopY} nhan={m.vung.docLai} />
+		</div>
+	);
+}
+
 export function VungKara({
 	gopY,
 	soKr,
@@ -304,25 +343,7 @@ export function VungKara({
 				</Empty>
 			);
 		case "loi":
-			return (
-				<Empty border="solid" data-nhom-kara="loi" size="compact">
-					<EmptyHeader>
-						<EmptyTitle>{m.vung.loi}</EmptyTitle>
-						<EmptyDescription>{m.vung.loiMoTa}</EmptyDescription>
-					</EmptyHeader>
-					<EmptyContent>
-						<Button
-							disabled={gopY.nut.loai !== "mo" || gopY.dangGui}
-							onClick={gopY.nho}
-							size="sm"
-							type="button"
-							variant="outline"
-						>
-							{m.vung.thuLai}
-						</Button>
-					</EmptyContent>
-				</Empty>
-			);
+			return <KhoiLoi gopY={gopY} laVung />;
 		case "co-gop-y":
 			return (
 				<div className="flex flex-col gap-1" data-nhom-kara="co-gop-y">
@@ -338,11 +359,7 @@ export function VungKara({
 					{gopY.nhom.capBo.map((d) => (
 						<DeXuatNeo d={d} gopY={gopY} key={d.id} moKr={moKr} />
 					))}
-					{gopY.conCho === 0 ? (
-						<div>
-							<NutNhoKara gopY={gopY} nhan={m.vung.docLai} />
-						</div>
-					) : null}
+					{gopY.conCho === 0 ? <SauKhiQuyetHet gopY={gopY} /> : null}
 				</div>
 			);
 	}

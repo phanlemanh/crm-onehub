@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { act } from "react";
+import { toast } from "sonner";
 import { troLySanSangOutput } from "../../api/src/okr/okr.contracts";
 import {
 	bamChuot,
@@ -409,6 +410,16 @@ describe("bo-qua", () => {
 	});
 });
 
+async function choHet(xong: () => boolean, moTa: string): Promise<void> {
+	const het = Date.now() + 3000;
+	while (Date.now() < het) {
+		if (xong()) return;
+		await nhip(1);
+		await new Promise((r) => setTimeout(r, 40));
+	}
+	throw new Error(`khong toi: ${moTa}`);
+}
+
 describe("khoa-gui", () => {
 	const nutCuaKhac = () =>
 		[D_DOI_TRONG.id, D_CAN.id].flatMap((id) =>
@@ -451,6 +462,20 @@ describe("khoa-gui", () => {
 			() => nhom()?.getAttribute("data-nhom-kara") === "co-gop-y",
 			"nhom kara",
 		);
+		await act(async () => {
+			toast.error("Đối chứng: toast hiện được trong khung dựng này");
+		});
+		await cho(
+			() => qs("[data-sonner-toast]") !== null,
+			"doi chung toast khong hien",
+		);
+		await act(async () => {
+			toast.dismiss();
+		});
+		await choHet(
+			() => qs("[data-sonner-toast]") === null,
+			"toast doi chung con",
+		);
 		kho.ghiRieng.set("okr.troLyQuyet", async () => {
 			lanDau = false;
 			throw new LoiTrpc("CONFLICT", "Đề xuất đã đổi");
@@ -459,7 +484,7 @@ describe("khoa-gui", () => {
 		await bamChuot(nut(m.de.boQua, deXuat(D_DOI_TRONG.id) ?? document.body));
 		await cho(() => deXuat(D_DOI_TRONG.id) === null, "de xuat bien mat");
 		expect(docCua("okr.troLyDanhSach").length).toBeGreaterThan(docTruoc);
-		expect(qs("[data-sonner-toast]")).toBeNull();
+		expect(qs("[data-sonner-toast]"), "co toast loi khi CONFLICT").toBeNull();
 		expect(qs("[data-slot=field-error]")).toBeNull();
 
 		kho.ghiRieng.set("okr.troLyQuyet", async () => {
@@ -670,13 +695,34 @@ describe("trang-thai-kara", () => {
 		await cho(() => qs("[data-hop-thoai-kr]") !== null, "hop KR");
 		expect(document.body.textContent).not.toContain("Trợ lý OKR");
 		await thaoHet();
+		kho.chiTiet = () =>
+			chiTietTu(mtSheet(), {
+				trail: [
+					{
+						id: "v-kara",
+						at: "2026-10-03T03:00:00.000Z",
+						actor: HUNG,
+						action: "sua-kr",
+						keyResultId: KR_1.id,
+						before: { title: KR_1.title },
+						after: { title: D_KR1.sau ?? "" },
+						note: `tro-ly-okr:${D_KR1.id}`,
+					},
+				],
+			});
 		await dungSheet();
 		const tabVet = qsa("[role=tab]").find(
 			(t) => t.textContent?.trim().startsWith(mo.sheet.tabVet) === true,
 		);
 		if (!tabVet) throw new Error("khong co tab Vet");
 		await bamChuot(tabVet);
-		await nhip(5);
+		await cho(
+			() =>
+				qs(
+					"[role=tabpanel][data-state=active] [data-vet-hang]",
+				)?.textContent?.includes(m.vet.theoKara) === true,
+			"hang vet theo Kara khong hien",
+		);
 		expect(document.body.textContent).not.toContain("Trợ lý OKR");
 	});
 });

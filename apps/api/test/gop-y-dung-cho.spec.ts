@@ -93,6 +93,24 @@ async function soCua(ai: Nguoi, mucTieu: string): Promise<number | null> {
 	return ds.rows.find((r) => r.id === mucTieu)?.soGopYCho ?? null;
 }
 
+async function soTrongDon(
+	ai: Nguoi,
+	mucTieu: string,
+	unit: { loai: "pb" | "bp"; id: string },
+): Promise<number | null> {
+	const ds = ok<DanhSach>(
+		await goi(
+			app,
+			"okr.danhSach",
+			"query",
+			{ cycleId, unit, loc: LOC_RONG } as never,
+			cookie[ai],
+		),
+		`danhSach ${ai}`,
+	);
+	return ds.rows.find((r) => r.id === mucTieu)?.soGopYCho ?? null;
+}
+
 async function soTrongMine(ai: Nguoi, mucTieu: string): Promise<number | null> {
 	const mine = ok<{ objectives: Dong[] }>(
 		await goi(app, "okr.mine", "query", { cycleId }, cookie[ai]),
@@ -244,6 +262,71 @@ afterAll(async () => {
 }, CHO_DB);
 
 describe("dem-chip", () => {
+	const MA_TRAN: readonly [
+		Nguoi,
+		"M1" | "M2",
+		"danhSach" | "mine",
+		number | null,
+	][] = [
+		["truong", "M1", "danhSach", 3],
+		["truong", "M2", "danhSach", 0],
+		["phu-trach-kr2", "M1", "danhSach", 1],
+		["phu-trach-kr2", "M2", "danhSach", 0],
+		["chi-doc", "M1", "danhSach", 0],
+		["chi-doc", "M2", "danhSach", 0],
+		["truong", "M1", "mine", 3],
+		["truong", "M2", "mine", null],
+		["phu-trach-kr2", "M1", "mine", 1],
+		["phu-trach-kr2", "M2", "mine", null],
+		["chi-doc", "M1", "mine", null],
+		["chi-doc", "M2", "mine", null],
+	];
+
+	test(
+		"chỉ bật Kinh doanh miền Bắc: 3 người × {M1, M2} × {danhSach, mine} đúng bảng viết trước",
+		async () => {
+			const luc = new Date();
+			for (const [goc, them] of [
+				[id.tenMt, { trangThai: "bo-qua", quyetLuc: luc }],
+				[id.tenMt, { trangThai: "het-han" }],
+				[id2.ten, { nac: "an" }],
+				[id2.ten, { cuocSoanId: `${M2}-cuoc` }],
+				[id2.tenK1, { truoc: "Tên KR đã cũ" }],
+				[id2.ten, { trangThai: "nhan", quyetLuc: luc }],
+				[id2.ten, { trangThai: "bac", quyetLuc: luc }],
+				[id2.hoi, { trangThai: "bo-qua", quyetLuc: luc }],
+				[id2.ten, { trangThai: "het-han" }],
+			] as const)
+				await clone(goc, them);
+			await ghiCauHinh(app, cookie["quan-tri"], {
+				...NAC_CAU_HINH.bat,
+				aiDeXuatPhamVi: "danh-sach",
+				aiDeXuatDonVi: [PB_BAC],
+				aiDeXuatAnPhamVi: "toan-cong-ty",
+			});
+			try {
+				for (const [ai, ten, duong, ky] of MA_TRAN) {
+					const mt = ten === "M1" ? M1 : M2;
+					const thuc =
+						duong === "mine"
+							? await soTrongMine(ai, mt)
+							: await soTrongDon(ai, mt, {
+									loai: "pb",
+									id: ten === "M1" ? PB_BAC : PB_NAM,
+								});
+					if (thuc !== ky)
+						throw new Error(
+							`dem sai: ${ai}/${ten} ${thuc} != ${ky} (${duong})`,
+						);
+				}
+			} finally {
+				await ghiCauHinh(app, cookie["quan-tri"], NAC_CAU_HINH.bat);
+			}
+			console.log(`dem-chip ma tran: ${MA_TRAN.length} o`);
+		},
+		CHO_DB,
+	);
+
 	const BANG_BAT: readonly [Nguoi, string, number][] = [
 		["truong", M1, 3],
 		["phu-trach-kr2", M1, 1],
@@ -421,7 +504,8 @@ describe("dong-bo", () => {
 			});
 			const sau = await soCua("truong-nam", M2);
 			expect(h.trangThai).toBe("het-han");
-			expect(`truoc=${truoc} sau=${sau}`).toBe("truoc=2 sau=2");
+			for (const so of [truoc, sau])
+				if (so !== 2) throw new Error(`chip lech danh sach: ${so} != 2`);
 		},
 		CHO_DB,
 	);
@@ -435,34 +519,32 @@ describe("theo-kara", () => {
 		).trail;
 
 	test(
-		"nhận đổi tên KR2 → dấu theo Kara; sửa tay sau đó → mất dấu; sửa rồi nhận ghi đúng chữ",
+		"nhận đổi tên KR1 → dấu theo Kara; sửa dòng khác ghi đúng chữ; sửa tay KR1 sau đó → mất dấu",
 		async () => {
-			ok(await quyet(id.tenK2, "nhan", "truong"), "nhan ten k2");
-			expect(krTheoKara(await vet()).has(M1K2)).toBe(true);
+			ok(await quyet(id.tenK1, "nhan", "truong"), "nhan ten k1");
+			expect(krTheoKara(await vet()).has(M1K1)).toBe(true);
 			ok(
-				await quyet(id.tenK1, "sua", "truong", "Hợp đồng bán lẻ, tự sửa"),
-				"sua k1",
+				await quyet(id.tenK2, "sua", "truong", "Số cuộc hẹn, tự sửa"),
+				"sua k2",
 			);
-			const k1 = await db.okrKeyResult.findUniqueOrThrow({
-				where: { id: M1K1 },
+			const k2 = await db.okrKeyResult.findUniqueOrThrow({
+				where: { id: M1K2 },
 				select: { title: true },
 			});
-			expect(k1.title).toBe("Hợp đồng bán lẻ, tự sửa");
+			expect(k2.title).toBe("Số cuộc hẹn, tự sửa");
 			tienDongHo();
 			ok(
 				await goi(
 					app,
 					"okr.updateKeyResult",
 					"mutation",
-					{ id: M1K2, title: "Số cuộc hẹn, người sửa tay" },
+					{ id: M1K1, title: "Hợp đồng bán lẻ, người sửa tay" },
 					cookie.truong,
 				),
-				"sua tay k2",
+				"sua tay k1",
 			);
-			const loi = krTheoKara(await vet()).has(M1K2)
-				? "dau theo kara con sau khi sua tay: KR2"
-				: "ok";
-			expect(loi).toBe("ok");
+			if (krTheoKara(await vet()).has(M1K1))
+				throw new Error("dau theo kara con sau khi sua tay: KR1");
 		},
 		CHO_DB,
 	);
