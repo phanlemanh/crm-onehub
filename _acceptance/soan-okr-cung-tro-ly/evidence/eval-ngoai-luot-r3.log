@@ -1,0 +1,192 @@
+HEAD c8bc6b3417029977f6f484aa134b40414727589e
+cay_sach=0
+cho_may_yen_giay=0 con_ban=0
+lenh: OKR_AGENT_BRIDGE_SECRET=<sinh moi> TDX_TRAN_USD=2 bun _acceptance/soan-okr-cung-tro-ly/rang/eval-soan.mjs (config:executors.script.soan_eval)
+bat_dau 2026-10-01T06:53:09Z
+eval-soan: tin dung nhom tren gateway con 34.677673075 USD (da dung 60.322326925); ngan sach rieng cua khoa khong doc o day — het thi phan loai sau lan chay
+eval-soan: kho khong phai kho do — chay trong mot phien do (tien-de)
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+  dropped crm_tts_e17_thu__mau_do: older than 12h
+phien-do: kho crm_friendly_liskov_8d4458_do · app http://localhost:4547 · api http://localhost:4267
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+eval-soan: tin dung nhom tren gateway con 34.677673075 USD (da dung 60.322326925); ngan sach rieng cua khoa khong doc o day — het thi phan loai sau lan chay
+$ bun run --filter=api okr:mau
+api okr:mau: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-10-01T06:53:13.435Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ, 2 trang tài liệu.
+api okr:mau: Exited with code 0
+☰eve  v0.29.4
+[DEV] server listening at http://127.0.0.1:58753/
+
+EVALS 30
+target http://127.0.0.1:58753/
+
+[okr-soan/soan-boi-canh/0000] {"ca":"onehub#v1","phiaCoGoi":"B","usd":0.057299}
+✓  okr-soan/soan-boi-canh/0000  gates 8/8  judge.autoevals.closedQA [boi-canh:onehub#v1]: 0%
+[okr-soan/soan-boi-canh/0001] {"ca":"bp-kinh-doanh#v1","phiaCoGoi":"B","usd":0.044466}
+✓  okr-soan/soan-boi-canh/0001  gates 8/8  judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v1]: 0%
+[okr-soan/soan-boi-canh/0002] {"ca":"pb-kd-bac#v1","phiaCoGoi":"A","usd":0.05399599999999999}
+✗  okr-soan/soan-boi-canh/0002  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:pb-kd-bac#v1] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0003] {"ca":"pb-kho-van#v1","phiaCoGoi":"B","usd":0.051320000000000005}
+✗  okr-soan/soan-boi-canh/0003  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:pb-kho-van#v1] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0004] {"ca":"pb-tai-chinh#v1","phiaCoGoi":"A","usd":0.043547999999999996}
+✗  okr-soan/soan-boi-canh/0004  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v1] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0005] {"ca":"onehub#v2","phiaCoGoi":"B","usd":0.050342}
+✓  okr-soan/soan-boi-canh/0005  gates 8/8  judge.autoevals.closedQA [boi-canh:onehub#v2]: 0%
+[okr-soan/soan-boi-canh/0006] {"ca":"bp-kinh-doanh#v2","phiaCoGoi":"A","usd":0.055038}
+✗  okr-soan/soan-boi-canh/0006  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v2] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0007] {"ca":"pb-kd-bac#v2","phiaCoGoi":"A","usd":0.04734}
+✓  okr-soan/soan-boi-canh/0007  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-kd-bac#v2]: 100%
+[okr-soan/soan-boi-canh/0008] {"ca":"pb-kho-van#v2","phiaCoGoi":"A","usd":0.046358}
+✓  okr-soan/soan-boi-canh/0008  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-kho-van#v2]: 100%
+[okr-soan/soan-boi-canh/0009] {"ca":"pb-tai-chinh#v2","phiaCoGoi":"B","usd":0.04422999999999999}
+✓  okr-soan/soan-boi-canh/0009  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v2]: 0%
+[okr-soan/soan-boi-canh/0010] {"ca":"onehub#v3","phiaCoGoi":"B","usd":0.04682}
+✓  okr-soan/soan-boi-canh/0010  gates 8/8  judge.autoevals.closedQA [boi-canh:onehub#v3]: 0%
+[okr-soan/soan-boi-canh/0011] {"ca":"bp-kinh-doanh#v3","phiaCoGoi":"B","usd":0.045236}
+✗  okr-soan/soan-boi-canh/0011  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v3] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0012] {"ca":"pb-kd-bac#v3","phiaCoGoi":"B","usd":0.053434999999999996}
+✗  okr-soan/soan-boi-canh/0012  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:pb-kd-bac#v3] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0013] {"ca":"pb-kho-van#v3","phiaCoGoi":"A","usd":0.048049999999999995}
+✓  okr-soan/soan-boi-canh/0013  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-kho-van#v3]: 100%
+[okr-soan/soan-boi-canh/0014] {"ca":"pb-tai-chinh#v3","phiaCoGoi":"B","usd":0.050663}
+✓  okr-soan/soan-boi-canh/0014  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v3]: 0%
+[okr-soan/soan-do-tre/0000] {"cuoc":1,"ca":"onehub","ms":[22162,34123,12426,12625],"tach":[{"soBuoc":1,"moHinhMs":21559,"congCuMs":0,"soCongCu":0},{"soBuoc":3,"moHinhMs":33172,"congCuMs":250,"soCongCu":2},{"soBuoc":2,"moHinhMs":11992,"congCuMs":101,"soCongCu":1},{"soBuoc":2,"moHinhMs":11944,"congCuMs":135,"soCongCu":1}],"usd":0.045470000000000003}
+✓  okr-soan/soan-do-tre/0000  gates 7/7
+[okr-soan/soan-do-tre/0001] {"cuoc":2,"ca":"bp-kinh-doanh","ms":[4532,16539,21762,59350],"tach":[{"soBuoc":1,"moHinhMs":3878,"congCuMs":0,"soCongCu":0},{"soBuoc":3,"moHinhMs":15941,"congCuMs":65,"soCongCu":2},{"soBuoc":2,"moHinhMs":21217,"congCuMs":35,"soCongCu":1},{"soBuoc":2,"moHinhMs":58688,"congCuMs":34,"soCongCu":1}],"usd":0.045309999999999996}
+✓  okr-soan/soan-do-tre/0001  gates 7/7
+[okr-soan/soan-do-tre/0002] {"cuoc":3,"ca":"pb-kd-bac","ms":[8066,65107,39851,36009],"tach":[{"soBuoc":1,"moHinhMs":7606,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":64271,"congCuMs":283,"soCongCu":1},{"soBuoc":2,"moHinhMs":39098,"congCuMs":273,"soCongCu":1},{"soBuoc":2,"moHinhMs":35193,"congCuMs":273,"soCongCu":1}],"usd":0.033505999999999994}
+✓  okr-soan/soan-do-tre/0002  gates 7/7
+[okr-soan/soan-do-tre/0003] {"cuoc":4,"ca":"pb-kho-van","ms":[21252,10896,8757,13722],"tach":[{"soBuoc":1,"moHinhMs":15605,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":10127,"congCuMs":67,"soCongCu":1},{"soBuoc":2,"moHinhMs":8128,"congCuMs":109,"soCongCu":1},{"soBuoc":2,"moHinhMs":13267,"congCuMs":50,"soCongCu":1}],"usd":0.034987}
+✓  okr-soan/soan-do-tre/0003  gates 7/7
+[okr-soan/soan-do-tre/0004] {"cuoc":5,"ca":"pb-tai-chinh","ms":[4820,12391,10375,9766],"tach":[{"soBuoc":1,"moHinhMs":4282,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":11775,"congCuMs":54,"soCongCu":1},{"soBuoc":2,"moHinhMs":9931,"congCuMs":62,"soCongCu":1},{"soBuoc":2,"moHinhMs":9320,"congCuMs":36,"soCongCu":1}],"usd":0.039701}
+✓  okr-soan/soan-do-tre/0004  gates 7/7
+[okr-soan/soan-do-tre/0005] {"cuoc":6,"ca":"onehub","ms":[6656,18930,12075,11673],"tach":[{"soBuoc":1,"moHinhMs":6163,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":18146,"congCuMs":153,"soCongCu":1},{"soBuoc":2,"moHinhMs":11611,"congCuMs":80,"soCongCu":1},{"soBuoc":2,"moHinhMs":10916,"congCuMs":114,"soCongCu":1}],"usd":0.034066}
+✓  okr-soan/soan-do-tre/0005  gates 7/7
+[okr-soan/soan-do-tre/0006] {"cuoc":7,"ca":"bp-kinh-doanh","ms":[5252,13783,19984,16972],"tach":[{"soBuoc":1,"moHinhMs":4719,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":13042,"congCuMs":53,"soCongCu":1},{"soBuoc":2,"moHinhMs":19309,"congCuMs":153,"soCongCu":1},{"soBuoc":3,"moHinhMs":16275,"congCuMs":85,"soCongCu":2}],"usd":0.039199}
+✓  okr-soan/soan-do-tre/0006  gates 7/7
+[okr-soan/soan-do-tre/0007] {"cuoc":8,"ca":"pb-kd-bac","ms":[5307,11678,10113,10708],"tach":[{"soBuoc":1,"moHinhMs":4804,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":11084,"congCuMs":44,"soCongCu":1},{"soBuoc":2,"moHinhMs":9476,"congCuMs":48,"soCongCu":1},{"soBuoc":2,"moHinhMs":10049,"congCuMs":63,"soCongCu":1}],"usd":0.03869}
+✓  okr-soan/soan-do-tre/0007  gates 7/7
+[okr-soan/soan-do-tre/0008] {"cuoc":9,"ca":"pb-kho-van","ms":[4885,10712,8826,10369],"tach":[{"soBuoc":1,"moHinhMs":4440,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":10296,"congCuMs":31,"soCongCu":1},{"soBuoc":2,"moHinhMs":8132,"congCuMs":64,"soCongCu":1},{"soBuoc":2,"moHinhMs":9757,"congCuMs":51,"soCongCu":1}],"usd":0.033982000000000005}
+✓  okr-soan/soan-do-tre/0008  gates 7/7
+[okr-soan/soan-do-tre/0009] {"cuoc":10,"ca":"pb-tai-chinh","ms":[6428,12190,9821,10970],"tach":[{"soBuoc":1,"moHinhMs":5928,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":11808,"congCuMs":49,"soCongCu":1},{"soBuoc":2,"moHinhMs":9345,"congCuMs":44,"soCongCu":1},{"soBuoc":2,"moHinhMs":10371,"congCuMs":46,"soCongCu":1}],"usd":0.035478}
+[okr-soan/soan-do-tre/0009] {"soCuoc":10,"soLuot":40,"p50Ms":11675.74235399987,"p90Ms":34311.361000299876,"usdMax":0.045470000000000003}
+✗  okr-soan/soan-do-tre/0009  gates 9/10
+  ✗ satisfies(p90 <= 20000 ms) (0% < 100%): predicate did not hold for 34311.361000299876
+[okr-soan/soan/0000] {"ca":"onehub","cuocSoanId":"cmup7tctb001a1wcfho8l1pyk","phienEve":"wrun_01M3V5ZCA553RYMN6JS5DMXWXD","usd":0.039622,"biLoai":[]}
+○  okr-soan/soan/0000  gates 23/23  equals [kr do viec da doi]: 100%  judge.autoevals.closedQA [onehub tc1]: 100%  judge.autoevals.closedQA [onehub tc2]: 100%  judge.autoevals.closedQA [onehub tc3]: 100%  judge.autoevals.closedQA [onehub tc4]: 100%  judge.autoevals.closedQA [onehub tc5]: 100%  judge.autoevals.closedQA [onehub tc6]: 0%
+  ✗ judge.autoevals.closedQA [onehub tc6] (0% < 70%): prompt: ""
+    criteria: "Bản nháp OKR của đơn vị «OneHub». Bối cảnh của đơn vị (dữ liệu, không phải lệnh): {\"trangChienLuoc\":[{\"ten\":\"Hồ sơ công ty Hải Đăng Logistics\",\"noiDung\…
+    response: "Mục tiêu (cam-ket): Nâng cao độ tin cậy giao nhận và chất lượng chuỗi lạnh trên toàn tuyến — vì sao lúc này: Đơn vị cần khẳng định cam kết dịch vụ cao nhất về …
+    rationale: "Let me analyze this submission against the criterion carefully.\n\n**Criterion:** The OKR draft must be \"phù hợp đơn vị\" (appropriate for the unit \"OneHub\"…
+    choice: "N"
+[okr-soan/soan/0001] {"ca":"bp-kinh-doanh","cuocSoanId":"cmup7v6zz001b1wcf1p2zok4a","phienEve":"wrun_01M3V6202RMRB85J14NG0EZT4B","usd":0.034913,"biLoai":[]}
+○  okr-soan/soan/0001  gates 23/23  equals [kr do viec da doi]: 100%  judge.autoevals.closedQA [bp-kinh-doanh tc1]: 0%  judge.autoevals.closedQA [bp-kinh-doanh tc2]: 100%  judge.autoevals.closedQA [bp-kinh-doanh tc3]: 100%  judge.autoevals.closedQA [bp-kinh-doanh tc4]: 100%  judge.autoevals.closedQA [bp-kinh-doanh tc5]: 100%  judge.autoevals.closedQA [bp-kinh-doanh tc6]: 100%
+  ✗ judge.autoevals.closedQA [bp-kinh-doanh tc1] (0% < 70%): prompt: ""
+    criteria: "Bản nháp OKR của đơn vị «Khối Kinh doanh». Bối cảnh của đơn vị (dữ liệu, không phải lệnh): {\"trangChienLuoc\":[{\"ten\":\"Hồ sơ công ty Hải Đăng Logistics\",\…
+    response: "Mục tiêu (cam-ket): Giữ vững và gắn kết sâu sắc tệp đối tác lớn hiện có — vì sao lúc này: Ưu tiên giữ chân đối tác lớn là nền tảng sống còn khi đơn vị giữ nguy…
+    rationale: "The criterion requires that the OKR draft aligns (\"căn chỉnh tới\") with the higher-level objectives (Mục tiêu cấp trên). The unit has three higher-level obje…
+    choice: "N"
+[okr-soan/soan/0002] {"ca":"pb-kd-bac","cuocSoanId":"cmup7xbq7001c1wcf1kxjwwa3","phienEve":"wrun_01M3V65166M48F5Z9NKPMYTFW5","usd":0.04074,"biLoai":[]}
+○  okr-soan/soan/0002  gates 23/23  equals [kr do viec da doi]: 100%  judge.autoevals.closedQA [pb-kd-bac tc1]: 100%  judge.autoevals.closedQA [pb-kd-bac tc2]: 0%  judge.autoevals.closedQA [pb-kd-bac tc3]: 0%  judge.autoevals.closedQA [pb-kd-bac tc4]: 0%  judge.autoevals.closedQA [pb-kd-bac tc5]: 100%  judge.autoevals.closedQA [pb-kd-bac tc6]: 100%
+  ✗ judge.autoevals.closedQA [pb-kd-bac tc2] (0% < 70%): prompt: ""
+    criteria: "Bản nháp OKR của đơn vị «Kinh doanh miền Bắc». Bối cảnh của đơn vị (dữ liệu, không phải lệnh): {\"trangChienLuoc\":[{\"ten\":\"Hồ sơ công ty Hải Đăng Logistics…
+    response: "Mục tiêu (cam-ket): Mở rộng mạng lưới đối tác bán lẻ tại thị trường miền Bắc — vì sao lúc này: Thị trường đang có khoảng trống lớn khi các đối thủ rút lui, cần…
+    rationale: "Let me carefully analyze the criterion and each KR in the submission.\n\n**Criterion:** The khởi điểm (starting point) for each KR must be the nearest measurem…
+    choice: "N"
+  ✗ judge.autoevals.closedQA [pb-kd-bac tc3] (0% < 70%): prompt: ""
+    criteria: "Bản nháp OKR của đơn vị «Kinh doanh miền Bắc». Bối cảnh của đơn vị (dữ liệu, không phải lệnh): {\"trangChienLuoc\":[{\"ten\":\"Hồ sơ công ty Hải Đăng Logistics…
+    response: "Mục tiêu (cam-ket): Mở rộng mạng lưới đối tác bán lẻ tại thị trường miền Bắc — vì sao lúc này: Thị trường đang có khoảng trống lớn khi các đối thủ rút lui, cần…
+    rationale: "I need to check whether all KRs measure results (not activities), whether KR targets (đích) are left blank, and whether starting points (khởi điểm) are only fi…
+    choice: "N"
+  ✗ judge.autoevals.closedQA [pb-kd-bac tc4] (0% < 70%): prompt: ""
+    criteria: "Bản nháp OKR của đơn vị «Kinh doanh miền Bắc». Bối cảnh của đơn vị (dữ liệu, không phải lệnh): {\"trangChienLuoc\":[{\"ten\":\"Hồ sơ công ty Hải Đăng Logistics…
+    response: "Mục tiêu (cam-ket): Mở rộng mạng lưới đối tác bán lẻ tại thị trường miền Bắc — vì sao lúc này: Thị trường đang có khoảng trống lớn khi các đối thủ rút lui, cần…
+    rationale: "Step-by-step analysis:\n\n1. **Rule check on \"đích\" (targets)**: All KR targets are left blank as required. ✓\n\n2. **Rule check on \"khởi điểm\" (starting p…
+    choice: "N"
+[okr-soan/soan/0003] {"ca":"pb-kho-van","cuocSoanId":"cmup7z219001d1wcfrks69l3v","phienEve":"wrun_01M3V67G1TWRK522S25NMT0A2M","usd":0.03513,"biLoai":[]}
+✓  okr-soan/soan/0003  gates 23/23  equals [kr do viec da doi]: 100%  judge.autoevals.closedQA [pb-kho-van tc1]: 100%  judge.autoevals.closedQA [pb-kho-van tc2]: 100%  judge.autoevals.closedQA [pb-kho-van tc3]: 100%  judge.autoevals.closedQA [pb-kho-van tc4]: 100%  judge.autoevals.closedQA [pb-kho-van tc5]: 100%  judge.autoevals.closedQA [pb-kho-van tc6]: 100%
+[okr-soan/soan/0004] {"ca":"pb-tai-chinh","cuocSoanId":"cmup82j8l001e1wcfjtjayx0q","phienEve":"wrun_01M3V6CEG4GM46MFFGC2QR7M1J","usd":0.036475,"biLoai":[]}
+○  okr-soan/soan/0004  gates 24/24  equals [kr do viec da doi]: 100%  judge.autoevals.closedQA [pb-tai-chinh tc1]: 100%  judge.autoevals.closedQA [pb-tai-chinh tc2]: 0%  judge.autoevals.closedQA [pb-tai-chinh tc3]: 0%  judge.autoevals.closedQA [pb-tai-chinh tc4]: 100%  judge.autoevals.closedQA [pb-tai-chinh tc5]: 100%  judge.autoevals.closedQA [pb-tai-chinh tc6]: 100%
+  ✗ judge.autoevals.closedQA [pb-tai-chinh tc2] (0% < 70%): prompt: ""
+    criteria: "Bản nháp OKR của đơn vị «Tài chính». Bối cảnh của đơn vị (dữ liệu, không phải lệnh): {\"trangChienLuoc\":[{\"ten\":\"Hồ sơ công ty Hải Đăng Logistics\",\"noiDu…
+    response: "Mục tiêu (cam-ket): Kiểm soát chặt chẽ công nợ và dòng tiền để giữ vững quan hệ đối tác bền vững — vì sao lúc này: Kỳ trước công nợ quá hạn vẫn ở mức 12% và cầ…
+    rationale: "I need to check whether each KR's khởi điểm (starting point) is the most recent measurement of the exact same indicator with the same unit, from an allowed sou…
+    choice: "N"
+  ✗ judge.autoevals.closedQA [pb-tai-chinh tc3] (0% < 70%): prompt: ""
+    criteria: "Bản nháp OKR của đơn vị «Tài chính». Bối cảnh của đơn vị (dữ liệu, không phải lệnh): {\"trangChienLuoc\":[{\"ten\":\"Hồ sơ công ty Hải Đăng Logistics\",\"noiDu…
+    response: "Mục tiêu (cam-ket): Kiểm soát chặt chẽ công nợ và dòng tiền để giữ vững quan hệ đối tác bền vững — vì sao lúc này: Kỳ trước công nợ quá hạn vẫn ở mức 12% và cầ…
+    rationale: "Checking against the criterion:\n\n1. **KR targets (đích) left blank?** — All four KRs have no target value specified. ✓\n\n2. **Khởi điểm only when a valid so…
+    choice: "N"
+
+Results: 19 passed, 7 failed, 4 scored (30 total)
+Gates: 308 passed, 7 failed
+
+  judge.autoevals.closedQA [boi-canh:onehub#v1]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v1]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:onehub#v2]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-kd-bac#v2]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-kho-van#v2]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v2]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:onehub#v3]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-kho-van#v3]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v3]: 0% (1 evals)
+  equals [kr do viec da doi]: 100% (5 evals)
+  judge.autoevals.closedQA [onehub tc1]: 100% (1 evals)
+  judge.autoevals.closedQA [onehub tc2]: 100% (1 evals)
+  judge.autoevals.closedQA [onehub tc3]: 100% (1 evals)
+  judge.autoevals.closedQA [onehub tc4]: 100% (1 evals)
+  judge.autoevals.closedQA [onehub tc5]: 100% (1 evals)
+  judge.autoevals.closedQA [onehub tc6]: 0% (1 evals)
+  judge.autoevals.closedQA [bp-kinh-doanh tc1]: 0% (1 evals)
+  judge.autoevals.closedQA [bp-kinh-doanh tc2]: 100% (1 evals)
+  judge.autoevals.closedQA [bp-kinh-doanh tc3]: 100% (1 evals)
+  judge.autoevals.closedQA [bp-kinh-doanh tc4]: 100% (1 evals)
+  judge.autoevals.closedQA [bp-kinh-doanh tc5]: 100% (1 evals)
+  judge.autoevals.closedQA [bp-kinh-doanh tc6]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kd-bac tc1]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kd-bac tc2]: 0% (1 evals)
+  judge.autoevals.closedQA [pb-kd-bac tc3]: 0% (1 evals)
+  judge.autoevals.closedQA [pb-kd-bac tc4]: 0% (1 evals)
+  judge.autoevals.closedQA [pb-kd-bac tc5]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kd-bac tc6]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kho-van tc1]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kho-van tc2]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kho-van tc3]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kho-van tc4]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kho-van tc5]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-kho-van tc6]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-tai-chinh tc1]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-tai-chinh tc2]: 0% (1 evals)
+  judge.autoevals.closedQA [pb-tai-chinh tc3]: 0% (1 evals)
+  judge.autoevals.closedQA [pb-tai-chinh tc4]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-tai-chinh tc5]: 100% (1 evals)
+  judge.autoevals.closedQA [pb-tai-chinh tc6]: 100% (1 evals)
+
+Completed in 47m 33s
+
+eval-soan: da ghi /Users/manhphan/dev/crm/.claude/worktrees/friendly-liskov-8d4458/_acceptance/soan-okr-cung-tro-ly/evidence/eval-soan.md
+eval-soan: sau tieu chi (chan doan, khong doi ma thoat) duoi nguong: onehub tc6 0, bp-kinh-doanh tc1 0, pb-kd-bac tc2 0, pb-kd-bac tc3 0, pb-kd-bac tc4 0, pb-tai-chinh tc2 0, pb-tai-chinh tc3 0
+eval-soan: goi thang 9/9 cap da cham (100 %), xau nhat 9/15 (60 %)
+eval-soan: chot ma hong 1: okr-soan/soan-do-tre/0009 satisfies(p90 <= 20000 ms)
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1
+EXIT=1
+ket_thuc 2026-10-01T07:40:52Z
+HEAD_sau c8bc6b3417029977f6f484aa134b40414727589e
+tai 06:58:09Z: 0 tien trinh do/test khac
+tai 07:03:09Z: 0 tien trinh do/test khac
+tai 07:08:09Z: 7 tien trinh do/test khac
+tai 07:13:10Z: 9 tien trinh do/test khac
+tai 07:18:10Z: 2 tien trinh do/test khac
+tai 07:23:10Z: 7 tien trinh do/test khac
+tai 07:28:11Z: 2 tien trinh do/test khac
+tai 07:33:11Z: 5 tien trinh do/test khac
+tai 07:38:11Z: 0 tien trinh do/test khac

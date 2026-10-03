@@ -12,6 +12,11 @@ export function homNayVn(luc: Date): string {
 	}).format(luc);
 }
 
+export function ngayThangVn(luc: Date): string {
+	const ngay = homNayVn(luc);
+	return `${ngay.slice(8, 10)}/${ngay.slice(5, 7)}`;
+}
+
 export function goiYChuKy(homNay: string): GoiYChuKy {
 	const nam = Number(homNay.slice(0, 4));
 	const quy = Math.ceil(Number(homNay.slice(5, 7)) / OKR_CHU_KY.thangMoiQuy);

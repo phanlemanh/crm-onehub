@@ -7,6 +7,7 @@ import {
 	ConfirmationRejected,
 	ConfirmationRequest,
 } from "@crm/ui/components/ai-elements/confirmation";
+import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { FieldError } from "@crm/ui/components/field";
 import { useMessages } from "@crm/ui/components/locale-provider";
@@ -51,6 +52,8 @@ export type ProposedChangeProps = Omit<
 	before?: ReactNode;
 	value: ReactNode;
 	rationale?: ReactNode;
+	fields?: ReactNode;
+	tag?: ReactNode;
 	pending?: boolean;
 	decided?: { decision: ProposedChangeDecision; text: ReactNode };
 	error?: ReactNode;
@@ -147,6 +150,8 @@ export function ProposedChange({
 	before,
 	value,
 	rationale,
+	fields,
+	tag,
 	pending = false,
 	decided,
 	error,
@@ -183,12 +188,17 @@ export function ProposedChange({
 			</ConfirmationRejected>
 			<ConfirmationRequest>
 				<div data-slot="proposed-change-body" className="flex flex-col gap-1">
-					{label ? (
+					{label || tag ? (
 						<p
 							data-slot="proposed-change-label"
-							className="font-medium text-foreground"
+							className="flex flex-wrap items-center gap-2 font-medium text-foreground"
 						>
 							{label}
+							{tag ? (
+								<Badge variant="outline" data-slot="proposed-change-tag">
+									{tag}
+								</Badge>
+							) : null}
 						</p>
 					) : null}
 					{before !== undefined ? (
@@ -199,6 +209,14 @@ export function ProposedChange({
 					<GiaTri kind={kind} value={value} editing={editing} />
 					{rationale ? (
 						<p className="text-muted-foreground text-pretty">{rationale}</p>
+					) : null}
+					{fields ? (
+						<div
+							data-slot="proposed-change-fields"
+							className="flex flex-col gap-2"
+						>
+							{fields}
+						</div>
 					) : null}
 				</div>
 			</ConfirmationRequest>

@@ -1,0 +1,37 @@
+HEAD 6fa36384c93d1941bc2f5d4be0dfcc57bffc8c85 (ma nguon == 62560bfc da cham; khac chi o _acceptance)
+cay_sach=1
+lenh: bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/soan-okr-cung-tro-ly/rang/cach-ly-chi-okr.mjs" (config:executors.script.soan_cach_ly)
+bat_dau 2026-10-01T17:41:25Z
+tai_luc_dau { 4.84 5.67 6.22 } khac=0
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_friendly_liskov_8d4458_do · app http://localhost:4395 · api http://localhost:4263
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+tu kiem thuoc: 12 ca dung (may do ten, chuoi JSON, JWT, khoa doi tac)
+-- phien do cach ly: apps/agent cong 50791
+-- phien do co agent-okr: cay friendly-liskov-8d4458-soan · agent-okr cong 50792
+phien-do: kho crm_friendly_liskov_8d4458_soan_do · app http://localhost:4302 · api http://localhost:4246
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+tu kiem thuoc: 12 ca dung (may do ten, chuoi JSON, JWT, khoa doi tac)
+-- node: v24.15.0
+cay: app dung-cay · agent-okr http://127.0.0.1:50839 dung-cay (friendly_liskov_8d4458_soan) sau may soi http://127.0.0.1:50792 · apps/agent http://127.0.0.1:50791 · 95 ten doi tac
+(0) doi chung duong: quan tri qua cua cu bat 6 ten (elias gupta · wise · rosa rossi), tool read_company_history, ket turn.completed
+(1) vai okr qua cua cu: 403 Your role does not include this part of OneHub Center.
+(2) vai okr qua cua moi: 202, cuoc cmuptn05g0003cecfdk5fj334 phien wrun_01M3W8Y16AJSWMPT2079BT4XMG
+(3) phien OKR: 0 ten trong goi (4023 ky tu) va 18 su kien, tool goi (khong goi), info() [nop_ban_nhap], 3 JWT vai okr 0 khoa doi tac, ket turn.completed
+(4a) lop kenh giu: apps/agent tu choi vai okr (401)
+(4b) duong vao ro: wise · wise — expansion · wise — comp ai — bo lop cua va lop kenh (vai tam member trong kho do, JWT co dealId), chieu do bat dung, may do song
+DAT
+CHI PHI 0.0643 USD — crm.nghien-cuu 0.0605 (4 dong) · okr.soan 0.0038 (1 dong)
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0
+ket_thuc 2026-10-01T17:42:15Z
+HEAD_sau 6fa36384c93d1941bc2f5d4be0dfcc57bffc8c85

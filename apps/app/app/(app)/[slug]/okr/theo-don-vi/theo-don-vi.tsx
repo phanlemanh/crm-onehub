@@ -39,6 +39,7 @@ import {
 	locOkr,
 	okrParsers,
 } from "../okr-search-params";
+import { NutSoan } from "../soan/nut-soan";
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 
 const GOC: DonChonOkr = { loai: "goc" };
@@ -319,6 +320,13 @@ export function TheoDonVi() {
 										}
 									/>
 								) : null}
+								<NutSoan
+									don={don}
+									cycleId={currentId}
+									phaKy={phaKy}
+									quanTri={quanTri}
+									canEdit={byUnit.data?.canEdit === true}
+								/>
 								{byUnit.data?.canEdit || quanTri ? (
 									<Button
 										size="sm"

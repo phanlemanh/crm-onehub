@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import { danhSachDeXuat } from "@crm/db/okr-de-xuat";
-import type { DongDeXuat } from "@crm/validation/okr-tro-ly";
+import type { DongGopY } from "@crm/validation/okr-tro-ly";
 import hookGoc from "../agent/hooks/okr-uy-quyen";
 import { dungGoiDeXuat, kiemLaiCua } from "../agent/lib/okr/goi-ngu-canh";
 import nopDeXuat from "../agent/subagents/tro_ly_okr/tools/nop_de_xuat";
@@ -23,7 +23,7 @@ const TEN_THANH_VIEN = "Trần Thị Bảo Ngọc";
 
 type NopRa = { ketQua: string; lyDo: string; soDong: number; biLoai: number };
 type CongCuNop = {
-	execute: (input: { dong: DongDeXuat[] }, ctx: NguCanhCon) => Promise<NopRa>;
+	execute: (input: { dong: DongGopY[] }, ctx: NguCanhCon) => Promise<NopRa>;
 };
 
 let nguoi = "";
@@ -31,8 +31,8 @@ let chuKy = "";
 let phong = "";
 
 function dong(
-	p: Partial<DongDeXuat> & Pick<DongDeXuat, "loai" | "objectiveId">,
-): DongDeXuat {
+	p: Partial<DongGopY> & Pick<DongGopY, "loai" | "objectiveId">,
+): DongGopY {
 	return {
 		keyResultId: null,
 		truong: null,
@@ -46,7 +46,7 @@ function dong(
 	};
 }
 
-async function nop(viec: ViecMo, ds: DongDeXuat[]): Promise<NopRa> {
+async function nop(viec: ViecMo, ds: DongGopY[]): Promise<NopRa> {
 	return (nopDeXuat as unknown as CongCuNop).execute(
 		{ dong: ds },
 		nguCanhCon(viec.phienGoc),
@@ -307,7 +307,7 @@ describe("tro-ly-okr-nop", () => {
 				maVanDe: "khong-do-duoc",
 				lyDo: "Chưa rõ con số nào cho biết KR đạt",
 			}),
-			{ ...(lanh[1] as DongDeXuat), lyDo: "Nói rõ điểm đầu và điểm đích" },
+			{ ...(lanh[1] as DongGopY), lyDo: "Nói rõ điểm đầu và điểm đích" },
 		]);
 		expect(ra2).toMatchObject({ ketQua: "da-ghi", soDong: 0, biLoai: 5 });
 		await dongDaNop(v2.taskId);

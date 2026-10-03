@@ -12,6 +12,7 @@ import { dienBien, type LanMau, lanQuy3, lichMau } from "./dien-bien";
 import type { BoOkrMau, KrMau, MucTieuMau } from "./khuon";
 import { type DemCanhKr, napCanhKr, xoaCanhKr } from "./nap-canh-kr";
 import { type DemHoiY, napHoiYMau, xoaHoiY } from "./nap-hoi-y";
+import { napTaiLieuMau } from "./nap-tai-lieu";
 
 export { idMau };
 
@@ -28,6 +29,7 @@ export type DemBoMau = {
 	phien: number;
 	soChup: number;
 	diem: number;
+	taiLieu: number;
 	nguoiXem: number;
 	vet: number;
 } & DemCanhKr &
@@ -74,19 +76,21 @@ export async function kiemOkrThat(tx: Tx | Db): Promise<void> {
 
 async function tapMau(tx: Tx) {
 	const tien = { startsWith: OKR_MAU.tienTo };
-	const [nguoi, boPhan, phongBan, chuKy, mucTieu, kr] = await Promise.all([
-		tx.user.findMany({
-			where: {
-				OR: [{ id: tien }, { email: { endsWith: `@${OKR_MAU.mienThu}` } }],
-			},
-			select: { id: true },
-		}),
-		tx.division.findMany({ where: { id: tien }, select: { id: true } }),
-		tx.department.findMany({ where: { id: tien }, select: { id: true } }),
-		tx.okrCycle.findMany({ where: { id: tien }, select: { id: true } }),
-		tx.okrObjective.findMany({ where: { id: tien }, select: { id: true } }),
-		tx.okrKeyResult.findMany({ where: { id: tien }, select: { id: true } }),
-	]);
+	const [nguoi, boPhan, phongBan, chuKy, mucTieu, kr, taiLieu] =
+		await Promise.all([
+			tx.user.findMany({
+				where: {
+					OR: [{ id: tien }, { email: { endsWith: `@${OKR_MAU.mienThu}` } }],
+				},
+				select: { id: true },
+			}),
+			tx.division.findMany({ where: { id: tien }, select: { id: true } }),
+			tx.department.findMany({ where: { id: tien }, select: { id: true } }),
+			tx.okrCycle.findMany({ where: { id: tien }, select: { id: true } }),
+			tx.okrObjective.findMany({ where: { id: tien }, select: { id: true } }),
+			tx.okrKeyResult.findMany({ where: { id: tien }, select: { id: true } }),
+			tx.taiLieuTrang.count({ where: { chuTrangId: tien } }),
+		]);
 	const ids = (ds: { id: string }[]) => ds.map((x) => x.id);
 	return {
 		nguoi: ids(nguoi),
@@ -95,6 +99,7 @@ async function tapMau(tx: Tx) {
 		chuKy: ids(chuKy),
 		mucTieu: ids(mucTieu),
 		kr: ids(kr),
+		taiLieu,
 	};
 }
 
@@ -116,7 +121,9 @@ function bangGiu(loi: Prisma.PrismaClientKnownRequestError): string {
 
 export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	const t = await tapMau(tx);
-	const tong = Object.values(t).reduce((s, ds) => s + ds.length, 0);
+	const { taiLieu: soTaiLieu, ...danhSach } = t;
+	const tong =
+		soTaiLieu + Object.values(danhSach).reduce((s, ds) => s + ds.length, 0);
 	if (tong === 0) return null;
 	const U = { in: t.nguoi };
 	const C = { in: t.chuKy };
@@ -172,6 +179,25 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	const mucTieu = await tx.okrObjective.deleteMany({ where: { id: O } });
 	await tx.okrCycle.deleteMany({ where: { id: C, parentId: { not: null } } });
 	await tx.okrCycle.deleteMany({ where: { id: C } });
+	const trangMau = await tx.taiLieuTrang.findMany({
+		where: { OR: [{ chuTrangId: U }, { taoBoiId: U }] },
+		select: { id: true },
+	});
+	const TL = { in: trangMau.map((x) => x.id) };
+	await tx.taiLieuLienKet.deleteMany({ where: { tuTrangId: TL } });
+	await tx.taiLieuSuKien.deleteMany({ where: { trangId: TL } });
+	await tx.taiLieuTrang.updateMany({
+		where: { id: TL },
+		data: { banDangDungId: null },
+	});
+	await tx.taiLieuDeXuat.updateMany({
+		where: { trangId: TL },
+		data: { banGocId: null },
+	});
+	await tx.taiLieuPhienBan.deleteMany({ where: { trangId: TL } });
+	await tx.taiLieuDeXuat.deleteMany({ where: { trangId: TL } });
+	await tx.taiLieuNguon.deleteMany({ where: { trangId: TL } });
+	const taiLieu = await tx.taiLieuTrang.deleteMany({ where: { id: TL } });
 	await tx.orgPlacement.deleteMany({ where: { userId: U } });
 	const phongBan = await tx.department.deleteMany({
 		where: { id: { in: t.phongBan } },
@@ -191,6 +217,7 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 		phien: phienXoa.count,
 		soChup: soChup.count,
 		diem: diem.count,
+		taiLieu: taiLieu.count,
 		nguoiXem: nguoiXem.count,
 		vet: vet.count,
 		...canhKr,
@@ -317,6 +344,7 @@ export async function napTrong(
 			createdAt: bayGio,
 			name: b.ten,
 			position: dauBp + i,
+			moTa: b.moTa,
 			headUserId: nguoiId(b.truong),
 		})),
 	});
@@ -328,6 +356,7 @@ export async function napTrong(
 			name: p.ten,
 			position: dauPb + i,
 			divisionId: idMau("bp", p.boPhan),
+			moTa: p.moTa,
 			headUserId: nguoiId(p.truong),
 		})),
 	});
@@ -346,6 +375,8 @@ export async function napTrong(
 		data: bo.nguoi.map((n) => ({
 			userId: nguoiId(n.ma),
 			primaryDepartmentId: idMau("pb", n.phongBan),
+			chucDanh: n.chucDanh,
+			managerUserId: nguoiId(n.quanLy),
 		})),
 	});
 
@@ -455,6 +486,8 @@ export async function napTrong(
 						khoi: k.khoi,
 						dich: k.dich,
 						chot: k.chot ?? k.khoi,
+						kichBanQuy3: k.kichBanQuy3,
+						ghiChu: k.ghiChu,
 					}),
 				});
 			} else if (k.kichBan) {
@@ -653,6 +686,7 @@ export async function napTrong(
 		phien: phien.size,
 		soChup: chup.length,
 		diem: diem.length,
+		taiLieu: 0,
 		nguoiXem: nguoiXem.length,
 		vet: vet.length,
 		...canhKr,
@@ -693,11 +727,12 @@ export async function napBoOkrMau(
 	});
 	try {
 		const hoiY = await napHoiYMau(db, bo, { moc, chuKyId: CHU_KY.namKe });
-		return { ...dem, ...hoiY };
+		const taiLieu = await napTaiLieuMau(db, bo);
+		return { ...dem, ...hoiY, taiLieu };
 	} catch (loi) {
 		await xoaBoOkrMau(db).catch((loiDon) => {
 			console.error(
-				`Nạp lần hỏi ý mẫu hỏng, và dọn bộ mẫu vừa nạp cũng hỏng — kho còn bộ mẫu dở, chạy lại với ${OKR_MAU.co.xoa}: ${loiDon instanceof Error ? loiDon.message : String(loiDon)}`,
+				`Nạp lần hỏi ý hoặc trang tài liệu mẫu hỏng, và dọn bộ mẫu vừa nạp cũng hỏng — kho còn bộ mẫu dở, chạy lại với ${OKR_MAU.co.xoa}: ${loiDon instanceof Error ? loiDon.message : String(loiDon)}`,
 			);
 		});
 		throw loi;

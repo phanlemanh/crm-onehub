@@ -36,7 +36,11 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { Switch } from "@crm/ui/components/switch";
-import { DON_VI_ONEHUB, okrProgram } from "@crm/validation/okr-chuong-trinh";
+import {
+	DON_VI_ONEHUB,
+	docTranDatOkrUsd,
+	okrProgram,
+} from "@crm/validation/okr-chuong-trinh";
 import {
 	AI_PHAM_VI,
 	type AiPhamVi,
@@ -58,10 +62,10 @@ import { LoiThe } from "./trang-thai-cai-dat";
 
 const FORM = "okr-tro-ly";
 
-type Viec = "de-xuat" | "tom-tat-tuan";
+type Viec = "de-xuat" | "tom-tat-tuan" | "soan";
 type Nac = "bat" | "an";
 
-const VIEC: readonly Viec[] = ["de-xuat", "tom-tat-tuan"];
+const VIEC: readonly Viec[] = ["de-xuat", "tom-tat-tuan", "soan"];
 const NAC: readonly Nac[] = ["bat", "an"];
 
 type Dong = { phamVi: AiPhamVi; donVi: string[] };
@@ -71,6 +75,7 @@ type Nhap = {
 	aiOn: boolean;
 	dong: DongViecNac;
 	tran: string;
+	tranDatOkr: string;
 };
 
 type Luu = {
@@ -83,7 +88,12 @@ type Luu = {
 	aiDeXuatAnDonVi: string[];
 	aiTomTatAnPhamVi: AiPhamVi;
 	aiTomTatAnDonVi: string[];
+	aiSoanPhamVi: AiPhamVi;
+	aiSoanDonVi: string[];
+	aiSoanAnPhamVi: AiPhamVi;
+	aiSoanAnDonVi: string[];
 	aiTranThangUsd: number;
+	aiTranThangDatOkrUsd: number | null;
 };
 
 type PhuBoi = (id: string) => boolean;
@@ -107,6 +117,12 @@ const dong = (phamVi: AiPhamVi, donVi: readonly string[]): Dong => ({
 	donVi: [...donVi],
 });
 
+const chuSo = (so: number, locale: string) =>
+	new Intl.NumberFormat(locale, {
+		maximumFractionDigits: 2,
+		useGrouping: false,
+	}).format(so);
+
 function nhapTu(ct: Luu, locale: string): Nhap {
 	return {
 		aiOn: ct.aiOn,
@@ -119,11 +135,16 @@ function nhapTu(ct: Luu, locale: string): Nhap {
 				bat: dong(ct.aiTomTatPhamVi, ct.aiTomTatDonVi),
 				an: dong(ct.aiTomTatAnPhamVi, ct.aiTomTatAnDonVi),
 			},
+			soan: {
+				bat: dong(ct.aiSoanPhamVi, ct.aiSoanDonVi),
+				an: dong(ct.aiSoanAnPhamVi, ct.aiSoanAnDonVi),
+			},
 		},
-		tran: new Intl.NumberFormat(locale, {
-			maximumFractionDigits: 2,
-			useGrouping: false,
-		}).format(ct.aiTranThangUsd),
+		tran: chuSo(ct.aiTranThangUsd, locale),
+		tranDatOkr:
+			ct.aiTranThangDatOkrUsd === null
+				? ""
+				: chuSo(ct.aiTranThangDatOkrUsd, locale),
 	};
 }
 
@@ -147,11 +168,18 @@ function anHieuLuc(d: Record<Nac, Dong>, phu: PhuBoi): Dong {
 	};
 }
 
-function goiLuu(nhap: Nhap, tran: number, phu: PhuTheoViec): Luu {
+function goiLuu(
+	nhap: Nhap,
+	tran: number,
+	tranDatOkr: number | null,
+	phu: PhuTheoViec,
+): Luu {
 	const deXuat = nhap.dong["de-xuat"];
 	const tomTat = nhap.dong["tom-tat-tuan"];
+	const soan = nhap.dong.soan;
 	const anDeXuat = anHieuLuc(deXuat, phu["de-xuat"]);
 	const anTomTat = anHieuLuc(tomTat, phu["tom-tat-tuan"]);
+	const anSoan = anHieuLuc(soan, phu.soan);
 	return {
 		aiOn: nhap.aiOn,
 		aiDeXuatPhamVi: deXuat.bat.phamVi,
@@ -162,7 +190,12 @@ function goiLuu(nhap: Nhap, tran: number, phu: PhuTheoViec): Luu {
 		aiDeXuatAnDonVi: anDeXuat.donVi,
 		aiTomTatAnPhamVi: anTomTat.phamVi,
 		aiTomTatAnDonVi: anTomTat.donVi,
+		aiSoanPhamVi: soan.bat.phamVi,
+		aiSoanDonVi: soan.bat.donVi,
+		aiSoanAnPhamVi: anSoan.phamVi,
+		aiSoanAnDonVi: anSoan.donVi,
 		aiTranThangUsd: tran,
+		aiTranThangDatOkrUsd: tranDatOkr,
 	};
 }
 
@@ -176,11 +209,16 @@ function daDoi(gui: Luu, ct: Luu): boolean {
 		gui.aiTomTatPhamVi !== ct.aiTomTatPhamVi ||
 		gui.aiDeXuatAnPhamVi !== ct.aiDeXuatAnPhamVi ||
 		gui.aiTomTatAnPhamVi !== ct.aiTomTatAnPhamVi ||
+		gui.aiSoanPhamVi !== ct.aiSoanPhamVi ||
+		gui.aiSoanAnPhamVi !== ct.aiSoanAnPhamVi ||
 		!cungTap(gui.aiDeXuatDonVi, ct.aiDeXuatDonVi) ||
 		!cungTap(gui.aiTomTatDonVi, ct.aiTomTatDonVi) ||
 		!cungTap(gui.aiDeXuatAnDonVi, ct.aiDeXuatAnDonVi) ||
 		!cungTap(gui.aiTomTatAnDonVi, ct.aiTomTatAnDonVi) ||
-		gui.aiTranThangUsd !== ct.aiTranThangUsd
+		!cungTap(gui.aiSoanDonVi, ct.aiSoanDonVi) ||
+		!cungTap(gui.aiSoanAnDonVi, ct.aiSoanAnDonVi) ||
+		gui.aiTranThangUsd !== ct.aiTranThangUsd ||
+		gui.aiTranThangDatOkrUsd !== ct.aiTranThangDatOkrUsd
 	);
 }
 
@@ -458,10 +496,16 @@ export function TheTroLyOkr() {
 	const phu: PhuTheoViec = {
 		"de-xuat": phuBoiBat(nhap.dong["de-xuat"].bat, boPhanCua),
 		"tom-tat-tuan": phuBoiBat(nhap.dong["tom-tat-tuan"].bat, boPhanCua),
+		soan: phuBoiBat(nhap.dong.soan.bat, boPhanCua),
 	};
 	const tran = docTran(nhap.tran);
 	const tranHong = tran === null;
-	const gui = tran === null ? null : goiLuu(nhap, tran, phu);
+	const tranDatOkr = docTranDatOkrUsd(nhap.tranDatOkr);
+	const tranDatOkrHong = tranDatOkr === undefined;
+	const gui =
+		tran === null || tranDatOkr === undefined
+			? null
+			: goiLuu(nhap, tran, tranDatOkr, phu);
 	const doi = gui !== null && daDoi(gui, daLuu);
 	const khoa = luu.isPending;
 	const sua = (thay: Partial<Nhap>) =>
@@ -497,7 +541,7 @@ export function TheTroLyOkr() {
 						type="submit"
 						form={FORM}
 						size="sm"
-						disabled={khoa || !doi || tranHong}
+						disabled={khoa || !doi || tranHong || tranDatOkrHong}
 						data-nut="luu-tro-ly"
 					>
 						{luu.isPending ? <Spinner data-icon="inline-start" /> : null}
@@ -580,6 +624,27 @@ export function TheTroLyOkr() {
 								<FieldError>{t.tranHong}</FieldError>
 							) : (
 								<FieldDescription>{t.tranMoTa}</FieldDescription>
+							)}
+						</Field>
+						<Field data-invalid={tranDatOkrHong}>
+							<FieldLabel htmlFor={`${ma}-tran-dat-okr`}>
+								{t.tranDatOkr}
+							</FieldLabel>
+							<Input
+								id={`${ma}-tran-dat-okr`}
+								inputMode="decimal"
+								autoComplete="off"
+								className="w-full sm:w-32"
+								value={nhap.tranDatOkr}
+								disabled={khoa}
+								aria-invalid={tranDatOkrHong}
+								data-o-tran-dat-okr
+								onChange={(event) => sua({ tranDatOkr: event.target.value })}
+							/>
+							{tranDatOkrHong ? (
+								<FieldError>{t.tranDatOkrHong}</FieldError>
+							) : (
+								<FieldDescription>{t.tranDatOkrMoTa}</FieldDescription>
 							)}
 						</Field>
 						{loiLuu ? <FieldError data-loi-luu>{t.loiLuu}</FieldError> : null}

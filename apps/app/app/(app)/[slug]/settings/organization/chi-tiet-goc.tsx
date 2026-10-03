@@ -62,6 +62,7 @@ export function ChiTietGoc({
 											don: "bo-phan",
 											id: x.id,
 											name: x.name,
+											moTa: x.moTa,
 										}),
 								},
 								{
@@ -73,6 +74,7 @@ export function ChiTietGoc({
 							muc={cay.divisions.map((bp) => ({
 								id: bp.id,
 								name: bp.name,
+								moTa: bp.moTa,
 								phu: dien(t.soPhongBan, { n: bp.departments.length }),
 							}))}
 							sua={hd.sua}

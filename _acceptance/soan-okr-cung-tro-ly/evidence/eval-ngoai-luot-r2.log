@@ -1,0 +1,123 @@
+HEAD a16a130e07fb5b7c02a9ed4542c2e73a985db36b
+cay_sach=0
+cho_may_yen_giay=30 con_ban=0
+lenh: OKR_AGENT_BRIDGE_SECRET=<sinh moi> TDX_TRAN_USD=2 bun _acceptance/soan-okr-cung-tro-ly/rang/eval-soan.mjs (config:executors.script.soan_eval)
+bat_dau 2026-10-01T04:05:41Z
+eval-soan: tin dung nhom tren gateway con 38.42469531 USD (da dung 56.57530469); ngan sach rieng cua khoa khong doc o day — het thi phan loai sau lan chay
+eval-soan: kho khong phai kho do — chay trong mot phien do (tien-de)
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_friendly_liskov_8d4458_do · app http://localhost:4432 · api http://localhost:4219
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+eval-soan: tin dung nhom tren gateway con 38.42469531 USD (da dung 56.57530469); ngan sach rieng cua khoa khong doc o day — het thi phan loai sau lan chay
+$ bun run --filter=api okr:mau
+api okr:mau: Đã nạp bộ OKR mẫu «Hải Đăng Logistics» (tuần 6 chứa 2026-10-01T04:05:46.183Z): 40 người, 3 bộ phận, 11 phòng ban, 4 chu kỳ, 40 mục tiêu, 85 KR, 434 lần cập nhật trong 300 phiên, 42 bản chụp số, 23 điểm quý 3, 24 việc, 4 bằng chứng, 7 ghi nhận, 3 mẫu OKR, 2 mục tiêu sinh từ mẫu, 1 người xem có tên, 3 dòng vết, 1 lần hỏi ý mục tiêu với 30 ý, 12 lượt đồng ý, 4 chủ đề + 1 ý lạ, 2 trang tài liệu.
+api okr:mau: Exited with code 0
+☰eve  v0.29.4
+[DEV] server listening at http://127.0.0.1:51629/
+
+EVALS 30
+target http://127.0.0.1:51629/
+
+[okr-soan/soan-boi-canh/0000] {"ca":"onehub#v1","phiaCoGoi":"A","usd":0.049751000000000004}
+✓  okr-soan/soan-boi-canh/0000  gates 8/8  judge.autoevals.closedQA [boi-canh:onehub#v1]: 100%
+[okr-soan/soan-boi-canh/0001] {"ca":"bp-kinh-doanh#v1","phiaCoGoi":"A","usd":0.045834}
+✓  okr-soan/soan-boi-canh/0001  gates 8/8  judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v1]: 100%
+[okr-soan/soan-boi-canh/0002] {"ca":"pb-kd-bac#v1","phiaCoGoi":"B","usd":0.058575999999999996}
+✓  okr-soan/soan-boi-canh/0002  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-kd-bac#v1]: 0%
+[okr-soan/soan-boi-canh/0003] {"ca":"pb-kho-van#v1","phiaCoGoi":"A","usd":0.050545}
+✗  okr-soan/soan-boi-canh/0003  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:pb-kho-van#v1] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0004] {"ca":"pb-tai-chinh#v1","phiaCoGoi":"B","usd":0.041993}
+✓  okr-soan/soan-boi-canh/0004  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v1]: 0%
+[okr-soan/soan-boi-canh/0005] {"ca":"onehub#v2","phiaCoGoi":"B","usd":0.047937}
+✓  okr-soan/soan-boi-canh/0005  gates 8/8  judge.autoevals.closedQA [boi-canh:onehub#v2]: 0%
+[okr-soan/soan-boi-canh/0006] {"ca":"bp-kinh-doanh#v2","phiaCoGoi":"A","usd":0.054300999999999995}
+✓  okr-soan/soan-boi-canh/0006  gates 8/8  judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v2]: 100%
+[okr-soan/soan-boi-canh/0007] {"ca":"pb-kd-bac#v2","phiaCoGoi":"B","usd":0.040864}
+✗  okr-soan/soan-boi-canh/0007  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:pb-kd-bac#v2] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0008] {"ca":"pb-kho-van#v2","phiaCoGoi":"A","usd":0.045728000000000005}
+✗  okr-soan/soan-boi-canh/0008  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:pb-kho-van#v2] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0009] {"ca":"pb-tai-chinh#v2","phiaCoGoi":"A","usd":0.051515}
+✓  okr-soan/soan-boi-canh/0009  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v2]: 100%
+[okr-soan/soan-boi-canh/0010] {"ca":"onehub#v3","phiaCoGoi":"A","usd":0.046206}
+✓  okr-soan/soan-boi-canh/0010  gates 8/8  judge.autoevals.closedQA [boi-canh:onehub#v3]: 100%
+[okr-soan/soan-boi-canh/0011] {"ca":"bp-kinh-doanh#v3","phiaCoGoi":"B","usd":0.052541000000000004}
+✓  okr-soan/soan-boi-canh/0011  gates 8/8  judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v3]: 0%
+[okr-soan/soan-boi-canh/0012] {"ca":"pb-kd-bac#v3","phiaCoGoi":"A","usd":0.046400000000000004}
+✗  okr-soan/soan-boi-canh/0012  gates 8/9
+  ✗ judge.autoevals.closedQA [boi-canh:pb-kd-bac#v3] (0% < 100%): No tool calls in response
+[okr-soan/soan-boi-canh/0013] {"ca":"pb-kho-van#v3","phiaCoGoi":"A","usd":0.044255}
+✓  okr-soan/soan-boi-canh/0013  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-kho-van#v3]: 100%
+[okr-soan/soan-boi-canh/0014] {"ca":"pb-tai-chinh#v3","phiaCoGoi":"A","usd":0.048377}
+✓  okr-soan/soan-boi-canh/0014  gates 8/8  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v3]: 100%
+[okr-soan/soan-do-tre/0000] {"cuoc":1,"ca":"onehub","ms":[5694,12510,7556,9043],"tach":[{"soBuoc":1,"moHinhMs":5032,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":11928,"congCuMs":90,"soCongCu":1},{"soBuoc":2,"moHinhMs":6948,"congCuMs":34,"soCongCu":1},{"soBuoc":2,"moHinhMs":8645,"congCuMs":33,"soCongCu":1}],"usd":0.032595}
+✓  okr-soan/soan-do-tre/0000  gates 7/7
+[okr-soan/soan-do-tre/0001] {"cuoc":2,"ca":"bp-kinh-doanh","ms":[4372,12579,8764,10109],"tach":[{"soBuoc":1,"moHinhMs":3963,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":12049,"congCuMs":57,"soCongCu":1},{"soBuoc":2,"moHinhMs":8246,"congCuMs":33,"soCongCu":1},{"soBuoc":2,"moHinhMs":9603,"congCuMs":15,"soCongCu":1}],"usd":0.034172999999999995}
+✓  okr-soan/soan-do-tre/0001  gates 7/7
+[okr-soan/soan-do-tre/0002] {"cuoc":3,"ca":"pb-kd-bac","ms":[20336,14246,9983,35157],"tach":[{"soBuoc":1,"moHinhMs":19901,"congCuMs":0,"soCongCu":0},{"soBuoc":3,"moHinhMs":13562,"congCuMs":148,"soCongCu":2},{"soBuoc":2,"moHinhMs":9624,"congCuMs":143,"soCongCu":1},{"soBuoc":2,"moHinhMs":34623,"congCuMs":45,"soCongCu":1}],"usd":0.039989}
+✓  okr-soan/soan-do-tre/0002  gates 7/7
+[okr-soan/soan-do-tre/0003] {"cuoc":4,"ca":"pb-kho-van","ms":[27837,9208,8524,18881],"tach":[{"soBuoc":1,"moHinhMs":27300,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":8736,"congCuMs":42,"soCongCu":1},{"soBuoc":2,"moHinhMs":8165,"congCuMs":127,"soCongCu":1},{"soBuoc":2,"moHinhMs":18356,"congCuMs":13,"soCongCu":1}],"usd":0.035604000000000004}
+✓  okr-soan/soan-do-tre/0003  gates 7/7
+[okr-soan/soan-do-tre/0004] {"cuoc":5,"ca":"pb-tai-chinh","ms":[4835,26098,12656,10377],"tach":[{"soBuoc":1,"moHinhMs":4402,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":25582,"congCuMs":142,"soCongCu":1},{"soBuoc":2,"moHinhMs":12045,"congCuMs":117,"soCongCu":1},{"soBuoc":2,"moHinhMs":9996,"congCuMs":17,"soCongCu":1}],"usd":0.032098999999999996}
+✓  okr-soan/soan-do-tre/0004  gates 7/7
+[okr-soan/soan-do-tre/0005] {"cuoc":6,"ca":"onehub","ms":[7320,15011,8391,10538],"tach":[{"soBuoc":1,"moHinhMs":6833,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":14363,"congCuMs":73,"soCongCu":1},{"soBuoc":2,"moHinhMs":7992,"congCuMs":95,"soCongCu":1},{"soBuoc":2,"moHinhMs":10081,"congCuMs":132,"soCongCu":1}],"usd":0.034054}
+✓  okr-soan/soan-do-tre/0005  gates 7/7
+[okr-soan/soan-do-tre/0006] {"cuoc":7,"ca":"bp-kinh-doanh","ms":[7343,10427,7512,17345],"tach":[{"soBuoc":1,"moHinhMs":6886,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":9931,"congCuMs":95,"soCongCu":1},{"soBuoc":2,"moHinhMs":7125,"congCuMs":75,"soCongCu":1},{"soBuoc":2,"moHinhMs":16810,"congCuMs":81,"soCongCu":1}],"usd":0.03113}
+✓  okr-soan/soan-do-tre/0006  gates 7/7
+[okr-soan/soan-do-tre/0007] {"cuoc":8,"ca":"pb-kd-bac","ms":[4314,6639,13965,20304],"tach":[{"soBuoc":1,"moHinhMs":3860,"congCuMs":0,"soCongCu":0},{"soBuoc":1,"moHinhMs":6344,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":13286,"congCuMs":41,"soCongCu":1},{"soBuoc":3,"moHinhMs":19714,"congCuMs":187,"soCongCu":1}],"usd":0.033427}
+✓  okr-soan/soan-do-tre/0007  gates 7/7
+[okr-soan/soan-do-tre/0008] {"cuoc":9,"ca":"pb-kho-van","ms":[5051,10916,9138,9620],"tach":[{"soBuoc":1,"moHinhMs":4596,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":10612,"congCuMs":92,"soCongCu":1},{"soBuoc":2,"moHinhMs":8634,"congCuMs":85,"soCongCu":1},{"soBuoc":2,"moHinhMs":9101,"congCuMs":38,"soCongCu":1}],"usd":0.034433}
+✓  okr-soan/soan-do-tre/0008  gates 7/7
+[okr-soan/soan-do-tre/0009] {"cuoc":10,"ca":"pb-tai-chinh","ms":[3710,10828,7987,12582],"tach":[{"soBuoc":1,"moHinhMs":3312,"congCuMs":0,"soCongCu":0},{"soBuoc":2,"moHinhMs":10489,"congCuMs":118,"soCongCu":1},{"soBuoc":2,"moHinhMs":7618,"congCuMs":137,"soCongCu":1},{"soBuoc":2,"moHinhMs":12056,"congCuMs":86,"soCongCu":1}],"usd":0.030215000000000002}
+[okr-soan/soan-do-tre/0009] {"soCuoc":10,"soLuot":40,"p50Ms":10045.661667000037,"p90Ms":20307.109437499872,"usdMax":0.039989}
+✗  okr-soan/soan-do-tre/0009  gates 9/10
+  ✗ satisfies(p90 <= 20000 ms) (0% < 100%): predicate did not hold for 20307.109437499872
+✗  okr-soan/soan/0000  gates 13/14
+  ✗ satisfies(nop lai sau khi sua) (0% < 100%): predicate did not hold for 2
+✗  okr-soan/soan/0001  gates 13/14
+  ✗ satisfies(nop lai sau khi sua) (0% < 100%): predicate did not hold for 2
+✗  okr-soan/soan/0002  gates 13/14
+  ✗ satisfies(nop lai sau khi sua) (0% < 100%): predicate did not hold for 2
+✗  okr-soan/soan/0003  gates 13/14
+  ✗ satisfies(nop lai sau khi sua) (0% < 100%): predicate did not hold for 2
+✗  okr-soan/soan/0004  gates 13/14
+  ✗ satisfies(nop lai sau khi sua) (0% < 100%): predicate did not hold for 2
+
+Results: 20 passed, 10 failed (30 total)
+Gates: 257 passed, 10 failed
+
+  judge.autoevals.closedQA [boi-canh:onehub#v1]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v1]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-kd-bac#v1]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v1]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:onehub#v2]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v2]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v2]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:onehub#v3]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:bp-kinh-doanh#v3]: 0% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-kho-van#v3]: 100% (1 evals)
+  judge.autoevals.closedQA [boi-canh:pb-tai-chinh#v3]: 100% (1 evals)
+
+Completed in 35m 41s
+
+eval-soan: da ghi /Users/manhphan/dev/crm/.claude/worktrees/friendly-liskov-8d4458/_acceptance/soan-okr-cung-tro-ly/evidence/eval-soan.md
+eval-soan: sau tieu chi (chan doan, khong doi ma thoat) duoi nguong: khong co
+eval-soan: goi thang 11/11 cap da cham (100 %), xau nhat 11/15 (73 %)
+eval-soan: chot ma hong 6: okr-soan/soan-do-tre/0009 satisfies(p90 <= 20000 ms); okr-soan/soan/0000 satisfies(nop lai sau khi sua); okr-soan/soan/0001 satisfies(nop lai sau khi sua); okr-soan/soan/0002 satisfies(nop lai sau khi sua); okr-soan/soan/0003 satisfies(nop lai sau khi sua); okr-soan/soan/0004 satisfies(nop lai sau khi sua)
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1
+EXIT=1
+ket_thuc 2026-10-01T04:41:32Z
+HEAD_sau a16a130e07fb5b7c02a9ed4542c2e73a985db36b
+tai 04:10:41Z: 5 tien trinh do/test khac
+tai 04:15:41Z: 0 tien trinh do/test khac
+tai 04:20:41Z: 5 tien trinh do/test khac
+tai 04:25:41Z: 0 tien trinh do/test khac
+tai 04:30:42Z: 0 tien trinh do/test khac
+tai 04:35:42Z: 0 tien trinh do/test khac
+tai 04:40:42Z: 0 tien trinh do/test khac

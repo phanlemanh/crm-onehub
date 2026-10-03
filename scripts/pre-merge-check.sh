@@ -1154,6 +1154,19 @@ XLACS
   # lib/nhan-canh-gay.cjs — MỘT nguồn với thẻ Cổng 2 và recheck-evidence.cjs. Lib vắng /
   # node vắng → rơi xuống luật cũ (VIOLATION): thiếu lớp thì ĐÓNG, không mở.
   NCG_LIB="$(cd "$(dirname "$0")/.." 2>/dev/null && pwd)/lib/nhan-canh-gay.cjs"
+  # ── Cây đổi trong lượt chấm (hồ sơ luot-cham-ghi-vao-cay, AC-7) ──
+  # Lượt chấm cuối có commit lạ / tệp vật bị sửa giữa lượt → không dùng được BẤT KỂ verdict, chữ
+  # ký hay làn. Vị từ ở lib (một nguồn với thẻ + recheck). Lib/node vắng → luật cũ. Lib ĐỜI CŨ
+  # không biết `--luot` (in cách dùng, thoát 3) → NOTE, luật cũ: lớp mới thiếu thì không đóng thêm.
+  if [ -f "$NCG_LIB" ] && command -v node >/dev/null 2>&1; then
+    _cay="$(node "$NCG_LIB" --luot --root "$ROOT" --slug "$slug" 2>/dev/null)"; _cay_rc=$?
+    case "$_cay_rc" in
+      0) : ;;
+      1) echo "VIOLATION [$slug]: lượt chấm cuối không dùng được — cây đổi trong lượt chấm (${_cay#CAY-DOI }); hoàn lại thay đổi lạ rồi chấm lại"
+         violations=$((violations+1)); continue ;;
+      *) echo "NOTE [$slug]: lib chua biet nhan cay doi (lib/nhan-canh-gay.cjs đời cũ) — bỏ qua luật cây đổi trong lượt chấm" ;;
+    esac
+  fi
   if [ "$verdict" = "BLOCKED" ] && [ -n "$signoff" ] && [ -f "$NCG_LIB" ] && command -v node >/dev/null 2>&1; then
     _ncg="$(node "$NCG_LIB" --check --root "$ROOT" --slug "$slug" 2>/dev/null)"; _ncg_rc=$?
     case "$_ncg_rc" in

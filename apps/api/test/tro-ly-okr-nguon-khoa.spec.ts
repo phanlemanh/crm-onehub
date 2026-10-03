@@ -7,7 +7,7 @@ import {
 	spyOn,
 	test,
 } from "bun:test";
-import { db } from "@crm/db";
+import { db, Prisma } from "@crm/db";
 import {
 	KET_QUA_KIEM_SAN_SANG,
 	type KetQuaKiemSanSang,
@@ -25,6 +25,7 @@ import { gieoThanhVien, mintPhien } from "./phien-thu";
 const suffix = process.env.TEST_RUN_ID ?? "tro-ly-okr-nguon-khoa";
 const id = (phan: string) => `tnk-${suffix}-${phan}`;
 const BAY_GIO = new Date("2036-07-20T12:00:00+07:00");
+const THANG_DOI_SOAT = "2036-06";
 const PHUT_MS = 60_000;
 
 let app: NestExpressApplication;
@@ -69,6 +70,17 @@ beforeAll(async () => {
 	await gieoThanhVien(nguoi.thuong, "member");
 	cookie.quan = (await mintPhien(nguoi.quan)).cookie;
 	cookie.thuong = (await mintPhien(nguoi.thuong)).cookie;
+	await db.aiDoiSoat.upsert({
+		where: { thang: THANG_DOI_SOAT },
+		create: {
+			thang: THANG_DOI_SOAT,
+			tuNgay: new Date("2036-06-01T00:00:00Z"),
+			denNgay: new Date("2036-06-30T00:00:00Z"),
+			soSoUsd: new Prisma.Decimal(1),
+			ketQua: "khop",
+		},
+		update: {},
+	});
 	const r = await goiTrpc("okr.setProgram", "quan", {
 		aiOn: true,
 		aiDeXuatPhamVi: "toan-cong-ty",
@@ -87,6 +99,7 @@ afterAll(async () => {
 			],
 		},
 	});
+	await db.aiDoiSoat.deleteMany({ where: { thang: THANG_DOI_SOAT } });
 	await db.okrProgramConfig.deleteMany({
 		where: { createdById: { in: Object.values(nguoi) } },
 	});
@@ -127,7 +140,9 @@ describe("nguon-khoa", () => {
 			});
 			const r = await goiTrpc("okr.aiChiTieu", "quan");
 			expect(r.status).toBe(200);
-			const ra = aiChiTieuOutput.parse(r.data);
+			const ra = aiChiTieuOutput
+				.pick({ nguonKhoa: true, sanSang: true })
+				.parse(r.data);
 			expect(ra.nguonKhoa, `nguon lech: ${ketQua}`).toBe(dong.nguonKhoa);
 			expect(ra.sanSang.bat, `san sang lech: ${ketQua}`).toBe(dong.bat);
 			so += 1;

@@ -81,6 +81,24 @@ try {
 // Only a PASS-family verdict carries an evidence bar to re-check.
 if (!core.determineEnforce(payload)) process.exit(0);
 
+// ── Cây đổi trong lượt chấm (hồ sơ luot-cham-ghi-vao-cay, AC-7) ───────────────
+// Báo cáo họ PASS mà lượt chấm cuối có commit lạ / tệp vật bị sửa giữa lượt → không dùng được.
+// Dò NĂNG LỰC trước khi gọi: lib vắng hoặc đời cũ (không có hàm) → đi tiếp như trước vòng, không ném.
+{
+  let ncg = null;
+  try { ncg = require(path.join(__dirname, '..', 'lib', 'nhan-canh-gay.cjs')); } catch { ncg = null; }
+  if (ncg && typeof ncg.luotKhongDungDuoc === 'function') {
+    let rl = '';
+    try { rl = fs.readFileSync(path.join(path.dirname(path.resolve(reportPath)), 'run-log.jsonl'), 'utf8'); } catch { /* vắng: không có lượt */ }
+    const r = ncg.luotKhongDungDuoc({ runLogText: rl });
+    if (r.khong) {
+      const tom = typeof ncg.tomCay === 'function' ? ncg.tomCay(r.cay) : '';
+      process.stderr.write(`recheck-evidence: ${reportPath} — lượt chấm cuối không dùng được — cây đổi trong lượt chấm${tom ? ` (${tom})` : ''}; hoàn lại thay đổi lạ rồi chấm lại\n`);
+      process.exit(1);
+    }
+  }
+}
+
 // ── Hồ sơ NGHỈ ───────────────────────────────────────────────────────────────
 // Pin của một hồ sơ đã cho nghỉ là SỬ LIỆU, không phải một lời hứa đang sống:
 // tiền đề nó đo đã chết, hoặc vật đã cố ý đổi sau chữ ký, nên «ghim lại» không

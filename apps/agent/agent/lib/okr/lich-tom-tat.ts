@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { db, type Prisma } from "@crm/db";
 import { PRIORITY } from "@crm/db/agent-tasks";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
+import { KY_CON_HIEN } from "@crm/db/okr-chu-ky-hien";
 import { dungGoiTomTat, trangThaiTuan } from "@crm/db/okr-tom-tat";
 import {
 	cauHinhAiLuc,
@@ -121,7 +122,11 @@ async function xepTrongNgay(
 	const homQua = homQuaCua(task.dueAt);
 	const tuan = dauTuanVN(homQua);
 	const chuKy = await tx.okrCycle.findMany({
-		where: { phase: PHA_CHAY, updateWeekday: thuTrongTuan(homQua) },
+		where: {
+			phase: PHA_CHAY,
+			updateWeekday: thuTrongTuan(homQua),
+			...KY_CON_HIEN,
+		},
 		select: { id: true },
 		orderBy: { id: "asc" },
 	});

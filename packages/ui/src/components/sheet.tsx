@@ -198,17 +198,25 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
 
 function SheetBody({
 	split = false,
+	cuonRieng = false,
 	className,
 	...props
-}: React.ComponentProps<"div"> & { split?: boolean }) {
+}: React.ComponentProps<"div"> & { split?: boolean; cuonRieng?: boolean }) {
 	return (
 		<div
 			data-slot="sheet-body"
 			data-split={split}
+			data-cuon-rieng={cuonRieng}
 			className={cn(
 				"min-h-0 flex-1 overflow-y-auto overscroll-contain px-4",
 				split &&
-					"grid content-start gap-6 lg:grid-cols-[minmax(0,1fr)_var(--container-assist-rail)] lg:items-start",
+					"grid grid-cols-[minmax(0,1fr)] content-start gap-6 lg:grid-cols-[minmax(0,1fr)_var(--container-assist-rail)] lg:items-start",
+				cuonRieng &&
+					"grid grid-cols-[minmax(0,1fr)] content-stretch items-stretch overflow-hidden pb-4 *:min-h-0",
+				cuonRieng &&
+					(split
+						? "grid-rows-[minmax(0,1fr)_minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)] lg:items-stretch"
+						: "grid-rows-[minmax(0,1fr)]"),
 				className,
 			)}
 			{...props}
