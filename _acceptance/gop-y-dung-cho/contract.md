@@ -5,7 +5,7 @@ slug: gop-y-dung-cho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-03T13:58:01Z
 design_doc: docs/superpowers/specs/2026-10-03-gop-y-dung-cho-design.md
@@ -195,3 +195,28 @@ Quét bằng `morphological-scan` (preset entity-feature, entity = góp ý `OkrD
   dấu nguồn; ReUI (`mcp__reui__search`, 03/10) câu «AI generated provenance mark badge inline
   "suggested by AI" label», chỉ ví dụ miễn phí → khớp yếu, chỉ ra badge/label chung
   (`c-label-8`, `c-badge-1`, `c-tooltip-15`), không có dấu nguồn AI.
+
+### Known limits (Cổng Bằng chứng, 2026-10-04)
+
+- Ngoài-1: bấm «Nhờ Kara» rồi đóng khung trước khi Kara đọc xong thì chip «Kara · N góp ý» trên
+  danh sách giữ số cũ tới khi quay lại trang hoặc mở lại khung.
+- Ngoài-2: bài dong-bo không phân biệt làm mới số góp ý lúc Kara đọc xong với lúc Kara vừa bắt
+  đầu đọc (fixture trả số 2 ngay ở bản «đang soạn»).
+- Ngoài-3: ca làm mới sau khi Kara đọc xong trong khung chỉ kiểm chip danh sách, không kiểm
+  «Của tôi» và dòng dẫn hộp Sửa.
+- Ngoài-4: «Thử lại» trong khối lỗi xám đi mà không nói lý do khi nút Kara đang khoá hoặc ẩn
+  (hết lượt trong ngày, tính năng tạm nghỉ).
+- Ngoài-5: 4/12 ô ma trận E3 kỳ vọng null — số góp ý chờ cho người chỉ đọc và Mục tiêu đơn vị
+  khác chỉ đo «không có trong okr.mine», không đối chiếu `soGopYCho`.
+- Ngoài-8: `bang-vet.tsx` vẫn viết cứng tiền tố «tro-ly-okr:» thay vì dùng `TIEN_TO_VET_KARA`.
+- Ngoài-10: vùng đã mang nhãn Kara có thêm một dấu `AiGenerate` trên nút gọi Kara.
+- Ngoài-12: `tomTatCua` ép kiểu `as keyof` — mã vấn đề mới quên câu tóm tắt sẽ hiện lý do thô
+  không cảnh báo.
+- Ngoài-16: hai lần Hoàn tác liên tiếp rất nhanh trên hai KR dùng chung một mutation có thể làm
+  KR đầu vẫn hiện «Hoàn tác» và mất lỗi của lần đầu.
+- Ngoài-17: ca quá hạn trong `gop-y-dung-cho-ra-soat.tsx` trả `setSystemTime` trong
+  try/finally, không ở `afterEach`.
+- Ngoài-18: hai hàm chờ cục bộ chép `cho()` dùng chung; `choLau` 8000 ms dài hơn trần mặc định
+  của bun nên hỏng thì chỉ báo hết giờ chung chung.
+- Ngoài-19: `docLai` chép nguyên điều kiện «dang-doc»/«loi» của `noiDung` — đổi một chỗ mà quên
+  chỗ kia thì hai màn hiện hai trạng thái khác nhau.

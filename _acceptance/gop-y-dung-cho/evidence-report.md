@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: gop-y-dung-cho
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: b9cf90a2c50643d6f7da971f0ab4fa1d1dff236a
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-04
 ---
 
 # Evidence Report: gop-y-dung-cho
@@ -322,7 +322,7 @@ Lưu ý cho người chốt (khi soạn báo cáo đã mở bản sáng của ba
     - (operational-feasibility) Ảnh khung sau khi quyết, vùng dòng «Đã bỏ qua câu hỏi của Kara…» ở KR3, cho thấy có điều khiển mở lại hoặc lùi việc bỏ qua; nếu không có thì cần ảnh hoặc dòng chữ hiện trên khung nói rõ bỏ qua không lùi được. Hiện chỉ KR1 có «Hoàn tác».
     - (domain-correctness, spec-alignment) Đoạn AC-16 trong _acceptance/gop-y-dung-cho/contract.md nói rõ chỉ nút tô màu «Đổi tên KR» ghi thẳng vào Mục tiêu, còn «Thêm KR đối trọng» và «Sửa KR này» luôn chỉ mở biểu mẫu để người dùng tự ghi; hoặc nói rõ hợp đồng chỉ đòi tên hành động (đạt) hay đòi nội dung sẽ ghi (không đạt).
     - (spec-alignment) Ảnh khung ở trạng thái sau khi quyết chụp trong cùng một lượt cho cả hai theme, vì ảnh sáng đang ghi «Vết 5» còn ảnh tối ghi «Vết 7» với cùng một trạng thái đã nhận và đã bỏ qua; ảnh này cần cho thấy hai theme cùng số Vết, hoặc kèm giải thích chênh lệch.
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-10-04 — Đạt
 
 ### Lệnh suite (hồi quy)
 
