@@ -35,3 +35,7 @@ Gốc: hồ sơ `_acceptance/the-gop-y-okr` và buổi lái thử 30/09 ở `doc
 
 - Mở sẵn cỡ assist khi Trợ lý đã bật cho đơn vị, hay giữ cỡ mặc định và thêm chuyển tiếp?
 - Nút đầu form khi cột đang mở: ẩn, hay đổi thành «Đóng cột»?
+
+## Gộp
+
+Gộp vào: gop-y-dung-cho (chủ kho quyết 03/10/2026). Phần tự hết vì lượt đó bỏ cột góp ý khỏi hai hộp Sửa và phần thành AC ghi ở `_acceptance/gop-y-dung-cho/contract.md` mục Notes.

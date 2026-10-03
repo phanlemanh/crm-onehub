@@ -1,0 +1,53 @@
+{
+  "feature_plain": "Người phụ trách OKR thấy ngay Mục tiêu nào có góp ý của Kara đang chờ, và quyết từng góp ý ngay dưới KR nó sửa, thay vì phải bấm Sửa mới thấy một cột góp ý cạnh form.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ hiện «Kara · N góp ý» trên hàng Mục tiêu ở «Của tôi» và «Theo đơn vị»; bấm vào thì mở khung chi tiết và cuộn tới chỗ góp ý."},
+    {"id": "AC-2", "p": "Sẽ đếm đúng số góp ý mỗi người được thấy: người chỉ sửa một KR thấy góp ý của KR đó, người chỉ đọc không thấy số, đơn vị chưa bật Kara thì không có số."},
+    {"id": "AC-3", "p": "Sẽ sửa lại số trên danh sách ngay sau lần đầu mở khung, khi có góp ý đã hết hiệu lực vì tên KR vừa bị đổi tay."},
+    {"id": "AC-4", "p": "Sẽ có bộ lọc «Có góp ý chờ» ở «Theo đơn vị», nhớ trên đường dẫn, bỏ lọc là đủ danh sách."},
+    {"id": "AC-6", "p": "Sẽ ẩn cảnh báo cố định «thiếu KR đối trọng» khi Kara đang hỏi đúng điều đó; Kara chưa bật thì cảnh báo vẫn hiện như hôm nay."},
+    {"id": "AC-7", "p": "Sẽ đổi tên KR theo góp ý chỉ bằng một bấm, để lại dòng «Đã đổi tên KR theo Kara · Hoàn tác» tại chỗ và dấu «theo Kara» cạnh tên mới."},
+    {"id": "AC-8", "p": "Sẽ để lại một dòng mờ nói rõ đã bỏ qua góp ý nào khi người bấm Bỏ qua."},
+    {"id": "AC-9", "p": "Sẽ khoá các góp ý khác trong lúc một góp ý đang được ghi, và báo lỗi ngay dưới đúng góp ý hỏng."},
+    {"id": "AC-10", "p": "Sẽ giữ con trỏ bàn phím đúng chỗ sau khi huỷ sửa, nhận hay hoàn tác, và Esc chỉ đóng ô sửa chứ không đóng khung."},
+    {"id": "AC-11", "p": "Sẽ hiện đúng một trạng thái của Kara trong khung: chưa đọc, đang đọc, không thấy gì, đọc lỗi, hết lượt; và đổi chữ «Trợ lý OKR» thành «Kara» trên các màn này."},
+    {"id": "AC-13", "p": "Sẽ cho góp ý dùng cùng cỡ chữ với nội dung xung quanh và để nút Bỏ qua sát các nút khác (sửa trong thư viện giao diện dùng chung)."},
+    {"id": "AC-14", "p": "Sẽ không tràn ngang hay cắt nút ở khổ điện thoại 375 px và máy tính 1440 px, giao diện sáng lẫn tối."},
+    {"id": "AC-15", "p": "Sẽ khai rõ 36 phép đo của các việc đã ký trước đây mà việc này làm mất hiệu lực, mỗi phép đo kèm tiêu chí mới thay nó."},
+    {"id": "AC-16", "p": "Sẽ để một người chưa xem bản mẫu nhìn ảnh mà chỉ đúng góp ý nào sửa KR nào và bấm nút chính thì ghi gì."}
+  ],
+  "wont_do": [
+    {"id": "AC-5", "p": "Sẽ KHÔNG bọc góp ý trong hộp hay khung cảnh báo riêng — mỗi góp ý nằm ngay dưới KR nó sửa, nút nói đúng hậu quả («Đổi tên KR», «Sửa KR này»)."},
+    {"id": "AC-12", "p": "Sẽ KHÔNG còn cột góp ý trong hộp Sửa mục tiêu và hộp Sửa KR — chỉ một dòng dẫn «Kara · N góp ý chờ · Xem góp ý»."},
+    {"id": "OOS-1", "p": "Không có Hoàn tác cho Bỏ qua — cần thêm một đường ghi mới phía máy chủ."},
+    {"id": "OOS-2", "p": "Chưa có thẻ «Tất cả góp ý» trong khung, và chưa đưa số góp ý lên Toàn cảnh, cây căn chỉnh hay Việc của tôi."},
+    {"id": "OOS-3", "p": "Không đổi bố cục bảng Mục tiêu–KR; việc này chỉ cắm vào các chỗ đã chừa sẵn."},
+    {"id": "OOS-4", "p": "Không đổi chế độ chạy ngầm của Kara và trang số đo dành cho quản trị."},
+    {"id": "OOS-5", "p": "Bỏ phím tắt J/K chuyển giữa các thẻ góp ý; đi bằng Tab theo thứ tự nhìn thấy."},
+    {"id": "OOS-6", "p": "Chưa đổi chữ «Trợ lý OKR» ở Cài đặt, màn Soạn OKR và tóm tắt tuần — để việc đổi tên Kara khắp nơi làm sau."},
+    {"id": "OOS-7", "p": "Số trên danh sách không chạy bước kiểm lại đầy đủ của Kara, nên có thể giảm khi mở khung lần đầu."},
+    {"id": "OOS-8", "p": "Không chạy lại hay ghim lại các việc đã ký bị thay — chỉ khai đủ tên chúng và tiêu chí thay."}
+  ],
+  "scope_plain": "Những phần dưới đây cố ý để ngoài việc này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ mọi màn có góp ý hôm nay: hai danh sách (kèm bộ lọc), khung chi tiết, hai hộp Sửa, thẻ Vết — đối chiếu với các tệp đang dùng góp ý."},
+    {"i": 1, "p": "Đủ sáu loại góp ý Kara đang viết, mỗi loại có chỗ đặt riêng (AC-5 chỗ đặt góp ý)."},
+    {"i": 2, "p": "Đủ vòng đời một góp ý từ chưa gọi Kara tới hoàn tác và lỗi ghi (AC-7 nhận, AC-8 bỏ qua, AC-9 lỗi, AC-11 trạng thái Kara)."},
+    {"i": 3, "p": "Đủ các kiểu người dùng và mức bật Kara của đơn vị, đúng luật quyền phía máy chủ (AC-2 đếm theo quyền)."},
+    {"i": 4, "p": "Mọi tiêu chí còn phải đúng ở điện thoại và máy tính, sáng và tối, bằng bàn phím, và bằng tiếng Việt."},
+    {"i": 5, "p": "Đối chiếu ngành: Quantive Results đặt gợi ý KR của AI ngay trong khung chi tiết Mục tiêu — đã nhận; thẻ «Tất cả góp ý» của họ để sau. Cần anh gạch: nhận đối chiếu này."},
+    {"i": 6, "p": "Đối chiếu gần: chế độ góp ý của Google Docs và GitHub đặt chỗ sửa ngay dưới dòng nó sửa, nhận một bấm. Cần anh gạch: nhận đối chiếu này."},
+    {"i": 7, "p": "Phần làm ngay: danh sách có số, khung quyết mọi loại góp ý, hai hộp Sửa rút gọn, luật đếm theo người."},
+    {"i": 8, "p": "Để sau: thẻ «Tất cả góp ý», hoàn tác Bỏ qua, số trên Toàn cảnh và Việc của tôi."},
+    {"i": 9, "p": "Không bao giờ: Kara tự ghi khi người chưa bấm, hay lưu số góp ý thành một cột riêng."},
+    {"i": 10, "p": "Giả định cần anh gạch: người phụ trách mở khung chi tiết từ danh sách đủ thường để số trên danh sách cộng khung chi tiết thay được cột trong hộp Sửa — đo lại ở phiên nghiệm thu."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đối chiếu 36 phép đo bị thay sẽ báo đỏ oan vì hai phép chấm bằng mắt không có lệnh, và đang sót loại cảnh báo đối trọng — đã sửa: tách hai phép so, thêm mốc cảnh báo kèm hai ngoại lệ có tên."},
+    {"i": 1, "p": "Phép đo cỡ chữ chỉ so một điểm nên không phân biệt được bản cũ và bản mới, và chiều đỏ chạy trên một trang mà việc này cũng sửa — đã sửa: đo hai cỡ chữ cha khác nhau, chiều đỏ làm hỏng ngay trên cùng màn."},
+    {"i": 2, "p": "Dòng biên nhận mang hai tên khác nhau trong ba phép đo, nên một phép đo có thể xanh rỗng — đã sửa: chốt một tên, phép đo đếm phần tử trước khi xét."},
+    {"i": 3, "p": "Con số mốc «góp ý nằm im trước khi lên» không dựng lại được sau khi lên, có thể làm phiên nghiệm thu kết luận «chết» oan — đã sửa: chụp số mốc trên production ngay trước khi bấm merge, thêm phép đo ý nghĩa của truy vấn mốc."},
+    {"i": 4, "p": "Hai nửa của phép đo «số trên danh sách khớp lại» không nối với nhau và dữ liệu giả viết tay — đã sửa: dữ liệu giả rút từ khuôn thật, thêm ma trận ba ô."}
+  ],
+  "decisions_plain": []
+}
