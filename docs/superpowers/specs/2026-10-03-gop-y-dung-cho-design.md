@@ -265,6 +265,14 @@ này; chúng là vết cho người duyệt):
   `FactSuggestion` hoặc `confirmation.tsx` — giữ `the-gop-y-props.ts` và khối `thong-tin` của
   `the-gop-y-okr.dom.tsx`.
 - `khep-ky-okr` E3: đo cảnh báo đối trọng khi Kara không bật — cảnh báo vẫn hiện (AC-6).
+  E4, E7, E13, E14, E15, E22 chạy chung `rang/man-khep-ky.mjs` với E3, cùng lý do.
+- `nen-kara` E8: chạy khối `tom-tat` của `nen-kara-man-cu.dom.tsx` — khối giữ nguyên.
+- `muc-tieu-va-kr` E14: `ho-so-cham.mjs` chỉ nêu tên `thuoc-cu.mjs` trong mẫu cấm thước
+  chạy thước, không chạy nó.
+
+Danh sách miễn của `rang/thay-the.mjs` là các dòng trên cùng `khung-tao-okr-nhu-deal/E23`; script
+in từng dòng miễn kèm lý do. Phép quét đọc tệp test/rang ở commit `8d5e174a` (onehub ngay trước
+lượt), chỉ trong khối `-t` mà eval chạy, và tính khối đã gỡ ở cây hiện tại là bị thay.
 <!-- BANG-THAY-THE>>> -->
 
 Tệp test của kho bị xoá hay viết lại vì xoá thành phần: `tro-ly-okr-gop-y.dom.tsx` (xoá),
