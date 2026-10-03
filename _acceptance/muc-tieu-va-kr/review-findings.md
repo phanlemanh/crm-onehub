@@ -42,4 +42,46 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
+- **(r5) Below md the KR number button no longer carries data-so-kr, so signed-off so-okr-tu-chay E11 cannot find it at 390 px**
+  Người dùng thấy gì: Trên điện thoại nút số của KR vẫn bấm được, nhưng phép đo đã ký của sổ số (so-okr-tu-chay, ảnh 390 px) không còn tìm ra nó — nếu nút này hỏng ở điện thoại sẽ không ai được báo. Đây là hồi quy thật của móc DOM mà AC-11 hứa giữ; phép đo đó đang đỏ sẵn trên onehub nên E14 không bắt được.
+  file: `apps/app/app/(app)/[slug]/okr/bang-kr.tsx`
+  severity: high
+  Đề xuất: new-contract
+
+- **(r6) KR title in the sheet's «Góp vào» line is user data but is not marked translate="no"**
+  Người dùng thấy gì: Khi trình duyệt bật tự dịch, tên KR do người dùng đặt trong khu «Góp vào» có thể bị dịch, trong khi cùng tên đó ở chỗ khác thì giữ nguyên.
+  file: `apps/app/components/crm/record-sheet/objective-sheet.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **(r5) English sheet.tienDoTu always pluralises: «from 1 KRs»**
+  Người dùng thấy gì: Ở giao diện tiếng Anh, mục tiêu chỉ có một KR hiện câu «from 1 KRs». Số liệu đúng, chỉ câu chữ sai số ít.
+  file: `apps/app/lib/messages/okr.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **(r6) E14's pre-written list omits the-gop-y-okr although the design doc names it beside the KR menu hooks**
+  Người dùng thấy gì: Phép đo giữ móc của các việc đã ký chưa chạy lại phép đo màn của «Thẻ góp ý OKR», dù việc đó dùng menu KR mà vòng này viết lại — nếu menu KR hỏng với việc đó thì vòng này không thấy.
+  file: `_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **(r7) ho-so-cham.mjs: an uncaught git/JSON error exits 1, the same code as a regression or a passing red path**
+  Người dùng thấy gì: Khi máy gặp sự cố môi trường, công cụ kiểm hồi quy có thể thoát như thể đã tìm thấy hồi quy (hoặc như chiều đỏ đã chứng) và để lại thư mục tạm. Sản phẩm không bị ảnh hưởng.
+  file: `_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **(r8) E13's «bảng cuộn dọc» check has no red path and passes empty when no table-container is found**
+  Người dùng thấy gì: Phép kiểm máy cho việc bảng có cuộn dọc lạ hay không có thể báo xanh dù không thấy bảng nào để đo, nên một lỗi cuộn có thể lọt.
+  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **(r10) At 375 px the sheet's top progress cell for an objective with no expectation shows «33% · lẽ ra …» truncated**
+  Người dùng thấy gì: Ở điện thoại, ô tiến độ đầu sheet của mục tiêu chưa có kỳ vọng hiện «lẽ ra …» bị cắt chữ; nếu chữ bị cắt là «lẽ ra 0%» thì trái luật «kỳ vọng 0 là chưa có kỳ vọng». Ô này có từ trước vòng này.
+  file: `apps/app/components/crm/record-sheet/objective-sheet.tsx`
+  severity: low
+  Đề xuất: new-contract
+
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
