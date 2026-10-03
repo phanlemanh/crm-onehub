@@ -55,7 +55,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.gy_loc_api
-    expected: "exit 0; gop-y-dung-cho.spec.ts -t loc-gop-y: đơn vị 5 Mục tiêu, 2 có dòng chờ, trang cỡ 2 → okr.danhSach với loc.gopY=['cho'] trả đúng 2 id (so tập viết trước), total 2, facetCounts.gopY = [{value:'cho', count:2}]; không lọc → total 5, facetCounts.gopY vẫn đếm 2; loc.gopY=['cho'] trên đơn vị không có dòng nào → rows [] total 0. Chiều đỏ ghim: bản sao lọc sau khi cắt trang phải làm bài đỏ 'total sai: 1 != 2'."
+    expected: "exit 0; gop-y-dung-cho.spec.ts -t loc-gop-y: đơn vị 5 Mục tiêu, 2 có dòng chờ (okr.danhSach không phân trang: total là số dòng trả) → okr.danhSach với loc.gopY=['cho'] trả đúng 2 id (so tập viết trước), total 2, facetCounts.gopY = [{value:'cho', count:2}]; không lọc → total 5, facetCounts.gopY vẫn đếm 2; loc.gopY=['cho'] trên đơn vị không có dòng nào → rows [] total 0. Chiều đỏ ghim: bản sao bỏ điều kiện lọc gopY khỏi danh sách dòng (chỉ đếm ở mặt lọc) phải làm bài đỏ 'total sai: 5 != 2'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/api/src/okr/**", "apps/api/test/gop-y-dung-cho.spec.ts"]
 
