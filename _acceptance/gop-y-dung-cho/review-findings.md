@@ -1,6 +1,6 @@
 # Review findings: gop-y-dung-cho (round 3)
 
-Tổng 9 phát hiện: 0 trong hợp đồng, 9 ngoài hợp đồng (3 mới ở round này, 6 mang sang từ round 1 và round 2 không chấm lại). Không finder nào chết, không có mục chờ phân loại, không có mục thiếu bác bỏ vì refuter chết.
+Tổng 19 phát hiện: 0 trong hợp đồng, 19 ngoài hợp đồng (3 mới ở round này, 16 mang sang từ round 1 và round 2 không chấm lại; 10 trong số đó máy chấm round 3 đánh rơi khỏi gói, mang lại tay sau khi đối chiếu code ở af2ac8bf — cả 10 vẫn còn). Không finder nào chết, không có mục chờ phân loại, không có mục thiếu bác bỏ vì refuter chết.
 
 ## Trong hợp đồng
 
@@ -63,5 +63,65 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/api/src/okr/dem-gop-y.ts`
   severity: low
   Đề xuất: wont-fix
+
+- **nhom-kara.tsx tự import icon AiGenerate ở chỗ gọi, và đặt thêm một tia sáng trong vùng đã mang nhãn Kara (r1)**
+  Người dùng thấy gì: Nút gọi Kara nằm trong vùng đã có nhãn Kara nhưng vẫn mang thêm một tia sáng nữa, nên cùng một vùng hiện hai dấu AI. Chỉ là chuyện hình thức, thao tác vẫn dùng bình thường.
+  file: `apps/app/app/(app)/[slug]/okr/nhom-kara.tsx`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Nhận một góp ý căn chỉnh xong thì không có Hoàn tác, trái mục 6 của ai-ux.md (r1)**
+  Người dùng thấy gì: Sau khi bấm «Căn chỉnh» theo gợi ý của Kara, người dùng không có nút Hoàn tác để lùi lại; muốn gỡ phải tự gỡ liên kết bằng tay.
+  file: `apps/app/app/(app)/[slug]/okr/nhom-kara.tsx`
+  severity: medium
+  Đề xuất: new-contract
+
+- **tomTatCua ép kiểu `as keyof` trên maVanDe vốn đã có kiểu enum (r1)**
+  Người dùng thấy gì: Hôm nay mọi mã vấn đề của Kara đều có câu tóm tắt đúng; nếu sau này thêm một mã mới mà quên viết câu tóm tắt, người dùng sẽ thấy lý do thô thay vì câu tóm tắt và không có cảnh báo nào.
+  file: `apps/app/app/(app)/[slug]/okr/nhom-kara.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Mở khung lúc Kara đang đọc: hỏi lại mãi, không bao giờ sang trạng thái lỗi (r1)**
+  Người dùng thấy gì: Nếu mở khung đúng lúc Kara đang đọc, hoặc việc đọc bị treo vì tác tử tắt, khung có thể hiện «Kara đang đọc…» mãi, không bao giờ chuyển sang báo lỗi hay cho thử lại.
+  file: `apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Lỗi truy vấn troLyDanhSach bị nuốt: vùng Kara biến mất thay vì báo lỗi (r1)**
+  Người dùng thấy gì: Nếu máy chủ không tải được danh sách góp ý, vùng Kara biến mất lặng lẽ: người dùng không thấy góp ý, không thấy lỗi và không có nút thử lại.
+  file: `apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`
+  severity: medium
+  Đề xuất: new-contract
+
+- **troLyDeXuat lỗi thì không có phản hồi nào (mất onError) (r1)**
+  Người dùng thấy gì: Khi bấm «Nhờ Kara góp ý» mà máy chủ báo lỗi (hết quyền, mất mạng, lỗi máy chủ), không có thông báo nào; nút chỉ mở lại như chưa có chuyện gì nên người dùng không biết yêu cầu đã hỏng.
+  file: `apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Hai lần Hoàn tác liên tiếp trên cùng useMutation làm mất callback của lần đầu (r1)**
+  Người dùng thấy gì: Nếu bấm Hoàn tác ở hai KR liên tiếp rất nhanh, KR đầu có thể vẫn hiện nút «Hoàn tác» dù tên đã được trả về; lỗi của lần đầu cũng không hiện, và nếu đóng khung giữa chừng thì danh sách bên ngoài không làm mới.
+  file: `apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **setSystemTime is reset in try/finally inside the test, not in afterEach as every other apps/app dom test does (r2)**
+  Người dùng thấy gì: Không ảnh hưởng người dùng cuối. Nếu một bài kiểm tra tự động bị quá hạn thì bài kế tiếp có thể báo lỗi khó hiểu, làm người bảo trì khó tìm nguyên nhân thật.
+  file: `apps/app/test/gop-y-dung-cho-ra-soat.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Two new local wall-clock wait helpers copy the shared cho(); choLau's 8000 ms deadline is longer than bun's 5000 ms test timeout (r2)**
+  Người dùng thấy gì: Không ảnh hưởng người dùng cuối. Nếu việc Kara đọc lại bị hỏng, bài kiểm tra chỉ báo hết giờ chung chung thay vì nói rõ lỗi gì, nên khó chẩn đoán hơn.
+  file: `apps/app/test/gop-y-dung-cho-ra-soat.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **docLai copies noiDung's 'dang-doc' and 'loi' branch conditions word for word (r2)**
+  Người dùng thấy gì: Hiện người dùng không thấy gì sai. Về sau nếu đổi luật báo lỗi ở một chỗ mà quên chỗ kia, màn Kara đọc lần đầu và màn Kara đọc lại có thể hiện hai trạng thái khác nhau.
+  file: `apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`
+  severity: low
+  Đề xuất: known-limits
 
 ⚠ Cụm ngoài vùng phủ: 2/3 lỗi rơi vào file không bộ đo nào phủ (apps/app/test/gop-y-dung-cho-ra-soat.tsx) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
