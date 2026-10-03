@@ -1,0 +1,127 @@
+slug: nen-kara
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.nk_inline
+    expected: "exit 0; bài DOM packages/ui/test/nen-kara.dom.tsx -t nk-inline dựng ProposedChange viết lại chờ bằng chính props mà cột góp ý truyền (rút qua propsThe từ một dòng DongHien mẫu như proposed-change.dom.tsx, không viết tay props), một lần không truyền density và một lần density=inline: gốc [data-slot=proposed-change] mang data-density=inline, data-variant=default, data-size và lớp gốc group/item của Item (dấu Item để lại; data-slot của gốc là proposed-change nên không dùng làm dấu), không mang role=alert; trong gốc không phần tử nào mang lớp group/alert hay [data-slot=card]; chữ cũ và chữ mới mang translate=no; thứ tự DOM nhãn → <del> câu cũ → <ins> câu mới → lý do → hàng nút; đếm button[data-variant=default] đúng bằng 1. Chiều đỏ ghim trên cùng fixture: một bản sao proposed-change.tsx bọc thân inline trong Alert phải làm bài đỏ với thông điệp 'inline co alert'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/item.tsx", "packages/ui/test/nen-kara.dom.tsx"]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.nk_hai_do_day
+    expected: "exit 0; ma trận toàn phần viết trước trong bài, {chờ, đang gửi, khoá kèm lý do, lỗi, đang sửa} × {inline, card} = 10 ô, mỗi ô dựng từ cùng một bộ props: bộ (tên, data-variant, disabled) của các nút ở inline bằng đúng bộ ở card; ô khoá: nút khoá mang aria-describedby trỏ phần tử chứa lý do ở cả hai; ô lỗi: có [data-slot=field-error] mang chữ lỗi ở cả hai; ô đang sửa: có textarea[data-slot=proposed-change-edit], Esc trong ô gọi onCancel đúng một lần ở cả hai. Bài in số ô đã khẳng định và đòi bằng 10. Chiều đỏ ghim: bản sao bỏ dòng lý do khoá khỏi nhánh inline phải làm bài đỏ 'khoa mat o inline'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/test/nen-kara.dom.tsx"]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.nk_man_cu
+    expected: "exit 0; một lần gọi bun test chạy cả apps/app/test/nen-kara-man-cu.dom.tsx và nguyên the-gop-y-okr.dom.tsx của hồ sơ đã ký; ca man-cu dựng TheGopY thật (okr/the-gop-y.tsx) với một dòng viết lại mẫu và FactSuggestion thật (components/crm/facts.tsx) với một ContactFact mẫu, tRPC giả: gốc [data-slot=proposed-change] của cả hai mang data-density=card và lớp gốc group/alert của Alert (dấu Alert để lại qua Confirmation; data-slot của gốc là proposed-change nên không dùng làm dấu), không mang lớp group/item; ca đối chứng ngay trong bài: cùng bộ chọn nhận một ProposedChange density=card dựng thẳng và ném «doi chung doi sang inline» với cùng đề xuất ở density=inline; mọi ca của hai tệp xanh. Chiều đỏ ghim: bản sao facts.tsx bỏ density=card phải làm bài đỏ 'facts doi sang inline'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/the-gop-y.tsx", "apps/app/components/crm/facts.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "apps/app/test/nen-kara-man-cu.dom.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.nk_bien_nhan
+    expected: "exit 0; ma trận toàn phần viết trước, {accepted, dismissed, skipped} × {có onUndo, không} × {inline, card} = 12 ô: mọi ô không còn hàng nút đề xuất và có đúng một dòng [data-slot=proposed-change-decided] mang chữ đã quyết, nằm trong phần tử role=status; ô có onUndo có đúng một nút tên «Hoàn tác», bấm gọi onUndo đúng 1 lần (đếm lời gọi); ô không onUndo không có nút «Hoàn tác»; ô dismissed và skipped mang data-decided tương ứng và chữ có lớp text-muted-foreground. Bài in số ô và đòi bằng 12. Chiều đỏ ghim: bản sao không nối onUndo vào nút phải làm bài đỏ 'hoan tac khong goi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/test/nen-kara.dom.tsx"]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.nk_dau
+    expected: "exit 0; bài DOM -t nk-dau dựng KaraMark không phạm vi và có phạm vi «OKR»: có đúng một svg mang aria-hidden=true; textContent lần lượt bằng «Kara» và «Kara · OKR»; phần tử gốc có lớp text-muted-foreground; không phần tử nào trong gốc có lớp bắt đầu bằng text-primary, bg-primary, text-brand hay bg-brand. Chiều đỏ ghim: bản sao tô text-primary phải làm bài đỏ 'dau to mau'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara.tsx", "packages/ui/test/nen-kara.dom.tsx"]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.nk_vi_sao
+    expected: "exit 0; bài DOM -t nk-vi-sao đặt KaraLabel trong một div có cả onClick lẫn onKeyDown đếm lời gọi: bấm nút «Vì sao?» → [data-slot=popover-content] có trong DOM, chứa «Kara dựa trên gì», chữ lý do và giờ đọc truyền vào; đóng, rồi focus nút và nhấn Enter, đóng, nhấn Space → mỗi lần ô mở lại; sau cả ba, hai bộ đếm của hàng đều bằng 0; nhấn Esc → ô đóng và document.activeElement là nút «Vì sao?». Đối chứng dương: nhấn Enter trên một nút khác trong cùng hàng làm bộ đếm onKeyDown bằng 1. Chiều đỏ ghim: bản sao bỏ chặn click phải làm bài đỏ 'nhan lam mo hang'; bản sao bỏ chặn keydown phải làm bài đỏ 'phim lam mo hang'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara.tsx", "packages/ui/src/components/popover.tsx", "packages/ui/test/nen-kara.dom.tsx"]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.nk_phan_hoi
+    expected: "exit 0; bài DOM -t nk-phan-hoi dựng AiFeedback có điều khiển: bấm «Hữu ích» rồi «Không hữu ích» → onChange nhận [true, false] theo thứ tự; nút đang chọn mang data-state=on, nút kia off; role=status rỗng khi value=null, rỗng khi pending, mang đúng chữ thanks khi đã chọn. Chiều đỏ ghim: bản sao đảo hai giá trị phải làm bài đỏ 'phan hoi dao'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/ai-feedback.tsx", "packages/ui/test/nen-kara.dom.tsx"]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.nk_tom_tat
+    expected: "exit 0; rang/tom-tat.sh (một tên ngắn cho agent chép; bên trong chạy nen-kara-man-cu.dom.tsx -t tom-tat rồi tro-ly-okr-tom-tat.dom.tsx, thoát theo mã của lần đỏ đầu) — ca tom-tat dựng KhoiTomTat thật với tRPC giả trả một bản tóm tắt có câu: vùng phản hồi là [data-slot=ai-feedback] nằm trong phần tử data-phan-hoi; chữ hai nút theo thứ tự đúng bằng chữ ghim của bản trước lượt [«Hữu ích», «Không hữu ích»], nay lấy từ messages(vi).aiFeedback của packages/ui (hai khoá tomTat.huuIch, tomTat.khongHuuIch của apps/app bị xoá vì thành khoá chết); bấm «Hữu ích» gọi okr.troLyTomTatPhanHoi một lần với payload parse bằng schema input thật của thủ tục (import từ apps/api), data-phan-hoi=huu-ich; khi thủ tục giả trả lỗi, lựa chọn lùi về trước và data-phan-hoi về rỗng; tên nhóm (aria-label) bằng tomTat.phanHoiNhom và chữ dòng cảm ơn sau khi chọn bằng tomTat.daGhi — đúng khoá cũ; vùng data-phan-hoi có đúng một nhóm nút và một dòng role=status như bản trước lượt. Rồi chạy nguyên tro-ly-okr-tom-tat.dom.tsx của hồ sơ đã ký, xanh. Chiều đỏ ghim: bản sao khoi-tom-tat.tsx bỏ lùi khi lỗi phải làm bài đỏ 'khong lui khi loi'; bản sao đổi chữ cảm ơn phải làm bài đỏ 'chu cam on doi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx", "packages/ui/src/components/ai-feedback.tsx", "apps/app/lib/messages/okr-toan-canh.ts", "apps/app/test/nen-kara-man-cu.dom.tsx", "apps/app/test/tro-ly-okr-tom-tat.dom.tsx"]
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.nk_hai_tieng
+    expected: "exit 0; bài DOM -t nk-hai-tieng: ma trận viết trước, mỗi thành phần mới {KaraMark, KaraLabel đã mở ô, ProposedChange inline chờ, ProposedChangeReceipt có onUndo, AiFeedback đã chọn} dựng cùng props trong LocaleProvider vi và en; gom các nút chữ không đến từ props (loại chữ props bằng cách gán props là chuỗi đánh dấu duy nhất); số chỗ ghi trước theo từng thành phần {KaraMark 1, KaraLabel 4, ProposedChange 0, ProposedChangeReceipt 1, AiFeedback 2} và đòi đúng số đó ở cả vi lẫn en (sai thì «so cho sai: <thành phần> <tiếng> <n> != <số>»); mỗi chữ ở vi khác chữ cùng chỗ ở en, chỉ miễn đúng tập {Kara}; tổng chỗ so bằng tổng ghi trước (8). Rồi chạy messages-guard.spec.ts xanh với các khoá mới đã ghim. Chiều đỏ ghim: bản sao kara.tsx viết cứng «Vì sao?» phải làm bài đỏ 'chu cung: Vì sao?'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-feedback.tsx", "packages/ui/src/lib/messages.ts", "packages/ui/test/nen-kara.dom.tsx", "packages/ui/test/messages-guard.spec.ts"]
+
+  - id: E10
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.nk_man_proto
+    steps:
+      - "Phiên đo riêng của cây (tien-de, PROTO_ROUTE=1); canh-cay trước màn đầu tiên, lệch cây → mã 2"
+      - "Rút tập trạng thái từ khối UX-STATE-TABLE của design doc (đọc tệp, đường suy từ vị trí script) và đòi tập state của catalog bằng đúng tập đó; thiếu → in 'thieu trang thai: <id>' và mã 1"
+      - "Với mỗi khổ {1440 (1440×1000), 390 (390×844)} × nền {light, dark}: mở từng state của /proto/nen-kara, gỡ lớp phủ dev, chụp _acceptance/nen-kara/evidence/E10-<id trạng thái>-<1440|390>-<light|dark>.png"
+      - "Số phần tử ghi trước theo từng trạng thái (inline, card): nhan 0/0, bốn trạng thái inline-* 1/0, bien-nhan 2/0, the 0/2, phan-hoi 0/0; mỗi ô đòi đúng số đó, sai thì 'so phan tu sai'; trạng thái của bảng thiếu số ghi trước thì 'thieu so phan tu ghi truoc: <id>'"
+      - "Đo trong trình duyệt thật: mọi [data-slot=proposed-change][data-density=inline] không có viền nhìn thấy (mỗi cạnh rộng 0px hoặc màu có alpha 0) và nền có alpha 0; mọi phần tử con của nó trừ button, textarea, input, ins, del cũng vậy; mọi [data-density=card] có border-top-width > 0; documentElement.scrollWidth == innerWidth"
+      - "ST-nenkara-nhan: bấm «Vì sao?» → [data-slot=popover-content] hiện, có chữ «Kara dựa trên gì»"
+      - "ST-nenkara-bien-nhan: bấm «Hoàn tác» → dòng biên nhận biến mất, đề xuất chờ hiện lại với nút chính"
+    expected: "exit 0; rang/man-proto.mjs in từng số đo theo (state, khổ, nền) và số ô đã đo = 8 trạng thái × 2 khổ × 2 nền = 32, và mọi tệp inputs của E13 có mặt sau lượt. Chiều đỏ ghim: --kiem-do-do vien (script chèn viền 1px lên gốc inline đầu tiên trước khi đo) phải in 'inline co vien' và mã 1; --kiem-do-do hop-con (chèn một div có viền và nền vào trong thân đề xuất inline) phải in 'inline co hop con' và mã 1; --kiem-do-do the-khong-vien (đặt viền 0 cho bản card đầu tiên) phải in 'the khong vien' và mã 1; --kiem-do-do mat-phan-tu (gỡ data-density của đề xuất inline đầu tiên) phải in 'so phan tu sai' và mã 1. Chèn lỗi xong chờ cho màu dừng chuyển rồi mới đo."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["packages/ui/src/components/kara.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-feedback.tsx", "apps/app/app/proto/_modules/nen-kara/**", "apps/app/app/proto/catalog.ts", "_acceptance/nen-kara/rang/man-proto.mjs"]
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.nk_mo_coi
+    expected: "exit 0; cổng mồ côi nen-chat-ai-elements/rang/mo-coi.mjs in confirmation.tsx trong SONG và CHET (0); rồi thước ten-goi.mjs của hồ sơ đã ký the-gop-y-okr thoát 0 (confirmation.tsx trong bao đóng import của apps/**). Chiều đỏ ghim (của chính hai thước sẵn có): bản sao proposed-change.tsx bỏ Confirmation khỏi nhánh card làm mo-coi in 'MO COI: confirmation.tsx'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/**", "_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs", "_acceptance/the-gop-y-okr/rang/ten-goi.mjs"]
+
+  - id: E12
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.nk_tai_lieu
+    expected: "exit 0; rang/tai-lieu.mjs đọc bảng markdown thật (tách hàng theo |, không grep cả tệp): (a) bảng mục 10 của docs/ai-ux.md, cột «Có chưa» của ba hàng luật 2-3, 6, 8 không còn chữ «chưa — lượt nen-kara» và ô thành phần nêu KaraLabel, ProposedChangeReceipt, AiFeedback; hàng luật 5 nêu density; (b) bảng «Lộ trình áp luật»: chỉ số hàng `muc-tieu-va-kr` < chỉ số hàng `gop-y-dung-cho`, và ô «Làm gì» của hàng gop-y-dung-cho chứa BangMucTieu cùng đủ sáu tên nhanMucTieu, duoiMucTieu, duoiKr, sauTenKr, dangMo, data-muc-tieu; (c) hàng confirmation.tsx của bảng «What is in the tree today» trong docs/chat-ui.md nêu card. In từng mục. Chiều đỏ ghim: chạy trên bản sao đảo thứ tự hai hàng lộ trình phải in 'lo trinh sai thu tu' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["docs/ai-ux.md", "docs/chat-ui.md", "_acceptance/nen-kara/rang/tai-lieu.mjs"]
+
+  - id: E13
+    criterion: AC-12
+    executor: judgment
+    inputs:
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-inline-cho-1440-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-inline-cho-390-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-the-1440-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-bien-nhan-1440-light.png"
+      - "docs/ai-ux.md"
+    question: "Nhìn bốn ảnh — đề xuất inline ở 1440 và 390, đề xuất card, dòng biên nhận, đối chiếu mục 5 và 6 của docs/ai-ux.md: (1) đề xuất inline đọc như một phần của dòng nó sửa hay như một hộp riêng? (2) Mỗi đề xuất có đúng một nút chính nhận ra ngay không? (3) Ở khổ 390 câu mới đọc liền một mạch hay bị bẻ vụn? Trả lời PASS chỉ khi cả ba đạt."
+    expected: "Hội đồng đọc ảnh và luật: đề xuất inline không có khung riêng, nút chính nhận ra ngay, câu mới đọc liền ở 390."
+    evidence_required: [run_id, verdict, verifier, verified_at, rationale]
+
+  - id: E14
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.nk_san_thiet_ke
+    expected: "exit 0; design-gate.mjs --mode static trên từng tệp màn mới hay sửa của lượt (kara.tsx, proposed-change.tsx, ai-feedback.tsx, khoi-tom-tat.tsx, the-gop-y.tsx, facts.tsx và mọi .tsx dưới proto/_modules/nen-kara — lệnh liệt bằng find, không gõ tay); năm lỗi nền P0 bằng 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-feedback.tsx", "apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx", "apps/app/app/(app)/[slug]/okr/the-gop-y.tsx", "apps/app/components/crm/facts.tsx", "apps/app/app/proto/_modules/nen-kara/**"]

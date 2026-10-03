@@ -127,7 +127,7 @@ section for what is actually in the tree.
 `confirmation` moved here on 2026-09-29 (`the-gop-y-okr`): the OKR assistant's
 suggestion cards and the contact fact suggestions are approvals of a change the
 AI proposes, which is the job `Confirmation` exists for. `ProposedChange` wraps it
-so both surfaces share one card.
+so both surfaces share one card. Since `nen-kara` (2026-10-02) that card is the `card` density; the default `inline` density sits under the thing it changes and is built on `Item`, because a bordered `Alert` inside a table or under a field makes three layers of border.
 
 `sources` and `inline-citation` are the highest-value ones and the least
 started: `lib/agent-transcript.ts` already exports `sourcesOf()`, it is covered
@@ -139,7 +139,7 @@ by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 
 | File | Why it is here |
 | --- | --- |
-| `confirmation.tsx` | imported by `proposed-change.tsx`, which the OKR suggestion column and the contact fact suggestions use |
+| `confirmation.tsx` | imported by `proposed-change.tsx` as the body of its `card` density, which the OKR suggestion column and the contact fact suggestions use; the `inline` density is built on `Item` and does not use it |
 | `message.tsx` | imported by the record sheet's Agent tab and the builder |
 | `reasoning.tsx` | imported by the builder |
 | `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |

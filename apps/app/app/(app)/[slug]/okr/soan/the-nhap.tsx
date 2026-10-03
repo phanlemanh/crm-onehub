@@ -201,6 +201,7 @@ export function TheMucTieu({
 	);
 	return (
 		<ProposedChange
+			density="card"
 			kind="compact"
 			data-dong={d.id}
 			data-loai-dong="muc-tieu"
@@ -335,6 +336,7 @@ export function TheKr({
 			data-the-kr={kr.id}
 		>
 			<ProposedChange
+				density="card"
 				kind="compact"
 				data-dong={kr.id}
 				data-loai-dong="kr"
@@ -373,6 +375,7 @@ export function TheCanChinh({
 	const ket = ketCua(n, m, d, m.banNhap.canChinhNhan, giaTri);
 	return (
 		<ProposedChange
+			density="card"
 			kind="compact"
 			data-dong={d.id}
 			data-loai-dong="can-chinh"

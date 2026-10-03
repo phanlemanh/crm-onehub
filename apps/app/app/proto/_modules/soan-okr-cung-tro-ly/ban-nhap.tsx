@@ -214,6 +214,7 @@ function TheKr({
 			data-the-kr={kr.id}
 		>
 			<ProposedChange
+				density="card"
 				kind="compact"
 				id={`kr-${kr.id}`}
 				data-dong={kr.id}
@@ -255,6 +256,7 @@ function TheMucTieu({
 }) {
 	return (
 		<ProposedChange
+			density="card"
 			kind="compact"
 			id={`mt-${mt.id}`}
 			data-dong={mt.id}

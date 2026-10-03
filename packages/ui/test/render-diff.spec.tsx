@@ -4,6 +4,7 @@ import type { ReactElement } from "react";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
+import { AiFeedback } from "../src/components/ai-feedback";
 import { AsyncButtonContent } from "../src/components/async-action";
 import { AttendeeList } from "../src/components/attendee-list";
 import { Board } from "../src/components/board";
@@ -27,6 +28,7 @@ import {
 } from "../src/components/dialog";
 import { DotMatrix } from "../src/components/dot-matrix";
 import { Heatmap } from "../src/components/heatmap";
+import { KaraLabel } from "../src/components/kara";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	MessageScrollerButton,
@@ -54,7 +56,7 @@ import { ThreadMessage } from "../src/components/thread-message";
 import { TooltipProvider } from "../src/components/tooltip";
 import { DEFAULT_LOCALE, type Locale } from "../src/lib/locale";
 import type { TableQueryState } from "../src/lib/table-query";
-import { DU_LIEU, TRUNG_TINH } from "./du-lieu";
+import { DU_LIEU, TEN_RIENG, TRUNG_TINH } from "./du-lieu";
 
 const DOC_NGHE_DUOC = [
 	"title",
@@ -330,6 +332,28 @@ const CA: Ca[] = [
 		),
 	},
 	{
+		ten: "AiFeedback",
+		ve: () => (
+			<AiFeedback
+				value
+				onChange={() => {}}
+				label={DU_LIEU.nhomLoc}
+				thanks={DU_LIEU.tieuDeHopThoai}
+			/>
+		),
+	},
+	{
+		ten: "Kara",
+		ve: () => (
+			<KaraLabel
+				text={DU_LIEU.tenCongTy}
+				reason={DU_LIEU.tieuDeHopThoai}
+				readAt={DU_LIEU.ngayVi}
+			/>
+		),
+		bam: () => document.querySelector("[data-slot='kara-label'] button"),
+	},
+	{
 		ten: "Carousel",
 		ve: () => (
 			<Carousel>
@@ -570,7 +594,9 @@ async function chungNhau(
 	const en = await chuNguoiDoc(await ve(ca, "en", mo, trong));
 	const vi = await chuNguoiDoc(await ve(ca, "vi", mo, trong));
 	if (en.size === 0) throw new Error(`${ca.ten}: bản vẽ không có chữ nào`);
-	return [...en].filter((s) => vi.has(s) && !TRUNG_TINH.has(s));
+	return [...en].filter(
+		(s) => vi.has(s) && !TRUNG_TINH.has(s) && !TEN_RIENG.has(s),
+	);
 }
 
 describe("AC-5 — chấm bản vẽ, không chấm mã", () => {
