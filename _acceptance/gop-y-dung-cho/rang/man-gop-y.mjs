@@ -26,6 +26,7 @@ const GY = {
 	kho: {
 		1440: { rong: 1440, cao: 1000 },
 		375: { rong: 375, cao: 812 },
+		thap: { rong: 1440, cao: 360 },
 	},
 	cho: {
 		manMs: 120 * GIAY_MS,
@@ -272,6 +273,34 @@ async function buocE2(ctx, theme) {
 		kiem(
 			`E2 ${theme}: mo bang ten khong dat neoGopY (${url.searchParams.get("neoGopY")})`,
 			url.searchParams.get("neoGopY") === null,
+		);
+	} finally {
+		await t.ctx.close();
+	}
+}
+
+async function buocE2Thap(ctx) {
+	const a = ctx.g.a;
+	const t = await trang(ctx.tr, GY.kho.thap, "sang");
+	try {
+		await moTrang(t, duongDs(ctx), `[data-chip-gop-y="${a}"]`);
+		await t.p.click(`[data-chip-gop-y="${a}"]`);
+		await t.p.waitForSelector("[data-okr-sheet] [data-nhom-kara]", {
+			timeout: GY.cho.manMs,
+		});
+		await tre(GY.cho.cuonMs);
+		const chip = await t.p.evaluate(viTriNhom);
+		kiem(
+			`E2 khung thap 1440x${GY.kho.thap.cao}: mo tu chip da cuon (scrollTop ${chip?.scrollTop} > 0) va dinh nhom ${chip?.top} trong ${chip?.vungTop}-${chip?.vungDuoi}`,
+			chip?.coVungCuon === true && chip.scrollTop > 0 && chip.trong,
+		);
+		await chup(t, `E2-khung-thap-tu-chip-${GY.kho.thap.cao}`);
+		await moTrang(t, duongKhung(ctx, a), "[data-okr-sheet] [data-nhom-kara]");
+		await tre(GY.cho.cuonMs);
+		const ten = await t.p.evaluate(viTriNhom);
+		kiem(
+			`E2 khung thap: mo thang khong cuon (scrollTop ${ten?.scrollTop}) va nhom nam duoi mep (${ten?.top} >= ${ten?.vungDuoi})`,
+			ten !== null && ten.scrollTop === 0 && !ten.trong,
 		);
 	} finally {
 		await t.ctx.close();
@@ -620,6 +649,7 @@ try {
 		buoc = "E2";
 		await buocE2(ctx, "sang");
 		await buocE2(ctx, "toi");
+		await buocE2Thap(ctx);
 		buoc = "E22";
 		await buocE22(ctx);
 		buoc = "E23";

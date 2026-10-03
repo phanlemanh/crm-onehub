@@ -30,6 +30,7 @@ const vi = {
 		themDoiTrong: "Thêm KR đối trọng",
 		suaKrNay: "Sửa KR này",
 		suaMucTieu: "Sửa Mục tiêu",
+		khoaSua: "Mục tiêu đang khoá sửa nên chưa quyết được góp ý này.",
 	},
 	bienNhan: {
 		daDoiTenKr: "Đã đổi tên KR theo Kara",
@@ -131,6 +132,8 @@ const en: OkrGopYMessages = {
 		themDoiTrong: "Add a counterbalance KR",
 		suaKrNay: "Edit this KR",
 		suaMucTieu: "Edit objective",
+		khoaSua:
+			"This objective is locked for editing, so the suggestion can't be decided yet.",
 	},
 	bienNhan: {
 		daDoiTenKr: "KR renamed from Kara's suggestion",

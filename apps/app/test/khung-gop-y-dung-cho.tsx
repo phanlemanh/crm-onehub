@@ -315,7 +315,7 @@ type Kho = {
 	mine: ReturnType<typeof mineOutput.parse>;
 	danhSach: (vao: DauVao) => DanhSach;
 	chiTiet: () => ObjectiveOutput;
-	troLy: (vao: DauVao) => TroLyDs;
+	troLy: (vao: DauVao) => TroLyDs | Promise<TroLyDs>;
 	sanSang: SanSang;
 	daDoc: Goi[];
 	daGhi: Goi[];
@@ -441,6 +441,8 @@ export const KHOA_LAM_MOI = new Set([
 	"okr.objective",
 	"okr.mine",
 	"okr.danhSach",
+	"okr.troLySanSang",
+	"okr.troLyDanhSach",
 ]);
 
 mock.module("@/lib/trpc/client", () => ({
@@ -510,6 +512,7 @@ export type San = {
 	o: HTMLElement;
 	root: Root;
 	url: () => URLSearchParams;
+	veLai: (man: ReactElement) => Promise<void>;
 };
 let dangMo: San[] = [];
 
@@ -523,24 +526,34 @@ export async function dung(man: ReactElement, thamSo = ""): Promise<San> {
 		},
 	});
 	let url = new URLSearchParams(thamSo);
+	const ve = (noiDung: ReactElement) => (
+		<NuqsTestingAdapter
+			hasMemory
+			onUrlUpdate={(e) => {
+				url = new URLSearchParams(e.searchParams);
+			}}
+			searchParams={thamSo}
+		>
+			<QueryClientProvider client={client}>
+				<LocaleProvider locale="vi">
+					<TooltipProvider>{noiDung}</TooltipProvider>
+				</LocaleProvider>
+			</QueryClientProvider>
+		</NuqsTestingAdapter>
+	);
 	await act(async () => {
-		root.render(
-			<NuqsTestingAdapter
-				hasMemory
-				onUrlUpdate={(e) => {
-					url = new URLSearchParams(e.searchParams);
-				}}
-				searchParams={thamSo}
-			>
-				<QueryClientProvider client={client}>
-					<LocaleProvider locale="vi">
-						<TooltipProvider>{man}</TooltipProvider>
-					</LocaleProvider>
-				</QueryClientProvider>
-			</NuqsTestingAdapter>,
-		);
+		root.render(ve(man));
 	});
-	const san = { o, root, url: () => url };
+	const san = {
+		o,
+		root,
+		url: () => url,
+		veLai: async (moi: ReactElement) => {
+			await act(async () => {
+				root.render(ve(moi));
+			});
+		},
+	};
 	dangMo.push(san);
 	return san;
 }

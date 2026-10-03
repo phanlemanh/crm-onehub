@@ -100,6 +100,11 @@ export async function demGopYCho(
 		if (!m || !duoc) continue;
 		if (duoc !== "moi" && (h.keyResultId === null || !duoc.has(h.keyResultId)))
 			continue;
+		if (
+			h.keyResultId !== null &&
+			!m.keyResults.some((k) => k.id === h.keyResultId)
+		)
+			continue;
 		if (hetHieuLuc(m, h)) continue;
 		dem.set(h.objectiveId, (dem.get(h.objectiveId) ?? 0) + 1);
 	}

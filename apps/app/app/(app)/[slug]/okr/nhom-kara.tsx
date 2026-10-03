@@ -118,7 +118,8 @@ export function DeXuatNeo({
 	const m = okrGopYMessages(useLocale());
 	const [sua, setSua] = useState<string | null>(null);
 	const k = gopY.ketCua(d.id);
-	const khoa = gopY.dangQuyet !== null && gopY.dangQuyet !== d.id;
+	const khoa =
+		!gopY.ghiDuoc || (gopY.dangQuyet !== null && gopY.dangQuyet !== d.id);
 	const quyet = (cach: CachQuyet, giaTri?: string) => {
 		setSua(null);
 		gopY.quyet(d, cach, giaTri);
@@ -215,6 +216,7 @@ export function DeXuatNeo({
 			}
 			error={gopY.loiDong[d.id]}
 			kind={kind}
+			lockedReason={gopY.ghiDuoc ? undefined : m.de.khoaSua}
 			pending={gopY.dangQuyet === d.id}
 			rationale={rationale}
 			value={value}

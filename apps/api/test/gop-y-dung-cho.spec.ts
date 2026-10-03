@@ -120,6 +120,8 @@ function quyet(
 async function clone(
 	goc: string,
 	doi: Partial<{
+		objectiveId: string;
+		maVanDe: string;
 		nac: string;
 		trangThai: string;
 		cuocSoanId: string | null;
@@ -556,6 +558,59 @@ describe("bo-qua", () => {
 				z.object({ "?column?": z.number() }),
 			);
 			expect(mocRa[0]?.["?column?"] ?? -1).toBeCloseTo(2 / 3, 5);
+		},
+		CHO_DB,
+	);
+});
+
+describe("dem-chip kr-da-xoa", () => {
+	test(
+		"câu hỏi của Kara gắn KR đã xoá không còn được đếm trên chip",
+		async () => {
+			const truoc = await soCua("truong", M1);
+			const ten = "Số đơn giao đúng hẹn đạt 200";
+			const kr = ok<{ id: string }>(
+				await goi(
+					app,
+					"okr.createKeyResult",
+					"mutation",
+					{
+						objectiveId: M1,
+						title: ten,
+						kind: "tang-toi",
+						ownerUserId: idMau("nguoi", NGUOI.truong),
+						startValue: 0,
+						targetValue: 200,
+						currentValue: 0,
+						unit: "đơn",
+						dueOn: null,
+						weight: 1,
+					},
+					cookie.truong,
+				),
+				"tao kr",
+			);
+			await clone(id2.hoi, {
+				objectiveId: M1,
+				keyResultId: kr.id,
+				maVanDe: "kr-la-viec",
+				trangThai: "cho",
+				quyetLuc: null,
+			});
+			expect(await soCua("truong", M1)).toBe((truoc ?? 0) + 1);
+			ok(
+				await goi(
+					app,
+					"okr.removeKeyResult",
+					"mutation",
+					{ id: kr.id },
+					cookie.truong,
+				),
+				"xoa kr",
+			);
+			const sau = await soCua("truong", M1);
+			if (sau !== truoc)
+				throw new Error(`dem gop y cua KR da xoa: ${sau} != ${truoc}`);
 		},
 		CHO_DB,
 	);

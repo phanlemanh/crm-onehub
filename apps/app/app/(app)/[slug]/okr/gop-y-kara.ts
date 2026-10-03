@@ -6,11 +6,18 @@ import {
 	type LyDoKhongSanSang,
 	TRO_LY_OKR_TRAN,
 } from "@crm/validation/okr-tro-ly";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+	type QueryClient,
+	type QueryKey,
+	useMutation,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { troLyOkrMessages } from "@/lib/messages/tro-ly-okr";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
+import type { RouterOutputs } from "@/lib/trpc/types";
 import type { DongHien } from "./the-gop-y-props";
 
 export type CachQuyet = "nhan" | "sua" | "bac" | "bo-qua";
@@ -79,19 +86,59 @@ function nhipHoiLai(batDau: number | null, bayGio: number): number | false {
 		: false;
 }
 
+type CacheDanhSach = {
+	mine: QueryKey;
+	danhSach: QueryKey;
+};
+
+function soTrongDanhSach(
+	qc: QueryClient,
+	khoa: CacheDanhSach,
+	objectiveId: string,
+): number[] {
+	const tuMine = qc
+		.getQueriesData<RouterOutputs["okr"]["mine"]>({ queryKey: khoa.mine })
+		.flatMap(([, d]) => d?.objectives ?? []);
+	const tuDanhSach = qc
+		.getQueriesData<RouterOutputs["okr"]["danhSach"]>({
+			queryKey: khoa.danhSach,
+		})
+		.flatMap(([, d]) => d?.rows ?? []);
+	return [...tuMine, ...tuDanhSach]
+		.filter((mt) => mt.id === objectiveId)
+		.map((mt) => mt.soGopYCho);
+}
+
+function theoThuTu(
+	ds: readonly DongHien[],
+	thuTu: readonly string[],
+): DongHien[] {
+	const viTri = (d: DongHien, i: number) => {
+		const truoc = thuTu.indexOf(d.id);
+		return truoc === -1 ? thuTu.length + i : truoc;
+	};
+	return ds
+		.map((d, i) => ({ d, i: viTri(d, i) }))
+		.sort((a, b) => a.i - b.i)
+		.map(({ d }) => d);
+}
+
 export function useGopYMucTieu({
 	objectiveId,
 	soGopYCho,
 	canEdit,
 	krSuaDuoc,
+	ghiDuoc,
 }: {
 	objectiveId: string | null;
 	soGopYCho: number | null;
 	canEdit: boolean;
 	krSuaDuoc: readonly string[];
+	ghiDuoc: boolean;
 }) {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
+	const qc = useQueryClient();
 	const mTroLy = troLyOkrMessages(useLocale());
 	const coDich = objectiveId !== null;
 	const dich = canEdit
@@ -103,6 +150,7 @@ export function useGopYMucTieu({
 	const [daQuyet, setDaQuyet] = useState<readonly DongHien[]>([]);
 	const [loiDong, setLoiDong] = useState<Readonly<Record<string, string>>>({});
 	const [dangQuyet, setDangQuyet] = useState<string | null>(null);
+	const [thuTu, setThuTu] = useState<readonly string[]>([]);
 	const daDongBo = useRef(false);
 
 	const sanSang = useQuery({
@@ -130,11 +178,23 @@ export function useGopYMucTieu({
 		if (daDongBo.current || !objectiveId || ds === undefined) return;
 		if (soGopYCho === null) return;
 		daDongBo.current = true;
-		if (ds.dong.length !== soGopYCho) void cache.okr(objectiveId);
-	}, [ds, soGopYCho, objectiveId, cache]);
+		const daThay = soTrongDanhSach(
+			qc,
+			{
+				mine: trpc.okr.mine.pathKey(),
+				danhSach: trpc.okr.danhSach.pathKey(),
+			},
+			objectiveId,
+		);
+		if ([soGopYCho, ...daThay].some((so) => so !== ds.dong.length))
+			void cache.okr(objectiveId);
+	}, [ds, soGopYCho, objectiveId, cache, qc, trpc]);
 
 	const idCho = new Set(dongCho.map((d) => d.id));
-	const tatCa = [...dongCho, ...daQuyet.filter((d) => !idCho.has(d.id))];
+	const tatCa = theoThuTu(
+		[...dongCho, ...daQuyet.filter((d) => !idCho.has(d.id))],
+		thuTu,
+	);
 	const conCho = dongCho.filter((d) => ketCua[d.id] === undefined).length;
 	const dangSoan = ds?.dangSoan === true;
 	const quaHan =
@@ -146,8 +206,9 @@ export function useGopYMucTieu({
 	const noiDung: NoiDungKara = (() => {
 		if (!nhoDuoc || danhSach.isError || (ds?.lyDo ?? null) !== null)
 			return "tat";
-		if (ds === undefined) return "dang-doc";
+		if (ds === undefined) return "tat";
 		if (tatCa.length > 0) return "co-gop-y";
+		if (!ghiDuoc) return "tat";
 		if (dangSoan && !quaHan) return "dang-doc";
 		if (quaHan || (maKetThuc !== null && maKetThuc !== DA_NOP)) return "loi";
 		if (maKetThuc === DA_NOP) return "rong";
@@ -156,7 +217,7 @@ export function useGopYMucTieu({
 
 	const nut: NutKara = (() => {
 		const s = sanSang.data;
-		if (!s || dangSoan) return { loai: "an" };
+		if (!s || dangSoan || !ghiDuoc) return { loai: "an" };
 		if (s.bat) return { loai: "mo" };
 		const vi = KHOA_KHI_CHUA_SAN_SANG[s.lyDo];
 		return vi === null ? { loai: "an" } : { loai: "khoa", vi };
@@ -177,7 +238,8 @@ export function useGopYMucTieu({
 	};
 
 	const quyet = (d: DongHien, cach: CachQuyet, giaTri?: string) => {
-		if (dangQuyet !== null) return;
+		if (dangQuyet !== null || !ghiDuoc) return;
+		const thuTuNay = tatCa.map((x) => x.id);
 		setDangQuyet(d.id);
 		setLoiDong(({ [d.id]: _bo, ...cu }) => cu);
 		quyetDong.mutate(
@@ -193,6 +255,7 @@ export function useGopYMucTieu({
 						}));
 						return;
 					}
+					setThuTu(thuTuNay);
 					setDaQuyet((cu) => [...cu.filter((x) => x.id !== d.id), d]);
 					setKetCua((cu) => ({
 						...cu,
@@ -261,6 +324,8 @@ export function useGopYMucTieu({
 				ketCua[d.id] === undefined,
 		),
 		docLuc: ds?.docLuc ?? null,
+		ghiDuoc,
+		daTai: !coDich || !nhoDuoc || danhSach.isError || ds !== undefined,
 	};
 }
 

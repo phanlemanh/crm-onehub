@@ -462,6 +462,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 		soGopYCho: mt.soGopYCho,
 		canEdit: mt.canEdit,
 		krSuaDuoc: mt.canEditKr,
+		ghiDuoc: mt.status !== "da-bo" && mt.choDuyet === null && mt.kyGhiDuoc,
 	});
 	const moKr = (di: LoiDiKr) => {
 		if (di.loai === "kr-moi") void datHopOkr({ loai: "kr-moi" });
@@ -486,15 +487,20 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	};
 	const vung = useRef<HTMLDivElement>(null);
 	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
+	const coVungKara = gopY.noiDung !== "tat";
 	useEffect(() => {
-		if (!neo) return;
-		const giam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		vung.current?.scrollIntoView({
-			block: "start",
-			behavior: giam ? "auto" : "smooth",
-		});
+		if (!neo || !gopY.daTai) return;
+		if (coVungKara) {
+			const giam = window.matchMedia(
+				"(prefers-reduced-motion: reduce)",
+			).matches;
+			vung.current?.scrollIntoView({
+				block: "start",
+				behavior: giam ? "auto" : "smooth",
+			});
+		}
 		void setNeo(null);
-	}, [neo, setNeo]);
+	}, [neo, gopY.daTai, coVungKara, setNeo]);
 
 	return (
 		<DetailSheetBody>
