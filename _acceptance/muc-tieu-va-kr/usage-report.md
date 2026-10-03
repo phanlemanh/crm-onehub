@@ -323,3 +323,55 @@ wall: 1476s
 - **claude-opus-5-5**: 3 agent · 75 calls · out 10,388 · in 150 · cache_read 13,571,399 · cache_create 607,459
 - **claude-haiku-4-5-20251001**: 17 agent · 47 calls · out 16,897 · in 410 · cache_read 2,872,001 · cache_create 1,606,639
 
+### S4 round 7 — wf_b3151421-8ea (30 agent, 66,915 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 3 | 12,840 | 6 | 301,661 | 90 |
+| review:measurement | claude-opus-5-5 | 13 | 9,822 | 26 | 2,282,424 | 211 |
+| ui:E13 | claude-sonnet-5-5 | 7 | 4,388 | 14 | 833,562 | 108 |
+| ui:E16 | claude-sonnet-5-5 | 8 | 4,120 | 16 | 954,993 | 117 |
+| triage | claude-sonnet-5-5 | 2 | 3,980 | 4 | 119,048 | 33 |
+| ui:E5 | claude-sonnet-5-5 | 10 | 3,223 | 20 | 1,290,056 | 140 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 2,800 | 18 | 118,081 | 47 |
+| review:bugs | claude-opus-5-5 | 26 | 2,758 | 52 | 4,457,014 | 232 |
+| judge:E15:domain-correctness | claude-sonnet-5-5 | 2 | 2,517 | 4 | 115,246 | 20 |
+| judge:E15:operational-feasibility | claude-sonnet-5-5 | 2 | 2,167 | 4 | 149,945 | 17 |
+| machine:node _acceptance/muc-tieu-va-kr/rang/ho- | claude-haiku-4-5-20251001 | 8 | 2,019 | 66 | 472,401 | 1520 |
+| ui:E1 | claude-sonnet-5-5 | 8 | 1,924 | 16 | 909,294 | 103 |
+| review:conventions | claude-opus-5-5 | 25 | 1,763 | 50 | 4,259,250 | 212 |
+| machine:bun run test | claude-haiku-4-5-20251001 | 3 | 1,694 | 28 | 97,721 | 519 |
+| judge:E15:spec-alignment | claude-sonnet-5-5 | 2 | 1,095 | 4 | 149,943 | 16 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 1,040 | 18 | 118,081 | 22 |
+| machine:for t in "packages/ui/src/components/sim | claude-haiku-4-5-20251001 | 2 | 1,009 | 18 | 118,304 | 19 |
+| machine:node _acceptance/muc-tieu-va-kr/rang/kho | claude-haiku-4-5-20251001 | 2 | 958 | 18 | 118,109 | 22 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 834 | 18 | 118,144 | 19 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 823 | 18 | 118,143 | 24 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 741 | 18 | 118,145 | 23 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 696 | 18 | 118,145 | 22 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 606 | 18 | 118,144 | 23 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 604 | 18 | 118,142 | 19 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 593 | 18 | 118,144 | 23 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 551 | 18 | 118,145 | 20 |
+| machine:cd packages/ui && bun test --preload ./t | claude-haiku-4-5-20251001 | 2 | 551 | 18 | 118,141 | 20 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 336 | 18 | 118,079 | 13 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 308 | 18 | 118,143 | 16 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 155 | 4 | 114,147 | 6 |
+
+
+wall: 1659s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 17 | 16,163 | 2,342,212 | 1524 | 02:41:02 | 03:06:27 |
+| ui | 4 | 13,655 | 3,987,905 | 141 | 02:41:29 | 02:43:51 |
+| judge | 3 | 5,779 | 415,134 | 20 | 02:41:31 | 02:41:51 |
+| review | 3 | 14,343 | 10,998,688 | 247 | 02:41:32 | 02:45:39 |
+| triage | 1 | 3,980 | 119,048 | 33 | 03:06:29 | 03:07:01 |
+| capture | 1 | 155 | 114,147 | 6 | 03:07:04 | 03:07:09 |
+| synthesize | 1 | 12,840 | 301,661 | 90 | 03:07:11 | 03:08:41 |
+
+- **claude-sonnet-5-5**: 10 agent · 46 calls · out 36,409 · in 92 · cache_read 4,937,895 · cache_create 1,336,842
+- **claude-opus-5-5**: 3 agent · 64 calls · out 14,343 · in 128 · cache_read 10,998,688 · cache_create 596,151
+- **claude-haiku-4-5-20251001**: 17 agent · 41 calls · out 16,163 · in 364 · cache_read 2,342,212 · cache_create 1,555,401
+
