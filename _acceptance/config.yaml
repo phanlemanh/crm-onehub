@@ -1690,6 +1690,7 @@ risk_tiers:
     - "docs/**"
     - "**/*.md"
     - "PRODUCT-MAP.md"
+    - "LO-TRINH.html"   # trang lộ trình máy vẽ cùng bản đồ (kit 2.21.0) — view, --check canh
     - "AGENTS.md"
     - "CLAUDE.md"
     # Ba dòng trên là .md ở GỐC kho, phải liệt đích danh vì "**/*.md" chỉ khớp
@@ -1713,6 +1714,16 @@ risk_tiers:
     # kho này — cùng lớp measuring-stick với tám mục trên.
     - "lib/lop-nhin-thay.cjs"
     - "lib/nhan-canh-gay.cjs"
+    # Bảy mục còn lại của INIT-CI-COPY-LIST (kit 2.21.0: danh sách 17 tệp) — cùng lớp thước đo với các mục
+    # trên; thiếu chúng thì lượt nâng kit làm hết hạn bằng chứng của hồ sơ không đổi vật (đo 03/10: bộ vẽ
+    # bản đồ đổi làm nen-kara và tro-ly-okr-tom-tat hoá cũ).
+    - "scripts/product-map.mjs"
+    - "scripts/trang-thai-ho-so.cjs"
+    - "scripts/khong-can-nguoi.mjs"
+    - "lib/nguong-o-co-hoi.cjs"
+    - "lib/out-of-contract.cjs"
+    - "scripts/lo-trinh-khoa.cjs"
+    - "scripts/lo-trinh.mjs"
     # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
     # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
     # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và
@@ -1745,3 +1756,10 @@ dev_server:
   api_base: ["http://localhost:3001"]
 capture:
   ui: "bun run ui:capture"
+
+# Lộ trình cạnh bản đồ (kit 2.21.0): tệp ý định JSON, người viết và đổi bằng PR; kit chỉ ĐỌC, trạng thái
+# từng hàng suy từ hồ sơ. Viết danh sách có thụt bốn dấu cách — dạng sát lề kit 2.21.0 chưa đọc được.
+lo_trinh:
+  tep:
+    - docs/plan/lo-trinh-okr.json
+    - docs/plan/lo-trinh-kho-tai-lieu.json
