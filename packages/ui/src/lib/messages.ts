@@ -78,6 +78,8 @@ const en = {
 		why: "Why?",
 		whyTitle: "What Kara based this on",
 		readAt: (t: string) => `Read at ${t}`,
+		trace: "changed via Kara",
+		traceDescription: "This value was changed from a Kara suggestion",
 	},
 	aiFeedback: {
 		useful: "Useful",
@@ -286,6 +288,8 @@ const vi = {
 		why: "Vì sao?",
 		whyTitle: "Kara dựa trên gì",
 		readAt: (t: string) => `Đọc lúc ${t}`,
+		trace: "đổi theo Kara",
+		traceDescription: "Giá trị này đổi theo đề xuất của Kara",
 	},
 	aiFeedback: {
 		useful: "Hữu ích",

@@ -13,12 +13,7 @@ import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
-import {
-	Item,
-	ItemContent,
-	ItemDescription,
-	ItemMedia,
-} from "@crm/ui/components/item";
+import { Item, ItemContent, ItemMedia } from "@crm/ui/components/item";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
@@ -28,6 +23,7 @@ import {
 	type ReactNode,
 	useEffect,
 	useId,
+	useLayoutEffect,
 	useRef,
 } from "react";
 
@@ -137,10 +133,12 @@ function OSua({ editing }: { editing: ProposedChangeEditing }) {
 }
 
 function GiaTri({
+	density,
 	kind,
 	value,
 	editing,
 }: {
+	density: ProposedChangeDensity;
 	kind: ProposedChangeKind;
 	value: ReactNode;
 	editing: ProposedChangeEditing | undefined;
@@ -150,7 +148,11 @@ function GiaTri({
 		<p
 			data-slot="proposed-change-value"
 			translate="no"
-			className="text-foreground text-sm text-pretty wrap-anywhere"
+			className={
+				density === "card"
+					? "text-foreground text-sm text-pretty wrap-anywhere"
+					: "text-foreground text-pretty wrap-anywhere"
+			}
 		>
 			{kind === "rewrite" ? (
 				<ins className="bg-diff-them/15 no-underline">{value}</ins>
@@ -172,7 +174,8 @@ export function ProposedChangeReceipt({
 		<div
 			role="status"
 			data-slot="proposed-change-receipt"
-			className="flex flex-wrap items-center gap-2"
+			tabIndex={-1}
+			className="flex flex-wrap items-center gap-2 rounded-sm outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
 		>
 			{daNhan ? <Icon icon={Checkmark} /> : null}
 			<p
@@ -231,11 +234,8 @@ function ThanDeXuat({
 					<del className="line-through decoration-diff-bo">{before}</del>
 				</p>
 			) : null}
-			<GiaTri kind={kind} value={value} editing={editing} />
-			{rationale && density === "inline" ? (
-				<ItemDescription unclamped>{rationale}</ItemDescription>
-			) : null}
-			{rationale && density === "card" ? (
+			<GiaTri density={density} kind={kind} value={value} editing={editing} />
+			{rationale ? (
 				<p className="text-muted-foreground text-pretty">{rationale}</p>
 			) : null}
 			{fields ? (
@@ -248,16 +248,31 @@ function ThanDeXuat({
 }
 
 function NhomNut({
+	density,
 	actions,
 	pending,
 	describedBy,
 }: {
+	density: ProposedChangeDensity;
 	actions: readonly ProposedChangeAction[];
 	pending: boolean;
 	describedBy: string | undefined;
 }) {
 	const chinh = actions.filter((a) => a.tone !== "quiet");
 	const phu = actions.filter((a) => a.tone === "quiet");
+	if (density === "inline")
+		return (
+			<>
+				{[...chinh, ...phu].map((a) => (
+					<NutHanhDong
+						key={a.id}
+						action={a}
+						pending={pending}
+						describedBy={describedBy}
+					/>
+				))}
+			</>
+		);
 	return (
 		<>
 			{chinh.map((a) => (
@@ -284,6 +299,44 @@ function NhomNut({
 	);
 }
 
+type MocFocus = {
+	dangSua: boolean;
+	quyet: ProposedChangeDecision | undefined;
+	coHoanTac: boolean;
+};
+
+function useGiuFocus(
+	dangSua: boolean,
+	decided: ProposedChangeDecided | undefined,
+) {
+	const goc = useRef<HTMLDivElement>(null);
+	const quyet = decided?.decision;
+	const coHoanTac = decided?.onUndo !== undefined;
+	const truoc = useRef<MocFocus>({ dangSua, quyet, coHoanTac });
+	useLayoutEffect(() => {
+		const cu = truoc.current;
+		truoc.current = { dangSua, quyet, coHoanTac };
+		const el = goc.current;
+		if (!el) return;
+		const dang = document.activeElement;
+		if (dang && dang !== document.body && !el.contains(dang)) return;
+		const tim = (sel: string) => el.querySelector<HTMLElement>(sel);
+		if (cu.dangSua && !dangSua && quyet === undefined) {
+			tim('[data-hanh-dong="sua"]')?.focus();
+			return;
+		}
+		const vuaQuyet = quyet !== undefined && cu.quyet === undefined;
+		const vuaHoanTac = quyet !== undefined && cu.coHoanTac && !coHoanTac;
+		if (vuaQuyet && coHoanTac) {
+			tim('[data-slot="proposed-change-receipt"] button')?.focus();
+			return;
+		}
+		if (vuaQuyet || vuaHoanTac)
+			tim('[data-slot="proposed-change-receipt"]')?.focus();
+	}, [dangSua, quyet, coHoanTac]);
+	return goc;
+}
+
 export function ProposedChange({
 	id,
 	density = "inline",
@@ -304,6 +357,7 @@ export function ProposedChange({
 }: ProposedChangeProps) {
 	const maTuSinh = useId();
 	const ma = id ?? maTuSinh;
+	const goc = useGiuFocus(editing !== undefined, decided);
 	const idKhoa = `${ma}-khoa`;
 	const describedBy = lockedReason ? idKhoa : undefined;
 	const than = (
@@ -327,12 +381,18 @@ export function ProposedChange({
 		) : null;
 	const loi = error ? <FieldError>{error}</FieldError> : null;
 	const nut = (
-		<NhomNut actions={actions} pending={pending} describedBy={describedBy} />
+		<NhomNut
+			density={density}
+			actions={actions}
+			pending={pending}
+			describedBy={describedBy}
+		/>
 	);
 
 	if (density === "card") {
 		return (
 			<Confirmation
+				ref={goc}
 				role="group"
 				data-slot="proposed-change"
 				data-density="card"
@@ -367,7 +427,9 @@ export function ProposedChange({
 
 	return (
 		<Item
+			ref={goc}
 			role="group"
+			text="inherit"
 			size={decided ? "xs" : "sm"}
 			data-slot="proposed-change"
 			data-density="inline"
