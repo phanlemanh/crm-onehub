@@ -1,59 +1,63 @@
-# Review findings — muc-tieu-va-kr (round 7)
-
 ## Trong hợp đồng
 
-Không có.
+Không có finding nào map được vào AC.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **NhipGon hand-copies PaceIndicator from @crm/ui in the app**
-  Người dùng thấy gì: Ô tiến độ gọn trên điện thoại tự vẽ lại dấu nhịp thay vì dùng thành phần chung. Hôm nay hiển thị đúng; nhưng nếu sau này nhãn hay màu nhịp đổi ở chỗ chung thì bản điện thoại có thể lệch âm thầm.
+- **NhipGon copies PaceIndicator from packages/ui at the call site**
+  Người dùng thấy gì: Dấu nhịp trên điện thoại là một bản sao riêng của dấu nhịp dùng chung. Hôm nay hai bên giống nhau, nhưng sau này đổi nhãn hoặc màu nhịp ở một nơi có thể quên nơi kia, khiến hai màn hiện khác nhau.
   file: `apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **KR title inside the 'Góp vào' line is user data but is not marked translate="no"**
-  Người dùng thấy gì: Trong dòng «Góp vào» của khung chi tiết mục tiêu, tên KR do người dùng nhập vẫn có thể bị trình duyệt tự dịch sang ngôn ngữ khác, làm tên hiển thị không còn đúng như người nhập.
+- **AN_DUOI_MD is declared twice in the same area with different values**
+  Người dùng thấy gì: Điểm chuyển giữa bố cục điện thoại và máy tính được khai ở hai nơi. Nếu sau này chỉ sửa một nơi, hàng mục tiêu và hàng KR có thể chuyển bố cục lệch nhau trên màn cỡ vừa.
+  file: `apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **English tienDoTu has no plural form: 'from 1 KRs'**
+  Người dùng thấy gì: Ở giao diện tiếng Anh, mục tiêu chỉ có một KR hiện câu «from 1 KRs», sai ngữ pháp. Số liệu vẫn đúng, chỉ là chữ nghe vụng.
+  file: `apps/app/lib/messages/okr.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Aligned KR title in the sheet's 'Contributes to' section is not marked translate="no"**
+  Người dùng thấy gì: Khi trình duyệt bật tự dịch, tên KR do người dùng đặt trong khu «Góp vào» có thể bị dịch sai, trong khi cùng tên đó ở chỗ khác thì giữ nguyên.
   file: `apps/app/components/crm/record-sheet/objective-sheet.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **English sheet.tienDoTu is always plural ('from 1 KRs')**
+  Người dùng thấy gì: Ở giao diện tiếng Anh, mục tiêu có đúng một KR vẫn đọc là «from 1 KRs». Con số đúng, chỉ câu chữ sai ngữ pháp.
+  file: `apps/app/lib/messages/okr.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (assertion âm tính một mình): E13 kiểm «bảng cuộn dọc» không có chiều đỏ và qua rỗng khi không thấy table-container nào**
+  Người dùng thấy gì: Phép kiểm máy cho việc bảng có bị cuộn lạ hay không có thể báo xanh dù không thấy bảng nào để đo, nên một lỗi cuộn có thể lọt mà không ai biết.
+  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Responsive breakpoint and column widths are declared in two files that must stay in sync**
-  Người dùng thấy gì: Độ rộng các cột và điểm đổi bố cục giữa máy tính và điện thoại được khai ở hai nơi. Hiện đang khớp nhau; nếu chỉ sửa một nơi sau này, cột ở danh sách và ở khung chi tiết có thể lệch nhau.
-  file: `apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx`
+- **Hình dạng 4 (đối chứng dương rỗng): chiều đỏ E1 trên ST-hien-tai đỏ vì proto không có móc DOM, không phải vì KR nằm ngoài khung**
+  Người dùng thấy gì: Phép thử cho thấy máy bắt được lỗi «mục tiêu nằm ngoài bảng» lại đỏ vì lý do khác, nên chưa chứng minh được máy sẽ bắt đúng lỗi đó nếu nó xảy ra thật.
+  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (bộ đếm ma trận tự quy chiếu): chặn 'số eval thật đã chạy != M' của ho-so-cham không bao giờ đỏ được**
+  Người dùng thấy gì: Phép kiểm «đã chạy đủ số eval» không thể báo thiếu, vì nó tự đếm theo chính danh sách nó kiểm. Hậu quả chỉ là một lớp bảo hiểm thừa, không ảnh hưởng người dùng.
+  file: `_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **ho-so-cham.mjs: uncaught git/JSON errors exit 1, the same code as a regression or a passing red path, and skip ket()**
-  Người dùng thấy gì: Công cụ kiểm tra hồi quy có thể báo nhầm là đã kiểm xong ở chiều đỏ khi máy gặp sự cố môi trường, và để lại thư mục tạm. Người dùng sản phẩm không bị ảnh hưởng; chỉ làm kết quả nghiệm thu kém tin cậy khi môi trường hỏng.
-  file: `_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **man-mtkr.mjs: puppeteer.launch failure sits outside try/catch and exits 1, the red-path success code**
-  Người dùng thấy gì: Nếu máy kiểm tra không mở được trình duyệt, công cụ đo màn có thể báo như thể đã chứng minh được một lỗi đỏ thay vì báo là không đo được. Sản phẩm không bị ảnh hưởng.
+- **Hình dạng 4 (âm tính một mình): E5 chỉ khẳng định transition-duration 0s khi giảm chuyển động, phép đối chứng no-preference chỉ được ghi**
+  Người dùng thấy gì: Máy kiểm việc mũi tên đứng yên khi người dùng bật giảm chuyển động, nhưng không kiểm rằng bình thường nó có chuyển động. Nếu mũi tên vốn không có chuyển động, phép kiểm vẫn báo xanh.
   file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hinh dang 3 (quan he do bang chuoi tu so voi chinh no): hai chot dem cua E14 khong bao gio do duoc**
-  Người dùng thấy gì: Phép kiểm tra hồi quy các hồ sơ cũ có hai chốt tự kiểm số lượng không bao giờ bắt được lỗi. Nếu sau này sót hay bỏ qua một số kiểm tra, công cụ vẫn báo bình thường.
-  file: `_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hinh dang 4 (khang dinh am mot minh): 'khong table-container nao cuon doc/ngang' trong E13 qua ca khi khong do duoc container nao, va 'bang cuon doc' khong co chieu do**
-  Người dùng thấy gì: Phép kiểm tra bảng có cuộn trên điện thoại có thể báo đạt ngay cả khi không tìm thấy bảng nào để đo. Bố cục điện thoại của sản phẩm không bị sai vì lý do này.
-  file: `_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hinh dang 5 (tuyen quet lop nhung chi co diem-case): ST-mtkr-kr-may va ST-mtkr-kr-moc ghi 'moi man' nhung ca kiem chi dung mot hai man**
-  Người dùng thấy gì: Bài kiểm tra tự động cho dòng KR nguồn máy và KR mốc chỉ chạy trên một hoặc hai màn dù được khai là áp dụng mọi màn, nên một lỗi chỉ xảy ra ở màn «Theo đơn vị» có thể lọt qua mà bài kiểm tra vẫn xanh.
-  file: `apps/app/test/muc-tieu-va-kr.dom.tsx`
-  severity: low
-  Đề xuất: known-limits
-
-Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+⚠ Cụm ngoài vùng phủ: 2/9 lỗi rơi vào file không bộ đo nào phủ (apps/app/lib/messages/okr.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

@@ -1,0 +1,2 @@
+E1 network: driver la script Playwright trong rang/man-mtkr.mjs (khong co browser tool doc network); khong dump duoc request/console.
+networkObserved = n-a (driver). Log luot chung: .acceptance-runs/muc-tieu-va-kr/s4-man.log (EXIT 0, 78 DUNG 0 SAI).

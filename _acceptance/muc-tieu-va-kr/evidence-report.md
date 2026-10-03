@@ -3,17 +3,17 @@ schema_version: 2
 feature_slug: muc-tieu-va-kr
 verdict: BLOCKED
 failed_evals: []
-reason: 'bun run test (lenh suite, khong gan eval): agent bi skip/chet — khong co ket qua, khong duoc tinh la pass. Moi eval cua tinh nang va ba lenh suite con lai da xanh; huong xu ly la chay lai dung lenh nay, khong phai sua ma.'
+reason: "Hai lệnh không có kết quả vì agent bị skip hoặc chết, không được tính là pass: (1) eval E17, lệnh `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t trang-thai`; (2) lệnh suite `bun run lint:slop`. Cách xử lý là chạy lại hai lệnh này, không phải sửa mã."
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a4e11a6e827816dfb84882be2b8bfcdb0c46817f
+verified_commit: b3a4e08ab4cc15e5279b18285f7c45d0352cc394
 human_signoff:
 ---
 
 # Evidence Report: muc-tieu-va-kr
 
-Round 7. Lenh suite `bun run test` BLOCKED (agent chet, khong co ket qua); khong the ket luan PASS cho den khi chay lai.
+Round 8. Verdict BLOCKED: E17 và lệnh suite `bun run lint:slop` không có kết quả (agent bị skip hoặc chết). Thêm một lệnh suite đỏ không gắn eval nào: `bun run test` (xem mục Lệnh suite). Các eval còn lại có kết quả xanh.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -31,213 +31,229 @@ Round 7. Lenh suite `bun run test` BLOCKED (agent chet, khong co ket qua); khong
 | E12 | AC-9 | test | PASS |
 | E13 | AC-10 | ui-check | PASS |
 | E14 | AC-11 | script | PASS |
-| E15 | AC-12 | judgment | PASS (de xuat cua hoi dong, cho nguoi chot) |
+| E15 | AC-12 | judgment | PASS (judge đề xuất, giữ nguyên từ round 7, chờ người) |
 | E16 | AC-12 | ui-check | PASS |
-| E17 | AC-13 | test | PASS |
+| E17 | AC-13 | test | BLOCKED (agent bị skip hoặc chết, không có kết quả) |
 | E18 | AC-8 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: s4-man.log (luot chung E1/E5/E13/E16, phien do crm_muc_tieu_va_kr_do, app :4609, api :4278)
+  run_id: s4-man (một lượt đo chung E1 E5 E13 E16, log .acceptance-runs/muc-tieu-va-kr/s4-man.log, EXIT 0)
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtkr_man_that
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
+  output: |
+    Lệnh: PROTO_ROUTE=1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs"
+    KET LUAN: 86 DUNG, 0 SAI — ma thoat 0
+    Phiên đo riêng kho crm_muc_tieu_va_kr_do, app :4631, api :4581, đã dọn khi xong. okr.mine trả 2 mục tiêu, mỗi mục tiêu 2 KR.
+    E1 1440 px sáng và tối đều DUNG: mỗi khối một table chứa hàng mục tiêu và đủ hàng KR; 0 card-header trong vùng danh sách; chữ % khớp progress API (75 và 33); vạch kỳ vọng 44 khớp expected; dòng phụ có «Tính từ 2 KR».
+    Chiều đỏ --kiem-do-do không chạy trong lượt này (lệnh eval không có cờ); log đỏ cũ man-mtkr-do-do.log (02/10) chỉ để tham khảo.
   screenshot: evidence/E1-1440-sang.png
   observed: |
-    E1-1440-sang.png (da mo bang Read): trang "OKR cua toi" 1440 px sang, hai khoi muc tieu. Khoi 1 "Khoi Kinh doanh ve dich doanh thu quy 4": hang muc tieu co dong phu "Tinh tu 2 KR", 75%, vach ky vong tren thanh tien do, 2 hang KR (KR1 49%, KR2 100%) nam lien trong cung mot khung bang. Khoi 2 "Khoi Kinh doanh giu chan doi tac moi sau don dau": "Tinh tu 2 KR", 33%, trang thai "Chua co ky vong" (khong co vach ky vong, khop luat expected 0), 2 hang KR (40%, 25%), KR1 la chuoi dai khong dau cach bi ngat dong khong tran. Khong co header card rieng cho tung muc tieu; moi muc tieu la mot khoi table duy nhat chua hang muc tieu va cac hang KR. E1-1440-toi.png (da mo bang Read): cung bo cuc, nen toi, du chu/% (75%, 33%, 49%, 100%, 40%, 25%), vach ky vong va "Tinh tu 2 KR" deu doc duoc, tuong phan on, khong tran. Phu hop Expected. Ghi chu: E1-network.txt trong thu muc evidence la tep cu (02/10) do lan truoc de lai, khong phai cua luot nay.
+    Đã mở E1-1440-sang.png và E1-1440-toi.png (cùng bố cục, cùng số liệu, nền sáng và nền tối). Trang «OKR của tôi» có hai khối mục tiêu, mỗi khối một bảng liền: hàng mục tiêu mang % và dòng phụ «Tính từ 2 KR», KR1 và KR2 nằm dưới trong cùng bảng.
+    Khối 1 hiện 75% kèm vạch kỳ vọng. Khối 2 hiện 33%, trạng thái «Chưa có kỳ vọng» và không có vạch kỳ vọng. Không thấy tiêu đề card tách rời trên vùng danh sách.
   network_observed: n-a (driver)
 
 - eval: E2
-  run_id: minted-muc-tieu-va-kr-E2-r7
+  run_id: minted-muc-tieu-va-kr-E2-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_bang_co_du_lieu
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t co-du-lieu
-    __EXIT=0
+    bun test muc-tieu-va-kr.dom.tsx -t co-du-lieu
+    (tail rỗng; lệnh hoàn tất với mã thoát 0)
 
 - eval: E3
-  run_id: minted-muc-tieu-va-kr-E3-r7
+  run_id: minted-muc-tieu-va-kr-E3-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_theo_don_vi
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    Ran 1 test across 1 file. [953.00ms]
-    __EXIT=0
+    Ran 1 test across 1 file. [2.20s]
 
 - eval: E4
-  run_id: minted-muc-tieu-va-kr-E4-r7
+  run_id: minted-muc-tieu-va-kr-E4-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_thu_mo
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    Ran 6 tests across 1 file. [1.77s]
-    __EXIT=0
+    Ran 6 tests across 1 file. [2.89s]
 
 - eval: E5
-  run_id: s4-man.log (luot chung E1/E5/E13/E16, phien-do kho crm_muc_tieu_va_kr_do, app :4609, api :4278, EXIT 0)
+  run_id: s4-man.log (luot chung E1/E5/E13/E16, phien-do crm_muc_tieu_va_kr_do, app :4631, api :4581)
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtkr_man_that
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
+  output: |
+    Khẳng định DUNG: prefers-reduced-motion reduce → icon transition-duration 0s.
+    Sau bấm, mục tiêu đầu còn 0 hàng [data-kr], aria-expanded=false, location.search có thuMucTieu; reload vẫn 0 hàng; mở lại thì search sạch.
+    Chiều đỏ ghim đọc từ log s4-e5-do-do-fresh.log (09:43): thông điệp ghim 'reload mat trang thai thu' bật đúng, 4/4 thông điệp ghim đỏ đúng. Đây là log của lượt trước trên cùng mã, không chạy lại trong lượt này.
   screenshot: evidence/E5-da-thu.png
   observed: |
-    Da mo bang Read E5-da-thu.png (sinh luc 09:41 boi luot chung) va E5-step1.png (ban cu 06:15, noi dung giong het). Ca hai ao: trang "OKR cua toi" 1440 px, Quy 4 mau. Muc tieu dau "Khoi Kinh doanh ve dich doanh thu quy 4" (75%, Dung nhip) co chevron huong sang phai (da thu) va KHONG co hang KR nao nam duoi no; muc tieu thu hai "Khoi Kinh doanh giu chan doi tac moi sau don dau" (33%) van mo, chevron huong xuong, hien KR1 va KR2. Khop expected: sau bam, muc tieu dau con 0 hang KR. Cac buoc con lai (aria-expanded=false, location.search, reload, mo lai, reduced-motion) kiem bang assertion trong log vi ra chu khong nam trong anh; log khop expected.
+    Đã mở E5-da-thu.png (1440 px): trang «OKR của tôi». Mục tiêu đầu «Khối Kinh doanh về đích doanh thu quý 4» đang thu: chevron hướng phải, chỉ còn thẻ mục tiêu (75%), không có hàng KR nào. Mục tiêu thứ hai đang mở: chevron hướng xuống, hai hàng KR1 và KR2 hiện ngay dưới.
+    Khớp expected (sau bấm, mục tiêu đầu còn 0 hàng [data-kr]). Chỉ có một ảnh; các bước reload, mở lại và reduced-motion đọc từ dòng khẳng định trong log.
   network_observed: n-a (driver)
 
 - eval: E6
-  run_id: minted-muc-tieu-va-kr-E6-r7
+  run_id: minted-muc-tieu-va-kr-E6-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_o_tien_do
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t o-tien-do
-    __EXIT=0
+    Ran 4 tests across 1 file. [1.68s]
 
 - eval: E7
-  run_id: minted-muc-tieu-va-kr-E7-r7
+  run_id: minted-muc-tieu-va-kr-E7-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_chua_co_kr
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    Ran 1 test across 1 file. [1126.00ms]
-    __EXIT=0
+    bun test muc-tieu-va-kr.dom.tsx -t chua-co-kr
+    (tail rỗng; lệnh hoàn tất với mã thoát 0)
 
 - eval: E8
-  run_id: minted-muc-tieu-va-kr-E8-r7
+  run_id: minted-muc-tieu-va-kr-E8-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_sheet
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t sheet-chi-tiet
-    __EXIT=0
+    Ran 4 tests across 1 file. [2.12s]
 
 - eval: E9
-  run_id: minted-muc-tieu-va-kr-E9-r7
+  run_id: minted-muc-tieu-va-kr-E9-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_cham
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t cham-diem
-    __EXIT=0
+    bun test muc-tieu-va-kr.dom.tsx -t cham-diem
+    (tail rỗng; lệnh hoàn tất với mã thoát 0)
 
 - eval: E10
-  run_id: minted-muc-tieu-va-kr-E10-r7
+  run_id: minted-muc-tieu-va-kr-E10-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_hang_ui
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    Ran 10 tests across 3 files. [650.00ms]
-    __EXIT=0
+    Ran 10 tests across 3 files. [1160.00ms]
 
 - eval: E11
-  run_id: minted-muc-tieu-va-kr-E11-r7
+  run_id: minted-muc-tieu-va-kr-E11-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtkr_khong_ve_tay
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    node _acceptance/muc-tieu-va-kr/rang/khong-ve-tay.mjs
-    __EXIT=0
+    tep da quet: 55, SimpleTableRow da quet: 17
 
 - eval: E12
-  run_id: minted-muc-tieu-va-kr-E12-r7
+  run_id: minted-muc-tieu-va-kr-E12-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.mtkr_diem_cam
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    Ran 4 tests across 1 file. [1247.00ms]
-    __EXIT=0
+    Ran 4 tests across 1 file. [1.51s]
 
 - eval: E13
-  run_id: s4-man (lượt đo chung E1/E5/E13/E16, log .acceptance-runs/muc-tieu-va-kr/s4-man.log, phien-do kho crm_muc_tieu_va_kr_do)
+  run_id: s4-man-20261003-shared (log: .acceptance-runs/muc-tieu-va-kr/s4-man.log)
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtkr_man_that
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
+  output: |
+    Lượt đo chung với E1, E5, E16 trên phiên đo riêng kho crm_muc_tieu_va_kr_do.
+    Tám ảnh 375x812 đã lưu: evidence/E13-375-{cua-toi,theo-don-vi,sheet,cham}-{sang,toi}.png.
+    Chiều đỏ ghim (--kiem-do-do, --kiem-do-do-rong, --kiem-do-do-cuon) không chạy lại trong lượt này; chỉ có log ghim sẵn ngày 02/10.
   screenshot: evidence/E13-375-cua-toi-sang.png
   observed: |
-    Đã mở từng ảnh bằng Read. E13-375-cua-toi-sang/toi: màn «OKR của tôi» khung 375, không có thanh cuộn ngang, tiêu đề, tab và khối «Việc cần làm» nằm gọn trong 375 px; khối mục tiêu «Khối Kinh doanh về đích doanh thu quý 4» có dòng «Tính từ 2 KR», thanh tiến độ và chữ 75% cùng khối với tên, rồi hàng KR1 «Giá trị hợp đồng chốt được trong quý đạt 14 tỷ đồng» có thanh 49% cùng ô với tên (tên xuống dòng, không tràn). Bản tối cùng bố cục, tương phản đọc được, khác bản sáng. E13-375-theo-don-vi-sang/toi: «OKR theo đơn vị», khối mục tiêu 75% + KR1 49% + KR2 100% hiển thị tiến độ ngay dưới tên, không tràn ngang, hai theme khác nhau. E13-375-sheet-sang/toi: sheet mục tiêu «Khối Kinh doanh giữ chân đối tác mới sau đơn đầu» phủ vừa 375 px, hàng KR1 có tên gieo 120 ký tự «GiaoHangDungHen…» tự ngắt dòng trong ô (không tràn, không cuộn ngang), «40 / 100» hiện cùng ô; có vài ô tiêu đề bị cắt chữ («lẽ ra …», «Chưa có kỳ v…») nhưng không vượt mép và không thuộc khẳng định của eval; nền trên cùng của ảnh sáng là xám/đen (sheet chiếm phần dưới). E13-375-cham-sang/toi: «OKR theo đơn vị» ở pha chấm điểm (banner «Quý 3 · mẫu đang chấm điểm», «Đã chấm cả 9 KR của đơn vị»), hàng KR «Mở rộng tệp đối tác bán lẻ miền Bắc» có «Điểm 0,85 · Cam kết chưa trọn» ngay dưới tên cùng ô, không cuộn ngang, hai theme khác nhau. Tất cả khớp Expected: không tràn ngang, tiến độ/điểm hiển thị cùng td với tên, không bảng cuộn. Số hàng đo và các kiểm tra table-container khớp log (ảnh chỉ thấy phần trên màn hình, phần dưới do script đo bằng DOM).
+    Đã mở từng ảnh 375x812. Cả bốn màn (Của tôi, Theo đơn vị, sheet chi tiết, Chấm điểm), cả hai theme: không tràn ngang. Thanh tiến độ và % nằm cùng ô với tên mục tiêu và KR; ở màn chấm điểm, ô điểm và «Đã chấm k/n» cùng ô với tên.
+    Trong sheet, KR tên dài 120 ký tự không dấu cách xuống 8 dòng (wrap-anywhere) trong khung 375, không cuộn ngang. Ảnh chỉ chụp khung nhìn đầu, nên số hàng đầy đủ dựa vào log đo DOM.
   network_observed: n-a (driver)
 
 - eval: E14
-  run_id: minted-muc-tieu-va-kr-E14-r7
+  run_id: minted-muc-tieu-va-kr-E14-r8
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mtkr_ho_so_cham
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
   output: |
-    node _acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs
-    __EXIT=0
+    tong 41 eval: xanh o HEAD 27 · chap chon 0 · do san o B 14 · hoi quy 0
+    khong eval nao do o HEAD ma xanh o 923f5717
+
+- eval: E16
+  run_id: s4-man.log (lượt đo chung E1/E5/E13/E16, EXIT 0, phien-do kho crm_muc_tieu_va_kr_do, app :4631)
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.mtkr_man_that
+  verified_at: 2026-10-03T03:09:12Z
+  output: |
+    Năm ảnh đã lưu trong evidence/: E16-1440-theo-don-vi-sang.png, E16-1440-theo-don-vi-toi.png, E16-1440-sheet-sang.png, E16-1440-sheet-toi.png, E16-hien-tai.png.
+    Chiều đỏ --kiem-do-do không chạy lại trong lượt này; log ghim cũ s4-e16-do-do.log (03/10 07:02) vẫn còn hiệu lực vì man-mtkr.mjs không đổi từ 02/10.
+  screenshot: evidence/E16-1440-theo-don-vi-sang.png
+  observed: |
+    Đã mở cả năm ảnh. Theo đơn vị (sáng và tối): đơn vị Pháp chế, 3 mục tiêu, mỗi mục tiêu một khối có hàng mục tiêu cha cùng KR thụt dưới trong một khung, kèm dòng phụ «Tính từ N KR» và %, không KR nào lửng giữa hai mục tiêu. Sheet (sáng và tối) có đủ khu «VÌ SAO LÚC NÀY» và «GÓP VÀO», rồi bảng 3 KR và dòng «Tiến độ mục tiêu 35% tính từ 3 KR».
+    Ảnh agent ghi chú sheet hiện 35% (người đo nghĩ rằng lẽ ra 44%); expected của E16 không khẳng định con số này. E16-hien-tai.png là proto cũ, mỗi mục tiêu là một thẻ riêng, khác rõ với ảnh mới.
+  network_observed: n-a (driver)
+
+- eval: E18
+  run_id: minted-muc-tieu-va-kr-E18-r8
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.mtkr_san_thiet_ke
+  verified_at: 2026-10-03T03:09:12Z
+  output: |
+    design-gate --mode static chạy lần lượt trên 7 tệp (simple-table, bang-muc-tieu, khoi-muc-tieu, bang-kr, tien-do-kr, cham-diem, objective-sheet); vòng lặp không bị cắt bởi `|| exit 1`.
+
+### Eval bị chặn
+
+E17 (AC-13, test): không có kết quả. Lệnh `cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/muc-tieu-va-kr.dom.tsx -t trang-thai`. Agent bị skip hoặc chết, nên không được tính là pass. Cần chạy lại.
+
+### Judgment
 
 - eval: E15
-  judged_by: judge panel (3 lens, fresh context)
+  judged_by: judge panel, giữ nguyên từ round 7 (inputs không đổi, không chấm lại)
   verdict: PASS
-  rationale: Ba lens deu cho PASS (xem muc Judge). Day la de xuat cua may, nguoi quyet o Cong 2.
+  rationale: Panel giữ nguyên từ round 7, inputs không đổi, không chấm lại; rationale xem round 7.
   required_evidence:
     - (judge không nêu bằng-chứng-thiếu)
   human_override:  # chi nguoi ghi
 
-- eval: E16
-  run_id: s4-man (mot luot chung E1/E5/E13/E16; phien-do kho crm_muc_tieu_va_kr_do, app :4609, api :4278)
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.mtkr_man_that
-  verified_at: 2026-10-03T02:40:57Z
-  screenshot: evidence/E16-1440-theo-don-vi-sang.png
-  observed: |
-    E16-1440-theo-don-vi-sang.png: trang "OKR theo don vi", nen sang; cay don vi ben trai (chon Phap che, "3 muc tieu · 5 KR"); ben phai 3 khoi muc tieu (Hop dong mua Tet khong ket o phap che 75%, Kinh doanh tu tra loi duoc cau hoi phap ly 24%, Xu ly dut diem cac tranh chap 48%), moi muc tieu gom cac hang KR1/KR2 ngay duoi, % + thanh tien do + trang thai; "2 KR · gop vao 1 cho" -> doi chieu Expected: don vi co >= 3 muc tieu, KR nam trong khoi cua muc tieu, khong KR lung. E16-1440-theo-don-vi-toi.png: cung bo cuc, nen den, chu sang, cac chip/thanh tien do doc duoc, noi dung giong het ban sang (khac pixel, sha khac). E16-1440-sheet-sang.png: sheet ben phai "Giu da tang truong ban le mien Bac" (35%, le ra 44%, Cham nhip); tab KR 3 / Can chinh 1 / Vet / Trao doi 1 / Dien bien; co khu "VI SAO LUC NAY" voi chu "Quy 3 ky duoc 11 hop dong..." va khu "GOP VAO" voi dong "Tro thanh doi tac logistics... qua KR «Doanh thu hop dong moi dat 48 ty dong»"; duoi la bang 3 KR (KR1 48%, KR2 29%, KR3 27%) va nut Them KR. Ca hai khu vi-sao va gop-vao hien thi -> khop Expected. E16-1440-sheet-toi.png: cung bo cuc nen den; hai khu "VI SAO LUC NAY" va "GOP VAO" hien day du, doc duoc, bang 3 KR giong ban sang. E16-hien-tai.png: proto /proto/muc-tieu-va-kr ban cu ("Ban dang chay - de so" duoc chon): "OKR cua toi", moi muc tieu la tieu de + bang KR rieng (cot KR / Phu trach / Tien do / Dich), khong co khu vi-sao/gop-vao; la ban cu de so, ton tai va khong rong. Khong mau thuan nao voi Expected o phan chay thuc te.
-  network_observed: n-a (driver)
-
-- eval: E17
-  run_id: minted-muc-tieu-va-kr-E17-r7
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.mtkr_trang_thai_cu
-  verified_at: 2026-10-03T02:40:57Z
-  output: |
-    Ran 17 tests across 1 file. [2.91s]
-    __EXIT=0
-
-- eval: E18
-  run_id: minted-muc-tieu-va-kr-E18-r7
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.mtkr_san_thiet_ke
-  verified_at: 2026-10-03T02:40:57Z
-  output: |
-    design-gate --mode static tren 7 tep (simple-table, bang-muc-tieu, khoi-muc-tieu, bang-kr, tien-do-kr, cham-diem, objective-sheet)
-    __EXIT=0
+Panel đề xuất PASS, mỗi lens carried từ round 7:
+- domain-correctness: PASS (r7)
+- operational-feasibility: PASS (r7)
+- spec-alignment: PASS (r7)
 
 ### Lệnh suite (hồi quy)
 
-Lenh `bun run test`: BLOCKED — agent bi skip/chet, khong co ket qua nen khong co khoi bang chung. Ba lenh con lai:
+- cmd: bun run test
+  run_id: minted-muc-tieu-va-kr-SUITE-bun_run_test-r8
+  exit_code: 1
+  verified_at: 2026-10-03T03:09:12Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-muc-tieu-va-kr-SUITE-bunx_turbo_run_lint_force-r7
+  run_id: minted-muc-tieu-va-kr-SUITE-bunx_turbo_run_lint_force-r8
   exit_code: 0
-  verified_at: 2026-10-03T02:40:57Z
-
-- cmd: bun run lint:slop
-  run_id: minted-muc-tieu-va-kr-SUITE-bun_run_lint_slop-r7
-  exit_code: 0
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-muc-tieu-va-kr-SUITE-bunx_turbo_run_build_force-r7
+  run_id: minted-muc-tieu-va-kr-SUITE-bunx_turbo_run_build_force-r8
   exit_code: 0
-  verified_at: 2026-10-03T02:40:57Z
+  verified_at: 2026-10-03T03:09:12Z
+
+Lệnh suite đỏ không gắn eval nào: `bun run test` (đã khai failed_evals rỗng vì không eval nào sở hữu lệnh này). Tóm tắt từ log: gói api có 1403 pass, 3 skip, 1 fail. Ca đỏ duy nhất là `nguon-khoa > nguon-khoa: moi ket qua kiem ra dung nguonKhoa, bang rut tu KET_QUA_KIEM_SAN_SANG`; turbo báo 9 task thành công trên 10 và api#test đỏ. Chưa xác định ca này có liên quan tới diff của vòng hay đỏ sẵn; người quyết ở Cổng 2, hoặc chạy lại ở tip và so với baseline.
+
+Lệnh suite bị chặn: `bun run lint:slop` không có kết quả (agent bị skip hoặc chết), không có run_id, không tính là pass.
 
 ## Known limits
 
@@ -245,25 +261,15 @@ Lenh `bun run test`: BLOCKED — agent bi skip/chet, khong co ket qua nen khong 
 
 ## Analyst
 
-carried tu round 5 — baseline khong do lai round nay.
+carried tu round 5 — baseline khong do lai round nay
 
-Eval khong-phan-biet (xanh tren ca HEAD lan baseline round 5; chung minh harness chu chua chung minh tinh nang; nen viet lai de assert hanh vi moi hoac xac nhan la regression-guard co chu y):
-- E10 (cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/simple-table-hang.dom.tsx ./test/simple-table-hang-phu.dom.tsx ./test/luoi-va-khong-dich.dom.tsx)
-
-## Judge
-
-E15 (AC-12) — de xuat panel: PASS. Khong co human_override; de TRONG cho nguoi chot o Cong 2.
-
-- domain-correctness: PASS — Ở cả ba màn và cả hai theme, mỗi mục tiêu là một thẻ riêng có hàng cha (chevron, thẻ Cam kết/Tham vọng, người phụ trách, "Tính từ N KR" kèm phần trăm), và các KR nằm thụt vào bên dưới trong cùng thẻ, nên không KR nào trông thuộc mục tiêu khác. Tiến độ mục tiêu luôn thấy được và khớp trung bình KR: 75% = (49+100)/2, 33% = (40+25)/2, 24% = (0+48)/2, 48% với 1 KR, và sheet ghi 35% từ 3 KR (48, 29, 27) cùng "lẽ ra 44%". Ảnh bản cũ (E16-hien-tai) không có phần trăm ở cấp mục tiêu, nên liên kết mục tiêu–KR ở bản mới rõ hơn.
-- operational-feasibility: PASS — Ở cả sáu ảnh sáng/tối, mỗi mục tiêu nằm trong một khung riêng có dòng đầu ghi "Tính từ N KR" kèm phần trăm và thanh tiến độ, các KR thụt vào ngay dưới trong cùng khung, nên không KR nào trông thuộc mục tiêu khác. Số khớp với trung bình các KR con (75% từ 49 và 100; 33% từ 40 và 25; 24% từ 0 và 48; sheet 35% từ 48, 29, 27 kèm dòng "Tiến độ mục tiêu 35% tính từ 3 KR"), còn ảnh bản cũ E16-hien-tai chỉ có tiêu đề mục tiêu và bảng KR rời, không hiện tiến độ mục tiêu, nên liên kết mục tiêu–KR ở bản mới rõ hơn.
-- spec-alignment: PASS — Ở cả ba màn và cả hai theme, mỗi mục tiêu là một thẻ riêng: dòng cha có tiến độ ("Tính từ N KR", ví dụ 75%, 33%, 24%, 48%) và các KR thụt vào ngay dưới nó. Con số khớp với KR bên dưới (49% và 100% cho 75%; 40% và 25% cho 33%; 0% và 48% cho 24%; sheet 48/29/27% cho 35%, kèm dòng "Tiến độ mục tiêu 35% tính từ 3 KR"), và không KR nào trông như thuộc mục tiêu khác. Ảnh bản cũ E16-hien-tai chỉ có tiêu đề mục tiêu cùng bảng KR tách rời và không hiện tiến độ của mục tiêu, nên liên kết mục tiêu–KR nay rõ hơn hẳn.
+Eval không phân biệt (xanh trên cả HEAD lẫn baseline): E10 (lệnh `cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/simple-table-hang.dom.tsx ./test/simple-table-hang-phu.dom.tsx ./test/luoi-va-khong-dich.dom.tsx`). Nên viết lại để khẳng định hành vi mới, hoặc xác nhận đây là regression-guard có chủ ý.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval nhiều lần chạy đều đồng nhất (mọi eval round này chạy một lần, không có phương sai)
 
 ## Iterations
 
-Round 5: REJECT (chi tiet o run-log round 5).
-Round 6: REJECT — E14 khong dat o round do; cac eval con lai xanh.
-Round 7: 17 eval may (ke ca 4 ui-check) xanh, E15 de xuat PASS tu hoi dong; BLOCKED vi lenh suite `bun run test` khong co ket qua (agent chet). Chay lai lenh nay voi tool timeout dai hon / agent moi truoc khi len Cong 2.
+Round 7: BLOCKED. Run-log ghi 20 trên 21 eval trả kết quả, một eval bị chặn.
+Round 8: BLOCKED. E17 và lệnh suite `bun run lint:slop` không có kết quả; `bun run test` đỏ ở một ca của gói api, không gắn eval nào. Chạy lại hai lệnh bị chặn rồi mới tính tiếp.
