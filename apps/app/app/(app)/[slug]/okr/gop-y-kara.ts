@@ -199,6 +199,12 @@ export function useGopYMucTieu({
 	);
 	const conCho = dongCho.filter((d) => ketCua[d.id] === undefined).length;
 	const dangSoan = ds?.dangSoan === true;
+	const vuaSoan = useRef(false);
+	useEffect(() => {
+		if (vuaSoan.current && !dangSoan && objectiveId)
+			void cache.okr(objectiveId);
+		vuaSoan.current = dangSoan;
+	}, [dangSoan, objectiveId, cache]);
 	const quaHan =
 		batDau !== null &&
 		dangSoan &&

@@ -293,3 +293,44 @@ describe("trang-thai-kara", () => {
 		).not.toBeNull();
 	});
 });
+
+describe("dong-bo", () => {
+	test("Kara doc xong trong khung thi chip danh sach va so cua Muc tieu lam moi theo so moi", async () => {
+		let pha: "chua" | "soan" | "xong" = "chua";
+		const so = () => (pha === "xong" ? 2 : 0);
+		kho.danhSach = () => danhSachTu([mtSheet({ soGopYCho: so() })], 0);
+		kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: so() }));
+		kho.troLy = () => {
+			if (pha === "chua") return dsTroLy([], { maKetThuc: null, docLuc: null });
+			if (pha === "soan") {
+				pha = "xong";
+				return dsTroLy([], { dangSoan: true, maKetThuc: null });
+			}
+			return dsTroLy([D_TEN, D_KR1]);
+		};
+		kho.ghiRieng.set("okr.troLyDeXuat", async () => {
+			pha = "soan";
+			return { bat: true, taskId: "t-3", dungLai: false };
+		});
+		await dung(
+			<>
+				<TheoDonVi />
+				<DetailSheet onOpenChange={() => {}} open>
+					<ObjectiveSheet objectiveId={MT_ID} />
+				</DetailSheet>
+			</>,
+		);
+		await cho(() => qs("[data-nut=nho-kara]") !== null, "nut nho Kara");
+		expect(chipCua(MT_ID)).toBeNull();
+		await bamChuot(qs("[data-nut=nho-kara]") ?? document.body);
+		await choLau(
+			() => nhom()?.getAttribute("data-nhom-kara") === "co-gop-y",
+			"Kara doc xong co gop y",
+			6000,
+		);
+		await nhip(15);
+		const chip = chipCua(MT_ID);
+		if (chip !== `Kara · ${m.chip("2")}`)
+			throw new Error(`chip khong lam moi sau khi Kara doc xong: ${chip}`);
+	}, 15000);
+});
