@@ -61,6 +61,10 @@ evals:
     criterion: AC-8
     executor: test
     cmd: config:executors.test.api
+    paths:
+      - "apps/agent/agent/lib/tasks.ts"
+      - "apps/agent/rang/khoa-lo-giu-tran.rang.ts"
+      - "apps/agent/test/tasks.integration.spec.ts"
     expected: "exit 0; db:test thoat 0 roi turbo test moi goi xanh (agent 371, api 414, app 213 tai thoi diem viet)"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
@@ -68,6 +72,10 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - "apps/agent/agent/lib/tasks.ts"
+      - "apps/agent/rang/khoa-lo-giu-tran.rang.ts"
+      - "apps/agent/test/tasks.integration.spec.ts"
     expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -75,6 +83,10 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.lint_khong_cache
+    paths:
+      - "apps/agent/agent/lib/tasks.ts"
+      - "apps/agent/rang/khoa-lo-giu-tran.rang.ts"
+      - "apps/agent/test/tasks.integration.spec.ts"
     expected: "exit 0; moi task lint thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -82,6 +94,10 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.lint_slop
+    paths:
+      - "apps/agent/agent/lib/tasks.ts"
+      - "apps/agent/rang/khoa-lo-giu-tran.rang.ts"
+      - "apps/agent/test/tasks.integration.spec.ts"
     expected: "exit 0; 0 errors"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -98,5 +114,12 @@ evals:
     executor: judgment
     question: "Sua trong tasks.ts dua tren cam ket co tai lieu cua Postgres (CTE MATERIALIZED tinh mot lan) hay tren may rui cua bo lap ke hoach? Bon bai 'planner re-runs it per row' va tep rang apps/agent/rang/khoa-lo-giu-tran.rang.ts do dung co che (so hang duoi thong ke thu dich, so luot LockRows) hay chi do trieu chung? Co bai kiem cu nao trong tasks.integration.spec.ts bi noi de xanh khong?"
     inputs: [contract.md, ../../apps/agent/agent/lib/tasks.ts, ../../apps/agent/test/tasks.integration.spec.ts, ../../apps/agent/rang/khoa-lo-giu-tran.rang.ts, ../../docs/superpowers/specs/2026-09-06-khoa-lo-giu-tran-design.md, evidence/spec-diff.patch]
+    paths:
+      - "_acceptance/khoa-lo-giu-tran/contract.md"
+      - "apps/agent/agent/lib/tasks.ts"
+      - "apps/agent/test/tasks.integration.spec.ts"
+      - "apps/agent/rang/khoa-lo-giu-tran.rang.ts"
+      - "docs/superpowers/specs/2026-09-06-khoa-lo-giu-tran-design.md"
+      - "_acceptance/khoa-lo-giu-tran/evidence/spec-diff.patch"
     evidence_required: [judged_by, verdict, rationale]
     rationale_must_cite: "dong diff trong evidence/spec-diff.patch cho cau 'noi de xanh'"
