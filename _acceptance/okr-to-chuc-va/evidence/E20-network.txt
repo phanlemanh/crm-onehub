@@ -1,0 +1,1 @@
+driver: script playwright qua man-okr.mjs; khong co tool doc network -> n-a (driver)
