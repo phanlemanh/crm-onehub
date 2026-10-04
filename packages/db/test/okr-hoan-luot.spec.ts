@@ -80,9 +80,7 @@ describe("hoan-luot", () => {
 				tru: o.tru,
 			});
 			expect(await doc(cuocId), `so-luot-am ${o.truoc}`).toBe(o.sau);
-			expect(await doc(doiChung), "cuoc doi chung bi tru").toBe(
-				DOI_CHUNG_LUOT,
-			);
+			expect(await doc(doiChung), "cuoc doi chung bi tru").toBe(DOI_CHUNG_LUOT);
 		});
 	}
 
