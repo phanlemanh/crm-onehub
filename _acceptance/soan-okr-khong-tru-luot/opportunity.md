@@ -26,6 +26,8 @@ Người gặp: trưởng bộ phận/phòng ban mở một cuộc soạn OKR v�
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: khi lượt soạn không tới được Kara, người dùng có giữ nguyên lượt và cuộc của mình không, và «Thử lại» không chạy được thì có nói vì sao không?
-- Kết quả nào là SỐNG: mọi ca hỏng phía agent (401, 5xx, không nối được) để `soLuot` của cuộc trước bằng sau, và cuộc chưa có lượt nào tới Kara không bị tính vào trần cuộc của kỳ. Trần vẫn chặn được: agent trả lời thành công thì lượt bị tính như cũ. «Thử lại» không chạy được thì màn hiện một câu lý do bằng tiếng người, ở mọi lý do trả về.
-- Kết quả nào là CHẾT: còn một ca hỏng phía agent vẫn trừ lượt; hoặc trần bị thủng (gửi được quá `luotMoiCuoc` lượt thành công); hoặc «Thử lại» vẫn có một đường im lặng.
+- Kết quả nào là SỐNG: mọi lượt không tới được Trợ lý (không nối được, quá hạn, 401, 4xx, 5xx, không mở được phiên) để `soLuot` của cuộc trước bằng sau, và cuộc chưa có lượt nào tới Kara không bị tính vào trần cuộc của kỳ. Trần vẫn chặn được: agent trả lời thành công thì lượt bị tính như cũ. «Thử lại» không chạy được thì màn hiện một câu lý do bằng tiếng người, ở mọi lý do trả về.
+- Kết quả nào là CHẾT: còn một lượt không tới được Trợ lý vẫn bị trừ; hoặc trần bị thủng (gửi được quá `luotMoiCuoc` lượt thành công); hoặc «Thử lại» vẫn có một đường im lặng.
 - Timebox: một vòng máy (ước một ngày), PR trước 11/10. Phiên nghiệm thu: phòng ban soạn OKR quý 4 trên production, chủ kho hỏi lại có ai mất lượt hay bấm «Thử lại» mà không biết vì sao không.
+
+Ghi chú 04/10 (Cổng Phạm vi): câu SỐNG/CHẾT thu về «lượt không tới được Trợ lý» theo phạm vi chủ kho duyệt; lượt Trợ lý đã nhận rồi mới hỏng trong luồng (`turn.failed`) để vòng riêng — sổ `decisions.jsonl` dòng gate1.
