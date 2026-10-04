@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8e821a4a2f232c89ec469641b97b70209a9b9897
+verified_commit: 51a4de40d820df124d6455b7bd6d918958c1666b
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 3 (26/26 eval máy và ui-check đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Mười hai mục ngoài hợp đồng định đoạt từng mục ở lượt ký này — Ngoài-1, 3, 4, 5, 6, 7, 10, 12 ghi Known limits; Ngoài-2 mở hợp đồng mới; Ngoài-8, 9, 11 chấp nhận không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -337,3 +337,7 @@ none — every multi-run eval is uniform (moi eval chay mot lan, khong co eval n
 Round 1: REJECT — lenh suite `bun run test -- --filter=api` do (vai-chi-okr.spec chua khai workspace.setStaffDomains). Returned to implementation.
 Round 2: BLOCKED — E18 khong co ket qua (agent bi skip/chet); E20 do o 375x812 (thuoc bang-thanh-vien-giu-hang bao mot dong SAI ve con lan cuon trang). Lenh suite round nay xanh het.
 Round 3: PASS — 26 eval va 7 lenh suite xanh tren cay 8e821a4a2; E18 co ket qua, E20 xanh o 375 (so tai hien ghi o commit 5a97049cc, cham lai khong sua ma).
+
+### Re-pin lần 1 — 2026-10-04, do gộp onehub 6e7accc2 (#252) và vá thước lăn do-bang/do-khoi chống đua (51a4de40)
+run_id: repin-20261004T131201Z-36740
+sha: 51a4de40d820df124d6455b7bd6d918958c1666b · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · ngoài làn máy: E17
