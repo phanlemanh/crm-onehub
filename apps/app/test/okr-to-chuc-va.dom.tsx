@@ -529,8 +529,8 @@ describe("nut-them", () => {
 	});
 });
 
-const CHU_VIET =
-	/[đĐăĂâÂêÊôÔơƠưƯ\u0300-\u036f]|[àáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ]/i;
+const coChuViet = (chu: string): boolean =>
+	/[đĐ]/.test(chu) || /[\u0300-\u036f]/.test(chu.normalize("NFD"));
 
 const chuDich = (o: Element): string => {
 	const ban = o.cloneNode(true) as Element;
@@ -573,7 +573,7 @@ describe("ly-do-luu-tru", () => {
 			for (const l of LY_DO) {
 				const o = q(`[data-ly-do-chan=${l.loai}]`);
 				expect(
-					locale === "en" ? CHU_VIET.test(chuDich(o ?? document.body)) : false,
+					locale === "en" ? coChuViet(chuDich(o ?? document.body)) : false,
 					`cau tieng viet o en: ${l.loai}`,
 				).toBe(false);
 				expect(o?.textContent ?? "", `cau sai: ${locale} ${l.loai}`).toBe(
@@ -583,7 +583,7 @@ describe("ly-do-luu-tru", () => {
 			if (locale === "en") {
 				const khuon = q("[data-ly-do-chan=khuon]");
 				expect(
-					CHU_VIET.test(khuon?.textContent ?? ""),
+					coChuViet(khuon?.textContent ?? ""),
 					"doi chung: ten co dau",
 				).toBe(true);
 				expect(
@@ -675,9 +675,7 @@ describe("khoi-phuc-toast", () => {
 				).toBe(mau.replace("{ten}", ca.ten));
 				expect(
 					locale === "en"
-						? CHU_VIET.test(
-								chuDich(q("[data-chan-khoi-phuc]") ?? document.body),
-							)
+						? coChuViet(chuDich(q("[data-chan-khoi-phuc]") ?? document.body))
 						: false,
 					`toast con chu viet: ${ca.loai}`,
 				).toBe(false);

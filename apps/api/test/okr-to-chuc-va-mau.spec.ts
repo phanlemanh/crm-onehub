@@ -34,12 +34,7 @@ describe("mau-vet", () => {
 	let mauId: string;
 	beforeAll(async () => {
 		san = await gieoTuMau();
-		ok(
-			await goi("okr.setProgram", { ...CHUONG_TRINH_RONG } as {
-				[k: string]: Json;
-			}),
-			"dat chuong trinh",
-		);
+		ok(await goi("okr.setProgram", CHUONG_TRINH_RONG), "dat chuong trinh");
 		mauId = await mauMoi({
 			ten: "mau r1d",
 			cap: "phong-ban",

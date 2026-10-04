@@ -34,10 +34,7 @@ describe("quyen-tao", () => {
 	let san: San;
 	beforeAll(async () => {
 		ok(
-			await goi("okr.setProgram", {
-				...CHUONG_TRINH_RONG,
-				personalOn: true,
-			} as { [k: string]: Json }),
+			await goi("okr.setProgram", { ...CHUONG_TRINH_RONG, personalOn: true }),
 			"bat ca nhan",
 		);
 		const bp = await bpMoi("r1d-bp");

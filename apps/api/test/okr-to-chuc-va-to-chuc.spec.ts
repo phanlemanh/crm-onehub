@@ -40,12 +40,7 @@ describe("ly-do", () => {
 	const KHUON = `${TIEN_TO}-khuon-r1d`;
 	let pb = "";
 	beforeAll(async () => {
-		ok(
-			await goi("okr.setProgram", { ...CHUONG_TRINH_RONG } as {
-				[k: string]: Json;
-			}),
-			"dat chuong trinh",
-		);
+		ok(await goi("okr.setProgram", CHUONG_TRINH_RONG), "dat chuong trinh");
 		pb = await pbMoi("r1d-ly-do");
 		for (const ten of ["r1d-ld-1", "r1d-ld-2"])
 			ok(await datViTri(await nguoiMoi(ten), pb), `xep ${ten}`);
