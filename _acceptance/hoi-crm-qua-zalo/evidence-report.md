@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bbf1b9586ccd5aedd6683419f70c38a3c57db290
+verified_commit: 11bd93cf9f3488a2ed6df5c432a362feff41a428
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -299,3 +299,7 @@ sha: 4c2fea427e70e05e52c9bd769b0b8e56b16d7716 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-09-27, do gộp onehub f2acca7f (#161, #162, #163)
 run_id: repin-20260927T012809Z-43984
 sha: bbf1b9586ccd5aedd6683419f70c38a3c57db290 · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12j (E12j không khai paths)
+
+### Re-pin lần 4 — 2026-10-04, do khai paths lô 2: chỉ thêm khoá paths vào evals.yaml
+run_id: repin-20261004T075112Z-36317
+sha: 11bd93cf9f3488a2ed6df5c432a362feff41a428 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12j · diff chạm vật đo ngoài làn máy: E12j — chưa chứng lại, đi vòng S4 delta

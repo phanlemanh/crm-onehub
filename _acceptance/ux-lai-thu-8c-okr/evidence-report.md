@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9a385292b6fd5af0e5aefd875a7b596d38245bf7
+verified_commit: 11bd93cf9f3488a2ed6df5c432a362feff41a428
 human_signoff: Manh Phan 2026-09-30
 ---
 
@@ -237,3 +237,7 @@ Round 2: mọi eval và bốn lệnh suite đều đạt trên cây ba46f37b; E1
 ### Re-pin lần 1 — 2026-09-30, do CI đỏ: bài số thống kê của 8d ghim tổng đơn vị toàn kho, sửa cho đơn vị ngoài bộ mẫu
 run_id: repin-20260930T075237Z-32687
 sha: 9a385292b6fd5af0e5aefd875a7b596d38245bf7 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E15 (E15 không khai paths) · AC không có chốt máy: AC-12
+
+### Re-pin lần 2 — 2026-10-04, do khai paths lô 2: chỉ thêm khoá paths vào evals.yaml
+run_id: repin-20261004T075112Z-36317
+sha: 11bd93cf9f3488a2ed6df5c432a362feff41a428 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12
