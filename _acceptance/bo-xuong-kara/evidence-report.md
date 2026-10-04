@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 90aead63b0aebe0d575138d95400a049415413c2
+verified_commit: c2194108ee1258c40d635c28ed628e43cd233131
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (15/15 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; hội đồng E12 PASS). Mười mục ngoài hợp đồng định đoạt ở lượt ký này — Ngoài-1, 3, 4, 5, 6, 7, 8, 9 ghi Known limits; Ngoài-2, 10 chấp nhận, không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê hết.
 ---
 
@@ -249,3 +249,7 @@ none — mọi eval nhiều lượt đều đồng nhất
 
 Round 1: E11 thất bại — chiều đỏ khong-khoa của rang/man.mjs không bao giờ đỏ vì nút nằm trong fieldset disabled; E14 BLOCKED vì agent chạy design-gate bị skip/chết; suite app có một ca nguoi-huy quá hạn 5000ms.
 Round 2: E11 và E14 chạy lại trên bản vá (chiều đỏ khong-khoa gỡ cả khoá fieldset nên đỏ thật; design-gate chạy đủ); bảy lệnh suite xanh, kể cả suite app và @crm/ui chập chờn ở round 1; E1–E10, E13, E15 carry-forward từ round 1 vì delta không chạm paths của chúng.
+
+### Re-pin lần 1 — 2026-10-04, do gộp onehub 2498c97b sau chữ ký Cổng 2 của bo-xuong-kara
+run_id: repin-20261004T213037Z-56124
+sha: c2194108ee1258c40d635c28ed628e43cd233131 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12 (E12 không khai paths) · AC không có chốt máy: AC-11, AC-12
