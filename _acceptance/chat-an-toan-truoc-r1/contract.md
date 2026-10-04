@@ -5,9 +5,9 @@ slug: chat-an-toan-truoc-r1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-05
 design_doc: docs/superpowers/specs/2026-10-05-chat-an-toan-truoc-r1-design.md
 ---
 
