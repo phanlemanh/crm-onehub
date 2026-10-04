@@ -1,45 +1,10 @@
 {
   "feature_plain": "Ba màn OKR thôi làm người dùng hiểu sai trước R1: Hồi ý không bị thanh dưới đáy che, Cập nhật tuần nói rõ «bạn đã gửi tuần này», thẻ Toàn cảnh không còn nói ngược bảng.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ thu gọn thanh «Còn N điều trước khi công bố» ở Hồi ý thành một hàng; bấm «Hiện danh sách» mới bung các điều còn thiếu, mỗi điều dẫn tới đúng chỗ."},
-    {"id": "AC-3", "p": "Sẽ mở Cập nhật tuần ở màn «Bạn đã gửi cập nhật tuần này» kèm ngày giờ gửi, số và mức tự tin từng KR, khi người đó đã gửi đủ; nút «Sửa cập nhật» mở lại form với số điền sẵn, chỉ KR được chọn mức mới được gửi lại."},
-    {"id": "AC-4", "p": "Sẽ ghi «Đã gửi x/y KR tuần này» và đánh dấu từng KR đã gửi khi người đó mới gửi một phần; người chưa gửi gì hay không phụ trách KR nào thấy màn như cũ."},
-    {"id": "AC-5", "p": "Sẽ chạy thử trên trình duyệt thật: gửi, tải lại thấy «đã xong», sửa một KR thì chỉ thêm đúng một lần cập nhật, ở cả máy tính và điện thoại."},
-    {"id": "AC-6", "p": "Sẽ giữ đúng dữ liệu máy chủ mà màn «đã xong» đọc: trước khi gửi là chưa, gửi hai lần trong tuần thì lấy lần mới nhất (phép đo có sẵn, chạy lại)."},
-    {"id": "AC-7", "p": "Sẽ đổi chữ thẻ Toàn cảnh thành «<tên> chưa có mục tiêu riêng» và câu dưới bảng nói rõ hàng bộ phận cộng cả phòng ban con, bằng tiếng Việt và tiếng Anh."},
-    {"id": "AC-8", "p": "Sẽ kiểm trên bộ OKR mẫu thật: thẻ ghi «Khối Hỗ trợ chưa có mục tiêu riêng» trong khi bảng vẫn hiện số của Khối Hỗ trợ, không cuộn ngang ở điện thoại."},
-    {"id": "AC-9", "p": "Sẽ có đủ chữ tiếng Việt và tiếng Anh cho mọi câu mới, qua bộ gác chữ của kho."}
-  ],
-  "wont_do": [
-    {"id": "AC-2", "p": "Sẽ KHÔNG để thanh dưới đáy phủ lên ý chưa gom nào nằm trọn trong màn đầu, ở máy tính lẫn điện thoại (đo trên trình duyệt thật)."},
-    {"id": "AC-10", "p": "Sẽ KHÔNG tự tô màu, bo góc hay đổi khoảng cách riêng — dùng đúng thành phần chung của giao diện."},
-    {"id": "OOS-1", "p": "KHÔNG sửa chuyện quản trị không thêm được mục tiêu lẻ — điều phối đã giao R1d (phiên P1)."},
-    {"id": "OOS-2", "p": "KHÔNG đổi cách đếm «đơn vị đã công bố» và không thêm dữ liệu mới từ máy chủ cho Toàn cảnh."},
-    {"id": "OOS-3", "p": "KHÔNG sửa thanh lưu dùng chung của cả ứng dụng — chỉ đổi cách màn Hồi ý gọi nó."},
-    {"id": "OOS-4", "p": "KHÔNG sửa khung Mục tiêu và các lỗi trình bày khác của R1 — thuộc hàng R1a (phiên P1)."},
-    {"id": "OOS-5", "p": "KHÔNG đổi luồng gửi, phiên cập nhật hay tin nhắc buổi sáng."}
-  ],
-  "scope_plain": "Năm thứ cố ý để ngoài lượt này:",
-  "coverage_plain": [
-    {"i": 0, "p": "Phủ theo từng màn và từng trạng thái dữ liệu của nó:"},
-    {"i": 1, "p": "Hồi ý: còn thiếu điều (AC-1, AC-2) và đủ điều kiện (AC-1); đã công bố thì không có thanh, không đổi."},
-    {"i": 2, "p": "Cập nhật tuần: chưa gửi, gửi một phần, gửi đủ, vừa gửi, sửa sau khi đủ — AC-3 đến AC-6."},
-    {"i": 3, "p": "Toàn cảnh: bộ phận chưa có mục tiêu riêng nhưng phòng ban con có, và mọi đơn vị đã có — AC-7, AC-8."},
-    {"i": 4, "p": "Thước đủ: bảng trạng thái trong bản thiết kế và ảnh khảo sát màn thật 04/10."},
-    {"i": 5, "p": "Hai khổ màn: điện thoại 390 và máy tính 1440."},
-    {"i": 6, "p": "Hai ngôn ngữ: tiếng Việt và tiếng Anh, có bộ gác chữ của kho (AC-9)."},
-    {"i": 7, "p": "Mỗi màn một vai chính: người chọn ở Hồi ý, người phụ trách KR ở Cập nhật tuần, quản trị ở Toàn cảnh."},
-    {"i": 8, "p": "Đối chiếu sản phẩm cùng loại: 15Five và Lattice cho màn đã gửi kèm nút sửa; Shopify Polaris cho thanh lưu một hàng."},
-    {"i": 9, "p": "Làm ngay: AC-1 đến AC-11."},
-    {"i": 10, "p": "Để sau: dấu «chưa có mục tiêu riêng» trên từng hàng bộ phận (cần dữ liệu mới từ máy chủ); thanh Hồi ý nhớ trạng thái mở của từng người."},
-    {"i": 11, "p": "Không làm: Toàn cảnh khi chưa ai có mục tiêu — đã có màn riêng, không đổi."},
-    {"i": 12, "p": "Giả định cần anh gạch: gửi cập nhật lần hai trong cùng tuần là đúng (hiện đang cho phép, lượt này giữ nguyên)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Hai tiêu chí của Cập nhật tuần hứa ngược nhau: một bên bắt form sửa chọn sẵn mức tự tin cho mọi KR (gửi lại cả bộ), một bên bắt sửa một KR chỉ thêm một lần cập nhật. Đã sửa: form sửa điền sẵn số nhưng không chọn sẵn mức; chỉ KR anh chọn mức mới được gửi."},
-    {"i": 1, "p": "Người không phụ trách KR nào có thể bị báo «Bạn đã gửi tuần này» với ngày hỏng. Đã sửa: tiêu chí đòi có ít nhất một KR, người không có KR giữ màn trống cũ, phép đo có ô riêng."},
-    {"i": 2, "p": "Ảnh để hội đồng chấm có thể thiếu hoặc là ảnh cũ, và thiếu hai ảnh điện thoại. Đã sửa: một nơi lưu ảnh chung, xoá ảnh cũ khi bắt đầu, thiếu ảnh nào thì lượt đo đỏ."},
-    {"i": 3, "p": "Giờ «lần gửi mới nhất» có thể lấy nhầm KR đứng cuối. Đã sửa: phép đo thử cả hai thứ tự KR."},
-    {"i": 4, "p": "Hứa đọc được bằng trình đọc màn hình và đưa con trỏ về ô đầu khi sửa, nhưng chưa có phép đo. Đã sửa: thêm vào tiêu chí và phép đo."}
+  "decisions": [
+    {
+      "id": "E11",
+      "q": "Nhìn ảnh, ba màn đã hết gây hiểu lầm chưa?",
+      "why": "Hội đồng ba người chấm thấy Cập nhật tuần và Toàn cảnh 1440 đạt, nhưng chưa dám kết luận vì: thanh gọn vẫn đè lên ý nằm sát mép dưới màn (ý cuối tràn khỏi khung, cuộn xuống thì hiện trọn); hai ảnh «đã xong» ghi mức tự tin khác nhau vì ảnh 390 chụp sau bước «Sửa cập nhật» đổi KR đầu sang Thấp; ở 390 Toàn cảnh ẩn câu giải thích và cột Mục tiêu (giới hạn đã ghi sổ). Máy đo tay đã xác nhận: 0 ý nằm trọn trong màn đầu bị che, cuộn tới thì bấm trúng cả 5 ý."
+    }
   ]
 }
