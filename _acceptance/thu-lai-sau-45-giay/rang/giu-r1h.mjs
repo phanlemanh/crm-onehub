@@ -12,12 +12,34 @@ const BASE = execFileSync("git", ["merge-base", "HEAD", "origin/onehub"], {
 const NGUYEN = "apps/app/test/soan-okr-thu-lai.dom.tsx";
 const CO_KHOI = "apps/app/test/soan-okr-hong.dom.tsx";
 const KHOI = 'describe("hong — Thu lai roi van im"';
+const BAT_BUOC = [
+	"expect(daDung).toBe(0)",
+	'.filter((u) => u.endsWith("/cancel"))).toHaveLength(1)',
+	'expect(daGui).toEqual(["Giữ khách là chính"])',
+	'type: "turn.cancelled" as const',
+	'type: "session.waiting" as const',
+	'expect(daGui).toEqual(["Giữ khách là chính", "Giữ khách là chính"])',
+	'expect(goiCua("okr.soanMo")).toHaveLength(0)',
+	"expect(coLoi()).toBe(false)",
+	"await troi(SOAN_UI.hanKhongSuKienMs - 1_000)",
+];
+const chuanHoa = (chu) => chu.replace(/\s+/g, "");
 
 function docGoc(tep) {
 	return execFileSync("git", ["show", `${BASE}:${tep}`], {
 		cwd: GOC,
 		encoding: "utf8",
 	});
+}
+
+function layKhoi(noiDung, tep) {
+	const dau = noiDung.indexOf(KHOI);
+	const cuoi = noiDung.indexOf("\n});\n", dau);
+	if (dau < 0 || cuoi < 0) {
+		console.log(`mat khoi duoc phep sua: ${tep}`);
+		process.exit(1);
+	}
+	return noiDung.slice(dau, cuoi);
 }
 
 function boKhoi(noiDung, tep) {
@@ -42,7 +64,15 @@ if (nguyenGoc !== nguyenNay) {
 }
 
 const khoiGoc = boKhoi(docGoc(CO_KHOI), `${CO_KHOI}@merge-base`);
-const khoiNay = boKhoi(readFileSync(`${GOC}/${CO_KHOI}`, "utf8"), CO_KHOI);
+const coKhoiNay = readFileSync(`${GOC}/${CO_KHOI}`, "utf8");
+const khoiNay = boKhoi(coKhoiNay, CO_KHOI);
+const trongKhoi = chuanHoa(layKhoi(coKhoiNay, CO_KHOI));
+for (const dong of BAT_BUOC) {
+	if (!trongKhoi.includes(chuanHoa(dong))) {
+		console.log(`khoi thieu khang dinh: ${dong}`);
+		process.exit(1);
+	}
+}
 if (khoiGoc !== khoiNay) {
 	console.log(`sua ngoai khoi duoc phep: ${CO_KHOI}`);
 	process.exit(1);

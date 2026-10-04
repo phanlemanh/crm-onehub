@@ -232,46 +232,89 @@ describe("hong — 45 giay khong su kien", () => {
 
 describe("hong — Thu lai roi van im", () => {
 	test("Thử lại mà eve vẫn không có sự kiện: hẹn giờ lại và báo lại, không quay mãi", async () => {
-		await datAgent({
-			data: { messages: [noiTroLy("a0", MO_DAU)] },
-			session: {
-				sessionId: "phien-1",
-				continuationToken: "eve:live",
-				streamIndex: 2,
-			},
-		});
-		await moMan();
-		await go(q("[data-o-soan] textarea"), "Giữ khách là chính");
-		await bam(q('[data-o-soan] button[type="submit"]'));
-		batDongHoGia();
-		await datAgent({ status: "streaming", events: [{ type: "turn.started" }] });
-		await troi(SOAN_UI.hanKhongSuKienMs + 100);
-		expect(coLoi()).toBe(true);
-		await bam(q('[data-nut="thu-lai"]'));
-		expect(daDung).toBe(1);
-		expect(daGui).toEqual(["Giữ khách là chính"]);
 		const { tuyChonAgent } = await import("./khung-soan-okr");
 		const { act } = await import("react");
-		await act(async () => {
-			tuyChonAgent.at(-1)?.onFinish?.({
-				status: "ready",
-				error: undefined,
-				events: [],
-				data: { messages: [] },
+		const fetchCu = globalThis.fetch;
+		const daHuyLuot: string[] = [];
+		globalThis.fetch = (async (input: RequestInfo | URL) => {
+			daHuyLuot.push(String(input));
+			return Response.json(
+				{ ok: true, sessionId: "phien-1", status: "accepted" },
+				{ status: 202 },
+			);
+		}) as typeof fetch;
+		const suKien = [
+			{
+				type: "message.received" as const,
+				meta: { id: "e1", at: "2026-10-01T00:00:01.000Z" },
+				data: { message: "Giữ khách là chính", sequence: 1, turnId: "luot-9" },
+			},
+			{
+				type: "turn.started" as const,
+				meta: { id: "e2", at: "2026-10-01T00:00:02.000Z" },
+				data: { sequence: 2, turnId: "luot-9" },
+			},
+		];
+		try {
+			await datAgent({
+				data: { messages: [noiTroLy("a0", MO_DAU)] },
 				session: {
 					sessionId: "phien-1",
 					continuationToken: "eve:live",
 					streamIndex: 2,
 				},
 			});
-		});
-		await troi(50);
-		expect(daGui).toEqual(["Giữ khách là chính", "Giữ khách là chính"]);
-		expect(coLoi()).toBe(false);
-		await troi(SOAN_UI.hanKhongSuKienMs - 1_000);
-		expect(coLoi()).toBe(false);
-		await troi(1_100);
-		expect(coLoi()).toBe(true);
+			await moMan();
+			await go(q("[data-o-soan] textarea"), "Giữ khách là chính");
+			await bam(q('[data-o-soan] button[type="submit"]'));
+			batDongHoGia();
+			await datAgent({ status: "streaming", events: suKien });
+			await troi(SOAN_UI.hanKhongSuKienMs + 100);
+			expect(coLoi()).toBe(true);
+			await bam(q('[data-nut="thu-lai"]'));
+			await troi(20);
+			expect(daDung).toBe(0);
+			expect(daHuyLuot.filter((u) => u.endsWith("/cancel"))).toHaveLength(1);
+			expect(daGui).toEqual(["Giữ khách là chính"]);
+			const khep = {
+				status: "ready",
+				error: undefined,
+				events: [
+					...suKien,
+					{
+						type: "turn.cancelled" as const,
+						meta: { id: "e3", at: "2026-10-01T00:00:03.000Z" },
+						data: { sequence: 3, turnId: "luot-9" },
+					},
+					{
+						type: "session.waiting" as const,
+						meta: { id: "e4", at: "2026-10-01T00:00:04.000Z" },
+						data: { continuationToken: "eve:moi", wait: "next-user-message" },
+					},
+				],
+				data: { messages: [] },
+				session: {
+					sessionId: "phien-1",
+					continuationToken: "eve:moi",
+					streamIndex: 4,
+				},
+			} as Parameters<
+				NonNullable<(typeof tuyChonAgent)[number]["onFinish"]>
+			>[0];
+			await act(async () => {
+				tuyChonAgent.at(-1)?.onFinish?.(khep);
+			});
+			await troi(50);
+			expect(daGui).toEqual(["Giữ khách là chính", "Giữ khách là chính"]);
+			expect(goiCua("okr.soanMo")).toHaveLength(0);
+			expect(coLoi()).toBe(false);
+			await troi(SOAN_UI.hanKhongSuKienMs - 1_000);
+			expect(coLoi()).toBe(false);
+			await troi(1_100);
+			expect(coLoi()).toBe(true);
+		} finally {
+			globalThis.fetch = fetchCu;
+		}
 	});
 });
 

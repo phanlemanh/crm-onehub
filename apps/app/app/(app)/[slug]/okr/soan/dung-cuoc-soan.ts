@@ -17,6 +17,7 @@ import { OKR_SOAN_CUA, okrSoanHeader } from "@/lib/okr-soan-record";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { SOAN_UI } from "./cau-hinh";
+import { guiHuyLuot, kieuKhep, luotDangChay } from "./huy-luot";
 import type {
 	CuocSoan,
 	DongSoan,
@@ -63,7 +64,14 @@ type BanNhapDaXet = {
 	ket: KetSoBanNhap;
 };
 
-type ChoGuiLai = { tin: string; daKhep: boolean; daHuy: boolean };
+type ChoGuiLai = {
+	ma: number;
+	tin: string;
+	tu: number;
+	luot: string | undefined;
+	daKhep: boolean;
+	daHuy: boolean;
+};
 
 type PhienThan = { theo: string; id: string; lan: number; choNap: boolean };
 
@@ -185,37 +193,53 @@ export function useCuocSoan({
 		setLoiGuiLai(false);
 		if (!(await guiThang(tin))) setLoiGuiLai(true);
 	};
-	const thuGuiLai = () => {
-		const cho = choGuiLai.current;
-		if (!cho || !cho.daKhep || !cho.daHuy) return;
+	const boChuoi = (loi: boolean) => {
 		choGuiLai.current = null;
 		if (henKhep.current) clearTimeout(henKhep.current);
 		setDangChoKhep(false);
-		void guiLai(cho.tin);
+		if (loi) setLoiGuiLai(true);
 	};
-	const danhDau = (moi: Partial<ChoGuiLai>) => {
+	const danhDau = (
+		ma: number,
+		moi: Pick<ChoGuiLai, "daKhep"> | Pick<ChoGuiLai, "daHuy">,
+	) => {
+		const cho = choGuiLai.current;
+		if (!cho || cho.ma !== ma) return;
+		const sau = { ...cho, ...moi };
+		choGuiLai.current = sau;
+		if (!sau.daKhep || !sau.daHuy) return;
+		boChuoi(false);
+		void guiLai(sau.tin);
+	};
+	const khiKhep = (suKien: Parameters<typeof kieuKhep>[0]) => {
 		const cho = choGuiLai.current;
 		if (!cho) return;
-		choGuiLai.current = { ...cho, ...moi };
-		thuGuiLai();
+		const kieu = kieuKhep(suKien, cho.tu, cho.luot);
+		if (kieu === "huy") danhDau(cho.ma, { daKhep: true });
+		else boChuoi(kieu === "loi");
 	};
-	const hetChoKhep = () => {
-		if (!choGuiLai.current) return;
-		choGuiLai.current = null;
-		setDangChoKhep(false);
-		setLoiGuiLai(true);
+	const hetChoKhep = (ma: number) => {
+		if (choGuiLai.current?.ma !== ma) return;
+		boChuoi(true);
+		agent.stop();
 	};
 	const huyLuot = (tin: string, phien: string) => {
-		choGuiLai.current = { tin, daKhep: false, daHuy: false };
+		const ma = (choGuiLai.current?.ma ?? 0) + 1;
+		const luot = luotDangChay(agent.events);
+		choGuiLai.current = {
+			ma,
+			tin,
+			tu: agent.events.length,
+			luot,
+			daKhep: false,
+			daHuy: false,
+		};
 		setDangChoKhep(true);
-		henKhep.current = setTimeout(hetChoKhep, SOAN_UI.choKhepMs);
-		void fetch(`${OKR_SOAN_CUA.host}/eve/v1/session/${phien}/cancel`, {
-			method: "POST",
-			headers: okrSoanHeader(cuoc.id),
-		})
-			.catch(() => undefined)
-			.finally(() => danhDau({ daHuy: true }));
-		agent.stop();
+		henKhep.current = setTimeout(() => hetChoKhep(ma), SOAN_UI.choKhepMs);
+		void guiHuyLuot({ phien, cuocSoanId: cuoc.id, luot }).then((daHuy) => {
+			if (daHuy) danhDau(ma, { daHuy: true });
+			else if (choGuiLai.current?.ma === ma) boChuoi(true);
+		});
 	};
 
 	const agent = useEveAgent({
@@ -233,7 +257,7 @@ export function useCuocSoan({
 		onError: (loi) => {
 			if (laDaCoPhien(loi)) void docLaiRoi().then(napLai);
 		},
-		onFinish: () => danhDau({ daKhep: true }),
+		onFinish: (snap) => khiKhep(snap.events),
 	});
 	const busy = agent.status === "submitted" || agent.status === "streaming";
 	const dangTraLoi = busy || thread?.status === "working";
