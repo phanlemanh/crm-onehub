@@ -149,8 +149,11 @@ async function chayLuot(sai: BanNhap, dung: BanNhap) {
 	const truocLuot = await demDong(cuocSoanId);
 	const ketQuaNop: KetQuaNop[] = [];
 	let soLan = 0;
-	const buoc: { soLan: number; soDong: number; ra: ReturnType<typeof ketQuaCongCu> }[] =
-		[];
+	const buoc: {
+		soLan: number;
+		soDong: number;
+		ra: ReturnType<typeof ketQuaCongCu>;
+	}[] = [];
 	const model = new MockLanguageModelV4({
 		doGenerate: async (vao) => {
 			buoc.push({

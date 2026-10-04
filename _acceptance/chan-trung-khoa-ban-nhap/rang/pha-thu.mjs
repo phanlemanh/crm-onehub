@@ -16,14 +16,23 @@ const AGENT_OKR = join(GOC, "apps", "agent-okr");
 const NGUON = join(VALIDATION, "src", "okr-cuoc-soan.ts");
 const OKR_KR = join(VALIDATION, "src", "okr-kr.ts");
 const TEP_DON_VI = join(VALIDATION, "test", "okr-cuoc-soan.spec.ts");
-const TEP_TICH_HOP = join(AGENT_OKR, "test", "ban-nhap-trung-khoa.integration.spec.ts");
+const TEP_TICH_HOP = join(
+	AGENT_OKR,
+	"test",
+	"ban-nhap-trung-khoa.integration.spec.ts",
+);
 const MOC_REFINE = ".superRefine(chanKhoaTrung)";
 const LOC = "trung-khoa";
 const DAU_DO_TICH_HOP = "execute chay o buoc mot";
 const TRAN_LUOT_MS = 300_000;
 
 const CA_DON_VI = {
-	tuChoi: ["trung-khoa (a)", "trung-khoa (b)", "trung-khoa (c)", "trung-khoa (d)"],
+	tuChoi: [
+		"trung-khoa (a)",
+		"trung-khoa (b)",
+		"trung-khoa (c)",
+		"trung-khoa (d)",
+	],
 	nhan: ["trung-khoa (e)", "trung-khoa (f)", "trung-khoa (g)"],
 };
 const CA_TICH_HOP = ["trung-khoa-muc-tieu", "trung-khoa-kr"];
@@ -32,7 +41,8 @@ class MocVang extends Error {}
 
 function thayMotLan(src, cu, moi, ten) {
 	const n = src.split(cu).length - 1;
-	if (n !== 1) throw new MocVang(`${ten}: moc xuat hien ${n} lan, can 1: ${cu}`);
+	if (n !== 1)
+		throw new MocVang(`${ten}: moc xuat hien ${n} lan, can 1: ${cu}`);
 	return src.replace(cu, moi);
 }
 
@@ -67,8 +77,14 @@ function docJunit(duong) {
 }
 
 function dungBanSao(thuMuc, cheDo) {
-	let nguon = thayMotLan(readFileSync(NGUON, "utf8"), 'from "./okr-kr"', `from ${JSON.stringify(OKR_KR)}`, "okr-cuoc-soan.ts");
-	if (cheDo === "do") nguon = thayMotLan(nguon, MOC_REFINE, "", "okr-cuoc-soan.ts");
+	let nguon = thayMotLan(
+		readFileSync(NGUON, "utf8"),
+		'from "./okr-kr"',
+		`from ${JSON.stringify(OKR_KR)}`,
+		"okr-cuoc-soan.ts",
+	);
+	if (cheDo === "do")
+		nguon = thayMotLan(nguon, MOC_REFINE, "", "okr-cuoc-soan.ts");
 	else if (nguon.split(MOC_REFINE).length !== 2)
 		throw new MocVang(`okr-cuoc-soan.ts: khong thay dung mot ${MOC_REFINE}`);
 	writeFileSync(join(thuMuc, "okr-cuoc-soan.ts"), nguon);
@@ -77,7 +93,12 @@ function dungBanSao(thuMuc, cheDo) {
 	mkdirSync(join(thuMuc, "don-vi"));
 	writeFileSync(
 		join(thuMuc, "don-vi", "don-vi.spec.ts"),
-		thayMotLan(readFileSync(TEP_DON_VI, "utf8"), 'from "../src/okr-cuoc-soan"', 'from "../okr-cuoc-soan"', "tep don vi"),
+		thayMotLan(
+			readFileSync(TEP_DON_VI, "utf8"),
+			'from "../src/okr-cuoc-soan"',
+			'from "../okr-cuoc-soan"',
+			"tep don vi",
+		),
 	);
 
 	mkdirSync(join(thuMuc, "tich-hop"));
@@ -88,12 +109,19 @@ function dungBanSao(thuMuc, cheDo) {
 		"tep tich hop",
 	)
 		.replaceAll('from "../agent/', `from "${join(AGENT_OKR, "agent")}/`)
-		.replaceAll('from "./support/', `from "${join(AGENT_OKR, "test", "support")}/`);
+		.replaceAll(
+			'from "./support/',
+			`from "${join(AGENT_OKR, "test", "support")}/`,
+		);
 	writeFileSync(join(thuMuc, "tich-hop", "tich-hop.spec.ts"), tichHop);
 }
 
 function chay(lenh, args, cwd) {
-	const kq = spawnSync(lenh, args, { cwd, encoding: "utf8", timeout: TRAN_LUOT_MS });
+	const kq = spawnSync(lenh, args, {
+		cwd,
+		encoding: "utf8",
+		timeout: TRAN_LUOT_MS,
+	});
 	return { ma: kq.status, ra: `${kq.stdout}\n${kq.stderr}` };
 }
 
@@ -115,7 +143,9 @@ function chamDonVi(ca, cheDo) {
 }
 
 function chamTichHop(ca, cheDo, ra) {
-	const thieu = CA_TICH_HOP.filter((t) => ca.filter((c) => c.ten.startsWith(t)).length !== 1);
+	const thieu = CA_TICH_HOP.filter(
+		(t) => ca.filter((c) => c.ten.startsWith(t)).length !== 1,
+	);
 	if (thieu.length || ca.length !== CA_TICH_HOP.length)
 		return `so ca lech: ${ca.length} ca, thieu/lap ${thieu.join(", ")}`;
 	const muon = cheDo === "xanh" ? "pass" : "fail";
@@ -127,7 +157,12 @@ function chamTichHop(ca, cheDo, ra) {
 }
 
 function chayCheDo(cheDo) {
-	const thuMuc = join(GOC, ".acceptance-runs", SLUG, `sao-${cheDo}-${process.pid}`);
+	const thuMuc = join(
+		GOC,
+		".acceptance-runs",
+		SLUG,
+		`sao-${cheDo}-${process.pid}`,
+	);
 	rmSync(thuMuc, { recursive: true, force: true });
 	mkdirSync(thuMuc, { recursive: true });
 	try {
@@ -135,7 +170,14 @@ function chayCheDo(cheDo) {
 		const junitDonVi = join(thuMuc, "don-vi.xml");
 		const donVi = chay(
 			"bun",
-			["test", "./don-vi.spec.ts", "-t", LOC, "--reporter=junit", `--reporter-outfile=${junitDonVi}`],
+			[
+				"test",
+				"./don-vi.spec.ts",
+				"-t",
+				LOC,
+				"--reporter=junit",
+				`--reporter-outfile=${junitDonVi}`,
+			],
 			join(thuMuc, "don-vi"),
 		);
 		const junitTichHop = join(thuMuc, "tich-hop.xml");
@@ -155,10 +197,18 @@ function chayCheDo(cheDo) {
 		let ma = 0;
 		for (const [ten, ca, kq, cham] of [
 			["don-vi", caDonVi, donVi, (c) => chamDonVi(c, cheDo)],
-			["tich-hop", caTichHop, tichHop, (c) => chamTichHop(c, cheDo, tichHop.ra)],
+			[
+				"tich-hop",
+				caTichHop,
+				tichHop,
+				(c) => chamTichHop(c, cheDo, tichHop.ra),
+			],
 		]) {
 			if (!ca) {
-				dong.push(`${ten}: KHONG DO DUOC: bun khong ghi junit (ma ${kq.ma})`, kq.ra.slice(-1200));
+				dong.push(
+					`${ten}: KHONG DO DUOC: bun khong ghi junit (ma ${kq.ma})`,
+					kq.ra.slice(-1200),
+				);
 				ma = Math.max(ma, 2);
 				continue;
 			}
@@ -166,14 +216,22 @@ function chayCheDo(cheDo) {
 			const soPass = ca.filter((c) => c.trangThai === "pass").length;
 			const soFail = ca.length - soPass;
 			if (loi) {
-				dong.push(`${ten}: ${loi} (${soPass} pass, ${soFail} fail)`, kq.ra.slice(-1200));
+				dong.push(
+					`${ten}: ${loi} (${soPass} pass, ${soFail} fail)`,
+					kq.ra.slice(-1200),
+				);
 				ma = Math.max(ma, 1);
-			} else if (cheDo === "xanh") dong.push(`${ten}: ${soPass} pass, ${soFail} fail`);
-			else dong.push(`${ten}: go superRefine do dung chu ky (${soFail} fail, ${soPass} pass)`);
+			} else if (cheDo === "xanh")
+				dong.push(`${ten}: ${soPass} pass, ${soFail} fail`);
+			else
+				dong.push(
+					`${ten}: go superRefine do dung chu ky (${soFail} fail, ${soPass} pass)`,
+				);
 		}
 		return { ma, dong };
 	} catch (e) {
-		if (e instanceof MocVang) return { ma: 2, dong: [`KHONG DO DUOC: ${e.message}`] };
+		if (e instanceof MocVang)
+			return { ma: 2, dong: [`KHONG DO DUOC: ${e.message}`] };
 		throw e;
 	} finally {
 		rmSync(thuMuc, { recursive: true, force: true });

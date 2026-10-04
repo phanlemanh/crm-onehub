@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
 	BAN_NHAP_LOI,
 	BAN_NHAP_TRAN,
+	type BanNhap,
 	BUOC_CAT,
 	banNhap,
 	type KrNhap,
@@ -182,7 +183,7 @@ describe("cho-giu-phien", () => {
 });
 
 describe("trung-khoa", () => {
-	const loi = (v: unknown) => {
+	const loi = (v: BanNhap) => {
 		const r = banNhap.safeParse(v);
 		if (r.success) throw new Error("ban nhap trung khoa lot qua schema");
 		return r.error.issues.map(({ path, message }) => ({ path, message }));
