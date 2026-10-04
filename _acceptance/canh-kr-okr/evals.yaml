@@ -110,6 +110,18 @@ evals:
       - "Ảnh 390 cho buoc-khung-kr và buoc-bang-kr; scrollWidth <= innerWidth; tiêu đề việc mang translate=no"
     expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao bảng KR đếm cả sáng kiến vào «tổng» → bước buoc-bang-kr đỏ, script in «1/3» nhận thay «1/2»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/okr-canh-kr.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-canh-kr.ts"
+      - "packages/validation/src/okr-cap-nhat.ts"
+      - "packages/db/src/okr-hien-thi.ts"
+      - "apps/api/src/okr/**"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/**"
+      - "_acceptance/canh-kr-okr/rang/man-canh-kr.mjs"
 
   - id: E12
     criterion: AC-10
@@ -141,6 +153,18 @@ evals:
       - "Ảnh 390 cho buoc-ghi-nhan; scrollWidth <= innerWidth; lời ghi nhận mang translate=no"
     expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao máy chủ lienKetChoVai trả tên cho mọi vai → bước buoc-chi-okr đỏ, script in chuỗi tên lộ trong DOM («E14 buoc-chi-okr: ten lo «…»»); cùng một bản sao này làm E15 đỏ (đếm phản hồi lộ của vai okr > 0)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/okr-canh-kr.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-canh-kr.ts"
+      - "packages/validation/src/okr-trao-doi.ts"
+      - "packages/db/src/okr-hien-thi.ts"
+      - "apps/api/src/okr/**"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/**"
+      - "_acceptance/canh-kr-okr/rang/man-canh-kr.mjs"
 
   - id: E15
     criterion: AC-11
@@ -165,6 +189,20 @@ evals:
       - "Ảnh 390 cho buoc-mau-sheet và buoc-tu-mau; scrollWidth <= innerWidth"
     expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao danh sách mẫu phía màn không lọc theo đơn vị → bước cuối đỏ, script in tên mẫu lọt."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/okr-mau.ts"
+      - "apps/app/lib/messages/okr-canh-kr.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-mau.ts"
+      - "packages/validation/src/okr-kr.ts"
+      - "packages/validation/src/okr-muc-tieu.ts"
+      - "apps/api/src/okr/**"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/**"
+      - "_acceptance/canh-kr-okr/rang/man-canh-kr.mjs"
 
   - id: E17
     criterion: AC-12
@@ -226,3 +264,7 @@ evals:
       PASS khi cả năm vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu tệp
       và dòng. FAIL khi một vế sai.
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/superpowers/specs/2026-09-28-canh-kr-okr-design.md"
+      - "_acceptance/canh-kr-okr/contract.md"
+      - "_acceptance/canh-kr-okr/design-pass.md"
