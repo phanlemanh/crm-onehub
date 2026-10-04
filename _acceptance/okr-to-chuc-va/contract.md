@@ -5,7 +5,7 @@ slug: okr-to-chuc-va
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-04T20:56:09Z
 design_doc: docs/superpowers/specs/2026-10-04-okr-to-chuc-va-design.md
@@ -113,3 +113,16 @@ eval. [CE chưa kiểm chứng: chưa có bộ đếm máy so ô ↔ eval; ngư�
   `apps/api/src/okr/okr-mau.service.ts`, `packages/db/src/okr-vet.ts` (nếu cần hàm ghi vết chung),
   `apps/app/app/(app)/[slug]/settings/organization/**`, `packages/ui/src/hooks/` (chỉ thêm hook mới) —
   xin điều phối duyệt trước S3.
+- Known limits (Cổng Bằng chứng 05/10, chủ kho ký):
+  - Ngoài-1 / Ngoài-7: `org.restoreDepartment` và `org.restoreDivision` bị chặn vẫn trả HTTP 200 với
+    `{ chan }`; chương trình gọi qua khoá API phải đọc nội dung mới biết đơn vị không được khôi phục.
+    Giao diện của app báo đúng.
+  - Ngoài-2: bài quản trị không sửa được mục tiêu của đơn vị khác chỉ so mã 403, không ghim thông điệp;
+    nếu quyền sửa của quản trị bị mở nhầm, bài có thể vẫn xanh vì một lý do chặn khác.
+  - Ngoài-3: bài quyen-tao kiểm cấp (`level`) của mục tiêu quản trị tạo hộ, không kiểm đúng id đơn vị;
+    gắn nhầm sang đơn vị cùng cấp sẽ không bị bắt.
+  - Ngoài-4: bài hộp lưu trữ không đếm số dòng lý do; lý do thừa hoặc lặp không bị bắt.
+  - Ngoài-5: bài hộp KR mới kiểm các ô không bị khoá nhưng không ghim tên ô; ô bị đổi tên hoặc không vẽ
+    có thể lọt.
+  - Bài so-kr (E2) chỉ kiểm URL `record` sau khi bấm nút số, bài nut-them (E10) chỉ kiểm khoá URL — hai
+    phát hiện round 1 này rơi khỏi thẻ round 2 vì tệp bị vòng sửa chạm.

@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: eabda4540b513e081c1796dccfaaeac9255a9fd2
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (23/23 eval đạt, 0 phát hiện trong hợp đồng). Mười một mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 3, 4, 5, 7 ghi Known limits; Ngoài-6, 8, 9, 10, 11 chấp nhận không sửa. Hai phát hiện round 1 rơi khỏi thẻ (bài so-kr chỉ kiểm URL record, bài nut-them chỉ kiểm khoá URL) ghi Known limits. Phạm vi cắt/hoãn đồng ý cắt; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
 # Evidence Report: okr-to-chuc-va
