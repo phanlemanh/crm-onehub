@@ -110,6 +110,20 @@ nằm trong vùng `aria-live="polite"`.
 
 Chữ «Trợ lý OKR» giữ như phần còn lại của màn; đổi sang Kara là hàng K6a, sau.
 
+### Sửa sau Cổng Bằng chứng round 1 (chủ kho trả lại 04/10)
+
+- **Thời hạn chỉ chờ header của lượt POST (AC-11).** Round 1 gắn `AbortSignal.timeout` vào mọi yêu cầu,
+  nên luồng sự kiện `GET …/stream` và thân trả lời bị cắt ở giây thứ 30. Bản sửa: chỉ lượt `giuCho`
+  mới có hẹn giờ, và hẹn giờ là một `AbortController` riêng mà cửa dọn (`clearTimeout`) ngay khi
+  `fetch` trả header. Luồng và thân đi tiếp chỉ theo `request.signal` như trước lượt này.
+- **Chỉ lỗi mạng thật mới nói «mất mạng» (AC-12).** Lỗi không status chia hai: `TypeError` mang
+  một trong bốn câu lỗi mạng của trình duyệt → `mat-mang`; mọi lỗi khác (lỗi luồng eve khi lượt hỏng
+  trong Trợ lý) → `dung-giua-chung`, như trước lượt này. Bốn câu nằm trong `CUA_OKR`.
+- **Dòng đếm thuộc về một chuỗi thử (AC-13).** «Thử lại» ghi lại số sự kiện của phiên lúc bấm; chuỗi
+  thử còn hiệu lực khi phiên chưa nhận sự kiện mới. Phiên nhận sự kiện mới (Trợ lý đã trả lời) là chuỗi
+  kết thúc: không còn trạng thái «đang thử», không còn dòng đếm; lần bấm sau bắt đầu lại từ 1. Dẫn
+  xuất từ trạng thái sẵn có, không `useEffect`.
+
 ## Đặc tả UX
 
 <!-- <<<UX-SPEC-TEMPLATE -->
