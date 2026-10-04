@@ -4,7 +4,7 @@ import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { thanhVienMessages } from "@/lib/messages/settings-thanh-vien";
@@ -17,6 +17,7 @@ export function ChoPhepDiaChi() {
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
+	const workspace = useQuery(trpc.workspace.get.queryOptions());
 	const [mo, setMo] = useState(false);
 	const [loi, setLoi] = useState<string | null>(null);
 
@@ -31,6 +32,9 @@ export function ChoPhepDiaChi() {
 			onError: (error) => setLoi(error.message),
 		}),
 	);
+
+	if (workspace.isPending) return null;
+	if (workspace.data && !workspace.data.canManageMembers) return null;
 
 	return (
 		<>

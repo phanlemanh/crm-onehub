@@ -55,16 +55,26 @@ export default async function MembersSettingsPage({
 
 async function quyenQuanTri(): Promise<boolean> {
 	const trpc = getServerTrpc();
-	const workspace = await getServerQueryClient()
+	return getServerQueryClient()
 		.fetchQuery(trpc.workspace.get.queryOptions())
-		.catch(() => null);
-	return workspace?.canManageMembers ?? false;
+		.then(
+			(workspace) => workspace.canManageMembers,
+			() => true,
+		);
 }
 
 async function HanhDongDauTrang() {
 	await requireSession();
 
-	return (await quyenQuanTri()) ? <ChoPhepDiaChi /> : null;
+	await getServerQueryClient().prefetchQuery(
+		getServerTrpc().workspace.get.queryOptions(),
+	);
+
+	return (
+		<HydrateClient>
+			<ChoPhepDiaChi />
+		</HydrateClient>
+	);
 }
 
 async function Members({
