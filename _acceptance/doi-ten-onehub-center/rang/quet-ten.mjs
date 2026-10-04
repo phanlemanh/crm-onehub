@@ -19,11 +19,14 @@ const TAP_LOAI_TRU = [
 	/\.dom\.tsx$/,
 ];
 const NOI = "\u0000";
-const BON_NGOAI_LE = [
+const NGOAI_LE = [
 	`packages/auth/src/auth.ts${NOI}This CRM is private. Sign in with your @`,
 	`packages/auth/src/auth.ts${NOI}This CRM is private. That address is not on the allow-list.`,
 	`packages/db/src/settings.ts${NOI}CRM`,
 	`packages/db/src/safe-fetch.ts${NOI}Mozilla/5.0 (compatible; CRM/1.0)`,
+	`packages/validation/src/tai-lieu-hoi.ts${NOI}CRM`,
+	`packages/db/src/tai-lieu-hoi.ts${NOI}CRM`,
+	`apps/api/src/tai-lieu/tai-lieu-hoi.service.ts${NOI}CRM`,
 ];
 const TEN_CU = /\bCRM\b/;
 const TIEN_TO = "OneHub ";
@@ -95,7 +98,7 @@ function quet(goc) {
 		for (const { dong: d, chu } of docChuoi(tep, noiDung)) {
 			const khoa = `${tep}${NOI}${chu}`;
 			if (TEN_CU.test(chu)) {
-				if (BON_NGOAI_LE.includes(khoa)) thayNgoaiLe.add(khoa);
+				if (NGOAI_LE.includes(khoa)) thayNgoaiLe.add(khoa);
 				else con.push({ tep, dong: d });
 			}
 			const loi = viPhamLuatTen(chu);
@@ -144,12 +147,12 @@ function soNgoaiLe() {
 	const khai = JSON.parse(
 		readFileSync(join(HERE, "ngoai-le.json"), "utf8"),
 	).map((m) => `${m.tep}${NOI}${m.chu}`);
-	const la = khai.filter((k) => !BON_NGOAI_LE.includes(k));
-	const thieu = BON_NGOAI_LE.filter((k) => !khai.includes(k));
+	const la = khai.filter((k) => !NGOAI_LE.includes(k));
+	const thieu = NGOAI_LE.filter((k) => !khai.includes(k));
 	for (const k of la) ghi(false, `ngoai le la: ${hien(k)}`);
 	for (const k of thieu) ghi(false, `thieu ngoai le: ${hien(k)}`);
 	if (la.length === 0 && thieu.length === 0) {
-		ghi(true, "ngoai-le.json bang dung bon muc cua hop dong");
+		ghi(true, `ngoai-le.json bang dung ${NGOAI_LE.length} muc da duyet`);
 	}
 }
 
@@ -157,7 +160,7 @@ function soHead() {
 	const head = quet(GOC);
 	for (const c of head.con) ghi(false, `con CRM: ${c.tep}:${c.dong}`);
 	if (head.con.length === 0) ghi(true, "khong con CRM ngoai ngoai le");
-	for (const k of BON_NGOAI_LE) {
+	for (const k of NGOAI_LE) {
 		const co = head.thayNgoaiLe.has(k);
 		ghi(co, `${co ? "ngoai le con dung cho" : "ngoai le mo coi"}: ${hien(k)}`);
 	}

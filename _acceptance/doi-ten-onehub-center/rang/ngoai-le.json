@@ -2,5 +2,8 @@
 	{ "tep": "packages/auth/src/auth.ts", "chu": "This CRM is private. Sign in with your @" },
 	{ "tep": "packages/auth/src/auth.ts", "chu": "This CRM is private. That address is not on the allow-list." },
 	{ "tep": "packages/db/src/settings.ts", "chu": "CRM" },
-	{ "tep": "packages/db/src/safe-fetch.ts", "chu": "Mozilla/5.0 (compatible; CRM/1.0)" }
+	{ "tep": "packages/db/src/safe-fetch.ts", "chu": "Mozilla/5.0 (compatible; CRM/1.0)" },
+	{ "tep": "packages/validation/src/tai-lieu-hoi.ts", "chu": "CRM", "ly_do": "giá trị kênh hỏi của Kho tài liệu (KENH_HOI), ghi vào cột kenh, không hiện trên màn; chủ kho duyệt 04/10" },
+	{ "tep": "packages/db/src/tai-lieu-hoi.ts", "chu": "CRM", "ly_do": "lọc theo giá trị kênh hỏi khi đếm trần ngày và tháng, không hiện trên màn; chủ kho duyệt 04/10" },
+	{ "tep": "apps/api/src/tai-lieu/tai-lieu-hoi.service.ts", "chu": "CRM", "ly_do": "ghi giá trị kênh hỏi cho câu hỏi đến từ ứng dụng, không hiện trên màn; chủ kho duyệt 04/10" }
 ]
