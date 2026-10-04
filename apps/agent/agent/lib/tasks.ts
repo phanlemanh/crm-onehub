@@ -26,7 +26,11 @@ export type TaskSubject = {
 
 const LEASE_MS = DISPATCH.task.leaseMs;
 
-export { DIRECT_KINDS, MAX_ATTEMPTS } from "@crm/db/agent-tasks";
+export {
+	DIRECT_KINDS,
+	KHONG_VAO_LAN_NGHIEN_CUU,
+	MAX_ATTEMPTS,
+} from "@crm/db/agent-tasks";
 
 export async function claimDue(
 	limit: number,

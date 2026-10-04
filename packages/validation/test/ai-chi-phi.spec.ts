@@ -21,6 +21,7 @@ const PHIEN_CON = [
 	},
 	{ ma: "agent_runner", subagent: "agent_runner", okrViec: null },
 	{ ma: "agent_builder", subagent: "agent_builder", okrViec: null },
+	{ ma: "tro_ly_kho", subagent: "tro_ly_kho", okrViec: null },
 ] as const;
 
 const BANG = new Map<string, TinhNang>([
@@ -35,6 +36,9 @@ const BANG = new Map<string, TinhNang>([
 	["crm|team-agent|agent_runner", "crm.tac-nhan"],
 	["crm|builder|agent_builder", "crm.dung-tac-nhan"],
 	["crm|may-soan|-", "tai-lieu.may-soan"],
+	["crm|kho|-", "tai-lieu.tro-ly"],
+	["crm|kho|tro_ly_kho", "tai-lieu.tro-ly"],
+	["zalo|zalo|tro_ly_kho", "tai-lieu.tro-ly"],
 	["eve|okr-soan|-", "okr.soan"],
 	["crm|okr-soan|-", "okr.soan"],
 ]);
@@ -61,7 +65,7 @@ const NGOAI: readonly { khop: RegExp; lyDo: string }[] = [
 		lyDo: "phiên soạn OKR chỉ mở từ kênh crm hoặc eve, không từ Zalo",
 	},
 	{
-		khop: /^(crm|eve)\|okr-soan\|(tro_ly_okr\/|agent_runner$|agent_builder$)/,
+		khop: /^(crm|eve)\|okr-soan\|(tro_ly_okr\/|agent_runner$|agent_builder$|tro_ly_kho$)/,
 		lyDo: "phiên soạn OKR tự soạn, không giao việc cho phiên con",
 	},
 	{
@@ -91,6 +95,22 @@ const NGOAI: readonly { khop: RegExp; lyDo: string }[] = [
 	{
 		khop: /^(eve|zalo)\|builder\|agent_builder$/,
 		lyDo: "hội thoại dựng Tác nhân chỉ mở từ kênh crm",
+	},
+	{
+		khop: /^(eve|zalo)\|kho\|/,
+		lyDo: "phiên hỏi kho chỉ mở từ kênh crm",
+	},
+	{
+		khop: /^crm\|kho\|(tro_ly_okr\/|agent_runner$|agent_builder$)/,
+		lyDo: "phiên hỏi kho chỉ giao việc cho tro_ly_kho",
+	},
+	{
+		khop: /^(crm|eve|zalo)\|(builder|team-agent|research|okr|may-soan)\|tro_ly_kho$/,
+		lyDo: "tro_ly_kho chỉ chạy dưới phiên kho hay phiên zalo — hook mở hỏi ném ở phiên khác",
+	},
+	{
+		khop: /^(crm|eve)\|zalo\|tro_ly_kho$/,
+		lyDo: "phiên purpose zalo chỉ mở từ kênh zalo",
 	},
 ];
 

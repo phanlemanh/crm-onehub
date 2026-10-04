@@ -1,0 +1,4 @@
+E7u network truth: driver = playwright chay trong rang/man-hoi.mjs (qua man-lib.mjs), khong phai browser tool co read_network_requests.
+networkObserved: n-a (driver) - khong co dump request/console tho tu driver.
+Run 2026-10-02 (verifier doc lap): mot-luot.sh -> phien do crm_frosty_hermann_f35b13_do, app :4425, api :4300; man-hoi: dat, phien-do xong ma 0; 6 buoc dat.
+Chieu do --chieu-do: phien do crm_tlk_man_hoi_chieu_do_do app :4599 api :4161; in "buoc 1: khong thay tab Hỏi", ma 1, "DO DUNG GHIM".

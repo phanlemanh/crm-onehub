@@ -12,6 +12,7 @@ export const TINH_NANG = [
 	"okr.tom-tat",
 	"okr.soan",
 	"tai-lieu.may-soan",
+	"tai-lieu.tro-ly",
 	"khac",
 ] as const;
 
@@ -39,6 +40,7 @@ export const NHOM_CUA_TINH_NANG = {
 	"okr.tom-tat": "tro-ly-okr",
 	"okr.soan": "tro-ly-okr",
 	"tai-lieu.may-soan": "chua-gan",
+	"tai-lieu.tro-ly": "chua-gan",
 	khac: "chua-gan",
 } as const satisfies Record<TinhNang, NhomViecAi>;
 
@@ -57,6 +59,7 @@ export const SUBAGENT_CO_SO = [
 	"tro_ly_okr",
 	"agent_runner",
 	"agent_builder",
+	"tro_ly_kho",
 ] as const;
 
 export type SubagentCoSo = (typeof SUBAGENT_CO_SO)[number];
@@ -64,6 +67,7 @@ export type SubagentCoSo = (typeof SUBAGENT_CO_SO)[number];
 const VIEC_CUA_SUBAGENT = {
 	agent_runner: "crm.tac-nhan",
 	agent_builder: "crm.dung-tac-nhan",
+	tro_ly_kho: "tai-lieu.tro-ly",
 } as const satisfies Record<Exclude<SubagentCoSo, "tro_ly_okr">, TinhNang>;
 
 const VIEC_CUA_PURPOSE = {
@@ -73,6 +77,7 @@ const VIEC_CUA_PURPOSE = {
 	zalo: "zalo.hoi-crm",
 	research: "crm.nghien-cuu",
 	"may-soan": "tai-lieu.may-soan",
+	kho: "tai-lieu.tro-ly",
 	"okr-soan": "okr.soan",
 } as const satisfies Record<string, TinhNang>;
 
@@ -99,7 +104,11 @@ export function tinhNangCua(nguon: NguonBuoc): TinhNang {
 		if (nguon.okrViec === "tom-tat-tuan") return "okr.tom-tat";
 		return nguon.okrViec === "de-xuat" ? "okr.de-xuat" : "okr.chuyen-tiep";
 	}
-	if (nguon.subagent === "agent_runner" || nguon.subagent === "agent_builder") {
+	if (
+		nguon.subagent === "agent_runner" ||
+		nguon.subagent === "agent_builder" ||
+		nguon.subagent === "tro_ly_kho"
+	) {
 		return VIEC_CUA_SUBAGENT[nguon.subagent];
 	}
 	if (nguon.subagent) return "khac";

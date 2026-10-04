@@ -9,6 +9,7 @@ export const TAB_TAI_LIEU = [
 	"cho-duyet",
 	"nguon",
 	"suc-khoe",
+	"hoi",
 ] as const;
 export type TabTaiLieu = (typeof TAB_TAI_LIEU)[number];
 
@@ -29,6 +30,7 @@ export const TAI_LIEU_MAN = {
 		neo: "nguon-",
 		lamMoiMs: 5 * GIAY_MS,
 	},
+	hoi: { thamDoMs: 2 * GIAY_MS },
 } as const;
 
 export function duongDanhSach(): string {
@@ -76,6 +78,15 @@ export function duongDeXuat(id: string): string {
 
 export function ngayTaiLieu(iso: string, locale: Locale): string {
 	return dateFormat(locale, {
+		day: "2-digit",
+		month: "2-digit",
+		year: "numeric",
+		timeZone: TAI_LIEU_MAN.muiGio,
+	}).format(new Date(iso));
+}
+
+export function ngayVn(iso: string): string {
+	return new Intl.DateTimeFormat("en-CA", {
 		day: "2-digit",
 		month: "2-digit",
 		year: "numeric",
