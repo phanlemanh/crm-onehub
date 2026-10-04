@@ -1,0 +1,35 @@
+network: driver la script playwright (mot-luot.sh/man-khung.mjs); khong co read_network_requests
+--- xanh
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+o so ok 375
+can trai ok muc-tieu 375
+dien thoai ok 375
+can trai ok thoa-thuan 375
+o so ok 390
+can trai ok muc-tieu 390
+dien thoai ok 390
+can trai ok thoa-thuan 390
+can trai ok muc-tieu 1440
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0
+--- do (--kiem-do-do)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+o so bi cat: phu-trach 375
+ten can giua: muc-tieu 375 (center, 12)
+tab khong dinh: 375 (tl=5 vung=183)
+dien thoai sai: 375
+ten can giua: thoa-thuan 375 (center, 12)
+o so bi cat: phu-trach 390
+ten can giua: muc-tieu 390 (center, 12)
+tab khong dinh: 390 (tl=12 vung=190)
+dien thoai sai: 390
+ten can giua: thoa-thuan 390 (center, 12)
+can trai ok muc-tieu 1440
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1
+EXIT=1

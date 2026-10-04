@@ -328,14 +328,6 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 										}
 									/>
 								) : null}
-								<NutSoan
-									don={don}
-									cycleId={currentId}
-									phaKy={phaKy}
-									quanTri={quanTri}
-									canEdit={byUnit.data?.canEdit === true}
-									cauNoi={cauNoiOkr}
-								/>
 								{byUnit.data?.canEdit || quanTri ? (
 									<Button
 										size="sm"
@@ -349,6 +341,14 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 									</Button>
 								) : null}
 								<NutThemMucTieu suaDuoc={byUnit.data?.canEdit} />
+								<NutSoan
+									don={don}
+									cycleId={currentId}
+									phaKy={phaKy}
+									quanTri={quanTri}
+									canEdit={byUnit.data?.canEdit === true}
+									cauNoi={cauNoiOkr}
+								/>
 							</div>
 						</Card>
 						{don.loai === "nguoi" && xem === "danh-sach" ? (

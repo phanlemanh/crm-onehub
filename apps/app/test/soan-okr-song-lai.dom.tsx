@@ -71,19 +71,22 @@ describe("nut-chua-cau-hinh", () => {
 		test(`nut-chua-cau-hinh: ${ten} ${quanTri ? "quan-tri" : "nguoi-sua"}`, async () => {
 			await moKhung(DON_PB1, { sanSang, quanTri, cauNoi: true });
 			const homNayCo = q("[data-nut-soan]") !== null;
-			if (sanSang.bat && sanSang.soCuocDaDung > 0 && homNayCo)
+			if (sanSang.bat && sanSang.soCuocDaDung > 0 && homNayCo) {
+				await bam(q('[data-nut="thong-tin-soan"]'));
 				expect(
 					q('[data-nut="ds-cuoc"]'),
 					`doi chung ds-cuoc: ${ten}`,
 				).not.toBeNull();
+			}
 			await don();
 			datLai();
 			await moKhung(DON_PB1, { sanSang, quanTri, cauNoi: false });
 			const co = qa("[data-nut-soan]").map((o) =>
 				o.getAttribute("data-nut-soan"),
 			);
-			if (!homNayCo) {
+			if (!quanTri) {
 				expect(co, `nut mo khi chua cau hinh: ${ten}`).toEqual([]);
+				expect(document.body.textContent).not.toContain(m.nut.chuaCauHinh);
 				return;
 			}
 			expect(co, `nut mo khi chua cau hinh: ${ten}`).toEqual([
@@ -91,10 +94,10 @@ describe("nut-chua-cau-hinh", () => {
 			]);
 			const n = q('[data-nut-soan="nut-chua-cau-hinh"] button');
 			expect(n?.hasAttribute("disabled")).toBe(true);
-			const moTa = document.getElementById(
-				n?.getAttribute("aria-describedby") ?? "",
+			await bam(q('[data-nut="thong-tin-soan"]'));
+			expect(q("[data-thong-tin-soan]")?.textContent).toContain(
+				m.nut.chuaCauHinh,
 			);
-			expect(moTa?.textContent).toBe(m.nut.chuaCauHinh);
 			expect(document.body.textContent).not.toContain(m.nut.tiep);
 			expect(
 				q('[data-nut="ds-cuoc"]'),
@@ -123,6 +126,7 @@ describe("nut-chua-cau-hinh", () => {
 				).toBeNull();
 				return;
 			}
+			await bam(q('[data-nut="thong-tin-soan"]'));
 			expect(chu('[data-nut="ds-cuoc"]'), `so cuoc tren nut lech: ${k}`).toBe(
 				m.nut.dsCuoc(String(k), TRAN),
 			);
