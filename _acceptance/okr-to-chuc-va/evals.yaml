@@ -23,7 +23,7 @@ evals:
     cmd: config:executors.script.r1d_man_okr
     steps:
       - "Phiên đo riêng (tien-de) qua mot-luot.sh; seed rang/san-r1d.mjs: một Mục tiêu phòng ban có một KR lấy số tự động và một KR tay; đăng nhập dev:session trưởng phòng"
-      - "Với mỗi khổ {390×844, 1440×1000} sáng: mở khung Mục tiêu, đếm button[data-so-kr=<id KR máy>] đang hiện (rect > 0 và getComputedStyle khác display none ở mọi tổ tiên); bấm nút đó → chờ [data-so-kr-sheet=<id>]"
+      - "Với mỗi khổ {390×844, 1440×1000} sáng: mở khung Mục tiêu, đếm [data-okr-sheet] button[data-so-kr=<id KR máy>] đang hiện (rect > 0 và getComputedStyle khác display none ở mọi tổ tiên); bấm nút đó → chờ [data-so-kr-sheet=<id>]"
       - "Ảnh E3-so-kr-<khổ>.png vào evidence/"
     expected: "exit 0; rang/man-okr.mjs --phan so-kr in 'so kr ok <khổ> hien=1 mo=1' cho đủ 2 khổ viết trước và 'so o: 2'. Chiều đỏ ghim: cờ --kiem-do-do gỡ thuộc tính data-so-kr khỏi phần tử đang hiện trước khi đếm — phải in 'khong thay nut so: 390' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
@@ -106,7 +106,7 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.r1d_neo_kara
-    expected: "exit 0; okr-to-chuc-va.dom.tsx -t neo-kara dựng ObjectiveSheet thật trong RecordSheetFrame với hook khổ màn giả điều khiển được (chua-biet → dien-thoai), objective và góp ý đã có sẵn trong QueryClient, URL có neoGopY: khi khổ còn chua-biet → scrollIntoView chưa được gọi, neoGopY còn trên URL; chuyển sang dien-thoai → scrollIntoView được gọi đúng 1 lần trên vùng Kara, sau đó neoGopY rời URL; [data-cuon-ca-khung] có mặt. Đối chứng: khổ may-tinh ngay từ đầu → cuộn 1 lần, không có [data-cuon-ca-khung]. Ca thứ ba dùng hook khổ màn THẬT của packages/ui với window.matchMedia và innerWidth đặt 390: lần vẽ đầu (đọc trước effect) trả chua-biet, sau effect trả dien-thoai. In 'so ca: 3'. Chiều đỏ ghim: bản sao để hiệu ứng cuộn không chờ chua-biet phải làm bài đỏ 'cuon truoc khi biet kho'."
+    expected: "exit 0; okr-to-chuc-va.dom.tsx -t neo-kara dựng DetailSheet + ObjectiveSheet thật (khung đi qua RecordSheetFrame và hook khổ màn thật useKhoMan), mục tiêu và danh sách góp ý đã nạp sẵn vào QueryClient trước lần vẽ đầu, URL có neoGopY; HTMLElement.prototype.scrollIntoView được thay bằng bộ ghi (lúc gọi có [data-cuon-ca-khung] chưa, gọi trên [data-vung-kara] không). Ma trận viết trước 2 khổ {390 → mọi lần cuộn vùng Kara xảy ra khi [data-cuon-ca-khung] đã có, đúng 1 lần; 1440 → 1 lần, không có [data-cuon-ca-khung]}; sau đó neoGopY rời URL. Ca thứ ba: hook thật ở innerWidth 390 trả chua-biet ở lần vẽ đầu rồi dien-thoai. In 'so ca: 3'. Chiều đỏ ghim: bản sao để hiệu ứng cuộn không chờ chua-biet phải làm bài đỏ 'cuon truoc khi biet kho' (đã tái hiện đúng lỗi AC-10 điện thoại của R1a)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/components/crm/record-sheet/record-parts.tsx", "apps/app/components/detail-sheet.tsx", "packages/ui/src/hooks/**", "apps/app/test/okr-to-chuc-va.dom.tsx"]
 
