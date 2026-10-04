@@ -10,11 +10,16 @@ import {
 import { auth } from "@crm/auth";
 import { type INestApplication, Logger } from "@nestjs/common";
 import request from "supertest";
+import { z } from "zod";
 import { createApp } from "../src/create-app";
 import { soThuTuc } from "./ma-tran-thu";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 
 const NGUOI = "cvv-doc-phien";
+
+const loiTrpc = z.object({
+	error: z.object({ data: z.object({ code: z.string() }) }),
+});
 
 let app: INestApplication;
 let cookie = "";
@@ -58,8 +63,11 @@ async function goi(ten: string, loai: "query" | "mutation") {
 					.post(duong)
 					.set("cookie", cookie)
 					.send({});
-	const code: unknown = r.body?.error?.data?.code;
-	return { status: r.status, code: typeof code === "string" ? code : null };
+	const loi = loiTrpc.safeParse(r.body);
+	return {
+		status: r.status,
+		code: loi.success ? loi.data.error.data.code : null,
+	};
 }
 
 describe("doc-phien", () => {
