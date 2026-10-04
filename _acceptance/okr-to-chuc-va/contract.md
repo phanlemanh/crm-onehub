@@ -5,7 +5,7 @@ slug: okr-to-chuc-va
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: draft
 approved_by: Phan Le Manh
 approved_at: 2026-10-04T13:26:41Z
 design_doc: docs/superpowers/specs/2026-10-04-okr-to-chuc-va-design.md
@@ -65,6 +65,13 @@ L22, `mot-duong-ghi-phong-ban` L29) + Known limits của `khung-okr-truoc-r1`.
   chức, When bấm «Khôi phục» một phòng ban bị chặn vì bộ phận cha đã lưu trữ, rồi một bộ phận bị chặn vì
   trùng tên, Then toast in câu của ngôn ngữ đó từ `lib/messages`, mang đúng tên đơn vị (tên trong phần
   không dịch); đơn vị bị chặn vẫn nằm trong mục «Đã lưu trữ» sau khi tải lại.
+- AC-13: Given một mục tiêu đã bỏ (`da-bo`) trong kỳ còn ghi được, When trưởng đơn vị của nó hoặc quản trị
+  mở khung Mục tiêu, Then `okr.objective` trả `themKrLe = false` và khung không có nút «Thêm KR»; mục tiêu
+  chưa bỏ cùng đơn vị vẫn trả `themKrLe = true` cho quản trị không là trưởng (đối chứng).
+- AC-14: Given quản trị của workspace, mà trưởng phòng ban là người khác, When tạo mục tiêu từ mẫu
+  (`okr.taoTuMau`) cho phòng ban đó, rồi mở «Thêm KR» trên một mục tiêu vừa tạo, Then tạo từ mẫu thành công
+  như trưởng phòng (thành viên không là trưởng vẫn 403 `khongSuaDuocDonVi`), và trong hộp KR mới các ô loại
+  KR, giá trị đầu và người phụ trách đều bật, không khoá.
 - AC-11: Given vòng này đã sửa, When chạy bộ kiểm của kho (`feature_loop.suite_keys`), Then mọi lệnh
   thoát 0.
 
@@ -75,7 +82,8 @@ AC-10 R1a; (2) lớp — dữ liệu/API · màn; (3) vai — quản trị khôn
 vai chỉ OKR; (4) khổ — 1440 · 390; (5) ngôn ngữ — vi · en (chỉ #18).
 
 Ô phủ: mỗi mục nguồn có ≥ 1 AC; #30 tách ba AC — hai cách hỏng ở dữ liệu (AC-5, AC-6) và câu trên màn
-(AC-12); R1m-7 tách API (AC-7) và màn (AC-8). Ngôn ngữ en ở AC-4 và AC-12 — hai chỗ vòng này sinh câu
+(AC-12); R1m-7 tách API (AC-7), màn (AC-8), mục tiêu đã bỏ (AC-13), tạo từ mẫu và hộp KR mới (AC-14) — hai
+AC sau thêm sau Cổng Bằng chứng round 1. Ngôn ngữ en ở AC-4 và AC-12 — hai chỗ vòng này sinh câu
 mới; mục khác không đổi chữ. Vai chỉ OKR chỉ ở AC-10 (nguồn #17).
 
 Thước CE: mỗi ô (mục nguồn × lớp) mà mục đó thật sự chạm có ≥ 1 eval; ô không chạm ghi «—» trong bảng

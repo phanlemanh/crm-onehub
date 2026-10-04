@@ -46,6 +46,14 @@
    "p": "Sẽ báo lý do khôi phục bị chặn bằng ngôn ngữ của người xem, và đơn vị bị chặn vẫn nằm trong «Đã lưu trữ»."
   },
   {
+   "id": "AC-13",
+   "p": "Sẽ không hiện nút «Thêm KR» trên mục tiêu đã bỏ, cho cả trưởng đơn vị lẫn quản trị — sửa hồi quy vòng này gây ra."
+  },
+  {
+   "id": "AC-14",
+   "p": "Sẽ cho quản trị tạo mục tiêu từ mẫu như tạo tay, và mở đủ các ô (loại KR, giá trị đầu, người phụ trách) khi quản trị thêm KR."
+  },
+  {
    "id": "AC-11",
    "p": "Sẽ giữ toàn bộ bộ kiểm của kho xanh."
   }

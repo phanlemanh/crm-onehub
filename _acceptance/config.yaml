@@ -1155,6 +1155,7 @@ executors:
     r1d_khoi_phuc: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-to-chuc.spec.ts -t khoi-phuc"
     r1d_trung_ten: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-to-chuc.spec.ts -t trung-ten"
     r1d_quyen_tao: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-quyen.spec.ts"
+    r1d_kr_quan_tri: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-to-chuc-va.dom.tsx -t kr-quan-tri
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
