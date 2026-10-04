@@ -294,8 +294,14 @@ async function buocHoiY(cookie, slug) {
 		const chuNut = await nut.evaluate((b) => b.textContent.trim());
 		if (chuNut !== MU.hienDanhSach)
 			loi.push(`nut danh sach ghi «${chuNut}», mong «${MU.hienDanhSach}»`);
-		await nut.click();
-		await tre(R1C.cho.yenMs);
+		if (
+			(await nut.evaluate((b) => b.getAttribute("aria-expanded"))) !== "true"
+		) {
+			await nut.click();
+			await tre(R1C.cho.yenMs);
+		}
+		if ((await nut.evaluate((b) => b.getAttribute("aria-expanded"))) !== "true")
+			loi.push("bam nut danh sach ma danh sach khong mo");
 		await chup(t, `r1c-hoi-y-mo-${kho}`);
 		const lienKet = await t.p.$$("[data-khoi='thanh-cong-bo'] ul a");
 		let lienKetY = null;
@@ -311,7 +317,11 @@ async function buocHoiY(cookie, slug) {
 				const c = document.querySelector('[data-slot="page-shell-scroll"]');
 				if (c) c.scrollTop = c.scrollHeight;
 			});
-			await lienKetY.click();
+			try {
+				await lienKetY.click();
+			} catch (e) {
+				loi.push(`khong bam duoc lien ket y chua gom: ${e?.message ?? e}`);
+			}
 			await tre(R1C.cho.yenMs);
 			const trongKhung = await t.p.evaluate(() => {
 				const r = document
