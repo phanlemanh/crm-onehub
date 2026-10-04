@@ -182,11 +182,11 @@ evals:
       - "apps/app/lib/messages/okr.ts"
       - "apps/app/lib/messages/okr-toan-canh.ts"
       - "apps/app/test/messages-guard.spec.ts"
-      - "apps/app/test/okr-so-chu.spec.ts"
     expected: |
-      messages-guard.spec.ts va okr-so-chu.spec.ts xanh; ham ghep moi (daGuiMotPhan, daXong.luc...) co
-      dong GHIM; okr-so-chu co anh xa cho ST-capnhat-daxong va ST-capnhat-motphan.
-      CHIEU DO: ban sao de ban en cua khoa moi bang ban vi -> messages-guard do voi ten khoa, ma 1.
+      messages-guard.spec.ts xanh; moi ham ghep moi cua luot (capNhat.daXong.luc, capNhat.daGuiMotPhan)
+      co dong GHIM; khoa moi co ban vi co dau va ban en khac nhau.
+      CHIEU DO: ban sao de ban en cua capNhat.daXong.title bang ban vi -> messages-guard do voi ten khoa,
+      ma 1.
 
   - id: E10
     criterion: AC-10
