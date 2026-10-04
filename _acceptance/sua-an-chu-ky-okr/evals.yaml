@@ -133,6 +133,19 @@ evals:
       - "Ảnh 390 cho buoc-menu và buoc-sua-chi-ten; scrollWidth <= innerWidth ở cả hai khổ"
     expected: "Mọi bước đạt; ảnh lưu ở .acceptance-runs/sua-an-chu-ky-okr/evidence/; chữ trên màn bằng chữ của tệp chữ. CHIỀU ĐỎ: --chieu-do chạy bản sao sheet sửa không tắt ô ngày khi chỉ sửa được tên → bước buoc-sua-chi-ten đỏ, script in «ô ngày còn bật»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/lib/messages/okr-khep.ts"
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "packages/validation/src/okr-chu-ky.ts"
+      - "packages/validation/src/okr-khep.ts"
+      - "packages/ui/src/components/confirm-dialog.tsx"
+      - "packages/db/src/okr-chu-ky-hien.ts"
+      - "apps/api/src/okr/**"
+      - "_acceptance/sua-an-chu-ky-okr/rang/man-sua-an.mjs"
 
   - id: E15
     criterion: AC-11
@@ -166,6 +179,20 @@ evals:
       PASS khi cả năm vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu
       tệp và dòng. FAIL khi một vế sai.
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/superpowers/specs/2026-09-30-sua-an-chu-ky-okr-design.md"
+      - "packages/validation/src/okr-chu-ky.ts"
+      - "packages/db/src/okr-chu-ky-hien.ts"
+      - "apps/api/src/okr/okr-chu-ky.service.ts"
+      - "apps/api/src/okr/okr.contracts.ts"
+      - "apps/app/app/(app)/[slug]/settings/okr/bang-chu-ky.tsx"
+      - "apps/app/app/(app)/[slug]/settings/okr/sheet-sua-chu-ky.tsx"
+      - "apps/app/app/(app)/[slug]/settings/okr/hop-thoai-an-chu-ky.tsx"
+      - "apps/app/app/(app)/[slug]/settings/okr/hoi-chu-ky.tsx"
+      - "_acceptance/sua-an-chu-ky-okr/rang/noi-doc-chu-ky.json"
+      - "_acceptance/sua-an-chu-ky-okr/evidence/E14-step5.png"
+      - "_acceptance/sua-an-chu-ky-okr/contract.md"
+      - "_acceptance/sua-an-chu-ky-okr/design-pass.md"
 
   - id: E18
     criterion: AC-13
