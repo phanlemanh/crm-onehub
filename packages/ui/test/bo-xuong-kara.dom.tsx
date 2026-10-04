@@ -36,6 +36,10 @@ const KhoiTranscript = await nap<
 	typeof import("../src/components/kara/transcript")
 >("K1_TEP_TRANSCRIPT", "transcript.tsx");
 
+const KhoiComposer = await nap<
+	typeof import("../src/components/kara/composer")
+>("K1_TEP_COMPOSER", "composer.tsx");
+
 const VI = messages("vi");
 
 let root: Root | null = null;
@@ -532,21 +536,44 @@ describe("k1-transcript", () => {
 			khang += 1;
 		}
 		const nguoi = o.querySelector('[data-kara-turn="user"]');
-		phai(Boolean(nguoi?.classList.contains("is-user")), "luot nguoi khong la Message user");
+		phai(
+			Boolean(nguoi?.classList.contains("is-user")),
+			"luot nguoi khong la Message user",
+		);
 		const kara = o.querySelector('[data-kara-turn="kara"]') as Element;
-		phai(Boolean(kara.querySelector(".is-assistant")), "luot kara khong la Message assistant");
+		phai(
+			Boolean(kara.querySelector(".is-assistant")),
+			"luot kara khong la Message assistant",
+		);
 		const avatar = kara.querySelectorAll('[data-slot="message-avatar"]');
 		phai(avatar.length === 1, "avatar khong dung mot");
-		phai(avatar[0]?.querySelectorAll('svg[aria-hidden="true"]').length === 1, "avatar khong co dau tia sang");
-		phai(avatar[0]?.querySelector(".sr-only")?.textContent === "Kara", "avatar thieu ten Kara");
+		phai(
+			avatar[0]?.querySelectorAll('svg[aria-hidden="true"]').length === 1,
+			"avatar khong co dau tia sang",
+		);
+		phai(
+			avatar[0]?.querySelector(".sr-only")?.textContent === "Kara",
+			"avatar thieu ten Kara",
+		);
 		phai(o.querySelectorAll("img").length === 0, "avatar co anh");
 		khang += 5;
 		const he = o.querySelector('[data-kara-turn="system"]') as Element;
-		phai(!he.closest('[class*="is-assistant"], [class*="is-user"]'), "dong he thong nam trong bong bong");
-		phai(he.classList.contains("text-muted-foreground"), "dong he thong khong la chu phu");
+		phai(
+			!he.closest('[class*="is-assistant"], [class*="is-user"]'),
+			"dong he thong nam trong bong bong",
+		);
+		phai(
+			he.classList.contains("text-muted-foreground"),
+			"dong he thong khong la chu phu",
+		);
 		khang += 2;
-		const moc = o.querySelector('[data-kara-turn="checkpoint"] button') as HTMLButtonElement;
-		phai(Boolean(moc) && moc.textContent === VI.karaKhung.moc("⟦tom tat⟧"), "moc khong la nut");
+		const moc = o.querySelector(
+			'[data-kara-turn="checkpoint"] button',
+		) as HTMLButtonElement;
+		phai(
+			Boolean(moc) && moc.textContent === VI.karaKhung.moc("⟦tom tat⟧"),
+			"moc khong la nut",
+		);
 		act(() => moc.click());
 		phai(chon === 1, "moc khong goi");
 		khang += 2;
@@ -557,7 +584,126 @@ describe("k1-transcript", () => {
 	test("hội thoại rỗng mang dấu Kara", () => {
 		const o = ve(<KaraTranscript />);
 		const rong = o.querySelector('[data-slot="conversation-empty-state"]');
-		phai(Boolean(rong?.querySelector('[data-slot="kara-mark"]')), "rong thieu dau Kara");
+		phai(
+			Boolean(rong?.querySelector('[data-slot="kara-mark"]')),
+			"rong thieu dau Kara",
+		);
 		expect(rong?.textContent).toContain(VI.karaKhung.hoiThoaiRongTieuDe);
+	});
+});
+
+async function guiChu(goc: ParentNode, chu: string) {
+	const o = goc.querySelector("textarea") as HTMLTextAreaElement;
+	const datGiaTri = Object.getOwnPropertyDescriptor(
+		HTMLTextAreaElement.prototype,
+		"value",
+	)?.set;
+	act(() => {
+		datGiaTri?.call(o, chu);
+		o.dispatchEvent(new Event("input", { bubbles: true }));
+	});
+	await act(async () => {
+		o.form?.requestSubmit();
+		await new Promise((ok) => setTimeout(ok, 0));
+	});
+}
+
+describe("k1-composer", () => {
+	const { KaraComposer } = KhoiComposer;
+	const O = ["gui", "ban-status", "ban-busy", "chip", "goi-y", "khoa"] as const;
+
+	test("ma trận 6 ô", async () => {
+		let soO = 0;
+		for (const oo of O) {
+			const goi = { gui: [] as string[], dung: 0, bo: 0, goiY: [] as string[] };
+			const cay = (
+				<KaraComposer
+					onSubmit={(t) => goi.gui.push(t)}
+					onStop={() => (goi.dung += 1)}
+					status={oo === "ban-status" ? "busy" : "ready"}
+					context={
+						oo === "chip"
+							? { label: "⟦ve KR 1.3⟧", onRemove: () => (goi.bo += 1) }
+							: undefined
+					}
+					suggestions={oo === "goi-y" ? ["⟦g1⟧", "⟦g2⟧"] : undefined}
+					onSuggestion={(t) => goi.goiY.push(t)}
+					lockedReason={oo === "khoa" ? "⟦het luot⟧" : undefined}
+				/>
+			);
+			const o = ve(
+				oo === "ban-busy" ? (
+					<KaraBusyProvider busy={{ label: "⟦b⟧" }}>{cay}</KaraBusyProvider>
+				) : (
+					cay
+				),
+			);
+			if (oo === "gui") {
+				await guiChu(o, "  chào  ");
+				phai(
+					JSON.stringify(goi.gui) === JSON.stringify(["chào"]),
+					`gui sai: ${JSON.stringify(goi.gui)}`,
+				);
+			}
+			if (oo === "ban-status" || oo === "ban-busy") {
+				const nut = o.querySelector(
+					`button[aria-label="${VI.promptInput.stop}"]`,
+				) as HTMLButtonElement | null;
+				phai(
+					Boolean(nut),
+					oo === "ban-busy" ? "busy khong doi nut" : "status khong doi nut",
+				);
+				act(() => nut?.click());
+				phai(goi.dung === 1 && goi.gui.length === 0, `dung goi sai o ${oo}`);
+			}
+			if (oo === "chip") {
+				phai((o.textContent ?? "").includes("⟦ve KR 1.3⟧"), "thieu chip");
+				const go = o.querySelector(
+					`button[aria-label="${VI.karaKhung.boNguCanh("⟦ve KR 1.3⟧")}"]`,
+				) as HTMLButtonElement | null;
+				phai(Boolean(go), "chip thieu nut go co ten");
+				act(() => go?.click());
+				phai(goi.bo === 1, "go chip khong goi");
+				phai(
+					document.activeElement === o.querySelector("textarea"),
+					"go chip khong tra focus",
+				);
+			}
+			if (oo === "goi-y") {
+				act(() => nutTen(o, "⟦g2⟧")[0]?.click());
+				phai(
+					JSON.stringify(goi.goiY) === JSON.stringify(["⟦g2⟧"]),
+					"goi y sai",
+				);
+			}
+			if (oo === "khoa") {
+				const ta = o.querySelector("textarea") as HTMLTextAreaElement;
+				const gui = o.querySelector(
+					'button[type="submit"]',
+				) as HTMLButtonElement;
+				phai(ta.disabled && gui.disabled, "khoa khong khoa");
+				const mo = document.getElementById(
+					ta.getAttribute("aria-describedby") ?? "",
+				);
+				phai(
+					mo?.getAttribute("data-slot") === "field-description" &&
+						mo.textContent === "⟦het luot⟧",
+					"ly do khoa khong tro",
+				);
+			}
+			act(() => root?.unmount());
+			root = null;
+			document.body.innerHTML = "";
+			soO += 1;
+		}
+		console.log(`so o: ${soO}`);
+		expect(soO).toBe(6);
+	});
+
+	test("chữ toàn khoảng trắng không gửi", async () => {
+		const gui: string[] = [];
+		const o = ve(<KaraComposer onSubmit={(t) => gui.push(t)} />);
+		await guiChu(o, "   ");
+		expect(gui).toEqual([]);
 	});
 });
