@@ -87,6 +87,12 @@ function maTheoStatus(status: number): MaLyDoHong {
 	return status >= TRANG_THAI_LOI_MAY_CHU ? "tro-ly-loi" : "tro-ly-tu-choi";
 }
 
+const LOI_MANG: readonly string[] = CUA_OKR.loiMangTrinhDuyet;
+
+function laLoiMang(loi: Error): boolean {
+	return loi instanceof TypeError && LOI_MANG.includes(loi.message);
+}
+
 function coChoRieng(loi: Error): boolean {
 	return lyDoTuChoiLuot(loi) !== null || laChuaCauHinh(loi) || laDaCoPhien(loi);
 }
@@ -102,7 +108,11 @@ export function lyDoHong(vao: {
 		return { ma: vao.qua45s ? "qua-45s" : "dung-giua-chung", daHoan: false };
 	if (coChoRieng(loi)) return null;
 	const http = loiCoStatus.safeParse(loi);
-	if (!http.success) return { ma: "mat-mang", daHoan: false };
+	if (!http.success)
+		return {
+			ma: laLoiMang(loi) ? "mat-mang" : "dung-giua-chung",
+			daHoan: false,
+		};
 	const { error, luot } = http.data.body;
 	const ma =
 		(error ? MA_CUA.get(error) : undefined) ?? maTheoStatus(http.data.status);

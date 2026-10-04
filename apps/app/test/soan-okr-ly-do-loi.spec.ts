@@ -171,3 +171,98 @@ describe("ly-do-hong", () => {
 		}
 	});
 });
+
+const MONG_DOI_MA_CUA: Record<
+	keyof typeof CUA_OKR.loi,
+	{ status: number; ma: MaLyDoHong | null }
+> = {
+	chuaCauHinh: { status: 503, ma: null },
+	chuaDangNhap: { status: 401, ma: "het-dang-nhap" },
+	thieuCuoc: { status: 400, ma: "tro-ly-tu-choi" },
+	duongKhongPhucVu: { status: 404, ma: "tro-ly-tu-choi" },
+	cuocKhongThuocBan: { status: 403, ma: "tro-ly-tu-choi" },
+	cuocKhongDang: { status: 403, ma: null },
+	phienKhongThuocCuoc: { status: 403, ma: "tro-ly-tu-choi" },
+	daCoPhien: { status: 409, ma: null },
+	phienDaThay: { status: 409, ma: null },
+	khongDocDuocPhien: { status: 502, ma: "chua-mo-duoc-phien" },
+	khongGhiDuocPhien: { status: 502, ma: "chua-mo-duoc-phien" },
+	khongDemDuocLuot: { status: 502, ma: "chua-dem-duoc-luot" },
+	khongNoiDuoc: { status: 502, ma: "khong-noi-duoc" },
+	quaHan: { status: 504, ma: "qua-han" },
+	troLyTuChoi: { status: 401, ma: "tro-ly-tu-choi" },
+	troLyLoi: { status: 500, ma: "tro-ly-loi" },
+};
+
+describe("ma-cua-du", () => {
+	test("ma-cua-du: bang mong doi phu dung tap khoa CUA_OKR.loi", () => {
+		expect(Object.keys(MONG_DOI_MA_CUA).sort(), "ma-cua-thieu-dong").toEqual(
+			Object.keys(CUA_OKR.loi).sort(),
+		);
+	});
+
+	for (const [khoa, o] of Object.entries(MONG_DOI_MA_CUA)) {
+		const error = CUA_OKR.loi[khoa as keyof typeof CUA_OKR.loi];
+		test(`ma-cua-du: ${khoa}`, () => {
+			const ra = lyDoHong({
+				...KHONG,
+				loi: loiHttp(o.status, { error }),
+			});
+			expect(ra?.ma ?? null, `ly-do-sai ma-cua ${khoa}`).toBe(o.ma);
+		});
+	}
+});
+
+const LOI_MANG_TRINH_DUYET = [
+	"Failed to fetch",
+	"fetch failed",
+	"NetworkError when attempting to fetch resource.",
+	"Load failed",
+] as const;
+
+function loiLuongEve(ma: string, thongDiep: string): Error {
+	const loi = new Error(thongDiep);
+	loi.name = ma;
+	return loi;
+}
+
+const KHONG_STATUS: readonly { ten: string; loi: Error; ma: MaLyDoHong }[] = [
+	...LOI_MANG_TRINH_DUYET.map((cau) => ({
+		ten: `mang ${cau}`,
+		loi: new TypeError(cau),
+		ma: "mat-mang" as const,
+	})),
+	{
+		ten: "eve session.failed",
+		loi: loiLuongEve("session.failed", "Turn failed"),
+		ma: "dung-giua-chung",
+	},
+	{
+		ten: "eve turn.failed het ngan sach",
+		loi: loiLuongEve("turn.failed", "Insufficient credits for AI Gateway"),
+		ma: "dung-giua-chung",
+	},
+	{ ten: "error thuong", loi: new Error("boom"), ma: "dung-giua-chung" },
+	{
+		ten: "typeerror khac",
+		loi: new TypeError("Cannot read properties of undefined"),
+		ma: "dung-giua-chung",
+	},
+];
+
+const SAN_KHONG_STATUS = 8;
+
+describe("loi-khong-status", () => {
+	test("loi-khong-status: san ma tran", () => {
+		if (KHONG_STATUS.length < SAN_KHONG_STATUS) throw new Error("ma tran rong");
+	});
+
+	for (const dong of KHONG_STATUS) {
+		test(`loi-khong-status: ${dong.ten}`, () => {
+			expect(
+				lyDoHong({ ...KHONG, loi: dong.loi }),
+				`mat-mang-sai ${dong.ten}`,
+			).toEqual({ ma: dong.ma, daHoan: false });
+		});
+	}
+});

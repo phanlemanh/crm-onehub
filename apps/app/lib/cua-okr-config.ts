@@ -47,6 +47,12 @@ export const CUA_OKR = {
 	trangThaiChuaCauHinh: 503,
 	choTroLyMs: 30 * SECOND_MS,
 	luotDaHoan: "da-hoan",
+	loiMangTrinhDuyet: [
+		"Failed to fetch",
+		"fetch failed",
+		"NetworkError when attempting to fetch resource.",
+		"Load failed",
+	],
 	khongTra: [
 		"transfer-encoding",
 		"connection",
