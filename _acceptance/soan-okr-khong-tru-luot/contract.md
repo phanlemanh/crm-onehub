@@ -5,9 +5,9 @@ slug: soan-okr-khong-tru-luot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
-approved_by: Phan Le Manh
-approved_at: 2026-10-04
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-04-soan-okr-khong-tru-luot-design.md
 ---
 
@@ -36,6 +36,9 @@ quyết định 5; `_acceptance/soan-okr-khong-tru-luot/opportunity.md` (Cổng 
 - AC-8: Given màn soạn đang hiện chỗ báo lỗi, When bấm «Thử lại» và lần thử đó cũng không chạy — gửi lại bị cửa trả 502 `tro-ly-okr-khong-noi-duoc` có và không có `luot: "da-hoan"`; gửi lại mất mạng; gửi lại bị 401 `chua-dang-nhap`; mở lại cuộc ném lỗi; mở lại cuộc trả `ok: false` với một lý do có tên; gửi lại bị từ chối lượt có tên ở mọi mã của `CUA_OKR.trangThaiTuChoiLuot`; gửi lại bị 503 `chua-cau-hinh-tro-ly-okr` — Then không ca nào giữ nguyên chỗ báo lỗi cũ: ở ca có mã `lyDoHong`, chỗ báo lỗi hiện câu lý do của lần thử mới nhất, câu «Lượt này không bị tính.» CHỈ khi lỗi mang `luot: "da-hoan"`, và dòng «Đã thử lại N lần» với N bằng số lần đã bấm, cả ba trong vùng `aria-live`; ở ca từ chối có tên và chưa cấu hình, chỗ báo lỗi chung biến mất và hiện đúng thông báo có tên sẵn có của mã đó; nút «Thử lại» khoá trong lúc lần thử đang chạy và mở lại khi xong; khi lần thử chạy được thì chỗ báo lỗi biến mất.
 - AC-9: Given màn thật trong phiên đo riêng, cầu nối đã cấu hình nhưng `OKR_AGENT_URL` trỏ tới một cổng không ai nghe, và một cuộc `dang` có `soLuot = 0`, When trưởng phòng ban mở màn soạn của cuộc đó ở 1440 và 390 (màn tự gửi lượt mở đầu qua cửa) rồi bấm «Thử lại» một lần, Then thấy câu «Không nối được tới Trợ lý OKR.» kèm «Lượt này không bị tính.», sau khi bấm thấy «Đã thử lại 1 lần», không tràn ngang, cửa đã nhận ít nhất một POST lượt (đếm qua nghe mạng), và `soLuot` của cuộc trong kho phiên đo vẫn bằng 0 sau cả hai lần; đối chứng: cùng các bước với `OKR_AGENT_URL` trỏ tới máy giả trả 202 thì `soLuot` thành 1. (cross-layer)
 - AC-10: Given các khoá chữ mới của lượt này, When chạy bài ghim chữ và sàn thiết kế, Then mọi câu mới có ở cả `vi` và `en` trong `lib/messages/okr-soan.ts`, được `messages-guard` ghim, `hoi-thoai-soan.tsx` không có chữ cứng, và sàn thiết kế tĩnh không có lỗi P0 trên `hoi-thoai-soan.tsx`.
+- AC-11: Given cửa đang chuyển một luồng sự kiện (`GET session/:phien/stream`) hoặc thân trả lời của một lượt POST đã nhận header, When Trợ lý giữ luồng hay thân đó lâu hơn `CUA_OKR.choTroLyMs` mà vẫn gửi dữ liệu, Then cửa không cắt: người dùng đọc được trọn từng mẩu tới khi Trợ lý tự đóng, ở cả đường luồng sự kiện lẫn đường POST; thời hạn của cửa chỉ áp cho lượt POST mở phiên hay gửi tiếp, và chỉ trong lúc chờ Trợ lý trả header (ca POST treo trước header vẫn ra 504 và hoàn lượt như AC-1). (cross-layer)
+- AC-12: Given bảng viết trước các lỗi không có HTTP status mà phiên soạn có thể nhận — lỗi mạng của trình duyệt (`TypeError` «Failed to fetch», «fetch failed», «NetworkError when attempting to fetch resource.», «Load failed») và lỗi luồng của eve khi lượt hỏng trong Trợ lý (`Error` mang `name` là mã lỗi, ví dụ `session.failed`, hết ngân sách mô hình) — When gọi `lyDoHong`, Then chỉ lỗi mạng của trình duyệt ra `mat-mang`; mọi lỗi không status khác ra `dung-giua-chung` (câu «Phiên trò chuyện đã dừng giữa chừng»), cả hai với `daHoan = false`.
+- AC-13: Given người dùng đã bấm «Thử lại» và lần thử đó chạy được (Trợ lý đã trả sự kiện mới), When người dùng gửi một tin mới, và cả khi tin mới đó lại hỏng, Then trong lúc tin mới đang gửi không có chỗ báo lỗi nào hiện, và nếu tin mới hỏng thì chỗ báo lỗi hiện lý do của lỗi mới mà KHÔNG mang dòng «Đã thử lại N lần» của lần thử trước; bấm «Thử lại» lúc đó thì dòng đếm bắt đầu lại từ 1.
 
 ## Coverage
 
@@ -46,6 +49,7 @@ Không gian: Đường của cửa (mở phiên · gửi tiếp) × Kết quả 
 
 - Quét (skill morphological-scan, preset test-matrix): trục Đường × Kết quả Trợ lý × `soLuot` trước, đồng thời là lớp cắt ngang; trục Lối «Thử lại» × Kết quả lần thử. Chân ngành: mẫu giữ chỗ rồi bù trừ (Saga, Garcia-Molina & Salem 1987) `[NGÀNH: Saga — compensating transaction]`. Lượt quét bổ sung hai ô: mở lại trả `ok: false` (AC-8) và hoàn lượt hỏng (AC-1).
 - Lượt phản biện context sạch thêm: thời hạn chờ Trợ lý (ca treo), cờ `luot: "da-hoan"` để câu «không bị tính» chỉ hiện khi đúng, và các lần thử mà `lyDoHong` trả `null` (AC-8).
+- Lượt trả lại ở Cổng Bằng chứng round 1 (sổ gate2): thêm AC-11 (luồng trả lời không bị thời hạn cắt — Ngoài-1/3), AC-12 (chỉ lỗi mạng thật mới nói mất mạng — Ngoài-4), AC-13 (dòng đếm và khung lỗi không sống sang lượt sau — Ngoài-5).
 - Core: hỏng × hai đường × biên `soLuot` → AC-1; 2xx không dùng được → AC-2; trần còn chặn và không nới → AC-3; người dùng huỷ → AC-4; trần cuộc của kỳ → AC-5; hàm hoàn → AC-6; lý do → AC-7; «Thử lại» → AC-8; nhìn thấy trên màn thật → AC-9; chữ và sàn → AC-10.
 - Thước CE: tập mã lỗi có tên của cửa đọc từ `CUA_OKR.loi` và `CUA_OKR.trangThaiTuChoiLuot` lúc chạy bài AC-7, không chép tay; trần đọc từ `TRO_LY_OKR_TRAN.soan`.
 - Later: lượt tới Trợ lý rồi mới hỏng trong luồng (`turn.failed`) → hoàn ở `apps/agent-okr`, vòng riêng.
@@ -89,6 +93,11 @@ khẳng định trên `soLuot`, `soCuocDaDung`, `tranCuoc`, `luotMoiCuoc`, `demC
 > `descope` trong `decisions.jsonl`.
 
 ## Notes
+
+- Known limits (chủ kho ghi ở Cổng Bằng chứng round 1, 04/10):
+  - Ngoài-2: ngưỡng 500 phân biệt «Trợ lý lỗi» với «Trợ lý từ chối» viết ở hai chỗ (`route.ts` và `loi-cua.ts`) thay vì một hằng trong `CUA_OKR`; đổi một nơi mà quên nơi kia thì mã lỗi của cửa và câu trên màn lệch nhau.
+  - Ngoài-6: sàn ma trận của bài `soan-okr-thu-lai.dom.tsx` tự đếm chính danh sách ca, nên xoá bớt một ca không làm bài đỏ.
+  - Ngoài-7: bài đó kiểm câu lý do «có mặt» và «khác câu chung» chứ không kiểm câu chung đã biến mất; màn hiện cả hai câu cạnh nhau vẫn qua bài.
 
 - Ranh giới tệp (LUAT điều phối 1410): P5 sửa cửa `apps/app/app/eve/agents/okr/**` và `okr/soan/**` trừ `nut-soan.tsx`; điều phối duyệt thêm `packages/db/src/okr-cuoc-soan.ts` và `apps/api/src/okr/soan.service.ts` (Nhật ký 12:50). Không chạm `nop_ban_nhap.ts`, `packages/validation/src/okr-cuoc-soan.ts` (PR #248), `schema.prisma`.
 - Không mở cuộc hay gửi lượt AI trên production.

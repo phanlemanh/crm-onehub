@@ -91,3 +91,28 @@ evals:
     expected: "exit 0; messages-guard.spec.ts xanh với khoá mới hoiThoai.lyDoHong.* và hoiThoai.daThuLai được ghim (GHIM hoặc KHONG_DAU đúng luật tệp); design-gate --mode static trên hoi-thoai-soan.tsx không có P0. Chiều đỏ ghim: bản sao messages thiếu khoá en của một lý do → messages-guard đỏ gọi tên khoá."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", apps/app/lib/messages/okr-soan.ts, apps/app/test/messages-guard.spec.ts]
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1h_luong
+    expected: "exit 0; bài gọi handler thật của cửa với CUA_OKR.choTroLyMs hạ nhỏ (300 ms); fetch giả trả header ngay rồi đẩy thân thành N mẩu cách nhau sao cho tổng thời gian ≥ 2 × choTroLyMs; hai ô: GET session/<phien>/stream (200, NDJSON) và POST session/<phien> (202); mỗi ô đọc trọn res.text() và so toEqual chuỗi ghép đủ N mẩu, không ném lỗi; ô POST đọc lại soLuot = n + 1 (lượt đã tới Trợ lý thì vẫn tính). Đối chứng cùng tệp: POST treo trước header vẫn ra 504 tro-ly-okr-qua-han có luot (ô treo của E1). Chiều đỏ ghim: bản sao route.ts gắn thời hạn cho mọi yêu cầu và không dọn sau header → 'luong-bi-cat <duong>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", apps/app/lib/cua-okr-config.ts, apps/app/test/khung-cua-hoan.ts, apps/app/test/soan-okr-khong-tru-luot.spec.ts]
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.r1h_khong_status
+    expected: "exit 0; bảng viết trước lỗi không status: bốn lỗi mạng của trình duyệt (TypeError với «Failed to fetch», «fetch failed», «NetworkError when attempting to fetch resource.», «Load failed») → { ma: 'mat-mang', daHoan: false }; lỗi luồng của eve dựng như eve tạo khi lượt hỏng (Error có name là mã, ví dụ 'session.failed', 'turn.failed', thông điệp hết ngân sách), Error thường, TypeError có thông điệp khác → { ma: 'dung-giua-chung', daHoan: false }; số khẳng định = số dòng, sàn viết tay. Chiều đỏ ghim: bản sao trả mat-mang cho mọi lỗi không status → 'mat-mang-sai <dong>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/loi-cua.ts", apps/app/test/soan-okr-ly-do-loi.spec.ts]
+
+  - id: E13
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.r1h_sau_thu_lai
+    expected: "exit 0; bài DOM: màn ở lỗi chung, bấm «Thử lại», lần thử chạy được (phiên nhận sự kiện mới rồi về ready) → không [data-luot='loi']; gửi tin mới (phiên sang submitted) → không [data-luot='loi'] trong lúc gửi; tin mới hỏng (502 tro-ly-okr-khong-noi-duoc) → [data-luot='loi'] chứa câu lyDoHong khong-noi-duoc và KHÔNG chứa câu daThuLai nào; bấm «Thử lại» lần nữa → có daThuLai('1'), không có daThuLai('2'). Chiều đỏ ghim: bản sao không xoá đếm khi lần thử chạy được → 'thu-lai-song-sang-luot-sau' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr-thu-lai.dom.tsx]

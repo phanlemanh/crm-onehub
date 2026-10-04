@@ -1120,6 +1120,9 @@ executors:
     r1h_hoan_db: bun run test -- "cd packages/db && bun test test/okr-hoan-luot.spec.ts"
     r1h_ly_do: cd apps/app && bun test ./test/soan-okr-ly-do-loi.spec.ts
     r1h_thu_lai_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai.dom.tsx
+    r1h_luong: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t luong-khong-cat"
+    r1h_khong_status: cd apps/app && bun test ./test/soan-okr-ly-do-loi.spec.ts -t loi-khong-status
+    r1h_sau_thu_lai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai.dom.tsx -t sau-thu-lai
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
