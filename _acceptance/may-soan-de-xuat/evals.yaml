@@ -534,3 +534,22 @@ evals:
       viet. Man duyet: nguoi van phong thay nguon truoc, biet so nao den tu dau, khong bi goi y bam
       Duyet; khong nhan ky thuat (markdown, hash, blob). Thieu bat ky dau vao nao -> UNCERTAIN ghi ro
       "thieu dau vao: <ten>", khong cham tu tai lieu thiet ke.
+    paths:
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quyet-dinh-hoa-hong.md"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quy-trinh.md"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-bieu-mau.md"
+      - "_acceptance/may-soan-de-xuat/mau/quy-tac-viet.md"
+      - "_acceptance/may-soan-de-xuat/evidence/msd-duyet-b1-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/msd-duyet-b2-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/msd-duyet-390.png"
+      - "_acceptance/may-soan-de-xuat/evidence/msd-nguon-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quyet-dinh-hoa-hong-b1-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quyet-dinh-hoa-hong-b2-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quyet-dinh-hoa-hong-b2-390.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quy-trinh-b1-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quy-trinh-b2-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-quy-trinh-b2-390.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-bieu-mau-b1-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-bieu-mau-b2-1440.png"
+      - "_acceptance/may-soan-de-xuat/evidence/soan-that-bieu-mau-b2-390.png"
+      - "docs/superpowers/specs/2026-09-28-may-soan-de-xuat-design.md"

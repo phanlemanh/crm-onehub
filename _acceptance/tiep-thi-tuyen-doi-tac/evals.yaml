@@ -355,6 +355,10 @@ evals:
       - evidence/live-batch.json
       - evidence/live-run.log
     evidence_required: [judged_by, verdict, rationale]
+    paths:
+      - "_acceptance/tiep-thi-tuyen-doi-tac/contract.md"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log"
 
   - id: E20
     criterion: AC-15
