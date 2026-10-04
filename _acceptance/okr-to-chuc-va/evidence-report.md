@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: eabda4540b513e081c1796dccfaaeac9255a9fd2
+verified_commit: dcded547c3fdcf8e30545ded330088afd7084383
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (23/23 eval đạt, 0 phát hiện trong hợp đồng). Mười một mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 3, 4, 5, 7 ghi Known limits; Ngoài-6, 8, 9, 10, 11 chấp nhận không sửa. Hai phát hiện round 1 rơi khỏi thẻ (bài so-kr chỉ kiểm URL record, bài nut-them chỉ kiểm khoá URL) ghi Known limits. Phạm vi cắt/hoãn đồng ý cắt; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -298,3 +298,7 @@ none — moi eval chay mot lan, khong co eval ngau nhien.
 
 Round 1: 25 eval xanh nhung review ra loi ngoai hop dong (them KR tren muc tieu da bo, taoTuMau cua quan tri, khoa cot hop KR cua quan tri). Hop dong mo rong them AC-13, AC-14 va cac eval E21, E22, E23.
 Round 2: chay lai cac eval cham paths da doi (E1, E2, E4, E6, E9, E10, E11, E12, E13, E15, E16, E17, E18, E19, E21, E22, E23) va bo suite; E3, E5, E7, E8, E14, E20 carry-forward tu round 1. Tat ca xanh, verdict PASS.
+
+### Re-pin lần 1 — 2026-10-04, do hoá cũ do gộp onehub c63b3afb (#257 #258 #259); lượt trước đỏ hạ tầng: worktree thiếu minimatch của #259
+run_id: repin-20261004T233824Z-71709
+sha: dcded547c3fdcf8e30545ded330088afd7084383 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E3, E11, E13, E18, E20
