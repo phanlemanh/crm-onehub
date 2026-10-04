@@ -5,7 +5,7 @@ slug: thanh-vien-vao-dung
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-04T07:08:02Z
 design_doc: docs/superpowers/specs/2026-10-04-thanh-vien-vao-dung-design.md
@@ -87,3 +87,21 @@ Never: dọn dòng treo trên production bằng migration — trái ràng buộc
 - `apps/api/src/companies/domain.ts` nằm ngoài ranh giới P3; vòng này chỉ THÊM một hàm xuất `isFreeEmailDomain`, không sửa dòng có sẵn.
 - Lệnh soi production lấy chuỗi kết nối bằng `vercel env pull` vào tệp tạm ngoài kho, chạy, xoá tệp; tệp kết quả chỉ chứa số đếm và tên máy chủ.
 - Số soi production ngày giao code (04/10/2026, trước merge, dự án `crm-onehub-api`, máy chủ Neon pooler, giao dịch READ ONLY): `ten-mien 0`, `treo 0`, `bo-sot 0`, `khong-doc-duoc 0` — `evidence/soi-production.txt`. Hôm nay không có dòng treo cũ nào, nên ngưỡng «dòng treo» đọc theo cách (b) cũng là 0 tuyệt đối; tên miền nội bộ chưa đặt (đúng lỗi #28).
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-04):**
+  - Ngoài-1 — sau khi lưu tên miền nội bộ thành công, nếu lần tải lại ngay sau đó gặp lỗi mạng thoáng
+    qua, thẻ thay form bằng «Không tải được tên miền nội bộ» dù đã lưu (cùng lúc toast «Đã lưu»); bấm
+    «Thử lại» là hiện lại danh sách.
+  - Ngoài-3 — ca «nút sau lỗi máy chủ» (E13 a) kiểm vế máy chủ bằng cách đọc chữ trong `page.tsx`, chưa
+    xem trang thật; trang viết lại kiểu khác có thể làm mất nút mà ca vẫn xanh.
+  - Ngoài-4 — thước tài liệu (E22) cho dòng «dòng treo đọc thành accepted» đã xanh từ trước vòng này;
+    xoá đoạn giải thích trong `docs/api.md` thì thước không phát hiện.
+  - Ngoài-5 — phần màn hình và phần máy chủ của việc lưu tên miền (AC-1) được kiểm riêng bằng hai đầu
+    vào viết tay, không nối liền.
+  - Ngoài-6 — năm ca test của hồ sơ đã ký (workspace-thanh-vien ×4, go-thanh-vien ×1) nay tự gieo lời
+    cho phép `accepted` thay vì đi qua `allowEmail`; điều các ca khẳng định không đổi.
+  - Ngoài-7 — dòng «giao-dich READ ONLY» trong tệp soi production là chữ in sẵn; bằng chứng chỉ-đọc thật
+    là ca E15 chèn câu ghi bị Postgres từ chối, không phải dòng đó.
+  - Ngoài-10 — ca xoá trắng / hai đường đọc chỉ khẳng định bài nộp KHÔNG bị bỏ qua vì người nhà, chưa
+    chứng nó được lập hồ sơ đúng.
+  - Ngoài-12 — bàn đo màn kiểm câu lỗi nằm trong thẻ, chưa đo nó nằm dưới ô; vị trí chỉ được xác nhận
+    bằng mắt trên ảnh.
