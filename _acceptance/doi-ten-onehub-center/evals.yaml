@@ -139,6 +139,9 @@ evals:
       ten; khong "OneHub Center của bạn" hay "your OneHub Center data" khi cau cu dung CRM theo
       nghia kho du lieu; khong tu thuoc _Avoid_; muc «OneHub Center» trong CONTEXT.md co dinh
       nghia, _Avoid_, «Vì sao». Dat khi moi cau dat.
+    paths:
+      - "CONTEXT.md"
+      - "_acceptance/doi-ten-onehub-center/evidence/chuoi-doi.md"
 
   - id: E8
     criterion: AC-8

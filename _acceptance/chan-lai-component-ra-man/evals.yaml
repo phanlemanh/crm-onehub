@@ -170,3 +170,5 @@ evals:
     expected: |
       Nguoi doc cac chuoi vong nay ghi de va cham: co doc nhu tieng Viet cua nguoi lam
       nghe khong. May KHONG cham muc nay.
+    paths:
+      - "packages/ui/src/lib/messages.ts"
