@@ -365,15 +365,13 @@ export class WorkspaceService {
 			);
 		}
 
-		const member = await this.db.member.findFirst({
-			where: {
-				organizationId: WORKSPACE_ID,
-				user: { email: { equals: email, mode: "insensitive" } },
-			},
-			select: { id: true },
-		});
+		const member = await this.db.$queryRaw<{ id: string }[]>`
+			SELECT m.id FROM member m
+			JOIN "user" u ON u.id = m."userId"
+			WHERE m."organizationId" = ${WORKSPACE_ID} AND lower(u.email) = ${email}
+			LIMIT 1`;
 
-		if (member) {
+		if (member.length > 0) {
 			throw new BadRequestException(ALREADY_A_MEMBER);
 		}
 

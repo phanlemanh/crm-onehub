@@ -504,6 +504,28 @@ describe("cho-phep", () => {
 		]).toEqual(["pending", 1, "doi chung duong: dia chi moi"]);
 	});
 
+	it("ky-tu-dai-dien: _ va % trong dia chi khong khop nham thanh vien khac", async () => {
+		const thanhVien = `${suffix}-nguyen.an@lan-do.onehub.vn`;
+		await ganThanhVien(await gieoNguoi("nguyen-an", thanhVien), "member");
+		const gach = `${suffix}-nguyen_an@lan-do.onehub.vn`;
+		const phanTram = `%@lan-do.onehub.vn`;
+
+		const loiGach = await loiCua(() =>
+			workspace.allowEmail(quan, { email: gach, role: "member" }),
+		);
+		const loiPhanTram = await loiCua(() =>
+			workspace.allowEmail(quan, { email: phanTram, role: "member" }),
+		);
+
+		expect([
+			loiGach,
+			loiPhanTram === ALREADY_A_MEMBER,
+			await demDong(gach),
+			"ky-tu-dai-dien",
+		]).toEqual([null, false, 1, "ky-tu-dai-dien"]);
+		await db.invitation.deleteMany({ where: { email: phanTram } });
+	});
+
 	it("treo-khi-doc: dong pending cua thanh vien doc thanh accepted, khong ghi", async () => {
 		const treo = `${suffix}-treo@lan-do.onehub.vn`;
 		const cho = `${suffix}-cho@lan-do.onehub.vn`;
