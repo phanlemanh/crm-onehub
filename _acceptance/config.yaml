@@ -1177,6 +1177,9 @@ executors:
     l4b_dem: 'bun run test -- "bun test _acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.spec.ts"'
     r1c_dg_da_gui_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cap-nhat-tuan.dom.tsx -t 'da gui dem dung'"
     r1c_dg_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx" --mode static'
+    tpa_hop_le: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t hop-le
+    tpa_onehub: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t onehub-trien-khai
+    tpa_nhanh_khac: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t "nhanh-khac-khong-trien-khai|bo-khop-bat-bay-sao"
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
@@ -1830,6 +1833,12 @@ executors:
     r1h_man_that: 'OKR_AGENT_BRIDGE_SECRET=gia-do-soan-okr-khong-tru-luot OKR_AGENT_URL=http://127.0.0.1:9 PHIEN_DO_TEN_CAY=soan-okr-khong-tru-luot bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-khong-tru-luot/rang/thu-lai-man-that.mjs"'
     r1h_chu_va_san: 'cd apps/app && bun test test/messages-guard.spec.ts && cd ../.. && node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx" --mode static'
     r1c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/man-okr-truoc-r1/rang/man-r1c.mjs"'
+    tpa_pha_thu: bun _acceptance/tat-preview-agent-okr/rang/pha-thu.mjs
+    tpa_vercel_preview_xanh: bun _acceptance/tat-preview-agent-okr/rang/vercel-preview.mjs xanh
+    tpa_vercel_preview_do: bun _acceptance/tat-preview-agent-okr/rang/vercel-preview.mjs do
+    tpa_vercel_production_xanh: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs xanh
+    tpa_vercel_production_do: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs do
+    tpa_vercel_production_bo_tay: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs bo-tay
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
