@@ -1163,6 +1163,13 @@ executors:
     r1d_trung_ten: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-to-chuc.spec.ts -t trung-ten"
     r1d_quyen_tao: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-quyen.spec.ts"
     r1d_kr_quan_tri: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-to-chuc-va.dom.tsx -t kr-quan-tri
+    l4b_gui: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-gui"'
+    l4b_loi_dan: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-loi-dan"'
+    l4b_zdr: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-zdr"'
+    l4b_cam_goi: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-cam-goi"'
+    l4b_tu_choi: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-tu-choi"'
+    l4b_hoi_cu: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-nop.spec.ts && TZ=Asia/Ho_Chi_Minh bun test test/tro-ly-kho-zalo.integration.spec.ts"'
+    l4b_dem: 'bun run test -- "bun test _acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.spec.ts"'
     r1c_dg_da_gui_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cap-nhat-tuan.dom.tsx -t 'da gui dem dung'"
     r1c_dg_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx" --mode static'
   script:

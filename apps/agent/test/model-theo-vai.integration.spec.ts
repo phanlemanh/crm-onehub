@@ -322,6 +322,7 @@ describe("bon-phien", () => {
 
 	it("bon-phien: moi phien qua modelTheoVai", () => {
 		const choPhep = new Set([
+			"MODEL_GOC",
 			"modelChoPhienGoc",
 			"modelChoBoDung",
 			"modelChoBoChay",
