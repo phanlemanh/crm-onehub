@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 444d323b0f995102b444855556e79e4e0cbe2d38
+verified_commit: 51a4de40d820df124d6455b7bd6d918958c1666b
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -305,3 +305,7 @@ none — every multi-run eval is uniform
 Round 1: `bun run test` thất bại — suite chuỗi (messages-guard) thiếu khoá `dem` và `duocPhepVao.menu` trong từ điển tiếng Việt. Trả về S3 để bổ sung khoá.
 Round 2: 18 eval (E1–E18) và 4 lệnh suite hồi quy đều xanh — PASS.
 Round 3: nâng phạm vi từ phát hiện «Ngoài-1» của round 1 (allowEmail invalidate ngoài lối chung useCrmCache) — thêm AC-17/E19 «làm mới qua useCrmCache» cho cho-phep-dia-chi.tsx, allowances-table.tsx, members-table.tsx, cache.ts; 19 eval (E1–E19) và 4 lệnh suite hồi quy đều xanh — PASS.
+
+### Re-pin lần 1 — 2026-10-04, do gộp onehub 6e7accc2 (#252) và vá thước lăn do-bang/do-khoi chống đua (51a4de40)
+run_id: repin-20261004T131201Z-36740
+sha: 51a4de40d820df124d6455b7bd6d918958c1666b · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E16 · diff chạm vật đo ngoài làn máy: E16 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-14

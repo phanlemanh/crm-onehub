@@ -172,3 +172,13 @@ evals:
       - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-loi-390.png"
       - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-tra-lai-1440.png"
       - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-tra-lai-390.png"
+    paths:
+      - "CONTEXT.md"
+      - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-may-soan-1440.png"
+      - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-may-soan-390.png"
+      - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-go-tay-1440.png"
+      - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-go-tay-390.png"
+      - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-loi-1440.png"
+      - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-loi-390.png"
+      - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-tra-lai-1440.png"
+      - "_acceptance/trang-chua-de-xuat-mo-duoc/evidence/tcd-tra-lai-390.png"

@@ -172,6 +172,9 @@ evals:
       Do dau ra that can mot luot chay end-to-end voi model that (duong
       `bun run --filter=agent eval`), vong nay khong dung — xem entry revisit trong
       decisions.jsonl.
+    paths:
+      - "apps/agent/agent/instructions/task.ts"
+      - "CONTEXT.md"
 
   - id: E10
     criterion: AC-10

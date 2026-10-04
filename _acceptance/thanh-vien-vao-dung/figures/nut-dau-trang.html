@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nút đầu trang · Hình d-4</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 70ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình d-4 · Máy trạng thái · thanh-vien-vao-dung</p>
+    <h1>Nút «Cho phép một địa chỉ» khi workspace.get lỗi vẫn hiện</h1>
+    <p class="sub"><code>ChoPhepDiaChi</code> đọc <code>useQuery(trpc.workspace.get)</code> thay cho <code>quyenQuanTri()</code>. Lỗi không còn bị đọc thành «không quyền». AC-9; giữ AC-10 đã ký của <code>thanh-vien-hai-khoi-cung-khuon</code>.</p>
+
+    <svg viewBox="0 0 1000 648" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+        </marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">ĐIỂM QUYẾT ĐỊNH d-4 · NÚT Ở ĐẦU TRANG THÀNH VIÊN</text>
+
+      <path d="M 62 232 L 112 232" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <path d="M 272 232 L 448 232" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="328" y="208" width="64" height="16" rx="2" fill="#fafafa"/>
+      <text x="360" y="220" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">có dữ liệu</text>
+
+      <path d="M 472 208 L 472 128 A 8 8 0 0 1 480 120 L 640 120" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="504" y="96" width="112" height="16" rx="2" fill="#fafafa"/>
+      <text x="560" y="108" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">[canManageMembers]</text>
+
+      <path d="M 496 232 L 640 232" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="528" y="208" width="80" height="16" rx="2" fill="#fafafa"/>
+      <text x="568" y="220" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">[không quyền]</text>
+
+      <path d="M 192 268 L 192 384 A 8 8 0 0 0 200 392 L 376 392" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="252" y="368" width="72" height="16" rx="2" fill="#fafafa"/>
+      <text x="288" y="380" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">lỗi lần đầu</text>
+
+      <path d="M 472 356 L 472 256" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="480" y="300" width="108" height="16" rx="2" fill="#fafafa"/>
+      <text x="484" y="312" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">thử lại thành công</text>
+
+      <path d="M 568 392 L 640 392" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <rect x="580" y="368" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="604" y="380" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">vẫn lỗi</text>
+
+      <path d="M 198 504 L 464 504 A 8 8 0 0 0 472 496 L 472 428" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="236" y="480" width="192" height="16" rx="2" fill="#fafafa"/>
+      <text x="332" y="492" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">prefetch máy chủ lỗi · hydrate</text>
+
+      <circle cx="56" cy="232" r="6" fill="#171717"/>
+      <circle cx="192" cy="504" r="6" fill="#171717"/>
+      <text x="192" y="528" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">trang dựng trên máy chủ</text>
+
+      <rect x="112" y="196" width="160" height="72" rx="8" fill="#fafafa"/>
+      <rect x="112" y="196" width="160" height="72" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="192" y="222" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đang tải</text>
+      <text x="192" y="238" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">useQuery(workspace.get)</text>
+      <text x="192" y="256" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không nút</text>
+
+      <polygon points="472,208 496,232 472,256 448,232" fill="#fafafa"/>
+      <polygon points="472,208 496,232 472,256 448,232" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="472" y="235" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">vai</text>
+
+      <rect x="640" y="84" width="240" height="72" rx="8" fill="#fafafa"/>
+      <rect x="640" y="84" width="240" height="72" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="760" y="110" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có dữ liệu · quản trị</text>
+      <text x="760" y="126" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">canManageMembers = true</text>
+      <text x="760" y="144" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nút hiện — như hôm nay</text>
+
+      <rect x="640" y="196" width="240" height="72" rx="8" fill="#fafafa"/>
+      <rect x="640" y="196" width="240" height="72" rx="8" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="760" y="222" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có dữ liệu · thành viên thường</text>
+      <text x="760" y="238" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">canManageMembers = false</text>
+      <text x="760" y="256" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">không nút — giữ AC-10 đã ký</text>
+
+      <rect x="376" y="356" width="192" height="72" rx="8" fill="#fafafa"/>
+      <rect x="376" y="356" width="192" height="72" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="472" y="380" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lỗi · thử lại một lần</text>
+      <text x="472" y="396" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">retryQuery</text>
+      <text x="472" y="414" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không nút trong lúc thử</text>
+
+      <rect x="640" y="348" width="240" height="88" rx="8" fill="#fafafa"/>
+      <rect x="640" y="348" width="240" height="88" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="760" y="372" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Vẫn lỗi sau lượt thử lại</text>
+      <text x="760" y="390" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">nút hiện</text>
+      <text x="760" y="406" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">bấm → hộp; người không quyền nhận</text>
+      <text x="760" y="420" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">403 trong hộp, không tạo dòng</text>
+
+      <text x="528" y="480" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">Lỗi lúc máy chủ dựng trang không còn là trạng thái cuối —</text>
+      <text x="528" y="500" fill="#171717" font-size="14" font-style="italic" font-family="'Lora', Georgia, serif">truy vấn trình duyệt chạy lại, không cần tải lại trang.</text>
+      <text x="528" y="524" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Hôm nay: quyenQuanTri() đọc lỗi thành «không quyền», nút mất tới khi tải lại trang.</text>
+
+      <line x1="32" y1="584" x2="968" y2="584" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="604" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="32" y="616" width="28" height="14" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="68" y="626" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Trạng thái mới của vòng này</text>
+      <rect x="240" y="616" width="28" height="14" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="276" y="626" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Như hôm nay</text>
+      <circle cx="388" cy="623" r="5" fill="#171717"/>
+      <text x="400" y="626" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Điểm vào</text>
+      <polygon points="476,623 488,617 500,623 488,629" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="508" y="626" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Rẽ theo vai</text>
+      <line x1="592" y1="623" x2="616" y2="623" stroke="#575757" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="624" y="626" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Vào từ trạng thái hydrate</text>
+    </svg>
+
+    <footer>d-4 · thanh-vien-vao-dung · nút «Cho phép một địa chỉ» theo trạng thái truy vấn · thiết kế 2026-10-04</footer>
+  </div>
+</body>
+</html>

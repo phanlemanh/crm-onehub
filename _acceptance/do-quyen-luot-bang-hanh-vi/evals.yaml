@@ -255,6 +255,11 @@ evals:
       loi khai" hoac im lang ve chuyen ai khai, trong khi ma nhan thang gia tri
       client -> FAIL. Tai lieu dung dung ba cau nhung viet bang jargon schema/tool
       -> FAIL theo tieu chi (3).
+    paths:
+      - "docs/agent.md"
+      - "apps/api/src/conversations/conversations.service.ts"
+      - "apps/agent/agent/lib/custom-agent-dispatch.ts"
+      - "apps/agent/agent/subagents/agent_builder/lib/authorization.ts"
 
   - id: E8
     criterion: AC-7
