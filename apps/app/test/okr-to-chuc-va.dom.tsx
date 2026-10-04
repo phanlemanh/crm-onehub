@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import type { Locale } from "@crm/ui/lib/locale";
+import {
+	ketQuaKhoiPhuc,
+	lyDoChanLuuTru,
+} from "@crm/validation/to-chuc-luu-tru";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
@@ -31,6 +35,15 @@ const { ObjectiveSheet } = await import(
 );
 const { DetailSheet } = await import("@/components/detail-sheet");
 const { SEARCH_PARAM } = await import("@/lib/search-param-keys");
+const { XacNhanLuuTru } = await import(
+	"@/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru"
+);
+const { DaLuuTruToChuc } = await import(
+	"@/app/(app)/[slug]/settings/organization/da-luu-tru-to-chuc"
+);
+const { Toaster } = await import("@crm/ui/components/sonner");
+const { okrTaiCoCauMessages } = await import("@/lib/messages/okr-tai-co-cau");
+const { toChucMessages } = await import("@/lib/messages/to-chuc");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 
@@ -500,5 +513,170 @@ describe("nut-them", () => {
 			dangMo = dangMo.filter((x) => x !== san);
 			document.body.innerHTML = "";
 		}
+	});
+});
+
+const CHU_VIET =
+	/[đĐăĂâÂêÊôÔơƠưƯ\u0300-\u036f]|[àáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ]/i;
+
+const chuDich = (o: Element): string => {
+	const ban = o.cloneNode(true) as Element;
+	for (const x of ban.querySelectorAll("[translate=no]")) x.remove();
+	return ban.textContent ?? "";
+};
+
+describe("ly-do-luu-tru", () => {
+	const LY_DO = [
+		lyDoChanLuuTru.parse({
+			loai: "khuon",
+			khuon: ["Khuôn Bán hàng"],
+			cau: "Phòng ban này còn nằm trong khuôn Khuôn Bán hàng — sửa khuôn trước.",
+		}),
+		lyDoChanLuuTru.parse({ loai: "nguoi", so: 2, cau: "x" }),
+		lyDoChanLuuTru.parse({ loai: "okr", so: 3, cau: "x" }),
+	];
+
+	test("ly-do-luu-tru: ba ly do in theo ngon ngu nguoi xem, so va ten dung, ten khuon khong dich", async () => {
+		expect.assertions(2 * LY_DO.length * 2 + 2);
+		for (const locale of ["en", "vi"] as const) {
+			dat("org.luuTruXemTruoc", () => ({ lyDo: LY_DO }));
+			const san = await dung(
+				<XacNhanLuuTru
+					daLuu={() => {}}
+					dong={() => {}}
+					hoi={{ loai: "phong-ban", id: "pb-1", name: "Kinh doanh miền Bắc" }}
+					moChuyen={() => {}}
+					okrMo={0}
+				/>,
+				{ locale },
+			);
+			await cho(() => q("[data-ly-do-chan=okr]") !== null, "hop ly do");
+			const c = okrTaiCoCauMessages(locale).toChuc.chan;
+			const mong = {
+				khuon: c.lyDoKhuon.replace("{khuon}", "Khuôn Bán hàng"),
+				nguoi: c.lyDoNguoi(2),
+				okr: c.lyDo["phong-ban"](3),
+			};
+			for (const l of LY_DO) {
+				const o = q(`[data-ly-do-chan=${l.loai}]`);
+				expect(
+					locale === "en" ? CHU_VIET.test(chuDich(o ?? document.body)) : false,
+					`cau tieng viet o en: ${l.loai}`,
+				).toBe(false);
+				expect(o?.textContent ?? "", `cau sai: ${locale} ${l.loai}`).toBe(
+					mong[l.loai],
+				);
+			}
+			if (locale === "en") {
+				const khuon = q("[data-ly-do-chan=khuon]");
+				expect(
+					CHU_VIET.test(khuon?.textContent ?? ""),
+					"doi chung: ten co dau",
+				).toBe(true);
+				expect(
+					q("[data-ly-do-chan=khuon] [translate=no]")?.textContent,
+					"ten khuon khong o phan khong dich",
+				).toBe("Khuôn Bán hàng");
+			}
+			await act(async () => san.root.unmount());
+			san.o.remove();
+			dangMo = dangMo.filter((x) => x !== san);
+			document.body.innerHTML = "";
+		}
+		console.log(`so o: ${2 * LY_DO.length}`);
+	});
+});
+
+describe("khoi-phuc-toast", () => {
+	const CA = [
+		{
+			loai: "cha-luu-tru",
+			ten: "Khối Kinh doanh",
+			id: "pb-x",
+			thuTuc: "org.restoreDepartment",
+		},
+		{
+			loai: "trung-ten",
+			ten: "Kinh doanh miền Bắc",
+			id: "bp-y",
+			thuTuc: "org.restoreDivision",
+		},
+	] as const;
+
+	test("khoi-phuc-toast: tu choi khoi phuc bao bang ngon ngu nguoi xem, khong bao thanh cong", async () => {
+		expect.assertions(2 * CA.length * 3);
+		for (const locale of ["en", "vi"] as const)
+			for (const ca of CA) {
+				dat(ca.thuTuc, () =>
+					ketQuaKhoiPhuc.parse({ chan: { loai: ca.loai, ten: ca.ten } }),
+				);
+				const cay = orgTreeOutput.parse({
+					divisions: [],
+					chuaXep: [],
+					chuaCoPhongBan: [],
+					people: [],
+					archived: {
+						divisions: [
+							{
+								id: "bp-y",
+								name: "Kinh doanh miền Bắc",
+								okrMo: 0,
+								purgeable: false,
+							},
+						],
+						departments: [
+							{
+								id: "pb-x",
+								name: "Kinh doanh miền Bắc",
+								okrMo: 0,
+								purgeable: false,
+							},
+						],
+					},
+					coverage: { members: 0, withPrimary: 0, departmentsWithoutHead: 0 },
+				});
+				const san = await dung(
+					<>
+						<DaLuuTruToChuc cay={cay} sua />
+						<Toaster />
+					</>,
+					{ locale },
+				);
+				await bam(q("[data-slot=archived-list] button", san.o), "mo danh sach");
+				const nut = [
+					...san.o.querySelectorAll<HTMLElement>(
+						"[data-slot=archived-list] button",
+					),
+				].filter(
+					(b) => b.textContent?.trim() === toChucMessages(locale).khoiPhuc,
+				);
+				await bam(nut[ca.id === "bp-y" ? 0 : 1] ?? null, `khoi phuc ${ca.id}`);
+				await cho(() => q("[data-sonner-toast]") !== null, "toast");
+				const toast = q("[data-sonner-toast]");
+				const m = toChucMessages(locale);
+				const mau =
+					ca.loai === "cha-luu-tru" ? m.khoiPhucChaLuuTru : m.khoiPhucTrungTen;
+				expect(
+					q("[data-chan-khoi-phuc]")?.textContent ?? "",
+					`toast khong theo ngon ngu: ${locale} ${ca.loai}`,
+				).toBe(mau.replace("{ten}", ca.ten));
+				expect(
+					locale === "en"
+						? CHU_VIET.test(
+								chuDich(q("[data-chan-khoi-phuc]") ?? document.body),
+							)
+						: false,
+					`toast con chu viet: ${ca.loai}`,
+				).toBe(false);
+				expect(
+					toast?.getAttribute("data-type"),
+					`toast khong phai loi: ${locale} ${ca.loai}`,
+				).toBe("error");
+				await act(async () => san.root.unmount());
+				san.o.remove();
+				dangMo = dangMo.filter((x) => x !== san);
+				document.body.innerHTML = "";
+			}
+		console.log(`so o: ${2 * CA.length}`);
 	});
 });

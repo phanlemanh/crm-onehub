@@ -42,7 +42,7 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.r1d_ly_do_api
-    expected: "exit 0; apps/api/test/okr-to-chuc-va-to-chuc.spec.ts -t ly-do (CSDL riêng): dựng phòng ban vướng cả ba lý do (khuôn onboarding đang dùng tên «Khuôn A», 2 người có phòng ban chính, 3 mục tiêu ở kỳ dang-chay); org.luuTruXemTruoc trả đúng ba mục parse được bằng schema đầu ra mới (packages/validation): {loai: khuon, khuon: ['Khuôn A']}, {loai: nguoi, so: 2}, {loai: okr, so: 3}; archiveDepartment vẫn từ chối với câu tiếng Việt cũ. Chiều đỏ ghim: bản sao trả lại trường cau thay cho so phải làm bài đỏ 'ly do khong co so: nguoi'."
+    expected: "exit 0; apps/api/test/okr-to-chuc-va-to-chuc.spec.ts -t ly-do (CSDL riêng): dựng phòng ban vướng cả ba lý do (khuôn onboarding đang dùng tên «Khuôn A», 2 người có phòng ban chính, 3 mục tiêu ở kỳ dang-chay); org.luuTruXemTruoc trả đúng ba mục parse được bằng schema đầu ra mới (packages/validation): {loai: khuon, khuon: ['Khuôn A']}, {loai: nguoi, so: 2}, {loai: okr, so: 3}; archiveDepartment vẫn từ chối với câu tiếng Việt cũ. Chiều đỏ ghim: bản sao trả lý do không có so phải làm thủ tục trả 500 (đầu ra không qua schema) và bài đỏ 'xem truoc: HTTP 500'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/api/src/to-chuc/**", "packages/validation/src/**", "apps/api/test/okr-to-chuc-va-to-chuc.spec.ts"]
 
