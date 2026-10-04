@@ -279,6 +279,9 @@ evals:
       man do van hieu dung thi chu do thua; (2) danh tu san pham theo CONTEXT.md —
       "cong ty" va "ca nhan", khong khoa vao giai doan moi gioi; (3) khong tu duc tu
       ghep cho thuat ngu ky thuat — giu ten that trong ngoac khi can.
+    paths:
+      - "apps/app/lib/messages/settings.ts"
+      - "CONTEXT.md"
 
   - id: E14
     criterion: AC-6b
