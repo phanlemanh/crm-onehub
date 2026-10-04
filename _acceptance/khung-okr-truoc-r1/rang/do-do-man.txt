@@ -1,0 +1,45 @@
+# Chiều đỏ phép đo màn — 04/10, phiên đo riêng (mot-luot.sh)
+== man-khung.mjs --phan le --kiem-do-do
+bang cham mep: kr 1440 (trai=0 phai=0 viSao=20)
+MA 1
+== man-khung.mjs --phan dien-thoai --kiem-do-do
+o so bi cat: phu-trach 375
+ten can giua: muc-tieu 375 (center, 12)
+tab khong dinh: 375 (tl=5 vung=183)
+ten can giua: thoa-thuan 375 (center, 12)
+o so bi cat: phu-trach 390
+ten can giua: muc-tieu 390 (center, 12)
+tab khong dinh: 390 (tl=12 vung=190)
+ten can giua: thoa-thuan 390 (center, 12)
+MA 1
+== man-khung.mjs --phan dien-thoai --kiem-do-doc
+o so bi cat doc: phu-trach 375
+o so bi cat doc: phu-trach 390
+MA 1
+chip lech nhan: cua-toi
+chip lech nhan: theo-don-vi
+MA 1
+MA 0
+== bon-vai.mjs --kiem-do-vai
+nguoi thuong thay nut: truong-phong
+MA 1
+== man-khung.mjs --phan thanh --kiem-do-do
+thanh nhay: tiep (hang=1 cao 84->116 ds 316->348 cuoi=true chu=false)
+MA 1
+== man-khung.mjs --phan thanh --tat-chan
+khong bat duoc dang tai: mo-duoc (giu=0 nut=Soạn OKR cùng Trợ lý khoa=true)
+khong bat duoc dang tai: tiep (giu=0 nut=Tiếp cuộc đang soạn khoa=false)
+khong bat duoc dang tai: che-do-an (giu=0 nut=Soạn OKR cùng Trợ lý khoa=true)
+khong bat duoc dang tai: het-cuoc (giu=0 nut=Soạn OKR cùng Trợ lý khoa=true)
+MA 1
+
+[exited with code 0]
+== man-khung.mjs --phan chip --kiem-do-do (sau sửa phép phá)
+chip lech nhan: cua-toi
+chip rot dong: cua-toi 1440
+chip lech nhan: theo-don-vi
+chip rot dong: theo-don-vi 1440
+MA 1
+== bon-vai.mjs --kiem-do-do (sau sửa phép phá)
+tran ngang: quan-tri khung 375 sang
+MA 1
