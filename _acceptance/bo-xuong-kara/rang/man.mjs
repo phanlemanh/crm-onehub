@@ -184,6 +184,8 @@ async function doDangSoan(trang, phong) {
 		await trang.evaluate(() => {
 			const n = document.querySelector('[data-slot="proposed-change"] button[data-variant="default"]');
 			n.disabled = false;
+			const khung = n.closest("fieldset");
+			if (khung) khung.disabled = false;
 		});
 	const kq = await trang.evaluate((chuDung, chuHoanTac) => {
 		const chinh = [...document.querySelectorAll('[data-slot="proposed-change"] button[data-variant="default"]')];
