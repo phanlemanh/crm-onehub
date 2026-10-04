@@ -3,10 +3,10 @@ schema_version: 1
 slug: tro-ly-kho-dung-phien
 feature: «Trợ lý kho chỉ được mời ở tab Hỏi và Zalo, hết lỗi và hết tốn tiền vô ích»
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-04T12:55:41Z
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -37,6 +37,6 @@ kho (trả tiền cho phiên hỏng; câu hỏi nội bộ đi qua nhà cung c�
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: trong đợt chạy thật, có phiên `tro_ly_kho` nào mở ngoài tab Hỏi và Zalo, và có câu hỏi kho nào đi qua model không ZDR không?
-- [đề xuất] Kết quả nào là SỐNG: 0 phiên `tro_ly_kho` hỏng vì `KHONG_PHAI_HOI` trên production trong timebox, và mọi lời gọi model của phiên gốc purpose `kho` mang ZDR.
-- [đề xuất] Kết quả nào là CHẾT: ≥ 1 phiên `tro_ly_kho` mở từ chat CRM, lượt Tác nhân hay dựng Tác nhân; hoặc ≥ 1 câu hỏi kho đi qua model gốc không ZDR.
-- [đề xuất] Timebox: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 (đếm `AgentEvent`/`AiChiPhi` theo phiên con `tro_ly_kho` và purpose phiên gốc).
+- Kết quả nào là SỐNG: 0 phiên `tro_ly_kho` hỏng vì `KHONG_PHAI_HOI` trên production trong timebox, và mọi lời gọi model của phiên gốc purpose `kho` mang ZDR.
+- Kết quả nào là CHẾT: ≥ 1 phiên `tro_ly_kho` mở từ chat CRM, lượt Tác nhân hay dựng Tác nhân; hoặc ≥ 1 câu hỏi kho đi qua model gốc không ZDR.
+- Timebox: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 (đếm `AgentEvent`/`AiChiPhi` theo phiên con `tro_ly_kho` và purpose phiên gốc).
