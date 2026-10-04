@@ -454,7 +454,10 @@ describe("nut-soan", () => {
 				hang?.lastElementChild,
 				`nhom soan khong cuoi thanh: ${d.ten}`,
 			).toBe(nhom);
-			expect(qa("button", nhom as HTMLElement).length).toBeLessThanOrEqual(2);
+			expect(
+				qa("button", nhom as HTMLElement).length,
+				`chu phu tren thanh: ${d.ten}`,
+			).toBeLessThanOrEqual(2);
 			expect(
 				qa("[data-slot=field-description]", theDonVi() ?? document).length,
 				`chu phu tren thanh: ${d.ten}`,
