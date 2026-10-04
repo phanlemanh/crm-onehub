@@ -180,7 +180,7 @@ evals:
     executor: script
     layer: backend-effect
     cmd: config:executors.script.ghd_man_chrome
-    paths: ["apps/app/app/(app)/[slug]/settings/okr/**", "apps/app/app/(app)/[slug]/settings/organization/**", "apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, apps/api/src/to-chuc/**, _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs]
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/**", "apps/app/app/(app)/[slug]/settings/organization/**", "apps/app/app/(app)/[slug]/okr/**", apps/app/components/okr/**, apps/api/src/okr/**, apps/api/src/to-chuc/**, _acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs]
     expected: "Cùng lần chạy với E18: sau Lưu, program() version tăng và duyetCongBo true; sau Chuyển, đúng ba mục tiêu đã chọn có departmentId là phòng nhận (so tập), mục tiêu bỏ chọn giữ phòng cũ, ba vết chuyen-don-vi; phòng ban cũ archivedAt vẫn null; khối mồ côi trên màn liệt đúng tập objectiveId của okr.moCoi. CHIỀU ĐỎ: bản sao hộp chuyển gửi mọi mục tiêu bất kể ô chọn → so tập đỏ in mục tiêu thừa."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
