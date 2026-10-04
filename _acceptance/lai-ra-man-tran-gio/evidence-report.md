@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e23fa3363044c4aa596e45e8acd1852749b6fd66
+verified_commit: 0d03129ecfa5bdbcff83dee9706a511e342f399c
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -111,3 +111,15 @@ Round 1: E1–E4 (script) và bốn lệnh suite (bun run test, turbo lint, lint
 ### Re-pin lần 1 — 2026-09-28, do gộp onehub #186–#188 sau chữ ký — CI kiểm bản đồ trên commit gộp
 run_id: repin-20260928T084508Z-16649
 sha: e23fa3363044c4aa596e45e8acd1852749b6fd66 · suites: 4 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E5 (E5 không khai paths) · AC không có chốt máy: AC-5
+
+### Re-pin lần 2 — 2026-10-04, do khai paths lô 2: chỉ thêm khoá paths vào evals.yaml
+run_id: repin-20261004T075112Z-36317
+sha: 11bd93cf9f3488a2ed6df5c432a362feff41a428 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E5 · AC không có chốt máy: AC-5
+
+### Re-pin lần 3 — 2026-10-04, do gộp onehub sau khi khai paths lô 2
+run_id: repin-20261004T141023Z-83923
+sha: 4893629a5ff0068f0b3a0fc09523a037c7c953b7 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E5 · AC không có chốt máy: AC-5
+
+### Re-pin lần 4 — 2026-10-04, do gộp onehub sau khi khai paths lô 2
+run_id: repin-20261004T161003Z-91842
+sha: 0d03129ecfa5bdbcff83dee9706a511e342f399c · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E5 · AC không có chốt máy: AC-5
