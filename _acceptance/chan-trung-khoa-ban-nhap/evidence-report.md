@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 92206a5f9516f169e0e3cb22ddbcbd795b9821fa
+verified_commit: a4d0f717d74b9274aa7dbd8f5a5bc23042daf5ae
 human_signoff: Phan Le Manh 2026-10-04
 ---
 
@@ -141,3 +141,7 @@ Round 2: E2 được tách thành E2 (AC-5) và E6 (AC-6) theo luật cặp cros
 ### Re-pin lần 1 — 2026-10-04, do gộp onehub (#244, #246) sau S4 round 2
 run_id: repin-20261004T050849Z-98376
 sha: 92206a5f9516f169e0e3cb22ddbcbd795b9821fa · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E5 (E5 không khai paths) · AC không có chốt máy: AC-8
+
+### Re-pin lần 2 — 2026-10-04, do gộp onehub (#231) sau chữ ký Cổng 2
+run_id: repin-20261004T081247Z-85315
+sha: a4d0f717d74b9274aa7dbd8f5a5bc23042daf5ae · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E5 (E5 không khai paths) · AC không có chốt máy: AC-8
