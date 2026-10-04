@@ -1,0 +1,46 @@
+{
+  "feature_plain": "Mọi chỗ Kara nói chuyện về sau dựng từ một bộ sáu khối chung — lời, ô soạn, các bước, trạng thái, đề xuất, bản nháp — để K2 dựng trang Soạn OKR mà không phải tự vẽ khối nào.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ hiện cuộc trò chuyện với Kara bằng một khung chung: lời người, lời Kara mang dấu tia sáng, dòng hệ thống nhỏ, và mốc «Kara sửa bản nháp» bấm được."},
+    {"id": "AC-2", "p": "Sẽ có một ô soạn chung: gửi, nút Dừng khi Kara đang soạn, chip «về KR 1.3» gỡ được, gợi ý bấm được, và khoá kèm lý do khi hết lượt."},
+    {"id": "AC-3", "p": "Sẽ gập các bước Kara đã làm thành «Kara đã làm N bước», mở sẵn khi đang chạy hay có bước lỗi, tên bước bằng tiếng người, không hiện mã."},
+    {"id": "AC-4", "p": "Sẽ có một bộ năm trạng thái của Kara (đang làm, rỗng, lỗi, tắt, chưa bật) đúng bảng luật; «đang làm» chỉ hiện sau 1 giây."},
+    {"id": "AC-5", "p": "Sẽ chỉ có một nút «Thử lại» cho mọi chỗ Kara: viền, cỡ nhỏ, không icon."},
+    {"id": "AC-6", "p": "Sẽ tự khoá mọi đề xuất chưa quyết và nút Hoàn tác khi Kara đang soạn, kèm lý do; Kara xong thì tự mở lại."},
+    {"id": "AC-7", "p": "Sẽ gắn nhãn «Kara · N đề xuất» một lần mỗi nhóm, đếm từ đề xuất còn chờ, và có nút nhận cả nhóm cùng dòng biên nhận có Hoàn tác."},
+    {"id": "AC-8", "p": "Sẽ có khung bản nháp chung: đầu khung mang dấu Kara một lần, thân tự cuộn, chân giữ nút chính; khi Kara soạn thì đầu khung báo bận."},
+    {"id": "AC-9", "p": "Sẽ đổi mọi chữ của sáu khối theo tiếng Việt hay tiếng Anh, trừ tên Kara."},
+    {"id": "AC-10", "p": "Sẽ kéo hai thành phần khung bản nháp và danh sách bước của thư viện AI Elements vào kho, sửa cho hợp luật kho, và cho phép chúng chưa có màn dùng tới tận K2."},
+    {"id": "AC-13", "p": "Sẽ ghi sáu khối vào bản luật Kara và sổ thành phần hội thoại, và qua sàn thiết kế tĩnh không lỗi nặng."}
+  ],
+  "wont_do": [
+    {"id": "AC-11", "p": "Sẽ KHÔNG để trang mẫu tràn ngang ở máy tính, máy tính bảng hay điện thoại; bản nháp co theo ô kéo, cuộn bên trong chứ không cuộn cả trang."},
+    {"id": "AC-14", "p": "Sẽ KHÔNG chạm màn nào của ứng dụng, và chỉ thêm dòng (không xoá) ở ba tệp dùng chung."},
+    {"id": "OOS-1", "p": "Chưa nối khối nào vào màn thật — K2 đến K5 làm sau 14/10."},
+    {"id": "OOS-2", "p": "Chưa đổi tên Kara trên các màn hiện có — chuyển sang K4 và K6a."},
+    {"id": "OOS-3", "p": "Chưa làm thanh kéo đổi cỡ và trang Soạn OKR riêng — việc của K2."},
+    {"id": "OOS-4", "p": "Chưa có đính kèm, trích nguồn, tua lại cuộc trò chuyện, hay hiện chi tiết công cụ."},
+    {"id": "OOS-5", "p": "Không sửa thành phần đề xuất hay dấu Kara đang có — chỉ dựng thêm bên ngoài."}
+  ],
+  "scope_plain": "Lượt này chỉ dựng bộ khối trong thư viện giao diện; chưa người dùng nào thấy gì khác trước 14/10.",
+  "coverage_plain": [
+    {"i": 0, "p": "Sáu khối đều có tiêu chí riêng (AC-1 đến AC-8) — đủ theo danh sách khối của đề xuất 04/10."},
+    {"i": 1, "p": "Mọi trạng thái của Kara trong bảng luật đều có tiêu chí (AC-4, AC-5) — đủ theo bảng trạng thái của bản luật Kara."},
+    {"i": 2, "p": "Mọi cách người quyết một đề xuất — chờ, khoá, nhận rồi Hoàn tác, bỏ qua, nhận cả nhóm — có tiêu chí (AC-6, AC-7)."},
+    {"i": 3, "p": "Ba khổ màn, hai bề rộng ô kéo, sáng tối, hai tiếng đều được đo (AC-9, AC-11)."},
+    {"i": 4, "p": "Phần làm ngay: sáu khối, ba điểm cắm cho K2, một nút Thử lại, hai tiếng, kéo thư viện và giữ ranh giới."},
+    {"i": 5, "p": "Để sau: đính kèm, trích nguồn, tua lại cuộc trò chuyện, bố cục hai tab trên điện thoại."},
+    {"i": 6, "p": "Không làm: chi tiết công cụ dạng mã, nối màn trước 14/10, tô màu thương hiệu cho dấu Kara."},
+    {"i": 7, "p": "[GIẢ ĐỊNH] Bảy tệp khối nằm chung một thư mục kara trong thư viện giao diện."},
+    {"i": 8, "p": "[GIẢ ĐỊNH] Nhãn nhóm ghi «N đề xuất»; màn gọi đổi được chữ."},
+    {"i": 9, "p": "[GIẢ ĐỊNH] Khi Kara đang soạn, cả nút Hoàn tác của dòng đã quyết cũng khoá."},
+    {"i": 10, "p": "[GIẢ ĐỊNH] «Kara đang …» chỉ hiện sau 1 giây chờ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Trang mẫu chưa nói bày thế nào trên điện thoại, cột 380px sẽ tràn — đã thêm luật xếp chồng dưới 768px và phép đo ở 375."},
+    {"i": 1, "p": "Phép đo hai tiếng bỏ sót chữ lý do khoá, bước đang chạy và vài trạng thái — đã phủ đủ 13 cấu hình và quét chữ viết cứng trong mã."},
+    {"i": 2, "p": "Thiết kế hứa nút khoá vẫn nhận con trỏ phím, mà cơ chế khoá thật không làm vậy — đã gỡ lời hứa, chốt cách đo theo cơ chế thật."},
+    {"i": 3, "p": "Người chấm bằng mắt thiếu hai ảnh điện thoại mà tiêu chí hứa — đã bổ sung đủ."},
+    {"i": 4, "p": "Ảnh «đang soạn» có thể chụp trước khi chữ bận kịp hiện — đã chờ chữ hiện rồi mới chụp."}
+  ]
+}
