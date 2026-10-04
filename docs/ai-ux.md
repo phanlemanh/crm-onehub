@@ -119,8 +119,9 @@ Không dùng `Spinner` trần, `Shimmer` trần hay `Alert` đứng yên cho lú
 | 2, 3 | dấu AI + nhãn Kara có ô «vì sao»: `KaraMark`, `KaraLabel` (`kara.tsx`) | có — lượt `nen-kara`; nút «Vì sao?» tự chặn nổi bọt khi nằm trong hàng bấm được |
 | 5 | `ProposedChange` với `density`: `inline` (mặc định, thân `Item`) và `card` (thân `Confirmation`) | có — lượt `nen-kara` |
 | 6 | dòng biên nhận có Hoàn tác: `ProposedChangeReceipt`, `ProposedChange` tự dùng khi `decided` có `onUndo` | có — lượt `nen-kara` |
-| 7 | `ThinkingIndicator` | có |
+| 7 | `ThinkingIndicator`; `KaraState` (năm trạng thái) và `KaraRetry` — nút «Thử lại» duy nhất, `outline` cỡ `sm`, không icon | có — `ThinkingIndicator` từ trước; `KaraState`, `KaraRetry` lượt `bo-xuong-kara` |
 | 8 | `InlineCitation`; thành phần phản hồi `AiFeedback` (`ai-feedback.tsx`) | có; tóm tắt tuần đã dùng `AiFeedback` |
+| 3, 5, 6, 7 | sáu khối dựng màn Kara (`kara/`): `KaraTranscript`, `KaraComposer`, `KaraSteps`, `KaraState`, `KaraProposal` (cùng `KaraProposalGroup` — nhãn một lần mỗi nhóm, nhận cả nhóm), `KaraArtifact`; `KaraBusy` là nguồn duy nhất của «Kara đang soạn» — khi bận đề xuất chưa quyết và «Hoàn tác» tự khoá | có — lượt `bo-xuong-kara`; chưa màn nào dùng trước 14/10 |
 
 ## Lộ trình áp luật
 
@@ -129,7 +130,8 @@ Không dùng `Spinner` trần, `Shimmer` trần hay `Alert` đứng yên cho lú
 | `nen-kara` | T2 | Dựng các thành phần còn thiếu ở mục 10 |
 | `muc-tieu-va-kr` | T2 | Khung Mục tiêu–KR: một bảng `BangMucTieu` thay khối thẻ, chừa sáu điểm cắm cho Kara; đi trước `gop-y-dung-cho` |
 | `gop-y-dung-cho` | T2 | Đã làm. Khu OKR: chip «Kara · N góp ý» trên hàng Mục tiêu (Của tôi, Theo đơn vị) và mặt lọc «Góp ý của Kara»; khung chi tiết có vùng Kara (nhãn, «Vì sao?», nhờ đọc), góp ý neo dưới KR qua điểm cắm `duoiKr`/`sauTenKr` của `okr/diem-cam.ts`, biên nhận có Hoàn tác, dấu «đổi theo Kara» sau tên KR; hai hộp Sửa bỏ cột góp ý, chỉ còn dòng dẫn sang khung |
-| `tu-vung-tac-tu` | T2 | Tên Kara và tiếng Việt khắp nơi; `ThinkingIndicator`; thông tin liên hệ có nhãn và hoàn tác |
+| `tu-vung-tac-tu` | T2 | Phần `packages/ui` đã gộp vào `bo-xuong-kara`; phần màn (tên Kara và tiếng Việt trên tab bản ghi, Soạn OKR, Tài liệu, thông tin liên hệ có nhãn và hoàn tác) chuyển sang K4 `khung-ban-ghi-kara` và K6a `kara-mot-ten` |
+| `bo-xuong-kara` | T2 | Sáu khối trong `packages/ui/src/components/kara/` và một nút «Thử lại»; ba điểm cắm cho Soạn OKR trang riêng (co giãn trong thanh kéo, khoá khi Kara đang soạn, nhận theo nhóm); chưa nối màn nào trước 14/10 |
 | `tac-tu-xin-duyet` | T3 | Tab bản ghi: công cụ ghi thành đề xuất |
 
 Bản mẫu: `/proto/gop-y-dung-cho`.
