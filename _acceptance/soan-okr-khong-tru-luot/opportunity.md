@@ -3,10 +3,10 @@ schema_version: 1
 slug: soan-okr-khong-tru-luot
 feature: «Kara sập giữa lượt thì không mất lượt soạn; «Thử lại» nói rõ vì sao không chạy»
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided                # discovery | decided | archived
+decision: build
+decided_by: phanlemanh@gmail.com
+decided_at: 2026-10-04T06:18:47Z
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -25,7 +25,7 @@ Người gặp: trưởng bộ phận/phòng ban mở một cuộc soạn OKR v�
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: khi lượt soạn không tới được Kara, người dùng có giữ nguyên lượt và cuộc của mình không, và «Thử lại» không chạy được thì có nói vì sao không?
-- [đề xuất] Kết quả nào là SỐNG: mọi ca hỏng phía agent (401, 5xx, không nối được) để `soLuot` của cuộc trước bằng sau, và cuộc chưa có lượt nào tới Kara không bị tính vào trần cuộc của kỳ. Trần vẫn chặn được: agent trả lời thành công thì lượt bị tính như cũ. «Thử lại» không chạy được thì màn hiện một câu lý do bằng tiếng người, ở mọi lý do trả về.
-- [đề xuất] Kết quả nào là CHẾT: còn một ca hỏng phía agent vẫn trừ lượt; hoặc trần bị thủng (gửi được quá `luotMoiCuoc` lượt thành công); hoặc «Thử lại» vẫn có một đường im lặng.
-- [đề xuất] Timebox: một vòng máy (ước một ngày), PR trước 11/10. Phiên nghiệm thu: phòng ban soạn OKR quý 4 trên production, chủ kho hỏi lại có ai mất lượt hay bấm «Thử lại» mà không biết vì sao không.
+- Câu hỏi phép đo trả lời: khi lượt soạn không tới được Kara, người dùng có giữ nguyên lượt và cuộc của mình không, và «Thử lại» không chạy được thì có nói vì sao không?
+- Kết quả nào là SỐNG: mọi ca hỏng phía agent (401, 5xx, không nối được) để `soLuot` của cuộc trước bằng sau, và cuộc chưa có lượt nào tới Kara không bị tính vào trần cuộc của kỳ. Trần vẫn chặn được: agent trả lời thành công thì lượt bị tính như cũ. «Thử lại» không chạy được thì màn hiện một câu lý do bằng tiếng người, ở mọi lý do trả về.
+- Kết quả nào là CHẾT: còn một ca hỏng phía agent vẫn trừ lượt; hoặc trần bị thủng (gửi được quá `luotMoiCuoc` lượt thành công); hoặc «Thử lại» vẫn có một đường im lặng.
+- Timebox: một vòng máy (ước một ngày), PR trước 11/10. Phiên nghiệm thu: phòng ban soạn OKR quý 4 trên production, chủ kho hỏi lại có ai mất lượt hay bấm «Thử lại» mà không biết vì sao không.
