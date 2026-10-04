@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0bcf848412d35a1f2a14cfe7175787dd669bff07
+verified_commit: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b
 human_signoff: Manh Phan 2026-10-01
 ---
 
@@ -225,3 +225,7 @@ none — every multi-run eval is uniform
 Round 1: E5, E9, E10, E11, E12 đạt; run_id và verified_at của chúng được giữ nguyên và carry-forward sang round 3 vì delta không chạm paths của các eval này.
 Round 2: toàn bộ eval máy xanh nhưng verdict là PENDING-JUDGMENT vì E14 (judgment gộp luật kho và tài liệu) chưa chắc; E13 được chạy lại ở màn thật.
 Round 3: E14 được tách thành E16 (script đo luật kho) và E17 (judgment tài liệu) — sửa thước, không đổi tiêu chí; E1-E4, E6-E8, E13, E15, E16 chạy lại, bốn lệnh suite chạy lại, tất cả đạt. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-04, do sửa thước đỏ lô 2-4 (c2)
+run_id: repin-20261004T155414Z-26973
+sha: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E13, E17 · diff chạm vật đo ngoài làn máy: E13, E17 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12

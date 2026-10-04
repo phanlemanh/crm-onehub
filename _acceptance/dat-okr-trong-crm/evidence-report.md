@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7c376b788ed70e80a1320c667607aa0e6d13ab1c
+verified_commit: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -439,3 +439,7 @@ sha: 9fafa8190acd95e5b848f369f13ad38feae4a6a6 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 10 — 2026-09-26, do hoá cũ do PR #161 thế tên trong thước của hồ sơ (doi-ten-onehub-center)
 run_id: repin-20260926T161424Z-58266
 sha: 7c376b788ed70e80a1320c667607aa0e6d13ab1c · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 (E18 không khai paths) · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 11 — 2026-10-04, do sửa thước đỏ lô 2-4 (c2)
+run_id: repin-20261004T155414Z-26973
+sha: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta

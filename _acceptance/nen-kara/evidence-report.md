@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d
+verified_commit: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b
 human_signoff: Phan Le Manh 2026-10-03
 ---
 
@@ -230,3 +230,7 @@ Round 3: PASS, mọi eval máy xanh, E10 đo 32 ô, E13 giữ nguyên từ round
 ### Re-pin lần 1 — 2026-10-03, do hoá cũ sau khi gộp onehub có #234 muc-tieu-va-kr
 run_id: repin-20261003T095736Z-43153
 sha: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E10, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9, AC-12
+
+### Re-pin lần 2 — 2026-10-04, do sửa thước đỏ lô 2-4 (c2)
+run_id: repin-20261004T155414Z-26973
+sha: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E10, E13 · diff chạm vật đo ngoài làn máy: E10, E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9, AC-12
