@@ -37,8 +37,10 @@ Sau đợt nhập cả công ty, mọi nhân viên đi qua cửa vào. Ba chỗ 
 - `trpc.context.ts`: lỗi của `getSession()` → `session: null, sessionError: true`, ghi một dòng
   `logger.error({ message: "Could not read the session" }, err.stack)` (không header, không cookie —
   luật Logging của `docs/api.md`). Không có lỗi → `sessionError: false`.
-- `auth.middleware.ts`, `signed-in.middleware.ts`, `session-only.middleware.ts`: trước khi kiểm
-  `user`, `ctx.sessionError` → `throw new TRPCError({ code: "SERVICE_UNAVAILABLE" })`. Các nhánh còn
+- `auth.middleware.ts` (cùng các lớp con phạm vi) và `signed-in.middleware.ts`: trước khi kiểm
+  `user`, `ctx.sessionError` → `throw new TRPCError({ code: "SERVICE_UNAVAILABLE" })`.
+  `session-only.middleware.ts` không đọc phiên (chỉ chặn khoá API) nên không sửa; thủ tục sau nó
+  (`apiKeys.*`) đi tiếp qua `PhamViChungMiddleware`. Các nhánh còn
   lại giữ nguyên: không phiên vẫn 401, không là thành viên vẫn 403.
 - Thủ tục công khai không đọc cờ — chạy như cũ.
 - Đo đủ: quét mọi thủ tục tRPC trả 401 khi không phiên, mỗi thủ tục phải trả 503 khi `getSession` ném
