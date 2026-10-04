@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "bun:test";
-import { auth } from "@crm/auth";
+import { ALLOWANCE_WITHOUT_EXPIRY, auth } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
@@ -79,6 +79,25 @@ async function don() {
 		where: { userId: { startsWith: `${suffix}-` } },
 	});
 	await db.user.deleteMany({ where: { id: { startsWith: `${suffix}-` } } });
+}
+
+async function loiChoPhepDaNhan(
+	nguoiChoPhep: string,
+	email: string,
+	role: string,
+): Promise<{ id: string }> {
+	return db.invitation.create({
+		data: {
+			id: id(`loi-da-nhan-${crypto.randomUUID()}`),
+			organizationId: WORKSPACE_ID,
+			email: email.trim().toLowerCase(),
+			role,
+			status: "accepted",
+			expiresAt: ALLOWANCE_WITHOUT_EXPIRY,
+			inviterId: nguoiChoPhep,
+		},
+		select: { id: true },
+	});
 }
 
 async function haChuLa(chu: string): Promise<string[]> {
@@ -364,10 +383,7 @@ describe("chu-cuoi-cung", () => {
 			update: { role: "member" },
 		});
 
-		const loi = await workspace.allowEmail(quan, {
-			email: diaHoa,
-			role: "member",
-		});
+		const loi = await loiChoPhepDaNhan(quan, diaHoa, "member");
 		await db.invitation.update({
 			where: { id: loi.id },
 			data: { status: "accepted" },
@@ -401,10 +417,7 @@ describe("chu-cuoi-cung", () => {
 		await dungNguoi("chu", "owner");
 		const bi = await dungNguoi("bi-go", "member");
 
-		const loi = await workspace.allowEmail(quan, {
-			email: `${bi}@onemount.com`,
-			role: "member",
-		});
+		const loi = await loiChoPhepDaNhan(quan, `${bi}@onemount.com`, "member");
 		await db.invitation.update({
 			where: { id: loi.id },
 			data: { status: "accepted" },
@@ -845,10 +858,7 @@ describe("go-tron-ven", () => {
 		await dungNguoi("chu", "owner");
 		const bi = await dungNguoi("nguyen-tu", "member");
 
-		const loi = await workspace.allowEmail(quan, {
-			email: `${bi}@onemount.com`,
-			role: "member",
-		});
+		const loi = await loiChoPhepDaNhan(quan, `${bi}@onemount.com`, "member");
 		await db.invitation.update({
 			where: { id: loi.id },
 			data: { status: "accepted" },
@@ -927,10 +937,7 @@ describe("go-tron-ven", () => {
 		await dungNguoi("chu", "owner");
 		const bi = await dungNguoi("bi-go-lai", "member");
 
-		const loi = await workspace.allowEmail(quan, {
-			email: `${bi}@onemount.com`,
-			role: "member",
-		});
+		const loi = await loiChoPhepDaNhan(quan, `${bi}@onemount.com`, "member");
 		await db.invitation.update({
 			where: { id: loi.id },
 			data: { status: "accepted" },

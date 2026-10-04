@@ -458,6 +458,7 @@ export function useCrmCache(): CrmCache {
 					trpc.workspace.get.queryKey(),
 					trpc.workspace.members.queryKey(),
 					trpc.workspace.allowances.queryKey(),
+					trpc.workspace.staffDomains.queryKey(),
 				],
 				[],
 				options,

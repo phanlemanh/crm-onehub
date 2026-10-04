@@ -145,6 +145,7 @@ const DAU_VAO_HOP_LE = {
 	"workspace.issuePasswordLink": { email: "moi@thu.test" },
 	"workspace.revokeAllowance": { allowanceId: "khong-co" },
 	"workspace.removeMember": { memberId: "khong-co" },
+	"workspace.setStaffDomains": { domains: ["thu.test"] },
 	"org.createDivision": { name: "Bo phan thu" },
 	"org.renameDivision": { id: "khong-co", name: "x" },
 	"org.reorderDivisions": { ids: ["khong-co"] },

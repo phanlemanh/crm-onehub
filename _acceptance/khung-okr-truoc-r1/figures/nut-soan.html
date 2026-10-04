@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nút soạn theo dạng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper: #fafafa;
+      --color-ink: #171717;
+      --color-muted: #575757;
+      --font-sans: 'Geist', system-ui, sans-serif;
+      --font-serif: 'Lora', serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ quyết định · khung-okr-truoc-r1 · AC-2 · AC-3 · AC-4</p>
+    <h1>Nút soạn trên thanh «Theo đơn vị»: nút chính và popover «i» ở từng dạng</h1>
+
+    <svg viewBox="0 0 1264 720" xmlns="http://www.w3.org/2000/svg" translate="no">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+      <clipPath id="c1"><rect x="480" y="40" width="760" height="368" rx="8"/></clipPath>
+      <text x="24" y="32" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">THANH «THEO ĐƠN VỊ» · NHÓM NÚT SOẠN</text>
+      <text x="1240" y="32" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.10em">AC-2 · AC-3</text>
+      <line x1="184" y1="224" x2="216" y2="224" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="424" y1="224" x2="480" y2="224" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="320" y1="280" x2="320" y2="444" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="400" y1="492" x2="480" y2="492" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M320,540 V556 Q320,564 328,564 H480" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <rect x="436" y="200" width="32" height="16" rx="2" fill="#fafafa"/>
+      <text x="452" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.10em">CÓ</text>
+      <rect x="328" y="354" width="48" height="16" rx="2" fill="#fafafa"/>
+      <text x="352" y="366" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.10em">KHÔNG</text>
+      <rect x="404" y="468" width="72" height="16" rx="2" fill="#fafafa"/>
+      <text x="440" y="480" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.10em">QUẢN TRỊ</text>
+      <rect x="360" y="540" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="404" y="552" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.10em">NGƯỜI KHÁC</text>
+      <rect x="24" y="196" width="160" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="104" y="222" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Theo đơn vị</text>
+      <text x="104" y="238" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">pha lập kế hoạch</text>
+      <polygon points="320,168 424,224 320,280 216,224" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="218" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Máy chủ đã cấu hình</text>
+      <text x="320" y="232" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">soạn nháp?</text>
+      <text x="320" y="250" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">cauNoi</text>
+      <polygon points="320,444 400,492 320,540 240,492" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="320" y="488" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Vai của</text>
+      <text x="320" y="502" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">người mở</text>
+      <rect x="480" y="40" width="760" height="368" rx="8" fill="#ffffff"/>
+      <g clip-path="url(#c1)">
+      <rect x="480" y="40" width="400" height="32" fill="#f2f2f2"/>
+      <rect x="880" y="40" width="360" height="32" fill="rgba(0,107,79,0.08)"/>
+      </g>
+      <line x1="480" y1="120" x2="1240" y2="120" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="480" y1="168" x2="1240" y2="168" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="480" y1="216" x2="1240" y2="216" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="480" y1="264" x2="1240" y2="264" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="480" y1="312" x2="1240" y2="312" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="480" y1="360" x2="1240" y2="360" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="480" y1="72" x2="1240" y2="72" stroke="rgba(23,23,23,0.20)" stroke-width="0.8"/>
+      <line x1="640" y1="40" x2="640" y2="408" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="880" y1="40" x2="880" y2="408" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="480" y="40" width="760" height="368" rx="8" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="1"/>
+      <text x="496" y="60" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">DẠNG</text>
+      <text x="656" y="60" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">NÚT TRÊN THANH</text>
+      <text x="896" y="60" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.14em">POPOVER «i» CHỨA</text>
+      <text x="496" y="100" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Đang tải</text>
+      <rect x="656" y="86" width="136" height="20" rx="5" fill="#f2f2f2" stroke="rgba(23,23,23,0.32)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="724" y="100" fill="#575757" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Soạn OKR cùng Trợ lý</text>
+      <text x="896" y="100" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#575757">Chưa có «i» — nút giữ đúng chỗ, cùng chữ, cùng cỡ</tspan></text>
+      <text x="496" y="148" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Mở được</text>
+      <rect x="656" y="134" width="136" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="724" y="148" fill="#171717" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Soạn OKR cùng Trợ lý</text>
+      <rect x="796" y="134" width="20" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="806" y="148" fill="#171717" font-size="11" font-weight="600" font-family="'Lora', serif" text-anchor="middle" font-style="italic">i</text>
+      <text x="896" y="148" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«N/3 cuộc»</tspan><tspan fill="#575757"> — bấm mở danh sách cuộc</tspan></text>
+      <text x="496" y="196" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Có cuộc đang soạn</text>
+      <rect x="656" y="182" width="136" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="724" y="196" fill="#171717" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Tiếp cuộc đang soạn</text>
+      <rect x="796" y="182" width="20" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="806" y="196" fill="#171717" font-size="11" font-weight="600" font-family="'Lora', serif" text-anchor="middle" font-style="italic">i</text>
+      <text x="896" y="188" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«Mở [ngày] · N lượt · M dòng chưa quyết»</tspan></text>
+      <text x="896" y="204" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«N/3 cuộc»</tspan><tspan fill="#575757"> — bấm mở danh sách cuộc</tspan></text>
+      <text x="496" y="238" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chế độ ẩn</text>
+      <text x="496" y="253" fill="#575757" font-size="10" font-family="'Geist', sans-serif">chỉ quản trị thấy</text>
+      <rect x="656" y="230" width="136" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="724" y="244" fill="#171717" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Soạn OKR cùng Trợ lý</text>
+      <rect x="796" y="230" width="20" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="806" y="244" fill="#171717" font-size="11" font-weight="600" font-family="'Lora', serif" text-anchor="middle" font-style="italic">i</text>
+      <text x="896" y="236" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«chế độ ẩn» · «Chỉ quản trị thấy nút này; cuộc soạn</tspan></text>
+      <text x="896" y="252" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">tính vào số đo, không tính vào đơn vị.»</tspan><tspan fill="#575757"> · </tspan><tspan fill="#171717">«N/3 cuộc»</tspan></text>
+      <text x="496" y="292" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hết cuộc</text>
+      <rect x="656" y="278" width="136" height="20" rx="5" fill="#f2f2f2" stroke="rgba(23,23,23,0.32)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="724" y="292" fill="#575757" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Soạn OKR cùng Trợ lý</text>
+      <rect x="796" y="278" width="20" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="806" y="292" fill="#171717" font-size="11" font-weight="600" font-family="'Lora', serif" text-anchor="middle" font-style="italic">i</text>
+      <text x="896" y="284" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«Đã dùng hết 3 cuộc soạn kỳ này»</tspan></text>
+      <text x="896" y="300" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«3/3 cuộc»</tspan><tspan fill="#575757"> — bấm mở danh sách cuộc</tspan></text>
+      <text x="496" y="340" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Tạm nghỉ</text>
+      <rect x="656" y="326" width="136" height="20" rx="5" fill="#f2f2f2" stroke="rgba(23,23,23,0.32)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="724" y="340" fill="#575757" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Soạn OKR cùng Trợ lý</text>
+      <rect x="796" y="326" width="20" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="806" y="340" fill="#171717" font-size="11" font-weight="600" font-family="'Lora', serif" text-anchor="middle" font-style="italic">i</text>
+      <text x="896" y="340" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«Trợ lý OKR tạm nghỉ tới [đầu tháng sau]»</tspan></text>
+      <text x="496" y="388" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chưa có khoá</text>
+      <rect x="656" y="374" width="136" height="20" rx="5" fill="#f2f2f2" stroke="rgba(23,23,23,0.32)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="724" y="388" fill="#575757" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Soạn OKR cùng Trợ lý</text>
+      <rect x="796" y="374" width="20" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="806" y="388" fill="#171717" font-size="11" font-weight="600" font-family="'Lora', serif" text-anchor="middle" font-style="italic">i</text>
+      <text x="896" y="388" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«Chưa có khoá mô hình»</tspan></text>
+      <text x="1240" y="448" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.10em">AC-4</text>
+      <rect x="480" y="456" width="760" height="144" rx="8" fill="#ffffff"/>
+      <line x1="480" y1="528" x2="1240" y2="528" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="640" y1="456" x2="640" y2="600" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <line x1="880" y1="456" x2="880" y2="600" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="480" y="456" width="760" height="144" rx="8" fill="none" stroke="rgba(23,23,23,0.28)" stroke-width="1"/>
+      <text x="496" y="490" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chưa cấu hình</text>
+      <text x="496" y="505" fill="#575757" font-size="10" font-family="'Geist', sans-serif">quản trị</text>
+      <rect x="656" y="482" width="136" height="20" rx="5" fill="#f2f2f2" stroke="rgba(23,23,23,0.32)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="724" y="496" fill="#575757" font-size="10" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Soạn OKR cùng Trợ lý</text>
+      <rect x="796" y="482" width="20" height="20" rx="5" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="806" y="496" fill="#171717" font-size="11" font-weight="600" font-family="'Lora', serif" text-anchor="middle" font-style="italic">i</text>
+      <text x="896" y="488" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">«Tính năng soạn nháp chưa được bật trên máy chủ này —</tspan></text>
+      <text x="896" y="504" font-size="10" font-family="'Geist', sans-serif"><tspan fill="#171717">quản trị viên OneHub cần bật nó.»</tspan></text>
+      <text x="496" y="562" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Chưa cấu hình</text>
+      <text x="496" y="577" fill="#575757" font-size="10" font-family="'Geist', sans-serif">người khác</text>
+      <text x="656" y="568" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Không có nút soạn</text>
+      <text x="896" y="568" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Không có «i», không có câu «chưa được bật»</text>
+      <text x="24" y="636" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">MỌI DẠNG</text>
+      <text x="24" y="656" fill="#171717" font-size="14" font-family="'Lora', serif" font-style="italic">Nhóm soạn luôn là phần tử cuối của thanh · thanh giữ một hàng · không chữ phụ nào của nút soạn nằm ngoài popover.</text>
+      <line x1="24" y1="680" x2="1240" y2="680" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="24" y="704" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="120" y="694" width="28" height="14" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="156" y="705" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Nút bấm được</text>
+      <rect x="288" y="694" width="28" height="14" rx="4" fill="#f2f2f2" stroke="rgba(23,23,23,0.32)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="324" y="705" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Nút khoá</text>
+      <rect x="432" y="694" width="14" height="14" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="439" y="705" fill="#171717" font-size="10" font-weight="600" font-family="'Lora', serif" text-anchor="middle" font-style="italic">i</text>
+      <text x="456" y="705" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Nút «i» mở popover</text>
+      <polygon points="620,701 632,694 644,701 632,708" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="652" y="705" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Rẽ nhánh</text>
+      <rect x="752" y="694" width="28" height="14" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+      <text x="788" y="705" fill="#575757" font-size="10" font-family="'Geist', sans-serif">Chữ phụ dời vào popover (vòng này)</text>
+      <text x="1240" y="705" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">[ngày], N, M: số thật lúc chạy</text>
+    </svg>
+  </div>
+</body>
+</html>

@@ -25,6 +25,8 @@ import {
 	removeMemberOutput,
 	revokeAllowanceInput,
 	setMemberRoleInput,
+	setStaffDomainsInput,
+	staffDomainsOutput,
 	updateWorkspaceInput,
 	workspaceMemberOutput,
 	workspaceOutput,
@@ -87,6 +89,28 @@ export class WorkspaceRouter {
 		@Input() input: z.infer<typeof setMemberRoleInput>,
 	) {
 		return this.workspace.setMemberRole(ctx.user.id, input);
+	}
+
+	@Query({
+		output: staffDomainsOutput,
+		meta: restMeta("GET", "/workspace/staff-domains", ["Workspace"]),
+	})
+	@UseMiddlewares(PhamViChungMiddleware)
+	async staffDomains(@Ctx() ctx: AuthedTrpcContext) {
+		return this.workspace.staffDomains(ctx.user.id);
+	}
+
+	@Mutation({
+		input: setStaffDomainsInput,
+		output: staffDomainsOutput,
+		meta: restMeta("PUT", "/workspace/staff-domains", ["Workspace"]),
+	})
+	@UseMiddlewares(PhamViChungMiddleware)
+	async setStaffDomains(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof setStaffDomainsInput>,
+	) {
+		return this.workspace.setStaffDomains(ctx.user.id, input);
 	}
 
 	@Query({
