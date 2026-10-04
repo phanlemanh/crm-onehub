@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 58f8fb3ff0bedc55cea6a773c79628a69fb5f838
+verified_commit: 80fea3400e5c375fb68ed9df1c79280ca748b079
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -310,3 +310,7 @@ sha: 0e97c6c04e50b432ae1472e6828d8248540e6752 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-01, do hoa cu sau khi gop onehub (#230) va thuoc bi cham boi tro-ly-doc-kho
 run_id: repin-20261001T235038Z-61043
 sha: 58f8fb3ff0bedc55cea6a773c79628a69fb5f838 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E3u, E4u, E5u, E8u, E12j (E12j không khai paths) · diff chạm vật đo ngoài làn máy: E3u, E4u, E5u, E8u — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 3 — 2026-10-04, do hoá cũ sau khi gộp onehub #247 vào PR #231, đổi tên migration, vá ba xung đột ngầm
+run_id: repin-20261004T060523Z-75459
+sha: 80fea3400e5c375fb68ed9df1c79280ca748b079 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E3u, E4u, E5u, E8u, E12j (E12j không khai paths) · diff chạm vật đo ngoài làn máy: E3u, E4u, E5u, E8u — chưa chứng lại, đi vòng S4 delta

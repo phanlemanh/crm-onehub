@@ -254,9 +254,9 @@ lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-c
 
 **Tệp:** `packages/ui/src/components/ai-elements/suggestion.tsx`
 
-**Số dòng khác:** 0
+**Số dòng khác:** 30
 
-**Vân tay lệch:** `0000000000000000`
+**Vân tay lệch:** `cc74a7d46eeb4fd4`
 
 **Đổi gì:** Kéo bằng CLI ngày 30/09 ở lượt `soan-okr-cung-tro-ly`, trong một sân
 tạm có `components.json` và `tsconfig.json` của kho, rồi chép riêng hai tệp

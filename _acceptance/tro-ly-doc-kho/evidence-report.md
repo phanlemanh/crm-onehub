@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cf7483a9aa8edf819b0f402386627a6213869019
+verified_commit: 80fea3400e5c375fb68ed9df1c79280ca748b079
 human_signoff: Phan Le Manh 2026-10-02
 ---
 
@@ -292,3 +292,7 @@ Round 4: toàn bộ eval máy, ui-check và bốn lệnh suite xanh trên commit
 ### Re-pin lần 1 — 2026-10-02, do hoa cu sau khi gop onehub (#230); bo cham E15 ghi ra .acceptance-runs
 run_id: repin-20261002T000703Z-46501
 sha: cf7483a9aa8edf819b0f402386627a6213869019 · suites: 4 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths)
+
+### Re-pin lần 2 — 2026-10-04, do hoá cũ sau khi gộp onehub #247 vào PR #231, đổi tên migration, vá ba xung đột ngầm
+run_id: repin-20261004T060523Z-75459
+sha: 80fea3400e5c375fb68ed9df1c79280ca748b079 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths) · diff chạm vật đo ngoài làn máy: E7u — chưa chứng lại, đi vòng S4 delta

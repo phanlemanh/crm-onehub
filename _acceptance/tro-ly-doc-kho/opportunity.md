@@ -3,10 +3,10 @@ schema_version: 1
 slug: tro-ly-doc-kho
 feature: Trợ lý AI đọc Kho tài liệu — hỏi trong CRM hay qua Zalo, trả lời có trích trang và phiên bản do máy chủ kiểm, không biết thì nói không biết
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-04
 prototype:
   base_commit: bb55853103b97d8dfa9950b99e6a9e38762b0c49
   disposition: keep
@@ -41,9 +41,9 @@ trạng thái `ST-tac-nhan-tra-loi`, `ST-tac-nhan-tu-choi`.
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: sau hai tuần chạy thật, nhân viên có hỏi kho và được trả lời theo trang, thay vì hỏi nhóm Zalo?
-- [đề xuất] Kết quả nào là SỐNG: ≥ 70% câu hỏi (trừ câu lỗi) được trả lời có trích (lộ trình mục 5), đếm bằng `demHoiKho` trên `TaiLieuHoi`; và ≥ 50% câu chưa trả lời được và việc báo sai được chủ trang đánh dấu đã xử lý.
-- [đề xuất] Kết quả nào là CHẾT: ≥ 1 câu trả lời trích chữ của bản chưa duyệt hay trang người hỏi không thấy được, được báo lại trong chạy thật; hoặc ≥ 1 báo sai được chủ trang xác nhận là trợ lý nói điều trang không nói về tiền, hạn hay quyền lợi; hoặc < 40% câu được trả lời có trích.
-- [đề xuất] Timebox: đo cùng chạy thật 2026-10-14 → 2026-10-28, đọc số 2026-10-29 cùng bốn số của lộ trình mục 5.
+- Kết quả nào là SỐNG: ≥ 70% câu hỏi (trừ câu lỗi) được trả lời có trích (lộ trình mục 5), đếm bằng `demHoiKho` trên `TaiLieuHoi`; và ≥ 50% câu chưa trả lời được và việc báo sai được chủ trang đánh dấu đã xử lý.
+- Kết quả nào là CHẾT: ≥ 1 câu trả lời trích chữ của bản chưa duyệt hay trang người hỏi không thấy được, được báo lại trong chạy thật; hoặc ≥ 1 báo sai được chủ trang xác nhận là trợ lý nói điều trang không nói về tiền, hạn hay quyền lợi; hoặc < 40% câu được trả lời có trích.
+- Timebox: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 cùng bốn số của lộ trình mục 5 (dời theo lộ trình «lên trước 14/10», chủ kho chốt khi ký 04/10).
 
 ## Kết quả prototype
 
