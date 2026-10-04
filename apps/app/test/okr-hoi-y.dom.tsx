@@ -516,6 +516,7 @@ const { DauTrangOkrHoiY } = await import(
 	"@/app/(app)/[slug]/okr/dau-trang-hoi-y"
 );
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
+const { messages } = await import("@crm/ui/lib/messages");
 
 type San = { o: HTMLElement; root: Root };
 let dangMo: San[] = [];
@@ -734,26 +735,51 @@ describe("Hỏi ý — ý đồng nghiệp", () => {
 });
 
 describe("Hỏi ý — người chọn kết luận", () => {
-	test("thanh công bố liệt đúng từng điều thiếu thành liên kết tới thẻ có trong DOM, «Công bố» tắt", async () => {
+	test("thanh công bố thu gọn mặc định; bấm «Xem danh sách» thì liệt đúng từng điều thiếu thành liên kết tới thẻ có trong DOM, «Công bố» tắt", async () => {
 		const o = await moTrangThai("chon-chua-du");
 		const thanh = document.querySelector('[data-khoi="thanh-cong-bo"]');
+		const nutDs = thanh?.querySelector<HTMLButtonElement>(
+			"button[aria-controls]",
+		);
+		const ds = thanh?.querySelector("ul");
+		const hien = () =>
+			ds !== null &&
+			ds !== undefined &&
+			!ds.classList.contains("hidden") &&
+			getComputedStyle(ds).display !== "none";
+		const truoc = {
+			dsHien: hien(),
+			moRong: nutDs?.getAttribute("aria-expanded"),
+			chuNut: nutDs?.textContent?.trim(),
+		};
+		if (!nutDs) throw new Error("thanh cong bo khong co nut danh sach");
+		await act(async () => nutDs.click());
 		const lienKet = [...(thanh?.querySelectorAll("a") ?? [])];
 		const dich = lienKet.map((a) => a.getAttribute("href") ?? "");
 		const nut = thanh ? nutCo(thanh, "Công bố") : null;
-		const ds = thanh?.querySelector("ul");
 		expect({
-			dsHien:
-				ds !== null &&
-				ds !== undefined &&
-				!ds.classList.contains("hidden") &&
-				getComputedStyle(ds).display !== "none",
+			truoc,
+			sau: {
+				dsHien: hien(),
+				moRong: nutDs.getAttribute("aria-expanded"),
+				chuNut: nutDs.textContent?.trim(),
+			},
 			chu: lienKet.map((a) => a.textContent),
 			dich,
 			tonTai: dich.map((d) => document.getElementById(d.slice(1)) !== null),
 			nutTat: nut?.disabled,
 			dem: o.querySelector('[data-khoi="dem-ket-luan"]')?.textContent,
 		}).toEqual({
-			dsHien: true,
+			truoc: {
+				dsHien: false,
+				moRong: "false",
+				chuNut: messages("vi").saveBar.hienDanhSach,
+			},
+			sau: {
+				dsHien: true,
+				moRong: "true",
+				chuNut: messages("vi").saveBar.anDanhSach,
+			},
 			chu: [
 				"Còn ý chưa gom vào chủ đề",
 				"«Kho miền Trung» — chưa kết luận",
@@ -808,7 +834,7 @@ describe("Hỏi ý — người chọn kết luận", () => {
 		});
 	});
 
-	test("khi không còn thiếu gì thì không có danh sách rỗng", async () => {
+	test("thanh công bố: khi không còn thiếu gì thì không có danh sách rỗng", async () => {
 		const b = chonChuaDu();
 		hoiY = {
 			...b,
