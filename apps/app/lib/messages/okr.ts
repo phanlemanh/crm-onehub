@@ -129,6 +129,9 @@ const vi = {
 		tienDoTu: "Tiến độ mục tiêu {x}% tính từ {n} KR.",
 		tabCanChinh: "Căn chỉnh",
 		tabVet: "Vết",
+		tabVetNhan: "Vết",
+		tienDoTuSo: (x: string, n: string) =>
+			`Tiến độ mục tiêu ${x}% tính từ ${n} KR.`,
 		tabTraoDoi: "Trao đổi",
 		theoDoi: "Theo dõi",
 		dangTheoDoi: "Đang theo dõi",
@@ -777,6 +780,9 @@ const en: OkrMessages = {
 		tienDoTu: "Objective progress {x}% from {n} KRs.",
 		tabCanChinh: "Alignment",
 		tabVet: "History",
+		tabVetNhan: "Changes",
+		tienDoTuSo: (x: string, n: string) =>
+			`Objective progress ${x}% from ${n} ${n === "1" ? "KR" : "KRs"}.`,
 		tabTraoDoi: "Discussion",
 		theoDoi: "Follow",
 		dangTheoDoi: "Following",

@@ -75,6 +75,7 @@ import {
 	DetailSheetStat,
 	DetailSheetStats,
 	type DetailSheetTab,
+	DetailSheetTable,
 } from "@/components/detail-sheet";
 import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
@@ -516,7 +517,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 			<div className="scroll-mt-4 px-5 py-3 empty:hidden" ref={vung}>
 				<VungKara gopY={gopY} moKr={moKr} soKr={mt.keyResults.length} />
 			</div>
-			<div>
+			<DetailSheetTable>
 				<BangKr
 					diemCam={{ ...diemKara, ...diemCam }}
 					mucTieu={mt}
@@ -541,13 +542,10 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 							: undefined
 					}
 				/>
-			</div>
+			</DetailSheetTable>
 			{mt.keyResults.length > 0 ? (
 				<p className="px-5 pt-2 text-muted-foreground text-xs" data-tien-do-tu>
-					{dien(m.tienDoTu, {
-						x: String(mt.progress),
-						n: String(mt.keyResults.length),
-					})}
+					{m.tienDoTuSo(String(mt.progress), String(mt.keyResults.length))}
 				</p>
 			) : null}
 			{suaNoiDung(mt) ? (
@@ -638,42 +636,47 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 				/>
 			) : (
 				<>
-					<SimpleTable columns={cot}>
-						{mt.alignments.map((g) => (
-							<SimpleTableRow key={g.alignmentId} data-noi-gop={g.alignmentId}>
-								<TableCell className={CELL}>
-									<span translate="no">{g.unitName}</span>
-								</TableCell>
-								<TableCell className={CELL}>
-									<span className="whitespace-normal" translate="no">
-										{g.objectiveTitle}
-									</span>
-								</TableCell>
-								<TableCell className={CELL}>
-									{g.keyResultTitle ? (
-										<span className="whitespace-normal" translate="no">
-											{g.keyResultTitle}
-										</span>
-									) : (
-										<EmptyCellValue />
-									)}
-								</TableCell>
-								{sua ? (
+					<DetailSheetTable>
+						<SimpleTable columns={cot}>
+							{mt.alignments.map((g) => (
+								<SimpleTableRow
+									key={g.alignmentId}
+									data-noi-gop={g.alignmentId}
+								>
 									<TableCell className={CELL}>
-										<Button
-											aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
-											size="icon-sm"
-											variant="ghost"
-											disabled={go.isPending}
-											onClick={() => setGoDi(g)}
-										>
-											<Icon icon={Close} />
-										</Button>
+										<span translate="no">{g.unitName}</span>
 									</TableCell>
-								) : null}
-							</SimpleTableRow>
-						))}
-					</SimpleTable>
+									<TableCell className={CELL}>
+										<span className="whitespace-normal" translate="no">
+											{g.objectiveTitle}
+										</span>
+									</TableCell>
+									<TableCell className={CELL}>
+										{g.keyResultTitle ? (
+											<span className="whitespace-normal" translate="no">
+												{g.keyResultTitle}
+											</span>
+										) : (
+											<EmptyCellValue />
+										)}
+									</TableCell>
+									{sua ? (
+										<TableCell className={CELL}>
+											<Button
+												aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
+												size="icon-sm"
+												variant="ghost"
+												disabled={go.isPending}
+												onClick={() => setGoDi(g)}
+											>
+												<Icon icon={Close} />
+											</Button>
+										</TableCell>
+									) : null}
+								</SimpleTableRow>
+							))}
+						</SimpleTable>
+					</DetailSheetTable>
 					{nutGan ? <div className="px-5 py-3">{nutGan}</div> : null}
 				</>
 			)}
@@ -816,15 +819,17 @@ export function ObjectiveSheet({
 				},
 				{
 					value: "vet",
-					label: m.tabVet,
+					label: m.tabVetNhan,
 					count: mt.trail.length,
 					content: (
 						<DetailSheetBody>
-							<BangVet
-								trail={mt.trail}
-								keyResults={mt.keyResults}
-								alignments={mt.alignments}
-							/>
+							<DetailSheetTable>
+								<BangVet
+									trail={mt.trail}
+									keyResults={mt.keyResults}
+									alignments={mt.alignments}
+								/>
+							</DetailSheetTable>
 						</DetailSheetBody>
 					),
 				},
@@ -939,6 +944,7 @@ export function ObjectiveSheet({
 				tabs={tabs}
 				tab={tab}
 				onTabChange={setTab}
+				cuonCaKhung
 			/>
 			{mt ? <NganOkr mt={mt} /> : null}
 			{mt && hopHienThi ? (

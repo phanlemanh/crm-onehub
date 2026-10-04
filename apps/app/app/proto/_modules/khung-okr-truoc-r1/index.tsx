@@ -508,6 +508,7 @@ function HoiLai() {
 			<KhungMayTinh chu={CHU.vi} mt={MT} />
 			<ConfirmDialog
 				nut="Bỏ thay đổi"
+				pending={false}
 				onConfirm={() => undefined}
 				onOpenChange={() => undefined}
 				open

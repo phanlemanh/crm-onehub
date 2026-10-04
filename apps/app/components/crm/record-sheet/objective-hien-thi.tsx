@@ -37,7 +37,7 @@ import {
 	OKR_HIEN_THI,
 } from "@crm/validation/okr-hien-thi";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -69,6 +69,7 @@ export function HopMucHienThi({
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const ma = useId();
+	const sangCanChinh = useRef(false);
 	const thanhVien = useQuery(trpc.okr.thanhVien.queryOptions());
 	const [muc, setMuc] = useState<MucHienThi>(mucTieu.hienThi);
 	const [nguoiXem, setNguoiXem] = useState<NguoiXem[]>(mucTieu.nguoiXem);
@@ -112,11 +113,22 @@ export function HopMucHienThi({
 		<Dialog
 			open
 			onOpenChange={(mo) => {
-				if (!mo && !luu.isPending) dong();
+				if (mo || luu.isPending) return;
+				if (sangCanChinh.current) moCanChinh();
+				else dong();
 			}}
 			coThayDoi={coThayDoi}
 		>
-			<DialogContent size="wide" data-hop="muc-hien-thi">
+			<DialogContent
+				size="wide"
+				data-hop="muc-hien-thi"
+				onEscapeKeyDown={() => {
+					sangCanChinh.current = false;
+				}}
+				onInteractOutside={() => {
+					sangCanChinh.current = false;
+				}}
+			>
 				<DialogHeader>
 					<DialogTitle>{m.tieuDe}</DialogTitle>
 					<DialogDescription>
@@ -163,15 +175,19 @@ export function HopMucHienThi({
 						{loi ? <FieldError id={idLoi}>{loi.cau}</FieldError> : null}
 						{loi?.tuChoi && muc === "gioi-han" && mucTieu.coCanChinh ? (
 							<div>
-								<Button
-									data-nut="mo-can-chinh"
-									onClick={moCanChinh}
-									size="sm"
-									variant="outline"
-								>
-									{m.moCanChinh}
-									<Icon icon={ArrowRight} data-icon="inline-end" />
-								</Button>
+								<DialogClose asChild>
+									<Button
+										data-nut="mo-can-chinh"
+										onClick={() => {
+											sangCanChinh.current = true;
+										}}
+										size="sm"
+										variant="outline"
+									>
+										{m.moCanChinh}
+										<Icon icon={ArrowRight} data-icon="inline-end" />
+									</Button>
+								</DialogClose>
 							</div>
 						) : null}
 					</FieldSet>
@@ -230,7 +246,13 @@ export function HopMucHienThi({
 				</div>
 				<DialogFooter>
 					<DialogClose asChild>
-						<Button variant="outline" disabled={luu.isPending}>
+						<Button
+							variant="outline"
+							disabled={luu.isPending}
+							onClick={() => {
+								sangCanChinh.current = false;
+							}}
+						>
 							{m.huy}
 						</Button>
 					</DialogClose>

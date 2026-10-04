@@ -97,12 +97,17 @@ function HangMucTieu({
 						>
 							{mucTieu.title}
 						</button>
-						<Badge variant="outline">{m.loai[mucTieu.kind]}</Badge>
-						<NhanTrangThai status={mucTieu.status} />
-						{mucTieu.hienThi === "gioi-han" ? (
-							<NhanGioiHan moHop={null} soNguoiXem={mucTieu.soNguoiXem} />
-						) : null}
-						{coNoiDung(nhan) ? nhan : null}
+						<span
+							className="inline-flex flex-wrap items-center gap-2"
+							data-nhom-nhan
+						>
+							<Badge variant="outline">{m.loai[mucTieu.kind]}</Badge>
+							<NhanTrangThai status={mucTieu.status} />
+							{mucTieu.hienThi === "gioi-han" ? (
+								<NhanGioiHan moHop={null} soNguoiXem={mucTieu.soNguoiXem} />
+							) : null}
+							{coNoiDung(nhan) ? nhan : null}
+						</span>
 					</span>
 					<span className="text-muted-foreground text-xs">
 						{hienDonVi ? (
