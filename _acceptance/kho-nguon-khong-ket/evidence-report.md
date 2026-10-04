@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: be0c54239e10b15b6a1618bea9ef967b5c82bb30
+verified_commit: b119f4913fb20c3fd6d59a95f5f5fbbd1b75b764
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng 2 trên verdict PASS 8/8 eval máy (S4 round 1, wf_10611c45-af9). Ngoài-1, Ngoài-2, Ngoài-4 ghi Known limits; Ngoài-3 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê cả bốn quyết định Treo-1…Treo-4.
 ---
 
@@ -170,3 +170,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: all 8 evals pass (E1-E6, E7u, E8), all 7 suite commands pass; no failed evals.
+
+### Re-pin lần 1 — 2026-10-04, do onehub dời (#252–#254) sau verify; ghim lại ở đỉnh trước merge
+run_id: repin-20261004T152839Z-87008
+sha: b119f4913fb20c3fd6d59a95f5f5fbbd1b75b764 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7u · AC không có chốt máy: AC-7
