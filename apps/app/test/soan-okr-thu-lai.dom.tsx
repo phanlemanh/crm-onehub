@@ -107,7 +107,10 @@ async function moManLoi(coTiepNoi: boolean): Promise<void> {
 			: { streamIndex: 0 },
 	});
 	await cho(() => q('[data-luot="loi"]') !== null, "cho bao loi dau");
-	expect(moTa()).toBe(m.hoiThoai.loiMoTaKhac);
+	expect(trongVungDoc(m.hoiThoai.khongTinh), "khong-tinh-sai mo-dau").toBe(
+		false,
+	);
+	expect(moTa(), "bao-loi-dau-sai").toBe(m.hoiThoai.loiMoTaKhac);
 }
 
 function trongVungDoc(cau: string): boolean {
