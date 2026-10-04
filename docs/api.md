@@ -54,6 +54,19 @@ here, what do we sell.
   (withdrawn — the row stays, so who allowed whom is still readable).
   `expiresAt` is not nullable and there is no expiry yet, so it takes
   `ALLOWANCE_WITHOUT_EXPIRY`.
+- **Allowing an address that already belongs to a member is refused** with 400
+  `That person is already a member. Change their role in the members table.`, and no
+  row is written — such a row would stay `pending` forever, because the session hook
+  keeps an existing member untouched. Rows like that from before the refusal are read
+  as `accepted` by `workspace.allowances` (the address belongs to a current member),
+  so «Allowed in» stops listing them; the row itself is not rewritten.
+- **Staff email domains** (`appSetting.staffEmailDomains`) are read by
+  `workspace.staffDomains` (any member, with `canEdit`) and written by
+  `workspace.setStaffDomains` (owner or admin). Entries are lower-cased, a leading `@`
+  dropped, duplicates removed, order kept; an address, something that is not a domain,
+  or a public mail domain (`isFreeEmailDomain`) is a 400 naming the entry; an empty
+  list stores `null`. They decide who is "us" for tracking and the inbox, never who
+  may sign in.
 - **`ensureWorkspaceMembership` runs in `databaseHooks.session.create.before` and
   degrades, never throws** — a throw fails the session create and locks everyone out.
   It **keeps** an existing member untouched, and creates one only when the address is
@@ -76,6 +89,9 @@ here, what do we sell.
 - **First account is owner**, and the hook enrols pre-existing users, oldest first.
   That migration branch still names the first user owner regardless of the role an
   allowance gave them — a narrow case the contract does not cover yet.
+  It leaves out an address only when it has an ended allowance **and no live one** —
+  the same rule as `decideSignIn` — so a person allowed again after removal is
+  enrolled; an unreadable status is logged, as at the other two reads.
 - **Permissions come from `@crm/auth`** — `canRenameWorkspace`, `canChangeRole`,
   `canConfigureSso`, `canManageCurrency`, `canManageSettings` — enforced by the service *and* used to
   disable the UI control, so the button and the 403 cannot disagree.

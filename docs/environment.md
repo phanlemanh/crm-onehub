@@ -57,7 +57,8 @@ quiet. **An empty list on a fresh install fails closed.** Parsed on demand.
 It used to carry a second job — the sync's "which side is external" decision read
 its domains. That job moved to its own field, `appSetting.staffEmailDomains`, so
 changing who may sign in no longer silently changes how mailbox matching and
-visitor filtering behave. `apps/api/src/workspace/staff-domains.ts`.
+visitor filtering behave. It is set on Settings → Members, in the «Staff email
+domains» card. `apps/api/src/workspace/staff-domains.ts`.
 
 ## Where things are
 

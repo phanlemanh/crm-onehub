@@ -195,6 +195,15 @@ Vì sao: không có thư mời nào được gửi — người đó tự đăng
 mình, nên «lời mời» hứa một email không tồn tại; «chờ duyệt» sai chiều, vì quản
 trị đã duyệt rồi, chỉ là người đó chưa vào.
 
+**Tên miền nội bộ**: tên miền thư của chính công ty (vd `onehub.center`,
+`onehub.vn`). Địa chỉ thuộc các tên miền này là người nhà: Theo dõi không lập hồ
+sơ khách cho họ, hộp thư không coi họ là đối tác. Quản trị đặt ở thẻ cùng tên trên
+màn Thành viên. Không quyết ai được đăng nhập — việc đó là của **Được phép vào**.
+Đặt 2026-10-04 (hàng R1b, `thanh-vien-vao-dung`).
+_Avoid_: domain nhà, domain nội bộ, tên miền được phép
+Vì sao: «được phép» lẫn với danh sách cho phép đăng nhập, mà hai việc đã tách
+riêng; «domain nhà» là tiếng lóng của mã, người quản trị không gọi thế.
+
 **Kế hoạch im**: kế hoạch 30 ngày đang chạy mà không bước nào đổi trong số ngày
 đã khai ở ngưỡng im (đếm như cột ngày im của danh mục). Chốt 2026-09-22.
 _Avoid_: kế hoạch treo, kế hoạch chết
