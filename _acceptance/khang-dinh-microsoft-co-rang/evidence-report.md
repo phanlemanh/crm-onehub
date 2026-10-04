@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
+verified_commit: bc36c2d575122deb12067a7da028614abef51f82
 human_signoff: Manh Phan 2026-09-01
 ---
 
@@ -244,3 +244,7 @@ sha: 96ec6d9b0447bb8e3eafaf36c84dc9902372ebef · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
 run_id: repin-20260917T051527Z-61120
 sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng
+
+### Re-pin lần 5 — 2026-10-04, do khai paths lô 1 (kit 2.21.0): chỉ thêm khoá paths vào evals.yaml
+run_id: repin-20261004T020617Z-28918
+sha: bc36c2d575122deb12067a7da028614abef51f82 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng
