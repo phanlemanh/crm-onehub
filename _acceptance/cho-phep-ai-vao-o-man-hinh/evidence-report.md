@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5b19f4f6cfc26c29964c1015607929288f1121c3
+verified_commit: 64d8a231b08ba0a8c4f1aba6724daa053a81c2a1
 human_signoff: Phan Le Manh 2026-09-19
 ---
 
@@ -339,3 +339,7 @@ skip/chết, không ra kết quả; E12 network app-fail trong lượt chụp); 
 E4 sang `apps/api` để gọi được thủ tục thật (xem 5b19f4f6); chạy lại E10 và
 tái chụp E12/E13 — cả 16 eval máy đạt, còn E14 (judgment, T3) chờ
 human_override.
+
+### Re-pin lần 1 — 2026-10-04, do sửa thước đỏ lô 2-4 (c1)
+run_id: repin-20261004T145505Z-62389
+sha: 64d8a231b08ba0a8c4f1aba6724daa053a81c2a1 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13, E14 · diff chạm vật đo ngoài làn máy: E12, E13, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13
