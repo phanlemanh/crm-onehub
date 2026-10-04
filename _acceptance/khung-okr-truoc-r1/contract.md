@@ -5,7 +5,7 @@ slug: khung-okr-truoc-r1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-04T06:18:06Z
 design_doc: docs/superpowers/specs/2026-10-04-khung-okr-truoc-r1-design.md
