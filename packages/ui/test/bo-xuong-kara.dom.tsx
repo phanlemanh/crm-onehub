@@ -40,6 +40,15 @@ const KhoiComposer = await nap<
 	typeof import("../src/components/kara/composer")
 >("K1_TEP_COMPOSER", "composer.tsx");
 
+const KhoiSteps = await nap<typeof import("../src/components/kara/steps")>(
+	"K1_TEP_STEPS",
+	"steps.tsx",
+);
+
+const KhoiArtifact = await nap<
+	typeof import("../src/components/kara/artifact")
+>("K1_TEP_ARTIFACT", "artifact.tsx");
+
 const VI = messages("vi");
 
 let root: Root | null = null;
@@ -240,9 +249,17 @@ describe("k1-thu-lai", () => {
 	});
 
 	test("mọi Thử lại trong các khối đúng cỡ", () => {
-		const o = ve(<KaraState kind="error" what="đọc" onRetry={() => {}} />);
+		const o = ve(
+			<>
+				<KaraState kind="error" what="đọc" onRetry={() => {}} />
+				<KhoiSteps.KaraSteps
+					steps={[{ id: "a", label: "⟦doc⟧", state: "error" }]}
+					onRetry={() => {}}
+				/>
+			</>,
+		);
 		const nut = nutTen(o, VI.karaKhung.thuLai);
-		expect(nut.length).toBe(1);
+		expect(nut.length).toBe(2);
 		for (const b of nut) phai(laThuLaiDung(b), "thu lai sai co");
 	});
 });
@@ -705,5 +722,101 @@ describe("k1-composer", () => {
 		const o = ve(<KaraComposer onSubmit={(t) => gui.push(t)} />);
 		await guiChu(o, "   ");
 		expect(gui).toEqual([]);
+	});
+});
+
+describe("k1-steps", () => {
+	const { KaraSteps } = KhoiSteps;
+	const O = {
+		xong: [
+			{ id: "1", label: "⟦doc muc tieu⟧", state: "done" },
+			{ id: "2", label: "⟦doc 3 KR⟧", state: "done" },
+			{ id: "3", label: "⟦so voi quy truoc⟧", state: "done" },
+		],
+		"dang-chay": [
+			{ id: "1", label: "⟦doc muc tieu⟧", state: "done" },
+			{ id: "2", label: "⟦doc 3 KR⟧", state: "running" },
+		],
+		loi: [
+			{ id: "1", label: "⟦doc muc tieu⟧", state: "done" },
+			{ id: "2", label: "⟦doc 3 KR⟧", state: "error" },
+		],
+	} as const;
+
+	test("ma trận 3 ô", () => {
+		let soO = 0;
+		for (const [ten, buoc] of Object.entries(O)) {
+			const o = ve(<KaraSteps steps={buoc} />);
+			const goc = o.querySelector("[data-kara-steps]") as Element;
+			phai(goc?.getAttribute("data-slot") === "collapsible", "goc khong la Collapsible cua task");
+			const trigger = o.querySelector("button") as HTMLButtonElement;
+			const mo = goc.getAttribute("data-state") === "open";
+			if (ten === "xong") {
+				phai(trigger.textContent?.includes(VI.karaKhung.daLamBuoc("3")) === true, "tieu de xong sai");
+				phai(!mo, "buoc xong khong gap");
+			} else if (ten === "dang-chay") {
+				phai(trigger.textContent?.includes("⟦doc 3 KR⟧") === true, "tieu de dang chay sai");
+				phai(mo, "dang chay khong mo");
+			} else {
+				phai(mo, "loi khong mo");
+				const loi = o.querySelector('[data-trang-thai="loi"]');
+				phai(Boolean(loi?.querySelector('[data-slot="status-indicator"][data-tone="error"]')), "buoc loi thieu dau");
+			}
+			if (mo)
+				for (const b of buoc)
+					phai((o.textContent ?? "").includes(b.label), `thieu chu buoc ${b.label}`);
+			phai(!o.querySelector("pre, code, [data-slot=code-block]"), "co khoi ma");
+			act(() => root?.unmount());
+			root = null;
+			document.body.innerHTML = "";
+			soO += 1;
+		}
+		console.log(`so o: ${soO}`);
+		expect(soO).toBe(3);
+	});
+});
+
+describe("k1-artifact", () => {
+	const { KaraArtifact } = KhoiArtifact;
+	const { KaraProposal } = KhoiProposal;
+
+	function khung(busy: boolean) {
+		return (
+			<KaraArtifact
+				title="⟦ban nhap⟧"
+				meta="⟦9 dong⟧"
+				actions={<button type="button">⟦phu⟧</button>}
+				footer={<button type="button">⟦dua vao⟧</button>}
+				busy={busy ? { label: "⟦dang soan⟧" } : null}
+			>
+				<KaraProposal kind="rewrite" value="⟦moi⟧" actions={hanhDong({ n: 0 })} />
+			</KaraArtifact>
+		);
+	}
+
+	test("đầu, thân, chân", () => {
+		const o = ve(khung(false));
+		const dau = o.querySelector('[data-slot="kara-artifact-header"]') as Element;
+		const than = o.querySelector('[data-slot="kara-artifact-content"]') as Element;
+		const chan = o.querySelector('[data-slot="kara-artifact-footer"]') as Element;
+		phai(o.querySelectorAll('[data-slot="kara-mark"]').length === 1, "dau Kara lap");
+		phai(Boolean(dau.querySelector('[data-slot="kara-mark"]')), "dau Kara khong o dau khung");
+		phai((dau.textContent ?? "").includes("⟦9 dong⟧"), "meta khong o dau khung");
+		phai(Boolean(dau.compareDocumentPosition(than) & Node.DOCUMENT_POSITION_FOLLOWING), "than khong sau dau");
+		phai(Boolean(than.compareDocumentPosition(chan) & Node.DOCUMENT_POSITION_FOLLOWING), "chan khong sau than");
+		phai(than.classList.contains("overflow-auto"), "than khong cuon rieng");
+		phai([...o.querySelectorAll<HTMLButtonElement>("button[data-hanh-dong]")].every((n) => !n.disabled), "khoa nham khi ranh");
+	});
+
+	test("bận: đầu khung báo, thân khoá", async () => {
+		const o = ve(khung(true));
+		phai(
+			[...o.querySelectorAll<HTMLButtonElement>("button[data-hanh-dong]")].every((n) => n.disabled),
+			"than khong khoa khi ban",
+		);
+		await cho(1060);
+		const st = o.querySelector('[data-slot="kara-artifact-header"] [role="status"]');
+		phai(Boolean(st?.textContent?.includes("⟦dang soan⟧")), "dau khung thieu chu ban");
+		phai(laChamBan(st as Element), "dau khung thieu cham ban");
 	});
 });

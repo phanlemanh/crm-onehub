@@ -101,6 +101,9 @@ const en = {
 		nhomDeXuat: (n: string) =>
 			n === "1" ? "1 suggestion" : `${n} suggestions`,
 	},
+	artifact: {
+		dong: "Close",
+	},
 	aiFeedback: {
 		useful: "Useful",
 		notUseful: "Not useful",
@@ -328,6 +331,9 @@ const vi = {
 		dangSoanKhoa: "Kara đang soạn — xong sẽ quyết được.",
 		dangSoan: "Kara đang soạn…",
 		nhomDeXuat: (n: string) => `${n} đề xuất`,
+	},
+	artifact: {
+		dong: "Đóng",
 	},
 	aiFeedback: {
 		useful: "Hữu ích",
