@@ -80,3 +80,19 @@ export const CUA_OKR = {
 		"chua-co-khoa-mo-hinh": 503,
 	} satisfies Record<TuChoiLuot, number>,
 } as const;
+
+export const MA_LY_DO_HONG = [
+	"khong-noi-duoc",
+	"qua-han",
+	"tro-ly-tu-choi",
+	"tro-ly-loi",
+	"chua-dem-duoc-luot",
+	"chua-mo-duoc-phien",
+	"het-dang-nhap",
+	"mat-mang",
+	"chua-mo-lai-duoc",
+	"qua-45s",
+	"dung-giua-chung",
+] as const;
+
+export type MaLyDoHong = (typeof MA_LY_DO_HONG)[number];
