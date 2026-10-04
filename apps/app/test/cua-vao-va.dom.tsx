@@ -43,6 +43,7 @@ describe("trang-loi", () => {
 			const retry = mock(() => {});
 			const o = await mo(<Trang error={new Error("x")} retry={retry} />);
 			expect(retry).toHaveBeenCalledTimes(0);
+			expect(o.querySelector("main")?.getAttribute("data-cap-loi")).toBe(ca);
 
 			const tieuDe = [...o.querySelectorAll("[role='heading']")].map(
 				(h) => h.textContent,

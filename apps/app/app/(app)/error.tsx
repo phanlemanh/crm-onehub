@@ -9,7 +9,10 @@ export default function LoiNgoaiKhung({
 	retry: () => void;
 }) {
 	return (
-		<main className="flex min-h-svh items-center justify-center bg-background p-6">
+		<main
+			className="flex min-h-svh items-center justify-center bg-background p-6"
+			data-cap-loi="ngoai-khung"
+		>
 			<TrangLoiTam retry={retry} />
 		</main>
 	);
