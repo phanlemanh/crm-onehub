@@ -76,8 +76,8 @@ const vi = {
 			moTa: "Người phụ trách ghi số ở cập nhật tuần.",
 		},
 		crm: {
-			nhan: "Chỉ số CRM",
-			moTa: "Máy đếm từ dữ liệu CRM mỗi sáng.",
+			nhan: "Chỉ số",
+			moTa: "Máy đếm từ dữ liệu trong OneHub Center mỗi sáng.",
 		},
 		api: {
 			nhan: "Khoá API",
@@ -89,7 +89,7 @@ const vi = {
 		},
 	},
 	dau: {
-		crm: "CRM",
+		crm: "Chỉ số",
 		api: "API",
 		bangTinh: "Sheets",
 	},
@@ -110,7 +110,7 @@ const vi = {
 			oBac: "Bậc",
 			dong: "Đóng",
 			crmKhongHopKieu:
-				"Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
+				"Chỉ số là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
 			xemTruoc: {
 				dangDem: "Đang đếm…",
 				toiHomNay: (dem: string) => `Tới hôm nay: ${dem}`,
@@ -136,7 +136,8 @@ const vi = {
 				docLai: "Đọc lại",
 				chuaDocXong: "Chưa đọc xong, thử lại sau.",
 				lyDo: {
-					"chua-chia-se": "Bảng tính chưa chia sẻ cho địa chỉ đọc của CRM",
+					"chua-chia-se":
+						"Bảng tính chưa chia sẻ cho địa chỉ đọc của OneHub Center",
 					"khong-thay": "Không thấy bảng tính hay trang này",
 					"khong-phai-so": "Ô này không chứa một con số",
 					"o-trong": "Ô này đang trống",
@@ -262,8 +263,8 @@ const en: OkrSoMessages = {
 			moTa: "The owner enters the number in the weekly update.",
 		},
 		crm: {
-			nhan: "CRM metric",
-			moTa: "Counted from CRM data every morning.",
+			nhan: "Metric",
+			moTa: "Counted from OneHub Center data every morning.",
 		},
 		api: {
 			nhan: "API key",
@@ -275,7 +276,7 @@ const en: OkrSoMessages = {
 		},
 	},
 	dau: {
-		crm: "CRM",
+		crm: "Metric",
 		api: "API",
 		bangTinh: "Sheets",
 	},
@@ -296,7 +297,7 @@ const en: OkrSoMessages = {
 			oBac: "Stage",
 			dong: "Close",
 			crmKhongHopKieu:
-				"CRM metrics are counts — a milestone or percentage KR can't take its number from them.",
+				"Metrics are counts — a milestone or percentage KR can't take its number from them.",
 			xemTruoc: {
 				dangDem: "Counting…",
 				toiHomNay: (dem: string) => `So far: ${dem}`,
@@ -323,7 +324,7 @@ const en: OkrSoMessages = {
 				chuaDocXong: "Not read yet — try again later.",
 				lyDo: {
 					"chua-chia-se":
-						"The spreadsheet isn't shared with the CRM's reading address",
+						"The spreadsheet isn't shared with OneHub Center's reading address",
 					"khong-thay": "Couldn't find this spreadsheet or sheet",
 					"khong-phai-so": "This cell doesn't hold a number",
 					"o-trong": "This cell is empty",

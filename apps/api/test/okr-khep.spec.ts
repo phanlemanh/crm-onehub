@@ -52,7 +52,8 @@ const CAU = {
 	nguocNgay: "tuNgay <= denNgay",
 	lyDoDoiDich: "Đổi đích ngoài rà giữa kỳ cần lý do",
 	chamTuNgaySau: "Sang chấm điểm từ ngày sau ngày cuối của chu kỳ",
-	thieuSoNgayCuoi: (n: number) => `Còn ${n} KR nguồn CRM chưa có số ngày cuối`,
+	thieuSoNgayCuoi: (n: number) =>
+		`Còn ${n} KR lấy số từ chỉ số chưa có số ngày cuối`,
 	tungBuoc: "Pha đi từng bước",
 	conKrChuaCham: (n: number) => `Còn ${n} KR chưa chấm`,
 	krCoDoiDich: "KR đã có lần đổi đích — sửa được, không xoá được.",
