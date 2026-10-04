@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3f3c60fe85ce0734a0f149a37c6c24dd52b98a74
+verified_commit: c0d7bd90bfedb66192708fd6a8e15fb7f08c5700
 human_signoff: Phan Le Manh 2026-09-23
 ---
 
@@ -162,3 +162,7 @@ Round 1: E1–E10 đều xanh ngay ở lần chấm đầu tiên; không có eva
 ### Re-pin lần 1 — 2026-10-04, do sua-thuoc-sau-gop
 run_id: repin-20261004T053254Z-97828
 sha: 3f3c60fe85ce0734a0f149a37c6c24dd52b98a74 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-10-04, do sua-thuoc-sau-gop
+run_id: repin-20261004T102557Z-19741
+sha: c0d7bd90bfedb66192708fd6a8e15fb7f08c5700 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng
