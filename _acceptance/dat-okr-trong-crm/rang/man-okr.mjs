@@ -643,14 +643,26 @@ async function chonTuySelect(trang, triggerSel, chu) {
 	return true;
 }
 
-const trenCung = (trang, sel) =>
-	trang.evaluate((s) => {
+const trenCung = async (trang, sel) => {
+	await trang
+		.waitForFunction(
+			(s) =>
+				document
+					.querySelector(s)
+					?.getAnimations({ subtree: true })
+					.every((a) => a.playState !== "running") ?? true,
+			{ timeout: CHO, polling: 100 },
+			sel,
+		)
+		.catch(() => null);
+	return trang.evaluate((s) => {
 		const e = document.querySelector(s);
 		if (!e) return false;
 		const r = e.getBoundingClientRect();
 		const o = document.elementFromPoint(r.left + r.width / 2, r.top + 24);
 		return o !== null && e.contains(o);
 	}, sel);
+};
 
 const khongTran = (trang) =>
 	trang.evaluate(
