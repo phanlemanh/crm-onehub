@@ -264,7 +264,7 @@ const en: OkrSoMessages = {
 		},
 		crm: {
 			nhan: "Metric",
-			moTa: "Counted from OneHub Center data every morning.",
+			moTa: "Counted every morning from data in OneHub Center.",
 		},
 		api: {
 			nhan: "API key",
