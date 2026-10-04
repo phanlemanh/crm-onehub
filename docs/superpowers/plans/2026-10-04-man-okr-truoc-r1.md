@@ -38,7 +38,7 @@
 
 **Interfaces:** Consumes `SaveBar` (`open`, `layout="checklist"`, `items`), `msg.saveBar.hienDanhSach/anDanhSach` từ `@crm/ui` messages.
 
-- [ ] Step 1: Sửa test «thanh công bố liệt đúng…» thành «thanh công bố thu gọn mặc định…»: trước khi bấm `dsHien: false`, nút `[aria-controls]` có `aria-expanded="false"` và chữ `Hiện danh sách`; bấm nút → `dsHien: true`, `aria-expanded="true"`, chữ `Ẩn danh sách`, các liên kết như cũ. Đổi tên test chon-du thành «thanh công bố: khi không còn thiếu gì thì không có danh sách rỗng».
+- [ ] Step 1: Sửa test «thanh công bố liệt đúng…» thành «thanh công bố thu gọn mặc định…»: trước khi bấm `dsHien: false`, nút `[aria-controls]` có `aria-expanded="false"` và chữ `Xem danh sách`; bấm nút → `dsHien: true`, `aria-expanded="true"`, chữ `Ẩn danh sách`, các liên kết như cũ. Đổi tên test chon-du thành «thanh công bố: khi không còn thiếu gì thì không có danh sách rỗng».
 - [ ] Step 2: Chạy `config:executors.test.r1c_hoi_y_dom` → ĐỎ (`dsHien` true trước khi bấm).
 - [ ] Step 3: Xoá dòng `defaultOpen` trong `<SaveBar … data-khoi="thanh-cong-bo">`.
 - [ ] Step 4: Chạy lại → XANH. Phá-thử: thêm lại `defaultOpen` → đỏ với tên test «thanh công bố thu gọn mặc định»; hoàn lại.

@@ -30,7 +30,7 @@ evals:
       - "Canh cay; phien do rieng (mot-luot.sh -> tien-de.mjs); napBoMau; dang nhap dev:session nguoi chon mau (le-hai-dang)"
       - "Buoc hoi-y (1440x900 roi 390x844): mo /<ws>/okr/hoi-y; doi [data-khoi='thanh-cong-bo'] va danh sach y chua gom; dem y chua gom nam tron trong khung nhin dau ma elementFromPoint tai tam tra ve phan tu thuoc thanh cong bo -> phai bang 0; chieu cao thanh <= 80 (1440) / <= 120 (390); anh r1c-hoi-y-gon-<kho>.png"
       - "Moi y chua gom: scrollIntoView({block:'center'}), elementFromPoint tai tam thuoc chinh y do"
-      - "Bam 'Hiện danh sách' (chu doc tu saveBar), anh r1c-hoi-y-mo-<kho>.png; bam lien ket 'Còn ý chưa gom vào chủ đề' -> danh sach y chua gom giao khung nhin; 390: scrollWidth <= clientWidth"
+      - "Bam 'Xem danh sách' (chu doc tu saveBar), anh r1c-hoi-y-mo-<kho>.png; bam lien ket 'Còn ý chưa gom vào chủ đề' -> danh sach y chua gom giao khung nhin; 390: scrollWidth <= clientWidth"
     paths:
       - "apps/app/app/(app)/[slug]/okr/hoi-y/**"
       - "packages/ui/src/components/save-bar.tsx"

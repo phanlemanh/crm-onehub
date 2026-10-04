@@ -25,7 +25,7 @@ Ba màn đang khiến người dùng hiểu sai, ngay trước khi cả công ty
 ## Hướng đã chốt (chủ kho trả lời bốn câu brainstorm, 04/10)
 
 - **Hồi ý — thu gọn mặc định.** Bỏ `defaultOpen` ở `ThanhCongBo`. Thanh còn một hàng: «Còn N điều
-  trước khi công bố · [Hiện danh sách] · [Công bố]». Bấm «Hiện danh sách» mới bung, liên kết vẫn
+  trước khi công bố · [Xem danh sách] · [Công bố]». Bấm «Xem danh sách» mới bung, liên kết vẫn
   cuộn tới đúng thẻ. Không đổi `SaveBar` dùng chung trong `packages/ui` (hơn 80 hồ sơ đo nó).
 - **Cập nhật tuần — màn «đã xong tuần này».**
   - Mọi KR đã có cập nhật tuần này: trang mở ở trạng thái `ST-capnhat-daxong` — một `Alert` «Bạn đã
@@ -63,7 +63,7 @@ tên đơn vị, tên KR là dữ liệu người nhập — `translate="no"`.
 ### 1. Luồng
 
 - Suôn sẻ (Hồi ý): người chọn mở tab Hồi ý ở pha gom → thấy trọn danh sách «Ý chưa gom», thanh đáy một
-  hàng «Còn N điều…» → bấm «Hiện danh sách» → bấm một điều thiếu → trang cuộn tới thẻ đó.
+  hàng «Còn N điều…» → bấm «Xem danh sách» → bấm một điều thiếu → trang cuộn tới thẻ đó.
 - Suôn sẻ (Cập nhật tuần): người phụ trách gửi cập nhật → thấy «Đã gửi…» → hôm sau mở lại từ tin nhắc
   → thấy «Bạn đã gửi cập nhật tuần này · <ngày giờ>» → muốn sửa thì bấm «Sửa cập nhật» → form điền sẵn
   → gửi lại.
@@ -86,7 +86,7 @@ tên đơn vị, tên KR là dữ liệu người nhập — `translate="no"`.
 <!-- <<<UX-STATE-TABLE -->
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
-| ST-hoiy-thanh-gon | Hồi ý | thanh một hàng «Còn N điều trước khi công bố», nút «Hiện danh sách» (`aria-expanded=false`), «Công bố» tắt | đọc ý chưa gom / bấm Hiện danh sách |
+| ST-hoiy-thanh-gon | Hồi ý | thanh một hàng «Còn N điều trước khi công bố», nút «Xem danh sách» (`aria-expanded=false`), «Công bố» tắt | đọc ý chưa gom / bấm Xem danh sách |
 | ST-hoiy-thanh-mo | Hồi ý | thanh bung danh sách điều thiếu, mỗi điều là liên kết, nút «Ẩn danh sách» | bấm một điều → cuộn tới thẻ |
 | ST-hoiy-san-sang | Hồi ý | «Sẵn sàng — N mục tiêu nháp…», không nút danh sách, «Công bố» bật | Công bố |
 | ST-capnhat-dangdien | Cập nhật tuần | form như cũ (chưa gửi KR nào) | điền, Gửi |
