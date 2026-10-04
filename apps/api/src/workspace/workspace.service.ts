@@ -68,6 +68,8 @@ const MEMBER_SELECT = {
 	user: { select: { name: true, email: true, image: true } },
 } as const;
 
+export const ALREADY_A_MEMBER = WORKSPACE_CONFIG.messages.alreadyAMember;
+
 type MemberRow = Prisma.MemberGetPayload<{ select: typeof MEMBER_SELECT }>;
 
 const ALLOWANCE_SELECT = {
@@ -330,10 +332,19 @@ export class WorkspaceService {
 			orderBy: [{ createdAt: "desc" }],
 		});
 
-		const vet = await this.vetMoiNhat(rows.map((row) => row.email));
+		const [vet, daVao] = await Promise.all([
+			this.vetMoiNhat(rows.map((row) => row.email)),
+			this.diaChiThanhVien(),
+		]);
 
 		return {
-			rows: rows.map((row) => this.toAllowance(row, vet.get(row.email))),
+			rows: rows.map((row) =>
+				this.toAllowance(
+					row,
+					vet.get(row.email),
+					daVao.has(normalizeEmail(row.email) ?? ""),
+				),
+			),
 		};
 	}
 
@@ -352,6 +363,18 @@ export class WorkspaceService {
 			throw new BadRequestException(
 				"That is not an email address. Enter one like name@company.com.",
 			);
+		}
+
+		const member = await this.db.member.findFirst({
+			where: {
+				organizationId: WORKSPACE_ID,
+				user: { email: { equals: email, mode: "insensitive" } },
+			},
+			select: { id: true },
+		});
+
+		if (member) {
+			throw new BadRequestException(ALREADY_A_MEMBER);
 		}
 
 		const live = await this.db.invitation.findFirst({
@@ -582,9 +605,23 @@ export class WorkspaceService {
 		return { memberId: input.memberId };
 	}
 
+	private async diaChiThanhVien(): Promise<Set<string>> {
+		const members = await this.db.member.findMany({
+			where: { organizationId: WORKSPACE_ID },
+			select: { user: { select: { email: true } } },
+		});
+
+		return new Set(
+			members
+				.map((member) => normalizeEmail(member.user.email))
+				.filter((email): email is string => email !== null),
+		);
+	}
+
 	private toAllowance(
 		row: AllowanceRow,
 		vet?: { issuedAt: Date; issuedByName: string },
+		daVao = false,
 	): Allowance {
 		const doc = docTrangThai(row.status);
 
@@ -600,7 +637,7 @@ export class WorkspaceService {
 			id: row.id,
 			email: row.email,
 			role: toRole(row.role ?? "member"),
-			status: doc.trangThai,
+			status: daVao && doc.trangThai === "pending" ? "accepted" : doc.trangThai,
 			invitedByName: row.user?.name ?? null,
 			createdAt: row.createdAt.toISOString(),
 			passwordLinkIssuedAt: vet?.issuedAt.toISOString() ?? null,

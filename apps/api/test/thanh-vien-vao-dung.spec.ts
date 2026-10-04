@@ -6,8 +6,13 @@ import {
 	expect,
 	it,
 } from "bun:test";
-import { NOT_A_MEMBER, type WorkspaceRole } from "@crm/auth";
+import {
+	ensureWorkspaceMembership,
+	NOT_A_MEMBER,
+	type WorkspaceRole,
+} from "@crm/auth";
 import { db } from "@crm/db";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { INestApplication } from "@nestjs/common";
 import request from "supertest";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
@@ -23,7 +28,10 @@ import {
 	APP_SETTING_ID,
 	staffEmailDomains,
 } from "../src/workspace/staff-domains";
-import { WorkspaceService } from "../src/workspace/workspace.service";
+import {
+	ALREADY_A_MEMBER,
+	WorkspaceService,
+} from "../src/workspace/workspace.service";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
 import {
 	COT_DA_LUU_AC1,
@@ -410,5 +418,204 @@ describe("ten-mien ba-vai qua router that", () => {
 			"onehub.center",
 			"nguoi ngoai",
 		]);
+	});
+});
+
+async function demDong(email: string): Promise<number> {
+	return db.invitation.count({
+		where: { organizationId: WORKSPACE_ID, email },
+	});
+}
+
+async function gieoNguoi(phan: string, email: string): Promise<string> {
+	const userId = id(phan);
+	const now = new Date();
+	await db.user.create({
+		data: {
+			id: userId,
+			name: phan,
+			email,
+			emailVerified: true,
+			createdAt: now,
+			updatedAt: now,
+		},
+	});
+	return userId;
+}
+
+async function ganThanhVien(
+	userId: string,
+	vai: WorkspaceRole,
+): Promise<string> {
+	const memberId = id(`member-${userId}`);
+	await db.member.create({
+		data: {
+			id: memberId,
+			organizationId: WORKSPACE_ID,
+			userId,
+			role: vai,
+			createdAt: new Date(),
+		},
+	});
+	return memberId;
+}
+
+describe("cho-phep", () => {
+	let quan = "";
+
+	beforeEach(async () => {
+		await don();
+		quan = await dungNguoi("quan", "admin");
+	});
+
+	it("da-la-thanh-vien: tu choi, khong tao dong, khac hoa van nhan ra", async () => {
+		const email = `${suffix}-da-vao@lan-do.onehub.vn`;
+		await ganThanhVien(await gieoNguoi("da-vao", email), "member");
+		const truoc = await demDong(email);
+
+		const loi = await loiCua(() =>
+			workspace.allowEmail(quan, {
+				email: `  ${email.toUpperCase()} `,
+				role: "member",
+			}),
+		);
+		const sau = await demDong(email);
+
+		const moi = `${suffix}-chua-vao@lan-do.onehub.vn`;
+		const duong = await workspace.allowEmail(quan, {
+			email: moi,
+			role: "member",
+		});
+
+		expect([loi, truoc, sau, "da-la-thanh-vien"]).toEqual([
+			ALREADY_A_MEMBER,
+			0,
+			0,
+			"da-la-thanh-vien",
+		]);
+		expect([
+			duong.status,
+			await demDong(moi),
+			"doi chung duong: dia chi moi",
+		]).toEqual(["pending", 1, "doi chung duong: dia chi moi"]);
+	});
+
+	it("treo-khi-doc: dong pending cua thanh vien doc thanh accepted, khong ghi", async () => {
+		const treo = `${suffix}-treo@lan-do.onehub.vn`;
+		const cho = `${suffix}-cho@lan-do.onehub.vn`;
+		await ganThanhVien(await gieoNguoi("treo", treo), "member");
+		for (const [phan, email] of [
+			["dong-treo", treo],
+			["dong-cho", cho],
+		] as const) {
+			await db.invitation.create({
+				data: {
+					id: id(phan),
+					organizationId: WORKSPACE_ID,
+					email,
+					role: "member",
+					status: "pending",
+					expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+					inviterId: quan,
+				},
+			});
+		}
+
+		const { rows } = await workspace.allowances(quan);
+		const theoDiaChi = Object.fromEntries(
+			rows
+				.filter((r) => r.email === treo || r.email === cho)
+				.map((r) => [r.email, r.status]),
+		);
+		const trongDb = await db.invitation.findUnique({
+			where: { id: id("dong-treo") },
+			select: { status: true },
+		});
+
+		expect([theoDiaChi[treo], trongDb?.status, "treo-khi-doc"]).toEqual([
+			"accepted",
+			"pending",
+			"treo-khi-doc",
+		]);
+		expect([
+			theoDiaChi[cho],
+			"doi chung: dia chi chua vao van pending",
+		]).toEqual(["pending", "doi chung: dia chi chua vao van pending"]);
+	});
+
+	it("cho-phep-lai-sau-go: nguoi da bi go duoc cho phep lai va vao voi vai moi", async () => {
+		const email = `${suffix}-go@lan-do.onehub.vn`;
+		const userId = await gieoNguoi("go", email);
+		const memberId = await ganThanhVien(userId, "member");
+
+		await workspace.removeMember(quan, { memberId });
+		const lai = await workspace.allowEmail(quan, { email, role: "admin" });
+		await ensureWorkspaceMembership(userId, email);
+
+		const member = await db.member.findUnique({
+			where: {
+				organizationId_userId: { organizationId: WORKSPACE_ID, userId },
+			},
+			select: { role: true },
+		});
+		const dong = await db.invitation.findUnique({
+			where: { id: lai.id },
+			select: { status: true },
+		});
+
+		expect([
+			lai.status,
+			member?.role,
+			dong?.status,
+			"cho-phep-lai-sau-go",
+		]).toEqual(["pending", "admin", "accepted", "cho-phep-lai-sau-go"]);
+	});
+});
+
+describe("cho-phep khong-quyen qua router that", () => {
+	let app: INestApplication;
+	let cookieThuong = "";
+	let cookieQuan = "";
+
+	beforeAll(async () => {
+		await don();
+		app = await createApp();
+		cookieThuong = (await mintPhien(await dungNguoi("kq-thuong", "member")))
+			.cookie;
+		cookieQuan = (await mintPhien(await dungNguoi("kq-quan", "admin"))).cookie;
+	});
+
+	afterAll(async () => {
+		await app.close();
+	});
+
+	async function choPhep(cookie: string, email: string) {
+		const res = await request(app.getHttpServer())
+			.post("/api/trpc/workspace.allowEmail")
+			.set("cookie", cookie)
+			.set("content-type", "application/json")
+			.send(JSON.stringify({ email, role: "member" }));
+		return { status: res.status, loi: String(res.body?.error?.message ?? "") };
+	}
+
+	it("khong-quyen: thanh vien thuong bi 403, khong tao dong", async () => {
+		const email = `${suffix}-kq@lan-do.onehub.vn`;
+		const truoc = await demDong(email);
+		const thuong = await choPhep(cookieThuong, email);
+		const sau = await demDong(email);
+		const quan = await choPhep(cookieQuan, email);
+
+		expect([thuong.status, thuong.loi, truoc, sau, "khong-quyen"]).toEqual([
+			403,
+			"Only an owner or an admin can allow an address.",
+			0,
+			0,
+			"khong-quyen",
+		]);
+		expect([
+			quan.status,
+			await demDong(email),
+			"doi chung duong: quan tri tao 1 dong",
+		]).toEqual([200, 1, "doi chung duong: quan tri tao 1 dong"]);
 	});
 });
