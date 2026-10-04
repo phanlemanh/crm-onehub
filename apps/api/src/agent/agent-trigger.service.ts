@@ -365,6 +365,25 @@ export class AgentTriggerService {
 		this.poke();
 	}
 
+	async hoiKho(hoiId: string, client: Prisma.TransactionClient): Promise<void> {
+		await this.enqueue(
+			{
+				kind: "hoi-kho",
+				reason: `Trả lời câu hỏi kho ${hoiId}`,
+				priority: PRIORITY.hoiKho,
+				budget: 0,
+				payload: { hoiId },
+				subject: [{ path: ["hoiId"], value: hoiId }],
+			},
+			true,
+			client,
+		);
+	}
+
+	danhThucHoiKho(): void {
+		this.poke();
+	}
+
 	troLyOkrDaXep(): void {
 		this.poke();
 	}

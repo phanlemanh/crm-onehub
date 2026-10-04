@@ -7,43 +7,66 @@ import {
 } from "ai";
 import { TAI_LIEU_AGENT } from "./tai-lieu-config";
 
-const SOAN = TAI_LIEU_AGENT.soan;
+export type ViecTaiLieu = "soan" | "hoi";
+
+type MoiTruong = Readonly<Record<string, string | undefined>>;
 
 export type NhanKhoa = "rieng" | "chung";
 
-export function nhanKhoaMaySoan(
-	env: Readonly<Record<string, string | undefined>> = process.env,
+export function nhanKhoaTaiLieu(
+	viec: ViecTaiLieu,
+	env: MoiTruong = process.env,
 ): NhanKhoa {
-	return env[SOAN.bienKhoaRieng]?.trim() ? "rieng" : "chung";
+	return env[TAI_LIEU_AGENT[viec].bienKhoaRieng]?.trim() ? "rieng" : "chung";
 }
 
-export const ganZdr: LanguageModelMiddleware = {
-	transformParams: async ({ params }) => ({
-		...params,
-		providerOptions: {
-			...params.providerOptions,
-			gateway: { ...params.providerOptions?.gateway, ...SOAN.gateway },
-		},
-	}),
-};
+export function nhanKhoaMaySoan(env: MoiTruong = process.env): NhanKhoa {
+	return nhanKhoaTaiLieu("soan", env);
+}
+
+function ganZdrCua(viec: ViecTaiLieu): LanguageModelMiddleware {
+	return {
+		transformParams: async ({ params }) => ({
+			...params,
+			providerOptions: {
+				...params.providerOptions,
+				gateway: {
+					...params.providerOptions?.gateway,
+					...TAI_LIEU_AGENT[viec].gateway,
+				},
+			},
+		}),
+	};
+}
+
+export const ganZdr: LanguageModelMiddleware = ganZdrCua("soan");
 
 export type ModelMaySoan = {
 	model: LanguageModel;
 	modelContextWindowTokens: number;
 };
 
-export function modelMaySoan(
-	env: Readonly<Record<string, string | undefined>> = process.env,
+export function modelTaiLieu(
+	viec: ViecTaiLieu,
+	env: MoiTruong = process.env,
 	tao: typeof createGateway = createGateway,
 ): ModelMaySoan {
-	const khoa = env[SOAN.bienKhoaRieng]?.trim();
+	const cauHinh = TAI_LIEU_AGENT[viec];
+	const khoa = env[cauHinh.bienKhoaRieng]?.trim();
 	const nha = khoa ? tao({ apiKey: khoa }) : tao();
 	return {
 		model: wrapLanguageModel({
-			model: nha(SOAN.maModel),
-			middleware: ganZdr,
-			modelId: SOAN.maModel,
+			model: nha(cauHinh.maModel),
+			middleware: ganZdrCua(viec),
+			modelId: cauHinh.maModel,
 		}),
 		modelContextWindowTokens: DEFAULT_AGENT_MODEL.contextWindowTokens,
 	};
+}
+
+export function modelMaySoan(
+	env: MoiTruong = process.env,
+	tao: typeof createGateway = createGateway,
+): ModelMaySoan {
+	return modelTaiLieu("soan", env, tao);
 }

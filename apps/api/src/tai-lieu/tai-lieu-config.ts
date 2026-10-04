@@ -18,6 +18,8 @@ export const TAI_LIEU_API = {
 	nhanNguon: { khoa: "kho-tai-lieu:nhan-nguon", timeoutMs: 2 * PHUT_MS },
 	phieuNguon: { tienTo: "kho-tai-lieu:phieu-nguon", hanMs: 60 * PHUT_MS },
 	khoaSlug: "tai-lieu-slug",
+	khoaHoi: "tai-lieu-hoi:",
+	gioXacMinh: "12:00:00+07:00",
 	suKienCu: "ban-goc-da-doi",
 	thongDiep: {
 		khongCo: "Không tìm thấy trang hay bản đề xuất này.",
@@ -39,6 +41,13 @@ export const TAI_LIEU_API = {
 		daXuLy: "Bản đề xuất này đã được xử lý.",
 		chuaDoiChieu:
 			"Chưa đối chiếu hết con số với nguồn. Đánh dấu từng con số rồi mới duyệt được.",
+		cauHoiNgan: "Câu hỏi cần ít nhất 2 ký tự.",
+		cauHoiDai: (n: number) => `Câu hỏi dài quá ${n} ký tự.`,
+		ghiChuDai: (n: number) => `Ghi chú dài quá ${n} ký tự.`,
+		baoSaiChiTraLoi: "Chỉ báo sai được câu trợ lý AI đã trả lời.",
+		khongDuocXuLy: "Chỉ chủ trang liên quan hoặc quản trị xử lý được việc này.",
+		khongDuocDatXacMinh:
+			"Chỉ chủ trang hoặc quản trị đặt được hạn xác minh của trang này.",
 	},
 } as const;
 
