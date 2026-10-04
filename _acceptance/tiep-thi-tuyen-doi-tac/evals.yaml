@@ -326,6 +326,7 @@ evals:
   - id: E18
     criterion: AC-14
     executor: script
+    status: not-run
     cmd: config:executors.script.tt_crawl_live
     expected: >-
       exit 0 va evidence/live-run.log in: so dia chi gieo tu sitemap, so ho so
@@ -334,6 +335,7 @@ evals:
       evidence/live-batch.json hop le theo schema. Lenh bi mang chan hoan toan →
       BLOCKED chu khong PASS. Chieu do: --limit 0 → script thoat ma 2 "khong co
       dia chi nao".
+      Khai not-run từ 04/10 (chủ kho duyệt gói B): lượt cào thật lên nhatot.com bằng trình duyệt né chặn bot, bấm lộ số điện thoại của tới 50 người thật; làn ghim lại không tự chạy. Người chạy tay khi tools/listing-crawl đổi, theo README của bộ cào.
     paths:
       - "tools/listing-crawl/**"
       - "packages/validation/src/listing-ingest.ts"

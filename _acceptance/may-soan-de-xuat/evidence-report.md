@@ -85,7 +85,8 @@ human_signoff: Phan Le Manh 2026-09-28
 
 - eval: E2t
   run_id: minted-may-soan-de-xuat-E2t-r5
-  exit_code: 0
+  status: not-run
+  not_run_note: khai không-chạy từ 04/10 theo dòng sổ d-20261004T123430Z-91 (chủ kho duyệt gói B); lúc ký vòng 5 (28/09) thoát mã không, có khoá kho riêng tư thật
   baseline: red
   verifier: config:executors.script.msd_blob_that
   verified_at: 2026-09-28T10:29:19Z
@@ -286,7 +287,8 @@ human_signoff: Phan Le Manh 2026-09-28
 
 - eval: E15a
   run_id: minted-may-soan-de-xuat-E15a-r5
-  exit_code: 0
+  status: not-run
+  not_run_note: khai không-chạy từ 04/10 theo dòng sổ d-20261004T123430Z-91 (chủ kho duyệt gói B); lúc ký vòng 5 (28/09) thoát mã không, có ba tệp nguồn thật
   baseline: red
   verifier: config:executors.script.msd_soan_that
   verified_at: 2026-09-28T10:29:19Z

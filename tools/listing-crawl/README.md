@@ -10,14 +10,19 @@ khuôn CSS/JSON cố định, xếp mức sản lượng, rồi phát ra một l
 
 ```bash
 cd tools/listing-crawl
-python3.13 -m venv .venv
+python3 -m venv .venv
 ./.venv/bin/pip install "crawl4ai==0.9.2" "lxml" "cssselect" "jsonschema" \
   "transformers<5" "sentence-transformers<6" "huggingface-hub<1"
 ./.venv/bin/python -c "from crawl4ai.__version__ import __version__; print(__version__)"
 ```
 
-In ra `0.9.2` là xong. Máy này không có `python3.12`; `python3.13` đạt yêu cầu
-tối thiểu (cần `tomllib`, có từ 3.11) và nằm trong dải `crawl4ai` khai báo hỗ trợ.
+In ra `0.9.2` là xong. `python3` của máy cần từ 3.12 trở lên (`pyproject.toml`;
+`tomllib` có từ 3.11); máy hiện chạy 3.14.
+
+Bộ kiểm và lượt chạy trên mẫu (`--fixtures`) chỉ cần `lxml`, `cssselect`,
+`jsonschema`. `scripts/dung-venv.sh` dựng `.venv` với đúng ba gói đó khi cây chưa
+có, và hai phép đo E17, E22 của hồ sơ `tiep-thi-tuyen-doi-tac` gọi nó trước. Lượt
+cào thật vẫn cần đủ các gói ở trên.
 
 ## Chạy
 

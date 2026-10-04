@@ -81,6 +81,7 @@ evals:
   - id: E2t
     criterion: AC-12
     executor: script
+    status: not-run
     layer: backend-effect
     cmd: config:executors.script.msd_blob_that
     paths:
@@ -94,6 +95,7 @@ evals:
       do -> dung byte. GET vao blob khong ky (URL tran cua pathname) -> bi tu choi (khac 200). Don blob o
       finally. In "buoc N: dat" cho 4 buoc. CHIEU DO: khong co token -> exit 2 voi "thieu BLOB_READ_WRITE_TOKEN
       that", khong in dat nao; ban sao put access "public" -> buoc 4 do, "blob doc duoc khong ky".
+      Khai not-run từ 04/10 (chủ kho duyệt gói B): cần khoá kho Vercel Blob riêng tư thật KHO_TAI_LIEU_BLOB_TOKEN, .env gốc hiện không có; gỡ khai và chạy lại bằng máy khi chủ kho cắm lại khoá vào .env gốc.
 
   - id: E3
     criterion: AC-3
@@ -493,13 +495,14 @@ evals:
   - id: E15a
     criterion: AC-15
     executor: script
+    status: not-run
     cmd: config:executors.script.msd_soan_that
     paths:
       - "apps/agent/agent/lib/tai-lieu-*.ts"
       - "apps/agent/agent/subagents/may_soan/**"
       - "_acceptance/may-soan-de-xuat/mau/**"
       - "_acceptance/may-soan-de-xuat/rang/soan-that.mjs"
-    expected: "Chay trong phien do rieng (tien-de.mjs), can khoa AI Gateway that. Nap trang quy-tac-viet cua chu kho (ban dang dung trong kho do, tu tep _acceptance/may-soan-de-xuat/mau/quy-tac-viet.md chu kho dat vao) va ba tep mau quyet-dinh-hoa-hong.docx, quy-trinh.pdf, bieu-mau.docx; chay soan-tu-nguon that; ghi moi ban may soan (markdown, trichDoan, su kien MAY_SOAN) ra .acceptance-runs/may-soan-de-xuat/evidence/soan-that-<tep>.md. exit 0 khi ca ba co de xuat qua duoc kiem so; in chi phi tong. Vong S4 chep ba tep sang _acceptance/may-soan-de-xuat/evidence/ cho E15j. CHIEU DO: khong co tep quy-tac-viet.md -> exit 2 voi 'thieu trang Quy tac viet cua chu kho', khong goi model."
+    expected: "Chay trong phien do rieng (tien-de.mjs), can khoa AI Gateway that. Nap trang quy-tac-viet cua chu kho (ban dang dung trong kho do, tu tep _acceptance/may-soan-de-xuat/mau/quy-tac-viet.md chu kho dat vao) va ba tep mau quyet-dinh-hoa-hong.docx, quy-trinh.pdf, bieu-mau.docx; chay soan-tu-nguon that; ghi moi ban may soan (markdown, trichDoan, su kien MAY_SOAN) ra .acceptance-runs/may-soan-de-xuat/evidence/soan-that-<tep>.md. exit 0 khi ca ba co de xuat qua duoc kiem so; in chi phi tong. Vong S4 chep ba tep sang _acceptance/may-soan-de-xuat/evidence/ cho E15j. CHIEU DO: khong co tep quy-tac-viet.md -> exit 2 voi 'thieu trang Quy tac viet cua chu kho', khong goi model. Khai not-run từ 04/10 (chủ kho duyệt gói B): cần ba tệp nguồn thật của công ty ở mau/that/ (gitignore, máy hiện không có) và khoá model còn tín dụng; E15j đã có chữ người ngày 28/09."
 
   - id: E15j
     criterion: AC-15

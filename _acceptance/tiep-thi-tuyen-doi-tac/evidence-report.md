@@ -268,7 +268,8 @@ nguyên trong sổ quyết định, không phải làm lại.
 - eval: E18
   carried: round-3
   run_id: minted-tiep-thi-tuyen-doi-tac-E18-r3
-  exit_code: 0
+  status: not-run
+  not_run_note: khai không-chạy từ 04/10 theo dòng sổ d-20261004T123430Z-65 (chủ kho duyệt gói B); lúc ký lượt cào thật vòng 3 (05/09) thoát mã không
   baseline: red
   verifier: config:executors.script.tt_crawl_live
   verified_at: 2026-09-05T04:10:00Z
