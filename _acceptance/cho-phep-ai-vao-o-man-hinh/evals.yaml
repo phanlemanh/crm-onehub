@@ -380,6 +380,8 @@ evals:
       roi quyet: mot nguoi quan doc lan dau, khong ai giai thich, co hieu dung rang go
       cat quyen cua nguoi DA vao con rut chi chan nguoi CHUA co tai khoan khong.
       May KHONG cham muc nay.
+    paths:
+      - "apps/app/lib/messages/settings-thanh-vien.ts"
 
   - id: E15
     criterion: AC-6
