@@ -347,21 +347,50 @@ const daGuiLai = (phien) =>
 		(n) => n.phien === phien && n.loai === "gui-lai" && n.trangThai === 200,
 	);
 
-async function layMau(p, phien, tenKho) {
-	const mau = [];
-	let chupLuc = null;
-	const het = Date.now() + DO.choGuiLaiMs;
-	while (Date.now() < het) {
-		const coO = await p.$('[data-luot="loi"]').then((o) => o !== null);
-		mau.push({ luc: Date.now(), coO });
-		if (chupLuc === null && mau.length === 2) {
-			chupLuc = Date.now();
-			await chup(p, `E7-cho-khep-${tenKho}`);
-		}
-		if (daGuiLai(phien)) break;
-		await tre(DO.mauMs);
-	}
-	return { mau, chupLuc };
+const GHI_TRANG = () => {
+	const dauVet = { mau: [], bam: null, guiLai: null, hen: null };
+	window.__tl45 = dauVet;
+	const fetchCu = window.fetch;
+	window.fetch = function (input, init) {
+		const url = new URL(
+			input instanceof Request ? input.url : String(input),
+			location.href,
+		);
+		const phuongThuc =
+			init?.method ?? (input instanceof Request ? input.method : "GET");
+		if (
+			dauVet.bam !== null &&
+			dauVet.guiLai === null &&
+			phuongThuc === "POST" &&
+			/\/eve\/v1\/session\/[^/]+$/.test(url.pathname)
+		)
+			dauVet.guiLai = performance.now();
+		return fetchCu.apply(this, [input, init]);
+	};
+};
+
+async function bamVaLayMau(p, phien, tenKho) {
+	await p.evaluate((mauMs) => {
+		const dauVet = window.__tl45;
+		dauVet.bam = performance.now();
+		dauVet.hen = setInterval(() => {
+			dauVet.mau.push({
+				t: performance.now(),
+				coO: document.querySelector('[data-luot="loi"]') !== null,
+			});
+		}, mauMs);
+	}, DO.mauMs);
+	await p.click('[data-nut="thu-lai"]');
+	await tre(2 * DO.mauMs);
+	const chupLuc = Date.now();
+	await chup(p, `E7-cho-khep-${tenKho}`);
+	await choDen(async () => daGuiLai(phien) !== undefined, DO.choGuiLaiMs);
+	const dauVet = await p.evaluate(() => {
+		const d = window.__tl45;
+		clearInterval(d.hen);
+		return { mau: d.mau, bam: d.bam, guiLai: d.guiLai };
+	});
+	return { ...dauVet, chupLuc };
 }
 
 async function doiChungDongLuong() {
@@ -412,6 +441,7 @@ async function doKho(kho, slug) {
 		height: kho.cao,
 		deviceScaleFactor: 1,
 	});
+	await p.evaluateOnNewDocument(GHI_TRANG);
 	const truocMo = nhatKy.length;
 	await p.goto(
 		`${APP}/${slug}/okr/theo-don-vi?kyOkr=${KY}&donOkr=pb:${PHONG}&cuocSoan=${cuoc.id}`,
@@ -440,9 +470,7 @@ async function doKho(kho, slug) {
 		(await tranNgang(p)) <= 0,
 	);
 	await chup(p, `E7-qua-45s-${kho.ten}`);
-	const bam = Date.now();
-	await p.click('[data-nut="thu-lai"]');
-	const { mau, chupLuc } = await layMau(p, phien, kho.ten);
+	const { mau, bam, guiLai, chupLuc } = await bamVaLayMau(p, phien, kho.ten);
 	const cuaPhien = nhatKy.filter((n) => n.phien === phien);
 	const huy = cuaPhien.filter((n) => n.loai === "huy");
 	kiem(
@@ -478,12 +506,12 @@ async function doKho(kho, slug) {
 			nhan[0].luc >= doLuc &&
 			nhan[0].token === phienGia(phien).token,
 	);
-	const giua = mau.filter(
-		(x) => x.luc >= bam && (!nhan[0] || x.luc <= nhan[0].luc),
-	);
+	const giua = mau.filter((x) => x.t >= bam && guiLai !== null && x.t < guiLai);
 	kiem(
-		`${kho.ten}: ${giua.length} mau giua bam va gui lai, ${giua.filter((x) => x.coO).length} thay bao loi`,
-		giua.length >= DO.soMauToiThieu && giua.every((x) => x.coO),
+		`${kho.ten}: trinh duyet gui lai ${guiLai === null ? "khong ghi duoc" : `sau bam ${Math.round(guiLai - bam)} ms`}; ${giua.length} mau truoc do, ${giua.filter((x) => x.coO).length} thay bao loi`,
+		guiLai !== null &&
+			giua.length >= DO.soMauToiThieu &&
+			giua.every((x) => x.coO),
 	);
 	kiem(
 		`${kho.ten}: anh cho khep chup truoc moc do`,
