@@ -141,7 +141,7 @@ function XemCay({
 const dangCho = (q: { isPending: boolean; isPlaceholderData: boolean }) =>
 	q.isPending || q.isPlaceholderData;
 
-export function TheoDonVi() {
+export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
@@ -334,6 +334,7 @@ export function TheoDonVi() {
 									phaKy={phaKy}
 									quanTri={quanTri}
 									canEdit={byUnit.data?.canEdit === true}
+									cauNoi={cauNoiOkr}
 								/>
 								{byUnit.data?.canEdit || quanTri ? (
 									<Button

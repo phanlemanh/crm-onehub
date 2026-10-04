@@ -1,0 +1,122 @@
+slug: soan-okr-song-lai
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.sol_nut_dom
+    expected: "exit 0; bài DOM dựng NutSoan với cauNoi=false trên ma trận rút lúc chạy: tập khoá HINH_NUT_TAT (nut-soan.tsx) phải BẰNG tập mã union lyDo của soanSanSangOutput (lệch → 'bang nut lech union: <ma>'), cộng ba biến thể bật (nấc bật không cuộc đang, nấc bật có cuộc đang, nấc ẩn) = 11 kết quả × hai vai (quản trị, người sửa được) = 22 ô, sàn viết tay 22 (ít hơn hoặc rỗng → 'ma tran rong' mã 1); mỗi ô hôm nay có nút → đúng một [data-nut-soan='nut-chua-cau-hinh'] disabled, aria-describedby trỏ câu nut.chuaCauHinh, không chữ nut.tiep, không [data-nut='ds-cuoc'], spy soanMo 0 lời gọi; mỗi ô hôm nay không có nút → không phần tử [data-nut-soan]; số khẳng định = số ô. Đối chứng dương: ô nấc bật với cauNoi=true, bấm nút thì spy soanMo ghi đúng 1 lời gọi; cả ma trận với cauNoi=true cho lại đúng hình hôm nay. Chiều đỏ ghim: bản sao bỏ nhánh cauNoi → 'nut mo khi chua cau hinh: <ma>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", apps/app/lib/messages/okr-soan.ts, apps/app/test/soan-okr-song-lai.dom.tsx]
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sol_cau_noi_server
+    expected: "exit 0; bài nguồn đọc theo tên (import và prop, không đếm dòng): page.tsx của okr/theo-don-vi gọi okrBridgeConfigured() và truyền cờ vào TheoDonVi; TheoDonVi truyền vào NutSoan; NutSoan truyền vào ManSoan; quét mọi tệp có chỉ thị 'use client' dưới apps/app: không tệp nào import @/lib/agent-bridge; okrBridgeConfigured() trả false khi OKR_AGENT_BRIDGE_SECRET rỗng hoặc chỉ khoảng trắng, true khi có giá trị. Chiều đỏ ghim: fixture một tệp 'use client' import agent-bridge → 'client import agent-bridge: <tep>'; fixture NutSoan bỏ prop ở ManSoan → 'man soan khong nhan co cau noi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/**", "apps/app/app/(app)/[slug]/okr/soan/**", apps/app/lib/agent-bridge.ts, apps/app/test/soan-okr-song-lai.spec.ts]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.sol_man_dom
+    expected: "exit 0; bài DOM dựng ManSoan với cauNoi=false và một cuộc dang soLuot=0: có tiêu đề màn soạn và mô tả đơn vị · kỳ; [data-slot='empty'] chứa câu nut.chuaCauHinh; không textarea, không [data-slot='suggestion'], không bản nháp; fetch giả bắt mọi URL — không URL nào chứa /eve/agents/okr; hook phiên (useEveAgent) không được gọi. Đối chứng dương: cùng fixture với cauNoi=true thì có ô soạn và có request tới /eve/agents/okr. Chiều đỏ ghim: bản sao vẫn dựng hội thoại khi chưa cấu hình → 'man mo phien khi chua cau hinh'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", apps/app/test/soan-okr-song-lai.dom.tsx]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.sol_loi_dom
+    expected: "exit 0; fetch giả trả Response dựng từ hằng của cửa thật (CUA_OKR.loi.chuaCauHinh và CUA_OKR.trangThaiChuaCauHinh mà route.ts dùng — không chép chuỗi, không chép số), đi qua client eve thật (useEveAgent trong dung-cuoc-soan.ts) tới DOM; bảng ca viết trước: {503 + chua-cau-hinh-tro-ly-okr → câu nut.chuaCauHinh, không 'Thử lại', không chữ lỗi chung} · {503 + mã khác → chữ chung, có 'Thử lại'} · {lỗi mạng không status → như hôm nay} · {401 chua-dang-nhap → như hôm nay}; mỗi ca một khẳng định có thông điệp riêng. Bài nguồn kèm: route.ts trả loi(CUA_OKR.trangThaiChuaCauHinh, CUA_OKR.loi.chuaCauHinh). Chiều đỏ ghim: bản sao bỏ nhánh laChuaCauHinh → 'loi chua cau hinh hien chu chung'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/loi-cua.ts", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/dung-cuoc-soan.ts", apps/app/test/soan-okr-song-lai.dom.tsx]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sol_dem_db
+    expected: "exit 0; bài packages/db trên CSDL riêng của lượt: ma trận k ∈ {0,1,2,3} × z ∈ {0,3} (cuộc có lượt đóng ở da-dua-vao/bo, cuộc rỗng ở bo) cộng hai ô riêng (dang 0 lượt với k=3, dang có lượt với k=2), dựng qua moCuoc + tangLuot thật (không ghi soLuot tay); demCuocTrongKy bằng đúng số cuộc có lượt ở mọi ô (10 khẳng định); cuộc của đơn vị khác và kỳ khác không lọt. Chiều đỏ ghim: bản sao bỏ điều kiện soLuot → 'dem ca cuoc rong: k=<k> z=<z>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/okr-cuoc-soan.ts, packages/db/test/okr-cuoc-soan.spec.ts]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.sol_tran_api
+    expected: "exit 0; bài API qua tRPC thật trên một phòng ban mẫu, cùng ma trận của E5: soanSanSang.soCuocDaDung bằng số cuộc có lượt; ô không cuộc dang: soanMo trả het-cuoc-ky đúng khi k ≥ TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy (rút hằng), mọi ô khác trả ok với id mới khác mọi id đã gieo và số hàng okrCuocSoan của đơn vị tăng đúng 1; ô có cuộc dang: soanSanSang.cuocDang.id bằng id đó và soanMo trả con-cuoc-dang; phòng ban khác cùng kỳ mở được ở ô k = trần. Chiều đỏ ghim: bản sao demCuocTrongKy đếm cả cuộc rỗng → 'het cuoc khi chi co cuoc rong: z=3'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/soan.service.ts, packages/db/src/okr-cuoc-soan.ts, apps/api/test/soan-okr-tran.spec.ts]
+
+  - id: E7
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.sol_nut_dom
+    expected: "exit 0; trong cùng tệp DOM, ca 'nut-chua-cau-hinh — so cuoc' với cauNoi=true và soanSanSang trả soCuocDaDung = k: nút danh sách cuộc ghi đúng nut.dsCuoc(k, trần), không có nút khi k = 0. Chiều đỏ: bản sao hiện số cố định → 'so cuoc tren nut lech: <k>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", apps/app/test/soan-okr-song-lai.dom.tsx]
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.soan_man_trang_thai
+    expected: "exit 0; bài DOM đã ký của soan-okr-cung-tro-ly (soan-okr.dom.tsx) chạy nguyên, fixture chỉ thêm cauNoi=true vào NutSoan và ManSoan; mọi ca nút (ST-soan-nut, ST-soan-nut-an, nut-het-cuoc, chưa có khoá mô hình, bảng nút theo lý do) và mọi ca màn soạn xanh như trước lượt này."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr.dom.tsx, apps/app/test/khung-soan-okr.tsx]
+
+  - id: E9
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.soan_tran
+    expected: "exit 0; bài API đã ký soan-okr-tran.spec.ts chạy trọn: lượt thứ (luotMoiCuoc+1) bị het-luot-cuoc; ca het-cuoc-ky sửa để ba cuộc đầu có lượt (tangLuot thật) trước lần mở thứ tư và vẫn ra het-cuoc-ky, đơn vị khác vẫn mở; mọi vế trần tháng giữ nguyên chiều đỏ 'tran thang dat okr khong ap'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/soan.service.ts, packages/db/src/okr-cuoc-soan.ts, apps/api/test/soan-okr-tran.spec.ts]
+
+  - id: E10
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.sol_huong_dan
+    expected: "exit 0; rang/huong-dan-trien-khai.mjs đọc docs/setup.md, cắt đúng mục có tiêu đề «Deploying `apps/agent-okr` to Vercel» (vắng mục → mã 1 'thieu muc huong dan'); khẳng định có Root Directory apps/agent-okr, Framework preset, Build Command, Node; rút danh sách biến từ apps/agent-okr/turbo.json (tasks.dev.passThroughEnv) lúc chạy và so tập với các biến dạng `[A-Z_]+` trong bảng biến của mục: in 'thieu bien: <X>' / 'thua bien: <X>' khi lệch; có OKR_AGENT_URL và OKR_AGENT_BRIDGE_SECRET cho dự án app kèm chữ «cùng giá trị»; có /health. Chiều đỏ ghim: cờ --kiem-do-do chạy trên bản sao mục bỏ dòng DATABASE_URL → 'thieu bien: DATABASE_URL' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [docs/setup.md, apps/agent-okr/turbo.json, _acceptance/soan-okr-song-lai/rang/huong-dan-trien-khai.mjs]
+
+  - id: E11
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sol_man_that
+    steps:
+      - "Phiên đo riêng (mot-luot.sh → tien-de) với OKR_AGENT_BRIDGE_SECRET rỗng; cảnh cây trước màn đầu tiên, lệch cây → mã 2"
+      - "Seed: chu kỳ mẫu ở pha lap-ke-hoach, một phòng ban bật soạn, một cuộc dang soLuot 0 của phòng ban đó; đăng nhập dev:session trưởng phòng ban"
+      - "1440 px: /okr/theo-don-vi chọn phòng ban → chờ [data-nut-soan]; đọc innerText câu mô tả; ảnh E11-nut-1440; lưu HTML E11-nut-1440.html"
+      - "Mở ?cuocSoan=<id> → chờ màn soạn; đọc innerText [data-slot='empty']; đếm request tới /eve/agents/okr bằng nghe mạng; ảnh E11-man-1440; HTML E11-man-1440.html"
+      - "Lặp ở 390 px: ảnh E11-nut-390, E11-man-390; đo scrollWidth ≤ clientWidth của trang và vùng cuộn màn soạn"
+      - "Chạy lại với OKR_AGENT_BRIDGE_SECRET giả: trang thấy đã cấu hình; chặn /eve/agents/okr trả Response 503 dựng từ CUA_OKR; mở ?cuocSoan=<id>; chờ chỗ báo lỗi; ảnh E11-loi-1440, E11-loi-390"
+    expected: "exit 0; man-chua-cau-hinh.mjs in DUNG cho: câu nut.chuaCauHinh nhìn thấy (innerText) dưới nút disabled ở cả hai khổ; màn soạn có câu đó trong empty và không textarea; 0 request /eve/agents/okr; trạng thái ST-soan-loi-chua-cau-hinh: chạy lại với OKR_AGENT_BRIDGE_SECRET giả cho trang và chặn mạng /eve/agents/okr trả đúng Response 503 của cửa (dựng từ CUA_OKR) → chỗ báo lỗi chứa câu, không 'Thử lại', ảnh ở 1440 và 390; không tràn ngang ở cả sáu ảnh; sáu ảnh + HTML có trên đĩa. Chiều đỏ ghim: cờ --kiem-do-do chạy phép đo nút với OKR_AGENT_BRIDGE_SECRET giả mà không chặn mạng → in 'nut khong khoa khi da cau hinh gia' hoặc 'thieu cau chua cau hinh' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/lib/messages/okr-soan.ts, packages/db/src/okr-cuoc-soan.ts, _acceptance/soan-okr-song-lai/rang/man-chua-cau-hinh.mjs]
+
+  - id: E12
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.sol_san_thiet_ke
+    expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, man-soan.tsx, hoi-thoai-soan.tsx: không lỗi P0 nào (low-contrast, gray-on-color, text-overflow, broken-image, body-text-viewport-edge). Chiều đỏ ghim: bản sao nut-soan.tsx chèn một phần tử text-gray-400 trên bg-blue-600 → REJECT, mã 2, hit 'gray-on-color'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
+
+  - id: E13
+    criterion: AC-2
+    executor: ui-check
+    layer: backend-effect
+    cmd: config:executors.script.sol_man_that
+    steps:
+      - "Cùng phiên đo của E11, sau bước mở ?cuocSoan=<id> ở 1440 với OKR_AGENT_BRIDGE_SECRET rỗng"
+      - "Đọc soLuot của cuộc bằng okr.soanDanhSachCuoc cùng cookie"
+      - "Đối chứng dương: gọi tangLuot thật (packages/db) một lần trên cùng cuộc rồi đọc lại bằng cùng thủ tục"
+    expected: "exit 0; man-chua-cau-hinh.mjs in DUNG 'soLuot sau khi mo man: 0' và DUNG 'soLuot sau tangLuot: 1' (cùng phép đọc tRPC, cùng cuộc); 0 request /eve/agents/okr trong lúc màn mở. Chiều đỏ ghim: cờ --kiem-do-do bỏ bước tangLuot mà vẫn đòi 1 → 'phep doc soLuot khong nhay' mã 1 (phép đọc phải phân biệt 0 với 1)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/theo-don-vi/**", packages/db/src/okr-cuoc-soan.ts, _acceptance/soan-okr-song-lai/rang/man-chua-cau-hinh.mjs]

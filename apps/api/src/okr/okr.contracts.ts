@@ -787,6 +787,7 @@ export const soanMoOutput = z.discriminatedUnion("ok", [
 ]);
 export const soanDanhSachCuocOutput = z.object({
 	cuoc: z.array(cuocSoan),
+	soCuocDaDung: z.number().int(),
 	tranCuoc: z.number().int(),
 });
 export const soanDanhSachOutput = z.object({

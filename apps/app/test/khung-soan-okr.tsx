@@ -403,7 +403,11 @@ export function datLai(): void {
 		ok: true,
 		cuoc: { ...CUOC, sessionId: "phien-2" },
 	}));
-	dat("okr.soanDanhSachCuoc", () => ({ cuoc: [], tranCuoc: 3 }));
+	dat("okr.soanDanhSachCuoc", () => ({
+		cuoc: [],
+		soCuocDaDung: 0,
+		tranCuoc: 3,
+	}));
 }
 
 type San = { o: HTMLElement; root: Root };
@@ -445,13 +449,14 @@ export async function mo(man: ReactElement, thamSo = ""): Promise<void> {
 export const daDong: number[] = [];
 export const daMoCuoc: string[] = [];
 
-export async function moMan(quanTri = false): Promise<void> {
+export async function moMan(quanTri = false, cauNoi = true): Promise<void> {
 	await mo(
 		<ManSoan
 			cuocSoanId={CUOC.id}
 			dong={() => daDong.push(1)}
 			quanTri={quanTri}
 			moCuoc={(id) => daMoCuoc.push(id)}
+			cauNoi={cauNoi}
 		/>,
 	);
 	await cho(
@@ -606,6 +611,7 @@ export type TuyChonKhung = {
 	canEdit?: boolean;
 	pha?: "lap-ke-hoach" | "dang-chay";
 	thamSo?: string;
+	cauNoi?: boolean;
 };
 
 export async function moKhung(
@@ -616,6 +622,7 @@ export async function moKhung(
 		canEdit = true,
 		pha = "lap-ke-hoach",
 		thamSo = "",
+		cauNoi = true,
 	}: TuyChonKhung,
 ): Promise<void> {
 	dat("okr.soanSanSang", () => sanSang);
@@ -652,7 +659,7 @@ export async function moKhung(
 	}));
 	const tham = new URLSearchParams(thamSo);
 	if (don !== "goc") tham.set("donOkr", don);
-	await mo(<TheoDonVi />, `?${tham}`);
+	await mo(<TheoDonVi cauNoiOkr={cauNoi} />, `?${tham}`);
 	await cho(
 		() => document.querySelector("[data-hang-nut]") !== null,
 		"khung don vi",

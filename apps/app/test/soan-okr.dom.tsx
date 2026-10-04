@@ -543,7 +543,11 @@ describe("nut theo ly do", () => {
 	});
 
 	test("danh sách cuộc mở từ URL; bấm Tiếp trong danh sách đổi sang màn soạn", async () => {
-		dat("okr.soanDanhSachCuoc", () => ({ cuoc: [CUOC], tranCuoc: 3 }));
+		dat("okr.soanDanhSachCuoc", () => ({
+			cuoc: [CUOC],
+			soCuocDaDung: 1,
+			tranCuoc: 3,
+		}));
 		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC, thamSo: "dsCuoc=1" });
 		await cho(
 			() => q('[data-cuoc="danh-sach"]') !== null,
@@ -1013,6 +1017,7 @@ const CA = {
 				},
 				{ ...CUOC, id: "c-moi", moLuc: "2026-12-01T03:00:00.000Z" },
 			],
+			soCuocDaDung: 2,
 			tranCuoc: 3,
 		}));
 		const mo_: string[] = [];
@@ -1338,6 +1343,7 @@ describe("bo tri — khong tran, khong cat, khong de chu (E13)", () => {
 				{ ...CUOC, id: "c-cu", trangThai: "da-dua-vao" },
 				{ ...CUOC, id: "c-moi", moLuc: "2026-12-01T03:00:00.000Z" },
 			],
+			soCuocDaDung: 2,
 			tranCuoc: 3,
 		}));
 		await mo(<DanhSachCuoc donVi={DV} dong={() => {}} mo={() => {}} />);

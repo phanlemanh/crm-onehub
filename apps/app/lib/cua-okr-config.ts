@@ -43,6 +43,7 @@ export const CUA_OKR = {
 		"expect",
 	],
 	tienToRieng: "x-crm-",
+	trangThaiChuaCauHinh: 503,
 	khongTra: [
 		"transfer-encoding",
 		"connection",

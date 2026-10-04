@@ -675,13 +675,16 @@
       "ten_ngan": "Soạn OKR",
       "nhom": "tro-ly",
       "thu_tu": 255,
-      "ghi_chu": "Cổng Đáng 30/09 chốt ba chỗ đổi: soạn trọn bộ nháp qua đối thoại; hạng mục này dựng nền chat OKR thay cho C (app eve riêng); trần riêng cho tháng đặt OKR. Bối cảnh: hồ sơ công ty và chiến lược trong Kho tài liệu (loại trang mới «chiến lược»), đơn vị kèm mô tả và chức danh (hai cột mới trên cây tổ chức), OKR cấp trên và ngang cấp, kỳ trước tóm gọn, số CRM dạng tổng. «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp; người điền đích và công bố. Dựng trên bộ OKR mẫu; dữ liệu thật là điều kiện bật.",
-      "buoc_ke": "Anh đã ký Cổng Đáng, Cổng Phạm vi (15 tiêu chí, 28 phép đo) và Cổng 1.5; đang viết mã",
-      "chay_khi": "Đang viết mã từ 30/09",
-      "cho_ai": "máy",
+      "ghi_chu": "Cổng Đáng 30/09 chốt ba chỗ đổi: soạn trọn bộ nháp qua đối thoại; hạng mục này dựng nền chat OKR thay cho C (app eve riêng); trần riêng cho tháng đặt OKR. Bối cảnh: hồ sơ công ty và chiến lược trong Kho tài liệu (loại trang mới «chiến lược»), đơn vị kèm mô tả và chức danh (hai cột mới trên cây tổ chức), OKR cấp trên và ngang cấp, kỳ trước tóm gọn, số CRM dạng tổng. «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp; người điền đích và công bố. Dựng trên bộ OKR mẫu; dữ liệu thật là điều kiện bật. 04/10: production chết vì thiếu dự án agent-okr; lượt Kara 0 (soan-okr-song-lai) cho nút nói thẳng «chưa bật», trần chỉ đếm cuộc có lượt, rồi dự án được dựng và bật.",
+      "buoc_ke": "Đã gộp 02/10 (#232). Bật trên production 04/10 sau lượt Kara 0 (#240) và dự án Vercel agent-okr; chủ kho thử cuộc thật thành công",
+      "chay_khi": "Đã chạy trên production từ 04/10",
       "han": "2026-12-07",
-      "ngay": "2026-09-30",
-      "phien": "Soạn OKR cùng Trợ lý: làm rõ bối cảnh trước"
+      "ngay": "2026-10-04",
+      "phien": "Soạn OKR cùng Trợ lý: làm rõ bối cảnh trước",
+      "pr": [
+        232,
+        240
+      ]
     },
     {
       "ma": "C",
@@ -743,6 +746,174 @@
       "buoc_ke": "Làn A, cuối cùng",
       "chay_khi": "L đã gộp (làn A)",
       "cho_ai": "điều kiện"
+    },
+    {
+      "ma": "MK",
+      "cau_giao": "«Mục tiêu và KR mở trong một khung, sửa tại chỗ như deal»",
+      "hang": "T2",
+      "slug": "muc-tieu-va-kr",
+      "khoa": "kara-mk",
+      "ten": "Mục tiêu và KR một khung",
+      "ten_ngan": "Mục tiêu–KR",
+      "nhom": "tro-ly",
+      "thu_tu": 282,
+      "pr": [
+        234
+      ],
+      "ghi_chu": "Nền giao diện để Kara góp ý đặt lên sau. Cổng Bằng chứng ký 03/10; ba hợp đồng mới Ngoài-4/7/13 (số KR trên điện thoại).",
+      "buoc_ke": "Đã gộp 03/10 (#234)",
+      "ngay": "2026-10-03"
+    },
+    {
+      "ma": "KN",
+      "cau_giao": "«Mọi chỗ AI nói đều mang một tên — Kara — và một dấu»",
+      "hang": "T2",
+      "slug": "nen-kara",
+      "khoa": "kara-nen",
+      "ten": "Nền Kara: một tên, một dấu",
+      "ten_ngan": "Nền Kara",
+      "nhom": "tro-ly",
+      "thu_tu": 284,
+      "pr": [
+        235
+      ],
+      "dung_tren": [
+        "MK"
+      ],
+      "ghi_chu": "Chốt 01/10: tên Kara, dấu AiGenerate, luật ở docs/ai-ux.md.",
+      "buoc_ke": "Đã gộp 03/10 (#235); còn lái thử và phiên nghiệm thu",
+      "ngay": "2026-10-03"
+    },
+    {
+      "ma": "KG",
+      "cau_giao": "«Góp ý của Kara hiện đúng chỗ, đếm đúng, nhận hay bác từng dòng»",
+      "hang": "T2",
+      "slug": "gop-y-dung-cho",
+      "khoa": "kara-gy",
+      "ten": "Góp ý Kara đúng chỗ",
+      "ten_ngan": "Góp ý đúng chỗ",
+      "nhom": "tro-ly",
+      "thu_tu": 286,
+      "pr": [
+        238
+      ],
+      "dung_tren": [
+        "KN"
+      ],
+      "ghi_chu": "Cổng Bằng chứng ký 04/10; mốc nằm-im production chụp trước gộp; 4 hợp đồng mới cho lỗi vùng Kara gom vào lượt K3.",
+      "buoc_ke": "Đã gộp 04/10 (#238)",
+      "ngay": "2026-10-04"
+    },
+    {
+      "ma": "K0",
+      "cau_giao": "«Chưa bật thì nút nói thẳng là chưa bật; cuộc chưa có lượt không bị trừ»",
+      "hang": "T2",
+      "slug": "soan-okr-song-lai",
+      "khoa": "kara-0",
+      "ten": "Soạn OKR sống lại",
+      "ten_ngan": "Soạn OKR sống lại",
+      "nhom": "tro-ly",
+      "thu_tu": 288,
+      "pr": [
+        240
+      ],
+      "dung_tren": [
+        "D"
+      ],
+      "ghi_chu": "Lượt 0 của lộ trình Kara chốt 04/10. Nút và màn soạn nói thẳng khi cầu nối chưa cấu hình, cửa trả 503 có tên, trần chỉ đếm cuộc có lượt, danh sách cuộc đếm cùng số với nút, hướng dẫn dựng apps/agent-okr ở docs/setup.md. Sáu giới hạn đã biết là độ chặt của bài kiểm, không phải hành vi.",
+      "buoc_ke": "Đã gộp 04/10 (#240); dự án Vercel agent-okr dựng và bật cùng ngày",
+      "ngay": "2026-10-04"
+    },
+    {
+      "ma": "K1",
+      "cau_giao": "«Mọi bề mặt Kara dùng chung một bộ khung: lời, ô soạn, bước, trạng thái, đề xuất, bản nháp»",
+      "hang": "T2",
+      "slug": "bo-xuong-kara",
+      "trang_thai": "chưa mở",
+      "khoa": "kara-1",
+      "ten": "Bộ xương Kara",
+      "ten_ngan": "Bộ xương Kara",
+      "nhom": "tro-ly",
+      "thu_tu": 290,
+      "dung_tren": [
+        "K0"
+      ],
+      "ghi_chu": "Gộp tu-vung-tac-tu thành sáu khối trong packages/ui: KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact. Đề xuất ở .acceptance-runs/lai-thu-prod-0410/de-xuat-kara.html.",
+      "buoc_ke": "Mở bằng feature-loop ngay sau lượt 0",
+      "ngay": "2026-10-04"
+    },
+    {
+      "ma": "K2",
+      "cau_giao": "«Tôi soạn bộ OKR trên một trang riêng, bản nháp rộng bên cạnh cuộc trò chuyện»",
+      "hang": "T2",
+      "slug": "soan-okr-trang-rieng",
+      "trang_thai": "chưa mở",
+      "khoa": "kara-2",
+      "ten": "Soạn OKR hoàn thiện",
+      "ten_ngan": "Soạn OKR trang riêng",
+      "nhom": "tro-ly",
+      "thu_tu": 292,
+      "dung_tren": [
+        "K1"
+      ],
+      "ghi_chu": "Chủ kho chốt 04/10: trang riêng có thanh kéo đổi cỡ (không sheet); khoá dòng chưa quyết khi Kara đang soạn; có nhận theo nhóm («Thêm cả Mục tiêu và KR đã đủ số»); mốc nộp nối hai chiều, hỏi Kara từ dòng, Hoàn tác mọi quyết định.",
+      "buoc_ke": "Sau lượt K1",
+      "ngay": "2026-10-04"
+    },
+    {
+      "ma": "K3",
+      "cau_giao": "«Góp ý của Kara trên KR dùng cùng khung và hết các lỗi đã thấy»",
+      "hang": "T2",
+      "slug": "kara-gop-y-luot-2",
+      "trang_thai": "chưa mở",
+      "khoa": "kara-3",
+      "ten": "Kara góp ý lượt 2",
+      "ten_ngan": "Góp ý lượt 2",
+      "nhom": "tro-ly",
+      "thu_tu": 294,
+      "dung_tren": [
+        "K1",
+        "KG"
+      ],
+      "ghi_chu": "Gom bốn hợp đồng mới từ gop-y-dung-cho (Ngoài-11/13/14/15) và các lỗi vùng Kara khảo sát 04/10.",
+      "buoc_ke": "Sau lượt K2",
+      "ngay": "2026-10-04"
+    },
+    {
+      "ma": "K4",
+      "cau_giao": "«Kara trong hồ sơ bản ghi có một khung chung»",
+      "hang": "T2",
+      "slug": "khung-ban-ghi-kara",
+      "trang_thai": "chưa mở",
+      "khoa": "kara-4",
+      "ten": "Khung Kara trong bản ghi",
+      "ten_ngan": "Khung bản ghi",
+      "nhom": "tro-ly",
+      "thu_tu": 296,
+      "dung_tren": [
+        "K1"
+      ],
+      "ghi_chu": "Chạy song song với K2–K3 khi chủ kho duyệt bố cục.",
+      "buoc_ke": "Chờ chủ kho duyệt bố cục",
+      "ngay": "2026-10-04"
+    },
+    {
+      "ma": "K5",
+      "cau_giao": "«Chat và hỏi đáp deal dùng cùng một khung Kara»",
+      "hang": "T3",
+      "slug": "chat-deal-mot-khung",
+      "trang_thai": "chưa mở",
+      "khoa": "kara-5",
+      "ten": "Chat và Deal về một khung",
+      "ten_ngan": "Chat + Deal",
+      "nhom": "tro-ly",
+      "thu_tu": 298,
+      "dung_tren": [
+        "K1"
+      ],
+      "ghi_chu": "T3 vì chạm đường chat chung của apps/agent và bản ghi deal.",
+      "buoc_ke": "Sau K3",
+      "ngay": "2026-10-04"
     },
     {
       "ma": "T",
