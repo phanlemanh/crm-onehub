@@ -1347,7 +1347,7 @@ executors:
     cai_dat_khong_du_quyen: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/chu-ngoai-jsx.mjs --chan khong-du-quyen"
     cai_dat_khai_sinh: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs"
     cai_dat_dan_so_tu_dia: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/khai-sinh.mjs --chan dan-so"
-    cai_dat_be_rong_do: "bash _acceptance/man-cai-dat-noi-tieng-viet/rang/be-rong-do.sh"
+    cai_dat_be_rong_do: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "bash _acceptance/man-cai-dat-noi-tieng-viet/rang/be-rong-do.sh"'
     cai_dat_dot_bien: "node _acceptance/man-cai-dat-noi-tieng-viet/rang/dot-bien.mjs"
     cai_dat_hai_tieng: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-cai-dat-noi-tieng-viet/rang/man-that.mjs hai-tieng"'
     cai_dat_trang_thai_rong: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/man-cai-dat-noi-tieng-viet/rang/man-that.mjs trang-thai-rong"'
@@ -1382,7 +1382,7 @@ executors:
     ab_du_lieu_nguoi_nhap: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs du-lieu-nguoi-nhap"'
     ab_trang_thai: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs trang-thai"'
     ab_be_rong: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/agent-builder-noi-tieng-viet/rang/man-that.mjs be-rong"'
-    ab_dot_bien: "node _acceptance/agent-builder-noi-tieng-viet/rang/dot-bien.mjs"
+    ab_dot_bien: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/agent-builder-noi-tieng-viet/rang/dot-bien.mjs"'
     ab_mot_bo_thuoc: "node _acceptance/agent-builder-noi-tieng-viet/rang/mot-bo-thuoc.mjs"
     ab_tu_dien: "node _acceptance/agent-builder-noi-tieng-viet/rang/tu-dien.mjs"
     ct_gieo_va_don: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/cua-so-tro-chuyen-noi-tieng-viet/rang/gieo-va-don.mjs gieo"'

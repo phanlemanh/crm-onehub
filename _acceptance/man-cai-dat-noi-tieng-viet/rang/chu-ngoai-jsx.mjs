@@ -83,6 +83,13 @@ function hinhDang(goi) {
 	return "khong-ro";
 }
 
+function khoaKho(chu) {
+	const m =
+		/t\.([A-Za-z]+)\.([A-Za-z]+)/.exec(chu) ??
+		/\bmsg\.([A-Za-z]+)\.([A-Za-z]+)/.exec(chu);
+	return m?.slice(1, 3).join(".") ?? null;
+}
+
 function quetToast(files) {
 	const thay = [];
 	let boQua = 0;
@@ -96,7 +103,7 @@ function quetToast(files) {
 						file: f,
 						dong: dong(n, nguon),
 						hinh_dang: hinhDang(n),
-						khoa: /t\.([A-Za-z]+)\.([A-Za-z]+)/.exec(n.getText(nguon))?.slice(1, 3).join(".") ?? null,
+						khoa: khoaKho(n.getText(nguon)),
 						chu: chuTrong(n),
 					});
 			}
