@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6cbe22d8ba82b49e338cf605b215a2b5c33cd3fe
+verified_commit: 92206a5f9516f169e0e3cb22ddbcbd795b9821fa
 human_signoff:
 ---
 
@@ -137,3 +137,7 @@ none — every multi-run eval is uniform
 
 Round 1: E1, E2, E3, E4 xanh và red trên baseline, E5 do hội đồng chấm PASS; 7 lệnh suite xanh. Không có eval nào thất bại.
 Round 2: E2 được tách thành E2 (AC-5) và E6 (AC-6) theo luật cặp cross-layer; E1, E2, E6, E3, E4 xanh và red trên baseline, E5 do hội đồng chấm PASS; 7 lệnh suite xanh. Không có eval nào thất bại.
+
+### Re-pin lần 1 — 2026-10-04, do gộp onehub (#244, #246) sau S4 round 2
+run_id: repin-20261004T050849Z-98376
+sha: 92206a5f9516f169e0e3cb22ddbcbd795b9821fa · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E5 (E5 không khai paths) · AC không có chốt máy: AC-8
