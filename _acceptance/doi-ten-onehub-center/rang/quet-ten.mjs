@@ -118,14 +118,26 @@ function doiChungLuatTen() {
 	}
 }
 
+const HOP_DONG_LUOT = "_acceptance/doi-ten-onehub-center/contract.md";
+
+function gitDoc(...doi) {
+	return execFileSync("git", ["-C", GOC, ...doi], { encoding: "utf8" }).trim();
+}
+
 function mergeBase() {
-	return execFileSync(
-		"git",
-		["-C", GOC, "merge-base", "HEAD", "origin/onehub"],
-		{
-			encoding: "utf8",
-		},
-	).trim();
+	const mocChung = gitDoc("merge-base", "HEAD", "origin/onehub");
+	const gopLuot = gitDoc(
+		"log",
+		"--first-parent",
+		"--diff-filter=A",
+		"--format=%H",
+		mocChung,
+		"--",
+		HOP_DONG_LUOT,
+	)
+		.split("\n")
+		.at(-1);
+	return gopLuot === "" ? mocChung : gitDoc("rev-parse", `${gopLuot}^1`);
 }
 
 function soNgoaiLe() {
