@@ -131,6 +131,64 @@ in place of the agent. Run it with `bun run --filter=agent-okr dev` (port 2100).
 the bridge — send `-H 'Host: agent.example.com'`. `GET /eve/v1/info` is the whole
 inventory, including a `diagnostics` count that finds files eve silently ignored.
 
+## Deploying `apps/agent-okr` to Vercel
+
+OKR drafting runs on its own eve deployment. The app decides whether drafting is on
+from one thing only: `OKR_AGENT_BRIDGE_SECRET` in the app's process. While it is empty,
+the gate answers `503 chua-cau-hinh-tro-ly-okr`, the «By unit» toolbar shows a locked
+drafting button with «Drafting isn't turned on for this server yet», and no session is
+opened or counted.
+
+Once the secret is set the button opens sessions, and the gate counts the turn before
+it forwards it. A wrong or missing `OKR_AGENT_URL` then answers `502`, and secrets that
+differ between the two projects answer `401` — both after the turn is counted, so every
+try burns a turn and the session counts against the unit's three. Set the app's secret
+last, after the steps below prove the agent answers. Creating the project and setting
+the secrets is the repository owner's job — this section is the checklist, in order.
+
+### Project settings
+
+Copy the shape of `crm-onehub-agent` (`vercel project inspect crm-onehub-agent`):
+
+| Setting | Value |
+| --- | --- |
+| Root Directory | `apps/agent-okr` |
+| Framework preset | Other |
+| Build Command | `bun run build` |
+| Node.js Version | 24.x |
+
+### agent-okr project
+
+Exactly the variables `apps/agent-okr/turbo.json` passes to `dev`:
+
+| Variable | What it does |
+| --- | --- |
+| `OKR_AGENT_BRIDGE_SECRET` | Verifies the two-minute token the app's OKR gate signs. |
+| `AI_GATEWAY_API_KEY` | Model access when `OKR_AI_GATEWAY_API_KEY` is absent; without either, Vercel OIDC is used. |
+| `OKR_AI_GATEWAY_API_KEY` | The OKR-only Gateway key, billed and capped apart from the record agent. |
+| `DATABASE_URL` | Production database; the `nop_ban_nhap` tool writes draft lines and cost rows there. |
+
+### app project
+
+Deploy the agent-okr project first and check `GET <its URL>/health` (see Check). Then
+add to `crm-onehub-app` in this order — `OKR_AGENT_URL` first, the secret last — and
+redeploy; the app reads both at start:
+
+| Variable | Value |
+| --- | --- |
+| `OKR_AGENT_URL` | The production URL of the new project. |
+| `OKR_AGENT_BRIDGE_SECRET` | The same value as the agent-okr project (`openssl rand -base64 32`). |
+
+### Check
+
+1. Before touching the app project: `GET <agent-okr URL>/health` answers JSON with a
+   `cay` field. On Vercel it is `{"cay":null}` — there is no git checkout to name — and
+   that is the healthy answer; a 404 or a timeout means the deployment is not up.
+2. After the app's redeploy: on «By unit», a unit head in a planning-phase cycle sees
+   «Draft OKRs with the Assistant» enabled, and opening a session gets an answer. A
+   `401` or `502` here is a mismatched secret or URL — fix it before anyone else tries,
+   since each try counts.
+
 ## Running the agent
 
 The agent package's default `dev` command is interactive `eve dev`. The root

@@ -2,7 +2,12 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
-import { cuocDang, demCuocTrongKy, moCuoc } from "@crm/db/okr-cuoc-soan";
+import {
+	cuocDang,
+	demCuocTrongKy,
+	moCuoc,
+	tangLuot,
+} from "@crm/db/okr-cuoc-soan";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { idMau } from "../scripts/okr-mau/nap";
 import { OKR } from "../src/okr/okr-config";
@@ -383,8 +388,16 @@ describe("ma-tran-quyen-soan", () => {
 				sessionId: phienMoi("don-vi-cuoc"),
 				nac: "bat",
 			});
+			await tangLuot(db, cuoc.id);
 			expect(await cuocDang(db, kdBac)).toBeNull();
-			expect(await demCuocTrongKy(db, kdBac)).toBe(0);
+			expect(
+				await demCuocTrongKy(db, kdBac),
+				"lo cuoc bo phan vao tran phong ban",
+			).toBe(0);
+			expect(
+				await demCuocTrongKy(db, { cycleId: CHU_KY_Q4, ...DON_VI.kinhDoanh }),
+				"cuoc bo phan co luot khong duoc dem",
+			).toBe(1);
 			expect(
 				(
 					await cuocDang(db, {

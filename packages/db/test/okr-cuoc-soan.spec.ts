@@ -360,20 +360,77 @@ describe("okr-cuoc-soan: cuocDang và demCuocTrongKy", () => {
 		expect(kq?.trangThai).toBe("dang");
 	});
 
-	test("demCuocTrongKy: 0 khi chưa có; đếm mọi trạng thái của đúng đơn vị và đúng kỳ", async () => {
+	test("demCuocTrongKy: 0 khi chưa có; đếm mọi trạng thái của cuộc đã có lượt, đúng đơn vị và đúng kỳ", async () => {
 		expect(await demCuocTrongKy(db, dv(id("pb-dem")))).toBe(0);
 		const a = await mo("dem-a", { departmentId: id("pb-dem") });
 		const b = await mo("dem-b", { departmentId: id("pb-dem") });
-		await mo("dem-c", { departmentId: id("pb-dem") });
+		const c = await mo("dem-c", { departmentId: id("pb-dem") });
+		await mo("dem-rong", { departmentId: id("pb-dem") });
+		for (const x of [a, b, c]) await tangLuot(db, x.id);
 		await doi(a.id, "da-dua-vao");
 		await doi(b.id, "bo");
-		await mo("dem-khac-dv", { departmentId: id("pb-dem-khac") });
-		await mo("dem-khac-ky", {
+		const khacDv = await mo("dem-khac-dv", { departmentId: id("pb-dem-khac") });
+		const khacKy = await mo("dem-khac-ky", {
 			departmentId: id("pb-dem"),
 			cycleId: id("ky2"),
 		});
+		await tangLuot(db, khacDv.id);
+		await tangLuot(db, khacKy.id);
 		expect(await demCuocTrongKy(db, dv(id("pb-dem")))).toBe(3);
 		expect(await demCuocTrongKy(db, dv(id("pb-dem"), id("ky2")))).toBe(1);
+	});
+
+	const MA_TRAN_DEM = [0, 1, 2, 3].flatMap((k) =>
+		[0, 3].map((z) => ({ k, z })),
+	);
+
+	async function gieoDem(pb: string, k: number, z: number) {
+		for (let i = 0; i < k; i += 1) {
+			const c = await mo(`${pb}-k${i}`, { departmentId: id(pb) });
+			await tangLuot(db, c.id);
+			await doi(c.id, i % 2 === 0 ? "da-dua-vao" : "bo");
+		}
+		for (let i = 0; i < z; i += 1) {
+			const c = await mo(`${pb}-z${i}`, { departmentId: id(pb) });
+			await doi(c.id, "bo");
+		}
+	}
+
+	for (const { k, z } of MA_TRAN_DEM) {
+		test(`dem-co-luot: k=${k} z=${z}`, async () => {
+			const pb = `pb-dcl-${k}-${z}`;
+			await gieoDem(pb, k, z);
+			const khacKy = await mo(`${pb}-khac-ky`, {
+				departmentId: id(pb),
+				cycleId: id("ky2"),
+			});
+			await tangLuot(db, khacKy.id);
+			expect(
+				await demCuocTrongKy(db, dv(id(pb))),
+				`dem ca cuoc rong: k=${k} z=${z}`,
+			).toBe(k);
+		});
+	}
+
+	test("dem-co-luot: cuoc dang 0 luot voi k=3", async () => {
+		const pb = "pb-dcl-dang-rong";
+		await gieoDem(pb, 3, 0);
+		await mo(`${pb}-dang`, { departmentId: id(pb) });
+		expect(
+			await demCuocTrongKy(db, dv(id(pb))),
+			"dem ca cuoc rong: k=3 dang-rong",
+		).toBe(3);
+	});
+
+	test("dem-co-luot: cuoc dang co luot voi k=2", async () => {
+		const pb = "pb-dcl-dang-luot";
+		await gieoDem(pb, 2, 0);
+		const c = await mo(`${pb}-dang`, { departmentId: id(pb) });
+		await tangLuot(db, c.id);
+		expect(
+			await demCuocTrongKy(db, dv(id(pb))),
+			"dem ca cuoc rong: k=3 dang-luot",
+		).toBe(3);
 	});
 
 	test("docCuocTheoDonVi và cuocDang cùng một điều kiện đơn vị: cuộc có divisionId thừa vẫn được thấy", async () => {
@@ -389,6 +446,7 @@ describe("okr-cuoc-soan: cuocDang và demCuocTrongKy", () => {
 		const tim = dv(id("pb-thua"));
 		expect((await cuocDang(db, tim))?.id).toBe(c.id);
 		expect((await docCuocTheoDonVi(db, tim)).map((x) => x.id)).toEqual([c.id]);
+		await tangLuot(db, c.id);
 		expect(await demCuocTrongKy(db, tim)).toBe(1);
 	});
 });

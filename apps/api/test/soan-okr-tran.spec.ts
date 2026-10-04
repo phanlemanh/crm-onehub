@@ -3,6 +3,7 @@ import { db } from "@crm/db";
 import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import type {
+	SoanDanhSachCuocOutput,
 	SoanMoOutput,
 	SoanSanSangOutput,
 	SoanTangLuotOutput,
@@ -41,6 +42,13 @@ async function sanSang(c = cTruong, dv = DON_VI.kdBac) {
 	return ok<SoanSanSangOutput>(
 		await goiSoan(app, "soanSanSang", "trpc", vaoDonVi(dv, "trpc"), c),
 		"san sang",
+	);
+}
+
+async function danhSach(c = cTruong, dv = DON_VI.kdBac) {
+	return ok<SoanDanhSachCuocOutput>(
+		await goiSoan(app, "soanDanhSachCuoc", "trpc", vaoDonVi(dv, "trpc"), c),
+		"danh sach cuoc",
 	);
 }
 
@@ -161,13 +169,18 @@ describe("tran-soan", () => {
 		async () => {
 			const tran = TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy;
 			const da = await db.okrCuocSoan.count({
-				where: { departmentId: DON_VI.kdBac.departmentId },
+				where: { departmentId: DON_VI.kdBac.departmentId, soLuot: { gt: 0 } },
 			});
 			for (let i = da; i < tran; i += 1) {
 				const m = await mo();
 				expect(m.ok, `mo lan ${i + 1}`).toBe(true);
+				const id = m.ok ? m.cuoc.id : "";
+				expect(await luot(id, `luot cuoc ${i + 1}`)).toEqual({
+					ok: true,
+					soLuot: 1,
+				});
 				await db.okrCuocSoan.update({
-					where: { id: m.ok ? m.cuoc.id : "" },
+					where: { id },
 					data: { trangThai: "bo" },
 				});
 			}
@@ -398,6 +411,126 @@ describe("tran-soan", () => {
 				ok: true,
 				soLuot: 1,
 			});
+		},
+		CHO_DB,
+	);
+});
+
+describe("cuoc-rong-khong-tinh", () => {
+	const TRAN = TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy;
+	const PB = DON_VI.kdBac.departmentId;
+
+	async function donPhong() {
+		await db.okrCuocSoan.deleteMany({ where: { departmentId: PB } });
+	}
+
+	async function moVaDong(trangThai: "da-dua-vao" | "bo", coLuot: boolean) {
+		const m = await mo();
+		expect(m.ok, "gieo mo cuoc").toBe(true);
+		const id = m.ok ? m.cuoc.id : "";
+		if (coLuot)
+			expect(await luot(id, "gieo luot")).toEqual({ ok: true, soLuot: 1 });
+		await db.okrCuocSoan.update({ where: { id }, data: { trangThai } });
+		return id;
+	}
+
+	async function gieo(k: number, z: number) {
+		for (let i = 0; i < z; i += 1) await moVaDong("bo", false);
+		for (let i = 0; i < k; i += 1)
+			await moVaDong(i % 2 === 0 ? "da-dua-vao" : "bo", true);
+	}
+
+	for (const k of [0, 1, 2, 3]) {
+		for (const z of [0, 3]) {
+			test(
+				`cuoc-rong-khong-tinh: k=${k} z=${z}`,
+				async () => {
+					await donPhong();
+					await gieo(k, z);
+					const truoc = await db.okrCuocSoan.findMany({
+						where: { departmentId: PB },
+						select: { id: true },
+					});
+					const s = await sanSang();
+					expect(
+						s.bat ? s.soCuocDaDung : TRAN,
+						`het cuoc khi chi co cuoc rong: z=${z} (so cuoc da dung, k=${k})`,
+					).toBe(k);
+					expect(
+						(await danhSach()).soCuocDaDung,
+						`danh sach dem ca cuoc rong: z=${z} (k=${k})`,
+					).toBe(k);
+					const kq = await mo();
+					if (k >= TRAN) {
+						expect(kq, `het cuoc khi chi co cuoc rong: z=${z}`).toEqual({
+							ok: false,
+							lyDo: "het-cuoc-ky",
+							cuocDang: null,
+						});
+						await db.okrCuocSoan.deleteMany({
+							where: { departmentId: DON_VI.kdNam.departmentId },
+						});
+						const khac = await mo(cNam, DON_VI.kdNam);
+						expect(
+							khac.ok,
+							`phong ban khac van mo: ${JSON.stringify(khac)}`,
+						).toBe(true);
+						await db.okrCuocSoan.deleteMany({
+							where: { departmentId: DON_VI.kdNam.departmentId },
+						});
+					} else {
+						expect(kq.ok, `het cuoc khi chi co cuoc rong: z=${z}`).toBe(true);
+						expect(truoc.map((x) => x.id)).not.toContain(
+							kq.ok ? kq.cuoc.id : "",
+						);
+						expect(
+							await db.okrCuocSoan.count({ where: { departmentId: PB } }),
+						).toBe(truoc.length + 1);
+					}
+					await donPhong();
+				},
+				CHO_DB,
+			);
+		}
+	}
+
+	test(
+		"cuoc-rong-khong-tinh: cuoc dang 0 luot voi k=3",
+		async () => {
+			await donPhong();
+			await gieo(3, 0);
+			const dang = (
+				await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: "nguyen-thi-lan" })
+			).id;
+			const s = await sanSang();
+			expect(s.bat ? s.cuocDang?.id : null, "cuoc dang rong").toBe(dang);
+			expect(s.bat ? s.soCuocDaDung : -1, "so cuoc da dung: dang-rong").toBe(3);
+			expect(
+				(await danhSach()).soCuocDaDung,
+				"danh sach dem ca cuoc rong: dang-rong",
+			).toBe(3);
+			expect(await mo()).toMatchObject({ ok: false, lyDo: "con-cuoc-dang" });
+			await donPhong();
+		},
+		CHO_DB,
+	);
+
+	test(
+		"cuoc-rong-khong-tinh: cuoc dang co luot voi k=2",
+		async () => {
+			await donPhong();
+			await gieo(2, 0);
+			const m = await mo();
+			const dang = m.ok ? m.cuoc.id : "";
+			expect(await luot(dang, "luot cuoc dang")).toEqual({
+				ok: true,
+				soLuot: 1,
+			});
+			const s = await sanSang();
+			expect(s.bat ? s.cuocDang?.id : null, "cuoc dang co luot").toBe(dang);
+			expect(s.bat ? s.soCuocDaDung : -1, "so cuoc da dung: dang-luot").toBe(3);
+			expect(await mo()).toMatchObject({ ok: false, lyDo: "con-cuoc-dang" });
+			await donPhong();
 		},
 		CHO_DB,
 	);

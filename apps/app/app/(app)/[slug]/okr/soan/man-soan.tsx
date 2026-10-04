@@ -8,6 +8,7 @@ import {
 } from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
+import { Empty, EmptyHeader, EmptyTitle } from "@crm/ui/components/empty";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Sheet,
@@ -222,16 +223,30 @@ function KhongMo({ m, thuLai }: { m: OkrSoanMessages; thuLai: () => void }) {
 	);
 }
 
+function ChuaCauHinh({ m }: { m: OkrSoanMessages }) {
+	return (
+		<SheetBody data-man-chua-cau-hinh>
+			<Empty>
+				<EmptyHeader>
+					<EmptyTitle>{m.nut.chuaCauHinh}</EmptyTitle>
+				</EmptyHeader>
+			</Empty>
+		</SheetBody>
+	);
+}
+
 export function ManSoan({
 	cuocSoanId,
 	dong,
 	quanTri,
 	moCuoc,
+	cauNoi,
 }: {
 	cuocSoanId: string;
 	dong: () => void;
 	quanTri: boolean;
 	moCuoc: (cuocSoanId: string) => void;
+	cauNoi: boolean;
 }) {
 	const m = okrSoanMessages(useLocale());
 	const danhSach = useLuongCuoc(cuocSoanId);
@@ -271,6 +286,8 @@ export function ManSoan({
 				</SheetHeader>
 				{dangMo ? (
 					<DangMo />
+				) : !cauNoi ? (
+					<ChuaCauHinh m={m} />
 				) : du ? (
 					<ThanCuoc
 						key={du.cuoc.id}
