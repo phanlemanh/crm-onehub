@@ -1,11 +1,14 @@
 import { auth } from "@crm/auth";
 import { Injectable, Logger } from "@nestjs/common";
+import { APIError } from "better-auth/api";
 import { fromNodeHeaders } from "better-auth/node";
 import type { Request } from "express";
 import type { ContextOptions, TRPCContext } from "nestjs-trpc";
 import type { BaseTrpcContext } from "./context.types";
 
 const logger = new Logger("TrpcContext");
+
+const LOI_MAY_CHU_TU = 500;
 
 async function docPhien(
 	req: Request,
@@ -16,6 +19,9 @@ async function docPhien(
 		});
 		return { session, sessionError: false };
 	} catch (error) {
+		if (error instanceof APIError && error.statusCode < LOI_MAY_CHU_TU) {
+			return { session: null, sessionError: false };
+		}
 		logger.error(
 			{ message: "Could not read the session" },
 			error instanceof Error ? error.stack : String(error),

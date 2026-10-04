@@ -18,6 +18,9 @@ evals:
       "Could not read the session", chuoi log khong chua ten cookie "session_token" va khong chua
       gia tri cookie. Doi chung duong cung ca: mockResolvedValue(null) -> 401 "UNAUTHORIZED";
       khong spy -> 200. spy khoi phuc trong afterEach (khong dung mock.module).
+      Ca "doc-phien loi nguoi goi": getSession nem APIError("UNAUTHORIZED", KEY_DISABLED) va
+      APIError("FORBIDDEN", INVALID_API_KEY) -> ca hai 401 UNAUTHORIZED, 0 dong log "Could not read
+      the session" (hoi quy khoa API tat/het han ma S4 r1 bat qua khoa-api-ghi-thua.spec.ts).
       CHIEU DO (pha-thu o S3 tren ban sao): bo nhanh sessionError trong AuthMiddleware -> ca do
       voi thong diep ghim 'expected 503' nhan 401.
 
@@ -30,20 +33,19 @@ evals:
       - "apps/api/src/trpc/**"
       - "apps/api/test/cua-vao-va.spec.ts"
     expected: |
-      describe "ba-lop": ma tran viet truoc 3 lop x 2 tinh trang =
-      [[AuthMiddleware, settings.researchKey], [SignedInMiddleware, workspace.get],
-      [SessionOnlyMiddleware, apiKeys.list]] x
-      [["getSession nem", 503, "SERVICE_UNAVAILABLE"], ["getSession null", 401, "UNAUTHORIZED"]];
-      moi o mot assert ma HTTP + mot assert error.data.code; so assert = 3 x 2 x 2 = 12, ca dem
-      so o da chay va doi 6. Ca kiem dieu kien do: moi thu tuc trong ma tran that su mang lop
-      middleware da khai (doc metadata router, khong tu ghi tay).
+      describe "ba-lop": ma tran viet truoc 3 dong x 2 tinh trang = [AuthMiddleware ->
+      settings.researchKey, SignedInMiddleware -> workspace.get, SessionOnlyMiddleware+AuthMiddleware
+      -> apiKeys.list] x [getSession nem -> 503 SERVICE_UNAVAILABLE, getSession null -> 401
+      UNAUTHORIZED]; so assert = 6 dong ket qua. Ca kiem dieu kien do "metadata router": moi dong
+      doc Reflect metadata middleware that cua lop router (hoac phuong thuc get) va doi co dung lop
+      da goi ten (lop con tinh) — khong tu ghi tay nhan.
       Ca "quet-het": danh sach thu tuc rut tu router that (src/generated/server.ts hoac metadata
       nestjs-trpc, khong ghi tay); goi moi thu tuc khong input voi getSession null -> tap A = cac
       thu tuc tra 401; goi lai tap A voi getSession nem -> tap B = cac thu tuc tra 503. In |A|, |B|
       va hieu A\B; doi A = B va |A| > 3 (middleware chay truoc .input(), docs/api.md).
-      CHIEU DO: bo nhanh sessionError o SessionOnlyMiddleware (ban sao) -> dung o
-      [SessionOnlyMiddleware, getSession nem] do, thong diep ghim ten lop; va ca "quet-het" do
-      voi hieu A\B goi ten thu tuc apiKeys.*.
+      CHIEU DO: bo nhanh sessionError o SignedInMiddleware -> dong SignedInMiddleware nem do va
+      quet-het goi ten workspace.get; bo SessionOnlyMiddleware khoi @UseMiddlewares cua
+      ApiKeysRouter -> ca metadata do "apiKeys.list thieu SessionOnlyMiddleware".
 
   - id: E3
     criterion: AC-3

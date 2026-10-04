@@ -4,7 +4,6 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { YAML } from "bun";
-import { z } from "zod";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
@@ -26,11 +25,11 @@ const soIdMay = evals.filter((e) => MAY.has(e.executor)).length;
 function giai(cmd) {
 	const m = cmd.match(/^config:executors\.(\w+)\.(\w+)$/);
 	if (!m) return null;
-	const lenh = z.string().safeParse(cauHinh.executors?.[m[1]]?.[m[2]]);
-	if (!lenh.success) return null;
+	const lenh = cauHinh.executors?.[m[1]]?.[m[2]];
+	if (lenh === undefined || lenh === null) return null;
 	if (process.env.THUOC_CU_SOI_MA && m[2] === "cvdn_soi_ma")
 		return `bun ${process.env.THUOC_CU_SOI_MA}`;
-	return lenh.data;
+	return String(lenh);
 }
 
 const dong = [];
