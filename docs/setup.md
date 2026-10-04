@@ -131,6 +131,51 @@ in place of the agent. Run it with `bun run --filter=agent-okr dev` (port 2100).
 the bridge — send `-H 'Host: agent.example.com'`. `GET /eve/v1/info` is the whole
 inventory, including a `diagnostics` count that finds files eve silently ignored.
 
+## Deploying `apps/agent-okr` to Vercel
+
+OKR drafting runs on its own eve deployment. Until it exists and the app knows where it
+is, the gate answers `503 chua-cau-hinh-tro-ly-okr`; the «By unit» toolbar then shows a
+locked drafting button with «Drafting isn't turned on for this server yet», and no
+session is opened or counted. Creating the project and setting the secrets is the
+repository owner's job — this section is the checklist.
+
+### Project settings
+
+Copy the shape of `crm-onehub-agent` (`vercel project inspect crm-onehub-agent`):
+
+| Setting | Value |
+| --- | --- |
+| Root Directory | `apps/agent-okr` |
+| Framework preset | Other |
+| Build Command | `bun run build` |
+| Node.js Version | 24.x |
+
+### agent-okr project
+
+Exactly the variables `apps/agent-okr/turbo.json` passes to `dev`:
+
+| Variable | What it does |
+| --- | --- |
+| `OKR_AGENT_BRIDGE_SECRET` | Verifies the two-minute token the app's OKR gate signs. |
+| `AI_GATEWAY_API_KEY` | Model access when `OKR_AI_GATEWAY_API_KEY` is absent; without either, Vercel OIDC is used. |
+| `OKR_AI_GATEWAY_API_KEY` | The OKR-only Gateway key, billed and capped apart from the record agent. |
+| `DATABASE_URL` | Production database; the `nop_ban_nhap` tool writes draft lines and cost rows there. |
+
+### app project
+
+Add to `crm-onehub-app`, then redeploy it — the app reads both at start:
+
+| Variable | Value |
+| --- | --- |
+| `OKR_AGENT_URL` | The production URL of the new project. |
+| `OKR_AGENT_BRIDGE_SECRET` | The same value as the agent-okr project (`openssl rand -base64 32`). |
+
+### Check
+
+1. `GET <OKR_AGENT_URL>/health` answers `cay`.
+2. On «By unit», a unit head in a planning-phase cycle sees «Draft OKRs with the
+   Assistant» enabled, and opening a session gets an answer.
+
 ## Running the agent
 
 The agent package's default `dev` command is interactive `eve dev`. The root
