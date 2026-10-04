@@ -4,6 +4,7 @@ import CheckmarkOutline from "@carbon/icons-react/es/CheckmarkOutline";
 import Renew from "@carbon/icons-react/es/Renew";
 import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
+import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
 import { Card, CardContent } from "@crm/ui/components/card";
 import {
@@ -81,6 +82,8 @@ const MOC = { chuaXong: "0", xong: "1" } as const;
 
 const DINH_DANG = { vi: "vi-VN", en: "en-GB" } satisfies Record<Locale, string>;
 
+const MUI_GIO = "Asia/Ho_Chi_Minh";
+
 const KHUNG_TAI = ["mot", "hai", "ba"] as const;
 
 export type LanTruoc = "tuan-nay" | "tuan-truoc" | "lan-truoc";
@@ -121,6 +124,28 @@ function lanTruoc(kr: KrCapNhat, weekStart: string): LanTruoc | null {
 	return ngayVN(kr.lastAt) >= congNgay(weekStart, -TUAN.soNgay)
 		? "tuan-truoc"
 		: "lan-truoc";
+}
+
+function lucGuiMoiNhat(items: KrCapNhat[]): string | null {
+	return items.reduce<string | null>(
+		(moiNhat, kr) =>
+			kr.lastAt !== null && (moiNhat === null || kr.lastAt > moiNhat)
+				? kr.lastAt
+				: moiNhat,
+		null,
+	);
+}
+
+function ngayGioVN(luc: string, locale: Locale) {
+	return {
+		ngay: ngayThang(ngayVN(luc)),
+		gio: new Date(luc).toLocaleTimeString(DINH_DANG[locale], {
+			hour: "2-digit",
+			minute: "2-digit",
+			hour12: false,
+			timeZone: MUI_GIO,
+		}),
+	};
 }
 
 function laMucTuTin(v: string): MucTuTin | null {
@@ -287,6 +312,7 @@ function BangCapNhat({
 			new Map(duLieu.items.map((kr) => [kr.keyResultId, oBanDau(kr, locale)])),
 	);
 	const [daGui, setDaGui] = useState<KetQuaGui | null>(null);
+	const [dangSua, setDangSua] = useState(false);
 	const gui = useMutation(trpc.okr.guiCapNhat.mutationOptions());
 
 	const dong = duLieu.items.map((kr) => {
@@ -295,6 +321,7 @@ function BangCapNhat({
 		return { kr, o: oKr, so, loi: loiSo(kr, so) };
 	});
 	const tong = dong.length;
+	const soDaGuiTuanNay = duLieu.items.filter((kr) => kr.updatedThisWeek).length;
 	const sanSang = dong.filter((d) => d.o.tuTin !== null);
 	const soLoi = dong.filter((d) => d.loi !== null).length;
 	const khoa = gui.isPending;
@@ -308,6 +335,11 @@ function BangCapNhat({
 				weekStart={duLieu.weekStart}
 			/>
 		);
+
+	if (!dangSua && tong > 0 && soDaGuiTuanNay === tong)
+		return <DaXongTuanNay duLieu={duLieu} sua={() => setDangSua(true)} />;
+
+	const motPhan = soDaGuiTuanNay > 0 && soDaGuiTuanNay < tong;
 
 	const datO = (id: string, moi: O) => setO((cu) => new Map(cu).set(id, moi));
 
@@ -351,7 +383,9 @@ function BangCapNhat({
 			? "ST-capnhat-loigui"
 			: soLoi > 0
 				? "ST-capnhat-sokhonghople"
-				: "ST-capnhat-dangdien";
+				: motPhan
+					? "ST-capnhat-motphan"
+					: "ST-capnhat-dangdien";
 	const loiMayChu =
 		gui.error?.data?.httpStatus !== undefined && gui.error.data.httpStatus < 500
 			? gui.error.message
@@ -362,6 +396,11 @@ function BangCapNhat({
 			<p className="text-muted-foreground text-sm">
 				{m.dauTrang(tong, ngayThang(congNgay(duLieu.weekStart, TUAN.chuNhat)))}
 			</p>
+			{motPhan ? (
+				<p className="font-medium text-sm" data-da-gui-mot-phan>
+					{m.daGuiMotPhan(soDaGuiTuanNay, tong)}
+				</p>
+			) : null}
 			{loiGui ? (
 				<Alert variant="destructive">
 					<Icon icon={WarningAlt} />
@@ -384,6 +423,7 @@ function BangCapNhat({
 									loi={d.loi}
 									o={d.o}
 									so={d.so}
+									tuDongFocus={dangSua && i === 0}
 									weekStart={duLieu.weekStart}
 								/>
 							</Fragment>
@@ -427,6 +467,7 @@ function DongCapNhat({
 	loi,
 	datO,
 	khoa,
+	tuDongFocus,
 	weekStart,
 }: {
 	kr: KrCapNhat;
@@ -435,8 +476,10 @@ function DongCapNhat({
 	loi: LoiSo | null;
 	datO: (o: O) => void;
 	khoa: boolean;
+	tuDongFocus: boolean;
 	weekStart: string;
 }) {
+	const m = okrMessages(useLocale()).capNhat;
 	const lan = lanTruoc(kr, weekStart);
 	return (
 		<Item data-kr={kr.keyResultId} data-nguon={kr.nguon} role="listitem">
@@ -444,6 +487,12 @@ function DongCapNhat({
 				<ItemTitle translate="no">{kr.title}</ItemTitle>
 				<ItemDescription translate="no">{kr.objectiveTitle}</ItemDescription>
 			</ItemContent>
+			{kr.updatedThisWeek ? (
+				<Badge data-da-gui-tuan-nay variant="outline">
+					<Icon data-icon="inline-start" icon={CheckmarkOutline} />
+					{m.nhanDaGui}
+				</Badge>
+			) : null}
 			<div className="grid basis-full grid-cols-1 gap-3 md:grid-cols-[minmax(0,12rem)_auto_minmax(0,1fr)] md:items-start md:gap-6">
 				<OGiaTri
 					datGiaTri={(giaTri) => datO({ ...o, giaTri })}
@@ -452,6 +501,7 @@ function DongCapNhat({
 					lan={lan}
 					loi={loi}
 					so={so}
+					tuDongFocus={tuDongFocus}
 					value={o.giaTri}
 				/>
 				<ChonTuTin
@@ -480,6 +530,7 @@ export function OGiaTri({
 	lan,
 	datGiaTri,
 	khoa,
+	tuDongFocus = false,
 }: {
 	kr: KrCapNhat;
 	value: string;
@@ -488,6 +539,7 @@ export function OGiaTri({
 	lan: LanTruoc | null;
 	datGiaTri: (v: string) => void;
 	khoa: boolean;
+	tuDongFocus?: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale).capNhat;
@@ -530,10 +582,18 @@ export function OGiaTri({
 					value={value}
 					variant="outline"
 				>
-					<ToggleGroupItem className="flex-1 sm:flex-none" value={MOC.chuaXong}>
+					<ToggleGroupItem
+						autoFocus={tuDongFocus && value === MOC.chuaXong}
+						className="flex-1 sm:flex-none"
+						value={MOC.chuaXong}
+					>
 						{okrMessages(locale).moc.chuaXong}
 					</ToggleGroupItem>
-					<ToggleGroupItem className="flex-1 sm:flex-none" value={MOC.xong}>
+					<ToggleGroupItem
+						autoFocus={tuDongFocus && value === MOC.xong}
+						className="flex-1 sm:flex-none"
+						value={MOC.xong}
+					>
 						{okrMessages(locale).moc.xong}
 					</ToggleGroupItem>
 				</ToggleGroup>
@@ -560,6 +620,7 @@ export function OGiaTri({
 			<InputGroup>
 				<InputGroupInput
 					aria-invalid={loi !== null || undefined}
+					autoFocus={tuDongFocus}
 					className="tabular-nums"
 					data-khoa={khoaNguon || undefined}
 					disabled={khoa || khoaNguon}
@@ -723,6 +784,66 @@ function DaGui({
 				</CardContent>
 			</Card>
 			<div>
+				<VeCuaToi />
+			</div>
+		</div>
+	);
+}
+
+function DaXongTuanNay({
+	duLieu,
+	sua,
+}: {
+	duLieu: DuLieuCapNhat;
+	sua: () => void;
+}) {
+	const locale = useLocale();
+	const m = okrMessages(locale).capNhat;
+	const luc = lucGuiMoiNhat(duLieu.items);
+	const moc = luc === null ? null : ngayGioVN(luc, locale);
+	return (
+		<div className="flex flex-col gap-4" data-trang-thai="ST-capnhat-daxong">
+			<Alert role="status">
+				<Icon icon={CheckmarkOutline} />
+				<AlertTitle>{m.daXong.title}</AlertTitle>
+				<AlertDescription>
+					{moc ? `${m.daXong.luc(moc.ngay, moc.gio)} ` : ""}
+					{m.daGui.keTiep(ngayThang(congNgay(duLieu.weekStart, TUAN.soNgay)))}
+				</AlertDescription>
+			</Alert>
+			<Card>
+				<CardContent>
+					<ItemGroup aria-label={m.daXong.danhSach}>
+						{duLieu.items.map((kr, i) => (
+							<Fragment key={kr.keyResultId}>
+								{i > 0 ? <ItemSeparator /> : null}
+								<Item data-kr={kr.keyResultId} role="listitem">
+									<ItemContent>
+										<ItemTitle translate="no">{kr.title}</ItemTitle>
+										<ItemDescription translate="no">
+											{kr.objectiveTitle}
+										</ItemDescription>
+									</ItemContent>
+									<span className="text-sm tabular-nums">
+										{giaTri(kr, kr.currentValue, locale)}
+									</span>
+									{kr.lastConfidence ? (
+										<StatusIndicator
+											label={m.tuTinNhan(m.mucTuTin[kr.lastConfidence])}
+											size="sm"
+											tone={TONE_TU_TIN[kr.lastConfidence]}
+										/>
+									) : null}
+								</Item>
+							</Fragment>
+						))}
+					</ItemGroup>
+				</CardContent>
+			</Card>
+			<div className="flex flex-wrap gap-2">
+				<Button data-nut="sua-cap-nhat" onClick={sua} variant="outline">
+					{m.daXong.sua}
+				</Button>
 				<VeCuaToi />
 			</div>
 		</div>

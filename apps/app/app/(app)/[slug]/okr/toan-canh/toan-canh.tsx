@@ -297,9 +297,13 @@ export function ToanCanh() {
 				/>
 				<StatCard
 					description={
-						chuaDat.length === 0
-							? mt.toanCanh.tatCaDaDat
-							: mt.toanCanh.chuaDat(tenChuaDat)
+						chuaDat.length === 0 ? (
+							mt.toanCanh.tatCaDaDat
+						) : (
+							<span data-chua-dat>
+								<span translate="no">{tenChuaDat}</span> {mt.toanCanh.chuaDat}
+							</span>
+						)
 					}
 					label={mt.toanCanh.donViCongBo}
 					value={`${tongQuan.donViCongBo}/${tongQuan.tongDonVi}`}
