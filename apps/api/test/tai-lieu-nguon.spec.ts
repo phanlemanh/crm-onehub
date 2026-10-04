@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db } from "@crm/db";
+import { dongNguonMoCoi } from "@crm/db/tai-lieu-nguon-mo-coi";
 import { khoNguonGia } from "@crm/db/test/blob-nguon-gia";
 import { NGUON } from "@crm/validation/tai-lieu-nguon";
 import { bam, docxNho, pdfNho, pngNho, zipLuu } from "./tai-lieu-nguon-mau";
@@ -365,5 +366,67 @@ describe("soan-lai", () => {
 		const dang = await goi("taiLieuNguon.soanLai", { id: nguonId }, "tao");
 		expect(`${dang.status} ${dang.loi}`).toBe(`409 ${T.dangSoan}`);
 		expect(await viecCua(nguonId)).toBe(truoc);
+	});
+});
+
+const CAU_MO_COI = "Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.";
+const CAU_DOC_LOI = "Chưa đọc được tệp — bấm Soạn lại để thử lần nữa.";
+
+describe("kn-soan-lai", () => {
+	test("kn-soan-lai: nguon ve LOI do luoi mo coi va do doc tep loi deu soan lai duoc", async () => {
+		const slug = await trangDangDung();
+		const sai: string[] = [];
+		for (const o of ["mo-coi", "doc-loi"] as const) {
+			const { nguonId } = ok<{ nguonId: string }>(
+				(
+					await taiLen("tao", docxNho(ma(`K-${o}`)), `${o}.docx`, "docx", {
+						loai: "cap-nhat",
+						slug,
+					})
+				).tra,
+				`nhan ${o}`,
+			);
+			await db.agentTask.updateMany({
+				where: {
+					kind: "soan-tu-nguon",
+					finishedAt: null,
+					payload: { path: ["nguonId"], equals: nguonId },
+				},
+				data: { finishedAt: new Date(), outcome: "thu" },
+			});
+			if (o === "mo-coi") {
+				expect(await dongNguonMoCoi(db, CAU_MO_COI)).toBeGreaterThanOrEqual(1);
+			} else {
+				await db.taiLieuNguon.update({
+					where: { id: nguonId },
+					data: { trangThai: "LOI", lyDo: CAU_DOC_LOI },
+				});
+			}
+			const loi = await db.taiLieuNguon.findUniqueOrThrow({
+				where: { id: nguonId },
+			});
+			expect(`${o} ${loi.trangThai} ${loi.lyDo}`).toBe(
+				`${o} LOI ${o === "mo-coi" ? CAU_MO_COI : CAU_DOC_LOI}`,
+			);
+			const tra = await goi("taiLieuNguon.soanLai", { id: nguonId }, "tao");
+			if (tra.status !== 200) {
+				sai.push(`kn-soan-lai: nguon LOI khong soan lai duoc (${o}: ${tra.status} ${tra.loi})`);
+				continue;
+			}
+			const sau = await db.taiLieuNguon.findUniqueOrThrow({
+				where: { id: nguonId },
+			});
+			const mo = await db.agentTask.count({
+				where: {
+					kind: "soan-tu-nguon",
+					finishedAt: null,
+					payload: { path: ["nguonId"], equals: nguonId },
+				},
+			});
+			if (`${sau.trangThai} ${sau.lyDo} ${mo}` !== "CHO_DOC null 1") {
+				sai.push(`${o}: sau soan lai ${sau.trangThai} ${sau.lyDo} ${mo}`);
+			}
+		}
+		expect(sai).toEqual([]);
 	});
 });
