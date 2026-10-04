@@ -28,46 +28,71 @@ eve («Message delivery and queueing»), eve không có hàng đợi tin bền; 
 chạy thì kết quả bất định, và cách đúng là huỷ lượt (`POST session/:id/cancel`) rồi chờ phiên đỗ
 lại mới gửi.
 
-## Thiết kế
+## Thiết kế (bản 2 — 05/10, đổi khuôn sau S4 round 1)
 
-### «Thử lại» khi phiên đang bận: huỷ, dừng, chờ khép, rồi mới gửi
+Bản 1 dừng luồng phía trình duyệt bằng `agent.stop()` rồi gửi lại khi `onFinish` cộng hồi âm huỷ
+đều tới. S4 round 1 chỉ ra, và tài liệu eve 0.29.4 đã cài xác nhận, rằng khuôn đó sai:
 
-Nhánh `busy` của `thuLai`:
+- `guides/frontend/overview.mdx`: `stop()` chỉ cắt luồng phía trình duyệt, lượt phía máy chủ vẫn
+  chạy. Muốn dừng lượt thì gọi route huỷ, «giữ luồng mở tới khi mốc huỷ về; đừng dùng `stop()` cho
+  việc này».
+- `channels/eve.mdx`: huỷ là bất đồng bộ. `accepted` chỉ nghĩa là đã nhận lệnh; kết quả thật là
+  `turn.cancelled` rồi `session.waiting` trên luồng. `no_active_turn` cũng là thành công.
+- `concepts/sessions-runs-and-streaming.md`: `session.waiting` mang `continuationToken` hiện hành;
+  token cũ bị từ chối.
+- Mã `eve/client` 0.29.4: luồng của một lần gửi đọc từ con trỏ cũ và dừng ở mốc khép đầu tiên. Sau
+  `stop()`, con trỏ nằm trước mốc khép của lượt cũ, nên luồng của lần gửi lại dừng ở
+  `session.waiting` của lượt CŨ và câu trả lời mới không bao giờ hiện — một đường im lặng mới.
 
-1. Ghi tin cần gửi lại vào một ref (`choGuiLai`) và bật cờ `dangChoKhep`.
-2. Gửi yêu cầu huỷ lượt qua cửa: `POST ${OKR_SOAN_CUA.host}/eve/v1/session/<phiên>/cancel` kèm
-   `okrSoanHeader(cuoc.id)`. Cửa đã phục vụ đường này (`CUA_OKR.dangDuong.huyLuot`) và không tính
-   nó là lượt. Yêu cầu huỷ hỏng thì không chặn bước sau — eve coi huỷ là «bắn rồi quên»
-   (`no_active_turn` cũng là thành công).
-3. `agent.stop()`.
-4. Gửi lại khi **cả hai** điều đã xong: `onFinish` của `useEveAgent` (chạy trong `finally` của
-   lượt cũ, sau khi store về `ready` — đã đọc mã `eve-agent-store.js` 0.29.4: `catch` đặt `ready`
-   cho lỗi huỷ, `finally` gọi `onFinish`) và yêu cầu huỷ đã có hồi âm (thành công hay hỏng). Hai cờ
-   `daKhep`, `daHuy` trong một ref; điều nào tới sau thì gửi `guiThang(tin)` — đúng một lần — rồi xoá
-   ref, tắt `dangChoKhep`. Chờ hồi âm huỷ vì tài liệu eve dặn huỷ rồi chờ phiên đỗ mới gửi; cửa chỉ
-   trả hồi âm huỷ sau khi Trợ lý đã nhận lệnh huỷ.
-5. **Trần chờ khép** `SOAN_UI.choKhepMs` (15 giây): hẹn giờ đặt ngay trong `thuLai` (bộ xử lý sự kiện,
-   không `useEffect`). Quá trần mà chưa gửi lại được thì bỏ tin chờ, tắt `dangChoKhep`, bật
-   `loiGuiLai` — chỗ báo lỗi nói «Chưa gửi lại được…» và nút mở lại, không có đường khoá mãi.
+Bản 2 làm đúng theo tài liệu:
+
+1. Nhánh `busy` của `thuLai` ghi tin cần gửi lại vào ref `choGuiLai` (`tin`, `daKhep`, `daHuy`),
+   bật `dangChoKhep`, đặt hẹn giờ trần `SOAN_UI.choKhepMs` (15 giây, trong bộ xử lý sự kiện).
+2. Gửi yêu cầu huỷ qua cửa: `POST ${OKR_SOAN_CUA.host}/eve/v1/session/<phiên>/cancel`, kèm
+   `okrSoanHeader(cuoc.id)` và thân `{ turnId }` — `turnId` của `turn.started` cuối ĐỨNG SAU
+   `message.received` cuối (sự kiện cũ cộng dồn từ `initialEvents` không được dùng); không có thì
+   thân rỗng. `turnId` làm một lệnh huỷ tới muộn thành no-op thay vì huỷ nhầm lượt mới. Ghi lại số
+   sự kiện lúc bấm để bước 3 chỉ xét sự kiện mới.
+3. **Không gọi `agent.stop()`.** Luồng giữ mở; khi máy chủ khép lượt cũ, luồng nhận
+   `turn.cancelled` rồi `session.waiting`, store về `ready` và gọi `onFinish`. Nhưng `onFinish` chạy
+   ở MỌI lần lượt khép (phản biện bản 2), nên phân loại sự kiện từ lúc bấm:
+   - có `turn.cancelled` (của T nếu có T) rồi `session.waiting` → khép-vì-huỷ: đặt `daKhep`;
+   - có `session.waiting` mà không `turn.cancelled` → lượt tự xong (có khi chính nhờ huỷ trả
+     `no_active_turn` với một lượt còn xếp hàng): bỏ chuỗi chờ, KHÔNG gửi lại;
+   - không có mốc khép (lỗi luồng, `session.failed`) → bỏ chuỗi chờ, bật `loiGuiLai`.
+4. Hồi âm huỷ được parse ở biên bằng một khuôn zod (`huy-luot.ts`): status 2xx (eve thật trả 202)
+   VÀ thân `{ ok: true, sessionId: <phiên>, status: "accepted" | "no_active_turn" }`. Khớp → `daHuy`. Không khớp
+   (status khác, thân lạ) hay lỗi mạng → bỏ tin chờ, tắt `dangChoKhep`, bật `loiGuiLai`: không gửi
+   bừa vào một lượt chưa huỷ, và người thấy «Chưa gửi lại được…» thay vì một lời từ chối chung.
+5. Đủ cả `daKhep` và `daHuy` (thứ tự nào cũng được) → gửi lại đúng một lần qua `guiLai`. Một hồi âm
+   huỷ hay một `onFinish` thuộc chuỗi chờ đã bỏ (quá trần, lỗi) không chạm chuỗi chờ mới: so định
+   danh của ref.
+6. Quá trần mà chưa gửi lại → **lối thoát**: `agent.stop()` (chỗ duy nhất gọi `stop`), bỏ tin chờ,
+   bật `loiGuiLai`, nút mở lại. Luồng chết (nửa mở, lượt kẹt) không bao giờ có mốc khép; không có lối
+   thoát thì «Thử lại» lặp vòng huỷ–chờ mãi. Sau `stop` phiên rảnh phía trình duyệt nên bấm tiếp là
+   gửi thẳng; máy chủ còn bận thì trả 409 và màn đi đường lỗi có tên của R1h. Giá đã biết (Out of
+   scope): máy chủ khép lượt cũ muộn hơn thì lần gửi kế có thể không hiện câu trả lời tới khi tải lại.
+
+Gọi huỷ bằng `fetch` cộng khuôn zod chứ không bằng `ClientSession.cancel()` của eve: khung kiểm
+dùng chung `khung-soan-okr.tsx` giả `eve/client` mà không có `cancel`, và hợp đồng không cho sửa
+khung đó (OOS-5). Khuôn zod mô tả đúng thân mà tài liệu eve ghi, nên ranh giới parse vẫn ở biên.
 
 Không dùng `useEffect`: `onFinish` là callback của eve, chạy như một bộ xử lý sự kiện.
 
 ### Gửi lại hỏng thì nói ra
 
-`guiThang` thôi nuốt lỗi im lặng: lần gửi bị từ chối (eve ném trước khi gửi, thường là phiên vẫn
-bận) bật cờ `loiGuiLai`. Bấm «Thử lại» lúc đó đi nhánh theo trạng thái thật: phiên bận thì lại huỷ →
-dừng → chờ; phiên rảnh thì gửi thẳng.
-`hong` tính thêm cờ này, nên chỗ báo lỗi hiện câu riêng `hoiThoai.chuaGuiLai` («Chưa gửi lại được
-— lượt trước chưa dừng hẳn. Thử lại sau ít phút.») kèm «Đã thử lại N lần». Lần bấm «Thử lại» kế
-tiếp và lần gửi thành công tắt cờ.
+Cờ `loiGuiLai` chỉ bật cho lần GỬI LẠI (hàm `guiLai`) và cho lệnh huỷ hỏng, không cho mọi lần gửi:
+app dev chạy StrictMode nên lượt mở đầu có thể gửi hai lần và lần hai bị eve từ chối — chuyện đó
+không phải lỗi của người (đo màn E7 bản 1 thấy câu hiện oan). Chỗ báo lỗi hiện câu riêng
+`hoiThoai.chuaGuiLai` kèm «Đã thử lại N lần»; một lần gửi lại thành công tắt cờ.
 
 Câu này KHÔNG là một mã mới trong `MA_LY_DO_HONG`: bài E7 của R1h (đã ký) so tập mã lý do với tập
-khoá câu `lyDoHong`; thêm mã làm bài đã ký đỏ. Câu riêng đi bằng một khoá chữ riêng.
+khoá câu `lyDoHong`; thêm mã làm bài đã ký đỏ.
 
 ### Trong lúc chờ lượt cũ khép
 
-`dangThu` tính thêm `dangChoKhep`, nên chỗ báo lỗi vẫn hiện, nút «Thử lại» khoá, dòng «Đã thử lại
-N lần» còn nguyên. Câu lý do giữ câu trước khi bấm («Quá 45 giây…», qua `lyDoTruoc` sẵn có).
+`dangThu` tính thêm `dangChoKhep`, nên chỗ báo lỗi vẫn hiện, nút khoá, dòng «Đã thử lại N lần» còn
+nguyên, câu lý do giữ câu trước khi bấm. Ô soạn vẫn khoá vì phiên còn bận.
 
 ### Không đổi
 
@@ -79,9 +104,9 @@ N lần» còn nguyên. Câu lý do giữ câu trước khi bấm («Quá 45 gi�
 <!-- <<<UX-SPEC-TEMPLATE -->
 ### 1. Luồng
 
-- Suôn sẻ: Trợ lý im quá 45 giây → «Quá 45 giây…» + «Thử lại» → bấm → nút khoá, «Đã thử lại 1 lần» → lượt cũ khép → tin cuối gửi lại → Trợ lý trả lời, chỗ báo lỗi biến mất.
+- Suôn sẻ: Trợ lý im quá 45 giây → «Quá 45 giây…» + «Thử lại» → bấm → nút khoá, «Đã thử lại 1 lần» → máy chủ khép lượt cũ (`turn.cancelled`, `session.waiting`) → tin cuối gửi lại → câu trả lời mới của Trợ lý hiện, chỗ báo lỗi biến mất.
 - Biên: lượt cũ khép rất chậm → chỗ báo lỗi đứng yên, nút khoá, không gửi đôi.
-- Lỗi & quay lại: gửi lại bị từ chối → «Chưa gửi lại được — lượt trước chưa dừng hẳn. Thử lại sau ít phút.» + «Đã thử lại N lần», nút mở lại.
+- Lỗi & quay lại: lệnh huỷ hỏng, hoặc gửi lại bị từ chối → «Chưa gửi lại được — lượt trước chưa dừng hẳn. Thử lại sau ít phút.» + «Đã thử lại N lần», nút mở lại.
 
 ### 2. Kiểm kê màn
 
@@ -117,10 +142,12 @@ Căn cứ: màn soạn đã là hội thoại; lượt này chỉ sửa hành vi
 
 ## Tệp chạm
 
-- `apps/app/app/(app)/[slug]/okr/soan/dung-cuoc-soan.ts` — `thuLai`, `guiThang`, `onFinish`, `dangChoKhep`, `loiGuiLai`.
+- `apps/app/app/(app)/[slug]/okr/soan/dung-cuoc-soan.ts` — `thuLai`, `guiLai`, `onFinish`, `dangChoKhep`, `loiGuiLai`; bỏ `agent.stop()` khỏi nhánh bận.
+- `apps/app/app/(app)/[slug]/okr/soan/huy-luot.ts` (MỚI) — gọi route huỷ qua cửa, khuôn zod của hồi âm, lấy `turnId` cuối từ sự kiện.
 - `apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx` — câu `chuaGuiLai` trong `LuotLoi`.
-- `apps/app/app/(app)/[slug]/okr/soan/cau-hinh.ts` — đoạn đường huỷ (nếu cần hằng).
-- `apps/app/lib/messages/okr-soan.ts` — chỉ thêm khoá `hoiThoai.chuaGuiLai` (vi + en); `messages-guard.spec.ts` không cần ghim (không phải hàm).
-- Tệp kiểm MỚI: `apps/app/test/soan-okr-thu-lai-45s.dom.tsx`, `apps/app/test/soan-okr-huy-luot.spec.ts`; rang `_acceptance/thu-lai-sau-45-giay/rang/thu-lai-45s-man-that.mjs`.
+- `apps/app/app/(app)/[slug]/okr/soan/cau-hinh.ts` — `choKhepMs`.
+- `apps/app/lib/messages/okr-soan.ts` — chỉ thêm khoá `hoiThoai.chuaGuiLai` (vi + en).
+- `apps/app/test/soan-okr-hong.dom.tsx` — chỉ khối «hong — Thu lai roi van im» (AC-6).
+- Tệp kiểm MỚI: `soan-okr-thu-lai-45s.dom.tsx`, `soan-okr-huy-luot.spec.ts`, `soan-okr-store-eve-huy.spec.ts`; rang `giu-r1h.mjs`, `thu-lai-45s-man-that.mjs`.
 
-Không chạm: `nut-soan.tsx` (P1), `khung-soan-okr.tsx` và mọi tệp kiểm của hồ sơ đã ký, cửa `route.ts`.
+Không chạm: `nut-soan.tsx` (P1), `khung-soan-okr.tsx`, cửa `route.ts`.

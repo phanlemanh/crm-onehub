@@ -1,18 +1,24 @@
 ---
 slug: thu-lai-sau-45-giay
-at: 2026-10-04T11:58:00Z
+at: 2026-10-04T21:30:00Z
 verdict: findings
-p0: 0
-p1: 4
-p2: 1
+p0: 1
+p1: 5
+p2: 3
 ---
 
 ## Findings
 
 | Sev | Artifact | Thiếu gì | Kịch bản fail | Thước đo | Xử lý |
 |---|---|---|---|---|---|
-| P1 | design, evals | Gửi lại chỉ chờ onFinish (lúc trình duyệt cắt luồng), không chờ hồi âm huỷ; Trợ lý giả của E7 nhận mọi lần gửi nên không mô phỏng đua | Production: tin gửi lại tới khi eve còn chạy lượt cũ → bị nuốt, từ chối hay chạy chồng; mọi eval vẫn xanh | Chờ cả onFinish lẫn hồi âm huỷ; E2 thêm ca huỷ treo; E7 Trợ lý giả trả 409 trước mốc đỗ | fixed: thiết kế bước 4 chờ cả hai điều; AC-2 và E2 ba ca thứ tự (onFinish trước, huỷ trước, huỷ treo); AC-7 và E7 đỗ trễ 3 s, 409 trước mốc đỗ, gửi lại 202 sau mốc |
-| P1 | evals | E4 cho send ném khi phiên ready nhưng đòi POST cancel thứ hai — mâu thuẫn với nhánh busy của thiết kế | Cài đúng thiết kế thì E4 đỏ; cài sai (luôn huỷ khi cờ bật) thì E4 xanh với yêu cầu huỷ thừa | E4 đặt phiên streaming lúc ném; đối chứng phiên ready gửi thẳng | fixed: AC-4 đi theo trạng thái thật của phiên; E4 hai nhánh viết trước và chiều đỏ 'huy-thua-khi-ranh' |
-| P1 | evals | AC-2/AC-3 dựa trên giả định chưa kiểm rằng stop() vẫn gọi onFinish sau khi đặt ready | eve không gọi onFinish khi huỷ → tin không bao giờ gửi lại, E1–E4 vẫn xanh | Bài với EveAgentStore thật, khẳng định thứ tự ready → onFinish | fixed: E9 mới dựng EveAgentStore thật, đo trạng thái lúc onFinish và đối chứng send ngay sau stop ném đúng lỗi gốc |
-| P1 | evals | «Mọi mẫu giữa hai mốc thấy chỗ báo lỗi» tự đúng khi khoảng giữa ngắn hơn chu kỳ lấy mẫu | Bản cài để chỗ báo lỗi biến mất trong lúc chờ vẫn qua E7 | Đỗ trễ 3 s; sàn số mẫu ≥ 3 | fixed: Trợ lý giả giữ hồi âm huỷ 3 s; E7 đòi ≥ 3 mẫu và in số mẫu; ảnh cho-khep chụp trước mốc đỗ |
-| P2 | design, contract | dangChoKhep không có trần — onFinish không tới thì nút khoá mãi, lại một đường im | eve bỏ qua onFinish hay luồng đóng giữa lúc kiểm busy và stop | Trần SOAN_UI.choKhepMs, quá trần thì bật chuaGuiLai | fixed: thiết kế bước 5 trần 15 s; AC-3 thêm vế; E3 ca đồng hồ trôi quá trần, chiều đỏ 'khoa-mai' |
+| P0 | evals | E6 đòi khối «hong — Thu lai roi van im» vẫn khẳng định daDung = 1, trái AC-1 bản 2 (cấm stop); khối không giả fetch nên lệnh huỷ hỏng và không có lần gửi lại | Khối đỏ dù mã đúng, hoặc phải giữ stop() để khối xanh | Khối khẳng định daDung = 0, 1 POST huỷ, gửi lại sau khép-vì-huỷ; giu-r1h đòi các khẳng định bắt buộc | fixed: AC-6 và E6 viết lại; giu-r1h kiểm nguyên văn từng khẳng định bắt buộc trong khối |
+| P1 | contract, design | onFinish chạy ở mọi lần lượt khép, không riêng lần huỷ; no_active_turn với lượt xếp hàng làm lượt tự xong rồi bị gửi lại | Trả lời hai lần, tính hai lượt | Phân loại sự kiện từ lúc bấm: turn.cancelled rồi session.waiting / khép thường / khép lỗi | fixed: AC-2 thêm ba nhánh; E2 thêm ca khép thường, khép lỗi, chiều đỏ 'gui-lai-khi-khep-thuong' |
+| P1 | contract | Luồng chết (nửa mở, lượt kẹt) thì không bao giờ có mốc khép; AC-4 «phiên bận: lại AC-1» lặp vòng huỷ–chờ mãi | Ô soạn khoá tới khi tải lại trang | Lối thoát sau trần | fixed: AC-3 quá trần thì stop (lối thoát duy nhất), bấm tiếp gửi thẳng; E3 chiều đỏ 'khong-loi-thoat'; hệ quả muộn ghi Out of scope |
+| P1 | evals | Mã trả giả lệch eve thật (huỷ 202, gửi tiếp 200, mở phiên 202); E5 hai cặp cùng 200 nên cửa ép 200 vẫn xanh | Bản kiểm status === 200 qua hết bài mà hỏng production | Giả đúng mã; E5 ba cặp khác status; khuôn so sessionId | fixed: E2/E4/E5/E7 đổi mã; E5 thêm cặp 500 và chiều đỏ 'status-khong-bang-tro-ly'; E4 thêm ca sessionId lạ |
+| P1 | design | Trần 15 giây là đoán, chưa đo thời gian từ huỷ tới turn.cancelled khi một bước mô hình đang chạy | Hầu như mọi lần bấm rơi vào trần | Đo với apps/agent-okr thật | descoped: cần gọi mô hình thật; ghi Out of scope, trần chỉnh ở cau-hinh.ts |
+| P1 | evals | giu-r1h chỉ kiểm khối còn tiêu đề, phần ngoài khối không đổi và tệp xanh — khoét rỗng khối vẫn xanh | Lời hứa AC-12c không có máy chấm | Kiểm nguyên văn khẳng định bắt buộc | fixed: E6 + giu-r1h, chiều đỏ xoá khẳng định soanMo |
+| P2 | design | turn.started cuối có thể là của lượt trước (initialEvents cộng dồn) | Huỷ no-op, chờ hết trần hay gửi đôi | Chỉ lấy turn.started sau message.received cuối | fixed: AC-1 và E1 (turn.started 'luot-0' cũ, chiều đỏ 'turn-id-cu') |
+| P2 | contract | Nhánh «eve ném» của AC-4 hiếm; từ chối HTTP của lần gửi lại đi đường lỗi R1h và mất dòng «Đã thử lại N lần» | Đếm lại từ 1 | — | descoped: Out of scope «Giữ dòng Đã thử lại N lần khi gửi lại bị từ chối bằng mã HTTP» |
+| P2 | evals | E7 «luồng không bị cắt» chưa có đối chứng — máy chủ dev không báo đóng thì luôn xanh | Thước xanh oan | Đối chứng dương đóng một luồng qua cửa | fixed: E7 bước đối chứng dương trước màn đầu, không ghi được thì KHONG DO mã 2 |
+
+Phản biện bản 1 (04/10, trên khuôn stop()) giữ ở `gap-probe-ban-1.md`.

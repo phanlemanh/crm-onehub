@@ -1,33 +1,33 @@
 {
-  "feature_plain": "Khi Trợ lý im quá 45 giây và người soạn bấm «Thử lại», máy huỷ lượt đang treo, chờ nó dừng hẳn rồi gửi lại tin; gửi không được thì nói ra, không biến mất im lặng.",
+  "feature_plain": "Khi Trợ lý im quá 45 giây và người soạn bấm «Thử lại», máy xin Trợ lý huỷ lượt đang treo, chờ Trợ lý báo đã khép rồi mới gửi lại tin; gửi không được thì nói ra, không biến mất im lặng.",
   "will_do": [
     {
       "id": "AC-1",
-      "p": "Sẽ huỷ lượt đang treo phía Trợ lý và dừng luồng trên trình duyệt khi bấm «Thử lại», chưa gửi lại ngay."
+      "p": "Sẽ gửi lệnh huỷ đúng lượt đang treo tới Trợ lý khi bấm «Thử lại» — không tự cắt dây luồng, chưa gửi lại ngay."
     },
     {
       "id": "AC-2",
-      "p": "Sẽ gửi lại tin cuối đúng một lần, chỉ khi lượt cũ đã khép và lệnh huỷ đã có hồi âm."
+      "p": "Sẽ gửi lại tin cuối đúng một lần, chỉ khi Trợ lý báo lượt cũ đã khép VÌ huỷ và lệnh huỷ được nhận; lượt cũ tự xong thì không gửi lại; câu trả lời mới hiện ra được (đo bằng thư viện eve thật, kèm phép đối chứng cho thấy cách cũ làm mất câu trả lời)."
     },
     {
       "id": "AC-3",
-      "p": "Sẽ giữ chỗ báo lỗi hiện với nút khoá và «Đã thử lại 1 lần» trong lúc chờ; chờ quá 15 giây thì nói «Chưa gửi lại được» và mở nút."
+      "p": "Sẽ giữ chỗ báo lỗi hiện với nút khoá và «Đã thử lại 1 lần» trong lúc chờ; chờ quá 15 giây thì cắt chờ, nói «Chưa gửi lại được», mở nút, bấm tiếp là gửi thẳng — không lặp vòng."
     },
     {
       "id": "AC-4",
-      "p": "Sẽ nói «Chưa gửi lại được — lượt trước chưa dừng hẳn» khi lần gửi lại bị từ chối, và bấm tiếp thì làm đúng theo trạng thái thật của phiên."
+      "p": "Sẽ nói «Chưa gửi lại được — lượt trước chưa dừng hẳn» khi gửi lại bị từ chối hoặc lệnh huỷ hỏng (và khi huỷ hỏng thì không gửi bừa); không báo oan lúc mở màn; bấm tiếp làm đúng theo trạng thái thật của phiên."
     },
     {
       "id": "AC-5",
-      "p": "Sẽ chuyển lệnh huỷ tới Trợ lý qua cửa mà không tính là một lượt."
+      "p": "Sẽ chuyển lệnh huỷ tới Trợ lý qua cửa nguyên vẹn, trả về đúng mã và nội dung Trợ lý trả (cả khi Trợ lý lỗi), và không tính là một lượt."
     },
     {
       "id": "AC-6",
-      "p": "Sẽ giữ nguyên mọi đường «Thử lại» khác đã làm ở R1h; tệp kiểm R1h không đổi dòng nào, và tệp kiểm của «Soạn OKR cùng Trợ lý» chỉ sửa đúng ca từng khẳng định lỗi cũ (dừng rồi gửi lại ngay) — ca đó vẫn chứng minh gửi lại trên cùng phiên."
+      "p": "Sẽ giữ nguyên mọi đường «Thử lại» khác đã làm ở R1h; tệp kiểm R1h không đổi dòng nào; tệp kiểm của «Soạn OKR cùng Trợ lý» chỉ sửa đúng ca từng khẳng định lỗi cũ, và ca đó vẫn chứng minh gửi lại trên cùng phiên."
     },
     {
       "id": "AC-7",
-      "p": "Sẽ đúng trên màn thật ở khổ máy tính và điện thoại, với một Trợ lý giả treo luồng thật."
+      "p": "Sẽ đúng trên màn thật ở khổ máy tính và điện thoại, với một Trợ lý giả trả mã như eve thật và khép lượt cũ sau 3 giây: không cắt luồng cũ, gửi lại đúng lúc với mã mới, câu trả lời mới hiện ra."
     },
     {
       "id": "AC-8",
@@ -53,6 +53,18 @@
     },
     {
       "id": "OOS-5",
+      "p": "KHÔNG đo thời gian huỷ thật của máy Trợ lý — trần 15 giây là giá đoán, chỉnh được."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG dựng lại phiên từ máy chủ sau khi quá trần — có thể phải tải lại trang mới thấy câu trả lời muộn."
+    },
+    {
+      "id": "OOS-7",
+      "p": "KHÔNG giữ dòng «Đã thử lại N lần» khi lần gửi lại bị Trợ lý từ chối bằng mã lỗi."
+    },
+    {
+      "id": "OOS-8",
       "p": "KHÔNG sửa khung kiểm dùng chung hay tệp kiểm của hồ sơ đã ký — trừ đúng một ca đã nói ở AC-6."
     }
   ],
@@ -66,23 +78,39 @@
   "gap_probe_plain": [
     {
       "i": 0,
-      "p": "Gửi lại chỉ chờ trình duyệt cắt luồng thì có thể tới khi Trợ lý còn chạy lượt cũ. Đã xử: chờ cả lượt cũ khép lẫn lệnh huỷ có hồi âm; bài kiểm ba thứ tự và Trợ lý giả từ chối gửi sớm."
+      "p": "Tệp kiểm cũ vẫn đòi «có cắt luồng», trái với cách mới. Đã xử: viết lại đúng ca đó và bắt máy kiểm từng khẳng định của ca."
     },
     {
       "i": 1,
-      "p": "Bài «gửi lại bị từ chối» dựng trạng thái phiên sai. Đã xử: đi theo trạng thái thật — phiên bận thì huỷ lại, phiên rảnh thì gửi thẳng."
+      "p": "Thư viện báo «lượt khép» cả khi lượt tự xong, nên có thể gửi lại một lượt đã có trả lời. Đã xử: chỉ gửi lại khi lượt khép vì huỷ."
     },
     {
       "i": 2,
-      "p": "Chưa chứng minh thư viện eve thật gọi báo khép sau khi huỷ. Đã xử: thêm bài chạy store eve thật, đo đúng thứ tự."
+      "p": "Luồng chết thì Thử lại lặp mãi. Đã xử: quá 15 giây thì cắt chờ và cho gửi thẳng."
     },
     {
       "i": 3,
-      "p": "Bài màn thật có thể xanh oan nếu khoảng chờ quá ngắn. Đã xử: Trợ lý giả giữ huỷ 3 giây, đòi ít nhất 3 mẫu trong khoảng chờ."
+      "p": "Mã trả của Trợ lý giả khác bản thật nên bài có thể xanh oan. Đã xử: giả đúng mã thật, bài cửa thử ba mã khác nhau."
     },
     {
       "i": 4,
-      "p": "Không có trần chờ — nút có thể khoá mãi. Đã xử: trần 15 giây rồi báo «Chưa gửi lại được» và mở nút."
+      "p": "Mốc 15 giây chưa đo trên Trợ lý thật. Để ngoài phạm vi: đo cần gọi mô hình thật."
+    },
+    {
+      "i": 5,
+      "p": "Thước giữ R1h không kiểm ca đã sửa còn hứa gì. Đã xử: kiểm từng khẳng định bắt buộc."
+    },
+    {
+      "i": 6,
+      "p": "Có thể lấy nhầm mã lượt cũ để huỷ. Đã xử: chỉ lấy mã lượt sau tin vừa gửi."
+    },
+    {
+      "i": 7,
+      "p": "Dòng đếm Thử lại mất khi Trợ lý từ chối bằng mã lỗi. Để ngoài phạm vi."
+    },
+    {
+      "i": 8,
+      "p": "Phép đo «không cắt luồng cũ» có thể luôn xanh ở máy này. Đã xử: tự thử đóng một luồng trước để chứng minh phép đo thấy được."
     }
   ]
 }
