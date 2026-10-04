@@ -125,7 +125,10 @@ export function HopMucHienThi({
 				onEscapeKeyDown={() => {
 					sangCanChinh.current = false;
 				}}
-				onInteractOutside={() => {
+				onInteractOutside={(e) => {
+					const dich = e.target;
+					if (dich instanceof Element && dich.closest("[role=alertdialog]"))
+						return;
 					sangCanChinh.current = false;
 				}}
 			>
