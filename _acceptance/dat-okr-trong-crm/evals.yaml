@@ -221,6 +221,9 @@ evals:
       ConfirmDialog trong packages/ui) đều trỏ rõ sang lượt 5 hoặc đợt 2 docs/settings.md.
     inputs: [docs/superpowers/specs/2026-09-25-dat-okr-trong-crm-design.md, _acceptance/dat-okr-trong-crm/contract.md]
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/superpowers/specs/2026-09-25-dat-okr-trong-crm-design.md"
+      - "_acceptance/dat-okr-trong-crm/contract.md"
 
   - id: E19
     criterion: AC-15

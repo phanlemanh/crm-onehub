@@ -117,6 +117,12 @@ evals:
     question: "Nhìn bốn ảnh — đề xuất inline ở 1440 và 390, đề xuất card, dòng biên nhận, đối chiếu mục 5 và 6 của docs/ai-ux.md: (1) đề xuất inline đọc như một phần của dòng nó sửa hay như một hộp riêng? (2) Mỗi đề xuất có đúng một nút chính nhận ra ngay không? (3) Ở khổ 390 câu mới đọc liền một mạch hay bị bẻ vụn? Trả lời PASS chỉ khi cả ba đạt."
     expected: "Hội đồng đọc ảnh và luật: đề xuất inline không có khung riêng, nút chính nhận ra ngay, câu mới đọc liền ở 390."
     evidence_required: [run_id, verdict, verifier, verified_at, rationale]
+    paths:
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-inline-cho-1440-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-inline-cho-390-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-the-1440-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-bien-nhan-1440-light.png"
+      - "docs/ai-ux.md"
 
   - id: E14
     criterion: AC-13

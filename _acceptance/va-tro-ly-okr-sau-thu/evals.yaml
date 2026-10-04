@@ -151,6 +151,10 @@ evals:
     expected: >-
       PASS khi cả hai tài liệu nói đủ các ý; FAIL nêu tài liệu và ý còn thiếu.
     evidence_required: [run_id, verdict, rationale]
+    paths:
+      - "docs/agent.md"
+      - "docs/environment.md"
+      - "_acceptance/va-tro-ly-okr-sau-thu/contract.md"
 
   - id: E15
     criterion: AC-10
