@@ -94,6 +94,10 @@ model User {
   taiLieuDeXuatXuLy TaiLieuDeXuat[]   @relation("TaiLieuDeXuatXuLyBoi")
   taiLieuSuKien     TaiLieuSuKien[]   @relation("TaiLieuSuKienAi")
   taiLieuNguonTai   TaiLieuNguon[]    @relation("TaiLieuNguonTaiBoi")
+  taiLieuHoi        TaiLieuHoi[]      @relation("TaiLieuHoiNguoiHoi")
+  taiLieuHoiXuLy    TaiLieuHoi[]      @relation("TaiLieuHoiXuLyBoi")
+  taiLieuBaoSai     TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiNguoiBao")
+  taiLieuBaoSaiXuLy TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiXuLyBoi")
 
   @@unique([email])
   @@map("user")
@@ -2325,6 +2329,7 @@ model TaiLieuTrang {
   suKien        TaiLieuSuKien[]
   lienKet       TaiLieuLienKet[]
   nguon         TaiLieuNguon[]           @relation("TaiLieuNguonCuaTrang")
+  baoSai        TaiLieuBaoSai[]
 
   @@index([loai])
   @@index([chuTrangId])
@@ -2429,6 +2434,60 @@ model TaiLieuLienKet {
   @@index([denSlug])
   @@index([tuTrangId])
   @@map("taiLieuLienKet")
+}
+
+model TaiLieuHoi {
+  id         String          @id @default(cuid())
+  nguoiHoiId String
+  nguoiHoi   User            @relation("TaiLieuHoiNguoiHoi", fields: [nguoiHoiId], references: [id], onDelete: Restrict)
+  kenh       String
+  zaloHoiId  String?         @unique
+  phienId    String?
+  cauHoi     String?
+  trangThai  String          @default("DANG_HOI")
+  lyDo       String?
+  traLoi     Json?
+  ganNhat    Json?
+  hoiLuc     DateTime        @default(now())
+  xongLuc    DateTime?
+  tokenVao   Int             @default(0)
+  tokenRa    Int             @default(0)
+  chiPhiUsd  Float           @default(0)
+  soLanBac   Int             @default(0)
+  nhanKhoa   String?
+  xuLyLuc    DateTime?
+  xuLyBoiId  String?
+  xuLyBoi    User?           @relation("TaiLieuHoiXuLyBoi", fields: [xuLyBoiId], references: [id], onDelete: Restrict)
+  baoSai     TaiLieuBaoSai[]
+
+  @@index([nguoiHoiId, hoiLuc])
+  @@index([kenh, hoiLuc])
+  @@index([phienId, trangThai])
+  @@index([trangThai, hoiLuc])
+  @@map("taiLieuHoi")
+}
+
+model TaiLieuBaoSai {
+  id         String       @id @default(cuid())
+  hoiId      String
+  hoi        TaiLieuHoi   @relation(fields: [hoiId], references: [id], onDelete: Restrict)
+  trangId    String
+  trang      TaiLieuTrang @relation(fields: [trangId], references: [id], onDelete: Restrict)
+  phienBan   Int
+  nguoiBaoId String
+  nguoiBao   User         @relation("TaiLieuBaoSaiNguoiBao", fields: [nguoiBaoId], references: [id], onDelete: Restrict)
+  cauHoi     String
+  ghiChu     String?
+  trangThai  String       @default("MO")
+  ketLuan    String?
+  xuLyLuc    DateTime?
+  xuLyBoiId  String?
+  xuLyBoi    User?        @relation("TaiLieuBaoSaiXuLyBoi", fields: [xuLyBoiId], references: [id], onDelete: Restrict)
+  taoLuc     DateTime     @default(now())
+
+  @@unique([hoiId, nguoiBaoId, trangId])
+  @@index([trangId, trangThai])
+  @@map("taiLieuBaoSai")
 }
 
 model OkrCuaSoRa {

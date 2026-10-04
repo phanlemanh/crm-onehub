@@ -427,7 +427,6 @@ function ThanhCongBo({ h, tenKy }: { h: HoiY; tenKy: string }) {
 		<>
 			<SaveBar
 				data-khoi="thanh-cong-bo"
-				defaultOpen
 				layout="checklist"
 				reserveSpace
 				description={thieu.length === 0 ? m.sanSangMoTa : undefined}

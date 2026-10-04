@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { readdirSync } from "node:fs";
-import { resolve } from "node:path";
+import { existsSync, readdirSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { db } from "@crm/db";
 import { ZALO } from "../agent/lib/zalo-config";
 import chiDoc from "../agent/tools/zalo-chi-doc";
@@ -153,6 +153,18 @@ describe("chi-doc", () => {
 		);
 		const thua = khai.filter((t) => !tenTep().includes(t));
 		expect(thua, `ten khai khong con tep: ${thua.join(", ")}`).toEqual([]);
+	});
+
+	test("chi-doc: moi ten trong danh sach subagent la mot thu muc subagents co agent.ts", () => {
+		for (const ten of ZALO.hoi.congCu.subagent) {
+			expect(
+				existsSync(
+					join(import.meta.dir, "..", "agent", "subagents", ten, "agent.ts"),
+				),
+				`subagent khai cho Zalo khong co: ${ten}`,
+			).toBe(true);
+		}
+		expect(ZALO.hoi.congCu.subagent).toEqual(["tro_ly_kho"]);
 	});
 
 	test("chi-doc: tep trong danh sach tat khong xuat cong cu", async () => {
