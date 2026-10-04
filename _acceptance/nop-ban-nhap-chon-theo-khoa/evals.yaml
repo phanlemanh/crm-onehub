@@ -3,7 +3,7 @@ slug: nop-ban-nhap-chon-theo-khoa
 
 evals:
   - id: E1
-    criterion: AC-1, AC-2
+    criterion: AC-1, AC-2, AC-7, AC-8
     executor: script
     cmd: config:executors.script.nbn_dao_thu_tu_xanh
     paths:
@@ -12,20 +12,27 @@ evals:
       - "apps/agent-okr/agent/**"
       - "_acceptance/nop-ban-nhap-chon-theo-khoa/rang/**"
     expected: |
-      Rang dung ban sao cua spec o .acceptance-runs/nop-ban-nhap-chon-theo-khoa/sao-xanh-<pid>/
-      (symlink node_modules cua apps/agent-okr), chen buoc doi ban ghi m1 ngay sau lan nop
-      dau cua ca "Muc tieu da nhan", chay rieng ca do qua `bun run test --`.
-      Buoc doi tu kiem trong ca: moi dong cua lan nop chung MOT moc createdAt (AC-1; khac ->
-      "RANG-KHONG-DO-DUOC: <n> dong co <k> moc createdAt"), va sau khi doi, findFirst theo
-      createdAt tra dong khac m1 (khac -> "RANG-KHONG-DO-DUOC: dao thu tu khong an").
-      Xanh (ma 0): in "chieu xanh: 13 dong cua mot lan nop chung mot createdAt; dong m1 da doi
-      ra sau m3" va "bo chon theo khoa: ca xanh du thu tu vat ly dao"; bun bao 1 pass, 0 fail.
-      Ca do -> ma 1 kem duoi log. Moc vang (tieu de ca, lan nop dau, khoi bo chon theo khoa
-      khong dung mot lan), buoc doi khong an, ca khong chay toi buoc doi -> ma 2, KHONG xanh.
+      Rang chay ba ca cua bang CA (nhan, bac, dich), moi ca mot ban sao cua spec o
+      .acceptance-runs/nop-ban-nhap-chon-theo-khoa/sao-<ca>-xanh-<pid>/ (symlink node_modules
+      cua apps/agent-okr), chen buoc XEP LAI BANG vao dung ca (CREATE INDEX tam -> CLUSTER ->
+      DROP INDEX), chay rieng ca qua `bun run test --` (nhan: -t "Muc tieu da nhan"; bac, dich:
+      -t "ban nhap tron|nop lai dong co khoa da bac").
+      Buoc chen tu kiem tien de truoc khi xep: nhan/bac — cac Muc tieu dang cho chung MOT moc
+      createdAt (AC-1; khac -> "RANG-KHONG-DO-DUOC: <n> muc tieu cho co <k> moc createdAt");
+      dich — cac dong m3:cc co createdAt khac nhau. Sau khi xep, kiem phep xep AN (nhan: findFirst
+      theo createdAt tra dong khac m1; bac: findFirst khong orderBy tra dong khac m1; dich:
+      findMany khong orderBy .at(-1) tra dong m3:cc cu nhat); khong an -> "RANG-KHONG-DO-DUOC:
+      dao thu tu khong an". Rang khop dong `error: RANG-KHONG-DO-DUOC: ...` cua bun, khong khop
+      khung ma nguon.
+      Xanh (ma 0): ba dong "nhan: 2 dong da xep lai ...; bo chon moi: 1 pass, 0 fail",
+      "bac: 2 dong ...; bo chon moi: 2 pass, 0 fail", "dich: 3 dong ...; bo chon moi: 2 pass,
+      0 fail". Ca nao do -> ma 1 kem duoi log. Moc vang (tieu de ca, cho chen, khoi bo chon moi
+      khong dung mot lan), tien de sai, phep xep khong an, ca khong chay toi buoc xep -> ma 2,
+      KHONG xanh. Ma cuoi = ma lon nhat cua ba ca.
       CAP HAI CHIEU tren CUNG ban sao: chieu do la E2 (chi thay khoi bo chon).
 
   - id: E2
-    criterion: AC-1, AC-3
+    criterion: AC-1, AC-3, AC-7, AC-8
     executor: script
     cmd: config:executors.script.nbn_dao_thu_tu_do
     paths:
@@ -34,15 +41,15 @@ evals:
       - "apps/agent-okr/agent/**"
       - "_acceptance/nop-ban-nhap-chon-theo-khoa/rang/**"
     expected: |
-      Cung ban sao va cung buoc doi nhu E1; khac DUY NHAT: khoi bo chon theo khoa duoc thay
-      bang bo chon cu `findFirstOrThrow({ ..., orderBy: { createdAt: "asc" } })`.
-      Ma 0 = do DUNG chu ky CI 37169842118: bun ma khac 0, co dong
-      "(fail) nop-ban-nhap > Muc tieu da nhan", va tren CAC DONG VE RECEIVED (bat dau "+")
-      cua diff bun co ca `"giu": [],` lan ten "Doi tac mien Bac gan bo them hai nam" (trong
-      mang m1) — khong khop chuoi bat ky trong log; rang in
-      'bo chon createdAt: ca do dung chu ky CI 37169842118 ("giu": [], m1 them ten moi)'.
-      Ca xanh, hay do ma khong dung chu ky -> ma 1 ("KHONG do dung chu ky CI").
-      Moc vang hay buoc doi khong an -> ma 2.
+      Cung ban sao va cung buoc xep nhu E1; khac DUY NHAT: khoi bo chon moi cua moi ca duoc thay
+      bang khoi cu (nhan: findFirstOrThrow orderBy createdAt asc; bac: findFirstOrThrow khong
+      orderBy; dich: bo dong orderBy [createdAt, id] cua findMany can-chinh-moi).
+      Ma 0 khi CA BA ca do dung chu ky: bun ma khac 0, co dong "(fail) nop-ban-nhap > <ca>", va
+      nhan — dong ve Received (bat dau "+") co `"giu": [],` va ten "Doi tac mien Bac gan bo them
+      hai nam" (chu ky CI 37169842118); bac — `Expected: "so-moi"` va `Received: undefined`;
+      dich — dong ve Received co `"id-la",`. Rang in "<ca>: ...; bo chon cu do dung chu ky: ...".
+      Ca nao xanh, hay do ma khong dung chu ky -> ma 1. Moc vang, tien de sai hay phep xep khong
+      an -> ma 2.
 
   - id: E3
     criterion: AC-4
@@ -54,8 +61,7 @@ evals:
       - "apps/agent-okr/agent/**"
     expected: |
       `bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/nop-ban-nhap.integration.spec.ts"`
-      thoat 0; bun bao 16 pass, 0 fail (16 ca cua tep). Chieu do da co o E2 (cung ca, bo chon cu
-      + doi ban ghi -> do co ghim chu ky).
+      thoat 0; bun bao 16 pass, 0 fail (16 ca cua tep). Chieu do cua tung ca da sua nam o E2.
 
   - id: E5
     criterion: AC-5
@@ -67,14 +73,17 @@ evals:
       - "_acceptance/nop-ban-nhap-chon-theo-khoa/rang/**"
     expected: |
       Quet de quy apps/agent-okr/test va moi packages/<goi>/test (bo node_modules), tep
-      .ts/.tsx/.mjs/.js, regex `orderBy:\s*\{\s*createdAt\s*:` (chiu xuong dong).
-      Xanh (ma 0): in so tep da quet, "cay that: 3 cho — <tep:dong>, ..." voi ca 3 cho o
-      apps/agent-okr/test/nop-ban-nhap.integration.spec.ts, va "chieu do (bo chon cu trong bo
-      nho): 4 cho".
-      CAP HAI CHIEU tren CUNG cay, chieu do trong bo nho: thay khoi BO_CHON_KHOA cua spec bang
-      BO_CHON_CREATED_AT (hai hang chung cua rang/dao-thu-tu.mjs) roi quet lai — phai dem 4;
-      khac -> ma 1 "chieu do KHONG an". Cay that khac 3 cho hay co cho ngoai tep spec -> ma 1
-      "cay that lech". 0 tep quet duoc, hay khoi bo chon theo khoa khong co dung mot lan -> ma 2.
+      .ts/.tsx/.mjs/.js; voi moi loi goi .findFirst( / .findFirstOrThrow( / .findMany( lay tham so
+      (ngoac can bang), giu cho khi (A) tham so co `orderBy: { createdAt` don, hoac (B) la
+      findFirst/findFirstOrThrow ma tham so khong co `orderBy`. Nhan dien moi cho bang
+      "<tep> :: <ham>(<tham so gop khoang trang>)", khong bang so dong.
+      Xanh (ma 0): "cay that: 11 cho, danh sach da ra: 11 cho", "chieu do (...): 2 cho chua ra",
+      "cay that khop tung cho voi danh sach da ra".
+      CAP HAI CHIEU tren CUNG cay, chieu do trong bo nho: tra khoi bo chon cu cua ca nhan va bac
+      (hang CA cua rang/dao-thu-tu.mjs) vao spec roi quet lai — phai thay DUNG 2 cho chua ra va 0
+      cho vang; khac -> ma 1 "chieu do KHONG an". Cay that co cho chua ra hay cho vang so voi
+      DA_RA -> ma 1, in tung cho. 0 tep quet duoc, hay khoi bo chon moi cua nhan/bac khong co dung
+      mot lan -> ma 2.
 
   - id: E4
     criterion: AC-6
@@ -84,21 +93,23 @@ evals:
       - "apps/agent-okr/test/nop-ban-nhap.integration.spec.ts"
       - "apps/agent-okr/agent/lib/nop-ban-nhap.ts"
       - "packages/validation/src/okr-cuoc-soan.ts"
+      - "packages/auth/test/chia-mat-khau.integration.spec.ts"
+      - "packages/auth/test/cong-vao.integration.spec.ts"
+      - "packages/auth/test/quen-mat-khau.integration.spec.ts"
     question: |
-      Bang "Ra cac ca cung mau" trong design doc ke bon cho `orderBy: { createdAt` dung mot
-      minh trong spec. Doc spec (ban da sua) va nop-ban-nhap.ts roi tra loi:
-      (1) Ca "Muc tieu da nhan" nay chon dong Muc tieu se danh dau "nhan" theo khoa ban nhap
-      `m1` (qua dongSoanTuHang), khong con dua vao thu tu createdAt?
-      (2) Voi tung cho con lai co `orderBy: { createdAt` don trong spec: neu hai dong cua CUNG
-      mot lan nop doi cho nhau trong ket qua truy van, ket qua cua ca co the doi khong? Ke ten
-      cho nao co the doi.
-      (3) Lap luan "ma san pham khong can doi" trong design doc dua tren: docDaQuyet trong
-      nop-ban-nhap.ts sap `[{ createdAt: "asc" }, { id: "asc" }]` nen ket qua xac dinh voi cung
-      mot tap dong. Design doc CO NOI ro schema banNhap trong okr-cuoc-soan.ts khong chan hai
-      Muc tieu trung `khoa` (chanTrungKhoa chi chan trung khoaDong). Doi chieu hai tep: (a)
-      docDaQuyet co that sap theo createdAt roi id khong; (b) schema banNhap co that khong chan
-      trung khoa khong; (c) con cho nao khac trong nop-ban-nhap.ts sap theo createdAt ma thieu
-      khoa phu?
-      PASS khi ca ba cau dong y voi design doc; tim thay mot cho thu tu trong mot lan nop quyet
-      dinh ket qua ma bang khong neu, hay mot cho sap createdAt thieu khoa phu -> FAIL va goi
-      ten cho do.
+      Design doc co bang "Cach sua" (ba cho da sua) va bang "Ra cac ca cung mau" (muoi mot cho
+      con lai). Doc cac tep trong inputs roi tra loi:
+      (1) Trong spec (ban da sua), ca "Muc tieu da nhan" va ca "nop lai dong co khoa da bac" co
+      chon dong Muc tieu se danh dau theo khoa ban nhap `m1` qua mucTieuChoTheoKhoa/dongSoanTuHang
+      khong? Ham dich("m3:cc") co doc cac dong can-chinh-moi theo orderBy [createdAt, id] khong?
+      (2) Trong spec, con cho nao chon mot dong (findFirst, findFirstOrThrow, hay findMany roi lay
+      theo vi tri: .at(...), [0], phan tu dau/cuoi) ma ket qua cua ca co the doi khi hai dong
+      bang nhau ve thu tu sap (cung createdAt, hay khong orderBy) doi cho nhau? Ke ten tung cho.
+      (3) Voi tung cho cua ba spec packages/auth trong bang: dieu kien where co that chi khop mot
+      dong khong (token rieng, userId + providerId, organizationId + email)?
+      (4) Lap luan "ma san pham khong can doi": (a) docDaQuyet co that sap theo createdAt roi id
+      khong; (b) schema banNhap co that khong chan trung khoa khong (design doc noi ro dieu nay);
+      (c) con cho nao khac trong nop-ban-nhap.ts sap theo createdAt ma thieu khoa phu?
+      PASS khi ca bon cau dong y voi design doc. Tim thay mot cho chon dong phu thuoc thu tu khong
+      xac dinh ma hai bang khong neu, hay mot cho sap createdAt thieu khoa phu trong nop-ban-nhap.ts
+      -> FAIL va goi ten cho do.
