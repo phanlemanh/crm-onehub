@@ -104,9 +104,14 @@ describe("kn-dem-ket", () => {
 		const anhSau = await chupAnh();
 		const sai: string[] = [];
 		if (kq.ket30.CHO_DOC !== 1) sai.push(`kn-dem-ket: ket30 sai o CHO_DOC (${kq.ket30.CHO_DOC})`);
-		if (kq.ket30.DANG_SOAN !== 1) sai.push(`kn-dem-ket: ket30 sai o DANG_SOAN (${kq.ket30.DANG_SOAN})`);
+		if (kq.ket30.DANG_SOAN !== 1 || !kq.nguonKet.includes(dang31.nguon.id)) {
+			sai.push(`kn-dem-ket: ket30 sai o DANG_SOAN (${kq.ket30.DANG_SOAN})`);
+		}
 		expect(sai).toEqual([]);
 		expect(kq.ket30).toEqual({ CHO_DOC: 1, CHO_SOAN: 1, DANG_SOAN: 1 });
+		expect([...kq.nguonKet].sort()).toEqual(
+			[doc40.nguon.id, soan45.nguon.id, dang31.nguon.id].sort(),
+		);
 		expect(kq.loi).toEqual({ docLoi: 1, moCoi: 1 });
 		expect(CAU.moCoi).toBe("Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.");
 		expect(anhSau).toBe(anhTruoc);

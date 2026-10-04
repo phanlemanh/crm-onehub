@@ -13,6 +13,7 @@ type MucKet = "CHO_DOC" | "CHO_SOAN" | "DANG_SOAN";
 
 export type KetQuaDemKet = {
 	ket30: Partial<Record<MucKet, number>>;
+	nguonKet: string[];
 	loi: Record<string, number>;
 };
 
@@ -21,20 +22,22 @@ export async function demKet(
 	bayGio: Date = new Date(),
 ): Promise<KetQuaDemKet> {
 	const moc = new Date(bayGio.getTime() - MOC_KET_MS);
-	const ket = await db.$queryRaw<{ muc: MucKet; so: number }[]>`
+	const ket = await db.$queryRaw<{ id: string; muc: MucKet }[]>`
 		WITH viec AS (
 			SELECT t.payload->>'nguonId' AS nguon_id, MAX(t."createdAt") AS tao
 			FROM "agentTask" AS t
 			WHERE t.kind = 'soan-tu-nguon'
 			GROUP BY 1
 		)
-		SELECT n."trangThai" AS muc, COUNT(*)::int AS so
+		SELECT n.id, n."trangThai" AS muc
 		FROM "taiLieuNguon" AS n
 		LEFT JOIN viec AS v ON v.nguon_id = n.id
 		WHERE (n."trangThai" IN ('CHO_DOC', 'CHO_SOAN') AND v.tao < ${moc})
 			OR (n."trangThai" = 'DANG_SOAN' AND n."soanLuc" < ${moc})
-		GROUP BY 1
+		ORDER BY n.id
 	`;
+	const ket30: Partial<Record<MucKet, number>> = {};
+	for (const d of ket) ket30[d.muc] = (ket30[d.muc] ?? 0) + 1;
 	const loi = await db.$queryRaw<{ lyDo: string | null; so: number }[]>`
 		SELECT n."lyDo" AS "lyDo", COUNT(*)::int AS so
 		FROM "taiLieuNguon" AS n
@@ -44,7 +47,8 @@ export async function demKet(
 	const tenLoi = (lyDo: string | null): string =>
 		lyDo === CAU.docLoi ? "docLoi" : lyDo === CAU.moCoi ? "moCoi" : (lyDo ?? "");
 	return {
-		ket30: Object.fromEntries(ket.map((d) => [d.muc, d.so])),
+		ket30,
+		nguonKet: ket.map((d) => d.id),
 		loi: Object.fromEntries(loi.map((d) => [tenLoi(d.lyDo), d.so])),
 	};
 }
