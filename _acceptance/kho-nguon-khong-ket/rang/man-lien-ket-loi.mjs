@@ -26,13 +26,28 @@ const LOI_TIM = "Chưa tìm được trang — thử gõ lại.";
 const TEN_TRANG = `Quy định nghỉ phép ${MA}`;
 
 const d = await moDo();
+const LOI_RIENG = [];
 
 async function moHop(nguoi, rong, chanTim) {
 	const t = await d.moTrang(nguoi.cookie, rong, "/tai-lieu/moi");
+	const daChan = { n: 0 };
+	t.removeAllListeners("console");
+	t.on("console", (m) => {
+		if (m.type() !== "error") return;
+		const s = m.text();
+		if (/Download the React DevTools/.test(s)) return;
+		if (/net::ERR_FAILED/.test(s) && daChan.n > 0) {
+			daChan.n -= 1;
+			return;
+		}
+		LOI_RIENG.push(`${rong}: console.error ${s.slice(0, 200)}`);
+	});
 	await t.setRequestInterception(true);
 	t.on("request", (r) => {
-		if (chanTim.chan && r.url().includes("taiLieu.tim")) r.abort();
-		else r.continue();
+		if (chanTim.chan && r.url().includes("taiLieu.tim")) {
+			daChan.n += 1;
+			r.abort();
+		} else r.continue();
 	});
 	await d.bamSel(t, `button[aria-label="${NUT}"]`);
 	await d.doi(t, (s) => window.__tim(s).length > 0, `input[aria-label="${O_TIM}"]`);
@@ -42,10 +57,22 @@ async function moHop(nguoi, rong, chanTim) {
 async function goTim(t, chu, thay) {
 	const o = await t.$(`input[aria-label="${O_TIM}"]`);
 	if (!o) throw new Error("khong thay o tim trang");
-	if (thay) {
-		await o.click({ clickCount: 3 });
-		await t.keyboard.press("Backspace");
-	}
+	await t.evaluate(
+		(el, xoa) => {
+			if (!xoa) return;
+			Object.getOwnPropertyDescriptor(
+				HTMLInputElement.prototype,
+				"value",
+			)?.set?.call(el, "");
+			el.dispatchEvent(new Event("input", { bubbles: true }));
+		},
+		o,
+		thay,
+	);
+	await o.focus();
+	await t.evaluate((el) => {
+		el.setSelectionRange(el.value.length, el.value.length);
+	}, o);
 	await o.type(chu, { delay: 30 });
 	await cho(400);
 }
@@ -147,6 +174,10 @@ try {
 		});
 
 	await t1440?.close().catch(() => null);
+	if (LOI_RIENG.length > 0) {
+		for (const l of LOI_RIENG.slice(0, 10)) console.log(`  ${l}`);
+		d.dat("console", false, `loi console app: ${LOI_RIENG.length}`);
+	}
 	await d.ket("man-lien-ket-loi");
 } catch (e) {
 	await d.khongDoDuoc(e);
