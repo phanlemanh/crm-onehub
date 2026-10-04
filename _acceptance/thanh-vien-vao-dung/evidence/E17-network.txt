@@ -1,1 +1,1 @@
-driver: do-man.mjs (playwright noi bo), khong co tool doc network -> n-a (driver); log da chay: /tmp/p3-r1b-1791111147745773000.log
+driver: playwright script do-man.mjs (khong co duong doc network cua browser tool) -> n-a (driver)

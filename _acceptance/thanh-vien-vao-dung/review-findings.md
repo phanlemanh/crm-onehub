@@ -1,4 +1,4 @@
-# Review findings — thanh-vien-vao-dung (round 2)
+# Review findings — thanh-vien-vao-dung (round 3)
 
 ## Trong hợp đồng
 
@@ -7,6 +7,12 @@ Không có finding nào.
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
+
+- **TenMienNoiBo replaces the saved domains with the load-error card whenever a background refetch fails**
+  Người dùng thấy gì: Sau khi quản trị lưu tên miền nội bộ thành công, nếu lần tải lại danh sách ngay sau đó gặp lỗi mạng thoáng qua, thẻ sẽ thay form bằng thông báo «Không tải được tên miền nội bộ» dù thay đổi đã được lưu. Thông báo «Đã lưu» vẫn hiện cùng lúc nên người dùng thấy hai tin trái nhau. Bấm «Thử lại» là hiện lại danh sách đã lưu.
+  file: `apps/app/app/(app)/[slug]/settings/members/ten-mien-noi-bo.tsx`
+  severity: low
+  Đề xuất: known-limits
 
 - **workspace.setStaffDomains is missing from the list of shared-scope mutations in vai-chi-okr.spec.ts, so the ghi-chung test fails (r1)**
   Người dùng thấy gì: Bài kiểm quyền của vai OKR sẽ đỏ vì thao tác đặt tên miền nội bộ chưa được khai vào danh sách. Người dùng không thấy lỗi, nhưng mỗi lần đẩy mã hoặc chạy CI đều bị chặn cho tới khi khai thêm.

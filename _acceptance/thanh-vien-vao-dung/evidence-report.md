@@ -1,19 +1,18 @@
 ---
 schema_version: 2
 feature_slug: thanh-vien-vao-dung
-verdict: BLOCKED
-failed_evals: [E20]
-reason: E18 (design-gate --mode static trên 3 tệp của trang Thanh vien) không có kết quả — agent chạy eval bị skip/chết, không được tính là pass. Round này còn một eval đỏ: E20 (thước bang-thanh-vien-giu-hang thoát 1, một dòng SAI ở 375x812).
+verdict: PASS
+failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 62f28f2452bf98b53688aec7aa5d8154d466390d
+verified_commit: 8e821a4a2f232c89ec469641b97b70209a9b9897
 human_signoff:
 ---
 
 # Evidence Report: thanh-vien-vao-dung
 
-Round 2. Không có eval judgment nên không có panel chấm. Không có lệnh fail nào ngoài lệnh của E20 (đã gắn eval).
+Round 3. Toàn bộ 26 eval và 7 lệnh suite xanh trên cây 8e821a4a2.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -34,9 +33,9 @@ Round 2. Không có eval judgment nên không có panel chấm. Không có lện
 | E15 | AC-11 | test | PASS |
 | E16 | AC-11 | script | PASS |
 | E17 | AC-12 | ui-check | PASS |
-| E18 | AC-12 | script | BLOCKED |
+| E18 | AC-12 | script | PASS |
 | E19 | AC-13 | script | PASS |
-| E20 | AC-13 | script | FAIL |
+| E20 | AC-13 | script | PASS |
 | E21 | AC-13 | test | PASS |
 | E22 | AC-14 | script | PASS |
 | E23 | AC-14 | test | PASS |
@@ -47,299 +46,277 @@ Round 2. Không có eval judgment nên không có panel chấm. Không có lện
 ## Evidence
 
 - eval: E1
-  run_id: minted-thanh-vien-vao-dung-E1-r2
+  run_id: minted-thanh-vien-vao-dung-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_ten_mien_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test test/thanh-vien-vao-dung.spec.ts -t ten-mien: xanh
-    test-run: dropped crm_mutpblk3oo95_test
+    test-run: dropped crm_mutr36ip3ez5_test
 
 - eval: E2
-  run_id: minted-thanh-vien-vao-dung-E2-r2
+  run_id: minted-thanh-vien-vao-dung-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_ten_mien_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test test/thanh-vien-vao-dung.spec.ts -t ten-mien: xanh
-    test-run: dropped crm_mutpblk3oo95_test
+    test-run: dropped crm_mutr36ip3ez5_test
 
 - eval: E3
-  run_id: minted-thanh-vien-vao-dung-E3-r2
+  run_id: minted-thanh-vien-vao-dung-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_ten_mien_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test test/thanh-vien-vao-dung.spec.ts -t ten-mien: xanh
-    test-run: dropped crm_mutpblk3oo95_test
+    test-run: dropped crm_mutr36ip3ez5_test
 
 - eval: E4
-  run_id: minted-thanh-vien-vao-dung-E4-r2
+  run_id: minted-thanh-vien-vao-dung-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_dom
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx: xanh
+    Ran 15 tests across 1 file. [3.15s]
 
 - eval: E5
-  run_id: minted-thanh-vien-vao-dung-E5-r2
+  run_id: minted-thanh-vien-vao-dung-E5-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_ten_mien_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test test/thanh-vien-vao-dung.spec.ts -t ten-mien: xanh
-    test-run: dropped crm_mutpblk3oo95_test
+    test-run: dropped crm_mutr36ip3ez5_test
 
 - eval: E6
-  run_id: minted-thanh-vien-vao-dung-E6-r2
+  run_id: minted-thanh-vien-vao-dung-E6-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_dom
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx: xanh
+    Ran 15 tests across 1 file. [3.15s]
 
 - eval: E7
-  run_id: minted-thanh-vien-vao-dung-E7-r2
+  run_id: minted-thanh-vien-vao-dung-E7-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_ten_mien_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test test/thanh-vien-vao-dung.spec.ts -t ten-mien: xanh
-    test-run: dropped crm_mutpblk3oo95_test
+    test-run: dropped crm_mutr36ip3ez5_test
 
 - eval: E8
-  run_id: minted-thanh-vien-vao-dung-E8-r2
+  run_id: minted-thanh-vien-vao-dung-E8-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_dom
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx: xanh
+    Ran 15 tests across 1 file. [3.15s]
 
 - eval: E9
-  run_id: minted-thanh-vien-vao-dung-E9-r2
+  run_id: minted-thanh-vien-vao-dung-E9-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_cho_phep_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    Ran 5 tests across 1 file. [1019.00ms]
-    test-run: dropped crm_mutpbqxue8px_test
+    test-run: dropped crm_mutr337pt5tf_test
 
 - eval: E10
-  run_id: minted-thanh-vien-vao-dung-E10-r2
+  run_id: minted-thanh-vien-vao-dung-E10-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_dom
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx: xanh
+    Ran 15 tests across 1 file. [3.15s]
 
 - eval: E11
-  run_id: minted-thanh-vien-vao-dung-E11-r2
+  run_id: minted-thanh-vien-vao-dung-E11-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_cho_phep_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    Ran 5 tests across 1 file. [1019.00ms]
-    test-run: dropped crm_mutpbqxue8px_test
+    test-run: dropped crm_mutr337pt5tf_test
 
 - eval: E12
-  run_id: minted-thanh-vien-vao-dung-E12-r2
+  run_id: minted-thanh-vien-vao-dung-E12-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_cho_phep_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    Ran 5 tests across 1 file. [1019.00ms]
-    test-run: dropped crm_mutpbqxue8px_test
+    test-run: dropped crm_mutr337pt5tf_test
 
 - eval: E13
-  run_id: minted-thanh-vien-vao-dung-E13-r2
+  run_id: minted-thanh-vien-vao-dung-E13-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_dom
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx: xanh
+    Ran 15 tests across 1 file. [3.15s]
 
 - eval: E14
-  run_id: minted-thanh-vien-vao-dung-E14-r2
+  run_id: minted-thanh-vien-vao-dung-E14-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_dung_lai_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test test/thanh-vien-vao-dung.spec.ts -t dung-lai: xanh
+    test-run: dropped crm_mutr34bkvo69_test
 
 - eval: E15
-  run_id: mutpbgs3jth2
+  run_id: minted-thanh-vien-vao-dung-E15-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_soi_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test test/soi-thanh-vien.spec.ts: xanh
-    test-run: dropped crm_mutpbgs3jth2_test
+    test/soi-thanh-vien.spec.ts chay xong, lenh ket thuc thanh cong (duoi dau ra trong)
 
 - eval: E16
-  run_id: minted-thanh-vien-vao-dung-E16-r2
+  run_id: minted-thanh-vien-vao-dung-E16-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.r1b_soi_vat
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
     KET LUAN: 7 DUNG, 0 SAI
 
 - eval: E17
-  run_id: minted-thanh-vien-vao-dung-E17-r2
+  run_id: minted-thanh-vien-vao-dung-E17-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.r1b_do_man
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   screenshot: evidence/E17-step1.png
   observed: |
-    Đã mở bằng Read cả 6 ảnh chụp lúc 17:52-17:53. (1) the-quan-tri-1440: thẻ cuối trang Thành viên «Tên miền nội bộ» có mô tả, ô «Tên miền» xếp dọc giá trị «onehub.center, onehub.vn», «Lưu» ở góc phải tiêu đề thẻ, toast «Đã lưu tên miền nội bộ». (2) the-quan-tri-375: cùng thẻ ở 375 px, không tràn ngang (dòng hướng dẫn dưới bị nút dev Next che một phần, overlay dev chứ không phải lỗi trang). (3) the-loi-1440: ô viền đỏ chứa «onehub.center, gmail.com», dòng lỗi đỏ «gmail.com is a public mail domain, not one of ours. Remove it and save again.» nằm ngay dưới ô, «Lưu» sáng. (4) the-thanh-vien-1440: ô khoá, «Lưu» khoá, dòng lý do «Chỉ chủ sở hữu hoặc quản trị đổi được tên miền nội bộ.». (5) the-thanh-vien-375: ô khoá, «Lưu» khoá, dòng lý do đọc được, không tràn ngang. (6) hop-da-la-thanh-vien-1440: hộp «Cho phép một địa chỉ» còn mở với MARCUS@TRYCOMP.AI, thông điệp đỏ «That person is already a member. Change their role in the members table.» dưới ô, nút «Thôi»/«Cho phép». Tất cả khớp Expected, không mâu thuẫn.
+    Đã mở từng ảnh (bản mới 18:42-18:43). Trang Thành viên trên màn thật: cuối trang có thẻ «Tên miền nội bộ» với mô tả, nút «Lưu» ở góc phải tiêu đề, ô «Tên miền» xếp dọc chứa «onehub.center, onehub.vn», hướng dẫn «Ngăn bằng dấu phẩy…»; toast «Đã lưu tên miền nội bộ». Ở 375 thẻ không tràn ngang (mô tả thẻ ẩn do CardDescription của packages/ui có lớp hidden sm:block, thiết kế chung, không phải lỗi). Ảnh lỗi: ô đỏ, nhập «onehub.center, gmail.com», thông điệp «gmail.com is a public mail domain, not one of ours. Remove it and save again.» ngay dưới ô. Vai thành viên (Marcus): ô và «Lưu» khoá, dòng lý do «Chỉ chủ sở hữu hoặc quản trị đổi được tên miền nội bộ.», không có bảng «Được phép vào». Hộp «Cho phép một địa chỉ» giữ mở với «MARCUS@TRYCOMP.AI» và thông điệp «That person is already a member. Change their role in the members table.». Tất cả khớp Expected.
   network_observed: n-a (driver)
-  output: |
-    DUNG 1440: luu -> DB staffEmailDomains = onehub.center,onehub.vn
-    DUNG 1440: o hien onehub.center, onehub.vn
-    DUNG 1440: «Lưu» tat lai (true)
-    DUNG 375 quan tri: tran ngang 0px (document va main)
-    DUNG 375 thanh vien: tran ngang 0px (document va main)
-    DUNG 1440: hop giu mo (true)
-    DUNG don: cot staffEmailDomains tra ve null (truoc null)
-    KET LUAN: 17 DUNG, 0 SAI — ma thoat 0
 
 - eval: E18
-  status: BLOCKED
+  run_id: minted-thanh-vien-vao-dung-E18-r3
+  exit_code: 0
+  baseline: n-a
   verifier: config:executors.script.r1b_san_thiet_ke
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    design-gate --mode static trên 3 tệp (page.tsx, cho-phep-dia-chi.tsx, ten-mien-noi-bo.tsx): agent bị skip/chết — không có kết quả, không được tính là pass.
+    design-gate static qua cho ca ba tep: page.tsx, cho-phep-dia-chi.tsx, ten-mien-noi-bo.tsx (duoi dau ra chi con dau dong khung JSON)
 
 - eval: E19
-  run_id: minted-thanh-vien-vao-dung-E19-r2
+  run_id: minted-thanh-vien-vao-dung-E19-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_do_khoi
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    phien-do: xong — mã 0
+    phien-do: xong
 
 - eval: E20
-  run_id: minted-thanh-vien-vao-dung-E20-r2
-  exit_code: 1
+  run_id: minted-thanh-vien-vao-dung-E20-r3
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.tvhk_ttv_do_bang
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    DUNG 375x812: bang cao 216px, 0 hang bi cat, tran trong 0px
-    SAI 375x812: con lan cuon trang 600px va toi duoc loi moi cuoi (false)
-    DUNG 375x812: chi mot vung cuon — tai lieu tran doc 0px
-    DUNG 1440: bang Khoa API van lap day khung trang (lech day 0px)
-    KET LUAN: 29 DUNG, 1 SAI — ma thoat 1
-    phien-do: xong — mã 1
+    phien-do: xong
 
 - eval: E21
-  run_id: minted-thanh-vien-vao-dung-E21-r2
+  run_id: minted-thanh-vien-vao-dung-E21-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_khong_hoi_quy_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    domain-nha-tach.spec.ts, workspace-thanh-vien.spec.ts, go-thanh-vien.spec.ts: 0 fail
+    test-run: dropped crm_mutr344sbdh4_test
 
 - eval: E22
-  run_id: minted-thanh-vien-vao-dung-E22-r2
+  run_id: minted-thanh-vien-vao-dung-E22-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.r1b_tu_dien
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
     KET LUAN: 9 DUNG, 0 SAI
 
 - eval: E23
-  run_id: minted-thanh-vien-vao-dung-E23-r2
+  run_id: minted-thanh-vien-vao-dung-E23-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_messages_guard
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    Ran 128 tests across 1 file. [878.00ms]
+    Ran 128 tests across 1 file. [688.00ms]
 
 - eval: E24
-  run_id: minted-thanh-vien-vao-dung-E24-r2
+  run_id: minted-thanh-vien-vao-dung-E24-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_cho_phep_api
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    Ran 5 tests across 1 file. [1019.00ms]
-    test-run: dropped crm_mutpbqxue8px_test
+    test-run: dropped crm_mutr337pt5tf_test
 
 - eval: E25
-  run_id: minted-thanh-vien-vao-dung-E25-r2
+  run_id: minted-thanh-vien-vao-dung-E25-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_dom
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx: xanh
+    Ran 15 tests across 1 file. [3.15s]
 
 - eval: E26
-  run_id: minted-thanh-vien-vao-dung-E26-r2
+  run_id: minted-thanh-vien-vao-dung-E26-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.r1b_dom
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
   output: |
-    bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx: xanh
+    Ran 15 tests across 1 file. [3.15s]
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-thanh-vien-vao-dung-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-thanh-vien-vao-dung-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
 
 - cmd: bun run lint:slop
-  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_lint_slop-r2
+  run_id: minted-thanh-vien-vao-dung-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-thanh-vien-vao-dung-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-thanh-vien-vao-dung-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-04T10:51:44Z
+  verified_at: 2026-10-04T11:41:19Z
 
 ## Known limits
 
@@ -358,4 +335,5 @@ none — every multi-run eval is uniform (moi eval chay mot lan, khong co eval n
 ## Iterations
 
 Round 1: REJECT — lenh suite `bun run test -- --filter=api` do (vai-chi-okr.spec chua khai workspace.setStaffDomains). Returned to implementation.
-Round 2: BLOCKED — E18 khong co ket qua (agent bi skip/chet); E20 do: thuoc bang-thanh-vien-giu-hang bao mot dong SAI o 375x812 ("con lan cuon trang ... va toi duoc loi moi cuoi" la false). Lenh suite round nay xanh het.
+Round 2: BLOCKED — E18 khong co ket qua (agent bi skip/chet); E20 do o 375x812 (thuoc bang-thanh-vien-giu-hang bao mot dong SAI ve con lan cuon trang). Lenh suite round nay xanh het.
+Round 3: PASS — 26 eval va 7 lenh suite xanh tren cay 8e821a4a2; E18 co ket qua, E20 xanh o 375 (so tai hien ghi o commit 5a97049cc, cham lai khong sua ma).
