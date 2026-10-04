@@ -3,10 +3,10 @@ schema_version: 1
 slug: okr-to-chuc-va
 feature: "«Dựng cây và đặt OKR không vấp: mục tiêu thu gọn giữ nguyên, KR từ mẫu báo người phụ trách, khôi phục phòng ban đúng chỗ»"
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Phan Le Manh
+decided_at: 2026-10-04T12:53:39Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -39,10 +39,10 @@ và đặt OKR:
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] một quản trị mới dựng được cây tổ chức và đặt OKR quý cho một phòng
+- Câu hỏi phép đo trả lời: một quản trị mới dựng được cây tổ chức và đặt OKR quý cho một phòng
   ban, trên máy tính và điện thoại, mà không vấp tám lỗi trên?
-- Kết quả nào là SỐNG: [đề xuất] lái-thử người-lạ đi trọn đường dựng cây → thêm một mục tiêu lẻ → giao KR
+- Kết quả nào là SỐNG: lái-thử người-lạ đi trọn đường dựng cây → thêm một mục tiêu lẻ → giao KR
   từ mẫu → khôi phục một phòng ban, 0 lần vấp thuộc tám lỗi; người được giao KR thấy thông báo.
-- Kết quả nào là CHẾT: [đề xuất] còn bất kỳ lỗi nào trong tám lỗi tái hiện được trên production sau
+- Kết quả nào là CHẾT: còn bất kỳ lỗi nào trong tám lỗi tái hiện được trên production sau
   14/10, hoặc khôi phục phòng ban sinh dữ liệu sai (trùng tên, rơi vào bộ phận đã lưu trữ).
-- Timebox: [đề xuất] hạn R1d 11/10 (lộ trình); hai ngày công máy.
+- Timebox: hạn R1d 11/10 (lộ trình); hai ngày công máy.

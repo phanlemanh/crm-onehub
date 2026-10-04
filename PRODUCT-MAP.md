@@ -6,8 +6,8 @@
 
 ```mermaid
 flowchart TD
-  A["Đang cân nhắc cơ hội<br/>10 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>chưa có"]
+  A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
+  GD --> B["Sắp mở vòng<br/>1 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
@@ -29,12 +29,15 @@ flowchart TD
 - Bộ cào nói ra khi hỏng MỘT PHẦN — hiện nó chỉ nói khi hỏng trọn vẹn (`bo-cao-noi-khi-hong-mot-phan`)
 - Phép đo «bấm trong cột góp ý không đóng hộp» dựa trên ma trận trạng thái thẻ × đích bấm viết trước, không đếm ca bằng ngưỡng và không lặng lẽ bỏ đích thiếu (`ma-tran-bam-khong-dong-hop`)
 - Người quyết mở rộng biết nhắm địa bàn nào — giao dịch và độ tập trung theo quận (`mo-o-dau`)
-- «Dựng cây và đặt OKR không vấp: mục tiêu thu gọn giữ nguyên, KR từ mẫu báo người phụ trách, khôi phục phòng ban đúng chỗ» (`okr-to-chuc-va`)
 - Phân tích cấu hình bộ cào ở biên, thay vì chuyền dict thô từ TOML xuống chỗ dùng (`phan-tich-cau-hinh-bo-cao`)
 - Cột góp ý của Trợ lý OKR cuộn riêng với form trong hộp sửa rộng, bỏ số đề xuất lặp hai lần, và hộp mở rộng không làm bố cục nhảy (`the-gop-y-cot-cuon-rieng`)
 - Thẻ góp ý của Trợ lý OKR thôi để viền «ô được chỉ» kẹt sau khi thoát sửa, trả focus về thẻ, bỏ lời nhắc sai trong hộp Sửa KR, và làm dòng đã quyết đọc được (`the-gop-y-sua-nhanh`)
 - Gợi ý thông tin của tác tử ở tab Tổng quan của Cá nhân trải hết hàng, nói rõ là tác tử đề xuất và độ tin, và đặt giá trị cũ cạnh giá trị mới (`the-thong-tin-ca-nhan`)
 - Ô tìm trong trang thành viên chiến dịch phải tìm TRONG phân khúc, không thay thế phân khúc (`tim-trong-phan-khuc`)
+
+## Sắp mở vòng
+
+- «Dựng cây và đặt OKR không vấp: mục tiêu thu gọn giữ nguyên, KR từ mẫu báo người phụ trách, khôi phục phòng ban đúng chỗ» (`okr-to-chuc-va`)
 
 ## Đang làm
 
