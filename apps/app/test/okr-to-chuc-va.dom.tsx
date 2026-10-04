@@ -272,8 +272,8 @@ describe("so-kr", () => {
 				),
 			];
 			const dungBan = nut.filter((n) => n.closest(kho.chon) !== null);
-			expect(nut.length, `so nut so-kr: ${kho.ban}`).toBe(1);
 			expect(dungBan.length, `${kho.ban} thieu moc: so-kr`).toBe(1);
+			expect(nut.length, `so nut so-kr: ${kho.ban}`).toBe(1);
 			expect(
 				san.o.querySelectorAll(`button[data-so-kr="${TAY.id}"]`).length,
 				`kr tay co nut so: ${kho.ban}`,
