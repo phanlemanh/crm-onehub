@@ -53,7 +53,7 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.khoa_lo_toan_tep
-    expected: "exit 0; tron tep tasks.integration.spec.ts: 19 pass, 0 fail; evidence/spec-diff.patch bang dung git diff 746d3ef8 -- tep kiem tai HEAD (lech thi 'spec-diff.patch stale')"
+    expected: "exit 0; tron tep tasks.integration.spec.ts: 20 pass, 0 fail; evidence/spec-diff.patch bang dung git diff 746d3ef8 -- tep kiem tai HEAD (lech thi 'spec-diff.patch stale')"
     paths: [apps/agent/agent/lib/tasks.ts, apps/agent/test/tasks.integration.spec.ts, _acceptance/khoa-lo-giu-tran/rang.sh]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
