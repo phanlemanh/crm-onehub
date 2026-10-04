@@ -38,13 +38,8 @@ const khoaVi = Object.keys(vi).sort();
 const khoaEn = Object.keys(en).sort();
 kiem(`nhom tenMienNoiBo co khoa (${khoaVi.length})`, khoaVi.length > 0);
 kiem("khoa vi khop khoa en", JSON.stringify(khoaVi) === JSON.stringify(khoaEn));
-const rong = khoaVi.filter(
-	(k) =>
-		typeof vi[k] !== "string" ||
-		vi[k].trim() === "" ||
-		typeof en[k] !== "string" ||
-		en[k].trim() === "",
-);
+const chuCua = (bang, k) => String(bang[k] ?? "").trim();
+const rong = khoaVi.filter((k) => chuCua(vi, k) === "" || chuCua(en, k) === "");
 kiem(
 	rong.length === 0
 		? "moi khoa co chuoi vi va en"

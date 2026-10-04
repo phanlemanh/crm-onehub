@@ -60,6 +60,12 @@ const WORKSPACE = JSON.parse(
 	),
 );
 
+type ChonThuTuc = {
+	onSuccess?: () => unknown;
+	onError?: (error: Error) => unknown;
+	onSettled?: () => unknown;
+};
+
 function thuTuc(
 	ten: string,
 	doc: () => Promise<unknown>,
@@ -71,7 +77,7 @@ function thuTuc(
 		queryKey: () => [ten],
 		pathKey: () => [ten],
 		queryOptions: () => ({ queryKey: [ten], queryFn: doc }),
-		mutationOptions: (chon: Record<string, unknown> = {}) => ({
+		mutationOptions: (chon: ChonThuTuc = {}) => ({
 			...chon,
 			mutationKey: [ten],
 			mutationFn: ghi,

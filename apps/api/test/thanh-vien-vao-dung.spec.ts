@@ -319,7 +319,7 @@ describe("ten-mien", () => {
 
 describe("ten-mien ba-vai qua router that", () => {
 	let app: INestApplication;
-	const cookie: Record<"admin" | "member" | "okr" | "ngoai", string> = {
+	const cookie = {
 		admin: "",
 		member: "",
 		okr: "",
