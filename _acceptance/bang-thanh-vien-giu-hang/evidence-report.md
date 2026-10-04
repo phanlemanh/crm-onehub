@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d60133f3d91fdf51b9db5e788dc375d25de6c12a
+verified_commit: 51a4de40d820df124d6455b7bd6d918958c1666b
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -165,3 +165,7 @@ Round 2: toàn bộ 8 eval (E1–E8) và 4 lệnh suite (test, lint, lint:slop, 
 ### Re-pin lần 1 — 2026-09-25, do tệp kiểm khung-trang-cai-dat.dom.tsx thôi gọi git merge-base (CI không có origin/onehub); E16 neo vào cặp sha của lần gộp #138
 run_id: repin-20260925T105306Z-51706
 sha: d60133f3d91fdf51b9db5e788dc375d25de6c12a · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8
+
+### Re-pin lần 2 — 2026-10-04, do gộp onehub 6e7accc2 (#252) và vá thước lăn do-bang/do-khoi chống đua (51a4de40)
+run_id: repin-20261004T131201Z-36740
+sha: 51a4de40d820df124d6455b7bd6d918958c1666b · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E8 · diff chạm vật đo ngoài làn máy: E8 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8

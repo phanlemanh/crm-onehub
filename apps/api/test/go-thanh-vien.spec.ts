@@ -1,5 +1,10 @@
 import { beforeEach, describe, expect, it } from "bun:test";
-import { AUTH_COOKIE_PREFIX, auth, ensureWorkspaceMembership } from "@crm/auth";
+import {
+	ALLOWANCE_WITHOUT_EXPIRY,
+	AUTH_COOKIE_PREFIX,
+	auth,
+	ensureWorkspaceMembership,
+} from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
@@ -103,6 +108,25 @@ async function dongMember(userId: string) {
 	});
 
 	return dong?.id ?? "";
+}
+
+async function loiChoPhepDaNhan(
+	nguoiChoPhep: string,
+	email: string,
+	role: string,
+): Promise<{ id: string }> {
+	return db.invitation.create({
+		data: {
+			id: id(`loi-da-nhan-${crypto.randomUUID()}`),
+			organizationId: WORKSPACE_ID,
+			email: email.trim().toLowerCase(),
+			role,
+			status: "accepted",
+			expiresAt: ALLOWANCE_WITHOUT_EXPIRY,
+			inviterId: nguoiChoPhep,
+		},
+		select: { id: true },
+	});
 }
 
 describe("bi-go-thi-bi-tu-choi", () => {
@@ -284,10 +308,7 @@ describe("duong-moi-khong-cap-lai", () => {
 		const bi = await dungNguoi("moi-bi", "admin");
 		const chuaTungMoi = await dungNguoi("moi-la", "member");
 
-		await workspace.allowEmail(chu, {
-			email: `${bi}@onemount.com`,
-			role: "admin",
-		});
+		await loiChoPhepDaNhan(chu, `${bi}@onemount.com`, "admin");
 		await workspace.removeMember(chu, { memberId: await dongMember(bi) });
 
 		const daGhi = await db.invitation.findFirst({

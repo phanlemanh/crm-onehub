@@ -1443,6 +1443,18 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
   `<<<NGUON-HET>>>`, xoá mọi dấu `<<<…>>>` có sẵn trong nguồn.
 - **Chi phí** vào sổ `MAY_SOAN` của trang (token, giá theo `TAI_LIEU_AGENT.bangGia`,
   nhãn khoá `rieng`/`chung`), chưa vào sổ chi phí AI chung.
+- **Đọc tệp ném lỗi thì nguồn về `LOI` ngay.** `chaySoanTuNguon` bắt mọi lỗi bị ném sau
+  bước đặt `CHO_DOC` (lưu trữ chậm, bộ bóc chữ hỏng) và ghi `TAI_LIEU_AGENT.lyDo.docLoi` —
+  một câu cố định; lỗi gốc chỉ vào log, vì nó có thể mang URL ký. Không để lease tự thử lại:
+  người nạp bấm «Soạn lại». Các ca lỗi đã có (`khongTai`, `bamLech`, `can-go-tay`,
+  `thieuQuyTac`) vẫn giữ lý do của chúng.
+- **Lưới nguồn mồ côi.** `dongNguonMoCoi()` chạy trên nhịp dispatch cạnh
+  `dongMaySoanQuaHan()`: nguồn `CHO_DOC` không còn việc `soan-tu-nguon` nào mở
+  (`payload->>'nguonId'`) về `LOI` với `lyDo.moCoi`. Câu `UPDATE` sống ở
+  `@crm/db/tai-lieu-nguon-mo-coi` để test API chạy được nó sau một lượt tải lên thật. Đừng
+  thêm đường nào đặt `CHO_DOC` mà không tạo việc trong cùng transaction — lưới sẽ đóng nhầm.
+  Cận: lease làn hiện 6 phút × 3 lượt + một nhịp mỗi lượt ≈ 21 phút, dưới mốc 30 phút của
+  thước `_acceptance/kho-nguon-khong-ket/rang/dem-ket.ts`.
 
 ## Chỗ rẽ: Trợ lý AI đọc kho (lượt 4)
 
