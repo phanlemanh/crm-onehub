@@ -25,7 +25,7 @@ import type {
 	SoDaGo,
 	SoKr,
 } from "./kieu";
-import { laDaCoPhien, lyDoTuChoiLuot } from "./loi-cua";
+import { laChuaCauHinh, laDaCoPhien, lyDoTuChoiLuot } from "./loi-cua";
 import {
 	cayNhap,
 	demDuaVao,
@@ -189,14 +189,23 @@ export function useCuocSoan({
 	const { locked, ended } = composerState(thread, busy);
 	const lyDoLuot =
 		agent.status === "error" ? lyDoTuChoiLuot(agent.error) : null;
+	const chuaCauHinh =
+		agent.status === "error" && laChuaCauHinh(agent.error);
 	const cuocDong = cuoc.trangThai !== "dang";
 	const hetLuot = cuoc.soLuot >= cuoc.tranLuot || lyDoLuot === "het-luot-cuoc";
 	const hong =
 		lyDoLuot === null &&
+		!chuaCauHinh &&
 		!cuocDong &&
 		!laDaCoPhien(agent.error) &&
 		(qua45s || agent.status === "error" || ended);
-	const khoaSoan = locked || hetLuot || hong || cuocDong || lyDoLuot !== null;
+	const khoaSoan =
+		locked ||
+		hetLuot ||
+		hong ||
+		cuocDong ||
+		lyDoLuot !== null ||
+		chuaCauHinh;
 
 	const guiThang = async (chu: string) => {
 		cuoiCung.current = chu;
@@ -263,6 +272,7 @@ export function useCuocSoan({
 		hong,
 		qua45s,
 		lyDoLuot,
+		chuaCauHinh,
 		hetLuot,
 		cuocDong,
 		gui,

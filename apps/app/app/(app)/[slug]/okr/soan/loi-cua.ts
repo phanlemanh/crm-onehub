@@ -28,6 +28,15 @@ export function lyDoTuChoiLuot(loi: Error | undefined): LyDoLuot | null {
 	return CUA_OKR.trangThaiTuChoiLuot[ma] === http.data.status ? ma : null;
 }
 
+export function laChuaCauHinh(loi: Error | undefined): boolean {
+	const http = loiHttp.safeParse(loi);
+	return (
+		http.success &&
+		http.data.status === CUA_OKR.trangThaiChuaCauHinh &&
+		http.data.body.error === CUA_OKR.loi.chuaCauHinh
+	);
+}
+
 const PHIEN_KHAC_SONG: readonly string[] = [
 	CUA_OKR.loi.daCoPhien,
 	CUA_OKR.loi.phienDaThay,

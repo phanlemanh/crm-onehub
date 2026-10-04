@@ -29,7 +29,8 @@ async function handler(
 ): Promise<Response> {
 	await connection();
 
-	if (!okrBridgeConfigured()) return loi(503, CUA_OKR.loi.chuaCauHinh);
+	if (!okrBridgeConfigured())
+		return loi(CUA_OKR.trangThaiChuaCauHinh, CUA_OKR.loi.chuaCauHinh);
 
 	const session = await getSession();
 	if (!session) return loi(401, CUA_OKR.loi.chuaDangNhap);
