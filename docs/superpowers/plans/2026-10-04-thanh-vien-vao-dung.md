@@ -324,7 +324,7 @@ if (workspace.data && !workspace.data.canManageMembers) return null;
 
 - [ ] **Step 1:** `vercel env pull` của dự án API production vào tệp tạm trong scratchpad (ngoài kho), chỉ lấy `DATABASE_URL`.
 - [ ] **Step 2:** `DATABASE_URL=<từ tệp tạm> bun apps/api/scripts/soi-thanh-vien.ts --ra _acceptance/thanh-vien-vao-dung/evidence/soi-production.txt`.
-- [ ] **Step 3:** xoá tệp tạm; `soi-vat.mjs` → `6 DUNG, 0 SAI`.
+- [ ] **Step 3:** xoá tệp tạm; `soi-vat.mjs` → `7 DUNG, 0 SAI`.
 - [ ] **Step 4:** ghi bốn số vào `Notes` của hợp đồng (phần máy viết sau Cổng 1, đi kèm dòng sổ `fix`); commit — `docs: số soi production thanh-vien-vao-dung`.
 
 ### Task 10: Năm lệnh chứng

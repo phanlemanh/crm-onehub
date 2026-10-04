@@ -254,7 +254,7 @@ evals:
       soi-vat.mjs doc evidence/soi-production.txt: co dong "may-chu <host>" voi host khong phai
       localhost/127.0.0.1; co du bon dong so dem (ten-mien, treo, bo-sot, khong-doc-duoc) moi dong
       mot so nguyen; dong "giao-dich READ ONLY"; khong ky tu "@" nao. In "DUNG <muc>" tung muc,
-      KET LUAN "6 DUNG, 0 SAI". Tep vang -> ma 2 "chua chay tren production".
+      KET LUAN "7 DUNG, 0 SAI" (may-chu, giao-dich, bon so, khong "@"). Tep vang -> ma 2 "chua chay tren production".
       CHIEU DO: ban sao tep chen mot dia chi thu -> "SAI co dia chi", ma 1; doi host thanh
       localhost -> "SAI may chu la may dev", ma 1.
 
