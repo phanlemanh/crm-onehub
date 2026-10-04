@@ -233,6 +233,7 @@ const en = {
 			tim: "Type a page name",
 			goThem: "Type at least two characters.",
 			khongCo: "No page matches.",
+			loiTim: "Couldn't search pages — try typing again.",
 		},
 		sauDuyet:
 			"The page is visible to everyone only after the page owner approves it.",
@@ -613,6 +614,7 @@ const vi: TaiLieuMessages = {
 			tim: "Gõ tên trang",
 			goThem: "Gõ ít nhất hai chữ.",
 			khongCo: "Không có trang nào khớp.",
+			loiTim: "Chưa tìm được trang — thử gõ lại.",
 		},
 		sauDuyet: "Trang chỉ hiện với mọi người sau khi chủ trang duyệt.",
 		guiDuyet: "Gửi duyệt",

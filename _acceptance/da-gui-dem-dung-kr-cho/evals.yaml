@@ -1,0 +1,76 @@
+schema_version: 1
+slug: da-gui-dem-dung-kr-cho
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_dg_da_gui_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**"
+      - "apps/app/test/okr-cap-nhat-tuan.dom.tsx"
+    expected: |
+      Test DOM 'da gui dem dung' cua okr-cap-nhat-tuan.dom.tsx, ma tran viet truoc SAU o — AC-1 (tat ca x sua
+      mot), AC-2 (mot phan x gui not), AC-3 (mot phan x gui mot trong hai con thieu), AC-4a (0 x gui hai trong
+      ba), AC-4b (0 x gui ca ba), AC-6 (A da gui x gui A va mot KR chua gui). Moi o dung CapNhatTuan voi du
+      lieu updatedThisWeek theo o, bam Sua cap nhat khi o la 'tat ca', chon muc bang nut that, bam gui, doi
+      ST-capnhat-dagui, roi doc BA cot: (i) mock guiCapNhat nhan dung tap id KR da chon (so tap); (ii) tieu de
+      chua daGui.title(N, ...) voi N = co luot gui (1, 1, 1, 2, 3, 2) doc tu okrMessages; (iii) cau
+      daGui.conCho(K) voi K = (0, 0, 1, 1, 0, 1), K = 0 thi khong co cau conCho nao. 6 o x 3 cot = 18 khang
+      dinh, so in ra bang 18. Doi chung duong: o AC-4a co cau conCho(1) (hanh vi cu).
+      CHIEU DO: (a) ban sao tra phep dem ve `tong - daGui.dong.length` -> o AC-1 do (co cau con cho), ma 1;
+      (b) ban sao tru hai lan phan giao (tong - dong - soDaCapNhatTuanNay) -> o AC-6 do (khong co cau
+      conCho(1)), ma 1.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_dg_da_gui_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**"
+      - "apps/app/test/okr-cap-nhat-tuan.dom.tsx"
+    expected: "Cung lan chay E1, o AC-2: tap id = {KR con lai}, daGui.title(1), khong cau conCho. CHIEU DO: nhu E1 (a), o AC-2 cung do."
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_dg_da_gui_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**"
+      - "apps/app/test/okr-cap-nhat-tuan.dom.tsx"
+    expected: "Cung lan chay E1, o AC-3: daGui.title(1) va dung daGui.conCho(1). CHIEU DO: nhu E1 (a) -> o AC-3 ra conCho(2), ma 1."
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_dg_da_gui_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**"
+      - "apps/app/test/okr-cap-nhat-tuan.dom.tsx"
+    expected: "Cung lan chay E1, o AC-4a (title(2), conCho(1)) va AC-4b (title(3), khong cau). CHIEU DO: ban sao dat chuaGui = 0 -> o AC-4a do, ma 1."
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_dg_da_gui_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**"
+      - "apps/app/test/okr-cap-nhat-tuan.dom.tsx"
+    expected: "Cung lan chay E1, o AC-6: tap id = {A, B}, daGui.title(2), dung daGui.conCho(1). CHIEU DO: nhu E1 (b), ma 1."
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_dg_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx"
+    expected: |
+      design-gate --mode static tren cap-nhat-tuan.tsx: exit 0, khong P0.
+      CHIEU DO: ban sao (.acceptance-runs/) them className='text-gray-500 bg-red-500' vao Alert cua DaGui ->
+      verdict REJECT, p0_count 1, ma thoat 2 (da chay thu truoc Cong Pham vi). Mot mau don bg-red-500 KHONG
+      bi bat — dot bien phai co ca chu xam tren nen mau.

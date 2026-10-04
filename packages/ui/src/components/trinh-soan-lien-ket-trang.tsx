@@ -30,6 +30,7 @@ export type NhanLienKetTrang = {
 	tim: string;
 	goThem: string;
 	khongCo: string;
+	loiTim: string;
 };
 
 export function ganLienKetTrang(editor: Editor | null, trang: TrangGoiY): void {
@@ -58,10 +59,12 @@ export function NutLienKetTrang({
 	const [mo, setMo] = useState(false);
 	const [q, setQ] = useState("");
 	const [ds, setDs] = useState<readonly TrangGoiY[]>([]);
+	const [loi, setLoi] = useState(false);
 	const moiNhat = useRef("");
 
 	const go = (chu: string) => {
 		setQ(chu);
+		setLoi(false);
 		moiNhat.current = chu;
 		if (chu.trim().length < TAI_LIEU.tim.toiThieu) {
 			setDs([]);
@@ -72,7 +75,9 @@ export function NutLienKetTrang({
 				if (moiNhat.current === chu) setDs(ra);
 			},
 			() => {
-				if (moiNhat.current === chu) setDs([]);
+				if (moiNhat.current !== chu) return;
+				setDs([]);
+				setLoi(true);
 			},
 		);
 	};
@@ -115,7 +120,9 @@ export function NutLienKetTrang({
 						<CommandEmpty>
 							{q.trim().length < TAI_LIEU.tim.toiThieu
 								? nhan.goThem
-								: nhan.khongCo}
+								: loi
+									? nhan.loiTim
+									: nhan.khongCo}
 						</CommandEmpty>
 						{ds.length > 0 ? (
 							<CommandGroup>
