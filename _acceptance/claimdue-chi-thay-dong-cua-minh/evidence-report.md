@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bc36c2d575122deb12067a7da028614abef51f82
+verified_commit: ef22d521135d81f1598ec28123f76aa07c60be54
 human_signoff: Manh Phan 2026-09-24
 ---
 
@@ -221,3 +221,7 @@ sha: 5fd9c0c8fbd6e02841b6290087ed919367624a23 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-04, do khai paths lô 1 (kit 2.21.0): chỉ thêm khoá paths vào evals.yaml
 run_id: repin-20261004T020617Z-28918
 sha: bc36c2d575122deb12067a7da028614abef51f82 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E12 · AC không có chốt máy: AC-8
+
+### Re-pin lần 3 — 2026-10-04, do gộp onehub (#240) sau khi khai paths lô 1
+run_id: repin-20261004T024314Z-40086
+sha: ef22d521135d81f1598ec28123f76aa07c60be54 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E12 · AC không có chốt máy: AC-8
