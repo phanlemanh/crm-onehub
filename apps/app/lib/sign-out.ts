@@ -3,11 +3,20 @@
 import { signOut } from "@crm/auth/client";
 import { toast } from "sonner";
 
-export async function signOutAndRedirect(loiMacDinh: string) {
-	const { error } = await signOut();
+function baoLoi(loiMacDinh: string, error: unknown) {
+	console.error("Sign out failed", error);
+	toast.error(loiMacDinh);
+}
 
-	if (error) {
-		toast.error(error.message ?? loiMacDinh);
+export async function signOutAndRedirect(loiMacDinh: string) {
+	try {
+		const { error } = await signOut();
+		if (error) {
+			baoLoi(loiMacDinh, error);
+			return;
+		}
+	} catch (error) {
+		baoLoi(loiMacDinh, error);
 		return;
 	}
 

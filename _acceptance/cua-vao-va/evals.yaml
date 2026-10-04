@@ -298,8 +298,9 @@ evals:
     expected: |
       rang/noi-goi-dang-xuat.mjs quet TypeScript AST ba noi goi viet truoc [app-header.tsx,
       het-quyen/sign-out-button.tsx, grant-access/grant-access.tsx]: moi loi goi
-      signOutAndRedirect(x) — x khong chua truy cap ".message" va truy nguoc duoc ve mot khoa
-      messages (hoac prop nhan tu trang server lay tu messages); khoa do co ban vi co dau. In mot
+      signOutAndRedirect(x) — x khong chua truy cap ".message" va x khong trung bieu thuc dang lam
+      chu cua nut trong cung tep (cau loi khong duoc la nhan nut). In mot
       dong moi noi goi + dong dem "3/3 noi goi"; dem so loi goi tim duoc bang 3 (ca kiem dieu kien
       do). CHIEU DO: ban sao app-header.tsx doi tham so thanh error.message -> dong app-header SAI
-      voi thong diep ghim ".message".
+      voi thong diep ghim ".message"; ban sign-out-button.tsx truoc vong (truyen label) -> SAI
+      "trung chu cua nut".
