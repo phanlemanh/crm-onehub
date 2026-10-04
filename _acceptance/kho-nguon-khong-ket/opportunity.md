@@ -3,10 +3,10 @@ schema_version: 1
 slug: kho-nguon-khong-ket
 feature: «Nguồn không kẹt mãi ở «đang đọc» khi máy soạn lỗi; «Soạn lại» chạy được; hộp chèn liên kết báo lỗi thay vì «không trang nào khớp»»
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-04T07:50:09Z
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -37,6 +37,6 @@ nằm đúng trên đường nạp tệp và viết trang.
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: trong đợt chạy thật, có nguồn nào kẹt ở «đang đọc» hay «đang soạn» mà người nạp không tự gỡ được không?
-- [đề xuất] Kết quả nào là SỐNG: 0 nguồn ở `CHO_DOC`/`CHO_SOAN`/`DANG_SOAN` quá 30 phút trên production trong timebox, và mọi nguồn `LOI` soạn lại được bằng nút «Soạn lại».
-- [đề xuất] Kết quả nào là CHẾT: ≥ 1 nguồn kẹt quá 30 phút phải gỡ tay bằng cơ sở dữ liệu, hoặc ≥ 1 lần người viết báo «không tìm thấy trang» khi trang có thật.
-- [đề xuất] Timebox: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 (đếm hàng `taiLieuNguon` theo `trangThai` và giờ cập nhật).
+- Kết quả nào là SỐNG: 0 nguồn ở `CHO_DOC`/`CHO_SOAN`/`DANG_SOAN` quá 30 phút trên production trong timebox, và mọi nguồn `LOI` soạn lại được bằng nút «Soạn lại».
+- Kết quả nào là CHẾT: ≥ 1 nguồn kẹt quá 30 phút phải gỡ tay bằng cơ sở dữ liệu, hoặc ≥ 1 lần người viết báo «không tìm thấy trang» khi trang có thật.
+- Timebox: đo cùng chạy thật mọi phòng ban 2026-10-26 → 2026-11-09, đọc số 2026-11-10 (đếm hàng `taiLieuNguon` theo `trangThai` và giờ cập nhật).
