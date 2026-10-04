@@ -4,6 +4,7 @@ import { focusOn, setBudget } from "../lib/focus";
 import { TRO_LY_OKR } from "../lib/okr/config";
 import { sessionPreamble } from "../lib/preamble";
 import { RESEARCH_INSTRUCTIONS } from "../lib/research-instructions";
+import { KHONG_GOI_TRO_LY_KHO } from "../lib/tai-lieu-config";
 import { attribute, purposeOf } from "../lib/session-purpose";
 import { CHI_DAN_ZALO } from "../lib/zalo-chi-dan";
 import { ZALO } from "../lib/zalo-config";
@@ -26,7 +27,9 @@ export default defineDynamic({
 			}
 
 			if (purpose === "okr") {
-				return defineInstructions({ markdown: TRO_LY_OKR.chiDanGoc });
+				return defineInstructions({
+					markdown: `${TRO_LY_OKR.chiDanGoc}\n\n${KHONG_GOI_TRO_LY_KHO}`,
+				});
 			}
 
 			if (purpose === ZALO.hoi.purpose) {
@@ -36,7 +39,7 @@ export default defineDynamic({
 			if (purpose === "may-soan") {
 				return defineInstructions({
 					markdown:
-						"This is one background drafting job for the document library. Call may_soan exactly once and pass the user message unchanged. Do not read, research or write anything yourself. Relay the specialist's one-line summary.",
+						`This is one background drafting job for the document library. Call may_soan exactly once and pass the user message unchanged. Do not read, research or write anything yourself. Relay the specialist's one-line summary.\n\n${KHONG_GOI_TRO_LY_KHO}`,
 				});
 			}
 
@@ -49,7 +52,7 @@ export default defineDynamic({
 
 			if (purpose === "team-agent") {
 				return defineInstructions({
-					markdown: `This is one background run of a deployed team agent. Call agent_runner exactly once and pass the run id from your user message. Do not call research tools or perform work yourself. Relay the specialist's structured factual completion summary. Never claim an external action that the specialist did not log.`,
+					markdown: `This is one background run of a deployed team agent. Call agent_runner exactly once and pass the run id from your user message. Do not call research tools or perform work yourself. Relay the specialist's structured factual completion summary. Never claim an external action that the specialist did not log.\n\n${KHONG_GOI_TRO_LY_KHO}`,
 				});
 			}
 
@@ -79,7 +82,7 @@ export default defineDynamic({
 			focusOn({ ...focus, sessionId: ctx.session.id, taskKind: kind });
 
 			return defineInstructions({
-				markdown: `${RESEARCH_INSTRUCTIONS}\n\n${markdown}`,
+				markdown: `${RESEARCH_INSTRUCTIONS}\n\n${markdown}\n\n${KHONG_GOI_TRO_LY_KHO}`,
 			});
 		},
 		"turn.started": (_event, ctx) => {
@@ -94,10 +97,10 @@ export default defineDynamic({
 
 function builderInstructions(ctx: Parameters<typeof purposeOf>[0]) {
 	return defineInstructions({
-		markdown: builderTaskMarkdown(
+		markdown: `${builderTaskMarkdown(
 			attribute(ctx, "commandType"),
 			attribute(ctx, "needsTitle") === "true",
-		),
+		)}\n\n${KHONG_GOI_TRO_LY_KHO}`,
 	});
 }
 

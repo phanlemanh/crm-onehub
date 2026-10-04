@@ -106,11 +106,11 @@ evals:
       - "_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.ts"
       - "_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.spec.ts"
     expected: |
-      Postgres that (kho rieng cua luot). Hang AiChiPhi cua session goc ghi bang ham ghi that cua hook
-      chi phi phien goc (hooks/so-chi-phi.ts): goc research A, research B, builder C (tinhNang theo
-      VIEC_CUA_PURPOSE), goc kho K1, K2, K3 voi modelId ZDR, K4 voi modelId khac. Dau sai cho sinh bang
-      DUONG HONG THAT: chay resolver session.started cua tro_ly_kho duoi ctx con cua A, B, C (moi lan ra
-      1 hang AgentEvent tro-ly-kho.sai-cho). demSaiPhien() tra bang viet truoc toEqual
-      { saiCho: { "crm.nghien-cuu": 2, "crm.dung-tac-nhan": 1 }, khongZdr: 1 }; anh chup hang truoc/sau
-      bang nhau. CHIEU DO: dem theo AiChiPhi cua session con thay vi AgentEvent -> do ghim
+      Postgres that (kho rieng cua luot). Hang AiChiPhi cua session goc ghi bang ham ghiBuoc that
+      (lib/so-chi-phi.ts) voi ctx goc purpose research (A, B), builder (C), kho (K) va zalo (Z). Dau sai
+      cho sinh bang DUONG HONG THAT: chay resolver session.started cua tro_ly_kho duoi ctx con cua A,
+      B, C (moi lan ra 1 hang AgentEvent tro-ly-kho.sai-cho); K va Z co cau hoi dang mo nen resolver
+      mo binh thuong, 0 hang sai-cho. demSaiPhien() tra bang viet truoc toEqual
+      { saiCho: { "crm.nghien-cuu": 2, "crm.dung-tac-nhan": 1 } }; anh chup hang truoc/sau bang nhau.
+      CHIEU DO: dem theo AiChiPhi cua session con thay vi AgentEvent -> do ghim
       "kd-dem: phien con hong truoc model khong duoc dem".

@@ -1,6 +1,8 @@
 import { db } from "@crm/db";
+import { createGateway } from "@ai-sdk/gateway";
 import { DEFAULT_AGENT_MODEL, readAgentModel } from "@crm/db/settings";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
+import { type ModelMaySoan, modelTaiLieu } from "./tai-lieu-model";
 
 export interface ModelSelection {
 	model: string;
@@ -38,7 +40,12 @@ export function vaiCuaPhien(ctx: PurposeContext): VaiModel {
 		: "tro-ly";
 }
 
-export function modelChoPhienGoc(ctx: PurposeContext) {
+export function modelChoPhienGoc(
+	ctx: PurposeContext,
+	tao: typeof createGateway = createGateway,
+	env: Readonly<Record<string, string | undefined>> = process.env,
+): Promise<ModelSelection | ModelMaySoan | null> | ModelMaySoan {
+	if (purposeOf(ctx) === "kho") return modelTaiLieu("hoi", env, tao);
 	return modelTheoVai(vaiCuaPhien(ctx));
 }
 

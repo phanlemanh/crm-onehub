@@ -38,10 +38,9 @@ cứng cần tách trợ lý kho ra một app eve riêng như `apps/agent-okr` �
    session gốc — dấu duy nhất của ca này, vì phiên con hỏng trước lời gọi model nên không có
    `AiChiPhi`.
 4. **Thước.** `_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.ts` — chỉ đọc: số hàng
-   `AgentEvent` `tro-ly-kho.sai-cho`, nhóm theo `AiChiPhi.tinhNang` của session gốc; và số lời gọi
-   model phiên gốc tính năng `tai-lieu.tro-ly` có `modelId` khác model ZDR. Vế thứ hai là chỉ báo
-   gián tiếp: cờ ZDR là tuỳ chọn của từng lời gọi, không lưu ở `AiChiPhi` (thêm cột là migration,
-   nâng T3); bảo đảm thật là ca E3 đo cờ trên từng lời gọi.
+   `AgentEvent` `tro-ly-kho.sai-cho`, nhóm theo `AiChiPhi.tinhNang` của session gốc. Không có thước
+   production cho vế ZDR: `lib/so-chi-phi.ts` ghi `modelId: null` cho mọi bước và cờ ZDR không lưu ở
+   đâu; vế ZDR được bảo đảm bằng ca E3 đo cờ trên từng lời gọi.
 
 ## Ngoài phạm vi
 

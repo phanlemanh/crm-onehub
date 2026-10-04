@@ -1488,6 +1488,15 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
   chung với tính năng `tai-lieu.tro-ly`.
 - `_acceptance/tro-ly-doc-kho/rang/nguong.ts` in tỉ lệ trả lời có trích và số báo sai
   cho phiên nghiệm thu; `rang/cham-bo-do.ts` chấm một bộ câu với model thật.
+- **Phiên gốc «kho» không thấy câu hỏi** (vòng `tro-ly-kho-dung-phien`). `guiHoiKho` gửi câu
+  cố định `TAI_LIEU_AGENT.hoi.tinGoc(hoiId)`; lời dặn của `tro_ly_kho` đọc `cauHoi` từ hàng
+  `TaiLieuHoi` và đặt giữa `hoi.dauCauHoi`. Câu Zalo chưa có `cauHoi` lúc mở nên không chèn.
+  Phiên gốc purpose `kho` chạy `modelTaiLieu("hoi")` — cùng model, khoá và ZDR với `tro_ly_kho`.
+- **eve không tắt được subagent theo phiên.** Định nghĩa agent không có `approval`, hook chỉ quan
+  sát. Lời dặn gốc của mọi purpose khác `kho`/`zalo` nối `KHONG_GOI_TRO_LY_KHO`; gọi sai chỗ vẫn
+  hỏng ở `session.started` của phiên con, và lời dặn ghi một `AgentEvent`
+  `tro-ly-kho.sai-cho` (`data.phienGoc`) trước khi ném lại. Thước
+  `_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.ts` đếm hàng đó theo tính năng của phiên gốc.
 
 ## Chỗ rẽ: Soạn OKR cùng Trợ lý
 

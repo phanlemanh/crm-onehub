@@ -31,7 +31,7 @@ Source input: `docs/plan/lo-trinh-kho-tai-lieu.json` hàng l4b; `opportunity.md`
 - AC-4: Given tám purpose `session` của `apps/agent`, When lời dặn `session` gốc được dựng ở `session.started`, Then sáu purpose khác `kho` và `zalo` có câu cấm gọi `tro_ly_kho`, còn `kho` và `zalo` không có; và mô tả của `tro_ly_kho` nói rõ nó chỉ dùng được trong `session` hỏi kho hoặc hội thoại Zalo.
 - AC-5: Given `session` con `tro_ly_kho` bị gọi dưới `session` gốc purpose `research`, `builder`, `team-agent`, `okr`, `may-soan` hay `okr-soan`, When resolver `session.started` của nó chạy, Then nó hỏng với thông điệp `KHONG_PHAI_HOI`, không tạo hàng `TaiLieuHoi` nào, và ghi đúng một hàng `AgentEvent` loại `tro-ly-kho.sai-cho` mang mã `session` gốc.
 - AC-6: Given các ca hỏi kho đã có của `tro-ly-doc-kho` (kiểm trích, từ chối, Zalo), When chạy lại sau thay đổi, Then chúng vẫn xanh.
-- AC-7: Given một kho có hàng `AgentEvent` `tro-ly-kho.sai-cho` sinh bởi AC-5 dưới `session` gốc của các purpose khác nhau, cùng lời gọi model `session` gốc tính năng `tai-lieu.tro-ly` có và không có mã model ZDR, When chạy `rang/dem-sai-phien.ts`, Then nó in đúng số `session` con sai chỗ theo tính năng của `session` gốc và số lời gọi gốc «kho» có mã model khác model ZDR, không ghi hàng nào.
+- AC-7: Given một kho có hàng `AgentEvent` `tro-ly-kho.sai-cho` sinh bởi AC-5 dưới `session` gốc của các purpose khác nhau, và hàng `AiChiPhi` của các `session` gốc đó, When chạy `rang/dem-sai-phien.ts`, Then nó in đúng số `session` con sai chỗ theo tính năng của `session` gốc, không đếm `session` gốc «kho» hay Zalo, và không ghi hàng nào.
 
 ## Coverage
 
@@ -47,7 +47,7 @@ Quét bằng skill morphological-scan, preset test-matrix.
 ## Đường đo
 
 - Thước: `session` con `tro_ly_kho` mở sai chỗ · số từ: `AgentEvent` loại `tro-ly-kho.sai-cho` (ghi lúc `session.started` hỏng, trước mọi lời gọi model của `session` con) nối `AiChiPhi.tinhNang` của `session` gốc · bảo đảm bởi: AC-5, AC-7
-- Thước: lời gọi model `session` gốc «kho» không ZDR · số từ: `AiChiPhi.modelId` của `session` gốc tính năng `tai-lieu.tro-ly` so mã model ZDR — chỉ báo GIÁN TIẾP: cờ ZDR là tuỳ chọn của từng lời gọi, không nằm trong `AiChiPhi`; một lời gọi cùng mã model mà thiếu cờ không bị thước thấy. Bảo đảm thật là AC-3 (đo cờ trên từng lời gọi) · bảo đảm bởi: AC-3, AC-7
+- Thước: lời gọi model `session` gốc «kho» không ZDR · số từ: KHÔNG có số production — `AiChiPhi.modelId` luôn rỗng (`lib/so-chi-phi.ts` ghi `modelId: null`) và cờ ZDR không lưu ở đâu; ngưỡng này đọc từ chứng cứ AC-3 (cờ trên từng lời gọi) cộng rà mã · bảo đảm bởi: AC-3
 
 ## Out of scope
 
