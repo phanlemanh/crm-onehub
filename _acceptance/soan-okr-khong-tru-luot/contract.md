@@ -5,7 +5,7 @@ slug: soan-okr-khong-tru-luot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-04
 design_doc: docs/superpowers/specs/2026-10-04-soan-okr-khong-tru-luot-design.md
@@ -98,6 +98,13 @@ khẳng định trên `soLuot`, `soCuocDaDung`, `tranCuoc`, `luotMoiCuoc`, `demC
   - Ngoài-2: ngưỡng 500 phân biệt «Trợ lý lỗi» với «Trợ lý từ chối» viết ở hai chỗ (`route.ts` và `loi-cua.ts`) thay vì một hằng trong `CUA_OKR`; đổi một nơi mà quên nơi kia thì mã lỗi của cửa và câu trên màn lệch nhau.
   - Ngoài-6: sàn ma trận của bài `soan-okr-thu-lai.dom.tsx` tự đếm chính danh sách ca, nên xoá bớt một ca không làm bài đỏ.
   - Ngoài-7: bài đó kiểm câu lý do «có mặt» và «khác câu chung» chứ không kiểm câu chung đã biến mất; màn hiện cả hai câu cạnh nhau vẫn qua bài.
+- Known limits (chủ kho ghi ở Cổng Bằng chứng round 2, 04/10):
+  - Ngoài-1 (r2): trùng Ngoài-2 của round 1 — ngưỡng 500 vẫn viết ở hai chỗ.
+  - Ngoài-2 (r2): `loi-cua.ts` có bộ đọc thân lỗi thứ hai nuốt lỗi đọc thành `{}`; thân lỗi dạng lạ của cửa được xử lý lặng như lỗi thường theo status.
+  - Ngoài-4 (r2): trùng Ngoài-6 của round 1 — sàn ma trận của bài «Thử lại» tự đếm danh sách ca.
+  - Ngoài-5 (r2): E9 không đếm POST sau cú bấm «Thử lại», nên chưa chứng minh lần thử đã gửi lại một lượt (đường mở lại cuộc không gửi lượt).
+  - Ngoài-6 (r2): ca từ chối có tên trong E8 chỉ kiểm có khung `[data-tu-choi]`, không kiểm câu trong khung.
+- Hợp đồng mới (Ngoài-3 r2): «Thử lại» sau 45 giây im dừng lượt đang chạy mà không gửi lại — mở ngay sau khi R1h gộp.
 
 - Ranh giới tệp (LUAT điều phối 1410): P5 sửa cửa `apps/app/app/eve/agents/okr/**` và `okr/soan/**` trừ `nut-soan.tsx`; điều phối duyệt thêm `packages/db/src/okr-cuoc-soan.ts` và `apps/api/src/okr/soan.service.ts` (Nhật ký 12:50). Không chạm `nop_ban_nhap.ts`, `packages/validation/src/okr-cuoc-soan.ts` (PR #248), `schema.prisma`.
 - Không mở cuộc hay gửi lượt AI trên production.
