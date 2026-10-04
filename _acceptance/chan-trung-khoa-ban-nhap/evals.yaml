@@ -101,8 +101,10 @@ evals:
       `.superRefine(chanKhoaTrung)` bi go. Ma 0 khi CA HAI tep do dung chu ky: don vi — bun ma
       khac 0, theo junit DUNG bon ca fail la bon ca tu choi (a),(b),(c),(d) cua E1 va DUNG ba ca
       pass la ba ca nhan (e),(f),(g); tich hop — theo junit DUNG hai ca fail la
-      trung-khoa-muc-tieu va trung-khoa-kr, 0 pass, va ra co thong diep
-      "execute chay o buoc mot" (do vi execute da chay, khong phai loi nap module hay CSDL).
+      trung-khoa-muc-tieu va trung-khoa-kr, 0 pass, va ra co DUNG hai dong (sau trim) bang
+      "error: execute chay o buoc mot" — mot dong moi ca, do vi execute da chay, khong phai loi
+      nap module hay CSDL (khop dong error: cua bun, khong dem chuoi trong khung ma nguon bun in
+      kem).
       Rang in "<tep>: go superRefine do dung chu ky". Tep nao xanh, hay do sai chu ky -> ma 1.
       Moc vang -> ma 2.
 

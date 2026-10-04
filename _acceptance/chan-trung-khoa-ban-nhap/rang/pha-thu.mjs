@@ -151,8 +151,11 @@ function chamTichHop(ca, cheDo, ra) {
 	const muon = cheDo === "xanh" ? "pass" : "fail";
 	const sai = ca.filter((c) => c.trangThai !== muon).map((c) => c.ten);
 	if (sai.length) return `ca sai chieu: ${sai.join(", ")}`;
-	if (cheDo === "do" && !ra.includes(DAU_DO_TICH_HOP))
-		return `do khong vi execute: thieu "${DAU_DO_TICH_HOP}"`;
+	const soDongDo = ra
+		.split("\n")
+		.filter((d) => d.trim() === `error: ${DAU_DO_TICH_HOP}`).length;
+	if (cheDo === "do" && soDongDo !== CA_TICH_HOP.length)
+		return `do khong vi execute: ${soDongDo} dong "error: ${DAU_DO_TICH_HOP}", can ${CA_TICH_HOP.length}`;
 	return null;
 }
 
