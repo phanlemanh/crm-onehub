@@ -1,3 +1,37 @@
 {
-  "feature_plain": "Khi tin soạn OKR không tới được Trợ lý (không nối được, treo, báo lỗi), người soạn không mất lượt; và «Thử lại» luôn nói vì sao chưa chạy."
+  "feature_plain": "Khi tin soạn OKR không tới được Trợ lý (không nối được, treo, báo lỗi), người soạn không mất lượt; «Thử lại» luôn nói vì sao chưa chạy — và lần này không cắt câu trả lời dài của Kara.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ giữ nguyên số lượt của cuộc soạn khi tin không tới được Trợ lý — không nối được, Trợ lý treo quá hạn, hay Trợ lý báo lỗi — ở cả lượt mở đầu lẫn lượt gửi tiếp."},
+    {"id": "AC-2", "p": "Sẽ giữ nguyên số lượt khi Trợ lý đã nhận nhưng máy chủ không mở được phiên trò chuyện."},
+    {"id": "AC-3", "p": "Sẽ vẫn tính đúng từng lượt Trợ lý trả lời được, và vẫn chặn ở 12 lượt mỗi cuộc."},
+    {"id": "AC-6", "p": "Sẽ hoàn lượt đúng một lần cho đúng cuộc, không bao giờ để số lượt âm."},
+    {"id": "AC-7", "p": "Sẽ phân mọi kiểu hỏng thành một lý do có tên, và chỉ nói «Lượt này không bị tính» khi máy chủ thật sự đã hoàn lượt."},
+    {"id": "AC-10", "p": "Sẽ có đủ câu tiếng Việt và tiếng Anh cho mọi lý do mới, và màn soạn qua sàn thiết kế."},
+    {"id": "AC-12", "p": "Sẽ chỉ nói «Mất kết nối mạng» khi trình duyệt thật sự mất mạng; Kara hỏng bên trong (ví dụ hết ngân sách AI) thì nói «dừng giữa chừng» như trước."}
+  ],
+  "wont_do": [
+    {"id": "AC-4", "p": "Sẽ KHÔNG hoàn lượt khi chính người dùng huỷ lúc tin đang đi — để không ai gửi-rồi-huỷ liên tục mà chạy Trợ lý miễn phí."},
+    {"id": "AC-5", "p": "Chặn việc một cuộc mà mọi lượt đều hỏng bị tính vào trần ba cuộc mỗi quý."},
+    {"id": "AC-8", "p": "Chặn «Thử lại» im lặng: mỗi lần bấm mà vẫn hỏng, màn đổi sang lý do mới nhất và đếm «Đã thử lại N lần»."},
+    {"id": "AC-9", "p": "Chặn lỗi chỉ đúng trong bài kiểm: trên màn thật ở khổ máy tính và điện thoại, thấy lý do, thấy đếm, số lượt vẫn bằng 0."},
+    {"id": "AC-11", "p": "Chặn việc cắt câu trả lời dài: thời hạn chờ chỉ áp lúc đợi Trợ lý nhận tin, không cắt luồng Kara đang trả lời dù dài bao lâu."},
+    {"id": "AC-13", "p": "Chặn khung lỗi và dòng đếm cũ sống sang lượt sau: thử lại xong thì gửi tin mới không nháy lỗi, lỗi mới đếm lại từ 1."},
+    {"id": "OOS-1", "p": "KHÔNG hoàn lượt khi Trợ lý đã nhận tin rồi mới hỏng giữa chừng — cần sửa phía máy Trợ lý, để vòng riêng."},
+    {"id": "OOS-2", "p": "KHÔNG mở một lệnh «hoàn lượt» cho người dùng tự gọi."},
+    {"id": "OOS-3", "p": "KHÔNG hoàn lượt khi người dùng tự huỷ."},
+    {"id": "OOS-4", "p": "KHÔNG đổi chữ «Trợ lý OKR» sang Kara ở lượt này."},
+    {"id": "OOS-5", "p": "KHÔNG làm trang soạn riêng, Hoàn tác biên nhận hay trạng thái chờ theo khuôn chung — thuộc K2."},
+    {"id": "OOS-6", "p": "KHÔNG trả lại các lượt đã mất trên production trước lượt này."}
+  ],
+  "scope_plain": "Những thứ lượt này cố ý không làm:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã quét có hệ thống: mọi đường gửi × mọi kiểu Trợ lý trả về × số lượt đang có, và mọi lối «Thử lại» × mọi kết quả của lần thử."},
+    {"i": 1, "p": "Phản biện độc lập trước Cổng 1 thêm ba ô: Trợ lý treo, câu «không bị tính» chỉ hiện khi đúng, và các lần thử rơi vào lý do có tên sẵn."},
+    {"i": 2, "p": "Lần trả lại ở Cổng Bằng chứng thêm ba tiêu chí: không cắt câu trả lời dài (AC-11), chỉ lỗi mạng thật mới nói mất mạng (AC-12), dòng đếm không sống sang lượt sau (AC-13)."},
+    {"i": 3, "p": "Mỗi ô cốt lõi có đúng một tiêu chí từ AC-1 tới AC-10."},
+    {"i": 4, "p": "Thước «đủ»: danh sách mã lỗi và trần đọc thẳng từ mã nguồn lúc chạy bài kiểm, không chép tay."},
+    {"i": 5, "p": "Để sau: Trợ lý nhận rồi mới hỏng giữa chừng — cần sửa phía máy Trợ lý."},
+    {"i": 6, "p": "Để sau: Trợ lý trả chuyển hướng (không xảy ra với Trợ lý hiện tại)."},
+    {"i": 7, "p": "Không bao giờ: một lệnh «hoàn lượt» người dùng tự gọi được."}
+  ]
 }
