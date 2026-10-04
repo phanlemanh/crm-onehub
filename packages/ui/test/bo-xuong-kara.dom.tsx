@@ -32,6 +32,10 @@ const KhoiProposal = await nap<
 	typeof import("../src/components/kara/proposal")
 >("K1_TEP_PROPOSAL", "proposal.tsx");
 
+const KhoiTranscript = await nap<
+	typeof import("../src/components/kara/transcript")
+>("K1_TEP_TRANSCRIPT", "transcript.tsx");
+
 const VI = messages("vi");
 
 let root: Root | null = null;
@@ -503,5 +507,57 @@ describe("k1-nhom", () => {
 		phai(Boolean(st), "thieu bien nhan nhom");
 		act(() => nutTen(st as Element, VI.proposedChange.undo)[0]?.click());
 		expect(undo).toBe(1);
+	});
+});
+
+describe("k1-transcript", () => {
+	const { KaraTranscript, KaraTurn, KaraSystemLine, KaraCheckpoint } =
+		KhoiTranscript;
+	const PHAN_TU = ["user", "kara", "system", "checkpoint"] as const;
+
+	test("bốn phần tử viết trước", () => {
+		let chon = 0;
+		const o = ve(
+			<KaraTranscript>
+				<KaraTurn from="user">⟦nguoi⟧</KaraTurn>
+				<KaraTurn from="kara">⟦kara⟧</KaraTurn>
+				<KaraSystemLine>⟦he thong⟧</KaraSystemLine>
+				<KaraCheckpoint summary="⟦tom tat⟧" onSelect={() => (chon += 1)} />
+			</KaraTranscript>,
+		);
+		let khang = 0;
+		for (const loai of PHAN_TU) {
+			const el = o.querySelector(`[data-kara-turn="${loai}"]`);
+			phai(Boolean(el), `thieu ${loai}`);
+			khang += 1;
+		}
+		const nguoi = o.querySelector('[data-kara-turn="user"]');
+		phai(Boolean(nguoi?.classList.contains("is-user")), "luot nguoi khong la Message user");
+		const kara = o.querySelector('[data-kara-turn="kara"]') as Element;
+		phai(Boolean(kara.querySelector(".is-assistant")), "luot kara khong la Message assistant");
+		const avatar = kara.querySelectorAll('[data-slot="message-avatar"]');
+		phai(avatar.length === 1, "avatar khong dung mot");
+		phai(avatar[0]?.querySelectorAll('svg[aria-hidden="true"]').length === 1, "avatar khong co dau tia sang");
+		phai(avatar[0]?.querySelector(".sr-only")?.textContent === "Kara", "avatar thieu ten Kara");
+		phai(o.querySelectorAll("img").length === 0, "avatar co anh");
+		khang += 5;
+		const he = o.querySelector('[data-kara-turn="system"]') as Element;
+		phai(!he.closest('[class*="is-assistant"], [class*="is-user"]'), "dong he thong nam trong bong bong");
+		phai(he.classList.contains("text-muted-foreground"), "dong he thong khong la chu phu");
+		khang += 2;
+		const moc = o.querySelector('[data-kara-turn="checkpoint"] button') as HTMLButtonElement;
+		phai(Boolean(moc) && moc.textContent === VI.karaKhung.moc("⟦tom tat⟧"), "moc khong la nut");
+		act(() => moc.click());
+		phai(chon === 1, "moc khong goi");
+		khang += 2;
+		console.log(`so khang dinh: ${khang}`);
+		expect(khang).toBe(13);
+	});
+
+	test("hội thoại rỗng mang dấu Kara", () => {
+		const o = ve(<KaraTranscript />);
+		const rong = o.querySelector('[data-slot="conversation-empty-state"]');
+		phai(Boolean(rong?.querySelector('[data-slot="kara-mark"]')), "rong thieu dau Kara");
+		expect(rong?.textContent).toContain(VI.karaKhung.hoiThoaiRongTieuDe);
 	});
 });
