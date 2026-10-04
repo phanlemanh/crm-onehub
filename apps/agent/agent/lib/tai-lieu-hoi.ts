@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { db, Prisma } from "@crm/db";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import { ghiKetQuaHoi } from "@crm/db/tai-lieu-hoi";
@@ -81,6 +82,26 @@ async function moHoiZalo(goc: string): Promise<string | null> {
 		select: { id: true, trangThai: true },
 	});
 	return hang.trangThai === "DANG_HOI" ? hang.id : null;
+}
+
+export async function ghiSaiCho(ctx: NguCanhKenh): Promise<void> {
+	await db.agentEvent.create({
+		data: {
+			id: randomUUID(),
+			sessionId: ctx.session?.id ?? HOI.phienKhongRo,
+			type: HOI.saiCho,
+			data: { phienGoc: phienGocCua(ctx) },
+			emittedAt: new Date(),
+		},
+	});
+}
+
+export async function cauHoiCua(hoiId: string): Promise<string | null> {
+	const hang = await db.taiLieuHoi.findUnique({
+		where: { id: hoiId },
+		select: { cauHoi: true },
+	});
+	return hang?.cauHoi?.trim() || null;
 }
 
 export async function moHoi(ctx: NguCanhKenh): Promise<string> {

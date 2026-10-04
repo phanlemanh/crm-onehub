@@ -107,7 +107,7 @@ export async function guiHoiKho(
 		return null;
 	}
 	try {
-		const phien = await send(h.cauHoi, {
+		const phien = await send(HOI.tinGoc(hoiId), {
 			auth: {
 				...APP_AUTH,
 				attributes: { purpose: PURPOSE_KHO, hoiId, userId: h.nguoiHoiId },
