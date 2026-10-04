@@ -5,7 +5,7 @@ slug: kho-nguon-khong-ket
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-04T08:37:26Z
 design_doc: docs/superpowers/specs/2026-10-04-kho-nguon-khong-ket-design.md
@@ -63,3 +63,7 @@ Quét bằng skill morphological-scan, preset test-matrix.
 
 - Không migration: lưới mồ côi tìm qua `agentTask.payload->>'nguonId'`; tải lên và soạn lại ghi nguồn và việc trong cùng transaction (`tai-lieu-nguon.service.ts:159-220`, `350-355`).
 - Bỏ design-pass theo chủ kho duyệt 04/10 (entry `bỏ design-pass` trong decisions.jsonl); khung hình thật ở AC-7.
+- Known limits (Cổng 2, 04/10):
+  - Ngoài-1 — khối `catch` của `chaySoanTuNguon` bọc cả các lần ghi sau khi nguồn đã sang trạng thái cuối; nếu `completeTask` lỗi tạm, nguồn có thể bị ghi đè thành `LOI` «Chưa đọc được tệp» (mất lý do cụ thể, hay kéo lùi một nguồn đã sang soạn). Người nạp bấm «Soạn lại» là chạy tiếp.
+  - Ngoài-2 — chưa có bài kiểm chạy trọn vòng từ «Soạn lại» (`soanLai` ghi việc) tới `chaySoanTuNguon` đọc việc đó; hai nửa được kiểm riêng.
+  - Ngoài-4 — nhịp dispatch trong cận 30 phút của E2 là hằng 60 giây viết trong tệp kiểm, không đọc từ `cron` của `schedules/dispatch.ts`; đổi lịch thưa hơn thì bài kiểm không kêu.
