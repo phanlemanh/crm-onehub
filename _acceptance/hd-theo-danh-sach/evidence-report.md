@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-eval verify, run_id minted at execution
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 11bd93cf9f3488a2ed6df5c432a362feff41a428
+verified_commit: 4893629a5ff0068f0b3a0fc09523a037c7c953b7
 run_id: s4r2-20260907T021447Z-5948
 human_signoff: Manh Phan 2026-09-07
 ---
@@ -131,3 +131,7 @@ human_signoff: Manh Phan 2026-09-07
 ### Re-pin lần 1 — 2026-10-04, do khai paths lô 2: chỉ thêm khoá paths vào evals.yaml
 run_id: repin-20261004T075112Z-36317
 sha: 11bd93cf9f3488a2ed6df5c432a362feff41a428 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 · diff chạm vật đo ngoài làn máy: E7 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7
+
+### Re-pin lần 2 — 2026-10-04, do gộp onehub sau khi khai paths lô 2
+run_id: repin-20261004T141023Z-83923
+sha: 4893629a5ff0068f0b3a0fc09523a037c7c953b7 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7
