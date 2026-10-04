@@ -315,7 +315,7 @@ export class OkrMauService {
 				if (mauKr === undefined)
 					throw new BadRequestException(T.mau.soKrKhac(krMau.length));
 				const kr = krTuMau(i + 1, mauKr, vao);
-				await tx.okrKeyResult.create({
+				const taoRa = await tx.okrKeyResult.create({
 					data: {
 						objectiveId: objective.id,
 						title: kr.title,
@@ -330,6 +330,19 @@ export class OkrMauService {
 						position: i,
 					},
 				});
+				await this.okr.vet(
+					tx,
+					userId,
+					"tao-kr",
+					{ objectiveId: objective.id, keyResultId: taoRa.id },
+					null,
+					{
+						title: taoRa.title,
+						kind: taoRa.kind,
+						startValue: kr.startValue,
+						targetValue: kr.targetValue,
+					},
+				);
 			}
 			await tx.okrMucTieuTuMau.create({
 				data: { objectiveId: objective.id, mauId: mau.id },
