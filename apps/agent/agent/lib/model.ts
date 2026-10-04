@@ -1,5 +1,5 @@
-import { db } from "@crm/db";
 import { createGateway } from "@ai-sdk/gateway";
+import { db } from "@crm/db";
 import { DEFAULT_AGENT_MODEL, readAgentModel } from "@crm/db/settings";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
 import { type ModelMaySoan, modelTaiLieu } from "./tai-lieu-model";

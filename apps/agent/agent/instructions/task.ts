@@ -4,8 +4,8 @@ import { focusOn, setBudget } from "../lib/focus";
 import { TRO_LY_OKR } from "../lib/okr/config";
 import { sessionPreamble } from "../lib/preamble";
 import { RESEARCH_INSTRUCTIONS } from "../lib/research-instructions";
-import { KHONG_GOI_TRO_LY_KHO } from "../lib/tai-lieu-config";
 import { attribute, purposeOf } from "../lib/session-purpose";
+import { KHONG_GOI_TRO_LY_KHO } from "../lib/tai-lieu-config";
 import { CHI_DAN_ZALO } from "../lib/zalo-chi-dan";
 import { ZALO } from "../lib/zalo-config";
 
@@ -38,8 +38,7 @@ export default defineDynamic({
 
 			if (purpose === "may-soan") {
 				return defineInstructions({
-					markdown:
-						`This is one background drafting job for the document library. Call may_soan exactly once and pass the user message unchanged. Do not read, research or write anything yourself. Relay the specialist's one-line summary.\n\n${KHONG_GOI_TRO_LY_KHO}`,
+					markdown: `This is one background drafting job for the document library. Call may_soan exactly once and pass the user message unchanged. Do not read, research or write anything yourself. Relay the specialist's one-line summary.\n\n${KHONG_GOI_TRO_LY_KHO}`,
 				});
 			}
 

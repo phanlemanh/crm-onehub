@@ -40,8 +40,8 @@ const batDau = (loiDan as unknown as { events: { "session.started": BatDau } })
 	.events["session.started"];
 
 type GiaiChiDan = (
-	e: unknown,
-	c: unknown,
+	e: Record<string, never>,
+	c: ReturnType<typeof phienGia>,
 ) => Promise<{ markdown?: string } | null>;
 
 function phienGia(purpose: string) {
@@ -55,9 +55,12 @@ function phienGia(purpose: string) {
 
 const api = () => new TaiLieuHoiService(db, new AgentTriggerService(db));
 
-type GoiGui = { tin: string; tuy: { auth: { attributes: Record<string, string> } } };
+type GoiGui = {
+	tin: string;
+	tuy: { auth: { attributes: Record<string, string> } };
+};
 
-function sendBat(goc: string): { send: SendFn; goi: GoiGui[] } {
+function sendBat(goc: string) {
 	const goi: GoiGui[] = [];
 	const send = (async (tin: string, tuy: GoiGui["tuy"]) => {
 		goi.push({ tin, tuy });
@@ -88,7 +91,9 @@ describe("kd-gui", () => {
 		}
 		if (tin !== `Câu hỏi kho ${hoiId}.`) sai.push(`kd-gui: tin ${tin}`);
 		const tt = goi[0]?.tuy.auth.attributes ?? {};
-		if (`${tt.purpose} ${tt.hoiId} ${tt.userId}` !== `kho ${hoiId} ${nguoi.id}`) {
+		if (
+			`${tt.purpose} ${tt.hoiId} ${tt.userId}` !== `kho ${hoiId} ${nguoi.id}`
+		) {
 			sai.push(`kd-gui: thuoc tinh ${JSON.stringify(tt)}`);
 		}
 		expect(sai).toEqual([]);
@@ -104,8 +109,9 @@ describe("kd-loi-dan", () => {
 		);
 		const goc = ma("ses-goc-kho");
 		await guiHoiKho(hoiId, sendBat(goc).send);
-		const crm = (await batDau({ type: "session.started" }, ctxBatDauThat(goc)))
-			?.markdown ?? "";
+		const crm =
+			(await batDau({ type: "session.started" }, ctxBatDauThat(goc)))
+				?.markdown ?? "";
 		const goZalo = ma("ses-zalo");
 		await db.zaloHoi.create({
 			data: {
@@ -116,9 +122,9 @@ describe("kd-loi-dan", () => {
 				ketQua: "dang-hoi",
 			},
 		});
-		const zalo = (
-			await batDau({ type: "session.started" }, ctxBatDauThat(goZalo))
-		)?.markdown ?? "";
+		const zalo =
+			(await batDau({ type: "session.started" }, ctxBatDauThat(goZalo)))
+				?.markdown ?? "";
 		const sai: string[] = [];
 		const giua = crm.slice(
 			crm.lastIndexOf(HOI.dauCauHoi.mo),
@@ -180,13 +186,19 @@ describe("kd-zdr", () => {
 				const ra = await modelChoPhienGoc(phienGia(p) as never);
 				if (ra !== null) sai.push(`kd-zdr: ${p} mac dinh khong ra null`);
 			}
-			await writeAgentModel(db, { id: "openai/gpt-x", contextWindowTokens: 200_000 });
+			await writeAgentModel(db, {
+				id: "openai/gpt-x",
+				contextWindowTokens: 200_000,
+			});
 			for (const p of khac) {
 				const ra = (await modelChoPhienGoc(phienGia(p) as never)) as {
 					model?: string;
 					modelContextWindowTokens?: number;
 				} | null;
-				if (ra?.model !== "openai/gpt-x" || ra?.modelContextWindowTokens !== 200_000) {
+				if (
+					ra?.model !== "openai/gpt-x" ||
+					ra?.modelContextWindowTokens !== 200_000
+				) {
 					sai.push(`kd-zdr: ${p} lech ${JSON.stringify(ra)}`);
 				}
 			}
@@ -236,52 +248,69 @@ describe("kd-cam-goi", () => {
 const TRAN_TU_CHOI_MS = 60_000;
 
 describe("kd-tu-choi", () => {
-	test("kd-tu-choi: ma tran 6 purpose goi sai cho, resolver nem, ghi dau, khong tao hang", async () => {
-		const PURPOSE = ["research", "builder", "team-agent", "okr", "may-soan", "okr-soan"];
-		expect(PURPOSE.length).toBe(6);
-		const sai: string[] = [];
-		for (const p of PURPOSE) {
-			const goc = ma(`ses-${p}`);
-			const truoc = await db.taiLieuHoi.count();
-			let nem = "";
-			let ra: { markdown?: string } | null = null;
-			try {
-				ra = await batDau({ type: "session.started" }, ctxBatDauThat(goc));
-			} catch (loi) {
-				nem = loi instanceof Error ? loi.message : String(loi);
+	test(
+		"kd-tu-choi: ma tran 6 purpose goi sai cho, resolver nem, ghi dau, khong tao hang",
+		async () => {
+			const PURPOSE = [
+				"research",
+				"builder",
+				"team-agent",
+				"okr",
+				"may-soan",
+				"okr-soan",
+			];
+			expect(PURPOSE.length).toBe(6);
+			const sai: string[] = [];
+			for (const p of PURPOSE) {
+				const goc = ma(`ses-${p}`);
+				const truoc = await db.taiLieuHoi.count();
+				let nem = "";
+				let ra: { markdown?: string } | null = null;
+				try {
+					ra = await batDau({ type: "session.started" }, ctxBatDauThat(goc));
+				} catch (loi) {
+					nem = loi instanceof Error ? loi.message : String(loi);
+				}
+				if (!nem.includes(KHONG_PHAI_HOI)) {
+					sai.push(
+						ra
+							? `kd-tu-choi: loi dan nuot KHONG_PHAI_HOI (${p})`
+							: `kd-tu-choi: ${p} nem ${nem}`,
+					);
+				}
+				if ((await db.taiLieuHoi.count()) !== truoc) {
+					sai.push(`kd-tu-choi: tao hang ngoai phien kho (${p})`);
+				}
+				const dau = await db.agentEvent.findMany({
+					where: {
+						type: HOI.saiCho,
+						data: { path: ["phienGoc"], equals: goc },
+					},
+				});
+				if (dau.length !== 1) {
+					sai.push(`kd-tu-choi: khong ghi dau sai cho (${p}: ${dau.length})`);
+				}
 			}
-			if (!nem.includes(KHONG_PHAI_HOI)) {
-				sai.push(
-					ra
-						? `kd-tu-choi: loi dan nuot KHONG_PHAI_HOI (${p})`
-						: `kd-tu-choi: ${p} nem ${nem}`,
-				);
+			const nguoi = await gieoNguoi("member");
+			const { hoiId } = await api().hoi(
+				{ id: nguoi.id, role: nguoi.role } as never,
+				{ cauHoi: CAU_HOI },
+			);
+			const goc = ma("ses-goc-dung");
+			await guiHoiKho(hoiId, sendBat(goc).send);
+			const dung = await batDau(
+				{ type: "session.started" },
+				ctxBatDauThat(goc),
+			);
+			if (!dung?.markdown?.includes(`Question id: ${hoiId}`)) {
+				sai.push("kd-tu-choi: doi chung kho khong mo");
 			}
-			if ((await db.taiLieuHoi.count()) !== truoc) {
-				sai.push(`kd-tu-choi: tao hang ngoai phien kho (${p})`);
-			}
-			const dau = await db.agentEvent.findMany({
+			const dauDung = await db.agentEvent.count({
 				where: { type: HOI.saiCho, data: { path: ["phienGoc"], equals: goc } },
 			});
-			if (dau.length !== 1) {
-				sai.push(`kd-tu-choi: khong ghi dau sai cho (${p}: ${dau.length})`);
-			}
-		}
-		const nguoi = await gieoNguoi("member");
-		const { hoiId } = await api().hoi(
-			{ id: nguoi.id, role: nguoi.role } as never,
-			{ cauHoi: CAU_HOI },
-		);
-		const goc = ma("ses-goc-dung");
-		await guiHoiKho(hoiId, sendBat(goc).send);
-		const dung = await batDau({ type: "session.started" }, ctxBatDauThat(goc));
-		if (!dung?.markdown?.includes(`Question id: ${hoiId}`)) {
-			sai.push("kd-tu-choi: doi chung kho khong mo");
-		}
-		const dauDung = await db.agentEvent.count({
-			where: { type: HOI.saiCho, data: { path: ["phienGoc"], equals: goc } },
-		});
-		if (dauDung !== 0) sai.push("kd-tu-choi: doi chung kho ghi dau sai cho");
-		expect(sai).toEqual([]);
-	}, TRAN_TU_CHOI_MS);
+			if (dauDung !== 0) sai.push("kd-tu-choi: doi chung kho ghi dau sai cho");
+			expect(sai).toEqual([]);
+		},
+		TRAN_TU_CHOI_MS,
+	);
 });
