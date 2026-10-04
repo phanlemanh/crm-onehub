@@ -381,7 +381,7 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 			mucTieu={mt}
 			kr={kr}
 			chuMacDinh={mt.owner.id}
-			suaDuocCot={mt.canEdit}
+			suaDuocCot={mt.canEdit || (kr === null && mt.themKrLe)}
 			dong={dong}
 		/>
 	);

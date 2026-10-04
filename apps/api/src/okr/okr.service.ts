@@ -2130,7 +2130,10 @@ export class OkrService {
 				rutDuyet: ghiDuoc && choDuyet && guiCuoi?.actorUserId === userId,
 			},
 			themKrLe:
-				ghiDuoc && !choDuyet && this.quyenOkr.nhapDuoc(q, userId, objective),
+				ghiDuoc &&
+				!choDuyet &&
+				mt.status !== "da-bo" &&
+				this.quyenOkr.nhapDuoc(q, userId, objective),
 		};
 	}
 }

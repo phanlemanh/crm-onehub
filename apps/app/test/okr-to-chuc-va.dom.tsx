@@ -782,3 +782,54 @@ describe("neo-kara", () => {
 		console.log("so ca: 3");
 	});
 });
+
+describe("kr-quan-tri", () => {
+	const CA = [
+		{ ten: "quan-tri", canEdit: false },
+		{ ten: "truong-phong", canEdit: true },
+	] as const;
+	const O = ["kieu", "khoi", "chu"] as const;
+
+	test("kr-quan-tri: hop KR moi mo du o loai, gia tri dau, nguoi phu trach cho quan tri va truong phong", async () => {
+		expect.assertions(CA.length * O.length);
+		for (const ca of CA) {
+			const mt = mucTieu(`mt-kr-${ca.ten}`, {
+				canEdit: ca.canEdit,
+				status: "nhap",
+			});
+			dat("okr.objective", () => chiTiet(mt, { themKrLe: true }));
+			dat("okr.comments", () => ({ comments: [], dong: [] }));
+			dat("okr.alignmentTargets", () => ({ targets: [] }));
+			dat("okr.troLyDanhSach", () =>
+				troLyDanhSachOutput.parse({
+					dong: [],
+					dangSoan: false,
+					maKetThuc: null,
+					docLuc: null,
+					lyDo: null,
+				}),
+			);
+			const san = await dung(
+				<DetailSheet onOpenChange={() => {}} open>
+					<ObjectiveSheet objectiveId={mt.id} />
+				</DetailSheet>,
+				{ thamSo: `record=objective:${mt.id}` },
+			);
+			await cho(() => q("[data-nut=them-kr]") !== null, "nut them KR");
+			await bam(q("[data-nut=them-kr]"), "them KR");
+			await cho(() => q("label[for$='-kieu']") !== null, "hop KR moi");
+			for (const o of O) {
+				const truong = q(`label[for$='-${o}']`)?.closest("[data-slot=field]");
+				expect(
+					truong?.getAttribute("data-disabled") === "true",
+					`hop KR khoa cot: ${ca.ten} ${o}`,
+				).toBe(false);
+			}
+			await act(async () => san.root.unmount());
+			san.o.remove();
+			dangMo = dangMo.filter((x) => x !== san);
+			document.body.innerHTML = "";
+		}
+		console.log(`so ca: ${CA.length}`);
+	});
+});

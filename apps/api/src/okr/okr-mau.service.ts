@@ -270,7 +270,7 @@ export class OkrMauService {
 
 	async taoTuMau(userId: string, input: TaoTuMauInput) {
 		const dv = donViCua(input.unit);
-		const q = await this.access.assertSuaDonVi(userId, dv);
+		const q = await this.access.assertNhapDuoc(userId, dv);
 		return this.db.$transaction(async (tx) => {
 			await this.okr.assertKyGhiDuoc(tx, input.cycleId);
 			const mau = await this.mauCo(tx, input.mauId);

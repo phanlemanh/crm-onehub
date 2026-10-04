@@ -1,6 +1,7 @@
-import { beforeAll, describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
 import { OKR } from "../src/okr/okr-config";
+import { donSanCanhKr, mauMoi } from "./okr-canh-kr-san";
 import { gieoKyQuy } from "./okr-khep-san";
 import {
 	bpMoi,
@@ -28,6 +29,7 @@ type San = {
 	pb: string;
 	p: string;
 	thanhVien: { id: string; cookie: string };
+	truongPb: string;
 };
 
 describe("quyen-tao", () => {
@@ -40,7 +42,7 @@ describe("quyen-tao", () => {
 		const bp = await bpMoi("r1d-bp");
 		const pb = await pbMoi("r1d-pb", bp);
 		await truongMoi("division", bp, "r1d-truong-bp");
-		await truongMoi("department", pb, "r1d-truong-pb");
+		const truongPb = await truongMoi("department", pb, "r1d-truong-pb");
 		const p = await nguoiMoi("r1d-p");
 		ok(await datViTri(p, pb), "xep p");
 		const tv = await nguoiMoi("r1d-thanh-vien");
@@ -56,7 +58,11 @@ describe("quyen-tao", () => {
 			pb,
 			p,
 			thanhVien: { id: tv, cookie: await phienCua(tv) },
+			truongPb: truongPb.cookie,
 		};
+	}, CHO_MS);
+	afterAll(async () => {
+		await donSanCanhKr();
 	}, CHO_MS);
 
 	const CAP = [
@@ -150,6 +156,125 @@ describe("quyen-tao", () => {
 				tv: false,
 			});
 			console.log(`so o: ${o}`);
+		},
+		CHO_MS,
+	);
+
+	const taoPb = async (ai: string, ten: string) =>
+		ok<{ id: string }>(
+			await goi(
+				"okr.createObjective",
+				{
+					cycleId: san.ky,
+					unit: { level: "phong-ban", departmentId: san.pb },
+					title: ma(ten),
+					kind: "cam-ket",
+					ownerUserId: san.p,
+					participantIds: [],
+					whyNow: "",
+					hienThi: "cong-khai",
+				},
+				ai,
+			),
+			`tao ${ten}`,
+		).id;
+
+	test(
+		"da-bo: muc tieu da bo khong co themKrLe o ca truong phong lan quan tri; muc tieu chua bo van co cho quan tri",
+		async () => {
+			const bo = await taoPb(san.truongPb, "muc tieu se bo r1d");
+			const giu = await taoPb(san.truongPb, "muc tieu giu r1d");
+			ok(
+				await goi("okr.dropObjective", { id: bo }, san.truongPb),
+				"bo muc tieu",
+			);
+			const themKr = async (id: string, ai: string) =>
+				(await doc<{ themKrLe: boolean }>("okr.objective", ai, { id }))
+					.themKrLe;
+			let o = 0;
+			for (const [vai, ai] of [
+				["truong-phong", san.truongPb],
+				["quan-tri", "quan"],
+			] as const) {
+				expect(
+					await themKr(bo, ai),
+					`them KR tren muc tieu da bo: ${vai}`,
+				).toBe(false);
+				o += 1;
+			}
+			expect(await themKr(giu, "quan"), "doi chung: quan tri mat them KR").toBe(
+				true,
+			);
+			o += 1;
+			expect(
+				await themKr(giu, san.truongPb),
+				"doi chung: truong phong mat them KR",
+			).toBe(true);
+			o += 1;
+			console.log(`so o: ${o}`);
+		},
+		CHO_MS,
+	);
+
+	test(
+		"tu-mau: quan tri khong la truong tao duoc muc tieu tu mau; thanh vien 403",
+		async () => {
+			const mauId = await mauMoi({
+				ten: "mau r1d quyen",
+				cap: "phong-ban",
+				donViIds: [san.pb],
+				noiDung: {
+					cauMucTieu: "Mở rộng khách r1d",
+					loai: "cam-ket",
+					krs: [
+						{
+							title: "Khách mới",
+							kind: "tang-toi",
+							unit: "khách",
+							startValue: null,
+							targetValue: null,
+						},
+						{
+							title: "Khách quay lại",
+							kind: "tang-toi",
+							unit: "khách",
+							startValue: null,
+							targetValue: null,
+						},
+					],
+				},
+			});
+			const vao = {
+				mauId,
+				cycleId: san.ky,
+				unit: { level: "phong-ban", departmentId: san.pb },
+				ownerUserId: san.p,
+				krs: [
+					{ ownerUserId: san.p, startValue: 0, targetValue: 10 },
+					{ ownerUserId: san.p, startValue: 0, targetValue: 10 },
+				],
+			};
+			const quan = await goi("okr.taoTuMau", vao);
+			expect(`${quan.status} ${quan.loi}`, "quan tri tao tu mau bi chan").toBe(
+				"200 ",
+			);
+			const id = (quan.data as { id: string }).id;
+			const hang = await db.okrObjective.findUniqueOrThrow({
+				where: { id },
+				select: {
+					departmentId: true,
+					_count: { select: { keyResults: true } },
+				},
+			});
+			expect(hang, "muc tieu tu mau sai").toEqual({
+				departmentId: san.pb,
+				_count: { keyResults: 2 },
+			});
+			const cam = await goi("okr.taoTuMau", vao, san.thanhVien.cookie);
+			expect(`${cam.status} ${cam.loi}`, "thanh vien tao tu mau duoc").toBe(
+				`403 ${OKR.thongDiep.khongSuaDuocDonVi}`,
+			);
+			console.log("so o: 2");
 		},
 		CHO_MS,
 	);
