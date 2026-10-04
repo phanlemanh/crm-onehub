@@ -299,7 +299,7 @@ describe("ten-mien", () => {
 
 		expect([mongDoi === null, ket.domains, "ten-mien-co-dau"]).toEqual([
 			false,
-			[mongDoi],
+			[mongDoi ?? "(normalizeDomain tra null)"],
 			"ten-mien-co-dau",
 		]);
 	});
@@ -363,40 +363,44 @@ describe("ten-mien ba-vai qua router that", () => {
 	}
 
 	it("ba-vai: quan tri sua duoc, thanh vien chi doc, nguoi ngoai bi chan", async () => {
-		const ket = {
-			admin: [await doc("admin"), await ghi("admin")],
-		};
-		await datCot("onehub.center");
-		const member = [await doc("member"), await ghi("member"), await docCot()];
-		const okr = [await doc("okr"), await ghi("okr"), await docCot()];
-		const ngoai = [await doc("ngoai"), await ghi("ngoai"), await docCot()];
+		async function vong(ai: keyof typeof cookie) {
+			const d = await doc(ai);
+			const g = await ghi(ai);
+			return [d.status, d.canEdit, d.loi, g.status, g.loi] as const;
+		}
 
-		expect([
-			ket.admin[0].status,
-			ket.admin[0].canEdit,
-			ket.admin[1].status,
+		const admin = await vong("admin");
+		await datCot("onehub.center");
+		const member = [...(await vong("member")), await docCot()];
+		const okr = [...(await vong("okr")), await docCot()];
+		const ngoai = [...(await vong("ngoai")), await docCot()];
+
+		expect([admin[0], admin[1], admin[3], "quan tri"]).toEqual([
+			200,
+			true,
+			200,
 			"quan tri",
-		]).toEqual([200, true, 200, "quan tri"]);
+		]);
 		expect([
-			member[0].status,
-			(member[0] as { canEdit: boolean | null }).canEdit,
-			member[1].status,
-			member[2],
+			member[0],
+			member[1],
+			member[3],
+			member[5],
 			"thanh vien thuong",
 		]).toEqual([200, false, 403, "onehub.center", "thanh vien thuong"]);
-		expect([
-			okr[0].status,
-			(okr[0] as { canEdit: boolean | null }).canEdit,
-			okr[1].status,
-			okr[2],
+		expect([okr[0], okr[1], okr[3], okr[5], "vai chi okr"]).toEqual([
+			200,
+			false,
+			403,
+			"onehub.center",
 			"vai chi okr",
-		]).toEqual([200, false, 403, "onehub.center", "vai chi okr"]);
+		]);
 		expect([
-			ngoai[0].status,
-			(ngoai[0] as { loi: string }).loi,
-			ngoai[1].status,
-			(ngoai[1] as { loi: string }).loi,
+			ngoai[0],
 			ngoai[2],
+			ngoai[3],
+			ngoai[4],
+			ngoai[5],
 			"nguoi ngoai",
 		]).toEqual([
 			403,
