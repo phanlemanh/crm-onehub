@@ -14,14 +14,22 @@ evals:
     expected: |
       Postgres that (kho rieng cua luot bun run test). Gieo nguon qua duong tai len that cua API
       (nguon + viec soan-tu-nguon trong cung transaction), roi goi chaySoanTuNguon voi KhoNguon gia.
-      Ma tran viet truoc 3 o: (a) kho.doc nem Error("blob https://x/y?token=BIMAT") -> nguon LOI,
-      lyDo === TAI_LIEU_AGENT.lyDo.docLoi, viec finishedAt khac null va outcome === lyDo, lyDo khong
-      chua "BIMAT" va khong chua "https://"; (b) docChu nem (tep hong khien bo boc chu nem) -> cung ba
-      khang dinh; (c) doi chung duong: kho tra byte lanh, co quy tac viet -> nguon CHO_SOAN, khong LOI.
-      Ham khong nem ra ngoai o ca ba o (await khong reject). Dem dung 3 o x khang dinh.
+      Ma tran viet truoc 7 o:
+      (a) kho.doc nem Error("blob https://x/y?token=BIMAT") -> nguon LOI, lyDo dung chuoi viet san
+      "Chưa đọc được tệp — bấm Soạn lại để thử lần nữa.", viec finishedAt khac null va outcome === lyDo,
+      lyDo khong chua "BIMAT" va khong chua "https://";
+      (b) docChu nem (tep hong khien bo boc chu nem) -> cung bon khang dinh nhu (a);
+      (c) doi chung duong: kho tra byte lanh, co quy tac viet -> nguon CHO_SOAN, khong LOI;
+      (d) kho.doc tra null -> LOI voi lyDo khongTai; (e) byte lech sha256 -> LOI voi lyDo bamLech;
+      (f) tep can go tay -> CAN_GO_TAY voi lyDo cua bo boc chu; (g) khong co quy tac viet -> LOI voi
+      lyDo thieuQuyTac. Bon o (d)-(g) chep ky vong trangThai/lyDo tu hanh vi tren merge-base, moi o
+      khang dinh them lyDo khac cau docLoi.
+      Ham khong nem ra ngoai o ca bay o (await khong reject).
       CHIEU DO (ban sao trong .acceptance-runs/): bo khoi try/catch -> do ghim
       "kn-bat-loi: nguon van CHO_DOC sau khi doc tep nem"; dua err.message vao lyDo -> do ghim
-      "kn-bat-loi: lyDo lo thong diep loi goc".
+      "kn-bat-loi: lyDo lo thong diep loi goc"; catch ghi docLoi cho moi nhanh -> do ghim
+      "kn-bat-loi: nuot nhanh thieuQuyTac"; sua mot chu trong hang docLoi -> do ghim
+      "kn-bat-loi: lyDo lech cau da hua".
 
   - id: E2
     criterion: AC-2
@@ -32,20 +40,27 @@ evals:
       - "apps/agent/agent/lib/tai-lieu-phien.ts"
       - "apps/agent/agent/schedules/dispatch.ts"
       - "apps/agent/agent/lib/tai-lieu-config.ts"
+      - "apps/agent/agent/lib/dispatch-config.ts"
       - "apps/agent/test/tai-lieu-nguon-mo-coi.integration.spec.ts"
+      - "_acceptance/kho-nguon-khong-ket/rang/dem-ket.ts"
     expected: |
       Postgres that. Gieo nguon qua duong tai len that cua API, roi dat trang thai viec bang chinh ham
       cua lan: claimDue (lease song), het lease con luot (leasedUntil qua khu, attempts < MAX),
       retireExhausted (cho nghi), completeTask (dong), va mot nguon CHO_DOC xoa viec (khong co).
-      Ma tran viet truoc 8 o -> trang thai sau mot luot dongNguonMoCoi():
+      Ma tran viet truoc 10 o -> muc va lyDo sau mot luot dongNguonMoCoi():
       CHO_DOC+lease song -> CHO_DOC; CHO_DOC+cho luot -> CHO_DOC; CHO_DOC+da cho nghi -> LOI;
       CHO_DOC+da dong -> LOI; CHO_DOC+khong co viec -> LOI; CHO_SOAN+khong viec mo -> CHO_SOAN;
-      DANG_SOAN -> DANG_SOAN; LOI(lyDo cu) -> LOI voi lyDo cu giu nguyen. Ba nguon ve LOI mang
-      lyDo === TAI_LIEU_AGENT.lyDo.moCoi; ham tra 3. Luot thu hai tra 0 va khong doi hang nao.
-      Them mot ca: schedules/dispatch.ts goi dongNguonMoCoi (nguon mo coi ve LOI sau mot nhip
-      dispatch chay bang ham lich that). CHIEU DO (ban sao): bo dieu kien "khong viec mo" -> do ghim
-      "kn-mo-coi: dong nguon co viec lease song"; bo loc trangThai CHO_DOC -> do ghim
-      "kn-mo-coi: doi trang thai CHO_SOAN".
+      DANG_SOAN -> DANG_SOAN; LOI(lyDo cu) -> LOI voi lyDo cu; DA_SOAN+viec da dong -> DA_SOAN,
+      lyDo giu nguyen; CAN_GO_TAY+viec da dong -> CAN_GO_TAY, lyDo giu nguyen. Ba nguon ve LOI mang
+      lyDo dung chuoi viet san "Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa."; ham tra 3.
+      Luot thu hai tra 0 va khong doi hang nao. Them mot ca: mot nhip schedules/dispatch.ts that dua
+      nguon mo coi ve LOI. Khang dinh can: soan-tu-nguon nam trong DIRECT_KINDS (lam hien) va
+      DISPATCH.visible.leaseMs x MAX_ATTEMPTS + MAX_ATTEMPTS x 60 giay (mot nhip dispatch) <=
+      MOC_KET_MS xuat tu rang/dem-ket.ts (30 phut).
+      CHIEU DO (ban sao): bo dieu kien "khong viec mo" -> do ghim "kn-mo-coi: dong nguon co viec
+      lease song"; bo loc CHO_DOC -> do ghim "kn-mo-coi: doi trang thai CHO_SOAN"; loc bang
+      NOT IN ('CHO_SOAN','DANG_SOAN','LOI') -> do ghim "kn-mo-coi: doi trang thai nguon da soan";
+      sua mot chu hang moCoi -> do ghim "kn-mo-coi: lyDo lech cau da hua".
 
   - id: E3
     criterion: AC-3
@@ -63,10 +78,9 @@ evals:
       LOI voi lyDo docLoi va lyDo moCoi (hai o), nguoi tai goi taiLieuNguon.soanLai qua caller tRPC
       that -> { ok: true }, nguon CHO_DOC, lyDo null, dung 1 viec soan-tu-nguon finishedAt null co
       payload.nguonId = nguon. Ve agent (-t kn-soan-lai): nguon LOI do chaySoanTuNguon voi kho nem
-      (writer that cua AC-1), API soanLai mo phong bang dung lenh enqueue cua API qua
-      parseSoanTuNguonPayload (khuon chung @crm/validation), chay lai chaySoanTuNguon voi kho lanh ->
-      CHO_SOAN. CHIEU DO: soanLai tu choi LOI (doi dieu kien) -> do ghim
-      "kn-soan-lai: nguon LOI khong soan lai duoc".
+      (writer that cua AC-1), viec moi tao bang dung khuon payload chung parseSoanTuNguonPayload
+      (@crm/validation), chay lai chaySoanTuNguon voi kho lanh -> CHO_SOAN. CHIEU DO: soanLai tu choi
+      LOI (doi dieu kien) -> do ghim "kn-soan-lai: nguon LOI khong soan lai duoc".
 
   - id: E4
     criterion: AC-4
@@ -77,14 +91,17 @@ evals:
       - "packages/ui/test/trinh-soan-lien-ket.dom.tsx"
     expected: |
       happy-dom qua setup-dom cua packages/ui. NutLienKetTrang voi timTrang dieu khien duoc tung luot.
-      Ma tran viet truoc 5 o -> chu cua CommandEmpty (doc textContent) va so dong goi y:
-      (1) go "q" (<2 chu) -> nhan.goThem; (2) "quy" tu choi -> nhan.loiTim, 0 dong; (3) "quy"
-      tra [] -> nhan.khongCo; (4) "quy" tu choi roi "quy d" tra 1 trang -> khong co nhan.loiTim,
-      1 dong; (5) "quy" (cham, tu choi sau) roi "quy d" tra 1 trang truoc -> sau khi "quy" tu choi
-      van 1 dong va khong co nhan.loiTim. Nhan dung cho test la chuoi khac nhau tung truong.
+      Ma tran viet truoc 7 o -> chu cua CommandEmpty (doc textContent) va so dong goi y:
+      (1) go "q" (<2 chu) -> nhan.goThem; (2) "quy" tu choi -> nhan.loiTim, 0 dong; (3) "quy" tra []
+      -> nhan.khongCo; (4) "quy" tu choi roi "quy d" tra 1 trang -> khong co nhan.loiTim, 1 dong;
+      (5) "quy" (cham, tu choi sau) roi "quy d" tra 1 trang truoc -> sau khi "quy" tu choi van 1 dong
+      va khong co nhan.loiTim; (6) "quy" tu choi roi go lui con "q" -> nhan.goThem, khong co
+      nhan.loiTim; (7) "quy" tu choi, dong hop roi mo lai -> khong co nhan.loiTim. Nhan dung cho test
+      la chuoi khac nhau tung truong.
       CHIEU DO: nhanh tu choi goi setDs([]) ma khong bat co loi -> do ghim
       "kn-loi-tim: loi tim hien 'khong co trang nao khop'"; bo bao ve moiNhat o nhanh loi -> do ghim
-      "kn-loi-tim: luot cu ve muon bat cau loi".
+      "kn-loi-tim: luot cu ve muon bat cau loi"; xet loi truoc do dai chu -> do ghim
+      "kn-loi-tim: cau loi de go them".
 
   - id: E5
     criterion: AC-5
@@ -98,7 +115,7 @@ evals:
       tai-lieu-chu-lien-ket.spec.ts: taiLieuMessages("vi") va ("en") -> nhom chen lien ket co loiTim
       dung bang chu viet truoc: vi "Chưa tìm được trang — thử gõ lại.", en
       "Couldn't search pages — try typing again."; hai ngon ngu co cung tap khoa cua nhom.
-      messages-guard.spec.ts xanh voi khoa moi da ghim. CHIEU DO: xoa loiTim o ban en -> do ghim
+      messages-guard.spec.ts xanh voi khoa moi da ghim. CHIEU DO: bo loiTim o ban en -> do ghim
       "kn-chu: thieu loiTim o en"; bo ghim o messages-guard -> messages-guard do ten khoa.
 
   - id: E6
@@ -122,9 +139,9 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.l4a_man_lien_ket_loi
     steps:
-      - "Canh cay truoc man dau; phien do rieng (tien-de.mjs qua mot-luot.sh); gieo mot trang da duyet 'Quy định nghỉ phép'; dang nhap dev:session mot member co quyen soan"
+      - "Canh cay truoc man dau; ban do rieng (tien-de.mjs qua mot-luot.sh); gieo mot trang da duyet 'Quy định nghỉ phép'; dang nhap dev:session mot member co quyen soan"
       - "Buoc 1 (1440): mo man soan trang moi -> bam nut chen lien ket -> go 'zzkhongco' (luot tim khong bi chan) -> cho 'Không có trang nào khớp.' -> anh kn-lien-ket-rong-1440.png"
-      - "Buoc 2 (1440): page.route chan moi request toi taiLieu.tim (abort) -> xoa o, go 'quy dinh' -> cho 'Chưa tìm được trang — thử gõ lại.' -> khong thay 'Không có trang nào khớp.' -> anh kn-lien-ket-loi-1440.png"
+      - "Buoc 2 (1440): page.route chan moi request toi taiLieu.tim (abort) -> go lai 'quy dinh' -> cho 'Chưa tìm được trang — thử gõ lại.' -> khong thay 'Không có trang nào khớp.' -> anh kn-lien-ket-loi-1440.png"
       - "Buoc 3 (390): lap lai buoc 2 o kho 390 -> hop khong tran ngang (scrollWidth <= clientWidth cua popover va cua trang) -> anh kn-lien-ket-loi-390.png"
       - "Buoc 4 (1440): bo chan route -> go them ' phep' -> danh sach hien 'Quy định nghỉ phép', cau loi bien mat -> anh kn-lien-ket-hoi-phuc-1440.png"
     paths:
@@ -142,11 +159,14 @@ evals:
       - "_acceptance/kho-nguon-khong-ket/rang/dem-ket.ts"
       - "_acceptance/kho-nguon-khong-ket/rang/dem-ket.spec.ts"
     expected: |
-      Postgres that (kho rieng cua luot). Gieo qua duong tai len that cua API 8 nguon roi dua trang
-      thai bang ham that cua lan (chaySoanTuNguon, dongNguonMoCoi, guiMaySoan) va lui createdAt cua
-      viec: CHO_DOC viec 40 phut, CHO_DOC viec 10 phut, CHO_SOAN viec 45 phut, DANG_SOAN viec 31
-      phut, DANG_SOAN viec 5 phut, CHO_DOC viec 29 phut (duoi moc, KHONG dem), LOI docLoi, LOI moCoi. demKet() tra bang viet truoc:
-      ket30 = { CHO_DOC: 1, CHO_SOAN: 1, DANG_SOAN: 1 }, loi = { docLoi: 1, moCoi: 1 }. Anh chup
-      (id, trangThai, lyDo) cua moi nguon va (id, finishedAt, attempts) cua moi viec truoc/sau bang
-      nhau (chi doc). CHIEU DO: doi moc 30 phut
-      thanh 60 -> do ghim "kn-dem-ket: ket30 sai o CHO_DOC".
+      Postgres that (kho rieng cua luot). Gieo qua duong tai len that cua API 10 nguon roi dua muc
+      bang ham that cua lan (chaySoanTuNguon, dongNguonMoCoi, guiMaySoan), roi lui createdAt cua viec
+      (CHO_DOC, CHO_SOAN) hoac soanLuc (DANG_SOAN): CHO_DOC 40 phut; CHO_DOC 10 phut; CHO_DOC 29 phut
+      (duoi moc, KHONG dem); CHO_SOAN 45 phut; DANG_SOAN soanLuc 31 phut (viec tao 5 phut); DANG_SOAN
+      soanLuc 5 phut (viec tao 60 phut, KHONG dem); DA_SOAN viec 60 phut (KHONG dem); CAN_GO_TAY viec
+      60 phut (KHONG dem); LOI docLoi; LOI moCoi. demKet() tra bang viet truoc, so bang toEqual (khong
+      khoa thua): ket30 = { CHO_DOC: 1, CHO_SOAN: 1, DANG_SOAN: 1 }, loi = { docLoi: 1, moCoi: 1 }.
+      Anh chup (id, trangThai, lyDo) cua moi nguon va (id, finishedAt, attempts) cua moi viec truoc/sau
+      bang nhau (chi doc). CHIEU DO: doi moc 30 phut thanh 60 -> do ghim
+      "kn-dem-ket: ket30 sai o CHO_DOC"; tinh DANG_SOAN theo createdAt cua viec -> do ghim
+      "kn-dem-ket: ket30 sai o DANG_SOAN".
