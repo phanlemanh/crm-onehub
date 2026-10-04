@@ -503,7 +503,7 @@ async function buocToanCanh(cookie, slug) {
 			loi.push(
 				`hang ${R1C.ma.khoiHoTro} co ${so.soMucTieu} muc tieu, mong > 0 — bo mau khong con dung ca can do`,
 			);
-		if (!so.chu.includes(MT.theoDonViMoTa))
+		if (kho === "1440" && !so.chu.includes(MT.theoDonViMoTa))
 			loi.push("thieu cau mo ta bang moi");
 		const tn = await tranNgang(t);
 		if (tn > 0) loi.push(`tran ngang ${tn}px`);
