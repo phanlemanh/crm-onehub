@@ -12,7 +12,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>118 việc"]
+  GB --> DG["Đã giao<br/>119 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>30 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -86,6 +86,7 @@ flowchart TD
 - Chỉ chủ và quản trị đổi được khoá nghiên cứu, model của trợ lý và số ngày giữ mục đã lưu trữ — thành viên thường vẫn xem được, mọi đường đổi đều khoá cả trên màn lẫn khi gọi thẳng máy chủ, và không bị nhốt ở màn cắm khoá (`cai-dat-chung-chi-quan-tri`)
 - Cài đặt còn lại nói tiếng Việt — năm cụm Theo dõi, Kết nối, Khoá API, SSO, Thành viên đọc đúng tiếng của người quản trị, và mọi đoạn mã người chép giữ nguyên từng byte (`cai-dat-con-lai-noi-tieng-viet`)
 - Chân lái từng component ra màn — đo lớp chữ tiếng Anh nằm ở giá trị mặc định của tham số, và giải toả bảng mười dòng của vòng trước bằng đo thay vì khai (`chan-lai-component-ra-man`)
+- Bản nháp OKR có hai Mục tiêu trùng khoá, hay hai KR trùng khoá dưới cùng một Mục tiêu, bị schema banNhap từ chối ở biên công cụ nop_ban_nhap — agent nhận lỗi nêu đúng ô và nộp lại (`chan-trung-khoa-ban-nhap`)
 - Chặn uỷ thác agent_builder ở lượt không mang CREATE_AGENT — hiện tại chốt quyền ném exception, con không có cửa ra, và hội thoại treo "đang chạy nền" vĩnh viễn không một thẻ lỗi (`chan-uy-thac-sai-luot`)
 - Đưa danh sách ai-được-vào CRM từ biến môi trường vào bảng lời cho phép, quản trên màn Members với hai khối tách bạch — gỡ thành viên là cắt quyền thật, rút lời cho phép chỉ chặn người chưa có tài khoản (`cho-phep-ai-vao-o-man-hinh`)
 - Ca «chủ cuối cùng» của api xanh bất kể trong workspace còn chủ lạ từ tệp khác — tiền đề «chu là chủ duy nhất» được lập tường minh trong ca và trả lại sau ca (`chu-cuoi-cung-tien-de`)
