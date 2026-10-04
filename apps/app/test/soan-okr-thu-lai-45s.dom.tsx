@@ -205,7 +205,7 @@ describe("dang-cho-khep", () => {
 		await moManQua45s();
 		await bam(nutThu());
 		await datAgent({ status: "ready", error: undefined });
-		expect(q('[data-luot="loi"]'), "bao-loi-mat-khi-cho").not.toBeNull();
+		expect(q('[data-luot="loi"]') !== null, "bao-loi-mat-khi-cho").toBe(true);
 		expect(nutThu()?.disabled, "bao-loi-mat-khi-cho nut").toBe(true);
 		expect(moTa()).toContain(m.hoiThoai.daThuLai("1"));
 		expect(moTa()).toContain(m.hoiThoai.loiMoTa);
@@ -225,6 +225,16 @@ describe("dang-cho-khep", () => {
 });
 
 describe("gui-lai-bi-tu-choi", () => {
+	test("gui-lai-bi-tu-choi: luot mo dau bi tu choi khong bao chua gui lai", async () => {
+		batDongHoGia();
+		tuChoiGui(true);
+		datDanhSach({ cuoc: { ...CUOC, soLuot: 0 } });
+		await moMan();
+		await troi(50);
+		tuChoiGui(false);
+		expect(q('[data-luot="loi"]') === null, "bao-chua-gui-lai-oan").toBe(true);
+	});
+
 	async function guiLaiBiTuChoi(): Promise<number> {
 		await moManQua45s();
 		const guiTruoc = daGui.length;

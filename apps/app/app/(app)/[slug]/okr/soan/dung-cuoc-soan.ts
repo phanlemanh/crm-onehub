@@ -174,12 +174,16 @@ export function useCuocSoan({
 
 	const guiThang = async (chu: string) => {
 		cuoiCung.current = chu;
-		setLoiGuiLai(false);
 		try {
 			await agent.send({ message: chu });
+			return true;
 		} catch {
-			setLoiGuiLai(true);
+			return false;
 		}
+	};
+	const guiLai = async (tin: string) => {
+		setLoiGuiLai(false);
+		if (!(await guiThang(tin))) setLoiGuiLai(true);
 	};
 	const thuGuiLai = () => {
 		const cho = choGuiLai.current;
@@ -187,7 +191,7 @@ export function useCuocSoan({
 		choGuiLai.current = null;
 		if (henKhep.current) clearTimeout(henKhep.current);
 		setDangChoKhep(false);
-		void guiThang(cho.tin);
+		void guiLai(cho.tin);
 	};
 	const danhDau = (moi: Partial<ChoGuiLai>) => {
 		const cho = choGuiLai.current;
@@ -297,7 +301,7 @@ export function useCuocSoan({
 		const phien = agent.session.sessionId;
 		if (agent.session.continuationToken && tin && !ended) {
 			if (busy && phien) huyLuot(tin, phien);
-			else void guiThang(tin);
+			else void guiLai(tin);
 			return;
 		}
 		moLai.mutate(
