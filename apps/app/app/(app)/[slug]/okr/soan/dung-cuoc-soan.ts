@@ -63,6 +63,8 @@ type BanNhapDaXet = {
 	ket: KetSoBanNhap;
 };
 
+type ChoGuiLai = { tin: string; daKhep: boolean; daHuy: boolean };
+
 type PhienThan = { theo: string; id: string; lan: number; choNap: boolean };
 
 export function usePhienCuoc(cuoc: CuocSoan) {
@@ -164,6 +166,54 @@ export function useCuocSoan({
 		});
 	const docLai = () => void docLaiRoi();
 	const daBaoPhien = useRef(false);
+	const choGuiLai = useRef<ChoGuiLai | null>(null);
+	const henKhep = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const [dangChoKhep, setDangChoKhep] = useState(false);
+	const [loiGuiLai, setLoiGuiLai] = useState(false);
+	const cuoiCung = useRef<string | null>(null);
+
+	const guiThang = async (chu: string) => {
+		cuoiCung.current = chu;
+		setLoiGuiLai(false);
+		try {
+			await agent.send({ message: chu });
+		} catch {
+			setLoiGuiLai(true);
+		}
+	};
+	const thuGuiLai = () => {
+		const cho = choGuiLai.current;
+		if (!cho || !cho.daKhep || !cho.daHuy) return;
+		choGuiLai.current = null;
+		if (henKhep.current) clearTimeout(henKhep.current);
+		setDangChoKhep(false);
+		void guiThang(cho.tin);
+	};
+	const danhDau = (moi: Partial<ChoGuiLai>) => {
+		const cho = choGuiLai.current;
+		if (!cho) return;
+		choGuiLai.current = { ...cho, ...moi };
+		thuGuiLai();
+	};
+	const hetChoKhep = () => {
+		if (!choGuiLai.current) return;
+		choGuiLai.current = null;
+		setDangChoKhep(false);
+		setLoiGuiLai(true);
+	};
+	const huyLuot = (tin: string, phien: string) => {
+		choGuiLai.current = { tin, daKhep: false, daHuy: false };
+		setDangChoKhep(true);
+		henKhep.current = setTimeout(hetChoKhep, SOAN_UI.choKhepMs);
+		void fetch(`${OKR_SOAN_CUA.host}/eve/v1/session/${phien}/cancel`, {
+			method: "POST",
+			headers: okrSoanHeader(cuoc.id),
+		})
+			.catch(() => undefined)
+			.finally(() => danhDau({ daHuy: true }));
+		agent.stop();
+	};
+
 	const agent = useEveAgent({
 		host: OKR_SOAN_CUA.host,
 		headers: okrSoanHeader(cuoc.id),
@@ -179,6 +229,7 @@ export function useCuocSoan({
 		onError: (loi) => {
 			if (laDaCoPhien(loi)) void docLaiRoi().then(napLai);
 		},
+		onFinish: () => danhDau({ daKhep: true }),
 	});
 	const busy = agent.status === "submitted" || agent.status === "streaming";
 	const dangTraLoi = busy || thread?.status === "working";
@@ -187,13 +238,11 @@ export function useCuocSoan({
 	const [lanThu, setLanThu] = useState(0);
 	const [lyDoTruoc, setLyDoTruoc] = useState<LyDoHong | null>(null);
 	const [mocThu, setMocThu] = useState<number | null>(null);
-	const trongChuoiThu = mocThu === soSuKien;
+	const trongChuoiThu = mocThu === soSuKien || dangChoKhep || loiGuiLai;
 	const [hetGioTai, setHetGioTai] = useState<string | null>(null);
 	const moc = `${lanThu}:${soSuKien}`;
 	const qua45s = dangTraLoi && hetGioTai === moc;
 	const baoHetGio = () => setHetGioTai(moc);
-
-	const cuoiCung = useRef<string | null>(null);
 
 	const { locked, ended } = composerState(thread, busy);
 	const lyDoLuot =
@@ -207,25 +256,23 @@ export function useCuocSoan({
 		!chuaCauHinh &&
 		!cuocDong &&
 		!laDaCoPhien(agent.error) &&
-		(qua45s || agent.status === "error" || ended || moLai.isError);
+		(qua45s ||
+			agent.status === "error" ||
+			ended ||
+			moLai.isError ||
+			dangChoKhep ||
+			loiGuiLai);
 	const lyDoMoi = lyDoHong({
 		loi: agent.status === "error" ? agent.error : undefined,
 		qua45s,
 		loiMoLai: moLai.error,
 	});
 	const dangThu =
-		trongChuoiThu && (agent.status === "submitted" || moLai.isPending);
+		dangChoKhep ||
+		(trongChuoiThu && (agent.status === "submitted" || moLai.isPending));
 	const khoaSoan =
 		locked || hetLuot || hong || cuocDong || lyDoLuot !== null || chuaCauHinh;
 
-	const guiThang = async (chu: string) => {
-		cuoiCung.current = chu;
-		try {
-			await agent.send({ message: chu });
-		} catch {
-			return;
-		}
-	};
 	const gui = (chu: string) => {
 		const s = chu.trim();
 		if (!s || khoaSoan) return;
@@ -247,9 +294,10 @@ export function useCuocSoan({
 		setMocThu(soSuKien);
 		moLai.reset();
 		const tin = cuoiCung.current;
+		const phien = agent.session.sessionId;
 		if (agent.session.continuationToken && tin && !ended) {
-			if (busy) agent.stop();
-			void guiThang(tin);
+			if (busy && phien) huyLuot(tin, phien);
+			else void guiThang(tin);
 			return;
 		}
 		moLai.mutate(
@@ -287,6 +335,7 @@ export function useCuocSoan({
 		dangThu,
 		lanThu: trongChuoiThu ? lanThu : 0,
 		lyDoHong: dangThu ? lyDoTruoc : lyDoMoi,
+		chuaGuiLai: loiGuiLai && !dangChoKhep,
 		lyDoLuot,
 		chuaCauHinh,
 		hetLuot,

@@ -249,6 +249,23 @@ describe("hong — Thu lai roi van im", () => {
 		expect(coLoi()).toBe(true);
 		await bam(q('[data-nut="thu-lai"]'));
 		expect(daDung).toBe(1);
+		expect(daGui).toEqual(["Giữ khách là chính"]);
+		const { tuyChonAgent } = await import("./khung-soan-okr");
+		const { act } = await import("react");
+		await act(async () => {
+			tuyChonAgent.at(-1)?.onFinish?.({
+				status: "ready",
+				error: undefined,
+				events: [],
+				data: { messages: [] },
+				session: {
+					sessionId: "phien-1",
+					continuationToken: "eve:live",
+					streamIndex: 2,
+				},
+			});
+		});
+		await troi(50);
 		expect(daGui).toEqual(["Giữ khách là chính", "Giữ khách là chính"]);
 		expect(coLoi()).toBe(false);
 		await troi(SOAN_UI.hanKhongSuKienMs - 1_000);
