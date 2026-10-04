@@ -5,7 +5,7 @@ slug: tro-ly-kho-dung-phien
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -58,3 +58,11 @@ Quét bằng skill morphological-scan, preset test-matrix.
 ## Notes
 
 - Chặn lời mời sai chỗ là chặn mềm (mô tả + lời dặn); thước AC-7 cho thấy nó có đủ hay không.
+- Known limits (Cổng 2, 05/10):
+  - Ngoài-2 — `ghiSaiCho` ghi mọi lỗi của `moHoi` thành «gọi sai chỗ», kể cả câu kho/Zalo hợp lệ đã đóng hay lỗi cơ sở dữ liệu; số đếm của `dem-sai-phien` có thể cao hơn thực tế, và lỗi ghi sự kiện có thể che lỗi gốc.
+  - Ngoài-3 — eve nuốt lỗi ném ở `session.started` của chỉ dẫn, nên một lời gọi `tro_ly_kho` sai chỗ vẫn chạy tiếp và vẫn tốn lượt model; việc đếm vẫn đúng, nhưng câu «từ chối ngay» trong mô tả không đúng khi chạy thật.
+  - Ngoài-4 — ma trận 6 purpose của `kd-tu-choi` không đưa purpose vào đầu vào: sáu lượt là cùng một ca.
+  - Ngoài-5 — nhánh khoá chung của `kd-zdr` không ghim «không có apiKey».
+  - Ngoài-6 — `kd-zdr` không ghim mã model của đường `step.started` trùng với `tro_ly_kho`.
+  - Ngoài-7 — `kd-cam-goi` đo research và okr-soan qua `chiDanNghienCuu`, không qua resolver `session.started` đầy đủ.
+- Ngoài-1 (câu hỏi phá dấu dữ liệu bằng dấu lồng; `loiDanCo` lột một lượt, `xoaDau` của `tai-lieu-kho-doc.ts` đã làm đúng) tách thành hợp đồng mới theo chủ kho 05/10.
