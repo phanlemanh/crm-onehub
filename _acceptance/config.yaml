@@ -1123,6 +1123,13 @@ executors:
     k1_nhom: 'cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/bo-xuong-kara.dom.tsx -t k1-nhom'
     k1_artifact: 'cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/bo-xuong-kara.dom.tsx -t k1-artifact'
     k1_hai_tieng: 'cd packages/ui && TZ=Asia/Ho_Chi_Minh bun test --preload ./test/setup-dom.ts ./test/bo-xuong-kara.dom.tsx -t k1-hai-tieng && bun test ./test/messages-guard.spec.ts'
+    l4a_bat_loi: 'bun run test -- "cd apps/agent && bun test test/tai-lieu-soan.integration.spec.ts -t kn-bat-loi"'
+    l4a_mo_coi: 'bun run test -- "cd apps/agent && bun test test/tai-lieu-nguon-mo-coi.integration.spec.ts"'
+    l4a_soan_lai: 'bun run test -- "cd apps/agent && bun test test/tai-lieu-nguon-mo-coi.integration.spec.ts -t kn-soan-lai && cd ../api && bun test test/tai-lieu-nguon.spec.ts -t kn-soan-lai"'
+    l4a_loi_tim: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-lien-ket.dom.tsx -t kn-loi-tim"
+    l4a_chu: "cd apps/app && bun test test/messages-guard.spec.ts test/tai-lieu-chu-lien-ket.spec.ts"
+    l4a_tien_to: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-soan.dom.tsx -t kn-tien-to"
+    l4a_dem_ket: 'bun run test -- "bun test _acceptance/kho-nguon-khong-ket/rang/dem-ket.spec.ts"'
     r1b_ten_mien_api: 'bun run test -- "cd apps/api && bun test test/thanh-vien-vao-dung.spec.ts -t ten-mien"'
     r1b_cho_phep_api: 'bun run test -- "cd apps/api && bun test test/thanh-vien-vao-dung.spec.ts -t cho-phep"'
     r1b_dung_lai_api: 'bun run test -- "cd apps/api && bun test test/thanh-vien-vao-dung.spec.ts -t dung-lai"'
@@ -1789,6 +1796,7 @@ executors:
     k1_tai_lieu: 'node _acceptance/bo-xuong-kara/rang/tai-lieu.mjs'
     k1_san_thiet_ke: '{ find packages/ui/src/components/kara -name "*.tsx"; printf "%s\n" packages/ui/src/components/ai-elements/artifact.tsx packages/ui/src/components/ai-elements/task.tsx; } | while IFS= read -r t; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     k1_ranh_gioi: 'node _acceptance/bo-xuong-kara/rang/ranh-gioi.mjs'
+    l4a_man_lien_ket_loi: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/kho-nguon-khong-ket/rang/man-lien-ket-loi.mjs"'
     r1b_soi_vat: "bun _acceptance/thanh-vien-vao-dung/rang/soi-vat.mjs"
     r1b_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-vao-dung/rang/do-man.mjs"'
     r1b_tu_dien: "bun _acceptance/thanh-vien-vao-dung/rang/tu-dien.mjs"

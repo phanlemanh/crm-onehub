@@ -30,6 +30,8 @@ type TuyChonDotBien<V, R> = {
 
 type GoiSoan = { tao: VaoTao[]; deXuat: VaoDeXuat[]; den: string[] };
 
+let slugWs = "ws";
+
 const goi: GoiSoan = {
 	tao: [],
 	deXuat: [],
@@ -58,6 +60,14 @@ mock.module("@/lib/trpc/client", () => ({
 			propose: dotBien("taiLieu.propose", goi.deXuat, () => ({
 				deXuatId: "dx-1",
 			})),
+			tim: {
+				queryOptions: (v: { q: string }) => ({
+					queryKey: ["taiLieu.tim", v],
+					queryFn: async () => ({
+						rows: [{ slug: "quy-dinh-moi", ten: "Quy định mới" }],
+					}),
+				}),
+			},
 		},
 	}),
 }));
@@ -73,7 +83,7 @@ mock.module("next/navigation", () => ({
 		refresh: () => {},
 		prefetch: () => {},
 	}),
-	useParams: () => ({ slug: "ws" }),
+	useParams: () => ({ slug: slugWs }),
 	usePathname: () => "/ws/tai-lieu",
 	useSearchParams: () => new URLSearchParams(),
 }));
@@ -164,6 +174,7 @@ afterEach(() => {
 	goi.tao.length = 0;
 	goi.deXuat.length = 0;
 	goi.den.length = 0;
+	slugWs = "ws";
 });
 
 async function nhip(): Promise<void> {
@@ -405,5 +416,48 @@ describe("tai-lieu man soan", () => {
 		await bamLienKet();
 		expect(document.body.textContent?.includes(HOI_LAI)).toBe(false);
 		expect(goi.den).toEqual([LIEN_KET_RAIL]);
+	});
+});
+
+describe("kn-tien-to", () => {
+	test("kn-tien-to: lien ket chen qua hop mang tien to workspace that do ManSoan dung", async () => {
+		slugWs = "kho-thu";
+		await mo(SUA);
+		const nutLienKet = document.body.querySelector<HTMLButtonElement>(
+			'button[aria-label="Liên kết tới trang"]',
+		);
+		if (!nutLienKet) throw new Error("kn-tien-to: khong thay nut lien ket");
+		await bam(nutLienKet);
+		const o = document.body.querySelector<HTMLInputElement>(
+			'input[aria-label="Gõ tên trang"]',
+		);
+		if (!o) throw new Error("kn-tien-to: khong thay o tim trang");
+		await act(async () => {
+			Object.getOwnPropertyDescriptor(
+				HTMLInputElement.prototype,
+				"value",
+			)?.set?.call(o, "quy");
+			o.dispatchEvent(new Event("input", { bubbles: true }));
+		});
+		for (let i = 0; i < 4; i += 1) await nhip();
+		const dong = document.body.querySelector<HTMLElement>(
+			'[data-goi-y-trang="quy-dinh-moi"]',
+		);
+		if (!dong) throw new Error("kn-tien-to: khong thay dong goi y");
+		await act(async () => {
+			dong.dispatchEvent(
+				new window.PointerEvent("pointerdown", { bubbles: true }),
+			);
+			dong.click();
+		});
+		for (let i = 0; i < 3; i += 1) await nhip();
+		await bam(nut("Gửi duyệt"));
+		const md = goi.deXuat.at(-1)?.noiDung ?? "";
+		if (
+			!md.includes("(/kho-thu/tai-lieu/quy-dinh-moi)") ||
+			md.includes("/ws/")
+		) {
+			throw new Error(`kn-tien-to: href thieu tien to /kho-thu/ — ${md}`);
+		}
 	});
 });

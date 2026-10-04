@@ -136,6 +136,13 @@ evals:
     inputs: [docs/setup.md, CONTEXT.md, docs/superpowers/specs/2026-09-28-bo-okr-mau-design.md, apps/api/scripts/okr-mau.ts, apps/api/scripts/okr-mau/lenh.ts, apps/api/scripts/okr-mau/cau-hinh.ts]
     question: "Một phiên lượt sau chỉ đọc docs/setup.md và CONTEXT.md có tự nạp được bộ mẫu vào máy dev và vào phiên đo, ghim ngày, xoá, đăng nhập làm người mẫu, biết chỗ đặt ca thật N1 và biết vì sao bản xem trước không có bộ mẫu không? Lệnh trong tài liệu có khớp tên cờ và mã thoát của okr-mau.ts không? Có chữ tự đúc hay thuật ngữ chưa có mục từ điển không?"
     evidence_required: [run_id, verdict, judges, verified_at]
+    paths:
+      - "docs/setup.md"
+      - "CONTEXT.md"
+      - "docs/superpowers/specs/2026-09-28-bo-okr-mau-design.md"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/lenh.ts"
+      - "apps/api/scripts/okr-mau/cau-hinh.ts"
 
   - id: E17
     criterion: AC-15
