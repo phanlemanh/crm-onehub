@@ -1,0 +1,7 @@
+E2 (-t nut-soan): exit 1 · do=True · thong diep ghim «chu phu tren thanh: nut-tiep» CO
+E4 (-t popover-soan): exit 1 · do=True · thong diep ghim «thieu chu phu: mo-co-cuoc» CO
+E5 (-t chua-cau-hinh): exit 1 · do=True · thong diep ghim «nguoi thuong thay nut chua cau hinh» CO
+E6 (-t tab-khung): exit 1 · do=True · thong diep ghim «tab trung: en History» CO
+E7 (-t so-it): exit 1 · do=True · thong diep ghim «so it sai: en 1» CO
+E11 (-t chip): exit 1 · do=True · thong diep ghim «chip khong la badge: cua-toi» CO
+E14 (-t lien-ket-cheo): exit 1 · do=True · thong diep ghim «mat thay doi khong hoi» CO

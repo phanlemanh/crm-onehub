@@ -1,0 +1,1 @@
+n-a (driver): lenh man-khung.mjs dung puppeteer rieng, khong co read_network_requests. Log: /tmp/r1a-E12.log (EXIT=0), /tmp/r1a-E12red.log (EXIT=1)

@@ -244,6 +244,17 @@ export async function tangLuot(
 	};
 }
 
+export async function hoanLuot(
+	db: DbHoacTx,
+	cuocId: string,
+): Promise<{ tru: boolean }> {
+	const { count } = await db.okrCuocSoan.updateMany({
+		where: { id: cuocId, soLuot: { gt: 0 } },
+		data: { soLuot: { decrement: 1 } },
+	});
+	return { tru: count === 1 };
+}
+
 export async function daCat(
 	db: DbHoacTx,
 	cuocId: string,

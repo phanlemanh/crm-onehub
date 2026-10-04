@@ -129,6 +129,9 @@ const vi = {
 		tienDoTu: "Tiến độ mục tiêu {x}% tính từ {n} KR.",
 		tabCanChinh: "Căn chỉnh",
 		tabVet: "Vết",
+		tabVetNhan: "Vết",
+		tienDoTuSo: (x: string, n: string) =>
+			`Tiến độ mục tiêu ${x}% tính từ ${n} KR.`,
 		tabTraoDoi: "Trao đổi",
 		theoDoi: "Theo dõi",
 		dangTheoDoi: "Đang theo dõi",
@@ -562,6 +565,15 @@ const vi = {
 			action: "Thử lại",
 		},
 		dangTai: "Đang tải KR của bạn…",
+		daXong: {
+			title: "Bạn đã gửi cập nhật tuần này",
+			luc: (ngay: string, gio: string) =>
+				`Lần gửi mới nhất ${ngay} lúc ${gio}.`,
+			sua: "Sửa cập nhật",
+			danhSach: "KR đã gửi tuần này",
+		},
+		daGuiMotPhan: (x: number, y: number) => `Đã gửi ${x}/${y} KR tuần này`,
+		nhanDaGui: "Đã gửi tuần này",
 	},
 	traoDoi: {
 		danhSach: "Bình luận và ghi nhận",
@@ -777,6 +789,9 @@ const en: OkrMessages = {
 		tienDoTu: "Objective progress {x}% from {n} KRs.",
 		tabCanChinh: "Alignment",
 		tabVet: "History",
+		tabVetNhan: "Changes",
+		tienDoTuSo: (x: string, n: string) =>
+			`Objective progress ${x}% from ${n} ${n === "1" ? "KR" : "KRs"}.`,
 		tabTraoDoi: "Discussion",
 		theoDoi: "Follow",
 		dangTheoDoi: "Following",
@@ -1212,6 +1227,15 @@ const en: OkrMessages = {
 			action: "Try again",
 		},
 		dangTai: "Loading your key results…",
+		daXong: {
+			title: "You've sent this week's update",
+			luc: (ngay: string, gio: string) => `Latest send ${ngay} at ${gio}.`,
+			sua: "Edit update",
+			danhSach: "Key results sent this week",
+		},
+		daGuiMotPhan: (x: number, y: number) =>
+			`Sent ${x}/${y} key results this week`,
+		nhanDaGui: "Sent this week",
 	},
 	traoDoi: {
 		danhSach: "Comments and recognitions",

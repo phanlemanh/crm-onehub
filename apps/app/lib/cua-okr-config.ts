@@ -6,6 +6,7 @@ type TuChoiLuot = Extract<
 	{ ok: false }
 >["lyDo"];
 
+const SECOND_MS = 1_000;
 const PHIEN = ":phien";
 const doan = z.string().regex(/^[A-Za-z0-9_-]{1,128}$/);
 
@@ -44,6 +45,14 @@ export const CUA_OKR = {
 	],
 	tienToRieng: "x-crm-",
 	trangThaiChuaCauHinh: 503,
+	choTroLyMs: 30 * SECOND_MS,
+	luotDaHoan: "da-hoan",
+	loiMangTrinhDuyet: [
+		"Failed to fetch",
+		"fetch failed",
+		"NetworkError when attempting to fetch resource.",
+		"Load failed",
+	],
 	khongTra: [
 		"transfer-encoding",
 		"connection",
@@ -64,6 +73,9 @@ export const CUA_OKR = {
 		khongGhiDuocPhien: "khong-ghi-duoc-phien",
 		khongDemDuocLuot: "khong-dem-duoc-luot",
 		khongNoiDuoc: "tro-ly-okr-khong-noi-duoc",
+		quaHan: "tro-ly-okr-qua-han",
+		troLyTuChoi: "tro-ly-okr-tu-choi",
+		troLyLoi: "tro-ly-okr-loi",
 	},
 	trangThaiTuChoiLuot: {
 		"het-luot-cuoc": 429,
@@ -74,3 +86,19 @@ export const CUA_OKR = {
 		"chua-co-khoa-mo-hinh": 503,
 	} satisfies Record<TuChoiLuot, number>,
 } as const;
+
+export const MA_LY_DO_HONG = [
+	"khong-noi-duoc",
+	"qua-han",
+	"tro-ly-tu-choi",
+	"tro-ly-loi",
+	"chua-dem-duoc-luot",
+	"chua-mo-duoc-phien",
+	"het-dang-nhap",
+	"mat-mang",
+	"chua-mo-lai-duoc",
+	"qua-45s",
+	"dung-giua-chung",
+] as const;
+
+export type MaLyDoHong = (typeof MA_LY_DO_HONG)[number];
