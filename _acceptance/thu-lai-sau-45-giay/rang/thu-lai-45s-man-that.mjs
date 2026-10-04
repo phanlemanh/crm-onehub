@@ -57,6 +57,7 @@ function kiem(nhan, dat) {
 const nhatKy = [];
 const dangGiu = new Map();
 const mocDo = new Map();
+const tinMo = new Map();
 let soPhien = 0;
 
 function ghi(phien, loai, trangThai) {
@@ -75,10 +76,13 @@ function suKien(phien, i, type, data) {
 function luong(phien, batDau) {
 	const ma = new TextEncoder();
 	let hen = null;
+	let daDong = false;
 	return new ReadableStream({
 		start(dk) {
 			dangGiu.set(phien, () => {
 				if (hen) clearInterval(hen);
+				if (daDong) return;
+				daDong = true;
 				dk.close();
 			});
 			if (batDau > 0) return;
@@ -87,7 +91,7 @@ function luong(phien, batDau) {
 			dk.enqueue(
 				ma.encode(
 					suKien(phien, 2, "message.received", {
-						message: m.hoiThoai.thuLai,
+						message: tinMo.get(phien) ?? "",
 						sequence: 1,
 						turnId: luot,
 					}),
@@ -114,6 +118,7 @@ function luong(phien, batDau) {
 			}, DO.nhipKiemDoDoMs);
 		},
 		cancel() {
+			daDong = true;
 			if (hen) clearInterval(hen);
 		},
 	});
@@ -127,6 +132,8 @@ const mayGia = Bun.serve({
 		if (req.method === "POST" && duong === DO.tienTo) {
 			soPhien += 1;
 			const phien = `phien-gia-${soPhien}-${Date.now()}`;
+			const than = await req.json().catch(() => ({}));
+			tinMo.set(phien, typeof than.message === "string" ? than.message : "");
 			ghi(phien, "mo", 202);
 			return Response.json(
 				{ ok: true, sessionId: phien, continuationToken: `eve:${phien}` },
@@ -369,6 +376,11 @@ async function doKho(kho, slug) {
 		huy.length === 1,
 	);
 	const doLuc = mocDo.get(phien);
+	const traHuy = cuaPhien.filter((n) => n.loai === "huy-tra");
+	kiem(
+		`${kho.ten}: tro ly gia tra ${traHuy.length} hoi am huy 200 accepted`,
+		traHuy.length === 1 && traHuy[0].trangThai === 200,
+	);
 	kiem(
 		`${kho.ten}: moc do = nhan huy + ${doLuc && huy[0] ? doLuc - huy[0].luc : "?"} ms`,
 		doLuc !== undefined &&
