@@ -1,0 +1,39 @@
+{
+  "feature_plain": "Chỉ chủ sở hữu và quản trị mới nhờ chat đổi được trường của cả đội; còn khi AI Gateway gỡ model đã chọn, chat tự chạy model mặc định và màn Cài đặt báo cho mọi người.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ chỉ cho chủ sở hữu và quản trị nhờ chat tạo trường mới, đổi chỉ dẫn hay chuyển trường sang nhập tay; thành viên thường, vai chỉ-OKR và người ngoài nhận câu từ chối và không trường nào đổi."},
+    {"id": "AC-2", "p": "Sẽ chỉ cho chủ sở hữu và quản trị nhờ chat lưu trữ một trường; người khác bấm duyệt cũng không lưu trữ được."},
+    {"id": "AC-4", "p": "Sẽ dùng đúng luật «chủ sở hữu hoặc quản trị» như màn Trường trong Cài đặt — một bài kiểm giữ hai bên luôn trùng nhau."},
+    {"id": "AC-5", "p": "Sẽ ghi lại mỗi lần chat đổi hay bị từ chối đổi trường, ai làm, để ngày 10/11 đếm được có ai không đủ quyền mà đổi được không."},
+    {"id": "AC-6", "p": "Sẽ cho chat chạy model mặc định khi model đã chọn không còn trên AI Gateway, và ghi lại lần lùi đó; danh mục Gateway lỗi thì giữ model đã chọn."},
+    {"id": "AC-8", "p": "Sẽ cho màn Cài đặt biết model đã chọn không còn, với cả quản trị lẫn thành viên thường."},
+    {"id": "AC-10", "p": "Sẽ có câu hộp báo và câu từ chối bằng tiếng Việt và tiếng Anh, được ghim chống sửa nhầm."},
+    {"id": "AC-11", "p": "Sẽ ghi lại mỗi lượt chat vẫn hỏng vì model không còn, để đếm số phiên hỏng; lỗi hết tín dụng hay quá hạn mức không bị đếm nhầm."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Chặn mọi phiên không có người — nghiên cứu nền và lượt Tác nhân — khỏi đổi trường của cả đội."},
+    {"id": "AC-7", "p": "Sẽ KHÔNG hỏi lại AI Gateway trong 5 phút sau lần đọc danh mục; quá 5 giây không trả lời thì coi như không đọc được."},
+    {"id": "AC-9", "p": "Sẽ KHÔNG hiện hộp báo khi model đã chọn vẫn còn; khi model bị gỡ thì hộp báo hiện ở cả máy tính và điện thoại, thành viên thường thấy hộp báo nhưng không có nút đổi model."},
+    {"id": "OOS-1", "p": "Không đổi model mặc định và không thống nhất model đo với production — chờ chủ kho quyết."},
+    {"id": "OOS-2", "p": "Không kiểm trên production xem Trợ lý OKR có bị đóng vì thiếu khoá model — máy không đọc được cơ sở dữ liệu production; chủ kho tự xem Cài đặt › OKR."},
+    {"id": "OOS-3", "p": "Không thêm cột «ai sửa» vào bảng trường — cần migration; dùng bản ghi sự kiện thay."},
+    {"id": "OOS-4", "p": "Không báo quản trị qua Zalo hay email khi model bị gỡ."}
+  ],
+  "scope_plain": "Bốn việc cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Ai đứng sau phiên chat: bảy loại — chủ sở hữu, quản trị, thành viên, vai chỉ-OKR, người ngoài, nghiên cứu nền, lượt Tác nhân — đều có ô kiểm (AC-1, AC-2, AC-3 chặn đổi trường)."},
+    {"i": 1, "p": "Bốn việc đổi trường — tạo, đổi chỉ dẫn, chuyển sang nhập tay, lưu trữ — đều đi qua cùng một chốt quyền (AC-1, AC-2 chặn đổi trường)."},
+    {"i": 2, "p": "Tám tình huống của danh mục AI Gateway, kể cả bản phản hồi thật đã ghi lại và model biến mất sau khi nhớ tạm, đều có ô kiểm (AC-6, AC-7, AC-11 lùi về mặc định)."},
+    {"i": 3, "p": "Người xem Cài đặt model: quản trị và thành viên thường đều thấy hộp báo khi model bị gỡ (AC-8, AC-9 báo trên Cài đặt)."},
+    {"i": 4, "p": "Bảng phủ: mỗi trục nối tới tiêu chí đo nó, kể cả đường đếm số ngày 10/11 (AC-5) và câu chữ (AC-10)."},
+    {"i": 5, "p": "Để sau: báo quản trị qua Zalo/email và cột «ai sửa» trên bảng trường."},
+    {"i": 6, "p": "Không bao giờ chặn thành viên xem trường hay điền giá trị cho một bản ghi — đó là việc hằng ngày của mọi người."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bộ đọc danh mục AI Gateway ở phía chat chỉ được kiểm bằng dữ liệu giả, nên một lỗi đọc sai cấu trúc sẽ lọt — đã sửa: chat và API dùng chung một cách đọc, và có ô kiểm bằng bản phản hồi thật đã ghi lại."},
+    {"i": 1, "p": "Trong 5 phút nhớ tạm danh mục, nếu Gateway vừa gỡ model thì chat vẫn hỏng — đẩy lên để anh quyết ở cổng này (xem hình): chấp nhận như ngoại lệ có tên, hay thêm thử lại trong lượt."},
+    {"i": 2, "p": "Số liệu ngày 10/11 không đọc được trên production theo cách cũ — đã sửa: ghi sự kiện bền thay cho log, và ghi rõ anh chạy bộ đếm bằng kết nối chỉ đọc."},
+    {"i": 3, "p": "Bài kiểm bộ đếm chỉ có một trường hợp vi phạm nên không bắt được lỗi bỏ sót vai — đã sửa: bốn trường hợp vi phạm, ghim tên vai cho người ngoài và phiên máy."},
+    {"i": 4, "p": "Chưa đo việc thành viên thường xem màn Cài đặt model — đã sửa: thêm ô thành viên thường ở API và ở bài đo màn."}
+  ]
+}
