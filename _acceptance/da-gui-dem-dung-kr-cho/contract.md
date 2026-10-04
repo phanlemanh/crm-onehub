@@ -5,7 +5,7 @@ slug: da-gui-dem-dung-kr-cho
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-04
 design_doc: docs/superpowers/specs/2026-10-04-da-gui-dem-dung-kr-cho-design.md
@@ -51,3 +51,8 @@ Quét theo khuôn test-matrix (cùng phương pháp `morphological-scan` đã ch
 
 - Ranh giới phiên P2: chỉ `okr/cap-nhat-tuan/**` và test của nó.
 - Một lần mở trang chỉ gửi được một lượt: màn «Đã gửi» thay form và chỉ dẫn về «Của tôi»; lượt gửi kế luôn mở trang lại, nên dữ liệu lúc mở trang không cũ giữa hai lượt (gap-probe P2).
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-04):**
+  - Ngoài-1 — tại đỉnh lúc chấm, bản đồ sản phẩm và trang lộ trình chưa vẽ lại cho hồ sơ này nên kiểm tra
+    nghiệm thu của công ty báo lệch; vẽ lại khi gộp `onehub` trước khi đẩy, theo luật điều phối.
+  - Ngoài-2 — cột «Đã gửi N cập nhật» trong ma trận E1 chỉ lặp lại số mà mock trả về (`written` bằng số dòng
+    gửi), nên nó không phải bằng chứng độc lập; cột tập KR gửi và cột câu chờ vẫn là hai phép đo thật.
