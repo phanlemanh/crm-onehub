@@ -87,8 +87,8 @@ describe("store-eve-huy", () => {
 			"chua gui",
 		);
 		store.stop();
-		await gui;
 		await choDen(() => khep.length > 0, "onfinish-khong-goi");
+		await gui;
 		expect(khep, "onfinish-khong-goi").toEqual([{ status: "ready", luc: 0 }]);
 		expect(store.snapshot.status).toBe("ready");
 	});
