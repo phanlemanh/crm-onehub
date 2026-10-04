@@ -36,23 +36,23 @@ L22, `mot-duong-ghi-phong-ban` L29) + Known limits của `khung-okr-truoc-r1`.
   xong, Then mỗi KR có đúng một dòng vết `tao-kr` cùng hình với KR tạo tay, và người phụ trách KR (khác
   người tạo) nhận lời nhắc `okr-duoc-giao` «Bạn được giao phụ trách KR» như khi KR được tạo bằng tay;
   người tạo không tự nhận lời nhắc cho KR của chính mình.
-- AC-4: Given phòng ban bị chặn lưu trữ vì cả ba lý do (còn trong khuôn đang dùng, còn người có phòng
-  ban chính ở đó, còn mục tiêu OKR ở kỳ chưa đóng), When quản trị dùng giao diện tiếng Anh mở hộp lưu
+- AC-4: Given phòng ban vướng cả ba lý do chưa lưu trữ được (còn trong khuôn đang dùng, còn người có
+  phòng ban chính ở đó, còn mục tiêu OKR ở kỳ chưa đóng), When quản trị dùng giao diện tiếng Anh mở hộp lưu
   trữ, Then hộp in ba câu tiếng Anh từ `lib/messages`, mỗi câu mang đúng số người, số mục tiêu hoặc tên
   khuôn; không câu nào là tiếng Việt; giao diện tiếng Việt in ba câu tiếng Việt cùng nghĩa với hôm nay.
 - AC-5: Given phòng ban P đã lưu trữ thuộc bộ phận X cũng đã lưu trữ, When quản trị bấm «Khôi phục» P,
   Then máy chủ trả lời chặn `{ loai: cha-luu-tru, ten: <tên X> }` và không đổi dữ liệu — P vẫn
   `archivedAt` khác null; khôi phục X rồi khôi phục P thì P về dưới X.
-- AC-6: Given phòng ban (hoặc bộ phận) đã lưu trữ có tên trùng — không phân biệt hoa thường — với một
-  phòng ban (hoặc bộ phận) đang hoạt động, When quản trị bấm «Khôi phục», Then máy chủ trả lời chặn
+- AC-6: Given phòng ban (hoặc bộ phận) đã lưu trữ có tên trùng với một phòng ban (hoặc bộ phận) đang
+  hoạt động — so tên bỏ qua hoa thường, When quản trị bấm «Khôi phục», Then máy chủ trả lời chặn
   `{ loai: trung-ten, ten: <tên đơn vị đang hoạt động> }`; không có hai đơn vị đang hoạt động cùng tên
   sau thao tác. Khôi phục một đơn vị không trùng tên, cha không lưu trữ, vẫn thành công như hôm nay.
-- AC-7: Given người là quản trị nhưng không là trưởng của đơn vị, When gọi `okr.createObjective` cho một
+- AC-7: Given quản trị của workspace, mà trưởng của đơn vị là người khác, When gọi `okr.createObjective` cho một
   bộ phận, một phòng ban và một cá nhân trong kỳ lập kế hoạch, rồi `okr.createKeyResult` trên mục tiêu
   vừa tạo, Then cả bốn thành công — quản trị tạo lẻ được đúng thứ việc nhập cả bộ tạo được; người không
   là quản trị và không là trưởng vẫn nhận 403 `khongSuaDuocDonVi` như hôm nay; quyền sửa và xoá không đổi
   (`updateObjective` của quản trị không là trưởng vẫn 403).
-- AC-8: Given quản trị không là trưởng mở «Theo đơn vị» của một phòng ban ở pha lập kế hoạch (1440 px),
+- AC-8: Given quản trị (trưởng phòng ban là người khác) mở «Theo đơn vị» của phòng ban ở pha lập kế hoạch (1440 px),
   When trang vẽ xong, Then thanh nút có «Thêm mục tiêu» cạnh «Nhập bảng tính», bấm nó mở ngăn tạo và lưu
   được một mục tiêu hiện ngay trong danh sách; thành viên thường không thấy nút này.
 - AC-9: Given ở 390 px một mục tiêu đã mở khung trước đó (dữ liệu và góp ý đã có trong bộ nhớ tạm), When
