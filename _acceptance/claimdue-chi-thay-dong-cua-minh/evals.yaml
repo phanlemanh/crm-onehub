@@ -53,6 +53,9 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - "apps/agent/test/tasks.integration.spec.ts"
+      - "apps/agent/agent/lib/tasks.ts"
     expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -60,6 +63,9 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.api
+    paths:
+      - "apps/agent/test/tasks.integration.spec.ts"
+      - "apps/agent/agent/lib/tasks.ts"
     expected: "exit 0; moi goi xanh trong mot co so du lieu rieng cua luot"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
@@ -67,6 +73,9 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.lint_khong_cache
+    paths:
+      - "apps/agent/test/tasks.integration.spec.ts"
+      - "apps/agent/agent/lib/tasks.ts"
     expected: "exit 0; moi task lint thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -74,6 +83,9 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.lint_slop
+    paths:
+      - "apps/agent/test/tasks.integration.spec.ts"
+      - "apps/agent/agent/lib/tasks.ts"
     expected: "exit 0"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -81,6 +93,9 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.build_khong_cache
+    paths:
+      - "apps/agent/test/tasks.integration.spec.ts"
+      - "apps/agent/agent/lib/tasks.ts"
     expected: "exit 0; moi task build thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -89,6 +104,10 @@ evals:
     executor: judgment
     question: "Cac loi goi claimDue trong ba khoi claimDue, retireExhausted, completeTask cua tasks.integration.spec.ts doi tu { except: DIRECT_KINDS } sang { only: [kind] }. Voi tung bai, ten bai hua mot dieu (vd 'does not hand the same row to two dispatchers', 'takes the most urgent first'). Sau khi doi loc, moi bai con do dung dieu ten no hua khong, hay co bai nao khang dinh da rong hoac tu dung (vd luon tra rong bat ke claimDue lam gi)? Rieng bai moi 'leaves a visible kind to the visible lane' giu RESEARCH co y: no co that su do viec lan nghien cuu chua loai hien thi ra khong, va co kin truoc dong la khong?"
     inputs: [_acceptance/claimdue-chi-thay-dong-cua-minh/contract.md, apps/agent/test/tasks.integration.spec.ts, apps/agent/agent/lib/tasks.ts]
+    paths:
+      - "_acceptance/claimdue-chi-thay-dong-cua-minh/contract.md"
+      - "apps/agent/test/tasks.integration.spec.ts"
+      - "apps/agent/agent/lib/tasks.ts"
     evidence_required: [judged_by, verdict, rationale]
 
   - id: E13

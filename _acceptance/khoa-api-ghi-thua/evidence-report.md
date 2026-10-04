@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e2a83d0c535a5430e7408a0bc277842fc1c591b7
+verified_commit: ef22d521135d81f1598ec28123f76aa07c60be54
 human_signoff: Phan Le Manh 2026-09-26 — ký Cổng 2 trên verdict PASS sau bốn vòng chấm (vòng 4 vượt trần theo quyết định chủ kho), với năm giới hạn đã khai ở Known limits của contract, trong đó có lỗ AC-11 đo hằng khai báo chứ không đo cấu hình plugin đã dựng. Ký trên hiểu biết rằng thẻ Cổng Phạm vi lần ký lại gần nhất đã trình sai nhóm AC-11 và nội dung AC-11 được xác nhận lại ở cổng này.
 ---
 
@@ -206,3 +206,11 @@ Round 3: E15 (AC-11) đỏ — ca kiểm đọc nhầm công tắc cấu hình p
 ### Re-pin lần 1 — 2026-09-26, do gộp onehub 46d7d3d7 (#150, #151) sau chữ ký
 run_id: repin-20260926T040506Z-89937
 sha: e2a83d0c535a5430e7408a0bc277842fc1c591b7 · suites: 4 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E13 (E13 không khai paths), E14 (E14 không khai paths) · AC không có chốt máy: AC-9, AC-10
+
+### Re-pin lần 2 — 2026-10-04, do khai paths lô 1 (kit 2.21.0): chỉ thêm khoá paths vào evals.yaml
+run_id: repin-20261004T020617Z-28918
+sha: bc36c2d575122deb12067a7da028614abef51f82 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 · diff chạm vật đo ngoài làn máy: E13, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9, AC-10
+
+### Re-pin lần 3 — 2026-10-04, do gộp onehub (#240) sau khi khai paths lô 1
+run_id: repin-20261004T024314Z-40086
+sha: ef22d521135d81f1598ec28123f76aa07c60be54 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 · AC không có chốt máy: AC-9, AC-10
