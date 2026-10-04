@@ -143,6 +143,19 @@ evals:
       - "Đăng nhập một thành viên phòng khác (không xem được G) → mở đường dẫn record của G → «Không tìm thấy mục tiêu này»; toàn trang (innerText) không chứa tiêu đề G; Theo đơn vị của phòng không có dòng G → ảnh buoc-khong-thay"
       - "Trạng thái: chặn truy vấn okr.objective ở trình duyệt → Empty lỗi + «Thử lại», bỏ chặn bấm lại tải được; ảnh 390 cho buoc-cho-duyet, buoc-nguoi-duyet; scrollWidth <= innerWidth; tiêu đề và lý do mang translate=no"
     expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao máy chủ objective không gắn dieuKienXemMucTieu → bước buoc-khong-thay đỏ, script in tiêu đề G tìm thấy trên trang."
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/components/okr/nhan-gioi-han.tsx"
+      - "apps/app/lib/messages/okr-gioi-han.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-hien-thi.ts"
+      - "packages/db/src/okr-hien-thi.ts"
+      - "apps/api/src/okr/**"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/**"
+      - "_acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs"
+      - "_acceptance/gioi-han-duyet-cay-okr/rang/noi-bang-chung.mjs"
 
   - id: E16
     criterion: AC-12
@@ -174,6 +187,23 @@ evals:
       - "Khu OKR › Sức khoẻ chương trình → khối «OKR mồ côi» rỗng «Không có OKR mồ côi» → phiên đo gỡ một người phụ trách KR qua API thật → tải lại → một mục với nhãn «Người phụ trách KR đã rời» và hành động → ảnh buoc-mo-coi"
       - "Ảnh 390 cho buoc-chuyen và buoc-mo-coi; scrollWidth <= innerWidth"
     expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao hộp lưu trữ không đọc okrMo → bước buoc-luu-tru-chan đỏ, script in «nút lưu trữ bật»."
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/okr/**"
+      - "apps/app/lib/messages/okr-tai-co-cau.ts"
+      - "apps/app/lib/messages/to-chuc.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-chuong-trinh.ts"
+      - "packages/validation/src/okr-hien-thi.ts"
+      - "packages/db/src/okr-don-vi.ts"
+      - "apps/api/src/okr/**"
+      - "apps/api/src/to-chuc/**"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/**"
+      - "_acceptance/gioi-han-duyet-cay-okr/rang/man-gioi-han-duyet.mjs"
+      - "_acceptance/gioi-han-duyet-cay-okr/rang/noi-bang-chung.mjs"
 
   - id: E19
     criterion: AC-13
@@ -242,3 +272,9 @@ evals:
     expected: >-
       PASS khi cả năm vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu tệp
       và dòng. FAIL khi một vế sai.
+    paths:
+      - "docs/superpowers/specs/2026-09-29-gioi-han-duyet-cay-okr-design.md"
+      - "_acceptance/gioi-han-duyet-cay-okr/contract.md"
+      - "_acceptance/gioi-han-duyet-cay-okr/design-pass.md"
+      - "_acceptance/gioi-han-duyet-cay-okr/mo-ta-pr.md"
+      - "_acceptance/gioi-han-duyet-cay-okr/evidence/diff-luot.txt"
