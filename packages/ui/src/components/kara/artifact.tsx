@@ -54,7 +54,7 @@ export function KaraArtifact({
 					{actions ? <ArtifactActions>{actions}</ArtifactActions> : null}
 				</ArtifactHeader>
 				<ArtifactContent data-slot="kara-artifact-content">
-					{children}
+					<div className="text-sm">{children}</div>
 				</ArtifactContent>
 				{footer ? (
 					<div data-slot="kara-artifact-footer" className="border-t px-4 py-3">

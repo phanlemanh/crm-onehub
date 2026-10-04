@@ -761,7 +761,7 @@ describe("k1-steps", () => {
 			} else {
 				phai(mo, "loi khong mo");
 				const loi = o.querySelector('[data-trang-thai="loi"]');
-				phai(Boolean(loi?.querySelector('[data-slot="status-indicator"][data-tone="error"]')), "buoc loi thieu dau");
+				phai(Boolean(loi?.querySelector('[data-slot="indicator-dot"][data-tone="error"]')), "buoc loi thieu dau");
 			}
 			if (mo)
 				for (const b of buoc)
@@ -846,7 +846,7 @@ const SO_CHO: Record<string, number> = {
 	"composer-ban-chip": 3,
 	"composer-khoa": 2,
 	"steps-xong": 1,
-	"steps-dang-chay": 4,
+	"steps-dang-chay": 3,
 	"steps-loi": 4,
 	"state-working": 0,
 	"state-empty": 0,

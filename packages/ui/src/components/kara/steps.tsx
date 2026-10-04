@@ -9,7 +9,7 @@ import {
 import { KaraRetry } from "@crm/ui/components/kara/state";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import {
-	StatusIndicator,
+	IndicatorDot,
 	type StatusTone,
 } from "@crm/ui/components/status-indicator";
 
@@ -57,12 +57,17 @@ export function KaraSteps({ steps, onRetry }: KaraStepsProps) {
 			<TaskTrigger title={tieuDe} />
 			<TaskContent>
 				{steps.map((b) => (
-					<TaskItem key={b.id} data-trang-thai={DAU[b.state]}>
-						<StatusIndicator
+					<TaskItem
+						key={b.id}
+						data-trang-thai={DAU[b.state]}
+						className="flex items-baseline gap-2"
+					>
+						<IndicatorDot
 							tone={TONE[b.state]}
-							busy={b.state === "running"}
-							label={b.label}
+							pulse={b.state === "running"}
+							aria-hidden="true"
 						/>
+						<span className="min-w-0 text-pretty">{b.label}</span>
 						<span className="sr-only">{trangThai[b.state]}</span>
 					</TaskItem>
 				))}

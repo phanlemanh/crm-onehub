@@ -20,7 +20,7 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.k1_steps
-    expected: "exit 0; bài DOM -t k1-steps, ma trận viết trước {mọi bước xong (3 bước), có bước đang chạy, có bước lỗi} = 3 ô: ô xong: trigger chứa chữ messages(vi).karaKhung.daLamBuoc(3), nội dung đóng (data-state=closed của Collapsible); ô đang chạy: trigger chứa tên bước đang chạy, data-state=open; ô lỗi: data-state=open, bước lỗi mang data-trang-thai=loi và có một StatusIndicator trạng thái lỗi; mọi ô: chữ từng bước bằng đúng chữ truyền vào, không có pre, code hay [data-slot=code-block] nào; gốc là Collapsible của ai-elements/task.tsx (data-slot=collapsible). Chiều đỏ ghim: bản sao steps.tsx để defaultOpen=true cho ô xong phải đỏ 'buoc xong khong gap'."
+    expected: "exit 0; bài DOM -t k1-steps, ma trận viết trước {mọi bước xong (3 bước), có bước đang chạy, có bước lỗi} = 3 ô: ô xong: trigger chứa chữ messages(vi).karaKhung.daLamBuoc(3), nội dung đóng (data-state=closed của Collapsible); ô đang chạy: trigger chứa tên bước đang chạy, data-state=open; ô lỗi: data-state=open, bước lỗi mang data-trang-thai=loi và có một chấm trạng thái lỗi ([data-slot=indicator-dot][data-tone=error] của status-indicator.tsx); mọi ô: chữ từng bước bằng đúng chữ truyền vào, không có pre, code hay [data-slot=code-block] nào; gốc là Collapsible của ai-elements/task.tsx (data-slot=collapsible). Chiều đỏ ghim: bản sao steps.tsx để defaultOpen=true cho ô xong phải đỏ 'buoc xong khong gap'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["packages/ui/src/components/kara/steps.tsx", "packages/ui/src/components/ai-elements/task.tsx", "packages/ui/test/bo-xuong-kara.dom.tsx"]
 
