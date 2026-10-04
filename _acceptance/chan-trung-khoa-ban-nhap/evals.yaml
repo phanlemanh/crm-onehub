@@ -79,7 +79,9 @@ evals:
       "@crm/validation/okr-cuoc-soan") sang ban sao — KHONG go superRefine. Cong cu that van
       mang schema that; bai tich hop dung banNhap cua ban sao lam inputSchema nen chi chay cac ca
       -t trung-khoa (ca cong-cu-dung-banNhap khong chay trong ban sao). Chay -t trung-khoa cho tep
-      don vi va `bun run test --` cho tep tich hop. Ma 0 khi ca hai xanh dung so ca: in
+      don vi va `bun run test --` cho tep tich hop, ca hai kem --reporter=junit (bun khong in dong
+      "(pass)" khi chay qua ong); trang thai tung ca doc tu junit (<failure> = fail, <skipped> =
+      bi loc, con lai = pass). Ma 0 khi ca hai xanh dung so ca: in
       "don-vi: 7 pass, 0 fail" va "tich-hop: 2 pass, 0 fail"; so ca khac -> ma 1.
       Moc vang (dong import khong thay dung mot lan, loi goi superRefine khong thay dung mot lan)
       -> ma 2 "KHONG DO DUOC: <moc>". Thu muc ban sao xoa trong finally.
@@ -97,8 +99,8 @@ evals:
     expected: |
       Cung ban sao va cung buoc nhu E3; khac DUY NHAT: trong ban sao okr-cuoc-soan.ts, loi goi
       `.superRefine(chanKhoaTrung)` bi go. Ma 0 khi CA HAI tep do dung chu ky: don vi — bun ma
-      khac 0, DUNG bon dong "(fail)" la bon ca tu choi (a),(b),(c),(d) cua E1 va DUNG ba dong
-      "(pass)" la ba ca nhan (e),(f),(g); tich hop — bun ma khac 0, DUNG hai dong "(fail)" la
+      khac 0, theo junit DUNG bon ca fail la bon ca tu choi (a),(b),(c),(d) cua E1 va DUNG ba ca
+      pass la ba ca nhan (e),(f),(g); tich hop — theo junit DUNG hai ca fail la
       trung-khoa-muc-tieu va trung-khoa-kr, 0 pass, va ra co thong diep
       "execute chay o buoc mot" (do vi execute da chay, khong phai loi nap module hay CSDL).
       Rang in "<tep>: go superRefine do dung chu ky". Tep nao xanh, hay do sai chu ky -> ma 1.

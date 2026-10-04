@@ -207,7 +207,7 @@ async function chayLuot(sai: BanNhap, dung: BanNhap) {
 beforeAll(moXuong, TRAN_CA_MS);
 afterAll(donDep);
 
-describe("ban-nhap-trung-khoa", () => {
+describe("nop-ban-nhap-khoa", () => {
 	test("cong-cu-dung-banNhap: inputSchema của nop_ban_nhap là chính schema banNhap", () => {
 		expect(congCu.inputSchema).toBe(banNhap);
 	});
