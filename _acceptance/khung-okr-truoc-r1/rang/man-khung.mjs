@@ -104,19 +104,20 @@ async function phanLe() {
 }
 
 function doThanh() {
-	const h = document.querySelector("[data-hang-nut]");
+	const hien = (e) => e.getClientRects().length > 0 && e.getBoundingClientRect().height > 0;
+	const h = [...document.querySelectorAll("[data-hang-nut]")].find(hien);
 	if (!h) return null;
 	const tam = [...h.querySelectorAll("button")]
-		.filter((b) => !b.closest("[data-radix-popper-content-wrapper]"))
+		.filter((b) => !b.closest("[data-radix-popper-content-wrapper]") && hien(b))
 		.map((b) => {
 			const r = b.getBoundingClientRect();
 			return r.top + r.height / 2;
 		})
 		.sort((x, y) => x - y);
 	const nut = tam.filter((t, i) => i === 0 || t - tam[i - 1] > 4).map((t) => Math.round(t));
-	const the = document.querySelector("[data-don-vi]");
-	const ds = document.querySelector("[data-muc-tieu],[data-hang-muc-tieu],[data-trang-thai^='ST-donvi']");
-	const nhom = document.querySelector("[data-nhom-soan]");
+	const the = h.closest("[data-don-vi]");
+	const ds = [...document.querySelectorAll("[data-muc-tieu],[data-hang-muc-tieu],[data-trang-thai^='ST-donvi']")].find(hien);
+	const nhom = h.querySelector("[data-nhom-soan]");
 	const ban = the?.cloneNode(true);
 	for (const p of ban?.querySelectorAll("[data-thong-tin-soan]") ?? []) p.remove();
 	return {
@@ -143,8 +144,10 @@ async function doMotDang(ten, { chuPhu = [], chan = !TAT_CHAN, dangTaiCo = true 
 		});
 	}
 	await p.goto(`${APP}/${slug}/okr/theo-don-vi?kyOkr=${KYKE}&donOkr=pb:${PB}`, { waitUntil: "domcontentloaded" });
-	await p.waitForSelector("[data-hang-nut]", { timeout: BD.cho.phanTu });
-	await p.waitForFunction(() => document.querySelector("[data-trang-thai^='ST-donvi']:not([data-trang-thai='ST-donvi-dangtai'])"), { timeout: BD.cho.phanTu }).catch(() => {});
+	await p.waitForSelector("[data-hang-nut]", { visible: true, timeout: BD.cho.phanTu });
+	await p.waitForSelector("[data-trang-thai^='ST-donvi']:not([data-trang-thai='ST-donvi-dangtai'])", { visible: true, timeout: BD.cho.phanTu }).catch(() => {});
+	if (chan) for (let i = 0; i < 120 && giu === 0; i += 1) await tre(250);
+	await tre(300);
 	const truoc = await p.evaluate(doThanh);
 	if (dangTaiCo) {
 		const batDuoc = giu >= 1 && truoc?.nutKhoa === true && truoc?.nutSoan === ms.nut.soan && truoc?.dsTop !== null;
@@ -156,7 +159,7 @@ async function doMotDang(ten, { chuPhu = [], chan = !TAT_CHAN, dangTaiCo = true 
 	await yen(p);
 	if (CO_DO && ten === "tiep")
 		await p.evaluate((cau) => {
-			const h = document.querySelector("[data-hang-nut]");
+			const h = [...document.querySelectorAll("[data-hang-nut]")].find((e) => e.getBoundingClientRect().height > 0);
 			const k = document.createElement("p");
 			k.style.height = "20px";
 			k.textContent = cau;
@@ -221,13 +224,13 @@ async function phanThanh() {
 	const cd = ss.cuocDang;
 	const chuTiep = cd ? ms.nut.tiepMoTa(ngayThangVn(new Date(cd.moLuc)), String(cd.soLuot), String(cd.soDongTong - cd.soDongNhan)) : "khong co cuoc dang";
 	await doMotDang("tiep", { chuPhu: [chuTiep] });
-	await db.okrCuocSoan.update({ where: { id: c1.id }, data: { trangThai: "bo" } });
+	await db.okrCuocSoan.update({ where: { id: c1.id }, data: { trangThai: "bo", soLuot: 1 } });
 	await datSoan("an");
 	await doMotDang("che-do-an", { chuPhu: [ms.nut.cheDoAn, ms.nut.cheDoAnMoTa] });
 	await datSoan("bat");
 	for (let i = 0; i < 2; i += 1) {
 		const c = await moMotCuoc();
-		await db.okrCuocSoan.update({ where: { id: c.id }, data: { trangThai: "bo" } });
+		await db.okrCuocSoan.update({ where: { id: c.id }, data: { trangThai: "bo", soLuot: 1 } });
 	}
 	await doMotDang("het-cuoc", { chuPhu: [ms.nut.hetCuoc("3")] });
 	console.log("so dang: 4");
@@ -343,7 +346,9 @@ async function phanDienThoai() {
 }
 
 function doChip(id) {
-	const hang = document.querySelector(`[data-hang-muc-tieu="${id}"]`);
+	const hang = [...document.querySelectorAll(`[data-hang-muc-tieu="${id}"]`)].find(
+		(e) => e.getClientRects().length > 0 && e.getBoundingClientRect().height > 0,
+	);
 	const chip = hang?.querySelector("[data-chip-gop-y]");
 	const nhom = hang?.querySelector("[data-nhom-nhan]");
 	const nhan = nhom?.querySelector("[data-slot=badge]");
@@ -375,27 +380,51 @@ async function phanChip() {
 	];
 	let soO = 0;
 	const viTri = new Map();
+	const nong = await moTrang(cookie["truong-phong"], BD.kho[1440]);
+	for (const m of man) {
+		await nong.p.goto(`${APP}${m.duong}`, { waitUntil: "domcontentloaded" });
+		await nong.p.waitForSelector(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`, { visible: true, timeout: BD.cho.phanTu });
+		await yen(nong.p);
+	}
+	await nong.ctx.close();
 	for (const m of man)
 		for (const kho of CO_DO ? [BD.kho[1440]] : [BD.kho[1440], BD.kho[375]]) {
 			const { ctx, p } = await moTrang(cookie["truong-phong"], kho);
 			await p.goto(`${APP}${m.duong}`, { waitUntil: "domcontentloaded" });
-			await p.waitForSelector(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`, { timeout: BD.cho.phanTu });
+			await p.waitForSelector(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`, { visible: true, timeout: BD.cho.phanTu });
 			await yen(p);
 			if (CO_DO) await chenStyle(p, "[data-chip-gop-y]{height:24px !important;border-radius:4px !important;display:block !important}");
 			const d = await p.evaluate(doChip, id);
-			await chup(p, `E13-${m.ma}-${kho.ten}`, true);
 			const cungHinh = d && Math.abs(d.caoChip - d.caoNhan) <= 1 && d.gocChip === d.gocNhan && d.chuChip === d.chuNhan;
 			if (kho.ten === "1440") {
 				if (kiem(cungHinh, `chip lech nhan: ${m.ma}`)) {
-					const chip = await p.$(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`);
-					await chip.hover();
+					const chip = await p.evaluateHandle(
+						(ma) =>
+							[...document.querySelectorAll(`[data-hang-muc-tieu="${ma}"] [data-chip-gop-y]`)].find((e) => e.getBoundingClientRect().height > 0),
+						id,
+					);
+					const hang = await chip.evaluateHandle((o) => o.closest("[data-hang-muc-tieu]"));
+					const hopHang = await hang.boundingBox();
+					await p.mouse.move(hopHang.x + 60, hopHang.y + hopHang.height / 2);
 					await tre(600);
-					const nenRe = await p.$eval(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`, (o) => getComputedStyle(o).backgroundColor);
-					const chanDoan = await p.$eval(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`, (o) => ({
+					const hopChip = await chip.boundingBox();
+					await p.mouse.move(hopChip.x + hopChip.width / 2, hopChip.y + hopChip.height / 2);
+					await tre(600);
+					const timChip = (ma) =>
+						[...document.querySelectorAll(`[data-hang-muc-tieu="${ma}"] [data-chip-gop-y]`)].find((e) => e.getBoundingClientRect().height > 0);
+					const nenRe = await p.evaluate((ma, f) => getComputedStyle(new Function(`return (${f})`)()(ma)).backgroundColor, id, timChip.toString());
+					const chanDoan = await chip.evaluate((o, x, y) => ({
+						hop: `${Math.round(x)},${Math.round(y)}`,
+						tren: (() => {
+							const e = document.elementFromPoint(x, y);
+							return `${e?.tagName}.${e?.getAttribute("data-slot") ?? ""}.${(e?.className ?? "").toString().slice(0, 40)}`;
+						})(),
+						scroll: `${scrollX},${scrollY}`,
+						conTrongCay: o.isConnected,
 						coLopHover: o.className.split(/\s+/).includes("hover:bg-muted"),
 						hoverMedia: matchMedia("(hover: hover)").matches,
 						dangHover: o.matches(":hover"),
-					}));
+					}), hopChip.x + hopChip.width / 2, hopChip.y + hopChip.height / 2);
 					await p.mouse.move(0, 0);
 					let toi = false;
 					for (let i = 0; i < 80 && !toi; i += 1) {
@@ -404,13 +433,14 @@ async function phanChip() {
 					}
 					await tre(600);
 					const vong = toi ? await p.evaluate(() => getComputedStyle(document.activeElement).boxShadow) : "none";
-					const fv = toi ? await p.evaluate(() => document.activeElement.matches(":focus-visible")) : false;
+					const fv = toi ? await p.evaluate(() => `${document.activeElement.matches(":focus-visible")} lop=${document.activeElement.className.split(/\s+/).filter((l) => l.includes("ring")).join(",")}`) : false;
 					const coVong = vong !== "none" && /\b[1-9]\d*(\.\d+)?px\b/.test(vong.replace(/0px 0px 0px 0px/g, ""));
 					if (kiem(nenRe !== d.nen && toi && coVong, `chip thieu trang thai: ${m.ma} (re=${nenRe} nghi=${d.nen} focus=${toi} fv=${fv} vong=${vong.slice(0, 80)} ${JSON.stringify(chanDoan)})`))
 						console.log(`chip ok ${m.ma}`);
 					await chup(p, `E12-${m.ma}`);
 				}
 			}
+			await chup(p, `E13-${m.ma}-${kho.ten}`, true);
 			const cungHang = d && d.cuoi && (kho.ten !== "1440" || Math.abs(d.topChip - d.topNhan) <= 2);
 			if (kiem(cungHang, `chip rot dong: ${m.ma} ${kho.ten}`)) console.log(`cung hang ok ${m.ma} ${kho.ten}`);
 			viTri.set(`${m.ma}-${kho.ten}`, d ? Math.round(d.topChip - d.topNhan) : null);
