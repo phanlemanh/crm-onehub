@@ -281,7 +281,7 @@ evals:
       text-<mau>, border-<mau>), goc (rounded) hay khoang cach (p-, px-, py-, m-, gap-); doi chung
       duong: nam tep hien tai cho 0. Ma tran chieu do viet truoc 3 o tren ban sao
       trang-loi-tam.tsx: rounded-[7px] | bg-[#ff0000] | px-6 -> moi o do voi thong diep ghim ten lop. Doi chung am cung lenh: ban sao trang-loi-tam.tsx them
-      `className="bg-[#ff0000] text-gray-400"` len Empty -> design-gate bao vi pham gray-on-color
+      `className="bg-blue-600 text-gray-400"` len Empty -> design-gate REJECT, ma 2, luat gray-on-color
       (bo nho do-man-rong-va-cat-nut: gate khong bat rounded-[7px]/bg-[#hex] mot minh, nen chieu
       do dung gray-on-color).
 
