@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f55e110820fbc2ccf229a0445cdf99813408649e
+verified_commit: b0e84291d6a770394f91f9c24730616f21273654
 human_signoff: Manh Phan 2026-09-28
 ---
 
@@ -373,3 +373,7 @@ sha: a93384d5e34ab5e56af0e1d95d728d15d45755bb · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-29, do thước migration của khep-ky-okr và canh-kr-okr đo được sau khi lượt đã gộp (dựng lại nền lúc gộp)
 run_id: repin-20260929T151035Z-23219
 sha: f55e110820fbc2ccf229a0445cdf99813408649e · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E3 (E3 không khai paths), E7 (E7 không khai paths), E13 (E13 không khai paths), E15 (E15 không khai paths), E19 (E19 không khai paths)
+
+### Re-pin lần 3 — 2026-10-04, do sửa thước theo diff sau gộp và khai paths (lô a)
+run_id: repin-20261004T095914Z-97808
+sha: b0e84291d6a770394f91f9c24730616f21273654 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E3, E7, E13, E15, E19 · diff chạm vật đo ngoài làn máy: E3, E7, E13, E15 — chưa chứng lại, đi vòng S4 delta

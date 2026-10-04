@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 44a7274a3f3f61703819d36644320f35179b559c
+verified_commit: b0e84291d6a770394f91f9c24730616f21273654
 human_signoff: Manh Phan 2026-09-30
 ---
 
@@ -294,3 +294,7 @@ Round 4: E1–E20 và bốn lệnh suite đạt trên cây 169eb0c0 (hợp đồ
 ### Re-pin lần 1 — 2026-09-30, do dùng lại bản ghim bài canh Trợ lý OKR của onehub sau chữ ký; thước màn thôi ghi vào hồ sơ đã ký
 run_id: repin-20260930T035602Z-23610
 sha: 44a7274a3f3f61703819d36644320f35179b559c · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12 (E12 không khai paths), E15 (E15 không khai paths), E21 (E21 không khai paths)
+
+### Re-pin lần 2 — 2026-10-04, do sửa thước theo diff sau gộp và khai paths (lô a)
+run_id: repin-20261004T095914Z-97808
+sha: b0e84291d6a770394f91f9c24730616f21273654 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E15, E21 · diff chạm vật đo ngoài làn máy: E12, E15 — chưa chứng lại, đi vòng S4 delta
