@@ -156,12 +156,18 @@ Copy the shape of `crm-onehub-agent` (`vercel project inspect crm-onehub-agent`)
 | Framework preset | Other |
 | Build Command | `bun run build` |
 | Node.js Version | 24.x |
-| Ignored Build Step | `[ "$VERCEL_ENV" != "production" ]` |
+| Ignored Build Step | empty |
 
-Preview deploys are skipped. Nothing calls an agent-okr preview — the app's
-`OKR_AGENT_URL` and bridge secret are Production-only — and its variables are
-Production-only too, so a preview build dies in `prisma generate` on the missing
-`DATABASE_URL`. `acceptance.yml` already proves the package builds.
+**The agent-okr check is red on every pull request, and that is expected.** The
+project's variables are Production-only, so a preview build dies in `prisma generate`
+on the missing `DATABASE_URL`. Nothing calls an agent-okr preview — the app's
+`OKR_AGENT_URL` and bridge secret are Production-only too — and `acceptance.yml`
+already proves the package builds.
+
+Do not silence it with the Ignored Build Step `[ "$VERCEL_ENV" != "production" ]`.
+On 2026-10-04 it skipped the Production deploys as well, with no build log, and two
+merges never reached agent-okr.vercel.app. After any change to this setting, deploy
+`onehub` to Production and check the deployment is Ready, not Canceled.
 
 ### agent-okr project
 
