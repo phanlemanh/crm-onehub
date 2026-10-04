@@ -11,7 +11,7 @@ import { join } from "node:path";
 import { db } from "@crm/db";
 import { chiTieuThang, thangVN } from "@crm/db/ai-chi-phi";
 import { viecAiCanNhac } from "@crm/db/ai-nhac";
-import { docCuoc } from "@crm/db/okr-cuoc-soan";
+import { docCuoc, tangLuot } from "@crm/db/okr-cuoc-soan";
 import {
 	cauHinhAiLuc,
 	coChuKyLapKeHoachTrongThang,
@@ -743,6 +743,7 @@ describe("nac-an-cuoc", () => {
 				});
 			}
 			expect(await db.okrCuocSoan.count()).toBe(1);
+			await tangLuot(db, m.cuoc.id);
 			await db.okrCuocSoan.update({
 				where: { id: m.cuoc.id },
 				data: { trangThai: "bo" },

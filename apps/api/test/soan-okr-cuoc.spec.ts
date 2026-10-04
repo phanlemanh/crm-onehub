@@ -242,6 +242,10 @@ beforeAll(async () => {
 	const m = await moLai("trpc");
 	if (!m.ok) throw new Error(`mo A: ${m.lyDo}`);
 	cuocA.dang = m.cuoc.id;
+	await db.okrCuocSoan.updateMany({
+		where: { id: { in: [cuocA.daDuaVao, cuocA.bo, cuocA.dang] } },
+		data: { soLuot: 1 },
+	});
 	cuocB.push(
 		(await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: TRUONG_B })).id,
 		(await gieoCuoc({ donVi: DON_VI.kdNam, nguoiMo: QUAN_TRI, nac: "an" })).id,

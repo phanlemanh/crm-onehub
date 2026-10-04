@@ -7,6 +7,7 @@ import {
 	test,
 } from "bun:test";
 import { db } from "@crm/db";
+import { tangLuot } from "@crm/db/okr-cuoc-soan";
 import { docTrangChienLuocDangDung } from "@crm/db/tai-lieu-chien-luoc";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { idMau } from "../scripts/okr-mau/nap";
@@ -147,6 +148,11 @@ describe("soan-mo", () => {
 			expect(await sanSang()).toMatchObject({
 				bat: true,
 				cuocDang: { id: kq.cuoc.id },
+				soCuocDaDung: 0,
+			});
+			await tangLuot(db, kq.cuoc.id);
+			expect(await sanSang()).toMatchObject({
+				cuocDang: { id: kq.cuoc.id },
 				soCuocDaDung: 1,
 			});
 		},
@@ -224,7 +230,7 @@ describe("soan-mo", () => {
 				const c = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: TRUONG });
 				await db.okrCuocSoan.update({
 					where: { id: c.id },
-					data: { trangThai },
+					data: { trangThai, soLuot: 1 },
 				});
 			}
 			expect(await sanSang()).toEqual({ bat: false, lyDo: "het-cuoc-ky" });
@@ -317,8 +323,10 @@ describe("soan-mo", () => {
 		async () => {
 			const dau = await mo();
 			if (!dau.ok) throw new Error(`mo: ${dau.lyDo}`);
+			await tangLuot(db, dau.cuoc.id);
 			const moi = await mo({ boCuocDangId: dau.cuoc.id });
 			if (!moi.ok) throw new Error(`bo roi mo: ${moi.lyDo}`);
+			await tangLuot(db, moi.cuoc.id);
 			expect(moi.cuoc.id).not.toBe(dau.cuoc.id);
 			expect(moi.cuoc.sessionId).toMatch(CHO_GIU);
 			const rest = ok<SoanMoOutput>(
@@ -332,6 +340,7 @@ describe("soan-mo", () => {
 				"soanMo rest",
 			);
 			if (!rest.ok) throw new Error(`rest: ${rest.lyDo}`);
+			await tangLuot(db, rest.cuoc.id);
 			const hang = await db.okrCuocSoan.findMany({
 				where: { id: { in: [dau.cuoc.id, moi.cuoc.id, rest.cuoc.id] } },
 				select: { id: true, trangThai: true },
