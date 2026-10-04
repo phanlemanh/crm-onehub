@@ -24,6 +24,7 @@ mock.module("../agent/lib/preamble", () => ({
 
 const { brief, taskAuth } = await import("../agent/lib/dispatch");
 const { TRO_LY_OKR } = await import("../agent/lib/okr/config");
+const { KHONG_GOI_TRO_LY_KHO } = await import("../agent/lib/tai-lieu-config");
 const { SESSION_PURPOSES, purposeOf } = await import(
 	"../agent/lib/session-purpose"
 );
@@ -133,11 +134,11 @@ describe("okr-chuyen-tiep", () => {
 		expect(cau).toBe(TRO_LY_OKR.brief);
 	}, 30_000);
 
-	test("nhánh okr trả câu cố định, không gọi phần mở đầu nghiên cứu; nghiên cứu vẫn gọi", async () => {
+	test("nhánh okr trả câu cố định kèm câu cấm gọi tro_ly_kho, không gọi phần mở đầu nghiên cứu; nghiên cứu vẫn gọi", async () => {
 		goiMoDau = 0;
 		expect(
 			await chiDan({ purpose: "okr", okrTaskId: "t", okrViec: "de-xuat" }),
-		).toBe(TRO_LY_OKR.chiDanGoc);
+		).toBe(`${TRO_LY_OKR.chiDanGoc}\n\n${KHONG_GOI_TRO_LY_KHO}`);
 		expect(goiMoDau).toBe(0);
 		await trongNguCanhEve(() =>
 			chiDan({
