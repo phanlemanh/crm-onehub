@@ -181,13 +181,6 @@ try {
 			kiem(`${kho.ten}: 0 request ${DO.cua} (thay ${cuaGoi.length})`, cuaGoi.length === 0);
 			kiem(`${kho.ten}: khong tran ngang (man) ${await tranNgang(p)}`, (await tranNgang(p)) <= 0);
 			await chup(p, `E11-man-${kho.ten}`);
-			if (kho.ten === "1440") {
-				const truoc = await soLuot();
-				kiem(`soLuot sau khi mo man: ${truoc}`, truoc === 0);
-				if (!KIEM_DO_DO) await tangLuot(db, cuoc.id);
-				const sau = await soLuot();
-				kiem(sau === 1 ? "soLuot sau tangLuot: 1" : `phep doc soLuot khong nhay: ${sau}`, sau === 1);
-			}
 		} else {
 			await p.goto(URL_DON(slug, `&cuocSoan=${cuoc.id}`), { waitUntil: "networkidle2" });
 			const coLoi = await cho(p, '[data-tu-choi="chua-cau-hinh"]');
@@ -198,6 +191,13 @@ try {
 			await chup(p, `E11-loi-${kho.ten}`);
 		}
 		await ctx.close();
+	}
+	if (PHA === "rong") {
+		const truoc = await soLuot();
+		kiem(`soLuot sau khi mo man: ${truoc}`, truoc === 0);
+		if (!KIEM_DO_DO) await tangLuot(db, cuoc.id);
+		const sau = await soLuot();
+		kiem(sau === 1 ? "soLuot sau tangLuot: 1" : `phep doc soLuot khong nhay: ${sau}`, sau === 1);
 	}
 } catch (loi) {
 	await khongDo(`${PHA}: ${loi?.message ?? loi}`);
