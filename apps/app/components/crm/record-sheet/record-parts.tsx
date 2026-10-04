@@ -92,17 +92,17 @@ export function RecordSheetFrame({
 		</>
 	);
 
-	return cuon ? (
-		<CuonCaKhungContext.Provider value>
+	return (
+		<CuonCaKhungContext.Provider value={cuon}>
 			<div
-				data-cuon-ca-khung
-				className="flex min-h-0 flex-1 flex-col overflow-y-auto"
+				data-cuon-ca-khung={cuon ? "" : undefined}
+				className={
+					cuon ? "flex min-h-0 flex-1 flex-col overflow-y-auto" : "contents"
+				}
 			>
 				{khung}
 			</div>
 		</CuonCaKhungContext.Provider>
-	) : (
-		khung
 	);
 }
 
