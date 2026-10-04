@@ -7,6 +7,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { coHoiCuaVai } from "./co-hoi";
 import { DangTaiDanhSach } from "./dang-tai";
 import { DanhSach } from "./danh-sach";
 import type { LuaChonTai } from "./hop-tai-nguon";
@@ -45,11 +46,12 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 	const page = Math.max(1, thamSo[SEARCH_PARAM.list.page]);
 	const trpc = getServerTrpc();
 	const queryClient = getServerQueryClient();
-	const [trangThai, chonNguoi] = await Promise.all([
+	const [trangThai, chonNguoi, workspace] = await Promise.all([
 		queryClient
 			.fetchQuery(trpc.taiLieuNguon.trangThai.queryOptions())
 			.catch(() => null),
 		chuTrangVaDonVi(session.user),
+		queryClient.fetchQuery(trpc.workspace.get.queryOptions()).catch(() => null),
 		queryClient.prefetchQuery(
 			trpc.taiLieu.list.queryOptions({
 				loai: loai ?? undefined,
@@ -74,6 +76,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 			? queryClient.prefetchQuery(trpc.taiLieuNguon.list.queryOptions())
 			: null,
 	]);
+	const coHoi = coHoiCuaVai(workspace?.viewerRole);
 	const luaChon: LuaChonTai = {
 		toiId: session.user.id,
 		...chonNguoi,
@@ -84,6 +87,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 		<HydrateClient>
 			<DanhSach
 				chu={chu}
+				coHoi={coHoi}
 				donVi={donVi}
 				loai={loai}
 				luaChon={luaChon}

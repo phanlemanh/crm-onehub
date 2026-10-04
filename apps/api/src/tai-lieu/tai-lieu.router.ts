@@ -38,6 +38,12 @@ import {
 	taiLieuTimOutput,
 } from "./tai-lieu.contracts";
 import { TaiLieuService } from "./tai-lieu.service";
+import {
+	taiLieuDatXacMinhInput,
+	taiLieuXuLyBaoSaiInput,
+	taiLieuXuLyChuaTraLoiInput,
+} from "./tai-lieu-hoi.contracts";
+import { TaiLieuHoiService } from "./tai-lieu-hoi.service";
 import { TaiLieuTimService } from "./tai-lieu-tim.service";
 
 const TAG = ["Documents"];
@@ -52,7 +58,44 @@ export class TaiLieuRouter {
 	constructor(
 		@Inject(TaiLieuService) private readonly taiLieu: TaiLieuService,
 		@Inject(TaiLieuTimService) private readonly timKiem: TaiLieuTimService,
+		@Inject(TaiLieuHoiService) private readonly hoiKho: TaiLieuHoiService,
 	) {}
+
+	@Mutation({
+		input: taiLieuDatXacMinhInput,
+		output: taiLieuOkOutput,
+		meta: restMeta("POST", "/tai-lieu/{slug}/xac-minh", TAG),
+	})
+	datXacMinh(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuDatXacMinhInput>,
+	) {
+		return this.taiLieu.datXacMinh(nguoiGoi(ctx), input);
+	}
+
+	@Mutation({
+		input: taiLieuXuLyChuaTraLoiInput,
+		output: taiLieuOkOutput,
+		meta: restMeta("POST", "/tai-lieu/chua-tra-loi/{hoiId}/xu-ly", TAG),
+	})
+	xuLyChuaTraLoi(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuXuLyChuaTraLoiInput>,
+	) {
+		return this.hoiKho.xuLyChuaTraLoi(nguoiGoi(ctx), input.hoiId);
+	}
+
+	@Mutation({
+		input: taiLieuXuLyBaoSaiInput,
+		output: taiLieuOkOutput,
+		meta: restMeta("POST", "/tai-lieu/bao-sai/{id}/xu-ly", TAG),
+	})
+	xuLyBaoSai(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof taiLieuXuLyBaoSaiInput>,
+	) {
+		return this.hoiKho.xuLyBaoSai(nguoiGoi(ctx), input);
+	}
 
 	@Query({
 		input: taiLieuTimInput,

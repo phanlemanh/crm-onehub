@@ -21,6 +21,23 @@ export const TAI_LIEU_AGENT = {
 			sessionTimeoutMs: 4 * MINUTE_MS,
 		},
 	},
+	hoi: {
+		maModel: "zai/glm-5.2-fast",
+		bienKhoaRieng: "KHO_TAI_LIEU_AI_GATEWAY_API_KEY",
+		gateway: { zeroDataRetention: true },
+		soKetQua: 8,
+		docToiDa: 24 * NGHIN,
+		tranBac: 3,
+		hanTraLoiMs: 3 * MINUTE_MS,
+		gioiHan: {
+			maxInputTokensPerSession: 200 * NGHIN,
+			maxOutputTokensPerSession: 8 * NGHIN,
+			sessionTimeoutMs: 3 * MINUTE_MS,
+		},
+		timHoi: { soLan: 8, cachMs: 250 },
+		loGui: 6,
+		dauTrang: { mo: "<<<TRANG-BAT-DAU>>>", dong: "<<<TRANG-HET>>>" },
+	},
 	bangGia: {
 		"zai/glm-5.2-fast": { vaoMoiTrieu: 2.8, raMoiTrieu: 8.8 },
 	} satisfies Record<string, { vaoMoiTrieu: number; raMoiTrieu: number }>,

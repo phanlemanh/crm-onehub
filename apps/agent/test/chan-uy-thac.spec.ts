@@ -65,7 +65,7 @@ describe("quyen", () => {
 	});
 
 	it("quyen: ma tran toan phan purpose nhan commandType", () => {
-		expect(SESSION_PURPOSES).toHaveLength(7);
+		expect(SESSION_PURPOSES).toHaveLength(8);
 		const cases = SESSION_PURPOSES.flatMap((purpose) =>
 			["CREATE_AGENT", "CHAT"].map((commandType) => ({ purpose, commandType })),
 		);

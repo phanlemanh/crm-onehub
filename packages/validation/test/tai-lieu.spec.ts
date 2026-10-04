@@ -89,7 +89,15 @@ describe("tai-lieu", () => {
 			"TRA_LAI",
 			"CU",
 		]);
-		expect(LOAI_SU_KIEN).toEqual(["TAO", "DE_XUAT", "DUYET", "TRA_LAI", "CU"]);
+		expect(LOAI_SU_KIEN).toEqual([
+			"TAO",
+			"DE_XUAT",
+			"DUYET",
+			"TRA_LAI",
+			"CU",
+			"MAY_SOAN",
+			"XAC_MINH",
+		]);
 		expect(TAI_LIEU.ten).toEqual({ min: 1, max: 160 });
 		expect(TAI_LIEU.lyDo).toEqual({ min: 1, max: 500 });
 		expect(TAI_LIEU.noiDung.max).toBe(200_000);
