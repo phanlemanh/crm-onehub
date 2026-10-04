@@ -5,7 +5,7 @@ slug: bo-xuong-kara
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-04
 design_doc: docs/superpowers/specs/2026-10-04-bo-xuong-kara-design.md
@@ -77,3 +77,17 @@ Microsoft Copilot Pages — hội thoại hẹp cạnh vật phẩm rộng, ch�
 
 - Tệp chung chỉ thêm và chỉ sau khi #231 gộp: `messages.ts`, `mo-coi.mjs`, `so-lech-chuan.md`, `docs/chat-ui.md`. Ghim lại `nen-chat-ai-elements` và mọi hồ sơ bị chạm đi cuối, một lượt ở đỉnh nhánh.
 - Phòng mẫu không dùng CSDL hay API, chạy cổng tự do; tay thì cổng 3360.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-05):**
+  - Ngoài-1 — dòng mốc «Kara sửa bản nháp» (`KaraCheckpoint`) và câu mô tả hội thoại rỗng dùng cứng chữ «bản
+    nháp» của OKR; khi Chat hay Deal dùng chung khối (K5) thì phải cho màn gọi đưa danh từ hoặc dùng chữ trung tính.
+  - Ngoài-3 — phòng mẫu (`rang/phong-mau.mjs`) dựng vào một thư mục cố định, nên hai lượt E11 chạy song song phá
+    nhau; luôn chạy E11 tuần tự.
+  - Ngoài-4 — cổng mồ côi (`mo-coi.mjs`) chỉ coi tệp nằm thẳng trong `components/` là cầu, không thấy lối
+    `@crm/ui/components/kara/<tệp>`; K2 gỡ hai mục miễn trừ thì phải dạy cổng nhìn qua `kara/` cùng lượt, nếu
+    không cổng báo đỏ giả.
+  - Ngoài-5 — ở `k1-artifact` và ca «KaraBusy lồng nhau», kiểm «mọi nút đã khoá» bằng `every()` trên một tập có
+    thể rỗng.
+  - Ngoài-6 — `rang/tai-lieu.mjs` chấp nhận «mỗi tên có ở một hàng nào đó» khi không có hàng nêu đủ sáu tên.
+  - Ngoài-7 — `k1-steps` kiểm chữ từng bước bằng `includes` trên cả khối, không theo từng dòng bước.
+  - Ngoài-8 — ô `off` của `k1-state` chỉ kiểm có `FieldDescription`, không kiểm nó chứa đúng lý do.
+  - Ngoài-9 — bài quét «`karaKhung.thuLai` chỉ dùng trong `state.tsx`» không có đối chứng dương.

@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 90aead63b0aebe0d575138d95400a049415413c2
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (15/15 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; hội đồng E12 PASS). Mười mục ngoài hợp đồng định đoạt ở lượt ký này — Ngoài-1, 3, 4, 5, 6, 7, 8, 9 ghi Known limits; Ngoài-2, 10 chấp nhận, không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê hết.
 ---
 
 # Evidence Report: bo-xuong-kara
