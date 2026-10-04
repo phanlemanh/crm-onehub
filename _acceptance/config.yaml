@@ -91,6 +91,23 @@ executors:
     tcd_man_doc: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-trang-cho.dom.tsx"
     tcd_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/tai-lieu/[trang]/man-doc.tsx" "apps/app/app/(app)/[slug]/tai-lieu/[trang]/sua/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     tdk_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "apps/app/app/(app)/[[]slug]/tai-lieu/**/*.tsx" "apps/app/components/crm/quick-switcher.tsx" "packages/ui/src/components/trinh-soan*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    tlk_tim: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-tim-doc.spec.ts -t tlk-tim && cd ../api && bun test test/tai-lieu-tim.spec.ts"'
+    tlk_doc: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-tim-doc.spec.ts -t tlk-doc"'
+    tlk_kiem_trich: 'cd packages/validation && bun test test/tai-lieu-hoi.spec.ts && cd ../.. && bun run test -- "cd apps/agent && bun test test/tro-ly-kho-nop.spec.ts -t tlk-kiem"'
+    tlk_tu_choi: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-nop.spec.ts -t tlk-tu-choi"'
+    tlk_qua_han: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tro-ly-kho-nop.spec.ts -t tlk-qua-han"'
+    tlk_xac_minh_api: 'bun run test -- "cd apps/api && bun test test/tai-lieu-xac-minh.spec.ts"'
+    tlk_man_xac_minh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-xac-minh.dom.tsx"
+    tlk_hoi_api: 'bun run test -- "cd apps/api && bun test test/tai-lieu-hoi.spec.ts -t tlk-hoi"'
+    tlk_man_hoi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-hoi.dom.tsx"
+    tlk_zalo: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tro-ly-kho-zalo.integration.spec.ts"'
+    tlk_nhat_ky: 'bun run test -- "cd apps/api && bun test test/tai-lieu-hoi.spec.ts -t tlk-nhat-ky"'
+    tlk_chua_tra_loi: 'bun run test -- "cd apps/api && bun test test/tai-lieu-hoi-suc-khoe.spec.ts -t tlk-chua-tra-loi"'
+    tlk_bao_sai: 'bun run test -- "cd apps/api && bun test test/tai-lieu-hoi-suc-khoe.spec.ts -t tlk-bao-sai"'
+    tlk_man_suc_khoe_hoi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-hoi-suc-khoe.dom.tsx"
+    tlk_ranh_gioi: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-ranh-gioi.spec.ts test/khuon-di-dong.spec.ts"'
+    tlk_loi: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tro-ly-kho-loi.spec.ts"'
+    tlk_tran: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/tai-lieu-hoi.spec.ts -t tlk-tran"'
     ktl_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "packages/ui/src/components/trinh-soan*.tsx" "packages/ui/src/components/diff-trang*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     dmk_ten_kho: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t ten-kho"'
     dmk_tao: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t tao"'
@@ -1129,6 +1146,9 @@ executors:
     tdk_man_tim: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tim-va-dieu-huong-kho/rang/man-tim.mjs"'
     tcd_man_trang_cho: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/trang-chua-de-xuat-mo-duoc/rang/man-trang-cho.mjs"'
     tdk_man_suc_khoe: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tim-va-dieu-huong-kho/rang/man-suc-khoe.mjs"'
+    tlk_man_hoi: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/tro-ly-doc-kho/rang/man-hoi.mjs"'
+    tlk_cham_bo_do: "bun _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts"
+    tlk_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "apps/app/app/(app)/[[]slug]/tai-lieu/**/*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; node _acceptance/tro-ly-doc-kho/rang/ban-kinh-man.mjs "$t" || exit 1; done && bun run test -- "bun _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs"'
     msd_quet_duong_ghi: "node _acceptance/may-soan-de-xuat/rang/quet-duong-ghi.mjs"
     msd_bien_ba_nha: "node _acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs"
     msd_blob_that: 'BLOB_READ_WRITE_TOKEN=vercel_blob_rw_logo_gia_khong_dung bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'

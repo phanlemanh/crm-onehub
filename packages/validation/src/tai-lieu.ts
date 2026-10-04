@@ -33,6 +33,8 @@ export const LOAI_SU_KIEN = [
 	"DUYET",
 	"TRA_LAI",
 	"CU",
+	"MAY_SOAN",
+	"XAC_MINH",
 ] as const;
 export type LoaiSuKien = (typeof LOAI_SU_KIEN)[number];
 
@@ -126,6 +128,7 @@ export const suKienChiTiet = z.discriminatedUnion("loai", [
 		chiPhiUsd: z.number().nonnegative().nullable(),
 		soLanBac: z.number().int().nonnegative(),
 	}),
+	z.object({ loai: z.literal("XAC_MINH"), den: z.iso.date().nullable() }),
 ]);
 
 export type SuKienChiTiet = z.infer<typeof suKienChiTiet>;

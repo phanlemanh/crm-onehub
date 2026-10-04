@@ -18,6 +18,7 @@ const STEPS = {
 	"nhac-ke-hoach": "Sending the morning reminder",
 	"okr-doc-sheet": "Reading the Google Sheet",
 	"soan-tu-nguon": "Drafting a document page from a source file",
+	"hoi-kho": "Answering a question from the document library",
 	"okr-de-xuat": "Reviewing an objective",
 	"okr-tom-tat-tuan": "Writing the weekly summary",
 	"okr-kiem-san-sang": "Checking the AI model key",

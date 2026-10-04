@@ -128,7 +128,7 @@ single place that knows what is set.
 | `BLOB_READ_WRITE_TOKEN` | Mirrors logos and photos into a public Blob store |
 | `KHO_TAI_LIEU_BLOB_TOKEN` | Keeps the Word and PDF sources of the document library in a private Blob store and reads them back for drafting. Without it nothing can be uploaded to the library |
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
-| `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document-drafting machine (`may_soan`), so its spend is billed apart. Without it drafting runs on the key above |
+| `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document library — the drafting machine (`may_soan`) and the AI assistant that answers from approved pages (`tro_ly_kho`) — so their spend is billed apart. Without it both run on the key above |
 | `OKR_AI_GATEWAY_API_KEY` | A separate AI Gateway key used only by Trợ lý OKR (suggestions, weekly summaries and the drafting chat in `apps/agent-okr`), so its spend is billed apart and the key can carry its own monthly budget. Without it Trợ lý OKR runs on `AI_GATEWAY_API_KEY`, or on Vercel OIDC |
 | `AGENT_BRIDGE_SECRET` | The rep-facing Agent panel — see `agent.md` |
 | `OKR_AGENT_URL` | Where the app forwards the OKR drafting chat (`/eve/agents/okr/eve/v1/*`); `apps/agent-okr` on `127.0.0.1:2100` by default |

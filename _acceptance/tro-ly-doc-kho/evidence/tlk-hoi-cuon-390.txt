@@ -1,0 +1,5 @@
+tlk-hoi-trong-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang · [data-goi-y] hien · khong phan tu nao tran mep
+tlk-hoi-tu-choi-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang · [data-tu-choi] hien · khong phan tu nao tran mep
+tlk-hoi-qua-han-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang · [data-qua-han] hien · khong phan tu nao tran mep
+tlk-hoi-tra-loi-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang · [data-y-tra-loi] hien · khong phan tu nao tran mep
+tlk-bao-sai-390.png: scrollWidth 390 innerWidth 390 khong cuon ngang · [data-bao-sai="da-gui"] hien · khong phan tu nao tran mep

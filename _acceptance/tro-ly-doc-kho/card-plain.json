@@ -1,0 +1,45 @@
+{
+ "feature_plain": "Nhân viên hỏi bằng lời thường, ở tab «Hỏi» của Kho tài liệu hay qua Zalo, và được trả lời có trích trang, phiên bản cùng đoạn nguyên văn; kho không có trang nào trả lời thì trợ lý nói không biết.",
+ "decisions": [
+  {
+   "id": "E15j",
+   "q": "Câu trả lời của bộ câu đo có trung thực với trang được trích không?",
+   "why": "Hội đồng đọc cả hai lượt: câu có trang đều trích đúng ý, sáu câu không có trang đều bị từ chối, Zalo chuyển đủ 30 câu quy định và giữ lại 10 câu không phải quy định."
+  },
+  {
+   "id": "E16j",
+   "q": "Nhân viên văn phòng nhìn ảnh tab «Hỏi» có hiểu ngay câu trả lời không?",
+   "why": "Ở khổ 390 và 1440: tên trang, phiên bản, ngày duyệt hiện rõ; khung cảnh báo quá hạn nêu ngày và chủ trang; chip gợi ý xuống dòng, không cuộn ngang."
+  }
+ ],
+ "decisions_plain": [
+  {
+   "id": "d-20261001T060746Z-19",
+   "p": "Câu nộp của trợ lý được kiểm ở máy chủ rồi mới ghi — đổi lại, trợ lý phải nộp lại nếu một đoạn trích không khớp trang."
+  },
+  {
+   "id": "d-20261001T060746Z-34",
+   "p": "Dấu ranh giới trang bị gỡ khỏi chữ trang ở cả dạng thô lẫn dạng mã hoá — đổi lại, trang không giữ được hai chuỗi đó nguyên văn."
+  },
+  {
+   "id": "d-20261001T060746Z-36",
+   "p": "Câu hỏi kho không đi vào làn nghiên cứu nền — đổi lại, nó có hàng gửi riêng của mình."
+  },
+  {
+   "id": "d-20261001T060746Z-40",
+   "p": "Ghi chú tài liệu về việc lưu chữ câu Zalo bị từ chối dời xuống bước cập nhật tài liệu cuối vòng — không đổi hành vi."
+  },
+  {
+   "id": "d-20261001T060746Z-51",
+   "p": "Hạn xác minh hiện thành một nhãn cạnh nút sửa trang, đặt bằng ô chọn ngày — đổi lại, lưu xong trang tải lại dữ liệu từ máy chủ."
+  },
+  {
+   "id": "d-20261001T060746Z-52",
+   "p": "Hai khối việc mới ở tab Sức khoẻ hiện cho mọi vai, danh sách rỗng khi người xem không có việc nào — đổi lại, người không có quyền thấy khối rỗng."
+  },
+  {
+   "id": "d-20261001T060746Z-59",
+   "p": "Dòng «khoá undefined» trong bằng chứng cũ là lỗi đọc của bộ chấm, đã sửa; bằng chứng cũ giữ nguyên chữ máy in."
+  }
+ ]
+}

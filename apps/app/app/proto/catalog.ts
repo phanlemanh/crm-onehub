@@ -71,6 +71,17 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "tro-ly-doc-kho",
+		ten: "Kho tài liệu lượt 4 — trợ lý AI trả lời theo kho",
+		states: [
+			{
+				id: "ST-tac-nhan-tra-loi",
+				nhan: "Trả lời có trích trang và phiên bản",
+			},
+			{ id: "ST-tac-nhan-tu-choi", nhan: "Từ chối, không đoán" },
+		],
+	},
+	{
 		slug: "doi-ten-onehub-center",
 		ten: "OneHub Center — cột trái đăng nhập hướng A",
 		states: [
