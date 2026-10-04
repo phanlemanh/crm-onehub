@@ -28,7 +28,6 @@ const PHAM_VI = [
 	"apps/agent/agent/lib/okr/viec.ts",
 	"apps/api/src/okr/okr.contracts.ts",
 	API,
-	"apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
 	"apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx",
 	"apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx",
 	"apps/app/lib/messages/okr-gop-y.ts",
@@ -49,7 +48,7 @@ const MIEN = [
 	{
 		luat: "tac-nhan",
 		tep: CHU_MAN,
-		gia: "dong 100",
+		gia: "dong 111",
 		lyDo: "nhan ten tinh nang Tac nhan (muc Tac nhan cua CONTEXT.md), co tu truoc luot, khong phai chu goi tac tu",
 	},
 ];

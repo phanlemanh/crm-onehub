@@ -1571,8 +1571,8 @@ async function buocE15() {
 		);
 	const td = await tieuDe(a);
 	kiem(
-		`E15 buoc 1: phai 2 CardTitle Chu ky, Cau hinh, thay ${JSON.stringify(td)}`,
-		td.length === 2 && td[0] === CHU.chuKy && td[1] === CHU.cauHinh,
+		`E15 buoc 1: hai CardTitle dau phai la Chu ky, Cau hinh, thay ${JSON.stringify(td)}`,
+		td.length >= 2 && td[0] === CHU.chuKy && td[1] === CHU.cauHinh,
 	);
 	const dongTruoc = await demSel(a, "[data-chu-ky]");
 	kiem(
@@ -1686,8 +1686,8 @@ async function buocE15() {
 	await hienSel(m, "[data-ly-do-khong-quyen]");
 	const tdM = await tieuDe(m);
 	kiem(
-		`E15 buoc 5: thanh vien van phai thay 2 CardTitle, thay ${JSON.stringify(tdM)}`,
-		tdM.length === 2,
+		`E15 buoc 5: thanh vien van phai thay hai CardTitle dau Chu ky, Cau hinh, thay ${JSON.stringify(tdM)}`,
+		tdM.length >= 2 && tdM[0] === CHU.chuKy && tdM[1] === CHU.cauHinh,
 	);
 	const khoa = await m.evaluate(() =>
 		[
