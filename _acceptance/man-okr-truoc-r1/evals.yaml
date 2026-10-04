@@ -28,9 +28,9 @@ evals:
     cmd: config:executors.script.r1c_man
     steps:
       - "Canh cay; phien do rieng (mot-luot.sh -> tien-de.mjs); napBoMau; dang nhap dev:session nguoi chon mau (le-hai-dang)"
-      - "Buoc hoi-y (1440x900 roi 390x844): mo /<ws>/okr/hoi-y; doi [data-khoi='thanh-cong-bo'] va danh sach y chua gom; dem y chua gom nam tron trong khung nhin dau ma elementFromPoint tai tam tra ve phan tu thuoc thanh cong bo -> phai bang 0; chieu cao thanh <= 80 (1440) / <= 120 (390); anh r1c-hoi-y-gon-<kho>.png"
+      - "Buoc hoi-y (1440x900 roi 390x844): mo /<ws>/okr/hoi-y; doi [data-khoi='thanh-cong-bo'] va danh sach y chua gom; dem y chua gom nam tron trong khung nhin dau (phai >= 1, neu khong so bi phu 0 la rong) va so y trong do ma elementFromPoint tai tam tra ve phan tu thuoc thanh cong bo -> phai bang 0; chieu cao thanh <= 80 (1440) / <= 120 (390); anh r1c-hoi-y-gon-<kho>.png"
       - "Moi y chua gom: scrollIntoView({block:'center'}), elementFromPoint tai tam thuoc chinh y do"
-      - "Bam 'Xem danh sách' (chu doc tu saveBar), anh r1c-hoi-y-mo-<kho>.png; bam lien ket 'Còn ý chưa gom vào chủ đề' -> danh sach y chua gom giao khung nhin; 390: scrollWidth <= clientWidth"
+      - "Bam 'Xem danh sách' (chu doc tu saveBar), anh r1c-hoi-y-mo-<kho>.png; cuon xuong day, khang dinh danh sach y chua gom NAM NGOAI khung nhin (trang thai truoc), roi bam lien ket 'Còn ý chưa gom vào chủ đề' -> danh sach y chua gom giao khung nhin; 390: scrollWidth <= clientWidth"
     paths:
       - "apps/app/app/(app)/[slug]/okr/hoi-y/**"
       - "packages/ui/src/components/save-bar.tsx"
@@ -61,7 +61,10 @@ evals:
       theo Asia/Ho_Chi_Minh o CA HAI thu tu; moi KR mot dong voi so dinh dang nhu o gia tri va nhan tu tin
       lastConfidence; khong co [data-nut='gui']. Bam 'Sửa cập nhật' -> ST-capnhat-dangdien, o gia tri dien
       san, khong nut tu tin nao duoc chon, nut gui = m.gui(0) va disabled, document.activeElement la o
-      gia tri cua KR dau; chon muc cho mot KR roi gui -> mock guiCapNhat nhan dung mot dong.
+      gia tri cua KR dau; chon muc cho mot KR -> bo chon tu tin thay dung KR do (doi chung duong cua
+      khang dinh 'khong chon san'), gui -> mock guiCapNhat nhan dung mot dong. Test 'da xong so': KR
+      1234,5 khach — so tren man da xong ghim nguyen van '1.234,5 khách' VA nam trong dong mo ta duoi o
+      gia tri cua form sau khi bam Sua (quan he giua hai man, khong suy tu ham ve).
       CHIEU DO: (a) ban sao bo nhanh da-xong (luon mo form) -> 'da xong: trang thai ST-capnhat-dangdien,
       mong ST-capnhat-daxong', ma 1; (b) ban sao lay lastAt cua phan tu cuoi -> o (i) do voi 'da xong: gio
       gui moi nhat lech', ma 1; (c) ban sao bo lenh focus -> 'sua cap nhat: focus khong o o gia tri dau',
@@ -95,7 +98,7 @@ evals:
     steps:
       - "Phien do rieng nhu E2; dang nhap dev:session nhan vien mau (do-minh-khoa, hai KR quy 4 mau)"
       - "Buoc cap-nhat: xoa OkrCheckIn tuan nay cua hai KR trong CSDL phien do; mo /<ws>/okr/cap-nhat-tuan?kyOkr=<quy4> -> ST-capnhat-dangdien; chon muc tu tin ca hai, bam gui -> ST-capnhat-dagui; CSDL dem +2 OkrCheckIn mang tuan nay"
-      - "Tai lai -> ST-capnhat-daxong, chu nhin thay (innerText) co ten hai KR va nhan muc vua chon; anh r1c-cap-nhat-xong-<kho>.png"
+      - "Tai lai -> ST-capnhat-daxong, chu nhin thay (innerText) co ten hai KR, va innerText cua TUNG hang [data-kr] mang nhan muc vua chon cua chinh KR do; anh r1c-cap-nhat-xong-<kho>.png"
       - "Bam 'Sửa cập nhật', doi muc tu tin KR dau, gui -> CSDL +1 OkrCheckIn cho KR do; tai lai -> ST-capnhat-daxong voi muc moi"
       - "Xoa OkrCheckIn tuan nay cua KR thu hai -> tai lai -> ST-capnhat-motphan, innerText co 'Đã gửi 1/2 KR tuần này'; anh r1c-cap-nhat-mot-phan-<kho>.png; 390: scrollWidth <= clientWidth o ca ba trang thai"
     paths:

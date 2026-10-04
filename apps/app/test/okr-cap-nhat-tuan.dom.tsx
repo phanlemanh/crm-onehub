@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+import type { GuiCapNhatInput } from "@crm/validation/okr-cap-nhat";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -78,7 +79,7 @@ const DU: CapNhatTuanOutput = {
 };
 
 let daLamMoi: string[] = [];
-let daGuiVao: unknown[] = [];
+let daGuiVao: GuiCapNhatInput[] = [];
 
 type KetQuaMock = { sessionId: string; written: number; seconds: number };
 
@@ -92,7 +93,7 @@ const thuTuc = (duong: string) => ({
 	mutationOptions: (chon?: { onSuccess?: (kq: KetQuaMock) => unknown }) => ({
 		...chon,
 		mutationKey: [duong],
-		mutationFn: async (vao: unknown): Promise<KetQuaMock> => {
+		mutationFn: async (vao: GuiCapNhatInput): Promise<KetQuaMock> => {
 			daGuiVao.push(vao);
 			return { written: 1, seconds: 1, sessionId: "phien" };
 		},
@@ -302,6 +303,19 @@ function tuTinDaChon(): string[] {
 	].map((e) => e.closest("[data-kr]")?.getAttribute("data-kr") ?? "");
 }
 
+type OMaTran = string | null | (string | null | undefined)[];
+
+const XONG_LON = kr({
+	keyResultId: "kr-xong-lon",
+	kind: "tang-toi",
+	unit: "khách",
+	currentValue: 1234.5,
+	targetValue: 2000,
+	lastConfidence: "thap",
+	lastAt: "2026-09-15T02:10:00.000Z",
+	updatedThisWeek: true,
+});
+
 function nutGui(): HTMLButtonElement | null {
 	return document.body.querySelector<HTMLButtonElement>('[data-nut="gui"]');
 }
@@ -367,15 +381,17 @@ describe("man cap nhat tuan: da xong", () => {
 		].find((b) => b.textContent?.includes(M.mucTuTin.vua));
 		if (!vua) throw new Error("khong thay nut Vua cua KR dau");
 		await act(async () => vua.click());
+		const daChonSau = tuTinDaChon();
 		const gui = nutGui();
 		if (!gui) throw new Error("khong thay nut gui");
 		await act(async () => gui.click());
 		await act(async () => {
 			await new Promise((r) => setTimeout(r, 0));
 		});
-		const vao = daGuiVao[0] as { items: { keyResultId: string }[] } | undefined;
+		const vao = daGuiVao.at(0);
 		expect({
 			truoc,
+			daChonSau,
 			guiCua: vao?.items.map((i) => i.keyResultId) ?? null,
 		}).toEqual({
 			truoc: {
@@ -386,8 +402,32 @@ describe("man cap nhat tuan: da xong", () => {
 				tatGui: true,
 				focus: `${XONG_A.keyResultId}-gia-tri`,
 			},
+			daChonSau: [XONG_A.keyResultId],
 			guiCua: [XONG_A.keyResultId],
 		});
+	});
+});
+
+describe("man cap nhat tuan: so tren man da xong", () => {
+	test("da xong so: so cua KR tren man da xong trung so ma dong mo ta duoi o gia tri cua form hien sau khi bam Sua cap nhat", async () => {
+		await mo(bo([XONG_LON]));
+		const soDaXong =
+			dong(XONG_LON.keyResultId)
+				.querySelector(".tabular-nums")
+				?.textContent?.trim() ?? "";
+		const sua = document.body.querySelector<HTMLButtonElement>(
+			'[data-nut="sua-cap-nhat"]',
+		);
+		if (!sua) throw new Error("khong thay nut sua cap nhat");
+		await act(async () => sua.click());
+		const moTaForm =
+			dong(XONG_LON.keyResultId)
+				.querySelector('[data-o="gia-tri"] [data-slot="field-description"]')
+				?.textContent?.replace(/\s+/g, " ") ?? "";
+		expect({
+			soDaXong,
+			formCoCungSo: soDaXong !== "" && moTaForm.includes(soDaXong),
+		}).toEqual({ soDaXong: "1.234,5 khách", formCoCungSo: true });
 	});
 });
 
@@ -412,8 +452,8 @@ describe("man cap nhat tuan: mot phan va chua gui", () => {
 	});
 
 	test("mot phan: ma tran x = 0, 1, 2 tren y = 3 — trang thai, dong da gui, tap dau, khong chon san", async () => {
-		const thuc: Record<string, unknown> = {};
-		const mong: Record<string, unknown> = {};
+		const thuc: Record<string, OMaTran> = {};
+		const mong: Record<string, OMaTran> = {};
 		for (const x of [0, 1, 2]) {
 			const items = [K1, K2].map((k, i) => (i < x ? tuanNay(k) : tuanTruoc(k)));
 			await mo(bo([...items, K3]));

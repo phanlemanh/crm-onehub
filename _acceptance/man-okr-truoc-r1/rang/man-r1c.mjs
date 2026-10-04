@@ -235,9 +235,11 @@ async function buocHoiY(cookie, slug) {
 				...document.querySelectorAll("[data-khoi='y-chua-gom'] [data-y]"),
 			];
 			let phu = 0;
+			let trongKhung = 0;
 			for (const y of ds) {
 				const r = y.getBoundingClientRect();
 				if (r.top < 0 || r.bottom > cao) continue;
+				trongKhung += 1;
 				const tam = document.elementFromPoint(
 					r.left + r.width / 2,
 					r.top + r.height / 2,
@@ -247,6 +249,7 @@ async function buocHoiY(cookie, slug) {
 			return {
 				soY: ds.length,
 				phu,
+				trongKhung,
 				caoThanh: Math.round(bar?.getBoundingClientRect().height ?? -1),
 				moRong: bar
 					?.querySelector("button[aria-controls]")
@@ -254,9 +257,13 @@ async function buocHoiY(cookie, slug) {
 			};
 		});
 		dong.push(
-			`GHI hoi-y ${kho}: ${dau.soY} y chua gom, ${dau.phu} bi phu, thanh cao ${dau.caoThanh}px, aria-expanded ${dau.moRong}`,
+			`GHI hoi-y ${kho}: ${dau.soY} y chua gom, ${dau.trongKhung} nam tron trong khung dau, ${dau.phu} bi phu, thanh cao ${dau.caoThanh}px, aria-expanded ${dau.moRong}`,
 		);
 		if (dau.soY === 0) loi.push("khong co y chua gom nao de do");
+		if (dau.trongKhung === 0)
+			loi.push(
+				"khong y chua gom nao nam tron trong khung dau — so bi phu 0 la rong",
+			);
 		if (dau.phu > 0) loi.push(`y chua gom bi thanh phu: ${dau.phu}`);
 		if (dau.caoThanh < 0 || dau.caoThanh > R1C.tranThanh[kho])
 			loi.push(
@@ -317,6 +324,17 @@ async function buocHoiY(cookie, slug) {
 				const c = document.querySelector('[data-slot="page-shell-scroll"]');
 				if (c) c.scrollTop = c.scrollHeight;
 			});
+			await tre(R1C.cho.yenMs);
+			const truocBam = await t.p.evaluate(() => {
+				const r = document
+					.querySelector("[data-khoi='y-chua-gom']")
+					.getBoundingClientRect();
+				return r.bottom > 0 && r.top < innerHeight;
+			});
+			if (truocBam)
+				loi.push(
+					"danh sach y chua gom da nam trong khung truoc khi bam lien ket — phep do khong phan biet",
+				);
 			try {
 				await lienKetY.click();
 			} catch (e) {
@@ -420,8 +438,16 @@ async function buocCapNhat(cookie, slug) {
 				loi1440.push(`man da xong thieu KR «${ten.get(id)}»`);
 		if (!chu.includes(MC.daXong.title))
 			loi1440.push(`man da xong thieu «${MC.daXong.title}»`);
-		if (!chu.includes(MC.tuTinNhan(MC.mucTuTin.cao)))
-			loi1440.push(`man da xong thieu nhan «${MC.tuTinNhan(MC.mucTuTin.cao)}»`);
+		for (const id of ids) {
+			const hang = await t.p.evaluate(
+				(id) => document.querySelector(`[data-kr="${id}"]`)?.innerText ?? "",
+				id,
+			);
+			if (!hang.includes(MC.tuTinNhan(MC.mucTuTin.cao)))
+				loi1440.push(
+					`hang KR «${ten.get(id)}» khong mang nhan «${MC.tuTinNhan(MC.mucTuTin.cao)}» vua chon`,
+				);
+		}
 		await chup(t, "r1c-cap-nhat-xong-1440");
 
 		const sua = await t.p.$("[data-nut='sua-cap-nhat']");

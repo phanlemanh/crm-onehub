@@ -183,8 +183,8 @@ const CAU = {
 
 describe("toan-canh chu the don vi", () => {
 	test("toan-canh: ma tran vi x en x {co don vi chua dat, moi don vi da dat} — the noi mục tiêu riêng, ten khong dich, mo ta bang noi gop", async () => {
-		const thuc: Record<string, unknown> = {};
-		const mong: Record<string, unknown> = {};
+		const thuc: Record<string, boolean | string | null> = {};
+		const mong: Record<string, boolean | string | null> = {};
 		for (const locale of ["vi", "en"] as const) {
 			const mt = okrToanCanhMessages(locale).toanCanh;
 			for (const chuaDat of [["Khối Hỗ trợ"], []]) {
