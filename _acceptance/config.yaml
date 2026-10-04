@@ -1095,6 +1095,13 @@ executors:
     sol_dem_db: bun run test -- "cd packages/db && bun test test/okr-cuoc-soan.spec.ts -t dem-co-luot"
     sol_tran_api: bun run test -- "cd apps/api && bun test test/soan-okr-tran.spec.ts -t cuoc-rong-khong-tinh"
     nbn_ca_tep: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/nop-ban-nhap.integration.spec.ts"
+    r1a_nut_soan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t nut-soan
+    r1a_popover_soan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t popover-soan
+    r1a_chua_cau_hinh: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t chua-cau-hinh
+    r1a_tab_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t tab-khung
+    r1a_so_it: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t so-it
+    r1a_chip: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t chip
+    r1a_lien_ket_cheo: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t lien-ket-cheo
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
@@ -1719,6 +1726,12 @@ executors:
     nbn_dao_thu_tu_xanh: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs xanh
     nbn_dao_thu_tu_do: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs do
     nbn_quet_mau: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/quet-mau.mjs
+    r1a_man_khung: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan le"
+    r1a_man_thanh: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan thanh"
+    r1a_man_khung_dt: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan dien-thoai"
+    r1a_man_chip: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan chip"
+    r1a_man_bon_vai: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/bon-vai.mjs"
+    r1a_san_thiet_ke: for t in "apps/app/components/detail-sheet.tsx" "apps/app/components/crm/record-sheet/objective-sheet.tsx" "apps/app/components/crm/record-sheet/objective-hien-thi.tsx" "apps/app/components/crm/record-sheet/record-parts.tsx" "apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx" "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

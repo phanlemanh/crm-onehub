@@ -886,6 +886,38 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-hien-tai", nhan: "Bản đang chạy — để so" },
 		],
 	},
+	{
+		slug: "khung-okr-truoc-r1",
+		ten: "Khung OKR trước R1 — bảng có lề, điện thoại đọc được, chip Kara cùng nhãn, thanh một hàng",
+		states: [
+			{ id: "ST-khung-kr", nhan: "Khung Mục tiêu — bảng KR có lề 20 px" },
+			{
+				id: "ST-khung-tab",
+				nhan: "Khung tiếng Anh — tab Changes/History, «from 1 KR»",
+			},
+			{
+				id: "ST-khung-dienthoai",
+				nhan: "Điện thoại (375) — đầu khung cuộn, tab dính, ô số không cắt",
+			},
+			{
+				id: "ST-danhsach-chip",
+				nhan: "Của tôi và Theo đơn vị — chip Kara là nhãn, cuối nhóm",
+			},
+			{
+				id: "ST-donvi-soan-tiep",
+				nhan: "Thanh Theo đơn vị — có cuộc đang soạn, chữ phụ trong «i»",
+			},
+			{
+				id: "ST-donvi-soan-chuacauhinh",
+				nhan: "Thanh Theo đơn vị — chưa cấu hình (quản trị)",
+			},
+			{
+				id: "ST-donvi-soan-dangtai",
+				nhan: "Thanh Theo đơn vị — đang tải, nút giữ chỗ",
+			},
+			{ id: "ST-hienthi-hoilai", nhan: "Mở tab Căn chỉnh — hỏi bỏ thay đổi" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
