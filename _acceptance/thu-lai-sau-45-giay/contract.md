@@ -5,7 +5,7 @@ slug: thu-lai-sau-45-giay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-05
 design_doc: docs/superpowers/specs/2026-10-04-thu-lai-sau-45-giay-design.md
@@ -55,6 +55,12 @@ Source input: chủ kho chọn «mở hợp đồng mới» cho Ngoài-3 ở C�
 
 ## Notes
 
+- Known limits (chủ kho ghi ở Cổng Bằng chứng round 3, 05/10):
+  - Ngoài-2: ca DOM «lượt tự xong sau một lần gửi lại bị từ chối» dựng ảnh chụp `onFinish` mà store eve thật (chỉ nối thêm) không sinh ra.
+  - (r2) `giu-r1h.mjs` neo «tệp đã ký không đổi» vào `git merge-base HEAD origin/onehub`; sau khi gộp, phép so thành tự so với chính nó.
+  - (r2) `giu-r1h.mjs` chỉ ghim nửa «không còn báo lỗi» của câu «hẹn giờ 45 s đặt lại».
+  - (r2) lớp «thân hồi âm huỷ không khớp khuôn» chỉ có một ca sai cùng lúc hai trường; không ca `turn.cancelled` mang `turnId` khác; không ca nhiều `message.received`; ca lượt mở đầu bị từ chối thiếu đối chứng dương; ảnh chụp `onFinish` trong bài DOM viết tay và ép kiểu.
+- Hợp đồng mới (Ngoài-1 r3 + mục r2 «huỷ hỏng rồi lượt tự xong»): «Thử lại khi bận» với lượt kế tiếp còn `submitted` (huỷ không được mang `turnId` của lượt trước) và với lệnh huỷ hỏng rồi lượt cũ tự xong (báo lỗi và khoá ô soạn phải tắt).
 - Phản biện context sạch (gap-probe) thêm: chờ cả hồi âm huỷ (AC-2), bài store eve thật (AC-2), E4 theo trạng thái thật của phiên (AC-4), trần chờ khép (AC-3), Trợ lý giả đỗ trễ 3 giây và sàn số mẫu (AC-7).
 - Duyệt lại Cổng 1 lần hai (05/10, sau S4 round 1): đổi khuôn theo tài liệu eve 0.29.4 — bỏ `stop()`, giữ luồng tới mốc khép, huỷ mang `turnId` và parse hồi âm ở biên; S4 round 1 (REJECT) chỉ ra bản 1 có thể làm câu trả lời mới không hiện. Xem `decisions.jsonl`.
 - Duyệt lại Cổng 1 (04/10, S3): bản duyệt đầu hứa AC-6 «không sửa dòng nào» ở cả hai tệp đã ký, nhưng một ca của `soan-okr-hong.dom.tsx` khẳng định đúng hành vi AC-1 cấm; AC-1 và AC-6 cũ không thể cùng xanh. Phản biện S1 sót chỗ này.
