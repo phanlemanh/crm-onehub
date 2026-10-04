@@ -1121,6 +1121,17 @@ executors:
     r1a_so_it: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t so-it
     r1a_chip: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t chip
     r1a_lien_ket_cheo: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t lien-ket-cheo
+    r1h_hong: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t hong-khong-tru --randomize --seed 1 && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t hong-khong-tru --randomize --seed 2 && bun test ./test/soan-okr-hoan-hong.spec.ts -t hoan-hong --randomize --seed 1 && bun test ./test/soan-okr-hoan-hong.spec.ts -t hoan-hong --randomize --seed 2"
+    r1h_mo_phien: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t mo-phien-khong-dung-duoc --randomize --seed 1 && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t mo-phien-khong-dung-duoc --randomize --seed 2 && bun test ./test/soan-okr-hoan-hong.spec.ts -t mo-phien-khong-dung-duoc --randomize --seed 1 && bun test ./test/soan-okr-hoan-hong.spec.ts -t mo-phien-khong-dung-duoc --randomize --seed 2"
+    r1h_tran: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t tran-van-chan"
+    r1h_huy: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t nguoi-huy"
+    r1h_cuoc_ky: bun run test -- "cd apps/api && bun test test/soan-okr-hoan-luot.spec.ts"
+    r1h_hoan_db: bun run test -- "cd packages/db && bun test test/okr-hoan-luot.spec.ts"
+    r1h_ly_do: cd apps/app && bun test ./test/soan-okr-ly-do-loi.spec.ts
+    r1h_thu_lai_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai.dom.tsx
+    r1h_luong: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t luong-khong-cat"
+    r1h_khong_status: cd apps/app && bun test ./test/soan-okr-ly-do-loi.spec.ts -t loi-khong-status
+    r1h_sau_thu_lai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai.dom.tsx -t sau-thu-lai
     r1c_hoi_y_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi-y.dom.tsx -t 'thanh công bố'"
     r1c_cap_nhat_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cap-nhat-tuan.dom.tsx"
     r1c_toan_canh_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-toan-canh-chu.dom.tsx"
@@ -1761,6 +1772,8 @@ executors:
     r1a_man_chip: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan chip"
     r1a_man_bon_vai: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/bon-vai.mjs"
     r1a_san_thiet_ke: for t in "apps/app/components/detail-sheet.tsx" "apps/app/components/crm/record-sheet/objective-sheet.tsx" "apps/app/components/crm/record-sheet/objective-hien-thi.tsx" "apps/app/components/crm/record-sheet/record-parts.tsx" "apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx" "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
+    r1h_man_that: 'OKR_AGENT_BRIDGE_SECRET=gia-do-soan-okr-khong-tru-luot OKR_AGENT_URL=http://127.0.0.1:9 PHIEN_DO_TEN_CAY=soan-okr-khong-tru-luot bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-khong-tru-luot/rang/thu-lai-man-that.mjs"'
+    r1h_chu_va_san: 'cd apps/app && bun test test/messages-guard.spec.ts && cd ../.. && node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx" --mode static'
     r1c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/man-okr-truoc-r1/rang/man-r1c.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"

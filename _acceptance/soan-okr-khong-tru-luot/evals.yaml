@@ -1,0 +1,118 @@
+slug: soan-okr-khong-tru-luot
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1h_hong
+    expected: "exit 0; bài gọi handler POST thật của cửa trên kho kiểm riêng (tRPC soanTangLuot giả chỉ để gọi đúng hàm tangLuot thật của @crm/db/okr-cuoc-soan, nên soLuot tăng thật trong kho); fetch giả cho mười một kết quả hỏng viết trước (ném lỗi; treo tới khi signal huỷ, với CUA_OKR.choTroLyMs hạ nhỏ trong bài; 400, 401, 403, 404, 409, 422, 500, 502, 503) × hai đường (POST session với cuộc giữ chỗ; POST session/<phien eve> với cuộc đã có phiên) × n ∈ {0, TRO_LY_OKR_TRAN.soan.luotMoiCuoc − 1} (rút từ hằng) = 44 ô, sàn viết tay 44 (ít hơn → 'ma tran rong' mã 1); mỗi ô: soLuot đọc lại từ kho bằng n; status = 502 (ném), 504 (treo), status của Trợ lý (còn lại); thân toEqual { error: <mã cửa theo bảng của AC-1>, luot: 'da-hoan' } (ném lỗi thì thêm detail như hôm nay); fetch giả được gọi đúng 1 lần. Đối chứng dương cùng fixture: fetch giả 202 → soLuot = n + 1, thân của Trợ lý không mang luot. Chiều đỏ ghim: bản sao route.ts bỏ lời gọi hoanLuot → 'tru-luot-khi-hong <duong> <ket-qua> n=<n>' mã 1. Ô hoàn-hỏng chạy ở tệp kiểm RIÊNG soan-okr-hoan-hong.spec.ts (mock một phần @crm/db/okr-cuoc-soan cho hoanLuot ném, không chung tiến trình với 44 ô): cửa trả status của lỗi gốc, thân không có luot, spy console.error nhận đúng 1 lời gọi chứa 'hoan-luot-hong' và mã cuộc. Lệnh chạy cả hai tệp, mỗi tệp hai lần với --randomize --seed khác nhau; tập ô đỏ rỗng ở cả bốn lượt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", packages/db/src/okr-cuoc-soan.ts, apps/app/lib/cua-okr-config.ts, apps/app/test/soan-okr-khong-tru-luot.spec.ts, apps/app/test/soan-okr-hoan-hong.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1h_mo_phien
+    expected: "exit 0; cùng tệp kiểm 44 ô, ba ca mở phiên mà Trợ lý trả 202: thân không có mã phiên và không header → 502 { error: 'khong-doc-duoc-phien', luot: 'da-hoan' }; capNhatPhien ném → 502 { error: 'khong-ghi-duoc-phien', luot: 'da-hoan' } (ca này chạy trong tệp riêng soan-okr-hoan-hong.spec.ts, nơi mock một phần @crm/db/okr-cuoc-soan làm capNhatPhien ném mà giữ hoanLuot thật); cuộc đổi sang chỗ giữ khác trong lúc Trợ lý trả lời → 409 { error: 'da-co-phien', luot: 'da-hoan' }; mỗi ca soLuot đọc lại = 0 và (ca thua đua) mã eve có trong cacPhien. Đối chứng dương: ca 202 có mã phiên → soLuot = 1, sessionId = mã eve. Chiều đỏ ghim: bản sao route.ts bỏ hoàn lượt ở nhánh mở phiên → 'tru-luot-mo-phien <ca>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", packages/db/src/okr-cuoc-soan.ts, apps/app/test/soan-okr-khong-tru-luot.spec.ts, apps/app/test/soan-okr-hoan-hong.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1h_tran
+    expected: "exit 0; một cuộc soLuot 0: chuỗi viết trước xen lượt 202 với lượt hỏng (502 và ném lỗi) cho tới khi có luotMoiCuoc lượt 202 (rút từ hằng); sau mỗi lượt soLuot bằng số lượt 202 đã qua; fetch giả nhận đúng luotMoiCuoc + số lượt hỏng lời gọi; lượt 202 kế tiếp → 429 { error: 'het-luot-cuoc' } và fetch giả không nhận thêm lời gọi; ca song song: cuộc soLuot = luotMoiCuoc − 1, hai POST cùng lúc với fetch 202 → tập status {202, 429} và fetch giả nhận đúng 1 lời gọi. Chiều đỏ ghim: bản sao hoàn lượt cả khi 202 → 'tran-thung: <so luot qua>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", packages/db/src/okr-cuoc-soan.ts, apps/app/test/soan-okr-khong-tru-luot.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1h_huy
+    expected: "exit 0; Request mang AbortSignal đã huỷ trước khi fetch giả trả lời, fetch giả ném AbortError khi signal huỷ; với n ∈ {0, 5}: soLuot sau = n + 1. Đối chứng cùng fixture: fetch giả ném lỗi thường khi signal KHÔNG huỷ → soLuot = n; fetch giả treo, người dùng không huỷ, thời hạn CUA_OKR.choTroLyMs (hạ nhỏ trong bài) cắt → 504 { error: 'tro-ly-okr-qua-han', luot: 'da-hoan' }, soLuot = n. Chiều đỏ ghim: bản sao hoàn cả khi người dùng huỷ → 'hoan-khi-nguoi-huy n=<n>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", apps/app/test/soan-okr-khong-tru-luot.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1h_cuoc_ky
+    expected: "exit 0; bài API qua tRPC thật trên kho kiểm: phòng ban mẫu gieo cuocMoiDonViMoiKy − 1 cuộc đã đóng có lượt (rút từ hằng), mở cuộc mới bằng soanMo, mô phỏng đúng hiệu ứng kho của cửa ở lượt hỏng (tangLuot rồi hoanLuot thật của @crm/db, k ∈ {1, 3} lượt hỏng); soanSanSang → soCuocDaDung = cuocMoiDonViMoiKy − 1; soanMo với boCuocDangId = cuộc hỏng → ok với id mới. Đối chứng dương cùng fixture: cuộc mới có một lượt thành công (tangLuot không hoàn) → soCuocDaDung = cuocMoiDonViMoiKy và soanMo boCuocDangId → het-cuoc-ky. Chiều đỏ ghim: hoanLuot thay bằng hàm không trừ → 'cuoc-hong-an-tran k=<k>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/okr-cuoc-soan.ts, apps/api/src/okr/soan.service.ts, apps/api/test/soan-okr-hoan-luot.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.r1h_hoan_db
+    expected: "exit 0; ma trận viết trước soLuot ∈ {0, 1, 3} → sau hoanLuot {0, 0, 2}, kết quả trả {tru:false}, {tru:true}, {tru:true}; cuộc đối chứng giữ soLuot; hai hoanLuot song song trên cuộc soLuot = 1 → soLuot 0 và đúng một kết quả tru:true; số khẳng định = số ô (sàn 5). Chiều đỏ ghim: bản sao bỏ điều kiện soLuot > 0 → 'so-luot-am <truoc>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/okr-cuoc-soan.ts, packages/db/test/okr-hoan-luot.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.r1h_ly_do
+    expected: "exit 0; bảng viết trước rút mã cửa từ CUA_OKR.loi và CUA_OKR.trangThaiTuChoiLuot lúc chạy: mỗi dòng (lỗi HTTP dựng như useEveAgent ném: status + thân JSON) → đúng { ma, daHoan } của thiết kế (khong-noi-duoc, qua-han, tro-ly-tu-choi, tro-ly-loi, chua-dem-duoc-luot, chua-mo-duoc-phien, het-dang-nhap, mat-mang, chua-mo-lai-duoc, qua-45s, dung-giua-chung); mỗi mã có thể hoàn xuất hiện hai dòng — có và không có luot: 'da-hoan' — và daHoan bằng đúng việc thân mang trường đó; lỗi không status → mat-mang, daHoan false; từ chối lượt có tên ở đúng status, 503 chua-cau-hinh, 409 da-co-phien và phien-da-thay không mang luot → null; tập mã bảng phủ BẰNG tập khoá okrSoanMessages(vi).hoiThoai.lyDoHong và bằng tập khoá bản en (lệch → 'ly-do-lech: <ma>'); số khẳng định = số dòng. Chiều đỏ ghim: bản sao trả daHoan true cho mọi 502 → 'da-hoan-sai <dong>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/loi-cua.ts", apps/app/lib/cua-okr-config.ts, apps/app/lib/messages/okr-soan.ts, apps/app/test/soan-okr-ly-do-loi.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.r1h_thu_lai_dom
+    expected: "exit 0; bài DOM dựng HoiThoaiSoan với phiên giả đang lỗi (câu chung dung-giua-chung); tập ca lần thử rút lúc chạy: bảy ca viết tay (gửi lại → 502 tro-ly-okr-khong-noi-duoc có luot da-hoan; cùng mã không có luot; gửi lại → Error không status; gửi lại → 401 chua-dang-nhap; mở lại → mutation ném; mở lại → { ok: false, lyDo: 'het-tran-thang' }) cộng một ca cho mỗi khoá CUA_OKR.trangThaiTuChoiLuot ở đúng status cộng 503 chua-cau-hinh-tro-ly-okr; sàn = 7 + số khoá + 1 (ít hơn → 'ma tran rong'); mỗi ca bấm [data-nut='thu-lai'] (ca có mã lyDoHong bấm hai lần): trong lúc lần thử treo nút disabled; ca có mã: [data-luot='loi'] chứa câu lyDoHong của mã (khác câu trước khi bấm), chứa câu khongTinh CHỈ ở ca có luot da-hoan, và chứa daThuLai(1) rồi daThuLai(2), cả ba trong phần tử aria-live='polite'; ca ok:false: câu lyDo sẵn có + daThuLai(1); ca từ chối có tên và chưa cấu hình: không còn [data-luot='loi'] và có [data-tu-choi=<mã>] với câu có tên sẵn có. Đối chứng dương: lần thử qua → không còn [data-luot='loi']. Chiều đỏ ghim: bản sao giữ câu chung sau khi bấm → 'thu-lai-im <ca>' mã 1; bản sao luôn in khongTinh → 'khong-tinh-sai <ca>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/lib/messages/okr-soan.ts, apps/app/test/soan-okr-thu-lai.dom.tsx]
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1h_man_that
+    steps:
+      - "Phiên đo riêng (mot-luot.sh → tien-de), OKR_AGENT_BRIDGE_SECRET giả, OKR_AGENT_URL=http://127.0.0.1:9 (không ai nghe); cảnh cây trước màn đầu tiên, lệch cây → mã 2"
+      - "Seed: chu kỳ mẫu pha lap-ke-hoach, một phòng ban bật soạn, một cuộc dang soLuot 0; đăng nhập dev:session trưởng phòng ban"
+      - "1440 px: mở ?cuocSoan=<id> → chờ [data-luot='loi']; đọc innerText; ảnh E9-loi-1440; HTML E9-loi-1440.html; đọc soLuot từ kho phiên đo"
+      - "Bấm [data-nut='thu-lai'] → chờ câu daThuLai(1); ảnh E9-thu-lai-1440; đọc soLuot"
+      - "Lặp ở 390 px (cuộc mới): ảnh E9-loi-390, E9-thu-lai-390; đo scrollWidth ≤ clientWidth của trang và vùng hội thoại"
+    expected: "exit 0; thu-lai-man-that.mjs in DUNG cho: nghe mạng thấy ít nhất một POST /eve/agents/okr/eve/v1/session trước khi chỗ báo lỗi hiện; innerText [data-luot='loi'] chứa câu lyDoHong khong-noi-duoc và câu khongTinh ở cả hai khổ; sau bấm có câu daThuLai(1); soLuot = 0 sau mở và sau bấm ở cả hai cuộc (đọc từ kho của phiên đo — DATABASE_URL tien-de cấp, in tên kho); không tràn ngang; bốn ảnh + HTML có trên đĩa. Chiều đỏ ghim: cờ --kiem-do-do chạy cùng các bước với OKR_AGENT_URL trỏ tới máy giả trong script trả 202 → phép đo câu lỗi in 'khong thay cau khong-noi-duoc' VÀ phép đo kho in 'luot tang: 1' (khẳng định soLuot = 1; khác → 'khong-thay-luot-tang' mã 1), cả lệnh mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/eve/agents/okr/**", apps/app/lib/messages/okr-soan.ts, packages/db/src/okr-cuoc-soan.ts, _acceptance/soan-okr-khong-tru-luot/rang/thu-lai-man-that.mjs]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.r1h_chu_va_san
+    expected: "exit 0; messages-guard.spec.ts xanh với khoá mới hoiThoai.lyDoHong.* và hoiThoai.daThuLai được ghim (GHIM hoặc KHONG_DAU đúng luật tệp); design-gate --mode static trên hoi-thoai-soan.tsx không có P0. Chiều đỏ ghim: bản sao messages thiếu khoá en của một lý do → messages-guard đỏ gọi tên khoá."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", apps/app/lib/messages/okr-soan.ts, apps/app/test/messages-guard.spec.ts]
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1h_luong
+    expected: "exit 0; bài gọi handler thật của cửa với CUA_OKR.choTroLyMs hạ nhỏ (300 ms); fetch giả trả header ngay rồi đẩy thân thành N mẩu cách nhau sao cho tổng thời gian ≥ 2 × choTroLyMs; hai ô: GET session/<phien>/stream (200, NDJSON) và POST session/<phien> (202); mỗi ô đọc trọn res.text() và so toEqual chuỗi ghép đủ N mẩu, không ném lỗi; ô POST đọc lại soLuot = n + 1 (lượt đã tới Trợ lý thì vẫn tính). Đối chứng cùng tệp: POST treo trước header vẫn ra 504 tro-ly-okr-qua-han có luot (ô treo của E1). Chiều đỏ ghim: bản sao route.ts gắn thời hạn cho mọi yêu cầu và không dọn sau header → 'luong-bi-cat <duong>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", apps/app/lib/cua-okr-config.ts, apps/app/test/khung-cua-hoan.ts, apps/app/test/soan-okr-khong-tru-luot.spec.ts]
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.r1h_khong_status
+    expected: "exit 0; bảng viết trước lỗi không status: bốn lỗi mạng của trình duyệt (TypeError với «Failed to fetch», «fetch failed», «NetworkError when attempting to fetch resource.», «Load failed») → { ma: 'mat-mang', daHoan: false }; lỗi luồng của eve dựng như eve tạo khi lượt hỏng (Error có name là mã, ví dụ 'session.failed', 'turn.failed', thông điệp hết ngân sách), Error thường, TypeError có thông điệp khác → { ma: 'dung-giua-chung', daHoan: false }; số khẳng định = số dòng, sàn viết tay. Chiều đỏ ghim: bản sao trả mat-mang cho mọi lỗi không status → 'mat-mang-sai <dong>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/loi-cua.ts", apps/app/test/soan-okr-ly-do-loi.spec.ts]
+
+  - id: E13
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.r1h_sau_thu_lai
+    expected: "exit 0; bài DOM: màn ở lỗi chung, bấm «Thử lại», lần thử chạy được (phiên nhận sự kiện mới rồi về ready) → không [data-luot='loi']; gửi tin mới (phiên sang submitted) → không [data-luot='loi'] trong lúc gửi; tin mới hỏng (502 tro-ly-okr-khong-noi-duoc) → [data-luot='loi'] chứa câu lyDoHong khong-noi-duoc và KHÔNG chứa câu daThuLai nào; bấm «Thử lại» lần nữa → có daThuLai('1'), không có daThuLai('2'). Chiều đỏ ghim: bản sao không xoá đếm khi lần thử chạy được → 'thu-lai-song-sang-luot-sau' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr-thu-lai.dom.tsx]
