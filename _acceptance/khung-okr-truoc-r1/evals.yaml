@@ -1,0 +1,190 @@
+slug: khung-okr-truoc-r1
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_khung
+    steps:
+      - "Cảnh cây trước màn đầu tiên; phiên đo riêng (tien-de) qua mot-luot.sh; seed rang/san-khung.mjs: một Mục tiêu có whyNow, 3 KR, 1 căn chỉnh, ≥ 1 dòng Vết; đăng nhập dev:session người sửa được đơn vị"
+      - "Với mỗi khổ {1440×1000, 390×844, 375×812} sáng: mở khung Mục tiêu; với mỗi tab {kr, can-chinh, vet}: đo getBoundingClientRect của khung bảng ([data-slot=table-container]) và của section «Vì sao lúc này» ([data-khu=vi-sao] section)"
+      - "Ảnh E1-<tab>-<khổ>.png vào evidence/"
+    expected: "exit 0; rang/man-khung.mjs --phan le: ma trận viết trước 3 khổ × 3 tab = 9 ô, mỗi ô in 'le ok <khổ> <tab> trai=<px> phai=<px>': |trái bảng − trái chữ khu Vì sao| ≤ 1 px và (phải vùng cuộn − phải bảng) bằng (trái bảng − trái vùng cuộn) ± 1 px, cả hai ≥ 16 px; in 'so o: 9'. Chiều đỏ ghim: cờ --kiem-do-do chèn style đặt padding-inline 0 cho [data-slot=detail-sheet-table] rồi đo lại một ô — phải in 'bang cham mep: kr 1440' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/components/detail-sheet.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/app/(app)/[slug]/okr/bang-vet.tsx", "packages/ui/src/components/simple-table.tsx", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.r1a_nut_soan
+    expected: "exit 0; apps/app/test/khung-okr-truoc-r1.dom.tsx -t nut-soan dựng TheoDonVi thật với tRPC giả (okr.soanSanSang parse bằng schema output thật của thủ tục, import từ apps/api) — ma trận viết trước 8 dạng {đang tải (truy vấn chưa trả), mở được, có cuộc đang soạn, chế độ ẩn, hết cuộc, tạm nghỉ, chưa có khoá, chưa cấu hình} × vai quản trị: trong [data-hang-nut] nhóm [data-nhom-soan] là phần tử con cuối, chứa ≤ 2 button; trong cả [data-don-vi] (thẻ đơn vị bao thanh) không có [data-slot=field-description] nào của nút soạn và textContent của thẻ trừ phần popover không chứa chuỗi phụ nào của dạng đó (lấy từ okrSoanMessages); ở dạng đang tải nhóm đã có mặt với nút soạn disabled cùng chữ «Soạn OKR cùng Trợ lý»; in 'so dang: 8'. Chiều đỏ ghim: bản sao nut-soan.tsx đặt lại FieldDescription dưới nút ở dạng có cuộc đang soạn phải làm bài đỏ 'chu phu tren thanh: nut-tiep'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/lib/messages/okr-soan.ts", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
+
+  - id: E3
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_thanh
+    steps:
+      - "Phiên đo riêng qua mot-luot.sh; quản trị; đơn vị ở pha lập kế hoạch (seed chu kỳ «Năm kế · mẫu»)"
+      - "1440×1000 sáng, ma trận viết trước 5 dạng, hai lượt phiên đo: lượt một không đặt khoá cầu nối soạn (OKR_AGENT_BRIDGE_SECRET) đo «chưa cấu hình»; lượt hai đặt khoá giả cho app của phiên đo rồi đổi trạng thái theo thứ tự — mở được, có cuộc đang soạn (moCuoc), chế độ ẩn (okr.setProgram nấc ẩn cho phòng ban), hết cuộc (ba cuộc đã bỏ) — trong rang/man-khung.mjs"
+      - "Đo top của mọi button trong [data-hang-nut], chiều cao [data-don-vi] và top của danh sách Mục tiêu ở mốc «truoc-tra» (request khớp soanSanSang bị page.setRequestInterception giữ 3 s) và ở mốc «sau-tra»; ở mốc truoc-tra đếm số request soanSanSang đang bị giữ; ảnh E3-<dạng>-truoc-tra.png, E3-<dạng>-sau-tra.png"
+    expected: "exit 0; rang/man-khung.mjs --phan thanh: ở mốc truoc-tra của mỗi dạng, đối chứng dương in 'dang tai da bat: <dạng>' — số request soanSanSang bị giữ ≥ 1, [data-nut-soan] có mặt, disabled, chữ bằng okrSoanMessages('vi').nut.soan, danh sách Mục tiêu đã có mặt; rồi với mỗi dạng in 'thanh ok <dạng> hang=1 lech=<px>': mọi button của [data-hang-nut] cùng một hàng ở cả hai mốc (gom theo tâm dọc, hai nút lệch tâm ≤ 4 px là cùng hàng — nút «i» cỡ icon nhỏ hơn nút chữ), chiều cao [data-don-vi] và top của khối danh sách đầu tiên lệch ≤ 1 px giữa hai mốc, phần tử con cuối của [data-hang-nut] là [data-nhom-soan]; dạng chưa cấu hình không có truy vấn sẵn sàng (skipToken) nên không có mốc truoc-tra, chỉ đo một mốc; lượt một in 'so dang: 1', lượt hai in 'so dang: 4'. Chiều đỏ ghim hai phép: (a) cờ --kiem-do-do chèn ngay sau [data-hang-nut] một khối cao 20 px chứa tiepMoTa sau khi truy vấn trả ở dạng có cuộc đang soạn — phải in 'thanh nhay: tiep' và mã 1; (b) cờ --tat-chan bỏ phép chặn request — phải in 'khong bat duoc dang tai' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.r1a_popover_soan
+    expected: "exit 0; khung-okr-truoc-r1.dom.tsx -t popover-soan: ma trận viết trước 6 dạng có chữ phụ {có cuộc đang soạn, chế độ ẩn có cuộc đã dùng, mở được có cuộc đã dùng, hết cuộc, tạm nghỉ, chưa có khoá} — bấm [data-nut=thong-tin-soan] (chuột; rồi đóng; rồi focus + Enter) → [data-slot=popover-content] chứa đúng chuỗi lấy từ okrSoanMessages của dạng đó (tiepMoTa với ngày/lượt/dòng của dữ liệu giả, dsCuoc «N/3 cuộc», cheDoAn + cheDoAnMoTa, hetCuoc, tamNghi, lyDo chua-co-khoa-mo-hinh — so bằng hàm messages, không chuỗi gõ tay); bấm «N/3 cuộc» trong popover → URL có khoá dsCuoc; Esc → popover rời DOM và document.activeElement là nút «i»; ngoài popover, textContent của cả [data-don-vi] không chứa các chuỗi đó. In 'so dang: 6'. Chiều đỏ ghim: bản sao bỏ dsCuoc khỏi popover phải làm bài đỏ 'thieu chu phu: mo-co-cuoc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/lib/messages/okr-soan.ts", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.r1a_chua_cau_hinh
+    expected: "exit 0; khung-okr-truoc-r1.dom.tsx -t chua-cau-hinh: TheoDonVi với cauNoi=false, pha lap-ke-hoach, soanSanSang trả dạng mở được — ma trận {quản trị, người sửa được không quản trị}: quản trị → [data-nhom-soan] có nút soạn disabled và popover của nút «i» chứa okrSoanMessages.nut.chuaCauHinh; người sửa được → không có [data-nhom-soan], không có [data-nut-soan], văn bản trang không chứa nut.chuaCauHinh. Chiều đỏ ghim: bản sao hiện nút khoá cho mọi người sửa được phải làm bài đỏ 'nguoi thuong thay nut chua cau hinh'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.r1a_tab_khung
+    expected: "exit 0; khung-okr-truoc-r1.dom.tsx -t tab-khung dựng ObjectiveSheet thật với tRPC giả (okr.objective parse bằng objectiveOutput thật) trong LocaleProvider vi rồi en: đọc textContent của mọi [role=tab] (bỏ phần số đếm) → 5 nhãn, tập không trùng trong mỗi ngôn ngữ; en: tab vet = 'Changes', tab dien-bien = 'History'; vi: năm nhãn bằng đúng chuỗi của okrMessages('vi').sheet và okrToanCanhMessages('vi').dienBien.tab. Nhãn tab Vết đọc từ khoá mới okrMessages(l).sheet.tabVetNhan (khoá cũ tabVet giữ nguyên, không dùng ở khung). Chiều đỏ ghim: bản sao để objective-sheet đọc lại khoá cũ tabVet phải làm bài đỏ 'tab trung: en History'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/lib/messages/okr.ts", "apps/app/lib/messages/okr-toan-canh.ts", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.r1a_so_it
+    expected: "exit 0; khung-okr-truoc-r1.dom.tsx -t so-it: ObjectiveSheet với Mục tiêu 1 KR (progress 0) và Mục tiêu 2 KR (progress 35) × {en, vi} = 4 ô viết trước: [data-tien-do-tu] en bằng đúng 'Objective progress 0% from 1 KR.' và 'Objective progress 35% from 2 KRs.'; vi bằng 'Tiến độ mục tiêu 0% tính từ 1 KR.' và 'Tiến độ mục tiêu 35% tính từ 2 KR.'. In 'so o: 4'. Câu đọc từ khoá mới okrMessages(l).sheet.tienDoTuSo(x, n) (khoá cũ tienDoTu giữ nguyên). Chiều đỏ ghim: bản sao để objective-sheet điền lại khoá cũ tienDoTu phải làm bài đỏ 'so it sai: en 1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/lib/messages/okr.ts", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
+
+  - id: E8
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_khung_dt
+    steps:
+      - "Phiên đo riêng qua mot-luot.sh, seed như E1 (Mục tiêu 3 KR) cộng một thoả thuận; lặp ở 375×812 và 390×844 sáng, isMobile"
+      - "Mở khung Mục tiêu; ghi top của tên ([data-slot=drawer-title]) và của [role=tablist]; cuộn bằng page.mouse.wheel trong vùng cuộn 400 px; ghi lại; ảnh E8-muc-tieu-dau.png, E8-muc-tieu-cuon.png"
+      - "Bấm tab Căn chỉnh khi đang dính; cuộn về đầu bằng con lăn; đo lại tên"
+      - "Đóng; mở khung thoả thuận; cuộn thân tab 200 px bằng con lăn; đo top tên trước/sau; ảnh E8-thoa-thuan-cuon.png"
+    expected: "exit 0; rang/man-khung.mjs --phan dien-thoai, mỗi khổ {375, 390}: khung Mục tiêu sau cuộn — đáy tên < đỉnh vùng nhìn của ngăn kéo (tên đã ra khỏi khung nhìn), |top tablist − top vùng cuộn| ≤ 1 px, bấm tab Căn chỉnh đổi aria-selected; cuộn về đầu — tên nằm trong khung nhìn; khung thoả thuận — top tên trước/sau cuộn bằng nhau ± 1 px. In 'dien thoai ok <khổ>' cho cả hai khổ. Chiều đỏ ghim: cờ --kiem-do-do bỏ position sticky của tablist bằng style chèn — phải in 'tab khong dinh' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/components/detail-sheet.tsx", "apps/app/components/crm/record-sheet/record-parts.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/components/responsive-sheet.tsx", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E9
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_khung_dt
+    steps:
+      - "Cùng lượt với E8; seed đặt Mục tiêu có expected (ô Tiến độ có «lẽ ra») và người phụ trách tên dài 'Nguyễn Thị Phương Thảo Hoàng' (≥ 20 ký tự)"
+      - "375×812 và 390×844: đo scrollWidth/clientWidth, scrollHeight/clientHeight và innerText của từng dd trong [data-slot=detail-sheet-stats]; ảnh E9-o-so-<khổ>.png"
+    expected: "exit 0; --phan dien-thoai in 'o so ok <khổ>' cho {375, 390}: với mỗi dd scrollWidth ≤ clientWidth + 1 và scrollHeight ≤ clientHeight + 1 (không cắt ngang, không cắt dọc); innerText ô Tiến độ chứa chuỗi okrMessages('vi').sheet.leRa điền số expected của seed; innerText ô Phụ trách chứa đủ tên seed. Chiều đỏ ghim: cờ --kiem-do-do chèn white-space:nowrap;overflow:hidden;text-overflow:ellipsis cho dd — phải in 'o so bi cat: phu-trach' và mã 1; cờ --kiem-do-doc chèn -webkit-line-clamp:1;display:-webkit-box;overflow:hidden cho phần tử trong ô Phụ trách — phải in 'o so bi cat doc: phu-trach' và mã 1. Phép đo cắt ngang và cắt dọc lấy giá trị lớn nhất trên ô và mọi phần tử con của ô."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/components/detail-sheet.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E10
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_khung_dt
+    steps:
+      - "Cùng lượt với E8: ở 375 px và 390 px đo getComputedStyle(tên).textAlign và left của tên với right của ảnh đại diện, cho khung Mục tiêu và khung thoả thuận; ở 1440 px đo cùng hai số cho khung Mục tiêu"
+    expected: "exit 0; --phan dien-thoai in 'can trai ok' cho 5 ô viết trước {Mục tiêu 375, Mục tiêu 390, thoả thuận 375, thoả thuận 390, Mục tiêu 1440}: textAlign ∈ {left, start} và (left tên − right ảnh) ≤ 16 px. Chiều đỏ ghim: cờ --kiem-do-do chèn text-align:center cho [data-slot=drawer-header] — phải in 'ten can giua: muc-tieu 375' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/components/detail-sheet.tsx", "packages/ui/src/components/drawer.tsx", "apps/app/components/responsive-sheet.tsx", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.r1a_chip
+    expected: "exit 0; khung-okr-truoc-r1.dom.tsx -t chip dựng CuaToi và TheoDonVi thật (tRPC giả, output parse bằng schema thật) với Mục tiêu A soGopYCho 2: trong mỗi màn [data-chip-gop-y=A] là button có data-slot='badge' và data-variant bằng data-variant của nhãn loại cùng hàng; focus chip + Enter (rồi Space) → mở hồ sơ objective:A với neoGopY, aria-expanded của hàng A không đổi. Ma trận 2 màn × 2 phím = 4 ca, in 'so ca: 4'. Chiều đỏ ghim: bản sao trả chip về Button size xs phải làm bài đỏ 'chip khong la badge: cua-toi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "packages/ui/src/components/badge.tsx", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
+
+  - id: E12
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_chip
+    steps:
+      - "Phiên đo riêng qua mot-luot.sh; seed Mục tiêu A có 2 dòng OkrDeXuat chờ (đơn vị bật Kara, như san-gop-y của gop-y-dung-cho), nhãn loại và trạng thái"
+      - "1440×1000 sáng: «Của tôi» và «Theo đơn vị»; đo height, border-radius, font-size của chip và nhãn loại; rê chuột lên chip đo background-color; Tab tới chip đo outline/box-shadow; ảnh E12-<màn>.png"
+    expected: "exit 0; rang/man-khung.mjs --phan chip: mỗi màn in 'chip ok <màn>': |height chip − height nhãn| ≤ 1 px, border-radius bằng nhau, font-size bằng nhau; background-color khi hover khác khi nghỉ; box-shadow hoặc outline khi focus-visible khác 'none'. Chiều đỏ ghim: cờ --kiem-do-do chèn height:24px;border-radius:4px cho [data-chip-gop-y] — phải in 'chip lech nhan: cua-toi' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "packages/ui/src/components/badge.tsx", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E13
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_chip
+    steps:
+      - "Cùng lượt với E12; Mục tiêu A tên dài ≥ 60 ký tự để «Theo đơn vị» 1440 px phải xuống dòng"
+      - "Ma trận {Của tôi, Theo đơn vị} × {1440, 375}: đo top của nhãn loại và chip, kiểm chip là phần tử con cuối của [data-nhom-nhan]; ảnh E13-<màn>-<khổ>.png"
+    expected: "exit 0; --phan chip in 'cung hang ok <màn> <khổ>' cho đủ 4 ô viết trước: [data-chip-gop-y] là lastElementChild của [data-nhom-nhan] ở cả 4 ô; ở 1440 thêm |top chip − top nhãn loại| ≤ 2 px; ở 375 nhóm nhãn rộng hơn cột nên chip được xuống dòng trong nhóm, và độ lệch (top chip − top nhãn loại) của hai màn bằng nhau ± 2 px, in 'cung cho ok 375'; in 'so o: 4'. Chiều đỏ ghim: cờ --kiem-do-do chèn flex-basis:100% cho chip và flex-wrap cho nhóm nhãn (giả lại chip rớt dòng) — phải in 'chip rot dong: theo-don-vi 1440' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.r1a_lien_ket_cheo
+    expected: "exit 0; khung-okr-truoc-r1.dom.tsx -t lien-ket-cheo dựng ObjectiveSheet thật (tRPC giả, okr.objective có 1 căn chỉnh, quyen.datHienThi true; okr.datHienThi giả trả lỗi tuChoi như thủ tục thật — thông điệp và mã lấy từ hằng của apps/api, không chuỗi gõ tay); mở hộp Mức hiển thị, chọn Giới hạn, thêm một người xem, Lưu → nút [data-nut=mo-can-chinh] hiện. Ma trận viết trước 3 ca: (a) bấm nút → hộp hỏi bỏ thay đổi có mặt; chọn ở lại → [data-hop=muc-hien-thi] còn, radio gioi-han vẫn chọn, [data-nguoi-xem] còn người đó, tab đang chọn vẫn là kr; (b) như (a) rồi chọn bỏ → [data-hop=muc-hien-thi] rời DOM, tab can-chinh aria-selected=true; (c) hộp mở với hienThi gioi-han có sẵn, chưa lưu lần nào → không có [data-nut=mo-can-chinh] và nút Lưu khoá (nút chỉ hiện sau một lần lưu bị từ chối, mà lưu đòi có thay đổi — vế «không thay đổi thì đi thẳng» của AC-12 là trạng thái không dựng được trên màn). In 'so ca: 3'. Chiều đỏ ghim: bản sao gọi thẳng moCanChinh không qua DialogClose phải làm bài đỏ 'mat thay doi khong hoi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/components/crm/record-sheet/objective-hien-thi.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "packages/ui/src/components/dialog.tsx", "packages/ui/src/components/giu-thay-doi.tsx", "apps/app/test/khung-okr-truoc-r1.dom.tsx"]
+
+  - id: E15
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_bon_vai
+    steps:
+      - "Phiên đo riêng qua mot-luot.sh; seed bốn vai như khảo sát R1 04/10 (rang/bon-vai.mjs chép từ khao-sat-lo-trinh/r1-man-that.mjs)"
+      - "4 vai × {Của tôi, Theo đơn vị, khung Mục tiêu} × {375, 390, 1440} × {sáng, tối}: đo document.documentElement.scrollWidth so innerWidth, gom console error"
+      - "4 vai × Theo đơn vị 1440 sáng trên đơn vị ở pha lập kế hoạch, phiên đo mặc định chưa cấu hình soạn: đọc [data-nhom-soan] và innerText"
+    expected: "exit 0; rang/bon-vai.mjs in 'man ok <vai> <màn> <khổ> <theme>' cho đủ 72 ô viết trước và 'so o: 72'; không ô nào scrollWidth > innerWidth; không console error nào ngoài danh sách bỏ qua viết sẵn trong tệp (lỗi tải ảnh đại diện ngoài); rồi in 'vai soan ok <vai>' cho 4 vai: quản trị có [data-nhom-soan] với nút soạn disabled, ba vai kia không có [data-nhom-soan] và innerText không chứa okrSoanMessages('vi').nut.chuaCauHinh. Chiều đỏ ghim: cờ --kiem-do-do chèn một phần tử rộng 2000 px vào gốc tài liệu khi đang mở khung Mục tiêu — phải in 'tran ngang: quan-tri khung 375 sang' và mã 1; cờ --kiem-do-vai đổi điều kiện hiện nhóm soạn thành «sửa được» bằng cách chèn lại nhóm cho trưởng phòng — phải in 'nguoi thuong thay nut: truong-phong' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/**", "packages/ui/src/components/**", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E18
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1a_man_bon_vai
+    steps:
+      - "Cùng lượt với E15: 4 vai thật × Theo đơn vị 1440 sáng, đơn vị ở pha lập kế hoạch, phiên đo mặc định chưa cấu hình soạn"
+    expected: "exit 0; rang/bon-vai.mjs in 'vai soan ok <vai>' cho đủ 4 vai viết trước: quản trị có [data-nhom-soan] với nút soạn disabled; trưởng phòng, nhân viên, chỉ OKR không có [data-nhom-soan] và innerText trang không chứa okrSoanMessages('vi').nut.chuaCauHinh. Vai lấy từ phiên đăng nhập thật, không đặt tay. Chiều đỏ ghim: cờ --kiem-do-vai chèn lại nhóm soạn cho trưởng phòng phải in 'nguoi thuong thay nut: truong-phong' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/**", "_acceptance/khung-okr-truoc-r1/rang/**"]
+
+  - id: E16
+    criterion: AC-14
+    executor: judgment
+    inputs:
+      - _acceptance/khung-okr-truoc-r1/evidence/truoc/kr-1440.jpg
+      - _acceptance/khung-okr-truoc-r1/evidence/truoc/khung-375.png
+      - _acceptance/khung-okr-truoc-r1/evidence/truoc/thanh-1440.png
+      - _acceptance/khung-okr-truoc-r1/evidence/E1-kr-1440.png
+      - _acceptance/khung-okr-truoc-r1/evidence/E8-muc-tieu-dau-375.png
+      - _acceptance/khung-okr-truoc-r1/evidence/E9-o-so-375.png
+      - _acceptance/khung-okr-truoc-r1/evidence/E3-chua-cau-hinh-sau-tra.png
+    question: "So ba ảnh trong thư mục truoc/ với bốn ảnh sau: (1) bảng KR có lề như khu «Vì sao lúc này» không, hay vẫn áp mép khung; (2) trên điện thoại tiến độ và tên người phụ trách có đọc trọn được không, tên Mục tiêu có căn trái không; (3) thanh nút «Theo đơn vị» có là một hàng gọn không. Trả lời từng ý có/không kèm chỗ nhìn thấy trong ảnh."
+    evidence_required: [run_id, verdict, rationale, screenshot]
+
+  - id: E17
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.r1a_san_thiet_ke
+    expected: "exit 0; design-gate --mode static của plugin acceptance-gate chạy trên tám tệp giao diện vòng này chạm (detail-sheet.tsx, objective-sheet.tsx, objective-hien-thi.tsx, record-parts.tsx, chip-gop-y.tsx, khoi-muc-tieu.tsx, soan/nut-soan.tsx, theo-don-vi/theo-don-vi.tsx) và không tệp nào có P0 (bán kính, màu, khoảng cách tự đặt, className đè thành phần của packages/ui) — chip đi qua biến thể của Badge, không đè lớp tại chỗ gọi. Chiều đỏ là của chính design-gate (bộ ca của kit); vòng này không dựng thêm."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/components/detail-sheet.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/components/crm/record-sheet/objective-hien-thi.tsx", "apps/app/components/crm/record-sheet/record-parts.tsx", "apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"]

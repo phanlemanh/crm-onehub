@@ -1,14 +1,20 @@
 "use client";
 
+import Information from "@carbon/icons-react/es/Information";
 import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
-import { Field, FieldDescription } from "@crm/ui/components/field";
+import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@crm/ui/components/popover";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsString, useQueryState } from "nuqs";
-import { type ReactNode, useId } from "react";
+import type { ReactNode } from "react";
 import { toast } from "sonner";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { dauThangSau, homNayVn, ngayThangVn } from "@/lib/okr-chu-ky-nhan";
@@ -71,28 +77,52 @@ export function donViSoanCua(
 	}
 }
 
-function NutTat({
+function NhomSoan({
+	nut,
+	thongTin,
 	hinh,
-	moTa,
-	kem,
 	m,
 }: {
-	hinh: HinhNutTat;
-	moTa: string;
-	kem?: ReactNode;
+	nut: ReactNode;
+	thongTin?: ReactNode;
+	hinh?: string;
 	m: OkrSoanMessages;
 }) {
-	const idMoTa = useId();
 	return (
-		<Field data-disabled data-nut-soan={hinh}>
-			<div className="flex items-center gap-2">
-				<Button size="sm" variant="outline" disabled aria-describedby={idMoTa}>
-					{m.nut.soan}
-				</Button>
-				{kem}
-			</div>
-			<FieldDescription id={idMoTa}>{moTa}</FieldDescription>
-		</Field>
+		<span
+			className="inline-flex items-center gap-1"
+			data-nhom-soan
+			data-nut-soan={hinh}
+		>
+			{nut}
+			{thongTin ? (
+				<Popover>
+					<PopoverTrigger asChild>
+						<Button
+							aria-label={m.nut.thongTin}
+							data-nut="thong-tin-soan"
+							size="icon-sm"
+							variant="ghost"
+						>
+							<Icon icon={Information} />
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent align="end" data-thong-tin-soan>
+						<div className="flex flex-col items-start gap-2 text-xs">
+							{thongTin}
+						</div>
+					</PopoverContent>
+				</Popover>
+			) : null}
+		</span>
+	);
+}
+
+function NutKhoa({ m }: { m: OkrSoanMessages }) {
+	return (
+		<Button disabled size="sm" variant="outline">
+			{m.nut.soan}
+		</Button>
 	);
 }
 
@@ -124,7 +154,9 @@ export function NutSoan({
 	const donVi = donViSoanCua(don, cycleId);
 	const hienDuoc = donVi !== null && phaKy === PHA_SOAN && (canEdit || quanTri);
 	const sanSang = useQuery({
-		...trpc.okr.soanSanSang.queryOptions(hienDuoc && donVi ? donVi : skipToken),
+		...trpc.okr.soanSanSang.queryOptions(
+			hienDuoc && cauNoi && donVi ? donVi : skipToken,
+		),
 		retry: false,
 	});
 	const mo = useMutation(
@@ -173,48 +205,65 @@ export function NutSoan({
 				{m.nut.dsCuoc(String(da), tran)}
 			</Button>
 		) : null;
+	const chu = (cau: string) => <p className="text-muted-foreground">{cau}</p>;
+
+	let nhom: ReactNode = null;
 	const s = sanSang.data;
-	let nut: ReactNode = null;
-	if (s && !s.bat) {
+	if (!cauNoi) {
+		if (quanTri)
+			nhom = (
+				<NhomSoan
+					m={m}
+					hinh="nut-chua-cau-hinh"
+					nut={<NutKhoa m={m} />}
+					thongTin={chu(m.nut.chuaCauHinh)}
+				/>
+			);
+	} else if (!s) {
+		nhom = <NhomSoan m={m} hinh="dang-tai" nut={<NutKhoa m={m} />} />;
+	} else if (!s.bat) {
 		const hinh = HINH_NUT_TAT[s.lyDo];
 		if (hinh === "nut-het-cuoc")
-			nut = (
-				<NutTat
-					hinh={hinh}
+			nhom = (
+				<NhomSoan
 					m={m}
-					moTa={m.nut.hetCuoc(TRAN_CUOC_KY)}
-					kem={nutDs(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy, TRAN_CUOC_KY)}
+					hinh={hinh}
+					nut={<NutKhoa m={m} />}
+					thongTin={
+						<>
+							{chu(m.nut.hetCuoc(TRAN_CUOC_KY))}
+							{nutDs(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy, TRAN_CUOC_KY)}
+						</>
+					}
 				/>
 			);
 		else if (hinh === "nut-het-tran")
-			nut = (
-				<NutTat
-					hinh={hinh}
+			nhom = (
+				<NhomSoan
 					m={m}
-					moTa={m.nut.tamNghi(dauThangSau(homNayVn(new Date())))}
+					hinh={hinh}
+					nut={<NutKhoa m={m} />}
+					thongTin={chu(m.nut.tamNghi(dauThangSau(homNayVn(new Date()))))}
 				/>
 			);
 		else if (hinh === "nut-chua-khoa")
-			nut = <NutTat hinh={hinh} m={m} moTa={m.lyDo["chua-co-khoa-mo-hinh"]} />;
-	} else if (s && (s.nac !== "an" || quanTri)) {
-		const nutMo = (
-			<Button
-				size="sm"
-				variant="outline"
-				data-nut-soan={s.nac === "an" ? undefined : "nut"}
-				aria-haspopup="dialog"
-				disabled={mo.isPending}
-				onClick={() => mo.mutate(donVi)}
-			>
-				{m.nut.soan}
-			</Button>
-		);
+			nhom = (
+				<NhomSoan
+					m={m}
+					hinh={hinh}
+					nut={<NutKhoa m={m} />}
+					thongTin={chu(m.lyDo["chua-co-khoa-mo-hinh"])}
+				/>
+			);
+	} else if (s.nac !== "an" || quanTri) {
 		const dsDaDung = nutDs(s.soCuocDaDung, String(s.tranCuoc));
 		if (s.cuocDang) {
 			const cuocDang = s.cuocDang;
-			nut = (
-				<Field data-nut-soan="nut-tiep">
-					<div className="flex items-center gap-2">
+			nhom = (
+				<NhomSoan
+					hinh="nut-tiep"
+					m={m}
+					nut={
 						<Button
 							size="sm"
 							variant="outline"
@@ -223,41 +272,61 @@ export function NutSoan({
 						>
 							{m.nut.tiep}
 						</Button>
-						{dsDaDung}
-					</div>
-					<FieldDescription>
-						{m.nut.tiepMoTa(
-							ngayThangVn(new Date(cuocDang.moLuc)),
-							String(cuocDang.soLuot),
-							String(cuocDang.soDongTong - cuocDang.soDongNhan),
-						)}
-					</FieldDescription>
-				</Field>
+					}
+					thongTin={
+						<>
+							{chu(
+								m.nut.tiepMoTa(
+									ngayThangVn(new Date(cuocDang.moLuc)),
+									String(cuocDang.soLuot),
+									String(cuocDang.soDongTong - cuocDang.soDongNhan),
+								),
+							)}
+							{dsDaDung}
+						</>
+					}
+				/>
 			);
-		} else if (s.nac === "an")
-			nut = (
-				<Field data-nut-soan="nut-an">
-					<div className="flex items-center gap-2">
-						{nutMo}
+		} else {
+			const nutMo = (
+				<Button
+					size="sm"
+					variant="outline"
+					data-nut-soan={s.nac === "an" ? undefined : "nut"}
+					aria-haspopup="dialog"
+					disabled={mo.isPending}
+					onClick={() => mo.mutate(donVi)}
+				>
+					{m.nut.soan}
+				</Button>
+			);
+			const an =
+				s.nac === "an" ? (
+					<>
 						<Badge variant="outline">{m.nut.cheDoAn}</Badge>
-						{dsDaDung}
-					</div>
-					<FieldDescription>{m.nut.cheDoAnMoTa}</FieldDescription>
-				</Field>
+						{chu(m.nut.cheDoAnMoTa)}
+					</>
+				) : null;
+			nhom = (
+				<NhomSoan
+					hinh={s.nac === "an" ? "nut-an" : undefined}
+					m={m}
+					nut={nutMo}
+					thongTin={
+						an || dsDaDung ? (
+							<>
+								{an}
+								{dsDaDung}
+							</>
+						) : undefined
+					}
+				/>
 			);
-		else
-			nut = (
-				<>
-					{nutMo}
-					{dsDaDung}
-				</>
-			);
+		}
 	}
-	if (!cauNoi && nut !== null)
-		nut = <NutTat hinh="nut-chua-cau-hinh" m={m} moTa={m.nut.chuaCauHinh} />;
 	return (
 		<>
-			{nut}
+			{nhom}
 			{man}
 			{ds}
 		</>

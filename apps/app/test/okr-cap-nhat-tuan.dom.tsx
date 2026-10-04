@@ -95,7 +95,7 @@ const thuTuc = (duong: string) => ({
 		mutationKey: [duong],
 		mutationFn: async (vao: GuiCapNhatInput): Promise<KetQuaMock> => {
 			daGuiVao.push(vao);
-			return { written: 1, seconds: 1, sessionId: "phien" };
+			return { written: vao.items.length, seconds: 1, sessionId: "phien" };
 		},
 	}),
 });
@@ -489,5 +489,102 @@ describe("man cap nhat tuan: mot phan va chua gui", () => {
 			trangThai: trangThai(),
 			daGui: document.body.textContent?.includes(M.daXong.title) ?? false,
 		}).toEqual({ trangThai: "ST-capnhat-rong", daGui: false });
+	});
+});
+
+describe("man cap nhat tuan: da gui dem dung", () => {
+	const A = kr({ keyResultId: "kr-dg-a", lastConfidence: "cao" });
+	const B = kr({ keyResultId: "kr-dg-b", lastConfidence: "vua" });
+	const C = kr({ keyResultId: "kr-dg-c", lastConfidence: "thap" });
+	const daGuiTuanNay = (k: Kr): Kr => ({
+		...k,
+		lastAt: "2026-09-15T03:00:00.000Z",
+		updatedThisWeek: true,
+	});
+	const O = [
+		{
+			ten: "AC-1",
+			items: [daGuiTuanNay(A), daGuiTuanNay(B)],
+			sua: true,
+			gui: [A],
+			n: 1,
+			k: 0,
+		},
+		{
+			ten: "AC-2",
+			items: [daGuiTuanNay(A), B],
+			sua: false,
+			gui: [B],
+			n: 1,
+			k: 0,
+		},
+		{
+			ten: "AC-3",
+			items: [daGuiTuanNay(A), B, C],
+			sua: false,
+			gui: [B],
+			n: 1,
+			k: 1,
+		},
+		{ ten: "AC-4a", items: [A, B, C], sua: false, gui: [A, B], n: 2, k: 1 },
+		{ ten: "AC-4b", items: [A, B, C], sua: false, gui: [A, B, C], n: 3, k: 0 },
+		{
+			ten: "AC-6",
+			items: [daGuiTuanNay(A), B, C],
+			sua: false,
+			gui: [A, B],
+			n: 2,
+			k: 1,
+		},
+	] as const;
+
+	test("da gui dem dung: ma tran 6 o x 3 cot — tap KR gui, tieu de Da gui N, cau con cho K", async () => {
+		const thuc: Record<string, string | boolean | string[]> = {};
+		const mong: Record<string, string | boolean | string[]> = {};
+		for (const o of O) {
+			await mo(bo([...o.items]));
+			if (o.sua) {
+				const sua = document.body.querySelector<HTMLButtonElement>(
+					'[data-nut="sua-cap-nhat"]',
+				);
+				if (!sua) throw new Error(`${o.ten}: khong thay nut sua cap nhat`);
+				await act(async () => sua.click());
+			}
+			for (const k of o.gui) {
+				const nut = [
+					...dong(k.keyResultId).querySelectorAll<HTMLButtonElement>(
+						'[data-o="tu-tin"] button',
+					),
+				].find((b) => b.textContent?.includes(M.mucTuTin.cao));
+				if (!nut)
+					throw new Error(`${o.ten}: khong thay nut Cao cua ${k.keyResultId}`);
+				await act(async () => nut.click());
+			}
+			const gui = nutGui();
+			if (!gui) throw new Error(`${o.ten}: khong thay nut gui`);
+			await act(async () => gui.click());
+			for (let i = 0; i < 50 && trangThai() !== "ST-capnhat-dagui"; i += 1)
+				await act(async () => {
+					await new Promise((r) => setTimeout(r, 10));
+				});
+			const chu = document.body.textContent ?? "";
+			const tienTo = M.daGui.title(o.n, "@", 1).split("@")[0] ?? "";
+			const conCho = [1, 2, 3].filter((k) => chu.includes(M.daGui.conCho(k)));
+			thuc[`${o.ten}.gui`] = (daGuiVao.at(-1)?.items ?? [])
+				.map((i) => i.keyResultId)
+				.sort();
+			thuc[`${o.ten}.tieuDe`] = tienTo !== "" && chu.includes(tienTo);
+			thuc[`${o.ten}.conCho`] = conCho.map(String);
+			mong[`${o.ten}.gui`] = o.gui.map((k) => k.keyResultId).sort();
+			mong[`${o.ten}.tieuDe`] = true;
+			mong[`${o.ten}.conCho`] = o.k === 0 ? [] : [String(o.k)];
+			for (const root of dangMo) act(() => root.unmount());
+			dangMo = [];
+			document.body.innerHTML = "";
+			daGuiVao = [];
+		}
+		console.log(`da gui dem dung: ${Object.keys(mong).length} khang dinh`);
+		expect(Object.keys(thuc).length).toBe(18);
+		expect(thuc).toEqual(mong);
 	});
 });
