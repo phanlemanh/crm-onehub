@@ -120,6 +120,38 @@
 		{
 			"chu": "deal",
 			"vi_sao": "khoa loai ban ghi truyen cho lop ghi nho — khong ve ra man"
+		},
+		{
+			"chu": "rate-limit",
+			"vi_sao": "khoa loai loi cua the loi dung, so bang === roi doc t.loi.choPhut — builder-failure-card.tsx (47c1e67c1)"
+		},
+		{
+			"chu": "restricted",
+			"vi_sao": "khoa loai loi cua the loi dung, so bang === — builder-failure-card.tsx (47c1e67c1)"
+		},
+		{
+			"chu": "credits",
+			"vi_sao": "khoa loai loi cua the loi dung, so bang === — builder-failure-card.tsx (47c1e67c1)"
+		},
+		{
+			"chu": "pending",
+			"vi_sao": "gia tri prop status cua AsyncButtonContent, nhan hien ra doc tu pendingLabel — builder-failure-card.tsx (47c1e67c1)"
+		},
+		{
+			"chu": "idle",
+			"vi_sao": "gia tri prop status cua AsyncButtonContent — builder-failure-card.tsx (47c1e67c1)"
+		},
+		{
+			"chu": "session_limit_continuation",
+			"vi_sao": "ten cong cu cua eve, so bang === de an buoc het han muc — builder-question-composer.tsx (a2864e723)"
+		},
+		{
+			"chu": "session-limit",
+			"vi_sao": "khoa loai cau hoi cua eve, so bang === — builder-question-composer.tsx (a2864e723)"
+		},
+		{
+			"chu": "did",
+			"vi_sao": "khoa loai muc trong ban ghi hoi thoai, so bang === — builder-question-composer.tsx (a2864e723)"
 		}
 	],
 	"khoa_kieu": {
