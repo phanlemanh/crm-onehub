@@ -1,0 +1,47 @@
+{
+  "feature_plain": "Khung Mục tiêu và thanh «Theo đơn vị» hết chín lỗi trình bày mà mọi phòng ban sẽ gặp ngày đầu, và nút sang tab Căn chỉnh hỏi lại trước khi bỏ thay đổi chưa lưu.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho bảng KR, bảng Căn chỉnh và bảng Vết trong khung lùi vào 20 px như khu «Vì sao lúc này», không còn áp mép khung."},
+    {"id": "AC-2", "p": "Sẽ giữ thanh nút «Theo đơn vị» trên một hàng, nút soạn ở cuối hàng ngay từ lúc trang vẽ, danh sách không còn tụt xuống khi dữ liệu nút soạn về."},
+    {"id": "AC-3", "p": "Sẽ dời mọi chữ phụ của nút soạn (ngày mở cuộc, số lượt, «1/3 cuộc», lý do khoá) vào một ô bật ra từ nút «i»."},
+    {"id": "AC-4", "p": "Sẽ chỉ cho quản trị thấy nút soạn khoá kèm lý do khi máy chủ chưa bật soạn nháp; người khác không thấy nút."},
+    {"id": "AC-5", "p": "Sẽ đặt tên tab Vết tiếng Anh là «Changes» để không còn hai tab cùng tên «History»."},
+    {"id": "AC-6", "p": "Sẽ viết đúng số ít ở dòng tiến độ tiếng Anh: «from 1 KR», «from 2 KRs»."},
+    {"id": "AC-7", "p": "Sẽ cho khung Mục tiêu trên điện thoại cuộn cả đầu khung theo nội dung, thanh tab dính ở mép trên."},
+    {"id": "AC-8", "p": "Sẽ cho ô Tiến độ và ô Phụ trách trên điện thoại xuống dòng thay vì cắt chữ."},
+    {"id": "AC-9", "p": "Sẽ căn trái tên bản ghi ở đầu mọi khung chi tiết trên điện thoại."},
+    {"id": "AC-10", "p": "Sẽ cho chip «Kara · N góp ý» cùng cỡ, cùng góc với nhãn bên cạnh, bấm được bằng chuột và bàn phím."},
+    {"id": "AC-11", "p": "Sẽ giữ chip Kara luôn ở cuối nhóm nhãn, cùng hàng với nhãn ở cả «Của tôi» lẫn «Theo đơn vị»."},
+    {"id": "AC-12", "p": "Sẽ hỏi «Bỏ thay đổi?» khi người bấm «Mở tab Căn chỉnh» trong hộp Mức hiển thị lúc còn thay đổi chưa lưu."},
+    {"id": "AC-13", "p": "Sẽ không làm màn nào tràn ngang hay sinh lỗi mới, ở bốn vai và ba khổ màn."},
+    {"id": "AC-14", "p": "Sẽ để một người chưa đọc mã so ảnh trước và sau, xác nhận khung gọn hơn bằng mắt."}
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để sang lượt khác, để R1a gộp kịp trước 08/10:",
+  "wont_do": [
+    {"id": "OOS-1", "p": "Sẽ KHÔNG sửa chữ tiếng Anh «1 suggestions» trên chip Kara và các lỗi chữ của vùng Kara — để lượt chữ Kara."},
+    {"id": "OOS-2", "p": "Sẽ KHÔNG đổi tên «Trợ lý» thành Kara ở nút soạn — lượt K6a, vì chữ đi sau."},
+    {"id": "OOS-3", "p": "Sẽ KHÔNG chạm Hồi ý, Cập nhật tuần, Toàn cảnh — hàng R1c của phiên P2."},
+    {"id": "OOS-4", "p": "Sẽ KHÔNG sửa sáu lỗi tổ chức và dựng cây — hàng R1d, làm ngay sau vòng này."},
+    {"id": "OOS-5", "p": "Sẽ KHÔNG cho khung thoả thuận, cá nhân, công ty, kế hoạch cuộn cả khung trên điện thoại — ô chat của chúng ghim ở đáy."},
+    {"id": "OOS-6", "p": "Sẽ KHÔNG chạy lại từng phép đo riêng của các việc đã ký trước; lưới chống hồi quy là bộ kiểm chung của kho cộng phép đo bốn vai."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Phủ đủ năm chỗ có lỗi: thanh Theo đơn vị, hàng Mục tiêu, đầu khung, thân khung, hộp Mức hiển thị — đối chiếu mười mục của khảo sát 04/10."},
+    {"i": 1, "p": "Phủ ba khổ màn: máy tính 1440, điện thoại 390 (khổ khảo sát đo) và 375."},
+    {"i": 2, "p": "Phủ bốn vai: quản trị, trưởng phòng, nhân viên, vai chỉ OKR — như khảo sát R1."},
+    {"i": 3, "p": "Phủ tám dạng của nút soạn, mục tiêu 1 KR và nhiều KR, có và không có góp ý, tên dài."},
+    {"i": 4, "p": "Áp mọi chỗ: tiếng Việt và tiếng Anh (AC-5, AC-6), bàn phím (AC-3, AC-10), khung khác không đổi (AC-7, AC-9), không tràn ngang (AC-13)."},
+    {"i": 5, "p": "Chuẩn ngành: Material Design và Apple cho đầu màn cuộn đi, thanh điều hướng ở lại — đã nhận vào AC-7 (khung cuộn, tab dính)."},
+    {"i": 6, "p": "Chuẩn ngành: chỉ số dịch chuyển bố cục của Google — khối tải muộn không đẩy nội dung — đã nhận vào AC-2 (thanh một hàng)."},
+    {"i": 7, "p": "Giả định chờ anh gạch: máy tính bảng 768 đi theo bố cục máy tính, không đo riêng."},
+    {"i": 8, "p": "Để sau: chụp đủ giao diện tối cho mọi ô (vòng này chụp sáng, nhưng đo tràn ngang cả hai), và chữ chip tiếng Anh số ít."},
+    {"i": 9, "p": "Không bao giờ: bố cục riêng cho máy tính bảng — sản phẩm không có nhánh đó."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Thiếu đường đo cho ngưỡng sống/chết, và ngưỡng nói khổ 390 trong khi phép đo chỉ chạy 375. Đã thêm mục «Đường đo» vào hợp đồng và đo thêm khổ 390."},
+    {"i": 1, "p": "Phép đo thanh nút trong trình duyệt thật chưa phủ đúng dạng gây lỗi (có cuộc đang soạn). Đã mở rộng ra năm dạng, và phép kiểm «không còn chữ phụ» quét cả thẻ đơn vị."},
+    {"i": 2, "p": "Phép đo «lúc đang tải» chưa chứng minh mình thật sự bắt được lúc đang tải. Đã thêm phép chứng dương và một chiều đỏ khi tắt phép chặn."},
+    {"i": 3, "p": "Thiết kế ghi tên người phụ trách «tối đa hai dòng» trong khi hứa hiện trọn, và phép đo không bắt được cắt dọc. Đã bỏ giới hạn hai dòng và thêm phép đo cắt dọc."},
+    {"i": 4, "p": "Lời hứa «người không phải quản trị không thấy nút soạn» chỉ đo trên vai đặt tay. Đã thêm phép đo bốn vai thật từ phiên đăng nhập."}
+  ]
+}

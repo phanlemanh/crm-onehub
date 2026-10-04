@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@crm/ui/components/button";
+import { Badge } from "@crm/ui/components/badge";
 import { KaraMark } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useQueryState } from "nuqs";
@@ -17,20 +17,21 @@ export function ChipGopY({ mt }: { mt: MucTieu }) {
 	const [, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
 	const so = String(mt.soGopYCho);
 	return (
-		<Button
-			aria-label={m.chipAria(so, mt.title)}
-			data-chip-gop-y={mt.id}
-			onClick={(e) => {
-				e.stopPropagation();
-				void setNeo(true);
-				openRecord({ kind: "objective", id: mt.id });
-			}}
-			size="xs"
-			type="button"
-			variant="outline"
-		>
-			<KaraMark scope={m.chip(so)} />
-		</Button>
+		<Badge asChild tuongTac variant="outline">
+			<button
+				aria-label={m.chipAria(so, mt.title)}
+				data-chip-gop-y={mt.id}
+				onClick={(e) => {
+					e.stopPropagation();
+					void setNeo(true);
+					openRecord({ kind: "objective", id: mt.id });
+				}}
+				onKeyDown={(e) => e.stopPropagation()}
+				type="button"
+			>
+				<KaraMark scope={m.chip(so)} />
+			</button>
+		</Badge>
 	);
 }
 

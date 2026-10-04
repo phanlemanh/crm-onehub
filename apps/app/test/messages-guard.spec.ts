@@ -176,6 +176,8 @@ const CHUA_NOI_KHAI: readonly string[] = [
 	"crm.standard.currency",
 	"crm.standard.closeDate",
 	"crm.standard.stage",
+	"okr.sheet.tabVet",
+	"okr.sheet.tienDoTu",
 ];
 
 const GHIM_TRO_LY_OKR = {
@@ -769,6 +771,10 @@ const GHIM = {
 	"okr:demMucTieu": ["1 mục tiêu", "12 mục tiêu"],
 	"okr:demDonVi": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
 	"okr:gopVao": ["góp vào 1 chỗ", "góp vào 12 chỗ"],
+	"okr:sheet.tienDoTuSo": [
+		"Tiến độ mục tiêu 1% tính từ A KR.",
+		"Tiến độ mục tiêu 12% tính từ A KR.",
+	],
 	"okr:tienDoCua": ["Tiến độ 1: A%", "Tiến độ 12: A%"],
 	"okr:khoiMucTieu.tinhTu": ["Tính từ 1 KR", "Tính từ 12 KR"],
 	"okr:khoiMucTieu.thuGon": ["Thu gọn KR của «1»", "Thu gọn KR của «12»"],
