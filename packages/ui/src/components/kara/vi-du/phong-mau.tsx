@@ -459,6 +459,6 @@ export const TRANG_THAI: readonly PhongMauTrangThai[] = [
 ];
 
 export function PhongMau({ state, pane }: { state: string; pane?: number }) {
-	const muc = TRANG_THAI.find((t) => t.id === state) ?? TRANG_THAI[0];
-	return <>{muc?.ve(pane)}</>;
+	const muc = TRANG_THAI.find((t) => t.id === state);
+	return muc ? <>{muc.ve(pane)}</> : null;
 }

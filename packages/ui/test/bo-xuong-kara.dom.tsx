@@ -186,7 +186,12 @@ describe("k1-state", () => {
 
 	test("working hiện sau trễ, không trước", async () => {
 		const o = ve(<KaraState kind="working" label="⟦dang doc⟧" delayMs={200} />);
-		phai(!o.querySelector('[role="status"]'), "working hien truoc tre");
+		phai(
+			!(o.querySelector('[role="status"]')?.textContent ?? "").includes(
+				"⟦dang doc⟧",
+			),
+			"working hien truoc tre",
+		);
 		await cho(260);
 		const st = o.querySelector('[role="status"]');
 		phai(
@@ -196,19 +201,22 @@ describe("k1-state", () => {
 		phai(laChamBan(st as Element), "thieu cham ban");
 	});
 
-	test("gỡ trước hạn không cập nhật sau khi gỡ", async () => {
-		const loi: unknown[] = [];
-		const goc = console.error;
-		console.error = (...a: unknown[]) => loi.push(a);
+	test("gỡ trước hạn thì huỷ hẹn giờ", async () => {
+		const goc = globalThis.clearTimeout;
+		let huy = 0;
+		globalThis.clearTimeout = ((id?: Parameters<typeof clearTimeout>[0]) => {
+			huy += 1;
+			goc(id);
+		}) as typeof clearTimeout;
 		try {
 			ve(<KaraState kind="working" label="x" delayMs={100} />);
+			const truoc = huy;
 			act(() => root?.unmount());
 			root = null;
-			await cho(150);
+			phai(huy > truoc, "hen gio khong huy khi go");
 		} finally {
-			console.error = goc;
+			globalThis.clearTimeout = goc;
 		}
-		expect(loi).toEqual([]);
 	});
 });
 
@@ -330,6 +338,7 @@ describe("k1-khoa", () => {
 			const hoanTac = nutTen(o, VI.proposedChange.undo);
 			if (t === "cho" && b === "ban") {
 				phai(nutDx.length === 2, `thieu nut o ${t}/${b}`);
+				phai(Boolean(o.querySelector("fieldset[disabled]")), "cho mo khi ban");
 				for (const n of nutDx) {
 					phai(n.disabled === true, "cho mo khi ban");
 					const id = n.getAttribute("aria-describedby");
@@ -510,9 +519,12 @@ describe("k1-nhom", () => {
 				{nhom(ENTRIES, goi)}
 			</KaraBusyProvider>,
 		);
+		const nutBan = nutTen(o, "⟦nhan ca nhom⟧")[0];
+		phai(nutBan?.disabled === true, "nut nhom mo khi ban");
 		phai(
-			nutTen(o, "⟦nhan ca nhom⟧")[0]?.disabled === true,
-			"nut nhom mo khi ban",
+			document.getElementById(nutBan?.getAttribute("aria-describedby") ?? "")
+				?.textContent === VI.karaKhung.dangSoanKhoa,
+			"nut nhom khoa khong ly do",
 		);
 	});
 
@@ -599,6 +611,23 @@ describe("k1-transcript", () => {
 		expect(khang).toBe(13);
 	});
 
+	test("lời người dùng giữ nguyên văn, không dịch", () => {
+		const o = ve(
+			<KaraTranscript>
+				<KaraTurn from="user">{"**x** 1. đổi KR"}</KaraTurn>
+			</KaraTranscript>,
+		);
+		const nguoi = o.querySelector('[data-kara-turn="user"]') as Element;
+		phai(
+			Boolean(nguoi.querySelector('[translate="no"]')),
+			"loi nguoi thieu translate=no",
+		);
+		phai(
+			(nguoi.textContent ?? "").includes("**x** 1. đổi KR"),
+			"loi nguoi bi doc nhu markdown",
+		);
+	});
+
 	test("hội thoại rỗng mang dấu Kara", () => {
 		const o = ve(<KaraTranscript />);
 		const rong = o.querySelector('[data-slot="conversation-empty-state"]');
@@ -673,6 +702,8 @@ describe("k1-composer", () => {
 				);
 				act(() => nut?.click());
 				phai(goi.dung === 1 && goi.gui.length === 0, `dung goi sai o ${oo}`);
+				await guiChu(o, "⟦gui khi ban⟧");
+				phai(goi.gui.length === 0, `gui lot khi ban o ${oo}`);
 			}
 			if (oo === "chip") {
 				phai((o.textContent ?? "").includes("⟦ve KR 1.3⟧"), "thieu chip");
@@ -769,6 +800,12 @@ describe("k1-steps", () => {
 				phai(mo, "dang chay khong mo");
 			} else {
 				phai(mo, "loi khong mo");
+				phai(
+					trigger.textContent?.includes(
+						VI.karaKhung.buocLoiTieuDe("⟦doc 3 KR⟧"),
+					) === true,
+					"tieu de loi sai",
+				);
 				const loi = o.querySelector('[data-trang-thai="loi"]');
 				phai(
 					Boolean(
@@ -793,6 +830,21 @@ describe("k1-steps", () => {
 		}
 		console.log(`so o: ${soO}`);
 		expect(soO).toBe(3);
+	});
+});
+
+describe("k1-steps-giu-mo", () => {
+	test("bước cuối xong thì danh sách vẫn mở", () => {
+		const { KaraSteps } = KhoiSteps;
+		const o = ve(
+			<KaraSteps steps={[{ id: "1", label: "⟦a⟧", state: "running" }]} />,
+		);
+		veLai(<KaraSteps steps={[{ id: "1", label: "⟦a⟧", state: "done" }]} />);
+		phai(
+			o.querySelector("[data-kara-steps]")?.getAttribute("data-state") ===
+				"open",
+			"buoc xong lam gap danh sach",
+		);
 	});
 });
 
@@ -913,7 +965,7 @@ const SO_CHO = {
 	"state-error": 2,
 	"state-off": 0,
 	"state-unconfigured": 1,
-	"nhom-bien-nhan-ban": 5,
+	"nhom-bien-nhan-ban": 6,
 	"artifact-ban": 1,
 	"artifact-ban-mac-dinh": 2,
 } as const;

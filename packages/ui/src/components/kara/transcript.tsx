@@ -67,6 +67,15 @@ export type KaraTurnProps = {
 };
 
 export function KaraTurn({ from, children, actions }: KaraTurnProps) {
+	if (from === "user") {
+		return (
+			<Message from="user" data-kara-turn="user">
+				<MessageContent translate="no">
+					<p className="whitespace-pre-wrap">{children}</p>
+				</MessageContent>
+			</Message>
+		);
+	}
 	const noiDung = (
 		<MessageContent>
 			{typeof children === "string" ? (
@@ -76,13 +85,6 @@ export function KaraTurn({ from, children, actions }: KaraTurnProps) {
 			)}
 		</MessageContent>
 	);
-	if (from === "user") {
-		return (
-			<Message from="user" data-kara-turn="user">
-				{noiDung}
-			</Message>
-		);
-	}
 	return (
 		<div data-kara-turn="kara" className="flex items-start gap-2">
 			<KaraAvatar />

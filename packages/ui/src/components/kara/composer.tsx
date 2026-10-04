@@ -70,6 +70,7 @@ export function KaraComposer({
 			) : null}
 			<PromptInput
 				onSubmit={() => {
+					if (ban) return;
 					const gon = chu.trim();
 					if (gon === "") return;
 					onSubmit(gon);
@@ -102,6 +103,9 @@ export function KaraComposer({
 						placeholder={placeholder}
 						value={chu}
 						onChange={(e) => doiChu(e.currentTarget.value)}
+						onKeyDown={(e) => {
+							if (ban && e.key === "Enter") e.preventDefault();
+						}}
 						disabled={khoa}
 						aria-describedby={khoa ? idLyDo : undefined}
 					/>
@@ -111,7 +115,8 @@ export function KaraComposer({
 					<PromptInputSubmit
 						status={ban ? "streaming" : status === "error" ? "error" : undefined}
 						onStop={onStop}
-						disabled={khoa}
+						type={ban ? "button" : "submit"}
+						disabled={khoa || (ban && !onStop)}
 					/>
 				</PromptInputFooter>
 			</PromptInput>

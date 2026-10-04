@@ -9,7 +9,7 @@ import {
 	type ProposedChangeProps,
 	ProposedChangeReceipt,
 } from "@crm/ui/components/proposed-change";
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 
 function KhoaKhiBan({ ban, children }: { ban: boolean; children: ReactNode }) {
 	return (
@@ -35,7 +35,7 @@ export function KaraProposal({
 	const ban = useKaraBusy() !== null;
 	const choKhoa = ban && !decided;
 	return (
-		<KhoaKhiBan ban={ban && decided !== undefined}>
+		<KhoaKhiBan ban={ban}>
 			<ProposedChange
 				{...props}
 				decided={decided}
@@ -75,6 +75,7 @@ export function KaraProposalGroup({
 	const ban = useKaraBusy() !== null;
 	const cho = entries.filter((e) => e.status === "pending");
 	const ids = cho.filter((e) => e.batchable).map((e) => e.id);
+	const idLyDo = useId();
 	return (
 		<section data-slot="kara-proposal-group" className="flex flex-col gap-2">
 			<div className="flex flex-wrap items-center justify-between gap-2">
@@ -91,12 +92,18 @@ export function KaraProposalGroup({
 						type="button"
 						data-slot="kara-batch"
 						disabled={ids.length === 0 || ban}
+						aria-describedby={ban ? idLyDo : undefined}
 						onClick={() => batch.onAccept(ids)}
 					>
 						{batch.label}
 					</Button>
 				) : null}
 			</div>
+			{ban && batch ? (
+				<span id={idLyDo} className="sr-only">
+					{msg.karaKhung.dangSoanKhoa}
+				</span>
+			) : null}
 			{batchDecided ? (
 				<KhoaKhiBan ban={ban}>
 					<ProposedChangeReceipt

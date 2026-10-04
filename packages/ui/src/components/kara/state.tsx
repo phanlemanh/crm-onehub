@@ -55,10 +55,9 @@ function DangLam({ label, delayMs }: { label: string; delayMs: number }) {
 		const hen = setTimeout(() => datHien(true), delayMs);
 		return () => clearTimeout(hen);
 	}, [delayMs]);
-	if (!hien) return null;
 	return (
 		<div role="status" data-kara-state="working">
-			<ThinkingIndicator label={label} />
+			{hien ? <ThinkingIndicator label={label} /> : null}
 		</div>
 	);
 }
