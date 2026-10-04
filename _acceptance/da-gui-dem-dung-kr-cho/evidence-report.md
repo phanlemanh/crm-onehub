@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b59178cf9877eabe859cabab29a77f1f0fb0582b
+verified_commit: 317860ec7f7bde937c022082aeb6e1c36da4c174
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 1 (6/6 eval máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Ba mục ngoài hợp đồng định đoạt ở lượt ký này — Ngoài-1, 2 ghi Known limits; Ngoài-3 chấp nhận không sửa. Phạm vi cắt/hoãn đồng ý như đã khai.
 ---
 
@@ -135,3 +135,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1 đến E6 đều đạt, mọi lệnh suite đều xanh. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-04, do gộp onehub da5455f4 sau Cổng 2 (#252, #253 đổi apps/api/workspace)
+run_id: repin-20261004T140150Z-67039
+sha: 317860ec7f7bde937c022082aeb6e1c36da4c174 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng

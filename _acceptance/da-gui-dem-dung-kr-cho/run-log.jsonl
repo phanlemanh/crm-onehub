@@ -18,3 +18,4 @@
 {"ts":"2026-10-04T12:13:11Z","sha":"b59178cf9877eabe859cabab29a77f1f0fb0582b","round":1,"kind":"round-tally","verdict":"PASS","expected":9,"returned":9,"blocked":0}
 {"ts":"2026-10-04T12:13:11Z","sha":"b59178cf9877eabe859cabab29a77f1f0fb0582b","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":13}
 {"kind":"thuoc-vat","ts":"2026-10-04T12:29:56Z","round":1,"san":"81605f6901a69899607ac374ee1bfaf658fe02bd","vat":[1697,31],"thuoc":[416,0],"ho_so":[810,0],"nhat":4,"lan":0,"tep_thuoc":["_acceptance/config.yaml","_acceptance/soan-okr-khong-tru-luot/evals.yaml","_acceptance/soan-okr-khong-tru-luot/rang/thu-lai-man-that.mjs"]}
+{"ts":"2026-10-04T14:05:50Z","kind":"repin","run_id":"repin-20261004T140150Z-67039","sha":"317860ec7f7bde937c022082aeb6e1c36da4c174","suites_exit":[0,0,0,0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E4":0,"E6":0,"E5":0},"wall_s":240.8,"so_lenh":9}
