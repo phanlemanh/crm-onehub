@@ -3,6 +3,7 @@ import { BanMauOkrMau } from "./_modules/ban-mau-okr";
 import { CanhKrOkrMau } from "./_modules/canh-kr-okr";
 import { CauTrucToChucMau } from "./_modules/cau-truc-to-chuc";
 import { CuaVaoDangNhapMau } from "./_modules/cua-vao-dang-nhap";
+import { CuaVaoVaMau } from "./_modules/cua-vao-va";
 import { DieuPhoi30NgayDauMau } from "./_modules/dieu-phoi-30-ngay-dau";
 import { DoiTenOnehubCenterMau } from "./_modules/doi-ten-onehub-center";
 import { DotHoiYTuongOkrMau } from "./_modules/dot-hoi-y-tuong-okr";
@@ -72,6 +73,7 @@ const BANG_GHEP = {
 	"noi-zalo-cho-nguoi-moi": NoiZaloChoNguoiMoiMau,
 	"sua-an-chu-ky-okr": SuaAnChuKyOkrMau,
 	"thanh-vien-vao-dung": ThanhVienVaoDungMau,
+	"cua-vao-va": CuaVaoVaMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 } satisfies Record<string, ProtoComponent>;
 

@@ -950,6 +950,17 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "cua-vao-va",
+		ten: "Cửa vào vá — logo trang Quên mật khẩu, trang lỗi khi hệ thống trục trặc",
+		states: [
+			{ id: "ST-quen-mat-khau-nhap", nhan: "Quên mật khẩu — nhập email" },
+			{ id: "ST-quen-mat-khau-da-gui", nhan: "Quên mật khẩu — đã gửi" },
+			{ id: "ST-trang-loi-trong-khung", nhan: "Trang lỗi trong khung app" },
+			{ id: "ST-trang-loi-dang-thu", nhan: "Trang lỗi — đang thử lại" },
+			{ id: "ST-trang-loi-ngoai-khung", nhan: "Trang lỗi ngoài khung app" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

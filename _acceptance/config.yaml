@@ -1121,6 +1121,14 @@ executors:
     r1b_khong_hoi_quy_api: 'bun run test -- "cd apps/api && bun test test/domain-nha-tach.spec.ts test/workspace-thanh-vien.spec.ts test/go-thanh-vien.spec.ts"'
     r1b_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx"
     r1b_messages_guard: "cd apps/app && bun test test/messages-guard.spec.ts"
+    r1f_doc_phien_api: 'bun run test -- "cd apps/api && bun test test/cua-vao-va.spec.ts -t doc-phien"'
+    r1f_ba_lop_api: 'bun run test -- "cd apps/api && bun test test/cua-vao-va.spec.ts -t ba-lop"'
+    r1f_cong_khai_api: 'bun run test -- "cd apps/api && bun test test/cua-vao-va.spec.ts -t cong-khai"'
+    r1f_proxy_503: cd apps/app && bun test ./test/onboarding-gate.spec.ts -t doc-503
+    r1f_trang_loi_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cua-vao-va.dom.tsx -t trang-loi
+    r1f_logo_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cua-vao-va.dom.tsx -t logo
+    r1f_dang_xuat: cd apps/app && bun test ./test/sign-out.spec.ts
+    r1f_messages_guard: "cd apps/app && bun test test/messages-guard.spec.ts"
     r1a_nut_soan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t nut-soan
     r1a_popover_soan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t popover-soan
     r1a_chua_cau_hinh: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-okr-truoc-r1.dom.tsx -t chua-cau-hinh
@@ -1777,6 +1785,11 @@ executors:
     r1b_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-vao-dung/rang/do-man.mjs"'
     r1b_tu_dien: "bun _acceptance/thanh-vien-vao-dung/rang/tu-dien.mjs"
     r1b_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/page.tsx" "apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx" "apps/app/app/(app)/[slug]/settings/members/ten-mien-noi-bo.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    r1f_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/cua-vao-va/rang/do-man.mjs"'
+    r1f_soi_ma_neo: "bun _acceptance/cua-vao-va/rang/soi-ma-neo.mjs"
+    r1f_noi_goi_dang_xuat: "bun _acceptance/cua-vao-va/rang/noi-goi-dang-xuat.mjs"
+    r1f_thuoc_cu_xanh: "bun _acceptance/cua-vao-va/rang/thuoc-cu-xanh.mjs"
+    r1f_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/error.tsx" "apps/app/app/(app)/error.tsx" "apps/app/components/trang-loi-tam.tsx" "apps/app/components/dau-cua-vao.tsx" "apps/app/components/auth-shell.tsx" "apps/app/app/(landing)/quen-mat-khau/quen-mat-khau-form.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done && bun _acceptance/cua-vao-va/rang/khong-ghi-de.mjs'
     r1a_man_khung: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan le"
     r1a_man_thanh: 'PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan thanh-chua" && OKR_AGENT_BRIDGE_SECRET=gia-do-r1a PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan thanh"'
     r1a_man_khung_dt: PROTO_ROUTE=1 PHIEN_DO_TEN_CAY=khung-okr-truoc-r1 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs --phan dien-thoai"

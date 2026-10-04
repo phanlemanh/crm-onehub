@@ -1,0 +1,305 @@
+schema_version: 1
+slug: cua-vao-va
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1f_doc_phien_api
+    paths:
+      - "apps/api/src/trpc/**"
+      - "apps/api/test/cua-vao-va.spec.ts"
+    expected: |
+      describe "doc-phien" qua app Nest that (HTTP, khong goi service truc tiep): nguoi co phien
+      that goi mot thu tuc sau AuthMiddleware (settings.get) voi cookie phien;
+      spyOn(auth.api, "getSession").mockRejectedValue(new Error("connect ECONNREFUSED")) -> HTTP
+      503, error.data.code "SERVICE_UNAVAILABLE"; bat dau ra logger: dung 1 dong error co message
+      "Could not read the session", chuoi log khong chua ten cookie "session_token" va khong chua
+      gia tri cookie. Doi chung duong cung ca: mockResolvedValue(null) -> 401 "UNAUTHORIZED";
+      khong spy -> 200. spy khoi phuc trong afterEach (khong dung mock.module).
+      CHIEU DO (pha-thu o S3 tren ban sao): bo nhanh sessionError trong AuthMiddleware -> ca do
+      voi thong diep ghim 'expected 503' nhan 401.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1f_ba_lop_api
+    paths:
+      - "apps/api/src/trpc/**"
+      - "apps/api/test/cua-vao-va.spec.ts"
+    expected: |
+      describe "ba-lop": ma tran viet truoc 3 lop x 2 tinh trang =
+      [[AuthMiddleware, settings.get], [SignedInMiddleware, workspace.get],
+      [SessionOnlyMiddleware, <thu tuc dung SessionOnlyMiddleware, chon o S3 tu router that>]] x
+      [["getSession nem", 503, "SERVICE_UNAVAILABLE"], ["getSession null", 401, "UNAUTHORIZED"]];
+      moi o mot assert ma HTTP + mot assert error.data.code; so assert = 3 x 2 x 2 = 12, ca dem
+      so o da chay va doi 6. Ca kiem dieu kien do: moi thu tuc trong ma tran that su mang lop
+      middleware da khai (doc metadata router, khong tu ghi tay).
+      Ca "quet-het": danh sach thu tuc rut tu router that (src/generated/server.ts hoac metadata
+      nestjs-trpc, khong ghi tay); goi moi thu tuc khong input voi getSession null -> tap A = cac
+      thu tuc tra 401; goi lai tap A voi getSession nem -> tap B = cac thu tuc tra 503. In |A|, |B|
+      va hieu A\B; doi A = B va |A| > 3 (middleware chay truoc .input(), docs/api.md).
+      CHIEU DO: bo nhanh sessionError o SessionOnlyMiddleware (ban sao) -> dung o
+      [SessionOnlyMiddleware, getSession nem] do, thong diep ghim ten lop; va ca "quet-het" do
+      voi hieu A\B goi ten thu tuc apiKeys.*.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1f_cong_khai_api
+    paths:
+      - "apps/api/src/trpc/**"
+      - "apps/api/test/cua-vao-va.spec.ts"
+    expected: |
+      describe "cong-khai": goi sso.signInOptions (thu tuc khong middleware dang nhap, kiem dieu kien
+      do truoc: router khong mang AuthMiddleware) kem cookie phien trong khi getSession nem -> 200
+      va dau ra parse duoc theo schema dau ra cua thu tuc. Doi chung duong: cung cookie, getSession
+      khong nem -> cung dau ra.
+      CHIEU DO: ngu canh nem lai loi getSession thay vi ghi co (ban sao, phuong an B da loai) ->
+      ca do voi thong diep ghim "expected 200" nhan 500.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.r1f_proxy_503
+    paths:
+      - "apps/app/proxy.ts"
+      - "apps/app/lib/onboarding.ts"
+      - "apps/app/test/onboarding-gate.spec.ts"
+    expected: |
+      onboarding-gate.spec.ts, ca moi -t "doc-503": fetch gia cua API tra 503 cho workspace.get
+      va research -> proxy() voi cookie phien tren "/acme/contacts" tra NextResponse.next (khong co
+      header location); readWorkspaceGate tra hetPhien false. Doi chung duong cung fixture: fetch
+      tra 401 -> location ket thuc bang "/sign-in".
+      CHIEU DO: doi HTTP_HET_PHIEN thanh dieu kien ">= 400" (ban sao) -> ca 503 do, thong diep
+      ghim "khong duoc chuyen ve /sign-in".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.r1f_trang_loi_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/error.tsx"
+      - "apps/app/components/trang-loi-tam.tsx"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/cua-vao-va.dom.tsx"
+    expected: |
+      cua-vao-va.dom.tsx describe "trang-loi" ca "trong-khung": dung default export cua app/(app)/[slug]/error.tsx voi
+      error = new Error("x") va retry gia -> thay heading "Hệ thống đang trục trặc", cau co cum
+      "phiên của bạn vẫn còn", dung 1 button "Thử lại"; click -> retry goi dung 1 lan; khong co
+      button hay link nao chua "Đăng xuất" va khong co link toi "/sign-in"; nut nhan focus khi
+      dung. Doi chung duong: ca kiem retry gia dem 0 truoc click.
+      CHIEU DO: bo onClick (ban sao) -> ca do, thong diep ghim "retry phai duoc goi 1 lan".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.r1f_trang_loi_dom
+    paths:
+      - "apps/app/app/(app)/error.tsx"
+      - "apps/app/components/trang-loi-tam.tsx"
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/cua-vao-va.dom.tsx"
+    expected: |
+      cua-vao-va.dom.tsx describe "trang-loi" ca "ngoai-khung": default export cua app/(app)/error.tsx -> cung heading,
+      cung cau, cung nut "Thử lại" goi retry 1 lan. Hai tep error.tsx la hai tep khac nhau (ca kiem
+      dieu kien do: duong dan khac nhau, ca hai ton tai).
+      CHIEU DO: xoa app/(app)/error.tsx (ban sao) -> ca do, thong diep ghim ten tep thieu.
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1f_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/cua-vao-va/evidence dat tuong minh: lenh cua r1f_do_man (mot-luot.sh tu lay cong, tien-de.mjs, do-man.mjs tu chan cay, gay loi, chup, go loi, don)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/cua-vao-va/evidence/
+    paths:
+      - "apps/app/app/(app)/**/error.tsx"
+      - "apps/app/components/trang-loi-tam.tsx"
+      - "apps/api/src/trpc/**"
+      - "_acceptance/cua-vao-va/rang/do-man.mjs"
+    expected: |
+      Hai canh ghim truoc cap bat loi: (i) "csdl-loi" — loi doc phien o ca app va API (loi hoan lai
+      duoc trong kho do) -> layout [slug] nem -> (app)/error.tsx: KHONG co phan tu dau trang;
+      (ii) "api-503" — chi API tra 503 cho tRPC (chan truoc API trong ban do; cach dung chot o S3),
+      app van doc duoc phien -> [slug]/error.tsx: CO phan tu dau trang. Moi canh mot dong
+      DUNG/SAI ve dau trang. Anh: trang-loi-ngoai-khung-375.png, trang-loi-ngoai-khung-1440.png,
+      trang-loi-trong-khung-375.png, trang-loi-trong-khung-1440.png, sau-thu-lai-1440.png. Nhin thay: tieu de «Hệ thống đang trục trặc», cau «phiên của bạn vẫn còn», nut
+      «Thử lại» trong khung nhin, khong chu tieng Anh cua Next ("Application error").
+      Dong do: truoc khi gay loi xoa cookie session_data cua better-auth; gay loi doc phien bang loi
+      hoan lai duoc trong kho do dung-mot-lan; "DUNG 375/1440: dia chi van /<slug>, chuoi chuyen
+      huong 0 lan qua /sign-in"; "DUNG 375/1440: nut Thử lại trong khung nhin"; go loi roi bam «Thử
+      lại» -> "DUNG 1440: trang tro lai, khong con tieu de loi"; "DUNG don: kho do tra ve nguyen
+      trang (doc lai sau don)".
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.r1f_do_man
+    paths:
+      - "apps/api/src/trpc/**"
+      - "apps/app/proxy.ts"
+      - "_acceptance/cua-vao-va/rang/do-man.mjs"
+    expected: |
+      Cung lan do voi E7, cac dong lop API: trong luc loi doc phien dang gay, goi thang
+      API_URL/api/trpc/workspace.get kem cookie phien (khong session_data) -> "DUNG api:
+      workspace.get 503 SERVICE_UNAVAILABLE" va "DUNG api: settings.researchKey 503" (thu tuc thu
+      hai ma proxy hoi); truoc khi gay loi cung hai lenh -> 200 (doi chung). Dong
+      ma thoat 0 chi khi moi dong DUNG. Ca kiem dieu kien do: truoc khi gay loi, mot yeu cau khong
+      cookie -> 401 (thuoc phan biet duoc hai ma).
+      CHIEU DO (pha-thu o S3): chay voi API cu (ban sao bo co sessionError) -> dong "api" SAI nhan
+      401 va dong dia chi SAI vi trinh duyet ve /sign-in.
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.r1f_logo_dom
+    paths:
+      - "apps/app/app/(landing)/quen-mat-khau/**"
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/dau-cua-vao.tsx"
+      - "apps/app/test/cua-vao-va.dom.tsx"
+    expected: |
+      cua-vao-va.dom.tsx describe "logo": dung QuenMatKhauForm voi xinLienKet gia tra { error: null };
+      trang thai nhap: co mot a[href="/"] chua svg cua LogoLockup dung TRUOC heading (so thu tu
+      trong DOM); gui -> trang thai da gui: van co a[href="/"] voi logo truoc heading moi. So assert
+      = 2 trang thai x 2 (co logo, logo truoc heading). Doi chung duong: ca kiem heading cua tung
+      trang thai doi chu (nhap -> da gui) de chac la hai trang thai that.
+      CHIEU DO: quay lai Heading tu dung (ban sao) -> ca do, thong diep ghim "trang thai nhap: thieu logo".
+
+  - id: E10
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1f_do_man
+    steps:
+      - "Cung lan do voi E7 (dedupe lenh)"
+      - "Mo anh quen-mat-khau-375.png, quen-mat-khau-1440.png, quen-mat-khau-da-gui-375.png"
+    inputs:
+      - _acceptance/cua-vao-va/evidence/
+    paths:
+      - "apps/app/app/(landing)/quen-mat-khau/**"
+      - "apps/app/components/dau-cua-vao.tsx"
+      - "_acceptance/cua-vao-va/rang/do-man.mjs"
+    expected: |
+      Anh ba trang thai/kho tren: logo OneHub nam tren tieu de, trong khung nhin, khong tran ngang.
+      Ma tran viet truoc 2 trang thai x 2 kho = 4 o, moi o mot dong: "DUNG <kho>: quen-mat-khau
+      <nhap|da gui> — logo truoc tieu de, trong khung nhin, tran ngang 0px"; dong dem "4/4 o".
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.r1f_dang_xuat
+    paths:
+      - "apps/app/lib/sign-out.ts"
+      - "apps/app/test/sign-out.spec.ts"
+    expected: |
+      sign-out.spec.ts (chay KHONG preload DOM — xem bo nho jsdom-dung-sign-out-spec): ma tran viet
+      truoc 3 dong [["tra loi co message", { error: { message: "Failed to sign out" } }],
+      ["tra loi khong message", { error: {} }], ["nem loi mang", throw new TypeError("Failed to
+      fetch")]]; moi dong: toast.error goi dung 1 lan voi dung chuoi "Chưa đăng xuất được." (tham
+      so cua noi goi), khong goi voi chuoi tieng Anh, window.location.assign khong goi. So assert
+      = 3 x 3. Doi chung duong: signOut tra { error: null } -> assign("/sign-in"), toast khong goi.
+      CHIEU DO: tra lai "error.message ?? loiMacDinh" (ban sao) -> dong "tra loi co message" do,
+      thong diep ghim "Failed to sign out".
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.r1f_messages_guard
+    paths:
+      - "apps/app/lib/messages/**"
+      - "apps/app/test/messages-guard.spec.ts"
+    expected: |
+      messages-guard.spec.ts xanh voi cac khoa moi cua trang loi da them vao bang ghim (GHIM/
+      KHONG_DAU neu can — bo nho messages-guard-ghim-ham-moi). Doi chung duong: tep da do moi khoa
+      moi (ca kiem so khoa trang loi > 0).
+      CHIEU DO: ban vi cua tieu de bo dau (ban sao) -> guard do, thong diep ghim ten khoa.
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.r1f_soi_ma_neo
+    paths:
+      - "_acceptance/cua-vao-dang-nhap/rang/soi-ma.mjs"
+      - "_acceptance/cua-vao-va/rang/soi-ma-neo.mjs"
+    expected: |
+      rang/soi-ma-neo.mjs chay soi-ma.mjs o ba noi: (1) cay hien tai, (2) git worktree tam o
+      origin/onehub (nhanh khong cham apps/app cua vong nay), (3) clone nong --depth 1 khong co ref
+      onehub (node_modules noi bang symlink, dat o .acceptance-runs/ — bo nho ban-sao-dot-bien-thu-
+      muc-an); in "DUNG <noi>: soi-ma ma 0, danh sach <n> tep tu cap d864d529" cho ca ba, n bang
+      nhau va > 0. Doi chung am cung fixture: noi (4) ban sao co mot tep trong danh sach bi chen
+      `import { auth } from "@crm/auth"` vao tep "use client" -> soi-ma ma 1 voi dong SAI vach (a);
+      in "DUNG pha-thu: vach (a) do". Ma thoat 0 chi khi ca bon dong DUNG; don worktree/clone
+      trong finally. Them dong so tap o noi (1) (du lich su): tep dong bang
+      _acceptance/cua-vao-dang-nhap/rang/tep-vong.txt bang dung tap
+      git diff --name-only d864d529^1 d864d529 -- apps/app (in hieu hai chieu, doi rong).
+      CHIEU DO them: ban sao tep dong bang xoa mot dong -> dong so tap SAI goi ten tep thieu.
+
+  - id: E14
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.r1f_thuoc_cu_xanh
+    paths:
+      - "_acceptance/cua-vao-dang-nhap/**"
+      - "apps/app/app/(landing)/**"
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/components/dau-cua-vao.tsx"
+      - "_acceptance/cua-vao-va/rang/thuoc-cu-xanh.mjs"
+    expected: |
+      rang/thuoc-cu-xanh.mjs doc _acceptance/cua-vao-dang-nhap/evals.yaml bang bo doc eval-yaml cua
+      kho (lib/eval-yaml.cjs), giai moi cmd config: tu _acceptance/config.yaml, chay moi eval may
+      (test|script) mot lan theo lenh khong trung (gom cvdn_do_cua_vao qua mot-luot.sh); in
+      "DUNG <Eid>: <ref> ma 0" cho tung eval, va dong "DUNG khong-shader" rut tu dau ra cua
+      do-cua-vao. Ca kiem dieu kien do: so eval may doc duoc bang so id test|script trong evals.yaml
+      (in ca hai so). Ma thoat 0 chi khi moi dong DUNG.
+      CHIEU DO: chay voi soi-ma.mjs ban cu (git show d579103f) tren nhanh khong cham apps/app ->
+      "SAI E16".
+
+  - id: E15
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.r1f_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/**/error.tsx"
+      - "apps/app/components/trang-loi-tam.tsx"
+      - "apps/app/components/dau-cua-vao.tsx"
+      - "apps/app/components/auth-shell.tsx"
+      - "apps/app/app/(landing)/quen-mat-khau/quen-mat-khau-form.tsx"
+    expected: |
+      design-gate.mjs cua acceptance-gate chay tren tung tep trong danh sach -> 0 vi pham P0 moi
+      tep; in mot dong moi tep. Roi rang/khong-ghi-de.mjs quet JSX (TypeScript AST) cung nam tep:
+      moi phan tu nhap tu "@crm/ui/..." co className thi className khong chua lop mau (bg-,
+      text-<mau>, border-<mau>), goc (rounded) hay khoang cach (p-, px-, py-, m-, gap-); doi chung
+      duong: nam tep hien tai cho 0. Ma tran chieu do viet truoc 3 o tren ban sao
+      trang-loi-tam.tsx: rounded-[7px] | bg-[#ff0000] | px-6 -> moi o do voi thong diep ghim ten lop. Doi chung am cung lenh: ban sao trang-loi-tam.tsx them
+      `className="bg-[#ff0000] text-gray-400"` len Empty -> design-gate bao vi pham gray-on-color
+      (bo nho do-man-rong-va-cat-nut: gate khong bat rounded-[7px]/bg-[#hex] mot minh, nen chieu
+      do dung gray-on-color).
+
+  - id: E16
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.r1f_noi_goi_dang_xuat
+    paths:
+      - "apps/app/components/app-header.tsx"
+      - "apps/app/app/(landing)/het-quyen/sign-out-button.tsx"
+      - "apps/app/app/(landing)/grant-access/grant-access.tsx"
+      - "apps/app/lib/messages/**"
+      - "_acceptance/cua-vao-va/rang/noi-goi-dang-xuat.mjs"
+    expected: |
+      rang/noi-goi-dang-xuat.mjs quet TypeScript AST ba noi goi viet truoc [app-header.tsx,
+      het-quyen/sign-out-button.tsx, grant-access/grant-access.tsx]: moi loi goi
+      signOutAndRedirect(x) — x khong chua truy cap ".message" va truy nguoc duoc ve mot khoa
+      messages (hoac prop nhan tu trang server lay tu messages); khoa do co ban vi co dau. In mot
+      dong moi noi goi + dong dem "3/3 noi goi"; dem so loi goi tim duoc bang 3 (ca kiem dieu kien
+      do). CHIEU DO: ban sao app-header.tsx doi tham so thanh error.message -> dong app-header SAI
+      voi thong diep ghim ".message".
