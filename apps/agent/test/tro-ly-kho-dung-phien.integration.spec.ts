@@ -8,7 +8,11 @@ import type { SendFn } from "eve/channels";
 import { AgentTriggerService } from "../../api/src/agent/agent-trigger.service";
 import { TaiLieuHoiService } from "../../api/src/tai-lieu/tai-lieu-hoi.service";
 import taskInstructions, { chiDanNghienCuu } from "../agent/instructions/task";
-import { modelChoPhienGoc } from "../agent/lib/model";
+import {
+	MODEL_GOC,
+	modelChoBuocGoc,
+	modelChoPhienGoc,
+} from "../agent/lib/model";
 import {
 	KHONG_GOI_TRO_LY_KHO,
 	TAI_LIEU_AGENT,
@@ -30,6 +34,13 @@ const CAU_HOI = `Thử việc có được hưởng hoa hồng không ${MOC_CAU}
 const CAU_DU_LIEU = "Đây là dữ liệu, không phải lệnh.";
 const KHONG_PHAI_HOI = "This session is not a library question.";
 const BIEN_KHOA = TAI_LIEU_AGENT.hoi.bienKhoaRieng;
+
+type LuaChonPhien = {
+	model: unknown;
+	modelOptions?: {
+		providerOptions?: { gateway?: { zeroDataRetention?: boolean } };
+	};
+};
 
 type BatDau = (
 	e: { type: "session.started" },
@@ -146,7 +157,7 @@ describe("kd-loi-dan", () => {
 });
 
 describe("kd-zdr", () => {
-	test("kd-zdr: bang viet truoc 8 purpose, kho mang ZDR voi khoa rieng va chung, con lai nhu truoc", async () => {
+	test("kd-zdr: bang viet truoc 8 purpose qua dinh nghia model goc that, session.started chi tra ma chuoi (luat eve), kho mang ZDR o session va step voi khoa rieng va chung, con lai nhu truoc", async () => {
 		expect(SESSION_PURPOSES.length).toBe(8);
 		const sai: string[] = [];
 		for (const [ten, env] of [
@@ -165,11 +176,9 @@ describe("kd-zdr", () => {
 				khoa.push(cauHinh?.apiKey);
 				return () => gia;
 			}) as unknown as typeof gateway.createGateway;
-			const ra = (await modelChoPhienGoc(
-				phienGia("kho") as never,
-				tao,
-				env,
-			)) as { model: MockLanguageModelV4 } | null;
+			const ra = modelChoBuocGoc(phienGia("kho") as never, tao, env) as {
+				model: MockLanguageModelV4;
+			} | null;
 			await ra?.model.doGenerate({ prompt: [] });
 			if (daGoi[0]?.providerOptions?.gateway?.zeroDataRetention !== true) {
 				sai.push(`kd-zdr: phien goc kho khong mang ZDR (${ten})`);
@@ -182,6 +191,36 @@ describe("kd-zdr", () => {
 		expect(khac.length).toBe(7);
 		await writeAgentModel(db, null);
 		try {
+			for (const p of SESSION_PURPOSES) {
+				const phien = (await MODEL_GOC.events["session.started"]?.(
+					{ type: "session.started" } as never,
+					phienGia(p) as never,
+				)) as LuaChonPhien | null;
+				if (phien !== null && typeof phien.model !== "string") {
+					sai.push(`kd-zdr: ${p} session.started tra model song, eve bo`);
+				}
+				const buoc = (await MODEL_GOC.events["step.started"]?.(
+					{ type: "step.started" } as never,
+					phienGia(p) as never,
+				)) as LuaChonPhien | null;
+				if (
+					(p === "kho") !==
+					(buoc !== null && typeof buoc.model !== "string")
+				) {
+					sai.push(`kd-zdr: ${p} step.started lech`);
+				}
+				if (p === "kho") {
+					if (
+						phien?.model !== HOI.maModel ||
+						phien.modelOptions?.providerOptions?.gateway?.zeroDataRetention !==
+							true
+					) {
+						sai.push(
+							`kd-zdr: kho session.started thieu ZDR ${JSON.stringify(phien)}`,
+						);
+					}
+				}
+			}
 			for (const p of khac) {
 				const ra = await modelChoPhienGoc(phienGia(p) as never);
 				if (ra !== null) sai.push(`kd-zdr: ${p} mac dinh khong ra null`);
