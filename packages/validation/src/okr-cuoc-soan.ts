@@ -12,6 +12,11 @@ export const BAN_NHAP_TRAN = {
 	tenToiThieu: 3,
 } as const;
 
+export const BAN_NHAP_LOI = {
+	mucTieuTrungKhoa: "khoa Mục tiêu trùng",
+	krTrungKhoa: "khoa KR trùng trong cùng Mục tiêu",
+} as const;
+
 export const khoaNhap = z.string().trim().min(1).max(BAN_NHAP_TRAN.khoa);
 
 const viSao = z.string().trim().min(1).max(TRO_LY_OKR_TRAN.chu.viSao);
@@ -44,12 +49,38 @@ export const mucTieuNhap = z.object({
 	kr: z.array(krNhap).min(BAN_NHAP_TRAN.kr.min).max(BAN_NHAP_TRAN.kr.max),
 });
 
-export const banNhap = z.object({
-	mucTieu: z
-		.array(mucTieuNhap)
-		.min(BAN_NHAP_TRAN.mucTieu.min)
-		.max(BAN_NHAP_TRAN.mucTieu.max),
-});
+function lapLai(khoa: readonly string[]): { i: number; khoa: string }[] {
+	return khoa.flatMap((k, i) => (khoa.indexOf(k) < i ? [{ i, khoa: k }] : []));
+}
+
+function chanKhoaTrung(
+	b: { mucTieu: MucTieuNhap[] },
+	ctx: z.RefinementCtx,
+): void {
+	for (const { i, khoa } of lapLai(b.mucTieu.map((m) => m.khoa)))
+		ctx.addIssue({
+			code: "custom",
+			path: ["mucTieu", i, "khoa"],
+			message: `${BAN_NHAP_LOI.mucTieuTrungKhoa}: ${khoa}`,
+		});
+	b.mucTieu.forEach((m, i) => {
+		for (const { i: j, khoa } of lapLai(m.kr.map((k) => k.khoa)))
+			ctx.addIssue({
+				code: "custom",
+				path: ["mucTieu", i, "kr", j, "khoa"],
+				message: `${BAN_NHAP_LOI.krTrungKhoa}: ${khoa}`,
+			});
+	});
+}
+
+export const banNhap = z
+	.object({
+		mucTieu: z
+			.array(mucTieuNhap)
+			.min(BAN_NHAP_TRAN.mucTieu.min)
+			.max(BAN_NHAP_TRAN.mucTieu.max),
+	})
+	.superRefine(chanKhoaTrung);
 
 export type KrNhap = z.infer<typeof krNhap>;
 export type MucTieuNhap = z.infer<typeof mucTieuNhap>;

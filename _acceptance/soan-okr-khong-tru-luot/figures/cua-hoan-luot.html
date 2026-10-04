@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cửa hoàn lượt · Hình d-1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 70ch;
+      margin-bottom: 1.5rem;
+    }
+    .sub code { font-family: var(--font-mono); font-size: 0.78rem; }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Luồng quyết định · d-1 d-2 d-7 d-8 · Cổng 1</p>
+    <h1>Giữ chỗ rồi hoàn lượt ngay tại cửa</h1>
+    <p class="sub">Cửa tăng <code>soLuot</code> trước khi chuyển để trần không thủng. Lượt không tới được Trợ lý thì cửa trừ lại đúng một lượt, và chỉ khi đó màn mới nói «Lượt này không bị tính».</p>
+
+    <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="500" y1="88" x2="500" y2="116" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="172" x2="500" y2="200" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="256" x2="500" y2="284" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="620" y1="340" x2="716" y2="340" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="380" y1="340" x2="284" y2="340" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="396" x2="500" y2="452" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="500" y1="516" x2="500" y2="552" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="816" y1="372" x2="816" y2="476" stroke="#1f4f7a" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-link)"/>
+
+      <rect x="624" y="320" width="88" height="12" rx="2" fill="#fafafa"/>
+      <text x="668" y="329" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">2XX DÙNG ĐƯỢC</text>
+
+      <rect x="288" y="320" width="88" height="12" rx="2" fill="#fafafa"/>
+      <text x="332" y="329" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">NGƯỜI DÙNG HUỶ</text>
+
+      <rect x="508" y="416" width="32" height="12" rx="2" fill="#fafafa"/>
+      <text x="512" y="425" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.06em">HỎNG</text>
+
+      <rect x="508" y="528" width="56" height="12" rx="2" fill="#fafafa"/>
+      <text x="512" y="537" fill="#006B4F" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.06em">TRỪ ĐƯỢC</text>
+
+      <rect x="680" y="400" width="128" height="28" rx="2" fill="#fafafa"/>
+      <text x="808" y="409" fill="#1f4f7a" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">TRỢ LÝ HỎNG TRONG LUỒNG</text>
+      <text x="808" y="424" fill="#1f4f7a" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">(turn.failed)</text>
+
+      <rect x="400" y="32" width="200" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="500" y="57" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người gửi lượt</text>
+      <text x="500" y="73" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">POST session · session/:phien</text>
+
+      <rect x="340" y="116" width="320" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="141" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cửa tính lượt — giữ chỗ</text>
+      <text x="500" y="157" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">soLuot +1, trước khi chuyển</text>
+
+      <rect x="340" y="200" width="320" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="225" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cửa chuyển tới Trợ lý</text>
+      <text x="500" y="241" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">chờ tối đa CUA_OKR.choTroLyMs</text>
+
+      <polygon points="500,284 620,340 500,396 380,340" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="337" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Kết quả sau</text>
+      <text x="500" y="352" fill="#171717" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">khi giữ chỗ?</text>
+
+      <rect x="716" y="308" width="200" height="64" rx="32" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="816" y="333" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lượt tính</text>
+      <text x="816" y="349" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">soLuot giữ +1 · AC-3</text>
+      <text x="816" y="362" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">Trợ lý đã nhận lượt</text>
+
+      <rect x="84" y="308" width="200" height="64" rx="32" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="184" y="333" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Không hoàn</text>
+      <text x="184" y="349" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">soLuot = n + 1 · AC-4</text>
+      <text x="184" y="362" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chặn gửi rồi huỷ liên tục</text>
+
+      <rect x="320" y="452" width="360" height="64" rx="6" fill="#ffffff" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="500" y="476" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cửa hoàn 1 lượt — hoanLuot</text>
+      <text x="500" y="492" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">không nối · quá hạn · 3xx/4xx · 5xx · 2xx không dùng được</text>
+      <text x="500" y="506" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">soLuot −1, không dưới 0 · AC-1 AC-2 AC-4</text>
+
+      <rect x="308" y="552" width="384" height="64" rx="32" fill="#fafafa"/>
+      <rect x="308" y="552" width="384" height="64" rx="32" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+      <text x="500" y="577" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Màn: lý do + «Lượt này không bị tính»</text>
+      <text x="500" y="593" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">luot: "da-hoan" · soLuot về n</text>
+      <text x="500" y="606" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chỉ khi cửa thật sự trừ được</text>
+
+      <rect x="704" y="476" width="224" height="88" rx="6" fill="rgba(31,79,122,0.06)" stroke="#1f4f7a" stroke-width="1" stroke-dasharray="5,4"/>
+      <rect x="716" y="486" width="84" height="14" rx="2" fill="transparent" stroke="rgba(31,79,122,0.50)" stroke-width="0.8"/>
+      <text x="758" y="496" fill="#1f4f7a" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">OUT OF SCOPE</text>
+      <text x="816" y="519" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Vẫn tính</text>
+      <text x="816" y="536" fill="#1f4f7a" font-size="11" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Ngoài lượt này — Cổng 1 quyết</text>
+      <text x="816" y="552" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">cần agent-okr tự hoàn</text>
+
+      <text x="288" y="472" fill="#171717" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif" text-anchor="end">Kho hỏng khi hoàn:</text>
+      <text x="288" y="488" fill="#171717" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif" text-anchor="end">trả lỗi gốc, không có da-hoan,</text>
+      <text x="288" y="504" fill="#171717" font-size="12" font-style="italic" font-family="'Lora', Georgia, serif" text-anchor="end">ghi hoan-luot-hong · AC-1</text>
+      <path d="M 296 484 Q 308 476 316 480" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="320" cy="480" r="2" fill="#171717"/>
+
+      <line x1="40" y1="640" x2="960" y2="640" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="656" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ THÍCH · HÌNH DẠNG MANG LOẠI</text>
+
+      <rect x="40" y="672" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="72" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đầu / kết cục</text>
+
+      <rect x="196" y="672" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="228" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước của cửa</text>
+
+      <polygon points="352,678 364,672 376,678 364,684" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="388" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Rẽ nhánh</text>
+
+      <line x1="496" y1="678" x2="524" y2="678" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="532" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đường hoàn lượt</text>
+
+      <line x1="668" y1="678" x2="696" y2="678" stroke="#1f4f7a" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow-link)"/>
+      <text x="704" y="682" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Ngoài lượt này (Out of scope)</text>
+    </svg>
+
+    <footer>d-1 d-2 d-7 d-8 · soan-okr-khong-tru-luot · cửa hoàn lượt · thiết kế 2026-10-04</footer>
+  </div>
+</body>
+</html>

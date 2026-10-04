@@ -5,7 +5,7 @@ import {
 	workspaceRoleOf,
 } from "@crm/auth";
 import { db } from "@crm/db";
-import { capNhatPhien, noiPhienMoCoi } from "@crm/db/okr-cuoc-soan";
+import { capNhatPhien, hoanLuot, noiPhienMoCoi } from "@crm/db/okr-cuoc-soan";
 import { laChoGiuPhien } from "@crm/validation/okr-cuoc-soan";
 import { connection } from "next/server";
 import {
@@ -87,7 +87,8 @@ async function handler(
 		return loi(409, CUA_OKR.loi.daCoPhien);
 	}
 
-	if (request.method === "POST" && laLuot(duong.ten)) {
+	const giuCho = request.method === "POST" && laLuot(duong.ten);
+	if (giuCho) {
 		let luot: Awaited<ReturnType<typeof tangLuot>>;
 		try {
 			luot = await tangLuot(cuocSoanId);
@@ -116,11 +117,17 @@ async function handler(
 		)}`,
 	);
 
+	const quaHan = new AbortController();
+	const henGio = giuCho
+		? setTimeout(() => quaHan.abort(), CUA_OKR.choTroLyMs)
+		: undefined;
 	const init: RequestInit & { duplex?: "half" } = {
 		method: request.method,
 		headers,
 		redirect: "manual",
-		signal: request.signal,
+		signal: giuCho
+			? AbortSignal.any([request.signal, quaHan.signal])
+			: request.signal,
 	};
 
 	if (request.method !== "GET" && request.method !== "HEAD") {
@@ -132,13 +139,20 @@ async function handler(
 	try {
 		upstream = await fetch(dich, init);
 	} catch (error) {
-		return Response.json(
-			{
-				error: CUA_OKR.loi.khongNoiDuoc,
-				detail: error instanceof Error ? error.message : String(error),
-			},
-			{ status: 502 },
-		);
+		const detail = error instanceof Error ? error.message : String(error);
+		const khongNoi = { error: CUA_OKR.loi.khongNoiDuoc, detail };
+		if (request.signal.aborted) return Response.json(khongNoi, { status: 502 });
+		if (quaHan.signal.aborted)
+			return loiHoan(giuCho, cuocSoanId, 504, { error: CUA_OKR.loi.quaHan });
+		return loiHoan(giuCho, cuocSoanId, 502, khongNoi);
+	} finally {
+		clearTimeout(henGio);
+	}
+
+	if (giuCho && !upstream.ok && (await daHoan(cuocSoanId))) {
+		const error =
+			upstream.status >= 500 ? CUA_OKR.loi.troLyLoi : CUA_OKR.loi.troLyTuChoi;
+		return Response.json(kemLuot({ error }, true), { status: upstream.status });
 	}
 
 	const responseHeaders = new Headers(upstream.headers);
@@ -147,15 +161,20 @@ async function handler(
 	if (moPhien && upstream.ok) {
 		const than = await upstream.text();
 		const phienEve = docPhienEve(upstream.headers, than);
-		if (!phienEve) return loi(502, CUA_OKR.loi.khongDocDuocPhien);
+		if (!phienEve)
+			return loiHoan(true, cuocSoanId, 502, {
+				error: CUA_OKR.loi.khongDocDuocPhien,
+			});
 		const ghi = await ghiPhienEve(cuocSoanId, phienEve, cuoc.sessionId);
 		if (ghi !== "da-ghi") {
 			await noiPhienMoCoi(db, cuocSoanId, phienEve).catch(() => ({
 				noi: false,
 			}));
 			return ghi === "thua"
-				? loi(409, CUA_OKR.loi.daCoPhien)
-				: loi(502, CUA_OKR.loi.khongGhiDuocPhien);
+				? loiHoan(true, cuocSoanId, 409, { error: CUA_OKR.loi.daCoPhien })
+				: loiHoan(true, cuocSoanId, 502, {
+						error: CUA_OKR.loi.khongGhiDuocPhien,
+					});
 		}
 		return new Response(than, {
 			status: upstream.status,
@@ -180,6 +199,32 @@ export {
 	handler as POST,
 	handler as PUT,
 };
+
+async function daHoan(cuocSoanId: string): Promise<boolean> {
+	try {
+		return (await hoanLuot(db, cuocSoanId)).tru;
+	} catch (error) {
+		console.error("hoan-luot-hong", cuocSoanId, error);
+		return false;
+	}
+}
+
+function kemLuot(
+	than: Record<string, string>,
+	hoan: boolean,
+): Record<string, string> {
+	return hoan ? { ...than, luot: CUA_OKR.luotDaHoan } : than;
+}
+
+async function loiHoan(
+	giuCho: boolean,
+	cuocSoanId: string,
+	status: number,
+	than: Record<string, string>,
+): Promise<Response> {
+	const hoan = giuCho && (await daHoan(cuocSoanId));
+	return Response.json(kemLuot(than, hoan), { status });
+}
 
 function tangLuot(cuocSoanId: string) {
 	return getServerTrpcClient().okr.soanTangLuot.mutate({ cuocSoanId });

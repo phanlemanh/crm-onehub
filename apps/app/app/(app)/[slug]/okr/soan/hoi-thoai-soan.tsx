@@ -47,6 +47,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { SOAN_UI } from "./cau-hinh";
 import { type CuocDangSoan, donViCua } from "./dung-cuoc-soan";
 import type { CuocSoan } from "./kieu";
+import type { LyDoHong } from "./loi-cua";
 import { tachLuotTroLy } from "./tach-cau-hoi";
 
 type LyDoSoan = keyof OkrSoanMessages["lyDo"];
@@ -135,6 +136,12 @@ function MucLuot({
 	);
 }
 
+function cauLyDoHong(m: OkrSoanMessages, lyDo: LyDoHong | null): string {
+	if (!lyDo || lyDo.ma === "dung-giua-chung") return m.hoiThoai.loiMoTaKhac;
+	if (lyDo.ma === "qua-45s") return m.hoiThoai.loiMoTa;
+	return m.hoiThoai.lyDoHong[lyDo.ma];
+}
+
 function LuotLoi({
 	s,
 	m,
@@ -148,18 +155,18 @@ function LuotLoi({
 		<Alert role="alert" data-luot="loi">
 			<AlertTitle>{m.hoiThoai.loi}</AlertTitle>
 			<AlertDescription>
-				{loiMo
-					? m.lyDo[loiMo]
-					: s.qua45s
-						? m.hoiThoai.loiMoTa
-						: m.hoiThoai.loiMoTaKhac}
+				<div aria-live="polite">
+					<p>{loiMo ? m.lyDo[loiMo] : cauLyDoHong(m, s.lyDoHong)}</p>
+					{s.lyDoHong?.daHoan ? <p>{m.hoiThoai.khongTinh}</p> : null}
+					{s.lanThu > 0 ? <p>{m.hoiThoai.daThuLai(String(s.lanThu))}</p> : null}
+				</div>
 			</AlertDescription>
 			<AlertAction>
 				<Button
 					size="sm"
 					variant="outline"
 					data-nut="thu-lai"
-					disabled={s.moLai.isPending}
+					disabled={s.dangThu || s.moLai.isPending}
 					onClick={s.thuLai}
 				>
 					{m.hoiThoai.thuLai}
@@ -332,7 +339,7 @@ export function HoiThoaiSoan({
 							/>
 						</div>
 					) : null}
-					{s.hong ? <LuotLoi s={s} m={m} loiMo={loiMo} /> : null}
+					{s.hong || s.dangThu ? <LuotLoi s={s} m={m} loiMo={loiMo} /> : null}
 					{s.lyDoLuot ? (
 						<Alert role="alert" data-tu-choi={s.lyDoLuot}>
 							<AlertTitle>{m.lyDoLuot[s.lyDoLuot]}</AlertTitle>

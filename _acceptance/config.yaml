@@ -78,6 +78,8 @@ executors:
     tdk_suc_khoe_trang_thai: 'bun run test -- "cd apps/api && bun test test/tai-lieu-suc-khoe.spec.ts -t trang-thai"'
     tdk_man_suc_khoe: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-suc-khoe.dom.tsx"
     tdk_nhac_sang: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tai-lieu-nhac.spec.ts"'
+    ctk_don_vi: 'cd packages/validation && bun test test/okr-cuoc-soan.spec.ts -t trung-khoa'
+    ctk_tich_hop: 'bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/ban-nhap-trung-khoa.integration.spec.ts"'
     tdk_nhac_bang_tab: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nhac-bang-tab.spec.ts"'
     tdk_ong_dung: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-khu-hoi.dom.tsx -t ong-dung"
     tdk_ong_dung_doc: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ong-dung-doc.dom.tsx"
@@ -1112,8 +1114,26 @@ executors:
     sol_dem_db: bun run test -- "cd packages/db && bun test test/okr-cuoc-soan.spec.ts -t dem-co-luot"
     sol_tran_api: bun run test -- "cd apps/api && bun test test/soan-okr-tran.spec.ts -t cuoc-rong-khong-tinh"
     nbn_ca_tep: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/nop-ban-nhap.integration.spec.ts"
+    r1h_hong: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t hong-khong-tru --randomize --seed 1 && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t hong-khong-tru --randomize --seed 2 && bun test ./test/soan-okr-hoan-hong.spec.ts -t hoan-hong --randomize --seed 1 && bun test ./test/soan-okr-hoan-hong.spec.ts -t hoan-hong --randomize --seed 2"
+    r1h_mo_phien: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t mo-phien-khong-dung-duoc --randomize --seed 1 && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t mo-phien-khong-dung-duoc --randomize --seed 2 && bun test ./test/soan-okr-hoan-hong.spec.ts -t mo-phien-khong-dung-duoc --randomize --seed 1 && bun test ./test/soan-okr-hoan-hong.spec.ts -t mo-phien-khong-dung-duoc --randomize --seed 2"
+    r1h_tran: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t tran-van-chan"
+    r1h_huy: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t nguoi-huy"
+    r1h_cuoc_ky: bun run test -- "cd apps/api && bun test test/soan-okr-hoan-luot.spec.ts"
+    r1h_hoan_db: bun run test -- "cd packages/db && bun test test/okr-hoan-luot.spec.ts"
+    r1h_ly_do: cd apps/app && bun test ./test/soan-okr-ly-do-loi.spec.ts
+    r1h_thu_lai_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai.dom.tsx
+    r1h_luong: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t luong-khong-cat"
+    r1h_khong_status: cd apps/app && bun test ./test/soan-okr-ly-do-loi.spec.ts -t loi-khong-status
+    r1h_sau_thu_lai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai.dom.tsx -t sau-thu-lai
+    r1c_hoi_y_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi-y.dom.tsx -t 'thanh công bố'"
+    r1c_cap_nhat_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cap-nhat-tuan.dom.tsx"
+    r1c_toan_canh_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-toan-canh-chu.dom.tsx"
+    r1c_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
+    r1c_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-ket-luan.tsx" "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx" "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
+    ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
+    ctk_pha_thu_do: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs do
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
     htbt_man_thanh: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hydrat-thanh-bieu-tuong/rang/man-thanh.mjs"'
@@ -1739,6 +1759,9 @@ executors:
     nbn_dao_thu_tu_xanh: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs xanh
     nbn_dao_thu_tu_do: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs do
     nbn_quet_mau: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/quet-mau.mjs
+    r1h_man_that: 'OKR_AGENT_BRIDGE_SECRET=gia-do-soan-okr-khong-tru-luot OKR_AGENT_URL=http://127.0.0.1:9 PHIEN_DO_TEN_CAY=soan-okr-khong-tru-luot bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-khong-tru-luot/rang/thu-lai-man-that.mjs"'
+    r1h_chu_va_san: 'cd apps/app && bun test test/messages-guard.spec.ts && cd ../.. && node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx" --mode static'
+    r1c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/man-okr-truoc-r1/rang/man-r1c.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
