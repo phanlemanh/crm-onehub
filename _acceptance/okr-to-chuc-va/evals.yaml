@@ -12,7 +12,7 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.r1d_so_kr_dom
-    expected: "exit 0; okr-to-chuc-va.dom.tsx -t so-kr dựng BangKr thật với một KR source=may (xem=duoc) và một KR tay: trong ô ẩn dưới md (span.md:hidden chứa TienDoGon) có đúng một button[data-so-kr=<id KR máy>]; trong ô AN_DUOI_MD có đúng một; tổng hai trong DOM; KR tay không có button[data-so-kr]; bấm nút ở bản điện thoại → URL record trỏ khung số so-kr của KR đó. Chiều đỏ ghim: bản sao đặt lại moc={false} cho bản điện thoại phải làm bài đỏ 'dien thoai thieu moc: so-kr'."
+    expected: "exit 0; okr-to-chuc-va.dom.tsx -t so-kr dựng BangKr thật với một KR source=crm (xem=duoc) và một KR tay, ma trận viết trước 2 khổ {390 → bản điện thoại (span.md:hidden), 1440 → bản máy tính (ô hidden md:table-cell)}: ở mỗi khổ cả bảng có đúng một button[data-so-kr=<id KR máy>] và nó nằm trong bản đang hiện ở khổ đó; KR tay không có; bấm nút đó → URL record trỏ khung số của KR. In 'so kho: 2'. Chiều đỏ ghim: bản sao để bản điện thoại không mang móc (moc={false}) phải làm bài đỏ 'dien-thoai thieu moc: so-kr'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/test/okr-to-chuc-va.dom.tsx"]
 

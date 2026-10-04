@@ -14,6 +14,7 @@ import {
 import { cho, dat, datLai, nhip } from "./khung-soan-okr";
 
 const { BangMucTieu } = await import("@/app/(app)/[slug]/okr/bang-muc-tieu");
+const { BangKr } = await import("@/app/(app)/[slug]/okr/bang-kr");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 
@@ -226,5 +227,64 @@ describe("thu-gon", () => {
 			).toBe(true);
 		}
 		console.log(`so ca: ${CACH.length}`);
+	});
+});
+
+describe("so-kr", () => {
+	const MAY = kr("kr-may", "mt-s", {
+		source: "crm",
+		nguonMay: {
+			loai: "crm",
+			chiSo: "thoa-thuan-chot-duoc",
+			phamVi: { kieu: "phong-ban", id: "pb-1" },
+			bac: null,
+			sheetId: null,
+			sheetO: null,
+			docLuc: null,
+			docGiaTri: null,
+			docLoi: null,
+		},
+	});
+	const TAY = kr("kr-tay", "mt-s");
+
+	const KHO = [
+		{ rong: 390, ban: "dien-thoai", chon: ".md\\:hidden" },
+		{ rong: 1440, ban: "may-tinh", chon: ".md\\:table-cell" },
+	] as const;
+
+	test("so-kr: moi kho dung mot nut data-so-kr, nam o ban dang hien; KR tay khong co", async () => {
+		expect.assertions(KHO.length * 4);
+		const rongGoc = window.innerWidth;
+		for (const kho of KHO) {
+			window.innerWidth = kho.rong;
+			const san = await dung(
+				<BangKr
+					danhDauCuaToi={false}
+					expected={47}
+					keyResults={[MAY, TAY]}
+					kind="cam-ket"
+				/>,
+			);
+			await cho(() => q("[data-so-kr-cho]", san.o) === null, "quyen xem so");
+			const nut = [
+				...san.o.querySelectorAll<HTMLElement>(
+					`button[data-so-kr="${MAY.id}"]`,
+				),
+			];
+			const dungBan = nut.filter((n) => n.closest(kho.chon) !== null);
+			expect(nut.length, `so nut so-kr: ${kho.ban}`).toBe(1);
+			expect(dungBan.length, `${kho.ban} thieu moc: so-kr`).toBe(1);
+			expect(
+				san.o.querySelectorAll(`button[data-so-kr="${TAY.id}"]`).length,
+				`kr tay co nut so: ${kho.ban}`,
+			).toBe(0);
+			await bam(dungBan[0] ?? null, `nut so ${kho.ban}`);
+			expect(
+				san.url().get("record") ?? "",
+				`nut ${kho.ban} khong mo so`,
+			).toContain(MAY.id);
+		}
+		window.innerWidth = rongGoc;
+		console.log(`so kho: ${KHO.length}`);
 	});
 });
