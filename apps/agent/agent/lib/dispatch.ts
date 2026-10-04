@@ -29,6 +29,7 @@ import {
 	claimDue,
 	completeTask,
 	DIRECT_KINDS,
+	KHONG_VAO_LAN_NGHIEN_CUU,
 	type LeasedTask,
 	noteSession,
 } from "./tasks";
@@ -183,7 +184,7 @@ export async function runResearchLane(
 
 	const tasks = await claimDue(
 		RESEARCH_BATCH,
-		{ except: DIRECT_KINDS },
+		{ except: KHONG_VAO_LAN_NGHIEN_CUU },
 		RESEARCH_LEASE_MS,
 	);
 	if (tasks.length === 0) return 0;

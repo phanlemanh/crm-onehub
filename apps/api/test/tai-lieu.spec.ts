@@ -253,7 +253,15 @@ async function trangDangDung(ten: string, noiDung: string) {
 	return t;
 }
 
-const THU_TUC_GHI = ["approve", "create", "propose", "reject"];
+const THU_TUC_GHI = [
+	"approve",
+	"create",
+	"datXacMinh",
+	"propose",
+	"reject",
+	"xuLyBaoSai",
+	"xuLyChuaTraLoi",
+];
 
 function thuTucTaiLieu(): { ten: string; loai: string }[] {
 	const nguon = readFileSync(
@@ -402,7 +410,12 @@ describe("so-va-dat", () => {
 		const cu = await db.taiLieuSuKien.findMany({
 			where: { trangId, loai: "CU" },
 		});
-		expect(cu.map((c) => parseSuKienChiTiet(c.chiTiet).deXuatId)).toContain(d);
+		expect(
+			cu.map((c) => {
+				const chiTiet = parseSuKienChiTiet(c.chiTiet);
+				return "deXuatId" in chiTiet ? chiTiet.deXuatId : null;
+			}),
+		).toContain(d);
 	});
 
 	test("so-va-dat: doi chung duong, hash dung va ban goc dung thi duyet duoc", async () => {

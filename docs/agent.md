@@ -574,6 +574,10 @@ API; the API only reads and writes rows.
   the AI assistant and its answer do live in that eve session's `AgentEvent` rows,
   like every other assistant conversation, and that is where a manual review reads
   them. Log lines carry `message_id`, `hoiId` and `zaloChatId`, never text.
+  One exception, chosen at the scope gate of `tro-ly-doc-kho`: a Zalo question that
+  `tro_ly_kho` refuses keeps its text in `TaiLieuHoi.cauHoi`, so page owners see it in
+  «Câu chưa trả lời được». A question it answers keeps no text — `ghiKetQuaHoi`
+  clears `cauHoi` on `TRA_LOI`.
 
 ### Chụp số OKR mỗi ngày
 
@@ -918,6 +922,7 @@ Hỏi theo thứ tự. **Dừng ở câu đầu tiên trả lời «có».**
 | Dựng và chạy Tác nhân | `subagent` `agent_builder` và `agent_runner` | 2 |
 | Trợ lý OKR (nền ở 9a; 9b, 9c) | `subagent` `tro_ly_okr` — tool sống `nop_de_xuat` (9a), `nop_tom_tat` (9c), mọi tool dựng sẵn tắt, sandbox chặn mạng; không có `skill` nào (`load_skill` tắt) — phương pháp OKR nằm trong lời dặn tĩnh `instructions.md`; 9b, 9c thêm mã kiểm số ở `packages/validation` | 1, 2, 6, 7, 8 — ranh giới riêng: vai «chỉ OKR», ZDR, trần $9, không ghi OKR |
 | Máy soạn bản đề xuất của Kho tài liệu (lượt 2) | Mã đọc chữ trong việc trực tiếp; `subagent` `may_soan` chỉ có một tool sống `nop_ban_de_xuat`, mọi tool dựng sẵn tắt, sandbox chặn mạng, mọi lời gọi mang ZDR; mã kiểm số và trích đoạn ở `packages/validation` | 1, 2, 6, 7 — không duyệt, không ghi bản đang dùng |
+| Trợ lý AI đọc kho (lượt 4 của Kho tài liệu) | `subagent` `tro_ly_kho` với ba tool sống `search_pages`, `read_page`, `nop_tra_loi`, mọi tool dựng sẵn tắt, sandbox chặn mạng, mọi lời gọi mang ZDR; mã kiểm trích dẫn và số ở `packages/validation` dựng câu người đọc thấy | 1, 2, 6, 7 — chỉ đọc bản đang dùng, câu trả lời người đọc thấy là của mã |
 | Báo KR trượt (lượt 10) | Mã phát hiện, cộng một dòng diễn giải từ Trợ lý OKR | 1 |
 | Tạo việc gọi lại khi thoả thuận đổi giai đoạn; tóm tắt thoả thuận im gửi Slack | Tác nhân | 10 — nằm trong danh mục |
 
@@ -1438,6 +1443,51 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
   `<<<NGUON-HET>>>`, xoá mọi dấu `<<<…>>>` có sẵn trong nguồn.
 - **Chi phí** vào sổ `MAY_SOAN` của trang (token, giá theo `TAI_LIEU_AGENT.bangGia`,
   nhãn khoá `rieng`/`chung`), chưa vào sổ chi phí AI chung.
+
+## Chỗ rẽ: Trợ lý AI đọc kho (lượt 4)
+
+Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
+
+- `agent/channels/crm.ts` — `receive` nhận `target.hoiId`; `/internal/crm/dispatch`
+  gọi `drainHoiKho`; `turn.failed`, `session.failed`, `session.completed` đóng câu
+  theo token `kho:<hoiId>`.
+- `agent/channels/zalo.ts` — `message.completed` và `turn.failed` gửi câu dựng từ
+  hàng `TaiLieuHoi` khi câu Zalo có hàng kho, thay cho chữ agent gốc viết.
+- `agent/instructions/task.ts` — nhánh `purpose: "kho"` giao việc cho `tro_ly_kho`.
+- `agent/lib/dispatch.ts` — làn nghiên cứu bỏ `KHONG_VAO_LAN_NGHIEN_CUU` (`hoi-kho`).
+- `agent/schedules/dispatch.ts` — đóng câu quá hạn, gửi câu `hoi-kho` đang chờ.
+- `agent/lib/zalo-config.ts`, `lib/zalo-chi-dan.ts` — `tro_ly_kho` là subagent agent
+  gốc Zalo được gọi; câu về quy định, chính sách, quy trình, biểu mẫu thì chuyển.
+- `agent/lib/capabilities.ts` — «Drafting key» của lượt 2 đổi tên «Document library
+  key»: cùng một khoá cho máy soạn và trợ lý AI đọc kho.
+- Tệp mới: `subagents/tro_ly_kho/**`, `hooks/dong-tro-ly-kho.ts`,
+  `lib/tai-lieu-hoi*.ts`, `lib/tai-lieu-kho-doc.ts`.
+
+Điều đo được, đừng thiết kế ngược lại:
+
+- **Người đọc không bao giờ thấy chữ model.** `nop_tra_loi` chạy `kiemTraLoi`
+  (`@crm/validation/tai-lieu-hoi`): mỗi câu phải có đoạn trích chép nguyên văn từ bản
+  đang dùng, mọi con số trong câu phải nằm trong trích của chính câu đó. Qua kiểm thì
+  hàng lưu `traLoi` đã kiểm; màn «Hỏi» và tin Zalo dựng từ `traLoi`, không từ chữ cuối
+  của phiên. Bác tới `TAI_LIEU_AGENT.hoi.tranBac` lần thì câu thành từ chối
+  `trich-truot` và tool bảo dừng.
+- **Hàng có trước bước model đầu.** Câu CRM tạo hàng ở API; câu Zalo tạo hàng ở
+  `session.started` của chỉ dẫn động (`moHoi`), trước mọi lời gọi model. Hết ngân sách,
+  hết tín dụng hay 402 ở bước đầu vẫn có hàng để đóng `LOI het-tran`.
+- **Quyền nằm trong tool.** `search_pages`, `read_page`, `nop_tra_loi` tự đòi phiên con
+  của một câu kho đang mở (`hoiCuaPhien`); gọi từ phiên gốc thì ném. eve bỏ công cụ
+  động khi replay, nên không dựa vào lớp ẩn.
+- **Phiên con tìm câu qua mã phiên gốc**, như máy soạn: `guiHoiKho` ghi
+  `gui:<id>` rồi mã phiên thật vào `TaiLieuHoi.phienId`.
+- **Chữ trang là dữ liệu.** `read_page` đặt nội dung giữa `<<<TRANG-BAT-DAU>>>` và
+  `<<<TRANG-HET>>>`, xoá mọi dấu `<<<…>>>` có sẵn trong trang, cắt ở
+  `TAI_LIEU_AGENT.hoi.docToiDa`.
+- **Mọi lời gọi mang ZDR** qua `modelTaiLieu("hoi")`; khoá riêng
+  `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` dùng chung với máy soạn, vắng thì dùng khoá chung.
+- **Chi phí** vào hàng `TaiLieuHoi` (token, `chiPhiUsd`, `nhanKhoa`) và sổ chi phí AI
+  chung với tính năng `tai-lieu.tro-ly`.
+- `_acceptance/tro-ly-doc-kho/rang/nguong.ts` in tỉ lệ trả lời có trích và số báo sai
+  cho phiên nghiệm thu; `rang/cham-bo-do.ts` chấm một bộ câu với model thật.
 
 ## Chỗ rẽ: Soạn OKR cùng Trợ lý
 

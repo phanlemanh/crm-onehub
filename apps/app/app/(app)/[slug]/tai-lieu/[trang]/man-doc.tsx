@@ -33,6 +33,7 @@ import {
 	ngayTaiLieu,
 } from "@/lib/tai-lieu-man";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { DatXacMinh } from "./dat-xac-minh";
 import { type NguonCuaTrang, NguonTrang } from "./nguon-trang";
 import { NhacToi } from "./nhac-toi";
 
@@ -70,6 +71,13 @@ export type TrangDoc = {
 	soBanCho: number;
 	deXuatChoId: string | null;
 	nguon: NguonCuaTrang | null;
+	xacMinh?: XacMinhTrang;
+};
+
+export type XacMinhTrang = {
+	den: string | null;
+	quaHan: boolean;
+	coQuyen: boolean;
 };
 
 export function ManDoc({ trang }: { trang: TrangDoc }) {
@@ -143,6 +151,9 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 									</Link>
 								</Button>
 							) : null}
+							{trang.xacMinh ? (
+								<DongXacMinh slug={trang.slug} xacMinh={trang.xacMinh} />
+							) : null}
 							{trang.deXuatChoId ? (
 								<Button asChild size="sm" variant="ghost">
 									<Link href={url(duongDeXuat(trang.deXuatChoId))}>
@@ -192,6 +203,31 @@ export function ManDoc({ trang }: { trang: TrangDoc }) {
 					</aside>
 				</div>
 			</PageShellContent>
+		</>
+	);
+}
+
+function DongXacMinh({
+	slug,
+	xacMinh,
+}: {
+	slug: string;
+	xacMinh: XacMinhTrang;
+}) {
+	const locale = useLocale();
+	const m = taiLieuMessages(locale).doc.xacMinh;
+	return (
+		<>
+			{xacMinh.quaHan ? (
+				<Badge data-xac-minh="qua-han" variant="outline">
+					{m.quaHan}
+				</Badge>
+			) : xacMinh.den ? (
+				<Badge data-xac-minh="den" variant="outline">
+					{dien(m.den, { ngay: ngayTaiLieu(xacMinh.den, locale) })}
+				</Badge>
+			) : null}
+			{xacMinh.coQuyen ? <DatXacMinh den={xacMinh.den} slug={slug} /> : null}
 		</>
 	);
 }
