@@ -18,7 +18,8 @@ const PHIEN = "phien-store-that";
 const TRA_LOI_MOI = "tra loi luot moi";
 const LOI_BAN = "eve session is already processing a turn.";
 
-type SuKienSo = { type: string; data: object };
+type DuLieu = { readonly [khoa: string]: string | number };
+type SuKienSo = { type: string; data: DuLieu };
 type May = {
 	so: SuKienSo[];
 	token: string;
@@ -41,7 +42,7 @@ function moi(doiToken: boolean): May {
 	};
 }
 
-function ghi(type: string, data: object): void {
+function ghi(type: string, data: DuLieu): void {
 	may.so.push({ type, data });
 	for (const f of may.nghe) f();
 }
@@ -177,9 +178,11 @@ async function choDen(dieuKien: () => boolean, moTa: string): Promise<void> {
 	throw new Error(moTa);
 }
 
-const coTraLoiMoi = (store: EveAgentStore) =>
+type Store = ReturnType<typeof taoStore>;
+
+const coTraLoiMoi = (store: Store) =>
 	JSON.stringify(store.snapshot.data).includes(TRA_LOI_MOI);
-const daDocLuot = (store: EveAgentStore) =>
+const daDocLuot = (store: Store) =>
 	store.snapshot.events.some((e) => e.type === "turn.started");
 
 describe("store-eve-huy", () => {

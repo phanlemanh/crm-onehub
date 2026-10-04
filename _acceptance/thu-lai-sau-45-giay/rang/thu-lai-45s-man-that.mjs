@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { okrSoanMessages } from "../../../apps/app/lib/messages/okr-soan.ts";
+import { OKR_SOAN_CUA } from "../../../apps/app/lib/okr-soan-record.ts";
 import { db } from "../../../packages/db/src/index.ts";
 import { moCuoc } from "../../../packages/db/src/okr-cuoc-soan.ts";
 import { PHIEN_CHO_EVE } from "../../../packages/validation/src/okr-cuoc-soan.ts";
@@ -24,6 +25,7 @@ const DO = {
 	],
 	cho45sMs: 80 * GIAY_MS,
 	choGuiLaiMs: 30 * GIAY_MS,
+	choTraLoiMs: 10 * GIAY_MS,
 	nhipMs: 300,
 	mauMs: 200,
 	soMauToiThieu: 3,
@@ -55,71 +57,91 @@ function kiem(nhan, dat) {
 }
 
 const nhatKy = [];
-const dangGiu = new Map();
-const mocDo = new Map();
-const tinMo = new Map();
-let soPhien = 0;
+const soPhien = new Map();
+let demPhien = 0;
+const TRA_LOI_MOI = "Câu trả lời của lượt mới (Trợ lý giả)";
 
-function ghi(phien, loai, trangThai) {
-	nhatKy.push({ luc: Date.now(), phien, loai, trangThai });
+function ghi(phien, loai, trangThai, them = {}) {
+	nhatKy.push({ luc: Date.now(), phien, loai, trangThai, ...them });
 	return trangThai;
 }
 
-function suKien(phien, i, type, data) {
-	return `${JSON.stringify({
-		type,
-		data,
-		meta: { id: `${phien}-${i}`, createdAt: new Date().toISOString() },
-	})}\n`;
+function phienGia(phien) {
+	if (!soPhien.has(phien))
+		soPhien.set(phien, {
+			so: [],
+			nghe: new Set(),
+			token: `eve:${phien}:0`,
+			soLuot: 0,
+			mocDo: null,
+			hen: null,
+		});
+	return soPhien.get(phien);
 }
 
-function luong(phien, batDau) {
+function themSuKien(phien, type, data) {
+	const p = phienGia(phien);
+	p.so.push({
+		type,
+		data,
+		meta: { id: `${phien}-${p.so.length}`, at: new Date().toISOString() },
+	});
+	for (const f of p.nghe) f();
+}
+
+function batDauLuot(phien, tin) {
+	const p = phienGia(phien);
+	p.soLuot += 1;
+	const luot = `luot-${p.soLuot}`;
+	themSuKien(phien, "message.received", {
+		message: tin,
+		sequence: 0,
+		turnId: luot,
+	});
+	themSuKien(phien, "turn.started", { sequence: 1, turnId: luot });
+	if (KIEM_DO_DO) {
+		let i = 1;
+		p.hen = setInterval(() => {
+			i += 1;
+			themSuKien(phien, "step.started", {
+				sequence: i,
+				stepIndex: i,
+				turnId: luot,
+			});
+		}, DO.nhipKiemDoDoMs);
+	}
+	return luot;
+}
+
+function luong(phien, tu, signal) {
+	const p = phienGia(phien);
 	const ma = new TextEncoder();
-	let hen = null;
-	let daDong = false;
+	let da = tu;
+	let nghe = null;
+	const dongLai = () => {
+		if (nghe) p.nghe.delete(nghe);
+		nghe = null;
+	};
 	return new ReadableStream({
 		start(dk) {
-			dangGiu.set(phien, () => {
-				if (hen) clearInterval(hen);
-				if (daDong) return;
-				daDong = true;
-				dk.close();
+			nghe = () => {
+				while (da < p.so.length) {
+					dk.enqueue(ma.encode(`${JSON.stringify(p.so[da])}\n`));
+					da += 1;
+				}
+			};
+			p.nghe.add(nghe);
+			nghe();
+			signal.addEventListener("abort", () => {
+				if (!nghe) return;
+				ghi(phien, `dong@${tu}`, 0);
+				dongLai();
 			});
-			if (batDau > 0) return;
-			const luot = `luot-${phien}`;
-			dk.enqueue(ma.encode(suKien(phien, 1, "session.started", {})));
-			dk.enqueue(
-				ma.encode(
-					suKien(phien, 2, "message.received", {
-						message: tinMo.get(phien) ?? "",
-						sequence: 1,
-						turnId: luot,
-					}),
-				),
-			);
-			dk.enqueue(
-				ma.encode(
-					suKien(phien, 3, "turn.started", { sequence: 2, turnId: luot }),
-				),
-			);
-			if (!KIEM_DO_DO) return;
-			let i = 3;
-			hen = setInterval(() => {
-				i += 1;
-				dk.enqueue(
-					ma.encode(
-						suKien(phien, i, "step.started", {
-							sequence: i,
-							stepIndex: i,
-							turnId: luot,
-						}),
-					),
-				);
-			}, DO.nhipKiemDoDoMs);
 		},
 		cancel() {
-			daDong = true;
-			if (hen) clearInterval(hen);
+			if (!nghe) return;
+			ghi(phien, `dong@${tu}`, 0);
+			dongLai();
 		},
 	});
 }
@@ -130,13 +152,17 @@ const mayGia = Bun.serve({
 	async fetch(req) {
 		const duong = new URL(req.url).pathname;
 		if (req.method === "POST" && duong === DO.tienTo) {
-			soPhien += 1;
-			const phien = `phien-gia-${soPhien}-${Date.now()}`;
-			const than = await req.json().catch(() => ({}));
-			tinMo.set(phien, typeof than.message === "string" ? than.message : "");
+			demPhien += 1;
+			const phien = `phien-gia-${demPhien}-${Date.now()}`;
+			const than = await req.json();
+			batDauLuot(phien, String(than.message ?? ""));
 			ghi(phien, "mo", 202);
 			return Response.json(
-				{ ok: true, sessionId: phien, continuationToken: `eve:${phien}` },
+				{
+					ok: true,
+					sessionId: phien,
+					continuationToken: phienGia(phien).token,
+				},
 				{ status: 202, headers: { "x-eve-session-id": phien } },
 			);
 		}
@@ -145,37 +171,64 @@ const mayGia = Bun.serve({
 		);
 		if (!khop) return new Response("", { status: 404 });
 		const phien = decodeURIComponent(khop[1]);
+		const p = phienGia(phien);
 		if (khop[2] === "/stream") {
-			const batDau = Number(
-				new URL(req.url).searchParams.get("startIndex") ?? 0,
-			);
-			ghi(phien, `luong@${batDau}`, 200);
-			return new Response(luong(phien, batDau), {
+			const tu = Number(new URL(req.url).searchParams.get("startIndex") ?? 0);
+			ghi(phien, `luong@${tu}`, 200);
+			return new Response(luong(phien, tu, req.signal), {
 				status: 200,
 				headers: { "content-type": "application/x-ndjson" },
 			});
 		}
 		if (khop[2] === "/cancel") {
-			ghi(phien, "huy-nhan", 0);
-			await new Promise((xong) => setTimeout(xong, DO.doHuyMs));
-			mocDo.set(phien, Date.now());
-			dangGiu.get(phien)?.();
-			ghi(phien, "huy-tra", 200);
-			return Response.json({ ok: true, sessionId: phien, status: "accepted" });
-		}
-		const daDo = mocDo.get(phien);
-		const truocMoc = daDo === undefined || Date.now() < daDo;
-		if (truocMoc) {
-			ghi(phien, "gui-lai", 409);
+			const than = await req.json();
+			ghi(phien, "huy", 202, { turnId: than.turnId ?? null });
+			setTimeout(() => {
+				if (p.hen) clearInterval(p.hen);
+				p.token = `eve:${phien}:${p.soLuot}`;
+				p.mocDo = Date.now();
+				themSuKien(phien, "turn.cancelled", {
+					sequence: 2,
+					turnId: `luot-${p.soLuot}`,
+				});
+				themSuKien(phien, "session.waiting", {
+					continuationToken: p.token,
+					wait: "next-user-message",
+				});
+				ghi(phien, "moc-do", 0);
+			}, DO.doHuyMs);
 			return Response.json(
-				{ error: "eve session is already processing a turn." },
+				{ ok: true, sessionId: phien, status: "accepted" },
+				{ status: 202, headers: { "x-eve-session-id": phien } },
+			);
+		}
+		const than = await req.json();
+		const hopLe = p.mocDo !== null && than.continuationToken === p.token;
+		if (!hopLe) {
+			ghi(phien, "gui-lai", 409, { token: than.continuationToken });
+			return Response.json(
+				{ ok: false, error: "eve session is already processing a turn." },
 				{ status: 409 },
 			);
 		}
-		ghi(phien, "gui-lai", 202);
+		ghi(phien, "gui-lai", 200, { token: than.continuationToken });
+		const luot = batDauLuot(phien, String(than.message ?? ""));
+		setTimeout(() => {
+			themSuKien(phien, "message.completed", {
+				message: TRA_LOI_MOI,
+				finishReason: "stop",
+				sequence: 2,
+				stepIndex: 0,
+				turnId: luot,
+			});
+			themSuKien(phien, "session.waiting", {
+				continuationToken: p.token,
+				wait: "next-user-message",
+			});
+		}, 300);
 		return Response.json(
-			{ ok: true, sessionId: phien, continuationToken: `eve:${phien}` },
-			{ status: 202, headers: { "x-eve-session-id": phien } },
+			{ ok: true, sessionId: phien },
+			{ status: 200, headers: { "x-eve-session-id": phien } },
 		);
 	},
 });
@@ -242,7 +295,7 @@ const truong = await db.user.findUnique({
 });
 if (!truong) await khongDo("khong thay truong phong trong bo mau");
 
-async function gieoCuoc(ten) {
+async function gieoCuoc(ten, sessionId) {
 	await db.okrCuocSoan.updateMany({
 		where: { departmentId: PHONG, cycleId: KY, trangThai: "dang" },
 		data: { trangThai: "bo" },
@@ -253,7 +306,7 @@ async function gieoCuoc(ten) {
 		divisionId: null,
 		departmentId: PHONG,
 		nguoiMoUserId: truong.id,
-		sessionId: `${PHIEN_CHO_EVE}do-tl45-${ten}-${Date.now()}`,
+		sessionId: sessionId ?? `${PHIEN_CHO_EVE}do-tl45-${ten}-${Date.now()}`,
 		nac: "bat",
 	});
 	dong.push(`GIEO cuoc ${c.id} (${ten}) soLuot ${c.soLuot}`);
@@ -289,6 +342,11 @@ async function suySlug() {
 		: null;
 }
 
+const daGuiLai = (phien) =>
+	nhatKy.find(
+		(n) => n.phien === phien && n.loai === "gui-lai" && n.trangThai === 200,
+	);
+
 async function layMau(p, phien, tenKho) {
 	const mau = [];
 	let chupLuc = null;
@@ -300,15 +358,44 @@ async function layMau(p, phien, tenKho) {
 			chupLuc = Date.now();
 			await chup(p, `E7-cho-khep-${tenKho}`);
 		}
-		if (
-			nhatKy.some(
-				(n) => n.phien === phien && n.loai === "gui-lai" && n.trangThai === 202,
-			)
-		)
-			break;
+		if (daGuiLai(phien)) break;
 		await tre(DO.mauMs);
 	}
 	return { mau, chupLuc };
+}
+
+async function doiChungDongLuong() {
+	const phien = `phien-doi-chung-${Date.now()}`;
+	const cuoc = await gieoCuoc("doi-chung", phien);
+	themSuKien(phien, "session.started", {});
+	const huy = new AbortController();
+	const res = await fetch(
+		`${APP}/eve/agents/okr/eve/v1/session/${phien}/stream`,
+		{
+			headers: {
+				cookie: `${tl.ten}=${tl.gia}; lang=vi`,
+				[OKR_SOAN_CUA.header]: cuoc.id,
+			},
+			signal: huy.signal,
+		},
+	);
+	const doc = res.body?.getReader();
+	await doc?.read().catch(() => null);
+	await tre(GIAY_MS);
+	huy.abort();
+	const thay = await choDen(
+		async () =>
+			nhatKy.some((n) => n.phien === phien && n.loai.startsWith("dong@")),
+		3 * GIAY_MS,
+	);
+	kiem(
+		`doi chung: cua tra ${res.status}, tro ly gia ghi duoc luc dong luong`,
+		thay,
+	);
+	if (!thay)
+		await khongDo(
+			"tro ly gia khong thay luc mot luong bi dong — phep do 'luong cu khong bi cat' vo nghia o may nay",
+		);
 }
 
 async function doKho(kho, slug) {
@@ -325,12 +412,6 @@ async function doKho(kho, slug) {
 		height: kho.cao,
 		deviceScaleFactor: 1,
 	});
-	const loiTrang = [];
-	p.on("console", (x) => {
-		if (x.type() === "error" || x.type() === "warn")
-			loiTrang.push(x.text().slice(0, 300));
-	});
-	p.on("pageerror", (x) => loiTrang.push(`pageerror ${x.message}`));
 	const truocMo = nhatKy.length;
 	await p.goto(
 		`${APP}/${slug}/okr/theo-don-vi?kyOkr=${KY}&donOkr=pb:${PHONG}&cuocSoan=${cuoc.id}`,
@@ -342,14 +423,6 @@ async function doKho(kho, slug) {
 	);
 	if (!qua45s) {
 		kiem(`khong thay qua 45 giay: ${kho.ten}`, false);
-		if (!KIEM_DO_DO) {
-			await chup(p, `E7-khong-45s-${kho.ten}`);
-			const chu = await p
-				.$eval("[data-man-soan]", (o) => o.innerText)
-				.catch(() => "(khong co data-man-soan)");
-			dong.push(`MAN ${kho.ten}: ${chu.replace(/\s+/g, " ").slice(0, 600)}`);
-			for (const l of loiTrang) dong.push(`CONSOLE ${kho.ten}: ${l}`);
-		}
 		await ctx.close();
 		return;
 	}
@@ -361,6 +434,7 @@ async function doKho(kho, slug) {
 		return;
 	}
 	const phien = mo.phien;
+	const luotCu = `luot-${phienGia(phien).soLuot}`;
 	kiem(
 		`${kho.ten}: khong tran ngang (qua 45s) ${await tranNgang(p)}`,
 		(await tranNgang(p)) <= 0,
@@ -370,36 +444,39 @@ async function doKho(kho, slug) {
 	await p.click('[data-nut="thu-lai"]');
 	const { mau, chupLuc } = await layMau(p, phien, kho.ten);
 	const cuaPhien = nhatKy.filter((n) => n.phien === phien);
-	const huy = cuaPhien.filter((n) => n.loai === "huy-nhan");
+	const huy = cuaPhien.filter((n) => n.loai === "huy");
 	kiem(
-		`${kho.ten}: tro ly gia nhan ${huy.length} yeu cau huy`,
-		huy.length === 1,
+		`${kho.ten}: tro ly gia nhan ${huy.length} yeu cau huy, turnId ${huy[0]?.turnId ?? "khong co"} (dang chay ${luotCu}), tra 202`,
+		huy.length === 1 && huy[0].turnId === luotCu && huy[0].trangThai === 202,
 	);
-	const doLuc = mocDo.get(phien);
-	const traHuy = cuaPhien.filter((n) => n.loai === "huy-tra");
-	kiem(
-		`${kho.ten}: tro ly gia tra ${traHuy.length} hoi am huy 200 accepted`,
-		traHuy.length === 1 && traHuy[0].trangThai === 200,
-	);
+	const doLuc = phienGia(phien).mocDo;
 	kiem(
 		`${kho.ten}: moc do = nhan huy + ${doLuc && huy[0] ? doLuc - huy[0].luc : "?"} ms`,
-		doLuc !== undefined &&
-			huy[0] !== undefined &&
-			doLuc - huy[0].luc >= DO.doHuyMs,
+		doLuc !== null && huy[0] !== undefined && doLuc - huy[0].luc >= DO.doHuyMs,
+	);
+	const catSom = cuaPhien.filter(
+		(n) => n.loai === "dong@0" && (doLuc === null || n.luc < doLuc),
+	);
+	kiem(
+		`${kho.ten}: luong cu bi dong truoc moc do ${catSom.length} lan`,
+		catSom.length === 0,
 	);
 	const tuChoi = cuaPhien.filter(
 		(n) => n.loai === "gui-lai" && n.trangThai === 409,
 	);
 	kiem(
-		`${kho.ten}: ${tuChoi.length} POST gui lai truoc moc do bi tra 409, deu truoc moc`,
-		tuChoi.every((n) => doLuc === undefined || n.luc < doLuc),
+		`${kho.ten}: ${tuChoi.length} POST gui lai bi tra 409 (truoc moc do hay token cu)`,
+		true,
 	);
 	const nhan = cuaPhien.filter(
-		(n) => n.loai === "gui-lai" && n.trangThai === 202,
+		(n) => n.loai === "gui-lai" && n.trangThai === 200,
 	);
 	kiem(
-		`${kho.ten}: ${nhan.length} POST gui lai 202, sau moc do ${nhan[0] && doLuc ? nhan[0].luc - doLuc : "?"} ms`,
-		nhan.length === 1 && doLuc !== undefined && nhan[0].luc >= doLuc,
+		`${kho.ten}: ${nhan.length} POST gui lai 200, sau moc do ${nhan[0] && doLuc ? nhan[0].luc - doLuc : "?"} ms, token ${nhan[0]?.token === phienGia(phien).token ? "moi" : "cu"}`,
+		nhan.length === 1 &&
+			doLuc !== null &&
+			nhan[0].luc >= doLuc &&
+			nhan[0].token === phienGia(phien).token,
 	);
 	const giua = mau.filter(
 		(x) => x.luc >= bam && (!nhan[0] || x.luc <= nhan[0].luc),
@@ -410,10 +487,23 @@ async function doKho(kho, slug) {
 	);
 	kiem(
 		`${kho.ten}: anh cho khep chup truoc moc do`,
-		chupLuc !== null && doLuc !== undefined && chupLuc < doLuc,
+		chupLuc !== null && doLuc !== null && chupLuc < doLuc,
 	);
+	const thayTraLoi = await choDen(
+		async () =>
+			(
+				await p.$eval("[data-man-soan]", (o) => o.innerText).catch(() => "")
+			).includes(TRA_LOI_MOI),
+		DO.choTraLoiMs,
+	);
+	kiem(`${kho.ten}: cau tra loi luot moi hien tren man`, thayTraLoi);
 	kiem(
-		`${kho.ten}: khong tran ngang (cho khep) ${await tranNgang(p)}`,
+		`${kho.ten}: bao loi da tat sau tra loi moi`,
+		(await p.$('[data-luot="loi"]')) === null,
+	);
+	await chup(p, `E7-tra-loi-moi-${kho.ten}`);
+	kiem(
+		`${kho.ten}: khong tran ngang (tra loi moi) ${await tranNgang(p)}`,
 		(await tranNgang(p)) <= 0,
 	);
 	await ctx.close();
@@ -428,12 +518,13 @@ trinhDuyet = await puppeteer.launch({
 });
 
 try {
+	await doiChungDongLuong();
 	for (const kho of DO.kho) await doKho(kho, slug);
 } catch (loi) {
 	await khongDo(`tl45: ${loi?.message ?? loi}`);
 }
 for (const n of nhatKy)
 	dong.push(
-		`NHAT KY ${new Date(n.luc).toISOString()} ${n.phien} ${n.loai} ${n.trangThai}`,
+		`NHAT KY ${new Date(n.luc).toISOString()} ${n.phien} ${n.loai} ${n.trangThai}${n.turnId ? ` turnId=${n.turnId}` : ""}${n.token ? ` token=${n.token}` : ""}`,
 	);
 await ket(sai === 0 ? 0 : 1);
