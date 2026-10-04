@@ -1,18 +1,22 @@
 import {
 	afterAll,
+	afterEach,
 	beforeAll,
 	beforeEach,
 	describe,
 	expect,
 	it,
+	spyOn,
 } from "bun:test";
 import {
+	decideSignIn,
 	ensureWorkspaceMembership,
 	NOT_A_MEMBER,
 	type WorkspaceRole,
 } from "@crm/auth";
 import { db } from "@crm/db";
 import { WORKSPACE_ID } from "@crm/db/workspace";
+import { docTrangThai } from "@crm/validation/invitation-status";
 import type { INestApplication } from "@nestjs/common";
 import request from "supertest";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
@@ -32,7 +36,7 @@ import {
 	ALREADY_A_MEMBER,
 	WorkspaceService,
 } from "../src/workspace/workspace.service";
-import { gieoThanhVien, mintPhien } from "./phien-thu";
+import { dungKho, gieoThanhVien, mintPhien } from "./phien-thu";
 import {
 	COT_DA_LUU_AC1,
 	TEN_MIEN_DA_LUU_AC1,
@@ -617,5 +621,106 @@ describe("cho-phep khong-quyen qua router that", () => {
 			await demDong(email),
 			"doi chung duong: quan tri tao 1 dong",
 		]).toEqual([200, 1, "doi chung duong: quan tri tao 1 dong"]);
+	});
+});
+
+describe("dung-lai", () => {
+	type HangMember = Awaited<ReturnType<typeof db.member.findMany>>[number];
+	let nguoiMoi = "";
+	let giu: HangMember[] = [];
+	let loiGhi: ReturnType<typeof spyOn> | null = null;
+
+	beforeEach(async () => {
+		await don();
+		await dungKho();
+		nguoiMoi = await gieoNguoi("moi", `${suffix}-moi@lan-do.onehub.vn`);
+		giu = await db.member.findMany({ where: { organizationId: WORKSPACE_ID } });
+		await db.member.deleteMany({ where: { organizationId: WORKSPACE_ID } });
+	});
+
+	afterEach(async () => {
+		loiGhi?.mockRestore();
+		loiGhi = null;
+		await db.member.deleteMany({ where: { organizationId: WORKSPACE_ID } });
+		await db.member.createMany({ data: giu, skipDuplicates: true });
+		await don();
+	});
+
+	async function dong(phan: string, email: string, status: string) {
+		await db.invitation.create({
+			data: {
+				id: id(phan),
+				organizationId: WORKSPACE_ID,
+				email,
+				role: "member",
+				status,
+				expiresAt: new Date("9999-12-31T00:00:00.000Z"),
+				inviterId: nguoiMoi,
+			},
+		});
+	}
+
+	it("A con dong hieu luc thi vao, B chi co dong ket thuc thi khong, D trang thai la thi khong va ghi loi", async () => {
+		const diaChi = {
+			A: `${suffix}-a@lan-do.onehub.vn`,
+			B: `${suffix}-b@lan-do.onehub.vn`,
+			C: `${suffix}-c@lan-do.onehub.vn`,
+			D: `${suffix}-d@lan-do.onehub.vn`,
+		};
+		const nguoi = {
+			A: await gieoNguoi("a", diaChi.A),
+			B: await gieoNguoi("b", diaChi.B),
+			C: await gieoNguoi("c", diaChi.C),
+			D: await gieoNguoi("d", diaChi.D),
+		};
+		await dong("a-huy", diaChi.A, "canceled");
+		await dong("a-cho", diaChi.A, "pending");
+		await dong("b-huy", diaChi.B, "canceled");
+		await dong("d-hong", diaChi.D, "bi-hong");
+		loiGhi = spyOn(console, "error").mockImplementation(() => {});
+
+		await ensureWorkspaceMembership(nguoi.C, diaChi.C);
+
+		const vao = Object.fromEntries(
+			await Promise.all(
+				(Object.keys(nguoi) as (keyof typeof nguoi)[]).map(async (ai) => [
+					ai,
+					(await db.member.findUnique({
+						where: {
+							organizationId_userId: {
+								organizationId: WORKSPACE_ID,
+								userId: nguoi[ai],
+							},
+						},
+						select: { id: true },
+					})) !== null,
+				]),
+			),
+		);
+		const dangNhapD = decideSignIn({
+			email: diaChi.D,
+			allowances: [
+				{
+					email: diaChi.D,
+					role: "member",
+					status: docTrangThai("bi-hong").trangThai,
+				},
+			],
+			seedList: "",
+			anyUserExists: true,
+		}).allowed;
+		const dongLoi = loiGhi.mock.calls.filter((c: unknown[]) =>
+			String(c[0]).includes("bi-hong"),
+		);
+
+		expect([vao, "A"]).toEqual([{ A: true, B: false, C: true, D: false }, "A"]);
+		expect([dangNhapD, "D khop luat dang nhap"]).toEqual([
+			false,
+			"D khop luat dang nhap",
+		]);
+		expect([dongLoi.length, "mot dong loi goi ten bi-hong"]).toEqual([
+			1,
+			"mot dong loi goi ten bi-hong",
+		]);
 	});
 });

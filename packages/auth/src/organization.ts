@@ -95,11 +95,27 @@ export async function ensureWorkspaceMembership(
 					select: { email: true, status: true },
 				});
 
-				const ketThuc = new Set(
-					loiMoi
-						.filter((dong) => !conHieuLuc(docTrangThai(dong.status).trangThai))
-						.map((dong) => normalizeEmail(dong.email))
+				const daDoc = loiMoi.map((dong) => ({
+					dia: normalizeEmail(dong.email),
+					...docTrangThai(dong.status),
+				}));
+
+				for (const dong of daDoc) {
+					if (dong.loi) console.error(`[auth] allow-list: ${dong.loi}`);
+				}
+
+				const conPhep = new Set(
+					daDoc
+						.filter((dong) => conHieuLuc(dong.trangThai))
+						.map((dong) => dong.dia)
 						.filter((dia): dia is string => dia !== null),
+				);
+
+				const ketThuc = new Set(
+					daDoc
+						.filter((dong) => !conHieuLuc(dong.trangThai))
+						.map((dong) => dong.dia)
+						.filter((dia): dia is string => dia !== null && !conPhep.has(dia)),
 				);
 
 				const duocMoi = existing.filter((user) => {
