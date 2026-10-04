@@ -175,7 +175,7 @@ evals:
       - _acceptance/khung-okr-truoc-r1/evidence/truoc/khung-375.png
       - _acceptance/khung-okr-truoc-r1/evidence/truoc/thanh-1440.png
       - _acceptance/khung-okr-truoc-r1/evidence/E1-kr-1440.png
-      - _acceptance/khung-okr-truoc-r1/evidence/E8-muc-tieu-dau.png
+      - _acceptance/khung-okr-truoc-r1/evidence/E8-muc-tieu-dau-375.png
       - _acceptance/khung-okr-truoc-r1/evidence/E9-o-so-375.png
       - _acceptance/khung-okr-truoc-r1/evidence/E3-chua-cau-hinh-sau-tra.png
     question: "So ba ảnh trong thư mục truoc/ với bốn ảnh sau: (1) bảng KR có lề như khu «Vì sao lúc này» không, hay vẫn áp mép khung; (2) trên điện thoại tiến độ và tên người phụ trách có đọc trọn được không, tên Mục tiêu có căn trái không; (3) thanh nút «Theo đơn vị» có là một hàng gọn không. Trả lời từng ý có/không kèm chỗ nhìn thấy trong ảnh."
