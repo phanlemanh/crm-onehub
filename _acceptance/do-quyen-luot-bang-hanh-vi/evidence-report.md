@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4893629a5ff0068f0b3a0fc09523a037c7c953b7
+verified_commit: 0d03129ecfa5bdbcff83dee9706a511e342f399c
 human_signoff: Mạnh 2026-09-12 — ký Cổng 2 trên verdict PASS của vòng chấm 9 (9/9 eval, 4 lệnh suite, hội đồng ba lens), với BỐN giới hạn đã khai ở `## Notes` của hợp đồng. Bảy finding ngoài hợp đồng được định đoạt trong cùng lượt: Ngoài-4 nâng phạm vi sửa ngay (đã xoá trường thừa trong một bài test, chạy lại xanh), Ngoài-1 và Ngoài-7 mở hợp đồng mới, bốn mục còn lại ghi Known limits. Ký trên hiểu biết rằng một đột biến sống sót hiện được báo là «giàn đo hỏng» chứ không phải «phép đo thủng», và rằng bài E1 tuyên quét lớp hai biến thể `inputResponse` trong khi chiều được biến thiên không chạm tới mã đang đo.
 ---
 
@@ -190,3 +190,7 @@ sha: 11bd93cf9f3488a2ed6df5c432a362feff41a428 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-04, do gộp onehub sau khi khai paths lô 2
 run_id: repin-20261004T141023Z-83923
 sha: 4893629a5ff0068f0b3a0fc09523a037c7c953b7 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-6
+
+### Re-pin lần 5 — 2026-10-04, do gộp onehub sau khi khai paths lô 2
+run_id: repin-20261004T161003Z-91842
+sha: 0d03129ecfa5bdbcff83dee9706a511e342f399c · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · diff chạm vật đo ngoài làn máy: E7 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-6
