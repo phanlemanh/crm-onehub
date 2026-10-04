@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: f409aeb1341baae824f39ce633ce2edad2f1c352
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 3 (18/18 eval đạt, 7/7 lệnh suite xanh). Phát hiện trong hợp đồng AC-10 trên điện thoại (chip Kara không cuộn tới vùng Kara khi mục tiêu đã có sẵn dữ liệu) ghi Known limits, sửa trong R1d. Mười sáu mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 3–10, 12, 14, 15 ghi Known limits; Ngoài-2 mở hợp đồng mới; Ngoài-11, 13, 16 chấp nhận không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
 # Evidence Report: khung-okr-truoc-r1

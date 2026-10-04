@@ -5,7 +5,7 @@ slug: khung-okr-truoc-r1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-04T06:18:06Z
 design_doc: docs/superpowers/specs/2026-10-04-khung-okr-truoc-r1-design.md
@@ -144,3 +144,23 @@ Ngưỡng của `opportunity.md`, từng vế:
 - Tệp ngoài danh sách P1 của `LUAT.md` mà vòng này cần: `record-parts.tsx`, `bang-vet.tsx`,
   `packages/ui/src/components/badge.tsx`, `drawer.tsx` (chỉ thêm), `lib/messages/okr.ts`,
   `okr-soan.ts` (chỉ thêm khoá, ghim ở `messages-guard`). Điều phối duyệt 04/10 13:00 (Nhật ký `LUAT.md`).
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-04):**
+  - AC-10 trên điện thoại — bấm chip «Kara · N góp ý» của một Mục tiêu đã có sẵn dữ liệu thì khung mở ở
+    đầu, không cuộn tới vùng Kara: lần cuộn chạy trong bố cục máy tính của lần vẽ đầu rồi tự tắt, sau đó
+    khung đổi sang bố cục điện thoại và vùng cuộn về đầu. Sửa trong hàng R1d (`okr-to-chuc-va`).
+  - Ngoài-1 — bài kiểm «nút bật thường không có nhãn chế độ ẩn» không mở «i», nên không bắt được nhãn
+    hiện nhầm trong hộp thông tin của nút đang bật.
+  - Ngoài-3, Ngoài-12, Ngoài-15 — truy vấn khả năng soạn lỗi (mất mạng, máy chủ lỗi) thì nút «Soạn OKR cùng
+    Trợ lý» khoá mãi như đang tải, không thông báo, không thử lại cho tới khi tải lại trang.
+  - Ngoài-4 — bài kiểm nút «Mở tab Căn chỉnh» khi máy chủ từ chối dùng lỗi giả dựng tay.
+  - Ngoài-5 — bài kiểm Esc trả focus về «i» tự đặt focus sẵn, nên không bắt được popover thôi trả focus.
+  - Ngoài-6 — bài kiểm người không quản trị không thấy câu «chưa được bật» luôn xanh vì câu ấy nằm trong
+    popover đóng.
+  - Ngoài-7 — phép đo bảng thẳng hàng với «Vì sao lúc này» bỏ qua im lặng khi khu ấy vắng.
+  - Ngoài-8 — dạng nút có cuộc đang soạn chưa có ca riêng đo chữ phụ không còn trên thanh.
+  - Ngoài-9 — báo cáo đo in sẵn số dạng, số ca thay vì đếm thật.
+  - Ngoài-10 — E15 có thể chấm đạt trên khung báo lỗi thay vì khung Mục tiêu thật.
+  - Ngoài-14 — chuỗi hiếm: «Mở tab Căn chỉnh» → chọn tiếp tục sửa → đóng hộp bằng X và xác nhận bỏ thì
+    khung chuyển sang tab Căn chỉnh.
+- **Hợp đồng mới (Ngoài-2):** chọn «ở lại» ở câu hỏi «Bỏ thay đổi?» rồi bấm X đóng hộp «Mức hiển thị» thì
+  khung nhảy sang tab Căn chỉnh thay vì chỉ đóng hộp — tách thành việc riêng.
