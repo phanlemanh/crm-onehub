@@ -3,10 +3,141 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ClientError } from "eve/client";
 import { CUA_OKR } from "@/lib/cua-okr-config";
-import { chu, datAgent, datLai, don, m, moMan, q } from "./khung-soan-okr";
+import {
+	bam,
+	CUOC,
+	chu,
+	daGui,
+	daTaiLuong,
+	datAgent,
+	datDanhSach,
+	datLai,
+	don,
+	goiCua,
+	m,
+	moKhung,
+	moMan,
+	nut,
+	q,
+	qa,
+	SAN_SANG_BAT,
+	SOAN_UI,
+	type SanSangGia,
+	soLanMoAgent,
+} from "./khung-soan-okr";
+
+const { HINH_NUT_TAT } = await import(
+	"@/app/(app)/[slug]/okr/soan/nut-soan"
+);
 
 beforeEach(datLai);
 afterEach(don);
+
+const DON_PB1 = "pb:pb-1";
+const SAN_TOI_THIEU = 22;
+const TRAN = "3";
+
+const BAT: readonly (readonly [string, SanSangGia])[] = [
+	["bat-thuong", SAN_SANG_BAT],
+	[
+		"bat-co-cuoc-dang",
+		{ ...SAN_SANG_BAT, cuocDang: { ...CUOC, soLuot: 0 }, soCuocDaDung: 0 },
+	],
+	["nac-an", { ...SAN_SANG_BAT, nac: "an" }],
+];
+const MA = Object.keys(HINH_NUT_TAT);
+const O = [
+	...MA.map((lyDo) => [lyDo, { bat: false, lyDo }] as const),
+	...BAT,
+].flatMap(([ten, sanSang]) =>
+	[false, true].map((quanTri) => ({ ten, sanSang, quanTri })),
+);
+
+describe("nut-chua-cau-hinh", () => {
+	test("nut-chua-cau-hinh: bang nut bang tap ma ly do", () => {
+		expect([...MA].sort(), `bang nut lech union: ${MA.join(",")}`).toEqual(
+			Object.keys(m.lyDo).sort(),
+		);
+	});
+
+	test("nut-chua-cau-hinh: ma tran du o", () => {
+		if (O.length < SAN_TOI_THIEU) throw new Error("ma tran rong");
+		expect(O.length).toBe(SAN_TOI_THIEU);
+	});
+
+	for (const { ten, sanSang, quanTri } of O) {
+		test(`nut-chua-cau-hinh: ${ten} ${quanTri ? "quan-tri" : "nguoi-sua"}`, async () => {
+			await moKhung(DON_PB1, { sanSang, quanTri, cauNoi: true });
+			const homNayCo = q("[data-nut-soan]") !== null;
+			await don();
+			datLai();
+			await moKhung(DON_PB1, { sanSang, quanTri, cauNoi: false });
+			const co = qa("[data-nut-soan]").map((o) =>
+				o.getAttribute("data-nut-soan"),
+			);
+			if (!homNayCo) {
+				expect(co, `nut mo khi chua cau hinh: ${ten}`).toEqual([]);
+				return;
+			}
+			expect(co, `nut mo khi chua cau hinh: ${ten}`).toEqual([
+				"nut-chua-cau-hinh",
+			]);
+			const n = q('[data-nut-soan="nut-chua-cau-hinh"] button');
+			expect(n?.hasAttribute("disabled")).toBe(true);
+			const moTa = document.getElementById(
+				n?.getAttribute("aria-describedby") ?? "",
+			);
+			expect(moTa?.textContent).toBe(m.nut.chuaCauHinh);
+			expect(document.body.textContent).not.toContain(m.nut.tiep);
+			expect(q('[data-nut="ds-cuoc"]')).toBeNull();
+			expect(goiCua("okr.soanMo").length).toBe(0);
+		});
+	}
+
+	test("nut-chua-cau-hinh: doi chung duong — da cau hinh, bam nut goi soanMo dung 1 lan", async () => {
+		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT, cauNoi: true });
+		await bam(nut(m.nut.soan));
+		expect(goiCua("okr.soanMo").length).toBe(1);
+	});
+
+	for (const k of [0, 1, 2, 3]) {
+		test(`nut-chua-cau-hinh — so cuoc: k=${k}`, async () => {
+			await moKhung(DON_PB1, {
+				sanSang: { ...SAN_SANG_BAT, soCuocDaDung: k },
+				cauNoi: true,
+			});
+			if (k === 0) {
+				expect(q('[data-nut="ds-cuoc"]'), `so cuoc tren nut lech: ${k}`).toBeNull();
+				return;
+			}
+			expect(chu('[data-nut="ds-cuoc"]'), `so cuoc tren nut lech: ${k}`).toBe(
+				m.nut.dsCuoc(String(k), TRAN),
+			);
+		});
+	}
+});
+
+describe("man-chua-cau-hinh", () => {
+	test("man-chua-cau-hinh: cuoc dang 0 luot, chua cau hinh -> trang trong, khong mo phien", async () => {
+		datDanhSach({ cuoc: { ...CUOC, soLuot: 0 } });
+		await moMan(false, false);
+		expect(chu("[data-man-chua-cau-hinh] [data-slot='empty-title']")).toBe(
+			m.nut.chuaCauHinh,
+		);
+		expect(q("textarea"), "man mo phien khi chua cau hinh").toBeNull();
+		expect(soLanMoAgent, "man mo phien khi chua cau hinh").toBe(0);
+		expect(daGui).toEqual([]);
+		expect(daTaiLuong).toEqual([]);
+	});
+
+	test("man-chua-cau-hinh: doi chung duong — da cau hinh thi co o soan va gui luot mo dau", async () => {
+		datDanhSach({ cuoc: { ...CUOC, soLuot: 0 } });
+		await moMan(false, true);
+		expect(q("textarea")).not.toBeNull();
+		expect(soLanMoAgent).toBeGreaterThan(0);
+		expect(daGui).toEqual([SOAN_UI.luotMoDau]);
+	});
+});
 
 async function loiCua(status: number, ma: string): Promise<ClientError> {
 	const r = Response.json({ error: ma }, { status });

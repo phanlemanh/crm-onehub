@@ -23,9 +23,13 @@ const PHA_SOAN = "lap-ke-hoach" satisfies PhaChuKy;
 const TRAN_CUOC_KY = String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy);
 
 type LyDoSoan = keyof OkrSoanMessages["lyDo"];
-type HinhNutTat = "nut-het-cuoc" | "nut-het-tran" | "nut-chua-khoa";
+type HinhNutTat =
+	| "nut-het-cuoc"
+	| "nut-het-tran"
+	| "nut-chua-khoa"
+	| "nut-chua-cau-hinh";
 
-const HINH_NUT_TAT = {
+export const HINH_NUT_TAT = {
 	"don-vi-luu-tru": null,
 	"don-vi-chua-bat": null,
 	"don-vi-che-do-an": null,
@@ -98,12 +102,14 @@ export function NutSoan({
 	phaKy,
 	quanTri,
 	canEdit,
+	cauNoi,
 }: {
 	don: DonChonOkr;
 	cycleId: string;
 	phaKy: PhaChuKy | null;
 	quanTri: boolean;
 	canEdit: boolean;
+	cauNoi: boolean;
 }) {
 	const m = okrSoanMessages(useLocale());
 	const trpc = useTRPC();
@@ -137,6 +143,7 @@ export function NutSoan({
 		<ManSoan
 			cuocSoanId={cuocSoan}
 			quanTri={quanTri}
+			cauNoi={cauNoi}
 			moCuoc={(id) => void datCuocSoan(id)}
 			dong={() => {
 				void datCuocSoan(null);
@@ -144,7 +151,7 @@ export function NutSoan({
 			}}
 		/>
 	) : null;
-	const ds = dsCuoc ? (
+	const ds = dsCuoc && cauNoi ? (
 		<DanhSachCuoc
 			donVi={donVi}
 			dong={() => void datDsCuoc(null)}
@@ -245,6 +252,10 @@ export function NutSoan({
 				</>
 			);
 	}
+	if (!cauNoi && nut !== null)
+		nut = (
+			<NutTat hinh="nut-chua-cau-hinh" m={m} moTa={m.nut.chuaCauHinh} />
+		);
 	return (
 		<>
 			{nut}
