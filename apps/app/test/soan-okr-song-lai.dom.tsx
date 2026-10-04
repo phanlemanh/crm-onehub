@@ -43,9 +43,9 @@ const BAT: readonly (readonly [string, SanSangGia])[] = [
 	["bat-thuong", SAN_SANG_BAT],
 	[
 		"bat-co-cuoc-dang",
-		{ ...SAN_SANG_BAT, cuocDang: { ...CUOC, soLuot: 0 }, soCuocDaDung: 0 },
+		{ ...SAN_SANG_BAT, cuocDang: { ...CUOC, soLuot: 0 }, soCuocDaDung: 1 },
 	],
-	["nac-an", { ...SAN_SANG_BAT, nac: "an" }],
+	["nac-an", { ...SAN_SANG_BAT, nac: "an", soCuocDaDung: 1 }],
 ];
 const MA = Object.keys(HINH_NUT_TAT);
 const O = [
@@ -71,6 +71,11 @@ describe("nut-chua-cau-hinh", () => {
 		test(`nut-chua-cau-hinh: ${ten} ${quanTri ? "quan-tri" : "nguoi-sua"}`, async () => {
 			await moKhung(DON_PB1, { sanSang, quanTri, cauNoi: true });
 			const homNayCo = q("[data-nut-soan]") !== null;
+			if (sanSang.bat && sanSang.soCuocDaDung > 0 && homNayCo)
+				expect(
+					q('[data-nut="ds-cuoc"]'),
+					`doi chung ds-cuoc: ${ten}`,
+				).not.toBeNull();
 			await don();
 			datLai();
 			await moKhung(DON_PB1, { sanSang, quanTri, cauNoi: false });
@@ -91,7 +96,10 @@ describe("nut-chua-cau-hinh", () => {
 			);
 			expect(moTa?.textContent).toBe(m.nut.chuaCauHinh);
 			expect(document.body.textContent).not.toContain(m.nut.tiep);
-			expect(q('[data-nut="ds-cuoc"]')).toBeNull();
+			expect(
+				q('[data-nut="ds-cuoc"]'),
+				`nut ds-cuoc khi chua cau hinh: ${ten}`,
+			).toBeNull();
 			expect(goiCua("okr.soanMo").length).toBe(0);
 		});
 	}
