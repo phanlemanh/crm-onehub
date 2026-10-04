@@ -106,10 +106,7 @@ function QuenNhap() {
 function QuenDaGui() {
 	return (
 		<KhungCuaVao>
-			<DauCuaVao
-				description={CHU.daGui.description}
-				title={CHU.daGui.title}
-			/>
+			<DauCuaVao description={CHU.daGui.description} title={CHU.daGui.title} />
 			<Button className="w-full" type="button" variant="outline">
 				{CHU.daGui.quayLai}
 			</Button>
