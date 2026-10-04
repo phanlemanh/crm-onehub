@@ -103,7 +103,7 @@ type Chu = {
 	phuTrach: string;
 };
 
-const CHU: Record<"vi" | "en", Chu> = {
+const CHU = {
 	vi: {
 		tabs: ["KR", "Căn chỉnh", "Vết", "Trao đổi", "Diễn biến"],
 		tienDoTu: (x, n) => `Tiến độ mục tiêu ${x}% tính từ ${n} KR.`,
@@ -121,7 +121,7 @@ const CHU: Record<"vi" | "en", Chu> = {
 		tinhTrang: "Status",
 		phuTrach: "Owner",
 	},
-};
+} satisfies Record<"vi" | "en", Chu>;
 
 function BangKrMau({ mt }: { mt: typeof MT }) {
 	return (

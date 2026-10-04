@@ -5,6 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import type { z } from "zod";
 import {
 	cyclesOutput,
 	type KrOutput,
@@ -326,7 +327,7 @@ type DangSoan = {
 	chuPhu: string[];
 };
 
-const SS = (x: object) => soanSanSangOutput.parse(x);
+const SS = (x: z.input<typeof soanSanSangOutput>) => soanSanSangOutput.parse(x);
 const BAT = {
 	bat: true,
 	nac: "bat",
@@ -334,7 +335,7 @@ const BAT = {
 	soCuocDaDung: 0,
 	tranCuoc: 3,
 	thieuBoiCanh: false,
-};
+} as const;
 const TRAN = String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy);
 
 const DANG_CO_CHU_PHU: DangSoan[] = [

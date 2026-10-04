@@ -731,7 +731,7 @@ function SoMucTieu({ mt }: { mt: ChiTiet }) {
 			</DetailSheetStat>
 			<DetailSheetStat label={t.phuTrach}>
 				<span translate="no">
-					<OwnerCell owner={{ ...mt.owner, image: null }} />
+					<OwnerCell owner={{ ...mt.owner, image: null }} xuongDongDienThoai />
 				</span>
 			</DetailSheetStat>
 		</DetailSheetStats>
