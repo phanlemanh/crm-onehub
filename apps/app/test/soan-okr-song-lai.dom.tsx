@@ -21,14 +21,12 @@ import {
 	q,
 	qa,
 	SAN_SANG_BAT,
-	SOAN_UI,
 	type SanSangGia,
+	SOAN_UI,
 	soLanMoAgent,
 } from "./khung-soan-okr";
 
-const { HINH_NUT_TAT } = await import(
-	"@/app/(app)/[slug]/okr/soan/nut-soan"
-);
+const { HINH_NUT_TAT } = await import("@/app/(app)/[slug]/okr/soan/nut-soan");
 
 beforeEach(datLai);
 afterEach(don);
@@ -107,7 +105,10 @@ describe("nut-chua-cau-hinh", () => {
 				cauNoi: true,
 			});
 			if (k === 0) {
-				expect(q('[data-nut="ds-cuoc"]'), `so cuoc tren nut lech: ${k}`).toBeNull();
+				expect(
+					q('[data-nut="ds-cuoc"]'),
+					`so cuoc tren nut lech: ${k}`,
+				).toBeNull();
 				return;
 			}
 			expect(chu('[data-nut="ds-cuoc"]'), `so cuoc tren nut lech: ${k}`).toBe(
@@ -192,10 +193,7 @@ describe("loi-chua-cau-hinh", () => {
 
 	test("loi-chua-cau-hinh: cua tra dung hang", () => {
 		const nguon = readFileSync(
-			join(
-				import.meta.dir,
-				"../app/eve/agents/okr/eve/v1/[...path]/route.ts",
-			),
+			join(import.meta.dir, "../app/eve/agents/okr/eve/v1/[...path]/route.ts"),
 			"utf8",
 		);
 		expect(nguon).toContain(

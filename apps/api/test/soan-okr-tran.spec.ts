@@ -459,7 +459,10 @@ describe("cuoc-rong-khong-tinh", () => {
 							where: { departmentId: DON_VI.kdNam.departmentId },
 						});
 						const khac = await mo(cNam, DON_VI.kdNam);
-						expect(khac.ok, `phong ban khac van mo: ${JSON.stringify(khac)}`).toBe(true);
+						expect(
+							khac.ok,
+							`phong ban khac van mo: ${JSON.stringify(khac)}`,
+						).toBe(true);
 						await db.okrCuocSoan.deleteMany({
 							where: { departmentId: DON_VI.kdNam.departmentId },
 						});
@@ -503,7 +506,10 @@ describe("cuoc-rong-khong-tinh", () => {
 			await gieo(2, 0);
 			const m = await mo();
 			const dang = m.ok ? m.cuoc.id : "";
-			expect(await luot(dang, "luot cuoc dang")).toEqual({ ok: true, soLuot: 1 });
+			expect(await luot(dang, "luot cuoc dang")).toEqual({
+				ok: true,
+				soLuot: 1,
+			});
 			const s = await sanSang();
 			expect(s.bat ? s.cuocDang?.id : null, "cuoc dang co luot").toBe(dang);
 			expect(s.bat ? s.soCuocDaDung : -1, "so cuoc da dung: dang-luot").toBe(3);

@@ -49,8 +49,11 @@ describe("cau-noi-server", () => {
 	});
 
 	test("bo bat client import that su bat duoc", () => {
-		const gia = '"use client";\nimport { okrBridgeConfigured } from "@/lib/agent-bridge";\n';
-		expect(clientNhapCauNoi(gia), "client import agent-bridge: fixture").toBe(true);
+		const gia =
+			'"use client";\nimport { okrBridgeConfigured } from "@/lib/agent-bridge";\n';
+		expect(clientNhapCauNoi(gia), "client import agent-bridge: fixture").toBe(
+			true,
+		);
 		expect(clientNhapCauNoi(gia.replace('"use client";\n', ""))).toBe(false);
 	});
 

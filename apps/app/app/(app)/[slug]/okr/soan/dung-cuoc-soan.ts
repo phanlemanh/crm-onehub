@@ -189,8 +189,7 @@ export function useCuocSoan({
 	const { locked, ended } = composerState(thread, busy);
 	const lyDoLuot =
 		agent.status === "error" ? lyDoTuChoiLuot(agent.error) : null;
-	const chuaCauHinh =
-		agent.status === "error" && laChuaCauHinh(agent.error);
+	const chuaCauHinh = agent.status === "error" && laChuaCauHinh(agent.error);
 	const cuocDong = cuoc.trangThai !== "dang";
 	const hetLuot = cuoc.soLuot >= cuoc.tranLuot || lyDoLuot === "het-luot-cuoc";
 	const hong =
@@ -200,12 +199,7 @@ export function useCuocSoan({
 		!laDaCoPhien(agent.error) &&
 		(qua45s || agent.status === "error" || ended);
 	const khoaSoan =
-		locked ||
-		hetLuot ||
-		hong ||
-		cuocDong ||
-		lyDoLuot !== null ||
-		chuaCauHinh;
+		locked || hetLuot || hong || cuocDong || lyDoLuot !== null || chuaCauHinh;
 
 	const guiThang = async (chu: string) => {
 		cuoiCung.current = chu;

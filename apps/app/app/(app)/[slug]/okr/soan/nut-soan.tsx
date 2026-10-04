@@ -151,16 +151,17 @@ export function NutSoan({
 			}}
 		/>
 	) : null;
-	const ds = dsCuoc && cauNoi ? (
-		<DanhSachCuoc
-			donVi={donVi}
-			dong={() => void datDsCuoc(null)}
-			mo={(id) => {
-				void datDsCuoc(null);
-				void datCuocSoan(id);
-			}}
-		/>
-	) : null;
+	const ds =
+		dsCuoc && cauNoi ? (
+			<DanhSachCuoc
+				donVi={donVi}
+				dong={() => void datDsCuoc(null)}
+				mo={(id) => {
+					void datDsCuoc(null);
+					void datCuocSoan(id);
+				}}
+			/>
+		) : null;
 	const nutDs = (da: number, tran: string) =>
 		da > 0 ? (
 			<Button
@@ -253,9 +254,7 @@ export function NutSoan({
 			);
 	}
 	if (!cauNoi && nut !== null)
-		nut = (
-			<NutTat hinh="nut-chua-cau-hinh" m={m} moTa={m.nut.chuaCauHinh} />
-		);
+		nut = <NutTat hinh="nut-chua-cau-hinh" m={m} moTa={m.nut.chuaCauHinh} />;
 	return (
 		<>
 			{nut}
