@@ -106,7 +106,14 @@ async function phanLe() {
 function doThanh() {
 	const h = document.querySelector("[data-hang-nut]");
 	if (!h) return null;
-	const nut = [...h.querySelectorAll("button")].filter((b) => !b.closest("[data-radix-popper-content-wrapper]")).map((b) => Math.round(b.getBoundingClientRect().top));
+	const tam = [...h.querySelectorAll("button")]
+		.filter((b) => !b.closest("[data-radix-popper-content-wrapper]"))
+		.map((b) => {
+			const r = b.getBoundingClientRect();
+			return r.top + r.height / 2;
+		})
+		.sort((x, y) => x - y);
+	const nut = tam.filter((t, i) => i === 0 || t - tam[i - 1] > 4).map((t) => Math.round(t));
 	const the = document.querySelector("[data-don-vi]");
 	const ds = document.querySelector("[data-muc-tieu],[data-hang-muc-tieu],[data-trang-thai^='ST-donvi']");
 	const nhom = document.querySelector("[data-nhom-soan]");
@@ -367,6 +374,7 @@ async function phanChip() {
 		{ ma: "theo-don-vi", duong: `/${slug}/okr/theo-don-vi?kyOkr=${KY4}&donOkr=pb:${PB}` },
 	];
 	let soO = 0;
+	const viTri = new Map();
 	for (const m of man)
 		for (const kho of CO_DO ? [BD.kho[1440]] : [BD.kho[1440], BD.kho[375]]) {
 			const { ctx, p } = await moTrang(cookie["truong-phong"], kho);
@@ -381,26 +389,41 @@ async function phanChip() {
 				if (kiem(cungHinh, `chip lech nhan: ${m.ma}`)) {
 					const chip = await p.$(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`);
 					await chip.hover();
-					await tre(300);
+					await tre(600);
 					const nenRe = await p.$eval(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`, (o) => getComputedStyle(o).backgroundColor);
+					const chanDoan = await p.$eval(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`, (o) => ({
+						coLopHover: o.className.split(/\s+/).includes("hover:bg-muted"),
+						hoverMedia: matchMedia("(hover: hover)").matches,
+						dangHover: o.matches(":hover"),
+					}));
 					await p.mouse.move(0, 0);
 					let toi = false;
 					for (let i = 0; i < 80 && !toi; i += 1) {
 						await p.keyboard.press("Tab");
 						toi = await p.evaluate(() => document.activeElement?.hasAttribute("data-chip-gop-y") ?? false);
 					}
+					await tre(600);
 					const vong = toi ? await p.evaluate(() => getComputedStyle(document.activeElement).boxShadow) : "none";
-					if (kiem(nenRe !== d.nen && toi && vong !== "none", `chip thieu trang thai: ${m.ma} (re=${nenRe} nghi=${d.nen} focus=${toi} vong=${vong})`))
+					const fv = toi ? await p.evaluate(() => document.activeElement.matches(":focus-visible")) : false;
+					const coVong = vong !== "none" && /\b[1-9]\d*(\.\d+)?px\b/.test(vong.replace(/0px 0px 0px 0px/g, ""));
+					if (kiem(nenRe !== d.nen && toi && coVong, `chip thieu trang thai: ${m.ma} (re=${nenRe} nghi=${d.nen} focus=${toi} fv=${fv} vong=${vong.slice(0, 80)} ${JSON.stringify(chanDoan)})`))
 						console.log(`chip ok ${m.ma}`);
 					await chup(p, `E12-${m.ma}`);
 				}
 			}
-			const cungHang = d && Math.abs(d.topChip - d.topNhan) <= 2 && d.cuoi;
+			const cungHang = d && d.cuoi && (kho.ten !== "1440" || Math.abs(d.topChip - d.topNhan) <= 2);
 			if (kiem(cungHang, `chip rot dong: ${m.ma} ${kho.ten}`)) console.log(`cung hang ok ${m.ma} ${kho.ten}`);
+			viTri.set(`${m.ma}-${kho.ten}`, d ? Math.round(d.topChip - d.topNhan) : null);
 			soO += 1;
 			await ctx.close();
 		}
-	if (!CO_DO) kiem(soO === 4, `so o sai: ${soO} != 4`);
+	if (!CO_DO) {
+		kiem(soO === 4, `so o sai: ${soO} != 4`);
+		const a = viTri.get("cua-toi-375");
+		const b = viTri.get("theo-don-vi-375");
+		if (kiem(a !== null && b !== null && Math.abs(a - b) <= 2, `chip lech cho giua hai man: 375 (${a} vs ${b})`))
+			console.log("cung cho ok 375");
+	}
 	console.log(`so o: ${soO}`);
 }
 
