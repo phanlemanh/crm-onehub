@@ -73,6 +73,15 @@ beforeAll(async () => {
 }, 60_000);
 afterAll(donDep);
 
+async function mucTieuChoTheoKhoa(cuocSoanId: string, khoa: string) {
+	const hang = await db.okrDeXuat.findMany({
+		where: { cuocSoanId, loai: "muc-tieu-moi", trangThai: "cho" },
+	});
+	const ra = hang.find((h) => dongSoanTuHang(h).khoa === khoa);
+	if (!ra) throw new Error(`thieu muc tieu ${khoa}`);
+	return ra;
+}
+
 const mucTieu = (b: BanNhap, i: number): MucTieuNhap => {
 	const m = b.mucTieu[i];
 	if (!m) throw new Error(`thieu muc tieu ${i}`);
@@ -270,13 +279,7 @@ describe("nop-ban-nhap", () => {
 
 	test("nộp lại dòng có khoá đã bác → bi-loai da-bac; số người gõ trong sự kiện message.received được nhận", async () => {
 		const ctx = nguCanh(PHIEN_1, canh.nguoiMo.id, canh.cuocSoanId);
-		const m1 = await db.okrDeXuat.findFirstOrThrow({
-			where: {
-				cuocSoanId: canh.cuocSoanId,
-				loai: "muc-tieu-moi",
-				trangThai: "cho",
-			},
-		});
+		const m1 = await mucTieuChoTheoKhoa(canh.cuocSoanId, "m1");
 		await db.okrDeXuat.update({
 			where: { id: m1.id },
 			data: {
@@ -302,6 +305,7 @@ describe("nop-ban-nhap", () => {
 		expect(ra.biLoai.some((x) => x.khoa === "m3")).toBe(false);
 		const canChinh = await db.okrDeXuat.findMany({
 			where: { cuocSoanId: canh.cuocSoanId, loai: "can-chinh-moi" },
+			orderBy: [{ createdAt: "asc" }, { id: "asc" }],
 			select: { noiDung: true },
 		});
 		const dich = (khoa: string) =>
@@ -500,10 +504,7 @@ describe("nop-ban-nhap", () => {
 		});
 		const ctx = nguCanh(cuoc.sessionId, canh.nguoiMo.id, cuoc.id);
 		await nop(tron(), ctx);
-		const m1 = await db.okrDeXuat.findFirstOrThrow({
-			where: { cuocSoanId: cuoc.id, loai: "muc-tieu-moi", trangThai: "cho" },
-			orderBy: { createdAt: "asc" },
-		});
+		const m1 = await mucTieuChoTheoKhoa(cuoc.id, "m1");
 		await db.okrDeXuat.update({
 			where: { id: m1.id },
 			data: {
