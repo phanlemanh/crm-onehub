@@ -189,7 +189,7 @@ export function DanhSachCuoc({
 					{ds.data ? (
 						<SheetDescription>
 							<span className="tabular-nums">
-								{m.cuoc.dem(String(cuoc.length), tran)}
+								{m.cuoc.dem(String(ds.data.soCuocDaDung), tran)}
 							</span>
 						</SheetDescription>
 					) : null}

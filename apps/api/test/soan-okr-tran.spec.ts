@@ -3,6 +3,7 @@ import { db } from "@crm/db";
 import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import type {
+	SoanDanhSachCuocOutput,
 	SoanMoOutput,
 	SoanSanSangOutput,
 	SoanTangLuotOutput,
@@ -41,6 +42,13 @@ async function sanSang(c = cTruong, dv = DON_VI.kdBac) {
 	return ok<SoanSanSangOutput>(
 		await goiSoan(app, "soanSanSang", "trpc", vaoDonVi(dv, "trpc"), c),
 		"san sang",
+	);
+}
+
+async function danhSach(c = cTruong, dv = DON_VI.kdBac) {
+	return ok<SoanDanhSachCuocOutput>(
+		await goiSoan(app, "soanDanhSachCuoc", "trpc", vaoDonVi(dv, "trpc"), c),
+		"danh sach cuoc",
 	);
 }
 
@@ -448,6 +456,10 @@ describe("cuoc-rong-khong-tinh", () => {
 						s.bat ? s.soCuocDaDung : TRAN,
 						`het cuoc khi chi co cuoc rong: z=${z} (so cuoc da dung, k=${k})`,
 					).toBe(k);
+					expect(
+						(await danhSach()).soCuocDaDung,
+						`danh sach dem ca cuoc rong: z=${z} (k=${k})`,
+					).toBe(k);
 					const kq = await mo();
 					if (k >= TRAN) {
 						expect(kq, `het cuoc khi chi co cuoc rong: z=${z}`).toEqual({
@@ -493,6 +505,10 @@ describe("cuoc-rong-khong-tinh", () => {
 			const s = await sanSang();
 			expect(s.bat ? s.cuocDang?.id : null, "cuoc dang rong").toBe(dang);
 			expect(s.bat ? s.soCuocDaDung : -1, "so cuoc da dung: dang-rong").toBe(3);
+			expect(
+				(await danhSach()).soCuocDaDung,
+				"danh sach dem ca cuoc rong: dang-rong",
+			).toBe(3);
 			expect(await mo()).toMatchObject({ ok: false, lyDo: "con-cuoc-dang" });
 			await donPhong();
 		},

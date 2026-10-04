@@ -403,7 +403,11 @@ export function datLai(): void {
 		ok: true,
 		cuoc: { ...CUOC, sessionId: "phien-2" },
 	}));
-	dat("okr.soanDanhSachCuoc", () => ({ cuoc: [], tranCuoc: 3 }));
+	dat("okr.soanDanhSachCuoc", () => ({
+		cuoc: [],
+		soCuocDaDung: 0,
+		tranCuoc: 3,
+	}));
 }
 
 type San = { o: HTMLElement; root: Root };

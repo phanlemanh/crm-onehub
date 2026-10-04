@@ -6,15 +6,19 @@ import { CUA_OKR } from "@/lib/cua-okr-config";
 import {
 	bam,
 	CUOC,
+	cho,
 	chu,
+	DanhSachCuoc,
 	daGui,
 	daTaiLuong,
+	dat,
 	datAgent,
 	datDanhSach,
 	datLai,
 	don,
 	goiCua,
 	m,
+	mo,
 	moKhung,
 	moMan,
 	nut,
@@ -199,5 +203,48 @@ describe("loi-chua-cau-hinh", () => {
 		expect(nguon).toContain(
 			"loi(CUA_OKR.trangThaiChuaCauHinh, CUA_OKR.loi.chuaCauHinh)",
 		);
+	});
+});
+
+describe("ds-cuoc-dem", () => {
+	test("ds-cuoc-dem: tieu de danh sach dem cuoc co luot, khong dem cuoc rong", async () => {
+		const rong = (i: number) => ({
+			...CUOC,
+			id: `c-rong-${i}`,
+			trangThai: "bo" as const,
+			soLuot: 0,
+			moLuc: `2026-11-0${i}T03:00:00.000Z`,
+		});
+		dat("okr.soanDanhSachCuoc", () => ({
+			cuoc: [
+				{ ...CUOC, id: "c-co-luot", trangThai: "da-dua-vao", soLuot: 3 },
+				rong(1),
+				rong(2),
+				rong(3),
+			],
+			soCuocDaDung: 1,
+			tranCuoc: 3,
+		}));
+		await mo(
+			<DanhSachCuoc
+				donVi={{
+					cycleId: "q1",
+					level: "phong-ban",
+					divisionId: null,
+					departmentId: "pb-1",
+				}}
+				dong={() => {}}
+				mo={() => {}}
+			/>,
+		);
+		await cho(
+			() => q('[data-cuoc="danh-sach"] [data-cuoc-id]') !== null,
+			"danh sach cuoc",
+		);
+		expect(qa('[data-cuoc="danh-sach"] [role="listitem"]')).toHaveLength(4);
+		expect(
+			chu('[data-slot="sheet-description"]'),
+			"danh sach dem ca cuoc rong",
+		).toBe(m.cuoc.dem("1", "3"));
 	});
 });

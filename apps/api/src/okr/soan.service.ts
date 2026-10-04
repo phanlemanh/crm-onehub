@@ -470,6 +470,7 @@ export class SoanService {
 				this.db,
 				tatCa.filter((c) => thayDuoc(q, c)),
 			),
+			soCuocDaDung: await demCuocTrongKy(this.db, dv),
 			tranCuoc: TRAN.cuocMoiDonViMoiKy,
 		};
 	}
