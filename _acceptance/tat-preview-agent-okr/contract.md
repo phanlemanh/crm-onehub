@@ -5,7 +5,7 @@ slug: tat-preview-agent-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [config, ci, docs]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-04-tat-preview-agent-okr-design.md
 approved_by:
 approved_at:
@@ -56,3 +56,14 @@ Source input: prompt (chủ kho, 04/10: «Tắt hẳn preview»)
 - `eve build` đọc `vercel.json` nhưng chỉ lấy khoá `services`/`experimentalServices*` (đọc ở `node_modules/eve/dist/src/internal/nitro/host/build-application.js`). Lệnh dựng không-cache của kho nằm trong `feature_loop.suite_keys`, nên mỗi lượt S4 chứng `eve build` vẫn xanh khi có tệp.
 - AC-5 chỉ đo được sau merge: eval xanh của nó khai `status: not-run` trong S4 và chạy ở S5; chiều đỏ của nó chạy được ngay trên sha `226231c9` (bản bị huỷ 04/10).
 - Đường lui nếu AC-5 đỏ sau merge: deploy Production `onehub` qua API như đã làm 04/10 (`dpl_9Ldx1dhroSFozvAo1zV1RuhQfXbA`), rồi revert PR nếu bản API cũng bị chặn.
+
+### Known limits (Cổng Bằng chứng, 2026-10-05)
+
+Mọi mục dưới đây là giới hạn của công cụ đo trong `rang/`, không phải của `vercel.json`.
+
+- Ngoài-3, Ngoài-10: rang Production (E7) không kiểm `git fetch` có thành công không, nên khi mạng lỗi nó có thể đo `origin/onehub` cũ và báo xanh oan. Ở S5, chạy E7 với sha của commit gộp làm đối số và tự kiểm sha đó có `apps/agent-okr/vercel.json`.
+- Ngoài-4: lệnh `tpa_vercel_production_xanh` không truyền sha của commit gộp; nếu có PR khác gộp vào `onehub` trước lúc đo thì E7 đo bản của PR kia. Cùng cách lách như trên.
+- Ngoài-13: rang Production chế độ xanh lấy đầu `onehub` lúc chạy mà không kiểm sha đó có `apps/agent-okr/vercel.json`. Cùng cách lách như trên.
+- Ngoài-5, Ngoài-12, Ngoài-15: chế độ `bo-tay` (E10) thoát 0 khi thấy bản git CANCELED mà không đòi đã thấy và bỏ qua bản deploy tay. Lượt chấm 04/10 có in dòng «bo qua dpl_9Ldx… (source cli)», nhưng rang không bắt buộc dòng đó.
+- Ngoài-6, Ngoài-14: ca `json` của rang phá-thử khớp chữ «JSON», chữ này có sẵn trong khung mã nguồn bun in ra, nên ca đó chứng yếu rằng thước bắt được JSON hỏng. Ca `khoa` (thêm khoá lạ) vẫn chứng phần schema.
+- Ngoài-8, Ngoài-11: `vercel-doc.mjs` chỉ đọc 100 deployment mới nhất, không theo phân trang. Khi project agent-okr có hơn 100 deployment mới hơn các sha ghim (9333acad, 226231c9, ff8c3372), E6, E8, E10 sẽ không tìm thấy chúng và báo đỏ oan ở lượt ghim lại.
