@@ -43,7 +43,7 @@ for (const [vai, v] of Object.entries(DO_VAI ? {} : vaiDo))
 				await yen(p);
 				if (CO_DO)
 					await p.evaluate(() => {
-						const k = document.querySelector("[data-okr-sheet]")?.parentElement ?? document.body;
+						const k = document.documentElement;
 						const r = document.createElement("div");
 						r.style.width = "2000px";
 						r.style.height = "4px";

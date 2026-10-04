@@ -393,7 +393,7 @@ async function phanChip() {
 			await p.goto(`${APP}${m.duong}`, { waitUntil: "domcontentloaded" });
 			await p.waitForSelector(`[data-hang-muc-tieu="${id}"] [data-chip-gop-y]`, { visible: true, timeout: BD.cho.phanTu });
 			await yen(p);
-			if (CO_DO) await chenStyle(p, "[data-chip-gop-y]{height:24px !important;border-radius:4px !important;display:block !important}");
+			if (CO_DO) await chenStyle(p, "[data-chip-gop-y]{height:24px !important;border-radius:4px !important;flex-basis:100% !important}[data-nhom-nhan]{flex-wrap:wrap !important}");
 			const d = await p.evaluate(doChip, id);
 			const cungHinh = d && Math.abs(d.caoChip - d.caoNhan) <= 1 && d.gocChip === d.gocNhan && d.chuChip === d.chuNhan;
 			if (kho.ten === "1440") {
