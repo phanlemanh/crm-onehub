@@ -1073,7 +1073,12 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   API không gọi model: phiên chat mở qua cửa `/eve/agents/okr/eve/v1/*` của app và
   `apps/agent-okr` viết `OkrDeXuat` (`cuocSoanId`, đích luôn `null`). `soanTangLuot` là
   chỗ duy nhất đếm lượt (`OkrCuocSoan.soLuot`, trần `luotMoiCuoc`) và kiểm trần tháng;
-  cửa gọi nó mỗi lần mở phiên hay gửi tin. `soanQuyet` (nhận · sửa · bác) khoá dòng như
+  cửa gọi nó mỗi lần mở phiên hay gửi tin. Lượt không tới được Trợ lý thì cửa trả lại
+  đúng một lượt bằng `hoanLuot` (`@crm/db/okr-cuoc-soan`, gọi thẳng trong mã máy chủ của
+  cửa, không có thủ tục tRPC nào cho người dùng tự hoàn): không nối được, quá
+  `CUA_OKR.choTroLyMs`, Trợ lý trả không `ok`, hay mở phiên mà không đọc hoặc không ghi
+  được phiên. Người dùng tự huỷ thì không hoàn. Thân lỗi mang `luot: "da-hoan"` chỉ khi
+  đã trừ thật, và màn soạn chỉ nói «Lượt này không bị tính» khi thấy trường đó. `soanQuyet` (nhận · sửa · bác) khoá dòng như
   `troLyQuyet`; `soanDuaVao` là một `db.$transaction`: đọc số khởi điểm và đích **người
   gõ** từ input (`soanDuaVaoInput`), gọi `taoMucTieuTrongTx` / `createKeyResult` /
   `addAlignmentTrong` (Mục tiêu tạo ra ở nháp, hiển thị công khai), ghi

@@ -1,0 +1,65 @@
+driver: puppeteer-core inside thu-lai-man-that.mjs (no browser-tool network reader)
+request listener: POST /eve/agents/okr/eve/v1/session count per viewport = 1 (1440), 1 (390)
+app traffic failures: none recorded by script; the deliberate failure is the unreachable OKR_AGENT_URL=127.0.0.1:9 (cua returns lyDoHong khong-noi-duoc)
+
+--- green run log
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_soan_okr_khong_tru_luot_do · app http://localhost:4731 · api http://localhost:4838
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+KHO crm_soan_okr_khong_tru_luot_do
+GIEO cuoc cmutnvd3o000030tydwv65hcf (1440) soLuot 0
+DUNG 1440: thay cau khong-noi-duoc
+DUNG 1440: cua da nhan POST mo phien (1)
+DUNG 1440: thay cau khong bi tinh
+DUNG 1440: soLuot sau mo 0
+DUNG 1440: khong tran ngang (loi) 0
+DUNG 1440: sau bam thay Da thu lai 1 lan
+DUNG 1440: soLuot sau bam 0
+DUNG 1440: khong tran ngang (thu lai) 0
+GIEO cuoc cmutnvg6e000130tyj7pwd5zv (390) soLuot 0
+DUNG 390: thay cau khong-noi-duoc
+DUNG 390: cua da nhan POST mo phien (1)
+DUNG 390: thay cau khong bi tinh
+DUNG 390: soLuot sau mo 0
+DUNG 390: khong tran ngang (loi) 0
+DUNG 390: sau bam thay Da thu lai 1 lan
+DUNG 390: soLuot sau bam 0
+DUNG 390: khong tran ngang (thu lai) 0
+16 DUNG, 0 SAI
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0
+
+--- red run log
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_soan_okr_khong_tru_luot_do · app http://localhost:4792 · api http://localhost:4499
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+KHO crm_soan_okr_khong_tru_luot_do
+GIEO cuoc cmutnvqke0000rgtyuzroyep1 (1440) soLuot 0
+SAI khong thay cau khong-noi-duoc: 1440
+DUNG 1440: cua da nhan POST mo phien (1)
+SAI 1440: thay cau khong bi tinh
+SAI luot tang: 1 (1440, sau mo)
+DUNG 1440: khong tran ngang (loi) 0
+SAI 1440: sau bam thay Da thu lai 1 lan
+SAI luot tang: 1 (1440, sau bam)
+DUNG 1440: khong tran ngang (thu lai) 0
+GIEO cuoc cmutnyde50001rgtyrzxhx5a7 (390) soLuot 0
+SAI khong thay cau khong-noi-duoc: 390
+DUNG 390: cua da nhan POST mo phien (1)
+SAI 390: thay cau khong bi tinh
+SAI luot tang: 1 (390, sau mo)
+DUNG 390: khong tran ngang (loi) 0
+SAI 390: sau bam thay Da thu lai 1 lan
+SAI luot tang: 1 (390, sau bam)
+DUNG 390: khong tran ngang (thu lai) 0
+chieu do: phep do bat duoc loi nhu ky vong
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1
+EXIT=1
