@@ -338,6 +338,11 @@ export function HoiThoaiSoan({
 							<AlertTitle>{m.lyDoLuot[s.lyDoLuot]}</AlertTitle>
 						</Alert>
 					) : null}
+					{s.chuaCauHinh ? (
+						<Alert role="alert" data-tu-choi="chua-cau-hinh">
+							<AlertTitle>{m.nut.chuaCauHinh}</AlertTitle>
+						</Alert>
+					) : null}
 				</ConversationContent>
 			</Conversation>
 			<OSoan s={s} cuoc={cuoc} m={m} moCuoc={moCuoc} />

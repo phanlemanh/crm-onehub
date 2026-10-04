@@ -172,7 +172,9 @@ export async function demCuocTrongKy(
 	db: DbHoacTx,
 	v: DonViCuocSoan,
 ): Promise<number> {
-	return db.okrCuocSoan.count({ where: dieuKienDonVi(v) });
+	return db.okrCuocSoan.count({
+		where: { ...dieuKienDonVi(v), soLuot: { gt: 0 } },
+	});
 }
 
 export async function capNhatPhien(
