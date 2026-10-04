@@ -18,7 +18,7 @@ const cauHinhVercel = z
 	.strict();
 
 type LuatTrienKhai = {
-	git: { deploymentEnabled: boolean | Record<string, boolean> };
+	git: { deploymentEnabled: Record<string, boolean> };
 };
 
 const NHANH = [
@@ -48,9 +48,9 @@ function docCauHinh(): LuatTrienKhai {
 }
 
 function duocTrienKhai(cauHinh: LuatTrienKhai, nhanh: string): boolean {
-	const luat = cauHinh.git.deploymentEnabled;
-	if (typeof luat === "boolean") return luat;
-	const khop = Object.entries(luat).filter(([mau]) => minimatch(nhanh, mau));
+	const khop = Object.entries(cauHinh.git.deploymentEnabled).filter(([mau]) =>
+		minimatch(nhanh, mau),
+	);
 	if (khop.length === 0) return true;
 	return khop.some(([, bat]) => bat);
 }

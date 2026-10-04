@@ -25,8 +25,8 @@ evals:
       - "apps/agent-okr/test/vercel-trien-khai.spec.ts"
     expected: |
       Ca "vercel-trien-khai > onehub-trien-khai" ap ham duocTrienKhai(cauHinh, nhanh) len
-      cau hinh that cho nhanh "onehub" va doi true. duocTrienKhai theo dung luat Vercel:
-      deploymentEnabled vang -> true; boolean -> chinh no; object -> cac mau khop bang
+      cau hinh that cho nhanh "onehub" va doi true. duocTrienKhai nhan cau hinh DA PARSE (zod
+      buoc deploymentEnabled la ban ghi nhanh -> boolean) va theo dung luat Vercel: cac mau khop bang
       minimatch (goi minimatch khai trong devDependencies cua apps/agent-okr, khong tu viet bo
       khop) — khong mau nao khop -> true, co mau khop -> true khi IT NHAT mot mau khop mang true.
       Xanh: 1 pass, 0 fail. Chieu do o E4 (dot bien bo "onehub": true).
