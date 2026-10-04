@@ -39,7 +39,7 @@ function moTa(dsTrienKhai) {
 
 try {
 	if (CHE_DO !== "xanh" && CHE_DO !== "do") thoat(2, "doi so: xanh | do");
-	const sha = CHE_DO === "do" ? MOC_DO : git("log", "-1", "--format=%H", "HEAD", "--", "apps/agent-okr");
+	const sha = CHE_DO === "do" ? MOC_DO : git("log", "-1", "--first-parent", "--no-merges", "--format=%H", "HEAD", "--", "apps/agent-okr");
 	if (!sha) thoat(2, "KHONG-CO-COMMIT cham apps/agent-okr");
 	if (!git("branch", "-r", "--contains", sha)) thoat(2, `CHUA-DAY ${sha}`);
 	const doiChung = await choDoiChung(sha);

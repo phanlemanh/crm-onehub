@@ -84,8 +84,9 @@ evals:
       - "apps/agent-okr/vercel.json"
       - "_acceptance/tat-preview-agent-okr/rang/**"
     expected: |
-      Rang lay S = git log -1 --format=%H HEAD -- apps/agent-okr (commit gan nhat cham
-      apps/agent-okr/; du an bat «bo du an khong bi anh huong», nen sha khong cham thu muc do
+      Rang lay S = git log -1 --first-parent --no-merges --format=%H HEAD -- apps/agent-okr (commit
+      gan nhat CUA NHANH NAY cham apps/agent-okr/ — bo commit gop, vi commit gop mang thay doi
+      apps/agent-okr cua onehub vao va khong bao gio la dinh mot lan day; du an bat «bo du an khong bi anh huong», nen sha khong cham thu muc do
       khong chung gi). Doi S da co tren origin (git branch -r --contains S khac rong), khong thi
       ma 2 "CHUA-DAY". Doi chung: cho toi da 10 phut (moi 20 s) toi khi commit status GitHub cua S
       (gh api repos/phanlemanh/crm-onehub/commits/<S>/statuses) co it nhat mot context bat dau
