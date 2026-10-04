@@ -392,6 +392,9 @@ evals:
       Doc chu tren hai man moi roi quyet: nguoi dung doc lan dau co biet lam gi tiep
       khong, ba cau loi co phan biet duoc khong, va co tu ghep ky thuat tu duc khong.
       May KHONG cham muc nay — hang T3, phan quyet phai do nguoi dua ra truc tiep.
+    paths:
+      - "apps/app/lib/messages/auth.ts"
+      - "apps/app/lib/messages/settings-thanh-vien.ts"
 
   - id: E17
     criterion: AC-8
