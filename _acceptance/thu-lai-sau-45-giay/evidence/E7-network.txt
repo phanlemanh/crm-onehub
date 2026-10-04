@@ -1,0 +1,3 @@
+driver = script bun/playwright (mot-luot.sh); khong co cong cu doc network cua trinh duyet tich hop.
+networkObserved: n-a (driver)
+Nhat ky Tro ly gia (yeu cau toi 127.0.0.1:3351) nam trong output lenh: mo 202, luong 200, huy-tra 200, gui-lai 202, 0 POST 409 (khong co gui lai som).
