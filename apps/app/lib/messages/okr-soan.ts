@@ -1,4 +1,5 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import type { MaLyDoHong } from "@/lib/cua-okr-config";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
 type Okr = RouterOutputs["okr"];
@@ -19,6 +20,15 @@ type TrangThaiDong = Okr["soanAn"]["dong"][number]["trangThai"];
 type LoaiDong = Okr["soanAn"]["dong"][number]["loai"];
 type BuocCat = NonNullable<Okr["soanAn"]["daCat"]>["buoc"][number];
 type Nac = Okr["soanSoDo"]["cuocGanDay"][number]["nac"];
+
+const CAU_QUA_45S =
+	"Quá 45 giây không có hồi âm. Bản nháp bên cạnh giữ nguyên.";
+const CAU_DUNG_GIUA =
+	"Phiên trò chuyện đã dừng giữa chừng. Bản nháp bên cạnh giữ nguyên.";
+const CAU_QUA_45S_EN =
+	"No reply for 45 seconds. The draft alongside is unchanged.";
+const CAU_DUNG_GIUA_EN =
+	"The conversation stopped part way. The draft alongside is unchanged.";
 
 type NhanDong = "vua-them" | "vua-sua" | "vua-chuyen" | "da-bo";
 type Ket = "accepted" | "dismissed" | "skipped";
@@ -67,9 +77,25 @@ const vi = {
 		goiY: (hoi: string) => `Gợi ý trả lời: ${hoi}`,
 		daNop: "Đã nộp bản nháp lên bảng",
 		loi: "Trợ lý OKR chưa trả lời được",
-		loiMoTa: "Quá 45 giây không có hồi âm. Bản nháp bên cạnh giữ nguyên.",
-		loiMoTaKhac:
-			"Phiên trò chuyện đã dừng giữa chừng. Bản nháp bên cạnh giữ nguyên.",
+		loiMoTa: CAU_QUA_45S,
+		loiMoTaKhac: CAU_DUNG_GIUA,
+		lyDoHong: {
+			"khong-noi-duoc": "Không nối được tới Trợ lý OKR.",
+			"qua-han": "Trợ lý OKR không trả lời kịp.",
+			"tro-ly-tu-choi": "Trợ lý OKR từ chối lượt này.",
+			"tro-ly-loi": "Trợ lý OKR đang gặp lỗi.",
+			"chua-dem-duoc-luot":
+				"Chưa đếm được lượt nên chưa gửi. Thử lại sau ít phút.",
+			"chua-mo-duoc-phien": "Chưa mở được phiên trò chuyện.",
+			"het-dang-nhap":
+				"Phiên đăng nhập đã hết — tải lại trang để đăng nhập lại.",
+			"mat-mang": "Mất kết nối mạng. Kiểm tra mạng rồi thử lại.",
+			"chua-mo-lai-duoc": "Chưa mở lại được cuộc này. Thử lại sau ít phút.",
+			"qua-45s": CAU_QUA_45S,
+			"dung-giua-chung": CAU_DUNG_GIUA,
+		} satisfies Record<MaLyDoHong, string>,
+		khongTinh: "Lượt này không bị tính.",
+		daThuLai: (n: string) => `Đã thử lại ${n} lần`,
 		thuLai: "Thử lại",
 		hetLuot: (n: string) =>
 			`Đã dùng hết ${n} lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới`,
@@ -333,9 +359,27 @@ const en: OkrSoanMessages = {
 		goiY: (hoi) => `Suggested answers: ${hoi}`,
 		daNop: "Put the draft on the board",
 		loi: "The OKR Assistant did not answer",
-		loiMoTa: "No reply for 45 seconds. The draft alongside is unchanged.",
-		loiMoTaKhac:
-			"The conversation stopped part way. The draft alongside is unchanged.",
+		loiMoTa: CAU_QUA_45S_EN,
+		loiMoTaKhac: CAU_DUNG_GIUA_EN,
+		lyDoHong: {
+			"khong-noi-duoc": "Could not reach the OKR Assistant.",
+			"qua-han": "The OKR Assistant did not respond in time.",
+			"tro-ly-tu-choi": "The OKR Assistant refused this turn.",
+			"tro-ly-loi": "The OKR Assistant ran into an error.",
+			"chua-dem-duoc-luot":
+				"Could not count the turn, so nothing was sent. Try again in a few minutes.",
+			"chua-mo-duoc-phien": "Could not open the conversation.",
+			"het-dang-nhap":
+				"Your sign-in has expired — reload the page to sign in again.",
+			"mat-mang":
+				"Network connection lost. Check your connection and try again.",
+			"chua-mo-lai-duoc":
+				"Could not reopen this session. Try again in a few minutes.",
+			"qua-45s": CAU_QUA_45S_EN,
+			"dung-giua-chung": CAU_DUNG_GIUA_EN,
+		},
+		khongTinh: "This turn was not counted.",
+		daThuLai: (n) => `Tried again ${n} times`,
 		thuLai: "Try again",
 		hetLuot: (n) =>
 			`All ${n} turns of this session are used — add it to the OKRs or open a new session`,
