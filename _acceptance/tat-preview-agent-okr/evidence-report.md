@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 150dec37b53c3022003ca0324e6f2ca56f8bd317
+verified_commit: 7180a612222ace93b80c0a6491900814f0bd1af3
 human_signoff: Phan Le Manh 2026-10-05
 ---
 
@@ -177,3 +177,7 @@ none — every multi-run eval is uniform
 Round 1: không eval nào đỏ; lệnh suite `bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db` bị agent bỏ qua hoặc chết nên không có kết quả. Verdict BLOCKED, cần chạy lại lệnh đó.
 Round 2: E5 đỏ — răng `vercel-preview.mjs xanh` chọn S = d3e323f3fe042793037c5bf52a60707eac34f398 (commit gộp «Merge origin/onehub vào chore/tat-preview-agent-okr»), commit này chưa có trên origin nên răng dừng ở CHUA-DAY, không đo được AC-4 theo chiều xanh. Các eval khác và cả bảy lệnh suite xanh. Trả về implementation.
 Round 3: E5 đã đo commit của chính nhánh (S = faab50a10146864236ca70ea5992470ab49e2724, bỏ commit gộp): 0 deployment, 0 status đỏ cho agent-okr, ba dự án đối chứng đều success. Mọi eval máy và cả bảy lệnh suite xanh, mọi eval feature đều đỏ ở baseline. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-04, do hoá cũ sau khi gộp onehub ef2e5b3b (#257, #258) vào nhánh đã ký
+run_id: repin-20261004T223937Z-48098
+sha: 7180a612222ace93b80c0a6491900814f0bd1af3 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E7 · ngoài làn máy: E9 (E9 không khai paths) · AC không có chốt máy: AC-6
