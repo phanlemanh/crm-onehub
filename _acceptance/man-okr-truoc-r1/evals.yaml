@@ -1,0 +1,221 @@
+schema_version: 1
+slug: man-okr-truoc-r1
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_hoi_y_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-ket-luan.tsx"
+      - "apps/app/lib/messages/okr-hoi-y.ts"
+      - "packages/ui/src/components/save-bar.tsx"
+      - "apps/app/test/okr-hoi-y.dom.tsx"
+    expected: |
+      Test DOM 'thanh công bố' cua okr-hoi-y.dom.tsx, ma tran viet truoc hai trang thai:
+      (a) chon-chua-du (4 dieu thieu): tieu de = demSo(congBo.chuaDuoc, 4) doc tu okrHoiYMessages,
+      ul cua thanh co class hidden / display none, nut [aria-controls] co aria-expanded="false" va chu
+      saveBar.hienDanhSach, nut Cong bo disabled; bam nut -> ul hien, 4 lien ket, moi href tro toi
+      mot id co trong DOM, nut doi chu saveBar.anDanhSach va aria-expanded="true".
+      (b) chon-du: ul null, nut [aria-controls] null, Cong bo bat.
+      CHIEU DO: ban sao (.acceptance-runs/) them lai defaultOpen vao ThanhCongBo -> ca (a) do voi
+      thong diep ghim 'thanh cong bo mo san danh sach', ma 1.
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1c_man
+    steps:
+      - "Canh cay; phien do rieng (mot-luot.sh -> tien-de.mjs); napBoMau; dang nhap dev:session nguoi chon mau (le-hai-dang)"
+      - "Buoc hoi-y (1440x900 roi 390x844): mo /<ws>/okr/hoi-y; doi [data-khoi='thanh-cong-bo'] va danh sach y chua gom; dem y chua gom nam tron trong khung nhin dau ma elementFromPoint tai tam tra ve phan tu thuoc thanh cong bo -> phai bang 0; chieu cao thanh <= 80 (1440) / <= 120 (390); anh r1c-hoi-y-gon-<kho>.png"
+      - "Moi y chua gom: scrollIntoView({block:'center'}), elementFromPoint tai tam thuoc chinh y do"
+      - "Bam 'Hiện danh sách' (chu doc tu saveBar), anh r1c-hoi-y-mo-<kho>.png; bam lien ket 'Còn ý chưa gom vào chủ đề' -> danh sach y chua gom giao khung nhin; 390: scrollWidth <= clientWidth"
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/**"
+      - "packages/ui/src/components/save-bar.tsx"
+      - "_acceptance/man-okr-truoc-r1/rang/**"
+    expected: |
+      exit 0; man-r1c.mjs in 'hoi-y 1440: dat' va 'hoi-y 390: dat', moi dong kem so y bi phu (0),
+      chieu cao thanh va so y da cuon toi. Luc bat dau man-r1c.mjs xoa moi anh r1c-* cu trong thu muc
+      bang chung; anh moi vao .acceptance-runs/man-okr-truoc-r1/evidence/, vong S4 chep sang
+      _acceptance/man-okr-truoc-r1/evidence/ cho E11; cuoi luot script kiem du 10 anh, thieu anh nao thi
+      in ten va thoat 1.
+      CHIEU DO: --chieu-do=hoi-y tren ban sao them lai defaultOpen -> 'hoi-y 1440: y chua gom bi thanh
+      phu: <n>' voi n >= 1, ma 1.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_cap_nhat_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-cap-nhat-tuan.dom.tsx"
+    expected: |
+      Test DOM 'da xong' cua okr-cap-nhat-tuan.dom.tsx, ma tran hai thu tu: hai KR (tang-toi va moc) deu
+      updatedThisWeek, lastConfidence cao/vua, lastAt khac nhau; o (i) KR moi hon dung dau, o (ii) KR moi
+      hon dung cuoi. Moi o: data-trang-thai = ST-capnhat-daxong; tieu de nam trong phan tu role="status";
+      tieu de va dong thoi diem doc tu okrMessages (khong chep chu tay); ngay gio = lastAt cua KR moi hon
+      theo Asia/Ho_Chi_Minh o CA HAI thu tu; moi KR mot dong voi so dinh dang nhu o gia tri va nhan tu tin
+      lastConfidence; khong co [data-nut='gui']. Bam 'Sửa cập nhật' -> ST-capnhat-dangdien, o gia tri dien
+      san, khong nut tu tin nao duoc chon, nut gui = m.gui(0) va disabled, document.activeElement la o
+      gia tri cua KR dau; chon muc cho mot KR roi gui -> mock guiCapNhat nhan dung mot dong.
+      CHIEU DO: (a) ban sao bo nhanh da-xong (luon mo form) -> 'da xong: trang thai ST-capnhat-dangdien,
+      mong ST-capnhat-daxong', ma 1; (b) ban sao lay lastAt cua phan tu cuoi -> o (i) do voi 'da xong: gio
+      gui moi nhat lech', ma 1; (c) ban sao bo lenh focus -> 'sua cap nhat: focus khong o o gia tri dau',
+      ma 1.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_cap_nhat_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/test/okr-cap-nhat-tuan.dom.tsx"
+    expected: |
+      Cung tep, test 'mot phan' va 'chua gui': ba KR, ma tran viet truoc x = 0, 1, 2 trong y = 3, cong o
+      y = 0 (danh sach rong -> ST-capnhat-rong, khong role=status 'đã gửi').
+      x = 1, 2: ST-capnhat-motphan, dong 'Đã gửi x/3 KR tuần này' tu okrMessages, tap KR mang
+      [data-da-gui-tuan-nay] bang dung tap KR updatedThisWeek (so sanh tap, khong dem), khong nut tu tin
+      nao duoc chon san; x = 0: ST-capnhat-dangdien, khong dong do, khong dau nao. So khang dinh in ra
+      bang so o (3 hang x 3 cot).
+      CHIEU DO: ban sao gan dau cho moi KR co lastAt (thay vi updatedThisWeek) -> 'mot phan: tap da gui
+      lech', ma 1 (o KR cap nhat tuan truoc); ban sao bo chan danh sach rong truoc nhanh da-xong -> o
+      y = 0 do voi 'rong: ra ST-capnhat-daxong', ma 1.
+
+  - id: E5u
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1c_man
+    steps:
+      - "Phien do rieng nhu E2; dang nhap dev:session nhan vien mau (do-minh-khoa, hai KR quy 4 mau)"
+      - "Buoc cap-nhat: xoa OkrCheckIn tuan nay cua hai KR trong CSDL phien do; mo /<ws>/okr/cap-nhat-tuan?kyOkr=<quy4> -> ST-capnhat-dangdien; chon muc tu tin ca hai, bam gui -> ST-capnhat-dagui; CSDL dem +2 OkrCheckIn mang tuan nay"
+      - "Tai lai -> ST-capnhat-daxong, chu nhin thay (innerText) co ten hai KR va nhan muc vua chon; anh r1c-cap-nhat-xong-<kho>.png"
+      - "Bam 'Sửa cập nhật', doi muc tu tin KR dau, gui -> CSDL +1 OkrCheckIn cho KR do; tai lai -> ST-capnhat-daxong voi muc moi"
+      - "Xoa OkrCheckIn tuan nay cua KR thu hai -> tai lai -> ST-capnhat-motphan, innerText co 'Đã gửi 1/2 KR tuần này'; anh r1c-cap-nhat-mot-phan-<kho>.png; 390: scrollWidth <= clientWidth o ca ba trang thai"
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**"
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "_acceptance/man-okr-truoc-r1/rang/**"
+    expected: |
+      exit 0; man-r1c.mjs in 'cap-nhat 1440: dat' va 'cap-nhat 390: dat' kem dem check-in truoc/sau
+      tung buoc (+2, +1) va trang thai sau moi lan tai lai. Anh cung dich voi E2 (xoa anh cu r1c-* luc bat
+      dau, chep sang _acceptance/man-okr-truoc-r1/evidence/ o S4).
+      CHIEU DO: --chieu-do=cap-nhat tren ban sao bo nhanh da-xong -> 'cap-nhat 1440: sau tai lai o
+      ST-capnhat-dangdien, mong ST-capnhat-daxong', ma 1.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cnt_gui_lo
+    paths:
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "apps/api/src/okr/okr.contracts.ts"
+      - "apps/api/test/okr-cap-nhat.spec.ts"
+    expected: |
+      Test 'gui-lo' cua apps/api/test/okr-cap-nhat.spec.ts (phep do co san, chay lai): truoc khi gui ba KR
+      [id, lastConfidence, updatedThisWeek] = [id, null, false]; sau lo mot va lo hai cung tuan, doc lai
+      [id, currentValue, lastConfidence, updatedThisWeek] = so va muc cua lo moi nhat, true.
+      CHIEU DO: ban sao doi dieu kien updatedThisWeek trong okr-cap-nhat.service.ts thanh false -> test
+      gui-lo do o khang dinh sau gui (expect toEqual ... true), ma 1.
+
+  - id: E6b
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cnt_gui_lo
+    paths:
+      - "apps/api/src/okr/okr-cap-nhat.service.ts"
+      - "apps/api/test/okr-cap-nhat.spec.ts"
+    expected: |
+      Cung lan chay E6: hieu ung may chu ma buoc gui va gui lai cua E5u dua vao — gui hai lo cung tuan
+      duoc nhan, doc lai tra muc moi nhat va updatedThisWeek dung. CHIEU DO: nhu E6.
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_toan_canh_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx"
+      - "apps/app/lib/messages/okr-toan-canh.ts"
+      - "apps/app/test/okr-toan-canh-chu.dom.tsx"
+    expected: |
+      Test DOM moi okr-toan-canh-chu.dom.tsx render ToanCanh voi du lieu dung tay theo khuon
+      ToanCanhOutput (parse bang schema cua okr-xem.contracts truoc khi render): mot bo phan 'Khối Hỗ trợ'
+      trong donViChuaDat, hang bo phan cua no soMucTieu 6. Ma tran vi x en x {co don vi chua dat, moi don
+      vi da dat}: mo ta the = okrToanCanhMessages(locale).toanCanh.chuaDat / tatCaDaDat (doc tu messages),
+      ten don vi nam trong phan tu translate="no"; mo ta bang = theoDonViMoTa moi. 4 o, 4 khang dinh, so
+      in ra bang 4.
+      CHIEU DO: ban sao tra chuaDat ve `${ten} chưa đặt` -> 'toan-canh vi: the noi nguoc bang', ma 1.
+
+  - id: E8u
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1c_man
+    steps:
+      - "Phien do rieng nhu E2; dang nhap dev:session quan tri mau (le-hai-dang)"
+      - "Buoc toan-canh (1440 va 390): mo /<ws>/okr/toan-canh?kyOkr=<quy4>; innerText cua the 'Đơn vị đã công bố OKR' chua 'Khối Hỗ trợ chưa có mục tiêu riêng'; hang [data-hang-toan-canh] 'Khối Hỗ trợ' co so muc tieu > 0; innerText mo ta bang bang theoDonViMoTa; 390: scrollWidth <= clientWidth; anh r1c-toan-canh-<kho>.png"
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/toan-canh/**"
+      - "apps/app/lib/messages/okr-toan-canh.ts"
+      - "_acceptance/man-okr-truoc-r1/rang/**"
+    expected: |
+      exit 0; man-r1c.mjs in 'toan-canh 1440: dat' va 'toan-canh 390: dat' kem chu the va so muc tieu
+      cua hang Khối Hỗ trợ. Anh cung dich voi E2.
+      CHIEU DO: --chieu-do=toan-canh tren ban sao tra chuaDat ve chu cu -> 'toan-canh 1440: the noi nguoc
+      bang: Khối Hỗ trợ', ma 1.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_chu
+    paths:
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/lib/messages/okr-toan-canh.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+      - "apps/app/test/okr-so-chu.spec.ts"
+    expected: |
+      messages-guard.spec.ts va okr-so-chu.spec.ts xanh; ham ghep moi (daGuiMotPhan, daXong.luc...) co
+      dong GHIM; okr-so-chu co anh xa cho ST-capnhat-daxong va ST-capnhat-motphan.
+      CHIEU DO: ban sao de ban en cua khoa moi bang ban vi -> messages-guard do voi ten khoa, ma 1.
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: ui
+    cmd: config:executors.test.r1c_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-ket-luan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx"
+    expected: |
+      design-gate --mode static tren ba tep: exit 0, khong P0.
+      CHIEU DO: ban sao them className='text-gray-500 bg-red-500' vao Alert da xong -> design-gate
+      REJECT, p0_count >= 1, lenh exit 1.
+
+  - id: E11
+    criterion: AC-11
+    executor: judgment
+    question: "Mot nhan vien van phong nhin anh ba man OKR sau sua o kho 1440 va 390: (1) o Hoi y, co thay het y chua gom ma khong phai dong gi, thanh duoi day co con che y nao khong; (2) o Cap nhat tuan, nguoi da gui co biet ngay minh da gui tuan nay va luc nao, va biet sua the nao; o trang thai gui mot phan co biet con KR nao chua gui; (3) o Toan canh, the 'Don vi da cong bo OKR' co con noi nguoc bang ngay duoi khong; chu co theo tu dien CONTEXT.md (bo phan, phong ban, don vi) khong?"
+    evidence_required: [judged_by, verdict, rationale]
+    inputs:
+      - "CONTEXT.md"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-hoi-y-gon-1440.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-hoi-y-gon-390.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-hoi-y-mo-1440.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-hoi-y-mo-390.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-cap-nhat-xong-1440.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-cap-nhat-xong-390.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-cap-nhat-mot-phan-1440.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-cap-nhat-mot-phan-390.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-toan-canh-1440.png"
+      - "_acceptance/man-okr-truoc-r1/evidence/r1c-toan-canh-390.png"
