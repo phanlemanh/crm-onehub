@@ -26,7 +26,7 @@ evals:
       CAP HAI CHIEU tren CUNG tep: chieu do la E4 (go superRefine trong ban sao).
 
   - id: E2
-    criterion: AC-5, AC-6
+    criterion: AC-5
     executor: test
     layer: backend-effect
     cmd: config:executors.test.ctk_tich_hop
@@ -60,6 +60,28 @@ evals:
       bang count truoc luot.
       Phep dem execute dung expect(soLan, "execute chay o buoc mot").toBe(0) — thong diep nay la
       chu ky do cua E4.
+      Chieu do tren CUNG tep la E4.
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ctk_tich_hop
+    paths:
+      - "packages/validation/src/okr-cuoc-soan.ts"
+      - "apps/agent-okr/agent/tools/nop_ban_nhap.ts"
+      - "apps/agent-okr/agent/lib/nop-ban-nhap.ts"
+      - "apps/agent-okr/test/ban-nhap-trung-khoa.integration.spec.ts"
+      - "apps/agent-okr/test/support/**"
+    expected: |
+      Cung lenh voi E2 (mot lan chay, kit gop lenh trung); E6 chot rieng AC-6 qua ca
+      (iii) trung-khoa-kr da ta o E2: thoat 0, bun bao 3 pass, 0 fail. Ca trung-khoa-kr: buoc 1
+      model nop ban co hai KR "k1" duoi Muc tieu "m1" -> execute chua chay
+      (expect(soLan, "execute chay o buoc mot").toBe(0)), count okrDeXuat cua cuoc bang count
+      truoc luot, mang issue cat tu error-text toEqual dung mot phan tu
+      { path: ["mucTieu",0,"kr",1,"khoa"], message: "khoa KR trùng trong cùng Mục tiêu: k1" };
+      buoc 2 nop ban da doi KR thu hai thanh "k2" -> execute dung 1 lan, "da-ghi", tap khoaModel
+      cua lan nop cuoi khong trung va chua "kr-moi:m1:k1", "kr-moi:m1:k2".
       Chieu do tren CUNG tep la E4.
 
   - id: E3
