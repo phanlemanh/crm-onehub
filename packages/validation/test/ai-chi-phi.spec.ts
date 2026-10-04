@@ -65,7 +65,7 @@ const NGOAI: readonly { khop: RegExp; lyDo: string }[] = [
 		lyDo: "phiên soạn OKR chỉ mở từ kênh crm hoặc eve, không từ Zalo",
 	},
 	{
-		khop: /^(crm|eve)\|okr-soan\|(tro_ly_okr\/|agent_runner$|agent_builder$)/,
+		khop: /^(crm|eve)\|okr-soan\|(tro_ly_okr\/|agent_runner$|agent_builder$|tro_ly_kho$)/,
 		lyDo: "phiên soạn OKR tự soạn, không giao việc cho phiên con",
 	},
 	{
