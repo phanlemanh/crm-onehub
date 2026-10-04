@@ -1,0 +1,42 @@
+{
+  "feature_plain": "Quản trị tự khai được tên miền thư của công ty, cho phép lại một người không còn để lại người «chưa vào» giả, nút cho phép không biến mất sau một lần mạng chập chờn, và việc dựng lại danh sách thành viên không bỏ sót người đã được cho phép lại.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho quản trị gõ tên miền nội bộ ở trang Thành viên và lưu; máy tự viết thường, bỏ «@», bỏ trùng, rồi hiện lại bản đã gọn."},
+    {"id": "AC-2", "p": "Sẽ làm hai chỗ đang chờ tên miền này chạy lại: Theo dõi không lập hồ sơ khách cho người nhà, hộp thư nhận ra đồng nghiệp."},
+    {"id": "AC-3", "p": "Sẽ từ chối chữ không phải tên miền, một địa chỉ thư, hay tên miền thư công cộng như gmail.com — báo đúng mục sai, giữ chữ đã gõ, không lưu gì."},
+    {"id": "AC-4", "p": "Sẽ cho xoá trắng danh sách: lưu rỗng, hai chỗ đọc thấy rỗng, thẻ hiện câu «Chưa có tên miền nội bộ»."},
+    {"id": "AC-5", "p": "Sẽ cho thành viên thường xem thẻ ở dạng khoá kèm lý do, chặn họ lưu; người ngoài không gian làm việc bị chặn cả xem lẫn lưu."},
+    {"id": "AC-6", "p": "Sẽ từ chối cho phép một địa chỉ đã là thành viên (kể cả gõ khác hoa), không tạo dòng nào, hộp giữ mở với câu báo."},
+    {"id": "AC-7", "p": "Sẽ thôi liệt những thành viên đang có dòng chờ cũ trong khối «Được phép vào», và số đếm của khối không tính họ — không sửa dữ liệu."},
+    {"id": "AC-8", "p": "Sẽ giữ nguyên việc cho phép lại người đã bị gỡ: họ đăng nhập là vào lại với vai trò được chọn."},
+    {"id": "AC-10", "p": "Sẽ dựng lại danh sách thành viên theo luật «còn một lời cho phép hiệu lực là được vào», giống hệt luật lúc đăng nhập, và ghi lỗi khi gặp trạng thái lạ."},
+    {"id": "AC-11", "p": "Sẽ có một lệnh soi chỉ đọc đếm bốn con số trên production (tên miền, dòng treo, người bị bỏ sót, trạng thái lạ), không in địa chỉ thư nào."},
+    {"id": "AC-12", "p": "Sẽ có ảnh chụp thật của thẻ và hộp ở máy tính và điện thoại, cho cả quản trị lẫn thành viên thường, không tràn ngang."},
+    {"id": "AC-13", "p": "Sẽ chạy lại các phép đo đã ký của trang Thành viên và hai đường đọc tên miền, phải đạt trọn như lúc ký."},
+    {"id": "AC-14", "p": "Sẽ thêm mục «Tên miền nội bộ» vào từ điển sản phẩm, chữ có cả tiếng Việt lẫn tiếng Anh, và tài liệu API nói rõ các luật mới."}
+  ],
+  "wont_do": [
+    {"id": "AC-9", "p": "Sẽ KHÔNG để nút «Cho phép một địa chỉ» biến mất khi lần tải đầu của trang lỗi: nút hiện ngay khi trình duyệt tải lại được, không cần tải lại trang; người không quyền bấm vào vẫn bị chặn trong hộp."},
+    {"id": "OOS-1", "p": "Không ghi gì vào dữ liệu production, kể cả dọn các dòng chờ cũ — chúng chỉ thôi hiện trên màn."},
+    {"id": "OOS-2", "p": "Không tự đổi dòng chờ thành «đã vào» lúc người đó đăng nhập — anh đã chọn «từ chối, báo rõ»."},
+    {"id": "OOS-3", "p": "Không dịch sang tiếng Việt các câu lỗi do máy chủ trả về trong hộp cho phép."},
+    {"id": "OOS-4", "p": "Không cho thành viên thường thấy nút cho phép và khối «Được phép vào» ở dạng khoá — việc của một đợt Cài đặt sau."},
+    {"id": "OOS-5", "p": "Không đổi việc dựng lại đặt người cũ nhất làm chủ sở hữu — đã khai sẵn trong tài liệu API."},
+    {"id": "OOS-6", "p": "Tên miền nội bộ không quyết ai được đăng nhập — việc đó vẫn là của danh sách cho phép."}
+  ],
+  "scope_plain": "Sáu thứ vòng này cố ý không làm:",
+  "coverage_plain": [
+    {"i": 0, "p": "Phủ đủ bốn lỗi của hàng R1b: tên miền nội bộ (AC-1…AC-5), cho phép lại (AC-6…AC-8), nút đầu trang (AC-9), dựng lại thành viên (AC-10, AC-11)."},
+    {"i": 1, "p": "Mỗi kiểu đầu vào có tiêu chí riêng: hợp lệ, sai dạng, thư công cộng, địa chỉ thay tên miền, rỗng, khác hoa, trạng thái lạ."},
+    {"i": 2, "p": "Ba vai — quản trị, thành viên thường, người ngoài — đều có ca đo ở cả xem lẫn lưu (AC-5, AC-9)."},
+    {"i": 3, "p": "Mỗi lời hứa đo ở cả máy chủ lẫn màn hình; phần production chỉ đọc (AC-11)."},
+    {"i": 4, "p": "Đối chiếu ngành: Slack và GitHub cũng đặt danh sách tên miền ở trang quản trị thành viên, và GitHub cũng từ chối mời người đã là thành viên."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo nút đầu trang chưa đi qua đúng đường gây lỗi (máy chủ lỗi rồi truyền xuống trình duyệt) — đã thêm ca đó cùng chiều đỏ."},
+    {"i": 1, "p": "Vế «người không quyền bị chặn trong hộp» chưa được đo ở máy chủ — đã thêm phép đo máy chủ và ca hộp giữ mở với lỗi 403."},
+    {"i": 2, "p": "Con số «người bị bỏ sót» đếm nhầm cả người vừa được cho phép lại mà chưa đăng nhập — đã đổi cách đếm: chỉ tính người đã thử vào mà không vào được."},
+    {"i": 3, "p": "Phần màn hình của việc lưu tên miền và số đếm khối «Được phép vào» chưa có phép đo trỏ đúng — đã thêm hai ca giao diện và ghim giá trị."},
+    {"i": 4, "p": "Ca người chỉ có dòng trạng thái lạ chưa ghi kết quả mong đợi — nay ghi rõ: không được vào, khớp luật đăng nhập."}
+  ]
+}

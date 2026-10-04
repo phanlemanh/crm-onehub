@@ -1095,6 +1095,13 @@ executors:
     sol_dem_db: bun run test -- "cd packages/db && bun test test/okr-cuoc-soan.spec.ts -t dem-co-luot"
     sol_tran_api: bun run test -- "cd apps/api && bun test test/soan-okr-tran.spec.ts -t cuoc-rong-khong-tinh"
     nbn_ca_tep: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/nop-ban-nhap.integration.spec.ts"
+    r1b_ten_mien_api: 'bun run test -- "cd apps/api && bun test test/thanh-vien-vao-dung.spec.ts -t ten-mien"'
+    r1b_cho_phep_api: 'bun run test -- "cd apps/api && bun test test/thanh-vien-vao-dung.spec.ts -t cho-phep"'
+    r1b_dung_lai_api: 'bun run test -- "cd apps/api && bun test test/thanh-vien-vao-dung.spec.ts -t dung-lai"'
+    r1b_soi_api: 'bun run test -- "cd apps/api && bun test test/soi-thanh-vien.spec.ts"'
+    r1b_khong_hoi_quy_api: 'bun run test -- "cd apps/api && bun test test/domain-nha-tach.spec.ts test/workspace-thanh-vien.spec.ts test/go-thanh-vien.spec.ts"'
+    r1b_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/thanh-vien-vao-dung.dom.tsx"
+    r1b_messages_guard: "cd apps/app && bun test test/messages-guard.spec.ts"
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
@@ -1719,6 +1726,10 @@ executors:
     nbn_dao_thu_tu_xanh: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs xanh
     nbn_dao_thu_tu_do: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs do
     nbn_quet_mau: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/quet-mau.mjs
+    r1b_soi_vat: "bun _acceptance/thanh-vien-vao-dung/rang/soi-vat.mjs"
+    r1b_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-vao-dung/rang/do-man.mjs"'
+    r1b_tu_dien: "bun _acceptance/thanh-vien-vao-dung/rang/tu-dien.mjs"
+    r1b_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/page.tsx" "apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx" "apps/app/app/(app)/[slug]/settings/members/ten-mien-noi-bo.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
