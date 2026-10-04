@@ -12,7 +12,7 @@ evals:
       - "apps/api/test/cua-vao-va.spec.ts"
     expected: |
       describe "doc-phien" qua app Nest that (HTTP, khong goi service truc tiep): nguoi co phien
-      that goi mot thu tuc sau AuthMiddleware (settings.get) voi cookie phien;
+      that goi mot thu tuc sau AuthMiddleware (settings.researchKey) voi cookie phien;
       spyOn(auth.api, "getSession").mockRejectedValue(new Error("connect ECONNREFUSED")) -> HTTP
       503, error.data.code "SERVICE_UNAVAILABLE"; bat dau ra logger: dung 1 dong error co message
       "Could not read the session", chuoi log khong chua ten cookie "session_token" va khong chua
@@ -31,8 +31,8 @@ evals:
       - "apps/api/test/cua-vao-va.spec.ts"
     expected: |
       describe "ba-lop": ma tran viet truoc 3 lop x 2 tinh trang =
-      [[AuthMiddleware, settings.get], [SignedInMiddleware, workspace.get],
-      [SessionOnlyMiddleware, <thu tuc dung SessionOnlyMiddleware, chon o S3 tu router that>]] x
+      [[AuthMiddleware, settings.researchKey], [SignedInMiddleware, workspace.get],
+      [SessionOnlyMiddleware, apiKeys.list]] x
       [["getSession nem", 503, "SERVICE_UNAVAILABLE"], ["getSession null", 401, "UNAUTHORIZED"]];
       moi o mot assert ma HTTP + mot assert error.data.code; so assert = 3 x 2 x 2 = 12, ca dem
       so o da chay va doi 6. Ca kiem dieu kien do: moi thu tuc trong ma tran that su mang lop
