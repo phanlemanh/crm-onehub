@@ -155,6 +155,10 @@ evals:
       GIOI HAN DA BIET, khai o day de khong ai tuong da do: phep do nay cham HANG VA
       CHI DAN, KHONG cham van ban runtime ma cha that su soan — xem muc Out of scope
       cua contract.
+    paths:
+      - "apps/agent/agent/subagents/agent_builder/lib/authorization.ts"
+      - "apps/agent/agent/subagents/agent_builder/instructions.md"
+      - "apps/agent/agent/instructions/task.ts"
 
   - id: E9
     criterion: AC-9

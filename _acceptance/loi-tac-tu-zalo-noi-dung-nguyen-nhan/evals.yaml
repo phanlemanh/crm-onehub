@@ -257,3 +257,8 @@ evals:
       noi dung chang hong; noi viec lam tiep (thu lai / bao nguoi cai dat CRM);
       khong dung «tác tử», «agent», ten bien moi truong; tieng Viet co dau; khong dung
       tu CONTEXT.md bao Avoid. Mot cau truot mot tieu chi -> FAIL kem ten cau.
+    paths:
+      - "apps/api/src/zalo/zalo.service.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "CONTEXT.md"
+      - "docs/superpowers/specs/2026-09-24-loi-tac-tu-zalo-noi-dung-nguyen-nhan-design.md"
