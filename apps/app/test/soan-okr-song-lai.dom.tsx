@@ -121,9 +121,10 @@ describe("man-chua-cau-hinh", () => {
 	test("man-chua-cau-hinh: cuoc dang 0 luot, chua cau hinh -> trang trong, khong mo phien", async () => {
 		datDanhSach({ cuoc: { ...CUOC, soLuot: 0 } });
 		await moMan(false, false);
-		expect(chu("[data-man-chua-cau-hinh] [data-slot='empty-title']")).toBe(
-			m.nut.chuaCauHinh,
-		);
+		expect(
+			chu("[data-man-chua-cau-hinh] [data-slot='empty-title']"),
+			"man mo phien khi chua cau hinh",
+		).toBe(m.nut.chuaCauHinh);
 		expect(q("textarea"), "man mo phien khi chua cau hinh").toBeNull();
 		expect(soLanMoAgent, "man mo phien khi chua cau hinh").toBe(0);
 		expect(daGui).toEqual([]);
