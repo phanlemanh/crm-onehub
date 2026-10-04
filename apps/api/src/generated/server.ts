@@ -49,8 +49,9 @@ import { savedViewListInput, savedViewListOutput, savedViewCreateInput, savedVie
 import { agentModelOutput, modelCatalogOutput, setAgentModelInput, researchKeyOutput, setResearchKeyInput, archiveRetentionOutput, setArchiveRetentionDaysInput } from "../settings/settings.contracts";
 import { slackStatusOutput, slackMatchesOutput, slackChannelsInput, slackChannelsOutput, slackJoinChannelInput, slackJoinChannelOutput, slackRefreshPeopleOutput, slackCreateChannelInput, slackCreateChannelOutput, slackDisconnectOutput } from "../slack/slack.contracts";
 import { ssoSignInOptionsOutput, ssoSettingsOutput, ssoProviderListInput, ssoProviderListOutput, registerSsoProviderInput, ssoProviderOutput, deleteSsoProviderInput, deleteSsoProviderOutput } from "../sso/sso.contracts";
+import { taiLieuHoiInput, taiLieuHoiOutput, taiLieuHoiKetQuaInput, taiLieuHoiKetQuaOutput, taiLieuBaoSaiInput, taiLieuBaoSaiOutput, taiLieuDatXacMinhInput, taiLieuXuLyChuaTraLoiInput, taiLieuXuLyBaoSaiInput } from "../tai-lieu/tai-lieu-hoi.contracts";
 import { taiLieuNguonTrangThaiOutput, taiLieuNguonXinChoInput, taiLieuNguonXinChoOutput, taiLieuNguonNhanInput, taiLieuNguonNhanOutput, taiLieuNguonListOutput, taiLieuNguonIdInput, taiLieuNguonGetOutput, taiLieuNguonTaiVeOutput, taiLieuNguonOkOutput } from "../tai-lieu/tai-lieu-nguon.contracts";
-import { taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuSlugInput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposeOutput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput, taiLieuOkOutput } from "../tai-lieu/tai-lieu.contracts";
+import { taiLieuOkOutput, taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuSlugInput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposeOutput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput } from "../tai-lieu/tai-lieu.contracts";
 import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgDepartmentCreateInput, orgLuuTruXemTruocOutput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
 import { workspaceOutput, memberListInput, memberListOutput, updateWorkspaceInput, setMemberRoleInput, workspaceMemberOutput, staffDomainsOutput, setStaffDomainsInput, allowanceListOutput, allowEmailInput, allowanceOutput, issuePasswordLinkInput, passwordLinkOutput, revokeAllowanceInput, removeMemberInput, removeMemberOutput } from "../workspace/workspace.contracts";
@@ -1368,6 +1369,20 @@ const appRouter = t.router({
       .output(deleteSsoProviderOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
+  hoiKho: t.router({
+    hoi: publicProcedure
+      .input(taiLieuHoiInput)
+      .output(taiLieuHoiOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    ketQua: publicProcedure
+      .input(taiLieuHoiKetQuaInput)
+      .output(taiLieuHoiKetQuaOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    baoSai: publicProcedure
+      .input(taiLieuBaoSaiInput)
+      .output(taiLieuBaoSaiOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
   taiLieuNguon: t.router({
     trangThai: publicProcedure
       .output(taiLieuNguonTrangThaiOutput)
@@ -1397,6 +1412,18 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   taiLieu: t.router({
+    datXacMinh: publicProcedure
+      .input(taiLieuDatXacMinhInput)
+      .output(taiLieuOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xuLyChuaTraLoi: publicProcedure
+      .input(taiLieuXuLyChuaTraLoiInput)
+      .output(taiLieuOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xuLyBaoSai: publicProcedure
+      .input(taiLieuXuLyBaoSaiInput)
+      .output(taiLieuOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     tim: publicProcedure
       .input(taiLieuTimInput)
       .output(taiLieuTimOutput)

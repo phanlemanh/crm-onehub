@@ -87,6 +87,8 @@ const MONG_KHOI = {
 	gay: 3,
 	"chua-co": 3,
 	"mo-coi": 7,
+	"chua-tra-loi": 0,
+	"bao-sai": 0,
 };
 
 const docKhoi = (t) =>
@@ -118,7 +120,7 @@ async function moSucKhoe(c, rong) {
 	const coTab = await t.$("[data-tab-suc-khoe]");
 	if (!coTab) return { t, coTab: false };
 	await d.bamSel(t, "[data-tab-suc-khoe]");
-	await d.doi(t, () => window.__tim("[data-khoi-suc-khoe]").length === 5);
+	await d.doi(t, () => window.__tim("[data-khoi-suc-khoe]").length === 7);
 	await cho(500);
 	return { t, coTab: true };
 }

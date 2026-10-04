@@ -976,13 +976,39 @@ _Avoid_: hết hạn, expiry
 Vì sao: «hết hạn» nghe như quy định hết hiệu lực — đó là chuyện khác, của văn bản
 pháp luật.
 
-**Sức khoẻ kho**: tab «Sức khoẻ» của kho tài liệu, năm danh sách việc chủ trang nên
+**Sức khoẻ kho**: tab «Sức khoẻ» của kho tài liệu, bảy danh sách việc chủ trang nên
 xem — quá hạn xác minh, có bản đề xuất chờ duyệt, liên kết gãy, được nhắc mà chưa có
-trang, trang mồ côi (không trang nào dẫn tới). Mỗi dòng là một trang cùng chủ trang,
-không có điểm hay màu. Chốt 2026-09-29 tại Cổng Phạm vi của `tim-va-dieu-huong-kho`.
+trang, trang mồ côi (không trang nào dẫn tới), bị báo sai, câu chưa trả lời được. Mỗi
+dòng là một trang hay một câu hỏi cùng chủ trang, không có điểm hay màu. Chốt
+2026-09-29 tại Cổng Phạm vi của `tim-va-dieu-huong-kho`; thêm hai danh sách cuối
+2026-10-01 tại Cổng Phạm vi của `tro-ly-doc-kho`.
 _Avoid_: điểm sức khoẻ, đèn đỏ/xanh, kiểm toán kho
 Vì sao: «sức khoẻ chương trình» của OKR là một màn khác; ở kho, sức khoẻ là danh sách
 việc để làm, không phải một con số để chấm.
+
+**Trích dẫn**: đoạn chép nguyên văn từ bản đang dùng của một trang tài liệu, đặt dưới
+một ý trong câu trả lời của trợ lý AI, kèm tên trang, phiên bản và ngày duyệt. Mỗi ý có
+ít nhất một trích dẫn; mọi con số trong ý phải nằm trong trích dẫn của chính ý đó. Máy
+kiểm trích dẫn trước khi ai thấy câu trả lời. Chốt 2026-10-01 tại Cổng Phạm vi của
+`tro-ly-doc-kho`.
+_Avoid_: nguồn, tham khảo, footnote
+Vì sao: «nguồn» đã là tệp gốc người tải vào kho; trích dẫn trỏ tới trang đã duyệt, không
+tới tệp gốc.
+
+**Báo sai**: một người đã hỏi đánh dấu câu trả lời của trợ lý AI là sai, kèm ghi chú
+nếu muốn. Mỗi trang được trích nhận một việc trong danh sách «Bị báo sai» của chủ trang;
+chủ trang đóng việc bằng một kết luận: «Trợ lý trả lời sai» hay «Trợ lý trả lời đúng theo
+trang». Chốt 2026-10-01 tại Cổng Phạm vi của `tro-ly-doc-kho`.
+_Avoid_: khiếu nại, phản hồi, feedback
+Vì sao: «khiếu nại» là việc của khách hàng với OneHub; «phản hồi» không nói câu trả lời
+đúng hay sai.
+
+**Câu chưa trả lời được**: câu hỏi trợ lý AI từ chối vì không trang đã duyệt nào trả
+lời, kèm tối đa ba trang gần nhất. Câu hiện cho chủ trang của trang gần nhất và cho quản
+trị, không hiện tên người hỏi, để ai đó viết hay sửa trang. Đây là câu duy nhất của bot
+Zalo được lưu chữ. Chốt 2026-10-01 tại Cổng Phạm vi của `tro-ly-doc-kho`.
+_Avoid_: câu hỏi lỗi, câu thất bại, unanswered
+Vì sao: câu không có lỗi; kho thiếu trang. Tên phải chỉ ra việc cần làm là viết trang.
 
 **Bậc duyệt**: mức duyệt của một bản đề xuất theo hậu quả của nội dung. Bậc 1 một
 chủ trang duyệt; bậc 2 (tiền, giá, pháp lý) thêm một người kiểm thứ hai. Chốt

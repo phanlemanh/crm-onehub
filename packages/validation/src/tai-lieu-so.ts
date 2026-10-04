@@ -25,6 +25,10 @@ export function rutSo(markdown: string): string[] {
 	return [...ra.join("").matchAll(SO)].map((m) => m[0]);
 }
 
+export function rutSoChu(chu: string): string[] {
+	return [...chuanNfc(chu).matchAll(SO)].map((m) => m[0]);
+}
+
 function noiSo(c: string | undefined, ke: string | undefined): boolean {
 	if (c === undefined) return false;
 	if (/\d/.test(c)) return true;

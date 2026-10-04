@@ -40,6 +40,13 @@ export default defineDynamic({
 				});
 			}
 
+			if (purpose === "kho") {
+				return defineInstructions({
+					markdown:
+						"This is one question to the company document library. Call tro_ly_kho exactly once and pass the user message unchanged. Do not answer it yourself and do not call any other tool. Reply only: đã chuyển.",
+				});
+			}
+
 			if (purpose === "team-agent") {
 				return defineInstructions({
 					markdown: `This is one background run of a deployed team agent. Call agent_runner exactly once and pass the run id from your user message. Do not call research tools or perform work yourself. Relay the specialist's structured factual completion summary. Never claim an external action that the specialist did not log.`,
