@@ -333,14 +333,14 @@ describe("man cap nhat tuan: da xong", () => {
 				),
 				a: dong(XONG_A),
 				b: dong(XONG_B),
-				nutGui: nutGui(),
+				coNutGui: nutGui() !== null,
 			}).toEqual({
 				trangThai: "ST-capnhat-daxong",
 				tieuDe: true,
 				luc: true,
 				a: { so: true, tuTin: true },
 				b: { so: true, tuTin: true },
-				nutGui: null,
+				coNutGui: false,
 			});
 		});
 	}
