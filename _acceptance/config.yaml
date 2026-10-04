@@ -1130,7 +1130,7 @@ executors:
     tl45_dang_cho_khep: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai-45s.dom.tsx -t dang-cho-khep
     tl45_gui_lai_bi_tu_choi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai-45s.dom.tsx -t gui-lai-bi-tu-choi
     tl45_huy_cua: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-huy-luot.spec.ts"
-    tl45_giu_r1h: 'B=$(git merge-base HEAD origin/onehub) && for t in apps/app/test/soan-okr-thu-lai.dom.tsx apps/app/test/soan-okr-hong.dom.tsx; do git diff --quiet $B -- $t || { echo "tep da ky bi sua: $t"; exit 1; }; done && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-thu-lai.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-hong.dom.tsx'
+    tl45_giu_r1h: node _acceptance/thu-lai-sau-45-giay/rang/giu-r1h.mjs
     tl45_store_eve_that: cd apps/app && bun test ./test/soan-okr-store-eve-huy.spec.ts
     r1c_hoi_y_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi-y.dom.tsx -t 'thanh công bố'"
     r1c_cap_nhat_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cap-nhat-tuan.dom.tsx"

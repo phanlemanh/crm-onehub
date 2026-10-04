@@ -1,31 +1,88 @@
 {
   "feature_plain": "Khi Trợ lý im quá 45 giây và người soạn bấm «Thử lại», máy huỷ lượt đang treo, chờ nó dừng hẳn rồi gửi lại tin; gửi không được thì nói ra, không biến mất im lặng.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ huỷ lượt đang treo phía Trợ lý và dừng luồng trên trình duyệt khi bấm «Thử lại», chưa gửi lại ngay."},
-    {"id": "AC-2", "p": "Sẽ gửi lại tin cuối đúng một lần, chỉ khi lượt cũ đã khép và lệnh huỷ đã có hồi âm."},
-    {"id": "AC-3", "p": "Sẽ giữ chỗ báo lỗi hiện với nút khoá và «Đã thử lại 1 lần» trong lúc chờ; chờ quá 15 giây thì nói «Chưa gửi lại được» và mở nút."},
-    {"id": "AC-4", "p": "Sẽ nói «Chưa gửi lại được — lượt trước chưa dừng hẳn» khi lần gửi lại bị từ chối, và bấm tiếp thì làm đúng theo trạng thái thật của phiên."},
-    {"id": "AC-5", "p": "Sẽ chuyển lệnh huỷ tới Trợ lý qua cửa mà không tính là một lượt."},
-    {"id": "AC-6", "p": "Sẽ giữ nguyên mọi đường «Thử lại» khác đã làm ở R1h."},
-    {"id": "AC-7", "p": "Sẽ đúng trên màn thật ở khổ máy tính và điện thoại, với một Trợ lý giả treo luồng thật."},
-    {"id": "AC-8", "p": "Sẽ có câu mới ở tiếng Việt và tiếng Anh, và qua sàn thiết kế."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ huỷ lượt đang treo phía Trợ lý và dừng luồng trên trình duyệt khi bấm «Thử lại», chưa gửi lại ngay."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ gửi lại tin cuối đúng một lần, chỉ khi lượt cũ đã khép và lệnh huỷ đã có hồi âm."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ giữ chỗ báo lỗi hiện với nút khoá và «Đã thử lại 1 lần» trong lúc chờ; chờ quá 15 giây thì nói «Chưa gửi lại được» và mở nút."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ nói «Chưa gửi lại được — lượt trước chưa dừng hẳn» khi lần gửi lại bị từ chối, và bấm tiếp thì làm đúng theo trạng thái thật của phiên."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ chuyển lệnh huỷ tới Trợ lý qua cửa mà không tính là một lượt."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ giữ nguyên mọi đường «Thử lại» khác đã làm ở R1h; tệp kiểm R1h không đổi dòng nào, và tệp kiểm của «Soạn OKR cùng Trợ lý» chỉ sửa đúng ca từng khẳng định lỗi cũ (dừng rồi gửi lại ngay) — ca đó vẫn chứng minh gửi lại trên cùng phiên."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ đúng trên màn thật ở khổ máy tính và điện thoại, với một Trợ lý giả treo luồng thật."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ có câu mới ở tiếng Việt và tiếng Anh, và qua sàn thiết kế."
+    }
   ],
   "wont_do": [
-    {"id": "OOS-1", "p": "KHÔNG hoàn lượt cho lượt bị huỷ — nó đã tới Trợ lý nên vẫn tính, đúng luật R1h."},
-    {"id": "OOS-2", "p": "KHÔNG đổi mốc 45 giây hay cách đo «im»."},
-    {"id": "OOS-3", "p": "KHÔNG xử lý lượt Trợ lý nhận rồi hỏng giữa chừng (hết ngân sách AI) — vòng riêng ở máy Trợ lý."},
-    {"id": "OOS-4", "p": "KHÔNG sửa khung kiểm dùng chung hay tệp kiểm của hồ sơ đã ký."},
-    {"id": "OOS-5", "p": "KHÔNG hoàn tác hay báo riêng phần trả lời dở của lượt bị huỷ."}
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG hoàn lượt cho lượt bị huỷ — nó đã tới Trợ lý nên vẫn tính, đúng luật R1h."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG đổi mốc 45 giây hay cách đo «im»."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG hoàn tác hay báo riêng phần trả lời dở của lượt bị huỷ."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG xử lý lượt Trợ lý nhận rồi hỏng giữa chừng (hết ngân sách AI) — vòng riêng ở máy Trợ lý."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG sửa khung kiểm dùng chung hay tệp kiểm của hồ sơ đã ký — trừ đúng một ca đã nói ở AC-6."
+    }
   ],
   "scope_plain": "Những thứ lượt này cố ý không làm:",
   "coverage_plain": [
-    {"i": 0, "p": "Không quét ma trận: chỉ có một đường «Thử lại» khi phiên bận với ba pha (bấm, chờ khép, gửi lại hay bị từ chối); các đường khác đã có thước của R1h."}
+    {
+      "i": 0,
+      "p": "Không quét ma trận: chỉ có một đường «Thử lại» khi phiên bận với ba pha (bấm, chờ khép, gửi lại hay bị từ chối); các đường khác đã có thước của R1h."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Gửi lại chỉ chờ trình duyệt cắt luồng thì có thể tới khi Trợ lý còn chạy lượt cũ. Đã xử: chờ cả lượt cũ khép lẫn lệnh huỷ có hồi âm; bài kiểm ba thứ tự và Trợ lý giả từ chối gửi sớm."},
-    {"i": 1, "p": "Bài «gửi lại bị từ chối» dựng trạng thái phiên sai. Đã xử: đi theo trạng thái thật — phiên bận thì huỷ lại, phiên rảnh thì gửi thẳng."},
-    {"i": 2, "p": "Chưa chứng minh thư viện eve thật gọi báo khép sau khi huỷ. Đã xử: thêm bài chạy store eve thật, đo đúng thứ tự."},
-    {"i": 3, "p": "Bài màn thật có thể xanh oan nếu khoảng chờ quá ngắn. Đã xử: Trợ lý giả giữ huỷ 3 giây, đòi ít nhất 3 mẫu trong khoảng chờ."},
-    {"i": 4, "p": "Không có trần chờ — nút có thể khoá mãi. Đã xử: trần 15 giây rồi báo «Chưa gửi lại được» và mở nút."}
+    {
+      "i": 0,
+      "p": "Gửi lại chỉ chờ trình duyệt cắt luồng thì có thể tới khi Trợ lý còn chạy lượt cũ. Đã xử: chờ cả lượt cũ khép lẫn lệnh huỷ có hồi âm; bài kiểm ba thứ tự và Trợ lý giả từ chối gửi sớm."
+    },
+    {
+      "i": 1,
+      "p": "Bài «gửi lại bị từ chối» dựng trạng thái phiên sai. Đã xử: đi theo trạng thái thật — phiên bận thì huỷ lại, phiên rảnh thì gửi thẳng."
+    },
+    {
+      "i": 2,
+      "p": "Chưa chứng minh thư viện eve thật gọi báo khép sau khi huỷ. Đã xử: thêm bài chạy store eve thật, đo đúng thứ tự."
+    },
+    {
+      "i": 3,
+      "p": "Bài màn thật có thể xanh oan nếu khoảng chờ quá ngắn. Đã xử: Trợ lý giả giữ huỷ 3 giây, đòi ít nhất 3 mẫu trong khoảng chờ."
+    },
+    {
+      "i": 4,
+      "p": "Không có trần chờ — nút có thể khoá mãi. Đã xử: trần 15 giây rồi báo «Chưa gửi lại được» và mở nút."
+    }
   ]
 }

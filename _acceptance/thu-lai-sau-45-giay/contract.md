@@ -31,7 +31,7 @@ Source input: chủ kho chọn «mở hợp đồng mới» cho Ngoài-3 ở C�
 - AC-3: Given đã bấm «Thử lại» như AC-1 và chưa gửi lại, When nhìn chỗ báo lỗi, Then nó vẫn hiện, nút «Thử lại» khoá, có dòng «Đã thử lại 1 lần», và câu lý do vẫn là câu «Quá 45 giây…» của lúc bấm; quá trần `SOAN_UI.choKhepMs` mà chưa gửi lại được thì chỗ báo lỗi chuyển sang câu «Chưa gửi lại được…» và nút mở lại.
 - AC-4: Given lần gửi lại bị từ chối (eve ném trước khi gửi), When chỗ báo lỗi hiện lại, Then nó mang câu «Chưa gửi lại được — lượt trước chưa dừng hẳn. Thử lại sau ít phút.» và «Đã thử lại N lần», nút mở lại; bấm tiếp thì đi theo trạng thái thật của phiên — phiên bận: lại đúng AC-1 (huỷ, dừng, chờ); phiên rảnh: gửi thẳng, không yêu cầu huỷ; và một lần gửi thành công sau đó tắt câu này.
 - AC-5: Given một cuộc `dang` đã có phiên eve và `soLuot = n`, When cửa nhận `POST session/<phiên>/cancel` của chính người mở cuộc, Then Trợ lý nhận đúng một yêu cầu huỷ trên đúng đường đó, cửa trả nguyên status và thân của Trợ lý, và `soLuot` của cuộc vẫn bằng n (huỷ không phải lượt). (cross-layer)
-- AC-6: Given «Thử lại» khi phiên không bận (lỗi HTTP có tên, mất mạng, mở lại cuộc), When bấm, Then hành vi giữ đúng như R1h: hai tệp kiểm đã ký `soan-okr-thu-lai.dom.tsx` và `soan-okr-hong.dom.tsx` xanh mà không sửa dòng nào.
+- AC-6: Given «Thử lại» khi phiên không bận (lỗi HTTP có tên, mất mạng, mở lại cuộc), When bấm, Then hành vi giữ đúng như R1h: `soan-okr-thu-lai.dom.tsx` xanh mà không sửa dòng nào, và `soan-okr-hong.dom.tsx` xanh với diff chỉ nằm trong khối «hong — Thu lai roi van im» — ca duy nhất khẳng định hành vi lỗi cũ (dừng rồi gửi lại ngay trên một `send` giả không bao giờ ném); khối đó sau khi sửa vẫn giữ lời hứa AC-12c của `soan-okr-cung-tro-ly` (gửi lại tin cuối trên cùng phiên, không gọi `soanMo`), chỉ thêm bước lượt cũ khép trước khi khẳng định đã gửi lại.
 - AC-7: Given màn thật trong phiên đo riêng với một Trợ lý giả nhận lượt rồi giữ luồng im, và chỉ trả hồi âm huỷ sau 3 giây (lượt cũ đỗ lại đúng lúc đó; POST session trước mốc đỗ bị trả 409), When trưởng phòng ban mở màn soạn ở 1440 và 390, chờ câu «Quá 45 giây…», rồi bấm «Thử lại», Then Trợ lý giả nhận yêu cầu huỷ, rồi một POST gửi lại SAU mốc đỗ và được trả 202; trong khoảng giữa bấm và lần gửi lại chỗ báo lỗi luôn hiện (ít nhất 3 mẫu lấy cách nhau 200 ms); không tràn ngang.
 - AC-8: Given khoá chữ mới `hoiThoai.chuaGuiLai`, When chạy bài ghim chữ và sàn thiết kế, Then câu có ở `vi` và `en`, `messages-guard` xanh, và sàn thiết kế tĩnh không có lỗi P0 trên `hoi-thoai-soan.tsx`.
 
@@ -45,7 +45,7 @@ Source input: chủ kho chọn «mở hợp đồng mới» cho Ngoài-3 ở C�
 - Đổi thời hạn 45 giây hay cách đo «im» (`SOAN_UI.hanKhongSuKienMs`).
 - Hoàn tác hay báo riêng cho lượt cũ bị huỷ (Trợ lý có thể đã viết một phần trả lời trước khi huỷ; phần đó giữ nguyên trên luồng như eve làm).
 - Lượt Trợ lý nhận rồi hỏng trong luồng (`turn.failed`) — vòng riêng ở `apps/agent-okr` (Out of scope của R1h).
-- Sửa khung kiểm dùng chung `khung-soan-okr.tsx` hay tệp kiểm của hồ sơ đã ký.
+- Sửa khung kiểm dùng chung `khung-soan-okr.tsx` hay tệp kiểm của hồ sơ đã ký — trừ đúng khối «hong — Thu lai roi van im» của `soan-okr-hong.dom.tsx` (AC-6).
 
 > Out of scope = scope-truth (Gate 1 duyệt mục này). Rationale/trade-off từng mục → 1 entry
 > `descope` trong `decisions.jsonl`.
@@ -53,4 +53,5 @@ Source input: chủ kho chọn «mở hợp đồng mới» cho Ngoài-3 ở C�
 ## Notes
 
 - Phản biện context sạch (gap-probe) thêm: chờ cả hồi âm huỷ (AC-2), bài store eve thật (AC-2), E4 theo trạng thái thật của phiên (AC-4), trần chờ khép (AC-3), Trợ lý giả đỗ trễ 3 giây và sàn số mẫu (AC-7).
+- Duyệt lại Cổng 1 (04/10, S3): bản duyệt đầu hứa AC-6 «không sửa dòng nào» ở cả hai tệp đã ký, nhưng một ca của `soan-okr-hong.dom.tsx` khẳng định đúng hành vi AC-1 cấm; AC-1 và AC-6 cũ không thể cùng xanh. Phản biện S1 sót chỗ này.
 - Ranh giới P5: `okr/soan/**` trừ `nut-soan.tsx`; `lib/messages/okr-soan.ts` chỉ thêm khoá.

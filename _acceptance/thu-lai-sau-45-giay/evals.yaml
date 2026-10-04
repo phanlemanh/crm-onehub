@@ -45,9 +45,9 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.tl45_giu_r1h
-    expected: "exit 0; chạy nguyên hai tệp đã ký soan-okr-thu-lai.dom.tsx (R1h) và soan-okr-hong.dom.tsx (soan-okr-cung-tro-ly) trên cây sau lượt này; git diff merge-base của hai tệp rỗng (lệnh in 'tep da ky bi sua: <tep>' và mã 1 nếu khác rỗng)."
+    expected: "exit 0; rang/giu-r1h.mjs: soan-okr-thu-lai.dom.tsx (R1h) giống hệt bản ở merge-base (khác → 'tep da ky bi sua: <tep>' mã 1); soan-okr-hong.dom.tsx (soan-okr-cung-tro-ly) sau khi bỏ đúng khối describe('hong — Thu lai roi van im') ở cả hai phía thì giống hệt bản ở merge-base (khác → 'sua ngoai khoi duoc phep: <tep>' mã 1; mất khối → 'mat khoi duoc phep sua' mã 1); khối đó vẫn khẳng định daDung = 1 sau bấm, daGui chưa thêm tin trước onFinish, đúng 2 tin bằng nhau sau onFinish (lời hứa AC-12c: gửi lại trên cùng phiên), không còn báo lỗi, và hẹn giờ 45 s đặt lại; rồi chạy nguyên hai tệp, cả hai xanh. Chiều đỏ ghim (đã chạy ở S3): đổi một dòng ngoài khối → 'sua ngoai khoi duoc phep'; thêm một dòng vào tệp R1h → 'tep da ky bi sua'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr-thu-lai.dom.tsx, apps/app/test/soan-okr-hong.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr-thu-lai.dom.tsx, apps/app/test/soan-okr-hong.dom.tsx, _acceptance/thu-lai-sau-45-giay/rang/giu-r1h.mjs]
 
   - id: E7
     criterion: AC-7
