@@ -325,12 +325,15 @@ const DV_PB1 = {
 	departmentId: "pb-1",
 } as const;
 const BAT_CO_CUOC = { ...SAN_SANG_BAT, cuocDang: CUOC_DANG, soCuocDaDung: 1 };
+const moThongTin = () => bam(q('[data-nut="thong-tin-soan"]'));
+const chuThongTin = () => q("[data-thong-tin-soan]")?.textContent ?? "";
 
 describe("nut soan — ST-soan-nut-*", () => {
 	test("ST-soan-nut: đã dùng cuộc thì có nút xem danh sách cuộc, bấm mở danh sách", async () => {
 		await moKhung(DON_PB1, {
 			sanSang: { ...SAN_SANG_BAT, soCuocDaDung: 2 },
 		});
+		await moThongTin();
 		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("2", "3"));
 		expect(q("[data-cuoc]")).toBeNull();
 		await bam(q('[data-nut="ds-cuoc"]'));
@@ -355,9 +358,8 @@ describe("nut soan — ST-soan-nut-*", () => {
 				cuocDang: { ...CUOC_DANG, moLuc: "2026-11-30T18:30:00.000Z" },
 			},
 		});
-		expect(
-			chu('[data-nut-soan="nut-tiep"] [data-slot="field-description"]'),
-		).toBe(m.nut.tiepMoTa("01/12", "2", "3"));
+		await moThongTin();
+		expect(chuThongTin()).toContain(m.nut.tiepMoTa("01/12", "2", "3"));
 	});
 
 	test("nút bật thường không có nhãn chế độ ẩn", async () => {
@@ -370,6 +372,7 @@ describe("nut soan — ST-soan-nut-*", () => {
 		await moKhung(DON_PB1, {
 			sanSang: { bat: false, lyDo: "het-cuoc-ky" },
 		});
+		await moThongTin();
 		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("3", "3"));
 		await bam(q('[data-nut="ds-cuoc"]'));
 		await cho(() => q("[data-cuoc]") !== null, "danh sach cuoc mo");
@@ -383,9 +386,8 @@ describe("nut soan — ST-soan-nut-*", () => {
 			(q('[data-nut-soan="nut-chua-khoa"] button') as HTMLButtonElement)
 				.disabled,
 		).toBe(true);
-		expect(
-			chu('[data-nut-soan="nut-chua-khoa"] [data-slot="field-description"]'),
-		).toBe(m.lyDo["chua-co-khoa-mo-hinh"]);
+		await moThongTin();
+		expect(chuThongTin()).toContain(m.lyDo["chua-co-khoa-mo-hinh"]);
 	});
 });
 
@@ -674,12 +676,9 @@ const CA = {
 	"ST-soan-nut-tiep": async () => {
 		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC });
 		expect(chu('[data-nut-soan="nut-tiep"] button')).toBe(m.nut.tiep);
-		expect(
-			chu('[data-nut-soan="nut-tiep"] [data-slot="field-description"]'),
-		).toBe(m.nut.tiepMoTa("01/12", "2", "3"));
-		expect(
-			chu('[data-nut-soan="nut-tiep"] [data-slot="field-description"]'),
-		).toContain("lượt");
+		await moThongTin();
+		expect(chuThongTin()).toContain(m.nut.tiepMoTa("01/12", "2", "3"));
+		expect(chuThongTin()).toContain("lượt");
 		expect(q('[data-nut-soan="nut"]')).toBeNull();
 		expect(chu('[data-nut="ds-cuoc"]')).toBe(m.nut.dsCuoc("1", "3"));
 	},
@@ -688,13 +687,12 @@ const CA = {
 			sanSang: { ...SAN_SANG_BAT, nac: "an" },
 			quanTri: true,
 		});
-		expect(chu('[data-nut-soan="nut-an"] [data-slot="badge"]')).toBe(
+		expect(chu('[data-nut-soan="nut-an"] button')).toBe(m.nut.soan);
+		await moThongTin();
+		expect(chu('[data-thong-tin-soan] [data-slot="badge"]')).toBe(
 			m.nut.cheDoAn,
 		);
-		expect(
-			chu('[data-nut-soan="nut-an"] [data-slot="field-description"]'),
-		).toBe(m.nut.cheDoAnMoTa);
-		expect(chu('[data-nut-soan="nut-an"] button')).toBe(m.nut.soan);
+		expect(chuThongTin()).toContain(m.nut.cheDoAnMoTa);
 	},
 	"ST-soan-nut-het-cuoc": async () => {
 		await moKhung(DON_PB1, {
@@ -704,12 +702,11 @@ const CA = {
 		const nutTat = o?.querySelector("button");
 		expect(nutTat?.textContent?.trim()).toBe(m.nut.soan);
 		expect(nutTat?.disabled).toBe(true);
-		expect(
-			chu('[data-nut-soan="nut-het-cuoc"] [data-slot="field-description"]'),
-		).toBe(m.nut.hetCuoc("3"));
-		expect(nutTat?.getAttribute("aria-describedby")).toBe(
-			q('[data-nut-soan="nut-het-cuoc"] [data-slot="field-description"]')?.id,
+		expect(q('[data-nut="thong-tin-soan"]')?.getAttribute("aria-label")).toBe(
+			m.nut.thongTin,
 		);
+		await moThongTin();
+		expect(chuThongTin()).toContain(m.nut.hetCuoc("3"));
 		await bam(nutTat ?? null);
 		expect(goiCua("okr.soanMo")).toHaveLength(0);
 	},
@@ -721,9 +718,10 @@ const CA = {
 			'[data-nut-soan="nut-het-tran"] button',
 		) as HTMLButtonElement;
 		expect(nutTat.disabled).toBe(true);
-		expect(
-			chu('[data-nut-soan="nut-het-tran"] [data-slot="field-description"]'),
-		).toBe(m.nut.tamNghi(dauThangSau(homNayVn(new Date()))));
+		await moThongTin();
+		expect(chuThongTin()).toContain(
+			m.nut.tamNghi(dauThangSau(homNayVn(new Date()))),
+		);
 		expect(q('[data-nut="ds-cuoc"]')).toBeNull();
 	},
 	"ST-soan-mo-dau": async () => {
