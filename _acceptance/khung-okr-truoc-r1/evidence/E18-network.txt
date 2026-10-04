@@ -1,0 +1,1 @@
+driver: script playwright qua mot-luot.sh, khong co duong doc network; console error loc trong bon-vai.mjs (72 o, 0 loi)
