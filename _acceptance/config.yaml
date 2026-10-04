@@ -1785,7 +1785,7 @@ executors:
     r1b_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-vao-dung/rang/do-man.mjs"'
     r1b_tu_dien: "bun _acceptance/thanh-vien-vao-dung/rang/tu-dien.mjs"
     r1b_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/page.tsx" "apps/app/app/(app)/[slug]/settings/members/cho-phep-dia-chi.tsx" "apps/app/app/(app)/[slug]/settings/members/ten-mien-noi-bo.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
-    r1f_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/cua-vao-va/rang/do-man.mjs"'
+    r1f_do_man: 'RESEND_API_KEY=re_test_gia MAIL_FROM="CRM <no-reply@example.test>" APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/cua-vao-va/rang/do-man.mjs"'
     r1f_soi_ma_neo: "bun _acceptance/cua-vao-va/rang/soi-ma-neo.mjs"
     r1f_noi_goi_dang_xuat: "bun _acceptance/cua-vao-va/rang/noi-goi-dang-xuat.mjs"
     r1f_thuoc_cu_xanh: "bun _acceptance/cua-vao-va/rang/thuoc-cu-xanh.mjs"

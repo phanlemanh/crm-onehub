@@ -126,16 +126,17 @@ evals:
       - "apps/api/src/trpc/**"
       - "_acceptance/cua-vao-va/rang/do-man.mjs"
     expected: |
-      Canh "csdl-loi" (do o S3 bang luot do tham: bang session doi ten trong kho do -> API tra 503
-      cho workspace.get va settings.researchKey, app cung khong doc duoc phien) roi vao
-      [slug]/error.tsx: main mang data-cap-loi="trong-khung" va CO phan tu header (khung app con).
-      (app)/error.tsx khong gay duoc bang loi that tren ban do (phan async cua layout nam trong
-      Suspense) — AC-6 do bang E6. Anh: trang-loi-375.png, trang-loi-1440.png, sau-thu-lai-1440.png.
+      Canh "csdl-loi" (bang session doi ten trong kho do -> API tra 503 cho workspace.get va
+      settings.researchKey, app cung khong doc duoc phien) -> layout [slug] nem -> (app)/error.tsx:
+      main mang data-cap-loi="ngoai-khung" va KHONG co header nao dang hien (khung cho stream an
+      khong tinh). [slug]/error.tsx khong gay duoc bang loi that tren ban do (cac trang tu nuot loi
+      bang du lieu) — AC-5 do bang E5. Anh: trang-loi-375.png, trang-loi-1440.png,
+      sau-thu-lai-1440.png.
       Nhin thay: tieu de «Hệ thống đang trục trặc», cau «phiên của bạn vẫn còn», nut
       «Thử lại» trong khung nhin, khong chu tieng Anh cua Next ("Application error").
       Dong do: truoc khi gay loi xoa cookie session_data cua better-auth; gay loi doc phien bang loi
       hoan lai duoc trong kho do dung-mot-lan; "DUNG 375/1440: dia chi van /<slug>, chuoi chuyen
-      huong 0 lan qua /sign-in"; "DUNG 375/1440: nut Thử lại trong khung nhin"; "DUNG 375/1440: cap loi trong-khung, co header";
+      huong 0 lan qua /sign-in"; "DUNG 375/1440: nut Thử lại trong khung nhin"; "DUNG 375/1440: cap loi ngoai-khung, 0 header dang hien";
       bam «Thử lại» khi loi con -> "DUNG 1440: van trang loi, van /<slug>"; go loi roi bam «Thử
       lại» -> "DUNG 1440: trang tro lai, khong con tieu de loi"; "DUNG don: kho do tra ve nguyen
       trang (doc lai sau don)".
