@@ -11,7 +11,7 @@
 // ổ cắm không bao giờ nạp nó). Kit KHÔNG BAO GIỜ ghi vào tệp ý định: mọi hàm ở đây chỉ đọc.
 //
 // Trang tất định: không ngày chạy, không «hôm nay» — `--check` so byte. Ngày chỉ vào `hangTre`,
-// thứ chỉ thẻ start in.
+// thứ chỉ thẻ start in; số ngày còn lại tới mốc do script nội tuyến của trang tính lúc xem.
 import { readFileSync, readdirSync, existsSync, statSync, realpathSync, mkdirSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -291,82 +291,210 @@ export function mocKhongHang(kq) {
 }
 
 // ── Trang ─────────────────────────────────────────────────────────────────────
+// Hồ sơ trang-lo-trinh-doc-mot-phut (design 2026-10-03-trang-lo-trinh-doc-mot-phut-design.md): màn
+// đầu là một thẻ mỗi lộ trình (làm tiếp · cần sửa · mốc kế tiếp · tiến độ), rồi mỗi lộ trình một mục
+// (chỗ lệch → việc còn mở → việc đã giao gập → dải mốc → đã bác), cuối trang MỘT khối hồ sơ không
+// thuộc kế hoạch nào. Chữ trên trang là tiếng sản phẩm: câu cờ của lớp phân tích giữ nguyên (thẻ
+// start và test đọc nó), lớp vẽ dịch bằng CO_DICH. Trang tất định: đoạn script nội tuyến duy nhất
+// tính «còn N ngày» lúc xem; tắt script trang vẫn đủ.
 const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const CSS = `:root{--bg:#fbfaf7;--fg:#1d1d1b;--mu:#6b6862;--ln:#e3e0d8;--ac:#2f5d8a;--wa:#8a5a00;--wabg:#fff4dc;--ok:#2e6b3a}
-@media (prefers-color-scheme:dark){:root{--bg:#171715;--fg:#ecebe6;--mu:#a19e96;--ln:#34332f;--ac:#8fb6dd;--wa:#f0c36a;--wabg:#33290f;--ok:#8fcf9a}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:1100px;margin:0 auto;padding:24px 16px 48px}h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:28px 0 8px}
-.mu{color:var(--mu)}.tom{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0}.tom span{white-space:nowrap}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--ln)}
-th{font-weight:600;color:var(--mu)}.wrap{overflow-x:auto}.chu{font-weight:600}.giao{color:var(--ok)}
-.co{background:var(--wabg);color:var(--wa);border-radius:6px;padding:2px 6px;display:inline-block;margin:2px 0;font-size:13px}
-.ke{border:1px solid var(--ac);border-radius:8px;padding:10px 14px}ul{margin:4px 0;padding-left:20px}`;
 
-function khung(tieuDe, than) {
-  return `<!doctype html>\n<html lang="vi">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>${esc(tieuDe)}</title>\n<style>\n${CSS}\n</style>\n</head>\n<body>\n<main>\n${than}\n</main>\n</body>\n</html>\n`;
+// Bảng dịch câu cờ → tiếng sản phẩm. MỘT dòng cho mỗi chỗ phát cờ trong mã (lớp phân tích +
+// lo-trinh-khoa.cjs); ca LT-97 đếm hai bên. `ma` là mã hàng để nối liên kết, `chu` là câu không mã.
+// Câu không khớp dòng nào thì in nguyên văn — không mất thông tin.
+export const CO_DICH = [
+  { ten: 'thieu-truong', re: /^hàng (.+?) thiếu (cau_giao|ma)$/, ra: m => ({ ma: m[1], chu: m[2] === 'ma' ? 'chưa có mã' : 'chưa có câu mô tả việc giao' }) },
+  { ten: 'dung-tren-mang', re: /^hàng (.+?): dung_tren phải là một mảng$/, ra: m => ({ ma: m[1], chu: 'ô «cần xong trước» phải là danh sách' }) },
+  { ten: 'khong-object', re: /^hàng #(\d+) không phải object$/, ra: m => ({ ma: null, chu: `việc thứ ${m[1]} không đúng dạng` }) },
+  { ten: 'khoi-hang', re: /^khối hang phải là một mảng$/, ra: () => ({ ma: null, chu: 'danh sách việc phải là một mảng' }) },
+  { ten: 'ma-trung', re: /^mã trùng: (.+)$/, ra: m => ({ ma: null, chu: `hai việc cùng mã ${m[1]} — đổi mã một trong hai` }) },
+  { ten: 'moc-mang', re: /^mốc (.+?): hang phải là một mảng$/, ra: m => ({ ma: null, chu: `mốc ${m[1]} — danh sách việc gắn mốc phải là một mảng` }) },
+  { ten: 'khoi-tu-vung', re: /^khối tu_vung phải là một object$/, ra: () => ({ ma: null, chu: 'bảng từ trạng thái phải là một object' }) },
+  { ten: 'tu-vung-tro', re: /^tu_vung: «(.+?)» trỏ «(.+?)» — không phải tên trạng thái$/, ra: m => ({ ma: null, chu: `từ «${m[1]}» trỏ «${m[2]}» — không phải tên trạng thái` }) },
+  { ten: 'slug-sai', re: /^hàng (.+?): slug không hợp lệ: (.+)$/, ra: m => ({ ma: m[1], chu: `tên hồ sơ «${m[2]}» không hợp lệ` }) },
+  { ten: 'nhieu-nhan', re: /^hàng (.+?) được nhiều hồ sơ nhận: (.+)$/, ra: m => ({ ma: m[1], chu: `nhiều hồ sơ cùng nhận việc này: ${m[2]}` }) },
+  { ten: 'nhan-khac', re: /^hàng (.+?) trỏ hồ sơ (.+?) nhưng hồ sơ (.+?) nhận hàng này$/, ra: m => ({ ma: m[1], chu: `kế hoạch ghi hồ sơ ${m[2]} nhưng hồ sơ ${m[3]} nhận việc này` }) },
+  { ten: 'ghi-hang-khac', re: /^hàng (.+?) trỏ hồ sơ (.+?) nhưng hồ sơ ghi hàng (.+)$/, ra: m => ({ ma: m[1], chu: `kế hoạch ghi hồ sơ ${m[2]} nhưng hồ sơ đó ghi việc ${m[3]}` }) },
+  { ten: 'tu-khai-khong-ho-so', re: /^hàng (.+?): tự khai (.+?) mà không có hồ sơ (.+)$/, ra: m => ({ ma: m[1], chu: `kế hoạch ghi «${m[2]}» nhưng chưa có hồ sơ ${m[3]}` }) },
+  { ten: 'khai-khac', re: /^hàng (.+?): tệp khai khác hồ sơ: khai (.+?)(?: \(([^()]*)\))?, hồ sơ (.+)$/, ra: m => ({ ma: m[1], chu: `kế hoạch ghi «${m[2]}», thực tế «${m[4]}»` }) },
+  { ten: 'hang-khac', re: /^hàng (.+?): hạng tệp (.+?), hồ sơ (.+)$/, ra: m => ({ ma: m[1], chu: `kế hoạch ghi hạng ${m[2]}, thực tế hạng ${m[3]}` }) },
+  { ten: 'dung-tren-khong-co', re: /^hàng (.+?): đứng trên mã không có: (.+)$/, ra: m => ({ ma: m[1], chu: `cần xong trước ${m[2]} nhưng kế hoạch không có việc ${m[2]}` }) },
+  { ten: 'vong', re: /^đứng trên tạo vòng: (.+)$/, ra: m => ({ ma: null, chu: `thứ tự «cần xong trước» tạo vòng: ${m[1]}` }) },
+  { ten: 'ho-so-tep', re: /^hồ sơ (.+?) ghi lo_trinh_tep (.+?) — kho không khai tệp đó$/, ra: m => ({ ma: null, chu: `hồ sơ ${m[1]} ghi kế hoạch ${m[2]} — kho không khai kế hoạch đó` }) },
+  { ten: 'ho-so-ma', re: /^hồ sơ (.+?) ghi lo_trinh_ma (.+?) — không có hàng (.+)$/, ra: m => ({ ma: null, chu: `hồ sơ ${m[1]} ghi việc ${m[2]} — kế hoạch không có việc ${m[3]}` }) },
+  { ten: 'khai-hai-lan', re: /^tệp lộ trình khai hai lần: (.+)$/, ra: m => ({ ma: null, chu: `kế hoạch ${m[1]} được khai hai lần trong cấu hình` }) },
+];
+export function dichCo(c) {
+  for (const d of CO_DICH) { const m = String(c).match(d.re); if (m) return { ten: d.ten, ...d.ra(m) }; }
+  return { ten: null, ma: null, chu: String(c) };
+}
+export const dichLoi = loi => String(loi).replace(/tệp ý định/g, 'tệp kế hoạch');
+// Tham số lệnh mở hàng kế — MỘT nguồn cho thẻ start và trang: `<tệp>:<mã>` khi kho khai nhiều tệp,
+// null khi mã trùng trong tệp (không ai mở được bằng mã).
+export const thamSoKe = (kq, tep, nhieu) => (kq.hangKe && kq.hangKeMaDon ? (nhieu ? `${tep}:${kq.hangKe.ma}` : kq.hangKe.ma) : null);
+
+const CSS = `:root{--bg:#fbfaf7;--sf:#ffffff;--fg:#1d1d1b;--mu:#5f5c56;--ln:#e3e0d8;--ac:#245a8a;--acbg:#eaf1f8;--wa:#7a4f00;--wabg:#fff4dc;--ok:#256033;--okbg:#e8f3ea;--bar:#d9d5cb}
+@media (prefers-color-scheme:dark){:root{--bg:#171715;--sf:#1f1f1c;--fg:#ecebe6;--mu:#a7a49c;--ln:#34332f;--ac:#9cc2e6;--acbg:#1d2a36;--wa:#f0c36a;--wabg:#33290f;--ok:#8fcf9a;--okbg:#1b2a1e;--bar:#3a3934}}
+*{box-sizing:border-box}html{scroll-padding-top:16px}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:26px;line-height:1.2;margin:0 0 6px}h2{font-size:18px;line-height:1.3;margin:32px 0 10px}h3{font-size:16px;margin:24px 0 8px}
+a{color:var(--ac)}a:visited{color:var(--ac)}code{font-size:13px}
+.mu{color:var(--mu)}.nho{font-size:13px}
+.the-dau{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin:16px 0 8px}
+.the{background:var(--sf);border:1px solid var(--ln);border-radius:10px;padding:16px}
+.the h2{margin:0 0 12px}.the h2 a{text-decoration:none;color:var(--fg)}
+.o{margin:0 0 12px}.o:last-child{margin:0}.nhan{display:block;font-size:13px;color:var(--mu);margin-bottom:2px}
+.ke{font-weight:600}.lenh{display:inline-block;margin-top:6px;padding:6px 8px;background:var(--acbg);border-radius:6px;user-select:all;-webkit-user-select:all;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;word-break:break-all}
+.thanh{height:8px;background:var(--bar);border-radius:4px;overflow:hidden;display:flex;margin-top:6px}.thanh i{display:block;height:100%}.thanh .g{background:var(--ok)}.thanh .l{background:var(--ac)}
+.so-co a{display:inline-flex;align-items:center;min-height:44px;font-weight:600;color:var(--wa)}.so-co .khong{color:var(--ok);font-weight:600}
+.co-ds{list-style:none;padding:0;margin:0}.co-ds li{background:var(--wabg);color:var(--wa);border-radius:8px;margin:6px 0}.co-ds li>*{display:block;min-height:44px;padding:11px 12px}.co-ds a{color:inherit;text-decoration:none}.co-ds a:hover{text-decoration:underline}
+.loi{background:var(--wabg);color:var(--wa);border-radius:8px;padding:8px 12px}
+.bang{border:1px solid var(--ln);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.4}th,td{text-align:left;vertical-align:top;padding:5px 8px;border-bottom:1px solid var(--ln)}
+thead th{position:sticky;top:0;background:var(--sf);font-weight:600;color:var(--mu);font-size:13px;z-index:1}
+tbody tr:target{outline:2px solid var(--ac);outline-offset:-2px}
+@media (min-width:641px){td[data-nhan="Việc giao"]{width:40%}}
+.tt{display:inline-block;font-weight:600;border-radius:999px;padding:1px 8px;font-size:13px;background:var(--acbg);color:var(--ac)}.tt.giao{background:var(--okbg);color:var(--ok)}.tt.chua{background:transparent;color:var(--mu);border:1px solid var(--ln)}
+.co-o{display:block;margin-top:4px;font-size:13px;color:var(--wa)}
+details{margin:8px 0}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;color:var(--ac)}
+.moc{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(400px,100%),1fr));column-gap:24px}.moc li{position:relative;padding:4px 0 4px 16px;border-left:2px solid var(--ln)}.moc li::before{content:"";position:absolute;left:-6px;top:11px;width:10px;height:10px;border-radius:50%;background:var(--bar)}
+.moc li.qua{color:var(--mu)}.moc li.tre{color:var(--wa)}.moc li.tre::before{background:var(--wa)}.moc li.ke-tiep::before{background:var(--ac)}.moc .ngay{font-variant-numeric:tabular-nums;font-weight:600;margin-right:6px}.moc .con{font-size:13px;color:var(--ac);margin-left:6px}.moc li.qua .con,.moc li.tre .con{color:inherit}.moc .trong{font-size:13px;color:var(--wa);margin-left:6px}
+@media (max-width:640px){main{padding:16px 12px 48px}.the-dau{gap:10px;margin:10px 0}.the{padding:12px}.the h2{margin:0 0 8px}.o{margin:0 0 6px}.the .nhan{display:inline;margin:0 4px 0 0}.the .nhan::after{content:':'}.lenh{margin-top:4px;padding:4px 6px}.thanh{display:none}.bang{border:0}table,thead,tbody,tr,td{display:block}thead{display:none}
+tr{border:1px solid var(--ln);border-radius:10px;margin:10px 0;padding:6px 0;background:var(--sf)}td{border:0;padding:4px 12px}td[data-nhan]::before{content:attr(data-nhan);display:block;font-size:13px;color:var(--mu)}td:empty{display:none}}`;
+
+// Script nội tuyến DUY NHẤT: tính «còn N ngày / hôm nay / đã qua» theo ngày của người xem, đánh dấu
+// mốc kế tiếp và điền ô «Mốc kế tiếp» của thẻ. Không tải gì, không ghi gì.
+const SCRIPT = `(function(){var d=new Date();var h=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate());
+document.querySelectorAll('ol.moc').forEach(function(ol){var ke=null;var tre=[];var hong=0;ol.querySelectorAll('li[data-ngay]').forEach(function(li){var p=li.getAttribute('data-ngay').split('-');var t=Date.UTC(+p[0],+p[1]-1,+p[2]);var n=Math.round((t-h)/864e5);var s=li.querySelector('.con');if(p.length!==3||isNaN(n)){hong++;return;}if(n<0){if(li.hasAttribute('data-con-viec')){tre.push(li.getAttribute('data-ten'));li.classList.add('tre');if(s)s.textContent='đã qua — còn việc chưa giao';}else{li.classList.add('qua');if(s)s.textContent='đã qua';}}else{if(s)s.textContent=n===0?'hôm nay':'còn '+n+' ngày';if(!ke){ke=li;li.classList.add('ke-tiep');}}});
+var o=document.getElementById(ol.getAttribute('data-the'));if(!o||(!ke&&hong))return;o.textContent=(ke?ke.getAttribute('data-ten')+' — '+ke.getAttribute('data-ngay').split('-').reverse().join('/')+' ('+ke.querySelector('.con').textContent+')':'Không còn mốc nào phía trước.')+(tre.length===1?' · mốc «'+tre[0]+'» đã qua, còn việc chưa giao':tre.length?' · '+tre.length+' mốc đã qua còn việc chưa giao (sớm nhất: «'+tre[0]+'»)':'');});})();`;
+
+const neoHang = (i, ma) => `lt${i}-h-${String(ma).replace(/[^A-Za-z0-9_-]/g, '_')}`;
+const ngayVN = s => chuoi(s).split('-').reverse().join('/');
+const COT = [['ma', 'Mã'], ['cau_giao', 'Việc giao'], ['hang', 'Hạng'], ['dung_tren', 'Cần xong trước'], ['chu', 'Trạng thái'], ['bat_khi', 'Bật khi'], ['vi_sao', 'Vì sao']];
+const coDuLieu = (d, k) => (k === 'dung_tren' ? Array.isArray(d.dung_tren) && d.dung_tren.length > 0 : !!chuoi(d[k]));
+
+// Neo mỗi hàng: mã (hoặc nhãn) — hàng trùng mã lấy hậu tố để mọi id trên trang là duy nhất. `theoNhan`
+// trỏ nhãn → id của hàng ĐẦU mang nhãn đó (liên kết từ chỗ cần sửa, cần xong trước, mốc).
+function neoCua(i, kq) {
+  const idHang = new Map(); const ids = new Set(); const theoNhan = new Map();
+  for (const d of kq.dong) {
+    const goc = neoHang(i, d._ma || d._nhan); let id = goc;
+    for (let n = 2; ids.has(id); n++) id = `${goc}-${n}`;
+    idHang.set(d, id); ids.add(id); if (!theoNhan.has(String(d._nhan))) theoNhan.set(String(d._nhan), id);
+  }
+  return { idHang, ids, theoNhan };
+}
+const CHUA_CAU = '(chưa có câu mô tả việc giao)';
+// Hàng mà lớp phân tích chọn làm hàng kế: cùng nhãn, trạng thái thuộc nhóm chưa làm (cùng luật lớp
+// phân tích dùng để chọn), cùng câu giao — mã trùng thì không lấy nhầm hàng đầu đã giao hay đang làm.
+function hangKeCua(kq, chuaLam) {
+  const ke = kq.hangKe; if (!ke) return null;
+  const cung = kq.dong.filter(d => String(d._nhan) === String(ke.ma) && (chuoi(d.cau_giao) || '(hàng chưa có câu giao)') === ke.cauGiao);
+  return cung.find(d => d.chu === CHUA_MO || chuaLam.has(d.chu)) || cung[0] || null;
+}
+// Hàng ghi trạng thái ngoài bảng từ, gom theo TỪ đã ghi: mỗi từ là một chỗ cần sửa (thêm từ đó vào
+// `tu_vung` là sửa xong mọi hàng mang nó).
+const khaiLa = kq => { const g = new Map(); for (const d of kq.dong) if (d.khaiNgoai) { if (!g.has(d.tuKhai)) g.set(d.tuKhai, []); g.get(d.tuKhai).push(d); } return [...g]; };
+
+function theDau(i, t, nhieu, nhom) {
+  const ten = esc((t.kq && t.kq.ten) || t.tep);
+  if (t.loi) return `<section class="the"><h2><a href="#lt${i}">${ten}</a></h2><p class="loi">Không đọc được kế hoạch ${esc(t.tep)}: ${esc(dichLoi(t.loi))}</p></section>`;
+  const kq = t.kq; const ke = hangKeCua(kq, nhom.chuaLam); const { idHang } = neoCua(i, kq);
+  const lenh = thamSoKe(kq, t.tep, nhieu);
+  const tong = kq.dong.length; const giao = kq.dong.filter(d => kq.daGiao.has(d.chu)).length;
+  const dang = kq.dong.filter(d => nhom.dangLam.has(d.chu)).length;
+  const chua = kq.dong.filter(d => d.chu === CHUA_MO || nhom.chuaLam.has(d.chu)).length;
+  const khac = tong - giao - dang - chua;
+  const pt = n => (100 * n / tong).toFixed(1);
+  const lamTiep = ke
+    ? `<span class="ke"><a href="#${idHang.get(ke)}">${esc(ke._nhan)}</a> — ${esc(chuoi(ke.cau_giao) || CHUA_CAU)}</span><br>${lenh
+      ? `<span class="mu nho">Dán vào Claude Code:</span> <span class="lenh">/feature-loop:feature-loop ${esc(lenh)}</span>`
+      : `<span class="mu">${ke._ma ? 'Mã này trùng trong kế hoạch — đổi mã trước khi mở.' : 'Việc này chưa có mã — đặt mã trong kế hoạch trước khi mở.'}</span>`}`
+    : '<span class="mu">Chưa có việc nào đủ điều kiện mở.</span>';
+  const nSua = kq.co.length + khaiLa(kq).length;
+  const canSua = nSua ? `<a href="#lt${i}-co">${nSua} chỗ cần sửa</a>` : '<span class="khong">Không có chỗ nào cần sửa</span>';
+  const tienDo = tong
+    ? `${giao}/${tong} đã giao · ${dang} đang làm · ${chua} chưa bắt đầu${khac ? ` · ${khac} việc khác (xếp lại, đã bác hoặc trạng thái chưa rõ)` : ''}<div class="thanh" aria-hidden="true"><i class="g" style="width:${pt(giao)}%"></i><i class="l" style="width:${pt(dang)}%"></i></div>`
+    : 'Kế hoạch chưa có việc nào.';
+  return `<section class="the"><h2><a href="#lt${i}">${ten}</a></h2>
+<div class="o"><span class="nhan">Làm tiếp</span>${lamTiep}</div>
+<div class="o so-co"><span class="nhan">Cần sửa trong kế hoạch</span>${canSua}</div>
+<div class="o"><span class="nhan">Mốc kế tiếp</span><span id="lt${i}-moc-ke">${kq.moc.length ? 'Xem dải mốc bên dưới.' : 'Kế hoạch chưa có mốc.'}</span></div>
+<div class="o"><span class="nhan">Tiến độ</span>${tienDo}</div>
+</section>`;
 }
 
-export function renderLoi(tep, loi) {
-  return khung('Lộ trình', `<h1>Lộ trình</h1>\n<p class="mu">Vẽ từ tệp ý định <code>${esc(tep)}</code> và hồ sơ trong <code>_acceptance/</code> — đừng sửa tay.</p>\n<p class="co">Không đọc được tệp ý định: ${esc(loi)}</p>`);
+function moCo(i, c, theoNhan) {
+  const d = dichCo(c); const id = d.ma != null ? theoNhan.get(String(d.ma)) : null;
+  return id ? `<li><a href="#${id}"><b>${esc(d.ma)}</b> — ${esc(d.chu)}</a></li>` : `<li><span>${d.ma != null ? `<b>${esc(d.ma)}</b> — ` : ''}${esc(d.chu)}</span></li>`;
+}
+function oHang(i, d, kq, theoNhan) {
+  const tt = `<span class="tt${kq.daGiao.has(d.chu) ? ' giao' : (d.chu === CHUA_MO ? ' chua' : '')}">${esc(d.chu)}</span>`;
+  return {
+    ma: esc(d._nhan),
+    cau_giao: `${esc(chuoi(d.cau_giao))}${d.slug ? `<div class="mu nho"><code>${esc(d.slug)}</code></div>` : ''}`,
+    hang: esc(chuoi(d.hang)),
+    dung_tren: (Array.isArray(d.dung_tren) ? d.dung_tren : []).map(chuoi).map(x => (theoNhan.has(x) ? `<a href="#${theoNhan.get(x)}">${esc(x)}</a>` : esc(x))).join(', '),
+    chu: `${tt}${d.tinTheoLoi ? '<span class="mu nho"> theo ghi chép, chưa có hồ sơ</span>' : ''}${d.khaiNgoai ? `<span class="co-o">kế hoạch ghi «${esc(d.tuKhai)}» — máy không hiểu trạng thái này</span>` : ''}${d.coHang.map(c => `<span class="co-o">${esc(dichCo(c).chu)}</span>`).join('')}`,
+    bat_khi: esc(chuoi(d.bat_khi)),
+    vi_sao: esc(chuoi(d.vi_sao)),
+  };
+}
+function bangViec(i, rows, kq, theoNhan, idHang) {
+  const cot = COT.filter(([k]) => k === 'ma' || k === 'chu' || rows.some(d => coDuLieu(d, k)));
+  return `<div class="bang"><table><thead><tr>${cot.map(([, n]) => `<th>${n}</th>`).join('')}</tr></thead><tbody>
+${rows.map(d => { const o = oHang(i, d, kq, theoNhan); return `<tr id="${idHang.get(d)}">${cot.map(([k, n]) => `<td data-nhan="${n}">${o[k]}</td>`).join('')}</tr>`; }).join('\n')}
+</tbody></table></div>`;
+}
+export function khoiNgoai(ds) {
+  return ds.length ? `<details><summary>${ds.length} hồ sơ không thuộc kế hoạch nào</summary><p class="mu nho">Sửa lỗi, sự cố, việc giao thẳng — hợp lệ, liệt kê để đủ.</p><ul>${ds.map(s => `<li><code>${esc(s)}</code></li>`).join('')}</ul></details>` : '';
+}
+function mucLoTrinh(i, t) {
+  const ten = esc((t.kq && t.kq.ten) || t.tep);
+  if (t.loi) return `<section id="lt${i}"><h2>${ten}</h2><p class="loi">Không đọc được kế hoạch ${esc(t.tep)}: ${esc(dichLoi(t.loi))}</p></section>`;
+  const kq = t.kq;
+  const { idHang, theoNhan } = neoCua(i, kq);
+  const mo = kq.dong.filter(d => !kq.daGiao.has(d.chu)); const xong = kq.dong.filter(d => kq.daGiao.has(d.chu));
+  const P = [`<section id="lt${i}"><h2>${ten}</h2>`];
+  // Chỗ cần sửa = cờ của lớp phân tích (đã dịch) + mỗi hàng ghi trạng thái ngoài bảng từ (không so được
+  // với hồ sơ — thêm từ đó vào `tu_vung`).
+  const la = khaiLa(kq);
+  if (kq.co.length || la.length) P.push(`<h3 id="lt${i}-co">Cần sửa trong kế hoạch (${kq.co.length + la.length})</h3><ul class="co-ds">${kq.co.map(c => moCo(i, c, theoNhan)).join('')}${la.map(([w, ds]) => `<li><span>${esc(`kế hoạch ghi «${w}» ở ${ds.length} việc — máy không hiểu trạng thái này, thêm từ này vào bảng từ trạng thái`)} (việc ${ds.map(d => `<a href="#${idHang.get(d)}">${esc(d._nhan)}</a>`).join(', ')})</span></li>`).join('')}</ul>`);
+  P.push(`<h3>Việc còn mở (${mo.length})</h3>`, mo.length ? bangViec(i, mo, kq, theoNhan, idHang)
+    : `<p class="mu">${kq.dong.length ? 'Mọi việc trong kế hoạch đã giao.' : `Kế hoạch chưa có việc nào — thêm hàng vào <code>${esc(t.tep)}</code>.`}</p>`);
+  if (xong.length) P.push(`<details><summary>${xong.length} việc đã giao</summary>${bangViec(i, xong, kq, theoNhan, idHang)}</details>`);
+  if (kq.moc.length) {
+    const mocs = [...kq.moc].sort((a, b) => chuoi(a.ngay).localeCompare(chuoi(b.ngay)));
+    const gan = m => (Array.isArray(m.hang) ? m.hang.map(chuoi).filter(Boolean) : []);
+    // Mốc còn việc chưa giao: script trên trang tô «đã qua — còn việc chưa giao» khi ngày đã qua.
+    const conViec = m => gan(m).some(x => kq.dong.some(d => String(d._nhan) === x && !kq.daGiao.has(d.chu)));
+    const mk = mocKhongHang(kq);
+    P.push(`<h3>Mốc${mk.k ? ` <span class="mu nho">— ${mk.k}/${mk.n} mốc chưa gắn việc nào</span>` : ''}</h3><ol class="moc" data-the="lt${i}-moc-ke">${mocs.map(m => `<li data-ngay="${esc(chuoi(m.ngay))}" data-ten="${esc(chuoi(m.ten))}"${conViec(m) ? ' data-con-viec' : ''}><span class="ngay">${esc(ngayVN(m.ngay))}</span>${esc(chuoi(m.ten))}<span class="con"></span>${gan(m).length ? ` <span class="mu nho">· việc ${gan(m).map(x => (theoNhan.has(x) ? `<a href="#${theoNhan.get(x)}">${esc(x)}</a>` : esc(x))).join(', ')}</span>` : '<span class="trong">chưa gắn việc</span>'}</li>`).join('')}</ol>`);
+  }
+  if (kq.daBac.length) P.push(`<h3>Đã bác</h3><ul>${kq.daBac.map(b => `<li>${esc(chuoi(b.ma))} — ${esc(chuoi(b.ly_do))}</li>`).join('')}</ul>`);
+  P.push('</section>');
+  return P.join('\n');
 }
 
-export function renderTrang(kq, tep) {
-  const ten = kq.ten || 'Lộ trình';
-  const P = [];
-  P.push(`<h1>${esc(ten)}</h1>`);
-  P.push(`<p class="mu">Vẽ từ tệp ý định <code>${esc(tep)}</code> và hồ sơ trong <code>_acceptance/</code> mỗi lần bản đồ sản phẩm được vẽ lại — đừng sửa tay. Trạng thái lấy từ hồ sơ; hàng không có slug là tin theo lời.</p>`);
-  const dem = Object.entries(kq.demTheoO).map(([c, n]) => `<span>${esc(c)}: <b>${n}</b></span>`).join('');
-  P.push(`<div class="tom">${dem}<span>Tin theo lời: <b>${kq.tinTheoLoi.n}/${kq.tinTheoLoi.tong}</b></span><span>Hàng sống qua Cổng Đáng: <b>${kq.songQuaCongDang.k}/${kq.songQuaCongDang.n}</b></span></div>`);
-  if (kq.tuKhaiNgoai > 0) P.push(`<p class="co">${kq.tuKhaiNgoai} hàng tự khai ngoài từ vựng — không so được với hồ sơ</p>`);
-  P.push('<h2>Hàng kế</h2>');
-  if (kq.hangKe) {
-    const dt = kq.hangKe.dungTren.length
-      ? `<p>Đủ điều kiện vì mọi hàng nó đứng trên đã giao: ${kq.hangKe.dungTren.map(x => `${esc(x.ma)} (${esc(x.chu)})`).join(' · ')}</p>`
-      : '<p>Đủ điều kiện: không đứng trên hàng nào.</p>';
-    P.push(`<div class="ke"><p><b>${esc(kq.hangKe.ma)}</b> — ${esc(kq.hangKe.cauGiao)}</p>${dt}</div>`);
-  } else P.push('<p class="mu">Chưa có hàng đủ điều kiện mở.</p>');
-  P.push('<h2>Các hàng</h2>');
-  const rows = kq.dong.map(d => {
-    const chu = `<span class="chu${kq.daGiao.has(d.chu) ? ' giao' : ''}">${esc(d.chu)}</span>${d.tinTheoLoi ? ` <span class="mu">(${TIN_THEO_LOI})</span>` : ''}`;
-    const khai = d.khaiNgoai ? `<div class="mu">tự khai: ${esc(d.tuKhai)}</div>` : '';
-    const cos = d.coHang.map(c => `<div class="co">${esc(c)}</div>`).join('');
-    const dt = (Array.isArray(d.dung_tren) ? d.dung_tren : []).map(chuoi).join(', ');
-    return `<tr><td>${esc(d._nhan)}</td><td>${esc(chuoi(d.cau_giao))}${d.slug ? `<div class="mu"><code>${esc(d.slug)}</code></div>` : ''}</td><td>${esc(chuoi(d.hang))}</td><td>${esc(dt)}</td><td>${chu}${khai}${cos}</td><td>${esc(chuoi(d.bat_khi))}</td><td>${esc(chuoi(d.vi_sao))}</td></tr>`;
-  });
-  P.push(`<div class="wrap"><table><thead><tr><th>Mã</th><th>Câu giao</th><th>Hạng</th><th>Đứng trên</th><th>Trạng thái</th><th>Bật khi</th><th>Vì sao</th></tr></thead><tbody>\n${rows.join('\n')}\n</tbody></table></div>`);
-  P.push('<h2>Mốc</h2>');
-  P.push(kq.moc.length
-    ? `<ul>${kq.moc.map(m => `<li>${esc(chuoi(m.ngay))} · ${esc(chuoi(m.ten))}${chuoi(m.loai) ? ` · ${esc(chuoi(m.loai))}` : ''}${Array.isArray(m.hang) && m.hang.length ? ` · hàng ${esc(m.hang.map(chuoi).join(', '))}` : ''}</li>`).join('')}</ul>`
-    : '<p class="mu">Không có mốc.</p>');
-  const mk = mocKhongHang(kq);
-  if (mk.k > 0) P.push(`<p class="mu">${mk.k} mốc không gắn hàng nào — không tính trễ được.</p>`);
-  P.push('<h2>Đã bác</h2>');
-  P.push(kq.daBac.length
-    ? `<ul>${kq.daBac.map(b => `<li>${esc(chuoi(b.ma))} — ${esc(chuoi(b.ly_do))}</li>`).join('')}</ul>`
-    : '<p class="mu">Không có mục đã bác.</p>');
-  P.push('<h2>Vòng ngoài lộ trình</h2>');
-  P.push(kq.ngoaiLoTrinh.length
-    ? `<p>${kq.ngoaiLoTrinh.length} hồ sơ không hàng nào trỏ tới — hợp lệ (sửa lỗi, sự cố, việc ship thẳng):</p><ul>${kq.ngoaiLoTrinh.map(s => `<li><code>${esc(s)}</code></li>`).join('')}</ul>`
-    : '<p class="mu">Không có.</p>');
-  P.push('<h2>Cờ</h2>');
-  P.push(kq.co.length ? `<ul>${kq.co.map(c => `<li class="co">${esc(c)}</li>`).join('')}</ul>` : '<p class="mu">Không có cờ.</p>');
-  return khung(ten, P.join('\n'));
+// Một trang cho mọi lộ trình của kho (`cacTep` = [{tep, loi, kq}] theo thứ tự khai). `sections` của
+// bản đồ cho tên các ô đang làm / chưa làm (số tiến độ); vắng thì chỉ «Chưa mở» tính là chưa bắt đầu.
+export function veHtml(cacTep, sections = null) {
+  const TEN = Object.fromEntries(sections || []); const ten = ds => new Set(ds.map(k => TEN[k]).filter(Boolean));
+  const nhom = { dangLam: ten(DANG_LAM_O), chuaLam: ten(CHUA_LAM_O) };
+  const nhieu = cacTep.length > 1;
+  const tieuDe = nhieu ? 'Lộ trình' : esc((cacTep[0].kq && cacTep[0].kq.ten) || 'Lộ trình');
+  const ngoai = (cacTep.find(t => t.kq) || {}).kq?.ngoaiLoTrinh || [];
+  const than = [`<h1>${tieuDe}</h1>`,
+    `<div class="the-dau">${cacTep.map((t, i) => theDau(i + 1, t, nhieu, nhom)).join('\n')}</div>`,
+    ...cacTep.map((t, i) => mucLoTrinh(i + 1, t)),
+    `<p class="mu nho">Vẽ từ ${cacTep.map(t => `<code>${esc(t.tep)}</code>`).join(', ')} và hồ sơ nghiệm thu; máy vẽ lại mỗi lần một cổng nghiệm thu đóng, trạng thái từng hàng lấy từ hồ sơ, không gõ tay. Đổi kế hoạch bằng PR vào tệp kế hoạch.</p>`,
+    khoiNgoai(ngoai)].filter(Boolean);
+  return `<!doctype html>\n<html lang="vi">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>${tieuDe}</title>\n<style>\n${CSS}\n</style>\n</head>\n<body>\n<main>\n${than.join('\n')}\n</main>\n<script>${SCRIPT}</script>\n</body>\n</html>\n`;
 }
-
-// Nhiều lộ trình: một trang, mỗi lộ trình một mục theo thứ tự khai, mỗi mục là đúng thân của trang
-// đơn với tiêu đề hạ một bậc. Kho một tệp KHÔNG đi đường này — trang giữ từng byte bản lát 1.
-const haBac = html => html.replace(/<(\/?)h([1-5])>/g, (m, g, n) => `<${g}h${Number(n) + 1}>`);
-const thanCua = html => html.slice(html.indexOf('<main>\n') + 7, html.lastIndexOf('\n</main>'));
-export function renderNhieu(cacTep) {
-  const P = ['<h1>Lộ trình</h1>'];
-  P.push(`<p class="mu">Kho khai ${cacTep.length} lộ trình; mỗi mục vẽ từ một tệp ý định và hồ sơ trong <code>_acceptance/</code> — đừng sửa tay.</p>`);
-  P.push(`<ul>${cacTep.map((t, i) => `<li><a href="#lt-${i + 1}">${esc((t.kq && t.kq.ten) || t.tep)}</a></li>`).join('')}</ul>`);
-  cacTep.forEach((t, i) => {
-    const html = t.loi ? renderLoi(t.tep, t.loi) : renderTrang(t.kq, t.tep);
-    P.push(`<section class="lt" id="lt-${i + 1}">\n${haBac(thanCua(html))}\n</section>`);
-  });
-  return khung('Lộ trình', P.join('\n'));
-}
+// Ba lối cũ giữ tên (test và bộ đọc đời trước gọi chúng), cùng một bộ vẽ.
+export const renderTrang = (kq, tep, sections = null) => veHtml([{ tep, loi: null, kq }], sections);
+export const renderLoi = (tep, loi) => veHtml([{ tep, loi, kq: null }]);
+export const renderNhieu = (cacTep, sections = null) => veHtml(cacTep, sections);
 
 // ── Hai lối vào cho hai bên đọc ───────────────────────────────────────────────
 // Phân tích cả kho: mọi tệp khai, và cờ không gắn được vào một hàng (tệp lặp, hồ sơ ghi tệp không
@@ -404,9 +532,7 @@ export function phanTich(opts) {
 export function veTrang(opts) {
   const k = phanTichKho(opts);
   if (k == null) return null;
-  if (k.cacTep.length > 1) return renderNhieu(k.cacTep);
-  const p = k.cacTep[0];
-  return p.loi ? renderLoi(p.tep, p.loi) : renderTrang(p.kq, p.tep);
+  return veHtml(k.cacTep, opts.sections);
 }
 // Thẻ start: dữ liệu từng lộ trình (`ds`) và CÁC DÒNG THẺ dựng sẵn (`dong`) — thân /start in nguyên,
 // không tự soạn (kit render, không soạn; phép đo đo đầu ra thay vì đo chữ chỉ dẫn).
@@ -419,7 +545,7 @@ export function loTrinhThe({ root, classify, sections, today, banDoBat = null, l
     const kq = p.kq;
     return {
       tep: p.tep, ten: kq.ten || null, loi: null,
-      hangKe: kq.hangKe ? { ma: kq.hangKe.ma, cauGiao: kq.hangKe.cauGiao, thamSo: kq.hangKeMaDon ? (nhieu ? `${p.tep}:${kq.hangKe.ma}` : kq.hangKe.ma) : null } : null,
+      hangKe: kq.hangKe ? { ma: kq.hangKe.ma, cauGiao: kq.hangKe.cauGiao, thamSo: thamSoKe(kq, p.tep, nhieu) } : null,
       hangTre: hangTre(kq, today), mocKhongHang: mocKhongHang(kq), tinTheoLoi: kq.tinTheoLoi, tuKhaiNgoai: kq.tuKhaiNgoai, co: kq.co,
     };
   });
