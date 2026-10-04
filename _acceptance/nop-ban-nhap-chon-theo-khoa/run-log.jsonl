@@ -33,3 +33,4 @@
 {"ts":"2026-10-04T02:59:39Z","sha":"b2b54df9eb144a6ad15efc59a1de4b2c3a9d0e30","round":2,"kind":"round-tally","verdict":"PASS","expected":11,"returned":11,"blocked":0}
 {"ts":"2026-10-04T02:59:39Z","sha":"b2b54df9eb144a6ad15efc59a1de4b2c3a9d0e30","round":2,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":11}
 {"kind":"thuoc-vat","ts":"2026-10-04T03:14:14Z","round":2,"san":"3383bf1e36d6d912d604acabc09c3840fc45be7e","vat":[12,13],"thuoc":[293,168],"ho_so":[22,0],"nhat":1,"lan":1,"tep_thuoc":["_acceptance/nop-ban-nhap-chon-theo-khoa/evals.yaml","_acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs","_acceptance/nop-ban-nhap-chon-theo-khoa/rang/quet-mau.mjs"]}
+{"ts":"2026-10-04T03:23:04Z","kind":"repin","run_id":"repin-20261004T031823Z-64329","sha":"bdef78deba9df1a4412a69f254280e967d0f561b","suites_exit":[0,0,0,0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E5":0},"wall_s":281.2,"so_lenh":11,"evals_not_machine":["E4"]}
