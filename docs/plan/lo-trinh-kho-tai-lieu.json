@@ -138,22 +138,24 @@
       "dong": 10,
       "ten": "Lượt 3b",
       "ngay": "2026-09-29",
-      "buoc_ke": "Mở được ngay: lượt 3 đã lên",
-      "ghi_chu": "Tách từ lượt 3 ngày 29/09, anh nhận ở Cổng Phạm vi. T3 vì cần cột trạng thái lưu trữ trên TaiLieuTrang. Gồm cả «trang lưu trữ không ra kết quả» của tìm kiếm."
+      "buoc_ke": "Sau 14/10",
+      "ghi_chu": "Tách từ lượt 3 ngày 29/09, anh nhận ở Cổng Phạm vi. T3 vì cần cột trạng thái lưu trữ trên TaiLieuTrang. Gồm cả «trang lưu trữ không ra kết quả» của tìm kiếm.",
+      "dung_tren": [
+        "l4a",
+        "l4b"
+      ]
     },
     {
       "ma": "l4",
       "cau_giao": "«Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết»",
       "hang": "T2",
-      "dung_tren": [
-        "cb"
-      ],
+      "dung_tren": [],
       "slug": "tro-ly-doc-kho",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đang dựng",
       "dong": 4,
       "ten": "Lượt 4",
-      "buoc_ke": "Lượt 3 đã lên; còn chờ 50 câu hỏi thật",
-      "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2."
+      "buoc_ke": "Đã ký Cổng Bằng chứng 02/10; PR #231 đang gỡ xung đột (16 tệp + migration trùng mốc), gộp trước 07/10",
+      "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 04/10 (khảo sát lộ trình): 50 câu thật chạy trong tuần đầu dùng thật, không chặn lượt này (contract.md:117 trên nhánh). Khoá AI riêng KHO_TAI_LIEU_AI_GATEWAY_API_KEY chủ kho đặt trên crm-onehub-agent. 04/10: chủ kho đã đặt khoá AI riêng cho Kho."
     },
     {
       "ma": "ct",
@@ -164,7 +166,7 @@
       "trang_thai": "chưa mở",
       "dong": 3,
       "ten": "Chạy thật — mọi phòng ban",
-      "buoc_ke": "Chờ lượt 4 lên",
+      "buoc_ke": "Mọi phòng ban 14/10, cùng ngày cả công ty vào CRM (chủ kho chốt 04/10)",
       "ghi_chu": "Bốn số: trang đã duyệt theo đơn vị ≥ 10, câu hỏi có trích ≥ 70%, trung vị đề xuất tới duyệt ≤ 5 ngày làm việc, số lần «báo sai»."
     },
     {
@@ -174,7 +176,7 @@
       "dong": 7,
       "ten": "Chuẩn bị chạy thật",
       "ngay": "2026-09-28",
-      "buoc_ke": "Gom 50 câu hỏi thật trước lượt 4",
+      "buoc_ke": "Gom 50 câu hỏi thật trong đợt dùng đầu, 09–14/10",
       "ghi_chu": "«Quy tắc viết» v0: máy soạn từ ba văn bản mẫu thật (cách C), anh nhận làm quy tắc và sửa dần khi vận hành. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
       "cho_anh": true
     },
@@ -216,6 +218,36 @@
       "dong": 6,
       "ten": "Để sau",
       "buoc_ke": "Quyết bằng số đo chạy thật"
+    },
+    {
+      "ma": "l4a",
+      "cau_giao": "«Nguồn không kẹt mãi ở «đang đọc» khi máy soạn lỗi; «Soạn lại» chạy được; hộp chèn liên kết báo lỗi thay vì «không trang nào khớp»»",
+      "hang": "T2",
+      "dung_tren": [
+        "l4"
+      ],
+      "slug": "kho-nguon-khong-ket",
+      "trang_thai": "chưa mở",
+      "dong": 11,
+      "ten": "Nguồn không kẹt",
+      "buoc_ke": "Sau khi #231 gộp; xong trước 13/10",
+      "ghi_chu": "Khảo sát lộ trình 04/10. #22 (Ngoài-11/19 của may-soan-de-xuat), #20, #21. tai-lieu-soan.ts:49-75.",
+      "han": "2026-10-13"
+    },
+    {
+      "ma": "l4b",
+      "cau_giao": "«Trợ lý kho chỉ được mời ở tab Hỏi và Zalo, hết lỗi và hết tốn tiền vô ích»",
+      "hang": "T2",
+      "dung_tren": [
+        "l4"
+      ],
+      "slug": "tro-ly-kho-dung-phien",
+      "trang_thai": "chưa mở",
+      "dong": 12,
+      "ten": "Trợ lý kho đúng phiên",
+      "buoc_ke": "Sau khi #231 gộp; xong trước 13/10",
+      "ghi_chu": "Khảo sát lộ trình 04/10. Ngoài-4 của tro-ly-doc-kho cộng ZDR cho phiên gốc «kho».",
+      "han": "2026-10-13"
     }
   ],
   "da_bac": []
