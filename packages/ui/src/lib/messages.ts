@@ -81,6 +81,26 @@ const en = {
 		trace: "changed via Kara",
 		traceDescription: "This value was changed from a Kara suggestion",
 	},
+	karaKhung: {
+		hoiThoaiRongTieuDe: "Ask Kara",
+		hoiThoaiRongMoTa:
+			"Kara answers here and keeps the draft beside the conversation.",
+		moc: (s: string) => `Kara changed the draft: ${s}`,
+		boNguCanh: (s: string) => `Remove context: ${s}`,
+		daLamBuoc: (n: string) =>
+			n === "1" ? "Kara took 1 step" : `Kara took ${n} steps`,
+		dangLamBuoc: (s: string) => `Kara is working on: ${s}`,
+		buocXong: "Done",
+		buocDangChay: "In progress",
+		buocLoi: "This step failed",
+		chuaDuoc: (s: string) => `Kara couldn't ${s}`,
+		thuLai: "Try again",
+		chuaBatTieuDe: "Kara isn't turned on here",
+		dangSoanKhoa: "Kara is drafting — you can decide once it finishes.",
+		dangSoan: "Kara is drafting…",
+		nhomDeXuat: (n: string) =>
+			n === "1" ? "1 suggestion" : `${n} suggestions`,
+	},
 	aiFeedback: {
 		useful: "Useful",
 		notUseful: "Not useful",
@@ -290,6 +310,24 @@ const vi = {
 		readAt: (t: string) => `Đọc lúc ${t}`,
 		trace: "đổi theo Kara",
 		traceDescription: "Giá trị này đổi theo đề xuất của Kara",
+	},
+	karaKhung: {
+		hoiThoaiRongTieuDe: "Hỏi Kara",
+		hoiThoaiRongMoTa:
+			"Kara trả lời ở đây, bản nháp nằm bên cạnh cuộc trò chuyện.",
+		moc: (s: string) => `Kara sửa bản nháp: ${s}`,
+		boNguCanh: (s: string) => `Bỏ ngữ cảnh: ${s}`,
+		daLamBuoc: (n: string) => `Kara đã làm ${n} bước`,
+		dangLamBuoc: (s: string) => `Kara đang ${s}`,
+		buocXong: "Đã xong",
+		buocDangChay: "Đang chạy",
+		buocLoi: "Bước này hỏng",
+		chuaDuoc: (s: string) => `Kara chưa ${s} được`,
+		thuLai: "Thử lại",
+		chuaBatTieuDe: "Kara chưa được bật ở đây",
+		dangSoanKhoa: "Kara đang soạn — xong sẽ quyết được.",
+		dangSoan: "Kara đang soạn…",
+		nhomDeXuat: (n: string) => `${n} đề xuất`,
 	},
 	aiFeedback: {
 		useful: "Hữu ích",
