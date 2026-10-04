@@ -738,7 +738,9 @@ describe("Hỏi ý — người chọn kết luận", () => {
 	test("thanh công bố thu gọn mặc định; bấm «Xem danh sách» thì liệt đúng từng điều thiếu thành liên kết tới thẻ có trong DOM, «Công bố» tắt", async () => {
 		const o = await moTrangThai("chon-chua-du");
 		const thanh = document.querySelector('[data-khoi="thanh-cong-bo"]');
-		const nutDs = thanh?.querySelector<HTMLButtonElement>("button[aria-controls]");
+		const nutDs = thanh?.querySelector<HTMLButtonElement>(
+			"button[aria-controls]",
+		);
 		const ds = thanh?.querySelector("ul");
 		const hien = () =>
 			ds !== null &&

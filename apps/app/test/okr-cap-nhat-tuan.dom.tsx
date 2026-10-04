@@ -78,6 +78,7 @@ const DU: CapNhatTuanOutput = {
 };
 
 let daLamMoi: string[] = [];
+let daGuiVao: unknown[] = [];
 
 type KetQuaMock = { sessionId: string; written: number; seconds: number };
 
@@ -91,11 +92,10 @@ const thuTuc = (duong: string) => ({
 	mutationOptions: (chon?: { onSuccess?: (kq: KetQuaMock) => unknown }) => ({
 		...chon,
 		mutationKey: [duong],
-		mutationFn: async (): Promise<KetQuaMock> => ({
-			written: 1,
-			seconds: 1,
-			sessionId: "phien",
-		}),
+		mutationFn: async (vao: unknown): Promise<KetQuaMock> => {
+			daGuiVao.push(vao);
+			return { written: 1, seconds: 1, sessionId: "phien" };
+		},
 	}),
 });
 
@@ -128,6 +128,8 @@ const { CapNhatTuan } = await import(
 	"@/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan"
 );
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
+const { okrMessages } = await import("@/lib/messages/okr");
+const { giaTri } = await import("@/app/(app)/[slug]/okr/bang-kr");
 
 let dangMo: Root[] = [];
 
@@ -184,6 +186,7 @@ afterEach(() => {
 	dangMo = [];
 	document.body.innerHTML = "";
 	daLamMoi = [];
+	daGuiVao = [];
 });
 
 describe("man cap nhat tuan: o so khoa hoac dien san", () => {
@@ -252,5 +255,199 @@ describe("man cap nhat tuan: o so khoa hoac dien san", () => {
 		expect(d.textContent).not.toContain("Số máy");
 		await go(o, "12");
 		expect(o.value).toBe("12");
+	});
+});
+
+const M = okrMessages("vi").capNhat;
+const TUAN_NAY = "2026-09-14";
+
+const XONG_A = kr({
+	keyResultId: "kr-xong-a",
+	kind: "tang-toi",
+	unit: "khách",
+	currentValue: 7,
+	targetValue: 20,
+	lastConfidence: "cao",
+	lastAt: "2026-09-15T02:10:00.000Z",
+	updatedThisWeek: true,
+});
+const XONG_B = kr({
+	keyResultId: "kr-xong-b",
+	kind: "moc",
+	unit: "",
+	currentValue: 1,
+	targetValue: 1,
+	lastConfidence: "vua",
+	lastAt: "2026-09-16T08:45:00.000Z",
+	updatedThisWeek: true,
+});
+
+function bo(items: Kr[]): CapNhatTuanOutput {
+	return { items, weekStart: TUAN_NAY, dueWeekday: 1 };
+}
+
+function trangThai(): string | null {
+	return (
+		document.body
+			.querySelector("[data-trang-thai]")
+			?.getAttribute("data-trang-thai") ?? null
+	);
+}
+
+function tuTinDaChon(): string[] {
+	return [
+		...document.body.querySelectorAll<HTMLElement>(
+			'[data-o="tu-tin"] [data-state="on"]',
+		),
+	].map((e) => e.closest("[data-kr]")?.getAttribute("data-kr") ?? "");
+}
+
+function nutGui(): HTMLButtonElement | null {
+	return document.body.querySelector<HTMLButtonElement>('[data-nut="gui"]');
+}
+
+describe("man cap nhat tuan: da xong", () => {
+	for (const [ten, items] of [
+		["moi hon dung dau", [XONG_B, XONG_A]],
+		["moi hon dung cuoi", [XONG_A, XONG_B]],
+	] as const) {
+		test(`da xong (${ten}): role=status, gio gui moi nhat, so va muc tu tin tung KR, khong nut gui`, async () => {
+			await mo(bo([...items]));
+			const status = document.body.querySelector('[role="status"]');
+			const dong = (k: Kr) => {
+				const o = document.body.querySelector(`[data-kr="${k.keyResultId}"]`);
+				return {
+					so:
+						o?.textContent?.includes(giaTri(k, k.currentValue, "vi")) ?? false,
+					tuTin:
+						o?.textContent?.includes(
+							M.tuTinNhan(M.mucTuTin[k.lastConfidence ?? "cao"]),
+						) ?? false,
+				};
+			};
+			expect({
+				trangThai: trangThai(),
+				tieuDe: status?.textContent?.includes(M.daXong.title) ?? false,
+				luc: document.body.textContent?.includes(
+					M.daXong.luc("16/09", "15:45"),
+				),
+				a: dong(XONG_A),
+				b: dong(XONG_B),
+				nutGui: nutGui(),
+			}).toEqual({
+				trangThai: "ST-capnhat-daxong",
+				tieuDe: true,
+				luc: true,
+				a: { so: true, tuTin: true },
+				b: { so: true, tuTin: true },
+				nutGui: null,
+			});
+		});
+	}
+
+	test("sua cap nhat: form dien san so, khong chon san muc tu tin, Gui 0 tat, focus o gia tri KR dau, chi KR duoc chon moi gui", async () => {
+		await mo(bo([XONG_A, XONG_B]));
+		const sua = document.body.querySelector<HTMLButtonElement>(
+			'[data-nut="sua-cap-nhat"]',
+		);
+		if (!sua) throw new Error("khong thay nut sua cap nhat");
+		await act(async () => sua.click());
+		const truoc = {
+			trangThai: trangThai(),
+			giaTriA: oGiaTri(XONG_A.keyResultId).value,
+			daChon: tuTinDaChon(),
+			chuGui: nutGui()?.textContent?.trim(),
+			tatGui: nutGui()?.disabled,
+			focus: document.activeElement?.id,
+		};
+		const vua = [
+			...dong(XONG_A.keyResultId).querySelectorAll<HTMLButtonElement>(
+				'[data-o="tu-tin"] button',
+			),
+		].find((b) => b.textContent?.includes(M.mucTuTin.vua));
+		if (!vua) throw new Error("khong thay nut Vua cua KR dau");
+		await act(async () => vua.click());
+		const gui = nutGui();
+		if (!gui) throw new Error("khong thay nut gui");
+		await act(async () => gui.click());
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, 0));
+		});
+		const vao = daGuiVao[0] as { items: { keyResultId: string }[] } | undefined;
+		expect({
+			truoc,
+			guiCua: vao?.items.map((i) => i.keyResultId) ?? null,
+		}).toEqual({
+			truoc: {
+				trangThai: "ST-capnhat-dangdien",
+				giaTriA: "7",
+				daChon: [],
+				chuGui: M.gui(0),
+				tatGui: true,
+				focus: `${XONG_A.keyResultId}-gia-tri`,
+			},
+			guiCua: [XONG_A.keyResultId],
+		});
+	});
+});
+
+describe("man cap nhat tuan: mot phan va chua gui", () => {
+	const K1 = kr({ keyResultId: "kr-mp-1", lastConfidence: "cao" });
+	const K2 = kr({ keyResultId: "kr-mp-2", lastConfidence: "vua" });
+	const K3 = kr({
+		keyResultId: "kr-mp-3",
+		lastConfidence: "thap",
+		lastAt: "2026-09-09T03:00:00.000Z",
+		updatedThisWeek: false,
+	});
+	const tuanNay = (k: Kr): Kr => ({
+		...k,
+		lastAt: "2026-09-15T03:00:00.000Z",
+		updatedThisWeek: true,
+	});
+	const tuanTruoc = (k: Kr): Kr => ({
+		...k,
+		lastAt: "2026-09-08T03:00:00.000Z",
+		updatedThisWeek: false,
+	});
+
+	test("mot phan: ma tran x = 0, 1, 2 tren y = 3 — trang thai, dong da gui, tap dau, khong chon san", async () => {
+		const thuc: Record<string, unknown> = {};
+		const mong: Record<string, unknown> = {};
+		for (const x of [0, 1, 2]) {
+			const items = [K1, K2].map((k, i) => (i < x ? tuanNay(k) : tuanTruoc(k)));
+			await mo(bo([...items, K3]));
+			const dongDaGui = document.body.querySelector("[data-da-gui-mot-phan]");
+			thuc[`${x}.trangThai`] = trangThai();
+			thuc[`${x}.dong`] = dongDaGui?.textContent ?? null;
+			thuc[`${x}.dau`] = [
+				...document.body.querySelectorAll("[data-da-gui-tuan-nay]"),
+			]
+				.map((e) => e.closest("[data-kr]")?.getAttribute("data-kr"))
+				.sort();
+			thuc[`${x}.chonSan`] = tuTinDaChon();
+			mong[`${x}.trangThai`] =
+				x === 0 ? "ST-capnhat-dangdien" : "ST-capnhat-motphan";
+			mong[`${x}.dong`] = x === 0 ? null : M.daGuiMotPhan(x, 3);
+			mong[`${x}.dau`] = items
+				.filter((k) => k.updatedThisWeek)
+				.map((k) => k.keyResultId)
+				.sort();
+			mong[`${x}.chonSan`] = [];
+			for (const root of dangMo) act(() => root.unmount());
+			dangMo = [];
+			document.body.innerHTML = "";
+		}
+		console.log(`mot phan: ${Object.keys(mong).length} khang dinh`);
+		expect(Object.keys(thuc).length).toBe(12);
+		expect(thuc).toEqual(mong);
+	});
+
+	test("chua gui: khong ai phu trach KR nao thi giu trang thai rong, khong bao da gui", async () => {
+		await mo(bo([]));
+		expect({
+			trangThai: trangThai(),
+			daGui: document.body.textContent?.includes(M.daXong.title) ?? false,
+		}).toEqual({ trangThai: "ST-capnhat-rong", daGui: false });
 	});
 });
