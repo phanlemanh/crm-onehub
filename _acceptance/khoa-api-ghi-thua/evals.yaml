@@ -61,6 +61,15 @@ evals:
     criterion: AC-8
     executor: test
     cmd: config:executors.test.api
+    paths:
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "packages/auth/src/api-keys.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/index.ts"
+      - "apps/api/test/khoa-api-ghi-thua.spec.ts"
+      - "packages/auth/test/khoa-api-ghi-thua.spec.ts"
     expected: "exit 0; db:test thoat 0 roi turbo test moi goi xanh"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
@@ -68,6 +77,15 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "packages/auth/src/api-keys.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/index.ts"
+      - "apps/api/test/khoa-api-ghi-thua.spec.ts"
+      - "packages/auth/test/khoa-api-ghi-thua.spec.ts"
     expected: "exit 0; turbo check-types --force moi goi xanh"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
@@ -75,6 +93,15 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.lint_khong_cache
+    paths:
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "packages/auth/src/api-keys.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/index.ts"
+      - "apps/api/test/khoa-api-ghi-thua.spec.ts"
+      - "packages/auth/test/khoa-api-ghi-thua.spec.ts"
     expected: "exit 0"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
@@ -82,6 +109,15 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.lint_slop
+    paths:
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "packages/auth/src/api-keys.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/index.ts"
+      - "apps/api/test/khoa-api-ghi-thua.spec.ts"
+      - "packages/auth/test/khoa-api-ghi-thua.spec.ts"
     expected: "exit 0"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
@@ -89,6 +125,15 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.build_khong_cache
+    paths:
+      - "patches/**"
+      - "package.json"
+      - "bun.lock"
+      - "packages/auth/src/api-keys.ts"
+      - "packages/auth/src/auth.ts"
+      - "packages/auth/src/index.ts"
+      - "apps/api/test/khoa-api-ghi-thua.spec.ts"
+      - "packages/auth/test/khoa-api-ghi-thua.spec.ts"
     expected: "exit 0"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
@@ -97,6 +142,12 @@ evals:
     executor: judgment
     question: "Tren cau hinh cua kho (luu khoa bang CSDL, khong co secondaryStorage), tep va co chi doi hai viec va chi khi co tuy chon lastRequestUpdateIntervalMs khong: hai nhanh skip cua evaluateRateLimit bo ghi lastRequest con trong nguong, va claimUsageInDatabase bo lan dong dau updatedAt? Co khong doi cach dem cua nhanh rate-limit bat, khong cham consumeRemaining, khong them chu thich khong? Design doc va AC-9 co noi ro duong secondary-storage bi cham nhung kho khong dung khong? Nguong co nam o packages/auth/src/api-keys.ts khong?"
     inputs: [patches/@better-auth%2Fapi-key@1.6.25.patch, packages/auth/src/api-keys.ts, packages/auth/src/auth.ts, docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md, _acceptance/khoa-api-ghi-thua/contract.md]
+    paths:
+      - "patches/@better-auth%2Fapi-key@1.6.25.patch"
+      - "packages/auth/src/api-keys.ts"
+      - "packages/auth/src/auth.ts"
+      - "docs/superpowers/specs/2026-09-26-khoa-api-ghi-thua-design.md"
+      - "_acceptance/khoa-api-ghi-thua/contract.md"
     expected: "Tren cau hinh cua kho ban va chi doi hai viec co dieu kien tuy chon; khong doi cach dem rate-limit bat, khong cham consumeRemaining, khong chu thich; duong secondary-storage bi cham duoc khai ro va AC-11 giu dieu kien kho khong dung no; nguong o module hang so"
     evidence_required: [judged_by, verdict, rationale]
 
@@ -105,6 +156,8 @@ evals:
     executor: judgment
     question: "Chi doc muc ve ban va api-key trong docs/api.md, nguoi doc co tra loi duoc hai cau khong: (1) khi nao go ban va (gan voi better-auth#10921); (2) phai lam gi khi nang @better-auth/api-key?"
     inputs: [docs/api.md]
+    paths:
+      - "docs/api.md"
     expected: "Muc ve ban va khoa-api-ghi-thua trong docs/api.md tra loi duoc hai cau co/khong: (1) co neu dieu kien go ban va gan voi better-auth#10921 khong; (2) co chi dan phai lam lai ban va khi nang @better-auth/api-key khong. Ca hai co thi dat"
     evidence_required: [judged_by, verdict, rationale]
 
