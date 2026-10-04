@@ -463,7 +463,12 @@ const O_BAT_LOI: readonly OBatLoi[] = [
 	{ ten: "b-docchu-nem", docChuNem: true, muc: "LOI", lyDo: CAU_DOC_LOI },
 	{ ten: "c-lanh", muc: "CHO_SOAN", lyDo: null },
 	{ ten: "d-khong-tai", khongPut: true, muc: "LOI", lyDo: LY_DO.khongTai },
-	{ ten: "e-bam-lech", bamKhai: "0".repeat(64), muc: "LOI", lyDo: LY_DO.bamLech },
+	{
+		ten: "e-bam-lech",
+		bamKhai: "0".repeat(64),
+		muc: "LOI",
+		lyDo: LY_DO.bamLech,
+	},
 	{
 		ten: "f-can-go-tay",
 		tep: "ban-quet.pdf",
@@ -471,7 +476,12 @@ const O_BAT_LOI: readonly OBatLoi[] = [
 		muc: "CAN_GO_TAY",
 		lyDo: "can-go-tay",
 	},
-	{ ten: "g-thieu-quy-tac", xoaQuyTac: true, muc: "LOI", lyDo: LY_DO.thieuQuyTac },
+	{
+		ten: "g-thieu-quy-tac",
+		xoaQuyTac: true,
+		muc: "LOI",
+		lyDo: LY_DO.thieuQuyTac,
+	},
 ];
 
 async function chayOBatLoi(o: OBatLoi) {
@@ -498,11 +508,11 @@ async function chayOBatLoi(o: OBatLoi) {
 		: null;
 	if (o.xoaQuyTac) await xoaQuyTacViet();
 	const task = await gieoViec(nguon.id);
-	let nem: unknown = null;
+	let nem = false;
 	try {
 		await chaySoanTuNguon(task, kho);
-	} catch (loi) {
-		nem = loi;
+	} catch {
+		nem = true;
 	} finally {
 		gian?.mockRestore();
 		if (o.xoaQuyTac) await datQuyTacViet(nguoiId, QUY_TAC);

@@ -453,7 +453,10 @@ describe("kn-tien-to", () => {
 		for (let i = 0; i < 3; i += 1) await nhip();
 		await bam(nut("Gửi duyệt"));
 		const md = goi.deXuat.at(-1)?.noiDung ?? "";
-		if (!md.includes("(/kho-thu/tai-lieu/quy-dinh-moi)") || md.includes("/ws/")) {
+		if (
+			!md.includes("(/kho-thu/tai-lieu/quy-dinh-moi)") ||
+			md.includes("/ws/")
+		) {
 			throw new Error(`kn-tien-to: href thieu tien to /kho-thu/ — ${md}`);
 		}
 	});

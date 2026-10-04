@@ -220,9 +220,7 @@ async function xong(f: () => void): Promise<void> {
 }
 
 function oTrong(): string {
-	return (
-		document.body.querySelector("[cmdk-empty]")?.textContent?.trim() ?? ""
-	);
+	return document.body.querySelector("[cmdk-empty]")?.textContent?.trim() ?? "";
 }
 
 function soDong(): number {
@@ -251,7 +249,12 @@ type OLoiTim = {
 const N = NHAN_LIEN_KET_TRANG;
 
 const O_LOI_TIM: readonly OLoiTim[] = [
-	{ ten: "1-go-them", chay: async () => go("q"), mongChu: N.goThem, mongDong: 0 },
+	{
+		ten: "1-go-them",
+		chay: async () => go("q"),
+		mongChu: N.goThem,
+		mongDong: 0,
+	},
 	{
 		ten: "2-loi",
 		chay: async () => {

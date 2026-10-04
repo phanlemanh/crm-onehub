@@ -410,7 +410,9 @@ describe("kn-soan-lai", () => {
 			);
 			const tra = await goi("taiLieuNguon.soanLai", { id: nguonId }, "tao");
 			if (tra.status !== 200) {
-				sai.push(`kn-soan-lai: nguon LOI khong soan lai duoc (${o}: ${tra.status} ${tra.loi})`);
+				sai.push(
+					`kn-soan-lai: nguon LOI khong soan lai duoc (${o}: ${tra.status} ${tra.loi})`,
+				);
 				continue;
 			}
 			const sau = await db.taiLieuNguon.findUniqueOrThrow({

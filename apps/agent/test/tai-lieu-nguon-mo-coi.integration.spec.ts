@@ -56,19 +56,84 @@ type O = {
 };
 
 const O_MO_COI: readonly O[] = [
-	{ ten: "CHO_DOC+lease", muc: "CHO_DOC", viec: "lease", mong: "CHO_DOC", mongLyDo: null },
-	{ ten: "CHO_DOC+cho", muc: "CHO_DOC", viec: "cho", mong: "CHO_DOC", mongLyDo: null },
-	{ ten: "CHO_DOC+nghi", muc: "CHO_DOC", viec: "nghi", mong: "LOI", mongLyDo: CAU_MO_COI },
-	{ ten: "CHO_DOC+dong", muc: "CHO_DOC", viec: "dong", mong: "LOI", mongLyDo: CAU_MO_COI },
-	{ ten: "CHO_DOC+khong", muc: "CHO_DOC", viec: "khong", mong: "LOI", mongLyDo: CAU_MO_COI },
-	{ ten: "CHO_SOAN", muc: "CHO_SOAN", viec: "dong", mong: "CHO_SOAN", mongLyDo: null },
-	{ ten: "DANG_SOAN", muc: "DANG_SOAN", viec: "dong", mong: "DANG_SOAN", mongLyDo: null },
-	{ ten: "LOI-cu", muc: "LOI", lyDo: LY_DO_CU, viec: "dong", mong: "LOI", mongLyDo: LY_DO_CU },
-	{ ten: "DA_SOAN", muc: "DA_SOAN", lyDo: "Đã soạn bản đề xuất.", viec: "dong", mong: "DA_SOAN", mongLyDo: "Đã soạn bản đề xuất." },
-	{ ten: "CAN_GO_TAY", muc: "CAN_GO_TAY", lyDo: "Cần gõ tay — 2/2 trang là bản quét, máy không đọc được chữ.", viec: "dong", mong: "CAN_GO_TAY", mongLyDo: "Cần gõ tay — 2/2 trang là bản quét, máy không đọc được chữ." },
+	{
+		ten: "CHO_DOC+lease",
+		muc: "CHO_DOC",
+		viec: "lease",
+		mong: "CHO_DOC",
+		mongLyDo: null,
+	},
+	{
+		ten: "CHO_DOC+cho",
+		muc: "CHO_DOC",
+		viec: "cho",
+		mong: "CHO_DOC",
+		mongLyDo: null,
+	},
+	{
+		ten: "CHO_DOC+nghi",
+		muc: "CHO_DOC",
+		viec: "nghi",
+		mong: "LOI",
+		mongLyDo: CAU_MO_COI,
+	},
+	{
+		ten: "CHO_DOC+dong",
+		muc: "CHO_DOC",
+		viec: "dong",
+		mong: "LOI",
+		mongLyDo: CAU_MO_COI,
+	},
+	{
+		ten: "CHO_DOC+khong",
+		muc: "CHO_DOC",
+		viec: "khong",
+		mong: "LOI",
+		mongLyDo: CAU_MO_COI,
+	},
+	{
+		ten: "CHO_SOAN",
+		muc: "CHO_SOAN",
+		viec: "dong",
+		mong: "CHO_SOAN",
+		mongLyDo: null,
+	},
+	{
+		ten: "DANG_SOAN",
+		muc: "DANG_SOAN",
+		viec: "dong",
+		mong: "DANG_SOAN",
+		mongLyDo: null,
+	},
+	{
+		ten: "LOI-cu",
+		muc: "LOI",
+		lyDo: LY_DO_CU,
+		viec: "dong",
+		mong: "LOI",
+		mongLyDo: LY_DO_CU,
+	},
+	{
+		ten: "DA_SOAN",
+		muc: "DA_SOAN",
+		lyDo: "Đã soạn bản đề xuất.",
+		viec: "dong",
+		mong: "DA_SOAN",
+		mongLyDo: "Đã soạn bản đề xuất.",
+	},
+	{
+		ten: "CAN_GO_TAY",
+		muc: "CAN_GO_TAY",
+		lyDo: "Cần gõ tay — 2/2 trang là bản quét, máy không đọc được chữ.",
+		viec: "dong",
+		mong: "CAN_GO_TAY",
+		mongLyDo: "Cần gõ tay — 2/2 trang là bản quét, máy không đọc được chữ.",
+	},
 ];
 
-async function gieoO(o: O): Promise<{ nguonId: string; taskId: string | null }> {
+async function gieoO(
+	o: O,
+): Promise<{ nguonId: string; taskId: string | null }> {
 	const trangId = await gieoTrang(nguoiId);
 	const nguon = await gieoNguon({
 		tep: "quyet-dinh.docx",
@@ -85,7 +150,11 @@ async function gieoO(o: O): Promise<{ nguonId: string; taskId: string | null }> 
 	}
 	const viec = await gieoViec(nguon.id);
 	if (o.viec === "lease") {
-		const claimed = await claimDue(50, { only: [KIND] }, DISPATCH.visible.leaseMs);
+		const claimed = await claimDue(
+			50,
+			{ only: [KIND] },
+			DISPATCH.visible.leaseMs,
+		);
 		if (!claimed.some((t) => t.id === viec.id)) {
 			throw new Error(`kn-mo-coi: claimDue khong lay viec cua ${o.ten}`);
 		}
@@ -107,11 +176,16 @@ async function gieoO(o: O): Promise<{ nguonId: string; taskId: string | null }> 
 	if (o.viec === "nghi") {
 		await db.agentTask.update({
 			where: { id: viec.id },
-			data: { attempts: soLanThuToiDa(KIND), leasedUntil: new Date(Date.now() - 60_000) },
+			data: {
+				attempts: soLanThuToiDa(KIND),
+				leasedUntil: new Date(Date.now() - 60_000),
+			},
 		});
 		const nghi = await retireExhausted();
 		if (!nghi.some((t) => t.id === viec.id)) {
-			throw new Error(`kn-mo-coi: retireExhausted khong cho nghi viec cua ${o.ten}`);
+			throw new Error(
+				`kn-mo-coi: retireExhausted khong cho nghi viec cua ${o.ten}`,
+			);
 		}
 	}
 	if (o.viec === "dong") await completeTask(viec.id, "thu");
@@ -132,7 +206,11 @@ async function docNguon(id: string) {
 async function dongViecMo(nguonIds: readonly string[]): Promise<void> {
 	for (const id of nguonIds) {
 		await db.agentTask.updateMany({
-			where: { kind: KIND, finishedAt: null, payload: { path: ["nguonId"], equals: id } },
+			where: {
+				kind: KIND,
+				finishedAt: null,
+				payload: { path: ["nguonId"], equals: id },
+			},
 			data: { finishedAt: new Date(), outcome: "thu", leasedUntil: null },
 		});
 	}
@@ -143,7 +221,8 @@ describe("kn-mo-coi", () => {
 		expect(O_MO_COI.length).toBe(10);
 		await dongNguonMoCoi();
 		const gieo: { o: O; nguonId: string }[] = [];
-		for (const o of O_MO_COI) gieo.push({ o, nguonId: (await gieoO(o)).nguonId });
+		for (const o of O_MO_COI)
+			gieo.push({ o, nguonId: (await gieoO(o)).nguonId });
 		const tra = await dongNguonMoCoi();
 		const sai: string[] = [];
 		for (const { o, nguonId } of gieo) {
@@ -180,9 +259,9 @@ describe("kn-mo-coi", () => {
 
 	test("kn-mo-coi: mot nhip dispatch that dua nguon mo coi ve LOI", async () => {
 		await dongViecMo(
-			(
-				await db.taiLieuNguon.findMany({ select: { id: true } })
-			).map((n) => n.id),
+			(await db.taiLieuNguon.findMany({ select: { id: true } })).map(
+				(n) => n.id,
+			),
 		);
 		const { nguonId } = await gieoO({
 			ten: "nhip",
@@ -236,7 +315,9 @@ describe("kn-soan-lai", () => {
 		await chaySoanTuNguon(task, lanh);
 		const sau = await docNguon(nguon.id);
 		if (sau.trangThai !== "CHO_SOAN") {
-			throw new Error(`kn-soan-lai: nguon LOI khong soan lai duoc (${sau.trangThai} ${sau.lyDo})`);
+			throw new Error(
+				`kn-soan-lai: nguon LOI khong soan lai duoc (${sau.trangThai} ${sau.lyDo})`,
+			);
 		}
 	});
 });
