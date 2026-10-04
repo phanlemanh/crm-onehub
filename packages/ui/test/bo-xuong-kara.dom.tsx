@@ -11,6 +11,7 @@ import type {
 } from "../src/components/proposed-change";
 import type { Locale } from "../src/lib/locale";
 import { messages } from "../src/lib/messages";
+import { DAU_TIENG_VIET, TEN_RIENG } from "./du-lieu";
 
 const THU_MUC_KARA = resolve(
 	import.meta.dir,
@@ -818,5 +819,196 @@ describe("k1-artifact", () => {
 		const st = o.querySelector('[data-slot="kara-artifact-header"] [role="status"]');
 		phai(Boolean(st?.textContent?.includes("⟦dang soan⟧")), "dau khung thieu chu ban");
 		phai(laChamBan(st as Element), "dau khung thieu cham ban");
+	});
+});
+
+function chuTuDat(goc: Element): string[] {
+	const ra: string[] = [];
+	const duyet = (el: Element) => {
+		const nhan = el.getAttribute("aria-label");
+		if (nhan) ra.push(nhan);
+		let rieng = "";
+		for (const c of el.childNodes)
+			if (c.nodeType === Node.TEXT_NODE) rieng += c.textContent ?? "";
+		const gon = rieng.trim();
+		if (gon) ra.push(gon);
+		for (const c of el.children) duyet(c);
+	};
+	duyet(goc);
+	return ra
+		.map((t) => t.replace(/⟦[^⟧]*⟧/g, "").trim())
+		.filter((t) => /\p{L}/u.test(t));
+}
+
+const SO_CHO: Record<string, number> = {
+	"transcript-rong": 3,
+	"transcript-he-thong-moc": 1,
+	"composer-ban-chip": 3,
+	"composer-khoa": 2,
+	"steps-xong": 1,
+	"steps-dang-chay": 4,
+	"steps-loi": 4,
+	"state-working": 0,
+	"state-empty": 0,
+	"state-error": 2,
+	"state-off": 0,
+	"state-unconfigured": 1,
+	"nhom-bien-nhan-ban": 5,
+	"artifact-ban": 1,
+	"artifact-ban-mac-dinh": 2,
+};
+
+const CHO_TRUOC_KHI_DOC: Record<string, number> = {
+	"artifact-ban-mac-dinh": 1060,
+};
+
+describe("k1-hai-tieng", () => {
+	const { KaraTranscript, KaraSystemLine, KaraCheckpoint } = KhoiTranscript;
+	const { KaraComposer } = KhoiComposer;
+	const { KaraSteps } = KhoiSteps;
+	const { KaraState } = KhoiState;
+	const { KaraProposalGroup, KaraProposal } = KhoiProposal;
+	const { KaraArtifact } = KhoiArtifact;
+
+	const CAU_HINH: Record<string, () => ReactElement> = {
+		"transcript-rong": () => <KaraTranscript />,
+		"transcript-he-thong-moc": () => (
+			<KaraTranscript>
+				<KaraSystemLine>⟦he thong⟧</KaraSystemLine>
+				<KaraCheckpoint summary="⟦tom tat⟧" onSelect={() => {}} />
+			</KaraTranscript>
+		),
+		"composer-ban-chip": () => (
+			<KaraComposer
+				onSubmit={() => {}}
+				status="busy"
+				label="⟦nhan⟧"
+				placeholder="⟦goi y go⟧"
+				context={{ label: "⟦ve KR⟧", onRemove: () => {} }}
+			/>
+		),
+		"composer-khoa": () => (
+			<KaraComposer
+				onSubmit={() => {}}
+				label="⟦nhan⟧"
+				placeholder="⟦goi y go⟧"
+				lockedReason="⟦het luot⟧"
+			/>
+		),
+		"steps-xong": () => (
+			<KaraSteps
+				steps={[
+					{ id: "1", label: "⟦a⟧", state: "done" },
+					{ id: "2", label: "⟦b⟧", state: "done" },
+				]}
+			/>
+		),
+		"steps-dang-chay": () => (
+			<KaraSteps
+				steps={[
+					{ id: "1", label: "⟦a⟧", state: "done" },
+					{ id: "2", label: "⟦b⟧", state: "running" },
+				]}
+			/>
+		),
+		"steps-loi": () => (
+			<KaraSteps
+				steps={[
+					{ id: "1", label: "⟦a⟧", state: "done" },
+					{ id: "2", label: "⟦b⟧", state: "error" },
+				]}
+				onRetry={() => {}}
+			/>
+		),
+		"state-working": () => (
+			<KaraState kind="working" label="⟦dang⟧" delayMs={0} />
+		),
+		"state-empty": () => (
+			<KaraState kind="empty" title="⟦t⟧" description="⟦m⟧" />
+		),
+		"state-error": () => (
+			<KaraState kind="error" what="⟦soan⟧" onRetry={() => {}} />
+		),
+		"state-off": () => <KaraState kind="off" reason="⟦ly do⟧" />,
+		"state-unconfigured": () => (
+			<KaraState kind="unconfigured" description="⟦ai bat⟧" />
+		),
+		"nhom-bien-nhan-ban": () => (
+			<KaraBusyProvider busy={{ label: "⟦ban⟧" }}>
+				<KaraProposalGroup
+					entries={[{ id: "a", status: "pending", batchable: true }]}
+					reason="⟦vi sao⟧"
+					batch={{ label: "⟦nhan ca⟧", onAccept: () => {} }}
+					batchDecided={{ text: "⟦da them⟧", onUndo: () => {} }}
+				>
+					<KaraProposal
+						kind="rewrite"
+						value="⟦moi⟧"
+						actions={hanhDong({ n: 0 })}
+					/>
+				</KaraProposalGroup>
+			</KaraBusyProvider>
+		),
+		"artifact-ban": () => (
+			<KaraArtifact title="⟦t⟧" meta="⟦m⟧" busy={{ label: "⟦ban⟧" }}>
+				⟦than⟧
+			</KaraArtifact>
+		),
+		"artifact-ban-mac-dinh": () => (
+			<KaraArtifact title="⟦t⟧" meta="⟦m⟧" busy={{}}>
+				⟦than⟧
+			</KaraArtifact>
+		),
+	};
+
+	test("mọi chữ tự đặt đổi theo tiếng, số chỗ ghi trước", async () => {
+		console.log(`so cho ghi truoc: ${JSON.stringify(SO_CHO)}`);
+		expect(Object.keys(CAU_HINH).sort()).toEqual(Object.keys(SO_CHO).sort());
+		let tong = 0;
+		for (const [ten, dung] of Object.entries(CAU_HINH)) {
+			const theoTieng: Record<Locale, string[]> = { vi: [], en: [] };
+			for (const tieng of ["vi", "en"] as const) {
+				const o = ve(dung(), tieng);
+				if (CHO_TRUOC_KHI_DOC[ten]) await cho(CHO_TRUOC_KHI_DOC[ten]);
+				theoTieng[tieng] = chuTuDat(o);
+				act(() => root?.unmount());
+				root = null;
+				document.body.innerHTML = "";
+				const so = theoTieng[tieng].length;
+				if (process.env.K1_IN_CHO) console.log(ten, tieng, JSON.stringify(theoTieng[tieng]));
+				phai(
+					Boolean(process.env.K1_IN_CHO) || so === SO_CHO[ten],
+					`so cho sai: ${ten} ${tieng} ${so} != ${SO_CHO[ten]} ${JSON.stringify(theoTieng[tieng])}`,
+				);
+			}
+			theoTieng.vi.forEach((v, i) => {
+				const e = theoTieng.en[i];
+				if (TEN_RIENG.has(v) && v === e) return;
+				phai(v !== e, `chu cung: ${v} (${ten})`);
+			});
+			tong += theoTieng.vi.length;
+		}
+		const ky = Object.values(SO_CHO).reduce((a, b) => a + b, 0);
+		console.log(`tong cho da so: ${tong}`);
+		expect(tong).toBe(ky);
+	});
+
+	test("không chữ tiếng Việt viết cứng trong mã khối", () => {
+		const loi: string[] = [];
+		const thay: Record<string, string | undefined> = {
+			"state.tsx": process.env.K1_TEP_STATE,
+			"proposal.tsx": process.env.K1_TEP_PROPOSAL,
+			"transcript.tsx": process.env.K1_TEP_TRANSCRIPT,
+			"composer.tsx": process.env.K1_TEP_COMPOSER,
+			"steps.tsx": process.env.K1_TEP_STEPS,
+			"artifact.tsx": process.env.K1_TEP_ARTIFACT,
+		};
+		for (const t of tepKara()) {
+			const dong = readFileSync(thay[t] ?? join(THU_MUC_KARA, t), "utf8").split("\n");
+			dong.forEach((d, i) => {
+				if (DAU_TIENG_VIET.test(d)) loi.push(`chu viet cung: ${t}:${i + 1}`);
+			});
+		}
+		phai(loi.length === 0, loi.join("; "));
 	});
 });
