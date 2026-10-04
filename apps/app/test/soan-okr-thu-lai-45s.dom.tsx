@@ -292,6 +292,28 @@ describe("gui-lai-sau-khep", () => {
 });
 
 describe("dang-cho-khep", () => {
+	test("dang-cho-khep: hoi am huy muon cua chuoi truoc khong cham chuoi moi", async () => {
+		giuHuy = true;
+		await moManQua45s();
+		const guiTruoc = daGui.length;
+		await bam(nutThu());
+		await troi(SOAN_UI.choKhepMs + 200);
+		await datAgent({ status: "streaming", error: undefined });
+		await bam(nutThu());
+		await troi(20);
+		expect(daHuy.length).toBe(2);
+		const muon = traHuy.shift();
+		await act(async () => {
+			muon?.();
+			await Promise.resolve();
+		});
+		await troi(20);
+		await khep();
+		expect(daGui.length, "hoi-am-muon-cham-chuoi-moi").toBe(guiTruoc);
+		await traLoiHuy();
+		expect(daGui.length).toBe(guiTruoc + 1);
+	});
+
 	test("dang-cho-khep: trong luc cho van hien bao loi, nut khoa, dem 1", async () => {
 		giuHuy = true;
 		await moManQua45s();
@@ -400,12 +422,12 @@ describe("gui-lai-bi-tu-choi", () => {
 			const guiTruoc = daGui.length;
 			await bam(nutThu());
 			await troi(20);
+			await khep();
+			expect(daGui.length, `gui-bua-khi-huy-hong ${ca.ten}`).toBe(guiTruoc);
 			expect(moTa(), `im-khi-huy-hong ${ca.ten}`).toContain(
 				m.hoiThoai.chuaGuiLai,
 			);
 			expect(nutThu()?.disabled).toBe(false);
-			await khep();
-			expect(daGui.length, `gui-bua-khi-huy-hong ${ca.ten}`).toBe(guiTruoc);
 		});
 	}
 });

@@ -175,6 +175,7 @@ export function useCuocSoan({
 	const docLai = () => void docLaiRoi();
 	const daBaoPhien = useRef(false);
 	const choGuiLai = useRef<ChoGuiLai | null>(null);
+	const soChuoi = useRef(0);
 	const henKhep = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const [dangChoKhep, setDangChoKhep] = useState(false);
 	const [loiGuiLai, setLoiGuiLai] = useState(false);
@@ -224,7 +225,8 @@ export function useCuocSoan({
 		agent.stop();
 	};
 	const huyLuot = (tin: string, phien: string) => {
-		const ma = (choGuiLai.current?.ma ?? 0) + 1;
+		soChuoi.current += 1;
+		const ma = soChuoi.current;
 		const luot = luotDangChay(agent.events);
 		choGuiLai.current = {
 			ma,
