@@ -1137,6 +1137,17 @@ executors:
     r1c_toan_canh_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-toan-canh-chu.dom.tsx"
     r1c_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
     r1c_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-ket-luan.tsx" "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx" "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    r1d_thu_gon: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-to-chuc-va.dom.tsx -t thu-gon
+    r1d_so_kr_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-to-chuc-va.dom.tsx -t so-kr
+    r1d_ly_do_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-to-chuc-va.dom.tsx -t ly-do-luu-tru
+    r1d_nut_them: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-to-chuc-va.dom.tsx -t nut-them
+    r1d_neo_kara: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-to-chuc-va.dom.tsx -t neo-kara
+    r1d_khoi_phuc_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-to-chuc-va.dom.tsx -t khoi-phuc-toast
+    r1d_mau_vet: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-mau.spec.ts"
+    r1d_ly_do_api: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-to-chuc.spec.ts -t ly-do"
+    r1d_khoi_phuc: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-to-chuc.spec.ts -t khoi-phuc"
+    r1d_trung_ten: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-to-chuc.spec.ts -t trung-ten"
+    r1d_quyen_tao: bun run test -- "cd apps/api && bun test test/okr-to-chuc-va-quyen.spec.ts"
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
@@ -1775,6 +1786,8 @@ executors:
     r1h_man_that: 'OKR_AGENT_BRIDGE_SECRET=gia-do-soan-okr-khong-tru-luot OKR_AGENT_URL=http://127.0.0.1:9 PHIEN_DO_TEN_CAY=soan-okr-khong-tru-luot bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-khong-tru-luot/rang/thu-lai-man-that.mjs"'
     r1h_chu_va_san: 'cd apps/app && bun test test/messages-guard.spec.ts && cd ../.. && node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx" --mode static'
     r1c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/man-okr-truoc-r1/rang/man-r1c.mjs"'
+    r1d_man_okr: PHIEN_DO_TEN_CAY=okr-to-chuc-va bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/okr-to-chuc-va/rang/man-okr.mjs"
+    r1d_san_thiet_ke: for t in "apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/bang-kr.tsx" "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx" "apps/app/app/(app)/[slug]/okr/ngan-okr-url.tsx" "apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx" "apps/app/app/(app)/[slug]/settings/organization/da-luu-tru-to-chuc.tsx" "apps/app/components/detail-sheet.tsx" "apps/app/components/crm/record-sheet/record-parts.tsx" "apps/app/components/crm/record-sheet/objective-sheet.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

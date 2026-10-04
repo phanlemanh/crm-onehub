@@ -1,0 +1,188 @@
+slug: okr-to-chuc-va
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.r1d_thu_gon
+    expected: "exit 0; apps/app/test/okr-to-chuc-va.dom.tsx -t thu-gon dựng BangMucTieu thật trong NuqsTestingAdapter (ghi nhận mọi lần đổi URL), mục tiêu giả parse bằng schema output thật của okr.byUnit — ma trận viết trước 2 cách khuất {lọc: ds rút còn [B], đổi đơn vị: ds đổi sang đơn vị khác chỉ có C rồi quay lại}: khởi đầu thuMucTieu=[A]; làm A khuất; bấm nút thu của B (hoặc của C) → URL thuMucTieu chứa A và id vừa thu; dựng lại ds đầy đủ → [data-hang-muc-tieu=A] và [data-hang-muc-tieu=B] có aria-expanded=false; bấm mở B → URL còn A. In 'so ca: 2'. Chiều đỏ ghim: bản sao bang-muc-tieu.tsx lọc lại id theo ds đang hiện phải làm bài đỏ 'mat id khuat: loc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/okr-search-params.ts", "apps/app/test/okr-to-chuc-va.dom.tsx"]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.r1d_so_kr_dom
+    expected: "exit 0; okr-to-chuc-va.dom.tsx -t so-kr dựng BangKr thật với một KR source=may (xem=duoc) và một KR tay: trong ô ẩn dưới md (span.md:hidden chứa TienDoGon) có đúng một button[data-so-kr=<id KR máy>]; trong ô AN_DUOI_MD có đúng một; tổng hai trong DOM; KR tay không có button[data-so-kr]; bấm nút ở bản điện thoại → URL record trỏ khung số so-kr của KR đó. Chiều đỏ ghim: bản sao đặt lại moc={false} cho bản điện thoại phải làm bài đỏ 'dien thoai thieu moc: so-kr'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/test/okr-to-chuc-va.dom.tsx"]
+
+  - id: E3
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1d_man_okr
+    steps:
+      - "Phiên đo riêng (tien-de) qua mot-luot.sh; seed rang/san-r1d.mjs: một Mục tiêu phòng ban có một KR lấy số tự động và một KR tay; đăng nhập dev:session trưởng phòng"
+      - "Với mỗi khổ {390×844, 1440×1000} sáng: mở khung Mục tiêu, đếm button[data-so-kr=<id KR máy>] đang hiện (rect > 0 và getComputedStyle khác display none ở mọi tổ tiên); bấm nút đó → chờ [data-so-kr-sheet=<id>]"
+      - "Ảnh E3-so-kr-<khổ>.png vào evidence/"
+    expected: "exit 0; rang/man-okr.mjs --phan so-kr in 'so kr ok <khổ> hien=1 mo=1' cho đủ 2 khổ viết trước và 'so o: 2'. Chiều đỏ ghim: cờ --kiem-do-do gỡ thuộc tính data-so-kr khỏi phần tử đang hiện trước khi đếm — phải in 'khong thay nut so: 390' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx", "_acceptance/okr-to-chuc-va/rang/**"]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1d_mau_vet
+    expected: "exit 0; apps/api/test/okr-to-chuc-va-mau.spec.ts (qua bun run test, CSDL riêng) gọi OkrMauService.taoTuMau thật với mẫu 3 KR: KR1 giao người B (khác người tạo A), KR2 giao A, KR3 giao C. Ma trận viết trước 3 KR: mỗi KR có đúng 1 dòng vết loại tao-kr; tập khoá của dòng đó bằng tập khoá dòng tao-kr do OkrService.createKeyResult thật ghi cho một KR tạo tay trong cùng bài (so khoá và các trường objectiveId/keyResultId/actorUserId, không so id/thời gian); rồi đọc lời nhắc bằng hàm đọc thật của packages/db/src/okr-nhac.ts: B có okr-duoc-giao cho KR1, C có okr-duoc-giao cho KR3, A không có okr-duoc-giao cho KR2. In 'so kr: 3'. Chiều đỏ ghim: bản sao okr-mau.service.ts bỏ lời ghi vết phải làm bài đỏ 'thieu vet tao-kr: KR1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/okr/okr-mau.service.ts", "apps/api/src/okr/okr.service.ts", "packages/db/src/okr-vet.ts", "packages/db/src/okr-nhac.ts", "apps/api/test/okr-to-chuc-va-mau.spec.ts"]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.r1d_ly_do_api
+    expected: "exit 0; apps/api/test/okr-to-chuc-va-to-chuc.spec.ts -t ly-do (CSDL riêng): dựng phòng ban vướng cả ba lý do (khuôn onboarding đang dùng tên «Khuôn A», 2 người có phòng ban chính, 3 mục tiêu ở kỳ dang-chay); org.luuTruXemTruoc trả đúng ba mục parse được bằng schema đầu ra mới (packages/validation): {loai: khuon, khuon: ['Khuôn A']}, {loai: nguoi, so: 2}, {loai: okr, so: 3}; archiveDepartment vẫn từ chối với câu tiếng Việt cũ. Chiều đỏ ghim: bản sao trả lại trường cau thay cho so phải làm bài đỏ 'ly do khong co so: nguoi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/to-chuc/**", "packages/validation/src/**", "apps/api/test/okr-to-chuc-va-to-chuc.spec.ts"]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.r1d_ly_do_dom
+    expected: "exit 0; okr-to-chuc-va.dom.tsx -t ly-do-luu-tru dựng XacNhanLuuTru thật với tRPC giả trả ba lý do parse bằng schema đầu ra thật (từ packages/validation), tên khuôn ghim «Khuôn Bán hàng»: ma trận viết trước 2 ngôn ngữ {en, vi} × 3 lý do: [data-ly-do-chan=<loai>] có textContent bằng đúng hàm messages của ngôn ngữ đó với cùng số/tên (gọi hàm, không chuỗi gõ tay); ở en, textContent sau khi gỡ mọi nút [translate=no] không chứa ký tự riêng của tiếng Việt (đ, ư, ơ, ă hoặc dấu thanh), và đối chứng dương: trước khi gỡ thì câu khuôn có chứa «á»; phần [translate=no] chứa nguyên văn «Khuôn Bán hàng». In 'so o: 6'. Chiều đỏ ghim: bản sao in lại trường cau tiếng Việt phải làm bài đỏ 'cau tieng viet o en: khuon'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx", "apps/app/lib/messages/**", "packages/validation/src/**", "apps/app/test/okr-to-chuc-va.dom.tsx"]
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1d_khoi_phuc
+    expected: "exit 0; okr-to-chuc-va-to-chuc.spec.ts -t khoi-phuc (CSDL riêng), ma trận viết trước 4 ca: (a) phòng ban P dưới bộ phận X, lưu trữ P rồi X; restoreDepartment(P) → kết quả parse bằng schema đầu ra mới (packages/validation) bằng { chan: { loai: cha-luu-tru, ten: <tên X> } }; P.archivedAt khác null; (b) restoreDivision(X) rồi restoreDepartment(P) → P.archivedAt null, P.divisionId = X; (c) phòng ban không bộ phận, đã lưu trữ → khôi phục thành công; (d) phòng ban dưới bộ phận đang hoạt động → khôi phục thành công. In 'so ca: 4'. Chiều đỏ ghim: bản sao restoreDepartment bỏ kiểm bộ phận cha phải làm bài đỏ 'khoi phuc vao bo phan da luu tru'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/to-chuc/**", "apps/api/test/okr-to-chuc-va-to-chuc.spec.ts"]
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1d_trung_ten
+    expected: "exit 0; okr-to-chuc-va-to-chuc.spec.ts -t trung-ten (CSDL riêng), ma trận viết trước 4 ca: {phòng ban, bộ phận} × {trùng đúng chữ, trùng khác hoa thường}: đơn vị đã lưu trữ «Kinh doanh» và đơn vị đang hoạt động «Kinh doanh»/«kinh DOANH» → kết quả parse bằng schema đầu ra mới bằng { chan: { loai: trung-ten, ten: <tên đơn vị đang hoạt động, đúng hoa thường của nó> } }; sau mỗi ca đếm đơn vị đang hoạt động có tên đó (không phân biệt hoa thường) = 1. Đối chứng dương: đơn vị đã lưu trữ «Kinh doanh 2» khôi phục được. In 'so ca: 4'. Chiều đỏ ghim: bản sao restoreDivision bỏ kiểm trùng tên phải làm bài đỏ 'hai don vi cung ten: bo-phan'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/to-chuc/**", "apps/api/test/okr-to-chuc-va-to-chuc.spec.ts"]
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1d_quyen_tao
+    expected: "exit 0; apps/api/test/okr-to-chuc-va-quyen.spec.ts (CSDL riêng) gọi OkrService.createObjective thật, kỳ ở lap-ke-hoach — ma trận viết trước 3 cấp {bo-phan, phong-ban, ca-nhan} × 2 vai {quản trị không là trưởng, thành viên không là trưởng}: quản trị → tạo được, hàng okrObjective có đúng đơn vị; thành viên → ForbiddenException với OKR.thongDiep.khongSuaDuocDonVi (hằng của apps/api). Ô thứ bảy: createKeyResult của quản trị không là trưởng trên mục tiêu vừa tạo ở phong-ban → tạo được. Rồi updateObjective của quản trị đó trên cùng mục tiêu → vẫn Forbidden (luật sửa không mở). okr.byUnit trả canCreate=true, canEdit=false cho quản trị; canCreate=false cho thành viên. In 'so o: 7'. Chiều đỏ ghim: bản sao createObjective quay về assertSuaDonVi phải làm bài đỏ 'quan tri khong tao duoc: phong-ban'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/okr/okr.service.ts", "apps/api/src/okr/okr-access.service.ts", "apps/api/src/okr/okr-xem.service.ts", "apps/api/src/okr/okr-xem.contracts.ts", "apps/api/test/okr-to-chuc-va-quyen.spec.ts"]
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.r1d_nut_them
+    expected: "exit 0; okr-to-chuc-va.dom.tsx -t nut-them dựng TheoDonVi thật với tRPC giả (okr.byUnit parse bằng schema output thật) — ma trận viết trước 3 vai {quản trị không là trưởng: canCreate=true canEdit=false; trưởng phòng: true/true; thành viên: false/false}: hai vai đầu có [data-nut=them-muc-tieu] và [data-nut=nhap-bang-tinh] trong [data-hang-nut]; thành viên không có cả hai. Bấm them-muc-tieu → URL có khoá dialog.create và ngăn tạo có mặt. In 'so vai: 3'. Chiều đỏ ghim: bản sao để NutThemMucTieu đọc lại canEdit phải làm bài đỏ 'quan tri khong thay nut them'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/okr/ngan-okr-url.tsx", "apps/app/test/okr-to-chuc-va.dom.tsx"]
+
+  - id: E11
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1d_man_okr
+    steps:
+      - "Cùng lượt với E3; seed thêm một quản trị không là trưởng của phòng ban mẫu"
+      - "1440×1000 sáng: quản trị mở Theo đơn vị phòng ban mẫu ở pha lập kế hoạch; đếm [data-nut=them-muc-tieu]; bấm, điền tên «Mục tiêu lẻ R1d», lưu; chờ [data-hang-muc-tieu] mới có tên đó; rồi gọi API okr.byUnit bằng phiên của quản trị và tìm mục tiêu cùng tên"
+      - "Ảnh E11-them-muc-tieu.png vào evidence/"
+    expected: "exit 0; rang/man-okr.mjs --phan them in 'them ok hien=1 luu=1 api=1'. Chiều đỏ ghim: cờ --kiem-do-do đăng nhập thành viên thường thay quản trị — phải in 'khong thay nut them: thanh-vien' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/okr/ngan-okr-url.tsx", "apps/api/src/okr/**", "_acceptance/okr-to-chuc-va/rang/**"]
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.r1d_neo_kara
+    expected: "exit 0; okr-to-chuc-va.dom.tsx -t neo-kara dựng ObjectiveSheet thật trong RecordSheetFrame với hook khổ màn giả điều khiển được (chua-biet → dien-thoai), objective và góp ý đã có sẵn trong QueryClient, URL có neoGopY: khi khổ còn chua-biet → scrollIntoView chưa được gọi, neoGopY còn trên URL; chuyển sang dien-thoai → scrollIntoView được gọi đúng 1 lần trên vùng Kara, sau đó neoGopY rời URL; [data-cuon-ca-khung] có mặt. Đối chứng: khổ may-tinh ngay từ đầu → cuộn 1 lần, không có [data-cuon-ca-khung]. Ca thứ ba dùng hook khổ màn THẬT của packages/ui với window.matchMedia và innerWidth đặt 390: lần vẽ đầu (đọc trước effect) trả chua-biet, sau effect trả dien-thoai. In 'so ca: 3'. Chiều đỏ ghim: bản sao để hiệu ứng cuộn không chờ chua-biet phải làm bài đỏ 'cuon truoc khi biet kho'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/components/crm/record-sheet/record-parts.tsx", "apps/app/components/detail-sheet.tsx", "packages/ui/src/hooks/**", "apps/app/test/okr-to-chuc-va.dom.tsx"]
+
+  - id: E13
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1d_man_okr
+    steps:
+      - "Cùng lượt với E3; seed một Mục tiêu có ≥ 2 góp ý Kara đang mở (san-gop-y của gop-y-dung-cho)"
+      - "390×844 sáng, ma trận viết trước 2 cách bấm {chuột, Enter}: mở khung Mục tiêu bằng tên, đóng, chờ 1 s (dữ liệu trong bộ nhớ tạm), rồi bấm chip [data-chip-gop-y] của nó; chờ 1,5 s; đo rect của vùng Kara ([data-vung-kara]) so với rect của vùng cuộn đang cuộn được ([data-cuon-ca-khung])"
+      - "Ảnh E13-kara-<cách>.png vào evidence/"
+    expected: "exit 0; rang/man-okr.mjs --phan kara in 'kara ok <cách> tren=<px>' cho 2 cách: đỉnh vùng Kara nằm trong [đỉnh vùng cuộn, đáy vùng cuộn − 40 px] và scrollTop của vùng cuộn > 0; URL không còn neoGopY; in 'so o: 2'. Chiều đỏ ghim: cờ --kiem-do-do đặt scrollTop vùng cuộn về 0 sau khi bấm — phải in 'kara ngoai tam nhin: chuot' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/components/crm/record-sheet/**", "apps/app/components/detail-sheet.tsx", "apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx", "packages/ui/src/hooks/**", "_acceptance/okr-to-chuc-va/rang/**"]
+
+  - id: E14
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.ccq_cong_nghien_cuu
+    expected: "exit 0; apps/app/test/onboarding-gate.spec.ts -t ccq-cong-nghien-cuu (bài kiểm đã có từ 7e133944): congNghienCuu cho thành viên và vai chỉ OKR (canManage false) khi khoá chưa có trả settled — không đẩy tới /onboarding/research; quản trị (canManage true) trả required. Vòng này không sửa mã này; eval giữ nó không lùi. Chiều đỏ là của bài cũ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/validation/src/cong-nghien-cuu.ts", "apps/app/lib/onboarding.ts", "apps/app/proxy.ts", "apps/app/test/onboarding-gate.spec.ts"]
+
+  - id: E15
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.suite_app_ui
+    expected: "exit 0; bộ kiểm app + packages/ui của kho (cùng lệnh với suite_keys)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.suite_api
+    expected: "exit 0; bộ kiểm api của kho (cùng lệnh với suite_keys)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.r1d_san_thiet_ke
+    expected: "exit 0; design-gate --mode static của plugin acceptance-gate chạy trên các tệp giao diện vòng này chạm (bang-muc-tieu.tsx, bang-kr.tsx, theo-don-vi/theo-don-vi.tsx, ngan-okr-url.tsx, settings/organization/xac-nhan-luu-tru.tsx, detail-sheet.tsx, record-sheet/record-parts.tsx, record-sheet/objective-sheet.tsx) và không tệp nào có P0. Chiều đỏ là của chính design-gate (bộ ca của kit)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/organization/xac-nhan-luu-tru.tsx", "apps/app/components/detail-sheet.tsx", "apps/app/components/crm/record-sheet/**"]
+
+  - id: E18
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1d_man_okr
+    steps:
+      - "Cùng lượt với E3; seed hai Mục tiêu A, B ở phòng ban mẫu (A một người phụ trách, B người khác) và một Mục tiêu C ở phòng ban thứ hai"
+      - "1440×1000 sáng, ma trận viết trước 2 cách khuất {lọc: bộ lọc người phụ trách thật chỉ chọn người của B, đổi đơn vị: bộ chọn đơn vị thật sang phòng ban thứ hai}: thu A; làm A khuất; thu B (hoặc C); bỏ lọc (hoặc chọn lại phòng ban mẫu bằng bộ chọn); đọc aria-expanded của nút thu ở [data-hang-muc-tieu=A] và tham số thuMucTieu trên URL thật"
+      - "Ảnh E18-thu-gon-<cách>.png vào evidence/"
+    expected: "exit 0; rang/man-okr.mjs --phan thu-gon in 'thu-gon ok <cách> A=false' cho 2 cách và 'so o: 2'; URL thật chứa id A. Chiều đỏ ghim: cờ --kiem-do-do xoá id A khỏi thuMucTieu bằng history.replaceState ngay trước khi quay lại — phải in 'mat id khuat: doi-don-vi' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "_acceptance/okr-to-chuc-va/rang/**"]
+
+  - id: E19
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.r1d_khoi_phuc_dom
+    expected: "exit 0; okr-to-chuc-va.dom.tsx -t khoi-phuc-toast dựng DaLuuTruToChuc thật với tRPC giả (restoreDepartment, restoreDivision trả kết quả parse bằng schema đầu ra thật từ packages/validation) và bắt toast sonner — ma trận viết trước 2 ngôn ngữ {en, vi} × 2 lý do {cha-luu-tru: «Khối Kinh doanh», trung-ten: «Kinh doanh miền Bắc»}: toast lỗi có text bằng đúng hàm messages của ngôn ngữ đó với tên đó (gọi hàm); ở en, text sau khi gỡ tên không chứa ký tự riêng của tiếng Việt, đối chứng dương: tên có dấu nằm nguyên văn trong text; không có toast thành công; trpc.org.tree không bị gọi làm mới thành dữ liệu đã khôi phục. In 'so o: 4'. Chiều đỏ ghim: bản sao in lại e.message (không đọc chan) phải làm bài đỏ 'toast khong theo ngon ngu: en cha-luu-tru'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/settings/organization/da-luu-tru-to-chuc.tsx", "apps/app/lib/messages/**", "packages/validation/src/**", "apps/app/test/okr-to-chuc-va.dom.tsx"]
+
+  - id: E20
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1d_man_okr
+    steps:
+      - "Cùng lượt với E3; seed bộ phận X «Khối Kinh doanh» và phòng ban P dưới X, lưu trữ P rồi X, bằng thủ tục org.* thật của quản trị"
+      - "1440×1000 sáng, cookie lang=en: mở Cài đặt › Tổ chức, mục Đã lưu trữ; bấm Khôi phục ở hàng P; chờ [data-sonner-toast]; đọc innerText toast; tải lại trang; đọc mục Đã lưu trữ"
+      - "Ảnh E20-khoi-phuc-chan-en.png vào evidence/"
+    expected: "exit 0; rang/man-okr.mjs --phan khoi-phuc in 'khoi-phuc ok toast=en ten=1 con-luu-tru=1': text toast bằng okrTaiCoCau/toChucMessages('en') của lý do cha-luu-tru với tên X (so bằng hàm messages nạp từ lib/messages), và P vẫn có hàng trong Đã lưu trữ sau khi tải lại. Chiều đỏ ghim: cờ --kiem-do-do đặt cookie lang=vi nhưng vẫn so với câu en — phải in 'toast khong khop ngon ngu: en' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/settings/organization/**", "apps/api/src/to-chuc/**", "_acceptance/okr-to-chuc-va/rang/**"]
