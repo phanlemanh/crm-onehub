@@ -857,10 +857,17 @@ const GHIM = {
 		"12 KR chưa chọn mức tự tin vẫn chờ lần gửi sau.",
 	],
 	"okr:capNhat.tuTinNhan": ["Tự tin 1", "Tự tin 12"],
+	"okr:capNhat.daXong.luc": [
+		"Lần gửi mới nhất 1 lúc A.",
+		"Lần gửi mới nhất 12 lúc A.",
+	],
+	"okr:capNhat.daGuiMotPhan": [
+		"Đã gửi 1/A KR tuần này",
+		"Đã gửi 12/A KR tuần này",
+	],
 	"okr:caiDat.mo.tenGoiY.nam": ["Năm 1", "Năm 12"],
 	"okr:caiDat.mo.tenGoiY.quy": ["Quý 1/A", "Quý 12/A"],
 	"okr-toan-canh:toanCanh.leRa": ["Lẽ ra đã tới 1%", "Lẽ ra đã tới 12%"],
-	"okr-toan-canh:toanCanh.chuaDat": ["1 chưa đặt", "12 chưa đặt"],
 	"okr-toan-canh:tienDoLeRa": [
 		"Tiến độ 1: A%, lẽ ra đã tới B%",
 		"Tiến độ 12: A%, lẽ ra đã tới B%",
