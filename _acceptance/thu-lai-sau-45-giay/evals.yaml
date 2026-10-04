@@ -1,0 +1,80 @@
+slug: thu-lai-sau-45-giay
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tl45_huy_truoc_gui
+    expected: "exit 0; bài DOM mới dùng khung-soan-okr (không sửa khung): phiên giả streaming có continuationToken, tin cuối đã gửi qua lượt mở đầu, đồng hồ giả trôi quá SOAN_UI.hanKhongSuKienMs để chỗ báo lỗi hiện câu loiMoTa; globalThis.fetch giả ghi lại yêu cầu; bấm [data-nut='thu-lai'] → đúng 1 POST tới đường kết thúc bằng /eve/v1/session/<phiên>/cancel, header OKR_SOAN_CUA.header = mã cuộc; số lần dừng (daDung) tăng 1; daGui KHÔNG thêm tin nào trước khi onFinish được gọi. Đối chứng dương cùng fixture: phiên không bận (status error do lỗi HTTP) → bấm gửi lại ngay, không POST cancel. Chiều đỏ ghim: bản sao gửi lại ngay sau stop → 'gui-lai-truoc-khi-khep' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr-thu-lai-45s.dom.tsx]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tl45_gui_lai_sau_khep
+    expected: "exit 0; cùng tệp, ba ca thứ tự viết trước: (a) onFinish trước, hồi âm huỷ sau; (b) hồi âm huỷ trước, onFinish sau; (c) onFinish tới nhưng yêu cầu huỷ còn treo (fetch giả giữ promise) — sau điều thứ nhất daGui không đổi, sau điều thứ hai daGui thêm đúng 1 tin bằng tin cuối (ca c: chỉ sau khi trả hồi âm huỷ); gọi onFinish lần nữa → daGui không đổi. Chiều đỏ ghim: bản sao gửi lại ngay trong onFinish không chờ huỷ → 'gui-lai-truoc-khi-huy <ca>' mã 1; bản sao bỏ gửi lại → 'khong-gui-lai <ca>' mã 1; bản sao gửi mỗi lần onFinish → 'gui-lai-hai-lan' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr-thu-lai-45s.dom.tsx]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tl45_dang_cho_khep
+    expected: "exit 0; cùng tệp: sau bấm, trước khi đủ hai điều của AC-2, store giả về ready (như eve làm khi huỷ) — [data-luot='loi'] còn, nút disabled, vùng aria-live chứa daThuLai('1') và câu loiMoTa; đồng hồ giả trôi quá SOAN_UI.choKhepMs mà không gọi onFinish → [data-luot='loi'] chứa câu hoiThoai.chuaGuiLai, nút mở, daGui không đổi. Chiều đỏ ghim: bản sao bỏ dangChoKhep khỏi dangThu → 'bao-loi-mat-khi-cho' mã 1; bản sao không có trần → 'khoa-mai' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr-thu-lai-45s.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.tl45_gui_lai_bi_tu_choi
+    expected: "exit 0; cùng tệp: cờ của bài cho send giả ném Error('eve session is already processing a turn.') đúng lúc phiên giả đang streaming (tắt cờ thì uỷ quyền về send của khung); sau đủ hai điều của AC-2 → [data-luot='loi'] chứa câu hoiThoai.chuaGuiLai và daThuLai('1'), nút mở; hai nhánh bấm tiếp viết trước: phiên giả streaming → POST cancel thứ hai và daGui chưa đổi; phiên giả ready → gửi thẳng (daGui +1), KHÔNG POST cancel; lần gửi thành công → không còn câu chuaGuiLai. Chiều đỏ ghim: bản sao nuốt lỗi như cũ → 'gui-lai-im' mã 1; bản sao luôn huỷ khi loiGuiLai → 'huy-thua-khi-ranh' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/lib/messages/okr-soan.ts, apps/app/test/soan-okr-thu-lai-45s.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tl45_huy_cua
+    expected: "exit 0; bài gọi handler POST thật của cửa (khung-cua-hoan của R1h, không sửa) trên kho kiểm riêng: cuộc dang có phiên eve, n ∈ {0, 5}; fetch giả trả 200 { status: 'accepted' } cho đường /cancel; POST session/<phiên>/cancel → fetch giả nhận đúng 1 lời gọi với đường kết thúc /eve/v1/session/<phiên>/cancel; cửa trả 200 và thân toEqual thân của Trợ lý; soLuot đọc lại = n. Đối chứng dương cùng fixture: POST session/<phiên> (gửi tiếp) 202 → soLuot = n + 1. Chiều đỏ ghim: bản sao thêm huyLuot vào CUA_OKR.dangLuot → 'huy-tinh-luot n=<n>' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", apps/app/lib/cua-okr-config.ts, apps/app/test/soan-okr-huy-luot.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.tl45_giu_r1h
+    expected: "exit 0; chạy nguyên hai tệp đã ký soan-okr-thu-lai.dom.tsx (R1h) và soan-okr-hong.dom.tsx (soan-okr-cung-tro-ly) trên cây sau lượt này; git diff merge-base của hai tệp rỗng (lệnh in 'tep da ky bi sua: <tep>' và mã 1 nếu khác rỗng)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/test/soan-okr-thu-lai.dom.tsx, apps/app/test/soan-okr-hong.dom.tsx]
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.tl45_man_that
+    steps:
+      - "Phiên đo riêng (mot-luot.sh), OKR_AGENT_BRIDGE_SECRET giả, OKR_AGENT_URL=http://127.0.0.1:3351; script dựng Trợ lý giả trên 3351 TRƯỚC màn đầu: POST session → 202 có mã phiên; GET stream → giữ kết nối, không gửi sự kiện; POST cancel → giữ 3 s rồi 200 accepted và đóng luồng đang giữ (mốc đỗ); POST session/<phiên> trước mốc đỗ → 409, sau mốc đỗ → 202; ghi nhật ký từng yêu cầu kèm mốc giờ"
+      - "Cảnh cây trước màn đầu; seed: chu kỳ pha lap-ke-hoach, một phòng ban bật soạn, một cuộc dang soLuot 0; đăng nhập trưởng phòng ban"
+      - "1440 px: mở ?cuocSoan=<id> (màn tự gửi lượt mở đầu) → chờ câu loiMoTa trong [data-luot='loi'] (tối đa 60 s); ảnh E7-qua-45s-1440; bấm [data-nut='thu-lai']; lấy mẫu [data-luot='loi'] mỗi 200 ms tới khi Trợ lý giả nhận POST gửi lại; ảnh E7-cho-khep-1440"
+      - "Lặp ở 390 px với cuộc mới; đo scrollWidth ≤ clientWidth"
+    expected: "exit 0; thu-lai-45s-man-that.mjs in DUNG cho, ở cả hai khổ: Trợ lý giả nhận cancel; mốc đỗ = mốc nhận cancel + 3 s; POST session/<phiên> trước mốc đỗ (nếu có) bị trả 409 và được ghi; có đúng một POST gửi lại được trả 202 với mốc SAU mốc đỗ; số mẫu [data-luot='loi'] lấy giữa lúc bấm và POST 202 ≥ 3 và mọi mẫu đều thấy phần tử (in số mẫu); không tràn ngang; ảnh E7-qua-45s-<kho>, E7-cho-khep-<kho> (chụp trước mốc đỗ) + HTML có trên đĩa. Chiều đỏ ghim: cờ --kiem-do-do cho Trợ lý giả gửi một sự kiện mỗi 10 giây (không im) → in 'khong thay qua 45 giay' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/lib/messages/okr-soan.ts, _acceptance/thu-lai-sau-45-giay/rang/thu-lai-45s-man-that.mjs]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.tl45_chu_va_san
+    expected: "exit 0; messages-guard.spec.ts xanh (khoá hoiThoai.chuaGuiLai có vi và en, có chỗ gọi); design-gate --mode static trên hoi-thoai-soan.tsx không có P0. Chiều đỏ ghim: bản sao thiếu bản en của khoá → messages-guard gọi tên khoá."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", apps/app/lib/messages/okr-soan.ts]
+
+  - id: E9
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.tl45_store_eve_that
+    expected: "exit 0; bài dựng EveAgentStore thật của eve (gói eve/client, không giả) với một phiên giả mà send trả luồng treo tới khi signal huỷ; bắt đầu send, gọi stop(); ghi thứ tự sự kiện: trạng thái snapshot lúc onFinish chạy là 'ready', và onFinish được gọi đúng 1 lần sau stop; send() mới ngay trong onFinish không ném. Đối chứng dương cùng fixture: gọi send() lần hai ngay sau stop() (không chờ onFinish) thì ném 'eve session is already processing a turn.' — chứng minh lỗi gốc của Ngoài-3. Chiều đỏ ghim: không gọi stop → 'onfinish-khong-goi' mã 1 (bài chờ có trần)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/test/soan-okr-store-eve-huy.spec.ts]
