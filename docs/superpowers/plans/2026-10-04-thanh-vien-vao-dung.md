@@ -315,7 +315,7 @@ if (workspace.data && !workspace.data.canManageMembers) return null;
 - [ ] **Step 1:** viết `do-man.mjs`: đọc giá trị cột trước lượt; quản trị `ada@trycomp.ai`, thành viên thường `marcus@trycomp.ai` (như `do-khoi.mjs`); gõ chuỗi AC-1, bấm «Lưu», đọc DB; gõ `gmail.com` → lỗi dưới ô; mở hộp, gõ địa chỉ của `marcus@trycomp.ai` (đã là thành viên) → hộp giữ mở + `ALREADY_A_MEMBER`; chụp sáu ảnh vào `BANG_CHUNG`; `finally` trả cột về giá trị cũ, xoá lời cho phép mang tiền tố lượt.
 - [ ] **Step 2:** chạy trên giao diện cũ (trước Task 5/6, bằng bản sao ở `.acceptance-runs/thanh-vien-vao-dung/sao-cu/` hoặc commit trước) → SAI ở các mã thẻ (chiều đỏ).
 - [ ] **Step 3:** chạy trên cây này → `17 DUNG, 0 SAI`; xem từng ảnh.
-- [ ] **Step 4:** chạy `r1b_san_thiet_ke` (mã 0) + phá-thử bản sao `rounded-[7px]` (mã 1); chạy `tvhk_do_khoi` (`46 DUNG, 0 SAI`), `tvhk_ttv_do_bang` (mã 0), `r1b_khong_hoi_quy_api` (0 fail; so số ca với merge-base).
+- [ ] **Step 4:** chạy `r1b_san_thiet_ke` (mã 0) + phá-thử bản sao `bg-blue-600 text-gray-400` (luật P0 gray-on-color, mã khác 0); chạy `tvhk_do_khoi` (`46 DUNG, 0 SAI`), `tvhk_ttv_do_bang` (mã 0), `r1b_khong_hoi_quy_api` (0 fail; so số ca với merge-base).
 - [ ] **Step 5: Commit** — `test: bàn đo màn thanh-vien-vao-dung`.
 
 ### Task 9: Soi production chỉ đọc

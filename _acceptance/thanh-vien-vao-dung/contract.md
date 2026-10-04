@@ -86,3 +86,4 @@ Never: dọn dòng treo trên production bằng migration — trái ràng buộc
 - Không migration: cột `appSetting.staffEmailDomains` có từ `20260916025034_staff_email_domains`.
 - `apps/api/src/companies/domain.ts` nằm ngoài ranh giới P3; vòng này chỉ THÊM một hàm xuất `isFreeEmailDomain`, không sửa dòng có sẵn.
 - Lệnh soi production lấy chuỗi kết nối bằng `vercel env pull` vào tệp tạm ngoài kho, chạy, xoá tệp; tệp kết quả chỉ chứa số đếm và tên máy chủ.
+- Số soi production ngày giao code (04/10/2026, trước merge, dự án `crm-onehub-api`, máy chủ Neon pooler, giao dịch READ ONLY): `ten-mien 0`, `treo 0`, `bo-sot 0`, `khong-doc-duoc 0` — `evidence/soi-production.txt`. Hôm nay không có dòng treo cũ nào, nên ngưỡng «dòng treo» đọc theo cách (b) cũng là 0 tuyệt đối; tên miền nội bộ chưa đặt (đúng lỗi #28).

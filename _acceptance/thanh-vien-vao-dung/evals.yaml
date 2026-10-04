@@ -292,7 +292,8 @@ evals:
       - "apps/app/app/(app)/[slug]/settings/members/**"
     expected: |
       design-gate --mode static tren tung tep cua trang Thanh vien (gom tep the ten mien moi) ->
-      ma 0 cho moi tep. CHIEU DO: ban sao the them className="rounded-[7px]" len Card -> ma 1.
+      ma 0 cho moi tep. CHIEU DO: ban sao the them className="bg-blue-600 text-gray-400" len Card -> luat P0
+      "gray-on-color", ma khac 0 (design-gate tinh chi chan P0; rounded-[7px] khong bi bat).
 
   - id: E19
     criterion: AC-13
