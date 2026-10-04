@@ -1,0 +1,13 @@
+== vong 3
+== (a) diff ban plugin <-> ban nhung
+so dong khac: 1
+sha256 ban plugin: 6b32575607a93f297d885e65e74e3a32510c785d74ab95665070bd329bd6d72e
+sha256 ban nhung : ffc95c0f3fc44f29c3ca0ad4aa20bc26a9c92a2f94ef430b1e06624ba9cfa99e
+== (b) JSON nhung == tep s4-args
+sha256 nhung: 8f28f30f8fcea53a1b7b18ef8d8e0bb21cbf98765954df9b95b5d351d98a3697
+sha256 tep  : 8f28f30f8fcea53a1b7b18ef8d8e0bb21cbf98765954df9b95b5d351d98a3697
+KHOP
+== (c) generated_sha == HEAD
+generated_sha: 62560bfc9ca841cc09ac3d314fa7ee9be9666192
+HEAD         : 62560bfc9ca841cc09ac3d314fa7ee9be9666192
+cay_sach=0

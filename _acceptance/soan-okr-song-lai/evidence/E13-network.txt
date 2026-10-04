@@ -1,0 +1,2 @@
+driver: script puppeteer (man-chua-cau-hinh.mjs) qua mot-luot.sh/tien-de; khong co duong doc network tong quat
+bo dem co san cua script: request toi /eve/agents/okr/ trong luc man mo: 1440=0, 390=0 (pha rong)

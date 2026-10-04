@@ -1,4 +1,6 @@
+import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { basename } from "node:path";
 
 const MINUTE_MS = 60_000;
 const HOUR_MS = 60 * MINUTE_MS;
@@ -24,6 +26,26 @@ export type MeasureComment =
 			createdAt: number;
 			usedAt: number;
 	  };
+
+export class MeasureDatabaseError extends Error {}
+
+export function currentTree(cwd = process.cwd()): string {
+	const named = process.env[MEASURE_DATABASE.treeVariable]?.trim();
+	if (named) return named;
+
+	const top = spawnSync("git", ["rev-parse", "--show-toplevel"], {
+		cwd,
+		encoding: "utf8",
+	});
+
+	if (top.status !== 0) {
+		throw new MeasureDatabaseError(
+			`${cwd} is not inside a git checkout, so there is no tree to name a measure database after. Set ${MEASURE_DATABASE.treeVariable}.`,
+		);
+	}
+
+	return basename(top.stdout.trim());
+}
 
 export function treeSlug(tree: string): string {
 	const slug = tree

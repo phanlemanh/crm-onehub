@@ -3,10 +3,16 @@ import { TO_CHUC } from "./to-chuc-config";
 
 const ma = z.string().trim().min(1).max(120);
 const tenTho = z.string().max(500);
+const moTaVao = z.string().max(TO_CHUC.vao.moTaToiDa);
+const chucDanhVao = z.string().max(TO_CHUC.vao.chucDanhToiDa);
 
 export const orgIdInput = z.object({ id: ma });
 export const orgDivisionCreateInput = z.object({ name: tenTho });
-export const orgRenameInput = z.object({ id: ma, name: tenTho });
+export const orgRenameInput = z.object({
+	id: ma,
+	name: tenTho,
+	moTa: moTaVao.optional(),
+});
 export const orgReorderInput = z.object({ ids: z.array(ma).min(1).max(200) });
 export const orgDepartmentCreateInput = z.object({
 	name: tenTho,
@@ -35,6 +41,7 @@ export const orgPlacementInput = z.object({
 	primaryDepartmentId: ma.nullable(),
 	secondaryDepartmentIds: z.array(ma).max(50),
 	managerUserId: ma.nullable(),
+	chucDanh: chucDanhVao.optional(),
 });
 export const orgImportInput = z.object({
 	text: z.string().max(TO_CHUC.nhap.toiDaKyTu),
@@ -52,6 +59,7 @@ export const nguoiTrongPhongBan = nguoiOutput.extend({ primary: z.boolean() });
 export const phongBanNode = z.object({
 	id: z.string(),
 	name: z.string(),
+	moTa: z.string(),
 	position: z.number(),
 	divisionId: z.string().nullable(),
 	head: nguoiOutput.nullable(),
@@ -62,6 +70,7 @@ export const phongBanNode = z.object({
 export const boPhanNode = z.object({
 	id: z.string(),
 	name: z.string(),
+	moTa: z.string(),
 	position: z.number(),
 	head: nguoiOutput.nullable(),
 	okrMo: z.number(),
@@ -79,6 +88,7 @@ export const viTriNguoi = nguoiOutput.extend({
 	managerOverrideId: z.string().nullable(),
 	manager: nguoiOutput.nullable(),
 	managerSource: nguonQuanLy,
+	chucDanh: z.string(),
 });
 export const donViLuuTru = z.object({
 	id: z.string(),
@@ -147,6 +157,7 @@ export const orgImportApplyOutput = z.object({
 		.optional(),
 });
 
+export type RenameInput = z.infer<typeof orgRenameInput>;
 export type TreeOutput = z.infer<typeof orgTreeOutput>;
 export type NguoiOutput = z.infer<typeof nguoiOutput>;
 export type NguonQuanLy = z.infer<typeof nguonQuanLy>;

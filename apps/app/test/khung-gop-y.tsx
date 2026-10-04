@@ -151,6 +151,7 @@ export const MT: MucTieuOutput = {
 	theoDoi: false,
 	hienThi: "cong-khai",
 	soNguoiXem: 0,
+	soGopYCho: 0,
 };
 
 const RONG_DONG = {
@@ -430,8 +431,6 @@ export const hopMucTieu = () =>
 	document.body.querySelector<HTMLElement>("[data-hop-thoai-muc-tieu]");
 export const hopKr = () =>
 	document.body.querySelector<HTMLElement>("[data-hop-thoai-kr]");
-export const cot = () =>
-	document.body.querySelector<HTMLElement>("[data-cot-gop-y]");
 export const dongCua = (id: string) =>
 	document.body.querySelector<HTMLElement>(`[data-dong="${id}"]`);
 export const goiCua = (duong: string) =>

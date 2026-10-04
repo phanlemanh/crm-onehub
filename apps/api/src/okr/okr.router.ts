@@ -12,6 +12,7 @@ import {
 	hienChuKyInput,
 	suaChuKyInput,
 } from "@crm/validation/okr-chu-ky";
+import { soanDuaVaoInput } from "@crm/validation/okr-cuoc-soan";
 import {
 	chuyenDonViInput,
 	datHienThiInput,
@@ -91,8 +92,10 @@ import {
 	createCycleInput,
 	createKrInput,
 	createObjectiveInput,
+	cuocIdInput,
 	cyclesOutput,
 	datHienThiOutput,
+	donViSoanVao,
 	followOutput,
 	guiCapNhatOutput,
 	idInput,
@@ -115,6 +118,18 @@ import {
 	programOutput,
 	setCyclePhaseInput,
 	setProgramInput,
+	soanAnOutput,
+	soanDanhSachCuocOutput,
+	soanDanhSachOutput,
+	soanDuaVaoOutput,
+	soanMoOutput,
+	soanMoVao,
+	soanQuyetInput,
+	soanQuyetOutput,
+	soanSanSangOutput,
+	soanSoDoInput,
+	soanSoDoOutput,
+	soanTangLuotOutput,
 	thanhVienOutput,
 	transferOkrOutput,
 	troLyAnInput,
@@ -196,6 +211,7 @@ import {
 	toanCanhOutput,
 } from "./okr-xem.contracts";
 import { OkrXemService } from "./okr-xem.service";
+import { SoanService } from "./soan.service";
 import { TroLyOkrService } from "./tro-ly.service";
 
 const TAG = ["OKR"];
@@ -213,6 +229,7 @@ export class OkrRouter {
 		@Inject(OkrKhepService) private readonly khep: OkrKhepService,
 		@Inject(OkrCanhKrService) private readonly canh: OkrCanhKrService,
 		@Inject(OkrMauService) private readonly khuon: OkrMauService,
+		@Inject(SoanService) private readonly soan: SoanService,
 		@Inject(OkrHoiYService) private readonly hoiYDv: OkrHoiYService,
 		@Inject(OkrHienThiService) private readonly hienThi: OkrHienThiService,
 		@Inject(OkrDuyetService) private readonly duyet: OkrDuyetService,
@@ -436,6 +453,114 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof xuHuongKrInput>,
 	) {
 		return this.troLy.xuHuongKr(ctx.user.id, input.keyResultId);
+	}
+
+	@Query({
+		input: donViSoanVao,
+		output: soanSanSangOutput,
+		meta: restMeta("GET", "/okr/soan/ready", TAG),
+	})
+	soanSanSang(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof donViSoanVao>,
+	) {
+		return this.soan.sanSang(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: soanMoVao,
+		output: soanMoOutput,
+		meta: restMeta("POST", "/okr/soan/sessions", TAG),
+	})
+	soanMo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soanMoVao>,
+	) {
+		return this.soan.mo(ctx.user.id, input);
+	}
+
+	@Query({
+		input: donViSoanVao,
+		output: soanDanhSachCuocOutput,
+		meta: restMeta("GET", "/okr/soan/sessions", TAG),
+	})
+	soanDanhSachCuoc(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof donViSoanVao>,
+	) {
+		return this.soan.danhSachCuoc(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: cuocIdInput,
+		output: soanTangLuotOutput,
+		meta: restMeta("POST", "/okr/soan/sessions/{cuocSoanId}/turn", TAG),
+	})
+	soanTangLuot(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cuocIdInput>,
+	) {
+		return this.soan.tangLuot(ctx.user.id, input.cuocSoanId);
+	}
+
+	@Query({
+		input: cuocIdInput,
+		output: soanDanhSachOutput,
+		meta: restMeta("GET", "/okr/soan/sessions/{cuocSoanId}/draft", TAG),
+	})
+	soanDanhSach(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cuocIdInput>,
+	) {
+		return this.soan.danhSach(ctx.user.id, input.cuocSoanId);
+	}
+
+	@Mutation({
+		input: soanQuyetInput,
+		output: soanQuyetOutput,
+		meta: restMeta("POST", "/okr/soan/lines/{deXuatId}/decision", TAG),
+	})
+	soanQuyet(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soanQuyetInput>,
+	) {
+		return this.soan.quyet(ctx.user.id, input);
+	}
+
+	@Mutation({
+		input: soanDuaVaoInput,
+		output: soanDuaVaoOutput,
+		meta: restMeta("POST", "/okr/soan/sessions/{cuocSoanId}/apply", TAG),
+	})
+	soanDuaVao(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soanDuaVaoInput>,
+	) {
+		return this.soan.duaVao(ctx.user.id, input);
+	}
+
+	@Query({
+		input: cuocIdInput,
+		output: soanAnOutput,
+		meta: restMeta("GET", "/okr/soan/sessions/{cuocSoanId}/admin", TAG),
+	})
+	soanAn(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof cuocIdInput>,
+	) {
+		return this.soan.an(ctx.user.id, input.cuocSoanId);
+	}
+
+	@Query({
+		input: soanSoDoInput,
+		output: soanSoDoOutput,
+		meta: restMeta("GET", "/okr/soan/metrics", TAG),
+	})
+	soanSoDo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof soanSoDoInput>,
+	) {
+		return this.soan.soDo(ctx.user.id, input.cycleId);
 	}
 
 	@Mutation({

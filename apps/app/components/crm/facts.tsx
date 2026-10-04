@@ -50,6 +50,7 @@ export function FactSuggestion({
 
 	return (
 		<ProposedChange
+			density="card"
 			kind="compact"
 			value={fact.value}
 			rationale={fact.evidence.map((item) => item.detail).join(" · ")}

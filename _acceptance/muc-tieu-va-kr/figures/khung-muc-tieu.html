@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khung mục tiêu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình 1 · Cấu trúc DOM · muc-tieu-va-kr</p>
+    <h1>Một bảng chung hay mỗi mục tiêu một khung</h1>
+    <p class="sub">Sáu hồ sơ đã ký đo «[data-muc-tieu] thead th» và «[data-muc-tieu] [data-kr-hang]»: hai móc đó chỉ đúng khi khối mục tiêu bọc cả bảng KR của nó.</p>
+
+    <svg viewBox="0 0 1200 680" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+  <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+  <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+  <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+</defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+<text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">HÌNH 1 · CẤU TRÚC DOM CỦA DANH SÁCH MỤC TIÊU · d-…-5 · AC-1 · AC-2 · AC-9 · AC-11</text>
+<text x="40" y="88" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">Một bảng chung — đã duyệt</text>
+<text x="640" y="88" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">Mỗi mục tiêu một khung — đề xuất</text>
+<line x1="600" y1="72" x2="600" y2="600" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<path d="M56 152 L56 404 A8 8 0 0 0 64 412 L88 412" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M56 188 L88 188" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M56 244 L88 244" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M56 300 L88 300" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M56 356 L88 356" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M656 152 L656 180 A8 8 0 0 0 664 188 L688 188" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M704 208 L704 404 A8 8 0 0 0 712 412 L736 412" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M704 244 L736 244" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M704 300 L736 300" fill="none" stroke="#575757" stroke-width="1"/>
+<path d="M704 356 L736 356" fill="none" stroke="#575757" stroke-width="1"/>
+<rect x="40" y="112" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="40" y="112" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="52" y="137" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">table</text>
+<text x="104" y="137" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">một bảng cho cả danh sách</text>
+<rect x="88" y="168" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="88" y="168" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="100" y="193" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">thead</text>
+<text x="152" y="193" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">hiện ra mắt</text>
+<text x="396" y="193" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">4 th</text>
+<rect x="88" y="224" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="88" y="224" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="100" y="249" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">tr</text>
+<text x="152" y="249" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">mục tiêu A</text>
+<text x="396" y="249" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-muc-tieu</text>
+<rect x="88" y="280" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="88" y="280" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="100" y="305" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">tr</text>
+<text x="152" y="305" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">KR của A</text>
+<text x="396" y="305" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-kr-hang</text>
+<rect x="88" y="336" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="88" y="336" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="100" y="361" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">tr</text>
+<text x="152" y="361" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">mục tiêu B</text>
+<text x="396" y="361" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-muc-tieu</text>
+<rect x="88" y="392" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="88" y="392" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="100" y="417" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">tr</text>
+<text x="152" y="417" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">KR của B</text>
+<text x="396" y="417" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-kr-hang</text>
+<rect x="640" y="112" width="344" height="40" rx="6" fill="#fafafa"/>
+<rect x="640" y="112" width="344" height="40" rx="6" fill="#ffffff" stroke="#006B4F" stroke-width="1.4"/>
+<text x="652" y="137" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">div</text>
+<text x="704" y="137" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">khối mục tiêu A</text>
+<text x="972" y="137" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-muc-tieu=A</text>
+<rect x="688" y="168" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="688" y="168" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="700" y="193" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">table</text>
+<text x="752" y="193" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">bảng của khung</text>
+<rect x="736" y="224" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="736" y="224" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8" stroke-dasharray="4,3"/>
+<text x="748" y="249" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">thead</text>
+<text x="800" y="249" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">chỉ trình đọc màn hình</text>
+<text x="1044" y="249" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">4 th</text>
+<rect x="736" y="280" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="736" y="280" width="320" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="748" y="305" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">tr</text>
+<text x="800" y="305" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">hàng mục tiêu</text>
+<text x="1044" y="305" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-hang-muc-tieu</text>
+<rect x="736" y="336" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="736" y="336" width="320" height="40" rx="6" fill="#f2f2f2" stroke="#575757" stroke-width="0.8"/>
+<text x="748" y="361" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">tr</text>
+<text x="800" y="361" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">KR1</text>
+<text x="1044" y="361" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-kr-hang</text>
+<rect x="736" y="392" width="320" height="40" rx="6" fill="#fafafa"/>
+<rect x="736" y="392" width="320" height="40" rx="6" fill="#f2f2f2" stroke="#575757" stroke-width="0.8"/>
+<text x="748" y="417" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">tr</text>
+<text x="800" y="417" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">KR2</text>
+<text x="1044" y="417" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-kr-hang</text>
+<rect x="640" y="448" width="344" height="40" rx="6" fill="#fafafa"/>
+<rect x="640" y="448" width="344" height="40" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="652" y="473" fill="#171717" font-size="11" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="start">div</text>
+<text x="704" y="473" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="start">khối mục tiêu B</text>
+<text x="972" y="473" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="end">data-muc-tieu=B</text>
+<text x="652" y="508" fill="#666666" font-size="11" font-family="'Geist', sans-serif" text-anchor="start" font-style="italic">lặp lại cấu trúc của khối A: table → thead · hàng mục tiêu · hàng KR</text>
+<rect x="40" y="536" width="480" height="60" rx="6" fill="#ffffff" stroke="#b42318" stroke-width="1"/>
+<text x="56" y="560" fill="#b42318" font-size="10" font-family="'Geist Mono', monospace" text-anchor="start">[data-muc-tieu] [data-kr-hang] = 0 · thead th trong khối = 0</text>
+<text x="56" y="582" fill="#b42318" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">→ 6 hồ sơ đã ký đỏ</text>
+<rect x="640" y="536" width="480" height="60" rx="6" fill="#ffffff" stroke="#006B4F" stroke-width="1"/>
+<text x="656" y="560" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">móc của 6 hồ sơ giữ nguyên</text>
+<text x="656" y="582" fill="#006B4F" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">tiêu đề cột không lặp ra mắt</text>
+<line x1="40" y1="624" x2="1160" y2="624" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="40" y="648" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">CHÚ GIẢI</text>
+<rect x="128" y="639" width="16" height="10" rx="2" fill="#ffffff" stroke="#006B4F" stroke-width="1.4"/>
+<text x="152" y="648" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="start">khối mang data-muc-tieu bọc cả bảng</text>
+<rect x="392" y="639" width="16" height="10" rx="2" fill="#ffffff" stroke="#575757" stroke-width="0.8" stroke-dasharray="4,3"/>
+<text x="416" y="648" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="start">có trong DOM, mắt không thấy</text>
+<rect x="616" y="639" width="16" height="10" rx="2" fill="#f2f2f2" stroke="#575757" stroke-width="0.8"/>
+<text x="640" y="648" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="start">hàng KR nền nhạt</text>
+<rect x="776" y="639" width="16" height="10" rx="2" fill="#ffffff" stroke="#b42318" stroke-width="1"/>
+<text x="800" y="648" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="start">móc đo của hồ sơ đã ký bị vỡ</text>
+<line x1="1000" y1="644" x2="1028" y2="644" stroke="#575757" stroke-width="1"/>
+<text x="1036" y="648" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="start">phần tử con</text>
+    </svg>
+
+    <footer>Hình 1 · muc-tieu-va-kr · sổ quyết định d-…-5 · AC-1, AC-2, AC-9, AC-11 · 2026-10-02</footer>
+  </div>
+</body>
+</html>

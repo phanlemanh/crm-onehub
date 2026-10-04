@@ -31,9 +31,10 @@ export async function loadThread(
 	sessionId: string,
 	headers: Record<string, string>,
 	signal?: AbortSignal,
+	host = "",
 ): Promise<Thread> {
 	try {
-		const snapshot = await new Client({ headers, host: "" })
+		const snapshot = await new Client({ headers, host })
 			.session({ sessionId, streamIndex: 0 })
 			.snapshot({ signal });
 

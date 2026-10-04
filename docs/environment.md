@@ -129,8 +129,10 @@ single place that knows what is set.
 | `KHO_TAI_LIEU_BLOB_TOKEN` | Keeps the Word and PDF sources of the document library in a private Blob store and reads them back for drafting. Without it nothing can be uploaded to the library |
 | `AI_GATEWAY_API_KEY` | The model. Not needed on Vercel (OIDC) |
 | `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` | A second AI Gateway key used only by the document library — the drafting machine (`may_soan`) and the AI assistant that answers from approved pages (`tro_ly_kho`) — so their spend is billed apart. Without it both run on the key above |
-| `OKR_AI_GATEWAY_API_KEY` | A separate AI Gateway key used only by Trợ lý OKR (suggestions and weekly summaries), so its spend is billed apart and the key can carry its own monthly budget. Without it Trợ lý OKR runs on `AI_GATEWAY_API_KEY`, or on Vercel OIDC |
+| `OKR_AI_GATEWAY_API_KEY` | A separate AI Gateway key used only by Trợ lý OKR (suggestions, weekly summaries and the drafting chat in `apps/agent-okr`), so its spend is billed apart and the key can carry its own monthly budget. Without it Trợ lý OKR runs on `AI_GATEWAY_API_KEY`, or on Vercel OIDC |
 | `AGENT_BRIDGE_SECRET` | The rep-facing Agent panel — see `agent.md` |
+| `OKR_AGENT_URL` | Where the app forwards the OKR drafting chat (`/eve/agents/okr/eve/v1/*`); `apps/agent-okr` on `127.0.0.1:2100` by default |
+| `OKR_AGENT_BRIDGE_SECRET` | Signs the OKR gate's two-minute token (audience `crm-okr-agent`); deliberately not `AGENT_BRIDGE_SECRET` — see `agent.md` «App eve thứ hai» |
 | `ZALO_BOT_TOKEN` | Fallback Bot Token. Người quản trị dán token ở Kết nối › Zalo, lưu trong `AppSetting`, và giá trị đó thắng biến này — see `agent.md` and `connections.md` |
 | `ZALO_WEBHOOK_SECRET` | Fallback webhook secret. Khi bot bật trên màn, tác tử sinh khoá và lưu trong `AppSetting`, giá trị đó thắng biến này; không có cả hai thì `/zalo/webhook` trả 404 — see `agent.md` |
 | `ZALO_API_URL` | Base URL of the Zalo Bot API; empty means the real one. Only for running against a fake Zalo in tests |
@@ -152,9 +154,20 @@ The API learns Zalo is on from `appSetting.zaloBotName`, which the agent writes
 each tick.
 
 `KHO_TAI_LIEU_AI_GATEWAY_API_KEY` and `OKR_AI_GATEWAY_API_KEY` are read by `apps/agent`
-only, so they are not in `env.validation.ts`. It is a secret: `turbo.json` `globalPassThroughEnv` and the agent's
+(and the latter also by `apps/agent-okr`, whose `dev` pass-through carries it), never by the API, so they are not in `env.validation.ts`. It is a secret: `turbo.json` `globalPassThroughEnv` and the agent's
 `dev` pass-through, never `env` (`_acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs`
 checks all three homes).
+
+`OKR_AGENT_URL` and `OKR_AGENT_BRIDGE_SECRET` are never read by the API, so neither
+is in `env.validation.ts`. The URL is read by `apps/app` alone (the gate); the secret by
+`apps/app`, which signs with it, and `apps/agent-okr`, which verifies. Both are in the
+root `turbo.json` `globalPassThroughEnv` and in `apps/app/turbo.json` `passThroughEnv`
+for `build` and `dev` — the secret never in `env`. `apps/agent-okr/turbo.json` hands the
+secret to its own `dev`, `dev:headless` and `test`. The app listens on `--port 2100`
+(`bun run --filter=agent-okr dev`); `bun run start` there reads `OKR_AGENT_PORT`, then
+`PORT`, then 2100. `_acceptance/soan-okr-cung-tro-ly/rang/tai-lieu.mjs` checks the four
+homes of the pair: `.env.example`, the root `turbo.json`, `apps/app/turbo.json` and this
+file.
 
 `BLOB_READ_WRITE_TOKEN` is also in `env.validation.ts` and `apps/api/turbo.json`
 because the API and the seed write pictures too. The Next.js app is deliberately

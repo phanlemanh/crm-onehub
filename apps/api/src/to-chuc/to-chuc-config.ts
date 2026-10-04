@@ -1,5 +1,15 @@
+import { TO_CHUC_TRAN } from "@crm/validation/to-chuc";
+
+const HE_SO_NFD = 3;
+
 export const TO_CHUC = {
 	ten: { toiDa: 80 },
+	moTa: { toiDa: TO_CHUC_TRAN.moTa },
+	chucDanh: { toiDa: TO_CHUC_TRAN.chucDanh },
+	vao: {
+		moTaToiDa: TO_CHUC_TRAN.moTa * HE_SO_NFD,
+		chucDanhToiDa: TO_CHUC_TRAN.chucDanh * HE_SO_NFD,
+	},
 	lo: { toiDa: 50 },
 	nhap: {
 		toiDaDong: 1000,
@@ -10,6 +20,8 @@ export const TO_CHUC = {
 		canQuyenQuanTri: "Cần quyền quản trị để sửa cây tổ chức.",
 		tenTrong: "Tên không được để trống.",
 		tenDai: (n: number) => `Tên dài quá ${n} ký tự.`,
+		moTaDai: (n: number) => `Mô tả dài quá ${n} ký tự.`,
+		chucDanhDai: (n: number) => `Chức danh dài quá ${n} ký tự.`,
 		tenTrung: (ten: string) => `Đã có «${ten}» ở cấp này.`,
 		khongCoBoPhan: (id: string) => `Không có bộ phận nào mang mã ${id}.`,
 		khongCoPhongBan: (id: string) => `Không có phòng ban nào mang mã ${id}.`,

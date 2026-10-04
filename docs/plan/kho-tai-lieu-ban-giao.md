@@ -22,7 +22,7 @@ từ điển được chốt ngay tại Cổng 1 của lượt 1, không có bư
 | Hồ sơ 17 luồng research | `docs/plan/kho-tai-lieu-ho-so/` |
 | Tài liệu trình bày (Claude Doc) | https://claude.ai/artifact/8B5uoGwQd4eyGb8wCNw8CN — riêng tư, mở được trên mọi máy đã đăng nhập tài khoản chủ kho |
 | Trang theo dõi tiến độ (artifact) | https://claude.ai/artifact/12sCbWrWgx6td1vqzR63Yg — dữ liệu trong kho dữ liệu của artifact; phiên máy cập nhật bằng `ArtifactData` sau mỗi hạng mục, cùng lúc với mục 8 |
-| Trang theo dõi trong kho | `docs/plan/lo-trinh-kho-tai-lieu.html` — mở bằng trình duyệt trên máy nào cũng xem được; dữ liệu là bản chụp sổ mục 8 ở `docs/plan/lo-trinh-kho-tai-lieu.data.js`, sửa cùng commit với sổ |
+| Trang theo dõi trong kho | `LO-TRINH.html` ở gốc kho — kit vẽ lại cùng bản đồ sản phẩm, trạng thái suy từ hồ sơ; tệp ý định `docs/plan/lo-trinh-kho-tai-lieu.json` (từ 03/10, kit 2.21.0) |
 | Bản mẫu bấm được | `apps/app/app/proto/_modules/kho-tai-lieu/`, 15 trạng thái khai ở `apps/app/app/proto/catalog.ts`, đường `/proto/kho-tai-lieu` |
 | Trình đọc markdown | `packages/ui/src/components/markdown-reader.tsx` |
 | Từ điển | Tám mục mới ở cuối `CONTEXT.md`, dạng «đề xuất, chưa qua Cổng Phạm vi» |

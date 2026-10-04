@@ -1,6 +1,6 @@
 # Sổ lệch chuẩn — `packages/ui/src/components/ai-elements/`
 
-Bốn tệp trong thư mục này là bản vendored của AI Elements. Chúng là một bản rẽ
+Bảy tệp trong thư mục này là bản vendored của AI Elements. Chúng là một bản rẽ
 nằm bên trong `packages/ui`: mỗi tệp đều khác bản thượng nguồn, và cái khác đó
 sẽ biến mất không kêu nếu ai đó chạy lại lệnh thêm của CLI.
 
@@ -13,7 +13,7 @@ Răng đối chiếu: `_acceptance/nen-chat-ai-elements/rang/so-lech-chuan.mjs`.
 
 ## Cách sổ này chịu chiều đỏ
 
-Răng **không** đọc sổ để biết tệp nào lệch. Nó kéo bản CLI tươi của cả bốn tệp
+Răng **không** đọc sổ để biết tệp nào lệch. Nó kéo bản CLI tươi của cả bảy tệp
 vào một sân tạm rồi so từng dòng với bản trong cây. Tập tệp lệch đo được và tập
 mục trong sổ phải trùng nhau — không thiếu, không thừa. Suy "tệp lệch" từ chính
 sổ thì hai tập luôn bằng nhau và phép đo xanh vĩnh viễn; đó là lỗi khuôn mà răng
@@ -250,35 +250,84 @@ làm, nhưng nó vẫn phải đi qua đúng nghi thức ở cuối sổ, vì `r
 thành biến thể `sm` của `Button`. Tệp không có chữ hiện trên màn: các chuỗi còn
 lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-cung.mjs`.
 
+### suggestion.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/suggestion.tsx`
+
+**Số dòng khác:** 0
+
+**Vân tay lệch:** `0000000000000000`
+
+**Đổi gì:** Kéo bằng CLI ngày 30/09 ở lượt `soan-okr-cung-tro-ly`, trong một sân
+tạm có `components.json` và `tsconfig.json` của kho, rồi chép riêng hai tệp
+`suggestion.tsx` và `prompt-input.tsx` vào cây. Lượt `tro-ly-doc-kho` kéo cùng tệp
+này ngày 01/10 trên nhánh riêng; khi gộp hai nhánh, tệp giữ bản vá của 30/09 và
+thêm biến thể của lượt 4. Toàn bộ dòng khác là bản vá của kho, **không có phần cũ
+hơn thượng nguồn**:
+
+- `Suggestion` bỏ `className` khỏi danh sách tham số tách riêng và bỏ chuỗi
+  `cn("cursor-pointer rounded-full px-4", className)` ở `Button`; `className`
+  của người gọi đi thẳng vào `Button` qua `...props`.
+- `Suggestions` thêm biến thể `xuongDong` (round 4 của `tro-ly-doc-kho`, 02/10):
+  thay hàng `ScrollArea` cuộn ngang `w-max` bằng một hàng `flex-wrap` rộng đúng
+  khung, và cho mỗi nút con cao theo chữ (`h-auto`, `whitespace-normal`,
+  `max-w-full`). Mặc định vẫn là hàng cuộn ngang của thượng nguồn.
+
+**Vì sao:** `rounded-full` không có trong thang bán kính của `docs/design.md`
+(AC-6, `mau-ban-kinh.mjs` đỏ đích danh dòng này). `px-4` là khoảng cách tự đặt
+đè lên cỡ `sm` của `Button`, và `cursor-pointer` đã nằm sẵn trong `buttonVariants`
+của kho. Nút gợi ý là chip viền cỡ `sm` của `Button` — hình dạng của một gợi ý
+do biến thể quyết, không do chỗ gọi. Ở khổ 390, hàng cuộn ngang giấu chip thứ hai
+và thứ ba sau mép phải mà trang không cuộn ngang, nên người dùng điện thoại của tab
+«Hỏi» không biết còn gợi ý; biến thể mới được dựng ở `packages/ui` thay vì đè lớp ở
+chỗ gọi.
+
 ### prompt-input.tsx
 
 **Tệp:** `packages/ui/src/components/ai-elements/prompt-input.tsx`
 
-**Số dòng khác:** 118
+**Số dòng khác:** 115
 
-**Vân tay lệch:** `290614e826061141`
+**Vân tay lệch:** `f68462a33fa0b590`
 
-**Đổi gì:** Kéo bằng CLI ngày 01/10 ở lượt `tro-ly-doc-kho`, trong sân tạm có
-`components.json` của kho, cùng lượt với `inline-citation` và `suggestion`; chỉ
-chép ba tệp này vào cây. CLI còn đòi gói `nanoid`, gói này đã khai tay vào
-`packages/ui/package.json` (`^6.0.1`, cùng bản đã có trong `bun.lock`); gói `cn`
-nó đòi thì không cài. Toàn bộ 118 dòng khác là bản vá của kho:
+**Đổi gì:** Kéo cùng đợt với `suggestion.tsx`. Toàn bộ dòng khác là bản vá của
+kho, **không có phần cũ hơn thượng nguồn**:
 
-- Bỏ 65 dòng chú thích `//` và hai khối `/** … */` của thượng nguồn, kể cả các
-  dòng `oxlint-disable` (thư mục này nằm ngoài `oxlint` và `biome`).
-- Chín chuỗi tiếng Anh về `useMessages()`, khối `promptInput` của
-  `packages/ui/src/lib/messages.ts`: hai nhãn mặc định của mục menu thêm tệp và
-  chụp màn hình (tham số `label`), `aria-label` và `title` của ô chọn tệp ẩn, chữ
-  gợi ý mặc định của `PromptInputTextarea` (tham số `placeholder`), `aria-label`
-  «Stop»/«Submit» của `PromptInputSubmit`, ba thông điệp lỗi truyền cho `onError`.
-  Tham số mặc định đổi thành `label ?? msg…` / `placeholder ?? msg…` ngay chỗ dùng.
-- Hai mảng phụ thuộc của `useCallback` thêm `msg`.
+- Bỏ mọi chú thích: các dòng `//` (kể cả khung `// =====` chia mục và các dòng
+  `// oxlint-disable-next-line …`) và hai khối `/** … */`. `AGENTS.md` cấm chú
+  thích trong mã. Bỏ các dòng `oxlint-disable` là có chủ ý: `bun run lint:slop`
+  chạy sau đó vẫn xanh.
+- Thêm `import { useMessages } from "@crm/ui/components/locale-provider"`.
+- Chín chuỗi tiếng Anh về `msg.promptInput.*`: hai giá trị mặc định của
+  tham số `label` — "Add photos or files" và "Take screenshot" — bỏ khỏi tham số
+  rồi đọc `label ?? msg.promptInput.addAttachments` · `.takeScreenshot` trong
+  thân; ba thông điệp `onError` — "No files match the accepted types.",
+  "All files exceed the maximum size.", "Too many files. Some were not added." —
+  mỗi câu xuất hiện **hai lần** vì tệp thượng nguồn có hai đường thêm tệp
+  (`addLocal` và `addWithProviderValidation`), nên hai mảng phụ thuộc của
+  `useCallback` thêm `msg`; `aria-label` và `title` "Upload files" của ô chọn tệp
+  ẩn; giá trị mặc định `placeholder = "What would you like to know?"` của
+  `PromptInputTextarea` bỏ khỏi tham số rồi đọc `placeholder ?? msg.promptInput.placeholder`;
+  và `aria-label` "Stop" · "Submit" của `PromptInputSubmit`.
+- `PromptInput`, `PromptInputTextarea`, `PromptInputSubmit`, hai mục menu tệp:
+  thêm dòng `const msg = useMessages();` đầu thân hàm.
 
-**Vì sao:** `AGENTS.md` cấm chú thích trong mã. Chữ hiện cho người dùng phải qua
-bảng chuỗi (`docs/chat-ui.md`, mục lệch). Các chuỗi máy còn lại — mã lỗi
-`accept`/`max_files`/`max_file_size`, tên sự kiện, `typeof`, MIME, tên phím, bộ
-chọn CSS, thông điệp reject nội bộ của `captureScreenshot` — đã khai miễn từng mục
-trong `chu-cung.mjs`, có lý do.
+Không có bán kính nào phải đổi: bản thượng nguồn không có `rounded-full` hay
+`rounded-xl` ở tệp này.
+
+**Vì sao:** Chuỗi hiển thị phải đi qua `useMessages()` (AC-5, `chu-cung.mjs`).
+Các giá trị mặc định của tham số là lớp lệch khó thấy nhất — xem mục «Ca đã trả
+giá» bên dưới — nên chúng bị bỏ khỏi chữ ký chứ không đổi thành chuỗi tiếng Việt
+cứng. Người gọi vẫn truyền `label`, `placeholder`, `aria-label` của riêng mình
+được, và khi không truyền thì bảng chuỗi quyết theo ngôn ngữ đang chọn.
+Các chuỗi kỹ thuật còn lại trong tệp (`"dragover"`, `"Enter"`, `"max_files"`,
+`"image/png"` …) không tới mắt người dùng; chúng nằm trong danh sách trắng theo
+giá trị của `chu-cung.mjs`, mỗi mục kèm lý do, chứ không bị sửa trong tệp.
+
+Về phụ thuộc: CLI ghi `nanoid` và gói `cn` của người khác vào `package.json` của
+sân tạm. Chỉ `nanoid` được giữ — thêm bằng `bun add nanoid` vào
+`packages/ui/package.json` và `bun.lock` ở lượt này; `cn` bị bỏ, như mục cảnh báo
+vận hành bên dưới đã nói.
 
 ### inline-citation.tsx
 
@@ -326,28 +375,6 @@ nhật trong kho, không phải URL. Bán kính theo thang, icon Carbon, chuỗi
 chuỗi là luật của `docs/design.md` và `docs/reui.md`. Bốn chuỗi máy mới
 (`secondary`, `panel`, `mouse`, `select`) đã khai miễn trong `chu-cung.mjs`
 kèm lý do.
-
-### suggestion.tsx
-
-**Tệp:** `packages/ui/src/components/ai-elements/suggestion.tsx`
-
-**Số dòng khác:** 30
-
-**Vân tay lệch:** `75d7eb7499e73dc8`
-
-**Đổi gì:** Kéo cùng lượt với `prompt-input` (01/10). Hai bản vá:
-
-- `Suggestion` bỏ `rounded-full` trong lớp của `Button`, để nút dùng `rounded-md`
-  của chính `Button`.
-- `Suggestions` thêm biến thể `xuongDong` (round 4 của `tro-ly-doc-kho`, 02/10):
-  thay hàng `ScrollArea` cuộn ngang `w-max` bằng một hàng `flex-wrap` rộng đúng
-  khung, và cho mỗi nút con cao theo chữ (`h-auto`, `whitespace-normal`,
-  `max-w-full`). Mặc định vẫn là hàng cuộn ngang của thượng nguồn.
-
-**Vì sao:** Bán kính chỉ từ thang của `docs/design.md`; nút là `rounded-md`. Ở
-khổ 390, hàng cuộn ngang giấu chip thứ hai và thứ ba sau mép phải mà trang không
-cuộn ngang, nên người dùng điện thoại không biết còn gợi ý; biến thể mới được dựng
-ở `packages/ui` thay vì đè lớp ở chỗ gọi.
 
 ## Ca đã trả giá: `conversation.tsx`, 06/09 và 09/09
 

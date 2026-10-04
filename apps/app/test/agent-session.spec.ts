@@ -2,7 +2,13 @@ import { describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import type { MessageStreamEvent, SessionState } from "eve/client";
 import { recordCopy, recordFilter, recordHeader } from "../lib/agent-record";
-import { classify, composerState, eventsOf } from "../lib/agent-session";
+import {
+	classify,
+	composerState,
+	eventsOf,
+	loadThread,
+} from "../lib/agent-session";
+import { OKR_SOAN_CUA, okrSoanHeader } from "../lib/okr-soan-record";
 
 const NOW = Date.parse("2026-08-01T12:00:00.000Z");
 
@@ -182,5 +188,56 @@ describe("the record sheet", () => {
 
 		expect(sheet).toContain("tab.keepMounted && opened.has(tab.value)");
 		expect(sheet).toContain("data-[state=inactive]:hidden");
+	});
+});
+
+describe("loadThread through a gateway", () => {
+	async function reads(
+		host: string | undefined,
+		headers: Record<string, string>,
+	): Promise<{ path: string; headers: Record<string, string> }> {
+		const real = globalThis.fetch;
+		const seen: { path: string; headers: Record<string, string> }[] = [];
+		globalThis.fetch = (async (
+			input: RequestInfo | URL,
+			init?: RequestInit,
+		) => {
+			const url = String(input instanceof Request ? input.url : input);
+			seen.push({
+				path: url.replace(/^https?:\/\/[^/]+/, "").split("?")[0] ?? "",
+				headers: Object.fromEntries(
+					new Headers(
+						input instanceof Request ? input.headers : init?.headers,
+					).entries(),
+				),
+			});
+			return Response.json({ error: "nope" }, { status: 403 });
+		}) as typeof fetch;
+		try {
+			const thread =
+				host === undefined
+					? await loadThread("wrun_1", headers)
+					: await loadThread("wrun_1", headers, undefined, host);
+			expect(thread.status).toBe("offline");
+		} finally {
+			globalThis.fetch = real;
+		}
+		const first = seen[0];
+		if (!first) throw new Error("loadThread never reached the gateway");
+		return first;
+	}
+
+	it("keeps the CRM agent on the old gateway when no host is given", async () => {
+		const call = await reads(undefined, { "x-crm-deal": "d1" });
+
+		expect(call.path).toBe("/eve/v1/session/wrun_1/stream");
+		expect(call.headers["x-crm-deal"]).toBe("d1");
+	});
+
+	it("sends the drafting session through the OKR gateway with its cuộc", async () => {
+		const call = await reads(OKR_SOAN_CUA.host, okrSoanHeader("c1"));
+
+		expect(call.path).toBe("/eve/agents/okr/eve/v1/session/wrun_1/stream");
+		expect(call.headers[OKR_SOAN_CUA.header]).toBe("c1");
 	});
 });

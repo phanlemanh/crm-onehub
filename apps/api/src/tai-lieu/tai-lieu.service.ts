@@ -2,6 +2,10 @@ import { createHash } from "node:crypto";
 import { WORKSPACE_ID } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
+import {
+	kiemTrangChienLuoc,
+	LOAI_TRANG_CHIEN_LUOC,
+} from "@crm/db/tai-lieu-chien-luoc";
 import { taoDeXuatTaiLieu } from "@crm/db/tai-lieu-de-xuat";
 import {
 	demChoDuyet,
@@ -553,7 +557,12 @@ export class TaiLieuService {
 				createdAt: true,
 				banGoc: { select: { noiDung: true } },
 				trang: {
-					select: { slug: true, chuTrangId: true, banDangDungId: true },
+					select: {
+						slug: true,
+						chuTrangId: true,
+						banDangDungId: true,
+						loai: true,
+					},
 				},
 				trichDoan: true,
 				nguon: { select: { id: true, tenTep: true, chu: true } },
@@ -562,6 +571,10 @@ export class TaiLieuService {
 		if (!dx || !thayDeXuat(nguoi, dx, dx.trang)) throw khongCo();
 		const banGoc = dx.banGoc?.noiDung ?? "";
 		const nguon = dx.nguon;
+		const chienLuoc =
+			dx.trang.loai === LOAI_TRANG_CHIEN_LUOC
+				? kiemTrangChienLuoc(dx.noiDung)
+				: null;
 		return {
 			id: dx.id,
 			slug: dx.trang.slug,
@@ -579,6 +592,13 @@ export class TaiLieuService {
 			trichDoan: nguon ? parseTrichDoan(dx.trichDoan) : [],
 			chuNguon: nguon?.chu ?? null,
 			soMoi: nguon ? soMoi(dx.noiDung, dx.banGoc?.noiDung ?? null) : [],
+			chienLuoc: chienLuoc
+				? {
+						soKyTu: chienLuoc.soKyTu,
+						tranKyTu: chienLuoc.tranKyTu,
+						canhBaoTuCam: chienLuoc.canhBaoTuCam,
+					}
+				: null,
 		};
 	}
 
@@ -613,7 +633,7 @@ export class TaiLieuService {
 				noiDung: true,
 				nguonId: true,
 				banGoc: { select: { noiDung: true } },
-				trang: { select: { chuTrangId: true } },
+				trang: { select: { chuTrangId: true, loai: true } },
 			},
 		});
 		if (!dx) throw khongCo();
@@ -625,8 +645,16 @@ export class TaiLieuService {
 	async approve(
 		nguoi: NguoiGoi,
 		input: TaiLieuApproveInput,
-	): Promise<{ slug: string; so: number }> {
+	): Promise<{ slug: string; so: number; canhBaoTuCam: string[] }> {
 		const truoc = await this.yeuCauDuyet(nguoi, input.id);
+		const chienLuoc =
+			truoc.trang.loai === LOAI_TRANG_CHIEN_LUOC
+				? kiemTrangChienLuoc(truoc.noiDung)
+				: null;
+		if (chienLuoc?.quaTran)
+			throw new BadRequestException(
+				T.chienLuocQuaTran(chienLuoc.tranKyTu, chienLuoc.soKyTu),
+			);
 		if (truoc.nguonId) {
 			const canDoiChieu = soMoi(
 				truoc.noiDung,
@@ -722,7 +750,11 @@ export class TaiLieuService {
 			return { loai: "xong", slug: trang.slug, so };
 		});
 		if (ket.loai === "cu") throw new ConflictException(T.cu);
-		return { slug: ket.slug, so: ket.so };
+		return {
+			slug: ket.slug,
+			so: ket.so,
+			canhBaoTuCam: chienLuoc?.canhBaoTuCam ?? [],
+		};
 	}
 
 	async reject(

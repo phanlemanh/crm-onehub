@@ -12,6 +12,7 @@ const TAI_LIEU = {
 	},
 	co: { goc: "--goc", onehub: "--onehub", release: "--release" },
 	refMacDinh: { onehub: "origin/onehub", release: "origin/release" },
+	hopNhat: "e5c369cc6d770afec9141d53770ac57f38bfdbe5",
 	muc: {
 		choRe: "## Chỗ rẽ: Trợ lý OKR (lượt 9c)",
 		okr: "## OKR",
@@ -64,17 +65,20 @@ function tapTepHang() {
 	const thieu = [onehub, release].filter((r) => !coRef(r));
 	if (thieu.length > 0)
 		throw new KhongDo(`tai lieu: thieu ref ${thieu.join(", ")}`);
+	const gocKhai = giaTriCo(TAI_LIEU.co.goc);
+	const neo =
+		gocKhai === null && coRef(TAI_LIEU.hopNhat) ? TAI_LIEU.hopNhat : null;
 	const goc =
-		giaTriCo(TAI_LIEU.co.goc) ?? git("merge-base", onehub, "HEAD").trim();
+		gocKhai ?? (neo ? `${neo}^1` : git("merge-base", onehub, "HEAD").trim());
 	if (!coRef(goc)) throw new KhongDo(`tai lieu: thieu ref goc ${goc}`);
-	const doi = git("diff", "--name-only", goc, "HEAD")
-		.split("\n")
-		.filter(Boolean);
+	const dinh = neo ?? "HEAD";
+	const doi = git("diff", "--name-only", goc, dinh).split("\n").filter(Boolean);
 	const coORelease = new Set(
 		git("ls-tree", "-r", "--name-only", release).split("\n").filter(Boolean),
 	);
 	return {
 		goc,
+		dinh,
 		release,
 		tap: new Set(doi.filter((t) => coORelease.has(t))),
 	};
@@ -85,7 +89,7 @@ function kiemChoRe(agentMd) {
 	const diff = tapTepHang();
 	const tapDiff = [...diff.tap].sort();
 	console.log(
-		`tai-lieu: diff ${diff.goc.slice(0, 12)}..HEAD giao ${diff.release}: ${tapDiff.length} tep — ${tapDiff.join(", ")}`,
+		`tai-lieu: diff ${diff.goc.replace(/^([0-9a-f]{12})[0-9a-f]*/, "$1")}..${diff.dinh.slice(0, 12)} giao ${diff.release}: ${tapDiff.length} tep — ${tapDiff.join(", ")}`,
 	);
 	if (doan === null) {
 		console.log(`tai-lieu: docs/agent.md chua co muc «${TAI_LIEU.muc.choRe}»`);

@@ -1,0 +1,141 @@
+{
+  "feature_plain": "Mục tiêu và các KR của nó nay nằm trong cùng một khung ở «Của tôi», «Theo đơn vị», sheet chi tiết và «Chấm điểm»; hàng mục tiêu có % lấy từ hệ thống, KR đánh số, và sheet có thêm «Vì sao lúc này» và «Góp vào».",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ đặt mỗi mục tiêu ở «Của tôi» làm hàng đầu trong cùng khung với KR của nó, kèm % đúng số hệ thống tính, vạch «lẽ ra đã tới» và dòng «Tính từ N KR»."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ trình «Theo đơn vị» thành từng khung mục tiêu, KR đánh số KR1, KR2… ngay dưới, và không lặp hàng tiêu đề cột ra mắt."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ mở sẵn mọi mục tiêu; thu gọn một mục tiêu thì ghi lên đường dẫn, tải lại hay gửi link vẫn giữ, và dùng được bằng bàn phím."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ gộp số hiện tại, đích, % và nhịp vào một ô tiến độ cho mỗi KR, ghi «từ <điểm khởi đầu>» khi KR không bắt đầu từ 0, và giữ nguyên dấu nguồn máy cùng nút mở sổ số."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ hiện «Mục tiêu này chưa có KR.» và «Chưa có KR để tính» cho mục tiêu chưa có KR."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ thêm vào trang chi tiết mục tiêu khu «Vì sao lúc này», khu «Góp vào» (góp vào mục tiêu nào, qua KR nào) và dòng «Tiến độ mục tiêu X% tính từ N KR», giữ đủ các nút sửa, thêm KR và cảnh báo đang có."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ đưa mục tiêu vào trong khung ở màn Chấm điểm: mục tiêu là hàng đầu, KR đánh số, ô «Điều học được» và «Mang sang» nằm cùng khung; chấm và lưu vẫn như trước."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ thêm vào bộ giao diện chung kiểu hàng con, hàng dính liền và hàng tiêu đề chỉ cho trình đọc màn hình, thay vì tô màu tại chỗ ở màn OKR."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ không tràn ngang ở khổ điện thoại 375 px trên cả bốn màn, và tiến độ xuống nằm dưới tên."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ giữ nguyên các chỗ trên màn OKR mà 14 việc OKR đã ký trước đang đo, chứng bằng cách chạy lại 41 phép đo đã liệt sẵn của chúng trên bản mới và so với bản đang chạy (khoảng 10–15 phút máy)."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ để một người chưa xem bản mẫu nhìn ảnh hai theme và chỉ ra đúng KR nào thuộc mục tiêu nào, tiến độ mục tiêu bao nhiêu."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ giữ nguyên các trạng thái đang tải, lỗi (nút Thử lại) và rỗng của hai màn danh sách."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-9",
+      "p": "Sẽ KHÔNG thêm hàng hay khoảng trống nào khi chưa có góp ý của Kara, nhưng chừa sẵn sáu chỗ để lượt Kara gắn góp ý vào đúng mục tiêu, đúng KR."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG đổi các tab Toàn cảnh, Cập nhật tuần và cây căn chỉnh."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG đổi phần máy chủ để biết chương trình có bật trọng số; vì thế chỉ ghi «Tính từ N KR»."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG chuyển các bảng lớn có lọc và phân trang sang kiểu hàng con mới."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG làm nội dung góp ý của Kara — đó là lượt sau, lượt này chỉ chừa chỗ."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG làm bấm vào hàng KR để mở trang KR; bấm số vẫn mở sổ số như hiện nay."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG chạy lại phép đo của mọi việc đã ký có đụng tệp chung (193 phép đo), các phép đo tự chạy phép đo của việc khác, và các luật chỉ đúng trong vòng của việc khác — những thứ này làm mỗi lượt chấm mất ~5 giờ mà không bắt được lỗi nào của màn OKR; 14 phép đo đã liệt sẵn đang hỏng sẵn trên bản đang chạy thì ghi là hạn chế đã biết."
+    }
+  ],
+  "scope_plain": "Những phần dưới đây cố ý để ngoài lượt này:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Bốn màn đều được phủ: Của tôi, Theo đơn vị, trang chi tiết mục tiêu, Chấm điểm — đúng bốn nơi đang vẽ khối mục tiêu (AC-1, AC-2, AC-6, AC-7)."
+    },
+    {
+      "i": 1,
+      "p": "Mọi dạng dữ liệu đều có ca riêng: đủ KR, chưa có KR, KR mốc, KR giảm hoặc không bắt đầu từ 0, KR lấy số máy, chưa có kỳ vọng, không có lý do hay nơi góp vào (AC-4, AC-5, AC-6)."
+    },
+    {
+      "i": 2,
+      "p": "Mọi thao tác đều có ca: đọc, thu/mở có nhớ, mở chi tiết, các nút KR sẵn có, chấm điểm, chỗ cắm cho Kara (AC-3, AC-7, AC-9)."
+    },
+    {
+      "i": 3,
+      "p": "Hai khổ màn và hai theme: máy tính 1440 px, điện thoại 375 px, sáng và tối (AC-10, AC-12)."
+    },
+    {
+      "i": 4,
+      "p": "Cắt ngang mọi màn: không làm gãy phép đo của việc đã ký, giữ chữ người nhập không bị dịch, dùng được bằng bàn phím và tôn trọng tắt chuyển động (AC-11, AC-3)."
+    },
+    {
+      "i": 5,
+      "p": "Đối chiếu ngành, chờ bạn gật hoặc gạch: Asana Goals và Perdoo đều cho mục tiêu cha hiện tiến độ tính từ phần con — đó là căn cứ cho AC-1."
+    },
+    {
+      "i": 6,
+      "p": "Để sau: bấm hàng KR mở trang KR, hiện trọng số từng KR, đổi Toàn cảnh và Cập nhật tuần cùng khuôn."
+    },
+    {
+      "i": 7,
+      "p": "Không làm: thanh chia phần đóng góp của từng KR vào % mục tiêu — thêm nhiễu, con số % đã đủ."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Các tài liệu nói hai chỗ khác nhau về nơi đặt dấu nhận diện mục tiêu (trên khung hay trên hàng), khiến dù làm cách nào cũng có phép đo đỏ — đã thống nhất: khung mang dấu mục tiêu, hàng mục tiêu mang dấu riêng, và thêm phép đo mỗi KR nằm đúng khung của mục tiêu mình."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo «không làm gãy việc đã ký» từng có lối thoát và bỏ sót các phép đo màn thật — đã viết sẵn danh sách hơn 40 phép đo cụ thể, chạy hết trước và sau, bỏ lối thoát."
+    },
+    {
+      "i": 2,
+      "p": "Ảnh theme sáng và tối của hai màn có thể ghi đè nhau, nên người chấm chỉ thấy một theme — đã đặt tên ảnh theo theme, kiểm hai ảnh khác nhau, và người chấm phải nhận đủ bảy ảnh."
+    },
+    {
+      "i": 3,
+      "p": "Phép đo khổ điện thoại có thể xanh trên màn Chấm điểm trống vì không có kỳ đang chấm — đã gieo một kỳ đang chấm và bắt mỗi màn có số hàng tối thiểu, màn trống là đỏ."
+    },
+    {
+      "i": 4,
+      "p": "Bảng trạng thái thiếu trạng thái lỗi, rỗng, đang tải của Theo đơn vị — đã thêm đủ, ghim đúng mã trạng thái đang có, và đếm nút Thử lại gọi tải lại đúng một lần."
+    }
+  ],
+  "analyst_plain": "Không có phép đo nào chỉ ra «đạt» mà không phân biệt được bản đúng và bản sai — mọi chiều đỏ đã chứng trên bản phá."
+}

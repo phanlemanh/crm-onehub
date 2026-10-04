@@ -6,6 +6,7 @@ export const SESSION_PURPOSES = [
 	"okr",
 	"may-soan",
 	"kho",
+	"okr-soan",
 ] as const;
 
 export type SessionPurpose = (typeof SESSION_PURPOSES)[number];

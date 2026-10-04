@@ -39,6 +39,8 @@ const BANG = new Map<string, TinhNang>([
 	["crm|kho|-", "tai-lieu.tro-ly"],
 	["crm|kho|tro_ly_kho", "tai-lieu.tro-ly"],
 	["zalo|zalo|tro_ly_kho", "tai-lieu.tro-ly"],
+	["eve|okr-soan|-", "okr.soan"],
+	["crm|okr-soan|-", "okr.soan"],
 ]);
 
 const NGOAI: readonly { khop: RegExp; lyDo: string }[] = [
@@ -57,6 +59,14 @@ const NGOAI: readonly { khop: RegExp; lyDo: string }[] = [
 	{
 		khop: /^eve\|(builder|team-agent|okr|zalo)\|/,
 		lyDo: "khung hội thoại eve không mang purpose; purposeOf trả research",
+	},
+	{
+		khop: /^zalo\|okr-soan\|/,
+		lyDo: "phiên soạn OKR chỉ mở từ kênh crm hoặc eve, không từ Zalo",
+	},
+	{
+		khop: /^(crm|eve)\|okr-soan\|(tro_ly_okr\/|agent_runner$|agent_builder$)/,
+		lyDo: "phiên soạn OKR tự soạn, không giao việc cho phiên con",
 	},
 	{
 		khop: /^zalo\|(builder|team-agent|research|okr)\|/,

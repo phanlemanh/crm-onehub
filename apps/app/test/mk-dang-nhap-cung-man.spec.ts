@@ -37,6 +37,7 @@ mock.module("@/lib/trpc/server", () => ({
 	getServerTrpc: () => ({
 		sso: { signInOptions: { queryOptions: () => ({}) } },
 	}),
+	getServerTrpcClient: () => ({}),
 }));
 
 mock.module("@/lib/locale/server", () => ({

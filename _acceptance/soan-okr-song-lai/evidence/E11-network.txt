@@ -1,0 +1,5 @@
+E11 network truth: driver = puppeteer-core script (man-chua-cau-hinh.mjs), khong phai browser tool doc network -> networkObserved = n-a (driver)
+Script chi nghe request toi /eve/agents/okr/ (setRequestInterception o pha loi, p.on('request') o pha rong):
+pha rong 1440: man soan mo, request /eve/agents/okr/ = 0 ; 390: 0   (DUNG "0 request /eve/agents/okr/ (thay 0)")
+pha loi  1440: cua /eve/agents/okr/ bi chan, tra 503 {error: CUA_OKR.loi.chuaCauHinh}, request toi cua = 1 ; 390: 1
+Khong co dump failed-request/console-error tong quat (script khong ghi).

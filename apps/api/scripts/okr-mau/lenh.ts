@@ -76,7 +76,7 @@ function docTep(tep: string) {
 }
 
 const tomTat = (d: DemBoMau) =>
-	`${d.nguoi} người, ${d.boPhan} bộ phận, ${d.phongBan} phòng ban, ${d.chuKy} chu kỳ, ${d.mucTieu} mục tiêu, ${d.kr} KR, ${d.capNhat} lần cập nhật trong ${d.phien} phiên, ${d.soChup} bản chụp số, ${d.diem} điểm quý 3, ${d.viec} việc, ${d.bangChung} bằng chứng, ${d.ghiNhan} ghi nhận, ${d.mau} mẫu OKR, ${d.tuMau} mục tiêu sinh từ mẫu, ${d.nguoiXem} người xem có tên, ${d.vet} dòng vết, ${d.hoiY} lần hỏi ý mục tiêu với ${d.y} ý, ${d.dongY} lượt đồng ý, ${d.chuDe} chủ đề + ${d.yLa} ý lạ`;
+	`${d.nguoi} người, ${d.boPhan} bộ phận, ${d.phongBan} phòng ban, ${d.chuKy} chu kỳ, ${d.mucTieu} mục tiêu, ${d.kr} KR, ${d.capNhat} lần cập nhật trong ${d.phien} phiên, ${d.soChup} bản chụp số, ${d.diem} điểm quý 3, ${d.viec} việc, ${d.bangChung} bằng chứng, ${d.ghiNhan} ghi nhận, ${d.mau} mẫu OKR, ${d.tuMau} mục tiêu sinh từ mẫu, ${d.nguoiXem} người xem có tên, ${d.vet} dòng vết, ${d.hoiY} lần hỏi ý mục tiêu với ${d.y} ý, ${d.dongY} lượt đồng ý, ${d.chuDe} chủ đề + ${d.yLa} ý lạ, ${d.taiLieu} trang tài liệu`;
 
 export async function chayLenh(args: string[]): Promise<number> {
 	try {

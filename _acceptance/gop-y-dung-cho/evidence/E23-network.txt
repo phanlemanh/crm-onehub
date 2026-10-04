@@ -1,0 +1,3 @@
+NETWORK: driver = puppeteer-core script (rang/man-gop-y.mjs) chay qua mot-luot.sh/tien-de.mjs; khong co duong doc network/console cua browser tool -> n-a (driver)
+run xanh log: /tmp/gydc-E23-main.log (EXIT=0, 103 DUNG, 0 SAI)
+run do log: /tmp/gydc-E23-red.log (EXIT=1, 10 DUNG, 5 SAI)

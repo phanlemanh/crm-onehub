@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, setSystemTime, test } from "bun:test";
-import { db } from "@crm/db";
+import { db, Prisma } from "@crm/db";
 import { QUAN_HE_GIU_CHU_KY } from "@crm/db/okr-chu-ky-hien";
+import { moCuoc } from "@crm/db/okr-cuoc-soan";
 import { chonChuKyHienTai } from "@crm/db/okr-tien-do";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
@@ -12,6 +13,7 @@ import {
 import { THANG_CHAM } from "@crm/validation/okr-chuong-trinh";
 import { KET_LUAN_CHON, NOI_MOI, OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { diemTheoThang } from "@crm/validation/okr-khep";
+import { dongSoan, hangTuDongSoan } from "@crm/validation/okr-tro-ly";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { z } from "zod";
 import type {
@@ -1654,6 +1656,52 @@ const ganCanChinh = (objectiveId: string, dich: string, c: Chung) =>
 const moiTheoKy = (cycleId: string) =>
 	db.okrObjective.findMany({ where: { cycleId }, orderBy: { id: "asc" } });
 
+const DON_VI_SOAN = {
+	level: "onehub",
+	divisionId: null,
+	departmentId: null,
+} as const;
+const cuocSoanMoi = (cycleId: string) =>
+	moCuoc(db, {
+		cycleId,
+		...DON_VI_SOAN,
+		nguoiMoUserId: phien.quan.nguoi,
+		sessionId: ma("phien-soan"),
+		nac: "bat",
+	});
+const cuocSoanDb = (id: string) => db.okrCuocSoan.findUnique({ where: { id } });
+async function dongSoanMoi(cuoc: {
+	id: string;
+	sessionId: string;
+	nguoiMoUserId: string;
+	nac: "bat" | "an";
+}): Promise<string> {
+	const dong = dongSoan.parse({
+		loai: "muc-tieu-moi",
+		khoa: "a",
+		cuocSoanId: cuoc.id,
+		dich: null,
+		ten: "Khách cũ quay lại đặt hàng",
+		viSao: "Kỳ trước khách cũ rơi nhiều.",
+		viSaoLucNay: "Kỳ trước còn trượt phần này.",
+		loaiMucTieu: "cam-ket",
+		canChinhId: null,
+	});
+	const h = await db.okrDeXuat.create({
+		data: {
+			...hangTuDongSoan(dong, cuoc.sessionId),
+			dich: Prisma.DbNull,
+			inputHash: ma("bam-soan"),
+			nguoiYeuCau: cuoc.nguoiMoUserId,
+			nac: cuoc.nac,
+			trangThai: "cho",
+			hienLuc: null,
+		},
+		select: { id: true },
+	});
+	return h.id;
+}
+
 const GHI_VAO_KY_AN = {
 	createCycle: {
 		cau: CAU.namChaDaAn,
@@ -2342,6 +2390,52 @@ const GHI_VAO_KY_AN = {
 			);
 		},
 	},
+	soanMo: {
+		gieo: async (b) => {
+			const cycleId = await b.kyLap();
+			return lenh(
+				() => goi("okr.soanMo", { cycleId, ...DON_VI_SOAN }),
+				() =>
+					db.okrCuocSoan.findMany({
+						where: { cycleId },
+						orderBy: { id: "asc" },
+					}),
+			);
+		},
+	},
+	soanTangLuot: {
+		gieo: async (b) => {
+			const cuoc = await cuocSoanMoi(await b.kyLap());
+			return lenh(
+				() => goi("okr.soanTangLuot", { cuocSoanId: cuoc.id }),
+				() => cuocSoanDb(cuoc.id),
+			);
+		},
+	},
+	soanQuyet: {
+		gieo: async (b) => {
+			const cuoc = await cuocSoanMoi(await b.kyLap());
+			const deXuatId = await dongSoanMoi(cuoc);
+			return lenh(
+				() => goi("okr.soanQuyet", { deXuatId, quyet: "nhan" }),
+				() => db.okrDeXuat.findUnique({ where: { id: deXuatId } }),
+			);
+		},
+	},
+	soanDuaVao: {
+		gieo: async (b) => {
+			const cycleId = await b.kyLap();
+			const cuoc = await cuocSoanMoi(cycleId);
+			await dongSoanMoi(cuoc);
+			return lenh(
+				() => goi("okr.soanDuaVao", { cuocSoanId: cuoc.id, kr: [] }),
+				async () => ({
+					cuoc: await cuocSoanDb(cuoc.id),
+					mucTieu: await moiTheoKy(cycleId),
+				}),
+			);
+		},
+	},
 	ghiSoKr: {
 		gieo: async (b) => {
 			const { krId } = await nhapCoKr(await b.kyChay());
@@ -2388,6 +2482,9 @@ async function datDuyetCongBo(bat: boolean): Promise<void> {
 async function donAnVang(): Promise<void> {
 	await db.okrDeXuat.deleteMany({
 		where: { nguoiYeuCau: { startsWith: TIEN_TO } },
+	});
+	await db.okrCuocSoan.deleteMany({
+		where: { nguoiMoUserId: { startsWith: TIEN_TO } },
 	});
 	await donSanCanhKr();
 	await donSanKhep();

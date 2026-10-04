@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, expect } from "bun:test";
+import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
 import type { INestApplication } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
@@ -22,7 +23,7 @@ export type Json =
 	| { readonly [khoa: string]: Json | undefined };
 
 export type TraLoi = { status: number; data: Json; loi: string };
-export type Ai = "quan" | "thuong" | "chu";
+export type Ai = "quan" | "thuong" | "chu" | "okr";
 type Phien = { nguoi: string; cookie: string; token: string };
 
 let app: INestApplication;
@@ -30,6 +31,7 @@ export const phien = {
 	quan: { nguoi: "", cookie: "", token: "" },
 	thuong: { nguoi: "", cookie: "", token: "" },
 	chu: { nguoi: "", cookie: "", token: "" },
+	okr: { nguoi: "", cookie: "", token: "" },
 } satisfies Record<Ai, Phien>;
 
 export async function goi(
@@ -82,7 +84,7 @@ export async function tao(
 
 export async function nguoiMoi(
 	ten: string,
-	vai: "member" | "admin" | "owner" = "member",
+	vai: WorkspaceRole = "member",
 ): Promise<string> {
 	const id = ma(ten);
 	await gieoThanhVien(id, vai);
@@ -118,6 +120,7 @@ export function dungSan(): void {
 			["quan", "admin"],
 			["thuong", "member"],
 			["chu", "owner"],
+			["okr", "okr"],
 		] as const) {
 			const id = ma(khoa);
 			await gieoThanhVien(id, vai);

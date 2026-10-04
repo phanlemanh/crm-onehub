@@ -1754,6 +1754,7 @@ model Department {
   id       String @id @default(cuid())
   name     String
   position Int
+  moTa     String @default("")
 
   divisionId String?
   division   Division? @relation(fields: [divisionId], references: [id], onDelete: Restrict)
@@ -1779,6 +1780,7 @@ model Division {
   id       String @id @default(cuid())
   name     String
   position Int
+  moTa     String @default("")
 
   headUserId String?
   head       User?   @relation("DivisionHead", fields: [headUserId], references: [id], onDelete: SetNull)
@@ -1802,6 +1804,7 @@ model OrgPlacement {
   primaryDepartment   Department? @relation("PrimaryDepartment", fields: [primaryDepartmentId], references: [id], onDelete: Restrict)
   managerUserId       String?
   manager             User?       @relation("OrgManager", fields: [managerUserId], references: [id], onDelete: SetNull)
+  chucDanh            String      @default("")
 
   updatedAt DateTime @updatedAt
 
@@ -2034,27 +2037,32 @@ model OkrCycle {
 }
 
 model OkrProgramConfig {
-  id               String   @id @default(cuid())
-  version          Int      @unique
-  objectiveCap     Int
-  krCap            Int
-  capMode          String
-  scoreScale       String
-  weightsOn        Boolean
-  personalOn       Boolean
-  aiOn             Boolean  @default(false)
-  aiDeXuatPhamVi   String   @default("tat")
-  aiDeXuatDonVi    String[] @default([])
-  aiTomTatPhamVi   String   @default("tat")
-  aiTomTatDonVi    String[] @default([])
-  aiDeXuatAnPhamVi String   @default("tat")
-  aiDeXuatAnDonVi  String[] @default([])
-  aiTomTatAnPhamVi String   @default("tat")
-  aiTomTatAnDonVi  String[] @default([])
-  aiTranThangUsd   Decimal  @default(9) @db.Decimal(8, 2)
-  duyetCongBo      Boolean  @default(false)
-  createdById      String
-  createdAt        DateTime @default(now())
+  id                   String   @id @default(cuid())
+  version              Int      @unique
+  objectiveCap         Int
+  krCap                Int
+  capMode              String
+  scoreScale           String
+  weightsOn            Boolean
+  personalOn           Boolean
+  aiOn                 Boolean  @default(false)
+  aiDeXuatPhamVi       String   @default("tat")
+  aiDeXuatDonVi        String[] @default([])
+  aiTomTatPhamVi       String   @default("tat")
+  aiTomTatDonVi        String[] @default([])
+  aiDeXuatAnPhamVi     String   @default("tat")
+  aiDeXuatAnDonVi      String[] @default([])
+  aiTomTatAnPhamVi     String   @default("tat")
+  aiTomTatAnDonVi      String[] @default([])
+  aiTranThangUsd       Decimal  @default(9) @db.Decimal(8, 2)
+  duyetCongBo          Boolean  @default(false)
+  aiSoanPhamVi         String   @default("tat")
+  aiSoanDonVi          String[] @default([])
+  aiSoanAnPhamVi       String   @default("tat")
+  aiSoanAnDonVi        String[] @default([])
+  aiTranThangDatOkrUsd Decimal? @db.Decimal(8, 2)
+  createdById          String
+  createdAt            DateTime @default(now())
 
   @@map("okrProgramConfig")
 }
@@ -2585,13 +2593,43 @@ model OkrDeXuat {
   nac         String    @default("bat")
   maLoai      String?
   hienLuc     DateTime?
+  cuocSoanId  String?
+  taoRaId     String?
+  noiDung     Json?
   createdAt   DateTime  @default(now())
 
   @@index([objectiveId, trangThai])
   @@index([objectiveId, nac, trangThai])
   @@index([taskId])
   @@index([createdAt])
+  @@index([cuocSoanId])
   @@map("okrDeXuat")
+}
+
+model OkrCuocSoan {
+  id                String    @id @default(cuid())
+  cycleId           String
+  level             String
+  divisionId        String?
+  departmentId      String?
+  nguoiMoUserId     String
+  sessionId         String    @unique
+  cacPhien          String[]  @default([])
+  nac               String
+  trangThai         String    @default("dang")
+  soLuot            Int       @default(0)
+  streamIndex       Int       @default(0)
+  continuationToken String?
+  lanNopMoiNhat     String?
+  daCat             Json?
+  duaVaoLuc         DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([cycleId, departmentId])
+  @@index([cycleId, divisionId])
+  @@index([nguoiMoUserId])
+  @@map("okrCuocSoan")
 }
 
 model OkrTomTat {

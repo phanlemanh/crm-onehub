@@ -613,10 +613,11 @@ nên sửa dòng sau khi ký Cổng Bằng chứng không phải ký lại. Khi 
 `PRODUCT-MAP.md` lệch nhau về cổng của một hồ sơ, theo `PRODUCT-MAP.md` — máy vẽ
 nó từ hồ sơ — rồi sửa dòng.
 
-Trang theo dõi `docs/plan/lo-trinh-okr.html` vẽ sổ này thành một trang: đếm ngược
-tới ngày mở, việc chờ chủ kho, thứ tự chạy, mốc triển khai. Kéo kho về rồi mở tệp
-bằng trình duyệt là xem được; trang đọc bản chụp `docs/plan/lo-trinh-okr.data.js`
-và chỉ để xem. Bản sống, nơi chủ kho đánh dấu việc và ghi chú, ở
+**Từ 03/10 (kit 2.21.0) trạng thái sống của từng hàng nằm ở `LO-TRINH.html` ở gốc kho**: kit đọc tệp
+ý định `docs/plan/lo-trinh-okr.json` và suy trạng thái từ hồ sơ `_acceptance/` mỗi lần vẽ lại bản đồ,
+thẻ `/acceptance-gate:start` in hàng kế. Cột Trạng thái của bảng dưới THÔI cập nhật — bảng giữ làm sử
+liệu và ghi chú. Đổi kế hoạch (thêm hàng, đổi thứ tự, gắn mốc) thì sửa tệp JSON bằng PR. Trang dựng tay
+`lo-trinh-okr.html` và bản chụp `lo-trinh-okr.data.js` đã gỡ. Bản sống, nơi chủ kho đánh dấu việc và ghi chú, ở
 https://claude.ai/artifact/X2YjeuJfqBESPHQPQP7y2b — riêng tư, chủ kho mở được trên
 mọi máy đã đăng nhập. Bản chụp do máy sinh, không sửa tay, và không chép ghi chú
 riêng của chủ kho.
@@ -662,6 +663,7 @@ Làm mới trang khi chủ kho nhắn «cập nhật lộ trình OKR»:
 | T | `tom-tat-cap-bo-phan` | chưa mở | — | — | 2026-09-28: gộp từ tóm tắt phòng ban đã kiểm, làn A cuối; bật khi tóm tắt phòng ban đã bật và đạt ngưỡng |
 | H | `dot-hoi-y-tuong-okr` | Cổng Bằng chứng | 2026-09-29 | — | 2026-09-29: hạng mục mới, mở từ phiên «Brainstorm tính năng OKR giai đoạn 1» — «Hỏi ý mục tiêu»: trước mỗi kỳ đặt OKR, cả công ty góp ý cho mục tiêu công ty, người gom xếp ý thành chủ đề, người chọn (CEO) viết trước rồi kết luận từng chủ đề bằng lý do tự viết, chủ đề chọn thành bản nháp mục tiêu; đưa bước 1–2 của mười bước VNOKRs vào CRM. T3: sáu bảng mới cuối `schema.prisma`, `setCyclePhase` từ chối rời «lập kế hoạch» khi còn lần hỏi ý chưa công bố. Cổng Đáng và Cổng Phạm vi (15 tiêu chí, 21 phép đo) chủ kho ký 29/09. S4 vòng 1 (30/09): mọi phép đo máy và bốn lệnh chứng toàn kho qua; một tiêu chí phán đoán chờ chủ kho; hai mục ngoài hợp đồng. Dựng trên bộ OKR mẫu; lần chạy thật đầu tiên là OKR năm 2027, mở cùng mùa đặt 2026-12-07. Không thuộc 78 mã của bản phạm vi; dòng do phiên điều phối thêm |
 | K | `khung-tao-okr-nhu-deal` | đã lên `onehub` | 2026-09-30 | #220 | 2026-09-30 (Manh Phan) mở hạng mục làn B, T2: tạo và sửa Mục tiêu, thêm và sửa KR mở trong ngăn trượt phải cùng khung với tạo deal, trạng thái mở trên URL (`new`, `hopOkr`), cột góp ý thành ngăn rộng. Cổng Phạm vi ký 30/09 (Manh Phan): 13 tiêu chí, 23 phép đo, kèm sửa chân ngăn chung (bảy ngăn tạo ngoài OKR đổi theo). Đi trước màn soạn của `soan-okr-cung-tro-ly`. Ghim lại `the-gop-y-okr`, `tro-ly-okr-de-xuat`, `hop-thoai-giu-cho-dang-nhap`. Cổng Phạm vi duyệt lại 30/09 thêm AC-14 phần đầu cột góp ý (14 tiêu chí, 24 phép đo). Cổng Bằng chứng ký 30/09 (Manh Phan) sau năm vòng chấm; tám mục ngoài hợp đồng ghi hạn chế đã biết; lỗi hydrat có sẵn trên màn Deals tách việc riêng. Sau chữ ký sửa một `useEffect` thành `useMountEffect` do E11 của `hop-thoai-giu-cho-dang-nhap` bắt, hồ sơ ghim lại bằng làn máy. Ghim lại `the-gop-y-okr`, `hop-thoai-giu-cho-dang-nhap`; `tro-ly-okr-de-xuat` vẫn khớp nên không ghim |
+| 11 | `soan-okr-cung-tro-ly` | đã lên `onehub` | 2026-10-02 | #232 | Cổng Đáng và Cổng Phạm vi ký 2026-09-30 (Manh Phan); hồ sơ `_acceptance/soan-okr-cung-tro-ly` (hợp đồng 15 AC, 28 phép đo, design-pass nấc 1 trên `/proto/soan-okr-cung-tro-ly`, ma trận quyền `rang/ma-tran-quyen.md`). Trưởng đơn vị soạn OKR của đơn vị cùng Trợ lý OKR: cuộc soạn, bản nháp (máy không ghi đích, người đưa vào bộ OKR), trang chiến lược, mô tả đơn vị và chức danh trong gói. Nền chat OKR là app eve riêng `apps/agent-okr` (quyết ở N0; hạng mục C `hoi-dap-okr` dùng lại nền này) — việc đầu tiên của S3 là phép thử «app thứ hai dựng và chạy cạnh app thứ nhất». Dựng hết bằng bộ mẫu Hải Đăng Logistics; bật khi ngưỡng Cổng Đáng đọc từ `rang/*.sql` (≥ 50 % đơn vị bật có cuộc tới «Đưa vào», ≥ 60 % dòng nháp được nhận/sửa, ≥ 70 % Mục tiêu nháp công bố trong 14 ngày, chi phí mỗi cuộc ≤ 0,25 USD, 0 lọt dữ liệu đối tác) · 2026-10-02: Cổng Bằng chứng ký (Manh Phan), 26/29 phép đo xanh, 2 phép đo phán quyết (Đạt), E22 tốc độ với model thật chưa đạt ổn định — giao ở nấc tắt, đo lại tốc độ và sửa bên chấm trước khi bật |
 
 Hai việc của lộ trình Zalo chặn khu OKR, theo dõi ở mục 7 của
 `docs/plan/lo-trinh-zalo.md`: triển khai Zalo trên production (dòng T, trước

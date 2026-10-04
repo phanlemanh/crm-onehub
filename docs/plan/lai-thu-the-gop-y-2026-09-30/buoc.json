@@ -1,0 +1,1226 @@
+[
+ {
+  "so": 1,
+  "tep": "01-khung-chi-tiet-1440.png",
+  "ten": "khung-chi-tiet",
+  "rong": 1440,
+  "moTa": "Khung chi tiết Mục tiêu «Doanh thu quý 4 miền Bắc», có KR yếu «Gọi điện cho đối tác mới mỗi tuần»",
+  "doLuong": {}
+ },
+ {
+  "so": 2,
+  "tep": "02-menu-sua-1440.png",
+  "ten": "menu-sua",
+  "rong": 1440,
+  "moTa": "Menu thao tác của Mục tiêu, mục «Sửa mục tiêu»",
+  "doLuong": {}
+ },
+ {
+  "so": 3,
+  "tep": "03-hop-truoc-nho-1440.png",
+  "ten": "hop-truoc-nho",
+  "rong": 1440,
+  "moTa": "Hộp Sửa mục tiêu trước khi nhờ góp ý: cỡ mặc định, nút «Nhờ Trợ lý OKR góp ý»",
+  "doLuong": {
+   "soHop": 1,
+   "size": "default",
+   "hop": 384,
+   "form": 352,
+   "cot": null,
+   "tran": false,
+   "oDuocChi": [],
+   "the": []
+  }
+ },
+ {
+  "so": 4,
+  "tep": "04-dang-soan-1440.png",
+  "ten": "dang-soan",
+  "rong": 1440,
+  "moTa": "Vừa bấm nhờ: cột mở, Trợ lý đang đọc (shimmer và khung chờ)",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": []
+  }
+ },
+ {
+  "so": null,
+  "tep": null,
+  "ten": "nho-lai",
+  "moTa": "lượt 1 thiếu loại thẻ ({\"vietLai\":true,\"hoi\":false,\"canChinh\":true,\"hoiKr\":false}) — đổi «vì sao lúc này» và nhờ lại qua API",
+  "doLuong": {}
+ },
+ {
+  "so": null,
+  "tep": null,
+  "ten": "loai-the",
+  "moTa": "{\"vietLai\":true,\"hoi\":true,\"canChinh\":true,\"hoiKr\":true}",
+  "doLuong": {}
+ },
+ {
+  "so": 5,
+  "tep": "05-cot-co-the-1440.png",
+  "ten": "cot-co-the",
+  "rong": 1440,
+  "moTa": "Cột góp ý có thẻ: hộp cỡ assist, form trái, cột phải",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 6,
+  "tep": "06-the-viet-lai-1440.png",
+  "ten": "the-viet-lai",
+  "rong": 1440,
+  "moTa": "Cận cảnh thẻ viết lại: nhãn, câu cũ gạch, câu mới, lý do, hàng nút ở chân",
+  "doLuong": {}
+ },
+ {
+  "so": 7,
+  "tep": "07-chi-o-re-1440.png",
+  "ten": "chi-o-re",
+  "rong": 1440,
+  "moTa": "Rê chuột lên thẻ viết lại: ô tương ứng của form sáng viền",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [
+    "_r_1e_-ten"
+   ],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 8,
+  "tep": "08-phim-j-1440.png",
+  "ten": "phim-j",
+  "rong": 1440,
+  "moTa": "Focus thẻ đầu rồi bấm J: focus sang thẻ cmunaizwh0001isty13erxlbx",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": null,
+  "tep": null,
+  "ten": "phim-k",
+  "moTa": "bấm K: focus về cmunaizwh0000istymb607if3 (mong đợi cmunaizwh0000istymb607if3)",
+  "doLuong": {}
+ },
+ {
+  "so": 9,
+  "tep": "09-sua-bang-phim-e-1440.png",
+  "ten": "sua-bang-phim-e",
+  "rong": 1440,
+  "moTa": "Bấm E trên thẻ viết lại: ô sửa mở, nút «Nhận bản đã sửa» tô màu, «Huỷ» viền",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [
+    "_r_1e_-ten"
+   ],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận bản đã sửa(default)",
+      "Huỷ(outline)"
+     ],
+     "cauMoi": null
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 10,
+  "tep": "10-esc-huy-sua-1440.png",
+  "ten": "esc-huy-sua",
+  "rong": 1440,
+  "moTa": "Esc trong ô sửa: thẻ về chờ, hộp vẫn mở",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [
+    "_r_1e_-ten"
+   ],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 11,
+  "tep": "11-khoa-khi-sua-do-1440.png",
+  "ten": "khoa-khi-sua-do",
+  "rong": 1440,
+  "moTa": "Ô «Vì sao lúc này» có chữ chưa lưu: nhận của ô đó khoá kèm lý do, «Mở KR này» khoá kèm lý do",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [
+    "_r_1e_-ten"
+   ],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline,khoa)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 12,
+  "tep": "12-dang-sua-1440.png",
+  "ten": "dang-sua",
+  "rong": 1440,
+  "moTa": "Sửa câu đề xuất ngay trên thẻ",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [
+    "_r_1e_-ten"
+   ],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận bản đã sửa(default)",
+      "Huỷ(outline)"
+     ],
+     "cauMoi": null
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 13,
+  "tep": "13-da-nhan-1440.png",
+  "ten": "da-nhan",
+  "rong": 1440,
+  "moTa": "Nhận bản đã sửa: thẻ gọn một dòng, toast có «Hoàn tác»; đọc lại API: «Không thoả thuận nào của miền Bắc bị mất dấu trong quý 4»",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": "accepted",
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [],
+     "cauMoi": null
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 14,
+  "tep": "14-the-can-chinh-1440.png",
+  "ten": "the-can-chinh",
+  "rong": 1440,
+  "moTa": "Cận cảnh thẻ căn chỉnh: «Góp vào «…»», một nút chính «Căn chỉnh»",
+  "doLuong": {}
+ },
+ {
+  "so": 15,
+  "tep": "15-da-can-chinh-1440.png",
+  "ten": "da-can-chinh",
+  "rong": 1440,
+  "moTa": "Căn chỉnh xong: thẻ gọn",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": "accepted",
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [],
+     "cauMoi": null
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Nhận(default)",
+      "Sửa(outline)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": "accepted",
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [],
+     "cauMoi": null
+    }
+   ]
+  }
+ },
+ {
+  "so": 16,
+  "tep": "16-cau-hoi-muc-tieu-1440.png",
+  "ten": "cau-hoi-muc-tieu",
+  "rong": 1440,
+  "moTa": "Câu hỏi cấp Mục tiêu: chỉ có «Bỏ qua», không nút tô màu",
+  "doLuong": {}
+ },
+ {
+  "so": null,
+  "tep": null,
+  "ten": "bo-qua",
+  "moTa": "bỏ qua cmunajdee0003isty5d6l2u7a; số hộp thoại 1",
+  "doLuong": {}
+ },
+ {
+  "so": 17,
+  "tep": "17-da-bac-bo-qua-1440.png",
+  "ten": "da-bac-bo-qua",
+  "rong": 1440,
+  "moTa": "Sau Bác và Bỏ qua: các thẻ gọn «Đã bác», «Đã bỏ qua»",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunaizwh0000istymb607if3",
+     "kind": "rewrite",
+     "decided": "accepted",
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [],
+     "cauMoi": null
+    },
+    {
+     "dong": "cmunaizwh0001isty13erxlbx",
+     "kind": "rewrite",
+     "decided": "dismissed",
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [],
+     "cauMoi": null
+    },
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunajdee0003isty5d6l2u7a",
+     "kind": "question",
+     "decided": "skipped",
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [],
+     "cauMoi": null
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 358
+    },
+    {
+     "dong": "cmunaizwh0002istygkzolzt4",
+     "kind": "compact",
+     "decided": "accepted",
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [],
+     "cauMoi": null
+    }
+   ]
+  }
+ },
+ {
+  "so": 18,
+  "tep": "18-cau-hoi-kr-1440.png",
+  "ten": "cau-hoi-kr",
+  "rong": 1440,
+  "moTa": "Câu hỏi gắn KR: «Mở KR này» viền, «Bỏ qua» mờ",
+  "doLuong": {}
+ },
+ {
+  "so": 19,
+  "tep": "19-mo-kr-1440.png",
+  "ten": "mo-kr",
+  "rong": 1440,
+  "moTa": "«Mở KR này»: hộp Mục tiêu đóng, hộp Sửa KR «Số cuộc hẹn gặp đối tác mới đạt 60» mở",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 20,
+  "tep": "20-hop-kr-cot-1440.png",
+  "ten": "hop-kr-cot",
+  "rong": 1440,
+  "moTa": "Hộp Sửa KR: cột chỉ thẻ của KR này",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 21,
+  "tep": "21-kr-sua-do-1440.png",
+  "ten": "kr-sua-do",
+  "rong": 1440,
+  "moTa": "Hộp Sửa KR có chữ chưa lưu: soi dòng nhắc trên thẻ câu hỏi (Ngoài-4)",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 800,
+   "form": 364,
+   "cot": 380,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 380,
+     "nutChinh": 0,
+     "nut": [
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 358
+    }
+   ]
+  }
+ },
+ {
+  "so": 22,
+  "tep": "22-hop-dien-thoai-dau-390.png",
+  "ten": "hop-dien-thoai-dau",
+  "rong": 390,
+  "moTa": "390 px: đầu hộp Sửa mục tiêu",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 358,
+   "form": 326,
+   "cot": 326,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 326,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 304
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 326,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 304
+    }
+   ]
+  }
+ },
+ {
+  "so": 23,
+  "tep": "23-hop-dien-thoai-cot-390.png",
+  "ten": "hop-dien-thoai-cot",
+  "rong": 390,
+  "moTa": "390 px: cột góp ý xếp dưới form, thẻ trải hết bề ngang",
+  "doLuong": {
+   "soHop": 1,
+   "size": "assist",
+   "hop": 358,
+   "form": 326,
+   "cot": 326,
+   "tran": false,
+   "oDuocChi": [],
+   "the": [
+    {
+     "dong": "cmunajdee0004isty6r5lfuga",
+     "kind": "question",
+     "decided": null,
+     "rong": 326,
+     "nutChinh": 0,
+     "nut": [
+      "Mở KR này(outline)",
+      "Bỏ qua(ghost)"
+     ],
+     "cauMoi": 304
+    },
+    {
+     "dong": "cmunajdee0006istyrecs7sns",
+     "kind": "compact",
+     "decided": null,
+     "rong": 326,
+     "nutChinh": 1,
+     "nut": [
+      "Căn chỉnh(default)",
+      "Bác(ghost)"
+     ],
+     "cauMoi": 304
+    }
+   ]
+  }
+ },
+ {
+  "so": 24,
+  "tep": "24-tab-vet-1440.png",
+  "ten": "tab-vet",
+  "rong": 1440,
+  "moTa": "Tab Vết của Mục tiêu có dòng «theo đề xuất của Trợ lý OKR»",
+  "doLuong": {}
+ },
+ {
+  "so": 25,
+  "tep": "25-thong-tin-ca-nhan-1440.png",
+  "ten": "thong-tin-ca-nhan",
+  "rong": 1440,
+  "moTa": "Tab Tổng quan của Cá nhân: gợi ý chức danh dùng thẻ gọn, «Nhận» tô màu, «Bác» mờ",
+  "doLuong": {
+   "coThe": true,
+   "nut": [
+    "Nhận(default)",
+    "Bác(ghost)"
+   ]
+  }
+ },
+ {
+  "so": 26,
+  "tep": "26-the-thong-tin-1440.png",
+  "ten": "the-thong-tin",
+  "rong": 1440,
+  "moTa": "Cận cảnh thẻ thông tin",
+  "doLuong": {}
+ },
+ {
+  "so": 27,
+  "tep": "27-da-nhan-thong-tin-1440.png",
+  "ten": "da-nhan-thong-tin",
+  "rong": 1440,
+  "moTa": "Sau «Nhận»: thông tin ghi vào hồ sơ, toast «Đã thêm vào hồ sơ»",
+  "doLuong": {}
+ },
+ {
+  "so": 28,
+  "tep": "28-thong-tin-ca-nhan-390.png",
+  "ten": "thong-tin-ca-nhan",
+  "rong": 390,
+  "moTa": "Tab Tổng quan của Cá nhân: gợi ý chức danh dùng thẻ gọn, «Nhận» tô màu, «Bác» mờ",
+  "doLuong": {
+   "coThe": false,
+   "nut": []
+  }
+ }
+]

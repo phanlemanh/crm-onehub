@@ -69,6 +69,12 @@ export const SEARCH_PARAM = {
 		mau: "mau",
 		hop: "hopOkr",
 		moHoiY: "moHoiY",
+		thuMucTieu: "thuMucTieu",
+		gopY: "gopYOkr",
+		neoGopY: "neoGopY",
+		cuocSoan: "cuocSoan",
+		dsCuoc: "dsCuoc",
+		cuocSoanAn: "cuocSoanAn",
 	},
 	taiLieu: {
 		tab: "tabTaiLieu",

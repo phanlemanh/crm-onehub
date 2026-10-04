@@ -114,13 +114,13 @@ function viec(id: string): string {
 
 function canNoiTroLy(id: string, mong: string): void {
 	const thay = viec(id);
-	if (!thay.includes(g.theoTroLy))
+	if (!thay.includes(g.theoKara))
 		throw new Error(`vet khong noi tro ly: hang ${id} hien "${thay}"`);
 	expect(thay).toBe(mong);
 }
 
 describe("vet theo de xuat cua Tro ly OKR", () => {
-	test("hang sua ten co note tro-ly-okr hien «Sửa tên — theo đề xuất của Trợ lý OKR»", async () => {
+	test("hang sua ten co note tro-ly-okr hien «Sửa tên — theo đề xuất của Kara»", async () => {
 		await ve([
 			vet(
 				"v1",
@@ -130,7 +130,7 @@ describe("vet theo de xuat cua Tro ly OKR", () => {
 				"tro-ly-okr:dx-1",
 			),
 		]);
-		canNoiTroLy("v1", "Sửa tên — theo đề xuất của Trợ lý OKR");
+		canNoiTroLy("v1", "Sửa tên — theo đề xuất của Kara");
 		const hang = document.body.querySelector('[data-vet-hang="v1"]');
 		expect(hang?.querySelector('[data-khoa="title"]')?.textContent).toBe(
 			"Tên: Triển khai CRM mới → Không thoả thuận nào bị mất dấu",
@@ -148,7 +148,7 @@ describe("vet theo de xuat cua Tro ly OKR", () => {
 				"kr-1",
 			),
 		]);
-		canNoiTroLy("v2", "Sửa tên — theo đề xuất của Trợ lý OKR");
+		canNoiTroLy("v2", "Sửa tên — theo đề xuất của Kara");
 	});
 
 	test("hang sua vi sao luc nay co note hien ten truong viet thuong", async () => {
@@ -161,7 +161,7 @@ describe("vet theo de xuat cua Tro ly OKR", () => {
 				"tro-ly-okr:dx-3",
 			),
 		]);
-		canNoiTroLy("v3", "Sửa vì sao lúc này — theo đề xuất của Trợ lý OKR");
+		canNoiTroLy("v3", "Sửa vì sao lúc này — theo đề xuất của Kara");
 	});
 
 	test("hang gan can chinh co note giu ten viec va noi tro ly", async () => {
@@ -176,7 +176,7 @@ describe("vet theo de xuat cua Tro ly OKR", () => {
 		]);
 		canNoiTroLy(
 			"v4",
-			`${mOkr.hanhDong["gan-can-chinh"]} — theo đề xuất của Trợ lý OKR`,
+			`${mOkr.hanhDong["gan-can-chinh"]} — theo đề xuất của Kara`,
 		);
 	});
 

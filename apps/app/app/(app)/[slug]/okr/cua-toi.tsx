@@ -18,8 +18,9 @@ import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
+import { BangMucTieu } from "./bang-muc-tieu";
+import { DIEM_CAM_GOP_Y } from "./chip-gop-y";
 import { useChuKy } from "./chon-chu-ky";
-import { KhoiMucTieu } from "./khoi-muc-tieu";
 import { ChuaChuKy, DangTai, Loi } from "./trang-thai-okr";
 import { ViecOkrCuaToi } from "./viec-cua-toi";
 
@@ -89,10 +90,8 @@ function MucTieuCuaToi() {
 	}
 
 	return (
-		<div className="flex flex-col gap-6" data-trang-thai="ST-cuatoi-codulieu">
-			{ds.map((mt) => (
-				<KhoiMucTieu key={mt.id} mucTieu={mt} hienDonVi danhDauCuaToi />
-			))}
+		<div data-trang-thai="ST-cuatoi-codulieu">
+			<BangMucTieu danhDauCuaToi diemCam={DIEM_CAM_GOP_Y} ds={ds} hienDonVi />
 		</div>
 	);
 }

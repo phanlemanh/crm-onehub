@@ -20,14 +20,15 @@ import { okrKhepMessages } from "@/lib/messages/okr-khep";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
+import { BangMucTieu } from "../bang-muc-tieu";
 import { CayCanChinh } from "../cay-can-chinh";
 import { CayDonVi } from "../cay-don-vi";
 import { ChamDiem } from "../cham-diem";
+import { DIEM_CAM_GOP_Y } from "../chip-gop-y";
 import { useChuKy } from "../chon-chu-ky";
 import { HopThoaiNhapOkr } from "../hop-thoai-nhap";
 import { HopTuan } from "../hop-tuan";
 import { KhoiKrCuaToi } from "../khoi-kr-cua-toi";
-import { KhoiMucTieu } from "../khoi-muc-tieu";
 import type { CayDuLieu, MucTieu } from "../kieu";
 import { coLoc, KhongKhop, LocOkr, type LocOkrGiaTri } from "../loc-okr";
 import { NganTaoMucTieu, NutThemMucTieu } from "../ngan-okr-url";
@@ -39,6 +40,7 @@ import {
 	locOkr,
 	okrParsers,
 } from "../okr-search-params";
+import { NutSoan } from "../soan/nut-soan";
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 
 const GOC: DonChonOkr = { loai: "goc" };
@@ -98,15 +100,13 @@ function viTriNguoi(cay: CayDuLieu, id: string) {
 
 function DanhSach({ objectives }: { objectives: MucTieu[] }) {
 	return (
-		<div className="flex flex-col gap-6" data-trang-thai="ST-donvi-danhsach">
-			{objectives.map((mt) => (
-				<KhoiMucTieu
-					key={mt.id}
-					mucTieu={mt}
-					hienDonVi={false}
-					danhDauCuaToi={false}
-				/>
-			))}
+		<div data-trang-thai="ST-donvi-danhsach">
+			<BangMucTieu
+				danhDauCuaToi={false}
+				diemCam={DIEM_CAM_GOP_Y}
+				ds={objectives}
+				hienDonVi={false}
+			/>
 		</div>
 	);
 }
@@ -141,7 +141,7 @@ function XemCay({
 const dangCho = (q: { isPending: boolean; isPlaceholderData: boolean }) =>
 	q.isPending || q.isPlaceholderData;
 
-export function TheoDonVi() {
+export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);
@@ -156,6 +156,7 @@ export function TheoDonVi() {
 			[SEARCH_PARAM.okr.loai]: giaTriLoc(thay.loai ?? loc.loai),
 			[SEARCH_PARAM.okr.trangThai]: giaTriLoc(thay.trangThai ?? loc.trangThai),
 			[SEARCH_PARAM.okr.tuTin]: giaTriLoc(thay.tuTin ?? loc.tuTin),
+			[SEARCH_PARAM.okr.gopY]: giaTriLoc(thay.gopY ?? loc.gopY),
 		});
 	const boLoc = () =>
 		void datUrl({
@@ -163,6 +164,7 @@ export function TheoDonVi() {
 			[SEARCH_PARAM.okr.loai]: null,
 			[SEARCH_PARAM.okr.trangThai]: null,
 			[SEARCH_PARAM.okr.tuTin]: null,
+			[SEARCH_PARAM.okr.gopY]: null,
 		});
 	const don = url[SEARCH_PARAM.okr.don] ?? GOC;
 	const { cycles, currentId } = useChuKy();
@@ -326,6 +328,14 @@ export function TheoDonVi() {
 										}
 									/>
 								) : null}
+								<NutSoan
+									don={don}
+									cycleId={currentId}
+									phaKy={phaKy}
+									quanTri={quanTri}
+									canEdit={byUnit.data?.canEdit === true}
+									cauNoi={cauNoiOkr}
+								/>
 								{byUnit.data?.canEdit || quanTri ? (
 									<Button
 										size="sm"

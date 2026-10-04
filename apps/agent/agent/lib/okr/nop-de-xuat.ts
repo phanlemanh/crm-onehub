@@ -6,7 +6,7 @@ import {
 	kiemDongDeXuat,
 } from "@crm/validation/okr-kiem-de-xuat";
 import {
-	type DongDeXuat,
+	type DongGopY,
 	type NopDeXuat,
 	okrTroLyViec,
 } from "@crm/validation/okr-tro-ly";
@@ -15,7 +15,7 @@ import { soLanNop } from "./doc";
 import { dungGoiDeXuat, goiKiemTu } from "./goi-ngu-canh";
 import { viecCuaPhienCon } from "./viec-con";
 
-export type BoKiem = (dong: DongDeXuat, goi: GoiKiem) => KetQuaKiemDong;
+export type BoKiem = (dong: DongGopY, goi: GoiKiem) => KetQuaKiemDong;
 
 export type KetQuaNop = {
 	ketQua: "da-ghi" | "tu-choi" | "thieu-du-lieu";
@@ -30,10 +30,10 @@ const khongGhi = (
 ): KetQuaNop => ({ ketQua, lyDo, soDong: 0, biLoai: 0 });
 
 function kiemLanLuot(
-	dong: readonly DongDeXuat[],
+	dong: readonly DongGopY[],
 	goi: GoiKiem,
 	kiem: BoKiem,
-): { dong: DongDeXuat; kq: KetQuaKiemDong }[] {
+): { dong: DongGopY; kq: KetQuaKiemDong }[] {
 	let dangCho = goi.khoaDangCho;
 	return dong.map((d) => {
 		const kq = kiem(d, { ...goi, khoaDangCho: dangCho });

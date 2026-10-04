@@ -28,6 +28,8 @@ import { KIEU_KR, kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
 import { luuMauInput, mauNoiDung } from "@crm/validation/okr-mau";
 import { TRANG_THAI_MUC_TIEU } from "@crm/validation/okr-muc-tieu";
 import { crmHopKieu } from "@crm/validation/okr-nguon";
+import { LOAI_TRANG } from "@crm/validation/tai-lieu";
+import { TO_CHUC_TRAN } from "@crm/validation/to-chuc";
 import { z } from "zod";
 import { OKR_MAU } from "./cau-hinh";
 
@@ -50,17 +52,22 @@ export const KICH_BAN = [
 ] as const;
 export type KichBan = (typeof KICH_BAN)[number];
 
+const moTaDonVi = z.string().trim().min(20).max(TO_CHUC_TRAN.moTa);
+
 const nguoi = z.strictObject({
 	ma,
 	ten: z.string().trim().min(3).max(80),
 	vai: z.enum(["admin", "member", "okr"]),
 	phongBan: ma,
+	chucDanh: z.string().trim().min(3).max(TO_CHUC_TRAN.chucDanh),
+	quanLy: ma,
 });
 
 const boPhan = z.strictObject({
 	ma,
 	ten: z.string().trim().min(2),
 	truong: ma,
+	moTa: moTaDonVi,
 });
 
 const phongBan = z.strictObject({
@@ -68,8 +75,12 @@ const phongBan = z.strictObject({
 	ten: z.string().trim().min(2),
 	boPhan: ma,
 	truong: ma,
+	moTa: moTaDonVi,
 });
 
+export const KICH_BAN_QUY3 = ["deu", "troi"] as const;
+export type KichBanQuy3 = (typeof KICH_BAN_QUY3)[number];
+export const TUAN_QUY3 = ["3", "6", "9", "13"] as const;
 const phongBanLuuTru = z.strictObject({
 	ma,
 	ten: z.string().trim().min(2),
@@ -101,9 +112,13 @@ const kr = z.strictObject({
 	dich: z.number(),
 	donVi: z.string().trim().max(24),
 	kichBan: z.enum(KICH_BAN).optional(),
+	kichBanQuy3: z.enum(KICH_BAN_QUY3).optional(),
 	nguon: nguonCrm.optional(),
 	ghiChu: z
-		.partialRecord(z.enum(["1", "2", "3", "4", "5", "6"]), z.string().max(200))
+		.partialRecord(
+			z.enum(["1", "2", "3", "4", "5", "6", "9", "13"]),
+			z.string().max(200),
+		)
 		.optional(),
 	chot: z.number().optional(),
 	diem: z.number().min(0).max(1).optional(),
@@ -181,6 +196,14 @@ const canhKr = z.strictObject({
 	tuMau: z.array(z.strictObject({ mucTieu: ma, mau: ma })),
 });
 
+const taiLieu = z.strictObject({
+	ma,
+	ten: z.string().trim().min(3).max(160),
+	loai: z.enum(LOAI_TRANG),
+	chuTrang: ma,
+	noiDung: z.string().min(200).max(20_000),
+});
+
 const yHoiYMau = z.strictObject({
 	ma,
 	tacGia: ma,
@@ -231,6 +254,7 @@ const boTho = z.strictObject({
 	nguoi: z.array(nguoi).min(1),
 	mucTieu: z.array(mucTieu).min(1),
 	canhKr,
+	taiLieu: z.array(taiLieu),
 	hoiY: hoiYMau,
 });
 
@@ -239,6 +263,7 @@ export type NguoiMau = BoOkrMau["nguoi"][number];
 export type MucTieuMau = BoOkrMau["mucTieu"][number];
 export type KrMau = MucTieuMau["krs"][number];
 export type CanhKrMau = BoOkrMau["canhKr"];
+export type TaiLieuMau = BoOkrMau["taiLieu"][number];
 export type HoiYMau = BoOkrMau["hoiY"];
 export type KetLuanHoiYMau = NonNullable<HoiYMau["chuDe"][number]["ketLuan"]>;
 
@@ -279,6 +304,10 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 	bo.nguoi.forEach((n, i) => {
 		if (!pbTheoMa.has(n.phongBan))
 			loi(["nguoi", i, "phongBan"], `không có phòng ban ${n.phongBan}`);
+		if (!nguoiTheoMa.has(n.quanLy))
+			loi(["nguoi", i, "quanLy"], `không có người ${n.quanLy}`);
+		if (n.quanLy === n.ma)
+			loi(["nguoi", i, "quanLy"], "quản lý phải là người khác");
 	});
 	bo.boPhan.forEach((b, i) => {
 		if (!nguoiTheoMa.has(b.truong))
@@ -386,6 +415,16 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 							: nguoiTheoMa.has(maPv);
 				if (!co) loi([...path, "nguon", "phamVi"], `không có ${maPv}`);
 			}
+			if (k.kichBanQuy3 && m.chuKy !== "quy3")
+				loi([...path, "kichBanQuy3"], "kịch bản quý 3 chỉ cho KR quý 3");
+			if (
+				k.kichBanQuy3 === "troi" &&
+				TUAN_QUY3.filter((t) => (k.ghiChu?.[t] ?? "") !== "").length < 2
+			)
+				loi(
+					[...path, "ghiChu"],
+					`KR ${k.ma} trôi cần ghi chú ở ít nhất hai tuần ${TUAN_QUY3.join("/")}`,
+				);
 			if (m.chuKy === "quy3") {
 				if (k.chot === undefined || k.diem === undefined)
 					loi(path, `KR quý 3 ${k.ma} cần số chốt và điểm`);
@@ -412,6 +451,13 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 					`${chuKy} ${khoa}: ${so} mục tiêu vượt trần ${OKR_PROGRAM_MAC_DINH.objectiveCap}`,
 				);
 	}
+
+	const trungTaiLieu = trungMa(bo.taiLieu);
+	if (trungTaiLieu) loi(["taiLieu"], `mã tài liệu trùng: ${trungTaiLieu}`);
+	bo.taiLieu.forEach((t, i) => {
+		if (!nguoiTheoMa.has(t.chuTrang))
+			loi(["taiLieu", i, "chuTrang"], `không có người ${t.chuTrang}`);
+	});
 
 	kiemCanhKr(bo, loi);
 	kiemHoiY(bo, loi);

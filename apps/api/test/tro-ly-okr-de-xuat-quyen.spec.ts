@@ -489,7 +489,13 @@ describe("ma-tran-quyen", () => {
 				return { objectiveId: moi.id, ids };
 			};
 			const truong = cookie["truong-phong-ban"];
-			const rong = { dong: [], dangSoan: false, maKetThuc: null, lyDo: null };
+			const rong = {
+				dong: [],
+				dangSoan: false,
+				maKetThuc: null,
+				docLuc: null,
+				lyDo: null,
+			};
 
 			const bo = await taoCoDong("mat-da-bo");
 			ok(
@@ -600,7 +606,13 @@ describe("gioi-han", () => {
 				expect(
 					(thay.data as { dong: { id: string }[] }).dong.map((d) => d.id),
 				).toEqual([dongId]);
-				const rong = { dong: [], dangSoan: false, maKetThuc: null, lyDo: null };
+				const rong = {
+					dong: [],
+					dangSoan: false,
+					maKetThuc: null,
+					docLuc: null,
+					lyDo: null,
+				};
 				const khongThay = `404 ${OKR.thongDiep.khongThayMucTieu}`;
 				const ra: Record<string, string> = {};
 				for (const ai of ["thanh-vien", "vai-okr"] as const) {

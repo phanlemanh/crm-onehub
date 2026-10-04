@@ -137,3 +137,46 @@ describe("ProposedChange — thẻ viết lại ba tầng", () => {
 		).toBe("no");
 	});
 });
+
+describe("ProposedChange — biến thể lồng (fields · tag)", () => {
+	test("fields: khối đặt trong thân thẻ, sau lý do, trước hàng nút; ẩn khi đã quyết", () => {
+		const p = propsThe(DONG_VIET_LAI, { m });
+		const goc = ve(
+			<ProposedChange
+				{...p.the}
+				actions={hanhDong(p.nut)}
+				tag="vừa sửa"
+				fields={<input aria-label="Đích" data-o="dich" />}
+			/>,
+		);
+		const the = goc.querySelector('[data-slot="proposed-change"]');
+		const than = the?.querySelector('[data-slot="proposed-change-body"]');
+		const o = than?.querySelector(
+			'[data-slot="proposed-change-fields"] [data-o="dich"]',
+		);
+		expect(o).not.toBeNull();
+		const thuTu = [...(than?.children ?? [])].map((k) =>
+			k.getAttribute("data-slot"),
+		);
+		expect(thuTu.at(-1)).toBe("proposed-change-fields");
+		expect(
+			the?.querySelector('[data-slot="proposed-change-tag"]')?.textContent,
+		).toBe("vừa sửa");
+		const nhan = the?.querySelector('[data-slot="proposed-change-label"]');
+		const tag = the?.querySelector('[data-slot="proposed-change-tag"]');
+		expect(tag && nhan?.contains(tag)).toBe(true);
+	});
+	test("fields: không render khi decided", () => {
+		const p = propsThe(DONG_VIET_LAI, { m, ket: "accepted" });
+		const goc = ve(
+			<ProposedChange
+				{...p.the}
+				actions={[]}
+				fields={<input data-o="dich" />}
+			/>,
+		);
+		expect(
+			goc.querySelector('[data-slot="proposed-change-fields"]'),
+		).toBeNull();
+	});
+});

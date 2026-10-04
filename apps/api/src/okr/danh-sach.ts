@@ -5,6 +5,7 @@ import {
 	TRANG_THAI_MUC_TIEU,
 	type TrangThaiMucTieu,
 } from "@crm/validation/okr-muc-tieu";
+import { LOC_GOP_Y } from "@crm/validation/okr-tham-so";
 import type { DanhSachOutput, LocDanhSach } from "./okr-xem.contracts";
 
 type NguoiGon = { id: string; name: string };
@@ -16,6 +17,7 @@ export type MucTieuGon = {
 	status: TrangThaiMucTieu;
 	krOwners: NguoiGon[];
 	tuTinKr: MucTuTin[];
+	coGopYCho: boolean;
 };
 
 type MatLoc = keyof LocDanhSach;
@@ -46,6 +48,7 @@ export function khopLoc(
 		!m.tuTinKr.some((t) => loc.tuTin.includes(t))
 	)
 		return false;
+	if (bo !== "gopY" && loc.gopY.includes("cho") && !m.coGopYCho) return false;
 	return true;
 }
 
@@ -93,6 +96,12 @@ export function demMatLoc(
 			count: ds
 				.filter((x) => khopLoc(x, loc, "tuTin"))
 				.filter((m) => m.tuTinKr.includes(value)).length,
+		})).filter((d) => d.count > 0),
+		gopY: LOC_GOP_Y.map((value) => ({
+			value,
+			count: ds
+				.filter((x) => khopLoc(x, loc, "gopY"))
+				.filter((m) => m.coGopYCho).length,
 		})).filter((d) => d.count > 0),
 	};
 }

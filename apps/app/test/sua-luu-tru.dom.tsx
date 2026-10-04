@@ -189,18 +189,22 @@ function cayTuBoPhan() {
 			{
 				id: "khoi",
 				name: "Khối",
+				moTa: "",
 				position: 0,
 				head: null,
+				okrMo: 0,
 				departments: boPhan
 					.filter((d) => !d.luuTru)
 					.sort((a, b) => a.position - b.position)
 					.map((d) => ({
 						id: d.id,
 						name: d.name,
+						moTa: "",
 						position: d.position,
 						divisionId: "khoi",
 						head: null,
 						stepCount: 0,
+						okrMo: 0,
 						people: [],
 					})),
 			},
@@ -947,6 +951,7 @@ describe("doi-ten-bo-phan", () => {
 		).toEqual({
 			id: "bp-a",
 			name: "Kinh doanh vung 1",
+			moTa: "",
 		});
 		await cho(() => coChu("Kinh doanh vung 1"), "ten moi tren man");
 	});

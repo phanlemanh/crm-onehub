@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nền chat OKR và bốn lớp chặn · Sơ đồ kiến trúc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1400px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub { color: var(--color-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sơ đồ kiến tr&#250;c · soan-okr-cung-tro-ly · d-1, d-2 · AC-1, AC-5, AC-12</p>
+    <h1>Nền chat OKR là app eve riêng — vai «chỉ OKR» đi qua bốn lớp chặn</h1>
+    <p class="sub">Đường mới từ màn soạn tới bảng nháp, và chỗ tác nhân CRM gốc đứng ngoài.</p>
+
+    <svg viewBox="0 0 1400 660" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="576" y="216" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">→ ĐƯỜNG MỚI CỦA VAI «CHỈ OKR»</text>
+
+      <line x1="248" y1="280" x2="320" y2="280" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="504" y1="280" x2="576" y2="280" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="760" y1="280" x2="832" y2="280" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1016" y1="280" x2="1088" y2="280" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="924" y1="144" x2="924" y2="232" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="412" y1="328" x2="412" y2="416" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M 504,464 H 1172 Q 1180,464 1180,456 V 328" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="412" y1="232" x2="412" y2="164" stroke="rgba(23,23,23,0.35)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="404" y1="148" x2="420" y2="164" stroke="#171717" stroke-width="1.4"/>
+      <line x1="420" y1="148" x2="404" y2="164" stroke="#171717" stroke-width="1.4"/>
+
+      <rect x="254" y="256" width="60" height="16" rx="2" fill="#fafafa"/>
+      <text x="284" y="268" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">SOẠN OKR</text>
+      <rect x="510" y="256" width="60" height="16" rx="2" fill="#fafafa"/>
+      <text x="540" y="268" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">MỞ PHIÊN</text>
+      <rect x="780" y="288" width="32" height="16" rx="2" fill="#fafafa"/>
+      <text x="796" y="300" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">THẺ</text>
+      <rect x="1022" y="256" width="60" height="16" rx="2" fill="#fafafa"/>
+      <text x="1052" y="268" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">NỘP NHÁP</text>
+      <rect x="936" y="180" width="88" height="16" rx="2" fill="#fafafa"/>
+      <text x="940" y="192" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">GÓI BỐI CẢNH</text>
+      <rect x="424" y="364" width="144" height="16" rx="2" fill="#fafafa"/>
+      <text x="428" y="376" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">MỞ · QUYẾT · ĐƯA VÀO</text>
+      <rect x="740" y="440" width="200" height="16" rx="2" fill="#fafafa"/>
+      <text x="840" y="452" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">ĐƯA VÀO · MỘT GIAO DỊCH</text>
+      <rect x="424" y="184" width="160" height="16" rx="2" fill="#fafafa"/>
+      <text x="428" y="196" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">VAI «CHỈ OKR» KHÔNG VÀO</text>
+
+      <rect x="320" y="48" width="184" height="96" rx="6" fill="#fafafa"/>
+      <rect x="320" y="48" width="184" height="96" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.25)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="328" y="56" width="32" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+      <text x="344" y="68" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">EVE</text>
+      <text x="412" y="100" fill="#666666" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tác nhân CRM gốc</text>
+      <text x="412" y="118" fill="#666666" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">apps/agent</text>
+      <text x="412" y="132" fill="#666666" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">app OKR không nhập gì từ đây</text>
+
+      <rect x="832" y="48" width="184" height="96" rx="6" fill="#fafafa"/>
+      <rect x="832" y="48" width="184" height="96" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <rect x="840" y="56" width="32" height="16" rx="2" fill="transparent" stroke="rgba(87,87,87,0.50)" stroke-width="0.8"/>
+      <text x="856" y="68" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHO</text>
+      <text x="924" y="100" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Kho tài liệu</text>
+      <text x="924" y="118" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">trang «chiến lược» đang dùng</text>
+      <text x="924" y="132" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">hồ sơ công ty · chiến lược</text>
+
+      <rect x="48" y="232" width="200" height="96" rx="6" fill="#fafafa"/>
+      <rect x="48" y="232" width="200" height="96" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <rect x="56" y="240" width="48" height="16" rx="2" fill="transparent" stroke="rgba(102,102,102,0.50)" stroke-width="0.8"/>
+      <text x="80" y="252" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NGƯỜI</text>
+      <text x="148" y="284" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Người sửa được đơn vị</text>
+      <text x="148" y="302" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">kể cả vai «chỉ OKR»</text>
+      <text x="148" y="316" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không đọc được dữ liệu đối tác</text>
+
+      <rect x="320" y="232" width="184" height="96" rx="6" fill="#fafafa"/>
+      <rect x="320" y="232" width="184" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="328" y="240" width="32" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="344" y="252" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">APP</text>
+      <text x="412" y="284" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Màn soạn</text>
+      <text x="412" y="302" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">apps/app</text>
+      <text x="412" y="316" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chat cạnh bảng nháp</text>
+
+      <rect x="576" y="232" width="184" height="96" rx="6" fill="#fafafa"/>
+      <rect x="576" y="232" width="184" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="584" y="240" width="32" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="600" y="252" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CỬA</text>
+      <text x="668" y="284" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Cửa mới</text>
+      <text x="668" y="302" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">/eve/agents/okr/eve/v1</text>
+      <text x="668" y="316" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">thẻ 120 giây, bí mật riêng</text>
+      <circle cx="744" cy="248" r="10" fill="#171717"/>
+      <text x="744" y="252" fill="#fafafa" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">1</text>
+
+      <circle cx="796" cy="256" r="10" fill="#171717"/>
+      <text x="796" y="260" fill="#fafafa" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">2</text>
+
+      <rect x="832" y="232" width="184" height="96" rx="6" fill="#fafafa"/>
+      <rect x="832" y="232" width="184" height="96" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="840" y="240" width="32" height="16" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+      <text x="856" y="252" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">EVE</text>
+      <text x="924" y="284" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">App eve riêng</text>
+      <text x="924" y="302" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">apps/agent-okr</text>
+      <text x="924" y="316" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">1 công cụ nop_ban_nhap · ZDR</text>
+      <circle cx="1000" cy="248" r="10" fill="#171717"/>
+      <text x="1000" y="252" fill="#fafafa" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">3</text>
+
+      <rect x="1088" y="232" width="184" height="96" rx="6" fill="#fafafa"/>
+      <rect x="1088" y="232" width="184" height="96" rx="6" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <rect x="1096" y="240" width="40" height="16" rx="2" fill="transparent" stroke="rgba(87,87,87,0.50)" stroke-width="0.8"/>
+      <text x="1116" y="252" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BẢNG</text>
+      <text x="1180" y="284" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bảng cuộc soạn, đề xuất</text>
+      <text x="1180" y="302" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">OkrCuocSoan + OkrDeXuat</text>
+      <text x="1180" y="316" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">dòng nháp chờ · bị loại kèm mã</text>
+
+      <rect x="320" y="416" width="184" height="96" rx="6" fill="#fafafa"/>
+      <rect x="320" y="416" width="184" height="96" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="328" y="424" width="32" height="16" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="344" y="436" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
+      <text x="412" y="468" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">API</text>
+      <text x="412" y="486" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">okr.soan* · OkrService</text>
+      <text x="412" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">không gọi model</text>
+      <circle cx="488" cy="432" r="10" fill="#171717"/>
+      <text x="488" y="436" fill="#fafafa" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">4</text>
+
+      <line x1="48" y1="548" x2="1352" y2="548" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="48" y="566" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">BỐN LỚP CHẶN CHO VAI «CHỈ OKR»</text>
+      <circle cx="58" cy="588" r="10" fill="#171717"/>
+      <text x="58" y="592" fill="#fafafa" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">1</text>
+      <text x="76" y="592" fill="#171717" font-size="12" font-family="'Geist', sans-serif">Cửa chỉ kiểm phạm vi OKR</text>
+      <circle cx="390" cy="588" r="10" fill="#171717"/>
+      <text x="390" y="592" fill="#fafafa" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">2</text>
+      <text x="408" y="592" fill="#171717" font-size="12" font-family="'Geist', sans-serif">Thẻ không mang id đối tác</text>
+      <circle cx="722" cy="588" r="10" fill="#171717"/>
+      <text x="722" y="592" fill="#fafafa" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">3</text>
+      <text x="740" y="592" fill="#171717" font-size="12" font-family="'Geist', sans-serif">App không có công cụ đối tác</text>
+      <circle cx="1054" cy="588" r="10" fill="#171717"/>
+      <text x="1054" y="592" fill="#fafafa" font-size="10" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">4</text>
+      <text x="1072" y="592" fill="#171717" font-size="12" font-family="'Geist', sans-serif">API kiểm quyền lần cuối khi đưa vào</text>
+
+      <line x1="48" y1="616" x2="1352" y2="616" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <rect x="48" y="634" width="14" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+      <text x="68" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nền chat OKR — app eve riêng</text>
+      <rect x="248" y="634" width="14" height="10" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="268" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Ứng dụng</text>
+      <rect x="352" y="634" width="14" height="10" rx="2" fill="rgba(23,23,23,0.05)" stroke="#575757" stroke-width="1"/>
+      <text x="372" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kho · bảng</text>
+      <rect x="464" y="634" width="14" height="10" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.25)" stroke-width="1" stroke-dasharray="3,2"/>
+      <text x="484" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Đứng ngoài đường mới</text>
+      <line x1="632" y1="639" x2="660" y2="639" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="668" y="642" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Công cụ nộp ghi dòng nháp</text>
+      <text x="1352" y="642" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.06em">AC-1 · AC-5 · AC-12</text>
+    </svg>
+  </div>
+</body>
+</html>

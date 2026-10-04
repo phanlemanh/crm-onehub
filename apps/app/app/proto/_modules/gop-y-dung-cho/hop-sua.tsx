@@ -16,9 +16,8 @@ import {
 	ItemContent,
 	ItemDescription,
 	ItemGroup,
-	ItemMedia,
-	ItemTitle,
 } from "@crm/ui/components/item";
+import { KaraMark } from "@crm/ui/components/kara";
 import { ProposedChange } from "@crm/ui/components/proposed-change";
 import {
 	Select,
@@ -40,13 +39,32 @@ import {
 } from "@crm/ui/components/sheet";
 import { Textarea } from "@crm/ui/components/textarea";
 import Link from "next/link";
-import { GOP_Y, MUC_TIEU, STATE } from "./du-lieu";
-import { DauKara } from "./kara";
+import { useRouter } from "next/navigation";
+import type { ReactNode } from "react";
+import { DONG_HN, GOP_Y, STATE } from "./du-lieu";
 
 const KHONG_LAM = () => undefined;
 
-function FormMucTieu({ dauForm }: { dauForm: React.ReactNode }) {
-	const mt = MUC_TIEU;
+function DongDanSang({ so, noi }: { so: number; noi: string }) {
+	return (
+		<Item data-dan-sang size="sm" variant="outline">
+			<ItemContent>
+				<KaraMark scope={`${so} góp ý chờ`} />
+				<ItemDescription>{noi}</ItemDescription>
+			</ItemContent>
+			<ItemActions>
+				<SheetClose asChild>
+					<Button asChild size="sm" variant="outline">
+						<Link href={`?state=${STATE.bChiTiet}`}>Xem góp ý</Link>
+					</Button>
+				</SheetClose>
+			</ItemActions>
+		</Item>
+	);
+}
+
+function FormMucTieu({ dauForm }: { dauForm: ReactNode }) {
+	const mt = DONG_HN;
 	return (
 		<form onSubmit={(e) => e.preventDefault()}>
 			<FieldGroup>
@@ -54,12 +72,12 @@ function FormMucTieu({ dauForm }: { dauForm: React.ReactNode }) {
 				<div className="grid grid-cols-2 gap-3">
 					<Field data-disabled>
 						<FieldLabel htmlFor="gy-cap">Cấp</FieldLabel>
-						<Select value="toan" disabled>
+						<Select value="phong" disabled>
 							<SelectTrigger id="gy-cap">
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="toan">Toàn OneHub</SelectItem>
+								<SelectItem value="phong">Phòng ban</SelectItem>
 							</SelectContent>
 						</Select>
 					</Field>
@@ -77,7 +95,7 @@ function FormMucTieu({ dauForm }: { dauForm: React.ReactNode }) {
 				</Field>
 				<Field>
 					<FieldLabel htmlFor="gy-loai">Loại</FieldLabel>
-					<Select defaultValue="tham-vong">
+					<Select defaultValue={mt.loai}>
 						<SelectTrigger id="gy-loai">
 							<SelectValue />
 						</SelectTrigger>
@@ -89,7 +107,7 @@ function FormMucTieu({ dauForm }: { dauForm: React.ReactNode }) {
 				</Field>
 				<Field>
 					<FieldLabel htmlFor="gy-chu">Phụ trách</FieldLabel>
-					<Input id="gy-chu" defaultValue={mt.phuTrach} translate="no" />
+					<Input id="gy-chu" defaultValue={mt.phuTrach.ten} translate="no" />
 				</Field>
 				<Field>
 					<FieldLabel htmlFor="gy-vi-sao">Vì sao lúc này</FieldLabel>
@@ -116,70 +134,56 @@ function CotGopYHienTai() {
 				</Button>
 			</SheetRailHeader>
 			<ItemDescription>
-				2 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».
+				{GOP_Y.length} đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ
+				lý OKR».
 			</ItemDescription>
 			<ItemGroup>
-				{GOP_Y.map((g) => (
-					<ProposedChange
-						key={g.id}
-						kind={g.kind}
-						label={g.nhan}
-						before={g.truoc}
-						value={g.sau}
-						rationale={g.lyDo}
-						actions={
-							g.kind === "rewrite"
-								? [
-										{
-											id: "nhan",
-											label: "Nhận",
-											tone: "primary",
-											onClick: KHONG_LAM,
-										},
-										{
-											id: "sua",
-											label: "Sửa",
-											tone: "secondary",
-											onClick: KHONG_LAM,
-										},
-										{
-											id: "bac",
-											label: "Bác",
-											tone: "quiet",
-											onClick: KHONG_LAM,
-										},
-									]
-								: [
-										{
-											id: "bo-qua",
-											label: "Bỏ qua",
-											tone: "quiet",
-											onClick: KHONG_LAM,
-										},
-									]
-						}
-					/>
-				))}
+				{GOP_Y.map((g) =>
+					g.loai === "viet-lai" ? (
+						<ProposedChange
+							key={g.id}
+							density="card"
+							kind="rewrite"
+							label="Viết lại · Tên KR"
+							before={g.truoc}
+							value={g.sau}
+							rationale={g.lyDo}
+							actions={[
+								{
+									id: "nhan",
+									label: "Nhận",
+									tone: "primary",
+									onClick: KHONG_LAM,
+								},
+								{
+									id: "sua",
+									label: "Sửa",
+									tone: "secondary",
+									onClick: KHONG_LAM,
+								},
+								{ id: "bac", label: "Bác", tone: "quiet", onClick: KHONG_LAM },
+							]}
+						/>
+					) : (
+						<ProposedChange
+							key={g.id}
+							density="card"
+							kind="question"
+							label="Câu hỏi"
+							value={g.cau}
+							actions={[
+								{
+									id: "bo-qua",
+									label: "Bỏ qua",
+									tone: "quiet",
+									onClick: KHONG_LAM,
+								},
+							]}
+						/>
+					),
+				)}
 			</ItemGroup>
 		</section>
-	);
-}
-
-function DongDanSangMucTieu() {
-	return (
-		<Item size="sm" data-dan-sang-muc-tieu>
-			<ItemContent>
-				<DauKara chu="Kara · 2 góp ý đang chờ" />
-				<ItemDescription>
-					Góp ý chạm cả KR nên nằm ở trang Mục tiêu, cạnh từng KR.
-				</ItemDescription>
-			</ItemContent>
-			<ItemActions>
-				<Button asChild size="sm" variant="outline">
-					<Link href={`?state=${STATE.bChiTiet}`}>Xem góp ý</Link>
-				</Button>
-			</ItemActions>
-		</Item>
 	);
 }
 
@@ -202,11 +206,11 @@ export function HopSuaMucTieu({ kieu }: { kieu: "hien-tai" | "b" }) {
 							coCot ? (
 								<div>
 									<Button type="button" variant="outline">
-										2 đề xuất đang chờ
+										{GOP_Y.length} đề xuất đang chờ
 									</Button>
 								</div>
 							) : (
-								<DongDanSangMucTieu />
+								<DongDanSang noi="Quyết ngay dưới từng KR." so={GOP_Y.length} />
 							)
 						}
 					/>
@@ -217,6 +221,91 @@ export function HopSuaMucTieu({ kieu }: { kieu: "hien-tai" | "b" }) {
 						<Button variant="outline">Huỷ</Button>
 					</SheetClose>
 					<Button disabled>Lưu</Button>
+				</SheetFooter>
+			</SheetContent>
+		</Sheet>
+	);
+}
+
+export function HopSuaKr({
+	kieu,
+	onDong,
+}: {
+	kieu: "sua" | "moi";
+	onDong?: () => void;
+}) {
+	const router = useRouter();
+	const kr = DONG_HN.kr[2];
+	const laSua = kieu === "sua";
+	const soGopY = GOP_Y.filter((g) => g.krId === kr?.id).length;
+	return (
+		<Sheet
+			open
+			modal={false}
+			onOpenChange={(mo) => {
+				if (mo) return;
+				if (onDong) onDong();
+				else router.push(`?state=${STATE.bChiTiet}`);
+			}}
+		>
+			<SheetContent
+				side="right"
+				aria-describedby={undefined}
+				data-hop-sua-kr={kieu}
+			>
+				<SheetHeader>
+					<SheetTitle>{laSua ? "Sửa KR" : "Thêm KR"}</SheetTitle>
+				</SheetHeader>
+				<SheetBody>
+					<form onSubmit={(e) => e.preventDefault()}>
+						<FieldGroup>
+							{laSua && soGopY > 0 ? (
+								<DongDanSang noi="Quyết ngay dưới KR này." so={soGopY} />
+							) : null}
+							<Field>
+								<FieldLabel htmlFor="kr-ten">Tên KR</FieldLabel>
+								<Input
+									id="kr-ten"
+									defaultValue={laSua ? kr?.ten : ""}
+									placeholder={
+										laSua
+											? undefined
+											: "Ví dụ: Đối tác còn giao dịch sau 60 ngày"
+									}
+									translate="no"
+								/>
+							</Field>
+							<div className="grid grid-cols-2 gap-3">
+								<Field>
+									<FieldLabel htmlFor="kr-kieu">Kiểu</FieldLabel>
+									<Select defaultValue={laSua ? "moc" : "tang-toi"}>
+										<SelectTrigger id="kr-kieu">
+											<SelectValue />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="tang-toi">Tăng tới</SelectItem>
+											<SelectItem value="phan-tram">Phần trăm</SelectItem>
+											<SelectItem value="moc">Mốc</SelectItem>
+										</SelectContent>
+									</Select>
+								</Field>
+								<Field>
+									<FieldLabel htmlFor="kr-chu">Phụ trách</FieldLabel>
+									<Input
+										id="kr-chu"
+										defaultValue={laSua ? kr?.phuTrach.ten : ""}
+										translate="no"
+									/>
+								</Field>
+							</div>
+						</FieldGroup>
+					</form>
+				</SheetBody>
+				<SheetFooter>
+					<SheetClose asChild>
+						<Button variant="outline">Huỷ</Button>
+					</SheetClose>
+					<Button disabled>{laSua ? "Lưu" : "Thêm KR"}</Button>
 				</SheetFooter>
 			</SheetContent>
 		</Sheet>

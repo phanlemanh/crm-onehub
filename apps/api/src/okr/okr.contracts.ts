@@ -7,8 +7,10 @@ import {
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
+import { bangDaCat } from "@crm/validation/okr-cuoc-soan";
 import { LY_DO_MO_COI, MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import { lyDoDoiDich } from "@crm/validation/okr-khep";
+import { MA_LOAI_BAN_NHAP } from "@crm/validation/okr-kiem-ban-nhap";
 import {
 	KIEU_KR,
 	krInput,
@@ -152,6 +154,7 @@ export const troLyDanhSachOutput = z.object({
 	dong: z.array(dongHien),
 	dangSoan: z.boolean(),
 	maKetThuc: z.string().nullable(),
+	docLuc: z.string().nullable(),
 	lyDo: lyDoKhongSanSang.nullable(),
 });
 export const troLyQuyetInput = z.object({
@@ -311,6 +314,7 @@ export const mucTieuOutput = z.object({
 	theoDoi: z.boolean(),
 	hienThi: z.enum(MUC_HIEN_THI),
 	soNguoiXem: z.number(),
+	soGopYCho: z.number().int().min(0),
 });
 export const vetOutput = z.object({
 	id: z.string(),
@@ -658,6 +662,212 @@ export const luuMauVao = luuMauInput
 		return z.NEVER;
 	});
 
+const maLoaiBanNhap = z.enum(MA_LOAI_BAN_NHAP);
+
+export const LY_DO_SOAN = [
+	"don-vi-luu-tru",
+	"don-vi-chua-bat",
+	"don-vi-che-do-an",
+	"het-cuoc-ky",
+	"het-tran-thang",
+	"con-cuoc-dang",
+	"cuoc-an-dang-mo",
+	"chua-co-khoa-mo-hinh",
+] as const;
+export const LY_DO_LUOT = [
+	"het-luot-cuoc",
+	"het-tran-thang",
+	"cuoc-khong-dang",
+	"don-vi-chua-bat",
+	"don-vi-luu-tru",
+	"chua-co-khoa-mo-hinh",
+] as const;
+export const LY_DO_QUYET = [
+	"don-vi-chua-bat",
+	"don-vi-luu-tru",
+	"cha-da-bac",
+	"cha-bi-loai",
+	"khong-co-cha",
+] as const;
+export const LY_DO_DUA_VAO = [
+	"thieu-so-kr",
+	"vuot-tran-muc-tieu",
+	"chu-ky-khong-lap-ke-hoach",
+	"cuoc-khong-dang",
+	"don-vi-chua-bat",
+	"don-vi-luu-tru",
+	"cha-chua-nhan",
+	"cha-da-bac",
+	"cha-bi-loai",
+	"khong-co-cha",
+] as const;
+export const capDonViSoan = z.enum(["onehub", "bo-phan", "phong-ban"]);
+export const donViSoan = z.object({
+	cycleId: ma,
+	level: capDonViSoan,
+	divisionId: ma.nullable(),
+	departmentId: ma.nullable(),
+});
+export const cuocSoan = z.object({
+	id: z.string(),
+	cycleId: z.string(),
+	level: capDonViSoan,
+	divisionId: z.string().nullable(),
+	departmentId: z.string().nullable(),
+	tenDonVi: z.string(),
+	tenChuKy: z.string(),
+	nguoiMo: z.object({ id: z.string(), name: z.string() }),
+	sessionId: z.string(),
+	nac: z.enum(["bat", "an"]),
+	trangThai: z.enum(["dang", "da-dua-vao", "bo"]),
+	soLuot: z.number().int(),
+	tranLuot: z.number().int(),
+	moLuc: z.string(),
+	duaVaoLuc: z.string().nullable(),
+	soDongNhan: z.number().int(),
+	soDongTong: z.number().int(),
+});
+const gocDongSoan = {
+	id: z.string(),
+	khoa: z.string(),
+	khoaDong: z.string(),
+	viSao: z.string(),
+	trangThai: trangThaiDeXuat,
+	maLoai: maLoaiBanNhap.nullable(),
+	giaTriCuoi: z.string().nullable(),
+	taoRaId: z.string().nullable(),
+};
+export const dongSoan = z.discriminatedUnion("loai", [
+	z.object({
+		...gocDongSoan,
+		loai: z.literal("muc-tieu-moi"),
+		ten: z.string(),
+		viSaoLucNay: z.string(),
+		loaiMucTieu: z.enum(["cam-ket", "tham-vong"]),
+	}),
+	z.object({
+		...gocDongSoan,
+		loai: z.literal("kr-moi"),
+		chaKhoa: z.string(),
+		ten: z.string(),
+		kieu: z.enum(KIEU_KR),
+		donVi: z.string(),
+		khoiDiemGoiY: z.number().nullable(),
+	}),
+	z.object({
+		...gocDongSoan,
+		loai: z.literal("can-chinh-moi"),
+		chaKhoa: z.string(),
+		dichId: z.string(),
+		tenDich: z.string(),
+	}),
+]);
+export const soanSanSangOutput = z.discriminatedUnion("bat", [
+	z.object({
+		bat: z.literal(true),
+		nac: z.enum(["bat", "an"]),
+		cuocDang: cuocSoan.nullable(),
+		soCuocDaDung: z.number().int(),
+		tranCuoc: z.number().int(),
+		thieuBoiCanh: z.boolean(),
+	}),
+	z.object({ bat: z.literal(false), lyDo: z.enum(LY_DO_SOAN) }),
+]);
+export const soanMoInput = donViSoan.extend({
+	thuLaiCuocId: ma.optional(),
+	boCuocDangId: ma.optional(),
+});
+export const soanMoOutput = z.discriminatedUnion("ok", [
+	z.object({ ok: z.literal(true), cuoc: cuocSoan }),
+	z.object({
+		ok: z.literal(false),
+		lyDo: z.enum(LY_DO_SOAN),
+		cuocDang: cuocSoan.nullable(),
+	}),
+]);
+export const soanDanhSachCuocOutput = z.object({
+	cuoc: z.array(cuocSoan),
+	soCuocDaDung: z.number().int(),
+	tranCuoc: z.number().int(),
+});
+export const soanDanhSachOutput = z.object({
+	cuoc: cuocSoan,
+	dong: z.array(dongSoan),
+	thieuBoiCanh: z.boolean(),
+	lyDo: z.enum(LY_DO_SOAN).nullable(),
+});
+export const soanQuyetInput = z.object({
+	deXuatId: ma,
+	quyet: z.enum(["nhan", "sua", "bac"]),
+	giaTriCuoi: z.string().trim().min(1).optional(),
+});
+export const soanQuyetOutput = z.discriminatedUnion("ok", [
+	z.object({ ok: z.literal(true) }),
+	z.object({
+		ok: z.literal(false),
+		lyDo: z.enum(LY_DO_QUYET),
+		chiTiet: z.string().nullable(),
+	}),
+]);
+export const soanDuaVaoOutput = z.discriminatedUnion("ok", [
+	z.object({
+		ok: z.literal(true),
+		mucTieuIds: z.array(z.string()),
+		soMucTieu: z.number().int(),
+		soKr: z.number().int(),
+	}),
+	z.object({
+		ok: z.literal(false),
+		lyDo: z.enum(LY_DO_DUA_VAO),
+		chiTiet: z.string().nullable(),
+	}),
+]);
+export const cuocIdInput = z.object({ cuocSoanId: ma });
+export const soanTangLuotOutput = z.discriminatedUnion("ok", [
+	z.object({ ok: z.literal(true), soLuot: z.number().int() }),
+	z.object({ ok: z.literal(false), lyDo: z.enum(LY_DO_LUOT) }),
+]);
+export const soDoSoanNac = z.object({
+	cuocMo: z.number().int(),
+	cuocDuaVao: z.number().int(),
+	dongNhan: z.number().int(),
+	dongSua: z.number().int(),
+	dongBac: z.number().int(),
+	dongBiLoai: z.number().int(),
+	theoMa: z.array(z.object({ maLoai: maLoaiBanNhap, so: z.number().int() })),
+	mucTieuNhap: z.number().int(),
+	mucTieuCongBo14Ngay: z.number().int(),
+	tyLeCongBo14Ngay: z.number().nullable(),
+	chiPhiMoiCuocUsd: z.number().nullable(),
+	p50Ms: z.number().int().nullable(),
+	p90Ms: z.number().int().nullable(),
+	donViCoCuoc: z.number().int(),
+	donViHoanTat: z.number().int(),
+	tyLeDonViHoanTat: z.number().nullable(),
+	daHien: z.number().int(),
+	tyLeDuocNhan: z.number().nullable(),
+	tienUsd: z.number(),
+});
+export const soanSoDoInput = z.object({ cycleId: ma });
+export const soanSoDoOutput = z.object({
+	cycleId: z.string(),
+	bat: soDoSoanNac,
+	an: soDoSoanNac,
+	cuocGanDay: z.array(cuocSoan.extend({ chiPhiUsd: z.number() })),
+});
+export const soanAnOutput = z.object({
+	cuoc: cuocSoan.extend({ chiPhiUsd: z.number() }),
+	dong: z.array(dongSoan),
+	daCat: bangDaCat.nullable(),
+});
+
+const donViSoanVaoRest = {
+	divisionId: ma.nullish(),
+	departmentId: ma.nullish(),
+};
+export const donViSoanVao = donViSoan.extend(donViSoanVaoRest);
+export const soanMoVao = soanMoInput.extend(donViSoanVaoRest);
+
 export type ChuKyOutput = z.infer<typeof chuKyOutput>;
 export type MucTieuOutput = z.infer<typeof mucTieuOutput>;
 export type AlignmentTreeOutput = z.infer<typeof alignmentTreeOutput>;
@@ -681,3 +891,19 @@ export type ViecOkrOutput = z.infer<typeof viecOkr>;
 export type ViecCuaToiOutput = z.infer<typeof viecCuaToiOutput>;
 export type TransferOkrOutput = z.infer<typeof transferOkrOutput>;
 export type { DonViMucTieu } from "@crm/validation/okr-muc-tieu";
+export type DonViSoanVao = z.infer<typeof donViSoanVao>;
+export type SoanMoVao = z.infer<typeof soanMoVao>;
+export type CuocSoanOutput = z.infer<typeof cuocSoan>;
+export type SoanSanSangOutput = z.infer<typeof soanSanSangOutput>;
+export type SoanMoOutput = z.infer<typeof soanMoOutput>;
+export type SoanTangLuotOutput = z.infer<typeof soanTangLuotOutput>;
+export type SoanDanhSachCuocOutput = z.infer<typeof soanDanhSachCuocOutput>;
+export type DongSoanOutput = z.infer<typeof dongSoan>;
+export type SoanDanhSachOutput = z.infer<typeof soanDanhSachOutput>;
+export type SoanQuyetInput = z.infer<typeof soanQuyetInput>;
+export type SoanQuyetOutput = z.infer<typeof soanQuyetOutput>;
+export type LyDoQuyet = (typeof LY_DO_QUYET)[number];
+export type SoanDuaVaoOutput = z.infer<typeof soanDuaVaoOutput>;
+export type SoDoSoanNac = z.infer<typeof soDoSoanNac>;
+export type SoanSoDoOutput = z.infer<typeof soanSoDoOutput>;
+export type SoanAnOutput = z.infer<typeof soanAnOutput>;

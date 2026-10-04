@@ -1,0 +1,33 @@
+{
+	"name": "agent-okr",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"license": "MIT",
+	"scripts": {
+		"dev": "eve dev --port 2100",
+		"dev:headless": "eve dev --no-ui --port 2100",
+		"build": "eve build",
+		"start": "bun scripts/start.ts",
+		"check-types": "tsc --noEmit",
+		"test": "CRM_TELEMETRY_DISABLED=1 bun test",
+		"eval": "CRM_TELEMETRY_DISABLED=1 eve eval",
+		"lint": "biome check .",
+		"clean": "rm -rf .turbo .eve .output node_modules"
+	},
+	"dependencies": {
+		"@crm/ai-okr": "workspace:*",
+		"@crm/db": "workspace:*",
+		"@crm/env": "workspace:*",
+		"@crm/validation": "workspace:*",
+		"ai": "^7.0.85",
+		"eve": "^0.29.4",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@crm/typescript-config": "workspace:*",
+		"@types/bun": "^1.3.14",
+		"@types/node": "^24.0.0",
+		"typescript": "^5.9.2"
+	}
+}

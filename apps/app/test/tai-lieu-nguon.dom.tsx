@@ -86,8 +86,10 @@ mock.module("@/lib/trpc/client", () => ({
 					"chinh-sach": 0,
 					"quy-trinh": 0,
 					"bieu-mau": 0,
+					"chien-luoc": 0,
 				},
 			})),
+			boLoc: truyVan("taiLieu.boLoc", () => ({ donVi: [], chuTrang: [] })),
 			proposals: truyVan("taiLieu.proposals", () => ({
 				rows: [],
 				choToiDuyet: 0,

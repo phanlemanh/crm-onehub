@@ -72,6 +72,23 @@ export function boDau(s: string): string {
 		.trim();
 }
 
+export function chuanHoa(s: string): string {
+	return s
+		.normalize("NFC")
+		.toLowerCase()
+		.split(/[^\p{L}\p{N}]+/u)
+		.filter(Boolean)
+		.join(" ");
+}
+
+export function khongDau(s: string): string {
+	return chuanHoa(boDau(s));
+}
+
+export function coCum(van: string, cum: string): boolean {
+	return cum !== "" && ` ${van} `.includes(` ${cum} `);
+}
+
 const chuThuong = (s: string) =>
 	s.normalize("NFC").toLocaleLowerCase("vi").trim();
 

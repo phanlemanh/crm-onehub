@@ -11,6 +11,8 @@ export const KIEU_KR = [
 
 export type KieuKr = (typeof KIEU_KR)[number];
 
+export const SO_KR_MOC = { startValue: 0, targetValue: 1 } as const;
+
 export const NGUON_KR = ["tay", "crm", "api", "bang-tinh"] as const;
 
 export type NguonKr = (typeof NGUON_KR)[number];

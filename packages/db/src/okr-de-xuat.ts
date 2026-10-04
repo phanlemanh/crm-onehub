@@ -12,15 +12,18 @@ export type DanhSachDeXuat = {
 	dong: OkrDeXuat[];
 	dangSoan: boolean;
 	maKetThuc: string | null;
+	docLuc: Date | null;
 };
 
-type MucTieuHienTai = {
+export type MucTieuHienTai = {
 	title: string;
 	whyNow: string;
 	keyResults: { id: string; title: string }[];
 };
 
-function giaTriHienTai(mt: MucTieuHienTai, hang: OkrDeXuat): string | null {
+type HangXet = Pick<OkrDeXuat, "loai" | "truong" | "keyResultId" | "truoc">;
+
+function giaTriHienTai(mt: MucTieuHienTai, hang: HangXet): string | null {
 	const truong = motTrong(
 		TRUONG_VIET_LAI,
 		hang.truong ?? "",
@@ -29,6 +32,10 @@ function giaTriHienTai(mt: MucTieuHienTai, hang: OkrDeXuat): string | null {
 	if (truong === "title") return mt.title;
 	if (truong === "whyNow") return mt.whyNow;
 	return mt.keyResults.find((k) => k.id === hang.keyResultId)?.title ?? null;
+}
+
+export function hetHieuLuc(mt: MucTieuHienTai, hang: HangXet): boolean {
+	return hang.loai === "viet-lai" && giaTriHienTai(mt, hang) !== hang.truoc;
 }
 
 export async function danhSachDeXuat(
@@ -75,11 +82,10 @@ export async function danhSachDeXuat(
 	const trangThaiViec = {
 		dangSoan: viec !== null && viec.finishedAt === null,
 		maKetThuc: viec?.outcome ?? null,
+		docLuc: viec?.finishedAt ?? null,
 	};
 	if (!mt) return { dong: [], ...trangThaiViec };
-	const hetHan = hang.filter(
-		(h) => h.loai === "viet-lai" && giaTriHienTai(mt, h) !== h.truoc,
-	);
+	const hetHan = hang.filter((h) => hetHieuLuc(mt, h));
 	if (hetHan.length > 0) {
 		await db.okrDeXuat.updateMany({
 			where: { id: { in: hetHan.map((h) => h.id) }, trangThai: "cho" },

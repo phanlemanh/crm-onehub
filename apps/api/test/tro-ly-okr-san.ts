@@ -5,7 +5,7 @@ import { ghiChiPhi } from "@crm/db/ai-chi-phi";
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import { xepViecTroLy } from "@crm/db/okr-tro-ly";
 import type { OkrProgramSua } from "@crm/validation/okr-chuong-trinh";
-import type { DongDeXuat } from "@crm/validation/okr-tro-ly";
+import type { DongGopY } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
 import { completeTask, noteSession } from "../../agent/agent/lib/tasks";
@@ -164,8 +164,8 @@ export async function ghiCauHinh(
 }
 
 export function dongMau(
-	p: Partial<DongDeXuat> & Pick<DongDeXuat, "loai" | "objectiveId">,
-): DongDeXuat {
+	p: Partial<DongGopY> & Pick<DongGopY, "loai" | "objectiveId">,
+): DongGopY {
 	return {
 		keyResultId: null,
 		truong: null,
@@ -203,14 +203,14 @@ type KetQuaNop = {
 };
 type CongCuNop = {
 	execute: (
-		input: { dong: DongDeXuat[] },
+		input: { dong: DongGopY[] },
 		ctx: ReturnType<typeof nguCanhCon>,
 	) => Promise<KetQuaNop>;
 };
 
 export async function nopThat(
 	taskId: string,
-	dong: DongDeXuat[],
+	dong: DongGopY[],
 	luc?: Date,
 ): Promise<KetQuaNop> {
 	await db.agentTask.update({
@@ -256,7 +256,7 @@ export async function xepGieo(v: {
 export async function gieoDong(
 	objectiveId: string,
 	keyResultId: string | null,
-	dong: DongDeXuat[],
+	dong: DongGopY[],
 ): Promise<string[]> {
 	const taskId = await xepGieo({ objectiveId, keyResultId });
 	const kq = await nopThat(taskId, dong);

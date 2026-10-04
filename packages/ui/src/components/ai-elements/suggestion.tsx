@@ -46,7 +46,6 @@ export type SuggestionProps = Omit<ComponentProps<typeof Button>, "onClick"> & {
 export const Suggestion = ({
   suggestion,
   onClick,
-  className,
   variant = "outline",
   size = "sm",
   children,
@@ -58,7 +57,6 @@ export const Suggestion = ({
 
   return (
     <Button
-      className={cn("cursor-pointer px-4", className)}
       onClick={handleClick}
       size={size}
       type="button"

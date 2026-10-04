@@ -79,6 +79,7 @@ export function ChiTietPhongBan({
 										don: "phong-ban",
 										id: pb.id,
 										name: pb.name,
+										moTa: pb.moTa,
 									}),
 							},
 							{

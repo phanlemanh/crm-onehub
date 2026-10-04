@@ -22,6 +22,7 @@
 	},
 	"dependencies": {
 		"@ai-sdk/gateway": "4.0.69",
+		"@crm/ai-okr": "workspace:*",
 		"@crm/db": "workspace:*",
 		"@crm/env": "workspace:*",
 		"@crm/telemetry": "workspace:*",

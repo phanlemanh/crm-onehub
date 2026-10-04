@@ -123,6 +123,7 @@ const CAY_TO_CHUC = {
 		{
 			id: "bp-1",
 			name: "Khối Kinh doanh",
+			moTa: "",
 			position: 0,
 			head: null,
 			okrMo: 0,
@@ -130,6 +131,7 @@ const CAY_TO_CHUC = {
 				{
 					id: "p1",
 					name: "Chăm sóc khách hàng",
+					moTa: "",
 					position: 0,
 					divisionId: "bp-1",
 					head: null,
@@ -140,6 +142,7 @@ const CAY_TO_CHUC = {
 				{
 					id: "p2",
 					name: "Hỗ trợ môi giới",
+					moTa: "",
 					position: 1,
 					divisionId: "bp-1",
 					head: null,

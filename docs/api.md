@@ -1009,6 +1009,19 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `troLySoDo` (`GET /okr/assistant/metrics`) chỉ quản trị, như `aiChiTieu`.
   `xuHuongKr` (`GET .../key-results/{keyResultId}/trend`) mọi vai OKR gọi được,
   và trả `null` — không phải lỗi — khi đơn vị của KR chưa ở nấc `bat`.
+- **`soGopYCho` là số góp ý chờ người xem thấy được, đếm lúc đọc.** Mọi đường trả
+  `mucTieuOutput` (`docMucTieu`: `okr.mine`, `okr.danhSach`, `okr.objective`…) điền nó qua
+  `demGopYCho` (`dem-gop-y.ts`): MỘT `okrDeXuat.findMany` cho cả trang, luật của
+  `troLyDanhSach` — đơn vị phải ở nấc `bat`, Mục tiêu chưa bỏ, người xem sửa được đơn vị thì
+  đếm mọi dòng, không thì chỉ dòng của KR mình `ghiDuocKr`, người chỉ đọc đếm 0; dòng viết lại
+  đã hết hiệu lực (`hetHieuLuc` của `@crm/db/okr-de-xuat`) và dòng gắn KR đã xoá không đếm.
+  `kiemDongDeXuat` KHÔNG chạy ở đây, nên số có thể lớn hơn số `troLyDanhSach` trả. Lần đầu
+  khung chi tiết đọc danh sách Kara, nó so số dòng với `soGopYCho` của `okr.objective` và của
+  mọi `okr.mine`/`okr.danhSach` đang có trong cache; lệch thì gọi `cache.okr` một lần — lệch do
+  hết hiệu lực khớp lại ngay, lệch do một luật khác của `kiemDongDeXuat` (dòng ẩn tạm, có thể
+  hiện lại) thì còn tới khi điều kiện đổi. `okr.danhSach` đếm một lần cho cả đơn vị, truyền xuống `docMucTieu`, và mặt
+  lọc `loc.gopY: ["cho"]` lọc Mục tiêu có `soGopYCho > 0` trước khi tính `total`;
+  `facetCounts.gopY` đếm như ba mặt sẵn có. Không lưu cột số đếm nào.
 - **Chế độ ẩn kích từ chính lần lưu, không từ lịch.** `OkrService.updateObjective`,
   `updateKeyResult` và `createKeyResult` gọi `kichLuotAn` sau khi transaction của
   lần lưu đã commit; hàm này gọi `xepLuotAnSauKhiLuu` (`@crm/db/okr-tro-ly`) và
@@ -1032,6 +1045,46 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   không để lại dòng `OkrTrail` nào. Chế độ ẩn không hiện gì cho người dùng: chỉ
   quản trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt ›
   Chương trình OKR.
+- **Chín thủ tục của `SoanService` cho hạng mục «Soạn OKR cùng Trợ lý».** `soanSanSang`,
+  `soanMo`, `soanDanhSachCuoc`, `soanTangLuot`, `soanDanhSach`, `soanQuyet`,
+  `soanDuaVao`, `soanAn`, `soanSoDo` — đọc thẳng `okr.router.ts` để lấy danh sách hiện
+  hành; tất cả dưới `PhamViOkrMiddleware` và lộ REST (`restMeta`) nên vai «chỉ OKR» gọi
+  được và trần theo người áp như mọi thủ tục OKR. Ai gọi được: `soanSanSang`, `soanMo`,
+  `soanDanhSachCuoc`, `soanTangLuot`, `soanDanhSach`, `soanQuyet`, `soanDuaVao` đòi sửa
+  được OKR của đơn vị (`OkrAccessService.nhapDuoc`: quản trị mọi cấp, trưởng bộ phận
+  cho bộ phận và phòng ban trong nó, trưởng phòng ban cho phòng ban); `soanAn` và
+  `soanSoDo` chỉ quản trị, như `troLyAn` và `troLySoDo`. Người không sửa được gặp 403 ở
+  ba thủ tục nhận đơn vị (`soanSanSang`, `soanMo`, `soanDanhSachCuoc`); ở bốn thủ tục
+  nhận mã cuộc hay mã dòng (`soanTangLuot`, `soanDanhSach`, `soanQuyet`, `soanDuaVao`)
+  họ gặp **404 cùng câu với mã không có** (`OKR.thongDiep.soan.khongCoCuoc`, hay
+  `khongCoDong(id)` ở `soanQuyet`), để mã cuộc không lộ sự tồn tại — cuộc ở chế độ ẩn
+  cũng 404 với người không phải quản trị, kể cả khi nấc đã chuyển sang `tat`. Không
+  sẵn sàng là một lý do, không phải 403: `don-vi-luu-tru` (bộ phận hay phòng ban đã lưu
+  trữ), `don-vi-chua-bat`, `don-vi-che-do-an` (nấc ẩn — quản trị vẫn mở được),
+  `het-cuoc-ky` (`TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy`), `het-tran-thang`
+  (`quaTranChung`, đọc trần qua `tranThangCuaThang`: tháng có chu kỳ pha lập kế hoạch
+  dùng `aiTranThangDatOkrUsd` nếu đã đặt, không thì `aiTranThangUsd`), `con-cuoc-dang`,
+  `cuoc-an-dang-mo` (đơn vị có cuộc ẩn mà người gọi không thấy), `chua-co-khoa-mo-hinh`.
+  Bảng đầy đủ người × đơn vị × nấc × thủ tục: `rang/ma-tran-quyen.md`. `soanMo` tạo
+  `OkrCuocSoan` (`sessionId @unique`, đặt là placeholder `cho-eve:<uuid>` cho tới khi cửa
+  ghi mã phiên eve — xem `agent.md`) và từ chối khi đơn vị còn cuộc `dang`; nhận thêm
+  `thuLaiCuocId` (đổi phiên, nối `cacPhien`) hoặc `boCuocDangId` (bỏ cuộc đang mở của
+  chính đơn vị rồi mở cuộc mới trong cùng giao dịch — để «Mở cuộc mới» khi hết lượt).
+  API không gọi model: phiên chat mở qua cửa `/eve/agents/okr/eve/v1/*` của app và
+  `apps/agent-okr` viết `OkrDeXuat` (`cuocSoanId`, đích luôn `null`). `soanTangLuot` là
+  chỗ duy nhất đếm lượt (`OkrCuocSoan.soLuot`, trần `luotMoiCuoc`) và kiểm trần tháng;
+  cửa gọi nó mỗi lần mở phiên hay gửi tin. `soanQuyet` (nhận · sửa · bác) khoá dòng như
+  `troLyQuyet`; `soanDuaVao` là một `db.$transaction`: đọc số khởi điểm và đích **người
+  gõ** từ input (`soanDuaVaoInput`), gọi `taoMucTieuTrongTx` / `createKeyResult` /
+  `addAlignmentTrong` (Mục tiêu tạo ra ở nháp, hiển thị công khai), ghi
+  `OkrTrail.note = "soan-okr:<cuocSoanId>:<deXuatId>"`, đặt `OkrDeXuat.taoRaId`, và chỉ
+  cập nhật có điều kiện `OkrCuocSoan.trangThai` từ `dang` sang `da-dua-vao` — hai lần
+  bấm «Đưa vào» cùng cuộc thì lần sau `ConflictException`. Từ chối có tên trả
+  `{ ok: false, lyDo, chiTiet }` (`thieu-so-kr`, `vuot-tran-muc-tieu`, `cha-chua-nhan`…)
+  chứ không ném; chỉ dữ liệu sai hẳn mới 400. `soanSoDo` tính số đo trong
+  `soan-so-do.service.ts` cho thẻ ở Cài đặt › Chương trình OKR; các câu SQL cùng tên ở
+  `_acceptance/soan-okr-cung-tro-ly/rang/*.sql` là bản đối chứng độc lập, do
+  `apps/api/test/soan-okr-so-do.spec.ts` chạy trên cùng kho để so từng số.
 - **Ba thủ tục của `TroLyOkrService` cho lượt 9c «Tóm tắt tuần».** Tóm tắt là vài câu
   Trợ lý OKR viết cho một phòng ban, sáng hôm sau ngày cập nhật của chu kỳ (lịch ở
   `docs/agent.md`, «Two lanes»). API chỉ đọc `OkrTomTat` và ghi phản hồi — không

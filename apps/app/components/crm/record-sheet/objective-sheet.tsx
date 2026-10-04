@@ -20,6 +20,14 @@ import {
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { EntityLogo } from "@crm/ui/components/entity-logo";
 import { Icon } from "@crm/ui/components/icon";
+import {
+	Item,
+	ItemContent,
+	ItemDescription,
+	ItemGroup,
+	ItemTitle,
+} from "@crm/ui/components/item";
+import { KaraTrace } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -27,11 +35,15 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
+import { krTheoKara } from "@crm/validation/okr-theo-kara";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useQueryState } from "nuqs";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
+import type { DiemCam } from "@/app/(app)/[slug]/okr/diem-cam";
+import { useGopYMucTieu } from "@/app/(app)/[slug]/okr/gop-y-kara";
 import { HopThoaiCanChinh } from "@/app/(app)/[slug]/okr/hop-thoai-can-chinh";
 import {
 	HopThoaiCapNhatKr,
@@ -45,6 +57,12 @@ import {
 	khoaHopOkr,
 	useHopOkr,
 } from "@/app/(app)/[slug]/okr/ngan-okr-url";
+import {
+	DeXuatNeo,
+	type LoiDiKr,
+	VungKara,
+} from "@/app/(app)/[slug]/okr/nhom-kara";
+import { parseAsNeoGopY } from "@/app/(app)/[slug]/okr/okr-search-params";
 import {
 	NhanTinhTrang,
 	NhanTrangThai,
@@ -62,6 +80,7 @@ import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrGioiHanMessages } from "@/lib/messages/okr-gioi-han";
 import { okrToanCanhMessages } from "@/lib/messages/okr-toan-canh";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -348,7 +367,6 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 				key={khoaHopOkr(hop)}
 				yeuCau={{ loai: "sua", mucTieu: mt }}
 				dong={dong}
-				moKr={(id) => void datHop({ loai: "kr", id })}
 			/>
 		);
 	}
@@ -365,7 +383,57 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 	);
 }
 
-function TabKr({ mt }: { mt: ChiTiet }) {
+function KhuViSao({ mt }: { mt: ChiTiet }) {
+	const m = okrMessages(useLocale()).sheet;
+	if (mt.whyNow.trim() === "") return null;
+	return (
+		<div data-khu="vi-sao">
+			<DetailSheetSection title={m.khuViSao}>
+				<p className="text-pretty text-sm" translate="no">
+					{mt.whyNow}
+				</p>
+			</DetailSheetSection>
+		</div>
+	);
+}
+
+function KhuGopVao({ mt }: { mt: ChiTiet }) {
+	const m = okrMessages(useLocale()).sheet;
+	if (mt.alignments.length === 0) return null;
+	return (
+		<div data-khu="gop-vao">
+			<DetailSheetSection title={m.khuGopVao}>
+				<ItemGroup>
+					{mt.alignments.map((g) => (
+						<Item
+							data-gop-vao={g.alignmentId}
+							key={g.alignmentId}
+							role="listitem"
+							size="xs"
+						>
+							<ItemContent>
+								<ItemTitle title={g.objectiveTitle} translate="no">
+									{g.objectiveTitle}
+								</ItemTitle>
+								<ItemDescription unclamped>
+									<span translate="no">{g.unitName}</span>
+									{g.keyResultTitle ? (
+										<>
+											{" · "}
+											{dien(m.quaKr, { ten: g.keyResultTitle })}
+										</>
+									) : null}
+								</ItemDescription>
+							</ItemContent>
+						</Item>
+					))}
+				</ItemGroup>
+			</DetailSheetSection>
+		</div>
+	);
+}
+
+function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const m = okrMessages(useLocale()).sheet;
 	const trpc = useTRPC();
 	const [hop, setHop] = useState<HopKr | null>(null);
@@ -389,31 +457,99 @@ function TabKr({ mt }: { mt: ChiTiet }) {
 	);
 	const coMenu =
 		mt.status !== "da-bo" && (mt.canEdit || mt.canEditKr.length > 0);
+	const gopY = useGopYMucTieu({
+		objectiveId: mt.id,
+		soGopYCho: mt.soGopYCho,
+		canEdit: mt.canEdit,
+		krSuaDuoc: mt.canEditKr,
+		ghiDuoc: mt.status !== "da-bo" && mt.choDuyet === null && mt.kyGhiDuoc,
+	});
+	const moKr = (di: LoiDiKr) => {
+		if (di.loai === "kr-moi") void datHopOkr({ loai: "kr-moi" });
+		else if (di.loai === "sua-kr")
+			void datHopOkr({ loai: "kr", id: di.keyResultId });
+		else void datHopOkr({ loai: "muc-tieu" });
+	};
+	const theoKara = krTheoKara(mt.trail);
+	const diemKara: DiemCam = {
+		duoiKr: (kr) => {
+			const ds = gopY.nhom.theoKr.get(kr.id) ?? [];
+			if (ds.length === 0) return null;
+			return (
+				<div className="flex flex-col gap-1">
+					{ds.map((d) => (
+						<DeXuatNeo d={d} gopY={gopY} key={d.id} moKr={moKr} />
+					))}
+				</div>
+			);
+		},
+		sauTenKr: (kr) => (theoKara.has(kr.id) ? <KaraTrace /> : null),
+	};
+	const vung = useRef<HTMLDivElement>(null);
+	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
+	const coVungKara = gopY.noiDung !== "tat";
+	useEffect(() => {
+		if (!neo || !gopY.daTai) return;
+		if (coVungKara) {
+			const giam = window.matchMedia(
+				"(prefers-reduced-motion: reduce)",
+			).matches;
+			vung.current?.scrollIntoView({
+				block: "start",
+				behavior: giam ? "auto" : "smooth",
+			});
+		}
+		void setNeo(null);
+	}, [neo, gopY.daTai, coVungKara, setNeo]);
 
 	return (
 		<DetailSheetBody>
-			<BangKr
-				keyResults={mt.keyResults}
-				kind={mt.kind}
-				expected={mt.expected}
-				danhDauCuaToi={false}
-				hoiDoiTrong={suaNoiDung(mt)}
-				canh={demCanh(mt)}
-				nhanHanhDong={m.cotThaoTac}
-				hanhDong={
-					coMenu
-						? (kr) => (
-								<MenuKr
-									mt={mt}
-									kr={kr}
-									capNhat={() => moCapNhat(kr)}
-									sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
-									xoa={() => setXoa(kr)}
-								/>
-							)
-						: undefined
-				}
-			/>
+			<KhuViSao mt={mt} />
+			{gopY.nhom.viSao.length > 0 ? (
+				<div className="flex flex-col gap-1 px-5 pb-3">
+					{gopY.nhom.viSao.map((d) => (
+						<DeXuatNeo d={d} gopY={gopY} key={d.id} moKr={moKr} />
+					))}
+				</div>
+			) : null}
+			<KhuGopVao mt={mt} />
+			<div className="scroll-mt-4 px-5 py-3 empty:hidden" ref={vung}>
+				<VungKara gopY={gopY} moKr={moKr} soKr={mt.keyResults.length} />
+			</div>
+			<div>
+				<BangKr
+					diemCam={{ ...diemKara, ...diemCam }}
+					mucTieu={mt}
+					keyResults={mt.keyResults}
+					kind={mt.kind}
+					expected={mt.expected}
+					danhDauCuaToi={false}
+					hoiDoiTrong={suaNoiDung(mt) && !gopY.coHoiDoiTrong}
+					canh={demCanh(mt)}
+					nhanHanhDong={m.cotThaoTac}
+					hanhDong={
+						coMenu
+							? (kr) => (
+									<MenuKr
+										mt={mt}
+										kr={kr}
+										capNhat={() => moCapNhat(kr)}
+										sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
+										xoa={() => setXoa(kr)}
+									/>
+								)
+							: undefined
+					}
+				/>
+			</div>
+			{mt.keyResults.length > 0 ? (
+				<p className="px-5 pt-2 text-muted-foreground text-xs" data-tien-do-tu>
+					{dien(m.tienDoTu, {
+						x: String(mt.progress),
+						n: String(mt.keyResults.length),
+					})}
+				</p>
+			) : null}
 			{suaNoiDung(mt) ? (
 				<div className="px-5 py-3">
 					<Button
@@ -644,7 +780,13 @@ function LoiKhung({
 	);
 }
 
-export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
+export function ObjectiveSheet({
+	objectiveId,
+	diemCam,
+}: {
+	objectiveId: string;
+	diemCam?: DiemCam;
+}) {
 	const locale = useLocale();
 	const t = okrMessages(locale);
 	const m = t.sheet;
@@ -664,7 +806,7 @@ export function ObjectiveSheet({ objectiveId }: { objectiveId: string }) {
 					value: "kr",
 					label: m.tabKr,
 					count: mt.keyResults.length,
-					content: <TabKr mt={mt} />,
+					content: <TabKr diemCam={diemCam} mt={mt} />,
 				},
 				{
 					value: "can-chinh",

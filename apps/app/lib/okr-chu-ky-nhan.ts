@@ -2,7 +2,13 @@ export const OKR_CHU_KY = {
 	muiGio: "Asia/Ho_Chi_Minh",
 	soQuy: 4,
 	thangMoiQuy: 3,
+	thangMoiNam: 12,
 } as const;
+
+export function dauThangSau(homNay: string): string {
+	const thang = (Number(homNay.slice(5, 7)) % OKR_CHU_KY.thangMoiNam) + 1;
+	return `01/${String(thang).padStart(2, "0")}`;
+}
 
 export type GoiYChuKy = { nam: number; quy: { so: number; nam: number } };
 
@@ -10,6 +16,11 @@ export function homNayVn(luc: Date): string {
 	return new Intl.DateTimeFormat("en-CA", {
 		timeZone: OKR_CHU_KY.muiGio,
 	}).format(luc);
+}
+
+export function ngayThangVn(luc: Date): string {
+	const ngay = homNayVn(luc);
+	return `${ngay.slice(8, 10)}/${ngay.slice(5, 7)}`;
 }
 
 export function goiYChuKy(homNay: string): GoiYChuKy {

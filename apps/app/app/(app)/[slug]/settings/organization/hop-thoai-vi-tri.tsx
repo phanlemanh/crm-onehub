@@ -20,6 +20,7 @@ import {
 	FieldLabel,
 } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
+import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { PersonAvatar } from "@crm/ui/components/person-avatar";
 import {
@@ -32,6 +33,7 @@ import {
 	SelectValue,
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
+import { TO_CHUC_TRAN } from "@crm/validation/to-chuc";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -121,7 +123,9 @@ export function HopThoaiViTri({
 	const [phu, setPhu] = useState<string[]>(nguoi.secondaryDepartmentIds);
 	const [tay, setTay] = useState<string | null>(nguoi.managerOverrideId);
 	const [chonTay, setChonTay] = useState(false);
+	const [chucDanh, setChucDanh] = useState(nguoi.chucDanh);
 	const [loi, setLoi] = useState<string | null>(null);
+	const chucDanhQua = chucDanh.length > TO_CHUC_TRAN.chucDanh;
 
 	const luu = useMutation(
 		trpc.org.setPlacement.mutationOptions({
@@ -165,7 +169,7 @@ export function HopThoaiViTri({
 					: v.khongCo;
 
 	const gui = () => {
-		if (dangGui.current || luu.isPending) return;
+		if (dangGui.current || luu.isPending || chucDanhQua) return;
 		dangGui.current = true;
 		setLoi(null);
 		luu.mutate({
@@ -173,6 +177,7 @@ export function HopThoaiViTri({
 			primaryDepartmentId: chinh,
 			secondaryDepartmentIds: phu,
 			managerUserId: tay,
+			chucDanh,
 		});
 	};
 
@@ -192,6 +197,35 @@ export function HopThoaiViTri({
 					</DialogTitle>
 					<DialogDescription translate="no">{nguoi.email}</DialogDescription>
 				</DialogHeader>
+
+				<Field data-invalid={chucDanhQua}>
+					<FieldLabel htmlFor={`${maChinh}-chuc-danh`}>{v.chucDanh}</FieldLabel>
+					<Input
+						id={`${maChinh}-chuc-danh`}
+						value={chucDanh}
+						maxLength={TO_CHUC_TRAN.chucDanh}
+						autoComplete="organization-title"
+						translate="no"
+						aria-invalid={chucDanhQua}
+						data-o-chuc-danh
+						onChange={(e) => setChucDanh(e.target.value)}
+					/>
+					{chucDanhQua ? (
+						<FieldError>
+							{dien(v.chucDanhDai, {
+								n: chucDanh.length,
+								max: TO_CHUC_TRAN.chucDanh,
+							})}
+						</FieldError>
+					) : (
+						<FieldDescription data-dem-chuc-danh>
+							{dien(m.donVi.dem, {
+								n: chucDanh.length,
+								max: TO_CHUC_TRAN.chucDanh,
+							})}
+						</FieldDescription>
+					)}
+				</Field>
 
 				<Field>
 					<FieldLabel htmlFor={maChinh}>{v.chinh}</FieldLabel>
@@ -301,7 +335,7 @@ export function HopThoaiViTri({
 							{v.huy}
 						</Button>
 					</DialogClose>
-					<Button onClick={gui} disabled={luu.isPending}>
+					<Button onClick={gui} disabled={luu.isPending || chucDanhQua}>
 						{luu.isPending ? <Spinner /> : null}
 						{v.luu}
 					</Button>

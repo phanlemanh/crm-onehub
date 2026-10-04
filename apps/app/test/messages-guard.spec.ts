@@ -113,11 +113,14 @@ const KHONG_DAU = new Set([
 	"header.otherLocale",
 	"datMatKhau.xong.title",
 	"sheet.tabKr",
+	"sheet.quaKr",
+	"khoiMucTieu.soKr",
 	"cot.kr",
 	"cot.pha",
 	"moc.xong",
 	"mucTuTin.cao",
 	"dem",
+	"donVi.dem",
 	"bangTinh.nhan",
 	"dau.crm",
 	"dau.api",
@@ -126,6 +129,9 @@ const KHONG_DAU = new Set([
 	"mangSang.xacNhan",
 	"hop.onehub",
 	"vietTruoc.tenChuDe",
+	"banNhap.kr",
+	"loaiDong.kr-moi",
+	"cuoc.xem",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -133,8 +139,14 @@ function mienDau(khoa: string): boolean {
 	return KHONG_DAU.has(khoa) || KHONG_DAU.has(phan.slice(-2).join("."));
 }
 
+const DOI_SO_HIEN = ["X", "Y", "Z", "W"];
+const DOI_SO_GHIM = [
+	["1", "A", "B", "C"],
+	["12", "A", "B", "C"],
+] as const;
+
 function hienRa(v: GiaTri): string {
-	return v instanceof Function ? v("X", "Y", "Z") : v;
+	return v instanceof Function ? v(...DOI_SO_HIEN.slice(0, v.length)) : v;
 }
 
 const CHUA_NOI_KHAI: readonly string[] = [
@@ -212,15 +224,46 @@ const GHIM_TRO_LY_OKR = {
 } satisfies Record<string, [string, string]>;
 
 const GHIM_OKR_GOP_Y = {
-	"okr-gop-y:nut.dangCho": ["1 đề xuất đang chờ", "12 đề xuất đang chờ"],
-	"okr-gop-y:nut.tamNghi": [
-		"Trợ lý OKR tạm nghỉ tới 1",
-		"Trợ lý OKR tạm nghỉ tới 12",
+	"okr-gop-y:vung.soCho": ["1 góp ý chờ", "12 góp ý chờ"],
+	"okr-gop-y:vung.lyDo": [
+		"Kara đọc tên, «vì sao lúc này» và 1 KR của Mục tiêu này. Kara chỉ đọc dữ liệu OKR.",
+		"Kara đọc tên, «vì sao lúc này» và 12 KR của Mục tiêu này. Kara chỉ đọc dữ liệu OKR.",
 	],
-	"okr-gop-y:cot.soDong": [
-		"1 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
-		"12 đề xuất. Nhận là ghi ngay, kèm vết «theo đề xuất của Trợ lý OKR».",
+	"okr-gop-y:vung.rongMoTa": [
+		"Tên, «vì sao lúc này» và các KR đã đọc ổn lúc 1. Sửa xong thì nhờ Kara đọc lại.",
+		"Tên, «vì sao lúc này» và các KR đã đọc ổn lúc 12. Sửa xong thì nhờ Kara đọc lại.",
 	],
+	"okr-gop-y:vung.tamNghi": ["Kara tạm nghỉ tới 1.", "Kara tạm nghỉ tới 12."],
+	"okr-gop-y:bienNhan.hoanTacKr": [
+		"Đã hoàn tác — tên KR trở lại «1»",
+		"Đã hoàn tác — tên KR trở lại «12»",
+	],
+	"okr-gop-y:bienNhan.hoanTacMucTieu": [
+		"Đã hoàn tác — tên Mục tiêu trở lại «1»",
+		"Đã hoàn tác — tên Mục tiêu trở lại «12»",
+	],
+	"okr-gop-y:bienNhan.boQuaTen": [
+		"Đã bỏ qua tên Kara đề xuất: «1»",
+		"Đã bỏ qua tên Kara đề xuất: «12»",
+	],
+	"okr-gop-y:bienNhan.boQuaCau": [
+		"Đã bỏ qua câu Kara đề xuất: «1»",
+		"Đã bỏ qua câu Kara đề xuất: «12»",
+	],
+	"okr-gop-y:bienNhan.boQuaCanChinh": [
+		"Đã bỏ qua góp ý góp vào «1»",
+		"Đã bỏ qua góp ý góp vào «12»",
+	],
+	"okr-gop-y:bienNhan.boQuaHoi": [
+		"Đã bỏ qua câu hỏi của Kara: 1",
+		"Đã bỏ qua câu hỏi của Kara: 12",
+	],
+	"okr-gop-y:chip": ["1 góp ý", "12 góp ý"],
+	"okr-gop-y:chipAria": [
+		"Kara có 1 góp ý chờ cho «A», mở khung chi tiết",
+		"Kara có 12 góp ý chờ cho «A», mở khung chi tiết",
+	],
+	"okr-gop-y:loc.coCho": ["Có góp ý chờ · 1", "Có góp ý chờ · 12"],
 	"okr-gop-y:xuHuong": [
 		"Theo các lần cập nhật gần nhất (1/tuần), cuối kỳ ước khoảng A B",
 		"Theo các lần cập nhật gần nhất (12/tuần), cuối kỳ ước khoảng A B",
@@ -229,9 +272,77 @@ const GHIM_OKR_GOP_Y = {
 	"okr-gop-y:dong.gopVao": ["Góp vào «1»", "Góp vào «12»"],
 } satisfies Record<string, [string, string]>;
 
+const GHIM_OKR_SOAN = {
+	"okr-soan:nut.tiepMoTa": [
+		"Mở 1 · A lượt · B dòng chưa quyết",
+		"Mở 12 · A lượt · B dòng chưa quyết",
+	],
+	"okr-soan:nut.hetCuoc": [
+		"Đã dùng hết 1 cuộc soạn kỳ này",
+		"Đã dùng hết 12 cuộc soạn kỳ này",
+	],
+	"okr-soan:nut.tamNghi": [
+		"Trợ lý OKR tạm nghỉ tới 1",
+		"Trợ lý OKR tạm nghỉ tới 12",
+	],
+	"okr-soan:nut.dsCuoc": ["1/A cuộc", "12/A cuộc"],
+	"okr-soan:man.luot": ["lượt 1/A", "lượt 12/A"],
+	"okr-soan:man.tabBanNhap": ["Bản nháp (1)", "Bản nháp (12)"],
+	"okr-soan:man.soDong": ["1 dòng", "12 dòng"],
+	"okr-soan:hoiThoai.goiY": ["Gợi ý trả lời: 1", "Gợi ý trả lời: 12"],
+	"okr-soan:hoiThoai.hetLuot": [
+		"Đã dùng hết 1 lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới",
+		"Đã dùng hết 12 lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới",
+	],
+	"okr-soan:banNhap.mucTieu": ["Mục tiêu 1", "Mục tiêu 12"],
+	"okr-soan:banNhap.viSaoLucNay": ["Vì sao lúc này: 1", "Vì sao lúc này: 12"],
+	"okr-soan:banNhap.canChinh": ["Góp vào «1»", "Góp vào «12»"],
+	"okr-soan:banNhap.doBang": ["đo bằng 1", "đo bằng 12"],
+	"okr-soan:banNhap.goiYKhoiDiem": ["khởi điểm gợi ý 1", "khởi điểm gợi ý 12"],
+	"okr-soan:banNhap.bacCon": ["1 dòng con thu gọn", "12 dòng con thu gọn"],
+	"okr-soan:banNhap.duaVao": [
+		"Đưa vào bộ OKR · 1 Mục tiêu, A KR",
+		"Đưa vào bộ OKR · 12 Mục tiêu, A KR",
+	],
+	"okr-soan:banNhap.thieuDich": [
+		"Điền khởi điểm và đích cho 1 KR đã nhận trước khi đưa vào",
+		"Điền khởi điểm và đích cho 12 KR đã nhận trước khi đưa vào",
+	],
+	"okr-soan:banNhap.duaVaoMoTa": [
+		"Tạo ở trạng thái nháp cho 1, A. Dòng đã bác không đưa vào; đích do bạn đặt.",
+		"Tạo ở trạng thái nháp cho 12, A. Dòng đã bác không đưa vào; đích do bạn đặt.",
+	],
+	"okr-soan:banNhap.xacNhan.than": [
+		"Tạo 1 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, C?",
+		"Tạo 12 Mục tiêu và A KR, đích do bạn đặt, ở trạng thái nháp cho B, C?",
+	],
+	"okr-soan:banNhap.daTao": [
+		"Đã tạo 1 Mục tiêu nháp",
+		"Đã tạo 12 Mục tiêu nháp",
+	],
+	"okr-soan:banNhap.daTaoMoTa": [
+		"1 KR đi kèm; đích bạn đã điền được giữ. Công bố như mọi OKR ở Theo đơn vị.",
+		"12 KR đi kèm; đích bạn đã điền được giữ. Công bố như mọi OKR ở Theo đơn vị.",
+	],
+	"okr-soan:cuoc.tieuDe": [
+		"Cuộc soạn cùng Trợ lý · 1",
+		"Cuộc soạn cùng Trợ lý · 12",
+	],
+	"okr-soan:cuoc.dem": ["1/A cuộc", "12/A cuộc"],
+	"okr-soan:cuoc.nutCuoc": ["1 cuộc A", "12 cuộc A"],
+	"okr-soan:cuoc.dongNhan": ["1/A dòng nhận", "12/A dòng nhận"],
+	"okr-soan:cuoc.rongMoTa": [
+		"Mỗi chu kỳ có 1 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
+		"Mỗi chu kỳ có 12 cuộc; cuộc đã đưa vào bộ OKR vẫn xem lại được ở đây.",
+	],
+	"okr-soan:soDo.luot": ["1 lượt", "12 lượt"],
+	"okr-soan:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
+} satisfies Record<string, [string, string]>;
+
 const GHIM = {
 	...GHIM_TRO_LY_OKR,
 	...GHIM_OKR_GOP_Y,
+	...GHIM_OKR_SOAN,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
@@ -658,6 +769,12 @@ const GHIM = {
 	"okr:demDonVi": ["1 mục tiêu · A KR", "12 mục tiêu · A KR"],
 	"okr:gopVao": ["góp vào 1 chỗ", "góp vào 12 chỗ"],
 	"okr:tienDoCua": ["Tiến độ 1: A%", "Tiến độ 12: A%"],
+	"okr:khoiMucTieu.tinhTu": ["Tính từ 1 KR", "Tính từ 12 KR"],
+	"okr:khoiMucTieu.thuGon": ["Thu gọn KR của «1»", "Thu gọn KR của «12»"],
+	"okr:khoiMucTieu.moRa": ["Mở KR của «1»", "Mở KR của «12»"],
+	"okr:khoiMucTieu.soKr": ["1 KR", "12 KR"],
+	"okr:khoiMucTieu.soKrCham": ["1 KR chậm", "12 KR chậm"],
+	"okr:khoiMucTieu.tuKhoiDiem": ["1 · từ A", "12 · từ A"],
 	"okr:caiDat.chuKy.chuyenSang": ["Chuyển sang 1", "Chuyển sang 12"],
 	"okr:caiDat.chuKy.daChuyen": ["1 đã sang A.", "12 đã sang A."],
 	"okr:caiDat.chuKy.hoi.title": ["Chuyển 1 sang A?", "Chuyển 12 sang A?"],
@@ -954,8 +1071,9 @@ describe("kho chuoi cua vong ③a", () => {
 			if (!lay) throw new Error(`khong co module ${ten}`);
 			const f = phang(lay("vi")).find(([k]) => k === duong)?.[1];
 			if (!(f instanceof Function)) throw new Error(`${khoa} khong phai ham`);
-			expect(f("1", "A", "B")).toBe(mot);
-			expect(f("12", "A", "B")).toBe(nhieu);
+			expect(f.length).toBeLessThanOrEqual(DOI_SO_GHIM[0].length);
+			expect(f(...DOI_SO_GHIM[0].slice(0, f.length))).toBe(mot);
+			expect(f(...DOI_SO_GHIM[1].slice(0, f.length))).toBe(nhieu);
 		}
 	});
 });

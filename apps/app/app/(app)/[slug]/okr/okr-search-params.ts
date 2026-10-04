@@ -15,11 +15,14 @@ import {
 	type CachXemOkr,
 	type DonChonOkr,
 	khoaDonOkr,
+	LOC_GOP_Y,
+	type LocGopY,
 } from "@crm/validation/okr-tham-so";
 import {
 	createLoader,
 	createParser,
 	parseAsArrayOf,
+	parseAsBoolean,
 	parseAsString,
 	parseAsStringLiteral,
 } from "nuqs/server";
@@ -65,21 +68,34 @@ export const okrParsers = {
 		parseAsStringLiteral(MUC_TU_TIN),
 	).withDefault([]),
 	[SEARCH_PARAM.okr.tu]: parseAsStringLiteral(LOI_VAO).withDefault("tab"),
+	[SEARCH_PARAM.okr.gopY]: parseAsArrayOf(
+		parseAsStringLiteral(LOC_GOP_Y),
+	).withDefault([]),
 };
 
+export const parseAsNeoGopY = parseAsBoolean;
+
 export const loadOkrSearchParams = createLoader(okrParsers);
+
+export const parseAsThuMucTieu = parseAsArrayOf(parseAsString).withDefault([]);
+
+export function chuanThuMucTieu(ids: readonly string[]): string[] {
+	return [...new Set(ids.map((id) => id.trim()).filter((id) => id !== ""))];
+}
 
 export function locOkr(v: {
 	[SEARCH_PARAM.okr.phuTrach]: string[];
 	[SEARCH_PARAM.okr.loai]: LoaiMucTieu[];
 	[SEARCH_PARAM.okr.trangThai]: TrangThaiMucTieu[];
 	[SEARCH_PARAM.okr.tuTin]: MucTuTin[];
+	[SEARCH_PARAM.okr.gopY]: LocGopY[];
 }) {
 	return {
 		phuTrach: v[SEARCH_PARAM.okr.phuTrach],
 		loai: v[SEARCH_PARAM.okr.loai],
 		trangThai: v[SEARCH_PARAM.okr.trangThai],
 		tuTin: v[SEARCH_PARAM.okr.tuTin],
+		gopY: v[SEARCH_PARAM.okr.gopY],
 	};
 }
 
@@ -98,6 +114,7 @@ export function kyTrongOChon<T extends { anLuc: string | null }>(
 }
 
 const PHA_HOI_Y = "lap-ke-hoach" satisfies PhaChuKy;
+const PHA_SOAN = "lap-ke-hoach" satisfies PhaChuKy;
 const LOAI_UU_TIEN = "nam" satisfies LoaiChuKy;
 
 export function kyMacDinhHoiY(cycles: {
@@ -112,6 +129,20 @@ export function kyMacDinhHoiY(cycles: {
 				(a.kind === b.kind ? 0 : a.kind === LOAI_UU_TIEN ? -1 : 1),
 		);
 	return keHoach[0]?.id ?? cycles.currentId;
+}
+
+export function kySoDoSoan<
+	T extends { id: string; phase: PhaChuKy; anLuc: string | null },
+>(
+	cycles: { cycles: readonly T[]; currentId: string | null } | undefined,
+): T | null {
+	if (!cycles) return null;
+	const hien = kyTrongOChon(cycles.cycles);
+	return (
+		hien.find((c) => c.phase === PHA_SOAN) ??
+		hien.find((c) => c.id === cycles.currentId) ??
+		null
+	);
 }
 
 export function giaiKyHoiY(

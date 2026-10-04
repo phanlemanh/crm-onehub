@@ -1,0 +1,121 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · nen-kara</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Nền giao diện của Kara trong packages/ui — dấu tia sáng, nhãn Kara có ô «vì sao», ProposedChange hai độ dày (inline không viền, card), dòng biên nhận có Hoàn tác, phản hồi chung — để mọi màn AI sau đó dựng trên một bộ</h1><div class="sub">Trang bằng chứng · <span class="mono">nen-kara</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E1-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E2-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E3-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E4-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E5-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E6-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E7-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E8-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-8</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E9-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-9</td><td>ui-check</td><td><span class="badge pass">PASS</span></td><td class="mono">E10-nen-kara-20261003</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-10</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E11-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-11</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E12-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-12</td><td>judgment</td><td><span class="badge pass">PASS</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+<tr><td><a href="#E14">E14</a></td><td>AC-13</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-nen-kara-E14-r3</td><td class="mono">2026-10-02T21:09:19Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1: Given một đề xuất dựng bằng `ProposedChange` với `density=&quot;inline&quot;` (hoặc không truyền `density`), When nó hiện, Then gốc của nó là `Item` biến thể mặc định, không có `Alert` hay `Card` bên trong; chữ cũ và chữ mới mang `translate=&quot;no&quot;`; thứ tự nhãn → chữ cũ gạch → chữ mới → lý do → hàng nút giữ như bản thẻ; đúng một nút tô màu.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E1-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_inline</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 1 test across 1 file. [485.00ms]</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-2: Given cùng bộ props của một đề xuất, When dựng ở `inline` và ở `card` qua năm trạng thái chờ, đang gửi, nút khoá kèm lý do, lỗi, đang sửa, Then hai độ dày cho cùng tập nút (tên, kiểu, khoá), cùng lý do khoá trỏ bằng `aria-describedby`, cùng dòng lỗi, cùng ô sửa; Esc trong ô sửa gọi huỷ ở cả hai.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E2-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_hai_do_day</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 1 test across 1 file. [511.00ms]</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-3: Given cột góp ý OKR (`okr/the-gop-y.tsx`) và thẻ thông tin liên hệ (`components/crm/facts.tsx`), When dựng sau lượt, Then cả hai ra bản `card` với thân `Confirmation` như trước lượt, và các bài DOM sẵn có của hai màn đó vẫn xanh.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E3-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_man_cu</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">Ran 18 tests across 2 files. [9.64s]</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-4: Given một đề xuất đã quyết, When `decided` có `onUndo`, Then ở cả hai độ dày đề xuất thu thành một dòng biên nhận gồm chữ đã quyết và nút «Hoàn tác»; bấm «Hoàn tác» gọi `onUndo` đúng một lần; dòng mang `role=&quot;status&quot;`; quyết định bỏ qua hay bác hiện chữ mờ và vẫn ở chỗ; không có `onUndo` thì không có nút «Hoàn tác».</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E4-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_bien_nhan</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 1 test across 1 file. [660.00ms]</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · test</h3><p class="crit">AC-5: Given `KaraMark`, When dựng có và không có phạm vi, Then nó hiện icon tia sáng ẩn với trình đọc màn hình và chữ «Kara», thêm «· {phạm vi}» khi có; màu là chữ phụ, không có lớp tô màu thương hiệu nào.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E5-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_dau</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 1 test across 1 file. [404.00ms]</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-6: Given `KaraLabel` nằm trong một hàng có xử lý bấm, When người bấm, nhấn Enter hoặc Space trên «Vì sao?», Then ô «Vì sao?» mở với tiêu đề «Kara dựa trên gì», lý do và giờ đọc, và cả xử lý bấm lẫn xử lý phím của hàng đều không chạy; Esc đóng ô và trả focus về nút «Vì sao?».</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E6-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_vi_sao</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 2 tests across 1 file. [560.00ms]</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-7: Given `AiFeedback`, When người chọn «Hữu ích» rồi «Không hữu ích», Then `onChange` nhận `true` rồi `false`, nút đang chọn mang trạng thái bật, dòng cảm ơn hiện khi đã chọn và không đang gửi; và khối tóm tắt tuần (`okr/khoi-tom-tat.tsx`) dùng `AiFeedback` thay bản riêng, giữ `data-phan-hoi`, chữ hai nút, tên nhóm, chữ cảm ơn và việc lùi lựa chọn khi gửi lỗi.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E7-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_phan_hoi</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 1 test across 1 file. [432.00ms]</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · test</h3><p class="crit">AC-7: Given `AiFeedback`, When người chọn «Hữu ích» rồi «Không hữu ích», Then `onChange` nhận `true` rồi `false`, nút đang chọn mang trạng thái bật, dòng cảm ơn hiện khi đã chọn và không đang gửi; và khối tóm tắt tuần (`okr/khoi-tom-tat.tsx`) dùng `AiFeedback` thay bản riêng, giữ `data-phan-hoi`, chữ hai nút, tên nhóm, chữ cảm ơn và việc lùi lựa chọn khi gửi lỗi.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E8-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_tom_tat</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 24 tests across 1 file. [2.33s]</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · test</h3><p class="crit">AC-8: Given các thành phần mới, When dựng cùng props ở tiếng Việt và tiếng Anh, Then mọi chữ do thành phần tự đặt (không phải chữ màn truyền vào) đổi theo tiếng, trừ tên «Kara»; khoá mới trong `messages.ts` được ghim trong bài gác messages.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E9-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.nk_hai_tieng</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">Ran 5 tests across 1 file. [7.00ms]</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · ui-check</h3><p class="crit">AC-9: Given `/proto/nen-kara` chạy trên máy chủ của cây này, When mở từng trạng thái ở khổ 1440 và 390, nền sáng và tối, Then đề xuất `inline` không có viền hay nền riêng, kể cả ở phần tử con (trừ nút, ô nhập và chữ chèn tô nền), bản `card` có viền, trang không tràn ngang, ô «Vì sao?» mở được, và bấm «Hoàn tác» ở dòng biên nhận đưa đề xuất về trạng thái chờ.</p>
+<div class="kv"><span>run_id <b>E10-nen-kara-20261003</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.nk_man_proto</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="shot slide" data-n="32"><div class="frame"><img src="evidence/E10-ST-nenkara-inline-cho-1440-light.png" alt="frame 1" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-bien-nhan-1440-dark.png" alt="frame 2" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-bien-nhan-1440-light.png" alt="frame 3" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-bien-nhan-390-dark.png" alt="frame 4" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-bien-nhan-390-light.png" alt="frame 5" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-cho-1440-dark.png" alt="frame 6" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-cho-390-dark.png" alt="frame 7" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-cho-390-light.png" alt="frame 8" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-khoa-1440-dark.png" alt="frame 9" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-khoa-1440-light.png" alt="frame 10" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-khoa-390-dark.png" alt="frame 11" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-khoa-390-light.png" alt="frame 12" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-loi-1440-dark.png" alt="frame 13" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-loi-1440-light.png" alt="frame 14" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-loi-390-dark.png" alt="frame 15" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-loi-390-light.png" alt="frame 16" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-sua-1440-dark.png" alt="frame 17" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-sua-1440-light.png" alt="frame 18" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-sua-390-dark.png" alt="frame 19" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-inline-sua-390-light.png" alt="frame 20" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-nhan-1440-dark.png" alt="frame 21" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-nhan-1440-light.png" alt="frame 22" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-nhan-390-dark.png" alt="frame 23" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-nhan-390-light.png" alt="frame 24" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-phan-hoi-1440-dark.png" alt="frame 25" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-phan-hoi-1440-light.png" alt="frame 26" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-phan-hoi-390-dark.png" alt="frame 27" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-phan-hoi-390-light.png" alt="frame 28" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-the-1440-dark.png" alt="frame 29" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-the-1440-light.png" alt="frame 30" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-the-390-dark.png" alt="frame 31" loading="lazy"></div><div class="frame"><img src="evidence/E10-ST-nenkara-the-390-light.png" alt="frame 32" loading="lazy"></div></div><div class="slidebar"><button class="btn" data-toggle>⏸ Tạm dừng</button><span>32 frame · chạy như GIF</span></div>
+<pre class="out">rang/man-proto.mjs chay chieu xanh cuoi cung: XANH, 109 OK, 32 anh sach E10-*.png trong _acceptance/nen-kara/evidence/.
+Driver la script Playwright rieng cua rang, khong qua cong cu co read_network_requests, nen khong co E10-network.txt.
+Frames da doc bang Read: inline-cho-1440-light, inline-cho-390-light, the-1440-light, bien-nhan-1440-light, nhan-1440-dark, phan-hoi-390-dark.</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-10: Given kho sau lượt, When chạy cổng mồ côi AI Elements và thước tên gọi của hồ sơ `the-gop-y-okr`, Then cả hai xanh: `confirmation.tsx` vẫn được một màn trong `apps/**` dùng tới qua bản `card`.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E11-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.nk_mo_coi</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>green</b></span></div>
+<pre class="out">RĂNG TÊN GỌI XANH</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · script</h3><p class="crit">AC-11: Given `docs/ai-ux.md` và `docs/chat-ui.md` sau lượt, When đọc, Then mục 10 ghi đã có bốn món của lượt này kèm tên thành phần; bảng «Lộ trình áp luật» có dòng lượt khung `muc-tieu-va-kr` đứng trước dòng `gop-y-dung-cho`, và dòng `gop-y-dung-cho` ghi dựng trên `BangMucTieu` qua sáu điểm cắm có tên; `docs/chat-ui.md` ghi `confirmation.tsx` là thân bản `card` của `ProposedChange`.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E12-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.nk_tai_lieu</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">XANH</pre>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge pass">PASS</span> &nbsp;E13 · judgment</h3><p class="crit">AC-12: Given ảnh `/proto/nen-kara` ở 1440 và 390 do AC-9 chụp, When một người không làm lượt này đọc, Then họ thấy đề xuất `inline` là một phần của dòng nó sửa chứ không phải một hộp riêng, và chỉ ra ngay nút chính của mỗi đề xuất.</p>
+<div class="kv"><span>judged_by <b>judge panel (3 lens, fresh context)</b></span></div>
+<p class="note"><b>Phán đoán:</b> Panel giu nguyen tu round 2 — inputs khong doi, khong cham lai; rationale xem round do. Day la de xuat cua hoi dong, nguoi quyet o Gate 2.</p>
+<div class="ov ovok">human_override: # chi nguoi ghi</div>
+</div>
+<div class="card eval" id="E14"><h3><span class="badge pass">PASS</span> &nbsp;E14 · script</h3><p class="crit">AC-13: Given các tệp giao diện mới hay sửa của lượt, When chạy sàn thiết kế tĩnh, Then số lỗi nền P0 bằng 0.</p>
+<div class="kv"><span>run_id <b>minted-nen-kara-E14-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.nk_san_thiet_ke</b></span><span>verified_at <b>2026-10-02T21:09:19Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">design-gate.mjs --mode static chay lan luot tren sau tep man cua luot va moi .tsx duoi proto/_modules/nen-kara, khong tep nao bi chan.</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">Hai eval xanh cả trên bản trước lượt lẫn bản hiện tại (baseline green), nên chúng chứng minh bộ đo chứ không chứng minh tính năng mới. Cả hai là hàng rào hồi quy có chủ ý:
+- E3 (AC-3): hai màn cũ vẫn ra bản card như trước.
+- E11 (AC-10): hai thước mồ côi và tên gọi sẵn có, xanh cả hai phía.
+Lệnh fail không gắn eval: không có.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: REJECT, E10 đỏ ở chiều đỏ của script đo (đã vá ở commit 475d8177), kèm các finding trong sổ quyết định S4-r1.</li><li>Round 2: REJECT, E8 đỏ vì lệnh gồm hai nửa mà nửa sau không chạy được; khuôn đo được đổi sang lệnh ngắn rang/tom-tat.sh.</li><li>Round 3: PASS, mọi eval máy xanh, E10 đo 32 ô, E13 giữ nguyên từ round 2.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>

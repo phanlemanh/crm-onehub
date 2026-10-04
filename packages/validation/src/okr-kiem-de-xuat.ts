@@ -1,7 +1,9 @@
-import { boDau, type MaLuatOkr } from "./okr-kiem";
+import { chuanHoa, coCum, khongDau, type MaLuatOkr } from "./okr-kiem";
 import { docSoOkr } from "./okr-kr";
 import {
 	type DongDeXuat,
+	type DongGopY,
+	type DongSoan,
 	type MaLoaiDeXuat,
 	TRO_LY_OKR_TRAN,
 } from "./okr-tro-ly";
@@ -190,40 +192,38 @@ export function trichSo(chu: string): number[] {
 	return docSo(chu).map((s) => s.giaTri);
 }
 
-export function chuanHoa(s: string): string {
-	return s
-		.normalize("NFC")
-		.toLowerCase()
-		.split(/[^\p{L}\p{N}]+/u)
-		.filter(Boolean)
-		.join(" ");
-}
-
-export function khongDau(s: string): string {
-	return chuanHoa(boDau(s));
-}
-
-export function coCum(van: string, cum: string): boolean {
-	return cum !== "" && ` ${van} `.includes(` ${cum} `);
-}
-
-function chuCuaDong(dong: DongDeXuat): string[] {
+function chuCuaDong(dong: DongGopY): string[] {
 	return [dong.sau ?? "", dong.lyDo];
 }
 
 export function khoaDong(dong: DongDeXuat): string {
-	const kr = dong.keyResultId ?? "-";
 	switch (dong.loai) {
 		case "viet-lai":
-			return `vl:${dong.objectiveId}:${kr}:${dong.truong ?? "-"}`;
+			return `vl:${dong.objectiveId}:${dong.keyResultId ?? "-"}:${dong.truong ?? "-"}`;
 		case "hoi":
-			return `hoi:${dong.objectiveId}:${kr}:${dong.maVanDe ?? "-"}`;
+			return `hoi:${dong.objectiveId}:${dong.keyResultId ?? "-"}:${dong.maVanDe ?? "-"}`;
 		case "can-chinh":
 			return `cc:${dong.objectiveId}:${dong.targetObjectiveId ?? dong.targetKeyResultId ?? "-"}`;
+		case "muc-tieu-moi":
+		case "kr-moi":
+			return `${dong.loai}:${chuanHoa(dong.ten)}`;
+		case "can-chinh-moi":
+			return `can-chinh-moi:${dong.chaKhoa}:${dong.targetObjectiveId ?? dong.targetKeyResultId ?? "-"}`;
 	}
 }
 
-function idNgoaiGoi(dong: DongDeXuat, goi: GoiKiem): boolean {
+export function khoaModel(dong: DongSoan): string {
+	switch (dong.loai) {
+		case "muc-tieu-moi":
+			return `muc-tieu-moi:${dong.khoa}`;
+		case "kr-moi":
+			return `kr-moi:${dong.chaKhoa}:${dong.khoa}`;
+		case "can-chinh-moi":
+			return khoaDong(dong);
+	}
+}
+
+function idNgoaiGoi(dong: DongGopY, goi: GoiKiem): boolean {
 	if (dong.objectiveId !== goi.mucTieu.id) return true;
 	if (
 		dong.keyResultId !== null &&
@@ -240,7 +240,7 @@ function idNgoaiGoi(dong: DongDeXuat, goi: GoiKiem): boolean {
 	return !trongGoi.includes(dich);
 }
 
-function khongDoi(dong: DongDeXuat): boolean {
+function khongDoi(dong: DongGopY): boolean {
 	return (
 		dong.loai === "viet-lai" &&
 		chuanHoa(dong.sau ?? "") === chuanHoa(dong.truoc ?? "")
@@ -255,7 +255,7 @@ function heSoCuaKr(kr: GoiKiem["krs"][number]): number[] {
 		.filter((h): h is number => h !== undefined && h !== 1);
 }
 
-function soMoi(dong: DongDeXuat, goi: GoiKiem): boolean {
+function soMoi(dong: DongGopY, goi: GoiKiem): boolean {
 	if (dong.loai !== "viet-lai") return false;
 	const kr = goi.krs.find((k) => k.id === dong.keyResultId);
 	const oKr = kr ? [kr.startValue, kr.targetValue, kr.currentValue] : [];
@@ -268,7 +268,7 @@ function soMoi(dong: DongDeXuat, goi: GoiKiem): boolean {
 	);
 }
 
-function tuCam(dong: DongDeXuat, goi: GoiKiem): boolean {
+function tuCam(dong: DongGopY, goi: GoiKiem): boolean {
 	const chu = chuCuaDong(dong).map(chuanHoa);
 	const dauVao = [
 		dong.truoc ?? "",
@@ -282,7 +282,7 @@ function tuCam(dong: DongDeXuat, goi: GoiKiem): boolean {
 	});
 }
 
-function noiVeNguoi(dong: DongDeXuat, goi: GoiKiem): boolean {
+function noiVeNguoi(dong: DongGopY, goi: GoiKiem): boolean {
 	const chu = chuCuaDong(dong).map(khongDau);
 	return goi.tenThanhVien
 		.map(khongDau)
@@ -292,7 +292,7 @@ function noiVeNguoi(dong: DongDeXuat, goi: GoiKiem): boolean {
 		.some((ten) => chu.some((c) => coCum(c, ten)));
 }
 
-function chepCapTren(dong: DongDeXuat, goi: GoiKiem): boolean {
+function chepCapTren(dong: DongGopY, goi: GoiKiem): boolean {
 	if (dong.loai !== "viet-lai" || dong.truong !== "title") return false;
 	const sau = chuanHoa(dong.sau ?? "");
 	return goi.dichCanChinh.some(
@@ -300,7 +300,7 @@ function chepCapTren(dong: DongDeXuat, goi: GoiKiem): boolean {
 	);
 }
 
-function trungLuat(dong: DongDeXuat, goi: GoiKiem): boolean {
+function trungLuat(dong: DongGopY, goi: GoiKiem): boolean {
 	return (
 		dong.loai === "hoi" &&
 		goi.luatDaHoi.some(
@@ -309,7 +309,7 @@ function trungLuat(dong: DongDeXuat, goi: GoiKiem): boolean {
 	);
 }
 
-function dichNgoaiTap(dong: DongDeXuat, goi: GoiKiem): boolean {
+function dichNgoaiTap(dong: DongGopY, goi: GoiKiem): boolean {
 	if (dong.loai !== "can-chinh") return false;
 	const [id, loai] =
 		dong.targetObjectiveId !== null
@@ -318,11 +318,11 @@ function dichNgoaiTap(dong: DongDeXuat, goi: GoiKiem): boolean {
 	return !goi.dichCanChinh.some((d) => d.id === id && d.loai === loai);
 }
 
-function daBac(dong: DongDeXuat, goi: GoiKiem): boolean {
+function daBac(dong: DongGopY, goi: GoiKiem): boolean {
 	return goi.khoaDaBac.includes(khoaDong(dong));
 }
 
-function dangCho(dong: DongDeXuat, goi: GoiKiem): boolean {
+function dangCho(dong: DongGopY, goi: GoiKiem): boolean {
 	const khoa = khoaDong(dong);
 	const sau = chuanHoa(dong.sau ?? "");
 	return goi.khoaDangCho.some(
@@ -332,7 +332,7 @@ function dangCho(dong: DongDeXuat, goi: GoiKiem): boolean {
 
 const LUAT_KIEM: readonly (readonly [
 	MaLoaiDeXuat,
-	(dong: DongDeXuat, goi: GoiKiem) => boolean,
+	(dong: DongGopY, goi: GoiKiem) => boolean,
 ])[] = [
 	["id-ngoai-goi", idNgoaiGoi],
 	["khong-doi", khongDoi],
@@ -346,7 +346,7 @@ const LUAT_KIEM: readonly (readonly [
 	["dang-cho", dangCho],
 ];
 
-export function kiemDongDeXuat(dong: DongDeXuat, goi: GoiKiem): KetQuaKiemDong {
+export function kiemDongDeXuat(dong: DongGopY, goi: GoiKiem): KetQuaKiemDong {
 	const loai = LUAT_KIEM.find(([, vi]) => vi(dong, goi));
 	return loai ? { qua: false, maLoai: loai[0] } : { qua: true };
 }

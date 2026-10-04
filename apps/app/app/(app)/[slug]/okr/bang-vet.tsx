@@ -64,7 +64,7 @@ const HANH_DONG_SUA = ["sua", "sua-kr"] as const;
 
 const GHI_CHU_TRO_LY = /^tro-ly-okr:\S+$/;
 
-function theoTroLy(note: string | null): boolean {
+function theoKara(note: string | null): boolean {
 	return note !== null && GHI_CHU_TRO_LY.test(note);
 }
 
@@ -156,14 +156,14 @@ function thayDoi(vet: Vet, bc: BoiCanh): ThayDoi[] {
 
 function tenViec(vet: Vet, doi: ThayDoi[], locale: Locale): string {
 	const m = okrMessages(locale);
-	if (!theoTroLy(vet.note)) return m.hanhDong[vet.action];
+	if (!theoKara(vet.note)) return m.hanhDong[vet.action];
 	const g = okrGopYMessages(locale).vet;
 	const motTruong = doi.length === 1 ? doi[0] : undefined;
 	const viec =
 		motTruong && HANH_DONG_SUA.some((h) => h === vet.action)
 			? g.suaTruong(motTruong.nhan.toLocaleLowerCase(locale))
 			: m.hanhDong[vet.action];
-	return `${viec} — ${g.theoTroLy}`;
+	return `${viec} — ${g.theoKara}`;
 }
 
 export function luc(at: string, locale: Locale): string {

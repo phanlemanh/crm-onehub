@@ -839,6 +839,57 @@ _Avoid_: hoá đơn AI, billing, nhật ký chi phí
 Vì sao: «hoá đơn» là chứng từ của nhà cung cấp, còn sổ là số của chính CRM để đối soát
 với hoá đơn đó.
 
+**Cuộc soạn**: một lần trưởng đơn vị ngồi soạn OKR của một đơn vị cho một chu kỳ cùng
+Trợ lý OKR — mở từ khung đơn vị ở màn OKR, có lời hỏi qua lại và một bản nháp, kết
+thúc khi người bấm «Đưa vào bộ OKR» hay bỏ. Mỗi cuộc có tối đa 12 lượt và mỗi đơn vị
+mỗi chu kỳ có tối đa 3 cuộc; một đơn vị không có hai cuộc đang mở cùng lúc. Cuộc chỉ
+mở ở đơn vị mà quản trị đã bật việc soạn, trong tháng chưa chạm trần chi phí. Chốt
+2026-09-30 tại Cổng Phạm vi của `soan-okr-cung-tro-ly`.
+_Avoid_: phiên, hội thoại, session, chat, workshop
+Vì sao: «phiên» là chữ kỹ thuật của một lần nối tới trợ lý — một cuộc có thể đi qua
+vài phiên khi bấm «Thử lại»; «hội thoại» đã là khung hội thoại của trợ lý AI đọc dữ
+liệu đối tác, thứ mà vai «chỉ OKR» không có.
+
+**Bản nháp (OKR)**: bộ Mục tiêu và KR mà Trợ lý OKR đề nghị trong một cuộc soạn,
+hiện thành bảng cạnh lời hỏi. Mỗi dòng là một Đề xuất: người nhận, sửa rồi nhận, hay
+bác từng dòng; dòng đã bác không được đề nghị lại. Bản nháp không có số đích — khởi
+điểm và đích do người gõ khi «Đưa vào bộ OKR» — và không nằm trong bộ OKR cho tới lúc
+đó. Chốt 2026-09-30 tại Cổng Phạm vi của `soan-okr-cung-tro-ly`.
+_Avoid_: bản đề xuất, draft, OKR gợi ý, OKR máy viết
+Vì sao: «Bản đề xuất» đã là một thay đổi chờ duyệt của trang tài liệu; «OKR máy viết»
+gợi máy đã ghi vào bộ OKR, trong khi máy không ghi gì — người đưa vào.
+
+**Trang chiến lược**: trang tài liệu loại «chiến lược» trong kho tài liệu — định
+hướng, ưu tiên năm, nguyên tắc vận hành — mà Trợ lý OKR đọc bản đang dùng làm nền khi
+soạn. Chỉ bản đang dùng vào gói: trang chưa duyệt không vào; trang quá hạn xác minh vẫn vào,
+kèm ngày xác minh.
+Tổng trang chiến lược có trần ký tự (20 nghìn), duyệt một trang có câu thuộc danh sách
+từ cấm thì màn duyệt cảnh báo. Phần lương thưởng và bảng điểm theo vai không thuộc
+loại này. Chốt 2026-09-30 tại Cổng Phạm vi của `soan-okr-cung-tro-ly`.
+_Avoid_: tài liệu chiến lược, strategy doc, bối cảnh công ty, prompt
+Vì sao: «tài liệu» trong kho là mọi trang; loại phải đứng cạnh «quy định», «quy trình»
+như một chữ ngắn trên ô chọn loại. «Bối cảnh công ty» nói về gói máy dựng, không phải
+thứ người viết.
+
+**Mô tả đơn vị**: vài câu quản trị viết cho một bộ phận hay phòng ban ở Cài đặt ›
+Tổ chức — đơn vị làm gì, phục vụ ai — tối đa 500 ký tự. Trợ lý OKR đọc mô tả của đơn
+vị và đơn vị cha khi soạn; không có mô tả thì vẫn soạn, chỉ kém sát. Trên màn Tổ chức
+gọi ngắn là «Mô tả». Chốt 2026-09-30 tại Cổng Phạm vi của `soan-okr-cung-tro-ly`.
+_Avoid_: chức năng nhiệm vụ, sứ mệnh, description, giới thiệu
+Vì sao: «chức năng nhiệm vụ» là văn bản hành chính dài, người viết sẽ dán nguyên; «sứ
+mệnh» là chữ của cấp công ty, đặt ở trang chiến lược.
+
+**Chức danh**: chữ ghi nghề của một người trong đơn vị — «trưởng phòng», «chuyên
+viên» — đặt cho từng người ở hộp «Vị trí trong tổ chức», tối đa 80 ký tự. Trợ lý OKR
+chỉ đọc chức danh của trưởng đơn vị và người hỏi, không đọc tên; màn OKR không hiện
+chức danh.
+Không phải vai trong workspace và không cho quyền gì. Chốt 2026-09-30 tại
+Cổng Phạm vi của `soan-okr-cung-tro-ly`.
+_Avoid_: vai, vị trí, title, job title, cấp bậc
+Vì sao: «vai» đã là vai trong workspace (quản trị, thành viên, chỉ OKR); «vị trí» là
+chỗ một người đứng trong tổ chức (bộ phận, phòng ban), chức danh chỉ là một ô nhập
+trong hộp đó; «cấp bậc» gợi thang lương, thứ không có trong CRM.
+
 **Chế độ ẩn**: nấc giữa của công tắc Trợ lý OKR, giữa tắt và bật. Ở nấc này máy vẫn làm
 việc trên OKR thật — góp ý khi một Mục tiêu được lưu, tóm tắt sau ngày cập nhật — ghi sổ
 chi phí và số đo, nhưng người dùng không thấy gì; chỉ quản trị đọc kết quả — góp ý ở

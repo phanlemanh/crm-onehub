@@ -8,7 +8,13 @@ export type NguoiDuLieu = CayDuLieu["people"][number];
 export type YeuCauDonVi =
 	| { loai: "tao-bo-phan" }
 	| { loai: "tao-phong-ban"; divisionId: string | null; name: string }
-	| { loai: "doi-ten"; don: "bo-phan" | "phong-ban"; id: string; name: string }
+	| {
+			loai: "doi-ten";
+			don: "bo-phan" | "phong-ban";
+			id: string;
+			name: string;
+			moTa: string;
+	  }
 	| { loai: "truong"; don: "bo-phan" | "phong-ban"; id: string; name: string }
 	| { loai: "chuyen"; id: string; name: string; divisionId: string | null };
 

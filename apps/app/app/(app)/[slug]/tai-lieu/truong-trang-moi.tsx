@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, FieldLabel } from "@crm/ui/components/field";
+import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Select,
@@ -52,6 +52,8 @@ export function TruongTrangMoi({
 	const t = taiLieuMessages(useLocale());
 	const m = t.soan;
 	const ma = useId();
+	const moTaLoai =
+		giaTri.loai === "chien-luoc" ? m.loaiMoTa[giaTri.loai] : null;
 	const id = {
 		loai: `${ma}-loai`,
 		donVi: `${ma}-don-vi`,
@@ -79,6 +81,9 @@ export function TruongTrangMoi({
 						))}
 					</SelectContent>
 				</Select>
+				{moTaLoai ? (
+					<FieldDescription data-mo-ta-loai>{moTaLoai}</FieldDescription>
+				) : null}
 			</Field>
 			<Field>
 				<FieldLabel htmlFor={id.donVi}>{m.donVi}</FieldLabel>

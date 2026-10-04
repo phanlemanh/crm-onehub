@@ -6,7 +6,7 @@ import {
 } from "./ai-chi-phi";
 import { mocBaoTran } from "./ai-chi-phi-danh-muc";
 import type { Db } from "./client";
-import { cauHinhAiLuc } from "./okr-tro-ly";
+import { cauHinhAiLuc, tranThangCuaThang } from "./okr-tro-ly";
 import { WORKSPACE_ID } from "./workspace";
 
 export const LOAI_NHAC_AI = ["ai-tran", "ai-doi-soat-lech"] as const;
@@ -45,14 +45,15 @@ async function viecChung(db: Db, now: Date): Promise<ViecAi[]> {
 		doiSoatGanNhat(db, now),
 	]);
 	const ds: ViecAi[] = [];
-	const muc = mocBaoTran(chi.troLyOkrUsd, cauHinh.aiTranThangUsd);
+	const tran = await tranThangCuaThang(db, cauHinh, thang);
+	const muc = mocBaoTran(chi.troLyOkrUsd, tran);
 	if (muc !== 0) {
 		ds.push({
 			loai: "ai-tran",
 			thang,
 			muc,
 			chiUsd: chi.troLyOkrUsd,
-			tranUsd: cauHinh.aiTranThangUsd,
+			tranUsd: tran,
 		});
 	}
 	if (

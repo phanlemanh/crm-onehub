@@ -39,6 +39,7 @@ function cayMau(): TreeOutput {
 	) => ({
 		id,
 		name,
+		moTa: "",
 		position: 0,
 		divisionId,
 		head,
@@ -51,6 +52,7 @@ function cayMau(): TreeOutput {
 			{
 				id: "bp-kd",
 				name: "Kinh doanh",
+				moTa: "",
 				position: 0,
 				head: LAN,
 				okrMo: 0,
@@ -59,6 +61,7 @@ function cayMau(): TreeOutput {
 			{
 				id: "bp-vh",
 				name: "Vận hành",
+				moTa: "",
 				position: 1,
 				head: null,
 				okrMo: 0,
@@ -146,6 +149,7 @@ function mucTieu(id: string, soKr: number): MucTieuOutput {
 		theoDoi: false,
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
+		soGopYCho: 0,
 	};
 }
 
@@ -247,6 +251,13 @@ mock.module("@/lib/trpc/client", () => ({
 			countByUnit: thuTuc("countByUnit", docDem),
 			danhSach: thuTuc("danhSach", docDanhSach),
 			cayCanChinh: thuTuc("cayCanChinh", docCayCanChinh),
+			soanSanSang: thuTuc("soanSanSang", () => ({
+				bat: false,
+				lyDo: "don-vi-chua-bat",
+			})),
+			soanMo: {
+				mutationOptions: () => ({ mutationFn: async () => null }),
+			},
 		},
 	}),
 }));

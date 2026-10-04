@@ -116,18 +116,19 @@ Không dùng `Spinner` trần, `Shimmer` trần hay `Alert` đứng yên cho lú
 
 | Luật | Thành phần trong `packages/ui` | Có chưa |
 | --- | --- | --- |
-| 2, 3 | dấu AI + nhãn Kara có ô «vì sao» | chưa — lượt `nen-kara` |
-| 5 | `ProposedChange` với `density` | có, chỉ dạng thẻ — lượt `nen-kara` |
-| 6 | dòng biên nhận có Hoàn tác | chưa — lượt `nen-kara` |
+| 2, 3 | dấu AI + nhãn Kara có ô «vì sao»: `KaraMark`, `KaraLabel` (`kara.tsx`) | có — lượt `nen-kara`; nút «Vì sao?» tự chặn nổi bọt khi nằm trong hàng bấm được |
+| 5 | `ProposedChange` với `density`: `inline` (mặc định, thân `Item`) và `card` (thân `Confirmation`) | có — lượt `nen-kara` |
+| 6 | dòng biên nhận có Hoàn tác: `ProposedChangeReceipt`, `ProposedChange` tự dùng khi `decided` có `onUndo` | có — lượt `nen-kara` |
 | 7 | `ThinkingIndicator` | có |
-| 8 | `InlineCitation`; thành phần phản hồi | có; phản hồi chưa tách — lượt `nen-kara` |
+| 8 | `InlineCitation`; thành phần phản hồi `AiFeedback` (`ai-feedback.tsx`) | có; tóm tắt tuần đã dùng `AiFeedback` |
 
 ## Lộ trình áp luật
 
 | Lượt | Cỡ | Làm gì |
 | --- | --- | --- |
 | `nen-kara` | T2 | Dựng các thành phần còn thiếu ở mục 10 |
-| `gop-y-dung-cho` | T2 | Khu OKR: «N góp ý» trên thẻ Mục tiêu; đề xuất neo dưới dòng KR ở khung chi tiết |
+| `muc-tieu-va-kr` | T2 | Khung Mục tiêu–KR: một bảng `BangMucTieu` thay khối thẻ, chừa sáu điểm cắm cho Kara; đi trước `gop-y-dung-cho` |
+| `gop-y-dung-cho` | T2 | Đã làm. Khu OKR: chip «Kara · N góp ý» trên hàng Mục tiêu (Của tôi, Theo đơn vị) và mặt lọc «Góp ý của Kara»; khung chi tiết có vùng Kara (nhãn, «Vì sao?», nhờ đọc), góp ý neo dưới KR qua điểm cắm `duoiKr`/`sauTenKr` của `okr/diem-cam.ts`, biên nhận có Hoàn tác, dấu «đổi theo Kara» sau tên KR; hai hộp Sửa bỏ cột góp ý, chỉ còn dòng dẫn sang khung |
 | `tu-vung-tac-tu` | T2 | Tên Kara và tiếng Việt khắp nơi; `ThinkingIndicator`; thông tin liên hệ có nhãn và hoàn tác |
 | `tac-tu-xin-duyet` | T3 | Tab bản ghi: công cụ ghi thành đề xuất |
 

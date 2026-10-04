@@ -5,6 +5,7 @@ import {
 	LOAI_MUC_TIEU,
 	TRANG_THAI_MUC_TIEU,
 } from "@crm/validation/okr-muc-tieu";
+import { LOC_GOP_Y } from "@crm/validation/okr-tham-so";
 import { z } from "zod";
 import { donViChon, mucTieuOutput, type NutCanChinh } from "./okr.contracts";
 import { OKR_XEM } from "./okr-xem.config";
@@ -17,6 +18,7 @@ export const locDanhSach = z.object({
 	loai: z.array(z.enum(LOAI_MUC_TIEU)).max(toiDa),
 	trangThai: z.array(z.enum(TRANG_THAI_MUC_TIEU)).max(toiDa),
 	tuTin: z.array(z.enum(MUC_TU_TIN)).max(toiDa).default([]),
+	gopY: z.array(z.enum(LOC_GOP_Y)).max(LOC_GOP_Y.length).default([]),
 });
 
 export const danhSachInput = z.object({
@@ -39,6 +41,7 @@ export const danhSachOutput = z.object({
 		loai: z.array(demGiaTri),
 		trangThai: z.array(demGiaTri),
 		tuTin: z.array(demGiaTri),
+		gopY: z.array(z.object({ value: z.enum(LOC_GOP_Y), count: z.number() })),
 	}),
 	canEdit: z.boolean(),
 });

@@ -16,6 +16,7 @@ function NavItem({
 	active = false,
 	level = 0,
 	orientation = "vertical",
+	size = "sm",
 	className,
 	children,
 	...props
@@ -23,17 +24,18 @@ function NavItem({
 	active?: boolean;
 	level?: 0 | 1 | 2;
 	orientation?: keyof typeof HUONG;
+	size?: "sm" | "icon";
 }) {
 	return (
 		<Button
 			data-slot="nav-item"
 			variant={active ? "secondary" : "ghost"}
-			size="sm"
+			size={size}
 			aria-current={active ? "page" : undefined}
 			className={cn(
-				"justify-start font-normal",
-				HUONG[orientation],
-				THUT[level],
+				size === "icon"
+					? null
+					: ["justify-start font-normal", HUONG[orientation], THUT[level]],
 				className,
 			)}
 			{...props}

@@ -1,6 +1,7 @@
 import { type Db, Prisma } from "@crm/db";
 import { khungThangVN } from "@crm/db/ai-chi-phi";
 import {
+	daNhanDeXuat,
 	MINUTE_MS,
 	NGAY_MS,
 	TRO_LY_OKR_TRAN,
@@ -36,7 +37,6 @@ const HAN_HOAN_TAC_MS = TRO_LY_OKR_TRAN.hoanTacNgay * NGAY_MS;
 const CHU_SO_TY_LE = 4;
 const CHU_SO_TIEN = 6;
 const CHU_SO_THUC = 15;
-const DA_NHAN = ["nhan", "sua"];
 
 const nacTho = z.object({
 	nac: z.union([z.string(), z.number(), z.boolean()]).optional(),
@@ -180,7 +180,7 @@ export async function docThang(db: DbHoacTx, thang: string): Promise<SoThang> {
 	]);
 	const hoanTac = await hoanTacTrong(
 		db,
-		dong.filter((d) => DA_NHAN.includes(d.trangThai)),
+		dong.filter((d) => daNhanDeXuat(d.trangThai)),
 	);
 	return {
 		hoanTac,
@@ -221,12 +221,12 @@ export function phanVi(so: readonly number[], p: number): number | null {
 	);
 }
 
-const tyLe = (tu: number, mau: number) =>
+export const tyLe = (tu: number, mau: number) =>
 	mau === 0
 		? null
 		: new Prisma.Decimal(tu).div(mau).toDecimalPlaces(CHU_SO_TY_LE).toNumber();
 
-const chiaTien = (tien: Prisma.Decimal, mau: number) =>
+export const chiaTien = (tien: Prisma.Decimal, mau: number) =>
 	mau === 0 ? null : tien.div(mau).toDecimalPlaces(CHU_SO_TIEN).toNumber();
 
 export const lamTronTien = (tien: Prisma.Decimal) =>
@@ -246,7 +246,7 @@ export function soDoCua(so: SoThang, nac: NacLuot): SoDoNac {
 		dem("bac"),
 		dem("bo-qua"),
 	];
-	const daNhan = dong.filter((d) => DA_NHAN.includes(d.trangThai));
+	const daNhan = dong.filter((d) => daNhanDeXuat(d.trangThai));
 	const hoanTac = daNhan.filter((d) => so.hoanTac.has(d.id)).length;
 	const tre = cua.flatMap((l) => {
 		const ms = doTreMs(l);

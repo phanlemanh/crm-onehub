@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 858f1967383b3bd27de9be8c90ce53db7f3a32c3
+verified_commit: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d
 human_signoff: Manh Phan 2026-10-01
 ---
 
@@ -296,3 +296,11 @@ sha: 8fa89fe50f884a461be5514e055bb16b55311eca · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-01, do PR 226: gộp onehub sau #225 chạm mã trong vùng của hồ sơ
 run_id: repin-20261001T071828Z-69614
 sha: 858f1967383b3bd27de9be8c90ce53db7f3a32c3 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9, E20 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 3 — 2026-10-03, do hoá cũ do nen-kara chạm khoi-tom-tat.tsx, bài DOM và thước màn; E19 neo vào merge #226
+run_id: repin-20261003T092630Z-48603
+sha: e6dbcf7dcc29a8ac12d9d2d84ec533458c6c4733 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9, E20 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 4 — 2026-10-03, do hoá cũ sau khi gộp onehub có #234 muc-tieu-va-kr
+run_id: repin-20261003T095736Z-43153
+sha: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta

@@ -4,6 +4,8 @@ import type { TrangThaiNguon } from "@crm/validation/tai-lieu-nguon";
 const HE_SO_NFD = 3;
 const PHUT_MS = 60_000;
 
+const soVi = (n: number) => new Intl.NumberFormat("vi-VN").format(n);
+
 export const TAI_LIEU_API = {
 	vao: {
 		tenToiDa: TAI_LIEU.ten.max * HE_SO_NFD,
@@ -25,6 +27,8 @@ export const TAI_LIEU_API = {
 		tenDai: (n: number) => `Tên trang dài quá ${n} ký tự.`,
 		tenKhongChu: "Tên trang cần có ít nhất một chữ hoặc số.",
 		noiDungDai: (n: number) => `Nội dung trang dài quá ${n} ký tự.`,
+		chienLuocQuaTran: (tran: number, so: number) =>
+			`Trang chiến lược tối đa ${soVi(tran)} ký tự (đang ${soVi(so)})`,
 		lyDoTrong: "Nhập lý do trả lại.",
 		lyDoDai: (n: number) => `Lý do trả lại dài quá ${n} ký tự.`,
 		chuaDoi: "Chưa có thay đổi so với bản đang dùng.",

@@ -70,6 +70,21 @@
 			"tep": "apps/agent/agent/lib/okr/doc.ts",
 			"ham": "docDichCanChinh",
 			"vi": "tác tử Trợ lý OKR không đề xuất căn chỉnh vào chu kỳ đã ẩn"
+		},
+		{
+			"tep": "packages/db/src/okr-tro-ly.ts",
+			"ham": "coChuKyLapKeHoachTrongThang",
+			"vi": "trần tháng đặt OKR chỉ tính chu kỳ lập kế hoạch chưa ẩn"
+		},
+		{
+			"tep": "packages/db/src/okr-goi-soan.ts",
+			"ham": "kyDaDongGanNhat",
+			"vi": "kỳ trước của gói soạn OKR bỏ chu kỳ đã ẩn"
+		},
+		{
+			"tep": "apps/agent/agent/lib/okr/lich-tom-tat.ts",
+			"ham": "xepTrongNgay",
+			"vi": "lịch tóm tắt tuần chỉ xếp tóm tắt cho chu kỳ đang chạy còn hiện"
 		}
 	],
 	"mien": [
@@ -117,6 +132,16 @@
 			"tep": "packages/db/src/okr-xu-huong.ts",
 			"ham": "*",
 			"lyDo": "chỉ select ngày của chu kỳ qua KR đã có id"
+		},
+		{
+			"tep": "packages/db/src/okr-goi-soan.ts",
+			"ham": "docCapTrenVaNgangCap",
+			"lyDo": "theo id chu kỳ của cuộc soạn và năm cha — cuộc trên chu kỳ ẩn đã bị chặn ở sẵn sàng, mở, đưa vào"
+		},
+		{
+			"tep": "apps/api/src/okr/soan.service.ts",
+			"ham": "boHien",
+			"lyDo": "tên chu kỳ của danh sách cuộc soạn theo id"
 		}
 	]
 }

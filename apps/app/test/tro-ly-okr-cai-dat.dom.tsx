@@ -36,7 +36,12 @@ const chuongTrinh = () => ({
 	aiDeXuatAnDonVi: [],
 	aiTomTatAnPhamVi: "tat",
 	aiTomTatAnDonVi: [],
+	aiSoanPhamVi: "tat",
+	aiSoanDonVi: [],
+	aiSoanAnPhamVi: "tat",
+	aiSoanAnDonVi: [],
 	aiTranThangUsd: 9,
+	aiTranThangDatOkrUsd: null,
 	duyetCongBo: false,
 	...cauHinh,
 	version: 4,
@@ -165,6 +170,9 @@ mock.module("@/lib/trpc/client", () => ({
 			setProgram: thuTuc("okr.setProgram"),
 			troLySoDo: thuTuc("okr.troLySoDo", soDo),
 			troLyAn: thuTuc("okr.troLyAn", () => ({ thang: "2026-09", luot: [] })),
+			cycles: thuTuc("okr.cycles", () => ({ cycles: [], currentId: null })),
+			soanSoDo: thuTuc("okr.soanSoDo"),
+			soanAn: thuTuc("okr.soanAn"),
 		},
 		org: { tree: thuTuc("org.tree", () => CAY) },
 	}),
@@ -349,6 +357,13 @@ describe("quan-tri", () => {
 		expect(sanSangO?.textContent).toBe(m.troLy.sanSang.sanSang);
 		expect(sanSangO?.closest('[data-slot="card-description"]')).toBeNull();
 		expect(sanSangO?.closest('[data-slot="card-content"]')).not.toBeNull();
+		const the = tatCa("[data-the]").map((o) => o.getAttribute("data-the"));
+		expect(the.indexOf("soan-so-do"), "the soan sau the gop y").toBe(
+			the.indexOf("gop-y-so-do") + 1,
+		);
+		expect(chuCua('[data-the="soan-so-do"] [data-slot="empty-title"]')).toBe(
+			"Chu kỳ này chưa có cuộc soạn nào",
+		);
 	});
 
 	test("Chưa gán việc hiện khi có tiền", async () => {
@@ -417,7 +432,12 @@ describe("quan-tri", () => {
 					aiDeXuatAnDonVi: [],
 					aiTomTatAnPhamVi: "tat",
 					aiTomTatAnDonVi: [],
+					aiSoanPhamVi: "tat",
+					aiSoanDonVi: [],
+					aiSoanAnPhamVi: "tat",
+					aiSoanAnDonVi: [],
 					aiTranThangUsd: 7.5,
+					aiTranThangDatOkrUsd: null,
 				},
 			},
 		]);
@@ -783,7 +803,12 @@ describe("nac", () => {
 					aiDeXuatAnDonVi: ["bp-kd"],
 					aiTomTatAnPhamVi: "toan-cong-ty",
 					aiTomTatAnDonVi: [],
+					aiSoanPhamVi: "tat",
+					aiSoanDonVi: [],
+					aiSoanAnPhamVi: "tat",
+					aiSoanAnDonVi: [],
 					aiTranThangUsd: 9,
+					aiTranThangDatOkrUsd: null,
 				},
 			},
 		]);

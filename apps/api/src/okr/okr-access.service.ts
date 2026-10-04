@@ -212,9 +212,13 @@ export class OkrAccessService {
 		return q;
 	}
 
+	nhapDuoc(q: Quyen, userId: string, dv: DonViCuaMucTieu): boolean {
+		return q.quanTri || this.suaDuocDonVi(q, userId, dv);
+	}
+
 	async assertNhapDuoc(userId: string, dv: DonViCuaMucTieu): Promise<Quyen> {
 		const q = await this.quyen(userId);
-		if (!q.quanTri && !this.suaDuocDonVi(q, userId, dv))
+		if (!this.nhapDuoc(q, userId, dv))
 			throw new ForbiddenException(OKR.thongDiep.khongSuaDuocDonVi);
 		return q;
 	}

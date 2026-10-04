@@ -72,6 +72,18 @@ const en = {
 	},
 	proposedChange: {
 		edit: "Edit",
+		undo: "Undo",
+	},
+	kara: {
+		why: "Why?",
+		whyTitle: "What Kara based this on",
+		readAt: (t: string) => `Read at ${t}`,
+		trace: "changed via Kara",
+		traceDescription: "This value was changed from a Kara suggestion",
+	},
+	aiFeedback: {
+		useful: "Useful",
+		notUseful: "Not useful",
 	},
 	spinner: {
 		loading: "Loading",
@@ -111,6 +123,17 @@ const en = {
 		unnamedAttachment: "Attachment",
 		removeAttachment: "Remove attachment",
 		remove: "Remove",
+	},
+	promptInput: {
+		submit: "Send",
+		stop: "Stop",
+		placeholder: "What would you like to know?",
+		uploadFiles: "Upload files",
+		addAttachments: "Add photos or files",
+		takeScreenshot: "Take screenshot",
+		errorAccept: "No files match the accepted types.",
+		errorFileSize: "All files exceed the maximum size.",
+		errorMaxFiles: "Too many files. Some were not added.",
 	},
 	chatTool: {
 		failed: "This step failed",
@@ -182,17 +205,6 @@ const en = {
 		hienDanhSach: "Show the list",
 		anDanhSach: "Hide the list",
 		cuonThem: "Scroll the list to see the rest",
-	},
-	promptInput: {
-		themTep: "Add photos or files",
-		chupManHinh: "Take screenshot",
-		taiTepLen: "Upload files",
-		goiY: "What would you like to know?",
-		dung: "Stop",
-		gui: "Submit",
-		tepSaiKieu: "No files match the accepted types.",
-		tepQuaCo: "All files exceed the maximum size.",
-		quaNhieuTep: "Too many files. Some were not added.",
 	},
 };
 
@@ -270,6 +282,18 @@ const vi = {
 	},
 	proposedChange: {
 		edit: "Sửa",
+		undo: "Hoàn tác",
+	},
+	kara: {
+		why: "Vì sao?",
+		whyTitle: "Kara dựa trên gì",
+		readAt: (t: string) => `Đọc lúc ${t}`,
+		trace: "đổi theo Kara",
+		traceDescription: "Giá trị này đổi theo đề xuất của Kara",
+	},
+	aiFeedback: {
+		useful: "Hữu ích",
+		notUseful: "Không hữu ích",
 	},
 	spinner: {
 		loading: "Đang tải",
@@ -309,6 +333,17 @@ const vi = {
 		unnamedAttachment: "Tệp đính kèm",
 		removeAttachment: "Xoá tệp đính kèm",
 		remove: "Xoá",
+	},
+	promptInput: {
+		submit: "Gửi",
+		stop: "Dừng",
+		placeholder: "Bạn muốn biết gì?",
+		uploadFiles: "Tải tệp lên",
+		addAttachments: "Thêm ảnh hoặc tệp",
+		takeScreenshot: "Chụp màn hình",
+		errorAccept: "Không tệp nào đúng loại được nhận.",
+		errorFileSize: "Mọi tệp đều vượt cỡ tối đa.",
+		errorMaxFiles: "Quá nhiều tệp. Một số tệp chưa được thêm.",
 	},
 	chatTool: {
 		failed: "Bước này lỗi",
@@ -379,17 +414,6 @@ const vi = {
 		hienDanhSach: "Xem danh sách",
 		anDanhSach: "Ẩn danh sách",
 		cuonThem: "Cuộn danh sách để xem phần còn lại",
-	},
-	promptInput: {
-		themTep: "Thêm ảnh hoặc tệp",
-		chupManHinh: "Chụp màn hình",
-		taiTepLen: "Tải tệp lên",
-		goiY: "Bạn muốn biết điều gì?",
-		dung: "Dừng",
-		gui: "Gửi",
-		tepSaiKieu: "Không tệp nào đúng loại được nhận.",
-		tepQuaCo: "Mọi tệp đều vượt cỡ tối đa.",
-		quaNhieuTep: "Quá nhiều tệp. Một số tệp chưa được thêm.",
 	},
 } satisfies Messages;
 

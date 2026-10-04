@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { resolve } from "node:path";
 import { db } from "@crm/db";
 import { type GoiKiem, kiemDongDeXuat } from "@crm/validation/okr-kiem-de-xuat";
-import type { DongDeXuat } from "@crm/validation/okr-tro-ly";
+import type { DongGopY } from "@crm/validation/okr-tro-ly";
 import { type BoKiem, nopDeXuatVao } from "../agent/lib/okr/nop-de-xuat";
 import { donDep, gieoNguoi, moXuong } from "./support/nhac-gieo";
 import { donOkr, gieoChuKy, gieoMucTieu } from "./support/okr-gieo";
@@ -32,7 +32,7 @@ const boKiemBoSoMoi: BoKiem = (d, g) => {
 	return !kq.qua && kq.maLoai === "so-moi" ? { qua: true } : kq;
 };
 
-const boKiemKhongHieuChu: BoKiem = (d: DongDeXuat, g: GoiKiem) =>
+const boKiemKhongHieuChu: BoKiem = (d: DongGopY, g: GoiKiem) =>
 	kiemDongDeXuat(
 		{ ...d, sau: (d.sau ?? "").replace(CHU_SO_BANG_CHU, "").trim() },
 		g,
@@ -42,7 +42,7 @@ function dongKr(
 	objectiveId: string,
 	keyResultId: string,
 	sau: string,
-): DongDeXuat {
+): DongGopY {
 	return {
 		loai: "viet-lai",
 		objectiveId,

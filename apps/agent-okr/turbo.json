@@ -1,0 +1,35 @@
+{
+	"$schema": "https://turborepo.dev/schema.json",
+	"extends": ["//"],
+	"tasks": {
+		"build": { "dependsOn": ["^build"], "outputs": [".eve/**", ".output/**"] },
+		"check-types": { "dependsOn": ["topo", "^build"] },
+		"dev": {
+			"dependsOn": ["$TURBO_EXTENDS$"],
+			"cache": false,
+			"interactive": true,
+			"persistent": true,
+			"passThroughEnv": [
+				"OKR_AGENT_BRIDGE_SECRET",
+				"AI_GATEWAY_API_KEY",
+				"OKR_AI_GATEWAY_API_KEY",
+				"DATABASE_URL"
+			]
+		},
+		"dev:headless": {
+			"dependsOn": ["$TURBO_EXTENDS$"],
+			"cache": false,
+			"persistent": true,
+			"passThroughEnv": [
+				"OKR_AGENT_BRIDGE_SECRET",
+				"AI_GATEWAY_API_KEY",
+				"OKR_AI_GATEWAY_API_KEY",
+				"DATABASE_URL"
+			]
+		},
+		"test": {
+			"dependsOn": ["topo", "^build"],
+			"passThroughEnv": ["DATABASE_URL", "OKR_AGENT_BRIDGE_SECRET"]
+		}
+	}
+}

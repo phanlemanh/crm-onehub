@@ -1,5 +1,6 @@
 "use client";
 
+import { useMessages } from "@crm/ui/components/locale-provider";
 import {
   Command,
   CommandEmpty,
@@ -39,7 +40,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@crm/ui/components/tooltip";
-import { useMessages } from "@crm/ui/components/locale-provider";
 import { cn } from "@crm/ui/lib/utils";
 import type { ChatStatus, FileUIPart, SourceDocumentUIPart } from "ai";
 import {
@@ -74,7 +74,6 @@ import {
   useRef,
   useState,
 } from "react";
-
 
 const convertBlobUrlToDataUrl = async (url: string): Promise<string | null> => {
   try {
@@ -161,7 +160,6 @@ const captureScreenshot = async (): Promise<File | null> => {
     video.srcObject = null;
   }
 };
-
 
 export interface AttachmentsContext {
   files: (FileUIPart & { id: string })[];
@@ -339,7 +337,6 @@ export const PromptInputProvider = ({
   );
 };
 
-
 const LocalAttachmentsContext = createContext<AttachmentsContext | null>(null);
 
 export const usePromptInputAttachments = () => {
@@ -353,7 +350,6 @@ export const usePromptInputAttachments = () => {
   }
   return context;
 };
-
 
 export interface ReferencedSourcesContext {
   sources: (SourceDocumentUIPart & { id: string })[];
@@ -398,7 +394,7 @@ export const PromptInputActionAddAttachments = ({
 
   return (
     <DropdownMenuItem {...props} onSelect={handleSelect}>
-      <ImageIcon className="mr-2 size-4" /> {label ?? msg.promptInput.themTep}
+      <ImageIcon className="mr-2 size-4" /> {label ?? msg.promptInput.addAttachments}
     </DropdownMenuItem>
   );
 };
@@ -445,7 +441,7 @@ export const PromptInputActionAddScreenshot = ({
   return (
     <DropdownMenuItem {...props} onSelect={handleSelect}>
       <Monitor className="mr-2 size-4" />
-      {label ?? msg.promptInput.chupManHinh}
+      {label ?? msg.promptInput.takeScreenshot}
     </DropdownMenuItem>
   );
 };
@@ -541,7 +537,7 @@ export const PromptInput = ({
       if (incoming.length && accepted.length === 0) {
         onError?.({
           code: "accept",
-          message: msg.promptInput.tepSaiKieu,
+          message: msg.promptInput.errorAccept,
         });
         return;
       }
@@ -551,7 +547,7 @@ export const PromptInput = ({
       if (accepted.length > 0 && sized.length === 0) {
         onError?.({
           code: "max_file_size",
-          message: msg.promptInput.tepQuaCo,
+          message: msg.promptInput.errorFileSize,
         });
         return;
       }
@@ -566,7 +562,7 @@ export const PromptInput = ({
         if (typeof capacity === "number" && sized.length > capacity) {
           onError?.({
             code: "max_files",
-            message: msg.promptInput.quaNhieuTep,
+            message: msg.promptInput.errorMaxFiles,
           });
         }
         const next: (FileUIPart & { id: string })[] = [];
@@ -604,7 +600,7 @@ export const PromptInput = ({
       if (incoming.length && accepted.length === 0) {
         onError?.({
           code: "accept",
-          message: msg.promptInput.tepSaiKieu,
+          message: msg.promptInput.errorAccept,
         });
         return;
       }
@@ -614,7 +610,7 @@ export const PromptInput = ({
       if (accepted.length > 0 && sized.length === 0) {
         onError?.({
           code: "max_file_size",
-          message: msg.promptInput.tepQuaCo,
+          message: msg.promptInput.errorFileSize,
         });
         return;
       }
@@ -629,7 +625,7 @@ export const PromptInput = ({
       if (typeof capacity === "number" && sized.length > capacity) {
         onError?.({
           code: "max_files",
-          message: msg.promptInput.quaNhieuTep,
+          message: msg.promptInput.errorMaxFiles,
         });
       }
 
@@ -637,15 +633,7 @@ export const PromptInput = ({
         controller?.attachments.add(capped);
       }
     },
-    [
-      matchesAccept,
-      maxFileSize,
-      maxFiles,
-      onError,
-      files.length,
-      controller,
-      msg,
-    ]
+    [matchesAccept, maxFileSize, maxFiles, onError, files.length, controller, msg]
   );
 
   const clearAttachments = useCallback(
@@ -858,12 +846,12 @@ export const PromptInput = ({
     <>
       <input
         accept={accept}
-        aria-label={msg.promptInput.taiTepLen}
+        aria-label={msg.promptInput.uploadFiles}
         className="hidden"
         multiple={multiple}
         onChange={handleChange}
         ref={inputRef}
-        title={msg.promptInput.taiTepLen}
+        title={msg.promptInput.uploadFiles}
         type="file"
       />
       <form
@@ -1008,7 +996,7 @@ export const PromptInputTextarea = ({
       onCompositionStart={handleCompositionStart}
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
-      placeholder={placeholder ?? msg.promptInput.goiY}
+      placeholder={placeholder ?? msg.promptInput.placeholder}
       {...props}
       {...controlledProps}
     />
@@ -1152,7 +1140,6 @@ export const PromptInputActionMenuItem = ({
   <DropdownMenuItem className={cn(className)} {...props} />
 );
 
-
 export type PromptInputSubmitProps = ComponentProps<typeof InputGroupButton> & {
   status?: ChatStatus;
   onStop?: () => void;
@@ -1195,7 +1182,7 @@ export const PromptInputSubmit = ({
 
   return (
     <InputGroupButton
-      aria-label={isGenerating ? msg.promptInput.dung : msg.promptInput.gui}
+      aria-label={isGenerating ? msg.promptInput.stop : msg.promptInput.submit}
       className={cn(className)}
       onClick={handleClick}
       size={size}

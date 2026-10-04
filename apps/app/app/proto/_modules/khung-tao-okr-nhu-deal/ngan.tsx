@@ -300,6 +300,7 @@ export function CotMau({ chiKr }: { chiKr: boolean }) {
 					d.loai === "hoi" ? (
 						<ProposedChange
 							key={d.id}
+							density="card"
 							kind="question"
 							label={`Câu hỏi · ${d.o}`}
 							value={<span translate="no">{d.sau}</span>}
@@ -321,6 +322,7 @@ export function CotMau({ chiKr }: { chiKr: boolean }) {
 					) : (
 						<ProposedChange
 							key={d.id}
+							density="card"
 							kind="rewrite"
 							label={`${d.loai === "can-chinh" ? "Căn chỉnh" : "Viết lại"} · ${d.o}`}
 							before={

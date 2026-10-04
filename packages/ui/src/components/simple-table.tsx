@@ -35,6 +35,10 @@ const ALIGN_CLASS = {
 const ROW_SUB =
 	"text-muted-foreground [&>[data-slot=table-cell]:first-child]:pl-6";
 
+const ROW_NESTED = "bg-muted/30";
+
+const ROW_JOINED = "border-b-0";
+
 const PANEL_SURFACE = {
 	popover: "bg-popover [&_th]:bg-popover",
 	page: "bg-background [&_th]:bg-background",
@@ -45,6 +49,7 @@ export function SimpleTable({
 	children,
 	variant = "default",
 	surface = "popover",
+	header,
 	className,
 	containerClassName,
 	headerClassName,
@@ -55,6 +60,7 @@ export function SimpleTable({
 	children: ReactNode;
 	variant?: "default" | "panel";
 	surface?: keyof typeof PANEL_SURFACE;
+	header?: "visible" | "sr-only";
 	className?: string;
 	containerClassName?: string;
 	headerClassName?: string;
@@ -74,6 +80,7 @@ export function SimpleTable({
 		>
 			<TableHeader
 				className={cn(
+					header === "sr-only" && "sr-only",
 					panel && ["sticky top-0 z-10", PANEL_SURFACE[surface]],
 					!panel &&
 						"bg-muted [&_tr]:border-0 [&_tr]:shadow-[inset_0_-1px_0_var(--border)]",
@@ -144,6 +151,8 @@ export function SimpleTableRow({
 	invalid,
 	selected,
 	sub,
+	nested,
+	joined,
 	className,
 	...props
 }: ComponentProps<typeof TableRow> & {
@@ -152,15 +161,21 @@ export function SimpleTableRow({
 	invalid?: boolean;
 	selected?: boolean;
 	sub?: boolean;
+	nested?: boolean;
+	joined?: boolean;
 }) {
 	return (
 		<TableRow
 			data-invalid={invalid ? "" : undefined}
 			data-state={selected ? "selected" : undefined}
 			data-sub={sub ? "" : undefined}
+			data-nested={nested ? "" : undefined}
+			data-joined={joined ? "" : undefined}
 			className={cn(
 				"hover:bg-transparent",
 				sub && ROW_SUB,
+				nested && ROW_NESTED,
+				joined && ROW_JOINED,
 				clickable && (expandable ? ROW_ACCENT_EXPANDABLE : ROW_ACCENT),
 				selected && !invalid && ROW_SELECTED,
 				invalid && ROW_INVALID,

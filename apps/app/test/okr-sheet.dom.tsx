@@ -121,6 +121,7 @@ function mucTieu(
 		followerCount: 0,
 		theoDoi: false,
 		soNguoiXem: 0,
+		soGopYCho: 0,
 		trail: [],
 		canEditKr: ["kr-1"],
 		hienThi: "cong-khai",
@@ -266,6 +267,8 @@ mock.module("@/lib/trpc/client", () => ({
 				bat: false,
 				lyDo: "tat",
 			})),
+			mine: thuTuc("okr.mine", () => ({ objectives: [] })),
+			danhSach: thuTuc("okr.danhSach"),
 			troLyDanhSach: thuTuc("okr.troLyDanhSach", () => ({
 				dong: [],
 				dangSoan: false,

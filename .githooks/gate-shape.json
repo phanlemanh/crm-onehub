@@ -85,6 +85,7 @@
 				"@crm/env": "Source-only package, built by whichever app imports it.",
 				"@crm/telemetry": "Source-only package, built by whichever app imports it.",
 				"@crm/ui": "Source-only package. apps/app lists it in transpilePackages and compiles it there; a separate build step would be a second, drifting copy.",
+				"@crm/ai-okr": "Source-only package (the shared ZDR model factory). apps/agent and apps/agent-okr import its TypeScript source and build it inside their own build.",
 				"@crm/validation": "Source-only package, built by whichever app imports it."
 			}
 		}

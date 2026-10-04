@@ -1,0 +1,1 @@
+E22 network: n-a (driver) - driver la puppeteer script (man-gop-y.mjs) chay trong phien do tien-de, khong co duong doc network/console.

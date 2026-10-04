@@ -531,6 +531,88 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "soan-okr-cung-tro-ly",
+		ten: "Soạn OKR cùng Trợ lý — hội thoại ghép bảng nháp, nút, cuộc, bối cảnh, số đo",
+		states: [
+			{ id: "ST-soan-nut", nhan: "Khung đơn vị — nút «Soạn OKR cùng Trợ lý»" },
+			{ id: "ST-soan-nut-tiep", nhan: "Khung đơn vị — «Tiếp cuộc đang soạn»" },
+			{ id: "ST-soan-nut-an", nhan: "Khung đơn vị — nút kèm nhãn «chế độ ẩn»" },
+			{ id: "ST-soan-nut-het-cuoc", nhan: "Khung đơn vị — hết 3 cuộc kỳ này" },
+			{ id: "ST-soan-nut-het-tran", nhan: "Khung đơn vị — hết trần tháng" },
+			{ id: "ST-soan-mo-dau", nhan: "Màn soạn — lượt mở đầu, bản nháp trống" },
+			{
+				id: "ST-soan-thieu-boi-canh",
+				nhan: "Màn soạn — dải nhắc thiếu bối cảnh",
+			},
+			{
+				id: "ST-soan-dang-tra-loi",
+				nhan: "Màn soạn — Trợ lý đang soạn, ô soạn khoá",
+			},
+			{
+				id: "ST-soan-ban-nhap",
+				nhan: "Màn soạn — bản nháp 3 Mục tiêu lồng 8 KR",
+			},
+			{ id: "ST-soan-dong-sua", nhan: "Màn soạn — thẻ mở ô sửa" },
+			{
+				id: "ST-soan-dong-da-quyet",
+				nhan: "Màn soạn — thẻ đã nhận / đã bác, thu gọn",
+			},
+			{
+				id: "ST-soan-sua-qua-chat",
+				nhan: "Màn soạn — sửa qua chat: vừa sửa · vừa chuyển · đã bỏ",
+			},
+			{ id: "ST-soan-dong-bi-loai", nhan: "Màn soạn — một KR bị bộ kiểm loại" },
+			{ id: "ST-soan-loi", nhan: "Màn soạn — Trợ lý chưa trả lời được" },
+			{ id: "ST-soan-het-luot", nhan: "Màn soạn — hết 12 lượt của cuộc" },
+			{
+				id: "ST-soan-dua-vao-xac-nhan",
+				nhan: "Màn soạn — hộp xác nhận đưa vào",
+			},
+			{
+				id: "ST-soan-dua-vao-thieu-dich",
+				nhan: "Màn soạn — chưa điền đích cho KR đã nhận",
+			},
+			{
+				id: "ST-soan-da-dua-vao",
+				nhan: "Màn soạn — đã tạo Mục tiêu nháp, bảng khoá",
+			},
+			{
+				id: "ST-soan-dua-vao-loi",
+				nhan: "Màn soạn — đưa vào hỏng, bảng giữ nguyên",
+			},
+			{
+				id: "ST-soan-hep",
+				nhan: "Màn soạn ≤ 640 — hai tab Trò chuyện · Bản nháp",
+			},
+			{ id: "ST-cuoc-danh-sach", nhan: "Danh sách cuộc của đơn vị" },
+			{ id: "ST-cuoc-rong", nhan: "Danh sách cuộc — chưa có cuộc nào" },
+			{ id: "ST-tochuc-mo-ta", nhan: "Tổ chức › đơn vị — ô Mô tả" },
+			{ id: "ST-tochuc-chuc-danh", nhan: "Tổ chức › người — ô Chức danh" },
+			{
+				id: "ST-kho-tao-chien-luoc",
+				nhan: "Kho tài liệu — trang mới loại Chiến lược",
+			},
+			{
+				id: "ST-kho-duyet-canh-bao",
+				nhan: "Kho tài liệu — duyệt có cảnh báo lương thưởng",
+			},
+			{
+				id: "ST-kho-duyet-qua-tran",
+				nhan: "Kho tài liệu — duyệt bị chặn vì quá 20.000 ký tự",
+			},
+			{
+				id: "ST-caidat-nac-soan",
+				nhan: "Cài đặt — nấc Soạn OKR và trần tháng",
+			},
+			{ id: "ST-sodo-soan", nhan: "Số đo — hai cột Bật · Ẩn, cuộc gần đây" },
+			{ id: "ST-sodo-soan-rong", nhan: "Số đo — chưa có cuộc soạn nào" },
+			{
+				id: "ST-sodo-soan-ngan",
+				nhan: "Số đo — ngăn một cuộc, dòng bị loại kèm mã",
+			},
+		],
+	},
+	{
 		slug: "tro-ly-okr-tom-tat",
 		ten: "Tóm tắt tuần — khối trên bảng họp tuần, trích dẫn, Sức khoẻ, nhắc buổi sáng",
 		states: [
@@ -730,15 +812,50 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	},
 	{
 		slug: "gop-y-dung-cho",
-		ten: "Kara — góp ý đặt đúng chỗ: hiện tại, A báo trên thẻ Mục tiêu, B neo dưới từng KR",
+		ten: "Kara — góp ý đặt đúng chỗ: «Kara · N góp ý» trên hàng Mục tiêu, neo dưới KR trong khung chi tiết, bộ lọc Có góp ý chờ",
 		states: [
 			{ id: "ST-hien-tai", nhan: "Hiện tại — cột Trợ lý OKR trong hộp Sửa" },
-			{ id: "ST-a-danh-sach", nhan: "A — «Kara · 2 góp ý» trên thẻ Mục tiêu" },
+			{ id: "ST-a-danh-sach", nhan: "A — «Kara · 3 góp ý» trên hàng Mục tiêu" },
+			{ id: "ST-a-loc", nhan: "A — lọc «Có góp ý chờ»" },
+			{ id: "ST-b-chi-tiet", nhan: "B — góp ý neo dưới KR, chờ quyết" },
 			{
-				id: "ST-b-chi-tiet",
-				nhan: "B — góp ý neo dưới KR, biên nhận có Hoàn tác",
+				id: "ST-b-bien-nhan",
+				nhan: "B — biên nhận có Hoàn tác, dấu theo Kara",
 			},
-			{ id: "ST-b-hop-sua", nhan: "B — hộp Sửa chỉ còn dòng dẫn sang" },
+			{ id: "ST-b-chua-goi", nhan: "B — Kara chưa đọc, nút Nhờ Kara góp ý" },
+			{ id: "ST-b-dang-doc", nhan: "B — Kara đang đọc" },
+			{ id: "ST-b-rong", nhan: "B — Kara không thấy chỗ cần sửa" },
+			{ id: "ST-b-loi", nhan: "B — Kara chưa đọc được" },
+			{ id: "ST-b-het-luot", nhan: "B — hết lượt, nút khoá kèm lý do" },
+			{ id: "ST-b-tat", nhan: "B — đơn vị chưa bật Kara, cảnh báo cố định" },
+			{ id: "ST-b-hop-sua", nhan: "B — hộp Sửa mục tiêu chỉ còn dòng dẫn" },
+			{ id: "ST-b-hop-sua-kr", nhan: "B — hộp Sửa KR chỉ còn dòng dẫn" },
+		],
+	},
+	{
+		slug: "nen-kara",
+		ten: "Nền Kara — dấu, nhãn có ô Vì sao, đề xuất hai độ dày, biên nhận, phản hồi",
+		states: [
+			{
+				id: "ST-nenkara-nhan",
+				nhan: "Nhãn «Kara · OKR · 2 góp ý» và ô Vì sao",
+			},
+			{ id: "ST-nenkara-inline-cho", nhan: "Đề xuất liền dòng dưới KR — chờ" },
+			{
+				id: "ST-nenkara-inline-khoa",
+				nhan: "Đề xuất liền dòng — nút chính khoá kèm lý do",
+			},
+			{
+				id: "ST-nenkara-inline-loi",
+				nhan: "Đề xuất liền dòng — Kara chưa ghi được",
+			},
+			{ id: "ST-nenkara-inline-sua", nhan: "Đề xuất liền dòng — đang sửa" },
+			{
+				id: "ST-nenkara-bien-nhan",
+				nhan: "Biên nhận «Đã … · Hoàn tác» và dòng đã bỏ qua",
+			},
+			{ id: "ST-nenkara-the", nhan: "Đề xuất dạng thẻ trong cột riêng" },
+			{ id: "ST-nenkara-phan-hoi", nhan: "Phản hồi Hữu ích / Không hữu ích" },
 		],
 	},
 	{
@@ -762,6 +879,22 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-an-ly-do", nhan: "Ẩn chu kỳ — ô lý do bắt buộc" },
 			{ id: "ST-hien-lai", nhan: "Hiện lại — hỏi lại" },
 			{ id: "ST-khong-quyen", nhan: "Thành viên thường — menu khoá" },
+		],
+	},
+	{
+		slug: "muc-tieu-va-kr",
+		ten: "Mục tiêu và KR trong cùng một khung — danh sách và chi tiết",
+		states: [
+			{ id: "ST-cua-toi", nhan: "Đề xuất — Của tôi, mục tiêu là hàng cha" },
+			{
+				id: "ST-theo-don-vi",
+				nhan: "Đề xuất — Theo đơn vị, nhiều mục tiêu thu gọn",
+			},
+			{ id: "ST-chi-tiet", nhan: "Đề xuất — Chi tiết mục tiêu" },
+			{ id: "ST-chua-co-kr", nhan: "Đề xuất — Mục tiêu nháp chưa có KR" },
+			{ id: "ST-cham", nhan: "Đề xuất — Chấm điểm, mục tiêu trong khung" },
+			{ id: "ST-dang-tai", nhan: "Đang tải" },
+			{ id: "ST-hien-tai", nhan: "Bản đang chạy — để so" },
 		],
 	},
 ];

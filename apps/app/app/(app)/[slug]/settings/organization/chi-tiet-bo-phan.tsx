@@ -68,6 +68,7 @@ export function ChiTietBoPhan({
 										don: "bo-phan",
 										id: bp.id,
 										name: bp.name,
+										moTa: bp.moTa,
 									}),
 							},
 							{
@@ -147,6 +148,7 @@ export function ChiTietBoPhan({
 											don: "phong-ban",
 											id: x.id,
 											name: x.name,
+											moTa: x.moTa,
 										}),
 								},
 								{
@@ -172,6 +174,7 @@ export function ChiTietBoPhan({
 							muc={bp.departments.map((pb) => ({
 								id: pb.id,
 								name: pb.name,
+								moTa: pb.moTa,
 								phu: pb.head
 									? dien(t.soNguoi, { n: pb.people.length })
 									: t.chuaCoTruong,

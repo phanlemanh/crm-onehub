@@ -1,74 +1,92 @@
 "use client";
 
-import { Badge } from "@crm/ui/components/badge";
+import { Button } from "@crm/ui/components/button";
 import {
-	Card,
-	CardAction,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@crm/ui/components/card";
+	type DataTableFacet,
+	DataTableFacetMenu,
+} from "@crm/ui/components/data-table";
 import Link from "next/link";
-import { BangKrMau } from "./bang-kr";
-import {
-	GOP_Y,
-	MUC_TIEU,
-	MUC_TIEU_KHAC,
-	type MucTieuMau,
-	STATE,
-} from "./du-lieu";
-import { DauKara } from "./kara";
+import { useRouter } from "next/navigation";
+import { BangMucTieu } from "../muc-tieu-va-kr/bang-muc-tieu";
+import { DANH_SACH, DANH_SACH_LOC, STATE } from "./du-lieu";
+import { ChipGopY } from "./kara";
 
-function NhanGopYCho({ so }: { so: number }) {
-	return (
-		<Link
-			href={`?state=${STATE.bChiTiet}`}
-			className="underline-offset-2 hover:underline focus-visible:underline"
-			data-nhan-gop-y-cho={so}
-		>
-			<DauKara chu={`Kara · ${so} góp ý`} />
-		</Link>
-	);
+const MAT_GOP_Y = "gopY";
+
+function facets(coKara: boolean): DataTableFacet[] {
+	const chung: DataTableFacet[] = [
+		{
+			id: "phuTrach",
+			label: "Phụ trách",
+			options: [
+				{ value: "hung", label: "Trần Văn Hùng · 2" },
+				{ value: "thao", label: "Võ Phương Thảo · 1" },
+				{ value: "nga", label: "Bùi Thu Nga · 1" },
+			],
+		},
+		{
+			id: "loai",
+			label: "Loại",
+			options: [
+				{ value: "cam-ket", label: "Cam kết · 4" },
+				{ value: "tham-vong", label: "Tham vọng · 3" },
+			],
+		},
+		{
+			id: "trangThai",
+			label: "Trạng thái",
+			options: [
+				{ value: "cong-bo", label: "Đã công bố · 6" },
+				{ value: "cho-duyet", label: "Chờ duyệt · 1" },
+			],
+		},
+	];
+	if (!coKara) return chung;
+	return [
+		...chung,
+		{
+			id: MAT_GOP_Y,
+			label: "Góp ý của Kara",
+			options: [
+				{ value: "cho", label: `Có góp ý chờ · ${DANH_SACH_LOC.length}` },
+			],
+		},
+	];
 }
 
-function TheMucTieu({
-	mucTieu,
-	soGopY,
+export function DanhSachMucTieu({
+	loc,
+	hienTai = false,
 }: {
-	mucTieu: MucTieuMau;
-	soGopY: number;
+	loc: boolean;
+	hienTai?: boolean;
 }) {
+	const router = useRouter();
+	const ds = loc ? DANH_SACH_LOC : DANH_SACH;
 	return (
-		<Card data-muc-tieu={mucTieu.id}>
-			<CardHeader>
-				<CardTitle>
-					<Link
-						href={`?state=${STATE.bChiTiet}`}
-						className="text-start underline-offset-2 hover:underline focus-visible:underline"
-						translate="no"
-					>
-						{mucTieu.ten}
-					</Link>
-				</CardTitle>
-				<CardDescription>
-					Phụ trách <span translate="no">{mucTieu.phuTrach}</span>
-				</CardDescription>
-				<CardAction className="flex items-center gap-1.5">
-					{soGopY > 0 ? <NhanGopYCho so={soGopY} /> : null}
-					<Badge variant="outline">{mucTieu.loai}</Badge>
-					<Badge variant="secondary">{mucTieu.trangThai}</Badge>
-				</CardAction>
-			</CardHeader>
-			<BangKrMau keyResults={mucTieu.kr} lePhanTram={mucTieu.lePhanTram} />
-		</Card>
-	);
-}
-
-export function DanhSachMucTieu({ coNhan }: { coNhan: boolean }) {
-	return (
-		<div className="flex flex-col gap-3 p-6" data-danh-sach-muc-tieu>
-			<TheMucTieu mucTieu={MUC_TIEU} soGopY={coNhan ? GOP_Y.length : 0} />
-			<TheMucTieu mucTieu={MUC_TIEU_KHAC} soGopY={0} />
+		<div className="flex flex-col gap-4">
+			<div className="flex flex-wrap items-center gap-2" data-loc-okr>
+				<DataTableFacetMenu
+					facets={facets(!hienTai)}
+					filters={{ [MAT_GOP_Y]: loc ? ["cho"] : [] }}
+					onFilterChange={(id, values) => {
+						if (id !== MAT_GOP_Y) return;
+						router.push(
+							`?state=${values.includes("cho") ? STATE.aLoc : STATE.aDanhSach}`,
+						);
+					}}
+				/>
+				{loc ? (
+					<Button asChild data-nut="bo-loc" size="sm" variant="ghost">
+						<Link href={`?state=${STATE.aDanhSach}`}>Bỏ lọc</Link>
+					</Button>
+				) : null}
+			</div>
+			<BangMucTieu
+				diemCam={hienTai ? {} : { nhanMucTieu: (mt) => <ChipGopY mt={mt} /> }}
+				ds={ds}
+				moSan="dau-tien"
+			/>
 		</div>
 	);
 }

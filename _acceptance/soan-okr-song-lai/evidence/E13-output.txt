@@ -1,0 +1,50 @@
+mot-luot: da cho 15s de toi luot
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_soan_okr_song_lai_do · app http://localhost:4110 · api http://localhost:4285
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+GIEO cuoc cmut502rh0000ditykldvirbq dang soLuot 0
+DUNG 1440: nut khoa nut-chua-cau-hinh
+DUNG 1440: cau chua bat nhin thay
+DUNG 1440: nut disabled
+DUNG 1440: khong tran ngang (nut) 0
+DUNG 1440: man soan trang trong
+DUNG 1440: man co cau chua bat
+DUNG 1440: man khong co o soan
+DUNG 1440: 0 request /eve/agents/okr/ (thay 0)
+DUNG 1440: khong tran ngang (man) 0
+DUNG 390: nut khoa nut-chua-cau-hinh
+DUNG 390: cau chua bat nhin thay
+DUNG 390: nut disabled
+DUNG 390: khong tran ngang (nut) 0
+DUNG 390: man soan trang trong
+DUNG 390: man co cau chua bat
+DUNG 390: man khong co o soan
+DUNG 390: 0 request /eve/agents/okr/ (thay 0)
+DUNG 390: khong tran ngang (man) 0
+DUNG soLuot sau khi mo man: 0
+DUNG soLuot sau tangLuot: 1
+20 DUNG, 0 SAI
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_soan_okr_song_lai_do · app http://localhost:4669 · api http://localhost:4575
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+GIEO cuoc cmut50kw10000d0tyz0hg55qb dang soLuot 0
+DUNG 1440: cua 503 -> cau chua bat
+DUNG 1440: khong nut Thu lai
+DUNG 1440: cua da duoc goi (1)
+DUNG 1440: khong tran ngang (loi) 0
+DUNG 390: cua 503 -> cau chua bat
+DUNG 390: khong nut Thu lai
+DUNG 390: cua da duoc goi (1)
+DUNG 390: khong tran ngang (loi) 0
+8 DUNG, 0 SAI
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0

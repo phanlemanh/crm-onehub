@@ -122,9 +122,84 @@ AGENT_BRIDGE_SECRET="$(openssl rand -base64 32)"
 | `401` | The two processes hold different secrets, **or** `passThroughEnv` in `apps/app/turbo.json` / `apps/agent/turbo.json` is missing the pair (Turbo is strict-env) |
 | `502` | Agent not running, or `AGENT_URL` wrong |
 
+The OKR drafting chat has its own pair, `OKR_AGENT_URL` (default `127.0.0.1:2100`)
+and `OKR_AGENT_BRIDGE_SECRET`, and its own gate at `/eve/agents/okr/eve/v1/*`; the
+same three errors apply to the «Soạn OKR cùng Trợ lý» screen, with `apps/agent-okr`
+in place of the agent. Run it with `bun run --filter=agent-okr dev` (port 2100).
+
 `localDev()` accepts any loopback request, so `curl 127.0.0.1` proves nothing about
 the bridge — send `-H 'Host: agent.example.com'`. `GET /eve/v1/info` is the whole
 inventory, including a `diagnostics` count that finds files eve silently ignored.
+
+## Deploying `apps/agent-okr` to Vercel
+
+OKR drafting runs on its own eve deployment. The app decides whether drafting is on
+from one thing only: `OKR_AGENT_BRIDGE_SECRET` in the app's process. While it is empty,
+the gate answers `503 chua-cau-hinh-tro-ly-okr`, the «By unit» toolbar shows a locked
+drafting button with «Drafting isn't turned on for this server yet», and no session is
+opened or counted.
+
+Once the secret is set the button opens sessions, and the gate counts the turn before
+it forwards it. A wrong or missing `OKR_AGENT_URL` then answers `502`, and secrets that
+differ between the two projects answer `401` — both after the turn is counted, so every
+try burns a turn and the session counts against the unit's three. Set the app's secret
+last, after the steps below prove the agent answers. Creating the project and setting
+the secrets is the repository owner's job — this section is the checklist, in order.
+
+### Project settings
+
+Copy the shape of `crm-onehub-agent` (`vercel project inspect crm-onehub-agent`):
+
+| Setting | Value |
+| --- | --- |
+| Root Directory | `apps/agent-okr` |
+| Framework preset | Other |
+| Build Command | `bun run build` |
+| Node.js Version | 24.x |
+| Ignored Build Step | empty |
+
+**The agent-okr check is red on every pull request, and that is expected.** The
+project's variables are Production-only, so a preview build dies in `prisma generate`
+on the missing `DATABASE_URL`. Nothing calls an agent-okr preview — the app's
+`OKR_AGENT_URL` and bridge secret are Production-only too — and `acceptance.yml`
+already proves the package builds.
+
+Do not silence it with the Ignored Build Step `[ "$VERCEL_ENV" != "production" ]`.
+On 2026-10-04 it skipped the Production deploys as well, with no build log, and two
+merges never reached agent-okr.vercel.app. After any change to this setting, deploy
+`onehub` to Production and check the deployment is Ready, not Canceled.
+
+### agent-okr project
+
+Exactly the variables `apps/agent-okr/turbo.json` passes to `dev`:
+
+| Variable | What it does |
+| --- | --- |
+| `OKR_AGENT_BRIDGE_SECRET` | Verifies the two-minute token the app's OKR gate signs. |
+| `AI_GATEWAY_API_KEY` | Model access when `OKR_AI_GATEWAY_API_KEY` is absent; without either, Vercel OIDC is used. |
+| `OKR_AI_GATEWAY_API_KEY` | The OKR-only Gateway key, billed and capped apart from the record agent. |
+| `DATABASE_URL` | Production database; the `nop_ban_nhap` tool writes draft lines and cost rows there. |
+
+### app project
+
+Deploy the agent-okr project first and check `GET <its URL>/health` (see Check). Then
+add to `crm-onehub-app` in this order — `OKR_AGENT_URL` first, the secret last — and
+redeploy; the app reads both at start:
+
+| Variable | Value |
+| --- | --- |
+| `OKR_AGENT_URL` | The production URL of the new project. |
+| `OKR_AGENT_BRIDGE_SECRET` | The same value as the agent-okr project (`openssl rand -base64 32`). |
+
+### Check
+
+1. Before touching the app project: `GET <agent-okr URL>/health` answers JSON with a
+   `cay` field. On Vercel it is `{"cay":null}` — there is no git checkout to name — and
+   that is the healthy answer; a 404 or a timeout means the deployment is not up.
+2. After the app's redeploy: on «By unit», a unit head in a planning-phase cycle sees
+   «Draft OKRs with the Assistant» enabled, and opening a session gets an answer. A
+   `401` or `502` here is a mismatched secret or URL — fix it before anyone else tries,
+   since each try counts.
 
 ## Running the agent
 
@@ -326,6 +401,27 @@ So a measurement now runs in a **measure session** on a database of its own tree
   or `repin-lane` gets a clean database and its own servers without any change to the
   eval. The ports an eval names (`${APP_URL:-http://localhost:3910}`) are only
   defaults; the session's `APP_URL` wins.
+- A measurement that needs a chat agent boots it itself, inside the session.
+  `_acceptance/tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs` does this for `apps/agent`: it
+  picks a free port, sets `AGENT_URL` and `AGENT_BRIDGE_SECRET` **before** starting the
+  session under a sibling tree name (`<tree>-tro-ly`), because the app reads those
+  variables once at start, then starts `apps/agent` on that port. The app is checked
+  with `_acceptance/man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs`.
+- The session also boots `apps/agent-okr`, the OKR drafting agent, when a measurement
+  needs it: `_acceptance/soan-okr-cung-tro-ly/rang/phien-soan.mjs`. `chayTrongPhienSoan`
+  asks the operating system for a free port (port 0, not the 4100–4899 range), sets
+  `OKR_AGENT_URL` and a fresh `OKR_AGENT_BRIDGE_SECRET` **before** the session starts,
+  and runs it under the sibling tree name `<tree>-soan`: when `tien-de` wrapped the
+  command, a session of `<tree>` already holds that tree's lock, so reusing the name
+  would wait on itself. `batAgentOkr` then starts `eve dev --no-ui` of `apps/agent-okr`
+  on that port with `NODE_ENV=development` (under `test` eve swaps the real model for
+  its mock) and the session's `DATABASE_URL`, so cost rows (`AiChiPhi`) land in the
+  measure database and vanish with it. It prints the Node version first and refuses
+  one below 24. `apps/agent-okr` answers `GET /health` with `cay`, and the ruler
+  compares it with its own `treeSlug(currentTree())`: an agent on that port started by
+  another tree or session is exit 2 naming both, not a measurement. The drafting-screen
+  ruler `rang/man-soan.mjs` uses it; the isolation ruler `rang/cach-ly-chi-okr.mjs`
+  (task E1) is meant to reuse it rather than boot its own.
 
 To measure a whole lane in one session — one database, one server start — wrap it:
 `bun run do:man --chay "node <feature-loop>/scripts/repin-lane.mjs --root . --slug <s>"`.

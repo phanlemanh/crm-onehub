@@ -1,0 +1,2 @@
+E5 network: driver la script Puppeteer trong rang/man-mtkr.mjs (khong co browser tool doc network); khong dump duoc request/console.
+networkObserved = n-a (driver). Log luot chung: .acceptance-runs/muc-tieu-va-kr/s4-man.log (EXIT 0, 86 DUNG 0 SAI). Log chieu do: .acceptance-runs/muc-tieu-va-kr/s4-e5-do-do.log (EXIT 1).

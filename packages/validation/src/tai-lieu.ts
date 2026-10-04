@@ -5,6 +5,7 @@ export const LOAI_TRANG = [
 	"chinh-sach",
 	"quy-trinh",
 	"bieu-mau",
+	"chien-luoc",
 ] as const;
 export type LoaiTrang = (typeof LOAI_TRANG)[number];
 

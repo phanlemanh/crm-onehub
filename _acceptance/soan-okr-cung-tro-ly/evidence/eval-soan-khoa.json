@@ -1,0 +1,32 @@
+[
+  {
+    "cap": 1,
+    "ca": "bp-kinh-doanh#v3",
+    "phiaCoGoi": "B",
+    "judgeChon": "khong cham duoc"
+  },
+  {
+    "cap": 2,
+    "ca": "bp-kinh-doanh#v1",
+    "phiaCoGoi": "B",
+    "judgeChon": "B"
+  },
+  {
+    "cap": 3,
+    "ca": "pb-kho-van#v1",
+    "phiaCoGoi": "B",
+    "judgeChon": "khong cham duoc"
+  },
+  {
+    "cap": 4,
+    "ca": "pb-kd-bac#v2",
+    "phiaCoGoi": "A",
+    "judgeChon": "A"
+  },
+  {
+    "cap": 5,
+    "ca": "pb-tai-chinh#v1",
+    "phiaCoGoi": "A",
+    "judgeChon": "khong cham duoc"
+  }
+]

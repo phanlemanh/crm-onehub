@@ -98,6 +98,7 @@ function mucTieu(
 		theoDoi: false,
 		hienThi: "cong-khai",
 		soNguoiXem: 0,
+		soGopYCho: 0,
 	};
 }
 
@@ -118,6 +119,7 @@ function cayMau(): TreeOutput {
 	) => ({
 		id,
 		name,
+		moTa: "",
 		position: 0,
 		divisionId,
 		head: HA,
@@ -130,6 +132,7 @@ function cayMau(): TreeOutput {
 			{
 				id: "bp-kd",
 				name: "Khối Kinh doanh",
+				moTa: "",
 				position: 0,
 				head: LAN,
 				okrMo: 0,
@@ -149,6 +152,7 @@ function cayMau(): TreeOutput {
 				managerOverrideId: null,
 				manager: null,
 				managerSource: "khong-co",
+				chucDanh: "",
 			},
 		],
 		archived: {

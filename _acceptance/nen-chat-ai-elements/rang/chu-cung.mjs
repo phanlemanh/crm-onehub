@@ -54,11 +54,9 @@ const MIEN_GIA_TRI = {
 			"icon-sm": "cỡ Button — ô vuông nhỏ",
 			sm: "cỡ Button — nút nhỏ của hàng hành động Confirmation",
 			default:
-				"biến thể Button mặc định của PromptInputSubmit — nút tô primary",
-			secondary:
-				"biến thể Badge — chip xám của nút trích dẫn trong InlineCitation",
-			panel:
-				"cỡ PopoverContent — khung không đệm của thẻ trích dẫn InlineCitation",
+				"biến thể Button — nút tô màu chính của nút gửi ở PromptInputSubmit",
+			secondary: "biến thể Badge — chip xám của nút trích dẫn trong InlineCitation",
+			panel: "cỡ PopoverContent — khung không đệm của thẻ trích dẫn InlineCitation",
 		},
 	},
 	"enum-may": {
@@ -69,26 +67,25 @@ const MIEN_GIA_TRI = {
 			log: "giá trị vai trò ARIA role=log",
 			horizontal: "hướng của ButtonGroup",
 			smooth: "giá trị prop initial và resize của StickToBottom",
-			submit: "giá trị thuộc tính type của nút gửi trong PromptInput",
-			start: "giá trị prop align của DropdownMenuContent và HoverCardContent",
-			top: "giá trị prop side mặc định của tooltip PromptInputButton",
-			"block-end":
-				"giá trị prop align của InputGroupAddon trong PromptInputHeader và PromptInputFooter",
-			dragover: "tên sự kiện DOM đem đi addEventListener cho thả tệp",
-			drop: "tên sự kiện DOM đem đi addEventListener cho thả tệp",
-			Enter:
-				"giá trị KeyboardEvent.key đem đi so sánh trong PromptInputTextarea",
-			Backspace:
-				"giá trị KeyboardEvent.key đem đi so sánh trong PromptInputTextarea",
-			submitted:
-				"giá trị ChatStatus của AI SDK, PromptInputSubmit đem đi so sánh",
-			streaming:
-				"giá trị ChatStatus của AI SDK, PromptInputSubmit đem đi so sánh",
-			error: "giá trị ChatStatus của AI SDK, PromptInputSubmit đem đi so sánh",
-			mouse:
-				"giá trị PointerEvent.pointerType — chỉ chuột mới mở thẻ trích dẫn theo đường di chuột, chạm thì không",
-			select:
-				"tên sự kiện của Embla mà InlineCitationCarouselIndex đăng ký để đếm nguồn",
+			submit: "giá trị thuộc tính type của nút gửi và phần tử con của form",
+			"block-end": "giá trị prop align của InputGroupAddon",
+			start: "giá trị prop align của HoverCardContent",
+			top: "giá trị prop side của TooltipContent",
+			dragover: "tên sự kiện DOM khi kéo tệp qua khung soạn",
+			drop: "tên sự kiện DOM khi thả tệp vào khung soạn",
+			Enter: "tên phím KeyboardEvent.key của lệnh gửi",
+			Backspace: "tên phím KeyboardEvent.key của lệnh gỡ tệp cuối",
+			'button[type="submit"]': "bộ chọn CSS tìm nút gửi trong form",
+			canvas: "tên thẻ HTML dựng tạm để chụp khung hình",
+			"2d": "tên ngữ cảnh vẽ của canvas",
+			NotAllowedError:
+				"tên lỗi DOMException khi người dùng từ chối quyền chụp màn hình",
+			AbortError: "tên lỗi DOMException khi người dùng bỏ chụp màn hình",
+			submitted: "giá trị ChatStatus của AI SDK",
+			streaming: "giá trị ChatStatus của AI SDK",
+			error: "giá trị ChatStatus của AI SDK",
+			mouse: "giá trị PointerEvent.pointerType — chỉ chuột mới mở thẻ trích dẫn theo đường di chuột, chạm thì không",
+			select: "tên sự kiện của Embla mà InlineCitationCarouselIndex đăng ký để đếm nguồn",
 		},
 	},
 	"ten-the": {
@@ -98,9 +95,7 @@ const MIEN_GIA_TRI = {
 			p: "thẻ mặc định của Shimmer khi không ai truyền as",
 			a: "thẻ dựng tạm để kích hoạt tải tệp rồi gỡ ngay",
 			video:
-				"thẻ dựng tạm trong captureScreenshot để đọc khung hình, không gắn vào cây",
-			canvas:
-				"thẻ dựng tạm trong captureScreenshot để vẽ khung hình, không gắn vào cây",
+				"thẻ dựng tạm, không gắn vào cây, để đọc một khung hình khi chụp màn hình",
 		},
 	},
 	"khoa-ky-thuat": {
@@ -125,39 +120,28 @@ const MIEN_GIA_TRI = {
 				"trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
 			"output-available":
 				"trạng thái ToolUIPart của AI SDK, Confirmation đem đi so sánh",
+			accept:
+				"mã lỗi của onError trong PromptInput — chữ hiện cho người dùng nằm ở msg.promptInput",
+			max_file_size:
+				"mã lỗi của onError trong PromptInput — chữ hiện cho người dùng nằm ở msg.promptInput",
+			max_files:
+				"mã lỗi của onError trong PromptInput — chữ hiện cho người dùng nằm ở msg.promptInput",
+			number: "kết quả typeof đem đi so sánh",
+			string: "kết quả typeof đem đi so sánh",
+			undefined: "kết quả typeof đem đi so sánh",
+			"Failed to load screen stream":
+				"thông điệp của Error đi vào reject trong captureScreenshot; lỗi này nổi lên ở bộ xử lý sự kiện chứ không vào cây render, và người dùng chỉ thấy khi mở console",
+			Files: "giá trị DataTransfer.types của thao tác kéo thả tệp",
+			message: "tên trường form mà PromptInput đọc lại bằng FormData",
+			"blob:": "tiền tố URL đối tượng đem đi startsWith",
+			"image/png": "MIME của ảnh chụp màn hình",
+			"screenshot-":
+				"tiền tố tên tệp máy đọc của ảnh chụp màn hình — tên tệp kèm đuôi, không phải câu trên màn",
+			".png": "đuôi tên tệp máy đọc của ảnh chụp màn hình",
+			T: "ký tự phân tách ngày và giờ trong chuỗi ISO 8601 khi dựng tên tệp",
+			Z: "hậu tố múi giờ trong chuỗi ISO 8601 khi dựng tên tệp",
 			"conversation.md":
 				"tên tệp máy đọc của bản tải về. Nó CÓ thể hiện ở thanh tải của trình duyệt; miễn ở đây là quyết định có ý thức vì nó là định danh tập tin kèm đuôi, không phải câu trên màn.",
-			message:
-				"tên trường của textarea trong form PromptInput, đọc lại bằng FormData.get",
-			number: "kết quả toán tử typeof đem đi so sánh",
-			string: "kết quả toán tử typeof đem đi so sánh",
-			undefined: "kết quả toán tử typeof đem đi so sánh",
-			Files: "giá trị DataTransfer.types báo có tệp đang được kéo",
-			accept: "mã lỗi máy đọc truyền cho onError của PromptInput",
-			max_file_size: "mã lỗi máy đọc truyền cho onError của PromptInput",
-			max_files: "mã lỗi máy đọc truyền cho onError của PromptInput",
-			"blob:": "tiền tố URL đem đi startsWith",
-			NotAllowedError:
-				"tên DOMException đem đi so sánh khi người dùng từ chối chia sẻ màn hình",
-			AbortError:
-				"tên DOMException đem đi so sánh khi người dùng huỷ chia sẻ màn hình",
-			"2d": "tên ngữ cảnh vẽ của canvas.getContext",
-			"image/png": "MIME của ảnh chụp màn hình",
-			T: "ký tự ngăn ngày giờ của ISO 8601 đem đi replace khi đặt tên tệp chụp",
-			Z: "ký tự múi giờ của ISO 8601 đem đi replace khi đặt tên tệp chụp",
-			'button[type="submit"]':
-				"bộ chọn CSS đem đi querySelector để tìm nút gửi",
-			"screenshot-":
-				"tiền tố tên tệp của ảnh chụp màn hình. Nó CÓ thể hiện ở chip đính kèm; miễn là quyết định có ý thức cùng lớp với conversation.md — định danh tập tin, không phải câu trên màn.",
-			".png": "đuôi tên tệp của ảnh chụp màn hình",
-		},
-	},
-	"loi-khong-len-man": {
-		vi_sao:
-			"Thông điệp của một Error do hàm nội bộ reject. Lời gọi duy nhất ném lại nó trong trình xử lý sự kiện, không nhánh render nào đọc message của nó.",
-		muc: {
-			"Failed to load screen stream":
-				"captureScreenshot reject khi thẻ video không nạp được luồng màn hình; PromptInputActionAddScreenshot ném lại",
 		},
 	},
 	"gia-tri-css": {

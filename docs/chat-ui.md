@@ -84,10 +84,10 @@ surfaces:
 | Anything that expands — reasoning, a tool call, a source list | `Reasoning` (in tree), plus `Tool` and `Sources` — **fetch first**, see the register |
 | Attachment in the transcript | `MessageAttachment` / `MessageAttachments` |
 | Attachment in the composer | `PromptInputAttachment` / `PromptInputAttachments` — **fetch first** |
-| The composer itself | the `PromptInput` family — **fetch first** |
+| The composer itself | the `PromptInput` family (in tree) |
 | Scrolling the transcript | `Conversation` + `ConversationScrollButton` (in tree) |
 | Empty transcript | `ConversationEmptyState` (in tree) |
-| Clickable prompt starters | `Suggestions` + `Suggestion` — **fetch first** |
+| Clickable prompt starters | `Suggestions` + `Suggestion` (in tree) |
 | Approving a change the AI proposes (accept, edit, reject) | `ProposedChange` in `packages/ui`, built on `Confirmation` |
 | "The agent is thinking" | `ThinkingIndicator` — see the orphan note below |
 
@@ -127,7 +127,7 @@ section for what is actually in the tree.
 `confirmation` moved here on 2026-09-29 (`the-gop-y-okr`): the OKR assistant's
 suggestion cards and the contact fact suggestions are approvals of a change the
 AI proposes, which is the job `Confirmation` exists for. `ProposedChange` wraps it
-so both surfaces share one card.
+so both surfaces share one card. Since `nen-kara` (2026-10-02) that card is the `card` density; the default `inline` density sits under the thing it changes and is built on `Item`, because a bordered `Alert` inside a table or under a field makes three layers of border.
 
 `sources` and `inline-citation` are the highest-value ones and the least
 started: `lib/agent-transcript.ts` already exports `sourcesOf()`, it is covered
@@ -139,20 +139,22 @@ by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 
 | File | Why it is here |
 | --- | --- |
-| `confirmation.tsx` | imported by `proposed-change.tsx`, which the OKR suggestion column and the contact fact suggestions use |
+| `confirmation.tsx` | imported by `proposed-change.tsx` as the body of its `card` density, which the OKR suggestion column and the contact fact suggestions use; the `inline` density is built on `Item` and does not use it |
 | `message.tsx` | imported by the record sheet's Agent tab and the builder |
 | `reasoning.tsx` | imported by the builder |
 | `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |
-| `conversation.tsx` | the transcript of the Documents «Ask» tab (`tai-lieu/hoi.tsx`); the orphan-gate exemption it carried until then is gone |
-| `prompt-input.tsx` | the composer of the Documents «Ask» tab, used through `PromptInputProvider` so a failed send keeps the typed question |
+| `conversation.tsx` | imported by `apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx` (`Conversation`, `ConversationContent`, `ConversationEmptyState`) and by the transcript of the Documents «Ask» tab (`tai-lieu/hoi.tsx`) — the orphan gate's exemption for the scroll measurement is gone (`MIEN_TRU` in `mo-coi.mjs` is empty) |
 | `inline-citation.tsx` | trích dẫn của khối Tóm tắt tuần — the weekly summary block on the OKR board cites the KRs and updates behind each sentence. Pulled back by the CLI in `tro-ly-okr-tom-tat`; the card is a `Popover` that opens on click, tap, Enter and Space, and still on hover for a mouse, and the trigger shows a given label instead of a URL hostname. The Documents «Ask» tab uses only `InlineCitationSource` and `InlineCitationQuote`, shown open under each sentence |
-| `suggestion.tsx` | the three starter questions of the empty «Ask» tab |
+| `prompt-input.tsx` | `PromptInput`, `PromptInputBody`, `PromptInputTextarea`, `PromptInputFooter`, `PromptInputTools`, `PromptInputSubmit` — the composer of `okr/soan/hoi-thoai-soan.tsx` and of the Documents «Ask» tab, which goes through `PromptInputProvider` so a failed send keeps the typed question; pulled 2026-09-30 with the CLI; its strings are in `messages.ts` under `promptInput` |
+| `suggestion.tsx` | `Suggestions` and `Suggestion` — the answer chips under an assistant question in the OKR drafting chat, and the three starter questions of the empty «Ask» tab (`Suggestions xuongDong` wraps them instead of scrolling); pulled 2026-09-30 with `prompt-input.tsx`. The accept · edit · reject card that once lived at `packages/ui/src/components/suggestion.tsx` is gone (`proposed-change.tsx` replaced it) |
 
-The other 19 vendored files were deleted in the `nen-chat-ai-elements` round —
-nine of them Adopted (`artifact`, `inline-citation`, `model-selector`, `plan`,
-`prompt-input`, `sources`, `suggestion`, `task`, `tool`), the rest Available or
-Not-for-this-product. None of them was reachable from `apps/**`, and carrying
-21 unreachable files was the cost the round was opened to remove.
+Of the 19 vendored files deleted in the `nen-chat-ai-elements` round, 16 are still
+gone — six of them Adopted (`artifact`, `model-selector`, `plan`, `sources`,
+`task`, `tool`), the rest Available or Not-for-this-product. `prompt-input` and
+`suggestion` were pulled back on 2026-09-30 for the OKR drafting screen, and
+`inline-citation` for the weekly summary block; all three are in the table above. None of the 19 was
+reachable from `apps/**`, and carrying 21 unreachable files was the cost the round
+was opened to remove.
 
 **Two gates now hold this shape, and they pull against each other on purpose:**
 the orphan gate (`_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs`, running
@@ -201,7 +203,8 @@ present is not evidence that it is supported. `ThinkingIndicator` —
 ## Local divergence, and re-applying it
 
 Several vendored files need edits to satisfy `docs/design.md` and
-`locale-provider`. The counts below are for the files that were in the tree before the «Ask» tab and the weekly summary (01/10); the files pulled for them are itemised in the ledger;
+`locale-provider`. The counts below are for the six files other than `prompt-input` and
+`suggestion`, which carry their own entries in the ledger;
 the divergence ledger of record is
 `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`, which carries one entry per
 file with a fingerprint of the diverging lines:
@@ -221,6 +224,11 @@ file with a fingerprint of the diverging lines:
   pulled in a scratch directory with this repo's `components.json`, because
   running `add` in `packages/ui` stops to ask about overwriting `alert.tsx` and
   `button.tsx`.
+- `prompt-input` and `suggestion` (pulled 2026-09-30): the English strings of
+  `prompt-input` go through `packages/ui/src/lib/messages.ts` (`promptInput`), its
+  upstream comments are dropped, and `suggestion` loses its `rounded-full` so the radius
+  stays on the scale of `docs/design.md`. Each has its own entry in
+  `_acceptance/nen-chat-ai-elements/so-lech-chuan.md`.
 - `inline-citation` swaps `HoverCard` for `Popover` so the card opens on click,
   tap and keyboard, takes `nhan` instead of deriving a hostname from `sources`,
   drops the upstream `rounded-full` on the trigger rather than replacing it,

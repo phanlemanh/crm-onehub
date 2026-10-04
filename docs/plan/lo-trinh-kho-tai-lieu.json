@@ -1,0 +1,254 @@
+{
+  "schema": 1,
+  "ten": "Kho tài liệu",
+  "tu_vung": {
+    "đã lên onehub": "Đã giao",
+    "xong": "Đã giao",
+    "đang dựng": "Đang làm",
+    "Cổng Phạm vi": "Chờ duyệt phạm vi",
+    "chưa mở": "Chưa mở",
+    "để sau": "Xếp lại sau"
+  },
+  "moc": [
+    {
+      "ten": "Kho cho người",
+      "ngay": "2026-10-01",
+      "loai": "su-kien",
+      "hang": [
+        "l1"
+      ],
+      "nghia": "Nhân viên viết trang, chủ trang duyệt, cả công ty đọc bản đang dùng",
+      "that": "2026-09-28"
+    },
+    {
+      "ten": "Nội dung vào nhanh",
+      "ngay": "2026-10-06",
+      "loai": "su-kien",
+      "hang": [
+        "l2"
+      ],
+      "nghia": "Phòng ban tải tệp đang có lên, máy soạn thành trang, chủ trang duyệt",
+      "that": "2026-09-28"
+    },
+    {
+      "ten": "Tìm được",
+      "ngay": "2026-10-08",
+      "loai": "su-kien",
+      "hang": [
+        "l3"
+      ],
+      "nghia": "⌘K có dấu hay không dấu, backlink, tab Sức khoẻ",
+      "that": "2026-09-29"
+    },
+    {
+      "ten": "Hỏi được",
+      "ngay": "2026-10-13",
+      "loai": "su-kien",
+      "hang": [
+        "l4"
+      ],
+      "nghia": "Hỏi trong CRM hay qua Zalo, trả lời có trích trang và phiên bản"
+    },
+    {
+      "ten": "Chạy thật",
+      "ngay": "2026-10-14",
+      "loai": "su-kien",
+      "hang": [
+        "ct"
+      ],
+      "nghia": "Mọi phòng ban tự nạp tài liệu và dùng hai tuần; đo bốn số",
+      "den": "2026-10-28"
+    },
+    {
+      "ten": "Sửa một đợt",
+      "ngay": "2026-11-04",
+      "loai": "su-kien",
+      "hang": [
+        "l5"
+      ],
+      "nghia": "Góp ý đã gom được sửa trong một lượt"
+    }
+  ],
+  "hang": [
+    {
+      "ma": "l0",
+      "cau_giao": "Nghiên cứu nền, bản mẫu bấm được, trình đọc markdown",
+      "trang_thai": "xong",
+      "dong": 0,
+      "ten": "Lượt 0 — nền",
+      "ngay": "2026-09-27",
+      "ghi_chu": "18 luồng nghiên cứu, 546 nguồn; bản mẫu /proto/kho-tai-lieu 15 trạng thái; chốt duyệt mọi thay đổi."
+    },
+    {
+      "ma": "l1",
+      "cau_giao": "«Tôi viết được một trang, gửi chủ trang duyệt, cả công ty đọc được bản đang dùng»",
+      "hang": "T3",
+      "slug": "kho-tai-lieu",
+      "dong": 1,
+      "ten": "Lượt 1",
+      "ngay": "2026-09-28",
+      "pr": [
+        180,
+        181
+      ],
+      "buoc_ke": "Cổng Giá trị đóng ở đợt chạy thật",
+      "ghi_chu": "Merge c1e37b73 ngày 28/09, sớm ba ngày so với đề xuất. 17 hạn chế đã biết; hai mục người dùng gặp trước (dấu | trong ô bảng mất dữ liệu, danh sách đề xuất trần 25 dòng) vào đầu lượt 3. migration dời thành 20261001010000_kho_tai_lieu."
+    },
+    {
+      "ma": "l2",
+      "cau_giao": "«Tôi tải tệp quy định đang có lên, máy soạn thành trang, tôi sửa và duyệt»",
+      "hang": "T3",
+      "slug": "may-soan-de-xuat",
+      "dong": 5,
+      "ten": "Lượt 2",
+      "ngay": "2026-09-28",
+      "pr": [
+        194,
+        195,
+        196,
+        197,
+        198,
+        200
+      ],
+      "buoc_ke": "Anh thử tải một tệp Word thật trên production, rồi chạy phiên nghiệm thu",
+      "ghi_chu": "Merge 8b76152a ngày 28/09, sớm tám ngày so với đề xuất. Chấm năm vòng: round 2 BLOCKED ở E2t vì thiếu Blob thật; Cổng Bằng chứng mở lại Cổng Phạm vi thêm AC-16 (thủ tục nhận nguồn có thể xoá tệp của nguồn đã có); round 3 REJECT chạm trần ba vòng; round 5 đạt, E2t chạy trên kho Blob riêng tư thật kho-tai-lieu-nguon (sin1, chưa gắn dự án). Bốn hạn chế đã biết ở Notes của hợp đồng. migration 20261003010000_may_soan_de_xuat. Sau merge: #195 vùng kéo-thả dựng trên móc ReUI; #196 sửa câu gợi ý; #197 kho nguồn đọc khoá riêng KHO_TAI_LIEU_BLOB_TOKEN (đặt tay trên Production của api và agent, kho không gắn dự án); #198 diff bỏ vòng Myers mức khối, hết sát trần CI; #200 thước màn chữ theo khoá mới. Hộp «Tải nguồn lên» đã mở trên production, chưa tải tệp thật nào.",
+      "cho_anh": true
+    },
+    {
+      "ma": "l3",
+      "cau_giao": "«Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt»",
+      "hang": "T2",
+      "slug": "tim-va-dieu-huong-kho",
+      "dong": 2,
+      "ten": "Lượt 3",
+      "ngay": "2026-09-29",
+      "pr": [
+        205
+      ],
+      "buoc_ke": "Phiên nghiệm thu lượt 3; Cổng Giá trị đóng ở đợt chạy thật",
+      "ghi_chu": "Nhận thêm hai hạn chế của lượt 1 (dấu | trong ô bảng, trần 25 dòng), dòng nhắc sáng «chờ duyệt», lọc theo đơn vị, loại, chủ. 2026-09-29: S1 xong trên nhánh feat/tim-va-dieu-huong-kho — hợp đồng 12 AC, 25 eval, gap-probe 1 P0 + 3 P1 + 1 P2 đã sửa, design-pass 6 ảnh, ba hình quyết định. Chủ kho chốt: dòng nhắc sáng đếm bằng số tab «Chờ duyệt»; nhận chèn liên kết tới trang. Máy đề xuất tách lịch sử, khôi phục, lưu trữ sang 3b (T3) vì chưa có trạng thái lưu trữ; lượt 3 giữ T2, không migration. Anh duyệt Cổng Phạm vi 29/09, nhận tách 3b; ký Cổng Đáng build, ngưỡng giữ như đề xuất. 29/09: S3 xong, năm lệnh xanh. S4 round 1 BLOCKED kèm một phát hiện trong hợp đồng (nhắc sáng tự tính lại luật duyệt) và hội đồng ảnh thấy tiêu đề bị nút đè ở 390; đã sửa, kể cả đầu trang dùng chung. Round 2 PENDING-JUDGMENT: 25 eval và bốn suite xanh, hội đồng ảnh UNCERTAIN, bảy mục ngoài hợp đồng. Anh ký Cổng Bằng chứng 29/09 (E12j Đạt); gộp onehub, ghim lại xanh, mở PR #205. CI xanh, merge vào onehub 29/09, lên production.",
+      "cho_anh": true
+    },
+    {
+      "ma": "l3b",
+      "cau_giao": "«Tôi xem được các phiên bản cũ của trang, khôi phục một bản cũ qua duyệt, và lưu trữ trang không còn dùng»",
+      "hang": "T3",
+      "slug": "lich-su-va-luu-tru-trang",
+      "trang_thai": "chưa mở",
+      "dong": 10,
+      "ten": "Lượt 3b",
+      "ngay": "2026-09-29",
+      "buoc_ke": "Sau 14/10",
+      "ghi_chu": "Tách từ lượt 3 ngày 29/09, anh nhận ở Cổng Phạm vi. T3 vì cần cột trạng thái lưu trữ trên TaiLieuTrang. Gồm cả «trang lưu trữ không ra kết quả» của tìm kiếm.",
+      "dung_tren": [
+        "l4a",
+        "l4b"
+      ]
+    },
+    {
+      "ma": "l4",
+      "cau_giao": "«Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết»",
+      "hang": "T2",
+      "dung_tren": [],
+      "slug": "tro-ly-doc-kho",
+      "trang_thai": "đang dựng",
+      "dong": 4,
+      "ten": "Lượt 4",
+      "buoc_ke": "Đã ký Cổng Bằng chứng 02/10; PR #231 đang gỡ xung đột (16 tệp + migration trùng mốc), gộp trước 07/10",
+      "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 04/10 (khảo sát lộ trình): 50 câu thật chạy trong tuần đầu dùng thật, không chặn lượt này (contract.md:117 trên nhánh). Khoá AI riêng KHO_TAI_LIEU_AI_GATEWAY_API_KEY chủ kho đặt trên crm-onehub-agent. 04/10: chủ kho đã đặt khoá AI riêng cho Kho."
+    },
+    {
+      "ma": "ct",
+      "cau_giao": "Mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ",
+      "dung_tren": [
+        "l4"
+      ],
+      "trang_thai": "chưa mở",
+      "dong": 3,
+      "ten": "Chạy thật — mọi phòng ban",
+      "buoc_ke": "Mọi phòng ban 14/10, cùng ngày cả công ty vào CRM (chủ kho chốt 04/10)",
+      "ghi_chu": "Bốn số: trang đã duyệt theo đơn vị ≥ 10, câu hỏi có trích ≥ 70%, trung vị đề xuất tới duyệt ≤ 5 ngày làm việc, số lần «báo sai»."
+    },
+    {
+      "ma": "cb",
+      "cau_giao": "Việc của chủ kho chạy song song với các lượt",
+      "trang_thai": "đang dựng",
+      "dong": 7,
+      "ten": "Chuẩn bị chạy thật",
+      "ngay": "2026-09-28",
+      "buoc_ke": "Gom 50 câu hỏi thật trong đợt dùng đầu, 09–14/10",
+      "ghi_chu": "«Quy tắc viết» v0: máy soạn từ ba văn bản mẫu thật (cách C), anh nhận làm quy tắc và sửa dần khi vận hành. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
+      "cho_anh": true
+    },
+    {
+      "ma": "l5",
+      "cau_giao": "Danh sách góp ý đã gom được sửa trong một lượt",
+      "hang": "T2",
+      "dung_tren": [
+        "ct"
+      ],
+      "slug": "sua-sau-chay-that",
+      "trang_thai": "chưa mở",
+      "dong": 8,
+      "ten": "Lượt 5",
+      "buoc_ke": "Chờ chạy thật xong"
+    },
+    {
+      "ma": "d9",
+      "cau_giao": "Phó, thang leo, nhắc hạn xác minh, phạm vi xem theo trang, bậc 2",
+      "hang": "T3",
+      "dung_tren": [
+        "ct"
+      ],
+      "slug": "chu-trang-va-pham-vi",
+      "trang_thai": "để sau",
+      "dong": 9,
+      "ten": "Để sau",
+      "buoc_ke": "Mở ngay sau chạy thật nếu trung vị duyệt vượt 5 ngày"
+    },
+    {
+      "ma": "d6",
+      "cau_giao": "Soát định kỳ, cờ cũ theo hash nguồn, thẻ căn cứ pháp lý, thẻ mâu thuẫn, đồ thị",
+      "hang": "T3",
+      "dung_tren": [
+        "ct"
+      ],
+      "slug": "bao-tri-trang-luat",
+      "trang_thai": "để sau",
+      "dong": 6,
+      "ten": "Để sau",
+      "buoc_ke": "Quyết bằng số đo chạy thật"
+    },
+    {
+      "ma": "l4a",
+      "cau_giao": "«Nguồn không kẹt mãi ở «đang đọc» khi máy soạn lỗi; «Soạn lại» chạy được; hộp chèn liên kết báo lỗi thay vì «không trang nào khớp»»",
+      "hang": "T2",
+      "dung_tren": [
+        "l4"
+      ],
+      "slug": "kho-nguon-khong-ket",
+      "trang_thai": "chưa mở",
+      "dong": 11,
+      "ten": "Nguồn không kẹt",
+      "buoc_ke": "Sau khi #231 gộp; xong trước 13/10",
+      "ghi_chu": "Khảo sát lộ trình 04/10. #22 (Ngoài-11/19 của may-soan-de-xuat), #20, #21. tai-lieu-soan.ts:49-75.",
+      "han": "2026-10-13"
+    },
+    {
+      "ma": "l4b",
+      "cau_giao": "«Trợ lý kho chỉ được mời ở tab Hỏi và Zalo, hết lỗi và hết tốn tiền vô ích»",
+      "hang": "T2",
+      "dung_tren": [
+        "l4"
+      ],
+      "slug": "tro-ly-kho-dung-phien",
+      "trang_thai": "chưa mở",
+      "dong": 12,
+      "ten": "Trợ lý kho đúng phiên",
+      "buoc_ke": "Sau khi #231 gộp; xong trước 13/10",
+      "ghi_chu": "Khảo sát lộ trình 04/10. Ngoài-4 của tro-ly-doc-kho cộng ZDR cho phiên gốc «kho».",
+      "han": "2026-10-13"
+    }
+  ],
+  "da_bac": []
+}

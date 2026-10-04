@@ -1,9 +1,25 @@
+import type { BacGhiDanh } from "./okr-chi-so-danh-muc";
+
 export const MINUTE_MS = 60_000;
 export const GIO_MS = 60 * MINUTE_MS;
 export const NGAY_MS = 24 * GIO_MS;
 export const TUAN_MS = 7 * NGAY_MS;
 
 const SECOND_MS = MINUTE_MS / 60;
+const PHAN_TRAM = 100;
+
+const TU_CAM_NHAN_SU = [
+	"lương",
+	"thưởng",
+	"xếp loại",
+	"xếp hạng",
+	"đánh giá nhân viên",
+	"đánh giá hiệu suất",
+	"KPI",
+	"bảng xếp hạng",
+	"huy hiệu",
+	"điểm đổi quà",
+] as const;
 
 export const TRO_LY_OKR_TRAN = {
 	chu: {
@@ -17,19 +33,14 @@ export const TRO_LY_OKR_TRAN = {
 	soDongDeXuat: 8,
 	soCauTomTat: 6,
 	soNguonMoiCau: 4,
+	soan: { luotMoiCuoc: 12, cuocMoiDonViMoiKy: 3, tranRaMoiLoiGoi: 3_000 },
+	thangLapKeHoachTruocKy: 3,
+	trangChienLuocKyTu: 20_000,
 	tranThangMacDinhUsd: 9,
 	tranThangToiDaUsd: 20,
+	tuCamTrangChienLuoc: TU_CAM_NHAN_SU,
 	tuCam: [
-		"lương",
-		"thưởng",
-		"xếp loại",
-		"xếp hạng",
-		"đánh giá nhân viên",
-		"đánh giá hiệu suất",
-		"KPI",
-		"bảng xếp hạng",
-		"huy hiệu",
-		"điểm đổi quà",
+		...TU_CAM_NHAN_SU,
 		"khách hàng",
 		"deal",
 		"cơ hội",
@@ -77,6 +88,12 @@ export const TRO_LY_OKR_TRAN = {
 	tranChoMs: 30 * SECOND_MS,
 	diemXuHuongToiThieu: 3,
 	hoanTacNgay: 7,
+	goiSoan: {
+		thangTienDo: PHAN_TRAM,
+		lamTronDiem: 100,
+		vaiKhongDocSoDoiTac: "okr",
+		bacGhiDanh: "giao-dich-dau" satisfies BacGhiDanh,
+	},
 } as const;
 
 export const OKR_TOM_TAT = {
@@ -110,7 +127,7 @@ export const TRO_LY_OKR_KHOA = {
 	chung: "AI_GATEWAY_API_KEY",
 } as const;
 
-export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan"] as const;
+export const VIEC_TRO_LY = ["de-xuat", "tom-tat-tuan", "soan"] as const;
 
 export type ViecTroLy = (typeof VIEC_TRO_LY)[number];
 
@@ -132,6 +149,25 @@ export const TRANG_THAI_DE_XUAT = [
 	"bo-qua",
 	"bi-loai",
 ] as const;
+
+export const TRANG_THAI_DA_NHAN = [
+	"nhan",
+	"sua",
+] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][];
+
+export const TRANG_THAI_GIU_KHOA = [
+	...TRANG_THAI_DA_NHAN,
+	"bac",
+] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][];
+
+export const TRANG_THAI_DA_BAC = [
+	"bac",
+	"bo-qua",
+] as const satisfies readonly (typeof TRANG_THAI_DE_XUAT)[number][];
+
+export function daNhanDeXuat(trangThai: string): boolean {
+	return (TRANG_THAI_DA_NHAN as readonly string[]).includes(trangThai);
+}
 
 export const NAC_TRO_LY = ["tat", "an", "bat"] as const;
 
@@ -212,7 +248,12 @@ export type CauHinhAi = {
 	aiDeXuatAnDonVi: readonly string[];
 	aiTomTatAnPhamVi: AiPhamVi;
 	aiTomTatAnDonVi: readonly string[];
+	aiSoanPhamVi: AiPhamVi;
+	aiSoanDonVi: readonly string[];
+	aiSoanAnPhamVi: AiPhamVi;
+	aiSoanAnDonVi: readonly string[];
 	aiTranThangUsd: number;
+	aiTranThangDatOkrUsd: number | null;
 };
 
 export type DonViMucTieu = {
@@ -221,30 +262,36 @@ export type DonViMucTieu = {
 	phongBanId: string | null;
 };
 
-export function phamViCuaViec(
-	ct: CauHinhAi,
-	viec: ViecTroLy,
-): { phamVi: AiPhamVi; donVi: readonly string[] } {
-	return viec === "de-xuat"
-		? { phamVi: ct.aiDeXuatPhamVi, donVi: ct.aiDeXuatDonVi }
-		: { phamVi: ct.aiTomTatPhamVi, donVi: ct.aiTomTatDonVi };
+export type PhamViViec = {
+	phamVi: AiPhamVi;
+	donVi: readonly string[];
+};
+
+export function phamViCuaViec(ct: CauHinhAi, viec: ViecTroLy): PhamViViec {
+	switch (viec) {
+		case "de-xuat":
+			return { phamVi: ct.aiDeXuatPhamVi, donVi: ct.aiDeXuatDonVi };
+		case "tom-tat-tuan":
+			return { phamVi: ct.aiTomTatPhamVi, donVi: ct.aiTomTatDonVi };
+		case "soan":
+			return { phamVi: ct.aiSoanPhamVi, donVi: ct.aiSoanDonVi };
+	}
 }
 
-function phamViAnCuaViec(
-	ct: CauHinhAi,
-	viec: ViecTroLy,
-): { phamVi: AiPhamVi; donVi: readonly string[] } {
-	return viec === "de-xuat"
-		? { phamVi: ct.aiDeXuatAnPhamVi, donVi: ct.aiDeXuatAnDonVi }
-		: { phamVi: ct.aiTomTatAnPhamVi, donVi: ct.aiTomTatAnDonVi };
+function phamViAnCuaViec(ct: CauHinhAi, viec: ViecTroLy): PhamViViec {
+	switch (viec) {
+		case "de-xuat":
+			return { phamVi: ct.aiDeXuatAnPhamVi, donVi: ct.aiDeXuatAnDonVi };
+		case "tom-tat-tuan":
+			return { phamVi: ct.aiTomTatAnPhamVi, donVi: ct.aiTomTatAnDonVi };
+		case "soan":
+			return { phamVi: ct.aiSoanAnPhamVi, donVi: ct.aiSoanAnDonVi };
+	}
 }
 
 export type NacCuaDonVi = "tat" | "viec-tat" | "don-vi-chua-bat" | "an" | "bat";
 
-function phuDonVi(
-	p: { phamVi: AiPhamVi; donVi: readonly string[] },
-	donVi: DonViMucTieu,
-): boolean {
+function phuDonVi(p: PhamViViec, donVi: DonViMucTieu): boolean {
 	if (p.phamVi === "tat") return false;
 	if (p.phamVi === "toan-cong-ty") return true;
 	return (

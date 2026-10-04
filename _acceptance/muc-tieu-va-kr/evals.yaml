@@ -1,0 +1,177 @@
+slug: muc-tieu-va-kr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mtkr_man_that
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Phiên đo riêng (tien-de): nạp bộ OKR mẫu, chọn người phụ trách một mục tiêu đã công bố có ≥ 2 KR, đăng nhập dev:session"
+      - "1440 px sáng: mở /okr, chờ [data-muc-tieu], đo mọi hàng mục tiêu và hàng KR của nó cùng closest('table'); không có [data-slot=card-header] nào trong vùng danh sách; ảnh E1-1440-sang"
+      - "Đọc okr.mine qua API cùng cookie; so % trên hàng với progress, vạch [data-expected] với expected, «Tính từ N KR» với số KR"
+      - "1440 px tối: lặp ảnh E1-1440-toi"
+    expected: "exit 0; rang/man-mtkr.mjs trong phiên đo riêng, ở /okr 1440 px: với MỌI mục tiêu trên trang (ma trận toàn phần, in số mục tiêu và số KR đã so), khối [data-muc-tieu=<id>] chứa đúng một table và table đó chứa cả hàng mục tiêu (data-hang-muc-tieu) lẫn mọi hàng [data-kr] của mục tiêu; vùng danh sách không chứa [data-slot=card-header]; chữ % trên hàng mục tiêu bằng progress mà okr.mine trả cho đúng id (đọc API cùng cookie, không hardcode), vạch [data-expected] bằng expected (hoặc vắng khi expected null hoặc 0 — luật «kỳ vọng 0 là chưa có kỳ vọng» đã có trước vòng này), dòng phụ chứa «Tính từ N KR» với N = keyResults.length. Chiều đỏ ghim trong script: chạy cùng phép so trên trang /proto/muc-tieu-va-kr?state=ST-hien-tai (bố cục cũ, cờ --kiem-do-do) phải in 'muc tieu ngoai khung: <id>' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx", "apps/app/app/(app)/[slug]/okr/cua-toi.tsx", "packages/ui/src/components/simple-table.tsx", "_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs"]
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mtkr_bang_co_du_lieu
+    expected: "exit 0; bài DOM muc-tieu-va-kr.dom.tsx dựng CuaToi thật với tRPC giả trả một bản okr.mine parse bằng schema output thật (mucTieuOutput import từ apps/api/src/okr/okr.contracts.ts, không object viết tay) gồm hai mục tiêu, progress 49 và 25, expected 47: mỗi khối [data-muc-tieu] chứa một table, trong đó hàng mục tiêu và mọi hàng [data-kr] của nó; chữ '49%' trên đúng hàng mục tiêu thứ nhất; [data-expected='47']; dòng phụ 'Tính từ 4 KR'. Chiều đỏ ghim: một bản sao vẽ % từ trung bình tự tính thay vì progress (đặt progress=10 trong fixture) phải làm bài đỏ 'phan tram khong tu api: 10'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx", "apps/app/app/(app)/[slug]/okr/cua-toi.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.mtkr_theo_don_vi
+    expected: "exit 0; dựng DanhSach của theo-don-vi.tsx với ba mục tiêu (fixture parse bằng mucTieuOutput) có 2, 1, 3 KR: ba khối [data-muc-tieu] theo đúng thứ tự, mỗi khối chứa đúng một table; trong mỗi table hàng đầu tbody là hàng mục tiêu (mang data-hang-muc-tieu) rồi tới các hàng [data-kr] của chính nó theo thứ tự fixture (so mảng viết trước [[mt1,kr,kr],[mt2,kr],[mt3,kr,kr,kr]]); nhãn KR1…KRn đúng vị trí; mỗi thead mang lớp sr-only của SimpleTable header='sr-only' và vẫn có 4 th. Chiều đỏ ghim: đảo thứ tự KR trong một mục tiêu ở bản sao phải làm bài đỏ 'thu tu kr sai: mt3'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.mtkr_thu_mo
+    expected: "exit 0; bài DOM có bộ chuyển URL thật của nuqs (NuqsTestingAdapter, ghi lời cập nhật): ma trận viết trước {bấm chuột, Enter, Space} × {mục tiêu 1, mục tiêu 2} → sau mỗi thao tác các hàng [data-kr] của đúng mục tiêu rời DOM, nút mang aria-expanded=false, URL ghi thuMucTieu chứa đúng id; mở lại cái cuối → khoá thuMucTieu rời URL; dựng với ?thuMucTieu=khong-ton-tai → mọi mục tiêu mở, không lỗi; bấm tên mục tiêu không đổi URL thu/mở. In số ca. Chiều đỏ ghim: bản sao giữ trạng thái bằng useState thay URL phải làm bài đỏ 'url khong ghi thuMucTieu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/okr-search-params.ts", "apps/app/lib/search-param-keys.ts", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E5
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mtkr_man_that
+    steps:
+      - "Cùng phiên E1; 1440 px: bấm nút mũi tên của mục tiêu đầu → đếm hàng KR của nó, đọc aria-expanded, đọc location.search; ảnh E5-da-thu"
+      - "Tải lại trang → đếm lại; mở lại → location.search không còn thuMucTieu"
+      - "emulateMediaFeatures prefers-reduced-motion: reduce → getComputedStyle(icon).transitionDuration"
+    expected: "exit 0; trong trình duyệt thật: sau bấm, mục tiêu đầu còn 0 hàng [data-kr], aria-expanded=false, location.search có thuMucTieu=<id>; sau reload vẫn 0 hàng; sau mở lại search không còn thuMucTieu; với prefers-reduced-motion: reduce, transition-duration của icon mũi tên là 0s. Chiều đỏ ghim: cờ --kiem-do-do đo trên proto ST-cua-toi (giữ trạng thái trong bộ nhớ) phải in 'reload mat trang thai thu' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/okr-search-params.ts", "_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs"]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.mtkr_o_tien_do
+    expected: "exit 0; ma trận toàn phần viết trước, mỗi phần tử một KR (fixture parse bằng krOutput thật): {tăng tới khởi điểm 0, tăng tới khởi điểm 60, giảm xuống 8→2 hiện 3,5, mốc chưa xong, mốc xong, nguồn máy chưa có số, nguồn máy đo cạnh} → khẳng định chữ dòng số («hiện tại / đích» đúng như SoCuaKr hôm nay, mốc «Xong»/«Chưa xong»), %, có/không vạch, dòng phụ («Tăng tới · từ 60%», «Giảm xuống · từ 8 giờ», không «từ» khi khởi điểm 0), [data-dau-nguon] và [data-chua-chup] cho KR máy, nút [data-so-kr] mở sổ số khi xem được; không thead nào chứa chữ «Đích». Số khẳng định = số phần tử ma trận (in ra). Chiều đỏ ghim: bỏ nhánh khởi điểm khỏi bản sao phải làm bài đỏ 'thieu tu khoi diem: tang-60'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.mtkr_chua_co_kr
+    expected: "exit 0; mục tiêu keyResults rỗng: trong khối [data-muc-tieu] của nó, ngay sau hàng [data-hang-muc-tieu] là hàng [data-chua-co-kr] mang chữ okrMessages('vi').chuaCoKr; ô tiến độ của hàng mục tiêu mang «Chưa có KR để tính»; không có [data-kr]. Đối chứng dương: mục tiêu có KR không có [data-chua-co-kr]. Chiều đỏ ghim: bản sao không vẽ hàng rỗng phải làm bài đỏ 'thieu hang chua co kr'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mtkr_sheet
+    expected: "exit 0; dựng ObjectiveSheet thật với tRPC giả trả okr.objective parse bằng schema output thật (import từ okr.contracts.ts): (a) có whyNow, một alignment có keyResultTitle, 3 KR, progress 49 → thứ tự DOM trong tab KR: [data-khu=vi-sao] chứa đúng whyNow → [data-khu=gop-vao] có một dòng mang tên mục tiêu, đơn vị và «qua KR «<tên>»» → bảng KR nhãn KR1..KR3 → dòng [data-tien-do-tu] «Tiến độ mục tiêu 49% tính từ 3 KR»; menu thao tác KR, [data-cot-viec], nút [data-nut=them-kr] còn khi có quyền sửa; (b) whyNow rỗng → không [data-khu=vi-sao]; (c) alignments rỗng → không [data-khu=gop-vao]. Chiều đỏ ghim: bản sao đặt khu Góp vào trước Vì sao phải làm bài đỏ 'thu tu khu sai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.mtkr_cham
+    expected: "exit 0; dựng bảng Chấm điểm thật với dữ liệu khép kỳ parse bằng schema output thật: mỗi khối [data-muc-tieu-cham=<id>] chứa đúng một table; hàng đầu tbody mang [data-hang-muc-tieu-cham=<id>] với tên, người phụ trách và điểm hoặc «đã chấm k/n»; KR theo sau mang KR1…KRn; [data-o-hoc] và nút [data-nut=mang-sang] (hoặc [data-da-mang-sang]) nằm trong chính khối [data-muc-tieu-cham=<id>] đó; không [data-slot=card-header] ngoài khối. Bấm lưu điểm và lưu học gọi đúng thủ tục như trước (payload parse bằng schema input thật). Chiều đỏ ghim: bản sao đặt tiêu đề mục tiêu trong CardHeader phải làm bài đỏ 'muc tieu cham ngoai khung'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.mtkr_hang_ui
+    expected: "exit 0; packages/ui/test/simple-table-hang.dom.tsx: ma trận {mặc định, nested, joined, nested+joined} → class của tr: nested chứa lớp nền hàng con và không chứa border-b-0; joined chứa border-b-0 và không lớp nền; cả hai có cả hai; mặc định không cái nào; data-nested/data-joined phản ánh đúng; và {header mặc định, header='sr-only'} → sr-only: thead mang lớp sr-only, số th bằng số cột; mặc định: thead không mang sr-only. Bài cũ simple-table-hang-phu.dom.tsx (sub) và luoi-va-khong-dich.dom.tsx (selected) vẫn xanh. Chiều đỏ ghim: bản sao để joined thêm lớp nền phải làm bài đỏ 'joined dinh nen'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/simple-table.tsx", "packages/ui/src/lib/row-accent.ts", "packages/ui/test/simple-table-hang.dom.tsx"]
+
+  - id: E11
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.mtkr_khong_ve_tay
+    expected: "exit 0; rang/khong-ve-tay.mjs (gốc suy từ vị trí script) đọc AST (TypeScript compiler API) mọi .tsx trong apps/app/app/(app)/[slug]/okr/** và objective-sheet.tsx: không phần tử JSX SimpleTableRow nào có thuộc tính className mang lớp bg-, border (trần hoặc border-…) hoặc rounded (kể cả có tiền tố biến thể như hover:, [&>td]:, data-[state=open]: — tách tiền tố theo dấu «:» ngoài ngoặc vuông) ở BẤT KỲ chữ hằng nào trong giá trị — chuỗi trần, {\"...\"}, template, đối số cn(...), nhánh điều kiện; in số tệp và số SimpleTableRow đã quét (> 0). Trước khi quét, chạy ma trận tự kiểm mười một dạng viết sẵn trong script (chín dạng phải bắt, gồm hai dạng ngoặc vuông và hai dạng viền trần `border`, `!border`; hai dạng sạch phải không bắt, gồm một dạng có ngoặc vuông); lệch dạng nào in 'thuoc mu: <k>/11' và mã 3. Chiều đỏ ghim: bản sao (--goc) có <SimpleTableRow className={cn(\"p-2\", \"hover:bg-muted\")}> phải in 've tay: <tep>:<dong> hover:bg-muted' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "_acceptance/muc-tieu-va-kr/rang/khong-ve-tay.mjs"]
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.mtkr_diem_cam
+    expected: "exit 0; (a) BangMucTieu không điểm cắm: số tr trong các tbody bằng đúng số mục tiêu + số KR (+ số hàng chưa-có-KR); số [data-muc-tieu] bằng đúng số mục tiêu; mỗi [data-kr] có closest('[data-muc-tieu]') mang đúng id mục tiêu của KR đó (ma trận toàn phần mọi KR của fixture, in số đã so); (b) đủ sáu điểm cắm trả phần tử có data-test riêng: nhanMucTieu nằm trong ô tiêu đề của hàng [data-hang-muc-tieu]; duoiMucTieu là tr ngay trước hàng KR1; duoiKr là tr ngay sau đúng hàng KR được chọn và hàng KR đó mang data-joined; sauTenKr nằm trong ô tên KR; dangMo rỗng + onDoiMo ghi lời gọi → không hàng KR nào, bấm mũi tên gọi onDoiMo(id) đúng một lần; (c) cùng (b) cho bảng KR của ObjectiveSheet với duoiMucTieu, duoiKr, sauTenKr. Chiều đỏ ghim: hàm điểm cắm trả null phải cho số tr như (a) — bản sao vẽ tr rỗng khi null làm bài đỏ 'hang thua khi diem cam null'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/app/(app)/[slug]/okr/diem-cam.ts", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E13
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mtkr_man_that
+    steps:
+      - "Cùng phiên E1; trong kho đo gieo thêm một chu kỳ ở pha chấm điểm có ≥ 2 mục tiêu, mỗi mục tiêu ≥ 2 KR, người đăng nhập chấm được (qua thủ tục OKR thật như bộ mẫu của khep-ky-okr)"
+      - "Khung 375×812; ma trận viết trước bốn màn {/okr, /okr/theo-don-vi, sheet chi tiết, chấm điểm}, mỗi màn số hàng tối thiểu {mục tiêu ≥ 2 (sheet: 1), KR ≥ 4 (sheet: 2)}"
+      - "Mỗi màn: đo scrollWidth và innerWidth; đếm hàng; ba màn đầu: mỗi hàng mục tiêu/KR có đúng một [data-o-tien-do] hiển thị cùng td với tên; chấm điểm: mỗi hàng mục tiêu có ô điểm hoặc «Đã chấm k/n» hiển thị, mỗi hàng KR có ô điểm hiển thị cùng td với tên"
+      - "Ảnh E13-375-<man>-<sang|toi>"
+    expected: "exit 0; ở 375 px, bốn màn: document.documentElement.scrollWidth == innerWidth; in số hàng đo mỗi màn, màn nào dưới mức tối thiểu đã khai thì in 'man rong: <man>' và mã 1; ba màn đầu: mỗi hàng mục tiêu và KR có đúng một [data-o-tien-do] hiển thị (offsetParent khác null) cùng td với tên; chấm điểm: ô điểm hoặc «Đã chấm k/n» hiển thị cùng td với tên; không [data-slot=table-container] nào trong khối mục tiêu, sheet hay khối chấm cuộn ngang (scrollWidth ≤ clientWidth + 1) hay cuộn dọc bên trong (scrollHeight ≤ clientHeight + 1, in 'bang cuon doc: <man>' khi vi phạm), dữ liệu gieo có một tên KR 120 ký tự không dấu cách. Ảnh evidence/E13-375-*.png. Chiều đỏ ghim: --kiem-do-do chèn một phần tử 500 px phải in 'tran ngang' và mã 1; --kiem-do-do-rong mở chấm điểm ở chu kỳ không đang chấm phải in 'man rong: cham' và mã 1; --kiem-do-do-cuon đo trên proto ST-cua-toi sau khi chèn một tên KR 120 ký tự không dấu cách (proto không có wrap-anywhere) phải in 'bang cuon ngang: <man>' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs"]
+
+  - id: E14
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.mtkr_ho_so_cham
+    expected: "exit 0; rang/ho-so-cham.mjs (gốc suy từ vị trí script) mang danh sách viết sẵn 41 eval của 14 hồ sơ OKR đã ký rút từ mục «Móc DOM phải giữ» của design doc (dat-okr-trong-crm E11 E12 E13 E20, so-okr-tu-chay E11 E12 E13, canh-kr-okr E11 E12 E13, khep-ky-okr E3 E4 E7, cap-nhat-tuan-okr E18 E29, gioi-han-duyet-cay-okr E15 E17, ux-lai-thu-8c-okr E2 E3 E5 E6 E9 E13 E14 E15, toan-canh-okr E2 E3 E7 E14 E23, no-sau-luot-5-okr E10, no-sau-luot-4-okr E8, khung-tao-okr-nhu-deal E2 E11 E12 E22, hop-thoai-giu-cho-dang-nhap E8 E9, okr-soat-anh-luot-3 E1 E2, thanh-vien-hai-khoi-cung-khuon E17) và in 'bo ra: <slug>/<E> — <lý do>' cho đúng ba eval bỏ ra (khung-tao-okr-nhu-deal/E18, okr-soat-anh-luot-3/E12, okr-soat-anh-luot-3/E13); KHÔNG cộng eval theo glob paths, KHÔNG có lớp miễn; lệnh của eval nào khớp ho-so-cham/khong-hoi-quy/repin-lane/thuoc-cu thì thoát 2 'thuoc chay thuoc trong danh sach'; in 'danh sach N eval = se chay M + khong chay duoc K' và thoát 2 nếu M + K != N hay số eval thật đã chạy != M. Mọi lệnh chạy trên worktree đóng băng (đỉnh ở sha HEAD, merge-base B = merge-base(HEAD, origin/onehub)), làm sạch (git checkout -- . và git clean -fd) trước MỖI lệnh; kết quả đỉnh ghi sổ ket-qua-<sha>-<HSC_LUOT>.jsonl (vắng = mac-dinh), kết quả B ghi sổ ket-qua-goc-<B>.jsonl dùng lại mọi lượt cùng B; khoá dang-chay-<sha>-<luot>.pid: lượt thứ hai cùng đỉnh và lượt in 'dang co luot khac chay' rồi chờ. Có biến HSC_DONG_KET thì script tự nối dòng 'EXIT <mã>' vào tệp đó ngay trước khi thoát. Quan hệ: eval đỏ ở đỉnh thì chạy ở B; đỏ ở B in 'do san o B: <slug>/<E>' và không làm hỏng; xanh ở B thì chạy lại một lần ở đỉnh — xanh lại in 'chap chon: …', vẫn đỏ in 'hoi quy: <slug>/<E>' và mã 1; dòng cuối in tổng xanh/chập chờn/đỏ sẵn/hồi quy. Chiều đỏ ghim: cờ --kiem-do-do chạy các lệnh của danh sách trên bản sao đỉnh đã xoá thuộc tính data-muc-tieu khỏi khoi-muc-tieu.tsx; lệnh đầu tiên đỏ trên bản phá mà XANH trên đỉnh nguyên in 'hoi quy: <slug>/<E>' và mã 1; đỏ cả trên đỉnh nguyên thì in 'khong quy duoc …' và đi tiếp; hết danh sách mà không quy được thì mã 3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "packages/ui/src/components/simple-table.tsx", "packages/ui/src/lib/row-accent.ts", "_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs"]
+
+  - id: E15
+    criterion: AC-12
+    executor: judgment
+    question: >-
+      Nhìn ba ảnh ở 1440 px (Của tôi, Theo đơn vị, sheet chi tiết), mỗi ảnh hai theme. Với từng mục tiêu
+      trên ảnh: những KR nào thuộc về nó, và tiến độ của mục tiêu là bao nhiêu? Có chỗ nào một KR
+      trông như thuộc mục tiêu khác, hoặc tiến độ mục tiêu không thấy được không? So với ảnh bản cũ
+      (E16-hien-tai), liên kết mục tiêu–KR rõ hơn hay không?
+    inputs: [_acceptance/muc-tieu-va-kr/evidence/E1-1440-sang.png, _acceptance/muc-tieu-va-kr/evidence/E1-1440-toi.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-theo-don-vi-sang.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-theo-don-vi-toi.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-sheet-sang.png, _acceptance/muc-tieu-va-kr/evidence/E16-1440-sheet-toi.png, _acceptance/muc-tieu-va-kr/evidence/E16-hien-tai.png]
+    expected: >-
+      PASS khi với mọi mục tiêu trên ảnh, người chấm kể đúng tập KR của nó và đọc được % của nó, và
+      không có KR nào nằm lửng giữa hai mục tiêu, ở cả ảnh sáng lẫn tối; FAIL nêu ảnh và mục tiêu gây nhầm; UNCERTAIN khi thiếu bất kỳ ảnh nào trong bảy ảnh.
+    evidence_required: [run_id, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx"]
+
+  - id: E16
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mtkr_man_that
+    steps:
+      - "Cùng phiên E1; 1440 px sáng/tối"
+      - "Mở /okr/theo-don-vi của đơn vị có ≥ 3 mục tiêu → ảnh E16-1440-theo-don-vi-<sang|toi>; mở sheet mục tiêu có whyNow + góp vào → ảnh E16-1440-sheet-<sang|toi> (mỗi theme một lượt)"
+      - "Mở /proto/muc-tieu-va-kr?state=ST-hien-tai → ảnh E16-hien-tai (bản cũ để so)"
+    expected: "exit 0; năm ảnh (theo-don-vi sáng/tối, sheet sáng/tối, hien-tai) tồn tại, mỗi ảnh > 10 KB, sha256 ảnh sáng khác ảnh tối của cùng màn (in hai cặp băm); sheet trong ảnh có [data-khu=vi-sao] và [data-khu=gop-vao] hiển thị. Chiều đỏ ghim: --kiem-do-do mở sheet của mục tiêu không có whyNow phải in 'thieu khu vi-sao trong anh' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "_acceptance/muc-tieu-va-kr/rang/man-mtkr.mjs"]
+
+  - id: E17
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.mtkr_trang_thai_cu
+    expected: "exit 0; bài rút danh sách id ST-mtkr-*, ST-cuatoi-* và ST-donvi-* từ bảng UX-STATE-TABLE của design doc lúc chạy (đường suy từ vị trí bài); mỗi id có đúng một ca dựng trạng thái đó và khẳng định chữ/điều khiển của dòng bảng; ST-mtkr-hep là bố cục, bài khai giao cho E13 (in 'giao E13: ST-mtkr-hep'); id trong bảng thiếu ca → đỏ 'thieu ca: <id>'; ca không có id → đỏ 'ca la: <id>'; mỗi dòng bảng mang mã data-trang-thai thật (ST-donvi-dangtai, ST-donvi-loi, ST-cuatoi-rong, ST-donvi-rong, ST-donvi-chuakychay, ST-cuatoi-codulieu, ST-donvi-danhsach) thì ca khẳng định đúng chuỗi đó trên [data-trang-thai] của màn; lỗi trên Của tôi và trên Theo đơn vị: bấm Thử lại → đếm đúng 1 lần gọi lại thủ tục đã lỗi trên từng màn. Chiều đỏ ghim: thêm dòng ST-mtkr-gia vào bản sao design doc phải làm bài đỏ 'thieu ca: ST-mtkr-gia'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["docs/superpowers/specs/2026-10-02-muc-tieu-va-kr-design.md", "apps/app/app/(app)/[slug]/okr/cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/test/muc-tieu-va-kr.dom.tsx"]
+
+  - id: E18
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.mtkr_san_thiet_ke
+    expected: "exit 0; design-gate --mode static đạt trên từng tệp đổi: simple-table.tsx, bang-muc-tieu.tsx, khoi-muc-tieu.tsx, bang-kr.tsx, tien-do-kr.tsx, cham-diem.tsx, objective-sheet.tsx. Chiều đỏ: design-gate là thước của kit, đã có chiều đỏ riêng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/simple-table.tsx", "apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/bang-kr.tsx", "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx", "apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx"]

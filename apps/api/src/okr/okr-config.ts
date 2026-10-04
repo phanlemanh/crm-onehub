@@ -1,3 +1,4 @@
+import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
 import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	LOI_KHUON_CAP_NHAT,
@@ -5,7 +6,9 @@ import {
 } from "@crm/validation/okr-cap-nhat";
 import { OKR_HOI_Y } from "@crm/validation/okr-hoi-y";
 import { OKR_KHEP } from "@crm/validation/okr-khep";
+import { SO_KR_MOC } from "@crm/validation/okr-kr";
 import { OKR_MAU } from "@crm/validation/okr-mau";
+import { TIEN_TO_VET_KARA } from "@crm/validation/okr-theo-kara";
 import type { MaThieu } from "./hoi-y";
 
 export const OKR = {
@@ -19,8 +22,16 @@ export const OKR = {
 		viSao: 500,
 	},
 	lo: { toiDaDong: 1000, toiDaKyTu: 200_000 },
-	troLy: { soLuotGanDay: 50, ghiChuVet: "tro-ly-okr:" },
-	mau: { moc: { startValue: 0, targetValue: 1 }, trongSoKr: 1 },
+	troLy: { soLuotGanDay: 50, ghiChuVet: TIEN_TO_VET_KARA },
+	soan: {
+		ghiChuVet: "soan-okr:",
+		soCuocGanDay: 50,
+		ngayCongBo: 14,
+		tinhNang: "okr.soan" satisfies TinhNang,
+		suKien: { nguoiGo: "message.received", xongBuoc: "step.completed" },
+		phanVi: { giua: 0.5, cao: 0.9 },
+	},
+	mau: { moc: SO_KR_MOC, trongSoKr: 1 },
 	nhap: {
 		tenCotDau: ["muc tieu", "objective"],
 		kieu: {
@@ -41,6 +52,8 @@ export const OKR = {
 			"Chỉ người phụ trách KR hoặc người sửa được mục tiêu mới sửa KR này.",
 		khongCoChuKy: (id: string) => `Không có chu kỳ nào mang mã ${id}.`,
 		khongCoMucTieu: (id: string) => `Không có mục tiêu nào mang mã ${id}.`,
+		krKhacGiaoDich: (objectiveId: string, dangGhi: string) =>
+			`KR nhắm mục tiêu ${objectiveId} nhưng giao dịch đang ghi mục tiêu ${dangGhi}.`,
 		khongThayMucTieu:
 			"Không thấy mục tiêu này — có thể nó không còn, hoặc bạn không được xem.",
 		khongCoKr: (id: string) => `Không có KR nào mang mã ${id}.`,
@@ -140,6 +153,44 @@ export const OKR = {
 			krHong: (thu: number, ten: string, cau: string) =>
 				`KR thứ ${thu} «${ten}»: ${cau}`,
 			mucTieuHong: (cau: string) => `Mục tiêu từ mẫu: ${cau}`,
+		},
+		soan: {
+			khongCoCuoc:
+				"Không thấy cuộc soạn này — có thể nó không còn, hoặc bạn không được xem.",
+			cuocKhongDang: "Cuộc soạn này đã đưa vào bộ OKR hoặc đã bỏ.",
+			khongPhaiNguoiMo:
+				"Chỉ người mở cuộc soạn này hoặc quản trị mới thử lại hay gửi tiếp được.",
+			cuocKhacDonVi: "Cuộc soạn này thuộc đơn vị hay chu kỳ khác.",
+			khongBoDuocCuoc:
+				"Cuộc này không phải cuộc đang soạn của đơn vị, hoặc chỉ người mở nó và quản trị bỏ được.",
+			thuLaiHayBo:
+				"Chọn một: thử lại cuộc đang soạn, hoặc bỏ nó để mở cuộc mới.",
+			khongCoDong: (id: string) => `Không có dòng nháp nào mang mã ${id}.`,
+			dongCu: "Dòng này thuộc bản nháp cũ — Trợ lý đã nộp bản mới hơn.",
+			chaDaBac: (ten: string) =>
+				`Mục tiêu cha «${ten}» đã bị bác — không nhận dòng dưới nó.`,
+			chaBiLoai: (ten: string) =>
+				`Mục tiêu cha «${ten}» không qua kiểm — không nhận dòng dưới nó.`,
+			khongCoCha: (khoa: string) =>
+				`Không có Mục tiêu cha «${khoa}» trong cuộc soạn này.`,
+			chaChuaNhan: (ten: string) =>
+				`Mục tiêu cha «${ten}» chưa được nhận — nhận nó, hoặc bác dòng dưới nó.`,
+			canGiaTri: "Sửa cần một giá trị mới.",
+			tenSuaKhongHop: (tran: number) =>
+				`Tên sau khi sửa quá ngắn hoặc dài quá ${tran} ký tự.`,
+			cachKhongHop: "Cách quyết không hợp với loại dòng.",
+			kyKhongLapKeHoach: "Chu kỳ không còn ở pha lập kế hoạch.",
+			khongCoDongNhan: "Chưa có Mục tiêu nào được nhận để đưa vào.",
+			thieuSoKr: (ten: string) =>
+				`Điền khởi điểm và đích cho KR «${ten}» trước khi đưa vào.`,
+			soKrLa: (id: string) => `Dòng ${id} không phải KR đã nhận của cuộc này.`,
+			mocKhongNhanSo: (ten: string) =>
+				`KR «${ten}» là mốc — không nhận khởi điểm và đích.`,
+			vuotTranMucTieu: (tran: number) =>
+				`Vượt trần ${tran} Mục tiêu mỗi đơn vị.`,
+			duaVaoHaiLan: "Cuộc này đã được đưa vào bộ OKR.",
+			donViThieuId: "Bộ phận cần divisionId, phòng ban cần departmentId.",
+			chuaCoKhoaMoHinh: "Chưa có khoá model cho Trợ lý OKR.",
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

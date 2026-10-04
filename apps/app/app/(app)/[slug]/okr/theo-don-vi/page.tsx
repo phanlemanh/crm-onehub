@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageShellContent, PageShellLoading } from "@/components/page-shell";
+import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -64,7 +65,7 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 
 	return (
 		<HydrateClient>
-			<TheoDonVi />
+			<TheoDonVi cauNoiOkr={okrBridgeConfigured()} />
 		</HydrateClient>
 	);
 }

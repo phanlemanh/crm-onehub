@@ -2,8 +2,6 @@
 
 import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import Renew from "@carbon/icons-react/es/Renew";
-import ThumbsDown from "@carbon/icons-react/es/ThumbsDown";
-import ThumbsUp from "@carbon/icons-react/es/ThumbsUp";
 import Warning from "@carbon/icons-react/es/Warning";
 import {
 	InlineCitation,
@@ -21,6 +19,7 @@ import {
 	InlineCitationSource,
 	InlineCitationText,
 } from "@crm/ui/components/ai-elements/inline-citation";
+import { AiFeedback } from "@crm/ui/components/ai-feedback";
 import {
 	Alert,
 	AlertAction,
@@ -45,7 +44,6 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { ConfidenceIndicator } from "@crm/ui/components/okr-status";
 import { Shimmer } from "@crm/ui/components/shimmer";
 import { Skeleton } from "@crm/ui/components/skeleton";
-import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { OKR_TOM_TAT } from "@crm/validation/okr-tom-tat";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { type ReactNode, useId, useState } from "react";
@@ -186,10 +184,7 @@ function PhanHoi({
 	);
 	const giaTri =
 		chon === null ? "" : chon ? PHAN_HOI.huuIch : PHAN_HOI.khongHuuIch;
-	const doi = (v: string) => {
-		if (v !== PHAN_HOI.huuIch && v !== PHAN_HOI.khongHuuIch) return;
-		const moi = v === PHAN_HOI.huuIch;
-		if (moi === chon) return;
+	const doi = (moi: boolean) => {
 		const cu = chon;
 		setChon(moi);
 		gui.mutate(
@@ -203,27 +198,14 @@ function PhanHoi({
 		);
 	};
 	return (
-		<div className="flex flex-wrap items-center gap-3" data-phan-hoi={giaTri}>
-			<ToggleGroup
-				aria-label={m.phanHoiNhom}
-				onValueChange={doi}
-				size="sm"
-				type="single"
-				value={giaTri}
-				variant="outline"
-			>
-				<ToggleGroupItem value={PHAN_HOI.huuIch}>
-					<Icon icon={ThumbsUp} data-icon="inline-start" />
-					{m.huuIch}
-				</ToggleGroupItem>
-				<ToggleGroupItem value={PHAN_HOI.khongHuuIch}>
-					<Icon icon={ThumbsDown} data-icon="inline-start" />
-					{m.khongHuuIch}
-				</ToggleGroupItem>
-			</ToggleGroup>
-			<p className="text-muted-foreground text-xs" role="status">
-				{chon !== null && !gui.isPending ? m.daGhi : ""}
-			</p>
+		<div data-phan-hoi={giaTri}>
+			<AiFeedback
+				label={m.phanHoiNhom}
+				onChange={doi}
+				pending={gui.isPending}
+				thanks={m.daGhi}
+				value={chon}
+			/>
 		</div>
 	);
 }

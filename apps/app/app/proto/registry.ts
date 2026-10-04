@@ -18,8 +18,11 @@ import { KhungTaoOkrNhuDealMau } from "./_modules/khung-tao-okr-nhu-deal";
 import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
+import { MucTieuVaKrMau } from "./_modules/muc-tieu-va-kr";
+import { NenKaraMau } from "./_modules/nen-kara";
 import { NhacQuaZaloMau } from "./_modules/nhac-qua-zalo";
 import { NoiZaloChoNguoiMoiMau } from "./_modules/noi-zalo-cho-nguoi-moi";
+import { SoanOkrCungTroLyMau } from "./_modules/soan-okr-cung-tro-ly";
 import { SuaAnChuKyOkrMau } from "./_modules/sua-an-chu-ky-okr";
 import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet";
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
@@ -47,6 +50,7 @@ const BANG_GHEP = {
 	"keo-tha-thoa-thuan": KeoThaThoaThuanMau,
 	"khep-ky-okr": KhepKyOkrMau,
 	"khung-trang-cai-dat": KhungTrangCaiDatMau,
+	"nen-kara": NenKaraMau,
 	"kho-tai-lieu": KhoTaiLieuMau,
 	"may-soan-de-xuat": KhoTaiLieuMau,
 	"tim-va-dieu-huong-kho": KhoTaiLieuMau,
@@ -59,7 +63,9 @@ const BANG_GHEP = {
 	"tro-ly-okr-tom-tat": TroLyOkrTomTatMau,
 	"may-nhac-truoc-nguoi": MayNhacTruocNguoiMau,
 	"moi-phia-deu-thay-ke-hoach": MoiPhiaDeuThayKeHoachMau,
+	"muc-tieu-va-kr": MucTieuVaKrMau,
 	"nhac-qua-zalo": NhacQuaZaloMau,
+	"soan-okr-cung-tro-ly": SoanOkrCungTroLyMau,
 	"noi-zalo-cho-nguoi-moi": NoiZaloChoNguoiMoiMau,
 	"sua-an-chu-ky-okr": SuaAnChuKyOkrMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
