@@ -1,0 +1,13 @@
+apps/app/app/(landing)/dat-mat-khau/[token]/page.tsx
+apps/app/app/(landing)/sign-in/page.tsx
+apps/app/app/proto/_modules/cua-vao-dang-nhap/index.tsx
+apps/app/app/proto/catalog.ts
+apps/app/app/proto/registry.ts
+apps/app/components/auth-shell.tsx
+apps/app/components/cua-vao/khoi-huong-dan.tsx
+apps/app/components/cua-vao/o-loi-dang-nhap.tsx
+apps/app/lib/cua-vao/chon-cua.ts
+apps/app/lib/cua-vao/loi-dang-nhap.ts
+apps/app/lib/cua-vao/thoi-han.ts
+apps/app/lib/messages/auth.ts
+apps/app/lib/messages/cua-vao.ts
