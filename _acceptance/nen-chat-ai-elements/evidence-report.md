@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 80fea3400e5c375fb68ed9df1c79280ca748b079
+verified_commit: ab5c600cd7e710031147763c108126087bb9249c
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -247,3 +247,7 @@ sha: 68478e877021999d6c540e4dd4a93e6d57549890 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 13 — 2026-10-04, do hoá cũ sau khi gộp onehub #247 vào PR #231, đổi tên migration, vá ba xung đột ngầm
 run_id: repin-20261004T060523Z-75459
 sha: 80fea3400e5c375fb68ed9df1c79280ca748b079 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 14 — 2026-10-04, do bo-xuong-kara (K1) thêm hai mục MIEN_TRU vào mo-coi.mjs và hai mục so-lech-chuan.md; gộp onehub
+run_id: repin-20261004T151416Z-39203
+sha: ab5c600cd7e710031147763c108126087bb9249c · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
