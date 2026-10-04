@@ -1,0 +1,29 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_soan_okr_khong_tru_luot_do · app http://localhost:4455 · api http://localhost:4729
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+KHO crm_soan_okr_khong_tru_luot_do
+GIEO cuoc cmutjtjas00005ntyez61s76b (1440) soLuot 0
+DUNG 1440: thay cau khong-noi-duoc
+DUNG 1440: cua da nhan POST mo phien (1)
+DUNG 1440: thay cau khong bi tinh
+DUNG 1440: soLuot sau mo 0
+DUNG 1440: khong tran ngang (loi) 0
+DUNG 1440: sau bam thay Da thu lai 1 lan
+DUNG 1440: soLuot sau bam 0
+DUNG 1440: khong tran ngang (thu lai) 0
+GIEO cuoc cmutjtm2800015nty3lhfmhgw (390) soLuot 0
+DUNG 390: thay cau khong-noi-duoc
+DUNG 390: cua da nhan POST mo phien (1)
+DUNG 390: thay cau khong bi tinh
+DUNG 390: soLuot sau mo 0
+DUNG 390: khong tran ngang (loi) 0
+DUNG 390: sau bam thay Da thu lai 1 lan
+DUNG 390: soLuot sau bam 0
+DUNG 390: khong tran ngang (thu lai) 0
+16 DUNG, 0 SAI
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0

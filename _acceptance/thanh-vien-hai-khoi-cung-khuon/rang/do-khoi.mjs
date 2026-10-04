@@ -31,6 +31,7 @@ const LECH_PX = 1;
 const SO_NAC_CON_LAN = 20;
 const NAC_NGANG_PX = 200;
 const CHO_CON_LAN_MS = 80;
+const SO_NHIP_DUNG_YEN = 3;
 const PHA_SAU_GIEO = process.env.TVHK_PHA_SAU_GIEO === "1";
 const LOI_DA_CO = "That address is already on the list.";
 const t = thanhVienMessages("vi");
@@ -287,7 +288,8 @@ async function doCuonNgang(p) {
 	}
 	await p.mouse.move(vo.x, vo.y);
 	let truoc = -1;
-	for (let i = 0; i < SO_NAC_CON_LAN; i++) {
+	let dungYen = 0;
+	for (let i = 0; i < SO_NAC_CON_LAN && dungYen < SO_NHIP_DUNG_YEN; i++) {
 		await p.mouse.wheel({ deltaX: NAC_NGANG_PX });
 		await ngu(CHO_CON_LAN_MS);
 		const nay = await p.evaluate(
@@ -295,7 +297,7 @@ async function doCuonNgang(p) {
 			t.duocPhepVao.tieuDe,
 			trongTrang.toString(),
 		);
-		if (nay === truoc) break;
+		dungYen = nay === truoc ? dungYen + 1 : 0;
 		truoc = nay;
 	}
 	const ket = await p.evaluate(
