@@ -126,10 +126,13 @@ function doThanh() {
 		dsTop: ds ? Math.round(ds.getBoundingClientRect().top) : null,
 		cuoiLaNhom: Boolean(nhom) && h.lastElementChild === nhom,
 		nutSoan: nhom?.querySelector("button")?.textContent?.trim() ?? null,
+		hinh: nhom ? (nhom.getAttribute("data-nut-soan") ?? nhom.querySelector("[data-nut-soan]")?.getAttribute("data-nut-soan") ?? null) : null,
 		nutKhoa: nhom?.querySelector("button")?.disabled ?? null,
 		chuThe: ban?.textContent ?? "",
 	};
 }
+
+const HINH_CUOI = { "mo-duoc": "nut", tiep: "nut-tiep", "che-do-an": "nut-an", "het-cuoc": "nut-het-cuoc", "chua-cau-hinh": "nut-chua-cau-hinh" };
 
 async function doMotDang(ten, { chuPhu = [], chan = !TAT_CHAN, dangTaiCo = true }) {
 	const { ctx, p } = await moTrang(cookie["quan-tri"], BD.kho[1440]);
@@ -167,6 +170,7 @@ async function doMotDang(ten, { chuPhu = [], chan = !TAT_CHAN, dangTaiCo = true 
 		}, chuPhu[0] ?? "");
 	const sau = await p.evaluate(doThanh);
 	await chup(p, `E3-${ten}-sau-tra`);
+	kiem(sau?.hinh === HINH_CUOI[ten], `chua ve dang: ${ten} (hinh=${sau?.hinh}, mong ${HINH_CUOI[ten]})`);
 	const motHang = sau.tops.length === 1 && (!dangTaiCo || truoc.tops.length === 1);
 	const khongNhay = !dangTaiCo || (Math.abs(sau.cao - truoc.cao) <= 1 && Math.abs((sau.dsTop ?? 0) - (truoc.dsTop ?? 0)) <= 1);
 	const khongChu = chuPhu.every((c) => !sau.chuThe.includes(c));
@@ -272,7 +276,12 @@ async function phanDienThoai() {
 		console.log("KHONG DO: kho do khong co thoa thuan nao");
 		await ket(2);
 	}
-	const leRa = mo.sheet.leRa;
+	const ct = await trpc(API, cookie["truong-phong"]).hoi("okr.objective", { id: idMau("mt", MT_A) });
+	if (ct.expected === null || ct.expected === undefined) {
+		console.log("KHONG DO: muc tieu khong co ky vong");
+		await ket(2);
+	}
+	const leRa = mo.sheet.leRa.replace("{n}", String(ct.expected));
 	for (const kho of [BD.kho[375], BD.kho[390]]) {
 		const { ctx, p } = await moTrang(cookie["truong-phong"], kho);
 		await moKhung(p, slug, MT_A);
@@ -290,7 +299,7 @@ async function phanDienThoai() {
 		const khongCatDoc = o.every((x) => x.catDoc <= 1);
 		if (!kiem(khongCatNgang, `o so bi cat: phu-trach ${kho.ten}`)) {
 		} else if (!kiem(khongCatDoc, `o so bi cat doc: phu-trach ${kho.ten}`)) {
-		} else if (kiem(tienDo.includes(leRa.split("{n}")[0].trim()) && phuTrach.includes(BD.tenDai), `o so thieu chu: ${kho.ten} (${tienDo} | ${phuTrach})`))
+		} else if (kiem(tienDo.includes(leRa) && phuTrach.includes(BD.tenDai), `o so thieu chu: ${kho.ten} (${tienDo} | ${phuTrach})`))
 			console.log(`o so ok ${kho.ten}`);
 		if (kiem((dau.canLe === "left" || dau.canLe === "start") && dau.khoangAnh !== null && dau.khoangAnh <= 16, `ten can giua: muc-tieu ${kho.ten} (${dau.canLe}, ${dau.khoangAnh})`))
 			console.log(`can trai ok muc-tieu ${kho.ten}`);
@@ -330,8 +339,17 @@ async function phanDienThoai() {
 		const tab = await d.p.$("[role=dialog] [role=tabpanel][data-state=active]");
 		const hopTab = await tab.boundingBox();
 		await d.p.mouse.move(hopTab.x + hopTab.width / 2, hopTab.y + Math.min(hopTab.height / 2, 200));
+		const cuonTab = () =>
+			d.p.evaluate(() => {
+				const panel = document.querySelector("[role=dialog] [role=tabpanel][data-state=active]");
+				const vung = [panel, ...(panel?.querySelectorAll("*") ?? [])].find((e) => /(auto|scroll)/.test(getComputedStyle(e).overflowY) && e.scrollHeight > e.clientHeight);
+				return vung ? vung.scrollTop : null;
+			});
+		const truocCuon = await cuonTab();
 		await d.p.mouse.wheel({ deltaY: 200 });
 		await tre(800);
+		const sauCuon = await cuonTab();
+		kiem(truocCuon !== null && sauCuon !== null && sauCuon > truocCuon, `than tab thoa thuan khong cuon: ${kho.ten} (${truocCuon} -> ${sauCuon})`);
 		const dd2 = await d.p.evaluate(doDau);
 		await chup(d.p, `E8-thoa-thuan-cuon-${kho.ten}`);
 		kiem(Math.abs((dd2.tenTop ?? 0) - (dd.tenTop ?? 0)) <= 1, `thoa thuan doi cau truc: ${kho.ten}`);

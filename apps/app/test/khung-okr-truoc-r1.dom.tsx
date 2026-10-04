@@ -337,6 +337,7 @@ const BAT = {
 	thieuBoiCanh: false,
 } as const;
 const TRAN = String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy);
+const CO_DS = new Set(["nut-tiep", "nut-an", "mo-co-cuoc", "nut-het-cuoc"]);
 
 const DANG_CO_CHU_PHU: DangSoan[] = [
 	{
@@ -493,6 +494,7 @@ describe("nut-soan", () => {
 
 describe("popover-soan", () => {
 	test("sáu dạng có chữ phụ: «i» mở popover chứa đúng chữ, Esc trả focus", async () => {
+		let soBamDs = 0;
 		for (const d of DANG_CO_CHU_PHU) {
 			const san = await moDonVi({ sanSang: d.sanSang, quanTri: d.quanTri });
 			const i = q("[data-nut=thong-tin-soan]");
@@ -512,16 +514,21 @@ describe("popover-soan", () => {
 				q("[data-thong-tin-soan]"),
 				`enter khong mo: ${d.ten}`,
 			).not.toBeNull();
-			const ds = qa("[data-thong-tin-soan] [data-nut=ds-cuoc]")[0];
+			const ds = qa("[data-thong-tin-soan] [data-nut=ds-cuoc]")[0] ?? null;
+			expect(Boolean(ds), `ds cuoc lech ma tran: ${d.ten}`).toBe(
+				CO_DS.has(d.ten),
+			);
 			if (ds) {
 				await bam(ds, "ds cuoc");
 				expect(san.url().get("dsCuoc"), `ds cuoc khong mo: ${d.ten}`).toBe("1");
+				soBamDs += 1;
 			}
 			for (const s of dangMo) await act(async () => s.root.unmount());
 			dangMo = [];
 			document.body.innerHTML = "";
 		}
-		console.log(`so dang: ${DANG_CO_CHU_PHU.length}`);
+		expect(soBamDs, "so lan bam ds cuoc").toBe(CO_DS.size);
+		console.log(`so dang: ${DANG_CO_CHU_PHU.length} · bam ds: ${soBamDs}`);
 	});
 });
 
@@ -793,6 +800,7 @@ describe("lien-ket-cheo", () => {
 		await moHop("cong-khai");
 		await choTuChoi(true);
 		const truoc = q("[data-nguoi-xem]")?.textContent;
+		expect(truoc ?? "", "chua them duoc nguoi xem").toContain(HUNG.name);
 		await bam(q('[data-nut="mo-can-chinh"]'), "mo can chinh");
 		expect(
 			document.body.textContent?.includes(ui.dialog.boThayDoi.tieuDe),

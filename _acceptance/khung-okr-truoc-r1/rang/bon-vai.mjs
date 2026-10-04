@@ -79,13 +79,20 @@ if (!CO_DO)
 				h.appendChild(s);
 			});
 		const d = await p.evaluate((cau) => {
-			const nhom = document.querySelector("[data-nhom-soan]");
+			const hien = (e) => e.getBoundingClientRect().height > 0;
+			const hang = [...document.querySelectorAll("[data-hang-nut]")].find(hien);
+			const nhom = hang?.querySelector("[data-nhom-soan]") ?? null;
 			return {
+				coHang: Boolean(hang),
 				coNhom: Boolean(nhom),
 				khoa: nhom?.querySelector("button")?.disabled ?? null,
 				coCau: document.body.innerText.includes(cau),
 			};
 		}, ms.nut.chuaCauHinh);
+		if (!kiem(d.coHang, `trang khong ve: ${vai}`)) {
+			await ctx.close();
+			continue;
+		}
 		const dung = vai === "quan-tri" ? d.coNhom && d.khoa === true : !d.coNhom && !d.coCau;
 		const thongDiep = vai === "quan-tri" ? `quan tri thieu nut khoa` : `nguoi thuong thay nut: ${vai}`;
 		if (kiem(dung, thongDiep)) console.log(`vai soan ok ${vai}`);
