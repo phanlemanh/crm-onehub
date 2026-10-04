@@ -929,6 +929,27 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-hienthi-hoilai", nhan: "Mở tab Căn chỉnh — hỏi bỏ thay đổi" },
 		],
 	},
+	{
+		slug: "thanh-vien-vao-dung",
+		ten: "Thành viên vào đúng — thẻ Tên miền nội bộ, hộp cho phép báo người đã là thành viên",
+		states: [
+			{ id: "ST-ten-mien-co", nhan: "Quản trị — đã có tên miền" },
+			{ id: "ST-ten-mien-rong", nhan: "Quản trị — chưa có tên miền nào" },
+			{ id: "ST-ten-mien-dang-tai", nhan: "Thẻ đang tải" },
+			{ id: "ST-ten-mien-dang-luu", nhan: "Đang lưu" },
+			{ id: "ST-ten-mien-loi-nhap", nhan: "Lỗi nhập — tên miền thư công cộng" },
+			{ id: "ST-ten-mien-khoa", nhan: "Thành viên thường — thẻ khoá" },
+			{ id: "ST-ten-mien-loi-tai", nhan: "Tải thẻ lỗi — Thử lại" },
+			{
+				id: "ST-cho-phep-da-la-thanh-vien",
+				nhan: "Hộp cho phép — người đã là thành viên",
+			},
+			{
+				id: "ST-dau-trang-sau-loi",
+				nhan: "Nút đầu trang hiện sau lỗi tải đầu",
+			},
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
