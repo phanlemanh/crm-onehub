@@ -19,6 +19,7 @@ import { AllowancesTable } from "./allowances-table";
 import { ChoPhepDiaChi } from "./cho-phep-dia-chi";
 import { membersSearchParams } from "./members-search-params";
 import { MembersTable } from "./members-table";
+import { TenMienNoiBo } from "./ten-mien-noi-bo";
 
 export async function generateMetadata(): Promise<Metadata> {
 	return { title: thanhVienMessages(await getLocale()).trang.tieuDeTab };
@@ -88,6 +89,7 @@ async function Members({
 		queryClient.prefetchQuery(
 			trpc.workspace.members.queryOptions(membersSearchParams.defaultInput()),
 		),
+		queryClient.prefetchQuery(trpc.workspace.staffDomains.queryOptions()),
 	]);
 
 	return (
@@ -95,6 +97,7 @@ async function Members({
 			<div className="flex flex-col gap-8">
 				<MembersTable />
 				<AllowancesTable />
+				<TenMienNoiBo />
 			</div>
 		</HydrateClient>
 	);

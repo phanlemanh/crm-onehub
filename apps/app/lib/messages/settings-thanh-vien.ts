@@ -93,6 +93,20 @@ const en = {
 		loi: "Could not issue the link. Try again in a few minutes.",
 		vet: (ten: string, luc: string) => `${ten} issued a link · ${luc}`,
 	},
+	tenMienNoiBo: {
+		tieuDe: "Staff email domains",
+		moTa: "Addresses on these domains are our own people: Tracking does not file them as visitors, and the inbox does not treat them as contacts.",
+		nhan: "Domains",
+		goiY: "onehub.center, onehub.vn",
+		huongDan:
+			"Separate with commas. Public mail domains such as gmail.com are not accepted.",
+		rong: "No staff domains yet — Tracking and the inbox cannot tell our own people apart.",
+		khoa: "Only an owner or an admin can change the staff email domains.",
+		luu: "Save",
+		daLuu: "Staff email domains saved",
+		loiTai: "Could not load the staff email domains.",
+		thuLai: "Try again",
+	},
 };
 
 export type ThanhVienMessages = typeof en;
@@ -189,6 +203,20 @@ const vi = {
 		dong: "Đóng",
 		loi: "Chưa phát được liên kết. Thử lại sau ít phút.",
 		vet: (ten: string, luc: string) => `${ten} đã phát liên kết · ${luc}`,
+	},
+	tenMienNoiBo: {
+		tieuDe: "Tên miền nội bộ",
+		moTa: "Địa chỉ thư thuộc các tên miền này là người của công ty: Theo dõi không lập hồ sơ khách cho họ, hộp thư không coi họ là đối tác.",
+		nhan: "Tên miền",
+		goiY: "onehub.center, onehub.vn",
+		huongDan:
+			"Ngăn bằng dấu phẩy. Không nhận tên miền thư công cộng như gmail.com.",
+		rong: "Chưa có tên miền nội bộ — máy chưa nhận ra người nhà ở Theo dõi và hộp thư.",
+		khoa: "Chỉ chủ sở hữu hoặc quản trị đổi được tên miền nội bộ.",
+		luu: "Lưu",
+		daLuu: "Đã lưu tên miền nội bộ",
+		loiTai: "Không tải được tên miền nội bộ.",
+		thuLai: "Thử lại",
 	},
 } satisfies ThanhVienMessages;
 

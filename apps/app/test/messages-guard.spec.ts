@@ -46,6 +46,7 @@ const KHONG_DAU = new Set([
 	"dong.soKr",
 	"chuyen.dongMoTa",
 	"hopThoaiChoPhep.choDoi",
+	"tenMienNoiBo.goiY",
 	"chiaSe.xong",
 	"tep.kiloByte",
 	"tep.megaByte",
