@@ -155,7 +155,7 @@
       "dong": 4,
       "ten": "Lượt 4",
       "buoc_ke": "Đã ký Cổng Bằng chứng 02/10; PR #231 đang gỡ xung đột (16 tệp + migration trùng mốc), gộp trước 07/10",
-      "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 04/10 (khảo sát lộ trình): 50 câu thật chạy trong tuần đầu dùng thật, không chặn lượt này (contract.md:117 trên nhánh). Khoá AI riêng KHO_TAI_LIEU_AI_GATEWAY_API_KEY chủ kho đặt trên crm-onehub-agent."
+      "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 04/10 (khảo sát lộ trình): 50 câu thật chạy trong tuần đầu dùng thật, không chặn lượt này (contract.md:117 trên nhánh). Khoá AI riêng KHO_TAI_LIEU_AI_GATEWAY_API_KEY chủ kho đặt trên crm-onehub-agent. 04/10: chủ kho đã đặt khoá AI riêng cho Kho."
     },
     {
       "ma": "ct",

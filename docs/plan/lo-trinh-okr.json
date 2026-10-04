@@ -11,15 +11,16 @@
   },
   "moc": [
     {
-      "ten": "Nhân sự gửi danh sách người, phòng ban, bộ phận, trưởng",
+      "ten": "Nhân sự gửi danh sách người, phòng ban, bộ phận, trưởng — đã xong trên production",
       "ngay": "2026-10-07",
       "loai": "han",
       "ai": "Nhân sự",
       "hang": [],
-      "khoa": "m-1007"
+      "khoa": "m-1007",
+      "that": "2026-10-04"
     },
     {
-      "ten": "Ban lãnh đạo gửi OKR quý 4 cấp OneHub, nếu đã có",
+      "ten": "Ban lãnh đạo gửi OKR quý 4 cấp OneHub (đang làm, 04/10)",
       "ngay": "2026-10-09",
       "ai": "Ban lãnh đạo",
       "den": "2026-10-12",
@@ -27,15 +28,16 @@
       "khoa": "m-1009"
     },
     {
-      "ten": "Dựng cây tổ chức, nhập người, đào tạo theo bộ phận, nối kênh nhắc",
+      "ten": "Dựng cây tổ chức, nhập người, đào tạo theo bộ phận, nối kênh nhắc — đã xong trên production",
       "ngay": "2026-10-09",
       "ai": "Quản trị chương trình, trưởng bộ phận",
       "den": "2026-10-13",
       "hang": [],
-      "khoa": "m-1009b"
+      "khoa": "m-1009b",
+      "that": "2026-10-04"
     },
     {
-      "ten": "R1 lên production",
+      "ten": "Làn R1 vá xong trên production, trước ngày dùng thật",
       "ngay": "2026-10-12",
       "loai": "phat-hanh",
       "hang": [
@@ -51,15 +53,7 @@
       "khoa": "m-1012r"
     },
     {
-      "ten": "Đóng băng giao diện OKR trong tuần đào tạo",
-      "ngay": "2026-10-12",
-      "den": "2026-10-14",
-      "ai": "Chủ kho",
-      "hang": [],
-      "khoa": "m-1012d"
-    },
-    {
-      "ten": "Cả công ty vào CRM — OKR và Kho tài liệu, mọi phòng ban",
+      "ten": "Mọi phòng ban bắt đầu dùng thật hằng ngày — OKR và Kho tài liệu",
       "ngay": "2026-10-14",
       "loai": "han-cung",
       "ai": "Mọi phòng ban",
@@ -211,7 +205,7 @@
       "ten_ngan": "Thành viên vào",
       "ngay": "2026-10-04",
       "cau_giao": "«Nhập cả công ty không hỏng ngầm: đặt được tên miền nội bộ, cho phép lại người đang là thành viên không treo»",
-      "ghi_chu": "#28 staffEmailDomains không có đường ghi (staff-domains.ts:18-23), #29 cho phép lại sinh dòng treo, #43 nút «Cho phép một địa chỉ» biến mất sau lỗi mạng, #44 soi người bị coi nhầm «đang bị gỡ». Phải xong trước khi nhập danh sách người.",
+      "ghi_chu": "#28 staffEmailDomains không có đường ghi (staff-domains.ts:18-23), #29 cho phép lại sinh dòng treo, #43 nút «Cho phép một địa chỉ» biến mất sau lỗi mạng, #44 soi người bị coi nhầm «đang bị gỡ». Phải xong trước khi nhập danh sách người. 04/10: cả công ty đã được nhập trên production; hàng này giữ cho người thêm sau và cho lần cho phép lại.",
       "buoc_ke": "Mở ngay 05/10; thêm Cổng 1.5",
       "trang_thai": "chưa mở",
       "han": "2026-10-08"
@@ -1113,20 +1107,17 @@
     {
       "ma": "ZT",
       "cau_giao": "«Nhắc buổi sáng đi qua Zalo ở production»",
-      "trang_thai": "đang dựng",
+      "trang_thai": "xong",
       "khoa": "zalo-t",
       "ten": "Triển khai Zalo trên production",
       "ten_ngan": "Triển khai Zalo",
       "nhom": "zalo",
       "thu_tu": 300,
       "ghi_chu": "Nhắc buổi sáng qua Zalo cần việc này trước ngày mở. Trần 300 câu hỏi CRM qua Zalo mỗi tháng đã lên onehub (#168), nên triển khai trước 9a vẫn giữ được chi phí. 04/10 (khảo sát lộ trình): migration Zalo đã có trên production, cron và webhook trả 200; phần còn lại là việc tay. Đổi mã T → ZT vì trùng với tóm tắt cấp bộ phận.",
-      "buoc_ke": "Chủ kho: chọn bot công ty, cho 2–3 người lái thử, nối kênh nhắc trong buổi đào tạo",
+      "buoc_ke": "Tin nhắc buổi sáng đã tới người thật (chủ kho xác nhận 04/10); lỗi còn lại ở R1g",
       "chay_khi": "Vòng 1–2 Zalo đã lên",
       "cho_ai": "chủ kho",
-      "han": "2026-10-13",
-      "dung_tren": [
-        "R1g"
-      ]
+      "dung_tren": []
     },
     {
       "ma": "4c",
