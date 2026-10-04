@@ -173,12 +173,17 @@ export function taoKhung(ten: string): Khung {
 
 const TIEN_TO = "/eve/agents/okr/eve/v1/";
 
+export type YeuCauCua = {
+	request: Request;
+	ctx: { params: Promise<{ path: string[] }> };
+};
+
 export function yeuCau(
 	duong: string,
 	cuocSoanId: string,
 	header: string,
 	signal?: AbortSignal,
-): { request: Request; ctx: { params: Promise<{ path: string[] }> } } {
+): YeuCauCua {
 	const url = `http://localhost:3000/eve/agents/okr${duong}`;
 	const { pathname } = new URL(url);
 	const path = pathname

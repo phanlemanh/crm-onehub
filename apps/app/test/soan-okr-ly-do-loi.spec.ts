@@ -7,9 +7,12 @@ import { okrSoanMessages } from "@/lib/messages/okr-soan";
 const L = CUA_OKR.loi;
 const LUOT = { luot: CUA_OKR.luotDaHoan };
 
-function loiHttp(status: number, than: unknown): ClientError {
-	const body = typeof than === "string" ? than : JSON.stringify(than);
+function loiHttpTho(status: number, body: string): ClientError {
 	return new ClientError(status, body, new Headers());
+}
+
+function loiHttp(status: number, than: Record<string, string>): ClientError {
+	return loiHttpTho(status, JSON.stringify(than));
 }
 
 type Dong = {
@@ -79,7 +82,7 @@ const BANG: readonly Dong[] = [
 	},
 	{
 		ten: "than khong json",
-		vao: { ...KHONG, loi: loiHttp(502, "<html>502 Bad Gateway</html>") },
+		vao: { ...KHONG, loi: loiHttpTho(502, "<html>502 Bad Gateway</html>") },
 		ra: { ma: "tro-ly-loi", daHoan: false },
 	},
 	{

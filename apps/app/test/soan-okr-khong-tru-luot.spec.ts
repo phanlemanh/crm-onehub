@@ -103,7 +103,9 @@ function statusMongDoi(ket: KetQuaTroLy): number {
 	return ket;
 }
 
-function thanMongDoi(ket: KetQuaTroLy): Record<string, unknown> {
+type ThanLoiCua = { error: string; detail?: string; luot?: string };
+
+function thanMongDoi(ket: KetQuaTroLy): ThanLoiCua {
 	const luot = CUA_OKR.luotDaHoan;
 	if (ket === "nem")
 		return {
