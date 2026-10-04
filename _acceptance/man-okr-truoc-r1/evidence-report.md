@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: man-okr-truoc-r1
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 51ff47fd18dc27873b9410c872ad191dec0c35af
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 2 (11/11 eval máy và ui-check đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng); E11 ghi Đạt. Sáu mục ngoài hợp đồng định đoạt từng mục ở lượt ký này — Ngoài-1, 4, 5 ghi Known limits; Ngoài-2, 6 chấp nhận không sửa; Ngoài-3 mở hợp đồng mới. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
 # Evidence Report: man-okr-truoc-r1
@@ -163,7 +163,7 @@ Round 2. Mười một eval máy và ui-check đạt, bảy lệnh suite xanh. C
     - Ảnh «Cập nhật tuần» trạng thái gửi một phần ở 390 cuộn tới KR thứ hai («Ký 15 hợp đồng bán lẻ mới»), thấy KR này chưa có chip «Đã gửi tuần này» khác KR thứ nhất. Tên r1c-cap-nhat-mot-phan-kr2-390.png.
     - Lời giải thích vì sao ảnh «xong» 390 ghi KR1 "Tự tin thấp" còn ảnh «xong» 1440 ghi "Tự tin cao": hai ảnh cùng hay khác dữ liệu mẫu, hoặc nhật ký chụp/seed xác nhận cùng bộ dữ liệu, hoặc ảnh chụp lại cùng trạng thái ở cả hai khổ. Ghi chú đặt trong evidence-report.md của man-okr-truoc-r1.
     - Nguyên văn câu AC-11 / clause (1) trong _acceptance/man-okr-truoc-r1/contract.md: câu hỏi đưa vào bị lỗi chữ, chưa rõ tiêu chí là «không phải cuộn», «không phải mở» hay «không phải bấm», nên chưa phân biệt được thanh đè lên ý khi cuộn giữa trang là chấp nhận được hay là lỗi.
-  human_override:        # human fills "<name> <date>" + optional note to resolve
+  human_override: Phan Le Manh 2026-10-04 — Đạt
 
 ### Lệnh suite (hồi quy)
 

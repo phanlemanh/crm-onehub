@@ -5,7 +5,7 @@ slug: man-okr-truoc-r1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-04
 design_doc: docs/superpowers/specs/2026-10-04-man-okr-truoc-r1-design.md
@@ -89,3 +89,12 @@ Quét `morphological-scan` preset test-matrix, 04/10.
   cuối nhóm trong `apps/app/lib/messages/okr.ts` (đổi chữ cũ chỉ ở khoá thuộc ba màn này).
 - Lượt chạm mã do hồ sơ đã ký đo (`dot-hoi-y-tuong-okr`, `cap-nhat-tuan-okr`, `toan-canh-okr` và hồ sơ
   có `paths` rộng); trước khi merge chạy làn ghim lại một lượt ở đỉnh nhánh.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-04):**
+  - Ngoài-1 — múi giờ Việt Nam của màn Cập nhật tuần khai riêng trong tệp màn, chưa đọc từ cấu hình OKR
+    chung; giờ hiện đúng, nhưng đổi múi giờ của OKR sau này thì phải sửa thêm ở màn này.
+  - Ngoài-4 — khi KR đầu danh sách lấy số tự động (ô giá trị bị khoá), bấm «Sửa cập nhật» không đặt con
+    trỏ vào ô nào; người dùng tự bấm vào ô cần sửa, không mất dữ liệu.
+  - Ngoài-5 — phép đo màn thật chọn cùng mức tự tin cho hai KR, nên chưa chứng minh mỗi hàng hiện đúng mức
+    của chính KR đó khi hai KR khác mức; test DOM E3 (cao/vừa khác nhau) phủ phần này ở mức fixture.
+- **Hợp đồng mới (Ngoài-3):** ngay sau khi «Sửa cập nhật» hoặc gửi nốt KR còn thiếu, màn «Đã gửi» báo nhầm
+  «N KR chưa chọn mức tự tin vẫn chờ lần gửi sau» cho KR đã gửi trong tuần — tách thành việc riêng.
