@@ -39,6 +39,11 @@ import {
 	paginate,
 	resolveOrderBy,
 } from "../trpc/list-input";
+import {
+	cleanStaffDomains,
+	staffEmailDomains,
+	writeStaffDomains,
+} from "./staff-domains";
 import type {
 	Allowance,
 	AllowEmailInput,
@@ -47,10 +52,13 @@ import type {
 	RemoveMemberInput,
 	RevokeAllowanceInput,
 	SetMemberRoleInput,
+	SetStaffDomainsInput,
+	StaffDomains,
 	UpdateWorkspaceInput,
 	Workspace,
 	WorkspaceMember,
 } from "./workspace.contracts";
+import { WORKSPACE_CONFIG } from "./workspace-config";
 
 const MEMBER_SELECT = {
 	id: true,
@@ -265,6 +273,46 @@ export class WorkspaceService {
 		const vet = await this.vetMoiNhat([updated.user.email]);
 
 		return this.toMember(updated, userId, vet.get(updated.user.email));
+	}
+
+	async staffDomains(userId: string): Promise<StaffDomains> {
+		const role = await workspaceRoleOf(userId);
+
+		return {
+			domains: [...(await staffEmailDomains(this.db))],
+			canEdit: canManageSettings(role),
+		};
+	}
+
+	async setStaffDomains(
+		userId: string,
+		input: SetStaffDomainsInput,
+	): Promise<StaffDomains> {
+		const role = await workspaceRoleOf(userId);
+
+		if (!canManageSettings(role)) {
+			throw new ForbiddenException(
+				WORKSPACE_CONFIG.messages.staffDomainsForbidden,
+			);
+		}
+
+		const cleaned = cleanStaffDomains(input.domains);
+
+		if (!cleaned.ok) {
+			throw new BadRequestException(cleaned.message);
+		}
+
+		const before = await staffEmailDomains(this.db);
+		await writeStaffDomains(this.db, cleaned.domains);
+
+		this.logger.log({
+			message: "Staff domains changed",
+			userId,
+			from: before,
+			to: cleaned.domains,
+		});
+
+		return { domains: cleaned.domains, canEdit: true };
 	}
 
 	async allowances(userId: string): Promise<{ rows: Allowance[] }> {
