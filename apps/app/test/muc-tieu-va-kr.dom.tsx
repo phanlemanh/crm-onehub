@@ -867,7 +867,7 @@ describe("thu-mo", () => {
 		console.log("so ca thu-mo mo-lai: 2");
 	});
 
-	test("thu-mo: id la trong URL bi bo qua, moi muc tieu mo; thu tiep chi ghi id co that", async () => {
+	test("thu-mo: id la trong URL bi bo qua, moi muc tieu mo; thu tiep giu ca id dang khuat", async () => {
 		expect.assertions(2);
 		const san = await dungBang(HAI_MT(), {
 			thamSo: "?thuMucTieu=khong-ton-tai",
@@ -884,7 +884,9 @@ describe("thu-mo", () => {
 		if (!nut) throw new Error("khong co nut mo mt-a");
 		await bamChuot(nut);
 		await doi(() => san.url().get("thuMucTieu") !== "khong-ton-tai");
-		expect(san.url().get("thuMucTieu"), "url giu id la").toBe("mt-a");
+		expect(san.url().get("thuMucTieu"), "url mat id dang khuat").toBe(
+			"khong-ton-tai,mt-a",
+		);
 		console.log("so ca thu-mo id-la: 2");
 	});
 
