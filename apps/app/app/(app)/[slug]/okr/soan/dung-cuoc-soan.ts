@@ -25,7 +25,13 @@ import type {
 	SoDaGo,
 	SoKr,
 } from "./kieu";
-import { laChuaCauHinh, laDaCoPhien, lyDoTuChoiLuot } from "./loi-cua";
+import {
+	type LyDoHong,
+	laChuaCauHinh,
+	laDaCoPhien,
+	lyDoHong,
+	lyDoTuChoiLuot,
+} from "./loi-cua";
 import {
 	cayNhap,
 	demDuaVao,
@@ -179,6 +185,7 @@ export function useCuocSoan({
 	const soSuKien = agent.events.length + eventsOf(thread).length;
 
 	const [lanThu, setLanThu] = useState(0);
+	const [lyDoTruoc, setLyDoTruoc] = useState<LyDoHong | null>(null);
 	const [hetGioTai, setHetGioTai] = useState<string | null>(null);
 	const moc = `${lanThu}:${soSuKien}`;
 	const qua45s = dangTraLoi && hetGioTai === moc;
@@ -192,12 +199,20 @@ export function useCuocSoan({
 	const chuaCauHinh = agent.status === "error" && laChuaCauHinh(agent.error);
 	const cuocDong = cuoc.trangThai !== "dang";
 	const hetLuot = cuoc.soLuot >= cuoc.tranLuot || lyDoLuot === "het-luot-cuoc";
+	const moLai = useMutation(trpc.okr.soanMo.mutationOptions());
 	const hong =
 		lyDoLuot === null &&
 		!chuaCauHinh &&
 		!cuocDong &&
 		!laDaCoPhien(agent.error) &&
-		(qua45s || agent.status === "error" || ended);
+		(qua45s || agent.status === "error" || ended || moLai.isError);
+	const lyDoMoi = lyDoHong({
+		loi: agent.status === "error" ? agent.error : undefined,
+		qua45s,
+		loiMoLai: moLai.error,
+	});
+	const dangThu =
+		lanThu > 0 && (agent.status === "submitted" || moLai.isPending);
 	const khoaSoan =
 		locked || hetLuot || hong || cuocDong || lyDoLuot !== null || chuaCauHinh;
 
@@ -224,9 +239,10 @@ export function useCuocSoan({
 		if (chuaCoLuot) void guiThang(SOAN_UI.luotMoDau);
 	});
 
-	const moLai = useMutation(trpc.okr.soanMo.mutationOptions());
 	const thuLai = () => {
+		setLyDoTruoc(lyDoMoi);
 		setLanThu((n) => n + 1);
+		moLai.reset();
 		const tin = cuoiCung.current;
 		if (agent.session.continuationToken && tin && !ended) {
 			if (busy) agent.stop();
@@ -265,6 +281,9 @@ export function useCuocSoan({
 		khoaSoan,
 		hong,
 		qua45s,
+		dangThu,
+		lanThu,
+		lyDoHong: dangThu ? lyDoTruoc : lyDoMoi,
 		lyDoLuot,
 		chuaCauHinh,
 		hetLuot,
