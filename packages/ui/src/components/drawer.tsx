@@ -257,14 +257,30 @@ function DrawerContent({
 	);
 }
 
-function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
+const drawerHeaderVariants = cva(
+	"flex flex-col gap-0.5 p-4 md:gap-0.5 md:text-left",
+	{
+		variants: {
+			align: {
+				center:
+					"group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center",
+				start: "text-left",
+			},
+		},
+		defaultVariants: { align: "center" },
+	},
+);
+
+function DrawerHeader({
+	className,
+	align = "center",
+	...props
+}: React.ComponentProps<"div"> & VariantProps<typeof drawerHeaderVariants>) {
 	return (
 		<div
 			data-slot="drawer-header"
-			className={cn(
-				"flex flex-col gap-0.5 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-0.5 md:text-left",
-				className,
-			)}
+			data-align={align}
+			className={cn(drawerHeaderVariants({ align }), className)}
 			{...props}
 		/>
 	);
