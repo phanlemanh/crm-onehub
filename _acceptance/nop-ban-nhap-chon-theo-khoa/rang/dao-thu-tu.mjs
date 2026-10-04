@@ -125,8 +125,8 @@ function chinh() {
 	}
 	const { ma, ra } = chay(src, chieu);
 	const daAn = new RegExp(`${DAU_AN} (\\d+)`).exec(ra);
-	const khongDo = /RANG-KHONG-DO-DUOC: [^\n]*/.exec(ra);
-	if (khongDo) ket(2, [`KHONG DO DUOC: ${khongDo[0]}`]);
+	const khongDo = /^error: (RANG-KHONG-DO-DUOC: [^\n]*)$/m.exec(ra);
+	if (khongDo) ket(2, [`KHONG DO DUOC: ${khongDo[1]}`]);
 	if (!daAn)
 		ket(2, [
 			`KHONG DO DUOC: ca khong chay toi buoc dao thu tu (ma ${ma})`,

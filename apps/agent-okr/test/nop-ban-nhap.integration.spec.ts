@@ -500,10 +500,12 @@ describe("nop-ban-nhap", () => {
 		});
 		const ctx = nguCanh(cuoc.sessionId, canh.nguoiMo.id, cuoc.id);
 		await nop(tron(), ctx);
-		const m1 = await db.okrDeXuat.findFirstOrThrow({
-			where: { cuocSoanId: cuoc.id, loai: "muc-tieu-moi", trangThai: "cho" },
-			orderBy: { createdAt: "asc" },
-		});
+		const m1 = (
+			await db.okrDeXuat.findMany({
+				where: { cuocSoanId: cuoc.id, loai: "muc-tieu-moi", trangThai: "cho" },
+			})
+		).find((h) => dongSoanTuHang(h).khoa === "m1");
+		if (!m1) throw new Error("thieu muc tieu m1");
 		await db.okrDeXuat.update({
 			where: { id: m1.id },
 			data: {
