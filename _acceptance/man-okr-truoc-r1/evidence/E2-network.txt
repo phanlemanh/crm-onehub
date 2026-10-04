@@ -1,0 +1,1 @@
+no network driver: script-internal playwright; no network dump
