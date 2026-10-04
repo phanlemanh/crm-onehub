@@ -233,8 +233,9 @@ describe("gui-lai-bi-tu-choi", () => {
 		tuChoiGui(true);
 		await khep();
 		tuChoiGui(false);
-		await cho(() => moTa().includes(m.hoiThoai.chuaGuiLai), "cho chua gui lai");
-		expect(moTa(), "gui-lai-im").toContain(m.hoiThoai.daThuLai("1"));
+		await troi(50);
+		expect(moTa(), "gui-lai-im").toContain(m.hoiThoai.chuaGuiLai);
+		expect(moTa()).toContain(m.hoiThoai.daThuLai("1"));
 		expect(nutThu()?.disabled).toBe(false);
 		return guiTruoc;
 	}
