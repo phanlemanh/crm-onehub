@@ -5,7 +5,7 @@ slug: soan-okr-song-lai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -73,3 +73,18 @@ nó đổi kỳ vọng theo AC-4 và chạy trong suite.
 
 - Trần vẫn đếm cuộc có lượt ở trạng thái `bo` và `da-dua-vao`: cuộc đã tốn AI là đã dùng.
 - Cờ cầu nối là cờ của app; dự án app và dự án `agent-okr` phải cùng bí mật, lệch thì cửa trả 401/503 — AC-3 phủ ca 503.
+
+### Known limits (Cổng Bằng chứng, 2026-10-04)
+
+- Ngoài-1: E3/E4 mô tả là đi qua client eve thật với fetch giả, nhưng bài DOM tiêm lỗi vào
+  `useEveAgent` đã mock; đường thật chỉ E11/E13 đo bằng trình duyệt.
+- Ngoài-2: không phép đo nào lấy Response thật của cửa rồi cho `laChuaCauHinh` đọc — thân lỗi 503
+  được chép tay ở bài DOM và ở thước màn; đổi khoá thân lỗi ở cửa thì E4/E11 vẫn xanh.
+- Ngoài-3: ô ma trận E1 khẳng định `soanMo` 0 lời gọi mà không bấm nút khoá; «không chữ Tiếp»
+  không có đối chứng dương ở nửa đã cấu hình.
+- Ngoài-4: «hình hôm nay» của ma trận 22 ô rút từ chính `NutSoan` lúc đã cấu hình, không đối chiếu
+  bảng viết trước — nút mất ở nhiều ô cùng lúc thì ma trận vẫn xanh.
+- Ngoài-5: chiều đỏ `--kiem-do-do` của E11 và E13 dùng chung một kết luận nhận ba thông điệp, nên
+  một lượt đỏ không nói phép đo nào đã cắn.
+- Ngoài-6: thước hướng dẫn E10 chỉ đo chữ có mặt (Root Directory, «same value»), không đo quan hệ
+  giá trị đúng chỗ.
