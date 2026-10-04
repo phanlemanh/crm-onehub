@@ -162,7 +162,9 @@ describe("ly-do-hong", () => {
 			const mangLuot =
 				loi instanceof ClientError &&
 				loi.body.includes(`"luot":"${CUA_OKR.luotDaHoan}"`);
-			expect(dong.ra.daHoan, `da-hoan-sai ${dong.ten}`).toBe(mangLuot);
+			expect(lyDoHong(dong.vao)?.daHoan, `da-hoan-sai ${dong.ten}`).toBe(
+				mangLuot,
+			);
 		}
 	});
 });
