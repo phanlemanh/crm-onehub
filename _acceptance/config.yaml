@@ -1095,6 +1095,9 @@ executors:
     sol_dem_db: bun run test -- "cd packages/db && bun test test/okr-cuoc-soan.spec.ts -t dem-co-luot"
     sol_tran_api: bun run test -- "cd apps/api && bun test test/soan-okr-tran.spec.ts -t cuoc-rong-khong-tinh"
     nbn_ca_tep: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/nop-ban-nhap.integration.spec.ts"
+    tpa_hop_le: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t hop-le
+    tpa_onehub: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t onehub-trien-khai
+    tpa_nhanh_khac: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t "nhanh-khac-khong-trien-khai|bo-khop-bat-bay-sao"
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
