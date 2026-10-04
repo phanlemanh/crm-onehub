@@ -240,6 +240,15 @@
         "cd apps/app && PORT=3630 NEXT_PUBLIC_API_URL=http://localhost:3631 API_URL=http://localhost:3631 APP_URL=http://localhost:3630 bun run dev"
       ],
       "port": 3630
+    },
+    {
+      "name": "proto-p3",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "cd apps/app && PROTO_ROUTE=1 PORT=3330 NEXT_PUBLIC_API_URL=http://localhost:3331 API_URL=http://localhost:3331 APP_URL=http://localhost:3330 bun run dev"
+      ],
+      "port": 3330
     }
   ]
 }

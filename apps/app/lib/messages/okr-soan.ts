@@ -48,6 +48,7 @@ const vi = {
 		loiMo: "Chưa mở được cuộc soạn",
 		chuaCauHinh:
 			"Tính năng soạn nháp chưa được bật trên máy chủ này — quản trị viên OneHub cần bật nó.",
+		thongTin: "Thông tin cuộc soạn",
 	},
 	man: {
 		tieuDe: "Soạn OKR cùng Trợ lý",
@@ -330,6 +331,7 @@ const en: OkrSoanMessages = {
 		loiMo: "The drafting session could not be opened",
 		chuaCauHinh:
 			"Drafting isn't turned on for this server yet — a OneHub admin needs to turn it on.",
+		thongTin: "Drafting details",
 	},
 	man: {
 		tieuDe: "Draft OKRs with the Assistant",

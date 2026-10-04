@@ -9,10 +9,12 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTableRow } from "@crm/ui/components/simple-table";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TableCell } from "@crm/ui/components/table";
+import { useIsMobile } from "@crm/ui/hooks/use-mobile";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import type { ReactNode } from "react";
 import {
+	CuonCaKhungContext,
 	DetailSheetHeader,
 	DetailSheetProse,
 	DetailSheetSection,
@@ -35,6 +37,7 @@ export function RecordSheetFrame({
 	tabs,
 	tab,
 	onTabChange,
+	cuonCaKhung = false,
 }: {
 	loading: boolean;
 	error: string | null;
@@ -48,11 +51,13 @@ export function RecordSheetFrame({
 	tabs: DetailSheetTab[];
 	tab: string;
 	onTabChange: (tab: string) => void;
+	cuonCaKhung?: boolean;
 }) {
 	const m = crmMessages(useLocale());
 	const { stack, close } = useRecordStack();
+	const cuon = useIsMobile() && cuonCaKhung;
 
-	return (
+	const khung = (
 		<>
 			<DetailSheetHeader
 				media={media}
@@ -85,6 +90,19 @@ export function RecordSheetFrame({
 				</>
 			)}
 		</>
+	);
+
+	return (
+		<CuonCaKhungContext.Provider value={cuon}>
+			<div
+				data-cuon-ca-khung={cuon ? "" : undefined}
+				className={
+					cuon ? "flex min-h-0 flex-1 flex-col overflow-y-auto" : "contents"
+				}
+			>
+				{khung}
+			</div>
+		</CuonCaKhungContext.Provider>
 	);
 }
 
