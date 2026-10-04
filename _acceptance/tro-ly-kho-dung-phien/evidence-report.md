@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: tro-ly-kho-dung-phien
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0390964ebc963e448e49cdb08ab9855cd87644f0
+verified_commit: 7ddbcff56a4588b9076259995bd647b0da3dc582
 human_signoff:
 ---
 
 # Evidence Report: tro-ly-kho-dung-phien
-
-Verdict REJECT. Bảy eval E1 đến E7 đều xanh, nhưng lệnh suite `bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db` đỏ và không gắn eval nào (chi tiết ở mục "Lệnh suite (hồi quy)"). Ngoài ra review có một finding trong hợp đồng, AC-3, mức high (xem `review-findings.md`).
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -28,113 +26,111 @@ Verdict REJECT. Bảy eval E1 đến E7 đều xanh, nhưng lệnh suite `bun ru
 ## Evidence
 
 - eval: E1
-  run_id: minted-tro-ly-kho-dung-phien-E1-r1
+  run_id: minted-tro-ly-kho-dung-phien-E1-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.l4b_gui
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-gui"
-    test-run: dropped crm_muu1k5hfwwnf_test
+    bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-gui"
+    ca kd-gui pass: tin gui phien goc la `Câu hỏi kho ${hoiId}.`, khong lo cau hoi, auth.attributes dung purpose kho / hoiId / userId.
 
 - eval: E2
-  run_id: muu1k8gseh36
+  run_id: minted-tro-ly-kho-dung-phien-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.l4b_loi_dan
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-loi-dan"
-    test-run: dropped crm_muu1k8gseh36_test
+    bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-loi-dan"
+    test-run: dropped crm_muu2lmd2iq98_test
 
 - eval: E3
-  run_id: minted-tro-ly-kho-dung-phien-E3-r1
+  run_id: minted-tro-ly-kho-dung-phien-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.l4b_zdr
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-zdr"
-    test-run: dropped crm_muu1k7bsim3t_test
+    bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-zdr"
+    ca kd-zdr pass: phien goc kho mang zeroDataRetention, bay purpose khac tra null.
 
 - eval: E4
-  run_id: minted-tro-ly-kho-dung-phien-E4-r1
+  run_id: minted-tro-ly-kho-dung-phien-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.l4b_cam_goi
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-cam-goi"
-    (không có dòng kết quả nào ngoài mã thoát của lệnh)
+    bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-cam-goi"
+    test-run: dropped crm_muu2lj76exyb_test
 
 - eval: E5
-  run_id: minted-tro-ly-kho-dung-phien-E5-r1
+  run_id: minted-tro-ly-kho-dung-phien-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.l4b_tu_choi
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-tu-choi"
-    test-run: dropped crm_muu1k80tn3my_test
+    bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-tu-choi"
+    test-run: dropped crm_muu2ljldx5hu_test
 
 - eval: E6
-  run_id: muu1k764nanw
+  run_id: minted-tro-ly-kho-dung-phien-E6-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.l4b_hoi_cu
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/tro-ly-kho-nop.spec.ts && TZ=Asia/Ho_Chi_Minh bun test test/tro-ly-kho-zalo.integration.spec.ts"
-    test-run: dropped crm_muu1k764nanw_test
+    bun run test -- "cd apps/agent && bun test test/tro-ly-kho-nop.spec.ts && TZ=Asia/Ho_Chi_Minh bun test test/tro-ly-kho-zalo.integration.spec.ts"
+    cac ca tlk-kiem, tlk-tu-choi, tlk-qua-han va tro-ly-kho-zalo chay lai khong ca nao do.
 
 - eval: E7
-  run_id: minted-tro-ly-kho-dung-phien-E7-r1
+  run_id: minted-tro-ly-kho-dung-phien-E7-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.l4b_dem
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
   output: |
-    cmd: bun run test -- "bun test _acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.spec.ts"
-    test-run: dropped crm_muu1k8ziabf4_test
+    bun run test -- "bun test _acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.spec.ts"
+    test-run: dropped crm_muu2lkfz2aoi_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
-  exit_code: 1
-  verified_at: 2026-10-04T16:34:26Z
+  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  exit_code: 0
+  verified_at: 2026-10-04T17:03:39Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tro-ly-kho-dung-phien-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-tro-ly-kho-dung-phien-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_lint_slop-r1
+  run_id: minted-tro-ly-kho-dung-phien-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-04T16:34:26Z
+  verified_at: 2026-10-04T17:03:39Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tro-ly-kho-dung-phien-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-tro-ly-kho-dung-phien-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-04T16:34:26Z
-
-Lệnh suite đỏ không gắn eval nào: `bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db` (mã thoát 1). Gói agent chạy 1035 ca trong 112 tệp: 1034 qua, 1 ca đỏ, đó là `okr-chuyen-tiep > nhánh okr trả câu cố định, không gọi phần mở đầu nghiên cứu; nghiên cứu vẫn gọi`. Các tác vụ còn lại của lệnh này xanh (3 trên 4 tác vụ thành công). Máy không gán ca đỏ này cho eval nào, nên `failed_evals` để rỗng. Người cần xác định ca này đỏ do thay đổi của tính năng hay đỏ sẵn trên nhánh nền trước khi quyết.
+  verified_at: 2026-10-04T17:03:39Z
 
 ## Known limits
 
@@ -142,12 +138,15 @@ Lệnh suite đỏ không gắn eval nào: `bun run test -- --filter=agent --fil
 
 ## Analyst
 
-E6 (cmd: `bun run test -- "cd apps/agent && bun test test/tro-ly-kho-nop.spec.ts && TZ=Asia/Ho_Chi_Minh bun test test/tro-ly-kho-zalo.integration.spec.ts"`): baseline green. Eval xanh cả trên HEAD lần trên diffBase, nên nó chứng minh bộ kiểm cũ vẫn chạy chứ không chứng minh tính năng mới. Đây là regression-guard có chủ ý của AC-6 (hỏi kho cũ và Zalo không hỏng), nên không cần viết lại; ghi ra để người đọc không nhầm E6 là bằng chứng cho hành vi mới.
+carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi).
+
+Eval khong-phan-biet (pass tren ca HEAD lan baseline round 1, chung minh harness chu khong phai feature): E6. E6 la regression-guard co chu y: chay lai cac ca tlk-kiem, tlk-tu-choi, tlk-qua-han va tro-ly-kho-zalo cua tro-ly-doc-kho, de xac nhan hanh vi cu khong bi pha. Cac lenh suite xanh o ca hai phia la regression-guard binh thuong, khong liet ke.
 
 ## Variance
 
-none — mọi eval nhiều lần chạy đều đồng đều (cả bảy eval chạy 1 lần, không có eval ngẫu nhiên)
+none — moi eval la deterministic (runs: 1), khong eval nao co pass_rate hon hop.
 
 ## Iterations
 
-Round 1: E1 đến E7 xanh, nhưng lệnh suite gói agent đỏ 1 ca (okr-chuyen-tiep) và review có 1 finding trong hợp đồng AC-3 mức high (model ZDR của phiên gốc kho bị eve bỏ khi trả từ session.started). Trả về implementation.
+Round 1: REJECT — mot lenh suite lane agent do, mot phat hien high trong hop dong (AC-3: model ZDR cua phien goc kho bi bo khi chay that vi session.started tra ve model song), kem cac phat hien do-bo-phan ve bai kiem. Quay lai implementation.
+Round 2: PASS — E1 den E7 deu xanh tai verified_commit 7ddbcff56a4588b9076259995bd647b0da3dc582 (fix 03815cc: phien goc kho giu ZDR khi chay that; 7ddbcff: kd-zdr parse lua chon model bang zod), bay lenh suite xanh, khong eval nao khai judgment nen khong co panel can cham.
