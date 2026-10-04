@@ -78,8 +78,7 @@ const VET = {
 		eval: "E12",
 		tep: TEP_DONG_NGHIEP,
 		mo: "ban sao «Toi cung nghi vay» dung lai bien the vien (bat chi doi vien, khong nen, khong dau tich)",
-		cam: (s) =>
-			s.replace('variant="outline-check"', 'variant="outline"'),
+		cam: (s) => s.replace('variant="outline-check"', 'variant="outline"'),
 		ghim: /E12 buoc 6: nut da bat khong khac nut chua bat/,
 	},
 	E13: {
@@ -1390,7 +1389,9 @@ async function nhomE12() {
 		KHUNG_DN,
 		yDau,
 	);
-	console.log(`  E12 buoc 6: nut «Toi cung nghi vay» ${JSON.stringify(nutBat)}`);
+	console.log(
+		`  E12 buoc 6: nut «Toi cung nghi vay» ${JSON.stringify(nutBat)}`,
+	);
 	const batKhac =
 		nutBat.bat !== null &&
 		nutBat.tat !== null &&
@@ -1771,6 +1772,7 @@ async function kiemCuoiTrang(trang, tenAnh, nhan) {
 			r.nutTren >= 0 &&
 			r.nutDay <= r.thanhTren,
 	);
+	await moDanhSach(trang);
 	const chanDoan = await chanDoanDanhSach(trang);
 	const mauLienKet = await soMauCuaLienKetDau(trang);
 	console.log(
@@ -1787,6 +1789,22 @@ async function kiemCuoiTrang(trang, tenAnh, nhan) {
 	await chup(trang, tenAnh);
 }
 const AN_DANH_SACH = "Ẩn danh sách";
+const HIEN_DANH_SACH = "Xem danh sách";
+
+async function moDanhSach(trang) {
+	const dangThu = await trang.evaluate(
+		(c) =>
+			[
+				...(window
+					.__tim("[data-khoi='thanh-cong-bo']")[0]
+					?.querySelectorAll("button") ?? []),
+			].some((b) => b.innerText.replace(/\s+/g, " ").trim() === c),
+		HIEN_DANH_SACH,
+	);
+	if (!dangThu) return;
+	await bamChu(trang, "[data-khoi='thanh-cong-bo'] button", HIEN_DANH_SACH);
+	await cho(400);
+}
 
 const theChuDe = (chuDeId) => `[data-chu-de='${chuDeId}'][id^='chu-de-']`;
 
@@ -1851,8 +1869,19 @@ async function ketLuanMot(trang, c) {
 		console.log(
 			`  E15 buoc 5: nut «${CHU.ketLuan.luu}» cua «${c.ten}» nam duoi thanh cong bo (nut y=${che.nut}, thanh tu y=${che.thanh}) — bam «${AN_DANH_SACH}» nhu nguoi dung roi moi bam luu`,
 		);
-		await bamChu(trang, "[data-khoi='thanh-cong-bo'] button", AN_DANH_SACH);
-		await cho(400);
+		const coNutAn = await trang.evaluate(
+			(c) =>
+				[
+					...(window
+						.__tim("[data-khoi='thanh-cong-bo']")[0]
+						?.querySelectorAll("button") ?? []),
+				].some((b) => b.innerText.replace(/\s+/g, " ").trim() === c),
+			AN_DANH_SACH,
+		);
+		if (coNutAn) {
+			await bamChu(trang, "[data-khoi='thanh-cong-bo'] button", AN_DANH_SACH);
+			await cho(400);
+		}
 	}
 	await bam(trang, nutLuu);
 	const luu = await thayNgay(
@@ -2196,6 +2225,7 @@ async function nhomE15() {
 	);
 	const dich = hep.lienKet.find((l) => l.startsWith("#chu-de-"));
 	if (dich) {
+		await moDanhSach(n);
 		await bam(n, `[data-khoi='thanh-cong-bo'] a[href='${dich}']`);
 		await cho(1200);
 		const toi = await n.evaluate((d) => {
