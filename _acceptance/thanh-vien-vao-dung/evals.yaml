@@ -1,0 +1,399 @@
+schema_version: 1
+slug: thanh-vien-vao-dung
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_ten_mien_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "apps/api/src/companies/domain.ts"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "ten-mien" ca "ghi-chuan-hoa": quan tri goi workspace.setStaffDomains voi
+      ["  @OneHub.Center", "onehub.vn", "onehub.center "] -> dau ra { domains: ["onehub.center",
+      "onehub.vn"], canEdit: true }; doc lai appSetting tu db: staffEmailDomains ===
+      "onehub.center,onehub.vn"; workspace.staffDomains tra cung mang. Doi chung duong: truoc khi
+      ghi, staffDomains tra [] va cot la null.
+      CHIEU DO (pha-thu o S3 tren ban sao): bo buoc bo trung trong service -> ca do voi thong
+      diep ghim 'expected "onehub.center,onehub.vn"' nhan "onehub.center,onehub.vn,onehub.center".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_ten_mien_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "apps/api/src/tracking/tracking-filing.service.ts"
+      - "apps/api/src/mailbox/mailbox-match.service.ts"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "ten-mien" ca "hai-duong-doc": dat ten mien qua WorkspaceService.setStaffDomains
+      (khong upsert tay); TrackingFilingService lap ho so bai nop cua "khach-<run>@onehub.vn" ->
+      bo qua voi ly do dung chuoi "One of our own addresses"; MailboxMatchService.internalIdentity()
+      .domains co "onehub.vn" trong khi khong user nao mang dia chi @onehub.vn (ca kiem dieu kien
+      do truoc). Doi chung duong: cung bai nop khi ten mien la null -> KHONG bo qua vi ly do do.
+      CHIEU DO: service ghi vao cot khac (ban sao) -> ca do "One of our own addresses" khong xuat hien.
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_ten_mien_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "apps/api/src/companies/domain.ts"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "ten-mien" ca "tu-choi": ma tran viet truoc ba dong
+      [["khong phai ten mien", "khong phai ten mien"], ["ai@onehub.vn", "ai@onehub.vn"],
+      ["gmail.com", "gmail.com"]]; moi dong: cot dang "onehub.center", goi setStaffDomains(
+      ["onehub.vn", <muc sai>]) -> BadRequestException co message chua dung <ten muc goi ra>;
+      cot van "onehub.center". So assert = 3 x 2. Doi chung duong: ["onehub.vn"] mot minh -> 200.
+      CHIEU DO: bo kiem FREE_EMAIL_DOMAINS (ban sao) -> dong gmail.com do, thong diep ghim
+      "gmail.com".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.r1b_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/lib/messages/settings-thanh-vien.ts"
+      - "apps/app/test/thanh-vien-vao-dung.dom.tsx"
+    expected: |
+      describe "the-ten-mien" ca "loi-nhap": render the voi query staffDomains (du lieu dung
+      hinh dau ra that) va mutation tra TRPCClientError 400 message "gmail.com is a public mail
+      domain..." -> FieldError hien dung thong diep do, o van chua chu da go, nut «Lưu» bat lai.
+      Doi chung duong: mutation thanh cong -> khong FieldError, o hien ban chuan hoa tra ve.
+      CHIEU DO: the xoa o trong onError (ban sao) -> ca do voi thong diep ghim "chu da go".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_ten_mien_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "ten-mien" ca "xoa-trang": cot "onehub.center" -> setStaffDomains([]) -> cot null;
+      staffEmailDomains(db) tra []; TrackingFilingService khong con bo qua bai nop @onehub.center
+      vi "One of our own addresses". CHIEU DO: service luu "" thay null (ban sao) -> assert
+      toBeNull do.
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.r1b_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/test/thanh-vien-vao-dung.dom.tsx"
+    expected: |
+      describe "the-ten-mien" ma tran trang thai viet truoc, moi trang thai mot ca va cay DOM
+      rieng: dang-tai (>= 3 Skeleton, khong o nhap), rong (cau «Chưa có tên miền nội bộ»), co
+      («Lưu» disabled khi chua sua), dang-luu (spinner, o disabled), khoa (o va «Lưu» disabled +
+      dong ly do), loi-tai (Empty co nut «Thử lại», bam -> refetch duoc goi). 6 ca, 6 cay khac nhau.
+      CHIEU DO: the tra null khi dang tai (ban sao) -> ca dang-tai do «khong thay khung xuong».
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_ten_mien_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "ten-mien" ca "ba-vai" qua router tRPC that (createCaller co AuthMiddleware):
+      thanh vien thuong: staffDomains -> canEdit false; setStaffDomains -> FORBIDDEN, cot khong
+      doi. Nguoi ngoai: ca hai thu tuc -> FORBIDDEN voi message NOT_A_MEMBER ("You are not a
+      member of this workspace."). Quan tri: canEdit true. 3 vai x 2 thu tuc = 6 assert.
+      CHIEU DO: setStaffDomains thieu kiem vai (ban sao) -> ca thanh vien thuong do.
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.r1b_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/test/thanh-vien-vao-dung.dom.tsx"
+    expected: |
+      Thuoc trang thai «khoa» cua E6 (canEdit false): o va «Lưu» disabled, dong
+      «Chỉ chủ sở hữu hoặc quản trị đổi được tên miền nội bộ.» nam trong the. Doi chung duong:
+      canEdit true -> o va nut khong disabled, khong co dong do.
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_cho_phep_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "cho-phep" ca "da-la-thanh-vien": gieo user + member "tvvd-<run>@lan-do.onehub.vn";
+      quan tri allowEmail({ email: "  TVVD-<run>@Lan-Do.OneHub.vn ", role: "member" }) ->
+      BadRequestException message dung "That person is already a member. Change their role in
+      the members table."; dem invitation cho dia chi do truoc va sau bang nhau. Doi chung duong:
+      dia chi chua la thanh vien -> tao 1 dong pending.
+      CHIEU DO: bo kiem thanh vien (ban sao) -> ca do, dem tang 1, thong diep ghim
+      "already a member".
+
+  - id: E10
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.r1b_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/test/thanh-vien-vao-dung.dom.tsx"
+    expected: |
+      describe "hop-cho-phep" ca "da-la-thanh-vien": mutation allowEmail tra loi 400 voi message
+      cua E9 -> hop van mo, thong diep nam trong hop. CHIEU DO: dong hop trong onSettled (ban sao)
+      -> ca do «hop van mo».
+
+  - id: E11
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_cho_phep_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "cho-phep" ca "treo-khi-doc": gieo member + mot invitation pending cung dia chi
+      (ghi thang db, mo phong dong treo cu); allowances() tra dong do voi status "accepted";
+      so dong status "pending" trong ket qua khong tinh no; doc lai db: dong van "pending".
+      Doi chung duong: mot dia chi pending KHONG thuoc thanh vien nao van tra "pending".
+      CHIEU DO: bo buoc doi trang thai khi doc (ban sao) -> ca do voi thong diep ghim
+      'expected "accepted"'.
+
+  - id: E12
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_cho_phep_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "packages/auth/src/organization.ts"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "cho-phep" ca "cho-phep-lai-sau-go": gieo thanh vien, removeMember (that), allowEmail
+      voi role "admin" -> 1 dong pending; ensureWorkspaceMembership(userId, email) -> member co
+      role "admin"; dong cho phep moi "accepted". CHIEU DO: allowEmail tu choi moi dia chi tung la
+      user (ban sao, kiem sai bang user thay vi member) -> ca do o buoc allowEmail.
+
+  - id: E13
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.r1b_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/test/thanh-vien-vao-dung.dom.tsx"
+    expected: |
+      describe "nut-dau-trang" bon ca: (a) "ssr-loi": QueryClient may chu tao bang chinh
+      makeQueryClient cua app, prefetch workspace.get bang mot fetch nem loi, dehydrate that
+      (cung ham ma HydrateClient dung) -> render dau trang trong HydrationBoundary voi trang thai
+      do, fetch phia trinh duyet tra canManageMembers true -> nut «Cho phép một địa chỉ» xuat
+      hien (findByRole) ma khong render lai trang; (b) "sau-loi": QueryClient trinh duyet, lan 1
+      loi mang, lan 2 thanh cong -> nut hien; (c) "khong-quyen": canManageMembers false -> khong
+      nut; (d) "loi-mai": moi lan loi -> nut van hien; bam nut, mutation allowEmail tra loi 403
+      voi message lay nguyen van tu E24 -> hop van mo, thong diep nam trong hop.
+      CHIEU DO: (1) ban sao giu cach quyet bang quyenQuanTri() o may chu -> ca (a) do, ghim
+      "nut sau loi ssr"; (2) ChoPhepDiaChi tra null khi isError -> ca (d) do, ghim "nut sau loi";
+      (3) dong hop trong onSettled -> ca (d) do, ghim "hop van mo".
+
+  - id: E14
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_dung_lai_api
+    paths:
+      - "packages/auth/src/organization.ts"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "dung-lai": xoa bang member cua workspace (CSDL rieng cua luot bun run test), gieo
+      A (canceled + pending), B (canceled), C (khong dong), D (chi mot dong status "bi-hong");
+      goi ensureWorkspaceMembership(C.id, C.email). Ma tran viet truoc: A true, B false, C true,
+      D false (khop decideSignIn({email: D, allowances: docHang(dong cua D)}) -> allowed false,
+      goi that trong ca de doi chieu); console.error (spy) nhan dung mot dong chua "bi-hong".
+      5 assert. Doi chung duong: B van bi loai (luat cu dung cho ca nay).
+      CHIEU DO: luat cu "co dong ket thuc thi loai" (ban sao) -> A false, thong diep ghim "A".
+
+  - id: E15
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_soi_api
+    paths:
+      - "apps/api/scripts/soi-thanh-vien.ts"
+      - "apps/api/test/soi-thanh-vien.spec.ts"
+    expected: |
+      Goi ham soi cua chinh lenh (import tu apps/api/scripts/soi-thanh-vien.ts, khong chep lai
+      SQL) tren CSDL test da gieo 1 dong treo, 1 nguoi bo sot (khong la member, co dong canceled,
+      dong pending, va mot session tao SAU dong pending), 1 nguoi duoc cho phep lai CHUA dang nhap
+      (canceled + pending, khong session — KHONG duoc dem), 1 trang thai khong doc duoc, ten mien
+      "onehub.vn": dau ra co bon dong "ten-mien 1", "treo 1", "bo-sot 1", "khong-doc-duoc 1"
+      (so dem tuong doi: tru so dem truoc khi gieo); chieu do rieng: bo dieu kien session (ban
+      sao) -> "bo-sot 2", ghim "bo-sot"; dau ra khong khop /@/; ham chen mot cau
+      INSERT vao giua giao dich soi (che do thu) -> loi Postgres "read-only transaction".
+      CHIEU DO: bo SET TRANSACTION READ ONLY (ban sao) -> ca chi-doc do, thong diep ghim
+      "read-only transaction".
+
+  - id: E16
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.r1b_soi_vat
+    paths:
+      - "_acceptance/thanh-vien-vao-dung/evidence/soi-production.txt"
+      - "_acceptance/thanh-vien-vao-dung/rang/soi-vat.mjs"
+    expected: |
+      soi-vat.mjs doc evidence/soi-production.txt: co dong "may-chu <host>" voi host khong phai
+      localhost/127.0.0.1; co du bon dong so dem (ten-mien, treo, bo-sot, khong-doc-duoc) moi dong
+      mot so nguyen; dong "giao-dich READ ONLY"; khong ky tu "@" nao. In "DUNG <muc>" tung muc,
+      KET LUAN "7 DUNG, 0 SAI" (may-chu, giao-dich, bon so, khong "@"). Tep vang -> ma 2 "chua chay tren production".
+      CHIEU DO: ban sao tep chen mot dia chi thu -> "SAI co dia chi", ma 1; doi host thanh
+      localhost -> "SAI may chu la may dev", ma 1.
+
+  - id: E17
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1b_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/thanh-vien-vao-dung/evidence dat tuong minh: lenh cua r1b_do_man (mot-luot.sh tu lay cong, tien-de.mjs, do-man.mjs tu chan cay, gieo, chup, don)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/thanh-vien-vao-dung/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "_acceptance/thanh-vien-vao-dung/rang/do-man.mjs"
+    expected: |
+      Anh: the-quan-tri-1440.png, the-quan-tri-375.png (co ten mien), the-loi-1440.png (loi duoi
+      o), the-thanh-vien-1440.png, the-thanh-vien-375.png (khoa + dong ly do),
+      hop-da-la-thanh-vien-1440.png. Nhin thay: the co tieu de «Tên miền nội bộ», mo ta, o xep
+      doc, «Lưu» o goc the; khong tran ngang o 375; loi nam duoi o; dong ly do doc duoc.
+      Dong do: "DUNG 375: document va main khong tran ngang" cho ca hai vai; go dung chuoi cua
+      AC-1 "  @OneHub.Center, onehub.vn, onehub.center " roi bam «Lưu» tren man that -> "DUNG 1440:
+      luu -> DB staffEmailDomains = onehub.center,onehub.vn", "DUNG 1440: o hien onehub.center,
+      onehub.vn", "DUNG 1440: «Lưu» tat lai"; "DUNG 1440:
+      hop giu mo, thong diep «That person is already a member…»". Ban do khoi phuc cot
+      staffEmailDomains ve gia tri truoc luot (doc lai sau don, in "DUNG don").
+
+  - id: E18
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.r1b_san_thiet_ke
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+    expected: |
+      design-gate --mode static tren tung tep cua trang Thanh vien (gom tep the ten mien moi) ->
+      ma 0 cho moi tep. CHIEU DO: ban sao the them className="bg-blue-600 text-gray-400" len Card -> luat P0
+      "gray-on-color", ma khac 0 (design-gate tinh chi chan P0; rounded-[7px] khong bi bat).
+
+  - id: E19
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.tvhk_do_khoi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/components/page-shell.tsx"
+    expected: |
+      Thuoc da ky cua thanh-vien-hai-khoi-cung-khuon chay tren cay nay: KET LUAN "46 DUNG, 0 SAI —
+      ma thoat 0" nhu luc ky (ma tran 46 ma, gom 3 dong khong-quyen giu AC-10 cu).
+
+  - id: E20
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.tvhk_ttv_do_bang
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+    expected: |
+      Thuoc da ky bang-thanh-vien-giu-hang qua lenh tvhk_ttv_do_bang: ma 0, moi dong DUNG nhu luc ky.
+
+  - id: E21
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.r1b_khong_hoi_quy_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "packages/auth/src/**"
+      - "apps/api/src/tracking/tracking-filing.service.ts"
+      - "apps/api/src/mailbox/mailbox-match.service.ts"
+    expected: |
+      domain-nha-tach.spec.ts, workspace-thanh-vien.spec.ts, go-thanh-vien.spec.ts: 0 fail, so ca
+      khong giam so voi merge-base (so ca in o dong "<n> pass" cua bun).
+
+  - id: E22
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.r1b_tu_dien
+    paths:
+      - "CONTEXT.md"
+      - "apps/app/lib/messages/settings-thanh-vien.ts"
+      - "docs/api.md"
+      - "docs/environment.md"
+      - "_acceptance/thanh-vien-vao-dung/rang/tu-dien.mjs"
+    expected: |
+      tu-dien.mjs: CONTEXT.md co muc «**Tên miền nội bộ**» voi dong _Avoid_ va dong «Vì sao» trong
+      cung muc; import thanhVienMessages("vi") va ("en") that: moi khoa moi cua nhom tenMienNoiBo
+      co chuoi khac rong o ca hai; docs/api.md co cau «already a member» va «staffDomains»;
+      docs/environment.md co «Settings → Members» trong doan staffEmailDomains. Moi muc mot dong
+      DUNG/SAI, KET LUAN "<n> DUNG, 0 SAI". CHIEU DO: ban sao CONTEXT.md bo dong _Avoid_ -> SAI
+      ghim "_Avoid_", ma 1.
+
+  - id: E23
+    criterion: AC-14
+    executor: test
+    cmd: config:executors.test.r1b_messages_guard
+    paths:
+      - "apps/app/lib/messages/settings-thanh-vien.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    expected: |
+      messages-guard.spec.ts xanh voi cac khoa moi da ghim (GHIM/KHONG_DAU theo luat cua tep).
+      CHIEU DO: ban sao de mot chuoi vi khong dau -> messages-guard do, ghim ten khoa.
+
+  - id: E24
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1b_cho_phep_api
+    paths:
+      - "apps/api/src/workspace/**"
+      - "apps/api/test/thanh-vien-vao-dung.spec.ts"
+    expected: |
+      describe "cho-phep" ca "khong-quyen": thanh vien thuong goi workspace.allowEmail qua router
+      tRPC that (createCaller co AuthMiddleware) -> FORBIDDEN voi message dung "Only an owner or an
+      admin can allow an address."; dem invitation cho dia chi do truoc va sau bang nhau. Doi chung
+      duong: quan tri cung loi goi -> 1 dong pending. CHIEU DO: bo kiem vai trong allowEmail (ban
+      sao) -> ca do, dem tang 1, ghim "allow an address".
+
+  - id: E25
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.r1b_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/test/thanh-vien-vao-dung.dom.tsx"
+    expected: |
+      describe "the-ten-mien" ca "luu-xong": go dung chuoi cua AC-1 vao o, bam «Lưu»; mutation tra
+      dau ra rut tu fixture chung voi E1 (mot hang xuat tu tep test API, khong viet tay lai) ->
+      o co gia tri "onehub.center, onehub.vn", nut «Lưu» disabled, toast «Đã lưu tên miền nội bộ».
+      CHIEU DO: form khong dat lai theo dau ra (ban sao) -> ca do, ghim "o hien ban chuan hoa".
+
+  - id: E26
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.r1b_dom
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/members/**"
+      - "apps/app/test/thanh-vien-vao-dung.dom.tsx"
+    expected: |
+      describe "duoc-phep-vao" ca "treo-khong-dem": allowances co 2 dong pending va 1 dong
+      "accepted" do API doc tu dong treo (dau ra cung hinh allowanceOutput that) -> tieu de
+      «Được phép vào · 2», dia chi cua dong accepted khong co trong khoi. CHIEU DO: dem tren mang
+      chua loc (ban sao) -> «· 3», ghim "khong tinh dong treo".
