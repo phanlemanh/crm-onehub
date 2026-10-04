@@ -198,7 +198,7 @@ export function useCuocSoan({
 		choGuiLai.current = null;
 		if (henKhep.current) clearTimeout(henKhep.current);
 		setDangChoKhep(false);
-		if (loi) setLoiGuiLai(true);
+		setLoiGuiLai(loi);
 	};
 	const danhDau = (
 		ma: number,

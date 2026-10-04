@@ -280,6 +280,29 @@ describe("gui-lai-sau-khep", () => {
 		expect(coLoi(), "bao-loi-con-khi-khep-thuong").toBe(false);
 	});
 
+	test("gui-lai-sau-khep: luot tu xong sau mot lan gui lai bi tu choi thi bao loi tat, o soan mo", async () => {
+		await moManQua45s();
+		const guiTruoc = daGui.length;
+		await bam(nutThu());
+		await troi(20);
+		tuChoiGui(true);
+		await khep();
+		tuChoiGui(false);
+		await troi(50);
+		expect(moTa()).toContain(m.hoiThoai.chuaGuiLai);
+		await bam(nutThu());
+		await troi(20);
+		expect(daHuy.length).toBe(2);
+		await datAgent({ status: "ready", error: undefined });
+		await khep("thuong");
+		expect(daGui.length, "gui-lai-khi-khep-thuong sau tu choi").toBe(guiTruoc);
+		expect(coLoi(), "bao-loi-con-khi-khep-thuong sau tu choi").toBe(false);
+		expect(
+			q('[data-o-soan="khoa"]') === null,
+			"o-soan-khoa-khi-khep-thuong",
+		).toBe(true);
+	});
+
 	test("gui-lai-sau-khep: khep khong co moc thi khong gui lai, bao chua gui lai", async () => {
 		await moManQua45s();
 		const guiTruoc = daGui.length;
