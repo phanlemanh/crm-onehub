@@ -125,7 +125,7 @@ describe("logo", () => {
 		);
 		const daGui = logoTruocTieuDe(o, q.xong.title);
 
-		expect(lienKetNhap).toBe("Trang chủ");
+		expect(lienKetNhap, "trang thai nhap: thieu logo").toBe("Trang chủ");
 		expect(nhap, "trang thai nhap: thieu logo").toBe(true);
 		expect(daGui, "trang thai da gui: thieu logo").toBe(true);
 	});
