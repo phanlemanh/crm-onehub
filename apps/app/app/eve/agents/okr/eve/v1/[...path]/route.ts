@@ -117,12 +117,17 @@ async function handler(
 		)}`,
 	);
 
-	const quaHan = AbortSignal.timeout(CUA_OKR.choTroLyMs);
+	const quaHan = new AbortController();
+	const henGio = giuCho
+		? setTimeout(() => quaHan.abort(), CUA_OKR.choTroLyMs)
+		: undefined;
 	const init: RequestInit & { duplex?: "half" } = {
 		method: request.method,
 		headers,
 		redirect: "manual",
-		signal: AbortSignal.any([request.signal, quaHan]),
+		signal: giuCho
+			? AbortSignal.any([request.signal, quaHan.signal])
+			: request.signal,
 	};
 
 	if (request.method !== "GET" && request.method !== "HEAD") {
@@ -137,9 +142,11 @@ async function handler(
 		const detail = error instanceof Error ? error.message : String(error);
 		const khongNoi = { error: CUA_OKR.loi.khongNoiDuoc, detail };
 		if (request.signal.aborted) return Response.json(khongNoi, { status: 502 });
-		if (quaHan.aborted)
+		if (quaHan.signal.aborted)
 			return loiHoan(giuCho, cuocSoanId, 504, { error: CUA_OKR.loi.quaHan });
 		return loiHoan(giuCho, cuocSoanId, 502, khongNoi);
+	} finally {
+		clearTimeout(henGio);
 	}
 
 	if (giuCho && !upstream.ok && (await daHoan(cuocSoanId))) {

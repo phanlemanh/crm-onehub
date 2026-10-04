@@ -6,7 +6,12 @@ export const BI_MAT = "bi-mat-cua-okr-hoan-luot-du-dai-32-ky-tu";
 export const AGENT_GIA = "http://127.0.0.1:65531";
 export const CHO_TRO_LY_THU_MS = 300;
 
-export type KetQuaTroLy = "nem" | "treo" | number;
+export type KetQuaTroLy = "nem" | "treo" | "luong-cham" | number;
+
+export const MAU_LUONG = [1, 2, 3, 4, 5, 6].map(
+	(i) => `{"type":"manh","so":${i}}\n`,
+);
+export const LUONG_NHIP_MS = 120;
 
 export type PhienNguoi = {
 	user: { id: string; email: string; name: string };
@@ -56,6 +61,11 @@ export function taoKhung(ten: string): Khung {
 		if (trangThai.truocKhiTra) await trangThai.truocKhiTra();
 		const ket = trangThai.ketQua;
 		if (ket === "nem") throw new TypeError("connect ECONNREFUSED tro-ly-gia");
+		if (ket === "luong-cham")
+			return new Response(luongCham(init?.signal), {
+				status: init?.method === "GET" ? 200 : 202,
+				headers: { "content-type": "application/x-ndjson" },
+			});
 		if (ket === "treo")
 			return new Promise<Response>((_xong, hong) => {
 				init?.signal?.addEventListener("abort", () =>
@@ -178,11 +188,29 @@ export type YeuCauCua = {
 	ctx: { params: Promise<{ path: string[] }> };
 };
 
+function luongCham(signal: AbortSignal | null | undefined) {
+	const ma = new TextEncoder();
+	return new ReadableStream<Uint8Array>({
+		async start(dong) {
+			for (const manh of MAU_LUONG) {
+				await new Promise((xong) => setTimeout(xong, LUONG_NHIP_MS));
+				if (signal?.aborted) {
+					dong.error(signal.reason ?? new Error("abort"));
+					return;
+				}
+				dong.enqueue(ma.encode(manh));
+			}
+			dong.close();
+		},
+	});
+}
+
 export function yeuCau(
 	duong: string,
 	cuocSoanId: string,
 	header: string,
 	signal?: AbortSignal,
+	method: "POST" | "GET" = "POST",
 ): YeuCauCua {
 	const url = `http://localhost:3000/eve/agents/okr${duong}`;
 	const { pathname } = new URL(url);
@@ -191,9 +219,9 @@ export function yeuCau(
 		.split("/")
 		.map((doan) => decodeURIComponent(doan));
 	const request = new Request(url, {
-		method: "POST",
+		method,
 		headers: { "content-type": "application/json", [header]: cuocSoanId },
-		body: "{}",
+		body: method === "POST" ? "{}" : undefined,
 		signal,
 	});
 	return { request, ctx: { params: Promise.resolve({ path }) } };

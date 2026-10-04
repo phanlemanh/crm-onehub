@@ -9,6 +9,7 @@ import {
 	BI_MAT,
 	CHO_TRO_LY_THU_MS,
 	type KetQuaTroLy,
+	MAU_LUONG,
 	taoKhung,
 	yeuCau,
 } from "./khung-cua-hoan";
@@ -51,7 +52,9 @@ process.env.OKR_AGENT_URL = AGENT_GIA;
 const fetchThat = globalThis.fetch;
 globalThis.fetch = k.fetchGia as typeof fetch;
 
-const { POST } = await import("@/app/eve/agents/okr/eve/v1/[...path]/route");
+const { GET, POST } = await import(
+	"@/app/eve/agents/okr/eve/v1/[...path]/route"
+);
 
 async function gui(duongCua: string, cuocSoanId: string, signal?: AbortSignal) {
 	const { request, ctx } = yeuCau(
@@ -281,6 +284,35 @@ describe("nguoi-huy", () => {
 				than: { error: CUA_OKR.loi.quaHan, luot: CUA_OKR.luotDaHoan },
 			});
 			expect(await docLuot(id)).toBe(n);
+		});
+	}
+});
+
+describe("luong-khong-cat", () => {
+	const O_LUONG = [
+		{ ten: "luong-get", method: "GET", duoi: "/stream" },
+		{ ten: "post-gui-tiep", method: "POST", duoi: "" },
+	] as const;
+
+	for (const o of O_LUONG) {
+		test(`luong-khong-cat: ${o.ten} dai hon thoi han van doc tron`, async () => {
+			const n = 2;
+			const { id, duongCua } = await k.cuoc("gui-tiep", n);
+			k.trangThai.ketQua = "luong-cham";
+			const { request, ctx } = yeuCau(
+				`${duongCua}${o.duoi}`,
+				id,
+				OKR_SOAN_CUA.header,
+				undefined,
+				o.method,
+			);
+			const res = await (o.method === "GET" ? GET : POST)(request, ctx);
+			const than = await res
+				.text()
+				.catch((loi: unknown) => `LOI ${String(loi)}`);
+			k.trangThai.ketQua = 202;
+			expect(than, `luong-bi-cat ${o.ten}`).toBe(MAU_LUONG.join(""));
+			expect(await docLuot(id)).toBe(o.method === "POST" ? n + 1 : n);
 		});
 	}
 });
