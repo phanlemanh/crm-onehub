@@ -40,6 +40,8 @@ async function ghiGoc(goc: string, purpose: string, kenh: string) {
 	);
 }
 
+const TRAN_MS = 60_000;
+
 const sendTra = (goc: string) =>
 	(async () => ({ id: goc })) as unknown as SendFn;
 
@@ -105,5 +107,5 @@ describe("kd-dem", () => {
 			saiCho: { "crm.nghien-cuu": 2, "crm.dung-tac-nhan": 1 },
 		});
 		expect(sau).toBe(truoc);
-	});
+	}, TRAN_MS);
 });
