@@ -27,6 +27,10 @@ const KHUON_PHAI_CO = [
 	"agent_builder/agent.ts#output",
 	"agent_runner/agent.ts#output",
 	"may_soan/agent.ts#output",
+	"tro_ly_kho/tools/search_pages.ts",
+	"tro_ly_kho/tools/read_page.ts",
+	"tro_ly_kho/tools/nop_tra_loi.ts",
+	"tro_ly_kho/agent.ts#output",
 ];
 
 type CoOKetQua = { shape: { result: z.ZodType } };

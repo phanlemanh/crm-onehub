@@ -19,6 +19,7 @@ export const TASK_KINDS = [
 	"okr-kiem-san-sang",
 	"okr-tom-tat-xep",
 	"ai-doi-soat",
+	"hoi-kho",
 ] as const;
 
 export type TaskKind = (typeof TASK_KINDS)[number];
@@ -42,6 +43,13 @@ export type DirectKind = (typeof DIRECT_KINDS)[number];
 export function isDirectKind(kind: string): kind is DirectKind {
 	return (DIRECT_KINDS as readonly string[]).includes(kind);
 }
+
+export const HOI_KHO_KINDS = ["hoi-kho"] as const;
+
+export const KHONG_VAO_LAN_NGHIEN_CUU = [
+	...DIRECT_KINDS,
+	...HOI_KHO_KINDS,
+] as const;
 
 export const CONTACT_STATUS_KINDS = ["identify", "profile", "recheck"] as const;
 
@@ -80,6 +88,7 @@ export const PRIORITY = {
 	okrNen: 90,
 	okrKiem: 940,
 	aiDoiSoat: 45,
+	hoiKho: 960,
 } as const;
 
 export const LOAI_VIEC_OKR = [

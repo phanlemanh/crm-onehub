@@ -1,10 +1,11 @@
 import type { Db } from "@crm/db";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import { dieuKienThay, dieuKienThayDeXuat } from "@crm/db/tai-lieu-quyen";
+import { type HangTimKho, timTrangDangDung } from "@crm/db/tai-lieu-tim";
 import { type LoaiTrang, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { cauChuaLienKet, chuThuong } from "@crm/validation/tai-lieu-markdown";
 import { doanTrich, dungTruyVan } from "@crm/validation/tai-lieu-tim";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type { NguoiGoi } from "./quyen";
 import type {
@@ -14,6 +15,7 @@ import type {
 	TaiLieuTimOutput,
 } from "./tai-lieu.contracts";
 import { TAI_LIEU_API } from "./tai-lieu-config";
+import { TaiLieuHoiService } from "./tai-lieu-hoi.service";
 
 const TIM = TAI_LIEU.tim;
 
@@ -29,18 +31,8 @@ function theoTen<T extends { ten: string }>(a: T, b: T): number {
 	return a.ten.localeCompare(b.ten, "vi");
 }
 
-type HangTim = {
-	slug: string;
-	ten: string;
-	loai: string;
-	chuId: string;
-	chuTen: string;
-	so: number;
-	noiDung: string;
-};
-
 function trichCua(
-	hang: HangTim,
+	hang: HangTimKho,
 	tu: readonly string[],
 ): TaiLieuTimOutput["rows"][number]["doanTrich"] {
 	return (
@@ -55,23 +47,15 @@ function trichCua(
 
 @Injectable()
 export class TaiLieuTimService {
-	constructor(@InjectDatabase() private readonly db: Db) {}
+	constructor(
+		@InjectDatabase() private readonly db: Db,
+		@Inject(TaiLieuHoiService) private readonly hoiKho: TaiLieuHoiService,
+	) {}
 
 	async tim(q: string): Promise<TaiLieuTimOutput> {
 		const truyVan = dungTruyVan(q);
 		if (!truyVan) return { rows: [] };
-		const hang = await this.db.$queryRaw<HangTim[]>`
-			SELECT t.slug, t.ten, t.loai, u.id AS "chuId", u.name AS "chuTen",
-				p.so, p."noiDung"
-			FROM "taiLieuTrang" t
-			JOIN "taiLieuPhienBan" p ON p.id = t."banDangDungId"
-			JOIN "user" u ON u.id = t."chuTrangId",
-				to_tsquery('simple', unaccent(${truyVan.tsquery})) q
-			WHERE t."timKiem" @@ q
-			ORDER BY (to_tsvector('simple', unaccent(t.ten)) @@ q) DESC,
-				ts_rank_cd(t."timKiem", q) DESC, t.ten ASC
-			LIMIT ${TIM.soDong}
-		`;
+		const hang = await timTrangDangDung(this.db, truyVan.tsquery, TIM.soDong);
 		return {
 			rows: hang.map((h) => ({
 				slug: h.slug,
@@ -159,6 +143,10 @@ export class TaiLieuTimService {
 	}
 
 	async sucKhoe(nguoi: NguoiGoi): Promise<TaiLieuSucKhoeOutput> {
+		const [chuaTraLoi, baoSai] = await Promise.all([
+			this.hoiKho.danhSachChuaTraLoi(nguoi),
+			this.hoiKho.danhSachBaoSai(nguoi),
+		]);
 		const [dangDung, lienKet, cho] = await Promise.all([
 			this.db.taiLieuTrang.findMany({
 				where: { banDangDungId: { not: null } },
@@ -237,6 +225,8 @@ export class TaiLieuTimService {
 						duyetLuc: (t.banDangDung?.duyetLuc ?? new Date(0)).toISOString(),
 					})),
 			),
+			chuaTraLoi,
+			baoSai,
 		};
 	}
 

@@ -56,7 +56,7 @@ Mỗi mục dưới đây tách hai thứ hoàn toàn khác nhau:
 
 Gộp hai loại vào một dòng là cách nhanh nhất để lần sau chép nhầm.
 
-## Bảy tệp
+## Các tệp
 
 ### conversation.tsx
 
@@ -254,24 +254,33 @@ lại là trạng thái `ToolUIPart` của AI SDK, đã khai miễn trong `chu-c
 
 **Tệp:** `packages/ui/src/components/ai-elements/suggestion.tsx`
 
-**Số dòng khác:** 2
+**Số dòng khác:** 30
 
-**Vân tay lệch:** `98b9edf62e06310b`
+**Vân tay lệch:** `cc74a7d46eeb4fd4`
 
 **Đổi gì:** Kéo bằng CLI ngày 30/09 ở lượt `soan-okr-cung-tro-ly`, trong một sân
 tạm có `components.json` và `tsconfig.json` của kho, rồi chép riêng hai tệp
-`suggestion.tsx` và `prompt-input.tsx` vào cây. Toàn bộ 2 dòng khác là bản vá của
-kho, **không có phần cũ hơn thượng nguồn**:
+`suggestion.tsx` và `prompt-input.tsx` vào cây. Lượt `tro-ly-doc-kho` kéo cùng tệp
+này ngày 01/10 trên nhánh riêng; khi gộp hai nhánh, tệp giữ bản vá của 30/09 và
+thêm biến thể của lượt 4. Toàn bộ dòng khác là bản vá của kho, **không có phần cũ
+hơn thượng nguồn**:
 
 - `Suggestion` bỏ `className` khỏi danh sách tham số tách riêng và bỏ chuỗi
   `cn("cursor-pointer rounded-full px-4", className)` ở `Button`; `className`
   của người gọi đi thẳng vào `Button` qua `...props`.
+- `Suggestions` thêm biến thể `xuongDong` (round 4 của `tro-ly-doc-kho`, 02/10):
+  thay hàng `ScrollArea` cuộn ngang `w-max` bằng một hàng `flex-wrap` rộng đúng
+  khung, và cho mỗi nút con cao theo chữ (`h-auto`, `whitespace-normal`,
+  `max-w-full`). Mặc định vẫn là hàng cuộn ngang của thượng nguồn.
 
 **Vì sao:** `rounded-full` không có trong thang bán kính của `docs/design.md`
 (AC-6, `mau-ban-kinh.mjs` đỏ đích danh dòng này). `px-4` là khoảng cách tự đặt
 đè lên cỡ `sm` của `Button`, và `cursor-pointer` đã nằm sẵn trong `buttonVariants`
 của kho. Nút gợi ý là chip viền cỡ `sm` của `Button` — hình dạng của một gợi ý
-do biến thể quyết, không do chỗ gọi.
+do biến thể quyết, không do chỗ gọi. Ở khổ 390, hàng cuộn ngang giấu chip thứ hai
+và thứ ba sau mép phải mà trang không cuộn ngang, nên người dùng điện thoại của tab
+«Hỏi» không biết còn gợi ý; biến thể mới được dựng ở `packages/ui` thay vì đè lớp ở
+chỗ gọi.
 
 ### prompt-input.tsx
 

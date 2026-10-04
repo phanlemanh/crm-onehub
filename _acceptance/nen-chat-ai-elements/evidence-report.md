@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 68478e877021999d6c540e4dd4a93e6d57549890
+verified_commit: 80fea3400e5c375fb68ed9df1c79280ca748b079
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -228,6 +228,10 @@ sha: fde37c8be543e5144ad9060eedd074aaad6cbdb8 · suites: 4 lệnh exit 0 · eval
 run_id: repin-20261001T072708Z-93351
 sha: 858f1967383b3bd27de9be8c90ce53db7f3a32c3 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
 
+### Re-pin lần 9 (nhánh feat/tro-ly-doc-kho) — 2026-10-01, do hoa cu sau khi gop onehub (#230) va thuoc bi cham boi tro-ly-doc-kho
+run_id: repin-20261001T234016Z-88835
+sha: 58f8fb3ff0bedc55cea6a773c79628a69fb5f838 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
 ### Re-pin lần 9 — 2026-10-02, do hoá cũ do soan-okr-cung-tro-ly (gộp onehub 923f5717)
 run_id: repin-20261002T013711Z-82256
 sha: 6b618bff86a078e61a0ed42321a2ca28d8a8e66e · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
@@ -239,3 +243,7 @@ sha: 255a3688eaa146901ac98df58fc8957d22dba7e9 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 11 — 2026-10-02, do hoá cũ do sửa mã kiểm (agent-okr Node 24, api nguon-khoa) cho CI PR #232
 run_id: repin-20261002T070749Z-51832
 sha: 68478e877021999d6c540e4dd4a93e6d57549890 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 13 — 2026-10-04, do hoá cũ sau khi gộp onehub #247 vào PR #231, đổi tên migration, vá ba xung đột ngầm
+run_id: repin-20261004T060523Z-75459
+sha: 80fea3400e5c375fb68ed9df1c79280ca748b079 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng

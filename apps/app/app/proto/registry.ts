@@ -54,6 +54,7 @@ const BANG_GHEP = {
 	"kho-tai-lieu": KhoTaiLieuMau,
 	"may-soan-de-xuat": KhoTaiLieuMau,
 	"tim-va-dieu-huong-kho": KhoTaiLieuMau,
+	"tro-ly-doc-kho": KhoTaiLieuMau,
 	"to-chuc-danh-sach-chi-tiet": ToChucDanhSachChiTietMau,
 	"toan-canh-okr": ToanCanhOkrMau,
 	"khung-tao-okr-nhu-deal": KhungTaoOkrNhuDealMau,

@@ -1328,11 +1328,11 @@ stages.
   and cuts the sentence around the link from that page's current text with `cauChuaLienKet`.
   No sentence is stored, so an edited page cannot show a stale quote. A caller who cannot
   see the target page gets `NOT_FOUND`, the same as a missing slug.
-- **`sucKhoe` is five lists, each capped at `TAI_LIEU.tim.sucKhoeToiDa` with a real
+- **`sucKhoe` is seven lists, each capped at `TAI_LIEU.tim.sucKhoeToiDa` with a real
   `total`.** Quá hạn xác minh (before the start of today, VN time), có bản chờ duyệt, liên
   kết gãy (grouped by source page), được nhắc mà chưa có trang (grouped by target slug) and
-  mồ côi (no other current page links to it). Every row carries its chủ trang; there is no
-  score.
+  mồ côi (no other current page links to it), then the two lists of the trợ lý AI described
+  in the next section. Every row carries its chủ trang; there is no score.
 - **One counting rule for «chờ duyệt».** The tab badge, the Tổng quan card
   (`dashboard.summary.taiLieuChoDuyet`) and the morning reminder all count through
   `demChoDuyet` / `demChoDuyetTheoNguoi` in `@crm/db/tai-lieu-quyen`: proposals in
@@ -1351,6 +1351,37 @@ stages.
   `chuTrangId`; `boLoc` returns only the đơn vị and chủ trang that have a page the caller can
   see, with counts. `proposals` takes `nhom` (`tat-ca` by default, `cho`, `da-xu-ly`) and a
   page, and returns `total`.
+
+## Kho tài liệu: hỏi, báo sai, xác minh
+
+`apps/api/src/tai-lieu/tai-lieu-hoi.service.ts` owns the questions people ask the trợ lý AI.
+The API decides nothing about the answer: `hoiKho.hoi` writes a `TaiLieuHoi` row and an
+`AgentTask` of kind `hoi-kho`, and `apps/agent` answers it (`docs/agent.md`, «Chỗ rẽ: Trợ lý
+AI đọc kho»).
+
+- **`hoi`, `ketQua`, `baoSai` live on their own router alias, `hoiKho`, behind
+  `PhamViDoiTacMiddleware`.** The `okr` role reaches every other `taiLieu.*` procedure, but the
+  trợ lý AI is closed to it; a separate alias keeps that refusal from breaking the matrix
+  that checks `taiLieu.*` stays open to `okr`.
+- **Two caps, counted on rows of channel `CRM`**: `TAI_LIEU_HOI.tran.ngay` per person per VN
+  day and `TAI_LIEU_HOI.tran.thang` for the whole workspace per VN month. Over a cap the call
+  fails with HTTP 429 and the fixed sentence, writes nothing and wakes nobody. The count runs
+  under an advisory lock per person, so two tabs cannot both take the last question.
+- **`ketQua` returns what was checked, never what the model wrote**: `TRA_LOI` with the
+  checked `traLoi` (sentences, verbatim excerpts, version, approval date, pages past their
+  verification date), `TU_CHOI` with up to three closest pages, or `LOI` with its reason.
+  Only the person who asked reads it; anyone else gets `NOT_FOUND`.
+- **`baoSai` is for the asker and a `TRA_LOI` row only.** It writes one `TaiLieuBaoSai` per
+  cited page, with the question text and an optional note; a second report returns the
+  rows already there. The question text is stored here because the answer row clears it.
+- **Two health lists.** «Bị báo sai» shows a chủ trang the reports on their pages and
+  `owner`/`admin` all of them; «Câu chưa trả lời được» shows refused questions to
+  `owner`/`admin`, and to a chủ trang the ones whose closest page is theirs. Neither shows
+  who asked. `taiLieu.xuLyBaoSai` requires a conclusion (`SAI` · `DUNG`), and `demBaoSai`
+  in `@crm/db/tai-lieu-hoi` counts the confirmed `SAI` ones for the round's kill threshold.
+- **`taiLieu.datXacMinh`** sets or clears a page's `xacMinhDen` for its chủ trang and
+  `owner`/`admin`, stores noon VN time of the chosen day, and writes a `XAC_MINH` event.
+  `taiLieu.get` returns `xacMinhDen`, `quaHanXacMinh` and `coQuyenXacMinh`.
 
 ## Money
 
