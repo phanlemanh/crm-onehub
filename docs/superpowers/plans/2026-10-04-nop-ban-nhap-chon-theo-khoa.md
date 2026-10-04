@@ -14,3 +14,10 @@ Hồ sơ `_acceptance/nop-ban-nhap-chon-theo-khoa/` · T2 · design `docs/superp
 - Files: `_acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs`, `rang/quet-mau.mjs`
 - Verify: `bun …/dao-thu-tu.mjs xanh` → 0; `bun …/dao-thu-tu.mjs do` → 0 (đỏ đúng chữ ký); `bun …/quet-mau.mjs` → 0. Phá-thử: tạm bỏ bước dời bản ghi trong bản sao → chiều đỏ phải ra mã 1 (không tái hiện), không ra 0.
 - Phục vụ: E1, E2, E5 · independent: false (cần Task 1)
+
+## Task 3 — Mở rộng sau S4 round 1 (sổ d-…-6)
+
+- Files: `apps/agent-okr/test/nop-ban-nhap.integration.spec.ts`, `_acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs`, `rang/quet-mau.mjs`
+- Việc: hàm `mucTieuChoTheoKhoa` dùng cho ca `nhan` và `bac`; `orderBy: [{ createdAt: "asc" }, { id: "asc" }]` cho `canChinh` của ca `bac`; răng dời thành bảng ba ca xếp lại bằng chỉ mục tạm + `CLUSTER`; răng quét so từng chỗ với `DA_RA` (11 chỗ).
+- Verify: `bun …/dao-thu-tu.mjs xanh` → 0 và `do` → 0, ba lượt liền; `bun …/quet-mau.mjs` → 0; phá-thử bỏ `CLUSTER` → mã 2 cả ba ca; E3 16 pass.
+- Phục vụ: E1, E2, E3, E4, E5 · independent: false
