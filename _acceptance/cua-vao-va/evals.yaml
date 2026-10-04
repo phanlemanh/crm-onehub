@@ -263,8 +263,9 @@ evals:
       "DUNG <Eid>: <ref> ma 0" cho tung eval, va dong "DUNG khong-shader" rut tu dau ra cua
       do-cua-vao. Ca kiem dieu kien do: so eval may doc duoc bang so id test|script trong evals.yaml
       (in ca hai so). Ma thoat 0 chi khi moi dong DUNG.
-      CHIEU DO: chay voi soi-ma.mjs ban cu (git show d579103f) tren nhanh khong cham apps/app ->
-      "SAI E16".
+      CHIEU DO (da chung o S3): truoc nhat sua khong-shader (a8f721c9^), luoi cham LuoiCham bi
+      dem nhu AuthShader -> "SAI E11/E12/E13/E19" va dong khong-shader SAI; bo data-slot cua
+      LuoiCham (ban sao) -> do-cua-vao lai SAI hai dong AuthShader.
 
   - id: E15
     criterion: AC-13
