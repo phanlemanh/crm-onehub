@@ -186,6 +186,8 @@ export function useCuocSoan({
 
 	const [lanThu, setLanThu] = useState(0);
 	const [lyDoTruoc, setLyDoTruoc] = useState<LyDoHong | null>(null);
+	const [mocThu, setMocThu] = useState<number | null>(null);
+	const trongChuoiThu = mocThu === soSuKien;
 	const [hetGioTai, setHetGioTai] = useState<string | null>(null);
 	const moc = `${lanThu}:${soSuKien}`;
 	const qua45s = dangTraLoi && hetGioTai === moc;
@@ -212,7 +214,7 @@ export function useCuocSoan({
 		loiMoLai: moLai.error,
 	});
 	const dangThu =
-		lanThu > 0 && (agent.status === "submitted" || moLai.isPending);
+		trongChuoiThu && (agent.status === "submitted" || moLai.isPending);
 	const khoaSoan =
 		locked || hetLuot || hong || cuocDong || lyDoLuot !== null || chuaCauHinh;
 
@@ -241,7 +243,8 @@ export function useCuocSoan({
 
 	const thuLai = () => {
 		setLyDoTruoc(lyDoMoi);
-		setLanThu((n) => n + 1);
+		setLanThu(trongChuoiThu ? lanThu + 1 : 1);
+		setMocThu(soSuKien);
 		moLai.reset();
 		const tin = cuoiCung.current;
 		if (agent.session.continuationToken && tin && !ended) {
@@ -282,7 +285,7 @@ export function useCuocSoan({
 		hong,
 		qua45s,
 		dangThu,
-		lanThu,
+		lanThu: trongChuoiThu ? lanThu : 0,
 		lyDoHong: dangThu ? lyDoTruoc : lyDoMoi,
 		lyDoLuot,
 		chuaCauHinh,

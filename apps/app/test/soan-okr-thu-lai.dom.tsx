@@ -215,3 +215,42 @@ describe("thu-lai", () => {
 		expect(q('[data-luot="loi"]')).toBeNull();
 	});
 });
+
+describe("sau-thu-lai", () => {
+	test("sau-thu-lai: thu lai chay duoc thi luot sau khong mang khung loi va dem cu", async () => {
+		await moManLoi(true);
+		await bam(nutThu());
+		await datAgent({
+			status: "streaming",
+			error: undefined,
+			events: [{ type: "message.delta" }],
+		});
+		await datAgent({ status: "ready", error: undefined });
+		expect(
+			q('[data-luot="loi"]'),
+			"thu-lai-song-sang-luot-sau xong",
+		).toBeNull();
+
+		await datAgent({ status: "submitted", error: undefined });
+		expect(
+			q('[data-luot="loi"]'),
+			"thu-lai-song-sang-luot-sau dang gui",
+		).toBeNull();
+
+		await baoLoiAgent(loiHttp(502, { error: L.khongNoiDuoc }));
+		expect(trongVungDoc(m.hoiThoai.lyDoHong["khong-noi-duoc"])).toBe(true);
+		for (const n of ["1", "2", "3"])
+			expect(
+				trongVungDoc(m.hoiThoai.daThuLai(n)),
+				`thu-lai-song-sang-luot-sau dem ${n}`,
+			).toBe(false);
+
+		await bam(nutThu());
+		await baoLoiAgent(loiHttp(502, { error: L.khongNoiDuoc }));
+		expect(
+			trongVungDoc(m.hoiThoai.daThuLai("1")),
+			"thu-lai-song-sang-luot-sau dem lai tu 1",
+		).toBe(true);
+		expect(trongVungDoc(m.hoiThoai.daThuLai("2"))).toBe(false);
+	});
+});
