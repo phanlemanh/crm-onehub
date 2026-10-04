@@ -1,8 +1,5 @@
 network: driver la script playwright (mot-luot.sh/man-khung.mjs); khong co read_network_requests
 --- xanh
-mot-luot: da cho 306s de toi luot
--- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-phien-do: kho crm_khung_okr_truoc_r1_do · app http://localhost:4328 · api http://localhost:4366
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
@@ -19,12 +16,7 @@ can trai ok muc-tieu 1440
 -- tiền đề làn đo: đã dọn ảnh đại diện
 phien-do: xong — mã 0
 EXIT=0
---- do
-mot-luot: da cho 777s de toi luot
--- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-phien-do: kho crm_khung_okr_truoc_r1_do · app http://localhost:4482 · api http://localhost:4571
--- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
--- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+--- do (--kiem-do-do)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 o so bi cat: phu-trach 375
 ten can giua: muc-tieu 375 (center, 12)
