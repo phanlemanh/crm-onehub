@@ -33,10 +33,15 @@ cứng cần tách trợ lý kho ra một app eve riêng như `apps/agent-okr` �
    library question session or a Zalo chat; anywhere else it refuses at once — do not call it.»
    Lời dặn phiên gốc của mọi purpose khác `kho` và `zalo` nối thêm hằng
    `KHONG_GOI_TRO_LY_KHO` («Never call tro_ly_kho …»). Gọi sai chỗ vẫn hỏng ở `session.started`
-   của phiên con, trước mọi lời gọi model của phiên con (giữ nguyên, có ca ghim).
-4. **Thước.** `_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.ts` — chỉ đọc: số phiên con
-   `tro_ly_kho` có phiên gốc purpose khác `kho`/`zalo` (từ `AiChiPhi`/`AgentEvent`), và số lời gọi
-   model phiên gốc tính năng `tai-lieu.tro-ly` có `modelId` khác model ZDR.
+   của phiên con, trước mọi lời gọi model của phiên con. Trước khi ném lại `KHONG_PHAI_HOI`, lời dặn
+   của `tro_ly_kho` ghi một hàng `AgentEvent` loại `tro-ly-kho.sai-cho` với `data.phienGoc` = mã
+   session gốc — dấu duy nhất của ca này, vì phiên con hỏng trước lời gọi model nên không có
+   `AiChiPhi`.
+4. **Thước.** `_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.ts` — chỉ đọc: số hàng
+   `AgentEvent` `tro-ly-kho.sai-cho`, nhóm theo `AiChiPhi.tinhNang` của session gốc; và số lời gọi
+   model phiên gốc tính năng `tai-lieu.tro-ly` có `modelId` khác model ZDR. Vế thứ hai là chỉ báo
+   gián tiếp: cờ ZDR là tuỳ chọn của từng lời gọi, không lưu ở `AiChiPhi` (thêm cột là migration,
+   nâng T3); bảo đảm thật là ca E3 đo cờ trên từng lời gọi.
 
 ## Ngoài phạm vi
 

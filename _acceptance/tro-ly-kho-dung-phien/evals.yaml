@@ -45,12 +45,14 @@ evals:
       - "apps/agent/agent/lib/tai-lieu-model.ts"
       - "apps/agent/test/tro-ly-kho-dung-phien.integration.spec.ts"
     expected: |
-      Ma tran viet truoc 8 purpose. purpose kho: model tra ve goi doGenerate tren provider gia
-      (createGateway gia tiem vao) va provider gia bat providerOptions.gateway.zeroDataRetention ===
-      true, modelId === TAI_LIEU_AGENT.hoi.maModel; hai o khoa: co KHO_TAI_LIEU_AI_GATEWAY_API_KEY ->
-      provider tao voi apiKey do; khong co -> khong apiKey. Bay purpose khac: ket qua deep-equal
-      modelTheoVai(vaiCuaPhien(ctx)) tren cung DB. CHIEU DO: bo nhanh kho -> do ghim
-      "kd-zdr: phien goc kho khong mang ZDR".
+      Bang viet truoc 8 dong (chep tu hanh vi tren merge-base), so tung truong, khong so ca doi tuong.
+      purpose kho: model tra ve goi doGenerate tren provider gia (createGateway gia tiem vao) va provider
+      gia bat providerOptions.gateway.zeroDataRetention === true, modelId === TAI_LIEU_AGENT.hoi.maModel;
+      hai o khoa: co KHO_TAI_LIEU_AI_GATEWAY_API_KEY -> provider tao voi apiKey do; khong co -> khong
+      apiKey. Bay purpose khac voi setting model mac dinh: ket qua === null (7 khang dinh); them mot luot
+      voi setting model khong mac dinh "openai/gpt-x" cua so 200000: ca bay purpose -> model
+      "openai/gpt-x", modelContextWindowTokens 200000; so tung truong tung dong. CHIEU DO: bo nhanh kho
+      -> do ghim "kd-zdr: phien goc kho khong mang ZDR".
 
   - id: E4
     criterion: AC-4
@@ -77,10 +79,13 @@ evals:
       - "apps/agent/agent/lib/tai-lieu-hoi.ts"
       - "apps/agent/test/tro-ly-kho-dung-phien.integration.spec.ts"
     expected: |
-      Ma tran 5 purpose phien goc (research, builder, team-agent, okr, may-soan), ctx phien con tu
-      ban ghi eve that. moHoi(ctx) reject voi thong diep chua KHONG_PHAI_HOI; dem TaiLieuHoi truoc/sau
-      bang nhau. Doi chung duong: phien goc kho co hang DANG_HOI -> moHoi tra hoiId. CHIEU DO: moHoi tao
-      hang moi khi khong thay -> do ghim "kd-tu-choi: tao hang ngoai phien kho".
+      Ma tran viet truoc 6 purpose phien goc (research, builder, team-agent, okr, may-soan, okr-soan),
+      ctx phien con dung tu ban ghi eve that. Goi resolver session.started THAT cua
+      tro_ly_kho/instructions.ts: reject voi thong diep chua KHONG_PHAI_HOI; dem TaiLieuHoi truoc/sau
+      bang nhau; dung 1 hang AgentEvent type "tro-ly-kho.sai-cho" voi data.phienGoc = ma session goc.
+      Doi chung duong: phien goc kho co hang DANG_HOI -> resolver tra loi dan, 0 hang sai-cho. CHIEU DO:
+      resolver bat loi va tra loi dan rong -> do ghim "kd-tu-choi: loi dan nuot KHONG_PHAI_HOI"; bo ghi
+      AgentEvent -> do ghim "kd-tu-choi: khong ghi dau sai cho".
 
   - id: E6
     criterion: AC-6
@@ -100,9 +105,11 @@ evals:
       - "_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.ts"
       - "_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.spec.ts"
     expected: |
-      Postgres that (kho rieng cua luot). Gieo AiChiPhi/AgentEvent bang ham ghi that cua hook chi phi
-      (so-chi-phi cua tro_ly_kho va hook chi phi phien goc): 2 phien con duoi phien goc kho, 1 duoi
-      zalo, 2 duoi research (sai cho), 1 duoi builder (sai cho); 3 loi goi phien goc tai-lieu.tro-ly voi
-      modelId ZDR, 1 voi modelId khac. demSaiPhien() tra bang viet truoc toEqual
-      { saiCho: { research: 2, builder: 1 }, khongZdr: 1 }; anh chup hang truoc/sau bang nhau. CHIEU DO:
-      dem ca zalo la sai cho -> do ghim "kd-dem: zalo bi dem sai cho".
+      Postgres that (kho rieng cua luot). Hang AiChiPhi cua session goc ghi bang ham ghi that cua hook
+      chi phi phien goc (hooks/so-chi-phi.ts): goc research A, research B, builder C (tinhNang theo
+      VIEC_CUA_PURPOSE), goc kho K1, K2, K3 voi modelId ZDR, K4 voi modelId khac. Dau sai cho sinh bang
+      DUONG HONG THAT: chay resolver session.started cua tro_ly_kho duoi ctx con cua A, B, C (moi lan ra
+      1 hang AgentEvent tro-ly-kho.sai-cho). demSaiPhien() tra bang viet truoc toEqual
+      { saiCho: { "crm.nghien-cuu": 2, "crm.dung-tac-nhan": 1 }, khongZdr: 1 }; anh chup hang truoc/sau
+      bang nhau. CHIEU DO: dem theo AiChiPhi cua session con thay vi AgentEvent -> do ghim
+      "kd-dem: phien con hong truoc model khong duoc dem".
