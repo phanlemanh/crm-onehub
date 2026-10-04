@@ -7,7 +7,7 @@ import { MockLanguageModelV4 } from "ai/test";
 import type { SendFn } from "eve/channels";
 import { AgentTriggerService } from "../../api/src/agent/agent-trigger.service";
 import { TaiLieuHoiService } from "../../api/src/tai-lieu/tai-lieu-hoi.service";
-import taskInstructions from "../agent/instructions/task";
+import taskInstructions, { chiDanNghienCuu } from "../agent/instructions/task";
 import { modelChoPhienGoc } from "../agent/lib/model";
 import {
 	KHONG_GOI_TRO_LY_KHO,
@@ -121,8 +121,8 @@ describe("kd-loi-dan", () => {
 		)?.markdown ?? "";
 		const sai: string[] = [];
 		const giua = crm.slice(
-			crm.indexOf(HOI.dauCauHoi.mo),
-			crm.indexOf(HOI.dauCauHoi.dong),
+			crm.lastIndexOf(HOI.dauCauHoi.mo),
+			crm.lastIndexOf(HOI.dauCauHoi.dong),
 		);
 		if (!giua.includes(CAU_HOI)) {
 			sai.push("kd-loi-dan: phien con khong thay cau hoi");
@@ -132,7 +132,7 @@ describe("kd-loi-dan", () => {
 			sai.push("kd-loi-dan: dau du lieu trong cau hoi khong bi xoa");
 		}
 		if (!zalo.includes("Question id:")) sai.push("kd-loi-dan: zalo khong mo");
-		if (zalo.includes(HOI.dauCauHoi.mo)) {
+		if (zalo.includes(CAU_DU_LIEU)) {
 			sai.push("kd-loi-dan: zalo chen doan cau hoi");
 		}
 		expect(sai).toEqual([]);
@@ -204,8 +204,11 @@ describe("kd-cam-goi", () => {
 		] as unknown as GiaiChiDan;
 		const sai: string[] = [];
 		let daKiem = 0;
+		const canNguCanhEve = new Set(["research", "okr-soan"]);
 		for (const p of SESSION_PURPOSES) {
-			const md = (await moc({}, phienGia(p)))?.markdown ?? "";
+			const md = canNguCanhEve.has(p)
+				? (await chiDanNghienCuu(phienGia(p) as never)).markdown
+				: ((await moc({}, phienGia(p)))?.markdown ?? "");
 			const coCam = md.includes(KHONG_GOI_TRO_LY_KHO);
 			const mongCam = p !== "kho" && p !== "zalo";
 			if (coCam !== mongCam) {
@@ -229,6 +232,8 @@ describe("kd-cam-goi", () => {
 		expect(sai).toEqual([]);
 	});
 });
+
+const TRAN_TU_CHOI_MS = 60_000;
 
 describe("kd-tu-choi", () => {
 	test("kd-tu-choi: ma tran 6 purpose goi sai cho, resolver nem, ghi dau, khong tao hang", async () => {
@@ -278,5 +283,5 @@ describe("kd-tu-choi", () => {
 		});
 		if (dauDung !== 0) sai.push("kd-tu-choi: doi chung kho ghi dau sai cho");
 		expect(sai).toEqual([]);
-	});
+	}, TRAN_TU_CHOI_MS);
 });

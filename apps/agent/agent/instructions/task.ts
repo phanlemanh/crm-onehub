@@ -56,34 +56,17 @@ export default defineDynamic({
 				});
 			}
 
-			const attributes = ctx.session.auth.current?.attributes ?? {};
-			const budget = attributeNumber.parse(attributes.budget);
-			const kind = attributeText.parse(attributes.taskKind);
+			const chiDan = await chiDanNghienCuu(ctx);
 
-			if (budget) setBudget(budget);
+			if (chiDan.budget) setBudget(chiDan.budget);
 
-			const fieldKeys = attributeText.parse(attributes.fieldKeys);
-
-			const { markdown, focus } = await sessionPreamble(
-				{
-					contactId: attributeText.parse(attributes.contactId),
-					companyId: attributeText.parse(attributes.companyId),
-					dealId: attributeText.parse(attributes.dealId),
-				},
-				{
-					dispatched: Boolean(kind),
-					kind,
-					reason: attributeText.parse(attributes.reason),
-					budget,
-					fieldKeys: fieldKeys ? fieldKeys.split(",") : null,
-				},
-			);
-
-			focusOn({ ...focus, sessionId: ctx.session.id, taskKind: kind });
-
-			return defineInstructions({
-				markdown: `${RESEARCH_INSTRUCTIONS}\n\n${markdown}\n\n${KHONG_GOI_TRO_LY_KHO}`,
+			focusOn({
+				...chiDan.focus,
+				sessionId: ctx.session.id,
+				taskKind: chiDan.kind,
 			});
+
+			return defineInstructions({ markdown: chiDan.markdown });
 		},
 		"turn.started": (_event, ctx) => {
 			const purpose = purposeOf(ctx);
@@ -94,6 +77,35 @@ export default defineDynamic({
 		},
 	},
 });
+
+export async function chiDanNghienCuu(ctx: Parameters<typeof purposeOf>[0]) {
+	const attributes = ctx.session.auth.current?.attributes ?? {};
+	const budget = attributeNumber.parse(attributes.budget);
+	const kind = attributeText.parse(attributes.taskKind);
+	const fieldKeys = attributeText.parse(attributes.fieldKeys);
+
+	const { markdown, focus } = await sessionPreamble(
+		{
+			contactId: attributeText.parse(attributes.contactId),
+			companyId: attributeText.parse(attributes.companyId),
+			dealId: attributeText.parse(attributes.dealId),
+		},
+		{
+			dispatched: Boolean(kind),
+			kind,
+			reason: attributeText.parse(attributes.reason),
+			budget,
+			fieldKeys: fieldKeys ? fieldKeys.split(",") : null,
+		},
+	);
+
+	return {
+		markdown: `${RESEARCH_INSTRUCTIONS}\n\n${markdown}\n\n${KHONG_GOI_TRO_LY_KHO}`,
+		focus,
+		budget,
+		kind,
+	};
+}
 
 function builderInstructions(ctx: Parameters<typeof purposeOf>[0]) {
 	return defineInstructions({
