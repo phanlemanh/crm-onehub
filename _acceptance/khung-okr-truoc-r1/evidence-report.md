@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f409aeb1341baae824f39ce633ce2edad2f1c352
+verified_commit: deee3ae5c9ebd163627dd9841bc6ad69b903486b
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 3 (18/18 eval đạt, 7/7 lệnh suite xanh). Phát hiện trong hợp đồng AC-10 trên điện thoại (chip Kara không cuộn tới vùng Kara khi mục tiêu đã có sẵn dữ liệu) ghi Known limits, sửa trong R1d. Mười sáu mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 3–10, 12, 14, 15 ghi Known limits; Ngoài-2 mở hợp đồng mới; Ngoài-11, 13, 16 chấp nhận không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -290,3 +290,7 @@ none — every multi-run eval is uniform
 Round 1: baseline A/B đo lần cuối ở round này; chi tiết xem run-log.jsonl.
 Round 2: bị trả lại ở bước chấm (tổng kết round ghi 23 eval, kết quả REJECT); sửa ở commit 5f8974a43 (chữ phụ trong popover cho soan-okr.dom.tsx; khung chi tiết không dựng lại khi sang điện thoại).
 Round 3: chạy lại E6, E7, E8, E15, E17 cùng bảy lệnh suite, tất cả xanh; các eval còn lại carry-forward từ round 2. Một phát hiện trong hợp đồng (AC-10, cuộn tới vùng Kara trên điện thoại) và các mục ngoài hợp đồng nằm ở review-findings.md.
+
+### Re-pin lần 1 — 2026-10-04, do hoá cũ do gộp onehub e7a30fab (#251) sau chữ ký
+run_id: repin-20261004T115722Z-91618
+sha: deee3ae5c9ebd163627dd9841bc6ad69b903486b · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E1, E3, E8, E9, E10, E12, E13, E15, E18, E16 (E16 không khai paths) · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-7, AC-8, AC-9, AC-11, AC-13, AC-14
