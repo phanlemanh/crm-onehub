@@ -20,6 +20,7 @@ import {
 	type ObjectiveOutput,
 	objectiveOutput,
 	okrAccessOutput,
+	troLyDanhSachOutput,
 } from "../../api/src/okr/okr.contracts";
 import { danhSachOutput } from "../../api/src/okr/okr-xem.contracts";
 import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
@@ -44,6 +45,7 @@ const { DaLuuTruToChuc } = await import(
 const { Toaster } = await import("@crm/ui/components/sonner");
 const { okrTaiCoCauMessages } = await import("@/lib/messages/okr-tai-co-cau");
 const { toChucMessages } = await import("@/lib/messages/to-chuc");
+const { useKhoMan } = await import("@crm/ui/hooks/use-kho-man");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 
@@ -83,14 +85,25 @@ afterEach(async () => {
 
 async function dung(
 	man: ReactElement,
-	{ locale = "vi", thamSo = "" }: { locale?: Locale; thamSo?: string } = {},
+	{
+		locale = "vi",
+		thamSo = "",
+		truoc,
+	}: {
+		locale?: Locale;
+		thamSo?: string;
+		truoc?: (qc: QueryClient) => void;
+	} = {},
 ): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
 	const client = new QueryClient({
-		defaultOptions: { queries: { retry: false } },
+		defaultOptions: {
+			queries: { retry: false, staleTime: Number.POSITIVE_INFINITY },
+		},
 	});
+	truoc?.(client);
 	let url = new URLSearchParams(thamSo);
 	const ve = (m: ReactElement) => (
 		<NuqsTestingAdapter
@@ -678,5 +691,96 @@ describe("khoi-phuc-toast", () => {
 				document.body.innerHTML = "";
 			}
 		console.log(`so o: ${2 * CA.length}`);
+	});
+});
+
+describe("neo-kara", () => {
+	const MT = mucTieu("mt-kara", { canEdit: true });
+	const CT = () =>
+		chiTiet(MT, {
+			canEditKr: MT.keyResults.map((k) => k.id),
+			kyGhiDuoc: true,
+		});
+	const DS = troLyDanhSachOutput.parse({
+		dong: [],
+		dangSoan: false,
+		maKetThuc: "da-nop",
+		docLuc: "2026-10-03T02:15:00.000Z",
+		lyDo: null,
+	});
+
+	type Goi = { coKhung: boolean; laVung: boolean };
+	let goiCuon: Goi[] = [];
+	const cuonGoc = HTMLElement.prototype.scrollIntoView;
+	const rongGoc = window.innerWidth;
+	afterEach(() => {
+		HTMLElement.prototype.scrollIntoView = cuonGoc;
+		window.innerWidth = rongGoc;
+	});
+
+	const KHO = [
+		{ rong: 390, ten: "dien-thoai", khung: true },
+		{ rong: 1440, ten: "may-tinh", khung: false },
+	] as const;
+
+	test("neo-kara: du lieu co san tu lan ve dau — chi cuon sau khi biet kho, dung mot lan, roi moi bo neoGopY", async () => {
+		expect.assertions(KHO.length * 3);
+		for (const kho of KHO) {
+			goiCuon = [];
+			HTMLElement.prototype.scrollIntoView = function (this: HTMLElement) {
+				goiCuon.push({
+					coKhung: document.querySelector("[data-cuon-ca-khung]") !== null,
+					laVung: this.hasAttribute("data-vung-kara"),
+				});
+			};
+			window.innerWidth = kho.rong;
+			dat("okr.objective", () => CT());
+			dat("okr.troLyDanhSach", () => DS);
+			dat("okr.comments", () => ({ comments: [], dong: [] }));
+			dat("okr.alignmentTargets", () => ({ targets: [] }));
+			const san = await dung(
+				<DetailSheet onOpenChange={() => {}} open>
+					<ObjectiveSheet objectiveId={MT.id} />
+				</DetailSheet>,
+				{
+					thamSo: `record=objective:${MT.id}&${SEARCH_PARAM.okr.neoGopY}=true`,
+					truoc: (qc) => {
+						qc.setQueryData(["okr.objective", { id: MT.id }], CT());
+						qc.setQueryData(["okr.troLyDanhSach", { objectiveId: MT.id }], DS);
+					},
+				},
+			);
+			await cho(() => !san.url().has(SEARCH_PARAM.okr.neoGopY), "neo roi url");
+			const vung = goiCuon.filter((g) => g.laVung);
+			expect(
+				vung.map((g) => g.coKhung),
+				kho.khung ? "cuon truoc khi biet kho" : `cuon sai khung: ${kho.ten}`,
+			).toEqual([kho.khung]);
+			expect(
+				document.querySelector("[data-cuon-ca-khung]") !== null,
+				`khung cuon sai: ${kho.ten}`,
+			).toBe(kho.khung);
+			expect(
+				san.url().has(SEARCH_PARAM.okr.neoGopY),
+				`neo con: ${kho.ten}`,
+			).toBe(false);
+			await act(async () => san.root.unmount());
+			san.o.remove();
+			dangMo = dangMo.filter((x) => x !== san);
+			document.body.innerHTML = "";
+		}
+	});
+
+	test("neo-kara: hook kho man that tra chua-biet o lan ve dau roi dien-thoai", async () => {
+		window.innerWidth = 390;
+		const thay: string[] = [];
+		function Do() {
+			thay.push(useKhoMan());
+			return null;
+		}
+		await dung(<Do />);
+		expect(thay[0], "lan ve dau da biet kho").toBe("chua-biet");
+		expect(thay.at(-1), "khong sang dien-thoai").toBe("dien-thoai");
+		console.log("so ca: 3");
 	});
 });
