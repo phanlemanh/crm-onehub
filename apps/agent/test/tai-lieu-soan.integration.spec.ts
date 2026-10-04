@@ -16,6 +16,7 @@ import { khoNguonGia } from "@crm/db/test/blob-nguon-gia";
 import { chuanHoa } from "@crm/validation/tai-lieu-markdown";
 import { parseTrichDoan } from "@crm/validation/tai-lieu-trich-doan";
 import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
+import * as docChuMoDun from "../agent/lib/tai-lieu-doc-chu";
 import type { BanNop } from "../agent/lib/tai-lieu-nop";
 import {
 	dongKhiPhienHong,
@@ -37,6 +38,7 @@ import {
 	DOAN_QUYET_DINH,
 	datBanDangDung,
 	datQuyTacViet,
+	docMau,
 	docxTu,
 	donTaiLieu,
 	gieoNguoi,
@@ -437,5 +439,123 @@ describe("soan-hong", () => {
 		const p = await moPhien({});
 		await nopRoiXong(p, BAN_DAT);
 		expect(await demDeXuat(p.trangId)).toBe(1);
+	});
+});
+
+const CAU_DOC_LOI = "Chưa đọc được tệp — bấm Soạn lại để thử lần nữa.";
+const BI_MAT = "BIMAT";
+
+type OBatLoi = {
+	ten: string;
+	tep?: string;
+	byte?: () => Uint8Array;
+	bamKhai?: string;
+	khongPut?: boolean;
+	khoNem?: boolean;
+	docChuNem?: boolean;
+	xoaQuyTac?: boolean;
+	muc: "LOI" | "CHO_SOAN" | "CAN_GO_TAY";
+	lyDo: string | null | "can-go-tay";
+};
+
+const O_BAT_LOI: readonly OBatLoi[] = [
+	{ ten: "a-kho-nem", khoNem: true, muc: "LOI", lyDo: CAU_DOC_LOI },
+	{ ten: "b-docchu-nem", docChuNem: true, muc: "LOI", lyDo: CAU_DOC_LOI },
+	{ ten: "c-lanh", muc: "CHO_SOAN", lyDo: null },
+	{ ten: "d-khong-tai", khongPut: true, muc: "LOI", lyDo: LY_DO.khongTai },
+	{ ten: "e-bam-lech", bamKhai: "0".repeat(64), muc: "LOI", lyDo: LY_DO.bamLech },
+	{
+		ten: "f-can-go-tay",
+		tep: "ban-quet.pdf",
+		byte: () => docMau("ban-quet.pdf"),
+		muc: "CAN_GO_TAY",
+		lyDo: "can-go-tay",
+	},
+	{ ten: "g-thieu-quy-tac", xoaQuyTac: true, muc: "LOI", lyDo: LY_DO.thieuQuyTac },
+];
+
+async function chayOBatLoi(o: OBatLoi) {
+	const trangId = await gieoTrang(nguoiId);
+	const tep = o.tep ?? "quyet-dinh.docx";
+	const nguon = await gieoNguon({
+		tep,
+		trangId,
+		taiBoiId: nguoiId,
+		byte: o.byte ? o.byte() : docxTu(DOAN_QUYET_DINH),
+		bamKhai: o.bamKhai,
+	});
+	const kho = khoNguonGia();
+	if (!o.khongPut) kho.daPut.set(nguon.pathname, nguon.byte);
+	if (o.khoNem) {
+		kho.doc = async () => {
+			throw new Error(`blob https://x/y?token=${BI_MAT}`);
+		};
+	}
+	const gian = o.docChuNem
+		? spyOn(docChuMoDun, "docChu").mockImplementation(async () => {
+				throw new Error(`docx hong https://x/z?token=${BI_MAT}`);
+			})
+		: null;
+	if (o.xoaQuyTac) await xoaQuyTacViet();
+	const task = await gieoViec(nguon.id);
+	let nem: unknown = null;
+	try {
+		await chaySoanTuNguon(task, kho);
+	} catch (loi) {
+		nem = loi;
+	} finally {
+		gian?.mockRestore();
+		if (o.xoaQuyTac) await datQuyTacViet(nguoiId, QUY_TAC);
+	}
+	const hang = await db.taiLieuNguon.findUniqueOrThrow({
+		where: { id: nguon.id },
+		select: { trangThai: true, lyDo: true },
+	});
+	const viec = await db.agentTask.findUniqueOrThrow({
+		where: { id: task.id },
+		select: { finishedAt: true, outcome: true },
+	});
+	return { hang, viec, nem };
+}
+
+describe("kn-bat-loi", () => {
+	test("kn-bat-loi: ma tran 7 o viet truoc, loi bi nem dua nguon ve LOI, ca loi da co giu ly do cu", async () => {
+		expect(O_BAT_LOI.length).toBe(7);
+		const sai: string[] = [];
+		for (const o of O_BAT_LOI) {
+			const { hang, viec, nem } = await chayOBatLoi(o);
+			if (nem) sai.push(`${o.ten}: chaySoanTuNguon nem ra ngoai`);
+			if (hang.trangThai !== o.muc) {
+				sai.push(
+					hang.trangThai === "CHO_DOC"
+						? `kn-bat-loi: nguon van CHO_DOC sau khi doc tep nem (${o.ten})`
+						: `${o.ten}: muc ${hang.trangThai}, mong ${o.muc}`,
+				);
+			}
+			const lyDo = hang.lyDo ?? "";
+			if (o.lyDo === CAU_DOC_LOI) {
+				if (lyDo.includes(BI_MAT) || lyDo.includes("https://")) {
+					sai.push(`kn-bat-loi: lyDo lo thong diep loi goc (${o.ten})`);
+				} else if (lyDo !== CAU_DOC_LOI) {
+					sai.push(`kn-bat-loi: lyDo lech cau da hua (${o.ten}): ${lyDo}`);
+				}
+				if (!viec.finishedAt) sai.push(`${o.ten}: viec chua dong`);
+				if (viec.outcome !== hang.lyDo) sai.push(`${o.ten}: outcome khac lyDo`);
+			} else if (o.lyDo === "can-go-tay") {
+				if (!lyDo.startsWith("Cần gõ tay")) {
+					sai.push(`${o.ten}: lyDo ${lyDo}`);
+				}
+			} else if (o.lyDo !== null && lyDo !== o.lyDo) {
+				sai.push(
+					lyDo === CAU_DOC_LOI
+						? `kn-bat-loi: nuot nhanh thieuQuyTac (${o.ten})`
+						: `${o.ten}: lyDo ${lyDo}, mong ${o.lyDo}`,
+				);
+			}
+			if (o.lyDo !== CAU_DOC_LOI && lyDo === CAU_DOC_LOI) {
+				sai.push(`kn-bat-loi: nuot nhanh thieuQuyTac (${o.ten})`);
+			}
+		}
+		expect(sai).toEqual([]);
 	});
 });

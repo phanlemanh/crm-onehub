@@ -61,6 +61,8 @@ export const TAI_LIEU_AGENT = {
 		saiKhuon: (chi: string) => `Chưa soạn được — bản nộp sai khuôn: ${chi}`,
 		daSoan: "Đã soạn bản đề xuất.",
 		choSoan: "Đã đọc chữ, chờ máy soạn.",
+		docLoi: "Chưa đọc được tệp — bấm Soạn lại để thử lần nữa.",
+		moCoi: "Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.",
 	},
 	phien: { lo: 6, chiToiDa: 200, timNguon: { soLan: 8, cachMs: 250 } },
 } as const;
