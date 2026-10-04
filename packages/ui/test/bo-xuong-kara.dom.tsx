@@ -105,16 +105,16 @@ type KyVongState = {
 	moTaO: boolean;
 };
 
-const KY_VONG_STATE: Record<
-	"working" | "empty" | "error" | "off" | "unconfigured",
-	KyVongState
-> = {
+const KY_VONG_STATE = {
 	working: { empty: false, status: true, thuLai: 0, moTaO: false },
 	empty: { empty: true, status: false, thuLai: 0, moTaO: false },
 	error: { empty: true, status: false, thuLai: 1, moTaO: false },
 	off: { empty: false, status: false, thuLai: 0, moTaO: true },
 	unconfigured: { empty: true, status: false, thuLai: 0, moTaO: false },
-};
+} as const satisfies Record<
+	"working" | "empty" | "error" | "off" | "unconfigured",
+	KyVongState
+>;
 
 describe("k1-state", () => {
 	const { KaraState } = KhoiState;
@@ -749,23 +749,42 @@ describe("k1-steps", () => {
 		for (const [ten, buoc] of Object.entries(O)) {
 			const o = ve(<KaraSteps steps={buoc} />);
 			const goc = o.querySelector("[data-kara-steps]") as Element;
-			phai(goc?.getAttribute("data-slot") === "collapsible", "goc khong la Collapsible cua task");
+			phai(
+				goc?.getAttribute("data-slot") === "collapsible",
+				"goc khong la Collapsible cua task",
+			);
 			const trigger = o.querySelector("button") as HTMLButtonElement;
 			const mo = goc.getAttribute("data-state") === "open";
 			if (ten === "xong") {
-				phai(trigger.textContent?.includes(VI.karaKhung.daLamBuoc("3")) === true, "tieu de xong sai");
+				phai(
+					trigger.textContent?.includes(VI.karaKhung.daLamBuoc("3")) === true,
+					"tieu de xong sai",
+				);
 				phai(!mo, "buoc xong khong gap");
 			} else if (ten === "dang-chay") {
-				phai(trigger.textContent?.includes("⟦doc 3 KR⟧") === true, "tieu de dang chay sai");
+				phai(
+					trigger.textContent?.includes("⟦doc 3 KR⟧") === true,
+					"tieu de dang chay sai",
+				);
 				phai(mo, "dang chay khong mo");
 			} else {
 				phai(mo, "loi khong mo");
 				const loi = o.querySelector('[data-trang-thai="loi"]');
-				phai(Boolean(loi?.querySelector('[data-slot="indicator-dot"][data-tone="error"]')), "buoc loi thieu dau");
+				phai(
+					Boolean(
+						loi?.querySelector(
+							'[data-slot="indicator-dot"][data-tone="error"]',
+						),
+					),
+					"buoc loi thieu dau",
+				);
 			}
 			if (mo)
 				for (const b of buoc)
-					phai((o.textContent ?? "").includes(b.label), `thieu chu buoc ${b.label}`);
+					phai(
+						(o.textContent ?? "").includes(b.label),
+						`thieu chu buoc ${b.label}`,
+					);
 			phai(!o.querySelector("pre, code, [data-slot=code-block]"), "co khoi ma");
 			act(() => root?.unmount());
 			root = null;
@@ -790,34 +809,75 @@ describe("k1-artifact", () => {
 				footer={<button type="button">⟦dua vao⟧</button>}
 				busy={busy ? { label: "⟦dang soan⟧" } : null}
 			>
-				<KaraProposal kind="rewrite" value="⟦moi⟧" actions={hanhDong({ n: 0 })} />
+				<KaraProposal
+					kind="rewrite"
+					value="⟦moi⟧"
+					actions={hanhDong({ n: 0 })}
+				/>
 			</KaraArtifact>
 		);
 	}
 
 	test("đầu, thân, chân", () => {
 		const o = ve(khung(false));
-		const dau = o.querySelector('[data-slot="kara-artifact-header"]') as Element;
-		const than = o.querySelector('[data-slot="kara-artifact-content"]') as Element;
-		const chan = o.querySelector('[data-slot="kara-artifact-footer"]') as Element;
-		phai(o.querySelectorAll('[data-slot="kara-mark"]').length === 1, "dau Kara lap");
-		phai(Boolean(dau.querySelector('[data-slot="kara-mark"]')), "dau Kara khong o dau khung");
-		phai((dau.textContent ?? "").includes("⟦9 dong⟧"), "meta khong o dau khung");
-		phai(Boolean(dau.compareDocumentPosition(than) & Node.DOCUMENT_POSITION_FOLLOWING), "than khong sau dau");
-		phai(Boolean(than.compareDocumentPosition(chan) & Node.DOCUMENT_POSITION_FOLLOWING), "chan khong sau than");
+		const dau = o.querySelector(
+			'[data-slot="kara-artifact-header"]',
+		) as Element;
+		const than = o.querySelector(
+			'[data-slot="kara-artifact-content"]',
+		) as Element;
+		const chan = o.querySelector(
+			'[data-slot="kara-artifact-footer"]',
+		) as Element;
+		phai(
+			o.querySelectorAll('[data-slot="kara-mark"]').length === 1,
+			"dau Kara lap",
+		);
+		phai(
+			Boolean(dau.querySelector('[data-slot="kara-mark"]')),
+			"dau Kara khong o dau khung",
+		);
+		phai(
+			(dau.textContent ?? "").includes("⟦9 dong⟧"),
+			"meta khong o dau khung",
+		);
+		phai(
+			Boolean(
+				dau.compareDocumentPosition(than) & Node.DOCUMENT_POSITION_FOLLOWING,
+			),
+			"than khong sau dau",
+		);
+		phai(
+			Boolean(
+				than.compareDocumentPosition(chan) & Node.DOCUMENT_POSITION_FOLLOWING,
+			),
+			"chan khong sau than",
+		);
 		phai(than.classList.contains("overflow-auto"), "than khong cuon rieng");
-		phai([...o.querySelectorAll<HTMLButtonElement>("button[data-hanh-dong]")].every((n) => !n.disabled), "khoa nham khi ranh");
+		phai(
+			[
+				...o.querySelectorAll<HTMLButtonElement>("button[data-hanh-dong]"),
+			].every((n) => !n.disabled),
+			"khoa nham khi ranh",
+		);
 	});
 
 	test("bận: đầu khung báo, thân khoá", async () => {
 		const o = ve(khung(true));
 		phai(
-			[...o.querySelectorAll<HTMLButtonElement>("button[data-hanh-dong]")].every((n) => n.disabled),
+			[
+				...o.querySelectorAll<HTMLButtonElement>("button[data-hanh-dong]"),
+			].every((n) => n.disabled),
 			"than khong khoa khi ban",
 		);
 		await cho(1060);
-		const st = o.querySelector('[data-slot="kara-artifact-header"] [role="status"]');
-		phai(Boolean(st?.textContent?.includes("⟦dang soan⟧")), "dau khung thieu chu ban");
+		const st = o.querySelector(
+			'[data-slot="kara-artifact-header"] [role="status"]',
+		);
+		phai(
+			Boolean(st?.textContent?.includes("⟦dang soan⟧")),
+			"dau khung thieu chu ban",
+		);
 		phai(laChamBan(st as Element), "dau khung thieu cham ban");
 	});
 });
@@ -840,7 +900,7 @@ function chuTuDat(goc: Element): string[] {
 		.filter((t) => /\p{L}/u.test(t));
 }
 
-const SO_CHO: Record<string, number> = {
+const SO_CHO = {
 	"transcript-rong": 3,
 	"transcript-he-thong-moc": 1,
 	"composer-ban-chip": 3,
@@ -856,11 +916,9 @@ const SO_CHO: Record<string, number> = {
 	"nhom-bien-nhan-ban": 5,
 	"artifact-ban": 1,
 	"artifact-ban-mac-dinh": 2,
-};
+} as const;
 
-const CHO_TRUOC_KHI_DOC: Record<string, number> = {
-	"artifact-ban-mac-dinh": 1060,
-};
+const CHO_TRUOC_KHI_DOC = new Map([["artifact-ban-mac-dinh", 1060]]);
 
 describe("k1-hai-tieng", () => {
 	const { KaraTranscript, KaraSystemLine, KaraCheckpoint } = KhoiTranscript;
@@ -870,7 +928,7 @@ describe("k1-hai-tieng", () => {
 	const { KaraProposalGroup, KaraProposal } = KhoiProposal;
 	const { KaraArtifact } = KhoiArtifact;
 
-	const CAU_HINH: Record<string, () => ReactElement> = {
+	const CAU_HINH = {
 		"transcript-rong": () => <KaraTranscript />,
 		"transcript-he-thong-moc": () => (
 			<KaraTranscript>
@@ -959,23 +1017,26 @@ describe("k1-hai-tieng", () => {
 				⟦than⟧
 			</KaraArtifact>
 		),
-	};
+	} satisfies Record<keyof typeof SO_CHO, () => ReactElement>;
 
 	test("mọi chữ tự đặt đổi theo tiếng, số chỗ ghi trước", async () => {
 		console.log(`so cho ghi truoc: ${JSON.stringify(SO_CHO)}`);
 		expect(Object.keys(CAU_HINH).sort()).toEqual(Object.keys(SO_CHO).sort());
 		let tong = 0;
-		for (const [ten, dung] of Object.entries(CAU_HINH)) {
-			const theoTieng: Record<Locale, string[]> = { vi: [], en: [] };
+		for (const ten of Object.keys(CAU_HINH) as (keyof typeof SO_CHO)[]) {
+			const dung = CAU_HINH[ten];
+			const theoTieng = { vi: [] as string[], en: [] as string[] };
 			for (const tieng of ["vi", "en"] as const) {
 				const o = ve(dung(), tieng);
-				if (CHO_TRUOC_KHI_DOC[ten]) await cho(CHO_TRUOC_KHI_DOC[ten]);
+				const lau = CHO_TRUOC_KHI_DOC.get(ten);
+				if (lau) await cho(lau);
 				theoTieng[tieng] = chuTuDat(o);
 				act(() => root?.unmount());
 				root = null;
 				document.body.innerHTML = "";
 				const so = theoTieng[tieng].length;
-				if (process.env.K1_IN_CHO) console.log(ten, tieng, JSON.stringify(theoTieng[tieng]));
+				if (process.env.K1_IN_CHO)
+					console.log(ten, tieng, JSON.stringify(theoTieng[tieng]));
 				phai(
 					Boolean(process.env.K1_IN_CHO) || so === SO_CHO[ten],
 					`so cho sai: ${ten} ${tieng} ${so} != ${SO_CHO[ten]} ${JSON.stringify(theoTieng[tieng])}`,
@@ -995,16 +1056,19 @@ describe("k1-hai-tieng", () => {
 
 	test("không chữ tiếng Việt viết cứng trong mã khối", () => {
 		const loi: string[] = [];
-		const thay: Record<string, string | undefined> = {
-			"state.tsx": process.env.K1_TEP_STATE,
-			"proposal.tsx": process.env.K1_TEP_PROPOSAL,
-			"transcript.tsx": process.env.K1_TEP_TRANSCRIPT,
-			"composer.tsx": process.env.K1_TEP_COMPOSER,
-			"steps.tsx": process.env.K1_TEP_STEPS,
-			"artifact.tsx": process.env.K1_TEP_ARTIFACT,
-		};
+		const thay = new Map([
+			["state.tsx", process.env.K1_TEP_STATE],
+			["proposal.tsx", process.env.K1_TEP_PROPOSAL],
+			["transcript.tsx", process.env.K1_TEP_TRANSCRIPT],
+			["composer.tsx", process.env.K1_TEP_COMPOSER],
+			["steps.tsx", process.env.K1_TEP_STEPS],
+			["artifact.tsx", process.env.K1_TEP_ARTIFACT],
+		]);
 		for (const t of tepKara()) {
-			const dong = readFileSync(thay[t] ?? join(THU_MUC_KARA, t), "utf8").split("\n");
+			const dong = readFileSync(
+				thay.get(t) ?? join(THU_MUC_KARA, t),
+				"utf8",
+			).split("\n");
 			dong.forEach((d, i) => {
 				if (DAU_TIENG_VIET.test(d)) loi.push(`chu viet cung: ${t}:${i + 1}`);
 			});
