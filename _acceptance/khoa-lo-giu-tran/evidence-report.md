@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
+verified_commit: 3f3c60fe85ce0734a0f149a37c6c24dd52b98a74
 human_signoff: Mạnh 2026-09-06 — ký trên giới hạn đã khai: 6 mục ngoài hợp đồng ghi vào giới hạn đã biết, cắt/hoãn đồng ý, Treo phê hết, và MỘT lỗ TRONG hợp đồng (AC-3: chân can chưa có chiều đỏ tự chạy) máy khai chứ không sửa vì đã hết ba vòng chấm.
 ---
 
@@ -188,3 +188,7 @@ sha: 96ec6d9b0447bb8e3eafaf36c84dc9902372ebef · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
 run_id: repin-20260917T051527Z-61120
 sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 5 — 2026-10-04, do sua-thuoc-sau-gop
+run_id: repin-20261004T053254Z-97828
+sha: 3f3c60fe85ce0734a0f149a37c6c24dd52b98a74 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E13 · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10
