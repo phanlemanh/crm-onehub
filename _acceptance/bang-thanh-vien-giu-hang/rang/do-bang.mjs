@@ -34,6 +34,7 @@ const PHA_SAU_GIEO = process.env.TTV_PHA_SAU_GIEO === "1";
 const SO_NAC_CON_LAN = 40;
 const NAC_CON_LAN_PX = 600;
 const CHO_CON_LAN_MS = 80;
+const SO_NHIP_DUNG_YEN = 3;
 const t = thanhVienMessages("vi");
 
 const dong = [];
@@ -172,11 +173,12 @@ async function cuonBangConLan(p) {
 	});
 	await p.mouse.move(tam.x, tam.y);
 	let truoc = -1;
-	for (let i = 0; i < SO_NAC_CON_LAN; i++) {
+	let dungYen = 0;
+	for (let i = 0; i < SO_NAC_CON_LAN && dungYen < SO_NHIP_DUNG_YEN; i++) {
 		await p.mouse.wheel({ deltaY: NAC_CON_LAN_PX });
 		await new Promise((r) => setTimeout(r, CHO_CON_LAN_MS));
 		const nay = await p.evaluate(() => document.querySelector("[data-slot=page-shell-scroll]").scrollTop);
-		if (nay === truoc) break;
+		dungYen = nay === truoc ? dungYen + 1 : 0;
 		truoc = nay;
 	}
 	const ket = await p.evaluate((tieuDe) => {
