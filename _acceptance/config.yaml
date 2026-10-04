@@ -78,6 +78,8 @@ executors:
     tdk_suc_khoe_trang_thai: 'bun run test -- "cd apps/api && bun test test/tai-lieu-suc-khoe.spec.ts -t trang-thai"'
     tdk_man_suc_khoe: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-suc-khoe.dom.tsx"
     tdk_nhac_sang: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tai-lieu-nhac.spec.ts"'
+    ctk_don_vi: 'cd packages/validation && bun test test/okr-cuoc-soan.spec.ts -t trung-khoa'
+    ctk_tich_hop: 'bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/ban-nhap-trung-khoa.integration.spec.ts"'
     tdk_nhac_bang_tab: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nhac-bang-tab.spec.ts"'
     tdk_ong_dung: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-khu-hoi.dom.tsx -t ong-dung"
     tdk_ong_dung_doc: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/ong-dung-doc.dom.tsx"
@@ -1119,6 +1121,8 @@ executors:
     r1c_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/hoi-y/khoi-ket-luan.tsx" "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx" "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
+    ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
+    ctk_pha_thu_do: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs do
     bclkt_khong_cham_thuoc: node _acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs
     bclkt_man_chu: 'KHO_TAI_LIEU_BLOB_TOKEN=vercel_blob_rw_bclktgia_khonglakhoathat bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/bo-chu-lap-keo-tha/rang/man-chu.mjs"'
     htbt_man_thanh: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/hydrat-thanh-bieu-tuong/rang/man-thanh.mjs"'
