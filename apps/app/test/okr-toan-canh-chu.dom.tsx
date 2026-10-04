@@ -168,6 +168,19 @@ function moTaThe(nhan: string): Element | null {
 	return the ?? null;
 }
 
+const CAU = {
+	vi: {
+		thieu: "Khối Hỗ trợ chưa có mục tiêu riêng",
+		du: "Mọi đơn vị đã có mục tiêu công bố",
+		gop: "một bộ phận chưa có mục tiêu riêng vẫn có số ở đây",
+	},
+	en: {
+		thieu: "Khối Hỗ trợ has no objectives of its own",
+		du: "Every unit has published objectives",
+		gop: "a division with no objectives of its own still shows numbers here",
+	},
+} as const;
+
 describe("toan-canh chu the don vi", () => {
 	test("toan-canh: ma tran vi x en x {co don vi chua dat, moi don vi da dat} — the noi mục tiêu riêng, ten khong dich, mo ta bang noi gop", async () => {
 		const thuc: Record<string, unknown> = {};
@@ -177,18 +190,24 @@ describe("toan-canh chu the don vi", () => {
 			for (const chuaDat of [["Khối Hỗ trợ"], []]) {
 				hienTai = duLieu(chuaDat);
 				await mo(locale);
-				const o = `${locale}.${chuaDat.length === 0 ? "du" : "thieu"}`;
+				const ca = chuaDat.length === 0 ? "du" : "thieu";
+				const o = `${locale}.${ca}`;
 				const the = moTaThe(mt.donViCongBo);
 				const khongDich = the?.querySelector('[translate="no"]');
-				thuc[`${o}.the`] = the?.textContent?.includes(
-					chuaDat.length === 0 ? mt.tatCaDaDat : mt.chuaDat,
-				);
+				const moTa =
+					ca === "du"
+						? (the?.textContent ?? "")
+						: (the?.querySelector("[data-chua-dat]")?.textContent ?? "");
+				thuc[`${o}.the`] = moTa
+					.replace(/\s+/g, " ")
+					.trim()
+					.endsWith(CAU[locale][ca]);
 				thuc[`${o}.ten`] =
-					chuaDat.length === 0 ? null : (khongDich?.textContent ?? null);
+					ca === "du" ? null : (khongDich?.textContent ?? null);
 				thuc[`${o}.moTa`] =
-					document.body.textContent?.includes(mt.theoDonViMoTa) ?? false;
+					document.body.textContent?.includes(CAU[locale].gop) ?? false;
 				mong[`${o}.the`] = true;
-				mong[`${o}.ten`] = chuaDat.length === 0 ? null : "Khối Hỗ trợ";
+				mong[`${o}.ten`] = ca === "du" ? null : "Khối Hỗ trợ";
 				mong[`${o}.moTa`] = true;
 				for (const root of dangMo) act(() => root.unmount());
 				dangMo = [];
