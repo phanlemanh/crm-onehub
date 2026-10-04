@@ -755,7 +755,7 @@ export class OkrService {
 	}
 
 	async createObjective(userId: string, input: MucTieuInput) {
-		await this.quyenOkr.assertSuaDonVi(userId, donViCua(input.unit));
+		await this.quyenOkr.assertNhapDuoc(userId, donViCua(input.unit));
 		return this.db.$transaction((tx) =>
 			this.taoMucTieuTrongTx(tx, userId, input),
 		);
@@ -998,7 +998,7 @@ export class OkrService {
 			);
 		const mt =
 			trong?.mt ??
-			(await this.quyenOkr.assertSuaMucTieu(userId, input.objectiveId));
+			(await this.quyenOkr.assertNhapMucTieu(userId, input.objectiveId));
 		const ghi = async (tx: Tx) => {
 			await this.assertKyGhiDuoc(tx, mt.cycleId);
 			const trangThai = await this.trangThai(tx, mt.id);
@@ -1875,6 +1875,7 @@ export class OkrService {
 		return {
 			objectives,
 			canEdit: this.quyenOkr.suaDuocDonVi(q, userId, dv),
+			canCreate: this.quyenOkr.nhapDuoc(q, userId, dv),
 			canhBao: null,
 		};
 	}
@@ -2128,6 +2129,8 @@ export class OkrService {
 				duyet: ghiDuoc && choDuyet && duyetDuoc,
 				rutDuyet: ghiDuoc && choDuyet && guiCuoi?.actorUserId === userId,
 			},
+			themKrLe:
+				ghiDuoc && !choDuyet && this.quyenOkr.nhapDuoc(q, userId, objective),
 		};
 	}
 }
