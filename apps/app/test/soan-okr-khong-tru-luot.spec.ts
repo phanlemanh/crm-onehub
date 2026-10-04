@@ -81,7 +81,7 @@ afterAll(async () => {
 	await k.don();
 });
 
-const KET_QUA_HONG: readonly KetQuaTroLy[] = [
+const KET_QUA_HONG: readonly KetQuaHong[] = [
 	"nem",
 	"treo",
 	400,
@@ -100,7 +100,9 @@ const O = DUONG.flatMap((duong) =>
 	KET_QUA_HONG.flatMap((ket) => N.map((n) => ({ duong, ket, n }))),
 );
 
-function statusMongDoi(ket: KetQuaTroLy): number {
+type KetQuaHong = Exclude<KetQuaTroLy, "luong-cham">;
+
+function statusMongDoi(ket: KetQuaHong): number {
 	if (ket === "nem") return 502;
 	if (ket === "treo") return 504;
 	return ket;
@@ -108,7 +110,7 @@ function statusMongDoi(ket: KetQuaTroLy): number {
 
 type ThanLoiCua = { error: string; detail?: string; luot?: string };
 
-function thanMongDoi(ket: KetQuaTroLy): ThanLoiCua {
+function thanMongDoi(ket: KetQuaHong): ThanLoiCua {
 	const luot = CUA_OKR.luotDaHoan;
 	if (ket === "nem")
 		return {
@@ -307,9 +309,7 @@ describe("luong-khong-cat", () => {
 				o.method,
 			);
 			const res = await (o.method === "GET" ? GET : POST)(request, ctx);
-			const than = await res
-				.text()
-				.catch((loi: unknown) => `LOI ${String(loi)}`);
+			const than = await res.text().catch((loi: Error) => `LOI ${loi.message}`);
 			k.trangThai.ketQua = 202;
 			expect(than, `luong-bi-cat ${o.ten}`).toBe(MAU_LUONG.join(""));
 			expect(await docLuot(id)).toBe(o.method === "POST" ? n + 1 : n);

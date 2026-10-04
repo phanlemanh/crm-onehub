@@ -172,10 +172,9 @@ describe("ly-do-hong", () => {
 	});
 });
 
-const MONG_DOI_MA_CUA: Record<
-	keyof typeof CUA_OKR.loi,
-	{ status: number; ma: MaLyDoHong | null }
-> = {
+type MongDoiMaCua = { status: number; ma: MaLyDoHong | null };
+
+const MONG_DOI_MA_CUA = {
 	chuaCauHinh: { status: 503, ma: null },
 	chuaDangNhap: { status: 401, ma: "het-dang-nhap" },
 	thieuCuoc: { status: 400, ma: "tro-ly-tu-choi" },
@@ -192,7 +191,7 @@ const MONG_DOI_MA_CUA: Record<
 	quaHan: { status: 504, ma: "qua-han" },
 	troLyTuChoi: { status: 401, ma: "tro-ly-tu-choi" },
 	troLyLoi: { status: 500, ma: "tro-ly-loi" },
-};
+} satisfies Record<keyof typeof CUA_OKR.loi, MongDoiMaCua>;
 
 describe("ma-cua-du", () => {
 	test("ma-cua-du: bang mong doi phu dung tap khoa CUA_OKR.loi", () => {
