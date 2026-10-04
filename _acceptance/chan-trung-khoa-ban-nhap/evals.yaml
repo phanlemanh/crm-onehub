@@ -1,0 +1,125 @@
+schema_version: 1
+slug: chan-trung-khoa-ban-nhap
+
+evals:
+  - id: E1
+    criterion: AC-1, AC-2, AC-3, AC-4
+    executor: test
+    layer: unit
+    cmd: config:executors.test.ctk_don_vi
+    paths:
+      - "packages/validation/src/okr-cuoc-soan.ts"
+      - "packages/validation/test/okr-cuoc-soan.spec.ts"
+    expected: |
+      `cd packages/validation && bun test test/okr-cuoc-soan.spec.ts -t trung-khoa` thoat 0 va bun
+      bao "7 pass" va "0 fail".
+      Ma tran viet truoc, BAY ca, moi ca mot test rieng co ten bat dau "trung-khoa":
+      tu choi — (a) hai Muc tieu trung "mt-1": dung MOT issue, path ["mucTieu",1,"khoa"],
+      message "khoa Mục tiêu trùng: mt-1"; (b) "mt-1 " va "mt-1": cung path va message nhu (a);
+      (c) hai KR "kr-10" duoi Muc tieu 0: dung MOT issue, path ["mucTieu",0,"kr",1,"khoa"],
+      message "khoa KR trùng trong cùng Mục tiêu: kr-10"; (d) ba Muc tieu cung "mt-1" va mot cap
+      KR trung duoi Muc tieu 0: dung BA issue voi tap path {["mucTieu",1,"khoa"],
+      ["mucTieu",2,"khoa"],["mucTieu",0,"kr",1,"khoa"]}.
+      nhan — (e) KR "kr-1" duoi hai Muc tieu khac nhau; (f) KR khoa "mt-1" duoi Muc tieu "mt-1";
+      (g) hai Muc tieu "MT-1" va "mt-1": parse thanh cong va toEqual du lieu vao.
+      So issue so bang toHaveLength, path va message so bang toEqual — khong toContain.
+      CAP HAI CHIEU tren CUNG tep: chieu do la E4 (go superRefine trong ban sao).
+
+  - id: E2
+    criterion: AC-5, AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ctk_tich_hop
+    paths:
+      - "packages/validation/src/okr-cuoc-soan.ts"
+      - "apps/agent-okr/agent/tools/nop_ban_nhap.ts"
+      - "apps/agent-okr/agent/lib/nop-ban-nhap.ts"
+      - "apps/agent-okr/test/ban-nhap-trung-khoa.integration.spec.ts"
+      - "apps/agent-okr/test/support/**"
+    expected: |
+      `bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/ban-nhap-trung-khoa.integration.spec.ts"`
+      thoat 0; bun bao 3 pass, 0 fail (ba ca: cong-cu-dung-banNhap, trung-khoa-muc-tieu,
+      trung-khoa-kr). CSDL rieng cua luot (crm_<id>_test), cuoc soan gieo bang
+      support/gieo-goi, phien that qua capNhatPhien.
+      (i) cong-cu-dung-banNhap: inputSchema cua default export tools/nop_ban_nhap.ts la CHINH doi
+      tuong banNhap import tu @crm/validation/okr-cuoc-soan (toBe).
+      (ii) trung-khoa-muc-tieu: generateText + MockLanguageModelV4, cong cu "nop_ban_nhap" =
+      tool({ inputSchema: banNhap (import o (i)), execute: execute that voi ngu canh phien }).
+      Buoc 1 model goi voi hai Muc tieu cung khoa "m1"; buoc 2 goi voi ban da doi khoa thu hai
+      thanh "m2"; buoc 3 tra chu. Trong doGenerate cua buoc 2, doc CSDL: count okrDeXuat theo
+      cuocSoanId = 0, so lan execute = 0; tool-result cuoi cua prompt co output.type "error-text"
+      va value; mang issue cat tu value (phan JSON sau "Error message: ") toEqual dung mot phan
+      tu chua { path: ["mucTieu",1,"khoa"], message: "khoa Mục tiêu trùng: m1" }
+      (expect.objectContaining cho tung phan tu). Sau luot: execute dung 1 lan, ket qua cua no
+      ketQua "da-ghi"; cac dong co inputHash = lanNopMoiNhat cua cuoc doc qua dongSoanTuHang,
+      tap khoaModel co kich thuoc bang so dong (khong hai dong chung khoaModel) va chua
+      "muc-tieu-moi:m1", "muc-tieu-moi:m2".
+      (iii) trung-khoa-kr: nhu (ii), ban sai co hai KR "k1" duoi Muc tieu "m1"; mang issue
+      toEqual dung mot phan tu { path: ["mucTieu",0,"kr",1,"khoa"],
+      message: "khoa KR trùng trong cùng Mục tiêu: k1" }; count okrDeXuat cua cuoc sau buoc 1
+      bang count truoc luot.
+      Phep dem execute dung expect(soLan, "execute chay o buoc mot").toBe(0) — thong diep nay la
+      chu ky do cua E4.
+      Chieu do tren CUNG tep la E4.
+
+  - id: E3
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ctk_pha_thu_xanh
+    paths:
+      - "packages/validation/src/okr-cuoc-soan.ts"
+      - "packages/validation/test/okr-cuoc-soan.spec.ts"
+      - "apps/agent-okr/test/ban-nhap-trung-khoa.integration.spec.ts"
+      - "apps/agent-okr/agent/**"
+      - "_acceptance/chan-trung-khoa-ban-nhap/rang/**"
+    expected: |
+      Rang pha-thu.mjs che do "xanh": chep okr-cuoc-soan.ts, tep kiem don vi va tep kiem tich hop
+      vao .acceptance-runs/chan-trung-khoa-ban-nhap/sao-xanh-<pid>/; doi DUY NHAT duong import
+      okr-cuoc-soan cua hai tep kiem (don vi: "../src/okr-cuoc-soan"; tich hop:
+      "@crm/validation/okr-cuoc-soan") sang ban sao — KHONG go superRefine. Cong cu that van
+      mang schema that; bai tich hop dung banNhap cua ban sao lam inputSchema nen chi chay cac ca
+      -t trung-khoa (ca cong-cu-dung-banNhap khong chay trong ban sao). Chay -t trung-khoa cho tep
+      don vi va `bun run test --` cho tep tich hop. Ma 0 khi ca hai xanh dung so ca: in
+      "don-vi: 7 pass, 0 fail" va "tich-hop: 2 pass, 0 fail"; so ca khac -> ma 1.
+      Moc vang (dong import khong thay dung mot lan, loi goi superRefine khong thay dung mot lan)
+      -> ma 2 "KHONG DO DUOC: <moc>". Thu muc ban sao xoa trong finally.
+
+  - id: E4
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ctk_pha_thu_do
+    paths:
+      - "packages/validation/src/okr-cuoc-soan.ts"
+      - "packages/validation/test/okr-cuoc-soan.spec.ts"
+      - "apps/agent-okr/test/ban-nhap-trung-khoa.integration.spec.ts"
+      - "apps/agent-okr/agent/**"
+      - "_acceptance/chan-trung-khoa-ban-nhap/rang/**"
+    expected: |
+      Cung ban sao va cung buoc nhu E3; khac DUY NHAT: trong ban sao okr-cuoc-soan.ts, loi goi
+      `.superRefine(chanKhoaTrung)` bi go. Ma 0 khi CA HAI tep do dung chu ky: don vi — bun ma
+      khac 0, DUNG bon dong "(fail)" la bon ca tu choi (a),(b),(c),(d) cua E1 va DUNG ba dong
+      "(pass)" la ba ca nhan (e),(f),(g); tich hop — bun ma khac 0, DUNG hai dong "(fail)" la
+      trung-khoa-muc-tieu va trung-khoa-kr, 0 pass, va ra co thong diep
+      "execute chay o buoc mot" (do vi execute da chay, khong phai loi nap module hay CSDL).
+      Rang in "<tep>: go superRefine do dung chu ky". Tep nao xanh, hay do sai chu ky -> ma 1.
+      Moc vang -> ma 2.
+
+  - id: E5
+    criterion: AC-8
+    executor: judgment
+    inputs:
+      - "docs/superpowers/specs/2026-10-04-chan-trung-khoa-ban-nhap-design.md"
+      - "packages/validation/src/okr-cuoc-soan.ts"
+      - "apps/agent-okr/agent/tools/nop_ban_nhap.ts"
+      - "apps/agent-okr/agent/lib/nop-ban-nhap.ts"
+    question: |
+      Doc cac tep trong inputs roi tra loi:
+      (1) Mo ta (description) cua cong cu nop_ban_nhap co noi ro voi agent rang khoa la duy nhat
+      giua cac Muc tieu, va giua cac KR cua cung mot Muc tieu (va khong cam KR trung khoa duoi
+      hai Muc tieu khac nhau) khong?
+      (2) Hai thong diep trong BAN_NHAP_LOI, ghep voi khoa bi trung, co du de agent biet sua o
+      dong nao khong? Superrefine co bao MOI lan lap (khong dung o cho dau) va so tren gia tri da
+      trim khong?
+      (3) nop-ban-nhap.ts co goi lai banNhap.parse hay tu kiem trung khoa theo khoaModel khong
+      (design doc chon chi chan o bien)?
+      PASS khi ca ba cau dong y voi design doc. Cau nao lech -> FAIL va goi ten cho lech.
