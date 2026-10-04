@@ -150,9 +150,10 @@ evals:
       Test DOM moi okr-toan-canh-chu.dom.tsx render ToanCanh voi du lieu dung tay theo khuon
       ToanCanhOutput (parse bang schema cua okr-xem.contracts truoc khi render): mot bo phan 'Khối Hỗ trợ'
       trong donViChuaDat, hang bo phan cua no soMucTieu 6. Ma tran vi x en x {co don vi chua dat, moi don
-      vi da dat}: mo ta the = okrToanCanhMessages(locale).toanCanh.chuaDat / tatCaDaDat (doc tu messages),
-      ten don vi nam trong phan tu translate="no"; mo ta bang = theoDonViMoTa moi. 4 o, 4 khang dinh, so
-      in ra bang 4.
+      vi da dat}: chu [data-chua-dat] cua the ket thuc bang dung cau AC-7 ghim nguyen van ('Khối Hỗ trợ chưa
+      có mục tiêu riêng' / 'Khối Hỗ trợ has no objectives of its own'; khi du: 'Mọi đơn vị đã có mục tiêu
+      công bố' / 'Every unit has published objectives'), ten don vi nam trong phan tu translate="no", trang
+      chua cau gop moi cua mo ta bang. 4 o x 3 cot = 12 khang dinh, so in ra bang 12.
       CHIEU DO: ban sao tra chuaDat ve `${ten} chưa đặt` -> 'toan-canh vi: the noi nguoc bang', ma 1.
 
   - id: E8u
