@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: man-okr-truoc-r1
-verdict: REJECT
+verdict: PENDING-JUDGMENT
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 269f2806b6c978d13488096ab2b037178f57528b
+verified_commit: 51ff47fd18dc27873b9410c872ad191dec0c35af
 human_signoff:
 ---
 
 # Evidence Report: man-okr-truoc-r1
 
-Round 1. Không eval nào của hợp đồng đỏ, nhưng lệnh suite `bun run lint:slop` không gắn eval nào thoát mã 1 (6 lỗi anti-slop) nên verdict là REJECT. Eval E11 (judgment) còn UNCERTAIN vì hội đồng không đọc được ảnh.
+Round 2. Mười một eval máy và ui-check đạt, bảy lệnh suite xanh. Còn một mục judgment (E11) chờ người quyết ở Cổng 2, nên verdict là PENDING-JUDGMENT.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -33,166 +33,174 @@ Round 1. Không eval nào của hợp đồng đỏ, nhưng lệnh suite `bun ru
 ## Evidence
 
 - eval: E1
-  run_id: minted-man-okr-truoc-r1-E1-r1
+  run_id: minted-man-okr-truoc-r1-E1-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.r1c_hoi_y_dom
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
+  runs: 1
   output: |
-    Ran 2 tests across 1 file. [926.00ms]
+    Ran 2 tests across 1 file. [1001.00ms]
+
+- eval: E2
+  run_id: minted-man-okr-truoc-r1-E2-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.r1c_man
+  verified_at: 2026-10-04T09:01:56Z
+  screenshot: evidence/E2-step1.png
+  observed: |
+    Hỏi ý 1440 gọn: 4 ý đầy đủ trong khung đầu, thanh «Còn 4 điều trước khi công bố» ở đáy thấp, chỉ đè lên ý thứ 5, không đè 4 ý nằm trọn. Bấm «Xem danh sách» thì thanh mở ra, nút đổi thành «Ẩn danh sách», 4 dòng thiếu hiện đủ.
+    Ở 390 thanh cao khoảng 66px, che một phần ý thứ hai, không tràn ngang; khi mở có dòng «Cuộn danh sách để xem phần còn lại». Khớp Expected.
+  network_observed: n-a (driver)
 
 - eval: E3
-  run_id: minted-man-okr-truoc-r1-E3-r1
+  run_id: minted-man-okr-truoc-r1-E3-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.r1c_cap_nhat_dom
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
+  runs: 1
   output: |
-    Ran 11 tests across 1 file. [1009.00ms]
+    Ran 12 tests across 1 file. [1182.00ms]
 
 - eval: E4
-  run_id: minted-man-okr-truoc-r1-E4-r1
+  run_id: minted-man-okr-truoc-r1-E4-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.r1c_cap_nhat_dom
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
+  runs: 1
   output: |
-    Ran 11 tests across 1 file. [1009.00ms]
+    Ran 12 tests across 1 file. [1182.00ms]
+
+- eval: E5u
+  run_id: minted-man-okr-truoc-r1-E5u-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.r1c_man
+  verified_at: 2026-10-04T09:01:56Z
+  screenshot: evidence/E5u-step1.png
+  observed: |
+    Cập nhật tuần 1440 trạng thái xong: banner «Bạn đã gửi cập nhật tuần này», hai KR «Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng» (2,9 tỷ đồng) và «Ký 15 hợp đồng bán lẻ mới» (12,1 hợp đồng) cùng «Tự tin cao», nút «Sửa cập nhật». Ảnh 390 sau khi sửa: KR đầu «Tự tin thấp», KR hai «Tự tin cao», không tràn ngang.
+    Trạng thái một phần: dòng «Đã gửi 1/2 KR tuần này», KR đầu có chip «Đã gửi tuần này», KR hai chưa gửi; ở 390 xếp dọc, không tràn ngang. Khớp Expected.
+  network_observed: n-a (driver)
 
 - eval: E6
-  run_id: minted-man-okr-truoc-r1-E6-r1
+  run_id: minted-man-okr-truoc-r1-E6-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.cnt_gui_lo
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
+  runs: 1
   output: |
-    test-run: dropped crm_mutkn2hx2bzc_test
+    test-run: dropped crm_mutle8lcvrxq_test
 
 - eval: E6b
-  run_id: minted-man-okr-truoc-r1-E6b-r1
+  run_id: minted-man-okr-truoc-r1-E6b-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.cnt_gui_lo
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
+  runs: 1
   output: |
-    test-run: dropped crm_mutkn2hx2bzc_test
+    test-run: dropped crm_mutle8lcvrxq_test
 
 - eval: E7
-  run_id: minted-man-okr-truoc-r1-E7-r1
+  run_id: minted-man-okr-truoc-r1-E7-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.r1c_toan_canh_dom
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
+  runs: 1
   output: |
-    Ran 1 test across 1 file. [1084.00ms]
+    Ran 1 test across 1 file. [656.00ms]
+
+- eval: E8u
+  run_id: minted-man-okr-truoc-r1-E8u-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.r1c_man
+  verified_at: 2026-10-04T09:01:56Z
+  screenshot: evidence/E8u-step1.png
+  observed: |
+    Toàn cảnh 1440: thẻ «Đơn vị đã công bố OKR» ghi 12/13 kèm dòng «Khối Hỗ trợ chưa có mục tiêu riêng»; bảng «Theo đơn vị» có dòng mô tả bộ phận in đậm cộng mục tiêu riêng, hàng «Khối Hỗ trợ» in đậm, tiến độ 56%, cột Mục tiêu là 6.
+    Ở 390 bốn thẻ xếp 2x2, dòng phụ của thẻ 12/13 xuống dòng trong thẻ, bảng chỉ còn cột Đơn vị và Tiến độ, không tràn ngang. Khớp Expected.
+  network_observed: n-a (driver)
 
 - eval: E9
-  run_id: minted-man-okr-truoc-r1-E9-r1
+  run_id: minted-man-okr-truoc-r1-E9-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.r1c_chu
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
+  runs: 1
   output: |
-    Ran 128 tests across 1 file. [1235.00ms]
+    Ran 128 tests across 1 file. [957.00ms]
 
 - eval: E10
-  run_id: design-gate-3a8b912e81
+  run_id: design-gate-8eae653c8e,design-gate-86f5cdbc58,design-gate-618f30ce34
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.r1c_san_thiet_ke
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
+  runs: 1
   output: |
-    design-gate static chạy trên ba tệp khoi-ket-luan.tsx, cap-nhat-tuan.tsx, toan-canh.tsx; không có P0.
-
-- eval: E2
-  run_id: minted-man-okr-truoc-r1-E2-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.r1c_man
-  verified_at: 2026-10-04T08:40:31Z
-  screenshot: evidence/E2-step1.png
-  observed: |
-    Da mo bang Read ca 4 frame. step1 (hoi-y gon 1440): trang "Hỏi ý mục tiêu", tab Hỏi ý, "Ý chưa gom (5)"; thanh cong bo dang gon o day khung nhin ("Còn 4 điều trước khi công bố", nut "Xem danh sách", nut "Công bố" mo mau), cao khoang 54px; bon y dau tien ("Gom hoá đơn xăng dầu...", "Làm sổ tay...", "Dán mã quét...", "Cho khách gửi ảnh hàng hỏng...") nam tron phia tren thanh, khong bi che; y thu nam chi lo mot phan o sat day, khong nam tron trong khung nhin dau nen khong tinh. Khop expected (0 bi phu, <=80). step2 (mo 1440): nut doi thanh "Ẩn danh sách", thanh mo rong liet ke "Còn ý chưa gom vào chủ đề", «Giữ khách cũ» — chưa kết luận, «Báo giá nhanh và chốt đơn sớm» — chưa kết luận, «Cho tài xế đổi tác thuê chỗ nghỉ...» — chưa kết luận; ca 5 y chua gom hien tron phia tren thanh, khong bi che. Khop. step3 (gon 390): bo cuc dien thoai, khong tran ngang; thanh "Còn 4 điều trước khi công bố / Xem danh sách / Công bố" cao khoang 66px (<=120), y dau tien hien ro phia tren thanh, cac y khac tiep ngay duoi thanh khong bi pha bo cuc. Khop. step4 (mo 390): sau khi bam, danh sach cuon toi: cac y "Làm sổ tay...", "Dán mã quét...", "Cho khách gửi ảnh...", "Họp giao ban..." giao khung nhin, hien tron phia tren thanh da mo ("Còn 4 điều... / Ẩn danh sách / Công bố", dong "Còn ý chưa gom vào chủ đề", «Giữ khách cũ»..., dong ghi chu "Cuộn danh sách để xem phần còn lại"); khong thay thanh ngang cuon. Khop expected, khong mau thuan voi so lieu script.
-  network_observed: n-a (driver)
-
-- eval: E5u
-  run_id: minted-man-okr-truoc-r1-E5u-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.r1c_man
-  verified_at: 2026-10-04T08:40:31Z
-  screenshot: evidence/E5u-step1.png
-  observed: |
-    E5u-step1 (xong 1440, sau gui 2 KR + tai lai): tieu de 'Cập nhật tuần của tôi', thanh 'Bạn đã gửi cập nhật tuần này' voi dong 'Lần gửi mới nhất 04/10 lúc 15:42. Lần kế tiếp: thứ Hai 05/10', hai hang KR 'Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng' (2,9 tỷ đồng, nhan 'Tự tin cao') va 'Ký 15 hợp đồng bán lẻ mới' (12,1 hợp đồng, 'Tự tin cao'), nut 'Sửa cập nhật' va 'Về Của tôi' — dung ST-capnhat-daxong, co ten hai KR va nhan muc vua chon (cao). Khop Expected.
-    E5u-step2 (xong 390, sau khi sua KR dau thanh thap + tai lai): cung man da xong, bo cuc mot cot, khong cat ngang; KR dau 'Tự tin thấp' (cham do), KR hai 'Tự tin cao'; nut Sửa cập nhật / Về Của tôi — khop (muc moi sau sua hien dung, khong tran ngang).
-    E5u-step3 (mot phan 1440, sau xoa check-in KR hai): dong 'Đã gửi 1/2 KR tuần này', KR dau co chip 'Đã gửi tuần này' va 'Tuần này: thấp', KR hai la form trong (Giá trị 12,1, 'Tuần trước: vừa'), thanh duoi 'Đã chọn mức tự tin 0/2 KR', nut 'Gửi 0 cập nhật' mo — dung ST-capnhat-motphan. Khop Expected.
-    E5u-step4 (mot phan 390): cung dong 'Đã gửi 1/2 KR tuần này', the KR dau chip 'Đã gửi tuần này', 'Tuần này: thấp', thanh gui 'Gửi 0 cập nhật' dinh duoi, bo cuc mot cot khong tran ngang — khop Expected.
-    Khong frame nao mau thuan Expected.
-  network_observed: n-a (driver)
-
-- eval: E8u
-  run_id: minted-man-okr-truoc-r1-E8u-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.r1c_man
-  verified_at: 2026-10-04T08:40:31Z
-  screenshot: evidence/E8u-step1.png
-  observed: |
-    Frame 1 (E8u-step1.png, 1440x900): trang 'Toàn cảnh OKR' tab Toàn cảnh, ky 'Quý 4 · mẫu'. The thu hai 'Đơn vị đã công bố OKR' hien 12/13 voi dong phu 'Khối Hỗ trợ chưa có mục tiêu riêng' (khop Expected). Bang 'Theo đơn vị' co dong mo ta 'Bộ phận in đậm cộng mục tiêu riêng của nó với mục tiêu các phòng ban thụt vào bên dưới — một bộ phận chưa có mục tiêu riêng vẫn có số ở đây.'; hang 'Khối Hỗ trợ' (in dam) cot Mục tiêu = 6, Số KR = 12 (so muc tieu > 0). Khong thay loi hay tran ngang. Frame 2 (E8u-step2.png, 390x844): cung trang o kho dien thoai, the 'Đơn vị đã công bố OKR 12/13' xuong dong voi 'Khối Hỗ trợ chưa có mục tiêu riêng' day du, luoi the 2x2 vua khung, bang cuon trong khung, khong thay noi dung bi cat hay tran ngang (script do scrollWidth<=clientWidth cung dat). Ca hai khop Expected.
-  network_observed: n-a (driver)
+    design-gate --mode static trên ba tệp: khoi-ket-luan.tsx, cap-nhat-tuan.tsx, toan-canh.tsx; không có P0.
 
 - eval: E11
-  judged_by: judge panel (3 lens, fresh context)
+  judged_by: judge-subagent (fresh context), ba góc nhìn
   verdict: UNCERTAIN
-  rationale: Ba lens đều báo mười ảnh r1c-* trong danh sách Input không đọc được; chỉ có CONTEXT.md để đối chiếu từ điển bộ phận, phòng ban, đơn vị. Khi lập báo cáo, thư mục evidence chỉ có bốn ảnh r1c-cap-nhat-* cùng các khung E2, E5u, E8u; sáu ảnh r1c-hoi-y-* và r1c-toan-canh-* chưa nằm ở đó.
+  rationale: |
+    Panel đề xuất UNCERTAIN, cả ba góc nhìn cùng bỏ phiếu như vậy.
+    - domain-correctness: UNCERTAIN — Phần cập nhật tuần đạt: ảnh «xong» ghi "Bạn đã gửi cập nhật tuần này", giờ gửi 04/10 16:01, có nút «Sửa cập nhật»; ảnh «một phần» ghi "Đã gửi 1/2 KR tuần này" kèm chip trên KR đã gửi. Toàn cảnh 1440 đạt (thẻ 12/13 có dòng giải thích dưới «Theo đơn vị», chữ khớp CONTEXT.md). Chưa đủ căn cứ PASS vì thanh «Còn 4 điều trước khi công bố» đè lên ý thứ 5 (1440) và ý thứ 2 (390) mà chưa có ảnh cuối trang; ảnh Toàn cảnh 390 không thấy dòng giải thích và hàng Khối Hỗ trợ; ảnh «một phần» 390 cắt mất KR chưa gửi.
+    - operational-feasibility: UNCERTAIN — Cập nhật tuần đạt rõ, Toàn cảnh đạt ở 1440. Hỏi ý chưa kết luận được: ảnh chỉ theo từng khung nhìn, không có ảnh cuối trang; thanh đè lên ý thứ 5 ở 1440 và ý thứ 2 ở 390; khi mở, thanh che tên chủ đề cuối ở 1440 và chiếm khoảng một phần tư màn 390 với danh sách bên trong bị cắt.
+    - spec-alignment: UNCERTAIN — Phần lớn đạt (đủ 5 ý, không dấu ba chấm, 390 xuống dòng; banner, nút sửa, nhãn «Đã gửi tuần này»; từ vựng bộ phận, phòng ban, đơn vị). Còn ba chỗ ảnh tĩnh không đủ: (a) thanh đè ý ở gọn 1440 và 390, danh sách trong thanh bị cắt ở mở 390, tên chủ đề «Cho tài xế đối tác thuê chỗ nghỉ ngay tại kho,» bị cắt ở mở 1440; (b) KR «Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng» hiện «Tự tin cao» ở xong-1440 nhưng «Tự tin thấp» ở xong-390 và «Tuần này: thấp» ở một-phần-1440; (c) ở 390 Toàn cảnh không có dòng chú thích và cột Mục tiêu/Số KR.
   required_evidence:
-    - Mười ảnh PNG r1c-hoi-y-gon-1440, r1c-hoi-y-gon-390, r1c-hoi-y-mo-1440, r1c-hoi-y-mo-390, r1c-cap-nhat-xong-1440, r1c-cap-nhat-xong-390, r1c-cap-nhat-mot-phan-1440, r1c-cap-nhat-mot-phan-390, r1c-toan-canh-1440, r1c-toan-canh-390 có thật và đọc được ở _acceptance/man-okr-truoc-r1/evidence/; sinh lại bằng cách chạy lại bước chụp man-r1c.mjs rồi kiểm bằng ls.
-    - Ảnh r1c-hoi-y-gon-* cho thấy thanh dưới không che dòng ý nào; ảnh r1c-cap-nhat-xong-* cho thấy thông báo đã gửi tuần này kèm thời điểm gửi và cách sửa; ảnh r1c-cap-nhat-mot-phan-* cho thấy KR nào chưa gửi.
-    - Ảnh r1c-toan-canh-* cho thấy thẻ «Đơn vị đã công bố OKR» khớp số với bảng bên dưới, dùng chữ bộ phận, phòng ban, đơn vị theo CONTEXT.md.
-  human_override:  # chi nguoi ghi
-  panel (đề xuất UNCERTAIN, không ai bỏ phiếu PASS hay FAIL):
-    - domain-correctness: UNCERTAIN — không có ảnh nào đọc được, chỉ có CONTEXT.md nên không chấm được ba màn ở 1440 và 390.
-    - operational-feasibility: UNCERTAIN — cả mười ảnh báo không tồn tại trên đĩa (Read và ls cùng báo), không có gì để nhìn ba màn OKR.
-    - spec-alignment: UNCERTAIN — thư mục evidence không có trong cây lúc chấm, không có gì để phán bố cục; CONTEXT.md chỉ cho chuẩn từ ngữ.
+    - Ảnh Hỏi ý ở 390 và 1440, cuộn tới cuối danh sách «Ý chưa gom» với thanh ở trạng thái gọn, thấy ý cuối nằm trọn phía trên thanh «Còn 4 điều trước khi công bố». Chụp lại bằng cùng bàn đo r1c, tên r1c-hoi-y-gon-cuoi-390.png và r1c-hoi-y-gon-cuoi-1440.png, kèm số đo khoảng đệm đáy bằng JS (scrollHeight trừ chiều cao thanh so với bottom của ý cuối).
+    - Ảnh Hỏi ý ở trạng thái mở thanh (1440 và 390, cuộn cuối trang, tên r1c-hoi-y-cuoi-trang-mo-390.png) cho thấy tên chủ đề «Cho tài xế đối tác thuê chỗ nghỉ ngay tại kho…» hiện trọn hoặc có dấu ba chấm và tooltip, không bị panel cắt cụt không báo.
+    - Ảnh Toàn cảnh ở 390 cuộn tới hàng «Khối Hỗ trợ» của bảng «Theo đơn vị», kèm dòng giải thích «Bộ phận in đậm cộng mục tiêu riêng...» nếu ở khổ này còn hiện, cùng các cột Mục tiêu / Số KR, để thấy thẻ 12/13 không nói ngược hàng đó. Tên r1c-toan-canh-khoi-ho-tro-390.png.
+    - Ảnh «Cập nhật tuần» trạng thái gửi một phần ở 390 cuộn tới KR thứ hai («Ký 15 hợp đồng bán lẻ mới»), thấy KR này chưa có chip «Đã gửi tuần này» khác KR thứ nhất. Tên r1c-cap-nhat-mot-phan-kr2-390.png.
+    - Lời giải thích vì sao ảnh «xong» 390 ghi KR1 "Tự tin thấp" còn ảnh «xong» 1440 ghi "Tự tin cao": hai ảnh cùng hay khác dữ liệu mẫu, hoặc nhật ký chụp/seed xác nhận cùng bộ dữ liệu, hoặc ảnh chụp lại cùng trạng thái ở cả hai khổ. Ghi chú đặt trong evidence-report.md của man-okr-truoc-r1.
+    - Nguyên văn câu AC-11 / clause (1) trong _acceptance/man-okr-truoc-r1/contract.md: câu hỏi đưa vào bị lỗi chữ, chưa rõ tiêu chí là «không phải cuộn», «không phải mở» hay «không phải bấm», nên chưa phân biệt được thanh đè lên ý khi cuộn giữa trang là chấp nhận được hay là lỗi.
+  human_override:        # human fills "<name> <date>" + optional note to resolve
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-man-okr-truoc-r1-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-man-okr-truoc-r1-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
 
 - cmd: bun run lint:slop
-  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_lint_slop-r1
-  exit_code: 1
-  verified_at: 2026-10-04T08:40:31Z
-  output: |
-    6 lỗi anti-slop, 0 cảnh báo. Có lỗi no-unsafe-dictionary-type ở apps/app/test/okr-toan-canh-chu.dom.tsx (dòng 186, 187, 415, 416) và no-known-value-widening ở apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx dòng 140 (hàm ngayGioVN).
+  run_id: minted-man-okr-truoc-r1-SUITE-bun_run_lint_slop-r2
+  exit_code: 0
+  verified_at: 2026-10-04T09:01:56Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-man-okr-truoc-r1-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-man-okr-truoc-r1-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-04T08:40:31Z
+  verified_at: 2026-10-04T09:01:56Z
 
 ## Known limits
 
@@ -200,14 +208,12 @@ Round 1. Không eval nào của hợp đồng đỏ, nhưng lệnh suite `bun ru
 
 ## Analyst
 
-Eval không phân biệt (xanh cả trên code hiện tại lẫn trên baseline diffBase), chứng minh khung đo chứ chưa chứng minh tính năng; cần viết lại để khẳng định hành vi mới, hoặc xác nhận là lưới chặn hồi quy có chủ ý:
-- E1 (cmd: bộ DOM okr-hoi-y.dom.tsx, lọc «thanh công bố») baseline green
-- E3, E4 (cmd: okr-cap-nhat-tuan.dom.tsx) baseline green
-- E6, E6b (cmd: okr-cap-nhat.spec.ts, ca gui-lo) baseline green
-- E9 (cmd: messages-guard.spec.ts) baseline green
-- E10 (cmd: design-gate static trên ba tệp) baseline green
+Eval không phân biệt (xanh trên cả HEAD lẫn baseline, chứng minh harness chứ chưa chứng minh tính năng; nên viết lại để khẳng định hành vi mới, hoặc xác nhận là regression-guard có chủ ý):
 
-Eval phân biệt được: E7 (baseline red). Ba eval ui-check (E2, E5u, E8u) không chạy được trên baseline (baseline n-a).
+- E1 (cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoi-y.dom.tsx -t 'thanh công bố')
+- E3, E4 (cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cap-nhat-tuan.dom.tsx)
+- E6, E6b (cmd: bun run test -- "cd apps/api && bun test test/okr-cap-nhat.spec.ts -t gui-lo")
+- E9 (cmd: cd apps/app && bun test test/messages-guard.spec.ts)
 
 ## Variance
 
@@ -215,4 +221,5 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: không eval hợp đồng nào đỏ, nhưng lệnh suite `bun run lint:slop` (không gắn eval) thoát mã 1 với 6 lỗi anti-slop trong okr-toan-canh-chu.dom.tsx và cap-nhat-tuan.tsx; E11 chưa chốt được vì hội đồng không đọc được ảnh. Trả về triển khai: vá 6 lỗi lint:slop, chụp lại đủ mười ảnh r1c-* vào _acceptance/man-okr-truoc-r1/evidence/ để chấm lại E11.
+Round 1: lệnh suite lint:slop đỏ (6 lỗi anti-slop) và 5 phát hiện đo nằm trong hợp đồng; 11 eval máy và ui-check đạt, E11 UNCERTAIN. Trả về cho cài đặt.
+Round 2: lint:slop sạch, 11 eval máy và ui-check đạt, bảy lệnh suite xanh; E11 vẫn UNCERTAIN (ba góc nhìn), chờ người quyết ở Cổng 2. Verdict PENDING-JUDGMENT.

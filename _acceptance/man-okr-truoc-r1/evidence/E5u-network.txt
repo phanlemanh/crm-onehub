@@ -1,1 +1,1 @@
-driver: puppeteer-core qua man-r1c.mjs (khong co browser tool doc network) -> n-a (driver)
+driver: puppeteer script (man-r1c.mjs), khong doc duoc network/console -> n-a (driver). Chay Sun Oct  4 16:04:14 +07 2026
