@@ -17,9 +17,11 @@ export type Owner = {
 export function OwnerCell({
 	owner,
 	compact = false,
+	xuongDongDienThoai = false,
 }: {
 	owner: Owner | null;
 	compact?: boolean;
+	xuongDongDienThoai?: boolean;
 }) {
 	if (!owner) return compact ? null : <EmptyCellValue />;
 
@@ -44,7 +46,13 @@ export function OwnerCell({
 	return (
 		<span className="flex min-w-0 items-center gap-2">
 			{avatar}
-			<span className="truncate">{owner.name}</span>
+			<span
+				className={
+					xuongDongDienThoai ? "min-w-0 wrap-anywhere md:truncate" : "truncate"
+				}
+			>
+				{owner.name}
+			</span>
 		</span>
 	);
 }

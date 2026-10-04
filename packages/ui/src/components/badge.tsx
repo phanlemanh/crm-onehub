@@ -22,9 +22,14 @@ const badgeVariants = cva(
         mono: "rounded-sm bg-muted font-mono font-normal text-muted-foreground",
         token: "rounded-sm border-border font-normal text-foreground",
       },
+      tuongTac: {
+        true: "cursor-pointer outline-none hover:bg-muted",
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "default",
+      tuongTac: false,
     },
   }
 )
@@ -32,6 +37,7 @@ const badgeVariants = cva(
 function Badge({
   className,
   variant = "default",
+  tuongTac = false,
   asChild = false,
   ...props
 }: React.ComponentProps<"span"> &
@@ -42,7 +48,7 @@ function Badge({
     <Comp
       data-slot="badge"
       data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
+      className={cn(badgeVariants({ variant, tuongTac }), className)}
       {...props}
     />
   )
