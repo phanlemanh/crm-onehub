@@ -357,7 +357,9 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 					mt.status !== "da-bo" &&
 					mt.choDuyet === null &&
 					mt.canEditKr.includes(kr.id)
-				: suaNoiDung(mt);
+				: hop.loai === "kr-moi"
+					? suaNoiDung(mt) || mt.themKrLe
+					: suaNoiDung(mt);
 	if (hop === null) return null;
 	if (!duoc)
 		return <BoKhoaUrl key={khoaHopOkr(hop)} bo={() => void datHop(null)} />;
@@ -548,7 +550,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 					{m.tienDoTuSo(String(mt.progress), String(mt.keyResults.length))}
 				</p>
 			) : null}
-			{suaNoiDung(mt) ? (
+			{suaNoiDung(mt) || mt.themKrLe ? (
 				<div className="px-5 py-3">
 					<Button
 						size="sm"

@@ -84,6 +84,7 @@ const KHONG_QUYEN = {
 
 function mucTieu(doi: Partial<ObjectiveOutput>): ObjectiveOutput {
 	return {
+		themKrLe: false,
 		id: "mt-g",
 		cycleId: QUY.id,
 		cycleName: QUY.name,

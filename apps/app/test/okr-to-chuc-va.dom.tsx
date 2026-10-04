@@ -6,15 +6,31 @@ import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import {
+	cyclesOutput,
 	type KrOutput,
+	krCanhOutput,
 	krOutput,
 	type MucTieuOutput,
+	mineOutput,
 	mucTieuOutput,
+	type ObjectiveOutput,
+	objectiveOutput,
+	okrAccessOutput,
 } from "../../api/src/okr/okr.contracts";
+import { danhSachOutput } from "../../api/src/okr/okr-xem.contracts";
+import { orgTreeOutput } from "../../api/src/to-chuc/to-chuc.contracts";
 import { cho, dat, datLai, nhip } from "./khung-soan-okr";
 
 const { BangMucTieu } = await import("@/app/(app)/[slug]/okr/bang-muc-tieu");
 const { BangKr } = await import("@/app/(app)/[slug]/okr/bang-kr");
+const { TheoDonVi } = await import(
+	"@/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi"
+);
+const { ObjectiveSheet } = await import(
+	"@/components/crm/record-sheet/objective-sheet"
+);
+const { DetailSheet } = await import("@/components/detail-sheet");
+const { SEARCH_PARAM } = await import("@/lib/search-param-keys");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 
@@ -286,5 +302,203 @@ describe("so-kr", () => {
 		}
 		window.innerWidth = rongGoc;
 		console.log(`so kho: ${KHO.length}`);
+	});
+});
+
+function chiTiet(
+	mt: MucTieuOutput,
+	doi: Partial<ObjectiveOutput> = {},
+): ObjectiveOutput {
+	return objectiveOutput.parse({
+		...mt,
+		keyResults: mt.keyResults.map((k) =>
+			krCanhOutput.parse({
+				...k,
+				soViec: { xong: 0, tong: 0 },
+				soSangKien: 0,
+				coBangChung: false,
+			}),
+		),
+		cycleName: "Quý 1 · 2027",
+		kyGhiDuoc: true,
+		mangSangToi: null,
+		mangSangTu: null,
+		trail: [],
+		canEditKr: [],
+		nguoiXem: [],
+		nguoiDuyetDuKien: null,
+		choDuyet: null,
+		traLaiGanNhat: null,
+		quyen: {
+			datHienThi: false,
+			congBo: false,
+			guiDuyet: false,
+			duyet: false,
+			rutDuyet: false,
+		},
+		themKrLe: false,
+		...doi,
+	});
+}
+
+function datDonVi(vai: {
+	canCreate: boolean;
+	canEdit: boolean;
+	quanTri: boolean;
+}) {
+	dat("okr.cycles", () =>
+		cyclesOutput.parse({
+			cycles: [
+				{
+					id: "q1",
+					kind: "quy",
+					name: "Quý 1 · 2027",
+					parentId: null,
+					startsOn: "2027-01-01",
+					endsOn: "2027-03-31",
+					phase: "lap-ke-hoach",
+					breakStartsOn: null,
+					breakEndsOn: null,
+					updateWeekday: 1,
+					cuaSoRa: null,
+					anLuc: null,
+					anLyDo: null,
+					quyConHien: 0,
+					viec: {
+						suaMoiO: false,
+						suaTen: false,
+						go: false,
+						an: false,
+						hienLai: false,
+					},
+				},
+			],
+			currentId: "q1",
+		}),
+	);
+	dat("okr.access", () =>
+		okrAccessOutput.parse({
+			canManageProgram: vai.quanTri,
+			headOf: { divisions: [], departments: [] },
+		}),
+	);
+	dat("org.tree", () =>
+		orgTreeOutput.parse({
+			divisions: [],
+			chuaXep: [],
+			chuaCoPhongBan: [],
+			people: [],
+			archived: { divisions: [], departments: [] },
+			coverage: { members: 1, withPrimary: 1, departmentsWithoutHead: 0 },
+		}),
+	);
+	dat("okr.countByUnit", () => ({}));
+	dat("okr.danhSach", () =>
+		danhSachOutput.parse({
+			rows: [],
+			total: 0,
+			facetCounts: {
+				phuTrach: [],
+				loai: [],
+				trangThai: [],
+				tuTin: [],
+				gopY: [],
+			},
+			canEdit: vai.canEdit,
+			canCreate: vai.canCreate,
+		}),
+	);
+	dat("okr.mine", () => mineOutput.parse({ objectives: [] }));
+	dat("okr.viecCuaToi", () => ({ viec: [], lienQuanOkr: false }));
+	dat("okr.thanhVien", () => [HUNG]);
+}
+
+describe("nut-them", () => {
+	const VAI = [
+		{
+			ten: "quan-tri",
+			canCreate: true,
+			canEdit: false,
+			quanTri: true,
+			thay: true,
+		},
+		{
+			ten: "truong-phong",
+			canCreate: true,
+			canEdit: true,
+			quanTri: false,
+			thay: true,
+		},
+		{
+			ten: "thanh-vien",
+			canCreate: false,
+			canEdit: false,
+			quanTri: false,
+			thay: false,
+		},
+	] as const;
+
+	test("nut-them: quan tri khong la truong va truong phong thay Them muc tieu; thanh vien khong", async () => {
+		expect.assertions(VAI.length * 2 + 1);
+		for (const vai of VAI) {
+			datDonVi(vai);
+			const san = await dung(<TheoDonVi cauNoiOkr={false} />);
+			await cho(() => q("[data-hang-nut]", san.o) !== null, "thanh don vi");
+			await nhip(6);
+			const them = q("[data-nut=them-muc-tieu]", san.o);
+			const nhap = q("[data-nut=nhap-bang-tinh]", san.o);
+			expect(
+				them !== null,
+				vai.thay
+					? `quan tri khong thay nut them: ${vai.ten}`
+					: `nguoi thuong thay nut them: ${vai.ten}`,
+			).toBe(vai.thay);
+			expect(nhap !== null, `nut nhap sai: ${vai.ten}`).toBe(vai.thay);
+			if (vai.ten === "quan-tri") {
+				await bam(them, "nut them muc tieu");
+				expect(
+					san.url().has(SEARCH_PARAM.dialog.create),
+					"nut them khong mo ngan tao",
+				).toBe(true);
+			}
+			await act(async () => san.root.unmount());
+			san.o.remove();
+			dangMo = dangMo.filter((x) => x !== san);
+		}
+		console.log(`so vai: ${VAI.length}`);
+	});
+
+	test("nut-them: khung Muc tieu hien Them KR khi themKrLe du canEdit false", async () => {
+		const mt = mucTieu("mt-le", { canEdit: false });
+		const ca = [
+			{ themKrLe: true, thay: true },
+			{ themKrLe: false, thay: false },
+		];
+		expect.assertions(ca.length);
+		for (const c of ca) {
+			dat("okr.objective", () => chiTiet(mt, { themKrLe: c.themKrLe }));
+			dat("okr.comments", () => ({ comments: [], dong: [] }));
+			dat("okr.alignmentTargets", () => ({ targets: [] }));
+			const san = await dung(
+				<DetailSheet onOpenChange={() => {}} open>
+					<ObjectiveSheet objectiveId={mt.id} />
+				</DetailSheet>,
+				{ thamSo: `record=objective:${mt.id}` },
+			);
+			await cho(
+				() => document.querySelector("[data-okr-sheet] [role=tab]") !== null,
+				"khung tai xong",
+			);
+			expect(
+				q("[data-nut=them-kr]") !== null,
+				c.thay
+					? "quan tri khong thay them KR"
+					: "them KR hien khi khong co quyen",
+			).toBe(c.thay);
+			await act(async () => san.root.unmount());
+			san.o.remove();
+			dangMo = dangMo.filter((x) => x !== san);
+			document.body.innerHTML = "";
+		}
 	});
 });

@@ -336,7 +336,7 @@ export const byUnitInput = z.object({ cycleId: ma, unit: donViChon });
 export const byUnitOutput = z.object({
 	objectives: z.array(mucTieuOutput),
 	canEdit: z.boolean(),
-	canCreate: z.boolean().default(false),
+	canCreate: z.boolean(),
 	canhBao: z.string().nullable(),
 });
 export const countByUnitInput = z.object({ cycleId: ma });
@@ -398,7 +398,7 @@ export const objectiveOutput = mucTieuOutput.extend({
 		duyet: z.boolean(),
 		rutDuyet: z.boolean(),
 	}),
-	themKrLe: z.boolean().default(false),
+	themKrLe: z.boolean(),
 });
 export const createObjectiveInput = mucTieuInput;
 export const datHienThiOutput = z.object({

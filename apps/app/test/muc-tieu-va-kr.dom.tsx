@@ -131,6 +131,7 @@ function chiTietTu(mt: MucTieuOutput, doi: Partial<ObjectiveOutput> = {}) {
 			duyet: false,
 			rutDuyet: false,
 		},
+		themKrLe: false,
 		...doi,
 	});
 }
@@ -196,6 +197,7 @@ const danhSachTu = (ds: MucTieuOutput[]) =>
 			gopY: [],
 		},
 		canEdit: false,
+		canCreate: false,
 	});
 
 function nguonMay(loai: "crm" | "api" | "bang-tinh"): KrOutput["nguonMay"] {
