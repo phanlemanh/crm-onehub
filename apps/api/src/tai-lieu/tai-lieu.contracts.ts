@@ -8,6 +8,7 @@ import {
 import { danhSachTrichDoan } from "@crm/validation/tai-lieu-trich-doan";
 import { z } from "zod";
 import { TAI_LIEU_API } from "./tai-lieu-config";
+import { dongBaoSai, dongChuaTraLoi } from "./tai-lieu-hoi.contracts";
 
 const V = TAI_LIEU_API.vao;
 const T = TAI_LIEU_API.thongDiep;
@@ -112,6 +113,9 @@ export const taiLieuGetOutput = z.object({
 		.nullable(),
 	suaDuoc: z.literal(true),
 	nguon: nguonNgan.nullable(),
+	xacMinhDen: z.string().nullable(),
+	quaHanXacMinh: z.boolean(),
+	coQuyenXacMinh: z.boolean(),
 });
 
 export const taiLieuCreateOutput = z.object({ slug: z.string() });
@@ -233,6 +237,8 @@ export const taiLieuSucKhoeOutput = z.object({
 		}),
 	),
 	moCoi: khoiSucKhoe(dongSucKhoe.extend({ duyetLuc: z.string() })),
+	chuaTraLoi: khoiSucKhoe(dongChuaTraLoi),
+	baoSai: khoiSucKhoe(dongBaoSai),
 });
 
 export type TaiLieuListInput = z.infer<typeof taiLieuListInput>;

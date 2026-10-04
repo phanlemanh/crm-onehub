@@ -92,7 +92,7 @@ describe("de-xuat-chung", () => {
 		const suKien = await db.taiLieuSuKien.findMany({ where: { trangId } });
 		const cuaNo = suKien
 			.map((s) => parseSuKienChiTiet(s.chiTiet))
-			.filter((c) => c.deXuatId === deXuatId);
+			.filter((c) => "deXuatId" in c && c.deXuatId === deXuatId);
 		expect(cuaNo.map((c) => c.loai)).toEqual(["DE_XUAT"]);
 	});
 

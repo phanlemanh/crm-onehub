@@ -92,9 +92,9 @@ export function capabilitiesFrom(
 		},
 		{
 			...fromEnv("KHO_TAI_LIEU_AI_GATEWAY_API_KEY"),
-			label: "Drafting key",
+			label: "Document library key",
 			gives:
-				"a separate AI Gateway key for the machine that drafts document pages from uploaded files, so its spend is billed apart. Without it drafting runs on the shared model key",
+				"a separate AI Gateway key for the document library — the machine that drafts pages from uploaded files and the AI assistant that answers questions from approved pages — so their spend is billed apart. Without it both run on the shared model key",
 		},
 		{
 			...fromEnv("ZALO_BOT_TOKEN"),

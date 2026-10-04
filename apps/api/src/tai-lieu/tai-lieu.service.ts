@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { WORKSPACE_ID } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
+import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import {
 	kiemTrangChienLuoc,
 	LOAI_TRANG_CHIEN_LUOC,
@@ -261,6 +262,7 @@ export class TaiLieuService {
 				loai: true,
 				chuTrang: NGUOI,
 				department: DON_VI,
+				xacMinhDen: true,
 				banDangDung: {
 					select: {
 						so: true,
@@ -288,7 +290,36 @@ export class TaiLieuService {
 			choLanDau: ban ? null : await this.choLanDau(nguoi, t),
 			suaDuoc: true,
 			nguon: ban?.deXuat.nguon ?? null,
+			xacMinhDen: t.xacMinhDen?.toISOString() ?? null,
+			quaHanXacMinh:
+				t.xacMinhDen !== null && t.xacMinhDen < dauNgayVN(new Date()),
+			coQuyenXacMinh: duyetDuoc(nguoi, { chuTrangId: t.chuTrang.id }),
 		};
+	}
+
+	async datXacMinh(
+		nguoi: NguoiGoi,
+		input: { slug: string; den: string | null },
+	): Promise<{ ok: true }> {
+		const t = await this.db.taiLieuTrang.findFirst({
+			where: { AND: [{ slug: input.slug }, dieuKienThay(nguoi)] },
+			select: { id: true, chuTrangId: true },
+		});
+		if (!t) throw khongCo();
+		if (!duyetDuoc(nguoi, t))
+			throw new ForbiddenException(T.khongDuocDatXacMinh);
+		const den =
+			input.den === null
+				? null
+				: new Date(`${input.den}T${TAI_LIEU_API.gioXacMinh}`);
+		await this.db.$transaction(async (tx) => {
+			await tx.taiLieuTrang.update({
+				where: { id: t.id },
+				data: { xacMinhDen: den },
+			});
+			await ghiSuKien(tx, t.id, nguoi.id, { loai: "XAC_MINH", den: input.den });
+		});
+		return { ok: true };
 	}
 
 	private async choLanDau(

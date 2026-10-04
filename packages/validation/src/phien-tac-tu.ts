@@ -5,6 +5,7 @@ export const SESSION_PURPOSES = [
 	"zalo",
 	"okr",
 	"may-soan",
+	"kho",
 	"okr-soan",
 ] as const;
 
