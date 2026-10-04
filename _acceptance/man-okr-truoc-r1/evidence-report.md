@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 51ff47fd18dc27873b9410c872ad191dec0c35af
+verified_commit: 9afe1c586f395777695460ac44406784d100b815
 human_signoff: Phan Le Manh 2026-10-04 — ký Cổng Bằng chứng trên vòng chấm 2 (11/11 eval máy và ui-check đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng); E11 ghi Đạt. Sáu mục ngoài hợp đồng định đoạt từng mục ở lượt ký này — Ngoài-1, 4, 5 ghi Known limits; Ngoài-2, 6 chấp nhận không sửa; Ngoài-3 mở hợp đồng mới. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -223,3 +223,7 @@ none — every multi-run eval is uniform
 
 Round 1: lệnh suite lint:slop đỏ (6 lỗi anti-slop) và 5 phát hiện đo nằm trong hợp đồng; 11 eval máy và ui-check đạt, E11 UNCERTAIN. Trả về cho cài đặt.
 Round 2: lint:slop sạch, 11 eval máy và ui-check đạt, bảy lệnh suite xanh; E11 vẫn UNCERTAIN (ba góc nhìn), chờ người quyết ở Cổng 2. Verdict PENDING-JUDGMENT.
+
+### Re-pin lần 1 — 2026-10-04, do gộp onehub 3e782921 (#248) sau Cổng 2
+run_id: repin-20261004T093433Z-56825
+sha: 9afe1c586f395777695460ac44406784d100b815 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E2, E5u, E8u, E11 (E11 không khai paths) · AC không có chốt máy: AC-2, AC-8, AC-11
