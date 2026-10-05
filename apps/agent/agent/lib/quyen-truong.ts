@@ -14,6 +14,8 @@ export type VaiDoiTruong = WorkspaceRole | "khong-thanh-vien" | "tu-dong";
 
 export type HanhDongTruong = "create" | "update-brief" | "archive";
 
+export type LyDoTuChoi = "quyen" | "khong-ghi-duoc";
+
 type Thuoc = Readonly<Record<string, string | readonly string[]>>;
 
 export type NguCanhTruong = {
@@ -62,6 +64,7 @@ export async function ghiDoiTruong(
 		hanhDong: HanhDongTruong;
 		vai: VaiDoiTruong;
 		ketQua: "lam" | "tu-choi";
+		lyDo?: LyDoTuChoi;
 		entity: string;
 		key?: string;
 	},

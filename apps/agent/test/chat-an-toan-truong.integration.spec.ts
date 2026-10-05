@@ -121,6 +121,13 @@ const ketCongCu = z
 	})
 	.loose();
 
+const suKienDayDu = z.object({
+	hanhDong: z.string(),
+	vai: z.string(),
+	ketQua: z.string(),
+	lyDo: z.string().optional(),
+});
+
 const duLieuSuKien = z.object({
 	hanhDong: z.string(),
 	vai: z.string(),
@@ -360,6 +367,94 @@ describe("ca-truong-su-kien", () => {
 		sai.push(
 			...(await kiemO("su kien tu-dong", "create", ctxNen(), false, "tu-dong")),
 		);
+		expect(sai).toEqual([]);
+	});
+});
+
+describe("ca-truong-su-kien", () => {
+	test("ca-truong-su-kien: quan tri chay ma khong ghi duoc gi thi la tu-choi khong-ghi-duoc, khong phai lam", async () => {
+		const admin = await nguoiCua("admin");
+		const daCo = await gieoTruong("trung");
+		const nhanTrung = (
+			await db.fieldDefinition.findUniqueOrThrow({
+				where: { entity_key: { entity: "COMPANY", key: daCo } },
+				select: { label: true },
+			})
+		).label;
+		const O = [
+			{
+				ten: "tao trung khoa",
+				chay: (ctx: NguCanh) =>
+					manageFields.execute(
+						{
+							action: "create",
+							entity: "COMPANY",
+							label: nhanTrung,
+							type: "TEXT",
+						},
+						ctx as never,
+					),
+			},
+			{
+				ten: "tao thieu loai",
+				chay: (ctx: NguCanh) =>
+					manageFields.execute(
+						{ action: "create", entity: "COMPANY", label: `R1e ${MOC} thieu` },
+						ctx as never,
+					),
+			},
+			{
+				ten: "doi khong co khoa",
+				chay: (ctx: NguCanh) =>
+					manageFields.execute(
+						{ action: "update-brief", entity: "COMPANY", agentBrief: "x" },
+						ctx as never,
+					),
+			},
+			{
+				ten: "doi truong khong ton tai",
+				chay: (ctx: NguCanh) =>
+					manageFields.execute(
+						{
+							action: "update-brief",
+							entity: "COMPANY",
+							key: `${fieldKeyFromLabel(`R1e ${MOC}`)}_khong_co`,
+							agentBrief: "x",
+						},
+						ctx as never,
+					),
+			},
+			{
+				ten: "luu tru truong khong ton tai",
+				chay: (ctx: NguCanh) =>
+					archiveField.execute(
+						{
+							entity: "COMPANY",
+							key: `${fieldKeyFromLabel(`R1e ${MOC}`)}_khong_co`,
+						},
+						ctx as never,
+					),
+			},
+		] as const;
+		expect(O.length).toBe(5);
+		const sai: string[] = [];
+		for (const o of O) {
+			const ctx = ctxChat(admin);
+			await o.chay(ctx);
+			const hang = (await suKien(ctx.session.id)).map((h) =>
+				suKienDayDu.parse(h.data),
+			);
+			const dung =
+				hang.length === 1 &&
+				hang[0]?.ketQua === "tu-choi" &&
+				hang[0]?.lyDo === "khong-ghi-duoc" &&
+				hang[0]?.vai === "admin";
+			if (!dung) {
+				sai.push(
+					`ca-truong-su-kien: ${o.ten} ghi ${JSON.stringify(hang)} thay vi mot hang tu-choi khong-ghi-duoc`,
+				);
+			}
+		}
 		expect(sai).toEqual([]);
 	});
 });
