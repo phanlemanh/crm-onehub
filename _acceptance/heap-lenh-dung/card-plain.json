@@ -1,21 +1,48 @@
 {
   "feature_plain": "Kiểm tra «lệnh dựng» chạy trên mọi PR thôi đỏ oan vì máy dựng hết bộ nhớ, nên PR đỏ ở đó là PR hỏng thật.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ cho bước dựng ứng dụng trong kiểm tra «lệnh dựng» được dùng tới 6 GB bộ nhớ, đúng con số đã nới cho kiểm tra kiểu ở PR #268. Máy chứng hai điều: dựng xong ở 6 GB, và cùng lệnh ép xuống 1 GB thì hết bộ nhớ, tức con số khai thật sự tới được công cụ dựng chứ không bị lọc dọc đường."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ cho bước dựng ứng dụng trong kiểm tra «lệnh dựng» được dùng tới 6 GB bộ nhớ, đúng con số đã nới cho kiểm tra kiểu ở PR #268. Máy chứng hai điều: dựng xong ở 6 GB, và cùng lệnh ép xuống 1 GB thì hết bộ nhớ, tức con số khai thật sự tới được công cụ dựng chứ không bị lọc dọc đường."
+    }
   ],
   "scope_plain": "Lượt này chỉ chạm đúng một bước dựng. Các việc sau để ngoài:",
   "wont_do": [
-    {"id": "OOS-1", "p": "Không đổi bước hay kiểm tra nào khác của CI. Kiểm tra kiểu đã nới riêng ở PR #268."},
-    {"id": "OOS-2", "p": "Không làm ứng dụng dựng tốn ít bộ nhớ hơn: lượt này cố ý nới trần thay vì chữa gốc."},
-    {"id": "OOS-3", "p": "Không đổi sang máy CI lớn hơn, không tách việc dựng thành nhiều phần."}
+    {
+      "id": "OOS-1",
+      "p": "Không đổi bước hay kiểm tra nào khác của CI. Kiểm tra kiểu đã nới riêng ở PR #268."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không làm ứng dụng dựng tốn ít bộ nhớ hơn: lượt này cố ý nới trần thay vì chữa gốc."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không đổi sang máy CI lớn hơn, không tách việc dựng thành nhiều phần."
+    }
   ],
   "coverage_plain": [
-    {"i": 0, "p": "Không quét độ phủ: việc chỉ có một lời hứa, dựng xong hoặc hết bộ nhớ, nên không có trục nào để liệt kê."}
+    {
+      "i": 0,
+      "p": "Không quét độ phủ: việc chỉ có một lời hứa, dựng xong hoặc hết bộ nhớ, nên không có trục nào để liệt kê."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Phép thử đỏ có thể xanh oan vì bộ nhớ đệm của lần dựng trước. Đã sửa: xoá sạch bộ nhớ đệm trước mỗi lần dựng, và chỉ tính là hết bộ nhớ khi chính ứng dụng báo."},
-    {"i": 1, "p": "Ngưỡng chỉ đòi «trên 2 GB», lỏng hơn ý định một con số chung với kiểm tra kiểu. Đã sửa: con số phải bằng đúng kiểm tra kiểu, khai số khác thì đỏ."},
-    {"i": 2, "p": "Phép đo gõ một lệnh khác với lệnh CI thật sự chạy. Đã sửa: đo bằng chính lệnh đọc ra từ CI."},
-    {"i": 3, "p": "Ai đó sửa cấu hình công cụ dựng về sau, phép đo sẽ không bị đòi chạy lại. Đã sửa: thêm các tệp cấu hình ấy vào danh sách theo dõi."}
+    {
+      "i": 0,
+      "p": "Phép thử đỏ có thể xanh oan vì bộ nhớ đệm của lần dựng trước. Đã sửa: xoá sạch bộ nhớ đệm trước mỗi lần dựng, và chỉ tính là hết bộ nhớ khi chính ứng dụng báo."
+    },
+    {
+      "i": 1,
+      "p": "Ngưỡng chỉ đòi «trên 2 GB», lỏng hơn ý định một con số chung với kiểm tra kiểu. Đã sửa: con số phải bằng đúng kiểm tra kiểu, khai số khác thì đỏ."
+    },
+    {
+      "i": 2,
+      "p": "Phép đo gõ một lệnh khác với lệnh CI thật sự chạy. Đã sửa: đo bằng chính lệnh đọc ra từ CI."
+    },
+    {
+      "i": 3,
+      "p": "Ai đó sửa cấu hình công cụ dựng về sau, phép đo sẽ không bị đòi chạy lại. Đã sửa: thêm các tệp cấu hình ấy vào danh sách theo dõi."
+    }
   ]
 }

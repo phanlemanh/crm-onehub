@@ -5,7 +5,7 @@ slug: heap-lenh-dung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-05
 design_doc: docs/superpowers/specs/2026-10-05-heap-lenh-dung-design.md
@@ -59,3 +59,12 @@ không có trục liệt kê. Trỏ entry `descope` «bỏ coverage-scan» trong
   ở pha «Running TypeScript» — cùng pha với lượt đỏ của run 37263692533; ba chiều đỏ tĩnh (bỏ biến, 2048,
   3072) mã 1 đúng thông điệp ghim. Chốt «phải thấy pha type-check» ở chiều xanh là chốt hạ tầng (mã 2),
   không có chiều đỏ dựng tay: không dựng được một lượt Next mã 0 mà bỏ type-check trên cây này.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-05):**
+  - Ngoài-1 — E1 so con số heap của bước dựng với bước `check-types` trong `ci.yml`, tệp của hãng mà con số
+    ấy chỉ có nhờ bản vá riêng #268. Kéo bản mới của hãng về mà `ci.yml` mất con số, E1 ra mã 2 dù
+    `acceptance.yml` vẫn đúng — phải sửa thước tay (khi đó `check-types` trên CI cũng đổ lại).
+  - Ngoài-2 — gọi thước với `--tep` thiếu giá trị thì nó sập mã 1, đọc nhầm thành đỏ thật.
+  - Ngoài-3 — lỗi hạ tầng (YAML hỏng, thiếu `apps/app`, `NODE_OPTIONS` của `ci.yml` không phải chuỗi) ra mã 1
+    thay vì mã 2 — đọc nhầm thành lượt dựng hỏng.
+  - Ngoài-4 — thước xoá `apps/app/.next` của cây nó nằm, kể cả `.next/dev` của một bản dev đang chạy; không
+    chạy E1 cùng lúc với máy chủ dev hay phép đo màn trên cùng cây.
