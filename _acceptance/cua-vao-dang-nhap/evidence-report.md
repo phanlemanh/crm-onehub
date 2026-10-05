@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d579103f31b9717e269cb699bb52d2c82f379c84
+verified_commit: bc521b55cef53c92861f49648c8d9ff4625c5448
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -330,3 +330,7 @@ none — every multi-run eval is uniform
 Round 1: 6 phát hiện thước trong hợp đồng bị REJECT (bàn đo Tab không đi hết khối, E19 dùng câu hook giả thay câu thật, thuoc-da-ky xanh rỗng — t3/t5/t7/t10) — đã sửa ở commit 6212fc09 (bàn đo Tab đi hết khối, E19 dùng câu hook thật, thuoc-da-ky không xanh rỗng) và commit 096affd3 (test đăng nhập đo quan hệ và đầu ra thật). Trả lại implementation.
 Round 2: toàn bộ 20 eval (E1–E20) đạt trên máy đo — E18 (judgment) có 1/3 lens UNCERTAIN chờ human_override, không tự nâng verdict. Verdict tổng vẫn REJECT vì lệnh suite `bunx turbo run lint --force` (app#lint, 2 lỗi biome a11y — noNoninteractiveTabindex và noAutofocus — mới xuất hiện trong apps/app/test/cua-vao-sign-in.dom.tsx) thất bại; lệnh này không gắn AC nào nên không vào failed_evals, nhưng CLAUDE.md liệt `bun run lint` là 1 trong 5 lệnh chứng minh bắt buộc của kho.
 Round 3: sau ký lại Gate 1 (mở rộng E21), toàn bộ 21 eval (E1–E21) đạt trên máy đo/ui-check — gồm cả E16 (agent đo ở lượt đầu của round này bị skip/chết giữa chừng, đã chạy lại thành công: 19 DUNG, 0 SAI, mã thoát 0) và E14 ui-check (8/8 ảnh khớp Expected ở cả 4 khổ x 2 theme). Cả 4 lệnh suite (`bun run test`, `bunx turbo run lint --force`, `bun run lint:slop`, `bunx turbo run build --force`) đều xanh — lỗi biome a11y của round 2 đã hết. E18 (judgment) hội đồng 3/3 lens đề xuất PASS, không lens nào UNCERTAIN (khác round 2, khi 1/3 lens UNCERTAIN). Verdict tổng round này là PASS.
+
+### Re-pin lần 1 — 2026-10-05, do R1f cua-vao-va sửa thước soi-ma (danh sách đóng băng) và khong-shader (bỏ qua lưới chấm có tên)
+run_id: repin-20261005T002015Z-46150
+sha: bc521b55cef53c92861f49648c8d9ff4625c5448 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E14, E18 · diff chạm vật đo ngoài làn máy: E14, E18 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15
