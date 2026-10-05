@@ -95,7 +95,7 @@ AI Gateway — trợ lý đang chạy model mặc định. Chọn model khác.»
 ### 4. Hành vi
 
 - Hộp báo chỉ dựa trên cờ API trả về, không tự đoán ở trình duyệt; thành viên thường cũng thấy hộp báo
-  (biết vì sao chat chạy model khác) nhưng không có nút đổi.
+  (biết vì sao chat chạy model khác); ô chọn của họ vẫn bị khoá kèm câu «chỉ chủ sở hữu hoặc quản trị đổi được» như hôm nay (hồ sơ `cai-dat-chung-chi-quan-tri`).
 
 ### 5. Xuất xứ component
 

@@ -5,9 +5,9 @@ slug: chat-an-toan-truoc-r1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: approved
-approved_by: Phan Le Manh
-approved_at: 2026-10-05
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-05-chat-an-toan-truoc-r1-design.md
 ---
 
@@ -29,7 +29,7 @@ kiểm vai (#35), và model đã chọn bị AI Gateway gỡ thì mọi lượt 
 - AC-6: Given model trợ lý đã chọn khác mặc định, When `modelTheoVai` chọn model cho phiên (cả vai `tro-ly` lẫn `tac-nhan`, và `modelChoLuot` ghim cho lượt Tác nhân) với danh mục Gateway (a) có id đó, (b) đọc được mà không có id đó, (c) không đọc được (lỗi mạng, mã HTTP lỗi, thân không phải danh mục), và (d) là thân phản hồi thật của Gateway đã ghi lại (có ngày và nguồn), Then (a) trả model đã chọn; (b) trả `null` để eve lùi về `DEFAULT_AGENT_MODEL`, và ghi đúng một `AgentEvent` loại `model.bi-go-lui` mang id đó cho mỗi id mỗi tiến trình; (c) trả model đã chọn; (d) bộ đọc nhận đủ id của thân thật và trả model đã chọn khi id có trong đó. Bộ đọc danh mục của agent và của API dùng chung một schema ở `@crm/validation`.
 - AC-7: Given danh mục Gateway đã đọc một lần, When `modelTheoVai` chạy lại trong `MODEL_DANH_MUC.ttlMs` (5 phút), Then không gọi Gateway lần nữa; quá `ttlMs` thì gọi lại; lời gọi Gateway quá `MODEL_DANH_MUC.timeoutMs` tính là không đọc được.
 - AC-8: Given model đã chọn và danh mục Gateway, When API trả `settings.agentModel` cho một quản trị và cho một thành viên thường, Then `selectedMissing` là `true` khi có model đã chọn, danh mục đọc được và id không có trong đó; `false` khi id có trong danh mục, khi đang dùng mặc định, và khi danh mục không đọc được.
-- AC-9: Given màn Cài đặt › Model trợ lý thật trên bàn đo riêng của cây, When model đã chọn là một id Gateway không phục vụ, Then quản trị thấy hộp báo «model đã chọn không còn» ở khổ 1440 và 390, hộp không tràn ngang; thành viên thường cũng thấy hộp báo nhưng không có ô chọn model hay nút lưu; và khi model đã chọn là một id Gateway có phục vụ thì hộp báo không hiện.
+- AC-9: Given màn Cài đặt › Model trợ lý thật trên bàn đo riêng của cây, When model đã chọn là một id Gateway không phục vụ, Then quản trị thấy hộp báo «model đã chọn không còn» ở khổ 1440 và 390, hộp không tràn ngang; thành viên thường cũng thấy hộp báo, còn ô chọn model của họ vẫn bị khoá kèm câu «chỉ chủ sở hữu hoặc quản trị đổi được» như hôm nay; và khi model đã chọn là một id Gateway có phục vụ thì hộp báo không hiện.
 - AC-10: Given chữ mới của hộp báo và câu từ chối, When đọc bảng chữ hai ngôn ngữ, Then có đúng câu tiếng Việt và tiếng Anh đã khai và khoá được ghim ở `messages-guard`.
 - AC-11: Given một lượt chat mà lời gọi model hỏng vì Gateway không tìm thấy model (`GatewayModelNotFoundError`), When eve phát `step.failed` cho lượt đó, Then có đúng một hàng `AgentEvent` loại `model.khong-tim-thay` của phiên đó mang id model; lỗi model khác (hết tín dụng, quá hạn mức) không ghi hàng này.
 

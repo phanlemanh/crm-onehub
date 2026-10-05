@@ -153,7 +153,7 @@ evals:
       - "Canh cay truoc man dau; ban do rieng (tien-de.mjs qua mot-luot.sh); dang nhap dev:session mot owner"
       - "Buoc 1 (1440): writeAgentModel id 'khong-con/model-gia-r1e' -> mo /<slug>/settings (muc Model tro ly) -> thay hop bao bang innerText -> anh r1e-bi-go-1440.png"
       - "Buoc 2 (390): cung trang thai o kho 390 -> hop bao hien, khong tran ngang (scrollWidth <= clientWidth cua trang va cua hop) -> anh r1e-bi-go-390.png"
-      - "Buoc 3 (1440): dang nhap dev:session mot member, cung id 'khong-con/model-gia-r1e' -> hop bao hien, khong co o chon model hay nut luu -> anh r1e-bi-go-member-1440.png"
+      - "Buoc 3 (1440): dang nhap dev:session mot member, cung id 'khong-con/model-gia-r1e' -> hop bao hien, o chon model (combobox aria-label nhan model) bi khoa (disabled) va cau khongDuQuyen hien -> anh r1e-bi-go-member-1440.png"
       - "Buoc 4 (1440): owner, writeAgentModel mot id lay tu danh muc Gateway that (dong dau cua settings.modelCatalog) -> tai lai -> khong co hop bao -> anh r1e-con-1440.png"
     paths:
       - "apps/app/app/(app)/[slug]/settings/agent-model.tsx"
