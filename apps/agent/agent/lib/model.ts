@@ -2,6 +2,7 @@ import { createGateway } from "@ai-sdk/gateway";
 import { db } from "@crm/db";
 import { DEFAULT_AGENT_MODEL, readAgentModel } from "@crm/db/settings";
 import { defineDynamic } from "eve";
+import { docDanhMuc, ghiBiGoLui } from "./model-danh-muc";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
 import { TAI_LIEU_AGENT } from "./tai-lieu-config";
 import { type ModelMaySoan, modelTaiLieu } from "./tai-lieu-model";
@@ -20,6 +21,12 @@ export async function modelTheoVai(
 		const setting = await readAgentModel(db);
 
 		if (setting.isDefault) return null;
+
+		const danhMuc = await docDanhMuc();
+		if (danhMuc !== "khong-doc-duoc" && !danhMuc.co.has(setting.id)) {
+			await ghiBiGoLui(setting.id, vai);
+			return null;
+		}
 
 		return {
 			model: setting.id,
