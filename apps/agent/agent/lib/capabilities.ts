@@ -37,20 +37,26 @@ export async function contextDevKey(): Promise<string | null> {
 
 export const LUU_NGUON = "LUU_NGUON";
 
+async function coTokenZalo(): Promise<boolean> {
+	try {
+		return (await zaloToken()) !== null;
+	} catch (error) {
+		console.error(
+			`[agent] could not read the Zalo bot token: ${
+				error instanceof Error ? error.message : String(error)
+			}`,
+		);
+		return false;
+	}
+}
+
 export async function capabilities(): Promise<readonly Capability[]> {
 	const [contextDev, nguon, zalo] = await Promise.all([
 		contextDevKey(),
 		nguonKhoaMoHinh({ rieng: false }),
-		zaloToken().catch((error: unknown) => {
-			console.error(
-				`[agent] could not read the Zalo bot token: ${
-					error instanceof Error ? error.message : String(error)
-				}`,
-			);
-			return null;
-		}),
+		coTokenZalo(),
 	]);
-	return capabilitiesFrom(contextDev, nguon !== null, zalo !== null);
+	return capabilitiesFrom(contextDev, nguon !== null, zalo);
 }
 
 export function capabilitiesFrom(
