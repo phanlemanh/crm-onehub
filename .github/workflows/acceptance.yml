@@ -60,6 +60,8 @@ jobs:
       - run: bun install --frozen-lockfile
 
       - run: bun run build
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
 
   agent-okr-node24:
     name: tác nhân OKR trên Node 24
