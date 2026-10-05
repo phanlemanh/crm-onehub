@@ -5,7 +5,7 @@ slug: cua-vao-va
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -73,3 +73,12 @@ Quét bằng `morphological-scan` preset test-matrix (S1, 05/10).
 
 - Dữ liệu production chỉ đọc. Không có migration.
 - Phép đo màn AC-7 dựng lỗi đọc phiên bằng một lỗi hoàn lại được trong kho đo dùng-một-lần (`crm_<cây>_do`), và xoá cookie `session_data` của better-auth trước lượt gây lỗi — `cookieCache` 5 phút làm `getSession()` không chạm cơ sở dữ liệu nếu cookie đó còn.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-05 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1–2:
+
+- Ngoài-1: Khi khoá API của một người bị tắt, hết hạn hoặc sai, hệ thống đang được kiểm tra bằng một lỗi giả dựng theo đúng khuôn của nơi nhận, chưa phải bằng khoá thật. Hôm nay hai bên khớp nhau nên người dùng vẫn bị báo chưa đăng nhập đúng cách, nhưng nếu thư viện sau này tách đôi thì khoá hỏng có thể bị báo nhầm là hệ thống trục trặc mà bài kiểm tra vẫn xanh.
+- Ngoài-2: Ba trường hợp khoá API hỏng (tắt, hết hạn, sai) được nhắc tên, nhưng bài kiểm tra mới thử hai trường hợp, chưa thử riêng trường hợp hết hạn. Người có khoá hết hạn nhiều khả năng vẫn được báo chưa đăng nhập đúng như hai trường hợp kia, chỉ là chưa có bằng chứng riêng cho nó.
+- Ngoài-3: Nếu ai đó chạy phép đo màn này trực tiếp trên máy dev mà không qua lệnh chuẩn, thước có thể làm hỏng dữ liệu phiên của cơ sở dữ liệu dùng chung, khiến mọi người đang đăng nhập bị văng ra. Đi đúng lệnh chuẩn thì không xảy ra.
+- Ngoài-4: Thước kiểm tra của đợt «cửa vào đăng nhập» cũ không còn báo động nếu một vòng sau lỡ đụng vào phần đăng nhập hay proxy, vì nó chỉ nhìn danh sách đã chốt từ trước. Người dùng không thấy gì khác đi, nhưng một thay đổi sai chỗ có thể lọt qua mà không có đèn đỏ.
+- Ngoài-5: Nếu sau này ai đó sửa trang hết quyền để thông báo lỗi đăng xuất lại dùng chữ của nút, thước quét tĩnh sẽ không phát hiện. Các bài kiểm tra khác vẫn có thể bắt được.
+- Ngoài-6: Sau khi bấm «Thử lại», thước chỉ kiểm tra tiêu đề lỗi đã biến mất chứ chưa kiểm trang bình thường thật sự hiện ra. Một trang trắng hay đang kẹt ở trạng thái tải vẫn có thể được tính là đạt.
