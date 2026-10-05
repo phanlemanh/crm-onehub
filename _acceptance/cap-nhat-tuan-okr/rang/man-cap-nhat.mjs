@@ -37,6 +37,7 @@ const NGAY_LUI_CONG_BO = 2;
 const LOI_HYDRATE = /hydrat/i;
 const CUA_CHAN_URL = process.env.CUA_CHAN_URL ?? "http://localhost:3922";
 const LY_DO_DOI_DICH = "Đo E29: đổi đích KR a lên 60";
+const GIO_GIEO_TUAN_TRUOC_UTC = "02";
 
 mkdirSync(BANG_CHUNG, { recursive: true });
 
@@ -617,7 +618,6 @@ async function gieoLichSuTuanTruoc() {
 	if (!hangThat || !phienThat)
 		throw new Error("khong doc lai duoc hang calibration vua ghi qua service");
 
-	const luc = new Date(Date.now() - 8 * 24 * 3600 * 1000);
 	const tuanTruocChuoi = new Date(
 		Date.parse(`${homNayVN}T00:00:00Z`) - 7 * 24 * 3600 * 1000,
 	);
@@ -628,6 +628,7 @@ async function gieoLichSuTuanTruoc() {
 	)
 		.toISOString()
 		.slice(0, 10);
+	const luc = new Date(`${tuanTruoc}T${GIO_GIEO_TUAN_TRUOC_UTC}:00:00Z`);
 
 	const phienCu = await db.okrCheckInSession.create({
 		data: {
@@ -705,6 +706,9 @@ async function donDep() {
 	await db.okrCheckIn.deleteMany({ where: { authorUserId: { in: moiNguoi } } });
 	await db.okrCheckInSession.deleteMany({
 		where: { userId: { in: moiNguoi } },
+	});
+	await db.okrDoiDich.deleteMany({
+		where: { keyResult: { objectiveId: { in: moiMt } } },
 	});
 	await db.okrKeyResult.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrParticipant.deleteMany({ where: { objectiveId: { in: moiMt } } });
