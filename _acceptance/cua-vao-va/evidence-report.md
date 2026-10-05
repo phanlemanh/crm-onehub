@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a95475d33264091d14b3184969896807dc540f53
+verified_commit: 77ca8466b8f4c1811411348d879271b9936b155c
 human_signoff: Phan Le Manh 2026-10-05
 ---
 
@@ -253,3 +253,7 @@ none — every multi-run eval is uniform (mọi eval chỉ chạy một lần, k
 
 Round 1: E14 BLOCKED (thiếu gói zod trong worktree, lỗi môi trường chứ không phải lỗi code); 15 eval còn lại xanh; lệnh suite `--filter=api` đỏ 2 ca cũ về khoá API hỏng, không gắn eval. Returned to implementation: khoá API hỏng vẫn trả 401 và ba-lop đọc metadata router (commit 96892e969).
 Round 2: 16/16 eval và 7/7 lệnh suite xanh, verdict PASS.
+
+### Re-pin lần 1 — 2026-10-05, do gộp onehub e9f8ed2f (#260, #262) trước khi merge #261
+run_id: repin-20261005T043446Z-73088
+sha: 77ca8466b8f4c1811411348d879271b9936b155c · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E7, E10

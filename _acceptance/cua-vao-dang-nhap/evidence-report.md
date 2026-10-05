@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bc521b55cef53c92861f49648c8d9ff4625c5448
+verified_commit: 77ca8466b8f4c1811411348d879271b9936b155c
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -334,3 +334,7 @@ Round 3: sau ký lại Gate 1 (mở rộng E21), toàn bộ 21 eval (E1–E21) �
 ### Re-pin lần 1 — 2026-10-05, do R1f cua-vao-va sửa thước soi-ma (danh sách đóng băng) và khong-shader (bỏ qua lưới chấm có tên)
 run_id: repin-20261005T002015Z-46150
 sha: bc521b55cef53c92861f49648c8d9ff4625c5448 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E14, E18 · diff chạm vật đo ngoài làn máy: E14, E18 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15
+
+### Re-pin lần 2 — 2026-10-05, do gộp onehub e9f8ed2f (#260, #262) trước khi merge #261
+run_id: repin-20261005T043446Z-73088
+sha: 77ca8466b8f4c1811411348d879271b9936b155c · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E14, E18 · AC không có chốt máy: AC-15
