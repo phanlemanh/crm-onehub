@@ -117,9 +117,20 @@ try {
 			await datModel(idCon);
 			const t = await d.moTrang(chu.cookie, RONG, "/settings");
 			const m = await docMan(t);
+			const coThe = await t.evaluate(
+				(id) => ({
+					coNut: Boolean(document.querySelector('button[role="combobox"]')),
+					coMa: (document.body.innerText ?? "").includes(id),
+				}),
+				idCon,
+			);
 			await d.chup(t, "r1e-con-1440.png");
 			await t.close();
-			d.dat(4, !m.coHop, "hop bao hien du model con tren Gateway");
+			const loi = [];
+			if (!coThe.coNut) loi.push("the model khong dung (khong thay o chon)");
+			if (!coThe.coMa) loi.push(`khong thay ma model dang dung ${idCon}`);
+			if (m.coHop) loi.push("hop bao hien du model con tren Gateway");
+			d.dat(4, loi.length === 0, loi.join(" · "));
 		});
 
 	await writeAgentModel(d.db, null);

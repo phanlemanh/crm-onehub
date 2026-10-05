@@ -1188,7 +1188,7 @@ executors:
     r1e_danh_muc_cache: 'bun run test -- "cd apps/agent && bun test test/model-lui-mac-dinh.integration.spec.ts -t danh-muc"'
     r1e_khong_tim_thay: 'bun run test -- "cd apps/agent && bun test test/model-lui-mac-dinh.integration.spec.ts -t khong-tim-thay"'
     r1e_api_bi_go: 'bun run test -- "cd apps/api && bun test test/cai-dat-model-bi-go.spec.ts"'
-    r1e_chu: "cd apps/app && bun test test/messages-guard.spec.ts && cd ../agent && bun test test/chat-an-toan-truong-chu.spec.ts"
+    r1e_chu: "cd apps/app && bun test test/messages-guard.spec.ts test/chu-model-bi-go.spec.ts && cd ../agent && bun test test/chat-an-toan-truong-chu.spec.ts"
     r1c_dg_da_gui_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cap-nhat-tuan.dom.tsx -t 'da gui dem dung'"
     r1c_dg_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx" --mode static'
     tpa_hop_le: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t hop-le

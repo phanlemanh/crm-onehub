@@ -17,7 +17,12 @@ import {
 } from "@ai-sdk/gateway";
 import { db } from "@crm/db";
 import { DEFAULT_AGENT_MODEL, writeAgentModel } from "@crm/db/settings";
-import { docDanhMucGateway } from "@crm/validation/gateway-danh-muc";
+import type { Cache } from "cache-manager";
+import { z } from "zod";
+import {
+	type CatalogModel,
+	ModelCatalogService,
+} from "../../api/src/settings/model-catalog.service";
 import telemetry from "../agent/hooks/telemetry";
 import { modelChoLuot, modelTheoVai } from "../agent/lib/model";
 import { MODEL_DANH_MUC } from "../agent/lib/model-config";
@@ -28,6 +33,8 @@ import {
 } from "../agent/lib/model-danh-muc";
 
 const DA_CHON = "openai/gpt-x";
+
+const duLieuKhongTimThay = z.object({ modelId: z.string() });
 const FIXTURE = join(
 	dirname(fileURLToPath(import.meta.url)),
 	"fixtures",
@@ -155,8 +162,26 @@ describe("model-lui", () => {
 		}
 		expect(ra.co.size).toBeGreaterThan(0);
 		expect(ra.co.has(DEFAULT_AGENT_MODEL.id)).toBe(true);
-		const api = new Set(docDanhMucGateway(JSON.parse(than)).map((m) => m.id));
-		expect([...ra.co].sort()).toEqual([...api].sort());
+		const kho = new Map<string, CatalogModel[]>();
+		const dichVuApi = new ModelCatalogService({
+			get: async (k: string) => kho.get(k),
+			set: async (k: string, v: CatalogModel[]) => {
+				kho.set(k, v);
+			},
+		} as unknown as Cache);
+		const fetchGoc = globalThis.fetch;
+		globalThis.fetch = (async () =>
+			new Response(than)) as unknown as typeof fetch;
+		const cuaApi = await dichVuApi.models().finally(() => {
+			globalThis.fetch = fetchGoc;
+		});
+		if (!cuaApi) throw new Error("model-lui: API khong doc duoc than that");
+		const api = new Set(cuaApi.map((m) => m.id));
+		if ([...ra.co].sort().join() !== [...api].sort().join()) {
+			throw new Error(
+				"model-lui: agent va API doc than that ra tap id khac nhau",
+			);
+		}
 		const khac = [...ra.co].find((id) => id !== DEFAULT_AGENT_MODEL.id);
 		if (!khac) throw new Error("model-lui: fixture thieu model thu hai");
 		await writeAgentModel(db, { id: khac, contextWindowTokens: 200_000 });
@@ -276,15 +301,22 @@ describe("khong-tim-thay", () => {
 					session: { id: sessionId, auth: { current: null, initiator: null } },
 				} as never,
 			);
-			const hang = await db.agentEvent.count({
+			const hangGhi = await db.agentEvent.findMany({
 				where: { sessionId, type: MODEL_DANH_MUC.suKienHong },
+				select: { data: true },
 			});
-			if (hang !== o.ghi) {
+			if (hangGhi.length !== o.ghi) {
 				sai.push(
 					o.ten === "402"
 						? "khong-tim-thay: loi 402 bi dem la model bi go"
-						: `khong-tim-thay: ${o.ten} ghi ${hang} hang`,
+						: `khong-tim-thay: ${o.ten} ghi ${hangGhi.length} hang`,
 				);
+			}
+			for (const h of hangGhi) {
+				const id = duLieuKhongTimThay.parse(h.data).modelId;
+				if (id !== DA_CHON) {
+					sai.push(`khong-tim-thay: hang mang modelId ${id}, mong ${DA_CHON}`);
+				}
 			}
 		}
 		expect(sai).toEqual([]);
