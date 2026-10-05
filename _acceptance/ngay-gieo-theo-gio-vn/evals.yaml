@@ -107,6 +107,13 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.api
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/**"
+      - "apps/api/test/fixtures/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/dashboard/**"
+      - "packages/db/src/onboarding-nhac.ts"
     expected: |
       bun run test o goc kho thoat 0 — ca suite, moi goi. Duong nen cua vong nay do dung mot ca
       viec-cua-toi (goc loi dang sua); sau ban sua phai xanh ca khi chay trong khung 00:00-07:00 VN.
@@ -115,22 +122,34 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.check_types
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/ke-hoach-gieo.ts"
     expected: bun run check-types thoat 0.
 
   - id: E8
     criterion: AC-6
     executor: script
     cmd: config:executors.script.lint_khong_cache
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/ke-hoach-gieo.ts"
     expected: turbo lint --force thoat 0.
 
   - id: E9
     criterion: AC-6
     executor: script
     cmd: config:executors.script.lint_slop
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/ke-hoach-gieo.ts"
     expected: bun run lint:slop thoat 0.
 
   - id: E10
     criterion: AC-6
     executor: script
     cmd: config:executors.script.build_khong_cache
+    paths:
+      - "apps/api/test/moi-phia-ke-hoach.spec.ts"
+      - "apps/api/test/support/ke-hoach-gieo.ts"
     expected: turbo build --force thoat 0.
