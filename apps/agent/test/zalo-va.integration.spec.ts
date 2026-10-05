@@ -4,13 +4,17 @@ import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { vanTay, ZALO_GETME } from "@crm/db/zalo-getme";
 import { suKienGetMe } from "@crm/validation/zalo-getme";
+import { khungUngDungMessages } from "../../app/lib/messages/khung-ung-dung";
+import { nhacQuaZaloMessages } from "../../app/lib/messages/nhac-qua-zalo";
 import { zaloGoiTho } from "../agent/lib/zalo-api";
 import { kiemBot } from "../agent/lib/zalo-bot";
 import { datBot } from "../agent/lib/zalo-bot-xuong";
 import { ZALO } from "../agent/lib/zalo-config";
 import { type PhanGetMe, phanLopGetMe } from "../agent/lib/zalo-getme";
+import { nhanWebhook } from "../agent/lib/zalo-webhook";
 import { donDep, gieoNguoi, moXuong, TIEN_TO } from "./support/nhac-gieo";
 import { zaloGia } from "./support/zalo-gia";
+import { thanWebhook, yeuCauWebhook } from "./support/zalo-tin";
 import {
 	BANG_TAM,
 	BANG_TU_CHOI,
@@ -346,5 +350,74 @@ describe("su-kien", () => {
 			},
 		});
 		expect(ket).toEqual({ outcome: "invalid", reason: ZALO.loi.tokenSai });
+	});
+});
+
+const KHOA_WEBHOOK = "khoa-webhook-du-dai";
+
+function chuoiCuaLoi(): string[] {
+	return Object.values(ZALO.loi).map((v) =>
+		String(v instanceof Function ? v("Bot", "08:30") : v),
+	);
+}
+
+function nhanDieuHuongKhac(): string[] {
+	const k = khungUngDungMessages("vi");
+	return [...Object.values(k.rail), k.header.homepage, k.header.accountMenu];
+}
+
+describe("cau-chao", () => {
+	test("cau-chao: nguoi chua noi nhan bot thi nhan dung cau huong dan", async () => {
+		const z = zaloGia();
+		const than = JSON.stringify(
+			thanWebhook({ messageId: "cc-1", fromId: "ZCC", text: "xin chào" }),
+		);
+		const res = await nhanWebhook(yeuCauWebhook(than, KHOA_WEBHOOK).request, {
+			fetcher: z.fetcher,
+			now: () => GOC,
+			env: { token: TOK, khoa: KHOA_WEBHOOK },
+		});
+		expect(res.status).toBe(200);
+		expect(z.guiToi("ZCC").map((g) => g.body.text)).toEqual([
+			ZALO.loi.huongDan,
+		]);
+	});
+
+	test("cau-chao: cau huong dan chi toi Nhắc buổi sáng va nut Nối Zalo", () => {
+		const cau = ZALO.loi.huongDan;
+		const nhan = khungUngDungMessages("vi").header.nhacBuoiSang;
+		const nut = nhacQuaZaloMessages("vi").khoiZalo.noi;
+		expect(cau.includes(nhan), "cau-chao: thieu nhan Nhắc buổi sáng").toBe(
+			true,
+		);
+		expect(cau.includes(nut), "cau-chao: thieu nhan nut Nối Zalo").toBe(true);
+		const viTri = cau.indexOf(nhan);
+		for (const khac of nhanDieuHuongKhac()) {
+			const o = cau.indexOf(khac);
+			expect(
+				o < 0 || o > viTri,
+				`cau-chao: nhan ${khac} dung truoc Nhắc buổi sáng`,
+			).toBe(true);
+		}
+	});
+
+	test("cau-chao: doi chung, nhan Cài đặt chen truoc thi bi bat", () => {
+		const nhan = khungUngDungMessages("vi").header.nhacBuoiSang;
+		const sai = `mở Cài đặt › ${nhan}`;
+		const viTri = sai.indexOf(nhan);
+		const bat = nhanDieuHuongKhac().some((k) => {
+			const o = sai.indexOf(k);
+			return o >= 0 && o < viTri;
+		});
+		expect(bat).toBe(true);
+	});
+
+	test("cau-chao: khong cau nao cua bot con chu Thông báo của bạn", () => {
+		for (const chu of chuoiCuaLoi()) {
+			expect(
+				chu.includes("Thông báo của bạn"),
+				`cau-chao: con chu Thông báo của bạn: ${chu}`,
+			).toBe(false);
+		}
 	});
 });
