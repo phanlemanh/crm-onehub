@@ -270,6 +270,14 @@ evals:
       cặp thành phần mức tự tin) trỏ rõ sang lượt 5; tệp thật khớp tên trong bảng.
     inputs: [docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md, _acceptance/cap-nhat-tuan-okr/contract.md, "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx", "apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx", apps/app/components/crm/record-sheet/objective-trao-doi.tsx, "apps/app/app/(app)/[slug]/settings/members/chuyen-okr-dialog.tsx"]
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md"
+      - "_acceptance/cap-nhat-tuan-okr/contract.md"
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx"
+      - "apps/app/components/crm/record-sheet/objective-trao-doi.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/chuyen-okr-dialog.tsx"
 
   - id: E27
     criterion: AC-15

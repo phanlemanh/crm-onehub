@@ -288,6 +288,11 @@ evals:
       nhắc buổi sáng là tin đã có; không câu nào mô tả tính năng lượt 7–10.
     inputs: [docs/huong-dan/okr-nguoi-phu-trach.md, docs/huong-dan/okr-truong-don-vi.md, docs/huong-dan/okr-quan-tri.md, CONTEXT.md]
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/huong-dan/okr-nguoi-phu-trach.md"
+      - "docs/huong-dan/okr-truong-don-vi.md"
+      - "docs/huong-dan/okr-quan-tri.md"
+      - "CONTEXT.md"
 
   - id: E28
     criterion: AC-8
