@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cd54c2f2cf478535dbad656052b01bcdb5ab52ed
+verified_commit: 328e1309b3895ba53793bb25972dd514232577b1
 human_signoff: Phan Le Manh 2026-10-05
 ---
 
@@ -171,3 +171,7 @@ none — every multi-run eval is uniform
 Round 1: REJECT. Một lệnh suite đỏ (lint:slop) và nhiều phát hiện về luồng huỷ: tín hiệu «lượt đã khép» lấy từ stop() cục bộ chứ không từ turn.cancelled của máy chủ, câu trả lời của lượt mới có thể bị cắt ở mốc khép của lượt cũ, lỗi huỷ bị nuốt như huỷ thành công. Quay lại implementation.
 Round 2: mọi eval máy và mọi lệnh suite xanh; vẫn REJECT vì một phát hiện mức cao trong hợp đồng AC-2 (lượt cũ tự xong sau huỷ hỏng để lại câu lỗi cũ và khoá ô nhập), chưa có eval nào bắt đường này. Quay lại implementation.
 Round 3: nhát sửa S4-r2 (lượt cũ tự xong thì tắt cờ chưa gửi lại và mở ô soạn) đã vào. E1 đến E4, E6, E7 chạy lại và xanh; E5, E8, E9 carry-forward từ round 2 vì delta không chạm paths của chúng; bảy lệnh suite xanh. Các phát hiện còn lại đều ngoài hợp đồng, xếp ở review-findings.md cho người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-05, do hoá cũ do gộp onehub ee0cc227 (#260) trước khi đẩy
+run_id: repin-20261005T004741Z-29909
+sha: 328e1309b3895ba53793bb25972dd514232577b1 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7
