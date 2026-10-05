@@ -331,6 +331,15 @@ evals:
     criterion: AC-14
     executor: script
     cmd: config:executors.script.build_khong_cache
+    paths:
+      - "apps/app/app/proto/**"
+      - "apps/app/lib/proto-gate.ts"
+      - "apps/app/lib/proxy-paths.ts"
+      - "apps/app/next.config.ts"
+      - "apps/app/proxy.ts"
+      - "apps/app/test/proto-catalog.spec.ts"
+      - "apps/app/test/proxy-an-danh.spec.ts"
+      - "turbo.json"
     expected: |
       Xanh: turbo chay build tuoi, ma 0. Day la lenh duy nhat dung ung dung that.
       Vai cua no trong ho so nay la LUOI DRIFT cua phong trung bay, khong phai
@@ -345,6 +354,15 @@ evals:
     criterion: AC-14
     executor: script
     cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - "apps/app/app/proto/**"
+      - "apps/app/lib/proto-gate.ts"
+      - "apps/app/lib/proxy-paths.ts"
+      - "apps/app/next.config.ts"
+      - "apps/app/proxy.ts"
+      - "apps/app/test/proto-catalog.spec.ts"
+      - "apps/app/test/proxy-an-danh.spec.ts"
+      - "turbo.json"
     expected: |
       Xanh: tsc chay tuoi tren toan kho, ma 0. Cung voi E14, day la doi luoi giu
       cho proto cu khong thoi dan trong im lang — ly do ky thuat de bat bac

@@ -61,6 +61,20 @@ chay_luoi() {
   REF | bash "$HOOK" 2>&1
 }
 
+chay_luoi_ben() {
+  local out code
+  out="$(chay_luoi)"
+  code=$?
+  if [ "$code" -ne 0 ] && ! grep -qF "declares no" <<<"$out" && grep -qE '^ *Failed: ' <<<"$out"; then
+    echo "  luot 1 do vi tac vu, chua toi buoc soi hinh — chay lai mot lan:" >&2
+    grep -E '^ *Failed: |\(fail\)' <<<"$out" | head -10 | sed 's/^/      /' >&2
+    out="$(chay_luoi)"
+    code=$?
+  fi
+  printf '%s\n' "$out"
+  return "$code"
+}
+
 so_goi() {
   node -e '
 const fs = require("fs"), path = require("path");
@@ -247,7 +261,7 @@ const p = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
 delete p.scripts.test;
 fs.writeFileSync(process.argv[2], JSON.stringify(p, null, "\t") + "\n");
 ' "$TMP/env.json" "$MUC"
-    OUT="$(chay_luoi)"
+    OUT="$(chay_luoi_ben)"
     CODE=$?
     cat "$TMP/env.json" > "$MUC"
     if [ "$CODE" -eq 0 ]; then
@@ -269,7 +283,7 @@ fs.writeFileSync(process.argv[2], JSON.stringify(p, null, "\t") + "\n");
     mkdir -p "$GOI_MOI"
     printf '{\n\t"name": "@crm/rang-goi-moi",\n\t"version": "0.0.0",\n\t"private": true\n}\n' \
       > "$GOI_MOI/package.json"
-    OUT2="$(chay_luoi)"
+    OUT2="$(chay_luoi_ben)"
     CODE2=$?
     rm -rf "$GOI_MOI"
     if [ "$CODE2" -eq 0 ]; then
@@ -298,7 +312,7 @@ const p = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
 p.workspaces.push("rang-goc-moi/*");
 fs.writeFileSync(process.argv[2], JSON.stringify(p, null, "\t") + "\n");
 ' "$LUU/package.json" "$PKG"
-    OUT3="$(chay_luoi)"
+    OUT3="$(chay_luoi_ben)"
     CODE3=$?
     cat "$LUU/package.json" > "$PKG"
     rm -rf "$GOC_MOI"
