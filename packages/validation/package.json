@@ -32,6 +32,7 @@
 		"./okr-cuoc-soan": "./src/okr-cuoc-soan.ts",
 		"./okr-phien-soan": "./src/okr-phien-soan.ts",
 		"./to-chuc": "./src/to-chuc.ts",
+		"./to-chuc-luu-tru": "./src/to-chuc-luu-tru.ts",
 		"./phien-tac-tu": "./src/phien-tac-tu.ts",
 		"./okr-hien-thi": "./src/okr-hien-thi.ts",
 		"./okr-khep": "./src/okr-khep.ts",

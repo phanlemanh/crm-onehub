@@ -1,6 +1,10 @@
+import { createGateway } from "@ai-sdk/gateway";
 import { db } from "@crm/db";
 import { DEFAULT_AGENT_MODEL, readAgentModel } from "@crm/db/settings";
+import { defineDynamic } from "eve";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
+import { TAI_LIEU_AGENT } from "./tai-lieu-config";
+import { type ModelMaySoan, modelTaiLieu } from "./tai-lieu-model";
 
 export interface ModelSelection {
 	model: string;
@@ -38,8 +42,33 @@ export function vaiCuaPhien(ctx: PurposeContext): VaiModel {
 		: "tro-ly";
 }
 
-export function modelChoPhienGoc(ctx: PurposeContext) {
+export type LuaChonPhienGoc = ModelSelection & {
+	modelOptions?: {
+		providerOptions: { gateway: typeof TAI_LIEU_AGENT.hoi.gateway };
+	};
+};
+
+export function modelChoPhienGoc(
+	ctx: PurposeContext,
+): Promise<LuaChonPhienGoc | null> {
+	if (purposeOf(ctx) === "kho") {
+		return Promise.resolve({
+			model: TAI_LIEU_AGENT.hoi.maModel,
+			modelContextWindowTokens: DEFAULT_AGENT_MODEL.contextWindowTokens,
+			modelOptions: {
+				providerOptions: { gateway: TAI_LIEU_AGENT.hoi.gateway },
+			},
+		});
+	}
 	return modelTheoVai(vaiCuaPhien(ctx));
+}
+
+export function modelChoBuocGoc(
+	ctx: PurposeContext,
+	tao: typeof createGateway = createGateway,
+	env: Readonly<Record<string, string | undefined>> = process.env,
+): ModelMaySoan | null {
+	return purposeOf(ctx) === "kho" ? modelTaiLieu("hoi", env, tao) : null;
 }
 
 export function modelChoBoDung() {
@@ -69,3 +98,11 @@ export function modelChoBoChay(ctx: PurposeContext): ModelSelection | null {
 		? { model, modelContextWindowTokens: cuaSo }
 		: null;
 }
+
+export const MODEL_GOC = defineDynamic({
+	fallback: DEFAULT_AGENT_MODEL.id,
+	events: {
+		"session.started": (_event, ctx) => modelChoPhienGoc(ctx),
+		"step.started": (_event, ctx) => modelChoBuocGoc(ctx),
+	},
+});

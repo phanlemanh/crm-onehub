@@ -5,6 +5,7 @@ import { TRO_LY_OKR } from "../lib/okr/config";
 import { sessionPreamble } from "../lib/preamble";
 import { RESEARCH_INSTRUCTIONS } from "../lib/research-instructions";
 import { attribute, purposeOf } from "../lib/session-purpose";
+import { KHONG_GOI_TRO_LY_KHO } from "../lib/tai-lieu-config";
 import { CHI_DAN_ZALO } from "../lib/zalo-chi-dan";
 import { ZALO } from "../lib/zalo-config";
 
@@ -26,7 +27,9 @@ export default defineDynamic({
 			}
 
 			if (purpose === "okr") {
-				return defineInstructions({ markdown: TRO_LY_OKR.chiDanGoc });
+				return defineInstructions({
+					markdown: `${TRO_LY_OKR.chiDanGoc}\n\n${KHONG_GOI_TRO_LY_KHO}`,
+				});
 			}
 
 			if (purpose === ZALO.hoi.purpose) {
@@ -35,8 +38,7 @@ export default defineDynamic({
 
 			if (purpose === "may-soan") {
 				return defineInstructions({
-					markdown:
-						"This is one background drafting job for the document library. Call may_soan exactly once and pass the user message unchanged. Do not read, research or write anything yourself. Relay the specialist's one-line summary.",
+					markdown: `This is one background drafting job for the document library. Call may_soan exactly once and pass the user message unchanged. Do not read, research or write anything yourself. Relay the specialist's one-line summary.\n\n${KHONG_GOI_TRO_LY_KHO}`,
 				});
 			}
 
@@ -49,38 +51,21 @@ export default defineDynamic({
 
 			if (purpose === "team-agent") {
 				return defineInstructions({
-					markdown: `This is one background run of a deployed team agent. Call agent_runner exactly once and pass the run id from your user message. Do not call research tools or perform work yourself. Relay the specialist's structured factual completion summary. Never claim an external action that the specialist did not log.`,
+					markdown: `This is one background run of a deployed team agent. Call agent_runner exactly once and pass the run id from your user message. Do not call research tools or perform work yourself. Relay the specialist's structured factual completion summary. Never claim an external action that the specialist did not log.\n\n${KHONG_GOI_TRO_LY_KHO}`,
 				});
 			}
 
-			const attributes = ctx.session.auth.current?.attributes ?? {};
-			const budget = attributeNumber.parse(attributes.budget);
-			const kind = attributeText.parse(attributes.taskKind);
+			const chiDan = await chiDanNghienCuu(ctx);
 
-			if (budget) setBudget(budget);
+			if (chiDan.budget) setBudget(chiDan.budget);
 
-			const fieldKeys = attributeText.parse(attributes.fieldKeys);
-
-			const { markdown, focus } = await sessionPreamble(
-				{
-					contactId: attributeText.parse(attributes.contactId),
-					companyId: attributeText.parse(attributes.companyId),
-					dealId: attributeText.parse(attributes.dealId),
-				},
-				{
-					dispatched: Boolean(kind),
-					kind,
-					reason: attributeText.parse(attributes.reason),
-					budget,
-					fieldKeys: fieldKeys ? fieldKeys.split(",") : null,
-				},
-			);
-
-			focusOn({ ...focus, sessionId: ctx.session.id, taskKind: kind });
-
-			return defineInstructions({
-				markdown: `${RESEARCH_INSTRUCTIONS}\n\n${markdown}`,
+			focusOn({
+				...chiDan.focus,
+				sessionId: ctx.session.id,
+				taskKind: chiDan.kind,
 			});
+
+			return defineInstructions({ markdown: chiDan.markdown });
 		},
 		"turn.started": (_event, ctx) => {
 			const purpose = purposeOf(ctx);
@@ -92,12 +77,41 @@ export default defineDynamic({
 	},
 });
 
+export async function chiDanNghienCuu(ctx: Parameters<typeof purposeOf>[0]) {
+	const attributes = ctx.session.auth.current?.attributes ?? {};
+	const budget = attributeNumber.parse(attributes.budget);
+	const kind = attributeText.parse(attributes.taskKind);
+	const fieldKeys = attributeText.parse(attributes.fieldKeys);
+
+	const { markdown, focus } = await sessionPreamble(
+		{
+			contactId: attributeText.parse(attributes.contactId),
+			companyId: attributeText.parse(attributes.companyId),
+			dealId: attributeText.parse(attributes.dealId),
+		},
+		{
+			dispatched: Boolean(kind),
+			kind,
+			reason: attributeText.parse(attributes.reason),
+			budget,
+			fieldKeys: fieldKeys ? fieldKeys.split(",") : null,
+		},
+	);
+
+	return {
+		markdown: `${RESEARCH_INSTRUCTIONS}\n\n${markdown}\n\n${KHONG_GOI_TRO_LY_KHO}`,
+		focus,
+		budget,
+		kind,
+	};
+}
+
 function builderInstructions(ctx: Parameters<typeof purposeOf>[0]) {
 	return defineInstructions({
-		markdown: builderTaskMarkdown(
+		markdown: `${builderTaskMarkdown(
 			attribute(ctx, "commandType"),
 			attribute(ctx, "needsTitle") === "true",
-		),
+		)}\n\n${KHONG_GOI_TRO_LY_KHO}`,
 	});
 }
 

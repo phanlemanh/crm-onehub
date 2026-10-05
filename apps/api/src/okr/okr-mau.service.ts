@@ -270,7 +270,7 @@ export class OkrMauService {
 
 	async taoTuMau(userId: string, input: TaoTuMauInput) {
 		const dv = donViCua(input.unit);
-		const q = await this.access.assertSuaDonVi(userId, dv);
+		const q = await this.access.assertNhapDuoc(userId, dv);
 		return this.db.$transaction(async (tx) => {
 			await this.okr.assertKyGhiDuoc(tx, input.cycleId);
 			const mau = await this.mauCo(tx, input.mauId);
@@ -315,7 +315,7 @@ export class OkrMauService {
 				if (mauKr === undefined)
 					throw new BadRequestException(T.mau.soKrKhac(krMau.length));
 				const kr = krTuMau(i + 1, mauKr, vao);
-				await tx.okrKeyResult.create({
+				const taoRa = await tx.okrKeyResult.create({
 					data: {
 						objectiveId: objective.id,
 						title: kr.title,
@@ -330,6 +330,19 @@ export class OkrMauService {
 						position: i,
 					},
 				});
+				await this.okr.vet(
+					tx,
+					userId,
+					"tao-kr",
+					{ objectiveId: objective.id, keyResultId: taoRa.id },
+					null,
+					{
+						title: taoRa.title,
+						kind: taoRa.kind,
+						startValue: kr.startValue,
+						targetValue: kr.targetValue,
+					},
+				);
 			}
 			await tx.okrMucTieuTuMau.create({
 				data: { objectiveId: objective.id, mauId: mau.id },

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e5e7a723d991539cca951cb97b980b2836f44cf3
+verified_commit: 0d03129ecfa5bdbcff83dee9706a511e342f399c
 human_signoff: Manh Phan 2026-09-09
 ---
 
@@ -166,3 +166,15 @@ sha: 89ab347002554a499400ca7ee0c58d148fa79199 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-26, do sau ký Cổng 2 hoi-crm-qua-zalo: gộp onehub 40d423bb; lính canh SESSION_PURPOSES 3→4
 run_id: repin-20260926T132219Z-98927
 sha: e5e7a723d991539cca951cb97b980b2836f44cf3 · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 (E7 không khai paths) · AC không có chốt máy: AC-7
+
+### Re-pin lần 3 — 2026-10-04, do khai paths lô 2: chỉ thêm khoá paths vào evals.yaml
+run_id: repin-20261004T075112Z-36317
+sha: 11bd93cf9f3488a2ed6df5c432a362feff41a428 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 · diff chạm vật đo ngoài làn máy: E7 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7
+
+### Re-pin lần 4 — 2026-10-04, do gộp onehub sau khi khai paths lô 2
+run_id: repin-20261004T141023Z-83923
+sha: 4893629a5ff0068f0b3a0fc09523a037c7c953b7 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 · diff chạm vật đo ngoài làn máy: E7 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7
+
+### Re-pin lần 5 — 2026-10-04, do gộp onehub sau khi khai paths lô 2
+run_id: repin-20261004T161003Z-91842
+sha: 0d03129ecfa5bdbcff83dee9706a511e342f399c · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · ngoài làn máy: E7 · AC không có chốt máy: AC-7
