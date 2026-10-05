@@ -7,7 +7,7 @@ reason:
 verified_by: sequential per-command verify (dieu khoan CLASSIFIER-FALLBACK)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bb2a22fbce6f69655e42f173fc8031f0bee76cf0
+verified_commit: 6ca1ebaa11c73b8cb58a3fc1e3e3895c0727ecd2
 run_id: s4r1-20260906T145103Z-21187
 human_signoff: Manh Phan 2026-09-06
 ---
@@ -230,3 +230,7 @@ sha: e482d8d3ee21642b475427ea4984cd02a1c37c59 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-09-24, do gop onehub 35796299 (#106) truoc khi merge #107
 run_id: repin-20260924T031944Z-19904
 sha: bb2a22fbce6f69655e42f173fc8031f0bee76cf0 · suites: 4 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 (E10 không khai paths) · AC không có chốt máy: AC-10
+
+### Re-pin lần 10 — 2026-10-05, do sửa thước đỏ lô 2-4 (f2)
+run_id: repin-20261005T044526Z-97535
+sha: 6ca1ebaa11c73b8cb58a3fc1e3e3895c0727ecd2 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10
