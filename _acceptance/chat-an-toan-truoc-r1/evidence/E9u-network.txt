@@ -1,1 +1,2 @@
-n/a (driver): man-bi-go.mjs chay Playwright trong tien-de.mjs, khong co read_network_requests; khong thu duoc network/console
+n/a (driver): man-bi-go.mjs chay Playwright trong tien-de.mjs/man-lib.mjs, khong co read_network_requests. man-lib bat console.error cua app: run xanh khong in "loi console app" (0 loi console).
+log run xanh: /private/tmp/claude-501/e9u-run3.log
