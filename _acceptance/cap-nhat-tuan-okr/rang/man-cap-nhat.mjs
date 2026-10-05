@@ -1019,6 +1019,9 @@ async function kiemKhongDich(trang, nhan, sel, chu) {
 }
 
 async function buocE6E7() {
+	const nong = await moTrang(cookie.r, RONG, "/okr/cap-nhat-tuan", "E6");
+	await hienSel(nong, "[data-trang-thai]");
+	await nong.close();
 	const truocCheckIn = await db.okrCheckIn.count({
 		where: { authorUserId: id.m },
 	});
@@ -1033,8 +1036,8 @@ async function buocE6E7() {
 	await cho(5300);
 
 	kiem(
-		"E6 buoc 1: thanh tab co 4 tab",
-		(await demSel(t, "[role='tab']")) === 4,
+		"E6 buoc 1: thanh tab co 5 tab",
+		(await demSel(t, "[role='tab']")) === 5,
 	);
 	kiem(
 		"E6 buoc 1: tab Cap nhat tuan aria-current",
@@ -1846,7 +1849,17 @@ async function suaKrTrongSheet(trang, objectiveId, krTitle) {
 	await hienSel(trang, "[data-hop-thoai-kr]");
 }
 
+const coHopSuaKr = (trang) =>
+	trang.evaluate(
+		() =>
+			document
+				.querySelector("[data-hop-thoai-kr]")
+				?.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }) ===
+			true,
+	);
+
 async function moLaiHopSuaKr(trang, krTitle) {
+	if (await coHopSuaKr(trang)) return;
 	await bamSel(trang, `button[aria-label='Thao tác với ${krTitle}']`);
 	await doi(
 		trang,
