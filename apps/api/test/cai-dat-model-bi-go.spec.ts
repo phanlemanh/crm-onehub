@@ -31,11 +31,14 @@ function dongModel(id: string) {
 	};
 }
 
-type DanhMuc = "co" | "thieu" | "loi";
+type DanhMuc = "co" | "thieu" | "loi" | "mang" | "hong" | "rong";
 
 function datFetch(danhMuc: DanhMuc) {
 	globalThis.fetch = (async () => {
 		if (danhMuc === "loi") return new Response("loi", { status: 503 });
+		if (danhMuc === "mang") throw new TypeError("fetch failed");
+		if (danhMuc === "hong") return Response.json({ models: [] });
+		if (danhMuc === "rong") return Response.json({ data: [] });
 		return Response.json({
 			data: [dongModel(danhMuc === "co" ? DA_CHON : "khac/model-y")],
 		});
@@ -69,7 +72,7 @@ afterAll(async () => {
 });
 
 describe("api-bi-go", () => {
-	test("api-bi-go: ma tran 4 o x 2 nguoi goi viet truoc", async () => {
+	test("api-bi-go: ma tran 7 o x 2 nguoi goi viet truoc", async () => {
 		await gieoThanhVien(OWNER, "owner");
 		await gieoThanhVien(MEMBER, "member");
 		const O = [
@@ -77,9 +80,12 @@ describe("api-bi-go", () => {
 			{ ten: "da chon, thieu", chon: DA_CHON, danhMuc: "thieu", mong: true },
 			{ ten: "mac dinh", chon: null, danhMuc: "thieu", mong: false },
 			{ ten: "da chon, loi", chon: DA_CHON, danhMuc: "loi", mong: false },
+			{ ten: "da chon, mang", chon: DA_CHON, danhMuc: "mang", mong: false },
+			{ ten: "da chon, hong", chon: DA_CHON, danhMuc: "hong", mong: false },
+			{ ten: "da chon, rong", chon: DA_CHON, danhMuc: "rong", mong: false },
 		] as const;
 		const lan = O.flatMap((o) => [OWNER, MEMBER].map((ai) => ({ o, ai })));
-		expect(lan.length).toBe(8);
+		expect(lan.length).toBe(14);
 		const sai: string[] = [];
 		for (const { o, ai } of lan) {
 			await writeAgentModel(
@@ -90,8 +96,11 @@ describe("api-bi-go", () => {
 			const ra = agentModelOutput.parse(await dichVu().agentModel(ai));
 			if (ra.selectedMissing !== o.mong) {
 				sai.push(
-					o.danhMuc === "loi"
-						? "api-bi-go: danh muc loi bao bi go"
+					o.danhMuc === "loi" ||
+						o.danhMuc === "mang" ||
+						o.danhMuc === "hong" ||
+						o.danhMuc === "rong"
+						? `api-bi-go: danh muc ${o.danhMuc} bao bi go`
 						: `api-bi-go: ${o.ten} (${ai === OWNER ? "owner" : "member"}) tra ${ra.selectedMissing}`,
 				);
 			}

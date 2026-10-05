@@ -17,8 +17,8 @@ export async function docDanhMucTuMang(
 			signal: AbortSignal.timeout(MODEL_DANH_MUC.timeoutMs),
 		});
 		if (!phanHoi.ok) return "khong-doc-duoc";
-		const ids = docDanhMucGateway(await phanHoi.json()).map((m) => m.id);
-		return ids.length === 0 ? "khong-doc-duoc" : { co: new Set(ids) };
+		const dong = docDanhMucGateway(await phanHoi.json());
+		return dong ? { co: new Set(dong.map((m) => m.id)) } : "khong-doc-duoc";
 	} catch {
 		return "khong-doc-duoc";
 	}
@@ -48,7 +48,6 @@ const daBao = new Set<string>();
 
 export async function ghiBiGoLui(modelId: string, vai: string): Promise<void> {
 	if (daBao.has(modelId)) return;
-	daBao.add(modelId);
 	console.warn(
 		`[agent] model ${modelId} is no longer on the AI Gateway, falling back to the default`,
 	);
@@ -61,6 +60,7 @@ export async function ghiBiGoLui(modelId: string, vai: string): Promise<void> {
 			emittedAt: new Date(),
 		},
 	});
+	daBao.add(modelId);
 }
 
 export const chiTietLoiModel = z

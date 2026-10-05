@@ -22,17 +22,18 @@ const gatewayModel = z.object({
 
 export type DongDanhMuc = z.infer<typeof gatewayModel>;
 
-const gatewayCatalog = z
-	.object({ data: z.array(z.json()).catch([]) })
-	.catch({ data: [] });
+const gatewayCatalog = z.object({ data: z.array(z.json()) });
 
 function usable(model: DongDanhMuc): boolean {
 	return model.type === "language" && model.tags.includes("tool-use");
 }
 
-export function docDanhMucGateway(json: unknown): DongDanhMuc[] {
-	return gatewayCatalog.parse(json).data.flatMap((entry) => {
+export function docDanhMucGateway(json: unknown): DongDanhMuc[] | null {
+	const than = gatewayCatalog.safeParse(json);
+	if (!than.success) return null;
+	const dong = than.data.data.flatMap((entry) => {
 		const parsed = gatewayModel.safeParse(entry);
 		return parsed.success && usable(parsed.data) ? [parsed.data] : [];
 	});
+	return dong.length === 0 ? null : dong;
 }

@@ -72,9 +72,14 @@ export class ModelCatalogService {
 				return null;
 			}
 
-			const models = docDanhMucGateway(await response.json()).map(
-				toCatalogModel,
-			);
+			const dong = docDanhMucGateway(await response.json());
+
+			if (!dong) {
+				this.logger.warn({ message: "Model catalog body unreadable or empty" });
+				return null;
+			}
+
+			const models = dong.map(toCatalogModel);
 
 			models.sort(
 				(a, b) =>
