@@ -330,10 +330,10 @@ export async function gieoTruongBiLoai(): Promise<SanTruongBiLoai> {
 	const pbDuoiBpLuu = await pbMoi("ht-pb-duoi-luu", bpLuuCoCon);
 	await luuTru("org.archiveDepartment", pbDuoiBpLuu, "phong ban con");
 	await luuTru("org.archiveDivision", bpLuuCoCon, "bo phan co con");
-	ok(
-		await goi("org.restoreDepartment", { id: pbDuoiBpLuu }),
-		"khoi phuc phong ban duoi bo phan luu tru",
-	);
+	await db.department.update({
+		where: { id: pbDuoiBpLuu },
+		data: { archivedAt: null },
+	});
 	const truongPbDuoiBpLuu = (
 		await truongMoi("department", pbDuoiBpLuu, "ht-truong-pb-duoi")
 	).nguoi;

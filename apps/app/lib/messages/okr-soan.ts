@@ -97,6 +97,8 @@ const vi = {
 		} satisfies Record<MaLyDoHong, string>,
 		khongTinh: "Lượt này không bị tính.",
 		daThuLai: (n: string) => `Đã thử lại ${n} lần`,
+		chuaGuiLai:
+			"Chưa gửi lại được — lượt trước chưa dừng hẳn. Thử lại sau ít phút.",
 		thuLai: "Thử lại",
 		hetLuot: (n: string) =>
 			`Đã dùng hết ${n} lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới`,
@@ -382,6 +384,8 @@ const en: OkrSoanMessages = {
 		},
 		khongTinh: "This turn was not counted.",
 		daThuLai: (n) => `Tried again ${n} times`,
+		chuaGuiLai:
+			"Could not send again — the previous turn has not fully stopped. Try again in a few minutes.",
 		thuLai: "Try again",
 		hetLuot: (n) =>
 			`All ${n} turns of this session are used — add it to the OKRs or open a new session`,

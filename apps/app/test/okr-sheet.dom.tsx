@@ -95,6 +95,7 @@ function mucTieu(
 	coKhoa: boolean,
 ): ObjectiveOutput {
 	return {
+		themKrLe: false,
 		id: "mt-1",
 		cycleId: QUY.id,
 		cycleName: QUY.name,

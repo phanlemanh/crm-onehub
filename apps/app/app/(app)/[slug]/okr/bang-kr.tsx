@@ -23,6 +23,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
+import { useKhoMan } from "@crm/ui/hooks/use-kho-man";
 import type { Locale } from "@crm/ui/lib/locale";
 import { kiemOkr } from "@crm/validation/okr-kiem";
 import type { LoaiMucTieu } from "@crm/validation/okr-muc-tieu";
@@ -286,15 +287,17 @@ function OTienDoKr({
 	kind,
 	expected,
 	xem,
+	moc,
 }: {
 	kr: KetQua;
 	kind: LoaiMucTieu;
 	expected: number | null;
 	xem: XemBanGhi;
+	moc: boolean;
 }) {
 	return (
 		<div className="flex min-w-0 flex-col gap-1.5" data-o-tien-do>
-			<SoCuaKr kr={kr} xem={xem} />
+			<SoCuaKr kr={kr} moc={moc} xem={xem} />
 			<TienDoKr
 				expected={expected}
 				kind={kind}
@@ -319,6 +322,7 @@ function HangKr({
 	nested,
 	joined,
 	sauTen,
+	dienThoai,
 }: {
 	kr: KetQua;
 	thuTu: number;
@@ -332,6 +336,7 @@ function HangKr({
 	nested: boolean;
 	joined: boolean;
 	sauTen: ReactNode;
+	dienThoai: boolean;
 }) {
 	const locale = useLocale();
 	const m = okrMessages(locale);
@@ -381,7 +386,7 @@ function HangKr({
 								laMoc={kr.kind === "moc"}
 								progress={kr.progress}
 								ten={kr.title}
-								tren={<SoCuaKr kr={kr} moc={false} xem={xem} />}
+								tren={<SoCuaKr kr={kr} moc={dienThoai} xem={xem} />}
 							/>
 						</span>
 					</span>
@@ -397,7 +402,13 @@ function HangKr({
 				data-nguon={kr.source}
 				data-do-canh={kr.doCanh ? "" : undefined}
 			>
-				<OTienDoKr expected={expected} kind={kind} kr={kr} xem={xem} />
+				<OTienDoKr
+					expected={expected}
+					kind={kind}
+					kr={kr}
+					moc={!dienThoai}
+					xem={xem}
+				/>
 			</SimpleTableCell>
 			{canh ? (
 				<SimpleTableCell data-cot-viec={kr.id}>
@@ -477,6 +488,7 @@ export function BangKr({
 	const mc = okrCanhKrMessages(locale).bangKr;
 	const canhBao = hoiDoiTrong === true && thieuDoiTrong(keyResults);
 	const xem = useXemDuocBanGhi();
+	const dienThoai = useKhoMan() === "dien-thoai";
 	const cot: SimpleTableColumn[] = [
 		...(cotMo ? [{ id: "mo", srLabel: m.cot.thuMo, width: "w-12" }] : []),
 		{ id: "ten", header: tenCotDau ?? m.cot.kr },
@@ -523,6 +535,7 @@ export function BangKr({
 							return (
 								<Fragment key={kr.id}>
 									<HangKr
+										dienThoai={dienThoai}
 										canh={canh}
 										cotMo={cotMo}
 										danhDauCuaToi={danhDauCuaToi}
