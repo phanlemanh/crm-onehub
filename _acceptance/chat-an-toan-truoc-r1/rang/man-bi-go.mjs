@@ -29,6 +29,17 @@ const ID_GIA = "khong-con/model-gia-r1e";
 
 const d = await moDo();
 
+async function chupThe(t, ten) {
+	await t.evaluate(() =>
+		document
+			.querySelector('button[role="combobox"]')
+			?.closest('[data-slot="card"]')
+			?.scrollIntoView({ block: "center" }),
+	);
+	await new Promise((r) => setTimeout(r, 300));
+	await d.chup(t, ten);
+}
+
 const docMan = (t) =>
 	t.evaluate(
 		(chuBao, chuQuyen) => {
@@ -79,7 +90,7 @@ try {
 			await datModel(CHIEU_DO ? idCon : ID_GIA);
 			const t = await d.moTrang(chu.cookie, RONG, "/settings");
 			const m = await docMan(t);
-			await d.chup(t, "r1e-bi-go-1440.png");
+			await chupThe(t, "r1e-bi-go-1440.png");
 			await t.close();
 			d.dat(1, m.coHop, "khong thay hop bao");
 		});
@@ -89,7 +100,7 @@ try {
 			await datModel(ID_GIA);
 			const t = await d.moTrang(chu.cookie, HEP, "/settings");
 			const m = await docMan(t);
-			await d.chup(t, "r1e-bi-go-390.png");
+			await chupThe(t, "r1e-bi-go-390.png");
 			await t.close();
 			const loi = [];
 			if (!m.coHop) loi.push("khong thay hop bao o 390");
@@ -102,7 +113,7 @@ try {
 			await datModel(ID_GIA);
 			const t = await d.moTrang(thanhVien.cookie, RONG, "/settings");
 			const m = await docMan(t);
-			await d.chup(t, "r1e-bi-go-member-1440.png");
+			await chupThe(t, "r1e-bi-go-member-1440.png");
 			await t.close();
 			const loi = [];
 			if (!m.coHop) loi.push("thanh vien khong thay hop bao");
@@ -124,7 +135,7 @@ try {
 				}),
 				idCon,
 			);
-			await d.chup(t, "r1e-con-1440.png");
+			await chupThe(t, "r1e-con-1440.png");
 			await t.close();
 			const loi = [];
 			if (!coThe.coNut) loi.push("the model khong dung (khong thay o chon)");

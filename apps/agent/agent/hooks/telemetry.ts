@@ -3,6 +3,7 @@ import { readAgentModel } from "@crm/db/settings";
 import { agentError, modelError } from "@crm/telemetry";
 import { defineHook } from "eve/hooks";
 import { z } from "zod";
+import { modelCuaPhien } from "../lib/model";
 import {
 	chiTietLoiModel,
 	ghiModelKhongTimThay,
@@ -80,10 +81,14 @@ export default defineHook({
 
 		async "step.failed"(event, ctx) {
 			if (laModelKhongTimThay(chiTietLoiModel.parse(event.data.details))) {
-				await ghiModelKhongTimThay(
-					ctx.session.id,
-					(await readAgentModel(db)).id,
-				);
+				try {
+					await ghiModelKhongTimThay(ctx.session.id, await modelCuaPhien(ctx));
+				} catch (loi) {
+					console.error("[agent] could not record a missing-model failure", {
+						sessionId: ctx.session.id,
+						loi,
+					});
+				}
 			}
 
 			if (!looksLikeModel(event.data.code)) return;

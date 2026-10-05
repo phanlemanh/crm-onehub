@@ -106,6 +106,15 @@ export function modelChoBoChay(ctx: PurposeContext): ModelSelection | null {
 		: null;
 }
 
+export async function modelCuaPhien(ctx: PurposeContext): Promise<string> {
+	if (purposeOf(ctx) === "kho") return TAI_LIEU_AGENT.hoi.maModel;
+	const luot = modelChoBoChay(ctx);
+	if (luot) return luot.model;
+	return (
+		(await modelTheoVai(vaiCuaPhien(ctx)))?.model ?? DEFAULT_AGENT_MODEL.id
+	);
+}
+
 export const MODEL_GOC = defineDynamic({
 	fallback: DEFAULT_AGENT_MODEL.id,
 	events: {

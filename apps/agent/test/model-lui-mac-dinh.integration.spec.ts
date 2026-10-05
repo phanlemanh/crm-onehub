@@ -31,6 +31,7 @@ import {
 	docDanhMuc,
 	docDanhMucTuMang,
 } from "../agent/lib/model-danh-muc";
+import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
 
 const DA_CHON = "openai/gpt-x";
 
@@ -317,6 +318,64 @@ describe("khong-tim-thay", () => {
 				if (id !== DA_CHON) {
 					sai.push(`khong-tim-thay: hang mang modelId ${id}, mong ${DA_CHON}`);
 				}
+			}
+		}
+		expect(sai).toEqual([]);
+	});
+});
+
+describe("khong-tim-thay", () => {
+	test("khong-tim-thay: hang mang id model ma phien that dung, ba khung viet truoc", async () => {
+		const goc = new GatewayModelNotFoundError({
+			message: "Model not found",
+			statusCode: 404,
+		});
+		const KHUNG = [
+			{ ten: "phien thuong", attributes: {}, mong: DA_CHON },
+			{
+				ten: "phien kho",
+				attributes: { purpose: "kho" },
+				mong: TAI_LIEU_AGENT.hoi.maModel,
+			},
+			{
+				ten: "luot tac nhan",
+				attributes: {
+					purpose: "team-agent",
+					modelId: "ghim/model-luot",
+					modelContextWindowTokens: "200000",
+				},
+				mong: "ghim/model-luot",
+			},
+		] as const;
+		expect(KHUNG.length).toBe(3);
+		const sai: string[] = [];
+		for (const k of KHUNG) {
+			const sessionId = `r1e-ktt-khung-${k.ten}-${Date.now()}`;
+			await telemetry.events["step.failed"]?.(
+				{
+					type: "step.failed",
+					data: {
+						code: "MODEL_CALL_FAILED",
+						message: "model call failed",
+						details: { gatewayName: goc.name, gatewayType: goc.type },
+					},
+				} as never,
+				{
+					session: {
+						id: sessionId,
+						auth: { current: { attributes: k.attributes }, initiator: null },
+					},
+				} as never,
+			);
+			const hang = await db.agentEvent.findMany({
+				where: { sessionId, type: MODEL_DANH_MUC.suKienHong },
+				select: { data: true },
+			});
+			const ids = hang.map((h) => duLieuKhongTimThay.parse(h.data).modelId);
+			if (ids.length !== 1 || ids[0] !== k.mong) {
+				sai.push(
+					`khong-tim-thay: ${k.ten} ghi ${JSON.stringify(ids)}, mong ${k.mong}`,
+				);
 			}
 		}
 		expect(sai).toEqual([]);
