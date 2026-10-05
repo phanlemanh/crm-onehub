@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 8b1cf1fc86fd3e5932ef8d605c67f1252c49099b
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-05 — ký Cổng 2 trên verdict PASS 9/9 eval (S4 round 1, wf_4081063d-f20). Ngoài-1, 2, 3 ghi Known limits; Ngoài-4 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: zalo-va

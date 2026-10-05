@@ -5,7 +5,7 @@ slug: zalo-va
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -64,3 +64,8 @@ Quét bằng skill morphological-scan, preset test-matrix.
 
 - Bỏ design-pass, đặc tả UX và eval `ui-observed` theo chủ kho duyệt 05/10 (các entry `bỏ …` trong decisions.jsonl): không màn web nào đổi; câu chào là tin Zalo, ghim nguyên văn ở AC-5.
 - AC-6 sửa thước của hồ sơ đã ký `tra-loi-tin-nhac` (Ngoài-3 của hồ sơ đó); hồ sơ đó phải ghim lại trên nhánh này trước khi đẩy.
+- Known limits (Cổng 2, 05/10):
+  - Ngoài-1 — `LoiGetMe`, `NoiGetMe`, `KetLuanGetMe` ở `apps/agent/agent/lib/zalo-getme.ts` viết tay cạnh schema `suKienGetMe`, và `ghiGetMeLoi` ghi `data` không qua `suKienGetMe.parse`; Zalo trả `error_code` không nguyên thì hàng vẫn được ghi nhưng `dem-getme.ts` ném lỗi cho cả kỳ.
+  - Ngoài-2 — dòng «token-sai trên token đang chạy» của `dem-getme.ts` chỉ so vân tay, không đòi Zalo đã nhận token sau đó: token đang lưu bị thu hồi thật thì nhịp kiểm bot ghi một hàng mỗi nhịp và dòng đó lớn hơn 0 dù không có báo oan. Đọc số 10/11 phải soi `noi` và thời điểm trước khi kết luận CHẾT.
+  - Ngoài-3 — bài kiểm thứ tự nhãn của câu chào chỉ xét nhãn thanh bên, trang chủ và menu tài khoản; các mục khác của menu tài khoản («Nền sáng», «Nền tối», «Đăng xuất», «English») không được xét.
+  - Ngoài-4 — ca đối chứng của phép kiểm thứ tự nhãn chạy trên bản sao điều kiện, không qua chính phép kiểm; chấp nhận, không sửa.
