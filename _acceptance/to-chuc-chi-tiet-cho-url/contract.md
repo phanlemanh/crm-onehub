@@ -51,4 +51,4 @@ trong tệp, không nới khẳng định; chạy lại nhiều lượt dưới 
 ## Notes
 
 - Neo so sánh là `ee0cc227cf1926a5359e10fdce07ffdeec57c183` (đỉnh onehub khi mở vòng), không neo `merge-base`: sau khi merge thì merge-base tiến lên và phép so sẽ luôn đúng.
-- Bản sao của E3/E4 nằm ở `apps/app/test/tcu-*-<pid>.dom.tsx` (alias `@/` chỉ giải trong gói app), xoá trong `finally`; răng thoát 2 nếu còn sót bản sao của chính lượt. E3 và E4 chạy tuần tự, không song song với lint của cùng gói.
+- Bản sao của E3/E4 nằm ở `apps/app/test/.scratch/tcu-*-<pid>.ban-sao.tsx` (alias `@/` chỉ giải trong gói app; import tương đối được viết lại thêm một cấp), xoá trong `finally`; răng thoát 2 nếu còn sót bản sao của chính lượt. `.scratch/` bị gitignore nên `biome check .` không quét, oxlint bỏ qua `**/.scratch/**`, còn runner `test:dom` chỉ nhận đuôi `.dom.tsx` — làn S4 chạy suite song song với E3/E4 không nhặt được bản sao.

@@ -38,6 +38,8 @@ export const CAU_HINH = {
 	mocTre: "url = new URLSearchParams(e.searchParams);",
 	treNhip: 3,
 	lanLapLai: 20,
+	thuMucBanSao: "test/.scratch",
+	duoiBanSao: ".ban-sao.tsx",
 	raGoc: ".acceptance-runs/to-chuc-chi-tiet-cho-url",
 	tranLuotMs: 10 * 60_000,
 };

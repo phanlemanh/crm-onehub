@@ -30,18 +30,26 @@ export function thuMucRa(eval_) {
 }
 
 export function banSao(ten, nguon) {
-	const tuongDoi = `test/${ten}-${process.pid}.dom.tsx`;
-	writeFileSync(join(GOC, CAU_HINH.goiApp, tuongDoi), nguon);
+	const tuongDoi = `${CAU_HINH.thuMucBanSao}/${ten}-${process.pid}${CAU_HINH.duoiBanSao}`;
+	mkdirSync(join(GOC, CAU_HINH.goiApp, CAU_HINH.thuMucBanSao), {
+		recursive: true,
+	});
+	writeFileSync(
+		join(GOC, CAU_HINH.goiApp, tuongDoi),
+		nguon.replaceAll('from "../', 'from "../../'),
+	);
 	return tuongDoi;
 }
 
 export function xoaBanSao(dsTuongDoi) {
 	for (const t of dsTuongDoi)
 		rmSync(join(GOC, CAU_HINH.goiApp, t), { force: true });
-	const thuMucTest = join(GOC, CAU_HINH.goiApp, "test");
-	return readdirSync(thuMucTest).filter((f) =>
-		f.includes(`-${process.pid}.dom.tsx`),
-	);
+	const thuMuc = join(GOC, CAU_HINH.goiApp, CAU_HINH.thuMucBanSao);
+	return existsSync(thuMuc)
+		? readdirSync(thuMuc).filter((f) =>
+				f.includes(`-${process.pid}${CAU_HINH.duoiBanSao}`),
+			)
+		: [];
 }
 
 export function chayBun(tuongDoi, them = []) {

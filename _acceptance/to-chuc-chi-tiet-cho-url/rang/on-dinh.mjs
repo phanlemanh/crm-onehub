@@ -1,5 +1,5 @@
 import { CAU_HINH } from "./cau-hinh.mjs";
-import { khangDinhTheoCa } from "./cay.mjs";
+import { demCaVaKhangDinh } from "./cay.mjs";
 import {
 	banSao,
 	chayBun,
@@ -17,7 +17,7 @@ function chay() {
 		let soCa;
 		try {
 			neo = nguonNeo();
-			soCa = khangDinhTheoCa(nguonHienTai()).length;
+			soCa = demCaVaKhangDinh(nguonHienTai()).soCa;
 		} catch (e) {
 			console.log(`khong doc duoc tep hoac ban neo: ${e.message}`);
 			return 2;

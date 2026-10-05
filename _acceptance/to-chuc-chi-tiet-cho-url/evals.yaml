@@ -59,7 +59,7 @@ evals:
       - "packages/ui/test/setup-dom.ts"
       - "_acceptance/to-chuc-chi-tiet-cho-url/rang/**"
     expected: |
-      Ban sao HEAD va ban sao neo ee0cc227 (apps/app/test/tcu-tre-{moi,cu}-<pid>.dom.tsx),
+      Ban sao HEAD va ban sao neo ee0cc227 (apps/app/test/.scratch/tcu-tre-{moi,cu}-<pid>.ban-sao.tsx),
       moi ban thay dung MOT moc `url = new URLSearchParams(e.searchParams);` bang lan ghi
       tre 3 nhip setTimeout(0) noi nhau (do bang nhip, khong bang ms: cho cung dem nhip);
       moc khong thay dung mot lan -> ma 2. Ket qua tung ca doc qua --reporter=junit
@@ -83,7 +83,7 @@ evals:
       - "packages/ui/test/setup-dom.ts"
       - "_acceptance/to-chuc-chi-tiet-cho-url/rang/**"
     expected: |
-      Doi chung truoc: ban sao neo (tcu-on-dinh-cu-<pid>.dom.tsx) chay --rerun-each 20;
+      Doi chung truoc: ban sao neo (apps/app/test/.scratch/tcu-on-dinh-cu-<pid>.ban-sao.tsx) chay --rerun-each 20;
       phai co >= 1 dong "(fail)" o mot trong ba ca cua AC-1, in so lan; 0 -> ma 2 "doi
       chung khong do", KHONG xanh.
       Roi tep that o HEAD chay --rerun-each 20: tong ket bun phai la 0 fail va
