@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents (hai làn)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ed70d70dd0ec9ee7412b45e63c90c925500d50c6
+verified_commit: df01345e0af096a5310ed5f99d5a3b580ae3d234
 human_signoff: Mạnh 2026-09-06 — ký lại trên bằng chứng vòng 4 sau khi bản sửa `go-khoa-goc-nhin` làm mốc cũ lệch cây. Mười mục ngoài hợp đồng ghi vào giới hạn đã biết; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Chấm E19 và các định đoạt ngày 05/09 giữ nguyên hiệu lực, không làm lại.
 ---
 
@@ -625,3 +625,7 @@ của kho kit.
 ### Re-pin lần 4 — 2026-09-17, do chiến dịch ghim lại kit 2.14.0 (PR #47): làn eval thật trên cây đã chuyển đường ghi tạo phẩm; đo bằng phanlemanh@gmail.com
 run_id: repin-20260917T051527Z-61120
 sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng
+
+### Re-pin lần 5 — 2026-10-05, do sửa thước đỏ lô 2-4 (g2)
+run_id: repin-20261005T050537Z-69105
+sha: df01345e0af096a5310ed5f99d5a3b580ae3d234 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E18 · ngoài làn máy: E6, E9, E12, E19, E23 · diff chạm vật đo ngoài làn máy: E6, E9, E12, E23 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-14
