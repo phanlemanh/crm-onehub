@@ -1,6 +1,8 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
 import { createField, updateFieldBrief } from "../lib/fields";
+import { FIELDS_AGENT } from "../lib/fields-config";
+import { ghiDoiTruong, quyenDoiTruong } from "../lib/quyen-truong";
 import { assertNotZaloQuestion } from "../lib/session-purpose";
 
 export default defineTool({
@@ -49,6 +51,23 @@ export default defineTool({
 	}),
 	async execute(input, ctx) {
 		assertNotZaloQuestion(ctx);
+		const quyen = await quyenDoiTruong(ctx);
+		const ghi = (ketQua: "lam" | "tu-choi") =>
+			ghiDoiTruong(ctx.session.id, {
+				hanhDong: input.action,
+				vai: quyen.vai,
+				ketQua,
+				entity: input.entity,
+				key: input.key,
+			});
+
+		if (!quyen.cho) {
+			await ghi("tu-choi");
+			return input.action === "create"
+				? { created: false, reason: FIELDS_AGENT.tuChoi }
+				: { updated: false, reason: FIELDS_AGENT.tuChoi };
+		}
+
 		if (input.action === "create") {
 			if (!input.label || !input.type) {
 				return {
@@ -57,13 +76,15 @@ export default defineTool({
 				};
 			}
 
-			return createField({
+			const tao = await createField({
 				entity: input.entity,
 				label: input.label,
 				type: input.type,
 				options: input.options,
 				agentBrief: input.agentBrief,
 			});
+			await ghi("lam");
+			return tao;
 		}
 
 		if (!input.key) {
@@ -73,11 +94,13 @@ export default defineTool({
 			};
 		}
 
-		return updateFieldBrief({
+		const doi = await updateFieldBrief({
 			entity: input.entity,
 			key: input.key,
 			agentBrief: input.agentBrief ?? null,
 			agentFilled: input.agentFilled,
 		});
+		await ghi("lam");
+		return doi;
 	},
 });

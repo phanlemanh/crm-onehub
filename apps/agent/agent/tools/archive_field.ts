@@ -2,6 +2,8 @@ import { defineTool } from "eve/tools";
 import { z } from "zod";
 import { sensitiveWrite } from "../lib/approval";
 import { archiveField } from "../lib/fields";
+import { FIELDS_AGENT } from "../lib/fields-config";
+import { ghiDoiTruong, quyenDoiTruong } from "../lib/quyen-truong";
 import { assertNotZaloQuestion } from "../lib/session-purpose";
 
 export default defineTool({
@@ -16,6 +18,23 @@ export default defineTool({
 	),
 	async execute(input, ctx) {
 		assertNotZaloQuestion(ctx);
-		return archiveField(input);
+		const quyen = await quyenDoiTruong(ctx);
+		const ghi = (ketQua: "lam" | "tu-choi") =>
+			ghiDoiTruong(ctx.session.id, {
+				hanhDong: "archive",
+				vai: quyen.vai,
+				ketQua,
+				entity: input.entity,
+				key: input.key,
+			});
+
+		if (!quyen.cho) {
+			await ghi("tu-choi");
+			return { archived: false, reason: FIELDS_AGENT.tuChoi };
+		}
+
+		const ket = await archiveField(input);
+		await ghi("lam");
+		return ket;
 	},
 });
