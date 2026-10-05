@@ -3,10 +3,10 @@ schema_version: 1
 slug: zalo-va
 feature: «Zalo quá tải không bị báo token sai; bot chỉ đúng đường tới trang nhắc»
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-05T06:38:47Z
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
