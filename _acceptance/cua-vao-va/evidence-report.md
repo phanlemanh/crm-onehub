@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: cua-vao-va
-verdict: BLOCKED
+verdict: PASS
 failed_evals: []
-reason: "E14 (bun _acceptance/cua-vao-va/rang/thuoc-cu-xanh.mjs) khong chay duoc: Cannot find package 'zod' — node_modules chua cai hoac chua symlink vao worktree /Users/manh-macmini/dev/crm/.claude/worktrees/trusting-bhabha-b549c2. Day la loi moi truong, khong phai loi code; cach xu ly la cai/symlink node_modules roi chay lai E14."
+reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e6d759fe025463fdd3c7c2d61511d23190523854
+verified_commit: a95475d33264091d14b3184969896807dc540f53
 human_signoff:
 ---
 
 # Evidence Report: cua-vao-va
 
-Round 1. Verdict BLOCKED vi E14 (AC-12) khong chay duoc do thieu goi `zod` trong worktree; 15 eval con lai da chay va xanh. Mot lenh suite (`bun run test -- --filter=api`) do 2 ca cu, khong gan eval nao (xem muc Lenh suite).
+Round 2. 16 eval máy đều xanh (14 test/script, 2 ui-check có ảnh chụp đã mở xem). 7 lệnh suite hồi quy đều xanh. Không có eval judgment nên không có hội đồng chấm.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -30,220 +30,212 @@ Round 1. Verdict BLOCKED vi E14 (AC-12) khong chay duoc do thieu goi `zod` trong
 | E11 | AC-9 | test | PASS |
 | E12 | AC-10 | test | PASS |
 | E13 | AC-11 | script | PASS |
-| E14 | AC-12 | script | BLOCKED |
+| E14 | AC-12 | script | PASS |
 | E15 | AC-13 | script | PASS |
 | E16 | AC-9 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-cua-vao-va-E1-r1
+  run_id: minted-cua-vao-va-E1-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.r1f_doc_phien_api
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
-    bun run test "cd apps/api && bun test test/cua-vao-va.spec.ts -t doc-phien"
-    test-run: dropped crm_muuf710fqdkr_test
+    bun run test -- "cd apps/api && bun test test/cua-vao-va.spec.ts -t doc-phien"
+    test-run: dropped crm_muuh9aizeskc_test
 
 - eval: E2
-  run_id: minted-cua-vao-va-E2-r1
+  run_id: minted-cua-vao-va-E2-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.r1f_ba_lop_api
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
-    bun run test "cd apps/api && bun test test/cua-vao-va.spec.ts -t ba-lop"
-    chay xong, ma thoat 0
+    bun run test -- "cd apps/api && bun test test/cua-vao-va.spec.ts -t ba-lop"
+    test-run: dropped crm_muuh9c0lu3nz_test
 
 - eval: E3
-  run_id: minted-cua-vao-va-E3-r1
+  run_id: minted-cua-vao-va-E3-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.r1f_cong_khai_api
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
-    bun run test "cd apps/api && bun test test/cua-vao-va.spec.ts -t cong-khai"
-    chay xong, ma thoat 0
+    bun run test -- "cd apps/api && bun test test/cua-vao-va.spec.ts -t cong-khai"
+    test-run: dropped crm_muuh999b4f1z_test
 
 - eval: E4
-  run_id: minted-cua-vao-va-E4-r1
+  run_id: minted-cua-vao-va-E4-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.r1f_proxy_503
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
     cd apps/app && bun test ./test/onboarding-gate.spec.ts -t doc-503
-    Ran 1 test across 1 file. [81.00ms]
+    Ran 1 test across 1 file. [56.00ms]
 
 - eval: E5
-  run_id: minted-cua-vao-va-E5-r1
+  run_id: minted-cua-vao-va-E5-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.r1f_trang_loi_dom
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
-    cua-vao-va.dom.tsx -t trang-loi
-    Ran 2 tests across 1 file. [530.00ms]
+    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cua-vao-va.dom.tsx -t trang-loi
+    chạy xong, mã thoát 0 (chung một lệnh với E6)
 
 - eval: E6
-  run_id: minted-cua-vao-va-E6-r1
+  run_id: minted-cua-vao-va-E6-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.r1f_trang_loi_dom
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
-    cua-vao-va.dom.tsx -t trang-loi (cung lenh voi E5, ca "ngoai-khung")
-    Ran 2 tests across 1 file. [530.00ms]
+    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cua-vao-va.dom.tsx -t trang-loi
+    chạy xong, mã thoát 0 (chung một lệnh với E5)
 
 - eval: E7
-  run_id: minted-cua-vao-va-E7-r1
+  run_id: minted-cua-vao-va-E7-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.r1f_do_man
-  verified_at: 2026-10-04T22:56:01Z
-  screenshot: evidence/trang-loi-375.png
+  verified_at: 2026-10-04T23:53:48Z
+  screenshot: evidence/E7-step1.png
   observed: |
-    Da mo bang Read tung anh. trang-loi-375.png (375x812, nen den): giua man hinh co tieu de «Hệ thống đang trục trặc», cau «Phiên của bạn vẫn còn — bạn chưa bị đăng xuất. Trang này chưa tải được vì máy chủ đang lỗi; thử lại sau ít giây.», nut xanh «Thử lại» nam gon trong khung nhin; khong co header/sidebar, khong co chu "Application error" (chi co badge "5 Issues" cua Next dev overlay o goc duoi trai, la cong cu dev khong phai noi dung trang). trang-loi-1440.png (1440x900): cung noi dung, can giua, tieu de + cau + nut «Thử lại» trong khung nhin, khong header, khong chu tieng Anh cua Next. sau-thu-lai-1440.png: sau khi go loi va bam «Thử lại», trang tro lai: header/thanh ben dang tai (skeleton), tieu de trang «Chào bạn», khong con tieu de loi «Hệ thống đang trục trặc». Khop Expected ca ba anh.
+    E7-step1.png (375x812): nền đen, giữa màn hình có tiêu đề «Hệ thống đang trục trặc», câu «Phiên của bạn vẫn còn — bạn chưa bị đăng xuất...», nút xanh «Thử lại» nằm trong khung nhìn; không có header hay thanh điều hướng, không có chữ «Application error». Chỉ có huy hiệu dev của Next ở góc dưới trái, không thuộc nội dung trang.
+    E7-step2.png (1440x900): cùng nội dung, tiêu đề, câu hai dòng và nút «Thử lại» căn giữa, không header. E7-step3.png (1440x900) sau khi gỡ lỗi và bấm Thử lại: khung ứng dụng đầy đủ (thanh bên icon, header trên cùng), tiêu đề «Chào bạn», không còn tiêu đề lỗi, nội dung đang tải. Tất cả khớp Expected.
   network_observed: n-a (driver)
-  output: |
-    r1f_do_man (mot-luot.sh + do-man.mjs), phien do rieng kho crm_trusting_bhabha_b549c2_do app :4358 api :4801.
-    KET LUAN: "19 DUNG, 0 SAI — ma thoat 0". Truoc khi gay loi workspace.get va settings.researchKey tra 200, khong cookie tra 401;
-    trong luc loi api tra 503 SERVICE_UNAVAILABLE; 375/1440 giu dia chi van, chuyen huong qua /sign-in 0 lan; tieu de «Hệ thống đang trục trặc» hien, nut «Thử lại» trong khung nhin;
-    bam Thu lai khi loi con thi van trang loi; go loi roi bam Thu lai thi trang tro lai; don: bang session tra ve nguyen trang.
-    Frame: evidence/trang-loi-375.png, trang-loi-1440.png, sau-thu-lai-1440.png (+ E7-step1/2/3.png). Server do da tu don.
 
 - eval: E8
-  run_id: minted-cua-vao-va-E8-r1
+  run_id: minted-cua-vao-va-E8-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.r1f_do_man
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
     bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/cua-vao-va/rang/do-man.mjs"
-    phien-do: xong — mã 0
+    các dòng lớp API của lần đo (workspace.get, settings.researchKey, đối chứng trước khi gây lỗi) đều DUNG, mã thoát 0
 
 - eval: E9
-  run_id: minted-cua-vao-va-E9-r1
+  run_id: minted-cua-vao-va-E9-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.r1f_logo_dom
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
-    cua-vao-va.dom.tsx -t logo
-    Ran 1 test across 1 file. [702.00ms]
+    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/cua-vao-va.dom.tsx -t logo
+    Ran 1 test across 1 file. [419.00ms]
 
 - eval: E10
-  run_id: minted-cua-vao-va-E10-r1
+  run_id: minted-cua-vao-va-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.r1f_do_man
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   screenshot: evidence/E10-step1.png
   observed: |
-    Da mo bang Read ca 4 anh. (1) quen-mat-khau-375.png (nhap, 375x812): logo OneHub nam tren tieu de "Quen mat khau", nam trong khung nhin, khong tran ngang; co o email, nut "Gui lien ket", link "Quay lai dang nhap". (2) quen-mat-khau-1440.png (nhap, 1440x900): cot phai co logo OneHub o tren tieu de "Quen mat khau", trong khung nhin; cot trai co logo thuong hieu o goc tren va dong chu "OneHub Center: doi tac, ke hoach 30 ngay va OKR."; khong tran ngang. (3) quen-mat-khau-da-gui-375.png (da gui, 375x812): logo OneHub tren tieu de "Kiem tra hop thu", trong khung nhin, khong tran ngang; nut "Quay lai dang nhap". (4) quen-mat-khau-da-gui-1440.png (da gui, 1440x900): logo OneHub tren tieu de "Kiem tra hop thu" o cot phai, trong khung nhin, khong tran ngang. Ca 4 khop Expected. Cac bieu tuong Next dev/avatar o goc duoi la lop dev-tool, khong phai noi dung trang.
+    quen-mat-khau-375.png (nháp, 375x812): logo OneHub nằm ngay trên tiêu đề «Quên mật khẩu», trong khung, không có thanh cuộn ngang; bên dưới là mô tả, ô «Địa chỉ email», nút xanh «Gửi liên kết», liên kết «Quay lại đăng nhập».
+    Ba ảnh còn lại: bản 1440 của trạng thái nháp có hai cột và logo ở cột phải trên tiêu đề; hai ảnh «đã gửi» (375 và 1440) có logo trên tiêu đề «Kiểm tra hộp thư», trong khung nhìn, không tràn ngang. Hai trạng thái khác nhau thật (tiêu đề đổi). Tất cả khớp Expected.
   network_observed: n-a (driver)
-  output: |
-    Cung lan do voi E7. 4/4 o quen-mat-khau DUNG (nhap va da gui, 375 va 1440): logo truoc tieu de, trong khung nhin, tran ngang 0px.
-    Frame: evidence/E10-step1.png (=quen-mat-khau-375), E10-step2.png (=quen-mat-khau-1440), E10-step3.png (=quen-mat-khau-da-gui-375), E10-step4.png (=quen-mat-khau-da-gui-1440).
 
 - eval: E11
-  run_id: minted-cua-vao-va-E11-r1
+  run_id: minted-cua-vao-va-E11-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.r1f_dang_xuat
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
     cd apps/app && bun test ./test/sign-out.spec.ts
     Ran 4 tests across 1 file. [6.00ms]
 
 - eval: E12
-  run_id: minted-cua-vao-va-E12-r1
+  run_id: minted-cua-vao-va-E12-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.r1f_messages_guard
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
     cd apps/app && bun test test/messages-guard.spec.ts
-    Ran 131 tests across 1 file. [857.00ms]
+    Ran 131 tests across 1 file. [1098.00ms]
 
 - eval: E13
-  run_id: minted-cua-vao-va-E13-r1
+  run_id: minted-cua-vao-va-E13-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.r1f_soi_ma_neo
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
     bun _acceptance/cua-vao-va/rang/soi-ma-neo.mjs
-    KET LUAN 6 DUNG, 0 SAI — ma thoat 0
+    KET LUAN 6 DUNG, 0 SAI — mã thoát 0
 
 - eval: E14
-  run_id: minted-cua-vao-va-E14-r1
-  result: BLOCKED (cannot-run — thieu goi zod trong worktree, khong phai loi code)
+  run_id: minted-cua-vao-va-E14-r2
+  exit_code: 0
   baseline: red
   verifier: config:executors.script.r1f_thuoc_cu_xanh
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
     bun _acceptance/cua-vao-va/rang/thuoc-cu-xanh.mjs
-    error: Cannot find package 'zod' from '/Users/manh-macmini/dev/crm/.claude/worktrees/trusting-bhabha-b549c2/_acceptance/cua-vao-va/rang/thuoc-cu-xanh.mjs'
-    Bun v1.3.12 (macOS arm64)
+    KET LUAN 21 DUNG, 0 SAI — mã thoát 0
 
 - eval: E15
-  run_id: minted-cua-vao-va-E15-r1
+  run_id: minted-cua-vao-va-E15-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.r1f_san_thiet_ke
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
-    design-gate (static) tren 6 tep, roi rang/khong-ghi-de.mjs
-    KET LUAN 10 DUNG, 0 SAI — ma thoat 0
+    design-gate.mjs (static) trên sáu tệp, rồi rang/khong-ghi-de.mjs
+    KET LUAN 10 DUNG, 0 SAI — mã thoát 0
 
 - eval: E16
-  run_id: minted-cua-vao-va-E16-r1
+  run_id: minted-cua-vao-va-E16-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.r1f_noi_goi_dang_xuat
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
   output: |
     bun _acceptance/cua-vao-va/rang/noi-goi-dang-xuat.mjs
-    KET LUAN 4 DUNG, 0 SAI — ma thoat 0
+    KET LUAN 4 DUNG, 0 SAI — mã thoát 0
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-cua-vao-va-SUITE-bun_run_test_filter_api-r1
-  ket_qua: DO — 1560 pass, 3 skip, 2 ca fail, 164 tep. Khong gan eval nao. Hai ca do: go-la-cat-quyen > go-tat-khoa (luot go tat moi khoa cua nguoi bi go, khong cham khoa nguoi khac) va khoa-api-ghi-thua > tu-choi-van-giu (khoa tat va khoa het han van bi tu-choi trong nguong). Phan tich nguyen nhan o muc Ngoài hợp đồng cua review-findings.md.
-  verified_at: 2026-10-04T22:56:01Z
+  run_id: minted-cua-vao-va-SUITE-bun_run_test_filter_api-r2
+  exit_code: 0
+  verified_at: 2026-10-04T23:53:48Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-cua-vao-va-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-cua-vao-va-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-cua-vao-va-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-cua-vao-va-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-cua-vao-va-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-cua-vao-va-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-cua-vao-va-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-cua-vao-va-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
 
 - cmd: bun run lint:slop
-  run_id: minted-cua-vao-va-SUITE-bun_run_lint_slop-r1
+  run_id: minted-cua-vao-va-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-cua-vao-va-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-cua-vao-va-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-04T22:56:01Z
+  verified_at: 2026-10-04T23:53:48Z
 
 ## Known limits
 
@@ -251,15 +243,13 @@ Round 1. Verdict BLOCKED vi E14 (AC-12) khong chay duoc do thieu goi `zod` trong
 
 ## Analyst
 
-Eval không phân biệt (xanh trên cả HEAD lẫn baseline diffBase, chứng minh harness chứ không chứng minh feature; nên viết lại để assert hành vi mới hoặc xác nhận đây là regression-guard có chủ ý):
-
-- E11 (`cd apps/app && bun test ./test/sign-out.spec.ts`)
-- E12 (`cd apps/app && bun test test/messages-guard.spec.ts`)
+Eval không phân biệt (xanh cả trên HEAD lẫn baseline diffBase, chứng minh bộ đo chứ chưa chứng minh tính năng): E11 (sign-out.spec.ts) và E12 (messages-guard.spec.ts). Cần viết lại để khẳng định hành vi mới, hoặc xác nhận đây là răng hồi quy có chủ ý. Các eval còn lại đều đỏ trên baseline (có phân biệt) hoặc không có baseline chạy được (E7, E8, E10).
 
 ## Variance
 
-none — mọi eval đều chạy một lần (deterministic), không có eval nhiều lượt nên không có pass_rate hỗn hợp.
+none — every multi-run eval is uniform (mọi eval chỉ chạy một lần, không có eval ngẫu nhiên)
 
 ## Iterations
 
-Round 1: E14 BLOCKED (thiếu gói zod trong worktree, không phải lỗi code; cần cài hoặc symlink node_modules rồi chạy lại E14); 15 eval còn lại xanh; lệnh suite `--filter=api` đỏ 2 ca cũ không gắn eval, xem review-findings.md.
+Round 1: E14 BLOCKED (thiếu gói zod trong worktree, lỗi môi trường chứ không phải lỗi code); 15 eval còn lại xanh; lệnh suite `--filter=api` đỏ 2 ca cũ về khoá API hỏng, không gắn eval. Returned to implementation: khoá API hỏng vẫn trả 401 và ba-lop đọc metadata router (commit 96892e969).
+Round 2: 16/16 eval và 7/7 lệnh suite xanh, verdict PASS.

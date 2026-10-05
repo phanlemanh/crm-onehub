@@ -1,1 +1,1 @@
-n-a (driver): script do-man.mjs chay Playwright trong mot-luot.sh, khong co browser tool doc network; log thuc thi: /tmp/p3-r1f-E10-1791154615049598000.log
+n-a (driver): do-man.mjs chay Playwright trong mot-luot.sh, khong co browser tool doc network; log: /tmp/p3-r1f-E10-run-1791158090.log

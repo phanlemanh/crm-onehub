@@ -52,3 +52,54 @@ wall: 899s
 - **claude-sonnet-5-5**: 8 agent · 47 calls · out 37,021 · in 94 · cache_read 5,268,423 · cache_create 1,043,456
 - **claude-haiku-4-5-20251001**: 20 agent · 40 calls · out 30,331 · in 360 · cache_read 2,417,822 · cache_create 1,438,812
 
+### S4 round 2 — wf_921ca4e4-a34 (29 agent, 88,719 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:measurement | claude-opus-5-5 | 18 | 14,234 | 36 | 2,790,669 | 167 |
+| synthesize:report | claude-sonnet-5-5 | 3 | 11,519 | 6 | 289,585 | 76 |
+| baseline:diffBase | claude-sonnet-5-5 | 12 | 8,337 | 24 | 1,461,186 | 158 |
+| review:bugs | claude-opus-5-5 | 18 | 8,041 | 36 | 2,530,529 | 109 |
+| review:conventions | claude-opus-5-5 | 12 | 5,117 | 24 | 1,545,021 | 70 |
+| ui:E10 | claude-sonnet-5-5 | 9 | 4,137 | 18 | 1,107,400 | 119 |
+| ui:E7 | claude-sonnet-5-5 | 7 | 3,404 | 14 | 778,661 | 79 |
+| machine:bun run test -- --filter=api | claude-haiku-4-5-20251001 | 2 | 2,749 | 18 | 93,158 | 228 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-4-5-20251001 | 2 | 2,714 | 18 | 122,345 | 83 |
+| machine:RESEND_API_KEY=re_test_gia MAIL_FROM="CR | claude-haiku-4-5-20251001 | 2 | 2,290 | 18 | 122,332 | 45 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-4-5-20251001 | 2 | 2,105 | 18 | 122,319 | 205 |
+| machine:bun _acceptance/cua-vao-va/rang/soi-ma-n | claude-haiku-4-5-20251001 | 2 | 2,104 | 18 | 122,238 | 34 |
+| machine:for t in "apps/app/app/(app)/[slug]/erro | claude-haiku-4-5-20251001 | 2 | 1,956 | 18 | 122,413 | 20 |
+| machine:bun _acceptance/cua-vao-va/rang/thuoc-cu | claude-haiku-4-5-20251001 | 2 | 1,950 | 18 | 122,238 | 149 |
+| triage | claude-sonnet-5-5 | 2 | 1,909 | 4 | 120,833 | 23 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 1,851 | 18 | 122,242 | 29 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 1,398 | 18 | 122,298 | 18 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-4-5-20251001 | 2 | 1,367 | 18 | 122,313 | 184 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 2 | 1,346 | 18 | 122,241 | 23 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-4-5-20251001 | 3 | 1,295 | 28 | 221,568 | 25 |
+| machine:cd apps/app && bun test ./test/onboardin | claude-haiku-4-5-20251001 | 2 | 1,198 | 18 | 122,232 | 17 |
+| machine:bun _acceptance/cua-vao-va/rang/noi-goi- | claude-haiku-4-5-20251001 | 2 | 1,170 | 18 | 122,243 | 14 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 1,112 | 18 | 122,270 | 14 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 1,092 | 18 | 122,296 | 15 |
+| machine:cd apps/app && bun test test/messages-gu | claude-haiku-4-5-20251001 | 2 | 1,090 | 18 | 122,224 | 16 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 1,061 | 18 | 122,298 | 29 |
+| machine:cd apps/app && TZ=Asia/Ho_Chi_Minh bun t | claude-haiku-4-5-20251001 | 2 | 897 | 18 | 122,266 | 14 |
+| machine:cd apps/app && bun test ./test/sign-out. | claude-haiku-4-5-20251001 | 2 | 872 | 18 | 122,225 | 15 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 404 | 4 | 118,163 | 8 |
+
+
+wall: 871s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 8,337 | 1,461,186 | 158 | 23:53:59 | 23:56:37 |
+| machine | 20 | 31,617 | 2,515,759 | 763 | 23:53:59 | 00:06:42 |
+| ui | 2 | 7,541 | 1,886,061 | 122 | 23:54:17 | 23:56:19 |
+| review | 3 | 27,392 | 6,866,219 | 173 | 23:54:24 | 23:57:17 |
+| triage | 1 | 1,909 | 120,833 | 23 | 00:06:42 | 00:07:05 |
+| capture | 1 | 404 | 118,163 | 8 | 00:07:05 | 00:07:13 |
+| synthesize | 1 | 11,519 | 289,585 | 76 | 00:07:13 | 00:08:30 |
+
+- **claude-opus-5-5**: 3 agent · 48 calls · out 27,392 · in 96 · cache_read 6,866,219 · cache_create 431,626
+- **claude-sonnet-5-5**: 6 agent · 35 calls · out 29,710 · in 70 · cache_read 3,875,828 · cache_create 806,719
+- **claude-haiku-4-5-20251001**: 20 agent · 41 calls · out 31,617 · in 370 · cache_read 2,515,759 · cache_create 1,432,045
+
