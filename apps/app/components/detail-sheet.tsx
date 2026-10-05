@@ -58,7 +58,7 @@ export const PROPERTY_LABEL = "truncate text-muted-foreground text-xs";
 
 const PROPERTY_CELL = "border border-transparent py-1";
 
-export const CuonCaKhungContext = createContext(false);
+export const CuonCaKhungContext = createContext<boolean | "chua-biet">(false);
 
 export function DetailSheet({
 	open,
@@ -214,7 +214,7 @@ export function DetailSheetTabs({
 }) {
 	const [opened] = useState(() => new Set<string>());
 	opened.add(value);
-	const cuon = useContext(CuonCaKhungContext);
+	const cuon = useContext(CuonCaKhungContext) === true;
 	const danhSach = (
 		<TabsList
 			variant="line"
@@ -270,7 +270,7 @@ export function DetailSheetTabs({
 }
 
 export function DetailSheetBody({ children }: { children: ReactNode }) {
-	const cuon = useContext(CuonCaKhungContext);
+	const cuon = useContext(CuonCaKhungContext) === true;
 	return (
 		<div
 			className={cn(

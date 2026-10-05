@@ -141,6 +141,7 @@ export function chiTietTu(
 			duyet: false,
 			rutDuyet: false,
 		},
+		themKrLe: false,
 		...doi,
 	});
 }
@@ -290,6 +291,7 @@ export function danhSachTu(ds: MucTieuOutput[], soCoGopY = 0): DanhSach {
 			gopY: [{ value: "cho", count: soCoGopY }],
 		},
 		canEdit: false,
+		canCreate: false,
 	});
 }
 

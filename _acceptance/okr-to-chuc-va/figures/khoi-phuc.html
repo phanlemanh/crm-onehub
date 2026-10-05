@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khôi phục đơn vị · luồng chặn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--paper:#fafafa;--ink:#171717;--muted:#575757;--soft:#666666;--rule:rgba(23,23,23,.12);--accent:#006B4F;--sans:'Geist',system-ui,sans-serif;--serif:'Lora',serif;--mono:'Geist Mono',ui-monospace,monospace}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:3rem 2rem;background:var(--paper);color:var(--ink);font-family:var(--sans)}
+    .frame{width:100%;max-width:1100px}
+    .eyebrow{margin-bottom:.5rem;color:var(--muted);font:500 .66rem/1.4 var(--mono);letter-spacing:.18em;text-transform:uppercase}
+    h1{margin-bottom:.35rem;font:400 clamp(1.5rem,2.4vw + .75rem,2rem)/1.3 var(--serif);letter-spacing:-.01em}
+    .subtitle{margin-bottom:1.5rem;color:var(--muted);font-size:.9rem;line-height:1.6}
+    .subtitle code{font-family:var(--mono);font-size:.82rem}
+    .diagram{overflow-x:auto}
+    svg{display:block;width:100%;min-width:900px}
+    svg .name{font-family:'Geist',sans-serif;font-size:12px;font-weight:600;fill:#171717}
+    svg .sub{font-family:'Geist',sans-serif;font-size:10px;fill:#575757}
+    svg .code{font-family:'Geist Mono',monospace;font-size:9px;fill:#575757}
+    svg .tag-box{fill:none;stroke:rgba(23,23,23,.40);stroke-width:.8}
+    svg .tag{font-family:'Geist Mono',monospace;font-size:9px;font-weight:500;fill:#171717;letter-spacing:.08em}
+    svg .arrow-label{font-family:'Geist Mono',monospace;font-size:9px;fill:#575757;letter-spacing:.12em}
+    svg .arrow-label.focal{fill:#006B4F;font-weight:600}
+    svg .callout{font-family:'Lora',serif;font-style:italic;font-size:14px;fill:#575757}
+    svg .leader{fill:none;stroke:rgba(23,23,23,.40);stroke-width:1;stroke-dasharray:4,3}
+    svg .legend-head{font-family:'Geist Mono',monospace;font-size:9px;fill:#575757;letter-spacing:.14em}
+    svg .legend-text{font-family:'Geist',sans-serif;font-size:10px;fill:#575757}
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <p class="eyebrow">Sơ đồ luồng · okr-to-chuc-va · #30 · AC-5 · AC-6 · AC-12</p>
+    <h1>Khôi phục một đơn vị đã lưu trữ</h1>
+    <p class="subtitle">Khôi phục chạy đúng các kiểm của tạo mới, cho cả phòng ban lẫn bộ phận. Bị chặn thì máy chủ trả <code>{ chan }</code>, không đổi dữ liệu, và màn dựng toast theo ngôn ngữ người xem.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 1000 680" role="img" aria-labelledby="kp-title kp-desc" xmlns="http://www.w3.org/2000/svg">
+        <title id="kp-title">Luồng khôi phục đơn vị đã lưu trữ</title>
+        <desc id="kp-desc">Quản trị bấm Khôi phục ở mục Đã lưu trữ, máy chủ kiểm. Nếu bộ phận cha đã lưu trữ, máy chủ trả lời chặn cha-luu-tru kèm tên, màn hiện toast khôi phục bộ phận X trước và đơn vị vẫn ở Đã lưu trữ. Nếu không, và tên trùng một đơn vị đang hoạt động, máy chủ trả lời chặn trung-ten kèm tên, toast gọi tên đơn vị trùng. Nếu không trùng, đơn vị được khôi phục về đúng chỗ cũ. Hôm nay cả hai nhánh có đều khôi phục ngay.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        </defs>
+        <rect width="1000" height="680" fill="#fafafa"/>
+
+        <line x1="200" y1="96" x2="200" y2="128" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="200" y1="176" x2="200" y2="208" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="312" y1="264" x2="372" y2="264" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="596" y1="264" x2="644" y2="264" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="200" y1="320" x2="200" y2="376" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="312" y1="432" x2="372" y2="432" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="596" y1="432" x2="644" y2="432" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="200" y1="488" x2="200" y2="544" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+        <rect x="328" y="236" width="28" height="16" rx="2" fill="#fafafa"/>
+        <text class="arrow-label" x="342" y="248" text-anchor="middle">CÓ</text>
+        <rect x="208" y="340" width="52" height="16" rx="2" fill="#fafafa"/>
+        <text class="arrow-label" x="212" y="352">KHÔNG</text>
+        <rect x="328" y="404" width="28" height="16" rx="2" fill="#fafafa"/>
+        <text class="arrow-label" x="342" y="416" text-anchor="middle">CÓ</text>
+        <rect x="208" y="508" width="52" height="16" rx="2" fill="#fafafa"/>
+        <text class="arrow-label focal" x="212" y="520">KHÔNG</text>
+
+        <rect x="100" y="40" width="200" height="56" rx="28" fill="rgba(23,23,23,.03)" stroke="rgba(23,23,23,.30)" stroke-width="1"/>
+        <text class="name" x="200" y="64" text-anchor="middle">Bấm «Khôi phục»</text>
+        <text class="sub" x="200" y="80" text-anchor="middle">mục «Đã lưu trữ» · quản trị</text>
+
+        <rect x="100" y="128" width="200" height="48" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text class="name" x="200" y="148" text-anchor="middle">Máy chủ kiểm</text>
+        <text class="sub" x="200" y="164" text-anchor="middle">đúng các kiểm của tạo mới</text>
+
+        <polygon points="200,208 312,264 200,320 88,264" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text class="name" x="200" y="260" text-anchor="middle">Bộ phận cha</text>
+        <text class="name" x="200" y="276" text-anchor="middle">đã lưu trữ?</text>
+
+        <rect x="372" y="224" width="224" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <rect class="tag-box" x="380" y="230" width="32" height="16" rx="2"/>
+        <text class="tag" x="396" y="242" text-anchor="middle">MỚI</text>
+        <text class="name" x="484" y="266" text-anchor="middle">Trả lời chặn</text>
+        <text class="code" x="484" y="282" text-anchor="middle">{ chan: cha-luu-tru, ten }</text>
+        <text class="sub" x="484" y="296" text-anchor="middle">không đổi dữ liệu</text>
+
+        <rect x="644" y="224" width="284" height="80" rx="24" fill="rgba(23,23,23,.03)" stroke="rgba(23,23,23,.30)" stroke-width="1"/>
+        <text class="name" x="786" y="256" text-anchor="middle">«khôi phục bộ phận X trước»</text>
+        <text class="sub" x="786" y="274" text-anchor="middle">toast theo ngôn ngữ người xem, tên X không dịch</text>
+        <text class="sub" x="786" y="290" text-anchor="middle">đơn vị vẫn ở «Đã lưu trữ»</text>
+
+        <path class="leader" d="M 400 324 L 400 308"/>
+        <circle cx="400" cy="306" r="2" fill="#171717"/>
+        <text class="callout" x="388" y="344">hôm nay: khôi phục ngay, rơi vào bộ phận đã lưu trữ</text>
+
+        <polygon points="200,376 312,432 200,488 88,432" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text class="name" x="200" y="428" text-anchor="middle">Trùng tên đơn vị</text>
+        <text class="name" x="200" y="444" text-anchor="middle">đang hoạt động?</text>
+
+        <rect x="372" y="392" width="224" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <rect class="tag-box" x="380" y="398" width="32" height="16" rx="2"/>
+        <text class="tag" x="396" y="410" text-anchor="middle">MỚI</text>
+        <text class="name" x="484" y="434" text-anchor="middle">Trả lời chặn</text>
+        <text class="code" x="484" y="450" text-anchor="middle">{ chan: trung-ten, ten }</text>
+        <text class="sub" x="484" y="464" text-anchor="middle">không đổi dữ liệu</text>
+
+        <rect x="644" y="392" width="284" height="80" rx="24" fill="rgba(23,23,23,.03)" stroke="rgba(23,23,23,.30)" stroke-width="1"/>
+        <text class="name" x="786" y="424" text-anchor="middle">«đã có đơn vị đang hoạt động tên X»</text>
+        <text class="sub" x="786" y="442" text-anchor="middle">toast gọi tên đơn vị trùng, theo ngôn ngữ</text>
+        <text class="sub" x="786" y="458" text-anchor="middle">đơn vị vẫn ở «Đã lưu trữ»</text>
+
+        <path class="leader" d="M 400 492 L 400 476"/>
+        <circle cx="400" cy="474" r="2" fill="#171717"/>
+        <text class="callout" x="388" y="512">hôm nay: cũng khôi phục ngay, sinh hai đơn vị cùng tên</text>
+
+        <rect x="80" y="544" width="240" height="56" rx="28" fill="rgba(0,107,79,.08)" stroke="#006B4F" stroke-width="1.4"/>
+        <text class="name" x="200" y="568" text-anchor="middle">Khôi phục</text>
+        <text class="sub" x="200" y="584" text-anchor="middle">về đúng chỗ cũ trong cây</text>
+
+        <line x1="32" y1="628" x2="976" y2="628" stroke="rgba(23,23,23,.12)" stroke-width=".8"/>
+        <text class="legend-head" x="32" y="656">CHÚ GIẢI</text>
+        <rect x="112" y="644" width="28" height="16" rx="8" fill="rgba(23,23,23,.03)" stroke="rgba(23,23,23,.30)" stroke-width="1"/>
+        <text class="legend-text" x="148" y="656">bắt đầu / kết thúc</text>
+        <rect x="264" y="644" width="28" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text class="legend-text" x="300" y="656">bước</text>
+        <polygon points="364,652 376,644 388,652 376,660" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+        <text class="legend-text" x="396" y="656">máy chủ hỏi</text>
+        <rect class="tag-box" x="488" y="644" width="32" height="16" rx="2"/>
+        <text class="tag" x="504" y="656" text-anchor="middle">MỚI</text>
+        <text class="legend-text" x="528" y="656">vòng này thêm</text>
+        <line x1="628" y1="652" x2="656" y2="652" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <text class="legend-text" x="664" y="656">khôi phục được</text>
+        <path class="leader" d="M 768 652 L 796 652"/>
+        <text class="legend-text" x="804" y="656">cách chạy hôm nay</text>
+      </svg>
+    </div>
+  </main>
+</body>
+</html>
