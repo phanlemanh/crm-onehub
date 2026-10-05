@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "ten": "Việc và Dự án",
+  "tu_vung": {
+    "đã lên onehub": "Đã giao",
+    "xong": "Đã giao",
+    "đang dựng": "Đang làm",
+    "Cổng Phạm vi": "Chờ duyệt phạm vi",
+    "chưa mở": "Chưa mở",
+    "để sau": "Xếp lại sau"
+  },
+  "hang": [
+    {
+      "ma": "V0",
+      "cau_giao": "«Biết các nền tảng hàng đầu làm việc, dự án, Kanban, Gantt và quyền xem thế nào, và OneHub nên làm theo thứ tự nào»",
+      "hang": "T1",
+      "trang_thai": "xong",
+      "ten": "Khảo sát nền",
+      "ten_ngan": "Khảo sát",
+      "ngay": "2026-10-05",
+      "ghi_chu": "29 nền tảng, 60 năng lực, 1.331 ô chấm. Tổng hợp ở docs/plan/viec-du-an-nghien-cuu.md, bản gốc sáu mảng ở docs/plan/viec-du-an-nghien-cuu/."
+    },
+    {
+      "ma": "V0a",
+      "cau_giao": "«Người vai chỉ OKR không được giao bước onboard và không nhận tên đối tác qua tin nhắc buổi sáng»",
+      "vi_sao": "Giao bước hiện chỉ kiểm có là thành viên; bộ gom nhắc không lọc vai và mang tên công ty qua Zalo/Slack. Gộp việc mà chưa vá là khuếch đại lỗ này.",
+      "hang": "T2",
+      "trang_thai": "chưa mở",
+      "ten": "Vá lỗ rò vai «chỉ OKR» ở kế hoạch 30 ngày",
+      "ten_ngan": "Vá lỗ rò",
+      "bat_khi": "Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»",
+      "ghi_chu": "Phiên riêng đề xuất 05/10. Kiểm dữ liệu thật trước khi sửa; có dữ liệu đã lộ thì báo chủ kho trước."
+    },
+    {
+      "ma": "V1",
+      "cau_giao": "«Tôi giao một việc gắn với deal hay kế hoạch onboard; người nhận thấy nó trong Việc của tôi và được nhắc buổi sáng»",
+      "vi_sao": "Ba thứ giống việc sống tách nhau; việc cần làm trên dòng thời gian không có người làm và ai cũng đánh dấu xong được.",
+      "hang": "T3",
+      "slug": "viec-chung",
+      "dung_tren": ["V0a"],
+      "trang_thai": "chưa mở",
+      "ten": "Việc chung",
+      "ten_ngan": "Việc chung",
+      "bat_khi": "Đề xuất, chốt ở Cổng Đáng: hai tuần dùng thật, ít nhất 80% việc mới có người thực hiện; không việc gắn đối tác nào tới người vai «chỉ OKR»",
+      "chay_khi": "V0a đã gộp; chủ kho mở lại mục từ điển cho việc (ba chữ cho ba thứ đang chốt)",
+      "ghi_chu": "Bảng việc riêng gắn nhiều bản ghi; người giao, một người thực hiện, người theo dõi; nhóm trạng thái Chưa làm · Đang làm · Chờ đánh giá · Xong · Huỷ; quyền P3; Việc của tôi; vào bộ nhắc buổi sáng và hộp chuyển việc khi nghỉ; lịch sử thay đổi. Chuyển việc cần làm cũ sang."
+    },
+    {
+      "ma": "V2",
+      "cau_giao": "«Tôi kéo việc giữa các cột Chưa làm, Đang làm, Chờ đánh giá, Xong, và tách một việc to thành việc con»",
+      "vi_sao": "Kanban là cách xem phổ biến nhất của việc; việc con trả lời luôn lượt «bước có việc con» đang chờ của kế hoạch 30 ngày.",
+      "hang": "T3",
+      "slug": "kanban-viec",
+      "dung_tren": ["V1"],
+      "trang_thai": "chưa mở",
+      "ten": "Kanban việc",
+      "ten_ngan": "Kanban",
+      "chay_khi": "V1 đã gộp; chủ kho mở lại dòng «không làm: kéo thả bảng cột» của lộ trình 30 ngày",
+      "ghi_chu": "Dùng chung thành phần kéo thả với hàng E3 (danh sách kéo thả chung) của lộ trình OKR. Thứ tự bằng khoá chèn giữa."
+    },
+    {
+      "ma": "V3",
+      "cau_giao": "«Tạo kế hoạch onboard từ khuôn là có sẵn việc cho từng phòng ban; deal thắng thì máy gợi ý mở kế hoạch»",
+      "vi_sao": "Odoo, Salesforce, Pipedrive đều để kế hoạch mẫu sinh việc thường; bước 30 ngày là loại việc thứ hai cần gỡ.",
+      "hang": "T3",
+      "slug": "ke-hoach-sinh-viec",
+      "dung_tren": ["V1"],
+      "trang_thai": "chưa mở",
+      "ten": "Kế hoạch sinh việc",
+      "ten_ngan": "Kế hoạch sinh việc",
+      "chay_khi": "V1 đã gộp",
+      "ghi_chu": "Gom với hàng E6 (điều phối vá) của lộ trình OKR. Luật deal thắng là tất định ở máy chủ; bản bàn giao do AI viết thuộc tác tử."
+    },
+    {
+      "ma": "V4",
+      "cau_giao": "«Tôi gom việc của một đợt triển khai vào một dự án và xem trên sơ đồ Gantt có phụ thuộc và mốc»",
+      "vi_sao": "Dự án là chỗ chứa việc; Gantt mức đủ là ngày bắt đầu và hạn, phụ thuộc xong-rồi-mới-bắt-đầu, tự dời, mốc, bỏ ngày nghỉ.",
+      "hang": "T3",
+      "slug": "du-an-gantt",
+      "dung_tren": ["V2", "V3"],
+      "trang_thai": "chưa mở",
+      "ten": "Dự án và Gantt",
+      "ten_ngan": "Dự án, Gantt",
+      "chay_khi": "Chủ kho mở mục từ điển «Dự án» (đang bị cấm hai lần) và dòng «không làm: ngày bắt đầu cho bước»"
+    },
+    {
+      "ma": "V5",
+      "cau_giao": "«Kết quả then chốt hiện các việc chung gắn với nó; vai chỉ OKR thấy số gộp cho việc gắn đối tác»",
+      "vi_sao": "Mục tiêu trỏ tới việc, không sở hữu việc; bỏ loại việc riêng của KR.",
+      "hang": "T3",
+      "slug": "okr-tro-viec",
+      "dung_tren": ["V1"],
+      "trang_thai": "chưa mở",
+      "ten": "KR nối việc chung",
+      "ten_ngan": "Nối OKR",
+      "chay_khi": "Sau buổi đọc số của hàng 8a (lộ trình OKR, 01/12), để không đổi thước giữa kỳ",
+      "ghi_chu": "Tiến độ KR không cộng từ việc; thêm dòng «tiến độ việc» riêng. Đếm trước các việc (KR) có người làm vai «chỉ OKR» gắn kế hoạch hay chiến dịch."
+    },
+    {
+      "ma": "V6",
+      "cau_giao": "«Gantt nâng cao: độ trễ, đường găng, baseline, tải công việc từng người»",
+      "hang": "T2",
+      "trang_thai": "để sau",
+      "ten": "Gantt nâng cao",
+      "ten_ngan": "Gantt nâng cao",
+      "dung_tren": ["V4"],
+      "ghi_chu": "Mọi hãng xếp ở gói cao nhất. Mở khi có người dùng thật hỏi."
+    },
+    {
+      "ma": "V7",
+      "cau_giao": "«Trưởng phòng thấy việc của người trong phòng»",
+      "hang": "T3",
+      "trang_thai": "để sau",
+      "ten": "Cấp trên thấy việc cấp dưới",
+      "ten_ngan": "Cấp trên thấy",
+      "dung_tren": ["V1"],
+      "ghi_chu": "Dataverse, Bitrix24, Getfly, Base đều có. Quyết định sản phẩm; luật P3 không phụ thuộc vào nó."
+    },
+    {
+      "ma": "V8",
+      "cau_giao": "«Máy đọc email và cuộc họp rồi đề xuất việc, tôi duyệt mới tạo»",
+      "hang": "T3",
+      "trang_thai": "để sau",
+      "ten": "AI đề xuất việc",
+      "ten_ngan": "AI đề xuất việc",
+      "dung_tren": ["V1"],
+      "ghi_chu": "Thuộc tác tử, đi qua bước duyệt như create_crm_activity."
+    }
+  ],
+  "da_bac": [
+    { "ma": "x1", "ly_do": "Nhân bản việc khi giao nhiều người: mất tiến độ chung (Salesforce, Base, Getfly)" },
+    { "ma": "x2", "ly_do": "Một loại việc riêng cho dự án hay cho KR: quay lại đúng chỗ đang gỡ" },
+    { "ma": "x3", "ly_do": "Tiến độ KR mặc định cộng từ việc xong: đo đầu ra thay cho kết quả" },
+    { "ma": "x4", "ly_do": "Tự đóng hay xoá việc khi đóng hoặc xoá bản ghi cha: hỏi người dùng thay vì tự làm" }
+  ]
+}
