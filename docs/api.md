@@ -146,6 +146,12 @@ request.
 - **Both reads run concurrently**, but order decides which is *asked* — the research
   read is never made while onboarding is open.
 - **An unreachable API fails open** (`unknown` lets the request through).
+- **Only a 401 means signed out.** When the API cannot read the session (the database
+  is down), the tRPC context sets `sessionError` and `AuthMiddleware`/`SignedInMiddleware`
+  answer `SERVICE_UNAVAILABLE` (503), never `UNAUTHORIZED` — so the proxy lets the request
+  through and the app shows its error page (`(app)/error.tsx`, `[slug]/error.tsx`) with
+  *Thử lại* instead of sending a signed-in person to `/sign-in`.
+  `apps/api/test/cua-vao-va.spec.ts` sweeps every procedure that answers 401.
 - **`/sign-in`, `/grant-access`, `/eve` are ungated.** `/sign-in` is the only path a
   stranger may read; `/` joins it only when `IS_MARKETING` is set.
 - **There is no way past the key gate but to answer** — Skip stranded installs, every

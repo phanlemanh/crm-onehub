@@ -204,6 +204,13 @@ _Avoid_: domain nhà, domain nội bộ, tên miền được phép
 Vì sao: «được phép» lẫn với danh sách cho phép đăng nhập, mà hai việc đã tách
 riêng; «domain nhà» là tiếng lóng của mã, người quản trị không gọi thế.
 
+**Trang lỗi tạm**: trang hiện thay nội dung app khi máy chủ trục trặc lúc dựng trang —
+tiêu đề «Hệ thống đang trục trặc», một câu nói phiên vẫn còn, và nút **Thử lại**. Không
+đăng xuất, không chuyển về trang đăng nhập: người còn phiên ở nguyên chỗ cũ. Đặt
+2026-10-05 (hàng R1f, `cua-vao-va`).
+_Avoid_: trang lỗi hệ thống, màn sập, trang 500
+Vì sao: lỗi ở đây là tạm — thử lại là việc kế đúng, và chữ phải nói người chưa bị đá ra
+
 **Kế hoạch im**: kế hoạch 30 ngày đang chạy mà không bước nào đổi trong số ngày
 đã khai ở ngưỡng im (đếm như cột ngày im của danh mục). Chốt 2026-09-22.
 _Avoid_: kế hoạch treo, kế hoạch chết
