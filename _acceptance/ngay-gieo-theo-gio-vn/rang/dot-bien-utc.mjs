@@ -116,8 +116,22 @@ function chay(luot) {
 		console.log(`${luot}: chay tren co so du lieu rieng ${db}`);
 	}
 	const ket = docXml(xml);
-	const tim = (ten) => [...ket.entries()].find(([k]) => k.includes(ten))?.[1];
+	const tim = (ten) => {
+		const t = [...ket.entries()].find(([k]) => k.includes(ten))?.[1];
+		return t && { ...t, noi: `${t.noi}\n${doanLoi(ra, ten)}` };
+	};
 	return { ma: r.status, ra, tim };
+}
+
+function doanLoi(ra, ten) {
+	const dong = ra.split("\n");
+	const cuoi = dong.findIndex(
+		(d) => d.startsWith("(fail) ") && d.includes(ten),
+	);
+	if (cuoi < 0) return "";
+	let dau = cuoi - 1;
+	while (dau >= 0 && !/^\((pass|fail|skip|todo)\) /.test(dong[dau])) dau--;
+	return dong.slice(dau + 1, cuoi).join("\n");
 }
 
 function kiemLanh(kq) {

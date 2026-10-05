@@ -14,6 +14,13 @@ run_sach() {
     bun test "$@" 2>&1
 }
 
+run_khong_google() {
+  cd "$ROOT/apps/api" || exit 2
+  env -i PATH="$PATH" HOME="$HOME" CRM_TELEMETRY_DISABLED=1 TEST_DATABASE_URL="$TDB" \
+    GOOGLE_CLIENT_ID= GOOGLE_CLIENT_SECRET= \
+    bun test "$@" 2>&1
+}
+
 case "$CHAN" in
   sach)
     OUT="$(run_sach --preload ./test/setup.ts)"
@@ -34,12 +41,12 @@ case "$CHAN" in
   thu-tu)
     PAIR="test/agent-lifecycle.spec.ts test/auth.e2e.spec.ts"
     echo "-- chieu duong: co preload"
-    OUT="$(run_sach --preload ./test/setup.ts $PAIR)"
+    OUT="$(run_khong_google --preload ./test/setup.ts $PAIR)"
     echo "$OUT" | grep -E '^ *[0-9]+ (pass|fail)'
     FAIL="$(printf '%s' "$OUT" | grep -Eo '^ *[0-9]+ fail' | tail -1 | grep -Eo '[0-9]+')"
     [ "${FAIL:-1}" -eq 0 ] || { echo "RANG DO: cap file do du da co preload"; exit 1; }
     echo "-- chieu do: bo preload di"
-    OUT="$(run_sach $PAIR)"
+    OUT="$(run_khong_google $PAIR)"
     echo "$OUT" | grep -E '^ *[0-9]+ (pass|fail)'
     FAIL="$(printf '%s' "$OUT" | grep -Eo '^ *[0-9]+ fail' | tail -1 | grep -Eo '[0-9]+')"
     if [ "${FAIL:-0}" -eq 0 ]; then

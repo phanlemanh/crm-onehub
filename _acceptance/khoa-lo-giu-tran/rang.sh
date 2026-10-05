@@ -153,9 +153,9 @@ case "$CHAN" in
   toan-tep)
     prepare_db "$CHAN"
     OUT="$(run_test "$SPEC")"
-    expect_counts "$OUT" 19 0
+    expect_counts "$OUT" 20 0
     git -C "$ROOT" diff "$SHA" -- "apps/agent/$SPEC" | cmp -s - "$WS/evidence/spec-diff.patch" || { echo "RANG DO: spec-diff.patch stale — chạy lại: git diff $SHA -- apps/agent/$SPEC > _acceptance/khoa-lo-giu-tran/evidence/spec-diff.patch"; exit 1; }
-    echo "rang toan-tep: 19 pass 0 fail, spec-diff.patch khớp diff sống"
+    echo "rang toan-tep: 20 pass 0 fail, spec-diff.patch khớp diff sống"
     ;;
   tai-lieu)
     DOC="$ROOT/docs/agent.md"
