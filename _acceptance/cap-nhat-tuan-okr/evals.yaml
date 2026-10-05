@@ -296,7 +296,7 @@ evals:
     cmd: config:executors.script.cnt_man_chrome
     steps:
       - "Cùng lần chạy với E6. Mục tiêu A công bố ở chu kỳ dang-chay có KR a; mục tiêu B nháp có KR b; mục tiêu C công bố ở chu kỳ lap-ke-hoach có KR c; trưởng TP đăng nhập"
-      - "TP mở sheet mục tiêu A, menu dòng KR a → «Sửa» → hộp thoại KR: ô «Hiện tại» (data-o-hien-tai) có thuộc tính readonly (không disabled), dưới ô có liên kết «Cập nhật tuần» trỏ /<slug>/okr/cap-nhat-tuan → E29-step1.png (1440), E29-step2.png (390); đổi ô «Đích» rồi Lưu → hộp đóng, SQL thẳng: targetValue đổi, currentValue không đổi"
+      - "TP mở sheet mục tiêu A, menu dòng KR a → «Sửa» → hộp thoại KR: ô «Hiện tại» (data-o-hien-tai) có thuộc tính readonly (không disabled), dưới ô có liên kết «Cập nhật tuần» trỏ /<slug>/okr/cap-nhat-tuan → E29-step1.png (1440), E29-step2.png (390); đổi ô «Đích» (chu kỳ đang chạy nên điền lý do đổi đích theo luật của khep-ky-okr) rồi Lưu → hộp đóng, SQL thẳng: targetValue đổi, currentValue không đổi"
       - "Bấm liên kết «Cập nhật tuần» (mở lại hộp) → URL /okr/cap-nhat-tuan → E29-step3.png"
       - "TP mở sheet mục tiêu B, hộp thoại KR b → ô «Hiện tại» sửa được, không có dòng dẫn; đổi 5 → Lưu → SQL thẳng: currentValue KR b = 5 → E29-step4.png"
       - "TP mở sheet mục tiêu C (đã công bố, chu kỳ lap-ke-hoach), hộp thoại KR c → ô «Hiện tại» sửa được, không có dòng dẫn; đổi 6 → Lưu → SQL thẳng: currentValue KR c = 6 → E29-step5.png"

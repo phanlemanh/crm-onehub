@@ -36,6 +36,7 @@ const CHO_HYDRATE_MS = 800;
 const NGAY_LUI_CONG_BO = 2;
 const LOI_HYDRATE = /hydrat/i;
 const CUA_CHAN_URL = process.env.CUA_CHAN_URL ?? "http://localhost:3922";
+const LY_DO_DOI_DICH = "Đo E29: đổi đích KR a lên 60";
 
 mkdirSync(BANG_CHUNG, { recursive: true });
 
@@ -1898,6 +1899,10 @@ async function buocE29() {
 	await moLaiHopSuaKr(tp, `KR29a ${MA}`);
 
 	await ganGiaTri(tp, "[data-o-dich]", "60");
+	const oLyDo = await tp
+		.waitForSelector("[data-o-ly-do-dich] textarea", { timeout: CHO })
+		.catch(() => null);
+	if (oLyDo) await oLyDo.type(LY_DO_DOI_DICH);
 	await doi(
 		tp,
 		"E29: nut Luu bat",
