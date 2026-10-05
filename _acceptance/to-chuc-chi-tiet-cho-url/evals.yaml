@@ -1,0 +1,91 @@
+schema_version: 1
+slug: to-chuc-chi-tiet-cho-url
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tcu_cho_truoc_doc
+    paths:
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+      - "_acceptance/to-chuc-chi-tiet-cho-url/rang/**"
+    expected: |
+      Xanh: doc cay cu phap cua tep; moi tham chieu `url` trong ca phai la url.get("k")
+      (dang khac -> ma 2 "doc url dang la (thuoc khong phu)"); in moi lan doc url.get
+      ngoai cho (ca, gia tri ma cho so ===); tap ca co lan doc nhu vay DUNG BANG ba ca
+      cua rang/cau-hinh.mjs (ma tran viet truoc, lech -> ma 2 "ma tran lech"); moi lan
+      doc dung sau mot cho co ve `url.get("don") === V` voi V = giaTriCho cua ca
+      (x.don, "chua-co", "goc").
+      CAP HAI CHIEU tren CUNG nguon, trong bo nho, moi chieu do chay cho CA BA ca:
+      chieu do A — go ve `&& url.get("don") === …` khoi cho -> phai bao
+      "doc ?don truoc khi cho: <ca>";
+      chieu do B — doi ve do thanh `url.get("don") !== null` -> phai bao
+      "cho sai gia tri ?don (…): <ca>". Chieu do nao khong bao -> ma 1.
+      chieu do tu nhien — ban neo ee0cc227 phai bao "doc ?don truoc khi cho" du 3/3 ca;
+      thieu -> ma 2 "doi chung khong do".
+      Moc pha khong thay -> ma 2, KHONG xanh.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tcu_khang_dinh
+    paths:
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+      - "_acceptance/to-chuc-chi-tiet-cho-url/rang/**"
+    expected: |
+      Xanh: in so ca, so cau expect, so cau cho cua neo (29 ca, 44 expect, 47 cho) va so
+      cau cho cua HEAD; bo moi cau `await cho(...)` khoi ca hai ban, bo khoang trang, hai
+      ban trung tung chu (lech -> "khac neo ngoai cho: <ten ca hoac cap tep>" theo vi tri
+      lech dau tien); dieu kien cho cua neo (bo ve url them) la day con theo thu tu cua
+      HEAD (thieu -> "cho cua neo bi bo: <dieu kien>"); cho HEAD them moi phai co ve url
+      (khong -> "cho them khong co ve url: …").
+      CAP HAI CHIEU tren CUNG nguon, trong bo nho, moi chieu do phai bao DUNG chuoi:
+      1..3 — cau expect cuoi cua moi ca trong ba ca .toEqual( -> .toMatchObject(
+        -> "khac neo ngoai cho: <ca>";
+      4 — bo hang chua-co khoi BON_NUT -> "khac neo ngoai cho: cap tep";
+      5 — bo `await bam(o);` cua o-so-man o thu nhat -> "khac neo ngoai cho: <ca do>";
+      6 — doi ten ca "chon-nut: dung tu ?loc=chua-truong…" -> "khac neo ngoai cho: <ten moi>";
+      7 — bo `await cho(() => url.get("loc") === null, "loc tat")` -> "cho cua neo bi bo:
+        url.get("loc")===null". Chieu do nao khong bao dung -> ma 1.
+      Neo khong co ca hay cau expect nao, hoac moc pha khong thay -> ma 2.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.tcu_tre_url
+    paths:
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "packages/ui/test/setup-dom.ts"
+      - "_acceptance/to-chuc-chi-tiet-cho-url/rang/**"
+    expected: |
+      Ban sao HEAD va ban sao neo ee0cc227 (apps/app/test/tcu-tre-{moi,cu}-<pid>.dom.tsx),
+      moi ban thay dung MOT moc `url = new URLSearchParams(e.searchParams);` bang lan ghi
+      tre 3 nhip setTimeout(0) noi nhau (do bang nhip, khong bang ms: cho cung dem nhip);
+      moc khong thay dung mot lan -> ma 2. Ket qua tung ca doc qua --reporter=junit
+      (.acceptance-runs/to-chuc-chi-tiet-cho-url/E3-<pid>/).
+      chieu do (doi chung) — ban neo do DUNG ba ca cua AC-1, khong ca nao khac; voi moi ca,
+      cac dong "+ …don…" trong doan loi truoc "(fail) <ca>" (gia tri ?don nhan duoc) phai
+      co >= 1 dong va MOI dong nam trong ma tran giaTriCu viet truoc o rang/cau-hinh.mjs
+      (?don truoc cu bam: chon-nut "bam goc: ?don=bp:bp-kd", "bam bp:bp-vh: ?don=goc",
+      "bam pb:pb-kho: ?don=bp:bp-vh", "bam chua-co: ?don=pb:pb-kho"; o-so-man "don": null;
+      nhap-ba-buoc "don": "bp:bp-kd"). Lech -> ma 2, khong ket luan.
+      chieu xanh — ban HEAD xanh moi ca (29/29); ca nao do -> ma 1, neu ten.
+      Ban sao xoa trong finally; con sot ban sao mang pid cua luot -> ma 2.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.tcu_on_dinh
+    paths:
+      - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
+      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "packages/ui/test/setup-dom.ts"
+      - "_acceptance/to-chuc-chi-tiet-cho-url/rang/**"
+    expected: |
+      Doi chung truoc: ban sao neo (tcu-on-dinh-cu-<pid>.dom.tsx) chay --rerun-each 20;
+      phai co >= 1 dong "(fail)" o mot trong ba ca cua AC-1, in so lan; 0 -> ma 2 "doi
+      chung khong do", KHONG xanh.
+      Roi tep that o HEAD chay --rerun-each 20: tong ket bun phai la 0 fail va
+      pass = so ca (doc tu cay cu phap) x 20; in tung dong do neu co -> ma 1.
+      Khong doc duoc tong ket bun -> ma 2. Ban sao xoa trong finally.
