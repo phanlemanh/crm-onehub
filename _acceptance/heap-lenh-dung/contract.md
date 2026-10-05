@@ -5,7 +5,7 @@ slug: heap-lenh-dung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-05
 design_doc: docs/superpowers/specs/2026-10-05-heap-lenh-dung-design.md

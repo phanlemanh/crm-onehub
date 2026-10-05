@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: heap-lenh-dung
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d4f3fcab27cbefa671353bb8bf3d7b92047f9075
+verified_commit: 293fc8e7a0e0e75bf5995998ce2b80bda15b146b
 human_signoff:
 ---
 
 # Evidence Report: heap-lenh-dung
-
-Vòng 1. Eval E1 xanh, nhưng một lệnh suite (`bun run lint:slop`) không gắn eval nào đã đỏ, nên verdict tổng là REJECT. Lệnh đỏ không thuộc eval nào: lỗi nằm ở chính tệp đo của tính năng (`_acceptance/heap-lenh-dung/rang/build-heap.mjs` dòng 37, luật `anti-slop(no-runtime-typeof)`).
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -22,51 +20,50 @@ Vòng 1. Eval E1 xanh, nhưng một lệnh suite (`bun run lint:slop`) không g�
 ## Evidence
 
 - eval: E1
-  run_id: minted-heap-lenh-dung-E1-r1
+  run_id: minted-heap-lenh-dung-E1-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.hld_build_heap
-  verified_at: 2026-10-05T05:35:12Z
+  verified_at: 2026-10-05T05:53:15Z
   output: |
     XANH: heap 6144 MB · dung app ma 0 · app:build qua pha type-check
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-heap-lenh-dung-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-heap-lenh-dung-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-05T05:35:12Z
+  verified_at: 2026-10-05T05:53:15Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-heap-lenh-dung-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-heap-lenh-dung-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-05T05:35:12Z
+  verified_at: 2026-10-05T05:53:15Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-heap-lenh-dung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-heap-lenh-dung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-05T05:35:12Z
+  verified_at: 2026-10-05T05:53:15Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-heap-lenh-dung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-heap-lenh-dung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-05T05:35:12Z
+  verified_at: 2026-10-05T05:53:15Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-heap-lenh-dung-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-heap-lenh-dung-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-05T05:35:12Z
+  verified_at: 2026-10-05T05:53:15Z
 
 - cmd: bun run lint:slop
-  run_id: minted-heap-lenh-dung-SUITE-bun_run_lint_slop-r1
-  exit_code: 1
-  verified_at: 2026-10-05T05:35:12Z
-  note: lệnh này không gắn eval nào. oxlint báo một lỗi `anti-slop(no-runtime-typeof)` tại `_acceptance/heap-lenh-dung/rang/build-heap.mjs:37` (`typeof nodeOptions === "string"`), tệp đo do chính tính năng này thêm.
+  run_id: minted-heap-lenh-dung-SUITE-bun_run_lint_slop-r2
+  exit_code: 0
+  verified_at: 2026-10-05T05:53:15Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-heap-lenh-dung-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-heap-lenh-dung-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-05T05:35:12Z
+  verified_at: 2026-10-05T05:53:15Z
 
 ## Known limits
 
@@ -74,12 +71,15 @@ Vòng 1. Eval E1 xanh, nhưng một lệnh suite (`bun run lint:slop`) không g�
 
 ## Analyst
 
-none — mọi eval feature đều red trên baseline (có phân biệt)
+carried tu round 1 — baseline khong do lai round nay.
+
+none — khong eval nao duoc liet ke la khong-phan-biet (baseline khong do lai round nay; cac lenh suite xanh o ca hai phia la regression-guard binh thuong).
 
 ## Variance
 
-none — mọi eval nhiều lần chạy đều đồng nhất
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: không eval nào đỏ, nhưng `bun run lint:slop` đỏ ở tệp đo `build-heap.mjs` dòng 37 (luật no-runtime-typeof). Trả về bước cài đặt để sửa tệp đo.
+Round 1: lệnh suite lint:slop đỏ — trả về implementation.
+Round 2: toàn bộ E1 và bảy lệnh suite xanh trên cây 293fc8e7a0e0e75bf5995998ce2b80bda15b146b — verdict PASS.
