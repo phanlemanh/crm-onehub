@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b0e84291d6a770394f91f9c24730616f21273654
+verified_commit: 97a2eb9d7c24cc0cb7c6308c3bd47bd5211a3b02
 human_signoff: Mạnh 2026-09-28
 ---
 
@@ -386,3 +386,7 @@ sha: 455047df0485976db93f549ae9c3b810f38b5314 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-04, do sửa thước theo diff sau gộp và khai paths (lô a)
 run_id: repin-20261004T095914Z-97808
 sha: b0e84291d6a770394f91f9c24730616f21273654 · suites: 7 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13b, E14, E14j · diff chạm vật đo ngoài làn máy: E12, E13b, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12, AC-14
+
+### Re-pin lần 4 — 2026-10-05, do sửa thước đỏ lô 2-4 (a)
+run_id: repin-20261005T012004Z-26223
+sha: 97a2eb9d7c24cc0cb7c6308c3bd47bd5211a3b02 · suites: 7 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13b, E14, E14j · diff chạm vật đo ngoài làn máy: E12, E13b, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12, AC-14
