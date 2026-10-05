@@ -193,7 +193,7 @@ export const DOC_TIEU_DE = () =>
 				text,
 				boxWidth: Number(box.toFixed(2)),
 				textWidth: Number(textWidth.toFixed(2)),
-				bicat: tran(nhan),
+				bicat: [nhan, ...nhan.querySelectorAll("*")].some(tran),
 				coBaCham: Boolean(cut),
 				title: ten,
 			};
