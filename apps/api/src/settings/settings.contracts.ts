@@ -19,6 +19,7 @@ export const agentModelOutput = z.object({
 	effectiveId: z.string(),
 	defaultId: z.string(),
 	effective: catalogModelOutput.nullable(),
+	selectedMissing: z.boolean(),
 	updatedAt: z.string().nullable(),
 	canManage: z.boolean(),
 });
