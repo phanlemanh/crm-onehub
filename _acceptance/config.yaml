@@ -1882,6 +1882,10 @@ executors:
     tpa_vercel_production_xanh: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs xanh
     tpa_vercel_production_do: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs do
     tpa_vercel_production_bo_tay: bun _acceptance/tat-preview-agent-okr/rang/vercel-production.mjs bo-tay
+    tcu_cho_truoc_doc: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/cho-truoc-doc.mjs"
+    tcu_khang_dinh: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/khang-dinh.mjs"
+    tcu_tre_url: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/tre-url.mjs"
+    tcu_on_dinh: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/on-dinh.mjs"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
