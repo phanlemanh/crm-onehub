@@ -713,3 +713,33 @@ describe("proxy and a dead session", () => {
 		expect(sai).toEqual([]);
 	});
 });
+
+describe("readWorkspaceGate when the API cannot read the session", () => {
+	it("doc-503: a 503 lets the request through, a 401 still sends it to sign-in", async () => {
+		const loiDocPhien: GateResponse = {
+			error: {
+				message: "SERVICE_UNAVAILABLE",
+				code: -32603,
+				data: {
+					code: "SERVICE_UNAVAILABLE",
+					httpStatus: 503,
+					path: "workspace.get",
+				},
+			},
+		};
+		answerWith(loiDocPhien, 503);
+		const gate = await readWorkspaceGate(
+			request("/comp-ai/contacts", [SESSION_COOKIE]),
+		);
+		const ra503 = await proxy(request("/comp-ai/contacts", [SESSION_COOKIE]));
+		hetPhien();
+		const ra401 = await proxy(request("/comp-ai/contacts", [SESSION_COOKIE]));
+
+		expect(gate.hetPhien, "503 khong phai het phien").toBe(false);
+		expect(
+			ra503.headers.get("location"),
+			"khong duoc chuyen ve /sign-in",
+		).toBeNull();
+		expect(ra401.headers.get("location")?.endsWith("/sign-in")).toBe(true);
+	});
+});
