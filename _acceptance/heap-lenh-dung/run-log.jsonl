@@ -26,3 +26,4 @@
 {"ts":"2026-10-05T05:53:15Z","sha":"293fc8e7a0e0e75bf5995998ce2b80bda15b146b","round":2,"kind":"round-tally","verdict":"PASS","expected":8,"returned":8,"blocked":0}
 {"ts":"2026-10-05T05:53:15Z","sha":"293fc8e7a0e0e75bf5995998ce2b80bda15b146b","round":2,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":8}
 {"kind":"thuoc-vat","ts":"2026-10-05T06:08:05Z","round":2,"san":"d4f3fcab27cbefa671353bb8bf3d7b92047f9075","vat":[0,0],"thuoc":[2,2],"ho_so":[17,0],"nhat":1,"lan":0,"tep_thuoc":["_acceptance/heap-lenh-dung/rang/build-heap.mjs"]}
+{"ts":"2026-10-05T09:51:58Z","kind":"repin","run_id":"repin-20261005T094724Z-72217","sha":"ffcb55bcbe347e1caf46582dac133161acacc8e6","suites_exit":[0,0,0,0,0,0,0],"evals_exit":{"E1":0},"wall_s":274.5,"so_lenh":8}

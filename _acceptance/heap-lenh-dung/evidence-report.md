@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 293fc8e7a0e0e75bf5995998ce2b80bda15b146b
+verified_commit: ffcb55bcbe347e1caf46582dac133161acacc8e6
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng Bằng chứng trên vòng chấm 2 (E1 đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Bốn mục ngoài hợp đồng mang từ vòng 1 định đoạt ở lượt ký này — Ngoài-1, 2, 3, 4 ghi Known limits. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê hết.
 ---
 
@@ -83,3 +83,7 @@ none — every multi-run eval is uniform
 
 Round 1: lệnh suite lint:slop đỏ — trả về implementation.
 Round 2: toàn bộ E1 và bảy lệnh suite xanh trên cây 293fc8e7a0e0e75bf5995998ce2b80bda15b146b — verdict PASS.
+
+### Re-pin lần 1 — 2026-10-05, do hoá cũ do gộp onehub 4aae0cb1 và 8d283819 (#269)
+run_id: repin-20261005T094724Z-72217
+sha: ffcb55bcbe347e1caf46582dac133161acacc8e6 · suites: 7 lệnh exit 0 · evals: 1/1 eval máy đạt kỳ vọng
