@@ -44,6 +44,7 @@ export const danhSachOutput = z.object({
 		gopY: z.array(z.object({ value: z.enum(LOC_GOP_Y), count: z.number() })),
 	}),
 	canEdit: z.boolean(),
+	canCreate: z.boolean(),
 });
 
 export const cycleOnlyInput = z.object({ cycleId: ma });

@@ -98,6 +98,10 @@ const vi = {
 	hoanTac: "Hoàn tác",
 	daLuuTruTen: "Đã lưu trữ {ten}",
 	daKhoiPhucTen: "Đã khôi phục {ten}",
+	khoiPhucChaLuuTru:
+		"Bộ phận «{ten}» chứa phòng ban này đang lưu trữ — khôi phục bộ phận đó trước.",
+	khoiPhucTrungTen:
+		"Đã có đơn vị đang hoạt động tên «{ten}» — đổi tên một trong hai trước khi khôi phục.",
 	daXoaTen: "Đã xoá hẳn {ten}",
 	boPhanLoai: "Bộ phận",
 	phongBanLoai: "Phòng ban",
@@ -305,6 +309,10 @@ const en: ToChucMessages = {
 	hoanTac: "Undo",
 	daLuuTruTen: "Archived {ten}",
 	daKhoiPhucTen: "Restored {ten}",
+	khoiPhucChaLuuTru:
+		"The division “{ten}” that holds this department is archived — restore that division first.",
+	khoiPhucTrungTen:
+		"An active unit named “{ten}” already exists — rename one of them before restoring.",
 	daXoaTen: "Deleted {ten} forever",
 	boPhanLoai: "Division",
 	phongBanLoai: "Department",

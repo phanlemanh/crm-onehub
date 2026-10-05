@@ -33,7 +33,7 @@ export function BangMucTieu({
 			onDoiMo(id);
 			return;
 		}
-		const conLai = ds.map((mt) => mt.id).filter((x) => daThu.has(x));
+		const conLai = [...daThu];
 		const sau = daThu.has(id)
 			? conLai.filter((x) => x !== id)
 			: [...conLai, id];

@@ -237,6 +237,7 @@ const danhSachCua = (vao: DauVao) => {
 		total: d.objectives.length,
 		facetCounts: { phuTrach: [], loai: [], trangThai: [] },
 		canEdit: d.canEdit,
+		canCreate: d.canEdit,
 	};
 };
 const docCayCanChinh = () => cayCanChinh;

@@ -1,0 +1,1 @@
+E11 driver: puppeteer-core script (rang/man.mjs) tren phong mau cuc bo; khong co duong doc network cua cong cu. networkObserved = n-a (driver). pageerror: 0 (dong "khong loi trang" OK).
