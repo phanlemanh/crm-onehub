@@ -13,6 +13,7 @@ export const ZALO = {
 		cam: 403,
 		loiMayChu: 500,
 		tuChoi: { tu: 400, den: 500 },
+		tamLoi: [408, 429],
 	},
 	poll: { toiDaMoiNhip: 20, timeoutGiay: 1, giuDauMs: 7 * DAY_MS },
 	pollTay: { timeoutGiay: 30 },
