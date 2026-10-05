@@ -2,6 +2,8 @@ import { createGateway } from "@ai-sdk/gateway";
 import { db } from "@crm/db";
 import { DEFAULT_AGENT_MODEL, readAgentModel } from "@crm/db/settings";
 import { defineDynamic } from "eve";
+import { docDanhMuc, ghiBiGoLui } from "./model-danh-muc";
+import { ghiModelPhien, modelPhienDaGhi } from "./model-phien";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
 import { TAI_LIEU_AGENT } from "./tai-lieu-config";
 import { type ModelMaySoan, modelTaiLieu } from "./tai-lieu-model";
@@ -20,6 +22,12 @@ export async function modelTheoVai(
 		const setting = await readAgentModel(db);
 
 		if (setting.isDefault) return null;
+
+		const danhMuc = await docDanhMuc();
+		if (danhMuc !== "khong-doc-duoc" && !danhMuc.co.has(setting.id)) {
+			await ghiBiGoLui(setting.id, vai);
+			return null;
+		}
 
 		return {
 			model: setting.id,
@@ -99,10 +107,18 @@ export function modelChoBoChay(ctx: PurposeContext): ModelSelection | null {
 		: null;
 }
 
+export async function modelPhienDaDung(sessionId: string): Promise<string> {
+	return (await modelPhienDaGhi(sessionId)) ?? (await readAgentModel(db)).id;
+}
+
 export const MODEL_GOC = defineDynamic({
 	fallback: DEFAULT_AGENT_MODEL.id,
 	events: {
-		"session.started": (_event, ctx) => modelChoPhienGoc(ctx),
+		"session.started": async (_event, ctx) => {
+			const chon = await modelChoPhienGoc(ctx);
+			void ghiModelPhien(ctx, chon?.model ?? DEFAULT_AGENT_MODEL.id);
+			return chon;
+		},
 		"step.started": (_event, ctx) => modelChoBuocGoc(ctx),
 	},
 });

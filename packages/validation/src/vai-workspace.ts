@@ -37,3 +37,7 @@ export function docDuocPhamVi(
 	if (!laVaiChiOkr(role)) return true;
 	return phamVi !== null && PHAM_VI_CUA_CHI_OKR.includes(phamVi);
 }
+
+export function laQuanTriWorkspace(role: WorkspaceRole | null): boolean {
+	return role === "owner" || role === "admin";
+}

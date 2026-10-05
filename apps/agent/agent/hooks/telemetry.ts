@@ -3,6 +3,12 @@ import { readAgentModel } from "@crm/db/settings";
 import { agentError, modelError } from "@crm/telemetry";
 import { defineHook } from "eve/hooks";
 import { z } from "zod";
+import { modelPhienDaDung } from "../lib/model";
+import {
+	chiTietLoiModel,
+	ghiModelKhongTimThay,
+	laModelKhongTimThay,
+} from "../lib/model-danh-muc";
 
 type SessionPrincipal = {
 	readonly attributes?: Readonly<Record<string, string | readonly string[]>>;
@@ -73,7 +79,21 @@ export default defineHook({
 			});
 		},
 
-		async "step.failed"(event) {
+		async "step.failed"(event, ctx) {
+			if (laModelKhongTimThay(chiTietLoiModel.parse(event.data.details))) {
+				try {
+					await ghiModelKhongTimThay(
+						ctx.session.id,
+						await modelPhienDaDung(ctx.session.id),
+					);
+				} catch (loi) {
+					console.error("[agent] could not record a missing-model failure", {
+						sessionId: ctx.session.id,
+						loi,
+					});
+				}
+			}
+
 			if (!looksLikeModel(event.data.code)) return;
 
 			modelError({
