@@ -12,6 +12,11 @@ import type { AuthedTrpcContext, BaseTrpcContext } from "../context.types";
 export class SignedInMiddleware implements TRPCMiddleware {
 	async use(opts: MiddlewareOptions): Promise<MiddlewareResponse> {
 		const ctx = opts.ctx as BaseTrpcContext;
+
+		if (ctx.sessionError) {
+			throw new TRPCError({ code: "SERVICE_UNAVAILABLE" });
+		}
+
 		const user = ctx.session?.user;
 
 		if (!user) {

@@ -50,17 +50,21 @@ export class SettingsService {
 	}
 
 	async agentModel(userId: string): Promise<AgentModelSettings> {
-		const [model, row, canManage] = await Promise.all([
+		const [model, row, canManage, models] = await Promise.all([
 			readAgentModel(this.db),
 			this.db.appSetting.findFirst({ select: { updatedAt: true } }),
 			this.canManage(userId),
+			this.catalog.models(),
 		]);
+		const effective = models?.find((entry) => entry.id === model.id) ?? null;
 
 		return {
 			selectedId: model.isDefault ? null : model.id,
 			effectiveId: model.id,
 			defaultId: DEFAULT_AGENT_MODEL.id,
-			effective: await this.catalog.find(model.id),
+			effective,
+			selectedMissing:
+				!model.isDefault && models !== null && effective === null,
 			updatedAt: row?.updatedAt.toISOString() ?? null,
 			canManage,
 		};

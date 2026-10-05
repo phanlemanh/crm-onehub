@@ -1,5 +1,6 @@
 import { ketQuaTroLy } from "@crm/validation/okr-tro-ly";
 import { defineAgent, defineDynamic } from "eve";
+import { ghiModelPhien } from "../../lib/model-phien";
 import { chonMoHinhTheoViec } from "../../lib/okr/chon-mo-hinh";
 import { TRO_LY_OKR } from "../../lib/okr/config";
 import { MO_HINH_TRO_LY_OKR, TUY_CHON_MO_HINH } from "../../lib/okr/mo-hinh";
@@ -10,7 +11,10 @@ export default defineAgent({
 	model: defineDynamic({
 		fallback: MO_HINH_TRO_LY_OKR,
 		events: {
-			"step.started": (_event, ctx) => chonMoHinhTheoViec(ctx),
+			"step.started": (_event, ctx) => {
+				void ghiModelPhien(ctx, TRO_LY_OKR.model);
+				return chonMoHinhTheoViec(ctx);
+			},
 		},
 	}),
 	modelContextWindowTokens: TRO_LY_OKR.cuaSoNguCanh,

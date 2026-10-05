@@ -16,6 +16,7 @@
 			"!**/dist",
 			"!**/*.svg",
 			"!**/test/fixtures/**/clipboard-*.html",
+			"!**/test/fixtures/**/gateway-models-*.json",
 			"!.claude",
 			"!.agents",
 			"!tools/oxlint/anti-slop",

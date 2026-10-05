@@ -75,6 +75,7 @@ const en = {
 		tieuDe: "This account is not in the workspace",
 		than: "Someone removed it. Ask an owner or an admin to allow your address again.",
 		dangXuat: "Sign out",
+		dangXuatLoi: "Could not sign out.",
 	},
 	go: "Remove from workspace",
 	phatChia: {
@@ -186,6 +187,7 @@ const vi = {
 		tieuDe: "Tài khoản này không còn trong không gian làm việc",
 		than: "Ai đó đã gỡ nó. Nhờ chủ sở hữu hoặc quản trị cho phép lại địa chỉ của bạn.",
 		dangXuat: "Đăng xuất",
+		dangXuatLoi: "Chưa đăng xuất được.",
 	},
 	go: "Gỡ khỏi không gian làm việc",
 	phatChia: {
