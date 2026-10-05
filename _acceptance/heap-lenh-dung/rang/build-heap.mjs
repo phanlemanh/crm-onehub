@@ -33,8 +33,8 @@ const buocDung = buocChay(acceptance.jobs?.build, "bun run build");
 if (buocDung.length !== 1) thoat(1, `DO: job build co ${buocDung.length} buoc 'bun run build', can dung mot`);
 
 const [buoc] = buocDung;
-const nodeOptions = buoc.env?.NODE_OPTIONS;
-const heap = typeof nodeOptions === "string" ? nodeOptions.match(CO_HEAP) : null;
+const nodeOptions = String(buoc.env?.NODE_OPTIONS ?? "");
+const heap = nodeOptions.match(CO_HEAP);
 if (!heap) thoat(1, "DO: buoc bun run build khong khai NODE_OPTIONS voi --max-old-space-size");
 const heapMb = Number(heap[1]);
 
