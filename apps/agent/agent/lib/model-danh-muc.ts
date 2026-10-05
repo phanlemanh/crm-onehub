@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { db } from "@crm/db";
 import { docDanhMucGateway } from "@crm/validation/gateway-danh-muc";
+import { z } from "zod";
 import { MODEL_DANH_MUC } from "./model-config";
 
 export type KetQuaDanhMuc = { co: ReadonlySet<string> } | "khong-doc-duoc";
@@ -57,6 +58,40 @@ export async function ghiBiGoLui(modelId: string, vai: string): Promise<void> {
 			sessionId: MODEL_DANH_MUC.phienSuKien,
 			type: MODEL_DANH_MUC.suKienLui,
 			data: { modelId, vai },
+			emittedAt: new Date(),
+		},
+	});
+}
+
+export const chiTietLoiModel = z
+	.object({
+		gatewayName: z.string().optional(),
+		gatewayType: z.string().optional(),
+	})
+	.loose()
+	.nullable()
+	.optional()
+	.catch(null);
+
+export type ChiTietLoiModel = z.infer<typeof chiTietLoiModel>;
+
+export function laModelKhongTimThay(chiTiet: ChiTietLoiModel): boolean {
+	return (
+		chiTiet?.gatewayName === "GatewayModelNotFoundError" ||
+		chiTiet?.gatewayType === "model_not_found"
+	);
+}
+
+export async function ghiModelKhongTimThay(
+	sessionId: string,
+	modelId: string,
+): Promise<void> {
+	await db.agentEvent.create({
+		data: {
+			id: randomUUID(),
+			sessionId,
+			type: MODEL_DANH_MUC.suKienHong,
+			data: { modelId },
 			emittedAt: new Date(),
 		},
 	});

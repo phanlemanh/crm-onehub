@@ -10,9 +10,15 @@ import {
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+	GatewayInternalServerError,
+	GatewayModelNotFoundError,
+	GatewayRateLimitError,
+} from "@ai-sdk/gateway";
 import { db } from "@crm/db";
 import { DEFAULT_AGENT_MODEL, writeAgentModel } from "@crm/db/settings";
 import { docDanhMucGateway } from "@crm/validation/gateway-danh-muc";
+import telemetry from "../agent/hooks/telemetry";
 import { modelChoLuot, modelTheoVai } from "../agent/lib/model";
 import { MODEL_DANH_MUC } from "../agent/lib/model-config";
 import {
@@ -210,4 +216,77 @@ describe("danh-muc", () => {
 		},
 		MODEL_DANH_MUC.timeoutMs + 5_000,
 	);
+});
+
+describe("khong-tim-thay", () => {
+	test("khong-tim-thay: ma tran 4 loi buoc, chi model khong tim thay ghi su kien", async () => {
+		const goc = new GatewayModelNotFoundError({
+			message: "Model not found",
+			statusCode: 404,
+			modelId: DA_CHON,
+		});
+		const hetTien = new GatewayInternalServerError({
+			message: "A positive credit balance is required",
+			statusCode: 402,
+		});
+		const gioiHan = new GatewayRateLimitError({ message: "Rate limited" });
+		const O = [
+			{
+				ten: "model-not-found",
+				code: "MODEL_CALL_FAILED",
+				details: {
+					gatewayName: goc.name,
+					gatewayType: goc.type,
+					statusCode: goc.statusCode,
+				},
+				ghi: 1,
+			},
+			{
+				ten: "402",
+				code: "MODEL_CALL_FAILED",
+				details: {
+					gatewayName: hetTien.name,
+					gatewayType: hetTien.type,
+					statusCode: 402,
+				},
+				ghi: 0,
+			},
+			{
+				ten: "429",
+				code: "MODEL_CALL_FAILED",
+				details: { gatewayName: gioiHan.name, gatewayType: gioiHan.type },
+				ghi: 0,
+			},
+			{ ten: "khac", code: "TOOL_FAILED", details: undefined, ghi: 0 },
+		] as const;
+		expect(O.length).toBe(4);
+		const sai: string[] = [];
+		for (const o of O) {
+			const sessionId = `r1e-ktt-${o.ten}-${Date.now()}`;
+			await telemetry.events["step.failed"]?.(
+				{
+					type: "step.failed",
+					data: {
+						code: o.code,
+						message: "model call failed",
+						details: o.details,
+					},
+				} as never,
+				{
+					session: { id: sessionId, auth: { current: null, initiator: null } },
+				} as never,
+			);
+			const hang = await db.agentEvent.count({
+				where: { sessionId, type: MODEL_DANH_MUC.suKienHong },
+			});
+			if (hang !== o.ghi) {
+				sai.push(
+					o.ten === "402"
+						? "khong-tim-thay: loi 402 bi dem la model bi go"
+						: `khong-tim-thay: ${o.ten} ghi ${hang} hang`,
+				);
+			}
+		}
+		expect(sai).toEqual([]);
+	});
 });

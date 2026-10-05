@@ -3,6 +3,11 @@ import { readAgentModel } from "@crm/db/settings";
 import { agentError, modelError } from "@crm/telemetry";
 import { defineHook } from "eve/hooks";
 import { z } from "zod";
+import {
+	chiTietLoiModel,
+	ghiModelKhongTimThay,
+	laModelKhongTimThay,
+} from "../lib/model-danh-muc";
 
 type SessionPrincipal = {
 	readonly attributes?: Readonly<Record<string, string | readonly string[]>>;
@@ -73,7 +78,14 @@ export default defineHook({
 			});
 		},
 
-		async "step.failed"(event) {
+		async "step.failed"(event, ctx) {
+			if (laModelKhongTimThay(chiTietLoiModel.parse(event.data.details))) {
+				await ghiModelKhongTimThay(
+					ctx.session.id,
+					(await readAgentModel(db)).id,
+				);
+			}
+
 			if (!looksLikeModel(event.data.code)) return;
 
 			modelError({
