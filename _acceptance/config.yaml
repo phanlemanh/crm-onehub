@@ -1354,6 +1354,7 @@ executors:
     ld_bat_duoc_lop_loi: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bat-duoc-lop-loi.mjs"
     ld_bon_lenh_cu: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs"
     ld_lang_theo_tieng: "bun _acceptance/lenh-dung-do-khong-ai-thay/rang/lang-theo-tieng.mjs"
+    hld_build_heap: "bun _acceptance/heap-lenh-dung/rang/build-heap.mjs"
     rang_suite_sach: 'bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan sach"'
     rang_suite_thu_tu: 'bun run test -- "bash _acceptance/sua-test-do-thu-tu-nap/rang-suite.sh --chan thu-tu"'
     rang_config_doi: "bash _acceptance/sua-test-do-thu-tu-nap/rang-config.sh --chan doi"
