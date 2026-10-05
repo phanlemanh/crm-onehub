@@ -210,7 +210,7 @@ export const OKR = {
 			kyDaQua: "Chu kỳ đã qua ngày cuối — không ghi số nữa.",
 			kyChuaToi: "Chu kỳ chưa tới ngày đầu — chưa ghi số được.",
 			crmKhongHopKieu:
-				"Chỉ số là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
+				"Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
 			danhSachDoiTac:
 				"Danh sách bản ghi thuộc dữ liệu đối tác — vai «chỉ OKR» chỉ xem được con số.",
 			ghiChuDoCanh: "đo cạnh",
@@ -226,7 +226,7 @@ export const OKR = {
 				"Pha đi từng bước: lập kế hoạch, đang chạy, chấm điểm, đã đóng.",
 			chamTuNgaySau: "Sang chấm điểm từ ngày sau ngày cuối của chu kỳ.",
 			thieuSoNgayCuoi: (n: number) =>
-				`Còn ${n} KR lấy số từ chỉ số chưa có số ngày cuối — chờ nhịp chụp số rồi thử lại.`,
+				`Còn ${n} KR nguồn CRM chưa có số ngày cuối — chờ nhịp chụp số rồi thử lại.`,
 			conKrChuaCham: (n: number) => `Còn ${n} KR chưa chấm.`,
 			krCoDoiDich: "KR đã có lần đổi đích — sửa được, không xoá được.",
 			krCoDiem: "KR đã có điểm cuối kỳ — không xoá được.",

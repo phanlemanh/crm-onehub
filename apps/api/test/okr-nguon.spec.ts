@@ -60,7 +60,7 @@ const CAU = {
 	daCoSoChup: "KR đã có lịch sử số — sửa được, không xoá được.",
 	doiTac: "Danh sách bản ghi thuộc dữ liệu đối tác",
 	crmKhongHopKieu:
-		"Chỉ số là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
+		"Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
 } as const;
 
 type Pha = "lap-ke-hoach" | "dang-chay" | "cham-diem" | "da-dong";

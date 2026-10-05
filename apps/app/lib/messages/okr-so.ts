@@ -76,7 +76,7 @@ const vi = {
 			moTa: "Người phụ trách ghi số ở cập nhật tuần.",
 		},
 		crm: {
-			nhan: "Chỉ số",
+			nhan: "Chỉ số CRM",
 			moTa: "Máy đếm từ dữ liệu trong OneHub Center mỗi sáng.",
 		},
 		api: {
@@ -89,7 +89,7 @@ const vi = {
 		},
 	},
 	dau: {
-		crm: "Chỉ số",
+		crm: "CRM",
 		api: "API",
 		bangTinh: "Sheets",
 	},
@@ -110,7 +110,7 @@ const vi = {
 			oBac: "Bậc",
 			dong: "Đóng",
 			crmKhongHopKieu:
-				"Chỉ số là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
+				"Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.",
 			xemTruoc: {
 				dangDem: "Đang đếm…",
 				toiHomNay: (dem: string) => `Tới hôm nay: ${dem}`,
@@ -263,7 +263,7 @@ const en: OkrSoMessages = {
 			moTa: "The owner enters the number in the weekly update.",
 		},
 		crm: {
-			nhan: "Metric",
+			nhan: "CRM metric",
 			moTa: "Counted every morning from data in OneHub Center.",
 		},
 		api: {
@@ -276,7 +276,7 @@ const en: OkrSoMessages = {
 		},
 	},
 	dau: {
-		crm: "Metric",
+		crm: "CRM",
 		api: "API",
 		bangTinh: "Sheets",
 	},
@@ -297,7 +297,7 @@ const en: OkrSoMessages = {
 			oBac: "Stage",
 			dong: "Close",
 			crmKhongHopKieu:
-				"Metrics are counts — a milestone or percentage KR can't take its number from them.",
+				"CRM metrics are counts — a milestone or percentage KR can't take its number from them.",
 			xemTruoc: {
 				dangDem: "Counting…",
 				toiHomNay: (dem: string) => `So far: ${dem}`,
