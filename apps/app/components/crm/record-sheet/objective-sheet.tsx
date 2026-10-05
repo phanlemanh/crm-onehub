@@ -38,7 +38,7 @@ import { TableCell } from "@crm/ui/components/table";
 import { krTheoKara } from "@crm/validation/okr-theo-kara";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
@@ -69,6 +69,7 @@ import {
 } from "@/app/(app)/[slug]/okr/tien-do-kr";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import {
+	CuonCaKhungContext,
 	DetailSheetBody,
 	DetailSheetEmpty,
 	DetailSheetSection,
@@ -357,7 +358,9 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 					mt.status !== "da-bo" &&
 					mt.choDuyet === null &&
 					mt.canEditKr.includes(kr.id)
-				: suaNoiDung(mt);
+				: hop.loai === "kr-moi"
+					? suaNoiDung(mt) || mt.themKrLe
+					: suaNoiDung(mt);
 	if (hop === null) return null;
 	if (!duoc)
 		return <BoKhoaUrl key={khoaHopOkr(hop)} bo={() => void datHop(null)} />;
@@ -378,7 +381,7 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 			mucTieu={mt}
 			kr={kr}
 			chuMacDinh={mt.owner.id}
-			suaDuocCot={mt.canEdit}
+			suaDuocCot={mt.canEdit || (kr === null && mt.themKrLe)}
 			dong={dong}
 		/>
 	);
@@ -489,8 +492,9 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const vung = useRef<HTMLDivElement>(null);
 	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
 	const coVungKara = gopY.noiDung !== "tat";
+	const khoKhung = useContext(CuonCaKhungContext);
 	useEffect(() => {
-		if (!neo || !gopY.daTai) return;
+		if (!neo || !gopY.daTai || khoKhung === "chua-biet") return;
 		if (coVungKara) {
 			const giam = window.matchMedia(
 				"(prefers-reduced-motion: reduce)",
@@ -501,7 +505,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 			});
 		}
 		void setNeo(null);
-	}, [neo, gopY.daTai, coVungKara, setNeo]);
+	}, [neo, gopY.daTai, coVungKara, setNeo, khoKhung]);
 
 	return (
 		<DetailSheetBody>
@@ -514,7 +518,11 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 				</div>
 			) : null}
 			<KhuGopVao mt={mt} />
-			<div className="scroll-mt-4 px-5 py-3 empty:hidden" ref={vung}>
+			<div
+				className="scroll-mt-4 px-5 py-3 empty:hidden"
+				data-vung-kara
+				ref={vung}
+			>
 				<VungKara gopY={gopY} moKr={moKr} soKr={mt.keyResults.length} />
 			</div>
 			<DetailSheetTable>
@@ -548,7 +556,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 					{m.tienDoTuSo(String(mt.progress), String(mt.keyResults.length))}
 				</p>
 			) : null}
-			{suaNoiDung(mt) ? (
+			{suaNoiDung(mt) || mt.themKrLe ? (
 				<div className="px-5 py-3">
 					<Button
 						size="sm"

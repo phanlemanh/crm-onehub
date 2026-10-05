@@ -5,6 +5,12 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.rang_suite_sach
+    paths:
+      - "_acceptance/sua-test-do-thu-tu-nap/rang-suite.sh"
+      - "packages/db/scripts/test-run.ts"
+      - "packages/db/scripts/test-db.ts"
+      - "apps/api/test/setup.ts"
+      - "apps/api/test/auth.e2e.spec.ts"
     expected: "exit 0; stdout co 'rang-suite sach:' voi 0 fail va pass >= 381"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -12,6 +18,16 @@ evals:
     criterion: AC-2
     executor: script
     cmd: config:executors.script.rang_suite_thu_tu
+    paths:
+      - "_acceptance/sua-test-do-thu-tu-nap/rang-suite.sh"
+      - "packages/db/scripts/test-run.ts"
+      - "packages/db/scripts/test-db.ts"
+      - "apps/api/test/setup.ts"
+      - "apps/api/test/auth.e2e.spec.ts"
+      - "apps/api/test/agent-lifecycle.spec.ts"
+      - "apps/api/src/**"
+      - "packages/auth/src/**"
+      - "packages/env/src/**"
     expected: "exit 0; co preload thi 0 fail, bo preload thi >=1 fail — hai chieu deu phai dung"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -19,6 +35,14 @@ evals:
     criterion: AC-3
     executor: script
     cmd: config:executors.script.db_test
+    paths:
+      - "packages/db/scripts/test-db.ts"
+      - "packages/db/scripts/test-db-admin.ts"
+      - "packages/db/src/test-database.ts"
+      - "packages/db/prisma.config.ts"
+      - "packages/db/prisma/schema.prisma"
+      - "packages/db/prisma/migrations/**"
+      - "packages/env/src/**"
     expected: "exit 0; khong con dong 'Neither TEST_DATABASE_URL nor DATABASE_URL is set'"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -26,6 +50,11 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.api_khong_cache_tru_agent
+    paths:
+      - "packages/db/scripts/test-run.ts"
+      - "packages/db/scripts/test-db.ts"
+      - "apps/api/test/setup.ts"
+      - "apps/api/test/auth.e2e.spec.ts"
     expected: "exit 0; turbo bao moi task con lai thanh cong, 0 cached; goi agent bi loai bang --filter=!agent"
     evidence_required: [run_id, exit_code, verifier, verified_at]
 
@@ -33,6 +62,9 @@ evals:
     criterion: AC-5
     executor: script
     cmd: config:executors.script.rang_config_doi
+    paths:
+      - "_acceptance/sua-test-do-thu-tu-nap/rang-config.sh"
+      - "_acceptance/config.yaml"
     expected: "exit 0; config that sach, va fixture co duong dan ghi cung bi bat — chieu do phai do"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -40,6 +72,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.resolve_plugin
+    paths:
+      - "scripts/resolve-plugin.mjs"
     expected: "exit 0; stdout la mot duong dan thu muc co that"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -47,6 +81,10 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.rang_config_o_cam
+    paths:
+      - "_acceptance/sua-test-do-thu-tu-nap/rang-config.sh"
+      - "_acceptance/config.yaml"
+      - "lib/evidence-core.cjs"
     expected: "exit 0; HAI o cam thiet ke doc ra ten skill (AC-7 goc doi ba — o khai thac da duoc ho so o-cam-khai-thac-trung-tinh thay the), fixture bo tung o thiet ke deu bi bat, va fixture CO khai o khai thac van xanh"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -54,6 +92,12 @@ evals:
     criterion: AC-8
     executor: script
     cmd: config:executors.script.rang_t1_chan
+    paths:
+      - "_acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh"
+      - "scripts/pre-merge-check.sh"
+      - "lib/workspace-record.cjs"
+      - "lib/evidence-core.cjs"
+      - "_acceptance/config.yaml"
     expected: "exit 0; cong tra ve khac 0 va in 'VIOLATION [PR]' cho file khong phai T1 khong kem ho so"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -61,6 +105,12 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.rang_t1_im
+    paths:
+      - "_acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh"
+      - "scripts/pre-merge-check.sh"
+      - "lib/workspace-record.cjs"
+      - "lib/evidence-core.cjs"
+      - "_acceptance/config.yaml"
     expected: "exit 0; luat t1-escape co chay va khong co dong VIOLATION [PR] cho diff chi cham file T1 — nua suppression"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -68,6 +118,11 @@ evals:
     criterion: AC-10
     executor: script
     cmd: config:executors.script.lint_khong_cache
+    paths:
+      - "apps/api/test/setup.ts"
+      - "apps/api/test/auth.e2e.spec.ts"
+      - "packages/db/scripts/test-db.ts"
+      - "scripts/resolve-plugin.mjs"
     expected: "exit 0; moi task lint thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -75,6 +130,11 @@ evals:
     criterion: AC-10
     executor: script
     cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - "apps/api/test/setup.ts"
+      - "apps/api/test/auth.e2e.spec.ts"
+      - "packages/db/scripts/test-db.ts"
+      - "scripts/resolve-plugin.mjs"
     expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -83,4 +143,8 @@ evals:
     executor: judgment
     question: "Khoi bien gia chuyen tu auth.e2e.spec.ts sang test/setup.ts. Test 'lets the sign-in page read what it may offer' van khang dinh google: true. Phep do con do dung thu no hua do khong, hay no da bi lam cho xanh bang cach noi long khang dinh?"
     inputs: [contract.md, apps/api/test/setup.ts, apps/api/test/auth.e2e.spec.ts]
+    paths:
+      - "_acceptance/sua-test-do-thu-tu-nap/contract.md"
+      - "apps/api/test/setup.ts"
+      - "apps/api/test/auth.e2e.spec.ts"
     evidence_required: [judged_by, verdict, rationale]

@@ -53,6 +53,7 @@
 		"./tai-lieu-chien-luoc": "./src/tai-lieu-chien-luoc.ts",
 		"./tai-lieu-de-xuat": "./src/tai-lieu-de-xuat.ts",
 		"./tai-lieu-nhac": "./src/tai-lieu-nhac.ts",
+		"./tai-lieu-nguon-mo-coi": "./src/tai-lieu-nguon-mo-coi.ts",
 		"./tai-lieu-hoi": "./src/tai-lieu-hoi.ts",
 		"./tai-lieu-quyen": "./src/tai-lieu-quyen.ts",
 		"./tai-lieu-tim": "./src/tai-lieu-tim.ts",

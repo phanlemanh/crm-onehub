@@ -1,6 +1,22 @@
-import { PROTO_CATALOG } from "../../../apps/app/app/proto/catalog.ts";
-import { PROTO_COMPONENTS } from "../../../apps/app/app/proto/registry.ts";
 import { SLUG_HO_SO, thoat } from "./may-chu.mjs";
+
+Bun.plugin({
+	name: "page-transition-ngoai-next",
+	setup(build) {
+		build.onLoad({ filter: /components\/page-transition\.tsx$/ }, () => ({
+			contents:
+				"export function PageTransition({ children }) { return children; }",
+			loader: "js",
+		}));
+	},
+});
+
+const { PROTO_CATALOG } = await import(
+	"../../../apps/app/app/proto/catalog.ts"
+);
+const { PROTO_COMPONENTS } = await import(
+	"../../../apps/app/app/proto/registry.ts"
+);
 
 const loi = [];
 const doi = (d, c) => {

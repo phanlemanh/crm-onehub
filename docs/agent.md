@@ -1443,6 +1443,18 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
   `<<<NGUON-HET>>>`, xoá mọi dấu `<<<…>>>` có sẵn trong nguồn.
 - **Chi phí** vào sổ `MAY_SOAN` của trang (token, giá theo `TAI_LIEU_AGENT.bangGia`,
   nhãn khoá `rieng`/`chung`), chưa vào sổ chi phí AI chung.
+- **Đọc tệp ném lỗi thì nguồn về `LOI` ngay.** `chaySoanTuNguon` bắt mọi lỗi bị ném sau
+  bước đặt `CHO_DOC` (lưu trữ chậm, bộ bóc chữ hỏng) và ghi `TAI_LIEU_AGENT.lyDo.docLoi` —
+  một câu cố định; lỗi gốc chỉ vào log, vì nó có thể mang URL ký. Không để lease tự thử lại:
+  người nạp bấm «Soạn lại». Các ca lỗi đã có (`khongTai`, `bamLech`, `can-go-tay`,
+  `thieuQuyTac`) vẫn giữ lý do của chúng.
+- **Lưới nguồn mồ côi.** `dongNguonMoCoi()` chạy trên nhịp dispatch cạnh
+  `dongMaySoanQuaHan()`: nguồn `CHO_DOC` không còn việc `soan-tu-nguon` nào mở
+  (`payload->>'nguonId'`) về `LOI` với `lyDo.moCoi`. Câu `UPDATE` sống ở
+  `@crm/db/tai-lieu-nguon-mo-coi` để test API chạy được nó sau một lượt tải lên thật. Đừng
+  thêm đường nào đặt `CHO_DOC` mà không tạo việc trong cùng transaction — lưới sẽ đóng nhầm.
+  Cận: lease làn hiện 6 phút × 3 lượt + một nhịp mỗi lượt ≈ 21 phút, dưới mốc 30 phút của
+  thước `_acceptance/kho-nguon-khong-ket/rang/dem-ket.ts`.
 
 ## Chỗ rẽ: Trợ lý AI đọc kho (lượt 4)
 
@@ -1488,6 +1500,15 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
   chung với tính năng `tai-lieu.tro-ly`.
 - `_acceptance/tro-ly-doc-kho/rang/nguong.ts` in tỉ lệ trả lời có trích và số báo sai
   cho phiên nghiệm thu; `rang/cham-bo-do.ts` chấm một bộ câu với model thật.
+- **Phiên gốc «kho» không thấy câu hỏi** (vòng `tro-ly-kho-dung-phien`). `guiHoiKho` gửi câu
+  cố định `TAI_LIEU_AGENT.hoi.tinGoc(hoiId)`; lời dặn của `tro_ly_kho` đọc `cauHoi` từ hàng
+  `TaiLieuHoi` và đặt giữa `hoi.dauCauHoi`. Câu Zalo chưa có `cauHoi` lúc mở nên không chèn.
+  Phiên gốc purpose `kho` chạy `modelTaiLieu("hoi")` — cùng model, khoá và ZDR với `tro_ly_kho`.
+- **eve không tắt được subagent theo phiên.** Định nghĩa agent không có `approval`, hook chỉ quan
+  sát. Lời dặn gốc của mọi purpose khác `kho`/`zalo` nối `KHONG_GOI_TRO_LY_KHO`; gọi sai chỗ vẫn
+  hỏng ở `session.started` của phiên con, và lời dặn ghi một `AgentEvent`
+  `tro-ly-kho.sai-cho` (`data.phienGoc`) trước khi ném lại. Thước
+  `_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.ts` đếm hàng đó theo tính năng của phiên gốc.
 
 ## Chỗ rẽ: Soạn OKR cùng Trợ lý
 

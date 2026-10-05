@@ -16,6 +16,10 @@ import {
 } from "@crm/ui/components/dialog";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import type {
+	KetQuaKhoiPhuc,
+	LyDoChanLuuTru,
+} from "@crm/validation/to-chuc-luu-tru";
 import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useRef } from "react";
 import { toast } from "sonner";
@@ -23,10 +27,11 @@ import { dien, dienNode } from "@/components/crm/record-sheet/plan-copy";
 import { okrTaiCoCauMessages } from "@/lib/messages/okr-tai-co-cau";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
+import { cauChanKhoiPhuc } from "./chan-khoi-phuc";
 import type { HoiLuuTru } from "./kieu";
 import { useLamMoiToChuc } from "./lam-moi";
 
-export type LyDoChan = { loai: "khuon" | "nguoi" | "okr"; cau: string };
+export type LyDoChan = LyDoChanLuuTru;
 
 function HopLuuTruChan({
 	hoi,
@@ -44,6 +49,14 @@ function HopLuuTruChan({
 	const c = okrTaiCoCauMessages(useLocale()).toChuc;
 	const idLyDo = useId();
 	const cap = hoi?.loai ?? "phong-ban";
+	const cauLyDo = (l: LyDoChan) => {
+		if (l.loai === "khuon")
+			return dienNode(c.chan.lyDoKhuon, {
+				khuon: <span translate="no">{l.khuon.join(", ")}</span>,
+			});
+		if (l.loai === "nguoi") return c.chan.lyDoNguoi(l.so);
+		return c.chan.lyDo[cap](l.so);
+	};
 	return (
 		<Dialog
 			open={hoi !== null}
@@ -77,7 +90,7 @@ function HopLuuTruChan({
 							<div id={idLyDo} className="flex flex-col gap-2">
 								{lyDo.map((l) => (
 									<div key={l.loai} className="flex flex-col gap-2">
-										<p data-ly-do-chan={l.loai}>{l.cau}</p>
+										<p data-ly-do-chan={l.loai}>{cauLyDo(l)}</p>
 										{l.loai === "okr" ? (
 											<div className="flex flex-col gap-2 sm:flex-row">
 												<Button
@@ -148,7 +161,11 @@ export function XacNhanLuuTru({
 		if (dangHoanTac.current) return;
 		dangHoanTac.current = true;
 		const xong = {
-			onSuccess: async () => {
+			onSuccess: async (kq: KetQuaKhoiPhuc) => {
+				if ("chan" in kq) {
+					toast.error(cauChanKhoiPhuc(locale, kq.chan));
+					return;
+				}
 				toast.success(dien(m.daKhoiPhucTen, { ten: x.name }));
 				await lamMoi();
 			},
@@ -163,7 +180,7 @@ export function XacNhanLuuTru({
 
 	const chanBoPhan: LyDoChan[] =
 		hoi?.loai === "bo-phan" && okrMo > 0
-			? [{ loai: "okr", cau: c.chan.lyDo["bo-phan"](okrMo) }]
+			? [{ loai: "okr", so: okrMo, cau: c.chan.lyDo["bo-phan"](okrMo) }]
 			: [];
 	const lyDo =
 		hoi?.loai === "phong-ban" ? (xemTruoc.data?.lyDo ?? []) : chanBoPhan;
