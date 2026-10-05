@@ -17,7 +17,7 @@
 - Hằng số tinh chỉnh đặt ở tệp cấu hình của vùng: `apps/agent/agent/lib/fields-config.ts` (`FIELDS_AGENT`), `apps/agent/agent/lib/model-config.ts` (`MODEL_DANH_MUC`), đơn vị suy từ `MINUTE_MS`/`SECOND_MS` kiểu `dispatch-config.ts`.
 - `MODEL_DANH_MUC.ttlMs` = 5 phút; `timeoutMs` = 5 giây; URL `https://ai-gateway.vercel.sh/v1/models`.
 - Câu từ chối `FIELDS_AGENT.tuChoi` = «Only a workspace owner or admin can change the team's fields. Ask one of them to do it from Settings › Fields.»
-- Hộp báo: en «The model you chose is no longer on the AI Gateway — the agent is running the default model. Pick another model.» · vi «Model đã chọn không còn trên AI Gateway — trợ lý đang chạy model mặc định. Chọn model khác.»
+- Hộp báo: en «The model you chose is no longer on the AI Gateway — the agent is running the default model. Pick another model.» · vi «Model đã chọn không còn trên AI Gateway — tác nhân đang chạy model mặc định. Chọn model khác.»
 - Nhãn vai trong sự kiện: `owner` | `admin` | `member` | `okr` | `khong-thanh-vien` | `tu-dong`.
 - Loại sự kiện: `truong.doi-qua-chat`, `model.bi-go-lui`, `model.khong-tim-thay`.
 - Parse ở biên bằng zod, không truyền `Record<string, unknown>`.

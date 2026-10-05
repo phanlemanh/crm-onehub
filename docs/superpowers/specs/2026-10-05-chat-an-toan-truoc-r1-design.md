@@ -63,7 +63,7 @@ Trong cửa sổ cache (model bị gỡ sau lần đọc danh mục cuối), lư
 
 `SettingsService.agentModel` trả thêm `selectedMissing: boolean` = có model đã chọn ∧ danh mục đọc được ∧
 id không có trong danh mục. Màn `settings/agent-model.tsx` hiện một `Alert` («Model đã chọn không còn trên
-AI Gateway — trợ lý đang chạy model mặc định. Chọn model khác.») khi cờ bật. Chữ ở
+AI Gateway — tác nhân đang chạy model mặc định. Chọn model khác.») khi cờ bật. Chữ ở
 `apps/app/lib/messages/*`, ghim ở `messages-guard`.
 
 <!-- <<<UX-SPEC-TEMPLATE -->
