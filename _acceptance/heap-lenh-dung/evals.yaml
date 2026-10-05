@@ -24,7 +24,9 @@ evals:
       Dung bang CHINH lenh cua buoc (truong `run:` doc duoc) noi them `-- --filter=app --force`,
       NODE_OPTIONS lay tu tep. Truoc moi luot dung: xoa `apps/app/.next` va moi `*.tsbuildinfo` trong
       `apps/app`, in "da xoa cache next" — dieu kien lanh nhu runner.
-      Xanh: ma 0, in "heap <n> MB · dung app ma 0".
+      Xanh: ma 0 VA dau ra co dong `app:build` bao pha type-check ("Running TypeScript" /
+      "Linting and checking validity of types"), in "heap <n> MB · dung app ma 0 · app:build qua pha
+      type-check". Ma 0 ma khong thay pha ay -> ma 2 (dung khong do dung vat).
       Do vi het heap: dau ra co dong mang tien to `app:build` chua "heap out of memory" /
       "Reached heap limit" / "Ineffective mark-compacts" -> ma 1 "next build het heap o <n> MB".
       Het heap o goi khac, do vi ly do khac, hay khong chay duoc lenh -> ma 2.

@@ -7,6 +7,7 @@ const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const NGUONG_DO_MB = 2048;
 const HET_HEAP = /heap out of memory|Reached heap limit|Ineffective mark-compacts/;
 const CO_HEAP = /--max-old-space-size=(\d+)/;
+const KIEM_KIEU = /Running TypeScript|Linting and checking validity of types/;
 
 const doiSo = process.argv.slice(2);
 const viTriTep = doiSo.indexOf("--tep");
@@ -65,7 +66,11 @@ if (ra.error) thoat(2, `MA 2: khong chay duoc '${lenh}' — ${ra.error.message}`
 
 const chu = `${ra.stdout}${ra.stderr}`;
 console.log(`lenh: ${lenh} · NODE_OPTIONS=${nodeOptions} · ma ${ra.status}`);
-if (ra.status === 0) thoat(0, `XANH: heap ${heapMb} MB · dung app ma 0`);
+if (ra.status === 0) {
+	const daKiemKieu = chu.split("\n").some((dong) => dong.startsWith("app:build") && KIEM_KIEU.test(dong));
+	if (!daKiemKieu) thoat(2, "MA 2: dung ma 0 nhung khong thay app:build chay pha type-check — khong phai vat duoc do");
+	thoat(0, `XANH: heap ${heapMb} MB · dung app ma 0 · app:build qua pha type-check`);
+}
 
 const dongHetHeap = chu.split("\n").filter((dong) => HET_HEAP.test(dong));
 if (dongHetHeap.some((dong) => dong.startsWith("app:build"))) thoat(1, `DO: next build het heap o ${heapMb} MB`);

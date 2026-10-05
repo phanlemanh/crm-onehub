@@ -5,7 +5,7 @@ slug: heap-lenh-dung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ci]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-05
 design_doc: docs/superpowers/specs/2026-10-05-heap-lenh-dung-design.md
@@ -54,3 +54,8 @@ không có trục liệt kê. Trỏ entry `descope` «bỏ coverage-scan» trong
 - Máy Mac có heap mặc định khác runner Ubuntu, nên phép đo tại chỗ không tái hiện được lượt đỏ ở 2048; nó
   chứng hai điều tái hiện được — giá trị khai tới được Next, và đủ để dựng xong. Bằng chứng trên chính runner
   là job «lệnh dựng» của PR mang hồ sơ này, đọc ở PR.
+- Cặp đo S3 (05/10, dưới khoá s4, đỉnh e413ce93): tệp thật → «XANH: heap 6144 MB · dung app ma 0 · app:build
+  qua pha type-check»; bản sao khai 1024 kèm `--bo-nguong` → mã 1 «next build het heap o 1024 MB», Next đổ
+  ở pha «Running TypeScript» — cùng pha với lượt đỏ của run 37263692533; ba chiều đỏ tĩnh (bỏ biến, 2048,
+  3072) mã 1 đúng thông điệp ghim. Chốt «phải thấy pha type-check» ở chiều xanh là chốt hạ tầng (mã 2),
+  không có chiều đỏ dựng tay: không dựng được một lượt Next mã 0 mà bỏ type-check trên cây này.
