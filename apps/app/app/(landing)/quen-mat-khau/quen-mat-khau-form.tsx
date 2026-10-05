@@ -5,9 +5,12 @@ import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { Field, FieldGroup, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import Link from "next/link";
 import { type FormEvent, useState } from "react";
+import { DauCuaVao } from "@/components/dau-cua-vao";
+import { authMessages } from "@/lib/messages/auth";
 
 const HTTP_QUA_LUOT = 429;
 
@@ -18,25 +21,6 @@ export type XinLienKet = (dau: {
 }) => Promise<{ error: { status?: number } | null }>;
 
 const xinThat: XinLienKet = (dau) => requestPasswordReset(dau);
-
-function Heading({
-	title,
-	description,
-}: {
-	title: string;
-	description: string;
-}) {
-	return (
-		<div className="flex flex-col gap-1">
-			<h2 className="text-2xl/8 font-semibold tracking-tight text-balance">
-				{title}
-			</h2>
-			<p className="max-w-[32ch] text-sm/5 text-muted-foreground text-pretty">
-				{description}
-			</p>
-		</div>
-	);
-}
 
 type XongChu = {
 	title: string;
@@ -67,6 +51,7 @@ export function QuenMatKhauForm({
 	xong: XongChu;
 	xin?: XinLienKet;
 }) {
+	const trangChu = authMessages(useLocale()).shell.homepage;
 	const [email, setEmail] = useState("");
 	const [trangThai, setTrangThai] = useState<TrangThai>("nhap");
 	const dangChay = trangThai === "dang-gui";
@@ -94,14 +79,22 @@ export function QuenMatKhauForm({
 		<div aria-live="polite" className="contents">
 			{trangThai === "da-gui" ? (
 				<>
-					<Heading description={xong.description} title={xong.title} />
+					<DauCuaVao
+						description={xong.description}
+						title={xong.title}
+						trangChu={trangChu}
+					/>
 					<Button asChild className="w-full" variant="outline">
 						<Link href="/sign-in">{xong.quayLai}</Link>
 					</Button>
 				</>
 			) : (
 				<>
-					<Heading description={description} title={title} />
+					<DauCuaVao
+						description={description}
+						title={title}
+						trangChu={trangChu}
+					/>
 					<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 						{cauBao ? (
 							<Alert variant="destructive">
