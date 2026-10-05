@@ -446,6 +446,8 @@ async function voiToken<T>(
 	chay: () => Promise<T>,
 ): Promise<T> {
 	const cu = process.env.ZALO_BOT_TOKEN;
+	const cuKhac = process.env.PERPLEXITY_API_KEY;
+	process.env.PERPLEXITY_API_KEY = "khoa-gia-de-co-muc-available";
 	await db.appSetting.update({
 		where: { id: SETTINGS_ID },
 		data: { zaloBotToken: o.caiDat },
@@ -457,6 +459,8 @@ async function voiToken<T>(
 	} finally {
 		if (cu === undefined) delete process.env.ZALO_BOT_TOKEN;
 		else process.env.ZALO_BOT_TOKEN = cu;
+		if (cuKhac === undefined) delete process.env.PERPLEXITY_API_KEY;
+		else process.env.PERPLEXITY_API_KEY = cuKhac;
 	}
 }
 
