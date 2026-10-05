@@ -244,6 +244,9 @@ evals:
            o HEAD chay lai tuan tu mot lan o HEAD (xanh -> in "chap chon", khong tinh), roi chay
            dung lenh do tren worktree tam o B (.acceptance-runs/tra-loi-tin-nhac/goc,
            go sau khi chay); eval nao xanh o B -> exit 1 "vong nay lam do them N eval: <ten>".
+        6. Bo qua cac thuoc do NHANH DANG XET cua vong khac (danh sach THUOC_DO_NHANH trong script,
+           moi muc kem ly do; muc khong con trong evals.yaml cua ho so do -> exit 2), in
+           "bo qua thuoc do nhanh: <ten> <id>" (them 05/10 o zalo-va).
       Doi chung duong cung fixture: tap rut ra chua nhac-qua-zalo — thieu -> exit 1 "bo rut tap hong".
       So lieu S3 (25/09, HEAD c3b2d780): 28 ho so, 378 eval may, 4 suite xanh, 46 eval do o HEAD,
       ca 46 do cung ma o 680d112a.
@@ -357,7 +360,7 @@ evals:
     expected: |
       Script doc ban nhanh va ban merge-base(origin/onehub) cua CONTEXT.md, docs/agent.md,
       docs/plan/lo-trinh-zalo.md. Kiem: muc Bot Zalo cua CONTEXT.md ban nhanh chua "xong" va
-      ban merge-base khong; docs/agent.md co mot doan chua ca bon moc `xong`, "được cả hoặc
+      ban ngay truoc commit dau cua ho so khong (doi tu merge-base 05/10 o zalo-va); docs/agent.md co mot doan chua ca bon moc `xong`, "được cả hoặc
       không", "hôm nay", `source: "zalo"`; dong tra-loi-tin-nhac o muc 7 co Trang thai thuoc
       tap gia tri muc 7 va khac "chờ điều kiện". In tung moc voi dat/khong dat; mot moc
       khong dat -> exit 1 va ghi ten moc.

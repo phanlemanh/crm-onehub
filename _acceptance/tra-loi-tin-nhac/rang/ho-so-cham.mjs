@@ -16,6 +16,18 @@ const SPEC_DA_KY = [
 	"zalo-webhook-doc-khuon-that",
 ].map((t) => `apps/agent/test/${t}.integration.spec.ts`);
 const DOI_CHUNG = "nhac-qua-zalo";
+const THUOC_DO_NHANH = [
+	{
+		hoSo: "ha-tran-thang-hoi-zalo",
+		id: "E7",
+		vi: "chay pre-merge-check tren nhanh dang xet, nen do vi chinh cac ho so ma lan ghim nay dang ghim lai",
+	},
+	{
+		hoSo: "slack-thieu-quyen-email",
+		id: "E10",
+		vi: "doi moi commit rieng cua nhanh dang xet mang ten ho so slack-thieu-quyen-email",
+	},
+];
 
 const git = (...a) =>
 	execFileSync("git", ["-C", GOC, ...a], { encoding: "utf8" });
@@ -52,6 +64,16 @@ function dung(ma, loi) {
 	console.error(loi);
 	process.exit(ma);
 }
+
+for (const t of THUOC_DO_NHANH) {
+	const tep = join(GOC, "_acceptance", t.hoSo, "evals.yaml");
+	const coId =
+		existsSync(tep) &&
+		new RegExp(`^\\s*- id: ${t.id}\\s*$`, "m").test(readFileSync(tep, "utf8"));
+	if (!coId) dung(2, `thuoc do nhanh khong con: ${t.hoSo} ${t.id}`);
+}
+const laThuocDoNhanh = (ten, id) =>
+	THUOC_DO_NHANH.some((t) => t.hoSo === ten && t.id === id);
 
 const coSo = git("merge-base", "HEAD", "origin/onehub").trim();
 const doi = git("diff", "--name-only", `${coSo}..HEAD`)
@@ -127,7 +149,13 @@ const doHead = loLan
 	.split("\n")
 	.map((d) => DONG.exec(d))
 	.filter((m) => m !== null && m[4] !== "0")
-	.map((m) => ({ ten: m[1], id: m[2], lenh: m[3], ma: Number(m[4]) }));
+	.map((m) => ({ ten: m[1], id: m[2], lenh: m[3], ma: Number(m[4]) }))
+	.filter((d) => {
+		if (!laThuocDoNhanh(d.ten, d.id)) return true;
+		const t = THUOC_DO_NHANH.find((x) => x.hoSo === d.ten && x.id === d.id);
+		console.log(`bo qua thuoc do nhanh: ${d.ten} ${d.id} — ${t?.vi ?? ""}`);
+		return false;
+	});
 console.log(`do o HEAD: ${doHead.length} eval`);
 if (doHead.length === 0) process.exit(0);
 
