@@ -1,104 +1,83 @@
-# Review findings: chat-an-toan-truoc-r1 (round 1)
+# Review findings: chat-an-toan-truoc-r1 (round 2)
 
 ## Trong hợp đồng
 
-- **The audit event records ketQua "lam" even when the field write was refused or did not happen**
-  file: `apps/agent/agent/tools/manage_fields.ts:86`
-  severity: medium
-  AC: AC-5
-  source: bugs
-  detail: After the permission check passes, both tools call ghi("lam") on whatever the lib returned, without checking the result. createField can return { created: false, reason } (fields.ts:129/138/145). updateFieldBrief can return { updated: false } when the field is not found (fields.ts:189). archiveField can return { archived: false } (fields.ts:214). In each case nothing was written, but a truong.doi-qua-chat row with ketQua "lam" is still logged (manage_fields.ts:86 and :103, archive_field.ts:37). AC-5 requires ketQua to match what actually happened. dem-doi-truong.ts then over-counts lam per role. Scenario: an admin asks chat to create a field whose label duplicates an existing key. The tool returns created:false, and the event log says the admin created a field. Fix: log "lam" only on a successful result (no created/updated/archived === false), and treat a refusal from the lib as its own outcome.
-
-- **Hình dạng 3 (assert «có mặt» thay vì quan hệ bằng nhau): E10 không ghim nguyên văn câu hộp báo biGo**
-  file: `_acceptance/chat-an-toan-truoc-r1/evals.yaml:164`
-  severity: medium
-  AC: AC-10
-  source: measurement
-  detail: Trong E10, mục expected hứa: «messages-guard.spec.ts xanh voi khoa moi cua hop bao ghim o GHIM/KHONG_DAU; vi === cau tieng Viet da khai, en === cau tieng Anh da khai (so nguyen van)». Lệnh r1e_chu chỉ chạy messages-guard.spec.ts và chat-an-toan-truong-chu.spec.ts. Trong diff, messages-guard.spec.ts không đổi và không có chỗ nào nhắc `biGo`. GHIM chỉ chứa hàm ghép biến; với khoá chuỗi, các ca it() ở dòng 1053–1067 chỉ kiểm khoá vi khớp khoá en, vi có dấu và vi khác en. chat-an-toan-truong-chu.spec.ts chỉ ghim FIELDS_AGENT.tuChoi. Vậy cả hai câu `model.biGo` (settings.ts dòng 68 bản en, dòng 257 bản vi) chỉ được đo theo tính chất «có dấu / có khoá», không được so bằng với câu đã khai. Sửa bản en thành câu khác, hoặc đổi bản vi sang một câu khác vẫn có dấu, thì E10 vẫn xanh. Chiều đỏ «bo dau» bắt được chỉ vì kiểm dấu là luật chung, không phải vì câu được ghim. Bước ui-check man-bi-go.mjs có viết cứng câu vi, nhưng câu en thì không phép đo nào chạm tới.
-
-- **Hình dạng 1 (đo nguồn chung thay vì đầu ra): ô (d) của E6 so agent với chính schema, không qua ModelCatalogService**
-  file: `apps/agent/test/model-lui-mac-dinh.integration.spec.ts:158`
-  severity: medium
-  AC: AC-6
-  source: measurement
-  detail: E6 hứa: «API ModelCatalogService doc cung than qua cung schema @crm/validation/gateway-danh-muc ra cung tap id». Dòng 158 lại dựng phía «API» bằng `new Set(docDanhMucGateway(JSON.parse(than)).map((m) => m.id))`, tức gọi thẳng hàm schema dùng chung. Phía agent, docDanhMucTuMang (model-danh-muc.ts dòng 20) cũng chỉ là `docDanhMucGateway(...).map((m) => m.id)`. Phép so ở dòng 159 vì thế là so một hàm với chính nó, nên đúng hiển nhiên. Đầu ra thật của API là ModelCatalogService.models(), có thêm toCatalogModel, sắp xếp và cache, và không được gọi với thân thật. Nếu ModelCatalogService quay lại dùng schema riêng, hoặc lọc khác đi, ô này vẫn xanh. Đây là đo tầng mà bên đọc dùng tới, không đo cái bên đọc API thật trả ra.
-
-- **Hình dạng 3 (đếm hàng có mặt, không kiểm giá trị): E11 không kiểm data.modelId của hàng model.khong-tim-thay**
-  file: `apps/agent/test/model-lui-mac-dinh.integration.spec.ts:279`
+- **The step.failed hook logs the wrong model id, and a failed lookup there throws**
+  file: `apps/agent/agent/hooks/telemetry.ts:81`
   severity: medium
   AC: AC-11
-  source: measurement
-  detail: AC-11 hứa hàng ghi ra «mang id model», và expected của E11 ghi «ghi dung 1 hang ... data.modelId dung». Test chỉ chạy `db.agentEvent.count({ where: { sessionId, type } })` rồi so với o.ghi (dòng 279–288), không đọc `data.modelId`. Hook lấy modelId từ `readAgentModel(db).id` (telemetry.ts), không lấy từ lỗi. Nếu hook ghi sai id (ví dụ id mặc định, chuỗi rỗng, hay id từ chỗ khác), E11 vẫn xanh vì chỉ đếm số hàng. Lời hứa «hàng mang đúng id model» chưa có phép đo nào.
-
-- **Hình dạng 4 (assert âm tính đứng một mình): bước 4 của man-bi-go.mjs xanh khi trang không dựng**
-  file: `_acceptance/chat-an-toan-truoc-r1/rang/man-bi-go.mjs:122`
-  severity: medium
-  AC: AC-9
-  source: measurement
-  detail: Bước 4 chỉ kiểm `d.dat(4, !m.coHop, ...)`. coHop được tính từ việc tìm một `[data-slot="alert"]` có innerText chứa đúng câu BI_GO. Trong bước này không có đối chứng dương nào cho thấy thẻ Model trợ lý thật sự đã dựng: không kiểm combobox có mặt, không kiểm tên model idCon có hiện. Trang lỗi, trang đăng nhập, phần Suspense chưa xong hay thẻ AgentModel trả null (`if (!settings.data) return null`) đều cho coHop false, và bước 4 vẫn «dat». Các bước 1–3 không đối chứng được cho bước 4 vì mỗi bước mở trang riêng, và chay(4) chạy được một mình. Như vậy vế «model có phục vụ thì hộp báo không hiện» của AC-9 được đo bằng một khẳng định âm không có đối chứng.
+  source: conventions
+  detail: The new branch writes `model.khong-tim-thay` with `(await readAgentModel(db)).id`. That is the workspace-wide setting, not the model the failing session actually used. A `kho` session runs `TAI_LIEU_AGENT.hoi.maModel` (see `modelChoPhienGoc` in lib/model.ts). A session where `modelTheoVai` already fell back runs the default model. In both cases a GatewayModelNotFoundError is recorded against the wrong id, so `dem-doi-truong` and the AC that counts these events measure the wrong thing. Separately, the same file already wraps `readAgentModel` in a never-throw helper (`configuredModel`, per the docs/agent.md rule 'A failed read logs and keeps the compiled fallback. Never throws.'). The new branch calls `readAgentModel` and `db.agentEvent.create` with no guard. A DB hiccup throws out of the telemetry hook, and the `modelError` emission below it never runs.
+  lý do vào hợp đồng: AC-11 đòi hàng model.khong-tim-thay mang id của model gây lỗi; ghi id cài đặt chung thay vì id model phiên thực dùng làm AC này sai ở phiên dùng model khác.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The new step.failed branch in the telemetry hook does unguarded DB reads and writes, so a DB error can throw out of the hook**
-  Người dùng thấy gì: Nếu cơ sở dữ liệu đang trục trặc đúng lúc model bị gỡ, lượt chat vốn đã hỏng có thể mất thêm bản ghi đếm lỗi gửi về hệ thống theo dõi; người dùng không thấy khác biệt gì ngoài việc số liệu thiếu.
-  file: `apps/agent/agent/hooks/telemetry.ts`
+- **The truong.doi-qua-chat event payload has two hand-written shapes instead of one schema in packages/validation**
+  Người dùng thấy gì: Nếu sau này thêm một vai mới trong workspace, công cụ đếm số lần đổi trường qua chat có thể báo lỗi thay vì in số, và chủ kho phải sửa tay trước khi đọc số.
+  file: `_acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.ts`
   severity: medium
   Đề xuất: known-limits
 
-- **API and agent read an empty Gateway catalog differently, so Settings shows a false 'running the default model' alert**
-  Người dùng thấy gì: Nếu danh sách model của hệ thống AI trả về rỗng, trang Cài đặt có thể báo sai rằng trợ lý đang chạy model mặc định, trong khi thật ra trợ lý vẫn dùng model đã chọn.
-  file: `apps/api/src/settings/settings.service.ts`
+- **laQuanTriWorkspace copies @crm/auth's isWorkspaceAdmin instead of moving it to validation**
+  Người dùng thấy gì: Hiện không ảnh hưởng người dùng: quyền sửa trường của chủ sở hữu và quản trị vẫn đúng. Chỉ là luật này nằm ở hai nơi, nên sau này sửa một nơi mà quên nơi kia thì bài kiểm sẽ báo đỏ.
+  file: `packages/validation/src/vai-workspace.ts`
   severity: medium
-  Đề xuất: known-limits
+  Đề xuất: wont-fix
 
-- **The agent treats a catalog row that fails the schema or is filtered out as 'removed from the Gateway'**
-  Người dùng thấy gì: Nếu hệ thống AI đổi cách mô tả một model, model đã chọn có thể bị tự thay bằng model mặc định và ghi nhận sai lý do là đã bị gỡ, dù thật ra nó vẫn còn.
-  file: `packages/validation/src/gateway-danh-muc.ts`
-  severity: low
-  Đề xuất: known-limits
-
-- **The agent's 'model not found' event records the workspace setting id, not the model that actually failed**
-  Người dùng thấy gì: Khi model lỗi không phải model đang đặt trong Cài đặt (ví dụ phiên đọc kho tài liệu hay lượt của Tác nhân), bản ghi lỗi có thể ghi tên model khác, làm số liệu 10/11 chỉ nhầm model cho quản trị.
-  file: `apps/agent/agent/hooks/telemetry.ts`
-  severity: low
-  Đề xuất: new-contract
-
-- **The 'crm-app' authenticator in the new permission check is a literal string, not the constant the chat channel uses**
-  Người dùng thấy gì: Nếu sau này ai đó đổi tên kênh đăng nhập của chat mà quên sửa chỗ kiểm quyền, mọi người kể cả quản trị sẽ bị từ chối sửa trường qua chat.
+- **The authenticator 'crm-app' is a string literal that duplicates BRIDGE_ISSUER**
+  Người dùng thấy gì: Hiện không ảnh hưởng ai. Chỉ nếu sau này đổi tên nguồn đăng nhập của chat mà quên chỗ này, mọi người dùng, kể cả quản trị, sẽ bị từ chối đổi trường qua chat.
   file: `apps/agent/agent/lib/quyen-truong.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **ModelCatalogService.find is now dead code**
-  Người dùng thấy gì: Không ảnh hưởng người dùng; chỉ là một đoạn mã không còn ai gọi và một bài kiểm tra giả lập thừa.
-  file: `apps/api/src/settings/model-catalog.service.ts`
+- **The Gateway catalog URL is still kept in two apps after the schema moved to a shared module**
+  Người dùng thấy gì: Hiện không ảnh hưởng người dùng. Nếu địa chỉ danh mục model của Gateway đổi, phải sửa ở hai nơi, quên một nơi thì Cài đặt và chat nhìn hai danh mục khác nhau.
+  file: `apps/agent/agent/lib/model-config.ts`
   severity: low
   Đề xuất: wont-fix
 
-- **model.khong-tim-thay records the configured model id, not the model that actually failed**
-  Người dùng thấy gì: Con số model bị gỡ đọc vào ngày 10/11 có thể chỉ sai model trong vài tình huống (phiên kho tài liệu, lượt Tác nhân, hoặc model mặc định cũng hỏng), khiến quản trị xử lý nhầm chỗ.
-  file: `apps/agent/agent/hooks/telemetry.ts`
+- **The event write runs after the field write with no transaction; a failed event write throws after the change is committed**
+  Người dùng thấy gì: Hiếm khi cơ sở dữ liệu trục trặc đúng lúc ghi nhật ký, trường vẫn được tạo hoặc đổi nhưng chat báo lỗi, và nếu thử lại sẽ báo trường đã tồn tại; nhật ký đếm sẽ thiếu một lần.
+  file: `apps/agent/agent/tools/manage_fields.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **The committed r1e screenshots are byte-identical across states that should differ**
+  Người dùng thấy gì: Người ký duyệt sẽ thấy các ảnh minh chứng của trạng thái có và không có hộp báo giống hệt nhau, nên phải xem ảnh cuộn riêng để thấy hộp báo thật.
+  file: `_acceptance/chat-an-toan-truoc-r1/evidence/r1e-bi-go-1440.png`
+  severity: low
+  Đề xuất: known-limits
+
+- **A failed Gateway catalog read is never cached, so every session start can stall for 5 seconds with no log**
+  Người dùng thấy gì: Khi dịch vụ danh mục model treo hoặc không với tới được, mỗi lần mở một cuộc chat sẽ chờ thêm tới 5 giây mà không có dấu vết nào giải thích vì sao chậm.
+  file: `apps/agent/agent/lib/model-danh-muc.ts`
   severity: medium
   Đề xuất: new-contract
 
-- **An unguarded DB call in step.failed can throw and skip the existing modelError telemetry**
-  Người dùng thấy gì: Khi cơ sở dữ liệu lỗi đúng lúc model bị gỡ, hệ thống có thể không gửi được báo cáo lỗi model vốn có sẵn, nên đội kỹ thuật thấy ít lỗi hơn thực tế.
-  file: `apps/agent/agent/hooks/telemetry.ts`
+- **settings.agentModel reports the removed model as effectiveId while selectedMissing says the agent runs the default**
+  Người dùng thấy gì: Khi model đã chọn bị gỡ, Cài đặt vừa báo trợ lý đang chạy model mặc định, vừa ghi ngay bên dưới rằng model đã bị gỡ là model đang chạy, nên quản trị đọc thấy mâu thuẫn.
+  file: `apps/api/src/settings/settings.service.ts`
+  severity: low
+  Đề xuất: new-contract
+
+- **The Settings alert can lag the agent's fallback by up to 30 minutes because the API and agent cache the catalog differently**
+  Người dùng thấy gì: Khi model bị gỡ, chat đã chuyển sang model mặc định nhưng hộp cảnh báo trong Cài đặt có thể chưa hiện tới khoảng 30 phút, nên quản trị biết muộn.
+  file: `apps/api/src/settings/model-catalog.service.ts`
   severity: low
   Đề xuất: known-limits
 
-- **ghiBiGoLui marks the model as reported before the write, so a failed insert loses the event for the whole process**
-  Người dùng thấy gì: Nếu lần ghi nhận đầu tiên bị lỗi, hệ thống sẽ không thử ghi lại cho đến khi khởi động lại, nên số lần model bị gỡ có thể đếm thiếu là 0 dù trợ lý vẫn đã lùi về mặc định.
-  file: `apps/agent/agent/lib/model-danh-muc.ts`
+- **Shape 2 (hand-written fixture matching the reader's shape): E11 builds step.failed.details by hand from exactly the keys the hook reads**
+  Người dùng thấy gì: Nếu thư viện chạy trợ lý đổi cách báo lỗi model không tìm thấy, bộ đếm lượt chat hỏng vì model bị gỡ có thể lặng lẽ đếm ra 0 trong khi chat vẫn hỏng, và kiểm thử vẫn xanh.
+  file: `apps/agent/test/model-lui-mac-dinh.integration.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Shape 1 (proving with an artifact that does not show the output): E9u's 'alert shown' and 'alert hidden' screenshots are byte-identical**
+  Người dùng thấy gì: Ảnh do phép đo tự chụp không cho thấy hộp báo, nên người duyệt phải dựa vào ảnh cuộn do agent kiểm tra chụp thay vì ảnh của chính phép đo.
+  file: `_acceptance/chat-an-toan-truoc-r1/rang/man-bi-go.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **docDanhMucTuMang swallows every catalog read failure without logging**
-  Người dùng thấy gì: Khi không đọc được danh sách model, hệ thống lặng lẽ giữ model đã chọn và không để lại dấu vết, nên khó biết vì sao việc phát hiện model bị gỡ đã ngừng hoạt động.
-  file: `apps/agent/agent/lib/model-danh-muc.ts`
-  severity: low
-  Đề xuất: known-limits
-
-⚠ Cụm ngoài vùng phủ: 2/15 lỗi rơi vào file không bộ đo nào phủ (apps/api/src/settings/model-catalog.service.ts, _acceptance/chat-an-toan-truoc-r1/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 2/12 lỗi rơi vào file không bộ đo nào phủ (_acceptance/chat-an-toan-truoc-r1/evidence/r1e-bi-go-1440.png, apps/api/src/settings/model-catalog.service.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
