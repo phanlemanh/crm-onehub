@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 5cbbd0f17466a5e07e1881e72d7760a47d0c3569
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-05
 ---
 
 # Evidence Report: to-chuc-chi-tiet-cho-url

@@ -5,7 +5,7 @@ slug: to-chuc-chi-tiet-cho-url
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -52,3 +52,9 @@ trong tệp, không nới khẳng định; chạy lại nhiều lượt dưới 
 
 - Neo so sánh là `ee0cc227cf1926a5359e10fdce07ffdeec57c183` (đỉnh onehub khi mở vòng), không neo `merge-base`: sau khi merge thì merge-base tiến lên và phép so sẽ luôn đúng.
 - Bản sao của E3/E4 nằm ở `apps/app/test/.scratch/tcu-*-<pid>.ban-sao.tsx` (alias `@/` chỉ giải trong gói app; import tương đối được viết lại thêm một cấp), xoá trong `finally`; răng thoát 2 nếu còn sót bản sao của chính lượt. `.scratch/` bị gitignore nên `biome check .` không quét, oxlint bỏ qua `**/.scratch/**`, còn runner `test:dom` chỉ nhận đuôi `.dom.tsx` — làn S4 chạy suite song song với E3/E4 không nhặt được bản sao.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-05 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1 (sổ d-20261005T040400Z-9, -10):
+
+- Ngoài-3: chiều xanh của E3 chỉ kiểm «không ca nào đỏ» trong junit, không so số ca với 29 hay đọc mã thoát của bun — bản sao có trễ bị dừng giữa tệp vẫn có thể ra xanh. E4 đếm đủ 29 × 20 lượt nên che phần lớn ca này.
+- Ngoài-4: E1 chỉ quét thân từng ca `test(...)`; một hàm phụ ở cấp tệp đọc `url` hay gọi `bam` thì không bị tính. Tệp hiện không có hàm như vậy.
+- Ngoài-2 (dời một `cho` xuống sau câu kiểm tra mà E2 vẫn xanh) tách thành hợp đồng mới; Ngoài-1 chấp nhận, không sửa.
