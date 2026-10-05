@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5cbbd0f17466a5e07e1881e72d7760a47d0c3569
+verified_commit: b8b51e77d9069cf3b63a4bcf14e0f0ad43dfb097
 human_signoff: Phan Le Manh 2026-10-05
 ---
 
@@ -112,3 +112,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1, E2, E3, E4 deu xanh, moi eval feature do red tren baseline; cac lenh suite hoi quy deu xanh. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-05, do hoá cũ sau gộp onehub c810f83e (#261, #262)
+run_id: repin-20261005T062642Z-60657
+sha: b8b51e77d9069cf3b63a4bcf14e0f0ad43dfb097 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng
