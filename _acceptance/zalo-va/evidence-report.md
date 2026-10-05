@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8b1cf1fc86fd3e5932ef8d605c67f1252c49099b
+verified_commit: 753faa20cd70440628fbbf3f007a5da3a98c4312
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng 2 trên verdict PASS 9/9 eval (S4 round 1, wf_4081063d-f20). Ngoài-1, 2, 3 ghi Known limits; Ngoài-4 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -177,3 +177,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1 đến E9 đều xanh, mọi lệnh suite xanh, không eval nào đỏ; không có judgment eval nên không có bảng chấm.
+
+### Re-pin lần 1 — 2026-10-05, do zalo-va (R1g): thước nguong.ts, E11, E17 của tra-loi-tin-nhac; gộp onehub e0b08ccd
+run_id: repin-20261005T144800Z-79320
+sha: 753faa20cd70440628fbbf3f007a5da3a98c4312 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng

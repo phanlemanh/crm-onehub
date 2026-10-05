@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b44d3d3e376855edcc58639630415cb68cc44437
+verified_commit: 753faa20cd70440628fbbf3f007a5da3a98c4312
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -274,3 +274,7 @@ sha: 51c4ee4dc15d5798da7264a1d6aad637b5c46db5 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-26, do lượt cuối độc quyền cả máy sau gộp onehub 31a9f0ba (#147)
 run_id: repin-20260926T000407Z-89806
 sha: b44d3d3e376855edcc58639630415cb68cc44437 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng
+
+### Re-pin lần 5 — 2026-10-05, do zalo-va (R1g): thước nguong.ts, E11, E17 của tra-loi-tin-nhac; gộp onehub e0b08ccd
+run_id: repin-20261005T144800Z-79320
+sha: 753faa20cd70440628fbbf3f007a5da3a98c4312 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng
