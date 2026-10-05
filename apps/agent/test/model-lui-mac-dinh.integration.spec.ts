@@ -24,7 +24,7 @@ import {
 	ModelCatalogService,
 } from "../../api/src/settings/model-catalog.service";
 import telemetry from "../agent/hooks/telemetry";
-import { modelChoLuot, modelTheoVai } from "../agent/lib/model";
+import { MODEL_GOC, modelChoLuot, modelTheoVai } from "../agent/lib/model";
 import { MODEL_DANH_MUC } from "../agent/lib/model-config";
 import {
 	datNguonDanhMuc,
@@ -32,6 +32,8 @@ import {
 	docDanhMucTuMang,
 } from "../agent/lib/model-danh-muc";
 import { TAI_LIEU_AGENT } from "../agent/lib/tai-lieu-config";
+import agentRunner from "../agent/subagents/agent_runner/agent";
+import troLyKho from "../agent/subagents/tro_ly_kho/agent";
 
 const DA_CHON = "openai/gpt-x";
 
@@ -325,50 +327,117 @@ describe("khong-tim-thay", () => {
 });
 
 describe("khong-tim-thay", () => {
-	test("khong-tim-thay: hang mang id model ma phien that dung, ba khung viet truoc", async () => {
+	test("khong-tim-thay: hang mang model phien da chon luc bat dau, khong tinh lai luc hong, nam khung viet truoc", async () => {
 		const goc = new GatewayModelNotFoundError({
 			message: "Model not found",
 			statusCode: 404,
 		});
+		const phien = (ten: string, attributes: Record<string, string> = {}) => ({
+			session: {
+				id: `r1e-ktt-chon-${ten}-${Date.now()}`,
+				auth: { current: { attributes }, initiator: null },
+			},
+		});
+		type Phien = ReturnType<typeof phien>;
+		const choGhi = async (sessionId: string) => {
+			for (let i = 0; i < 50; i += 1) {
+				const co = await db.agentEvent.count({
+					where: { sessionId, type: MODEL_DANH_MUC.suKienChon },
+				});
+				if (co > 0) return;
+				await new Promise((r) => setTimeout(r, 20));
+			}
+			throw new Error(`khong-tim-thay: ${sessionId} khong ghi model phien`);
+		};
 		const KHUNG = [
-			{ ten: "phien thuong", attributes: {}, mong: DA_CHON },
+			{
+				ten: "phien thuong, model bi go sau khi bat dau",
+				ctx: phien("thuong"),
+				bat: (c: Phien) =>
+					voiNguon(
+						layVeGia("co"),
+						() =>
+							MODEL_GOC.events["session.started"]?.(
+								{ type: "session.started" } as never,
+								c as never,
+							) ?? Promise.resolve(null),
+					),
+				mong: DA_CHON,
+			},
 			{
 				ten: "phien kho",
-				attributes: { purpose: "kho" },
+				ctx: phien("kho", { purpose: "kho" }),
+				bat: (c: Phien) =>
+					Promise.resolve(
+						MODEL_GOC.events["session.started"]?.(
+							{ type: "session.started" } as never,
+							c as never,
+						),
+					),
 				mong: TAI_LIEU_AGENT.hoi.maModel,
 			},
 			{
 				ten: "luot tac nhan",
-				attributes: {
+				ctx: phien("luot", {
 					purpose: "team-agent",
 					modelId: "ghim/model-luot",
 					modelContextWindowTokens: "200000",
-				},
+				}),
+				bat: (c: Phien) =>
+					Promise.resolve(
+						(
+							agentRunner.model as unknown as {
+								events: Record<string, (e: never, c: never) => unknown>;
+							}
+						).events["session.started"]?.(
+							{ type: "session.started" } as never,
+							c as never,
+						),
+					),
 				mong: "ghim/model-luot",
 			},
+			{
+				ten: "phien con tro_ly_kho",
+				ctx: phien("con-kho"),
+				bat: (c: Phien) =>
+					Promise.resolve(
+						(
+							troLyKho.model as unknown as {
+								events: Record<string, (e: never, c: never) => unknown>;
+							}
+						).events["step.started"]?.(
+							{ type: "step.started" } as never,
+							c as never,
+						),
+					),
+				mong: TAI_LIEU_AGENT.hoi.maModel,
+			},
 		] as const;
-		expect(KHUNG.length).toBe(3);
+		expect(KHUNG.length).toBe(4);
 		const sai: string[] = [];
+		const luiTruoc = await db.agentEvent.count({
+			where: { type: MODEL_DANH_MUC.suKienLui },
+		});
 		for (const k of KHUNG) {
-			const sessionId = `r1e-ktt-khung-${k.ten}-${Date.now()}`;
-			await telemetry.events["step.failed"]?.(
-				{
-					type: "step.failed",
-					data: {
-						code: "MODEL_CALL_FAILED",
-						message: "model call failed",
-						details: { gatewayName: goc.name, gatewayType: goc.type },
-					},
-				} as never,
-				{
-					session: {
-						id: sessionId,
-						auth: { current: { attributes: k.attributes }, initiator: null },
-					},
-				} as never,
+			await k.bat(k.ctx);
+			await choGhi(k.ctx.session.id);
+			await voiNguon(layVeGia("thieu"), () =>
+				Promise.resolve(
+					telemetry.events["step.failed"]?.(
+						{
+							type: "step.failed",
+							data: {
+								code: "MODEL_CALL_FAILED",
+								message: "model call failed",
+								details: { gatewayName: goc.name, gatewayType: goc.type },
+							},
+						} as never,
+						k.ctx as never,
+					),
+				),
 			);
 			const hang = await db.agentEvent.findMany({
-				where: { sessionId, type: MODEL_DANH_MUC.suKienHong },
+				where: { sessionId: k.ctx.session.id, type: MODEL_DANH_MUC.suKienHong },
 				select: { data: true },
 			});
 			const ids = hang.map((h) => duLieuKhongTimThay.parse(h.data).modelId);
@@ -377,6 +446,41 @@ describe("khong-tim-thay", () => {
 					`khong-tim-thay: ${k.ten} ghi ${JSON.stringify(ids)}, mong ${k.mong}`,
 				);
 			}
+		}
+		const luiSau = await db.agentEvent.count({
+			where: { type: MODEL_DANH_MUC.suKienLui },
+		});
+		if (luiSau !== luiTruoc) {
+			sai.push(
+				`khong-tim-thay: hook tao ${luiSau - luiTruoc} hang bi-go-lui gia`,
+			);
+		}
+		const khongGhi = phien("khong-ghi");
+		await telemetry.events["step.failed"]?.(
+			{
+				type: "step.failed",
+				data: {
+					code: "MODEL_CALL_FAILED",
+					message: "model call failed",
+					details: { gatewayName: goc.name, gatewayType: goc.type },
+				},
+			} as never,
+			khongGhi as never,
+		);
+		const hangKhongGhi = await db.agentEvent.findMany({
+			where: {
+				sessionId: khongGhi.session.id,
+				type: MODEL_DANH_MUC.suKienHong,
+			},
+			select: { data: true },
+		});
+		const idKhongGhi = hangKhongGhi.map(
+			(h) => duLieuKhongTimThay.parse(h.data).modelId,
+		);
+		if (idKhongGhi.length !== 1 || idKhongGhi[0] !== DA_CHON) {
+			sai.push(
+				`khong-tim-thay: phien khong co ban ghi ghi ${JSON.stringify(idKhongGhi)}`,
+			);
 		}
 		expect(sai).toEqual([]);
 	});

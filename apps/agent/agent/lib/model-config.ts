@@ -7,5 +7,6 @@ export const MODEL_DANH_MUC = {
 	timeoutMs: 5 * SECOND_MS,
 	suKienLui: "model.bi-go-lui",
 	suKienHong: "model.khong-tim-thay",
+	suKienChon: "model.phien-chon",
 	phienSuKien: "model-danh-muc",
 } as const;
