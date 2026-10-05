@@ -32,6 +32,14 @@ agent and the API both need it.
   bị Google từ chối cả lời gọi. `test/khuon-di-dong.spec.ts` quét mọi tệp.
 - **`lib/model.ts` always sends `modelContextWindowTokens`**; eve never inherits it.
 - **A failed read logs and keeps the compiled fallback.** Never throws.
+- **Model bị Gateway gỡ thì lùi về mặc định.** `modelTheoVai` đối chiếu model đã chọn với
+  danh mục `GET /v1/models` (`lib/model-danh-muc.ts`, schema chung
+  `@crm/validation/gateway-danh-muc`, nhớ tạm `MODEL_DANH_MUC.ttlMs` 5 phút). Đọc được mà
+  thiếu id → trả `null` và ghi `AgentEvent` `model.bi-go-lui` một lần mỗi id mỗi tiến
+  trình; không đọc được → giữ model đã chọn. Lượt vẫn hỏng trong cửa sổ nhớ tạm thì hook
+  `step.failed` ghi `model.khong-tim-thay` (khớp `details.gatewayName`/`gatewayType`, không
+  khớp chữ). Cài đặt hiện hộp báo khi `settings.agentModel.selectedMissing`. Bài kiểm
+  agent dùng nguồn danh mục «không đọc được» qua preload `test/support/danh-muc-mac-dinh.ts`.
 - **The chooser offers only `tool-use` models** (`ModelCatalogService`).
 - **Not a frontier model, deliberately** — refusing wrong answers is enforced by the
   tools and evidence model, not model strength.
@@ -1409,6 +1417,18 @@ Tệp của hãng lượt này chạm — `git diff` của nhánh giao với dan
   `@ai-sdk/gateway` 4.0.69 dùng.
 - `.env.example`, `turbo.json`, `apps/agent/turbo.json`, `docs/environment.md` —
   biến `OKR_AI_GATEWAY_API_KEY`.
+
+## Chỗ rẽ: chat đổi trường của cả đội (R1e)
+
+- `manage_fields` (`create`, `update-brief`) và `archive_field` chạy chốt
+  `quyenDoiTruong` (`lib/quyen-truong.ts`) trước khi ghi: chỉ `owner`/`admin` của
+  workspace (luật `laQuanTriWorkspace` ở `@crm/validation/vai-workspace`, trùng
+  `canManageFields` của API — `apps/api/test/luat-vai-truong-trung.spec.ts` ghim). Phiên
+  không có người (`isAutomated`: dispatch nền, lượt Tác nhân) luôn bị từ chối.
+  `archive_field` vẫn hỏi duyệt như cũ.
+- Mỗi lần chạy, làm hay từ chối, ghi `AgentEvent` `truong.doi-qua-chat`
+  (`hanhDong`, `vai`, `ketQua`); `_acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.ts`
+  đếm cùng hai loại sự kiện model ở mục Model.
 
 ## Chỗ rẽ: Máy soạn của Kho tài liệu (lượt 2)
 

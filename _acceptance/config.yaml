@@ -1194,6 +1194,16 @@ executors:
     l4b_tu_choi: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-dung-phien.integration.spec.ts -t kd-tu-choi"'
     l4b_hoi_cu: 'bun run test -- "cd apps/agent && bun test test/tro-ly-kho-nop.spec.ts && TZ=Asia/Ho_Chi_Minh bun test test/tro-ly-kho-zalo.integration.spec.ts"'
     l4b_dem: 'bun run test -- "bun test _acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.spec.ts"'
+    r1e_tao_truong: 'bun run test -- "cd apps/agent && bun test test/chat-an-toan-truong.integration.spec.ts -t ca-truong-tao"'
+    r1e_luu_tru_truong: 'bun run test -- "cd apps/agent && bun test test/chat-an-toan-truong.integration.spec.ts -t ca-truong-luu-tru"'
+    r1e_phien_may: 'bun run test -- "cd apps/agent && bun test test/chat-an-toan-truong.integration.spec.ts -t ca-truong-phien-may"'
+    r1e_luat_vai: "cd apps/api && bun test test/luat-vai-truong-trung.spec.ts"
+    r1e_dem_truong: 'bun run test -- "cd apps/agent && bun test test/chat-an-toan-truong.integration.spec.ts -t ca-truong-su-kien && cd ../.. && bun test _acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.spec.ts"'
+    r1e_model_lui: 'bun run test -- "cd apps/agent && bun test test/model-lui-mac-dinh.integration.spec.ts -t model-lui"'
+    r1e_danh_muc_cache: 'bun run test -- "cd apps/agent && bun test test/model-lui-mac-dinh.integration.spec.ts -t danh-muc"'
+    r1e_khong_tim_thay: 'bun run test -- "cd apps/agent && bun test test/model-lui-mac-dinh.integration.spec.ts -t khong-tim-thay"'
+    r1e_api_bi_go: 'bun run test -- "cd apps/api && bun test test/cai-dat-model-bi-go.spec.ts"'
+    r1e_chu: "cd apps/app && bun test test/messages-guard.spec.ts test/chu-model-bi-go.spec.ts && cd ../agent && bun test test/chat-an-toan-truong-chu.spec.ts"
     r1c_dg_da_gui_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cap-nhat-tuan.dom.tsx -t 'da gui dem dung'"
     r1c_dg_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx" --mode static'
     tpa_hop_le: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t hop-le
@@ -1834,6 +1844,7 @@ executors:
     k1_san_thiet_ke: '{ find packages/ui/src/components/kara -name "*.tsx"; printf "%s\n" packages/ui/src/components/ai-elements/artifact.tsx packages/ui/src/components/ai-elements/task.tsx; } | while IFS= read -r t; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     k1_ranh_gioi: 'node _acceptance/bo-xuong-kara/rang/ranh-gioi.mjs'
     l4a_man_lien_ket_loi: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/kho-nguon-khong-ket/rang/man-lien-ket-loi.mjs"'
+    r1e_man_bi_go: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/chat-an-toan-truoc-r1/rang/man-bi-go.mjs"'
     r1b_soi_vat: "bun _acceptance/thanh-vien-vao-dung/rang/soi-vat.mjs"
     r1b_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/thanh-vien-vao-dung/rang/do-man.mjs"'
     r1b_tu_dien: "bun _acceptance/thanh-vien-vao-dung/rang/tu-dien.mjs"
