@@ -1,14 +1,24 @@
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
 import {
-	parseZaloGetMe,
 	parseZaloWebhookInfo,
 	type ZaloLyDo,
 } from "@crm/validation/zalo-update";
-import { zaloGoi, zaloGoiTho, zaloToken } from "./zalo-api";
+import { zaloGoiTho, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
+import {
+	type GhiGetMe,
+	ghiAnToan,
+	ghiGetMeLoi,
+	type PhanGetMe,
+	phanLopGetMe,
+} from "./zalo-getme";
 
-export type PhuThuocBot = { fetcher?: typeof fetch; now?: () => Date };
+export type PhuThuocBot = {
+	fetcher?: typeof fetch;
+	now?: () => Date;
+	ghi?: GhiGetMe;
+};
 
 export type TrangThaiBot = "tat" | "song" | "loi";
 
@@ -45,18 +55,25 @@ async function docBot(
 	token: string,
 	fetcher: typeof fetch,
 	now: Date,
+	ghi: GhiGetMe,
 ): Promise<boolean> {
+	let phan: PhanGetMe | null = null;
 	try {
-		const { tenBot } = parseZaloGetMe(
-			await zaloGoi(fetcher, token, "getMe", {}),
-		);
-		await ghiBot({ zaloBotName: tenBot, zaloPolledAt: now });
-		return true;
+		phan = await zaloGoiTho(fetcher, token, "getMe", {});
 	} catch (loi) {
-		console.error(`[zalo] getMe loi, coi Zalo la tat: ${String(loi)}`);
-		await ghiBot({ zaloBotName: null, zaloWebhookUrl: null });
-		return false;
+		console.error(`[zalo] getMe loi mang: ${String(loi)}`);
 	}
+	const ket = phanLopGetMe(phan);
+	if (ket.loai === "duoc") {
+		await ghiBot({ zaloBotName: ket.tenBot, zaloPolledAt: now });
+		return true;
+	}
+	console.error(`[zalo] getMe ${ket.loi.lop}, ${ket.loi.ketLuan}`);
+	await ghiAnToan(ghi, "kiem-bot", token, ket.loi);
+	if (ket.loi.ketLuan === "token-sai") {
+		await ghiBot({ zaloBotName: null, zaloWebhookUrl: null });
+	}
+	return false;
 }
 
 async function docWebhook(token: string, fetcher: typeof fetch): Promise<void> {
@@ -96,7 +113,8 @@ export async function kiemBot(deps: PhuThuocBot = {}): Promise<TrangThaiBot> {
 		await ghiBot({ zaloBotName: null });
 		return "tat";
 	}
-	if (!(await docBot(token, fetcher, now))) return "loi";
+	if (!(await docBot(token, fetcher, now, deps.ghi ?? ghiGetMeLoi)))
+		return "loi";
 	await docWebhook(token, fetcher);
 	await db.zaloUpdateSeen.deleteMany({
 		where: { seenAt: { lt: new Date(now.getTime() - ZALO.poll.giuDauMs) } },
