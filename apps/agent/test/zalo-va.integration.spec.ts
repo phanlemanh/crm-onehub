@@ -6,6 +6,11 @@ import { vanTay, ZALO_GETME } from "@crm/db/zalo-getme";
 import { suKienGetMe } from "@crm/validation/zalo-getme";
 import { khungUngDungMessages } from "../../app/lib/messages/khung-ung-dung";
 import { nhacQuaZaloMessages } from "../../app/lib/messages/nhac-qua-zalo";
+import {
+	capabilities,
+	capabilitiesMarkdown,
+	logCapabilities,
+} from "../agent/lib/capabilities";
 import { zaloGoiTho } from "../agent/lib/zalo-api";
 import { kiemBot } from "../agent/lib/zalo-bot";
 import { datBot } from "../agent/lib/zalo-bot-xuong";
@@ -420,4 +425,93 @@ describe("cau-chao", () => {
 			).toBe(false);
 		}
 	});
+});
+
+type CauHinhToken = {
+	ten: string;
+	caiDat: string | null;
+	bien: string | null;
+	bat: boolean;
+};
+
+const CAU_HINH: readonly CauHinhToken[] = [
+	{ ten: "chi-cai-dat", caiDat: "111:cai-dat", bien: null, bat: true },
+	{ ten: "chi-bien", caiDat: null, bien: "222:bien", bat: true },
+	{ ten: "ca-hai", caiDat: "111:cai-dat", bien: "222:bien", bat: true },
+	{ ten: "khong", caiDat: null, bien: null, bat: false },
+];
+
+async function voiToken<T>(
+	o: CauHinhToken,
+	chay: () => Promise<T>,
+): Promise<T> {
+	const cu = process.env.ZALO_BOT_TOKEN;
+	await db.appSetting.update({
+		where: { id: SETTINGS_ID },
+		data: { zaloBotToken: o.caiDat },
+	});
+	if (o.bien === null) delete process.env.ZALO_BOT_TOKEN;
+	else process.env.ZALO_BOT_TOKEN = o.bien;
+	try {
+		return await chay();
+	} finally {
+		if (cu === undefined) delete process.env.ZALO_BOT_TOKEN;
+		else process.env.ZALO_BOT_TOKEN = cu;
+	}
+}
+
+async function batLogRa(chay: () => Promise<unknown>): Promise<string[]> {
+	const dong: string[] = [];
+	const goc = console.log;
+	console.log = (...m: unknown[]) => {
+		dong.push(m.map(String).join(" "));
+	};
+	try {
+		await chay();
+	} finally {
+		console.log = goc;
+	}
+	return dong;
+}
+
+describe("nang-luc", () => {
+	test("nang-luc: ma tran 4 cau hinh token", () => {
+		expect(CAU_HINH.length).toBe(4);
+	});
+
+	for (const o of CAU_HINH) {
+		test(`nang-luc: ${o.ten}`, async () => {
+			const { zalo, log, md } = await voiToken(o, async () => {
+				const ds = await capabilities();
+				const log = await batLogRa(() => logCapabilities());
+				const md = await capabilitiesMarkdown();
+				return { zalo: ds.find((c) => c.label === "Zalo reminders"), log, md };
+			});
+			expect(
+				zalo?.enabled,
+				o.ten === "chi-cai-dat"
+					? "nang-luc: chi Cai dat van bao off"
+					: `nang-luc: ${o.ten} sai trang thai`,
+			).toBe(o.bat);
+			expect(zalo?.from).toContain("ZALO_BOT_TOKEN");
+			expect(zalo?.from).toContain("Settings");
+			const dong = log.find((d) => d.includes("Zalo reminders")) ?? "";
+			expect(
+				dong.startsWith(o.bat ? "[agent] on " : "[agent] off"),
+				`nang-luc: ${o.ten} log ${dong}`,
+			).toBe(true);
+			const viTriTat = md.indexOf("Not configured");
+			const viTriBat = md.indexOf("- **Zalo reminders**");
+			if (o.bat) {
+				expect(
+					viTriBat,
+					`nang-luc: ${o.ten} khong o Available`,
+				).toBeGreaterThanOrEqual(0);
+				expect(viTriTat < 0 || viTriBat < viTriTat).toBe(true);
+			} else {
+				expect(viTriBat).toBe(-1);
+				expect(md.indexOf("- Zalo reminders")).toBeGreaterThan(viTriTat);
+			}
+		});
+	}
 });

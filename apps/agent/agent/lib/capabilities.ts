@@ -5,6 +5,7 @@ import { BLOB_NGUON } from "@crm/db/blob-nguon";
 import { TRO_LY_OKR_KHOA } from "@crm/db/okr-tro-ly-danh-muc";
 import { readContextDevKey } from "@crm/db/settings";
 import { nguonKhoaMoHinh } from "./mo-hinh-khoa";
+import { zaloToken } from "./zalo-api";
 
 export const CONTEXT_DEV = "CONTEXT_DEV";
 
@@ -37,16 +38,25 @@ export async function contextDevKey(): Promise<string | null> {
 export const LUU_NGUON = "LUU_NGUON";
 
 export async function capabilities(): Promise<readonly Capability[]> {
-	const [contextDev, nguon] = await Promise.all([
+	const [contextDev, nguon, zalo] = await Promise.all([
 		contextDevKey(),
 		nguonKhoaMoHinh({ rieng: false }),
+		zaloToken().catch((error: unknown) => {
+			console.error(
+				`[agent] could not read the Zalo bot token: ${
+					error instanceof Error ? error.message : String(error)
+				}`,
+			);
+			return null;
+		}),
 	]);
-	return capabilitiesFrom(contextDev, nguon !== null);
+	return capabilitiesFrom(contextDev, nguon !== null, zalo !== null);
 }
 
 export function capabilitiesFrom(
 	contextDev: string | null,
 	coMoHinh = false,
+	coZalo = Boolean(process.env.ZALO_BOT_TOKEN?.trim()),
 ): readonly Capability[] {
 	const fromEnv = (id: string) => ({
 		id,
@@ -97,7 +107,9 @@ export function capabilitiesFrom(
 				"a separate AI Gateway key for the document library — the machine that drafts pages from uploaded files and the AI assistant that answers questions from approved pages — so their spend is billed apart. Without it both run on the shared model key",
 		},
 		{
-			...fromEnv("ZALO_BOT_TOKEN"),
+			id: "ZALO_BOT_TOKEN",
+			from: "Zalo bot token (Settings › Connections › Zalo) or ZALO_BOT_TOKEN",
+			enabled: coZalo,
 			label: "Zalo reminders",
 			gives:
 				"the morning reminder on Zalo for anyone who linked their Zalo, and the bot that answers link codes",
