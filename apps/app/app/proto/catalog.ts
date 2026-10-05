@@ -897,6 +897,78 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-hien-tai", nhan: "Bản đang chạy — để so" },
 		],
 	},
+	{
+		slug: "okr-to-chuc-va",
+		ten: "OKR và tổ chức vá — quản trị thêm mục tiêu lẻ, lý do chặn lưu trữ song ngữ, khôi phục đúng chỗ",
+		states: [
+			{
+				id: "ST-donvi-quantri-them",
+				nhan: "Theo đơn vị — quản trị không là trưởng thấy «Thêm mục tiêu»",
+			},
+			{ id: "ST-donvi-thanhvien", nhan: "Theo đơn vị — thành viên thường" },
+			{
+				id: "ST-luutru-chan-en",
+				nhan: "Hộp lưu trữ tiếng Anh — ba lý do chặn",
+			},
+			{
+				id: "ST-luutru-khoiphuc-chan",
+				nhan: "Đã lưu trữ — khôi phục bị từ chối",
+			},
+		],
+	},
+	{
+		slug: "khung-okr-truoc-r1",
+		ten: "Khung OKR trước R1 — bảng có lề, điện thoại đọc được, chip Kara cùng nhãn, thanh một hàng",
+		states: [
+			{ id: "ST-khung-kr", nhan: "Khung Mục tiêu — bảng KR có lề 20 px" },
+			{
+				id: "ST-khung-tab",
+				nhan: "Khung tiếng Anh — tab Changes/History, «from 1 KR»",
+			},
+			{
+				id: "ST-khung-dienthoai",
+				nhan: "Điện thoại (375) — đầu khung cuộn, tab dính, ô số không cắt",
+			},
+			{
+				id: "ST-danhsach-chip",
+				nhan: "Của tôi và Theo đơn vị — chip Kara là nhãn, cuối nhóm",
+			},
+			{
+				id: "ST-donvi-soan-tiep",
+				nhan: "Thanh Theo đơn vị — có cuộc đang soạn, chữ phụ trong «i»",
+			},
+			{
+				id: "ST-donvi-soan-chuacauhinh",
+				nhan: "Thanh Theo đơn vị — chưa cấu hình (quản trị)",
+			},
+			{
+				id: "ST-donvi-soan-dangtai",
+				nhan: "Thanh Theo đơn vị — đang tải, nút giữ chỗ",
+			},
+			{ id: "ST-hienthi-hoilai", nhan: "Mở tab Căn chỉnh — hỏi bỏ thay đổi" },
+		],
+	},
+	{
+		slug: "thanh-vien-vao-dung",
+		ten: "Thành viên vào đúng — thẻ Tên miền nội bộ, hộp cho phép báo người đã là thành viên",
+		states: [
+			{ id: "ST-ten-mien-co", nhan: "Quản trị — đã có tên miền" },
+			{ id: "ST-ten-mien-rong", nhan: "Quản trị — chưa có tên miền nào" },
+			{ id: "ST-ten-mien-dang-tai", nhan: "Thẻ đang tải" },
+			{ id: "ST-ten-mien-dang-luu", nhan: "Đang lưu" },
+			{ id: "ST-ten-mien-loi-nhap", nhan: "Lỗi nhập — tên miền thư công cộng" },
+			{ id: "ST-ten-mien-khoa", nhan: "Thành viên thường — thẻ khoá" },
+			{ id: "ST-ten-mien-loi-tai", nhan: "Tải thẻ lỗi — Thử lại" },
+			{
+				id: "ST-cho-phep-da-la-thanh-vien",
+				nhan: "Hộp cho phép — người đã là thành viên",
+			},
+			{
+				id: "ST-dau-trang-sau-loi",
+				nhan: "Nút đầu trang hiện sau lỗi tải đầu",
+			},
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

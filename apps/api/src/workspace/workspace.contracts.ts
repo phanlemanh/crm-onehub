@@ -122,3 +122,16 @@ export const memberListOutput = z.object({
 	total: z.number(),
 	facetCounts: z.record(z.string(), z.record(z.string(), z.number())),
 });
+
+export const staffDomainsOutput = z.object({
+	domains: z.array(z.string()),
+	canEdit: z.boolean(),
+});
+
+export type StaffDomains = z.infer<typeof staffDomainsOutput>;
+
+export const setStaffDomainsInput = z.object({
+	domains: z.array(z.string().max(255)).max(100),
+});
+
+export type SetStaffDomainsInput = z.infer<typeof setStaffDomainsInput>;

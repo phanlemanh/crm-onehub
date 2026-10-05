@@ -269,6 +269,7 @@ function FormSoan({
 								tim: m.lienKetTrang.tim,
 								goThem: m.lienKetTrang.goThem,
 								khongCo: m.lienKetTrang.khongCo,
+								loiTim: m.lienKetTrang.loiTim,
 							}}
 							timTrang={timTrang}
 							nhanNut={{

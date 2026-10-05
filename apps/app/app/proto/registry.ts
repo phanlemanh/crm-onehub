@@ -14,6 +14,7 @@ import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
 import { KhepKyOkrMau } from "./_modules/khep-ky-okr";
 import { KhoTaiLieuMau } from "./_modules/kho-tai-lieu";
+import { KhungOkrTruocR1Mau } from "./_modules/khung-okr-truoc-r1";
 import { KhungTaoOkrNhuDealMau } from "./_modules/khung-tao-okr-nhu-deal";
 import { KhungTrangCaiDatMau } from "./_modules/khung-trang-cai-dat";
 import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
@@ -22,8 +23,10 @@ import { MucTieuVaKrMau } from "./_modules/muc-tieu-va-kr";
 import { NenKaraMau } from "./_modules/nen-kara";
 import { NhacQuaZaloMau } from "./_modules/nhac-qua-zalo";
 import { NoiZaloChoNguoiMoiMau } from "./_modules/noi-zalo-cho-nguoi-moi";
+import { OkrToChucVaMau } from "./_modules/okr-to-chuc-va";
 import { SoanOkrCungTroLyMau } from "./_modules/soan-okr-cung-tro-ly";
 import { SuaAnChuKyOkrMau } from "./_modules/sua-an-chu-ky-okr";
+import { ThanhVienVaoDungMau } from "./_modules/thanh-vien-vao-dung";
 import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet";
 import { ToanCanhOkrMau } from "./_modules/toan-canh-okr";
 import { TroLyOkrDeXuatMau } from "./_modules/tro-ly-okr-de-xuat";
@@ -57,6 +60,8 @@ const BANG_GHEP = {
 	"tro-ly-doc-kho": KhoTaiLieuMau,
 	"to-chuc-danh-sach-chi-tiet": ToChucDanhSachChiTietMau,
 	"toan-canh-okr": ToanCanhOkrMau,
+	"khung-okr-truoc-r1": KhungOkrTruocR1Mau,
+	"okr-to-chuc-va": OkrToChucVaMau,
 	"khung-tao-okr-nhu-deal": KhungTaoOkrNhuDealMau,
 	"tro-ly-okr-de-xuat": TroLyOkrDeXuatMau,
 	"tro-ly-okr-nen": TroLyOkrNenMau,
@@ -68,6 +73,7 @@ const BANG_GHEP = {
 	"soan-okr-cung-tro-ly": SoanOkrCungTroLyMau,
 	"noi-zalo-cho-nguoi-moi": NoiZaloChoNguoiMoiMau,
 	"sua-an-chu-ky-okr": SuaAnChuKyOkrMau,
+	"thanh-vien-vao-dung": ThanhVienVaoDungMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 } satisfies Record<string, ProtoComponent>;
 

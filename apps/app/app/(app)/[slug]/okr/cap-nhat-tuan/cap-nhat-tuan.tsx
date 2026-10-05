@@ -330,7 +330,13 @@ function BangCapNhat({
 	if (daGui)
 		return (
 			<DaGui
-				chuaGui={tong - daGui.dong.length}
+				chuaGui={
+					duLieu.items.filter(
+						(kr) =>
+							!kr.updatedThisWeek &&
+							!daGui.dong.some((d) => d.kr.keyResultId === kr.keyResultId),
+					).length
+				}
 				ketQua={daGui}
 				weekStart={duLieu.weekStart}
 			/>

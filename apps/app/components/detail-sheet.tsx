@@ -3,6 +3,7 @@
 import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
 import Close from "@carbon/icons-react/es/Close";
 import { Button } from "@crm/ui/components/button";
+import { DrawerHeader } from "@crm/ui/components/drawer";
 import {
 	Empty,
 	EmptyContent,
@@ -27,8 +28,15 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@crm/ui/components/tooltip";
+import { useIsMobile } from "@crm/ui/hooks/use-mobile";
 import { cn } from "@crm/ui/lib/utils";
-import { type ReactNode, useRef, useState } from "react";
+import {
+	createContext,
+	type ReactNode,
+	useContext,
+	useRef,
+	useState,
+} from "react";
 import {
 	Sheet,
 	SheetClose,
@@ -49,6 +57,8 @@ export const PROPERTY_ROW = "grid grid-cols-[6.5rem_minmax(0,1fr)] gap-2";
 export const PROPERTY_LABEL = "truncate text-muted-foreground text-xs";
 
 const PROPERTY_CELL = "border border-transparent py-1";
+
+export const CuonCaKhungContext = createContext<boolean | "chua-biet">(false);
 
 export function DetailSheet({
 	open,
@@ -101,8 +111,10 @@ export function DetailSheetHeader({
 	onBack?: () => void;
 }) {
 	const m = crmMessages(useLocale());
+	const laDienThoai = useIsMobile();
+	const DauKhung = laDienThoai ? DauNganKeo : SheetHeader;
 	return (
-		<SheetHeader className={cn("gap-0 border-b py-3", GUTTER)}>
+		<DauKhung className={cn("gap-0 border-b py-3", GUTTER)}>
 			<div className="flex items-start gap-3">
 				{onBack ? (
 					<Tooltip>
@@ -147,13 +159,22 @@ export function DetailSheetHeader({
 					</SheetClose>
 				</div>
 			</div>
-		</SheetHeader>
+		</DauKhung>
 	);
+}
+
+function DauNganKeo(props: { className?: string; children: ReactNode }) {
+	return <DrawerHeader align="start" {...props} />;
 }
 
 export function DetailSheetStats({ children }: { children: ReactNode }) {
 	return (
-		<dl className="flex shrink-0 divide-x border-b bg-muted/40">{children}</dl>
+		<dl
+			data-slot="detail-sheet-stats"
+			className="flex shrink-0 divide-x border-b bg-muted/40"
+		>
+			{children}
+		</dl>
 	);
 }
 
@@ -167,7 +188,7 @@ export function DetailSheetStat({
 	return (
 		<div className={cn("flex min-w-0 flex-1 flex-col gap-1 py-2.5", GUTTER)}>
 			<dt className="truncate text-muted-foreground text-xs/5">{label}</dt>
-			<dd className="min-w-0 truncate font-medium text-foreground text-sm/5">
+			<dd className="min-w-0 wrap-anywhere font-medium text-foreground text-sm/5 md:truncate">
 				{children}
 			</dd>
 		</div>
@@ -193,28 +214,41 @@ export function DetailSheetTabs({
 }) {
 	const [opened] = useState(() => new Set<string>());
 	opened.add(value);
+	const cuon = useContext(CuonCaKhungContext) === true;
+	const danhSach = (
+		<TabsList
+			variant="line"
+			className={cn("w-full shrink-0 justify-start gap-6 border-b", GUTTER)}
+		>
+			{tabs.map((tab) => (
+				<TabsTrigger key={tab.value} value={tab.value}>
+					{tab.label}
+					{tab.count ? (
+						<span className="text-muted-foreground tabular-nums">
+							{tab.count}
+						</span>
+					) : null}
+				</TabsTrigger>
+			))}
+		</TabsList>
+	);
 
 	return (
 		<Tabs
 			value={value}
 			onValueChange={onValueChange}
-			className="flex min-h-0 flex-1 flex-col gap-0"
+			className={cn("flex flex-col gap-0", cuon ? undefined : "min-h-0 flex-1")}
 		>
-			<TabsList
-				variant="line"
-				className={cn("w-full shrink-0 justify-start gap-6 border-b", GUTTER)}
-			>
-				{tabs.map((tab) => (
-					<TabsTrigger key={tab.value} value={tab.value}>
-						{tab.label}
-						{tab.count ? (
-							<span className="text-muted-foreground tabular-nums">
-								{tab.count}
-							</span>
-						) : null}
-					</TabsTrigger>
-				))}
-			</TabsList>
+			{cuon ? (
+				<div
+					data-tab-dinh
+					className="sticky top-0 z-10 overflow-x-auto bg-popover"
+				>
+					{danhSach}
+				</div>
+			) : (
+				danhSach
+			)}
 
 			{tabs.map((tab) => (
 				<TabsContent
@@ -223,7 +257,10 @@ export function DetailSheetTabs({
 					forceMount={
 						tab.keepMounted && opened.has(tab.value) ? true : undefined
 					}
-					className="flex min-h-0 flex-1 flex-col overflow-hidden outline-none data-[state=inactive]:hidden"
+					className={cn(
+						"flex flex-col outline-none data-[state=inactive]:hidden",
+						cuon ? undefined : "min-h-0 flex-1 overflow-hidden",
+					)}
 				>
 					{tab.content}
 				</TabsContent>
@@ -233,8 +270,22 @@ export function DetailSheetTabs({
 }
 
 export function DetailSheetBody({ children }: { children: ReactNode }) {
+	const cuon = useContext(CuonCaKhungContext) === true;
 	return (
-		<div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+		<div
+			className={cn(
+				"flex flex-col",
+				cuon ? undefined : "min-h-0 flex-1 overflow-y-auto",
+			)}
+		>
+			{children}
+		</div>
+	);
+}
+
+export function DetailSheetTable({ children }: { children: ReactNode }) {
+	return (
+		<div data-slot="detail-sheet-table" className={cn("py-3", GUTTER)}>
 			{children}
 		</div>
 	);

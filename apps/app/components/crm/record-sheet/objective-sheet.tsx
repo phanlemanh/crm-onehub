@@ -38,7 +38,7 @@ import { TableCell } from "@crm/ui/components/table";
 import { krTheoKara } from "@crm/validation/okr-theo-kara";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
 import { BangVet } from "@/app/(app)/[slug]/okr/bang-vet";
@@ -69,12 +69,14 @@ import {
 } from "@/app/(app)/[slug]/okr/tien-do-kr";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import {
+	CuonCaKhungContext,
 	DetailSheetBody,
 	DetailSheetEmpty,
 	DetailSheetSection,
 	DetailSheetStat,
 	DetailSheetStats,
 	type DetailSheetTab,
+	DetailSheetTable,
 } from "@/components/detail-sheet";
 import { NhanGioiHan } from "@/components/okr/nhan-gioi-han";
 import { okrMessages } from "@/lib/messages/okr";
@@ -356,7 +358,9 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 					mt.status !== "da-bo" &&
 					mt.choDuyet === null &&
 					mt.canEditKr.includes(kr.id)
-				: suaNoiDung(mt);
+				: hop.loai === "kr-moi"
+					? suaNoiDung(mt) || mt.themKrLe
+					: suaNoiDung(mt);
 	if (hop === null) return null;
 	if (!duoc)
 		return <BoKhoaUrl key={khoaHopOkr(hop)} bo={() => void datHop(null)} />;
@@ -377,7 +381,7 @@ function NganOkr({ mt }: { mt: ChiTiet }) {
 			mucTieu={mt}
 			kr={kr}
 			chuMacDinh={mt.owner.id}
-			suaDuocCot={mt.canEdit}
+			suaDuocCot={mt.canEdit || (kr === null && mt.themKrLe)}
 			dong={dong}
 		/>
 	);
@@ -488,8 +492,9 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	const vung = useRef<HTMLDivElement>(null);
 	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
 	const coVungKara = gopY.noiDung !== "tat";
+	const khoKhung = useContext(CuonCaKhungContext);
 	useEffect(() => {
-		if (!neo || !gopY.daTai) return;
+		if (!neo || !gopY.daTai || khoKhung === "chua-biet") return;
 		if (coVungKara) {
 			const giam = window.matchMedia(
 				"(prefers-reduced-motion: reduce)",
@@ -500,7 +505,7 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 			});
 		}
 		void setNeo(null);
-	}, [neo, gopY.daTai, coVungKara, setNeo]);
+	}, [neo, gopY.daTai, coVungKara, setNeo, khoKhung]);
 
 	return (
 		<DetailSheetBody>
@@ -513,10 +518,14 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 				</div>
 			) : null}
 			<KhuGopVao mt={mt} />
-			<div className="scroll-mt-4 px-5 py-3 empty:hidden" ref={vung}>
+			<div
+				className="scroll-mt-4 px-5 py-3 empty:hidden"
+				data-vung-kara
+				ref={vung}
+			>
 				<VungKara gopY={gopY} moKr={moKr} soKr={mt.keyResults.length} />
 			</div>
-			<div>
+			<DetailSheetTable>
 				<BangKr
 					diemCam={{ ...diemKara, ...diemCam }}
 					mucTieu={mt}
@@ -541,16 +550,13 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 							: undefined
 					}
 				/>
-			</div>
+			</DetailSheetTable>
 			{mt.keyResults.length > 0 ? (
 				<p className="px-5 pt-2 text-muted-foreground text-xs" data-tien-do-tu>
-					{dien(m.tienDoTu, {
-						x: String(mt.progress),
-						n: String(mt.keyResults.length),
-					})}
+					{m.tienDoTuSo(String(mt.progress), String(mt.keyResults.length))}
 				</p>
 			) : null}
-			{suaNoiDung(mt) ? (
+			{suaNoiDung(mt) || mt.themKrLe ? (
 				<div className="px-5 py-3">
 					<Button
 						size="sm"
@@ -638,42 +644,47 @@ function TabCanChinh({ mt }: { mt: ChiTiet }) {
 				/>
 			) : (
 				<>
-					<SimpleTable columns={cot}>
-						{mt.alignments.map((g) => (
-							<SimpleTableRow key={g.alignmentId} data-noi-gop={g.alignmentId}>
-								<TableCell className={CELL}>
-									<span translate="no">{g.unitName}</span>
-								</TableCell>
-								<TableCell className={CELL}>
-									<span className="whitespace-normal" translate="no">
-										{g.objectiveTitle}
-									</span>
-								</TableCell>
-								<TableCell className={CELL}>
-									{g.keyResultTitle ? (
-										<span className="whitespace-normal" translate="no">
-											{g.keyResultTitle}
-										</span>
-									) : (
-										<EmptyCellValue />
-									)}
-								</TableCell>
-								{sua ? (
+					<DetailSheetTable>
+						<SimpleTable columns={cot}>
+							{mt.alignments.map((g) => (
+								<SimpleTableRow
+									key={g.alignmentId}
+									data-noi-gop={g.alignmentId}
+								>
 									<TableCell className={CELL}>
-										<Button
-											aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
-											size="icon-sm"
-											variant="ghost"
-											disabled={go.isPending}
-											onClick={() => setGoDi(g)}
-										>
-											<Icon icon={Close} />
-										</Button>
+										<span translate="no">{g.unitName}</span>
 									</TableCell>
-								) : null}
-							</SimpleTableRow>
-						))}
-					</SimpleTable>
+									<TableCell className={CELL}>
+										<span className="whitespace-normal" translate="no">
+											{g.objectiveTitle}
+										</span>
+									</TableCell>
+									<TableCell className={CELL}>
+										{g.keyResultTitle ? (
+											<span className="whitespace-normal" translate="no">
+												{g.keyResultTitle}
+											</span>
+										) : (
+											<EmptyCellValue />
+										)}
+									</TableCell>
+									{sua ? (
+										<TableCell className={CELL}>
+											<Button
+												aria-label={dien(m.goCanChinh, { ten: tenNoi(g) })}
+												size="icon-sm"
+												variant="ghost"
+												disabled={go.isPending}
+												onClick={() => setGoDi(g)}
+											>
+												<Icon icon={Close} />
+											</Button>
+										</TableCell>
+									) : null}
+								</SimpleTableRow>
+							))}
+						</SimpleTable>
+					</DetailSheetTable>
 					{nutGan ? <div className="px-5 py-3">{nutGan}</div> : null}
 				</>
 			)}
@@ -728,7 +739,7 @@ function SoMucTieu({ mt }: { mt: ChiTiet }) {
 			</DetailSheetStat>
 			<DetailSheetStat label={t.phuTrach}>
 				<span translate="no">
-					<OwnerCell owner={{ ...mt.owner, image: null }} />
+					<OwnerCell owner={{ ...mt.owner, image: null }} xuongDongDienThoai />
 				</span>
 			</DetailSheetStat>
 		</DetailSheetStats>
@@ -816,15 +827,17 @@ export function ObjectiveSheet({
 				},
 				{
 					value: "vet",
-					label: m.tabVet,
+					label: m.tabVetNhan,
 					count: mt.trail.length,
 					content: (
 						<DetailSheetBody>
-							<BangVet
-								trail={mt.trail}
-								keyResults={mt.keyResults}
-								alignments={mt.alignments}
-							/>
+							<DetailSheetTable>
+								<BangVet
+									trail={mt.trail}
+									keyResults={mt.keyResults}
+									alignments={mt.alignments}
+								/>
+							</DetailSheetTable>
 						</DetailSheetBody>
 					),
 				},
@@ -939,6 +952,7 @@ export function ObjectiveSheet({
 				tabs={tabs}
 				tab={tab}
 				onTabChange={setTab}
+				cuonCaKhung
 			/>
 			{mt ? <NganOkr mt={mt} /> : null}
 			{mt && hopHienThi ? (

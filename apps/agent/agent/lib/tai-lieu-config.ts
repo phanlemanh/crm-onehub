@@ -37,6 +37,10 @@ export const TAI_LIEU_AGENT = {
 		timHoi: { soLan: 8, cachMs: 250 },
 		loGui: 6,
 		dauTrang: { mo: "<<<TRANG-BAT-DAU>>>", dong: "<<<TRANG-HET>>>" },
+		dauCauHoi: { mo: "<<<CAU-HOI-BAT-DAU>>>", dong: "<<<CAU-HOI-HET>>>" },
+		tinGoc: (hoiId: string) => `Câu hỏi kho ${hoiId}.`,
+		saiCho: "tro-ly-kho.sai-cho",
+		phienKhongRo: "khong-ro",
 	},
 	bangGia: {
 		"zai/glm-5.2-fast": { vaoMoiTrieu: 2.8, raMoiTrieu: 8.8 },
@@ -61,6 +65,11 @@ export const TAI_LIEU_AGENT = {
 		saiKhuon: (chi: string) => `Chưa soạn được — bản nộp sai khuôn: ${chi}`,
 		daSoan: "Đã soạn bản đề xuất.",
 		choSoan: "Đã đọc chữ, chờ máy soạn.",
+		docLoi: "Chưa đọc được tệp — bấm Soạn lại để thử lần nữa.",
+		moCoi: "Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa.",
 	},
 	phien: { lo: 6, chiToiDa: 200, timNguon: { soLan: 8, cachMs: 250 } },
 } as const;
+
+export const KHONG_GOI_TRO_LY_KHO =
+	"Never call tro_ly_kho in this session. It only works inside a document-library question session or a Zalo chat; anywhere else it refuses at once and wastes the turn.";

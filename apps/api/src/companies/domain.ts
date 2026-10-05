@@ -87,3 +87,8 @@ const MACHINE_SUFFIXES = [
 	".local",
 	".localhost",
 ];
+
+export function isFreeEmailDomain(input: string): boolean {
+	const domain = normalizeDomain(input);
+	return domain !== null && FREE_EMAIL_DOMAINS.has(domain);
+}

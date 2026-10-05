@@ -74,6 +74,7 @@ function mucTieu(
 	thay: Partial<ObjectiveOutput>,
 ): ObjectiveOutput {
 	return {
+		themKrLe: false,
 		id: "mt-1",
 		cycleId: QUY.id,
 		cycleName: QUY.name,

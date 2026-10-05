@@ -20,6 +20,20 @@ const BO_QUA = new Set([
 ]);
 
 const MIEN_TRU = [];
+MIEN_TRU.push(
+	{
+		tep: "artifact.tsx",
+		ly_do:
+			"bộ xương Kara K1 (bo-xuong-kara) — KaraArtifact dựng trên nó, chưa màn nào trong apps/** nối tới trước 14/10",
+		het_han: "K2 soan-okr-trang-rieng gộp — K2 nối màn Soạn OKR thì xoá mục này",
+	},
+	{
+		tep: "task.tsx",
+		ly_do:
+			"bộ xương Kara K1 (bo-xuong-kara) — KaraSteps dựng trên nó, chưa màn nào trong apps/** nối tới trước 14/10",
+		het_han: "K2 soan-okr-trang-rieng gộp — K2 nối màn Soạn OKR thì xoá mục này",
+	},
+);
 
 const boMienTru = new Map(MIEN_TRU.map((m) => [m.tep, m]));
 

@@ -1,0 +1,120 @@
+{
+ "feature_plain": "Dựng cây tổ chức và đặt OKR không còn vấp: mục tiêu đã thu gọn giữ nguyên, quản trị thêm được một mục tiêu lẻ, người được giao KR từ mẫu nhận thông báo, khôi phục phòng ban không rơi sai chỗ hay trùng tên, và câu báo lỗi theo đúng ngôn ngữ người dùng.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ giữ mục tiêu đã thu gọn ở trạng thái thu gọn khi người dùng lọc, đổi đơn vị rồi quay lại."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ cho nút số của KR trên điện thoại có móc đo như trên máy tính, để phép đo đã ký tìm được nó ở khổ 390."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho người được giao KR khi trưởng phòng tạo mục tiêu từ mẫu nhận lời nhắc «Bạn được giao phụ trách KR», như khi KR tạo tay."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ in ba lý do chưa lưu trữ được phòng ban (khuôn, người, OKR) bằng ngôn ngữ của người xem, kèm đúng số và tên."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ chặn khôi phục một phòng ban khi bộ phận chứa nó vẫn đang lưu trữ, nói rõ phải khôi phục bộ phận nào trước."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ chặn khôi phục phòng ban hay bộ phận khi đã có một đơn vị đang hoạt động cùng tên, để không bao giờ có hai đơn vị trùng tên."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ cho quản trị tạo được một mục tiêu lẻ và thêm KR vào nó ở mọi đơn vị — đúng những gì việc nhập cả bộ đã cho làm; quyền sửa, xoá giữ như cũ."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ hiện nút «Thêm mục tiêu» cho quản trị trên «Theo đơn vị» cạnh «Nhập bảng tính»; thành viên thường không thấy."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ cho chip «Kara · N góp ý» trên điện thoại mở khung và cuộn tới vùng Kara, kể cả khi mục tiêu đã mở trước đó."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ giữ bản sửa ngày 25/09: thành viên thường và vai chỉ OKR không bị đẩy vào màn nhập khoá research."
+  },
+  {
+   "id": "AC-12",
+   "p": "Sẽ báo lý do khôi phục bị chặn bằng ngôn ngữ của người xem, và đơn vị bị chặn vẫn nằm trong «Đã lưu trữ»."
+  },
+  {
+   "id": "AC-13",
+   "p": "Sẽ không hiện nút «Thêm KR» trên mục tiêu đã bỏ, cho cả trưởng đơn vị lẫn quản trị — sửa hồi quy vòng này gây ra."
+  },
+  {
+   "id": "AC-14",
+   "p": "Sẽ cho quản trị tạo mục tiêu từ mẫu như tạo tay, và mở đủ các ô (loại KR, giá trị đầu, người phụ trách) khi quản trị thêm KR."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ giữ toàn bộ bộ kiểm của kho xanh."
+  }
+ ],
+ "scope_plain": "Những việc dưới đây cố ý để ngoài, để R1d kịp trước 11/10:",
+ "wont_do": [
+  {
+   "id": "OOS-1",
+   "p": "Sẽ KHÔNG sửa câu lỗi tiếng Việt viết cứng ở các thao tác khác của màn Tổ chức (tạo, đổi tên, gắn phòng ban, nhập) — chip riêng."
+  },
+  {
+   "id": "OOS-2",
+   "p": "Sẽ KHÔNG cho quản trị sửa hay xoá mục tiêu, KR sau khi tạo ở đơn vị mình không làm trưởng — giữ luật sửa hiện có."
+  },
+  {
+   "id": "OOS-3",
+   "p": "Sẽ KHÔNG dọn id thu gọn của mục tiêu đã xoá khỏi đường dẫn."
+  },
+  {
+   "id": "OOS-4",
+   "p": "Sẽ KHÔNG dịch câu lỗi ở ca hiếm: hộp lưu trữ đã kiểm xong mà lúc bấm lại bị chặn."
+  },
+  {
+   "id": "OOS-5",
+   "p": "Sẽ KHÔNG tự đưa phòng ban về «chưa xếp bộ phận» khi bộ phận cha đã lưu trữ."
+  }
+ ],
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Năm trục: tám mục nguồn (sáu mục khảo sát, R1m-7, chip Kara trên điện thoại còn lại từ R1a) · hai lớp (máy chủ, màn) · bốn vai · hai khổ màn · hai ngôn ngữ."
+  },
+  {
+   "i": 1,
+   "p": "Mỗi mục nguồn có ít nhất một tiêu chí; khôi phục tách ba tiêu chí (bộ phận cha, trùng tên, câu trên màn); quyền tạo tách máy chủ và màn. Hai ngôn ngữ chỉ đo ở hai chỗ vòng này sinh câu mới."
+  },
+  {
+   "i": 2,
+   "p": "Chưa có bộ đếm máy so từng ô với phép đo; người duyệt soi bằng mắt ở bảng phép đo."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Câu từ chối khôi phục mới sẽ lại là tiếng Việt viết cứng — đúng lỗi #18 ở chỗ mới. Đã đổi: máy chủ trả lý do, màn dựng câu theo ngôn ngữ; thêm AC-12 và hai phép đo."
+  },
+  {
+   "i": 1,
+   "p": "Phép đo thu gọn chỉ giả lập đổi đơn vị trong bài kiểm, chưa đi qua bộ chọn đơn vị thật. Đã thêm phép đo trên màn thật qua bộ lọc và bộ chọn."
+  },
+  {
+   "i": 2,
+   "p": "Phép kiểm «không còn chữ tiếng Việt» trong câu tiếng Anh dễ vướng tên khuôn có dấu do người nhập. Đã ghim tên «Khuôn Bán hàng» và chỉ kiểm phần được dịch."
+  },
+  {
+   "i": 3,
+   "p": "Phép đo chip Kara dùng hook giả. Đã thêm ca dùng hook thật; phần chạy lại trên mã cũ để so thì hoãn vì máy thiếu RAM."
+  },
+  {
+   "i": 4,
+   "p": "Theo lối A, quản trị tạo được mục tiêu nhưng không thêm được KR — vẫn vấp. Đã đổi khuyến nghị sang A+: tạo lẻ được cả mục tiêu và KR."
+  }
+ ]
+}
