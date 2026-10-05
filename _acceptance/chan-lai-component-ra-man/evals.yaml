@@ -13,7 +13,7 @@ evals:
       - "apps/app/app/**"
       - "_acceptance/chan-lai-component-ra-man/rang/**"
     expected: |
-      Xanh: cac neo khop dia — 389 file · 122 gia tri mac dinh la chuoi co chu (neo doi 93 -> 122 theo d-20261004T123511Z-22) · 10
+      Xanh: cac neo khop dia — 389 file · 128 gia tri mac dinh la chuoi co chu (neo doi 93 -> 128 theo d-20261004T123511Z-22) · 10
       dong trong bang gioi han cua vong truoc (neo DOC LAP, ghim trong contract) · so
       phan tu TUNG nhom sau khi phan (chu-nguoi-doc va ky thuat), khong chi tong.
       Chieu do da chay: doi mot neo trong ban khai -> ma 1, neu ten neo lech va ca hai
@@ -36,7 +36,7 @@ evals:
       placeholder · combobox empty · date-picker placeholder · command title ·
       async-action errorLabel — ca nam PHAI roi vao nhom chu-nguoi-doc. Sai mot dong
       la ma 1, neu ten dong.
-      In ra so phan tu TUNG nhom, khong chi tong; tong bang 122 (neo mac_dinh cua lai-ra-man.mjs).
+      In ra so phan tu TUNG nhom, khong chi tong; tong bang 128 (neo mac_dinh cua lai-ra-man.mjs).
       Component nao khong mount duoc phai khai trong so ca kem ly do; so khong-mount
       duoc + so mount duoc = so component co gia tri mac dinh.
       Chieu do da chay: mount CHI trang thai dong -> nam dong ma tran roi sang nhom ky

@@ -27,6 +27,13 @@ const NGOAI_LE = [
 	`packages/validation/src/tai-lieu-hoi.ts${NOI}CRM`,
 	`packages/db/src/tai-lieu-hoi.ts${NOI}CRM`,
 	`apps/api/src/tai-lieu/tai-lieu-hoi.service.ts${NOI}CRM`,
+	`apps/app/lib/messages/okr-so.ts${NOI}Chỉ số CRM`,
+	`apps/app/lib/messages/okr-so.ts${NOI}CRM metric`,
+	`apps/app/lib/messages/okr-so.ts${NOI}CRM`,
+	`apps/app/lib/messages/okr-so.ts${NOI}Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.`,
+	`apps/app/lib/messages/okr-so.ts${NOI}CRM metrics are counts — a milestone or percentage KR can't take its number from them.`,
+	`apps/api/src/okr/okr-config.ts${NOI}Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.`,
+	`apps/api/src/okr/okr-config.ts${NOI} KR nguồn CRM chưa có số ngày cuối — chờ nhịp chụp số rồi thử lại.`,
 ];
 const TEN_CU = /\bCRM\b/;
 const TIEN_TO = "OneHub ";
