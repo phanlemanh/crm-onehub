@@ -61,6 +61,8 @@ jobs:
         run: bun run db:deploy
 
       - run: bun run check-types
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
 
       - run: bun run lint
 

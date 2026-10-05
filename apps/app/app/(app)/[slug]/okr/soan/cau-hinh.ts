@@ -1,5 +1,6 @@
 export const SOAN_UI = {
 	hanKhongSuKienMs: 45_000,
+	choKhepMs: 15_000,
 	giuPhienMs: 60_000,
 	hoiLuongMs: 3_000,
 	khoHep: "(max-width: 640px)",
