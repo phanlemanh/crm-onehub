@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7c82865c7637a68e1d61a8959b0545ff64f796d8
+verified_commit: b97e26239fbf6678d39856a17aa09ebdb923ac63
 human_signoff: Phan Le Manh 2026-10-02
 ---
 
@@ -300,3 +300,7 @@ sha: 80fea3400e5c375fb68ed9df1c79280ca748b079 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-05, do l4b tro-ly-kho-dung-phien (#257) đổi tệp kiểm tro-ly-kho-loi và vật tro_ly_kho; ghim lại ở onehub
 run_id: repin-20261005T012126Z-14209
 sha: 7c82865c7637a68e1d61a8959b0545ff64f796d8 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths) · diff chạm vật đo ngoài làn máy: E7u — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 4 — 2026-10-05, do gộp onehub f2fad732 (#274, #269, #275)
+run_id: repin-20261005T101547Z-69359
+sha: b97e26239fbf6678d39856a17aa09ebdb923ac63 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths)
