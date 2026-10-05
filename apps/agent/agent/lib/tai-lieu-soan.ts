@@ -50,28 +50,48 @@ export async function chaySoanTuNguon(
 		where: { id: nguon.id },
 		data: { trangThai: "CHO_DOC", lyDo: null },
 	});
-	if (!kho.bat()) return ketThuc(task.id, nguon.id, "LOI", KHONG_BAT);
+	try {
+		await docVaChuyen(task.id, nguon, kho);
+	} catch (loi) {
+		console.error("soan-tu-nguon: doc nguon loi", { nguonId: nguon.id, loi });
+		await ketThuc(task.id, nguon.id, "LOI", LY_DO.docLoi);
+	}
+}
+
+type NguonDoc = {
+	id: string;
+	sha256: string;
+	blobPathname: string;
+	kieu: string;
+};
+
+async function docVaChuyen(
+	taskId: string,
+	nguon: NguonDoc,
+	kho: KhoNguon,
+): Promise<void> {
+	if (!kho.bat()) return ketThuc(taskId, nguon.id, "LOI", KHONG_BAT);
 	const byte = await kho.doc(nguon.blobPathname);
-	if (!byte) return ketThuc(task.id, nguon.id, "LOI", LY_DO.khongTai);
+	if (!byte) return ketThuc(taskId, nguon.id, "LOI", LY_DO.khongTai);
 	const bam = createHash("sha256").update(byte).digest("hex");
 	if (bam !== nguon.sha256) {
-		return ketThuc(task.id, nguon.id, "LOI", LY_DO.bamLech);
+		return ketThuc(taskId, nguon.id, "LOI", LY_DO.bamLech);
 	}
 	const doc = await docChu(byte, parseKieuNguon(nguon.kieu));
 	if (doc.loai === "can-go-tay") {
-		return ketThuc(task.id, nguon.id, "CAN_GO_TAY", doc.lyDo);
+		return ketThuc(taskId, nguon.id, "CAN_GO_TAY", doc.lyDo);
 	}
-	if (doc.loai === "loi") return ketThuc(task.id, nguon.id, "LOI", doc.lyDo);
+	if (doc.loai === "loi") return ketThuc(taskId, nguon.id, "LOI", doc.lyDo);
 	await db.taiLieuNguon.update({
 		where: { id: nguon.id },
 		data: { chu: doc.chu, soTrang: doc.soTrang },
 	});
 	if (!(await coQuyTacViet())) {
-		return ketThuc(task.id, nguon.id, "LOI", LY_DO.thieuQuyTac);
+		return ketThuc(taskId, nguon.id, "LOI", LY_DO.thieuQuyTac);
 	}
 	await db.taiLieuNguon.update({
 		where: { id: nguon.id },
 		data: { trangThai: "CHO_SOAN" },
 	});
-	await completeTask(task.id, LY_DO.choSoan);
+	await completeTask(taskId, LY_DO.choSoan);
 }

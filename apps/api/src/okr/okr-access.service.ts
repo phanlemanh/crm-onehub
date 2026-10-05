@@ -216,6 +216,17 @@ export class OkrAccessService {
 		return q.quanTri || this.suaDuocDonVi(q, userId, dv);
 	}
 
+	async assertNhapMucTieu(
+		userId: string,
+		objectiveId: string,
+		client: Prisma.TransactionClient | Db = this.db,
+	) {
+		const { q, mt } = await this.assertXemMucTieu(userId, objectiveId, client);
+		if (!this.nhapDuoc(q, userId, mt))
+			throw new ForbiddenException(OKR.thongDiep.khongSuaDuocDonVi);
+		return mt;
+	}
+
 	async assertNhapDuoc(userId: string, dv: DonViCuaMucTieu): Promise<Quyen> {
 		const q = await this.quyen(userId);
 		if (!this.nhapDuoc(q, userId, dv))

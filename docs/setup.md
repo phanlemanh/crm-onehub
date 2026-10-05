@@ -157,17 +157,26 @@ Copy the shape of `crm-onehub-agent` (`vercel project inspect crm-onehub-agent`)
 | Build Command | `bun run build` |
 | Node.js Version | 24.x |
 | Ignored Build Step | empty |
+| Preview deployments | off, by `apps/agent-okr/vercel.json` |
 
-**The agent-okr check is red on every pull request, and that is expected.** The
-project's variables are Production-only, so a preview build dies in `prisma generate`
-on the missing `DATABASE_URL`. Nothing calls an agent-okr preview — the app's
-`OKR_AGENT_URL` and bridge secret are Production-only too — and `acceptance.yml`
-already proves the package builds.
+**Preview deploys are turned off in `apps/agent-okr/vercel.json`.** Its
+`git.deploymentEnabled` sets `"**": false` and `"onehub": true`: only a push to
+`onehub` deploys, so pull requests show no agent-okr check at all. The pattern is
+`**`, not `*` — Vercel matches branch names with minimatch, where `*` stops at a `/`,
+and every working branch here has one. A branch that matches both patterns deploys,
+because one `true` is enough. `apps/agent-okr/test/vercel-trien-khai.spec.ts` holds
+the rule to a table of branch names.
 
-Do not silence it with the Ignored Build Step `[ "$VERCEL_ENV" != "production" ]`.
-On 2026-10-04 it skipped the Production deploys as well, with no build log, and two
-merges never reached agent-okr.vercel.app. After any change to this setting, deploy
-`onehub` to Production and check the deployment is Ready, not Canceled.
+A preview would have nothing to do anyway: the project's variables are
+Production-only, so a preview build dies in `prisma generate` on the missing
+`DATABASE_URL`, and nothing calls it — the app's `OKR_AGENT_URL` and bridge secret
+are Production-only too. `acceptance.yml` already proves the package builds.
+
+Do not use the Ignored Build Step `[ "$VERCEL_ENV" != "production" ]` for this. On
+2026-10-04 it skipped the Production deploys as well, with no build log, and two
+merges never reached agent-okr.vercel.app. After any change to `vercel.json` or the
+build settings, merge or deploy `onehub` to Production and check the deployment made
+from git is Ready, not Canceled.
 
 ### agent-okr project
 

@@ -270,6 +270,11 @@ evals:
       - apps/agent/agent/lib/zalo-config.ts
       - CONTEXT.md
     evidence_required: [judged_by, verdict, rationale]
+    paths:
+      - "_acceptance/hoi-crm-qua-zalo/contract.md"
+      - "apps/agent/agent/lib/zalo-chi-dan.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "CONTEXT.md"
   - id: E13
     criterion: AC-13
     executor: test

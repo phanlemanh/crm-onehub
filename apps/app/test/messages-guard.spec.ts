@@ -46,6 +46,7 @@ const KHONG_DAU = new Set([
 	"dong.soKr",
 	"chuyen.dongMoTa",
 	"hopThoaiChoPhep.choDoi",
+	"tenMienNoiBo.goiY",
 	"chiaSe.xong",
 	"tep.kiloByte",
 	"tep.megaByte",
@@ -1022,6 +1023,10 @@ const GHIM = {
 	"okr-tai-co-cau:toChuc.chan.lyDo.phong-ban": [
 		"Phòng ban còn 1 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
 		"Phòng ban còn 12 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
+	],
+	"okr-tai-co-cau:toChuc.chan.lyDoNguoi": [
+		"Còn 1 người có phòng ban chính ở đây — chuyển họ trước.",
+		"Còn 12 người có phòng ban chính ở đây — chuyển họ trước.",
 	],
 	"okr-tai-co-cau:toChuc.chan.lyDo.bo-phan": [
 		"Bộ phận còn 1 mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.",
