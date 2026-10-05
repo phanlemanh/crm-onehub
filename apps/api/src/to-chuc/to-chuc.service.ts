@@ -24,6 +24,7 @@ import type {
 	HeadInput,
 	ImportApplyOutput,
 	ImportPreviewOutput,
+	KetQuaKhoiPhuc,
 	LyDoChanLuuTru,
 	PlacementInput,
 	RenameInput,
@@ -251,8 +252,34 @@ export class ToChucService {
 		});
 	}
 
-	async restoreDivision(input: { id: string }) {
+	private async tenDangDung(
+		bang: "division" | "department",
+		ten: string,
+		boQua: string,
+	): Promise<string | null> {
+		const where = {
+			archivedAt: null,
+			name: { equals: ten, mode: "insensitive" as const },
+			id: { not: boQua },
+		};
+		const trung =
+			bang === "division"
+				? await this.db.division.findFirst({ where, select: { name: true } })
+				: await this.db.department.findFirst({
+						where,
+						select: { name: true },
+					});
+		return trung?.name ?? null;
+	}
+
+	async restoreDivision(input: { id: string }): Promise<KetQuaKhoiPhuc> {
 		await this.boPhanSong(input.id);
+		const bp = await this.db.division.findUniqueOrThrow({
+			where: { id: input.id },
+			select: { name: true },
+		});
+		const trung = await this.tenDangDung("division", bp.name, input.id);
+		if (trung !== null) return { chan: { loai: "trung-ten", ten: trung } };
 		return this.db.division.update({
 			where: { id: input.id },
 			data: { archivedAt: null },
@@ -373,13 +400,25 @@ export class ToChucService {
 		const { mo } = await demOkrCuaDonVi(db, { departmentId: id });
 		return [
 			...(song.length > 0
-				? [{ loai: "khuon" as const, cau: T.phongBanTrongKhuon(song) }]
+				? [
+						{
+							loai: "khuon" as const,
+							khuon: song,
+							cau: T.phongBanTrongKhuon(song),
+						},
+					]
 				: []),
 			...(conNguoi > 0
-				? [{ loai: "nguoi" as const, cau: T.phongBanConNguoi(conNguoi) }]
+				? [
+						{
+							loai: "nguoi" as const,
+							so: conNguoi,
+							cau: T.phongBanConNguoi(conNguoi),
+						},
+					]
 				: []),
 			...(mo > 0
-				? [{ loai: "okr" as const, cau: T.phongBanConOkrMo(mo) }]
+				? [{ loai: "okr" as const, so: mo, cau: T.phongBanConOkrMo(mo) }]
 				: []),
 		];
 	}
@@ -406,8 +445,22 @@ export class ToChucService {
 		};
 	}
 
-	async restoreDepartment(input: { id: string }) {
-		await this.phongBanCo(input.id);
+	async restoreDepartment(input: { id: string }): Promise<KetQuaKhoiPhuc> {
+		const pb = await this.phongBanCo(input.id);
+		if (pb.divisionId !== null) {
+			const bp = await this.db.division.findUniqueOrThrow({
+				where: { id: pb.divisionId },
+				select: { name: true, archivedAt: true },
+			});
+			if (bp.archivedAt !== null)
+				return { chan: { loai: "cha-luu-tru", ten: bp.name } };
+		}
+		const ten = await this.db.department.findUniqueOrThrow({
+			where: { id: input.id },
+			select: { name: true },
+		});
+		const trung = await this.tenDangDung("department", ten.name, input.id);
+		if (trung !== null) return { chan: { loai: "trung-ten", ten: trung } };
 		return this.db.department.update({
 			where: { id: input.id },
 			data: { archivedAt: null },
