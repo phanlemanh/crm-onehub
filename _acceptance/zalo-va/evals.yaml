@@ -111,11 +111,12 @@ evals:
       - "_acceptance/tra-loi-tin-nhac/rang/nguong.ts"
       - "apps/agent/test/tra-loi-tin-nhac-nguong.integration.spec.ts"
     expected: |
-      Postgres that, TZ=Asia/Ho_Chi_Minh. Gieo hang nhac kenh zalo cho mot user o D1, D2, D3 (dueAt la gio nhac
-      sang VN, daGui mang stepId) va vet PLAN_CHANGE buoc.xong source zalo: X1 khop nhac D1, X3 khop nhac D3
-      (ngay cuoi ky, sau gio nhac), X4 o D4 khop stepId, Xn o D2 khong khop stepId nao. Goi doNguong that voi
-      ky tu = D1 00:00 VN, den = D3 00:00 VN (dung cach --den cua thuoc). coXong === 2 (D1, D3), mau === 3,
-      nham deep-equal [Xn.id]. CHIEU DO: tra lai cua so cu (nhac toi den, vet toi den+24h) -> do ghim
+      Postgres that, TZ=Asia/Ho_Chi_Minh. Gieo bang duong ghi that (gieoNhac, noiZalo, guiNhac, nhan cua
+      support/tra-loi-gieo): ba nguoi nhan nhac Zalo o D1, D3, D4 va moi nguoi tra "xong 1" 30 phut sau nhac
+      cua minh (X1, X3, X4); mot vet nham Xn o D2 bang datBuocXong source zalo cho buoc khong co trong tin.
+      Goi doNguong that voi ky tu = D1 00:00 VN, den = D3 00:00 VN (dung cach --den cua thuoc). coXong === 2
+      (D1, D3), mau === 2, nham deep-equal [Xn.id]; X4 khong vao coXong lan nham. CHIEU DO: tra lai cua so cu
+      (nhac toi den, vet toi den+24h) -> do ghim
       "ngay-cuoi-ky: xong ngay D3 bi dem nham" (nham chua X3.id).
 
   - id: E7
