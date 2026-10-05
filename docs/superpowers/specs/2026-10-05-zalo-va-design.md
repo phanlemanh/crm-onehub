@@ -32,12 +32,20 @@ Hàng R1g của `docs/plan/lo-trinh-okr.json`, Cổng Đáng `build, giữ ngư�
 
 ## Đường đo
 
-Mỗi lần `getMe` lỗi ở hai `docBot` ghi một hàng `AgentEvent` loại `zalo.getme-loi`, `sessionId`
-cố định `zalo-bot`, `data = { noi: "dat-bot" | "kiem-bot", lop, ketLuan: "token-sai" | "tam-loi" }`
-(`lop`: `http-<mã>`, `ok-false-<mã>`, `mang`, `sai-khuon`). Lỗi ghi hàng không được làm hỏng việc
-chính: bắt và log. `_acceptance/zalo-va/rang/dem-getme.ts` đọc các hàng trong một kỳ và in số lần
-theo `ketLuan` × `lop`, cùng số lần «token-sai» mang `lop` thuộc lỗi tạm (ngưỡng chết, phải là 0),
-không ghi hàng nào.
+Hai `docBot` cùng gọi `getMe` bằng `zaloGoiTho` (giữ mã HTTP và thân) rồi qua một hàm phân lớp chung.
+`lop`: `mang` khi lỗi mạng; `http-<mã>` khi HTTP khác 200, thân ra sao cũng vậy; `ok-false-<mã>` khi
+HTTP 200 và thân `ok: false`; `sai-khuon` khi HTTP 200 mà thân lạ. `ketLuan` là `tam-loi` khi mã HTTP
+hoặc `error_code` của thân thuộc `ZALO.http.tamLoi` hay từ 500 trở lên, hoặc lỗi mạng, hoặc sai khuôn;
+còn lại (4xx) là `token-sai`.
+
+Mỗi lần `getMe` lỗi ghi một hàng `AgentEvent` loại `zalo.getme-loi`, `sessionId` cố định `zalo-bot`,
+`data = { noi, http, maThan, lop, ketLuan, vanTay }` — `vanTay` là 12 ký tự hex đầu của sha256 token đã
+gọi. Lỗi ghi hàng không làm hỏng việc chính: bắt và log.
+
+`_acceptance/zalo-va/rang/dem-getme.ts` chỉ đọc, in: số lần theo `ketLuan` × `lop`; số hàng `token-sai`
+mang mã tạm theo danh sách riêng của bộ đếm (408, 429, 5xx — không đọc `ZALO.http`, để bắt một lần lùi
+cấu hình); và số hàng `token-sai` có `vanTay` trùng token đang chạy trong `AppSetting` — token đã được
+Zalo nhận sau đó mà từng bị báo sai. Dòng cuối là ngưỡng chết của ô cơ hội.
 
 ## Không làm
 

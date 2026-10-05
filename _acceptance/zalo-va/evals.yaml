@@ -15,13 +15,18 @@ evals:
       - "apps/agent/test/support/zalo-gia.ts"
       - "apps/agent/test/zalo-va.integration.spec.ts"
     expected: |
-      Postgres that, Zalo gia. Ma tran viet truoc 9 dang loi tam cua getMe (HTTP 408, HTTP 429, HTTP 500,
-      HTTP 503, loi mang, than sai khuon, ok:false 408, ok:false 429, ok:false 500), expect(o.length).toBe(9).
+      Postgres that, Zalo gia. Ma tran viet truoc 11 dang loi tam cua getMe (HTTP 408 than ok:false 408,
+      HTTP 408 than khong phai JSON, HTTP 429, HTTP 500, HTTP 503, loi mang, HTTP 200 than sai khuon,
+      HTTP 200 ok:false 408, HTTP 200 ok:false 429, HTTP 200 ok:false 500, HTTP 400 than ok:false 429),
+      expect(o.length).toBe(11). Zalo gia tra dung status va than ghim san cua tung dang (than khong phai
+      JSON la Response chu "loi").
       Moi o: gieo AppSetting voi nam cot Zalo co gia tri cu; goi datBot that voi token moi va goc https.
       Tung o: outcome === "zalo-loi", reason === ZALO.loi.zaloKhongTraLoi, Zalo gia khong nhan setWebhook,
       doc lai DB nam cot Zalo bang dung gia tri cu. Ten ca ghim dang loi.
       CHIEU DO: tra lai luat cu "moi 4xx la token sai" (bo ZALO.http.tamLoi khoi phan lop) -> do ghim
-      "tam-loi: http-408 bi bao token sai" va "tam-loi: ok-false-429 bi bao token sai".
+      "tam-loi: http-429 bi bao token sai" va "tam-loi: ok-false-429 bi bao token sai"; chieu do rieng:
+      chi xet ma HTTP, bo nhanh doc error_code tam trong than -> do ghim "tam-loi: http-400+ok-false-429
+      bi bao token sai".
 
   - id: E2
     criterion: AC-2
@@ -54,7 +59,7 @@ evals:
       - "apps/agent/test/support/zalo-gia.ts"
       - "apps/agent/test/zalo-va.integration.spec.ts"
     expected: |
-      Cung 9 dang loi tam cua E1, expect(o.length).toBe(9). Moi o: gieo AppSetting co token, zaloBotName,
+      Cung 11 dang loi tam cua E1, expect(o.length).toBe(11). Moi o: gieo AppSetting co token, zaloBotName,
       zaloWebhookUrl; gieo mot user da noi ZaloLink, uu tien AUTO; goi kiemBot that voi fetcher Zalo gia.
       Tung o: tra "loi"; doc lai DB zaloBotName va zaloWebhookUrl bang dung gia tri cu; kenhSeDungCua(userId)
       that tra kenh "zalo". CHIEU DO: tra lai ghiBot({zaloBotName:null, zaloWebhookUrl:null}) cho moi loi ->
@@ -90,9 +95,12 @@ evals:
     expected: |
       Mot nguoi chua noi nhan "xin chao" qua duong webhook that (Zalo gia nhan sendMessage). Cau gui di
       === ZALO.loi.huongDan. Quan he, khong chep tay: cau do chua nhacBuoiSang cua khungUngDungMessages("vi")
-      va noi cua nhacQuaZaloMessages("vi") (nhan nut «Nối Zalo»); khong gia tri chuoi nao trong ZALO.loi
+      va noi cua nhacQuaZaloMessages("vi") (nhan nut «Nối Zalo»); khong nhan muc dieu huong nao khac cua
+      khungUngDungMessages("vi") (vd nhan Cai dat) xuat hien truoc vi tri nhacBuoiSang trong cau; doi chung
+      duong: cau dung thi xanh; khong gia tri chuoi nao trong ZALO.loi
       (ke ca ham, goi voi tham so mau) chua «Thông báo của bạn». CHIEU DO: dat lai cau cu -> do ghim
-      "cau-chao: thieu nhan Nhắc buổi sáng" va "cau-chao: con chu Thông báo của bạn".
+      "cau-chao: thieu nhan Nhắc buổi sáng" va "cau-chao: con chu Thông báo của bạn"; chen "Cài đặt › " truoc
+      nhan -> do ghim "cau-chao: nhan Cài đặt dung truoc Nhắc buổi sáng".
 
   - id: E6
     criterion: AC-6
@@ -140,10 +148,11 @@ evals:
       - "apps/agent/agent/lib/zalo-config.ts"
       - "apps/agent/test/zalo-va.integration.spec.ts"
     expected: |
-      Ma tran 2 noi (datBot, kiemBot) x 17 dang loi (9 tam + 8 tu choi) = 34 o, expect(o.length).toBe(34).
-      Moi o: dem hang AgentEvent type "zalo.getme-loi" moi them === 1; data parse bang zod: noi, lop
-      (http-408, ok-false-429, mang, sai-khuon...) dung voi dang, ketLuan "tam-loi" cho 9 dang tam,
-      "token-sai" cho 8 dang tu choi. Doi chung duong: getMe 200 -> 0 hang moi o ca hai noi. Ca ghi hong:
+      Ma tran 2 noi (datBot, kiemBot) x 19 dang loi (11 tam + 8 tu choi) = 38 o, expect(o.length).toBe(38).
+      Moi o: dem hang AgentEvent type "zalo.getme-loi" moi them === 1; data parse bang zod: noi, http,
+      maThan, lop (mang khi loi mang; http-<ma> khi HTTP khac 200 du than ra sao; ok-false-<ma> khi HTTP 200
+      va than ok:false; sai-khuon khi HTTP 200 than la) dung voi dang, ketLuan "tam-loi" cho 11 dang tam,
+      "token-sai" cho 8 dang tu choi, vanTay === 12 ky tu hex dau cua sha256(token da goi). Doi chung duong: getMe 200 -> 0 hang moi o ca hai noi. Ca ghi hong:
       thay ham ghi bang ham nem (tiem phu thuoc) -> datBot van tra outcome dung va kiemBot van tra "loi".
       CHIEU DO: bo dong ghi o kiemBot -> do ghim "su-kien: kiem-bot http-408 khong co hang".
 
@@ -156,9 +165,16 @@ evals:
       - "_acceptance/zalo-va/rang/dem-getme.ts"
       - "_acceptance/zalo-va/rang/dem-getme.spec.ts"
     expected: |
-      Postgres that. Gieo hang AgentEvent zalo.getme-loi bang chinh ham ghi cua agent (khong dung tay khuon):
-      3 tam-loi kiem-bot http-429, 1 tam-loi dat-bot mang, 2 token-sai dat-bot http-401, 1 hang ngoai ky.
-      Chay dem-getme.ts --tu --den bang Bun.spawn; so tung dong in ra (toEqual mang dong, khong toContain):
-      tam-loi 4, token-sai 2, token-sai mang lop tam 0, theo lop dung so; hang ngoai ky khong dem; so hang
-      AgentEvent truoc va sau bang nhau. Ca nguong chet: gieo them mot hang token-sai lop http-429 (dung khuon
-      that) -> dong "token-sai mang lop tam: 1". CHIEU DO: dem ca hang ngoai ky -> do ghim "dem: tam-loi 5".
+      Postgres that. Gieo hang bang duong ghi THAT cua agent: goi datBot/kiemBot that voi Zalo gia (khong
+      dung tay khuon): 3 lan kiemBot http-429, 1 lan datBot loi mang, 2 lan datBot http-401 voi token T1,
+      1 hang ngoai ky. Chay dem-getme.ts --tu --den bang Bun.spawn; so tung dong in ra (toEqual mang dong,
+      khong toContain): tam-loi 4, token-sai 2, theo lop dung so; hang ngoai ky khong dem; so hang AgentEvent
+      truoc va sau bang nhau.
+      Nguong chet theo van tay: datBot that voi token T2 bi tu choi (http-401), roi datBot that cung T2 duoc
+      (getMe 200, AppSetting.zaloBotToken = T2) -> dong "token-sai tren token dang chay: 1"; doi chung: token
+      dang chay la T3 chua tung bi tu choi -> dong do in 0.
+      Ma tran ma tam cua bo dem viet truoc 10 o (http-408, http-429, http-500, http-503, ok-false-408,
+      ok-false-429, ok-false-500, http-400 kem maThan 429, va hai o 5xx bien 502, 599), expect(o.length).toBe(10):
+      moi o goi ham ghi that cua agent voi ketLuan "token-sai" ep tay (tiem phu thuoc phan lop) -> dong
+      "token-sai mang ma tam: 1". CHIEU DO: thu danh sach ma tam cua bo dem ve chi 408 va 429 -> do ghim
+      "dem: ma tam http-503 khong duoc dem"; dem ca hang ngoai ky -> do ghim "dem: tam-loi 5".
