@@ -381,8 +381,10 @@ evals:
     expected: >-
       exit 0. Chan "be-rong": o 1024px khong tieu de cot nao cua bang thanh vien
       bi cat; o 768px moi tieu de bi cat co dau ba cham VA chu day du trong cay
-      tro nang; in bang ten cot × be rong × trang thai. Chieu do: rut khung cot
-      xuong 300px → o 1024px co cot bi cat → do.
+      tro nang; in bang ten cot × be rong × trang thai. "Bi cat" la nhan
+      [data-slot=table-head-label] tran o theo chieu ngang hoac doc (tieu de xuong
+      toi da hai dong van la du chu); "ba cham" gom text-overflow ellipsis va
+      line-clamp. Chieu do: rut khung cot xuong 300px → o 1024px co cot bi cat → do.
     paths:
       - "apps/app/app/(app)/[slug]/campaigns/**"
       - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"

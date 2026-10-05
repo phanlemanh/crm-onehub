@@ -89,11 +89,11 @@ evals:
       - "packages/db/src/blob*.ts"
       - "_acceptance/may-soan-de-xuat/rang/blob-that.mjs"
     expected: |
-      Chay trong phien do rieng (tien-de.mjs), can BLOB_READ_WRITE_TOKEN that. Goi taiLieu.nguon.xinCho
+      Chay trong phien do rieng (tien-de.mjs), can KHO_TAI_LIEU_BLOB_TOKEN that (BLOB_READ_WRITE_TOKEN ep gia). Goi taiLieu.nguon.xinCho
       qua tRPC that; fetch PUT tep mau quyet-dinh.docx vao URL tra ve voi header Origin cua APP_URL (dung
       header ma man that gui); goi nhan; so sha256 cua hang voi bam doc lap cua tep. Goi taiVe; GET bang URL
       do -> dung byte. GET vao blob khong ky (URL tran cua pathname) -> bi tu choi (khac 200). Don blob o
-      finally. In "buoc N: dat" cho 4 buoc. CHIEU DO: khong co token -> exit 2 voi "thieu BLOB_READ_WRITE_TOKEN
+      finally. In "buoc N: dat" cho 4 buoc. CHIEU DO: khong co token -> exit 2 voi "thieu KHO_TAI_LIEU_BLOB_TOKEN
       that", khong in dat nao; ban sao put access "public" -> buoc 4 do, "blob doc duoc khong ky".
       Khai not-run từ 04/10 (chủ kho duyệt gói B): cần khoá kho Vercel Blob riêng tư thật KHO_TAI_LIEU_BLOB_TOKEN, .env gốc hiện không có; gỡ khai và chạy lại bằng máy khi chủ kho cắm lại khoá vào .env gốc.
 
