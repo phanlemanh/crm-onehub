@@ -1,8 +1,210 @@
 diff --git a/apps/agent/test/tasks.integration.spec.ts b/apps/agent/test/tasks.integration.spec.ts
-index 3100f0c..b1712c8 100644
+index 3100f0c1f..4151a036c 100644
 --- a/apps/agent/test/tasks.integration.spec.ts
 +++ b/apps/agent/test/tasks.integration.spec.ts
-@@ -239,3 +239,80 @@ describe("scheduleTask", () => {
+@@ -13,8 +13,16 @@ const kind = "test-lease";
+ 
+ const RESEARCH = { except: DIRECT_KINDS } as const;
+ 
++const MINE = { only: [kind] } as const;
++
++const VISIBLE_KIND = "brand";
++const VISIBLE_REASON = "test-lease-visible";
++const TOP_PRIORITY = 2_147_483_647;
++
+ async function clear() {
+-	await db.agentTask.deleteMany({ where: { kind } });
++	await db.agentTask.deleteMany({
++		where: { OR: [{ kind }, { reason: VISIBLE_REASON }] },
++	});
+ 	await db.contact.deleteMany({ where: { email: { startsWith: "lease-" } } });
+ }
+ 
+@@ -58,7 +66,7 @@ describe("claimDue", () => {
+ 	it("claims due work and leases it", async () => {
+ 		const task = await queue();
+ 
+-		const claimed = await claimDue(10, RESEARCH);
++		const claimed = await claimDue(10, MINE);
+ 		expect(claimed.map((t) => t.id)).toContain(task.id);
+ 
+ 		const row = await db.agentTask.findUnique({ where: { id: task.id } });
+@@ -70,8 +78,8 @@ describe("claimDue", () => {
+ 		await Promise.all([queue(), queue(), queue()]);
+ 
+ 		const [first, second] = await Promise.all([
+-			claimDue(3, RESEARCH),
+-			claimDue(3, RESEARCH),
++			claimDue(3, MINE),
++			claimDue(3, MINE),
+ 		]);
+ 		const ids = [...first, ...second].map((t) => t.id);
+ 
+@@ -80,58 +88,80 @@ describe("claimDue", () => {
+ 	});
+ 
+ 	it("leaves work that is not due yet", async () => {
+-		await queue({ dueAt: new Date(Date.now() + 60_000) });
+-		const claimed = await claimDue(10, RESEARCH);
+-		expect(claimed).toHaveLength(0);
++		const later = await queue({ dueAt: new Date(Date.now() + 60_000) });
++		const due = await queue();
++
++		const claimed = await claimDue(10, MINE);
++		expect(claimed.map((t) => t.id)).toEqual([due.id]);
++		expect(claimed.map((t) => t.id)).not.toContain(later.id);
++	});
++
++	it("leaves a visible kind to the visible lane", async () => {
++		expect(DIRECT_KINDS).toContain(VISIBLE_KIND);
++		const visible = await db.agentTask.create({
++			data: {
++				kind: VISIBLE_KIND,
++				reason: VISIBLE_REASON,
++				dueAt: new Date(Date.now() - 2000),
++				priority: TOP_PRIORITY,
++				budget: 2,
++			},
++			select: { id: true },
++		});
++		const research = await queue({ priority: TOP_PRIORITY });
++
++		const claimed = await claimDue(1, RESEARCH);
++		expect(claimed.map((t) => t.id)).toEqual([research.id]);
++
++		const row = await db.agentTask.findUnique({ where: { id: visible.id } });
++		expect(row?.leasedUntil).toBeNull();
+ 	});
+ 
+ 	it("takes the most urgent first", async () => {
+ 		const low = await queue({ priority: 0 });
+ 		const high = await queue({ priority: 100 });
+ 
+-		const claimed = await claimDue(1, RESEARCH);
++		const claimed = await claimDue(1, MINE);
+ 		expect(claimed[0]?.id).toBe(high.id);
+ 		expect(claimed[0]?.id).not.toBe(low.id);
+ 	});
+ 
+ 	it("does not re-claim a leased row, and does re-claim an expired one", async () => {
+ 		const task = await queue();
+-		await claimDue(10, RESEARCH);
++		await claimDue(10, MINE);
+ 
+-		expect(await claimDue(10, RESEARCH)).toHaveLength(0);
++		expect(await claimDue(10, MINE)).toHaveLength(0);
+ 
+ 		await db.agentTask.update({
+ 			where: { id: task.id },
+ 			data: { leasedUntil: new Date(Date.now() - 1000) },
+ 		});
+ 
+-		expect((await claimDue(10, RESEARCH)).map((t) => t.id)).toContain(task.id);
++		expect((await claimDue(10, MINE)).map((t) => t.id)).toContain(task.id);
+ 	});
+ 
+ 	it("stops handing out a row that has spent its attempts", async () => {
+ 		const task = await queue();
+ 
+ 		for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+-			expect((await claimDue(10, RESEARCH)).map((t) => t.id)).toContain(
+-				task.id,
+-			);
++			expect((await claimDue(10, MINE)).map((t) => t.id)).toContain(task.id);
+ 			await expire(task.id);
+ 		}
+ 
+-		expect(await claimDue(10, RESEARCH)).toHaveLength(0);
++		expect(await claimDue(10, MINE)).toHaveLength(0);
+ 	});
+ 
+ 	it("counts the attempts it has handed out", async () => {
+ 		const task = await queue();
+ 
+-		expect((await claimDue(10, RESEARCH))[0]?.attempts).toBe(1);
++		expect((await claimDue(10, MINE))[0]?.attempts).toBe(1);
+ 		await expire(task.id);
+-		expect((await claimDue(10, RESEARCH))[0]?.attempts).toBe(2);
++		expect((await claimDue(10, MINE))[0]?.attempts).toBe(2);
+ 	});
+ 
+ 	it("stops claiming once the work is finished", async () => {
+ 		const task = await queue();
+-		await claimDue(10, RESEARCH);
++		expect((await claimDue(10, MINE)).map((t) => t.id)).toContain(task.id);
+ 		await completeTask(task.id, "ran");
+ 
+ 		await db.agentTask.update({
+@@ -139,7 +169,7 @@ describe("claimDue", () => {
+ 			data: { leasedUntil: null },
+ 		});
+ 
+-		expect(await claimDue(10, RESEARCH)).toHaveLength(0);
++		expect(await claimDue(10, MINE)).toHaveLength(0);
+ 	});
+ });
+ 
+@@ -149,7 +179,7 @@ describe("retireExhausted", () => {
+ 		const task = await queue({ contactId: contact.id });
+ 
+ 		for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+-			await claimDue(10, RESEARCH);
++			await claimDue(10, MINE);
+ 			await expire(task.id);
+ 		}
+ 
+@@ -166,18 +196,27 @@ describe("retireExhausted", () => {
+ 		const task = await queue();
+ 
+ 		for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+-			await claimDue(10, RESEARCH);
++			expect((await claimDue(10, MINE)).map((t) => t.id)).toContain(task.id);
+ 			if (attempt < MAX_ATTEMPTS - 1) await expire(task.id);
+ 		}
+ 
+-		expect(await retireExhausted()).toHaveLength(0);
++		const leased = await db.agentTask.findUnique({ where: { id: task.id } });
++		expect(leased?.attempts).toBe(MAX_ATTEMPTS);
++		expect(leased?.leasedUntil?.getTime()).toBeGreaterThan(Date.now());
++
++		expect((await retireExhausted()).map((t) => t.id)).not.toContain(task.id);
++		const row = await db.agentTask.findUnique({ where: { id: task.id } });
++		expect(row?.finishedAt).toBeNull();
+ 	});
+ 
+ 	it("leaves work that still has attempts left", async () => {
+-		await queue();
+-		await claimDue(10, RESEARCH);
++		const task = await queue();
++		expect((await claimDue(10, MINE)).map((t) => t.id)).toContain(task.id);
++		await expire(task.id);
+ 
+-		expect(await retireExhausted()).toHaveLength(0);
++		expect((await retireExhausted()).map((t) => t.id)).not.toContain(task.id);
++		const row = await db.agentTask.findUnique({ where: { id: task.id } });
++		expect(row?.finishedAt).toBeNull();
+ 	});
+ 
+ 	it("retires no more rows than the limit allows", async () => {
+@@ -185,7 +224,7 @@ describe("retireExhausted", () => {
+ 		for (let row = 0; row < 3; row++) mine.push((await queue()).id);
+ 
+ 		for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+-			const claimed = await claimDue(10, RESEARCH);
++			const claimed = await claimDue(10, MINE);
+ 			for (const task of claimed) await expire(task.id);
+ 		}
+ 
+@@ -204,7 +243,7 @@ describe("completeTask", () => {
+ 	it("retires a row once, and reports who it was about", async () => {
+ 		const contact = await someone();
+ 		const task = await queue({ contactId: contact.id });
+-		await claimDue(10, RESEARCH);
++		await claimDue(10, MINE);
+ 
+ 		const subject = await completeTask(task.id, "ran");
+ 		expect(subject?.contactId).toBe(contact.id);
+@@ -239,3 +278,80 @@ describe("scheduleTask", () => {
  		expect(await db.agentTask.count({ where: { kind } })).toBe(1);
  	});
  });
