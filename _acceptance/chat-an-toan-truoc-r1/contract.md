@@ -5,7 +5,7 @@ slug: chat-an-toan-truoc-r1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-05
 design_doc: docs/superpowers/specs/2026-10-05-chat-an-toan-truoc-r1-design.md
@@ -64,3 +64,15 @@ Quét bằng skill morphological-scan, preset test-matrix.
 
 - `packages/auth` không đổi (đường T3); AC-4 ghim luật agent trùng luật API.
 - Bỏ design-pass theo chủ kho duyệt 05/10 (entry `bỏ design-pass` trong decisions.jsonl); khung hình thật ở AC-9.
+- Known limits (Cổng 2, 05/10):
+  - Trong hợp đồng, AC-6 — `ghiBiGoLui` kiểm `daBao` trước khi ghi và chỉ đánh dấu sau khi ghi xong, nên hai phiên mở cùng lúc ngay khi model vừa bị gỡ có thể ghi hai hàng `model.bi-go-lui` cho cùng một id; `ghiModelPhien` cùng khuôn với `model.phien-chon`. Số đếm ngày 10/11 có thể dư.
+  - Ngoài-1 — luật «chủ sở hữu hoặc quản trị» viết ở hai nơi (`laQuanTriWorkspace` và `isWorkspaceAdmin`); chỉ bài kiểm AC-4 giữ hai nơi trùng nhau.
+  - Ngoài-2 — ghi nhật ký `truong.doi-qua-chat` hỏng sau khi trường đã đổi thì công cụ ném lỗi dù việc đã xong.
+  - Ngoài-3 — địa chỉ danh mục Gateway khai hai nơi; agent giữ danh mục 5 phút, API 30 phút, nên màn Cài đặt có thể báo chậm hơn chat.
+  - Ngoài-4 — `ModelCatalogService.find` không còn ai gọi; chấp nhận, không sửa.
+  - Ngoài-5 — tập `daGhi` của `model-phien.ts` giữ mọi mã phiên suốt đời tiến trình agent.
+  - Ngoài-7 — cùng lớp với Ngoài-2: lỗi ghi nhật ký tạm thời biến việc đổi trường đã thành công thành lỗi, và mất dấu thay đổi đó.
+  - Ngoài-8 — phiên không có hàng `model.phien-chon` thì `model.khong-tim-thay` lùi về model đã chọn ở Cài đặt, có thể không phải model phiên con đã chạy.
+  - Ngoài-9 — E11 tự dựng `event.data.details` của `step.failed`, không lấy từ bên ghi của eve; eve đổi khuôn lỗi thì bài vẫn xanh.
+  - Ngoài-10 — E5 chạy năm ô chọn tay, không quét cả ma trận vai × việc.
+- Ngoài-6 (thẻ Cài đặt vẫn ghi tên model đã bị gỡ trong ô chọn và dòng chú thích khi hộp báo nói đang chạy mặc định) tách thành hợp đồng mới theo chủ kho 05/10.

@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 287a26666fc085533f44159a5ba02ea20f60b4fc
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-05 — ký Cổng 2 trên verdict PASS 11/11 eval (S4 round 4, wf_47305466-c97). Phát hiện trong hợp đồng AC-6 (đua ghi trùng model.bi-go-lui) ghi Known limits; Ngoài-6 mở hợp đồng mới; Ngoài-4 chấp nhận, không sửa; Ngoài-1, 2, 3, 5, 7, 8, 9, 10 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: chat-an-toan-truoc-r1
