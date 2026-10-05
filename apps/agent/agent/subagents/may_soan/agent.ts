@@ -1,5 +1,6 @@
 import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
+import { ghiModelPhien } from "../../lib/model-phien";
 import { TAI_LIEU_AGENT } from "../../lib/tai-lieu-config";
 import { modelMaySoan } from "../../lib/tai-lieu-model";
 
@@ -9,7 +10,10 @@ export default defineAgent({
 	model: defineDynamic({
 		fallback: TAI_LIEU_AGENT.soan.maModel,
 		events: {
-			"step.started": () => modelMaySoan(),
+			"step.started": (_event, ctx) => {
+				void ghiModelPhien(ctx, TAI_LIEU_AGENT.soan.maModel);
+				return modelMaySoan();
+			},
 		},
 	}),
 	outputSchema: z.object({
