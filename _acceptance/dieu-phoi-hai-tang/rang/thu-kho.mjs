@@ -1,4 +1,4 @@
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
@@ -10,6 +10,8 @@ const CHO_DUNG_MS = 5_000;
 const BUOC_MS = 200;
 const DONG_XEM = /^đợt thu-kho · dang-chay · nhịp \S+ · khoá trống · chờ lượt 0 · chờ người 0$/;
 const MOC_DONG = "  dungPhatLich(cwd);\n";
+const CHO_MONITOR_MS = 15_000;
+const KHOI_DONG_TAIL_MS = 1_000;
 
 let sai = 0;
 const ghi = (s) => process.stdout.write(`${s}\n`);
@@ -64,6 +66,33 @@ function choDen(dieuKien, han) {
 	return dieuKien();
 }
 
+function lenhMonitor() {
+	const readme = readFileSync(join(GOC, "scripts", "dieu-phoi", "README.md"), "utf8");
+	const dong = readme.split("\n").find((d) => d.includes("tail -n0 -F") && d.includes("grep --line-buffered"));
+	const m = dong?.match(/`([^`]*tail -n0 -F[^`]*)`/);
+	if (!m) {
+		ghi("KHONG DO DUOC: README khong co lenh Monitor");
+		process.exit(2);
+	}
+	return m[1];
+}
+
+async function thuMonitor(lenh, dot, tenDon) {
+	const con = spawn("sh", ["-c", lenh], { detached: true, stdio: ["ignore", "pipe", "ignore"] });
+	let ra = "";
+	con.stdout.on("data", (b) => {
+		ra += b;
+	});
+	await new Promise((r) => setTimeout(r, KHOI_DONG_TAIL_MS));
+	writeFileSync(join(dot, "xin", tenDon), "{hong");
+	const het = Date.now() + CHO_MONITOR_MS;
+	while (Date.now() < het && !ra.includes('"can_phan":true')) await new Promise((r) => setTimeout(r, BUOC_MS));
+	try {
+		process.kill(-con.pid, "SIGKILL");
+	} catch {}
+	return ra.split("\n").filter((d) => d.includes('"can_phan":true')).length;
+}
+
 function chayVongDoi(du, ten) {
 	const dot = join(du, ".acceptance-runs", "dieu-phoi-thu-kho");
 	const mo = cli(du, "mo", "thu-kho");
@@ -87,6 +116,19 @@ try {
 	const xem = cli(du, "xem");
 	ghi(`that xem: ma ${xem.ma} '${xem.ra}'`);
 	if (xem.ma !== 0 || !DONG_XEM.test(xem.ra)) do_(`that dong-xem-sai '${xem.ra}'`);
+	const monitor = lenhMonitor();
+	const dotThat = join(du, ".acceptance-runs", "dieu-phoi-thu-kho");
+	const lenhThat = monitor.replace("<thư mục đợt>", dotThat);
+	ghi(`monitor lenh: ${lenhThat}`);
+	const soDong = await thuMonitor(lenhThat, dotThat, "P9-s4.json");
+	ghi(`monitor: ${soDong} dong`);
+	if (soDong < 1) do_("monitor-khong-nha-dong");
+	const soDongSai = await thuMonitor(lenhThat.replace("su-kien.jsonl", "su-kien.json"), dotThat, "P8-s4.json");
+	if (soDongSai === 0) ghi("  lenh monitor doi ten tep su kien: DO: monitor-cam");
+	else {
+		sai++;
+		ghi(`SOT monitor: lenh sai ten tep van nha ${soDongSai} dong`);
+	}
 	const h1 = hook(du);
 	ghi(`that hook trong dot: ma ${h1}`);
 	if (h1 !== 2) do_(`that hook-trong-dot ma ${h1}`);
