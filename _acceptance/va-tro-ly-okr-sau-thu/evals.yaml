@@ -86,6 +86,8 @@ evals:
     paths: [packages/validation/src/okr-kiem.ts, packages/validation/test/okr-kiem.spec.ts]
 
   - id: E11
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-11
     criterion: AC-10
     executor: test
     cmd: config:executors.test.vtl_hai_giong
@@ -94,6 +96,8 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/hop-thoai-kr-sau-thu.dom.tsx]
 
   - id: E12
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-11
     criterion: AC-11
     executor: test
     cmd: config:executors.test.vtl_chu_nho
@@ -118,6 +122,8 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/messages/tro-ly-okr.ts, packages/validation/src/okr-kiem.ts, _acceptance/va-tro-ly-okr-sau-thu/rang/man-that.mjs]
 
   - id: E16
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-11
     criterion: AC-13
     executor: script
     cmd: config:executors.script.vtl_luat_kho
@@ -157,6 +163,8 @@ evals:
       - "_acceptance/va-tro-ly-okr-sau-thu/contract.md"
 
   - id: E15
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-14
     criterion: AC-10
     executor: script
     cmd: config:executors.script.vtl_san_thiet_ke

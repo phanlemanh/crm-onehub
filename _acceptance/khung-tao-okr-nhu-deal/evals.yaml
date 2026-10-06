@@ -68,6 +68,8 @@ evals:
     paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "_acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"]
 
   - id: E7
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-12
     criterion: AC-5
     executor: test
     cmd: config:executors.test.kto_co_ngan
@@ -84,6 +86,8 @@ evals:
     paths: ["packages/ui/src/components/sheet.tsx", "packages/ui/src/components/giu-thay-doi.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/khung-tao-okr.dom.tsx"]
 
   - id: E9
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-12
     criterion: AC-6
     executor: test
     cmd: config:executors.test.tgy_cot_khong_dong
@@ -92,6 +96,8 @@ evals:
     paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E10
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-7
     criterion: AC-6
     executor: test
     cmd: config:executors.test.tgy_cot_sua_roi_nhan
@@ -100,6 +106,8 @@ evals:
     paths: ["packages/ui/src/components/sheet.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E11
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-5
     criterion: AC-7
     executor: test
     cmd: config:executors.test.kto_mo_kr_url
@@ -108,6 +116,8 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/components/crm/record-sheet/objective-sheet.tsx", "apps/app/test/khung-tao-okr.dom.tsx"]
 
   - id: E12
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-15
     criterion: AC-8
     executor: test
     cmd: config:executors.test.kto_bai_cu
@@ -163,6 +173,8 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/**", "packages/ui/src/components/sheet.tsx", "_acceptance/hop-thoai-giu-cho-dang-nhap/rang/man-giu-cho.mjs"]
 
   - id: E18
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-15
     criterion: AC-10
     executor: script
     cmd: config:executors.script.kto_thuoc_cu
