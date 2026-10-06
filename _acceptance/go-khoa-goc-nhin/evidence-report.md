@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cfc9e4a17fb05f456291afb5e0d73f50479669ff
+verified_commit: 6d01a2b462872b15d5ae560439fe5a54b2fcf64b
 human_signoff:
 ---
 
@@ -234,3 +234,7 @@ tiếng Việt, và không dựng nút xoá.
 ### Re-pin lần 1 — 2026-09-12, do ghim lại sau khi gộp onehub 193 commit — .githooks + workflow acceptance đổi sau verify; engine kit 2.11.0
 run_id: repin-20260912T031450Z-30729
 sha: cfc9e4a17fb05f456291afb5e0d73f50479669ff · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-10-06, do paths thư mục trần thành thư-mục/** trước khi bật hoá cũ theo paths
+run_id: repin-20261006T035956Z-62627
+sha: 6d01a2b462872b15d5ae560439fe5a54b2fcf64b · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng

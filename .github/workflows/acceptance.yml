@@ -23,6 +23,9 @@ jobs:
       - name: Product map
         run: node scripts/product-map.mjs --root . --check
 
+      - name: Paths đóng mặc định
+        run: node scripts/kiem-paths-dong.mjs
+
       - name: Pre-merge check
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then

@@ -1952,6 +1952,7 @@ risk_tiers:
     - "apps/api/src/workspace/**"
     - "apps/api/src/tracking/**"
     - "apps/api/src/mailbox/**"
+  stale_scope: paths
 signoff:
   required_for: [T2, T3]
   approvers: ["Manh Phan"]
