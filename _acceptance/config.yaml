@@ -1209,6 +1209,15 @@ executors:
     tpa_hop_le: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t hop-le
     tpa_onehub: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t onehub-trien-khai
     tpa_nhanh_khac: cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/vercel-trien-khai.spec.ts -t "nhanh-khac-khong-trien-khai|bo-khop-bat-bay-sao"
+    r1g_tam_loi: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t tam-loi"'
+    r1g_token_sai: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t token-sai"'
+    r1g_kiem_tam: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t kiem-tam"'
+    r1g_kiem_tu_choi: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t kiem-tu-choi"'
+    r1g_cau_chao: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t cau-chao"'
+    r1g_nang_luc: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t nang-luc"'
+    r1g_su_kien: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t su-kien"'
+    r1g_ngay_cuoi_ky: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tra-loi-tin-nhac-nguong.integration.spec.ts -t ngay-cuoi-ky"'
+    r1g_dem: 'bun run test -- "bun test _acceptance/zalo-va/rang/dem-getme.spec.ts"'
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh

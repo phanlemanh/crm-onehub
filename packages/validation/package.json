@@ -59,6 +59,7 @@
 		"./giai-doan": "./src/giai-doan.ts",
 		"./zalo-cau-noi": "./src/zalo-cau-noi.ts",
 		"./zalo-hoi": "./src/zalo-hoi.ts",
+		"./zalo-getme": "./src/zalo-getme.ts",
 		"./zalo-update": "./src/zalo-update.ts",
 		"./zalo-webhook": "./src/zalo-webhook.ts",
 		"./tai-lieu": "./src/tai-lieu.ts",

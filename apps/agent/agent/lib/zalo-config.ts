@@ -13,6 +13,7 @@ export const ZALO = {
 		cam: 403,
 		loiMayChu: 500,
 		tuChoi: { tu: 400, den: 500 },
+		tamLoi: [408, 429],
 	},
 	poll: { toiDaMoiNhip: 20, timeoutGiay: 1, giuDauMs: 7 * DAY_MS },
 	pollTay: { timeoutGiay: 30 },
@@ -84,7 +85,7 @@ export const ZALO = {
 	lenh: { tu: ["xong", "done"], toiDaSo: 20, moi: ["mới", "moi", "/new"] },
 	loi: {
 		huongDan:
-			"Chào bạn. Để nhận nhắc việc, mở OneHub Center › Cài đặt › Thông báo của bạn, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
+			"Chào bạn. Để nhận nhắc việc, mở OneHub Center, bấm ảnh đại diện ở góc trên › Nhắc buổi sáng, bấm «Nối Zalo» rồi nhắn mã 6 số ở đây.",
 		daNoi: (ten: string) =>
 			`Đã nối với ${ten}. Mỗi sáng tôi gửi việc cần để ý ở đây.`,
 		daNoiRoi: (ten: string, gio: string) =>
