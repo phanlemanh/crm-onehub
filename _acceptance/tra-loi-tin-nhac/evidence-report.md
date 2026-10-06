@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 753faa20cd70440628fbbf3f007a5da3a98c4312
+verified_commit: 0971326f082085b10597f13003cfa48437922f66
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -278,3 +278,7 @@ sha: b44d3d3e376855edcc58639630415cb68cc44437 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-05, do zalo-va (R1g): thước nguong.ts, E11, E17 của tra-loi-tin-nhac; gộp onehub e0b08ccd
 run_id: repin-20261005T144800Z-79320
 sha: 753faa20cd70440628fbbf3f007a5da3a98c4312 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng
+
+### Re-pin lần 6 — 2026-10-06, do zalo-va (R1g): ca nang-luc chạy được không khoá như CI #276; E11 tra-loi-tin-nhac sang judgment (chủ kho duyệt 06/10); gộp onehub e8645db7
+run_id: repin-20261006T010601Z-43596
+sha: 0971326f082085b10597f13003cfa48437922f66 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E11 (E11 không khai paths)
