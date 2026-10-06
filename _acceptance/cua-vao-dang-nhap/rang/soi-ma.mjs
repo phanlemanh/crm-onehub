@@ -1,4 +1,3 @@
-import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -6,6 +5,7 @@ import ts from "typescript";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
+const TEP_VONG = process.env.CVDN_TEP_VONG ?? join(HERE, "tep-vong.txt");
 const CAM_NHAP = ["@crm/auth", "@crm/db"];
 const LOI_VAO_CLIENT = new Set(["@crm/auth/client"]);
 const LOP_CAM = [
@@ -33,20 +33,16 @@ const CAN_DUNG = [
 	},
 ];
 
-function git(...doi) {
-	return execFileSync("git", ["-C", GOC, ...doi], { encoding: "utf8" }).trim();
+function docTepVong() {
+	return readFileSync(TEP_VONG, "utf8")
+		.split("\n")
+		.map((t) => t.trim())
+		.filter((t) => t !== "");
 }
 
 function tepVongNay() {
 	if (process.env.CVDN_SOI_TEP) return process.env.CVDN_SOI_TEP.split(":");
-	const goc = git("merge-base", "HEAD", "origin/onehub");
-	const daDoi = new Set([
-		...git("diff", "--name-only", goc).split("\n"),
-		...git("ls-files", "--others", "--exclude-standard", "apps/app").split(
-			"\n",
-		),
-	]);
-	return [...daDoi].filter(
+	return docTepVong().filter(
 		(t) =>
 			t.startsWith("apps/app/") &&
 			/\.(ts|tsx)$/.test(t) &&
@@ -158,15 +154,14 @@ function chay() {
 	}
 
 	if (!process.env.CVDN_SOI_TEP) {
-		const goc = git("merge-base", "HEAD", "origin/onehub");
-		const cham = git("diff", "--name-only", goc, "HEAD")
-			.split("\n")
-			.filter((t) => DUONG_CAM.some((d) => t === d || t.startsWith(d)));
+		const cham = docTepVong().filter((t) =>
+			DUONG_CAM.some((d) => t === d || t.startsWith(d)),
+		);
 		ghi(
 			cham.length === 0,
 			cham.length === 0
-				? "(d) diff khong cham landing, proxy.ts, packages/auth"
-				: `(d) diff cham: ${cham.join(", ")}`,
+				? "(d) vong khong cham landing, proxy.ts, packages/auth"
+				: `(d) vong cham: ${cham.join(", ")}`,
 		);
 	}
 

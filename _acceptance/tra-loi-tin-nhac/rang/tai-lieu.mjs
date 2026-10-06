@@ -24,23 +24,37 @@ function mucBotZalo(text) {
 	return het < 0 ? sau : sau.slice(0, het);
 }
 
-const coSo = execFileSync(
+const dauHoSo = execFileSync(
 	"git",
-	["-C", GOC, "merge-base", "HEAD", "origin/onehub"],
-	{
-		encoding: "utf8",
-	},
-).trim();
+	[
+		"-C",
+		GOC,
+		"log",
+		"--diff-filter=A",
+		"--format=%H",
+		"--",
+		`_acceptance/${SLUG}/contract.md`,
+	],
+	{ encoding: "utf8" },
+)
+	.trim()
+	.split("\n")
+	.at(-1);
+if (!dauHoSo) {
+	console.error(`khong tim thay commit dau cua ho so ${SLUG}`);
+	process.exit(2);
+}
+const truocHoSo = `${dauHoSo}^`;
 const ket = [];
 const moc = (ten, dat) => ket.push({ ten, dat });
 
 const botNhanh = mucBotZalo(doc("CONTEXT.md", REF));
-const botGoc = mucBotZalo(doc("CONTEXT.md", coSo));
+const botTruoc = mucBotZalo(doc("CONTEXT.md", truocHoSo));
 moc(
 	"CONTEXT Bot Zalo neu lenh xong",
 	/`?xong`?/.test(botNhanh) && botNhanh.includes("đánh dấu"),
 );
-moc("CONTEXT ban merge-base chua neu lenh xong", !/`?xong`?/.test(botGoc));
+moc("CONTEXT ban truoc ho so chua neu lenh xong", !/`?xong`?/.test(botTruoc));
 
 const agent = doc("docs/agent.md", REF);
 const doan = agent.split(/\n{2,}/);

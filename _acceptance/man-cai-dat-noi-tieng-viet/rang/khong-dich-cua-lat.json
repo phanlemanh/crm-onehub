@@ -48,5 +48,11 @@
 			"gia_tri": "acme.com",
 			"vi_sao": "Ten mien mau trong o goi y. Giu nguyen o ca hai ban."
 		}
+	],
+	"mien_dau": [
+		{
+			"chuoi": "Chung",
+			"vi_sao": "nhan thanh ben va tieu de man /settings tu bfb313301 (25/09, thay Tong quan) — tu tieng Viet khong co dau, ve 3 la phep do gan dung"
+		}
 	]
 }

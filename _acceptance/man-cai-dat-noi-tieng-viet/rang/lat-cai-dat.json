@@ -4,7 +4,7 @@
 		"apps/app/app/(app)/[slug]/settings",
 		"apps/app/app/(app)/[slug]/settings/currencies"
 	],
-	"them": [],
+	"them": ["packages/ui/src/components/copy-value.tsx"],
 	"khong_quet": [],
 	"mien_tru": []
 }

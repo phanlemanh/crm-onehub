@@ -252,3 +252,8 @@ evals:
       - apps/app/lib/messages/agent-builder-tac-nhan.ts
       - apps/app/lib/messages/agent-builder-ket-qua.ts
       - CONTEXT.md
+    paths:
+      - "apps/app/lib/messages/agent-builder-khung.ts"
+      - "apps/app/lib/messages/agent-builder-tac-nhan.ts"
+      - "apps/app/lib/messages/agent-builder-ket-qua.ts"
+      - "CONTEXT.md"

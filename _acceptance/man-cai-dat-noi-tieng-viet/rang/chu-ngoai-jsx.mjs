@@ -83,6 +83,13 @@ function hinhDang(goi) {
 	return "khong-ro";
 }
 
+function khoaKho(chu) {
+	const m =
+		/t\.([A-Za-z]+)\.([A-Za-z]+)/.exec(chu) ??
+		/\bmsg\.([A-Za-z]+)\.([A-Za-z]+)/.exec(chu);
+	return m?.slice(1, 3).join(".") ?? null;
+}
+
 function quetToast(files) {
 	const thay = [];
 	let boQua = 0;
@@ -96,7 +103,7 @@ function quetToast(files) {
 						file: f,
 						dong: dong(n, nguon),
 						hinh_dang: hinhDang(n),
-						khoa: /t\.([A-Za-z]+)\.([A-Za-z]+)/.exec(n.getText(nguon))?.slice(1, 3).join(".") ?? null,
+						khoa: khoaKho(n.getText(nguon)),
 						chu: chuTrong(n),
 					});
 			}
@@ -152,6 +159,47 @@ function quetTieuDe(files) {
 		};
 		ts.forEachChild(nguon, di);
 	}
+	return o;
+}
+
+function oThanhBenKhai() {
+	const tb = TD.thanh_ben;
+	if (tb === undefined) return [];
+	const nguon = ts.createSourceFile(
+		tb.khoa_tai,
+		readFileSync(`${GOC}/${tb.khoa_tai}`, "utf8"),
+		ts.ScriptTarget.Latest,
+		true,
+		ts.ScriptKind.TSX,
+	);
+	const o = [];
+	const di = (n) => {
+		if (
+			ts.isPropertyAssignment(n) &&
+			ts.isIdentifier(n.name) &&
+			n.name.text === "khoa" &&
+			ts.isObjectLiteralExpression(n.parent)
+		) {
+			const laNhom = n.parent.properties.some(
+				(p) => p.name && ts.isIdentifier(p.name) && p.name.text === tb.nhom_khi_co,
+			);
+			o.push({
+				file: tb.khoa_tai,
+				dong: dong(n, nguon),
+				loai: "nhan-thanh-ben",
+				tra_cuu: tb.tra_cuu_tai,
+				nhom: laNhom ? tb.nhom.nhom : tb.nhom.muc,
+				khoa:
+					ts.isStringLiteral(n.initializer) ||
+					ts.isNoSubstitutionTemplateLiteral(n.initializer)
+						? n.initializer.text
+						: null,
+				viet_thang: null,
+			});
+		}
+		ts.forEachChild(n, di);
+	};
+	ts.forEachChild(nguon, di);
 	return o;
 }
 
@@ -299,10 +347,12 @@ function ngan(duong) {
 	return duong.startsWith(`${GOC}/`) ? duong.slice(GOC.length + 1) : duong;
 }
 
-async function nhomKhoCuaFile(file) {
+async function nhomKhoCuaFile(file, nhomCan = null) {
 	const duong = `${GOC}/${file}`;
 	const nguon = cay(file);
-	const ung = nhomTraCuu(nguon, bienGoiKho(nguon, nhapDanhDinh(nguon)));
+	const ung = nhomTraCuu(nguon, bienGoiKho(nguon, nhapDanhDinh(nguon))).filter(
+		(u) => nhomCan === null || u.nhom === nhomCan,
+	);
 
 	if (ung.length !== 1)
 		return {
@@ -350,7 +400,7 @@ async function nhomKhoCuaFile(file) {
 
 async function chanTieuDe() {
 	const L = lat(KHAI_PATH);
-	const o = quetTieuDe(L.file);
+	const o = [...quetTieuDe(L.file), ...oThanhBenKhai()];
 
 	if (o.length === 0) {
 		console.log(
@@ -364,17 +414,19 @@ async function chanTieuDe() {
 
 	const thanhBen = o.filter((x) => x.loai === "nhan-thanh-ben");
 	const khoTheoFile = new Map();
+	const noiTra = (x) => `${x.tra_cuu ?? x.file}|${x.nhom ?? ""}`;
 
 	if (TD.co_thanh_ben === true) {
-		const cacFile = [...new Set(thanhBen.map((x) => x.file))];
+		const cacFile = [...new Set(thanhBen.map(noiTra))];
 		if (cacFile.length === 0) {
 			console.log(
 				"KHONG DO DUOC: lat khai co thanh ben ma khong file nao trong lat mang o nhan thanh ben.",
 			);
 			process.exit(2);
 		}
-		for (const f of cacFile) {
-			const r = await nhomKhoCuaFile(f);
+		for (const noi of cacFile) {
+			const [f, nhomCan] = noi.split("|");
+			const r = await nhomKhoCuaFile(f, nhomCan === "" ? null : nhomCan);
 			if (r.loi !== undefined) {
 				console.log(`KHONG DO DUOC: ${r.loi}`);
 				console.log(
@@ -391,15 +443,15 @@ async function chanTieuDe() {
 			console.log(
 				`   ${f} -> ${r.ham}("${TIENG_DO}").${r.nhom} trong ${r.kho} (${r.khoa.size} khoa)`,
 			);
-			khoTheoFile.set(f, r);
+			khoTheoFile.set(noi, r);
 		}
 	}
 
 	const lac = thanhBen.filter(
-		(x) => x.khoa === null || !khoTheoFile.get(x.file).khoa.has(x.khoa),
+		(x) => x.khoa === null || !khoTheoFile.get(noiTra(x)).khoa.has(x.khoa),
 	);
 	for (const x of lac) {
-		const r = khoTheoFile.get(x.file);
+		const r = khoTheoFile.get(noiTra(x));
 		console.log(
 			`NHAN THANH BEN LAC: ${x.file}:${x.dong} khoa ${JSON.stringify(x.khoa)} khong co trong nhom ${r.nhom} cua ${r.kho}`,
 		);
@@ -612,7 +664,7 @@ function chanDoiChieu() {
 			toastKhaiMuc: BANG.loi_goi.map((l) => `${l.file}|${l.khoa}`).sort(),
 			toastNhanRa: thay.length,
 			toastKhai: BANG.loi_goi.length,
-			tieuDeNhanRa: td.length,
+			tieuDeNhanRa: td.length + oThanhBenKhai().length,
 			tieuDeKhai: SO_TIEU_DE,
 		}),
 	);

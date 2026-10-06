@@ -65,6 +65,7 @@ const en = {
 			`Could not reach the AI Gateway to list models. The agent is still running ${ma}.`,
 		daLuu: "The agent will use this model from its next session.",
 		khongDuQuyen: "Only an owner or an admin can change the agent's model.",
+		biGo: "The model you chose is no longer on the AI Gateway — the agent is running the default model. Pick another model.",
 	},
 	luuTru: {
 		tieuDe: "Archived records",
@@ -253,6 +254,7 @@ const vi = {
 			`Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy ${ma}.`,
 		daLuu: "Tác nhân sẽ dùng model này từ lượt chạy sau.",
 		khongDuQuyen: "Chỉ chủ sở hữu hoặc quản trị mới đổi được model.",
+		biGo: "Model đã chọn không còn trên AI Gateway — tác nhân đang chạy model mặc định. Chọn model khác.",
 	},
 	luuTru: {
 		tieuDe: "Bản ghi đã xoá",

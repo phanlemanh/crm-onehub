@@ -44,11 +44,11 @@
 	],
 	"mien_tru": [],
 	"neo": {
-		"file": 26,
+		"file": 28,
 		"file_quet": 20,
 		"chuoi": 237,
 		"van_ban": 180,
 		"thuoc_tinh": 57,
-		"ghi_chu": "Do bang chinh ban khai nay ngay 06/09, sau khi ban khai nhap sot hai thu muc route. file = so .tsx tren dia trong sau thu muc; file_quet = con lai sau khi tru sau file hoan; chuoi = ung vien truoc khi tru mien tru, tach thanh van_ban + thuoc_tinh. Lech la thoat ma 2 kem diff ten file."
+		"ghi_chu": "Do bang chinh ban khai nay ngay 06/09, sau khi ban khai nhap sot hai thu muc route. file = so .tsx tren dia trong sau thu muc; file_quet = con lai sau khi tru sau file hoan; chuoi = ung vien truoc khi tru mien tru, tach thanh van_ban + thuoc_tinh. Lech la thoat ma 2 kem diff ten file. Tu 04/10 neo.file 26 -> 28: builder-failure-card.tsx (47c1e67c1, 22/09) va builder-question-composer.tsx (a2864e723, 27/09) them vao components/agent-builder."
 	}
 }

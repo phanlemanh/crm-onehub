@@ -5,6 +5,7 @@ import type { PhamViYeuCau } from "./pham-vi-yeu-cau";
 export type BaseTrpcContext = {
 	req?: Request;
 	session: Session | null;
+	sessionError: boolean;
 	phamViYeuCau?: PhamViYeuCau;
 };
 
