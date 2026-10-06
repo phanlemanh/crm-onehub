@@ -61,6 +61,7 @@ mock.module("@/lib/trpc/client", () => ({
 						effectiveId: MODEL.id,
 						defaultId: MODEL.id,
 						effective: MODEL,
+						selectedMissing: false,
 						updatedAt: null,
 						canManage: coQuyen,
 					}),

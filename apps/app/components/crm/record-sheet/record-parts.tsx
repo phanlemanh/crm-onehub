@@ -9,7 +9,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTableRow } from "@crm/ui/components/simple-table";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TableCell } from "@crm/ui/components/table";
-import { useIsMobile } from "@crm/ui/hooks/use-mobile";
+import { useKhoMan } from "@crm/ui/hooks/use-kho-man";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import type { ReactNode } from "react";
@@ -55,7 +55,9 @@ export function RecordSheetFrame({
 }) {
 	const m = crmMessages(useLocale());
 	const { stack, close } = useRecordStack();
-	const cuon = useIsMobile() && cuonCaKhung;
+	const kho = useKhoMan();
+	const cuon = cuonCaKhung && kho === "dien-thoai";
+	const ngu = cuonCaKhung && kho === "chua-biet" ? "chua-biet" : cuon;
 
 	const khung = (
 		<>
@@ -93,7 +95,7 @@ export function RecordSheetFrame({
 	);
 
 	return (
-		<CuonCaKhungContext.Provider value={cuon}>
+		<CuonCaKhungContext.Provider value={ngu}>
 			<div
 				data-cuon-ca-khung={cuon ? "" : undefined}
 				className={

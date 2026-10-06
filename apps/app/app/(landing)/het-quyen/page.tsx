@@ -20,7 +20,7 @@ export default async function HetQuyenPage() {
 		<main className="mx-auto flex min-h-svh max-w-md flex-col items-start justify-center gap-4 px-4">
 			<h1 className="font-medium text-xl">{t.tieuDe}</h1>
 			<p className="text-muted-foreground">{t.than}</p>
-			<SignOutButton label={t.dangXuat} />
+			<SignOutButton label={t.dangXuat} loi={t.dangXuatLoi} />
 		</main>
 	);
 }

@@ -25,6 +25,7 @@ import {
 	orgImportApplyOutput,
 	orgImportInput,
 	orgImportPreviewOutput,
+	orgKhoiPhucOutput,
 	orgLuuTruXemTruocOutput,
 	orgOkOutput,
 	orgPlacementInput,
@@ -105,7 +106,7 @@ export class ToChucRouter {
 
 	@Mutation({
 		input: orgIdInput,
-		output: orgOkOutput,
+		output: orgKhoiPhucOutput,
 		meta: restMeta("POST", "/org/divisions/{id}/restore", TAG),
 	})
 	async restoreDivision(
@@ -183,7 +184,7 @@ export class ToChucRouter {
 
 	@Mutation({
 		input: orgIdInput,
-		output: orgOkOutput,
+		output: orgKhoiPhucOutput,
 		meta: restMeta("POST", "/org/departments/{id}/restore", TAG),
 	})
 	async restoreDepartment(

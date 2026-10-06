@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 83457a0979f2332fd2ed396d7cbccf5facac3989
+verified_commit: f1dc3a0b31cebbabb5759766220011401697308a
 human_signoff: Mạnh 2026-09-16
 ---
 
@@ -261,3 +261,15 @@ Round 4: so-dang-ky.mjs đổi sang nạp slug hồ sơ qua SLUG_HO_SO thay vì 
 ### Re-pin lần 1 — 2026-09-18, do hoa cu do tron origin/onehub vao nhanh truoc khi mo PR
 run_id: repin-20260918T123301Z-81551
 sha: 83457a0979f2332fd2ed396d7cbccf5facac3989 · suites: 4 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-10-04, do sua-thuoc-sau-gop
+run_id: repin-20261004T053254Z-97828
+sha: 3f3c60fe85ce0734a0f149a37c6c24dd52b98a74 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E13 · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12
+
+### Re-pin lần 3 — 2026-10-04, do sua-thuoc-sau-gop
+run_id: repin-20261004T102557Z-19741
+sha: c0d7bd90bfedb66192708fd6a8e15fb7f08c5700 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E13 · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12
+
+### Re-pin lần 4 — 2026-10-04, do sua-thuoc-sau-gop
+run_id: repin-20261004T122715Z-87704
+sha: f1dc3a0b31cebbabb5759766220011401697308a · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E13 · AC không có chốt máy: AC-12

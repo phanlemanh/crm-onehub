@@ -222,6 +222,7 @@ function chiTiet(
 			duyet: false,
 			rutDuyet: false,
 		},
+		themKrLe: false,
 		...doi,
 	});
 }
@@ -297,6 +298,7 @@ function datNen({
 				gopY: [{ value: "cho", count: 0 }],
 			},
 			canEdit,
+			canCreate: canEdit || quanTri,
 		}),
 	);
 	dat("okr.mine", () => mineOutput.parse({ objectives: rows }));

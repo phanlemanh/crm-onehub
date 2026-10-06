@@ -332,6 +332,7 @@ export class OkrXemService {
 			total: rows.length,
 			facetCounts: demMatLoc(ds, input.loc),
 			canEdit: this.quyenOkr.suaDuocDonVi(q, userId, donViCuaChon(input.unit)),
+			canCreate: this.quyenOkr.nhapDuoc(q, userId, donViCuaChon(input.unit)),
 		};
 	}
 
