@@ -299,23 +299,38 @@ async function dung(base) {
 	const congApi = await congTuDo([congApp]);
 	const app = `http://localhost:${congApp}`;
 	const api = `http://localhost:${congApi}`;
+	const tepCuaChan = process.env.PHIEN_DO_CUA_CHAN ?? null;
+	const congCua = tepCuaChan ? await congTuDo([congApp, congApi]) : null;
+	const cua = congCua ? `http://localhost:${congCua}` : null;
 	const moiTruong = {
 		...process.env,
 		DATABASE_URL: url,
 		APP_URL: app,
 		API_URL: api,
 		PHIEN_DO: ten,
+		...(cua ? { CUA_CHAN_URL: cua } : {}),
 	};
-	noi(`kho ${ten} · app ${app} · api ${api}`);
+	noi(`kho ${ten} · app ${app} · api ${api}${cua ? ` · cua chan ${cua}` : ""}`);
 
 	const mayApi = khoi(
 		"api",
 		"bun",
-		["src/main.ts"],
+		["--watch", "src/main.ts"],
 		join(GOC, "apps/api"),
 		{ ...moiTruong, PORT: String(congApi) },
 		thuMuc,
 	);
+	const mayCua = cua
+		? khoi(
+				"cua-chan",
+				"bun",
+				[join(GOC, tepCuaChan)],
+				GOC,
+				{ ...moiTruong, CUA_CHAN_PORT: String(congCua), CUA_CHAN_NANG: api },
+				thuMuc,
+			)
+		: null;
+	const apiCuaApp = cua ?? api;
 	const mayApp = khoi(
 		"app",
 		"bun",
@@ -324,13 +339,21 @@ async function dung(base) {
 		{
 			...moiTruong,
 			PORT: String(congApp),
-			NEXT_PUBLIC_API_URL: api,
+			API_URL: apiCuaApp,
+			NEXT_PUBLIC_API_URL: apiCuaApp,
 			PROTO_DIST_DIR: `${PHIEN_DO.khoApp}-${treeSlug(cay)}`,
 		},
 		thuMuc,
 	);
 
 	await choSan(mayApi, `${api}/health`, PHIEN_DO.cho.apiMs, true);
+	if (mayCua)
+		await choSan(
+			mayCua,
+			`${cua}/__cua-chan/trang-thai`,
+			PHIEN_DO.cho.apiMs,
+			true,
+		);
 	await choSan(mayApp, app, PHIEN_DO.cho.appMs, false);
 
 	process.env.APP_URL = app;

@@ -10,6 +10,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { doTaiGop } from "./cau-hinh.mjs";
 
 const TEP_NAY = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP_NAY), "..", "..", "..");
@@ -17,6 +18,8 @@ const SLUG = "cap-nhat-tuan-okr";
 const DA_KY = new Set(["signed-off", "machine-cleared"]);
 const MAY = new Set(["test", "script"]);
 const HO_SO_DAT_OKR = "dat-okr-trong-crm";
+
+doTaiGop(TEP_NAY);
 
 function dung(ma, loi) {
 	console.log(loi);

@@ -403,6 +403,20 @@ So a measurement now runs in a **measure session** on a database of its own tree
   `PHIEN_DO` set. It cleans up in `finally` and on SIGINT, SIGTERM and SIGHUP, and
   exits with the command's code (130/143/129 when interrupted, 2 when the session
   could not be built).
+- The session's API runs under `bun --watch`. A measurement that plants a fault in API
+  code to prove a ruler still goes red (a mutation run) sees the API reload with the
+  fault in place, and again when the fault is removed. Without it the API keeps the code
+  it started with, and a planted fault in the API is never measured.
+- `PHIEN_DO_CUA_CHAN=<file>` puts a blocking proxy between the app and the API. The
+  session starts `<file>` (a path from the repo root, today
+  `_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs`) on a third free port with
+  `CUA_CHAN_PORT` and `CUA_CHAN_NANG` (the API it forwards to), waits for
+  `/__cua-chan/trang-thai`, points both `API_URL` and `NEXT_PUBLIC_API_URL` of the app at
+  it, and gives the command `CUA_CHAN_URL`. The ruler then makes one tRPC procedure
+  return 500 to show an error state rendered by the server, which interception in the
+  browser cannot reach. The command's own `API_URL` still names the API directly. The
+  screen evals of cap-nhat-tuan-okr and toan-canh-okr use it; before this option they
+  needed dev servers started by hand on fixed ports and a fixed `_do` database.
 - `tien-de` never runs on the shared database. When `DATABASE_URL` does not name a
   throwaway database — `_do` other than a `__mau_do` template, or a `_gieo` scratch
   database — it re-runs itself inside a session. Every screen eval in

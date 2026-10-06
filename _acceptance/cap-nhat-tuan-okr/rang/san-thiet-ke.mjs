@@ -9,7 +9,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { VONG } from "./cau-hinh.mjs";
+import { doTaiGop, VONG } from "./cau-hinh.mjs";
 
 const TEP_NAY = fileURLToPath(import.meta.url);
 const GOC = join(dirname(TEP_NAY), "..", "..", "..");
@@ -165,6 +165,8 @@ if (process.argv.includes("--chieu-do")) {
 	console.log(`chieu do: ${ca.length - lot}/${ca.length} ca do bi bat`);
 	process.exit(lot === 0 ? 0 : 1);
 }
+
+doTaiGop(TEP_NAY);
 
 const tep = git("diff", "--name-only", `${VONG.truoc}...${VONG.sau}`)
 	.split("\n")
