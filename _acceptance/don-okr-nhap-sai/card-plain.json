@@ -1,0 +1,44 @@
+{
+  "feature_plain": "Người phụ trách xoá được mục tiêu OKR nhập sai, lấy lại được mục tiêu bỏ nhầm, và danh sách OKR mặc định chỉ hiện mục tiêu đang dùng; thoả thuận, cá nhân, công ty chỉ xoá vĩnh viễn được sau khi đã lưu trữ.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ xoá hẳn một mục tiêu nháp chưa ai dựa vào, cùng KR, việc và người theo dõi của nó; vết thao tác và góp ý Kara vẫn còn."},
+    {"id": "AC-2", "p": "Sẽ từ chối xoá khi mục tiêu đã có lịch sử, nói rõ vì sao, kể cả khi một lần cập nhật tuần đang ghi dở cùng lúc."},
+    {"id": "AC-3", "p": "Sẽ có một bài kiểm tự đỏ khi ai thêm bảng mới trỏ vào mục tiêu mà quên xếp nó là lịch sử hay đi theo."},
+    {"id": "AC-4", "p": "Sẽ chỉ hiện nút Xoá hay Dùng lại khi bấm vào thì máy chủ thật sự làm được, ở mọi trạng thái, mọi người, mọi giai đoạn chu kỳ."},
+    {"id": "AC-6", "p": "Sẽ cho «Dùng lại» mục tiêu đã bỏ: về Nháp, ghi vết, tính lại vào trần số mục tiêu của đơn vị."},
+    {"id": "AC-7", "p": "Sẽ để máy chủ tách mục tiêu đã bỏ ra riêng, khớp đủ bộ lọc phụ trách, loại và luật ai được xem."},
+    {"id": "AC-8", "p": "Sẽ ẩn mục tiêu đã bỏ ở «Theo đơn vị», gom vào dòng gập «Đã bỏ (n)» cuối danh sách, đóng sẵn."},
+    {"id": "AC-9", "p": "Sẽ làm y như vậy ở «Của tôi»."},
+    {"id": "AC-10", "p": "Sẽ cho mục tiêu đã bỏ trông khác hẳn Nháp: nhãn khác kiểu, dòng mờ, không thanh tiến độ."},
+    {"id": "AC-11", "p": "Sẽ cho ngăn chi tiết đúng nút theo trạng thái: nháp sạch có Xoá mà không có Bỏ, mục tiêu đã bỏ có Dùng lại; xoá luôn hỏi lại một lần."},
+    {"id": "AC-12", "p": "Sẽ từ chối xoá vĩnh viễn thoả thuận, cá nhân, công ty chưa lưu trữ, ở cả màn hình lẫn khi gọi thẳng API."},
+    {"id": "AC-13", "p": "Sẽ giữ nguyên ngày lưu trữ đầu khi ai lưu trữ lại một bản ghi đã lưu trữ, để hạn dọn 180 ngày không bị đếm lại."},
+    {"id": "AC-14", "p": "Sẽ thêm bộ chữ chung (Xoá, Đã lưu trữ, Xoá vĩnh viễn, Bỏ · Dùng lại) vào từ điển sản phẩm và tài liệu máy chủ."}
+  ],
+  "wont_do": [
+    {"id": "AC-5", "p": "Chặn người không sửa được đơn vị, vai «chỉ OKR» không đủ quyền, chu kỳ đã khoá hoặc đã ẩn — y như các thao tác ghi mục tiêu khác."},
+    {"id": "OOS-1", "p": "KHÔNG làm lượt 2 và lượt 3 của chuẩn: chữ trên các màn khác, Hoàn tác khi lưu trữ bán hàng, Kanban, tác nhân, giai đoạn, chiến dịch, kế hoạch 30 ngày."},
+    {"id": "OOS-2", "p": "KHÔNG làm Tài liệu — nó đi lượt 3b của lộ trình Kho tài liệu."},
+    {"id": "OOS-3", "p": "KHÔNG làm xoá nhiều mục tiêu một lúc, Hoàn tác sau khi xoá, hay thùng rác cho mục tiêu."},
+    {"id": "OOS-4", "p": "KHÔNG cho Kara xoá hay dùng lại mục tiêu."}
+  ],
+  "scope_plain": "Bốn phần dưới đây cố ý để ngoài lượt này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Loại bản ghi: mục tiêu OKR, KR (chỉ để xét lịch sử) và thoả thuận, cá nhân, công ty — phủ ở AC-1 đến AC-13."},
+    {"i": 1, "p": "Việc làm với bản ghi: xoá, bỏ, dùng lại, lưu trữ, xoá vĩnh viễn, hiện trong danh sách — đối chiếu HubSpot (thùng rác 90 ngày) và Lattice (xoá và kết thúc mục tiêu)."},
+    {"i": 2, "p": "Tình trạng: sáu tình trạng của mục tiêu, cộng đang dùng và đã lưu trữ của bán hàng — thước là danh sách trạng thái và mọi quan hệ trỏ vào mục tiêu, KR (AC-2, AC-3, AC-4)."},
+    {"i": 3, "p": "Đường vào: ngăn chi tiết, Theo đơn vị, Của tôi, gọi thẳng API, thao tác theo lô, lịch dọn tự động (AC-5, AC-7…AC-9, AC-11, AC-12)."},
+    {"i": 4, "p": "Áp mọi chỗ: quyền và giai đoạn chu kỳ, vết thao tác, trần số mục tiêu, mục tiêu hạn chế, cập nhật tuần chen giữa, tiếng Việt và tiếng Anh."},
+    {"i": 5, "p": "Giả định chờ anh gạch: nháp sạch chỉ có «Xoá», không có «Bỏ»."},
+    {"i": 6, "p": "Giả định chờ anh gạch: «Dùng lại» không hỏi lại, vì bấm «Bỏ» là đảo được."},
+    {"i": 7, "p": "Giả định chờ anh gạch: xoá mục tiêu vẫn giữ vết và góp ý Kara; dấu «tạo từ mẫu» đi theo mục tiêu."},
+    {"i": 8, "p": "Giả định chờ anh gạch: cây căn chỉnh, họp tuần, chấm điểm không đổi lượt này."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo màn hình hứa mười ảnh mà các bước chỉ chụp chín — đã thêm bước «Của tôi» và ghi sẵn mười tên ảnh để so đủ."},
+    {"i": 1, "p": "Ca cập nhật tuần ghi dở đúng lúc xoá chưa có tiêu chí nào đo — đã thêm vào AC-2 và một phép đo ép hai việc chạy chồng nhau."},
+    {"i": 2, "p": "Câu báo sau «Dùng lại» chưa chốt, và câu «phải gửi duyệt lại» sai với đơn vị không có bước duyệt — đã chốt hai câu theo hai trường hợp."},
+    {"i": 3, "p": "Người chấm bằng mắt bị hỏi những điều không có trong tệp được đưa — đã bổ sung tệp và ảnh cho từng vế câu hỏi."},
+    {"i": 4, "p": "«Của tôi» chỉ được đo bằng dữ liệu giả, lọt được lỗi chỉ có trên hệ thật — đã thêm phép đo trên trang thật, so số trên màn với dữ liệu."}
+  ]
+}

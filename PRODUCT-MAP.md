@@ -11,7 +11,7 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>123 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>42 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
@@ -41,6 +41,7 @@ flowchart TD
 
 ## Đang làm
 
+- Dọn được OKR nhập sai — mục tiêu chưa có lịch sử xoá được, mục tiêu đã bỏ ẩn khỏi danh sách mặc định và trông khác nháp, mục tiêu bỏ nhầm dùng lại được về Nháp; xoá vĩnh viễn thoả thuận, cá nhân, công ty chỉ được sau lưu trữ, lưu trữ lại giữ ngày đầu (`don-okr-nhap-sai`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
