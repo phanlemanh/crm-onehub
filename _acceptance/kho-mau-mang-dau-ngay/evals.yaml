@@ -35,7 +35,8 @@ evals:
       moi 50 ms (tran 120 s; het tran -> ca do "khong toi diem giet <diem>") toi diem giet roi
       SIGKILL CA NHOM, cho tien trinh thoat va kho mau het ket noi (tran 30 s). Diem "migrate":
       kho mau co >= 1 hang trong _prisma_migrations. Diem "seed": so migration_name co
-      finished_at khac null BANG so thu muc trong packages/db/prisma/migrations. Tien de ghim sau
+      finished_at khac null BANG so thu muc trong packages/db/prisma/migrations VA bang "user" co
+      >= 1 hang (seed da bat dau, moi lenh truoc seed trong buildTemplate da chay). Tien de ghim sau
       khi giet, ca hai diem: kho mau chua co deal seed-deal-wise-1 — dem bang ham dem deal dung
       chung: to_regclass('public.deal') null -> 0, nguoc lai SELECT count(*) WHERE id; loi khac
       KHONG bi nuot ("luot bi giet da dung xong kho mau — phep do khong do giua chung: <diem>").

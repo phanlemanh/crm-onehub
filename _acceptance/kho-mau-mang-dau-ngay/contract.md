@@ -34,7 +34,8 @@ Từ ngữ trong hợp đồng này:
 - **Lượt bị giết giữa chừng**: CLI `bun scripts/measure-db.ts --tao --ten <cây>` bị SIGKILL cả
   nhóm tiến trình ở một trong hai điểm: **trong migrate** — kho mẫu đã có ít nhất một hàng
   trong `_prisma_migrations`; **trong seed** — mọi migration của `packages/db/prisma/migrations`
-  đã hoàn tất mà bảng `deal` chưa có hàng nào. Kho mẫu sau khi bị giết chưa có deal
+  đã hoàn tất và seed đã ghi ít nhất một hàng vào bảng `user` (nên mọi lệnh đứng trước seed
+  trong `buildTemplate` đã chạy xong). Kho mẫu sau khi bị giết chưa có deal
   `seed-deal-wise-1` (bảng `deal` vắng, theo `to_regclass`, cũng tính là chưa có).
 - **Lượt quét**: `sweepMeasureDatabases` — chính hàm mà `--quet` và đầu mỗi `--tao` gọi —
   chạy với đồng hồ tua tới, giới hạn vào tiền tố tên của lượt kiểm.

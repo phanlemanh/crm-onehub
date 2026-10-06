@@ -26,9 +26,11 @@ import { dropDatabase, withMaintenance } from "../scripts/test-db-admin";
 import {
 	isMeasureDatabase,
 	isTemplateDatabase,
+	lastTouched,
 	MEASURE_DATABASE,
 	measureDatabaseName,
 	parseMeasureComment,
+	templateBuildingComment,
 	templateDatabaseName,
 } from "../src/measure-database";
 
@@ -457,4 +459,34 @@ describe("quet-mo-coi", () => {
 		},
 		SLOW_MS,
 	);
+});
+
+describe("dau-dang-dung", () => {
+	it("reads back the building mark written by the module and refuses a broken one", () => {
+		const at = Date.UTC(2026, 9, 7, 5, 0, 0);
+		const written = templateBuildingComment(at);
+		const parsed = parseMeasureComment(written);
+
+		expect(parsed, "dau dang dung doc lai sai").toEqual({
+			kind: "building",
+			createdAt: at,
+		});
+		expect(parsed ? lastTouched(parsed) : 0, "dau dang dung doc lai sai").toBe(
+			at,
+		);
+
+		const broken: [string, string][] = [
+			[
+				"gio hong",
+				`${MEASURE_DATABASE.commentPrefix} ${MEASURE_DATABASE.buildingMark} created khong-phai-gio`,
+			],
+			["duoi thua", `${written} x`],
+		];
+		for (const [label, text] of broken) {
+			expect(
+				parseMeasureComment(text),
+				`dau dang dung hong van doc duoc: ${label}`,
+			).toBe(null);
+		}
+	});
 });
