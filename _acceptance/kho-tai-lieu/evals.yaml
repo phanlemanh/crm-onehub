@@ -418,6 +418,15 @@ evals:
       doc nhu Track Changes (chu them to, chu bo gach) chu khong nhu man cua lap trinh vien; khong
       nhan nao dung tu ky thuat (markdown, slug, diff, hash). Bo cuc 390 dung duoc.
       Thieu bat ky anh dau vao nao -> UNCERTAIN ghi ro "thieu anh: <ten>", khong cham tu tai lieu thiet ke.
+    paths:
+      - "_acceptance/kho-tai-lieu/evidence/ktl-kho-rong.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-danh-sach-1440.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-danh-sach-390.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-doc-390.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-doc-1440.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-duyet-1440.png"
+      - "_acceptance/kho-tai-lieu/evidence/ktl-duyet-390.png"
+      - "docs/superpowers/specs/2026-09-27-kho-tai-lieu-design.md"
 
   - id: E15
     criterion: AC-15

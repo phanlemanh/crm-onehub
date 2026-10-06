@@ -1,7 +1,16 @@
 {
 	"lat": "man-cai-dat-noi-tieng-viet",
-	"so_o": 10,
-	"ghi_chu": "Muoi O NHAN: 2 tieu de tab (generateMetadata) + 8 nhan thanh ben. Dem O NHAN chu khong dem chuoi. Muc thanh ben thu tam la Truong, them ngay 18/09 boi ho so truong-tu-tao-o-cai-dat.",
+	"so_o": 18,
+	"ghi_chu": "Muoi O NHAN: 2 tieu de tab (generateMetadata) + 8 nhan thanh ben. Dem O NHAN chu khong dem chuoi. Muc thanh ben thu tam la Truong, them ngay 18/09 boi ho so truong-tu-tao-o-cai-dat. Tu 04/10 so_o 10 -> 18 va them khoi thanh_ben: db5641ba6 (21/09) doi danh sach muc thanh ben sang apps/app/lib/cai-dat-dieu-huong.ts, bfb313301 (25/09) chia bon nhom co nhan rieng (nhomThanhBen), cac luot sau them Giai doan, To chuc, Chuong trinh OKR, Dieu phoi — 12 nhan muc + 4 nhan nhom + 2 tieu de tab. Khoa nam o khoa_tai, tra cuu kho chuoi o tra_cuu_tai; object co thuoc tinh nhom_khi_co la nhan NHOM.",
 	"giu_nguyen": [],
-	"co_thanh_ben": true
+	"co_thanh_ben": true,
+	"thanh_ben": {
+		"khoa_tai": "apps/app/lib/cai-dat-dieu-huong.ts",
+		"tra_cuu_tai": "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx",
+		"nhom_khi_co": "muc",
+		"nhom": {
+			"muc": "thanhBen",
+			"nhom": "nhomThanhBen"
+		}
+	}
 }

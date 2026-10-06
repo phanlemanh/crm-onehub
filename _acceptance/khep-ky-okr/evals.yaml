@@ -31,13 +31,23 @@ evals:
       - "Ảnh ở 390 cho buoc-hoi; scrollWidth <= innerWidth"
     expected: "Mọi bước đạt; ảnh lưu ở evidence/; câu trên màn bằng câu của tệp chữ cho đúng mã. CHIỀU ĐỎ: --chieu-do chạy với bản sao hộp thoại khoá Lưu khi có câu hỏi → bước Lưu đỏ, script in «câu hỏi chặn lưu»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/okr-khep.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-kiem.ts"
+      - "packages/validation/src/okr-kr.ts"
+      - "packages/ui/src/components/field.tsx"
+      - "apps/api/src/okr/**"
+      - "_acceptance/khep-ky-okr/rang/man-khep-ky.mjs"
 
   - id: E4
     criterion: AC-2
     executor: script
     layer: backend-effect
     cmd: config:executors.script.kko_man_chrome
-    paths: ["apps/app/app/(app)/[slug]/okr/**", packages/validation/src/okr-kiem.ts, _acceptance/khep-ky-okr/rang/man-khep-ky.mjs]
+    paths: ["apps/app/app/(app)/[slug]/okr/**", packages/validation/src/okr-kiem.ts, apps/api/src/okr/**, _acceptance/khep-ky-okr/rang/man-khep-ky.mjs]
     expected: "Cùng lần chạy với E3: sau Lưu đọc DB có đúng một okrKeyResult mới với tên, khởi điểm 0, đích 40 như gõ; publishObjective của mục tiêu ba KR tăng tới trả thành công và DB đọc status cong-bo — luật không chặn máy chủ. CHIỀU ĐỎ: bản sao createKeyResult gọi kiemOkr và ném khi có mã → bước Lưu đỏ, script in thông điệp máy chủ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -71,6 +81,15 @@ evals:
       - "Mở lại hộp thoại trong rà (phiên đo mở cửa sổ qua API) → đổi đích không hiện ô lý do; dải «Đang rà giữa kỳ tới <ngày>» hiện ở đầu khu OKR → ảnh buoc-dai-ra"
     expected: "Mọi bước đạt; sau Lưu ngoài rà, DB có một dòng okrDoiDich ngoaiRa true mang đúng lý do đã gõ (script đọc DB). CHIỀU ĐỎ: bản sao hộp thoại luôn ẩn ô lý do → bước đầu đỏ, script in «thiếu ô lý do»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/okr-khep.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-khep.ts"
+      - "packages/validation/src/okr-kr.ts"
+      - "apps/api/src/okr/**"
+      - "_acceptance/khep-ky-okr/rang/man-khep-ky.mjs"
 
   - id: E8
     criterion: AC-5
@@ -132,6 +151,17 @@ evals:
       - "Ảnh ở 390 và 1440 cho buoc-cham; scrollWidth <= innerWidth; ở 390 bộ chọn cách xem là danh sách thả xuống (không phải nhóm nút) và chọn «Chấm điểm» từ đó đổi URL; chữ người nhập mang translate=no"
     expected: "Mọi bước đạt, ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao màn bỏ câu «không phải đánh giá nhân sự» → bước buoc-cham đỏ, script in «thiếu câu»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr-khep.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "packages/validation/src/okr-khep.ts"
+      - "packages/validation/src/okr-chu-ky.ts"
+      - "packages/validation/src/okr-chuong-trinh.ts"
+      - "packages/ui/src/components/view-switch.tsx"
+      - "apps/api/src/okr/**"
+      - "_acceptance/khep-ky-okr/rang/man-khep-ky.mjs"
 
   - id: E14
     criterion: AC-10
@@ -159,6 +189,17 @@ evals:
       - "Ảnh 390 cho buoc-dong-chan; scrollWidth <= innerWidth"
     expected: "Mọi bước đạt; pha trên bảng sau mỗi bước bằng phase đọc DB (script đọc). CHIỀU ĐỎ: bản sao hộp thoại đóng không tắt nút khi còn KR chưa chấm → bước buoc-dong-chan đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/okr/**"
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr-khep.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "packages/validation/src/okr-khep.ts"
+      - "packages/validation/src/okr-chu-ky.ts"
+      - "apps/api/src/okr/**"
+      - "_acceptance/khep-ky-okr/rang/man-khep-ky.mjs"
 
   - id: E16
     criterion: AC-12
@@ -201,6 +242,10 @@ evals:
       PASS khi cả bốn vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu
       tệp và dòng. FAIL khi một vế sai.
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/superpowers/specs/2026-09-27-khep-ky-okr-design.md"
+      - "_acceptance/khep-ky-okr/contract.md"
+      - "_acceptance/khep-ky-okr/design-pass.md"
 
   - id: E20
     criterion: AC-15
