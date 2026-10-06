@@ -181,11 +181,11 @@ evals:
     cmd: config:executors.script.dok_man_chrome
     steps:
       - "Cùng lần chạy với E11"
-      - "Quản trị: mở /<slug>/settings/okr ở 1440/vi → thanh bên có mục «Chương trình OKR», trang có 2 CardTitle (Chu kỳ, Cấu hình), bảng chu kỳ có dòng, nút Lưu disabled → E15-step1.png; bấm «Mở chu kỳ» → Sheet mở, URL có tham số, nút gửi disabled tới khi hợp lệ → E15-step2.png; điền quý 1/2027 trong năm 2027 (tạo năm trước) và gửi → bảng thêm dòng → E15-step3.png; sửa trần mục tiêu → nút Lưu bật → bấm → toast «Đã lưu» → E15-step4.png"
-      - "Thành viên thường: mở cùng trang → cả hai card còn, điều khiển disabled, dòng dưới tiêu đề nói chỉ quản trị đổi được → E15-step5.png"
+      - "Quản trị: mở /<slug>/settings/okr ở 1440/vi → thanh bên có mục «Chương trình OKR», hai CardTitle đầu của trang là Chu kỳ, Cấu hình theo đúng thứ tự (các lượt sau thêm thẻ bên dưới), bảng chu kỳ có dòng, nút Lưu disabled → E15-step1.png; bấm «Mở chu kỳ» → Sheet mở, URL có tham số, nút gửi disabled tới khi hợp lệ → E15-step2.png; điền quý 1/2027 trong năm 2027 (tạo năm trước) và gửi → bảng thêm dòng → E15-step3.png; sửa trần mục tiêu → nút Lưu bật → bấm → toast «Đã lưu» → E15-step4.png"
+      - "Thành viên thường: mở cùng trang → cả hai card còn, vẫn là hai CardTitle đầu Chu kỳ, Cấu hình, điều khiển disabled, dòng dưới tiêu đề nói chỉ quản trị đổi được → E15-step5.png"
       - "Cảnh cạnh sheet Thoả thuận (điều kiện bỏ design-pass): quản trị mở trang với ?record=deal:<id seed> → E15-step6.png (1440), E15-step7.png (390); Sheet «Mở chu kỳ» ở 390 → E15-step8.png"
     paths: ["apps/app/app/(app)/[slug]/settings/okr/**", apps/app/lib/cai-dat-dieu-huong.ts, apps/app/lib/messages/settings.ts, _acceptance/dat-okr-trong-crm/rang/man-okr.mjs]
-    expected: "exit 0 và ảnh; script đếm CardTitle, đọc disabled, đọc URL, đếm dòng bảng trước/sau. CHIỀU ĐỎ: ẩn card khi không quyền → bài đỏ đếm CardTitle 1; bỏ điều kiện đã-sửa khỏi nút Lưu → disabled ban đầu false, bài đỏ."
+    expected: "exit 0 và ảnh; script đọc dãy CardTitle (ít nhất 2, hai thẻ đầu là Chu kỳ, Cấu hình), đọc disabled, đọc URL, đếm dòng bảng trước/sau. CHIỀU ĐỎ: ẩn card khi không quyền → hai CardTitle đầu lệch, bài đỏ; bỏ điều kiện đã-sửa khỏi nút Lưu → disabled ban đầu false, bài đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E16
@@ -221,6 +221,9 @@ evals:
       ConfirmDialog trong packages/ui) đều trỏ rõ sang lượt 5 hoặc đợt 2 docs/settings.md.
     inputs: [docs/superpowers/specs/2026-09-25-dat-okr-trong-crm-design.md, _acceptance/dat-okr-trong-crm/contract.md]
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/superpowers/specs/2026-09-25-dat-okr-trong-crm-design.md"
+      - "_acceptance/dat-okr-trong-crm/contract.md"
 
   - id: E19
     criterion: AC-15

@@ -169,7 +169,11 @@ async function doMau(trang, giaoDien) {
 			?.closest("section");
 		const shader = [
 			...(cot?.querySelectorAll("[aria-hidden=true]") ?? []),
-		].some((e) => (e.getAttribute("class") ?? "").includes("radial-gradient"));
+		].some(
+			(e) =>
+				e.getAttribute("data-slot") !== "luoi-cham" &&
+				(e.getAttribute("class") ?? "").includes("radial-gradient"),
+		);
 		return {
 			sang: 0.2126 * k(red) + 0.7152 * k(g) + 0.0722 * k(b),
 			nen: `rgb(${red},${g},${b})`,

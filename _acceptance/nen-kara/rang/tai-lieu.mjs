@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,6 +18,8 @@ const TL = {
 		6: ["ProposedChangeReceipt"],
 		8: ["AiFeedback"],
 	},
+	moc: "origin/onehub",
+	hoSo: "_acceptance/nen-kara/contract.md",
 	khung: "muc-tieu-va-kr",
 	gopY: "gop-y-dung-cho",
 	diemCam: [
@@ -97,7 +100,32 @@ for (const [luat, can] of Object.entries(TL.thanhPhan)) {
 		ghi(chu.includes(ten), `muc 10 luat ${luat}: neu ${ten}`);
 }
 
-const loTrinh = bangSau(aiUx, TL.loTrinh);
+const git = (...d) =>
+	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
+
+function aiUxLucGop() {
+	if (doiSo("--tep-ai-ux") !== null) return { chu: aiUx, nguon: tepAiUx };
+	const gop = git(
+		"log",
+		"--first-parent",
+		"--diff-filter=A",
+		"--format=%H",
+		git("merge-base", "HEAD", TL.moc),
+		"--",
+		TL.hoSo,
+	)
+		.split("\n")
+		.at(-1);
+	if (!gop) return { chu: aiUx, nguon: tepAiUx };
+	return {
+		chu: git("show", `${gop}:${TL.aiUx}`),
+		nguon: `${TL.aiUx} tai commit gop ${gop.slice(0, 9)}`,
+	};
+}
+
+const lucGop = aiUxLucGop();
+dong.push(`--  lo trinh doc tu ${lucGop.nguon}`);
+const loTrinh = bangSau(lucGop.chu, TL.loTrinh);
 const iKhung = loTrinh.findIndex((o) => o[0].replaceAll("`", "") === TL.khung);
 const iGopY = loTrinh.findIndex((o) => o[0].replaceAll("`", "") === TL.gopY);
 ghi(iKhung !== -1, `lo trinh co hang ${TL.khung}`);

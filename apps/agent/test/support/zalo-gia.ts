@@ -20,7 +20,8 @@ export type TinDen = { giay: number; than: unknown };
 
 export type ChonZaloGia = {
 	tin?: TinGia[];
-	getMe?: "ok" | 401 | 500 | "la" | "ok-false-401" | "ok-false-500";
+	getMe?: "ok" | 401 | 500 | "la" | "ok-false-401" | "ok-false-500" | "mang";
+	getMeTho?: { http: number; than: "chu" | { ma: number } };
 	tenBot?: string;
 	send?: "ok" | 500 | "ok-false" | "la";
 	vatVoTan?: boolean;
@@ -86,6 +87,14 @@ function hangGiaoKhiMo(dau: TinDen[]) {
 }
 
 function traGetMe(chon: ChonZaloGia): Response {
+	const g = chon.getMeTho;
+	if (g) {
+		if (g.than === "chu") return new Response("loi", { status: g.http });
+		return Response.json(
+			{ ok: false, error_code: g.than.ma, description: "x" },
+			{ status: g.http },
+		);
+	}
 	if (chon.getMe === 401) {
 		return Response.json(
 			{ ok: false, error_code: 401, description: "Unauthorized" },
@@ -193,7 +202,10 @@ export function zaloGia(chon: ChonZaloGia = {}) {
 		const token = (phan.at(-2) ?? "").replace(/^bot/, "");
 		const body = thanGoi.parse(JSON.parse(String(init?.body ?? "{}")));
 		goi.push({ method, token, body });
-		if (method === "getMe") return traGetMe(chon);
+		if (method === "getMe") {
+			if (chon.getMe === "mang") throw new TypeError("fetch failed");
+			return traGetMe(chon);
+		}
 		if (method === "sendMessage") return traSend(chon, goi.length);
 		if (method === "setWebhook") {
 			if (chon.goiNguoc) {

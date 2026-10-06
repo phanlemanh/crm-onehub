@@ -3,6 +3,7 @@ import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
 import { SESSION_LIMITS } from "../../lib/dispatch-config";
 import { modelChoBoChay } from "../../lib/model";
+import { ghiModelPhien } from "../../lib/model-phien";
 import { ketQuaLuot } from "../../lib/run-result";
 
 export default defineAgent({
@@ -11,7 +12,11 @@ export default defineAgent({
 	model: defineDynamic({
 		fallback: DEFAULT_AGENT_MODEL.id,
 		events: {
-			"session.started": (_event, ctx) => modelChoBoChay(ctx),
+			"session.started": (_event, ctx) => {
+				const chon = modelChoBoChay(ctx);
+				void ghiModelPhien(ctx, chon?.model ?? DEFAULT_AGENT_MODEL.id);
+				return chon;
+			},
 		},
 	}),
 	outputSchema: z.object({

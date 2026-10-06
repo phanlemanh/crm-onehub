@@ -20,9 +20,9 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.nk_man_cu
-    expected: "exit 0; một lần gọi bun test chạy cả apps/app/test/nen-kara-man-cu.dom.tsx và nguyên the-gop-y-okr.dom.tsx của hồ sơ đã ký; ca man-cu dựng TheGopY thật (okr/the-gop-y.tsx) với một dòng viết lại mẫu và FactSuggestion thật (components/crm/facts.tsx) với một ContactFact mẫu, tRPC giả: gốc [data-slot=proposed-change] của cả hai mang data-density=card và lớp gốc group/alert của Alert (dấu Alert để lại qua Confirmation; data-slot của gốc là proposed-change nên không dùng làm dấu), không mang lớp group/item; ca đối chứng ngay trong bài: cùng bộ chọn nhận một ProposedChange density=card dựng thẳng và ném «doi chung doi sang inline» với cùng đề xuất ở density=inline; mọi ca của hai tệp xanh. Chiều đỏ ghim: bản sao facts.tsx bỏ density=card phải làm bài đỏ 'facts doi sang inline'."
+    expected: "exit 0; một lần gọi bun test chạy cả apps/app/test/nen-kara-man-cu.dom.tsx và apps/app/test/the-gop-y-okr.dom.tsx như hiện có (hai ca thong-tin: gợi ý thông tin của Cá nhân là thẻ gọn, Nhận chính, Bác mờ). Nửa OKR của AC-3 đã nghỉ hưu cùng lượt gop-y-dung-cho (081c9b792): TheGopY (okr/the-gop-y.tsx) bị xoá, ca «cột góp ý OKR vẫn là thẻ» và phần cột góp ý của the-gop-y-okr.dom.tsx bị gỡ, góp ý OKR nay là bản inline neo tại chỗ. Ca man-cu dựng FactSuggestion thật (components/crm/facts.tsx) với một ContactFact mẫu, tRPC giả: gốc [data-slot=proposed-change] mang data-density=card và lớp gốc group/alert của Alert (dấu Alert để lại qua Confirmation; data-slot của gốc là proposed-change nên không dùng làm dấu), không mang lớp group/item; ca đối chứng ngay trong bài: cùng bộ chọn nhận một ProposedChange density=card dựng thẳng và ném «doi chung doi sang inline» với cùng đề xuất ở density=inline; mọi ca của hai tệp xanh. Chiều đỏ ghim: bản sao facts.tsx bỏ density=card phải làm bài đỏ 'facts doi sang inline'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/the-gop-y.tsx", "apps/app/components/crm/facts.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "apps/app/test/nen-kara-man-cu.dom.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
+    paths: ["apps/app/components/crm/facts.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "apps/app/test/nen-kara-man-cu.dom.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E4
     criterion: AC-4
@@ -101,7 +101,7 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.nk_tai_lieu
-    expected: "exit 0; rang/tai-lieu.mjs đọc bảng markdown thật (tách hàng theo |, không grep cả tệp): (a) bảng mục 10 của docs/ai-ux.md, cột «Có chưa» của ba hàng luật 2-3, 6, 8 không còn chữ «chưa — lượt nen-kara» và ô thành phần nêu KaraLabel, ProposedChangeReceipt, AiFeedback; hàng luật 5 nêu density; (b) bảng «Lộ trình áp luật»: chỉ số hàng `muc-tieu-va-kr` < chỉ số hàng `gop-y-dung-cho`, và ô «Làm gì» của hàng gop-y-dung-cho chứa BangMucTieu cùng đủ sáu tên nhanMucTieu, duoiMucTieu, duoiKr, sauTenKr, dangMo, data-muc-tieu; (c) hàng confirmation.tsx của bảng «What is in the tree today» trong docs/chat-ui.md nêu card. In từng mục. Chiều đỏ ghim: chạy trên bản sao đảo thứ tự hai hàng lộ trình phải in 'lo trinh sai thu tu' và mã 1."
+    expected: "exit 0; rang/tai-lieu.mjs đọc bảng markdown thật (tách hàng theo |, không grep cả tệp): (a) bảng mục 10 của docs/ai-ux.md, cột «Có chưa» của ba hàng luật 2-3, 6, 8 không còn chữ «chưa — lượt nen-kara» và ô thành phần nêu KaraLabel, ProposedChangeReceipt, AiFeedback; hàng luật 5 nêu density; (b) bảng «Lộ trình áp luật» đọc từ docs/ai-ux.md TẠI commit gộp của lượt (git log --first-parent --diff-filter=A của _acceptance/nen-kara/contract.md từ merge-base với origin/onehub; lượt chưa gộp thì đọc cây hiện tại; script in nguồn đã đọc), vì lượt gop-y-dung-cho (e589af468) cố ý viết lại hàng của nó: chỉ số hàng `muc-tieu-va-kr` < chỉ số hàng `gop-y-dung-cho`, và ô «Làm gì» của hàng gop-y-dung-cho chứa BangMucTieu cùng đủ sáu tên nhanMucTieu, duoiMucTieu, duoiKr, sauTenKr, dangMo, data-muc-tieu; (c) hàng confirmation.tsx của bảng «What is in the tree today» trong docs/chat-ui.md nêu card. In từng mục. Chiều đỏ ghim: chạy trên bản sao đảo thứ tự hai hàng lộ trình phải in 'lo trinh sai thu tu' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["docs/ai-ux.md", "docs/chat-ui.md", "_acceptance/nen-kara/rang/tai-lieu.mjs"]
 
@@ -117,11 +117,17 @@ evals:
     question: "Nhìn bốn ảnh — đề xuất inline ở 1440 và 390, đề xuất card, dòng biên nhận, đối chiếu mục 5 và 6 của docs/ai-ux.md: (1) đề xuất inline đọc như một phần của dòng nó sửa hay như một hộp riêng? (2) Mỗi đề xuất có đúng một nút chính nhận ra ngay không? (3) Ở khổ 390 câu mới đọc liền một mạch hay bị bẻ vụn? Trả lời PASS chỉ khi cả ba đạt."
     expected: "Hội đồng đọc ảnh và luật: đề xuất inline không có khung riêng, nút chính nhận ra ngay, câu mới đọc liền ở 390."
     evidence_required: [run_id, verdict, verifier, verified_at, rationale]
+    paths:
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-inline-cho-1440-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-inline-cho-390-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-the-1440-light.png"
+      - "_acceptance/nen-kara/evidence/E10-ST-nenkara-bien-nhan-1440-light.png"
+      - "docs/ai-ux.md"
 
   - id: E14
     criterion: AC-13
     executor: script
     cmd: config:executors.script.nk_san_thiet_ke
-    expected: "exit 0; design-gate.mjs --mode static trên từng tệp màn mới hay sửa của lượt (kara.tsx, proposed-change.tsx, ai-feedback.tsx, khoi-tom-tat.tsx, the-gop-y.tsx, facts.tsx và mọi .tsx dưới proto/_modules/nen-kara — lệnh liệt bằng find, không gõ tay); năm lỗi nền P0 bằng 0."
+    expected: "exit 0; design-gate.mjs --mode static trên từng tệp màn mới hay sửa của lượt còn tồn tại (kara.tsx, proposed-change.tsx, ai-feedback.tsx, khoi-tom-tat.tsx, facts.tsx và mọi .tsx dưới proto/_modules/nen-kara — lệnh liệt bằng find, không gõ tay); năm lỗi nền P0 bằng 0. okr/the-gop-y.tsx đã bị xoá ở 081c9b792 (gop-y-dung-cho), nội dung sang nhom-kara.tsx và các tệp cùng lượt, có sàn thiết kế riêng của hồ sơ gop-y-dung-cho."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/kara.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-feedback.tsx", "apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx", "apps/app/app/(app)/[slug]/okr/the-gop-y.tsx", "apps/app/components/crm/facts.tsx", "apps/app/app/proto/_modules/nen-kara/**"]
+    paths: ["packages/ui/src/components/kara.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-feedback.tsx", "apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx", "apps/app/components/crm/facts.tsx", "apps/app/app/proto/_modules/nen-kara/**"]
