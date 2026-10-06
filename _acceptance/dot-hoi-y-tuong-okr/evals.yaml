@@ -118,6 +118,18 @@ evals:
       - "Ảnh 390 cho buoc-mo và buoc-gop; scrollWidth <= innerWidth ở mọi bước; ý và lời mở mang translate=no"
     expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao màn in tên người góp cho mọi vai → bước buoc-gop đỏ, script in tên lộ trong DOM; bản sao đặt thẻ con số xếp dọc một cột trước ô soạn → bước buoc-man-dau đỏ, script in mép trên ô soạn (px)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/lib/messages/okr-hoi-y.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-hoi-y.ts"
+      - "packages/ui/src/components/heatmap.tsx"
+      - "packages/ui/src/components/stat-card.tsx"
+      - "packages/ui/src/components/reui/timeline.tsx"
+      - "apps/api/src/okr/**"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/**"
+      - "_acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs"
 
   - id: E13
     criterion: AC-11
@@ -152,6 +164,19 @@ evals:
       - "Ảnh 390 cho buoc-thieu và buoc-ket-qua; scrollWidth <= innerWidth; thanh công bố nằm trong khung nhìn khi cuộn"
     expected: "Mọi bước đạt; ảnh lưu ở evidence/. CHIỀU ĐỎ: --chieu-do chạy bản sao máy chủ trả ý cho người chọn chưa niêm phong → bước buoc-khoa-nguoi-chon đỏ, script in số ý hiện."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/**"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/okr-hoi-y.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "packages/validation/src/okr-hoi-y.ts"
+      - "packages/ui/src/components/save-bar.tsx"
+      - "packages/ui/src/components/reui/scrollspy.tsx"
+      - "packages/ui/src/components/reui/timeline.tsx"
+      - "apps/api/src/okr/**"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/**"
+      - "_acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs"
 
   - id: E16
     criterion: AC-12
@@ -213,3 +238,7 @@ evals:
       PASS khi cả sáu vế đúng với diff thật, kèm tên tệp làm căn cứ; mỗi vi phạm nêu
       tệp và dòng. FAIL khi một vế sai.
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/superpowers/specs/2026-09-29-dot-hoi-y-tuong-okr-design.md"
+      - "_acceptance/dot-hoi-y-tuong-okr/contract.md"
+      - "_acceptance/dot-hoi-y-tuong-okr/design-pass.md"

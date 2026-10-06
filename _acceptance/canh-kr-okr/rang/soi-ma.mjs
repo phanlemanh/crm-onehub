@@ -1,11 +1,13 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import {
+	copyFileSync,
 	existsSync,
 	mkdtempSync,
 	readdirSync,
 	readFileSync,
 	rmSync,
 	statSync,
+	symlinkSync,
 	writeFileSync,
 } from "node:fs";
 import { createRequire } from "node:module";
@@ -215,7 +217,9 @@ function lanhDemTheoNguoi() {
 	process.exit(hong.length === 0 ? 0 : 1);
 }
 
-const MOC = "origin/onehub";
+const LUOT = "canh-kr-okr";
+const GOP_DO = process.env.SOI_MA_GOP ?? null;
+const MOC = GOP_DO ? `${GOP_DO}^1` : "origin/onehub";
 const NHANH_MOC = "onehub";
 const LOAI_TRU_THIET_KE = new Set([
 	"node_modules",
@@ -749,6 +753,45 @@ function chieuDoThietKe() {
 	process.exit(lot === 0 ? 1 : 0);
 }
 
+function doTaiGopLuot() {
+	if (GOP_DO) return;
+	const chung = git("merge-base", "HEAD", "origin/onehub");
+	const gop = git(
+		"log",
+		"--first-parent",
+		"--diff-filter=A",
+		"--format=%H",
+		chung,
+		"--",
+		`_acceptance/${LUOT}/contract.md`,
+	)
+		.split("\n")
+		.at(-1);
+	if (!gop) return;
+	console.log(
+		`luot ${LUOT} da gop o ${gop.slice(0, 8)}: do tren cay tai commit gop, so voi cha ${git("rev-parse", `${gop}^1`).slice(0, 8)}`,
+	);
+	const thu = mkdtempSync(join(tmpdir(), "soi-ma-gop-"));
+	const cay = join(thu, "cay");
+	let ma = 2;
+	try {
+		git("worktree", "add", "--detach", "--quiet", cay, gop);
+		symlinkSync(join(GOC, "node_modules"), join(cay, "node_modules"));
+		const tep = fileURLToPath(import.meta.url);
+		const banSao = join(cay, tep.slice(GOC.length + 1));
+		copyFileSync(tep, banSao);
+		const r = spawnSync(process.execPath, [banSao, ...process.argv.slice(2)], {
+			stdio: "inherit",
+			env: { ...process.env, SOI_MA_GOP: gop },
+		});
+		ma = r.status ?? 2;
+	} finally {
+		spawnSync("git", ["-C", GOC, "worktree", "remove", "--force", cay]);
+		rmSync(thu, { recursive: true, force: true });
+	}
+	process.exit(ma);
+}
+
 const CA = {
 	"dem-theo-nguoi": { lanh: lanhDemTheoNguoi, chieuDo: chieuDoDemTheoNguoi },
 	"thiet-ke": { lanh: lanhThietKe, chieuDo: chieuDoThietKe },
@@ -760,5 +803,6 @@ if (!chon) {
 	console.log(`KHONG DO DUOC: can --ca ${Object.keys(CA).join(" | ")}`);
 	process.exit(2);
 }
+if (ca === "thiet-ke") doTaiGopLuot();
 if (process.argv.includes("--chieu-do")) chon.chieuDo();
 else chon.lanh();

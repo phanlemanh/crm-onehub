@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f55e110820fbc2ccf229a0445cdf99813408649e
+verified_commit: b557fca3b24cb5d3684006a748adf2735af0f24b
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -325,3 +325,15 @@ sha: b08c53a6574d2a596d22b3f023cf9c24a1a0a7cc · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-09-29, do thước migration của khep-ky-okr và canh-kr-okr đo được sau khi lượt đã gộp (dựng lại nền lúc gộp)
 run_id: repin-20260929T151035Z-23219
 sha: f55e110820fbc2ccf229a0445cdf99813408649e · suites: 4 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11 (E11 không khai paths), E14 (E14 không khai paths), E16 (E16 không khai paths), E22 (E22 không khai paths)
+
+### Re-pin lần 3 — 2026-10-04, do sửa thước theo diff sau gộp và khai paths (lô a)
+run_id: repin-20261004T095914Z-97808
+sha: b0e84291d6a770394f91f9c24730616f21273654 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · diff chạm vật đo ngoài làn máy: E11, E14, E16 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 4 — 2026-10-05, do sửa thước đỏ lô 2-4 (a)
+run_id: repin-20261005T012004Z-26223
+sha: 97a2eb9d7c24cc0cb7c6308c3bd47bd5211a3b02 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · diff chạm vật đo ngoài làn máy: E11, E14, E16 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 5 — 2026-10-06, do sửa thước đỏ lô 2-4 (a)
+run_id: repin-20261006T100303Z-21340
+sha: b557fca3b24cb5d3684006a748adf2735af0f24b · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E11, E14, E16, E22 · diff chạm vật đo ngoài làn máy: E11, E14, E16 — chưa chứng lại, đi vòng S4 delta
