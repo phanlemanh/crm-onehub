@@ -47,7 +47,8 @@
       "hang": [
         "l4"
       ],
-      "nghia": "Hỏi trong CRM hay qua Zalo, trả lời có trích trang và phiên bản"
+      "nghia": "Hỏi trong CRM hay qua Zalo, trả lời có trích trang và phiên bản",
+      "that": "2026-10-04"
     },
     {
       "ten": "Chạy thật",
@@ -151,11 +152,15 @@
       "hang": "T2",
       "dung_tren": [],
       "slug": "tro-ly-doc-kho",
-      "trang_thai": "đang dựng",
       "dong": 4,
       "ten": "Lượt 4",
-      "buoc_ke": "Đã ký Cổng Bằng chứng 02/10; PR #231 đang gỡ xung đột (16 tệp + migration trùng mốc), gộp trước 07/10",
-      "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 04/10 (khảo sát lộ trình): 50 câu thật chạy trong tuần đầu dùng thật, không chặn lượt này (contract.md:117 trên nhánh). Khoá AI riêng KHO_TAI_LIEU_AI_GATEWAY_API_KEY chủ kho đặt trên crm-onehub-agent. 04/10: chủ kho đã đặt khoá AI riêng cho Kho."
+      "buoc_ke": "Chạy thật từ 14/10; gom 50 câu hỏi thật",
+      "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 04/10 (khảo sát lộ trình): 50 câu thật chạy trong tuần đầu dùng thật, không chặn lượt này (contract.md:117 trên nhánh). Khoá AI riêng KHO_TAI_LIEU_AI_GATEWAY_API_KEY chủ kho đặt trên crm-onehub-agent. 04/10: chủ kho đã đặt khoá AI riêng cho Kho. Đã gộp 04/10 (#231, 9007b331); migration 20261004054354 lên production; ghim lại sau l4b ở #267 (05/10).",
+      "pr": [
+        231,
+        267
+      ],
+      "ngay": "2026-10-04"
     },
     {
       "ma": "ct",
@@ -227,12 +232,15 @@
         "l4"
       ],
       "slug": "kho-nguon-khong-ket",
-      "trang_thai": "chưa mở",
       "dong": 11,
       "ten": "Nguồn không kẹt",
-      "buoc_ke": "Sau khi #231 gộp; xong trước 13/10",
-      "ghi_chu": "Khảo sát lộ trình 04/10. #22 (Ngoài-11/19 của may-soan-de-xuat), #20, #21. tai-lieu-soan.ts:49-75.",
-      "han": "2026-10-13"
+      "buoc_ke": "Phiên nghiệm thu (chủ kho)",
+      "ghi_chu": "Khảo sát lộ trình 04/10. #22 (Ngoài-11/19 của may-soan-de-xuat), #20, #21. tai-lieu-soan.ts:49-75. Đã gộp 04/10 (#256).",
+      "han": "2026-10-13",
+      "pr": [
+        256
+      ],
+      "ngay": "2026-10-04"
     },
     {
       "ma": "l4b",
@@ -242,12 +250,15 @@
         "l4"
       ],
       "slug": "tro-ly-kho-dung-phien",
-      "trang_thai": "chưa mở",
       "dong": 12,
       "ten": "Trợ lý kho đúng phiên",
-      "buoc_ke": "Sau khi #231 gộp; xong trước 13/10",
-      "ghi_chu": "Khảo sát lộ trình 04/10. Ngoài-4 của tro-ly-doc-kho cộng ZDR cho phiên gốc «kho».",
-      "han": "2026-10-13"
+      "buoc_ke": "Phiên nghiệm thu (chủ kho)",
+      "ghi_chu": "Khảo sát lộ trình 04/10. Ngoài-4 của tro-ly-doc-kho cộng ZDR cho phiên gốc «kho». Đã gộp 05/10 (#257, 2498c97b).",
+      "han": "2026-10-13",
+      "pr": [
+        257
+      ],
+      "ngay": "2026-10-05"
     }
   ],
   "da_bac": []
