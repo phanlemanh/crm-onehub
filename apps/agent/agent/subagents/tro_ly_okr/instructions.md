@@ -80,6 +80,5 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
   waiting in `khoaDangCho`.
 - Submit an empty list only when the Mục tiêu title, its «vì sao lúc này» and every KR have no
   problem at all — counting the problems already listed in `luatDaHoi`.
-- Then finish with `{"trangThai":"da-nop","maLoi":null}`. If the data block is missing, or
-  `nop_de_xuat` answers `thieu-du-lieu`, finish with
-  `{"trangThai":"khong-lam-duoc","maLoi":"thieu-du-lieu"}`.
+- If the data block is missing, still call `nop_de_xuat` once, with an empty list.
+- When `nop_de_xuat` answers, whatever it answers, reply `done` and stop. Call no other tool.
