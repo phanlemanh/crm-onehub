@@ -674,6 +674,24 @@ const MIEN_XEM = [
 		lyDo: "số đo Trợ lý OKR chỉ quản trị (troLyAn, troLySoDo qua assertQuanTri); đếm lần hoàn tác, không trả vết; quản trị xem được mọi mục tiêu (§4)",
 	},
 	{
+		tep: "apps/api/src/okr/dem-gop-y.ts",
+		ham: "demGopYCho",
+		bang: "okrObjective",
+		lyDo: "chỉ nhận id mục tiêu người gọi đã đọc qua dieuKienXemMucTieu (okr.service docMucTieu, okr-xem danh sách theo đơn vị); trả số góp ý chờ cho đúng các id đó, chỉ đếm mục tiêu người gọi sửa được hoặc ghi được KR",
+	},
+	{
+		tep: "apps/api/src/okr/soan-so-do.service.ts",
+		ham: "mucTieuTuNhap",
+		bang: "okrTrail",
+		lyDo: "số đo soạn OKR chỉ quản trị (soan.soDo qua assertQuanTri); đọc vết tạo để biết mục tiêu nào ra từ cuộc soạn, chỉ trả số đếm; quản trị xem được mọi mục tiêu (§4)",
+	},
+	{
+		tep: "apps/api/src/okr/soan-so-do.service.ts",
+		ham: "mucTieuTuNhap",
+		bang: "okrObjective",
+		lyDo: "số đo soạn OKR chỉ quản trị (soan.soDo qua assertQuanTri); đọc ngày tạo và ngày công bố để đếm tỷ lệ công bố, không trả tiêu đề; quản trị xem được mọi mục tiêu (§4)",
+	},
+	{
 		tep: "packages/db/src/okr-chi-so.ts",
 		ham: "chupKrCrm",
 		bang: "okrKeyResult",

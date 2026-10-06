@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ae5cc42cf61cac0bc654d60077bf97c96bf285ec
+verified_commit: af6c2a1f766002ebfd92b37ea95ac53088d3fadc
 human_signoff: Manh Phan 2026-09-29
 ---
 
@@ -368,3 +368,11 @@ sha: 8d8725346789a1736b8e93aecd051c28535aa2ce · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-01, do PR 226 gom #229: thuoc gioi-han-duyet-cay-okr sua sau cac PR gop sau 29/09
 run_id: repin-20261001T110529Z-90087
 sha: ae5cc42cf61cac0bc654d60077bf97c96bf285ec · suites: 4 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15 (E15 không khai paths), E18 (E18 không khai paths), E25 (E25 không khai paths)
+
+### Re-pin lần 3 — 2026-10-04, do sửa thước đỏ lô 2-4 (b2)
+run_id: repin-20261004T151626Z-30567
+sha: acf6075c3693321e23f0a28648a93996ab43f58e · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 4 — 2026-10-06, do sửa thước đỏ lô 2-4 (b2c)
+run_id: repin-20261006T110126Z-87182
+sha: af6c2a1f766002ebfd92b37ea95ac53088d3fadc · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E15, E18, E25 · diff chạm vật đo ngoài làn máy: E15, E18 — chưa chứng lại, đi vòng S4 delta

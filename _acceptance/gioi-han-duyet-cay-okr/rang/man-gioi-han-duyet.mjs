@@ -220,9 +220,6 @@ const { okrTaiCoCauMessages } = await import(
 	"../../../apps/app/lib/messages/okr-tai-co-cau.ts"
 );
 const { okrMessages } = await import("../../../apps/app/lib/messages/okr.ts");
-const { TO_CHUC } = await import(
-	"../../../apps/api/src/to-chuc/to-chuc-config.ts"
-);
 const { toChucMessages } = await import(
 	"../../../apps/app/lib/messages/to-chuc.ts"
 );
@@ -1721,7 +1718,7 @@ async function buocLuuTruVaChuyen() {
 		console.log(
 			`  E18 buoc-luu-tru-chan: nut luu tru bat (${chan.nutXacNhanBat ? "hop xac nhan co nut Luu tru bam duoc" : "khong co hop chan"})`,
 		);
-	const mongLyDo = TO_CHUC.thongDiep.phongBanConOkrMo(mo.length);
+	const mongLyDo = CHU_TCC.toChuc.chan.lyDo["phong-ban"](mo.length);
 	kiem(
 		`${nhom}: hop noi ly do «${mongLyDo}», nut luu tru khoa, co «${CHU_TCC.toChuc.chuyenOkr}» (thay ${JSON.stringify(chan)})`,
 		chan.hop && chan.lyDo === mongLyDo && chan.khoa === true && chan.chuyen,
