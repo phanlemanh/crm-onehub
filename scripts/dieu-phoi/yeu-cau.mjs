@@ -1,0 +1,58 @@
+import { NHIP } from './cau-hinh.mjs';
+import { khopMot } from './glob.mjs';
+
+const MOT_NGAY_MS = NHIP.motNgayMs;
+
+export function xetYeuCau(yc, nguCanh, cfg) {
+  switch (yc.loai) {
+    case 'cham-tep':
+      return xetChamTep(yc, nguCanh, cfg);
+    case 'viec-phu':
+      return xetViecPhu(yc, nguCanh);
+    case 's4-gom':
+    case 'gia-han': {
+      const uoc = yc.noi_dung?.uoc_phut;
+      if (Number.isFinite(uoc) && uoc <= cfg.s4_tran_gom_phut) {
+        return { ket_qua: 'duyet', boi: 'may', ly_do: `trong trần ${cfg.s4_tran_gom_phut}′` };
+      }
+      return { ket_qua: 'can_phan', ly_do: `ước ${uoc ?? '?'}′ vượt trần ${cfg.s4_tran_gom_phut}′` };
+    }
+    case 'can-nguoi':
+      return { ket_qua: 'can_phan', dich: 'owner', ly_do: 'việc chỉ người làm được' };
+    default:
+      return { ket_qua: 'can_phan', ly_do: `loại ${yc.loai} cần phán` };
+  }
+}
+
+function xetChamTep(yc, nguCanh, cfg) {
+  const tep = yc.noi_dung?.tep ?? [];
+  if (tep.length === 0) return { ket_qua: 'can_phan', ly_do: 'yêu cầu không nêu tệp' };
+  const baoVe = [...cfg.bao_ve, ...nguCanh.hangViec.hang.flatMap((h) => h.chung_chi_them ?? [])];
+  const nhanhMinh = nguCanh.nhanhCua(yc.phien);
+  for (const t of tep) {
+    if (khopMot(baoVe, t)) return { ket_qua: 'can_phan', ly_do: `${t} thuộc danh sách bảo vệ` };
+    const chu = nguCanh.hangViec.hang.find((h) => h.day !== yc.phien && khopMot(h.ranh_gioi ?? [], t));
+    if (chu) return { ket_qua: 'can_phan', ly_do: `${t} thuộc ranh giới ${chu.day}` };
+    const nhanh = (nguCanh.nhanhChamTep.get(t) ?? []).filter((b) => b !== nhanhMinh);
+    if (nhanh.length > 0) return { ket_qua: 'can_phan', ly_do: `${t} đang được nhánh ${nhanh.join(', ')} sửa` };
+  }
+  return { ket_qua: 'duyet', boi: 'may', ly_do: 'không ai giữ, không nhánh mở nào chạm, không thuộc danh sách bảo vệ' };
+}
+
+const chuanHoa = (s) => (s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
+
+function xetViecPhu(yc, nguCanh) {
+  const luc = Date.parse(yc.luc);
+  const tepMoi = yc.noi_dung?.tep ?? [];
+  const trung = nguCanh.yeuCauGanDay.find(
+    (c) =>
+      c.loai === 'viec-phu' &&
+      c.id !== yc.id &&
+      luc - Date.parse(c.luc) < MOT_NGAY_MS &&
+      c.noi_dung?.kho === yc.noi_dung?.kho &&
+      (chuanHoa(c.noi_dung?.tieu_de) === chuanHoa(yc.noi_dung?.tieu_de) ||
+        (c.noi_dung?.tep ?? []).some((t) => tepMoi.includes(t))),
+  );
+  if (trung) return { ket_qua: 'gop', boi: 'may', ly_do: `trùng yêu cầu ${trung.id}`, voi: trung.id };
+  return { ket_qua: 'can_phan', ly_do: 'việc phụ mới' };
+}

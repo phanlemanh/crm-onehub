@@ -41,14 +41,14 @@ function chuThich(text) {
 	const thay = new Set();
 	const ra = [];
 	const di = (n) => {
-		for (const r of [...(ts.getLeadingCommentRanges(text, n.pos) ?? []), ...(ts.getTrailingCommentRanges(text, n.end) ?? [])]) {
+		for (const r of [...(ts.getLeadingCommentRanges(text, n.pos) ?? []), ...(ts.getTrailingCommentRanges(text, n.pos) ?? [])]) {
 			if (thay.has(r.pos)) continue;
 			thay.add(r.pos);
 			const than = text.slice(r.pos, r.end);
 			if (than.startsWith("#!")) continue;
 			ra.push(sf.getLineAndCharacterOfPosition(r.pos).line + 1);
 		}
-		n.forEachChild(di);
+		for (const c of n.getChildren(sf)) di(c);
 	};
 	di(sf);
 	return ra.sort((a, b) => a - b);
@@ -94,6 +94,7 @@ function chieuXanh() {
 const TIEM = [
 	{ luat: "chu-thich", tep: "lich.mjs", them: (t) => `// tiem\n${t}`, dong: 1 },
 	{ luat: "chu-thich", tep: "glob.mjs", them: (t) => t.replace(/\n$/, " // cuoi dong\n"), dong: null },
+	{ luat: "chu-thich", tep: "hook-nhip.mjs", them: (t) => t.replace("} catch {\n", "} catch {\n    // tiem trong khoi rong\n"), dong: "sau-catch" },
 	{ luat: "cam-chuoi", tep: "dot.mjs", them: (t) => `${t}export const X = 'gh pr merge 1 --auto';\n`, dong: null },
 	{ luat: "cam-chuoi", tep: "bang.mjs", them: (t) => `${t}export const Y = 'onehub';\n`, dong: null },
 	{ luat: "hang-so", tep: "lich.mjs", them: (t) => `${t}export const Z = 60_000;\n`, dong: null },
@@ -113,7 +114,7 @@ function chieuDo() {
 				process.exit(2);
 			}
 			writeFileSync(p, moi);
-			const soDong = t.dong ?? moi.trimEnd().split("\n").length;
+			const soDong = t.dong === "sau-catch" ? moi.split("\n").findIndex((d) => d.includes("// tiem trong khoi rong")) + 1 : (t.dong ?? moi.trimEnd().split("\n").length);
 			const mong = `${t.luat} ${DICH}/${t.tep}:${soDong}`;
 			const { vi } = quet(tam);
 			const trung = vi.some((v) => v.startsWith(mong));
@@ -129,5 +130,5 @@ function chieuDo() {
 
 const xanh = chieuXanh();
 const doDu = chieuDo();
-process.stdout.write(`KET LUAN: cay that ${xanh ? "sach" : "co vi pham"} · chieu do ${doDu ? "bat du 5/5" : "sot"}\n`);
+process.stdout.write(`KET LUAN: cay that ${xanh ? "sach" : "co vi pham"} · chieu do ${doDu ? `bat du ${TIEM.length}/${TIEM.length}` : "sot"}\n`);
 process.exit(xanh && doDu ? 0 : 1);
