@@ -1,0 +1,21 @@
+[agent] ✓ subagent tro_ly_okr 17.2s
+[agent] ▸ session wrun_01M49P97MS42AXZ36BJWDVTW1N on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ◂ done
+[agent] · step 0 stop  in 4.2k out 47 cached 4.1k $0.0030
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 4.1k out 58 cached 4.1k $0.0029
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M49P9BVQ4R8C7B20WRHVD7X9', turnId: 'turn_0' }
+[agent] ✓ subagent tro_ly_okr 31.2s
+[agent] ▸ session wrun_01M49PAAC6HP40FACTHVVJD0MY on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] ◂ done
+[agent] · step 0 stop  in 4.2k out 32 cached 4.1k $0.0029
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 4.1k out 69 cached 4.1k $0.0030
+[eve:harness.tool-loop] empty model response; reissuing the model call once { sessionId: 'wrun_01M49PADB520EHP9P069MGZ65P', turnId: 'turn_0' }
+[agent] ✓ subagent tro_ly_okr 21.4s
+[agent] ▸ session wrun_01M49PB2DSJRZFG58R8BCTS37C on channel:crm
+[agent] » Run one Trợ lý OKR task.
+[agent] → subagent tro_ly_okr message=run
+[agent] · step 0 tool-calls  in 4.1k out 78 cached 4.1k $0.0031
