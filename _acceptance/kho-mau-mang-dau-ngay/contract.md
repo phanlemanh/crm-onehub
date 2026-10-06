@@ -5,7 +5,7 @@ slug: kho-mau-mang-dau-ngay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-07-kho-mau-mang-dau-ngay-design.md
 approved_by:
 approved_at:
