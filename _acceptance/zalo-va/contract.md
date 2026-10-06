@@ -69,3 +69,4 @@ Quét bằng skill morphological-scan, preset test-matrix.
   - Ngoài-2 — dòng «token-sai trên token đang chạy» của `dem-getme.ts` chỉ so vân tay, không đòi Zalo đã nhận token sau đó: token đang lưu bị thu hồi thật thì nhịp kiểm bot ghi một hàng mỗi nhịp và dòng đó lớn hơn 0 dù không có báo oan. Đọc số 10/11 phải soi `noi` và thời điểm trước khi kết luận CHẾT.
   - Ngoài-3 — bài kiểm thứ tự nhãn của câu chào chỉ xét nhãn thanh bên, trang chủ và menu tài khoản; các mục khác của menu tài khoản («Nền sáng», «Nền tối», «Đăng xuất», «English») không được xét.
   - Ngoài-4 — ca đối chứng của phép kiểm thứ tự nhãn chạy trên bản sao điều kiện, không qua chính phép kiểm; chấp nhận, không sửa.
+- E11 của tra-loi-tin-nhac đổi sang judgment (chủ kho duyệt 06/10): kiểm hồi quy chéo đã đạt ở lượt ghim lại dài 2 của zalo-va (repin-20261005T144800Z-79320); lượt 3 và 4 đỏ vì ca chập chờn agent-okr app-rieng, không vì mã; kiểm chéo bằng máy chuyển sang hạt giống kiem-cheo-sau-gop.

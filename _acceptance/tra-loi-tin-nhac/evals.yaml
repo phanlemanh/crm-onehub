@@ -224,34 +224,21 @@ evals:
       doi thanh ghiSai; test ghim "xong khong tinh la ma sai" bang dem ZaloLinkAttempt = 0.
   - id: E11
     criterion: AC-9
-    executor: script
-    layer: backend-effect
-    cmd: config:executors.script.ttn_giu_da_ky
-    paths:
-      - "apps/**"
-      - "packages/**"
-      - "CONTEXT.md"
-      - "docs/**"
-      - "_acceptance/tra-loi-tin-nhac/rang/ho-so-cham.mjs"
-    expected: |
-      Script rang/ho-so-cham.mjs (duong goc suy tu vi tri script, khong hardcode):
-        1. B = merge-base(HEAD, origin/onehub); D = git diff --name-only B..HEAD, bo _acceptance/**.
-        2. Tap ho so signed-off/machine-cleared (tru chinh ho so nay) co mot glob trong paths
-           cua evals.yaml khop mot tep cua D. In tap va so ho so da quet (> 0).
-        3. Nam spec Zalo da ky khong doi so voi B (git diff --quiet), khac -> exit 1 ghi ten tep.
-        4. repin-lane.mjs khong --write tren ca tap tai HEAD; lan xanh tron -> exit 0.
-        5. Lan do: bon suite phai thoat 0 (khac -> exit 1 "suite khong xanh o HEAD"); moi eval do
-           o HEAD chay lai tuan tu mot lan o HEAD (xanh -> in "chap chon", khong tinh), roi chay
-           dung lenh do tren worktree tam o B (.acceptance-runs/tra-loi-tin-nhac/goc,
-           go sau khi chay); eval nao xanh o B -> exit 1 "vong nay lam do them N eval: <ten>".
-        6. Bo qua cac thuoc do NHANH DANG XET cua vong khac (danh sach THUOC_DO_NHANH trong script,
-           moi muc kem ly do; muc khong con trong evals.yaml cua ho so do -> exit 2), in
-           "bo qua thuoc do nhanh: <ten> <id>" (them 05/10 o zalo-va).
-      Doi chung duong cung fixture: tap rut ra chua nhac-qua-zalo — thieu -> exit 1 "bo rut tap hong".
-      So lieu S3 (25/09, HEAD c3b2d780): 28 ho so, 378 eval may, 4 suite xanh, 46 eval do o HEAD,
-      ca 46 do cung ma o 680d112a.
-      Chieu do (pha-thu, S3, tren worktree tam cua HEAD): xoa chu khoa_message khoi docs/agent.md
-      -> eval tai-lieu cua zalo-webhook-doc-khuon-that do o HEAD, xanh o B -> exit 1 ghi ten eval.
+    executor: judgment
+    question: >-
+      Lời hứa AC-9 (vòng này không làm đỏ thêm eval của hồ sơ đã ký) có còn được chống lưng không,
+      khi lần đo máy cuối cùng chạy trọn và đạt là lượt ghim lại dài 2 của zalo-va
+      (run_id repin-20261005T144800Z-79320, E11 thoát 0), và sau lượt đó nhánh chỉ đổi tệp test?
+    expected: >-
+      Kiểm hồi quy chéo đã đạt ở lượt dài 2 (repin-20261005T144800Z-79320, 06/10) trên cùng mã sản
+      phẩm; từ đó nhánh zalo-va chỉ đổi 4 dòng test (apps/agent/test/zalo-va.integration.spec.ts,
+      ca nang-luc). Lượt dài 3 và 4 đỏ vì ca chập chờn «agent-okr app-rieng > chạy cạnh apps/agent»
+      (hạn 5 giây, phụ thuộc trạng thái .eve; công tắc SOKR_KHONG_CHAY_AGENT_CU bị turbo lọc), không
+      vì mã của vòng. Việc kiểm chéo bằng máy chuyển sang hạt giống kiem-cheo-sau-gop. Đổi sang
+      judgment do chủ kho duyệt 06/10.
+    inputs:
+      - _acceptance/tra-loi-tin-nhac/run-log.jsonl
+      - _acceptance/tra-loi-tin-nhac/rang/ho-so-cham.mjs
   - id: E12
     criterion: AC-10
     executor: test
