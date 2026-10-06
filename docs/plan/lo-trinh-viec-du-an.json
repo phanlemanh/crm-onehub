@@ -42,7 +42,7 @@
       "ten": "Việc chung",
       "ten_ngan": "Việc chung",
       "bat_khi": "Đề xuất, chốt ở Cổng Đáng: hai tuần dùng thật, ít nhất 80% việc mới có người thực hiện; không việc gắn đối tác nào tới người vai «chỉ OKR»",
-      "chay_khi": "V0a đã gộp; chủ kho mở lại mục từ điển cho việc (ba chữ cho ba thứ đang chốt)",
+      "chay_khi": "V0a đã gộp (mục từ điển «Việc» chủ kho mở 07/10)",
       "ghi_chu": "Bảng việc riêng gắn nhiều bản ghi; người giao, một người thực hiện, người theo dõi; nhóm trạng thái Chưa làm · Đang làm · Chờ đánh giá · Xong · Huỷ; quyền P3; Việc của tôi; vào bộ nhắc buổi sáng và hộp chuyển việc khi nghỉ; lịch sử thay đổi. Chuyển việc cần làm cũ sang."
     },
     {
@@ -81,7 +81,7 @@
       "trang_thai": "chưa mở",
       "ten": "Dự án và Gantt",
       "ten_ngan": "Dự án, Gantt",
-      "chay_khi": "Chủ kho mở mục từ điển «Dự án» (đang bị cấm hai lần) và dòng «không làm: ngày bắt đầu cho bước»"
+      "chay_khi": "V2 và V3 đã gộp; chủ kho mở dòng «không làm: ngày bắt đầu cho bước» của lộ trình 30 ngày (mục từ điển «Dự án» đã mở 07/10)"
     },
     {
       "ma": "V5",

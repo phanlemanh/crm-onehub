@@ -20,10 +20,10 @@ gắn kèm và không bao giờ đưa dữ liệu đối tác tới người vai
 | --- | --- | --- | --- |
 | V0 | Biết các hãng làm thế nào và nên làm theo thứ tự nào | Nghiên cứu nền, trang bảng năng lực | Xong 05/10 |
 | V0a | Người vai «chỉ OKR» không được giao bước onboard, không nhận tên đối tác qua tin nhắc | Chặn ở chỗ giao bước và ở bộ gom nhắc, kèm test | Ngay |
-| V1 | Giao việc gắn deal hay kế hoạch; người nhận thấy trong Việc của tôi và được nhắc | Bảng việc riêng, ba vai, nhóm trạng thái, quyền P3, Việc của tôi, nhắc, chuyển việc khi nghỉ | V0a gộp; chủ kho mở lại mục từ điển việc |
+| V1 | Giao việc gắn deal hay kế hoạch; người nhận thấy trong Việc của tôi và được nhắc | Bảng việc riêng, ba vai, nhóm trạng thái, quyền P3, Việc của tôi, nhắc, chuyển việc khi nghỉ | V0a gộp (từ điển «Việc» mở 07/10) |
 | V2 | Kéo việc giữa các cột; tách việc to thành việc con | Kanban việc, việc con một tầng, checklist | V1 gộp; mở lại «không làm: kéo thả bảng cột» |
 | V3 | Kế hoạch onboard từ khuôn có sẵn việc; deal thắng thì gợi ý mở kế hoạch | Khuôn sinh việc thường; gợi ý khi deal thắng | V1 gộp |
-| V4 | Gom việc của một đợt triển khai vào dự án, xem Gantt | Dự án, Gantt mức đủ | V2 và V3 gộp; mở mục từ điển «Dự án» và «không làm: ngày bắt đầu cho bước» |
+| V4 | Gom việc của một đợt triển khai vào dự án, xem Gantt | Dự án, Gantt mức đủ | V2 và V3 gộp; mở «không làm: ngày bắt đầu cho bước» (từ điển «Dự án» mở 07/10) |
 | V5 | KR hiện việc chung gắn với nó | KR nối việc chung, dòng tiến độ việc riêng | V1 gộp; sau buổi đọc số 8a ngày 01/12 |
 
 Để sau: Gantt nâng cao (V6), cấp trên thấy việc cấp dưới (V7), AI đề xuất việc từ email và
