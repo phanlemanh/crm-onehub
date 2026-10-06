@@ -158,7 +158,7 @@ evals:
     cmd: config:executors.test.soan_man_cai_dat
     expected: "exit 0; bài DOM thẻ Trợ lý OKR: việc 'Soạn OKR' có hai dòng Bật cho · Chế độ ẩn cho và ô 'Trần tháng đặt OKR' với mô tả 'trống = bằng trần thường'; lưu gọi setProgram đúng trường; vai member/okr không render thẻ. Chiều đỏ: bản sao gửi thiếu aiSoanAnDonVi → 'thieu truong khi luu'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", apps/app/lib/messages/tro-ly-okr.ts, apps/app/test/soan-okr-cai-dat.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", apps/app/lib/messages/okr-tro-ly.ts, apps/app/test/soan-okr-cai-dat.dom.tsx]
 
   - id: E18
     criterion: AC-11

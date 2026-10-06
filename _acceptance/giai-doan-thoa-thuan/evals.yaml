@@ -50,7 +50,7 @@ evals:
     paths:
       - "apps/app/components/crm/stage-change.tsx"
       - "apps/app/components/crm/stage-stepper.tsx"
-      - "apps/app/lib/giai-doan.ts"
+      - "apps/app/lib/deal-stage.ts"
       - "apps/app/test/giai-doan-menu.dom.tsx"
     expected: |
       jsdom, tRPC gia tra giaiDoan.list gom 5 giai doan tu dat ten (khong trung ten cu). Menu giai doan
