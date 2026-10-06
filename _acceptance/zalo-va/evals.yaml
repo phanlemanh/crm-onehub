@@ -1,0 +1,181 @@
+schema_version: 1
+slug: zalo-va
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_tam_loi
+    paths:
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/agent/lib/zalo-getme.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-api.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+    expected: |
+      Postgres that, Zalo gia. Ma tran viet truoc 11 dang loi tam cua getMe (HTTP 408 than ok:false 408,
+      HTTP 408 than khong phai JSON, HTTP 429, HTTP 500, HTTP 503, loi mang, HTTP 200 than sai khuon,
+      HTTP 200 ok:false 408, HTTP 200 ok:false 429, HTTP 200 ok:false 500, HTTP 400 than ok:false 429),
+      expect(o.length).toBe(11). Zalo gia tra dung status va than ghim san cua tung dang (than khong phai
+      JSON la Response chu "loi").
+      Moi o: gieo AppSetting voi nam cot Zalo co gia tri cu; goi datBot that voi token moi va goc https.
+      Tung o: outcome === "zalo-loi", reason === ZALO.loi.zaloKhongTraLoi, Zalo gia khong nhan setWebhook,
+      doc lai DB nam cot Zalo bang dung gia tri cu. Ten ca ghim dang loi.
+      CHIEU DO: tra lai luat cu "moi 4xx la token sai" (bo ZALO.http.tamLoi khoi phan lop) -> do ghim
+      "tam-loi: http-429 bi bao token sai" va "tam-loi: ok-false-429 bi bao token sai"; chieu do rieng:
+      chi xet ma HTTP, bo nhanh doc error_code tam trong than -> do ghim "tam-loi: http-400+ok-false-429
+      bi bao token sai".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_token_sai
+    paths:
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/agent/lib/zalo-getme.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+    expected: |
+      Ma tran viet truoc 8 dang tu choi (HTTP 400, 401, 403, 404; ok:false 400, 401, 403, 404),
+      expect(o.length).toBe(8). Moi o: outcome === "invalid", reason === ZALO.loi.tokenSai, khong setWebhook,
+      AppSetting khong doi. Doi chung duong cung fixture: getMe 200 dung khuon -> Zalo gia nhan setWebhook
+      va outcome "valid". CHIEU DO: coi moi loi getMe la tam loi -> do ghim "token-sai: http-401 khong bi
+      bao token sai"; va bo nhanh duoc -> doi chung duong do "token-sai: getMe 200 khong toi setWebhook".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_kiem_tam
+    paths:
+      - "apps/agent/agent/lib/zalo-bot.ts"
+      - "apps/agent/agent/lib/zalo-getme.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "packages/db/src/kenh-thong-bao.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+    expected: |
+      Cung 11 dang loi tam cua E1, expect(o.length).toBe(11). Moi o: gieo AppSetting co token, zaloBotName,
+      zaloWebhookUrl; gieo mot user da noi ZaloLink, uu tien AUTO; goi kiemBot that voi fetcher Zalo gia.
+      Tung o: tra "loi"; doc lai DB zaloBotName va zaloWebhookUrl bang dung gia tri cu; kenhSeDungCua(userId)
+      that tra kenh "zalo". CHIEU DO: tra lai ghiBot({zaloBotName:null, zaloWebhookUrl:null}) cho moi loi ->
+      do ghim "kiem-tam: http-429 xoa ten bot" va "kiem-tam: http-429 nhac roi khoi zalo".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_kiem_tu_choi
+    paths:
+      - "apps/agent/agent/lib/zalo-bot.ts"
+      - "apps/agent/agent/lib/zalo-getme.ts"
+      - "packages/db/src/kenh-thong-bao.ts"
+      - "apps/agent/test/support/zalo-gia.ts"
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+    expected: |
+      Cung 8 dang tu choi cua E2, expect(o.length).toBe(8). Moi o: zaloBotName va zaloWebhookUrl ve null,
+      kenhSeDungCua khong tra "zalo". Doi chung duong: getMe 200 -> zaloBotName la ten bot moi, kenh "zalo".
+      CHIEU DO: giu ten bot cho moi loi -> do ghim "kiem-tu-choi: http-401 van giu ten bot".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_cau_chao
+    paths:
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/agent/lib/zalo-nhan.ts"
+      - "apps/app/lib/messages/khung-ung-dung.ts"
+      - "apps/app/lib/messages/nhac-qua-zalo.ts"
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+    expected: |
+      Mot nguoi chua noi nhan "xin chao" qua duong webhook that (Zalo gia nhan sendMessage). Cau gui di
+      === ZALO.loi.huongDan. Quan he, khong chep tay: cau do chua nhacBuoiSang cua khungUngDungMessages("vi")
+      va noi cua nhacQuaZaloMessages("vi") (nhan nut «Nối Zalo»); khong nhan muc dieu huong nao khac cua
+      khungUngDungMessages("vi") (vd nhan Cai dat) xuat hien truoc vi tri nhacBuoiSang trong cau; doi chung
+      duong: cau dung thi xanh; khong gia tri chuoi nao trong ZALO.loi
+      (ke ca ham, goi voi tham so mau) chua «Thông báo của bạn». CHIEU DO: dat lai cau cu -> do ghim
+      "cau-chao: thieu nhan Nhắc buổi sáng" va "cau-chao: con chu Thông báo của bạn"; chen "Cài đặt › " truoc
+      nhan -> do ghim "cau-chao: nhan Cài đặt dung truoc Nhắc buổi sáng".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_ngay_cuoi_ky
+    paths:
+      - "_acceptance/tra-loi-tin-nhac/rang/nguong.ts"
+      - "apps/agent/test/tra-loi-tin-nhac-nguong.integration.spec.ts"
+    expected: |
+      Postgres that, TZ=Asia/Ho_Chi_Minh. Gieo bang duong ghi that (gieoNhac, noiZalo, guiNhac, nhan cua
+      support/tra-loi-gieo): ba nguoi nhan nhac Zalo o D1, D3, D4 va moi nguoi tra "xong 1" 30 phut sau nhac
+      cua minh (X1, X3, X4); mot vet nham Xn o D2 bang datBuocXong source zalo cho buoc khong co trong tin.
+      Goi doNguong that voi ky tu = D1 00:00 VN, den = D3 00:00 VN (dung cach --den cua thuoc). coXong === 2
+      (D1, D3), mau === 2, nham deep-equal [Xn.id]; X4 khong vao coXong lan nham. CHIEU DO: tra lai cua so cu
+      (nhac toi den, vet toi den+24h) -> do ghim
+      "ngay-cuoi-ky: xong ngay D3 bi dem nham" (nham chua X3.id).
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_nang_luc
+    paths:
+      - "apps/agent/agent/lib/capabilities.ts"
+      - "apps/agent/agent/lib/zalo-api.ts"
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+    expected: |
+      Ma tran viet truoc 4 cau hinh token (chi Cai dat, chi bien moi truong, ca hai, khong co),
+      expect(o.length).toBe(4). Moi o: dat AppSetting.zaloBotToken va process.env.ZALO_BOT_TOKEN theo o (khoi
+      phuc sau), goi capabilities(), logCapabilities() (bat console.log), capabilitiesMarkdown(). Ba o dau:
+      nang luc "Zalo reminders" enabled true, dong log bat dau "[agent] on " va chua nhan, markdown co dong
+      "- **Zalo reminders**" truoc dong "Not configured". O cuoi: enabled false, log "off", markdown xep o
+      danh sach tat. from chua "ZALO_BOT_TOKEN" va chua nguon Cai dat. CHIEU DO: tra lai fromEnv("ZALO_BOT_TOKEN")
+      -> do ghim "nang-luc: chi Cai dat van bao off".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_su_kien
+    paths:
+      - "apps/agent/agent/lib/zalo-getme.ts"
+      - "apps/agent/agent/lib/zalo-bot.ts"
+      - "apps/agent/agent/lib/zalo-bot-xuong.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+    expected: |
+      Ma tran 2 noi (datBot, kiemBot) x 19 dang loi (11 tam + 8 tu choi) = 38 o, expect(o.length).toBe(38).
+      Moi o: dem hang AgentEvent type "zalo.getme-loi" moi them === 1; data parse bang zod: noi, http,
+      maThan, lop (mang khi loi mang; http-<ma> khi HTTP khac 200 du than ra sao; ok-false-<ma> khi HTTP 200
+      va than ok:false; sai-khuon khi HTTP 200 than la) dung voi dang, ketLuan "tam-loi" cho 11 dang tam,
+      "token-sai" cho 8 dang tu choi, vanTay === 12 ky tu hex dau cua sha256(token da goi). Doi chung duong: getMe 200 -> 0 hang moi o ca hai noi. Ca ghi hong:
+      thay ham ghi bang ham nem (tiem phu thuoc) -> datBot van tra outcome dung va kiemBot van tra "loi".
+      CHIEU DO: bo dong ghi o kiemBot -> do ghim "su-kien: kiem-bot http-408 khong co hang".
+
+  - id: E9
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1g_dem
+    paths:
+      - "_acceptance/zalo-va/rang/dem-getme.ts"
+      - "_acceptance/zalo-va/rang/dem-getme.spec.ts"
+    expected: |
+      Postgres that. Gieo hang bang duong ghi THAT cua agent: goi datBot/kiemBot that voi Zalo gia (khong
+      dung tay khuon): 3 lan kiemBot http-429, 1 lan datBot loi mang, 2 lan datBot http-401 voi token T1,
+      1 hang ngoai ky. Chay dem-getme.ts --tu --den bang Bun.spawn; so tung dong in ra (toEqual mang dong,
+      khong toContain): tam-loi 4, token-sai 2, theo lop dung so; hang ngoai ky khong dem; so hang AgentEvent
+      truoc va sau bang nhau.
+      Nguong chet theo van tay: datBot that voi token T2 bi tu choi (http-401), roi datBot that cung T2 duoc
+      (getMe 200, AppSetting.zaloBotToken = T2) -> dong "token-sai tren token dang chay: 1"; doi chung: token
+      dang chay la T3 chua tung bi tu choi -> dong do in 0.
+      Ma tran ma tam cua bo dem viet truoc 10 o (http-408, http-429, http-500, http-503, ok-false-408,
+      ok-false-429, ok-false-500, http-400 kem maThan 429, va hai o 5xx bien 502, 599), expect(o.length).toBe(10):
+      moi o goi ham ghi that cua agent voi ketLuan "token-sai" ep tay (tiem phu thuoc phan lop) -> dong
+      "token-sai mang ma tam: 1". CHIEU DO: thu danh sach ma tam cua bo dem ve chi 408 va 429 -> do ghim
+      "dem: ma tam http-503 khong duoc dem"; dem ca hang ngoai ky -> do ghim "dem: tam-loi 5".

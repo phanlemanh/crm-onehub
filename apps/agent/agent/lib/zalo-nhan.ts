@@ -1,7 +1,6 @@
 import { db, type Prisma } from "@crm/db";
 import {
 	chuanHoaMa,
-	type DbGhi,
 	dangBiChan,
 	ghiSai,
 	noiBangMa,

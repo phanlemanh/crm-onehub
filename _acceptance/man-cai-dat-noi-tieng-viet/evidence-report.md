@@ -10,7 +10,7 @@ slug: man-cai-dat-noi-tieng-viet
 verdict: PASS
 round: 3
 run_id: s4r3d-20260904T130156Z-16359
-verified_commit: 51b0f631670690e2f136fe1d77294193655aa382
+verified_commit: 8a12ef6b73932d74e7e6a322b242aee5164c0478
 verified_at: 2026-09-04T13:04:00Z
 human_signoff: Manh Phan 2026-09-04
 ---
@@ -372,3 +372,11 @@ sha: 7ea0e79dd739f9fb5254c3a6f6ee54312a6a2d85 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-09-18, do them canh cay vao thuoc, tron onehub co ban va ban khai o nhan
 run_id: repin-20260918T135152Z-29995
 sha: 51b0f631670690e2f136fe1d77294193655aa382 · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2
+
+### Re-pin lần 7 — 2026-10-04, do sửa thước đỏ lô 2-4 (d2)
+run_id: repin-20261004T153704Z-99356
+sha: 2bf938e6511c00c6c2d29af571759b2afaad2a49 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2 · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 8 — 2026-10-06, do sửa thước đỏ lô 2-4 (d2)
+run_id: repin-20261006T094613Z-99306
+sha: 8a12ef6b73932d74e7e6a322b242aee5164c0478 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E5=2 · ngoài làn máy: E12 · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta

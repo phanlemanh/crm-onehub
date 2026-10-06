@@ -105,3 +105,4 @@ Quét bằng `morphological-scan` (preset test-matrix) —
   worktree tạm ở `merge-base` không được gỡ; lượt kế tự gỡ.
 - Ngoài-5: test của script ngưỡng kiểm `toContain` chuỗi con thay vì đúng dòng in ra,
   nên một con số lệch thêm chữ số vẫn có thể lọt.
+- E11 của tra-loi-tin-nhac đổi sang judgment (chủ kho duyệt 06/10): kiểm hồi quy chéo đã đạt ở lượt ghim lại dài 2 của zalo-va (repin-20261005T144800Z-79320); lượt 3 và 4 đỏ vì ca chập chờn agent-okr app-rieng, không vì mã; kiểm chéo bằng máy chuyển sang hạt giống kiem-cheo-sau-gop.

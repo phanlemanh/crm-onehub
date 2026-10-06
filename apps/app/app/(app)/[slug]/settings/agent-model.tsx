@@ -1,6 +1,7 @@
 "use client";
 
 import ChevronDown from "@carbon/icons-react/es/ChevronDown";
+import { Alert, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Card,
@@ -97,8 +98,14 @@ export function AgentModel() {
 
 	if (!settings.data) return null;
 
-	const { selectedId, effectiveId, defaultId, effective, canManage } =
-		settings.data;
+	const {
+		selectedId,
+		effectiveId,
+		defaultId,
+		effective,
+		canManage,
+		selectedMissing,
+	} = settings.data;
 	const models = catalog.data?.models ?? [];
 	const unavailable = catalog.data !== undefined && !catalog.data.available;
 
@@ -125,6 +132,12 @@ export function AgentModel() {
 			</CardHeader>
 
 			<CardContent>
+				{selectedMissing ? (
+					<Alert>
+						<AlertDescription>{t.model.biGo}</AlertDescription>
+					</Alert>
+				) : null}
+
 				<Popover open={open} onOpenChange={setOpen}>
 					<PopoverTrigger asChild>
 						<Button

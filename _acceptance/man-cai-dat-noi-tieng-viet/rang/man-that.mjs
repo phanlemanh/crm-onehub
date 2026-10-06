@@ -50,7 +50,11 @@ function docBang() {
 		console.log("KHONG DO DUOC: bang khai khong co mang `dong`.");
 		process.exit(2);
 	}
-	return { luat: new Set(la), dong: b.dong };
+	return {
+		luat: new Set(la),
+		dong: b.dong,
+		mienDau: new Set((b.mien_dau ?? []).map((d) => d.chuoi)),
+	};
 }
 
 function maTienTe() {
@@ -108,6 +112,7 @@ async function chanHaiTieng(cookie, slug) {
 	const mt = await dungMienTru(cookie, bang);
 	let hong = 0;
 	let tongCap = 0;
+	const thayDau = new Set();
 	for (const man of MAN) {
 		const vi = await docMan(cookie, slug, man, "vi", RONG);
 		const en = await docMan(cookie, slug, man, "en", RONG);
@@ -141,6 +146,10 @@ async function chanHaiTieng(cookie, slug) {
 				);
 				giongNhau += 1;
 			}
+			if (ly === null && bang.mienDau.has(vi[i].chu)) {
+				thayDau.add(vi[i].chu);
+				continue;
+			}
 			if (ly === null && !DAU_VIET.test(vi[i].chu)) {
 				console.log(
 					`   VE 3 HONG: chuoi luot vi khong mang dau tieng Viet: ${JSON.stringify(vi[i].chu)} — ${vi[i].khoa}`,
@@ -162,7 +171,16 @@ async function chanHaiTieng(cookie, slug) {
 			"KHONG DO DUOC: 0 cap chuoi de doi chieu. Tap quan sat rong khong bao gio la dat.",
 		);
 	}
-	console.log(`\nket qua: ${tongCap} cap doi chieu · hong=${hong}`);
+	for (const c of bang.mienDau)
+		if (!thayDau.has(c)) {
+			console.log(
+				`   MIEN DAU CHET: ${JSON.stringify(c)} khai mien dau ma khong con tren man nao.`,
+			);
+			hong += 1;
+		}
+	console.log(
+		`\nket qua: ${tongCap} cap doi chieu · mien dau=${thayDau.size} · hong=${hong}`,
+	);
 	await ket(hong > 0 ? 1 : 0);
 }
 

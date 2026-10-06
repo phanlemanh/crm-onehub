@@ -49,11 +49,11 @@ const VET = [
 	},
 	{
 		ten: "nhan thanh ben doi sang chu viet thang",
-		file: "apps/app/app/(app)/[slug]/settings/settings-sidebar.tsx",
+		file: "apps/app/lib/cai-dat-dieu-huong.ts",
 		cam: (s) =>
 			s.replace(
-				'{ khoa: "chung", href: ROOT }',
-				'{ khoa: "General", href: ROOT }',
+				'{ khoa: "chung", href: GOC_CAI_DAT }',
+				'{ khoa: "General", href: GOC_CAI_DAT }',
 			),
 	},
 	{
