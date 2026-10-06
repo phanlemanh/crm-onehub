@@ -6,6 +6,28 @@ feature_loop:
   ui_standards_skill: web-design-guidelines
   suite_keys: [executors.test.suite_api, executors.test.suite_app_ui, executors.test.suite_agent_db, executors.test.suite_okr_goi, executors.script.lint_khong_cache, executors.script.lint_slop, executors.script.build_khong_cache]
   repin_parallel_suites: true
+  repin_retry: 1
+  repin_budget_min: 80
+  repin_cost_cmd: node scripts/lan-do/chi-phi-gateway.mjs
+  repin_ci_blank_env: [AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN]
+  model_evals:
+    - chan-uy-thac-sai-luot/E6
+    - khung-tao-okr-nhu-deal/E6
+    - may-soan-de-xuat/E15a
+    - soan-okr-cung-tro-ly/E8
+    - soan-okr-cung-tro-ly/E13
+    - soan-okr-cung-tro-ly/E22
+    - tac-nhan-model-rieng/E4
+    - the-gop-y-okr/E1
+    - the-gop-y-okr/E13
+    - tro-ly-doc-kho/E15
+    - tro-ly-okr-de-xuat/E4
+    - tro-ly-okr-de-xuat/E22
+    - tro-ly-okr-de-xuat/E24
+    - tro-ly-okr-nen/E9
+    - tro-ly-okr-nen/E12
+    - tro-ly-okr-tom-tat/E9
+    - tro-ly-okr-tom-tat/E17
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
