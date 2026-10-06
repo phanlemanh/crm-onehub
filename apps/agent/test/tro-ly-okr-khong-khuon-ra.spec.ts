@@ -11,7 +11,7 @@ const CHI_DAN_GOP_Y = readFileSync(
 	"utf8",
 );
 
-function loiPhienCon(dinhNghia: object): string[] {
+function loiPhienCon(dinhNghia: ReturnType<typeof defineAgent>): string[] {
 	return "outputSchema" in dinhNghia ? ["phien con khai outputSchema"] : [];
 }
 

@@ -523,7 +523,10 @@ describe("dong-viec-tom-tat", () => {
 	let soLuot = 0;
 	let viecCoBan: ViecMo | null = null;
 
-	async function banSaoB(payload?: object): Promise<ViecMo> {
+	async function banSaoB(payload?: {
+		viec: string;
+		departmentId: string;
+	}): Promise<ViecMo> {
 		soBan += 1;
 		const goc = await db.agentTask.findUniqueOrThrow({
 			where: { id: viecB.taskId },
