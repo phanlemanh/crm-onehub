@@ -1,7 +1,7 @@
 import { defineHook } from "eve/hooks";
 import { ketThucTuKetQua, quyetUyQuyen } from "../lib/okr/uy-quyen";
 import { uyQuyenOkrState } from "../lib/okr/uy-quyen-state";
-import { dongViecOkr, giaHanLease, ketThucCuaViec } from "../lib/okr/viec";
+import { dongViecOkr, giaHanLease } from "../lib/okr/viec";
 import { attribute, purposeOf } from "../lib/session-purpose";
 
 export default defineHook({
@@ -23,8 +23,7 @@ export default defineHook({
 			const taskId = attribute(ctx, "okrTaskId");
 			if (!taskId) return;
 			const ketThuc = ketThucTuKetQua(event.data.result);
-			if (ketThuc)
-				await dongViecOkr(taskId, await ketThucCuaViec(taskId, ketThuc));
+			if (ketThuc) await dongViecOkr(taskId, ketThuc);
 		},
 
 		async "*"(_event, ctx) {

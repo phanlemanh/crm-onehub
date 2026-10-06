@@ -33,8 +33,9 @@ Làn ghim lại `repin-20261006T220643Z-23148` của `tro-ly-okr-de-xuat` đỏ 
    - `nop_de_xuat`: ghi xong (kể cả 0 dòng) → `da-nop`; Mục tiêu hay KR không còn →
      `khong-lam-duoc:thieu-du-lieu`; payload hỏng → `khong-lam-duoc:khuon-hong`. Từ chối vì việc
      đã đóng, đã nộp, hay không phải việc góp ý → không đóng gì.
-   - `nop_tom_tat`: ghi xong → `ketThucCuaViec(taskId, "da-nop")` (không có bản thì
-     `khong-lam-duoc:khong-nop` như hôm nay); phòng không còn → `khong-lam-duoc:thieu-du-lieu`;
+   - `nop_tom_tat`: ghi xong → `da-nop` (`ghiTomTat` luôn ghi một hàng, kể cả khi mọi câu bị
+     bỏ, nên nhánh «không có bản» của `ketThucCuaViec` thành mã chết và được gỡ); phòng không còn
+     → `khong-lam-duoc:thieu-du-lieu`;
      payload hỏng → `khong-lam-duoc:khuon-hong`. Từ chối vì đã có bản, việc đã đóng hay sai loại
      → không đóng gì.
 3. **Hook phiên gốc thành lưới.** `completeTask` đã là «ai ghi trước thắng» (`finishedAt: null`

@@ -975,7 +975,7 @@ executors:
     tdx_khong_moi_lai: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-nop.integration.spec.ts -t khong-moi-lai"'
     tbf_khong_khuon_ra: 'cd apps/agent && bun test test/tro-ly-okr-khong-khuon-ra.spec.ts'
     tbf_dong_gop_y: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-dong-viec.integration.spec.ts -t gop-y"'
-    tbf_dong_tom_tat: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-dong-viec.integration.spec.ts -t tom-tat"'
+    tbf_dong_tom_tat: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-nop-tom-tat.integration.spec.ts -t dong-viec-tom-tat"'
     tbf_luoi: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-dong-viec.integration.spec.ts -t luoi"'
     tdx_quyet: 'bun run test -- "cd apps/api && bun test test/tro-ly-okr-quyet.spec.ts"'
     tdx_man_vet: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-vet.dom.tsx'
