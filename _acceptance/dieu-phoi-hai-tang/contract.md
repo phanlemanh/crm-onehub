@@ -5,10 +5,10 @@ slug: dieu-phoi-hai-tang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, config]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-hai-tang-design.md
-approved_by:
-approved_at:
+approved_by: Phan Le Manh
+approved_at: 2026-10-07
 ---
 
 # Acceptance Contract: dieu-phoi-hai-tang
