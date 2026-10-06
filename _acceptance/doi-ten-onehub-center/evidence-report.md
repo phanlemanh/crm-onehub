@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6ca1ebaa11c73b8cb58a3fc1e3e3895c0727ecd2
+verified_commit: 977a9018f3511f37f189c25d26903aa9823df199
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -364,3 +364,7 @@ sha: 9acaf2819022175612728ad0cc7e8a5b9331be6f · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-05, do sửa thước đỏ lô 2-4 (f2)
 run_id: repin-20261005T044526Z-97535
 sha: 6ca1ebaa11c73b8cb58a3fc1e3e3895c0727ecd2 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E7, E8, E11, E15 · diff chạm vật đo ngoài làn máy: E7, E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7, AC-8, AC-11, AC-15
+
+### Re-pin lần 3 — 2026-10-06, do sửa thước đỏ lô 2-4 (f2c)
+run_id: repin-20261006T111742Z-87303
+sha: 977a9018f3511f37f189c25d26903aa9823df199 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E7, E8, E11, E15 · diff chạm vật đo ngoài làn máy: E7, E8, E11, E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7, AC-8, AC-11, AC-15
