@@ -271,7 +271,7 @@ executors:
     cp_quyen_hai_ve: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t quyen-hai-ve"'
     cp_chuan_hoa_dia_chi: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t chuan-hoa"'
     cp_domain_nha_tach: 'bun run test -- "cd apps/api && bun test test/domain-nha-tach.spec.ts"'
-    cp_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx" "apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx" "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx" "apps/app/app/(landing)/het-quyen/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    cp_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/settings/members/allowances-table.tsx" "apps/app/app/(app)/[slug]/settings/members/allow-dialog.tsx" "packages/ui/src/components/confirm-dialog.tsx" "apps/app/app/(landing)/het-quyen/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     cp_cho_phep_lai: 'bun run test -- "cd apps/api && bun test test/workspace-thanh-vien.spec.ts -t cho-phep-lai"'
     cua_vao_chon_tieng: "cd apps/app && bun test test/locale-resolve.spec.ts"
     cua_vao_kho_chuoi: "cd apps/app && bun test test/auth-messages.spec.ts"
