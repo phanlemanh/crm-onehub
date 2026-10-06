@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0d03129ecfa5bdbcff83dee9706a511e342f399c
+verified_commit: 9b27f278da85b85fbbc406af270856ca7ba9b04a
 human_signoff: Manh Phan 2026-09-28
 ---
 
@@ -275,3 +275,7 @@ sha: 4893629a5ff0068f0b3a0fc09523a037c7c953b7 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-04, do gộp onehub sau khi khai paths lô 2
 run_id: repin-20261004T161003Z-91842
 sha: 0d03129ecfa5bdbcff83dee9706a511e342f399c · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E14, E16
+
+### Re-pin lần 5 — 2026-10-06, do khai lại paths trỏ tệp không còn trong kho
+run_id: repin-20261006T060645Z-42412
+sha: 9b27f278da85b85fbbc406af270856ca7ba9b04a · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E14, E16 · diff chạm vật đo ngoài làn máy: E16 — chưa chứng lại, đi vòng S4 delta

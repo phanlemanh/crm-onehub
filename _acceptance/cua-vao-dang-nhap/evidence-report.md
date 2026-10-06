@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 77ca8466b8f4c1811411348d879271b9936b155c
+verified_commit: 4ea4d500c62d180a22132b852f6c1ac54293f2eb
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -338,3 +338,7 @@ sha: bc521b55cef53c92861f49648c8d9ff4625c5448 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-05, do gộp onehub e9f8ed2f (#260, #262) trước khi merge #261
 run_id: repin-20261005T043446Z-73088
 sha: 77ca8466b8f4c1811411348d879271b9936b155c · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E14, E18 · AC không có chốt máy: AC-15
+
+### Re-pin lần 3 — 2026-10-06, do khai lại paths trỏ tệp không còn trong kho
+run_id: repin-20261006T060047Z-57794
+sha: 4ea4d500c62d180a22132b852f6c1ac54293f2eb · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E14, E18 · AC không có chốt máy: AC-15

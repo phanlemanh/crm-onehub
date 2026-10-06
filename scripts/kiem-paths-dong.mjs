@@ -7,6 +7,10 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ACCEPTANCE = join(ROOT, "_acceptance");
+const SPECS = join(ROOT, "docs", "superpowers", "specs");
+const BANG_MO = "<!-- <<<BANG-THAY-THE -->";
+const BANG_DONG = "<!-- BANG-THAY-THE>>> -->";
+const DONG_BANG = /^\|\s*([\w-]+\/E\d+)\s*\|.*\|\s*([^|]*?)\s*\|\s*$/;
 const GLOB_CHARS = /[*?]/;
 const ODD_SHAPE = /^(\.{1,2}\/|\/)|\/$|\\|\s/;
 
@@ -21,6 +25,36 @@ function trackedFiles() {
 		maxBuffer: 1 << 28,
 	});
 	return new Set(out.split("\0").filter(Boolean));
+}
+
+function nguonBangThayThe() {
+	const nguon = [];
+	for (const slug of readdirSync(ACCEPTANCE).sort()) {
+		const file = join(ACCEPTANCE, slug, "contract.md");
+		if (existsSync(file)) nguon.push([slug, file]);
+	}
+	if (existsSync(SPECS)) {
+		for (const ten of readdirSync(SPECS).sort()) {
+			if (ten.endsWith(".md")) nguon.push([ten, join(SPECS, ten)]);
+		}
+	}
+	return nguon;
+}
+
+function bangThayThe() {
+	const thay = new Map();
+	for (const [ten, file] of nguonBangThayThe()) {
+		const text = readFileSync(file, "utf8");
+		const khoi = text.split(BANG_MO)[1]?.split(BANG_DONG)[0];
+		if (!khoi) continue;
+		for (const dong of khoi.split("\n")) {
+			const khop = dong.match(DONG_BANG);
+			if (khop && !thay.has(khop[1])) {
+				thay.set(khop[1], `${ten} ${khop[2]}`.trim());
+			}
+		}
+	}
+	return thay;
 }
 
 function classify(entry, tracked) {
@@ -38,8 +72,10 @@ function classify(entry, tracked) {
 
 function scan() {
 	const tracked = trackedFiles();
+	const thay = bangThayThe();
 	const errors = [];
 	const warnings = [];
+	const replaced = [];
 	for (const slug of readdirSync(ACCEPTANCE).sort()) {
 		const file = join(ACCEPTANCE, slug, "evals.yaml");
 		if (!existsSync(file)) continue;
@@ -50,18 +86,22 @@ function scan() {
 			for (const entry of entries) {
 				const verdict = classify(entry, tracked);
 				const line = `${slug}/${item.id}: ${entry} (${verdict.why})`;
+				const thayBoi = thay.get(`${slug}/${item.id}`);
 				if (verdict.kind === "loi") errors.push(line);
-				if (verdict.kind === "canh-bao") warnings.push(line);
+				if (verdict.kind === "canh-bao" && thayBoi) {
+					replaced.push(`${line}, eval đã bị thay: ${thayBoi}`);
+				} else if (verdict.kind === "canh-bao") warnings.push(line);
 			}
 		}
 	}
-	return { errors, warnings };
+	return { errors, warnings, replaced };
 }
 
-const { errors, warnings } = scan();
+const { errors, warnings, replaced } = scan();
+for (const line of replaced) console.log(`ĐÃ THAY ${line}`);
 for (const line of warnings) console.log(`CẢNH BÁO ${line}`);
 for (const line of errors) console.log(`LỖI ${line}`);
 console.log(
-	`kiem-paths-dong: ${errors.length} lỗi, ${warnings.length} cảnh báo. Bộ lọc hoá cũ theo paths chỉ an toàn với tệp có thật hoặc glob có dấu sao.`,
+	`kiem-paths-dong: ${errors.length} lỗi, ${warnings.length} cảnh báo, ${replaced.length} mục của eval đã bị thay theo bảng thay thế. Bộ lọc hoá cũ theo paths chỉ an toàn với tệp có thật hoặc glob có dấu sao.`,
 );
 process.exit(errors.length ? 1 : 0);
