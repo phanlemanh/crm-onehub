@@ -53,7 +53,7 @@ evals:
     steps:
       - "Cảnh cây (rang/canh-cay.mjs của man-cai-dat-noi-tieng-viet) trước màn đầu tiên; lệch cây → mã 2"
       - "Gieo qua API thật: phòng ban có trưởng, chu kỳ quý dang-chay, mục tiêu công bố với ba KR của M (tang-toi, moc, phan-tram), một lần cập nhật tuần trước cho KR tang-toi (mức vua); người R không phụ trách KR nào; đăng nhập dev:session"
-      - "M mở {APP_URL}/<slug>/okr/cap-nhat-tuan ở 1440/vi → thanh tab có bốn tab, tab «Cập nhật tuần» aria-current; mỗi KR một dòng (data-kr), ô giá trị điền sẵn đúng số, dòng «Tuần trước: vừa» ở KR có lần trước, KR mốc có hai nút → evidence E6-step1.png"
+      - "M mở {APP_URL}/<slug>/okr/cap-nhat-tuan ở 1440/vi → thanh tab có năm tab (tab thứ năm «Hỏi ý» do dot-hoi-y-tuong-okr thêm), tab «Cập nhật tuần» aria-current; mỗi KR một dòng (data-kr), ô giá trị điền sẵn đúng số, dòng «Tuần trước: vừa» ở KR có lần trước, KR mốc có hai nút → evidence E6-step1.png"
       - "Gõ «ba» vào ô KR phan-tram → câu lỗi dưới ô, nút gửi disabled → E6-step2.png; sửa thành 40; chọn mức tự tin cho hai KR → nút «Gửi 2 cập nhật» → E6-step3.png"
       - "Chặn request okr.guiCapNhat (trả 500) rồi bấm gửi → Alert «Chưa gửi được», ô còn nguyên giá trị đã gõ, nút «Gửi lại 2 cập nhật» → E6-step4.png; bỏ chặn, bấm gửi lại → «Đã gửi 2 cập nhật … giây» → E6-step5.png"
       - "R mở cùng URL → Empty rỗng → E6-step6.png; lỗi tải dựng phía máy chủ (danh sách tải ở trang máy chủ nên chặn trong trình duyệt không tới): app của phép đo trỏ API_URL qua cửa chặn rang/cua-chan.mjs (đứng giữa app và api, chuyển nguyên mọi yêu cầu, bật được trả 500 cho đúng thủ tục okr.capNhatTuan); bật chặn, M mở màn → Empty có «Thử lại»; tắt chặn, bấm «Thử lại» → danh sách hiện → E6-step7.png"
@@ -69,7 +69,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.script.cnt_man_chrome
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs]
-    expected: "Cùng lần chạy với E6: script ghi mốc T0 (giờ máy chủ, đọc bằng SELECT now() qua DATABASE_URL của cây) ngay khi danh sách hiện, cố ý chờ 5 giây trước khi gửi. Trước bước 5 đếm okrCheckIn và okrCheckInSession của M bằng SQL thẳng (không qua màn); sau lần gửi bị chặn đếm okrCheckIn +0; sau «Đã gửi» đếm okrCheckIn +2, hai dòng có confidence đúng lựa chọn, value KR phan-tram = 40; okrCheckInSession của M +1 ĐÚNG MỘT phiên cho cả lần mở màn này (kể cả sau «Gửi lại»), entry = tab, openedAt ≤ T0 + 1s và seconds ≥ 5. CHIỀU ĐỎ: màn chỉ đổi state không gọi mutation → đếm +0, bài đỏ in đếm; màn gọi okr.moCapNhat trong nút gửi → seconds < 5, bài đỏ in «seconds <n> < 5»; màn gọi moCapNhat lại sau «Gửi lại» → hai phiên, bài đỏ in đếm phiên."
+    expected: "Cùng lần chạy với E6: trước mọi phép đếm, R mở màn Cập nhật tuần một lần để app (vừa khởi động trong phiên đo) biên dịch xong trang, tránh M đếm đôi phiên lúc app còn lạnh; script ghi mốc T0 (giờ máy chủ, đọc bằng SELECT now() qua DATABASE_URL của cây) ngay khi danh sách hiện, cố ý chờ 5 giây trước khi gửi. Trước bước 5 đếm okrCheckIn và okrCheckInSession của M bằng SQL thẳng (không qua màn); sau lần gửi bị chặn đếm okrCheckIn +0; sau «Đã gửi» đếm okrCheckIn +2, hai dòng có confidence đúng lựa chọn, value KR phan-tram = 40; okrCheckInSession của M +1 ĐÚNG MỘT phiên cho cả lần mở màn này (kể cả sau «Gửi lại»), entry = tab, openedAt ≤ T0 + 1s và seconds ≥ 5. CHIỀU ĐỎ: màn chỉ đổi state không gọi mutation → đếm +0, bài đỏ in đếm; màn gọi okr.moCapNhat trong nút gửi → seconds < 5, bài đỏ in «seconds <n> < 5»; màn gọi moCapNhat lại sau «Gửi lại» → hai phiên, bài đỏ in đếm phiên."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -270,6 +270,14 @@ evals:
       cặp thành phần mức tự tin) trỏ rõ sang lượt 5; tệp thật khớp tên trong bảng.
     inputs: [docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md, _acceptance/cap-nhat-tuan-okr/contract.md, "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx", "apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx", apps/app/components/crm/record-sheet/objective-trao-doi.tsx, "apps/app/app/(app)/[slug]/settings/members/chuyen-okr-dialog.tsx"]
     evidence_required: [run_id, verifier, verified_at, output]
+    paths:
+      - "docs/superpowers/specs/2026-09-25-cap-nhat-tuan-okr-design.md"
+      - "_acceptance/cap-nhat-tuan-okr/contract.md"
+      - "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/cap-nhat-tuan.tsx"
+      - "apps/app/app/(app)/[slug]/okr/viec-cua-toi.tsx"
+      - "apps/app/app/(app)/[slug]/okr/hop-thoai-cap-nhat-kr.tsx"
+      - "apps/app/components/crm/record-sheet/objective-trao-doi.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/chuyen-okr-dialog.tsx"
 
   - id: E27
     criterion: AC-15
@@ -296,7 +304,7 @@ evals:
     cmd: config:executors.script.cnt_man_chrome
     steps:
       - "Cùng lần chạy với E6. Mục tiêu A công bố ở chu kỳ dang-chay có KR a; mục tiêu B nháp có KR b; mục tiêu C công bố ở chu kỳ lap-ke-hoach có KR c; trưởng TP đăng nhập"
-      - "TP mở sheet mục tiêu A, menu dòng KR a → «Sửa» → hộp thoại KR: ô «Hiện tại» (data-o-hien-tai) có thuộc tính readonly (không disabled), dưới ô có liên kết «Cập nhật tuần» trỏ /<slug>/okr/cap-nhat-tuan → E29-step1.png (1440), E29-step2.png (390); đổi ô «Đích» rồi Lưu → hộp đóng, SQL thẳng: targetValue đổi, currentValue không đổi"
+      - "TP mở sheet mục tiêu A, menu dòng KR a → «Sửa» → hộp thoại KR: ô «Hiện tại» (data-o-hien-tai) có thuộc tính readonly (không disabled), dưới ô có liên kết «Cập nhật tuần» trỏ /<slug>/okr/cap-nhat-tuan → E29-step1.png (1440), E29-step2.png (390); đổi ô «Đích» (chu kỳ đang chạy nên điền lý do đổi đích theo luật của khep-ky-okr) rồi Lưu → hộp đóng, SQL thẳng: targetValue đổi, currentValue không đổi"
       - "Bấm liên kết «Cập nhật tuần» (mở lại hộp) → URL /okr/cap-nhat-tuan → E29-step3.png"
       - "TP mở sheet mục tiêu B, hộp thoại KR b → ô «Hiện tại» sửa được, không có dòng dẫn; đổi 5 → Lưu → SQL thẳng: currentValue KR b = 5 → E29-step4.png"
       - "TP mở sheet mục tiêu C (đã công bố, chu kỳ lap-ke-hoach), hộp thoại KR c → ô «Hiện tại» sửa được, không có dòng dẫn; đổi 6 → Lưu → SQL thẳng: currentValue KR c = 6 → E29-step5.png"

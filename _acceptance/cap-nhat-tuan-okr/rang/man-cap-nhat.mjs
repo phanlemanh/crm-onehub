@@ -36,6 +36,8 @@ const CHO_HYDRATE_MS = 800;
 const NGAY_LUI_CONG_BO = 2;
 const LOI_HYDRATE = /hydrat/i;
 const CUA_CHAN_URL = process.env.CUA_CHAN_URL ?? "http://localhost:3922";
+const LY_DO_DOI_DICH = "Đo E29: đổi đích KR a lên 60";
+const GIO_GIEO_TUAN_TRUOC_UTC = "02";
 
 mkdirSync(BANG_CHUNG, { recursive: true });
 
@@ -616,7 +618,6 @@ async function gieoLichSuTuanTruoc() {
 	if (!hangThat || !phienThat)
 		throw new Error("khong doc lai duoc hang calibration vua ghi qua service");
 
-	const luc = new Date(Date.now() - 8 * 24 * 3600 * 1000);
 	const tuanTruocChuoi = new Date(
 		Date.parse(`${homNayVN}T00:00:00Z`) - 7 * 24 * 3600 * 1000,
 	);
@@ -627,6 +628,7 @@ async function gieoLichSuTuanTruoc() {
 	)
 		.toISOString()
 		.slice(0, 10);
+	const luc = new Date(`${tuanTruoc}T${GIO_GIEO_TUAN_TRUOC_UTC}:00:00Z`);
 
 	const phienCu = await db.okrCheckInSession.create({
 		data: {
@@ -704,6 +706,9 @@ async function donDep() {
 	await db.okrCheckIn.deleteMany({ where: { authorUserId: { in: moiNguoi } } });
 	await db.okrCheckInSession.deleteMany({
 		where: { userId: { in: moiNguoi } },
+	});
+	await db.okrDoiDich.deleteMany({
+		where: { keyResult: { objectiveId: { in: moiMt } } },
 	});
 	await db.okrKeyResult.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrParticipant.deleteMany({ where: { objectiveId: { in: moiMt } } });
@@ -1019,6 +1024,9 @@ async function kiemKhongDich(trang, nhan, sel, chu) {
 }
 
 async function buocE6E7() {
+	const nong = await moTrang(cookie.r, RONG, "/okr/cap-nhat-tuan", "E6");
+	await hienSel(nong, "[data-trang-thai]");
+	await nong.close();
 	const truocCheckIn = await db.okrCheckIn.count({
 		where: { authorUserId: id.m },
 	});
@@ -1033,8 +1041,8 @@ async function buocE6E7() {
 	await cho(5300);
 
 	kiem(
-		"E6 buoc 1: thanh tab co 4 tab",
-		(await demSel(t, "[role='tab']")) === 4,
+		"E6 buoc 1: thanh tab co 5 tab",
+		(await demSel(t, "[role='tab']")) === 5,
 	);
 	kiem(
 		"E6 buoc 1: tab Cap nhat tuan aria-current",
@@ -1846,7 +1854,17 @@ async function suaKrTrongSheet(trang, objectiveId, krTitle) {
 	await hienSel(trang, "[data-hop-thoai-kr]");
 }
 
+const coHopSuaKr = (trang) =>
+	trang.evaluate(
+		() =>
+			document
+				.querySelector("[data-hop-thoai-kr]")
+				?.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }) ===
+			true,
+	);
+
 async function moLaiHopSuaKr(trang, krTitle) {
+	if (await coHopSuaKr(trang)) return;
 	await bamSel(trang, `button[aria-label='Thao tác với ${krTitle}']`);
 	await doi(
 		trang,
@@ -1885,6 +1903,10 @@ async function buocE29() {
 	await moLaiHopSuaKr(tp, `KR29a ${MA}`);
 
 	await ganGiaTri(tp, "[data-o-dich]", "60");
+	const oLyDo = await tp
+		.waitForSelector("[data-o-ly-do-dich] textarea", { timeout: CHO })
+		.catch(() => null);
+	if (oLyDo) await oLyDo.type(LY_DO_DOI_DICH);
 	await doi(
 		tp,
 		"E29: nut Luu bat",

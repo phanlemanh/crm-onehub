@@ -135,8 +135,8 @@ const homNay = new Intl.DateTimeFormat("en-CA", {
 }).format(new Date());
 const NAM = Number(homNay.slice(0, 4));
 const QUY = Math.ceil(Number(homNay.slice(5, 7)) / 3);
-const QUY_SAU = QUY === 4 ? 1 : QUY + 1;
-const NAM_SAU_QUY = QUY === 4 ? NAM + 1 : NAM;
+const QUY_DONG = QUY === 1 ? 4 : QUY - 1;
+const NAM_DONG = QUY === 1 ? NAM - 1 : NAM;
 const ngay = (y, m, d) =>
 	`${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 const cuoiThang = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
@@ -158,6 +158,7 @@ const tuanNayLuc = (phut) =>
 		),
 	);
 const truocNgay = (n) => new Date(Date.now() - n * NGAY_MS);
+const TUAN_DIEN_BIEN = 6;
 
 const NGUOI = {
 	admin: { email: `a${MA}@thu.test`, vai: "admin", ten: "Nguyễn Minh An" },
@@ -205,8 +206,8 @@ const TEN = {
 	SP1: `Phòng Triển khai ${MA}`,
 	SP2: `Phòng Hỗ trợ ${MA}`,
 	PK: `Phòng Chu kỳ ${MA}`,
-	TQ3: `TCO-Q${QUY}-${MA}`,
-	TQ4: `TCO-Q${QUY_SAU}-${MA}`,
+	TQ3: `TCO-Q${QUY_DONG}-${MA}`,
+	TQ4: `TCO-Q${QUY}-${MA}`,
 };
 
 const phienCua = (email) =>
@@ -365,6 +366,24 @@ const taoQuy = (namId, nam, quy, pha) =>
 async function kyDangChay() {
 	const nam = await taoNam(NAM);
 	return { nam, quy: await taoQuy(nam, NAM, QUY, "dang-chay") };
+}
+
+async function kyDangChayTu(batDauMs) {
+	const nam = await taoNam(NAM);
+	const dauQuy = ngay(NAM, QUY * 3 - 2, 1);
+	const tu = new Intl.DateTimeFormat("en-CA", {
+		timeZone: "Asia/Ho_Chi_Minh",
+	}).format(new Date(batDauMs));
+	const batDau = tu < dauQuy && tu.startsWith(String(NAM)) ? tu : dauQuy;
+	const quy = await taoKy(
+		"quy",
+		`Quý ${QUY}/${NAM} ${MA}`,
+		nam,
+		batDau,
+		ngay(NAM, QUY * 3, cuoiThang(NAM, QUY * 3)),
+		"dang-chay",
+	);
+	return { nam, quy };
 }
 
 async function moi(c, cycleId, unit, title, owner, krs, them = {}) {
@@ -626,7 +645,9 @@ async function gieoDien() {
 	ORG.PD = await taoPb(TEN.PD, null);
 	await xep(id.truongP1, ORG.PD);
 	await datTruong("department", ORG.PD, id.truongP1);
-	const ky = await kyDangChay();
+	const ky = await kyDangChayTu(
+		dauTuanMs(new Date()) - TUAN_DIEN_BIEN * 7 * NGAY_MS,
+	);
 	OKR.nam = ky.nam;
 	OKR.quy = ky.quy;
 	const c = cookie.truongP1;
@@ -808,13 +829,13 @@ async function gieoKy() {
 	const nam = await taoNam(NAM);
 	const namSau = await taoNam(NAM + 1);
 	OKR.namSau = namSau;
-	OKR.quyA = await taoQuy(nam, NAM, QUY, "dang-chay");
-	OKR.quyB = await taoQuy(
-		NAM_SAU_QUY === NAM ? nam : namSau,
-		NAM_SAU_QUY,
-		QUY_SAU,
+	OKR.quyA = await taoQuy(
+		NAM_DONG === NAM ? nam : await taoNam(NAM_DONG),
+		NAM_DONG,
+		QUY_DONG,
 		"dang-chay",
 	);
+	OKR.quyB = await taoQuy(nam, NAM, QUY, "dang-chay");
 	const c = cookie.truongP1;
 	const don = { level: "phong-ban", departmentId: ORG.PK };
 	OKR.TQ3 = await moi(c, OKR.quyA, don, TEN.TQ3, id.truongP1, [
@@ -843,8 +864,28 @@ async function gieoKy() {
 	]);
 	await congBo(c, OKR.TQ4.id);
 	await capNhat(c, [muc(OKR.TQ4.kr[0], 3, "vua", "Đã mở ba hồ sơ")]);
+	await dongKy(OKR.quyA, c);
+}
+
+async function dongKy(cycleId, cookieCham) {
 	await lam(cookie.admin, "okr.setCyclePhase", {
-		id: OKR.quyA,
+		id: cycleId,
+		phase: "cham-diem",
+	});
+	const dong = await db.okrDiemKr.findMany({
+		where: { cycleId },
+		select: { keyResultId: true, diemGoiY: true, thang: true },
+	});
+	for (const d of dong)
+		await lam(cookieCham, "okr.chamKr", {
+			keyResultId: d.keyResultId,
+			diem:
+				d.thang === "0-100"
+					? Math.round(Number(d.diemGoiY) * 100)
+					: Number(d.diemGoiY),
+		});
+	await lam(cookie.admin, "okr.setCyclePhase", {
+		id: cycleId,
 		phase: "da-dong",
 	});
 }
@@ -877,6 +918,7 @@ async function donNhom() {
 	});
 	await db.okrComment.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrFollow.deleteMany({ where: { objectiveId: { in: moiMt } } });
+	await db.okrDiemKr.deleteMany({ where: { cycleId: { in: moiKy } } });
 	await db.okrKeyResult.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrParticipant.deleteMany({ where: { objectiveId: { in: moiMt } } });
 	await db.okrObjective.deleteMany({ where: { id: { in: moiMt } } });
@@ -1983,8 +2025,8 @@ async function buocSucKhoe() {
 }
 
 async function buocChuKy() {
-	const tenA = `Quý ${QUY}/${NAM} ${MA}`;
-	const tenB = `Quý ${QUY_SAU}/${NAM_SAU_QUY} ${MA}`;
+	const tenA = `Quý ${QUY_DONG}/${NAM_DONG} ${MA}`;
+	const tenB = `Quý ${QUY}/${NAM} ${MA}`;
 	const t = await moTrang(
 		cookie.truongP1,
 		RONG,
@@ -2103,7 +2145,7 @@ async function buocChuKy() {
 	);
 	const tc = await chuTrang(t);
 	console.log(
-		`  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q${QUY}: 1 KR, Q${QUY_SAU}: 2 KR), thay [${hangPK}]`,
+		`  E23 Toan canh khong in ten muc tieu; hang pb:PK doc so KR cua ky dang xem (Q${QUY_DONG}: 1 KR, Q${QUY}: 2 KR), thay [${hangPK}]`,
 	);
 	kiem(
 		`E23 buoc 4: Toan canh giu kyOkr, hang phong ban mang so cua ${tenA} (1 muc tieu, 1 KR), khong «${TEN.TQ4}» (thay [${hangPK.slice(-2)}])`,
