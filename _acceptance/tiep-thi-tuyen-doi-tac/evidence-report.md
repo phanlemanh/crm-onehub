@@ -25,7 +25,7 @@ reason: |
 verified_by: fresh-context verification subagents (hai làn)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: df01345e0af096a5310ed5f99d5a3b580ae3d234
+verified_commit: e3b979ae92631d509c9868e6f8b03c345cbd4fac
 human_signoff: Mạnh 2026-09-06 — ký lại trên bằng chứng vòng 4 sau khi bản sửa `go-khoa-goc-nhin` làm mốc cũ lệch cây. Mười mục ngoài hợp đồng ghi vào giới hạn đã biết; phạm vi đã cắt giữ nguyên; phê toàn bộ quyết định ghi sau Cổng 1. Chấm E19 và các định đoạt ngày 05/09 giữ nguyên hiệu lực, không làm lại.
 ---
 
@@ -629,3 +629,7 @@ sha: ed70d70dd0ec9ee7412b45e63c90c925500d50c6 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-05, do sửa thước đỏ lô 2-4 (g2)
 run_id: repin-20261005T050537Z-69105
 sha: df01345e0af096a5310ed5f99d5a3b580ae3d234 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E18 · ngoài làn máy: E6, E9, E12, E19, E23 · diff chạm vật đo ngoài làn máy: E6, E9, E12, E23 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-14
+
+### Re-pin lần 6 — 2026-10-06, do sửa thước đỏ lô 2-4 (g2c)
+run_id: repin-20261006T110836Z-56430
+sha: e3b979ae92631d509c9868e6f8b03c345cbd4fac · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E18 · ngoài làn máy: E6, E9, E12, E19, E23 · AC không có chốt máy: AC-14
