@@ -17,6 +17,8 @@ evals:
     paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/test/nen-kara.dom.tsx"]
 
   - id: E3
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-5
     criterion: AC-3
     executor: test
     cmd: config:executors.test.nk_man_cu
@@ -125,6 +127,8 @@ evals:
       - "docs/ai-ux.md"
 
   - id: E14
+    status: not-run
+    superseded_by: gop-y-dung-cho#AC-14
     criterion: AC-13
     executor: script
     cmd: config:executors.script.nk_san_thiet_ke
