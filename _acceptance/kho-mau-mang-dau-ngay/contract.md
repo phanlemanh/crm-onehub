@@ -5,7 +5,7 @@ slug: kho-mau-mang-dau-ngay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: draft
+status: implemented
 design_doc: docs/superpowers/specs/2026-10-07-kho-mau-mang-dau-ngay-design.md
 approved_by:
 approved_at:
@@ -92,3 +92,17 @@ container được gắn nhãn phiên ngay lúc tạo để bộ dọn gom đư�
   `crm_thumuuz4g8ycr8btao__mau_do`.
 - Vòng này chạm `paths` của hồ sơ đã ký `do-man-tren-kho-rieng`; ghim lại hồ sơ đó ở đỉnh
   nhánh trước khi mở PR.
+- S3 (07/10, bản sửa `123d13554`): ba ca `giet-*` chạy trên `measure-db.ts` chưa sửa —
+  `giet-mang-dau` đỏ «kho mau cua luot bi giet khong mang dau dang dung: migrate»,
+  `giet-quet-gom` đỏ «luot quet khong gom kho mau cua luot bi giet», `giet-dung-lai` xanh
+  (nó canh đột biến khác). Sau bản sửa: tám lệnh executor nguyên văn xanh, số ca
+  1/1/1/1/1/2/2/1 đúng như ghim.
+- Phá-thử trên bản đã commit, trả lại bằng `git checkout`, cây sạch sau mỗi nhát: (1) bỏ
+  `markTemplateBuilding` → E2 đỏ «…: migrate»; (2) chèn `markTemplate` với dấu nguồn thật
+  giữa `migrate deploy` và seed → E2 đỏ «…: seed», E4 đỏ «kho mau do dang duoc dung lai:
+  seed» (điểm `migrate` không bắt được đột biến này — điểm `seed` là cần); (3) `lastTouched`
+  của `building` cộng `maxAgeMs` → E3 đỏ «luot quet khong gom…»; (4) `parseMeasureComment`
+  bỏ nhánh `building` → E1 đỏ «dau dang dung doc lai sai».
+- Kho bằng chứng sau mọi lượt S3: vẫn đúng 7 kho cũ cộng `crm_thudieutra26552__mau_do`, không
+  kho `crm_thu*` nào khác sót lại.
+- Năm lệnh ở gốc tại `9e12dafe3`: test 0 (646 s) · check-types 0 · lint 0 · lint:slop 0 · build 0.
