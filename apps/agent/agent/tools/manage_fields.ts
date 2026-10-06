@@ -1,6 +1,12 @@
 import { defineTool } from "eve/tools";
 import { z } from "zod";
 import { createField, updateFieldBrief } from "../lib/fields";
+import { FIELDS_AGENT } from "../lib/fields-config";
+import {
+	ghiDoiTruong,
+	type LyDoTuChoi,
+	quyenDoiTruong,
+} from "../lib/quyen-truong";
 import { assertNotZaloQuestion } from "../lib/session-purpose";
 
 export default defineTool({
@@ -49,35 +55,59 @@ export default defineTool({
 	}),
 	async execute(input, ctx) {
 		assertNotZaloQuestion(ctx);
+		const quyen = await quyenDoiTruong(ctx);
+		const ghi = (lyDo?: LyDoTuChoi) =>
+			ghiDoiTruong(ctx.session.id, {
+				hanhDong: input.action,
+				vai: quyen.vai,
+				ketQua: lyDo ? "tu-choi" : "lam",
+				lyDo,
+				entity: input.entity,
+				key: input.key,
+			});
+
+		if (!quyen.cho) {
+			await ghi("quyen");
+			return input.action === "create"
+				? { created: false, reason: FIELDS_AGENT.tuChoi }
+				: { updated: false, reason: FIELDS_AGENT.tuChoi };
+		}
+
 		if (input.action === "create") {
 			if (!input.label || !input.type) {
+				await ghi("khong-ghi-duoc");
 				return {
 					created: false,
 					reason: "Creating a field needs both a label and a type.",
 				};
 			}
 
-			return createField({
+			const tao = await createField({
 				entity: input.entity,
 				label: input.label,
 				type: input.type,
 				options: input.options,
 				agentBrief: input.agentBrief,
 			});
+			await ghi("created" in tao ? "khong-ghi-duoc" : undefined);
+			return tao;
 		}
 
 		if (!input.key) {
+			await ghi("khong-ghi-duoc");
 			return {
 				updated: false,
 				reason: "Changing a brief needs the field key.",
 			};
 		}
 
-		return updateFieldBrief({
+		const doi = await updateFieldBrief({
 			entity: input.entity,
 			key: input.key,
 			agentBrief: input.agentBrief ?? null,
 			agentFilled: input.agentFilled,
 		});
+		await ghi("updated" in doi ? "khong-ghi-duoc" : undefined);
+		return doi;
 	},
 });

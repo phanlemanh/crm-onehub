@@ -50,7 +50,8 @@
         "R1g",
         "R1h"
       ],
-      "khoa": "m-1012r"
+      "khoa": "m-1012r",
+      "that": "2026-10-06"
     },
     {
       "ten": "Mọi phòng ban bắt đầu dùng thật hằng ngày — OKR và Kho tài liệu",
@@ -189,10 +190,12 @@
       "ten_ngan": "Khung OKR",
       "ngay": "2026-10-04",
       "cau_giao": "«Khung Mục tiêu gọn: bảng KR có lề, tab không trùng tên, điện thoại đọc được, chip Kara cùng cỡ nhãn, thanh Theo đơn vị không nhảy dòng»",
-      "ghi_chu": "Khảo sát 04/10: KH1 viền bảng KR áp mép, KH2 thanh nhảy dòng, KH3 hai tab History, KH4 đầu khung điện thoại, KH5 «1 KRs», G2/G3 chip Kara, R1m-2/3/5, hỏi lại trước khi bỏ thay đổi ở liên kết chéo. Nguồn .acceptance-runs/khao-sat-lo-trinh/de-xuat-lo-trinh.md (A1).",
-      "buoc_ke": "Mở ngay 05/10",
-      "trang_thai": "chưa mở",
-      "han": "2026-10-08"
+      "ghi_chu": "Khảo sát 04/10: KH1 viền bảng KR áp mép, KH2 thanh nhảy dòng, KH3 hai tab History, KH4 đầu khung điện thoại, KH5 «1 KRs», G2/G3 chip Kara, R1m-2/3/5, hỏi lại trước khi bỏ thay đổi ở liên kết chéo. Nguồn .acceptance-runs/khao-sat-lo-trinh/de-xuat-lo-trinh.md (A1). Đã gộp 04/10 (#252).",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
+      "han": "2026-10-08",
+      "pr": [
+        252
+      ]
     },
     {
       "ma": "R1b",
@@ -205,10 +208,12 @@
       "ten_ngan": "Thành viên vào",
       "ngay": "2026-10-04",
       "cau_giao": "«Nhập cả công ty không hỏng ngầm: đặt được tên miền nội bộ, cho phép lại người đang là thành viên không treo»",
-      "ghi_chu": "#28 staffEmailDomains không có đường ghi (staff-domains.ts:18-23), #29 cho phép lại sinh dòng treo, #43 nút «Cho phép một địa chỉ» biến mất sau lỗi mạng, #44 soi người bị coi nhầm «đang bị gỡ». Phải xong trước khi nhập danh sách người. 04/10: cả công ty đã được nhập trên production; hàng này giữ cho người thêm sau và cho lần cho phép lại.",
-      "buoc_ke": "Mở ngay 05/10; thêm Cổng 1.5",
-      "trang_thai": "chưa mở",
-      "han": "2026-10-08"
+      "ghi_chu": "#28 staffEmailDomains không có đường ghi (staff-domains.ts:18-23), #29 cho phép lại sinh dòng treo, #43 nút «Cho phép một địa chỉ» biến mất sau lỗi mạng, #44 soi người bị coi nhầm «đang bị gỡ». Phải xong trước khi nhập danh sách người. 04/10: cả công ty đã được nhập trên production; hàng này giữ cho người thêm sau và cho lần cho phép lại. Đã gộp 04/10 (#253). Ngoài-2 chờ hợp đồng mới.",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
+      "han": "2026-10-08",
+      "pr": [
+        253
+      ]
     },
     {
       "ma": "R1c",
@@ -221,10 +226,13 @@
       "ten_ngan": "Màn OKR",
       "ngay": "2026-10-04",
       "cau_giao": "«Hồi ý không bị hộp che, Cập nhật tuần báo đã xong, Toàn cảnh không nói ngược bảng»",
-      "ghi_chu": "R1m-1 hộp «Còn N điều» che danh sách Hồi ý, R1m-4 Cập nhật tuần không báo đã gửi, R1m-6 thẻ Toàn cảnh nói ngược bảng, R1m-7 chốt ý đồ nhập cả bộ và thêm mục tiêu lẻ.",
-      "buoc_ke": "Song song R1a (khác tệp)",
-      "trang_thai": "chưa mở",
-      "han": "2026-10-10"
+      "ghi_chu": "R1m-1 hộp «Còn N điều» che danh sách Hồi ý, R1m-4 Cập nhật tuần không báo đã gửi, R1m-6 thẻ Toàn cảnh nói ngược bảng, R1m-7 chốt ý đồ nhập cả bộ và thêm mục tiêu lẻ. Đã gộp 04/10 (#250). Ngoài-3 «Đã gửi» đếm đúng KR còn chờ gộp #254.",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
+      "han": "2026-10-10",
+      "pr": [
+        250,
+        254
+      ]
     },
     {
       "ma": "R1d",
@@ -237,12 +245,14 @@
       "ten_ngan": "OKR tổ chức vá",
       "ngay": "2026-10-04",
       "cau_giao": "«Dựng cây và đặt OKR không vấp: mục tiêu thu gọn giữ nguyên, KR từ mẫu báo người phụ trách, khôi phục phòng ban đúng chỗ»",
-      "ghi_chu": "#11 #13 #16 (canh-kr-okr Ngoài-1) #17 #18 #30.",
-      "buoc_ke": "Sau R1a (cùng theo-don-vi)",
-      "trang_thai": "chưa mở",
+      "ghi_chu": "#11 #13 #16 (canh-kr-okr Ngoài-1) #17 #18 #30. Đã gộp 05/10 (#260).",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
       "han": "2026-10-11",
       "dung_tren": [
         "R1a"
+      ],
+      "pr": [
+        260
       ]
     },
     {
@@ -256,10 +266,12 @@
       "ten_ngan": "Chat an toàn",
       "ngay": "2026-10-04",
       "cau_giao": "«Thành viên thường không nhờ chat sửa trường của cả đội; model bị gỡ thì chat lùi về mặc định và báo quản trị»",
-      "ghi_chu": "#35 manage_fields; #36 model.ts chỉ lùi khi đọc cấu hình lỗi. Kèm kiểm: việc Trợ lý OKR có bị đóng «chua-co-khoa-mo-hinh» trên production không (crm-onehub-agent không có khoá Gateway, dựa OIDC).",
-      "buoc_ke": "Sau khi #231 gộp (cùng apps/agent)",
-      "trang_thai": "chưa mở",
-      "han": "2026-10-10"
+      "ghi_chu": "#35 manage_fields; #36 model.ts chỉ lùi khi đọc cấu hình lỗi. Kèm kiểm: việc Trợ lý OKR có bị đóng «chua-co-khoa-mo-hinh» trên production không (crm-onehub-agent không có khoá Gateway, dựa OIDC). Đã gộp 05/10 (#274). Bốn round S4; AC-6(b) đua ghi hàng model.bi-go-lui vào Known limits; Ngoài-6 (thẻ Cài đặt vẫn ghi tên model đã gỡ) mở hợp đồng mới.",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
+      "han": "2026-10-10",
+      "pr": [
+        274
+      ]
     },
     {
       "ma": "R1f",
@@ -272,12 +284,14 @@
       "ten_ngan": "Cửa vào",
       "ngay": "2026-10-04",
       "cau_giao": "«Quên mật khẩu giữ logo, đăng xuất lỗi báo tiếng Việt, lỗi cơ sở dữ liệu không đá người về đăng nhập»",
-      "ghi_chu": "#31 #32 #33; thành T3 nếu #33 chạm module auth. Trả nợ thước cua-vao-dang-nhap cùng lượt.",
-      "buoc_ke": "Sau R1b",
-      "trang_thai": "chưa mở",
+      "ghi_chu": "#31 #32 #33; thành T3 nếu #33 chạm module auth. Trả nợ thước cua-vao-dang-nhap cùng lượt. Đã gộp 05/10 (#261).",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
       "han": "2026-10-11",
       "dung_tren": [
         "R1b"
+      ],
+      "pr": [
+        261
       ]
     },
     {
@@ -291,10 +305,12 @@
       "ten_ngan": "Zalo vá",
       "ngay": "2026-10-04",
       "cau_giao": "«Zalo quá tải không bị báo token sai; bot chỉ đúng đường tới trang nhắc»",
-      "ghi_chu": "#26 408/429 và getMe xoá tên bot, #27 đường /reminders, đếm ngưỡng ngày cuối kỳ, log «off» khi bot vẫn chạy.",
-      "buoc_ke": "Sau #231 (cùng apps/agent)",
-      "trang_thai": "chưa mở",
-      "han": "2026-10-10"
+      "ghi_chu": "#26 408/429 và getMe xoá tên bot, #27 đường /reminders, đếm ngưỡng ngày cuối kỳ, log «off» khi bot vẫn chạy. Đã gộp 06/10 (#276). E11 của tra-loi-tin-nhac chuyển sang judgment (chủ kho duyệt 06/10) sau bốn lượt dài; ca app-rieng chập chờn chưa vá — xem ca-chap-chon-cach-ly.",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
+      "han": "2026-10-10",
+      "pr": [
+        276
+      ]
     },
     {
       "ma": "R1h",
@@ -307,12 +323,14 @@
       "ten_ngan": "Soạn không trừ lượt",
       "ngay": "2026-10-04",
       "cau_giao": "«Kara sập giữa lượt thì không mất lượt soạn; «Thử lại» nói rõ vì sao không chạy»",
-      "ghi_chu": "Chủ kho chốt 04/10: phòng ban dùng Soạn OKR cho quý 4. #7 cửa tính lượt trước khi chuyển tiếp, #8 Thử lại im lặng.",
-      "buoc_ke": "Mở ngay",
-      "trang_thai": "chưa mở",
+      "ghi_chu": "Chủ kho chốt 04/10: phòng ban dùng Soạn OKR cho quý 4. #7 cửa tính lượt trước khi chuyển tiếp, #8 Thử lại im lặng. Đã gộp 04/10 (#251).",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
       "han": "2026-10-11",
       "dung_tren": [
         "K0"
+      ],
+      "pr": [
+        251
       ]
     },
     {
@@ -980,7 +998,6 @@
       "cau_giao": "«Mọi bề mặt Kara dùng chung một bộ khung: lời, ô soạn, bước, trạng thái, đề xuất, bản nháp»",
       "hang": "T2",
       "slug": "bo-xuong-kara",
-      "trang_thai": "chưa mở",
       "khoa": "kara-1",
       "ten": "Bộ xương Kara",
       "ten_ngan": "Bộ xương Kara",
@@ -989,9 +1006,12 @@
       "dung_tren": [
         "K0"
       ],
-      "ghi_chu": "Gộp tu-vung-tac-tu thành sáu khối trong packages/ui: KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact. Đề xuất ở .acceptance-runs/lai-thu-prod-0410/de-xuat-kara.html. Gồm chốt một cỡ nút «Thử lại».",
-      "buoc_ke": "Mở ngay, song song làn R1; tới 14/10 chỉ chạm packages/ui, không chạm khung Mục tiêu và nút soạn",
-      "ngay": "2026-10-04"
+      "ghi_chu": "Gộp tu-vung-tac-tu thành sáu khối trong packages/ui: KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact. Đề xuất ở .acceptance-runs/lai-thu-prod-0410/de-xuat-kara.html. Gồm chốt một cỡ nút «Thử lại». Đã gộp 04/10 (#258).",
+      "buoc_ke": "Lái thử và phiên nghiệm thu (chủ kho)",
+      "ngay": "2026-10-04",
+      "pr": [
+        258
+      ]
     },
     {
       "ma": "K2",
@@ -1239,6 +1259,66 @@
       "cau_giao": "«Ghim lại các hồ sơ đã ký chạy được»",
       "ghi_chu": "E23/E25 so-okr-tu-chay, E7 cap-nhat-tuan-okr, E5 và Ngoài-3 lam-moi-chuyen-viec. Máy tự duyệt phạm vi (veto).",
       "buoc_ke": "Làm xen",
+      "trang_thai": "chưa mở"
+    },
+    {
+      "ma": "F9",
+      "slug": "kiem-cheo-sau-gop",
+      "hang": "T2",
+      "khoa": "vs-kiem-cheo-sau-gop",
+      "nhom": "ve-sinh",
+      "thu_tu": 90,
+      "ten": "Kiểm chéo sau gộp",
+      "ten_ngan": "Kiểm chéo sau gộp",
+      "ngay": "2026-10-06",
+      "cau_giao": "«Kiểm hồ sơ đã ký khác không hỏng chạy một lần sau mỗi lần gộp, không nằm trong lượt ghim lại»",
+      "ghi_chu": "Hạt giống 06/10 (#277). R1g trả ~14 giờ máy cho E11; E11 đã chuyển sang judgment. Làm ngay sau R1, trước nhất trong bốn hạt giống.",
+      "buoc_ke": "Chờ chủ kho ký Cổng Đáng",
+      "trang_thai": "chưa mở"
+    },
+    {
+      "ma": "F10",
+      "slug": "thuoc-khong-tu-het-han",
+      "hang": "T2",
+      "khoa": "vs-thuoc-khong-tu-het-han",
+      "nhom": "ve-sinh",
+      "thu_tu": 91,
+      "ten": "Thước không tự hết hạn",
+      "ten_ngan": "Thước không hết hạn",
+      "ngay": "2026-10-06",
+      "cau_giao": "«Thước của hồ sơ đã ký neo mốc cố định, không đỏ khi lượt sau gộp vào»",
+      "ghi_chu": "Hạt giống 06/10 (#277). Gom tám PR sửa thước của phiên cloud #263–#266, #270–#273 vào một lượt ghim lại.",
+      "buoc_ke": "Chờ chủ kho ký Cổng Đáng; quyết gộp tám PR cloud",
+      "trang_thai": "chưa mở"
+    },
+    {
+      "ma": "F11",
+      "slug": "ca-chap-chon-cach-ly",
+      "hang": "T2",
+      "khoa": "vs-ca-chap-chon-cach-ly",
+      "nhom": "ve-sinh",
+      "thu_tu": 92,
+      "ten": "Ca chập chờn cách ly",
+      "ten_ngan": "Ca chập chờn",
+      "ngay": "2026-10-06",
+      "cau_giao": "«Ca kiểm chập chờn theo máy không làm đỏ cả lượt dài hay CI»",
+      "ghi_chu": "Hạt giống 06/10 (#277): app-rieng chạy cạnh, .eve sót, tai-lieu-* hết giờ, nguoi-huy.",
+      "buoc_ke": "Chờ chủ kho ký Cổng Đáng",
+      "trang_thai": "chưa mở"
+    },
+    {
+      "ma": "F12",
+      "slug": "eval-model-that-dung-luc",
+      "hang": "T2",
+      "khoa": "vs-eval-model-that-dung-luc",
+      "nhom": "ve-sinh",
+      "thu_tu": 93,
+      "ten": "Eval model thật đúng lúc",
+      "ten_ngan": "Eval model đúng lúc",
+      "ngay": "2026-10-06",
+      "cau_giao": "«Eval gọi model thật chỉ chạy khi đầu vào đổi; chấm theo biên, không ngưỡng cứng sát điểm đo»",
+      "ghi_chu": "Hạt giống 06/10 (#277). Số dư Gateway 47,84 → 32,51 USD trong 05–06/10, phần lớn do chạy lại eval không đổi đầu vào.",
+      "buoc_ke": "Chờ chủ kho ký Cổng Đáng",
       "trang_thai": "chưa mở"
     }
   ],

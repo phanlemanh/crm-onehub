@@ -1,3 +1,7 @@
+import {
+	ketQuaKhoiPhuc,
+	lyDoChanLuuTru,
+} from "@crm/validation/to-chuc-luu-tru";
 import { z } from "zod";
 import { TO_CHUC } from "./to-chuc-config";
 
@@ -113,11 +117,12 @@ export const orgTreeOutput = z.object({
 });
 export const orgAccessOutput = z.object({ canManage: z.boolean() });
 export const orgOkOutput = z.object({ id: z.string() });
-export const lyDoChanLuuTru = z.object({
-	loai: z.enum(["khuon", "nguoi", "okr"]),
-	cau: z.string(),
-});
-export type LyDoChanLuuTru = z.infer<typeof lyDoChanLuuTru>;
+export type {
+	KetQuaKhoiPhuc,
+	LyDoChanLuuTru,
+} from "@crm/validation/to-chuc-luu-tru";
+export const orgKhoiPhucOutput = ketQuaKhoiPhuc;
+export { lyDoChanLuuTru };
 export const orgLuuTruXemTruocOutput = z.object({
 	lyDo: z.array(lyDoChanLuuTru),
 });

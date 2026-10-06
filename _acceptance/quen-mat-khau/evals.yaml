@@ -376,6 +376,10 @@ evals:
       PASS khi ca bon cau tra loi deu tot cho nguoi dung: biet lam gi tiep; khong cau nao lo
       tai khoan; loi va qua luot noi hai viec khac nhau va co duong thu lai; khong thuat ngu
       tu duc. Mot cau lo tai khoan la FAIL, khong phai UNCERTAIN.
+    paths:
+      - "apps/app/lib/messages/auth.ts"
+      - "packages/auth/src/thu-mat-khau.ts"
+      - "CONTEXT.md"
 
   - id: E21
     criterion: AC-1

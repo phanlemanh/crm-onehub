@@ -376,6 +376,52 @@ chuỗi là luật của `docs/design.md` và `docs/reui.md`. Bốn chuỗi máy
 (`secondary`, `panel`, `mouse`, `select`) đã khai miễn trong `chu-cung.mjs`
 kèm lý do.
 
+### artifact.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/artifact.tsx`
+
+**Số dòng khác:** 54
+
+**Vân tay lệch:** `0968e085c9646755`
+
+**Đổi gì:** Kéo bằng CLI ngày 04/10 ở lượt `bo-xuong-kara` (K1), trong một sân tạm có
+`components.json` của kho, rồi chép riêng tệp này vào cây. Toàn bộ dòng khác là bản vá
+của kho, không có phần cũ hơn thượng nguồn:
+
+- `XIcon` và kiểu `LucideIcon` của Lucide đổi sang `Close` của Carbon qua `Icon` và kiểu
+  `CarbonIcon` của `icon.tsx`; `ArtifactAction` nhận `icon?: CarbonIcon`.
+- Chữ ẩn «Close» của `ArtifactClose` đi qua `messages.ts` (`artifact.dong`).
+- `Artifact` bỏ `shadow-sm`.
+- `ArtifactClose` và `ArtifactAction` bỏ `className` «size-8 p-0 text-muted-foreground
+  hover:text-foreground» ở `Button`, đổi cỡ mặc định sang `icon-sm`.
+
+**Vì sao:** `KaraArtifact` (bộ xương Kara) dựng trên tệp này. Kho dùng icon Carbon,
+mọi chữ qua `lib/messages`, và `docs/design.md` cấm `className` đè cỡ và màu của
+`Button` tại chỗ gọi — cỡ `icon-sm` của `Button` là đúng cỡ đó. Bóng bị bỏ để khung bản
+nháp phẳng như mọi bề mặt khác của kho. Chưa màn nào dùng tệp trước K2: cổng mồ côi có
+một mục miễn trừ tên `artifact.tsx` tới khi K2 `soan-okr-trang-rieng` gộp.
+
+### task.tsx
+
+**Tệp:** `packages/ui/src/components/ai-elements/task.tsx`
+
+**Số dòng khác:** 18
+
+**Vân tay lệch:** `7d61f0e51237383d`
+
+**Đổi gì:** Kéo cùng lần với `artifact.tsx`. Toàn bộ dòng khác là bản vá của kho:
+
+- `ChevronDownIcon` của Lucide đổi sang `ChevronDown` của Carbon qua `Icon`; bỏ
+  `SearchIcon` trước tiêu đề.
+- Thân mặc định của `TaskTrigger` đổi từ `div` sang `button type="button"`, chữ tiêu đề
+  trong `span`.
+
+**Vì sao:** `KaraSteps` dựng trên tệp này. Icon kính lúp nói «tìm» trong khi danh sách
+bước của Kara không phải kết quả tìm. `CollapsibleTrigger asChild` trên một `div` để lại
+một vùng bấm không nhận phím Tab hay Enter; `button` thì nhận. Chưa màn nào dùng tệp trước
+K2: cổng mồ côi có một mục miễn trừ tên `task.tsx` tới khi K2 gộp. `tool.tsx` cố ý không
+kéo — nó hiện JSON qua `code-block`, mục «Not for this product» của `docs/chat-ui.md`.
+
 ## Ca đã trả giá: `conversation.tsx`, 06/09 và 09/09
 
 Đây không phải cảnh báo trừu tượng. Nó đã xảy ra trong chính kho này, trong hai

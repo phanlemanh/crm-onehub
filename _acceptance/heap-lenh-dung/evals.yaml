@@ -1,0 +1,39 @@
+schema_version: 1
+slug: heap-lenh-dung
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.hld_build_heap
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - ".github/workflows/ci.yml"
+      - "turbo.json"
+      - "package.json"
+      - "bun.lock"
+      - "apps/app/**"
+      - "_acceptance/heap-lenh-dung/rang/**"
+    expected: |
+      Doc `.github/workflows/acceptance.yml` va `.github/workflows/ci.yml` bang Bun.YAML (khong tim
+      chuoi). Job `build` cua acceptance.yml phai co DUNG MOT buoc `run: bun run build`; buoc ay khai
+      `env.NODE_OPTIONS` chua `--max-old-space-size=<n>`; n > 2048; va n bang dung gia tri
+      `--max-old-space-size` cua buoc `run: bun run check-types` trong ci.yml. Sai mot dieu -> ma 1,
+      thong diep goi ten ("khong khai NODE_OPTIONS" / "heap <n> khong vuot 2048" /
+      "heap <n> khong khop ci.yml <m>") va KHONG dung.
+      Dung bang CHINH lenh cua buoc (truong `run:` doc duoc) noi them `-- --filter=app --force`,
+      NODE_OPTIONS lay tu tep. Truoc moi luot dung: xoa `apps/app/.next` va moi `*.tsbuildinfo` trong
+      `apps/app`, in "da xoa cache next" — dieu kien lanh nhu runner.
+      Xanh: ma 0 VA dau ra co dong `app:build` bao pha type-check ("Running TypeScript" /
+      "Linting and checking validity of types"), in "heap <n> MB · dung app ma 0 · app:build qua pha
+      type-check". Ma 0 ma khong thay pha ay -> ma 2 (dung khong do dung vat).
+      Do vi het heap: dau ra co dong mang tien to `app:build` chua "heap out of memory" /
+      "Reached heap limit" / "Ineffective mark-compacts" -> ma 1 "next build het heap o <n> MB".
+      Het heap o goi khac, do vi ly do khac, hay khong chay duoc lenh -> ma 2.
+      Duong tep suy tu vi tri script, khong hardcode goc kho.
+      Chieu do tren CUNG tep (ban sao acceptance.yml qua `--tep <ban sao>`): (a) xoa NODE_OPTIONS khoi
+      env cua buoc -> ma 1 "khong khai NODE_OPTIONS"; (b) khai 2048 -> ma 1 "khong vuot 2048";
+      (c) khai 3072 -> ma 1 "khong khop ci.yml 6144"; (d) khai 1024 kem `--bo-nguong` (bo kiem
+      nguong, chi dung) -> ma 1 "het heap o 1024 MB" — chung gia tri khai toi duoc tien trinh Next
+      qua turbo. 2048 khong dung lam chieu do dung vi luot do o run 37263692533 dung o 2023 MB, sat
+      tran: chay lac, khong do chac.

@@ -29,7 +29,7 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.bom_sau_tuan
-    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts, apps/api/src/okr/hop-tuan.ts]
+    paths: [apps/api/scripts/okr-mau/**, apps/api/test/okr-mau.spec.ts, packages/db/src/okr-hop-tuan.ts]
     expected: "exit 0; BẢNG MỐC VIẾT TRƯỚC ba dòng — 2026-11-09T00:30+07:00 (thứ Hai), 2026-11-12T15:00+07:00 (thứ Năm), 2026-11-15T23:30+07:00 (Chủ nhật; là chiều Chủ nhật UTC) — mỗi dòng kèm weekStart tuần 6 VIẾT TAY (2026-11-09 cả ba), không gọi dauTuanVN. Với mỗi mốc: nạp với mốc đó, đặt đồng hồ bài bằng mốc (setSystemTime) rồi gọi okr.hopTuan qua tRPC cho từng phòng ban; mọi OkrCheckIn.createdAt, OkrCheckInSession.submittedAt ≤ mốc và mọi OkrSoChup.ngay ≤ ngày của mốc; tập weekStart của lần cập nhật đầu mỗi KR đang chạy = {thứ Hai tuần T−5}; KR kịch bản deu có đúng 6 lần, weekStart là 6 thứ Hai liên tiếp tới T; KR của người kịch bản chua-gui có 5 lần, lần cuối tuần T−1; ≥ 3 KR có chuỗi confidence không tăng đi qua cao, vua, thap; gộp dangBan toàn công ty: ≥ 2 KR có lyDo loai 'tut' và ≥ 2 KR có lyDo loai 'im' với soNgay ≥ OKR_NHAC.imNgay (rút hằng, không chép 14); tập KR 'tut' và 'im' so toEqual với tập KR kịch bản tut và bo rút từ cong-ty.json — quan hệ, không đếm; currentValue mỗi KR tay = value lần cập nhật cuối; mỗi (người phụ trách, tuần có lần cập nhật) đúng một OkrCheckInSession có submittedAt. Hàm dien-bien thuần có ca riêng: bảng viết trước kịch bản × 6 tuần → (value, confidence). CHIỀU ĐỎ: đặt đồng hồ bài sang tuần T+1 → không còn KR 'tut' (lời hứa là quan hệ theo hôm nay) — bài khẳng định đúng chiều này để chứng thước không hằng-đúng."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -136,6 +136,13 @@ evals:
     inputs: [docs/setup.md, CONTEXT.md, docs/superpowers/specs/2026-09-28-bo-okr-mau-design.md, apps/api/scripts/okr-mau.ts, apps/api/scripts/okr-mau/lenh.ts, apps/api/scripts/okr-mau/cau-hinh.ts]
     question: "Một phiên lượt sau chỉ đọc docs/setup.md và CONTEXT.md có tự nạp được bộ mẫu vào máy dev và vào phiên đo, ghim ngày, xoá, đăng nhập làm người mẫu, biết chỗ đặt ca thật N1 và biết vì sao bản xem trước không có bộ mẫu không? Lệnh trong tài liệu có khớp tên cờ và mã thoát của okr-mau.ts không? Có chữ tự đúc hay thuật ngữ chưa có mục từ điển không?"
     evidence_required: [run_id, verdict, judges, verified_at]
+    paths:
+      - "docs/setup.md"
+      - "CONTEXT.md"
+      - "docs/superpowers/specs/2026-09-28-bo-okr-mau-design.md"
+      - "apps/api/scripts/okr-mau.ts"
+      - "apps/api/scripts/okr-mau/lenh.ts"
+      - "apps/api/scripts/okr-mau/cau-hinh.ts"
 
   - id: E17
     criterion: AC-15

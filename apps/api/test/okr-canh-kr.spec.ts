@@ -1945,7 +1945,13 @@ describe("tu-mau", () => {
 						where: { objectiveId: tra.id },
 						select: { action: true, actorUserId: true, after: true },
 					})
-				).map((v) => ({ ...v, after: parseOkrVet(v.after) })),
+				)
+					.map((v) => ({ ...v, after: parseOkrVet(v.after) }))
+					.sort((x, y) => {
+						const kx = `${x.action}|${x.after?.title ?? ""}`;
+						const ky = `${y.action}|${y.after?.title ?? ""}`;
+						return kx < ky ? -1 : kx > ky ? 1 : 0;
+					}),
 			}).toEqual({
 				canhBao: null,
 				dem: {
@@ -1986,6 +1992,26 @@ describe("tu-mau", () => {
 				},
 				nguon: [{ objectiveId: tra.id, mauId: m.M2 }],
 				vet: [
+					{
+						action: "tao-kr",
+						actorUserId: san.T1.id,
+						after: {
+							title: KR_M2_SAU.title,
+							kind: KR_M2_SAU.kind,
+							startValue: 120,
+							targetValue: 90,
+						},
+					},
+					{
+						action: "tao-kr",
+						actorUserId: san.T1.id,
+						after: {
+							title: KR_M2_DAU.title,
+							kind: KR_M2_DAU.kind,
+							startValue: 0,
+							targetValue: 40,
+						},
+					},
 					{
 						action: "tao",
 						actorUserId: san.T1.id,

@@ -124,3 +124,6 @@ evals:
       PR nhap do-thu (so PR, run id), danh sach ca do cua tung nhanh. Dat khi: luot CI
       cua PR xanh, ca lai < TRAN_LAI_MS; nhanh co ban va chi do dung ca lai; nhanh chua
       va do them it nhat mot ca khac ngoai ca lai. May KHONG cham muc nay.
+    paths:
+      - "_acceptance/lai-ra-man-tran-gio/rang/bang-do-ci.json"
+      - "_acceptance/lai-ra-man-tran-gio/evidence/do-ci.md"

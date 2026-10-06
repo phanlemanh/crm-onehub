@@ -1,0 +1,195 @@
+schema_version: 1
+slug: chat-an-toan-truoc-r1
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1e_tao_truong
+    paths:
+      - "apps/agent/agent/tools/manage_fields.ts"
+      - "apps/agent/agent/lib/quyen-truong.ts"
+      - "apps/agent/agent/lib/fields.ts"
+      - "packages/validation/src/vai-workspace.ts"
+      - "apps/agent/test/chat-an-toan-truong.integration.spec.ts"
+    expected: |
+      Postgres that, ma tran viet truoc 5 vai (owner, admin, member, okr, khong-thanh-vien) x 3 hanh dong
+      (create, update-brief co agentBrief, update-brief agentFilled false) = 15 o, expect(o.length).toBe(15).
+      Moi o: gieo user + member voi vai do (khong-thanh-vien: khong co hang member), ctx phien chat
+      authenticator crm-app principalId userId; goi execute that cua tools/manage_fields.ts. owner/admin:
+      hang fieldDefinition duoc tao/doi dung gia tri. member/okr/khong-thanh-vien: tra created|updated false,
+      reason === FIELDS_AGENT.tuChoi, so hang fieldDefinition va agentBrief/agentFilled khong doi (doc lai
+      DB). CHIEU DO: bo chot quyen trong manage_fields -> do ghim "ca-truong: member doi duoc truong (create)".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1e_luu_tru_truong
+    paths:
+      - "apps/agent/agent/tools/archive_field.ts"
+      - "apps/agent/agent/lib/quyen-truong.ts"
+      - "apps/agent/test/chat-an-toan-truong.integration.spec.ts"
+    expected: |
+      Ma tran 5 vai x archive_field = 5 o. Goi execute that (sau buoc duyet: goi thang execute nhu khi
+      approval da chap nhan; rieng o kiem approval van la sensitiveWrite cho phien nguoi). owner/admin:
+      archivedAt co gia tri. Ba vai con lai: archived false, reason === FIELDS_AGENT.tuChoi, archivedAt
+      van null (doc lai DB). CHIEU DO: bo chot quyen trong archive_field -> do ghim
+      "ca-truong: member luu tru duoc truong".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1e_phien_may
+    paths:
+      - "apps/agent/agent/lib/quyen-truong.ts"
+      - "apps/agent/agent/lib/approval.ts"
+      - "apps/agent/test/chat-an-toan-truong.integration.spec.ts"
+    expected: |
+      Ma tran 2 khung (APP_AUTH dispatch; purpose team-agent voi principalId la mot owner that) x 3 viec
+      (create, update-brief, archive) = 6 o. Moi o: tu choi voi FIELDS_AGENT.tuChoi, khong hang
+      fieldDefinition nao doi. O team-agent dung principal owner de chung minh chot theo khung, khong theo vai.
+      CHIEU DO: cho phien tu dong qua -> do ghim "ca-truong: phien tu dong doi duoc truong".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.r1e_luat_vai
+    paths:
+      - "packages/validation/src/vai-workspace.ts"
+      - "packages/auth/src/organization.ts"
+      - "apps/api/test/luat-vai-truong-trung.spec.ts"
+    expected: |
+      Bang 5 gia tri (owner, admin, member, okr, null), expect(bang.length).toBe(5). Moi gia tri:
+      laQuanTriWorkspace(v) === canManageFields(v), va ket qua dung bang mong (owner/admin true, con lai
+      false) — ghim ca ket qua, khong chi so bang nhau. CHIEU DO: cho laQuanTriWorkspace tra true voi
+      "member" -> do ghim "luat-vai: lech o member".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1e_dem_truong
+    paths:
+      - "apps/agent/agent/lib/quyen-truong.ts"
+      - "apps/agent/test/chat-an-toan-truong.integration.spec.ts"
+      - "_acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.ts"
+      - "_acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.spec.ts"
+    expected: |
+      (a) Sau ma tran E1-E3: moi o co dung mot hang AgentEvent type truong.doi-qua-chat cua sessionId o
+      do, data.hanhDong/vai/ketQua khop dieu da xay ra (rut tu hang ghi that, khong viet tay).
+      (b) dem-doi-truong.spec.ts: gieo hang qua chinh ham ghi that cua agent (khong JSON viet tay) — ma
+      tran viet truoc: lam owner x2, lam admin x1, tu-choi member x3, va 4 o chet (lam member, lam okr,
+      lam khong-thanh-vien, lam tu-dong), expect(chet.length).toBe(4); cong 1 hang model.bi-go-lui va
+      1 hang model.khong-tim-thay gieo qua ham ghi that cua AC-6/AC-11 — demDoiTruong tra lam theo vai
+      dung, tuChoi 3, chet 4, biGoLui 1, khongTimThay 1; dem truoc va sau khong doi so hang. CHIEU DO: dem
+      chet chi theo vai "member" -> do ghim "dem-truong: bo sot vai okr".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1e_model_lui
+    paths:
+      - "apps/agent/agent/lib/model.ts"
+      - "apps/agent/agent/lib/model-danh-muc.ts"
+      - "apps/agent/agent/lib/model-config.ts"
+      - "packages/validation/src/gateway-danh-muc.ts"
+      - "apps/agent/test/fixtures/gateway-models-2026-10-05.json"
+      - "apps/agent/test/model-lui-mac-dinh.integration.spec.ts"
+    expected: |
+      Ma tran viet truoc 3 duong goi (modelTheoVai tro-ly, modelTheoVai tac-nhan, modelChoLuot) x 5 danh muc
+      (co id; doc duoc thieu id; loi mang; HTTP 503; than khong phai danh muc) = 15 o, cong o (d): than
+      phan hoi THAT cua GET https://ai-gateway.vercel.sh/v1/models ghi lai ngay 05/10 (tep fixture co
+      ngay + nguon) qua bo doc that -> tap id khong rong, chua DEFAULT_AGENT_MODEL.id, va modelTheoVai
+      tra model da chon khi chon mot id lay tu chinh than do; API ModelCatalogService doc cung than qua
+      cung schema @crm/validation/gateway-danh-muc ra cung tap id; fetch gia tiem qua
+      tham so. writeAgentModel that id "openai/gpt-x". co id / loi mang / 503 / than hong: tra model da
+      chon (modelChoLuot: id === "openai/gpt-x"). thieu id: tra null (modelChoLuot: id === DEFAULT_AGENT_MODEL.id,
+      thuocTinh rong). AgentEvent model.bi-go-lui: dung 1 hang cho "openai/gpt-x" sau ca 3 duong o thieu id.
+      CHIEU DO: bo nhanh thieu id -> do ghim "model-lui: thieu id van tra model da chon"; doi khoa
+      bao ngoai cua schema (data -> models) -> o (d) do ghim "model-lui: than that doc ra rong".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: logic
+    cmd: config:executors.test.r1e_danh_muc_cache
+    paths:
+      - "apps/agent/agent/lib/model-danh-muc.ts"
+      - "apps/agent/agent/lib/model-config.ts"
+      - "apps/agent/test/model-lui-mac-dinh.integration.spec.ts"
+    expected: |
+      MODEL_DANH_MUC.ttlMs === 5 phut (ghim gia tri). Dong ho gia (setSystemTime, afterEach tra lai): goi 3 lan trong ttlMs -> fetch gia dem 1; tien dong ho
+      qua MODEL_DANH_MUC.ttlMs -> goi them -> dem 2. Fetch gia treo lau hon timeoutMs -> ket qua
+      "khong-doc-duoc" (dung AbortSignal, khong cho het). CHIEU DO: bo cache -> do ghim "danh-muc: goi
+      Gateway 3 lan trong ttl".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1e_api_bi_go
+    paths:
+      - "apps/api/src/settings/settings.service.ts"
+      - "apps/api/src/settings/settings.contracts.ts"
+      - "apps/api/test/cai-dat-model-bi-go.spec.ts"
+    expected: |
+      Ma tran 4 o viet truoc: (da chon, danh muc co id) false · (da chon, danh muc thieu id) true ·
+      (mac dinh, danh muc bat ky) false · (da chon, danh muc khong doc duoc) false; catalog gia qua
+      ModelCatalogService that voi fetch gia; writeAgentModel that. Doc agentModel(userId) that ->
+      selectedMissing dung tung o; output parse qua agentModelOutput (zod) cua router. CHIEU DO: bo dieu
+      kien "danh muc doc duoc" -> do ghim "api-bi-go: danh muc loi bao bi go".
+
+  - id: E9u
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.r1e_man_bi_go
+    steps:
+      - "Canh cay truoc man dau; ban do rieng (tien-de.mjs qua mot-luot.sh); dang nhap dev:session mot owner"
+      - "Buoc 1 (1440): writeAgentModel id 'khong-con/model-gia-r1e' -> mo /<slug>/settings (muc Model tro ly) -> thay hop bao bang innerText -> anh r1e-bi-go-1440.png"
+      - "Buoc 2 (390): cung trang thai o kho 390 -> hop bao hien, khong tran ngang (scrollWidth <= clientWidth cua trang va cua hop) -> anh r1e-bi-go-390.png"
+      - "Buoc 3 (1440): dang nhap dev:session mot member, cung id 'khong-con/model-gia-r1e' -> hop bao hien, o chon model (combobox aria-label nhan model) bi khoa (disabled) va cau khongDuQuyen hien -> anh r1e-bi-go-member-1440.png"
+      - "Buoc 4 (1440): owner, writeAgentModel mot id lay tu danh muc Gateway that (dong dau cua settings.modelCatalog) -> tai lai -> doi chung duong: o chon model co mat va trang hien ma model do -> khong co hop bao -> anh r1e-con-1440.png"
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/agent-model.tsx"
+      - "apps/app/lib/messages/settings.ts"
+      - "_acceptance/chat-an-toan-truoc-r1/rang/man-bi-go.mjs"
+    expected: "exit 0; man-bi-go.mjs in 'buoc N: dat' cho 4 buoc; chu doc bang innerText (khong page.content); anh o .acceptance-runs/chat-an-toan-truoc-r1/evidence/. Danh muc Gateway khong doc duoc trong ban do -> KHONG DO DUOC, ma 2 (khong bao xanh). CHIEU DO: --chieu-do dat id co trong danh muc o buoc 1 -> 'buoc 1: khong thay hop bao', ma 1."
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: logic
+    cmd: config:executors.test.r1e_chu
+    paths:
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/agent/agent/lib/fields-config.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+      - "apps/agent/test/chat-an-toan-truong-chu.spec.ts"
+      - "apps/app/test/chu-model-bi-go.spec.ts"
+    expected: |
+      messages-guard.spec.ts xanh voi khoa moi cua hop bao ghim o GHIM/KHONG_DAU; vi === cau tieng Viet da
+      khai, en === cau tieng Anh da khai (so nguyen van). FIELDS_AGENT.tuChoi === cau tieng Anh da khai
+      trong design doc. CHIEU DO: bo dau o cau vi -> messages-guard do ghim ten khoa.
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1e_khong_tim_thay
+    paths:
+      - "apps/agent/agent/hooks/telemetry.ts"
+      - "apps/agent/agent/lib/model.ts"
+      - "apps/agent/test/model-lui-mac-dinh.integration.spec.ts"
+    expected: |
+      Ma tran viet truoc 4 loi buoc (GatewayModelNotFoundError that dung tu @ai-sdk/gateway; loi 402 het
+      tin dung; loi 429; loi khong phai model) = 4 o, expect(o.length).toBe(4). Goi handler step.failed
+      that cua hook voi su kien mang loi do va ctx phien that. Chi o model-not-found ghi dung 1 hang
+      AgentEvent type model.khong-tim-thay cua sessionId do, data.modelId dung; ba o con lai 0 hang.
+      CHIEU DO: khop theo chu "model" thay vi lop loi -> o 402 ghi hang -> do ghim
+      "khong-tim-thay: loi 402 bi dem la model bi go".

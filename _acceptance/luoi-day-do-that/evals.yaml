@@ -5,6 +5,24 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.rang_hook_ep_chay
+    paths:
+      - "_acceptance/luoi-day-do-that/rang-hook.sh"
+      - ".githooks/pre-push"
+      - ".githooks/gate-shape.json"
+      - "scripts/verify-gate-shape.mjs"
+      - "package.json"
+      - "apps/*/package.json"
+      - "packages/*/package.json"
+      - "turbo.json"
+      - "biome.jsonc"
+      - ".oxlintrc.json"
+      - "tools/oxlint/**"
+      - "packages/db/scripts/test-run.ts"
+      - "packages/db/scripts/test-db-admin.ts"
+      - "packages/db/scripts/test-db.ts"
+      - "packages/db/src/test-database.ts"
+      - "packages/env/src/load.ts"
+      - "packages/env/src/index.ts"
     expected: "exit 0; dong `for task in` khop NGUYEN VAN bon ten, du bon dong thong bao nguyen-ve, va DUNG 3 dong tong ket bo dung deu '0 cached'"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -12,6 +30,22 @@ evals:
     criterion: AC-2
     executor: script
     cmd: config:executors.script.rang_hook_con_rang
+    paths:
+      - "_acceptance/luoi-day-do-that/rang-hook.sh"
+      - ".githooks/pre-push"
+      - "package.json"
+      - "turbo.json"
+      - "biome.jsonc"
+      - ".oxlintrc.json"
+      - "tools/oxlint/**"
+      - "packages/env/package.json"
+      - "packages/env/tsconfig.json"
+      - "packages/db/scripts/test-run.ts"
+      - "packages/db/scripts/test-db-admin.ts"
+      - "packages/db/scripts/test-db.ts"
+      - "packages/db/src/test-database.ts"
+      - "packages/env/src/load.ts"
+      - "packages/env/src/index.ts"
     expected: "exit 0; mot bai kiem THAT dang do lam luoi thoat khac 0, in 'would have failed CI' va goi dung ten tac vu test"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -19,6 +53,11 @@ evals:
     criterion: AC-3
     executor: script
     cmd: config:executors.script.rang_hook_loi_thoat
+    paths:
+      - "_acceptance/luoi-day-do-that/rang-hook.sh"
+      - ".githooks/pre-push"
+      - "package.json"
+      - "packages/db/scripts/test-run.ts"
     expected: "exit 0; CRM_SKIP_HOOKS lam luoi IN RA mot dong noi khong co gi duoc kiem, khong chay tac vu nao, duoi 3 giay"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -26,6 +65,14 @@ evals:
     criterion: AC-4
     executor: script
     cmd: config:executors.script.rang_hook_tro_dung
+    paths:
+      - "_acceptance/luoi-day-do-that/rang-hook.sh"
+      - "package.json"
+      - "packages/db/scripts/test-run.ts"
+      - "_acceptance/sua-test-do-thu-tu-nap/contract.md"
+      - "_acceptance/sua-test-do-thu-tu-nap/rang-config.sh"
+      - "lib/evidence-core.cjs"
+      - "_acceptance/config.yaml"
     expected: "exit 0; ho so da ky tro toi mot chan cham that (khong phai bi danh gop) va chan do chay duoc"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -33,6 +80,8 @@ evals:
     criterion: AC-5
     executor: script
     cmd: config:executors.script.lint_khong_cache
+    paths:
+      - ".githooks/pre-push"
     expected: "exit 0; moi task lint thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -40,6 +89,8 @@ evals:
     criterion: AC-5
     executor: script
     cmd: config:executors.script.check_types_khong_cache
+    paths:
+      - ".githooks/pre-push"
     expected: "exit 0; moi task kiem kieu thanh cong, 0 cached"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -47,5 +98,16 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.rang_hook_canary_slop
+    paths:
+      - "_acceptance/luoi-day-do-that/rang-hook.sh"
+      - ".githooks/pre-push"
+      - "package.json"
+      - "turbo.json"
+      - "biome.jsonc"
+      - ".oxlintrc.json"
+      - "tools/oxlint/**"
+      - "packages/env/package.json"
+      - "packages/env/tsconfig.json"
+      - "packages/db/scripts/test-run.ts"
     expected: "exit 0; cai mot vi pham anti-slop that lam luoi chan, goi dung ten tac vu lint:slop va in ten luat vi pham"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
