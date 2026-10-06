@@ -60,6 +60,7 @@
 		"./test-database": "./src/test-database.ts",
 		"./tracking": "./src/tracking.ts",
 		"./workspace": "./src/workspace.ts",
+		"./zalo-getme": "./src/zalo-getme.ts",
 		"./zalo-lien-ket": "./src/zalo-lien-ket.ts",
 		"./test/*": "./test/*.ts"
 	},

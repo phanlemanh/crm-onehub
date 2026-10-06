@@ -3,6 +3,7 @@ import { defineAgent, defineDynamic } from "eve";
 import { z } from "zod";
 import { SESSION_LIMITS } from "../../lib/dispatch-config";
 import { modelChoBoDung } from "../../lib/model";
+import { ghiModelPhien } from "../../lib/model-phien";
 import { BUILDER_STATUS } from "./lib/authorization";
 
 export default defineAgent({
@@ -10,7 +11,13 @@ export default defineAgent({
 		"Turn one private CRM builder-chat request into a validated, reviewable team-agent version without deploying it.",
 	model: defineDynamic({
 		fallback: DEFAULT_AGENT_MODEL.id,
-		events: { "session.started": () => modelChoBoDung() },
+		events: {
+			"session.started": async (_event, ctx) => {
+				const chon = await modelChoBoDung();
+				void ghiModelPhien(ctx, chon?.model ?? DEFAULT_AGENT_MODEL.id);
+				return chon;
+			},
+		},
 	}),
 	outputSchema: z
 		.object({

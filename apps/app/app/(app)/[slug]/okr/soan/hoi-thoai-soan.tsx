@@ -156,7 +156,13 @@ function LuotLoi({
 			<AlertTitle>{m.hoiThoai.loi}</AlertTitle>
 			<AlertDescription>
 				<div aria-live="polite">
-					<p>{loiMo ? m.lyDo[loiMo] : cauLyDoHong(m, s.lyDoHong)}</p>
+					<p>
+						{loiMo
+							? m.lyDo[loiMo]
+							: s.chuaGuiLai
+								? m.hoiThoai.chuaGuiLai
+								: cauLyDoHong(m, s.lyDoHong)}
+					</p>
 					{s.lyDoHong?.daHoan ? <p>{m.hoiThoai.khongTinh}</p> : null}
 					{s.lanThu > 0 ? <p>{m.hoiThoai.daThuLai(String(s.lanThu))}</p> : null}
 				</div>
