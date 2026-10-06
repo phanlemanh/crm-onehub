@@ -297,7 +297,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/settings/organization/**"
       - "apps/app/app/(app)/[slug]/settings/onboarding/**"
-      - "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx"
+      - "packages/ui/src/components/confirm-dialog.tsx"
       - "packages/ui/src/components/archived-list.tsx"
       - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
     expected: |
