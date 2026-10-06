@@ -340,7 +340,7 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 										{m.nhapBangTinh}
 									</Button>
 								) : null}
-								<NutThemMucTieu suaDuoc={byUnit.data?.canEdit} />
+								<NutThemMucTieu suaDuoc={byUnit.data?.canCreate} />
 								<NutSoan
 									don={don}
 									cycleId={currentId}
@@ -356,7 +356,7 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 						) : null}
 						{noiDung}
 						<NganTaoMucTieu
-							suaDuoc={byUnit.data?.canEdit}
+							suaDuoc={byUnit.data?.canCreate}
 							cycleId={currentId}
 							don={don}
 							tenDon={dv.ten}

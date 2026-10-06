@@ -414,16 +414,21 @@ describe("mdg-luat-luu-tru", () => {
 		}
 	});
 
-	test("mdg-luat-luu-tru: khoi-phuc-bo-phan-da-luu — phong ban ve muc chua xep", async () => {
+	test("mdg-luat-luu-tru: khoi-phuc-bo-phan-da-luu — bi chan, phong ban van o muc da luu tru", async () => {
 		const bp = await bpMoi("kpl-bp");
 		const id = await pbMoi("kpl-pb", bp);
 		await luuPb(id);
 		ok(await trpc("org.archiveDivision", { id: bp }), "luu bp");
-		ok(await trpc("org.restoreDepartment", { id }), "khoi phuc pb");
-		const c = await cay();
-		expect(`chua xep ${c.chuaXep.some((d) => d.id === id)}`).toBe(
-			"chua xep true",
+		const tra = ok<{ chan?: { loai: string } }>(
+			await trpc("org.restoreDepartment", { id }),
+			"khoi phuc pb",
 		);
+		const c = await cay();
+		expect({
+			chan: tra.chan?.loai ?? null,
+			chuaXep: c.chuaXep.some((d) => d.id === id),
+			daLuu: c.archived.departments.some((d) => d.id === id),
+		}).toEqual({ chan: "cha-luu-tru", chuaXep: false, daLuu: true });
 	});
 });
 

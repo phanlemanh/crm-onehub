@@ -32,6 +32,14 @@ agent and the API both need it.
   bị Google từ chối cả lời gọi. `test/khuon-di-dong.spec.ts` quét mọi tệp.
 - **`lib/model.ts` always sends `modelContextWindowTokens`**; eve never inherits it.
 - **A failed read logs and keeps the compiled fallback.** Never throws.
+- **Model bị Gateway gỡ thì lùi về mặc định.** `modelTheoVai` đối chiếu model đã chọn với
+  danh mục `GET /v1/models` (`lib/model-danh-muc.ts`, schema chung
+  `@crm/validation/gateway-danh-muc`, nhớ tạm `MODEL_DANH_MUC.ttlMs` 5 phút). Đọc được mà
+  thiếu id → trả `null` và ghi `AgentEvent` `model.bi-go-lui` một lần mỗi id mỗi tiến
+  trình; không đọc được → giữ model đã chọn. Lượt vẫn hỏng trong cửa sổ nhớ tạm thì hook
+  `step.failed` ghi `model.khong-tim-thay` (khớp `details.gatewayName`/`gatewayType`, không
+  khớp chữ). Cài đặt hiện hộp báo khi `settings.agentModel.selectedMissing`. Bài kiểm
+  agent dùng nguồn danh mục «không đọc được» qua preload `test/support/danh-muc-mac-dinh.ts`.
 - **The chooser offers only `tool-use` models** (`ModelCatalogService`).
 - **Not a frontier model, deliberately** — refusing wrong answers is enforced by the
   tools and evidence model, not model strength.
@@ -495,10 +503,12 @@ API; the API only reads and writes rows.
     `kenhSeDungCua` picks, without an `AgentTask`.
   Both bodies are parsed with `@crm/validation/zalo-cau-noi`.
 - **A bridge route does not throw when Zalo or Slack fails; it answers with the
-  cause.** `/internal/zalo/bot` returns `outcome: "zalo-loi"` when `getMe` cannot be
-  reached, answers 5xx, answers `ok:false` with a code outside 4xx, or answers a body
-  of the wrong shape; a 4xx — as the HTTP status or as `error_code` in an `ok:false`
-  body — is still a wrong token. `/internal/zalo/gui-thu` returns `guiDuoc: false`
+  cause.** `/internal/zalo/bot` returns `outcome: "zalo-loi"` when Zalo only failed
+  for now: `getMe` cannot be reached, answers 5xx, answers 408 or 429
+  (`ZALO.http.tamLoi`) — as the HTTP status or as `error_code` in the body — or
+  answers a body of the wrong shape. Any other 4xx is a wrong token. Both callers of
+  `getMe` — this route and the tick — classify through one function, `phanLopGetMe`
+  (`lib/zalo-getme.ts`), so the two cannot disagree. `/internal/zalo/gui-thu` returns `guiDuoc: false`
   when the test message did not go out. Each failure prints one
   `[zalo] <method> hong: <class>` line with the error's **name only**: a Bun
   `fetch` error carries the whole URL, `/bot<token>/…`, in `path`, so the error
@@ -516,8 +526,16 @@ API; the API only reads and writes rows.
   `zalo-tu-choi` — the last registration failed, or Zalo could not reach the
   webhook when checking it — the tick never writes a URL, only null: one
   conditional `updateMany`, so a registration that lands mid-tick keeps its flag.
-  Only a registration that passes Zalo's check clears it. `getMe` failure writes
-  `zaloBotName = null` and `zaloWebhookUrl = null` and logs. No token writes null and makes no call. It also
+  Only a registration that passes Zalo's check clears it. A `getMe` that Zalo
+  answers with a wrong-token code writes `zaloBotName = null` and
+  `zaloWebhookUrl = null` and logs; a failure that is only for now (the same
+  classes as the bridge route) keeps both, because `kenhSeDungCua` reads
+  `zaloBotName` and clearing it would move the morning reminder off Zalo until the
+  next tick. Every `getMe` failure, on either path, writes one `AgentEvent`
+  `zalo.getme-loi` (`sessionId` `zalo-bot`; `data` parsed by
+  `@crm/validation/zalo-getme`: `noi`, `lop`, `http`, `maThan`, `ketLuan`, and
+  `vanTay`, the first 12 hex of the token's sha256). A failed write is logged and
+  never changes the result. `_acceptance/zalo-va/rang/dem-getme.ts` reads them. No token writes null and makes no call. It also
   trims `ZaloUpdateSeen` rows older than `ZALO.poll.giuDauMs`. The tick never calls
   `getUpdates`: a bot with a webhook cannot use it anyway.
 - **Two commands for whoever runs it:**
@@ -1410,6 +1428,18 @@ Tệp của hãng lượt này chạm — `git diff` của nhánh giao với dan
 - `.env.example`, `turbo.json`, `apps/agent/turbo.json`, `docs/environment.md` —
   biến `OKR_AI_GATEWAY_API_KEY`.
 
+## Chỗ rẽ: chat đổi trường của cả đội (R1e)
+
+- `manage_fields` (`create`, `update-brief`) và `archive_field` chạy chốt
+  `quyenDoiTruong` (`lib/quyen-truong.ts`) trước khi ghi: chỉ `owner`/`admin` của
+  workspace (luật `laQuanTriWorkspace` ở `@crm/validation/vai-workspace`, trùng
+  `canManageFields` của API — `apps/api/test/luat-vai-truong-trung.spec.ts` ghim). Phiên
+  không có người (`isAutomated`: dispatch nền, lượt Tác nhân) luôn bị từ chối.
+  `archive_field` vẫn hỏi duyệt như cũ.
+- Mỗi lần chạy, làm hay từ chối, ghi `AgentEvent` `truong.doi-qua-chat`
+  (`hanhDong`, `vai`, `ketQua`); `_acceptance/chat-an-toan-truoc-r1/rang/dem-doi-truong.ts`
+  đếm cùng hai loại sự kiện model ở mục Model.
+
 ## Chỗ rẽ: Máy soạn của Kho tài liệu (lượt 2)
 
 Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
@@ -1443,6 +1473,18 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
   `<<<NGUON-HET>>>`, xoá mọi dấu `<<<…>>>` có sẵn trong nguồn.
 - **Chi phí** vào sổ `MAY_SOAN` của trang (token, giá theo `TAI_LIEU_AGENT.bangGia`,
   nhãn khoá `rieng`/`chung`), chưa vào sổ chi phí AI chung.
+- **Đọc tệp ném lỗi thì nguồn về `LOI` ngay.** `chaySoanTuNguon` bắt mọi lỗi bị ném sau
+  bước đặt `CHO_DOC` (lưu trữ chậm, bộ bóc chữ hỏng) và ghi `TAI_LIEU_AGENT.lyDo.docLoi` —
+  một câu cố định; lỗi gốc chỉ vào log, vì nó có thể mang URL ký. Không để lease tự thử lại:
+  người nạp bấm «Soạn lại». Các ca lỗi đã có (`khongTai`, `bamLech`, `can-go-tay`,
+  `thieuQuyTac`) vẫn giữ lý do của chúng.
+- **Lưới nguồn mồ côi.** `dongNguonMoCoi()` chạy trên nhịp dispatch cạnh
+  `dongMaySoanQuaHan()`: nguồn `CHO_DOC` không còn việc `soan-tu-nguon` nào mở
+  (`payload->>'nguonId'`) về `LOI` với `lyDo.moCoi`. Câu `UPDATE` sống ở
+  `@crm/db/tai-lieu-nguon-mo-coi` để test API chạy được nó sau một lượt tải lên thật. Đừng
+  thêm đường nào đặt `CHO_DOC` mà không tạo việc trong cùng transaction — lưới sẽ đóng nhầm.
+  Cận: lease làn hiện 6 phút × 3 lượt + một nhịp mỗi lượt ≈ 21 phút, dưới mốc 30 phút của
+  thước `_acceptance/kho-nguon-khong-ket/rang/dem-ket.ts`.
 
 ## Chỗ rẽ: Trợ lý AI đọc kho (lượt 4)
 
@@ -1488,6 +1530,15 @@ Tệp của hãng bị chạm, mỗi chỗ một nhánh mới:
   chung với tính năng `tai-lieu.tro-ly`.
 - `_acceptance/tro-ly-doc-kho/rang/nguong.ts` in tỉ lệ trả lời có trích và số báo sai
   cho phiên nghiệm thu; `rang/cham-bo-do.ts` chấm một bộ câu với model thật.
+- **Phiên gốc «kho» không thấy câu hỏi** (vòng `tro-ly-kho-dung-phien`). `guiHoiKho` gửi câu
+  cố định `TAI_LIEU_AGENT.hoi.tinGoc(hoiId)`; lời dặn của `tro_ly_kho` đọc `cauHoi` từ hàng
+  `TaiLieuHoi` và đặt giữa `hoi.dauCauHoi`. Câu Zalo chưa có `cauHoi` lúc mở nên không chèn.
+  Phiên gốc purpose `kho` chạy `modelTaiLieu("hoi")` — cùng model, khoá và ZDR với `tro_ly_kho`.
+- **eve không tắt được subagent theo phiên.** Định nghĩa agent không có `approval`, hook chỉ quan
+  sát. Lời dặn gốc của mọi purpose khác `kho`/`zalo` nối `KHONG_GOI_TRO_LY_KHO`; gọi sai chỗ vẫn
+  hỏng ở `session.started` của phiên con, và lời dặn ghi một `AgentEvent`
+  `tro-ly-kho.sai-cho` (`data.phienGoc`) trước khi ném lại. Thước
+  `_acceptance/tro-ly-kho-dung-phien/rang/dem-sai-phien.ts` đếm hàng đó theo tính năng của phiên gốc.
 
 ## Chỗ rẽ: Soạn OKR cùng Trợ lý
 

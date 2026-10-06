@@ -19,14 +19,21 @@ export async function doNguong(
 	ket: Db,
 	ky: { tu: Date; den: Date },
 ): Promise<KetNguong> {
+	const tuNgay = ngayVN(ky.tu);
+	const denNgay = ngayVN(ky.den);
+	const trongKy = (ngay: string) => ngay >= tuNgay && ngay <= denNgay;
+	const khung = {
+		gte: new Date(ky.tu.getTime() - NGAY_MS),
+		lte: new Date(ky.den.getTime() + NGAY_MS),
+	};
 	const hang = await ket.agentTask.findMany({
-		where: { kind: LOAI, dueAt: { gte: ky.tu, lte: ky.den } },
+		where: { kind: LOAI, dueAt: khung },
 		select: { subject: true, payload: true },
 	});
 	const tin = new Map<string, Set<string>>();
 	for (const h of hang) {
 		const khop = CHU_DE.exec(h.subject ?? "");
-		if (!khop) continue;
+		if (!khop?.[2] || !trongKy(khop[2])) continue;
 		const p = parseNhacPayload(h.payload);
 		if (p.kenh !== "zalo") continue;
 		const buoc = (p.daGui ?? []).flatMap((m) => (m.stepId ? [m.stepId] : []));
@@ -35,7 +42,7 @@ export async function doNguong(
 	const vet = await ket.activity.findMany({
 		where: {
 			type: "PLAN_CHANGE",
-			occurredAt: { gte: ky.tu, lte: new Date(ky.den.getTime() + NGAY_MS) },
+			occurredAt: khung,
 			meta: { path: ["source"], equals: "zalo" },
 		},
 		select: { id: true, createdById: true, occurredAt: true, meta: true },
@@ -45,7 +52,9 @@ export async function doNguong(
 	for (const v of vet) {
 		const meta = onboardingActivityMeta.parse(v.meta);
 		if (meta.kind !== "buoc.xong" || !v.occurredAt) continue;
-		const khoa = `${v.createdById}|${ngayVN(v.occurredAt)}`;
+		const ngay = ngayVN(v.occurredAt);
+		if (!trongKy(ngay)) continue;
+		const khoa = `${v.createdById}|${ngay}`;
 		if (tin.get(khoa)?.has(meta.stepId)) coXong.add(khoa);
 		else nham.push(v.id);
 	}

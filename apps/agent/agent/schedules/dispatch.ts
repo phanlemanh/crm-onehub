@@ -12,7 +12,11 @@ import { lenLichNhac } from "../lib/nhac-ke-hoach";
 import { chupSoOkr } from "../lib/okr-chup";
 import { reconcileStaleTasks } from "../lib/stale-tasks";
 import { dongHoiKhoQuaHan, hoiKhoCho } from "../lib/tai-lieu-hoi-phien";
-import { dongMaySoanQuaHan, nguonChoSoan } from "../lib/tai-lieu-phien";
+import {
+	dongMaySoanQuaHan,
+	dongNguonMoCoi,
+	nguonChoSoan,
+} from "../lib/tai-lieu-phien";
 import { kiemBot } from "../lib/zalo-bot";
 import { dongHoiQuaHan } from "../lib/zalo-hoi";
 
@@ -28,6 +32,7 @@ export default defineSchedule({
 				kiemBot(),
 				dongHoiQuaHan(),
 				dongMaySoanQuaHan(),
+				dongNguonMoCoi(),
 				dongHoiKhoQuaHan(),
 
 				(async () => {

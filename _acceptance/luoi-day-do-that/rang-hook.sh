@@ -74,7 +74,9 @@ case "$CHAN" in
     CODE=$?
     if [ "$CODE" -ne 0 ]; then
       echo "RANG DO: hook do tren cay dang sach"
-      printf '%s' "$OUT" | tail -5
+      printf '%s\n' "$OUT" | grep -E '\(fail\)|error:|Error:|ERROR|Failed:|failed|exited with code|Expected|Received' | head -60
+      echo "-- 20 dong cuoi:"
+      printf '%s\n' "$OUT" | tail -20
       exit 1
     fi
     for tv in $TAC_VU; do

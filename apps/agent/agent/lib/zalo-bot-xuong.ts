@@ -8,11 +8,7 @@ import type {
 	DatBotYeuCau,
 	GuiThuPhanHoi,
 } from "@crm/validation/zalo-cau-noi";
-import {
-	maLoiZalo,
-	parseZaloGetMe,
-	parseZaloSetWebhook,
-} from "@crm/validation/zalo-update";
+import { parseZaloSetWebhook } from "@crm/validation/zalo-update";
 import { z } from "zod";
 import { guiQuaSlackThu } from "./nhac-ke-hoach";
 import {
@@ -23,6 +19,14 @@ import {
 	zaloToken,
 } from "./zalo-api";
 import { ZALO } from "./zalo-config";
+import {
+	type GhiGetMe,
+	ghiAnToan,
+	ghiGetMeLoi,
+	type KetGetMe,
+	type PhanGetMe,
+	phanLopGetMe,
+} from "./zalo-getme";
 
 const CHU_SO_GIO = 2;
 
@@ -69,11 +73,6 @@ async function ghiCot(cot: Partial<CotZalo>): Promise<void> {
 	});
 }
 
-type KetGetMe =
-	| { loai: "duoc"; tenBot: string }
-	| { loai: "token-sai" }
-	| { loai: "zalo-loi" };
-
 function baoLoiZalo(method: string, lop: string): void {
 	console.error(`[zalo] ${method} hong: ${lop}`);
 }
@@ -87,37 +86,27 @@ function lopLoi(loi: Error): string {
 	return `tra-loi-la (${loi.name})`;
 }
 
-function laTuChoi(ma: number | null): boolean {
-	return ma !== null && ma >= ZALO.http.tuChoi.tu && ma < ZALO.http.tuChoi.den;
-}
-
-async function docBot(fetcher: typeof fetch, token: string): Promise<KetGetMe> {
-	let me: { status: number; than: unknown };
+async function docBot(
+	fetcher: typeof fetch,
+	token: string,
+	ghi: GhiGetMe,
+): Promise<KetGetMe> {
+	let phan: PhanGetMe | null = null;
 	try {
-		me = await zaloGoiTho(fetcher, token, "getMe", {});
+		phan = await zaloGoiTho(fetcher, token, "getMe", {});
 	} catch (loi) {
 		baoLoiZalo(
 			"getMe",
 			`mang (${loi instanceof Error ? loi.name : "khong-ro"})`,
 		);
-		return { loai: "zalo-loi" };
 	}
-	const maThan = maLoiZalo(me.than);
-	if (laTuChoi(me.status) || laTuChoi(maThan)) return { loai: "token-sai" };
-	if (me.status !== ZALO.http.ok) {
-		baoLoiZalo("getMe", `http-${me.status}`);
-		return { loai: "zalo-loi" };
+	const ket = phanLopGetMe(phan);
+	if (ket.loai === "duoc") return ket;
+	if (phan !== null && ket.loi.ketLuan === "tam-loi") {
+		baoLoiZalo("getMe", ket.loi.lop);
 	}
-	if (maThan !== null) {
-		baoLoiZalo("getMe", `ok-false-${maThan}`);
-		return { loai: "zalo-loi" };
-	}
-	try {
-		return { loai: "duoc", tenBot: parseZaloGetMe(me.than).tenBot };
-	} catch {
-		baoLoiZalo("getMe", "sai-khuon");
-		return { loai: "zalo-loi" };
-	}
+	await ghiAnToan(ghi, "dat-bot", token, ket.loi);
+	return ket;
 }
 
 type KetDangKy = "duoc" | "tu-choi" | "xac-minh-hong";
@@ -146,18 +135,17 @@ async function dangKy(
 export async function datBot(
 	yeuCau: DatBotYeuCau,
 	goc: URL,
-	deps: { fetcher?: typeof fetch } = {},
+	deps: { fetcher?: typeof fetch; ghi?: GhiGetMe } = {},
 ): Promise<DatBotPhanHoi> {
 	const fetcher = deps.fetcher ?? fetch;
 	const token = yeuCau.token ?? (await zaloToken());
 	if (!token)
 		return { outcome: "khong-co-token", reason: ZALO.loi.khongCoToken };
-	const bot = await docBot(fetcher, token);
-	if (bot.loai === "token-sai") {
-		return { outcome: "invalid", reason: ZALO.loi.tokenSai };
-	}
-	if (bot.loai === "zalo-loi") {
-		return { outcome: "zalo-loi", reason: ZALO.loi.zaloKhongTraLoi };
+	const bot = await docBot(fetcher, token, deps.ghi ?? ghiGetMeLoi);
+	if (bot.loai === "loi") {
+		return bot.loi.ketLuan === "token-sai"
+			? { outcome: "invalid", reason: ZALO.loi.tokenSai }
+			: { outcome: "zalo-loi", reason: ZALO.loi.zaloKhongTraLoi };
 	}
 	const { tenBot } = bot;
 	if (goc.protocol !== ZALO.webhook.giaoThucAnToan) {

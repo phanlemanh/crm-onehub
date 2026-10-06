@@ -258,7 +258,7 @@ describe("tlk-hoi-dau-cuoi", () => {
 		expect(cuaToi.length).toBe(1);
 		expect(cuaToi[0]?.thuocTinh.purpose).toBe("kho");
 		expect(cuaToi[0]?.token).toBe(tokenHoiKho(hoiId));
-		expect(cuaToi[0]?.tin).toBe("Nghỉ phép năm bao nhiêu ngày?");
+		expect(cuaToi[0]?.tin).toBe(TAI_LIEU_AGENT.hoi.tinGoc(hoiId));
 		const viec = await db.agentTask.findFirstOrThrow({
 			where: { kind: "hoi-kho", payload: { path: ["hoiId"], equals: hoiId } },
 		});

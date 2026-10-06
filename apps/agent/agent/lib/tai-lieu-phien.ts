@@ -1,4 +1,5 @@
 import { db } from "@crm/db";
+import { dongNguonMoCoi as dongNguonMoCoiTrong } from "@crm/db/tai-lieu-nguon-mo-coi";
 import type { SendFn } from "eve/channels";
 import { z } from "zod";
 import { APP_AUTH } from "./app-auth";
@@ -129,6 +130,10 @@ export async function dongMaySoanQuaHan(bayGio = new Date()): Promise<number> {
 		data: { trangThai: "LOI", lyDo: LY_DO.hetGio },
 	});
 	return count;
+}
+
+export function dongNguonMoCoi(): Promise<number> {
+	return dongNguonMoCoiTrong(db, LY_DO.moCoi);
 }
 
 export function laPhienMaySoan(ctx: PurposeContext): boolean {
