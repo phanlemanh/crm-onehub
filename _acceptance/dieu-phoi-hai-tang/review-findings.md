@@ -1,85 +1,89 @@
-# Review findings: dieu-phoi-hai-tang (round 2)
+# Review findings: dieu-phoi-hai-tang (round 3)
 
 ## Trong hợp đồng
 
-- **Every viec-phu request is machine-merged into itself and never reaches the supervisor**
-  file: `scripts/dieu-phoi/phat-lich.mjs:135`
+- **Two viec-phu requests that arrive in the same tick get merged into each other, so neither reaches the supervisor**
+  file: scripts/dieu-phoi/yeu-cau.mjs:51
   severity: high
   AC: AC-9
   source: bugs
-  detail: `yeuCauGanDay` is built from the raw entries of `docThuMucJson`. Those entries carry `_ten` but no `id`. In yeu-cau.mjs:54 the duplicate check `c.id !== yc.id` therefore compares `undefined !== '<ten>'`, which is always true, so the request being judged matches itself: same `kho`, same `tieu_de`, and `luc - luc = 0` is under one day. I reproduced this through `motNhip` with one `yeu-cau/P1-1.json` = {loai:'viec-phu', noi_dung:{kho:'crm', tieu_de:'...'}, luc:<now-1m>}. The scheduler wrote `tra-loi/P1-1.json` = {ket_qua:'gop', boi:'may', ly_do:'trùng yêu cầu undefined'}. It emitted no `can_phan` event. Any viec-phu that has `luc` (LUAT.md requires it) is silently closed as a duplicate, so the supervisor never sees it. A real match against an earlier request also reports `voi: undefined`. The unit test misses this because it passes a hand-built `yeuCauGanDay` that has `id` set. Fix: map entries to `{...y, id: y._ten}` when building `yeuCauGanDay`.
-
-- **Hình dạng 3 (assert chuỗi có mặt thay cho quan hệ): ca 'ba ca đỏ' của cham-tep khớp cả câu DUYỆT, nên kiểm danh sách bảo vệ không được đo**
-  file: `scripts/dieu-phoi/test/yeu-cau.test.mjs:23`
-  severity: high
-  AC: AC-9
-  source: measurement
-  detail: Dòng 23-24 chỉ assert `.ly_do` khớp /danh sách bảo vệ/, không kiểm `ket_qua`. Nhưng câu lý do khi duyệt ở yeu-cau.mjs:43 là 'không ai giữ, không nhánh mở nào chạm, không thuộc danh sách bảo vệ', và câu đó cũng khớp regex này. Lời hứa của AC-9 là một quan hệ: tệp thuộc `bao_ve` hoặc `chung_chi_them` thì ra `ket_qua: can_phan` kèm đúng lý do. Đã chạy thử: gỡ hẳn dòng `if (khopMot(baoVe, t)) return { ket_qua: 'can_phan', … }` ở yeu-cau.mjs:35 thì cả 54/54 ca của `node --test scripts/dieu-phoi/test/*.test.mjs` vẫn xanh. Vậy cả hai ca bảo vệ mà E13 nêu (migrations/** và chung_chi_them messages/*.ts) đều không được đo. Không đột biến M nào trong dot-bien.mjs nhắm vào nhánh này.
-
-- **Hình dạng 3 (lời hứa là quan hệ, test chỉ so hằng số): chu.json không kiểm cap_luc, cũng không kiểm han_thue_den = cap_luc + 90′**
-  file: `scripts/dieu-phoi/test/phat-lich.test.mjs:60`
-  severity: medium
-  AC: AC-1
-  source: measurement
-  detail: AC-1 hứa chu.json có đủ `phien, slug, loai, worktree, cap_luc, han_thue_den`. Expected của E2 ghi rõ 'han_thue_den = cap_luc + 90 phút'. Thế nhưng dòng 60 chỉ deepEqual năm giá trị [phien, slug, loai, worktree, han_thue_den], với han_thue_den so với hằng '2026-10-05T13:30:00.000Z'. Test không đọc `cap_luc`. Đã chạy thử: xoá dòng `cap_luc: new Date(nowMs).toISOString(),` ở phat-lich.mjs:94 thì cả bộ 54/54 vẫn xanh. Trường bắt buộc vắng mặt mà không có ca nào đỏ, và quan hệ giữa hai mốc thời gian mà eval tuyên bố thì chưa được khẳng định.
-
-- **Hình dạng 4 (đối chứng giả, không chạy luật cũ): nửa 'luật cũ không cấp ai' của ca phát lại 04/10 là hằng đúng**
-  file: `scripts/dieu-phoi/test/lich.test.mjs:61`
-  severity: medium
-  AC: AC-2
-  source: measurement
-  detail: Test tính `luatCu` bằng `Object.keys(thayDiTruoc).filter((p) => thayDiTruoc[p] === null)` (dòng 61) trên một map viết tay mà không giá trị nào là null. Vì vậy `assert.equal(luatCu.length, 0, 'luật cũ phải tái hiện quãng kẹt')` luôn đúng, và không có mã luật cũ nào chạy trên cùng `donXin`. AC-2 và E3 hứa so sánh 'luật cũ cấp 0, capLuot cấp đúng 1' trên cùng một ca. Thực tế chỉ có vế `kq.length === 1` được đo, còn vế đối chứng không đỏ được dưới bất kỳ thay đổi nào. Thêm nữa, bốn đơn cùng slug 'a' và cùng loại s4 nên `kq.length === 1` chỉ khẳng định lại luật một lượt cho mỗi tài nguyên, mà ca 'capLuot: mỗi tài nguyên một lượt' đã đo rồi; tình huống kẹt chéo không được dựng thành đầu vào.
+  detail: This comes from the HEAD fix (phat-lich.mjs:135 now builds yeuCauGanDay with `id: y._ten` for every request less than 24 h old). The candidate list holds every pending request, including ones not judged yet. The time check `luc - Date.parse(c.luc) < MOT_NGAY_MS` also passes when c is newer than yc, because the difference is negative. So when A and B both land in yeu-cau/ before one tick (same kho, same normalized tieu_de or a shared tep), A matches B and B matches A. Both get ket_qua 'gop' with boi 'may', tra-loi/ is written for both, and no can_phan event is emitted. The side task disappears with nobody escalated. I reproduced it: calling xetYeuCau(A, {yeuCauGanDay:[A,B]}) returns {ket_qua:'gop', voi:'P2-1'}, and xetYeuCau(B, …) returns {ket_qua:'gop', voi:'P1-1'}. Fix: only merge into a request that is older (Date.parse(c.luc) < luc, with the id as tiebreak) or into one that has already been processed (has a tra-loi entry or is in daBao).
+  rationale: AC-9(a) hứa viec-phu trùng thì gop với voi là id cũ; hai yêu cầu cùng nhịp gộp vào nhau (voi trỏ tới yêu cầu mới hơn) và không sinh can_phan, nên làm AC-9 thất bại.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **nhanhMo fails open: a gh/git failure becomes an empty map, and cham-tep is then approved by the machine**
-  Người dùng thấy gì: Khi máy mất mạng hoặc chưa đăng nhập GitHub, hệ thống vẫn tự duyệt cho thợ sửa một tệp dù có nhánh khác đang sửa chính tệp đó, và không để lại dấu nào cho người giám sát biết việc kiểm tra chưa chạy.
+- **nhanhMo turns gh/git failures into an empty map, so the machine approves cham-tep requests**
+  Người dùng thấy gì: Khi công cụ kiểm tra nhánh đang mở bị lỗi (mất mạng, hết đăng nhập, cấu hình nhánh chính sai), hệ thống vẫn tự duyệt yêu cầu sửa tệp mà không báo ai. Hai phiên có thể cùng sửa một tệp và đụng nhau về sau.
   file: `scripts/dieu-phoi/phat-lich.mjs`
   severity: high
   Đề xuất: new-contract
 
-- **dieu-phoi.config.json and hang-viec.json are read raw with no boundary check, and a wrong key fails silently or crashes the scheduler every tick**
-  Người dùng thấy gì: Người giám sát gõ sai hoặc thiếu một khoá trong cấu hình hay danh sách việc thì bộ phát lịch có thể lặp lỗi mãi không cấp được lượt chạy kiểm, hoặc giao lại một việc đã gộp, mà không có thông báo nào nói rõ chỗ sai.
+- **tienDoCua cannot tell a missing ref from a missing contract, so dependent rows can wait forever with no event**
+  Người dùng thấy gì: Nếu tên nhánh chính trong cấu hình đặt sai, các việc phụ thuộc việc khác sẽ chờ mãi mà không ai được báo. Người giám sát chỉ thấy hàng không nhúc nhích.
   file: `scripts/dieu-phoi/phat-lich.mjs`
-  severity: medium
-  Đề xuất: new-contract
-
-- **hook-nhip and hook-cho-nguoi swallow every error with an empty catch, so a broken heartbeat inside a batch gets the lease reclaimed with no trace**
-  Người dùng thấy gì: Nếu tín hiệu còn sống của một phiên thợ bị hỏng giữa đợt, khoá của phiên đó bị thu hồi mà người giám sát không thấy lý do nào được ghi lại.
-  file: `scripts/dieu-phoi/hook-nhip.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **The test:dieu-phoi suite is outside every gate (bun run test, pre-push, CI) even though the hook it covers runs on every tool call in the repo**
-  Người dùng thấy gì: Một lần sửa sau này làm hỏng bộ chặn chạy kiểm vẫn có thể đi qua kiểm tra trước khi đẩy và CI, rồi chỉ lộ ra khi mở đợt thật: chặn nhầm mọi lệnh hoặc để hai lượt kiểm chạy chồng nhau.
+- **The new test suite is outside the gate: pre-push and CI never run test:dieu-phoi**
+  Người dùng thấy gì: Bộ kiểm tra của công cụ điều phối chỉ chạy khi có người gọi tay. Một lỗi mới trong các hook chạy ở mọi phiên vẫn có thể qua cổng đẩy và CI mà không ai thấy.
   file: `package.json`
   severity: medium
   Đề xuất: new-contract
 
-- **Open-branch conflict check fails open: gh/git errors are swallowed, so cham-tep gets machine-approved**
-  Người dùng thấy gì: Khi không lấy được danh sách nhánh đang mở, hệ thống vẫn coi như không nhánh nào đụng tới tệp và tự duyệt cho thợ sửa, không báo cho ai biết việc kiểm tra đã không chạy.
-  file: `scripts/dieu-phoi/phat-lich.mjs`
-  severity: medium
-  Đề xuất: new-contract
-
-- **A signed but unmerged item falls back to 'chua' once the worker switches branch, and the scheduler hands it out again**
-  Người dùng thấy gì: Khi thợ chuyển sang việc kế tiếp trong khi việc trước đã ký mà chưa gộp, hệ thống có thể bảo thợ làm lại việc trước và chưa báo được là đã hết việc.
-  file: `scripts/dieu-phoi/phat-lich.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Supporting finding (no severity): the scheduler wrongly reports the requesting session's own open branch as another session's edit**
-  Người dùng thấy gì: Thợ đã có nhánh riêng đang sửa một tệp, khi xin sửa tiếp tệp đó vẫn bị chuyển cho người giám sát xét dù không cần.
+- **The dieu-phoi config files are read with no shape check, even though this round added boundary checks for xin/ and yeu-cau/**
+  Người dùng thấy gì: Nếu người giám sát sửa tay tệp cấu hình và thiếu một khoá, bộ phát lịch có thể cấp khoá rồi lỗi, lặp lại mỗi phút mà chỉ báo lỗi chung chung. Phiên thợ có thể bị cấp lượt rồi thu lại liên tục.
   file: `scripts/dieu-phoi/phat-lich.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 3 (đếm theo loai thay cho quan hệ loai + can_phan): sự kiện giam-tai mất can_phan mà test vẫn xanh**
-  Người dùng thấy gì: Khi máy quá tải và bộ phát lịch chuyển sang giảm tải, phiên giám sát phải được đánh thức một lần. Hiện tại việc đó vẫn đúng. Nhưng nếu sau này ai đó làm mất dấu đánh thức, bộ kiểm tra vẫn báo xanh, nên phiên giám sát có thể ngủ quên mà không ai hay.
-  file: `scripts/dieu-phoi/test/phat-lich.test.mjs`
-  severity: medium
+- **hook-nhip and hook-cho-nguoi swallow errors with an empty catch even when a run is active**
+  Người dùng thấy gì: Khi hook báo nhịp của một phiên thợ bị lỗi, không ai biết vì sao. Rồi lượt của thợ bị thu hồi vì nhịp cũ mà không để lại dấu vết lý do.
+  file: `scripts/dieu-phoi/hook-nhip.mjs`
+  severity: low
   Đề xuất: known-limits
+
+- **phat-lich hard-codes the threshold '60″' next to the constant NHIP.khoaTrongMs**
+  Người dùng thấy gì: Nếu ai đổi thời gian chờ cho khoá trống, câu giải thích hiển thị cho người giám sát vẫn ghi con số cũ. Chỉ gây hiểu nhầm nhẹ, không ảnh hưởng việc cấp lượt.
+  file: `scripts/dieu-phoi/phat-lich.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **scripts/dieu-phoi does not follow the repo's Biome formatting (tabs, double quotes, sorted imports)**
+  Người dùng thấy gì: Mã của công cụ điều phối trình bày khác quy ước chung của kho (thụt lề, nháy). Không đổi hành vi nào, chỉ làm mã nhìn lệch.
+  file: `scripts/dieu-phoi/lich.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Open-branch check in cham-tep fails open: a gh/git failure, a branch not fetched yet, or more than 30 PRs all lead to machine approval**
+  Người dùng thấy gì: Khi chưa kiểm tra được nhánh nào đang mở (lỗi mạng, nhánh mới chưa tải về, hơn 30 PR), hệ thống vẫn tự duyệt yêu cầu sửa tệp. Hai phiên có thể sửa trùng một tệp mà không ai được báo.
+  file: `scripts/dieu-phoi/phat-lich.mjs`
+  severity: high
+  Đề xuất: new-contract
+
+- **The «cần người» event repeats on every 0.1 GB change in the largest process's RSS**
+  Người dùng thấy gì: Khi một tiến trình ngốn bộ nhớ cứ dao động, người giám sát bị báo lại liên tục, mỗi lần chỉ khác vài chục MB. Thông báo ồn làm người đọc dễ bỏ qua cảnh báo thật.
+  file: `scripts/dieu-phoi/phat-lich.mjs`
+  severity: medium
+  Đề xuất: new-contract
+
+- **A dangling dieu-phoi-hien-tai symlink blocks both `mo` and `dong` with confusing errors**
+  Người dùng thấy gì: Nếu thư mục của đợt bị xoá tay, không thể mở đợt mới cũng không đóng được đợt cũ. Người dùng phải tự xoá liên kết thừa mới làm tiếp được.
+  file: `scripts/dieu-phoi/dieu-phoi.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (assert chuỗi có mặt thay cho quan hệ): ca 'ba ca đỏ' của yeu-cau.test.mjs vẫn khớp cả câu DUYỆT, mà E13 vẫn dẫn nó làm bằng chứng**
+  Người dùng thấy gì: Một phép kiểm tra cũ vẫn xanh dù luật bảo vệ tệp bị gỡ, nhưng luật đó đã có phép kiểm tra đúng ở chỗ khác. Hành vi cho người dùng không sai.
+  file: `scripts/dieu-phoi/test/yeu-cau.test.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 4 (assert âm tính tự đúng, không chạy luật cũ): nửa 'luật cũ không cấp ai' ở lich.test.mjs vẫn là hằng đúng, mà E3 vẫn ghi là đã đo**
+  Người dùng thấy gì: Một phép kiểm tra so sánh với luật cũ luôn xanh vì không thật sự chạy luật cũ. Việc cấp lượt thực tế của công cụ vẫn được kiểm đúng ở chỗ khác.
+  file: `scripts/dieu-phoi/test/lich.test.mjs`
+  severity: low
+  Đề xuất: wont-fix
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
