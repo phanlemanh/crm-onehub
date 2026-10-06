@@ -428,7 +428,10 @@ describe("chon-nut", () => {
 		const thay: string[] = [];
 		for (const x of BON_NUT) {
 			await bam(document.body.querySelector(`[data-nut-cay='${x.nut}']`));
-			await cho(() => khung() === x.chiTiet, `khung ${x.chiTiet}`);
+			await cho(
+				() => khung() === x.chiTiet && url.get("don") === x.don,
+				`khung ${x.chiTiet} va ?don=${x.don}`,
+			);
 			thay.push(`bam ${x.nut}: khung=${khung()}`);
 			thay.push(`bam ${x.nut}: aria-current=${dangChon().join(",")}`);
 			thay.push(`bam ${x.nut}: ?don=${url.get("don")}`);
@@ -566,7 +569,10 @@ describe("o-so-man", () => {
 		const o = document.body.querySelector("[data-o='chua-co']");
 		expect(o?.textContent).toContain(`${x}/${mm}`);
 		await bam(o);
-		await cho(() => khung() === "chua-co-phong-ban", "khung chua co");
+		await cho(
+			() => khung() === "chua-co-phong-ban" && url.get("don") === "chua-co",
+			"khung chua co va ?don=chua-co",
+		);
 		const ten = [
 			...document.body.querySelectorAll(
 				"[data-chi-tiet='chua-co-phong-ban'] [data-dong-nguoi] [data-ten]",
@@ -1609,6 +1615,10 @@ describe("nhap-ba-buoc", () => {
 		);
 		await bam(nutTheoChu(hop(), m.nhapHop.xemCay)[0]);
 		await doiDong();
+		await cho(
+			() => khung() === "goc" && url.get("don") === "goc",
+			"khung goc va ?don=goc",
+		);
 		expect({ thay, don: url.get("don"), khung: khung() }).toEqual({
 			thay: [
 				"buoc 1: dang o 1",

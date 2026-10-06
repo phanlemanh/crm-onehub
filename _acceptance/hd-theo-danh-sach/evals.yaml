@@ -146,3 +146,5 @@ evals:
       Nguoi doc cau tu choi ma mot nguoi ngoai domain se nhan sau khi da chon tai khoan
       Google, roi quyet danh doi ay co dang de mo duong cho mot dia chi ngoai domain
       khong. May KHONG cham muc nay.
+    paths:
+      - "packages/auth/src/auth.ts"

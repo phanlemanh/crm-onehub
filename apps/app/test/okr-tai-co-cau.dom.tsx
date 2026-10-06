@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import type { LyDoChanLuuTru } from "@crm/validation/to-chuc-luu-tru";
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -177,14 +178,20 @@ type DauVao = Json | undefined;
 let cay: TreeOutput = cayMau();
 let quanTri = true;
 let moCoi: () => Promise<MucMoCoi[]> = async () => [];
-type LyDoXem = { loai: "khuon" | "nguoi" | "okr"; cau: string };
+type LyDoXem = LyDoChanLuuTru;
 const lyDoMacDinh = (id: string): LyDoXem[] => {
 	const okrMo =
 		[...cay.divisions.flatMap((b) => b.departments), ...cay.chuaXep].find(
 			(p) => p.id === id,
 		)?.okrMo ?? 0;
 	return okrMo > 0
-		? [{ loai: "okr", cau: t.toChuc.chan.lyDo["phong-ban"](okrMo) }]
+		? [
+				{
+					loai: "okr",
+					so: okrMo,
+					cau: t.toChuc.chan.lyDo["phong-ban"](okrMo),
+				},
+			]
 		: [];
 };
 let luuTruXem: (id: string) => Promise<LyDoXem[]> = async (id) =>
@@ -937,6 +944,13 @@ async function moHopLuuTru(): Promise<void> {
 	);
 }
 
+const cauManHinh = (l: LyDoXem): string =>
+	l.loai === "khuon"
+		? t.toChuc.chan.lyDoKhuon.replace("{khuon}", l.khuon.join(", "))
+		: l.loai === "nguoi"
+			? t.toChuc.chan.lyDoNguoi(l.so)
+			: t.toChuc.chan.lyDo["phong-ban"](l.so);
+
 describe("luu-tru", () => {
 	const CA: readonly { ten: string; lyDo: LyDoXem[] }[] = [
 		{
@@ -944,9 +958,10 @@ describe("luu-tru", () => {
 			lyDo: [
 				{
 					loai: "nguoi",
+					so: 2,
 					cau: "Còn 2 người có phòng ban chính ở đây — chuyển họ trước.",
 				},
-				{ loai: "okr", cau: "Phòng ban còn 3 mục tiêu ở kỳ đang mở." },
+				{ loai: "okr", so: 3, cau: "Phòng ban còn 3 mục tiêu ở kỳ đang mở." },
 			],
 		},
 		{
@@ -954,19 +969,23 @@ describe("luu-tru", () => {
 			lyDo: [
 				{
 					loai: "nguoi",
+					so: 2,
 					cau: "Còn 2 người có phòng ban chính ở đây — chuyển họ trước.",
 				},
 			],
 		},
 		{
 			ten: "C",
-			lyDo: [{ loai: "okr", cau: "Phòng ban còn 4 mục tiêu ở kỳ đang mở." }],
+			lyDo: [
+				{ loai: "okr", so: 4, cau: "Phòng ban còn 4 mục tiêu ở kỳ đang mở." },
+			],
 		},
 		{
 			ten: "E",
 			lyDo: [
 				{
 					loai: "khuon",
+					khuon: ["Làm quen Kinh doanh"],
 					cau: "Phòng ban này còn nằm trong khuôn Làm quen Kinh doanh — sửa khuôn trước.",
 				},
 			],
@@ -1001,7 +1020,7 @@ describe("luu-tru", () => {
 		expect(ra).toEqual(
 			CA.map((c) => ({
 				ten: c.ten,
-				dong: c.lyDo.map((l) => [l.loai, l.cau]),
+				dong: c.lyDo.map((l) => [l.loai, cauManHinh(l)]),
 				chuyen: c.lyDo.some((l) => l.loai === "okr"),
 				khoa: c.lyDo.length > 0,
 			})),

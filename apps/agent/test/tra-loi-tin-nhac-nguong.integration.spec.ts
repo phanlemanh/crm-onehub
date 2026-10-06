@@ -10,6 +10,7 @@ import {
 import { join } from "node:path";
 import { db } from "@crm/db";
 import { datBuocXong } from "@crm/db/onboarding-buoc";
+import { doNguong } from "../../../_acceptance/tra-loi-tin-nhac/rang/nguong";
 import { VET_ZALO } from "../agent/lib/tra-loi-nhac";
 import { donDep, xongBuoc } from "./support/nhac-gieo";
 import { lucVN, NGAY_NHAC, PHUT_SAU } from "./support/nhac-gui-gieo";
@@ -97,5 +98,51 @@ describe("nguong", () => {
 		const sau = await chay();
 		expect(sau).toContain("danh_dau_nham: 0");
 		expect(sau).toContain("ti_le_co_xong: 1/2");
+	});
+});
+
+describe("ngay-cuoi-ky", () => {
+	const D1 = "2026-10-10";
+	const D2 = "2026-10-11";
+	const D3 = "2026-10-12";
+	const D4 = "2026-10-13";
+	const NUA_GIO = 30;
+
+	async function mot(ngay: string, ten: string, zaloId: string) {
+		const r = await gieoNhac(lucVN(ngay, PHUT_SAU), { quaHan: 2 }, ten);
+		await noiZalo(r.A.id, zaloId);
+		const g = await guiNhac(r.A.id, lucVN(ngay, PHUT_SAU));
+		await nhan(zaloId, "xong 1", lucVN(ngay, PHUT_SAU + NUA_GIO));
+		return { r, g };
+	}
+
+	test("ngay-cuoi-ky: xong ngay cuoi ky duoc dem, xong sau ky khong dem", async () => {
+		const n1 = await mot(D1, "Ngay Mot", "ZN1");
+		await mot(D3, "Ngay Ba", "ZN3");
+		await mot(D4, "Ngay Bon", "ZN4");
+		await datBuocXong(
+			db,
+			{
+				stepId: buocCuaMuc(n1.g.daGui, 2),
+				done: true,
+				nguoiId: n1.r.A.id,
+				now: lucVN(D2, PHUT_SAU),
+			},
+			VET_ZALO,
+		);
+		const nham = await db.activity.findFirstOrThrow({
+			where: {
+				createdById: n1.r.A.id,
+				occurredAt: { gte: new Date(`${D2}T00:00:00+07:00`) },
+			},
+		});
+		const ket = await doNguong(db, {
+			tu: new Date(`${D1}T00:00:00+07:00`),
+			den: new Date(`${D3}T00:00:00+07:00`),
+		});
+		expect(ket.nham, "ngay-cuoi-ky: xong ngay D3 bi dem nham").toEqual([
+			nham.id,
+		]);
+		expect({ coXong: ket.coXong, mau: ket.mau }).toEqual({ coXong: 2, mau: 2 });
 	});
 });

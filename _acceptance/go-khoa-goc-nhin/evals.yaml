@@ -7,7 +7,7 @@ evals:
     cmd: config:executors.test.go_khoa_api
     expected: "exit 0; bài «góc nhìn đang dùng mang tên chiến dịch» pass — trước bản sửa đỏ vì danh sách góc nhìn không có trường usedBy"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/saved-views, apps/api/src/campaigns, apps/api/test/saved-views-in-use.spec.ts]
+    paths: [apps/api/src/saved-views/**, apps/api/src/campaigns/**, apps/api/test/saved-views-in-use.spec.ts]
 
   - id: E2
     criterion: AC-2
@@ -15,7 +15,7 @@ evals:
     cmd: config:executors.test.go_khoa_api
     expected: "exit 0; bài «góc nhìn rảnh thì danh sách chiến dịch rỗng» pass"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/saved-views, apps/api/test/saved-views-in-use.spec.ts]
+    paths: [apps/api/src/saved-views/**, apps/api/test/saved-views-in-use.spec.ts]
 
   - id: E3
     criterion: AC-3
@@ -23,7 +23,7 @@ evals:
     cmd: config:executors.test.go_khoa_api
     expected: "exit 0; bài «từ chối xoá nêu đúng lối thoát» pass VÀ ghim rằng câu từ chối KHÔNG chứa chữ Finish — trước bản sửa câu đó có chữ Finish nên bài đỏ"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/saved-views, apps/api/test/saved-views-in-use.spec.ts]
+    paths: [apps/api/src/saved-views/**, apps/api/test/saved-views-in-use.spec.ts]
 
   - id: E4
     criterion: AC-4
@@ -31,7 +31,7 @@ evals:
     cmd: config:executors.test.go_khoa_api
     expected: "exit 0; bài «trỏ sang góc nhìn khác thì phân khúc và thành viên đổi theo» pass — trước bản sửa đỏ vì không có thủ tục trỏ-lại"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/campaigns, apps/api/test/saved-views-in-use.spec.ts]
+    paths: [apps/api/src/campaigns/**, apps/api/test/saved-views-in-use.spec.ts]
 
   - id: E5
     criterion: AC-5
@@ -39,7 +39,7 @@ evals:
     cmd: config:executors.test.go_khoa_api
     expected: "exit 0; bài «trỏ đi rồi thì xoá được góc nhìn cũ» pass — đây là chiều chứng minh ngõ cụt đã mở"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/campaigns, apps/api/src/saved-views, apps/api/test/saved-views-in-use.spec.ts]
+    paths: [apps/api/src/campaigns/**, apps/api/src/saved-views/**, apps/api/test/saved-views-in-use.spec.ts]
 
   - id: E6
     criterion: AC-6
@@ -47,7 +47,7 @@ evals:
     cmd: config:executors.test.go_khoa_api
     expected: "exit 0; hai bài từ chối pass: góc nhìn thực thể khác cá nhân, và mã góc nhìn không tồn tại — mỗi bài kiểm lại rằng phân khúc cũ còn nguyên"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/api/src/campaigns, apps/api/test/saved-views-in-use.spec.ts]
+    paths: [apps/api/src/campaigns/**, apps/api/test/saved-views-in-use.spec.ts]
 
   - id: E7
     criterion: AC-7

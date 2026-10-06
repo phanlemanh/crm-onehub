@@ -1,0 +1,140 @@
+slug: bo-xuong-kara
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.k1_transcript
+    expected: "exit 0; bài DOM packages/ui/test/bo-xuong-kara.dom.tsx -t k1-transcript dựng KaraTranscript với bốn phần tử viết trước {lượt user, lượt kara, dòng system, KaraCheckpoint}: lượt user và lượt kara là [data-slot] của Message AI Elements (lớp is-user / is-assistant mà ai-elements/message.tsx đặt theo from); lượt kara có đúng một [data-slot=message-avatar] chứa đúng một svg aria-hidden=true và một phần tử sr-only chữ «Kara», không có img nào trong cả transcript; dòng system không nằm trong [data-slot=message-content] và mang lớp text-muted-foreground; mốc là button, bấm gọi onSelect đúng 1 lần (đếm lời gọi); transcript rỗng có [data-slot=conversation-empty-state] chứa [data-slot=kara-mark]. Bài in số khẳng định đã chạy và đòi bằng số viết trước. Chiều đỏ ghim trên cùng fixture: bản sao transcript.tsx gắn img vào avatar phải làm bài đỏ 'avatar co anh'; bản sao bỏ onClick của mốc phải đỏ 'moc khong goi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/transcript.tsx", "packages/ui/src/components/ai-elements/conversation.tsx", "packages/ui/src/components/ai-elements/message.tsx", "packages/ui/test/bo-xuong-kara.dom.tsx"]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.k1_composer
+    expected: "exit 0; bài DOM -t k1-composer, ma trận viết trước {gửi, bận theo status, bận theo KaraBusy, chip ngữ cảnh, gợi ý, khoá có lý do} = 6 ô: ô gửi gõ '  chào  ' rồi gửi → onSubmit nhận đúng ['chào'] (một lần); hai ô bận: nút gửi có aria-label bằng messages(vi).promptInput.stop, bấm → onStop 1 lần, onSubmit 0 lần; ô chip: có chữ nhãn chip, nút gỡ có tên chứa nhãn chip, bấm → onRemoveContext 1 lần và document.activeElement là textarea của ô soạn; ô gợi ý: bấm gợi ý thứ hai → onSuggestion nhận đúng chữ gợi ý thứ hai; ô khoá: textarea và nút gửi disabled, textarea có aria-describedby trỏ phần tử [data-slot=field-description] chứa chữ lý do. Bài in số ô và đòi bằng 6. Chiều đỏ ghim: bản sao composer.tsx bỏ đọc KaraBusy phải làm ô 'bận theo KaraBusy' đỏ 'busy khong doi nut'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/composer.tsx", "packages/ui/src/components/kara/busy.tsx", "packages/ui/src/components/ai-elements/prompt-input.tsx", "packages/ui/src/components/ai-elements/suggestion.tsx", "packages/ui/test/bo-xuong-kara.dom.tsx"]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.k1_steps
+    expected: "exit 0; bài DOM -t k1-steps, ma trận viết trước {mọi bước xong (3 bước), có bước đang chạy, có bước lỗi} = 3 ô: ô xong: trigger chứa chữ messages(vi).karaKhung.daLamBuoc(3), nội dung đóng (data-state=closed của Collapsible); ô đang chạy: trigger chứa tên bước đang chạy, data-state=open; ô lỗi: data-state=open, bước lỗi mang data-trang-thai=loi và có một chấm trạng thái lỗi ([data-slot=indicator-dot][data-tone=error] của status-indicator.tsx); mọi ô: chữ từng bước bằng đúng chữ truyền vào, không có pre, code hay [data-slot=code-block] nào; gốc là Collapsible của ai-elements/task.tsx (data-slot=collapsible). Chiều đỏ ghim: bản sao steps.tsx để defaultOpen=true cho ô xong phải đỏ 'buoc xong khong gap'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/steps.tsx", "packages/ui/src/components/ai-elements/task.tsx", "packages/ui/test/bo-xuong-kara.dom.tsx"]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.k1_state
+    expected: "exit 0; bài DOM -t k1-state, ma trận toàn phần viết trước, năm kind {working, empty, error, off, unconfigured}, mỗi kind một bảng kỳ vọng ghi trước (thành phần có mặt / vắng): working delayMs=200: trước 200 ms không có role=status nào chứa chữ label, sau 260 ms có đúng một role=status chứa chữ label và chấm bận của ThinkingIndicator (span aria-hidden=true có nhiều ô con — DotMatrix không mang data-slot) (đồng hồ thật, không setSystemTime); empty và unconfigured và error: [data-slot=empty] mang data-border=solid và data-size=compact; error: tiêu đề bằng messages(vi).karaKhung.chuaDuoc('<việc>') và đúng một nút tên «Thử lại», bấm → onRetry 1 lần; unconfigured: không có nút «Thử lại»; off: có [data-slot=field-description] chứa chữ lý do; cả năm kind: không có [data-slot=alert], [data-slot=spinner]. Bài in số ô và đòi bằng 5. Chiều đỏ ghim: bản sao state.tsx bỏ trễ (hiện ngay) phải đỏ 'working hien truoc tre'; bản sao thêm Spinner cho working phải đỏ 'co spinner tran'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/state.tsx", "packages/ui/src/components/thinking-indicator.tsx", "packages/ui/src/components/empty.tsx", "packages/ui/test/bo-xuong-kara.dom.tsx"]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.k1_thu_lai
+    expected: "exit 0; bài -t k1-thu-lai: (a) quét mã nguồn mọi .tsx dưới packages/ui/src/components/kara/ (đọc tệp, đường suy từ vị trí bài): chữ messages karaKhung.thuLai chỉ được dùng trong state.tsx, và mọi tệp khác muốn nút Thử lại phải import KaraRetry — đếm chỗ dùng .thuLai ngoài state.tsx bằng 0; (b) dựng KaraRetry: một button data-variant=outline data-size=sm, không chứa svg, chữ «Thử lại»; (c) dựng KaraState error và KaraSteps có bước lỗi kèm onRetry: mọi nút tên «Thử lại» trong hai khối đều mang data-variant=outline data-size=sm và không chứa svg. Chiều đỏ ghim: bản sao state.tsx đổi KaraRetry sang size=xs phải đỏ 'thu lai sai co'; bản sao thêm Icon Renew phải đỏ 'thu lai co icon'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/**", "packages/ui/test/bo-xuong-kara.dom.tsx"]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.k1_khoa
+    expected: "exit 0; bài DOM -t k1-khoa, ma trận viết trước {chờ, đã nhận có onUndo, đã bỏ qua có onUndo} × {trong KaraBusy bận, trong KaraBusy rảnh, ngoài KaraBusy} = 9 ô dựng KaraProposal (inline) từ cùng một bộ props: ô chờ+bận: mọi button[data-hanh-dong] mang thuộc tính disabled thật (button.disabled === true, cơ chế của ProposedChange) và mang aria-describedby trỏ phần tử chứa đúng chữ messages(vi).karaKhung.dangSoanKhoa; ô đã quyết+bận: nút «Hoàn tác» disabled (nằm trong fieldset[disabled]); ô rảnh và ô ngoài: không nút nào disabled, bấm «Hoàn tác» gọi onUndo 1 lần; rồi một ca chuyển: dựng bận → rerender rảnh → mọi nút mở lại, không đổi props đề xuất. Bài in số ô và đòi bằng 9. Chiều đỏ ghim: bản sao proposal.tsx bỏ fieldset phải đỏ 'hoan tac mo khi ban'; bản sao bỏ lockedReason phải đỏ 'cho mo khi ban'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/proposal.tsx", "packages/ui/src/components/kara/busy.tsx", "packages/ui/src/components/proposed-change.tsx", "packages/ui/test/bo-xuong-kara.dom.tsx"]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.k1_nhom
+    expected: "exit 0; bài DOM -t k1-nhom, entries viết trước gồm 5 mục {a chờ batchable, b chờ batchable, c chờ không batchable, d đã quyết batchable, e đã quyết}: đúng một [data-slot=kara-label] trong nhóm, chữ chứa '3' (số chờ); các đề xuất con không có [data-slot=kara-label] hay [data-slot=kara-mark] riêng; rerender với c chuyển sang đã quyết → nhãn chứa '2' (đếm suy từ entries, không lưu); nút nhận cả nhóm có đúng chữ label truyền vào, bấm → onAccept gọi 1 lần với ['a','b'] đúng thứ tự entries; entries không còn chờ batchable → nút disabled; trong KaraBusy bận → nút disabled; batchDecided → một role=status chứa chữ text và nút «Hoàn tác», bấm → onUndo 1 lần. Đối chứng dương: chữ '3' ở bước đầu không đến từ props nào khác (label là chuỗi đánh dấu duy nhất). Chiều đỏ ghim: bản sao proposal.tsx đếm entries.length thay vì số chờ phải đỏ 'dem sai: 5 != 3'; bản sao gửi mọi id chờ (kể cả không batchable) phải đỏ 'gui id khong batchable'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/proposal.tsx", "packages/ui/src/components/kara/busy.tsx", "packages/ui/src/components/kara.tsx", "packages/ui/test/bo-xuong-kara.dom.tsx"]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.k1_artifact
+    expected: "exit 0; bài DOM -t k1-artifact dựng KaraArtifact có title, meta, actions, children, footer: đúng một [data-slot=kara-mark] trong cả khung và nó nằm trong phần đầu; meta nằm trong phần đầu; thứ tự DOM đầu → thân → chân; thân là phần tử dẫn xuất từ ArtifactContent của ai-elements/artifact.tsx (lớp overflow-auto); với busy={label}: phần đầu có role=status chứa chấm bận (span aria-hidden=true có nhiều ô con) và chữ label sau trễ; một KaraProposal chờ đặt trong thân có nút chính disabled kèm lý do như E6. Chiều đỏ ghim: bản sao artifact.tsx không bọc children bằng KaraBusyProvider phải đỏ 'than khong khoa khi ban'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/artifact.tsx", "packages/ui/src/components/kara/busy.tsx", "packages/ui/src/components/ai-elements/artifact.tsx", "packages/ui/test/bo-xuong-kara.dom.tsx"]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.k1_hai_tieng
+    expected: "exit 0; bài DOM -t k1-hai-tieng: ma trận viết trước, 15 cấu hình viết trước, phủ mọi ô sinh chữ của E1–E8 (thêm KaraArtifact bận không truyền chữ để đo chữ bận mặc định, đọc sau trễ): {KaraTranscript rỗng, KaraTranscript có dòng system và mốc, KaraComposer bận có chip, KaraComposer khoá, KaraSteps 2 bước xong, KaraSteps có bước đang chạy, KaraSteps có bước lỗi, KaraState working (delayMs=0), KaraState empty, KaraState error, KaraState off, KaraState unconfigured, KaraProposalGroup có batchDecided và một KaraProposal chờ trong KaraBusy bận, KaraArtifact busy} dựng cùng props trong LocaleProvider vi và en; props chữ là chuỗi đánh dấu duy nhất để loại; gom chữ nhìn thấy và aria-label không đến từ props; số chỗ của từng cấu hình ghi thành hằng ở đầu tệp bài (viết trước khi chạy, in ra cùng kết quả) và đòi đúng số đó ở cả hai tiếng (sai thì 'so cho sai: <khối> <tiếng> <n> != <số>'); mỗi chữ ở vi khác chữ cùng chỗ ở en, chỉ miễn đúng tập {Kara}; rồi chạy packages/ui/test/messages-guard.spec.ts xanh với các khoá karaKhung đã ghim. Thêm một quét nguồn trên mọi .tsx dưới packages/ui/src/components/kara/ trừ vi-du/ (đường suy từ vị trí bài): không có chuỗi chứa chữ tiếng Việt có dấu nào ngoài lời gọi messages — sai thì 'chu viet cung: <tệp>:<dòng>'. Chiều đỏ ghim: bản sao state.tsx viết cứng «Thử lại» phải đỏ 'chu cung: Thử lại'; bản sao proposal.tsx viết cứng lý do khoá «Kara đang soạn» phải đỏ ở quét nguồn 'chu viet cung: proposal.tsx'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/**", "packages/ui/src/lib/messages.ts", "packages/ui/test/bo-xuong-kara.dom.tsx", "packages/ui/test/messages-guard.spec.ts"]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.k1_ai_elements
+    expected: "exit 0; rang/ai-elements.mjs (đường suy từ vị trí script): (a) artifact.tsx và task.tsx có trong packages/ui/src/components/ai-elements; tool.tsx và code-block.tsx không có; (b) hai tệp không chứa '//' đầu dòng hay '/*', không import 'lucide-react', và mọi chữ hiển thị tiếng Anh (thuộc tính sr-only, chuỗi giữa thẻ) đi qua useMessages — dò bằng danh sách cho phép đóng như rang-chat của packages/ui; (c) _acceptance/nen-chat-ai-elements/so-lech-chuan.md có một mục tiêu đề nêu artifact.tsx và một mục nêu task.tsx (tách mục theo tiêu đề, không grep cả tệp); (d) chạy node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs: mã 0, dòng MIEN TRU (2) liệt đúng artifact.tsx và task.tsx, mỗi lý do chứa 'K1' và mỗi hạn chứa 'K2'; CHET (0). In từng mục. Chiều đỏ ghim: chạy trên bản sao thư mục ai-elements có thêm một dòng chú thích trong task.tsx phải in 'co chu thich: task.tsx' và mã 1; bản sao mo-coi.mjs bỏ mục miễn trừ task.tsx phải làm bước (d) in 'MO COI: task.tsx' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/ai-elements/**", "packages/ui/src/lib/messages.ts", "_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs", "_acceptance/nen-chat-ai-elements/so-lech-chuan.md", "_acceptance/bo-xuong-kara/rang/ai-elements.mjs"]
+
+  - id: E11
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.k1_phong_mau
+    steps:
+      - "rang/phong-mau.mjs dựng phòng mẫu từ chính cây này (Bun.build các ví dụ kara/vi-du, @tailwindcss/postcss trên packages/ui/src/styles/globals.css) và phục vụ trên cổng tự do; dấu mốc cây: trang trả /__cay chứa đường tuyệt đối của cây đang xét, lệch → mã 2"
+      - "Rút tập trạng thái từ khối UX-STATE-TABLE của design doc (đọc tệp, đường suy từ vị trí script) và đòi tập id của danh mục ví dụ kara/vi-du bằng đúng tập đó; thiếu → 'thieu trang thai: <id>' và mã 1"
+      - "Với mỗi trạng thái × khổ {1440×1000, 768×1024, 375×812} × nền {light, dark}: mở ?state=<id>&theme=<nền>, chụp _acceptance/bo-xuong-kara/evidence/E11-<id>-<khổ>-<nền>.png; đo documentElement.scrollWidth == innerWidth"
+      - "Ô bản nháp: mở ST-phongmau-ban-nhap với ?pane=360 rồi ?pane=1080 ở khổ 1440: bề rộng [data-slot=kara-artifact] bằng bề rộng ô ±1px; lăn chuột (mouse.wheel, không gán scrollTop) trên thân: scrollTop của thân tăng, window.scrollY giữ 0"
+      - "Khổ 375: bề rộng vùng hội thoại và vùng bản nháp (getBoundingClientRect) không vượt innerWidth và hai vùng không chồng nhau (đáy vùng trên ≤ đỉnh vùng dưới)"
+      - "ST-phongmau-dang-soan: trước khi chụp, chờ có trần (≤ 5 s) tới khi một role=status trong phần đầu [data-slot=kara-artifact] chứa chữ bận; không thấy → 'thieu chu ban' và mã 1"
+      - "ST-phongmau-dang-soan: mọi nút chính (data-variant=default) của đề xuất chờ disabled; ô soạn có nút aria-label «Dừng»; nút «Hoàn tác» của dòng đã quyết disabled"
+      - "ST-phongmau-ban-nhap: bấm nút nhận cả nhóm → dòng biên nhận nhóm hiện, nhãn đếm giảm; bấm «Hoàn tác» của dòng ấy → nhóm về đúng số đề xuất chờ ban đầu"
+      - "ST-phongmau-loi: chiều cao tính toán của nút «Thử lại» bằng 28px"
+    expected: "exit 0; rang/man.mjs in từng số đo theo (trạng thái, khổ, nền) và số ô đã đo = 10 trạng thái × 3 khổ × 2 nền = 60 ảnh, cộng 2 ô bề rộng bản nháp và 3 bài tương tác; mọi tệp inputs của E12 có mặt sau lượt. Chiều đỏ ghim: --kiem-do-do tran (chèn một div rộng 2000px vào trang trước khi đo) phải in 'tran ngang' và mã 1; --kiem-do-do khong-khoa (gỡ disabled của nút chính đầu tiên ở đang soạn) phải in 'nut cho mo khi ban' và mã 1; --kiem-do-do cuon-trang (đặt thân overflow visible) phải in 'trang cuon thay than' và mã 1; --kiem-do-do chong-cot (đặt vùng hội thoại rộng 380px cố định ở khổ 375) phải in 'cot vuot khung' và mã 1; --kiem-do-do chup-som (chụp dang-soan không chờ) phải in 'thieu chu ban' và mã 1. Mọi tệp trong inputs của E12 có mặt và lớn hơn 0 byte, liệt theo tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["packages/ui/src/components/kara/**", "packages/ui/src/components/ai-elements/artifact.tsx", "packages/ui/src/components/ai-elements/task.tsx", "_acceptance/bo-xuong-kara/rang/**", "docs/superpowers/specs/2026-10-04-bo-xuong-kara-design.md"]
+
+  - id: E12
+    criterion: AC-12
+    executor: judgment
+    inputs:
+      - "_acceptance/bo-xuong-kara/evidence/E11-ST-phongmau-hoi-thoai-1440-light.png"
+      - "_acceptance/bo-xuong-kara/evidence/E11-ST-phongmau-hoi-thoai-375-light.png"
+      - "_acceptance/bo-xuong-kara/evidence/E11-ST-phongmau-ban-nhap-1440-light.png"
+      - "_acceptance/bo-xuong-kara/evidence/E11-ST-phongmau-dang-soan-1440-light.png"
+      - "_acceptance/bo-xuong-kara/evidence/E11-ST-phongmau-dang-soan-375-light.png"
+      - "_acceptance/bo-xuong-kara/evidence/E11-ST-phongmau-ban-nhap-375-light.png"
+      - "_acceptance/bo-xuong-kara/evidence/E11-ST-phongmau-dang-soan-1440-dark.png"
+      - "docs/ai-ux.md"
+    question: "Nhìn bảy ảnh phòng mẫu — hội thoại, bản nháp, đang soạn, mỗi trạng thái ở 1440 và 375, thêm đang soạn nền tối — đối chiếu mục 2, 3, 5, 6, 7 của docs/ai-ux.md: (1) phân biệt ngay đâu là hội thoại, đâu là bản nháp không? (2) mỗi đề xuất có đúng một nút chính nhận ra ngay, và nhãn Kara chỉ một lần mỗi nhóm không? (3) ở ảnh đang soạn, người dùng hiểu vì sao các nút đang khoá không? Trả lời PASS chỉ khi cả ba đạt."
+    expected: "Hội đồng đọc ảnh và luật: hai vùng tách bạch, một nút chính mỗi đề xuất, nhãn một lần mỗi nhóm, lý do khoá đọc được."
+    evidence_required: [run_id, verdict, verifier, verified_at, rationale]
+
+  - id: E13
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.k1_tai_lieu
+    expected: "exit 0; rang/tai-lieu.mjs đọc bảng markdown thật (tách hàng theo |, không grep cả tệp): (a) bảng mục 10 của docs/ai-ux.md có hàng nêu đủ sáu tên KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact, và hàng luật 7 nêu KaraRetry; (b) ô «Làm gì» của hàng tu-vung-tac-tu ở bảng «Lộ trình áp luật» chứa 'bo-xuong-kara'; (c) bảng «What is in the tree today» của docs/chat-ui.md có hàng artifact.tsx và hàng task.tsx. In từng mục. Chiều đỏ ghim: chạy trên bản sao ai-ux.md bỏ KaraSteps khỏi hàng phải in 'thieu khoi: KaraSteps' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["docs/ai-ux.md", "docs/chat-ui.md", "_acceptance/bo-xuong-kara/rang/tai-lieu.mjs"]
+
+  - id: E14
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.k1_san_thiet_ke
+    expected: "exit 0; design-gate.mjs --mode static trên từng .tsx dưới packages/ui/src/components/kara (lệnh liệt bằng find, không gõ tay) cộng ai-elements/artifact.tsx và ai-elements/task.tsx; năm lỗi nền P0 bằng 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["packages/ui/src/components/kara/**", "packages/ui/src/components/ai-elements/artifact.tsx", "packages/ui/src/components/ai-elements/task.tsx"]
+
+  - id: E15
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.k1_ranh_gioi
+    expected: "exit 0; rang/ranh-gioi.mjs lấy merge-base của HEAD với origin/onehub (không có ref thì mã 2 có tên); git diff --name-only merge-base..HEAD: không tệp nào bắt đầu bằng apps/app/; git diff --numstat cho messages.ts, mo-coi.mjs, so-lech-chuan.md: cột xoá bằng 0 ở cả ba; in danh sách tệp đã chạm và số dòng thêm/xoá của ba tệp chung; diff rỗng (nhánh đã gộp) in 'RONG: nhanh da gop, khong con diff' và mã 0. Chiều đỏ ghim: --kiem-do-do (script đọc một danh sách tệp giả gồm apps/app/x.tsx và một numstat giả có 1 dòng xoá ở messages.ts) phải in 'cham apps/app: apps/app/x.tsx' và 'xoa dong o tep chung: packages/ui/src/lib/messages.ts' rồi mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/bo-xuong-kara/rang/ranh-gioi.mjs"]

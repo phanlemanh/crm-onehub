@@ -3,12 +3,14 @@
 import { ArchivedList } from "@crm/ui/components/archived-list";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import type { KetQuaKhoiPhuc } from "@crm/validation/to-chuc-luu-tru";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
+import { cauChanKhoiPhuc } from "./chan-khoi-phuc";
 import type { CayDuLieu } from "./kieu";
 import { useLamMoiToChuc } from "./lam-moi";
 
@@ -20,7 +22,8 @@ type Muc = {
 };
 
 export function DaLuuTruToChuc({ cay, sua }: { cay: CayDuLieu; sua: boolean }) {
-	const m = toChucMessages(useLocale());
+	const locale = useLocale();
+	const m = toChucMessages(locale);
 	const trpc = useTRPC();
 	const lamMoi = useLamMoiToChuc();
 	const [hoiXoa, setHoiXoa] = useState<Muc | null>(null);
@@ -60,7 +63,11 @@ export function DaLuuTruToChuc({ cay, sua }: { cay: CayDuLieu; sua: boolean }) {
 					const x = theoId.get(id);
 					if (!x || dangKhoi) return;
 					const xong = {
-						onSuccess: async () => {
+						onSuccess: async (kq: KetQuaKhoiPhuc) => {
+							if ("chan" in kq) {
+								toast.error(cauChanKhoiPhuc(locale, kq.chan));
+								return;
+							}
 							toast.success(dien(m.daKhoiPhucTen, { ten: x.name }));
 							await lamMoi();
 						},

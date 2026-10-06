@@ -31,6 +31,9 @@ const vi = {
 				"bo-phan": (n: number) =>
 					`Bộ phận còn ${n} mục tiêu ở kỳ đang mở — chuyển OKR hoặc bỏ mục tiêu trước khi lưu trữ.`,
 			},
+			lyDoKhuon: "Phòng ban này còn nằm trong khuôn {khuon} — sửa khuôn trước.",
+			lyDoNguoi: (n: number) =>
+				`Còn ${n} người có phòng ban chính ở đây — chuyển họ trước.`,
 			huy: "Huỷ",
 			luuTru: "Lưu trữ",
 			dangKiem: "Đang kiểm điều kiện lưu trữ…",
@@ -147,6 +150,10 @@ const en: OkrTaiCoCauMessages = {
 				"bo-phan": (n: number) =>
 					`This division still has ${n} ${n === 1 ? "objective" : "objectives"} in an open cycle — move the OKRs or drop the objectives before archiving.`,
 			},
+			lyDoKhuon:
+				"This department is still in the onboarding template {khuon} — edit the template first.",
+			lyDoNguoi: (n: number) =>
+				`${n} ${n === 1 ? "person still has" : "people still have"} this as their primary department — move them first.`,
 			huy: "Cancel",
 			luuTru: "Archive",
 			dangKiem: "Checking whether this can be archived…",

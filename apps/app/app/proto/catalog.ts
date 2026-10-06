@@ -898,6 +898,25 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "okr-to-chuc-va",
+		ten: "OKR và tổ chức vá — quản trị thêm mục tiêu lẻ, lý do chặn lưu trữ song ngữ, khôi phục đúng chỗ",
+		states: [
+			{
+				id: "ST-donvi-quantri-them",
+				nhan: "Theo đơn vị — quản trị không là trưởng thấy «Thêm mục tiêu»",
+			},
+			{ id: "ST-donvi-thanhvien", nhan: "Theo đơn vị — thành viên thường" },
+			{
+				id: "ST-luutru-chan-en",
+				nhan: "Hộp lưu trữ tiếng Anh — ba lý do chặn",
+			},
+			{
+				id: "ST-luutru-khoiphuc-chan",
+				nhan: "Đã lưu trữ — khôi phục bị từ chối",
+			},
+		],
+	},
+	{
 		slug: "khung-okr-truoc-r1",
 		ten: "Khung OKR trước R1 — bảng có lề, điện thoại đọc được, chip Kara cùng nhãn, thanh một hàng",
 		states: [
@@ -948,6 +967,17 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 				id: "ST-dau-trang-sau-loi",
 				nhan: "Nút đầu trang hiện sau lỗi tải đầu",
 			},
+		],
+	},
+	{
+		slug: "cua-vao-va",
+		ten: "Cửa vào vá — logo trang Quên mật khẩu, trang lỗi khi hệ thống trục trặc",
+		states: [
+			{ id: "ST-quen-mat-khau-nhap", nhan: "Quên mật khẩu — nhập email" },
+			{ id: "ST-quen-mat-khau-da-gui", nhan: "Quên mật khẩu — đã gửi" },
+			{ id: "ST-trang-loi-trong-khung", nhan: "Trang lỗi trong khung app" },
+			{ id: "ST-trang-loi-dang-thu", nhan: "Trang lỗi — đang thử lại" },
+			{ id: "ST-trang-loi-ngoai-khung", nhan: "Trang lỗi ngoài khung app" },
 		],
 	},
 ];
