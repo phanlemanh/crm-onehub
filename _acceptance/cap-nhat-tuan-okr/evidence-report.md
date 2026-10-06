@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 08d8837e1cc4222d84ebf0a880d0a64bdcbe5d64
+verified_commit: a8e229b52f9d3819c526d154271e98f18d9ebe28
 human_signoff: Manh Phan 2026-09-26
 ---
 
@@ -391,3 +391,7 @@ Round 4 (round này): lượt thử lại của round 3 trên cùng phạm vi, k
 ### Re-pin lần 1 — 2026-10-05, do sửa thước đỏ lô 2-4 (b3)
 run_id: repin-20261005T052409Z-94633
 sha: 08d8837e1cc4222d84ebf0a880d0a64bdcbe5d64 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 · diff chạm vật đo ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 2 — 2026-10-06, do sửa thước đỏ lô 2-4 (b3)
+run_id: repin-20261006T104542Z-41641
+sha: a8e229b52f9d3819c526d154271e98f18d9ebe28 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E6, E13, E16, E18, E23, E26, E29
