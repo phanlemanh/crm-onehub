@@ -11,8 +11,6 @@ evals:
     paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr-access.service.ts, packages/db/src/okr-tro-ly.ts, apps/api/test/tro-ly-okr-de-xuat-quyen.spec.ts, apps/api/test/tro-ly-okr-san.ts]
 
   - id: E2
-    status: not-run
-    superseded_by: gop-y-dung-cho#AC-11
     criterion: AC-1
     executor: test
     cmd: config:executors.test.tdx_man_nut
@@ -21,8 +19,6 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/trpc/cache.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx, apps/app/test/okr-sheet.dom.tsx]
 
   - id: E3
-    status: not-run
-    superseded_by: gop-y-dung-cho#AC-11
     criterion: AC-2
     executor: test
     cmd: config:executors.test.tdx_man_trang_thai
@@ -96,8 +92,6 @@ evals:
     paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.service.ts, apps/api/test/tro-ly-okr-quyet.spec.ts, apps/api/test/tro-ly-okr-san.ts]
 
   - id: E10
-    status: not-run
-    superseded_by: gop-y-dung-cho#AC-7
     criterion: AC-6
     executor: test
     cmd: config:executors.test.tdx_man_vet
@@ -278,8 +272,6 @@ evals:
     paths: [CONTEXT.md, docs/api.md, docs/agent.md, "apps/agent/agent/**", "apps/api/src/okr/**", "packages/validation/src/**", "packages/ui/src/components/**"]
 
   - id: E29
-    status: not-run
-    superseded_by: gop-y-dung-cho#AC-14
     criterion: AC-2
     executor: script
     cmd: config:executors.script.tdx_san_thiet_ke
