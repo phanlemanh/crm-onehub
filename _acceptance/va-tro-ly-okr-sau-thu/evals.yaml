@@ -89,17 +89,17 @@ evals:
     criterion: AC-10
     executor: test
     cmd: config:executors.test.vtl_hai_giong
-    expected: "exit 0; bài DOM apps/app/test/tro-ly-okr-gop-y.dom.tsx -t hai-giong: HopThoaiKr thật với tRPC giả trả troLyDanhSach rỗng đã nộp; ca KR tên là việc ('Gọi 50 đối tác') → gợi ý tĩnh hiện VÀ mô tả rỗng là rongCoGoiY; ca KR tên không là việc → không gợi ý VÀ mô tả rongMoTaKr; ca KR có gợi ý thieu-khoi-diem (khởi điểm 0) cũng ra rongCoGoiY (điều kiện là có gợi ý bất kỳ, không riêng kr-la-viec). HopThoaiMucTieu không có gợi ý tĩnh: ca rỗng giữ rongMoTa (đối chứng không đổi). Chữ rút từ okrGopYMessages. Chiều đỏ: bản sao CotGopY bỏ prop coGoiYTinh → ca có gợi ý ra 'đã đọc ổn', thông điệp ghim 'hai giong: kr'."
+    expected: "exit 0; bài DOM apps/app/test/hop-thoai-kr-sau-thu.dom.tsx -t hai-giong: HopThoaiKr thật với tRPC giả; ca KR tên là việc ('Gọi 50 cuộc mỗi tuần') → gợi ý tĩnh [data-hoi-chat-luong] hiện; ca KR tên không là việc → không gợi ý; ca KR thieu-khoi-diem (khởi điểm 0) → gợi ý hiện. Phần cột góp ý (rongCoGoiY, rongMoTaKr, rongMoTa của CotGopY) không còn đối tượng: 081c9b792 (gop-y-dung-cho) gỡ cột góp ý khỏi hai hộp Sửa và xoá tro-ly-okr-gop-y.dom.tsx. Chiều đỏ: bỏ gợi ý tĩnh khỏi HopThoaiKr thì ca có gợi ý đỏ 'goi y tinh: <ca>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/hop-thoai-kr-sau-thu.dom.tsx]
 
   - id: E12
     criterion: AC-11
     executor: test
     cmd: config:executors.test.vtl_chu_nho
-    expected: "exit 0; cùng tệp -t chu-nho: HopThoaiKr với xuHuongKr giả và KR có unit 'tỷ đồng' → dòng xu hướng kết thúc bằng '<ước> tỷ đồng'; KR unit rỗng → không có đơn vị và không khoảng trắng thừa ở cuối. CotGopY sau khi quyết hết mọi dòng (nhan, bo-qua qua tRPC giả) → đầu cột là daQuyetHet, không còn chuỗi soDong('0'). Chiều đỏ: bản sao bỏ tham số đơn vị → '6,61' không có 'tỷ đồng', thông điệp ghim 'xu huong thieu don vi'."
+    expected: "exit 0; cùng tệp -t chu-nho: HopThoaiKr với xuHuongKr giả và KR có unit 'cuộc' → dòng xu hướng đúng bằng okrGopYMessages.xuHuong('+12', '180', 'cuộc'), kết thúc bằng '180 cuộc'; KR unit rỗng → kết thúc bằng 'khoảng 180', không đơn vị, không khoảng trắng thừa. Phần đầu cột daQuyetHet của CotGopY không còn đối tượng (081c9b792 gỡ cột). Chiều đỏ: bỏ tham số đơn vị ở DongXuHuong → thông điệp ghim 'xu huong thieu don vi'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/tro-ly-okr-gop-y.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/hop-thoai-kr-sau-thu.dom.tsx]
 
   - id: E13
     criterion: AC-12
@@ -122,7 +122,7 @@ evals:
     executor: script
     cmd: config:executors.script.vtl_luat_kho
     expected: >-
-      exit 0; _acceptance/va-tro-ly-okr-sau-thu/rang/luat-kho.mjs đo TRẠNG THÁI 19 tệp mã (không phải
+      exit 0; _acceptance/va-tro-ly-okr-sau-thu/rang/luat-kho.mjs đo TRẠNG THÁI 18 tệp mã (không phải
       test) mà lượt này chạm, khai đích danh trong script, theo sáu luật: không chú thích (quét cú pháp
       // và /* ngoài chuỗi); tệp apps/api không đọc AI_GATEWAY_API_KEY, VERCEL_OIDC_TOKEN, không gọi
       createGateway, getVercelOidcToken, @ai-sdk/gateway; hai tên biến khoá (đọc từ TRO_LY_OKR_KHOA
@@ -137,7 +137,7 @@ evals:
       tệp giao diện. Known limit: biến thể chữ không dấu hay gạch nối của «tác nhân» không bắt; tái
       lập bằng `grep -rniE "tac[ -]?nhan" apps/app/lib/messages`.
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [apps/agent/agent/lib/capabilities.ts, apps/agent/agent/lib/mo-hinh-khoa.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/agent/lib/okr/doc.ts, apps/agent/agent/lib/okr/goi-ngu-canh.ts, apps/agent/agent/lib/okr/kiem-san-sang.ts, apps/agent/agent/lib/okr/mo-hinh.ts, apps/agent/agent/lib/okr/viec.ts, apps/api/src/okr/okr.contracts.ts, apps/api/src/okr/tro-ly.service.ts, "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/messages/tro-ly-okr.ts, packages/db/src/okr-tro-ly-danh-muc.ts, packages/db/src/okr-tro-ly.ts, packages/validation/src/okr-kiem.ts, packages/validation/src/okr-tro-ly.ts, _acceptance/va-tro-ly-okr-sau-thu/rang/luat-kho.mjs]
+    paths: [apps/agent/agent/lib/capabilities.ts, apps/agent/agent/lib/mo-hinh-khoa.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/agent/lib/okr/doc.ts, apps/agent/agent/lib/okr/goi-ngu-canh.ts, apps/agent/agent/lib/okr/kiem-san-sang.ts, apps/agent/agent/lib/okr/mo-hinh.ts, apps/agent/agent/lib/okr/viec.ts, apps/api/src/okr/okr.contracts.ts, apps/api/src/okr/tro-ly.service.ts, "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/lib/messages/tro-ly-okr.ts, packages/db/src/okr-tro-ly-danh-muc.ts, packages/db/src/okr-tro-ly.ts, packages/validation/src/okr-kiem.ts, packages/validation/src/okr-tro-ly.ts, _acceptance/va-tro-ly-okr-sau-thu/rang/luat-kho.mjs]
 
   - id: E17
     criterion: AC-13
@@ -151,11 +151,15 @@ evals:
     expected: >-
       PASS khi cả hai tài liệu nói đủ các ý; FAIL nêu tài liệu và ý còn thiếu.
     evidence_required: [run_id, verdict, rationale]
+    paths:
+      - "docs/agent.md"
+      - "docs/environment.md"
+      - "_acceptance/va-tro-ly-okr-sau-thu/contract.md"
 
   - id: E15
     criterion: AC-10
     executor: script
     cmd: config:executors.script.vtl_san_thiet_ke
-    expected: "exit 0; design-gate --mode static của plugin acceptance-gate chạy trên từng tệp giao diện lượt này chạm (cot-gop-y.tsx, hop-thoai-kr.tsx, hop-thoai-muc-tieu.tsx, the-tro-ly-okr.tsx) và không tệp nào có P0 (bán kính, màu, khoảng cách tự đặt, className đè thành phần của packages/ui). Chiều đỏ là của chính design-gate (bộ ca của kit); lượt này không dựng thêm."
+    expected: "exit 0; design-gate --mode static của plugin acceptance-gate chạy trên từng tệp giao diện lượt này chạm (hop-thoai-kr.tsx, hop-thoai-muc-tieu.tsx, the-tro-ly-okr.tsx) và không tệp nào có P0 (bán kính, màu, khoảng cách tự đặt, className đè thành phần của packages/ui). Chiều đỏ là của chính design-gate (bộ ca của kit); lượt này không dựng thêm."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx"]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx"]
