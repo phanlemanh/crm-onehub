@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 68478e877021999d6c540e4dd4a93e6d57549890
+verified_commit: c57cf22c6193ebbbdd903cf74f0b1fdb3c7022f2
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -255,3 +255,7 @@ sha: 255a3688eaa146901ac98df58fc8957d22dba7e9 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-02, do hoá cũ do sửa mã kiểm (agent-okr Node 24, api nguon-khoa) cho CI PR #232
 run_id: repin-20261002T070749Z-51832
 sha: 68478e877021999d6c540e4dd4a93e6d57549890 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E1, E11, E13, E14 · AC không có chốt máy: AC-13, AC-14
+
+### Re-pin lần 7 — 2026-10-06, do nhận kit 2.24.0 — eval máy khai superseded_by theo BANG-THAY-THE của gop-y-dung-cho
+run_id: repin-20261006T163931Z-72362
+sha: c57cf22c6193ebbbdd903cf74f0b1fdb3c7022f2 · suites: 7 lệnh exit 0 · evals: 3/3 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E4, E5, E6, E7, E8, E9, E15, E16 · thay bởi hồ sơ đã ký: E3→gop-y-dung-cho#AC-7, E4→gop-y-dung-cho#AC-5, E5→gop-y-dung-cho#AC-5, E6→gop-y-dung-cho#AC-12, E7→gop-y-dung-cho#AC-10, E8→gop-y-dung-cho#AC-12, E9→gop-y-dung-cho#AC-11, E15→gop-y-dung-cho#AC-14, E16→gop-y-dung-cho#AC-12 · ngoài làn máy: E1, E11, E13, E14 · diff chạm vật đo ngoài làn máy: E1, E11, E13, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-3, AC-4, AC-5, AC-6, AC-7, AC-8, AC-9, AC-11, AC-13, AC-14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
