@@ -7,6 +7,7 @@ import { execFileSync } from 'node:child_process';
 import { phienCuaCwd, trongWorktree } from '../dot.mjs';
 import { chayHook } from '../hook-chan-s4.mjs';
 import { chamNhip } from '../hook-nhip.mjs';
+import { capLuot } from '../lich.mjs';
 import { motNhip } from '../phat-lich.mjs';
 import { xetYeuCau } from '../yeu-cau.mjs';
 
@@ -128,4 +129,54 @@ test('worktree lồng: cwd trong worktree git lồng không thuộc khoá của 
   assert.deepEqual(chamNhip({ cwd: longThuc }, { timDot: () => dot }), []);
   assert.equal(fs.existsSync(path.join(dot, 'khoa', 's4', 'nhip')), false);
   assert.deepEqual(chamNhip({ cwd: chinh }, { timDot: () => dot }), ['s4']);
+});
+
+test('cham-tep bảo vệ: migrations và chung_chi_them → can_phan đúng lý do; tệp thường cùng ngữ cảnh → duyệt', () => {
+  const cfg = { ...CFG, bao_ve: ['packages/db/prisma/schema.prisma', 'packages/db/prisma/migrations/**'] };
+  const hv = { day: [{ id: 'P1' }, { id: 'P2' }], hang: [{ slug: 'a', day: 'P1', ranh_gioi: ['apps/a/**'], chung_chi_them: ['apps/app/lib/messages/*.ts'] }] };
+  const nc = { hangViec: hv, nhanhChamTep: new Map(), nhanhCua: () => null, yeuCauGanDay: [], ranhGioiThem: {} };
+  const xet = (tep) => {
+    const kq = xetYeuCau({ id: 'y', phien: 'P1', loai: 'cham-tep', noi_dung: { tep: [tep] }, luc: 't' }, nc, cfg);
+    return [kq.ket_qua, kq.ly_do];
+  };
+  assert.deepEqual(xet('packages/db/prisma/migrations/2026/x.sql'), ['can_phan', 'packages/db/prisma/migrations/2026/x.sql thuộc danh sách bảo vệ']);
+  assert.deepEqual(xet('packages/db/prisma/schema.prisma'), ['can_phan', 'packages/db/prisma/schema.prisma thuộc danh sách bảo vệ']);
+  assert.deepEqual(xet('apps/app/lib/messages/okr.ts'), ['can_phan', 'apps/app/lib/messages/okr.ts thuộc danh sách bảo vệ']);
+  assert.equal(xet('apps/app/record-parts.tsx')[0], 'duyet');
+});
+
+test('chu.json khi cấp: cap_luc là giờ nhịp và han_thue_den = cap_luc + han_thue_phut theo loại', async () => {
+  const { dot, w1, w2 } = dung();
+  ghi(path.join(dot, 'xin', 'P1-s4.json'), { phien: 'P1', slug: 'a', loai: 's4', luc: '2026-10-05T11:00:00Z', worktree: w1 });
+  ghi(path.join(dot, 'xin', 'P2-duong-nen.json'), { phien: 'P2', slug: 'b', loai: 'duong-nen', luc: '2026-10-05T11:00:00Z', worktree: w2 });
+  await motNhip(dot, IO);
+  for (const [tn, phut] of [['s4', 90], ['duong-nen', 40]]) {
+    const chu = JSON.parse(fs.readFileSync(path.join(dot, 'khoa', tn, 'chu.json'), 'utf8'));
+    assert.equal(chu.cap_luc, new Date(NOW).toISOString(), tn);
+    assert.equal(Date.parse(chu.han_thue_den) - Date.parse(chu.cap_luc), phut * 60 * 1000, tn);
+  }
+});
+
+test('phát lại kẹt chéo: luật tự nhường chạy thật trên cùng đơn → 0 lượt, bỏ một mắt xích → 1; capLuot → đúng 1', () => {
+  const nhuong = { P3: 'P1', P1: 'P2', P2: 'P4', P4: 'P3' };
+  const luatTuNhuong = (don) => don.filter((d) => !don.some((k) => k.phien === nhuong[d.phien]));
+  const donXin = ['P1', 'P2', 'P3', 'P4'].map((p, i) => ({ phien: p, slug: `s${i}`, loai: 's4', luc: `2026-10-04T10:3${i}:00Z`, worktree: `/w/${p}` }));
+  assert.equal(luatTuNhuong(donXin).length, 0);
+  assert.deepEqual(luatTuNhuong(donXin.filter((d) => d.phien !== 'P4')).map((d) => d.phien), ['P2']);
+  const kq = capLuot({ donXin, dangGiu: { s4: null, 'duong-nen': null, merge: null }, giamTai: false, hangViec: { day: [], hang: [] } });
+  assert.deepEqual(kq.map((c) => [c.taiNguyen, c.don.phien]), [['s4', 'P1']]);
+});
+
+test('viec-phu ở nhịp thật: yêu cầu đầu → can_phan cho giám sát; yêu cầu trùng sau → gộp với id yêu cầu cũ', async () => {
+  const { dot } = dung();
+  ghi(path.join(dot, 'yeu-cau', 'P1-1.json'), { phien: 'P1', loai: 'viec-phu', hang: 'a', noi_dung: { kho: 'crm', tieu_de: 'Sửa ca chập chờn' }, luc: '2026-10-05T11:00:00Z' });
+  await motNhip(dot, IO);
+  assert.equal(fs.existsSync(path.join(dot, 'tra-loi', 'P1-1.json')), false);
+  const dau = suKien(dot).filter((s) => s.loai === 'yeu-cau' && s.id === 'P1-1');
+  assert.deepEqual(dau.map((s) => [s.kieu, s.can_phan, s.ly_do]), [['viec-phu', true, 'việc phụ mới']]);
+  ghi(path.join(dot, 'yeu-cau', 'P2-1.json'), { phien: 'P2', loai: 'viec-phu', hang: 'b', noi_dung: { kho: 'crm', tieu_de: 'sửa ca  chập chờn' }, luc: '2026-10-05T11:30:00Z' });
+  await motNhip(dot, IO);
+  const tl = JSON.parse(fs.readFileSync(path.join(dot, 'tra-loi', 'P2-1.json'), 'utf8'));
+  assert.deepEqual([tl.ket_qua, tl.boi, tl.voi, tl.ly_do], ['gop', 'may', 'P1-1', 'trùng yêu cầu P1-1']);
+  assert.equal(suKien(dot).filter((s) => s.loai === 'yeu-cau' && s.id === 'P1-1' && s.can_phan).length, 1);
 });

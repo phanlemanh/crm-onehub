@@ -11,7 +11,7 @@ const TRAN_LENH_MS = 60_000;
 const DOT_BIEN = [
 	{ ma: "M1", tep: "lich.mjs", tim: "d.loai === 'ghim-lai' && d.mo_merge ? 0 : 1", thay: "1", ghim: [["lich", "xepHang: ghim-lai mở merge chen lên trước mọi đơn"]] },
 	{ ma: "M1b", tep: "lich.mjs", tim: "mocCua(hangViec, d.slug), d.luc]", thay: "d.luc]", ghim: [["lich", "xepHang: mốc sớm trước, rồi giờ xin"], ["phat-lich", "cấp lượt theo mốc: P1 (mốc 12/10) trước P2 (14/10); đơn được xoá; chu.json đủ trường"]] },
-	{ ma: "M2", tep: "lich.mjs", tim: "    ban.add(tn);\n", thay: "", ghim: [["lich", "capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4"], ["lich", "phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một"]] },
+	{ ma: "M2", tep: "lich.mjs", tim: "    ban.add(tn);\n", thay: "", ghim: [["lich", "capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4"], ["lich", "phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một"], ["bien", "phát lại kẹt chéo: luật tự nhường chạy thật trên cùng đơn → 0 lượt, bỏ một mắt xích → 1; capLuot → đúng 1"]] },
 	{ ma: "M2b", tep: "phat-lich.mjs", tim: "    if (!fs.existsSync(d)) continue;", thay: "    if (!fs.existsSync(d)) { dangGiu[tn] = { phien: '?' }; continue; }", ghim: [["phat-lich", "nhả khoá → nhịp sau cấp cho người kế (không bao giờ trống khi còn đơn)"]] },
 	{ ma: "M3", tep: "lich.mjs", tim: "nhipTuoiPhut !== null && nhipTuoiPhut < cfg.nhip_cu_phut", thay: "true", ghim: [["lich", "xetHanThue: còn hạn giữ; hết hạn + nhịp mới gia hạn; hết hạn + nhịp cũ thu hồi"], ["phat-lich", "hạn thuê: hết hạn + nhịp cũ → thu hồi + can_phan; thư mục khoá trống quá 60″ → thu hồi"]] },
 	{ ma: "M12", tep: "phat-lich.mjs", tim: "mtimeMs > KHOA_TRONG_MS", thay: "mtimeMs > Infinity", ghim: [["phat-lich", "hạn thuê: hết hạn + nhịp cũ → thu hồi + can_phan; thư mục khoá trống quá 60″ → thu hồi"]] },
@@ -31,6 +31,9 @@ const DOT_BIEN = [
 	{ ma: "M19", tep: "yeu-cau.mjs", tim: "  if (!Array.isArray(tep) || !tep.every((t) => typeof t === 'string')) return { ket_qua: 'can_phan', ly_do: 'tep phải là danh sách đường dẫn' };\n", thay: "", ghim: [["bien", "yêu cầu cham-tep với tep là chuỗi → yeu-cau/hong/ ở nhịp, can_phan ở hàm định tuyến"]] },
 	{ ma: "M17", tep: "yeu-cau.mjs", tim: "    if (nguoiNoi) return { ket_qua: 'can_phan', ly_do: `${t} đã được duyệt cho ${nguoiNoi[0]}` };\n", thay: "", ghim: [["bien", "cham-tep: tệp đã duyệt cho phiên khác → can_phan; chính phiên đó → duyệt; cả khi duyệt trong cùng nhịp"]] },
 	{ ma: "M18", tep: "dot.mjs", tim: "  return goc === worktree || !goc.startsWith(`${worktree}${path.sep}`);", thay: "  return true;", ghim: [["bien", "worktree lồng: cwd trong worktree git lồng không thuộc khoá của checkout chính"]] },
+	{ ma: "M20", tep: "yeu-cau.mjs", tim: "    if (khopMot(baoVe, t)) return { ket_qua: 'can_phan', ly_do: `${t} thuộc danh sách bảo vệ` };\n", thay: "", ghim: [["bien", "cham-tep bảo vệ: migrations và chung_chi_them → can_phan đúng lý do; tệp thường cùng ngữ cảnh → duyệt"]] },
+	{ ma: "M21", tep: "phat-lich.mjs", tim: "      cap_luc: new Date(nowMs).toISOString(),\n", thay: "", ghim: [["bien", "chu.json khi cấp: cap_luc là giờ nhịp và han_thue_den = cap_luc + han_thue_phut theo loại"]] },
+	{ ma: "M22", tep: "phat-lich.mjs", tim: ".map((y) => ({ ...y, id: y._ten }))", thay: "", ghim: [["bien", "viec-phu ở nhịp thật: yêu cầu đầu → can_phan cho giám sát; yêu cầu trùng sau → gộp với id yêu cầu cũ"]] },
 ];
 
 const ghi = (s) => process.stdout.write(`${s}\n`);

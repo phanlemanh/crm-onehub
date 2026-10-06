@@ -132,7 +132,7 @@ function xuLyYeuCau(thuMuc, cfg, hangViec, io, trangThaiCu, nowMs) {
     ranhGioiThem: docJson(pThem, {}),
     nhanhChamTep: nhanhMo(io, cfg),
     nhanhCua: () => null,
-    yeuCauGanDay: tatCa.filter((y) => nowMs - Date.parse(y.luc) < MOT_NGAY_MS),
+    yeuCauGanDay: tatCa.filter((y) => nowMs - Date.parse(y.luc) < MOT_NGAY_MS).map((y) => ({ ...y, id: y._ten })),
   };
   for (const y of choXet) {
     const kq = xetYeuCau({ ...y, id: y._ten }, nguCanh, cfg);

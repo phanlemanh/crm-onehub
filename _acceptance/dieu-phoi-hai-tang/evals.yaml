@@ -12,14 +12,14 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.dph_phat_lich
-    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'cấp lượt theo mốc: P1 (mốc 12/10) trước P2 (14/10); đơn được xoá; chu.json đủ trường' (chu.json so đủ phien, slug, loai, worktree, han_thue_den = cap_luc + 90 phút; đơn P2 còn; có sự kiện cap của P1). Chiều đỏ: M1b của bộ đột biến dph_dot_bien làm đúng ca này đỏ (E25)."
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'cấp lượt theo mốc: P1 (mốc 12/10) trước P2 (14/10); đơn được xoá; chu.json đủ trường' (chu.json so đủ phien, slug, loai, worktree, han_thue_den = cap_luc + 90 phút; đơn P2 còn; có sự kiện cap của P1). Chiều đỏ: M1b của bộ đột biến dph_dot_bien làm đúng ca này đỏ (E25). Round 3 (sửa finding round 2): quan hệ cap_luc ↔ han_thue_den đo ở bien.test.mjs::'chu.json khi cấp: cap_luc là giờ nhịp và han_thue_den = cap_luc + han_thue_phut theo loại' (cap_luc = giờ nhịp; han_thue_den − cap_luc = 90 phút cho s4 và 40 phút cho duong-nen), chạy trong E24; chiều đỏ M21."
     paths: ["scripts/dieu-phoi/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E3
     criterion: AC-2
     executor: test
     cmd: config:executors.test.dph_lich
-    expected: "exit 0; lich.test.mjs xanh ở ca 'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một' (luật cũ cấp 0, capLuot cấp đúng 1). Chiều đỏ: M2 của bộ đột biến dph_dot_bien (E26)."
+    expected: "exit 0; lich.test.mjs xanh ở ca 'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một' (luật cũ cấp 0, capLuot cấp đúng 1). Chiều đỏ: M2 của bộ đột biến dph_dot_bien (E26). Round 3: đối chứng luật cũ chạy thật ở bien.test.mjs::'phát lại kẹt chéo: luật tự nhường chạy thật trên cùng đơn → 0 lượt, bỏ một mắt xích → 1; capLuot → đúng 1' — luật tự nhường trên bốn đơn khác slug nhường vòng P3→P1→P2→P4→P3 cấp 0, bỏ P4 thì cấp đúng P2 (chứng luật không hằng 0), capLuot trên cùng bốn đơn cấp đúng [s4, P1]; chạy trong E24; chiều đỏ M2."
     paths: ["scripts/dieu-phoi/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E4
@@ -89,14 +89,14 @@ evals:
     criterion: AC-9
     executor: test
     cmd: config:executors.test.dph_yeu_cau
-    expected: "exit 0; yeu-cau.test.mjs xanh ở bảy ca, gồm 'cham-tep: ba ca đỏ, mỗi ca đúng lý do' (regex 'danh sách bảo vệ', 'ranh giới P2', 'đang được nhánh feat/P2 sửa' và không nhắc feat/P1), 'cham-tep: nhánh của chính phiên xin không tính là vướng (chiều im)', 'viec-phu: trùng trong 24 giờ …', 's4-gom/gia-han: trong trần → máy; vượt hoặc thiếu ước → can_phan', 'can-nguoi → can_phan dich owner; …'. Chiều đỏ: M8 của bộ đột biến dph_dot_bien (E32)."
+    expected: "exit 0; yeu-cau.test.mjs xanh ở bảy ca, gồm 'cham-tep: ba ca đỏ, mỗi ca đúng lý do' (regex 'danh sách bảo vệ', 'ranh giới P2', 'đang được nhánh feat/P2 sửa' và không nhắc feat/P1), 'cham-tep: nhánh của chính phiên xin không tính là vướng (chiều im)', 'viec-phu: trùng trong 24 giờ …', 's4-gom/gia-han: trong trần → máy; vượt hoặc thiếu ước → can_phan', 'can-nguoi → can_phan dich owner; …'. Chiều đỏ: M8 của bộ đột biến dph_dot_bien (E32). Round 3: danh sách bảo vệ đo bằng quan hệ ở bien.test.mjs::'cham-tep bảo vệ: migrations và chung_chi_them → can_phan đúng lý do; tệp thường cùng ngữ cảnh → duyệt' — deepEqual [ket_qua, ly_do] = [can_phan, '<tệp> thuộc danh sách bảo vệ'] cho migrations/**, schema.prisma, chung_chi_them messages/*.ts, và tệp thường → duyet; chạy trong E24; chiều đỏ M20."
     paths: ["scripts/dieu-phoi/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E14
     criterion: AC-9
     executor: test
     cmd: config:executors.test.dph_phat_lich
-    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'yêu cầu: chạm tệp được máy duyệt → tra-loi + ranh-gioi-them; việc cần phán → một can_phan, không lặp' (ranh-gioi-them.json đúng {P1: [apps/x.ts]}, P1-2 không có tra-loi, đúng một sự kiện can_phan qua hai nhịp). Chiều đỏ: M8b của bộ đột biến dph_dot_bien (E32)."
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'yêu cầu: chạm tệp được máy duyệt → tra-loi + ranh-gioi-them; việc cần phán → một can_phan, không lặp' (ranh-gioi-them.json đúng {P1: [apps/x.ts]}, P1-2 không có tra-loi, đúng một sự kiện can_phan qua hai nhịp). Chiều đỏ: M8b của bộ đột biến dph_dot_bien (E32). Round 3: viec-phu ở nhịp thật đo ở bien.test.mjs::'viec-phu ở nhịp thật: yêu cầu đầu → can_phan cho giám sát; yêu cầu trùng sau → gộp với id yêu cầu cũ' — yêu cầu đầu không có tra-loi và có đúng một sự kiện can_phan 'việc phụ mới'; yêu cầu trùng sau có tra-loi gop, boi may, voi 'P1-1', ly_do 'trùng yêu cầu P1-1'; chạy trong E24; chiều đỏ M22."
     paths: ["scripts/dieu-phoi/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E15
@@ -178,21 +178,21 @@ evals:
     criterion: AC-15
     executor: test
     cmd: config:executors.test.dph_tat_ca
-    expected: "exit 0; bun run test:dieu-phoi chạy node --test trên mẫu 'scripts/dieu-phoi/test/*.test.mjs', báo 'tests' ≥ 54 và 'fail 0'; đủ mười tệp test: nen, lich, suc-khoe, yeu-cau, hook-chan-s4, hook-nhip-cho-nguoi, bang, phat-lich, cli, bien."
+    expected: "exit 0; bun run test:dieu-phoi chạy node --test trên mẫu 'scripts/dieu-phoi/test/*.test.mjs', báo 'tests' ≥ 58 và 'fail 0'; đủ mười tệp test: nen, lich, suc-khoe, yeu-cau, hook-chan-s4, hook-nhip-cho-nguoi, bang, phat-lich, cli, bien."
     paths: ["scripts/dieu-phoi/**", "package.json"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E25
     criterion: AC-1
     executor: script
     cmd: config:executors.script.dph_dot_bien
-    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M1 (xepHang bỏ ưu tiên ghim-lai mở merge) phải làm đỏ lich.test.mjs::'xepHang: ghim-lai mở merge chen lên trước mọi đơn'; M1b (xepHang bỏ mốc khỏi khoá xếp) phải làm đỏ lich.test.mjs::'xepHang: mốc sớm trước, rồi giờ xin' và phat-lich.test.mjs::'cấp lượt theo mốc: P1 (mốc 12/10) trước P2 (14/10); đơn được xoá; chu.json đủ trường'; M2 (capLuot bỏ đánh dấu tài nguyên đã cấp) phải làm đỏ lich.test.mjs::'capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4' và lich.test.mjs::'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M1 (xepHang bỏ ưu tiên ghim-lai mở merge) phải làm đỏ lich.test.mjs::'xepHang: ghim-lai mở merge chen lên trước mọi đơn'; M1b (xepHang bỏ mốc khỏi khoá xếp) phải làm đỏ lich.test.mjs::'xepHang: mốc sớm trước, rồi giờ xin' và phat-lich.test.mjs::'cấp lượt theo mốc: P1 (mốc 12/10) trước P2 (14/10); đơn được xoá; chu.json đủ trường'; M2 (capLuot bỏ đánh dấu tài nguyên đã cấp) phải làm đỏ lich.test.mjs::'capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4' và lich.test.mjs::'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>'). Round 3: thêm M21 (bỏ cap_luc khỏi chu.json) phải làm đỏ bien.test.mjs::'chu.json khi cấp: cap_luc là giờ nhịp và han_thue_den = cap_luc + han_thue_phut theo loại'."
     paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E26
     criterion: AC-2
     executor: script
     cmd: config:executors.script.dph_dot_bien
-    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M2 (capLuot bỏ đánh dấu tài nguyên đã cấp) phải làm đỏ lich.test.mjs::'capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4' và lich.test.mjs::'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một'; M2b (bộ phát lịch coi khoá vắng là đang giữ) phải làm đỏ phat-lich.test.mjs::'nhả khoá → nhịp sau cấp cho người kế (không bao giờ trống khi còn đơn)'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M2 (capLuot bỏ đánh dấu tài nguyên đã cấp) phải làm đỏ lich.test.mjs::'capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4' và lich.test.mjs::'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một'; M2b (bộ phát lịch coi khoá vắng là đang giữ) phải làm đỏ phat-lich.test.mjs::'nhả khoá → nhịp sau cấp cho người kế (không bao giờ trống khi còn đơn)'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>'). Round 3: M2 còn phải làm đỏ bien.test.mjs::'phát lại kẹt chéo: luật tự nhường chạy thật trên cùng đơn → 0 lượt, bỏ một mắt xích → 1; capLuot → đúng 1'."
     paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E27
@@ -234,7 +234,7 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.dph_dot_bien
-    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M8 (cham-tep không loại nhánh của chính phiên xin) phải làm đỏ yeu-cau.test.mjs::'cham-tep: nhánh của chính phiên xin không tính là vướng (chiều im)'; M8b (bộ phát lịch quên các yêu cầu đã báo) phải làm đỏ phat-lich.test.mjs::'yêu cầu: chạm tệp được máy duyệt → tra-loi + ranh-gioi-them; việc cần phán → một can_phan, không lặp'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M8 (cham-tep không loại nhánh của chính phiên xin) phải làm đỏ yeu-cau.test.mjs::'cham-tep: nhánh của chính phiên xin không tính là vướng (chiều im)'; M8b (bộ phát lịch quên các yêu cầu đã báo) phải làm đỏ phat-lich.test.mjs::'yêu cầu: chạm tệp được máy duyệt → tra-loi + ranh-gioi-them; việc cần phán → một can_phan, không lặp'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>'). Round 3: thêm M20 (bỏ kiểm danh sách bảo vệ) phải làm đỏ bien.test.mjs::'cham-tep bảo vệ: migrations và chung_chi_them → can_phan đúng lý do; tệp thường cùng ngữ cảnh → duyệt', và M22 (bỏ gán id cho yêu cầu gần đây ở bộ phát lịch) phải làm đỏ bien.test.mjs::'viec-phu ở nhịp thật: yêu cầu đầu → can_phan cho giám sát; yêu cầu trùng sau → gộp với id yêu cầu cũ'."
     paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E33
