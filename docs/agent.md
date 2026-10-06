@@ -1243,9 +1243,20 @@ Ba điều đo được trên eve 0.29.4 ở lượt này, đừng thiết kế 
   `subagent:<phiên cha>:<callId>` ở chỉ dẫn động và ở hook (`lib/phien-con.ts`), rồi
   đọc hàng `okr-*` có `sessionId` đó.
 - **`modelOptions.providerOptions` không tới model là đối tượng.** Model đã bọc tự trộn
-  ZDR, thẻ và `thinkingLevel` trong middleware. Với lời gọi eve dựng cho phiên con,
-  Gemini 3.8 Flash có lúc suy nghĩ tới trần 2.000 token rồi trả rỗng (5/8); câu «Act at
-  once…» đầu phần việc trong `instructions.md` đưa về 0/24.
+  ZDR, thẻ và `thinkingLevel` trong middleware.
+- **Phiên con không khai khuôn kết quả (07/10).** Khi `tro_ly_okr` khai `outputSchema`, eve
+  thêm tool `final_output` («Call it exactly once, when you are done»), đá với lệnh «câu
+  đầu là `nop_de_xuat`»; Gemini 3.8 Flash cân nhắc hai lệnh tới hết trần 2.000 token rồi trả
+  rỗng (`finishReason: length`). Đo 07/10: 17/88 lời gọi đầu rỗng trong trace E22 (7/47 từ
+  27–30/09 — câu «Act at once…» không chữa được, số 0/24 cũ là mẫu nhỏ); trên một đầu vào
+  khó, chỉ `nop_de_xuat` 0/22 hết trần, thêm `final_output` 5/8. Nay phiên con không có
+  khuôn kết quả; `nop_de_xuat` và `nop_tom_tat` tự đóng việc với kết cục (`da-nop`,
+  `khong-lam-duoc:<mã>`), hook `okr-uy-quyen` chỉ đóng việc phiên con bỏ dở (`hong:<mã>`,
+  `hong:khong-nop`). `thinkingLevel: minimal` bị Vertex từ chối và `thinkingBudget` bị bỏ
+  qua, nên không có cách chặn độ dài suy nghĩ — chỉ có cách bỏ mâu thuẫn. Trace eve giữ
+  `ai.response.finish_reason` và `ai.response.tool_calls` ở span `ai.streamText.doStream`
+  (`apps/agent/.eve/traces/v1`); `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
+  đọc chúng.
 - **Trần và lease theo loại việc (lượt 9c).** Việc góp ý (`okr-de-xuat`) giữ 2.000 token
   mỗi lời gọi và lease 30 giây. Việc tóm tắt (`okr-tom-tat-tuan`) được 8.000 token mỗi
   lời gọi, 16.000 mỗi phiên, lease 3 phút (`VIEC_OKR.leaseTomTatMs`). Vì sao: Gemini 3.8
@@ -1364,8 +1375,8 @@ Sau khi nhánh gộp vào `onehub`, merge-base đổi nên phép giao rỗng —
 Phần việc lớn của lượt này nằm ở tệp OneHub tự dựng, không có đường dẫn trùng ở
 `release` nên không vào bảng trên. Tác tử: `apps/agent/agent/lib/okr/lich-tom-tat.ts`,
 `nop-tom-tat.ts`, `chi-dan-tom-tat.ts` (mới), `viec.ts`, `doc.ts`, `config.ts`,
-`goi-ngu-canh.ts` (9a đã mở, 9c sửa thêm), `hooks/okr-uy-quyen.ts` (đóng `da-nop`
-của việc tóm tắt chỉ khi có bản), `apps/agent/agent/lib/so-chi-phi.ts`, `tin-nhac.ts`,
+`goi-ngu-canh.ts` (9a đã mở, 9c sửa thêm), `hooks/okr-uy-quyen.ts` (từ 07/10 chỉ còn là
+lưới — tool nộp tự đóng việc), `apps/agent/agent/lib/so-chi-phi.ts`, `tin-nhac.ts`,
 `nhac-ke-hoach.ts`, `tra-loi-nhac.ts`, và trong `subagents/tro_ly_okr/`:
 `tools/nop_tom_tat.ts` (mới), `instructions/viec.ts`, `agent.ts` (mô tả thêm việc
 tóm tắt; model chọn theo việc ở `step.started`, xem `lib/okr/chon-mo-hinh.ts`).
