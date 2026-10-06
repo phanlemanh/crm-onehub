@@ -96,7 +96,7 @@ const vi = {
 	},
 	so: {
 		tieuDe: "Sổ chi phí AI — tháng này",
-		moTa: "Tiền mọi việc AI trong CRM, theo giờ Việt Nam từ ngày 1.",
+		moTa: "Tiền mọi việc AI trong OneHub Center, theo giờ Việt Nam từ ngày 1.",
 		cotViec: "Việc",
 		cotTien: "Tiền",
 		tong: "Tổng",
@@ -107,7 +107,7 @@ const vi = {
 		nhom: {
 			"nghien-cuu-danh-ba": "Nghiên cứu danh bạ",
 			"tro-ly-ai": "Trợ lý AI",
-			"hoi-crm-zalo": "Hỏi CRM qua Zalo",
+			"hoi-crm-zalo": "Hỏi qua Zalo",
 			"tac-nhan": "Tác nhân",
 			"tro-ly-okr": "Trợ lý OKR",
 			"chua-gan": "Chưa gán việc",
@@ -295,7 +295,7 @@ const en: TroLyOkrMessages = {
 	},
 	so: {
 		tieuDe: "AI spend — this month",
-		moTa: "What every AI task in the CRM cost, Vietnam time from the 1st.",
+		moTa: "What every AI task in OneHub Center cost, Vietnam time from the 1st.",
 		cotViec: "Task",
 		cotTien: "Cost",
 		tong: "Total",
@@ -306,7 +306,7 @@ const en: TroLyOkrMessages = {
 		nhom: {
 			"nghien-cuu-danh-ba": "Contact research",
 			"tro-ly-ai": "AI assistant",
-			"hoi-crm-zalo": "CRM questions on Zalo",
+			"hoi-crm-zalo": "Questions on Zalo",
 			"tac-nhan": "Agents",
 			"tro-ly-okr": "OKR assistant",
 			"chua-gan": "Not assigned",

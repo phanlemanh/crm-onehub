@@ -1,6 +1,7 @@
-import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { execFileSync, spawnSync } from "node:child_process";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,6 +10,7 @@ const yeuCau = createRequire(import.meta.url);
 const GOC = process.env.DTOC_GOC ?? join(HERE, "..", "..", "..");
 const BANG = process.env.DTOC_BANG ?? join(HERE, "bang-the.json");
 const VONG_NAY = "doi-ten-onehub-center";
+const HOP_DONG_LUOT = `_acceptance/${VONG_NAY}/contract.md`;
 const LAN_MAY = new Set(["test", "script"]);
 const DA_KY = new Set(["signed-off", "machine-cleared"]);
 const LA_THUOC = /(^_acceptance\/|\/test\/|\.spec\.|\.test\.|\.dom\.tsx$)/;
@@ -280,8 +282,52 @@ function doiChung(base) {
 	);
 }
 
+function gopLuot() {
+	const mocChung = git("merge-base", "HEAD", "origin/onehub");
+	return gitThu(
+		"log",
+		"--first-parent",
+		"--diff-filter=A",
+		"--format=%H",
+		mocChung,
+		"--",
+		HOP_DONG_LUOT,
+	)
+		.split("\n")
+		.at(-1);
+}
+
+function doTaiCommitGop(gop) {
+	const tam = mkdtempSync(join(tmpdir(), "dtoc-gop-"));
+	rmSync(tam, { recursive: true, force: true });
+	git("worktree", "add", "--detach", tam, gop);
+	try {
+		const ra = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], {
+			stdio: "inherit",
+			env: {
+				...process.env,
+				DTOC_GOC: tam,
+				DTOC_NEN: git("rev-parse", `${gop}^1`),
+			},
+		});
+		return ra.status ?? 2;
+	} finally {
+		git("worktree", "remove", "--force", tam);
+	}
+}
+
 export function main() {
-	const base = git("merge-base", "HEAD", "origin/onehub");
+	if (process.env.DTOC_NEN === undefined) {
+		const gop = gopLuot();
+		if (gop) {
+			console.log(
+				`LUOT DA GOP o ${gop}: do tai commit gop, nen la cha thu nhat cua no`,
+			);
+			process.exit(doTaiCommitGop(gop));
+		}
+	}
+	const base =
+		process.env.DTOC_NEN ?? git("merge-base", "HEAD", "origin/onehub");
 	const doi = git("diff", "--name-only", base, "HEAD")
 		.split("\n")
 		.filter(Boolean);

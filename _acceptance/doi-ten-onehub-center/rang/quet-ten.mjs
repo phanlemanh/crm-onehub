@@ -19,11 +19,21 @@ const TAP_LOAI_TRU = [
 	/\.dom\.tsx$/,
 ];
 const NOI = "\u0000";
-const BON_NGOAI_LE = [
+const NGOAI_LE = [
 	`packages/auth/src/auth.ts${NOI}This CRM is private. Sign in with your @`,
 	`packages/auth/src/auth.ts${NOI}This CRM is private. That address is not on the allow-list.`,
 	`packages/db/src/settings.ts${NOI}CRM`,
 	`packages/db/src/safe-fetch.ts${NOI}Mozilla/5.0 (compatible; CRM/1.0)`,
+	`packages/validation/src/tai-lieu-hoi.ts${NOI}CRM`,
+	`packages/db/src/tai-lieu-hoi.ts${NOI}CRM`,
+	`apps/api/src/tai-lieu/tai-lieu-hoi.service.ts${NOI}CRM`,
+	`apps/app/lib/messages/okr-so.ts${NOI}Chỉ số CRM`,
+	`apps/app/lib/messages/okr-so.ts${NOI}CRM metric`,
+	`apps/app/lib/messages/okr-so.ts${NOI}CRM`,
+	`apps/app/lib/messages/okr-so.ts${NOI}Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.`,
+	`apps/app/lib/messages/okr-so.ts${NOI}CRM metrics are counts — a milestone or percentage KR can't take its number from them.`,
+	`apps/api/src/okr/okr-config.ts${NOI}Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.`,
+	`apps/api/src/okr/okr-config.ts${NOI} KR nguồn CRM chưa có số ngày cuối — chờ nhịp chụp số rồi thử lại.`,
 ];
 const TEN_CU = /\bCRM\b/;
 const TIEN_TO = "OneHub ";
@@ -95,7 +105,7 @@ function quet(goc) {
 		for (const { dong: d, chu } of docChuoi(tep, noiDung)) {
 			const khoa = `${tep}${NOI}${chu}`;
 			if (TEN_CU.test(chu)) {
-				if (BON_NGOAI_LE.includes(khoa)) thayNgoaiLe.add(khoa);
+				if (NGOAI_LE.includes(khoa)) thayNgoaiLe.add(khoa);
 				else con.push({ tep, dong: d });
 			}
 			const loi = viPhamLuatTen(chu);
@@ -118,26 +128,38 @@ function doiChungLuatTen() {
 	}
 }
 
+const HOP_DONG_LUOT = "_acceptance/doi-ten-onehub-center/contract.md";
+
+function gitDoc(...doi) {
+	return execFileSync("git", ["-C", GOC, ...doi], { encoding: "utf8" }).trim();
+}
+
 function mergeBase() {
-	return execFileSync(
-		"git",
-		["-C", GOC, "merge-base", "HEAD", "origin/onehub"],
-		{
-			encoding: "utf8",
-		},
-	).trim();
+	const mocChung = gitDoc("merge-base", "HEAD", "origin/onehub");
+	const gopLuot = gitDoc(
+		"log",
+		"--first-parent",
+		"--diff-filter=A",
+		"--format=%H",
+		mocChung,
+		"--",
+		HOP_DONG_LUOT,
+	)
+		.split("\n")
+		.at(-1);
+	return gopLuot === "" ? mocChung : gitDoc("rev-parse", `${gopLuot}^1`);
 }
 
 function soNgoaiLe() {
 	const khai = JSON.parse(
 		readFileSync(join(HERE, "ngoai-le.json"), "utf8"),
 	).map((m) => `${m.tep}${NOI}${m.chu}`);
-	const la = khai.filter((k) => !BON_NGOAI_LE.includes(k));
-	const thieu = BON_NGOAI_LE.filter((k) => !khai.includes(k));
+	const la = khai.filter((k) => !NGOAI_LE.includes(k));
+	const thieu = NGOAI_LE.filter((k) => !khai.includes(k));
 	for (const k of la) ghi(false, `ngoai le la: ${hien(k)}`);
 	for (const k of thieu) ghi(false, `thieu ngoai le: ${hien(k)}`);
 	if (la.length === 0 && thieu.length === 0) {
-		ghi(true, "ngoai-le.json bang dung bon muc cua hop dong");
+		ghi(true, `ngoai-le.json bang dung ${NGOAI_LE.length} muc da duyet`);
 	}
 }
 
@@ -145,7 +167,7 @@ function soHead() {
 	const head = quet(GOC);
 	for (const c of head.con) ghi(false, `con CRM: ${c.tep}:${c.dong}`);
 	if (head.con.length === 0) ghi(true, "khong con CRM ngoai ngoai le");
-	for (const k of BON_NGOAI_LE) {
+	for (const k of NGOAI_LE) {
 		const co = head.thayNgoaiLe.has(k);
 		ghi(co, `${co ? "ngoai le con dung cho" : "ngoai le mo coi"}: ${hien(k)}`);
 	}

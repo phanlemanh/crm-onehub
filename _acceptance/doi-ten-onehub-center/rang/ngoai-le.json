@@ -2,5 +2,15 @@
 	{ "tep": "packages/auth/src/auth.ts", "chu": "This CRM is private. Sign in with your @" },
 	{ "tep": "packages/auth/src/auth.ts", "chu": "This CRM is private. That address is not on the allow-list." },
 	{ "tep": "packages/db/src/settings.ts", "chu": "CRM" },
-	{ "tep": "packages/db/src/safe-fetch.ts", "chu": "Mozilla/5.0 (compatible; CRM/1.0)" }
+	{ "tep": "packages/db/src/safe-fetch.ts", "chu": "Mozilla/5.0 (compatible; CRM/1.0)" },
+	{ "tep": "packages/validation/src/tai-lieu-hoi.ts", "chu": "CRM", "ly_do": "giá trị kênh hỏi của Kho tài liệu (KENH_HOI), ghi vào cột kenh, không hiện trên màn; chủ kho duyệt 04/10" },
+	{ "tep": "packages/db/src/tai-lieu-hoi.ts", "chu": "CRM", "ly_do": "lọc theo giá trị kênh hỏi khi đếm trần ngày và tháng, không hiện trên màn; chủ kho duyệt 04/10" },
+	{ "tep": "apps/api/src/tai-lieu/tai-lieu-hoi.service.ts", "chu": "CRM", "ly_do": "ghi giá trị kênh hỏi cho câu hỏi đến từ ứng dụng, không hiện trên màn; chủ kho duyệt 04/10" },
+	{ "tep": "apps/app/lib/messages/okr-so.ts", "chu": "Chỉ số CRM", "ly_do": "nhãn nguồn số (vi) — tên nguồn số «Chỉ số CRM» chốt ở CONTEXT.md mục «Nguồn số (KR)» tại Cổng Phạm vi 26/09; chủ kho giữ tên này 05/10" },
+	{ "tep": "apps/app/lib/messages/okr-so.ts", "chu": "CRM metric", "ly_do": "nhãn nguồn số (en) — tên nguồn số «Chỉ số CRM» chốt ở CONTEXT.md mục «Nguồn số (KR)» tại Cổng Phạm vi 26/09; chủ kho giữ tên này 05/10" },
+	{ "tep": "apps/app/lib/messages/okr-so.ts", "chu": "CRM", "ly_do": "dấu ngắn của nguồn số «Chỉ số CRM» (vi và en) — tên nguồn số «Chỉ số CRM» chốt ở CONTEXT.md mục «Nguồn số (KR)» tại Cổng Phạm vi 26/09; chủ kho giữ tên này 05/10" },
+	{ "tep": "apps/app/lib/messages/okr-so.ts", "chu": "Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.", "ly_do": "câu giải thích gọi tên nguồn số (vi) — tên nguồn số «Chỉ số CRM» chốt ở CONTEXT.md mục «Nguồn số (KR)» tại Cổng Phạm vi 26/09; chủ kho giữ tên này 05/10" },
+	{ "tep": "apps/app/lib/messages/okr-so.ts", "chu": "CRM metrics are counts — a milestone or percentage KR can't take its number from them.", "ly_do": "câu giải thích gọi tên nguồn số (en) — tên nguồn số «Chỉ số CRM» chốt ở CONTEXT.md mục «Nguồn số (KR)» tại Cổng Phạm vi 26/09; chủ kho giữ tên này 05/10" },
+	{ "tep": "apps/api/src/okr/okr-config.ts", "chu": "Chỉ số CRM là số đếm — KR mốc hay phần trăm không lấy số từ đây.", "ly_do": "câu báo của API gọi tên nguồn số — tên nguồn số «Chỉ số CRM» chốt ở CONTEXT.md mục «Nguồn số (KR)» tại Cổng Phạm vi 26/09; chủ kho giữ tên này 05/10" },
+	{ "tep": "apps/api/src/okr/okr-config.ts", "chu": " KR nguồn CRM chưa có số ngày cuối — chờ nhịp chụp số rồi thử lại.", "ly_do": "câu báo của API gọi tên nguồn số (đuôi khuôn chuỗi) — tên nguồn số «Chỉ số CRM» chốt ở CONTEXT.md mục «Nguồn số (KR)» tại Cổng Phạm vi 26/09; chủ kho giữ tên này 05/10" }
 ]
