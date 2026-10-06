@@ -177,7 +177,9 @@ if (!core.determineEnforce(payload)) process.exit(0);
         for (const id of new Set(cited)) {
           const e = repins.get(id);
           if (!e || e.sha !== vc) continue;
-          for (const x of core.checkRepinEvals(e, evalsText, slug, payload).errs) errs.push(`REPIN x ${x}`);
+          // Gốc cây suy từ CHỖ ĐỨNG của báo cáo (<gốc>/_acceptance/<slug>/) — hồ sơ thay tra ở cây này,
+          // không ở cwd (eval-thay-boi-co-chung).
+          for (const x of core.checkRepinEvals(e, evalsText, slug, payload, { root: path.resolve(dir, '..', '..') }).errs) errs.push(`REPIN x ${x}`);
         }
       }
     }

@@ -1367,6 +1367,14 @@ XLACS
     # là vị từ --skip-unchanged của repin-lane.mjs. Không chạy được → giữ danh sách cũ + NOTE nói vì sao.
     if [ -n "$stale" ] && [ "$STALE_SCOPE" = paths ] && [ "$STALE_ALL" -eq 0 ]; then
       _sbp_pre="$(git -C "$ROOT" rev-parse --show-prefix 2>/dev/null)"
+      # Cây của bản đang kiểm (hồ sơ loc-paths-dong-mac-dinh): tệp git theo dõi, dựng MỘT lần cho mọi hồ
+      # sơ, `-z` để tên có dấu giữ nguyên chữ. ls-files lỗi → đánh dấu, bộ lọc nhận «không có cây» và
+      # trả thieu-cay — giữ luật cũ, không đoán từ đĩa.
+      if [ -z "${_sbp_cay:-}" ]; then
+        _sbp_cay="$(mktemp 2>/dev/null || echo "/tmp/pmc-cay.$$")"
+        trap 'rm -f "$_sbp_cay" "$_sbp_cay.loi"' EXIT
+        git -C "$ROOT" ls-files -z > "$_sbp_cay" 2>/dev/null || : > "$_sbp_cay.loi"
+      fi
       # stderr của node đi RIÊNG (lượt chấm 1, t4): trộn vào stdout thì một cảnh báo của node làm
       # bước đọc thứ hai sập, danh sách hoá cũ rỗng và cổng xanh im lặng — đúng chiều AC-5 cấm.
       _sbp_ok=0; _sbp=""; _sbp_ly="thiếu node hoặc lib/evidence-core.cjs"
@@ -1376,7 +1384,8 @@ XLACS
           const l=require(process.argv[1]),fs=require("fs");
           const files=fs.readFileSync(0,"utf8").split("\n").filter(Boolean);
           let ev=null; try{ev=fs.readFileSync(process.argv[2],"utf8")}catch(_){}
-          process.stdout.write(JSON.stringify(l.staleByPaths(files,ev,{prefix:process.argv[3]})));' "$CHU_KY_LIB" "$dir/evals.yaml" "$_sbp_pre" 2>"$_sbp_ef")"; then
+          let cay=null; try{ if(!fs.existsSync(process.argv[4]+".loi")) cay=l.dungCayPaths(fs.readFileSync(process.argv[4],"utf8").split("\0").filter(Boolean)) }catch(_){}
+          process.stdout.write(JSON.stringify(l.staleByPaths(files,ev,{prefix:process.argv[3],cay})));' "$CHU_KY_LIB" "$dir/evals.yaml" "$_sbp_pre" "$_sbp_cay" 2>"$_sbp_ef")"; then
           _sbp_ok=1; _sbp_ly="đầu ra không đọc được"
         else _sbp_ly="$(head -1 "$_sbp_ef" 2>/dev/null | cut -c1-160)"; fi
         rm -f "$_sbp_ef"
@@ -1482,7 +1491,8 @@ REPINIDS
           let bad = 0;
           for (const id of ids) {
             const e = repins.get(id); if (!e || e.sha !== vc) continue;
-            const r = core.checkRepinEvals(e, evalsText, slug, core.readSignedReportFor(evalsPath));
+            // Gốc cây suy từ chỗ đứng của evals.yaml (<gốc>/_acceptance/<slug>/evals.yaml), không cwd.
+            const r = core.checkRepinEvals(e, evalsText, slug, core.readSignedReportFor(evalsPath), { root: require("path").resolve(evalsPath, "..", "..", "..") });
             if (r.note) process.stdout.write(`NOTE [${slug}]: ${r.note}\n`);
             for (const x of r.errs) { bad = 1; process.stdout.write(`VIOLATION [${slug}]: ${x}\n`); }
           }
