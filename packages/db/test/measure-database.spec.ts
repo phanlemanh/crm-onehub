@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, it } from "bun:test";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import {
 	appendFileSync,
 	cpSync,
@@ -38,6 +38,11 @@ const PACKAGE = resolve(import.meta.dirname, "..");
 const MIGRATIONS = join(PACKAGE, "prisma", "migrations");
 const SLOW_MS = 240_000;
 const MINUTE_MS = 60_000;
+const GIET = {
+	pollMs: 50,
+	reachMs: 120_000,
+	idleMs: 30_000,
+} as const;
 const base = process.env.TEST_DATABASE_URL ?? "";
 const id = (process.env.TEST_RUN_ID ?? Date.now().toString(36))
 	.toLowerCase()
@@ -489,4 +494,227 @@ describe("dau-dang-dung", () => {
 			).toBe(null);
 		}
 	});
+});
+
+type KillPoint = "migrate" | "seed";
+
+const KILL_POINTS: KillPoint[] = ["migrate", "seed"];
+
+const MISSING = new Set(["3D000", "42P01"]);
+
+function onDisk(): string[] {
+	return readdirSync(MIGRATIONS, { withFileTypes: true })
+		.filter((entry) => entry.isDirectory())
+		.map((entry) => entry.name)
+		.sort();
+}
+
+async function probe(url: string, sql: string): Promise<number | null> {
+	try {
+		const rows = await query<{ n: string }>(url, sql);
+		return Number(rows[0]?.n ?? 0);
+	} catch (error) {
+		if (MISSING.has((error as { code?: string }).code ?? "")) return null;
+		throw error;
+	}
+}
+
+async function reached(template: string, point: KillPoint): Promise<boolean> {
+	const url = databaseUrl(base, template);
+
+	if (point === "migrate") {
+		return (
+			((await probe(url, "SELECT count(*) AS n FROM _prisma_migrations")) ??
+				0) >= 1
+		);
+	}
+
+	const finished = await probe(
+		url,
+		"SELECT count(*) AS n FROM _prisma_migrations WHERE finished_at IS NOT NULL",
+	);
+	if (finished !== onDisk().length) return false;
+
+	return ((await probe(url, `SELECT count(*) AS n FROM "user"`)) ?? 0) >= 1;
+}
+
+async function backends(name: string): Promise<number> {
+	const rows = await query<{ n: string }>(
+		databaseUrl(base, "postgres"),
+		"SELECT count(*) AS n FROM pg_stat_activity WHERE datname = $1",
+		[name],
+	);
+	return Number(rows[0]?.n ?? 0);
+}
+
+function pause(ms: number): Promise<void> {
+	return new Promise((done) => setTimeout(done, ms));
+}
+
+async function killMidBuild(
+	name: string,
+	point: KillPoint,
+): Promise<{ template: string; startedAt: number }> {
+	const template = templateDatabaseName(name);
+	const startedAt = Date.now();
+	const child = spawn(
+		"bun",
+		["scripts/measure-db.ts", "--tao", "--ten", name],
+		{
+			cwd: PACKAGE,
+			env: { ...process.env, DATABASE_URL: base },
+			detached: true,
+			stdio: "ignore",
+		},
+	);
+	let gone = false;
+	const exited = new Promise<void>((done) =>
+		child.once("exit", () => {
+			gone = true;
+			done();
+		}),
+	);
+
+	try {
+		while (!(await reached(template, point))) {
+			if (gone) throw new Error(`CLI thoat truoc diem giet ${point}`);
+			if (Date.now() - startedAt > GIET.reachMs) {
+				throw new Error(`khong toi diem giet ${point}`);
+			}
+			await pause(GIET.pollMs);
+		}
+	} finally {
+		if (!gone && child.pid) process.kill(-child.pid, "SIGKILL");
+		await exited;
+	}
+
+	const idleFrom = Date.now();
+	while ((await backends(template)) > 0) {
+		if (Date.now() - idleFrom > GIET.idleMs) {
+			throw new Error(`kho mau ${template} con ket noi sau khi giet`);
+		}
+		await pause(GIET.pollMs);
+	}
+
+	return { template, startedAt };
+}
+
+async function seedDeals(url: string): Promise<number | null> {
+	const table = await query<{ t: string | null }>(
+		url,
+		"SELECT to_regclass('public.deal')::text AS t",
+	);
+	if (!table[0]?.t) return null;
+
+	const rows = await query<{ n: string }>(
+		url,
+		"SELECT count(*) AS n FROM deal WHERE id = $1",
+		["seed-deal-wise-1"],
+	);
+	return Number(rows[0]?.n ?? 0);
+}
+
+describe("giet-giua-chung", () => {
+	it(
+		"giet-mang-dau: a build killed during migrate or seed leaves its template carrying the building mark",
+		async () => {
+			for (const point of KILL_POINTS) {
+				const name = tree(`gm${point[0]}`);
+				const { template } = await killMidBuild(name, point);
+				const deals = await seedDeals(databaseUrl(base, template));
+
+				if (point === "seed") {
+					expect(deals, "bang deal chua co o diem seed").not.toBe(null);
+				}
+				expect(
+					deals ?? 0,
+					`luot bi giet da dung xong kho mau — phep do khong do giua chung: ${point}`,
+				).toBe(0);
+
+				const mark = parseMeasureComment(await commentOf(template));
+				expect(
+					mark?.kind,
+					`kho mau cua luot bi giet khong mang dau dang dung: ${point}`,
+				).toBe("building");
+				expect(Date.now() - (mark?.createdAt ?? 0)).toBeLessThan(
+					10 * MINUTE_MS,
+				);
+				expect(
+					await exists(measureDatabaseName(name)),
+					`kho do ton tai sau luot bi giet: ${point}`,
+				).toBe(false);
+			}
+		},
+		SLOW_MS,
+	);
+
+	it(
+		"giet-quet-gom: the sweep keeps a killed build's template until maxAgeMs has passed, then drops it",
+		async () => {
+			const name = tree("gq");
+			const { template, startedAt } = await killMidBuild(name, "migrate");
+			const mark = parseMeasureComment(await commentOf(template));
+			const createdAt = mark?.createdAt ?? startedAt;
+			const own = `crm_thu${id}gq`;
+			const age = MEASURE_DATABASE.maxAgeMs;
+
+			const early = await withMaintenance(base, (client) =>
+				sweepMeasureDatabases(client, createdAt + age - MINUTE_MS, own),
+			);
+			expect(
+				early.includes(template) || !(await exists(template)),
+				"kho mau dang dung bi xoa truoc han",
+			).toBe(false);
+
+			const late = await withMaintenance(base, (client) =>
+				sweepMeasureDatabases(client, createdAt + age + MINUTE_MS, own),
+			);
+			expect(
+				late.includes(template),
+				"luot quet khong gom kho mau cua luot bi giet",
+			).toBe(true);
+			expect(
+				await exists(template),
+				"luot quet khong gom kho mau cua luot bi giet",
+			).toBe(false);
+		},
+		SLOW_MS,
+	);
+
+	it(
+		"giet-dung-lai: the next create rebuilds a template a killed build left half-built",
+		async () => {
+			for (const point of KILL_POINTS) {
+				const name = tree(`gd${point[0]}`);
+				const { template } = await killMidBuild(name, point);
+				const killed = parseMeasureComment(await commentOf(template));
+
+				const url = await createMeasureDatabase({ base, tree: name });
+				const rebuilt = parseMeasureComment(await commentOf(template));
+
+				expect(
+					rebuilt?.kind === "template" &&
+						rebuilt.createdAt > (killed?.createdAt ?? 0),
+					`kho mau do dang duoc dung lai: ${point}`,
+				).toBe(true);
+
+				const applied = (
+					await query<{ migration_name: string }>(
+						url,
+						"SELECT migration_name FROM _prisma_migrations WHERE finished_at IS NOT NULL",
+					)
+				)
+					.map((row) => row.migration_name)
+					.sort();
+				expect(applied, `kho do clone tu kho mau do dang: ${point}`).toEqual(
+					onDisk(),
+				);
+				expect(
+					await seedDeals(url),
+					`kho do clone tu kho mau do dang: ${point}`,
+				).toBe(1);
+			}
+		},
+		SLOW_MS * 2,
+	);
 });
