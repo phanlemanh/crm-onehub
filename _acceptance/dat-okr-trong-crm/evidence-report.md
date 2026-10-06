@@ -7,7 +7,7 @@ reason:
 verified_by: phiên điều khiển — chay-r2.mjs (Workflow vắng, xem Known limits)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b
+verified_commit: 787b6a34842f17cdf14e6beca7f6aef7b92f6c45
 human_signoff: Manh Phan 2026-09-25
 ---
 
@@ -443,3 +443,7 @@ sha: 7c376b788ed70e80a1320c667607aa0e6d13ab1c · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 11 — 2026-10-04, do sửa thước đỏ lô 2-4 (c2)
 run_id: repin-20261004T155414Z-26973
 sha: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 12 — 2026-10-06, do sửa thước đỏ lô 2-4 (c2)
+run_id: repin-20261006T093159Z-42780
+sha: 787b6a34842f17cdf14e6beca7f6aef7b92f6c45 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E20, E15, E18 · diff chạm vật đo ngoài làn máy: E11, E12, E20, E15 — chưa chứng lại, đi vòng S4 delta

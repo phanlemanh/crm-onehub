@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b
+verified_commit: 787b6a34842f17cdf14e6beca7f6aef7b92f6c45
 human_signoff: Manh Phan 2026-10-01
 ---
 
@@ -229,3 +229,7 @@ Round 3: E14 được tách thành E16 (script đo luật kho) và E17 (judgment
 ### Re-pin lần 1 — 2026-10-04, do sửa thước đỏ lô 2-4 (c2)
 run_id: repin-20261004T155414Z-26973
 sha: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E13, E17 · diff chạm vật đo ngoài làn máy: E13, E17 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12
+
+### Re-pin lần 2 — 2026-10-06, do sửa thước đỏ lô 2-4 (c2)
+run_id: repin-20261006T093159Z-42780
+sha: 787b6a34842f17cdf14e6beca7f6aef7b92f6c45 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E13, E17 · diff chạm vật đo ngoài làn máy: E13, E17 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12
