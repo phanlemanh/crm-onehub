@@ -1249,6 +1249,7 @@ executors:
     dph_phat_lich: node --test scripts/dieu-phoi/test/phat-lich.test.mjs
     dph_cli: node --test scripts/dieu-phoi/test/cli.test.mjs
     dph_tat_ca: bun run test:dieu-phoi
+    dph_bien: node --test scripts/dieu-phoi/test/bien.test.mjs
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh

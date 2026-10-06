@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { veBang } from './bang.mjs';
+import { kiemCoBan, kiemDon, kiemYeuCau } from './hinh-dang.mjs';
 import { GIAY_MS, NHIP, PHUT_MS } from './cau-hinh.mjs';
 import { docJson, ghiJsonNguyenTu, ghiSuKien } from './dot.mjs';
 import { capLuot, chonHangKe, xetHanThue } from './lich.mjs';
@@ -58,15 +59,14 @@ function xuLyKhoa(thuMuc, cfg, nowMs) {
   return dangGiu;
 }
 
-function docThuMucJson(thuMuc, ten) {
+function docThuMucJson(thuMuc, ten, kiem = kiemCoBan) {
   const d = path.join(thuMuc, ten);
   if (!fs.existsSync(d)) return [];
   const tot = [];
   for (const f of fs.readdirSync(d).filter((x) => x.endsWith('.json'))) {
     const p = path.join(d, f);
     try {
-      const du = JSON.parse(fs.readFileSync(p, 'utf8'));
-      if (typeof du.phien !== 'string' || typeof du.loai !== 'string') throw new Error('thiếu phien hoặc loai');
+      const du = kiem(JSON.parse(fs.readFileSync(p, 'utf8')));
       tot.push({ ...du, _tep: p, _ten: f.replace(/\.json$/, '') });
     } catch (e) {
       fs.mkdirSync(path.join(d, 'hong'), { recursive: true });
@@ -78,7 +78,7 @@ function docThuMucJson(thuMuc, ten) {
 }
 
 function capPhat(thuMuc, cfg, hangViec, dangGiu, giamTai, nowMs) {
-  const donXin = docThuMucJson(thuMuc, 'xin').filter((d) => typeof d.worktree === 'string');
+  const donXin = docThuMucJson(thuMuc, 'xin', kiemDon);
   for (const { taiNguyen, don } of capLuot({ donXin, dangGiu, giamTai, hangViec })) {
     const d = path.join(thuMuc, 'khoa', taiNguyen);
     try {
@@ -98,7 +98,7 @@ function capPhat(thuMuc, cfg, hangViec, dangGiu, giamTai, nowMs) {
     fs.rmSync(don._tep, { force: true });
     ghiSuKien(thuMuc, { loai: 'cap', tai_nguyen: taiNguyen, phien: don.phien, slug: don.slug });
   }
-  return docThuMucJson(thuMuc, 'xin').map(({ phien, loai, luc }) => ({ phien, loai, luc }));
+  return docThuMucJson(thuMuc, 'xin', kiemDon).map(({ phien, loai, luc }) => ({ phien, loai, luc }));
 }
 
 function nhanhMo(io, cfg) {
@@ -122,12 +122,14 @@ function nhanhMo(io, cfg) {
 }
 
 function xuLyYeuCau(thuMuc, cfg, hangViec, io, trangThaiCu, nowMs) {
-  const tatCa = docThuMucJson(thuMuc, 'yeu-cau');
+  const tatCa = docThuMucJson(thuMuc, 'yeu-cau', kiemYeuCau);
   const daBao = new Set(trangThaiCu.da_bao ?? []);
   const choXet = tatCa.filter((y) => !fs.existsSync(path.join(thuMuc, 'tra-loi', `${y._ten}.json`)) && !daBao.has(y._ten));
   if (choXet.length === 0) return [...daBao];
-  const nguCanh = {
+  const pThem = path.join(thuMuc, 'ranh-gioi-them.json');
+  let nguCanh = {
     hangViec,
+    ranhGioiThem: docJson(pThem, {}),
     nhanhChamTep: nhanhMo(io, cfg),
     nhanhCua: () => null,
     yeuCauGanDay: tatCa.filter((y) => nowMs - Date.parse(y.luc) < MOT_NGAY_MS),
@@ -141,10 +143,10 @@ function xuLyYeuCau(thuMuc, cfg, hangViec, io, trangThaiCu, nowMs) {
     }
     ghiJsonNguyenTu(path.join(thuMuc, 'tra-loi', `${y._ten}.json`), { ...kq, luc: new Date(nowMs).toISOString() });
     if (y.loai === 'cham-tep' && kq.ket_qua === 'duyet') {
-      const p = path.join(thuMuc, 'ranh-gioi-them.json');
-      const them = docJson(p, {});
-      them[y.phien] = [...new Set([...(them[y.phien] ?? []), ...y.noi_dung.tep])];
-      ghiJsonNguyenTu(p, them);
+      const cu = nguCanh.ranhGioiThem;
+      const moi = { ...cu, [y.phien]: [...new Set([...(cu[y.phien] ?? []), ...y.noi_dung.tep])] };
+      ghiJsonNguyenTu(pThem, moi);
+      nguCanh = { ...nguCanh, ranhGioiThem: moi };
     }
     ghiSuKien(thuMuc, { loai: 'yeu-cau', id: y._ten, phien: y.phien, kieu: y.loai, ket_qua: kq.ket_qua });
   }

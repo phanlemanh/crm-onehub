@@ -22,6 +22,7 @@ Mã này **không** chứa gì riêng của kho. Mọi giá trị riêng nằm t
 
 ## Trong đợt
 
+- Không dùng `/loop` làm nhịp: phiên giám sát thức dậy nhờ Monitor ở bước 4 và task lịch 30′ ở bước 5 của phần mở đợt, cộng tin của owner.
 - Mỗi sự kiện `can_phan`: đọc dòng sự kiện. Với yêu cầu, ghi `tra-loi/<id>.json` gồm
   `{ket_qua, boi:"giam-sat", ly_do, luc}` và một dòng Nhật ký. Với `dich:"owner"`: gom lại, push tối
   đa 1 lần mỗi 30′.

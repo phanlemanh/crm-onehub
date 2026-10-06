@@ -26,13 +26,17 @@ export function xetYeuCau(yc, nguCanh, cfg) {
 
 function xetChamTep(yc, nguCanh, cfg) {
   const tep = yc.noi_dung?.tep ?? [];
+  if (!Array.isArray(tep) || !tep.every((t) => typeof t === 'string')) return { ket_qua: 'can_phan', ly_do: 'tep phải là danh sách đường dẫn' };
   if (tep.length === 0) return { ket_qua: 'can_phan', ly_do: 'yêu cầu không nêu tệp' };
   const baoVe = [...cfg.bao_ve, ...nguCanh.hangViec.hang.flatMap((h) => h.chung_chi_them ?? [])];
   const nhanhMinh = nguCanh.nhanhCua(yc.phien);
+  const daNoi = Object.entries(nguCanh.ranhGioiThem ?? {}).filter(([phien]) => phien !== yc.phien);
   for (const t of tep) {
     if (khopMot(baoVe, t)) return { ket_qua: 'can_phan', ly_do: `${t} thuộc danh sách bảo vệ` };
     const chu = nguCanh.hangViec.hang.find((h) => h.day !== yc.phien && khopMot(h.ranh_gioi ?? [], t));
     if (chu) return { ket_qua: 'can_phan', ly_do: `${t} thuộc ranh giới ${chu.day}` };
+    const nguoiNoi = daNoi.find(([, ds]) => ds.includes(t));
+    if (nguoiNoi) return { ket_qua: 'can_phan', ly_do: `${t} đã được duyệt cho ${nguoiNoi[0]}` };
     const nhanh = (nguCanh.nhanhChamTep.get(t) ?? []).filter((b) => b !== nhanhMinh);
     if (nhanh.length > 0) return { ket_qua: 'can_phan', ly_do: `${t} đang được nhánh ${nhanh.join(', ')} sửa` };
   }

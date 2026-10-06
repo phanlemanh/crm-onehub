@@ -1,0 +1,279 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · dieu-phoi-hai-tang</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Tầng máy của Orchestrator–workers hai tầng, giai đoạn 1a — bộ phát lịch tất định (khoá có hạn thuê, canh sức khoẻ máy, kênh yêu cầu, hàng kế, bảng đồng hồ), CLI đợt và bốn hook (chặn S4, nhịp, chờ người)</h1><div class="sub">Trang bằng chứng · <span class="mono">dieu-phoi-hai-tang</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pend">PENDING-JUDGMENT</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E1-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E2-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E3-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E4-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E5-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E6-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E7-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E8-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-5</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E9-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E10-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E11-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-8</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E12-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-9</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E13-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E14">E14</a></td><td>AC-9</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E14-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E15">E15</a></td><td>AC-10</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E15-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E16">E16</a></td><td>AC-10</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E16-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E17">E17</a></td><td>AC-11</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E17-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E18">E18</a></td><td>AC-11</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E18-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E19">E19</a></td><td>AC-12</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E19-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E20">E20</a></td><td>AC-13</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E20-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E21">E21</a></td><td>AC-13</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E21-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E22">E22</a></td><td>AC-14</td><td>judgment</td><td><span class="badge pend">UNCERTAIN</span></td><td class="mono">—</td><td class="mono">—</td></tr>
+<tr><td><a href="#E23">E23</a></td><td>AC-15</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E23-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E24">E24</a></td><td>AC-15</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E24-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E25">E25</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E25-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E26">E26</a></td><td>AC-2</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E26-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E27">E27</a></td><td>AC-3</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E27-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E28">E28</a></td><td>AC-4</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E28-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E29">E29</a></td><td>AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E29-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E30">E30</a></td><td>AC-6</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E30-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E31">E31</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E31-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E32">E32</a></td><td>AC-9</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E32-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E33">E33</a></td><td>AC-10</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E33-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E34">E34</a></td><td>AC-11</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E34-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E35">E35</a></td><td>AC-12</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E35-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E36">E36</a></td><td>AC-9</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E36-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E37">E37</a></td><td>AC-10</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E37-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E38">E38</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E38-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+<tr><td><a href="#E39">E39</a></td><td>AC-14</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-dieu-phoi-hai-tang-E39-r1</td><td class="mono">2026-10-06T22:38:34Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1: Given các đơn `xin/` của nhiều phiên với `moc` khác nhau trong `hang-viec.json` và một đơn `ghim-lai` có `mo_merge: true`, When một nhịp cấp lượt, Then đơn `ghim-lai` mở merge được cấp trước mọi đơn, các đơn còn lại theo `moc` sớm trước rồi giờ xin; mỗi tài nguyên cấp đúng một lượt, `ghim-lai` dùng chung khoá `s4`; đơn được cấp bị xoá, `khoa/&lt;tài nguyên&gt;/chu.json` có đủ `phien, slug, loai, worktree, cap_luc, han_thue_den`, và có sự kiện `cap`; tài nguyên đang giữ thì không cấp.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E1-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/lich.test.mjs
+ℹ duration_ms 43.823333</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-1: Given các đơn `xin/` của nhiều phiên với `moc` khác nhau trong `hang-viec.json` và một đơn `ghim-lai` có `mo_merge: true`, When một nhịp cấp lượt, Then đơn `ghim-lai` mở merge được cấp trước mọi đơn, các đơn còn lại theo `moc` sớm trước rồi giờ xin; mỗi tài nguyên cấp đúng một lượt, `ghim-lai` dùng chung khoá `s4`; đơn được cấp bị xoá, `khoa/&lt;tài nguyên&gt;/chu.json` có đủ `phien, slug, loai, worktree, cap_luc, han_thue_den`, và có sự kiện `cap`; tài nguyên đang giữ thì không cấp.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E2-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_phat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+ℹ duration_ms 76.518667</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-2: Given khoá `s4` đang giữ và còn đơn chờ, When chủ khoá nhả bằng `rm -rf khoa/s4`, Then nhịp kế tiếp cấp cho đơn đứng đầu hàng (khoá không trống khi còn đơn); và ca kẹt chéo bốn phiên mà luật «tự nhường» 04/10 không cấp cho ai thì bộ lập lịch cấp đúng một.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E3-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/lich.test.mjs
+ℹ duration_ms 43.823333</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-2: Given khoá `s4` đang giữ và còn đơn chờ, When chủ khoá nhả bằng `rm -rf khoa/s4`, Then nhịp kế tiếp cấp cho đơn đứng đầu hàng (khoá không trống khi còn đơn); và ca kẹt chéo bốn phiên mà luật «tự nhường» 04/10 không cấp cho ai thì bộ lập lịch cấp đúng một.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E4-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_phat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+ℹ duration_ms 76.518667</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · test</h3><p class="crit">AC-3: Given một khoá có `chu.json`, When nhịp xét hạn thuê, Then còn hạn thì giữ; hết hạn mà `nhip` mới hơn `nhip_cu_phut` thì gia hạn thêm đúng `han_thue_phut[loai]` và ghi sự kiện `gia-han`; hết hạn mà `nhip` cũ hoặc vắng thì thu hồi và ghi sự kiện `thu-hoi` có `can_phan: true`; thư mục khoá không có `chu.json` quá 60″ cũng bị thu hồi với `can_phan`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E5-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/lich.test.mjs
+ℹ duration_ms 43.823333</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-3: Given một khoá có `chu.json`, When nhịp xét hạn thuê, Then còn hạn thì giữ; hết hạn mà `nhip` mới hơn `nhip_cu_phut` thì gia hạn thêm đúng `han_thue_phut[loai]` và ghi sự kiện `gia-han`; hết hạn mà `nhip` cũ hoặc vắng thì thu hồi và ghi sự kiện `thu-hoi` có `can_phan: true`; thư mục khoá không có `chu.json` quá 60″ cũng bị thu hồi với `can_phan`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E6-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_phat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+ℹ duration_ms 76.518667</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-4: Given số đo máy macOS, When đánh giá sức khoẻ, Then áp lực bộ nhớ ≥ `ap_luc_muc` hoặc swap dùng &gt; `swap_gb` → giảm tải, kèm lý do có số; ca 05/10 swap 1,6/3 GB với áp lực mức 1 → không giảm tải; một tiến trình RSS &gt; `rss_gb` → dòng «cần người» có tên tiến trình và số GB; trong giảm tải nhịp không cấp `s4`, `ghim-lai`, `duong-nen` nhưng vẫn cấp `merge`, và chỉ ghi đúng một sự kiện `giam-tai` có `can_phan` khi bước vào.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E7-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_suc_khoe</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/suc-khoe.test.mjs
+ℹ duration_ms 42.063792</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · test</h3><p class="crit">AC-4: Given số đo máy macOS, When đánh giá sức khoẻ, Then áp lực bộ nhớ ≥ `ap_luc_muc` hoặc swap dùng &gt; `swap_gb` → giảm tải, kèm lý do có số; ca 05/10 swap 1,6/3 GB với áp lực mức 1 → không giảm tải; một tiến trình RSS &gt; `rss_gb` → dòng «cần người» có tên tiến trình và số GB; trong giảm tải nhịp không cấp `s4`, `ghim-lai`, `duong-nen` nhưng vẫn cấp `merge`, và chỉ ghi đúng một sự kiện `giam-tai` có `can_phan` khi bước vào.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E8-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_phat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+ℹ duration_ms 76.518667</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · test</h3><p class="crit">AC-5: Given hook PreToolUse chặn S4, When nhận một lệnh S4 trong đợt, Then chưa có lượt → thoát 2 với stderr bắt đầu `chan-s4: khoá s4 đang trống nhưng chưa cấp cho phiên này. Ghi đơn xin/&lt;phiên&gt;-s4.json`; khoá thuộc phiên khác → thoát 2 nêu `khoá s4 đang thuộc &lt;phiên&gt;`; khoá ghi đúng worktree (kể cả cwd là thư mục con hay đi qua symlink) → 0; lệnh S4 mà đọc cấu hình đợt hay đầu vào hỏng → thoát 2 với `chan-s4: lỗi nội bộ: … — chặn để an toàn; báo phiên giám sát`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E9-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_hook_s4</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/hook-chan-s4.test.mjs
+ℹ duration_ms 44.867042</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · test</h3><p class="crit">AC-6: Given hook chặn S4, When ngoài đợt, hoặc lệnh không phải S4 (kể cả khi `dieu-phoi.config.json` của đợt hỏng, hoặc đầu vào không phải JSON và không nhắc lệnh S4), Then thoát 0 không có stderr.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E10-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_hook_s4</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/hook-chan-s4.test.mjs
+ℹ duration_ms 44.867042</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-7: Given `.claude/settings.json` đã commit, When chạy đúng chuỗi `command` mà tệp khai cho PreToolUse, PostToolUse, Notification và UserPromptSubmit với `CLAUDE_PROJECT_DIR` là một bản sao kho, Then PreToolUse khớp `Workflow|Bash`, Notification khớp `idle_prompt|permission_prompt`; ngoài đợt cả bốn thoát 0; trong một đợt dựng ở bản sao, PreToolUse với lệnh Workflow `acceptance-verify.js` thoát 2 và stderr có `chan-s4:`; bản sao không có `scripts/dieu-phoi/` thì cả bốn thoát 0.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E11-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_hook_that</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/hook-that.mjs
+KET LUAN: xanh</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · test</h3><p class="crit">AC-8: Given một phiên thợ trong đợt, When hook PostToolUse và hook chờ người chạy, Then hook nhịp chỉ chạm `khoa/&lt;tên&gt;/nhip` của khoá mà `worktree` trùng cwd; `idle_prompt` và `permission_prompt` đều ghi `cho-nguoi/&lt;phiên&gt;.json` có `phien, loai` (đúng loại thông báo), `tin, session_id`; loại thông báo khác → `bo-qua`, không ghi; `UserPromptSubmit` xoá đúng tệp đó; phiên còn đơn trong `xin/` → `cho-luot`, còn yêu cầu chưa có `tra-loi/` → `cho-tra-loi`, cả hai không ghi tệp; ngoài đợt → `ngoai-dot`, cwd không thuộc thợ nào → `khong-phai-tho`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E12-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_hook_nhip</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/hook-nhip-cho-nguoi.test.mjs
+ℹ duration_ms 58.501166</pre>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge pass">PASS</span> &nbsp;E13 · test</h3><p class="crit">AC-9: Given yêu cầu `yeu-cau/&lt;phiên&gt;-&lt;số&gt;.json`, When được xét, Then (a) ở hàm định tuyến: `cham-tep` với tệp không thuộc ranh giới thợ khác, không nằm trong nhánh mở nào ngoài nhánh của chính phiên xin, không khớp `bao_ve` hay `chung_chi_them` → máy duyệt; ba ca vướng (ranh giới `&lt;phiên&gt;`, `đang được nhánh &lt;nhánh&gt; sửa`, `thuộc danh sách bảo vệ`) → `can_phan` đúng lý do; `viec-phu` trùng cùng kho cùng tiêu đề hoặc chung tệp trong 24 giờ → `gop` với `voi: &lt;id cũ&gt;`; `s4-gom`/`gia-han` có ước ≤ `s4_tran_gom_phut` → máy duyệt, vượt hay thiếu ước → `can_phan`; `can-nguoi` → `can_phan` với `dich: owner`; mọi loại khác → `can_phan`; (b) ở nhịp thật: máy duyệt thì ghi `tra-loi/&lt;id&gt;.json` có `ket_qua: duyet, boi: may` và thêm tệp vào `ranh-gioi-them.json`; một yêu cầu `can_phan` chỉ sinh một sự kiện qua nhiều nhịp; và vì 1a chưa ánh xạ phiên → nhánh, tệp mà chính nhánh của phiên xin đang sửa vẫn thành `can_phan` nêu tên nhánh đó (lệch về phía an toàn, xem Out of scope).</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E13-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_yeu_cau</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/yeu-cau.test.mjs
+ℹ duration_ms 44.843375</pre>
+</div>
+<div class="card eval" id="E14"><h3><span class="badge pass">PASS</span> &nbsp;E14 · test</h3><p class="crit">AC-9: Given yêu cầu `yeu-cau/&lt;phiên&gt;-&lt;số&gt;.json`, When được xét, Then (a) ở hàm định tuyến: `cham-tep` với tệp không thuộc ranh giới thợ khác, không nằm trong nhánh mở nào ngoài nhánh của chính phiên xin, không khớp `bao_ve` hay `chung_chi_them` → máy duyệt; ba ca vướng (ranh giới `&lt;phiên&gt;`, `đang được nhánh &lt;nhánh&gt; sửa`, `thuộc danh sách bảo vệ`) → `can_phan` đúng lý do; `viec-phu` trùng cùng kho cùng tiêu đề hoặc chung tệp trong 24 giờ → `gop` với `voi: &lt;id cũ&gt;`; `s4-gom`/`gia-han` có ước ≤ `s4_tran_gom_phut` → máy duyệt, vượt hay thiếu ước → `can_phan`; `can-nguoi` → `can_phan` với `dich: owner`; mọi loại khác → `can_phan`; (b) ở nhịp thật: máy duyệt thì ghi `tra-loi/&lt;id&gt;.json` có `ket_qua: duyet, boi: may` và thêm tệp vào `ranh-gioi-them.json`; một yêu cầu `can_phan` chỉ sinh một sự kiện qua nhiều nhịp; và vì 1a chưa ánh xạ phiên → nhánh, tệp mà chính nhánh của phiên xin đang sửa vẫn thành `can_phan` nêu tên nhánh đó (lệch về phía an toàn, xem Out of scope).</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E14-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_phat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+ℹ duration_ms 76.518667</pre>
+</div>
+<div class="card eval" id="E15"><h3><span class="badge pass">PASS</span> &nbsp;E15 · test</h3><p class="crit">AC-10: Given `hang-viec.json` và trạng thái từng hàng suy từ `status` của `contract.md` (trên `origin/&lt;nhanh_chinh&gt;`: `signed-off` = đã gộp; ở worktree của phiên: `signed-off` = đã ký, có tệp = đang làm, vắng = chưa), When nhịp chọn hàng kế, Then `tiep/&lt;phiên&gt;.json` là hàng đang làm nếu có, nếu không là hàng chưa làm có mọi `sau` đã gộp và `uu_tien` nhỏ nhất; hàng thiếu phụ thuộc không bao giờ được chọn (→ `cho: phu-thuoc`); dãy hết hàng → `xong: true`, không bịa hàng; và ở nhịp thật, hàng đã gộp trên nhánh chính không bao giờ được giao lại.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E15-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/lich.test.mjs
+ℹ duration_ms 43.823333</pre>
+</div>
+<div class="card eval" id="E16"><h3><span class="badge pass">PASS</span> &nbsp;E16 · test</h3><p class="crit">AC-10: Given `hang-viec.json` và trạng thái từng hàng suy từ `status` của `contract.md` (trên `origin/&lt;nhanh_chinh&gt;`: `signed-off` = đã gộp; ở worktree của phiên: `signed-off` = đã ký, có tệp = đang làm, vắng = chưa), When nhịp chọn hàng kế, Then `tiep/&lt;phiên&gt;.json` là hàng đang làm nếu có, nếu không là hàng chưa làm có mọi `sau` đã gộp và `uu_tien` nhỏ nhất; hàng thiếu phụ thuộc không bao giờ được chọn (→ `cho: phu-thuoc`); dãy hết hàng → `xong: true`, không bịa hàng; và ở nhịp thật, hàng đã gộp trên nhánh chính không bao giờ được giao lại.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E16-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_phat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+ℹ duration_ms 76.518667</pre>
+</div>
+<div class="card eval" id="E17"><h3><span class="badge pass">PASS</span> &nbsp;E17 · test</h3><p class="crit">AC-11: Given trạng thái đợt, When nhịp ghi `trang-thai.json` và dựng `bang.html`, Then trang tự làm mới 30″, có tên đợt, khối «Hộp quyết định», phiên thợ, khoá đang giữ, hàng chờ lượt; chế độ giảm tải và dòng «cần anh» hiện ở đầu trang; mọi chuỗi được escape (`&lt;script&gt;` thành `&amp;lt;script&amp;gt;`) và chỉ link `claude://` hoặc `https://` thành `href` (link `javascript:` không thành `href`).</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E17-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_bang</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/bang.test.mjs
+ℹ todo 0
+ℹ duration_ms 39.5165</pre>
+</div>
+<div class="card eval" id="E18"><h3><span class="badge pass">PASS</span> &nbsp;E18 · test</h3><p class="crit">AC-11: Given trạng thái đợt, When nhịp ghi `trang-thai.json` và dựng `bang.html`, Then trang tự làm mới 30″, có tên đợt, khối «Hộp quyết định», phiên thợ, khoá đang giữ, hàng chờ lượt; chế độ giảm tải và dòng «cần anh» hiện ở đầu trang; mọi chuỗi được escape (`&lt;script&gt;` thành `&amp;lt;script&amp;gt;`) và chỉ link `claude://` hoặc `https://` thành `href` (link `javascript:` không thành `href`).</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E18-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_phat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+ℹ duration_ms 76.518667</pre>
+</div>
+<div class="card eval" id="E19"><h3><span class="badge pass">PASS</span> &nbsp;E19 · test</h3><p class="crit">AC-12: Given lỗi vận hành, When bộ phát lịch chạy, Then đơn hay yêu cầu JSON hỏng (hoặc thiếu `phien`/`loai`) bị chuyển vào `xin/hong/` hay `yeu-cau/hong/` kèm sự kiện `can_phan`, và nhịp vẫn cấp lượt cho đơn lành; `git fetch` hỏng không ngăn nhịp, và một lỗi lặp cùng nội dung chỉ ghi lại sau 30′; một tiến trình khác còn sống giữ `phat-lich.pid` thì bản thứ hai từ chối, pid đã chết thì bản mới nhận lại.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E19-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_phat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+ℹ duration_ms 76.518667</pre>
+</div>
+<div class="card eval" id="E20"><h3><span class="badge pass">PASS</span> &nbsp;E20 · test</h3><p class="crit">AC-13: Given một bản sao kho git, When chạy CLI `dieu-phoi.mjs mo &lt;tên&gt;` rồi `chay`, `xem`, `dong`, `xem`, Then `mo` dựng thư mục đợt từ `mau/` (đủ sáu thư mục, ba tệp, `goc_kho` = gốc bản sao) và symlink; `mo` lần hai khi đợt còn chạy báo `đợt &lt;tên&gt; đang chạy`; `chay` để lại một bộ phát lịch tách tiến trình mà sau ≥ 1 nhịp `xem` in `đợt &lt;tên&gt; · dang-chay · nhịp … · khoá trống · chờ lượt 0 · chờ người 0`; trong đợt hook chặn S4 thoát 2, sau `dong` hook thoát 0, tiến trình đã dừng, và `xem` thoát 1 với `dieu-phoi: không có đợt nào đang chạy`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E20-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_cli</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node --test scripts/dieu-phoi/test/cli.test.mjs
+ℹ todo 0
+ℹ duration_ms 189.58975</pre>
+</div>
+<div class="card eval" id="E21"><h3><span class="badge pass">PASS</span> &nbsp;E21 · script</h3><p class="crit">AC-13: Given một bản sao kho git, When chạy CLI `dieu-phoi.mjs mo &lt;tên&gt;` rồi `chay`, `xem`, `dong`, `xem`, Then `mo` dựng thư mục đợt từ `mau/` (đủ sáu thư mục, ba tệp, `goc_kho` = gốc bản sao) và symlink; `mo` lần hai khi đợt còn chạy báo `đợt &lt;tên&gt; đang chạy`; `chay` để lại một bộ phát lịch tách tiến trình mà sau ≥ 1 nhịp `xem` in `đợt &lt;tên&gt; · dang-chay · nhịp … · khoá trống · chờ lượt 0 · chờ người 0`; trong đợt hook chặn S4 thoát 2, sau `dong` hook thoát 0, tiến trình đã dừng, và `xem` thoát 1 với `dieu-phoi: không có đợt nào đang chạy`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E21-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_thu_kho</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/thu-kho.mjs
+KET LUAN: xanh</pre>
+</div>
+<div class="card eval" id="E22"><h3><span class="badge pend">UNCERTAIN</span> &nbsp;E22 · judgment</h3><p class="crit">AC-14: Given `scripts/dieu-phoi/README.md` và mục 4 của design doc, When người đọc README làm phiên giám sát, Then README có đủ bốn phần mở đợt, trong đợt, đóng đợt, đường lùi, mỗi phần chở đúng các bước mục 4 liệt kê (lệnh, Monitor timeout 30′, task lịch 30′ có `notifyOnCompletion`, lời dặn chip, push gom 30′, không `/loop`, kiểm `git status --porcelain` trước khi dọn worktree) ; và lệnh Monitor chép nguyên văn từ README, chạy trên một đợt đang sống, nhả ≥ 1 dòng trong 15 giây khi bộ phát lịch ghi một sự kiện `can_phan`.</p>
+<div class="kv"><span>judged_by <b>hội đồng ba judge (fresh context) — domain-correctness, operational-feasibility, spec-alignment</b></span></div>
+<p class="note"><b>Phán đoán:</b> README.md có đủ bốn phần và gần như mọi bước của mục 4 design doc. Cả ba judge cùng chỉ ra một chỗ thiếu: phần «Trong đợt» không có câu «Không dùng /loop» mà mục 4 yêu cầu, và README không nhắc /loop ở chỗ nào.</p>
+<div class="ov ovok">human_override: # chi nguoi ghi</div>
+</div>
+<div class="card eval" id="E23"><h3><span class="badge pass">PASS</span> &nbsp;E23 · script</h3><p class="crit">AC-15: Given mọi tệp `.mjs` và `.json` dưới `scripts/dieu-phoi/` ngoài `test/`, When quét mã, Then không có chuỗi `gh pr merge`, `--auto`, `onehub`, `crm`, đường dẫn tuyệt đối `/Users/`; không có dòng chú thích (trừ shebang); không có số `60_000`, `3600_000`, `300_000`, `1_800_000`, `30_000` ngoài `cau-hinh.mjs`; mẫu `mau/dieu-phoi.config.json` có `nhanh_chinh: &quot;main&quot;`; và `bun run test:dieu-phoi` chạy cả chín tệp test, mọi ca xanh.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E23-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_ranh_gioi</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/ranh-gioi.mjs
+KET LUAN: cay that sach · chieu do bat du 6/6</pre>
+</div>
+<div class="card eval" id="E24"><h3><span class="badge pass">PASS</span> &nbsp;E24 · test</h3><p class="crit">AC-15: Given mọi tệp `.mjs` và `.json` dưới `scripts/dieu-phoi/` ngoài `test/`, When quét mã, Then không có chuỗi `gh pr merge`, `--auto`, `onehub`, `crm`, đường dẫn tuyệt đối `/Users/`; không có dòng chú thích (trừ shebang); không có số `60_000`, `3600_000`, `300_000`, `1_800_000`, `30_000` ngoài `cau-hinh.mjs`; mẫu `mau/dieu-phoi.config.json` có `nhanh_chinh: &quot;main&quot;`; và `bun run test:dieu-phoi` chạy cả chín tệp test, mọi ca xanh.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E24-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.dph_tat_lich</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">bun run test:dieu-phoi
+ℹ duration_ms 219.732708</pre>
+</div>
+<div class="card eval" id="E25"><h3><span class="badge pass">PASS</span> &nbsp;E25 · script</h3><p class="crit">AC-1: Given các đơn `xin/` của nhiều phiên với `moc` khác nhau trong `hang-viec.json` và một đơn `ghim-lai` có `mo_merge: true`, When một nhịp cấp lượt, Then đơn `ghim-lai` mở merge được cấp trước mọi đơn, các đơn còn lại theo `moc` sớm trước rồi giờ xin; mỗi tài nguyên cấp đúng một lượt, `ghim-lai` dùng chung khoá `s4`; đơn được cấp bị xoá, `khoa/&lt;tài nguyên&gt;/chu.json` có đủ `phien, slug, loai, worktree, cap_luc, han_thue_den`, và có sự kiện `cap`; tài nguyên đang giữ thì không cấp.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E25-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E26"><h3><span class="badge pass">PASS</span> &nbsp;E26 · script</h3><p class="crit">AC-2: Given khoá `s4` đang giữ và còn đơn chờ, When chủ khoá nhả bằng `rm -rf khoa/s4`, Then nhịp kế tiếp cấp cho đơn đứng đầu hàng (khoá không trống khi còn đơn); và ca kẹt chéo bốn phiên mà luật «tự nhường» 04/10 không cấp cho ai thì bộ lập lịch cấp đúng một.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E26-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E27"><h3><span class="badge pass">PASS</span> &nbsp;E27 · script</h3><p class="crit">AC-3: Given một khoá có `chu.json`, When nhịp xét hạn thuê, Then còn hạn thì giữ; hết hạn mà `nhip` mới hơn `nhip_cu_phut` thì gia hạn thêm đúng `han_thue_phut[loai]` và ghi sự kiện `gia-han`; hết hạn mà `nhip` cũ hoặc vắng thì thu hồi và ghi sự kiện `thu-hoi` có `can_phan: true`; thư mục khoá không có `chu.json` quá 60″ cũng bị thu hồi với `can_phan`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E27-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E28"><h3><span class="badge pass">PASS</span> &nbsp;E28 · script</h3><p class="crit">AC-4: Given số đo máy macOS, When đánh giá sức khoẻ, Then áp lực bộ nhớ ≥ `ap_luc_muc` hoặc swap dùng &gt; `swap_gb` → giảm tải, kèm lý do có số; ca 05/10 swap 1,6/3 GB với áp lực mức 1 → không giảm tải; một tiến trình RSS &gt; `rss_gb` → dòng «cần người» có tên tiến trình và số GB; trong giảm tải nhịp không cấp `s4`, `ghim-lai`, `duong-nen` nhưng vẫn cấp `merge`, và chỉ ghi đúng một sự kiện `giam-tai` có `can_phan` khi bước vào.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E28-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E29"><h3><span class="badge pass">PASS</span> &nbsp;E29 · script</h3><p class="crit">AC-5: Given hook PreToolUse chặn S4, When nhận một lệnh S4 trong đợt, Then chưa có lượt → thoát 2 với stderr bắt đầu `chan-s4: khoá s4 đang trống nhưng chưa cấp cho phiên này. Ghi đơn xin/&lt;phiên&gt;-s4.json`; khoá thuộc phiên khác → thoát 2 nêu `khoá s4 đang thuộc &lt;phiên&gt;`; khoá ghi đúng worktree (kể cả cwd là thư mục con hay đi qua symlink) → 0; lệnh S4 mà đọc cấu hình đợt hay đầu vào hỏng → thoát 2 với `chan-s4: lỗi nội bộ: … — chặn để an toàn; báo phiên giám sát`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E29-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E30"><h3><span class="badge pass">PASS</span> &nbsp;E30 · script</h3><p class="crit">AC-6: Given hook chặn S4, When ngoài đợt, hoặc lệnh không phải S4 (kể cả khi `dieu-phoi.config.json` của đợt hỏng, hoặc đầu vào không phải JSON và không nhắc lệnh S4), Then thoát 0 không có stderr.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E30-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E31"><h3><span class="badge pass">PASS</span> &nbsp;E31 · script</h3><p class="crit">AC-8: Given một phiên thợ trong đợt, When hook PostToolUse và hook chờ người chạy, Then hook nhịp chỉ chạm `khoa/&lt;tên&gt;/nhip` của khoá mà `worktree` trùng cwd; `idle_prompt` và `permission_prompt` đều ghi `cho-nguoi/&lt;phiên&gt;.json` có `phien, loai` (đúng loại thông báo), `tin, session_id`; loại thông báo khác → `bo-qua`, không ghi; `UserPromptSubmit` xoá đúng tệp đó; phiên còn đơn trong `xin/` → `cho-luot`, còn yêu cầu chưa có `tra-loi/` → `cho-tra-loi`, cả hai không ghi tệp; ngoài đợt → `ngoai-dot`, cwd không thuộc thợ nào → `khong-phai-tho`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E31-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E32"><h3><span class="badge pass">PASS</span> &nbsp;E32 · script</h3><p class="crit">AC-9: Given yêu cầu `yeu-cau/&lt;phiên&gt;-&lt;số&gt;.json`, When được xét, Then (a) ở hàm định tuyến: `cham-tep` với tệp không thuộc ranh giới thợ khác, không nằm trong nhánh mở nào ngoài nhánh của chính phiên xin, không khớp `bao_ve` hay `chung_chi_them` → máy duyệt; ba ca vướng (ranh giới `&lt;phiên&gt;`, `đang được nhánh &lt;nhánh&gt; sửa`, `thuộc danh sách bảo vệ`) → `can_phan` đúng lý do; `viec-phu` trùng cùng kho cùng tiêu đề hoặc chung tệp trong 24 giờ → `gop` với `voi: &lt;id cũ&gt;`; `s4-gom`/`gia-han` có ước ≤ `s4_tran_gom_phut` → máy duyệt, vượt hay thiếu ước → `can_phan`; `can-nguoi` → `can_phan` với `dich: owner`; mọi loại khác → `can_phan`; (b) ở nhịp thật: máy duyệt thì ghi `tra-loi/&lt;id&gt;.json` có `ket_qua: duyet, boi: may` và thêm tệp vào `ranh-gioi-them.json`; một yêu cầu `can_phan` chỉ sinh một sự kiện qua nhiều nhịp; và vì 1a chưa ánh xạ phiên → nhánh, tệp mà chính nhánh của phiên xin đang sửa vẫn thành `can_phan` nêu tên nhánh đó (lệch về phía an toàn, xem Out of scope).</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E32-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E33"><h3><span class="badge pass">PASS</span> &nbsp;E33 · script</h3><p class="crit">AC-10: Given `hang-viec.json` và trạng thái từng hàng suy từ `status` của `contract.md` (trên `origin/&lt;nhanh_chinh&gt;`: `signed-off` = đã gộp; ở worktree của phiên: `signed-off` = đã ký, có tệp = đang làm, vắng = chưa), When nhịp chọn hàng kế, Then `tiep/&lt;phiên&gt;.json` là hàng đang làm nếu có, nếu không là hàng chưa làm có mọi `sau` đã gộp và `uu_tien` nhỏ nhất; hàng thiếu phụ thuộc không bao giờ được chọn (→ `cho: phu-thuoc`); dãy hết hàng → `xong: true`, không bịa hàng; và ở nhịp thật, hàng đã gộp trên nhánh chính không bao giờ được giao lại.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E33-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E34"><h3><span class="badge pass">PASS</span> &nbsp;E34 · script</h3><p class="crit">AC-11: Given trạng thái đợt, When nhịp ghi `trang-thai.json` và dựng `bang.html`, Then trang tự làm mới 30″, có tên đợt, khối «Hộp quyết định», phiên thợ, khoá đang giữ, hàng chờ lượt; chế độ giảm tải và dòng «cần anh» hiện ở đầu trang; mọi chuỗi được escape (`&lt;script&gt;` thành `&amp;lt;script&amp;gt;`) và chỉ link `claude://` hoặc `https://` thành `href` (link `javascript:` không thành `href`).</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E34-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E35"><h3><span class="badge pass">PASS</span> &nbsp;E35 · script</h3><p class="crit">AC-12: Given lỗi vận hành, When bộ phát lịch chạy, Then đơn hay yêu cầu JSON hỏng (hoặc thiếu `phien`/`loai`) bị chuyển vào `xin/hong/` hay `yeu-cau/hong/` kèm sự kiện `can_phan`, và nhịp vẫn cấp lượt cho đơn lành; `git fetch` hỏng không ngăn nhịp, và một lỗi lặp cùng nội dung chỉ ghi lại sau 30′; một tiến trình khác còn sống giữ `phat-lich.pid` thì bản thứ hai từ chối, pid đã chết thì bản mới nhận lại.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E35-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_dot_bien</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+KET LUAN: 17 dot bien, moi ca ghim deu do</pre>
+</div>
+<div class="card eval" id="E36"><h3><span class="badge pass">PASS</span> &nbsp;E36 · script</h3><p class="crit">AC-9: Given yêu cầu `yeu-cau/&lt;phiên&gt;-&lt;số&gt;.json`, When được xét, Then (a) ở hàm định tuyến: `cham-tep` với tệp không thuộc ranh giới thợ khác, không nằm trong nhánh mở nào ngoài nhánh của chính phiên xin, không khớp `bao_ve` hay `chung_chi_them` → máy duyệt; ba ca vướng (ranh giới `&lt;phiên&gt;`, `đang được nhánh &lt;nhánh&gt; sửa`, `thuộc danh sách bảo vệ`) → `can_phan` đúng lý do; `viec-phu` trùng cùng kho cùng tiêu đề hoặc chung tệp trong 24 giờ → `gop` với `voi: &lt;id cũ&gt;`; `s4-gom`/`gia-han` có ước ≤ `s4_tran_gom_phut` → máy duyệt, vượt hay thiếu ước → `can_phan`; `can-nguoi` → `can_phan` với `dich: owner`; mọi loại khác → `can_phan`; (b) ở nhịp thật: máy duyệt thì ghi `tra-loi/&lt;id&gt;.json` có `ket_qua: duyet, boi: may` và thêm tệp vào `ranh-gioi-them.json`; một yêu cầu `can_phan` chỉ sinh một sự kiện qua nhiều nhịp; và vì 1a chưa ánh xạ phiên → nhánh, tệp mà chính nhánh của phiên xin đang sửa vẫn thành `can_phan` nêu tên nhánh đó (lệch về phía an toàn, xem Out of scope).</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E36-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_nhip_that</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
+(bộ đo không in dòng kết luận; mã thoát bằng 0)</pre>
+</div>
+<div class="card eval" id="E37"><h3><span class="badge pass">PASS</span> &nbsp;E37 · script</h3><p class="crit">AC-10: Given `hang-viec.json` và trạng thái từng hàng suy từ `status` của `contract.md` (trên `origin/&lt;nhanh_chinh&gt;`: `signed-off` = đã gộp; ở worktree của phiên: `signed-off` = đã ký, có tệp = đang làm, vắng = chưa), When nhịp chọn hàng kế, Then `tiep/&lt;phiên&gt;.json` là hàng đang làm nếu có, nếu không là hàng chưa làm có mọi `sau` đã gộp và `uu_tien` nhỏ nhất; hàng thiếu phụ thuộc không bao giờ được chọn (→ `cho: phu-thuoc`); dãy hết hàng → `xong: true`, không bịa hàng; và ở nhịp thật, hàng đã gộp trên nhánh chính không bao giờ được giao lại.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E37-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_nhip_that</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
+(bộ đo không in dòng kết luận; mã thoát bằng 0)</pre>
+</div>
+<div class="card eval" id="E38"><h3><span class="badge pass">PASS</span> &nbsp;E38 · script</h3><p class="crit">AC-8: Given một phiên thợ trong đợt, When hook PostToolUse và hook chờ người chạy, Then hook nhịp chỉ chạm `khoa/&lt;tên&gt;/nhip` của khoá mà `worktree` trùng cwd; `idle_prompt` và `permission_prompt` đều ghi `cho-nguoi/&lt;phiên&gt;.json` có `phien, loai` (đúng loại thông báo), `tin, session_id`; loại thông báo khác → `bo-qua`, không ghi; `UserPromptSubmit` xoá đúng tệp đó; phiên còn đơn trong `xin/` → `cho-luot`, còn yêu cầu chưa có `tra-loi/` → `cho-tra-loi`, cả hai không ghi tệp; ngoài đợt → `ngoai-dot`, cwd không thuộc thợ nào → `khong-phai-tho`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E38-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_nhip_that</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
+(bộ đo không in dòng kết luận; mã thoát bằng 0)</pre>
+</div>
+<div class="card eval" id="E39"><h3><span class="badge pass">PASS</span> &nbsp;E39 · script</h3><p class="crit">AC-14: Given `scripts/dieu-phoi/README.md` và mục 4 của design doc, When người đọc README làm phiên giám sát, Then README có đủ bốn phần mở đợt, trong đợt, đóng đợt, đường lùi, mỗi phần chở đúng các bước mục 4 liệt kê (lệnh, Monitor timeout 30′, task lịch 30′ có `notifyOnCompletion`, lời dặn chip, push gom 30′, không `/loop`, kiểm `git status --porcelain` trước khi dọn worktree) ; và lệnh Monitor chép nguyên văn từ README, chạy trên một đợt đang sống, nhả ≥ 1 dòng trong 15 giây khi bộ phát lịch ghi một sự kiện `can_phan`.</p>
+<div class="kv"><span>run_id <b>minted-dieu-phoi-hai-tang-E39-r1</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.dph_thu_kho</b></span><span>verified_at <b>2026-10-06T22:38:34Z</b></span><span>baseline <b>red</b></span></div>
+<pre class="out">node _acceptance/dieu-phoi-hai-tang/rang/thu-kho.mjs
+KET LUAN: xanh</pre>
+</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: 38 eval máy xanh, đều đỏ trên baseline; E22 (AC-14, judgment) hội đồng ba judge đề xuất FAIL vì README thiếu câu «Không dùng /loop» ở phần «Trong đợt». Verdict PENDING-JUDGMENT, chờ người ở Cổng 2.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>

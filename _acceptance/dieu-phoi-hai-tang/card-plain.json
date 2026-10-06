@@ -1,5 +1,5 @@
 {
- "feature_plain": "Máy tự phát lượt chạy chấm (S4) cho các phiên thợ, tự canh máy quá tải và tự báo việc chờ anh — phiên điều phối thôi làm đồng hồ, anh thôi phải hỏi trạng thái.",
+ "feature_plain": "Máy tự phát lượt chạy chấm (S4) cho các phiên thợ, tự canh máy quá tải và tự báo việc chờ anh — phiên điều phối thôi làm đồng hồ, anh thôi phải hỏi trạng thái. Bản mở lại: thêm ba tiêu chí từ lỗi review của lượt chấm 1.",
  "will_do": [
   {
    "id": "AC-1",
@@ -40,6 +40,14 @@
   {
    "id": "AC-13",
    "p": "Sẽ có một lệnh để mở, chạy, xem và đóng đợt; bộ phát lịch chạy tách khỏi app nên app sập không kéo nó chết theo."
+  },
+  {
+   "id": "AC-16",
+   "p": "Sẽ từ chối ngay lúc đọc mọi đơn xin lượt hay yêu cầu ghi sai hình dạng (thư mục không tồn tại, loại lạ, danh sách tệp sai kiểu), chuyển sang chỗ hỏng và báo giám sát, trong khi đơn lành vẫn được cấp."
+  },
+  {
+   "id": "AC-17",
+   "p": "Sẽ nhớ tệp nào đã duyệt cho thợ nào: thợ thứ hai xin cùng tệp thì đánh thức giám sát thay vì tự duyệt."
   }
  ],
  "wont_do": [
@@ -94,13 +102,17 @@
   {
    "id": "OOS-9",
    "p": "Không làm hàng nào của lộ trình sản phẩm."
+  },
+  {
+   "id": "AC-18",
+   "p": "Sẽ KHÔNG coi một phiên thợ ở worktree lồng bên trong kho chính là chủ khoá của kho chính — lượt chấm của nó vẫn bị chặn."
   }
  ],
  "scope_plain": "Những gì vòng này cố ý chưa làm (đúng ranh giới giai đoạn 1a của spec):",
  "coverage_plain": [
   {
    "i": 0,
-   "p": "Mỗi thành phần của giai đoạn 1a có ít nhất một tiêu chí: lập lịch (AC-1–3, AC-10), sức khoẻ máy (AC-4), ba hook (AC-5–8), kênh yêu cầu (AC-9), trang đồng hồ (AC-11), bộ phát lịch (AC-12), lệnh đợt (AC-13), nghi thức giám sát (AC-14), mã không ghi cứng (AC-15)."
+   "p": "Mỗi thành phần của giai đoạn 1a có ít nhất một tiêu chí: lập lịch (AC-1–3, AC-10), sức khoẻ máy (AC-4), ba hook (AC-5–8), kênh yêu cầu (AC-9), trang đồng hồ (AC-11), bộ phát lịch (AC-12), lệnh đợt (AC-13), nghi thức giám sát (AC-14), mã không ghi cứng (AC-15). Thêm trục biên đọc vào: đơn và yêu cầu sai hình dạng (AC-16), tệp đã duyệt cho thợ khác (AC-17), worktree lồng (AC-18)."
   },
   {
    "i": 1,

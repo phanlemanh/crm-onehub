@@ -5,10 +5,10 @@ slug: dieu-phoi-hai-tang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, config]
-status: verified
+status: draft
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-hai-tang-design.md
-approved_by: Phan Le Manh
-approved_at: 2026-10-07
+approved_by:
+approved_at:
 ---
 
 # Acceptance Contract: dieu-phoi-hai-tang
@@ -46,14 +46,17 @@ Thuật ngữ:
 - AC-12: Given lỗi vận hành, When bộ phát lịch chạy, Then đơn hay yêu cầu JSON hỏng (hoặc thiếu `phien`/`loai`) bị chuyển vào `xin/hong/` hay `yeu-cau/hong/` kèm sự kiện `can_phan`, và nhịp vẫn cấp lượt cho đơn lành; `git fetch` hỏng không ngăn nhịp, và một lỗi lặp cùng nội dung chỉ ghi lại sau 30′; một tiến trình khác còn sống giữ `phat-lich.pid` thì bản thứ hai từ chối, pid đã chết thì bản mới nhận lại.
 - AC-13: Given một bản sao kho git, When chạy CLI `dieu-phoi.mjs mo <tên>` rồi `chay`, `xem`, `dong`, `xem`, Then `mo` dựng thư mục đợt từ `mau/` (đủ sáu thư mục, ba tệp, `goc_kho` = gốc bản sao) và symlink; `mo` lần hai khi đợt còn chạy báo `đợt <tên> đang chạy`; `chay` để lại một bộ phát lịch tách tiến trình mà sau ≥ 1 nhịp `xem` in `đợt <tên> · dang-chay · nhịp … · khoá trống · chờ lượt 0 · chờ người 0`; trong đợt hook chặn S4 thoát 2, sau `dong` hook thoát 0, tiến trình đã dừng, và `xem` thoát 1 với `dieu-phoi: không có đợt nào đang chạy`.
 - AC-14: Given `scripts/dieu-phoi/README.md` và mục 4 của design doc, When người đọc README làm phiên giám sát, Then README có đủ bốn phần mở đợt, trong đợt, đóng đợt, đường lùi, mỗi phần chở đúng các bước mục 4 liệt kê (lệnh, Monitor timeout 30′, task lịch 30′ có `notifyOnCompletion`, lời dặn chip, push gom 30′, không `/loop`, kiểm `git status --porcelain` trước khi dọn worktree) (judgment); và lệnh Monitor chép nguyên văn từ README, chạy trên một đợt đang sống, nhả ≥ 1 dòng trong 15 giây khi bộ phát lịch ghi một sự kiện `can_phan`.
-- AC-15: Given mọi tệp `.mjs` và `.json` dưới `scripts/dieu-phoi/` ngoài `test/`, When quét mã, Then không có chuỗi `gh pr merge`, `--auto`, `onehub`, `crm`, đường dẫn tuyệt đối `/Users/`; không có dòng chú thích (trừ shebang); không có số `60_000`, `3600_000`, `300_000`, `1_800_000`, `30_000` ngoài `cau-hinh.mjs`; mẫu `mau/dieu-phoi.config.json` có `nhanh_chinh: "main"`; và `bun run test:dieu-phoi` chạy cả chín tệp test, mọi ca xanh.
+- AC-15: Given mọi tệp `.mjs` và `.json` dưới `scripts/dieu-phoi/` ngoài `test/`, When quét mã, Then không có chuỗi `gh pr merge`, `--auto`, `onehub`, `crm`, đường dẫn tuyệt đối `/Users/`; không có dòng chú thích (trừ shebang); không có số `60_000`, `3600_000`, `300_000`, `1_800_000`, `30_000` ngoài `cau-hinh.mjs`; mẫu `mau/dieu-phoi.config.json` có `nhanh_chinh: "main"`; và `bun run test:dieu-phoi` chạy cả mười tệp test, mọi ca xanh.
+- AC-16: Given một đơn `xin/` hay yêu cầu `yeu-cau/` là JSON đúng cú pháp nhưng sai hình dạng — đơn có `loai` ngoài `s4`, `ghim-lai`, `duong-nen`, `merge`, hoặc `worktree` không phải thư mục tồn tại; yêu cầu `cham-tep` có `noi_dung.tep` không phải danh sách đường dẫn không rỗng — When nhịp đọc, Then tệp chuyển vào `hong/` cùng sự kiện `don-hong` hay `yeu-cau-hong` có `can_phan: true` nêu đúng trường sai; không tạo thư mục khoá, không ghi `tra-loi/`, không thêm gì vào `ranh-gioi-them.json`; đơn lành cùng nhịp vẫn được cấp và `trang-thai.json` vẫn được ghi; và hàm định tuyến gọi thẳng với `tep` là một chuỗi trả `can_phan`, không duyệt.
+- AC-17: Given `ranh-gioi-them.json` đã ghi một tệp cho phiên P1 (kể cả khi P1 được duyệt trước đó trong cùng nhịp), When phiên P2 xin `cham-tep` cùng tệp, Then `can_phan` với lý do `<tệp> đã được duyệt cho P1`; P1 xin lại chính tệp đó vẫn được máy duyệt.
+- AC-18: Given khoá ghi `worktree` là checkout chính và một worktree git khác nằm lồng bên trong nó (như `.claude/worktrees/<tên>`), When hook chặn S4, hook nhịp, hay ánh xạ cwd → phiên xét một cwd trong worktree lồng, Then cwd đó không được coi thuộc worktree của khoá: hook chặn S4 thoát 2 nêu phiên giữ khoá, hook nhịp không chạm `nhip`, ánh xạ không trả phiên của checkout chính; còn cwd ở chính checkout chính, kể cả thư mục con thường, vẫn khớp.
 
 ## Coverage
 
 Không dùng skill morphological-scan: spec ngoài đã chốt phạm vi và §7 của nó đã liệt ma trận kiểm thử
 (entry `descope` trong `decisions.jsonl`). Bảng đối chiếu tay:
 
-- Trục thành phần (spec §5 1a): lập lịch (AC-1, AC-2, AC-3, AC-10) | sức khoẻ (AC-4) | hook chặn S4 (AC-5, AC-6, AC-7) | hook nhịp + chờ người, cả `idle_prompt` lẫn `permission_prompt` (AC-7, AC-8) | kênh yêu cầu (AC-9) | bảng (AC-11) | vỏ I/O bộ phát lịch (AC-12) | CLI + vòng đời đợt (AC-13) | nghi thức giám sát và lệnh Monitor chạy thật (AC-14) | ranh giới mã §5.1 (AC-15)
+- Trục thành phần (spec §5 1a): lập lịch (AC-1, AC-2, AC-3, AC-10) | sức khoẻ (AC-4) | hook chặn S4 (AC-5, AC-6, AC-7) | hook nhịp + chờ người, cả `idle_prompt` lẫn `permission_prompt` (AC-7, AC-8) | kênh yêu cầu (AC-9) | bảng (AC-11) | vỏ I/O bộ phát lịch (AC-12) | CLI + vòng đời đợt (AC-13) | nghi thức giám sát và lệnh Monitor chạy thật (AC-14) | ranh giới mã §5.1 (AC-15) | biên đọc vào: đơn và yêu cầu sai hình dạng (AC-16), ranh giới đã nới (AC-17), worktree lồng (AC-18)
 - Trục chiều đo (spec §7): xanh-đúng ở mọi AC | đỏ-có-tên: thông điệp chặn (AC-5), lý do vướng (AC-9), lỗi nội bộ (AC-5) | chiều im: ngoài đợt / lệnh thường (AC-6, AC-7), chờ lượt không vào hộp quyết định (AC-8), nhánh của chính mình ở hàm định tuyến (AC-9a), thiếu phụ thuộc (AC-10) | lệch an toàn đã khai: nhánh của chính mình ở nhịp thật thành `can_phan` (AC-9b) | đối chứng luật cũ (AC-2), báo động giả 05/10 (AC-4) | tích hợp ở nhịp thật: suy trạng thái hàng (AC-10), đường đánh thức Monitor (AC-14)
 - Trục hỏng vận hành (Review Focus của kế hoạch): config hỏng (AC-5, AC-6) | sập giữa lúc cấp (AC-3) | chạy hai lần (AC-12) | worktree qua symlink (AC-5) | JSON ghi dở (AC-12) | mất mạng (AC-12)
 
@@ -72,6 +75,18 @@ Không dùng skill morphological-scan: spec ngoài đã chốt phạm vi và §7
 > Out of scope = scope-truth (Gate 1 duyệt mục này). Rationale/trade-off từng mục → 1 entry `descope` trong `decisions.jsonl`.
 
 ## Notes
+
+- Hạn chế đã biết, owner chọn ở Cổng 2 round 1 (sổ quyết định d-12):
+  - Ngoài-3: chu kỳ tự làm mới 30″ của bảng và chữ «60″» trong lý do thu hồi khoá trống vẫn viết tay, chỉnh `khoaTrongMs` thì chữ đó không đổi theo.
+  - Ngoài-8: E11 chỉ đo «thoát 0» cho ba hook phụ; hook trỏ nhầm tệp vẫn xanh.
+  - Ngoài-9: test dựng `chu.json` và `nhip` bằng tay thay vì đi vòng bên ghi thật → bên đọc.
+  - Ngoài-10: ma trận phân loại lệnh S4 thiếu phần tử `s4-args`.
+  - Ngoài-11: chưa có đơn `ghim-lai` trong ca giảm tải.
+  - Ngoài-12: ô {yêu cầu} × {JSON hỏng, thiếu trường} chưa đo riêng (AC-16 nay phủ một phần).
+  - Ngoài-13: sự kiện `gia-han` ở mức nhịp chưa được khẳng định.
+  - Ngoài-14: «ở đầu trang» của bảng chỉ đo bằng chuỗi có mặt.
+  - Ngoài-15: «đủ các khối» và «escape mọi chuỗi» chỉ đo vài ca.
+  - Ngoài-16, Ngoài-17: chấp nhận, không sửa.
 
 - Mã khác kế hoạch 1a đúng hai chỗ: bỏ chú thích, gom hằng thời gian vào `cau-hinh.mjs` (design doc mục 3). Test của kế hoạch giữ nguyên.
 - Test chạy bằng `node --test` (Node ≥ 22; máy có v26, cần mẫu glob thay vì thư mục).

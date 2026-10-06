@@ -57,7 +57,17 @@ export function trongWorktree(worktree, cwd) {
   } catch {
     return false;
   }
-  return thuc === worktree || thuc.startsWith(`${worktree}${path.sep}`);
+  if (thuc === worktree) return true;
+  if (!thuc.startsWith(`${worktree}${path.sep}`)) return false;
+  let goc;
+  try {
+    goc = fs.realpathSync(
+      execFileSync('git', ['rev-parse', '--show-toplevel'], { cwd: thuc, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(),
+    );
+  } catch {
+    return true;
+  }
+  return goc === worktree || !goc.startsWith(`${worktree}${path.sep}`);
 }
 
 export function phienCuaCwd(hangViec, cwd) {

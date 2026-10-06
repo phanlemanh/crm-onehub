@@ -26,6 +26,11 @@ const DOT_BIEN = [
 	{ ma: "M10", tep: "bang.mjs", tim: "  String(s ?? '').replace(", thay: "  String(s ?? '') || String(s ?? '').replace(", ghim: [["bang", "veBang: escape mọi chuỗi; link lạ không thành href"]] },
 	{ ma: "M10b", tep: "phat-lich.mjs", tim: "  fs.writeFileSync(path.join(thuMuc, 'bang.html'), veBang(tt));\n", thay: "", ghim: [["phat-lich", "hàng kế: ghi tiep/P1.json; trang-thai.json + bang.html có mặt"]] },
 	{ ma: "M11", tep: "phat-lich.mjs", tim: "      process.kill(cu, 0);\n      return false;\n", thay: "      process.kill(cu, 0);\n", ghim: [["phat-lich", "giuPid: một tiến trình KHÁC còn sống đang giữ → từ chối; pid chết → nhận lại; chính mình → giữ"]] },
+	{ ma: "M16", tep: "hinh-dang.mjs", tim: "  if (!laThuMuc) throw new Error(`worktree ${du.worktree} không phải thư mục tồn tại`);\n", thay: "", ghim: [["bien", "đơn sai hình dạng → xin/hong/ + can_phan nêu trường; đơn lành cùng nhịp vẫn được cấp"]] },
+	{ ma: "M16b", tep: "hinh-dang.mjs", tim: "  if (!LOAI_DON.includes(du.loai)) throw new Error(`loai ${du.loai} không thuộc ${LOAI_DON.join(', ')}`);\n", thay: "", ghim: [["bien", "đơn sai hình dạng → xin/hong/ + can_phan nêu trường; đơn lành cùng nhịp vẫn được cấp"]] },
+	{ ma: "M19", tep: "yeu-cau.mjs", tim: "  if (!Array.isArray(tep) || !tep.every((t) => typeof t === 'string')) return { ket_qua: 'can_phan', ly_do: 'tep phải là danh sách đường dẫn' };\n", thay: "", ghim: [["bien", "yêu cầu cham-tep với tep là chuỗi → yeu-cau/hong/ ở nhịp, can_phan ở hàm định tuyến"]] },
+	{ ma: "M17", tep: "yeu-cau.mjs", tim: "    if (nguoiNoi) return { ket_qua: 'can_phan', ly_do: `${t} đã được duyệt cho ${nguoiNoi[0]}` };\n", thay: "", ghim: [["bien", "cham-tep: tệp đã duyệt cho phiên khác → can_phan; chính phiên đó → duyệt; cả khi duyệt trong cùng nhịp"]] },
+	{ ma: "M18", tep: "dot.mjs", tim: "  return goc === worktree || !goc.startsWith(`${worktree}${path.sep}`);", thay: "  return true;", ghim: [["bien", "worktree lồng: cwd trong worktree git lồng không thuộc khoá của checkout chính"]] },
 ];
 
 const ghi = (s) => process.stdout.write(`${s}\n`);

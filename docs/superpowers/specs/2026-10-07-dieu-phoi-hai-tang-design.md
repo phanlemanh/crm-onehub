@@ -96,3 +96,18 @@ README `scripts/dieu-phoi/README.md` phải có đủ bốn phần, mỗi phần
   cho lọt.
 - **Bộ phát lịch là điểm hỏng chung mới** (spec §9) — đường lùi §8 không để trạng thái nào chỉ nằm
   trong tiến trình.
+
+## 7. Bổ sung sau Cổng 2 round 1 (owner trả lại 07/10, sổ quyết định d-11)
+
+Review của S4 round 1 tìm sáu lỗi cùng hai gốc; owner chọn sửa ngay trong vòng này:
+
+- **Kiểm hình dạng ở biên** (AC-16): `scripts/dieu-phoi/hinh-dang.mjs` kiểm đơn `xin/` (loại thuộc bốn loại, `worktree`
+  là thư mục tồn tại) và yêu cầu `yeu-cau/` (`cham-tep` có `tep` là danh sách đường dẫn) ngay lúc bộ phát lịch đọc;
+  sai thì vào `hong/` kèm `can_phan` nêu đúng trường. Hàm định tuyến cũng tự từ chối `tep` không phải danh sách.
+- **Ranh giới đã nới có hiệu lực** (AC-17): `cham-tep` đọc `ranh-gioi-them.json`; tệp đã duyệt cho phiên khác thành
+  `can_phan`, kể cả khi lần duyệt kia xảy ra trong cùng nhịp.
+- **Worktree lồng** (AC-18): `trongWorktree` không còn chỉ so tiền tố đường dẫn; cwd nằm trong một worktree git lồng
+  bên trong worktree của khoá (như `.claude/worktrees/<tên>` trong checkout chính) không được coi là chủ khoá.
+- README thêm câu «không dùng `/loop`» mà mục 4 đòi (E22).
+
+Mười một mục còn lại của review là hạn chế đã biết, ghi ở `## Notes` của hợp đồng.
