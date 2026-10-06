@@ -28,7 +28,7 @@ evals:
     cmd: config:executors.test.cvdn_shell_khong_khoi
     paths:
       - "apps/app/components/auth-shell.tsx"
-      - "apps/app/components/auth-shader.tsx"
+      - "packages/ui/src/components/luoi-cham.tsx"
       - "apps/app/lib/messages/auth.ts"
       - "apps/app/test/cua-vao-shell.dom.tsx"
     expected: |
