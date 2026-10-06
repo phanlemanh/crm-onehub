@@ -1240,6 +1240,15 @@ executors:
     r1g_su_kien: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t su-kien"'
     r1g_ngay_cuoi_ky: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tra-loi-tin-nhac-nguong.integration.spec.ts -t ngay-cuoi-ky"'
     r1g_dem: 'bun run test -- "bun test _acceptance/zalo-va/rang/dem-getme.spec.ts"'
+    dph_lich: node --test scripts/dieu-phoi/test/lich.test.mjs
+    dph_suc_khoe: node --test scripts/dieu-phoi/test/suc-khoe.test.mjs
+    dph_yeu_cau: node --test scripts/dieu-phoi/test/yeu-cau.test.mjs
+    dph_hook_s4: node --test scripts/dieu-phoi/test/hook-chan-s4.test.mjs
+    dph_hook_nhip: node --test scripts/dieu-phoi/test/hook-nhip-cho-nguoi.test.mjs
+    dph_bang: node --test scripts/dieu-phoi/test/bang.test.mjs
+    dph_phat_lich: node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+    dph_cli: node --test scripts/dieu-phoi/test/cli.test.mjs
+    dph_tat_ca: bun run test:dieu-phoi
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
@@ -1909,6 +1918,11 @@ executors:
     tcu_khang_dinh: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/khang-dinh.mjs"
     tcu_tre_url: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/tre-url.mjs"
     tcu_on_dinh: "node _acceptance/to-chuc-chi-tiet-cho-url/rang/on-dinh.mjs"
+    dph_hook_that: node _acceptance/dieu-phoi-hai-tang/rang/hook-that.mjs
+    dph_thu_kho: node _acceptance/dieu-phoi-hai-tang/rang/thu-kho.mjs
+    dph_ranh_gioi: node _acceptance/dieu-phoi-hai-tang/rang/ranh-gioi.mjs
+    dph_dot_bien: node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    dph_nhip_that: node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

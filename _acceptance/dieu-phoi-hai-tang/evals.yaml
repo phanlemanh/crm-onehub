@@ -1,0 +1,288 @@
+schema_version: 1
+feature_slug: dieu-phoi-hai-tang
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.dph_lich
+    expected: "exit 0; lich.test.mjs xanh ở bốn ca 'xepHang: mốc sớm trước, rồi giờ xin', 'xepHang: ghim-lai mở merge chen lên trước mọi đơn', 'capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4', 'capLuot: tài nguyên đang giữ thì không cấp'. Chiều đỏ cùng fixture: M1, M1b, M2 của bộ đột biến dph_dot_bien (E25)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E2
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.dph_phat_lich
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'cấp lượt theo mốc: P1 (mốc 12/10) trước P2 (14/10); đơn được xoá; chu.json đủ trường' (chu.json so đủ phien, slug, loai, worktree, han_thue_den = cap_luc + 90 phút; đơn P2 còn; có sự kiện cap của P1). Chiều đỏ: M1b của bộ đột biến dph_dot_bien làm đúng ca này đỏ (E25)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dph_lich
+    expected: "exit 0; lich.test.mjs xanh ở ca 'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một' (luật cũ cấp 0, capLuot cấp đúng 1). Chiều đỏ: M2 của bộ đột biến dph_dot_bien (E26)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E4
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dph_phat_lich
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'nhả khoá → nhịp sau cấp cho người kế (không bao giờ trống khi còn đơn)': P1 giữ thì P2 chờ; rm -rf khoa/s4 rồi một nhịp thì chu.json ghi P2. Chiều đỏ: M2b của bộ đột biến dph_dot_bien (E26)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E5
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dph_lich
+    expected: "exit 0; lich.test.mjs xanh ở ca 'xetHanThue: còn hạn giữ; hết hạn + nhịp mới gia hạn; hết hạn + nhịp cũ thu hồi' (gia hạn ra đúng 13:30 khi now 12:00 với hạn thuê s4 90 phút; nhịp vắng cũng thu hồi). Chiều đỏ: M3 của bộ đột biến dph_dot_bien (E27)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E6
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dph_phat_lich
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'hạn thuê: hết hạn + nhịp cũ → thu hồi + can_phan; thư mục khoá trống quá 60″ → thu hồi' (hai sự kiện thu-hoi, cả hai can_phan true). Chiều đỏ: M3 và M12 của bộ đột biến dph_dot_bien (E27)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E7
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dph_suc_khoe
+    expected: "exit 0; suc-khoe.test.mjs xanh ở năm ca, gồm 'ca 04/10 (swap 22,3/24 GB, fseventsd 19 GB) → giảm tải + cần người' (lý do khớp 'swap 22.3/24.0 GB; áp lực bộ nhớ mức 4', cần người khớp 'fseventsd giữ 19.0 GB RSS') và 'báo động giả đo 05/10: swap 1,6/3 GB (54 %) nhưng áp lực mức 1 → KHÔNG giảm tải'. Chiều đỏ: M4 của bộ đột biến dph_dot_bien (E28)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E8
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dph_phat_lich
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'giảm tải: không cấp s4; đúng một sự kiện can_phan khi vào giảm tải' (hai nhịp, khoa/s4 vắng, đúng một sự kiện giam-tai, trang-thai.json ghi giam-tai). Chiều đỏ: M4b của bộ đột biến dph_dot_bien làm ca này và ca lich 'capLuot: giảm tải chặn s4, ghim-lai, duong-nen nhưng vẫn cấp merge' đỏ (E28)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E9
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dph_hook_s4
+    expected: "exit 0; hook-chan-s4.test.mjs xanh ở 'chưa có lượt → exit 2, thông điệp gọi tên khoá và cách xin', 'khoá thuộc phiên khác → exit 2 nêu tên phiên giữ', 'có lượt đúng worktree (kể cả qua symlink và thư mục con) → 0', 'đóng khi lỗi: lệnh S4 + lỗi nội bộ → 2 «lỗi nội bộ»'; mỗi ca so thông điệp bằng regex neo đầu chuỗi, không chỉ mã thoát. Chiều đỏ: M5 của bộ đột biến dph_dot_bien (E29)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E10
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dph_hook_s4
+    expected: "exit 0; hook-chan-s4.test.mjs xanh ở 'phanLoai: chỉ lệnh S4 được phân loại' và 'chiều im: không có đợt, hoặc lệnh không phải S4 → 0, kể cả khi config hỏng' (gồm đầu vào 'khong-phai-json' → 0). Chiều đỏ: M6 của bộ đột biến dph_dot_bien (E30)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E11
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.dph_hook_that
+    expected: "exit 0 khi bộ đo (gốc kho suy từ vị trí script) đọc .claude/settings.json thật, không chép lệnh tay, dựng bản sao git tạm có scripts/dieu-phoi/, rồi chạy đúng chuỗi command của từng hook bằng sh -c với CLAUDE_PROJECT_DIR = bản sao: matcher PreToolUse = 'Workflow|Bash', Notification = 'idle_prompt|permission_prompt'; ngoài đợt cả bốn thoát 0 không stderr; trong đợt dựng ở bản sao, PreToolUse với Workflow acceptance-verify.js thoát 2 và stderr bắt đầu 'chan-s4:', ba hook kia thoát 0; bản sao không có scripts/dieu-phoi/ thì cả bốn thoát 0. Cùng một lần chạy, chiều đỏ trên bản sao cùng fixture: settings bị gỡ lá chắn '[ -f \"$f\" ] || exit 0' thì bộ đo phải in 'DO: khong-script <hook> ma <mã>' cho cả bốn hook (không in → 'SOT' và exit 1). Dòng cuối 'KET LUAN: xanh'."
+    paths: ["scripts/dieu-phoi/**", ".claude/settings.json", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E12
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.dph_hook_nhip
+    expected: "exit 0; hook-nhip-cho-nguoi.test.mjs xanh ở bốn ca 'chamNhip: chỉ chạm khoá mà phiên này giữ', 'chờ người: idle_prompt ghi; UserPromptSubmit xoá; loại khác bỏ qua', 'chờ người — chiều im: đang có đơn xin hoặc yêu cầu chưa trả lời thì không vào hộp quyết định', 'chờ người: ngoài đợt và phiên không phải thợ'. Chiều đỏ: M7 của bộ đột biến dph_dot_bien (E31)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E13
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.dph_yeu_cau
+    expected: "exit 0; yeu-cau.test.mjs xanh ở bảy ca, gồm 'cham-tep: ba ca đỏ, mỗi ca đúng lý do' (regex 'danh sách bảo vệ', 'ranh giới P2', 'đang được nhánh feat/P2 sửa' và không nhắc feat/P1), 'cham-tep: nhánh của chính phiên xin không tính là vướng (chiều im)', 'viec-phu: trùng trong 24 giờ …', 's4-gom/gia-han: trong trần → máy; vượt hoặc thiếu ước → can_phan', 'can-nguoi → can_phan dich owner; …'. Chiều đỏ: M8 của bộ đột biến dph_dot_bien (E32)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E14
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.dph_phat_lich
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'yêu cầu: chạm tệp được máy duyệt → tra-loi + ranh-gioi-them; việc cần phán → một can_phan, không lặp' (ranh-gioi-them.json đúng {P1: [apps/x.ts]}, P1-2 không có tra-loi, đúng một sự kiện can_phan qua hai nhịp). Chiều đỏ: M8b của bộ đột biến dph_dot_bien (E32)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E15
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.dph_lich
+    expected: "exit 0; lich.test.mjs xanh ở ca 'chonHangKe: tiếp hàng đang làm; chọn hàng đủ phụ thuộc theo uu_tien; chờ; xong' (năm khẳng định: tiếp a; chọn d; chọn c khi B đã gộp; cho phu-thuoc khi B còn đang; xong). Chiều đỏ: M9 của bộ đột biến dph_dot_bien (E33)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E16
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.dph_phat_lich
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'hàng kế: ghi tiep/P1.json; trang-thai.json + bang.html có mặt' (tiep/P1.json có hang 'a'). Ca này chỉ chứng đường ghi tiep/; phần suy trạng thái hàng và chiều đỏ của nó đo ở E37 (đột biến M13)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E17
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.dph_bang
+    expected: "exit 0; bang.test.mjs xanh ở ba ca: meta refresh 30, đủ khối và href claude:// có mặt (đối chứng dương); escape '<script>' thành '&lt;script&gt;' và không có 'href=\"javascript:'; 'GIẢM TẢI' và dòng cần người hiện. Chiều đỏ: M10 của bộ đột biến dph_dot_bien (E34)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E18
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.dph_phat_lich
+    expected: "exit 0; phat-lich.test.mjs xanh ở ca 'hàng kế: ghi tiep/P1.json; trang-thai.json + bang.html có mặt' (trang-thai.json có dot 'thu', bang.html có 'Hộp quyết định'). Chiều đỏ: M10b của bộ đột biến dph_dot_bien (nhịp không ghi bang.html) làm đúng ca này đỏ (E34)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E19
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.dph_phat_lich
+    expected: "exit 0; phat-lich.test.mjs xanh ở ba ca 'đơn hỏng → xin/hong/ + can_phan, nhịp vẫn chạy tiếp', 'taoVong: fetch hỏng vẫn chạy nhịp; lỗi lặp chỉ báo một lần trong 30′' (1 sự kiện fetch-loi ở phút 6,6; 2 ở phút 40) và 'giuPid: một tiến trình KHÁC còn sống đang giữ → từ chối; pid chết → nhận lại; chính mình → giữ'. Chiều đỏ: M11 của bộ đột biến dph_dot_bien (E35)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E20
+    criterion: AC-13
+    executor: test
+    cmd: config:executors.test.dph_cli
+    expected: "exit 0; cli.test.mjs xanh ở hai ca 'moDot dựng thư mục đợt từ mẫu + symlink; mở đợt thứ hai khi đợt kia còn chạy → ném' và 'thử khô: trong đợt hook chặn S4; sau dongDot hook im' (cùng một lệnh Workflow: 2 trong đợt, 0 sau dongDot — hai chiều trên cùng fixture)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E21
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.dph_thu_kho
+    expected: "exit 0 khi bộ đo (gốc kho suy từ vị trí script) dựng bản sao git tạm có scripts/dieu-phoi/ của cây hiện tại, chạy thật dieu-phoi.mjs mo thu-kho, chay, chờ trang-thai.json (tối đa 20 giây), xem, dong, xem: dòng xem đầu khớp '^đợt thu-kho · dang-chay · nhịp \S+ · khoá trống · chờ lượt 0 · chờ người 0$'; pid trong phat-lich.pid còn sống trước dong và đã chết sau dong; hook chặn S4 thoát 2 trong đợt và 0 sau dong; xem cuối thoát 1 với stderr đúng 'dieu-phoi: không có đợt nào đang chạy'. Cùng một lần chạy, chiều đỏ trên bản sao cùng fixture: dongDot bị gỡ lời gọi dungPhatLich thì bộ đo phải in 'DO: tien-trinh-con-song-sau-dong' (không in → 'SOT' và exit 1). Bộ đo luôn giết pid còn sót trước khi thoát. Dòng cuối 'KET LUAN: xanh'."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E22
+    criterion: AC-14
+    executor: judgment
+    question: >-
+      README này có đủ bốn phần mở đợt, trong đợt, đóng đợt, đường lùi, và mỗi phần có chở đúng
+      các bước mà mục 4 của design doc liệt kê không — lệnh mo/chay/xem/dong, Monitor tail -n0 -F
+      su-kien.jsonl lọc can_phan với timeout 30 phút giăng lại khi hết hạn, task lịch 30 phút có
+      notifyOnCompletion, nhóm thanh bên và lời dặn chip (thư mục đợt, mã phiên, ranh giới, đọc
+      LUAT.md trước S1), trả lời can_phan bằng tra-loi/<id>.json có boi giam-sat kèm một dòng Nhật
+      ký, push gom tối đa một lần mỗi 30 phút, không dùng /loop, kiểm git status --porcelain trước
+      khi dọn worktree? Bước nào thiếu hay sai thì nêu đích danh.
+    inputs:
+      - scripts/dieu-phoi/README.md
+      - docs/superpowers/specs/2026-10-07-dieu-phoi-hai-tang-design.md
+    paths: ["scripts/dieu-phoi/README.md", "docs/superpowers/specs/2026-10-07-dieu-phoi-hai-tang-design.md"]
+    expected: >-
+      Một phiên giám sát mới đọc README làm được trọn nghi thức mà không cần mở spec: đủ bốn phần,
+      mỗi bước của mục 4 design doc có mặt với đúng lệnh hay đúng tham số. Thiếu một bước là FAIL
+      và phải nêu tên bước. Lệnh Monitor có chạy được thật hay không KHÔNG thuộc câu hỏi này — E39 đo.
+  - id: E23
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.dph_ranh_gioi
+    expected: "exit 0 khi bộ đo (gốc kho suy từ vị trí script) quét mọi tệp .mjs và .json dưới scripts/dieu-phoi/ ngoài test/: 0 dòng chứa 'gh pr merge', '--auto', 'onehub', 'crm', '/Users/'; 0 chú thích theo cây cú pháp của typescript (shebang không tính); 0 số 60_000, 3600_000, 300_000, 1_800_000, 30_000 ngoài cau-hinh.mjs; mau/dieu-phoi.config.json có nhanh_chinh 'main'; tập tệp đã quét (> 0) bằng đúng tập git ls-files cùng bộ lọc. Cùng một lần chạy, chiều đỏ trên bản sao cùng fixture: tiêm lần lượt năm vi phạm (chú thích dòng ở lich.mjs, chú thích cuối dòng ở glob.mjs, chuỗi 'gh pr merge 1 --auto' ở dot.mjs, chuỗi 'onehub' ở bang.mjs, số 60_000 ở lich.mjs) thì mỗi lần bản quét in 'DO: <luật> <tệp>:<dòng>' đúng luật, đúng tệp, đúng dòng tiêm và bộ đo in 'BAT …'; một lần không bắt → 'SOT …' và exit 1. Dòng cuối 'KET LUAN: cay that sach · chieu do bat du 5/5'."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E24
+    criterion: AC-15
+    executor: test
+    cmd: config:executors.test.dph_tat_ca
+    expected: "exit 0; bun run test:dieu-phoi chạy node --test trên mẫu 'scripts/dieu-phoi/test/*.test.mjs', báo 'tests' ≥ 50 và 'fail 0'; đủ chín tệp test: nen, lich, suc-khoe, yeu-cau, hook-chan-s4, hook-nhip-cho-nguoi, bang, phat-lich, cli."
+    paths: ["scripts/dieu-phoi/**", "package.json"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E25
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M1 (xepHang bỏ ưu tiên ghim-lai mở merge) phải làm đỏ lich.test.mjs::'xepHang: ghim-lai mở merge chen lên trước mọi đơn'; M1b (xepHang bỏ mốc khỏi khoá xếp) phải làm đỏ lich.test.mjs::'xepHang: mốc sớm trước, rồi giờ xin' và phat-lich.test.mjs::'cấp lượt theo mốc: P1 (mốc 12/10) trước P2 (14/10); đơn được xoá; chu.json đủ trường'; M2 (capLuot bỏ đánh dấu tài nguyên đã cấp) phải làm đỏ lich.test.mjs::'capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4' và lich.test.mjs::'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E26
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M2 (capLuot bỏ đánh dấu tài nguyên đã cấp) phải làm đỏ lich.test.mjs::'capLuot: mỗi tài nguyên một lượt; ghim-lai dùng chung khoá s4' và lich.test.mjs::'phát lại 04/10: bốn phiên nhường chéo thì luật cũ không cấp ai, luật mới cấp một'; M2b (bộ phát lịch coi khoá vắng là đang giữ) phải làm đỏ phat-lich.test.mjs::'nhả khoá → nhịp sau cấp cho người kế (không bao giờ trống khi còn đơn)'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E27
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M3 (xetHanThue gia hạn bất kể nhịp) phải làm đỏ lich.test.mjs::'xetHanThue: còn hạn giữ; hết hạn + nhịp mới gia hạn; hết hạn + nhịp cũ thu hồi' và phat-lich.test.mjs::'hạn thuê: hết hạn + nhịp cũ → thu hồi + can_phan; thư mục khoá trống quá 60″ → thu hồi'; M12 (bộ phát lịch không thu hồi thư mục khoá trống) phải làm đỏ phat-lich.test.mjs::'hạn thuê: hết hạn + nhịp cũ → thu hồi + can_phan; thư mục khoá trống quá 60″ → thu hồi'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E28
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M4 (giảm tải theo tỉ lệ swap > 50 %) phải làm đỏ suc-khoe.test.mjs::'báo động giả đo 05/10: swap 1,6/3 GB (54 %) nhưng áp lực mức 1 → KHÔNG giảm tải'; M4b (capLuot bỏ chặn giảm tải) phải làm đỏ lich.test.mjs::'capLuot: giảm tải chặn s4, ghim-lai, duong-nen nhưng vẫn cấp merge' và phat-lich.test.mjs::'giảm tải: không cấp s4; đúng một sự kiện can_phan khi vào giảm tải'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E29
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M5 (lỗi nội bộ của hook trả mã 0) phải làm đỏ hook-chan-s4.test.mjs::'đóng khi lỗi: lệnh S4 + lỗi nội bộ → 2 «lỗi nội bộ»'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E30
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M6 (hook bỏ lối thoát sớm cho lệnh không phải S4) phải làm đỏ hook-chan-s4.test.mjs::'chiều im: không có đợt, hoặc lệnh không phải S4 → 0, kể cả khi config hỏng'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E31
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M7 (hook chờ người bỏ kiểm đơn xin) phải làm đỏ hook-nhip-cho-nguoi.test.mjs::'chờ người — chiều im: đang có đơn xin hoặc yêu cầu chưa trả lời thì không vào hộp quyết định'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E32
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M8 (cham-tep không loại nhánh của chính phiên xin) phải làm đỏ yeu-cau.test.mjs::'cham-tep: nhánh của chính phiên xin không tính là vướng (chiều im)'; M8b (bộ phát lịch quên các yêu cầu đã báo) phải làm đỏ phat-lich.test.mjs::'yêu cầu: chạm tệp được máy duyệt → tra-loi + ranh-gioi-them; việc cần phán → một can_phan, không lặp'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E33
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M9 (chonHangKe bỏ kiểm phụ thuộc) phải làm đỏ lich.test.mjs::'chonHangKe: tiếp hàng đang làm; chọn hàng đủ phụ thuộc theo uu_tien; chờ; xong'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E34
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M10 (bảng bỏ escape) phải làm đỏ bang.test.mjs::'veBang: escape mọi chuỗi; link lạ không thành href'; M10b (nhịp không ghi bang.html) phải làm đỏ phat-lich.test.mjs::'hàng kế: ghi tiep/P1.json; trang-thai.json + bang.html có mặt'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E35
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.dph_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm của hệ thống, ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc thay vắng → exit 2 'MOC VANG <mã>'), chạy các tệp test đã ghim bằng node --test, in mọi ca đỏ thật dạng '<mã> DO: <tệp>::<ca>', và đòi mỗi ca đã ghim nằm trong tập ca đỏ: M11 (giuPid luôn nhận pidfile) phải làm đỏ phat-lich.test.mjs::'giuPid: một tiến trình KHÁC còn sống đang giữ → từ chối; pid chết → nhận lại; chính mình → giữ'. Ca ghim không đỏ → 'SONG <mã>: <tệp>::<ca>' và exit 1. Đối chứng dương cùng fixture: bản chép KHÔNG đột biến chạy cùng các tệp test thì xanh hết (đỏ → exit 2 'NEN DO <tệp>')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E36
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.dph_nhip_that
+    expected: "exit 0 khi bộ đo dph_nhip_that (gốc kho suy từ vị trí script) nạp bản thật của scripts/dieu-phoi/ và chạy một nhịp motNhip với io giả trên thư mục đợt tạm do mã sinh: gh trả một PR mở có headRefName 'feat/P1', git diff của nhánh đó trả 'apps/x.ts'; phiên P1 gửi cham-tep apps/x.ts → không có tra-loi/P1-1.json, và su-kien.jsonl có đúng một dòng yeu-cau can_phan với ly_do chứa 'đang được nhánh feat/P1 sửa' (lệch an toàn đã khai). Đối chứng dương cùng fixture: tệp apps/y.ts không nhánh nào sửa → tra-loi duyet. Chiều đỏ cùng fixture: bản chép đột biến M14 (nhanhCua trả 'feat/P1') phải in 'M14 DO: nhanh-cua-minh'; không in → 'SONG M14' và exit 1."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E37
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.dph_nhip_that
+    expected: "exit 0 khi bộ đo dph_nhip_that (gốc kho suy từ vị trí script) nạp bản thật của scripts/dieu-phoi/ và chạy một nhịp motNhip với io giả trên thư mục đợt tạm do mã sinh: P1 có hàng a (uu_tien 1) và b (uu_tien 2), P2 có hàng c (sau ['A']); git show origin/main:_acceptance/a/contract.md trả 'status: signed-off', còn b và c ném; worktree P1 có _acceptance/b/contract.md 'status: implemented'; sau một nhịp tiep/P1.json có hang 'b' và moi false (không giao lại hàng a đã gộp), tiep/P2.json có hang 'c' và moi true. Chiều đỏ cùng fixture: bản chép đột biến M13 (suy trạng thái luôn trả rỗng) phải in 'M13 DO: tiep-theo-trang-thai'; không in → 'SONG M13' và exit 1."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E38
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.dph_nhip_that
+    expected: "exit 0 khi bộ đo dph_nhip_that gọi xuLyChoNguoi của bản thật với Notification permission_prompt từ worktree của P1 trong đợt tạm: trả 'ghi' và cho-nguoi/P1.json có loai 'permission_prompt'; đối chứng cùng fixture: notification_type 'auth_success' → 'bo-qua', không có tệp. Chiều đỏ: bản chép đột biến M15 (bỏ permission_prompt khỏi tập loại chờ) phải in 'M15 DO: permission-prompt'; không in → 'SONG M15' và exit 1."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E39
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.dph_thu_kho
+    expected: "exit 0 khi, trong lần chạy của E21 lúc bộ phát lịch đang sống, bộ đo trích nguyên văn lệnh Monitor từ một khối mã của scripts/dieu-phoi/README.md (dòng chứa 'tail -n0 -F' và 'grep --line-buffered'; không tìm thấy → exit 2 'KHONG DO DUOC: README khong co lenh Monitor'), thay '<thư mục đợt>' bằng thư mục đợt thật, chạy bằng sh -c, rồi gieo một đơn xin/ hỏng: lệnh nhả ≥ 1 dòng chứa '\"can_phan\":true' trong 15 giây, in 'monitor: <n> dong'. Cùng lần chạy, chiều đỏ cùng fixture: cùng lệnh nhưng tên tệp sự kiện đổi thành su-kien.json, gieo đơn hỏng thứ hai → 0 dòng trong 15 giây và bộ đo in 'DO: monitor-cam'; có dòng → 'SOT monitor' và exit 1."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
