@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8c6be6270473fc753bb15e19c063b3ef8c74219e
+verified_commit: 8a12ef6b73932d74e7e6a322b242aee5164c0478
 human_signoff: Phan Le Manh 2026-09-17 — ký Cổng 2 trên verdict PASS sau SÁU vòng đo (15/15 eval máy và cả bốn lệnh chứng đều xanh ở vòng cuối, phép đo đột biến bảy chân chứng từng thước đỏ được), với BA giới hạn đã khai. Ký trên hiểu biết rằng: vòng 2 cho một màu ĐỎ GIẢ vì chạy song song khiến phép đo đột biến cắm vết vào cây mà thước tĩnh đang đọc, và từ vòng 3 mọi vòng đều chạy tuần tự; rằng người đã TRẢ LẠI ở vòng 4 vì câu chào gọi người dùng bằng họ, và bản sửa đã được giám khảo chấm kín xác nhận độc lập ở vòng 5; và rằng BẢY mục chữ vẫn để ngỏ — đều cùng một lớp «chữ chưa có mục từ điển», đều do hội đồng ba người khai UNCERTAIN chứ không lăng kính nào FAIL, và đều cần phán quyết của chủ từ điển chứ không cần thêm vòng đo.
 ---
 
@@ -442,3 +442,11 @@ của người, không phải một vòng tự động.
 ### Re-pin lần 1 — 2026-09-17, do dựng lại trên bản chung hiện tại: nhánh cũ gánh việc hồ sơ khác, và bản chung đã sửa dot-bien-lib
 run_id: repin-20260917T165105Z-85386
 sha: 8c6be6270473fc753bb15e19c063b3ef8c74219e · suites: 4 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng
+
+### Re-pin lần 2 — 2026-10-04, do sửa thước đỏ lô 2-4 (d2)
+run_id: repin-20261004T153704Z-99356
+sha: 2bf938e6511c00c6c2d29af571759b2afaad2a49 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E18 · diff chạm vật đo ngoài làn máy: E18 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13
+
+### Re-pin lần 3 — 2026-10-06, do sửa thước đỏ lô 2-4 (d2)
+run_id: repin-20261006T094613Z-99306
+sha: 8a12ef6b73932d74e7e6a322b242aee5164c0478 · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E18 · diff chạm vật đo ngoài làn máy: E18 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-13

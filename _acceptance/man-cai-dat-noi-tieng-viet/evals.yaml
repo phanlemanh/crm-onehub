@@ -12,7 +12,9 @@ evals:
       Khang dinh ba ve tren cung tap quan sat:
       (1) so chuoi hai luot BANG nhau;
       (2) moi cap chuoi cung vi tri KHAC nhau, tru cac gia tri cua bang mien tru AC-6;
-      (3) moi chuoi luot vi mang dau tieng Viet.
+      (3) moi chuoi luot vi mang dau tieng Viet, tru tu khai trong mien_dau cua
+      khong-dich-cua-lat.json (tu 04/10 chi «Chung» — tu tieng Viet khong dau); dong
+      mien dau khong con tren man nao la DO.
       Tap quan sat rong la THOAT MA 2 — khong phai mot luot dat.
       Day la eval bat duoc lop loi ma doc ma KHONG bat duoc: mot trang server quen
       await getLocale() thi kho chuoi van du dau va khong con chuoi viet thang, nhung
@@ -77,9 +79,13 @@ evals:
     expected: >-
       exit 0. Cung chan do moi, hinh dang thu hai — gia tri title: trong
       export const metadata va trong mang khai thanh ben.
-      So o nhan ra phai BANG chin (con so khai trong tieu-de-cua-lat.json); lech la
-      THOAT MA 2 va in tung o da thay.
-      Tam nhan dich duoc doc tu kho chuoi va co ban tieng Viet co dau.
+      So o nhan ra phai BANG muoi tam (con so khai trong tieu-de-cua-lat.json): hai
+      tieu de tab, muoi hai nhan muc va bon nhan nhom thanh ben. Tu 04/10 khoa nhan
+      thanh ben nam o apps/app/lib/cai-dat-dieu-huong.ts va duoc tra kho chuoi o
+      settings-sidebar.tsx — khoi thanh_ben cua tieu-de-cua-lat.json khai hai cho do;
+      lech la THOAT MA 2 va in tung o da thay.
+      Muoi sau nhan thanh ben doc tu kho chuoi, moi khoa co trong dung nhom
+      (thanhBen cho muc, nhomThanhBen cho nhom) ma man nay that su doc.
       MOT dong giu nguyen CO TEN — "SSO", dinh danh ky thuat — giu nguyen van; dong giu
       nguyen nao khong con doi tuong that lam chan DO (mien tru chet).
       Lat nay KHONG co ten thuong hieu nao trong o title.
@@ -87,6 +93,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/settings/*.tsx"
       - "apps/app/app/(app)/[slug]/settings/currencies/*.tsx"
+      - "apps/app/lib/cai-dat-dieu-huong.ts"
       - "_acceptance/man-cai-dat-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -193,7 +200,7 @@ evals:
       Hang FILE: so file lat sinh ra tu dia, so file chan ③a doc, so file chan
       ngoai-JSX doc — ba so bang nhau.
       Hang VAT: so loi goi toast chan ngoai-JSX nhan ra so voi so dong cua
-      toast-cua-lat.json, va so o title nhan ra so voi chin — bang nhau.
+      toast-cua-lat.json, va so o nhan (title va thanh ben) nhan ra so voi muoi tam — bang nhau.
       Hang vat la cai hang file KHONG bat duoc: mot chan mo du muoi file ma nhan ra 0
       vat van cho ba con so file bang nhau.
       Lech bat ky cap nao la THOAT MA 2 va in ca hai hang kem ten chan lech.
@@ -272,6 +279,9 @@ evals:
       man do van hieu dung thi chu do thua; (2) danh tu san pham theo CONTEXT.md —
       "cong ty" va "ca nhan", khong khoa vao giai doan moi gioi; (3) khong tu duc tu
       ghep cho thuat ngu ky thuat — giu ten that trong ngoac khi can.
+    paths:
+      - "apps/app/lib/messages/settings.ts"
+      - "CONTEXT.md"
 
   - id: E14
     criterion: AC-6b
