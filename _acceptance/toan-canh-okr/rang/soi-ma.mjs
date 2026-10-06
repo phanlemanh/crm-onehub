@@ -120,6 +120,30 @@ function dieuKienVet(sf, doiSoGoi) {
 		const chu = hanh.initializer.getText(sf);
 		if (/\bnot(In)?\s*:/.test(chu) && /mo-hop-tuan|moHopTuan|MO_HOP_TUAN/i.test(chu))
 			return null;
+		if (ts.isStringLiteral(hanh.initializer)) return null;
+		if (ts.isObjectLiteralExpression(hanh.initializer)) {
+			const trong = hanh.initializer.properties.find(
+				(p) => ts.isPropertyAssignment(p) && p.name.getText(sf) === "in",
+			);
+			if (
+				trong &&
+				ts.isArrayLiteralExpression(trong.initializer) &&
+				trong.initializer.elements.length > 0 &&
+				trong.initializer.elements.every(
+					(e) => ts.isStringLiteral(e) && e.text !== "mo-hop-tuan",
+				)
+			)
+				return null;
+		}
+	}
+	const ghiChu = thuoc("note");
+	if (ghiChu && ts.isObjectLiteralExpression(ghiChu.initializer)) {
+		const loc = ghiChu.initializer.properties.filter(
+			(p) =>
+				ts.isPropertyAssignment(p) &&
+				["in", "startsWith", "equals"].includes(p.name.getText(sf)),
+		);
+		if (loc.length > 0) return null;
 	}
 	return `where khong loc objectiveId va khong loai mo-hop-tuan: ${where.initializer.getText(sf).replace(/\s+/g, " ").slice(0, 120)}`;
 }

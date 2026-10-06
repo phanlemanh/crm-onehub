@@ -16,6 +16,7 @@ const GOC = join(dirname(TEP), "..", "..", "..");
 const THU_MUC = "packages/db/prisma/migrations";
 const TEP_SCHEMA = "packages/db/prisma/schema.prisma";
 const MOC = "origin/onehub";
+const MIGRATION_LUOT = "20261008010000_okr_hoi_y";
 const MODEL_MOI = [
 	"OkrHoiY",
 	"OkrHoiYBanTruoc",
@@ -58,7 +59,32 @@ const GHIM = Object.freeze({
 const git = (...d) =>
 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
 
-const TRUOC = git("merge-base", "HEAD", MOC);
+const MOC_CHUNG = git("merge-base", "HEAD", MOC);
+const GOP_LUOT = git(
+	"log",
+	"--first-parent",
+	"--diff-filter=A",
+	"--format=%H",
+	MOC_CHUNG,
+	"--",
+	`${THU_MUC}/${MIGRATION_LUOT}/migration.sql`,
+)
+	.split("\n")
+	.at(-1);
+const daGop = GOP_LUOT !== "";
+const TRUOC = daGop ? git("rev-parse", `${GOP_LUOT}^1`) : MOC_CHUNG;
+const docSchemaSau = () =>
+	daGop
+		? git("show", `${GOP_LUOT}:${TEP_SCHEMA}`)
+		: readFileSync(join(GOC, TEP_SCHEMA), "utf8");
+const lietKeSau = () =>
+	daGop
+		? git("ls-tree", "--name-only", `${GOP_LUOT}:${THU_MUC}`)
+				.split("\n")
+				.filter((t) => t !== "" && t !== "migration_lock.toml")
+		: readdirSync(join(GOC, THU_MUC), { withFileTypes: true })
+				.filter((d) => d.isDirectory())
+				.map((d) => d.name);
 const lietKeTruoc = () =>
 	git("ls-tree", "--name-only", `${TRUOC}:${THU_MUC}`)
 		.split("\n")
@@ -167,7 +193,7 @@ function soatTinh({ moi, docSql, schema }) {
 }
 
 function chieuDo() {
-	const schema = readFileSync(join(GOC, TEP_SCHEMA), "utf8");
+	const schema = docSchemaSau();
 	const tam = mkdtempSync(join(tmpdir(), "hoi-y-mig-"));
 
 	const DUNG = `-- CreateTable
@@ -316,20 +342,21 @@ if (process.argv[2] === "--gia") {
 	process.exit(hong.length === 0 ? 0 : 1);
 }
 
-const moi = readdirSync(join(GOC, THU_MUC), { withFileTypes: true })
-	.filter((d) => d.isDirectory() && !cu.has(d.name))
-	.map((d) => d.name)
+const moi = lietKeSau()
+	.filter((t) => !cu.has(t))
 	.sort();
 const docSql = (t) =>
-	readFileSync(join(GOC, THU_MUC, t, "migration.sql"), "utf8");
+	daGop
+		? git("show", `${GOP_LUOT}:${THU_MUC}/${t}/migration.sql`)
+		: readFileSync(join(GOC, THU_MUC, t, "migration.sql"), "utf8");
 const { hong, dem, soKhoa } = soatTinh({
 	moi,
 	docSql,
-	schema: readFileSync(join(GOC, TEP_SCHEMA), "utf8"),
+	schema: docSchemaSau(),
 });
 
 console.log(
-	`goc so sanh: ${MOC} (${TRUOC.slice(0, 8)}) · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem} · khoa ngoai viet truoc khop: ${soKhoa}/${KHOA_NGOAI_VIET_TRUOC.length}`,
+	`goc so sanh: ${daGop ? `${MIGRATION_LUOT} da gop o ${GOP_LUOT.slice(0, 8)}, do tren cha ${TRUOC.slice(0, 8)}` : `${MOC} (${TRUOC.slice(0, 8)})`} · migration moi: ${moi.join(", ") || "(khong co)"} · so cau lenh: ${dem} · khoa ngoai viet truoc khop: ${soKhoa}/${KHOA_NGOAI_VIET_TRUOC.length}`,
 );
 if (moi.length === 0 || dem === 0) {
 	console.log(`khong co migration moi nao so voi ${MOC}`);

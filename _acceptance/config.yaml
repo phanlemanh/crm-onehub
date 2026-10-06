@@ -6,6 +6,28 @@ feature_loop:
   ui_standards_skill: web-design-guidelines
   suite_keys: [executors.test.suite_api, executors.test.suite_app_ui, executors.test.suite_agent_db, executors.test.suite_okr_goi, executors.script.lint_khong_cache, executors.script.lint_slop, executors.script.build_khong_cache]
   repin_parallel_suites: true
+  repin_retry: 1
+  repin_budget_min: 80
+  repin_cost_cmd: node scripts/lan-do/chi-phi-gateway.mjs
+  repin_ci_blank_env: [AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN]
+  model_evals:
+    - chan-uy-thac-sai-luot/E6
+    - khung-tao-okr-nhu-deal/E6
+    - may-soan-de-xuat/E15a
+    - soan-okr-cung-tro-ly/E8
+    - soan-okr-cung-tro-ly/E13
+    - soan-okr-cung-tro-ly/E22
+    - tac-nhan-model-rieng/E4
+    - the-gop-y-okr/E1
+    - the-gop-y-okr/E13
+    - tro-ly-doc-kho/E15
+    - tro-ly-okr-de-xuat/E4
+    - tro-ly-okr-de-xuat/E22
+    - tro-ly-okr-de-xuat/E24
+    - tro-ly-okr-nen/E9
+    - tro-ly-okr-nen/E12
+    - tro-ly-okr-tom-tat/E9
+    - tro-ly-okr-tom-tat/E17
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
@@ -1671,7 +1693,7 @@ executors:
     dok_man_chrome: 'APP_URL=${APP_URL:-http://localhost:3910} API_URL=${API_URL:-http://localhost:3911} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dat-okr-trong-crm/rang/man-okr.mjs"'
     dok_san_thiet_ke: "bun _acceptance/dat-okr-trong-crm/rang/san-thiet-ke.mjs"
     dok_migration_chi_them: "node _acceptance/dat-okr-trong-crm/rang/migration-chi-them.mjs"
-    tco_man_chrome: 'DATABASE_URL="$(sed -n -e "s#^DATABASE_URL=##p" .env | head -1 | tr -d "\\042" | sed "s#/crm?#/crm_toan_canh_okr_do?#")" NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3930} API_URL=${API_URL:-http://localhost:3931} CUA_CHAN_URL=${CUA_CHAN_URL:-http://localhost:3932} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
+    tco_man_chrome: 'PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} EVAL=${EVAL:-} bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/toan-canh-okr/rang/man-toan-canh.mjs"'
     tco_soi_ma: "bun _acceptance/toan-canh-okr/rang/soi-ma.mjs"
     sot_soi_chi_them: "bun _acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca chi-them"
     sot_san_thiet_ke: "bun _acceptance/so-okr-tu-chay/rang/soi-ma.mjs --ca thiet-ke"
@@ -1705,7 +1727,7 @@ executors:
     tco_san_thiet_ke: "bun _acceptance/toan-canh-okr/rang/san-thiet-ke.mjs"
     n4_san_thiet_ke: "bun _acceptance/no-sau-luot-4-okr/rang/san-thiet-ke.mjs"
     cnt_duong_do: "bun _acceptance/cap-nhat-tuan-okr/rang/duong-do.mjs"
-    cnt_man_chrome: 'DATABASE_URL="$(sed -n -e "s#^DATABASE_URL=##p" .env | head -1 | tr -d "\\042" | sed "s#/crm?#/crm_cnt_dev_do?#")" NGUOI=${NGUOI:-ada@trycomp.ai} APP_URL=${APP_URL:-http://localhost:3920} API_URL=${API_URL:-http://localhost:3921} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"'
+    cnt_man_chrome: 'PHIEN_DO_CUA_CHAN=_acceptance/cap-nhat-tuan-okr/rang/cua-chan.mjs NGUOI=${NGUOI:-ada@trycomp.ai} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/cap-nhat-tuan-okr/rang/man-cap-nhat.mjs"'
     cnt_san_thiet_ke: "bun _acceptance/cap-nhat-tuan-okr/rang/san-thiet-ke.mjs"
     cnt_migration_chi_them: "node _acceptance/cap-nhat-tuan-okr/rang/migration-chi-them.mjs"
     cnt_ho_so_bi_cham: "bun _acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs"

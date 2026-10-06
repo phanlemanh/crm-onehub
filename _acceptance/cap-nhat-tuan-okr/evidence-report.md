@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 251225fc079a4fb07197f0631afc6be5d9be260b
+verified_commit: a8e229b52f9d3819c526d154271e98f18d9ebe28
 human_signoff: Manh Phan 2026-09-26
 ---
 
@@ -387,3 +387,11 @@ Round 1: 21 eval đầu (E1–E5, E8–E11, E17, E20, E24) chạy PASS ở 2026-
 Round 2: 8 eval tiếp (E12–E16, E22, E23, E25, E27–E29) chạy PASS ở 2026-09-26T03:45:22Z, mở rộng che phủ sang AC-7, AC-8, AC-12, AC-14, AC-15, AC-16; judge panel cho E26 (AC-14, judgment) cho PASS.
 Round 3: BLOCKED — tệp "luot4-cham-lai-round2.md, mục Bổ sung 3" được yêu cầu đọc-và-làm-theo không tồn tại (đã tự kiểm tra độc lập); E6/E7/E19 và lệnh suite `bun run build` cannotRun vì vậy; E18 vẫn chạy được và PASS (kèm cảnh báo HEAD trôi do phiên khác gộp #152 song song trên cùng cây, không ảnh hưởng verdict); E21 tự thoát mã khác 0 độc lập do một violation pre-merge thật trên toàn kho. Theo quyết định d-20260926T054631Z-34 (Manh Phan — uỷ quyền phiên điều phối 24/09): cả round 2 và round 3 bị chặn vì hạ tầng (câu người gõ lẫn vào phiên S4, cây bị phiên khác gộp song song) chứ không phải lỗi sản phẩm hay phép đo; trần 3 round không tính hai lượt bị chặn do harness này, số round chỉ tăng vì kit đánh số theo run-log.
 Round 4 (round này): lượt thử lại của round 3 trên cùng phạm vi, không phiên nào khác commit vào cây trong round này. Chạy lại E6, E7, E18, E19 (script màn cập nhật + ui-check), E21 (rà hồ sơ bị chạm — nay 58 hồ sơ bị chạm, 4 lượt ghim lại trên nhánh xanh, 0 hồ sơ hoá cũ, 0 hỏng, vs. 1 violation FAIL ở round 3), E25 (sàn thiết kế) và E27 (migration-chỉ-thêm); 21 eval còn lại cùng panel E26 carry-forward nguyên vẹn từ round 1/2 (delta không chạm paths của chúng). Cả 4 lệnh suite (`bun run test`, `turbo lint`, `lint:slop`, `turbo build`) đều xanh round này — lệnh build vốn cannotRun ở round 3 nay chạy hết và thoát mã thành công. Toàn bộ 29 eval PASS, không `failed_evals`, không `blocked`. Verdict vẫn PENDING-JUDGMENT chứ không tự lên PASS: hợp đồng risk_tier T3 đòi `human_override` trên MỌI mục judgment bất kể phán quyết hội đồng — E26 mới có phiếu hội đồng (carried từ round 2), chưa có `human_override`; Gate 2 cần người tự xác nhận E26 rồi điền `human_override` và `human_signoff` trước khi nâng verdict lên PASS.
+
+### Re-pin lần 1 — 2026-10-05, do sửa thước đỏ lô 2-4 (b3)
+run_id: repin-20261005T052409Z-94633
+sha: 08d8837e1cc4222d84ebf0a880d0a64bdcbe5d64 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 · diff chạm vật đo ngoài làn máy: E6, E13, E16, E18, E23, E26, E29 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 2 — 2026-10-06, do sửa thước đỏ lô 2-4 (b3)
+run_id: repin-20261006T104542Z-41641
+sha: a8e229b52f9d3819c526d154271e98f18d9ebe28 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E6, E13, E16, E18, E23, E26, E29

@@ -16,6 +16,8 @@ const GOC = join(dirname(TEP), "..", "..", "..");
 const THU_MUC = "packages/db/prisma/migrations";
 const EXTENSION_CHO_PHEP = new Set(["unaccent", "pg_trgm"]);
 const THONG_DIEP = "migration khong chi them";
+const MOC = "origin/onehub";
+const MIGRATION_LUOT = "20261001010000_kho_tai_lieu";
 
 const git = (...d) =>
 	execFileSync("git", ["-C", GOC, ...d], { encoding: "utf8" }).trim();
@@ -151,16 +153,53 @@ if (cheDo === "--chieu-do") {
 	process.exit(bat === CA.length ? 1 : 0);
 }
 
-const base = git("merge-base", "HEAD", "origin/onehub");
+const MOC_CHUNG = git("merge-base", "HEAD", MOC);
+const GOP_LUOT = git(
+	"log",
+	"--first-parent",
+	"--diff-filter=A",
+	"--format=%H",
+	MOC_CHUNG,
+	"--",
+	`${THU_MUC}/${MIGRATION_LUOT}/migration.sql`,
+)
+	.split("\n")
+	.at(-1);
+const daGop = GOP_LUOT !== "";
+const base = daGop ? git("rev-parse", `${GOP_LUOT}^1`) : MOC_CHUNG;
 const cu = new Set(
 	git("ls-tree", "--name-only", `${base}:${THU_MUC}`).split("\n"),
 );
-const goc = join(GOC, THU_MUC);
-const dsTep = readdirSync(goc, { withFileTypes: true })
-	.filter((d) => d.isDirectory() && !cu.has(d.name))
-	.map((d) => d.name)
+const lietKeSau = () => {
+	if (daGop)
+		return git("ls-tree", "--name-only", `${GOP_LUOT}:${THU_MUC}`).split("\n");
+	const goc = join(GOC, THU_MUC);
+	return readdirSync(goc, { withFileTypes: true })
+		.filter((d) => d.isDirectory())
+		.map((d) => d.name);
+};
+const coMigration = (t) =>
+	daGop
+		? spawnSync("git", [
+				"-C",
+				GOC,
+				"cat-file",
+				"-e",
+				`${GOP_LUOT}:${THU_MUC}/${t}/migration.sql`,
+			]).status === 0
+		: existsSync(join(GOC, THU_MUC, t, "migration.sql"));
+const docMigration = (t) =>
+	daGop
+		? git("show", `${GOP_LUOT}:${THU_MUC}/${t}/migration.sql`)
+		: readFileSync(join(GOC, THU_MUC, t, "migration.sql"), "utf8");
+const dsTep = lietKeSau()
+	.filter((t) => t !== "" && !cu.has(t))
 	.sort()
-	.filter((t) => existsSync(join(goc, t, "migration.sql")))
-	.map((t) => [t, readFileSync(join(goc, t, "migration.sql"), "utf8")]);
-console.log(`merge-base: ${base.slice(0, 12)}`);
+	.filter(coMigration)
+	.map((t) => [t, docMigration(t)]);
+console.log(
+	daGop
+		? `${MIGRATION_LUOT} da gop o ${GOP_LUOT.slice(0, 12)}, do tren cha ${base.slice(0, 12)}`
+		: `merge-base: ${base.slice(0, 12)}`,
+);
 process.exit(ketLuan(dsTep));

@@ -10,7 +10,7 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { VONG } from "./cau-hinh.mjs";
+import { doTaiGop, VONG } from "./cau-hinh.mjs";
 
 const ts = createRequire(import.meta.url)("typescript");
 
@@ -139,6 +139,8 @@ if (process.argv.includes("--chieu-do")) {
 	console.log(`chieu do: ${ghim.length - lot}/${ghim.length} vi pham bi bat`);
 	process.exit(lot === 0 ? 0 : 1);
 }
+
+doTaiGop(TEP_NAY);
 
 const dai = `${VONG.truoc}...${VONG.sau}`;
 const theoLoc = (loc) =>
