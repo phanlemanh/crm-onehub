@@ -1553,14 +1553,14 @@ executors:
     hd_mot_bo_thuoc: "node _acceptance/hd-theo-danh-sach/rang/mot-bo-thuoc.mjs"
     rang_t1_chan: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan chan"
     rang_t1_im: "bash _acceptance/sua-test-do-thu-tu-nap/rang-t1-escape.sh --chan im"
-    tt_crawl_test: cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
+    tt_crawl_test: bash tools/listing-crawl/scripts/dung-venv.sh && cd tools/listing-crawl && ./.venv/bin/python -m unittest discover -s tests -v
     tt_crawl_live: cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --limit 50 --dry-run --redact --out ../../.acceptance-runs/tiep-thi-tuyen-doi-tac/live-batch.json --log ../../.acceptance-runs/tiep-thi-tuyen-doi-tac/live-run.log
-    tt_ui_luong: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs luong"'
-    tt_ui_chu: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs chu"'
-    tt_ui_trang_thai: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs trang-thai"'
-    tt_ui_be_rong: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs be-rong"'
-    tt_ui_thiet_ke: 'APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs thiet-ke"'
-    tt_crawl_to_ingest: 'bun run test -- "cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../.acceptance-runs/tiep-thi-tuyen-doi-tac/fixture-batch.json && cd ../../apps/api && LISTING_FIXTURE_BATCH=.acceptance-runs/tiep-thi-tuyen-doi-tac/fixture-batch.json bun run test listing-fixture-batch"'
+    tt_ui_luong: 'NGUOI=ada@trycomp.ai PHIEN_EMAIL=ada@trycomp.ai APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs luong"'
+    tt_ui_chu: 'NGUOI=ada@trycomp.ai PHIEN_EMAIL=ada@trycomp.ai APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs chu"'
+    tt_ui_trang_thai: 'NGUOI=ada@trycomp.ai PHIEN_EMAIL=ada@trycomp.ai APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs trang-thai"'
+    tt_ui_be_rong: 'NGUOI=ada@trycomp.ai PHIEN_EMAIL=ada@trycomp.ai APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs be-rong"'
+    tt_ui_thiet_ke: 'NGUOI=ada@trycomp.ai PHIEN_EMAIL=ada@trycomp.ai APP_URL=${APP_URL:-http://localhost:3000} API_URL=${API_URL:-http://localhost:3001} bun scripts/lan-do/tien-de.mjs --chay "node _acceptance/tiep-thi-tuyen-doi-tac/rang/chien-dich.mjs thiet-ke"'
+    tt_crawl_to_ingest: 'bun run test -- "bash tools/listing-crawl/scripts/dung-venv.sh && cd tools/listing-crawl && ./.venv/bin/python -m listing_crawl --fixtures --dry-run --out ../../.acceptance-runs/tiep-thi-tuyen-doi-tac/fixture-batch.json && cd ../../apps/api && LISTING_FIXTURE_BATCH=.acceptance-runs/tiep-thi-tuyen-doi-tac/fixture-batch.json bun run test listing-fixture-batch"'
     khoa_lo_tran_retire: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tran-retire
     khoa_lo_tran_claim: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan tran-claim
     khoa_lo_can: bash _acceptance/khoa-lo-giu-tran/rang.sh --chan can

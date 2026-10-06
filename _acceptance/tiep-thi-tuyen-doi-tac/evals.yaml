@@ -326,6 +326,7 @@ evals:
   - id: E18
     criterion: AC-14
     executor: script
+    status: not-run
     cmd: config:executors.script.tt_crawl_live
     expected: >-
       exit 0 va evidence/live-run.log in: so dia chi gieo tu sitemap, so ho so
@@ -334,6 +335,7 @@ evals:
       evidence/live-batch.json hop le theo schema. Lenh bi mang chan hoan toan →
       BLOCKED chu khong PASS. Chieu do: --limit 0 → script thoat ma 2 "khong co
       dia chi nao".
+      Khai not-run từ 04/10 (chủ kho duyệt gói B): lượt cào thật lên nhatot.com bằng trình duyệt né chặn bot, bấm lộ số điện thoại của tới 50 người thật; làn ghim lại không tự chạy. Người chạy tay khi tools/listing-crawl đổi, theo README của bộ cào.
     paths:
       - "tools/listing-crawl/**"
       - "packages/validation/src/listing-ingest.ts"
@@ -353,6 +355,10 @@ evals:
       - evidence/live-batch.json
       - evidence/live-run.log
     evidence_required: [judged_by, verdict, rationale]
+    paths:
+      - "_acceptance/tiep-thi-tuyen-doi-tac/contract.md"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-batch.json"
+      - "_acceptance/tiep-thi-tuyen-doi-tac/evidence/live-run.log"
 
   - id: E20
     criterion: AC-15
@@ -375,8 +381,13 @@ evals:
     expected: >-
       exit 0. Chan "be-rong": o 1024px khong tieu de cot nao cua bang thanh vien
       bi cat; o 768px moi tieu de bi cat co dau ba cham VA chu day du trong cay
-      tro nang; in bang ten cot × be rong × trang thai. Chieu do: rut khung cot
-      xuong 300px → o 1024px co cot bi cat → do.
+      tro nang; in bang ten cot × be rong × trang thai. "Bi cat" la nhan
+      [data-slot=table-head-label] hoac mot phan tu con cua no tran o theo chieu
+      ngang hoac doc (tieu de xuong toi da hai dong van la du chu); "ba cham" gom
+      text-overflow ellipsis va line-clamp. Chieu do: ep tieu de "Gần nhất" vao mot
+      o be rong co dinh nho hon chu, co overflow-hidden → o 1024px thuoc goi ten
+      "Gần nhất" la CAT TRAN va thoat 1. (Chieu do cu "rut khung cot xuong 300px"
+      chet tu 70b5dd47f: bang tu xep, cot khong hep duoi tieu de.)
     paths:
       - "apps/app/app/(app)/[slug]/campaigns/**"
       - "_acceptance/tiep-thi-tuyen-doi-tac/rang/**"

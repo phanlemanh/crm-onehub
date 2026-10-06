@@ -173,11 +173,17 @@ export const DOC_TIEU_DE = () =>
 			document.body.appendChild(probe);
 			const textWidth = probe.getBoundingClientRect().width;
 			probe.remove();
-			const cut = [...th.querySelectorAll("*")].find(
-				(e) =>
-					getComputedStyle(e).textOverflow === "ellipsis" &&
-					e.scrollWidth > e.clientWidth + 0.5,
-			);
+			const tran = (e) =>
+				e.scrollWidth > e.clientWidth + 0.5 ||
+				e.scrollHeight > e.clientHeight + 0.5;
+			const nhan = th.querySelector('[data-slot="table-head-label"]') ?? holder;
+			const cut = [nhan, ...th.querySelectorAll("*")].find((e) => {
+				const s = getComputedStyle(e);
+				return (
+					(s.textOverflow === "ellipsis" || s.webkitLineClamp !== "none") &&
+					tran(e)
+				);
+			});
 			const box = holder.getBoundingClientRect().width;
 			const ten =
 				th.getAttribute("title") ??
@@ -187,7 +193,7 @@ export const DOC_TIEU_DE = () =>
 				text,
 				boxWidth: Number(box.toFixed(2)),
 				textWidth: Number(textWidth.toFixed(2)),
-				bicat: textWidth > box + 0.5,
+				bicat: [nhan, ...nhan.querySelectorAll("*")].some(tran),
 				coBaCham: Boolean(cut),
 				title: ten,
 			};
