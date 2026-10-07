@@ -30,6 +30,12 @@ Mã này **không** chứa gì riêng của kho. Mọi giá trị riêng nằm t
   bằng `tra-loi/<id>.json` như mọi yêu cầu: `ket_qua: duyet` là đủ để nhịp kế kéo dài hạn thuê, một
   lần. Muốn cho số phút khác thì thêm `uoc_phut`; giữ nhiều khoá thì thêm `tai_nguyen`. Không áp được
   (khoá đã sang tay, thiếu số phút) thì có một sự kiện `gia-han-khong-ap` `can_phan`.
+- Tệp trả lời `tra-loi/<id>.json` được kiểm khi bộ phát lịch đọc nó. Hỏng cú pháp JSON, hoặc sai hình
+  dạng (không phải object, thiếu `ket_qua`, sai kiểu, khoá lạ), thì tệp bị chuyển nguyên tên vào
+  `tra-loi/hong/` và có một sự kiện `tra-loi-hong` `can_phan` nêu tệp và trường sai. Các khoá và yêu cầu
+  khác vẫn chạy bình thường trong cùng nhịp. Yêu cầu đó khi ấy coi như chưa trả lời: sửa bằng cách ghi
+  lại `tra-loi/<id>.json` đúng hình dạng, nhịp kế đọc nó như thường.
+- Khoá hợp lệ của tệp trả lời: `ket_qua`, `boi`, `ly_do`, `luc`, `voi`, `tai_nguyen`, `uoc_phut`.
 
 - Không dùng `/loop` làm nhịp: phiên giám sát thức dậy nhờ Monitor ở bước 4 và task lịch 30′ ở bước 5 của phần mở đợt, cộng tin của owner.
 - Mỗi sự kiện `can_phan`: đọc dòng sự kiện. Với yêu cầu, ghi `tra-loi/<id>.json` gồm
