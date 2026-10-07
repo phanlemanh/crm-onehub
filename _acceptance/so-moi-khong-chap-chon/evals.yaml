@@ -1,0 +1,130 @@
+schema_version: 1
+slug: so-moi-khong-chap-chon
+
+evals:
+  - id: E1
+    criterion: AC-1, AC-2
+    executor: test
+    cmd: config:executors.test.nbn_ca_tep
+    paths:
+      - "apps/agent-okr/test/nop-ban-nhap.integration.spec.ts"
+      - "apps/agent-okr/test/support/**"
+      - "apps/agent-okr/agent/**"
+      - "packages/validation/src/okr-kiem-ban-nhap.ts"
+      - "packages/validation/src/okr-kiem-de-xuat.ts"
+    expected: |
+      Ca tep nop-ban-nhap.integration.spec.ts chay tren CSDL rieng cua luot (bun run test --)
+      thoat 0, dong tong ket "<n> pass" va "0 fail" voi n bang so bai cua tep. Chieu do cua
+      cung lenh nay la E3 (spec cu tren fixture va cham) — tren cay thuong spec cu chi do ngau
+      nhien nen khong dung lam chieu do.
+
+  - id: E2
+    criterion: AC-2, AC-3
+    executor: script
+    cmd: config:executors.script.smk_va_cham_xanh
+    paths:
+      - "apps/agent-okr/test/nop-ban-nhap.integration.spec.ts"
+      - "apps/agent-okr/test/support/**"
+      - "apps/agent-okr/agent/**"
+      - "packages/validation/src/okr-kiem-ban-nhap.ts"
+      - "packages/validation/src/okr-kiem-de-xuat.ts"
+      - "_acceptance/so-moi-khong-chap-chon/rang/**"
+      - "_acceptance/so-moi-khong-chap-chon/fixtures/**"
+    expected: |
+      Goc kho suy tu import.meta.dirname cua rang/va-cham.mjs (ba cap len), khong tu cwd hay
+      duong ghi cung; rang in duong spec va duong agent/ da nap — khong nam duoi goc do -> ma 2.
+      rang/va-cham.mjs xanh dung ban sao o .acceptance-runs/so-moi-khong-chap-chon/sao-xanh-<pid>/
+      (symlink node_modules cua apps/agent-okr; don ban sao sot cua luot truoc; xoa sau luot): chep test/support/ vao ban sao, doi ma() cua
+      support/gieo.ts de moi ten gieo mang "so37so41so100so2031so" truoc phan Date.now — moc
+      ma() vang hay xuat hien khac mot lan -> ma 2 "KHONG DO DUOC: moc ma() ...". Chep spec MOI
+      (tep o HEAD), doi import "../agent/" sang duong tuyet doi, giu "./support/" tro vao ban sao,
+      va noi them mot bai do «rang va cham» doc goiKiemTu(goiSoan(canh.cuocSoanId)).soTrongGoi
+      va in "RANG-VA-CHAM <cac so trong 37,41,100,2031 co mat>". Chay ca tep tu goc kho bang
+      `bun run test -- "cd <ban sao> && CRM_TELEMETRY_DISABLED=1 bun test ./<tep>"` — cung duong
+      voi nbn_dao_thu_tu: moi luot mot kho crm_<id>_test rieng, tao truoc drop sau, nen E2 va E3
+      chay song song khong dam hang nhau.
+      Xanh (ma 0) khi: bun thoat 0, "0 fail", va dong "RANG-VA-CHAM 37,41,100,2031" (du bon so —
+      fixture va cham an that). Thieu dong do hay thieu so nao -> ma 2 "KHONG DO DUOC: va cham
+      khong an". Co bai do -> ma 1 kem duoi log.
+      CAP HAI CHIEU tren CUNG fixture: chieu do la E3 (chi khac tep spec).
+
+  - id: E3
+    criterion: AC-3, AC-4
+    executor: script
+    cmd: config:executors.script.smk_va_cham_do
+    paths:
+      - "apps/agent-okr/test/support/**"
+      - "apps/agent-okr/agent/**"
+      - "packages/validation/src/okr-kiem-ban-nhap.ts"
+      - "packages/validation/src/okr-kiem-de-xuat.ts"
+      - "_acceptance/so-moi-khong-chap-chon/rang/**"
+      - "_acceptance/so-moi-khong-chap-chon/fixtures/**"
+    expected: |
+      Cung ban sao, cung fixture va cung bai do nhu E2; khac DUY NHAT: spec la ban ghim
+      _acceptance/so-moi-khong-chap-chon/fixtures/spec-truoc.ts.txt (spec o onehub 0426cc9d0,
+      truoc vong nay — khong doc git nen khong tu het han khi merge-base doi).
+      Ma 0 khi: dong "RANG-VA-CHAM 37,41,100,2031" co mat, bun thoat khac 0, va DUNG bon dong
+      "(fail) nop-ban-nhap > " bat dau bang cac tien to: "bản nháp trộn", "nộp lại dòng có khoá đã
+      bác", "số người gõ đọc trên mọi phiên", "so-moi đọc mọi chữ gói" — khong bai nao khac do.
+      Rang in "<tien to>: do dung" cho moi bai. Thieu mot bai do, them bai do ngoai bon bai, hay
+      bun thoat 0 -> ma 1 "spec cu KHONG do dung bon bai: ...". Va cham khong an hay moc vang
+      -> ma 2.
+
+  - id: E4
+    criterion: AC-2, AC-5
+    executor: judgment
+    inputs:
+      - "apps/agent-okr/test/nop-ban-nhap.integration.spec.ts"
+      - "_acceptance/so-moi-khong-chap-chon/fixtures/spec-truoc.ts.txt"
+      - "_acceptance/so-moi-khong-chap-chon/contract.md"
+    question: |
+      So spec moi (tep thu nhat) voi ban ghim spec cu (tep thu hai), chi o bon bai dua vao luat
+      so-moi: «bản nháp trộn», «nộp lại dòng có khoá đã bác», «số người gõ đọc trên mọi phiên»,
+      «so-moi đọc mọi chữ gói». Moi bai cua spec moi co con doi DUNG dieu bai cu doi khong —
+      bai 1: k13 bi loai "so-moi" trong danh sach bi loai day du; bai 2 va 3: dong m3 bi loai
+      "so-moi" truoc khi go va duoc nhan sau khi go; bai 4: dung mot dong k3 bi loai voi viPham
+      "số mới: <so>"? Co khang dinh nao bi bo, bi doi sang phep yeu hon (toBe -> toBeDefined,
+      toEqual -> toMatchObject, so sanh tap con), hay bai nao them skip/retry/timeout noi khong?
+      So thu cua moi bai co duoc chon bang mot ham doc soTrongGoi (goiSoan + goiKiemTu) cua CHINH
+      cuoc bai do nop vao khong — goi ten doi so cuoc cua tung bai (bai 1, 2: canh.cuocSoanId;
+      bai 3, 4: cuoc moi cua bai)? Con hang so nao (37, 41, 100, 2031 hay mot hang khac) duoc dung
+      lam so "vang khoi goi" ma khong qua ham do khong? Tra loi PASS chi khi ca bon bai giu nguyen
+      phep kiem, so duoc chon qua ham doc goi, dung cuoc, va khong con hang so vang nao.
+    expected: PASS — bon bai giu nguyen phep kiem; so thu chon tu goi cua dung cuoc.
+
+  - id: E5
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.nbn_dao_thu_tu_xanh
+    paths:
+      - "apps/agent-okr/test/nop-ban-nhap.integration.spec.ts"
+      - "_acceptance/nop-ban-nhap-chon-theo-khoa/rang/**"
+    expected: |
+      Rang cua ho so nop-ban-nhap-chon-theo-khoa chieu xanh tren spec moi thoat 0: ba dong
+      "nhan: ... 1 pass, 0 fail", "bac: ... 2 pass, 0 fail", "dich: ... 2 pass, 0 fail".
+      Moc cua rang do vang hay lap trong spec moi -> rang thoat 2 "KHONG DO DUOC: moc ..." — do
+      la chieu do cua chinh eval nay (spec moi lam gay thuoc ho so khac).
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.nbn_dao_thu_tu_do
+    paths:
+      - "apps/agent-okr/test/nop-ban-nhap.integration.spec.ts"
+      - "_acceptance/nop-ban-nhap-chon-theo-khoa/rang/**"
+    expected: |
+      Chieu do cua rang ho so nop-ban-nhap-chon-theo-khoa tren spec moi thoat 0: ca ba ca do dung
+      chu ky cu (bac: `Expected: "so-moi"` / `Received: undefined`). Chu ky lech -> ma 1, moc
+      vang -> ma 2.
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.nbn_quet_mau
+    paths:
+      - "apps/agent-okr/test/**"
+      - "packages/*/test/**"
+      - "_acceptance/nop-ban-nhap-chon-theo-khoa/rang/**"
+    expected: |
+      Quet mau cua ho so nop-ban-nhap-chon-theo-khoa thoat 0: danh sach cho doc theo createdAt
+      don / findFirst khong orderBy khop DUNG DA_RA — spec moi khong them loi goi db.find* nao.

@@ -88,9 +88,11 @@ b. **The draft.** When the person asks for the draft («đưa bản nháp», «s
      this job drives directly gets a KR here, in this unit's own words. When a priority belongs
      to another unit's job, draft what this unit itself controls toward it, not that unit's own
      measure;
-   - two to four Mục tiêu, each with `khoa`, `ten`, `viSaoLucNay`, `loai` (`cam-ket` or
-     `tham-vong`), one sentence of `viSao`, and `canChinhId` only when it is an id listed in
-     `ungVienCanChinh`;
+   - two to four Mục tiêu, each with `khoa`, `ten`, `viSaoLucNay`, `loai` (`cam-ket`,
+     `tham-vong` or `hoc-tap`), one sentence of `viSao`, and `canChinhId` only when it is an id
+     listed in `ungVienCanChinh`. Use `hoc-tap` only to test an assumption nobody can answer
+     yet; its KR measure what the unit will learn. It is never «Trượt» mid-cycle and needs
+     «Điều học được» before the cycle closes, so never use it to soften a commitment;
    - two to four KR under each Mục tiêu, each with `khoa`, `ten`, `kieu`, `donVi` and one sentence
      of `viSao`;
    - `khoiDiemGoiY` is the last measured value of the very metric the KR measures. Look for it

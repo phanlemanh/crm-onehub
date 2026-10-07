@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bdef78deba9df1a4412a69f254280e967d0f561b
+verified_commit: ef36480392ffb9f09b1487ca24c05029b9600c98
 human_signoff:
 ---
 
@@ -134,3 +134,11 @@ Round 2: ca "nộp lại dòng đã bác" chọn m1 theo khoá và ca dịch đ�
 ### Re-pin lần 1 — 2026-10-04, do gộp onehub be23e1d8 (#240 soan-okr-song-lai, #242) vào nhánh
 run_id: repin-20261004T031823Z-64329
 sha: bdef78deba9df1a4412a69f254280e967d0f561b · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 (E4 không khai paths) · AC không có chốt máy: AC-6
+
+### Re-pin lần 2 — 2026-10-07, do spec nop-ban-nhap đổi bởi so-moi-khong-chap-chon (F13)
+run_id: repin-20261007T153711Z-89665
+sha: 85c14a8226c78b291ad69371b4d276cdb18db330 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 (E4 không khai paths) · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-07, do gộp onehub b9e51ffa (#300) vào nhánh của #301
+run_id: repin-20261007T213136Z-90346
+sha: ef36480392ffb9f09b1487ca24c05029b9600c98 · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · ngoài làn máy: E4 (E4 không khai paths) · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
