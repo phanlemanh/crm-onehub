@@ -505,6 +505,16 @@ _Avoid_: số dự phòng, số tham khảo
 Vì sao: nó không thay số tay khi thiếu, và không phải lời khuyên — nó là cùng
 một KR đo bằng máy.
 
+**Loại mục tiêu**: một trong ba, chọn khi tạo mục tiêu. **Cam kết** — phải tới đích; giữa kỳ
+đọc Đúng nhịp, Chậm nhịp hay Trượt; cuối kỳ «Đạt cam kết» khi điểm là 1. **Tham vọng** — 0,7
+là tốt; giữa kỳ không bao giờ «Trượt». **Học tập** — kiểm một giả thuyết chưa biết đáp án;
+giữa kỳ đọc như tham vọng, không bao giờ «Trượt»; cuối kỳ không đọc theo điểm mà «Đã trả lời»
+khi đã ghi «Điều học được», «Chưa trả lời» khi chưa; chu kỳ không khép được khi còn mục tiêu
+học tập đã công bố chưa ghi điều học được. Chốt 2026-10-07.
+_Avoid_: kiểu mục tiêu, dạng mục tiêu, mục tiêu thử nghiệm
+Vì sao: «kiểu» đã là chữ của KR; «thử nghiệm» gợi một tính năng bật tắt, còn học tập là một
+mục tiêu thật có người phụ trách và KR.
+
 **Kiểu KR**: cách một KR đo tiến độ, chọn một trong sáu: «tăng tới» (đích lớn
 hơn khởi điểm), «giảm xuống» (đích nhỏ hơn khởi điểm), «giữ trên» và «giữ dưới» (đạt
 khi giá trị hiện tại còn ở phía đúng của đích), «mốc» (xong hay chưa xong) và «phần
