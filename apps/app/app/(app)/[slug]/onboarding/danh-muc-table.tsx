@@ -316,7 +316,6 @@ export function DanhMucTable() {
 				getRowId={(hang) => hang.id}
 				rows={data?.rows ?? []}
 				total={data?.total ?? 0}
-				facetCounts={facetCounts}
 				facets={facets}
 				loading={danhMuc.isFetching}
 				meta={dangTaiDau}
