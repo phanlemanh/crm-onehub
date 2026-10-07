@@ -31,6 +31,13 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyTitle,
+} from "@crm/ui/components/empty";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TablePagination } from "@crm/ui/components/table-pagination";
 import {
@@ -121,6 +128,8 @@ export type DataTableProps<TRow, TSub> = {
 	search?: ReactNode;
 	meta?: ReactNode;
 	empty?: ReactNode;
+	searchActive?: boolean;
+	onClearFilters?: () => void;
 	className?: string;
 	tableClassName?: string;
 	layout?: DataTableLayout;
@@ -374,6 +383,8 @@ export function DataTable<TRow, TSub = unknown>({
 	search,
 	meta,
 	empty,
+	searchActive,
+	onClearFilters,
 	className,
 	tableClassName,
 	layout = "fill",
@@ -443,6 +454,12 @@ export function DataTable<TRow, TSub = unknown>({
 	).length;
 	const activeFilterCount =
 		(tabs && query.tab !== "all" ? 1 : 0) + activeFacetFilterCount;
+	const filterActive =
+		searchActive === true ||
+		(tabs != null && query.tab !== "all") ||
+		Object.entries(query.filters).some(
+			([id, values]) => id !== query.tabId && values.length > 0,
+		);
 
 	return (
 		<div className={cn(LAYOUT_CLASS[layout].root, className)}>
@@ -651,7 +668,31 @@ export function DataTable<TRow, TSub = unknown>({
 				overlay={
 					deferredRows.length === 0 ? (
 						<div className="absolute inset-x-0 top-11 bottom-0 flex items-center justify-center px-4 py-8 text-center text-muted-foreground">
-							{loading ? <Spinner /> : (empty ?? msg.table.noResults)}
+							{loading ? (
+								<Spinner />
+							) : filterActive ? (
+								<Empty>
+									<EmptyHeader>
+										<EmptyTitle>{msg.table.noMatch}</EmptyTitle>
+										<EmptyDescription>
+											{msg.table.noMatchDescription}
+										</EmptyDescription>
+									</EmptyHeader>
+									{onClearFilters && (
+										<EmptyContent>
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={onClearFilters}
+											>
+												{msg.table.resetFilters}
+											</Button>
+										</EmptyContent>
+									)}
+								</Empty>
+							) : (
+								(empty ?? msg.table.noResults)
+							)}
 						</div>
 					) : null
 				}
