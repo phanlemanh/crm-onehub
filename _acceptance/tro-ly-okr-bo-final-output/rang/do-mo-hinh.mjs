@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import {
 	appendFileSync,
 	closeSync,
@@ -18,6 +18,9 @@ const TRACES = join(GOC, "apps/agent/.eve/traces/v1");
 const RA_E22 = join(GOC, ".acceptance-runs/tro-ly-okr-de-xuat/e22");
 const RA = join(GOC, ".acceptance-runs/tro-ly-okr-bo-final-output");
 const NHAT_KY = join(RA, "do-mo-hinh.log");
+const LUOT = `${process.pid}-${new Date().toISOString()}`;
+mkdirSync(RA, { recursive: true });
+writeFileSync(NHAT_KY, "");
 
 const DO = {
 	subagent: "tro_ly_okr",
@@ -36,10 +39,13 @@ const DO = {
 		],
 	},
 	lechMtimeMs: 60_000,
+	choTest: { yenMs: 120_000, nhipMs: 15_000, toiDaMs: 45 * 60_000 },
+	mauTest: /(^|\s|\/)(bun|turbo)(\s+run)?\s+test(\s|$)/,
 };
 
 const thamSo = process.argv.slice(2);
 const chiTuKiem = thamSo.includes("--chi-tu-kiem");
+const demTest = thamSo.includes("--dem-test");
 const iMau = thamSo.indexOf("--mau");
 const MAU =
 	iMau >= 0 ? resolve(thamSo[iMau + 1] ?? "") : join(RANG, "mau-0710");
@@ -145,9 +151,66 @@ function ghi(dong) {
 	appendFileSync(NHAT_KY, `${dong}\n`);
 }
 
+let conDangChay = null;
+
 function ketThuc(ma) {
-	ghi(`KET THUC ma ${ma}`);
+	ghi(`KET THUC ma ${ma} · luot ${LUOT}`);
 	process.exit(ma);
+}
+
+for (const [tin, so] of [
+	["SIGTERM", 15],
+	["SIGINT", 2],
+	["SIGHUP", 1],
+]) {
+	process.on(tin, () => {
+		conDangChay?.kill(tin);
+		ghi(`bi ngat ${tin}`);
+		ketThuc(128 + so);
+	});
+}
+
+function cwdCua(pid) {
+	const r = spawnSync("lsof", ["-a", "-p", String(pid), "-d", "cwd", "-Fn"], {
+		encoding: "utf8",
+	});
+	const dong = (r.stdout ?? "").split("\n").find((d) => d.startsWith("n"));
+	return dong ? dong.slice(1) : "";
+}
+
+function testDangChay() {
+	const r = spawnSync("ps", ["-axo", "pid=,command="], { encoding: "utf8" });
+	return (r.stdout ?? "")
+		.split("\n")
+		.map((d) => d.trim().match(/^(\d+)\s+(.*)$/))
+		.filter((m) => m && Number(m[1]) !== process.pid && DO.mauTest.test(m[2]))
+		.filter((m) => cwdCua(m[1]).startsWith(GOC)).length;
+}
+
+const ngu = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function choBoTestYen() {
+	const batDau = Date.now();
+	let yenTu = null;
+	while (Date.now() - batDau < DO.choTest.toiDaMs) {
+		const n = testDangChay();
+		if (n > 0) {
+			yenTu = null;
+			ghi(`cho bo test cua cay xong: ${n} tien trinh dang chay`);
+		} else {
+			yenTu ??= Date.now();
+			if (Date.now() - yenTu >= DO.choTest.yenMs) {
+				ghi(
+					`bo test yen ${Math.round(DO.choTest.yenMs / 1000)} giay, bat dau do`,
+				);
+				return;
+			}
+		}
+		await ngu(DO.choTest.nhipMs);
+	}
+	ghi(
+		`het ${Math.round(DO.choTest.toiDaMs / 60_000)} phut cho bo test, van do`,
+	);
 }
 
 const NS_MOI_MS = 1_000_000n;
@@ -172,7 +235,7 @@ function tuKiem() {
 	return loi.length === 0;
 }
 
-function chay(ten) {
+async function chay(ten) {
 	const [lenh, args] = DO.lenh[ten];
 	const tuMs = Date.now();
 	const tuNs = bayGioNs();
@@ -180,13 +243,18 @@ function chay(ten) {
 		`[${ten}] bat dau ${new Date(tuMs).toISOString()}: ${lenh} ${args.join(" ")}`,
 	);
 	const fd = openSync(NHAT_KY, "a");
-	const r = spawnSync(lenh, args, { cwd: GOC, stdio: ["ignore", fd, fd] });
+	const ma = await new Promise((xong) => {
+		conDangChay = spawn(lenh, args, { cwd: GOC, stdio: ["ignore", fd, fd] });
+		conDangChay.on("exit", (m) => xong(m ?? 1));
+		conDangChay.on("error", () => xong(1));
+	});
+	conDangChay = null;
 	closeSync(fd);
 	const denNs = bayGioNs();
 	ghi(
-		`[${ten}] xong sau ${Math.round((Date.now() - tuMs) / 1000)} giay, ma ${r.status}`,
+		`[${ten}] xong sau ${Math.round((Date.now() - tuMs) / 1000)} giay, ma ${ma}`,
 	);
-	return { ma: r.status ?? 1, tuMs, tuNs, denNs };
+	return { ma, tuMs, tuNs, denNs };
 }
 
 function logE22(tuMs) {
@@ -202,8 +270,8 @@ function logE22(tuMs) {
 		.filter((t) => statSync(t).mtimeMs >= tuMs);
 }
 
-function phanMoHinh(ten, nToiThieu, coLog) {
-	const r = chay(ten);
+async function phanMoHinh(ten, nToiThieu, coLog) {
+	const r = await chay(ten);
 	const dem = demCuaSo(TRACES, r.tuNs, r.denNs, r.tuMs);
 	const rong = coLog ? demLog(logE22(r.tuMs)) : 0;
 	const loi = [];
@@ -216,21 +284,24 @@ function phanMoHinh(ten, nToiThieu, coLog) {
 	return loi.length === 0;
 }
 
-mkdirSync(RA, { recursive: true });
-writeFileSync(NHAT_KY, "");
-ghi(`nhat ky: ${NHAT_KY}`);
+ghi(`nhat ky: ${NHAT_KY} · luot ${LUOT}`);
 try {
 	if (!tuKiem()) ketThuc(3);
 	if (chiTuKiem) ketThuc(0);
+	if (demTest) {
+		ghi(`test dang chay trong cay: ${testDangChay()}`);
+		ketThuc(0);
+	}
 } catch (loi) {
 	ghi(`loi thuoc: ${loi instanceof Error ? loi.message : String(loi)}`);
 	ketThuc(1);
 }
 
 try {
+	await choBoTestYen();
 	const ket = [
-		phanMoHinh("e22", DO.nDauToiThieuE22, true),
-		phanMoHinh("e17", DO.nDauToiThieuE17, false),
+		await phanMoHinh("e22", DO.nDauToiThieuE22, true),
+		await phanMoHinh("e17", DO.nDauToiThieuE17, false),
 	];
 	ketThuc(ket.every(Boolean) ? 0 : 1);
 } catch (loi) {
