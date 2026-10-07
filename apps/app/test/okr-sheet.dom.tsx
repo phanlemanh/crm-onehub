@@ -136,6 +136,8 @@ function mucTieu(
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,
+			xoa: false,
+			dungLai: false,
 		},
 	};
 }
@@ -213,6 +215,8 @@ mock.module("@/lib/trpc/client", () => ({
 			})),
 			publishObjective: thuTuc("okr.publishObjective"),
 			dropObjective: thuTuc("okr.dropObjective"),
+			xoaMucTieu: thuTuc("okr.xoaMucTieu"),
+			dungLaiMucTieu: thuTuc("okr.dungLaiMucTieu"),
 			updateObjective: thuTuc("okr.updateObjective"),
 			createObjective: thuTuc("okr.createObjective"),
 			mau: thuTuc("okr.mau", () => ({ mau: [], quanTri: false })),
@@ -268,7 +272,7 @@ mock.module("@/lib/trpc/client", () => ({
 				bat: false,
 				lyDo: "tat",
 			})),
-			mine: thuTuc("okr.mine", () => ({ objectives: [] })),
+			mine: thuTuc("okr.mine", () => ({ objectives: [], daBo: [] })),
 			danhSach: thuTuc("okr.danhSach"),
 			troLyDanhSach: thuTuc("okr.troLyDanhSach", () => ({
 				dong: [],

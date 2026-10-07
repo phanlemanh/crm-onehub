@@ -781,6 +781,11 @@ const GHIM = {
 	"okr:khoiMucTieu.thuGon": ["Thu gọn KR của «1»", "Thu gọn KR của «12»"],
 	"okr:khoiMucTieu.moRa": ["Mở KR của «1»", "Mở KR của «12»"],
 	"okr:khoiMucTieu.soKr": ["1 KR", "12 KR"],
+	"okr:khoiMucTieu.nhomDaBo": ["Đã bỏ (1)", "Đã bỏ (12)"],
+	"okr:sheet.hoiXoa.body": [
+		"Mục tiêu và 1 KR của nó mất hẳn. Vết vẫn ghi lại việc xoá.",
+		"Mục tiêu và 12 KR của nó mất hẳn. Vết vẫn ghi lại việc xoá.",
+	],
 	"okr:khoiMucTieu.soKrCham": ["1 KR chậm", "12 KR chậm"],
 	"okr:khoiMucTieu.tuKhoiDiem": ["1 · từ A", "12 · từ A"],
 	"okr:caiDat.chuKy.chuyenSang": ["Chuyển sang 1", "Chuyển sang 12"],

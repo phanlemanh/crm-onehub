@@ -25,7 +25,8 @@
 		"db:do": "bun run --filter=@crm/db db:do",
 		"do:man": "bun scripts/lan-do/phien-do.mjs",
 		"okr:mau": "bun run --filter=api okr:mau",
-		"ui:capture": "node scripts/ui-capture.mjs"
+		"ui:capture": "node scripts/ui-capture.mjs",
+		"test:dieu-phoi": "node --test \"scripts/dieu-phoi/test/*.test.mjs\""
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.10",

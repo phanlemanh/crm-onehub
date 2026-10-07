@@ -33,6 +33,7 @@
 		"./okr-de-xuat": "./src/okr-de-xuat.ts",
 		"./okr-don-vi": "./src/okr-don-vi.ts",
 		"./okr-duyet": "./src/okr-duyet.ts",
+		"./okr-muc-tieu-lich-su": "./src/okr-muc-tieu-lich-su.ts",
 		"./okr-goi-soan": "./src/okr-goi-soan.ts",
 		"./okr-hien-thi": "./src/okr-hien-thi.ts",
 		"./okr-hoi-y-trang-thai": "./src/okr-hoi-y-trang-thai.ts",

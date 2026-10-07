@@ -177,6 +177,7 @@ describe("purging a selection", () => {
 			email: `also-gone@${domain}`,
 		});
 
+		await contacts.bulkArchive([first.id, second.id]);
 		expect(await contacts.bulkPurge([first.id, second.id])).toEqual({
 			requested: 2,
 			succeeded: 2,
@@ -198,6 +199,7 @@ describe("purging a selection", () => {
 			email: `doomed@${domain}`,
 		});
 
+		await contacts.archive(survivor.id);
 		const result = await contacts.bulkPurge([survivor.id, `missing-${suffix}`]);
 
 		expect(result.succeeded).toBe(1);
@@ -219,6 +221,7 @@ describe("purging a selection", () => {
 			ownerId,
 		});
 
+		await companies.archive(doomed.id);
 		expect(await companies.bulkPurge([doomed.id])).toEqual({
 			requested: 1,
 			succeeded: 1,

@@ -50,6 +50,7 @@ function HangMucTieu({
 	const openRecord = useOpenRecord();
 	const nhan = diemCam?.nhanMucTieu?.(mucTieu);
 	const cham = demCham(mucTieu);
+	const daBo = mucTieu.status === "da-bo";
 	const tienDo = {
 		ten: mucTieu.title,
 		progress: mucTieu.progress,
@@ -59,28 +60,32 @@ function HangMucTieu({
 	};
 	return (
 		<SimpleTableRow
-			clickable
+			clickable={!daBo}
+			data-da-bo={daBo ? "" : undefined}
 			data-hang-muc-tieu={mucTieu.id}
-			expandable
-			onClick={doiMo}
+			expandable={!daBo}
+			onClick={daBo ? undefined : doiMo}
+			sub={daBo}
 		>
 			<SimpleTableCell className="w-12 align-top">
-				<Button
-					aria-expanded={mo}
-					className="group"
-					aria-label={mo ? k.thuGon(mucTieu.title) : k.moRa(mucTieu.title)}
-					onClick={(e) => {
-						e.stopPropagation();
-						doiMo();
-					}}
-					size="icon-sm"
-					variant="ghost"
-				>
-					<Icon
-						className="transition-transform group-aria-expanded:rotate-90 motion-reduce:transition-none motion-reduce:duration-0"
-						icon={ChevronRight}
-					/>
-				</Button>
+				{daBo ? null : (
+					<Button
+						aria-expanded={mo}
+						className="group"
+						aria-label={mo ? k.thuGon(mucTieu.title) : k.moRa(mucTieu.title)}
+						onClick={(e) => {
+							e.stopPropagation();
+							doiMo();
+						}}
+						size="icon-sm"
+						variant="ghost"
+					>
+						<Icon
+							className="transition-transform group-aria-expanded:rotate-90 motion-reduce:transition-none motion-reduce:duration-0"
+							icon={ChevronRight}
+						/>
+					</Button>
+				)}
 			</SimpleTableCell>
 			<SimpleTableCell className="whitespace-normal align-top">
 				<span className="flex min-w-0 flex-col gap-1">
@@ -101,7 +106,9 @@ function HangMucTieu({
 							className="inline-flex flex-wrap items-center gap-2"
 							data-nhom-nhan
 						>
-							<Badge variant="outline">{m.loai[mucTieu.kind]}</Badge>
+							{daBo ? null : (
+								<Badge variant="outline">{m.loai[mucTieu.kind]}</Badge>
+							)}
 							<NhanTrangThai status={mucTieu.status} />
 							{mucTieu.hienThi === "gioi-han" ? (
 								<NhanGioiHan moHop={null} soNguoiXem={mucTieu.soNguoiXem} />
@@ -126,9 +133,11 @@ function HangMucTieu({
 							<span translate="no">{mucTieu.owner.name}</span>
 						</span>
 					</span>
-					<span className="w-full pt-1 md:hidden">
-						<TienDoMucTieuGon {...tienDo} />
-					</span>
+					{daBo ? null : (
+						<span className="w-full pt-1 md:hidden">
+							<TienDoMucTieuGon {...tienDo} />
+						</span>
+					)}
 				</span>
 			</SimpleTableCell>
 			<SimpleTableCell className={`${AN_DUOI_MD} w-48`}>
@@ -137,7 +146,13 @@ function HangMucTieu({
 				</span>
 			</SimpleTableCell>
 			<SimpleTableCell className={`${AN_DUOI_MD} w-64`}>
-				<TienDoMucTieu {...tienDo} />
+				{daBo ? (
+					<span className="text-muted-foreground text-xs">
+						{k.khongTinhTienDo}
+					</span>
+				) : (
+					<TienDoMucTieu {...tienDo} />
+				)}
 			</SimpleTableCell>
 		</SimpleTableRow>
 	);
@@ -171,10 +186,11 @@ export function KhoiMucTieu({
 	diemCam?: DiemCam;
 }) {
 	const m = okrMessages(useLocale());
+	const daBo = mucTieu.status === "da-bo";
 	return (
 		<div data-muc-tieu={mucTieu.id}>
 			<BangKr
-				an={!mo}
+				an={!mo || daBo}
 				cotMo
 				danhDauCuaToi={danhDauCuaToi}
 				dau={
@@ -188,7 +204,7 @@ export function KhoiMucTieu({
 				}
 				diemCam={diemCam}
 				duoiDau={
-					mo && mucTieu.keyResults.length === 0 ? (
+					mo && !daBo && mucTieu.keyResults.length === 0 ? (
 						<HangChuaCoKr mucTieu={mucTieu} />
 					) : null
 				}

@@ -293,6 +293,8 @@ export function datMacDinh(dong: DongHien[]): void {
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,
+			xoa: false,
+			dungLai: false,
 		},
 	}));
 	dat("okr.program", () => ({ weightsOn: false, personalOn: false }));

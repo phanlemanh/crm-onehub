@@ -96,6 +96,7 @@ import {
 	cyclesOutput,
 	datHienThiOutput,
 	donViSoanVao,
+	dungLaiOutput,
 	followOutput,
 	guiCapNhatOutput,
 	idInput,
@@ -1067,6 +1068,30 @@ export class OkrRouter {
 		@Input() input: z.infer<typeof idInput>,
 	) {
 		return this.okr.dropObjective(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: idInput,
+		output: okOutput,
+		meta: restMeta("DELETE", "/okr/objectives/{id}", TAG),
+	})
+	xoaMucTieu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof idInput>,
+	) {
+		return this.okr.xoaMucTieu(ctx.user.id, input.id);
+	}
+
+	@Mutation({
+		input: idInput,
+		output: dungLaiOutput,
+		meta: restMeta("POST", "/okr/objectives/{id}/reuse", TAG),
+	})
+	dungLaiMucTieu(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof idInput>,
+	) {
+		return this.okr.dungLaiMucTieu(ctx.user.id, input.id);
 	}
 
 	@Mutation({

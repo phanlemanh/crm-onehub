@@ -80,6 +80,8 @@ const KHONG_QUYEN = {
 	guiDuyet: false,
 	duyet: false,
 	rutDuyet: false,
+	xoa: false,
+	dungLai: false,
 };
 
 function mucTieu(doi: Partial<ObjectiveOutput>): ObjectiveOutput {
