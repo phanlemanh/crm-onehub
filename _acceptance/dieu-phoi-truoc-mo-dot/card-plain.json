@@ -1,32 +1,92 @@
 {
-  "feature_plain": "Gỡ ba cái bẫy còn lại trước khi mở đợt sau-14-10: một tệp trả lời gia hạn gõ sai không còn làm đứng cả bộ điều phối, dòng lệnh mà hook gợi ý chạy được cả khi lệnh có biến môi trường đứng trước, và mọi lần đẩy từ worktree chạy đúng cổng của chính cây đó.",
+  "feature_plain": "Ba cái bẫy cuối trước khi mở đợt sau-14-10 đã gỡ: một tệp trả lời gia hạn gõ sai chỉ bị cách ly và báo giám sát thay vì làm đứng cả bộ điều phối, dòng lệnh mà hook gợi ý chạy đúng cả khi lệnh có biến môi trường đứng trước, và mọi lần đẩy từ worktree chạy đúng cổng của chính cây đó.",
   "will_do": [
-    {"id": "AC-2", "p": "Sẽ cách ly tệp trả lời sai hình dạng (thiếu trường, sai kiểu, tên khoá gõ nhầm) và nói đúng trường sai, trong khi mọi tệp trả lời do chính máy ghi vẫn được đọc như cũ."},
-    {"id": "AC-3", "p": "Sẽ áp gia hạn ngay ở nhịp kế khi giám sát ghi lại tệp trả lời đúng, đúng một lần, không báo lặp."},
-    {"id": "AC-4", "p": "Sẽ in một dòng lệnh bọc chạy ra cùng kết quả như lệnh gốc cho mọi dạng lệnh: có biến môi trường đứng trước, có cd &&, có ống, nháy hay biến."},
-    {"id": "AC-5", "p": "Sẽ chạy đúng cổng của cây đang đẩy, kể cả khi worktree được cấu hình dùng hook của checkout chính, mà không lặp và không làm mất danh sách nhánh đang đẩy."},
-    {"id": "AC-6", "p": "Sẽ giữ mọi phép đo của hai vòng trước vẫn xanh."}
+    {
+      "id": "AC-2",
+      "p": "Sẽ cách ly tệp trả lời sai hình dạng (thiếu trường, sai kiểu, tên khoá gõ nhầm) và nói đúng trường sai, trong khi mọi tệp trả lời do chính máy ghi vẫn được đọc như cũ."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ áp gia hạn ngay ở nhịp kế khi giám sát ghi lại tệp trả lời đúng, đúng một lần, không báo lặp."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ in một dòng lệnh bọc chạy ra cùng kết quả như lệnh gốc cho mọi dạng lệnh: có biến môi trường đứng trước, có cd &&, có ống, nháy hay biến."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ chạy đúng cổng của cây đang đẩy, kể cả khi worktree được cấu hình dùng hook của checkout chính, mà không lặp và không làm mất danh sách nhánh đang đẩy."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ giữ mọi phép đo của hai vòng trước vẫn xanh."
+    }
   ],
   "wont_do": [
-    {"id": "AC-1", "p": "Chặn một tệp trả lời gõ hỏng làm đứng cả bộ điều phối: tệp đó bị cách ly và báo giám sát, các lượt khác vẫn được cấp và thu hồi trong cùng nhịp."},
-    {"id": "OOS-1", "p": "KHÔNG sửa các ô đo mỏng đã ghi là hạn chế ở hai vòng trước."},
-    {"id": "OOS-2", "p": "KHÔNG đổi cách app tạo worktree hay cấu hình hook của từng worktree."},
-    {"id": "OOS-3", "p": "KHÔNG kiểm nội dung tệp trả lời ở những chỗ chỉ xem tệp có tồn tại hay không."},
-    {"id": "OOS-4", "p": "KHÔNG mở đợt sau-14-10 trong vòng này."}
+    {
+      "id": "AC-1",
+      "p": "Chặn một tệp trả lời gõ hỏng làm đứng cả bộ điều phối: tệp đó bị cách ly và báo giám sát, các lượt khác vẫn được cấp và thu hồi trong cùng nhịp."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG sửa các ô đo mỏng đã ghi là hạn chế ở hai vòng trước."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG đổi cách app tạo worktree hay cấu hình hook của từng worktree."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG kiểm nội dung tệp trả lời ở những chỗ chỉ xem tệp có tồn tại hay không."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG mở đợt sau-14-10 trong vòng này."
+    }
   ],
   "scope_plain": "Bốn thứ cố ý để ngoài vòng này:",
   "coverage_plain": [
-    {"i": 0, "p": "Ba mục tồn đọng trước khi mở đợt đều có tiêu chí: tệp trả lời hỏng (AC-1 tới AC-3), dòng lệnh bọc (AC-4), cổng của cây (AC-5); cộng không hồi quy (AC-6) và tài liệu cho giám sát (AC-7)."},
-    {"i": 1, "p": "Mọi kiểu hỏng của tệp trả lời đều được đo: hỏng cú pháp, sai hình dạng ở năm ô, và hỏng rồi được sửa."},
-    {"i": 2, "p": "Bảy dạng lệnh thường gặp đều được chạy thật để so kết quả với lệnh gốc."},
-    {"i": 3, "p": "Ba nơi đẩy đều được đo bằng git push thật: từ worktree, từ checkout chính, và cây không có hook riêng."},
-    {"i": 4, "p": "GIẢ ĐỊNH cần anh gạch: máy chạy hook có lệnh realpath (macOS từ bản 13, Linux có sẵn); không đo trên máy thiếu nó."}
+    {
+      "i": 0,
+      "p": "Ba mục tồn đọng trước khi mở đợt đều có tiêu chí: tệp trả lời hỏng (AC-1 tới AC-3), dòng lệnh bọc (AC-4), cổng của cây (AC-5); cộng không hồi quy (AC-6) và tài liệu cho giám sát (AC-7)."
+    },
+    {
+      "i": 1,
+      "p": "Mọi kiểu hỏng của tệp trả lời đều được đo: hỏng cú pháp, sai hình dạng ở năm ô, và hỏng rồi được sửa."
+    },
+    {
+      "i": 2,
+      "p": "Bảy dạng lệnh thường gặp đều được chạy thật để so kết quả với lệnh gốc."
+    },
+    {
+      "i": 3,
+      "p": "Ba nơi đẩy đều được đo bằng git push thật: từ worktree, từ checkout chính, và cây không có hook riêng."
+    },
+    {
+      "i": 4,
+      "p": "GIẢ ĐỊNH cần anh gạch: máy chạy hook có lệnh realpath (macOS từ bản 13, Linux có sẵn); không đo trên máy thiếu nó."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Phép thử «tệp trả lời đúng vẫn đọc được» dùng tệp gõ tay thiếu một khoá máy thật ghi — đã sửa: đọc lại đúng ba tệp do bộ phát lịch thật ghi ra, thêm một đột biến bỏ khoá đó."},
-    {"i": 1, "p": "Một chiều đỏ không thể đỏ vì tệp được ghi lại ngay sau khi cách ly — đã sửa: thêm một nhịp chưa ai sửa ở giữa."},
-    {"i": 2, "p": "Phép đo cổng của cây chỉ dùng hook giả, không đo bản thật có lặp hay mất danh sách nhánh không — đã sửa: thêm ca worktree mang bản pre-push thật, ghi lại dữ liệu hook nhận được, thêm chiều đỏ."},
-    {"i": 3, "p": "So dòng lệnh bọc với lệnh gốc mà không đòi lệnh gốc chạy thật — đã sửa: mỗi dạng phải chạy ra kết quả mong đợi trước khi so."},
-    {"i": 4, "p": "Hội đồng chấm tài liệu bị hỏi một ý không phán được từ tài liệu — đã sửa: danh sách khoá hợp lệ đo bằng máy, so với chính bộ kiểm."}
+    {
+      "i": 0,
+      "p": "Phép thử «tệp trả lời đúng vẫn đọc được» dùng tệp gõ tay thiếu một khoá máy thật ghi — đã sửa: đọc lại đúng ba tệp do bộ phát lịch thật ghi ra, thêm một đột biến bỏ khoá đó."
+    },
+    {
+      "i": 1,
+      "p": "Một chiều đỏ không thể đỏ vì tệp được ghi lại ngay sau khi cách ly — đã sửa: thêm một nhịp chưa ai sửa ở giữa."
+    },
+    {
+      "i": 2,
+      "p": "Phép đo cổng của cây chỉ dùng hook giả, không đo bản thật có lặp hay mất danh sách nhánh không — đã sửa: thêm ca worktree mang bản pre-push thật, ghi lại dữ liệu hook nhận được, thêm chiều đỏ."
+    },
+    {
+      "i": 3,
+      "p": "So dòng lệnh bọc với lệnh gốc mà không đòi lệnh gốc chạy thật — đã sửa: mỗi dạng phải chạy ra kết quả mong đợi trước khi so."
+    },
+    {
+      "i": 4,
+      "p": "Hội đồng chấm tài liệu bị hỏi một ý không phán được từ tài liệu — đã sửa: danh sách khoá hợp lệ đo bằng máy, so với chính bộ kiểm."
+    }
   ]
 }
