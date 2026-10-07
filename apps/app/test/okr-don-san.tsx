@@ -199,7 +199,7 @@ type DauVao = { readonly [khoa: string]: Json | undefined } | undefined;
 type KetGhi = { id: string; canhBao: string | null; canGuiDuyet?: boolean };
 
 export const kho = {
-	mine: mineOutput.parse({ objectives: [], daBo: [] }),
+	mine: mineOutput.parse({ dangTheoDoi: [], objectives: [], daBo: [] }),
 	danhSach: danhSachTu([], []),
 	chiTiet: chiTietTu(mucTieu("mt-s")),
 	loiGhi: new Map<string, string>(),
@@ -418,7 +418,7 @@ export const daTaiXong = () =>
 	) !== null;
 
 beforeEach(() => {
-	kho.mine = mineOutput.parse({ objectives: [], daBo: [] });
+	kho.mine = mineOutput.parse({ dangTheoDoi: [], objectives: [], daBo: [] });
 	kho.danhSach = danhSachTu([], []);
 	kho.loiGhi = new Map();
 	kho.traGhi = new Map();
