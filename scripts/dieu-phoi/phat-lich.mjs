@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { veBang } from './bang.mjs';
-import { docCauHinh, docHangViec, kiemCoBan, kiemDon, kiemYeuCau } from './hinh-dang.mjs';
+import { docCauHinh, docHangViec, kiemCoBan, kiemDon, kiemTraLoi, kiemYeuCau } from './hinh-dang.mjs';
 import { GIAY_MS, NHIP, PHUT_MS } from './cau-hinh.mjs';
 import { docJson, ghiJsonNguyenTu, ghiSuKien } from './dot.mjs';
 import { capLuot, chonHangKe, hanGiaHan, xetHanThue } from './lich.mjs';
@@ -162,12 +162,27 @@ function chonTaiNguyen(thuMuc, yc, tra) {
   return { loi: dangGiu.length === 0 ? `${yc.phien} không còn giữ khoá nào` : `${yc.phien} giữ ${dangGiu.join(', ')} — tra-loi phải nêu tai_nguyen` };
 }
 
+function docTraLoi(thuMuc, ten) {
+  const tep = `${ten}.json`;
+  const nguon = path.join(thuMuc, 'tra-loi', tep);
+  if (!fs.existsSync(nguon)) return null;
+  try {
+    return kiemTraLoi(JSON.parse(fs.readFileSync(nguon, 'utf8')));
+  } catch (e) {
+    const noiHong = path.join(thuMuc, 'tra-loi', 'hong');
+    fs.mkdirSync(noiHong, { recursive: true });
+    fs.renameSync(nguon, path.join(noiHong, tep));
+    ghiSuKien(thuMuc, { loai: 'tra-loi-hong', tep, ly_do: `tra-loi/${tep}: ${e.message}`, can_phan: true });
+    return null;
+  }
+}
+
 function apGiaHan(thuMuc, nowMs, daBaoCu) {
   const daBao = new Set(daBaoCu);
   for (const y of docThuMucJson(thuMuc, 'yeu-cau', kiemYeuCau).filter((x) => x.loai === 'gia-han')) {
     const dau = `gia-han:${y._ten}`;
     if (daBao.has(dau)) continue;
-    const tra = docJson(path.join(thuMuc, 'tra-loi', `${y._ten}.json`));
+    const tra = docTraLoi(thuMuc, y._ten);
     if (tra?.ket_qua !== 'duyet') continue;
     const bao = (ly_do) => {
       ghiSuKien(thuMuc, { loai: 'gia-han-khong-ap', id: y._ten, phien: y.phien, ly_do, can_phan: true });

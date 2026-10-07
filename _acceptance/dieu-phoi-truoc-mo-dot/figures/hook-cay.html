@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pre-push chuyển sang hook của cây</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap&subset=vietnamese" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper: #fafafa;
+      --color-ink: #171717;
+      --color-muted: #575757;
+      --font-sans: 'Geist', system-ui, sans-serif;
+      --font-serif: 'Lora', serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 880px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 800px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Flowchart · d-3 · AC-5</p>
+    <h1>Pre-push luôn chạy cổng của chính cây đang đẩy</h1>
+
+    <svg viewBox="0 0 880 912" xmlns="http://www.w3.org/2000/svg" font-family="'Geist', sans-serif">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="440" y1="88" x2="440" y2="128" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="440" y1="200" x2="440" y2="240" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="272" y1="164" x2="240" y2="164" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="280" y1="312" x2="224" y2="312" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="440" y1="384" x2="440" y2="432" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="280" y1="504" x2="224" y2="504" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="440" y1="576" x2="440" y2="624" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="440" y1="696" x2="440" y2="736" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <path d="M704,128 H712 V696 H704" fill="none" stroke="#666666" stroke-width="0.8"/>
+      <path d="M704,736 H712 V816 H704" fill="none" stroke="#666666" stroke-width="0.8"/>
+      <g fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">
+        <text x="724" y="404">chạy trong pre-push</text>
+        <text x="724" y="418">của checkout chính</text>
+        <text x="724" y="772">chạy trong pre-push</text>
+        <text x="724" y="786">của cây đang đẩy</text>
+      </g>
+
+      <g font-family="'Geist Mono', monospace" font-size="9" letter-spacing="0.06em" text-anchor="middle">
+        <rect x="228" y="290" width="48" height="16" rx="2" fill="#fafafa"/>
+        <text x="252" y="302" fill="#575757">không</text>
+        <rect x="452" y="400" width="24" height="16" rx="2" fill="#fafafa"/>
+        <text x="464" y="412" fill="#575757">có</text>
+        <rect x="228" y="482" width="48" height="16" rx="2" fill="#fafafa"/>
+        <text x="252" y="494" fill="#575757">giống</text>
+        <rect x="452" y="592" width="36" height="16" rx="2" fill="#fafafa"/>
+        <text x="470" y="604" fill="#006B4F">khác</text>
+      </g>
+
+      <rect x="320" y="40" width="240" height="48" rx="24" fill="#fafafa"/>
+      <rect x="320" y="40" width="240" height="48" rx="24" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="440" y="68" fill="#171717" font-size="12" font-weight="600" text-anchor="middle"><tspan font-family="'Geist Mono', monospace" font-weight="500">git push</tspan> từ worktree</text>
+
+      <rect x="272" y="128" width="336" height="72" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="152" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">git chạy <tspan font-family="'Geist Mono', monospace" font-weight="500">.githooks/pre-push</tspan></text>
+      <text x="440" y="168" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">của checkout chính</text>
+      <text x="440" y="186" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">qua core.hooksPath dùng chung</text>
+
+      <rect x="40" y="128" width="200" height="72" rx="6" fill="#fafafa"/>
+      <rect x="40" y="128" width="200" height="72" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="56" y="148" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LỖI CŨ</text>
+      <text x="56" y="168" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace">reported no test summary</text>
+      <text x="56" y="186" fill="#575757" font-size="11">khi hai bản lệch</text>
+
+      <polygon points="440,240 600,312 440,384 280,312" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="306" fill="#171717" font-size="11" font-weight="600" text-anchor="middle">gốc cây đang đẩy có</text>
+      <text x="440" y="324" fill="#171717" font-size="10" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">.githooks/pre-push?</text>
+
+      <rect x="40" y="284" width="184" height="56" rx="28" fill="#fafafa"/>
+      <rect x="40" y="284" width="184" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="132" y="308" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">chạy tiếp vòng lệnh này</text>
+      <text x="132" y="324" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">như cũ</text>
+
+      <polygon points="440,432 600,504 440,576 280,504" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="440" y="498" fill="#171717" font-size="11" font-weight="600" text-anchor="middle"><tspan font-family="'Geist Mono', monospace" font-weight="500">realpath</tspan> giống</text>
+      <text x="440" y="516" fill="#171717" font-size="11" font-weight="600" text-anchor="middle">tệp đang chạy?</text>
+
+      <rect x="40" y="476" width="184" height="56" rx="28" fill="#fafafa"/>
+      <rect x="40" y="476" width="184" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="132" y="500" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">chạy vòng lệnh</text>
+      <text x="132" y="516" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">một lượt, không lặp</text>
+
+      <rect x="240" y="624" width="400" height="72" rx="6" fill="#fafafa"/>
+      <rect x="240" y="624" width="400" height="72" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="440" y="652" fill="#171717" font-size="11" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle">exec bash &lt;hook của cây&gt;</text>
+      <text x="440" y="674" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">giữ argv và stdin (dòng ref)</text>
+
+      <rect x="200" y="736" width="480" height="80" rx="40" fill="#fafafa"/>
+      <rect x="200" y="736" width="480" height="80" rx="40" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="440" y="764" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">hook của cây tự nhận ra mình</text>
+      <text x="440" y="780" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">→ chạy vòng lệnh của cây</text>
+      <text x="440" y="798" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">khớp gate-shape.json của cây · mã thoát của cây</text>
+
+      <text x="724" y="808" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">AC-5</text>
+
+      <line x1="40" y1="848" x2="840" y2="848" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="866" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="40" y="878" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="72" y="888" fill="#575757" font-size="9">bắt đầu / kết cục</text>
+      <rect x="168" y="878" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="200" y="888" fill="#575757" font-size="9">bước</text>
+      <polygon points="244,884 256,878 268,884 256,890" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="276" y="888" fill="#575757" font-size="9">quyết định</text>
+      <rect x="344" y="878" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="376" y="888" fill="#575757" font-size="9">hành vi mới của vòng</text>
+      <rect x="492" y="878" width="24" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="524" y="888" fill="#575757" font-size="9">lỗi cũ, đã vá</text>
+      <path d="M612,878 H616 V890 H612" fill="none" stroke="#666666" stroke-width="0.8"/>
+      <text x="624" y="888" fill="#575757" font-size="9">tệp hook đang chạy</text>
+    </svg>
+  </div>
+</body>
+</html>
