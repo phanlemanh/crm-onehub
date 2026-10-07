@@ -329,7 +329,7 @@ type Kho = {
 };
 
 const khoMoi = (): Kho => ({
-	mine: mineOutput.parse({ objectives: [], daBo: [] }),
+	mine: mineOutput.parse({ dangTheoDoi: [], objectives: [], daBo: [] }),
 	danhSach: () => danhSachTu([]),
 	chiTiet: () => chiTietTu(mtSheet()),
 	troLy: () => dsTroLy([]),
@@ -675,7 +675,7 @@ export async function dungCuaToi(
 	ds: MucTieuOutput[],
 	thamSo = "",
 ): Promise<San> {
-	kho.mine = mineOutput.parse({ objectives: ds, daBo: [] });
+	kho.mine = mineOutput.parse({ dangTheoDoi: [], objectives: ds, daBo: [] });
 	const san = await dung(<CuaToi />, thamSo);
 	await cho(
 		() => daTaiDanhSach() && qs("[data-so-kr-cho]") === null,

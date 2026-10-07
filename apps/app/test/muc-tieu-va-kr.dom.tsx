@@ -218,7 +218,7 @@ function nguonMay(loai: "crm" | "api" | "bang-tinh"): KrOutput["nguonMay"] {
 }
 
 let cycles = KY_CO;
-let mine = mineOutput.parse({ objectives: [], daBo: [] });
+let mine = mineOutput.parse({ dangTheoDoi: [], objectives: [], daBo: [] });
 let danhSach = danhSachTu([]);
 let chiTiet = chiTietTu(mucTieu("mt-s", []));
 let bangCham: BangChamOutput = bangChamOutput.parse({
@@ -544,7 +544,7 @@ const daTaiXong = () =>
 	) !== null;
 
 async function dungCuaToi(ds: MucTieuOutput[], thamSo = ""): Promise<San> {
-	mine = mineOutput.parse({ objectives: ds, daBo: [] });
+	mine = mineOutput.parse({ dangTheoDoi: [], objectives: ds, daBo: [] });
 	const san = await dung(<CuaToi />, thamSo);
 	await cho(daTaiXong, "cua toi tai xong");
 	return san;
@@ -618,7 +618,7 @@ async function dungCham(): Promise<San> {
 
 beforeEach(() => {
 	cycles = KY_CO;
-	mine = mineOutput.parse({ objectives: [], daBo: [] });
+	mine = mineOutput.parse({ dangTheoDoi: [], objectives: [], daBo: [] });
 	danhSach = danhSachTu([]);
 	treo = new Set();
 	loi = new Set();
@@ -2168,7 +2168,11 @@ const CA_TRANG_THAI = {
 	"ST-donvi-dangtai": () =>
 		haiMan(async (man) => {
 			treo = new Set([man === "cua-toi" ? "okr.mine" : "okr.danhSach"]);
-			mine = mineOutput.parse({ objectives: HAI_MT(), daBo: [] });
+			mine = mineOutput.parse({
+				dangTheoDoi: [],
+				objectives: HAI_MT(),
+				daBo: [],
+			});
 			danhSach = danhSachTu(HAI_MT());
 			await dung(man === "cua-toi" ? <CuaToi /> : <TheoDonVi />);
 			await cho(
@@ -2198,7 +2202,11 @@ const CA_TRANG_THAI = {
 			const thuTucLoi = man === "cua-toi" ? "okr.mine" : "okr.danhSach";
 			loi = new Set([thuTucLoi]);
 			soLanDoc = new Map();
-			mine = mineOutput.parse({ objectives: HAI_MT(), daBo: [] });
+			mine = mineOutput.parse({
+				dangTheoDoi: [],
+				objectives: HAI_MT(),
+				daBo: [],
+			});
 			danhSach = danhSachTu(HAI_MT());
 			await dung(man === "cua-toi" ? <CuaToi /> : <TheoDonVi />);
 			await cho(

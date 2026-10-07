@@ -272,7 +272,11 @@ mock.module("@/lib/trpc/client", () => ({
 				bat: false,
 				lyDo: "tat",
 			})),
-			mine: thuTuc("okr.mine", () => ({ objectives: [], daBo: [] })),
+			mine: thuTuc("okr.mine", () => ({
+				objectives: [],
+				daBo: [],
+				dangTheoDoi: [],
+			})),
 			danhSach: thuTuc("okr.danhSach"),
 			troLyDanhSach: thuTuc("okr.troLyDanhSach", () => ({
 				dong: [],
