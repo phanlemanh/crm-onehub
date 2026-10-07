@@ -1,4 +1,5 @@
 import type { TinhNang } from "@crm/db/ai-chi-phi-danh-muc";
+import type { LyDoLichSu } from "@crm/db/okr-muc-tieu-lich-su";
 import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	LOI_KHUON_CAP_NHAT,
@@ -385,6 +386,32 @@ export const OKR = {
 		},
 		daCongBo: "Mục tiêu này đã công bố.",
 		daBo: "Mục tiêu này đã bỏ.",
+		xoa: {
+			dangChoDuyet: "Mục tiêu đang chờ duyệt — rút về Nháp rồi mới xoá được.",
+			coLichSu: (lyDo: string) =>
+				`Mục tiêu ${lyDo} — không xoá được. Hãy bỏ mục tiêu.`,
+			lyDo: {
+				"da-cong-bo": "đã từng công bố",
+				"muc-tieu.alignedBy": "đang có mục tiêu khác góp vào",
+				"muc-tieu.comments": "đã có bình luận",
+				"muc-tieu.nhinLai": "đã có nhìn lại cuối kỳ",
+				"muc-tieu.mangSangDi": "đã được mang sang kỳ sau",
+				"muc-tieu.mangSangTu": "được mang sang từ kỳ trước",
+				"muc-tieu.ghiNhan": "đã có ghi nhận",
+				"muc-tieu.chuDeHoiY": "sinh ra từ một lần hỏi ý",
+				"kr.alignedBy": "có KR đang được mục tiêu khác góp vào",
+				"kr.checkIns": "có KR đã có cập nhật tuần",
+				"kr.comments": "có KR đã có bình luận",
+				"kr.soChup": "có KR đã có số chụp",
+				"kr.doiDich": "có KR đã đổi đích",
+				"kr.diemKr": "có KR đã chấm điểm",
+				"kr.bangChung": "có KR đã có bằng chứng",
+				"kr.ghiNhan": "có KR đã có ghi nhận",
+			} satisfies Record<LyDoLichSu, string>,
+		},
+		dungLai: {
+			chuaBo: "Chỉ dùng lại được mục tiêu đã bỏ.",
+		},
 		soTheoKieu: {
 			"dich-phai-lon-hon-khoi-diem":
 				"Kiểu «tăng tới» cần đích lớn hơn khởi điểm.",

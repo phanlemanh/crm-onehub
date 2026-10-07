@@ -145,6 +145,7 @@ describe("purging a contact", () => {
 			},
 		});
 
+		await contacts.archive(contactId);
 		expect(await contacts.purge(contactId)).toEqual({
 			id: contactId,
 			name: "Gone Person",
@@ -222,6 +223,7 @@ describe("purging a contact", () => {
 			}),
 		).toEqual({ email: asSynced });
 
+		await contacts.archive(created.id);
 		await contacts.purge(created.id);
 
 		expect(
@@ -264,6 +266,7 @@ describe("purging a company", () => {
 
 		await parked({ companyId: company.id });
 
+		await companies.archive(company.id);
 		expect(await companies.purge(company.id)).toEqual({
 			id: company.id,
 			name: "Doomed",
@@ -317,6 +320,7 @@ describe("the activity stamps a purge leaves behind", () => {
 			at,
 		);
 
+		await contacts.archive(contact.id);
 		await contacts.purge(contact.id);
 
 		expect(
@@ -361,6 +365,7 @@ describe("the activity stamps a purge leaves behind", () => {
 		});
 		await stamp.touch({ contactId: contact.id, dealId: deal.id }, at);
 
+		await companies.archive(company.id);
 		await companies.purge(company.id);
 
 		expect(

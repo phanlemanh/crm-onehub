@@ -361,6 +361,8 @@ function chiTiet(
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,
+			xoa: false,
+			dungLai: false,
 		},
 		themKrLe: false,
 		...doi,
@@ -422,6 +424,7 @@ function datDonVi(vai: {
 	dat("okr.danhSach", () =>
 		danhSachOutput.parse({
 			rows: [],
+			daBo: [],
 			total: 0,
 			facetCounts: {
 				phuTrach: [],
@@ -434,7 +437,7 @@ function datDonVi(vai: {
 			canCreate: vai.canCreate,
 		}),
 	);
-	dat("okr.mine", () => mineOutput.parse({ objectives: [] }));
+	dat("okr.mine", () => mineOutput.parse({ objectives: [], daBo: [] }));
 	dat("okr.viecCuaToi", () => ({ viec: [], lienQuanOkr: false }));
 	dat("okr.thanhVien", () => [HUNG]);
 }

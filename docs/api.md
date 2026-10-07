@@ -404,15 +404,23 @@ row is still there, just filtered out of every list.
   where.** A list call defaults to `archived: false`; the Archived view is the same
   procedure with `archived: true`. There is no third "everything" mode — mixing
   active and archived rows in one table is exactly what this feature removes.
-- **`archive`/`restore` are a bare `update({ archivedAt })`, nothing more.** They do
-  not touch `AgentTask`, `SuppressedContact`, or `lastActivityAt` — the record is
-  unchanged, only hidden.
+- **`archive`/`restore` touch `archivedAt` and nothing else.** They do not touch
+  `AgentTask`, `SuppressedContact`, or `lastActivityAt` — the record is unchanged, only
+  hidden. `archive` writes only while `archivedAt` is null (`updateMany` with
+  `archivedAt: null`), so archiving again keeps the first date and the retention clock
+  does not restart; `restore` then `archive` starts a new date.
 - **`purge` is the old `delete`.** Same transaction, same suppression, same
   `AgentTask`/`AgentEvent` cleanup, same `ActivityStampService.recomputeAfterDelete`.
   Read the rest of this section as `purge`'s contract, not `archive`'s.
 - **A rep can `purge` straight from the Archived view — retention is a ceiling, not a
   wait.** `bulkPurge`/the per-record "Delete forever" action call it directly, no
   different from the cron.
+- **`purge` refuses a record that is not archived.** Without the cron's `guard`, a
+  row with `archivedAt` null answers 400 `ARCHIVE.thongDiep.chuaLuuTru` («Chỉ xoá vĩnh
+  viễn được bản ghi đã lưu trữ.») and nothing is deleted — tRPC, REST `DELETE` and
+  `bulkPurge` alike (the batch reports that id as failed and carries on). Archive first
+  with `POST /…/{id}/archive`. `apps/api/test/luu-tru-chat.spec.ts` pins both rules for
+  deals, contacts and companies.
 
 **Pruning**: `ArchiveRetentionController` (`internal/archive/prune`, `CRON_SECRET`-gated,
 `apps/api/vercel.json`) reads `AppSetting.archiveRetentionDays`
@@ -778,6 +786,28 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   snapshot (`crm`, `bang-tinh`) or from `ghiSoKr` (`api`). `guiCapNhat` on such a KR
   ignores the value sent, records the machine's current value on the check-in and
   leaves `currentValue` alone; confidence and note are still required.
+- **An objective without history can be deleted; with history it is dropped.**
+  "History" is one definition in `@crm/db/okr-muc-tieu-lich-su`: ever published, or a
+  row in a history relation of the objective (`QUAN_HE_LICH_SU_MUC_TIEU`) or of one of
+  its KRs (`QUAN_HE_LICH_SU_KR`); every other relation goes with the objective
+  (`QUAN_HE_DI_THEO_*`). A test reads the Prisma runtime data model and fails, naming
+  the relation, when a relation of `OkrObjective` or `OkrKeyResult` is in neither list.
+  - `okr.xoaMucTieu({ id })` (whoever edits the unit, phase-locked) locks the objective
+    and its KR rows `FOR UPDATE`, refuses a pending objective
+    (`OKR.thongDiep.xoa.dangChoDuyet`) and one with history
+    (`OKR.thongDiep.xoa.coLichSu(lyDo)`, naming the reason), then deletes `OkrViecKr`,
+    `OkrNguonKr`, `OkrMucTieuTuMau` and the objective, and writes one `xoa-muc-tieu`
+    trail row with the old `objectiveId`. Trail rows and `OkrDeXuat` rows stay — neither
+    has a foreign key, and both are measured.
+  - `okr.dungLaiMucTieu({ id })` moves `da-bo` back to `nhap` (`droppedAt` null,
+    `publishedAt` kept), counts the unit's objective cap like a new objective, writes
+    `dung-lai`, and returns `canGuiDuyet` so the toast says whether to submit or publish.
+  - `okr.objective` returns `quyen.xoa` and `quyen.dungLai` from the same conditions.
+- **`danhSach` and `mine` keep dropped objectives apart.** With no status filter,
+  `rows`/`objectives` leave `da-bo` out and `daBo` carries the dropped ones that match
+  every other filter and the visibility rule; with a status filter, `rows` is exactly
+  what was asked and `daBo` is empty. `total` counts `rows`; the status facet still
+  counts dropped objectives.
 - **`removeKeyResult` refuses once a KR has history.** A KR with at least one
   `OkrCheckIn` row cannot be deleted (`krDaCapNhat`) — only edited; a KR another
   objective aligns to (`OkrAlignment.targetKeyResultId`) is refused the same way

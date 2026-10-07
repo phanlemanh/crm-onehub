@@ -702,6 +702,7 @@ describe("xoa-day-chuyen", () => {
 		const idVet = (await vetCua(plan.id)).map((v) => v.id);
 		expect(idVet.length).toBeGreaterThan(0);
 
+		await congTyDichVu().archive(congTy.id);
 		await congTyDichVu().purge(congTy.id);
 
 		const con = await db.activity.count({ where: { id: { in: idVet } } });

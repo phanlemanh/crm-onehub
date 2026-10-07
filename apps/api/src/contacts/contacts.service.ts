@@ -9,6 +9,7 @@ import {
 } from "@crm/db";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import {
+	BadRequestException,
 	ConflictException,
 	Injectable,
 	Logger,
@@ -357,9 +358,12 @@ export class ContactsService {
 
 	async archive(id: string): Promise<{ id: string; name: string }> {
 		try {
-			const contact = await this.db.contact.update({
-				where: { id },
+			await this.db.contact.updateMany({
+				where: { id, archivedAt: null },
 				data: { archivedAt: new Date() },
+			});
+			const contact = await this.db.contact.findUniqueOrThrow({
+				where: { id },
 				select: { firstName: true, lastName: true },
 			});
 
@@ -412,6 +416,8 @@ export class ContactsService {
 					if (guard) return null;
 					throw new NotFoundException(`No contact with id ${id}.`);
 				}
+				if (!guard && !row.archivedAt)
+					throw new BadRequestException(ARCHIVE.thongDiep.chuaLuuTru);
 				if (
 					guard &&
 					(!row.archivedAt || row.archivedAt > guard.archivedBefore)

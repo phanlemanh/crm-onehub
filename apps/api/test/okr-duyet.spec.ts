@@ -393,6 +393,8 @@ describe("vong-duyet", () => {
 					guiDuyet: true,
 					duyet: false,
 					rutDuyet: false,
+					xoa: true,
+					dungLai: false,
 				},
 				khiChoT: [
 					choTen,
@@ -402,6 +404,8 @@ describe("vong-duyet", () => {
 						guiDuyet: false,
 						duyet: false,
 						rutDuyet: true,
+						xoa: false,
+						dungLai: false,
 					},
 				],
 				khiChoH: {
@@ -410,6 +414,8 @@ describe("vong-duyet", () => {
 					guiDuyet: false,
 					duyet: true,
 					rutDuyet: false,
+					xoa: false,
+					dungLai: false,
 				},
 				khiChoNguoiGui: s.t.id,
 				sauTraLai: [LY_DO, s.h.id, null, true],

@@ -342,7 +342,10 @@ export const byUnitOutput = z.object({
 export const countByUnitInput = z.object({ cycleId: ma });
 export const okrCountByUnitOutput = z.record(z.string(), z.number());
 export const mineInput = z.object({ cycleId: ma });
-export const mineOutput = z.object({ objectives: z.array(mucTieuOutput) });
+export const mineOutput = z.object({
+	objectives: z.array(mucTieuOutput),
+	daBo: z.array(mucTieuOutput),
+});
 export const objectiveInput = z.object({ id: ma });
 export const lienKetMangSang = z
 	.object({ objectiveId: z.string(), cycleName: z.string() })
@@ -397,6 +400,8 @@ export const objectiveOutput = mucTieuOutput.extend({
 		guiDuyet: z.boolean(),
 		duyet: z.boolean(),
 		rutDuyet: z.boolean(),
+		xoa: z.boolean(),
+		dungLai: z.boolean(),
 	}),
 	themKrLe: z.boolean(),
 });
@@ -435,6 +440,7 @@ export const okOutput = z.object({
 	id: z.string(),
 	canhBao: z.string().nullable(),
 });
+export const dungLaiOutput = okOutput.extend({ canGuiDuyet: z.boolean() });
 export const createKrInput = krInput.extend({ objectiveId: ma });
 export const updateKrInput = krInput
 	.partial()
