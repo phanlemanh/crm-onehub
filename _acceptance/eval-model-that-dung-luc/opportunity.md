@@ -3,10 +3,10 @@ schema_version: 1
 slug: eval-model-that-dung-luc
 feature: Eval gọi model thật chỉ chạy khi đầu vào của nó đổi (prompt, model, dữ liệu mẫu), và chấm theo biên thống kê thay vì một ngưỡng cứng sát điểm đo
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-07
 prototype:
   base_commit:
   disposition:
@@ -41,3 +41,7 @@ Mỗi lượt ghim lại chạy lại mọi eval của hồ sơ, kể cả eval 
 ## Hạng mục cùng lớp
 
 `kiem-cheo-sau-gop`, `ca-chap-chon-cach-ly`, `thuoc-khong-tu-het-han`. Bộ nhớ đệm theo băm đầu vào cho mọi eval thuộc bộ kit, đi chip riêng.
+
+## Quyết định Cổng Đáng
+
+07/10/2026, chủ kho: «Đưa F9-F12 vào đợt» — `build`, làm trong dãy P4 của đợt `sau-14-10`. Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.

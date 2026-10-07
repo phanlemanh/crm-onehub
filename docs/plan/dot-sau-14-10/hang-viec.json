@@ -389,6 +389,62 @@
       "s4": "local"
     },
     {
+      "ma": "F9",
+      "slug": "kiem-cheo-sau-gop",
+      "day": "P4",
+      "uu_tien": 4,
+      "ranh_gioi": [
+        "_acceptance/tra-loi-tin-nhac/**",
+        ".github/workflows/acceptance.yml",
+        "scripts/kiem-cheo/**",
+        "_acceptance/kiem-cheo-sau-gop/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
+      "ma": "F10",
+      "slug": "thuoc-khong-tu-het-han",
+      "day": "P4",
+      "uu_tien": 6,
+      "ranh_gioi": [
+        "_acceptance/ha-tran-thang-hoi-zalo/**",
+        "_acceptance/slack-thieu-quyen-email/**",
+        "_acceptance/tra-loi-tin-nhac/**",
+        "scripts/luat-kho/**",
+        "_acceptance/thuoc-khong-tu-het-han/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
+      "ma": "F11",
+      "slug": "ca-chap-chon-cach-ly",
+      "day": "P4",
+      "uu_tien": 7,
+      "ranh_gioi": [
+        "apps/agent-okr/test/app-rieng.integration.spec.ts",
+        "apps/api/test/tai-lieu-khong-ro.spec.ts",
+        "apps/api/test/tai-lieu-thay-trang.spec.ts",
+        "scripts/lan-do/**",
+        "_acceptance/ca-chap-chon-cach-ly/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
+      "ma": "F12",
+      "slug": "eval-model-that-dung-luc",
+      "day": "P4",
+      "uu_tien": 8,
+      "ranh_gioi": [
+        "_acceptance/tro-ly-doc-kho/**",
+        "_acceptance/eval-model-that-dung-luc/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
       "ma": "V2L",
       "slug": "luat-kho-vong-doi",
       "day": "P4",

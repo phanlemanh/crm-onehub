@@ -3,10 +3,10 @@ schema_version: 1
 slug: kiem-cheo-sau-gop
 feature: Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần sau mỗi lần gộp vào onehub (và mỗi đêm), không còn nằm trong lượt ghim lại của một hồ sơ
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-07
 prototype:
   base_commit:
   disposition:
@@ -44,3 +44,7 @@ Số đo (R1g `zalo-va`, ký Cổng 2 05/10 15:11):
 ## Hạng mục cùng lớp
 
 `ca-chap-chon-cach-ly`, `eval-model-that-dung-luc`, `thuoc-khong-tu-het-han` (hồ sơ cơ hội cùng đợt); phần sửa ở bộ kit đi chip riêng sang `~/dev/acceptance-gate-kit`.
+
+## Quyết định Cổng Đáng
+
+07/10/2026, chủ kho: «Đưa F9-F12 vào đợt» — `build`, làm trong dãy P4 của đợt `sau-14-10`. Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.

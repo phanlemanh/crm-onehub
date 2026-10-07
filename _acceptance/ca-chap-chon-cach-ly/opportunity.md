@@ -3,10 +3,10 @@ schema_version: 1
 slug: ca-chap-chon-cach-ly
 feature: Các ca kiểm chập chờn theo máy thôi làm đỏ cả lượt dài hay CI — làm kín từng ca, dọn trạng thái sót trước mỗi lượt, ca chưa kín thì cách ly có người phụ trách
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-07
 prototype:
   base_commit:
   disposition:
@@ -42,3 +42,7 @@ Một ca chập chờn trong suite làm đỏ cả lượt, và lượt đó ph�
 ## Hạng mục cùng lớp
 
 `kiem-cheo-sau-gop`, `eval-model-that-dung-luc`, `thuoc-khong-tu-het-han`. Phần «chạy lại một lần trước khi kết luận đỏ» trong làn ghim lại thuộc bộ kit, đi chip riêng.
+
+## Quyết định Cổng Đáng
+
+07/10/2026, chủ kho: «Đưa F9-F12 vào đợt» — `build`, làm trong dãy P4 của đợt `sau-14-10`. Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.

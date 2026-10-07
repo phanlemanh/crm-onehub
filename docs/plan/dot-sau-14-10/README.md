@@ -27,8 +27,8 @@ thêm phần vòng đời, K6a chờ thêm E5 và V2. Chi tiết ở mục 2.
 | Tắt «Auto-archive sessions when their pull request closes» | Đã tắt | — |
 | Claude Code trong app desktop ≥ 2.1.288 (lệnh nền không bị giới hạn thời gian) | Đạt — app 2.26454.0 chạy Claude Code 2.1.289 cho mọi phiên (kiểm 07/10, app tự nâng lúc 05:04); CLI 2.1.289 | — |
 | Docker và Postgres chạy (`lsof -nP -iTCP:5432 -sTCP:LISTEN`) | 07/10 đầu phiên Docker tắt, cả bốn suite đỏ giả; đã mở lại | Phiên giám sát kiểm mỗi lần thức |
-| Chế độ quyền của phiên giám sát (mặc định của máy: auto) | Anh chọn giữ hay đổi | Anh |
-| Cổng Đáng F9–F12 (vệ sinh thước) | Chưa ký — ba hàng có `opportunity.md` ở `stage: discovery` | Anh, nếu muốn chúng vào đợt |
+| Chế độ quyền của phiên giám sát (mặc định của máy: auto) | Giữ mặc định — anh chốt 07/10 | — |
+| Cổng Đáng F9–F12 (vệ sinh thước) | Xong — anh chốt `build` 07/10 («Đưa F9-F12 vào đợt»), ghi vào `opportunity.md` của bốn hàng; xếp vào P4 | — |
 | Thư mục chính `~/dev/crm` về `onehub` mới nhất (`git pull --ff-only origin onehub`) | Đã kéo 07/10 sau #297; kiểm lại ngay trước lệnh `mo` | Phiên giám sát |
 | Bản vá ba lỗ của bộ kit nghiệm thu: vòng sửa S4 làm rơi mục ngoài hợp đồng của vòng trước, rơi khung ảnh ui-check mang sang, bộ đếm vật/thước tính cả phần gộp từ onehub | Còn ở nhánh `fix/luot-sua-giu-du-dem-dung` của kit, chưa có PR; bản đang cài 2.24.0 khớp `main` của kit (kiểm 07/10) | Gộp và cài cùng phiên bản trước khi mở đợt; chưa có thì áp luật 13 của `LUAT-rieng.md` |
 | Ngân sách mô hình cho các hàng Kara (K2, K3, K4, K6b) | Xong — anh nạp 07/10 tối; gọi thử AI Gateway bằng khoá của kho trả 200 | Phiên giám sát đọc lại khi một phép đo gọi mô hình trả 402 |
@@ -46,7 +46,7 @@ trước. Ranh giới tệp lấy từ ba lượt khảo sát chỉ đọc 07/10
 | **P1 · Kara OKR** | K2 `soan-okr-trang-rieng` → K3 `kara-gop-y-luot-2` → K6a `kara-mot-ten` | K2 và K6a cùng nặng ở `okr-soan.ts`; K6a là câu chữ, làm cuối (chủ kho chốt 04/10: tính năng trước, chữ sau) và chờ K4, K6b, E5, V2 gộp — cả bốn đều thêm chữ vào tệp chữ mà K6a đổi |
 | **P2 · Kara bản ghi** | K4 `khung-ban-ghi-kara` → K6b `kara-trang-thai-toan-crm` → V2 `vong-doi-mot-cach-cat` | K4, K6b cùng `contact-sheet`, `company-sheet`, `contact-plans`, `crm.ts`; V2 chạm chính các ngăn bản ghi, `record-actions`, `bulk-actions` và `ArchivedList` của hai hàng đó nên đứng sau chúng, và chờ E7 vì cùng màn thoả thuận |
 | **P3 · Deal và CRM chung** | E7 `datatable-loc-ro` → E3 `danh-sach-keo-chung` → E1 `deal-va` → E4 `giai-doan-mac-dinh` (T3) → E6 `dieu-phoi-va` → E5 `tac-nhan-va` | E7 trước vì `data-table.tsx` là chỗ chồng lớn nhất với Kara; E4 sửa schema nên đứng một mình giữa dãy |
-| **P4 · Sửa nóng** | Lỗi do người dùng thật báo (ưu tiên cao nhất, phiên giám sát thêm hàng khi có) → F13 `so-moi-khong-chap-chon` → F14 `chen-lien-ket-khong-lac` → V2L `luat-kho-vong-doi` → F8 `neo-thuoc-het-han` | F13, F14, V2L, F8 chỉ chạm bài kiểm, thước và công cụ, không chồng tệp với dãy nào; làm lúc khoá `s4` rảnh |
+| **P4 · Sửa nóng** | Lỗi do người dùng thật báo (ưu tiên cao nhất, phiên giám sát thêm hàng khi có) → F13 `so-moi-khong-chap-chon` → F14 `chen-lien-ket-khong-lac` → F9 `kiem-cheo-sau-gop` → V2L `luat-kho-vong-doi` → F10 `thuoc-khong-tu-het-han` → F11 `ca-chap-chon-cach-ly` → F12 `eval-model-that-dung-luc` → F8 `neo-thuoc-het-han` | Mọi hàng P4 chỉ chạm bài kiểm, thước, công cụ và hồ sơ nghiệm thu, không chồng tệp với dãy nào; làm lúc khoá `s4` rảnh. F9 trước vì nó gỡ lượt dài nhất (E11 của `tra-loi-tin-nhac`, ~3 giờ 25 phút mỗi lần ghim lại); F10 trước F8 để F8 ghim lại trên thước đã neo mốc. Tám hàng cho một thợ là dãy dài nhất — phiên giám sát chuyển bớt sang thợ rảnh khi một dãy khác xong sớm |
 
 **Phần vòng đời trong đợt** (chuẩn `docs/vong-doi.md`, lượt 2 của mục «Đợt»). Mọi hàng có nút xoá, lưu trữ hay trạng
 thái kết thúc trả lời ba câu của mục «Tính năng mới phải trả lời ba câu ở Cổng Phạm vi» trong hợp đồng của mình.
@@ -61,7 +61,7 @@ thái kết thúc trả lời ba câu của mục «Tính năng mới phải tr�
 | F14 | Bài `chen-lien-ket` › «Esc đóng hộp và trả focus về trình soạn» của `packages/ui` đỏ ở 9 trên 12 lượt CI hỏng gần nhất (30/09–07/10), mọi lần trên nhánh không chạm `packages/ui`, kèm `TypeError … commandManager` của tiptap; tại chỗ xanh 8/8. Tìm gốc (trình soạn huỷ trước khi trả focus, hay chờ một nhịp chưa đủ trên máy CI chậm), sửa cho tất định bằng chờ có điều kiện, không nới phép kiểm | Ca CI đỏ không do mã đang xét làm tốn một lượt chạy lại mỗi lần — đo trên đúng các PR 07/10 |
 
 Không vào đợt: K5 `chat-deal-mot-khung` (lộ trình ghi sau 07/12; chồng nặng với K4 và E5), 7n (hạn 14/12, chưa có
-hồ sơ cơ hội), F9–F12 (chờ Cổng Đáng; ký xong thì giám sát xếp vào P4, F9 trước). Vòng đời lượt 3 (chiến dịch «Đang
+hồ sơ cơ hội). Vòng đời lượt 3 (chiến dịch «Đang
 chạy | Đã kết thúc», xoá kế hoạch 30 ngày tạo nhầm, khôi phục lựa chọn của trường, ghi rõ phạm vi dọn tự động) để đợt
 sau: kế hoạch 30 ngày nằm trong ranh giới K6b. Lưu trữ trang Tài liệu (lượt 3b của `docs/plan/lo-trinh-kho-tai-lieu.md`)
 cũng để sau: nó sửa schema, mà schema đã có E4 trong đợt này.
@@ -109,5 +109,5 @@ Sau khi anh duyệt thẻ, phiên giám sát:
 | Tệp | Nội dung |
 |---|---|
 | `dieu-phoi.config.json` | `nhanh_chinh: onehub`, ngưỡng giữ như mẫu, `bao_ve` 12 mục (schema, migrations, bản đồ, lộ trình, `bun.lock`, các tệp chữ dùng chung) |
-| `hang-viec.json` | 4 dãy, 16 hàng, 191 glob (bổ sung 07/10 chiều: V2, F13, V2L; E3, E5 thêm ranh giới; 07/10 tối: F14, không chồng tệp với hàng nào); đã qua `kiemHangViec` và `kiemCauHinh` của cả `onehub` sau #288 lẫn nhánh `feat/dieu-phoi-va-bien` |
+| `hang-viec.json` | 4 dãy, 20 hàng, 207 glob (bổ sung 07/10 chiều: V2, F13, V2L; E3, E5 thêm ranh giới; 07/10 tối: F14, F9–F12, không chồng tệp với dãy khác hay tệp bảo vệ); đã qua `kiemHangViec` và `kiemCauHinh` của cả `onehub` sau #288 lẫn nhánh `feat/dieu-phoi-va-bien` |
 | `LUAT-rieng.md` | Luật riêng crm cho Nhật ký đợt: 12 luật rút từ Nhật ký 04–06/10, ba luật (13–15) từ lượt `don-okr-nhap-sai` 07/10 |
