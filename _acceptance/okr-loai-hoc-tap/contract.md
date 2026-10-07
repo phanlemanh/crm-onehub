@@ -5,7 +5,7 @@ slug: okr-loai-hoc-tap
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -63,3 +63,12 @@ Quét bằng `morphological-scan` (preset entity-feature × test-matrix), 07/10.
 - Không migration: `okrObjective.kind` là `String` không CHECK.
 - Vòng đời (`docs/vong-doi.md`): không thêm loại bản ghi hay trạng thái kết thúc mới, ba câu không áp.
 - `CONTEXT.md` thêm mục «Loại mục tiêu».
+- Hạn chế đã biết, owner chọn ở Cổng 2 (sổ quyết định, các dòng «Ngoài-<số>: ghi Known limits», 08/10):
+  - Ngoài-1, 2: bước chọn «Loại» của thước màn thật bấm và chụp khi danh sách còn đang hiện dần — có lúc hỏng ở lần chạy đầu, ảnh chọn loại bị mờ.
+  - Ngoài-3: phép kiểm 390 px chỉ đo màn chấm điểm của kỳ đã đóng (chỉ đọc), chưa đo màn đang chấm.
+  - Ngoài-4, 8: đối chứng «loại viết sai bị từ chối» của E2 bị từ chối vì người phụ trách sai, không chứng minh được enum loại chặn.
+  - Ngoài-5: quy tắc «đã ghi điều học được» sống ở hai nơi (`cachDoc` và `hocTapChuaGhi`), hôm nay khớp nhau.
+  - Ngoài-7: xoá trắng điều học được đúng lúc quản trị đóng kỳ có thể để kỳ đóng với một mục tiêu học tập trống — `ghiDieuHocDuoc` không khoá chu kỳ.
+  - Ngoài-9: E15 chỉ thử schema của một trường soạn OKR, chưa parse một bản soạn đầy đủ.
+  - Ngoài-10: nửa tiếng Anh của E10 đọc bảng nhãn, không mở hộp chọn thật.
+  - Ngoài-11, 12: bước 4 của thước màn đo đổi nhãn khi KR đã chấm; bước 2 đếm thuộc tính `data-*` thay vì đọc chữ hiển thị.
