@@ -149,6 +149,20 @@ describe("luat-ban-nhap", () => {
 		});
 	});
 
+	test("soBanNhap: Kara giữ khoá mà đổi tên thì là «vừa sửa» kèm chữ cũ, không thành dòng mới + đã bỏ", () => {
+		const { nhan, truocTen, dong } = soBanNhap(
+			[mt("1", "Giữ khách"), kr("11", "1", "Ký lại hợp đồng")],
+			[mt("1", "Giữ khách lớn"), kr("11", "1", "Ký lại hợp đồng")],
+		);
+		expect(Object.fromEntries(nhan)).toEqual({
+			[kdMt("Giữ khách lớn")]: "vua-sua",
+		});
+		expect(Object.fromEntries(truocTen)).toEqual({
+			[kdMt("Giữ khách lớn")]: "Giữ khách",
+		});
+		expect(dong).toHaveLength(2);
+	});
+
 	test("soBanNhap: bỏ một Mục tiêu làm KR chạy sang Mục tiêu đã có thì KR «vừa chuyển»", () => {
 		const { nhan } = soBanNhap(
 			[

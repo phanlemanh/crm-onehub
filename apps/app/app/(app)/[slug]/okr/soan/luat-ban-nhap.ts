@@ -1,5 +1,6 @@
 import { docSoOkr } from "@crm/validation/okr-kr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
+import { khoaKr, khoaMucTieu } from "./moc-nop";
 import { khoaSo } from "./so-theo-khoa";
 import type {
 	DemDuaVao,
@@ -59,14 +60,27 @@ function chaCua(d: DongSoan, ds: readonly DongSoan[]): string | null {
 	return cha ? cha.khoaDong : d.chaKhoa;
 }
 
+const khoaKara = (d: DongSoan): string =>
+	d.loai === "muc-tieu-moi"
+		? khoaMucTieu(d.khoa)
+		: d.loai === "kr-moi"
+			? khoaKr(d.chaKhoa, d.khoa)
+			: d.khoaDong;
+
+const tenCua = (d: DongSoan): string =>
+	d.loai === "can-chinh-moi" ? d.tenDich : d.ten;
+
 export function soBanNhap(
 	truoc: readonly DongSoan[],
 	sau: readonly DongSoan[],
 ): KetSoBanNhap {
 	const nhan = new Map<string, NhanDong>();
-	if (truoc.length === 0) return { dong: [...sau], nhan };
+	const truocTen = new Map<string, string>();
+	if (truoc.length === 0) return { dong: [...sau], nhan, truocTen };
+	const theoKara = new Map(truoc.map((d) => [khoaKara(d), d] as const));
 	const cu = new Map(truoc.map((d) => [d.khoaDong, d] as const));
 	const moi = new Set(sau.map((d) => d.khoaDong));
+	const daKhop = new Set<DongSoan>();
 	const doiCha = (c: DongSoan, d: DongSoan) => {
 		const chaCu = chaCua(c, truoc);
 		const chaMoi = chaCua(d, sau);
@@ -74,16 +88,25 @@ export function soBanNhap(
 		return moi.has(chaCu) || cu.has(chaMoi);
 	};
 	for (const d of sau) {
-		const c = cu.get(d.khoaDong);
-		if (!c) nhan.set(d.khoaDong, "vua-them");
-		else if (doiCha(c, d)) nhan.set(d.khoaDong, "vua-chuyen");
-		else if (noiDungCua(c) !== noiDungCua(d)) nhan.set(d.khoaDong, "vua-sua");
+		const c = theoKara.get(khoaKara(d)) ?? cu.get(d.khoaDong);
+		if (!c) {
+			nhan.set(d.khoaDong, "vua-them");
+			continue;
+		}
+		daKhop.add(c);
+		if (doiCha(c, d)) nhan.set(d.khoaDong, "vua-chuyen");
+		else if (noiDungCua(c) !== noiDungCua(d)) {
+			nhan.set(d.khoaDong, "vua-sua");
+			if (tenCua(c) !== tenCua(d)) truocTen.set(d.khoaDong, tenCua(c));
+		}
 	}
 	const daBo = truoc
-		.filter((d) => !moi.has(d.khoaDong) && d.trangThai === "cho")
+		.filter(
+			(d) => !daKhop.has(d) && !moi.has(d.khoaDong) && d.trangThai === "cho",
+		)
 		.map((d) => ({ ...d, trangThai: "bac" as const }));
 	for (const d of daBo) nhan.set(d.khoaDong, "da-bo");
-	return { dong: [...sau, ...daBo], nhan };
+	return { dong: [...sau, ...daBo], nhan, truocTen };
 }
 
 export function soMacDinh(kr: DongKr): SoKr {

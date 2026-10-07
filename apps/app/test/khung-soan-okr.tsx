@@ -406,6 +406,7 @@ export function datLai(): void {
 	goi.length = 0;
 	diTrang.length = 0;
 	urlDoi.length = 0;
+	globalThis.sessionStorage?.clear();
 	dinhVi.duong = "/ws/okr/theo-don-vi";
 	daGui.length = 0;
 	daLamMoi.length = 0;

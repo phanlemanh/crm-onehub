@@ -8,47 +8,98 @@ import {
 } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
-import {
-	Empty,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyTitle,
-} from "@crm/ui/components/empty";
 import { Field, FieldDescription, FieldError } from "@crm/ui/components/field";
-import { useLocale } from "@crm/ui/components/locale-provider";
+import { KaraArtifact } from "@crm/ui/components/kara/artifact";
+import { KaraState } from "@crm/ui/components/kara/state";
+import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { type ReactNode, useId, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
+import { SOAN_UI } from "./cau-hinh";
 import { type CuocDangSoan, donViCua } from "./dung-cuoc-soan";
-import type { CuocSoan, DongSoan } from "./kieu";
-import { duongTheoDonVi } from "./luat-ban-nhap";
-import { type NguCanhThe, TheCanChinh, TheKr, TheMucTieu } from "./the-nhap";
+import type { QuyetBang } from "./khoi-ngu-canh";
+import type { CuocSoan, DongKr, DongSoan } from "./kieu";
+import { loiQuyetTu } from "./loi-cua";
+import { canSo, demDong, duongTheoDonVi, soCua } from "./luat-ban-nhap";
+import { khoaHang, type NguCanhThe, NhomMucTieu } from "./the-nhap";
+import { docSoOkr } from "@crm/validation/okr-kr";
+
+const LOC = ["cho"] as const;
 
 export function daDuaVao(s: CuocDangSoan, cuoc: CuocSoan): boolean {
 	return s.duaVao.data?.ok === true || cuoc.trangThai === "da-dua-vao";
 }
 
-function useNguCanhThe(s: CuocDangSoan, cuoc: CuocSoan): NguCanhThe {
+const loaiKhoi = (d: DongSoan): QuyetBang["loai"] =>
+	d.loai === "muc-tieu-moi"
+		? "muc-tieu"
+		: d.loai === "kr-moi"
+			? "kr"
+			: "can-chinh";
+
+const chuDong = (d: DongSoan): string =>
+	d.loai === "can-chinh-moi" ? d.tenDich : (d.giaTriCuoi ?? d.ten);
+
+const quyetCua = (
+	d: DongSoan,
+	cach: QuyetBang["cach"],
+	chu = chuDong(d),
+): QuyetBang => ({ cach, loai: loaiKhoi(d), chu, khoaDong: d.khoaDong });
+
+function useNguCanhThe(
+	s: CuocDangSoan,
+	cuoc: CuocSoan,
+	chiCho: boolean,
+	hoi: (d: DongSoan) => void,
+	veMoc: () => void,
+): NguCanhThe {
 	const locale = useLocale();
-	const [loi, setLoi] = useState<Readonly<Record<string, string | undefined>>>(
-		{},
-	);
 	const m = okrSoanMessages(locale);
-	const datLoi = (id: string, chu: string | undefined) =>
+	const [loiGoc, setLoi] = useState<
+		Readonly<Record<string, string | "xung-dot" | undefined>>
+	>({});
+	const datLoi = (id: string, chu: string | "xung-dot" | undefined) =>
 		setLoi((cu) => ({ ...cu, [id]: chu }));
-	const quyet: NguCanhThe["quyet"] = (d: DongSoan, cach, giaTriCuoi) => {
+	const loi: Record<string, ReactNode> = Object.fromEntries(
+		Object.entries(loiGoc).map(([id, v]) => [
+			id,
+			v === "xung-dot" ? (
+				<span data-loi-quyet="xung-dot">
+					{cuoc.trangThai === "dang"
+						? m.loiQuyet.dongCu
+						: m.loiQuyet.cuocKhongDang}
+				</span>
+			) : (
+				v
+			),
+		]),
+	);
+	const ghi = (
+		d: DongSoan,
+		vao: {
+			deXuatId: string;
+			quyet: "nhan" | "sua" | "bac" | "hoan";
+			giaTriCuoi?: string;
+			kem?: string[];
+		},
+		khiXong: () => void,
+	) => {
+		if (s.quyet.isPending) return;
 		datLoi(d.id, undefined);
-		s.quyet.mutate(
-			{ deXuatId: d.id, quyet: cach, giaTriCuoi },
-			{
-				onSuccess: (kq) => {
-					if (!kq.ok) datLoi(d.id, kq.chiTiet ?? m.lyDoQuyet[kq.lyDo]);
-				},
-				onError: (e) => datLoi(d.id, e.message),
+		s.quyet.mutate(vao, {
+			onSuccess: (kq) => {
+				if (kq.ok) khiXong();
+				else datLoi(d.id, m.lyDoQuyet[kq.lyDo]);
 			},
-		);
+			onError: (e) =>
+				datLoi(
+					d.id,
+					loiQuyetTu(e).kieu === "xung-dot" ? "xung-dot" : m.loiQuyet.mang,
+				),
+		});
 	};
 	const so = new Intl.NumberFormat(locale);
 	return {
@@ -56,7 +107,30 @@ function useNguCanhThe(s: CuocDangSoan, cuoc: CuocSoan): NguCanhThe {
 		mOkr: okrMessages(locale),
 		khoa: cuoc.trangThai !== "dang" || daDuaVao(s, cuoc),
 		loi,
-		quyet,
+		chiCho,
+		hoi,
+		veMoc,
+		quyet: (d, cach, giaTriCuoi) =>
+			ghi(d, { deXuatId: d.id, quyet: cach, giaTriCuoi }, () =>
+				s.themQuyetBang([quyetCua(d, cach, giaTriCuoi)]),
+			),
+		nhom: (mt, kem) =>
+			ghi(
+				mt,
+				{ deXuatId: mt.id, quyet: "nhan", kem: kem.map((k) => k.id) },
+				() => {
+					s.ghiNhom(
+						mt.id,
+						kem.map((k) => k.id),
+					);
+					s.themQuyetBang([mt, ...kem].map((d) => quyetCua(d, "nhan")));
+				},
+			),
+		hoan: (d, keo) =>
+			ghi(d, { deXuatId: d.id, quyet: "hoan" }, () => {
+				if (d.loai === "muc-tieu-moi") s.ghiNhom(d.id, null);
+				s.themQuyetBang([d, ...keo].map((x) => quyetCua(x, "hoan")));
+			}),
 		soDinhDang: (x) => so.format(x),
 	};
 }
@@ -92,85 +166,169 @@ function DaDuaVao({
 	);
 }
 
-export function BangNhap({ s, cuoc }: { s: CuocDangSoan; cuoc: CuocSoan }) {
-	const n = useNguCanhThe(s, cuoc);
-	const m = okrSoanMessages(useLocale());
-	const xong = daDuaVao(s, cuoc);
-	if (s.cay.length === 0 && !xong) {
-		return (
-			<Empty data-ban-nhap="rong">
-				<EmptyHeader>
-					<EmptyTitle>{m.banNhap.rong}</EmptyTitle>
-					<EmptyDescription>{m.banNhap.rongMoTa}</EmptyDescription>
-				</EmptyHeader>
-			</Empty>
-		);
-	}
-	return (
-		<div className="flex flex-col gap-4" data-ban-nhap="co">
-			{xong ? <DaDuaVao s={s} cuoc={cuoc} m={m} /> : null}
-			{s.cay.map((khoi, i) => {
-				const bac = khoi.mucTieu.trangThai === "bac";
-				return (
-					<section
-						key={khoi.mucTieu.id}
-						aria-label={m.banNhap.mucTieu(String(i + 1))}
-						className="flex flex-col gap-2"
-						data-khoi-muc-tieu={khoi.mucTieu.id}
-					>
-						<TheMucTieu n={n} m={m} khoi={khoi} stt={i + 1} />
-						{bac ? null : (
-							<div className="ms-4 flex flex-col gap-3 border-s ps-3">
-								{khoi.kr.map((kr) => (
-									<TheKr key={kr.id} n={n} m={m} kr={kr} />
-								))}
-								{khoi.canChinh.map((d) => (
-									<TheCanChinh key={d.id} n={n} m={m} d={d} />
-								))}
-							</div>
-						)}
-					</section>
-				);
-			})}
-		</div>
+function gioNop(locale: string, at: number | null): string | null {
+	if (at === null) return null;
+	return new Intl.DateTimeFormat(locale, {
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: false,
+	}).format(at);
+}
+
+export function BanNhap({
+	s,
+	cuoc,
+	hoi,
+	veMoc,
+}: {
+	s: CuocDangSoan;
+	cuoc: CuocSoan;
+	hoi: (d: DongSoan) => void;
+	veMoc: () => void;
+}) {
+	const locale = useLocale();
+	const m = okrSoanMessages(locale);
+	const mui = useMessages();
+	const [loc, datLoc] = useQueryState(
+		SOAN_UI.thamSo.loc,
+		parseAsStringLiteral(LOC),
 	);
+	const n = useNguCanhThe(s, cuoc, loc === "cho", hoi, veMoc);
+	const xong = daDuaVao(s, cuoc);
+	const soDong = demDong(s.cay);
+	const gio = gioNop(locale, s.gioNopCuoi);
+	const coNhap = s.cay.length > 0;
+	return (
+		<KaraArtifact
+			title={m.dong.tieuDe}
+			meta={
+				coNhap
+					? gio
+						? m.dong.meta(String(soDong), gio)
+						: m.dong.metaChuaNop(String(soDong))
+					: undefined
+			}
+			actions={
+				coNhap && !xong ? (
+					<Button
+						variant="ghost"
+						size="sm"
+						type="button"
+						aria-pressed={loc === "cho"}
+						data-nut="loc-cho"
+						onClick={() => void datLoc(loc === "cho" ? null : "cho")}
+					>
+						{loc === "cho" ? m.dong.moiDong : m.dong.chiDongCho}
+					</Button>
+				) : undefined
+			}
+			footer={
+				cuoc.trangThai === "dang" && !xong && coNhap ? (
+					<ChanDuaVao s={s} cuoc={cuoc} />
+				) : undefined
+			}
+			busy={
+				s.dangTraLoi
+					? { label: mui.karaKhung.dangSoanKhoa, reasonShown: true }
+					: null
+			}
+		>
+			<div
+				className="flex flex-col gap-6"
+				data-ban-nhap={coNhap ? "co" : "rong"}
+			>
+				{xong ? <DaDuaVao s={s} cuoc={cuoc} m={m} /> : null}
+				{!coNhap && !xong ? (
+					s.dangTraLoi ? (
+						<KaraState kind="working" label={m.dong.dangSoanDau} delayMs={0} />
+					) : (
+						<KaraState
+							kind="empty"
+							title={m.banNhap.rong}
+							description={m.banNhap.rongMoTa}
+						/>
+					)
+				) : null}
+				{s.cay.map((khoi, i) => (
+					<NhomMucTieu
+						key={khoaHang(khoi.mucTieu)}
+						n={n}
+						m={m}
+						khoi={khoi}
+						stt={i + 1}
+					/>
+				))}
+			</div>
+		</KaraArtifact>
+	);
+}
+
+function oTrongDau(kr: DongKr, s: CuocDangSoan): string {
+	const so = soCua(kr, s.so);
+	return docSoOkr(so.khoiDiem) === null ? `khoi-${kr.id}` : `dich-${kr.id}`;
 }
 
 export function ChanDuaVao({ s, cuoc }: { s: CuocDangSoan; cuoc: CuocSoan }) {
 	const m = okrSoanMessages(useLocale());
+	const mui = useMessages();
+	const idLyDo = useId();
 	const [hoi, setHoi] = useState(false);
-	if (cuoc.trangThai !== "dang" || daDuaVao(s, cuoc)) return null;
 	const { soMucTieu, soKr } = s.dem;
 	const tuChoi = s.duaVao.data?.ok === false ? s.duaVao.data : null;
 	const loi = tuChoi
 		? (tuChoi.chiTiet ?? m.banNhap.loiDuaVao[tuChoi.lyDo])
 		: s.duaVao.error?.message;
+	const thieuKr = s.cay
+		.flatMap((k) => k.kr)
+		.filter((kr) => s.thieu.includes(kr.id) && canSo(kr));
 	const khoa =
 		soMucTieu === 0 || s.thieu.length > 0 || s.duaVao.isPending || s.dangTraLoi;
 	return (
 		<Field data-chan="dua-vao">
+			{thieuKr.length > 0 ? (
+				<div className="flex flex-wrap items-center gap-2" data-con-thieu>
+					<FieldDescription>{m.dong.conThieu}:</FieldDescription>
+					{thieuKr.map((kr) => (
+						<Button
+							key={kr.id}
+							variant="link"
+							size="sm"
+							type="button"
+							data-thieu={kr.id}
+							onClick={() => {
+								const o = document.getElementById(oTrongDau(kr, s));
+								o?.scrollIntoView({ block: "center" });
+								o?.focus();
+							}}
+						>
+							<span translate="no">{kr.giaTriCuoi ?? kr.ten}</span>
+						</Button>
+					))}
+				</div>
+			) : null}
 			<Button
-				className="w-fit"
 				data-nut="dua-vao"
 				aria-haspopup="dialog"
+				aria-describedby={s.dangTraLoi ? idLyDo : undefined}
 				disabled={khoa}
 				onClick={() => setHoi(true)}
 			>
 				{m.banNhap.duaVao(String(soMucTieu), String(soKr))}
 			</Button>
+			{s.dangTraLoi ? (
+				<span id={idLyDo} className="sr-only">
+					{mui.karaKhung.dangSoanKhoa}
+				</span>
+			) : null}
 			{loi ? (
 				<FieldError data-loi="dua-vao">{loi}</FieldError>
-			) : s.thieu.length > 0 ? (
-				<FieldDescription data-thieu-dich>
-					{m.banNhap.thieuDich(String(s.thieu.length))}
-				</FieldDescription>
 			) : soMucTieu === 0 ? (
 				<FieldDescription>{m.banNhap.chuaNhan}</FieldDescription>
-			) : (
+			) : thieuKr.length === 0 ? (
 				<FieldDescription>
 					{m.banNhap.duaVaoMoTa(cuoc.tenDonVi, cuoc.tenChuKy)}
 				</FieldDescription>
-			)}
+			) : null}
 			<ConfirmDialog
 				open={hoi}
 				onOpenChange={setHoi}

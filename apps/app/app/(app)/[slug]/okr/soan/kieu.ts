@@ -28,6 +28,7 @@ export type LyDoLuot = Extract<
 export type KetSoBanNhap = {
 	dong: DongSoan[];
 	nhan: ReadonlyMap<string, NhanDong>;
+	truocTen: ReadonlyMap<string, string>;
 };
 export type DemDuaVao = { soMucTieu: number; soKr: number };
 export type LuotTroLy = { loiDan: string; cauHoi: CauHoi[] };

@@ -1,6 +1,9 @@
 import { type BanNhap, banNhap } from "@crm/validation/okr-cuoc-soan";
+import { eveTurnReference } from "@crm/validation/eve-stream";
 import { chuanHoa } from "@crm/validation/okr-kiem";
-import type { TranscriptItem } from "@/lib/agent-transcript";
+import type { MessageStreamEvent } from "eve/client";
+import type { EveMessage } from "eve/react";
+import type { TranscriptItem, TranscriptMessage } from "@/lib/agent-transcript";
 import { SOAN_UI } from "./cau-hinh";
 
 type MucTieuVao = BanNhap["mucTieu"][number];
@@ -135,4 +138,22 @@ export function mocTuTranscript(items: readonly TranscriptItem[]): MocNop[] {
 		if (ban) truoc = ban;
 	}
 	return ra;
+}
+
+export function gioNopCuoi(
+	transcript: readonly TranscriptMessage[],
+	messages: readonly EveMessage[],
+	events: readonly MessageStreamEvent[],
+): number | null {
+	const tin = transcript.findLast((t) =>
+		t.items.some((i) => i.kind === "did" && i.tool === SOAN_UI.congCuNop),
+	);
+	const luot = messages.find((x) => x.id === tin?.id)?.metadata?.turnId;
+	if (!luot) return null;
+	const suKien = events.find(
+		(e) =>
+			eveTurnReference.parse("data" in e ? e.data : undefined).turnId === luot,
+	);
+	const at = suKien ? Date.parse(suKien.meta.at) : Number.NaN;
+	return Number.isNaN(at) ? null : at;
 }

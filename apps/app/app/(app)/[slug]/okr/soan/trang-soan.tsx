@@ -18,7 +18,7 @@ import {
 import type { Thread } from "@/lib/agent-session";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { useTRPC } from "@/lib/trpc/client";
-import { BangNhap, ChanDuaVao } from "./bang-nhap";
+import { BanNhap } from "./bang-nhap";
 import { SOAN_UI } from "./cau-hinh";
 import {
 	donViCua,
@@ -30,7 +30,7 @@ import {
 } from "./dung-cuoc-soan";
 import { useKhoHep } from "./dung-kho-hep";
 import { HoiThoaiSoan } from "./hoi-thoai-soan";
-import { KhungSoan } from "./khung-soan";
+import { KhungSoan, useTabSoan } from "./khung-soan";
 import type { CuocSoan, DongSoan } from "./kieu";
 import { demDong, duongTheoDonVi, duongTrangSoan } from "./luat-ban-nhap";
 
@@ -114,6 +114,7 @@ function Than({
 }) {
 	const m = okrSoanMessages(useLocale());
 	const s = useCuocSoan({ cuoc, thread, nhap, napLai });
+	const [, datTab] = useTabSoan();
 	return (
 		<>
 			{s.dangTraLoi ? <CanhLuot batDau={s.luotBatDau} xong={s.docLai} /> : null}
@@ -142,13 +143,21 @@ function Than({
 				banNhap={
 					<section
 						aria-label={m.man.banNhap}
-						className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto"
+						className="flex min-h-0 flex-1 flex-col"
 						data-cot="ban-nhap"
 					>
-						<BangNhap s={s} cuoc={cuoc} />
-						{cuoc.trangThai === "dang" ? (
-							<ChanDuaVao s={s} cuoc={cuoc} />
-						) : null}
+						<BanNhap
+							s={s}
+							cuoc={cuoc}
+							hoi={(d) => {
+								s.datHoiVeDong(d);
+								void datTab("tro-chuyen");
+							}}
+							veMoc={() => {
+								void datTab("tro-chuyen");
+								s.cuonToiMocCuoi();
+							}}
+						/>
 					</section>
 				}
 			/>
