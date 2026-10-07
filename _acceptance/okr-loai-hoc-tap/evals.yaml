@@ -1,0 +1,168 @@
+schema_version: 1
+feature_slug: okr-loai-hoc-tap
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.olht_mot_nguon
+    paths: [packages/validation/src/okr-muc-tieu.ts, packages/validation/src/okr-cuoc-soan.ts, apps/api/src/okr/okr.contracts.ts, packages/validation/test/okr-loai-hoc-tap.spec.ts]
+    expected: "exit 0; bài khẳng định new Set(LOAI_MUC_TIEU) toEqual {cam-ket, tham-vong, hoc-tap} (tập viết tay), new Set(LOAI_MUC_TIEU_NHAP) toEqual cùng tập, và lấy tập giá trị từ schema thật của loaiMucTieu trong okr.contracts.ts (đọc .options của z.enum qua đúng đối tượng hợp đồng xuất ra, không chép) toEqual cùng tập. CHIỀU ĐỎ (rang/dot-bien.mjs): bản sao okr-cuoc-soan.ts khai lại mảng tay [\"cam-ket\", \"tham-vong\"] → bài đỏ với thông điệp ghim «LOAI_MUC_TIEU_NHAP lech LOAI_MUC_TIEU»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.olht_api_tao
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-muc-tieu.ts, apps/api/test/okr-hoc-tap.spec.ts]
+    expected: "exit 0; trên CSDL riêng của lượt: okr.createObjective kind hoc-tap → 200; db.okrObjective đọc lại kind «hoc-tap»; okr.objective trả kind «hoc-tap»; okr.danhSach của chu kỳ có bộ đếm loai mang khoá hoc-tap = 1. Đối chứng âm cùng fixture: kind «hoc tap» (sai mã) → 400, số okrObjective của chu kỳ không đổi. CHIỀU ĐỎ: bản sao LOAI_MUC_TIEU bỏ hoc-tap → bước tạo 400, bài in «tao hoc-tap bi tu choi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.olht_tinh_trang
+    paths: [packages/validation/src/okr-muc-tieu.ts, packages/validation/test/okr-loai-hoc-tap.spec.ts]
+    expected: "exit 0; BẢNG VIẾT TRƯỚC 3 loại × 7 mức tỉ lệ (0, 0,49, 0,5, 0,69, 0,7, 0,85, 1 — tiến độ = mức × kỳ vọng 50) = 21 dòng, mỗi dòng gõ tay tình trạng kỳ vọng; bài khẳng định 21 dòng đã chạy, cột hoc-tap toEqual cột tham-vong từng dòng, và không dòng hoc-tap nào là «truot»; ca kyVong null và 0 cho hoc-tap → «chua-co-ky-vong». CHIỀU ĐỎ: bản sao tinhTrang giữ điều kiện loai === \"tham-vong\" → dòng hoc-tap × 0,49 đỏ với thông điệp ghim «hoc-tap ra truot o muc 0.49»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.olht_cach_doc
+    paths: [packages/validation/src/okr-khep.ts, packages/validation/test/okr-loai-hoc-tap.spec.ts]
+    expected: "exit 0; BẢNG VIẾT TRƯỚC cho cachDoc: hoc-tap × (diem null, 0, 1) × (dieuHocDuoc \"\", \"   \", \"Khách cần bản dùng thử\") = 9 dòng, kỳ vọng gõ tay (chỉ phụ thuộc vế chữ: \"\" và khoảng trắng → chua-tra-loi, có chữ → da-tra-loi); cam-ket × (0,99, 1) và tham-vong × (0,69, 0,7) với dieuHocDuoc có chữ → dat/chua-tron/duoi-muc-tot/tot như hôm nay (4 dòng); bài khẳng định 13 dòng đã chạy và tập CACH_DOC toEqual 6 giá trị viết tay. CHIỀU ĐỎ: bản sao cachDoc bỏ trim → dòng hoc-tap × «   » đỏ với thông điệp ghim «khoang trang doc thanh da-tra-loi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.olht_bang_cham
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-khep.ts, apps/api/test/okr-hoc-tap.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; chu kỳ quá hạn gieo qua okr-khep-san (gieoKyQuy, gieoMucTieuCongBo kind hoc-tap và một mục tiêu cam-ket), sangPha cham-diem thật; okr.bangCham: dòng của mục tiêu học tập có cachDoc «chua-tra-loi» khi KR chưa chấm; okr.ghiDieuHocDuoc «   » → vẫn «chua-tra-loi»; ghi «Khách cần bản dùng thử» → «da-tra-loi»; dòng cam-ket chưa chấm → cachDoc null như hôm nay. CHIỀU ĐỎ: bản sao okr-khep.service gọi cachDoc khi diem !== null như cũ → bước KR chưa chấm đỏ, bài in «hoc-tap chua cham khong co cach doc»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.olht_khep
+    paths: [apps/api/src/okr/**, apps/api/test/okr-hoc-tap.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; chu kỳ ở Chấm điểm, mọi KR chấm bằng chamHetBangGoiY, một mục tiêu học tập «Kiểm gói dùng thử» chưa ghi điều học được: okr.setCyclePhase da-dong → 400, thông điệp chứa số 1 và tên «Kiểm gói dùng thử» (ghim chuỗi OKR.thongDiep), db.okrCycle.phase vẫn cham-diem, okrTrail không thêm dòng doi-pha; okr.bangCham.hocTapChuaGhi toEqual [{id, ten}] của đúng mục tiêu đó; ghi điều học được rồi gọi lại → 200, phase da-dong, hocTapChuaGhi rỗng ở lần đọc trước khi khép. Ca hai mục tiêu (chu kỳ riêng): «Kiểm gói dùng thử» và «Đo giá chấp nhận được», tạo theo thứ tự đó rồi đổi position để thứ tự position NGƯỢC thứ tự tạo → thông điệp toEqual chuỗi gõ tay đầy đủ (số 2, hai tên đúng thứ tự position) và bangCham.hocTapChuaGhi toEqual mảng gõ tay cùng thứ tự. CHIỀU ĐỎ: (f) bản sao setCyclePhase bỏ kiểm hocTapChuaGhi → bước từ chối đỏ, bài in «khep duoc khi con hoc-tap chua ghi»; (l) bản sao thông điệp chỉ in tên đầu → ca hai mục tiêu đỏ, ghim «thieu ten hoc-tap thu hai»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.olht_khep_bien
+    paths: [apps/api/src/okr/**, apps/api/test/okr-hoc-tap.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "exit 0; BẢNG VIẾT TRƯỚC 4 dòng — mỗi giá trị của TRANG_THAI_MUC_TIEU một chu kỳ riêng (nhap: không công bố; cho-duyet: chương trình bật duyetCongBo và người không phải trưởng gửi công bố; cong-bo; da-bo: công bố rồi okr.dropObjective), mục tiêu học tập chưa ghi điều học được, cộng một mục tiêu cam-ket công bố đã chấm hết; kỳ vọng gõ tay: chỉ cong-bo → 400, ba dòng kia → 200 và phase da-dong. Bài đọc lại status từ DB trước khi khép và khẳng định tập status đã chạy toEqual new Set(TRANG_THAI_MUC_TIEU), số dòng = hằng gõ tay 4. CHIỀU ĐỎ: (g) bản sao hocTapChuaGhi bỏ điều kiện status = cong-bo → dòng da-bo đỏ, ghim «hoc-tap da bo van chan khep»; (m) bản sao lọc kiểu loại trừ (status không phải nhap, không phải da-bo) → dòng cho-duyet đỏ, ghim «hoc-tap cho duyet van chan khep»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.olht_dom
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/hop-thoai-dong-ky.tsx", "apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-khep.ts, apps/app/test/okr-hoc-tap.dom.tsx, apps/app/test/okr-hoc-tap-chon.dom.tsx]
+    expected: "exit 0; dựng HopThoaiDongKy với okr.bangCham giả parse qua schema đầu ra thật, ba ca viết trước: (a) conLai 0, hocTapChuaGhi [{id h1, ten «Kiểm gói dùng thử»}] → có [data-hoc-tap-chua-ghi] chứa đúng tên đó, số phần tử mang tên có translate=\"no\" trong khối bằng 1 (= số mục gõ tay), không có nút xác nhận khép; (b) conLai 0, hocTapChuaGhi [] → hộp xác nhận có nút khép như hôm nay; (c) conLai 2, hocTapChuaGhi [h1] → hộp chặn có cả [data-chua-cham] và [data-hoc-tap-chua-ghi]. CHIỀU ĐỎ (rang/dot-bien.mjs): (h) bản sao hop-thoai-dong-ky chỉ xét conLai === 0 → ca (a) đỏ với thông điệp ghim «hop xac nhan hien khi con hoc-tap chua ghi»; (n) bản sao bỏ translate=\"no\" trên tên → ca (a) đỏ, ghim «ten hoc-tap thieu translate no»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.olht_dom
+    paths: ["apps/app/app/(app)/[slug]/okr/cham-diem.tsx", apps/app/lib/messages/okr-khep.ts, apps/app/test/okr-hoc-tap.dom.tsx, apps/app/test/okr-hoc-tap-chon.dom.tsx]
+    expected: "Cùng lệnh E8 — dựng màn chấm điểm với bảng chấm giả: mục tiêu học tập cachDoc chua-tra-loi, diem null → nhãn «Chưa trả lời» hiện, dưới ô điều học được có chữ «Bắt buộc trước khi đóng kỳ»; cachDoc da-tra-loi → nhãn «Đã trả lời»; mục tiêu cam-ket cùng màn → không có chữ «Bắt buộc trước khi đóng kỳ». CHIỀU ĐỎ: bản sao cham-diem ẩn nhãn khi diem null → ca chua-tra-loi đỏ, ghim «hoc-tap diem trong mat nhan cach doc»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.olht_dom
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr.ts, apps/app/test/okr-hoc-tap.dom.tsx, apps/app/test/okr-hoc-tap-chon.dom.tsx]
+    expected: "Cùng lệnh E8 — mở hộp thoại thêm mục tiêu, mở Select «Loại»: tập chữ các lựa chọn toEqual {Cam kết, Tham vọng, Học tập} (vi) và {Committed, Aspirational, Learning} (en). CHIỀU ĐỎ (rang/dot-bien.mjs, cặp (j)): bản sao hop-thoai-muc-tieu.tsx lọc bỏ hoc-tap khỏi danh sách lựa chọn → ca vi đỏ với thông điệp ghim «hop chon loai thieu Hoc tap»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.olht_man
+    paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/app/(app)/[slug]/settings/okr/**", apps/api/src/okr/**, packages/validation/src/okr-muc-tieu.ts, packages/validation/src/okr-khep.ts, _acceptance/okr-loai-hoc-tap/rang/**]
+    steps:
+      - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
+      - "Gieo qua API thật trong phiên đo: quản trị Q, chu kỳ đang chạy năm 2031; chu kỳ quá hạn 2024 Q1 ở pha Chấm điểm có mục tiêu học tập H «Kiểm gói dùng thử» (KR CHƯA chấm) và một mục tiêu cam kết đã chấm"
+      - "Bước 1 — mở Mục tiêu › Theo đơn vị của chu kỳ 2031 ở 1440/vi, bấm Thêm mục tiêu, mở Select Loại → ba lựa chọn Cam kết, Tham vọng, Học tập → ảnh olht-chon-loai.png; chọn Học tập, điền tên, lưu → mục tiêu mới mang chip «Học tập»; okr.objective trả kind hoc-tap"
+      - "Bước 2 — mở màn chấm điểm của chu kỳ 2024 Q1 khi KR của H còn trống điểm → H mang nhãn «Chưa trả lời» và chú thích «Bắt buộc trước khi đóng kỳ» → ảnh olht-cham-chua.png; rồi chấm KR của H qua API"
+      - "Bước 3 — Cài đặt › OKR, hàng 2024 Q1 → Khép kỳ → hộp chặn liệt kê «Kiểm gói dùng thử», không có nút khép → ảnh olht-dong-chan.png"
+      - "Bước 4 — mở màn chấm điểm, đặt dấu window.__mocMan, ghi điều học được cho H, bấm lưu → nhãn «Đã trả lời» và dấu còn nguyên (không tải lại) → ảnh olht-cham-da.png; đi sang Cài đặt › OKR bằng bấm điều hướng trong app (không goto, dấu vẫn còn) → Khép kỳ → hộp xác nhận → khép → hàng 2024 Q1 mang pha «Đã đóng»; okr.cycles trả phase da-dong"
+      - "Bước 5 — mở màn chấm điểm ở 390 → không cuộn ngang → ảnh olht-390.png"
+    expected: "exit 0; năm bước đạt, ảnh trong _acceptance/okr-loai-hoc-tap/evidence/. CHIỀU ĐỎ (--chieu-do E11): bản sao hop-thoai-dong-ky chỉ xét conLai → bước 3 đỏ với thông điệp ghim «buoc 3: hop xac nhan hien khi con hoc-tap chua ghi»; (--chieu-do E11b) bản sao bỏ làm mới cache ở onSuccess của ghiDieuHocDuoc → bước 4 đỏ, ghim «buoc 4: nhan cu sau khi luu»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E12
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.olht_man
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/**", "apps/app/app/(app)/[slug]/okr/cham-diem.tsx", apps/api/src/okr/**, _acceptance/okr-loai-hoc-tap/rang/**]
+    steps:
+      - "Cùng lệnh và cùng phiên gieo với E11"
+      - "Bước 3 và 4 — hộp chặn khi còn mục tiêu học tập chưa ghi; ghi xong thì khép được và okr.cycles trả da-dong"
+    expected: "Cùng lệnh E11 — bước 3 và 4 đạt."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E13
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.olht_man
+    paths: ["apps/app/app/(app)/[slug]/okr/cham-diem.tsx", apps/app/lib/messages/okr-khep.ts, _acceptance/okr-loai-hoc-tap/rang/**]
+    steps:
+      - "Cùng lệnh và cùng phiên gieo với E11"
+      - "Bước 2 và 4 — nhãn «Chưa trả lời» kèm chú thích bắt buộc khi điểm còn trống, rồi «Đã trả lời» sau khi lưu, không tải lại"
+    expected: "Cùng lệnh E11 — bước 2 và 4 đạt. CHIỀU ĐỎ (--chieu-do E13): bản sao cham-diem.tsx ẩn nhãn cách đọc khi diem null → bước 2 đỏ, ghim «buoc 2: hoc-tap diem trong mat nhan»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E14
+    criterion: AC-9
+    executor: judgment
+    inputs: [apps/agent-okr/agent/instructions.md, packages/validation/src/okr-cuoc-soan.ts, packages/validation/src/okr-muc-tieu.ts]
+    question: "Đọc lời dặn của Kara trong instructions.md (mục về Mục tiêu và trường loai) cùng hai tệp lược đồ. (1) Lời dặn có cho phép loai hoc-tap và nói rõ khi nào dùng nó (mục tiêu kiểm một giả thuyết chưa biết đáp án) không? (2) Có câu nào mâu thuẫn với việc mục tiêu học tập không bao giờ «Trượt» giữa kỳ và phải ghi điều học được trước khi khép kỳ không? (3) LOAI_MUC_TIEU_NHAP mà lược đồ soạn OKR dùng có gồm hoc-tap không? Trả PASS khi cả ba đều ổn; nêu câu trích nguyên văn làm căn cứ."
+    expected: "PASS — lời dặn cho phép hoc-tap kèm câu khi nào dùng, không câu nào mâu thuẫn, LOAI_MUC_TIEU_NHAP gồm hoc-tap."
+    evidence_required: [run_id, verdict, rationale]
+
+  - id: E15
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.olht_soan_nhan
+    paths: [packages/validation/src/okr-cuoc-soan.ts, packages/validation/src/okr-tro-ly.ts, packages/validation/test/okr-loai-hoc-tap.spec.ts]
+    expected: "exit 0; parse một đầu ra soạn OKR mẫu (dựng bằng chính schema đầu ra soạn OKR/đề xuất mục tiêu mới của okr-tro-ly.ts) mang loaiMucTieu hoc-tap → thành công; cùng mẫu với loaiMucTieu «hoc tap» → lỗi Zod ghim đường dẫn loaiMucTieu. CHIỀU ĐỎ: chính bản sao của E1 → ca hoc-tap đỏ, ghim «soan OKR tu choi hoc-tap»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.olht_dot_bien
+    paths: [packages/validation/src/**, apps/api/src/okr/**, "apps/app/app/(app)/[slug]/settings/okr/hop-thoai-dong-ky.tsx", "apps/app/app/(app)/[slug]/okr/cham-diem.tsx", packages/validation/test/okr-loai-hoc-tap.spec.ts, apps/api/test/okr-hoc-tap.spec.ts, apps/app/test/okr-hoc-tap.dom.tsx, _acceptance/okr-loai-hoc-tap/rang/**]
+    expected: "exit 0; rang/dot-bien.mjs dựng bản sao cây bằng git worktree ở thư mục tạm NGOÀI kho, bảng ánh xạ viết trước đột biến → lệnh eval → thông điệp ghim, với HẰNG SO_CAP_KHAI = số cặp gõ tay và khẳng định số cặp trong bảng bằng hằng đó (không tự đếm từ bảng): (a) okr-cuoc-soan mảng tay → olht_mot_nguon «LOAI_MUC_TIEU_NHAP lech LOAI_MUC_TIEU» và olht_soan_nhan «soan OKR tu choi hoc-tap»; (b) LOAI_MUC_TIEU bỏ hoc-tap → olht_api_tao «tao hoc-tap bi tu choi»; (c) tinhTrang điều kiện cũ → olht_tinh_trang «hoc-tap ra truot o muc 0.49»; (d) cachDoc bỏ trim → olht_cach_doc «khoang trang doc thanh da-tra-loi»; (e) bảng chấm chỉ đọc khi có điểm → olht_bang_cham «hoc-tap chua cham khong co cach doc»; (f) bỏ kiểm khép → olht_khep «khep duoc khi con hoc-tap chua ghi»; (g) bỏ điều kiện công bố → olht_khep_bien «hoc-tap da bo van chan khep»; (h) hộp khép chỉ xét conLai → olht_dom «hop xac nhan hien khi con hoc-tap chua ghi»; (i) màn chấm ẩn nhãn khi diem null → olht_dom «hoc-tap diem trong mat nhan cach doc»; (j) hộp chọn lọc bỏ hoc-tap → olht_dom «hop chon loai thieu Hoc tap»; (l) thông điệp chỉ in tên đầu → olht_khep «thieu ten hoc-tap thu hai»; (m) lọc kiểu loại trừ → olht_khep_bien «hoc-tap cho duyet van chan khep»; (n) bỏ translate=\"no\" → olht_dom «ten hoc-tap thieu translate no» — 14 cặp, SO_CAP_KHAI = 14. Mỗi cặp: exit ≠ 0 VÀ stdout chứa đúng thông điệp ghim; đối chứng lành mọi lệnh trên bản sao chưa đột biến → exit 0. Dọn bản sao kể cả khi đỏ. Hồ sơ có đột biến nên làn S4 chạy tuần tự."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.olht_san_thiet_ke
+    paths: ["apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/app/(app)/[slug]/settings/okr/hop-thoai-dong-ky.tsx"]
+    expected: "exit 0; design-gate --mode static trên hai tệp tsx đã chạm, không P0. CHIỀU ĐỎ: bản sao thêm «text-gray-400 bg-blue-600» vào một className → exit 2, rule gray-on-color (đã thử trên vòng okr-cua-toi-tach-theo-doi 07/10). Giới hạn đã biết: soát tĩnh không bắt chữ nhạt trên nền trắng — ảnh của E11 cho người nhìn."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.olht_bang_cham
+    paths: [apps/api/src/okr/**, packages/validation/src/okr-khep.ts, apps/api/test/okr-hoc-tap.spec.ts, apps/api/test/okr-khep-san.ts]
+    expected: "Cùng lệnh E5 — sau okr.ghiDieuHocDuoc có chữ, lần đọc okr.bangCham kế tiếp (không chờ, không đổi pha) trả cachDoc da-tra-loi cho mục tiêu đó VÀ hocTapChuaGhi không còn id của nó; đối chứng cùng fixture trước khi ghi: hocTapChuaGhi chứa đúng id đó."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

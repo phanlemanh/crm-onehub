@@ -119,6 +119,7 @@ const vi = {
 		loai: {
 			"cam-ket": "Cam kết",
 			"tham-vong": "Tham vọng",
+			"hoc-tap": "Học tập",
 		} satisfies Record<LoaiMucTieu, string>,
 		viSaoLucNay: (chu: string) => `Vì sao lúc này: ${chu}`,
 		kr: "KR",
@@ -404,7 +405,11 @@ const en: OkrSoanMessages = {
 		rongMoTa:
 			"Answer the Assistant in the conversation; the draft appears here so you can accept, edit or reject each line.",
 		mucTieu: (stt) => `Objective ${stt}`,
-		loai: { "cam-ket": "Committed", "tham-vong": "Aspirational" },
+		loai: {
+			"cam-ket": "Committed",
+			"tham-vong": "Aspirational",
+			"hoc-tap": "Learning",
+		},
 		viSaoLucNay: (chu) => `Why now: ${chu}`,
 		kr: "KR",
 		canChinhNhan: "Alignment",

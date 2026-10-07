@@ -35,7 +35,13 @@ import { z } from "zod";
 import { InjectDatabase } from "../database/database.constants";
 import { tenDonVi } from "./don-vi";
 import { locXemTrongVet } from "./hien-thi";
-import { dongKyChoNguoiXem, ngayLuu, PHA_CO_DIEM, PHA_NHIN_LAI } from "./khep";
+import {
+	dongKyChoNguoiXem,
+	hocTapChuaGhi,
+	ngayLuu,
+	PHA_CO_DIEM,
+	PHA_NHIN_LAI,
+} from "./khep";
 import { OkrService } from "./okr.service";
 import {
 	chonDonVi,
@@ -615,7 +621,7 @@ export class OkrKhepService {
 				input.donVi ? this.xem.dieuKienDonVi(input.donVi, q) : {},
 			],
 		};
-		const [mts, dauDong, dongKy] = await Promise.all([
+		const [mts, dauDong, dongKy, hocTap] = await Promise.all([
 			this.db.okrObjective.findMany({
 				where: { AND: [where, dieuKienXemMucTieu(nc)] },
 				orderBy: [{ position: "asc" }, { createdAt: "asc" }],
@@ -626,6 +632,7 @@ export class OkrKhepService {
 				select: { thang: true },
 			}),
 			dongKyChoNguoiXem(this.db, input.cycleId, nc),
+			hocTapChuaGhi(this.db, input.cycleId, nc),
 		]);
 		const thangKy = dauDong ? thangCham.parse(dauDong.thang) : null;
 		const { xemDuoc } = await locXemTrongVet(
@@ -694,7 +701,7 @@ export class OkrKhepService {
 					suaDuoc: this.quyenOkr.suaDuocDonVi(q, userId, dv),
 					diem:
 						diem === null || thang === null ? null : diemTheoThang(diem, thang),
-					cachDoc: diem === null ? null : cachDoc(loai, diem),
+					cachDoc: cachDoc(loai, diem, m.nhinLai?.dieuHocDuoc ?? ""),
 					dieuHocDuoc: m.nhinLai?.dieuHocDuoc ?? "",
 					mangSangToi: toi
 						? {
@@ -718,6 +725,7 @@ export class OkrKhepService {
 			thang: thangKy,
 			conLai: dongKy.conLai,
 			chuaCham: dongKy.theoDonVi,
+			hocTapChuaGhi: hocTap,
 			mucTieu,
 		};
 	}

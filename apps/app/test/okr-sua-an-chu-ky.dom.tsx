@@ -146,6 +146,7 @@ mock.module("@/lib/trpc/client", () => ({
 				thang: "0-1",
 				conLai: 0,
 				chuaCham: [],
+				hocTapChuaGhi: [],
 				mucTieu: [],
 			})),
 			suaChuKy: thuTuc("okr.suaChuKy"),
