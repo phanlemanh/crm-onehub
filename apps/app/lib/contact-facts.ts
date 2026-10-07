@@ -12,6 +12,7 @@ export type FactTruoc =
 export type FactReceipt = {
 	fact: ContactFact;
 	decision: "accept" | "dismiss";
+	thay: boolean;
 	truoc: FactTruoc;
 	loi: boolean;
 };

@@ -21,6 +21,11 @@ const { chay, HEP, MA, moDo, RONG } = await import(
 	"../../kho-tai-lieu/rang/man-lib.mjs"
 );
 
+const GOI_Y_CA_NHAN = [
+	"Người này là ai?",
+	"Họ còn làm ở đó không?",
+	"Cần biết gì trước cuộc gọi?",
+];
 const CU = "Trưởng phòng";
 const MOI = "Giám đốc kinh doanh";
 const d = await moDo();
@@ -37,7 +42,23 @@ const docMan = async (t) => {
 		);
 		if (ngan && ngan.scrollWidth > ngan.clientWidth + 1)
 			tran.push(`ngan ${ngan.scrollWidth}>${ngan.clientWidth}`);
+		const cat = [];
+		const rong = goc.clientWidth;
+		for (const nut of window.__tim("button")) {
+			const r = nut.getBoundingClientRect();
+			if (r.width === 0) continue;
+			if (r.left < -1 || r.right > rong + 1)
+				cat.push(`nut ${(nut.innerText ?? "").trim()}`);
+		}
+		for (const o of window.__tim("dd")) {
+			const hop = o.getBoundingClientRect();
+			for (const con of o.children) {
+				if (con.getBoundingClientRect().right > hop.right + 1)
+					cat.push(`o ${(con.innerText ?? "").trim()}`);
+			}
+		}
 		return {
+			cat,
 			chu: document.body.innerText ?? "",
 			nhanKara: window.__tim('[data-slot="kara-label"]').length,
 			nhanChu: window
@@ -238,6 +259,16 @@ try {
 			await chupNgan(t2, "kbk-de-xuat-390.png");
 			await t2.close();
 			if (m1.tran.length > 0) loi.push(`tab Kara tran: ${m1.tran.join(", ")}`);
+			for (const cau of GOI_Y_CA_NHAN) {
+				if (!m1.chu.includes(cau)) loi.push(`390 khong thay goi y ${cau}`);
+			}
+			const catGoiY = m1.cat.filter((c) =>
+				GOI_Y_CA_NHAN.some((cau) => c === `nut ${cau}`),
+			);
+			if (catGoiY.length > 0)
+				loi.push(`390 goi y bi cat: ${catGoiY.join(", ")}`);
+			const catO = m2.cat.filter((c) => c.startsWith("o "));
+			if (catO.length > 0) loi.push(`390 o thong tin tran: ${catO.join(", ")}`);
 			if (m2.tran.length > 0) loi.push(`de xuat tran: ${m2.tran.join(", ")}`);
 			if (!m2.chu.includes("Thay giá trị hiện có"))
 				loi.push("390 khong thay de xuat");

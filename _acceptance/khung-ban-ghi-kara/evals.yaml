@@ -19,9 +19,11 @@ evals:
       expect(o.length).toBe(18); moi o so chu hien (innerText) voi ban viet truoc tieng Viet trong bai
       (khong rut tu tep chu, de bat ca tep chu sai). Moi loai: khong co [data-slot=logo] / svg cua Logo
       trong tab, co dau Kara ([data-slot=kara-mark] hoac avatar KaraAvatar); recordSheetMessages("vi")
-      .tabs.agent === "Kara". Bam cau goi y thu hai -> agent.send goi dung mot lan voi {message: <cau do>}.
+      .tabs.agent === "Kara". Ba nut goi y nam trong khoang rong [data-slot=empty] (xuong dong duoc, khong
+      nam trong hang cuon cua o soan). Bam cau goi y thu hai -> agent.send goi dung mot lan voi {message: <cau do>}.
       CHIEU DO ghim: ban sao agent-panel.tsx tra <Logo vao khoang rong -> do "tab-rong: con logo OneHub";
-      doi mot goi y cua deal trong tep chu -> do "tab-rong: deal goi y 2".
+      doi mot goi y cua deal trong tep chu -> do "tab-rong: deal goi y 2"; ban sao tra goi y ve hang cuon
+      cua o soan -> do "tab-rong: contact goi y nam ngoai o trong".
 
   - id: E2
     criterion: AC-2
@@ -50,11 +52,13 @@ evals:
     expected: |
       exit 0; ma tran viet truoc 3 loi gia cua agent.error: "Agent is not reachable at http://127.0.0.1:2000",
       "Agent bridge is not configured", "Unexpected token < in JSON" = 3 o. Hai o dau va o ba: chu
-      "Kara chưa trả lời được" + nut "Thử lại"; o hai: "Kara chưa được bật" + cau cho quan tri vien, khong
-      nut Thu lai. Moi o: document.body.textContent khong chua chuoi nao trong danh sach cam viet truoc
+      "Kara chưa trả lời được" + nut "Thử lại"; o hai (bang muc 7 hang Tat): o soan khoa, aria-describedby
+      tro toi dong "Kara chưa được bật cho hồ sơ. Hỏi được ngay khi quản trị viên bật trong Cài đặt.", khong
+      hop trang thai [data-kara-state], khong nut Thu lai. Moi o: document.body.textContent khong chua chuoi nao trong danh sach cam viet truoc
       ["bun run dev", "AGENT_URL", "AGENT_BRIDGE_SECRET", "not reachable", "not configured", "Unexpected token"].
       O mot: gui "Họ còn làm ở đó không?" roi loi; bam Thu lai -> agent.send goi lan hai voi dung message do.
-      CHIEU DO ghim: ban sao in error.message -> do "loi: lo chuoi cam not reachable".
+      CHIEU DO ghim: ban sao in error.message -> do "loi: lo chuoi cam not reachable"; ban sao khong khoa o
+      soan khi chua bat -> do (cho het han tai cau chua bat, o soan khong mang dong ly do).
 
   - id: E4
     criterion: AC-4
@@ -148,13 +152,18 @@ evals:
       - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
       - "apps/app/test/kara-ban-ghi-de-xuat.dom.tsx"
     expected: |
-      exit 0; FactSuggestion that, tRPC gia ghi loi goi. Bam "Thêm vào hồ sơ" -> contacts.decideFact dung mot
-      lan; dong bien nhan "Đã thêm theo Kara" + nut "Hoàn tác". Bam Hoan tac -> contacts.undoFactDecision
+      exit 0; FactSuggestion that, tRPC gia ghi loi goi. Bam nut chinh -> contacts.decideFact dung mot
+      lan; dong bien nhan theo dung dong tu cua nut: truong trong -> "Đã thêm theo Kara", truong co gia tri ->
+      "Đã thay theo Kara"; kem nut "Hoàn tác". Bam Hoan tac -> contacts.undoFactDecision
       dung mot lan; payload parse bang schema input that undoFactDecisionInput import tu
       apps/api/src/contacts/contacts.contracts.ts, mang factId cua de xuat va truoc = gia tri truong truoc khi
       nhan (ca truong trong: value null; ca ten: firstName/lastName cu); sau do de xuat cho hien lai va
-      document.activeElement la nut chinh cua no. CHIEU DO ghim: ban sao gui truoc = gia tri de xuat ->
-      do "nhan: truoc sai gia tri".
+      document.activeElement la nut chinh cua no. Ca trong ngan that (ContactSheet trong DetailSheet, bo dem
+      lam moi goi invalidateQueries that, contacts.byId doi theo giai doan cho -> da ap -> cho): sau Hoan tac
+      de xuat con va focus nam tren "Thay giá trị hiện có". CHIEU DO ghim: ban sao gui truoc = gia tri de
+      xuat -> do "nhan: truoc sai gia tri"; ban sao xoa bien nhan truoc khi tai lai, hoac Tong quan doc
+      contact qua prop -> do "nhan: focus roi khoi nut chinh"; ban sao bien nhan luon "Đã thêm" -> do
+      toContain "Đã thay theo Kara".
 
   - id: E9
     criterion: AC-7
@@ -218,7 +227,9 @@ evals:
     expected: |
       exit 0; tRPC gia: undoFactDecision nem loi CONFLICT. Sau nhan, bam Hoan tac -> dong bien nhan doi
       thanh "Trường này đã đổi sau khi nhận — không hoàn tác được", khong con nut "Hoàn tác", khong toast
-      chu tho cua loi. CHIEU DO ghim: ban sao giu nut Hoan tac khi loi -> do "hoan-tac-loi: con nut".
+      chu tho cua loi. Loi khac (khong phai CONFLICT, vd mat ket noi): toast "Chưa hoàn tác được. Thử lại nhé.",
+      bien nhan giu nguyen va con nut "Hoàn tác". CHIEU DO ghim: ban sao giu nut Hoan tac khi loi -> do
+      "hoan-tac-loi: con nut"; ban sao coi moi loi la xung dot -> do (cho het han "bao thu lai").
 
   - id: E13
     criterion: AC-10
@@ -286,7 +297,7 @@ evals:
       - "Buoc 1 (1440): mo ngan ca nhan, tab Kara -> chup kbk-kara-ca-nhan-1440.png; innerText co 'Kara' va mot cau goi y tieng Viet, khong 'Ask about'"
       - "Buoc 2 (1440): cung o ngan cong ty va thoa thuan -> kbk-kara-cong-ty-1440.png, kbk-kara-thoa-thuan-1440.png; o ngan ca nhan bam goi y dau tien -> phien do khong chay tac nhan nen tab phai hien mot trang thai Kara (innerText chua 'Kara chưa trả lời được' hoac 'Kara chưa được bật', khong chua 'bun run dev', 'AGENT_URL', 'not reachable') -> kbk-kara-trang-thai-1440.png; in ten trang thai da thay"
       - "Buoc 3 (1440): tab Tong quan ca nhan -> de xuat duoi truong Chuc danh, nhan 'Kara · 1 đề xuất' -> kbk-de-xuat-1440.png; bam 'Thay giá trị hiện có' -> doc lai qua API contacts.byId: title = 'Giám đốc kinh doanh' -> kbk-bien-nhan-1440.png; bam 'Hoàn tác' -> contacts.byId: title = 'Trưởng phòng', de xuat hien lai -> kbk-hoan-tac-1440.png"
-      - "Buoc 4 (390): lap buoc 1 va 3 o kho 390 -> kbk-kara-ca-nhan-390.png, kbk-de-xuat-390.png; scrollWidth <= clientWidth cua trang va cua ngan"
+      - "Buoc 4 (390): lap buoc 1 va 3 o kho 390 -> kbk-kara-ca-nhan-390.png, kbk-de-xuat-390.png; scrollWidth <= clientWidth cua trang va cua ngan; ba goi y ca nhan co mat va khong nut goi y nao vuot mep khung nhin (do '390 goi y bi cat'); khong phan tu con nao cua mot <dd> vuot mep phai cua <dd> do (do '390 o thong tin tran')"
     paths:
       - "apps/app/components/crm/agent-panel.tsx"
       - "apps/app/components/crm/facts.tsx"

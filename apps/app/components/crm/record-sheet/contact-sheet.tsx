@@ -301,7 +301,7 @@ function CompanyStat({
 		<button
 			type="button"
 			onClick={() => openRecord({ kind: "company", id: company.id })}
-			className="flex min-w-0 items-center gap-2 underline-offset-2 hover:underline"
+			className="flex min-w-0 max-w-full items-center gap-2 underline-offset-2 hover:underline"
 		>
 			<EntityLogo
 				src={company.iconUrl}
@@ -322,11 +322,13 @@ const AGENT_FIELDS = [
 	"githubUrl",
 ] as const;
 
-function ContactOverview({ contact }: { contact: Contact }) {
+function ContactOverview({ contact: banDau }: { contact: Contact }) {
 	const m = recordSheetMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
+	const contact =
+		useQuery(trpc.contacts.byId.queryOptions({ id: banDau.id })).data ?? banDau;
 	const users = useQuery(trpc.users.list.queryOptions());
 
 	const { applied, proposed } = factsByField(contact.facts);

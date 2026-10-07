@@ -14,6 +14,7 @@ import {
 import { Button } from "@crm/ui/components/button";
 import {
 	Empty,
+	EmptyContent,
 	EmptyDescription,
 	EmptyHeader,
 	EmptyMedia,
@@ -231,11 +232,14 @@ function Thread({
 		void agent.send({ message: message.trim() });
 	};
 
-	const lockedReason = ended
-		? t.tab.ketThuc
-		: thread?.status === "working" && !busy
-			? t.tab.ban
-			: undefined;
+	const chuaBat = agent.error?.message.includes("not configured") ?? false;
+	const lockedReason = chuaBat
+		? t.tab.chuaBat
+		: ended
+			? t.tab.ketThuc
+			: thread?.status === "working" && !busy
+				? t.tab.ban
+				: undefined;
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col">
@@ -243,7 +247,9 @@ function Thread({
 				<MessageScroller className="flex-1">
 					<MessageScrollerViewport>
 						<MessageScrollerContent className="gap-3 px-4 py-4 sm:px-5">
-							{empty ? <Idle copy={copy} /> : null}
+							{empty ? (
+								<Idle copy={copy} label={t.tab.nhanGoiY} onAsk={ask} />
+							) : null}
 
 							{messages.map((message) => (
 								<MessageScrollerItem key={message.id} messageId={message.id}>
@@ -262,7 +268,7 @@ function Thread({
 				</MessageScroller>
 			</MessageScrollerProvider>
 
-			{agent.error ? (
+			{agent.error && !chuaBat ? (
 				<div className="border-t px-4 py-3 sm:px-5">
 					<Failure
 						message={agent.error.message}
@@ -294,9 +300,6 @@ function Thread({
 						status={busy ? "busy" : "ready"}
 						placeholder={copy.choNhap}
 						label={t.tab.nhanO}
-						suggestions={empty ? copy.goiY : undefined}
-						suggestionsLabel={t.tab.nhanGoiY}
-						onSuggestion={ask}
 						lockedReason={lockedReason}
 					/>
 				)}
@@ -305,7 +308,15 @@ function Thread({
 	);
 }
 
-function Idle({ copy }: { copy: ReturnType<typeof recordCopy> }) {
+function Idle({
+	copy,
+	label,
+	onAsk,
+}: {
+	copy: ReturnType<typeof recordCopy>;
+	label: string;
+	onAsk: (question: string) => void;
+}) {
 	return (
 		<Empty width="wide">
 			<EmptyHeader>
@@ -315,6 +326,18 @@ function Idle({ copy }: { copy: ReturnType<typeof recordCopy> }) {
 				<EmptyTitle>{copy.tieuDe}</EmptyTitle>
 				<EmptyDescription>{copy.moTa}</EmptyDescription>
 			</EmptyHeader>
+			<EmptyContent layout="row" role="group" aria-label={label}>
+				{copy.goiY.map((cau) => (
+					<Button
+						key={cau}
+						variant="outline"
+						size="sm"
+						onClick={() => onAsk(cau)}
+					>
+						{cau}
+					</Button>
+				))}
+			</EmptyContent>
 		</Empty>
 	);
 }
@@ -328,10 +351,6 @@ function Failure({
 	t: KaraBanGhiMessages;
 	onRetry: () => void;
 }) {
-	if (message.includes("not configured")) {
-		return <KaraState kind="unconfigured" description={t.tab.chuaBat} />;
-	}
-
 	return (
 		<KaraState
 			kind="error"

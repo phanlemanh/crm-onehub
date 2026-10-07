@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+import { type QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { undoFactDecisionInput } from "../../api/src/contacts/contacts.contracts";
 import {
@@ -12,6 +13,30 @@ import {
 	nutCo,
 	trangThai,
 } from "./khung-gop-y";
+
+type NoiGiuClient = { qc: QueryClient | null };
+
+const lamMoiThat: NoiGiuClient = { qc: null };
+
+mock.module("@/lib/trpc/cache", () => ({
+	useCrmCache: () =>
+		new Proxy(
+			{},
+			{
+				get: () => async () => {
+					await lamMoiThat.qc?.invalidateQueries();
+				},
+			},
+		),
+}));
+
+function GiuClient() {
+	lamMoiThat.qc = useQueryClient();
+	return null;
+}
+
+const xungDot = (thongDiep: string) =>
+	Object.assign(new Error(thongDiep), { data: { code: "CONFLICT" } });
 
 mock.module("@/components/crm/agent-panel", () => ({ AgentPanel: () => null }));
 mock.module("@/components/crm/timeline/timeline", () => ({
@@ -125,7 +150,10 @@ function caNhan(facts: ContactFact[]) {
 	};
 }
 
-afterEach(dongHet);
+afterEach(async () => {
+	lamMoiThat.qc = null;
+	await dongHet();
+});
 
 describe("kara-ban-ghi-de-xuat", () => {
 	test("de-xuat-cho: neo tại chỗ, nút đúng hậu quả, nhãn Kara một lần mỗi nhóm", async () => {
@@ -172,8 +200,12 @@ describe("kara-ban-ghi-de-xuat", () => {
 
 	test("nhan-hoan-tac: nhận thu thành biên nhận, Hoàn tác gửi đúng giá trị cũ", async () => {
 		const ca = [
-			{ current: "Trưởng phòng", truoc: { value: "Trưởng phòng" } },
-			{ current: null, truoc: { value: null } },
+			{
+				current: "Trưởng phòng",
+				truoc: { value: "Trưởng phòng" },
+				bienNhan: "Đã thay theo Kara",
+			},
+			{ current: null, truoc: { value: null }, bienNhan: "Đã thêm theo Kara" },
 		] as const;
 		for (const o of ca) {
 			datLai();
@@ -182,7 +214,7 @@ describe("kara-ban-ghi-de-xuat", () => {
 			await bam(nutChinh()[0] as HTMLButtonElement);
 			await cho(() => nutCo("Hoàn tác") !== null, "bien nhan");
 			expect(goiCua("contacts.decideFact").length).toBe(1);
-			expect(document.body.textContent).toContain("Đã thêm theo Kara");
+			expect(document.body.textContent).toContain(o.bienNhan);
 
 			await bam(nut("Hoàn tác"));
 			await cho(() => nutChinh().length === 1, "de xuat hien lai");
@@ -195,6 +227,52 @@ describe("kara-ban-ghi-de-xuat", () => {
 			expect(document.activeElement).toBe(nutChinh()[0] ?? null);
 			await dongHet();
 		}
+	});
+
+	test("nhan-hoan-tac-trong-ngan: Hoàn tác chờ tải lại rồi trả đề xuất và tiêu điểm", async () => {
+		datLai();
+		let giai = 0;
+		const tieuDe = ["Trưởng phòng", "Giám đốc kinh doanh", "Trưởng phòng"];
+		const trangThaiFact = ["PROPOSED", "APPLIED", "PROPOSED"] as const;
+		dat("contacts.byId", () => ({
+			...caNhan([{ ...TITLE, status: trangThaiFact[giai] ?? "PROPOSED" }]),
+			title: tieuDe[giai] ?? null,
+		}));
+		dat("contacts.decideFact", () => {
+			giai = 1;
+			return { contactId: "ct-1", field: "title", applied: true };
+		});
+		dat("contacts.undoFactDecision", () => {
+			giai = 2;
+			return { contactId: "ct-1", field: "title" };
+		});
+		dat("users.list", () => []);
+		dat("onboarding.listTemplates", () => []);
+		await mo(
+			<>
+				<GiuClient />
+				<DetailSheet open onOpenChange={() => {}}>
+					<ContactSheet contactId="ct-1" />
+				</DetailSheet>
+			</>,
+			{ searchParams: "?record=contact:ct-1" },
+		);
+		await cho(() => nutCo("Thay giá trị hiện có") !== null, "de xuat");
+		await bam(nut("Thay giá trị hiện có"));
+		await cho(() => nutCo("Hoàn tác") !== null, "bien nhan");
+		expect(document.body.textContent).toContain("Đã thay theo Kara");
+
+		await bam(nut("Hoàn tác"));
+		await cho(
+			() =>
+				goiCua("contacts.undoFactDecision").length === 1 &&
+				nutCo("Hoàn tác") === null,
+			"het bien nhan",
+		);
+		const nutLai = nutCo("Thay giá trị hiện có");
+		if (!nutLai) throw new Error("nhan: mat de xuat sau hoan tac");
+		if (document.activeElement !== nutLai)
+			throw new Error("nhan: focus roi khoi nut chinh");
 	});
 
 	test("bo-qua: bỏ qua thu thành biên nhận, Hoàn tác gọi đúng một lần", async () => {
@@ -222,7 +300,7 @@ describe("kara-ban-ghi-de-xuat", () => {
 	test("hoan-tac-loi: trường đã đổi thì biên nhận nói rõ, không còn Hoàn tác", async () => {
 		datLai();
 		dat("contacts.undoFactDecision", () => {
-			throw new Error("The field changed after the suggestion was accepted.");
+			throw xungDot("The field changed after the suggestion was accepted.");
 		});
 		await mo(
 			<GiuBienNhan
@@ -244,5 +322,38 @@ describe("kara-ban-ghi-de-xuat", () => {
 		);
 		if (nutCo("Hoàn tác")) throw new Error("hoan-tac-loi: con nut");
 		expect(document.body.textContent).not.toContain("The field changed");
+	});
+
+	test("hoan-tac-loi-ket-noi: lỗi không phải xung đột thì báo thử lại, giữ Hoàn tác", async () => {
+		datLai();
+		dat("contacts.undoFactDecision", () => {
+			throw new Error("fetch failed");
+		});
+		await mo(
+			<GiuBienNhan
+				f={TITLE}
+				current="Trưởng phòng"
+				truoc={{ value: "Trưởng phòng" }}
+			/>,
+		);
+		await cho(() => nutChinh().length === 1, "nut chinh");
+		await bam(nutChinh()[0] as HTMLButtonElement);
+		await cho(() => nutCo("Hoàn tác") !== null, "bien nhan");
+		await bam(nut("Hoàn tác"));
+		await cho(
+			() =>
+				(document.body.textContent ?? "").includes(
+					"Chưa hoàn tác được. Thử lại nhé.",
+				),
+			"bao thu lai",
+		);
+		if (
+			(document.body.textContent ?? "").includes(
+				"Trường này đã đổi sau khi nhận",
+			)
+		)
+			throw new Error("hoan-tac-loi: loi ket noi bao nham truong da doi");
+		if (!nutCo("Hoàn tác"))
+			throw new Error("hoan-tac-loi: mat nut sau loi ket noi");
 	});
 });

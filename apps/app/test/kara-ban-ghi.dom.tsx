@@ -331,8 +331,12 @@ describe("kara-ban-ghi", () => {
 			}
 			expect(oSoan()?.placeholder).toBe(mong.choNhap);
 			o.push(`${loai}:cho nhap`);
+			const oTrong = document.querySelector('[data-slot="empty"]');
 			mong.goiY.forEach((cau, i) => {
-				if (!nutCo(cau)) throw new Error(`tab-rong: ${loai} goi y ${i + 1}`);
+				const n = nutCo(cau);
+				if (!n) throw new Error(`tab-rong: ${loai} goi y ${i + 1}`);
+				if (!oTrong?.contains(n))
+					throw new Error(`tab-rong: ${loai} goi y nam ngoai o trong`);
 				o.push(`${loai}:goi y ${i + 1}`);
 			});
 			await bam(nut(mong.goiY[1] ?? ""));
@@ -410,7 +414,7 @@ describe("kara-ban-ghi", () => {
 			},
 			{
 				loi: "Agent bridge is not configured",
-				chu: "Kara chưa được bật",
+				chu: "Kara chưa được bật cho hồ sơ. Hỏi được ngay khi quản trị viên bật trong Cài đặt.",
 				thuLai: false,
 			},
 			{
@@ -434,6 +438,17 @@ describe("kara-ban-ghi", () => {
 				if (chu.includes(cam)) throw new Error(`loi-gui: lo chuoi cam ${cam}`);
 			}
 			expect(nutCo("Thử lại") !== null).toBe(o.thuLai);
+			if (!o.thuLai) {
+				if (!oSoan()?.disabled)
+					throw new Error("loi-gui: chua bat van mo o soan");
+				const moTa = document.getElementById(
+					oSoan()?.getAttribute("aria-describedby") ?? "",
+				);
+				if (!moTa?.textContent?.includes(o.chu))
+					throw new Error("loi-gui: o soan khong noi vi sao khoa");
+				if (document.querySelector("[data-kara-state]"))
+					throw new Error("loi-gui: chua bat con hop trang thai");
+			}
 			if (o.thuLai) {
 				await bam(nut("Thử lại"));
 				expect(gia.daGui).toEqual([{ message: "Họ còn làm ở đó không?" }]);

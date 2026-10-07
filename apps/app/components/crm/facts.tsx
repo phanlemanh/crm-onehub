@@ -56,7 +56,13 @@ export function FactSuggestion({
 	const decide = useMutation(
 		trpc.contacts.decideFact.mutationOptions({
 			onSuccess: (_ketQua, vao) => {
-				onReceipt({ fact, decision: vao.decision, truoc, loi: false });
+				onReceipt({
+					fact,
+					decision: vao.decision,
+					thay: Boolean(current),
+					truoc,
+					loi: false,
+				});
 				return lamMoi();
 			},
 			onError: () => toast.error(t.loiQuyet),
@@ -65,14 +71,18 @@ export function FactSuggestion({
 
 	const undo = useMutation(
 		trpc.contacts.undoFactDecision.mutationOptions({
-			onSuccess: () => {
+			onSuccess: async () => {
+				await lamMoi();
 				flushSync(() => onReceipt(undefined));
 				khung.current
 					?.querySelector<HTMLButtonElement>('button[data-variant="default"]')
 					?.focus();
-				return lamMoi();
 			},
-			onError: () => {
+			onError: (loi) => {
+				if (loi.data?.code !== "CONFLICT") {
+					toast.error(t.loiHoanTac);
+					return;
+				}
 				if (receipt) onReceipt({ ...receipt, loi: true });
 			},
 		}),
@@ -87,9 +97,11 @@ export function FactSuggestion({
 		decision: receipt.decision === "accept" ? "accepted" : "dismissed",
 		text: receipt.loi
 			? t.hoanTacLoi
-			: receipt.decision === "accept"
-				? t.daThem
-				: t.daBo,
+			: receipt.decision === "dismiss"
+				? t.daBo
+				: receipt.thay
+					? t.daThay
+					: t.daThem,
 		onUndo: receipt.loi ? undefined : hoanTac,
 	};
 

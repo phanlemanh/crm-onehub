@@ -46,7 +46,8 @@ const en = {
 		loiVang:
 			"Kara is away for the moment, so the question did not arrive. Try again in a few minutes.",
 		loiKhac: "Something went wrong on the way. Try again.",
-		chuaBat: "An admin needs to turn Kara on for records in Settings.",
+		chuaBat:
+			"Kara isn't on for records yet. You can ask as soon as an admin turns it on in Settings.",
 		ban: "Kara is still answering the last question. The next one can go when it finishes.",
 		ketThuc: "This conversation has ended.",
 		batDauMoi: "Start a new conversation",
@@ -123,9 +124,11 @@ const en = {
 		thay: "Replace current value",
 		boQua: "Skip",
 		daThem: "Added from Kara",
+		daThay: "Replaced from Kara",
 		daBo: "Skipped",
 		hoanTacLoi: "This field changed after you accepted — it can't be undone",
 		loiQuyet: "Couldn't save the decision. Try again.",
+		loiHoanTac: "Couldn't undo. Try again.",
 	},
 	khung: {
 		loiMoTa: "Check your connection and try again.",
@@ -174,7 +177,8 @@ const vi: KaraBanGhiMessages = {
 		chuaTraLoi: "trả lời",
 		loiVang: "Kara đang tạm vắng nên câu hỏi chưa tới. Thử lại sau ít phút.",
 		loiKhac: "Có trục trặc trên đường gửi. Thử lại nhé.",
-		chuaBat: "Quản trị viên cần bật Kara cho hồ sơ trong Cài đặt.",
+		chuaBat:
+			"Kara chưa được bật cho hồ sơ. Hỏi được ngay khi quản trị viên bật trong Cài đặt.",
 		ban: "Kara vẫn đang trả lời câu trước. Câu tiếp theo gửi được khi xong.",
 		ketThuc: "Cuộc trò chuyện này đã kết thúc.",
 		batDauMoi: "Bắt đầu cuộc mới",
@@ -251,9 +255,11 @@ const vi: KaraBanGhiMessages = {
 		thay: "Thay giá trị hiện có",
 		boQua: "Bỏ qua",
 		daThem: "Đã thêm theo Kara",
+		daThay: "Đã thay theo Kara",
 		daBo: "Đã bỏ qua",
 		hoanTacLoi: "Trường này đã đổi sau khi nhận — không hoàn tác được",
 		loiQuyet: "Chưa lưu được quyết định. Thử lại nhé.",
+		loiHoanTac: "Chưa hoàn tác được. Thử lại nhé.",
 	},
 	khung: {
 		loiMoTa: "Kiểm tra kết nối rồi thử lại.",
