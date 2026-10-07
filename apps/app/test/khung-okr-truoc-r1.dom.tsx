@@ -304,7 +304,9 @@ function datNen({
 			canCreate: canEdit || quanTri,
 		}),
 	);
-	dat("okr.mine", () => mineOutput.parse({ objectives: rows, daBo: [] }));
+	dat("okr.mine", () =>
+		mineOutput.parse({ dangTheoDoi: [], objectives: rows, daBo: [] }),
+	);
 	dat("okr.viecCuaToi", () => ({ viec: [], lienQuanOkr: false }));
 	dat("okr.comments", () => ({ comments: [], dong: [] }));
 	dat("okr.thanhVien", () => [HUNG]);

@@ -151,6 +151,7 @@ async function dungCuaToi() {
 describe("cua-toi", () => {
 	test("cua-toi (a): 1 dang dung + 2 da bo — danh sach chinh 1, dong gap dong Da bo (2), mo ra thay 2", async () => {
 		kho.mine = mineOutput.parse({
+			dangTheoDoi: [],
 			objectives: [mucTieu("a1")],
 			daBo: [daBoTu("d1"), daBoTu("d2")],
 		});
@@ -174,7 +175,11 @@ describe("cua-toi", () => {
 	});
 
 	test("cua-toi (b): 0 dang dung + 1 da bo — trang thai rong va dong gap Da bo (1)", async () => {
-		kho.mine = mineOutput.parse({ objectives: [], daBo: [daBoTu("d1")] });
+		kho.mine = mineOutput.parse({
+			dangTheoDoi: [],
+			objectives: [],
+			daBo: [daBoTu("d1")],
+		});
 		await dungCuaToi();
 		expect({
 			rong:
@@ -185,7 +190,11 @@ describe("cua-toi", () => {
 	});
 
 	test("cua-toi (c): khong muc tieu da bo — khong co dong gap", async () => {
-		kho.mine = mineOutput.parse({ objectives: [mucTieu("a1")], daBo: [] });
+		kho.mine = mineOutput.parse({
+			dangTheoDoi: [],
+			objectives: [mucTieu("a1")],
+			daBo: [],
+		});
 		await dungCuaToi();
 		expect(anhNhom().coNhom).toBe(false);
 	});
