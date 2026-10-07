@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from "node:child_process";
-import { chmodSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -37,6 +37,7 @@ function chup(kho) {
 		nhanh: git(kho.chinh, "for-each-ref", "--format=%(refname) %(objectname)", "refs/heads"),
 		worktree: git(kho.chinh, "worktree", "list", "--porcelain"),
 		log: git(kho.chinh, "log", "--all", "--format=%H %s"),
+		dot: existsSync(join(kho.chinh, ".acceptance-runs")) ? readdirSync(join(kho.chinh, ".acceptance-runs")).sort().join(",") : "",
 	});
 }
 
