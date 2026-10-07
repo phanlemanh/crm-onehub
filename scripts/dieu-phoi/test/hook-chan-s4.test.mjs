@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -169,4 +170,42 @@ test('giữ khoá mà chạy nền lệnh nặng không bọc → 2 kèm lệnh 
   const chua = chayHook(JSON.stringify({ tool_name: 'Bash', cwd: trong.wt, tool_input: { command: lenh, run_in_background: true } }), { timDot: trong.timDot });
   assert.equal(chua.ma, 2);
   assert.match(chua.loi, /^chan-s4: khoá s4 đang trống nhưng chưa cấp cho phiên này/);
+});
+
+test('dòng lệnh bọc chạy ra cùng kết quả như lệnh gốc: ma trận bảy dạng', () => {
+  const { dot, wt, timDot } = dung();
+  fs.mkdirSync(path.join(dot, 'khoa', 's4'), { recursive: true });
+  fs.writeFileSync(path.join(dot, 'khoa', 's4', 'chu.json'), JSON.stringify({ phien: 'P1', worktree: wt }));
+  fs.writeFileSync(path.join(wt, 'repin-lane.mjs'), "console.log(JSON.stringify({ argv: process.argv.slice(2), tz: process.env.TZ ?? null, x: process.env.X ?? null }));\n");
+  fs.mkdirSync(path.join(wt, 'sub'));
+  const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => !k.startsWith('GIT_') && k !== 'TZ'));
+  env.X = 'gia-tri-x';
+  const chay = (lenh) => spawnSync('bash', ['-c', lenh], { cwd: wt, env, encoding: 'utf8' });
+  const dang = [
+    ['lệnh trần', 'node ./repin-lane.mjs a b', { argv: ['a', 'b'], tz: null }],
+    ['tiền tố biến môi trường', 'TZ=UTC node ./repin-lane.mjs a', { argv: ['a'], tz: 'UTC' }],
+    ['cd &&', 'cd sub && node ../repin-lane.mjs c', { argv: ['c'], tz: null }],
+    ['nháy đơn có khoảng trắng', "node ./repin-lane.mjs 'hai tu'", { argv: ['hai tu'], tz: null }],
+    ['biến "$X"', 'node ./repin-lane.mjs "$X"', { argv: ['gia-tri-x'], tz: null }],
+    ['ống | cat', 'node ./repin-lane.mjs p | cat', { argv: ['p'], tz: null }],
+    ['đối số --slug=a', 'node ./repin-lane.mjs --slug=a', { argv: ['--slug=a'], tz: null }],
+  ];
+  assert.equal(dang.length, 7);
+  let daDo = 0;
+  for (const [ten, lenh, mong] of dang) {
+    const goc = chay(lenh);
+    assert.equal(goc.status, 0, `${ten}: lệnh gốc phải chạy được`);
+    const raGoc = JSON.parse(goc.stdout);
+    assert.deepEqual([raGoc.argv, raGoc.tz, raGoc.x], [mong.argv, mong.tz, 'gia-tri-x'], ten);
+    const kq = chayHook(JSON.stringify({ tool_name: 'Bash', cwd: wt, tool_input: { command: lenh, run_in_background: true } }), { timDot });
+    assert.equal(kq.ma, 2, ten);
+    const boc = kq.loi.split('phải chạy qua giu-nhip: ')[1];
+    assert.ok(boc, ten);
+    const raBoc = chay(boc);
+    assert.equal(raBoc.status, goc.status, `${ten}: mã thoát của dòng bọc — ${raBoc.stderr}`);
+    assert.equal(raBoc.stdout, goc.stdout, ten);
+    assert.deepEqual(chayHook(JSON.stringify({ tool_name: 'Bash', cwd: wt, tool_input: { command: boc, run_in_background: true } }), { timDot }), { ma: 0 }, ten);
+    daDo++;
+  }
+  assert.equal(daDo, dang.length);
 });

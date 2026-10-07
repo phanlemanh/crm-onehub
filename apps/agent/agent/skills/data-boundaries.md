@@ -41,9 +41,10 @@ value stored in `AppSetting`. Names, stages and amounts are fine; a phone
 number is not. The reply lives on the platform's servers and on the phone,
 outside the CRM's retention and audit.
 
-**5. Trợ lý OKR:** nhà cung cấp model là bên nhận; nội dung OKR chỉ gửi đi khi có ZDR, kể cả eval. The OKR session's root sees only a fixed
-sentence; the OKR data block goes to the `tro_ly_okr` child alone, through a model that
-carries the ZDR flag on every call.
+**5. Trợ lý OKR:** nhà cung cấp model là bên nhận; nội dung OKR chỉ gửi đi khi có ZDR, kể cả eval. The OKR session's root gets only a fixed
+sentence as input; the OKR data block goes to the `tro_ly_okr` child alone. Both the root and
+the child run on a model that carries the ZDR flag on every call, so whatever the child replies
+to the root stays with a ZDR provider.
 
 ## What belongs on a record
 

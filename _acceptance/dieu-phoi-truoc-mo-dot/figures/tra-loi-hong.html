@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tệp trả lời hỏng được cách ly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap&subset=vietnamese" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper: #fafafa;
+      --color-ink: #171717;
+      --color-muted: #575757;
+      --font-sans: 'Geist', system-ui, sans-serif;
+      --font-serif: 'Lora', serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1000px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 880px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Flowchart · d-1 · AC-1 · AC-2 · AC-3</p>
+    <h1>Tệp trả lời hỏng: cách ly và báo, nhịp vẫn chạy</h1>
+
+    <svg viewBox="0 0 1000 812" xmlns="http://www.w3.org/2000/svg" font-family="'Geist', sans-serif">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="500" y1="104" x2="500" y2="140" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="640" y1="204" x2="744" y2="204" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="360" y1="204" x2="256" y2="204" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <line x1="500" y1="268" x2="500" y2="320" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="500" y1="392" x2="500" y2="432" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="512" x2="500" y2="560" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="616" x2="500" y2="664" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <g font-family="'Geist Mono', monospace" font-size="9" letter-spacing="0.06em" text-anchor="middle">
+        <rect x="680" y="182" width="24" height="16" rx="2" fill="#fafafa"/>
+        <text x="692" y="194" fill="#575757">có</text>
+        <rect x="280" y="182" width="56" height="16" rx="2" fill="#fafafa"/>
+        <text x="308" y="194" fill="#575757">trước</text>
+        <rect x="512" y="284" width="44" height="16" rx="2" fill="#fafafa"/>
+        <text x="534" y="296" fill="#006B4F">không</text>
+        <rect x="512" y="528" width="128" height="16" rx="2" fill="#fafafa"/>
+        <text x="576" y="540" fill="#575757">sau đó, ngoài nhịp</text>
+        <rect x="512" y="632" width="56" height="16" rx="2" fill="#fafafa"/>
+        <text x="540" y="644" fill="#575757">nhịp kế</text>
+      </g>
+
+      <rect x="360" y="40" width="280" height="64" rx="32" fill="#fafafa"/>
+      <rect x="360" y="40" width="280" height="64" rx="32" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="500" y="64" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">mỗi nhịp: yêu cầu <tspan font-family="'Geist Mono', monospace" font-weight="500">gia-han</tspan></text>
+      <text x="500" y="80" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">có tệp trả lời</text>
+      <text x="500" y="94" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tra-loi/&lt;id&gt;.json</text>
+
+      <polygon points="500,140 640,204 500,268 360,204" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="196" fill="#171717" font-size="11" font-weight="600" text-anchor="middle">đọc + kiểm hình dạng</text>
+      <text x="500" y="212" fill="#171717" font-size="11" font-weight="600" text-anchor="middle">được?</text>
+      <text x="500" y="230" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">docTraLoi · kiemTraLoi</text>
+
+      <rect x="744" y="176" width="216" height="56" rx="28" fill="#fafafa"/>
+      <rect x="744" y="176" width="216" height="56" rx="28" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="852" y="200" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">áp gia hạn như cũ</text>
+      <text x="852" y="216" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">gồm tệp có uoc_phut</text>
+
+      <rect x="40" y="152" width="216" height="104" rx="6" fill="#fafafa"/>
+      <rect x="40" y="152" width="216" height="104" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="56" y="176" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">TRƯỚC VÒNG NÀY</text>
+      <text x="56" y="200" fill="#171717" font-size="12" font-weight="600">một tệp hỏng làm</text>
+      <text x="56" y="216" fill="#171717" font-size="12" font-weight="600">mọi nhịp ném</text>
+      <text x="56" y="238" fill="#575757" font-size="11">không cấp, không thu hồi</text>
+
+      <rect x="320" y="320" width="360" height="72" rx="6" fill="#fafafa"/>
+      <rect x="320" y="320" width="360" height="72" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="500" y="344" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">chuyển vào <tspan font-family="'Geist Mono', monospace" font-weight="500">tra-loi/hong/</tspan>, giữ tên cũ</text>
+      <text x="500" y="362" fill="#171717" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">một sự kiện tra-loi-hong · can_phan: true</text>
+      <text x="500" y="378" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">ly_do: "tra-loi/&lt;id&gt;.json: " + trường hỏng</text>
+
+      <rect x="296" y="432" width="408" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="500" y="456" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">yêu cầu coi như chưa trả lời</text>
+      <text x="500" y="474" fill="#171717" font-size="11" text-anchor="middle">các khoá khác vẫn cấp / thu hồi trong cùng nhịp</text>
+      <text x="500" y="494" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">hạn thuê P1 không đổi · trang-thai.json, bang.html vẫn ghi</text>
+
+      <rect x="344" y="560" width="312" height="56" rx="6" fill="#fafafa"/>
+      <rect x="344" y="560" width="312" height="56" rx="6" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <text x="500" y="584" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">giám sát ghi lại tệp đúng</text>
+      <text x="500" y="600" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tra-loi/&lt;id&gt;.json · ket_qua: duyet</text>
+
+      <rect x="340" y="664" width="320" height="64" rx="32" fill="#fafafa"/>
+      <rect x="340" y="664" width="320" height="64" rx="32" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="500" y="692" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">nhịp kế áp gia hạn đúng một lần</text>
+      <text x="500" y="710" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">nhịp sau: không thêm tra-loi-hong</text>
+
+      <g fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">
+        <text x="652" y="264">AC-2</text>
+        <text x="696" y="360">AC-1</text>
+        <text x="720" y="476">AC-1</text>
+        <text x="676" y="700">AC-3</text>
+      </g>
+
+      <line x1="40" y1="752" x2="960" y2="752" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="770" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <rect x="40" y="782" width="24" height="12" rx="6" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="72" y="792" fill="#575757" font-size="9">bắt đầu / kết cục</text>
+      <rect x="168" y="782" width="24" height="12" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="200" y="792" fill="#575757" font-size="9">bước của máy</text>
+      <rect x="284" y="782" width="24" height="12" rx="2" fill="rgba(87,87,87,0.10)" stroke="#666666" stroke-width="1"/>
+      <text x="316" y="792" fill="#575757" font-size="9">việc tay của giám sát</text>
+      <polygon points="432,788 444,782 456,788 444,794" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="464" y="792" fill="#575757" font-size="9">quyết định</text>
+      <rect x="532" y="782" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="564" y="792" fill="#575757" font-size="9">hành vi mới của vòng</text>
+      <rect x="680" y="782" width="24" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="712" y="792" fill="#575757" font-size="9">hành vi cũ, đã bỏ</text>
+    </svg>
+  </div>
+</body>
+</html>

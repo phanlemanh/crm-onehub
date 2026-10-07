@@ -1,6 +1,6 @@
-import { ketQuaTroLy } from "@crm/validation/okr-tro-ly";
 import { z } from "zod";
 import type { SessionPurpose } from "../session-purpose";
+import { TRO_LY_OKR } from "./config";
 
 export const SUBAGENT_TRO_LY_OKR = "tro_ly_okr";
 
@@ -65,9 +65,5 @@ export function ketThucTuKetQua(r: KetQuaCon): string | null {
 		return null;
 	}
 	if (r.isError) return `hong:${ketQuaLoi.parse(r.output).code}`;
-	const kq = ketQuaTroLy.safeParse(r.output);
-	if (!kq.success) return "hong:ket-qua-hong";
-	return kq.data.trangThai === "da-nop"
-		? "da-nop"
-		: `khong-lam-duoc:${kq.data.maLoi ?? "khong-ro"}`;
+	return TRO_LY_OKR.ketThuc.khongNop;
 }

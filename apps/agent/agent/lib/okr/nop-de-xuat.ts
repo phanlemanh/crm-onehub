@@ -11,8 +11,10 @@ import {
 	okrTroLyViec,
 } from "@crm/validation/okr-tro-ly";
 import type { NguCanhKenh } from "../phien-con";
+import { TRO_LY_OKR } from "./config";
 import { soLanNop } from "./doc";
 import { dungGoiDeXuat, goiKiemTu } from "./goi-ngu-canh";
+import { dongViecOkr, maKhongLamDuoc } from "./viec";
 import { viecCuaPhienCon } from "./viec-con";
 
 export type BoKiem = (dong: DongGopY, goi: GoiKiem) => KetQuaKiemDong;
@@ -54,6 +56,7 @@ export async function nopDeXuatVao(
 	}
 	const doc = okrTroLyViec.safeParse(hang.payload);
 	if (!doc.success || doc.data.viec !== "de-xuat") {
+		await dongViecOkr(hang.id, maKhongLamDuoc("khuon-hong"));
 		return khongGhi("tu-choi", "task payload unreadable");
 	}
 	const viec = doc.data;
@@ -65,6 +68,7 @@ export async function nopDeXuatVao(
 		nac: viec.nac,
 	});
 	if (!goi) {
+		await dongViecOkr(hang.id, maKhongLamDuoc("thieu-du-lieu"));
 		return khongGhi("thieu-du-lieu", "the Objective or Key Result is gone");
 	}
 	const daKiem = kiemLanLuot(input.dong, goiKiemTu(goi), kiem);
@@ -93,6 +97,7 @@ export async function nopDeXuatVao(
 			maLoai: kq.qua ? null : kq.maLoai,
 		})),
 	});
+	await dongViecOkr(hang.id, TRO_LY_OKR.ketThuc.daNop);
 	const cho = daKiem.filter(({ kq }) => kq.qua).length;
 	return {
 		ketQua: "da-ghi",

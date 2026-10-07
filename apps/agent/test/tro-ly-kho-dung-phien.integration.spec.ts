@@ -163,7 +163,7 @@ describe("kd-loi-dan", () => {
 });
 
 describe("kd-zdr", () => {
-	test("kd-zdr: bang viet truoc 8 purpose qua dinh nghia model goc that, session.started chi tra ma chuoi (luat eve), kho mang ZDR o session va step voi khoa rieng va chung, con lai nhu truoc", async () => {
+	test("kd-zdr: bang viet truoc 8 purpose qua dinh nghia model goc that, session.started chi tra ma chuoi (luat eve), kho mang ZDR o session va step voi khoa rieng va chung, okr mang ZDR cua Tro ly OKR, con lai nhu truoc", async () => {
 		expect(SESSION_PURPOSES.length).toBe(8);
 		const sai: string[] = [];
 		for (const [ten, env] of [
@@ -193,8 +193,9 @@ describe("kd-zdr", () => {
 				sai.push(`kd-zdr: khoa sai ${ten}`);
 			}
 		}
-		const khac = SESSION_PURPOSES.filter((p) => p !== "kho");
-		expect(khac.length).toBe(7);
+		const coZdr = ["kho", "okr"];
+		const khac = SESSION_PURPOSES.filter((p) => !coZdr.includes(p));
+		expect(khac.length).toBe(6);
 		await writeAgentModel(db, null);
 		try {
 			for (const p of SESSION_PURPOSES) {
@@ -210,7 +211,7 @@ describe("kd-zdr", () => {
 					phienGia(p) as never,
 				);
 				if (
-					(p === "kho") !==
+					coZdr.includes(p) !==
 					(buoc != null && !luaChonChuoi.safeParse(buoc).success)
 				) {
 					sai.push(`kd-zdr: ${p} step.started lech`);
