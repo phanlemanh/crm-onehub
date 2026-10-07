@@ -20,7 +20,7 @@ import { okrMessages } from "@/lib/messages/okr";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { SOAN_UI } from "./cau-hinh";
 import { type CuocDangSoan, donViCua } from "./dung-cuoc-soan";
-import type { QuyetBang } from "./khoi-ngu-canh";
+import { dongKhoi, type QuyetBang } from "./khoi-ngu-canh";
 import type { CuocSoan, DongKr, DongSoan } from "./kieu";
 import { loiQuyetTu } from "./loi-cua";
 import { canSo, demDong, duongTheoDonVi, soCua } from "./luat-ban-nhap";
@@ -33,21 +33,11 @@ export function daDuaVao(s: CuocDangSoan, cuoc: CuocSoan): boolean {
 	return s.duaVao.data?.ok === true || cuoc.trangThai === "da-dua-vao";
 }
 
-const loaiKhoi = (d: DongSoan): QuyetBang["loai"] =>
-	d.loai === "muc-tieu-moi"
-		? "muc-tieu"
-		: d.loai === "kr-moi"
-			? "kr"
-			: "can-chinh";
-
-const chuDong = (d: DongSoan): string =>
-	d.loai === "can-chinh-moi" ? d.tenDich : (d.giaTriCuoi ?? d.ten);
-
 const quyetCua = (
 	d: DongSoan,
 	cach: QuyetBang["cach"],
-	chu = chuDong(d),
-): QuyetBang => ({ cach, loai: loaiKhoi(d), chu, khoaDong: d.khoaDong });
+	chu = dongKhoi(d).chu,
+): QuyetBang => ({ cach, loai: dongKhoi(d).loai, chu, khoaDong: d.khoaDong });
 
 function useNguCanhThe(
 	s: CuocDangSoan,
@@ -205,7 +195,7 @@ export function BanNhap({
 				coNhap
 					? gio
 						? m.dong.meta(String(soDong), gio)
-						: m.dong.metaChuaNop(String(soDong))
+						: m.man.soDong(String(soDong))
 					: undefined
 			}
 			actions={
@@ -285,6 +275,11 @@ export function ChanDuaVao({ s, cuoc }: { s: CuocDangSoan; cuoc: CuocSoan }) {
 		soMucTieu === 0 || s.thieu.length > 0 || s.duaVao.isPending || s.dangTraLoi;
 	return (
 		<Field data-chan="dua-vao">
+			{thieuKr.length > 0 ? (
+				<FieldDescription data-thieu-dich>
+					{m.banNhap.thieuDich(String(thieuKr.length))}
+				</FieldDescription>
+			) : null}
 			{thieuKr.length > 0 ? (
 				<div className="flex flex-wrap items-center gap-2" data-con-thieu>
 					<FieldDescription>{m.dong.conThieu}:</FieldDescription>

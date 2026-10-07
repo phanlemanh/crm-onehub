@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { DongSoan } from "./kieu";
 
 export const KHOI_MO = "⟦ngữ cảnh từ trang soạn⟧";
 export const KHOI_DONG = "⟦hết ngữ cảnh⟧";
@@ -62,4 +63,11 @@ export function rutGonQuyet(ds: readonly QuyetBang[]): QuyetBang[] {
 		);
 		return i < 0 ? [...ra, q] : ra.filter((_, j) => j !== i);
 	}, []);
+}
+
+export function dongKhoi(d: DongSoan): { loai: LoaiDongKhoi; chu: string } {
+	if (d.loai === "muc-tieu-moi")
+		return { loai: "muc-tieu", chu: d.giaTriCuoi ?? d.ten };
+	if (d.loai === "kr-moi") return { loai: "kr", chu: d.giaTriCuoi ?? d.ten };
+	return { loai: "can-chinh", chu: d.tenDich };
 }

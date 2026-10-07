@@ -1,18 +1,22 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { act } from "react";
 import { donViCua } from "@/app/(app)/[slug]/okr/soan/dung-cuoc-soan";
+import { docKhoi, KHOI_MO } from "@/app/(app)/[slug]/okr/soan/khoi-ngu-canh";
 import { duongTheoDonVi } from "@/app/(app)/[slug]/okr/soan/luat-ban-nhap";
 import {
 	BAN_NHAP,
 	bam,
 	CUOC,
 	cc,
+	daDung,
+	daGui,
 	datAgent,
 	datDanhSach,
 	go,
 	goiCua,
 	kr,
 	mt,
+	nguoiNoi,
 	cho,
 	DauTrangOkr,
 	dat,
@@ -293,7 +297,7 @@ describe("k2-trang-thai", () => {
 				await moTrang();
 				const dau = q('[data-slot="kara-artifact-header"]');
 				expect(dau?.textContent).toContain(m.dong.tieuDe);
-				expect(dau?.textContent).toContain(m.dong.metaChuaNop("7"));
+				expect(dau?.textContent).toContain(m.man.soDong("7"));
 			} else {
 				datDanhSach({ cuoc: { ...CUOC, trangThai: "bo" }, dong: BAN_NHAP });
 				await moTrang();
@@ -360,7 +364,7 @@ describe("k2-dong", () => {
 			});
 			expect(
 				`nut khong theo hau qua: ${chinh[0]?.textContent?.trim()}`,
-			).not.toBe(`nut khong theo hau qua: ${m.banNhap.nut.nhan}`);
+			).not.toBe("nut khong theo hau qua: Nhận");
 			expect(nutTrong(d.id, "sua") === null).toBe(loai === "can-chinh");
 			expect(nutTrong(d.id, "bac")?.textContent?.trim()).toBe(m.dong.boQua);
 			khang += 4;
@@ -720,5 +724,258 @@ describe("k2-dua-vao", () => {
 			`hoan tac sau dua vao: ${qa("button").filter((b) => b.textContent?.trim() === "Hoàn tác").length}`,
 		).toBe("hoan tac sau dua vao: 0");
 		expect(qa('[data-dong] button[data-variant="default"]').length).toBe(0);
+	});
+});
+
+const daCuon: Element[] = [];
+type CoCuon = { scrollIntoView: Element["scrollIntoView"] };
+let protoCuon: CoCuon | null = null;
+let cuonGoc: Element["scrollIntoView"] | null = null;
+const datCuon = () => {
+	daCuon.length = 0;
+	let p: object | null = Object.getPrototypeOf(document.createElement("div"));
+	while (p && !Object.hasOwn(p, "scrollIntoView")) p = Object.getPrototypeOf(p);
+	protoCuon = p as CoCuon | null;
+	if (!protoCuon) return;
+	cuonGoc = protoCuon.scrollIntoView;
+	protoCuon.scrollIntoView = function ghi(this: Element) {
+		daCuon.push(this);
+	};
+};
+const traCuon = () => {
+	if (protoCuon && cuonGoc) protoCuon.scrollIntoView = cuonGoc;
+};
+
+const krVao = (khoa: string, ten: string, kieu = "tang-toi") => ({
+	khoa,
+	ten,
+	kieu,
+	donVi: kieu === "moc" ? "mốc" : "khách",
+	khoiDiemGoiY: null,
+	viSao: "Vì số đo được.",
+});
+const mtVao = (khoa: string, ten: string, kr: ReturnType<typeof krVao>[]) => ({
+	khoa,
+	ten,
+	viSaoLucNay: "Quý này cần.",
+	loai: "cam-ket",
+	viSao: "Vì khách lớn.",
+	canChinhId: null,
+	kr,
+});
+const NOP_1 = {
+	mucTieu: [
+		mtVao("m1", "Giữ khách lớn miền Bắc", [
+			krVao("k11", "Khách lớn ký lại hợp đồng"),
+			krVao("k12", "Khách lớn mua thêm"),
+			krVao("k13", "Rà soát tuyến trước hạn", "moc"),
+		]),
+		mtVao("m2", "Mở tuyến Hà Nội – Hải Phòng", [
+			krVao("k21", "Chuyến đúng hẹn"),
+			krVao("k22", "Khảo sát tuyến", "moc"),
+		]),
+	],
+};
+const NOP_2 = {
+	mucTieu: [
+		mtVao("m1", "Giữ khách lớn và mua thêm", [
+			krVao("k11", "Khách lớn ký lại hợp đồng"),
+			krVao("k14", "Đối tác mới ký"),
+		]),
+		mtVao("m2", "Mở tuyến Hà Nội – Hải Phòng", [
+			krVao("k21", "Chuyến đúng hẹn"),
+			krVao("k22", "Khảo sát tuyến", "moc"),
+			krVao("k13", "Rà soát tuyến trước hạn", "moc"),
+		]),
+	],
+};
+const nop = (id: string, input: unknown): ReturnType<typeof nguoiNoi> =>
+	({
+		id,
+		role: "assistant",
+		parts: [
+			{
+				type: "tool-nop_ban_nhap",
+				toolCallId: `goi-${id}`,
+				state: "output-available",
+				input,
+				output: {},
+			},
+		],
+	}) as unknown as ReturnType<typeof nguoiNoi>;
+
+describe("k2-moc", () => {
+	beforeEach(datCuon);
+	afterEach(traCuon);
+
+	test("ba lần nộp thành ba mốc đúng chữ; bấm mốc tới dòng đổi đầu tiên và làm nổi; nhãn «vừa sửa» về mốc mới nhất; dòng vừa sửa có chữ cũ gạch; mốc trỏ dòng không còn thì về đầu bản nháp", async () => {
+		await datBanNhap([
+			mt("1", "Giữ khách lớn miền Bắc"),
+			kr("11", "1", "Khách lớn ký lại hợp đồng"),
+		]);
+		await moTrang();
+		await datAgent({ status: "streaming" });
+		await datBanNhap([
+			mt("1", "Giữ khách lớn và mua thêm"),
+			kr("11", "1", "Khách lớn ký lại hợp đồng"),
+			kr("14", "1", "Đối tác mới ký"),
+		]);
+		await datAgent({
+			status: "ready",
+			data: {
+				messages: [
+					nop("n1", NOP_1),
+					nop("n2", NOP_2),
+					nop("n3", { mucTieu: 1 }),
+				],
+			},
+		});
+		await nhip(10);
+		const moc = qa('[data-kara-turn="checkpoint"]');
+		expect(moc.map((o) => o.textContent)).toEqual([
+			`Kara soạn bản nháp đầu: ${m.moc.dau("2", "5")}`,
+			`Kara sửa bản nháp: ${m.moc.themKr("1")} · ${m.moc.sua("1")} · ${m.moc.chuyen("1")} · ${m.moc.bo("1")}`,
+			m.moc.khongDoc,
+		]);
+		await bam(moc[1]?.querySelector("button") ?? null);
+		await nhip(3);
+		const dauDoi = q('[data-khoa-dong="muc-tieu-moi:m1"]');
+		expect(
+			`moc khong noi ban nhap: ${daCuon.includes(dauDoi as Element)}`,
+		).toBe("moc khong noi ban nhap: true");
+		expect(dauDoi?.closest("[data-noi]")).not.toBeNull();
+		const vuaSua = q('[data-nhan-dong="vua-sua"]');
+		expect(vuaSua?.tagName).toBe("BUTTON");
+		daCuon.length = 0;
+		await bam(vuaSua);
+		await nhip(3);
+		expect(daCuon.at(-1)).toBe(moc[2] as Element);
+		expect(dongEl("1")?.querySelector("del")?.textContent).toBe(
+			"Giữ khách lớn miền Bắc",
+		);
+		daCuon.length = 0;
+		await bam(moc[0]?.querySelector("button") ?? null);
+		await nhip(3);
+		expect(daCuon.at(-1)).toBe(q("[data-ban-nhap]") as Element);
+	});
+});
+
+const oSoanEl = () =>
+	q('[data-slot="kara-composer"] textarea') as HTMLTextAreaElement | null;
+async function guiOSoan(chu: string): Promise<void> {
+	await go(oSoanEl(), chu);
+	await bam(q('[data-slot="kara-composer"] button[type="submit"]'));
+}
+
+describe("k2-hoi-dong", () => {
+	test("hỏi Kara từ một dòng: chip trên ô soạn, focus ô soạn; tin gửi mang khối dòng; bong bóng hiện chip, không lộ dấu khối; gỡ chip thì gửi nguyên văn", async () => {
+		await datBanNhap([
+			mt("1", "Giữ khách lớn miền Bắc"),
+			kr("11", "1", "Tăng số đại lý gắn bó"),
+		]);
+		await moTrang();
+		await bam(nutTrong("11", "hoi"));
+		await nhip(3);
+		expect(q('[data-slot="kara-context"]')?.textContent).toContain(
+			"KR · Tăng số đại lý gắn bó",
+		);
+		expect(document.activeElement).toBe(oSoanEl());
+		await guiOSoan("ngắn hơn");
+		const tin = daGui.at(-1) ?? "";
+		expect(docKhoi(tin)).toEqual({
+			khoi: { dong: { loai: "kr", chu: "Tăng số đại lý gắn bó" }, quyet: [] },
+			nguoi: "ngắn hơn",
+		});
+		await datAgent({ data: { messages: [nguoiNoi("u1", tin)] } });
+		const bong = q('[data-kara-turn="user"]');
+		expect(bong?.textContent).toContain("Tăng số đại lý gắn bó");
+		expect(bong?.textContent).toContain("ngắn hơn");
+		expect(
+			`lo dau khoi trong bong bong: ${bong?.textContent?.includes(KHOI_MO)}`,
+		).toBe("lo dau khoi trong bong bong: false");
+		await bam(nutTrong("11", "hoi"));
+		await bam(q('[data-slot="kara-context"] button'));
+		await guiOSoan("x");
+		expect(daGui.at(-1)).toBe("x");
+	});
+
+	test("khổ hẹp: bấm hỏi trên dòng thì mở tab Trò chuyện", async () => {
+		const tra = beRong(375);
+		try {
+			await datBanNhap([mt("1", "Giữ khách lớn miền Bắc")]);
+			await moTrang(false, true, "?tab=ban-nhap");
+			await bam(nutTrong("1", "hoi"));
+			await nhip(3);
+			expect(urlDoi.at(-1)).toBe("");
+		} finally {
+			tra();
+		}
+	});
+});
+
+describe("k2-he-thong", () => {
+	test("quyết trên bảng thành dòng «Sẽ gửi kèm lượt sau», nhận rồi hoàn tác thì rút; gửi lượt kế mang hai quyết; đọc lại thì dòng hệ thống đứng trước bong bóng", async () => {
+		const DS = [
+			mt("1", "Giữ khách lớn miền Bắc", "nhan"),
+			kr("12", "1", "Tăng số đại lý gắn bó"),
+			kr("13", "1", "Đối tác mới ký"),
+			mt("2", "Mở tuyến Hà Nội – Hải Phòng"),
+		];
+		await datBanNhap(DS);
+		await moTrang();
+		const sau = (id: string, tt: "nhan" | "bac" | "cho") =>
+			DS.map((d) => (d.id === id ? { ...d, trangThai: tt } : d));
+		await datBanNhap(sau("12", "nhan"));
+		await bam(nutTrong("12", "nhan"));
+		await datBanNhap(
+			sau("12", "nhan").map((d) =>
+				d.id === "2" ? { ...d, trangThai: "bac" as const } : d,
+			),
+		);
+		await bam(nutTrong("2", "bac"));
+		const daBac = sau("12", "nhan").map((d) =>
+			d.id === "2" ? { ...d, trangThai: "bac" as const } : d,
+		);
+		await datBanNhap(
+			daBac.map((d) =>
+				d.id === "13" ? { ...d, trangThai: "nhan" as const } : d,
+			),
+		);
+		await bam(nutTrong("13", "nhan"));
+		await nhip(5);
+		await datBanNhap(daBac);
+		await bam(nutHoanTac(dongEl("13")));
+		await nhip(5);
+		const he = qa('[data-kara-turn="system"]').at(-1);
+		expect(he?.textContent).toContain("Sẽ gửi kèm lượt sau:");
+		expect(he?.textContent).toContain("Tăng số đại lý gắn bó");
+		expect(he?.textContent).toContain("Mở tuyến Hà Nội – Hải Phòng");
+		expect(he?.textContent?.includes("Đối tác mới ký")).toBe(false);
+		await guiOSoan("tiếp");
+		const tin = daGui.at(-1) ?? "";
+		expect(docKhoi(tin).khoi?.quyet.length).toBe(2);
+		expect(
+			`hang quyet gui hai lan: ${qa('[data-kara-turn="system"]').length}`,
+		).toBe("hang quyet gui hai lan: 0");
+		await datAgent({ data: { messages: [nguoiNoi("u1", tin)] } });
+		const luot = qa("[data-kara-turn]");
+		const i = luot.findIndex(
+			(o) => o.getAttribute("data-kara-turn") === "user",
+		);
+		expect(luot[i - 1]?.getAttribute("data-kara-turn")).toBe("system");
+		expect(luot[i]?.textContent).toBe("tiếp");
+	});
+});
+
+describe("k2-khoa-dung", () => {
+	test("Kara đang soạn: ô soạn có nút Dừng, bấm chấm dứt lượt", async () => {
+		await datBanNhap([mt("1", "Giữ khách lớn miền Bắc")]);
+		await moTrang();
+		await datAgent({ status: "streaming" });
+		const dung = q('[data-slot="kara-composer"] button[aria-label="Dừng"]');
+		expect(dung).not.toBeNull();
+		const truoc = daDung;
+		await bam(dung);
+		expect(daDung - truoc).toBe(1);
 	});
 });

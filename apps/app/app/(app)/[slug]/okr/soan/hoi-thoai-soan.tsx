@@ -1,24 +1,6 @@
 "use client";
 
-import Checkmark from "@carbon/icons-react/es/Checkmark";
-import {
-	Conversation,
-	ConversationContent,
-	ConversationEmptyState,
-} from "@crm/ui/components/ai-elements/conversation";
-import {
-	Message,
-	MessageContent,
-	MessageResponse,
-} from "@crm/ui/components/ai-elements/message";
-import {
-	PromptInput,
-	PromptInputBody,
-	PromptInputFooter,
-	PromptInputSubmit,
-	PromptInputTextarea,
-	PromptInputTools,
-} from "@crm/ui/components/ai-elements/prompt-input";
+import { MessageResponse } from "@crm/ui/components/ai-elements/message";
 import {
 	Suggestion,
 	Suggestions,
@@ -29,38 +11,67 @@ import {
 	AlertDescription,
 	AlertTitle,
 } from "@crm/ui/components/alert";
+import { Badge } from "@crm/ui/components/badge";
 import { Button } from "@crm/ui/components/button";
-import { FieldDescription } from "@crm/ui/components/field";
-import { Icon } from "@crm/ui/components/icon";
-import { useLocale } from "@crm/ui/components/locale-provider";
-import Logo from "@crm/ui/components/logo";
-import { Marker, MarkerContent, MarkerIcon } from "@crm/ui/components/marker";
-import { MessageAvatar } from "@crm/ui/components/message";
-import { Spinner } from "@crm/ui/components/spinner";
-import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyTitle,
+} from "@crm/ui/components/empty";
+import { KaraComposer } from "@crm/ui/components/kara/composer";
+import { KaraRetry, KaraState } from "@crm/ui/components/kara/state";
+import { type KaraStep, KaraSteps } from "@crm/ui/components/kara/steps";
+import {
+	KaraCheckpoint,
+	KaraSystemLine,
+	KaraTranscript,
+	KaraTurn,
+} from "@crm/ui/components/kara/transcript";
+import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import type { TranscriptItem } from "@/lib/agent-transcript";
+import type { ReactNode } from "react";
+import type { TranscriptItem, TranscriptMessage } from "@/lib/agent-transcript";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { useTRPC } from "@/lib/trpc/client";
 import { SOAN_UI } from "./cau-hinh";
 import { type CuocDangSoan, donViCua } from "./dung-cuoc-soan";
+import {
+	docKhoi,
+	dongKhoi,
+	type KhoiNguCanh,
+	type QuyetBang,
+} from "./khoi-ngu-canh";
 import type { CuocSoan } from "./kieu";
 import type { LyDoHong } from "./loi-cua";
+import type { MocNop, TomTatMoc } from "./moc-nop";
 import { tachLuotTroLy } from "./tach-cau-hoi";
 
 type LyDoSoan = keyof OkrSoanMessages["lyDo"];
 
-function AvatarTroLy() {
-	return (
-		<MessageAvatar square>
-			<Logo className="size-5" />
-		</MessageAvatar>
-	);
+export function chuQuyet(m: OkrSoanMessages, ds: readonly QuyetBang[]): string {
+	return ds
+		.map((q) => m.heThong.cach[q.cach](m.heThong.loai[q.loai], q.chu))
+		.join(" · ");
 }
 
-function LuotTroLy({
+export function chuMoc(m: OkrSoanMessages, tom: TomTatMoc): string {
+	if (!tom.docDuoc) return m.moc.khongDoc;
+	if (tom.dau) return m.moc.dau(String(tom.mucTieu), String(tom.kr));
+	const phan = [
+		tom.themMucTieu > 0 ? m.moc.themMucTieu(String(tom.themMucTieu)) : null,
+		tom.themKr > 0 ? m.moc.themKr(String(tom.themKr)) : null,
+		tom.sua > 0 ? m.moc.sua(String(tom.sua)) : null,
+		tom.chuyen > 0 ? m.moc.chuyen(String(tom.chuyen)) : null,
+		tom.bo > 0 ? m.moc.bo(String(tom.bo)) : null,
+	].filter((x) => x !== null);
+	return phan.length > 0 ? phan.join(" · ") : m.moc.khongDoi;
+}
+
+function LuotKara({
 	chu,
 	goiY,
 	gui,
@@ -73,67 +84,138 @@ function LuotTroLy({
 }) {
 	const { loiDan, cauHoi } = tachLuotTroLy(chu);
 	return (
-		<div className="flex min-w-0 gap-2" data-luot="tro-ly">
-			<AvatarTroLy />
-			<Message from="assistant" className="min-w-0">
-				<MessageContent>
-					{loiDan ? <MessageResponse>{loiDan}</MessageResponse> : null}
-					{cauHoi.map((c) => (
-						<div className="flex flex-col gap-2" key={c.hoi} data-cau-hoi>
-							<p>{c.hoi}</p>
-							{goiY && c.goiY.length > 0 ? (
-								<Suggestions aria-label={m.hoiThoai.goiY(c.hoi)}>
-									{c.goiY.map((g) => (
-										<Suggestion
-											key={g}
-											suggestion={g}
-											onClick={gui}
-											data-goi-y
-										/>
-									))}
-								</Suggestions>
-							) : null}
-						</div>
-					))}
-				</MessageContent>
-			</Message>
-		</div>
+		<KaraTurn from="kara">
+			<div className="flex flex-col gap-2" data-luot="tro-ly">
+				{loiDan ? <MessageResponse>{loiDan}</MessageResponse> : null}
+				{cauHoi.map((c) => (
+					<div className="flex flex-col gap-2" key={c.hoi} data-cau-hoi>
+						<p>{c.hoi}</p>
+						{goiY && c.goiY.length > 0 ? (
+							<Suggestions aria-label={m.hoiThoai.goiY(c.hoi)}>
+								{c.goiY.map((g) => (
+									<Suggestion key={g} suggestion={g} onClick={gui} data-goi-y />
+								))}
+							</Suggestions>
+						) : null}
+					</div>
+				))}
+			</div>
+		</KaraTurn>
 	);
 }
 
-function MucLuot({
-	item,
-	goiY,
-	gui,
+function LuotNguoi({
+	khoi,
+	nguoi,
 	m,
 }: {
-	item: TranscriptItem;
-	goiY: boolean;
-	gui: (chu: string) => void;
+	khoi: KhoiNguCanh | null;
+	nguoi: string;
 	m: OkrSoanMessages;
 }) {
-	if (item.kind === "said") {
-		if (item.mine) {
-			if (item.text === SOAN_UI.luotMoDau) return null;
-			return (
-				<Message from="user" className="min-w-0" data-luot="nguoi">
-					<MessageContent className="text-pretty" translate="no">
-						{item.text}
-					</MessageContent>
-				</Message>
-			);
-		}
-		return <LuotTroLy chu={item.text} goiY={goiY} gui={gui} m={m} />;
-	}
-	if (item.kind !== "did" || item.tool !== SOAN_UI.congCuNop) return null;
 	return (
-		<Marker data-luot="nop">
-			<MarkerIcon>
-				{item.pending ? <Spinner /> : <Icon icon={Checkmark} />}
-			</MarkerIcon>
-			<MarkerContent>{m.hoiThoai.daNop}</MarkerContent>
-		</Marker>
+		<>
+			{khoi && khoi.quyet.length > 0 ? (
+				<KaraSystemLine>{chuQuyet(m, khoi.quyet)}</KaraSystemLine>
+			) : null}
+			<KaraTurn from="user">
+				{khoi?.dong ? (
+					<>
+						<Badge variant="secondary" data-chip-dong>
+							{m.dong.nguCanh(m.heThong.loai[khoi.dong.loai], khoi.dong.chu)}
+						</Badge>{" "}
+					</>
+				) : null}
+				{nguoi}
+			</KaraTurn>
+		</>
 	);
+}
+
+function tenBuoc(m: OkrSoanMessages, tool: string): string {
+	const b = m.buoc;
+	return Object.hasOwn(b, tool) ? b[tool as keyof typeof b] : b.khac;
+}
+
+function buocCua(
+	m: OkrSoanMessages,
+	items: readonly TranscriptItem[],
+): KaraStep[] {
+	return items.flatMap((i): KaraStep[] =>
+		i.kind === "did" && i.tool !== SOAN_UI.congCuNop
+			? [
+					{
+						id: i.id,
+						label: tenBuoc(m, i.tool),
+						state: i.pending ? "running" : i.failed ? "error" : "done",
+					},
+				]
+			: [],
+	);
+}
+
+function TinNhan({
+	tin,
+	mocs,
+	goiY,
+	s,
+	m,
+	moMoc,
+}: {
+	tin: TranscriptMessage;
+	mocs: ReadonlyMap<string, MocNop>;
+	goiY: boolean;
+	s: CuocDangSoan;
+	m: OkrSoanMessages;
+	moMoc: (moc: MocNop) => void;
+}) {
+	const mui = useMessages();
+	const buoc = tin.mine ? [] : buocCua(m, tin.items);
+	const ra: ReactNode[] = [];
+	if (buoc.length > 0)
+		ra.push(
+			<div key={`${tin.id}-buoc`} data-luot="buoc" className="ps-10">
+				<KaraSteps steps={buoc} />
+			</div>,
+		);
+	for (const item of tin.items) {
+		if (item.kind === "said") {
+			if (item.mine) {
+				if (item.text === SOAN_UI.luotMoDau) continue;
+				const { khoi, nguoi } = docKhoi(item.text);
+				ra.push(<LuotNguoi key={item.id} khoi={khoi} nguoi={nguoi} m={m} />);
+			} else {
+				ra.push(
+					<LuotKara
+						key={item.id}
+						chu={item.text}
+						goiY={goiY}
+						gui={s.gui}
+						m={m}
+					/>,
+				);
+			}
+			continue;
+		}
+		const moc = item.kind === "did" ? mocs.get(item.id) : undefined;
+		if (!moc) continue;
+		const tom = moc.tom;
+		ra.push(
+			<KaraCheckpoint
+				key={item.id}
+				summary={chuMoc(m, tom)}
+				label={
+					!tom.docDuoc
+						? m.moc.khongDoc
+						: tom.dau
+							? mui.karaKhung.mocDau(chuMoc(m, tom))
+							: undefined
+				}
+				onSelect={() => moMoc(moc)}
+			/>,
+		);
+	}
+	return <>{ra}</>;
 }
 
 function cauLyDoHong(m: OkrSoanMessages, lyDo: LyDoHong | null): string {
@@ -152,34 +234,52 @@ function LuotLoi({
 	loiMo: LyDoSoan | null;
 }) {
 	return (
-		<Alert role="alert" data-luot="loi">
-			<AlertTitle>{m.hoiThoai.loi}</AlertTitle>
-			<AlertDescription>
-				<div aria-live="polite">
-					<p>
-						{loiMo
-							? m.lyDo[loiMo]
-							: s.chuaGuiLai
-								? m.hoiThoai.chuaGuiLai
-								: cauLyDoHong(m, s.lyDoHong)}
-					</p>
-					{s.lyDoHong?.daHoan ? <p>{m.hoiThoai.khongTinh}</p> : null}
-					{s.lanThu > 0 ? <p>{m.hoiThoai.daThuLai(String(s.lanThu))}</p> : null}
-				</div>
-			</AlertDescription>
-			<AlertAction>
-				<Button
-					size="sm"
-					variant="outline"
-					data-nut="thu-lai"
-					disabled={s.dangThu || s.moLai.isPending}
+		<Empty
+			border="solid"
+			size="compact"
+			data-kara-state="error"
+			data-luot="loi"
+		>
+			<EmptyHeader>
+				<EmptyTitle>{m.hoiThoai.loi}</EmptyTitle>
+				<EmptyDescription>
+					<span aria-live="polite" className="flex flex-col gap-1">
+						<span>
+							{loiMo
+								? m.lyDo[loiMo]
+								: s.chuaGuiLai
+									? m.hoiThoai.chuaGuiLai
+									: cauLyDoHong(m, s.lyDoHong)}
+						</span>
+						{s.lyDoHong?.daHoan ? <span>{m.hoiThoai.khongTinh}</span> : null}
+						{s.lanThu > 0 ? (
+							<span>{m.hoiThoai.daThuLai(String(s.lanThu))}</span>
+						) : null}
+					</span>
+				</EmptyDescription>
+			</EmptyHeader>
+			<EmptyContent>
+				<KaraRetry
 					onClick={s.thuLai}
-				>
-					{m.hoiThoai.thuLai}
-				</Button>
-			</AlertAction>
-		</Alert>
+					disabled={s.dangThu || s.moLai.isPending}
+				/>
+			</EmptyContent>
+		</Empty>
 	);
+}
+
+function lyDoKhoa(
+	s: CuocDangSoan,
+	cuoc: CuocSoan,
+	m: OkrSoanMessages,
+): string | undefined {
+	if (!s.khoaSoan || s.dangTraLoi) return undefined;
+	if (s.cuocDong) return m.hoiThoai.cuocDongMoTa;
+	if (s.hetLuot) return m.hoiThoai.hetLuot(String(cuoc.tranLuot));
+	if (s.lyDoLuot) return m.lyDoLuot[s.lyDoLuot];
+	if (s.chuaCauHinh) return m.nut.chuaCauHinh;
+	if (s.hong || s.dangThu) return m.hoiThoai.loi;
+	return m.hoiThoai.khoaKhiSoan;
 }
 
 function OSoan({
@@ -194,7 +294,6 @@ function OSoan({
 	moCuoc: (cuocSoanId: string) => void;
 }) {
 	const trpc = useTRPC();
-	const { chu, doiChu } = s;
 	const moMoi = useMutation(
 		trpc.okr.soanMo.mutationOptions({
 			onSuccess: (kq) => {
@@ -202,42 +301,32 @@ function OSoan({
 			},
 		}),
 	);
-	const ghi = s.hetLuot
-		? m.hoiThoai.hetLuot(String(cuoc.tranLuot))
-		: s.dangTraLoi
-			? m.hoiThoai.khoaKhiSoan
-			: m.hoiThoai.phim;
 	const tuChoiMo = moMoi.data?.ok === false ? moMoi.data.lyDo : null;
+	const ngu = s.hoiVeDong;
 	return (
-		<div className="flex flex-col gap-2">
-			<PromptInput
-				onSubmit={() => {
-					s.gui(chu);
-					doiChu("");
-				}}
-				data-o-soan={s.khoaSoan ? "khoa" : "mo"}
-			>
-				<PromptInputBody>
-					<PromptInputTextarea
-						aria-label={m.hoiThoai.nhan}
-						placeholder={m.hoiThoai.placeholder}
-						value={chu}
-						onChange={(e) => doiChu(e.currentTarget.value)}
-						disabled={s.khoaSoan}
-						translate="no"
-					/>
-				</PromptInputBody>
-				<PromptInputFooter>
-					<PromptInputTools />
-					<PromptInputSubmit
-						aria-label={m.hoiThoai.gui}
-						disabled={s.khoaSoan || chu.trim() === ""}
-					/>
-				</PromptInputFooter>
-			</PromptInput>
-			{cuoc.trangThai === "dang" ? (
-				<FieldDescription data-o-soan-ghi>{ghi}</FieldDescription>
-			) : null}
+		<div
+			className="flex flex-col gap-2"
+			data-o-soan={s.khoaSoan ? "khoa" : "mo"}
+		>
+			<KaraComposer
+				onSubmit={s.gui}
+				onStop={s.dung}
+				status={s.dangTraLoi ? "busy" : "ready"}
+				label={m.hoiThoai.nhan}
+				placeholder={m.hoiThoai.placeholder}
+				context={
+					ngu
+						? {
+								label: m.dong.nguCanh(
+									m.heThong.loai[dongKhoi(ngu).loai],
+									dongKhoi(ngu).chu,
+								),
+								onRemove: () => s.datHoiVeDong(null),
+							}
+						: undefined
+				}
+				lockedReason={lyDoKhoa(s, cuoc, m)}
+			/>
 			{s.hetLuot && cuoc.trangThai === "dang" ? (
 				<Button
 					size="sm"
@@ -253,9 +342,9 @@ function OSoan({
 				</Button>
 			) : null}
 			{tuChoiMo ? (
-				<FieldDescription data-loi="mo-cuoc-moi">
+				<p className="text-muted-foreground text-sm" data-loi="mo-cuoc-moi">
 					{m.lyDo[tuChoiMo]}
-				</FieldDescription>
+				</p>
 			) : null}
 		</div>
 	);
@@ -268,6 +357,7 @@ export function HoiThoaiSoan({
 	lyDo,
 	quanTri,
 	moCuoc,
+	moMoc,
 }: {
 	s: CuocDangSoan;
 	cuoc: CuocSoan;
@@ -275,12 +365,14 @@ export function HoiThoaiSoan({
 	lyDo: LyDoSoan | null;
 	quanTri: boolean;
 	moCuoc: (cuocSoanId: string) => void;
+	moMoc: (moc: MocNop) => void;
 }) {
 	const m = okrSoanMessages(useLocale());
 	const { slug } = useParams<{ slug: string }>();
-	const tuTroLy = s.transcript.filter((t) => !t.mine);
-	const cuoiTroLy = tuTroLy.at(-1)?.id ?? null;
+	const tuKara = s.transcript.filter((t) => !t.mine);
+	const cuoiKara = tuKara.at(-1)?.id ?? null;
 	const loiMo = s.moLai.data?.ok === false ? s.moLai.data.lyDo : null;
+	const mocs = new Map(s.mocs.map((x) => [x.itemId, x] as const));
 	const rong = s.transcript.length === 0 && !s.dangTraLoi;
 	return (
 		<>
@@ -308,56 +400,42 @@ export function HoiThoaiSoan({
 					<AlertDescription>{m.hoiThoai.cuocDongMoTa}</AlertDescription>
 				</Alert>
 			) : null}
-			<Conversation aria-label={m.hoiThoai.nhan}>
-				<ConversationContent>
-					{rong && cuoc.soLuot === 0 && !s.cuocDong ? (
-						<ConversationEmptyState data-rong="mo-dau">
-							<ThinkingIndicator label={m.hoiThoai.moDau} />
-						</ConversationEmptyState>
-					) : null}
-					{rong && cuoc.soLuot > 0 && !s.cuocDong ? (
-						<ConversationEmptyState
-							title={m.hoiThoai.khongDocLai}
-							description={m.hoiThoai.khongDocLaiMoTa}
+			<KaraTranscript
+				empty={
+					rong && cuoc.soLuot > 0
+						? {
+								title: m.hoiThoai.khongDocLai,
+								description: m.hoiThoai.khongDocLaiMoTa,
+							}
+						: undefined
+				}
+			>
+				{s.transcript.map((tin) => (
+					<TinNhan
+						key={tin.id}
+						tin={tin}
+						mocs={mocs}
+						goiY={tin.id === cuoiKara && !s.khoaSoan}
+						s={s}
+						m={m}
+						moMoc={moMoc}
+					/>
+				))}
+				{s.dangTraLoi ? (
+					<KaraTurn from="kara">
+						<KaraState
+							kind="working"
+							label={cuoiKara ? m.hoiThoai.dangSoan : m.hoiThoai.moDau}
 						/>
-					) : null}
-					{s.transcript.map((tin) =>
-						tin.items.map((item) => (
-							<MucLuot
-								key={item.id}
-								item={item}
-								goiY={tin.id === cuoiTroLy && !s.khoaSoan}
-								gui={s.gui}
-								m={m}
-							/>
-						)),
-					)}
-					{s.dangTraLoi ? (
-						<div
-							className="flex min-w-0 gap-2"
-							role="status"
-							aria-live="polite"
-							aria-busy="true"
-						>
-							<AvatarTroLy />
-							<ThinkingIndicator
-								label={cuoiTroLy ? m.hoiThoai.dangSoan : m.hoiThoai.moDau}
-							/>
-						</div>
-					) : null}
-					{s.hong || s.dangThu ? <LuotLoi s={s} m={m} loiMo={loiMo} /> : null}
-					{s.lyDoLuot ? (
-						<Alert role="alert" data-tu-choi={s.lyDoLuot}>
-							<AlertTitle>{m.lyDoLuot[s.lyDoLuot]}</AlertTitle>
-						</Alert>
-					) : null}
-					{s.chuaCauHinh ? (
-						<Alert role="alert" data-tu-choi="chua-cau-hinh">
-							<AlertTitle>{m.nut.chuaCauHinh}</AlertTitle>
-						</Alert>
-					) : null}
-				</ConversationContent>
-			</Conversation>
+					</KaraTurn>
+				) : null}
+				{s.hong || s.dangThu ? <LuotLoi s={s} m={m} loiMo={loiMo} /> : null}
+				{s.quyetBang.length > 0 ? (
+					<KaraSystemLine>
+						{m.heThong.seGui(chuQuyet(m, s.quyetBang))}
+					</KaraSystemLine>
+				) : null}
+			</KaraTranscript>
 			<OSoan s={s} cuoc={cuoc} m={m} moCuoc={moCuoc} />
 		</>
 	);

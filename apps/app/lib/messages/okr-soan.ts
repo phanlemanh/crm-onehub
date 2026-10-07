@@ -51,7 +51,6 @@ const vi = {
 		thongTin: "Thông tin cuộc soạn",
 	},
 	man: {
-		tieuDe: "Soạn OKR cùng Trợ lý",
 		luot: (luot: string, tran: string) => `lượt ${luot}/${tran}`,
 		tabs: "Màn soạn",
 		tabTroChuyen: "Trò chuyện",
@@ -62,7 +61,6 @@ const vi = {
 		khongMo: "Không mở được cuộc soạn này",
 		khongMoMoTa:
 			"Cuộc không còn, hoặc bạn không xem được nó. Đóng màn này rồi mở lại từ khung đơn vị.",
-		thuLai: "Thử lại",
 	},
 	hoiThoai: {
 		nhan: "Trò chuyện với Trợ lý OKR",
@@ -72,11 +70,8 @@ const vi = {
 			"Bản nháp bên cạnh vẫn còn đủ; bạn nói tiếp được ở ô bên dưới.",
 		dangSoan: "Trợ lý OKR đang soạn…",
 		placeholder: "Trả lời, hoặc nói bạn muốn đổi gì trong bản nháp…",
-		gui: "Gửi",
-		phim: "Enter gửi · Shift+Enter xuống dòng",
 		khoaKhiSoan: "Ô soạn mở lại khi Trợ lý trả lời xong.",
 		goiY: (hoi: string) => `Gợi ý trả lời: ${hoi}`,
-		daNop: "Đã nộp bản nháp lên bảng",
 		loi: "Trợ lý OKR chưa trả lời được",
 		loiMoTa: CAU_QUA_45S,
 		loiMoTaKhac: CAU_DUNG_GIUA,
@@ -99,7 +94,6 @@ const vi = {
 		daThuLai: (n: string) => `Đã thử lại ${n} lần`,
 		chuaGuiLai:
 			"Chưa gửi lại được — lượt trước chưa dừng hẳn. Thử lại sau ít phút.",
-		thuLai: "Thử lại",
 		hetLuot: (n: string) =>
 			`Đã dùng hết ${n} lượt của cuộc này — đưa vào bộ OKR hoặc mở cuộc mới`,
 		moCuocMoi: "Mở cuộc mới",
@@ -136,10 +130,7 @@ const vi = {
 			"da-bo": "đã bỏ",
 		} satisfies Record<NhanDong, string>,
 		nut: {
-			nhan: "Nhận",
 			sua: "Sửa",
-			bac: "Bác",
-			nhanBanSua: "Nhận bản đã sửa",
 			huy: "Huỷ",
 		},
 		ket: {
@@ -299,7 +290,6 @@ const vi = {
 	dong: {
 		tieuDe: "Bản nháp",
 		meta: (n: string, gio: string) => `${n} dòng · sửa lúc ${gio}`,
-		metaChuaNop: (n: string) => `${n} dòng`,
 		dangSoanDau: "Kara đang soạn bản nháp đầu…",
 		chiDongCho: "Chỉ dòng chờ",
 		moiDong: "Mọi dòng",
@@ -316,7 +306,6 @@ const vi = {
 		daThem: "Đã thêm",
 		daBoQua: "Đã bỏ qua",
 		conThieu: "Còn thiếu",
-		krMoc: "KR mốc — không cần số",
 		nguCanh: (loai: string, chu: string) => `${loai} · ${chu}`,
 	},
 	loiQuyet: {
@@ -333,6 +322,19 @@ const vi = {
 		bo: (n: string) => `bỏ ${n}`,
 		khongDoi: "không đổi dòng nào",
 		khongDoc: "Kara nộp bản nháp",
+	},
+	buoc: {
+		read_file: "đọc tài liệu của đơn vị",
+		grep: "tìm trong tài liệu",
+		glob: "liệt kê tài liệu",
+		load_skill: "nạp cách soạn OKR",
+		web_search: "tìm trên web",
+		web_fetch: "đọc một trang web",
+		todo: "lập danh sách việc",
+		agent: "nhờ một trợ lý phụ",
+		bash: "chạy một lệnh",
+		write_file: "ghi ghi chú",
+		khac: "làm một bước",
 	},
 	heThong: {
 		seGui: (s: string) => `Sẽ gửi kèm lượt sau: ${s}`,
@@ -396,7 +398,6 @@ const en: OkrSoanMessages = {
 		thongTin: "Drafting details",
 	},
 	man: {
-		tieuDe: "Draft OKRs with the Assistant",
 		luot: (luot, tran) => `turn ${luot}/${tran}`,
 		tabs: "Drafting screen",
 		tabTroChuyen: "Conversation",
@@ -407,7 +408,6 @@ const en: OkrSoanMessages = {
 		khongMo: "This drafting session could not be opened",
 		khongMoMoTa:
 			"It no longer exists, or you cannot see it. Close this screen and open it again from the unit.",
-		thuLai: "Try again",
 	},
 	hoiThoai: {
 		nhan: "Conversation with the OKR Assistant",
@@ -417,11 +417,8 @@ const en: OkrSoanMessages = {
 			"The draft alongside is complete; you can keep talking in the box below.",
 		dangSoan: "The OKR Assistant is drafting…",
 		placeholder: "Answer, or say what you want changed in the draft…",
-		gui: "Send",
-		phim: "Enter sends · Shift+Enter adds a line",
 		khoaKhiSoan: "The box reopens when the Assistant finishes.",
 		goiY: (hoi) => `Suggested answers: ${hoi}`,
-		daNop: "Put the draft on the board",
 		loi: "The OKR Assistant did not answer",
 		loiMoTa: CAU_QUA_45S_EN,
 		loiMoTaKhac: CAU_DUNG_GIUA_EN,
@@ -446,7 +443,6 @@ const en: OkrSoanMessages = {
 		daThuLai: (n) => `Tried again ${n} times`,
 		chuaGuiLai:
 			"Could not send again — the previous turn has not fully stopped. Try again in a few minutes.",
-		thuLai: "Try again",
 		hetLuot: (n) =>
 			`All ${n} turns of this session are used — add it to the OKRs or open a new session`,
 		moCuocMoi: "Open a new session",
@@ -481,10 +477,7 @@ const en: OkrSoanMessages = {
 			"da-bo": "dropped",
 		},
 		nut: {
-			nhan: "Accept",
 			sua: "Edit",
-			bac: "Reject",
-			nhanBanSua: "Accept the edit",
 			huy: "Cancel",
 		},
 		ket: { accepted: "Accepted", dismissed: "Rejected", skipped: "Skipped" },
@@ -636,7 +629,6 @@ const en: OkrSoanMessages = {
 	dong: {
 		tieuDe: "Draft",
 		meta: (n: string, gio: string) => `${n} lines · edited ${gio}`,
-		metaChuaNop: (n: string) => `${n} lines`,
 		dangSoanDau: "Kara is drafting the first version…",
 		chiDongCho: "Only pending",
 		moiDong: "All lines",
@@ -653,7 +645,6 @@ const en: OkrSoanMessages = {
 		daThem: "Added",
 		daBoQua: "Skipped",
 		conThieu: "Still missing",
-		krMoc: "Milestone KR — no numbers needed",
 		nguCanh: (loai: string, chu: string) => `${loai} · ${chu}`,
 	},
 	loiQuyet: {
@@ -671,6 +662,19 @@ const en: OkrSoanMessages = {
 		bo: (n: string) => `${n} dropped`,
 		khongDoi: "no lines changed",
 		khongDoc: "Kara submitted the draft",
+	},
+	buoc: {
+		read_file: "read the unit's documents",
+		grep: "search the documents",
+		glob: "list the documents",
+		load_skill: "load the OKR drafting guide",
+		web_search: "search the web",
+		web_fetch: "read a web page",
+		todo: "make a task list",
+		agent: "ask a helper",
+		bash: "run a command",
+		write_file: "write notes",
+		khac: "take a step",
 	},
 	heThong: {
 		seGui: (s: string) => `Sent with the next turn: ${s}`,

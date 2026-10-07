@@ -26,3 +26,9 @@ export function cuonToiDong(khoa: string): boolean {
 export function sauMotNhip(viec: () => void): void {
 	setTimeout(viec, 0);
 }
+
+export function focusOSoan(): void {
+	document
+		.querySelector<HTMLTextAreaElement>('[data-slot="kara-composer"] textarea')
+		?.focus();
+}

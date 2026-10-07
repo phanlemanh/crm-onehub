@@ -217,6 +217,9 @@ function ketCua(
 				{ket === "accepted" ? m.dong.daThem : m.dong.daBoQua} {nhan} ·{" "}
 				<span translate="no">{giaTri}</span>
 				{hoanDuoc && keo.length > 0 ? m.dong.kemKr(String(keo.length)) : null}
+				{d.trangThai === "bac" && keo.length > 0
+					? ` · ${m.banNhap.bacCon(String(keo.length))}`
+					: null}
 			</>
 		),
 		onUndo: hoanDuoc ? () => n.hoan(d, keo) : undefined,
@@ -272,7 +275,7 @@ function OSoKr({
 }) {
 	if (!canSo(kr))
 		return (
-			<FieldDescription data-o-so={kr.id}>{m.dong.krMoc}</FieldDescription>
+			<FieldDescription data-o-so={kr.id}>{m.banNhap.moc}</FieldDescription>
 		);
 	const so = soCua(kr, n.s.so);
 	const thieu = n.s.thieu.includes(kr.id);

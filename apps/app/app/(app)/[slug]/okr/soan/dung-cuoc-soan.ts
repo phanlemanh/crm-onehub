@@ -41,9 +41,14 @@ import {
 	krThieuSo,
 	soBanNhap,
 } from "./luat-ban-nhap";
-import { type QuyetBang, rutGonQuyet } from "./khoi-ngu-canh";
+import {
+	dongKhoi,
+	type QuyetBang,
+	rutGonQuyet,
+	vietKhoi,
+} from "./khoi-ngu-canh";
 import { cuonToiDong, cuonToiMocCuoi, sauMotNhip } from "./cuon";
-import { gioNopCuoi } from "./moc-nop";
+import { gioNopCuoi, mocTuTranscript } from "./moc-nop";
 import { docSoDaLuu, ghiSoDaLuu, khoaSo } from "./so-theo-khoa";
 
 export function donViCua(cuoc: CuocSoan): DonViSoan {
@@ -332,7 +337,16 @@ export function useCuocSoan({
 	const gui = (chu: string) => {
 		const s = chu.trim();
 		if (!s || khoaSoan) return;
-		void guiThang(s);
+		const tin = vietKhoi(
+			{
+				dong: hoiVeDong ? dongKhoi(hoiVeDong) : null,
+				quyet: rutGonQuyet(quyetBang),
+			},
+			s,
+		);
+		setQuyetBang([]);
+		datHoiVeDong(null);
+		void guiThang(tin);
 	};
 
 	useMountEffect(() => {
@@ -410,6 +424,8 @@ export function useCuocSoan({
 		thuLai,
 		moLai,
 		transcript,
+		mocs: mocTuTranscript(transcript.flatMap((t) => t.items)),
+		dung: () => agent.stop(),
 		gioNopCuoi: gioNopCuoi(transcript, agent.data.messages, agent.events),
 		nhan: nhap.ket.nhan,
 		truocTen: nhap.ket.truocTen,

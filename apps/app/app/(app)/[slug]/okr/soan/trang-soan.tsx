@@ -19,6 +19,7 @@ import type { Thread } from "@/lib/agent-session";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { useTRPC } from "@/lib/trpc/client";
 import { BanNhap } from "./bang-nhap";
+import { focusOSoan, sauMotNhip } from "./cuon";
 import { SOAN_UI } from "./cau-hinh";
 import {
 	donViCua,
@@ -137,6 +138,12 @@ function Than({
 							lyDo={lyDo}
 							quanTri={quanTri}
 							moCuoc={moCuoc}
+							moMoc={(moc) => {
+								void datTab("ban-nhap");
+								s.cuonToiDong(
+									moc.tom.docDuoc ? (moc.tom.dongDoi[0] ?? "") : "",
+								);
+							}}
 						/>
 					</section>
 				}
@@ -152,6 +159,7 @@ function Than({
 							hoi={(d) => {
 								s.datHoiVeDong(d);
 								void datTab("tro-chuyen");
+								sauMotNhip(focusOSoan);
 							}}
 							veMoc={() => {
 								void datTab("tro-chuyen");
