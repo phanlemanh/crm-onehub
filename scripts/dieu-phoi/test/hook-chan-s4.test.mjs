@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { chayHook, phanLoai } from '../hook-chan-s4.mjs';
+import { chayHook, lenhBoc, phanLoai } from '../hook-chan-s4.mjs';
 import { CFG_BIEN } from './mau-thu.mjs';
 
 const tam = () => fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'dp-')));
@@ -82,4 +82,91 @@ test('hang-viec.json sai không đổi hook chặn S4', () => {
   fs.mkdirSync(path.join(dot, 'khoa', 's4'), { recursive: true });
   fs.writeFileSync(path.join(dot, 'khoa', 's4', 'chu.json'), JSON.stringify({ phien: 'P1', worktree: wt }));
   assert.deepEqual(chayHook(wf(wt), { timDot }), { ma: 0 });
+});
+
+const META = (ten, moTa = 'S4 VERIFY') => `export const meta = {\n  name: '${ten}',\n  description: '${moTa}',\n};\nexport default async function chay() {}\n`;
+function thuMucWf() {
+  const d = tam();
+  fs.writeFileSync(path.join(d, 'acceptance-verify.js'), META('acceptance-verify'));
+  fs.writeFileSync(path.join(d, 'acceptance-verify-dieu-phoi-va-bien-r2.js'), META('acceptance-verify'));
+  fs.writeFileSync(path.join(d, 's4-r3.js'), META('acceptance-verify'));
+  fs.writeFileSync(path.join(d, 'execute-parallel.js'), META('execute-parallel', 'chạy trước acceptance-verify'));
+  return d;
+}
+const goiWf = (cwd, tool_input) => JSON.stringify({ tool_name: 'Workflow', cwd, tool_input });
+
+test('S4 workflow mọi đường vào: năm dạng → chặn khi chưa có lượt, 0 khi khoá đúng worktree', () => {
+  const { dot, wt, timDot } = dung();
+  const d = thuMucWf();
+  const dang = [
+    ['tên gốc', { scriptPath: path.join(d, 'acceptance-verify.js') }],
+    ['tên bản chép', { scriptPath: path.join(d, 'acceptance-verify-dieu-phoi-va-bien-r2.js') }],
+    ['tên lạ có meta', { scriptPath: path.join(d, 's4-r3.js') }],
+    ['gọi theo name', { name: 'acceptance-verify' }],
+    ['script nội tuyến', { script: META('acceptance-verify') }],
+  ];
+  assert.equal(dang.length, 5);
+  let soChan = 0;
+  for (const [ten, vao] of dang) {
+    const kq = chayHook(goiWf(wt, vao), { timDot });
+    assert.equal(kq.ma, 2, ten);
+    assert.match(kq.loi, /^chan-s4: khoá s4 đang trống nhưng chưa cấp cho phiên này\. Ghi đơn xin\/<phiên>-s4\.json/, ten);
+    soChan++;
+  }
+  assert.equal(soChan, dang.length);
+  fs.mkdirSync(path.join(dot, 'khoa', 's4'), { recursive: true });
+  fs.writeFileSync(path.join(dot, 'khoa', 's4', 'chu.json'), JSON.stringify({ phien: 'P1', worktree: wt }));
+  let soQua = 0;
+  for (const [ten, vao] of dang) {
+    assert.deepEqual(chayHook(goiWf(wt, vao), { timDot }), { ma: 0 }, ten);
+    soQua++;
+  }
+  assert.equal(soQua, dang.length);
+});
+
+test('chiều im S4 workflow: meta khác, tệp vắng, script khác → 0; đầu vào hỏng nhắc bản chép → 2', () => {
+  const { wt, timDot } = dung();
+  const d = thuMucWf();
+  const im = [
+    ['meta khác', { scriptPath: path.join(d, 'execute-parallel.js') }],
+    ['tệp vắng tên khác', { scriptPath: path.join(d, 's4-r9.js') }],
+    ['script khác', { script: META('khac', 'gọi acceptance-verify sau') }],
+  ];
+  for (const [ten, vao] of im) assert.deepEqual(chayHook(goiWf(wt, vao), { timDot }), { ma: 0 }, ten);
+  fs.writeFileSync(path.join(d, 'execute-parallel.js'), META('acceptance-verify'));
+  assert.equal(chayHook(goiWf(wt, { scriptPath: path.join(d, 'execute-parallel.js') }), { timDot }).ma, 2);
+  const hong = chayHook('{"tool_name":"Workflow","tool_input":{"scriptPath":"/w/acceptance-verify-x-r2.js"', { timDot });
+  assert.equal(hong.ma, 2);
+  assert.match(hong.loi, /^chan-s4: lỗi nội bộ: .* — chặn để an toàn; báo phiên giám sát$/);
+});
+
+test('giữ khoá mà chạy nền lệnh nặng không bọc → 2 kèm lệnh bọc; bọc, tiền cảnh, lệnh thường → 0', () => {
+  const { dot, wt, timDot } = dung();
+  for (const tn of ['s4', 'duong-nen']) {
+    fs.mkdirSync(path.join(dot, 'khoa', tn), { recursive: true });
+    fs.writeFileSync(path.join(dot, 'khoa', tn, 'chu.json'), JSON.stringify({ phien: 'P1', worktree: wt }));
+  }
+  const nen = (command, run_in_background = true) => JSON.stringify({ tool_name: 'Bash', cwd: wt, tool_input: { command, run_in_background } });
+  const lenh = 'node x/repin-lane.mjs --write';
+  const o = [
+    ['repin-lane nền không bọc', nen(lenh), 2, /^chan-s4: lệnh nền giữ khoá s4 phải chạy qua giu-nhip: node (\S+giu-nhip\.mjs) -- node x\/repin-lane\.mjs --write$/],
+    ['duong-nen nền không bọc', nen('node k/duong-nen.mjs --root . --slug a'), 2, /^chan-s4: lệnh nền giữ khoá duong-nen phải chạy qua giu-nhip: node (\S+giu-nhip\.mjs) -- node k\/duong-nen\.mjs --root \. --slug a$/],
+    ['nhắc giu-nhip mà không bọc', nen('node x/repin-lane.mjs --ghi-chu giu-nhip'), 2, /^chan-s4: lệnh nền giữ khoá s4 phải chạy qua giu-nhip: /],
+    ['repin-lane nền có bọc', nen(lenhBoc(lenh)), 0, null],
+    ['repin-lane tiền cảnh', nen(lenh, false), 0, null],
+    ['lệnh không nặng chạy nền', nen('sleep 60'), 0, null],
+  ];
+  for (const [ten, raw, ma, mau] of o) {
+    const kq = chayHook(raw, { timDot });
+    assert.equal(kq.ma, ma, ten);
+    if (mau) {
+      const m = kq.loi.match(mau);
+      assert.ok(m, `${ten}: ${kq.loi}`);
+      if (m[1]) assert.equal(fs.existsSync(m[1]), true, m[1]);
+    }
+  }
+  const trong = dung();
+  const chua = chayHook(JSON.stringify({ tool_name: 'Bash', cwd: trong.wt, tool_input: { command: lenh, run_in_background: true } }), { timDot: trong.timDot });
+  assert.equal(chua.ma, 2);
+  assert.match(chua.loi, /^chan-s4: khoá s4 đang trống nhưng chưa cấp cho phiên này/);
 });
