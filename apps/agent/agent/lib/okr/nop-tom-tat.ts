@@ -14,7 +14,9 @@ import {
 	okrTroLyViec,
 } from "@crm/validation/okr-tro-ly";
 import type { NguCanhKenh } from "../phien-con";
+import { TRO_LY_OKR } from "./config";
 import { daCoTomTat } from "./doc";
+import { dongViecOkr, maKhongLamDuoc } from "./viec";
 import { type ViecCon, viecCuaPhienCon } from "./viec-con";
 
 const LOAI_VIEC =
@@ -66,7 +68,10 @@ export async function nopTomTatVao(
 		return khongGhi("tu-choi", "task is not a running weekly summary");
 	}
 	const viec = viecTomTatCua(hang);
-	if (!viec) return khongGhi("tu-choi", "task payload unreadable");
+	if (!viec) {
+		await dongViecOkr(hang.id, maKhongLamDuoc("khuon-hong"));
+		return khongGhi("tu-choi", "task payload unreadable");
+	}
 	if (await daCoTomTat(hang.id)) {
 		return khongGhi("tu-choi", "already submitted");
 	}
@@ -82,6 +87,7 @@ export async function nopTomTatVao(
 			},
 			LUAT_TOM_TAT,
 		);
+		await dongViecOkr(hang.id, TRO_LY_OKR.ketThuc.daNop);
 		return {
 			ketQua: "da-ghi",
 			lyDo: "",
@@ -90,6 +96,7 @@ export async function nopTomTatVao(
 		};
 	} catch (loi) {
 		if (loi instanceof PhongKhongTomTatDuoc) {
+			await dongViecOkr(hang.id, maKhongLamDuoc("thieu-du-lieu"));
 			return khongGhi("thieu-du-lieu", "the department is gone or archived");
 		}
 		if (loi instanceof TomTatDaCo) {

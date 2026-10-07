@@ -20,6 +20,7 @@ import { donDep, gieoNguoi, moXuong } from "./support/nhac-gieo";
 import { donOkr, gieoChuKy, gieoMucTieu } from "./support/okr-gieo";
 import { donTroLy, gieoCauHinhAi } from "./support/tro-ly-gieo";
 import {
+	dongDaNop,
 	type NguCanhCon,
 	nguCanhCon,
 	nguCanhGoc,
@@ -130,7 +131,7 @@ afterAll(async () => {
 }, 30_000);
 
 describe("tro-ly-okr-giu-viec", () => {
-	test("giu-viec: phiên con phát sự kiện mỗi 10 giây trong 90 giây thì việc không đóng; kết quả ở gốc đóng da-nop", async () => {
+	test("giu-viec: phiên con phát sự kiện mỗi 10 giây trong 90 giây thì việc không đóng; tool nộp đóng da-nop, kết quả ở gốc giữ nguyên", async () => {
 		const viec = await batDau(MOC);
 		const con = nguCanhCon(viec.phienGoc);
 		for (let giay = 10; giay <= 90; giay += 10) {
@@ -144,6 +145,7 @@ describe("tro-ly-okr-giu-viec", () => {
 				);
 			}
 		}
+		await dongDaNop(viec.id);
 		const moc = hookGoc.events[
 			"action.result"
 		] as unknown as XuLyKetQuaHanhDong;
@@ -156,7 +158,7 @@ describe("tro-ly-okr-giu-viec", () => {
 						subagentName: "tro_ly_okr",
 						callId: "goi-tro-ly",
 						isError: false,
-						output: { trangThai: "da-nop", maLoi: null } as never,
+						output: "done",
 					},
 				},
 			},

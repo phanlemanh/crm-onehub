@@ -182,14 +182,9 @@ describe("tro-ly-okr-cach-ly", () => {
 		expect(await kiemTapTool(THU_MUC_CON)).toEqual([]);
 	});
 
-	test("model, ZDR, mức suy nghĩ và trần cố định ở cấp subagent", () => {
+	test("model, ZDR, mức suy nghĩ và trần cố định ở cấp subagent; không khuôn kết quả", () => {
 		expect(kiemMoHinh(troLyOkr as never)).toEqual([]);
-		const s = z.toJSONSchema(
-			(troLyOkr as { outputSchema: z.ZodType }).outputSchema,
-			{ target: "draft-7" },
-		);
-		expect(s.type).toBe("object");
-		expect(JSON.stringify(s)).not.toContain("$ref");
+		expect("outputSchema" in troLyOkr).toBe(false);
 	});
 
 	test("đối chứng: bộ đọc thấy thiếu cờ khi định nghĩa sai", () => {

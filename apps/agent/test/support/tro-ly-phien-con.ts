@@ -71,7 +71,14 @@ export async function moViecDeXuat(v: {
 }
 
 export async function dongDaNop(taskId: string): Promise<void> {
-	if (!(await completeTask(taskId, "da-nop"))) {
-		throw new Error(`viec ${taskId} da dong truoc khi nop xong`);
+	if (await completeTask(taskId, "da-nop")) return;
+	const hang = await db.agentTask.findUniqueOrThrow({
+		where: { id: taskId },
+		select: { outcome: true },
+	});
+	if (hang.outcome !== "da-nop") {
+		throw new Error(
+			`viec ${taskId} da dong ${hang.outcome} truoc khi nop xong`,
+		);
 	}
 }
