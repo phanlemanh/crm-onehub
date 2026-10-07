@@ -579,13 +579,13 @@ describe("k2-khoa", () => {
 			q('[data-nut="dua-vao"]') as HTMLButtonElement | null;
 		expect(biKhoa(nutDuaVao())).toBe(false);
 		await datAgent({ status: "streaming" });
-		const dau = q('[data-slot="kara-artifact-header"]');
-		expect(dau?.querySelector('[data-kara-state="working"]')).not.toBeNull();
 		const cho = qa("[data-the-cho] button, [data-the-cho] input");
 		expect(cho.length).toBeGreaterThan(0);
 		expect(
 			`dong cho mo khi kara soan: ${cho.filter((o) => !biKhoa(o)).length}`,
 		).toBe("dong cho mo khi kara soan: 0");
+		const dau = q('[data-slot="kara-artifact-header"]');
+		expect(dau?.querySelector('[data-kara-state="working"]')).not.toBeNull();
 		const hoanTac = qa("button").filter(
 			(b) => b.textContent?.trim() === "Hoàn tác",
 		);
