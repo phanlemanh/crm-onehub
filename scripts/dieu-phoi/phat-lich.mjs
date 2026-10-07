@@ -162,12 +162,32 @@ function chonTaiNguyen(thuMuc, yc, tra) {
   return { loi: dangGiu.length === 0 ? `${yc.phien} không còn giữ khoá nào` : `${yc.phien} giữ ${dangGiu.join(', ')} — tra-loi phải nêu tai_nguyen` };
 }
 
+function doiTraLoiHong(thuMuc, p, ly_do) {
+  fs.mkdirSync(path.join(path.dirname(p), 'hong'), { recursive: true });
+  fs.renameSync(p, path.join(path.dirname(p), 'hong', path.basename(p)));
+  ghiSuKien(thuMuc, { loai: 'tra-loi-hong', tep: path.basename(p), ly_do, can_phan: true });
+  return null;
+}
+
+function docTraLoi(thuMuc, ten) {
+  const p = path.join(thuMuc, 'tra-loi', `${ten}.json`);
+  if (!fs.existsSync(p)) return null;
+  let du;
+  try {
+    du = JSON.parse(fs.readFileSync(p, 'utf8'));
+  } catch (e) {
+    return doiTraLoiHong(thuMuc, p, `JSON hỏng: ${e.message}`);
+  }
+  const laBanGhi = du !== null && typeof du === 'object' && !Array.isArray(du);
+  return laBanGhi ? du : doiTraLoiHong(thuMuc, p, 'không phải object');
+}
+
 function apGiaHan(thuMuc, nowMs, daBaoCu) {
   const daBao = new Set(daBaoCu);
   for (const y of docThuMucJson(thuMuc, 'yeu-cau', kiemYeuCau).filter((x) => x.loai === 'gia-han')) {
     const dau = `gia-han:${y._ten}`;
     if (daBao.has(dau)) continue;
-    const tra = docJson(path.join(thuMuc, 'tra-loi', `${y._ten}.json`));
+    const tra = docTraLoi(thuMuc, y._ten);
     if (tra?.ket_qua !== 'duyet') continue;
     const bao = (ly_do) => {
       ghiSuKien(thuMuc, { loai: 'gia-han-khong-ap', id: y._ten, phien: y.phien, ly_do, can_phan: true });

@@ -10,8 +10,19 @@ import { chamNhip } from './hook-nhip.mjs';
 const TIN_HIEU_CHUYEN = ['SIGTERM', 'SIGINT', 'SIGHUP'];
 const MA_KHONG_CHAY = 127;
 const MA_SAI_CACH_DUNG = 2;
+const MAU_GAN_BIEN = /^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/s;
+const CACH_DUNG = 'dùng: giu-nhip.mjs -- <lệnh> [đối số…]\n';
 
 const maCuaTinHieu = (ten) => 128 + (os.constants.signals[ten] ?? 0);
+
+export function tachBien(lenh) {
+  const viTri = lenh.findIndex((tu) => !MAU_GAN_BIEN.test(tu));
+  const so = viTri === -1 ? lenh.length : viTri;
+  return {
+    bien: Object.fromEntries(lenh.slice(0, so).map((tu) => tu.match(MAU_GAN_BIEN).slice(1))),
+    conLai: lenh.slice(so),
+  };
+}
 
 export function chayGiuNhip({ lenh, cwd = process.cwd(), moiMs = NHIP.giuNhipMs, timDot = timThuMucDot }) {
   return new Promise((xong) => {
@@ -23,7 +34,8 @@ export function chayGiuNhip({ lenh, cwd = process.cwd(), moiMs = NHIP.giuNhipMs,
       }
     };
     cham();
-    const con = spawn(lenh[0], lenh.slice(1), { cwd, stdio: 'inherit' });
+    const { bien, conLai } = tachBien(lenh);
+    const con = spawn(conLai[0], conLai.slice(1), { cwd, stdio: 'inherit', env: { ...process.env, ...bien } });
     const hen = setInterval(cham, moiMs);
     let tinNhan = null;
     let daXong = false;
@@ -45,7 +57,7 @@ export function chayGiuNhip({ lenh, cwd = process.cwd(), moiMs = NHIP.giuNhipMs,
       xong(tinNhan ? maCuaTinHieu(tinNhan) : ma);
     };
     con.on('error', (e) => {
-      process.stderr.write(`giu-nhip: không chạy được ${lenh[0]}: ${e.message}\n`);
+      process.stderr.write(`giu-nhip: không chạy được ${conLai[0]}: ${e.message}\n`);
       ket(MA_KHONG_CHAY);
     });
     con.on('exit', (ma, tin) => ket(ma ?? maCuaTinHieu(tin)));
@@ -56,8 +68,8 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === fs.realpathSync(proces
   const doiSo = process.argv.slice(2);
   const ngan = doiSo.indexOf('--');
   const lenh = ngan === -1 ? [] : doiSo.slice(ngan + 1);
-  if (lenh.length === 0) {
-    process.stderr.write('dùng: giu-nhip.mjs -- <lệnh> [đối số…]\n');
+  if (tachBien(lenh).conLai.length === 0) {
+    process.stderr.write(CACH_DUNG);
     process.exit(MA_SAI_CACH_DUNG);
   }
   process.exit(await chayGiuNhip({ lenh }));
