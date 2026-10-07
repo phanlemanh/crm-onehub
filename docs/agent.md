@@ -809,7 +809,10 @@ egress:
 5. Trợ lý OKR: nhà cung cấp model là bên nhận; nội dung OKR chỉ gửi đi khi có ZDR, kể cả eval. Cờ ZDR và mức suy nghĩ do model đã bọc của
    `tro_ly_okr` tự gắn vào từng lời gọi (`lib/okr/mo-hinh.ts`), không trông vào
    `modelOptions` — eve 0.29.4 không chuyển `modelOptions.providerOptions` cho model
-   là đối tượng. Phiên gốc của một việc `okr-*` chỉ thấy câu hằng, không thấy chữ OKR.
+   là đối tượng. Phiên gốc của một việc `okr-*` nhận câu hằng làm đầu vào, và từ 07/10
+   chạy chính model có ZDR của Trợ lý ở cả `session.started` lẫn `step.started`
+   (`lib/model.ts`, cùng khuôn với phiên gốc kho): phiên con không còn khuôn kết quả, nên
+   chữ nó trả về gốc cũng chỉ đi tới nhà cung cấp có ZDR.
 
 `skills/data-boundaries.md` is the agent's copy. Keep them in step.
 

@@ -9,7 +9,7 @@ status: implemented
 approved_by:
 approved_at:
 veto_state: mo
-veto_opened_at: 2026-10-07T00:18:00Z
+veto_opened_at: 2026-10-07T03:42:37Z
 design_doc: docs/superpowers/specs/2026-10-07-tro-ly-okr-bo-final-output-design.md
 ---
 
@@ -36,6 +36,7 @@ trong chat); thiết kế `docs/superpowers/specs/2026-10-07-tro-ly-okr-bo-final
 - AC-5: Given model thật có ZDR và bộ ca góp ý của E22 (`tro-ly-okr-de-xuat`), When chạy E22 và đọc trace của đúng cửa sổ lượt đó, Then có ít nhất 18 lời gọi đầu của `tro_ly_okr`, 0 lời gọi tool `final_output`, 0 lời gọi `tro_ly_okr` mang `outputSchema`; số lời gọi dừng vì hết trần, số dòng «empty model response» và mã thoát của E22 được in ra để đối chiếu, không chặn (xem Known limits). (cross-layer)
 - AC-6: Given model thật có ZDR và bộ ca tóm tắt tuần của E17 (`tro-ly-okr-tom-tat`), When chạy E17 ngay sau E22 và đọc trace của đúng cửa sổ lượt đó, Then có ít nhất một lời gọi đầu của `tro_ly_okr`, 0 lời gọi `final_output`, 0 lời gọi `tro_ly_okr` mang `outputSchema`; số lời gọi hết trần và mã thoát của E17 được in ra, không chặn. (cross-layer)
 - AC-8: Given `docs/agent.md` mục «Chỗ rẽ: Trợ lý OKR (lượt 9a)», When đọc đoạn về Gemini trả rỗng, Then đoạn nói đúng gốc (tool `final_output` do khuôn kết quả đá với lệnh nộp), số đo 07/10, và không còn khẳng định câu «Act at once» đưa lỗi về 0. (judgment)
+- AC-9: Given phiên gốc của một việc OKR (`purpose: okr`) và ma trận viết trước mọi `purpose` của phiên tác tử, When eve chọn model ở `session.started` và `step.started`, Then phiên gốc OKR nhận mã model của Trợ lý OKR kèm `providerOptions.gateway.zeroDataRetention: true` và thẻ `onehub:tro-ly-okr` ở `session.started` (chuỗi, đúng luật eve), và model sống đã bọc ZDR ở `step.started` (khoá riêng của Trợ lý khi có); phiên gốc kho giữ ZDR như trước; các `purpose` khác theo Cài đặt như trước; And When chạy E22 và E17 bằng model thật, Then mọi bước của phiên gốc OKR trong cửa sổ lượt đó chạy đúng model của Trợ lý OKR. (cross-layer)
 
 ## Coverage
 
@@ -66,6 +67,7 @@ không thành AC riêng: cùng đường mã với dispatch thật (Never — c�
 - Mã đóng việc giữ đúng chuỗi hôm nay; `ketQuaTroLy` vẫn là nguồn của giá trị `da-nop` cho màn góp ý.
 - AC-5, AC-6 đo bằng MỘT lệnh tuần tự (E22 → E17) để cửa sổ trace không chồng nhau và máy không chạy hai eval model cùng lúc.
 - AC-5, AC-6 gọi model thật qua khoá Gateway, có trần chi trong lệnh (E22 `TDX_TRAN_USD` mặc định 2, E17 `--tran-usd 1`).
+- Mở rộng phạm vi 07/10 sau S4 lượt 5 (chủ kho đồng ý trong phiên): thêm AC-9 — bỏ khuôn kết quả làm chữ tự do của phiên con về tới phiên gốc, nên phiên gốc OKR phải chạy model có ZDR, cùng khuôn với phiên gốc kho.
 - Thu phạm vi 07/10 sau S4 round 1 (chủ kho đồng ý trong phiên): AC-7 (độ trễ) bỏ khỏi hợp đồng; AC-5, AC-6 thôi chặn ở «0 lời gọi hết trần».
 
 ## Known limits

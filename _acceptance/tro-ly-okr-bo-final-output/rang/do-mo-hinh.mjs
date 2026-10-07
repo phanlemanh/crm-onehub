@@ -18,6 +18,10 @@ const TRACES = join(GOC, "apps/agent/.eve/traces/v1");
 const RA_E22 = join(GOC, ".acceptance-runs/tro-ly-okr-de-xuat/e22");
 const RA = join(GOC, ".acceptance-runs/tro-ly-okr-bo-final-output");
 const NHAT_KY = join(RA, "do-mo-hinh.log");
+const MO_HINH_OKR = readFileSync(
+	join(GOC, "apps/agent/agent/lib/okr/config.ts"),
+	"utf8",
+).match(/const MO_HINH = "([^"]+)"/)?.[1];
 const LUOT = `${process.pid}-${new Date().toISOString()}`;
 mkdirSync(RA, { recursive: true });
 writeFileSync(NHAT_KY, "");
@@ -108,7 +112,31 @@ function goiTool(s) {
 
 export function demCuaSo(thuMuc, tuNs, denNs, tuMs = null) {
 	const spans = docSpans(thuMuc, tuMs);
-	const kq = { n_dau: 0, het_tran: 0, final_output: 0, output_schema: 0 };
+	const kq = {
+		n_dau: 0,
+		het_tran: 0,
+		final_output: 0,
+		output_schema: 0,
+		goc_buoc: 0,
+		goc_khong_zdr: 0,
+	};
+	const gocOkr = new Set();
+	for (const s of spans.values())
+		if (
+			s.name === "agent.turn" &&
+			s.a["agent.subagent.name"] === DO.subagent &&
+			s.a["agent.parent.session.id"]
+		)
+			gocOkr.add(s.a["agent.parent.session.id"]);
+	for (const s of spans.values()) {
+		if (s.name !== "agent.step" || !gocOkr.has(s.a["agent.session.id"]))
+			continue;
+		const bd = BigInt(s.startTimeUnixNano);
+		if (bd < tuNs || bd > denNs) continue;
+		kq.goc_buoc += 1;
+		if (!MO_HINH_OKR || s.a["agent.model.id"] !== MO_HINH_OKR)
+			kq.goc_khong_zdr += 1;
+	}
 	for (const s of spans.values()) {
 		if (s.name !== "ai.streamText.doStream") continue;
 		const bd = BigInt(s.startTimeUnixNano);
@@ -225,11 +253,12 @@ function tuKiem() {
 	);
 	const rong = demLog([join(MAU, "eve.log")]);
 	if (dem.het_tran < 1) loi.push("het_tran");
+	if (dem.goc_khong_zdr < 1) loi.push("goc_khong_zdr");
 	if (dem.final_output < 1) loi.push("final_output");
 	if (dem.output_schema < 1) loi.push("output_schema");
 	if (rong < 1) loi.push("empty_log");
 	ghi(
-		`[tu-kiem] n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema} · empty-log ${rong}`,
+		`[tu-kiem] n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema} · goc-buoc ${dem.goc_buoc} · goc-khong-zdr ${dem.goc_khong_zdr} · empty-log ${rong}`,
 	);
 	for (const o of loi) ghi(`tu kiem khong bat duoc ${o}`);
 	return loi.length === 0;
@@ -278,8 +307,10 @@ async function phanMoHinh(ten, nToiThieu, coLog) {
 	if (dem.n_dau < nToiThieu) loi.push(`mau qua nho: ${dem.n_dau}`);
 	if (dem.final_output) loi.push(`final_output: ${dem.final_output}`);
 	if (dem.output_schema) loi.push(`outputSchema: ${dem.output_schema}`);
+	if (dem.goc_buoc < 1) loi.push(`khong thay buoc goc okr: ${dem.goc_buoc}`);
+	if (dem.goc_khong_zdr) loi.push(`goc khong zdr: ${dem.goc_khong_zdr}`);
 	ghi(
-		`[${ten}] ma ${r.ma} · n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema}${coLog ? ` · empty-log ${rong}` : ""} → ${loi.length ? `DO ${loi.join("; ")}` : "dat"}`,
+		`[${ten}] ma ${r.ma} · n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema} · goc-buoc ${dem.goc_buoc} · goc-khong-zdr ${dem.goc_khong_zdr}${coLog ? ` · empty-log ${rong}` : ""} → ${loi.length ? `DO ${loi.join("; ")}` : "dat"}`,
 	);
 	return loi.length === 0;
 }

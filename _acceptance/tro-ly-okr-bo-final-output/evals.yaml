@@ -81,3 +81,21 @@ evals:
     inputs: [docs/agent.md, _acceptance/tro-ly-okr-bo-final-output/contract.md]
     expected: >-
       PASS khi đoạn nói đủ ba ý; FAIL nêu ý còn thiếu hoặc câu còn khẳng định sai.
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tbf_goc_zdr
+    expected: "exit 0; apps/agent/test/tro-ly-okr-goc-zdr.integration.spec.ts chạy MA TRẬN mọi phần tử SESSION_PURPOSES (rút lúc chạy) qua MODEL_GOC.events['session.started'] thật và modelChoBuocGoc thật, với Cài đặt đặt model openai/gpt-x: okr → session.started là chuỗi (luatChonChuoi) mang model TRO_LY_OKR.model, zeroDataRetention true; step.started trả model sống mà một lời gọi doGenerate qua model giả mang providerOptions.gateway.zeroDataRetention true và thẻ TRO_LY_OKR.tags[0], khoá riêng TRO_LY_OKR.khoa.rieng có thì nhà Gateway nhận đúng khoá, không có thì không; kho → ZDR ở cả hai lớp như trước; mọi purpose khác → model Cài đặt ở session.started và null ở step.started. Chiều đỏ trên cùng ma trận: bản sao để phiên gốc okr theo Cài đặt (modelTheoVai, step null) → lỗi ghim 'phien goc okr khong mang ZDR o session' và 'phien goc okr khong mang ZDR o step (chung)'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/model.ts, apps/agent/agent/lib/okr/mo-hinh.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/tro-ly-okr-goc-zdr.integration.spec.ts]
+
+  - id: E11
+    criterion: AC-9
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tbf_do_mo_hinh
+    expected: "exit 0; cùng lệnh với E6, E7. Bộ đếm lấy các phiên gốc OKR là agent.parent.session.id của mọi span agent.turn có agent.subagent.name tro_ly_okr, rồi đếm span agent.step của các phiên đó có giờ bắt đầu trong cửa sổ từng phần: goc-buoc = số bước, goc-khong-zdr = số bước có agent.model.id khác MO_HINH đọc từ apps/agent/agent/lib/okr/config.ts. [tu-kiem] trên rang/mau-0710 phải đếm goc-khong-zdr ≥ 1 (phiên gốc 07/10 chạy zai/glm-5.2-fast). E11 đạt khi dòng [e22] và [e17] đều có goc-buoc ≥ 1 và goc-khong-zdr 0 (khác 0 → 'goc khong zdr: n')."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/model.ts, apps/agent/agent/lib/okr/mo-hinh.ts, "_acceptance/tro-ly-okr-bo-final-output/rang/**"]
+

@@ -1,8 +1,6 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 import { db } from "@crm/db";
 import { xepViecTroLy } from "@crm/db/okr-tro-ly";
-import { ketQuaTroLy } from "@crm/validation/okr-tro-ly";
-import { z } from "zod";
 import type { CtxPhien, GiaiChiDan } from "./support/eve-kieu";
 import { trongNguCanhEve } from "./support/eve-ngu-canh";
 import { donDep, gieoNguoi, moXuong } from "./support/nhac-gieo";
@@ -24,6 +22,7 @@ mock.module("../agent/lib/preamble", () => ({
 
 const { brief, taskAuth } = await import("../agent/lib/dispatch");
 const { TRO_LY_OKR } = await import("../agent/lib/okr/config");
+const { modelChoPhienGoc } = await import("../agent/lib/model");
 const { KHONG_GOI_TRO_LY_KHO } = await import("../agent/lib/tai-lieu-config");
 const { SESSION_PURPOSES, purposeOf } = await import(
 	"../agent/lib/session-purpose"
@@ -156,14 +155,11 @@ describe("okr-chuyen-tiep", () => {
 		expect(purposeOf(phien({ purpose: "okr" }))).toBe("okr");
 	});
 
-	test("kết quả về gốc và sổ chi phí không có chữ tự do", () => {
-		const s = z.toJSONSchema(ketQuaTroLy, { target: "draft-7" }) as {
-			properties: Record<string, { type?: string; enum?: unknown }>;
-		};
-		const chuTuDo = Object.entries(s.properties).filter(
-			([, v]) => v.type === "string" && !v.enum,
+	test("kết quả về gốc chỉ tới model có ZDR; sổ chi phí không có chữ tự do", async () => {
+		const goc = await modelChoPhienGoc(phien({ purpose: "okr" }) as never);
+		expect(goc?.modelOptions?.providerOptions.gateway.zeroDataRetention).toBe(
+			true,
 		);
-		expect(chuTuDo).toEqual([]);
 		const cotChu = Object.entries(db.aiChiPhi.fields)
 			.filter(([, f]) => (f as { typeName: string }).typeName === "String")
 			.map(([k]) => k)
