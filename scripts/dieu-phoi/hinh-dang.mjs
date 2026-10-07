@@ -109,5 +109,22 @@ export function kiemHangViec(du) {
   return du;
 }
 
+export const KHOA_TRA_LOI = ['ket_qua', 'boi', 'ly_do', 'luc', 'voi', 'tai_nguyen', 'uoc_phut'];
+
+export function kiemTraLoi(du) {
+  const sai = (s) => {
+    throw new Error(s);
+  };
+  if (!laObject(du)) sai('phải là một object');
+  const la = Object.keys(du).filter((k) => !KHOA_TRA_LOI.includes(k));
+  if (la.length > 0) sai(`khoá lạ ${la.join(', ')}`);
+  if (!laChuoi(du.ket_qua)) sai('ket_qua phải là chuỗi không rỗng');
+  for (const k of ['boi', 'ly_do', 'luc', 'voi', 'tai_nguyen']) {
+    if (du[k] !== undefined && typeof du[k] !== 'string') sai(`${k} phải là chuỗi`);
+  }
+  if (du.uoc_phut !== undefined && !Number.isFinite(du.uoc_phut)) sai('uoc_phut phải là số');
+  return du;
+}
+
 export const docCauHinh = (thuMuc, tuyChon = {}) => kiemCauHinh(docJson(path.join(thuMuc, TEP_CAU_HINH)), tuyChon);
 export const docHangViec = (thuMuc) => kiemHangViec(docJson(path.join(thuMuc, TEP_HANG_VIEC)));
