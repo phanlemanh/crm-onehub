@@ -5,7 +5,7 @@ slug: dieu-phoi-truoc-mo-dot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, config, ci]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-truoc-mo-dot-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
