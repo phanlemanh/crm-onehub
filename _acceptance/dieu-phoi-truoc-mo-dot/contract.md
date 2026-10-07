@@ -5,7 +5,7 @@ slug: dieu-phoi-truoc-mo-dot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, config, ci]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-truoc-mo-dot-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
@@ -61,3 +61,6 @@ Bỏ — không có `opportunity.md` (hợp đồng nối tiếp từ Cổng 2);
 ## Notes
 
 - Bản chuyển hook (AC-5) chỉ có hiệu lực ở worktree khi checkout chính đã có bản pre-push này.
+- Hạn chế đã biết, owner chọn ở Cổng 2 lượt 2 (sổ quyết định, dòng descope gate2):
+  - Ngoài-2: phép đo dòng lệnh bọc (E4) chỉ thử lệnh gốc thoát 0; chưa có ca chứng minh lệnh gốc thoát khác 0 thì dòng bọc trả đúng mã đó.
+  - Ngoài-1: chấp nhận, không sửa — `kiemTraLoi` tự viết phép kiểm khoá lạ thay vì dùng `kiemKhoaLa`.
