@@ -1,0 +1,6 @@
+{
+  "feature_plain": "Phép kiểm tra «người dùng huỷ lúc đang chờ Kara soạn OKR thì vẫn bị tính lượt» thôi đỏ ngẫu nhiên trên máy CI chậm, mà vẫn bắt được đúng lỗi nó sinh ra để bắt.",
+  "scope_plain": "Vòng này chỉ sửa phép kiểm tra; cửa soạn OKR không đổi một dòng.",
+  "decisions": [],
+  "analyst_plain": "Phép kiểm tra sáu ca «người dùng huỷ» (AC-3, giữ nguyên nghĩa) xanh cả trước lẫn sau bản vá — đúng ý: nó là lưới chống hồi quy cho hành vi đã có, không phải phép đo phần mới. Phần mới được hai phép kiểm tra kia chứng (đỏ trước bản vá, xanh sau)."
+}
