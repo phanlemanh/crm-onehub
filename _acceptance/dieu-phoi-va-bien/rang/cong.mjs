@@ -5,6 +5,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const { nodeTestSummary, sectionFor } = await import(pathToFileURL(join(GOC, "scripts", "gate-shape-node-test.mjs")).href);
+const SECTION_MARK = "pre-push: bun run ";
 const ID = "test:dieu-phoi";
 const DIR = "scripts/dieu-phoi/test";
 const TEP = [".githooks/pre-push", ".githooks/gate-shape.json", "package.json", ".github/workflows/acceptance.yml"];
@@ -23,7 +25,14 @@ function kiemPrePush(goc) {
 	if (!/bun run "\$task"/.test(m[2])) return "than vong pre-push khong goi bun run \"$task\"";
 	const r = spawnSync("bash", ["-c", `for task in ${m[1]}; do echo "$task"; done`], { encoding: "utf8" });
 	const nhiemVu = r.stdout.trim().split("\n");
-	return nhiemVu.includes(ID) ? null : `vong pre-push chay [${nhiemVu.join(", ")}], thieu ${ID}`;
+	if (!nhiemVu.includes(ID)) return `vong pre-push chay [${nhiemVu.join(", ")}], thieu ${ID}`;
+	const log = join(thuMucTam(), "log");
+	writeFileSync(log, "");
+	const gia = `LOG=${JSON.stringify(log)}; fail() { exit 1; }; bun() { echo "ℹ tests 7"; echo "ℹ fail 0"; }; ${m[0]}`;
+	const chay = spawnSync("bash", ["-c", gia], { encoding: "utf8" });
+	if (chay.status !== 0) return `vong pre-push gia thoat ${chay.status}`;
+	const tong = nodeTestSummary(sectionFor(readFileSync(log, "utf8"), ID) ?? "");
+	return tong?.tests === 7 ? null : `log cua vong pre-push khong mang muc '${SECTION_MARK}${ID}' kem tong ket — checker node-test se khong thay gi`;
 }
 
 function kiemGateShape(goc) {
@@ -67,6 +76,7 @@ const QUAN_HE = [
 
 const PHA = [
 	["pre-push", ".githooks/pre-push", (t) => t.replace(` ${ID}; do`, "; do")],
+	["pre-push", ".githooks/pre-push", (t) => t.replace('echo "pre-push: bun run $task" | tee -a "$LOG"', 'echo "pre-push: bun run $task"')],
 	["gate-shape", ".githooks/gate-shape.json", (t) => t.replace('"kind": "node-test"', '"kind": "turbo"')],
 	["glob", "package.json", (t) => t.replace('scripts/dieu-phoi/test/*.test.mjs', "scripts/dieu-phoi/test/lich.test.mjs")],
 	["ci", ".github/workflows/acceptance.yml", (t) => t.replace(`      - run: bun run ${ID}\n`, "")],

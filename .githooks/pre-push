@@ -34,7 +34,7 @@ export TURBO_FORCE=true
 export TURBO_RUN_SUMMARY=true
 
 for task in check-types lint lint:slop test build test:dieu-phoi; do
-	echo "pre-push: bun run $task"
+	echo "pre-push: bun run $task" | tee -a "$LOG"
 	bun run "$task" 2>&1 | tee -a "$LOG" || fail "$task"
 done
 
