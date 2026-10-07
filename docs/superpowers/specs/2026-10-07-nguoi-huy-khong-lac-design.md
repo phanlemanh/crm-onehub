@@ -39,7 +39,7 @@ Không nâng trần thời gian của ca: chờ có điều kiện rút được
   `treo-sau-huy n=<n>`); soLuot = n + 1; thân không có `luot`. Chiều đỏ: bản sao ca chờ `Bun.sleep(20)`.
 - E2 (AC-2) — describe mới `fetch-gia-theo-that`: ma trận viết trước năm kết quả của `fetch` giả
   (`nem`, `treo`, `luong-cham`, 202, 500 — mỗi nhánh của `fetchGia` một ô) gọi với signal huỷ sẵn → từ
-  chối với đúng `signal.reason` trước hạn (ghim `fetch-gia-treo-khi-da-huy <ket>`). Đối chứng rút từ
+  chối với đúng `signal.reason` trước hạn (ghim `fetch-gia-da-huy <ket>`). Đối chứng rút từ
   writer thật: `fetch` thật của Bun với cùng signal từ chối cùng lý do. Đối chứng dương: signal chưa
   huỷ, 202 → 202.
 - E3 (AC-3) — lệnh `r1h_huy` của hồ sơ gốc: sáu ca `nguoi-huy` xanh, khẳng định không đổi. Chiều đỏ của E4

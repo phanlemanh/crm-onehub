@@ -5,7 +5,7 @@ slug: nguoi-huy-khong-lac
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -54,7 +54,7 @@ không gian có hai trục, liệt kê tay:
 ## Notes
 
 - Chiều đỏ của E1/E2 chạy ở S3 trên bản sao (measure-birth): E1 — ca chờ `Bun.sleep(20)` thay vì
-  `k.choTreo()` → `huy-truoc-fetch n=<n>`; E2 — khung bỏ dòng kiểm signal huỷ sẵn → `fetch-gia-treo-khi-da-huy <ket>`.
+  `k.choTreo()` → `huy-truoc-fetch n=<n>`; E2 — khung bỏ dòng kiểm signal huỷ sẵn → `fetch-gia-da-huy <ket>`.
 - Chiều đỏ thứ hai của E3 (gap-probe P1): bản sao ca `nguoi-huy` dùng `Bun.sleep(0)` thay `k.choTreo()` →
   `huy-truoc-fetch n=<n>` — chứng chính thước E4 đo huỷ-trong-lúc-chờ, không chỉ describe mới.
 - Chiều đỏ của hạn `choTreo` (gap-probe P2): bản sao mock tăng lượt ném lỗi (cửa không tới `fetch`) →
@@ -74,3 +74,9 @@ không gian có hai trục, liệt kê tay:
   `nhkl_fetch_gia`, `r1h_hong`, `r1h_luong` mã 0; `check-types`, `lint`, `lint:slop` mã 0.
 - Lượt tái hiện trước vòng (07/10, phiên này): `Bun.sleep(0)` thay `Bun.sleep(20)` trên khung cũ → hai ca
   `nguoi dung huy` quá hạn 5000.69 / 5001.09 ms.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-07):**
+  - Ngoài-1 — bộ đếm `soLanHuySan` (lời gọi `fetch` giả mang signal đã huỷ sẵn) chỉ được khẳng định bằng 0;
+    không ca nào chứng nó đếm lên 1. Bộ đếm hỏng thầm lặng thì vế `huySan` của E1/E3 vẫn xanh — vế
+    `daGoi` và chiều đỏ R1a/R1b/R4 vẫn cắn.
+  - Ngoài-2 — vế «thân trả lời không có `luot`» của E1 không ghim thông điệp và không có đối chứng dương
+    trong chính lệnh `nhkl_duong_cham`; đối chứng dương (504 có `luot: 'da-hoan'`) nằm ở lệnh `r1h_huy` của E3.
