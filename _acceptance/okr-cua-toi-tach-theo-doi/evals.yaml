@@ -110,6 +110,10 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.ctt_man
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", apps/app/lib/trpc/cache.ts, apps/api/src/okr/**, _acceptance/okr-cua-toi-tach-theo-doi/rang/**]
+    steps:
+      - "Cùng lệnh và cùng phiên gieo với E11"
+      - "Bước 3 — mở nhóm, mở M5, đặt dấu window.__cttDau, bấm nút theo dõi để tắt, đóng khung bằng Escape → M5 rời màn, dấu còn nguyên, nhóm «Đang theo dõi (1)», okr.mine của U không còn M5 → ảnh ctt-sau-bo-theo-doi.png"
+      - "Bước 4 — mở «Theo đơn vị», mở M5, bấm Theo dõi → quay về Của tôi → nhóm «Đang theo dõi (2)» có M5"
     expected: "Cùng lệnh E11 — bước 3 và 4: M5 rời màn không tải lại trang (không có điều hướng document mới giữa bấm tắt và đọc màn) và okr.mine đọc lại khớp; M5 trở lại nhóm sau khi theo dõi lại. CHIỀU ĐỎ (--chieu-do E12): bản sao apps/app/lib/trpc/cache.ts cho cache.okr làm mới okr.mine bằng một khoá không khớp (khung mục tiêu vẫn cập nhật, danh sách thì không) → bước 3 đỏ, thông điệp ghim «buoc 3: M5 con tren man sau khi tat»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
 
@@ -119,6 +123,9 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.ctt_man
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/okr-cua-toi-tach-theo-doi/rang/**]
+    steps:
+      - "Cùng lệnh và cùng phiên gieo với E11"
+      - "Bước 5 — W chỉ theo dõi M7, không giữ gì: mở Của tôi ở 1440/vi → Empty ST-cuatoi-rong và nút «Đang theo dõi (1)» là anh em kế sau nó → ảnh ctt-rong-co-theo-doi.png"
     expected: "Cùng lệnh E11 — bước 5: Empty ST-cuatoi-rong và nhóm «Đang theo dõi (1)» cùng hiện cho W."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
 
