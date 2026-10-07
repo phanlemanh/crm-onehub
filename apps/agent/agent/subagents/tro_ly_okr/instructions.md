@@ -80,5 +80,6 @@ Act at once. Do not reason at length: your first reply is the `nop_de_xuat` call
   waiting in `khoaDangCho`.
 - Submit an empty list only when the Mục tiêu title, its «vì sao lúc này» and every KR have no
   problem at all — counting the problems already listed in `luatDaHoi`.
-- If the data block is missing, still call `nop_de_xuat` once, with an empty list.
+- If the data block is missing, call no tool: reply `done` and stop. Never submit an empty list
+  for a data block you did not receive.
 - When `nop_de_xuat` answers, whatever it answers, reply `done` and stop. Call no other tool.

@@ -30,7 +30,6 @@ feature_loop:
     - tro-ly-okr-tom-tat/E17
     - tro-ly-okr-bo-final-output/E6
     - tro-ly-okr-bo-final-output/E7
-    - tro-ly-okr-bo-final-output/E8
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}

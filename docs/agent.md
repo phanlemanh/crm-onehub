@@ -140,10 +140,10 @@ dặn tĩnh («never call `nop_de_xuat`»).
   trong gói. Tool (`lib/okr/nop-tom-tat.ts`) từ chối không ghi (`tu-choi`) khi phiên
   không phải phiên OKR, việc không phải `okr-tom-tat-tuan` đang chạy, payload hỏng,
   hay việc đã có bản; phòng đã lưu trữ thì `thieu-du-lieu`. `nop_de_xuat` vẫn từ
-  chối việc tóm tắt. Phiên con báo `da-nop` mà việc tóm tắt không có hàng `OkrTomTat`
-  nào thì hook uỷ quyền đóng `khong-lam-duoc:khong-nop`
-  (`TRO_LY_OKR.ketThuc.tomTatKhongNop`, `ketThucCuaViec`); việc góp ý giữ cách đóng
-  của 9b.
+  chối việc tóm tắt. Từ 07/10 tool tự đóng việc: ghi được thì `da-nop` (`ghiTomTat` luôn
+  ghi một hàng `OkrTomTat`, kể cả khi mọi câu bị bỏ), phòng đã lưu trữ thì
+  `khong-lam-duoc:thieu-du-lieu`, payload hỏng thì `khong-lam-duoc:khuon-hong`; phiên con
+  kết thúc mà chưa nộp thì hook uỷ quyền đóng `hong:khong-nop`.
 - **Câu lệch số bị bỏ; bỏ quá 30% thì cả bản bị giữ lại.** `ghiTomTat` chạy bộ kiểm
   câu (`kiemBanTomTat`, `@crm/validation/okr-kiem-tom-tat`, hàm thuần dùng chung với
   lúc hiện): câu trượt luật đầu tiên thì bị bỏ với mã — `nguon-ngoai-goi`,

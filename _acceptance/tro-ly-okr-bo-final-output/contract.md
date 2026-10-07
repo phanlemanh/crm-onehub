@@ -9,7 +9,7 @@ status: implemented
 approved_by:
 approved_at:
 veto_state: mo
-veto_opened_at: 2026-10-06T23:25:53Z
+veto_opened_at: 2026-10-07T00:18:00Z
 design_doc: docs/superpowers/specs/2026-10-07-tro-ly-okr-bo-final-output-design.md
 ---
 
@@ -29,13 +29,12 @@ trong chat); thiết kế `docs/superpowers/specs/2026-10-07-tro-ly-okr-bo-final
 
 ## Criteria
 
-- AC-1: Given phiên con `tro_ly_okr`, When đọc định nghĩa của nó, Then nó không khai `outputSchema`; And When đọc chỉ dẫn góp ý và chỉ dẫn tóm tắt tuần, Then không câu nào đòi kết bằng một khuôn `{"trangThai":…}` hay gọi `final_output` — nộp xong thì trả lời `done`.
+- AC-1: Given phiên con `tro_ly_okr`, When đọc định nghĩa của nó, Then nó không khai `outputSchema`; And When đọc chỉ dẫn góp ý và chỉ dẫn tóm tắt tuần, Then không câu nào đòi kết bằng một khuôn `{"trangThai":…}` hay gọi `final_output` — nộp xong thì trả lời `done`; And khi thiếu khối dữ liệu, chỉ dẫn bảo không gọi tool nào và trả lời `done`, để việc đóng `hong:khong-nop` thay vì một lần nộp rỗng được đọc là «không có gì cần sửa».
 - AC-2: Given một việc góp ý đang chạy và ma trận viết trước {ghi được có dòng, ghi được 0 dòng, Mục tiêu đã xoá, payload hỏng, việc đã đóng, đã nộp một lần, việc là tóm tắt tuần}, When `nop_de_xuat` chạy ở từng ô, Then việc đóng ngay trong tool với đúng {`da-nop`, `da-nop`, `khong-lam-duoc:thieu-du-lieu`, `khong-lam-duoc:khuon-hong`, giữ kết cục cũ, giữ kết cục cũ, không đóng}, và tool vẫn trả đúng `ketQua` như hôm nay. (cross-layer)
 - AC-3: Given một việc tóm tắt tuần đang chạy và ma trận viết trước {ghi được có bản, ghi được nhưng không bản nào còn lại, phòng đã lưu trữ, payload hỏng, đã có bản, việc đã đóng `hong:het-lease` từ trước, việc là góp ý}, When `nop_tom_tat` chạy ở từng ô, Then việc đóng ngay trong tool với đúng {`da-nop`, `da-nop` (bản ghi giữ các câu bị bỏ, không câu nào hiện), `khong-lam-duoc:thieu-du-lieu`, `khong-lam-duoc:khuon-hong`, giữ kết cục cũ, giữ `hong:het-lease` và không ghi bản nào, không đóng}. (cross-layer)
 - AC-4: Given phiên gốc của một việc OKR nhận kết quả của `tro_ly_okr` và ma trận viết trước {việc đã đóng bởi tool + kết quả không lỗi, việc đã đóng bởi tool + kết quả lỗi, việc còn mở + kết quả lỗi mã X, việc còn mở + kết quả không lỗi, kết quả của subagent khác}, When hook ủy quyền OKR xử lý, Then kết cục là {giữ của tool, giữ của tool, `hong:X`, `hong:khong-nop`, không đụng}. (cross-layer)
-- AC-5: Given model thật có ZDR và bộ ca góp ý của E22 (`tro-ly-okr-de-xuat`), When chạy E22 và đọc trace của đúng cửa sổ lượt đó (mốc đầu và mốc cuối, không eval model nào khác chạy chồng), Then E22 xanh, có ít nhất 18 lời gọi đầu của `tro_ly_okr` (với tỉ lệ rỗng cũ 17%, 18 lời gọi sạch có xác suất dưới 5% nếu lỗi còn), 0 lời gọi `tro_ly_okr` dừng vì hết trần, 0 lời gọi tool `final_output`, 0 lời gọi `tro_ly_okr` mang `outputSchema`, và nhật ký eve không có dòng «empty model response». (cross-layer)
-- AC-6: Given model thật có ZDR và bộ ca tóm tắt tuần của E17 (`tro-ly-okr-tom-tat`), When chạy E17 ngay sau E22 và đọc trace của đúng cửa sổ lượt đó, Then E17 xanh, có ít nhất một lời gọi đầu của `tro_ly_okr`, 0 lời gọi `tro_ly_okr` dừng vì hết trần, 0 lời gọi `final_output`, 0 lời gọi `tro_ly_okr` mang `outputSchema`. (cross-layer)
-- AC-7: Given 20 lượt góp ý thật trên 20 Mục tiêu khác nhau khi máy rảnh, When đo độ trễ bằng thước E24 của `tro-ly-okr-de-xuat` ngay sau E17, cùng một lệnh tuần tự, Then p50 ≤ 8 000 ms, p90 ≤ 15 000 ms, và số lượt hỏng bằng 0 (một lượt hỏng là đỏ dù p90 vẫn dưới ngưỡng).
+- AC-5: Given model thật có ZDR và bộ ca góp ý của E22 (`tro-ly-okr-de-xuat`), When chạy E22 và đọc trace của đúng cửa sổ lượt đó, Then có ít nhất 18 lời gọi đầu của `tro_ly_okr`, 0 lời gọi tool `final_output`, 0 lời gọi `tro_ly_okr` mang `outputSchema`; số lời gọi dừng vì hết trần, số dòng «empty model response» và mã thoát của E22 được in ra để đối chiếu, không chặn (xem Known limits). (cross-layer)
+- AC-6: Given model thật có ZDR và bộ ca tóm tắt tuần của E17 (`tro-ly-okr-tom-tat`), When chạy E17 ngay sau E22 và đọc trace của đúng cửa sổ lượt đó, Then có ít nhất một lời gọi đầu của `tro_ly_okr`, 0 lời gọi `final_output`, 0 lời gọi `tro_ly_okr` mang `outputSchema`; số lời gọi hết trần và mã thoát của E17 được in ra, không chặn. (cross-layer)
 - AC-8: Given `docs/agent.md` mục «Chỗ rẽ: Trợ lý OKR (lượt 9a)», When đọc đoạn về Gemini trả rỗng, Then đoạn nói đúng gốc (tool `final_output` do khuôn kết quả đá với lệnh nộp), số đo 07/10, và không còn khẳng định câu «Act at once» đưa lỗi về 0. (judgment)
 
 ## Coverage
@@ -65,6 +64,14 @@ không thành AC riêng: cùng đường mã với dispatch thật (Never — c�
 ## Notes
 
 - Mã đóng việc giữ đúng chuỗi hôm nay; `ketQuaTroLy` vẫn là nguồn của giá trị `da-nop` cho màn góp ý.
-- AC-5, AC-6, AC-7 đo bằng MỘT lệnh tuần tự (E22 → E17 → độ trễ) để cửa sổ trace không chồng nhau và máy không chạy hai eval model cùng lúc; lệnh in tải máy lúc đo độ trễ. Lời hứa thống kê «thôi trả rỗng» đứng trên AC-5 (≥ 18 lời gọi đầu); AC-6 chứng cấu trúc cho việc tóm tắt.
-- Bộ test không gọi model của S4 vẫn có thể chạy cùng lúc với lệnh đo model; lệnh in tải máy để người đọc biết lúc đo máy bận hay rảnh.
-- AC-5, AC-6, AC-7 gọi model thật qua khoá Gateway, có trần chi trong lệnh (E22 `TDX_TRAN_USD` mặc định 2, E17 `--tran-usd 1`).
+- AC-5, AC-6 đo bằng MỘT lệnh tuần tự (E22 → E17) để cửa sổ trace không chồng nhau và máy không chạy hai eval model cùng lúc.
+- AC-5, AC-6 gọi model thật qua khoá Gateway, có trần chi trong lệnh (E22 `TDX_TRAN_USD` mặc định 2, E17 `--tran-usd 1`).
+- Thu phạm vi 07/10 sau S4 round 1 (chủ kho đồng ý trong phiên): AC-7 (độ trễ) bỏ khỏi hợp đồng; AC-5, AC-6 thôi chặn ở «0 lời gọi hết trần».
+
+## Known limits
+
+- Gemini 3.8 Flash ở `thinkingLevel: low` vẫn có đuôi lời gọi nghĩ hết trần khi chỉ còn một tool nộp: round 1 đo 11/114 lời gọi đầu của `tro_ly_okr` dừng `length` (trước vòng này 17/88), E22 còn 3 + 2 dòng «empty model response» (trước 9 + 5) và một ca hỏng vì lời nộp bị cắt giữa chừng khi hết trần. `minimal` bị Vertex từ chối, `thinkingBudget` bị bỏ qua — không chặn được độ dài suy nghĩ trong model này.
+- Độ trễ E24 round 1: p50 6 928 ms, p90 20 702 ms (ngưỡng 15 000), 0 lượt hỏng — đuôi do các lần nghĩ dài, không đổi so với 06/10 (p90 17,8 s và 21,2 s).
+- Việc tóm tắt tuần (trần 8 000) có lần nghĩ 7 687 token trong 49 s rồi hết trần.
+- Sửa đuôi suy nghĩ (đổi model có ZDR, hay nâng trần cùng lease) là một vòng riêng.
+

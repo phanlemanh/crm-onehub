@@ -1,6 +1,5 @@
 import { spawnSync } from "node:child_process";
 import { readdirSync, readFileSync, statSync } from "node:fs";
-import { loadavg } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,8 +15,14 @@ const DO = {
 	chuRong: "empty model response",
 	lenh: {
 		e22: ["bun", ["_acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs"]],
-		e17: ["bun", ["_acceptance/tro-ly-okr-tom-tat/rang/eval-tom-tat.mjs", "--tran-usd", "1"]],
-		e24: ["bun", ["_acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs", "--lan", "20"]],
+		e17: [
+			"bun",
+			[
+				"_acceptance/tro-ly-okr-tom-tat/rang/eval-tom-tat.mjs",
+				"--tran-usd",
+				"1",
+			],
+		],
 	},
 	boDemMB: 512,
 	lechMtimeMs: 60_000,
@@ -26,7 +31,8 @@ const DO = {
 const thamSo = process.argv.slice(2);
 const chiTuKiem = thamSo.includes("--chi-tu-kiem");
 const iMau = thamSo.indexOf("--mau");
-const MAU = iMau >= 0 ? resolve(thamSo[iMau + 1] ?? "") : join(RANG, "mau-0710");
+const MAU =
+	iMau >= 0 ? resolve(thamSo[iMau + 1] ?? "") : join(RANG, "mau-0710");
 
 function giaTri(v) {
 	if (!v) return null;
@@ -52,7 +58,8 @@ function docSpans(thuMuc, tuMs) {
 		}
 		for (const t of tep) {
 			const duong = join(seg, t);
-			if (tuMs !== null && statSync(duong).mtimeMs < tuMs - DO.lechMtimeMs) continue;
+			if (tuMs !== null && statSync(duong).mtimeMs < tuMs - DO.lechMtimeMs)
+				continue;
 			const j = JSON.parse(readFileSync(duong, "utf8"));
 			for (const rs of j.resourceSpans ?? [])
 				for (const ss of rs.scopeSpans ?? [])
@@ -96,10 +103,15 @@ export function demCuaSo(thuMuc, tuNs, denNs, tuMs = null) {
 		const turn = toTien(spans, s, "agent.turn");
 		if (turn?.a["agent.subagent.name"] !== DO.subagent) continue;
 		const step = toTien(spans, s, "agent.step");
-		if (step && Number(step.a["agent.step.index"]) === 0 && Number(step.a["agent.step.attempt"]) === 0)
+		if (
+			step &&
+			Number(step.a["agent.step.index"]) === 0 &&
+			Number(step.a["agent.step.attempt"]) === 0
+		)
 			kq.n_dau += 1;
 		if (s.a["ai.response.finish_reason"] === "length") kq.het_tran += 1;
-		for (const t of goiTool(s)) if (t.toolName === "final_output") kq.final_output += 1;
+		for (const t of goiTool(s))
+			if (t.toolName === "final_output") kq.final_output += 1;
 	}
 	return kq;
 }
@@ -118,29 +130,23 @@ export function demLog(tep) {
 	return n;
 }
 
-export function docLuotHong(chu) {
-	const m = [...chu.matchAll(/(\d+) luot hong/g)].at(-1);
-	return m ? Number(m[1]) : null;
-}
-
 const NS_MOI_MS = 1_000_000n;
 const bayGioNs = () => BigInt(Date.now()) * NS_MOI_MS;
 
 function tuKiem() {
 	const loi = [];
-	const dem = demCuaSo(join(MAU, "traces"), 0n, BigInt(Number.MAX_SAFE_INTEGER) * NS_MOI_MS);
+	const dem = demCuaSo(
+		join(MAU, "traces"),
+		0n,
+		BigInt(Number.MAX_SAFE_INTEGER) * NS_MOI_MS,
+	);
 	const rong = demLog([join(MAU, "eve.log")]);
-	let hong = null;
-	try {
-		hong = docLuotHong(readFileSync(join(MAU, "do-tre-mot-luot-hong.log"), "utf8"));
-	} catch {}
 	if (dem.het_tran < 1) loi.push("het_tran");
 	if (dem.final_output < 1) loi.push("final_output");
 	if (dem.output_schema < 1) loi.push("output_schema");
 	if (rong < 1) loi.push("empty_log");
-	if (hong !== 1) loi.push("luot_hong");
 	console.log(
-		`[tu-kiem] n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema} · empty-log ${rong} · luot-hong ${hong}`,
+		`[tu-kiem] n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema} · empty-log ${rong}`,
 	);
 	for (const o of loi) console.log(`tu kiem khong bat duoc ${o}`);
 	return loi.length === 0;
@@ -180,28 +186,13 @@ function phanMoHinh(ten, nToiThieu, coLog) {
 	const dem = demCuaSo(TRACES, r.tuNs, r.denNs, r.tuMs);
 	const rong = coLog ? demLog(logE22(r.tuMs)) : 0;
 	const loi = [];
-	if (r.ma !== 0) loi.push(`lenh ${ten} thoat ${r.ma}`);
 	if (dem.n_dau < nToiThieu) loi.push(`mau qua nho: ${dem.n_dau}`);
-	if (dem.het_tran) loi.push(`het-tran: ${dem.het_tran}`);
 	if (dem.final_output) loi.push(`final_output: ${dem.final_output}`);
 	if (dem.output_schema) loi.push(`outputSchema: ${dem.output_schema}`);
-	if (rong) loi.push(`empty-log: ${rong}`);
 	console.log(
 		`[${ten}] ma ${r.ma} · n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema}${coLog ? ` · empty-log ${rong}` : ""} → ${loi.length ? `DO ${loi.join("; ")}` : "dat"}`,
 	);
-	return { ma: r.ma, dat: loi.length === 0 };
-}
-
-function phanDoTre() {
-	console.log(`[e24] tai may truoc khi do: ${loadavg().map((x) => x.toFixed(2)).join(" ")}`);
-	const r = chay("e24");
-	const hong = docLuotHong(r.ra);
-	const loi = [];
-	if (r.ma !== 0) loi.push(`do-tre thoat ${r.ma}`);
-	if (hong === null) loi.push("khong doc duoc so luot hong");
-	else if (hong > 0) loi.push(`co luot hong: ${hong}`);
-	console.log(`[e24] ma ${r.ma} · luot hong ${hong} → ${loi.length ? `DO ${loi.join("; ")}` : "dat"}`);
-	return { ma: r.ma, dat: loi.length === 0 };
+	return loi.length === 0;
 }
 
 if (!tuKiem()) process.exit(3);
@@ -210,8 +201,5 @@ if (chiTuKiem) process.exit(0);
 const ket = [
 	phanMoHinh("e22", DO.nDauToiThieuE22, true),
 	phanMoHinh("e17", DO.nDauToiThieuE17, false),
-	phanDoTre(),
 ];
-const maLenh = ket.find((k) => k.ma !== 0)?.ma;
-if (ket.every((k) => k.dat)) process.exit(0);
-process.exit(maLenh ?? 1);
+process.exit(ket.every(Boolean) ? 0 : 1);
