@@ -365,7 +365,7 @@ async function goiVoiSignalDaHuy(
 	});
 	const viec = goi(signal).then(
 		(): HinhTraLoi => ({ kieu: "tra", dungLyDo: false }),
-		(loi: unknown): HinhTraLoi => ({ kieu: "tu-choi", dungLyDo: loi === lyDo }),
+		(loi): HinhTraLoi => ({ kieu: "tu-choi", dungLyDo: loi === lyDo }),
 	);
 	try {
 		return await Promise.race([viec, han]);
@@ -392,7 +392,9 @@ describe("fetch-gia-theo-that", () => {
 			k.trangThai.ketQua = ket;
 			try {
 				expect(
-					await goiVoiSignalDaHuy((signal) => k.fetchGia(AGENT_GIA, { signal })),
+					await goiVoiSignalDaHuy((signal) =>
+						k.fetchGia(AGENT_GIA, { signal }),
+					),
 					`fetch-gia-da-huy ${ket}`,
 				).toEqual({ kieu: "tu-choi", dungLyDo: true });
 			} finally {

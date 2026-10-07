@@ -5,7 +5,7 @@ slug: nguoi-huy-khong-lac
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -65,5 +65,12 @@ không gian có hai trục, liệt kê tay:
 - «huỷ» trong hợp đồng này là người dùng ngắt yêu cầu HTTP đang chờ (`AbortSignal`), đúng chữ `docs/api.md`
   dùng («Người dùng tự huỷ thì không hoàn»); không phải «Bỏ» trong vòng đời bản ghi (cảnh báo W6 của
   `eval-coverage-lint` giữ có chủ đích).
+- Cặp đo S3 (07/10, đỉnh 77f7afa96, phá tại chỗ rồi `git checkout`, cây sạch sau mỗi lượt): R1a `r1h_huy`
+  với `Bun.sleep(0)` thay `k.choTreo()` → `huy-truoc-fetch n=0/5` (~11 ms); R1b `nhkl_duong_cham` với
+  `Bun.sleep(20)` → `huy-truoc-fetch n=0/5` (~230 ms); R2 `nhkl_fetch_gia` khung bỏ dòng kiểm → đủ năm dòng
+  `fetch-gia-da-huy <ket>` (`treo` 2003 ms, bốn ô còn lại dưới 3 ms); R3 `r1h_huy` mock tăng lượt ném →
+  `cho-treo-qua-han` ~2005 ms; R4 `r1h_huy` route bỏ nhánh `request.signal.aborted` → `hoan-khi-nguoi-huy
+  n=0/5` (~13 ms). Chiều xanh: ba tệp dùng chung khung 3 lượt 81/0; `r1h_huy`, `nhkl_duong_cham`,
+  `nhkl_fetch_gia`, `r1h_hong`, `r1h_luong` mã 0; `check-types`, `lint`, `lint:slop` mã 0.
 - Lượt tái hiện trước vòng (07/10, phiên này): `Bun.sleep(0)` thay `Bun.sleep(20)` trên khung cũ → hai ca
   `nguoi dung huy` quá hạn 5000.69 / 5001.09 ms.
