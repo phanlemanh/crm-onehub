@@ -1,0 +1,27 @@
+{
+  "feature_plain": "Rời trình soạn tài liệu lúc hộp «Liên kết tới trang» còn mở sẽ không còn văng lỗi ngầm; nhờ vậy log CI hết dòng TypeError từng khiến người ta tưởng bài kiểm này đỏ.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ giữ cả tệp bài kiểm của hộp chèn liên kết xanh."},
+    {"id": "AC-2", "p": "Sẽ không văng lỗi nào khi trình soạn bị gỡ lúc hộp còn mở — có bài kiểm mới đòi điều đó."},
+    {"id": "AC-3", "p": "Sẽ chứng bài kiểm mới thấy được lỗi cũ: gỡ lớp chặn trong bản sao thì đúng bài đó đỏ vì lỗi cũ."},
+    {"id": "AC-4", "p": "Sẽ giữ nguyên hành vi Esc đóng hộp và trả con trỏ về trình soạn — mọi bài cũ không đổi một chữ."},
+    {"id": "AC-5", "p": "Sẽ làm đầu ra của tệp kiểm sạch dòng lỗi TypeError (đang in 6–7 dòng mỗi lượt)."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Không đổi bài Esc: đo lại cho thấy nó chưa từng đỏ trên CI (0/31 lượt)."},
+    {"id": "OOS-2", "p": "Không ghim lại khoảng 30 hồ sơ đã ký đo cả gói giao diện — lưới gộp không đòi, bộ kiểm toàn gói vẫn chạy lại."},
+    {"id": "OOS-3", "p": "Không đổi cách Radix trả con trỏ, không nâng phiên bản thư viện."}
+  ],
+  "scope_plain": "Một lớp chặn trong thành phần cộng một bài kiểm mới; phần còn lại giữ nguyên.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã xét hai trạng thái của trình soạn lúc hộp trả con trỏ: còn sống và đã bị gỡ."},
+    {"i": 1, "p": "Đã xét ba cách hộp đóng: nhấn Esc, chọn một trang, gỡ cả trình soạn."},
+    {"i": 2, "p": "Ô chính: đã gỡ × gỡ trình soạn → bài mới (AC-2) và chiều đỏ (AC-3); còn sống × Esc → giữ bài cũ (AC-4); còn sống × chọn trang → các bài có sẵn (AC-1); đầu ra sạch lỗi (AC-5)."},
+    {"i": 3, "p": "Hai ô «đã gỡ × Esc» và «đã gỡ × chọn trang» không tồn tại — gỡ rồi thì không còn hộp."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chiều đỏ có thể xanh oan nếu chữ lỗi đến từ bài khác. Đã sửa: chỉ tính lỗi trong đúng khối của bài mới; bài mới ghi thông điệp dạng chữ để bun không treo; mỗi lượt có trần thời gian."},
+    {"i": 1, "p": "Chỉ so khối bài Esc thì hàm trợ giúp bị nới vẫn lọt. Đã sửa: bài mới tách ra cuối tệp, phần còn lại phải trùng từng byte với bản ghim, và bản ghim đối chiếu với bản gốc trong git."},
+    {"i": 2, "p": "Bộ đếm dòng lỗi chưa có đối chứng. Đã sửa: chiều đỏ đòi bộ đếm thấy ít nhất 2 dòng lỗi của các bài cũ, trên cả hai luồng đầu ra."}
+  ]
+}

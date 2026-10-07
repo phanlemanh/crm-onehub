@@ -1,0 +1,56 @@
+schema_version: 1
+slug: chen-lien-ket-khong-lac
+
+evals:
+  - id: E1
+    criterion: AC-1, AC-2, AC-4
+    executor: test
+    cmd: config:executors.test.tdk_chen_lien_ket_ui
+    paths:
+      - "packages/ui/test/trinh-soan-lien-ket.dom.tsx"
+      - "packages/ui/src/components/trinh-soan-lien-ket-trang.tsx"
+      - "packages/ui/src/components/trinh-soan.tsx"
+    expected: |
+      Ca tep trinh-soan-lien-ket.dom.tsx thoat 0, "0 fail", so bai = so bai cua tep (co bai moi
+      «go trinh soan khi hop dang mo thi khong loi chua bat» va bai «Esc dong hop va tra focus»).
+      Chieu do cua bai moi la E3.
+
+  - id: E2
+    criterion: AC-2, AC-4, AC-5
+    executor: script
+    cmd: config:executors.script.clk_pha_chot_xanh
+    paths:
+      - "packages/ui/test/trinh-soan-lien-ket.dom.tsx"
+      - "packages/ui/src/components/trinh-soan-lien-ket-trang.tsx"
+      - "packages/ui/src/components/trinh-soan.tsx"
+      - "_acceptance/chen-lien-ket-khong-lac/rang/**"
+      - "_acceptance/chen-lien-ket-khong-lac/fixtures/**"
+    expected: |
+      rang/pha-chot.mjs xanh: goc kho suy tu import.meta.dirname; chep tep test, trinh-soan.tsx va
+      trinh-soan-lien-ket-trang.tsx (ban HEAD, khong doi) vao .acceptance-runs/chen-lien-ket-khong-lac/sao-xanh-<pid>/,
+      doi import de ban sao dung thanh phan cua ban sao (moc vang/lap -> ma 2), symlink node_modules cua
+      packages/ui, chay ca tep voi preload setup-dom tuyet doi, tran thoi gian moi luot bun (qua tran -> ma 2).
+      Tien de ban ghim: fixtures/test-truoc.dom.tsx.txt phai trung tung byte `git show 0426cc9d0:packages/ui/test/trinh-soan-lien-ket.dom.tsx`
+      (lech -> ma 2 "ban ghim khong con la writer that").
+      Ma 0 khi dong thoi: (a) tep test o HEAD bo DUNG khoi cuoi bat dau bang `describe("chen-lien-ket-go"` trung tung
+      byte voi ban ghim — moi bai cu (ke ca Esc), ham tro giup, afterEach, hang cho giu nguyen (AC-4; lech -> ma 1
+      "tep test cu bi doi ngoai khoi moi"); (b) bun thoat 0, "0 fail"; (c) dem dong chua "commandManager" tren
+      stdout CONG stderr = 0 (AC-5). Bai do hay co dong commandManager -> ma 1 kem duoi log.
+      CAP HAI CHIEU tren CUNG ban sao: chieu do la E3 (chi khac lop chan bi go), dung CUNG ham dem.
+
+  - id: E3
+    criterion: AC-3, AC-5
+    executor: script
+    cmd: config:executors.script.clk_pha_chot_do
+    paths:
+      - "packages/ui/test/trinh-soan-lien-ket.dom.tsx"
+      - "packages/ui/src/components/trinh-soan-lien-ket-trang.tsx"
+      - "packages/ui/src/components/trinh-soan.tsx"
+      - "_acceptance/chen-lien-ket-khong-lac/rang/**"
+    expected: |
+      Cung ban sao, cung tran thoi gian va cung ham dem nhu E2; khac DUY NHAT: trong trinh-soan-lien-ket-trang.tsx cua
+      ban sao, lop chan editor.isDestroyed bi thay bang loi goi cu `editor?.commands.focus();` (moc lop chan vang/lap
+      -> ma 2). Ma 0 khi dong thoi: bun thoat khac 0; DUNG mot dong "(fail)" va do la bai «go trinh soan khi hop dang mo
+      thi khong loi chua bat»; khoi dau ra cua chinh bai do (tu dau bai toi dong "(fail)" cua no) chua "commandManager"
+      — loi bai moi bat duoc, khong phai dong console cua bai khac; va con >= 2 dong "commandManager" NGOAI khoi do
+      (doi chung duong: ham dem thay duoc dong console jsdom do afterEach cua bai cu in ra). Thieu dieu nao -> ma 1.
