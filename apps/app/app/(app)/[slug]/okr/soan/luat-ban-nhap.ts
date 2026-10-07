@@ -1,5 +1,6 @@
 import { docSoOkr } from "@crm/validation/okr-kr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
+import { khoaSo } from "./so-theo-khoa";
 import type {
 	DemDuaVao,
 	DongKr,
@@ -102,7 +103,16 @@ function krDaNhan(cay: readonly KhoiNhap[]): DongKr[] {
 }
 
 export function soCua(kr: DongKr, so: SoDaGo): SoKr {
-	return so[kr.id] ?? soMacDinh(kr);
+	const dung = so[khoaSo(kr)];
+	if (dung) return dung;
+	const theoTen = Object.values(so).find((s) => s?.khoaDong === kr.khoaDong);
+	return theoTen ?? soMacDinh(kr);
+}
+
+export function laDuSo(kr: DongKr, so: SoDaGo): boolean {
+	if (!canSo(kr)) return true;
+	const s = soCua(kr, so);
+	return docSoOkr(s.khoiDiem) !== null && docSoOkr(s.dich) !== null;
 }
 
 export function krThieuSo(cay: readonly KhoiNhap[], so: SoDaGo): string[] {

@@ -11,10 +11,14 @@ import {
 	krThieuSo,
 	soBanNhap,
 } from "@/app/(app)/[slug]/okr/soan/luat-ban-nhap";
+import { khoaSo } from "@/app/(app)/[slug]/okr/soan/so-theo-khoa";
 import {
 	tachCauHoi,
 	tachLuotTroLy,
 } from "@/app/(app)/[slug]/okr/soan/tach-cau-hoi";
+
+const ks = (id: string, cha: string) =>
+	khoaSo({ khoa: `kr:${id}`, chaKhoa: `mt:${cha}` });
 
 type TrangThai = DongSoan["trangThai"];
 
@@ -195,13 +199,15 @@ describe("luat-ban-nhap", () => {
 			mt("2", "B"),
 			kr("21", "2", "K4", "nhan"),
 		]);
-		expect(krThieuSo(cay, { "11": { khoiDiem: "3", dich: "" } })).toEqual([
-			"11",
-		]);
-		expect(krThieuSo(cay, { "11": { khoiDiem: "3", dich: "9" } })).toEqual([]);
-		expect(krThieuSo(cay, { "11": { khoiDiem: "abc", dich: "9" } })).toEqual([
-			"11",
-		]);
+		expect(
+			krThieuSo(cay, { [ks("11", "1")]: { khoiDiem: "3", dich: "" } }),
+		).toEqual(["11"]);
+		expect(
+			krThieuSo(cay, { [ks("11", "1")]: { khoiDiem: "3", dich: "9" } }),
+		).toEqual([]);
+		expect(
+			krThieuSo(cay, { [ks("11", "1")]: { khoiDiem: "abc", dich: "9" } }),
+		).toEqual(["11"]);
 		expect(krThieuSo(cay, {})).toEqual(["11"]);
 	});
 
@@ -239,8 +245,8 @@ describe("luat-ban-nhap", () => {
 		]);
 		expect(
 			krDuaVao(cay, {
-				"11": { khoiDiem: " 3,5 ", dich: "10" },
-				"12": { khoiDiem: "0", dich: "1" },
+				[ks("11", "1")]: { khoiDiem: " 3,5 ", dich: "10" },
+				[ks("12", "1")]: { khoiDiem: "0", dich: "1" },
 			}),
 		).toEqual([{ deXuatId: "11", khoiDiem: 3.5, dich: 10 }]);
 	});
@@ -252,13 +258,39 @@ describe("luat-ban-nhap", () => {
 			kr("12", "1", "K2", "nhan"),
 		]);
 		const so = {
-			"11": { khoiDiem: "5.000", dich: "1.250.000" },
-			"12": { khoiDiem: "0", dich: "1000000000001" },
+			[ks("11", "1")]: { khoiDiem: "5.000", dich: "1.250.000" },
+			[ks("12", "1")]: { khoiDiem: "0", dich: "1000000000001" },
 		};
 		expect(krDuaVao(cay, so)).toEqual([
 			{ deXuatId: "11", khoiDiem: 5000, dich: 1_250_000 },
 		]);
 		expect(krThieuSo(cay, so)).toEqual(["12"]);
+	});
+
+	test("số giữ theo khoá dòng: Kara nộp lại với id mới vẫn thấy số; KR chuyển Mục tiêu khớp lùi theo khoaDong", () => {
+		const so = {
+			[ks("11", "1")]: { khoiDiem: "4", dich: "9", khoaDong: kdKr("K1") },
+		};
+		const lanMoi = cayNhap([
+			mt("1", "A", "nhan"),
+			{ ...kr("11", "1", "K1", "nhan"), id: "11b" },
+		]);
+		expect(krDuaVao(lanMoi, so)).toEqual([
+			{ deXuatId: "11b", khoiDiem: 4, dich: 9 },
+		]);
+		const daChuyen = cayNhap([
+			mt("2", "B", "nhan"),
+			{ ...kr("11", "2", "K1", "nhan"), id: "11c" },
+		]);
+		expect(krDuaVao(daChuyen, so)).toEqual([
+			{ deXuatId: "11c", khoiDiem: 4, dich: 9 },
+		]);
+		expect(
+			krDuaVao(
+				cayNhap([mt("2", "B", "nhan"), kr("21", "2", "K9", "nhan")]),
+				so,
+			),
+		).toEqual([]);
 	});
 
 	test("duongTheoDonVi dựng đường Theo đơn vị cho ba cấp", () => {
