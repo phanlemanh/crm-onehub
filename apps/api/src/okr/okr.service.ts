@@ -83,6 +83,7 @@ import {
 	hangViec,
 	vetSangKienChoVai,
 } from "./canh-kr";
+import { chiaCuaToi, vaiCuaToi } from "./cua-toi";
 import { demGopYCho } from "./dem-gop-y";
 import { khoaDonViDong, tenDonVi } from "./don-vi";
 import { MOC_SAU_KHOA_CHU_KY, type MocSauKhoa } from "./dong-ho";
@@ -1978,26 +1979,23 @@ export class OkrService {
 
 	async mine(userId: string, cycleId: string) {
 		const q = await this.quyenOkr.quyen(userId);
-		const objectives = await this.docMucTieu(
-			this.db,
-			{
-				cycleId,
-				OR: [
-					{ ownerUserId: userId },
-					{ personUserId: userId },
-					{ participants: { some: { userId } } },
-					{ keyResults: { some: { ownerUserId: userId } } },
-					{ followers: { some: { userId } } },
-				],
-			},
-			userId,
-			q,
-			{ nguCanh: this.quyenOkr.nguCanhXem(q, userId) },
-		);
-		return {
-			objectives: objectives.filter((m) => m.status !== "da-bo"),
-			daBo: objectives.filter((m) => m.status === "da-bo"),
-		};
+		const [ds, cuaToi] = await Promise.all([
+			this.docMucTieu(
+				this.db,
+				{
+					cycleId,
+					OR: [...vaiCuaToi(userId), { followers: { some: { userId } } }],
+				},
+				userId,
+				q,
+				{ nguCanh: this.quyenOkr.nguCanhXem(q, userId) },
+			),
+			this.db.okrObjective.findMany({
+				where: { cycleId, OR: vaiCuaToi(userId) },
+				select: { id: true },
+			}),
+		]);
+		return chiaCuaToi(ds, new Set(cuaToi.map((m) => m.id)));
 	}
 
 	async objective(userId: string, id: string): Promise<ObjectiveOutput> {
