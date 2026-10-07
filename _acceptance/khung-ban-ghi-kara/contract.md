@@ -5,7 +5,7 @@ slug: khung-ban-ghi-kara
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-07-khung-ban-ghi-kara-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07T14:04:10Z
@@ -71,3 +71,12 @@ Source input: `docs/plan/lo-trinh-okr.json` hàng K4 · `_acceptance/khung-ban-g
 - `decideFact` đổi đúng một chỗ: một mốc thời gian chung cho `supersededAt` và `decidedAt`, để hoàn tác khớp đúng lần nhận.
 - Known limits (Cổng Phạm vi, anh duyệt theo khuyến nghị của design-pass): ở khổ 375 dòng biên nhận «Đã thêm theo Kara · Hoàn tác» trong ô thuộc tính hẹp xuống hai dòng — đọc được, bấm được; thành phần biên nhận chưa có cách xếp gọn cho ô hẹp.
 - Nút gọi Kara dùng chung (`NutKara`) dựng ở `packages/ui/src/components/kara/ban-ghi.tsx` để nút tra cứu không tự nhập icon ở chỗ gọi (finding Nhóm 2 của design-pass, anh duyệt làm ở S3).
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-08):**
+  - Ngoài-1 — hai người cùng mở một liên hệ, người kia vừa sửa chức danh, rồi người này nhận đề xuất của Kara và bấm Hoàn tác: chức danh người kia vừa sửa bị đè bằng giá trị cũ trên màn của người này, hệ thống vẫn báo hoàn tác thành công. Giá trị cũ do màn gửi lên, máy chủ không tự lưu trước lúc nhận.
+  - Ngoài-2 — ai gọi thẳng vào hệ thống (không qua màn) có thể hoàn tác một lần nhận tên và để liên hệ có tên trống, hoặc để chức danh là chuỗi rỗng thay vì không có; người thao tác trên màn không gặp.
+  - Ngoài-6 — trong lúc Kara đang làm giàu hồ sơ và màn tự làm mới, bấm Thay rồi Hoàn tác có thể báo thành công nhưng trường vẫn giữ giá trị mới, giá trị cũ mất.
+  - Ngoài-7 — thông tin không có ô riêng trong hồ sơ (nơi làm việc, địa điểm) thì hoàn tác luôn bị từ chối; màn hiện không cho hoàn tác các trường này.
+  - Ngoài-8 — kiểm thử chưa chứng minh Hoàn tác trả lại đúng giá trị cũ, kể cả khi hoàn tác tên.
+  - Ngoài-9 — phép kiểm gợi ý của công ty và thoả thuận có chép nhầm câu của liên hệ không bao giờ đỏ.
+  - Ngoài-10 — kiểm thử máy chủ chỉ xác nhận trường đã đổi sau khi nhận, chưa xác nhận trường mang đúng giá trị Kara đề xuất.
+- Hợp đồng mới (Cổng Bằng chứng 2026-10-08): Ngoài-4 — mở bản ghi đã xoá hay không có quyền xem thì khung chỉ nói kiểm tra kết nối; Ngoài-5 — bước Kara tìm được mà hệ thống từ chối lưu vẫn hiện dấu xong.
