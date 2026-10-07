@@ -10,8 +10,8 @@ import {
 } from "@crm/db/okr-muc-tieu-lich-su";
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { z } from "zod";
-import { OKR } from "../src/okr/okr-config";
 import { dungLaiOutput } from "../src/okr/okr.contracts";
+import { OKR } from "../src/okr/okr-config";
 import { donSanCanhKr, mauMoi } from "./okr-canh-kr-san";
 import {
 	donSanKhep,
