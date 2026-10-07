@@ -5,9 +5,9 @@ slug: chen-lien-ket-khong-lac
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-07T21:06:09Z
 design_doc: _acceptance/chen-lien-ket-khong-lac/design.md
 ---
 
