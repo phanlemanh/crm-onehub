@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { docJson, timThuMucDot, trongWorktree } from './dot.mjs';
+import { docCauHinh } from './hinh-dang.mjs';
 
 export const LENH_MAC_DINH = {
   workflow_script: 'acceptance-verify.js',
@@ -24,7 +25,7 @@ export function phanLoai(dauVao, lenh = LENH_MAC_DINH) {
 export function quyet(dauVao, { timDot = timThuMucDot } = {}) {
   const thuMuc = timDot(dauVao.cwd);
   if (!thuMuc) return { ma: 0 };
-  docJson(path.join(thuMuc, 'dieu-phoi.config.json'), {});
+  docCauHinh(thuMuc);
   const taiNguyen = phanLoai(dauVao);
   if (!taiNguyen) return { ma: 0 };
   const chu = docJson(path.join(thuMuc, 'khoa', taiNguyen, 'chu.json'));

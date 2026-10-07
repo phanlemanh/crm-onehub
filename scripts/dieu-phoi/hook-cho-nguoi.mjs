@@ -2,7 +2,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { docJson, ghiJsonNguyenTu, phienCuaCwd, timThuMucDot } from './dot.mjs';
+import { ghiJsonNguyenTu, phienCuaCwd, timThuMucDot } from './dot.mjs';
+import { docHangViec } from './hinh-dang.mjs';
 
 const LOAI_CHO = new Set(['idle_prompt', 'permission_prompt']);
 
@@ -14,7 +15,7 @@ function coTepBatDau(thuMuc, ten, tienTo) {
 export function xuLyChoNguoi(dauVao, { timDot = timThuMucDot } = {}) {
   const thuMuc = timDot(dauVao.cwd);
   if (!thuMuc) return 'ngoai-dot';
-  const hangViec = docJson(path.join(thuMuc, 'hang-viec.json'), { day: [], hang: [] });
+  const hangViec = docHangViec(thuMuc);
   const phien = phienCuaCwd(hangViec, dauVao.cwd);
   if (!phien) return 'khong-phai-tho';
   const tep = path.join(thuMuc, 'cho-nguoi', `${phien}.json`);

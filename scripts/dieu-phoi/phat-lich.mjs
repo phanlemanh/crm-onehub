@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { veBang } from './bang.mjs';
-import { kiemCoBan, kiemDon, kiemYeuCau } from './hinh-dang.mjs';
+import { docCauHinh, docHangViec, kiemCoBan, kiemDon, kiemYeuCau } from './hinh-dang.mjs';
 import { GIAY_MS, NHIP, PHUT_MS } from './cau-hinh.mjs';
 import { docJson, ghiJsonNguyenTu, ghiSuKien } from './dot.mjs';
 import { capLuot, chonHangKe, xetHanThue } from './lich.mjs';
@@ -191,8 +191,8 @@ function capNhatHangKe(thuMuc, hangViec, tienDo) {
 
 export async function motNhip(thuMuc, io) {
   const nowMs = io.nowMs();
-  const cfg = docJson(path.join(thuMuc, 'dieu-phoi.config.json'));
-  const hangViec = docJson(path.join(thuMuc, 'hang-viec.json'));
+  const cfg = docCauHinh(thuMuc);
+  const hangViec = docHangViec(thuMuc);
   const pTrangThai = path.join(thuMuc, 'trang-thai.json');
   const cu = docJson(pTrangThai, {});
 
@@ -288,7 +288,13 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === fs.realpathSync(proces
     process.stderr.write(`phat-lich: đã có bộ phát lịch đang chạy cho ${thuMuc}\n`);
     process.exit(3);
   }
-  const cfg = docJson(path.join(thuMuc, 'dieu-phoi.config.json'));
+  let cfg;
+  try {
+    cfg = docCauHinh(thuMuc, { canGocKho: true });
+  } catch (e) {
+    process.stderr.write(`phat-lich: ${e.message}\n`);
+    process.exit(1);
+  }
   const io = { ...IO_THAT, chay: (cmd, args, opts) => IO_THAT.chay(cmd, args, { cwd: cfg.goc_kho, ...opts }) };
   const vong = taoVong(thuMuc, io);
   await vong();

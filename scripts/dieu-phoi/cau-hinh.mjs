@@ -8,4 +8,7 @@ export const NHIP = {
   fetchMs: 5 * PHUT_MS,
   lenhNgoaiMs: 30 * GIAY_MS,
   tickGiayMacDinh: 5,
+  giuNhipMs: PHUT_MS,
 };
+
+export const DOC_DAU_BYTE = 64 * 1024;

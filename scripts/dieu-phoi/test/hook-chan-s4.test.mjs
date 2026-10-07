@@ -4,12 +4,13 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { chayHook, phanLoai } from '../hook-chan-s4.mjs';
+import { CFG_BIEN } from './mau-thu.mjs';
 
 const tam = () => fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'dp-')));
 function dung() {
   const dot = tam();
   const wt = tam();
-  fs.writeFileSync(path.join(dot, 'dieu-phoi.config.json'), '{}');
+  fs.writeFileSync(path.join(dot, 'dieu-phoi.config.json'), JSON.stringify(CFG_BIEN));
   return { dot, wt, timDot: () => dot };
 }
 const wf = (cwd) => JSON.stringify({ tool_name: 'Workflow', cwd, tool_input: { scriptPath: '/x/workflows/acceptance-verify.js' } });
@@ -63,4 +64,22 @@ test('đóng khi lỗi: lệnh S4 + lỗi nội bộ → 2 «lỗi nội bộ»'
   assert.equal(kq.ma, 2);
   assert.match(kq.loi, /^chan-s4: lỗi nội bộ: .* — chặn để an toàn; báo phiên giám sát$/);
   assert.equal(chayHook('{"tool_name":"Workflow","x": acceptance-verify.js', { timDot }).ma, 2);
+});
+
+test('cấu hình sai hình dạng (JSON đúng): lệnh S4 → 2 lỗi nội bộ nêu tệp; lệnh thường → 0', () => {
+  const { dot, wt, timDot } = dung();
+  fs.writeFileSync(path.join(dot, 'dieu-phoi.config.json'), JSON.stringify({ ...CFG_BIEN, bao_ve: 'packages/db/prisma/**' }));
+  const kq = chayHook(wf(wt), { timDot });
+  assert.equal(kq.ma, 2);
+  assert.match(kq.loi, /^chan-s4: lỗi nội bộ: dieu-phoi\.config\.json: bao_ve phải là danh sách chuỗi — chặn để an toàn; báo phiên giám sát$/);
+  assert.deepEqual(chayHook(bash(wt, 'git status'), { timDot }), { ma: 0 });
+});
+
+test('hang-viec.json sai không đổi hook chặn S4', () => {
+  const { dot, wt, timDot } = dung();
+  fs.writeFileSync(path.join(dot, 'hang-viec.json'), JSON.stringify({ dot: 'thu', day: {}, hang: [] }));
+  assert.deepEqual(chayHook(bash(wt, 'git status'), { timDot }), { ma: 0 });
+  fs.mkdirSync(path.join(dot, 'khoa', 's4'), { recursive: true });
+  fs.writeFileSync(path.join(dot, 'khoa', 's4', 'chu.json'), JSON.stringify({ phien: 'P1', worktree: wt }));
+  assert.deepEqual(chayHook(wf(wt), { timDot }), { ma: 0 });
 });

@@ -33,7 +33,7 @@ evals:
   criterion: AC-3
   executor: test
   cmd: config:executors.test.dph_hinh_dang
-  expected: 'exit 0; hinh-dang.test.mjs xanh ở ca ''kiemCauHinh: ma trận mười sáu ô sai → lỗi nêu đúng trường; mẫu + goc_kho qua'' — ma trận viết trước mười sáu phần tử (bao_ve chuỗi · bao_ve phần tử số · han_thue_phut thiếu từng loại, lặp trên LOAI_DON import từ hinh-dang.mjs — chính danh sách kiemDon dùng để nhận đơn mà capPhat cấp khoá, không chép tay · han_thue_phut[s4] = 0 · nhip_cu_phut chuỗi · nhip_cu_phut bằng NHIP.giuNhipMs/PHUT_MS · thiếu s4_tran_gom_phut · suc_khoe thiếu từng khoá trong ba · nhanh_chinh rỗng · thiếu goc_kho · khoá lạ tick_giayy); số assert.throws bằng số phần tử, mỗi assert ghim thông điệp bắt đầu ''dieu-phoi.config.json: '' và tên trường (với han_thue_phut: tên loại thiếu). Đối chứng dương: mau/dieu-phoi.config.json đọc từ đĩa cộng goc_kho qua; CFG của phat-lich.test và bien.test (import) qua. Chiều đỏ: đột biến V7 (bỏ kiểm bao_ve là mảng), V8 (bỏ kiểm đủ loại han_thue_phut), V29 (bộ kiểm dùng danh sách loại riêng thiếu ''merge''), V9 (bỏ kiểm khoá lạ), V10 (bỏ
+  expected: 'exit 0; hinh-dang.test.mjs xanh ở ca ''kiemCauHinh: ma trận mười sáu ô sai → lỗi nêu đúng trường; mẫu + goc_kho qua'' — ma trận viết trước mười sáu phần tử (bao_ve chuỗi · bao_ve phần tử số · han_thue_phut thiếu từng loại, lặp trên LOAI_DON import từ hinh-dang.mjs — chính danh sách kiemDon dùng để nhận đơn mà capPhat cấp khoá, không chép tay · han_thue_phut[s4] = 0 · nhip_cu_phut chuỗi · nhip_cu_phut bằng NHIP.giuNhipMs/PHUT_MS · thiếu s4_tran_gom_phut · suc_khoe thiếu từng khoá trong ba · nhanh_chinh rỗng · goc_kho rỗng · khoá lạ tick_giayy); số assert.throws bằng số phần tử, mỗi assert ghim thông điệp bắt đầu ''dieu-phoi.config.json: '' và tên trường (với han_thue_phut: tên loại thiếu). Đối chứng dương: mau/dieu-phoi.config.json đọc từ đĩa cộng goc_kho qua; CFG của phat-lich.test và bien.test (import từ test/mau-thu.mjs) qua. Ca ''bộ phát lịch đòi goc_kho lúc khởi động; một nhịp thì không'': tiến trình phat-lich.mjs thật trên đợt thiếu goc_kho thoát 1 với stderr đúng ''phat-lich: dieu-phoi.config.json: goc_kho phải là chuỗi không rỗng''; cùng đợt, một nhịp qua taoVong vẫn cấp khoá và không có loi-nhip. Chiều đỏ: đột biến V7 (bỏ kiểm bao_ve là mảng), V8 (bỏ kiểm đủ loại han_thue_phut), V29 (bộ kiểm dùng danh sách loại riêng thiếu ''merge''), V9 (bỏ kiểm khoá lạ), V10 (bỏ
     so nhip_cu_phut với giuNhipMs) của E19.'
   paths:
   - scripts/dieu-phoi/hinh-dang.mjs
@@ -242,7 +242,7 @@ evals:
   criterion: AC-13
   executor: script
   cmd: config:executors.script.dph_dot_bien
-  expected: 'exit 0; bộ đột biến cũ in ''KET LUAN: 26 dot bien, moi ca ghim deu do'' trên cây mới — không MOC VANG, không ca ghim cũ nào bị đổi tên.'
+  expected: 'exit 0; bộ đột biến cũ in ''KET LUAN: 27 dot bien, moi ca ghim deu do'' trên cây mới — không MOC VANG, không ca ghim cũ nào bị đổi tên.'
   paths:
   - scripts/dieu-phoi/**
   - _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
