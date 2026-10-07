@@ -50,6 +50,10 @@ function chinh() {
 		process.exit(2);
 	}
 	const ra = `${r.stdout}\n${r.stderr}`;
+	writeFileSync(
+		join(GOC, ".acceptance-runs", "ci-test-duoi-tran-chay-that.log"),
+		ra,
+	);
 	const nhom = [...ra.matchAll(DONG_NHOM)].map((m) => ({
 		ten: m[1],
 		ma: Number(m[2]),

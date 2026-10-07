@@ -28,6 +28,7 @@ const bat = Date.now();
 await new Promise((r) => setTimeout(r, Number(process.env.CTD_NGU || 0)));
 appendFileSync(process.env.CTD_SO, JSON.stringify({ doiSo, bat, ket: Date.now() }) + "\\n");
 console.log("test-run: crm_gia" + process.pid + "_test is this run's database");
+if (process.env.CTD_KHONG_XUONG) process.stdout.write("dong cuoi khong xuong dong");
 const doNhom = (process.env.CTD_DO || "").split(",").filter(Boolean);
 process.exit(doiSo.some((a) => doNhom.includes(a.replace("--filter=", ""))) ? 1 : 0);
 `,
@@ -136,6 +137,16 @@ describe("ctd-cli", () => {
 			(m) => m[1],
 		);
 		assert.equal(new Set(csdl).size, 4, r.ra);
+	});
+
+	test("(f) dau ra nhom khong ket thuc xuong dong van du bon dong ket qua", () => {
+		const r = chay([], { CTD_KHONG_XUONG: "1" });
+		assert.equal(r.ma, 0, r.ra);
+		assert.equal(
+			[...r.ra.matchAll(/^nhom \S+: ma 0 · CSDL \S+ · /gm)].length,
+			4,
+			r.ra,
+		);
 	});
 
 	for (const n of NHOM_TEST) {
