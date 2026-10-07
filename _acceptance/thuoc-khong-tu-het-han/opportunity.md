@@ -3,10 +3,10 @@ schema_version: 1
 slug: thuoc-khong-tu-het-han
 feature: Thước đo của hồ sơ đã ký neo vào mốc cố định của chính lượt đó, không so với origin/onehub hay merge-base, nên không tự đỏ khi các lượt sau gộp vào
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-07
 prototype:
   base_commit:
   disposition:
@@ -48,3 +48,7 @@ Một thước viết đúng cho vòng của chính nó, nhưng đo theo «nhán
 ## Hạng mục cùng lớp
 
 `kiem-cheo-sau-gop`, `ca-chap-chon-cach-ly`, `eval-model-that-dung-luc`.
+
+## Quyết định Cổng Đáng
+
+07/10/2026, chủ kho: «Đưa F9-F12 vào đợt» — `build`, làm trong dãy P4 của đợt `sau-14-10`. Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.
