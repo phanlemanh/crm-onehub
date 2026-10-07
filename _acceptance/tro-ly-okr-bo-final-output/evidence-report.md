@@ -3,11 +3,11 @@ schema_version: 2
 feature_slug: tro-ly-okr-bo-final-output
 verdict: BLOCKED
 failed_evals: []
-reason: "E6 và E7 (bun _acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs): bị công cụ giết ở ~600 giây; lệnh được đẩy vào nền nhưng chưa có output được ghi vào tệp, không thể xác nhận kết quả thực thi. Cách xử lý là chạy lại với giới hạn thời gian dài hơn, không phải sửa mã."
+reason: "E6 và E7 (bun _acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs): lệnh vượt trần 600 giây của công cụ và bị giết, tệp đầu ra còn trống, chưa có mã thoát thật, chưa có dòng [tu-kiem], [e22] hay [e17]. Đây không phải kết quả đo của tính năng. Cách xử lý là chạy lại ngoài trần của công cụ (nền, đọc tệp đầu ra), không phải sửa mã."
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 55ed8390093bf97541c2c9c29c0c62855d061212
+verified_commit: fa351d5f822d233a6d8254fa07e2fd1d3a5f5a85
 human_signoff:
 ---
 
@@ -16,7 +16,7 @@ human_signoff:
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
 | E1 | AC-1 | test | PASS |
-| E2 | AC-1 | judgment | UNCERTAIN |
+| E2 | AC-1 | judgment | PASS |
 | E3 | AC-2 | test | PASS |
 | E4 | AC-3 | test | PASS |
 | E5 | AC-4 | test | PASS |
@@ -27,127 +27,120 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-tro-ly-okr-bo-final-output-E1-r2
+  run_id: minted-tro-ly-okr-bo-final-output-E1-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.test.tbf_khong_khuon_ra
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
   cmd: cd apps/agent && bun test test/tro-ly-okr-khong-khuon-ra.spec.ts
   output: |
-    (đầu ra của lượt chạy chỉ còn dòng kết thúc thành công, không có dòng lỗi)
+    Ran 3 tests across 1 file. [89.00ms]
     __EXIT=0
 
 - eval: E3
   run_id: minted-tro-ly-okr-bo-final-output-E3-r2
   exit_code: 0
-  baseline: red
   verifier: config:executors.test.tbf_dong_gop_y
   verified_at: 2026-10-07T00:18:15Z
-  cmd: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-dong-viec.integration.spec.ts -t gop-y"
-  output: |
-    (đầu ra của lượt chạy chỉ còn dòng kết thúc thành công, không có dòng lỗi)
-    __EXIT=0
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: muxd09921eyc
   exit_code: 0
-  baseline: red
   verifier: config:executors.test.tbf_dong_tom_tat
   verified_at: 2026-10-07T00:18:15Z
-  cmd: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-nop-tom-tat.integration.spec.ts -t dong-viec-tom-tat"
-  output: |
-    (đầu ra của lượt chạy chỉ còn dòng kết thúc thành công, không có dòng lỗi)
-    __EXIT=0
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E5
   run_id: minted-tro-ly-okr-bo-final-output-E5-r2
   exit_code: 0
-  baseline: red
   verifier: config:executors.test.tbf_luoi
   verified_at: 2026-10-07T00:18:15Z
-  cmd: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-dong-viec.integration.spec.ts -t luoi"
-  output: |
-    test-run: dropped crm_muxd0a4x01vv_test
-    __EXIT=0
+  carried_from_round: 2
+  note: carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E6
-  run_id: minted-tro-ly-okr-bo-final-output-E6-r2
-  exit_code: n-a (công cụ giết lệnh trước khi có mã thoát thật)
+  run_id: minted-tro-ly-okr-bo-final-output-E6-r3
+  exit_code: n-a (công cụ giết lệnh ở trần 600 giây, không có mã thoát thật)
   baseline: red
   verifier: config:executors.script.tbf_do_mo_hinh
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
   cmd: bun _acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs
   output: |
-    Bị công cụ giết ở ~600 giây. Lệnh được đẩy vào nền nhưng chưa có output nào được ghi vào tệp.
+    Lệnh vượt trần 600 giây của công cụ nên bị giết; tệp đầu ra còn trống suốt thời gian chạy.
     Không xác nhận được kết quả của [tu-kiem], [e22] hay [e17]. Đây là BLOCKED, không phải kết quả đo.
 
 - eval: E7
-  run_id: minted-tro-ly-okr-bo-final-output-E7-r2
-  exit_code: n-a (công cụ giết lệnh trước khi có mã thoát thật)
+  run_id: minted-tro-ly-okr-bo-final-output-E7-r3
+  exit_code: n-a (công cụ giết lệnh ở trần 600 giây, không có mã thoát thật)
   baseline: red
   verifier: config:executors.script.tbf_do_mo_hinh
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
   cmd: bun _acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs
   output: |
-    Cùng lệnh với E6, cùng lần bị giết ở ~600 giây; phần [e17] chưa có dòng đếm nào được ghi.
+    Cùng lệnh với E6, cùng lần bị giết; phần [e17] chưa có dòng đếm nào được ghi.
     Không xác nhận được kết quả. Đây là BLOCKED, không phải kết quả đo.
 
 ### Judgment
 
 - eval: E2
   judged_by: judge-subagent (fresh context)
-  verdict: UNCERTAIN
-  rationale: Ba người chấm (domain-correctness, operational-feasibility, spec-alignment) cùng thấy hai ý đầu đạt — cả hai chỉ dẫn đặt lời gọi nộp (nop_de_xuat, nop_tom_tat) là việc đầu tiên, nộp xong thì trả lời «done» và dừng, không còn câu đòi khuôn kết quả hay tool thứ hai. Ý thứ ba chỉ chắc cho instructions.md (có câu «If the data block is missing, call no tool: reply done and stop»). MUC_TOM_TAT trong chi-dan-tom-tat.ts không có câu tương đương và còn tuyên bố các luật phía trên về nop_de_xuat không áp dụng, nên chưa rõ luật thiếu khối dữ liệu có còn hiệu lực cho đường tóm tắt tuần.
-  required_evidence:
-    - Một câu tường minh trong MUC_TOM_TAT (apps/agent/agent/lib/okr/chi-dan-tom-tat.ts) nói khi thiếu khối dữ liệu (phong, tuan hoặc krs) thì không gọi tool nào, không nộp danh sách rỗng, trả lời done. Có câu này thì phán quyết đổi thành PASS.
-    - Hoặc bằng chứng chỉ dẫn tóm tắt luôn được nối sau instructions.md và luật thiếu dữ liệu của instructions.md còn hiệu lực ở đường tóm tắt — lấy từ hàm dựng prompt phiên con trong apps/agent/agent/subagents/tro_ly_okr, hoặc một test chạy phiên tóm tắt không có khối dữ liệu và thấy không có lời gọi tool nào. Eval đó phải liệt kê tệp ghép chỉ dẫn trong Input của nó.
+  verdict: PASS
+  rationale: Ba người chấm cùng thấy cả hai chỉ dẫn không còn câu đòi khuôn kết quả hay tool thứ hai, nộp xong thì trả lời «done», và khi thiếu khối dữ liệu thì không gọi tool nào, không nộp danh sách rỗng. Lưu ý đã ghi ở review-findings.md: phép chấm này đọc văn bản chỉ dẫn, chưa chạy đường dựng chỉ dẫn lúc thiếu dữ liệu.
+  votes:
+    - domain-correctness: PASS — Ca hai chỉ dẫn đều không còn câu nào bảo kết bằng khối JSON, khuôn kết quả hay gọi tool khác; lời gọi nộp là phản hồi đầu tiên, tool nộp trả lời thì chỉ đáp «done». Khi thiếu khối dữ liệu, cả hai bảo không gọi tool nào, không nộp danh sách rỗng, trả lời «done».
+    - operational-feasibility: PASS — Cả hai chỉ dẫn nói lời gọi nộp là phản hồi đầu tiên, chỉ gọi đúng một lần, và kết thúc bằng câu trả «done» rồi dừng, không gọi tool nào khác. Không có câu nào bảo kết bằng khối JSON hay khuôn kết quả.
+    - spec-alignment: PASS — Cả hai chỉ dẫn bảo nộp là lời đáp đầu tiên, nộp đúng một lần, tool nộp trả lời thì chỉ trả «done». Khi khối dữ liệu thiếu, cả hai bảo không gọi tool nào, không nộp danh sách rỗng, trả «done».
   human_override:  # chi nguoi ghi
 
 - eval: E9
-  judged_by: judge-subagent (fresh context)
+  judged_by: judge-subagent (fresh context, panel carried from round 2)
   verdict: PASS
-  rationale: Cả ba người chấm thấy đoạn «Phiên con không khai khuôn kết quả (07/10)» trong docs/agent.md nêu đủ ba ý. Gốc là tool final_output do eve thêm khi tro_ly_okr khai outputSchema, đá với lệnh nộp nop_de_xuat, nên model nghĩ tới trần rồi trả rỗng. Có số đo 07/10 (17/88 lời gọi đầu rỗng; chỉ nop_de_xuat thì 0/22 hết trần, thêm final_output thì 5/8). Câu «Act at once…» được ghi là không chữa được và số 0/24 cũ là mẫu nhỏ.
-  required_evidence:
-    - (judge không nêu bằng-chứng-thiếu)
+  rationale: panel giu nguyen tu round 2 — inputs khong doi, khong cham lai; rationale xem round do
+  votes:
+    - domain-correctness: PASS (r2)
+    - operational-feasibility: PASS (r2)
+    - spec-alignment: PASS (r2)
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_api-r2
-  exit_code: 1
-  verified_at: 2026-10-07T00:18:15Z
-  note: Lệnh này không gắn eval nào. 1572 bài qua, 3 bỏ qua, 1 đỏ trên 1576 bài ở 169 tệp. Bài đỏ là getme-zalo-hong (Zalo không trả lời thì zaloKhongTraLoi, token sai thì tokenSai; không setWebhook, cột không đổi). Cần người đọc trước khi tin hay bỏ qua.
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_api-r3
+  exit_code: 0
+  verified_at: 2026-10-07T00:41:02Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_lint_slop-r2
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-07T00:18:15Z
+  verified_at: 2026-10-07T00:41:02Z
 
 ## Known limits
 
@@ -164,4 +157,5 @@ none — mọi eval chạy nhiều lần đều đồng nhất
 ## Iterations
 
 Round 1: REJECT — E6, E7, E8 và hai lệnh suite (api, agent-okr) đỏ, kèm các lỗi ngoài hợp đồng. Quay lại cài đặt: sửa hàm kiểm nopThat của api, bổ sung xử lý thiếu khối dữ liệu cho phiên con.
-Round 2: BLOCKED — E1, E3, E4, E5 qua; E6 và E7 bị công cụ giết ở ~600 giây nên chưa có kết quả đo; E2 chờ người quyết; lệnh suite api còn một bài đỏ (getme-zalo-hong) không gắn eval nào. Cách xử lý: chạy lại do-mo-hinh.mjs với giới hạn thời gian dài hơn rồi đọc bài đỏ của api.
+Round 2: BLOCKED — E1, E3, E4, E5 qua; E6 và E7 bị công cụ giết ở ~600 giây nên chưa có kết quả đo; E2 chờ người quyết; lệnh suite api còn một bài đỏ (getme-zalo-hong) không gắn eval nào.
+Round 3: BLOCKED — E1 qua trên cây mới, E3, E4, E5 mang từ round 2, cả bảy lệnh suite xanh (bài api đã hết đỏ), E2 và E9 được hội đồng cho qua; E6 và E7 lại bị công cụ giết ở trần 600 giây, tệp đầu ra còn trống. Lần thứ hai cùng nguyên nhân: cần người chạy do-mo-hinh.mjs ngoài trần của công cụ rồi đọc tệp đầu ra, không phải sửa mã.

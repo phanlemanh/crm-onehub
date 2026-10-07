@@ -92,3 +92,44 @@ wall: 1256s
 - **claude-haiku-4-5-20251001**: 12 agent · 34 calls · out 13,196 · in 300 · cache_read 1,550,050 · cache_create 426,651
 - **claude-opus-5-5**: 3 agent · 50 calls · out 6,671 · in 100 · cache_read 5,468,516 · cache_create 356,213
 
+### S4 round 3 — wf_dd867a14-730 (19 agent, 23,825 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 4 | 5,779 | 8 | 301,383 | 66 |
+| triage | claude-sonnet-5-5 | 2 | 2,459 | 4 | 76,028 | 21 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-4-5-20251001 | 2 | 2,331 | 18 | 83,460 | 220 |
+| review:measurement | claude-opus-5-5 | 9 | 1,941 | 18 | 835,577 | 80 |
+| review:conventions | claude-opus-5-5 | 6 | 1,884 | 12 | 418,055 | 44 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-4-5-20251001 | 2 | 1,613 | 18 | 83,466 | 224 |
+| machine:bun run test -- --filter=api | claude-haiku-4-5-20251001 | 2 | 1,518 | 18 | 83,447 | 194 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 989 | 18 | 83,445 | 18 |
+| judge:E2:operational-feasibility | claude-sonnet-5-5 | 2 | 939 | 4 | 108,667 | 10 |
+| machine:bun _acceptance/tro-ly-okr-bo-final-outp | claude-haiku-4-5-20251001 | 5 | 878 | 42 | 233,937 | 623 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-4-5-20251001 | 2 | 628 | 18 | 83,492 | 64 |
+| judge:E2:domain-correctness | claude-sonnet-5-5 | 2 | 602 | 4 | 73,837 | 7 |
+| judge:E2:spec-alignment | claude-sonnet-5-5 | 2 | 572 | 4 | 108,665 | 7 |
+| review:bugs | claude-opus-5-5 | 10 | 438 | 20 | 914,358 | 68 |
+| baseline:diffBase | claude-sonnet-5-5 | 4 | 368 | 8 | 234,577 | 22 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 367 | 18 | 83,443 | 13 |
+| machine:cd apps/agent && bun test test/tro-ly-ok | claude-haiku-4-5-20251001 | 2 | 357 | 18 | 83,475 | 15 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 157 | 4 | 73,043 | 7 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 5 | 18 | 83,445 | 56 |
+
+
+wall: 896s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 368 | 234,577 | 22 | 00:41:15 | 00:41:37 |
+| machine | 9 | 8,686 | 901,610 | 798 | 00:41:15 | 00:54:33 |
+| judge | 3 | 2,113 | 291,169 | 12 | 00:41:15 | 00:41:27 |
+| review | 3 | 4,263 | 2,167,990 | 81 | 00:41:15 | 00:42:36 |
+| triage | 1 | 2,459 | 76,028 | 21 | 00:54:34 | 00:54:55 |
+| capture | 1 | 157 | 73,043 | 7 | 00:54:57 | 00:55:03 |
+| synthesize | 1 | 5,779 | 301,383 | 66 | 00:55:05 | 00:56:11 |
+
+- **claude-sonnet-5-5**: 7 agent · 18 calls · out 10,876 · in 36 · cache_read 976,200 · cache_create 534,161
+- **claude-haiku-4-5-20251001**: 9 agent · 21 calls · out 8,686 · in 186 · cache_read 901,610 · cache_create 298,840
+- **claude-opus-5-5**: 3 agent · 25 calls · out 4,263 · in 50 · cache_read 2,167,990 · cache_create 247,285
+
