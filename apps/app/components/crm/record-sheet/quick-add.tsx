@@ -1,10 +1,12 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import { Field, FieldLabel } from "@crm/ui/components/field";
+import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { Input } from "@crm/ui/components/input";
-import { useLocale } from "@crm/ui/components/locale-provider";
+import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
 import { MoneyInput } from "@crm/ui/components/money-input";
 import {
 	Select,
@@ -24,10 +26,23 @@ import { recordSheetMessages } from "@/lib/messages/record-sheet";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
+function useNhap<T extends Record<string, string>>(dau: T) {
+	const khai = useKhaiThayDoi();
+	const [nhap, datNhap] = useState(dau);
+	const coChu = (gia: T) => Object.values(gia).some((o) => o.trim() !== "");
+	const doi = (thay: Partial<T>) => {
+		const ke = { ...nhap, ...thay };
+		datNhap(ke);
+		khai(coChu(ke));
+	};
+	return { nhap, doi, ban: coChu(nhap), xong: () => khai(false) };
+}
+
 function QuickAddForm({
 	submitLabel,
 	pending,
 	ready,
+	dirty,
 	onSubmit,
 	onCancel,
 	children,
@@ -35,11 +50,14 @@ function QuickAddForm({
 	submitLabel: string;
 	pending: boolean;
 	ready: boolean;
+	dirty: boolean;
 	onSubmit: () => void;
 	onCancel: () => void;
 	children: React.ReactNode;
 }) {
 	const cancel = crmMessages(useLocale()).sheet.cancel;
+	const hop = useMessages().dialog.boThayDoi;
+	const [hoi, datHoi] = useState(false);
 
 	return (
 		<form
@@ -53,7 +71,7 @@ function QuickAddForm({
 					variant="ghost"
 					size="sm"
 					disabled={pending}
-					onClick={onCancel}
+					onClick={() => (dirty ? datHoi(true) : onCancel())}
 				>
 					{cancel}
 				</Button>
@@ -62,6 +80,20 @@ function QuickAddForm({
 					{submitLabel}
 				</Button>
 			</div>
+			<ConfirmDialog
+				open={hoi}
+				onOpenChange={datHoi}
+				tieuDe={hop.tieuDe}
+				than={hop.than}
+				nut={hop.bo}
+				thoi={hop.tiepTuc}
+				pending={false}
+				tone="destructive"
+				onConfirm={() => {
+					datHoi(false);
+					onCancel();
+				}}
+			/>
 		</form>
 	);
 }
@@ -80,10 +112,13 @@ export function QuickAddContact({
 	const sheet = recordSheetMessages(useLocale());
 	const m = sheet.contact;
 
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [email, setEmail] = useState("");
-	const [title, setTitle] = useState("");
+	const { nhap, doi, ban, xong } = useNhap({
+		firstName: "",
+		lastName: "",
+		email: "",
+		title: "",
+	});
+	const { firstName, lastName, email, title } = nhap;
 
 	const firstNameId = useId();
 	const lastNameId = useId();
@@ -95,6 +130,7 @@ export function QuickAddContact({
 			onSuccess: async (contact) => {
 				await cache.contact(contact.id);
 				toast.success(m.added(contact.firstName));
+				xong();
 				onDone();
 			},
 			onError: (error) => toast.error(error.message),
@@ -106,6 +142,7 @@ export function QuickAddContact({
 			submitLabel={sheet.company.addContact}
 			pending={create.isPending}
 			ready={firstName.trim() !== ""}
+			dirty={ban}
 			onCancel={onDone}
 			onSubmit={() =>
 				create.mutate({
@@ -124,7 +161,7 @@ export function QuickAddContact({
 					id={firstNameId}
 					autoFocus
 					value={firstName}
-					onChange={(event) => setFirstName(event.target.value)}
+					onChange={(event) => doi({ firstName: event.target.value })}
 					autoComplete="off"
 				/>
 			</Field>
@@ -133,7 +170,7 @@ export function QuickAddContact({
 				<Input
 					id={lastNameId}
 					value={lastName}
-					onChange={(event) => setLastName(event.target.value)}
+					onChange={(event) => doi({ lastName: event.target.value })}
 					autoComplete="off"
 				/>
 			</Field>
@@ -143,7 +180,7 @@ export function QuickAddContact({
 					id={emailId}
 					type="email"
 					value={email}
-					onChange={(event) => setEmail(event.target.value)}
+					onChange={(event) => doi({ email: event.target.value })}
 					autoComplete="off"
 				/>
 			</Field>
@@ -152,7 +189,7 @@ export function QuickAddContact({
 				<Input
 					id={titleId}
 					value={title}
-					onChange={(event) => setTitle(event.target.value)}
+					onChange={(event) => doi({ title: event.target.value })}
 					placeholder={m.rolePlaceholder}
 					autoComplete="off"
 				/>
@@ -175,8 +212,8 @@ export function AttachDealContact({
 	const locale = useLocale();
 	const m = recordSheetMessages(locale).deal;
 
-	const [contactId, setContactId] = useState("");
-	const [role, setRole] = useState("");
+	const { nhap, doi, ban, xong } = useNhap({ contactId: "", role: "" });
+	const { contactId, role } = nhap;
 
 	const personId = useId();
 	const roleId = useId();
@@ -192,6 +229,7 @@ export function AttachDealContact({
 				);
 				await cache.deal(dealId);
 				toast.success(person ? m.onDeal(contactName(person)) : m.addedToDeal);
+				xong();
 				onDone();
 			},
 			onError: (error) => toast.error(error.message),
@@ -211,6 +249,7 @@ export function AttachDealContact({
 			submitLabel={m.addToDeal}
 			pending={attach.isPending}
 			ready={contactId !== ""}
+			dirty={ban}
 			onCancel={onDone}
 			onSubmit={() =>
 				attach.mutate({ dealId, contactId, role: role.trim() || null })
@@ -218,7 +257,10 @@ export function AttachDealContact({
 		>
 			<Field>
 				<FieldLabel htmlFor={personId}>{m.personLabel}</FieldLabel>
-				<Select value={contactId} onValueChange={setContactId}>
+				<Select
+					value={contactId}
+					onValueChange={(contactId) => doi({ contactId })}
+				>
 					<SelectTrigger id={personId} className="w-full" disabled={nobody}>
 						<SelectValue placeholder={placeholder} />
 					</SelectTrigger>
@@ -237,7 +279,7 @@ export function AttachDealContact({
 				<Input
 					id={roleId}
 					value={role}
-					onChange={(event) => setRole(event.target.value)}
+					onChange={(event) => doi({ role: event.target.value })}
 					placeholder={m.champion}
 					autoComplete="off"
 				/>
@@ -262,9 +304,12 @@ export function QuickAddDeal({
 	const locale = useLocale();
 	const m = recordSheetMessages(locale).deal;
 
-	const [name, setName] = useState("");
-	const [amount, setAmount] = useState("");
-	const [closeDate, setCloseDate] = useState("");
+	const { nhap, doi, ban, xong } = useNhap({
+		name: "",
+		amount: "",
+		closeDate: "",
+	});
+	const { name, amount, closeDate } = nhap;
 
 	const nameId = useId();
 	const amountId = useId();
@@ -282,6 +327,7 @@ export function QuickAddDeal({
 			onSuccess: async (deal) => {
 				await cache.deal(deal.id);
 				toast.success(m.created(deal.name));
+				xong();
 				onDone();
 			},
 			onError: (error) => toast.error(error.message),
@@ -321,6 +367,7 @@ export function QuickAddDeal({
 			submitLabel={m.create}
 			pending={create.isPending}
 			ready={name.trim() !== "" && (currency !== null || currencyFailed)}
+			dirty={ban}
 			onCancel={onDone}
 			onSubmit={submit}
 		>
@@ -330,7 +377,7 @@ export function QuickAddDeal({
 					id={nameId}
 					autoFocus
 					value={name}
-					onChange={(event) => setName(event.target.value)}
+					onChange={(event) => doi({ name: event.target.value })}
 					placeholder={m.namePlaceholder(companyName)}
 					autoComplete="off"
 				/>
@@ -341,7 +388,7 @@ export function QuickAddDeal({
 					id={amountId}
 					ref={amountRef}
 					value={amount}
-					onValueChange={setAmount}
+					onValueChange={(amount) => doi({ amount })}
 					currency={currency}
 					missingCurrency={
 						currencyFailed ? m.currencyLoadFailed : m.currencyLoading
@@ -364,7 +411,7 @@ export function QuickAddDeal({
 				<DatePicker
 					id={closeId}
 					value={closeDate}
-					onChange={setCloseDate}
+					onChange={(closeDate) => doi({ closeDate })}
 					placeholder={m.noDate}
 				/>
 			</Field>

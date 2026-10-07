@@ -268,7 +268,9 @@ evals:
     expected: |
       exit 0; DetailSheet that boc ba bieu mau that (QuickAddContact, QuickAddDeal, AttachDealContact).
       Ma tran viet truoc 3 bieu mau x 4 cach dong (Esc, bam lop phu, nut dong, nut Huy) khi da go = 12 o:
-      hop "Bỏ những gì vừa nhập?" hien, bam "Tiếp tục sửa" -> chu go con nguyen trong o. Doi chung 3 bieu mau
+      Esc, nut dong, nut Huy -> hop "Bỏ những gì vừa nhập?" hien, bam "Tiếp tục sửa" -> chu go con nguyen;
+      bam lop phu -> ngan van mo, khong hop, chu con nguyen (co che giu cho da ky cua hop-thoai-giu-cho;
+      lech voi chu AC-12, ghi so d-20261007T143827Z-12, trinh o Cong 2). Doi chung 3 bieu mau
       x (trong -> Esc dong khong hoi) = 3 o, 3 bieu mau x (luu xong -> dong khong hoi) = 3 o. Tong 18,
       expect(o.length).toBe(18). Ca cu ngan-ban-ghi cua tep van xanh. CHIEU DO ghim: ban sao bo khai thay doi
       o QuickAddDeal -> do "them-nhanh: QuickAddDeal Esc mat chu".
