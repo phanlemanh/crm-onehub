@@ -9,14 +9,15 @@ export function xetYeuCau(yc, nguCanh, cfg) {
       return xetChamTep(yc, nguCanh, cfg);
     case 'viec-phu':
       return xetViecPhu(yc, nguCanh);
-    case 's4-gom':
-    case 'gia-han': {
+    case 's4-gom': {
       const uoc = yc.noi_dung?.uoc_phut;
       if (Number.isFinite(uoc) && uoc <= cfg.s4_tran_gom_phut) {
         return { ket_qua: 'duyet', boi: 'may', ly_do: `trong trần ${cfg.s4_tran_gom_phut}′` };
       }
       return { ket_qua: 'can_phan', ly_do: `ước ${uoc ?? '?'}′ vượt trần ${cfg.s4_tran_gom_phut}′` };
     }
+    case 'gia-han':
+      return xetGiaHan(yc, nguCanh, cfg);
     case 'can-nguoi':
       return { ket_qua: 'can_phan', dich: 'owner', ly_do: 'việc chỉ người làm được' };
     default:
@@ -41,6 +42,22 @@ function xetChamTep(yc, nguCanh, cfg) {
     if (nhanh.length > 0) return { ket_qua: 'can_phan', ly_do: `${t} đang được nhánh ${nhanh.join(', ')} sửa` };
   }
   return { ket_qua: 'duyet', boi: 'may', ly_do: 'không ai giữ, không nhánh mở nào chạm, không thuộc danh sách bảo vệ' };
+}
+
+function xetGiaHan(yc, nguCanh, cfg) {
+  const uoc = yc.noi_dung?.uoc_phut;
+  if (!(Number.isFinite(uoc) && uoc > 0 && uoc <= cfg.s4_tran_gom_phut)) {
+    return { ket_qua: 'can_phan', ly_do: `ước ${uoc ?? '?'}′ vượt trần ${cfg.s4_tran_gom_phut}′` };
+  }
+  const dangGiu = nguCanh.khoaCua(yc.phien);
+  const muon = yc.noi_dung?.tai_nguyen;
+  if (dangGiu.length === 0) return { ket_qua: 'can_phan', ly_do: `${yc.phien} không giữ khoá nào` };
+  if (muon !== undefined && !dangGiu.includes(muon)) return { ket_qua: 'can_phan', ly_do: `${yc.phien} không giữ khoá ${muon}` };
+  if (muon === undefined && dangGiu.length > 1) {
+    return { ket_qua: 'can_phan', ly_do: `${yc.phien} giữ ${dangGiu.join(', ')} — nêu noi_dung.tai_nguyen` };
+  }
+  const taiNguyen = muon ?? dangGiu[0];
+  return { ket_qua: 'duyet', boi: 'may', ly_do: `trong trần ${cfg.s4_tran_gom_phut}′, giữ khoá ${taiNguyen}`, tai_nguyen: taiNguyen };
 }
 
 const chuanHoa = (s) => (s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();

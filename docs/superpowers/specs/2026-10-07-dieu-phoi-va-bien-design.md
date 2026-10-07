@@ -51,7 +51,10 @@ gộp lúc mở vòng. PR của vòng này nhắm `onehub` và chỉ gộp SAU #
   bộ cũ vẫn thoát 0 trên cây mới. Tên mọi ca test cũ giữ nguyên (hồ sơ cũ ghim theo tên).
 - Fixture cũ ghi `dieu-phoi.config.json` là `{}` cho ca KHÔNG cố ý kiểm cấu hình hỏng được sửa thành
   cấu hình đúng hình dạng (AGENTS.md: fixture thiếu trường bắt buộc là dữ liệu không thể tồn tại).
-- Thứ tự một nhịp: khoá → cấp → yêu cầu → (mới) áp gia hạn → hàng kế → bảng.
+- Thứ tự một nhịp đổi thành: yêu cầu → (mới) áp gia hạn → khoá → cấp → hàng kế → bảng. Lý do: áp
+  gia hạn sau bước khoá thì hạn cũ luôn còn (khoá hết hạn đã bị tự gia hạn hoặc thu hồi trước đó),
+  nên vế «hạn cũ đã qua thì gốc là giờ nhịp» không bao giờ xảy ra; áp trước thì một lời gia hạn đã
+  duyệt cứu được khoá trước khi máy xét thu hồi (sổ quyết định, dòng S3 cùng ngày).
 - Hạn chế đã biết của vòng trước (Ngoài-2 realpath, Ngoài-4 ba chỗ khai loại…) giữ nguyên là hạn chế.
 
 ## 4. Đo
