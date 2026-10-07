@@ -90,11 +90,9 @@ b. **The draft.** When the person asks for the draft («đưa bản nháp», «s
      measure;
    - two to four Mục tiêu, each with `khoa`, `ten`, `viSaoLucNay`, `loai` (`cam-ket`,
      `tham-vong` or `hoc-tap`), one sentence of `viSao`, and `canChinhId` only when it is an id
-     listed in `ungVienCanChinh`. Use `hoc-tap` only when the Mục tiêu exists to test an
-     assumption whose answer nobody knows yet — its KR measure what the unit will find out, not
-     a result it already expects. A `hoc-tap` Mục tiêu is never read as «Trượt» mid-cycle, and
-     its owner must write «Điều học được» before the cycle can close, so do not use it to soften
-     a commitment;
+     listed in `ungVienCanChinh`. Use `hoc-tap` only to test an assumption nobody can answer
+     yet; its KR measure what the unit will learn. It is never «Trượt» mid-cycle and needs
+     «Điều học được» before the cycle closes, so never use it to soften a commitment;
    - two to four KR under each Mục tiêu, each with `khoa`, `ten`, `kieu`, `donVi` and one sentence
      of `viSao`;
    - `khoiDiemGoiY` is the last measured value of the very metric the KR measures. Look for it
