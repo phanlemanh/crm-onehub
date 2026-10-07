@@ -437,7 +437,9 @@ function datDonVi(vai: {
 			canCreate: vai.canCreate,
 		}),
 	);
-	dat("okr.mine", () => mineOutput.parse({ objectives: [], daBo: [] }));
+	dat("okr.mine", () =>
+		mineOutput.parse({ objectives: [], daBo: [], dangTheoDoi: [] }),
+	);
 	dat("okr.viecCuaToi", () => ({ viec: [], lienQuanOkr: false }));
 	dat("okr.thanhVien", () => [HUNG]);
 }
