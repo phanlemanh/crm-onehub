@@ -24,13 +24,18 @@ import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import { TableCell } from "@crm/ui/components/table";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
 import { InlineCompanyField } from "@/components/crm/company-picker";
 import { contactName } from "@/components/crm/contact-name";
 import { ContactEnrichmentAction } from "@/components/crm/enrichment-actions";
 import { EnrichmentIndicator } from "@/components/crm/enrichment-status";
-import { FactProvenance, FactSuggestion } from "@/components/crm/facts";
+import {
+	FactGroupLabel,
+	FactProvenance,
+	FactSuggestion,
+} from "@/components/crm/facts";
 import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
 import {
 	InlineField,
@@ -54,7 +59,12 @@ import {
 	type DetailSheetTab,
 } from "@/components/detail-sheet";
 import { LocalDateTime, LocalRelativeDate } from "@/components/local-date-time";
-import { factsByField } from "@/lib/contact-facts";
+import {
+	type FactReceipt,
+	factsByField,
+	giaTriHienTai,
+	giaTriTruoc,
+} from "@/lib/contact-facts";
 import { ENRICHMENT_POLL_MS, isEnriching } from "@/lib/enrichment-status";
 import {
 	type RecordSheetMessages,
@@ -304,6 +314,13 @@ function CompanyStat({
 	);
 }
 
+const AGENT_FIELDS = [
+	"title",
+	"linkedinUrl",
+	"twitterUrl",
+	"githubUrl",
+] as const;
+
 function ContactOverview({ contact }: { contact: Contact }) {
 	const m = recordSheetMessages(useLocale());
 	const trpc = useTRPC();
@@ -312,17 +329,36 @@ function ContactOverview({ contact }: { contact: Contact }) {
 	const users = useQuery(trpc.users.list.queryOptions());
 
 	const { applied, proposed } = factsByField(contact.facts);
+	const [bienNhan, datBienNhan] = useState<Record<string, FactReceipt>>({});
 
 	const agentProps = (field: string) => {
 		const fact = applied.get(field);
-		const suggestion = proposed.get(field);
+		const receipt = bienNhan[field];
+		const suggestion = receipt?.fact ?? proposed.get(field);
 		return {
 			provenance: fact ? <FactProvenance fact={fact} /> : undefined,
 			suggestion: suggestion ? (
-				<FactSuggestion fact={suggestion} contactId={contact.id} />
+				<FactSuggestion
+					fact={suggestion}
+					contactId={contact.id}
+					current={giaTriHienTai(contact, field)}
+					truoc={giaTriTruoc(contact, field)}
+					receipt={receipt}
+					onReceipt={(next) =>
+						datBienNhan((cu) => {
+							const { [field]: _bo, ...con } = cu;
+							return next ? { ...con, [field]: next } : con;
+						})
+					}
+				/>
 			) : undefined,
 		};
 	};
+
+	const deXuatCho = AGENT_FIELDS.flatMap((field) => {
+		const fact = proposed.get(field);
+		return fact && !bienNhan[field] ? [fact] : [];
+	});
 
 	const update = useMutation(
 		trpc.contacts.update.mutationOptions({
@@ -345,7 +381,12 @@ function ContactOverview({ contact }: { contact: Contact }) {
 		<DetailSheetBody>
 			<DetailSheetSection
 				title={m.contact.details}
-				action={<FieldsCog kind="contact" />}
+				action={
+					<div className="flex items-center gap-2">
+						<FactGroupLabel facts={deXuatCho} />
+						<FieldsCog kind="contact" />
+					</div>
+				}
 			>
 				<DetailSheetProperties>
 					<InlineField
