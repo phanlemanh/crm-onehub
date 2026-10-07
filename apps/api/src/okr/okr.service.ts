@@ -1994,7 +1994,10 @@ export class OkrService {
 			q,
 			{ nguCanh: this.quyenOkr.nguCanhXem(q, userId) },
 		);
-		return { objectives };
+		return {
+			objectives: objectives.filter((m) => m.status !== "da-bo"),
+			daBo: objectives.filter((m) => m.status === "da-bo"),
+		};
 	}
 
 	async objective(userId: string, id: string): Promise<ObjectiveOutput> {

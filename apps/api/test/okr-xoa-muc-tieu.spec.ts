@@ -172,7 +172,12 @@ function quanHeCua(model: string): string[] {
 
 describe("quan-he-du", () => {
 	test("quan-he-du: moi quan he cua OkrObjective va OkrKeyResult nam dung mot danh sach lich su hoac di theo", () => {
-		const ca = [
+		const ca: {
+			model: string;
+			thuc: string[];
+			lichSu: string[];
+			diTheo: string[];
+		}[] = [
 			{
 				model: "OkrObjective",
 				thuc: quanHeCua("OkrObjective"),
@@ -1020,6 +1025,113 @@ describe("dung-lai", () => {
 				canhBao: CAU.vuotTran(1),
 				canGuiDuyet: false,
 				sauCanhBao: "nhap",
+			});
+		},
+		CHO_MS,
+	);
+});
+
+const danhSachDoc = z.object({
+	rows: z.array(z.object({ id: z.string() })),
+	daBo: z.array(z.object({ id: z.string() })),
+	facetCounts: z.object({
+		trangThai: z.array(z.object({ value: z.string(), count: z.number() })),
+	}),
+});
+const mineDoc = z.object({
+	objectives: z.array(z.object({ id: z.string() })),
+	daBo: z.array(z.object({ id: z.string() })),
+});
+const ids = (ds: { id: string }[]) => ds.map((d) => d.id).sort();
+
+describe("danh-sach-da-bo", () => {
+	test(
+		"danh-sach-da-bo: khong loc trang thai thi da bo tach ra daBo, khop loc con lai va luat xem; loc trang thai thi khong tach",
+		async () => {
+			const don = await donVi("danh-sach");
+			const U1 = await nguoiCo("danh-sach-U1");
+			const U2 = await nguoiCo("danh-sach-U2");
+			const M = await nguoiCo("danh-sach-M");
+			const V = await nguoiCo("danh-sach-V");
+			const ky = await gieoKyQuy(KY);
+			const cua = async (
+				chu: string,
+				kind: "cam-ket" | "tham-vong",
+			): Promise<string> =>
+				ok<{ id: string }>(
+					await goi(
+						"okr.createObjective",
+						{
+							cycleId: ky,
+							unit: { level: "phong-ban", departmentId: don.pb },
+							title: ma("danh sach"),
+							kind,
+							ownerUserId: chu,
+							participantIds: [],
+							whyNow: "",
+						},
+						don.t.cookie,
+					),
+					"tao",
+				).id;
+			const A1 = await cua(U1.id, "cam-ket");
+			const A2 = await cua(U2.id, "tham-vong");
+			const D1 = await cua(U1.id, "cam-ket");
+			const D2 = await cua(U2.id, "tham-vong");
+			const R = await cua(don.t.id, "cam-ket");
+			ok(
+				await goi(
+					"okr.datHienThi",
+					{ objectiveId: R, hienThi: "gioi-han", nguoiXem: [V.id] },
+					don.t.cookie,
+				),
+				"gioi han R",
+			);
+			for (const id of [D1, D2, R]) ok(await bo(id, don.t.cookie), "bo");
+			const loc = (doi: Record<string, string[]> = {}) => ({
+				phuTrach: [],
+				loai: [],
+				trangThai: [],
+				tuTin: [],
+				gopY: [],
+				...doi,
+			});
+			const docDs = async (doi: Record<string, string[]> = {}) =>
+				danhSachDoc.parse(
+					(
+						await goiQuery("okr.danhSach", M.cookie, {
+							cycleId: ky,
+							unit: { loai: "pb", id: don.pb },
+							loc: loc(doi),
+						})
+					).data,
+				);
+			const khong = await docDs();
+			const phuTrach = await docDs({ phuTrach: [U1.id] });
+			const chiBo = await docDs({ trangThai: ["da-bo"] });
+			const haiLoai = await docDs({ trangThai: ["nhap", "da-bo"] });
+			const mine = mineDoc.parse(
+				(await goiQuery("okr.mine", U1.cookie, { cycleId: ky })).data,
+			);
+			const thuc = {
+				khong: {
+					rows: ids(khong.rows),
+					daBo: ids(khong.daBo),
+					demDaBo: khong.facetCounts.trangThai.find((t) => t.value === "da-bo")
+						?.count,
+				},
+				phuTrach: { rows: ids(phuTrach.rows), daBo: ids(phuTrach.daBo) },
+				chiBo: { rows: ids(chiBo.rows), daBo: ids(chiBo.daBo) },
+				haiLoai: { rows: ids(haiLoai.rows), daBo: ids(haiLoai.daBo) },
+				mine: { objectives: ids(mine.objectives), daBo: ids(mine.daBo) },
+			};
+			console.log(`danh-sach-da-bo: ${JSON.stringify(thuc)}`);
+			expect(thuc).toEqual({
+				khong: { rows: [A1, A2].sort(), daBo: [D1, D2].sort(), demDaBo: 2 },
+				phuTrach: { rows: [A1], daBo: [D1] },
+				chiBo: { rows: [D1, D2].sort(), daBo: [] },
+				haiLoai: { rows: [A1, A2, D1, D2].sort(), daBo: [] },
+				mine: { objectives: [A1], daBo: [D1] },
 			});
 		},
 		CHO_MS,

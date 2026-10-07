@@ -35,6 +35,7 @@ export const dongDanhSach = mucTieuOutput.extend({
 
 export const danhSachOutput = z.object({
 	rows: z.array(dongDanhSach),
+	daBo: z.array(dongDanhSach),
 	total: z.number(),
 	facetCounts: z.object({
 		phuTrach: z.array(demGiaTri.extend({ name: z.string() })),

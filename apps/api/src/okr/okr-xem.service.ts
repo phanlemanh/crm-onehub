@@ -321,14 +321,19 @@ export class OkrXemService {
 				input.loc.phuTrach.includes(k.owner.id)) &&
 			(input.loc.tuTin.length === 0 ||
 				input.loc.tuTin.some((t) => tuTinMoi.get(k.id) === t));
-		const rows = [...mucTieu]
+		const tatCa = [...mucTieu]
 			.sort((a, b) => HANG_CAP[a.level] - HANG_CAP[b.level])
 			.map((m) => ({
 				...m,
 				krKhop: coLocKr ? m.keyResults.filter(khopKr).map((k) => k.id) : [],
 			}));
+		const tachDaBo = input.loc.trangThai.length === 0;
+		const rows = tachDaBo
+			? tatCa.filter((m) => m.status !== "da-bo")
+			: tatCa;
 		return {
 			rows,
+			daBo: tachDaBo ? tatCa.filter((m) => m.status === "da-bo") : [],
 			total: rows.length,
 			facetCounts: demMatLoc(ds, input.loc),
 			canEdit: this.quyenOkr.suaDuocDonVi(q, userId, donViCuaChon(input.unit)),
