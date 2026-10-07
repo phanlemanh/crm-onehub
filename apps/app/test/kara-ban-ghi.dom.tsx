@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import userEvent from "@testing-library/user-event";
+import type { ReactElement } from "react";
 import {
 	bam,
 	cho,
@@ -66,6 +67,16 @@ const { DealSheet } = await import("@/components/crm/record-sheet/deal-sheet");
 const { CompanyPlans } = await import(
 	"@/components/crm/record-sheet/company-plans"
 );
+const { EnrichmentActions, ContactEnrichmentAction } = await import(
+	"@/components/crm/enrichment-actions"
+);
+const { renderToStaticMarkup } = await import("react-dom/server");
+const { default: MagicWand } = await import("@carbon/icons-react/es/MagicWand");
+const { default: AiGenerate } = await import(
+	"@carbon/icons-react/es/AiGenerate"
+);
+const { Icon } = await import("@crm/ui/components/icon");
+const { Button } = await import("@crm/ui/components/button");
 
 type Loai = "contact" | "company" | "deal";
 
@@ -242,6 +253,21 @@ function lanDauLoi<T>(lay: () => T) {
 }
 
 const khungLoi = () => document.querySelector("[data-khung-tai-loi]");
+
+function duongVe(phan: ReactElement): string {
+	const ma = renderToStaticMarkup(phan);
+	const d = /<path[^>]* d="([^"]+)"/.exec(ma)?.[1];
+	if (!d) throw new Error("khong rut duoc duong ve icon");
+	return d;
+}
+
+const VE_DUA_PHEP = duongVe(<MagicWand />);
+const VE_KARA = duongVe(<AiGenerate />);
+
+const demVe = (goc: Element | null, ve: string) =>
+	[...(goc?.querySelectorAll("svg path") ?? [])].filter(
+		(p) => p.getAttribute("d") === ve,
+	).length;
 
 afterEach(dongHet);
 
@@ -666,5 +692,74 @@ describe("kara-ban-ghi", () => {
 			document.querySelector('[data-khung-tai-loi] [data-slot="kara-retry"]'),
 		).not.toBeNull();
 		expect(document.body.textContent).not.toContain(LOI_THO);
+	});
+	test("tra-cuu: nút tra cứu mang dấu Kara, Kara đang tra cứu…, lỗi nói tiếng Việt", async () => {
+		const doiChung = renderToStaticMarkup(
+			<Button>
+				<Icon icon={MagicWand} />
+			</Button>,
+		);
+		const o = document.createElement("div");
+		o.innerHTML = doiChung;
+		expect(demVe(o, VE_DUA_PHEP)).toBe(1);
+
+		const nut2 = [
+			{
+				ten: "cong-ty",
+				duong: "companies.research",
+				man: <EnrichmentActions companyId="co-1" hasDomain />,
+			},
+			{
+				ten: "ca-nhan",
+				duong: "contacts.enrich",
+				man: <ContactEnrichmentAction contactId="ct-1" />,
+			},
+		] as const;
+		const daDo: string[] = [];
+		for (const n of nut2) {
+			for (const trangThai of ["nghi", "dang-chay", "loi"] as const) {
+				datLai();
+				dat(n.duong, () => {
+					if (trangThai === "loi") throw new Error("boom-500");
+					return new Promise(() => {});
+				});
+				await mo(n.man);
+				const kara = () =>
+					document.querySelector<HTMLButtonElement>('[data-slot="nut-kara"]');
+				await cho(() => kara() !== null, `${n.ten} nut kara`);
+				if (trangThai !== "nghi") {
+					await bam(kara() as HTMLButtonElement);
+				}
+				if (trangThai === "dang-chay") {
+					await cho(
+						() => kara()?.textContent === "Kara đang tra cứu…",
+						`${n.ten} dang chay`,
+					);
+					expect(soSpinner()).toBe(0);
+				}
+				if (trangThai === "loi") {
+					await cho(
+						() =>
+							(document.body.textContent ?? "").includes(
+								"Kara chưa bắt đầu tra cứu được",
+							),
+						`${n.ten} loi`,
+					);
+					expect(document.body.textContent).not.toContain("boom-500");
+				}
+				if (demVe(document.body, VE_DUA_PHEP) !== 0)
+					throw new Error(
+						trangThai === "dang-chay"
+							? "tra-cuu: MagicWand con o dang chay"
+							: "tra-cuu: con MagicWand",
+					);
+				if (trangThai === "nghi") {
+					expect(demVe(kara(), VE_KARA)).toBe(1);
+				}
+				daDo.push(`${n.ten}:${trangThai}`);
+				await dongHet();
+			}
+		}
+		expect(daDo.length).toBe(6);
 	});
 });
