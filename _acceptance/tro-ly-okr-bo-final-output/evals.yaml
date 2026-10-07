@@ -1,0 +1,101 @@
+schema_version: 1
+feature_slug: tro-ly-okr-bo-final-output
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.tbf_khong_khuon_ra
+    expected: "exit 0; apps/agent/test/tro-ly-okr-khong-khuon-ra.spec.ts nạp định nghĩa mặc định của apps/agent/agent/subagents/tro_ly_okr/agent.ts và khẳng định không có khoá outputSchema (đọc khoá trên đối tượng defineAgent trả về, không grep chữ). Ca thứ hai đọc chuỗi chỉ dẫn THẬT: nội dung instructions.md và hằng MUC_TOM_TAT của lib/okr/chi-dan-tom-tat.ts, khẳng định không còn chuỗi 'trangThai' và 'final_output', và có câu 'done'. Chiều đỏ trên cùng bài: dựng một đối tượng định nghĩa bằng chính defineAgent với outputSchema: ketQuaTroLy rồi chạy cùng hàm kiểm → hàm kiểm trả lỗi ghim 'phien con khai outputSchema'; một chuỗi chỉ dẫn mẫu có '{\"trangThai\":\"da-nop\"}' → lỗi ghim 'chi dan doi khuon ket qua'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/subagents/tro_ly_okr/agent.ts, apps/agent/agent/subagents/tro_ly_okr/instructions.md, apps/agent/agent/lib/okr/chi-dan-tom-tat.ts, apps/agent/test/tro-ly-okr-khong-khuon-ra.spec.ts]
+
+  - id: E2
+    criterion: AC-1
+    executor: judgment
+    question: >-
+      Đọc chỉ dẫn của phiên con Trợ lý OKR (instructions.md cho việc góp ý, chi-dan-tom-tat.ts cho
+      việc tóm tắt tuần). Sau khi nộp bằng nop_de_xuat hoặc nop_tom_tat, chỉ dẫn có còn câu nào bảo
+      model kết bằng một khối JSON, một khuôn kết quả, hay gọi thêm một tool nào khác không? Chỉ dẫn
+      có nói rõ lời gọi tool nộp là việc đầu tiên và nộp xong thì trả lời đúng một chữ «done» không?
+      Khi khối dữ liệu bị thiếu, chỉ dẫn có bảo model không gọi tool nào (không nộp một danh sách
+      rỗng) và trả lời «done» không?
+    inputs: [apps/agent/agent/subagents/tro_ly_okr/instructions.md, apps/agent/agent/lib/okr/chi-dan-tom-tat.ts]
+    expected: >-
+      PASS khi cả hai chỉ dẫn không còn câu đòi khuôn kết quả hay tool thứ hai, cả hai nói nộp
+      xong trả lời «done», và khi thiếu khối dữ liệu thì không còn câu nào bảo nộp danh sách rỗng;
+      FAIL nêu tệp và câu còn sót.
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbf_dong_gop_y
+    expected: "exit 0; apps/agent/test/tro-ly-okr-dong-viec.integration.spec.ts -t gop-y trên kho kiểm của lượt: việc okr-de-xuat gieo bằng đường xếp thật (xepViecTroLy) cho một Mục tiêu có KR; ngữ cảnh phiên con giả trỏ về phiên gốc của việc như lib/phien-con.ts đọc. MA TRẬN viết trước bảy ô gọi nopDeXuatVao thật → outcome của agentTask: {ghi 2 dòng: da-nop, ghi 0 dòng: da-nop, Mục tiêu đã xoá: khong-lam-duoc:thieu-du-lieu, payload hỏng: khong-lam-duoc:khuon-hong, việc đã đóng 'hong:het-lease' từ trước: giữ 'hong:het-lease', đã nộp một lần rồi gọi lại: giữ 'da-nop' và ketQua tu-choi, việc là okr-tom-tat-tuan: finishedAt null}; ketQua của tool so với bảng cũ {da-ghi, da-ghi, thieu-du-lieu, tu-choi, tu-choi, tu-choi, tu-choi}. Mã đóng rút từ TRO_LY_OKR.ketThuc và hằng chung, không chép chuỗi trừ bảng kỳ vọng; số khẳng định = số ô (in ra). Chiều đỏ trên cùng bảng: bản nopDeXuatVao cũ (không đóng việc) chạy qua cùng ma trận → ô 'ghi 0 dòng' ra finishedAt null, thông điệp ghim 'tool khong dong viec: ghi-0-dong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/nop-de-xuat.ts, apps/agent/agent/lib/okr/viec.ts, apps/agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat.ts, apps/agent/test/tro-ly-okr-dong-viec.integration.spec.ts]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbf_dong_tom_tat
+    expected: "exit 0; apps/agent/test/tro-ly-okr-nop-tom-tat.integration.spec.ts -t dong-viec-tom-tat (dùng lại khâu dựng bộ OKR mẫu của tệp đó): việc okr-tom-tat-tuan xếp bằng chayXepTomTat thật, mỗi ô một bản sao payload của việc phòng tài chính gắn phiên gốc riêng; trước ô ghi được thì xoá bản của khoá (chu kỳ, phòng, tuần) vì khoá đó là duy nhất. MA TRẬN viết trước bảy ô gọi nopTomTatVao thật → outcome: {ghi một câu hợp lệ trích id có thật: da-nop, ghi mà mọi câu bị bộ kiểm bỏ (câu trích id ngoài gói): da-nop và đúng một hàng OkrTomTat với soCauBo bằng số câu, phòng đã lưu trữ: khong-lam-duoc:thieu-du-lieu, payload hỏng: khong-lam-duoc:khuon-hong, đã có bản rồi gọi lại: giữ da-nop, việc đã đóng 'hong:het-lease' từ trước: giữ 'hong:het-lease', 0 hàng OkrTomTat của việc (đếm có where taskId) và ketQua tu-choi, việc là okr-de-xuat: finishedAt null}; số khẳng định = số ô. Chiều đỏ: bản nopTomTatVao cũ qua cùng ma trận → ô đầu ra finishedAt null, thông điệp ghim 'tool khong dong viec: co-ban'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/nop-tom-tat.ts, apps/agent/agent/lib/okr/viec.ts, apps/agent/agent/subagents/tro_ly_okr/tools/nop_tom_tat.ts, apps/agent/test/tro-ly-okr-nop-tom-tat.integration.spec.ts]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.tbf_luoi
+    expected: "exit 0; cùng tệp -t luoi: hàm kết cục của hook (lib/okr/uy-quyen.ts) và hook okr-uy-quyen chạy trên hàng agentTask thật. MA TRẬN viết trước năm ô: {việc đã đóng da-nop + kết quả tro_ly_okr không lỗi (chữ 'done'): giữ da-nop; việc đã đóng da-nop + kết quả lỗi SUBAGENT_EXECUTION_FAILED: giữ da-nop; việc mở + kết quả lỗi mã MODEL_CALL_FAILED: hong:MODEL_CALL_FAILED; việc mở + kết quả không lỗi: TRO_LY_OKR.ketThuc.khongNop; kết quả của subagent khác: finishedAt null}; số khẳng định = số ô. Chiều đỏ: hàm kết cục cũ (đọc ketQuaTroLy từ output) qua cùng ma trận → ô 'việc mở + kết quả không lỗi' ra hong:ket-qua-hong, thông điệp ghim 'luoi doc khuon ket qua cu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/okr/uy-quyen.ts, apps/agent/agent/hooks/okr-uy-quyen.ts, apps/agent/agent/lib/okr/viec.ts, apps/agent/test/tro-ly-okr-dong-viec.integration.spec.ts]
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tbf_do_mo_hinh
+    expected: "exit 0; lệnh chạy 20–35 phút (E22 rồi E17 bằng model thật), dài hơn trần 600 giây của công cụ: chạy nền rồi theo dõi tệp .acceptance-runs/tro-ly-okr-bo-final-output/do-mo-hinh.log — thước ghi vào đó từng dòng của chính nó và toàn bộ đầu ra của E22, E17 ngay khi có, và mọi đường thoát (đạt, đỏ, tự kiểm hụt, lỗi thước, bị ngắt bằng tín hiệu → 128+số hiệu) kết bằng đúng một dòng 'KET THUC ma <n> · luot <mã lượt>'; mã lượt trùng với mã ở dòng đầu 'nhat ky: … · luot <mã lượt>' của chính lần chạy (tệp bị xoá trắng ngay khi thước khởi động), và mã thoát của eval là <n> của dòng đó. Trước phần [e22] thước chờ tới khi không còn tiến trình bun/turbo test nào có thư mục làm việc trong cây suốt 120 giây (in 'cho bo test cua cay xong: …'; tối đa 45 phút), để eve dev của E22 không chạy chồng bộ test agent-okr. rang/do-mo-hinh.mjs chạy TUẦN TỰ [tu-kiem] → [e22] → [e17]. [tu-kiem] chạy chính bộ đếm trên rang/mau-0710/ — segment OTLP chép nguyên từ trace của hai lượt ghim lại ngày 06–07/10 (repin-20261006T220643Z-23148, repin-20261006T223851Z-46396), cộng một bản sao span ai.streamText.doStream của phiên gốc có lời gọi tro_ly_okr được thêm khoá outputSchema vào input trong ai.response.tool_calls, và đoạn eve.log thật có dòng 'empty model response' — phải đếm ra het-tran ≥ 1, final_output ≥ 1, outputSchema ≥ 1, empty-log ≥ 1; ô nào hụt thì mã 3 'tu kiem khong bat duoc <ô>'. [e22] ghi mốc đầu, chạy lệnh E22 của tro-ly-okr-de-xuat, ghi mốc cuối, rồi đếm trong apps/agent/.eve/traces/v1 các span ai.streamText.doStream có giờ bắt đầu giữa hai mốc: n_dau = span của agent.step index 0 attempt 0 dưới agent.turn có agent.subagent.name tro_ly_okr; final_output = số mục toolName final_output trong ai.response.tool_calls của span thuộc phiên tro_ly_okr; outputSchema = số mục toolName tro_ly_okr trong ai.response.tool_calls (span bất kỳ) có khoá outputSchema trong input — trace eve chỉ ghi các lời gọi này trong ai.response.tool_calls, không thành span ai.toolCall. In '[e22] ma · n_dau · het-tran · final_output · outputSchema · empty-log'. E6 đạt khi n_dau ≥ 18 (thiếu → 'mau qua nho: n'), final_output 0 và outputSchema 0 (khác 0 → ghim tên ô); het-tran, empty-log và mã của E22 chỉ in ra (Known limits). Mã thoát 0 chỉ khi cả [e22] và [e17] đạt. Đường gốc suy từ vị trí script."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/agent/agent/subagents/tro_ly_okr/**", apps/agent/agent/lib/okr/chi-dan-tom-tat.ts, apps/agent/agent/lib/okr/nop-de-xuat.ts, apps/agent/agent/lib/okr/nop-tom-tat.ts, apps/agent/agent/hooks/okr-uy-quyen.ts, apps/agent/agent/lib/okr/uy-quyen.ts, "_acceptance/tro-ly-okr-bo-final-output/rang/**"]
+
+  - id: E7
+    criterion: AC-6
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tbf_do_mo_hinh
+    expected: "exit 0; cùng lệnh với E6, phần [e17]: chạy lệnh E17 của tro-ly-okr-tom-tat (eval-tom-tat.mjs --tran-usd 1) giữa hai mốc riêng của nó, cùng bộ đếm. E7 đạt khi dòng [e17] có n_dau ≥ 1, final_output 0, outputSchema 0; het-tran và mã của E17 chỉ in ra."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/agent/agent/subagents/tro_ly_okr/**", apps/agent/agent/lib/okr/chi-dan-tom-tat.ts, apps/agent/agent/lib/okr/nop-tom-tat.ts, apps/agent/agent/hooks/okr-uy-quyen.ts, apps/agent/agent/lib/okr/uy-quyen.ts, "_acceptance/tro-ly-okr-bo-final-output/rang/**"]
+
+  - id: E9
+    criterion: AC-8
+    executor: judgment
+    question: >-
+      Trong docs/agent.md, mục «Chỗ rẽ: Trợ lý OKR (lượt 9a)», đoạn nói Gemini 3.8 Flash có lúc
+      nghĩ tới trần rồi trả rỗng: đoạn đó có nêu gốc là tool kết thúc final_output (eve thêm khi
+      phiên con khai khuôn kết quả) đá với lệnh nộp, có nêu số đo ngày 07/10 (tỉ lệ rỗng và phép dò
+      theo bộ tool), và không còn khẳng định rằng câu «Act at once» đưa lỗi về 0 không?
+    inputs: [docs/agent.md, _acceptance/tro-ly-okr-bo-final-output/contract.md]
+    expected: >-
+      PASS khi đoạn nói đủ ba ý; FAIL nêu ý còn thiếu hoặc câu còn khẳng định sai.
+
+  - id: E10
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.tbf_goc_zdr
+    expected: "exit 0; apps/agent/test/tro-ly-okr-goc-zdr.integration.spec.ts chạy MA TRẬN mọi phần tử SESSION_PURPOSES (rút lúc chạy) qua MODEL_GOC.events['session.started'] thật và modelChoBuocGoc thật, với Cài đặt đặt model openai/gpt-x: okr → session.started là chuỗi (luatChonChuoi) mang model TRO_LY_OKR.model, zeroDataRetention true; step.started trả model sống mà một lời gọi doGenerate qua model giả mang providerOptions.gateway.zeroDataRetention true và thẻ TRO_LY_OKR.tags[0], khoá riêng TRO_LY_OKR.khoa.rieng có thì nhà Gateway nhận đúng khoá, không có thì không; kho → ZDR ở cả hai lớp như trước; mọi purpose khác → model Cài đặt ở session.started và null ở step.started. Chiều đỏ trên cùng ma trận: bản sao để phiên gốc okr theo Cài đặt (modelTheoVai, step null) → lỗi ghim 'phien goc okr khong mang ZDR o session' và 'phien goc okr khong mang ZDR o step (chung)'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/model.ts, apps/agent/agent/lib/okr/mo-hinh.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/tro-ly-okr-goc-zdr.integration.spec.ts]
+
+  - id: E11
+    criterion: AC-9
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tbf_do_mo_hinh
+    expected: "exit 0; cùng lệnh với E6, E7. Bộ đếm lấy các phiên gốc OKR là agent.parent.session.id của mọi span agent.turn có agent.subagent.name tro_ly_okr, rồi đếm span agent.step của các phiên đó có giờ bắt đầu trong cửa sổ từng phần: goc-buoc = số bước, goc-khong-zdr = số bước có agent.model.id khác MO_HINH đọc từ apps/agent/agent/lib/okr/config.ts. [tu-kiem] trên rang/mau-0710 phải đếm goc-khong-zdr ≥ 1 (phiên gốc 07/10 chạy zai/glm-5.2-fast). E11 đạt khi dòng [e22] và [e17] đều có goc-buoc ≥ 1 và goc-khong-zdr 0 (khác 0 → 'goc khong zdr: n')."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/model.ts, apps/agent/agent/lib/okr/mo-hinh.ts, "_acceptance/tro-ly-okr-bo-final-output/rang/**"]
+

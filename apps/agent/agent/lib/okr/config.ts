@@ -102,6 +102,7 @@ export const TRO_LY_OKR = {
 		tuChoi: "Not available in an OKR session. Call tro_ly_okr only.",
 	},
 	ketThuc: {
+		daNop: "da-nop",
 		hetLease: "hong:het-lease",
 		turnFailed: "hong:turn-failed",
 		khongNop: "hong:khong-nop",
@@ -109,6 +110,5 @@ export const TRO_LY_OKR = {
 		chuaCoKhoa: "khong-chay:chua-co-khoa-mo-hinh",
 		khongXemDuoc: "khong-chay:khong-xem-duoc",
 		phongLuuTru: "khong-chay:phong-luu-tru",
-		tomTatKhongNop: "khong-lam-duoc:khong-nop",
 	},
 } as const;

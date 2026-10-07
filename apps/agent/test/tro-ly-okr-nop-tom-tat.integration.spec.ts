@@ -21,26 +21,22 @@ import { parseNoiDungTomTat } from "@crm/validation/okr-tom-tat";
 import {
 	type CauTomTat,
 	type DongDeXuat,
-	ketQuaTroLy,
 	okrTroLyViec,
 } from "@crm/validation/okr-tro-ly";
 import { OKR_MAU } from "../../api/scripts/okr-mau/cau-hinh";
 import { idMau, xoaBoOkrMau } from "../../api/scripts/okr-mau/nap";
 import { lamSachOkr, napMau } from "../../api/test/okr-mau-san";
-import hookGoc from "../agent/hooks/okr-uy-quyen";
 import {
 	CAU_KHONG_DE_XUAT,
 	MUC_TOM_TAT,
 } from "../agent/lib/okr/chi-dan-tom-tat";
 import { goiTomTatThanhChiDan } from "../agent/lib/okr/goi-ngu-canh";
 import { chayXepTomTat } from "../agent/lib/okr/lich-tom-tat";
-import { ketThucTuKetQua } from "../agent/lib/okr/uy-quyen";
-import { okrAuthAttributes } from "../agent/lib/okr/viec";
 import { completeTask, noteSession } from "../agent/lib/tasks";
 import chiDanViec from "../agent/subagents/tro_ly_okr/instructions/viec";
 import nopDeXuat from "../agent/subagents/tro_ly_okr/tools/nop_de_xuat";
 import nopTomTat from "../agent/subagents/tro_ly_okr/tools/nop_tom_tat";
-import type { GiaiChiDan, XuLyKetQuaHanhDong } from "./support/eve-kieu";
+import type { GiaiChiDan } from "./support/eve-kieu";
 import { moXuong } from "./support/nhac-gieo";
 import {
 	moViecDeXuat,
@@ -508,172 +504,250 @@ describe("nop", () => {
 		},
 		CHO_DB,
 	);
+});
 
-	test(
-		"ket-thuc: ket qua that cua phien con dong viec tom tat da-nop",
-		async () => {
-			const output = ketQuaTroLy.parse({ trangThai: "da-nop", maLoi: null });
-			const ketQua = {
-				kind: "subagent-result",
-				subagentName: "tro_ly_okr",
-				callId: "goi-tro-ly",
-				isError: false,
-				output,
-			};
-			expect(ketThucTuKetQua(ketQua)).toBe("da-nop");
-			const hang = await db.agentTask.findUniqueOrThrow({
-				where: { id: viecA.taskId },
-			});
-			const moc = hookGoc.events[
-				"action.result"
-			] as unknown as XuLyKetQuaHanhDong;
-			await moc({ type: "action.result", data: { result: ketQua as never } }, {
-				agent: { name: "crm" },
-				channel: { kind: "crm" },
-				session: {
-					id: viecA.phienGoc,
-					auth: {
-						current: { attributes: okrAuthAttributes(hang) },
-						initiator: null,
-					},
-				},
-			} as never);
-			const dong = await db.agentTask.findUniqueOrThrow({
-				where: { id: viecA.taskId },
-				select: { outcome: true, finishedAt: true },
-			});
-			expect([dong.outcome, dong.finishedAt !== null]).toEqual([
-				"da-nop",
-				true,
-			]);
+type ODongTomTat = {
+	ten: string;
+	viec: () => Promise<ViecMo>;
+	chuan: (v: ViecMo) => Promise<void>;
+	cau: () => Promise<CauTomTat[]>;
+	ketQua: string;
+	outcome: string | null;
+	soHang?: number;
+	soCauBo?: number;
+	sau?: (v: ViecMo) => Promise<void>;
+};
+
+describe("dong-viec-tom-tat", () => {
+	let soBan = 0;
+	let soLuot = 0;
+	let viecCoBan: ViecMo | null = null;
+
+	async function banSaoB(payload?: {
+		viec: string;
+		departmentId: string;
+	}): Promise<ViecMo> {
+		soBan += 1;
+		const goc = await db.agentTask.findUniqueOrThrow({
+			where: { id: viecB.taskId },
+			select: { kind: true, reason: true, payload: true, createdAt: true },
+		});
+		const hang = await db.agentTask.create({
+			data: {
+				kind: goc.kind,
+				reason: goc.reason,
+				subject: `${TIEN_TO}ban-sao-${soBan}`,
+				budget: 0,
+				dueAt: new Date(),
+				attempts: 1,
+				createdAt: goc.createdAt,
+				payload: payload ?? goc.payload ?? {},
+			},
+		});
+		const phienGoc = `${TIEN_TO}goc-ban-sao-${soBan}`;
+		await noteSession(hang.id, phienGoc);
+		return { taskId: hang.id, phienGoc };
+	}
+
+	async function xoaBanPhongB(): Promise<void> {
+		await db.okrTomTat.deleteMany({
+			where: { cycleId: KY, departmentId: pb(PHONG.b) },
+		});
+	}
+
+	async function cauCoNguonB(): Promise<CauTomTat[]> {
+		const goi = await goiCua(viecB, PHONG.b);
+		const nguon = goi?.nguon[0]?.id;
+		if (!nguon) throw new Error("goi phong b khong co nguon");
+		return [
+			{
+				vanBan: "Phòng tài chính đã cập nhật kết quả then chốt trong tuần.",
+				nguon: [nguon],
+			},
+		];
+	}
+
+	const O: readonly ODongTomTat[] = [
+		{
+			ten: "co-ban",
+			viec: () => banSaoB(),
+			chuan: xoaBanPhongB,
+			cau: cauCoNguonB,
+			ketQua: "da-ghi",
+			outcome: "da-nop",
+			soHang: 1,
+			sau: async (v) => {
+				viecCoBan = v;
+			},
 		},
-		CHO_DB,
-	);
-
-	test(
-		"ket-thuc-khong-ban: phien con bao da-nop ma viec tom tat khong co ban -> khong-lam-duoc:khong-nop",
-		async () => {
-			const goc = await db.agentTask.findUniqueOrThrow({
-				where: { id: viecB.taskId },
-				select: { kind: true, reason: true, payload: true },
-			});
-			const hang = await db.agentTask.create({
-				data: {
-					kind: goc.kind,
-					reason: goc.reason,
-					subject: `${TIEN_TO}khong-ban`,
-					budget: 0,
-					dueAt: new Date(),
-					attempts: 1,
-					payload: goc.payload ?? {},
+		{
+			ten: "da-co-ban",
+			viec: async () => {
+				if (!viecCoBan) throw new Error("o co-ban chua chay");
+				return viecCoBan;
+			},
+			chuan: async () => {},
+			cau: cauCoNguonB,
+			ketQua: "tu-choi",
+			outcome: "da-nop",
+			soHang: 1,
+		},
+		{
+			ten: "moi-cau-bi-bo",
+			viec: () => banSaoB(),
+			chuan: xoaBanPhongB,
+			cau: async () => [
+				{
+					vanBan: "Mức tự tin của phòng giữ ổn định trong tuần.",
+					nguon: [lanNgoai],
 				},
-			});
-			try {
-				const ketQua = {
-					kind: "subagent-result",
-					subagentName: "tro_ly_okr",
-					callId: "goi-tro-ly",
-					isError: false,
-					output: ketQuaTroLy.parse({ trangThai: "da-nop", maLoi: null }),
-				};
-				const moc = hookGoc.events[
-					"action.result"
-				] as unknown as XuLyKetQuaHanhDong;
-				await moc(
-					{ type: "action.result", data: { result: ketQua as never } },
-					{
-						agent: { name: "crm" },
-						channel: { kind: "crm" },
-						session: {
-							id: `${TIEN_TO}phien-khong-ban`,
-							auth: {
-								current: { attributes: okrAuthAttributes(hang) },
-								initiator: null,
-							},
-						},
-					} as never,
-				);
-				expect(await hangTomTat(hang.id)).toEqual([]);
-				const dong = await db.agentTask.findUniqueOrThrow({
-					where: { id: hang.id },
-					select: { outcome: true },
+			],
+			ketQua: "da-ghi",
+			outcome: "da-nop",
+			soHang: 1,
+			soCauBo: 1,
+		},
+		{
+			ten: "phong-luu-tru",
+			viec: () => banSaoB(),
+			chuan: async () => {
+				await xoaBanPhongB();
+				await db.department.update({
+					where: { id: pb(PHONG.b) },
+					data: { archivedAt: DONG_HO },
 				});
-				expect(dong.outcome).toBe("khong-lam-duoc:khong-nop");
-			} finally {
-				await db.agentTask.delete({ where: { id: hang.id } });
-			}
-		},
-		CHO_DB,
-	);
-
-	test(
-		"phong-luu-tru: phong da luu tru luc nop -> thieu-du-lieu, 0 hang",
-		async () => {
-			await db.department.update({
-				where: { id: pb(PHONG.b) },
-				data: { archivedAt: DONG_HO },
-			});
-			try {
-				const ra = await nop(viecB, [
-					{ vanBan: "Tài chính cập nhật đều trong tuần.", nguon: ["x"] },
-				]);
-				expect(ra).toMatchObject({ ketQua: "thieu-du-lieu", soCau: 0 });
-				expect(await hangTomTat(viecB.taskId)).toEqual([]);
-			} finally {
+			},
+			cau: async () => [
+				{ vanBan: "Tài chính cập nhật đều trong tuần.", nguon: ["x"] },
+			],
+			ketQua: "thieu-du-lieu",
+			outcome: "khong-lam-duoc:thieu-du-lieu",
+			soHang: 0,
+			sau: async () => {
 				await db.department.update({
 					where: { id: pb(PHONG.b) },
 					data: { archivedAt: null },
 				});
-			}
+			},
 		},
-		CHO_DB,
-	);
-
-	test(
-		"payload-hong: viec tom tat co payload khong doc duoc -> tu-choi, 0 hang",
-		async () => {
-			const cu = await db.agentTask.findUniqueOrThrow({
-				where: { id: viecB.taskId },
-				select: { payload: true },
-			});
-			await db.agentTask.update({
-				where: { id: viecB.taskId },
-				data: { payload: { viec: "tom-tat-tuan", departmentId: pb(PHONG.b) } },
-			});
-			try {
-				const ra = await nop(viecB, lanh());
-				expect(ra).toEqual({
-					ketQua: "tu-choi",
-					lyDo: "task payload unreadable",
-					soCau: 0,
-					soBo: 0,
-				});
-				expect(await hangTomTat(viecB.taskId)).toEqual([]);
-			} finally {
-				await db.agentTask.update({
-					where: { id: viecB.taskId },
-					data: { payload: cu.payload ?? {} },
-				});
-			}
-		},
-		CHO_DB,
-	);
-
-	test(
-		"da-dong: nop sau khi viec tom tat da dong -> tu-choi, 0 hang",
-		async () => {
-			if (!(await completeTask(viecB.taskId, "hong:het-lease")))
-				throw new Error("viec b da dong truoc ca nay");
-			const ra = await nop(viecB, [
+		{
+			ten: "payload-hong",
+			viec: () => banSaoB({ viec: "tom-tat-tuan", departmentId: pb(PHONG.b) }),
+			chuan: async () => {},
+			cau: async () => [
 				{ vanBan: "Tài chính cập nhật đều trong tuần.", nguon: ["x"] },
-			]);
-			expect(ra).toEqual({
-				ketQua: "tu-choi",
-				lyDo: "task is not a running weekly summary",
-				soCau: 0,
-				soBo: 0,
+			],
+			ketQua: "tu-choi",
+			outcome: "khong-lam-duoc:khuon-hong",
+			soHang: 0,
+		},
+		{
+			ten: "viec-da-dong",
+			viec: () => banSaoB(),
+			chuan: async (v) => {
+				await xoaBanPhongB();
+				await completeTask(v.taskId, "hong:het-lease");
+			},
+			cau: cauCoNguonB,
+			ketQua: "tu-choi",
+			outcome: "hong:het-lease",
+			soHang: 0,
+		},
+		{
+			ten: "viec-gop-y",
+			viec: () =>
+				moViecDeXuat({
+					objectiveId: idMau(
+						"mt",
+						soLuot === 1 ? "q4-phap-che-2" : "q4-phap-che-3",
+					),
+					nguoiYeuCau: NGUOI_GHI,
+				}),
+			chuan: async () => {},
+			cau: async () => [
+				{ vanBan: "Tài chính cập nhật đều trong tuần.", nguon: ["x"] },
+			],
+			ketQua: "tu-choi",
+			outcome: null,
+			soHang: 0,
+		},
+	];
+
+	type HamNop = (v: ViecMo, cau: CauTomTat[]) => Promise<NopTomTatRa>;
+
+	const nopKhongDong: HamNop = async (v, cau) => {
+		const truoc = await db.agentTask.findUniqueOrThrow({
+			where: { id: v.taskId },
+			select: { finishedAt: true },
+		});
+		const ra = await nop(v, cau);
+		if (!truoc.finishedAt)
+			await db.agentTask.update({
+				where: { id: v.taskId },
+				data: { finishedAt: null, outcome: null },
 			});
-			expect(await hangTomTat(viecB.taskId)).toEqual([]);
+		return ra;
+	};
+
+	async function kiemO(ham: HamNop): Promise<string[]> {
+		const lech: string[] = [];
+		soLuot += 1;
+		viecCoBan = null;
+		for (const o of O) {
+			const v = await o.viec();
+			await o.chuan(v);
+			try {
+				const ra = await ham(v, await o.cau());
+				const hang = await db.agentTask.findUniqueOrThrow({
+					where: { id: v.taskId },
+					select: { outcome: true, finishedAt: true },
+				});
+				const that = hang.finishedAt ? hang.outcome : null;
+				const ban = await hangTomTat(v.taskId);
+				if (ra.ketQua !== o.ketQua)
+					lech.push(`ketQua lech: ${o.ten} ${ra.ketQua}`);
+				if (that !== o.outcome)
+					lech.push(`tool khong dong viec: ${o.ten} (${that ?? "mo"})`);
+				if (o.soHang !== undefined && ban.length !== o.soHang)
+					lech.push(`so ban lech: ${o.ten} ${ban.length}`);
+				if (o.soCauBo !== undefined && ban[0]?.soCauBo !== o.soCauBo)
+					lech.push(`so cau bo lech: ${o.ten} ${ban[0]?.soCauBo}`);
+			} finally {
+				await o.sau?.(v);
+			}
+		}
+		console.log(`tom-tat so o: ${O.length}`);
+		return lech;
+	}
+
+	afterAll(async () => {
+		const banSao = await db.agentTask.findMany({
+			where: { subject: { startsWith: `${TIEN_TO}ban-sao-` } },
+			select: { id: true },
+		});
+		await db.okrTomTat.deleteMany({
+			where: { taskId: { in: banSao.map((b) => b.id) } },
+		});
+		await db.agentTask.deleteMany({
+			where: { subject: { startsWith: `${TIEN_TO}ban-sao-` } },
+		});
+	}, CHO_DB);
+
+	test(
+		"dong-viec-tom-tat: nop_tom_tat dong viec dung ket cuc o moi o cua ma tran",
+		async () => {
+			expect(await kiemO(nop)).toEqual([]);
+		},
+		CHO_DB,
+	);
+
+	test(
+		"dong-viec-tom-tat doi chung: ban khong dong viec bi bat o co-ban",
+		async () => {
+			const lech = await kiemO(nopKhongDong);
+			expect(
+				lech.some((l) => l.startsWith("tool khong dong viec: co-ban")),
+			).toBe(true);
 		},
 		CHO_DB,
 	);
