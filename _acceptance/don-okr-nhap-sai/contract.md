@@ -5,7 +5,7 @@ slug: don-okr-nhap-sai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: implemented
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-06T23:45:38Z
 design_doc: docs/superpowers/specs/2026-10-07-don-okr-nhap-sai-design.md
@@ -135,3 +135,9 @@ Quét bằng `morphological-scan`; bản đầy đủ ở mục «Độ phủ» 
 - Công cụ xoá hay dùng lại mục tiêu cho Kara.
 
 ## Notes
+
+- Known limits (Cổng 2, 07/10):
+  - Ngoài-1 — ca bật duyệt của bài `dung-lai` (`apps/api/test/okr-xoa-muc-tieu.spec.ts`) tắt lại bước duyệt trong `.finally` mà không kiểm câu trả lời; tắt hỏng thì các ca sau trong cùng tệp chạy trên chương trình còn bật duyệt mà không báo.
+  - Ngoài-2 — E7 so tập mã mục tiêu đã sắp, nên thứ tự của nhóm «Đã bỏ» so với danh sách chính không được đo.
+  - Ngoài-3 — ca «mục tiêu hạn chế không vào daBo» chỉ có người không được xem; chưa có người được xem để chứng nó vẫn hiện trong «Đã bỏ».
+  - Ngoài-4 — phép kiểm «lời xoá có chờ khoá» của `dong-thoi` đếm mọi lần chờ Lock trong kho thử, không riêng lời xoá chờ giao dịch T1; kết cục cuối (từ chối, dữ liệu còn nguyên) vẫn được kiểm đúng.

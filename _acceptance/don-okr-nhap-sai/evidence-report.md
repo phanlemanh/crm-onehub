@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: a34053a8285784720db15c2a9ae3c4c6b80f6202
-human_signoff:
+human_signoff: Manh Phan 2026-10-07 — ký Cổng 2 trên verdict PASS 21/21 eval (S4 round 2, wf_f7ec3801-de5). Ngoài-1, 2, 3, 4 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: don-okr-nhap-sai
