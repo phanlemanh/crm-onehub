@@ -621,6 +621,9 @@ người sửa được mục tiêu — bấm để tự thêm mình vào danh s
 đó, không xin quyền, không đổi ai phụ trách. Bật thì lần cập nhật và bình luận mới
 của mục tiêu gộp vào việc OKR của người đó trong cửa sổ 24 giờ; bấm lại «Đang theo
 dõi» để tắt, không mất bình luận hay lần cập nhật đã có. Chốt 2026-09-26.
+Theo dõi không làm mục tiêu thành «của tôi»: mục tiêu chỉ đang theo dõi hiện ở nhóm
+gập «Đang theo dõi» của tab «Của tôi», không vào danh sách chính; mục tiêu chỉ theo
+dõi mà đã bỏ không hiện ở tab đó. Chốt 2026-10-07.
 _Avoid_: subscribe, đăng ký nhận tin, quan tâm
 Vì sao: «đăng ký» gợi một luồng xin–duyệt, còn theo dõi ở đây một người tự bật tự
 tắt cho chính mình, không ai duyệt. «Quan tâm» không phải một hành động có thể
