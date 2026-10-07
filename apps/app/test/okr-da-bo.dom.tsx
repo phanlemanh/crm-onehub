@@ -61,6 +61,7 @@ describe("theo-don-vi", () => {
 		]);
 		await dungDonVi();
 		const truoc = anhNhom();
+		expect(truoc.moNhom, "dong gap phai dong mac dinh").toBe("false");
 		const dauThe =
 			document.body.textContent?.includes(m.demDonVi(2, 4)) ?? false;
 		const nut = nutNhom();
