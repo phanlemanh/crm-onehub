@@ -12,6 +12,7 @@ import {
 	measureDatabaseName,
 	parseMeasureComment,
 	sessionComment,
+	templateBuildingComment,
 	templateComment,
 	templateDatabaseName,
 } from "../src/measure-database";
@@ -114,6 +115,14 @@ export async function markTemplate(
 	await comment(client, name, templateComment(fingerprint, createdAt, usedAt));
 }
 
+export async function markTemplateBuilding(
+	client: pg.Client,
+	name: string,
+	createdAt: number,
+): Promise<void> {
+	await comment(client, name, templateBuildingComment(createdAt));
+}
+
 async function comment(
 	client: pg.Client,
 	name: string,
@@ -209,6 +218,7 @@ async function buildTemplate(
 
 	await dropDatabase(client, name);
 	await client.query(`CREATE DATABASE "${name}"`);
+	await markTemplateBuilding(client, name, Date.now());
 
 	try {
 		log(
