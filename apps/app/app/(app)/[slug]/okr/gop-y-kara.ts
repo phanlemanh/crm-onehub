@@ -100,7 +100,7 @@ function soTrongDanhSach(
 ): number[] {
 	const tuMine = qc
 		.getQueriesData<RouterOutputs["okr"]["mine"]>({ queryKey: khoa.mine })
-		.flatMap(([, d]) => d?.objectives ?? []);
+		.flatMap(([, d]) => [...(d?.objectives ?? []), ...(d?.dangTheoDoi ?? [])]);
 	const tuDanhSach = qc
 		.getQueriesData<RouterOutputs["okr"]["danhSach"]>({
 			queryKey: khoa.danhSach,

@@ -461,11 +461,13 @@ describe("so-gop", () => {
 					).objectives,
 				),
 				mine: ids(
-					(
-						await doc<{ objectives: { id: string }[] }>("okr.mine", cookie, {
-							cycleId: s.ky,
-						})
-					).objectives,
+					await doc<{
+						objectives: { id: string }[];
+						dangTheoDoi: { id: string }[];
+					}>("okr.mine", cookie, { cycleId: s.ky }).then((r) => [
+						...r.objectives,
+						...r.dangTheoDoi,
+					]),
 				).filter((x) => x !== s.mucTieu.cn),
 				danhSach: await doc<{ rows: { id: string }[]; total: number }>(
 					"okr.danhSach",
