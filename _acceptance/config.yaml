@@ -1268,6 +1268,8 @@ executors:
     dph_cli: node --test scripts/dieu-phoi/test/cli.test.mjs
     dph_tat_ca: bun run test:dieu-phoi
     dph_bien: node --test scripts/dieu-phoi/test/bien.test.mjs
+    nhkl_duong_cham: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t khong-lac-duong-cham"
+    nhkl_fetch_gia: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t fetch-gia-theo-that"
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh

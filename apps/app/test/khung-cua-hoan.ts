@@ -5,6 +5,8 @@ import { PHIEN_CHO_EVE } from "@crm/validation/okr-cuoc-soan";
 export const BI_MAT = "bi-mat-cua-okr-hoan-luot-du-dai-32-ky-tu";
 export const AGENT_GIA = "http://127.0.0.1:65531";
 export const CHO_TRO_LY_THU_MS = 300;
+export const TRE_TOI_FETCH_MS = 200;
+export const HAN_KHONG_LAC_MS = 2_000;
 
 export type KetQuaTroLy = "nem" | "treo" | "luong-cham" | number;
 
@@ -23,6 +25,7 @@ export type TrangThaiKhung = {
 	phien: PhienNguoi;
 	ketQua: KetQuaTroLy;
 	soLanFetch: number;
+	soLanHuySan: number;
 	truocKhiTra: null | (() => Promise<void>);
 };
 
@@ -38,6 +41,7 @@ export type Khung = {
 		soLuot: number,
 	) => Promise<{ id: string; duongCua: string }>;
 	docCuoc: (id: string) => Promise<CuocDoc>;
+	choTreo: (hanMs: number) => Promise<void>;
 	dangNhap: () => void;
 };
 
@@ -49,8 +53,10 @@ export function taoKhung(ten: string): Khung {
 		phien: null,
 		ketQua: 202,
 		soLanFetch: 0,
+		soLanHuySan: 0,
 		truocKhiTra: null,
 	};
+	let khiTreo: (() => void) | null = null;
 
 	async function fetchGia(
 		_input: RequestInfo | URL,
@@ -58,6 +64,10 @@ export function taoKhung(ten: string): Khung {
 	): Promise<Response> {
 		trangThai.soLanFetch += 1;
 		const eve = `${suffix}-eve-${trangThai.soLanFetch}`;
+		if (init?.signal?.aborted) {
+			trangThai.soLanHuySan += 1;
+			throw init.signal.reason ?? new Error("abort");
+		}
 		if (trangThai.truocKhiTra) await trangThai.truocKhiTra();
 		const ket = trangThai.ketQua;
 		if (ket === "nem") throw new TypeError("connect ECONNREFUSED tro-ly-gia");
@@ -71,6 +81,8 @@ export function taoKhung(ten: string): Khung {
 				init?.signal?.addEventListener("abort", () =>
 					hong(init.signal?.reason ?? new Error("abort")),
 				);
+				khiTreo?.();
+				khiTreo = null;
 			});
 		if (ket >= 200 && ket < 300)
 			return Response.json(
@@ -173,6 +185,17 @@ export function taoKhung(ten: string): Khung {
 		don,
 		cuoc,
 		docCuoc,
+		choTreo: (hanMs: number) =>
+			new Promise<void>((xong, hong) => {
+				const hen = setTimeout(() => {
+					khiTreo = null;
+					hong(new Error("cho-treo-qua-han"));
+				}, hanMs);
+				khiTreo = () => {
+					clearTimeout(hen);
+					xong();
+				};
+			}),
 		dangNhap: () => {
 			trangThai.phien = {
 				user: { id: nguoi, email: `${nguoi}@thu.test`, name: nguoi },

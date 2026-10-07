@@ -8,8 +8,10 @@ import {
 	AGENT_GIA,
 	BI_MAT,
 	CHO_TRO_LY_THU_MS,
+	HAN_KHONG_LAC_MS,
 	type KetQuaTroLy,
 	MAU_LUONG,
+	TRE_TOI_FETCH_MS,
 	taoKhung,
 	yeuCau,
 } from "./khung-cua-hoan";
@@ -17,6 +19,8 @@ import {
 const k = taoKhung("r1h-tru");
 const LUOT_TOI_DA = TRO_LY_OKR_TRAN.soan.luotMoiCuoc;
 const SAN_O = 44;
+const SAN_KET_DA_HUY = 5;
+let treTangLuot = 0;
 
 const serverThat = await import("next/server");
 mock.module("next/server", () => ({
@@ -34,8 +38,10 @@ mock.module("@/lib/trpc/server", () => ({
 	getServerTrpcClient: () => ({
 		okr: {
 			soanTangLuot: {
-				mutate: (vao: { cuocSoanId: string }) =>
-					cuocSoan.tangLuot(db, vao.cuocSoanId),
+				mutate: async (vao: { cuocSoanId: string }) => {
+					if (treTangLuot > 0) await Bun.sleep(treTangLuot);
+					return cuocSoan.tangLuot(db, vao.cuocSoanId);
+				},
 			},
 		},
 	}),
@@ -67,6 +73,60 @@ async function gui(duongCua: string, cuocSoanId: string, signal?: AbortSignal) {
 }
 
 const docLuot = async (id: string) => (await k.docCuoc(id)).soLuot;
+
+async function truocHan<T>(viec: Promise<T>, ten: string): Promise<T> {
+	let hen: ReturnType<typeof setTimeout> | undefined;
+	const han = new Promise<never>((_xong, hong) => {
+		hen = setTimeout(() => hong(new Error(ten)), HAN_KHONG_LAC_MS);
+	});
+	try {
+		return await Promise.race([viec, han]);
+	} finally {
+		clearTimeout(hen);
+	}
+}
+
+type KetQuaHuy = {
+	daGoi: number;
+	huySan: number;
+	soLuot: number;
+	than: unknown;
+};
+
+async function huyKhiDangTreo(n: number, tre: number): Promise<KetQuaHuy> {
+	const { id, duongCua } = await k.cuoc("gui-tiep", n);
+	k.trangThai.ketQua = "treo";
+	k.trangThai.soLanFetch = 0;
+	k.trangThai.soLanHuySan = 0;
+	treTangLuot = tre;
+	try {
+		const huy = new AbortController();
+		const dangTreo = k.choTreo(HAN_KHONG_LAC_MS);
+		const cho = gui(duongCua, id, huy.signal);
+		await dangTreo;
+		const daGoi = k.trangThai.soLanFetch;
+		huy.abort();
+		const res = await truocHan(cho, `treo-sau-huy n=${n}`);
+		return {
+			daGoi,
+			huySan: k.trangThai.soLanHuySan,
+			soLuot: await docLuot(id),
+			than: await res.json(),
+		};
+	} finally {
+		treTangLuot = 0;
+		k.trangThai.ketQua = 202;
+	}
+}
+
+function khangDinhHuy(kq: KetQuaHuy, n: number) {
+	expect(
+		{ daGoi: kq.daGoi, huySan: kq.huySan },
+		`huy-truoc-fetch n=${n}`,
+	).toEqual({ daGoi: 1, huySan: 0 });
+	expect(kq.soLuot, `hoan-khi-nguoi-huy n=${n}`).toBe(n + 1);
+	expect(kq.than).not.toHaveProperty("luot");
+}
 
 beforeAll(async () => {
 	await k.gieo();
@@ -255,16 +315,7 @@ describe("tran-van-chan", () => {
 describe("nguoi-huy", () => {
 	for (const n of [0, 5]) {
 		test(`nguoi-huy: nguoi dung huy thi khong hoan n=${n}`, async () => {
-			const { id, duongCua } = await k.cuoc("gui-tiep", n);
-			k.trangThai.ketQua = "treo";
-			const huy = new AbortController();
-			const cho = gui(duongCua, id, huy.signal);
-			await Bun.sleep(20);
-			huy.abort();
-			const res = await cho;
-			k.trangThai.ketQua = 202;
-			expect(await docLuot(id), `hoan-khi-nguoi-huy n=${n}`).toBe(n + 1);
-			expect(await res.json()).not.toHaveProperty("luot");
+			khangDinhHuy(await huyKhiDangTreo(n, 0), n);
 		});
 
 		test(`nguoi-huy: doi chung loi thuong khong huy thi hoan n=${n}`, async () => {
@@ -288,6 +339,82 @@ describe("nguoi-huy", () => {
 			expect(await docLuot(id)).toBe(n);
 		});
 	}
+});
+
+describe("khong-lac-duong-cham", () => {
+	for (const n of [0, 5]) {
+		test(`khong-lac-duong-cham: huy trong luc cho khi duong toi fetch cham n=${n}`, async () => {
+			khangDinhHuy(await huyKhiDangTreo(n, TRE_TOI_FETCH_MS), n);
+		});
+	}
+});
+
+type HinhTraLoi = { kieu: "tra" | "tu-choi" | "treo"; dungLyDo: boolean };
+
+async function goiVoiSignalDaHuy(
+	goi: (signal: AbortSignal) => Promise<Response>,
+): Promise<HinhTraLoi> {
+	const lyDo = new DOMException(`huy-${crypto.randomUUID()}`, "AbortError");
+	const signal = AbortSignal.abort(lyDo);
+	let hen: ReturnType<typeof setTimeout> | undefined;
+	const han = new Promise<HinhTraLoi>((xong) => {
+		hen = setTimeout(
+			() => xong({ kieu: "treo", dungLyDo: false }),
+			HAN_KHONG_LAC_MS,
+		);
+	});
+	const viec = goi(signal).then(
+		(): HinhTraLoi => ({ kieu: "tra", dungLyDo: false }),
+		(loi: unknown): HinhTraLoi => ({ kieu: "tu-choi", dungLyDo: loi === lyDo }),
+	);
+	try {
+		return await Promise.race([viec, han]);
+	} finally {
+		clearTimeout(hen);
+	}
+}
+
+describe("fetch-gia-theo-that", () => {
+	const KET_DA_HUY: readonly KetQuaTroLy[] = [
+		"nem",
+		"treo",
+		"luong-cham",
+		202,
+		500,
+	];
+
+	test("fetch-gia-theo-that: san ma tran", () => {
+		expect(KET_DA_HUY.length).toBe(SAN_KET_DA_HUY);
+	});
+
+	for (const ket of KET_DA_HUY) {
+		test(`fetch-gia-theo-that: ${ket} voi signal da huy`, async () => {
+			k.trangThai.ketQua = ket;
+			try {
+				expect(
+					await goiVoiSignalDaHuy((signal) => k.fetchGia(AGENT_GIA, { signal })),
+					`fetch-gia-da-huy ${ket}`,
+				).toEqual({ kieu: "tu-choi", dungLyDo: true });
+			} finally {
+				k.trangThai.ketQua = 202;
+			}
+		});
+	}
+
+	test("fetch-gia-theo-that: doi chung fetch that voi signal da huy", async () => {
+		expect(
+			await goiVoiSignalDaHuy((signal) => fetchThat(AGENT_GIA, { signal })),
+			"fetch-that-da-huy",
+		).toEqual({ kieu: "tu-choi", dungLyDo: true });
+	});
+
+	test("fetch-gia-theo-that: doi chung signal chua huy thi 202", async () => {
+		k.trangThai.ketQua = 202;
+		const res = await k.fetchGia(AGENT_GIA, {
+			signal: new AbortController().signal,
+		});
+		expect(res.status).toBe(202);
+	});
 });
 
 describe("luong-khong-cat", () => {
