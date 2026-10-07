@@ -1,0 +1,29 @@
+schema_version: 1
+slug: nguoi-huy-khong-lac
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.nhkl_duong_cham
+    expected: "exit 0; describe khong-lac-duong-cham goi handler that cua cua soan voi fetch gia treo; voi n trong {0, 5}: tiem TRE_TOI_FETCH_MS (200 ms, hang trong khung-cua-hoan.ts) vao mock tangLuot, ca di qua MOT ham dung chung voi ca nguoi-huy (huyKhiDangTreo(n, tre)): cho k.choTreo(HAN_KHONG_LAC_MS) — qua han nem 'cho-treo-qua-han' — roi huy; daGoi = soLanFetch doc NGAY luc huy; cho tra loi bang Promise.race voi han HAN_KHONG_LAC_MS (2000 ms) — qua han nem 'treo-sau-huy n=<n>'; huySan = soLanHuySan doc SAU khi cua tra loi; so toEqual { daGoi: 1, huySan: 0 } voi thong diep 'huy-truoc-fetch n=<n>'; soLuot sau = n + 1; than khong co 'luot'; tre duoc tra ve 0 trong finally. Chieu do ghim tren CUNG fixture: ban sao ca cho Bun.sleep(20) thay vi k.choTreo() → 'huy-truoc-fetch n=<n>' ma 1, do trong duoi HAN_KHONG_LAC_MS."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", apps/app/test/khung-cua-hoan.ts, apps/app/test/soan-okr-khong-tru-luot.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.nhkl_fetch_gia
+    expected: "exit 0; describe fetch-gia-theo-that: ma tran viet truoc nam ket qua cua fetchGia ['nem', 'treo', 'luong-cham', 202, 500] (moi nhanh if cua fetchGia mot o, san do dai = 5 viet tay); moi o: signal = AbortSignal.abort(ly do rieng), Promise.race(fetchGia(AGENT_GIA, { signal }), han) quy ve { kieu: 'tra' | 'tu-choi' | 'treo', dungLyDo } va so toEqual { kieu: 'tu-choi', dungLyDo: true } voi thong diep 'fetch-gia-da-huy <ket>' — so khang dinh = 5. Doi chung rut tu writer that: fetch that cua Bun (giu truoc khi thay globalThis.fetch) goi AGENT_GIA voi cung kieu signal tu choi voi dung signal.reason. Doi chung duong: signal chua huy, ket 202 → status 202. Chieu do ghim: ban sao khung bo dong kiem signal huy san → ma 1 voi DU NAM dong 'fetch-gia-da-huy <ket>' (nem: tu-choi sai ly do; treo: treo; luong-cham, 202, 500: tra) — so dong do = 5."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/test/khung-cua-hoan.ts, apps/app/test/soan-okr-khong-tru-luot.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.r1h_huy
+    expected: "exit 0; sau ca cua describe nguoi-huy xanh: nguoi dung huy di qua huyKhiDangTreo(n, 0) cung ham voi E1 → { daGoi: 1, huySan: 0 } ('huy-truoc-fetch n=<n>'), soLuot = n + 1, than khong co 'luot'; doi chung loi thuong khong huy → 502, soLuot = n; doi chung qua han cua cat → 504 { error: 'tro-ly-okr-qua-han', luot: 'da-hoan' }, soLuot = n; n trong {0, 5}. Chieu do ghim 1: ban sao ca nguoi-huy dung Bun.sleep(0) thay k.choTreo() → 'huy-truoc-fetch n=<n>' ma 1. Chieu do ghim 2 (E4 cua soan-okr-khong-tru-luot): ban sao route bo nhanh 'request.signal.aborted → 502 khong hoan' → 'hoan-khi-nguoi-huy n=<n>' ma 1, do trong duoi 1 s chu khong qua han."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/eve/agents/okr/**", apps/app/test/khung-cua-hoan.ts, apps/app/test/soan-okr-khong-tru-luot.spec.ts]
