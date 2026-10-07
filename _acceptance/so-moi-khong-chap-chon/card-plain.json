@@ -1,0 +1,32 @@
+{
+  "feature_plain": "Bốn bài kiểm của Trợ lý soạn OKR thôi đỏ ngẫu nhiên trên CI, nên một PR không chạm Trợ lý không còn phải chạy lại vì chúng — luật chặn số bịa vẫn giữ nguyên.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ giữ cả tệp bài kiểm nộp bản nháp OKR xanh trên đường chạy thường của CI."},
+    {"id": "AC-2", "p": "Sẽ cho mỗi bài tự chọn số thử bằng cách đọc chính gói dữ liệu gửi cho Trợ lý, nên số đó chắc chắn chưa có trong gói — không còn hằng 37, 41, 100, 2031."},
+    {"id": "AC-3", "p": "Sẽ chứng điều đó dưới ca xấu nhất: mọi tên phòng, bộ phận, chu kỳ gieo đều mang sẵn 37, 41, 100, 2031 mà bài mới vẫn xanh."},
+    {"id": "AC-4", "p": "Sẽ chứng ca xấu nhất đó tái hiện được lỗi thật: bản bài cũ chạy trên cùng dữ liệu thì đỏ đúng bốn bài."},
+    {"id": "AC-5", "p": "Sẽ để người đọc so bài mới với bài cũ và xác nhận không phép kiểm nào bị nới — vẫn đòi số mới bị chặn trước khi người gõ và được nhận sau khi gõ. (người chấm)"},
+    {"id": "AC-6", "p": "Sẽ giữ nguyên ba thước của hồ sơ đã ký «chọn dòng theo khoá» vốn chèn mã vào chính tệp bài kiểm này."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Không sửa bộ gieo dữ liệu dùng chung của gói (chỗ sinh tên mang chữ số) — nằm ngoài ranh giới hàng; bài khác cùng lớp lỗi sẽ cần hồ sơ riêng."},
+    {"id": "OOS-2", "p": "Không đụng luật chặn số bịa hay bất kỳ mã sản phẩm nào — luật đúng, bài kiểm sai."},
+    {"id": "OOS-3", "p": "Không dùng «chạy lại khi đỏ» hay nới phép kiểm để che lỗi."},
+    {"id": "OOS-4", "p": "Không sửa các bài khác của tệp không dựa vào luật chặn số bịa."}
+  ],
+  "scope_plain": "Chỉ sửa một tệp bài kiểm; phần còn lại để nguyên hoặc để hồ sơ sau.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã soi mọi nguồn có thể đưa chữ số lạc vào gói gửi Trợ lý: dấu thời gian trong tên gieo, bộ đếm theo thứ tự tệp, và số gieo cố định có chủ đích — thước là chỗ sản phẩm ghép chữ của gói."},
+    {"i": 1, "p": "Đã đếm đủ bốn bài dựa vào việc một số vắng khỏi gói (số 100, 37, 41, 2031) — thước là bốn chỗ luật chặn số bịa xuất hiện trong tệp."},
+    {"i": 2, "p": "Mỗi bài giữ ba chiều khẳng định: số mới bị chặn trước khi người gõ, được nhận sau khi gõ, và lời báo nêu đúng con số."},
+    {"i": 3, "p": "Ô chính ghép thành một cách sửa (AC-2, đọc gói để chọn số), chứng hai chiều trên cùng dữ liệu xấu (AC-3 xanh, AC-4 đỏ), không nới phép kiểm (AC-5), không gãy thước hồ sơ khác (AC-6), đường thường xanh (AC-1)."},
+    {"i": 4, "p": "Số gieo cố định có chủ đích (tên trang, năm) không cần đổi: bài 4 dựa vào chúng có mặt, và chúng không ngẫu nhiên."},
+    {"i": 5, "p": "Để sau: sửa bộ gieo cho tên hết chữ số — chữa gốc cho cả gói nhưng ngoài ranh giới hàng này."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Nặng nhất: dữ liệu xấu chèn cùng số vào mọi cuộc, nên một bài đọc nhầm gói của cuộc khác vẫn xanh. Đã xử một phần: người chấm (AC-5) nay soi đích danh mỗi bài đọc gói của cuộc nào. Không dựng được dữ liệu khác nhau theo cuộc vì các cuộc dùng chung phòng và chu kỳ — muốn khác phải sửa bộ gieo, ngoài ranh giới."},
+    {"i": 1, "p": "Một hằng số mới (vd 9973) vẫn qua mọi thước máy. Đã sửa: người chấm phủ thêm AC-2 và hỏi thẳng còn hằng nào làm số vắng không."},
+    {"i": 2, "p": "Chưa nói bản sao dùng cơ sở dữ liệu nào. Đã sửa: ghi rõ mỗi lượt có kho riêng, tạo trước xoá sau, như thước đã ký của hồ sơ anh em."},
+    {"i": 3, "p": "Chưa nói thước tìm gốc kho từ đâu. Đã sửa: tìm từ chỗ đặt chính script, in đường đã nạp, lệch thì dừng."}
+  ]
+}
