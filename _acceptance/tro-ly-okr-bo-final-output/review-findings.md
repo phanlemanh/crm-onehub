@@ -2,29 +2,23 @@
 
 ## Trong hợp đồng
 
-Không có finding nào map được vào tiêu chí.
+Không có finding nào.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **New missing-data rule in the weekly summary instructions can never reach the model**
-  Người dùng thấy gì: Khi tóm tắt tuần mà thiếu dữ liệu, dòng dặn trợ lý «không làm gì, trả lời done» được viết thêm nhưng thực tế không bao giờ đến được trợ lý. Việc vẫn được bảo vệ bằng quy định chung ở chỗ khác, nên người dùng không thấy khác biệt, chỉ là có một dòng dặn thừa.
-  file: `apps/agent/agent/lib/okr/chi-dan-tom-tat.ts`
+- **A crash before the log is cleared leaves the previous run's 'KET THUC ma <n>' line in place, and the grader takes that as the result**
+  Người dùng thấy gì: Phép đo thử Trợ lý OKR với model thật có thể đọc nhầm kết quả của lần chạy trước. Nếu lần chạy mới hỏng ngay từ đầu, người chấm vẫn có thể thấy một kết quả «đạt» cũ và ghi nhận như thật.
+  file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **E6's 'wait until the [e17] line' instruction has no exit when the script stops early**
-  Người dùng thấy gì: Nếu bài đo tự động dừng giữa chừng vì lỗi, người chấm có thể cứ chờ mãi đến hết giờ rồi báo «bị kẹt» thay vì báo đúng lỗi đã xảy ra. Chỉ ảnh hưởng việc kiểm thử nội bộ, không ảnh hưởng người dùng cuối.
-  file: `_acceptance/tro-ly-okr-bo-final-output/evals.yaml`
+- **If the process is killed by a signal, no 'KET THUC' line is written, so a grader waiting for that line has no ending**
+  Người dùng thấy gì: Nếu phép đo Trợ lý OKR bị công cụ cắt ngang giữa chừng, người chấm không nhận được dấu hiệu kết thúc nên không biết lần đo đã xong hay đã chết. Phải chạy lại phép đo, và những lần đo dài có thể phải làm lại nhiều lần.
+  file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
   severity: low
   Đề xuất: known-limits
-
-- **Shape 1 (đo CHỈ DẪN thay vì ĐẦU RA): E2 chấm câu «thiếu khối dữ liệu» của chi-dan-tom-tat.ts, nhưng bộ dựng chỉ dẫn không bao giờ đưa câu đó cho model khi khối dữ liệu thiếu**
-  Người dùng thấy gì: Bài kiểm tra hiện chỉ xác nhận câu dặn có nằm trong văn bản, chứ chưa thử xem khi tóm tắt tuần thiếu dữ liệu thì trợ lý thực sự nhận được gì và làm gì. Có thể bài kiểm tra báo đạt trong khi tình huống thiếu dữ liệu thật chưa được thử.
-  file: `_acceptance/tro-ly-okr-bo-final-output/evals.yaml`
-  severity: medium
-  Đề xuất: new-contract
 
 - **The old output schema ketQuaTroLy is still the app's source for "da-nop", while the agent now writes it from its own config (r2)**
   Người dùng thấy gì: Hom nay the gop y cua Kara dua vao mot khai bao cu de nhan ra viec da nop xong, trong khi tro ly lai ghi ket qua theo cau hinh rieng cua no. Neu ai do xoa khai bao cu hoac doi ten ma, moi viec da xong se hien thanh loi tren man gop y ma khong co kiem tra nao bao.
@@ -50,4 +44,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 2/3 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tro-ly-okr-bo-final-output/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
