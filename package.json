@@ -12,7 +12,7 @@
 		"lint:dead": "knip --no-progress",
 		"format": "biome format --write .",
 		"check-types": "turbo run check-types",
-		"test": "bun packages/db/scripts/test-run.ts",
+		"test": "bun scripts/ci/test-song-song.mjs",
 		"auth:generate": "turbo run auth:generate",
 		"db:deploy": "turbo run db:deploy",
 		"db:generate": "turbo run db:generate",
