@@ -353,3 +353,28 @@ describe("kn-loi-tim", () => {
 		expect(sai).toEqual([]);
 	});
 });
+
+describe("chen-lien-ket-go", () => {
+	test("chen-lien-ket: go trinh soan khi hop dang mo thi khong loi chua bat", async () => {
+		const loi: string[] = [];
+		const nghe = (e: ErrorEvent) => {
+			loi.push(String(e.error?.message ?? e.message));
+		};
+		window.addEventListener("error", nghe);
+		try {
+			await mo("Một đoạn.\n");
+			await bam(nutLienKetTrang());
+			expect(
+				document.body.querySelector(
+					`input[aria-label="${NHAN_LIEN_KET_TRANG.tim}"]`,
+				),
+			).not.toBeNull();
+			act(() => root?.unmount());
+			root = null;
+			await new Promise((r) => setTimeout(r, 0));
+		} finally {
+			window.removeEventListener("error", nghe);
+		}
+		expect(loi).toEqual([]);
+	});
+});
