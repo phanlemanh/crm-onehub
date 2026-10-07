@@ -67,9 +67,12 @@ evals:
     expected: |
       exit 0; hai ca: thread status working (khong ban o phia khach) -> o soan [data-slot=kara-composer]
       textarea disabled, chu ly do "Kara vẫn đang trả lời câu trước…" hien qua aria-describedby; thread
-      ended -> textarea disabled, chu "Cuộc trò chuyện này đã kết thúc." va nut "Bắt đầu cuộc mới"; bam nut
-      -> setThread duoc goi voi NEW_THREAD. Doi chung: thread ready -> textarea khong disabled.
-      CHIEU DO ghim: ban sao bo lockedReason khi ended -> do "khoa: ket thuc van go duoc".
+      ended -> textarea disabled, chu "Cuộc trò chuyện này đã kết thúc." va nut "Bắt đầu cuộc mới". Ca ended
+      dung noi giu thread THAT (bo chuyen nuqs thu cua kho, khong ham gia): bam nut -> man dung lai voi cuoc
+      moi, textarea cua [data-slot=kara-composer] het disabled, chu ket thuc va nut "Bắt đầu cuộc mới" bien mat.
+      Doi chung: thread ready -> textarea khong disabled. CHIEU DO ghim: ban sao bo lockedReason khi ended ->
+      do "khoa: ket thuc van go duoc"; ban sao giu trang thai ended sau khi doi thread -> do
+      "khoa: cuoc moi van khoa".
 
   - id: E5
     criterion: AC-5
@@ -88,12 +91,17 @@ evals:
       - "apps/app/lib/agent-record.ts"
       - "_acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
     expected: |
-      exit 0; rang/chu-cung.mjs tu suy goc kho tu vi tri cua no, chay bo quet AST chu cung JSX co san
-      (_acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs) tren danh sach tep viet truoc 9 tep
-      (dem 9, so tep thieu tren dia -> ma 2 "khong do duoc: thieu <tep>"), cong quet chuoi trong lib/agent-record.ts
-      (moi gia tri chuoi hien thi phai den tu tep chu). In "<tep>: <so> chu cung" moi tep; tong 0 -> ma 0;
+      exit 0; rang/chu-cung.mjs tu suy goc kho tu vi tri cua no, chay hai luot tren danh sach tep viet truoc
+      9 tep (dem 9; tep thieu tren dia -> ma 2 "khong do duoc: thieu <tep>"). Luot 1: bo quet AST chu cung JSX co
+      san (_acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs) cong quet chuoi trong lib/agent-record.ts
+      (moi gia tri chuoi hien thi phai den tu tep chu). Luot 2: quet MOI chuoi literal (ca ngoai JSX: hang so,
+      toast, nhanh trang thai) voi danh sach cam viet truoc 5 muc ["bun run dev", "AGENT_URL",
+      "AGENT_BRIDGE_SECRET", "Start it with", "Set AGENT"]; so phep kiem = 9 tep x 5 muc = 45, in so do va doi
+      expect bang 45. In "<tep>: <so> chu cung" va "<tep>: <so> goi y lap trinh vien" moi tep; tong 0 -> ma 0;
       khac 0 -> ma 1 goi ten tep va dong. CHIEU DO ghim: ban sao agent-conversations.tsx them
-      <span>Nothing yet</span> -> ma 1 ghim "agent-conversations.tsx: 1 chu cung".
+      <span>Nothing yet</span> -> ma 1 ghim "agent-conversations.tsx: 1 chu cung"; ban sao agent-panel.tsx chen
+      hang "Start it with bun run dev" vao mot loi goi toast() -> ma 1 ghim
+      "agent-panel.tsx: 1 goi y lap trinh vien".
 
   - id: E6
     criterion: AC-5
@@ -192,10 +200,12 @@ evals:
       exit 0; Postgres that. Ma tran viet truoc 3 ca chan = (truong da sua sau lan nhan, nguoi khac nguoi da
       quyet, de xuat con PROPOSED), expect(ca.length).toBe(3): moi ca loi tRPC dung ma (CONFLICT, FORBIDDEN,
       CONFLICT) va chup hang contact + moi contactFact cung contact truoc/sau bang nhau tung truong.
-      Ca phuc hoi: truong co mot fact APPLIED cu (gia tri X) va mot PROPOSED khac (Y); nhan fact Z ->
-      hai fact kia SUPERSEDED cung moc decidedAt cua Z; hoan tac voi truoc = X -> fact X ve APPLIED, Y ve
-      PROPOSED, supersededAt null, cot = X. CHIEU DO ghim: ban sao bo kiem nguoi da quyet -> do
-      "chan: nguoi khac hoan tac duoc".
+      Ca phuc hoi: truong co fact W da bi SUPERSEDED tu mot lan nhan TRUOC (moc cu t0), mot fact APPLIED
+      (gia tri X) va mot PROPOSED khac (Y); nhan fact Z -> X va Y SUPERSEDED cung moc decidedAt cua Z; hoan tac
+      voi truoc = X -> X ve APPLIED, Y ve PROPOSED, ca hai supersededAt null, cot = X; doi chung: W van
+      SUPERSEDED va supersededAt van bang t0. CHIEU DO ghim: ban sao bo kiem nguoi da quyet -> do
+      "chan: nguoi khac hoan tac duoc"; ban sao bo dieu kien khop moc supersededAt === decidedAt -> do
+      "chan: phuc hoi fact cua lan nhan khac".
 
   - id: E12
     criterion: AC-9
@@ -238,10 +248,13 @@ evals:
       - "apps/app/components/crm/enrichment-actions.tsx"
       - "apps/app/test/kara-ban-ghi.dom.tsx"
     expected: |
-      exit 0; EnrichmentActions va ContactEnrichmentAction that, tRPC gia: nut mang dau Kara (icon AiGenerate,
-      khong MagicWand — kiem bang data-slot cua dau Kara); mutation dang chay -> chu nut "Kara đang tra cứu…",
-      so [data-slot=spinner] === 0; mutation loi "boom-500" -> toast chu tieng Viet khong chua "boom-500".
-      CHIEU DO ghim: ban sao tra MagicWand -> do "tra-cuu: con MagicWand".
+      exit 0; EnrichmentActions va ContactEnrichmentAction that, tRPC gia. Ma tran 3 o (nghi, dang chay, loi) x
+      2 nut = 6 o: moi o dem svg cua MagicWand trong nut === 0 (nhan dien bang duong ve path rut tu
+      @carbon/icons-react/es/MagicWand luc chay, khong viet tay); o nghi co dau Kara (icon AiGenerate). Dang
+      chay -> chu nut "Kara đang tra cứu…", so [data-slot=spinner] === 0; loi "boom-500" -> toast chu tieng
+      Viet khong chua "boom-500". Doi chung duong: cung bo dem tren mot nut dung MagicWand dung tay trong bai
+      tra 1. CHIEU DO ghim: ban sao tra MagicWand -> do "tra-cuu: con MagicWand"; ban sao giu MagicWand canh dau
+      Kara o nhanh dang chay -> do "tra-cuu: MagicWand con o dang chay".
 
   - id: E15
     criterion: AC-12
@@ -269,7 +282,7 @@ evals:
       - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs: phien do rieng cua cay, kho crm_<cay>_do"
       - "Gieo bang Prisma trong man.mjs: mot cong ty, mot ca nhan co title 'Trưởng phòng' va mot ContactFact PROPOSED title 'Giám đốc kinh doanh', mot thoa thuan"
       - "Buoc 1 (1440): mo ngan ca nhan, tab Kara -> chup kbk-kara-ca-nhan-1440.png; innerText co 'Kara' va mot cau goi y tieng Viet, khong 'Ask about'"
-      - "Buoc 2 (1440): cung o ngan cong ty va thoa thuan -> kbk-kara-cong-ty-1440.png, kbk-kara-thoa-thuan-1440.png"
+      - "Buoc 2 (1440): cung o ngan cong ty va thoa thuan -> kbk-kara-cong-ty-1440.png, kbk-kara-thoa-thuan-1440.png; o ngan ca nhan bam goi y dau tien -> phien do khong chay tac nhan nen tab phai hien mot trang thai Kara (innerText chua 'Kara chưa trả lời được' hoac 'Kara chưa được bật', khong chua 'bun run dev', 'AGENT_URL', 'not reachable') -> kbk-kara-trang-thai-1440.png; in ten trang thai da thay"
       - "Buoc 3 (1440): tab Tong quan ca nhan -> de xuat duoi truong Chuc danh, nhan 'Kara · 1 đề xuất' -> kbk-de-xuat-1440.png; bam 'Thay giá trị hiện có' -> doc lai qua API contacts.byId: title = 'Giám đốc kinh doanh' -> kbk-bien-nhan-1440.png; bam 'Hoàn tác' -> contacts.byId: title = 'Trưởng phòng', de xuat hien lai -> kbk-hoan-tac-1440.png"
       - "Buoc 4 (390): lap buoc 1 va 3 o kho 390 -> kbk-kara-ca-nhan-390.png, kbk-de-xuat-390.png; scrollWidth <= clientWidth cua trang va cua ngan"
     paths:
@@ -287,15 +300,19 @@ evals:
     executor: judgment
     inputs:
       - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-ca-nhan-1440.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-cong-ty-1440.png"
       - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-thoa-thuan-1440.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-trang-thai-1440.png"
       - "_acceptance/khung-ban-ghi-kara/evidence/kbk-de-xuat-1440.png"
       - "_acceptance/khung-ban-ghi-kara/evidence/kbk-bien-nhan-1440.png"
       - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-ca-nhan-390.png"
       - "_acceptance/khung-ban-ghi-kara/evidence/kbk-de-xuat-390.png"
       - "docs/ai-ux.md"
     question: |
-      Nhìn sáu ảnh ngăn bản ghi và đối chiếu docs/ai-ux.md mục 1, 2, 3, 5, 6, 7: một người không làm lượt này
-      có thấy đây là cùng một Kara như luật mô tả không — tên «Kara», dấu tia sáng không tô màu thương hiệu,
+      Nhìn tám ảnh ngăn bản ghi và đối chiếu docs/ai-ux.md mục 1, 2, 3, 5, 6, 7: một người không làm lượt này
+      có thấy đây là cùng một Kara như luật mô tả không — tab Kara của cả ba loại ngăn (cá nhân, công ty, thoả
+      thuận) giống nhau, ảnh trạng thái dùng đúng chữ và thành phần của bảng mục 7 (không gợi ý cho lập trình
+      viên), tên «Kara», dấu tia sáng không tô màu thương hiệu,
       nhãn «Kara · N đề xuất» một lần ở đầu nhóm, đề xuất neo ngay dưới trường không khung thẻ, nút gọi đúng
       hậu quả, dòng biên nhận có Hoàn tác? Ở ảnh 390 có chữ hay nút nào bị cắt hoặc tràn không? Nêu từng
       chỗ lệch kèm tên ảnh.
