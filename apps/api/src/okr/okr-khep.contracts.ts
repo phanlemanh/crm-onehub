@@ -55,6 +55,7 @@ export const bangChamOutput = z.object({
 	chuaCham: z.array(
 		z.object({ khoa: z.string(), ten: z.string(), conLai: z.number() }),
 	),
+	hocTapChuaGhi: z.array(z.object({ id: z.string(), ten: z.string() })),
 	mucTieu: z.array(mucTieuCham),
 });
 

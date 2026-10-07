@@ -229,6 +229,8 @@ export const OKR = {
 			thieuSoNgayCuoi: (n: number) =>
 				`Còn ${n} KR nguồn CRM chưa có số ngày cuối — chờ nhịp chụp số rồi thử lại.`,
 			conKrChuaCham: (n: number) => `Còn ${n} KR chưa chấm.`,
+			conHocTapChuaGhi: (n: number, ten: readonly string[]) =>
+				`Còn ${n} mục tiêu học tập chưa ghi điều học được: ${ten.join(", ")}.`,
 			krCoDoiDich: "KR đã có lần đổi đích — sửa được, không xoá được.",
 			krCoDiem: "KR đã có điểm cuối kỳ — không xoá được.",
 			chiChamKhiChamDiem: "Chỉ chấm KR khi chu kỳ ở pha chấm điểm.",
