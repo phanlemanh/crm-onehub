@@ -170,7 +170,8 @@ export function DealsTable() {
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
-	const { query, input, setArchived } = useTableQuery(dealsSearchParams);
+	const { query, input, setArchived, currentView, applyView } =
+		useTableQuery(dealsSearchParams);
 	const [{ view }, setView] = useQueryStates(dealsViewParsers);
 	const board = showsBoard(view, input.archived);
 
@@ -205,34 +206,33 @@ export function DealsTable() {
 	};
 
 	const facetCounts = deals.data?.facetCounts;
-	const fieldFacets = useFieldFacets("DEAL", facetCounts);
+	const fieldFacets = useFieldFacets("DEAL");
 	const giaiDoan = useGiaiDoan();
 
 	const facets: DataTableFacet[] = [
 		{
 			id: "owner",
 			label: m.facets.owner,
-			options: (users.data ?? []).flatMap((user) =>
-				(facetCounts?.owner?.[user.id] ?? 0) > 0
-					? [{ value: user.id, label: user.name }]
-					: [],
-			),
+			options: (users.data ?? []).map((user) => ({
+				value: user.id,
+				label: user.name,
+			})),
 		},
 		{
 			id: "stage",
 			label: m.facets.stage,
-			options: giaiDoan.stages
-				.filter((option) => (facetCounts?.stage?.[option.id] ?? 0) > 0)
-				.map((option) => ({ value: option.id, label: option.label })),
+			options: giaiDoan.stages.map((option) => ({
+				value: option.id,
+				label: option.label,
+			})),
 		},
 		{
 			id: "closing",
 			label: m.facets.closing,
-			options: closingOptions(locale).flatMap((option) =>
-				(facetCounts?.closing?.[option.value] ?? 0) > 0
-					? [{ value: option.value, label: option.label }]
-					: [],
-			),
+			options: closingOptions(locale).map((option) => ({
+				value: option.value,
+				label: option.label,
+			})),
 		},
 		...fieldFacets,
 	];
@@ -283,6 +283,7 @@ export function DealsTable() {
 						facets={facets.filter((facet) => facet.id !== "stage")}
 						filters={query.filters}
 						onFilterChange={query.setFilter}
+						counts={facetCounts}
 					/>
 					<div className="sm:ml-auto">{viewToggle}</div>
 				</div>
@@ -336,6 +337,10 @@ export function DealsTable() {
 			onRowHover={(row) => prefetchRecord({ kind: "deal", id: row.id })}
 			onRowClick={(row) => openRecord({ kind: "deal", id: row.id })}
 			empty={input.archived ? m.emptyArchived : m.empty}
+			searchActive={input.q !== ""}
+			onClearFilters={() =>
+				applyView({ ...currentView, q: "", filters: { status: ["all"] } })
+			}
 			meta={
 				input.archived || openPipelineCents === null ? undefined : (
 					<span>

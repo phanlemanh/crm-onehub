@@ -219,6 +219,16 @@ function SortIndicator({
 	);
 }
 
+export function facetValueOptions(
+	counts: Record<string, number> | undefined,
+	selected: string[],
+): { value: string; label: string }[] {
+	const known = Object.keys(counts ?? {}).sort();
+	return [...known, ...selected.filter((value) => !known.includes(value))].map(
+		(value) => ({ value, label: value }),
+	);
+}
+
 function facetLabel(facet: DataTableFacet, selected: string[]): string {
 	if (selected.length === 0) return facet.label;
 	if (selected.length === 1) {
