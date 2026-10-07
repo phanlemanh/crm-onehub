@@ -76,6 +76,6 @@ test("rang va cham", async () => {
   chạy `bun run test -- "cd <sao> && CRM_TELEMETRY_DISABLED=1 bun test ./so-moi.spec.ts"` từ `GOC`, xoá bản sao trong `finally`; in đường spec và `agent/` đã nạp.
   - `xanh`: mã 0 khi bun 0, `0 fail`, `RANG-VA-CHAM 37,41,100,2031`; thiếu dòng/số → 2; có bài đỏ → 1.
   - `do`: mã 0 khi `RANG-VA-CHAM 37,41,100,2031`, bun ≠ 0, và tập `(fail) nop-ban-nhap > …` khớp ĐÚNG bốn tiền tố; khác → 1; va chạm không ăn → 2.
-- [ ] Verify: `bun …/va-cham.mjs xanh` → 0; `… do` → 0. Phá-thử (cùng fixture): `SMK_KHONG_CHEN=1` tắt chèn → `xanh` thoát 2 «va cham khong an»; chạy chế độ `xanh` trên bản ghim (biến `SMK_SPEC=truoc`) → thoát 1 nêu bốn bài đỏ.
+- [ ] Verify: `bun …/va-cham.mjs xanh` → 0; `… do` → 0. Phá-thử (cùng fixture, bản chép tạm `.pha-*.mjs` cạnh răng rồi xoá — không thêm biến môi trường vào răng): bỏ chèn (`MA_VA_CHAM = MOC_MA`) → `xanh` thoát 2 «va cham khong an (rong)»; chế độ `xanh` trỏ spec sang bản ghim → thoát 1 nêu bốn bài đỏ. Đã chạy 07/10: 2 và 1.
 - [ ] Thêm hai dòng config; `git diff _acceptance/config.yaml` chỉ có dòng `+`.
 - [ ] Commit.
