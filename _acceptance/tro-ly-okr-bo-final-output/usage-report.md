@@ -240,3 +240,44 @@ wall: 1141s
 - **claude-haiku-4-5-20251001**: 8 agent · 37 calls · out 10,292 · in 312 · cache_read 1,943,585 · cache_create 293,294
 - **claude-opus-5-5**: 3 agent · 74 calls · out 5,501 · in 148 · cache_read 8,867,514 · cache_create 378,868
 
+### S4 round 5 (thu lai) — wf_c811e9e4-3d4 (19 agent, 34,410 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 5 | 8,959 | 10 | 434,491 | 72 |
+| review:measurement | claude-opus-5-5 | 7 | 4,091 | 14 | 616,226 | 101 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 2,899 | 18 | 83,599 | 67 |
+| machine:bun run test -- --filter=api | claude-haiku-4-5-20251001 | 10 | 2,719 | 82 | 599,308 | 251 |
+| machine:bun _acceptance/tro-ly-okr-bo-final-outp | claude-haiku-4-5-20251001 | 17 | 2,435 | 138 | 1,090,901 | 866 |
+| triage | claude-sonnet-5-5 | 2 | 2,269 | 4 | 77,438 | 18 |
+| review:conventions | claude-opus-5-5 | 12 | 2,173 | 24 | 1,066,460 | 98 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-4-5-20251001 | 2 | 1,621 | 18 | 83,620 | 280 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-4-5-20251001 | 2 | 1,320 | 18 | 83,614 | 217 |
+| review:bugs | claude-opus-5-5 | 21 | 1,146 | 42 | 2,128,447 | 139 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 1,069 | 18 | 83,599 | 21 |
+| judge:E9:operational-feasibility | claude-sonnet-5-5 | 3 | 874 | 6 | 189,496 | 13 |
+| machine:bun run test -- "cd apps/agent && CRM_TE | claude-haiku-4-5-20251001 | 2 | 641 | 18 | 83,648 | 17 |
+| judge:E9:spec-alignment | claude-sonnet-5-5 | 3 | 610 | 6 | 189,372 | 13 |
+| baseline:diffBase | claude-sonnet-5-5 | 7 | 505 | 14 | 487,021 | 42 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 445 | 18 | 83,597 | 13 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-4-5-20251001 | 2 | 442 | 18 | 83,646 | 65 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 158 | 4 | 73,236 | 6 |
+| judge:E9:domain-correctness | claude-sonnet-5-5 | 3 | 34 | 6 | 153,472 | 12 |
+
+
+wall: 1026s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 505 | 487,021 | 42 | 03:43:32 | 03:44:14 |
+| machine | 9 | 13,591 | 2,275,532 | 925 | 03:43:32 | 03:58:57 |
+| judge | 3 | 1,518 | 532,340 | 16 | 03:43:32 | 03:43:48 |
+| review | 3 | 7,410 | 3,811,133 | 140 | 03:43:32 | 03:45:53 |
+| triage | 1 | 2,269 | 77,438 | 18 | 03:58:59 | 03:59:17 |
+| capture | 1 | 158 | 73,236 | 6 | 03:59:18 | 03:59:24 |
+| synthesize | 1 | 8,959 | 434,491 | 72 | 03:59:26 | 04:00:38 |
+
+- **claude-sonnet-5-5**: 7 agent · 25 calls · out 13,409 · in 50 · cache_read 1,604,526 · cache_create 550,190
+- **claude-opus-5-5**: 3 agent · 40 calls · out 7,410 · in 80 · cache_read 3,811,133 · cache_create 285,449
+- **claude-haiku-4-5-20251001**: 9 agent · 41 calls · out 13,591 · in 346 · cache_read 2,275,532 · cache_create 346,310
+

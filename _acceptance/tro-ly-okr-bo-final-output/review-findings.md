@@ -8,80 +8,32 @@ Không có.
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **With outputSchema removed, the tro_ly_okr result goes back to the non-ZDR root model as free text, breaking the rule that the root only sees constants**
-  Người dùng thấy gì: Sau thay đổi này, trợ lý OKR trả lời lại cho phiên chính bằng chữ tự do thay vì một mã cố định. Nếu mô hình không đđáp 'done' mà tóm tắt hay trích nội dung OKR, nội dung đó có thể đi tới nhà cung cấp mô hình không cam kết xoá dữ liệu (ZDR). Hiện chỉ có lời dặn trong chỉ dẫn, chưa có gì chặn thật.
-  file: `apps/agent/agent/subagents/tro_ly_okr/agent.ts`
-  severity: high
-  Đề xuất: new-contract
-
-- **The okr-chuyen-tiep test 'kết quả về gốc… không có chữ tự do' still passes, but it now checks a schema that no longer controls the output**
-  Người dùng thấy gì: Có một bài kiểm tra báo xanh rằng kết quả gửi về phiên chính không chứa chữ tự do, nhưng nó đang kiểm một khuôn không còn quyết định gì. Bài kiểm tra xanh nên tạo cảm giác an toàn giả cho điểm riêng tư này.
-  file: `apps/agent/test/okr-chuyen-tiep.spec.ts`
-  severity: medium
-  Đề xuất: new-contract
-
-- **The literal outcome 'da-nop' now has two sources: the agent config and the dead ketQuaTroLy schema that the app reads**
-  Người dùng thấy gì: Chữ 'đã nộp' được ghi ở hai nơi riêng nhau. Hôm nay hai nơi khớp nên màn góp ý hiển thị đúng, nhưng nếu ai đổi một nơi mà quên nơi kia thì một lần góp ý thành công sẽ hiện như bị lỗi.
-  file: `apps/agent/agent/lib/okr/config.ts`
+- **E11 không khai okr/config.ts trong paths dù thước nay đọc MO_HINH từ tệp đó**
+  Người dùng thấy gì: Nếu sau này ai đổi model của Trợ lý OKR, bằng chứng «phiên gốc chạy đúng model» đã ký vẫn hiện là còn hiệu lực dù thứ nó đo đã đổi, nên có thể không ai được nhắc chạy lại.
+  file: `_acceptance/tro-ly-okr-bo-final-output/evals.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **The 'khong-lam-duoc:' prefix is built inline in viec.ts, not taken from the TRO_LY_OKR.ketThuc config**
-  Người dùng thấy gì: Một tiền tố của mã lý do không làm được nằm riêng ở một chỗ thay vì chung với các mã khác. Người dùng không thấy khác biệt nào; chỉ gây khó cho người sửa sau này.
-  file: `apps/agent/agent/lib/okr/viec.ts`
-  severity: low
-  Đề xuất: wont-fix
-
-- **Stopping the measurement leaves the real model eval running**
-  Người dùng thấy gì: Nếu dừng phép đo giữa chừng, bài kiểm tra dùng mô hình thật vẫn chạy ngầm và tiếp tục tiêu hạn mức chi của team, đồng thời có thể làm lệch số đo của lần chạy kế tiếp. Dừng bằng Ctrl-C trong terminal thì không bị.
-  file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
+- **E10 không khai packages/ai-okr, nơi thật sự gắn cờ ZDR ở bước gốc**
+  Người dùng thấy gì: Nếu có người sửa phần dùng chung làm rơi cờ không lưu dữ liệu ở phiên gốc của Trợ lý OKR, bằng chứng đã ký vẫn báo ổn và không có gì yêu cầu kiểm lại, nên nội dung OKR có thể đi tới nhà cung cấp mô hình mà không ai biết.
+  file: `_acceptance/tro-ly-okr-bo-final-output/evals.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **"Already submitted" weekly-summary paths leave the task open, so the hook labels it hong:khong-nop**
-  Người dùng thấy gì: Khi một bản tóm tắt tuần đã có sẵn cho phòng đó và tuần đó, hoặc khi việc ghi bị lỗi sau lúc đã lưu xong, việc được ghi nhận là thất bại dù nội dung đã nằm trong hệ thống. Người theo dõi sẽ thấy báo lỗi sai và có thể làm lại không cần thiết.
-  file: `apps/agent/agent/lib/okr/nop-tom-tat.ts`
-  severity: low
-  Đề xuất: new-contract
-
-- **Hinh dang 2 (fixture viet tay dung khuon ben doc): bo dem outputSchema chi duoc tu-kiem bang mot span sua tay, trace that truoc ban sua khong bao gio sinh khuon do**
-  Người dùng thấy gì: Một trong hai kiểm tra trong phép đo mô hình thật chỉ được chứng minh bằng dữ liệu viết tay, chưa từng gặp trong dữ liệu thật. Kiểm tra còn lại vẫn chắc, nên kết luận 'không còn lỗi cũ' không bị lung lay đáng kể.
-  file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
+- **Phiên gốc okr dựng tay tùy chọn ZDR ngay ở chỗ gọi, không lấy từ cấu hình của Trợ lý**
+  Người dùng thấy gì: Cờ không lưu dữ liệu và thẻ của Trợ lý OKR giờ được ghi ở ba nơi; sau này đổi thẻ hay cờ ở một nơi thì phiên gốc có thể vẫn dùng giá trị cũ mà không báo lỗi.
+  file: `apps/agent/agent/lib/model.ts`
   severity: low
   Đề xuất: known-limits
 
-- **Hinh dang 2 (trang thai viet tay thay cho writer): test giu-viec tuyen 'tool nop dong da-nop' nhung tu dong viec bang dongDaNop**
-  Người dùng thấy gì: Mot bai kiem tra ve viec giu nguyen ket qua da nop co ten noi rong hon nhung gi no thuc su kiem tra. Nguoi dung khong bi anh huong: viec 'nop xong thi dong viec' van duoc kiem o mot bai khac, nen chi can chap nhan va ghi vet.
-  file: `apps/agent/test/tro-ly-okr-giu-viec.integration.spec.ts`
-  severity: low
-  Đề xuất: wont-fix
-
-- **Hinh dang 3 (assert chuoi co mat thay cho quan he): kiem 'ket bang done' qua bat cu cho nao co chu `done`**
-  Người dùng thấy gì: Bài kiểm tra chỉ thấy chữ 'done' xuất hiện đâu đó trong chỉ dẫn chứ không đảm bảo đúng chỗ. Nếu ai xoá nhầm một dòng chỉ dẫn, bài này có thể không báo, nhưng phần chấm bằng nhận xét vẫn bắt được.
-  file: `apps/agent/test/tro-ly-okr-khong-khuon-ra.spec.ts`
-  severity: low
-  Đề xuất: wont-fix
-
-- **The model measurement script hard-codes millisecond values instead of building them from one minute/second base (r4)**
-  Người dùng thấy gì: Các con số thời gian trong công cụ đo được viết thẳng thay vì đặt từ một đơn vị gốc. Người dùng không thấy gì khác đi: sản phẩm chạy như cũ, chỉ là sau này sửa một số có thể làm dòng báo thời gian ghi lệch.
+- **Hình dạng 4 (âm tính một mình, thiếu đối chứng dương): phần tự kiểm của E11 chỉ đòi «bắt được bước sai model», chưa từng thử «bước đúng model thì không bị đếm»**
+  Người dùng thấy gì: Phép tự kiểm của bộ đo model chưa chứng minh được nó phân biệt bước đúng với bước sai, nhưng nếu nó sai thì chỉ báo đỏ nhầm chứ không cho qua nhầm, nên người dùng không chịu hậu quả.
   file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Stopping the measurement only kills the direct child; the `eve eval` started under it keeps running after the 'KET THUC' line (r4)**
-  Người dùng thấy gì: Nếu người vận hành ngắt lượt đo giữa chừng, tiến trình gọi model thật có thể vẫn chạy ngầm và tiếp tục tốn tiền, trong khi nhật ký đã báo là đã dừng. Sản phẩm của người dùng cuối không bị ảnh hưởng.
-  file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **The 'tests running in this tree' check matches by path prefix, so it also counts worktrees nested inside the tree (r4)**
-  Người dùng thấy gì: Khi đo từ thư mục chính, công cụ có thể tưởng bộ test của một bản làm việc khác đang chạy nên chờ lâu, tối đa 45 phút, rồi vẫn đo. Chỉ làm chậm lượt đo, không làm sai chức năng nào của sản phẩm.
-  file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 4 (âm tính một mình): «bộ test của cây đã yên» được chấp nhận chỉ vì đếm ra 0, không có đối chứng dương nào chứng minh bộ đếm thấy được một tiến trình test đang chạy (r4)**
-  Người dùng thấy gì: Dòng nhật ký báo bộ test đã yên có thể in ra dù công cụ thực ra không nhìn thấy test nào đang chạy. Người đọc bằng chứng không phân biệt được lần chờ thật với lần chờ mù, nên số đo của một lượt có thể chạy chồng mà không ai biết.
+- **Hình dạng 3 (đo một chuỗi có mặt thay cho quan hệ cần chứng minh): cột «goc-khong-zdr» của E11 chỉ so mã model, không đo cờ ZDR**
+  Người dùng thấy gì: Dòng báo «không có ZDR» trong kết quả đo chỉ kiểm phiên gốc có dùng đúng model hay không, chưa kiểm cờ không lưu dữ liệu ở lần chạy thật, nên người đọc có thể tin điều đó đã được xác nhận khi chạy thật hơn thực tế.
   file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
   severity: low
   Đề xuất: known-limits
@@ -118,6 +70,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
 
 ## Chưa adversarial-verify (refuter chết)
 
-Không có.
-
-⚠ Cụm ngoài vùng phủ: 3/9 lỗi rơi vào file không bộ đo nào phủ (apps/agent/test/okr-chuyen-tiep.spec.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/tro-ly-okr-giu-viec.integration.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+⚠ Cụm ngoài vùng phủ: 2/5 lỗi rơi vào file không bộ đo nào phủ (_acceptance/tro-ly-okr-bo-final-output/evals.yaml) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
