@@ -326,6 +326,8 @@ function OSoan({
 						: undefined
 				}
 				lockedReason={lyDoKhoa(s, cuoc, m)}
+				value={s.chu}
+				onValueChange={s.doiChu}
 			/>
 			{s.hetLuot && cuoc.trangThai === "dang" ? (
 				<Button
@@ -407,7 +409,9 @@ export function HoiThoaiSoan({
 								title: m.hoiThoai.khongDocLai,
 								description: m.hoiThoai.khongDocLaiMoTa,
 							}
-						: undefined
+						: rong
+							? { description: m.hoiThoai.moDau }
+							: undefined
 				}
 			>
 				{s.transcript.map((tin) => (
@@ -430,6 +434,16 @@ export function HoiThoaiSoan({
 					</KaraTurn>
 				) : null}
 				{s.hong || s.dangThu ? <LuotLoi s={s} m={m} loiMo={loiMo} /> : null}
+				{s.lyDoLuot ? (
+					<div data-tu-choi={s.lyDoLuot}>
+						<KaraState kind="off" reason={m.lyDoLuot[s.lyDoLuot]} />
+					</div>
+				) : null}
+				{s.chuaCauHinh ? (
+					<div data-tu-choi="chua-cau-hinh">
+						<KaraState kind="off" reason={m.nut.chuaCauHinh} />
+					</div>
+				) : null}
 				{s.quyetBang.length > 0 ? (
 					<KaraSystemLine>
 						{m.heThong.seGui(chuQuyet(m, s.quyetBang))}

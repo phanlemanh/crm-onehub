@@ -33,6 +33,8 @@ export type KaraComposerProps = {
 	suggestionsLabel?: string;
 	onSuggestion?: (text: string) => void;
 	lockedReason?: ReactNode;
+	value?: string;
+	onValueChange?: (text: string) => void;
 };
 
 export function KaraComposer({
@@ -46,6 +48,8 @@ export function KaraComposer({
 	suggestionsLabel,
 	onSuggestion,
 	lockedReason,
+	value,
+	onValueChange,
 }: KaraComposerProps) {
 	const msg = useMessages();
 	const banChung = useKaraBusy();
@@ -53,7 +57,12 @@ export function KaraComposer({
 	const khoa = lockedReason !== undefined && lockedReason !== null;
 	const idLyDo = useId();
 	const o = useRef<HTMLTextAreaElement>(null);
-	const [chu, doiChu] = useState("");
+	const [chuRieng, doiChuRieng] = useState("");
+	const chu = value ?? chuRieng;
+	const doiChu = (moi: string) => {
+		if (value === undefined) doiChuRieng(moi);
+		onValueChange?.(moi);
+	};
 	return (
 		<div data-slot="kara-composer" className="flex flex-col gap-2">
 			{suggestions && suggestions.length > 0 ? (

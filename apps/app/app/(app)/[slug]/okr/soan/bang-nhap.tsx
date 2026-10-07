@@ -12,6 +12,7 @@ import { Field, FieldDescription, FieldError } from "@crm/ui/components/field";
 import { KaraArtifact } from "@crm/ui/components/kara/artifact";
 import { KaraState } from "@crm/ui/components/kara/state";
 import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
+import { docSoOkr } from "@crm/validation/okr-kr";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
@@ -22,10 +23,8 @@ import { SOAN_UI } from "./cau-hinh";
 import { type CuocDangSoan, donViCua } from "./dung-cuoc-soan";
 import { dongKhoi, type QuyetBang } from "./khoi-ngu-canh";
 import type { CuocSoan, DongKr, DongSoan } from "./kieu";
-import { loiQuyetTu } from "./loi-cua";
 import { canSo, demDong, duongTheoDonVi, soCua } from "./luat-ban-nhap";
 import { khoaHang, type NguCanhThe, NhomMucTieu } from "./the-nhap";
-import { docSoOkr } from "@crm/validation/okr-kr";
 
 const LOC = ["cho"] as const;
 
@@ -57,7 +56,7 @@ function useNguCanhThe(
 		Object.entries(loiGoc).map(([id, v]) => [
 			id,
 			v === "xung-dot" ? (
-				<span data-loi-quyet="xung-dot">
+				<span key={id} data-loi-quyet="xung-dot">
 					{cuoc.trangThai === "dang"
 						? m.loiQuyet.dongCu
 						: m.loiQuyet.cuocKhongDang}
@@ -82,12 +81,12 @@ function useNguCanhThe(
 		s.quyet.mutate(vao, {
 			onSuccess: (kq) => {
 				if (kq.ok) khiXong();
-				else datLoi(d.id, m.lyDoQuyet[kq.lyDo]);
+				else datLoi(d.id, kq.chiTiet ?? m.lyDoQuyet[kq.lyDo]);
 			},
 			onError: (e) =>
 				datLoi(
 					d.id,
-					loiQuyetTu(e).kieu === "xung-dot" ? "xung-dot" : m.loiQuyet.mang,
+					e.data?.code === "CONFLICT" ? "xung-dot" : m.loiQuyet.mang,
 				),
 		});
 	};

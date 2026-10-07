@@ -19,8 +19,8 @@ import type { Thread } from "@/lib/agent-session";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { useTRPC } from "@/lib/trpc/client";
 import { BanNhap } from "./bang-nhap";
-import { focusOSoan, sauMotNhip } from "./cuon";
 import { SOAN_UI } from "./cau-hinh";
+import { focusOSoan, sauMotNhip } from "./cuon";
 import {
 	donViCua,
 	type NhapCuoc,
@@ -30,6 +30,7 @@ import {
 	usePhienCuoc,
 } from "./dung-cuoc-soan";
 import { useKhoHep } from "./dung-kho-hep";
+import { GiuTrangSoan } from "./giu-trang";
 import { HoiThoaiSoan } from "./hoi-thoai-soan";
 import { KhungSoan, useTabSoan } from "./khung-soan";
 import type { CuocSoan, DongSoan } from "./kieu";
@@ -221,34 +222,36 @@ export function TrangSoan({
 	const du = danhSach.data;
 	const dangMo = danhSach.isPending;
 	return (
-		<div
-			className="flex min-h-0 flex-1 flex-col gap-4"
-			data-trang-soan={du?.cuoc.trangThai ?? (dangMo ? "dang-mo" : "loi")}
-		>
-			<DauTrangSoan cuoc={du?.cuoc ?? null} m={m} />
-			{dangMo ? (
-				<KaraState kind="working" label={m.man.dangMo} delayMs={0} />
-			) : !cauNoi ? (
-				<KaraState kind="unconfigured" description={m.trang.chuaCauHinh} />
-			) : du ? (
-				<ThanCuoc
-					key={du.cuoc.id}
-					cuoc={du.cuoc}
-					dong={du.dong}
-					thieuBoiCanh={du.thieuBoiCanh}
-					lyDo={du.lyDo}
-					quanTri={quanTri}
-					hep={hep}
-					moCuoc={(id) => router.push(duongTrangSoan(slug, id))}
-				/>
-			) : (
-				<KaraState
-					kind="error"
-					what={m.trang.khongMo}
-					description={m.trang.khongMoMoTa}
-					onRetry={() => void danhSach.refetch()}
-				/>
-			)}
-		</div>
+		<GiuTrangSoan>
+			<div
+				className="flex min-h-0 flex-1 flex-col gap-4"
+				data-trang-soan={du?.cuoc.trangThai ?? (dangMo ? "dang-mo" : "loi")}
+			>
+				<DauTrangSoan cuoc={du?.cuoc ?? null} m={m} />
+				{dangMo ? (
+					<KaraState kind="working" label={m.man.dangMo} delayMs={0} />
+				) : !cauNoi ? (
+					<KaraState kind="unconfigured" description={m.trang.chuaCauHinh} />
+				) : du ? (
+					<ThanCuoc
+						key={du.cuoc.id}
+						cuoc={du.cuoc}
+						dong={du.dong}
+						thieuBoiCanh={du.thieuBoiCanh}
+						lyDo={du.lyDo}
+						quanTri={quanTri}
+						hep={hep}
+						moCuoc={(id) => router.push(duongTrangSoan(slug, id))}
+					/>
+				) : (
+					<KaraState
+						kind="error"
+						what={m.trang.khongMo}
+						description={m.trang.khongMoMoTa}
+						onRetry={() => void danhSach.refetch()}
+					/>
+				)}
+			</div>
+		</GiuTrangSoan>
 	);
 }

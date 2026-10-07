@@ -203,6 +203,7 @@ function ketCua(
 	nhan: string,
 	giaTri: string,
 	keo: readonly DongSoan[] = [],
+	soAn = 0,
 ):
 	| { decision: ProposedChangeDecision; text: ReactNode; onUndo?: () => void }
 	| undefined {
@@ -217,9 +218,15 @@ function ketCua(
 				{ket === "accepted" ? m.dong.daThem : m.dong.daBoQua} {nhan} ·{" "}
 				<span translate="no">{giaTri}</span>
 				{hoanDuoc && keo.length > 0 ? m.dong.kemKr(String(keo.length)) : null}
-				{d.trangThai === "bac" && keo.length > 0
-					? ` · ${m.banNhap.bacCon(String(keo.length))}`
+				{d.trangThai === "bac" && soAn > 0
+					? ` · ${m.banNhap.bacCon(String(soAn))}`
 					: null}
+				{daBo ? (
+					<>
+						{" · "}
+						<span data-nhan="da-bo">{m.banNhap.nhan["da-bo"]}</span>
+					</>
+				) : null}
 			</>
 		),
 		onUndo: hoanDuoc ? () => n.hoan(d, keo) : undefined,
@@ -323,12 +330,14 @@ function DongMucTieuNhap({
 	d,
 	nhan,
 	keo,
+	soCon,
 }: {
 	n: NguCanhThe;
 	m: OkrSoanMessages;
 	d: DongMucTieu;
 	nhan: string;
 	keo: readonly DongSoan[];
+	soCon: number;
 }) {
 	const sua = useSuaDong(n, m, d, m.dong.themMucTieu);
 	return (
@@ -349,7 +358,7 @@ function DongMucTieuNhap({
 					<span className="block">{d.viSao}</span>
 				</>
 			}
-			decided={ketCua(n, m, d, nhan, giaTriCua(d), keo)}
+			decided={ketCua(n, m, d, nhan, giaTriCua(d), keo, soCon)}
 			pending={dangQuyet(n, d)}
 			error={n.loi[d.id]}
 			actions={sua.actions}
@@ -481,7 +490,14 @@ export function NhomMucTieu({
 			}
 		>
 			{hien(mt) ? (
-				<DongMucTieuNhap n={n} m={m} d={mt} nhan={nhan} keo={keo} />
+				<DongMucTieuNhap
+					n={n}
+					m={m}
+					d={mt}
+					nhan={nhan}
+					keo={keo}
+					soCon={con.length}
+				/>
 			) : null}
 			{bac
 				? null
