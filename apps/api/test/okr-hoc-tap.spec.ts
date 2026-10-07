@@ -235,18 +235,18 @@ describe("khep-bien", () => {
 	afterAll(async () => {
 		await donSanKhep();
 	});
-	const NAM: Record<(typeof TRANG_THAI_MUC_TIEU)[number], number> = {
+	const NAM = {
 		nhap: 2017,
 		"cho-duyet": 2018,
 		"cong-bo": 2019,
 		"da-bo": 2020,
-	};
-	const KY_VONG: Record<(typeof TRANG_THAI_MUC_TIEU)[number], number> = {
+	} as const satisfies Record<(typeof TRANG_THAI_MUC_TIEU)[number], number>;
+	const KY_VONG = {
 		nhap: 200,
 		"cho-duyet": 200,
 		"cong-bo": 400,
 		"da-bo": 200,
-	};
+	} as const satisfies Record<(typeof TRANG_THAI_MUC_TIEU)[number], number>;
 	const SO_DONG = 4;
 
 	async function mucTieuHocTapTheo(

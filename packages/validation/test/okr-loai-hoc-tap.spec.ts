@@ -40,10 +40,7 @@ describe("mot-nguon", () => {
 
 const KY_VONG = 50;
 const MUC = [0, 0.49, 0.5, 0.69, 0.7, 0.85, 1] as const;
-const BANG_TINH_TRANG: Record<
-	LoaiMucTieu,
-	Record<(typeof MUC)[number], TinhTrang>
-> = {
+const BANG_TINH_TRANG = {
 	"cam-ket": {
 		0: "truot",
 		0.49: "truot",
@@ -71,7 +68,10 @@ const BANG_TINH_TRANG: Record<
 		0.85: "dung-nhip",
 		1: "dung-nhip",
 	},
-};
+} as const satisfies Record<
+	LoaiMucTieu,
+	Record<(typeof MUC)[number], TinhTrang>
+>;
 
 describe("tinh-trang", () => {
 	test("bang 3 loai x 7 muc ti le", () => {

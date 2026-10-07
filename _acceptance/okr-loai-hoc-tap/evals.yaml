@@ -65,7 +65,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.olht_dom
-    paths: ["apps/app/app/(app)/[slug]/settings/okr/hop-thoai-dong-ky.tsx", "apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-khep.ts, apps/app/test/okr-hoc-tap.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/settings/okr/hop-thoai-dong-ky.tsx", "apps/app/app/(app)/[slug]/okr/cham-diem.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr.ts, apps/app/lib/messages/okr-khep.ts, apps/app/test/okr-hoc-tap.dom.tsx, apps/app/test/okr-hoc-tap-chon.dom.tsx]
     expected: "exit 0; dựng HopThoaiDongKy với okr.bangCham giả parse qua schema đầu ra thật, ba ca viết trước: (a) conLai 0, hocTapChuaGhi [{id h1, ten «Kiểm gói dùng thử»}] → có [data-hoc-tap-chua-ghi] chứa đúng tên đó, số phần tử mang tên có translate=\"no\" trong khối bằng 1 (= số mục gõ tay), không có nút xác nhận khép; (b) conLai 0, hocTapChuaGhi [] → hộp xác nhận có nút khép như hôm nay; (c) conLai 2, hocTapChuaGhi [h1] → hộp chặn có cả [data-chua-cham] và [data-hoc-tap-chua-ghi]. CHIỀU ĐỎ (rang/dot-bien.mjs): (h) bản sao hop-thoai-dong-ky chỉ xét conLai === 0 → ca (a) đỏ với thông điệp ghim «hop xac nhan hien khi con hoc-tap chua ghi»; (n) bản sao bỏ translate=\"no\" trên tên → ca (a) đỏ, ghim «ten hoc-tap thieu translate no»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -73,7 +73,7 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.olht_dom
-    paths: ["apps/app/app/(app)/[slug]/okr/cham-diem.tsx", apps/app/lib/messages/okr-khep.ts, apps/app/test/okr-hoc-tap.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/okr/cham-diem.tsx", apps/app/lib/messages/okr-khep.ts, apps/app/test/okr-hoc-tap.dom.tsx, apps/app/test/okr-hoc-tap-chon.dom.tsx]
     expected: "Cùng lệnh E8 — dựng màn chấm điểm với bảng chấm giả: mục tiêu học tập cachDoc chua-tra-loi, diem null → nhãn «Chưa trả lời» hiện, dưới ô điều học được có chữ «Bắt buộc trước khi khép kỳ»; cachDoc da-tra-loi → nhãn «Đã trả lời»; mục tiêu cam-ket cùng màn → không có chữ «Bắt buộc trước khi khép kỳ». CHIỀU ĐỎ: bản sao cham-diem ẩn nhãn khi diem null → ca chua-tra-loi đỏ, ghim «hoc-tap diem trong mat nhan cach doc»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
@@ -81,7 +81,7 @@ evals:
     criterion: AC-8
     executor: test
     cmd: config:executors.test.olht_dom
-    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr.ts, apps/app/test/okr-hoc-tap.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx", apps/app/lib/messages/okr.ts, apps/app/test/okr-hoc-tap.dom.tsx, apps/app/test/okr-hoc-tap-chon.dom.tsx]
     expected: "Cùng lệnh E8 — mở hộp thoại thêm mục tiêu, mở Select «Loại»: tập chữ các lựa chọn toEqual {Cam kết, Tham vọng, Học tập} (vi) và {Committed, Aspirational, Learning} (en). CHIỀU ĐỎ (rang/dot-bien.mjs, cặp (j)): bản sao hop-thoai-muc-tieu.tsx lọc bỏ hoc-tap khỏi danh sách lựa chọn → ca vi đỏ với thông điệp ghim «hop chon loai thieu Hoc tap»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

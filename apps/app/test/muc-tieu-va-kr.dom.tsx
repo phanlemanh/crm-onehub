@@ -225,6 +225,7 @@ let bangCham: BangChamOutput = bangChamOutput.parse({
 	thang: "0-1",
 	conLai: 0,
 	chuaCham: [],
+	hocTapChuaGhi: [],
 	mucTieu: [],
 });
 let treo = new Set<string>();
@@ -1661,6 +1662,7 @@ const BANG_CHAM = () =>
 		thang: "0-1",
 		conLai: 3,
 		chuaCham: [],
+		hocTapChuaGhi: [],
 		mucTieu: [
 			{
 				id: "mt-c1",
