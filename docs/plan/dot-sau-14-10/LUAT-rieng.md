@@ -25,3 +25,15 @@ Mỗi luật đều đến từ một ca đã xảy ra trong Nhật ký đợt `
     vào điều kiện CI xanh.
 12. Đầu mỗi lần thức, phiên giám sát kiểm Postgres: `lsof -nP -iTCP:5432 -sTCP:LISTEN` trống thì mở lại Docker trước
     khi cấp lượt `s4` hay `duong-nen` (07/10: Docker tắt làm cả bốn suite đỏ giả).
+
+Ba luật dưới đây đến từ lượt `don-okr-nhap-sai` (07/10, #290).
+
+13. Sau mỗi vòng sửa S4 chạy với `--carry-anchor`, trước khi dựng thẻ Cổng 2: so mục «Ngoài hợp đồng» của
+    `review-findings.md` với vòng trước; thiếu mục nào thì chép lại, tiêu đề mở đầu «(r<N>)». Cờ «không có ảnh màn» trên
+    thẻ khi ui-check được mang sang là do kit làm rơi khung ảnh, ảnh vẫn ở `evidence/`; nói một dòng với anh. Luật này
+    bỏ khi bản vá ba lỗ của kit đã cài.
+14. Hàng nào có nút xoá, lưu trữ hay trạng thái kết thúc thì đọc `docs/vong-doi.md` trước khi viết hợp đồng, và hợp đồng
+    trả lời ba câu ở mục «Tính năng mới phải trả lời ba câu ở Cổng Phạm vi».
+15. Một kiểm tra CI đỏ ở phần PR không chạm: đối chiếu cùng kiểm tra trên `onehub` ở mốc đã gộp vào nhánh, và chạy lại
+    riêng tệp đó trên máy. `onehub` xanh và máy xanh thì chạy lại job đỏ một lần (`gh run rerun <id> --failed`) trước khi
+    sửa gì; đỏ lần hai mới là việc thật (07/10: bài «số người gõ» của Trợ lý OKR đỏ trên CI của #290, chạy lại xanh).

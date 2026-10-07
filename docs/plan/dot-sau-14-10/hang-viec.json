@@ -108,7 +108,9 @@
         "K2",
         "K3",
         "K4",
-        "K6b"
+        "K6b",
+        "E5",
+        "V2"
       ],
       "ranh_gioi": [
         "apps/app/lib/messages/*.ts",
@@ -185,6 +187,39 @@
       "s4": "local"
     },
     {
+      "ma": "V2",
+      "slug": "vong-doi-mot-cach-cat",
+      "day": "P2",
+      "uu_tien": 3,
+      "sau": [
+        "K6b",
+        "E7"
+      ],
+      "ranh_gioi": [
+        "apps/app/app/(app)/[slug]/deals/page.tsx",
+        "apps/app/app/(app)/[slug]/deals/deals-bulk-actions.tsx",
+        "apps/app/app/(app)/[slug]/contacts/contacts-bulk-actions.tsx",
+        "apps/app/app/(app)/[slug]/companies/companies-bulk-actions.tsx",
+        "apps/app/components/crm/record-sheet/deal-sheet.tsx",
+        "apps/app/components/crm/record-sheet/record-actions.tsx",
+        "apps/app/components/crm/record-sheet/contact-sheet.tsx",
+        "apps/app/components/crm/record-sheet/company-sheet.tsx",
+        "apps/app/components/crm/bulk-actions.tsx",
+        "apps/app/components/data-table/list-search-params.ts",
+        "packages/ui/src/components/archived-list.tsx",
+        "apps/app/test/vong-doi-*.dom.tsx",
+        "apps/api/test/vong-doi-*.spec.ts",
+        "_acceptance/vong-doi-mot-cach-cat/**"
+      ],
+      "chung_chi_them": [
+        "apps/app/lib/messages/deals.ts",
+        "apps/app/lib/messages/contacts.ts",
+        "apps/app/lib/messages/companies.ts",
+        "apps/app/lib/messages/crm.ts"
+      ],
+      "s4": "local"
+    },
+    {
       "ma": "E7",
       "slug": "datatable-loc-ro",
       "day": "P3",
@@ -214,6 +249,7 @@
       ],
       "ranh_gioi": [
         "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx",
+        "apps/app/app/(app)/[slug]/settings/giai-doan/hop-thoai-giai-doan.tsx",
         "apps/app/app/(app)/[slug]/settings/organization/danh-sach-keo.tsx",
         "apps/app/app/(app)/[slug]/settings/organization/chi-tiet-goc.tsx",
         "apps/app/app/(app)/[slug]/settings/organization/chi-tiet-bo-phan.tsx",
@@ -317,12 +353,39 @@
         "apps/agent/agent/lib/builder-runtime.ts",
         "apps/agent/agent/lib/builder-delivery.ts",
         "apps/agent/test/cau-hoi-het-han-muc.integration.spec.ts",
+        "apps/api/src/agent/agent-definitions.service.ts",
+        "apps/api/test/tac-nhan-luu-tru.spec.ts",
         "_acceptance/tac-nhan-va/**"
       ],
       "chung_chi_them": [
         "apps/app/lib/messages/agent-builder-tac-nhan.ts",
         "apps/app/lib/messages/agent-builder-khung.ts"
       ],
+      "s4": "local"
+    },
+    {
+      "ma": "F13",
+      "slug": "so-moi-khong-chap-chon",
+      "day": "P4",
+      "uu_tien": 2,
+      "ranh_gioi": [
+        "apps/agent-okr/test/nop-ban-nhap.integration.spec.ts",
+        "_acceptance/so-moi-khong-chap-chon/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
+      "ma": "V2L",
+      "slug": "luat-kho-vong-doi",
+      "day": "P4",
+      "uu_tien": 5,
+      "ranh_gioi": [
+        "scripts/luat-kho/**",
+        ".github/workflows/acceptance.yml",
+        "_acceptance/luat-kho-vong-doi/**"
+      ],
+      "chung_chi_them": [],
       "s4": "local"
     },
     {
