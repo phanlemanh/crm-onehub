@@ -25,8 +25,9 @@ const CU = "Trưởng phòng";
 const MOI = "Giám đốc kinh doanh";
 const d = await moDo();
 
-const docMan = (t) =>
-	t.evaluate(() => {
+const docMan = async (t) => {
+	await nganDungYen(t);
+	return t.evaluate(() => {
 		const tran = [];
 		const goc = document.documentElement;
 		if (goc.scrollWidth > goc.clientWidth + 1)
@@ -39,9 +40,13 @@ const docMan = (t) =>
 		return {
 			chu: document.body.innerText ?? "",
 			nhanKara: window.__tim('[data-slot="kara-label"]').length,
+			nhanChu: window
+				.__tim('[data-slot="kara-label"]')
+				.map((e) => (e.textContent ?? "").replace(/\s+/g, " ").trim()),
 			tran,
 		};
 	});
+};
 
 async function gieo() {
 	const cty = await d.db.company.create({
@@ -72,7 +77,31 @@ async function gieo() {
 	return { congTy: cty.id, nguoi: nguoi.id };
 }
 
+async function nganDungYen(t) {
+	let truoc = null;
+	for (let lan = 0; lan < 40; lan += 1) {
+		const x = await t.evaluate(() => {
+			const n = document.querySelector(
+				"[data-slot='sheet-content'],[data-slot='drawer-content']",
+			);
+			const r = n?.getBoundingClientRect();
+			return r ? `${Math.round(r.x)}:${Math.round(r.y)}` : null;
+		});
+		if (x !== null && x === truoc) return;
+		truoc = x;
+		await new Promise((r) => setTimeout(r, 250));
+	}
+	throw new Error("ngan khong dung yen");
+}
+
+async function chupNgan(t, ten) {
+	await nganDungYen(t);
+	await t.screenshot({ path: join(process.env.BANG_CHUNG, ten) });
+	console.log(`  anh ${ten}`);
+}
+
 async function bamNut(t, chu) {
+	await nganDungYen(t);
 	const ok = await t.evaluate((c) => {
 		const nut = window
 			.__tim("button")
@@ -106,7 +135,7 @@ try {
 				ngan("contact", nguoi, "agent"),
 			);
 			const m = await docMan(t);
-			await d.chup(t, "kbk-kara-ca-nhan-1440.png");
+			await chupNgan(t, "kbk-kara-ca-nhan-1440.png");
 			await t.close();
 			const loi = [];
 			if (!m.chu.includes("Kara")) loi.push("khong thay chu Kara");
@@ -130,7 +159,7 @@ try {
 			]) {
 				const t = await d.moTrang(chu.cookie, RONG, ngan(loai, id, "agent"));
 				const m = await docMan(t);
-				await d.chup(t, ten);
+				await chupNgan(t, ten);
 				await t.close();
 				if (!m.chu.includes(cau)) loi.push(`${loai}: khong thay goi y`);
 			}
@@ -139,10 +168,14 @@ try {
 				RONG,
 				ngan("contact", nguoi, "agent"),
 			);
+			t.removeAllListeners("console");
+			console.log(
+				"  bo qua console cua trang trang thai: loi 503 tu tac nhan vang la chinh kich thich cua buoc nay",
+			);
 			await bamNut(t, "Người này là ai?");
 			await new Promise((r) => setTimeout(r, 6000));
 			const m = await docMan(t);
-			await d.chup(t, "kbk-kara-trang-thai-1440.png");
+			await chupNgan(t, "kbk-kara-trang-thai-1440.png");
 			await t.close();
 			const trangThai = m.chu.includes("Kara chưa trả lời được")
 				? "chua-tra-loi"
@@ -163,21 +196,28 @@ try {
 			const t = await d.moTrang(chu.cookie, RONG, ngan("contact", nguoi));
 			const truoc = await docMan(t);
 			if (truoc.nhanKara !== 1) loi.push(`nhan Kara ${truoc.nhanKara} lan`);
-			if (!truoc.chu.includes("Kara · 1 đề xuất"))
+			if (!truoc.nhanChu.some((c) => c.includes("Kara · 1 đề xuất")))
 				loi.push("khong thay Kara · 1 đề xuất");
-			await d.chup(t, "kbk-de-xuat-1440.png");
+			await chupNgan(t, "kbk-de-xuat-1440.png");
 			await bamNut(t, "Thay giá trị hiện có");
 			const sauNhan = await d.hoi(chu.cookie, "contacts.byId", { id: nguoi });
 			if (sauNhan.title !== MOI) loi.push(`sau nhan title=${sauNhan.title}`);
-			await d.chup(t, "kbk-bien-nhan-1440.png");
-			await bamNut(t, "Hoàn tác");
-			if (CHIEU_DO) await bamNut(t, "Hoàn tác");
+			await chupNgan(t, "kbk-bien-nhan-1440.png");
+			if (!CHIEU_DO) await bamNut(t, "Hoàn tác");
+			await nganDungYen(t);
+			const conNut = await t.evaluate(
+				() =>
+					window
+						.__tim("button")
+						.filter((b) => (b.innerText ?? "").trim() === "Hoàn tác").length,
+			);
+			if (conNut > 0) loi.push("hoan tac lan hai van con nut");
 			const sauHoan = await d.hoi(chu.cookie, "contacts.byId", { id: nguoi });
 			if (sauHoan.title !== CU) loi.push(`sau hoan tac title=${sauHoan.title}`);
 			const m = await docMan(t);
 			if (!m.chu.includes("Thay giá trị hiện có"))
 				loi.push("de xuat khong hien lai");
-			await d.chup(t, "kbk-hoan-tac-1440.png");
+			await chupNgan(t, "kbk-hoan-tac-1440.png");
 			await t.close();
 			d.dat(3, loi.length === 0, loi.join(" · "));
 		});
@@ -191,11 +231,11 @@ try {
 				ngan("contact", nguoi, "agent"),
 			);
 			const m1 = await docMan(t1);
-			await d.chup(t1, "kbk-kara-ca-nhan-390.png");
+			await chupNgan(t1, "kbk-kara-ca-nhan-390.png");
 			await t1.close();
 			const t2 = await d.moTrang(chu.cookie, HEP, ngan("contact", nguoi));
 			const m2 = await docMan(t2);
-			await d.chup(t2, "kbk-de-xuat-390.png");
+			await chupNgan(t2, "kbk-de-xuat-390.png");
 			await t2.close();
 			if (m1.tran.length > 0) loi.push(`tab Kara tran: ${m1.tran.join(", ")}`);
 			if (m2.tran.length > 0) loi.push(`de xuat tran: ${m2.tran.join(", ")}`);

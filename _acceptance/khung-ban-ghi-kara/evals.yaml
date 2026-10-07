@@ -295,7 +295,7 @@ evals:
       - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
       - "apps/api/src/contacts/contacts.service.ts"
       - "_acceptance/khung-ban-ghi-kara/rang/man.mjs"
-    expected: "exit 0; man.mjs in 'buoc N: dat' cho 4 buoc; chu doc bang innerText (khong page.content); anh o .acceptance-runs/khung-ban-ghi-kara/evidence/ va chep sang _acceptance/khung-ban-ghi-kara/evidence/. Khong mo duoc phien do -> KHONG DO DUOC ma 2 (khong bao xanh). CHIEU DO: --chieu-do bam Hoan tac hai lan -> 'buoc 3: hoan tac lan hai van con nut' ma 1."
+    expected: "exit 0; man.mjs in 'buoc N: dat' cho 4 buoc; chu doc bang innerText (khong page.content); anh o .acceptance-runs/khung-ban-ghi-kara/evidence/ va chep sang _acceptance/khung-ban-ghi-kara/evidence/. Khong mo duoc phien do -> KHONG DO DUOC ma 2 (khong bao xanh). CHIEU DO: --chieu-do bo qua cu bam Hoan tac (bien nhan con nguyen) -> 'buoc 3: hoan tac lan hai van con nut' ma 1. Anh chup theo khung nhin sau khi ngan dung yen (chup fullPage lam ngan chay lai hieu ung truot)."
 
   - id: E17
     criterion: AC-13
