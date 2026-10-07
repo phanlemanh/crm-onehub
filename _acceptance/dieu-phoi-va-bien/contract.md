@@ -5,7 +5,7 @@ slug: dieu-phoi-va-bien
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, config, ci]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-va-bien-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
@@ -88,5 +88,9 @@ Bỏ — hồ sơ không có `opportunity.md` (vòng nối tiếp từ Cổng 2,
   - Ngoài-3: yêu cầu `gia-han` viết trước `cap_luc` của lượt hiện tại mà được duyệt thì bị bỏ qua không có sự kiện nào; `tra-loi` vẫn ghi `duyet`.
   - Ngoài-4: test kiểm hình dạng dựng tay bản cấu hình sau `moDot` thay vì đọc tệp do `moDot` ghi ra; `moDot` ghi thêm khoá mới thì đợt thật hỏng mà test vẫn xanh.
   - Ngoài-5: `cli.test.mjs` chỉ xem hook thoát 2 trong đợt, không ghim thông điệp, nên không phân biệt chặn đúng lý do với lỗi nội bộ.
+- Hạn chế đã biết, owner chọn ở Cổng 2 lượt 3 (sổ quyết định, dòng descope gate2 cuối; Ngoài-6, 7, 8 của lượt 3 là Ngoài-3, 4, 5 ở trên):
+  - Ngoài-2 (lượt 3): `rang/git-sach.mjs` chỉ đo ca kho có worktree liên kết; ca `GIT_DIR` của kho thường dựa vào cùng bước gỡ biến, chưa có phép đo riêng.
+  - Ngoài-3 (lượt 3): `bun` giả trong `rang/git-sach.mjs` chép tay lệnh `test:dieu-phoi` thay vì đọc từ `package.json`; đổi script thật mà quên bản chép thì răng vẫn xanh.
+  - Ngoài-1 (lượt 3): chấp nhận, không sửa — răng để lại thư mục tạm khi mất mốc đột biến.
 - Mở lại hợp đồng sau chữ ký Cổng 2 lượt 2 (sổ quyết định d-20261007T023802Z-19): lần đẩy đầu của nhánh lộ ra test điều phối chạy trong hook pre-push bật `core.bare=true` ở `.git/config` chung; thêm AC-15, sửa trong vòng này.
 - Mở hợp đồng mới (sổ quyết định, dòng revisit gate2): Ngoài-1 tệp `tra-loi` gia hạn hỏng làm đứng cả nhịp; Ngoài-2 lệnh bọc gợi ý hỏng khi lệnh gốc có biến môi trường đứng trước.
