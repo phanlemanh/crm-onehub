@@ -24,7 +24,6 @@ const DO = {
 			],
 		],
 	},
-	boDemMB: 512,
 	lechMtimeMs: 60_000,
 };
 
@@ -156,16 +155,18 @@ function chay(ten) {
 	const [lenh, args] = DO.lenh[ten];
 	const tuMs = Date.now();
 	const tuNs = bayGioNs();
+	console.log(
+		`[${ten}] bat dau ${new Date(tuMs).toISOString()}: ${lenh} ${args.join(" ")}`,
+	);
 	const r = spawnSync(lenh, args, {
 		cwd: GOC,
-		encoding: "utf8",
-		maxBuffer: DO.boDemMB * 1024 * 1024,
-		stdio: ["ignore", "pipe", "pipe"],
+		stdio: ["ignore", "inherit", "inherit"],
 	});
 	const denNs = bayGioNs();
-	process.stdout.write(r.stdout ?? "");
-	process.stderr.write(r.stderr ?? "");
-	return { ma: r.status ?? 1, tuMs, tuNs, denNs, ra: r.stdout ?? "" };
+	console.log(
+		`[${ten}] xong sau ${Math.round((Date.now() - tuMs) / 1000)} giay, ma ${r.status}`,
+	);
+	return { ma: r.status ?? 1, tuMs, tuNs, denNs };
 }
 
 function logE22(tuMs) {

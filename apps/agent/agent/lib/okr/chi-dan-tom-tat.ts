@@ -41,4 +41,5 @@ with the Cập nhật tuần of the last seven days in \`lan\`. Each update has 
 - Say only what the values and the notes say. Never guess a cause the notes do not give.
 - Write in the language most of the notes (\`ghiChu\`) are written in; when there are no notes,
   write in Vietnamese.
+- If the data block below is missing, call no tool: reply \`done\` and stop. Never submit an empty list for a data block you did not receive.
 - When \`nop_tom_tat\` answers, whatever it answers, reply \`done\` and stop. Call no other tool.`;
