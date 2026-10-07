@@ -15,6 +15,7 @@ const DOT_BIEN = [
 	{ ma: "T4", tep: "phat-lich.mjs", tim: "    fs.renameSync(nguon, path.join(noiHong, tep));", thay: "    fs.copyFileSync(nguon, path.join(noiHong, tep));", ghim: [["tra-loi", "tệp trả lời hỏng rồi giám sát ghi lại: áp đúng một lần, không báo lặp"]] },
 	{ ma: "T5", tep: "hook-chan-s4.mjs", tim: "const KY_TU_AN_TOAN = /^[\\w./:@%+,-]+(?: [\\w./:@%+,-]+)*$/;", thay: "const KY_TU_AN_TOAN = /^[\\w./=:@%+,-]+(?: [\\w./=:@%+,-]+)*$/;", ghim: [["hook-chan-s4", "dòng lệnh bọc chạy ra cùng kết quả như lệnh gốc: ma trận bảy dạng"]] },
 	{ ma: "T6", tep: "hinh-dang.mjs", tim: "export const KHOA_TRA_LOI = ['ket_qua', 'boi', 'ly_do', 'luc', 'voi', 'tai_nguyen', 'uoc_phut'];", thay: "export const KHOA_TRA_LOI = ['ket_qua', 'boi', 'ly_do', 'luc', 'tai_nguyen', 'uoc_phut'];", ghim: [["tra-loi", "tệp trả lời sai hình dạng: ma trận năm ô cách ly nêu trường; đúng hình dạng thì áp"]] },
+	{ ma: "T7", tep: "phat-lich.mjs", tim: "  ghiJsonNguyenTu(pTrangThai, tt);\n", thay: "", ghim: [["tra-loi", "tệp trả lời hỏng cú pháp: nhịp không ném, cách ly, cấp và thu hồi vẫn chạy"]] },
 ];
 
 const ghi = (s) => process.stdout.write(`${s}\n`);

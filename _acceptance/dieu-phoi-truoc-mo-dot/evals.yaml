@@ -5,7 +5,7 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.dph_tra_loi
-    expected: "exit 0; tra-loi.test.mjs xanh ở ca 'tệp trả lời hỏng cú pháp: nhịp không ném, cách ly, cấp và thu hồi vẫn chạy' — fixture qua motNhip thật: khoá s4 của P1 do capPhat cấp, yêu cầu gia-han của P1, tệp trả lời là chuỗi '{\"ket_qua\":\"duyet\",}', đơn duong-nen lành của P2, khoá merge do capPhat cấp rồi lùi hạn và nhịp; khẳng định: motNhip không ném, tra-loi/hong/<id>.json tồn tại và tra-loi/<id>.json vắng, đúng một sự kiện tra-loi-hong can_phan với tep '<id>.json', khoa/duong-nen/chu.json ghi P2, sự kiện thu-hoi merge, trang-thai.json và bang.html có mặt, han_thue_den của P1 không đổi. Chiều đỏ: đột biến T1 (apGiaHan đọc tệp trả lời bằng docJson thô) làm ca này đỏ."
+    expected: "exit 0; tra-loi.test.mjs xanh ở ca 'tệp trả lời hỏng cú pháp: nhịp không ném, cách ly, cấp và thu hồi vẫn chạy' — fixture qua motNhip thật: khoá s4 của P1 do capPhat cấp, yêu cầu gia-han của P1, tệp trả lời là chuỗi '{\"ket_qua\":\"duyet\",}', đơn duong-nen lành của P2, khoá merge do capPhat cấp rồi lùi hạn và nhịp; khẳng định: motNhip không ném, tra-loi/hong/<id>.json tồn tại và tra-loi/<id>.json vắng, đúng một sự kiện tra-loi-hong can_phan với tep '<id>.json', khoa/duong-nen/chu.json ghi P2, sự kiện thu-hoi merge, trang-thai.json mang nhip_cuoi đúng giờ nhịp 12:10 và bang.html in đúng giờ đó (quan hệ, không chỉ tệp có mặt — tệp đã có từ các nhịp trước), han_thue_den của P1 không đổi. Chiều đỏ: đột biến T1 (apGiaHan đọc tệp trả lời bằng docJson thô) và T7 (bỏ bước ghi trang-thai.json) làm ca này đỏ."
     paths: [scripts/dieu-phoi/phat-lich.mjs, scripts/dieu-phoi/hinh-dang.mjs, scripts/dieu-phoi/test/tra-loi.test.mjs]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E2
@@ -82,7 +82,7 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.dptm_dot_bien
-    expected: "exit 0; bộ đột biến của vòng này (cùng khuôn hai vòng trước) in 'KET LUAN: 6 dot bien, moi ca ghim deu do' cho T1–T6 nêu ở E1–E4; không MOC VANG, không SONG."
+    expected: "exit 0; bộ đột biến của vòng này (cùng khuôn hai vòng trước) in 'KET LUAN: 7 dot bien, moi ca ghim deu do' cho T1–T7 nêu ở E1–E4; không MOC VANG, không SONG."
     paths: [scripts/dieu-phoi/**, _acceptance/dieu-phoi-truoc-mo-dot/rang/**]
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
   - id: E13

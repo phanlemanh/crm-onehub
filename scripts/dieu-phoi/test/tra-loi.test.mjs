@@ -67,8 +67,8 @@ test('tệp trả lời hỏng cú pháp: nhịp không ném, cách ly, cấp v�
   assert.match(hong[0].ly_do, /^tra-loi\/P1-1\.json: /);
   assert.equal(chu(dot, 'duong-nen').phien, 'P2');
   assert.ok(suKien(dot).some((s) => s.loai === 'thu-hoi' && s.tai_nguyen === 'merge' && s.phien === 'P2'));
-  assert.equal(fs.existsSync(path.join(dot, 'trang-thai.json')), true);
-  assert.equal(fs.existsSync(path.join(dot, 'bang.html')), true);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(dot, 'trang-thai.json'), 'utf8')).nhip_cuoi, luc('12:10'), 'trang-thai.json ghi ở chính nhịp có tệp hỏng');
+  assert.ok(fs.readFileSync(path.join(dot, 'bang.html'), 'utf8').includes(`Nhịp cuối ${luc('12:10')}`), 'bang.html vẽ lại ở chính nhịp có tệp hỏng');
   assert.equal(chu(dot, 's4').han_thue_den, luc('13:30'));
 });
 
