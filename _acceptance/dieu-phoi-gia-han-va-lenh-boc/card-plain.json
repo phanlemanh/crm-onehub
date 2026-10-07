@@ -1,0 +1,29 @@
+{
+ "feature_plain": "Bộ điều phối không còn đứng cả đợt chỉ vì một tệp duyệt gia hạn bị gõ sai, và lệnh nền có `TZ=…` đứng trước chạy được qua lệnh bọc giữ nhịp.",
+ "will_do": [
+  {"id":"AC-1","p":"Sẽ vẫn chạy trọn nhịp khi tệp duyệt gia hạn hỏng: thu hồi khoá hết hạn, cấp lượt kế, ghi bảng; tệp hỏng được dời sang chỗ riêng và báo đúng một lần cho giám sát."},
+  {"id":"AC-3","p":"Sẽ coi tệp duyệt đọc được nhưng không phải dạng bản ghi (mảng, chuỗi, số, null) là tệp hỏng, xử như trên."},
+  {"id":"AC-4","p":"Sẽ gia hạn y như hôm nay khi tệp duyệt lành — đối chứng để chắc bản sửa không làm hỏng đường thường."},
+  {"id":"AC-5","p":"Sẽ chạy được lệnh có biến môi trường đứng trước qua lệnh bọc giữ nhịp, giữ nguyên các biến cũ và mã thoát của lệnh con; không nhầm `K=V` nằm sau tên lệnh thành biến."},
+  {"id":"AC-6","p":"Sẽ đưa ra dòng gợi ý chạy được ngay cho lệnh nền có `TZ=…`, và chính dòng ấy gửi lại thì hook cho qua."}
+ ],
+ "wont_do": [
+  {"id":"AC-2","p":"Sẽ KHÔNG báo lại cùng một tệp hỏng ở các nhịp sau; yêu cầu quay về đường xét thường — trong trần máy duyệt lại, vượt trần chờ giám sát mà không báo lặp."},
+  {"id":"AC-7","p":"Sẽ KHÔNG thêm chú thích, hằng thời gian rời rạc hay thứ gì riêng của crm vào bộ điều phối; toàn bộ test của nó phải xanh."},
+  {"id":"OOS-1","p":"Không xử yêu cầu gia hạn viết trước lúc cấp lượt (đã ghi là hạn chế đã biết từ vòng trước)."},
+  {"id":"OOS-2","p":"Không kiểm từng trường của tệp duyệt; chỉ chặn tệp không đọc được hoặc sai dạng."},
+  {"id":"OOS-3","p":"Không đụng tệp hỏng ở các thư mục khác — chúng đã có đường dời riêng."},
+  {"id":"OOS-4","p":"Không xử cú pháp shell khác (ống, &&, ngoặc) — những lệnh đó vẫn đi đường bọc bằng bash như cũ."}
+ ],
+ "coverage_plain": [
+  {"i":0,"p":"Tệp duyệt gia hạn: hỏng (AC-1), sai dạng (AC-3), lành (AC-4), và các nhịp sau khi đã dời — trong trần và vượt trần (AC-2). Đủ là mỗi dạng có một ca test hai chiều."},
+  {"i":1,"p":"Phần nhịp từng bị chặn: thu hồi khoá, cấp lượt, ghi trạng thái và bảng đều chạy trong cùng nhịp có tệp hỏng (AC-1)."},
+  {"i":2,"p":"Lệnh bọc: một biến, nhiều biến, biến rỗng, không biến, chỉ có biến, `K=V` sau tên lệnh, tên biến sai (AC-5); và đường thật từ hook ra dòng gợi ý rồi chạy (AC-6)."}
+ ],
+ "gap_probe_plain": [
+  {"i":0,"p":"Phép đo hạn gia hạn dùng số phút viết tay — đã đổi sang so với chính hàm tính hạn của mã, và so tập tệp trước/sau nhịp."},
+  {"i":1,"p":"Phép đo dòng gợi ý không kiểm nó trỏ đúng bản lệnh bọc đang chạy — đã ghim đường."},
+  {"i":2,"p":"Không có ca chặn việc tách nhầm `K=V` sau tên lệnh hay tên biến sai — đã thêm hai ca và một đột biến."},
+  {"i":3,"p":"Phép đo dòng gợi ý chỉ nhìn mã thoát, không nhìn biến có tới nơi — đã thêm đối chứng không biến và một đột biến."}
+ ]
+}

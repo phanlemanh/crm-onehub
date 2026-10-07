@@ -1,0 +1,101 @@
+schema_version: 1
+feature_slug: dieu-phoi-gia-han-va-lenh-boc
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.dph_gh_test
+    expected: "exit 0; gia-han-va-lenh-boc.test.mjs xanh ở ca 'tra-loi hỏng không làm đứng nhịp: thu hồi, cấp, ghi bảng; dời tệp và báo một lần': sau một nhịp khoa/s4 của P1 vắng và có sự kiện thu-hoi, khoa/merge/chu.json ghi P2, trang-thai.json và bang.html có mặt với nhip_cuoi của nhịp đó, 0 sự kiện loi-nhip; tra-loi/hong/P1-1.json có mặt, tra-loi/P1-1.json vắng, đúng một sự kiện tra-loi-hong với tep 'P1-1.json', can_phan true và ly_do bắt đầu 'JSON'. Chiều đỏ: đột biến G1 của bộ đột biến dph_gh_dot_bien (E7)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dph_gh_test
+    expected: "exit 0; gia-han-va-lenh-boc.test.mjs xanh ở ca 'sau khi dời tệp hỏng: không báo lại; trong trần máy duyệt lại và gia hạn một lần; vượt trần chờ giám sát không lặp': qua ba nhịp tiếp đúng một sự kiện tra-loi-hong; với ước 30 phút trong trần, tra-loi mới boi 'may' và han_thue_den mới bằng đúng giá trị hàm tính hạn của mã (hanGiaHan) cho cùng hạn cũ, giờ nhịp và số phút, áp một lần; với ước 75 phút vượt trần, không tra-loi mới, đúng một sự kiện yeu-cau can_phan. Chiều đỏ: G2 của dph_gh_dot_bien (E7)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dph_gh_test
+    expected: "exit 0; gia-han-va-lenh-boc.test.mjs xanh ở ca 'tra-loi hợp lệ mà không phải object bị coi là hỏng': bốn tệp [], \\"duyet\\", 3, null đều bị dời sang tra-loi/hong/ với đúng một tra-loi-hong mỗi tệp, ly_do 'không phải object', và nhịp vẫn ghi trang-thai.json. Chiều đỏ: G3 của dph_gh_dot_bien (E7)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dph_gh_test
+    expected: "exit 0; gia-han-va-lenh-boc.test.mjs xanh ở ca 'tra-loi lành của giám sát vẫn gia hạn như cũ, không có tra-loi-hong': tra-loi duyet boi giam-sat uoc 45 phút làm han_thue_den mới bằng đúng giá trị hàm tính hạn của mã (hanGiaHan) cho cùng hạn cũ, giờ nhịp và số phút, gia_han_theo chứa đúng id, có sự kiện gia-han với han_moi đó, 0 sự kiện tra-loi-hong, và tập tệp trong tra-loi/ trước và sau nhịp như nhau (đối chứng quan hệ, không con số viết tay). Chiều đỏ: G4 của dph_gh_dot_bien (coi mọi tra-loi là hỏng) làm ca này đỏ (E7)."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dph_gh_test
+    expected: "exit 0; gia-han-va-lenh-boc.test.mjs xanh ở ca 'giu-nhip: tiền tố biến tới tiến trình con, giữ môi trường cũ, mã thoát đúng, vẫn chạm nhịp; không tiền tố như cũ; chỉ gán biến thoát 2': lệnh 'TZ=Asia/Ho_Chi_Minh A= node <tệp kiểm>' thoát 0 khi tệp kiểm thấy TZ đúng, A rỗng và một biến có sẵn của môi trường; cùng tệp kiểm không tiền tố thoát 3 (đối chứng: thiếu biến thì lệnh con báo); khoa/s4/nhip được chạm; 'node giu-nhip.mjs -- A=1 B=2' thoát 2 với stderr chứa 'dùng: giu-nhip.mjs -- <lệnh> [đối số…]'; 'giu-nhip -- node <tệp kiểm> B=2' thì đối số của lệnh con chứa 'B=2' và biến B vắng trong môi trường của nó; '1X=y' đứng đầu bị chạy như tên chương trình (không thành biến). Chiều đỏ: G5 (bỏ tách biến, mã 127), G6 (tách mọi từ có dấu =), G7 (tách nhưng không truyền biến, mã 3) của dph_gh_dot_bien đều làm ca này đỏ."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dph_gh_test
+    expected: "exit 0; gia-han-va-lenh-boc.test.mjs xanh ở ca 'dòng gợi ý của hook cho lệnh nền có tiền tố biến chạy được bằng sh -c và được hook cho qua': hook chặn lệnh nền 'TZ=Asia/Ho_Chi_Minh node <tệp kiểm> repin-lane' của phiên giữ khoá s4 với mã 2, đường tới giu-nhip.mjs trong dòng gợi ý bằng đúng giu-nhip.mjs nằm cạnh mã đang chạy (dẫn từ import.meta.url của tệp test, nên ở bản chép đột biến là đường trong bản chép); dòng gợi ý chạy bằng sh -c thoát 0, trong khi cùng tệp kiểm chạy không tiền tố thoát 3 (đối chứng: tệp kiểm chỉ thoát 0 khi TZ tới nơi); gửi dòng gợi ý lại qua hook với run_in_background true được mã 0. Chiều đỏ: G5 (mã 127) và G7 (mã 3) của dph_gh_dot_bien làm ca này đỏ."
+    paths: ["scripts/dieu-phoi/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E7
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.dph_gh_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc vắng → exit 2 'MOC VANG <mã>'), chạy gia-han-va-lenh-boc.test.mjs bằng node --test, in mọi ca đỏ thật '<mã> DO: <ca>', và đòi ca ghim nằm trong tập đỏ: G1 (đọc tra-loi bằng docJson trần) làm đỏ 'tra-loi hỏng không làm đứng nhịp: thu hồi, cấp, ghi bảng; dời tệp và báo một lần'; G2 (báo nhưng không dời tệp) làm đỏ 'sau khi dời tệp hỏng: không báo lại; trong trần máy duyệt lại và gia hạn một lần; vượt trần chờ giám sát không lặp'; G3 (bỏ kiểm object) làm đỏ 'tra-loi hợp lệ mà không phải object bị coi là hỏng'; G4 (coi mọi tra-loi là hỏng) làm đỏ 'tra-loi lành của giám sát vẫn gia hạn như cũ, không có tra-loi-hong'; G5 (giu-nhip bỏ tách biến) và G7 (tách nhưng không truyền biến) làm đỏ 'giu-nhip: tiền tố biến tới tiến trình con, giữ môi trường cũ, mã thoát đúng, vẫn chạm nhịp; không tiền tố như cũ; chỉ gán biến thoát 2' và 'dòng gợi ý của hook cho lệnh nền có tiền tố biến chạy được bằng sh -c và được hook cho qua'; G6 (tách mọi từ có dấu =) làm đỏ ca giu-nhip. Ca ghim không đỏ → 'SONG <mã>' và exit 1. Đối chứng dương: bản chép không đột biến chạy cùng tệp test thì xanh hết (đỏ → exit 2 'NEN DO')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-gia-han-va-lenh-boc/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E8
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.dph_gh_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc vắng → exit 2 'MOC VANG <mã>'), chạy gia-han-va-lenh-boc.test.mjs bằng node --test, in mọi ca đỏ thật '<mã> DO: <ca>', và đòi ca ghim nằm trong tập đỏ: G1 (đọc tra-loi bằng docJson trần) làm đỏ 'tra-loi hỏng không làm đứng nhịp: thu hồi, cấp, ghi bảng; dời tệp và báo một lần'; G2 (báo nhưng không dời tệp) làm đỏ 'sau khi dời tệp hỏng: không báo lại; trong trần máy duyệt lại và gia hạn một lần; vượt trần chờ giám sát không lặp'; G3 (bỏ kiểm object) làm đỏ 'tra-loi hợp lệ mà không phải object bị coi là hỏng'; G4 (coi mọi tra-loi là hỏng) làm đỏ 'tra-loi lành của giám sát vẫn gia hạn như cũ, không có tra-loi-hong'; G5 (giu-nhip bỏ tách biến) và G7 (tách nhưng không truyền biến) làm đỏ 'giu-nhip: tiền tố biến tới tiến trình con, giữ môi trường cũ, mã thoát đúng, vẫn chạm nhịp; không tiền tố như cũ; chỉ gán biến thoát 2' và 'dòng gợi ý của hook cho lệnh nền có tiền tố biến chạy được bằng sh -c và được hook cho qua'; G6 (tách mọi từ có dấu =) làm đỏ ca giu-nhip. Ca ghim không đỏ → 'SONG <mã>' và exit 1. Đối chứng dương: bản chép không đột biến chạy cùng tệp test thì xanh hết (đỏ → exit 2 'NEN DO')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-gia-han-va-lenh-boc/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E9
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.dph_gh_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc vắng → exit 2 'MOC VANG <mã>'), chạy gia-han-va-lenh-boc.test.mjs bằng node --test, in mọi ca đỏ thật '<mã> DO: <ca>', và đòi ca ghim nằm trong tập đỏ: G1 (đọc tra-loi bằng docJson trần) làm đỏ 'tra-loi hỏng không làm đứng nhịp: thu hồi, cấp, ghi bảng; dời tệp và báo một lần'; G2 (báo nhưng không dời tệp) làm đỏ 'sau khi dời tệp hỏng: không báo lại; trong trần máy duyệt lại và gia hạn một lần; vượt trần chờ giám sát không lặp'; G3 (bỏ kiểm object) làm đỏ 'tra-loi hợp lệ mà không phải object bị coi là hỏng'; G4 (coi mọi tra-loi là hỏng) làm đỏ 'tra-loi lành của giám sát vẫn gia hạn như cũ, không có tra-loi-hong'; G5 (giu-nhip bỏ tách biến) và G7 (tách nhưng không truyền biến) làm đỏ 'giu-nhip: tiền tố biến tới tiến trình con, giữ môi trường cũ, mã thoát đúng, vẫn chạm nhịp; không tiền tố như cũ; chỉ gán biến thoát 2' và 'dòng gợi ý của hook cho lệnh nền có tiền tố biến chạy được bằng sh -c và được hook cho qua'; G6 (tách mọi từ có dấu =) làm đỏ ca giu-nhip. Ca ghim không đỏ → 'SONG <mã>' và exit 1. Đối chứng dương: bản chép không đột biến chạy cùng tệp test thì xanh hết (đỏ → exit 2 'NEN DO')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-gia-han-va-lenh-boc/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E10
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.dph_gh_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc vắng → exit 2 'MOC VANG <mã>'), chạy gia-han-va-lenh-boc.test.mjs bằng node --test, in mọi ca đỏ thật '<mã> DO: <ca>', và đòi ca ghim nằm trong tập đỏ: G1 (đọc tra-loi bằng docJson trần) làm đỏ 'tra-loi hỏng không làm đứng nhịp: thu hồi, cấp, ghi bảng; dời tệp và báo một lần'; G2 (báo nhưng không dời tệp) làm đỏ 'sau khi dời tệp hỏng: không báo lại; trong trần máy duyệt lại và gia hạn một lần; vượt trần chờ giám sát không lặp'; G3 (bỏ kiểm object) làm đỏ 'tra-loi hợp lệ mà không phải object bị coi là hỏng'; G4 (coi mọi tra-loi là hỏng) làm đỏ 'tra-loi lành của giám sát vẫn gia hạn như cũ, không có tra-loi-hong'; G5 (giu-nhip bỏ tách biến) và G7 (tách nhưng không truyền biến) làm đỏ 'giu-nhip: tiền tố biến tới tiến trình con, giữ môi trường cũ, mã thoát đúng, vẫn chạm nhịp; không tiền tố như cũ; chỉ gán biến thoát 2' và 'dòng gợi ý của hook cho lệnh nền có tiền tố biến chạy được bằng sh -c và được hook cho qua'; G6 (tách mọi từ có dấu =) làm đỏ ca giu-nhip. Ca ghim không đỏ → 'SONG <mã>' và exit 1. Đối chứng dương: bản chép không đột biến chạy cùng tệp test thì xanh hết (đỏ → exit 2 'NEN DO')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-gia-han-va-lenh-boc/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E11
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.dph_gh_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc vắng → exit 2 'MOC VANG <mã>'), chạy gia-han-va-lenh-boc.test.mjs bằng node --test, in mọi ca đỏ thật '<mã> DO: <ca>', và đòi ca ghim nằm trong tập đỏ: G1 (đọc tra-loi bằng docJson trần) làm đỏ 'tra-loi hỏng không làm đứng nhịp: thu hồi, cấp, ghi bảng; dời tệp và báo một lần'; G2 (báo nhưng không dời tệp) làm đỏ 'sau khi dời tệp hỏng: không báo lại; trong trần máy duyệt lại và gia hạn một lần; vượt trần chờ giám sát không lặp'; G3 (bỏ kiểm object) làm đỏ 'tra-loi hợp lệ mà không phải object bị coi là hỏng'; G4 (coi mọi tra-loi là hỏng) làm đỏ 'tra-loi lành của giám sát vẫn gia hạn như cũ, không có tra-loi-hong'; G5 (giu-nhip bỏ tách biến) và G7 (tách nhưng không truyền biến) làm đỏ 'giu-nhip: tiền tố biến tới tiến trình con, giữ môi trường cũ, mã thoát đúng, vẫn chạm nhịp; không tiền tố như cũ; chỉ gán biến thoát 2' và 'dòng gợi ý của hook cho lệnh nền có tiền tố biến chạy được bằng sh -c và được hook cho qua'; G6 (tách mọi từ có dấu =) làm đỏ ca giu-nhip. Ca ghim không đỏ → 'SONG <mã>' và exit 1. Đối chứng dương: bản chép không đột biến chạy cùng tệp test thì xanh hết (đỏ → exit 2 'NEN DO')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-gia-han-va-lenh-boc/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E12
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.dph_gh_dot_bien
+    expected: "exit 0 khi bộ đột biến (gốc kho suy từ vị trí script) chép scripts/dieu-phoi/ ra thư mục tạm ngoài kho; với mỗi đột biến áp một lần thay chuỗi đích danh (mốc vắng → exit 2 'MOC VANG <mã>'), chạy gia-han-va-lenh-boc.test.mjs bằng node --test, in mọi ca đỏ thật '<mã> DO: <ca>', và đòi ca ghim nằm trong tập đỏ: G1 (đọc tra-loi bằng docJson trần) làm đỏ 'tra-loi hỏng không làm đứng nhịp: thu hồi, cấp, ghi bảng; dời tệp và báo một lần'; G2 (báo nhưng không dời tệp) làm đỏ 'sau khi dời tệp hỏng: không báo lại; trong trần máy duyệt lại và gia hạn một lần; vượt trần chờ giám sát không lặp'; G3 (bỏ kiểm object) làm đỏ 'tra-loi hợp lệ mà không phải object bị coi là hỏng'; G4 (coi mọi tra-loi là hỏng) làm đỏ 'tra-loi lành của giám sát vẫn gia hạn như cũ, không có tra-loi-hong'; G5 (giu-nhip bỏ tách biến) và G7 (tách nhưng không truyền biến) làm đỏ 'giu-nhip: tiền tố biến tới tiến trình con, giữ môi trường cũ, mã thoát đúng, vẫn chạm nhịp; không tiền tố như cũ; chỉ gán biến thoát 2' và 'dòng gợi ý của hook cho lệnh nền có tiền tố biến chạy được bằng sh -c và được hook cho qua'; G6 (tách mọi từ có dấu =) làm đỏ ca giu-nhip. Ca ghim không đỏ → 'SONG <mã>' và exit 1. Đối chứng dương: bản chép không đột biến chạy cùng tệp test thì xanh hết (đỏ → exit 2 'NEN DO')."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-gia-han-va-lenh-boc/rang/**"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E13
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.dph_ranh_gioi
+    expected: "exit 0 khi thước ranh giới mã của dieu-phoi-hai-tang quét mọi tệp .mjs và .json dưới scripts/dieu-phoi/ ngoài test/ (gồm phat-lich.mjs và giu-nhip.mjs đã sửa): 0 chú thích, 0 chuỗi cấm ('gh pr merge', '--auto', 'onehub', 'crm', '/Users/'), 0 số thời gian viết tay ngoài cau-hinh.mjs, tập tệp bằng git ls-files; chiều đỏ trên bản sao tiêm sáu vi phạm đều bị bắt. Dòng cuối 'KET LUAN: cay that sach · chieu do bat du 6/6'."
+    paths: ["scripts/dieu-phoi/**", "_acceptance/dieu-phoi-hai-tang/rang/ranh-gioi.mjs"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+  - id: E14
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.dph_tat_ca
+    expected: "exit 0; bun run test:dieu-phoi chạy node --test trên mẫu scripts/dieu-phoi/test/*.test.mjs, 'fail 0', và có tệp gia-han-va-lenh-boc.test.mjs trong lượt."
+    paths: ["scripts/dieu-phoi/**", "package.json"]
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
