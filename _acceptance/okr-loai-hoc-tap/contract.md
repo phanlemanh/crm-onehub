@@ -5,7 +5,7 @@ slug: okr-loai-hoc-tap
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [api, ui]
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
