@@ -232,15 +232,28 @@ function toggle(selected: string[], value: string, checked: boolean): string[] {
 	return checked ? [...selected, value] : selected.filter((v) => v !== value);
 }
 
+function FacetCount({ count }: { count: number | undefined }) {
+	if (count === undefined) return null;
+	return (
+		<span data-slot="facet-count" className="tabular-nums opacity-60">
+			{count}
+		</span>
+	);
+}
+
 function FacetSubmenu({
 	facet,
 	selected,
+	counts,
 	onChange,
 }: {
 	facet: DataTableFacet;
 	selected: string[];
+	counts?: Record<string, number>;
 	onChange: (values: string[]) => void;
 }) {
+	const countOf = (value: string) =>
+		counts === undefined ? undefined : (counts[value] ?? 0);
 	const msg = useMessages();
 	return (
 		<DropdownMenuSub>
@@ -265,6 +278,16 @@ function FacetSubmenu({
 						<CommandList label={msg.table.facetOptions}>
 							<CommandEmpty>{facet.empty ?? msg.table.facetEmpty}</CommandEmpty>
 							<CommandGroup>
+								{selected.length > 0 && (
+									<CommandItem
+										forceMount
+										value={`${facet.id}:clear`}
+										disabled={facet.stale}
+										onSelect={() => onChange([])}
+									>
+										{msg.table.clearFilters}
+									</CommandItem>
+								)}
 								{facet.options.map((option) => {
 									const checked = selected.includes(option.value);
 									return (
@@ -281,7 +304,8 @@ function FacetSubmenu({
 												checked={checked}
 												className="pointer-events-none"
 											/>
-											<span className="truncate">{option.label}</span>
+											<span className="flex-1 truncate">{option.label}</span>
+											<FacetCount count={countOf(option.value)} />
 										</CommandItem>
 									);
 								})}
@@ -292,7 +316,12 @@ function FacetSubmenu({
 					<div className="max-h-72 overflow-y-auto">
 						{selected.length > 0 && (
 							<>
-								<DropdownMenuItem onSelect={() => onChange([])}>
+								<DropdownMenuItem
+									onSelect={(event) => {
+										event.preventDefault();
+										onChange([]);
+									}}
+								>
 									{msg.table.clearFilters}
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
@@ -309,7 +338,8 @@ function FacetSubmenu({
 										onChange(toggle(selected, option.value, next))
 									}
 								>
-									{option.label}
+									<span className="flex-1">{option.label}</span>
+									<FacetCount count={countOf(option.value)} />
 								</DropdownMenuCheckboxItem>
 							);
 						})}
@@ -324,10 +354,12 @@ export function DataTableFacetMenu({
 	facets,
 	filters,
 	onFilterChange,
+	counts,
 }: {
 	facets: DataTableFacet[];
 	filters: Record<string, string[]>;
 	onFilterChange: (id: string, values: string[]) => void;
+	counts?: Record<string, Record<string, number>>;
 }) {
 	const msg = useMessages();
 	if (facets.length === 0) return null;
@@ -356,6 +388,7 @@ export function DataTableFacetMenu({
 						key={facet.id}
 						facet={facet}
 						selected={filters[facet.id] ?? []}
+						counts={counts?.[facet.id]}
 						onChange={(values) => onFilterChange(facet.id, values)}
 					/>
 				))}
@@ -545,17 +578,21 @@ export function DataTable<TRow, TSub = unknown>({
 									<DropdownMenuRadioItem value="all">
 										<span className="flex-1">{tabs.allLabel ?? "All"}</span>
 									</DropdownMenuRadioItem>
-									{tabs.options.map((option) => {
-										if (tabCounts?.[option.value] === 0) return null;
-										return (
-											<DropdownMenuRadioItem
-												key={option.value}
-												value={option.value}
-											>
-												<span className="flex-1">{option.label}</span>
-											</DropdownMenuRadioItem>
-										);
-									})}
+									{tabs.options.map((option) => (
+										<DropdownMenuRadioItem
+											key={option.value}
+											value={option.value}
+										>
+											<span className="flex-1">{option.label}</span>
+											<FacetCount
+												count={
+													tabCounts === undefined
+														? undefined
+														: (tabCounts[option.value] ?? 0)
+												}
+											/>
+										</DropdownMenuRadioItem>
+									))}
 								</DropdownMenuRadioGroup>
 							</DropdownMenuContent>
 						</DropdownMenu>
@@ -568,6 +605,7 @@ export function DataTable<TRow, TSub = unknown>({
 							facets={availableFacets}
 							filters={query.filters}
 							onFilterChange={query.setFilter}
+							counts={facetCounts}
 						/>
 						{(sortableColumns.length > 0 || anyExpandable) && (
 							<DropdownMenu>
