@@ -61,7 +61,11 @@ const vi = {
 		moc: "Mốc",
 		"phan-tram": "Phần trăm",
 	},
-	loai: { "cam-ket": "Cam kết", "tham-vong": "Tham vọng" },
+	loai: {
+		"cam-ket": "Cam kết",
+		"tham-vong": "Tham vọng",
+		"hoc-tap": "Học tập",
+	},
 	trangThai: {
 		nhap: "Nháp",
 		"cho-duyet": "Chờ duyệt",
@@ -90,6 +94,7 @@ const vi = {
 		soKrCham: (n: number) => `${n} KR chậm`,
 		khongTinhTienDo: "Không tính tiến độ",
 		nhomDaBo: (n: number) => `Đã bỏ (${n})`,
+		nhomDangTheoDoi: (n: number) => `Đang theo dõi (${n})`,
 		tuKhoiDiem: (kieu: string, gia: string) => `${kieu} · từ ${gia}`,
 	},
 	tienDoCua: (ten: string, p: number) => `Tiến độ ${ten}: ${p}%`,
@@ -739,7 +744,11 @@ const en: OkrMessages = {
 		moc: "Milestone",
 		"phan-tram": "Percentage",
 	},
-	loai: { "cam-ket": "Committed", "tham-vong": "Aspirational" },
+	loai: {
+		"cam-ket": "Committed",
+		"tham-vong": "Aspirational",
+		"hoc-tap": "Learning",
+	},
 	trangThai: {
 		nhap: "Draft",
 		"cho-duyet": "Awaiting approval",
@@ -768,6 +777,7 @@ const en: OkrMessages = {
 		soKrCham: (n: number) => `${n} KR${n === 1 ? "" : "s"} behind`,
 		khongTinhTienDo: "Not counted in progress",
 		nhomDaBo: (n: number) => `Dropped (${n})`,
+		nhomDangTheoDoi: (n: number) => `Following (${n})`,
 		tuKhoiDiem: (kieu: string, gia: string) => `${kieu} · from ${gia}`,
 	},
 	tienDoCua: (ten: string, p: number) => `${ten} progress: ${p}%`,

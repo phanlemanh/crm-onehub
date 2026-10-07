@@ -505,6 +505,16 @@ _Avoid_: số dự phòng, số tham khảo
 Vì sao: nó không thay số tay khi thiếu, và không phải lời khuyên — nó là cùng
 một KR đo bằng máy.
 
+**Loại mục tiêu**: một trong ba, chọn khi tạo mục tiêu. **Cam kết** — phải tới đích; giữa kỳ
+đọc Đúng nhịp, Chậm nhịp hay Trượt; cuối kỳ «Đạt cam kết» khi điểm là 1. **Tham vọng** — 0,7
+là tốt; giữa kỳ không bao giờ «Trượt». **Học tập** — kiểm một giả thuyết chưa biết đáp án;
+giữa kỳ đọc như tham vọng, không bao giờ «Trượt»; cuối kỳ không đọc theo điểm mà «Đã trả lời»
+khi đã ghi «Điều học được», «Chưa trả lời» khi chưa; chu kỳ không khép được khi còn mục tiêu
+học tập đã công bố chưa ghi điều học được. Chốt 2026-10-07.
+_Avoid_: kiểu mục tiêu, dạng mục tiêu, mục tiêu thử nghiệm
+Vì sao: «kiểu» đã là chữ của KR; «thử nghiệm» gợi một tính năng bật tắt, còn học tập là một
+mục tiêu thật có người phụ trách và KR.
+
 **Kiểu KR**: cách một KR đo tiến độ, chọn một trong sáu: «tăng tới» (đích lớn
 hơn khởi điểm), «giảm xuống» (đích nhỏ hơn khởi điểm), «giữ trên» và «giữ dưới» (đạt
 khi giá trị hiện tại còn ở phía đúng của đích), «mốc» (xong hay chưa xong) và «phần
@@ -621,6 +631,9 @@ người sửa được mục tiêu — bấm để tự thêm mình vào danh s
 đó, không xin quyền, không đổi ai phụ trách. Bật thì lần cập nhật và bình luận mới
 của mục tiêu gộp vào việc OKR của người đó trong cửa sổ 24 giờ; bấm lại «Đang theo
 dõi» để tắt, không mất bình luận hay lần cập nhật đã có. Chốt 2026-09-26.
+Theo dõi không làm mục tiêu thành «của tôi»: mục tiêu chỉ đang theo dõi hiện ở nhóm
+gập «Đang theo dõi» của tab «Của tôi», không vào danh sách chính; mục tiêu chỉ theo
+dõi mà đã bỏ không hiện ở tab đó. Chốt 2026-10-07.
 _Avoid_: subscribe, đăng ký nhận tin, quan tâm
 Vì sao: «đăng ký» gợi một luồng xin–duyệt, còn theo dõi ở đây một người tự bật tự
 tắt cho chính mình, không ai duyệt. «Quan tâm» không phải một hành động có thể
@@ -663,6 +676,7 @@ tiêu, còn thứ được mở ở đây là đích của KR.
 **Điều học được**: một ô chữ mỗi mục tiêu, người sửa được mục tiêu ghi — thường lúc chấm —
 đơn vị sẽ làm gì khác ở kỳ sau. Ai mở được mục tiêu đều đọc được. Không bắt buộc để đóng kỳ. Đề xuất
 2026-09-27, chốt tại Cổng Phạm vi.
+Riêng mục tiêu học tập: bắt buộc trước khi đóng kỳ — xem «Loại mục tiêu». Chốt 2026-10-07.
 _Avoid_: bài học, rút kinh nghiệm, retro
 Vì sao: «rút kinh nghiệm» mang giọng kiểm điểm người; ô này nói về cách làm của đơn vị.
 

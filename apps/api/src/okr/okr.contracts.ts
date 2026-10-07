@@ -345,6 +345,7 @@ export const mineInput = z.object({ cycleId: ma });
 export const mineOutput = z.object({
 	objectives: z.array(mucTieuOutput),
 	daBo: z.array(mucTieuOutput),
+	dangTheoDoi: z.array(mucTieuOutput),
 });
 export const objectiveInput = z.object({ id: ma });
 export const lienKetMangSang = z
@@ -751,7 +752,7 @@ export const dongSoan = z.discriminatedUnion("loai", [
 		loai: z.literal("muc-tieu-moi"),
 		ten: z.string(),
 		viSaoLucNay: z.string(),
-		loaiMucTieu: z.enum(["cam-ket", "tham-vong"]),
+		loaiMucTieu: z.enum(LOAI_MUC_TIEU),
 	}),
 	z.object({
 		...gocDongSoan,

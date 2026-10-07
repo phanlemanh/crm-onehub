@@ -349,7 +349,11 @@ function DieuHocDuoc({
 				value={chu}
 				onChange={(e) => setChu(e.target.value)}
 			/>
-			<FieldDescription>{mk.moTa}</FieldDescription>
+			<FieldDescription
+				data-hoc-bat-buoc={mt.kind === "hoc-tap" ? "" : undefined}
+			>
+				{mt.kind === "hoc-tap" ? mk.batBuoc : mk.moTa}
+			</FieldDescription>
 			<Button
 				className="self-start"
 				data-nut="luu-hoc"
@@ -368,6 +372,15 @@ function DiemMucTieuCham({ mt, locale }: { mt: MucTieuCham; locale: Locale }) {
 	const m = okrKhepMessages(locale);
 	const mk = m.cham;
 	const daCham = mt.krs.filter((k) => k.diem !== null).length;
+	if (mt.diem === null && mt.cachDoc !== null)
+		return (
+			<StatusIndicator
+				data-cach-doc={mt.cachDoc}
+				label={m.cachDoc[mt.cachDoc]}
+				size="sm"
+				tone={mt.cachDoc === "chua-tra-loi" ? "warning" : "neutral"}
+			/>
+		);
 	return mt.diem === null || mt.cachDoc === null ? (
 		<StatusIndicator
 			label={mk.daCham(String(daCham), String(mt.krs.length))}

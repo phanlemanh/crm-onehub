@@ -1,8 +1,9 @@
 import { TRO_LY_OKR_TRAN } from "@crm/db/okr-tro-ly-danh-muc";
 import { z } from "zod";
 import { KIEU_KR, SO_KR_MOC, soKr } from "./okr-kr";
+import { LOAI_MUC_TIEU } from "./okr-muc-tieu";
 
-export const LOAI_MUC_TIEU_NHAP = ["cam-ket", "tham-vong"] as const;
+export const LOAI_MUC_TIEU_NHAP = LOAI_MUC_TIEU;
 
 export const BAN_NHAP_TRAN = {
 	mucTieu: { min: 2, max: 4 },

@@ -19,6 +19,7 @@ import {
 	ItemTitle,
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { SectionHeading } from "@crm/ui/components/section-heading";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -55,7 +56,8 @@ export function HopThoaiDongKy({
 		}),
 	);
 
-	if (bang.data && bang.data.conLai === 0)
+	const hocTap = bang.data?.hocTapChuaGhi ?? [];
+	if (bang.data && bang.data.conLai === 0 && hocTap.length === 0)
 		return (
 			<ConfirmDialog
 				tone="default"
@@ -81,13 +83,38 @@ export function HopThoaiDongKy({
 					<DialogTitle>{c.chanTieuDe(ky.name)}</DialogTitle>
 					<DialogDescription>
 						{bang.data
-							? c.chanMoTa(String(bang.data.conLai))
+							? bang.data.conLai > 0
+								? c.chanMoTa(String(bang.data.conLai))
+								: c.hocTapMoTa
 							: bang.isError
 								? c.loi
 								: c.dangDem}
 					</DialogDescription>
 				</DialogHeader>
-				{bang.data ? (
+				{bang.data && hocTap.length > 0 ? (
+					<div className="flex flex-col gap-2">
+						{bang.data.conLai > 0 ? (
+							<SectionHeading level={4}>{c.hocTapMoTa}</SectionHeading>
+						) : null}
+						<ItemGroup data-hoc-tap-chua-ghi>
+							{hocTap.map((m) => (
+								<Item
+									key={m.id}
+									size="sm"
+									variant="outline"
+									data-hoc-tap={m.id}
+								>
+									<ItemContent>
+										<ItemTitle>
+											<span translate="no">{m.ten}</span>
+										</ItemTitle>
+									</ItemContent>
+								</Item>
+							))}
+						</ItemGroup>
+					</div>
+				) : null}
+				{bang.data && bang.data.conLai > 0 ? (
 					<ItemGroup data-chua-cham>
 						{bang.data.chuaCham.map((d) => (
 							<Item
@@ -109,7 +136,7 @@ export function HopThoaiDongKy({
 							</Item>
 						))}
 					</ItemGroup>
-				) : bang.isError ? null : (
+				) : bang.data || bang.isError ? null : (
 					<div aria-busy="true" className="flex flex-col gap-2">
 						<Skeleton className="h-10 w-full" />
 						<Skeleton className="h-10 w-full" />

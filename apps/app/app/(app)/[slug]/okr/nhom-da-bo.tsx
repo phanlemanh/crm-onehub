@@ -15,19 +15,27 @@ import type { MucTieu } from "./kieu";
 
 const KHONG_MO: ReadonlySet<string> = new Set();
 
-export function NhomDaBo({
+const DAU_NHOM = {
+	"da-bo": { "data-nhom-da-bo": "" },
+	"dang-theo-doi": { "data-nhom-dang-theo-doi": "" },
+} as const;
+
+export function NhomMucTieuGap({
+	nhan,
+	ma,
 	ds,
 	hienDonVi,
 	danhDauCuaToi,
 }: {
+	nhan: string;
+	ma: keyof typeof DAU_NHOM;
 	ds: MucTieu[];
 	hienDonVi: boolean;
 	danhDauCuaToi: boolean;
 }) {
-	const k = okrMessages(useLocale()).khoiMucTieu;
 	if (ds.length === 0) return null;
 	return (
-		<Collapsible data-nhom-da-bo>
+		<Collapsible {...DAU_NHOM[ma]}>
 			<CollapsibleTrigger asChild>
 				<Button className="group" size="sm" variant="ghost">
 					<Icon
@@ -35,7 +43,7 @@ export function NhomDaBo({
 						data-icon="inline-start"
 						icon={ChevronRight}
 					/>
-					{k.nhomDaBo(ds.length)}
+					{nhan}
 				</Button>
 			</CollapsibleTrigger>
 			<CollapsibleContent className="pt-3">
@@ -47,5 +55,39 @@ export function NhomDaBo({
 				/>
 			</CollapsibleContent>
 		</Collapsible>
+	);
+}
+
+export function NhomDaBo({
+	ds,
+	hienDonVi,
+	danhDauCuaToi,
+}: {
+	ds: MucTieu[];
+	hienDonVi: boolean;
+	danhDauCuaToi: boolean;
+}) {
+	const k = okrMessages(useLocale()).khoiMucTieu;
+	return (
+		<NhomMucTieuGap
+			danhDauCuaToi={danhDauCuaToi}
+			ds={ds}
+			hienDonVi={hienDonVi}
+			ma="da-bo"
+			nhan={k.nhomDaBo(ds.length)}
+		/>
+	);
+}
+
+export function NhomDangTheoDoi({ ds }: { ds: MucTieu[] }) {
+	const k = okrMessages(useLocale()).khoiMucTieu;
+	return (
+		<NhomMucTieuGap
+			danhDauCuaToi={false}
+			ds={ds}
+			hienDonVi
+			ma="dang-theo-doi"
+			nhan={k.nhomDangTheoDoi(ds.length)}
+		/>
 	);
 }
