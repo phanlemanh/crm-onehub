@@ -5,7 +5,7 @@ slug: datatable-loc-ro
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-07T20:53:42Z
 design_doc: docs/superpowers/specs/2026-10-07-datatable-loc-ro-design.md
@@ -70,3 +70,11 @@ Quét bằng `morphological-scan` preset test-matrix (S1, 07/10).
 - Không migration, không đổi API.
 - Tệp ngoài ranh giới đã được giám sát duyệt: `packages/ui/src/lib/messages.ts` và ba tệp chữ app (P3-2); hai tệp kiểm DOM mới và khoá `dlr_` trong `_acceptance/config.yaml` (P3-4, đang chờ trả lời).
 - Đường nền dùng lại của `so-moi-khong-chap-chon` (P4), cùng sha 0426cc9d0, giám sát duyệt P3-3.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-07 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1–2:
+
+- Ngoài-2: Lệnh kiểm chữ của E9 chỉ soát bốn chữ của bảng; ba câu «Chưa có thoả thuận / cá nhân / công ty nào» được soát ở bài kiểm khác (E7). Viết nhầm ba câu đó thì lệnh của E9 vẫn báo xanh.
+- Ngoài-3: Trên điện thoại, phép đo màn chỉ chắc nút «Bỏ lọc» nằm trong màn hình; câu «Không có kết quả nào khớp bộ lọc» mới chỉ được đo là có trên trang, chưa đo là không bị cắt.
+- Ngoài-4: Bài kiểm lựa chọn số 0 tự đặt tên số đếm của trường tuỳ chỉnh thay vì lấy từ chỗ ứng dụng đọc nó. Máy chủ đổi cách đặt tên thì bài vẫn xanh; phép đo màn thật vẫn bắt được.
+- Ngoài-7: «Menu con vẫn mở sau khi bấm Bỏ chọn» và ca «không có mục Bỏ chọn khi chưa chọn gì» chỉ được kiểm ở menu thường, chưa kiểm ở menu có ô tìm (Công ty).
+- Ngoài-8: Việc soát chữ cũ «Bỏ hết tiêu chí» chỉ nhìn bộ chữ tiếng Việt của bảng và so khớp nguyên câu; chữ đó quay lại ở chỗ khác thì bài kiểm không bắt.
