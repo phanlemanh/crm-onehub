@@ -816,6 +816,10 @@ const GHIM = {
 	"okr:khoiMucTieu.moRa": ["Mở KR của «1»", "Mở KR của «12»"],
 	"okr:khoiMucTieu.soKr": ["1 KR", "12 KR"],
 	"okr:khoiMucTieu.nhomDaBo": ["Đã bỏ (1)", "Đã bỏ (12)"],
+	"okr:khoiMucTieu.nhomDangTheoDoi": [
+		"Đang theo dõi (1)",
+		"Đang theo dõi (12)",
+	],
 	"okr:sheet.hoiXoa.body": [
 		"Mục tiêu và 1 KR của nó mất hẳn. Vết vẫn ghi lại việc xoá.",
 		"Mục tiêu và 12 KR của nó mất hẳn. Vết vẫn ghi lại việc xoá.",

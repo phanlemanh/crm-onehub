@@ -345,6 +345,7 @@ export const mineInput = z.object({ cycleId: ma });
 export const mineOutput = z.object({
 	objectives: z.array(mucTieuOutput),
 	daBo: z.array(mucTieuOutput),
+	dangTheoDoi: z.array(mucTieuOutput),
 });
 export const objectiveInput = z.object({ id: ma });
 export const lienKetMangSang = z
