@@ -1,28 +1,3 @@
 {
-  "feature_plain": "Luật cách ly hai agent của kho xanh trở lại: bài kiểm Zalo của agent thôi nhập mã app; hai bài kiểm «câu chào của bot khớp nhãn trên màn» dời nguyên văn sang phía app — nhờ vậy hồ sơ «Soạn OKR cùng trợ lý» ghim lại được.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ làm bộ đo luật kho thoát xanh, mà luật cách ly vẫn bắt đúng mẫu lỗi «test của agent nhập app» — không nới, không miễn trừ."},
-    {"id": "AC-2", "p": "Sẽ giữ cả tệp kiểm Zalo của agent xanh, không còn dòng nhập nào trỏ sang app."},
-    {"id": "AC-3", "p": "Sẽ giữ phép kiểm «câu hướng dẫn của bot chỉ đúng tới Nhắc buổi sáng và nút Nối Zalo thật trên màn» — chạy ở phía app, đọc chữ thật của cả hai bên."},
-    {"id": "AC-4", "p": "Sẽ chứng hai bài dời đi y nguyên từng chữ, và tệp của agent chỉ mất đúng phần đã dời."},
-    {"id": "AC-5", "p": "Sẽ giữ eval «câu chào» của hồ sơ Zalo đã ký đo đủ bốn bài như cũ."}
-  ],
-  "wont_do": [
-    {"id": "OOS-1", "p": "Không dời nhãn sang gói dùng chung để bot dựng câu từ cùng nguồn — đúng hơn về lâu dài nhưng đổi mã sản phẩm hai app; để hồ sơ riêng."},
-    {"id": "OOS-2", "p": "Không đổi hay nới luật cách ly."},
-    {"id": "OOS-3", "p": "Không sửa tiêu chí của hồ sơ Zalo đã ký; chỉ dòng lệnh eval của nó chạy thêm tệp mới, rồi hồ sơ được ghim lại."}
-  ],
-  "scope_plain": "Chỉ dời bài kiểm và chỉnh một dòng lệnh đo; không đổi mã sản phẩm.",
-  "coverage_plain": [
-    {"i": 0, "p": "Đã xét hai nơi đặt phép kiểm: ở lại test agent (không được nhập app) hoặc dời sang test app (nhập hằng của agent — luật cho phép)."},
-    {"i": 1, "p": "Đã liệt đủ bốn bài và một hàm của khối «câu chào»: hai bài ở lại, hai bài và hàm dời đi."},
-    {"i": 2, "p": "Mỗi phần có tiêu chí: luật xanh (AC-1), phần ở lại xanh (AC-2), phần dời xanh (AC-3), dời nguyên văn (AC-4), eval hồ sơ Zalo đủ (AC-5)."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Nặng nhất: tài liệu đếm sai số bài dời (ba thay vì hai) — không cách làm nào xanh cả hai phía. Đã sửa mọi chỗ theo bản gốc: hai bài và một hàm; phép đo đọc đúng «2 pass» ở mỗi bên."},
-    {"i": 1, "p": "Tệp mới có thể chép tay chữ thay vì nhập chữ thật. Đã sửa: phép đo đòi đúng ba dòng nhập từ nguồn thật, có chiều đỏ."},
-    {"i": 2, "p": "Vế «không nới luật» chưa có thước. Đã sửa: đòi bộ tự kiểm của luật vẫn bắt đúng mẫu lỗi này, và không có miễn trừ."},
-    {"i": 3, "p": "Chiều đỏ chỉ phủ phía app. Đã sửa: ba đột biến (app, agent, nhập), mỗi đột biến phải áp đúng một lần."},
-    {"i": 4, "p": "Ngưỡng «ghim lại hồ sơ Soạn OKR xanh» chưa có chỗ đo. Đã ghi rõ: đo bằng làn ghim lại ở đỉnh nhánh trước khi xin gộp; đỏ thì không mở PR."}
-  ]
+  "feature_plain": "Luật cách ly hai agent của kho xanh trở lại: bài kiểm Zalo của agent thôi nhập mã app, hai bài «câu chào khớp nhãn trên màn» chạy ở phía app nguyên văn — hồ sơ Soạn OKR cùng trợ lý nay ghim lại được."
 }

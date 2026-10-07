@@ -5,7 +5,7 @@ slug: zalo-va-cach-ly
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-07T21:02:48Z
 design_doc: _acceptance/zalo-va-cach-ly/design.md
@@ -49,3 +49,4 @@ kiểm của `apps/app`, giữ nguyên phép kiểm, không nới luật.
 
 - Ngưỡng ở `opportunity.md` «làn ghim lại `soan-okr-cung-tro-ly` xanh» đo NGOÀI hồ sơ: P4 chạy làn ghim lại ở đỉnh nhánh trước khi xin `mo_merge`, kết quả nêu trên PR và báo giám sát; làn đỏ thì không mở PR.
 - Sau khi vòng này xanh, ghim lại ở cuối nhánh (khoá `s4`, `mo_merge`): `soan-okr-cung-tro-ly` (trong ranh giới) và `zalo-va` — sửa dòng `r1g_cau_chao` làm pin của `zalo-va` hoá cũ; giám sát duyệt thêm `_acceptance/zalo-va/**` cho việc ghim lại (`tra-loi/P4-7.json`).
+- Known limits (Ngoài-1, Cổng 2 07/10): `paths` của eval câu chào (E5) trong hồ sơ đã ký `zalo-va` chưa có `apps/app/test/zalo-cau-chao-nhan.spec.ts`; sửa tệp đó sau này không làm pin của `zalo-va` báo cũ (eval vẫn chạy tệp và đo đủ).
