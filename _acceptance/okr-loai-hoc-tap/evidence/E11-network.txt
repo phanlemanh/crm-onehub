@@ -1,0 +1,1 @@
+driver: script man-hoc-tap.mjs (playwright/puppeteer noi bo qua tien-de), khong co read_network_requests -> n/a (driver). Run 1: buoc 1 nem "Node is either not clickable" (click option luc dang animation) ; run 2: dat ca 5 buoc, exit 0.

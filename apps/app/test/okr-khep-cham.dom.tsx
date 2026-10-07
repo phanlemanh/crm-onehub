@@ -71,6 +71,7 @@ const BANG: BangChamOutput = {
 	thang: "0-1",
 	conLai: 2,
 	chuaCham: [],
+	hocTapChuaGhi: [],
 	mucTieu: [
 		mucTieu(
 			"mt-1",

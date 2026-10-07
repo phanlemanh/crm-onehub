@@ -61,7 +61,11 @@ const vi = {
 		moc: "Mốc",
 		"phan-tram": "Phần trăm",
 	},
-	loai: { "cam-ket": "Cam kết", "tham-vong": "Tham vọng" },
+	loai: {
+		"cam-ket": "Cam kết",
+		"tham-vong": "Tham vọng",
+		"hoc-tap": "Học tập",
+	},
 	trangThai: {
 		nhap: "Nháp",
 		"cho-duyet": "Chờ duyệt",
@@ -740,7 +744,11 @@ const en: OkrMessages = {
 		moc: "Milestone",
 		"phan-tram": "Percentage",
 	},
-	loai: { "cam-ket": "Committed", "tham-vong": "Aspirational" },
+	loai: {
+		"cam-ket": "Committed",
+		"tham-vong": "Aspirational",
+		"hoc-tap": "Learning",
+	},
 	trangThai: {
 		nhap: "Draft",
 		"cho-duyet": "Awaiting approval",

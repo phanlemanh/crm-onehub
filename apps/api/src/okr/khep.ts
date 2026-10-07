@@ -158,6 +158,32 @@ export async function kiemDongKy(
 	);
 }
 
+export type HocTapChuaGhi = { id: string; ten: string };
+
+export async function hocTapChuaGhi(
+	tx: Prisma.TransactionClient | Db,
+	cycleId: string,
+	nc?: NguCanhXem,
+): Promise<HocTapChuaGhi[]> {
+	const ds = await tx.okrObjective.findMany({
+		where: {
+			AND: [
+				{ cycleId, kind: "hoc-tap", status: "cong-bo" },
+				nc ? dieuKienXemMucTieu(nc) : {},
+			],
+		},
+		orderBy: [{ position: "asc" }, { id: "asc" }],
+		select: {
+			id: true,
+			title: true,
+			nhinLai: { select: { dieuHocDuoc: true } },
+		},
+	});
+	return ds
+		.filter((m) => !(m.nhinLai?.dieuHocDuoc ?? "").trim())
+		.map((m) => ({ id: m.id, ten: m.title }));
+}
+
 export async function dongKyChoNguoiXem(
 	tx: Prisma.TransactionClient | Db,
 	cycleId: string,

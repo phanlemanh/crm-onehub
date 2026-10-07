@@ -7,7 +7,7 @@ export const CAP_MUC_TIEU = [
 	"phong-ban",
 	"ca-nhan",
 ] as const;
-export const LOAI_MUC_TIEU = ["cam-ket", "tham-vong"] as const;
+export const LOAI_MUC_TIEU = ["cam-ket", "tham-vong", "hoc-tap"] as const;
 export const TRANG_THAI_MUC_TIEU = [
 	"nhap",
 	"cho-duyet",
@@ -47,7 +47,7 @@ export function tinhTrang(
 ): TinhTrang {
 	if (kyVong === null || kyVong === 0) return "chua-co-ky-vong";
 	const tiLe = phanTram / kyVong;
-	if (loai === "tham-vong")
+	if (loai !== "cam-ket")
 		return tiLe >= NGUONG_TINH_TRANG.thamVong ? "dung-nhip" : "cham-nhip";
 	if (tiLe >= NGUONG_TINH_TRANG.cham) return "dung-nhip";
 	if (tiLe >= NGUONG_TINH_TRANG.truot) return "cham-nhip";
