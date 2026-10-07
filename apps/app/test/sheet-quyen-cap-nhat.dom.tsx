@@ -115,6 +115,8 @@ function mucTieu(
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,
+			xoa: false,
+			dungLai: false,
 		},
 		...thay,
 	};
@@ -192,7 +194,7 @@ mock.module("@/lib/trpc/client", () => ({
 				bat: false,
 				lyDo: "tat",
 			})),
-			mine: thuTuc("okr.mine", () => ({ objectives: [] })),
+			mine: thuTuc("okr.mine", () => ({ objectives: [], daBo: [] })),
 			danhSach: thuTuc("okr.danhSach"),
 			troLyDanhSach: thuTuc("okr.troLyDanhSach", () => ({
 				dong: [],

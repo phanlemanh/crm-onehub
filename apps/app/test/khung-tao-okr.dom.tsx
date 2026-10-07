@@ -307,6 +307,8 @@ function datKhung(chon: { suaDuoc?: boolean; cho?: number } = {}): void {
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,
+			xoa: false,
+			dungLai: false,
 		},
 	};
 	dat("okr.objective", () =>

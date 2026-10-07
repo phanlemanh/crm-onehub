@@ -171,8 +171,10 @@ function HanhDongMucTieu({
 	const g = okrGioiHanMessages(locale);
 	const trpc = useTRPC();
 	const toi = useQuery(trpc.users.me.queryOptions());
-	const [hoi, setHoi] = useState<"cong-bo" | "bo" | null>(null);
+	const [hoi, setHoi] = useState<"cong-bo" | "bo" | "xoa" | null>(null);
 	const [, datHop] = useHopOkr();
+	const { close } = useRecordStack();
+	const cache = useCrmCache();
 	const dongHoi = () => setHoi(null);
 	const congBo = useMutation(
 		trpc.okr.publishObjective.mutationOptions(
@@ -182,10 +184,96 @@ function HanhDongMucTieu({
 	const bo = useMutation(
 		trpc.okr.dropObjective.mutationOptions(useXong(mt.id, m.daBo, dongHoi)),
 	);
+	const xoa = useMutation(
+		trpc.okr.xoaMucTieu.mutationOptions({
+			onSuccess: () => {
+				toast.success(m.daXoa);
+				dongHoi();
+				close();
+				void cache.okr(mt.id);
+			},
+			onError: (e) => {
+				dongHoi();
+				toast.error(e.message);
+				void cache.okr(mt.id);
+			},
+		}),
+	);
+	const dungLai = useMutation(
+		trpc.okr.dungLaiMucTieu.mutationOptions({
+			onSuccess: (kq) => {
+				if (kq.canhBao) toast.warning(kq.canhBao);
+				toast.success(
+					kq.canGuiDuyet ? m.daDungLai.guiDuyet : m.daDungLai.congBo,
+				);
+				void cache.okr(mt.id);
+			},
+			onError: (e) => toast.error(e.message),
+		}),
+	);
 
 	const vuaTraLai =
 		mt.traLaiGanNhat?.nguoi?.id !== undefined &&
 		mt.traLaiGanNhat.nguoi.id === toi.data?.id;
+
+	const hopXoa = (
+		<ConfirmDialog
+			nut={m.hoiXoa.action}
+			thoi={m.hoiXoa.cancel}
+			tieuDe={m.hoiXoa.title}
+			than={m.hoiXoa.body(mt.keyResults.length)}
+			noiDung={
+				<p className="font-medium text-sm" translate="no">
+					{mt.title}
+				</p>
+			}
+			open={hoi === "xoa"}
+			pending={xoa.isPending}
+			onOpenChange={(mo) => {
+				if (!mo && !xoa.isPending) dongHoi();
+			}}
+			onConfirm={() => {
+				if (!xoa.isPending) xoa.mutate({ id: mt.id });
+			}}
+		/>
+	);
+	const mucXoa = (
+		<DropdownMenuItem
+			data-muc="xoa-muc-tieu"
+			variant="destructive"
+			onSelect={() => setHoi("xoa")}
+		>
+			{m.xoa}
+		</DropdownMenuItem>
+	);
+
+	if (mt.status === "da-bo")
+		return (
+			<>
+				{mt.quyen.dungLai ? (
+					<Button
+						size="sm"
+						variant="outline"
+						data-nut="dung-lai"
+						disabled={dungLai.isPending}
+						onClick={() => dungLai.mutate({ id: mt.id })}
+					>
+						{m.dungLai}
+					</Button>
+				) : null}
+				{mt.quyen.xoa ? (
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button aria-label={m.menu} size="icon-sm" variant="ghost">
+								<Icon icon={OverflowMenuHorizontal} />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">{mucXoa}</DropdownMenuContent>
+					</DropdownMenu>
+				) : null}
+				{hopXoa}
+			</>
+		);
 
 	if (!ghiDuoc(mt)) return null;
 
@@ -232,11 +320,20 @@ function HanhDongMucTieu({
 					>
 						{g.menuMucHienThi}
 					</DropdownMenuItem>
-					<DropdownMenuItem variant="destructive" onSelect={() => setHoi("bo")}>
-						{m.bo}
-					</DropdownMenuItem>
+					{mt.quyen.xoa ? (
+						mucXoa
+					) : (
+						<DropdownMenuItem
+							data-muc="bo-muc-tieu"
+							variant="destructive"
+							onSelect={() => setHoi("bo")}
+						>
+							{m.bo}
+						</DropdownMenuItem>
+					)}
 				</DropdownMenuContent>
 			</DropdownMenu>
+			{hopXoa}
 			<ConfirmDialog
 				tone="default"
 				nut={m.hoiCongBo.action}
@@ -923,7 +1020,8 @@ export function ObjectiveSheet({
 					mt ? (
 						<>
 							<NutTheoDoi mt={mt} />
-							{ghiDuoc(mt) ? (
+							{ghiDuoc(mt) ||
+							(mt.status === "da-bo" && (mt.quyen.dungLai || mt.quyen.xoa)) ? (
 								<HanhDongMucTieu
 									mt={mt}
 									moHienThi={() => setHopHienThi(true)}
