@@ -5,9 +5,9 @@ slug: datatable-loc-ro
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
-approved_by: Phan Le Manh
-approved_at: 2026-10-07T14:04:16Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-07-datatable-loc-ro-design.md
 ---
 
@@ -32,7 +32,7 @@ Source input: `docs/plan/lo-trinh-okr.json` hàng E7; `_acceptance/datatable-loc
 - AC-5: Given `DataTable` nhận `facetCounts` có mục cho một tiêu chí, When mở menu con của tiêu chí đó, Then mỗi lựa chọn in số đếm của nó (giá trị không có trong mục = 0), lựa chọn số 0 vẫn hiện và tick được; When `facetCounts` không có mục cho tiêu chí, Then lựa chọn không in số; và bộ lọc trạng thái hiện mọi lựa chọn kể cả lựa chọn đếm 0, kèm số khi có đếm.
 - AC-6: Given bốn bảng nhận từ API đếm trong đó một số lựa chọn bằng 0, When mở menu lọc, Then ma trận viết trước bảng × tiêu chí — cá nhân {người phụ trách, công ty, hoạt động, trường tuỳ chỉnh}, công ty {người phụ trách, làm giàu, hoạt động, trường tuỳ chỉnh}, thoả thuận {người phụ trách, giai đoạn, thời hạn chốt, trường tuỳ chỉnh}, thành viên {vai trò} — mỗi ô hiện đủ mọi lựa chọn nguồn, lựa chọn đếm 0 mang số 0; tiêu chí giá trị tự do rút từ đếm — chức danh, cấp bậc, chân dung của cá nhân và ngành của công ty — giữ lựa chọn đang chọn dù đếm không còn nó, kèm số 0; và menu lọc của Kanban thoả thuận cũng in số.
 - AC-7: Given thoả thuận, cá nhân hoặc công ty không có bản ghi và không lọc gì, When mở danh sách (không ở «Đã lưu trữ»), Then câu rỗng là «Chưa có thoả thuận nào.», «Chưa có cá nhân nào.», «Chưa có công ty nào.» (en «No deals yet.», «No contacts yet.», «No companies yet.»), không chứa «bộ lọc»; ở «Đã lưu trữ» câu cũ giữ nguyên.
-- AC-8: Given người đăng nhập trên app thật ở khổ 375 và 1440, When ở danh sách thoả thuận chọn trong menu Giai đoạn một giai đoạn đếm 0 (menu in «0» cạnh tên giai đoạn), Then bảng hiện «Không có kết quả nào khớp bộ lọc» và nút «Bỏ lọc» trong khung nhìn, không tràn ngang; When bấm «Bỏ lọc», Then bảng có dòng trở lại và địa chỉ không còn tham số tiêu chí, trường tuỳ chỉnh hay tìm kiếm; And ở danh sách cá nhân, menu con của một trường tuỳ chỉnh dạng lựa chọn có một lựa chọn chưa ai dùng thì lựa chọn đó hiện kèm «0».
+- AC-8: Given người đăng nhập trên app thật ở khổ 1440, When ở danh sách thoả thuận chọn trong menu Giai đoạn một giai đoạn đếm 0 (menu in «0» cạnh tên giai đoạn), Then bảng hiện «Không có kết quả nào khớp bộ lọc» và nút «Bỏ lọc» trong khung nhìn, không tràn ngang; When bấm «Bỏ lọc», Then bảng có dòng trở lại và địa chỉ không còn tham số tiêu chí, trường tuỳ chỉnh hay tìm kiếm; And ở danh sách cá nhân, menu con của một trường tuỳ chỉnh dạng lựa chọn có một lựa chọn chưa ai dùng thì lựa chọn đó hiện kèm «0». Given khổ 375 và địa chỉ danh sách thoả thuận đã lọc sẵn theo giai đoạn đếm 0, When mở trang, Then câu và nút «Bỏ lọc» nằm trong khung nhìn, không tràn ngang; When bấm «Bỏ lọc», Then bảng có dòng trở lại và địa chỉ không còn tham số giai đoạn.
 - AC-9: Given các khoá chữ mới và đổi của vòng (`table.clearFilters`, `table.noMatch`, `table.noMatchDescription`, `table.resetFilters`, ba câu `empty`), When soát bằng `messages-guard` và bài chữ của bảng, Then đủ bản vi và en, bản vi có dấu, không chữ nào để trống, mỗi khoá có bản en khác bản vi và không chứa chữ có dấu tiếng Việt, và bảng ở `en` (ô rỗng vì lọc, menu con có lựa chọn) không lọt chữ tiếng Việt nào của vòng.
 - AC-10: Given màn OKR dùng `DataTableFacetMenu` không truyền đếm và các nơi gọi `DataTable` khác (khoá API, SSO, chiến dịch, danh mục), When chạy bài kiểm sẵn có của bộ lọc OKR và của `DataTable` (`loc-okr-ten`, `loc-okr-tai-truoc`, `render-diff`, `lai-ra-man`, `data-table-locale`), Then cả năm thoát 0 không sửa kỳ vọng của bài OKR.
 - AC-11: Given các tệp giao diện sửa của vòng (`data-table.tsx`, bốn bảng, `field-facets.tsx`), When chạy sàn thiết kế của kho, Then không vi phạm P0, và trong bốn bảng không phần tử nào nhập từ `@crm/ui` mang `className` có lớp màu, góc hay khoảng cách (mọi biến thể `p*`, `m*`, `gap*`, `space-*`) mới so với merge-base với `onehub`.
@@ -63,6 +63,7 @@ Quét bằng `morphological-scan` preset test-matrix (S1, 07/10).
 - Lựa chọn đang chọn của tiêu chí Công ty (có ô tìm) khi nó nằm ngoài kết quả tìm của menu.
 - Bảng không dùng `useTableQuery` hay không có tiêu chí (khoá API, SSO, chiến dịch, danh mục): không đổi hành vi, chỉ phải không hồi quy (AC-10).
 - Chữ rỗng của bảng thành viên (`settings-thanh-vien.ts`): ca không lọc mà rỗng không xảy ra.
+- Menu con của tiêu chí lọc mở ra ngoài màn hình ở khổ điện thoại (đo 07/10: hộp ở x=359, rộng 208, khung 375) — lỗi có từ trước, tách thành hàng sửa riêng; vòng này không đo đường chọn qua menu ở 375.
 
 ## Notes
 

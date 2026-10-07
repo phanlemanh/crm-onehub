@@ -157,17 +157,17 @@ if (process.argv.includes("--tu-thu")) {
 		throw new Error(`khong tim thay <Button trong ${tep} de bom lop`);
 	let doDung = 0;
 	for (const lop of TIEN_TO) {
-		const banSao = goc.replace("<Button\n", `<Button\n\t\t\t\t\tclassName="${lop}"\n`);
+		const banSao = goc.replace(
+			"<Button\n",
+			`<Button\n\t\t\t\t\tclassName="${lop}"\n`,
+		);
 		writeFileSync(join(NHA, `deals-table-${lop}.tsx`), banSao);
 		const moi = lopMoi(soi(tep, goc), soi(tep, banSao));
 		const bat = moi.some((l) => l.endsWith(` ${lop}`));
 		if (bat) doDung += 1;
 		ghi(bat, `tu-thu ${lop}: ${bat ? `do — ${tep} ${lop}` : "KHONG bat"}`);
 	}
-	ghi(
-		doDung === TIEN_TO.length,
-		`${doDung}/${TIEN_TO.length} tien to do`,
-	);
+	ghi(doDung === TIEN_TO.length, `${doDung}/${TIEN_TO.length} tien to do`);
 }
 
 for (const d of dong) console.log(`${d.dat ? "DUNG" : "SAI"} ${d.chu}`);

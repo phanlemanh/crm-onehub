@@ -1,41 +1,132 @@
 {
   "feature_plain": "Khi danh sách thoả thuận, cá nhân, công ty hay thành viên rỗng vì đang lọc, bảng nói rõ lý do và có nút «Bỏ lọc»; menu lọc hiện mọi lựa chọn kèm số bản ghi, kể cả số 0.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ nói «Không có kết quả nào khớp bộ lọc» khi bảng rỗng vì tiêu chí, bộ lọc trạng thái hay ô tìm — còn không lọc gì thì giữ câu của màn, đang tải thì giữ vòng quay."},
-    {"id": "AC-3", "p": "Sẽ đưa bốn danh sách về đầy đủ sau một lần bấm «Bỏ lọc»: xoá tiêu chí, trường tuỳ chỉnh, trạng thái và từ khoá, nhưng giữ chế độ «Đã lưu trữ» và cách sắp xếp."},
-    {"id": "AC-6", "p": "Sẽ hiện đủ mọi lựa chọn trong menu lọc của bốn danh sách và Kanban thoả thuận, lựa chọn chưa ai dùng mang số 0, lựa chọn đang chọn không bao giờ biến mất."},
-    {"id": "AC-7", "p": "Sẽ ghi «Chưa có thoả thuận nào.» (cá nhân, công ty tương tự) khi danh sách thật sự trống — bỏ đuôi «khớp bộ lọc này» đang nói sai."},
-    {"id": "AC-9", "p": "Sẽ có đủ chữ tiếng Việt có dấu và tiếng Anh cho mọi câu mới, bảng ở tiếng Anh không lọt chữ Việt."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ nói «Không có kết quả nào khớp bộ lọc» khi bảng rỗng vì tiêu chí, bộ lọc trạng thái hay ô tìm — còn không lọc gì thì giữ câu của màn, đang tải thì giữ vòng quay."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ đưa bốn danh sách về đầy đủ sau một lần bấm «Bỏ lọc»: xoá tiêu chí, trường tuỳ chỉnh, trạng thái và từ khoá, nhưng giữ chế độ «Đã lưu trữ» và cách sắp xếp."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ hiện đủ mọi lựa chọn trong menu lọc của bốn danh sách và Kanban thoả thuận, lựa chọn chưa ai dùng mang số 0, lựa chọn đang chọn không bao giờ biến mất."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ ghi «Chưa có thoả thuận nào.» (cá nhân, công ty tương tự) khi danh sách thật sự trống — bỏ đuôi «khớp bộ lọc này» đang nói sai."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ có đủ chữ tiếng Việt có dấu và tiếng Anh cho mọi câu mới, bảng ở tiếng Anh không lọt chữ Việt."
+    }
   ],
   "wont_do": [
-    {"id": "AC-2", "p": "Sẽ KHÔNG hiện nút «Bỏ lọc» ở màn không đưa được cách bỏ lọc; màn có thì một lần bấm làm đúng một lần bỏ lọc."},
-    {"id": "AC-4", "p": "Sẽ KHÔNG còn nút «Bỏ hết tiêu chí» bỏ có một tiêu chí — đổi thành «Bỏ chọn», có ở cả menu có ô tìm, bấm xong menu vẫn mở."},
-    {"id": "AC-5", "p": "Sẽ KHÔNG giấu lựa chọn có số 0, cả ở bộ lọc Mở/Đóng của thoả thuận; lựa chọn vẫn tick được."},
-    {"id": "AC-8", "p": "Sẽ KHÔNG để người kẹt trên app thật ở điện thoại lẫn màn rộng: chọn giai đoạn không có thoả thuận thấy câu và nút trong khung nhìn, bấm là bảng có dòng lại."},
-    {"id": "AC-10", "p": "Sẽ KHÔNG đổi bộ lọc của màn OKR và các bảng khác (khoá API, SSO, chiến dịch, danh mục) — bài kiểm sẵn có của chúng vẫn xanh nguyên kỳ vọng."},
-    {"id": "AC-11", "p": "Sẽ KHÔNG thêm màu, góc hay khoảng cách tự đặt ở bốn danh sách — mọi thay đổi giao diện nằm trong bộ thành phần dùng chung."},
-    {"id": "OOS-1", "p": "Không đổi cách máy chủ đếm số bản ghi (đếm theo các tiêu chí còn lại)."},
-    {"id": "OOS-2", "p": "Không thêm nút «Bỏ lọc» thường trực trên thanh công cụ."},
-    {"id": "OOS-3", "p": "Không giữ lựa chọn công ty đang chọn khi nó nằm ngoài kết quả tìm trong menu Công ty."},
-    {"id": "OOS-4", "p": "Không đổi các bảng không có bộ lọc (khoá API, SSO, chiến dịch, danh mục) — chỉ giữ chúng không hỏng."},
-    {"id": "OOS-5", "p": "Không đổi câu rỗng của bảng thành viên — không gian làm việc luôn có ít nhất một người."}
+    {
+      "id": "AC-2",
+      "p": "Sẽ KHÔNG hiện nút «Bỏ lọc» ở màn không đưa được cách bỏ lọc; màn có thì một lần bấm làm đúng một lần bỏ lọc."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ KHÔNG còn nút «Bỏ hết tiêu chí» bỏ có một tiêu chí — đổi thành «Bỏ chọn», có ở cả menu có ô tìm, bấm xong menu vẫn mở."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ KHÔNG giấu lựa chọn có số 0, cả ở bộ lọc Mở/Đóng của thoả thuận; lựa chọn vẫn tick được."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ KHÔNG để người kẹt trên app thật: ở màn rộng chọn giai đoạn không có thoả thuận thấy câu và nút trong khung nhìn, bấm là bảng có dòng lại; ở điện thoại kiểm cùng ô rỗng và nút qua đường dẫn đã lọc sẵn."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ KHÔNG đổi bộ lọc của màn OKR và các bảng khác (khoá API, SSO, chiến dịch, danh mục) — bài kiểm sẵn có của chúng vẫn xanh nguyên kỳ vọng."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ KHÔNG thêm màu, góc hay khoảng cách tự đặt ở bốn danh sách — mọi thay đổi giao diện nằm trong bộ thành phần dùng chung."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không đổi cách máy chủ đếm số bản ghi (đếm theo các tiêu chí còn lại)."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không thêm nút «Bỏ lọc» thường trực trên thanh công cụ."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không giữ lựa chọn công ty đang chọn khi nó nằm ngoài kết quả tìm trong menu Công ty."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi các bảng không có bộ lọc (khoá API, SSO, chiến dịch, danh mục) — chỉ giữ chúng không hỏng."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không đổi câu rỗng của bảng thành viên — không gian làm việc luôn có ít nhất một người."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Không sửa trong vòng này lỗi menu con của bộ lọc mở ra ngoài màn điện thoại — tách thành hàng sửa riêng."
+    }
   ],
   "scope_plain": "Năm việc để sau, có lý do:",
   "coverage_plain": [
-    {"i": 0, "p": "Mọi lý do một bảng có thể rỗng — không lọc, tiêu chí, trường tuỳ chỉnh, trạng thái, tìm kiếm, trộn, đang tải, đã lưu trữ — đều có ca đo (AC-1 câu rỗng, AC-7 câu không lọc)."},
-    {"i": 1, "p": "Mọi chỗ dùng bảng lọc đều được kê: bảng dùng chung, bốn danh sách, Kanban thoả thuận, và OKR để chặn hồi quy (AC-6, AC-10)."},
-    {"i": 2, "p": "Mọi kiểu tiêu chí — danh sách cố định, người, giá trị tự do, có ô tìm, trường tuỳ chỉnh — đều có ô trong ma trận số 0 (AC-6)."},
-    {"i": 3, "p": "Đo trên app thật ở khổ điện thoại 375 và màn rộng 1440 (AC-8 màn thật)."},
-    {"i": 4, "p": "Đối chiếu ngành: Linear và bài «empty states» của NN/g đều nói lý do rỗng và cho nút xoá bộ lọc ngay tại chỗ — chờ anh gạch."},
-    {"i": 5, "p": "Ba việc chính đều thành tiêu chí: câu rỗng và nút bỏ lọc, nút «Bỏ chọn», số đếm và lựa chọn 0; thêm màn thật, chữ, hồi quy OKR, sàn thiết kế."},
-    {"i": 6, "p": "Để sau: nút bỏ lọc thường trực, lựa chọn công ty ngoài kết quả tìm, đếm theo các tiêu chí còn lại."},
-    {"i": 7, "p": "Không bao giờ: tự bỏ lọc khi bảng rỗng, hay giấu lựa chọn 0 sau một công tắc."}
+    {
+      "i": 0,
+      "p": "Mọi lý do một bảng có thể rỗng — không lọc, tiêu chí, trường tuỳ chỉnh, trạng thái, tìm kiếm, trộn, đang tải, đã lưu trữ — đều có ca đo (AC-1 câu rỗng, AC-7 câu không lọc)."
+    },
+    {
+      "i": 1,
+      "p": "Mọi chỗ dùng bảng lọc đều được kê: bảng dùng chung, bốn danh sách, Kanban thoả thuận, và OKR để chặn hồi quy (AC-6, AC-10)."
+    },
+    {
+      "i": 2,
+      "p": "Mọi kiểu tiêu chí — danh sách cố định, người, giá trị tự do, có ô tìm, trường tuỳ chỉnh — đều có ô trong ma trận số 0 (AC-6)."
+    },
+    {
+      "i": 3,
+      "p": "Đo trên app thật ở khổ điện thoại 375 và màn rộng 1440 (AC-8 màn thật)."
+    },
+    {
+      "i": 4,
+      "p": "Đối chiếu ngành: Linear và bài «empty states» của NN/g đều nói lý do rỗng và cho nút xoá bộ lọc ngay tại chỗ — chờ anh gạch."
+    },
+    {
+      "i": 5,
+      "p": "Ba việc chính đều thành tiêu chí: câu rỗng và nút bỏ lọc, nút «Bỏ chọn», số đếm và lựa chọn 0; thêm màn thật, chữ, hồi quy OKR, sàn thiết kế."
+    },
+    {
+      "i": 6,
+      "p": "Để sau: nút bỏ lọc thường trực, lựa chọn công ty ngoài kết quả tìm, đếm theo các tiêu chí còn lại."
+    },
+    {
+      "i": 7,
+      "p": "Không bao giờ: tự bỏ lọc khi bảng rỗng, hay giấu lựa chọn 0 sau một công tắc."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Bài đo «Bỏ lọc» chỉ dùng một trường tuỳ chỉnh nên không bắt được lỗi hai trường ghi đè nhau — đã sửa: đo với hai trường cùng chọn, ca đỏ gọi tên trường còn sót."},
-    {"i": 1, "p": "Bài đo chữ tiếng Anh có lỗ, chép nhầm câu Việt sang bản Anh vẫn xanh — đã sửa: mỗi câu bản Anh phải khác bản Việt và không có dấu."},
-    {"i": 2, "p": "Số đếm giả trong bài đo danh sách viết tay theo khuôn bên đọc — đã sửa: thêm cảnh trên app thật với một trường tuỳ chỉnh có lựa chọn 0."},
-    {"i": 3, "p": "Bài quét lớp tự đặt chỉ thử một tiền tố — đã sửa: liệt trước 27 tiền tố, mỗi tiền tố một ca đỏ."},
-    {"i": 4, "p": "Bài hồi quy OKR so với mốc có thể dời — đã sửa: so với điểm rẽ nhánh khỏi onehub."}
+    {
+      "i": 0,
+      "p": "Bài đo «Bỏ lọc» chỉ dùng một trường tuỳ chỉnh nên không bắt được lỗi hai trường ghi đè nhau — đã sửa: đo với hai trường cùng chọn, ca đỏ gọi tên trường còn sót."
+    },
+    {
+      "i": 1,
+      "p": "Bài đo chữ tiếng Anh có lỗ, chép nhầm câu Việt sang bản Anh vẫn xanh — đã sửa: mỗi câu bản Anh phải khác bản Việt và không có dấu."
+    },
+    {
+      "i": 2,
+      "p": "Số đếm giả trong bài đo danh sách viết tay theo khuôn bên đọc — đã sửa: thêm cảnh trên app thật với một trường tuỳ chỉnh có lựa chọn 0."
+    },
+    {
+      "i": 3,
+      "p": "Bài quét lớp tự đặt chỉ thử một tiền tố — đã sửa: liệt trước 27 tiền tố, mỗi tiền tố một ca đỏ."
+    },
+    {
+      "i": 4,
+      "p": "Bài hồi quy OKR so với mốc có thể dời — đã sửa: so với điểm rẽ nhánh khỏi onehub."
+    }
   ]
 }

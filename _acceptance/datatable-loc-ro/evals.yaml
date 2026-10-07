@@ -170,16 +170,18 @@ evals:
       - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
       - "_acceptance/datatable-loc-ro/rang/do-man.mjs"
     expected: |
-      Kho do co it nhat 1 thoa thuan va 1 giai doan khong co thoa thuan nao (do-man.mjs tao qua API
-      cua kho do, khong sua CSDL dung chung), va mot truong tuy chinh dang lua chon cua ca nhan co 2
-      lua chon, mot lua chon chua ai dung. Ma tran viet truoc 2 kho (375, 1440) x 4 canh:
-      menu-giai-doan (menu con Giai doan mo, giai doan rong mang "0") · rong-vi-loc (sau khi chon giai
-      doan rong: "Không có kết quả nào khớp bộ lọc" va nut "Bỏ lọc" nam trong khung nhin, tran ngang
-      0px) · sau-bo-loc (bam "Bỏ lọc": bang co >= 1 dong, location.search khong con stage/fields/q)
-      · truong-tuy-chinh (danh sach ca nhan, menu con cua truong do: lua chon chua ai dung hien kem
-      "0" — doi chieu khuon dem cua API that).
-      Moi o mot dong "DUNG <kho>: <canh> — <so lieu>" va mot anh evidence/<canh>-<kho>.png; dong dem
-      "8/8 o". Anh rong-vi-loc: tieu de, mo ta, nut thay ro, khong de len thanh cong cu.
+      Kho do co it nhat 1 thoa thuan va 1 giai doan khong co thoa thuan nao, va mot truong tuy chinh
+      dang lua chon cua ca nhan co 2 lua chon, mot lua chon chua ai dung (do-man.mjs dung bang Prisma
+      tren kho do rieng crm_<cay>_do, tu choi khi DATABASE_URL tro kho khac). Ma tran viet truoc 6 o:
+      1440 x 4 canh — menu-giai-doan (menu con Giai doan mo, giai doan rong mang "0", lua chon nam
+      trong khung nhin) · rong-vi-loc (chon giai doan rong qua menu: "Không có kết quả nào khớp bộ
+      lọc" va nut "Bỏ lọc" trong khung nhin, tran ngang 0px) · sau-bo-loc (truoc khi bam dia chi da
+      mang stage; bam "Bỏ lọc": bang co >= 1 dong, location.search khong con stage/fields/q) ·
+      truong-tuy-chinh (danh sach ca nhan, menu con cua truong do: lua chon chua ai dung hien kem "0"
+      — doi chieu khuon dem cua API that); 375 x 2 canh — rong-vi-loc (mo thang dia chi
+      /deals?stage=<giai doan rong>: cau va nut trong khung nhin, tran ngang 0px) · sau-bo-loc (nhu
+      1440). Moi o mot dong "DUNG <kho>: <canh> — <so lieu>" va mot anh evidence/<canh>-<kho>.png;
+      dong dem "6/6 o". Anh rong-vi-loc: tieu de, mo ta, nut thay ro, khong de len thanh cong cu.
 
   - id: E9
     criterion: AC-9
