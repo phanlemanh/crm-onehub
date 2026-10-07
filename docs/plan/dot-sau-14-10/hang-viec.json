@@ -1,0 +1,344 @@
+{
+  "dot": "sau-14-10",
+  "day": [
+    {
+      "id": "P1",
+      "worktree": "/CHUA-CO-WORKTREE/P1",
+      "link": ""
+    },
+    {
+      "id": "P2",
+      "worktree": "/CHUA-CO-WORKTREE/P2",
+      "link": ""
+    },
+    {
+      "id": "P3",
+      "worktree": "/CHUA-CO-WORKTREE/P3",
+      "link": ""
+    },
+    {
+      "id": "P4",
+      "worktree": "/CHUA-CO-WORKTREE/P4",
+      "link": ""
+    }
+  ],
+  "hang": [
+    {
+      "ma": "K2",
+      "slug": "soan-okr-trang-rieng",
+      "day": "P1",
+      "uu_tien": 1,
+      "ranh_gioi": [
+        "apps/app/app/(app)/[slug]/okr/soan/**",
+        "apps/app/lib/okr-soan-record.ts",
+        "apps/app/lib/messages/okr-soan.ts",
+        "apps/app/app/proto/_modules/soan-okr-trang-rieng/**",
+        "apps/app/test/soan-okr*",
+        "apps/app/test/khung-soan-okr.tsx",
+        "apps/api/src/okr/soan*.ts",
+        "packages/validation/src/okr-cuoc-soan.ts",
+        "packages/validation/src/okr-phien-soan.ts",
+        "packages/validation/src/okr-kiem-ban-nhap.ts",
+        "packages/ui/src/components/kara/artifact.tsx",
+        "packages/ui/src/components/kara/busy.tsx",
+        "packages/ui/src/components/kara/proposal.tsx",
+        "_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs",
+        "_acceptance/soan-okr-trang-rieng/**"
+      ],
+      "chung_chi_them": [
+        "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx",
+        "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx",
+        "apps/app/app/proto/registry.ts",
+        "apps/app/app/proto/catalog.ts"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "K3",
+      "slug": "kara-gop-y-luot-2",
+      "day": "P1",
+      "uu_tien": 2,
+      "sau": [
+        "K2"
+      ],
+      "ranh_gioi": [
+        "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts",
+        "apps/app/app/(app)/[slug]/okr/chip-gop-y.tsx",
+        "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx",
+        "apps/app/app/(app)/[slug]/okr/dong-dan-gop-y.tsx",
+        "apps/app/app/(app)/[slug]/okr/the-gop-y-props.ts",
+        "apps/app/app/(app)/[slug]/okr/diem-cam.ts",
+        "apps/app/app/(app)/[slug]/okr/bang-kr.tsx",
+        "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx",
+        "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx",
+        "apps/app/app/(app)/[slug]/okr/cua-toi.tsx",
+        "apps/app/app/(app)/[slug]/okr/bang-vet.tsx",
+        "apps/app/app/(app)/[slug]/okr/bang-muc-tieu.tsx",
+        "apps/app/components/crm/record-sheet/objective-sheet.tsx",
+        "apps/app/components/crm/record-sheet/kr-sheet.tsx",
+        "apps/app/lib/messages/okr-gop-y.ts",
+        "apps/app/lib/messages/tro-ly-okr.ts",
+        "apps/api/src/okr/dem-gop-y.ts",
+        "apps/api/src/okr/tro-ly.service.ts",
+        "apps/api/src/okr/tro-ly-so-do.ts",
+        "packages/validation/src/okr-tro-ly.ts",
+        "packages/validation/src/okr-ca-gop-y.ts",
+        "packages/db/src/okr-tro-ly-danh-muc.ts",
+        "packages/ui/src/components/proposed-change.tsx",
+        "apps/app/test/gop-y-dung-cho*",
+        "apps/app/test/khung-gop-y*",
+        "apps/app/test/the-gop-y-okr.dom.tsx",
+        "apps/app/test/hop-thoai-kr-sau-thu.dom.tsx",
+        "apps/app/test/okr-sheet.dom.tsx",
+        "_acceptance/kara-gop-y-luot-2/**"
+      ],
+      "chung_chi_them": [
+        "apps/api/src/okr/okr-config.ts",
+        "packages/ui/src/components/kara/transcript.tsx",
+        "packages/ui/src/components/kara/steps.tsx"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "K6a",
+      "slug": "kara-mot-ten",
+      "day": "P1",
+      "uu_tien": 3,
+      "sau": [
+        "K2",
+        "K3",
+        "K4",
+        "K6b"
+      ],
+      "ranh_gioi": [
+        "apps/app/lib/messages/*.ts",
+        "packages/ui/src/lib/messages.ts",
+        "apps/app/test/messages-guard.spec.ts",
+        "packages/validation/src/tai-lieu-hoi.ts",
+        "_acceptance/kara-mot-ten/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
+      "ma": "K4",
+      "slug": "khung-ban-ghi-kara",
+      "day": "P2",
+      "uu_tien": 1,
+      "ranh_gioi": [
+        "apps/app/components/crm/agent-panel.tsx",
+        "apps/app/components/crm/agent-conversations.tsx",
+        "apps/app/components/crm/facts.tsx",
+        "apps/app/components/crm/social-links.tsx",
+        "apps/app/components/crm/enrichment-actions.tsx",
+        "apps/app/components/crm/enrichment-status.tsx",
+        "apps/app/components/agent-clarification-composer.tsx",
+        "apps/app/components/agent-session-limit-composer.tsx",
+        "apps/app/components/agent-composer-frame.ts",
+        "apps/app/components/crm/record-sheet/contact-sheet.tsx",
+        "apps/app/components/crm/record-sheet/company-sheet.tsx",
+        "apps/app/components/crm/record-sheet/company-plans.tsx",
+        "apps/app/components/crm/record-sheet/quick-add.tsx",
+        "apps/app/components/crm/record-sheet/record-parts.tsx",
+        "apps/app/components/crm/record-sheet/record-sheet-host.tsx",
+        "apps/app/lib/agent-record.ts",
+        "apps/app/lib/contact-facts.ts",
+        "apps/app/lib/pending-field.ts",
+        "apps/app/lib/messages/record-sheet.ts",
+        "apps/app/lib/messages/kara-ban-ghi.ts",
+        "packages/ui/src/components/status-indicator.tsx",
+        "packages/ui/src/components/sheet.tsx",
+        "packages/ui/src/components/kara/ban-ghi.tsx",
+        "apps/app/test/ngan-ban-ghi-giu.dom.tsx",
+        "_acceptance/khung-ban-ghi-kara/**"
+      ],
+      "chung_chi_them": [
+        "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "K6b",
+      "slug": "kara-trang-thai-toan-crm",
+      "day": "P2",
+      "uu_tien": 2,
+      "sau": [
+        "K4"
+      ],
+      "ranh_gioi": [
+        "apps/app/components/crm/timeline/**",
+        "apps/app/components/crm/website-activity.tsx",
+        "apps/app/components/crm/bulk-actions.tsx",
+        "apps/app/components/crm/record-sheet/record-actions.tsx",
+        "apps/app/components/crm/record-sheet/contact-plans.tsx",
+        "packages/ui/src/components/archived-list.tsx",
+        "apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx",
+        "apps/app/app/(app)/[slug]/okr/hop-tuan.tsx",
+        "apps/app/app/(app)/[slug]/okr/cap-nhat-tuan/**",
+        "apps/app/lib/messages/okr-toan-canh.ts",
+        "apps/app/test/okr-cap-nhat-tuan.dom.tsx",
+        "apps/app/test/tro-ly-okr-tom-tat.dom.tsx",
+        "apps/app/test/giai-doan-timeline.dom.tsx",
+        "_acceptance/kara-trang-thai-toan-crm/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
+      "ma": "E7",
+      "slug": "datatable-loc-ro",
+      "day": "P3",
+      "uu_tien": 1,
+      "ranh_gioi": [
+        "packages/ui/src/components/data-table.tsx",
+        "packages/ui/test/data-table-locale.spec.tsx",
+        "packages/ui/test/render-diff.spec.tsx",
+        "packages/ui/test/lai-ra-man.spec.tsx",
+        "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx",
+        "apps/app/app/(app)/[slug]/companies/companies-table.tsx",
+        "apps/app/app/(app)/[slug]/deals/deals-table.tsx",
+        "apps/app/app/(app)/[slug]/settings/members/members-table.tsx",
+        "apps/app/components/crm/fields/field-facets.tsx",
+        "_acceptance/datatable-loc-ro/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
+      "ma": "E3",
+      "slug": "danh-sach-keo-chung",
+      "day": "P3",
+      "uu_tien": 2,
+      "sau": [
+        "E7"
+      ],
+      "ranh_gioi": [
+        "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx",
+        "apps/app/app/(app)/[slug]/settings/organization/danh-sach-keo.tsx",
+        "apps/app/app/(app)/[slug]/settings/organization/chi-tiet-goc.tsx",
+        "apps/app/app/(app)/[slug]/settings/organization/chi-tiet-bo-phan.tsx",
+        "apps/app/test/giai-doan-cai-dat.dom.tsx",
+        "apps/app/test/keo-tha-khong-lap-chu.dom.tsx",
+        "apps/app/test/nguon-keo-tha-chu.dom.tsx",
+        "packages/ui/src/components/sortable-list.tsx",
+        "_acceptance/danh-sach-keo-chung/**"
+      ],
+      "chung_chi_them": [
+        "apps/app/lib/messages/settings.ts"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "E1",
+      "slug": "deal-va",
+      "day": "P3",
+      "uu_tien": 3,
+      "sau": [
+        "E3"
+      ],
+      "ranh_gioi": [
+        "apps/api/src/telemetry/rollup.service.ts",
+        "packages/telemetry/src/allowlist.ts",
+        "packages/telemetry/test/allowlist.spec.ts",
+        "docs/telemetry.md",
+        "apps/api/test/giai-doan-bao-cao.spec.ts",
+        "apps/agent/agent/lib/lookup.ts",
+        "apps/app/components/agent-builder/deal-list-result.tsx",
+        "apps/app/test/agent-results.spec.ts",
+        "_acceptance/deal-va/**"
+      ],
+      "chung_chi_them": [
+        "apps/app/lib/agent-transcript.ts"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "E4",
+      "slug": "giai-doan-mac-dinh",
+      "day": "P3",
+      "uu_tien": 4,
+      "sau": [
+        "E1"
+      ],
+      "ranh_gioi": [
+        "packages/db/prisma/seed.ts",
+        "apps/api/test/giai-doan.spec.ts",
+        "apps/api/src/deals/deals.service.ts",
+        "_acceptance/giai-doan-mac-dinh/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    },
+    {
+      "ma": "E6",
+      "slug": "dieu-phoi-va",
+      "day": "P3",
+      "uu_tien": 5,
+      "sau": [
+        "E4"
+      ],
+      "ranh_gioi": [
+        "apps/api/src/agent/agent-trigger.service.ts",
+        "apps/agent/agent/lib/dispatch.ts",
+        "apps/app/components/crm/record-sheet/plan-steps.tsx",
+        "apps/api/src/onboarding/onboarding-ghi.ts",
+        "apps/api/src/onboarding/onboarding.contracts.ts",
+        "apps/api/src/dashboard/dashboard.service.ts",
+        "apps/api/src/dashboard/dashboard.contracts.ts",
+        "apps/app/app/(app)/[slug]/dashboard-summary.tsx",
+        "_acceptance/dieu-phoi-va/**"
+      ],
+      "chung_chi_them": [
+        "packages/db/src/agent-tasks.ts",
+        "apps/app/lib/messages/onboarding.ts",
+        "apps/app/lib/messages/tong-quan.ts"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "E5",
+      "slug": "tac-nhan-va",
+      "day": "P3",
+      "uu_tien": 6,
+      "sau": [
+        "E6"
+      ],
+      "ranh_gioi": [
+        "apps/app/components/agent-builder/team-agent-detail.tsx",
+        "apps/app/components/agent-builder/team-agents-index.tsx",
+        "apps/app/components/agent-builder/agent-runs-drawer.tsx",
+        "apps/app/components/agent-builder/agent-capabilities.tsx",
+        "apps/app/components/agent-builder/agent-builder-shell.tsx",
+        "apps/app/components/agent-builder/builder-question-composer.tsx",
+        "apps/app/components/agent-builder/builder-failure-card.tsx",
+        "apps/app/app/(app)/[slug]/(agent-builder)/**",
+        "apps/agent/agent/lib/builder-input.ts",
+        "apps/agent/agent/lib/dispatch-config.ts",
+        "apps/agent/agent/lib/builder-runtime.ts",
+        "apps/agent/agent/lib/builder-delivery.ts",
+        "apps/agent/test/cau-hoi-het-han-muc.integration.spec.ts",
+        "_acceptance/tac-nhan-va/**"
+      ],
+      "chung_chi_them": [
+        "apps/app/lib/messages/agent-builder-tac-nhan.ts",
+        "apps/app/lib/messages/agent-builder-khung.ts"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "F8",
+      "slug": "neo-thuoc-het-han",
+      "day": "P4",
+      "uu_tien": 9,
+      "ranh_gioi": [
+        "_acceptance/so-okr-tu-chay/**",
+        "_acceptance/cap-nhat-tuan-okr/**",
+        "_acceptance/lam-moi-chuyen-viec-qua-loi-chung/**",
+        "_acceptance/neo-thuoc-het-han/**"
+      ],
+      "chung_chi_them": [],
+      "s4": "local"
+    }
+  ],
+  "ngoai_hang_merge": []
+}
