@@ -24,6 +24,7 @@ evals:
       PASS khi cả hai chỉ dẫn không còn câu đòi khuôn kết quả hay tool thứ hai, cả hai nói nộp
       xong trả lời «done», và khi thiếu khối dữ liệu thì không còn câu nào bảo nộp danh sách rỗng;
       FAIL nêu tệp và câu còn sót.
+    paths: [apps/agent/agent/subagents/tro_ly_okr/instructions.md, apps/agent/agent/lib/okr/chi-dan-tom-tat.ts]
 
   - id: E3
     criterion: AC-2
@@ -81,6 +82,7 @@ evals:
     inputs: [docs/agent.md, _acceptance/tro-ly-okr-bo-final-output/contract.md]
     expected: >-
       PASS khi đoạn nói đủ ba ý; FAIL nêu ý còn thiếu hoặc câu còn khẳng định sai.
+    paths: [docs/agent.md, _acceptance/tro-ly-okr-bo-final-output/contract.md]
 
   - id: E10
     criterion: AC-9
