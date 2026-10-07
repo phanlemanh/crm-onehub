@@ -29,7 +29,7 @@ export const TEN = {
 	m2: "Mở kênh đại lý miền Trung",
 	k11: "Tỷ lệ đối tác gia hạn hợp đồng",
 	k12: "Số khiếu nại giao hàng",
-	k13: "Khảo sát đối tác xong",
+	k13: "Số đối tác được khảo sát",
 	k21: "Số đại lý mới ký",
 	k22: "Tăng số đại lý gắn bó",
 	k23: "Số đơn qua đại lý",
@@ -38,7 +38,7 @@ export const TEN = {
 const K = {
 	k11: kr("k11", TEN.k11, "tang-toi", "%"),
 	k12: kr("k12", TEN.k12, "giam-xuong", "vụ"),
-	k13: kr("k13", TEN.k13, "moc", "mốc"),
+	k13: kr("k13", TEN.k13, "tang-toi", "đối tác"),
 	k21: kr("k21", TEN.k21, "tang-toi", "đại lý"),
 	k22: kr("k22", TEN.k22, "giu-tren", "%"),
 	k23: kr("k23", TEN.k23, "tang-toi", "đơn"),

@@ -38,6 +38,25 @@ import {
 	urlDoi,
 } from "./khung-soan-okr";
 
+type PropsO = {
+	defaultSize?: number | string;
+	minSize?: number | string;
+	maxSize?: number | string;
+};
+type Soi = { memoizedProps?: PropsO; return?: Soi | null };
+
+function propsDaDung(o: Element | null): PropsO | null {
+	const khoa = o && Object.keys(o).find((k) => k.startsWith("__reactFiber$"));
+	let soi: Soi | null | undefined = khoa
+		? (o as unknown as Record<string, Soi>)[khoa]
+		: null;
+	while (soi) {
+		if (soi.memoizedProps?.defaultSize !== undefined) return soi.memoizedProps;
+		soi = soi.return;
+	}
+	return null;
+}
+
 const q = (s: string) => document.querySelector(s);
 const qa = (s: string) => [...document.querySelectorAll(s)];
 
@@ -174,7 +193,19 @@ describe("k2-khung", () => {
 		{ rong: 375, hep: true },
 	] as const;
 
-	test("hằng cỡ ô hội thoại theo SOAN_UI: 380 px mặc định, 300 px tối thiểu, tối đa nửa thân", () => {
+	test("ô hội thoại đã dựng mang cỡ theo SOAN_UI: 380 px mặc định, 300 px tối thiểu, tối đa nửa thân", async () => {
+		const tra = beRong(1440);
+		try {
+			await moTrang();
+			const o = propsDaDung(
+				q('[data-slot="resizable-panel"][data-o="hoi-thoai"]'),
+			);
+			expect(
+				`co o hoi thoai: ${o?.defaultSize}/${o?.minSize}/${o?.maxSize}`,
+			).toBe("co o hoi thoai: 380/300/50");
+		} finally {
+			tra();
+		}
 		expect(KhungSoanXuat.CO_O_HOI_THOAI).toEqual({
 			defaultSize: SOAN_UI.ocHoiThoai.macDinhPx,
 			minSize: SOAN_UI.ocHoiThoai.toiThieuPx,
@@ -294,11 +325,36 @@ describe("k2-trang-thai", () => {
 				).toBe("rong khi dang soan: false");
 				expect(than?.textContent).toContain(m.dong.dangSoanDau);
 			} else if (ca === "co-nhap") {
-				await datBanNhap(BAN_NHAP);
+				await datBanNhap([
+					...BAN_NHAP,
+					kr("15", "1", "Khách lớn mua thêm dịch vụ"),
+					kr("16", "1", "Khách lớn gia hạn trước hạn"),
+				]);
 				await moTrang();
+				await datAgent({
+					status: "ready",
+					data: {
+						messages: [
+							{
+								...nop("n-gio", banNhap.parse(NOP_1)),
+								metadata: { turnId: "luot-gio" },
+							},
+						],
+					},
+					events: [
+						{
+							type: "turn.started",
+							meta: { id: "e-gio", at: "2026-10-01T03:42:00.000Z" },
+							data: { sequence: 1, turnId: "luot-gio" },
+						},
+					] as never,
+				});
+				await nhip(5);
 				const dau = q('[data-slot="kara-artifact-header"]');
 				expect(dau?.textContent).toContain(m.dong.tieuDe);
-				expect(dau?.textContent).toContain(m.man.soDong("7"));
+				expect(`dong phu: ${dau?.textContent}`).toContain(
+					m.dong.meta("9", "10:42"),
+				);
 			} else {
 				datDanhSach({ cuoc: { ...CUOC, trangThai: "bo" }, dong: BAN_NHAP });
 				await moTrang();

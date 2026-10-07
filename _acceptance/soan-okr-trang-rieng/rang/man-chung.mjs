@@ -32,7 +32,7 @@ const PHUT_MS = 60 * GIAY_MS;
 export const MAN = {
 	chrome: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
 	kho: {
-		1440: { rong: 1440, cao: 900 },
+		1440: { rong: 1440, cao: 1000 },
 		1024: { rong: 1024, cao: 800 },
 		768: { rong: 768, cao: 1024 },
 		375: { rong: 375, cao: 812 },
@@ -342,6 +342,26 @@ export async function choBienNhan(p, ten) {
 		MAN.cho.manMs,
 		ten,
 	);
+}
+
+export async function anh(t, ten, doDo) {
+	const tep = join(doDo ? the.ra : BANG.evidence, `${ten}.png`);
+	mkdirSync(doDo ? the.ra : BANG.evidence, { recursive: true });
+	await t.p.screenshot({ path: tep });
+	ghi(`   ANH ${tep.slice(GOC.length + 1)}`);
+}
+
+export async function oCuonTrong(p, chon) {
+	return p.evaluate((chon) => {
+		const goc = document.querySelector(chon);
+		if (!goc) return null;
+		const o = [goc, ...goc.querySelectorAll("*")].find(
+			(x) => x.checkVisibility() && ["auto", "scroll"].includes(getComputedStyle(x).overflowY) && x.scrollHeight > x.clientHeight,
+		);
+		if (!o) return null;
+		const r = o.getBoundingClientRect();
+		return { x: r.left + r.width / 2, y: r.top + r.height / 2, top: o.scrollTop, cao: o.scrollHeight - o.clientHeight };
+	}, chon);
 }
 
 export async function tranVaCuon(p) {

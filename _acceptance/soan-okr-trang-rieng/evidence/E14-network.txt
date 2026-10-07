@@ -1,0 +1,5 @@
+E14 network truth
+driver: bun/puppeteer script (man.mjs --phan ma-tran) via mot-luot.sh -> tien-de.mjs phien do rieng; khong co browser tool doc network
+networkObserved: n-a (driver)
+console (pageerror + console.error) duoc script gom: 0 loi tren ca luot ("KET LUAN: 0 SAI — ma thoat 0")
+phien do: app http://localhost:4166, api http://localhost:4716 (cong tu do, tu dong tat khi xong; khong phai dev_server.url 3000)

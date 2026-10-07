@@ -1,0 +1,1 @@
+driver: puppeteer qua man.mjs (khong co read_network_requests). Console loi do man.mjs dem: 0 (DUNG console khong loi (0)). networkObserved: n-a (driver)

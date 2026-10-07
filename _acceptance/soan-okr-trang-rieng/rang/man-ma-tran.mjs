@@ -49,21 +49,23 @@ function anhE15() {
 
 const coChu = (chon, chu) => ({ chon, chu });
 
-function trangThai(cuoc, bad) {
+const TAB = ["tro-chuyen", "ban-nhap"];
+
+function trangThai(bad) {
 	return {
 		"ST-soan-dang-mo": { tab: null, khoa: true, dau: coChu('[data-trang-soan="dang-mo"] [data-kara-state="working"]', m.man.dangMo) },
-		"ST-soan-mo-dau": { tab: "ban-nhap", dau: coChu(CHON.oBanNhap, m.dong.dangSoanDau) },
+		"ST-soan-mo-dau": { tab: "tro-chuyen", dau: coChu('[data-kara-turn="kara"] [data-kara-state="working"]', m.hoiThoai.moDau) },
 		"ST-soan-co-nhap": { tab: "ban-nhap", dau: coChu('[data-slot="kara-artifact-header"]', "dòng") },
-		"ST-soan-dang-soan": { tab: "ban-nhap", dau: coChu(CHON.oBanNhap, mui.karaKhung.dangSoanKhoa) },
-		"ST-soan-moc": { tab: "tro-chuyen", dau: coChu('[data-kara-turn="checkpoint"]', "") },
-		"ST-soan-hoi-dong": { tab: "ban-nhap", hoi: true, dau: coChu(CHON.chip, TEN.k22) },
+		"ST-soan-dang-soan": { tab: "ban-nhap", choMs: 5000, dau: coChu('[data-slot="kara-artifact-header"] [role="status"]', mui.karaKhung.dangSoanKhoa) },
+		"ST-soan-moc": { tabMo: "tro-chuyen", tab: "ban-nhap", moc: true, dau: coChu("fieldset[data-noi]", TEN.m1Sua) },
+		"ST-soan-hoi-dong": { tabMo: "ban-nhap", tab: "tro-chuyen", hoi: true, dau: coChu(CHON.chip, TEN.k22) },
 		"ST-soan-loi": { tab: "tro-chuyen", hong: true, dau: coChu('[data-luot="loi"]', m.hoiThoai.loi) },
 		"ST-soan-da-quyet": { tab: "ban-nhap", dau: coChu('[data-slot="proposed-change-receipt"]', m.dong.daThem) },
 		"ST-soan-con-thieu": { tab: "ban-nhap", dau: coChu("[data-con-thieu]", m.dong.conThieu) },
 		"ST-soan-het-luot": { tab: "tro-chuyen", dau: coChu('[data-slot="kara-composer"]', m.hoiThoai.hetLuot("12")) },
 		"ST-soan-hep": { tab: "ban-nhap", dau: coChu(CHON.oBanNhap, TEN.m2) },
 		"ST-soan-da-dua-vao": { tab: "ban-nhap", dau: coChu("[data-da-dua-vao]", m.banNhap.daTao("1")) },
-		"ST-soan-khong-mo": { tab: null, id: bad, dau: coChu('[data-kara-state="error"]', m.trang.khongMo) },
+		"ST-soan-khong-mo": { tab: null, id: bad, dau: coChu('[data-kara-state="error"] [data-slot="empty-title"]', mui.karaKhung.chuaDuoc(m.trang.khongMo)) },
 	};
 }
 
@@ -78,7 +80,8 @@ async function mot(st, id, cuoc, rong, nen, doDo, dem) {
 	const t = await trang(MAN.kho[rong], nen);
 	try {
 		const nha = st.khoa ? await khoaBangCuoc() : null;
-		const thamSo = st.tab && rong < 1024 ? `?tab=${st.tab}` : "";
+		const tabMo = st.tabMo ?? st.tab;
+		const thamSo = tabMo && rong < 1024 ? `?tab=${tabMo}` : "";
 		const som = doDo === "chup-som" && id === "ST-soan-co-nhap" && dem.som === 0;
 		if (som) {
 			dem.som += 1;
@@ -86,7 +89,7 @@ async function mot(st, id, cuoc, rong, nen, doDo, dem) {
 			await t.p.waitForSelector("body", { timeout: 30000 });
 		} else if (st.khoa) {
 			void t.p.goto(duongSoan(cuoc.id)).catch(() => {});
-			await choThay(t.p, (d) => [...document.querySelectorAll(d.chon)].some((o) => o.checkVisibility() && (o.textContent ?? "").includes(d.chu)), `${id} hien`, 30000, st.dau);
+			await choThay(t.p, (d) => [...document.querySelectorAll(d.chon)].some((o) => o.checkVisibility() && (o.textContent ?? "").includes(d.chu)), `${id} hien`, st.choMs ?? 30000, st.dau);
 		} else {
 			await moTrang(t, st.id ?? cuoc.id, thamSo);
 			if (st.hong) {
@@ -98,12 +101,23 @@ async function mot(st, id, cuoc, rong, nen, doDo, dem) {
 				);
 				await guiTin(t, LENH.hong, { choXong: false, choToi: false });
 			}
+			if (st.moc) {
+				await choThay(t.p, (chon) => [...document.querySelectorAll(chon)].filter((b) => b.checkVisibility()).length === 2, "hai moc", 30000, CHON.moc);
+				await t.p.evaluate((chon) => [...document.querySelectorAll(chon)].filter((b) => b.checkVisibility())[1]?.click(), CHON.moc);
+			}
 			if (st.hoi) {
 				await choThay(t.p, (ten) => [...document.querySelectorAll("[data-dong]")].some((d) => d.checkVisibility() && d.textContent?.includes(ten)), "dong hoi", 30000, TEN.k22);
 				await tre(MAN.cho.yenMs);
 				await bamTrongDong(t.p, TEN.k22, m.dong.hoiKara);
 			}
-			await choThay(t.p, (d) => [...document.querySelectorAll(d.chon)].some((o) => o.checkVisibility() && (o.textContent ?? "").includes(d.chu)), `${id} hien`, 30000, st.dau);
+			await choThay(t.p, (d) => [...document.querySelectorAll(d.chon)].some((o) => o.checkVisibility() && (o.textContent ?? "").includes(d.chu)), `${id} hien`, st.choMs ?? 30000, st.dau);
+		}
+		if (st.tab && rong < 1024) {
+			await choThay(t.p, () => [...document.querySelectorAll('[data-khung="hep"] [role="tab"]')].some((x) => x.checkVisibility() && x.getAttribute("aria-selected") === "true"), `${id} thanh tab`, 5000);
+			const dangChon = await t.p.evaluate(() =>
+				[...document.querySelectorAll('[data-khung="hep"] [role="tab"]')].findIndex((x) => x.getAttribute("aria-selected") === "true"),
+			);
+			if (TAB[dangChon] !== st.tab) kiem(`sai tab: ${id} ${rong} ${nen} (dang chon ${TAB[dangChon] ?? "khong co"}, can ${st.tab})`, false);
 		}
 		if (doDo === "tran" && dem.tran === 0) {
 			dem.tran += 1;
@@ -115,7 +129,11 @@ async function mot(st, id, cuoc, rong, nen, doDo, dem) {
 		}
 		await tre(MAN.cho.yenMs);
 		const thay = await coDau(t.p, st.dau);
-		if (!thay) kiem(`${id} ${rong} ${nen}: thieu chu ban «${st.dau.chu}» o ${st.dau.chon}`, false);
+		if (!thay) {
+			kiem(`${id} ${rong} ${nen}: thieu chu ban «${st.dau.chu}» o ${st.dau.chon}`, false);
+			const dang = await t.p.evaluate(() => `${location.pathname}${location.search} · ${(document.body.innerText ?? "").replace(/\s+/g, " ").slice(0, 200)}`);
+			ghi(`      dang hien: ${dang}`);
+		}
 		const c = await tranVaCuon(t.p);
 		if (c.sw > c.cw) kiem(`${id} ${rong} ${nen}: tran ngang (${c.sw}/${c.cw})`, false);
 		if (c.sh > c.ch + 1) kiem(`${id} ${rong} ${nen}: trang cuon (${c.sh}/${c.ch})`, false);
@@ -183,9 +201,12 @@ export async function phanMaTran({ doDo, nop1 }) {
 	if (!ids?.length) await khongDo("khong doc duoc bang UX-STATE-TABLE cua thiet ke");
 	mkdirSync(BANG.evidence, { recursive: true });
 	const cuoc = await moCuoc();
-	const st = trangThai(cuoc, "khong-co-cuoc-nay");
+	const st = trangThai("khong-co-cuoc-nay");
 	const thieuCa = ids.filter((id) => !st[id]);
-	if (thieuCa.length > 0) await khongDo(`trang thai chua co cach dung: ${thieuCa.join(", ")}`);
+	if (thieuCa.length > 0) {
+		for (const id of thieuCa) kiem(`thieu trang thai: ${id}`, false);
+		await ket(1);
+	}
 	const dem = { anh: 0, som: 0, tran: 0 };
 	const t = await trang(MAN.kho[1440]);
 	const chup = (id) => chupTrangThai(id, st[id], cuoc, doDo, dem);
@@ -212,6 +233,27 @@ export async function phanMaTran({ doDo, nop1 }) {
 		await chup("ST-soan-loi");
 		await moTrang(t, cuoc.id);
 		await choYen(t.p);
+		const go = async (ten, o, chu) => {
+			const h = await t.p.evaluateHandle(
+				(ten, o) =>
+					[...document.querySelectorAll("[data-dong]")]
+						.find((d) => d.checkVisibility() && d.textContent?.includes(ten))
+						?.closest("[data-the-kr]")
+						?.querySelector(`input[id^="${o}-"]`) ?? null,
+				ten,
+				o,
+			);
+			const o2 = h.asElement();
+			if (!o2) await khongDo(`khong thay o ${o} cua ${ten}`);
+			await o2.click({ clickCount: 3 });
+			await t.p.keyboard.type(chu);
+			await t.p.keyboard.press("Tab");
+		};
+		await go(TEN.k11, "khoi", "10");
+		await go(TEN.k11, "dich", "20");
+		await go(TEN.k12, "khoi", "50");
+		await go(TEN.k12, "dich", "30");
+		await tre(MAN.cho.yenMs);
 		for (const [ten, nhan] of [
 			[TEN.m1Sua, m.dong.themMucTieu],
 			[TEN.k11, m.dong.themKr],
@@ -221,6 +263,8 @@ export async function phanMaTran({ doDo, nop1 }) {
 			await choBienNhan(t.p, ten);
 		}
 		await chup("ST-soan-da-quyet");
+		if (!(await bamTrongDong(t.p, TEN.k22, m.dong.themKr))) await khongDo(`khong nhan duoc ${TEN.k22}`);
+		await choBienNhan(t.p, TEN.k22);
 		await chup("ST-soan-con-thieu");
 		const [{ soLuot }] = await sql(`SELECT "soLuot" FROM "okrCuocSoan" WHERE id = $1`, [cuoc.id]);
 		await datLuot(cuoc.id, 12);
@@ -229,20 +273,8 @@ export async function phanMaTran({ doDo, nop1 }) {
 		await chup("ST-soan-hep");
 		await moTrang(t, cuoc.id);
 		await choYen(t.p);
-		const go = async (ten, o, chu) => {
-			const h = await t.p.evaluateHandle(
-				(ten, o) => [...document.querySelectorAll("[data-dong]")].find((d) => d.textContent?.includes(ten))?.closest("[data-the-kr]")?.querySelector(`input[id^="${o}-"]`) ?? null,
-				ten,
-				o,
-			);
-			await h.asElement()?.click({ clickCount: 3 });
-			await t.p.keyboard.type(chu);
-			await t.p.keyboard.press("Tab");
-		};
-		await go(TEN.k11, "khoi", "10");
-		await go(TEN.k11, "dich", "20");
-		await go(TEN.k12, "khoi", "50");
-		await go(TEN.k12, "dich", "30");
+		await go(TEN.k22, "khoi", "60");
+		await go(TEN.k22, "dich", "80");
 		await tre(MAN.cho.yenMs);
 		await t.p.click('[data-nut="dua-vao"]');
 		await choThay(t.p, () => !!document.querySelector('[role="alertdialog"]'), "hop xac nhan", 10000);

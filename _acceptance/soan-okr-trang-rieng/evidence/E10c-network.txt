@@ -1,0 +1,1 @@
+E10c network: driver = puppeteer-core script (man.mjs), khong co read_network_requests -> n-a (driver). Console loi do script gom: 0 (dong "DUNG console khong loi (0)").

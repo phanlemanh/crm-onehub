@@ -1,7 +1,8 @@
 import { SOAN_UI } from "../../../apps/app/app/(app)/[slug]/okr/soan/cau-hinh.ts";
 import { tre } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
-import { LENH, TEN } from "./kich-ban.mjs";
+import { DEM, LENH, TEN } from "./kich-ban.mjs";
 import {
+	anh,
 	bamTrongDong,
 	buoc,
 	CHON,
@@ -133,82 +134,140 @@ export async function phanSo({ doDo, nop1 }) {
 	}
 }
 
+const SO_DU = {
+	[TEN.k11]: ["10", "20"],
+	[TEN.k12]: ["50", "30"],
+	[TEN.k21]: ["5", "15"],
+	[TEN.k22]: ["60", "80"],
+};
+const KR_LE = { ten: TEN.k13, khoi: "2", dich: "4" };
+
+async function demBang(p) {
+	return p.evaluate(() => ({
+		nhan: document.querySelectorAll('[data-slot="proposed-change-receipt"]').length,
+		cho: document.querySelectorAll("[data-the-cho]").length,
+		thieu: document.querySelectorAll("[data-con-thieu] [data-thieu]").length,
+	}));
+}
+
+async function inDem(p, nhan) {
+	const d = await demBang(p);
+	ghi(`   ${nhan}: nhan ${d.nhan} · cho ${d.cho} · con thieu ${d.thieu}`);
+}
+
+async function bamNhom(p, tenMt) {
+	const ok = await p.evaluate((ten) => {
+		const nhom = [...document.querySelectorAll('[data-slot="kara-proposal-group"]')].find((g) => g.checkVisibility() && g.textContent?.includes(ten));
+		const nut = nhom?.querySelector('[data-slot="kara-batch"]');
+		if (!nut || nut.disabled) return false;
+		nut.click();
+		return true;
+	}, tenMt);
+	if (ok) await tre(MAN.cho.yenMs);
+	return ok;
+}
+
+async function demCsdl(cuoc) {
+	const [{ mt }] = await sql(`SELECT count(*)::int AS mt FROM "okrObjective" WHERE "cycleId" = $1 AND "departmentId" = $2`, [cuoc.cycleId, cuoc.departmentId]);
+	const [{ kr }] = await sql(
+		`SELECT count(*)::int AS kr FROM "okrKeyResult" k JOIN "okrObjective" o ON o.id = k."objectiveId" WHERE o."cycleId" = $1 AND o."departmentId" = $2`,
+		[cuoc.cycleId, cuoc.departmentId],
+	);
+	return { mt, kr };
+}
+
 export async function phanDuaVao({ doDo, nop1 }) {
 	const cuoc = await moCuoc();
 	const t = await trang({ rong: 1440, cao: 900 });
-	const canMt = doDo === "dem-sai" ? 2 : 1;
-	const canKr = 3;
+	const canMt = DEM.nop1.mucTieu + (doDo === "dem-sai" ? 1 : 0);
+	const canKr = DEM.nop1.kr;
 	try {
 		if (!(await mo(t, cuoc.id)) || !(await nop1(t))) await khongDo("khong dung duoc ban nhap dau");
-		for (const [ten, nhan] of [
-			[TEN.m1, m.dong.themMucTieu],
-			[TEN.k11, m.dong.themKr],
-			[TEN.k12, m.dong.themKr],
-			[TEN.k13, m.dong.themKr],
-			[TEN.m2, m.dong.boQua],
-		]) {
-			if (!(await bamTrongDong(t.p, ten, nhan))) await khongDo(`khong bam duoc «${nhan}» tren «${ten}»`);
-			await choBienNhan(t.p, ten);
+		await inDem(t.p, "sau ban nhap dau");
+		for (const [ten, [khoi, dich]] of Object.entries(SO_DU)) {
+			if (!(await goSo(t.p, ten, "khoi", khoi)) || !(await goSo(t.p, ten, "dich", dich))) await khongDo(`khong go duoc so cho ${ten}`);
 		}
-		await goSo(t.p, TEN.k11, "khoi", "10");
-		await goSo(t.p, TEN.k11, "dich", "20");
-		await goSo(t.p, TEN.k12, "khoi", "50");
+		if (!(await goSo(t.p, KR_LE.ten, "khoi", KR_LE.khoi))) await khongDo(`khong go duoc Khoi diem cho ${KR_LE.ten}`);
+		await inDem(t.p, "sau khi go so");
+		for (const ten of [TEN.m1, TEN.m2]) {
+			const soTruoc = (await demBang(t.p)).nhan;
+			if (!(await bamNhom(t.p, ten))) await khongDo(`khong bam duoc nut nhom cua ${ten}`);
+			await choThay(
+				t.p,
+				(n) => document.querySelectorAll('[data-slot="proposed-change-receipt"]').length > n,
+				`bien nhan nhom ${ten}`,
+				MAN.cho.manMs,
+				soTruoc,
+			);
+			await inDem(t.p, `sau nhom ${ten}`);
+		}
+		if (!(await bamTrongDong(t.p, KR_LE.ten, m.dong.themKr))) await khongDo(`khong nhan le duoc ${KR_LE.ten}`);
+		await choBienNhan(t.p, KR_LE.ten);
+		await inDem(t.p, "sau nhan le KR thu nam");
+		await choThay(t.p, () => !!document.querySelector("[data-con-thieu] [data-thieu]"), "con thieu", 15000);
 		const chan = await t.p.evaluate(() => ({
 			khoa: document.querySelector('[data-nut="dua-vao"]')?.disabled ?? null,
 			thieu: [...document.querySelectorAll("[data-con-thieu] [data-thieu]")].map((b) => ({ id: b.getAttribute("data-thieu"), chu: b.textContent?.trim(), nut: b.tagName })),
 		}));
 		ghi(`   chan: dua vao khoa ${chan.khoa} · con thieu ${JSON.stringify(chan.thieu)}`);
-		buoc(1, chan.khoa !== true ? "con thieu ma Dua vao khong khoa" : chan.thieu.length !== 1 || chan.thieu[0].chu !== TEN.k12 || chan.thieu[0].nut !== "BUTTON" ? "Con thieu khong liet dung KR thieu so" : null);
+		await anh(t, "E12b-con-thieu", doDo);
+		buoc(1, chan.khoa !== true ? "con thieu ma Dua vao khong khoa" : chan.thieu.length !== 1 || chan.thieu[0].chu !== KR_LE.ten || chan.thieu[0].nut !== "BUTTON" ? "Con thieu khong liet dung KR thu nam" : null);
 		await t.p.click(`[data-con-thieu] [data-thieu="${chan.thieu[0]?.id}"]`);
 		await tre(MAN.cho.yenMs);
 		const focus = await t.p.evaluate(() => document.activeElement?.id ?? "");
 		ghi(`   focus: ${focus}`);
-		buoc(2, focus === `dich-${chan.thieu[0]?.id}` ? null : "bam Con thieu khong dua focus toi o trong dau tien");
-		await t.p.keyboard.type("30");
+		buoc(2, focus === `dich-${chan.thieu[0]?.id}` ? null : "bam Con thieu khong dua focus toi o Dich cua KR do");
+		await t.p.keyboard.type(KR_LE.dich);
 		await t.p.keyboard.press("Tab");
 		await tre(MAN.cho.yenMs);
 		const nut = await t.p.evaluate(() => {
 			const b = document.querySelector('[data-nut="dua-vao"]');
 			return { khoa: b?.disabled, chu: b?.textContent?.trim() };
 		});
+		const truoc = await demCsdl(cuoc);
 		await t.p.click('[data-nut="dua-vao"]');
 		await choThay(t.p, () => !!document.querySelector('[role="alertdialog"]'), "hop xac nhan", 10000);
 		const hop = await t.p.evaluate(() => document.querySelector('[role="alertdialog"]')?.textContent ?? "");
 		ghi(`   nut «${nut.chu}» · hop «${hop.slice(0, 200)}»`);
-		buoc(3, nut.khoa || nut.chu !== m.banNhap.duaVao("1", String(canKr)) ? "nut Dua vao sai chu hay con khoa" : !hop.includes(cuoc.tenDonVi) || !hop.includes(cuoc.tenChuKy) ? "hop xac nhan thieu don vi hay chu ky" : null);
+		buoc(3, nut.khoa || nut.chu !== m.banNhap.duaVao(String(DEM.nop1.mucTieu), String(canKr)) ? "nut Dua vao sai chu hay con khoa" : !hop.includes(cuoc.tenDonVi) || !hop.includes(cuoc.tenChuKy) ? "hop xac nhan thieu don vi hay chu ky" : null);
 		await t.p.evaluate((nhan) => [...document.querySelectorAll('[role="alertdialog"] button')].find((b) => b.textContent?.trim() === nhan)?.click(), m.banNhap.xacNhan.nut);
 		await choThay(t.p, () => !!document.querySelector("[data-da-dua-vao]"), "da dua vao", 30000);
-		const [mt] = await sql(`SELECT count(*)::int AS n FROM "okrObjective" WHERE "cycleId" = $1 AND "departmentId" = $2 AND title = $3`, [cuoc.cycleId, cuoc.departmentId, TEN.m1]);
+		await anh(t, "E12b-da-dua-vao", doDo);
+		const sau = await demCsdl(cuoc);
+		const soMt = sau.mt - truoc.mt;
+		const soKr = sau.kr - truoc.kr;
 		const kr = await sql(
-			`SELECT k.title, k."startValue"::float AS s, k."targetValue"::float AS d FROM "okrKeyResult" k JOIN "okrObjective" o ON o.id = k."objectiveId" WHERE o."cycleId" = $1 AND o."departmentId" = $2 AND o.title = $3`,
-			[cuoc.cycleId, cuoc.departmentId, TEN.m1],
+			`SELECT k.title, k."startValue"::float AS s, k."targetValue"::float AS d FROM "okrKeyResult" k JOIN "okrObjective" o ON o.id = k."objectiveId" WHERE o."cycleId" = $1 AND o."departmentId" = $2 AND k.title = ANY($3)`,
+			[cuoc.cycleId, cuoc.departmentId, [...Object.keys(SO_DU), KR_LE.ten]],
 		);
 		const [c] = await sql(`SELECT "trangThai", "duaVaoLuc" FROM "okrCuocSoan" WHERE id = $1`, [cuoc.id]);
-		ghi(`   so muc tieu tao: ${mt.n} · so KR tao: ${kr.length} · ${kr.map((x) => `${x.title} ${x.s}→${x.d}`).join(" · ")} · cuoc ${c.trangThai} duaVaoLuc ${c.duaVaoLuc ? "co" : "rong"}`);
-		const dung11 = kr.some((x) => x.title === TEN.k11 && x.s === 10 && x.d === 20);
-		const dung12 = kr.some((x) => x.title === TEN.k12 && x.s === 50 && x.d === 30);
+		ghi(`   CSDL truoc ${truoc.mt} MT/${truoc.kr} KR · sau ${sau.mt}/${sau.kr} · tao ${soMt} Muc tieu, ${soKr} KR · cuoc ${c.trangThai} duaVaoLuc ${c.duaVaoLuc ? "co" : "rong"}`);
+		for (const x of kr) ghi(`   KR ${x.title}: ${x.s} → ${x.d}`);
+		const soDung = [...Object.entries(SO_DU), [KR_LE.ten, [KR_LE.khoi, KR_LE.dich]]].every(([ten, [khoi, dich]]) =>
+			kr.some((x) => x.title === ten && x.s === Number(khoi) && x.d === Number(dich)),
+		);
 		buoc(
 			4,
-			mt.n !== canMt
-				? `so muc tieu: ${mt.n} != ${canMt}`
-				: kr.length !== canKr
-					? `so kr: ${kr.length} != ${canKr}`
-					: !dung11 || !dung12
+			soMt !== canMt
+				? `so muc tieu: ${soMt} != ${canMt}`
+				: soKr !== canKr
+					? `so kr: ${soKr} != ${canKr}`
+					: !soDung
 						? "so cua KR trong co so du lieu khac so da go"
 						: c.trangThai !== "da-dua-vao" || !c.duaVaoLuc
 							? "cuoc chua thanh da dua vao"
 							: null,
 		);
-		const sau = await t.p.evaluate(
+		const xong = await t.p.evaluate(
 			(nhan) => ({
 				bien: document.querySelector('[data-da-dua-vao] [data-slot="alert-title"]')?.textContent?.trim() ?? "",
 				lienKet: document.querySelector('[data-nut="xem-theo-don-vi"]')?.getAttribute("href") ?? "",
-				conNut: [...document.querySelectorAll("[data-dong] button")].filter((b) => nhan.includes(b.textContent?.trim() ?? "")).length,
+				conNut: [...document.querySelectorAll('[data-dong] button, [data-slot="kara-proposal-group"] button')].filter((b) => nhan.includes(b.textContent?.trim() ?? "")).length,
 			}),
 			[m.dong.themMucTieu, m.dong.themKr, m.dong.themCanChinh, m.dong.boQua, mui.proposedChange.undo],
 		);
-		ghi(`   bien nhan «${sau.bien}» · lien ket ${sau.lienKet} · nut quyet con ${sau.conNut}`);
-		buoc(5, sau.bien !== m.banNhap.daTao("1") || !sau.lienKet.includes("/okr/theo-don-vi") ? "thieu bien nhan Da tao hay lien ket" : sau.conNut > 0 ? "con nut quyet hay Hoan tac" : null);
+		ghi(`   bien nhan «${xong.bien}» · lien ket ${xong.lienKet} · nut quyet con ${xong.conNut}`);
+		buoc(5, xong.bien !== m.banNhap.daTao(String(DEM.nop1.mucTieu)) || !xong.lienKet.includes("/okr/theo-don-vi") ? "thieu bien nhan Da tao hay lien ket" : xong.conNut > 0 ? "con nut quyet hay Hoan tac" : null);
 		if (!doDo) kiem(`console khong loi (${t.loi.length})`, t.loi.length === 0);
 		for (const l of t.loi.slice(0, 5)) ghi(`   console: ${l.slice(0, 200)}`);
 	} finally {

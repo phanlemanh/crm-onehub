@@ -1,0 +1,1 @@
+Driver: puppeteer trong man.mjs (khong co read_network_requests). Console do trong harness: 0 loi, khong co cau hydration. networkObserved = n-a (driver)

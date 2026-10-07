@@ -1,0 +1,2 @@
+E2 network/console: driver = puppeteer-core (man.mjs + e2-driver), khong co read_network_requests; chi doc console error + pageerror.
+man.mjs --phan khung: console khong loi (0)

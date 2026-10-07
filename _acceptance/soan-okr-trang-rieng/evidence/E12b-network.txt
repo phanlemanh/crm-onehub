@@ -1,0 +1,5 @@
+E12b network truth
+driver: puppeteer (driver scratchpad e12b-driver.mjs), khong co read_network_requests; chi doc console/pageerror cua trang (loc /_next/hmr)
+lan chay 2 (dau, KET QUA CUOI): console errors = 0 ("DUNG console khong loi (0)"), ma thoat 0
+lan chay 1 (loi o phia driver: KR "giam-xuong" duoc go dich 27 > khoi 20): console co 1 dong "Failed to load resource: 400 (Bad Request)", trang hien "Kieu «giam xuong» can dich nho hon khoi diem." — la tu choi hop le cua may chu, khong phai loi san pham; da sua kich ban (dich 13 < khoi 20) o lan chay 2
+request that bai khong duoc ghi theo tung URL (driver khong doc network) -> networkObserved = n-a (driver)
