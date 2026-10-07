@@ -288,6 +288,63 @@ const vi = {
 		loiCuoc: "Không đọc được cuộc này",
 		thuLai: "Thử lại",
 	},
+	trang: {
+		tieuDe: "Soạn OKR",
+		veTheoDonVi: "Theo đơn vị",
+		thanhKeo: "Đổi cỡ hội thoại và bản nháp",
+		khongMo: "mở cuộc soạn",
+		khongMoMoTa: "Cuộc này không còn, hoặc bạn không xem được nó.",
+		chuaCauHinh: "Quản trị cần nối Kara · OKR trong Cài đặt trước khi soạn.",
+	},
+	dong: {
+		tieuDe: "Bản nháp",
+		meta: (n: string, gio: string) => `${n} dòng · sửa lúc ${gio}`,
+		metaChuaNop: (n: string) => `${n} dòng`,
+		dangSoanDau: "Kara đang soạn bản nháp đầu…",
+		chiDongCho: "Chỉ dòng chờ",
+		moiDong: "Mọi dòng",
+		themMucTieu: "Thêm Mục tiêu",
+		themKr: "Thêm KR",
+		themCanChinh: "Thêm căn chỉnh",
+		themBanSua: "Thêm bản đã sửa",
+		boQua: "Bỏ qua",
+		hoiKara: "Hỏi Kara về dòng này",
+		themNhom: (n: string) => `Thêm cả Mục tiêu và ${n} KR đã đủ số`,
+		daThemNhom: (stt: string, n: string) =>
+			`Đã thêm Mục tiêu ${stt} và ${n} KR`,
+		kemKr: (n: string) => ` · hoàn tác kèm ${n} KR`,
+		daThem: "Đã thêm",
+		daBoQua: "Đã bỏ qua",
+		conThieu: "Còn thiếu",
+		krMoc: "KR mốc — không cần số",
+		nguCanh: (loai: string, chu: string) => `${loai} · ${chu}`,
+	},
+	loiQuyet: {
+		dongCu: "Dòng này thuộc bản nháp cũ — Kara đã nộp bản mới hơn.",
+		cuocKhongDang: "Cuộc soạn này đã đưa vào bộ OKR hoặc đã bỏ.",
+		mang: "Kara chưa ghi được quyết định này. Thử lại.",
+	},
+	moc: {
+		dau: (mt: string, kr: string) => `${mt} Mục tiêu · ${kr} KR`,
+		themMucTieu: (n: string) => `+${n} Mục tiêu`,
+		themKr: (n: string) => `+${n} KR`,
+		sua: (n: string) => `sửa ${n}`,
+		chuyen: (n: string) => `chuyển ${n}`,
+		bo: (n: string) => `bỏ ${n}`,
+		khongDoi: "không đổi dòng nào",
+		khongDoc: "Kara nộp bản nháp",
+	},
+	heThong: {
+		seGui: (s: string) => `Sẽ gửi kèm lượt sau: ${s}`,
+		loai: { "muc-tieu": "Mục tiêu", kr: "KR", "can-chinh": "căn chỉnh" },
+		cach: {
+			nhan: (loai: string, chu: string) => `Bạn đã thêm ${loai} «${chu}»`,
+			sua: (loai: string, chu: string) =>
+				`Bạn đã sửa rồi thêm ${loai} «${chu}»`,
+			bac: (loai: string, chu: string) => `Bạn đã bỏ qua ${loai} «${chu}»`,
+			hoan: (loai: string, chu: string) => `Bạn đã hoàn tác ${loai} «${chu}»`,
+		},
+	},
 	lyDo: {
 		"don-vi-luu-tru": "Đơn vị đã lưu trữ",
 		"don-vi-chua-bat": "Đơn vị chưa được bật việc soạn",
@@ -313,6 +370,9 @@ const vi = {
 		"cha-da-bac": "Mục tiêu cha đã bị bác",
 		"cha-bi-loai": "Mục tiêu cha đã bị loại",
 		"khong-co-cha": "Không còn Mục tiêu cha",
+		"chua-quyet": "Dòng này đang chờ — không có gì để hoàn tác",
+		"kem-sai":
+			"Có KR không còn chờ hay không thuộc Mục tiêu này — tải lại bản nháp rồi thử lại",
 	} satisfies Record<LyDoQuyet, string>,
 };
 
@@ -564,6 +624,65 @@ const en: OkrSoanMessages = {
 		loiCuoc: "This session could not be read",
 		thuLai: "Try again",
 	},
+	trang: {
+		tieuDe: "Draft OKRs",
+		veTheoDonVi: "By unit",
+		thanhKeo: "Resize conversation and draft",
+		khongMo: "open this drafting session",
+		khongMoMoTa: "The session is gone, or you can't see it.",
+		chuaCauHinh:
+			"An admin needs to connect Kara · OKR in Settings before drafting.",
+	},
+	dong: {
+		tieuDe: "Draft",
+		meta: (n: string, gio: string) => `${n} lines · edited ${gio}`,
+		metaChuaNop: (n: string) => `${n} lines`,
+		dangSoanDau: "Kara is drafting the first version…",
+		chiDongCho: "Only pending",
+		moiDong: "All lines",
+		themMucTieu: "Add objective",
+		themKr: "Add KR",
+		themCanChinh: "Add alignment",
+		themBanSua: "Add edited version",
+		boQua: "Skip",
+		hoiKara: "Ask Kara about this line",
+		themNhom: (n: string) => `Add the objective and ${n} KR with numbers`,
+		daThemNhom: (stt: string, n: string) =>
+			`Added objective ${stt} and ${n} KR`,
+		kemKr: (n: string) => ` · undo includes ${n} KR`,
+		daThem: "Added",
+		daBoQua: "Skipped",
+		conThieu: "Still missing",
+		krMoc: "Milestone KR — no numbers needed",
+		nguCanh: (loai: string, chu: string) => `${loai} · ${chu}`,
+	},
+	loiQuyet: {
+		dongCu:
+			"This line belongs to an older draft — Kara has submitted a newer one.",
+		cuocKhongDang: "This session was applied to the OKR set or abandoned.",
+		mang: "Kara couldn't save this decision. Try again.",
+	},
+	moc: {
+		dau: (mt: string, kr: string) => `${mt} objectives · ${kr} KR`,
+		themMucTieu: (n: string) => `+${n} objectives`,
+		themKr: (n: string) => `+${n} KR`,
+		sua: (n: string) => `${n} edited`,
+		chuyen: (n: string) => `${n} moved`,
+		bo: (n: string) => `${n} dropped`,
+		khongDoi: "no lines changed",
+		khongDoc: "Kara submitted the draft",
+	},
+	heThong: {
+		seGui: (s: string) => `Sent with the next turn: ${s}`,
+		loai: { "muc-tieu": "objective", kr: "KR", "can-chinh": "alignment" },
+		cach: {
+			nhan: (loai: string, chu: string) => `You added ${loai} «${chu}»`,
+			sua: (loai: string, chu: string) =>
+				`You edited and added ${loai} «${chu}»`,
+			bac: (loai: string, chu: string) => `You skipped ${loai} «${chu}»`,
+			hoan: (loai: string, chu: string) => `You undid ${loai} «${chu}»`,
+		},
+	},
 	lyDo: {
 		"don-vi-luu-tru": "The unit is archived",
 		"don-vi-chua-bat": "Drafting is not switched on for the unit",
@@ -589,6 +708,9 @@ const en: OkrSoanMessages = {
 		"cha-da-bac": "The parent Objective was rejected",
 		"cha-bi-loai": "The parent Objective was removed",
 		"khong-co-cha": "The parent Objective is gone",
+		"chua-quyet": "This line is still pending — there is nothing to undo",
+		"kem-sai":
+			"A KR is no longer pending or not under this objective — reload the draft and try again",
 	},
 };
 

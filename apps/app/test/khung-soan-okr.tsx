@@ -94,11 +94,30 @@ mock.module("@/lib/trpc/cache", () => ({
 		),
 }));
 
+if (!("ResizeObserver" in window))
+	Object.defineProperty(window, "ResizeObserver", {
+		value: globalThis.ResizeObserver,
+		writable: true,
+		configurable: true,
+	});
+
+mock.module("@/components/page-transition", () => ({
+	PageTransition: ({ children }: { children: ReactNode }) => children,
+}));
+
+export const diTrang: { kieu: "push" | "replace"; duong: string }[] = [];
+export const urlDoi: string[] = [];
+export const dinhVi = { duong: "/ws/okr/theo-don-vi" };
+
 mock.module("next/navigation", () => ({
-	useRouter: () => ({ push: () => {}, replace: () => {}, prefetch: () => {} }),
+	useRouter: () => ({
+		push: (duong: string) => diTrang.push({ kieu: "push", duong }),
+		replace: (duong: string) => diTrang.push({ kieu: "replace", duong }),
+		prefetch: () => {},
+	}),
 	useParams: () => ({ slug: "ws" }),
 	useSearchParams: () => new URLSearchParams(),
-	usePathname: () => "/ws/okr/theo-don-vi",
+	usePathname: () => dinhVi.duong,
 }));
 
 mock.module("next/link", () => ({
@@ -233,7 +252,13 @@ mock.module("@/lib/agent-session", () => ({
 	},
 }));
 
-export const { ManSoan } = await import("@/app/(app)/[slug]/okr/soan/man-soan");
+export const { TrangSoan } = await import(
+	"@/app/(app)/[slug]/okr/soan/trang-soan"
+);
+export const KhungSoanXuat = await import(
+	"@/app/(app)/[slug]/okr/soan/khung-soan"
+);
+export const { DauTrangOkr } = await import("@/app/(app)/[slug]/okr/thanh-tab");
 export const { DanhSachCuoc } = await import(
 	"@/app/(app)/[slug]/okr/soan/danh-sach-cuoc"
 );
@@ -379,6 +404,9 @@ export function datDanhSach(moi: Partial<DanhSachGia>): void {
 
 export function datLai(): void {
 	goi.length = 0;
+	diTrang.length = 0;
+	urlDoi.length = 0;
+	dinhVi.duong = "/ws/okr/theo-don-vi";
 	daGui.length = 0;
 	daLamMoi.length = 0;
 	tuyChonAgent.length = 0;
@@ -433,7 +461,11 @@ export async function mo(man: ReactElement, thamSo = ""): Promise<void> {
 	});
 	await act(async () => {
 		root.render(
-			<NuqsTestingAdapter hasMemory searchParams={thamSo}>
+			<NuqsTestingAdapter
+				hasMemory
+				searchParams={thamSo}
+				onUrlUpdate={(e) => urlDoi.push(e.queryString)}
+			>
 				<QueryClientProvider client={client}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>{man}</TooltipProvider>
@@ -449,24 +481,27 @@ export async function mo(man: ReactElement, thamSo = ""): Promise<void> {
 export const daDong: number[] = [];
 export const daMoCuoc: string[] = [];
 
-export async function moMan(quanTri = false, cauNoi = true): Promise<void> {
-	await mo(
-		<ManSoan
-			cuocSoanId={CUOC.id}
-			dong={() => daDong.push(1)}
-			quanTri={quanTri}
-			moCuoc={(id) => daMoCuoc.push(id)}
-			cauNoi={cauNoi}
-		/>,
-	);
+export async function moTrang(
+	quanTri = false,
+	cauNoi = true,
+	thamSo = "",
+): Promise<void> {
+	dinhVi.duong = `/ws/okr/soan/${CUOC.id}`;
+	dat("okr.access", () => ({
+		canManageProgram: quanTri,
+		headOf: { divisions: [], departments: [] },
+	}));
+	await mo(<TrangSoan cuocSoanId={CUOC.id} cauNoi={cauNoi} />, thamSo);
 	await cho(
 		() =>
 			document.querySelector(
-				"[data-man-soan]:not([data-man-soan='dang-mo'])",
+				"[data-trang-soan]:not([data-trang-soan='dang-mo'])",
 			) !== null,
-		"man soan mo xong",
+		"trang soan mo xong",
 	);
 }
+
+export const moMan = moTrang;
 
 export async function don(): Promise<void> {
 	tatDongHoGia();

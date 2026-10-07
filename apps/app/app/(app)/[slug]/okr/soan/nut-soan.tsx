@@ -13,6 +13,7 @@ import {
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
 import { parseAsString, useQueryState } from "nuqs";
 import type { ReactNode } from "react";
 import { toast } from "sonner";
@@ -23,7 +24,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { DonChonOkr } from "../okr-search-params";
 import { DanhSachCuoc } from "./danh-sach-cuoc";
 import type { DonViSoan } from "./kieu";
-import { ManSoan } from "./man-soan";
+import { duongTrangSoan } from "./luat-ban-nhap";
 
 const PHA_SOAN = "lap-ke-hoach" satisfies PhaChuKy;
 const TRAN_CUOC_KY = String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy);
@@ -143,10 +144,9 @@ export function NutSoan({
 }) {
 	const m = okrSoanMessages(useLocale());
 	const trpc = useTRPC();
-	const [cuocSoan, datCuocSoan] = useQueryState(
-		SEARCH_PARAM.okr.cuocSoan,
-		parseAsString,
-	);
+	const router = useRouter();
+	const { slug } = useParams<{ slug: string }>();
+	const moTrang = (id: string) => router.push(duongTrangSoan(slug, id));
 	const [dsCuoc, datDsCuoc] = useQueryState(
 		SEARCH_PARAM.okr.dsCuoc,
 		parseAsString,
@@ -162,8 +162,8 @@ export function NutSoan({
 	const mo = useMutation(
 		trpc.okr.soanMo.mutationOptions({
 			onSuccess: (kq) => {
-				if (kq.ok) void datCuocSoan(kq.cuoc.id);
-				else if (kq.cuocDang) void datCuocSoan(kq.cuocDang.id);
+				if (kq.ok) moTrang(kq.cuoc.id);
+				else if (kq.cuocDang) moTrang(kq.cuocDang.id);
 				else void sanSang.refetch();
 			},
 			onError: (loi) => toast.error(loi.message || m.nut.loiMo),
@@ -171,18 +171,6 @@ export function NutSoan({
 	);
 	if (!hienDuoc || !donVi) return null;
 
-	const man = cuocSoan ? (
-		<ManSoan
-			cuocSoanId={cuocSoan}
-			quanTri={quanTri}
-			cauNoi={cauNoi}
-			moCuoc={(id) => void datCuocSoan(id)}
-			dong={() => {
-				void datCuocSoan(null);
-				void sanSang.refetch();
-			}}
-		/>
-	) : null;
 	const ds =
 		dsCuoc && cauNoi ? (
 			<DanhSachCuoc
@@ -190,7 +178,7 @@ export function NutSoan({
 				dong={() => void datDsCuoc(null)}
 				mo={(id) => {
 					void datDsCuoc(null);
-					void datCuocSoan(id);
+					moTrang(id);
 				}}
 			/>
 		) : null;
@@ -267,8 +255,7 @@ export function NutSoan({
 						<Button
 							size="sm"
 							variant="outline"
-							aria-haspopup="dialog"
-							onClick={() => void datCuocSoan(cuocDang.id)}
+							onClick={() => moTrang(cuocDang.id)}
 						>
 							{m.nut.tiep}
 						</Button>
@@ -293,7 +280,6 @@ export function NutSoan({
 					size="sm"
 					variant="outline"
 					data-nut-soan={s.nac === "an" ? undefined : "nut"}
-					aria-haspopup="dialog"
 					disabled={mo.isPending}
 					onClick={() => mo.mutate(donVi)}
 				>
@@ -327,7 +313,6 @@ export function NutSoan({
 	return (
 		<>
 			{nhom}
-			{man}
 			{ds}
 		</>
 	);

@@ -20,6 +20,7 @@ import { SOAN_UI } from "./cau-hinh";
 import { guiHuyLuot, kieuKhep, luotDangChay } from "./huy-luot";
 import type {
 	CuocSoan,
+	DongKr,
 	DongSoan,
 	DonViSoan,
 	KetSoBanNhap,
@@ -40,6 +41,7 @@ import {
 	krThieuSo,
 	soBanNhap,
 } from "./luat-ban-nhap";
+import { docSoDaLuu, ghiSoDaLuu, khoaSo } from "./so-theo-khoa";
 
 export function donViCua(cuoc: CuocSoan): DonViSoan {
 	return {
@@ -117,7 +119,7 @@ export function usePhienCuoc(cuoc: CuocSoan) {
 	};
 }
 
-export function useNhapCuoc(dong: readonly DongSoan[]) {
+export function useNhapCuoc(dong: readonly DongSoan[], cuocSoanId: string) {
 	const [xet, setXet] = useState<BanNhapDaXet>(() => ({
 		nguon: dong,
 		goc: dong,
@@ -130,6 +132,10 @@ export function useNhapCuoc(dong: readonly DongSoan[]) {
 	const [chu, setChu] = useState("");
 	const khaiSo = useKhaiThayDoi();
 	const khaiChu = useKhaiThayDoi();
+	useMountEffect(() => {
+		const daLuu = docSoDaLuu(cuocSoanId);
+		if (Object.keys(daLuu).length > 0) setSo(daLuu);
+	});
 	return {
 		ket: xet.ket,
 		luotBatDau: () =>
@@ -139,8 +145,19 @@ export function useNhapCuoc(dong: readonly DongSoan[]) {
 				ket: soBanNhap(cu.nguon, cu.nguon),
 			})),
 		so,
-		datSo: (krId: string, moi: SoKr) => {
-			setSo((cu) => ({ ...cu, [krId]: moi }));
+		datSo: (kr: DongKr, moi: SoKr) => {
+			setSo((cu) => {
+				const sau = {
+					...cu,
+					[khoaSo(kr)]: {
+						khoiDiem: moi.khoiDiem,
+						dich: moi.dich,
+						khoaDong: kr.khoaDong,
+					},
+				};
+				ghiSoDaLuu(cuocSoanId, sau);
+				return sau;
+			});
 			khaiSo(true);
 		},
 		xongSo: () => khaiSo(false),

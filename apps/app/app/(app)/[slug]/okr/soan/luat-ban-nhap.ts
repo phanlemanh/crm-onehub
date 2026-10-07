@@ -166,3 +166,13 @@ export function duongTheoDonVi(slug: string, dv: DonViSoan): string {
 	});
 	return `/${slug}/okr/theo-don-vi?${q.toString()}`;
 }
+
+export function duongTrangSoan(slug: string, cuocSoanId: string): string {
+	return `/${slug}/okr/soan/${encodeURIComponent(cuocSoanId)}`;
+}
+
+export function laTrangSoan(duong: string): boolean {
+	const phan = duong.split("/").filter(Boolean);
+	const i = phan.indexOf("okr");
+	return i >= 0 && phan[i + 1] === "soan" && phan.length > i + 2;
+}

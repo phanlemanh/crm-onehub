@@ -290,7 +290,7 @@ function OSoKr({
 				giaTri={so.khoiDiem}
 				loi={thieu && docSoOkr(so.khoiDiem) === null}
 				khoa={n.khoa}
-				doi={(khoiDiem) => n.s.datSo(kr.id, { ...so, khoiDiem })}
+				doi={(khoiDiem) => n.s.datSo(kr, { ...so, khoiDiem })}
 			/>
 			<OSo
 				id={`dich-${kr.id}`}
@@ -299,7 +299,7 @@ function OSoKr({
 				giaTri={so.dich}
 				loi={thieu && docSoOkr(so.dich) === null}
 				khoa={n.khoa}
-				doi={(dich) => n.s.datSo(kr.id, { ...so, dich })}
+				doi={(dich) => n.s.datSo(kr, { ...so, dich })}
 			/>
 		</div>
 	);
