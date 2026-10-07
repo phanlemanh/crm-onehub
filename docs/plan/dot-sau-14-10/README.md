@@ -33,7 +33,7 @@ thêm phần vòng đời, K6a chờ thêm E5 và V2. Chi tiết ở mục 2.
 | Bản vá ba lỗ của bộ kit nghiệm thu: vòng sửa S4 làm rơi mục ngoài hợp đồng của vòng trước, rơi khung ảnh ui-check mang sang, bộ đếm vật/thước tính cả phần gộp từ onehub | Còn ở nhánh `fix/luot-sua-giu-du-dem-dung` của kit, chưa có PR; bản đang cài 2.24.0 khớp `main` của kit (kiểm 07/10) | Gộp và cài cùng phiên bản trước khi mở đợt; chưa có thì áp luật 13 của `LUAT-rieng.md` |
 | Ngân sách mô hình cho các hàng Kara (K2, K3, K4, K6b) | Ngân sách team chạm trần 07/10 (lỗi 402); anh đang nạp 07/10 | Anh nạp; chưa nạp thì phép đo gọi mô hình thật đỏ giả |
 | Bài «số người gõ» của Trợ lý OKR chập chờn | Có chip riêng; chip gộp trước khi mở đợt thì bỏ hàng F13 | Anh bấm chip, hoặc để F13 làm |
-| Bài «người dùng huỷ» của cửa soạn OKR lắc theo tốc độ máy (`nguoi-huy-khong-lac`) | Đã ký Cổng 2; #294 đã gộp `onehub` mới, CI đang chạy lại | Anh gộp khi CI xanh |
+| Bài «người dùng huỷ» của cửa soạn OKR lắc theo tốc độ máy (`nguoi-huy-khong-lac`) | Xong — #294, 07/10 | — |
 | Bài `chen-lien-ket` › «Esc đóng hộp và trả focus về trình soạn» của `packages/ui` chập chờn trên CI — có mặt trong 9 trên 12 lượt CI đỏ gần nhất (30/09–07/10), mọi lần trên nhánh không chạm `packages/ui`; tại chỗ xanh 8/8 | Đã xếp vào P4 thành hàng F14 `chen-lien-ket-khong-lac` (anh chốt 07/10) | Thợ P4 |
 
 ## 2. Dãy và hàng
