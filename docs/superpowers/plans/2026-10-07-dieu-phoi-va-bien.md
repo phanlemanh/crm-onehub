@@ -97,3 +97,13 @@
 - [ ] LUAT mẫu: mục «Việc nền dài khi giữ khoá» (lệnh bọc + mẫu) và «Gia hạn» (`noi_dung.uoc_phut`, `tai_nguyen`); README: hai tệp được kiểm hình dạng mỗi nhịp, `loi-nhip`, duyệt `gia-han` bằng `tra-loi` (kèm `uoc_phut` tuỳ chọn).
 - [ ] Bộ đột biến V1–V33 (trừ V16, ở `cong.mjs`): mốc đúng một lần, ca ghim đỏ.
 - [ ] Chạy cả bốn lệnh verify → xanh; commit.
+
+### Task 7: Cổng không đổi kho thật khi chạy trong hook (AC-15 — thêm khi mở lại hợp đồng 07/10)
+
+**Files:** Modify `.githooks/pre-push`, `scripts/gate-shape-node-test.mjs`; create `_acceptance/dieu-phoi-va-bien/rang/git-sach.mjs`.
+**Interfaces — Produces:** `runReference(root, dir)` chạy `node --test` với `env` đã lọc bỏ mọi biến `GIT_*`; pre-push gọi `unset $(git rev-parse --local-env-vars)` ngay sau khi lấy `ROOT`.
+**Verify:** `node _acceptance/dieu-phoi-va-bien/rang/git-sach.mjs` + `bun _acceptance/dieu-phoi-va-bien/rang/cong.mjs` + `bun run test:dieu-phoi`.
+**Evals:** E22 (và E8, E9 không hồi quy). **independent:** false.
+
+- [ ] Viết `rang/git-sach.mjs`: kho nháp có worktree liên kết; chạy tệp pre-push thật với `bun` giả và lượt tham chiếu thật, `GIT_DIR` trỏ gitdir worktree nháp; so trạng thái kho trước/sau; chiều đỏ trên bản sao bỏ bước gỡ biến. Chạy → đỏ (chưa sửa).
+- [ ] Sửa pre-push và `runReference`; chạy → xanh; commit.
