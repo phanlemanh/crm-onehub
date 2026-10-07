@@ -1279,6 +1279,9 @@ executors:
     dph_hinh_dang: node --test scripts/dieu-phoi/test/hinh-dang.test.mjs
     dph_giu_nhip: node --test scripts/dieu-phoi/test/giu-nhip.test.mjs
     dph_gia_han: node --test scripts/dieu-phoi/test/gia-han.test.mjs
+    nhkl_duong_cham: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t khong-lac-duong-cham"
+    nhkl_fetch_gia: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t fetch-gia-theo-that"
+    dph_tra_loi: node --test scripts/dieu-phoi/test/tra-loi.test.mjs
     ctt_chia: "cd apps/api && bun test test/okr-cua-toi-chia.spec.ts"
     ctt_mine: 'bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t mine-vai"'
     ctt_trung_vai: 'bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t trung-vai"'
@@ -1968,6 +1971,9 @@ executors:
     dpvb_dot_bien: node _acceptance/dieu-phoi-va-bien/rang/dot-bien.mjs
     dpvb_s4_that: node _acceptance/dieu-phoi-va-bien/rang/s4-that.mjs
     dpvb_git_sach: node _acceptance/dieu-phoi-va-bien/rang/git-sach.mjs
+    dptm_hook_cay: node _acceptance/dieu-phoi-truoc-mo-dot/rang/hook-cay.mjs
+    dptm_dot_bien: node _acceptance/dieu-phoi-truoc-mo-dot/rang/dot-bien.mjs
+    dptm_readme_khoa: node _acceptance/dieu-phoi-truoc-mo-dot/rang/readme-khoa.mjs
     ctt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/okr-cua-toi-tach-theo-doi/rang/man-theo-doi.mjs"'
     ctt_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/cua-toi.tsx" "apps/app/app/(app)/[slug]/okr/nhom-da-bo.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     ctt_dot_bien: node _acceptance/okr-cua-toi-tach-theo-doi/rang/dot-bien.mjs

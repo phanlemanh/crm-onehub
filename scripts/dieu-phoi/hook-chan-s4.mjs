@@ -14,7 +14,7 @@ export const LENH_MAC_DINH = {
 };
 const MAU_THO = /acceptance-verify|repin-lane|s4-args|duong-nen\.mjs/;
 const MAU_LENH_BOC = /^\s*\S*node\s+\S*giu-nhip\.mjs\s+--\s/;
-const KY_TU_AN_TOAN = /^[\w./=:@%+,-]+(?: [\w./=:@%+,-]+)*$/;
+const KY_TU_AN_TOAN = /^[\w./:@%+,-]+(?: [\w./:@%+,-]+)*$/;
 
 const nhayDon = (s) => (KY_TU_AN_TOAN.test(s) ? s : `'${s.replace(/'/g, `'\\''`)}'`);
 

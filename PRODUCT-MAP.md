@@ -12,7 +12,7 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>129 việc"]
+  GB --> DG["Đã giao<br/>131 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>42 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -114,6 +114,7 @@ flowchart TD
 - Bảng cột thoả thuận — số đếm và tổng đầu cột đổi ngay khi thả, trả về đúng khi lưu thất bại (`dem-dau-cot-khi-dang-luu`)
 - Cả đội điều phối 30 ngày đầu của đối tác mới ngay trong CRM, thôi dùng Google Sheet và giấy tờ tay (`dieu-phoi-30-ngay-dau`) — đã chấm bởi thực tế
 - Tầng máy của Orchestrator–workers hai tầng, giai đoạn 1a — bộ phát lịch tất định (khoá có hạn thuê, canh sức khoẻ máy, kênh yêu cầu, hàng kế, bảng đồng hồ), CLI đợt và bốn hook (chặn S4, nhịp, chờ người) (`dieu-phoi-hai-tang`)
+- Bộ điều phối — ba lỗ còn lại trước khi mở đợt sau-14-10 (tệp trả lời gia hạn hỏng không làm đứng nhịp, lệnh bọc chạy được với lệnh có biến môi trường, pre-push luôn chạy cổng của chính cây đang đẩy) (`dieu-phoi-truoc-mo-dot`)
 - Bộ điều phối — vá năm lỗ ở biên trước khi mở đợt (hook chặn S4 nhận bản chép, kiểm hình dạng hai tệp cấu hình đợt, test điều phối vào cổng, giữ nhịp khi chờ việc nền, gia hạn theo yêu cầu thật sự kéo dài hạn thuê) (`dieu-phoi-va-bien`)
 - Phép đo màn thật chạy trên kho riêng của chính cây (crm_<cây>_do) với máy chủ app/api của chính cây, tự dựng và tự dọn; kho dev chung crm không bao giờ bị phép đo ghi nữa (`do-man-tren-kho-rieng`)
 - Đo quyền của lượt bằng hành vi — thay bộ dò regex theo dòng của AC-5 cũ bằng phép đo đi trọn đường sản phẩm, siết mệnh đề về đúng thứ máy chủ và agent giữ được, và đổi sàn dân số sang bất biến nguồn ghi đọc bằng AST (`do-quyen-luot-bang-hanh-vi`)
@@ -167,6 +168,7 @@ flowchart TD
 - Nền chat AI Elements — dọn 19 component mồ côi, dựng lớp chuyển kiểu eve→AI SDK, chuẩn hoá phần còn lại, đặt răng chống tái phát (`nen-chat-ai-elements`)
 - Thước lái-ra-màn thôi đỏ khi kho chỉ thêm tệp nguồn — bỏ neo số tệp cố định, thay bằng quan hệ «mọi tệp git theo dõi đều được bộ duyệt thấy»; giữ neo chuỗi mặc định và neo bảng cũ (`neo-dan-so-khong-cung`)
 - Ngày gieo của test «bước của tôi» tính theo ngày giờ VN như sản phẩm, ghim bằng hai mốc giờ (`ngay-gieo-theo-gio-vn`)
+- Ca «người dùng huỷ thì không hoàn lượt» của cửa soạn OKR không lắc theo tốc độ máy: huỷ đúng lúc đang chờ Trợ lý OKR, fetch giả từ chối signal đã huỷ như fetch thật (`nguoi-huy-khong-lac`)
 - Vùng kéo-thả tệp nguồn (NguonKeoTha) dựng lại trên móc ReUI use-file-upload theo bố cục c-file-upload-3, thay bản vẽ tay bậc 5 (`nguon-keo-tha-reui`)
 - Nhắc buổi sáng qua Zalo — mỗi người nối Zalo bằng mã 6 số gửi cho bot, tự chọn nhận nhắc qua Tự động · Zalo · Slack trên trang «Thông báo của bạn»; trang kết nối Zalo cho thấy bot sống và ai đã nối (`nhac-qua-zalo`)
 - Nhãn ứng dụng nói tiếng Việt trên ba luồng của ngưỡng — thêm công ty, ghi hoạt động, cập nhật thoả thuận (`nhan-ung-dung-noi-tieng-viet`) — đã chấm bởi thực tế

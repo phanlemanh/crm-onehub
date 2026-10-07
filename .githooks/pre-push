@@ -7,6 +7,13 @@ if [ -n "${CRM_SKIP_HOOKS:-}" ]; then
 	exit 0
 fi
 
+CAY="$(git rev-parse --show-toplevel)"
+HOOK_CAY="$CAY/.githooks/pre-push"
+if [ -f "$HOOK_CAY" ] && [ "$(realpath "$0")" != "$(realpath "$HOOK_CAY")" ]; then
+	echo "pre-push: running this tree's own hook at $HOOK_CAY"
+	exec bash "$HOOK_CAY" "$@"
+fi
+
 deleting_only=1
 while read -r _local_ref local_sha _remote_ref _remote_sha; do
 	case "$local_sha" in
