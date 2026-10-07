@@ -164,6 +164,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
+			onRetry={() => void query.refetch()}
 			title={contact ? contactName(contact) : m.contact.fallbackTitle}
 			description={
 				contact ? (

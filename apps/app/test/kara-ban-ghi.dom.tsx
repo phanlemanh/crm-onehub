@@ -5,6 +5,7 @@ import {
 	cho,
 	dat,
 	dongHet,
+	goiCua,
 	mo,
 	nhip,
 	nut,
@@ -54,6 +55,17 @@ const { ConversationPicker } = await import(
 	"@/components/crm/agent-conversations"
 );
 const { recordSheetMessages } = await import("@/lib/messages/record-sheet");
+const { DetailSheet } = await import("@/components/detail-sheet");
+const { ContactSheet } = await import(
+	"@/components/crm/record-sheet/contact-sheet"
+);
+const { CompanySheet } = await import(
+	"@/components/crm/record-sheet/company-sheet"
+);
+const { DealSheet } = await import("@/components/crm/record-sheet/deal-sheet");
+const { CompanyPlans } = await import(
+	"@/components/crm/record-sheet/company-plans"
+);
 
 type Loai = "contact" | "company" | "deal";
 
@@ -113,6 +125,123 @@ const oSoan = () =>
 	document.querySelector<HTMLTextAreaElement>(
 		'[data-slot="kara-composer"] textarea',
 	);
+
+const LOI_THO = "Lỗi máy chủ 500 chi tiết";
+
+const caNhanGia = () => ({
+	id: "ct-1",
+	firstName: "Hà",
+	lastName: "Nguyễn",
+	email: null,
+	phone: null,
+	title: null,
+	linkedinUrl: null,
+	twitterUrl: null,
+	githubUrl: null,
+	imageUrl: null,
+	enrichmentStatus: "COMPLETE",
+	enrichmentError: null,
+	owner: null,
+	company: null,
+	fields: [],
+	queued: false,
+	createdAt: "2026-09-01T00:00:00.000Z",
+	archivedAt: null,
+	brief: null,
+	facts: [],
+	relationship: {
+		emails: 0,
+		threads: 0,
+		lastReplyAt: null,
+		meetings: 0,
+		nextMeeting: null,
+		colleagues: [],
+	},
+	isPrimaryContact: false,
+	deals: [],
+});
+
+const congTyGia = () => ({
+	id: "co-1",
+	name: "Thép Hòa Phát",
+	domain: null,
+	website: null,
+	description: null,
+	logoUrl: null,
+	logoDarkUrl: null,
+	iconUrl: null,
+	iconDarkUrl: null,
+	iconTone: null,
+	brandColor: null,
+	industry: null,
+	subIndustry: null,
+	city: null,
+	stateCode: null,
+	country: null,
+	countryCode: null,
+	phone: null,
+	email: null,
+	linkedinUrl: null,
+	twitterUrl: null,
+	githubUrl: null,
+	pricingUrl: null,
+	careersUrl: null,
+	enrichmentStatus: "COMPLETE",
+	enrichmentError: null,
+	source: "MANUAL",
+	owner: null,
+	contacts: [],
+	fields: [],
+	queued: false,
+	createdAt: "2026-09-01T00:00:00.000Z",
+	archivedAt: null,
+	enrichedAt: null,
+	primaryContactId: null,
+	primaryContact: null,
+	reportingCurrency: "VND",
+	soKeHoach: 0,
+	xuongCoKhuon: false,
+	deals: [],
+});
+
+const thoaThuanGia = () => ({
+	id: "d-1",
+	name: "Hợp đồng thép quý 4",
+	description: null,
+	stage: "lead",
+	currency: "VND",
+	closedReason: null,
+	company: { id: "co-1", name: "Thép Hòa Phát", domain: null, iconUrl: null },
+	owner: {
+		id: "u-1",
+		name: "Trần Minh Hải",
+		email: "hai@onehub.vn",
+		image: null,
+	},
+	fields: [],
+	amountCents: null,
+	baseAmountCents: null,
+	reportingCurrency: "VND",
+	fxRate: null,
+	fxRateAt: null,
+	stageChangedAt: "2026-09-01T00:00:00.000Z",
+	expectedCloseDate: null,
+	closedAt: null,
+	createdAt: "2026-09-01T00:00:00.000Z",
+	archivedAt: null,
+	contacts: [],
+});
+
+function lanDauLoi<T>(lay: () => T) {
+	let lan = 0;
+	return () => {
+		lan += 1;
+		if (lan === 1) throw new Error(LOI_THO);
+		return lay();
+	};
+}
+
+const khungLoi = () => document.querySelector("[data-khung-tai-loi]");
 
 afterEach(dongHet);
 
@@ -472,5 +601,70 @@ describe("kara-ban-ghi", () => {
 		await cho(() => chu().includes("Đã xoá cuộc trò chuyện."), "toast xoa");
 		o.push("da xoa");
 		expect(o.length).toBe(11);
+	});
+	test("khung-loi: tải bản ghi lỗi thì có Thử lại, không in lỗi thô", async () => {
+		const ca = [
+			{
+				ten: "contact",
+				duong: "contacts.byId",
+				lay: caNhanGia,
+				man: <ContactSheet contactId="ct-1" />,
+				url: "?record=contact:ct-1",
+				chu: "Hà",
+			},
+			{
+				ten: "company",
+				duong: "companies.byId",
+				lay: congTyGia,
+				man: <CompanySheet companyId="co-1" />,
+				url: "?record=company:co-1",
+				chu: "Thép Hòa Phát",
+			},
+			{
+				ten: "deal",
+				duong: "deals.byId",
+				lay: thoaThuanGia,
+				man: <DealSheet dealId="d-1" />,
+				url: "?record=deal:d-1",
+				chu: "Hợp đồng thép quý 4",
+			},
+		] as const;
+		expect(ca.length).toBe(3);
+
+		for (const o of ca) {
+			datLai();
+			dat("users.list", () => []);
+			dat("onboarding.listTemplates", () => []);
+			dat(o.duong, lanDauLoi(o.lay));
+			await mo(
+				<DetailSheet open onOpenChange={() => {}}>
+					{o.man}
+				</DetailSheet>,
+				{ searchParams: o.url },
+			);
+			await cho(() => khungLoi() !== null, `${o.ten} khung loi`);
+			const chu = document.body.textContent ?? "";
+			expect(chu).toContain("Không tải được bản ghi này");
+			expect(chu).toContain("Kiểm tra kết nối rồi thử lại.");
+			if (chu.includes(LOI_THO))
+				throw new Error("khung-loi: lo thong diep tho");
+			await bam(nut("Thử lại"));
+			await cho(() => khungLoi() === null, `${o.ten} tai lai`);
+			expect(goiCua(o.duong).length).toBeGreaterThanOrEqual(2);
+			expect(document.body.textContent).toContain(o.chu);
+			await dongHet();
+		}
+
+		datLai();
+		dat("onboarding.plansOfCompany", () => {
+			throw new Error(LOI_THO);
+		});
+		await mo(<CompanyPlans companyId="co-1" companyName="Thép Hòa Phát" />);
+		await cho(() => khungLoi() !== null, "ke hoach khung loi");
+		expect(document.body.textContent).toContain("Không tải được bản ghi này");
+		expect(
+			document.querySelector('[data-khung-tai-loi] [data-slot="kara-retry"]'),
+		).not.toBeNull();
+		expect(document.body.textContent).not.toContain(LOI_THO);
 	});
 });
