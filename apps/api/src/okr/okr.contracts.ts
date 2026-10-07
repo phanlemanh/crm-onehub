@@ -7,7 +7,7 @@ import {
 	PHA_CHU_KY,
 } from "@crm/validation/okr-chu-ky";
 import { okrProgram, okrProgramSua } from "@crm/validation/okr-chuong-trinh";
-import { bangDaCat } from "@crm/validation/okr-cuoc-soan";
+import { BAN_NHAP_TRAN, bangDaCat } from "@crm/validation/okr-cuoc-soan";
 import { LY_DO_MO_COI, MUC_HIEN_THI } from "@crm/validation/okr-hien-thi";
 import { lyDoDoiDich } from "@crm/validation/okr-khep";
 import { MA_LOAI_BAN_NHAP } from "@crm/validation/okr-kiem-ban-nhap";
@@ -696,6 +696,8 @@ export const LY_DO_QUYET = [
 	"cha-da-bac",
 	"cha-bi-loai",
 	"khong-co-cha",
+	"chua-quyet",
+	"kem-sai",
 ] as const;
 export const LY_DO_DUA_VAO = [
 	"thieu-so-kr",
@@ -806,8 +808,9 @@ export const soanDanhSachOutput = z.object({
 });
 export const soanQuyetInput = z.object({
 	deXuatId: ma,
-	quyet: z.enum(["nhan", "sua", "bac"]),
+	quyet: z.enum(["nhan", "sua", "bac", "hoan"]),
 	giaTriCuoi: z.string().trim().min(1).optional(),
+	kem: z.array(ma).max(BAN_NHAP_TRAN.kr.max).optional(),
 });
 export const soanQuyetOutput = z.discriminatedUnion("ok", [
 	z.object({ ok: z.literal(true) }),
