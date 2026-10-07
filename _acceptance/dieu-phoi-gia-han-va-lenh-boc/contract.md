@@ -5,7 +5,7 @@ slug: dieu-phoi-gia-han-va-lenh-boc
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-gia-han-va-lenh-boc-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
