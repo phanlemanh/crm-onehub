@@ -83,8 +83,8 @@ describe("purge-chua-luu-tru", () => {
 	test(
 		"purge-chua-luu-tru: 3 loai x 3 duong — ban chua luu tru bi tu choi, ban da luu tru xoa duoc, lich don chay nhu cu",
 		async () => {
-			const thuc: Record<string, unknown> = {};
-			const mong: Record<string, unknown> = {};
+			const thuc: Record<string, object | number> = {};
+			const mong: Record<string, object | number> = {};
 			for (const loai of LOAI) {
 				const x = await tao[loai]();
 				const rTrpc = await goi(`${loai}.purge`, { id: x });
@@ -159,8 +159,8 @@ describe("luu-tru-giu-ngay", () => {
 			const t1 = new Date(goc);
 			const t2 = new Date(goc + 3_600_000);
 			const t3 = new Date(goc + 7_200_000);
-			const thuc: Record<string, unknown> = {};
-			const mong: Record<string, unknown> = {};
+			const thuc: Record<string, object | number> = {};
+			const mong: Record<string, object | number> = {};
 			for (const loai of LOAI) {
 				for (const duong of ["archive", "bulkArchive"] as const) {
 					const id = await tao[loai]();
