@@ -15,11 +15,13 @@ export const MEASURE_DATABASE = {
 	hashLength: 6,
 	maxAgeMs: 12 * HOUR_MS,
 	commentPrefix: "crm phien do",
+	buildingMark: "template-building",
 	treeVariable: "PHIEN_DO_TEN_CAY",
 } as const;
 
 export type MeasureComment =
 	| { kind: "session"; createdAt: number }
+	| { kind: "building"; createdAt: number }
 	| {
 			kind: "template";
 			fingerprint: string;
@@ -112,6 +114,10 @@ export function sessionComment(createdAt: number): string {
 	return `${MEASURE_DATABASE.commentPrefix} session created ${new Date(createdAt).toISOString()}`;
 }
 
+export function templateBuildingComment(createdAt: number): string {
+	return `${MEASURE_DATABASE.commentPrefix} ${MEASURE_DATABASE.buildingMark} created ${new Date(createdAt).toISOString()}`;
+}
+
 export function templateComment(
 	fingerprint: string,
 	createdAt: number,
@@ -131,6 +137,15 @@ export function parseMeasureComment(
 	if (session) {
 		const createdAt = Date.parse(session[1] ?? "");
 		return Number.isNaN(createdAt) ? null : { kind: "session", createdAt };
+	}
+
+	const building = new RegExp(
+		`^${MEASURE_DATABASE.buildingMark} created (\\S+)$`,
+	).exec(rest);
+
+	if (building) {
+		const createdAt = Date.parse(building[1] ?? "");
+		return Number.isNaN(createdAt) ? null : { kind: "building", createdAt };
 	}
 
 	const template = /^template (\S+) created (\S+) used (\S+)$/.exec(rest);

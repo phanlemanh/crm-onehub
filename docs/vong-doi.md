@@ -131,6 +131,14 @@ Mỗi đợt là một lượt `/feature-loop`:
    mọi nơi, dải báo bản ghi đã cất, nút «Đã lưu trữ» trên Kanban thoả thuận, danh
    sách liên quan lọc bản đã cất, giai đoạn thoả thuận và tác nhân theo nếp lưu trữ.
    Thêm luật thứ bảy «vòng đời» vào `scripts/luat-kho` và chạy thước đó ở CI.
-3. **Lấp chỗ trống**: lưu trữ trang và nguồn tài liệu, chiến dịch có «Đang chạy |
-   Đã kết thúc», xoá kế hoạch 30 ngày tạo nhầm, khôi phục lựa chọn của trường, ghi
-   rõ phạm vi dọn tự động ở Cài đặt › Chung.
+3. **Lấp chỗ trống**: chiến dịch có «Đang chạy | Đã kết thúc», xoá kế hoạch 30 ngày
+   tạo nhầm, khôi phục lựa chọn của trường, ghi rõ phạm vi dọn tự động ở Cài đặt ›
+   Chung.
+
+**Tài liệu đi lộ trình riêng.** Lưu trữ trang tài liệu là lượt 3b
+`lich-su-va-luu-tru-trang` của `docs/plan/lo-trinh-kho-tai-lieu.md` (T3, thêm cột lưu
+trữ cho `TaiLieuTrang`), chủ kho nhận ngày 2026-09-29. Lượt đó theo chuẩn này, với
+một điểm riêng của Kho: lưu trữ một trang là một đề xuất phải qua duyệt, vì chủ kho
+chốt ngày 2026-09-26 rằng mọi thay đổi trong Kho đều qua duyệt. Hai việc rà ngày
+2026-10-07 thấy thêm và chuyển vào lượt đó: nguồn tài liệu (`TaiLieuNguon`) cũng chưa
+lưu trữ được, và đề xuất đã duyệt không hiện ở tab nào của màn duyệt.

@@ -384,13 +384,23 @@ So a measurement now runs in a **measure session** on a database of its own tree
   migrations, `schema.prisma` or `seed.ts` change. A clone takes about a second; the
   seed alone takes thirty. Nothing is copied from `crm`. The seed runs with an empty
   `BLOB_READ_WRITE_TOKEN`, so building a template never uploads to the blob store.
+  A template carries the measure-session `COMMENT` from the moment it is created, before
+  `migrate deploy` and the seed: first a building mark
+  (`crm phien do template-building created …`), replaced by the template mark when the
+  seed finishes. A building template is never cloned; the next `--tao` of the tree
+  rebuilds it.
 - `bun run db:do --xoa` drops the tree's measure database. It refuses a name that does
   not end in `_do`, and one without the measure-session `COMMENT`.
 - `bun run db:do --quet` drops every marked measure database and template with no
   connection whose last touch — creation, or the last clone for a template — is older
   than `MEASURE_DATABASE.maxAgeMs` (12 hours). Every `--tao` runs the same sweep,
-  so a database left by a killed run goes on a later one. Rules and constants:
-  `packages/db/src/measure-database.ts`.
+  so a database left by a killed run goes on a later one — including a template whose
+  build was killed during `migrate deploy` or the seed, which still carries its building
+  mark. A kill that lands between `CREATE DATABASE` and the `COMMENT` (one round trip;
+  Postgres refuses both in one transaction) can still leave a database with no mark, and
+  so can any run from before 07/10/2026, when templates were marked only after the seed.
+  The sweep never drops an unmarked database: drop those by hand with `DROP DATABASE`.
+  Rules and constants: `packages/db/src/measure-database.ts`.
 - `bun run do:man --chay "<command>"` is a whole session
   (`scripts/lan-do/phien-do.mjs`, constants in `scripts/lan-do/cau-hinh.mjs`): take a
   Postgres advisory lock on the database name (a second session of the same tree

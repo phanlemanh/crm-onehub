@@ -138,6 +138,10 @@ executors:
     dmk_kho_mau: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t kho-mau"'
     dmk_xoa: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t xoa"'
     dmk_quet_mo_coi: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t quet-mo-coi"'
+    kmd_dau_dang_dung: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t dau-dang-dung"'
+    kmd_giet_mang_dau: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t giet-mang-dau"'
+    kmd_giet_quet_gom: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t giet-quet-gom"'
+    kmd_giet_dung_lai: 'bun run test -- "cd packages/db && bun test test/measure-database.spec.ts -t giet-dung-lai"'
     dp30_chep_khong_tham_chieu: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t chep-khong-tham-chieu"'
     dp30_buoc_chua_giao_van_co_bo_phan: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t buoc-chua-giao"'
     dp30_danh_muc_loc_va_ngay_im: 'bun run test -- "cd apps/api && bun test test/dieu-phoi.spec.ts -t danh-muc-loc"'
@@ -2008,3 +2012,4 @@ lo_trinh:
   tep:
     - docs/plan/lo-trinh-okr.json
     - docs/plan/lo-trinh-kho-tai-lieu.json
+    - docs/plan/lo-trinh-viec-du-an.json
