@@ -4,6 +4,8 @@ import { DEFAULT_AGENT_MODEL, readAgentModel } from "@crm/db/settings";
 import { defineDynamic } from "eve";
 import { docDanhMuc, ghiBiGoLui } from "./model-danh-muc";
 import { ghiModelPhien, modelPhienDaGhi } from "./model-phien";
+import { TRO_LY_OKR } from "./okr/config";
+import { moHinhTroLyOkr } from "./okr/mo-hinh";
 import { attribute, type PurposeContext, purposeOf } from "./session-purpose";
 import { TAI_LIEU_AGENT } from "./tai-lieu-config";
 import { type ModelMaySoan, modelTaiLieu } from "./tai-lieu-model";
@@ -52,7 +54,9 @@ export function vaiCuaPhien(ctx: PurposeContext): VaiModel {
 
 export type LuaChonPhienGoc = ModelSelection & {
 	modelOptions?: {
-		providerOptions: { gateway: typeof TAI_LIEU_AGENT.hoi.gateway };
+		providerOptions: {
+			gateway: { zeroDataRetention: boolean; tags?: string[] };
+		};
 	};
 };
 
@@ -68,6 +72,17 @@ export function modelChoPhienGoc(
 			},
 		});
 	}
+	if (purposeOf(ctx) === "okr") {
+		return Promise.resolve({
+			model: TRO_LY_OKR.model,
+			modelContextWindowTokens: TRO_LY_OKR.cuaSoNguCanh,
+			modelOptions: {
+				providerOptions: {
+					gateway: { zeroDataRetention: true, tags: [...TRO_LY_OKR.tags] },
+				},
+			},
+		});
+	}
 	return modelTheoVai(vaiCuaPhien(ctx));
 }
 
@@ -76,7 +91,13 @@ export function modelChoBuocGoc(
 	tao: typeof createGateway = createGateway,
 	env: Readonly<Record<string, string | undefined>> = process.env,
 ): ModelMaySoan | null {
-	return purposeOf(ctx) === "kho" ? modelTaiLieu("hoi", env, tao) : null;
+	if (purposeOf(ctx) === "kho") return modelTaiLieu("hoi", env, tao);
+	if (purposeOf(ctx) === "okr")
+		return {
+			model: moHinhTroLyOkr(env, tao),
+			modelContextWindowTokens: TRO_LY_OKR.cuaSoNguCanh,
+		};
+	return null;
 }
 
 export function modelChoBoDung() {

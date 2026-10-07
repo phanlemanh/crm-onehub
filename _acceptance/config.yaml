@@ -28,6 +28,9 @@ feature_loop:
     - tro-ly-okr-nen/E12
     - tro-ly-okr-tom-tat/E9
     - tro-ly-okr-tom-tat/E17
+    - tro-ly-okr-bo-final-output/E6
+    - tro-ly-okr-bo-final-output/E7
+    - tro-ly-okr-bo-final-output/E11
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
@@ -988,6 +991,11 @@ executors:
     vtl_hai_giong: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hop-thoai-kr-sau-thu.dom.tsx -t hai-giong'
     vtl_chu_nho: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hop-thoai-kr-sau-thu.dom.tsx -t chu-nho'
     tdx_khong_moi_lai: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-nop.integration.spec.ts -t khong-moi-lai"'
+    tbf_khong_khuon_ra: 'cd apps/agent && bun test test/tro-ly-okr-khong-khuon-ra.spec.ts'
+    tbf_dong_gop_y: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-dong-viec.integration.spec.ts -t gop-y"'
+    tbf_dong_tom_tat: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-nop-tom-tat.integration.spec.ts -t dong-viec-tom-tat"'
+    tbf_goc_zdr: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-goc-zdr.integration.spec.ts"'
+    tbf_luoi: 'bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-dong-viec.integration.spec.ts -t luoi"'
     tdx_quyet: 'bun run test -- "cd apps/api && bun test test/tro-ly-okr-quyet.spec.ts"'
     tdx_man_vet: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-vet.dom.tsx'
     tdx_tach_tx: 'bun run test -- "cd apps/api && bun test test/okr*.spec.ts test/tro-ly-okr-hoan-tac.spec.ts"'
@@ -1840,6 +1848,7 @@ executors:
     vtl_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     tdx_eval_gop_y: 'bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs'
     tdx_do_tre: 'bun _acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs --lan 20'
+    tbf_do_mo_hinh: 'bun _acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs'
     tdx_tai_lieu: 'node _acceptance/tro-ly-okr-de-xuat/rang/tai-lieu.mjs'
     tdx_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx" "apps/app/app/(app)/[slug]/settings/okr/the-gop-y-so-do.tsx" "packages/ui/src/components/proposed-change.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     tts_man_that: 'PHIEN_DO_TEN_CAY=tts-e9 bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/tro-ly-okr-tom-tat/rang/man-tom-tat.mjs"'

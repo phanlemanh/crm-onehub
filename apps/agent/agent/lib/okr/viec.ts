@@ -7,12 +7,12 @@ import {
 } from "@crm/db/agent-tasks";
 import { troLyOkrSanSang } from "@crm/db/okr-tro-ly";
 import type { DonViMucTieu } from "@crm/db/okr-tro-ly-danh-muc";
-import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
+import { type MA_LOI_TRO_LY, okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { nguonKhoaMoHinh } from "../mo-hinh-khoa";
 import type { LeasedTask } from "../tasks";
 import { completeTask } from "../tasks";
 import { TRO_LY_OKR } from "./config";
-import { coBanTomTatCuaViec, docViecOkr, nguoiYeuCauXemDuoc } from "./doc";
+import { nguoiYeuCauXemDuoc } from "./doc";
 
 export { laViecTroLyOkr };
 
@@ -83,16 +83,8 @@ export async function giaHanLease(
 	`;
 }
 
-export async function ketThucCuaViec(
-	taskId: string,
-	ketThuc: string,
-): Promise<string> {
-	if (ketThuc !== "da-nop") return ketThuc;
-	const viec = await docViecOkr(taskId);
-	if (viec?.kind !== LOAI_VIEC_TOM_TAT_TUAN) return ketThuc;
-	return (await coBanTomTatCuaViec(taskId))
-		? ketThuc
-		: TRO_LY_OKR.ketThuc.tomTatKhongNop;
+export function maKhongLamDuoc(ma: (typeof MA_LOI_TRO_LY)[number]): string {
+	return `khong-lam-duoc:${ma}`;
 }
 
 export async function dongViecOkr(
