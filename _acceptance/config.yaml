@@ -1282,6 +1282,9 @@ executors:
     nhkl_duong_cham: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t khong-lac-duong-cham"
     nhkl_fetch_gia: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t fetch-gia-theo-that"
     dph_tra_loi: node --test scripts/dieu-phoi/test/tra-loi.test.mjs
+    kbk_api_nhan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t nhan"'
+    kbk_api_bo_qua: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t bo-qua" && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi-de-xuat.dom.tsx -t bo-qua'
+    kbk_api_chan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t chan"'
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
