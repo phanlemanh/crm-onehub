@@ -75,6 +75,10 @@ const BANG_TINH_TRANG: Record<
 
 describe("tinh-trang", () => {
 	test("bang 3 loai x 7 muc ti le", () => {
+		ghim(
+			tinhTrang(0.49 * KY_VONG, KY_VONG, "hoc-tap") !== "truot",
+			"hoc-tap ra truot o muc 0.49",
+		);
 		let soDong = 0;
 		for (const loai of LOAI_MUC_TIEU)
 			for (const muc of MUC) {
@@ -136,10 +140,10 @@ describe("cach-doc", () => {
 	});
 
 	test("cam-ket va tham-vong chua co diem khong co cach doc", () => {
-		expect([cachDoc("cam-ket", null, CO_CHU), cachDoc("tham-vong", null, CO_CHU)]).toEqual([
-			null,
-			null,
-		]);
+		expect([
+			cachDoc("cam-ket", null, CO_CHU),
+			cachDoc("tham-vong", null, CO_CHU),
+		]).toEqual([null, null]);
 	});
 
 	test("tap CACH_DOC du sau gia tri", () => {
@@ -162,7 +166,11 @@ describe("soan-nhan", () => {
 		const nhanNhap = mucTieuNhap.shape.loai.safeParse("hoc-tap");
 		ghim(nhan.success && nhanNhap.success, "soan OKR tu choi hoc-tap");
 		const sai = dongMucTieuMoi.shape.loaiMucTieu.safeParse("hoc tap");
-		expect({ nhan: nhan.success, nhanNhap: nhanNhap.success, sai: sai.success }).toEqual({
+		expect({
+			nhan: nhan.success,
+			nhanNhap: nhanNhap.success,
+			sai: sai.success,
+		}).toEqual({
 			nhan: true,
 			nhanNhap: true,
 			sai: false,

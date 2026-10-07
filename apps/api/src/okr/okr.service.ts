@@ -93,6 +93,7 @@ import {
 	cuaSoHieuLuc,
 	cuaSoRaRa,
 	hieuLucHomNay,
+	hocTapChuaGhi,
 	kiemDongKy,
 } from "./khep";
 import { dongLoOkr, phanTichLoOkr } from "./nhap";
@@ -535,6 +536,14 @@ export class OkrService {
 				const { conLai } = await kiemDongKy(tx, id);
 				if (conLai > 0)
 					throw new BadRequestException(T.khep.conKrChuaCham(conLai));
+				const hocTap = await hocTapChuaGhi(tx, id);
+				if (hocTap.length > 0)
+					throw new BadRequestException(
+						T.khep.conHocTapChuaGhi(
+							hocTap.length,
+							hocTap.map((m) => m.ten),
+						),
+					);
 			}
 			await tx.okrCycle.update({ where: { id }, data: { phase } });
 			await this.vet(

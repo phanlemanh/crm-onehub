@@ -87,10 +87,10 @@ describe("diem-muc-tieu", () => {
 
 describe("cach-doc", () => {
 	test("tham vọng 0.7 → tốt", () =>
-		expect(cachDoc("tham-vong", 0.7)).toBe("tot"));
+		expect(cachDoc("tham-vong", 0.7, "")).toBe("tot"));
 	test("tham vọng 0.65 → dưới mức tốt", () =>
-		expect(cachDoc("tham-vong", 0.65)).toBe("duoi-muc-tot"));
-	test("cam kết 1 → đạt", () => expect(cachDoc("cam-ket", 1)).toBe("dat"));
+		expect(cachDoc("tham-vong", 0.65, "")).toBe("duoi-muc-tot"));
+	test("cam kết 1 → đạt", () => expect(cachDoc("cam-ket", 1, "")).toBe("dat"));
 	test("cam kết 0.9 → chưa trọn", () =>
-		expect(cachDoc("cam-ket", 0.9)).toBe("chua-tron"));
+		expect(cachDoc("cam-ket", 0.9, "")).toBe("chua-tron"));
 });
