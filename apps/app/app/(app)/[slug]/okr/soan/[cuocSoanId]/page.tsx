@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageShellContent, PageShellLoading } from "@/components/page-shell";
+import { PageShellContent } from "@/components/page-shell";
 import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { getLocale } from "@/lib/locale/server";
 import { okrSoanMessages } from "@/lib/messages/okr-soan";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { TrangSoan } from "../trang-soan";
+import { DangMoTrangSoan, TrangSoan } from "../trang-soan";
 
 type Params = Promise<{ slug: string; cuocSoanId: string }>;
 
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function SoanOkrPage({ params }: { params: Params }) {
 	return (
 		<PageShellContent className="min-h-0">
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<DangMoTrangSoan />}>
 				<NoiDung params={params} />
 			</Suspense>
 		</PageShellContent>

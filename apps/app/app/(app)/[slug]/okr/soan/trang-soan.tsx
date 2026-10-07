@@ -204,6 +204,19 @@ function ThanCuoc({
 	);
 }
 
+export function DangMoTrangSoan() {
+	const m = okrSoanMessages(useLocale());
+	return (
+		<div
+			className="flex min-h-0 flex-1 flex-col gap-4"
+			data-trang-soan="dang-mo"
+		>
+			<DauTrangSoan cuoc={null} m={m} />
+			<KaraState kind="working" label={m.man.dangMo} delayMs={0} />
+		</div>
+	);
+}
+
 export function TrangSoan({
 	cuocSoanId,
 	cauNoi,
