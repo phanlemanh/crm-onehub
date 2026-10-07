@@ -5,7 +5,7 @@ slug: kho-mau-mang-dau-ngay
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-07-kho-mau-mang-dau-ngay-design.md
 approved_by:
 approved_at:
@@ -106,3 +106,8 @@ container được gắn nhãn phiên ngay lúc tạo để bộ dọn gom đư�
 - Kho bằng chứng sau mọi lượt S3: vẫn đúng 7 kho cũ cộng `crm_thudieutra26552__mau_do`, không
   kho `crm_thu*` nào khác sót lại.
 - Năm lệnh ở gốc tại `9e12dafe3`: test 0 (646 s) · check-types 0 · lint 0 · lint:slop 0 · build 0.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-07 (Phan Le Manh), từ mục ngoài hợp đồng của S4 lượt 1:
+
+- Ngoài-2: Bài kiểm chưa chắc bắt được nếu sau này có người sửa nhầm khiến kho mẫu của lượt bị ngắt giữa chừng sống 24 giờ thay vì 12 giờ — giờ tạo của dấu đang dựng chỉ bị chặn một phía, và đồng hồ quét của E3 lấy từ chính giá trị đó.
+- Ngoài-3: Ca `giet-quet-gom` (E3) và `giet-dung-lai` (E4) không ghim tiền đề «kho bị giết mang dấu đang dựng»; chỉ `giet-mang-dau` (E2) canh điều đó.
