@@ -1,7 +1,5 @@
 import { docSoOkr } from "@crm/validation/okr-kr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
-import { khoaKr, khoaMucTieu } from "./moc-nop";
-import { khoaSo } from "./so-theo-khoa";
 import type {
 	DemDuaVao,
 	DongKr,
@@ -13,6 +11,8 @@ import type {
 	SoDaGo,
 	SoKr,
 } from "./kieu";
+import { khoaKr, khoaMucTieu } from "./moc-nop";
+import { khoaSo } from "./so-theo-khoa";
 
 const DA_NHAN: ReadonlySet<DongSoan["trangThai"]> = new Set(["nhan", "sua"]);
 const DA_QUYET: ReadonlySet<DongSoan["trangThai"]> = new Set([

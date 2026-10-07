@@ -34,7 +34,7 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
-import { type DongMau, NHOM_MAU, type NhomMau, SOAN_MAU as M } from "./du-lieu";
+import { type DongMau, SOAN_MAU as M, NHOM_MAU, type NhomMau } from "./du-lieu";
 
 type Quyet = "cho" | "nhan" | "bo";
 

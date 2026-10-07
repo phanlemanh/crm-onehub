@@ -18,6 +18,17 @@ const khoiNguCanh = z.object({
 	quyet: z.array(quyetBang),
 });
 
+const khoiNguCanhJson = z
+	.string()
+	.transform((chu) => {
+		try {
+			return JSON.parse(chu);
+		} catch {
+			return null;
+		}
+	})
+	.pipe(khoiNguCanh);
+
 export type LoaiDongKhoi = z.infer<typeof loaiDong>;
 export type QuyetBang = z.infer<typeof quyetBang>;
 export type KhoiNguCanh = z.infer<typeof khoiNguCanh>;
@@ -34,20 +45,12 @@ export function vietKhoi(khoi: KhoiNguCanh, nguoi: string): string {
 	return `${DAU}${JSON.stringify(khoi)}${CUOI}${nguoi}`;
 }
 
-function docJson(chu: string): unknown {
-	try {
-		return JSON.parse(chu);
-	} catch {
-		return null;
-	}
-}
-
 export function docKhoi(tin: string): TinDaTach {
 	const nguyen: TinDaTach = { khoi: null, nguoi: tin };
 	if (!tin.startsWith(DAU)) return nguyen;
 	const het = tin.indexOf(CUOI, DAU.length);
 	if (het < 0) return nguyen;
-	const r = khoiNguCanh.safeParse(docJson(tin.slice(DAU.length, het)));
+	const r = khoiNguCanhJson.safeParse(tin.slice(DAU.length, het));
 	if (!r.success) return nguyen;
 	return {
 		khoi: rong(r.data) ? null : r.data,
@@ -65,9 +68,12 @@ export function rutGonQuyet(ds: readonly QuyetBang[]): QuyetBang[] {
 	}, []);
 }
 
-export function dongKhoi(d: DongSoan): { loai: LoaiDongKhoi; chu: string } {
+export type DongKhoi = { loai: LoaiDongKhoi; chu: string };
+
+export function dongKhoi(d: DongSoan) {
 	if (d.loai === "muc-tieu-moi")
-		return { loai: "muc-tieu", chu: d.giaTriCuoi ?? d.ten };
-	if (d.loai === "kr-moi") return { loai: "kr", chu: d.giaTriCuoi ?? d.ten };
-	return { loai: "can-chinh", chu: d.tenDich };
+		return { loai: "muc-tieu", chu: d.giaTriCuoi ?? d.ten } satisfies DongKhoi;
+	if (d.loai === "kr-moi")
+		return { loai: "kr", chu: d.giaTriCuoi ?? d.ten } satisfies DongKhoi;
+	return { loai: "can-chinh", chu: d.tenDich } satisfies DongKhoi;
 }

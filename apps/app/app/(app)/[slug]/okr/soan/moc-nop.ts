@@ -1,5 +1,5 @@
-import { type BanNhap, banNhap } from "@crm/validation/okr-cuoc-soan";
 import { eveTurnReference } from "@crm/validation/eve-stream";
+import { type BanNhap, docBanNhap } from "@crm/validation/okr-cuoc-soan";
 import { chuanHoa } from "@crm/validation/okr-kiem";
 import type { MessageStreamEvent } from "eve/client";
 import type { EveMessage } from "eve/react";
@@ -115,14 +115,11 @@ function tomTatTu(truoc: BanNhap | null, sau: BanNhap): TomTatMoc {
 	return { docDuoc: true, dau: false, dongDoi, ...dem };
 }
 
-function docBan(vao: unknown): BanNhap | null {
-	const r = banNhap.safeParse(vao);
-	return r.success ? r.data : null;
-}
-
-export function tomTatMoc(truoc: BanNhap | null, sau: unknown): TomTatMoc {
-	const ban = docBan(sau);
-	return ban ? tomTatTu(truoc, ban) : { docDuoc: false };
+export function tomTatMoc(
+	truoc: BanNhap | null,
+	sau: BanNhap | null,
+): TomTatMoc {
+	return sau ? tomTatTu(truoc, sau) : { docDuoc: false };
 }
 
 export function mocTuTranscript(items: readonly TranscriptItem[]): MocNop[] {
@@ -130,7 +127,7 @@ export function mocTuTranscript(items: readonly TranscriptItem[]): MocNop[] {
 	let truoc: BanNhap | null = null;
 	for (const item of items) {
 		if (item.kind !== "did" || item.tool !== SOAN_UI.congCuNop) continue;
-		const ban = docBan(item.input);
+		const ban = docBanNhap(item.input);
 		ra.push({
 			itemId: item.id,
 			tom: ban ? tomTatTu(truoc, ban) : { docDuoc: false },

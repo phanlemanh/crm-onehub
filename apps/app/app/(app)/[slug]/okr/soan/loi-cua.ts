@@ -118,14 +118,3 @@ export function lyDoHong(vao: {
 		(error ? MA_CUA.get(error) : undefined) ?? maTheoStatus(http.data.status);
 	return { ma, daHoan: luot === CUA_OKR.luotDaHoan };
 }
-
-const loiTrpc = z.object({ data: z.object({ code: z.string() }) });
-
-export type LoiQuyet = { kieu: "xung-dot" } | { kieu: "mang" };
-
-export function loiQuyetTu(e: unknown): LoiQuyet {
-	const r = loiTrpc.safeParse(e);
-	return r.success && r.data.data.code === "CONFLICT"
-		? { kieu: "xung-dot" }
-		: { kieu: "mang" };
-}

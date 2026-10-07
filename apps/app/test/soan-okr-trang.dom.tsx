@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { type BanNhap, banNhap } from "@crm/validation/okr-cuoc-soan";
 import { act } from "react";
 import { donViCua } from "@/app/(app)/[slug]/okr/soan/dung-cuoc-soan";
 import { docKhoi, KHOI_MO } from "@/app/(app)/[slug]/okr/soan/khoi-ngu-canh";
@@ -8,27 +9,27 @@ import {
 	bam,
 	CUOC,
 	cc,
-	daDung,
-	daGui,
-	datAgent,
-	datDanhSach,
-	go,
-	goiCua,
-	kr,
-	mt,
-	nguoiNoi,
 	cho,
 	DauTrangOkr,
+	daDung,
+	daGui,
 	dat,
+	datAgent,
+	datDanhSach,
 	datLai,
-	diTrang,
 	dinhVi,
+	diTrang,
 	don,
+	go,
+	goiCua,
 	KhungSoanXuat,
+	kr,
 	m,
 	mo,
 	moKhung,
 	moTrang,
+	mt,
+	nguoiNoi,
 	nhip,
 	nut,
 	SAN_SANG_BAT,
@@ -494,7 +495,7 @@ describe("k2-quyet", () => {
 
 	test("bấm Hoàn tác hai lần nhanh chỉ gửi một lệnh", async () => {
 		await datBanNhap([mt("1", "Giữ khách lớn miền Bắc", "nhan")]);
-		let mo = (_: unknown) => {};
+		let mo: (kq: { ok: true }) => void = () => {};
 		dat("okr.soanQuyet", () => new Promise((ok) => (mo = ok)));
 		await moTrang();
 		const nutH = nutHoanTac(dongEl("1"));
@@ -789,7 +790,10 @@ const NOP_2 = {
 		]),
 	],
 };
-const nop = (id: string, input: unknown): ReturnType<typeof nguoiNoi> =>
+const nop = (
+	id: string,
+	input: BanNhap | { mucTieu: number },
+): ReturnType<typeof nguoiNoi> =>
 	({
 		id,
 		role: "assistant",
@@ -824,8 +828,8 @@ describe("k2-moc", () => {
 			status: "ready",
 			data: {
 				messages: [
-					nop("n1", NOP_1),
-					nop("n2", NOP_2),
+					nop("n1", banNhap.parse(NOP_1)),
+					nop("n2", banNhap.parse(NOP_2)),
 					nop("n3", { mucTieu: 1 }),
 				],
 			},

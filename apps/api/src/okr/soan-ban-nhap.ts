@@ -288,7 +288,7 @@ async function ghiHoan(
 			giaTriCuoi: null,
 			nguoiQuyet: null,
 			quyetLuc: null,
-			...(cuoc.lanNopMoiNhat ? { inputHash: cuoc.lanNopMoiNhat } : {}),
+			inputHash: cuoc.lanNopMoiNhat ?? undefined,
 		},
 	});
 	return { ok: true };

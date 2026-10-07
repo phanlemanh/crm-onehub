@@ -14,6 +14,17 @@ const soDaLuu = z.record(
 	}),
 );
 
+const soDaLuuJson = z
+	.string()
+	.transform((chu) => {
+		try {
+			return JSON.parse(chu);
+		} catch {
+			return null;
+		}
+	})
+	.pipe(soDaLuu);
+
 export const khoaSo = (kr: { chaKhoa: string; khoa: string }): string =>
 	khoaKr(kr.chaKhoa, kr.khoa);
 
@@ -25,11 +36,11 @@ function khoMacDinh(): Kho | undefined {
 	}
 }
 
-function docThu(kho: Kho, khoa: string): unknown {
+function docChu(kho: Kho, khoa: string): string {
 	try {
-		return JSON.parse(kho.getItem(khoa) ?? "{}");
+		return kho.getItem(khoa) ?? "{}";
 	} catch {
-		return null;
+		return "{}";
 	}
 }
 
@@ -38,7 +49,7 @@ export function docSoDaLuu(
 	kho: Kho | undefined = khoMacDinh(),
 ): SoDaGo {
 	if (!kho) return {};
-	const r = soDaLuu.safeParse(docThu(kho, SOAN_UI.khoaSo + cuocSoanId));
+	const r = soDaLuuJson.safeParse(docChu(kho, SOAN_UI.khoaSo + cuocSoanId));
 	return r.success ? r.data : {};
 }
 

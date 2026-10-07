@@ -1,16 +1,20 @@
 import { describe, expect, test } from "bun:test";
-import { type BanNhap, banNhap } from "@crm/validation/okr-cuoc-soan";
 import {
-	type KhoiNguCanh,
-	KHOI_MO,
-	type QuyetBang,
+	type BanNhap,
+	banNhap,
+	docBanNhap,
+} from "@crm/validation/okr-cuoc-soan";
+import {
 	docKhoi,
+	KHOI_MO,
+	type KhoiNguCanh,
+	type QuyetBang,
 	rutGonQuyet,
 	vietKhoi,
 } from "@/app/(app)/[slug]/okr/soan/khoi-ngu-canh";
 import {
-	khoaMucTieu,
 	khoaKr,
+	khoaMucTieu,
 	mocTuTranscript,
 	type TomTatMoc,
 	tomTatMoc,
@@ -181,12 +185,17 @@ describe("tom-tat-moc", () => {
 	});
 
 	test("đầu vào không qua lược đồ bản nháp → docDuoc false, không ném", () => {
-		expect(tomTatMoc(DAU, { mucTieu: "hỏng" })).toEqual({ docDuoc: false });
+		expect(tomTatMoc(DAU, docBanNhap({ mucTieu: "hỏng" }))).toEqual({
+			docDuoc: false,
+		});
 		expect(tomTatMoc(null, null)).toEqual({ docDuoc: false });
 	});
 
 	test("mocTuTranscript: chỉ lời gọi nop_ban_nhap, so với lần đọc được liền trước", () => {
-		const did = (id: string, input: unknown): TranscriptItem =>
+		const did = (
+			id: string,
+			input: BanNhap | { mucTieu: number },
+		): TranscriptItem =>
 			({
 				kind: "did",
 				id,
