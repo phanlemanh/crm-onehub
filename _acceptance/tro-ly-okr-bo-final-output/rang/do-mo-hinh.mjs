@@ -1,5 +1,14 @@
 import { spawnSync } from "node:child_process";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import {
+	appendFileSync,
+	closeSync,
+	mkdirSync,
+	openSync,
+	readdirSync,
+	readFileSync,
+	statSync,
+	writeFileSync,
+} from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -7,6 +16,8 @@ const RANG = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(RANG, "../../..");
 const TRACES = join(GOC, "apps/agent/.eve/traces/v1");
 const RA_E22 = join(GOC, ".acceptance-runs/tro-ly-okr-de-xuat/e22");
+const RA = join(GOC, ".acceptance-runs/tro-ly-okr-bo-final-output");
+const NHAT_KY = join(RA, "do-mo-hinh.log");
 
 const DO = {
 	subagent: "tro_ly_okr",
@@ -129,6 +140,16 @@ export function demLog(tep) {
 	return n;
 }
 
+function ghi(dong) {
+	console.log(dong);
+	appendFileSync(NHAT_KY, `${dong}\n`);
+}
+
+function ketThuc(ma) {
+	ghi(`KET THUC ma ${ma}`);
+	process.exit(ma);
+}
+
 const NS_MOI_MS = 1_000_000n;
 const bayGioNs = () => BigInt(Date.now()) * NS_MOI_MS;
 
@@ -144,10 +165,10 @@ function tuKiem() {
 	if (dem.final_output < 1) loi.push("final_output");
 	if (dem.output_schema < 1) loi.push("output_schema");
 	if (rong < 1) loi.push("empty_log");
-	console.log(
+	ghi(
 		`[tu-kiem] n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema} · empty-log ${rong}`,
 	);
-	for (const o of loi) console.log(`tu kiem khong bat duoc ${o}`);
+	for (const o of loi) ghi(`tu kiem khong bat duoc ${o}`);
 	return loi.length === 0;
 }
 
@@ -155,15 +176,14 @@ function chay(ten) {
 	const [lenh, args] = DO.lenh[ten];
 	const tuMs = Date.now();
 	const tuNs = bayGioNs();
-	console.log(
+	ghi(
 		`[${ten}] bat dau ${new Date(tuMs).toISOString()}: ${lenh} ${args.join(" ")}`,
 	);
-	const r = spawnSync(lenh, args, {
-		cwd: GOC,
-		stdio: ["ignore", "inherit", "inherit"],
-	});
+	const fd = openSync(NHAT_KY, "a");
+	const r = spawnSync(lenh, args, { cwd: GOC, stdio: ["ignore", fd, fd] });
+	closeSync(fd);
 	const denNs = bayGioNs();
-	console.log(
+	ghi(
 		`[${ten}] xong sau ${Math.round((Date.now() - tuMs) / 1000)} giay, ma ${r.status}`,
 	);
 	return { ma: r.status ?? 1, tuMs, tuNs, denNs };
@@ -190,17 +210,30 @@ function phanMoHinh(ten, nToiThieu, coLog) {
 	if (dem.n_dau < nToiThieu) loi.push(`mau qua nho: ${dem.n_dau}`);
 	if (dem.final_output) loi.push(`final_output: ${dem.final_output}`);
 	if (dem.output_schema) loi.push(`outputSchema: ${dem.output_schema}`);
-	console.log(
+	ghi(
 		`[${ten}] ma ${r.ma} · n_dau ${dem.n_dau} · het-tran ${dem.het_tran} · final_output ${dem.final_output} · outputSchema ${dem.output_schema}${coLog ? ` · empty-log ${rong}` : ""} → ${loi.length ? `DO ${loi.join("; ")}` : "dat"}`,
 	);
 	return loi.length === 0;
 }
 
-if (!tuKiem()) process.exit(3);
-if (chiTuKiem) process.exit(0);
+mkdirSync(RA, { recursive: true });
+writeFileSync(NHAT_KY, "");
+ghi(`nhat ky: ${NHAT_KY}`);
+try {
+	if (!tuKiem()) ketThuc(3);
+	if (chiTuKiem) ketThuc(0);
+} catch (loi) {
+	ghi(`loi thuoc: ${loi instanceof Error ? loi.message : String(loi)}`);
+	ketThuc(1);
+}
 
-const ket = [
-	phanMoHinh("e22", DO.nDauToiThieuE22, true),
-	phanMoHinh("e17", DO.nDauToiThieuE17, false),
-];
-process.exit(ket.every(Boolean) ? 0 : 1);
+try {
+	const ket = [
+		phanMoHinh("e22", DO.nDauToiThieuE22, true),
+		phanMoHinh("e17", DO.nDauToiThieuE17, false),
+	];
+	ketThuc(ket.every(Boolean) ? 0 : 1);
+} catch (loi) {
+	ghi(`loi thuoc: ${loi instanceof Error ? loi.message : String(loi)}`);
+	ketThuc(1);
+}
