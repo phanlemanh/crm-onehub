@@ -34,6 +34,10 @@ async function gieoNguoi(): Promise<string> {
 	return nguoi.id;
 }
 
+async function don(contactId: string): Promise<void> {
+	await db.contact.deleteMany({ where: { id: contactId } });
+}
+
 async function gieoFact(
 	contactId: string,
 	field: string,
@@ -166,6 +170,7 @@ describe("hoan-tac-thong-tin", () => {
 				"quan",
 			);
 			expect(lanHai.status).toBe(409);
+			await don(contactId);
 		}
 	});
 
@@ -198,6 +203,7 @@ describe("hoan-tac-thong-tin", () => {
 			decidedById: null,
 			decidedAt: null,
 		});
+		await don(contactId);
 	});
 
 	test("chan: ba ca tu choi khong doi hang nao", async () => {
@@ -237,6 +243,7 @@ describe("hoan-tac-thong-tin", () => {
 				ma: o.ma,
 			});
 			expect(await anh(contactId)).toEqual(truoc);
+			await don(contactId);
 		}
 	});
 
@@ -285,5 +292,6 @@ describe("hoan-tac-thong-tin", () => {
 		)
 			throw new Error("chan: phuc hoi fact cua lan nhan khac");
 		expect((await cot(contactId)).title).toBe("Trưởng phòng");
+		await don(contactId);
 	});
 });

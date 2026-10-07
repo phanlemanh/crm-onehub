@@ -374,7 +374,7 @@ function lastQuestion(messages: readonly TranscriptMessage[]): string | null {
 }
 
 function stepLabel(item: DidItem, t: KaraBanGhiMessages, locale: Locale) {
-	const viec = t.tab.buoc[item.tool];
+	const viec = new Map(Object.entries(t.tab.buoc)).get(item.tool);
 	if (!viec) return locale === "vi" ? t.tab.buocKhac : item.label;
 	const tach = item.label.indexOf(" — ");
 	return tach === -1 ? viec : `${viec}${item.label.slice(tach)}`;

@@ -93,7 +93,7 @@ const en = {
 			write_file: "Wrote a file",
 			glob: "Looked for files",
 			grep: "Searched inside the files",
-		} as Record<string, string>,
+		},
 		buocKhac: "Used a tool",
 	},
 	hoiLai: {
