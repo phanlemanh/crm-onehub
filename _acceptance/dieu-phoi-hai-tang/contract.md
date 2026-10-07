@@ -5,7 +5,7 @@ slug: dieu-phoi-hai-tang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, config]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-hai-tang-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
@@ -87,6 +87,11 @@ Không dùng skill morphological-scan: spec ngoài đã chốt phạm vi và §7
   - Ngoài-14: «ở đầu trang» của bảng chỉ đo bằng chuỗi có mặt.
   - Ngoài-15: «đủ các khối» và «escape mọi chuỗi» chỉ đo vài ca.
   - Ngoài-16, Ngoài-17: chấp nhận, không sửa.
+- Hạn chế đã biết, owner chọn ở Cổng 2 lượt 4 (sổ quyết định, dòng descope gate2 cuối):
+  - Ngoài-2 (lượt 4): `day.worktree` trong `hang-viec.json` không được chuẩn hoá `realpath`; gõ có dấu `/` cuối hay qua symlink thì hook chờ người im lặng.
+  - Ngoài-4 (lượt 4): tập loại đơn và tài nguyên khai ở ba chỗ (`hinh-dang.mjs`, `lich.mjs`, `phat-lich.mjs`), có thể lệch nhau khi thêm loại mới.
+  - Ngoài-8 (lượt 4): tệp `nhip` do hook nhịp ghi chưa bao giờ được bộ phát lịch đọc trong test (thiếu vòng ghi → đọc).
+  - Ngoài-10 (lượt 4): ca «khoá thuộc phiên khác» của test kế hoạch không khẳng định mã thoát 2.
 
 - Mã khác kế hoạch 1a đúng hai chỗ: bỏ chú thích, gom hằng thời gian vào `cau-hinh.mjs` (design doc mục 3). Test của kế hoạch giữ nguyên.
 - Test chạy bằng `node --test` (Node ≥ 22; máy có v26, cần mẫu glob thay vì thư mục).

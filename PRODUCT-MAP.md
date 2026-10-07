@@ -11,8 +11,8 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>123 việc"]
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>124 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>42 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -41,7 +41,6 @@ flowchart TD
 
 ## Đang làm
 
-- Tầng máy của Orchestrator–workers hai tầng, giai đoạn 1a — bộ phát lịch tất định (khoá có hạn thuê, canh sức khoẻ máy, kênh yêu cầu, hàng kế, bảng đồng hồ), CLI đợt và bốn hook (chặn S4, nhịp, chờ người) (`dieu-phoi-hai-tang`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -114,6 +113,7 @@ flowchart TD
 - Màn «Đã gửi» của Cập nhật tuần đếm đúng KR còn chờ — không báo nhầm KR đã gửi trong tuần là còn chờ (`da-gui-dem-dung-kr-cho`)
 - Bảng cột thoả thuận — số đếm và tổng đầu cột đổi ngay khi thả, trả về đúng khi lưu thất bại (`dem-dau-cot-khi-dang-luu`)
 - Cả đội điều phối 30 ngày đầu của đối tác mới ngay trong CRM, thôi dùng Google Sheet và giấy tờ tay (`dieu-phoi-30-ngay-dau`) — đã chấm bởi thực tế
+- Tầng máy của Orchestrator–workers hai tầng, giai đoạn 1a — bộ phát lịch tất định (khoá có hạn thuê, canh sức khoẻ máy, kênh yêu cầu, hàng kế, bảng đồng hồ), CLI đợt và bốn hook (chặn S4, nhịp, chờ người) (`dieu-phoi-hai-tang`)
 - Phép đo màn thật chạy trên kho riêng của chính cây (crm_<cây>_do) với máy chủ app/api của chính cây, tự dựng và tự dọn; kho dev chung crm không bao giờ bị phép đo ghi nữa (`do-man-tren-kho-rieng`)
 - Đo quyền của lượt bằng hành vi — thay bộ dò regex theo dòng của AC-5 cũ bằng phép đo đi trọn đường sản phẩm, siết mệnh đề về đúng thứ máy chủ và agent giữ được, và đổi sàn dân số sang bất biến nguồn ghi đọc bằng AST (`do-quyen-luot-bang-hanh-vi`)
 - Đường proto cho nghi thức design-pass — route /proto sau cờ dev, sổ đăng ký có khai state, proto mẫu ghép từ @crm/ui, và ba khoá design_pass trong config (`duong-proto-cho-design-pass`)
