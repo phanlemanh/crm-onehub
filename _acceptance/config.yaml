@@ -94,6 +94,7 @@ executors:
     tdk_khong_ro: 'bun run test -- "cd apps/api && bun test test/tai-lieu-tim-khong-ro.spec.ts"'
     tdk_cmdk: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-cmdk.dom.tsx"
     tdk_chen_lien_ket_ui: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/trinh-soan-lien-ket.dom.tsx"
+    ctd_don_vi: node --test scripts/ci/test-song-song.test.mjs
     tdk_chen_lien_ket_api: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nhac-toi.spec.ts -t chen-lien-ket"'
     tdk_nhac_toi: 'bun run test -- "cd apps/api && bun test test/tai-lieu-nhac-toi.spec.ts -t nhac-toi-ma-tran"'
     tdk_man_nhac_toi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tai-lieu-nhac-toi.dom.tsx"
@@ -1932,6 +1933,8 @@ executors:
     nbn_dao_thu_tu_xanh: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs xanh
     nbn_dao_thu_tu_do: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs do
     nbn_quet_mau: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/quet-mau.mjs
+    ctd_chay_that: bun _acceptance/ci-test-duoi-tran/rang/chay-that.mjs
+    ctd_ci_thoi_gian: node _acceptance/ci-test-duoi-tran/rang/ci-thoi-gian.mjs
     smk_va_cham_xanh: bun _acceptance/so-moi-khong-chap-chon/rang/va-cham.mjs xanh
     smk_va_cham_do: bun _acceptance/so-moi-khong-chap-chon/rang/va-cham.mjs do
     k1_ai_elements: 'node _acceptance/bo-xuong-kara/rang/ai-elements.mjs'
