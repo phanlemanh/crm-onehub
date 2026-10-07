@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: datatable-loc-ro
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2d09a90c95166eb80ecce6ac7ca8b321ddb694b0
+verified_commit: 1a1c0eed2235ddd3bf3e684bc182624485af152e
 human_signoff:
 ---
 
 # Evidence Report: datatable-loc-ro
 
-Round 1. Mười một eval của hợp đồng đều xanh, nhưng một lệnh suite hồi quy không gắn eval nào đỏ: `bun run test -- --filter=app --filter=@crm/ui`. Theo luật, lệnh suite đỏ thì verdict là REJECT dù `failed_evals` rỗng. Chi tiết ở mục Lệnh suite (hồi quy) bên dưới.
+Round 2. Mười một eval của hợp đồng đều xanh và cả bảy lệnh suite hồi quy đều xanh, kể cả lệnh `bun run test -- --filter=app --filter=@crm/ui` đã đỏ ở round 1. Không có eval judgment, không có eval ngẫu nhiên, không mục nào chờ người.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -32,156 +32,152 @@ Round 1. Mười một eval của hợp đồng đều xanh, nhưng một lệnh
 ## Evidence
 
 - eval: E1
-  run_id: minted-datatable-loc-ro-E1-r1
+  run_id: minted-datatable-loc-ro-E1-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dlr_rong_vi_loc
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    Ran 1 test across 1 file. [1088.00ms]
+    Ran 1 test across 1 file. [733.00ms]
 
 - eval: E2
-  run_id: minted-datatable-loc-ro-E2-r1
+  run_id: minted-datatable-loc-ro-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dlr_nut_bo_loc
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    Ran 2 tests across 1 file. [1032.00ms]
+    Ran 2 tests across 1 file. [1000.00ms]
 
 - eval: E3
-  run_id: minted-datatable-loc-ro-E3-r1
+  run_id: minted-datatable-loc-ro-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dlr_bang_bo_loc
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    (bo-loc, 4 bảng) xanh; lệnh chạy với TZ=Asia/Ho_Chi_Minh
+    Ran 4 tests across 1 file. [1146.00ms]
+    Lệnh chạy với TZ=Asia/Ho_Chi_Minh.
 
 - eval: E4
-  run_id: minted-datatable-loc-ro-E4-r1
+  run_id: minted-datatable-loc-ro-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dlr_bo_chon
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    (bo-chon) xanh
+    Ran 4 tests across 1 file. [874.00ms]
 
 - eval: E5
-  run_id: minted-datatable-loc-ro-E5-r1
+  run_id: minted-datatable-loc-ro-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dlr_so_dem
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    (so-dem) xanh
+    Ran 4 tests across 1 file. [931.00ms]
 
 - eval: E6
-  run_id: minted-datatable-loc-ro-E6-r1
+  run_id: minted-datatable-loc-ro-E6-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dlr_bang_so_0
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    4 expect() calls
-    Ran 3 tests across 1 file. [3.12s]
+    Ran 3 tests across 1 file. [3.11s]
+    Lệnh chạy với TZ=Asia/Ho_Chi_Minh.
 
 - eval: E7
-  run_id: minted-datatable-loc-ro-E7-r1
+  run_id: minted-datatable-loc-ro-E7-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dlr_bang_khong_loc
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    Ran 2 tests across 1 file. [1.60s]
+    3 expect() calls
+    Ran 2 tests across 1 file. [1243.00ms]
 
 - eval: E8
-  run_id: minted-datatable-loc-ro-E8-r1
+  run_id: minted-datatable-loc-ro-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dlr_do_man
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   screenshot: evidence/menu-giai-doan-1440.png
   observed: |
-    menu-giai-doan-1440: trang Thoả thuận, menu Lọc mở, mục Giai đoạn có menu con liệt kê từng giai đoạn kèm số (giai đoạn rỗng mang 0), hộp menu nằm trọn trong khung 1440x900.
-    rong-vi-loc-1440: bảng rỗng với tiêu đề "Không có kết quả nào khớp bộ lọc", mô tả, nút "Bỏ lọc" rõ giữa bảng, nút Lọc hiện (1), không đè thanh công cụ, không tràn ngang.
-    sau-bo-loc-1440: sau khi bấm Bỏ lọc bảng có 12 dòng (27 thoả thuận, trang 1/2), nút Lọc hết số đếm. truong-tuy-chinh-1440: menu con trường "Nguồn đo E7" có lựa chọn chưa ai dùng kèm 0.
-    rong-vi-loc-375 và sau-bo-loc-375: khung điện thoại thấy rõ tiêu đề, mô tả, nút "Bỏ lọc", không tràn ngang; sau bỏ lọc bảng hiện nhiều dòng, nút Lọc hết (1). Khớp expected.
+    Đã mở từng ảnh bằng Read. menu-giai-doan-1440: trang Thoả thuận, menu Lọc mở, submenu Giai đoạn liệt kê từng giai đoạn kèm số (Demo booked 5, Qualified to buy 8, ... «Giai đoạn đo E7» 0, Closed won 0), giai đoạn rỗng mang 0, hộp menu nằm trọn trong khung 1440x900.
+    rong-vi-loc-1440: nút «Lọc (1)» bật, bảng chỉ còn hàng tiêu đề, giữa vùng bảng có «Không có kết quả nào khớp bộ lọc», mô tả và nút «Bỏ lọc» rõ ràng, không đè thanh công cụ. sau-bo-loc-1440: nút Lọc hết số đếm, bảng 12 dòng, chân bảng «27 thoả thuận», trang 1/2. truong-tuy-chinh-1440: trang Cá nhân, menu con «Nguồn đo E7» có «Hội chợ đo E7» 1 và «Chưa dùng đo E7» 0.
+    rong-vi-loc-375: điện thoại, «Lọc (1)», câu, mô tả và nút «Bỏ lọc» trong khung nhìn, không tràn ngang (chỉ huy hiệu dev «N» che nhẹ chân trang, không thuộc nội dung). sau-bo-loc-375: nút Lọc hết (1), bảng nhiều dòng thoả thuận, chân «27 thoả thuận». Tất cả khớp expected.
   network_observed: n-a (driver)
   output: |
-    Frame đã lưu (6 ảnh trong evidence/): menu-giai-doan-1440, rong-vi-loc-1440, sau-bo-loc-1440, truong-tuy-chinh-1440, rong-vi-loc-375, sau-bo-loc-375 (.png). Đã mở từng ảnh bằng Read và đối chiếu mắt.
-    Driver là script do-man.mjs, không có công cụ đọc network nên không tạo E8-network.txt.
-    Ghi chú nhỏ: ở 375 (rong-vi-loc, sau-bo-loc) nút nổi "N" của dev overlay đè lên chữ chân bảng ở góc dưới, không đè tiêu đề, mô tả, nút hay thanh công cụ.
+    6 ô đo: 1440 gồm menu-giai-doan, rong-vi-loc, sau-bo-loc, truong-tuy-chinh; 375 gồm rong-vi-loc, sau-bo-loc.
+    Frame lưu trong evidence/: menu-giai-doan-1440, rong-vi-loc-1440, sau-bo-loc-1440, truong-tuy-chinh-1440, rong-vi-loc-375, sau-bo-loc-375 (.png); bản sao E8-step1..6.png theo cùng thứ tự.
+    Driver là script Playwright trong do-man.mjs, không có công cụ đọc network nên không tạo E8-network.txt. Máy chủ do script tự dựng và tự dọn.
 
 - eval: E9
-  run_id: minted-datatable-loc-ro-E9-r1
+  run_id: minted-datatable-loc-ro-E9-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.dlr_chu
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    Ran 12 tests across 1 file. [856.00ms]
+    Ran 12 tests across 1 file. [940.00ms]
 
 - eval: E10
-  run_id: minted-datatable-loc-ro-E10-r1
+  run_id: minted-datatable-loc-ro-E10-r2
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.test.dlr_hoi_quy
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    git diff --quiet với merge-base: hai tệp OKR không đổi; năm tệp kiểm xanh
+    git diff --quiet với merge-base: hai tệp OKR không đổi.
+    Ran 96 tests across 3 files. [3.40s]
 
 - eval: E11
-  run_id: minted-datatable-loc-ro-E11-r1
+  run_id: minted-datatable-loc-ro-E11-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dlr_san_thiet_ke
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
   output: |
-    design-gate --mode static xanh cho sáu tệp; rang/khong-ghi-de.mjs:
-    KET LUAN 4 DUNG, 0 SAI
+    design-gate --mode static xanh cho sáu tệp; rang/khong-ghi-de.mjs xanh.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-datatable-loc-ro-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-datatable-loc-ro-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-datatable-loc-ro-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
-  exit_code: 1
-  verified_at: 2026-10-07T21:38:25Z
-  output: |
-    Tệp đỏ: apps/app/test/danh-muc-quan-ly.dom.tsx, ca "khong-khop: dang bang giu thanh loc, hien khong khop va Bo loc" (6 ca xanh, 1 ca đỏ trong tệp).
-    Lỗi: màn không tới trạng thái mong đợi. Nội dung màn lúc đó: nút Lọc (1) và dòng "Không có kết quả nào khớp bộ lọc", tức câu chung của DataTable thay cho màn không-khớp riêng của bảng danh mục onboarding.
-    Task đỏ: app#test; 3 trên 4 task thành công. Cơ sở dữ liệu thử đã drop sạch.
-    Lệnh này không gắn eval nào. Nguyên nhân khớp với hai phát hiện t2 và t3 trong review-findings.md (bộ lọc đang bật thắng prop empty của DataTable); phát hiện đó cần người xác nhận.
+  run_id: minted-datatable-loc-ro-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  exit_code: 0
+  verified_at: 2026-10-07T22:02:36Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-datatable-loc-ro-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-datatable-loc-ro-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-datatable-loc-ro-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-datatable-loc-ro-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-datatable-loc-ro-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-datatable-loc-ro-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
 
 - cmd: bun run lint:slop
-  run_id: minted-datatable-loc-ro-SUITE-bun_run_lint_slop-r1
+  run_id: minted-datatable-loc-ro-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-datatable-loc-ro-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-datatable-loc-ro-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-07T21:38:25Z
+  verified_at: 2026-10-07T22:02:36Z
 
 ## Known limits
 
@@ -189,12 +185,14 @@ Round 1. Mười một eval của hợp đồng đều xanh, nhưng một lệnh
 
 ## Analyst
 
-Eval không phân biệt (xanh ở cả code mới lẫn baseline diffBase, chứng minh harness chứ không chứng minh tính năng): E9 và E10.
+Carried từ round 1 — baseline không đo lại round này (evals.yaml không đổi từ lần baseline cuối). Trường `baseline:` của mọi eval ghi n-a vì round này không đo.
 
-- E9 (AC-9): lệnh messages-guard cộng data-table-locale xanh cả trước lẫn sau. Cần viết lại để khẳng định hành vi mới, hoặc xác nhận đây là regression-guard có chủ ý. Lưu ý thêm: ca "loc-ro-chu" trong tệp chỉ phủ 4 khoá table chứ không đủ 7 khoá như eval hứa (xem review-findings.md).
+Eval không phân biệt theo phép đo baseline ở round 1 (xanh ở cả code mới lẫn baseline diffBase, chứng minh harness chứ không chứng minh tính năng): E9 và E10.
+
+- E9 (AC-9): lệnh messages-guard cộng data-table-locale xanh cả trước lẫn sau. Cần viết lại để khẳng định hành vi mới, hoặc xác nhận đây là regression-guard có chủ ý. Lưu ý thêm: ca "loc-ro-chu" trong tệp chỉ phủ 4 khoá table chứ không đủ 7 khoá như eval hứa (xem review-findings.md, mục carried từ round 1).
 - E10 (AC-10): hồi quy có chủ ý (năm tệp kiểm cũ cộng kiểm hai tệp OKR không đổi so với merge-base), xanh ở cả hai phía là kỳ vọng.
 
-E8 và E11 không chạy được trên baseline (n-a), không tính là không phân biệt.
+Lệnh suite xanh ở cả hai phía là regression-guard bình thường, không liệt kê.
 
 ## Variance
 
@@ -202,8 +200,9 @@ none — every multi-run eval is uniform
 
 ## Judge panels
 
-Không có eval judgment nào trong vòng này, không có panel nào được chấm. Không mục nào chờ human_override.
+Không có eval judgment nào trong vòng này, không có panel nào được chấm. Không mục nào chờ người điền xác nhận.
 
 ## Iterations
 
-Round 1: mọi eval của hợp đồng xanh nhưng lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở ca không-khớp của bảng danh mục onboarding (danh-muc-quan-ly.dom.tsx), không gắn eval nào nên failed_evals rỗng. Trả về triển khai để người xem xét: hoặc sửa DataTable cho prop empty tường minh thắng nguồn lọc, hoặc cập nhật nơi gọi.
+Round 1: mọi eval của hợp đồng xanh nhưng lệnh suite `bun run test -- --filter=app --filter=@crm/ui` đỏ ở ca không-khớp của bảng danh mục onboarding (danh-muc-quan-ly.dom.tsx), không gắn eval nào nên failed_evals rỗng. Verdict REJECT, trả về triển khai.
+Round 2: đã vá ở hai commit bcad1554d (nơi gọi tự đưa màn rỗng vì lọc riêng qua filteredEmpty, giữ màn không khớp và màn lỗi của danh mục) và f769014fe (bảng danh mục giữ nhãn bộ lọc chỉ là tên). Mười một eval và bảy lệnh suite đều xanh trên commit 1a1c0eed2. Verdict PASS.
