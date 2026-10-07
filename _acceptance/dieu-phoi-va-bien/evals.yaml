@@ -183,7 +183,7 @@ evals:
   criterion: AC-11
   executor: test
   cmd: config:executors.test.dph_gia_han
-  expected: 'exit 0; gia-han.test.mjs xanh ở ca ''gia-han máy duyệt kéo dài hạn thuê đúng một lần'' — khoá do capPhat thật cấp lúc 12:00 (s4, hạn 13:30), yêu cầu gia-han uoc_phut 30 qua motNhip: tra-loi duyet boi may, chu.json han_thue_den ''2026-10-05T14:00:00.000Z'', gia_han_theo chứa id, sự kiện gia-han với theo_yeu_cau; ba nhịp nữa hạn vẫn 14:00. Ca ''gốc là giờ nhịp khi hạn cũ đã qua'': nhịp lúc 14:10 với nhip mới → 14:40 cộng thêm. Chiều đỏ: đột biến V23 (bỏ bước áp gia hạn), V24 (bỏ chặn gia_han_theo — hạn thành 14:30 sau nhịp hai), V25 (gốc luôn là hạn cũ) của E19.'
+  expected: 'exit 0; gia-han.test.mjs xanh ở ca ''gia-han máy duyệt kéo dài hạn thuê đúng một lần'' — khoá do capPhat thật cấp lúc 12:00 (s4, hạn 13:30), yêu cầu gia-han uoc_phut 30 qua motNhip: tra-loi duyet boi may, chu.json han_thue_den ''2026-10-05T14:00:00.000Z'', gia_han_theo chứa id, sự kiện gia-han với theo_yeu_cau; ba nhịp nữa hạn vẫn 14:00, và xoá trang-thai.json rồi thêm một nhịp hạn vẫn 14:00 (dấu đã áp sống trong chu.json). Ca ''gốc là giờ nhịp khi hạn cũ đã qua'': nhịp lúc 14:10 với nhip mới → 14:40 cộng thêm. Chiều đỏ: đột biến V23 (bỏ bước áp gia hạn), V24 (bỏ chặn gia_han_theo — hạn thành 14:30 sau nhịp mất trang-thai.json), V25 (gốc luôn là hạn cũ) của E19.'
   paths:
   - scripts/dieu-phoi/phat-lich.mjs
   - scripts/dieu-phoi/lich.mjs

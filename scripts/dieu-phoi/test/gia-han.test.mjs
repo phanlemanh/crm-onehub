@@ -53,6 +53,9 @@ test('gia-han máy duyệt kéo dài hạn thuê đúng một lần', async () =
   assert.deepEqual([gh[0].tai_nguyen, gh[0].phien, gh[0].han_moi, gh[0].theo_yeu_cau], ['s4', 'P1', luc('14:00'), 'P1-1']);
   for (const t of ['12:00', '12:01', '12:05']) await motNhip(dot, io(t));
   assert.equal(chu(dot).han_thue_den, luc('14:00'));
+  fs.rmSync(path.join(dot, 'trang-thai.json'));
+  await motNhip(dot, io('12:06'));
+  assert.equal(chu(dot).han_thue_den, luc('14:00'), 'mất trang-thai.json vẫn không cộng lần hai');
   assert.equal(suKien(dot).filter((s) => s.loai === 'gia-han').length, 1);
 });
 
