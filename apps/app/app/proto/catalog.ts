@@ -980,6 +980,20 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-trang-loi-ngoai-khung", nhan: "Trang lỗi ngoài khung app" },
 		],
 	},
+	{
+		slug: "don-okr-nhap-sai",
+		ten: "Dọn OKR nhập sai — xoá nháp, ẩn mục tiêu đã bỏ, dùng lại",
+		states: [
+			{ id: "ST-donvi-dabo-dong", nhan: "Theo đơn vị — dòng «Đã bỏ» đóng" },
+			{ id: "ST-donvi-dabo-mo", nhan: "Theo đơn vị — dòng «Đã bỏ» mở" },
+			{ id: "ST-donvi-chi-dabo", nhan: "Theo đơn vị — chỉ còn mục tiêu đã bỏ" },
+			{ id: "ST-cuatoi-dabo-dong", nhan: "Của tôi — dòng «Đã bỏ» đóng" },
+			{ id: "ST-ngan-nhap-sach", nhan: "Ngăn — nháp sạch, menu có Xoá" },
+			{ id: "ST-ngan-co-lich-su", nhan: "Ngăn — đã có lịch sử, menu có Bỏ" },
+			{ id: "ST-ngan-da-bo", nhan: "Ngăn — đã bỏ, có Dùng lại" },
+			{ id: "ST-ngan-hoi-xoa", nhan: "Ngăn — hộp hỏi lại khi xoá" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

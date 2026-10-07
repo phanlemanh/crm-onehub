@@ -118,12 +118,20 @@ export function TienDoKr({
 	);
 }
 
+const BIEN_THE_TRANG_THAI = {
+	nhap: "outline",
+	"cho-duyet": "outline",
+	"cong-bo": "secondary",
+	"da-bo": "ghost",
+} as const satisfies Record<
+	TrangThaiMucTieu,
+	"outline" | "secondary" | "ghost"
+>;
+
 export function NhanTrangThai({ status }: { status: TrangThaiMucTieu }) {
 	const m = okrMessages(useLocale());
 	return (
-		<Badge variant={status === "cong-bo" ? "secondary" : "outline"}>
-			{m.trangThai[status]}
-		</Badge>
+		<Badge variant={BIEN_THE_TRANG_THAI[status]}>{m.trangThai[status]}</Badge>
 	);
 }
 

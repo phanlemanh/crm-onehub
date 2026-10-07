@@ -221,6 +221,8 @@ function chiTiet(
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,
+			xoa: false,
+			dungLai: false,
 		},
 		themKrLe: false,
 		...doi,
@@ -289,6 +291,7 @@ function datNen({
 	dat("okr.danhSach", () =>
 		danhSachOutput.parse({
 			rows: rows.map((mt) => ({ ...mt, krKhop: [] })),
+			daBo: [],
 			total: rows.length,
 			facetCounts: {
 				phuTrach: [],
@@ -301,7 +304,7 @@ function datNen({
 			canCreate: canEdit || quanTri,
 		}),
 	);
-	dat("okr.mine", () => mineOutput.parse({ objectives: rows }));
+	dat("okr.mine", () => mineOutput.parse({ objectives: rows, daBo: [] }));
 	dat("okr.viecCuaToi", () => ({ viec: [], lienQuanOkr: false }));
 	dat("okr.comments", () => ({ comments: [], dong: [] }));
 	dat("okr.thanhVien", () => [HUNG]);
@@ -762,6 +765,8 @@ describe("lien-ket-cheo", () => {
 					guiDuyet: false,
 					duyet: false,
 					rutDuyet: false,
+					xoa: false,
+					dungLai: false,
 				},
 			},
 		});

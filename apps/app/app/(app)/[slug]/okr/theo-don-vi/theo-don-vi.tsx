@@ -32,6 +32,7 @@ import { KhoiKrCuaToi } from "../khoi-kr-cua-toi";
 import type { CayDuLieu, MucTieu } from "../kieu";
 import { coLoc, KhongKhop, LocOkr, type LocOkrGiaTri } from "../loc-okr";
 import { NganTaoMucTieu, NutThemMucTieu } from "../ngan-okr-url";
+import { NhomDaBo } from "../nhom-da-bo";
 import {
 	CACH_XEM,
 	type CachXem,
@@ -217,6 +218,7 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 			[SEARCH_PARAM.okr.don]: khoaDon(d) === "goc" ? null : d,
 		});
 	const objectives = byUnit.data?.rows ?? [];
+	const daBo = byUnit.data?.daBo ?? [];
 	const soKr = objectives.reduce((t, mt) => t + mt.keyResults.length, 0);
 
 	let noiDung: ReactNode;
@@ -252,6 +254,7 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 			/>
 		);
 	else noiDung = <DanhSach objectives={objectives} />;
+	const coNhomDaBo = xem === "danh-sach" && !dangCho(byUnit) && !byUnit.isError;
 
 	return (
 		<div className="grid grid-cols-1 gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
@@ -355,6 +358,9 @@ export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
 							<KhoiKrCuaToi cycleId={currentId} userId={don.id} />
 						) : null}
 						{noiDung}
+						{coNhomDaBo ? (
+							<NhomDaBo danhDauCuaToi={false} ds={daBo} hienDonVi={false} />
+						) : null}
 						<NganTaoMucTieu
 							suaDuoc={byUnit.data?.canCreate}
 							cycleId={currentId}

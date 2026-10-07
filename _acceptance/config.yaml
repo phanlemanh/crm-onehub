@@ -435,6 +435,20 @@ executors:
     sac_an_vang_nen: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/okr-nhac.integration.spec.ts -t ky-an && TZ=Asia/Ho_Chi_Minh bun test test/okr-chup.integration.spec.ts -t ky-an && TZ=Asia/Ho_Chi_Minh bun test test/okr-dich-can-chinh.integration.spec.ts -t ky-an"'
     sac_giai_ky: "cd apps/app && bun test test/okr-giai-ky-an.spec.ts"
     sac_bang_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-sua-an-chu-ky.dom.tsx"
+    dos_xoa_sach: 'bun run test -- "cd apps/api && bun test test/okr-xoa-muc-tieu.spec.ts -t xoa-sach"'
+    dos_tu_choi: 'bun run test -- "cd apps/api && bun test test/okr-xoa-muc-tieu.spec.ts -t tu-choi-lich-su"'
+    dos_dong_thoi: 'bun run test -- "cd apps/api && bun test test/okr-xoa-muc-tieu.spec.ts -t dong-thoi"'
+    dos_quan_he: 'bun run test -- "cd apps/api && bun test test/okr-xoa-muc-tieu.spec.ts -t quan-he-du"'
+    dos_mot_nguon: 'bun run test -- "cd apps/api && bun test test/okr-xoa-muc-tieu.spec.ts -t mot-nguon"'
+    dos_quyen_pha: 'bun run test -- "cd apps/api && bun test test/okr-xoa-muc-tieu.spec.ts -t quyen-pha && bun test test/vai-chi-okr.spec.ts -t ma-tran && bun test test/okr-sua-an-chu-ky.spec.ts -t an-vang"'
+    dos_dung_lai: 'bun run test -- "cd apps/api && bun test test/okr-xoa-muc-tieu.spec.ts -t dung-lai"'
+    dos_danh_sach: 'bun run test -- "cd apps/api && bun test test/okr-xoa-muc-tieu.spec.ts -t danh-sach-da-bo"'
+    dos_dom_don_vi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-da-bo.dom.tsx -t theo-don-vi"
+    dos_dom_cua_toi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-da-bo.dom.tsx -t cua-toi"
+    dos_dom_nhin: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-da-bo.dom.tsx -t nhin-khac"
+    dos_dom_ngan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-xoa-muc-tieu.dom.tsx"
+    dos_purge: 'bun run test -- "cd apps/api && bun test test/luu-tru-chat.spec.ts -t purge-chua-luu-tru"'
+    dos_luu_tru_ngay: 'bun run test -- "cd apps/api && bun test test/luu-tru-chat.spec.ts -t luu-tru-giu-ngay"'
     ckr_viec: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t viec-vong-doi"'
     ckr_viec_quyen: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t viec-quyen"'
     ckr_sang_kien: 'bun run test -- "cd apps/api && bun test test/okr-canh-kr.spec.ts -t sang-kien"'
@@ -1722,6 +1736,9 @@ executors:
     sac_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/sua-an-chu-ky-okr/rang/man-sua-an.mjs"'
     sac_san_thiet_ke: "bun _acceptance/sua-an-chu-ky-okr/rang/soi-ma.mjs --ca thiet-ke"
     sac_migration_chi_them: "bun _acceptance/sua-an-chu-ky-okr/rang/migration-chi-them.mjs"
+    dos_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/don-okr-nhap-sai/rang/man-don-okr.mjs"'
+    dos_soi_chu: "bun _acceptance/don-okr-nhap-sai/rang/soi-ma.mjs --ca chu"
+    dos_san_thiet_ke: "bun _acceptance/don-okr-nhap-sai/rang/soi-ma.mjs --ca thiet-ke"
     ckr_man_chrome: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/man-canh-kr.mjs"'
     ckr_ty_le: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/canh-kr-okr/rang/ty-le.mjs"'
     ckr_san_thiet_ke: "bun _acceptance/canh-kr-okr/rang/soi-ma.mjs --ca thiet-ke"

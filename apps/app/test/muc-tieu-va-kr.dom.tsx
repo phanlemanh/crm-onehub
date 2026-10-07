@@ -130,6 +130,8 @@ function chiTietTu(mt: MucTieuOutput, doi: Partial<ObjectiveOutput> = {}) {
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,
+			xoa: false,
+			dungLai: false,
 		},
 		themKrLe: false,
 		...doi,
@@ -188,6 +190,7 @@ const VIEC_RONG = viecCuaToiOutput.parse({ viec: [], lienQuanOkr: false });
 const danhSachTu = (ds: MucTieuOutput[]) =>
 	danhSachOutput.parse({
 		rows: ds.map((mt) => ({ ...mt, krKhop: [] })),
+		daBo: [],
 		total: ds.length,
 		facetCounts: {
 			phuTrach: [],
@@ -215,7 +218,7 @@ function nguonMay(loai: "crm" | "api" | "bang-tinh"): KrOutput["nguonMay"] {
 }
 
 let cycles = KY_CO;
-let mine = mineOutput.parse({ objectives: [] });
+let mine = mineOutput.parse({ objectives: [], daBo: [] });
 let danhSach = danhSachTu([]);
 let chiTiet = chiTietTu(mucTieu("mt-s", []));
 let bangCham: BangChamOutput = bangChamOutput.parse({
@@ -540,7 +543,7 @@ const daTaiXong = () =>
 	) !== null;
 
 async function dungCuaToi(ds: MucTieuOutput[], thamSo = ""): Promise<San> {
-	mine = mineOutput.parse({ objectives: ds });
+	mine = mineOutput.parse({ objectives: ds, daBo: [] });
 	const san = await dung(<CuaToi />, thamSo);
 	await cho(daTaiXong, "cua toi tai xong");
 	return san;
@@ -614,7 +617,7 @@ async function dungCham(): Promise<San> {
 
 beforeEach(() => {
 	cycles = KY_CO;
-	mine = mineOutput.parse({ objectives: [] });
+	mine = mineOutput.parse({ objectives: [], daBo: [] });
 	danhSach = danhSachTu([]);
 	treo = new Set();
 	loi = new Set();
@@ -2163,7 +2166,7 @@ const CA_TRANG_THAI = {
 	"ST-donvi-dangtai": () =>
 		haiMan(async (man) => {
 			treo = new Set([man === "cua-toi" ? "okr.mine" : "okr.danhSach"]);
-			mine = mineOutput.parse({ objectives: HAI_MT() });
+			mine = mineOutput.parse({ objectives: HAI_MT(), daBo: [] });
 			danhSach = danhSachTu(HAI_MT());
 			await dung(man === "cua-toi" ? <CuaToi /> : <TheoDonVi />);
 			await cho(
@@ -2193,7 +2196,7 @@ const CA_TRANG_THAI = {
 			const thuTucLoi = man === "cua-toi" ? "okr.mine" : "okr.danhSach";
 			loi = new Set([thuTucLoi]);
 			soLanDoc = new Map();
-			mine = mineOutput.parse({ objectives: HAI_MT() });
+			mine = mineOutput.parse({ objectives: HAI_MT(), daBo: [] });
 			danhSach = danhSachTu(HAI_MT());
 			await dung(man === "cua-toi" ? <CuaToi /> : <TheoDonVi />);
 			await cho(

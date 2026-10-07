@@ -213,7 +213,7 @@ describe("danh-sach", () => {
 			["bộ phận không có phòng ban", tap(await hoi({ loai: "bp", id: Crong }))],
 		];
 		expect(ketQua).toEqual([
-			["bp gồm con", new Set([B1, P1a, P1b, P2a])],
+			["bp gồm con", new Set([B1, P1a, P1b])],
 			["người phụ trách k", new Set([P1a])],
 			["loại tham vọng", new Set([P1a])],
 			["đã công bố", new Set([B1, P1a])],
@@ -223,7 +223,8 @@ describe("danh-sach", () => {
 			["bộ phận không có phòng ban", new Set()],
 		]);
 		expect(tatCa.rows.some((m) => m.id === P3a)).toBe(false);
-		expect(tatCa.total).toBe(4);
+		expect(tatCa.daBo.map((m) => m.id)).toEqual([P2a]);
+		expect(tatCa.total).toBe(3);
 		expect(loc1.rows.find((m) => m.id === P1a)?.krKhop).toEqual([krK]);
 
 		const nguoiDem = (r: DanhSachOutput) =>

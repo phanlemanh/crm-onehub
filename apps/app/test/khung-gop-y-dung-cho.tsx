@@ -140,6 +140,8 @@ export function chiTietTu(
 			guiDuyet: false,
 			duyet: false,
 			rutDuyet: false,
+			xoa: false,
+			dungLai: false,
 		},
 		themKrLe: false,
 		...doi,
@@ -282,6 +284,7 @@ export const PROGRAM = {
 export function danhSachTu(ds: MucTieuOutput[], soCoGopY = 0): DanhSach {
 	return danhSachOutput.parse({
 		rows: ds.map((mt) => ({ ...mt, krKhop: [] })),
+		daBo: [],
 		total: ds.length,
 		facetCounts: {
 			phuTrach: [],
@@ -326,7 +329,7 @@ type Kho = {
 };
 
 const khoMoi = (): Kho => ({
-	mine: mineOutput.parse({ objectives: [] }),
+	mine: mineOutput.parse({ objectives: [], daBo: [] }),
 	danhSach: () => danhSachTu([]),
 	chiTiet: () => chiTietTu(mtSheet()),
 	troLy: () => dsTroLy([]),
@@ -672,7 +675,7 @@ export async function dungCuaToi(
 	ds: MucTieuOutput[],
 	thamSo = "",
 ): Promise<San> {
-	kho.mine = mineOutput.parse({ objectives: ds });
+	kho.mine = mineOutput.parse({ objectives: ds, daBo: [] });
 	const san = await dung(<CuaToi />, thamSo);
 	await cho(
 		() => daTaiDanhSach() && qs("[data-so-kr-cho]") === null,

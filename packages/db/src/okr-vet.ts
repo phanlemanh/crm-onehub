@@ -12,6 +12,8 @@ export const HANH_DONG_VET = [
 	"sua",
 	"cong-bo",
 	"bo",
+	"xoa-muc-tieu",
+	"dung-lai",
 	"tao-kr",
 	"sua-kr",
 	"xoa-kr",

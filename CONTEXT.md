@@ -414,6 +414,33 @@ _Avoid_: xoá (khi ý là lưu trữ), ẩn, archive
 Vì sao: nút ghi «Xoá» mà dữ liệu còn nguyên là nói dối người bấm; «ẩn» gợi thứ vẫn
 có trong danh sách chỉ không hiện.
 
+**Đã lưu trữ**: tên chỗ xem các bản ghi đã cất — nút trên thanh công cụ của bảng, hay
+mục gập «Đã lưu trữ (n)» cuối trang Cài đặt. Chốt 2026-10-07 (`docs/vong-doi.md`).
+_Avoid_: «Lưu trữ» trần cho nút xem, thùng rác
+Vì sao: «Lưu trữ» trần đọc như một hành động; người bấm tưởng mình sắp cất gì đó.
+
+**Xoá**: làm mất một bản ghi ngay lúc bấm, chỉ cho bản ghi chưa có lịch sử — chưa ai
+thấy hay dựa vào nó. Luôn hỏi lại một lần, nói rõ thứ gì mất theo; vết vẫn ghi việc
+xoá. Bản ghi đã có lịch sử thì lưu trữ, hoặc khép bằng kết cục của nó. Chốt
+2026-10-07.
+_Avoid_: xoá (khi ý là lưu trữ), xoá mềm, gỡ (khi ý là mất bản ghi)
+Vì sao: chữ «Xoá» phải giữ đúng một nghĩa — mất thật — thì người bấm mới tin nó.
+
+**Xoá vĩnh viễn**: bước cuối sau lưu trữ, chỉ bấm được từ chỗ «Đã lưu trữ», luôn hỏi
+lại và nêu hậu quả. Máy chủ từ chối xoá vĩnh viễn một bản ghi chưa lưu trữ. Chốt
+2026-10-07.
+_Avoid_: xoá hẳn, xoá luôn, purge
+Vì sao: hai chữ cho cùng một việc ở hai màn làm người ta tưởng là hai việc.
+
+**Bỏ · Dùng lại**: kết cục của một mục tiêu OKR đã có lịch sử. **Bỏ** khép mục tiêu —
+không sửa được, không tính vào tiến độ, cất vào dòng gập «Đã bỏ (n)» cuối danh sách.
+**Dùng lại** đưa mục tiêu đã bỏ về Nháp khi chu kỳ còn nhận ghi; muốn nó chạy lại
+thì gửi duyệt hay công bố lại như mới. Chốt 2026-10-07.
+_Avoid_: lưu trữ (cho mục tiêu), huỷ, khôi phục (cho mục tiêu đã bỏ)
+Vì sao: bỏ là một quyết định có thật trong chu kỳ, vết của nó là một phần lịch sử
+OKR; «lưu trữ» gợi việc cất cho gọn, «khôi phục» gợi trở lại nguyên trạng — dùng lại
+thì về Nháp, không về chỗ cũ.
+
 **Số chứng chỉ**: **KHÔNG CÓ TRONG SẢN PHẨM.** Sàn chỉ gắn huy hiệu có hoặc
 không cho chứng chỉ hành nghề môi giới, không lộ mã số nào. CRM ghi trường
 `Chứng chỉ` với đúng hai giá trị `Có` · `Không`.

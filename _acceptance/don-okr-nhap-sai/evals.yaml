@@ -1,0 +1,211 @@
+schema_version: 1
+feature_slug: don-okr-nhap-sai
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_xoa_sach
+    paths: [apps/api/src/okr/**, packages/db/src/okr-muc-tieu-lich-su.ts, packages/db/src/okr-vet.ts, apps/api/test/okr-xoa-muc-tieu.spec.ts]
+    expected: "exit 0; gieo qua thủ tục thật một mục tiêu nháp M có 2 KR, mỗi KR một việc và một nguồn số (datNguonKr), một người tham gia, một người theo dõi (follow), một người xem, một căn chỉnh đi ra (addAlignment), một dòng OkrMucTieuTuMau (taoTuMau), và một dòng OkrDeXuat ghi thẳng DB với objectiveId M. okr.xoaMucTieu(M) → okrObjective.findUnique null; đếm bằng truy vấn trực tiếp trong bài, theo objectiveId/keyResultId của M: okrKeyResult, okrViecKr, okrNguonKr, okrParticipant, okrFollow, okrNguoiXem, okrAlignment (objectiveId), okrMucTieuTuMau đều 0; okrTrail có ĐÚNG MỘT dòng action xoa-muc-tieu, objectiveId = M, before parse được bằng parseOkrVet và có title, level, đơn vị, status = nhap, soKr = 2; số dòng okrTrail khác của M (tao, tao-kr…) bằng số đếm trước khi xoá; OkrDeXuat của M còn 1. Đối chứng cùng fixture: mục tiêu N cùng đơn vị không bị chạm (đọc lại toEqual trước). CHIỀU ĐỎ: bản sao service bỏ bước xoá OkrMucTieuTuMau → 400/500 khoá ngoại Restrict, bài in tên bảng; bản sao ghi vết trước khi xoá rồi ném lỗi → ca đếm vết đỏ in số dòng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_tu_choi
+    paths: [apps/api/src/okr/**, packages/db/src/okr-muc-tieu-lich-su.ts, apps/api/test/okr-xoa-muc-tieu.spec.ts]
+    expected: "exit 0; HAI bài trong describe tu-choi-lich-su. (1) Qua API thật, BẢNG CA VIẾT TRƯỚC 5 ca, mỗi ca một mục tiêu gieo bằng thủ tục thật: da-cong-bo-dang-chay (publishObjective), da-cong-bo-da-bo (publishObjective rồi dropObjective), muc-tieu.comments (addComment trên nháp), muc-tieu.mangSangTu (mangSang sang kỳ mới — nháp mang sang), cho-duyet (guiDuyet khi duyetCongBo bật); mỗi ca xoaMucTieu → 400 (không 500), thông điệp toEqual câu ghim của lý do đó (cho-duyet: câu rút về Nháp), okrObjective, okrKeyResult và bảng của chính loại lịch sử đọc lại toEqual bản trước, okrTrail không thêm dòng. (2) Ánh xạ đủ ở mức module: lichSuMucTieu gọi với một client giả trả đúng khuôn select thật; BẢNG viết trước một ca cho MỖI phần tử của QUAN_HE_LICH_SU_MUC_TIEU và QUAN_HE_LICH_SU_KR cộng da-cong-bo và ca sạch; bài khẳng định tập khoá bảng toEqual hai danh sách (gắn tiền tố muc-tieu./kr.) ∪ {da-cong-bo, sach} — thiếu ca nào đỏ in tên; mỗi ca lý do trả về toEqual lý do kỳ vọng gõ tay, và mỗi lý do có câu trong T.xoa.lyDo. Lý do: phần lớn loại lịch sử chỉ sinh được sau khi công bố, khi đó da-cong-bo chặn trước, nên không gieo qua thủ tục thật được trên nháp. CHIỀU ĐỎ: bản sao lichSuMucTieu bỏ checkIns → ca kr.checkIns của bài (2) đỏ in lý do nhận được (null)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E19
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_dong_thoi
+    paths: [apps/api/src/okr/**, packages/db/src/okr-muc-tieu-lich-su.ts, apps/api/test/okr-xoa-muc-tieu.spec.ts]
+    expected: "exit 0; mục tiêu nháp sạch M có một KR K (gieo qua thủ tục thật; phiên và lần cập nhật ghi thẳng DB vì nháp không cập nhật tuần được). Giao dịch T1 (db.$transaction tương tác): SELECT … FROM okrKeyResult WHERE id = K FOR UPDATE, tạo một okrCheckInSession và một okrCheckIn cho K, rồi CHỜ, chưa commit. Gọi xoaMucTieu(M) qua API không await; vòng chờ tối đa 5 giây đọc pg_stat_activity tới khi có phiên wait_event_type = 'Lock' (không thấy → đỏ «xoa khong cho khoa»). Thả T1 cho commit. xoaMucTieu trả 400 (không 500), thông điệp toEqual câu ghim coLichSu của kr.checkIns; M, K và dòng checkIn đọc lại còn. Đối chứng dương cùng fixture: M' không có T1 → xoaMucTieu thành công. CHIỀU ĐỎ: bản sao service bỏ khoá FOR UPDATE trên KR → lời xoá đọc lịch sử trước khi T1 commit, rồi lệnh xoá KR vấp khoá ngoại okrCheckIn → 500; bài in trạng thái HTTP và thông điệp nhận được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-8
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dos_man
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/don-okr-nhap-sai/rang/man-don-okr.mjs]
+    expected: "Cùng lần chạy với E12: ở bước E12-danh-sach, số trong dòng gập đọc từ DOM của trang thật bằng số okrObjective status da-bo của P đọc DB cùng lúc (2), đếm trên đầu thẻ bằng số chưa bỏ (2); không phần tử data-da-bo nào nằm ngoài nhóm gập khi nhóm đóng. CHIỀU ĐỎ: bản sao trang đọc rows thay vì daBo cho dòng gập → script in hai số khác nhau và exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E21
+    criterion: AC-9
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dos_man
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/api/src/okr/**, _acceptance/don-okr-nhap-sai/rang/man-don-okr.mjs]
+    expected: "Cùng lần chạy với E12: ở bước E12-cua-toi, số trong dòng gập trên «Của tôi» thật bằng số mục tiêu da-bo có KR hoặc phụ trách là người đó đọc DB cùng lúc; danh sách chính không có phần tử data-da-bo. CHIỀU ĐỎ: bản sao CuaToi bỏ daBo khi objectives rỗng hay khi truyền xuống → không thấy dòng gập, script in «cua-toi thiếu dòng gập» và exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dos_quan_he
+    paths: [packages/db/src/okr-muc-tieu-lich-su.ts, packages/db/prisma/schema.prisma, apps/api/test/okr-xoa-muc-tieu.spec.ts]
+    expected: "exit 0; bài đọc db._runtimeDataModel (parse bằng Zod ở biên, như okr-sua-an-chu-ky.spec.ts), lấy mọi trường kind object của model OkrObjective và OkrKeyResult trừ quan hệ cha (cycle, division, department, person, owner, objective); so TẬP toEqual hợp hai danh sách của từng model, và giao hai danh sách toEqual rỗng; in hai tập. CHIỀU ĐỎ: bản sao danh sách bỏ «comments» khỏi QUAN_HE_LICH_SU_KR → đỏ in «OkrKeyResult.comments»; bản sao đặt «followers» ở cả hai danh sách → đỏ in giao khác rỗng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_mot_nguon
+    paths: [apps/api/src/okr/**, packages/db/src/okr-muc-tieu-lich-su.ts, apps/api/test/okr-xoa-muc-tieu.spec.ts]
+    expected: "exit 0; MA TRẬN VIẾT TRƯỚC 6 trạng thái (nhap-sach, nhap-co-lich-su qua bình luận, cho-duyet, cong-bo, da-bo-sach, da-bo-tung-cong-bo) × 2 người gọi (trưởng đơn vị, thành viên khác) × 2 pha (dang-chay, cham-diem) = 24 ô, viết thẳng 24 dòng có cờ kỳ vọng gõ tay {xoa, dungLai} theo bảng của design doc; bài khẳng định 24 ô và không trùng. Mỗi ô: đọc okr.objective (người gọi đó) lấy quyen.xoa, quyen.dungLai; trên bản sao riêng của ô gọi xoaMucTieu và dungLaiMucTieu; khẳng định quyen.xoa === (xoaMucTieu thành công) và quyen.dungLai === (dungLaiMucTieu thành công) và cả hai bằng cờ gõ tay. Ô không xem được mục tiêu (thành viên khác với mục tiêu hạn chế) không nằm trong ma trận. CHIỀU ĐỎ: bản sao tính quyen.xoa bỏ điều kiện pha → ô cham-diem đỏ in ô và hai giá trị."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_quyen_pha
+    paths: [apps/api/src/okr/**, apps/api/test/okr-xoa-muc-tieu.spec.ts, apps/api/test/vai-chi-okr.spec.ts, apps/api/test/okr-sua-an-chu-ky.spec.ts]
+    expected: "exit 0; ba bài: (1) okr-xoa-muc-tieu -t quyen-pha: với mỗi thủ tục mới × {người không sửa được đơn vị, chu kỳ da-dong, chu kỳ đã ẩn} = 6 ca viết trước, lỗi nhận được (lớp và thông điệp) toEqual lỗi dropObjective trả trong cùng ca, và mục tiêu đọc lại không đổi; (2) vai-chi-okr -t ma-tran: hai thủ tục mới có trong tập đo của vai «chỉ OKR» với đầu vào hợp lệ; (3) okr-sua-an-chu-ky -t an-vang: hai thủ tục mới có đúng một dòng GHI_VAO_KY_AN và gọi vào chu kỳ ẩn trả 400 câu kyDaAn. CHIỀU ĐỎ: xoá dòng xoaMucTieu khỏi GHI_VAO_KY_AN trong bản sao bài → an-vang đỏ in «thieuDong: [xoaMucTieu]»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_dung_lai
+    paths: [apps/api/src/okr/**, packages/db/src/okr-vet.ts, apps/api/test/okr-xoa-muc-tieu.spec.ts]
+    expected: "exit 0; gieo qua thủ tục thật: A đã bỏ chưa từng công bố, B công bố rồi bỏ, C đang nháp. dungLaiMucTieu(A) → status nhap, droppedAt null, publishedAt null; dungLaiMucTieu(B) → status nhap, droppedAt null, publishedAt bằng giá trị trước; mỗi lần đúng một dòng vết dung-lai, before.status da-bo, after.status nhap. dungLaiMucTieu(C) → 400 câu ghim chuaBo, C không đổi, không thêm vết. Trần: đơn vị đã đủ objectiveCap mục tiêu chưa bỏ, mục tiêu D đã bỏ — chế độ chan: 400 thông điệp vuotTranMucTieu, D vẫn da-bo, không vết; chế độ canh-bao: D về nhap và kết quả có canhBao khác null. CHIỀU ĐỎ: bản sao bỏ kiểm trần → ca chan đỏ in status đọc được của D."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_danh_sach
+    paths: [apps/api/src/okr/**, apps/api/test/okr-xoa-muc-tieu.spec.ts]
+    expected: "exit 0; đơn vị P gieo qua thủ tục thật: hai mục tiêu đang dùng (người phụ trách U1, U2), hai mục tiêu đã bỏ (U1 kiểu cam-ket, U2 kiểu tham-vong), một mục tiêu đã bỏ hạn chế mà người gọi không xem được. danhSach không lọc trạng thái → id của rows toEqual hai mục tiêu đang dùng; id của daBo toEqual hai mục tiêu đã bỏ xem được, cùng thứ tự với cách rows sắp; facetCounts trạng thái có da-bo = 2. Lọc phụ trách U1 → rows chỉ mục tiêu đang dùng của U1, daBo chỉ mục tiêu đã bỏ của U1. Lọc trạng thái [da-bo] → rows là hai mục tiêu đã bỏ xem được, daBo rỗng. Lọc trạng thái [nhap, da-bo] → rows gồm cả hai loại, daBo rỗng. mine của U1 → objectives không có mục tiêu đã bỏ, daBo là mục tiêu đã bỏ của U1. Mục tiêu đã bỏ hạn chế (R) không có trong daBo của người không xem được — daBo lấy từ cùng tập đã qua dieuKienXemMucTieu với rows. CHIỀU ĐỎ: bản sao danhSach không loại mục tiêu đã bỏ khỏi rows khi không lọc trạng thái → ca khong đỏ, bài in rows có D1, D2."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.dos_dom_don_vi
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/lib/messages/okr.ts, apps/app/test/okr-da-bo.dom.tsx]
+    expected: "exit 0; dựng TheoDonVi với tRPC giả trả dữ liệu khuôn đúng output thật (parse bằng schema output của router trong bài, không viết tay khuôn lỏng). BỐN ca viết trước: (a) 2 đang dùng + 3 đã bỏ → danh sách chính có đúng 2 khối, không khối nào mang data-da-bo; dòng gập có chữ «Đã bỏ (3)», aria-expanded false, không khối đã bỏ nào trong DOM nhìn thấy; đầu thẻ đếm 2 mục tiêu; bấm dòng gập → aria-expanded true, 3 khối data-da-bo; (b) 2 đang dùng + 0 đã bỏ → không có dòng gập; (c) 0 đang dùng + 2 đã bỏ → trạng thái rỗng ST-donvi-danhsach không có, có trạng thái rỗng của đơn vị VÀ dòng gập «Đã bỏ (2)»; (d) lọc trạng thái da-bo trên URL → không dòng gập, danh sách chính 2 khối data-da-bo. Thanh ghi en: dòng gập chữ tiếng Anh khác chữ vi. CHIỀU ĐỎ: bản sao bỏ đóng mặc định → ca (a) đỏ in aria-expanded đọc được."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.dos_dom_cua_toi
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/lib/messages/okr.ts, apps/app/test/okr-da-bo.dom.tsx]
+    expected: "exit 0; dựng CuaToi với tRPC giả trả mine đúng khuôn output thật: (a) 1 đang dùng + 2 đã bỏ → danh sách chính 1 khối, dòng gập «Đã bỏ (2)» đóng, bấm thì 2 khối data-da-bo; (b) 0 đang dùng + 1 đã bỏ → có Empty ST-cuatoi-rong và dòng gập «Đã bỏ (1)»; (c) không đã bỏ → không dòng gập. CHIỀU ĐỎ: bản sao CuaToi trả Empty sớm khi objectives rỗng (bỏ qua daBo) → ca (b) đỏ in «không thấy dòng gập»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.dos_dom_nhin
+    paths: ["apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx", apps/app/test/okr-da-bo.dom.tsx]
+    expected: "exit 0; dựng hai KhoiMucTieu cạnh nhau, một nhap một da-bo, cùng tiến độ 40%: data-variant của nhãn trạng thái hai khối khác nhau; khối da-bo có data-da-bo, có chữ «Đã bỏ», không có phần tử role=progressbar; khối nhap có role=progressbar và không có data-da-bo. CHIỀU ĐỎ: bản sao NhanTrangThai trả cùng biến thể cho nhap và da-bo → đỏ in hai data-variant."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.dos_dom_ngan
+    paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/lib/messages/okr.ts, apps/app/test/okr-xoa-muc-tieu.dom.tsx]
+    expected: "exit 0; dựng ngăn chi tiết với okr.objective giả đúng khuôn output thật. NĂM ca viết trước theo (status, quyen.xoa, quyen.dungLai): nhap/true/false → menu «…» có «Xoá mục tiêu», không «Bỏ mục tiêu»; nhap/false/false → có «Bỏ mục tiêu», không «Xoá mục tiêu»; cong-bo/false/false → như trên; da-bo/true/true → nút «Dùng lại» và menu có «Xoá mục tiêu»; da-bo/false/true → nút «Dùng lại», menu không «Xoá mục tiêu». Ca xoá: chọn «Xoá mục tiêu» → hộp hỏi lại có tên mục tiêu (translate=no) và số KR; xác nhận → mutation xoaMucTieu được gọi đúng một lần với id, ngăn gọi đóng, toast «Đã xoá mục tiêu». Ca lỗi: mutation trả lỗi thông điệp X → toast X, ngăn không đóng, okr.objective được làm mới. Ca dùng lại: bấm «Dùng lại» → dungLaiMucTieu một lần, không hộp hỏi lại; kết quả canGuiDuyet true → toast toEqual «Mục tiêu đã về Nháp. Gửi duyệt lại khi sẵn sàng.», canGuiDuyet false → toast toEqual «Mục tiêu đã về Nháp. Công bố lại khi sẵn sàng.». CHIỀU ĐỎ: bản sao hiện «Bỏ mục tiêu» khi quyen.xoa true → ca 1 đỏ in danh sách mục menu."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dos_man
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/lib/messages/okr.ts, apps/api/src/okr/**, _acceptance/don-okr-nhap-sai/rang/man-don-okr.mjs]
+    steps:
+      - "Cảnh cây (rang/canh-cay.mjs của kho) trước màn đầu tiên; lệch cây → mã 2, không chụp"
+      - "Gieo qua API thật trong phiên đo trên một chu kỳ dang-chay của kho đo: đơn vị P có M1 nháp sạch, M2 công bố, M3 đã bỏ chưa từng công bố, M4 công bố rồi bỏ; đăng nhập trưởng P bằng dev:session; dọn theo id ở cuối kể cả khi đỏ"
+      - "Mở {APP_URL}/<slug>/okr/theo-don-vi?don=<P> ở 1440/vi → ảnh E12-danh-sach (thấy M1, M2, dòng «Đã bỏ (2)» đóng); bấm dòng gập → ảnh E12-da-bo-mo (M3, M4 nhãn «Đã bỏ», không thanh tiến độ)"
+      - "Bấm M1 → ngăn chi tiết → «…» → ảnh E12-menu-nhap-sach; «Xoá mục tiêu» → ảnh E12-hoi-xoa; xác nhận → ảnh E12-sau-xoa (ngăn đóng, toast, M1 biến mất)"
+      - "Bấm dòng gập → M3 → ảnh E12-ngan-da-bo (nút «Dùng lại», menu có «Xoá mục tiêu»); bấm «Dùng lại» → ảnh E12-sau-dung-lai (M3 về danh sách chính, nhãn «Nháp», dòng gập «Đã bỏ (1)»)"
+      - "Lặp danh sách ở 390/vi → ảnh E12-danh-sach-390; mở dòng gập → E12-da-bo-mo-390"
+      - "Mở {APP_URL}/<slug>/okr bằng tài khoản người phụ trách M4 (dev:session) ở 1440/vi → ảnh E12-cua-toi (dòng gập «Đã bỏ (1)» đóng)"
+      - "Chạy với BANG_CHUNG=_acceptance/don-okr-nhap-sai/evidence (đường tuyệt đối suy từ gốc kho) để mười ảnh nằm trong hồ sơ; thiếu biến thì thước ghi vào .acceptance-runs/don-okr-nhap-sai/evidence"
+    expected: |
+      Script khẳng định TẬP tên ảnh trong evidence/ có tiền tố E12- bằng đúng mười tên
+      viết trước: E12-danh-sach, E12-da-bo-mo, E12-menu-nhap-sach, E12-hoi-xoa,
+      E12-sau-xoa, E12-ngan-da-bo, E12-sau-dung-lai, E12-danh-sach-390, E12-da-bo-mo-390,
+      E12-cua-toi; thiếu hay thừa thì in tên. Mỗi ảnh đúng trạng thái bước của nó: dòng
+      gập đóng mặc định và đếm đúng; mục tiêu đã bỏ có chữ «Đã bỏ» và không thanh tiến
+      độ; menu nháp sạch có «Xoá mục tiêu» mà không «Bỏ mục tiêu»; hộp hỏi lại có tên và
+      số KR, tông huỷ; sau xoá ngăn đóng và dòng biến mất; ngăn mục tiêu đã bỏ có «Dùng
+      lại»; sau dùng lại toast đúng câu chốt của design doc; ở 390 không chữ nào bị cắt
+      và dòng gập không tràn ngang; «Của tôi» có dòng gập đóng.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.dos_man
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/api/src/okr/**, _acceptance/don-okr-nhap-sai/rang/man-don-okr.mjs]
+    expected: "Cùng lần chạy với E12: sau bước xoá, okrObjective.findUnique(M1) null và okrTrail có dòng xoa-muc-tieu objectiveId M1; sau bước dùng lại, M3 status nhap, droppedAt null, okrTrail có dòng dung-lai; số trong dòng gập trên màn bằng số mục tiêu da-bo của P đọc DB ở cùng thời điểm (2 rồi 1). CHIỀU ĐỎ: bản sao nút «Dùng lại» gọi dropObjective → bước dùng lại đỏ, script in status đọc được của M3."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_purge
+    paths: [apps/api/src/deals/**, apps/api/src/contacts/**, apps/api/src/companies/**, apps/api/src/archive/**, apps/api/test/luu-tru-chat.spec.ts]
+    expected: "exit 0; MA TRẬN VIẾT TRƯỚC 3 loại (deals, contacts, companies) × 3 đường (tRPC purge, REST DELETE qua ứng dụng Nest thật trong bài như ma-tran-thu.ts, bulkPurge) = 9 ca, bài khẳng định 9. Mỗi loại gieo X chưa lưu trữ, Y đã lưu trữ: purge(X) tRPC → 400 thông điệp toEqual ARCHIVE.thongDiep.chuaLuuTru, X đọc lại còn với archivedAt null; REST DELETE X → 400 cùng thông điệp, X còn; bulkPurge([X, Y]) → kết quả lô có đúng một lỗi cho X với cùng thông điệp, Y biến mất, X còn. purgeExpired với mốc sau archivedAt của Z đã lưu trữ → Z biến mất, X chưa lưu trữ còn. Đối chứng dương: purge(Y') đã lưu trữ → biến mất. CHIỀU ĐỎ: bản sao deals.purge bỏ kiểm archivedAt khi không guard → ca deals-trpc đỏ in «deal còn: false»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-13
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dos_luu_tru_ngay
+    paths: [apps/api/src/deals/**, apps/api/src/contacts/**, apps/api/src/companies/**, apps/api/test/luu-tru-chat.spec.ts]
+    expected: "exit 0; 3 loại × 2 đường (archive, bulkArchive) = 6 ca viết trước. Mỗi ca: archive bản ghi lúc T1 (setSystemTime), đọc archivedAt = T1; đặt giờ T2 > T1, archive lần nữa → trả tên đúng, archivedAt vẫn T1 (so ISO). Rồi restore, đặt T3, archive → archivedAt = T3. archive một id không có → NotFound như trước. CHIỀU ĐỎ: bản sao contacts.archive ghi đè archivedAt → ca contacts-archive đỏ in hai ISO."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E16
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.dos_soi_chu
+    paths: [CONTEXT.md, docs/api.md, apps/app/lib/messages/**, _acceptance/don-okr-nhap-sai/rang/soi-ma.mjs]
+    expected: "exit 0; soi-ma.mjs --ca chu suy gốc kho từ vị trí của nó: CONTEXT.md có tiêu đề mục in đậm **Xoá**, **Đã lưu trữ**, **Xoá vĩnh viễn**, **Bỏ · Dùng lại** và vẫn có **Lưu trữ**; docs/api.md có chữ xoaMucTieu, dungLaiMucTieu, daBo, chuaLuuTru; trong các tệp chữ lượt này đổi (git diff --name-only origin/onehub...HEAD), mỗi khoá chữ mới có bản vi và en khác nhau, và không chữ vi mới nào chứa «Xoá hẳn», «xoá mềm», «archive» hay mã trạng thái thô (da-bo, archived); in số khoá đã soi (> 0). CHIỀU ĐỎ (--chieu-do, tmpdir): bản sao tệp chữ có một khoá vi = en và một chữ «Xoá hẳn» → exit 1 in hai vi phạm có tên khoá."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E17
+    criterion: AC-15
+    executor: script
+    cmd: config:executors.script.dos_san_thiet_ke
+    paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/**, apps/app/lib/messages/**, packages/ui/src/components/**, packages/db/src/okr-muc-tieu-lich-su.ts, apps/api/src/okr/**, apps/api/src/deals/**, apps/api/src/contacts/**, apps/api/src/companies/**, _acceptance/don-okr-nhap-sai/rang/soi-ma.mjs]
+    expected: "exit 0; soi-ma.mjs --ca thiet-ke lấy git diff --name-only origin/onehub...HEAD, chỉ tính dòng lượt này thêm: mỗi .tsx của apps/app qua design-gate.mjs --mode static không P0; tệp mới không chú thích mã, không Record<string, unknown>, không useEffect( trong apps/app; lichSuMucTieu và bốn danh sách quan hệ mỗi thứ đúng một định nghĩa toàn kho (grep export const/function = 1); không tệp apps/app nào tự đếm quan hệ lịch sử (không chữ checkIns, nhinLai, mangSang cạnh phép đếm trong apps/app); in danh sách tệp đã soi (> 0). CHIỀU ĐỎ (--chieu-do, tmpdir): chèn `// x` vào một tệp và một định nghĩa thứ hai của lichSuMucTieu → exit 1 in hai vi phạm có tên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E18
+    criterion: AC-15
+    executor: judgment
+    question: >-
+      Đọc các tệp sau: «có lịch sử» có đúng một nguồn (module okr-muc-tieu-lich-su)
+      mà cả quyen.xoa (tính trong okr.service.ts) lẫn thủ tục xoaMucTieu cùng gọi,
+      không điều kiện chép lại ở màn; đầu vào mới của router có được parse ở biên bằng
+      Zod; màn dựng bằng thành phần packages/ui (Collapsible, ConfirmDialog, Badge —
+      nhãn trạng thái ở tien-do-kr.tsx, khối ở khoi-muc-tieu.tsx) thay vì vẽ tay; và chữ
+      trong okr.ts cùng các ảnh nói rõ hệ quả — xoá thì mất hẳn mà vết còn, dùng lại thì
+      toast đúng hai câu chốt ở design doc theo có hay không bước duyệt, «Đã bỏ (n)» là
+      số mục tiêu đã bỏ?
+    inputs: [docs/superpowers/specs/2026-10-07-don-okr-nhap-sai-design.md, _acceptance/don-okr-nhap-sai/contract.md, packages/db/src/okr-muc-tieu-lich-su.ts, apps/api/src/okr/okr.service.ts, apps/api/src/okr/okr.router.ts, apps/api/src/okr/okr.contracts.ts, apps/app/components/crm/record-sheet/objective-sheet.tsx, "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/app/(app)/[slug]/okr/cua-toi.tsx", "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx", "apps/app/app/(app)/[slug]/okr/khoi-muc-tieu.tsx", "apps/app/app/(app)/[slug]/okr/nhom-da-bo.tsx", apps/app/lib/messages/okr.ts, _acceptance/don-okr-nhap-sai/evidence/E12-hoi-xoa.png, _acceptance/don-okr-nhap-sai/evidence/E12-da-bo-mo.png, _acceptance/don-okr-nhap-sai/evidence/E12-ngan-da-bo.png, _acceptance/don-okr-nhap-sai/evidence/E12-sau-dung-lai.png, _acceptance/don-okr-nhap-sai/evidence/E12-cua-toi.png]
+    expected: >-
+      PASS khi cả bốn vế đúng với tệp, kèm tên tệp làm căn cứ; mỗi vi phạm nêu tệp và
+      vế. UNCERTAIN khi thiếu ảnh hay tệp để kết luận một vế, nêu đúng tệp thiếu.
+    evidence_required: [run_id, verdict, rationale, judges]

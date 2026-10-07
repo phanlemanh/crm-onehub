@@ -88,6 +88,8 @@ const vi = {
 		moRa: (ten: string) => `Mở KR của «${ten}»`,
 		soKr: (n: number) => `${n} KR`,
 		soKrCham: (n: number) => `${n} KR chậm`,
+		khongTinhTienDo: "Không tính tiến độ",
+		nhomDaBo: (n: number) => `Đã bỏ (${n})`,
 		tuKhoiDiem: (kieu: string, gia: string) => `${kieu} · từ ${gia}`,
 	},
 	tienDoCua: (ten: string, p: number) => `Tiến độ ${ten}: ${p}%`,
@@ -187,6 +189,20 @@ const vi = {
 		daCongBo: "Đã công bố mục tiêu",
 		daBo: "Đã bỏ mục tiêu",
 		daXoaKr: "Đã xoá KR",
+		xoa: "Xoá mục tiêu",
+		dungLai: "Dùng lại",
+		hoiXoa: {
+			title: "Xoá mục tiêu này?",
+			body: (n: number) =>
+				`Mục tiêu và ${n} KR của nó mất hẳn. Vết vẫn ghi lại việc xoá.`,
+			action: "Xoá mục tiêu",
+			cancel: "Huỷ",
+		},
+		daXoa: "Đã xoá mục tiêu",
+		daDungLai: {
+			guiDuyet: "Mục tiêu đã về Nháp. Gửi duyệt lại khi sẵn sàng.",
+			congBo: "Mục tiêu đã về Nháp. Công bố lại khi sẵn sàng.",
+		},
 		daGo: "Đã gỡ căn chỉnh",
 	},
 	hopThoai: {
@@ -264,6 +280,8 @@ const vi = {
 		sua: "Sửa mục tiêu",
 		"cong-bo": "Công bố",
 		bo: "Bỏ mục tiêu",
+		"xoa-muc-tieu": "Xoá mục tiêu",
+		"dung-lai": "Dùng lại mục tiêu",
 		"tao-kr": "Thêm KR",
 		"sua-kr": "Sửa KR",
 		"xoa-kr": "Xoá KR",
@@ -748,6 +766,8 @@ const en: OkrMessages = {
 		moRa: (ten: string) => `Expand the KRs of “${ten}”`,
 		soKr: (n: number) => `${n} KR${n === 1 ? "" : "s"}`,
 		soKrCham: (n: number) => `${n} KR${n === 1 ? "" : "s"} behind`,
+		khongTinhTienDo: "Not counted in progress",
+		nhomDaBo: (n: number) => `Dropped (${n})`,
 		tuKhoiDiem: (kieu: string, gia: string) => `${kieu} · from ${gia}`,
 	},
 	tienDoCua: (ten: string, p: number) => `${ten} progress: ${p}%`,
@@ -847,6 +867,21 @@ const en: OkrMessages = {
 		daCongBo: "Objective published",
 		daBo: "Objective dropped",
 		daXoaKr: "KR deleted",
+		xoa: "Delete objective",
+		dungLai: "Reuse",
+		hoiXoa: {
+			title: "Delete this objective?",
+			body: (n: number) =>
+				`The objective and its ${n} KR${n === 1 ? "" : "s"} are gone for good. The trail still records the deletion.`,
+			action: "Delete objective",
+			cancel: "Cancel",
+		},
+		daXoa: "Objective deleted",
+		daDungLai: {
+			guiDuyet:
+				"The objective is back to Draft. Submit it for approval again when ready.",
+			congBo: "The objective is back to Draft. Publish it again when ready.",
+		},
 		daGo: "Alignment removed",
 	},
 	hopThoai: {
@@ -924,6 +959,8 @@ const en: OkrMessages = {
 		sua: "Edited objective",
 		"cong-bo": "Published",
 		bo: "Dropped objective",
+		"xoa-muc-tieu": "Deleted objective",
+		"dung-lai": "Reused objective",
 		"tao-kr": "Added KR",
 		"sua-kr": "Edited KR",
 		"xoa-kr": "Deleted KR",

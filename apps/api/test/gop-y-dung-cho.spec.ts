@@ -49,6 +49,7 @@ const LOC_RONG = { phuTrach: [], loai: [], trangThai: [], tuTin: [], gopY: [] };
 type Dong = { id: string; soGopYCho: number };
 type DanhSach = {
 	rows: Dong[];
+	daBo: Dong[];
 	total: number;
 	facetCounts: { gopY: { value: string; count: number }[] };
 };
@@ -90,7 +91,9 @@ async function danhSach(ai: Nguoi, gopY: "cho"[] = []): Promise<DanhSach> {
 
 async function soCua(ai: Nguoi, mucTieu: string): Promise<number | null> {
 	const ds = await danhSach(ai);
-	return ds.rows.find((r) => r.id === mucTieu)?.soGopYCho ?? null;
+	return (
+		[...ds.rows, ...ds.daBo].find((r) => r.id === mucTieu)?.soGopYCho ?? null
+	);
 }
 
 async function soTrongDon(
