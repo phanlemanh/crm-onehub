@@ -146,8 +146,10 @@ màu. Biến thể cụ thể chốt ở design-pass bằng thành phần có s�
 - Đã có lịch sử, chưa bỏ: «Bỏ mục tiêu» như hôm nay, không có «Xoá».
 - Đã bỏ: nút «Dùng lại» (viền) ở chỗ nút chính; menu «…» có «Xoá mục tiêu» khi
   `quyen.xoa`.
-- «Xoá mục tiêu» mở `ConfirmDialog` tông huỷ: «Xoá «{ten}»?» / «Mục tiêu và {n} KR
-  của nó mất hẳn. Vết vẫn ghi lại việc xoá.» / «Xoá mục tiêu» · «Huỷ». Xác nhận →
+- «Xoá mục tiêu» mở `ConfirmDialog` tông huỷ: tiêu đề «Xoá mục tiêu này?», tên mục
+  tiêu ở dòng riêng mang `translate="no"` (tiêu đề của `ConfirmDialog` là chuỗi, không
+  đánh dấu được phần dữ liệu người nhập), thân «Mục tiêu và {n} KR của nó mất hẳn. Vết
+  vẫn ghi lại việc xoá.», nút «Xoá mục tiêu» · «Huỷ». Xác nhận →
   ngăn đóng, toast «Đã xoá mục tiêu», danh sách làm mới. Lỗi máy chủ (ví dụ vừa có một
   lần cập nhật) → toast đúng thông điệp, ngăn vẫn mở và đọc lại.
 - «Dùng lại» không hỏi lại (đảo được bằng «Bỏ»). Toast chốt nguyên văn, hai nhánh theo
