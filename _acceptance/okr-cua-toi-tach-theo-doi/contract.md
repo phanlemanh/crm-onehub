@@ -5,7 +5,7 @@ slug: okr-cua-toi-tach-theo-doi
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -64,3 +64,4 @@ Quét bằng `morphological-scan` (preset entity-feature × test-matrix), 07/10.
 - `CONTEXT.md` mục «Theo dõi (mục tiêu)» thêm một câu về nhóm «Đang theo dõi».
 - Bảng ánh xạ của AC-10 `dat-okr-trong-crm` («gom mục tiêu tôi phụ trách, tôi tham gia, có KR tôi phụ trách») vẫn đúng; vòng này là bản sửa đưa mã về khớp nó.
 - Hồ sơ đã ký chạm lời hứa (đã tra 07/10 bằng `git grep` `okr.mine`/`mineOutput` trên `_acceptance/*/{contract.md,evals.yaml,rang/*}`): **`cap-nhat-tuan-okr` AC-9 / E17** hứa «`okr.mine` có mục tiêu đang theo dõi» và test `apps/api/test/okr-cap-nhat.spec.ts` (khối `trao-doi`) đọc nó từ `objectives`. Kiểm ở S3 (07/10): người M trong ca đó phụ trách KR1 của mục tiêu O, tức O là «của tôi» với M — khẳng định cũ vẫn đúng sau vòng này, test chạy xanh không sửa gì. Hồ sơ thật bị chạm, lộ ở S4 round 1 (bộ suite api): **`gioi-han-duyet-cay-okr`**, test `apps/api/test/okr-hien-thi.spec.ts` khối `so-gop` đọc `okr.mine().objectives` của thành viên M — M chỉ bấm «Theo dõi» c1, c2. Lời hứa của khối đó là quyền xem (M không thấy G bị giới hạn), không phải vai «của tôi»; vế `mine` nay đọc `objectives` + `dangTheoDoi`, tức đủ những gì `okr.mine` trả cho M — khẳng định giữ nguyên. Các hồ sơ còn lại đọc `okr.mine` (`dat-okr-trong-crm`, `gop-y-dung-cho`, `muc-tieu-va-kr`, `ux-lai-thu-8c-okr`) chỉ đọc vai phụ trách/tham gia/giữ KR hoặc dựng fixture `mineOutput`: fixture thêm `dangTheoDoi: []`, khẳng định không đổi.
+- Hạn chế đã biết, owner chọn ở Cổng 2 (sổ quyết định, dòng «Ngoài-1: ghi Known limits»): bảng phá thử `rang/dot-bien.mjs` đếm số cặp đã chạy so với một số rút từ chính bảng `DOT_BIEN`, không so với hằng 8 cặp khai trong E15 — xoá bớt một cặp khỏi bảng thì thước vẫn xanh. Người dùng không thấy gì khác.
