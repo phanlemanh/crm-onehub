@@ -5,7 +5,7 @@ slug: so-moi-khong-chap-chon
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-07T13:33:45Z
 design_doc: _acceptance/so-moi-khong-chap-chon/design.md
@@ -60,3 +60,4 @@ bài 3 (41), bài 4 (2031 trong `viPham`).
 - Spec này nằm trong `paths` eval của hai hồ sơ đã ký (`nop-ban-nhap-chon-theo-khoa` E1–E3, `soan-okr-cung-tro-ly` E11): pin của chúng hoá cũ khi vòng này gộp. Giám sát đã duyệt (`tra-loi/P4-1.json`) ghim lại hai hồ sơ đó bằng làn ghim lại của kit ở cuối nhánh, sau khi gộp `origin/onehub` mới nhất.
 - «Mã sản phẩm không đổi» không có thước riêng: thước phạm vi neo `merge-base` tự hết hạn và đỏ trên nhánh khác sau khi gộp (bẫy đã đo ở kho này). Người ký thấy danh sách tệp ở `diff --stat` trên thẻ Cổng 2.
 - Design doc đặt trong hồ sơ (không ở `docs/superpowers/specs/`) vì ranh giới của hàng F13 chỉ gồm spec và `_acceptance/so-moi-khong-chap-chon/**`.
+- Known limits (Ngoài-2, Cổng 2 07/10): răng `rang/va-cham.mjs` ném lại mọi lỗi ngoài `KhongDo` và bỏ qua `kq.error` của `spawnSync`, nên một lỗi môi trường (symlink, đọc tệp, hết giờ) thoát mã 1 — hiện thành «không đạt» ở E2/E3 thay vì «không đo được». Chạy lại mới phân biệt được.
