@@ -169,6 +169,8 @@ mock.module("@/lib/trpc/client", () => ({
 			})),
 			publishObjective: thuTuc("okr.publishObjective"),
 			dropObjective: thuTuc("okr.dropObjective"),
+			xoaMucTieu: thuTuc("okr.xoaMucTieu"),
+			dungLaiMucTieu: thuTuc("okr.dungLaiMucTieu"),
 			updateObjective: thuTuc("okr.updateObjective"),
 			createObjective: thuTuc("okr.createObjective"),
 			createKeyResult: thuTuc("okr.createKeyResult"),
