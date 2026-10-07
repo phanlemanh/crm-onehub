@@ -405,9 +405,12 @@ export class CompaniesService {
 
 	async archive(id: string): Promise<{ id: string; name: string }> {
 		try {
-			const company = await this.db.company.update({
-				where: { id },
+			await this.db.company.updateMany({
+				where: { id, archivedAt: null },
 				data: { archivedAt: new Date() },
+			});
+			const company = await this.db.company.findUniqueOrThrow({
+				where: { id },
 				select: { name: true },
 			});
 
@@ -456,6 +459,8 @@ export class CompaniesService {
 					if (guard) return null;
 					throw new NotFoundException(`No company with id ${id}.`);
 				}
+				if (!guard && !row.archivedAt)
+					throw new BadRequestException(ARCHIVE.thongDiep.chuaLuuTru);
 				if (
 					guard &&
 					(!row.archivedAt || row.archivedAt > guard.archivedBefore)
