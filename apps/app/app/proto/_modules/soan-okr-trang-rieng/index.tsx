@@ -76,18 +76,20 @@ function laHinh(s: string): s is keyof typeof HINH {
 
 function DauTrang() {
 	return (
-		<PageShellHeader>
-			<PageShellHeading>
-				<Button asChild variant="link" size="sm" className="w-fit px-0">
-					<a href="#theo-don-vi">{M.veTheoDonVi}</a>
-				</Button>
-				<PageShellTitle>{M.tieuDe}</PageShellTitle>
-				<PageShellDescription>
-					<span translate="no">{M.donVi}</span> · {M.chuKy} ·{" "}
-					<span className="tabular-nums">{M.luot}</span>
-				</PageShellDescription>
-			</PageShellHeading>
-		</PageShellHeader>
+		<div className="flex flex-col gap-1">
+			<Button asChild variant="link" size="sm" className="w-fit px-0">
+				<a href="#theo-don-vi">{M.veTheoDonVi}</a>
+			</Button>
+			<PageShellHeader>
+				<PageShellHeading>
+					<PageShellTitle>{M.tieuDe}</PageShellTitle>
+					<PageShellDescription>
+						<span translate="no">{M.donVi}</span> · {M.chuKy} ·{" "}
+						<span className="tabular-nums">{M.luot}</span>
+					</PageShellDescription>
+				</PageShellHeading>
+			</PageShellHeader>
+		</div>
 	);
 }
 
@@ -277,21 +279,23 @@ function DongKr({
 	khoa: boolean;
 }) {
 	const nhan = NHAN_LOAI[d.loai];
+	const coSo = d.loai !== "can-chinh";
 	return (
-		<KaraProposal
-			kind="compact"
-			data-dong={d.id}
-			label={nhan}
-			tag={d.nhan ? NHAN_DONG[d.nhan] : undefined}
-			value={<span translate="no">{d.ten}</span>}
-			before={d.truoc}
-			rationale={d.viSao}
-			fields={
-				d.loai === "can-chinh" || q === "bo" ? undefined : <OSoDong d={d} />
-			}
-			decided={daQuyet(q, nhan, d.ten, () => doi("cho"))}
-			actions={khoa ? [] : nut(NUT_THEM[d.loai], d.loai !== "can-chinh", doi)}
-		/>
+		<div className="flex flex-col gap-2" data-the-kr={d.id}>
+			<KaraProposal
+				kind="compact"
+				data-dong={d.id}
+				label={nhan}
+				tag={d.nhan ? NHAN_DONG[d.nhan] : undefined}
+				value={<span translate="no">{d.ten}</span>}
+				before={d.truoc}
+				rationale={d.viSao}
+				fields={coSo && q === "cho" ? <OSoDong d={d} /> : undefined}
+				decided={daQuyet(q, nhan, d.ten, () => doi("cho"))}
+				actions={khoa ? [] : nut(NUT_THEM[d.loai], coSo, doi)}
+			/>
+			{coSo && q === "nhan" ? <OSoDong d={d} /> : null}
+		</div>
 	);
 }
 
@@ -486,28 +490,39 @@ function CotHoiThoai({ h }: { h: Hinh }) {
 	);
 }
 
-function Than({ h }: { h: Hinh }) {
-	if (h.hep) {
-		return (
-			<Tabs defaultValue="ban-nhap">
-				<TabsList className="w-full">
-					<TabsTrigger value="tro-chuyen">{M.tabTroChuyen}</TabsTrigger>
-					<TabsTrigger value="ban-nhap">{M.tabBanNhap}</TabsTrigger>
-				</TabsList>
-				<TabsContent value="tro-chuyen">
-					<CotHoiThoai h={h} />
-				</TabsContent>
-				<TabsContent value="ban-nhap">
-					<BanNhap h={h} />
-				</TabsContent>
-			</Tabs>
-		);
-	}
+const TAB_HOI_THOAI = new Set(["mo-dau", "loi", "het-luot", "dang-mo"]);
+
+function HaiTab({ h }: { h: Hinh }) {
+	const mo =
+		TAB_HOI_THOAI.has(h.hoiThoai) || h.chip ? "tro-chuyen" : "ban-nhap";
 	return (
-		<div className="grid min-h-0 flex-1 grid-cols-1 gap-4 sm:grid-cols-[380px_minmax(0,1fr)]">
-			<CotHoiThoai h={h} />
-			<BanNhap h={h} />
-		</div>
+		<Tabs defaultValue={mo}>
+			<TabsList className="w-full">
+				<TabsTrigger value="tro-chuyen">{M.tabTroChuyen}</TabsTrigger>
+				<TabsTrigger value="ban-nhap">{M.tabBanNhap}</TabsTrigger>
+			</TabsList>
+			<TabsContent value="tro-chuyen">
+				<CotHoiThoai h={h} />
+			</TabsContent>
+			<TabsContent value="ban-nhap">
+				<BanNhap h={h} />
+			</TabsContent>
+		</Tabs>
+	);
+}
+
+function Than({ h }: { h: Hinh }) {
+	if (h.hep) return <HaiTab h={h} />;
+	return (
+		<>
+			<div className="lg:hidden">
+				<HaiTab h={h} />
+			</div>
+			<div className="hidden items-start gap-4 lg:grid lg:grid-cols-[380px_minmax(0,1fr)]">
+				<CotHoiThoai h={h} />
+				<BanNhap h={h} />
+			</div>
+		</>
 	);
 }
 

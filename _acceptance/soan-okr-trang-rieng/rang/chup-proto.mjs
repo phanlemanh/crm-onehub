@@ -88,7 +88,13 @@ for (const theme of themes) {
 				tran++;
 				console.error(`tran ngang: ${id} ${k.ten} ${theme}`);
 			}
-			await trang.screenshot({
+			const coTrang = await trang.$("[data-soan-trang]");
+			if (!coTrang) {
+				console.error(`khong thay trang soan: ${id} ${k.ten}`);
+				process.exitCode = 1;
+				continue;
+			}
+			await coTrang.screenshot({
 				path: join(ra, `${id}--${k.ten}--${theme}.png`),
 			});
 			console.log(`${id} ${k.ten} ${theme}`);
