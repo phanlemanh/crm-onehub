@@ -39,7 +39,7 @@ gantt
   Lượt 1 kho-tai-lieu (T3)            :l1, 2026-09-29, 3d
   Lượt 2 may-soan-de-xuat (T3)        :l2, 2026-10-02, 5d
   Lượt 3 tim-va-dieu-huong-kho (T2)   :l3, 2026-10-07, 2d
-  Lượt 4 tro-ly-doc-kho (T2)          :l4, 2026-10-09, 5d
+  Lượt 4 tro-ly-doc-kho (T3)          :l4, 2026-10-09, 5d
   section Người dùng thật
   Chạy thật mọi phòng ban             :ct, 2026-10-14, 15d
   Lượt 5 sua-sau-chay-that (T2)       :l5, 2026-10-29, 7d
@@ -80,7 +80,7 @@ gantt
 | 1 | `kho-tai-lieu` | «Tôi viết được một trang, gửi chủ trang duyệt, cả công ty đọc được bản đang dùng» | T3 | Từ điển chốt ở Cổng 1; lược đồ qua Cổng Phạm vi và Cổng 1.5 |
 | 2 | `may-soan-de-xuat` | «Tôi tải tệp quy định đang có lên, máy soạn thành trang, tôi sửa và duyệt» | T3 | Lượt 1 đã lên `onehub` |
 | 3 | `tim-va-dieu-huong-kho` | «Tôi gõ ⌘K có dấu hay không dấu là ra trang; thấy trang nào nhắc tới trang này; sáng ra biết có mấy bản chờ tôi duyệt» | T2 | Lượt 1 đã lên |
-| 4 | `tro-ly-doc-kho` | «Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết» | T2 | Lượt 3 đã lên; có 50 câu hỏi thật |
+| 4 | `tro-ly-doc-kho` | «Tôi hỏi bằng lời thường, trong CRM hay qua Zalo, được trả lời có trích trang và phiên bản; không biết thì nói không biết» | T3 | Lượt 3 đã lên; có 50 câu hỏi thật |
 | — | Chạy thật | Mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ | — | Lượt 4 đã lên |
 | 5 | `sua-sau-chay-that` | Danh sách góp ý đã gom được sửa trong một lượt | T2 | Chạy thật xong |
 
@@ -141,7 +141,7 @@ lượt 1 tràn thì nhận thêm lịch sử, khôi phục, lưu trữ.
 
 **Không dùng** `pg_search` (Neon gỡ ngày 2026-09-21). Không vector.
 
-### Lượt 4 — `tro-ly-doc-kho` · T2
+### Lượt 4 — `tro-ly-doc-kho` · T3
 
 **Phạm vi.** Hai công cụ chỉ đọc `search_pages` và `read_page` ở `apps/agent`, chỉ thấy bản
 đang dùng, không thấy trang lưu trữ; trích dẫn gồm slug, phiên bản, đoạn nguyên văn, máy

@@ -34,10 +34,23 @@ Luôn `--dry-run` trước. Không bao giờ `--overwrite`: mục ReUI kéo theo
 tuỳ biến. `@reui/badge` và `@reui/alert` là bản của ReUI, trùng tên với
 `badge.tsx` và `alert.tsx` của kho.
 
+Bản `--dry-run` ghi nhãn `overwrite` cho mọi file trùng tên, kể cả khi lệnh
+thật sẽ không ghi đè: không có `--overwrite` thì CLI bỏ qua file đã có khi chạy
+không tương tác, và hỏi từng file (mặc định «không») khi chạy tương tác. Nhãn đó
+là danh sách file cần trả lời «không», không phải lý do bỏ mục. Mục ReUI gọi một
+biến thể mà `button` của kho không có thì `bun run check-types` bắt.
+
+Đọc danh sách phụ thuộc trong bản `--dry-run` trước khi cài thật. Có
+`@base-ui/react` thì dừng: một số mục nhập Base UI ngay trong bản `radix-nova`
+(`number-field`, `autocomplete`, `data-grid`, và các block `kanban-board-2`,
+`kanban-board-3`, `timeline-8`, `timeline-9`, `solution-crm-2`). Kho thuần
+Radix; hai thư viện nền cho cùng một việc là hai cách đóng mở, hai cách bắt
+phím.
+
 File rơi vào `src/components/reui/`, import bằng
 `@crm/ui/components/reui/<tên>`.
 
-## Sau khi cài, luôn sửa bốn chỗ
+## Sau khi cài, luôn sửa năm chỗ
 
 Đo trên lần cài thử `@reui/timeline` với shadcn 4.16.1:
 
@@ -50,6 +63,13 @@ File rơi vào `src/components/reui/`, import bằng
 4. **Màu và góc** — badge nhiều màu, sao đánh giá, `className` tại chỗ đều phạm
    `docs/design.md`: chỉ `primary` và `destructive` được tô nền, góc lấy từ thang
    `rounded-sm/md/lg`. Biến thể mới đặt trong `packages/ui`, không đặt ở chỗ gọi.
+   Mục nào kéo `@reui/badge` hay `@reui/alert` thì CLI chèn vào `globals.css`
+   một khối `--success`, `--info`, `--warning`, `--invert` và định nghĩa lại
+   `--destructive-foreground` khác nhau giữa hai theme — gỡ cả khối.
+5. **Chữ** — `data-grid`, `filters`, `cascader`, `event-calendar`, `gantt` mang
+   nhãn tiếng Anh trong file `*-i18n`. Mọi nhãn đi qua
+   `packages/ui/src/lib/messages.ts` và truyền vào prop `i18n`; bản tiếng Việt
+   trùng nguyên văn tiếng Anh thì `test/messages-guard.spec.ts` đỏ.
 
 ## Chọn gì, bỏ gì
 
@@ -65,8 +85,8 @@ Dùng:
 
 - `kanban` — kéo thả thương vụ giữa các giai đoạn. Màn Deals hiện chỉ có bảng;
   `@dnd-kit` đã có sẵn trong `packages/ui`.
-- `timeline`, `stepper`, `phone-input`, `number-field` (số tiền theo
-  `docs/currency.md`), `event-calendar` — những thứ kho chưa có.
+- `timeline`, `stepper`, `tree`, `phone-input`, `event-calendar`, `gantt` —
+  những thứ kho chưa có.
 - Block Pro — vật liệu cho `/proto` và phiên design-pass, xem `docs/proto.md`.
   Chỉ phần đã qua Cổng 1 mới được tách thành thành phần trong `packages/ui`.
 
@@ -75,6 +95,8 @@ Không dùng:
 - `data-grid` và `filters` thay `data-table.tsx` — đó là hệ bảng thứ hai
   (TanStack) cạnh một bảng đã có lọc và ẩn cột, đang dùng ở mười hai file.
   Skill và MCP của ReUI nói «bảng thì luôn dùng data-grid»; ở kho này thì không.
+- `number-field`, `autocomplete` — nhập Base UI. Ô số tiền theo
+  `docs/currency.md` dựng trên `input` của kho.
 - `code-block` trong màn chat — hội thoại thuộc AI Elements, xem
   `docs/chat-ui.md`.
 - Skill ReUI cài toàn cục — nó dạy «bảng luôn là data-grid» và «không chỉnh
