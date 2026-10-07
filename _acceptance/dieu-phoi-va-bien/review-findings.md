@@ -1,4 +1,4 @@
-# Review findings: dieu-phoi-va-bien (round 2)
+# Review findings: dieu-phoi-va-bien (round 3)
 
 ## Trong hợp đồng
 
@@ -7,6 +7,24 @@ Không có finding nào.
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
+
+- **git-sach.mjs exits without cleaning up when the mutation anchor is missing**
+  Người dùng thấy gì: Khi bộ kiểm tra tự phát hiện nó đã mất mốc để đo, nó dừng đúng và báo lỗi đúng, nhưng để lại vài thư mục tạm trong máy. Không ảnh hưởng đến kho hay kết quả nghiệm thu, chỉ tốn chỗ chứa.
+  file: `_acceptance/dieu-phoi-va-bien/rang/git-sach.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 5 — trục môi trường khai ô 'GIT_DIR của kho thường' thuộc AC-15 nhưng E22 chỉ có ca worktree liên kết**
+  Người dùng thấy gì: Bộ kiểm tra việc đẩy mã không làm hỏng kho mới chỉ thử trong kho có nhiều thư mục làm việc. Kho thường một thư mục chưa có phép thử riêng, tuy cách xử lý giống nhau nên rủi ro thấp.
+  file: `_acceptance/dieu-phoi-va-bien/rang/git-sach.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 2 — bun giả chép tay lệnh test:dieu-phoi thay vì đọc script thật trong package.json**
+  Người dùng thấy gì: Phép thử việc đẩy mã dùng một bản sao chép tay của lệnh chạy test. Nếu sau này ai đổi lệnh thật mà quên đổi bản sao, phép thử vẫn báo xanh trong khi lệnh thật đã khác.
+  file: `_acceptance/dieu-phoi-va-bien/rang/git-sach.mjs`
+  severity: low
+  Đề xuất: known-limits
 
 - **Một tệp tra-loi gia-han hỏng làm hỏng cả nhịp: không cấp và không thu hồi khoá nào (r1)**
   Người dùng thấy gì: Nếu người giám sát gõ tay một tệp trả lời duyệt gia hạn bị sai cú pháp, bộ điều phối ngừng làm việc ở mọi nhịp sau: không cấp lượt mới, không thu hồi khoá hết hạn, bảng theo dõi không cập nhật cho tới khi có người sửa tay tệp đó.
@@ -37,5 +55,9 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `scripts/dieu-phoi/test/cli.test.mjs`
   severity: medium
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
+
+Không có.
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

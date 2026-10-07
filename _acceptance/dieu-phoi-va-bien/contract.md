@@ -5,7 +5,7 @@ slug: dieu-phoi-va-bien
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, config, ci]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-va-bien-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
