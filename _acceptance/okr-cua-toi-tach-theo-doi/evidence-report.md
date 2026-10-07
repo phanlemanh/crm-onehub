@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: okr-cua-toi-tach-theo-doi
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d0ebd845b7b77d88d1667d2dcf3e811fd4c96e8c
+verified_commit: edc9b1253b4409cdb487d53c1b50e7d5cff36c62
 human_signoff:
 ---
 
 # Evidence Report: okr-cua-toi-tach-theo-doi
 
-Round 1. Mọi eval của tính năng (E1 đến E15) đều xanh trên cây đã ghim. Verdict tổng là REJECT vì một lệnh suite hồi quy, `bun run test -- --filter=api`, đỏ và không gắn eval nào. Đuôi đầu ra chỉ có các dòng log khởi động Nest nên không xác định được ca nào đỏ; cần chạy lại riêng gói api để biết nguyên nhân trước khi ký.
+Round 2. Bảng và khối bằng chứng thay trọn round cũ. Tám eval (E1, E7, E8, E9, E10, E11, E13, E14) mang từ round 1 vì delta không chạm paths của chúng; bảy eval chạy lại ở round này (E2, E3, E4, E5, E6, E12, E15).
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -38,103 +38,106 @@ Round 1. Mọi eval của tính năng (E1 đến E15) đều xanh trên cây đ�
 - eval: E1
   run_id: minted-okr-cua-toi-tach-theo-doi-E1-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_chia
   verified_at: 2026-10-07T10:53:25Z
-  output: |
-    cd apps/api && bun test test/okr-cua-toi-chia.spec.ts
-    Ran 10 tests across 1 file. [24.00ms]
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E2
-  run_id: minted-okr-cua-toi-tach-theo-doi-E2-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_mine
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
+  runs: 1
   output: |
-    bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t mine-vai"
-    lệnh kết thúc, không có ca đỏ
+    bun test okr-cua-toi-theo-doi.spec.ts -t mine-vai: 1 lan chay, 1 dat
+    test-run: dropped crm_muy0m4m9ji1j_test
+    __EXIT=0
 
 - eval: E3
-  run_id: minted-okr-cua-toi-tach-theo-doi-E3-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_trung_vai
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
+  runs: 1
   output: |
-    bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t trung-vai"
-    test-run: dropped crm_muxzq9bmyd0p_test
+    bun test okr-cua-toi-theo-doi.spec.ts -t trung-vai: 1 lan chay, 1 dat
+    test-run: dropped crm_muy0m4nbsox3_test
+    __EXIT=0
 
 - eval: E4
-  run_id: minted-okr-cua-toi-tach-theo-doi-E4-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_da_bo
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
+  runs: 1
   output: |
-    bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t da-bo"
-    lệnh kết thúc, không có ca đỏ
+    bun test okr-cua-toi-theo-doi.spec.ts -t da-bo: 1 lan chay, 1 dat
+    test-run: dropped crm_muy0m4vvwkoi_test
+    __EXIT=0
 
 - eval: E5
-  run_id: minted-okr-cua-toi-tach-theo-doi-E5-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_hien_thi
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
+  runs: 1
   output: |
-    bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t hien-thi"
-    test-run: dropped crm_muxzqbr5i7jn_test
+    bun test okr-cua-toi-theo-doi.spec.ts -t hien-thi: 1 lan chay, 1 dat
+    test-run: dropped crm_muy0m56xlj68_test
+    __EXIT=0
 
 - eval: E6
-  run_id: minted-okr-cua-toi-tach-theo-doi-E6-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-E6-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_bo_theo_doi
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
+  runs: 1
   output: |
-    bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t bo-theo-doi"
-    Ran 1 test across 1 file. [1255.00ms]
-    test-run: dropped crm_muxzq9mzgrit_test
+    bun test okr-cua-toi-theo-doi.spec.ts -t bo-theo-doi: 1 lan chay, 1 dat
+    __EXIT=0
 
 - eval: E7
   run_id: minted-okr-cua-toi-tach-theo-doi-E7-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_dom
   verified_at: 2026-10-07T10:53:25Z
-  output: |
-    cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-theo-doi.dom.tsx
-    Ran 5 tests across 1 file. [1.57s]
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E8
   run_id: minted-okr-cua-toi-tach-theo-doi-E8-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_dom
   verified_at: 2026-10-07T10:53:25Z
-  output: |
-    cùng lệnh E7, ca (b)
-    Ran 5 tests across 1 file. [1.57s]
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E9
   run_id: minted-okr-cua-toi-tach-theo-doi-E9-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_dom
   verified_at: 2026-10-07T10:53:25Z
-  output: |
-    cùng lệnh E7, ca (c) và (d)
-    Ran 5 tests across 1 file. [1.57s]
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E10
   run_id: minted-okr-cua-toi-tach-theo-doi-E10-r1
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.ctt_dom
   verified_at: 2026-10-07T10:53:25Z
-  output: |
-    cùng lệnh E7, ca (e)
-    Ran 5 tests across 1 file. [1.57s]
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E11
   run_id: minted-okr-cua-toi-tach-theo-doi-E11-r1
@@ -142,26 +145,24 @@ Round 1. Mọi eval của tính năng (E1 đến E15) đều xanh trên cây đ�
   baseline: n-a
   verifier: config:executors.script.ctt_man
   verified_at: 2026-10-07T10:53:25Z
-  screenshot: evidence/E11-step1.png
-  observed: |
-    E11-step1.png (1440, vi, cookie U): trang "OKR của tôi" tab Của tôi. Bảng chính có hai mục tiêu, "Tăng khách quay lại" (M1, người phụ trách Phan Minh Anh, KR1 gắn nhãn "Của tôi") và "Mở kênh đối tác mới" (M3, Lê Thu Hà). Không thấy "Rút ngắn thời gian chốt" hay "Chuẩn hoá báo giá" (M5/M7) trong bảng chính. Cuối màn có nút thu gọn "> Đang theo dõi (2)" (mũi tên trỏ phải, tức đóng). "Đã bỏ" nằm dưới mép khung ảnh nên không thấy ở ảnh này. Khớp Expected về bảng chính và nhóm đóng.
-    E11-step2.png (sau khi bấm nhóm): nút chuyển thành "v Đang theo dõi (2)" (mở). Trong nhóm có hai hàng "Rút ngắn thời gian chốt" (Lê Thu Hà) và "Chuẩn hoá báo giá" (Lê Thu Hà), nghĩa là M5 và M7. Bên dưới là nút "> Đã bỏ (1)", nằm dưới nhóm theo dõi, đúng thứ tự. Bảng chính vẫn chỉ có M1 và M3. Khớp.
-    E11-step3.png (sau tắt theo dõi M5 và đóng sheet): bảng chính vẫn M1 và M3. Nhóm hiện "v Đang theo dõi (1)" chỉ còn "Chuẩn hoá báo giá" (M7). "Rút ngắn thời gian chốt" (M5) không còn trên màn. "Đã bỏ (1)" vẫn ở dưới. Khớp. Việc okr.mine vắng M5 cả ba mảng do script khẳng định ("buoc 3: dat"), không thấy được trên ảnh.
-    E11-step5.png (cookie W, 1440): trang "OKR của tôi" với Empty "Bạn chưa phụ trách mục tiêu hay KR nào", mô tả "OKR của đơn vị bạn nằm ở Theo đơn vị.", nút "Sang Theo đơn vị". Ngay bên dưới Empty có nút "> Đang theo dõi (1)". Khớp Expected: Empty và nhóm theo dõi cùng hiện.
-    E11-step6.png (390 px): bố cục điện thoại, tiêu đề, bộ chọn quý, các tab, thẻ "Việc cần làm", mục tiêu "Tăng khách quay lại" và KR1, mọi thứ nằm gọn trong khung 390 px, không có thanh cuộn ngang hay phần bị cắt bên phải. Khớp (script khẳng định không cuộn ngang: "buoc 6: dat").
-    Cả năm frame đều khớp Expected, không có mâu thuẫn.
-  network_observed: n-a (driver)
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E12
-  run_id: E12-20261007-1755
+  run_id: E12-20261007-1
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.ctt_man
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
   screenshot: evidence/E12-step1.png
   observed: |
-    E12-step1.png (1440, giao dien toi, sau khi bo theo doi M5): bang chinh chi co hai muc tieu «Tang khach quay lai» (Phan Minh Anh) va «Mo kenh doi tac moi» (Le Thu Ha); M5 «Rut ngan thoi gian chot» khong con tren man; nhom o duoi co nut «Dang theo doi (1)» dang mo, ben trong chi con «Chuan hoa bao gia» (M7); phia duoi la «Da bo (1)» dong. Khop Expected: M5 roi man, nhom con (1), M7 con lai. Dau window.__cttDau va okr.mine duoc script khang dinh (khong thay trong anh), ket qua dat.
+    Frame E12-step1.png (1440, tieng Viet, nguoi U) sau khi tat theo doi M5 va dong khung bang Escape. Bang chinh co M1 «Tang khach quay lai» (kem KR1 «Cua toi») va M3 «Mo kenh doi tac moi». Nhom «Dang theo doi (1)» dang mo, chi con M7 «Chuan hoa bao gia»; M5 «Rut ngan thoi gian chot» khong con tren man. Nut nhom «Da bo (1)» dong, nam duoi nhom theo doi. Khop Expected: M5 roi man, nhom «Dang theo doi (1)».
   network_observed: n-a (driver)
+  output: |
+    man-theo-doi.mjs chay qua tien-de.mjs (phien do rieng kho crm_okr_cua_toi_tach_theo_doi_do, app 4787, api 4169, tu don khi xong)
+    buoc 1..6 deu «dat»; man-theo-doi: dat; phien-do: xong — mã 0
+    buoc 3: M5 roi man sau khi tat, dau window.__cttDau con nguyen (khong tai lai trang), nut nhom «Đang theo dõi (1)»
+    buoc 4: theo doi lai M5 → nhom «Đang theo dõi (2)» co M5
 
 - eval: E13
   run_id: minted-okr-cua-toi-tach-theo-doi-E13-r1
@@ -169,10 +170,8 @@ Round 1. Mọi eval của tính năng (E1 đến E15) đều xanh trên cây đ�
   baseline: n-a
   verifier: config:executors.script.ctt_man
   verified_at: 2026-10-07T10:53:25Z
-  screenshot: evidence/E13-step1.png
-  observed: |
-    Frame E13-step1.png (1440, vi, nguoi W, trang Cua toi, copy tu ctt-rong-co-theo-doi.png): tieu de "OKR cua toi", tab "Cua toi" dang chon. Giua trang la Empty (icon nguoi, "Ban chua phu trach muc tieu hay KR nao", mo ta "OKR cua don vi ban nam o Theo don vi", nut "Sang Theo don vi"). Ngay duoi Empty, la nut nhom thu gon voi mui ten "Dang theo doi (1)". Khop Expected: Empty ST-cuatoi-rong va nhom "Dang theo doi (1)" cung hien cho W, nhom lien ke sau Empty.
-  network_observed: n-a (driver)
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E14
   run_id: design-gate-7e479c8939
@@ -180,60 +179,56 @@ Round 1. Mọi eval của tính năng (E1 đến E15) đều xanh trên cây đ�
   baseline: n-a
   verifier: config:executors.script.ctt_san_thiet_ke
   verified_at: 2026-10-07T10:53:25Z
-  output: |
-    design-gate --mode static trên cua-toi.tsx và nhom-da-bo.tsx
-      "hits": [],
-      "findings": []
+  carried_from_round: 1
+  note: carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E15
-  run_id: minted-okr-cua-toi-tach-theo-doi-E15-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-E15-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.ctt_dot_bien
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
+  runs: 1
   output: |
-    dot-bien: 8/8 cap do dung ghim, doi chung lanh xanh
+    node _acceptance/okr-cua-toi-tach-theo-doi/rang/dot-bien.mjs: 1 lan chay, 1 dat
+    __EXIT=0
 
 ### Lệnh suite (hồi quy)
 
-Lệnh đỏ không gắn eval nào: `bun run test -- --filter=api` (khối đầu tiên bên dưới).
-
 - cmd: bun run test -- --filter=api
-  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_test_filter_api-r1
-  exit_code: 1
-  verified_at: 2026-10-07T10:53:25Z
-  output: |
-    Đuôi đầu ra chỉ có dòng log khởi động Nest (Router Factory, Mapped Mutation, deals.archive); không có dòng tóm tắt ca đỏ trong phần đã lưu.
+  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_test_filter_api-r2
+  exit_code: 0
+  verified_at: 2026-10-07T11:19:01Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: muy05xb3ltw7
+  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
 
 - cmd: bun run lint:slop
-  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_lint_slop-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-okr-cua-toi-tach-theo-doi-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-07T10:53:25Z
+  verified_at: 2026-10-07T11:19:01Z
 
 ## Known limits
 
@@ -241,12 +236,15 @@ Lệnh đỏ không gắn eval nào: `bun run test -- --filter=api` (khối đ�
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet). E14 và E11 đến E13 chạy baseline n-a (không chạy được trên cây cũ), không phải green.
+carried tu round 1 — baseline khong do lai round nay.
+
+Khong co eval khong-phan-biet. Cac lenh suite xanh o ca hai phia la regression-guard binh thuong.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — khong eval nao chay nhieu lan; moi eval deterministic va deu thong nhat.
 
 ## Iterations
 
-Round 1: không eval nào đỏ; lệnh suite `bun run test -- --filter=api` đỏ và không gắn eval, nên verdict REJECT. Trả về triển khai để tìm ca đỏ ở gói api (E1 đến E6 chạy riêng đều xanh).
+Round 1: lenh suite bun run test --filter=api do, cong them mot phat hien muc trung binh (E2/E3/E4 chi kiem id co mat thay vi so ca tap id va «dung mot lan»). Tra ve implementation; commit 0715bbd2b so tron tap id va cho test so-gop doc ca dangTheoDoi.
+Round 2: PASS — E2, E3, E4, E5, E6, E12, E15 va bay lenh suite chay lai tren cay edc9b1253b44 deu xanh; E1, E7, E8, E9, E10, E11, E13, E14 mang tu round 1 (frame goc cua E11 va E13 xem evidence round 1). Khong co muc judgment, khong co panel judge.

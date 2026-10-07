@@ -5,7 +5,7 @@ slug: okr-cua-toi-tach-theo-doi
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: [api, ui]
-status: implemented
+status: verified
 approved_by:
 approved_at:
 veto_state: mo
