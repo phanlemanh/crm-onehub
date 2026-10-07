@@ -5,7 +5,7 @@ slug: so-moi-khong-chap-chon
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-07T13:33:45Z
 design_doc: _acceptance/so-moi-khong-chap-chon/design.md
