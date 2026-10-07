@@ -157,6 +157,26 @@ _Avoid_: task, việc cần làm, nhiệm vụ
 Vì sao: "việc cần làm" là một loại hoạt động khác đã có trên dòng thời gian —
 hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
 
+**Việc**: một đầu việc có người giao, một người thực hiện, người theo dõi và hạn;
+gắn được vào một hay nhiều bản ghi — thoả thuận, công ty, cá nhân, kế hoạch 30
+ngày, KR, dự án — và hiện trên dòng thời gian của từng bản ghi đó. Trạng thái
+thuộc một trong năm nhóm cố định: Chưa làm · Đang làm · Chờ đánh giá · Xong · Huỷ.
+Quyền xem đi theo bản ghi gắn kèm; người mang vai «chỉ OKR» không thấy việc gắn
+dữ liệu đối tác. Thay dần «việc cần làm» trên dòng thời gian (lượt V1) và Việc
+(KR) (lượt V5) của lộ trình Việc và Dự án; bước của kế hoạch 30 ngày vẫn là bước.
+Chủ kho mở mục 2026-10-07; nghĩa chốt tại Cổng Phạm vi lượt V1.
+_Avoid_: task, nhiệm vụ, đầu việc
+Vì sao: khảo sát 05/10 thấy mọi hãng tách hai loại việc đều phải vá — «việc của
+tôi» nằm hai chỗ, quyền theo hai luật. Một chữ cho một loại việc chung cả CRM.
+
+**Dự án**: chỗ chứa các việc của một đợt triển khai có đầu có cuối; xem dạng danh
+sách, Kanban hay Gantt, có mốc, việc trong dự án có ngày bắt đầu, hạn và phụ
+thuộc xong-rồi-mới-bắt-đầu. Kế hoạch 30 ngày và sáng kiến (KR) không phải dự án.
+Chủ kho mở mục 2026-10-07; nghĩa chốt tại Cổng Phạm vi lượt V4.
+_Avoid_: project, chương trình
+Vì sao: «chương trình» đã là Chương trình OKR. Mục Kế hoạch 30 ngày và Sáng kiến
+(KR) vẫn tránh chữ «dự án», vì đúng hai thứ đó không phải dự án.
+
 **Người cầm trịch**: một người duy nhất chịu trách nhiệm cả kế hoạch 30 ngày của
 một đối tác, điều phối nhiều phòng ban. Chốt 2026-09-22.
 _Avoid_: phụ trách, owner, chủ kế hoạch
