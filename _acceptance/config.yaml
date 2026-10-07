@@ -1927,7 +1927,7 @@ executors:
     dph_ranh_gioi: node _acceptance/dieu-phoi-hai-tang/rang/ranh-gioi.mjs
     dph_dot_bien: node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
     dph_nhip_that: node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
-    dpvb_cong: node _acceptance/dieu-phoi-va-bien/rang/cong.mjs
+    dpvb_cong: bun _acceptance/dieu-phoi-va-bien/rang/cong.mjs
     dpvb_dot_bien: node _acceptance/dieu-phoi-va-bien/rang/dot-bien.mjs
     dpvb_s4_that: node _acceptance/dieu-phoi-va-bien/rang/s4-that.mjs
   design:

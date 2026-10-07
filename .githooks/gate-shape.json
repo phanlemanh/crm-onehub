@@ -88,6 +88,12 @@
 				"@crm/ai-okr": "Source-only package (the shared ZDR model factory). apps/agent and apps/agent-okr import its TypeScript source and build it inside their own build.",
 				"@crm/validation": "Source-only package, built by whichever app imports it."
 			}
+		},
+		{
+			"id": "test:dieu-phoi",
+			"kind": "node-test",
+			"dir": "scripts/dieu-phoi/test",
+			"note": "Added 2026-10-07 by _acceptance/dieu-phoi-va-bien. The orchestration hooks in .claude/settings.json run on every tool call of every session in this repo, and their tests ran in no gate. This checker reads the node test summary of the `pre-push: bun run test:dieu-phoi` section and compares its test count to a reference run over every *.test.mjs in `dir`, so a narrowed glob or a skipped file shows up. It is not part of `bun run test`: that command is packages/db/scripts/test-run.ts, which builds a per-run database for the turbo packages; scripts/ is not a workspace and these tests need no database."
 		}
 	]
 }

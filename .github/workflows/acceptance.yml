@@ -31,6 +31,24 @@ jobs:
             bash scripts/pre-merge-check.sh . --base "HEAD^" --no-t1-escape
           fi
 
+  dieu-phoi:
+    name: bộ điều phối
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - run: bun run test:dieu-phoi
+
   build:
     name: lệnh dựng
     runs-on: ubuntu-24.04
