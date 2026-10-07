@@ -5,7 +5,7 @@ slug: tro-ly-okr-bo-final-output
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [agent, docs]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -69,6 +69,15 @@ không thành AC riêng: cùng đường mã với dispatch thật (Never — c�
 - AC-5, AC-6 gọi model thật qua khoá Gateway, có trần chi trong lệnh (E22 `TDX_TRAN_USD` mặc định 2, E17 `--tran-usd 1`).
 - Mở rộng phạm vi 07/10 sau S4 lượt 5 (chủ kho đồng ý trong phiên): thêm AC-9 — bỏ khuôn kết quả làm chữ tự do của phiên con về tới phiên gốc, nên phiên gốc OKR phải chạy model có ZDR, cùng khuôn với phiên gốc kho.
 - Thu phạm vi 07/10 sau S4 round 1 (chủ kho đồng ý trong phiên): AC-7 (độ trễ) bỏ khỏi hợp đồng; AC-5, AC-6 thôi chặn ở «0 lời gọi hết trần».
+
+- Known limits (Cổng 2, Ngoài-1): Nếu sau này ai đổi model của Trợ lý OKR, bằng chứng «phiên gốc chạy đúng model» đã ký vẫn hiện là còn hiệu lực dù thứ nó đo đã đổi, nên có thể không ai được nhắc chạy lại.
+- Known limits (Cổng 2, Ngoài-2): Nếu có người sửa phần dùng chung làm rơi cờ không lưu dữ liệu ở phiên gốc của Trợ lý OKR, bằng chứng đã ký vẫn báo ổn và không có gì yêu cầu kiểm lại, nên nội dung OKR có thể đi tới nhà cung cấp mô hình mà không ai biết.
+- Known limits (Cổng 2, Ngoài-3): Cờ không lưu dữ liệu và thẻ của Trợ lý OKR giờ được ghi ở ba nơi; sau này đổi thẻ hay cờ ở một nơi thì phiên gốc có thể vẫn dùng giá trị cũ mà không báo lỗi.
+- Known limits (Cổng 2, Ngoài-5): Dòng báo «không có ZDR» trong kết quả đo chỉ kiểm phiên gốc có dùng đúng model hay không, chưa kiểm cờ không lưu dữ liệu ở lần chạy thật, nên người đọc có thể tin điều đó đã được xác nhận khi chạy thật hơn thực tế.
+- Known limits (Cổng 2, Ngoài-6): Khi tóm tắt tuần mà thiếu dữ liệu, dòng dặn trợ lý «không làm gì, trả lời done» được viết thêm nhưng thực tế không bao giờ đến được trợ lý. Việc vẫn được bảo vệ bằng quy định chung ở chỗ khác, nên người dùng không thấy khác biệt, chỉ là có một dòng dặn thừa.
+- Known limits (Cổng 2, Ngoài-8): Neu co loi co so du lieu rat hiem ngay luc dong viec, cac de xuat hoac ban tom tat van duoc luu nhung viec bi danh dau la hong. Man gop y se hien loi, va lan sau he thong co the chay lai mo hinh cho cung yeu cau, ton them chi phi AI.
+- Known limits (Cổng 2, Ngoài-9): Sau mot loi hiem luc dong viec, de xuat da luu van nam o trang thai cho duyet nhung viec lai bi tinh la that bai. Nguoi dung thay thong bao loi tren the gop y du noi dung da co, va he thong co the tra them chi phi AI de lam lai.
+- Known limits (Cổng 2, Ngoài-10): Mot bai kiem tra tu ghi san ket qua roi doc lai, nen no se van xanh du viec dong viec trong cong cu nop co hong. Phan kiem tra nay chua chung minh duoc rang cong cu nop thuc su tu dong viec.
 
 ## Known limits
 
