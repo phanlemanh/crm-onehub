@@ -32,17 +32,17 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **(r1) The new filter-empty branch in DataTable hides the onboarding table's error view and its retry button whenever a filter is active** — đã sửa ở round fix (bcad1554d): bảng danh mục đưa màn lỗi qua filteredEmpty
-  Người dùng thấy gì: Ở bảng danh mục của màn làm quen, nếu đang lọc theo một nhóm rồi tải dữ liệu bị lỗi, người dùng sẽ thấy câu «Không có kết quả nào khớp bộ lọc» thay vì thông báo lỗi, và mất nút «thử lại». Họ tưởng là lọc không ra gì trong khi thật ra hệ thống đang lỗi.
+- **(r1) The new filter-empty branch in DataTable hides the onboarding table's error view and its retry button whenever a filter is active**
+  Người dùng thấy gì: Ở bảng danh mục của màn làm quen, nếu đang lọc theo một nhóm rồi tải dữ liệu bị lỗi, người dùng sẽ thấy câu «Không có kết quả nào khớp bộ lọc» thay vì thông báo lỗi, và mất nút «thử lại». Họ tưởng là lọc không ra gì trong khi thật ra hệ thống đang lỗi. Đã sửa ở round sửa của S4 (commit bcad1554d): bảng danh mục đưa màn này qua filteredEmpty; suite app và bài danh-muc-quan-ly xanh ở round 2.
   file: `packages/ui/src/components/data-table.tsx`
   severity: high
-  Đề xuất: new-contract
+  Đề xuất: wont-fix
 
-- **(r1) The onboarding no-match view (KhongKhop with its «bỏ lọc» button) can no longer appear when facets are selected** — đã sửa ở round fix (bcad1554d): bảng danh mục đưa màn không khớp qua filteredEmpty
-  Người dùng thấy gì: Ở bảng danh mục của màn làm quen, khi lọc ra kết quả rỗng người dùng không còn thấy nút «bỏ lọc» như trước, chỉ thấy câu chung chung không có đường ra. Họ phải tự gỡ từng bộ lọc bằng tay.
+- **(r1) The onboarding no-match view (KhongKhop with its «bỏ lọc» button) can no longer appear when facets are selected**
+  Người dùng thấy gì: Ở bảng danh mục của màn làm quen, khi lọc ra kết quả rỗng người dùng không còn thấy nút «bỏ lọc» như trước, chỉ thấy câu chung chung không có đường ra. Họ phải tự gỡ từng bộ lọc bằng tay. Đã sửa ở round sửa của S4 (commit bcad1554d): bảng danh mục đưa màn này qua filteredEmpty; suite app và bài danh-muc-quan-ly xanh ở round 2.
   file: `packages/ui/src/components/data-table.tsx`
   severity: medium
-  Đề xuất: new-contract
+  Đề xuất: wont-fix
 
 - **(r1) Hình dạng 5 (tuyên quét lớp nhưng chỉ có điểm-case): «menu con vẫn mở» và đối chứng «không có mục» chỉ kiểm ở menu thường, bỏ trống menu có ô tìm**
   Người dùng thấy gì: Ở menu lọc có ô tìm, chưa có phép kiểm tự động nào bắt lỗi nếu mục «Bỏ chọn» hiện ra cả khi chưa chọn gì hoặc làm menu đóng lại. Nếu sau này hỏng, người dùng mới là người thấy trước.
