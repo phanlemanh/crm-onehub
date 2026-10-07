@@ -97,7 +97,7 @@ export async function lichSuMucTieu(
 		},
 	});
 	for (const m of dong) {
-		const motMucTieu: Record<QuanHeMucTieu, boolean> = {
+		const motMucTieu = {
 			alignedBy: m._count.alignedBy > 0,
 			comments: m._count.comments > 0,
 			nhinLai: m.nhinLai !== null,
@@ -105,7 +105,7 @@ export async function lichSuMucTieu(
 			mangSangTu: m.mangSangTu !== null,
 			ghiNhan: m._count.ghiNhan > 0,
 			chuDeHoiY: m.chuDeHoiY !== null,
-		};
+		} satisfies Record<QuanHeMucTieu, boolean>;
 		const quanHe = QUAN_HE_LICH_SU_MUC_TIEU.find((q) => motMucTieu[q]);
 		const lyDo: LyDoLichSu | null =
 			m.publishedAt !== null

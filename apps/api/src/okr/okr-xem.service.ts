@@ -328,9 +328,7 @@ export class OkrXemService {
 				krKhop: coLocKr ? m.keyResults.filter(khopKr).map((k) => k.id) : [],
 			}));
 		const tachDaBo = input.loc.trangThai.length === 0;
-		const rows = tachDaBo
-			? tatCa.filter((m) => m.status !== "da-bo")
-			: tatCa;
+		const rows = tachDaBo ? tatCa.filter((m) => m.status !== "da-bo") : tatCa;
 		return {
 			rows,
 			daBo: tachDaBo ? tatCa.filter((m) => m.status === "da-bo") : [],

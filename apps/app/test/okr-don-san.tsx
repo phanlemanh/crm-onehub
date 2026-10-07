@@ -188,13 +188,23 @@ export function danhSachTu(rows: MucTieuOutput[], daBo: MucTieuOutput[]) {
 	});
 }
 
+type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| readonly Json[]
+	| { readonly [khoa: string]: Json | undefined };
+type DauVao = { readonly [khoa: string]: Json | undefined } | undefined;
+type KetGhi = { id: string; canhBao: string | null; canGuiDuyet?: boolean };
+
 export const kho = {
 	mine: mineOutput.parse({ objectives: [], daBo: [] }),
 	danhSach: danhSachTu([], []),
 	chiTiet: chiTietTu(mucTieu("mt-s")),
 	loiGhi: new Map<string, string>(),
-	traGhi: new Map<string, object>(),
-	daGhi: [] as { duong: string; dauVao: unknown }[],
+	traGhi: new Map<string, KetGhi>(),
+	daGhi: [] as { duong: string; dauVao: DauVao }[],
 	toast: [] as { loai: string; chu: string }[],
 };
 
@@ -250,15 +260,15 @@ function docThuTuc(duong: string): object | null {
 }
 
 type ChonGhi = {
-	onSuccess?: (kq: object) => void;
+	onSuccess?: (kq: KetGhi) => void;
 	onError?: (e: Error) => void;
 };
 
 function thuTuc(duong: string) {
 	return {
-		queryKey: (vao?: object) => [duong, vao ?? null],
+		queryKey: (vao?: DauVao) => [duong, vao ?? null],
 		pathKey: () => [duong],
-		queryOptions: (vao?: object | typeof skipToken) =>
+		queryOptions: (vao?: DauVao | typeof skipToken) =>
 			vao === skipToken
 				? { queryKey: [duong, "skip"], queryFn: skipToken }
 				: {
@@ -268,7 +278,7 @@ function thuTuc(duong: string) {
 		mutationOptions: (chon?: ChonGhi) => ({
 			...chon,
 			mutationKey: [duong],
-			mutationFn: async (vao: unknown) => {
+			mutationFn: async (vao: DauVao) => {
 				kho.daGhi.push({ duong, dauVao: vao });
 				const loi = kho.loiGhi.get(duong);
 				if (loi !== undefined) throw new Error(loi);

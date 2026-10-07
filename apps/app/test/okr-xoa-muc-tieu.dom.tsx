@@ -2,8 +2,8 @@ import { describe, expect, test } from "bun:test";
 import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
 import {
 	bamChuot,
-	cho,
 	chiTietTu,
+	cho,
 	DetailSheet,
 	daBoTu,
 	dung,

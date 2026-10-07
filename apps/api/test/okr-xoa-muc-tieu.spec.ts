@@ -156,14 +156,14 @@ const moHinhDuLieu = z.object({
 	models: z.record(z.string(), z.object({ fields: z.array(truongMoHinh) })),
 });
 
-const QUAN_HE_CHA: Record<string, readonly string[]> = {
+const QUAN_HE_CHA = {
 	OkrObjective: ["cycle", "division", "department", "person", "owner"],
 	OkrKeyResult: ["objective", "owner"],
-};
+} as const;
 
-function quanHeCua(model: string): string[] {
+function quanHeCua(model: keyof typeof QUAN_HE_CHA): string[] {
 	const { models } = moHinhDuLieu.parse(Reflect.get(db, "_runtimeDataModel"));
-	const cha = QUAN_HE_CHA[model] ?? [];
+	const cha: readonly string[] = QUAN_HE_CHA[model];
 	return (models[model]?.fields ?? [])
 		.filter((f) => f.kind === "object" && !cha.includes(f.name))
 		.map((f) => f.name)
@@ -173,7 +173,7 @@ function quanHeCua(model: string): string[] {
 describe("quan-he-du", () => {
 	test("quan-he-du: moi quan he cua OkrObjective va OkrKeyResult nam dung mot danh sach lich su hoac di theo", () => {
 		const ca: {
-			model: string;
+			model: keyof typeof QUAN_HE_CHA;
 			thuc: string[];
 			lichSu: string[];
 			diTheo: string[];
@@ -339,6 +339,12 @@ describe("xoa-sach", () => {
 				"dat gioi han",
 			);
 			const ben = await nhap(ky, don);
+			const tenTuMau = (
+				await db.okrObjective.findUniqueOrThrow({
+					where: { id: tuMau },
+					select: { title: true },
+				})
+			).title;
 			const benTruoc = await anhMucTieu(ben.mt);
 			const vetTruoc = await db.okrTrail.count({
 				where: { objectiveId: tuMau, action: { not: "xoa-muc-tieu" } },
@@ -383,7 +389,7 @@ describe("xoa-sach", () => {
 				dem,
 				soVetXoa: vetXoa.length,
 				before: {
-					title: typeof before?.title,
+					title: before?.title,
 					level: before?.level,
 					departmentId: before?.departmentId,
 					status: before?.status,
@@ -409,7 +415,7 @@ describe("xoa-sach", () => {
 				},
 				soVetXoa: 1,
 				before: {
-					title: "string",
+					title: tenTuMau,
 					level: "phong-ban",
 					departmentId: don.pb,
 					status: "nhap",
@@ -483,50 +489,49 @@ const krDem = (q: keyof (typeof KR_SACH)["_count"]): DongGia => ({
 	keyResults: [KR_SACH, { ...KR_SACH, _count: { ...KR_SACH._count, [q]: 1 } }],
 });
 
-const BANG_ANH_XA: Record<string, { hang: DongGia; mong: LyDoLichSu | null }> =
-	{
-		sach: { hang: SACH, mong: null },
-		"da-cong-bo": {
-			hang: { ...SACH, publishedAt: new Date("2026-10-02T00:00:00Z") },
-			mong: "da-cong-bo",
+const BANG_ANH_XA = {
+	sach: { hang: SACH, mong: null },
+	"da-cong-bo": {
+		hang: { ...SACH, publishedAt: new Date("2026-10-02T00:00:00Z") },
+		mong: "da-cong-bo",
+	},
+	"muc-tieu.alignedBy": {
+		hang: coDem("alignedBy"),
+		mong: "muc-tieu.alignedBy",
+	},
+	"muc-tieu.comments": { hang: coDem("comments"), mong: "muc-tieu.comments" },
+	"muc-tieu.nhinLai": {
+		hang: { ...SACH, nhinLai: { id: "n" } },
+		mong: "muc-tieu.nhinLai",
+	},
+	"muc-tieu.mangSangDi": {
+		hang: coDem("mangSangDi"),
+		mong: "muc-tieu.mangSangDi",
+	},
+	"muc-tieu.mangSangTu": {
+		hang: { ...SACH, mangSangTu: { id: "s" } },
+		mong: "muc-tieu.mangSangTu",
+	},
+	"muc-tieu.ghiNhan": { hang: coDem("ghiNhan"), mong: "muc-tieu.ghiNhan" },
+	"muc-tieu.chuDeHoiY": {
+		hang: { ...SACH, chuDeHoiY: { id: "c" } },
+		mong: "muc-tieu.chuDeHoiY",
+	},
+	"kr.alignedBy": { hang: krDem("alignedBy"), mong: "kr.alignedBy" },
+	"kr.checkIns": { hang: krDem("checkIns"), mong: "kr.checkIns" },
+	"kr.comments": { hang: krDem("comments"), mong: "kr.comments" },
+	"kr.soChup": { hang: krDem("soChup"), mong: "kr.soChup" },
+	"kr.doiDich": { hang: krDem("doiDich"), mong: "kr.doiDich" },
+	"kr.diemKr": {
+		hang: {
+			...SACH,
+			keyResults: [KR_SACH, { ...KR_SACH, diemKr: { id: "d" } }],
 		},
-		"muc-tieu.alignedBy": {
-			hang: coDem("alignedBy"),
-			mong: "muc-tieu.alignedBy",
-		},
-		"muc-tieu.comments": { hang: coDem("comments"), mong: "muc-tieu.comments" },
-		"muc-tieu.nhinLai": {
-			hang: { ...SACH, nhinLai: { id: "n" } },
-			mong: "muc-tieu.nhinLai",
-		},
-		"muc-tieu.mangSangDi": {
-			hang: coDem("mangSangDi"),
-			mong: "muc-tieu.mangSangDi",
-		},
-		"muc-tieu.mangSangTu": {
-			hang: { ...SACH, mangSangTu: { id: "s" } },
-			mong: "muc-tieu.mangSangTu",
-		},
-		"muc-tieu.ghiNhan": { hang: coDem("ghiNhan"), mong: "muc-tieu.ghiNhan" },
-		"muc-tieu.chuDeHoiY": {
-			hang: { ...SACH, chuDeHoiY: { id: "c" } },
-			mong: "muc-tieu.chuDeHoiY",
-		},
-		"kr.alignedBy": { hang: krDem("alignedBy"), mong: "kr.alignedBy" },
-		"kr.checkIns": { hang: krDem("checkIns"), mong: "kr.checkIns" },
-		"kr.comments": { hang: krDem("comments"), mong: "kr.comments" },
-		"kr.soChup": { hang: krDem("soChup"), mong: "kr.soChup" },
-		"kr.doiDich": { hang: krDem("doiDich"), mong: "kr.doiDich" },
-		"kr.diemKr": {
-			hang: {
-				...SACH,
-				keyResults: [KR_SACH, { ...KR_SACH, diemKr: { id: "d" } }],
-			},
-			mong: "kr.diemKr",
-		},
-		"kr.bangChung": { hang: krDem("bangChung"), mong: "kr.bangChung" },
-		"kr.ghiNhan": { hang: krDem("ghiNhan"), mong: "kr.ghiNhan" },
-	};
+		mong: "kr.diemKr",
+	},
+	"kr.bangChung": { hang: krDem("bangChung"), mong: "kr.bangChung" },
+	"kr.ghiNhan": { hang: krDem("ghiNhan"), mong: "kr.ghiNhan" },
+} satisfies Record<string, { hang: DongGia; mong: LyDoLichSu | null }>;
 
 const clientGia = (hang: DongGia) =>
 	({
@@ -569,7 +574,11 @@ describe("tu-choi-lich-su", () => {
 			ok(
 				await goi(
 					"okr.addComment",
-					{ objectiveId: bl.mt, body: "Xem lại câu mục tiêu", mentionUserIds: [] },
+					{
+						objectiveId: bl.mt,
+						body: "Xem lại câu mục tiêu",
+						mentionUserIds: [],
+					},
 					don.t.cookie,
 				),
 				"binh luan",
@@ -664,9 +673,7 @@ describe("tu-choi-lich-su", () => {
 		}
 		console.log(`tu-choi-lich-su anh xa: ${JSON.stringify(thuc)}`);
 		expect(thuc).toEqual(mong);
-		const lyDo = Object.values(mong).filter(
-			(l): l is LyDoLichSu => l !== null,
-		);
+		const lyDo = Object.values(mong).filter((l): l is LyDoLichSu => l !== null);
 		expect(
 			lyDo.filter((l) => !(l in OKR.thongDiep.xoa.lyDo)),
 			"ly do chua co cau",
@@ -798,30 +805,150 @@ const MA_TRAN: {
 	pha: "dang-chay" | "cham-diem";
 	co: { xoa: boolean; dungLai: boolean };
 }[] = [
-	{ tt: "nhap-sach", ai: "truong", pha: "dang-chay", co: { xoa: true, dungLai: false } },
-	{ tt: "nhap-co-lich-su", ai: "truong", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "cho-duyet", ai: "truong", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "cong-bo", ai: "truong", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "da-bo-sach", ai: "truong", pha: "dang-chay", co: { xoa: true, dungLai: true } },
-	{ tt: "da-bo-tung-cong-bo", ai: "truong", pha: "dang-chay", co: { xoa: false, dungLai: true } },
-	{ tt: "nhap-sach", ai: "khac", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "nhap-co-lich-su", ai: "khac", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "cho-duyet", ai: "khac", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "cong-bo", ai: "khac", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "da-bo-sach", ai: "khac", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "da-bo-tung-cong-bo", ai: "khac", pha: "dang-chay", co: { xoa: false, dungLai: false } },
-	{ tt: "nhap-sach", ai: "truong", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "nhap-co-lich-su", ai: "truong", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "cho-duyet", ai: "truong", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "cong-bo", ai: "truong", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "da-bo-sach", ai: "truong", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "da-bo-tung-cong-bo", ai: "truong", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "nhap-sach", ai: "khac", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "nhap-co-lich-su", ai: "khac", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "cho-duyet", ai: "khac", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "cong-bo", ai: "khac", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "da-bo-sach", ai: "khac", pha: "cham-diem", co: { xoa: false, dungLai: false } },
-	{ tt: "da-bo-tung-cong-bo", ai: "khac", pha: "cham-diem", co: { xoa: false, dungLai: false } },
+	{
+		tt: "nhap-sach",
+		ai: "truong",
+		pha: "dang-chay",
+		co: { xoa: true, dungLai: false },
+	},
+	{
+		tt: "nhap-co-lich-su",
+		ai: "truong",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "cho-duyet",
+		ai: "truong",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "cong-bo",
+		ai: "truong",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "da-bo-sach",
+		ai: "truong",
+		pha: "dang-chay",
+		co: { xoa: true, dungLai: true },
+	},
+	{
+		tt: "da-bo-tung-cong-bo",
+		ai: "truong",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: true },
+	},
+	{
+		tt: "nhap-sach",
+		ai: "khac",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "nhap-co-lich-su",
+		ai: "khac",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "cho-duyet",
+		ai: "khac",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "cong-bo",
+		ai: "khac",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "da-bo-sach",
+		ai: "khac",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "da-bo-tung-cong-bo",
+		ai: "khac",
+		pha: "dang-chay",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "nhap-sach",
+		ai: "truong",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "nhap-co-lich-su",
+		ai: "truong",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "cho-duyet",
+		ai: "truong",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "cong-bo",
+		ai: "truong",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "da-bo-sach",
+		ai: "truong",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "da-bo-tung-cong-bo",
+		ai: "truong",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "nhap-sach",
+		ai: "khac",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "nhap-co-lich-su",
+		ai: "khac",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "cho-duyet",
+		ai: "khac",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "cong-bo",
+		ai: "khac",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "da-bo-sach",
+		ai: "khac",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
+	{
+		tt: "da-bo-tung-cong-bo",
+		ai: "khac",
+		pha: "cham-diem",
+		co: { xoa: false, dungLai: false },
+	},
 ];
 
 const quyenSchema = z.object({
@@ -833,9 +960,9 @@ describe("mot-nguon", () => {
 		"mot-nguon: 24 o — quyen.xoa va quyen.dungLai dung khi va chi khi thu tuc thanh cong",
 		async () => {
 			expect(MA_TRAN.length).toBe(24);
-			expect(
-				new Set(MA_TRAN.map((o) => `${o.tt}|${o.ai}|${o.pha}`)).size,
-			).toBe(24);
+			expect(new Set(MA_TRAN.map((o) => `${o.tt}|${o.ai}|${o.pha}`)).size).toBe(
+				24,
+			);
 			const don = await donVi("mot-nguon");
 			const khac = await nguoiCo("mot-nguon-khac");
 			const ky = {
@@ -973,8 +1100,16 @@ describe("dung-lai", () => {
 			const docB = await anhMucTieu(b);
 			expect({
 				kq,
-				a: { status: docA?.status, droppedAt: docA?.droppedAt, publishedAt: docA?.publishedAt },
-				b: { status: docB?.status, droppedAt: docB?.droppedAt, publishedAt: docB?.publishedAt },
+				a: {
+					status: docA?.status,
+					droppedAt: docA?.droppedAt,
+					publishedAt: docA?.publishedAt,
+				},
+				b: {
+					status: docB?.status,
+					droppedAt: docB?.droppedAt,
+					publishedAt: docB?.publishedAt,
+				},
 				vetA: await vetDungLai(a),
 				vetB: await vetDungLai(b),
 				vetC: (await vetDungLai(c)).length,
@@ -982,7 +1117,11 @@ describe("dung-lai", () => {
 			}).toEqual({
 				kq: { a: "200", b: "200", c: `400 ${CAU.chuaBo}` },
 				a: { status: "nhap", droppedAt: null, publishedAt: null },
-				b: { status: "nhap", droppedAt: null, publishedAt: bTruoc?.publishedAt },
+				b: {
+					status: "nhap",
+					droppedAt: null,
+					publishedAt: bTruoc?.publishedAt,
+				},
 				vetA: [{ before: { status: "da-bo" }, after: { status: "nhap" } }],
 				vetB: [{ before: { status: "da-bo" }, after: { status: "nhap" } }],
 				vetC: 0,
@@ -993,10 +1132,7 @@ describe("dung-lai", () => {
 			const kyTran = await gieoKyQuy(KY);
 			const d = await gieoTrangThai(kyTran, donTran, "da-bo-sach");
 			await nhap(kyTran, donTran);
-			ok(
-				await chuongTrinh({ objectiveCap: 1, capMode: "chan" }),
-				"tran chan",
-			);
+			ok(await chuongTrinh({ objectiveCap: 1, capMode: "chan" }), "tran chan");
 			const chan = tra(await dungLai(d, donTran.t.cookie));
 			const sauChan = (await anhMucTieu(d))?.status;
 			const vetSauChan = await db.okrTrail.count({

@@ -1031,7 +1031,8 @@ export class OkrService {
 		return this.db.$transaction(async (tx) => {
 			await this.assertKyGhiDuoc(tx, mt.cycleId);
 			const trangThai = await this.khoaMucTieu(tx, mt.id);
-			if (trangThai !== "da-bo") throw new BadRequestException(T.dungLai.chuaBo);
+			if (trangThai !== "da-bo")
+				throw new BadRequestException(T.dungLai.chuaBo);
 			const ct = await this.program(tx);
 			const canhBao = await this.kiemTranMucTieu(tx, mt.cycleId, mt, 1);
 			await tx.okrObjective.update({
@@ -1049,8 +1050,7 @@ export class OkrService {
 			return {
 				id: mt.id,
 				canhBao,
-				canGuiDuyet:
-					this.congBoHayGuiDuyet(ct, q, userId, mt) === "cho-duyet",
+				canGuiDuyet: this.congBoHayGuiDuyet(ct, q, userId, mt) === "cho-duyet",
 			};
 		});
 	}
