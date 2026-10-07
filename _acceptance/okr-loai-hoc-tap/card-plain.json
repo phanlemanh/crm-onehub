@@ -1,0 +1,38 @@
+{
+  "feature_plain": "Mục tiêu có thêm loại «Học tập» cho việc kiểm một giả thuyết: giữa kỳ không bao giờ «Trượt», cuối kỳ đọc «Đã trả lời / Chưa trả lời», và phải ghi «Điều học được» trước khi khép kỳ.",
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ cho tạo mục tiêu loại «Học tập» ở mọi nơi chọn loại — hộp thoại, Kara, API — từ cùng một danh sách loại." },
+    { "id": "AC-2", "p": "Sẽ đọc tình trạng giữa kỳ của mục tiêu học tập y như tham vọng: dưới 70% vạch kỳ vọng là chậm nhịp, không bao giờ «Trượt»." },
+    { "id": "AC-3", "p": "Sẽ đọc cuối kỳ mục tiêu học tập là «Đã trả lời» khi đã ghi điều học được, «Chưa trả lời» khi chưa (kể cả chỉ gõ khoảng trắng), dù KR có điểm hay chưa." },
+    { "id": "AC-8", "p": "Sẽ hiện «Học tập» / «Learning» là lựa chọn thứ ba trong hộp chọn loại, và chip «Học tập» trên mục tiêu đã lưu." }
+  ],
+  "wont_do": [
+    { "id": "AC-4", "p": "Sẽ KHÔNG cho khép kỳ khi còn mục tiêu học tập đã công bố chưa ghi điều học được — thông báo nói số và tên từng mục tiêu." },
+    { "id": "AC-5", "p": "Sẽ KHÔNG chặn khép kỳ vì mục tiêu học tập còn nháp, đang chờ duyệt hay đã bỏ." },
+    { "id": "AC-6", "p": "Sẽ KHÔNG hiện nút khép trong hộp khép kỳ khi còn mục tiêu học tập chưa ghi — hộp liệt kê chúng, tên giữ nguyên không bị trình duyệt dịch." },
+    { "id": "AC-7", "p": "Sẽ KHÔNG bắt tải lại trang: lưu điều học được thì nhãn đổi ngay sang «Đã trả lời» và hộp khép kỳ thôi liệt kê mục tiêu đó." },
+    { "id": "OOS-1", "p": "KHÔNG làm thống kê riêng cho mục tiêu học tập ở Toàn cảnh hay báo cáo xuất." },
+    { "id": "OOS-2", "p": "KHÔNG nhắc người phụ trách ghi điều học được trước hạn khép kỳ." },
+    { "id": "OOS-3", "p": "KHÔNG thêm ô đánh dấu riêng «chưa trả lời được câu hỏi» — anh đã chọn «đã trả lời = đã ghi điều học được»." },
+    { "id": "OOS-4", "p": "KHÔNG đổi cách chấm điểm KR của mục tiêu học tập — chỉ đổi cách đọc." },
+    { "id": "OOS-5", "p": "KHÔNG sửa câu cũ trong từ điển sản phẩm — chỉ thêm mục «Loại mục tiêu», theo luật của đợt." }
+  ],
+  "scope_plain": "Phần cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    { "i": 0, "p": "Đã xét đủ ba loại mục tiêu ở mọi chỗ máy rẽ nhánh theo loại." },
+    { "i": 1, "p": "Đã xét ba thời điểm đọc: giữa kỳ (AC-2), cuối kỳ (AC-3), lúc khép kỳ (AC-4, AC-5)." },
+    { "i": 2, "p": "Đã xét đủ bốn trạng thái của mục tiêu học tập lúc khép kỳ — nháp, chờ duyệt, công bố, đã bỏ (AC-5)." },
+    { "i": 3, "p": "Đã xét ba dạng điều học được: chưa có, chỉ khoảng trắng, có chữ (AC-3)." },
+    { "i": 4, "p": "Đã xét từng mặt người dùng chạm: API, màn chấm điểm, hộp khép kỳ, hộp chọn loại, Kara." },
+    { "i": 5, "p": "Mỗi ô được làm ngay đều có tiêu chí đo riêng." },
+    { "i": 6, "p": "Đối chiếu ngành: Google chỉ có hai loại cam kết / tham vọng; loại thứ ba là chủ ý của anh, chưa có chuẩn ngành đúng loại." },
+    { "i": 7, "p": "Để sau: thống kê riêng ở Toàn cảnh và nhắc ghi điều học được trước hạn." }
+  ],
+  "gap_probe_plain": [
+    { "i": 0, "p": "Tiêu chí màn chấm điểm cho phép tải lại trang, nên lỗi «lưu xong nhãn vẫn cũ» không bị bắt — đã đòi nhãn đổi ngay không tải lại, đo bằng dấu trang và mở hộp khép bằng bấm." },
+    { "i": 1, "p": "Chưa xét mục tiêu học tập đang chờ duyệt lúc khép kỳ, có thể làm quản trị kẹt — đã đo đủ bốn trạng thái và thêm một phép thử phá kiểu lọc loại trừ." },
+    { "i": 2, "p": "Thông báo chặn chỉ được thử với một mục tiêu — đã thêm ca hai mục tiêu, so nguyên văn số và thứ tự tên." },
+    { "i": 3, "p": "Màn thật chưa thử mục tiêu học tập có KR chưa chấm — đã gieo đúng ca đó và thêm chiều đỏ riêng." },
+    { "i": 4, "p": "Tên mục tiêu trong hộp chặn có thể bị trình duyệt tự dịch — đã đòi đánh dấu không dịch và đo nó." }
+  ]
+}
