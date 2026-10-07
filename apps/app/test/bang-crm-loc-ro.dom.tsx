@@ -9,7 +9,14 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
-type DauVao = Record<string, unknown> | undefined;
+type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| Json[]
+	| { [khoa: string]: Json };
+type DauVao = Json | undefined;
 type LoiGoi = { duong: string; dauVao: DauVao };
 type Lay = (dauVao: DauVao) => unknown;
 
@@ -36,7 +43,10 @@ function thuTuc(duong: string) {
 			v === skipToken
 				? { queryKey: [duong, "skip"], queryFn: skipToken }
 				: { ...chon, queryKey: [duong, v], queryFn: async () => doc(v) },
-		mutationOptions: (chon?: object) => ({
+		mutationOptions: (chon?: {
+			onSuccess?: (kq: Json, v: DauVao) => void;
+			onError?: (e: Error) => void;
+		}) => ({
 			...chon,
 			mutationKey: [duong],
 			mutationFn: async (v: DauVao) => (await doc(v)) ?? { id: "ok" },
@@ -82,7 +92,9 @@ const { messages } = await import("@crm/ui/lib/messages");
 const { contactMessages } = await import("@/lib/messages/contacts");
 const { companyMessages } = await import("@/lib/messages/companies");
 const { dealMessages } = await import("@/lib/messages/deals");
-const { thanhVienMessages } = await import("@/lib/messages/settings-thanh-vien");
+const { thanhVienMessages } = await import(
+	"@/lib/messages/settings-thanh-vien"
+);
 const { activityFacetOptions } = await import("@/lib/activity-recency");
 const { enrichmentFacetOptions } = await import("@/lib/enrichment-status");
 const { closingOptions } = await import("@/components/crm/closing-window");
@@ -137,7 +149,11 @@ function datChung(): void {
 	dat("fields.list", () => []);
 	dat("savedViews.list", () => []);
 	dat("companies.options", () => CONG_TY);
-	dat("giaiDoan.list", () => ({ stages: GIAI_DOAN, canManage: false, tran: 0 }));
+	dat("giaiDoan.list", () => ({
+		stages: GIAI_DOAN,
+		canManage: false,
+		tran: 0,
+	}));
 	dat("contacts.list", () => ({ rows: [], total: 0, facetCounts: dem }));
 	dat("companies.list", () => ({ rows: [], total: 0, facetCounts: dem }));
 	dat("deals.list", () => ({ rows: [], total: 0, facetCounts: dem }));
@@ -233,7 +249,9 @@ async function bamTro(el: Element | null | undefined): Promise<void> {
 }
 
 function nutMenu(chu: string): HTMLElement | undefined {
-	return [...document.body.querySelectorAll('button[aria-haspopup="menu"]')].find(
+	return [
+		...document.body.querySelectorAll('button[aria-haspopup="menu"]'),
+	].find(
 		(b): b is HTMLElement =>
 			b instanceof HTMLElement && (b.textContent ?? "").includes(chu),
 	);
@@ -242,7 +260,9 @@ function nutMenu(chu: string): HTMLElement | undefined {
 async function moMenuCon(nhan: string): Promise<HTMLElement> {
 	await bamTro(nutMenu(ui.filters));
 	const trig = [
-		...document.body.querySelectorAll('[data-slot="dropdown-menu-sub-trigger"]'),
+		...document.body.querySelectorAll(
+			'[data-slot="dropdown-menu-sub-trigger"]',
+		),
 	].find(
 		(el): el is HTMLElement =>
 			el instanceof HTMLElement && (el.textContent ?? "").includes(nhan),
@@ -253,13 +273,16 @@ async function moMenuCon(nhan: string): Promise<HTMLElement> {
 	const noi = document.body.querySelector(
 		'[data-slot="dropdown-menu-sub-content"]',
 	);
-	if (!(noi instanceof HTMLElement)) throw new Error(`tieu chi ${nhan} khong mo`);
+	if (!(noi instanceof HTMLElement))
+		throw new Error(`tieu chi ${nhan} khong mo`);
 	return noi;
 }
 
 function mucLuaChon(noi: HTMLElement): HTMLElement[] {
 	return [
-		...noi.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"], [role="option"]'),
+		...noi.querySelectorAll<HTMLElement>(
+			'[role="menuitemcheckbox"], [role="option"]',
+		),
 	].filter((el) => (el.textContent ?? "").trim() !== ui.clearFilters);
 }
 
@@ -267,11 +290,27 @@ function soCua(muc: HTMLElement): string | null {
 	return muc.querySelector('[data-slot="facet-count"]')?.textContent ?? null;
 }
 
-function cuoiCung(duong: string, loc: (v: DauVao) => boolean = () => true): DauVao {
+function truong(v: DauVao, khoa: string): Json | undefined {
+	if (
+		v === null ||
+		v === undefined ||
+		Array.isArray(v) ||
+		!(v instanceof Object)
+	)
+		return undefined;
+	return v[khoa];
+}
+
+function cuoiCung(
+	duong: string,
+	loc: (v: DauVao) => boolean = () => true,
+): DauVao {
 	return daGoi.filter((g) => g.duong === duong && loc(g.dauVao)).at(-1)?.dauVao;
 }
 
-const FIELDS_HAI = encodeURIComponent(JSON.stringify({ k1: ["o1"], k2: ["o3"] }));
+const FIELDS_HAI = encodeURIComponent(
+	JSON.stringify({ k1: ["o1"], k2: ["o3"] }),
+);
 
 type BangBoLoc = {
 	ten: string;
@@ -349,21 +388,27 @@ describe("bo-loc", () => {
 			expect(nut.length).toBe(1);
 			await act(async () => nut[0]?.click());
 			await cho();
-			const dauVao = cuoiCung(bang.list, (v) => v?.sort === bang.sort);
+			const dauVao = cuoiCung(
+				bang.list,
+				(v) => truong(v, "sort") === bang.sort,
+			);
 			const ketQua = {
 				q: url.get("q"),
 				tieuChi: url.getAll(bang.tieuChi),
-				fields: fieldsCon().length === 0 ? "rong" : `fields con ${fieldsCon().join(",")}`,
+				fields:
+					fieldsCon().length === 0
+						? "rong"
+						: `fields con ${fieldsCon().join(",")}`,
 				trangThai: bang.trangThai ? (url.get(bang.trangThai) ?? "all") : "all",
 				page: url.get("page") ?? "1",
 				archived: url.get("archived"),
 				dauVao: {
-					sort: dauVao?.sort,
-					dir: dauVao?.dir,
-					q: dauVao?.q,
-					tieuChi: dauVao?.[bang.tieuChi],
-					fields: dauVao?.fields ?? {},
-					archived: dauVao?.archived ?? false,
+					sort: truong(dauVao, "sort"),
+					dir: truong(dauVao, "dir"),
+					q: truong(dauVao, "q"),
+					tieuChi: truong(dauVao, bang.tieuChi),
+					fields: truong(dauVao, "fields") ?? {},
+					archived: truong(dauVao, "archived") ?? false,
 				},
 			};
 			expect(ketQua).toEqual({
@@ -396,19 +441,84 @@ function maTranSo0(): O[] {
 	const k1 = TRUONG[0]?.label ?? "";
 	const soTruong = TRUONG[0]?.options.length ?? 0;
 	return [
-		{ bang: "ca-nhan", man: () => <ContactsTable />, nhan: c.facets.owner, nguon: NGUOI.length + 1 },
-		{ bang: "ca-nhan", man: () => <ContactsTable />, nhan: c.facets.company, nguon: CONG_TY.length + 1 },
-		{ bang: "ca-nhan", man: () => <ContactsTable />, nhan: c.facets.activity, nguon: activityFacetOptions("vi").length },
-		{ bang: "ca-nhan", man: () => <ContactsTable />, nhan: k1, nguon: soTruong },
-		{ bang: "cong-ty", man: () => <CompaniesTable />, nhan: co.facets.owner, nguon: NGUOI.length + 1 },
-		{ bang: "cong-ty", man: () => <CompaniesTable />, nhan: co.facets.enrichment, nguon: enrichmentFacetOptions("vi").length },
-		{ bang: "cong-ty", man: () => <CompaniesTable />, nhan: co.facets.activity, nguon: activityFacetOptions("vi").length },
-		{ bang: "cong-ty", man: () => <CompaniesTable />, nhan: k1, nguon: soTruong },
-		{ bang: "thoa-thuan", man: () => <DealsTable />, nhan: d.facets.owner, nguon: NGUOI.length },
-		{ bang: "thoa-thuan", man: () => <DealsTable />, nhan: d.facets.stage, nguon: GIAI_DOAN.length },
-		{ bang: "thoa-thuan", man: () => <DealsTable />, nhan: d.facets.closing, nguon: closingOptions("vi").length },
-		{ bang: "thoa-thuan", man: () => <DealsTable />, nhan: k1, nguon: soTruong },
-		{ bang: "thanh-vien", man: () => <MembersTable />, nhan: t.bang.vaiTro, nguon: Object.keys(t.vaiTro).length },
+		{
+			bang: "ca-nhan",
+			man: () => <ContactsTable />,
+			nhan: c.facets.owner,
+			nguon: NGUOI.length + 1,
+		},
+		{
+			bang: "ca-nhan",
+			man: () => <ContactsTable />,
+			nhan: c.facets.company,
+			nguon: CONG_TY.length + 1,
+		},
+		{
+			bang: "ca-nhan",
+			man: () => <ContactsTable />,
+			nhan: c.facets.activity,
+			nguon: activityFacetOptions("vi").length,
+		},
+		{
+			bang: "ca-nhan",
+			man: () => <ContactsTable />,
+			nhan: k1,
+			nguon: soTruong,
+		},
+		{
+			bang: "cong-ty",
+			man: () => <CompaniesTable />,
+			nhan: co.facets.owner,
+			nguon: NGUOI.length + 1,
+		},
+		{
+			bang: "cong-ty",
+			man: () => <CompaniesTable />,
+			nhan: co.facets.enrichment,
+			nguon: enrichmentFacetOptions("vi").length,
+		},
+		{
+			bang: "cong-ty",
+			man: () => <CompaniesTable />,
+			nhan: co.facets.activity,
+			nguon: activityFacetOptions("vi").length,
+		},
+		{
+			bang: "cong-ty",
+			man: () => <CompaniesTable />,
+			nhan: k1,
+			nguon: soTruong,
+		},
+		{
+			bang: "thoa-thuan",
+			man: () => <DealsTable />,
+			nhan: d.facets.owner,
+			nguon: NGUOI.length,
+		},
+		{
+			bang: "thoa-thuan",
+			man: () => <DealsTable />,
+			nhan: d.facets.stage,
+			nguon: GIAI_DOAN.length,
+		},
+		{
+			bang: "thoa-thuan",
+			man: () => <DealsTable />,
+			nhan: d.facets.closing,
+			nguon: closingOptions("vi").length,
+		},
+		{
+			bang: "thoa-thuan",
+			man: () => <DealsTable />,
+			nhan: k1,
+			nguon: soTruong,
+		},
+		{
+			bang: "thanh-vien",
+			man: () => <MembersTable />,
+			nhan: t.bang.vaiTro,
+			nguon: Object.keys(t.vaiTro).length,
+		},
 	];
 }
 
@@ -448,10 +558,30 @@ describe("so-0", () => {
 	});
 
 	const TU_DO = [
-		{ bang: "ca-nhan", man: () => <ContactsTable />, mat: "title", nhan: contactMessages("vi").facets.title },
-		{ bang: "ca-nhan", man: () => <ContactsTable />, mat: "seniority", nhan: contactMessages("vi").facets.seniority },
-		{ bang: "ca-nhan", man: () => <ContactsTable />, mat: "persona", nhan: contactMessages("vi").facets.persona },
-		{ bang: "cong-ty", man: () => <CompaniesTable />, mat: "industry", nhan: companyMessages("vi").facets.industry },
+		{
+			bang: "ca-nhan",
+			man: () => <ContactsTable />,
+			mat: "title",
+			nhan: contactMessages("vi").facets.title,
+		},
+		{
+			bang: "ca-nhan",
+			man: () => <ContactsTable />,
+			mat: "seniority",
+			nhan: contactMessages("vi").facets.seniority,
+		},
+		{
+			bang: "ca-nhan",
+			man: () => <ContactsTable />,
+			mat: "persona",
+			nhan: contactMessages("vi").facets.persona,
+		},
+		{
+			bang: "cong-ty",
+			man: () => <CompaniesTable />,
+			mat: "industry",
+			nhan: companyMessages("vi").facets.industry,
+		},
 	];
 
 	test("tu-do: lua chon dang chon khong con trong dem van hien, kem so 0", async () => {
@@ -483,16 +613,25 @@ describe("so-0", () => {
 });
 
 const BANG_RONG = [
-	{ ten: "thoa-thuan", man: () => <DealsTable />, chu: (l: Locale) => dealMessages(l) },
-	{ ten: "ca-nhan", man: () => <ContactsTable />, chu: (l: Locale) => contactMessages(l) },
-	{ ten: "cong-ty", man: () => <CompaniesTable />, chu: (l: Locale) => companyMessages(l) },
+	{
+		ten: "thoa-thuan",
+		man: () => <DealsTable />,
+		chu: (l: Locale) => dealMessages(l),
+		cau: { vi: "Chưa có thoả thuận nào.", en: "No deals yet." },
+	},
+	{
+		ten: "ca-nhan",
+		man: () => <ContactsTable />,
+		chu: (l: Locale) => contactMessages(l),
+		cau: { vi: "Chưa có cá nhân nào.", en: "No contacts yet." },
+	},
+	{
+		ten: "cong-ty",
+		man: () => <CompaniesTable />,
+		chu: (l: Locale) => companyMessages(l),
+		cau: { vi: "Chưa có công ty nào.", en: "No companies yet." },
+	},
 ];
-
-const CAU_RONG: Record<string, Record<Locale, string>> = {
-	"thoa-thuan": { vi: "Chưa có thoả thuận nào.", en: "No deals yet." },
-	"ca-nhan": { vi: "Chưa có cá nhân nào.", en: "No contacts yet." },
-	"cong-ty": { vi: "Chưa có công ty nào.", en: "No companies yet." },
-};
 
 describe("khong-loc", () => {
 	test("12 o: khong loc thi hien cau cua man, khong noi bo loc; luu tru giu cau cu", async () => {
@@ -503,9 +642,15 @@ describe("khong-loc", () => {
 				for (const cheDo of ["thuong", "luu-tru"] as const) {
 					const ten = `${bang.ten}/${cheDo}/${locale}`;
 					const cauMan =
-						cheDo === "thuong" ? CAU_RONG[bang.ten]?.[locale] : bang.chu(locale).emptyArchived;
+						cheDo === "thuong"
+							? bang.cau[locale]
+							: bang.chu(locale).emptyArchived;
 					mong[ten] = `hien: ${cauMan}`;
-					const o = await mo(bang.man(), cheDo === "luu-tru" ? "archived=true" : "", locale);
+					const o = await mo(
+						bang.man(),
+						cheDo === "luu-tru" ? "archived=true" : "",
+						locale,
+					);
 					const chu = o.textContent ?? "";
 					const noMatch = messages(locale).table.noMatch;
 					ketQua[ten] =
@@ -538,6 +683,10 @@ describe("khong-loc", () => {
 			].filter((x): x is string => x !== null);
 			ketQua[bang.ten] = loi.length === 0 ? "dung" : loi.join("; ");
 		}
-		expect(ketQua).toEqual({ "thoa-thuan": "dung", "ca-nhan": "dung", "cong-ty": "dung" });
+		expect(ketQua).toEqual({
+			"thoa-thuan": "dung",
+			"ca-nhan": "dung",
+			"cong-ty": "dung",
+		});
 	});
 });

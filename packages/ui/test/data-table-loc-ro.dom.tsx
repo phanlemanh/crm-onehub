@@ -62,8 +62,16 @@ const TABS: DataTableTabs = {
 };
 
 const FACETS: DataTableFacet[] = [
-	{ id: "owner", label: "Người phụ trách", options: [{ value: "u1", label: "An" }] },
-	{ id: "field:k", label: "Nguồn", options: [{ value: "o1", label: "Hội chợ" }] },
+	{
+		id: "owner",
+		label: "Người phụ trách",
+		options: [{ value: "u1", label: "An" }],
+	},
+	{
+		id: "field:k",
+		label: "Nguồn",
+		options: [{ value: "o1", label: "Hội chợ" }],
+	},
 ];
 
 type ThemProps = Partial<DataTableProps<Dong, unknown>>;
@@ -123,21 +131,40 @@ const TRON = {
 } satisfies ThemProps;
 
 const MA_TRAN: { ten: string; them: ThemProps; mong: Mong }[] = [
-	{ ten: "1 tieu chi thuong", them: { query: truyVan({ owner: ["u1"] }) }, mong: "loc" },
-	{ ten: "2 truong tuy chinh", them: { query: truyVan({ "field:k": ["o1"] }) }, mong: "loc" },
+	{
+		ten: "1 tieu chi thuong",
+		them: { query: truyVan({ owner: ["u1"] }) },
+		mong: "loc",
+	},
+	{
+		ten: "2 truong tuy chinh",
+		them: { query: truyVan({ "field:k": ["o1"] }) },
+		mong: "loc",
+	},
 	{
 		ten: "3 bo loc trang thai",
-		them: { query: truyVan({ status: ["closed"] }, "closed", "status"), tabs: TABS },
+		them: {
+			query: truyVan({ status: ["closed"] }, "closed", "status"),
+			tabs: TABS,
+		},
 		mong: "loc",
 	},
 	{ ten: "4 tim kiem", them: { searchActive: true }, mong: "loc" },
 	{ ten: "5 tron", them: TRON, mong: "loc" },
 	{
 		ten: "6 khong-loc: phai hien cau cua man",
-		them: { query: truyVan({ status: ["all"] }, "all", "status"), tabs: TABS, searchActive: false },
+		them: {
+			query: truyVan({ status: ["all"] }, "all", "status"),
+			tabs: TABS,
+			searchActive: false,
+		},
 		mong: "man",
 	},
-	{ ten: "7 khong loc, filters rong", them: { query: truyVan({}) }, mong: "man" },
+	{
+		ten: "7 khong loc, filters rong",
+		them: { query: truyVan({}) },
+		mong: "man",
+	},
 	{ ten: "8 dang tai", them: { ...TRON, loading: true }, mong: "tai" },
 ];
 
@@ -215,9 +242,12 @@ function nutCo(chu: string): HTMLElement | undefined {
 
 function trigCon(nhan: string): HTMLElement | undefined {
 	return [
-		...document.body.querySelectorAll('[data-slot="dropdown-menu-sub-trigger"]'),
-	].find((el): el is HTMLElement =>
-		el instanceof HTMLElement && (el.textContent ?? "").includes(nhan),
+		...document.body.querySelectorAll(
+			'[data-slot="dropdown-menu-sub-trigger"]',
+		),
+	].find(
+		(el): el is HTMLElement =>
+			el instanceof HTMLElement && (el.textContent ?? "").includes(nhan),
 	);
 }
 
@@ -229,14 +259,15 @@ async function moCon(nhan: string): Promise<HTMLElement> {
 	const noi = document.body.querySelector(
 		'[data-slot="dropdown-menu-sub-content"]',
 	);
-	if (!(noi instanceof HTMLElement)) throw new Error(`menu con ${nhan} khong mo`);
+	if (!(noi instanceof HTMLElement))
+		throw new Error(`menu con ${nhan} khong mo`);
 	return noi;
 }
 
 function mucBoChon(noi: HTMLElement): HTMLElement[] {
-	return [...noi.querySelectorAll<HTMLElement>('[role="menuitem"], [role="option"]')].filter(
-		(el) => (el.textContent ?? "").trim() === vi.clearFilters,
-	);
+	return [
+		...noi.querySelectorAll<HTMLElement>('[role="menuitem"], [role="option"]'),
+	].filter((el) => (el.textContent ?? "").trim() === vi.clearFilters);
 }
 
 const FACET_A: DataTableFacet = {
@@ -292,8 +323,9 @@ describe("bo-chon", () => {
 		expect({
 			goi,
 			vanMo:
-				document.body.querySelector('[data-slot="dropdown-menu-sub-content"]') !==
-				null,
+				document.body.querySelector(
+					'[data-slot="dropdown-menu-sub-content"]',
+				) !== null,
 		}).toEqual({ goi: [["A", []]], vanMo: true });
 	});
 
@@ -314,11 +346,12 @@ describe("bo-chon", () => {
 	});
 
 	test("chu: vi Bo chon, en Clear, khong con Bo het tieu chi", () => {
-		const viTable: Record<string, unknown> = messages("vi").table;
 		expect({
 			vi: messages("vi").table.clearFilters,
 			en: messages("en").table.clearFilters,
-			conChuCu: Object.values(viTable).includes("Bỏ hết tiêu chí"),
+			conChuCu: Object.values(messages("vi").table).some(
+				(chu) => chu === "Bỏ hết tiêu chí",
+			),
 		}).toEqual({ vi: "Bỏ chọn", en: "Clear", conChuCu: false });
 	});
 });
@@ -367,14 +400,15 @@ describe("so-dem", () => {
 
 	test("so 4,0,0 theo thu tu; lua chon so 0 tick duoc", async () => {
 		const goi: [string, string[]][] = [];
-		await veBang({ owner: { u1: 4, u2: 0 }, status: { open: 2, closed: 0 } }, (id, v) =>
-			goi.push([id, v]),
+		await veBang(
+			{ owner: { u1: 4, u2: 0 }, status: { open: 2, closed: 0 } },
+			(id, v) => goi.push([id, v]),
 		);
 		const noi = await moCon(OWNER.label);
 		expect(soTrong(noi, ["An", "Bình", "Chi"])).toEqual(["4", "0", "0"]);
-		const chi = [...noi.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"]')].find(
-			(el) => (el.textContent ?? "").includes("Chi"),
-		);
+		const chi = [
+			...noi.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"]'),
+		].find((el) => (el.textContent ?? "").includes("Chi"));
 		await act(async () => chi?.click());
 		expect(goi).toEqual([["owner", ["u3"]]]);
 	});
@@ -396,8 +430,11 @@ describe("so-dem", () => {
 	test("lua chon trang thai so 0 phai hien, kem so", async () => {
 		await veBang({ owner: {}, status: { open: 2, closed: 0 } });
 		await bam(nutCo(TABS.allLabel ?? ""));
-		const noi = document.body.querySelector('[data-slot="dropdown-menu-content"]');
-		if (!(noi instanceof HTMLElement)) throw new Error("menu trang thai khong mo");
+		const noi = document.body.querySelector(
+			'[data-slot="dropdown-menu-content"]',
+		);
+		if (!(noi instanceof HTMLElement))
+			throw new Error("menu trang thai khong mo");
 		expect(soTrong(noi, ["Mở", "Đóng"])).toEqual(["2", "0"]);
 	});
 });
