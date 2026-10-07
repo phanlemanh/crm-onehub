@@ -1,0 +1,164 @@
+schema_version: 1
+slug: kho-mau-mang-dau-ngay
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.kmd_dau_dang_dung
+    paths: [packages/db/src/measure-database.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; dong tom tat bun "1 pass" va "0 fail" — dung mot ca chay, tieu de day du
+      "dau-dang-dung > reads back the building mark written by the module and refuses a broken one".
+      Ca thuan (khong CSDL). Chuoi dau dang dung lay tu CHINH ham ghi cua module
+      (templateBuildingComment), khong viet tay: parseMeasureComment(chuoi(t)) toEqual
+      { kind: "building", createdAt: t } va lastTouched(...) == t (doi chung duong). MA TRAN AM viet
+      truoc: (a) cung tien to "crm phien do template-building created " voi gio "khong-phai-gio" ->
+      null; (b) chuoi dung cua ham ghi them " x" o cuoi -> null. Thong diep ghim "dau dang dung doc
+      lai sai" / "dau dang dung hong van doc duoc: <nhan>".
+      CHIEU DO (pha thu o S3): parseMeasureComment bo nhanh building -> ca do "dau dang dung doc
+      lai sai"; lastTouched bo qua building (tra 0) -> ca do cung thong diep.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kmd_giet_mang_dau
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; dong tom tat bun "1 pass" va "0 fail" — dung mot ca, tieu de day du
+      "giet-giua-chung > giet-mang-dau: a build killed during migrate or seed leaves its template
+      carrying the building mark". MA TRAN viet truoc hai diem giet x moi diem mot cay rieng
+      (thu<runid>gmm, thu<runid>gms). Thu tuc giet dung chung trong bai: chay CLI that
+      `bun scripts/measure-db.ts --tao --ten <cay>` trong nhom tien trinh rieng (detached), hoi pg
+      moi 50 ms (tran 120 s; het tran -> ca do "khong toi diem giet <diem>") toi diem giet roi
+      SIGKILL CA NHOM, cho tien trinh thoat va kho mau het ket noi (tran 30 s). Diem "migrate":
+      kho mau co >= 1 hang trong _prisma_migrations. Diem "seed": so migration_name co
+      finished_at khac null BANG so thu muc trong packages/db/prisma/migrations VA bang "user" co
+      >= 1 hang (seed da bat dau, moi lenh truoc seed trong buildTemplate da chay). Tien de ghim sau
+      khi giet, ca hai diem: kho mau chua co deal seed-deal-wise-1 — dem bang ham dem deal dung
+      chung: to_regclass('public.deal') null -> 0, nguoc lai SELECT count(*) WHERE id; loi khac
+      KHONG bi nuot ("luot bi giet da dung xong kho mau — phep do khong do giua chung: <diem>").
+      Diem "seed" them: to_regclass('public.deal') khac null. Roi doc shobj_description:
+      parseMeasureComment -> kind "building" ("kho mau cua luot bi giet khong mang dau dang dung:
+      <diem>"), createdAt cach gio that < 10 phut; kho do <cay>_do khong ton tai. Don trong afterAll.
+      CHIEU DO: tai hien 07/10 tren ban cu (sha 73bb599b) — SIGKILL 6 s sau --tao de lai
+      crm_thudieutra26552__mau_do voi COMMENT rong. Pha thu o S3: (1) bo loi goi markTemplateBuilding
+      -> do "khong mang dau dang dung: migrate"; (2) them markTemplate voi fingerprint that ngay sau
+      migrate deploy, truoc seed -> do "khong mang dau dang dung: seed".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kmd_giet_quet_gom
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; dong tom tat bun "1 pass" va "0 fail" — dung mot ca, tieu de day du
+      "giet-giua-chung > giet-quet-gom: the sweep keeps a killed build's template until maxAgeMs has
+      passed, then drops it". Dung kho mau bi giet o diem "migrate" bang CUNG thu tuc giet cua E2
+      (cay thu<runid>gq). Goi sweepMeasureDatabases that (ham ma --quet goi) voi tien to rieng
+      crm_thu<runid>gq va hai dong ho tinh tu createdAt doc trong dau: som = createdAt + maxAgeMs -
+      1 phut -> danh sach tra ve KHONG chua kho mau va kho con trong pg_database ("kho mau dang
+      dung bi xoa truoc han"); muon = createdAt + maxAgeMs + 1 phut -> danh sach tra ve CHUA kho mau
+      ("luot quet khong gom kho mau cua luot bi giet") va kho khong con trong pg_database.
+      CHIEU DO: ban cu — kho khong dau, luot quet khong nhan, ca do "luot quet khong gom kho mau cua
+      luot bi giet". Pha thu o S3: parseMeasureComment bo nhanh building -> do cung thong diep;
+      lastTouched cua building tra 0 -> do "kho mau dang dung bi xoa truoc han"; lastTouched cua
+      building cong them maxAgeMs (an han rieng) -> do "luot quet khong gom kho mau cua luot bi giet".
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kmd_giet_dung_lai
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; dong tom tat bun "1 pass" va "0 fail" — dung mot ca, tieu de day du
+      "giet-giua-chung > giet-dung-lai: the next create rebuilds a template a killed build left
+      half-built". MA TRAN viet truoc hai diem giet ("migrate", "seed") x moi diem mot cay rieng
+      (thu<runid>gdm, thu<runid>gds): dung kho mau bi giet bang thu tuc cua E2, doc createdAt cua
+      dau building; goi createMeasureDatabase that cho cung cay voi dau nguon mac dinh
+      (sourceFingerprint() that). Doc lai qua pg: dau kho mau kind "template" va createdAt >
+      createdAt cua building ("kho mau do dang duoc dung lai: <diem>"); kho do co tap
+      migration_name hoan tat BANG DUNG tap thu muc trong packages/db/prisma/migrations (toEqual tren
+      mang sap xep) va ham dem deal dung chung cua E2 tra 1 tren kho do ("kho do clone tu kho mau
+      do dang: <diem>") — day cung la doi chung duong cua ham dem deal.
+      CHIEU DO (pha thu o S3): them markTemplate voi fingerprint that ngay sau migrate deploy, truoc
+      seed -> diem "seed" do "kho mau do dang duoc dung lai: seed"; ghi dau template voi fingerprint
+      that thay cho dau building -> ca hai diem do.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dmk_tao
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/scripts/test-db-admin.ts, packages/db/prisma/seed.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; dong tom tat bun "1 pass" va "0 fail" — dung 1 ca, CUNG tap ca nhu o merge-base
+      (khong ca moi nao cua vong nay khop mau -t); ca "tao" co san cua ho so do-man-tren-kho-rieng, khong sua: kho do co du migration,
+      deal seed, dau "session" trong 10 phut, dong cuoi stdout CLI == URL, dau van tay kho chung
+      khong doi.
+      CHIEU DO: da chung o ho so do-man-tren-kho-rieng (E2 cua ho so do). Vong nay khong sua ca.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dmk_kho_mau
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; dong tom tat bun "2 pass" va "0 fail" — dung 2 ca, CUNG tap ca nhu o merge-base
+      (khong ca moi nao cua vong nay khop mau -t); hai ca "kho-mau" co san, khong sua: dau nguon doi theo migration/schema/seed; kho mau
+      dung xong mang dau "template", duoc dung lai khi dau khop, dung lai khi dau doi.
+      CHIEU DO: da chung o ho so do-man-tren-kho-rieng (E3 cua ho so do). Vong nay khong sua ca.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dmk_xoa
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; dong tom tat bun "2 pass" va "0 fail" — dung 2 ca, CUNG tap ca nhu o merge-base
+      (khong ca moi nao cua vong nay khop mau -t); hai ca "xoa" co san, khong sua: --xoa xoa kho do dang co ket noi; tu choi kho khong
+      _do va kho _do khong dau (exit 2, kho con nguyen).
+      CHIEU DO: da chung o ho so do-man-tren-kho-rieng (E4 cua ho so do). Vong nay khong sua ca.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dmk_quet_mo_coi
+    paths: [packages/db/src/measure-database.ts, packages/db/scripts/measure-db.ts, packages/db/test/measure-database.spec.ts]
+    expected: |
+      exit 0; dong tom tat bun "1 pass" va "0 fail" — dung 1 ca, CUNG tap ca nhu o merge-base
+      (khong ca moi nao cua vong nay khop mau -t); ca "quet-mo-coi" co san, khong sua: dung hai kho bi xoa (do qua tuoi, mau khong dung
+      qua tuoi); kho non, kho mau con dung, kho _do khong dau con nguyen.
+      CHIEU DO: da chung o ho so do-man-tren-kho-rieng (E5 cua ho so do). Vong nay khong sua ca.
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6
+    executor: judgment
+    question: >-
+      Muc "Screen measurements get a database of their own" cua docs/setup.md co noi du ba dieu
+      sau, dung voi thiet ke trong tep design khong: (1) kho mau mang dau phien do ngay khi duoc
+      tao, truoc migrate deploy va seed; (2) mot luot --tao bi giet giua chung de lai kho mau co
+      dau, --quet xoa no sau 12 gio va --tao ke cua cay dung lai no; (3) kho mau khong dau do luot
+      bi giet truoc ban sua nay van phai xoa bang tay. Cau nao mau thuan voi cau khac trong cung
+      muc khong?
+    expected: >-
+      Ca ba dieu co mat, doc duoc boi nguoi chua doc ma, khop voi design doc, va khong cau nao
+      trong muc con noi dieu nguoc lai (vi du "--quet xoa moi kho mau" hay "kho mau chi duoc danh
+      dau khi dung xong").
+    inputs:
+      - docs/setup.md
+      - docs/superpowers/specs/2026-10-07-kho-mau-mang-dau-ngay-design.md
