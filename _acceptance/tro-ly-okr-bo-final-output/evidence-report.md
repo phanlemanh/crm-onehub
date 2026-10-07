@@ -1,13 +1,12 @@
 ---
 schema_version: 2
 feature_slug: tro-ly-okr-bo-final-output
-verdict: BLOCKED
+verdict: PASS
 failed_evals: []
-reason: "Lenh `bun _acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs` (cover E6, E7, E11) bi cong cu giet o 600 giay (timeout); tien trinh dang cho bo test cua cay xong (6 tien trinh test dang chay khi bi ngat), chua toi phan [e22] nen chua co so do nao. Cach go: chay lai lenh voi tran cong cu dai hon (chay nen, theo doi .acceptance-runs/tro-ly-okr-bo-final-output/do-mo-hinh.log), khong phai sua code."
-verified_by: fresh-context verification subagent
+verified_by: fresh-context verification subagent (E6, E7, E11: duong kiem doc lap tuan tu, tac tu cham tuoi rieng)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ac77cb276e5dbd4308dcd9244a25ce2c03a5b5a4
+verified_commit: d1797513ac081c1dabd72f9e30b82dcffc87cfdd
 human_signoff:
 ---
 
@@ -20,13 +19,13 @@ human_signoff:
 | E3 | AC-2 | test | PASS |
 | E4 | AC-3 | test | PASS |
 | E5 | AC-4 | test | PASS |
-| E6 | AC-5 | script | BLOCKED |
-| E7 | AC-6 | script | BLOCKED |
+| E6 | AC-5 | script | PASS |
+| E7 | AC-6 | script | PASS |
 | E9 | AC-8 | judgment | PASS |
 | E10 | AC-9 | test | PASS |
-| E11 | AC-9 | script | BLOCKED |
+| E11 | AC-9 | script | PASS |
 
-Ghi chu bang: E1, E3, E4, E5 la carry-forward tu round 2 (delta khong cham paths cua eval). E2 va E9 la de xuat cua hoi dong judge, chua co human_override. E6, E7, E11 la ba eval cua cung mot lenh do-mo-hinh.mjs, bi cong cu giet nen chua co ket qua. E10 la eval moi cua round 5 (AC-9, phien goc okr chay model co ZDR) va dat.
+Ghi chu bang: E1, E3, E4, E5 la carry-forward tu round 2 (delta khong cham paths cua eval). E2 va E9 la de xuat cua hoi dong judge, chua co human_override. E6, E7, E11 la ba eval cua cung mot lenh do-mo-hinh.mjs; bay tac tu cham bi cong cu cat o 600 giay, nen lenh duoc mot tac tu cham tuoi rieng chay lai theo duong kiem doc lap tuan tu (chay nen, cho dong KET THUC cung ma luot) va ca ba dat. E10 la eval moi cua round 5 (AC-9, phien goc okr chay model co ZDR) va dat.
 
 ## Evidence
 
@@ -71,28 +70,36 @@ Ghi chu bang: E1, E3, E4, E5 la carry-forward tu round 2 (delta khong cham paths
     carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E6
-  run_id: minted-tro-ly-okr-bo-final-output-E6-r5
+  run_id: tro-ly-okr-bo-final-output-E6-r5-doclap-20261007T041956Z
+  exit_code: 0
   baseline: red
   verifier: config:executors.script.tbf_do_mo_hinh
-  verified_at: 2026-10-07T03:43:27Z
+  verified_at: 2026-10-07T04:20:30Z
   runs: 1
-  killed_by_tool: true
   output: |
-    Lenh bi cong cu giet o 600 giay; khong co dong KET THUC cua thuoc.
-    Dong tu-kiem da in: n_dau 1 · het-tran 1 · final_output 1 · outputSchema 1 · goc-buoc 2 · goc-khong-zdr 2 · empty-log 2
-    Sau do thuoc chi in dong cho: "cho bo test cua cay xong: 6 tien trinh dang chay" (lap lai).
-    Chua toi phan [e22] nen chua co so do n_dau / final_output / outputSchema nao cho E6.
+    luot 67643-2026-10-07T04:02:08.045Z (dong dau va dong KET THUC cung ma luot); chay nen 04:02 → 04:19 UTC, khong bi cong cu cat
+    [tu-kiem] n_dau 1 · het-tran 1 · final_output 1 · outputSchema 1 · goc-buoc 2 · goc-khong-zdr 2 · empty-log 2
+    bo test yen 120 giay, bat dau do
+    [e22] ma 0 · n_dau 53 · het-tran 4 · final_output 0 · outputSchema 0 · goc-buoc 104 · goc-khong-zdr 0 · empty-log 4 → dat
+    [e17] ma 0 · n_dau 20 · het-tran 0 · final_output 0 · outputSchema 0 · goc-buoc 40 · goc-khong-zdr 0 → dat
+    KET THUC ma 0
+    E6 dat: tu-kiem du nguong; [e22] n_dau 53 >= 18, final_output 0, outputSchema 0; het-tran 4 va empty-log 4 chi in ra (Known limits).
 
 - eval: E7
-  run_id: minted-tro-ly-okr-bo-final-output-E7-r5
+  run_id: tro-ly-okr-bo-final-output-E7-r5-doclap-20261007T041956Z
+  exit_code: 0
   baseline: red
   verifier: config:executors.script.tbf_do_mo_hinh
-  verified_at: 2026-10-07T03:43:27Z
+  verified_at: 2026-10-07T04:20:30Z
   runs: 1
-  killed_by_tool: true
   output: |
-    Cung lenh voi E6 (phan [e17] chay sau [e22]); lenh bi cong cu giet truoc khi toi phan nay.
-    Chua co so do n_dau / final_output / outputSchema nao cho E7.
+    luot 67643-2026-10-07T04:02:08.045Z (dong dau va dong KET THUC cung ma luot); chay nen 04:02 → 04:19 UTC, khong bi cong cu cat
+    [tu-kiem] n_dau 1 · het-tran 1 · final_output 1 · outputSchema 1 · goc-buoc 2 · goc-khong-zdr 2 · empty-log 2
+    bo test yen 120 giay, bat dau do
+    [e22] ma 0 · n_dau 53 · het-tran 4 · final_output 0 · outputSchema 0 · goc-buoc 104 · goc-khong-zdr 0 · empty-log 4 → dat
+    [e17] ma 0 · n_dau 20 · het-tran 0 · final_output 0 · outputSchema 0 · goc-buoc 40 · goc-khong-zdr 0 → dat
+    KET THUC ma 0
+    E7 dat: [e17] n_dau 20 >= 1, final_output 0, outputSchema 0; het-tran 0.
 
 - eval: E10
   run_id: minted-tro-ly-okr-bo-final-output-E10-r5
@@ -106,15 +113,20 @@ Ghi chu bang: E1, E3, E4, E5 la carry-forward tu round 2 (delta khong cham paths
     Ma tran SESSION_PURPOSES chay xong, khong co ca nao do.
 
 - eval: E11
-  run_id: minted-tro-ly-okr-bo-final-output-E11-r5
+  run_id: tro-ly-okr-bo-final-output-E11-r5-doclap-20261007T041956Z
+  exit_code: 0
   baseline: red
   verifier: config:executors.script.tbf_do_mo_hinh
-  verified_at: 2026-10-07T03:43:27Z
+  verified_at: 2026-10-07T04:20:30Z
   runs: 1
-  killed_by_tool: true
   output: |
-    Cung lenh voi E6, E7; lenh bi cong cu giet truoc khi toi phan [e22] va [e17].
-    Chua co so do goc-buoc / goc-khong-zdr nao cho E11 (chi co dong tu-kiem tren mau 0710).
+    luot 67643-2026-10-07T04:02:08.045Z (dong dau va dong KET THUC cung ma luot); chay nen 04:02 → 04:19 UTC, khong bi cong cu cat
+    [tu-kiem] n_dau 1 · het-tran 1 · final_output 1 · outputSchema 1 · goc-buoc 2 · goc-khong-zdr 2 · empty-log 2
+    bo test yen 120 giay, bat dau do
+    [e22] ma 0 · n_dau 53 · het-tran 4 · final_output 0 · outputSchema 0 · goc-buoc 104 · goc-khong-zdr 0 · empty-log 4 → dat
+    [e17] ma 0 · n_dau 20 · het-tran 0 · final_output 0 · outputSchema 0 · goc-buoc 40 · goc-khong-zdr 0 → dat
+    KET THUC ma 0
+    E11 dat: tu-kiem goc-khong-zdr 2 >= 1; [e22] goc-buoc 104, goc-khong-zdr 0; [e17] goc-buoc 40, goc-khong-zdr 0.
 
 ### Judgment
 
@@ -181,6 +193,11 @@ Panel E9 — de xuat PASS
 
 ## Known limits
 
+- Gemini 3.8 Flash ở `thinkingLevel: low` vẫn có đuôi lời gọi nghĩ hết trần khi chỉ còn một tool nộp: round 1 đo 11/114 lời gọi đầu của `tro_ly_okr` dừng `length` (trước vòng này 17/88), E22 còn 3 + 2 dòng «empty model response» (trước 9 + 5) và một ca hỏng vì lời nộp bị cắt giữa chừng khi hết trần. `minimal` bị Vertex từ chối, `thinkingBudget` bị bỏ qua — không chặn được độ dài suy nghĩ trong model này.
+- Độ trễ E24 round 1: p50 6 928 ms, p90 20 702 ms (ngưỡng 15 000), 0 lượt hỏng — đuôi do các lần nghĩ dài, không đổi so với 06/10 (p90 17,8 s và 21,2 s).
+- Việc tóm tắt tuần (trần 8 000) có lần nghĩ 7 687 token trong 49 s rồi hết trần.
+- Sửa đuôi suy nghĩ (đổi model có ZDR, hay nâng trần cùng lease) là một vòng riêng.
+
 ## Ngoài hợp đồng
 
 ## Analyst
@@ -196,3 +213,4 @@ none — every multi-run eval is uniform
 Round 3: moi eval dat; suite agent-okr do vi eve dev cua phep do E22 chay chong. Chay lai o round sau.
 Round 4: REJECT — AI Gateway cua team het ngan sach (402) nen phep do model that khong chay duoc.
 Round 5: BLOCKED — E6, E7, E11 (cung mot lenh do-mo-hinh.mjs) bi cong cu giet o 600 giay khi thuoc con cho bo test cua cay (6 tien trinh); E10 moi (AC-9) dat, bay lenh suite deu xanh. Cach go: chay lai lenh do bang tran cong cu dai hon.
+Round 5 (duong kiem doc lap tuan tu cho lenh do-mo-hinh.mjs): E6, E7, E11 dat — [e22] n_dau 53, final_output 0, outputSchema 0, goc-khong-zdr 0; [e17] n_dau 20, final_output 0, outputSchema 0, goc-khong-zdr 0. Moi eval dat, verdict PASS.
