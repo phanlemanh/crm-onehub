@@ -1283,6 +1283,7 @@ executors:
     nhkl_fetch_gia: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t fetch-gia-theo-that"
     dph_tra_loi: node --test scripts/dieu-phoi/test/tra-loi.test.mjs
     k2_duong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-duong
+    k2_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-khung
     k2_trang_thai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-trang-thai
     k2_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-dong
     k2_quyet: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-quyet
