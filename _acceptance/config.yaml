@@ -1271,6 +1271,7 @@ executors:
     dph_hinh_dang: node --test scripts/dieu-phoi/test/hinh-dang.test.mjs
     dph_giu_nhip: node --test scripts/dieu-phoi/test/giu-nhip.test.mjs
     dph_gia_han: node --test scripts/dieu-phoi/test/gia-han.test.mjs
+    dph_tra_loi: node --test scripts/dieu-phoi/test/tra-loi.test.mjs
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
@@ -1952,6 +1953,9 @@ executors:
     dpvb_dot_bien: node _acceptance/dieu-phoi-va-bien/rang/dot-bien.mjs
     dpvb_s4_that: node _acceptance/dieu-phoi-va-bien/rang/s4-that.mjs
     dpvb_git_sach: node _acceptance/dieu-phoi-va-bien/rang/git-sach.mjs
+    dptm_hook_cay: node _acceptance/dieu-phoi-truoc-mo-dot/rang/hook-cay.mjs
+    dptm_dot_bien: node _acceptance/dieu-phoi-truoc-mo-dot/rang/dot-bien.mjs
+    dptm_readme_khoa: node _acceptance/dieu-phoi-truoc-mo-dot/rang/readme-khoa.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
