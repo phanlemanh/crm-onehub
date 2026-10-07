@@ -24,11 +24,11 @@ export type AgentRecordFilter = {
 
 export type RecordCopy = KaraBanGhiMessages["tab"]["theoLoai"][AgentRecordKind];
 
-const WIRING: Record<AgentRecordKind, RecordWiring> = {
+const WIRING = {
 	contact: { header: "x-crm-contact", field: "contactId" },
 	company: { header: "x-crm-company", field: "companyId" },
 	deal: { header: "x-crm-deal", field: "dealId" },
-};
+} satisfies Record<AgentRecordKind, RecordWiring>;
 
 export function recordCopy(kind: AgentRecordKind, locale: Locale): RecordCopy {
 	return karaBanGhiMessages(locale).tab.theoLoai[kind];

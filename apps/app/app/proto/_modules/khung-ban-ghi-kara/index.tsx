@@ -42,15 +42,16 @@ import { CHU, NGUOI } from "./du-lieu";
 
 type Tab = "tong-quan" | "thoa-thuan" | "hoat-dong" | "kara";
 
-const TAB_THEO_STATE: Record<string, Tab> = {
-	"ST-de-xuat-cho": "tong-quan",
-	"ST-de-xuat-da-nhan": "tong-quan",
-	"ST-de-xuat-da-bo": "tong-quan",
-	"ST-de-xuat-hoan-tac-loi": "tong-quan",
-	"ST-khung-loi": "tong-quan",
-	"ST-tra-cuu-dang-chay": "tong-quan",
-	"ST-them-nhanh-hoi": "thoa-thuan",
-};
+function tabTheoState(state: string): Tab {
+	if (state === "ST-them-nhanh-hoi") return "thoa-thuan";
+	if (
+		state.startsWith("ST-de-xuat") ||
+		state === "ST-khung-loi" ||
+		state === "ST-tra-cuu-dang-chay"
+	)
+		return "tong-quan";
+	return "kara";
+}
 
 function TabKara({ state }: { state: string }) {
 	if (state === "ST-kara-dang-mo") {
@@ -289,7 +290,7 @@ function ThemNhanh({ state }: { state: string }) {
 }
 
 export function KhungBanGhiKaraMau({ state }: { state: string }) {
-	const [tab, datTab] = useState<Tab>(TAB_THEO_STATE[state] ?? "kara");
+	const [tab, datTab] = useState<Tab>(tabTheoState(state));
 	const dangTraCuu = state === "ST-tra-cuu-dang-chay";
 
 	return (
