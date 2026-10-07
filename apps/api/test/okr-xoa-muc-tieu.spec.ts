@@ -11,6 +11,7 @@ import {
 import { parseOkrVet } from "@crm/validation/okr-vet";
 import { z } from "zod";
 import { OKR } from "../src/okr/okr-config";
+import { dungLaiOutput } from "../src/okr/okr.contracts";
 import { donSanCanhKr, mauMoi } from "./okr-canh-kr-san";
 import {
 	donSanKhep,
@@ -1161,6 +1162,21 @@ describe("dung-lai", () => {
 				canhBao: CAU.vuotTran(1),
 				canGuiDuyet: false,
 				sauCanhBao: "nhap",
+			});
+
+			const donDuyet = await donVi("dung-lai-duyet");
+			const kyDuyet = await gieoKyQuy(KY);
+			const e = await gieoTrangThai(kyDuyet, donDuyet, "da-bo-sach");
+			ok(await chuongTrinh({ duyetCongBo: true }), "bat duyet");
+			const coDuyet = await dungLai(e, donDuyet.t.cookie).finally(() =>
+				chuongTrinh({ duyetCongBo: false }),
+			);
+			expect({
+				tra: dungLaiOutput.parse(ok(coDuyet, "dung lai co duyet")),
+				sau: (await anhMucTieu(e))?.status,
+			}).toEqual({
+				tra: { id: e, canhBao: null, canGuiDuyet: true },
+				sau: "nhap",
 			});
 		},
 		CHO_MS,

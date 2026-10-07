@@ -101,10 +101,10 @@ describe("purge-chua-luu-tru", () => {
 
 				const rRest = await xoaRest(loai, x);
 				ghi(thuc, `${loai}|rest`, {
-					status: rRest.status,
+					tra: tra(rRest),
 					con: await archivedAt(loai, x),
 				});
-				ghi(mong, `${loai}|rest`, { status: 400, con: null });
+				ghi(mong, `${loai}|rest`, { tra: `400 ${CAU}`, con: null });
 
 				const y = await tao[loai]();
 				await luuTru(loai, y);

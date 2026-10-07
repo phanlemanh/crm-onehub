@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import type { ObjectiveOutput } from "../../api/src/okr/okr.contracts";
+import {
+	dungLaiOutput,
+	type ObjectiveOutput,
+} from "../../api/src/okr/okr.contracts";
 import {
 	bamChuot,
 	chiTietTu,
@@ -180,11 +183,10 @@ describe("dung-lai", () => {
 		[false, m.daDungLai.congBo],
 	] as const)
 		test(`dung-lai: bam Dung lai goi dungLaiMucTieu mot lan, khong hop hoi lai, toast theo canGuiDuyet=${canGuiDuyet}`, async () => {
-			kho.traGhi.set("okr.dungLaiMucTieu", {
-				id: "mt-x",
-				canhBao: null,
-				canGuiDuyet,
-			});
+			kho.traGhi.set(
+				"okr.dungLaiMucTieu",
+				dungLaiOutput.parse({ id: "mt-x", canhBao: null, canGuiDuyet }),
+			);
 			await dungSheet(
 				chiTietTu({ ...daBoTu("mt-x"), canEdit: true }, { dungLai: true }),
 			);
