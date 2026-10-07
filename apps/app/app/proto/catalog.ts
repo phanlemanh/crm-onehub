@@ -994,6 +994,30 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-ngan-hoi-xoa", nhan: "Ngăn — hộp hỏi lại khi xoá" },
 		],
 	},
+	{
+		slug: "khung-ban-ghi-kara",
+		ten: "Kara trong ngăn bản ghi — tab Kara, đề xuất thông tin liên hệ, khung tải lỗi",
+		states: [
+			{ id: "ST-kara-rong", nhan: "Tab Kara — chưa có lời nào" },
+			{ id: "ST-kara-dang-mo", nhan: "Tab Kara — đang mở cuộc trò chuyện" },
+			{ id: "ST-kara-dang-lam", nhan: "Tab Kara — Kara đang chạy bước" },
+			{ id: "ST-kara-tra-loi", nhan: "Tab Kara — đã trả lời, kèm nguồn" },
+			{ id: "ST-kara-loi", nhan: "Tab Kara — gửi lỗi, có Thử lại" },
+			{ id: "ST-kara-chua-bat", nhan: "Tab Kara — Kara chưa được bật" },
+			{ id: "ST-kara-ban", nhan: "Tab Kara — đang trả lời câu trước" },
+			{ id: "ST-kara-ket-thuc", nhan: "Tab Kara — cuộc đã kết thúc" },
+			{ id: "ST-de-xuat-cho", nhan: "Chi tiết — đề xuất chờ dưới trường" },
+			{
+				id: "ST-de-xuat-da-nhan",
+				nhan: "Chi tiết — đã thêm theo Kara, Hoàn tác",
+			},
+			{ id: "ST-de-xuat-da-bo", nhan: "Chi tiết — đã bỏ qua, Hoàn tác" },
+			{ id: "ST-de-xuat-hoan-tac-loi", nhan: "Chi tiết — hoàn tác bị chặn" },
+			{ id: "ST-khung-loi", nhan: "Khung bản ghi — tải lỗi, có Thử lại" },
+			{ id: "ST-tra-cuu-dang-chay", nhan: "Hàng nút — Kara đang tra cứu" },
+			{ id: "ST-them-nhanh-hoi", nhan: "Thêm nhanh — hỏi lại khi lỡ đóng" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);
