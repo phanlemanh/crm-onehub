@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 40eef7f68ba199fc1a466c4c7b70c99873e72de5
+verified_commit: ef36480392ffb9f09b1487ca24c05029b9600c98
 human_signoff: Phan Le Manh 2026-10-07
 ---
 
@@ -150,3 +150,7 @@ none — mọi eval chạy một lượt, xác định, không có phương sai.
 
 Round 1: mọi eval và lệnh suite xanh, E4 do hội đồng chấm PASS. Verdict PASS.
 
+
+### Re-pin lần 1 — 2026-10-07, do gộp onehub b9e51ffa (#300) vào nhánh của #301
+run_id: repin-20261007T213136Z-90346
+sha: ef36480392ffb9f09b1487ca24c05029b9600c98 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · ngoài làn máy: E4 (E4 không khai paths) · AC không có chốt máy: AC-2, AC-5 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

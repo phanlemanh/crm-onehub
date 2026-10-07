@@ -18,3 +18,4 @@
 {"ts":"2026-10-07T13:38:53Z","sha":"40eef7f68ba199fc1a466c4c7b70c99873e72de5","round":1,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":1,"bypass_ack":0,"verified_at":13}
 {"kind":"thuoc-vat","ts":"2026-10-07T13:54:26Z","round":1,"san":"40eef7f68ba199fc1a466c4c7b70c99873e72de5","vat":[0,0],"thuoc":[0,0],"ho_so":[0,0],"nhat":0,"lan":0,"tep_thuoc":[]}
 {"kind":"thuoc-vat","ts":"2026-10-07T13:54:36Z","round":1,"san":"40eef7f68ba199fc1a466c4c7b70c99873e72de5","vat":[0,0],"thuoc":[0,0],"ho_so":[0,0],"nhat":0,"lan":0,"tep_thuoc":[]}
+{"ts":"2026-10-07T21:35:54Z","kind":"repin","run_id":"repin-20261007T213136Z-90346","sha":"ef36480392ffb9f09b1487ca24c05029b9600c98","suites_exit":[0,0,0,0,0,0,0],"evals_exit":{"E1":0,"E2":0,"E3":0,"E5":0,"E6":0,"E7":0},"wall_s":257.7,"so_lenh":13,"evals_not_machine":["E4"],"suites_env":"ci","tong_ket":{"ket_cuc":"xanh","phut":4.3,"so_lenh":13,"model_goi":0,"model_carry":0,"chap_chon":0,"chi_phi":0}}
