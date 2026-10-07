@@ -1297,6 +1297,8 @@ executors:
     kbk_tra_cuu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t tra-cuu"
     kbk_them_nhanh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ban-ghi-giu.dom.tsx -t them-nhanh"
   script:
+    kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
+    kbk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-ban-ghi-kara/rang/man.mjs"'
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
     ctk_pha_thu_do: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs do
