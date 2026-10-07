@@ -8,8 +8,8 @@ const GOC = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const TAI_LIEU = {
 	tep: {
 		context: join(GOC, "CONTEXT.md"),
-		api: join(GOC, "docs", "api.md"),
-		agent: join(GOC, "docs", "agent.md"),
+		api: process.env.TAI_LIEU_API ?? join(GOC, "docs", "api.md"),
+		agent: process.env.TAI_LIEU_AGENT ?? join(GOC, "docs", "agent.md"),
 		router:
 			process.env.TAI_LIEU_ROUTER ??
 			join(GOC, "apps", "api", "src", "okr", "okr.router.ts"),
@@ -17,6 +17,7 @@ const TAI_LIEU = {
 	ref: {
 		onehub: process.env.TAI_LIEU_REF_ONEHUB ?? "origin/onehub",
 		release: process.env.TAI_LIEU_REF_RELEASE ?? "origin/release",
+		cay: process.env.TAI_LIEU_REF_CAY ?? "HEAD",
 		gop9b:
 			process.env.TAI_LIEU_GOP_9B ?? "2e3280474f472b9853ed9a66bb0f4524ede6ff7d",
 	},
@@ -111,6 +112,12 @@ function kiemApiMd(thuTuc) {
 	return [...lac, ...thieu];
 }
 
+function tepTrongCay(ref) {
+	return new Set(
+		git("ls-tree", "-r", "--name-only", ref).split("\n").filter(Boolean),
+	);
+}
+
 function tapTepHangTrongDiff() {
 	const thieuRef = [
 		...Object.values(TAI_LIEU.ref),
@@ -133,12 +140,11 @@ function tapTepHangTrongDiff() {
 	)
 		.split("\n")
 		.filter(Boolean);
-	const coORelease = new Set(
-		git("ls-tree", "-r", "--name-only", TAI_LIEU.ref.release)
-			.split("\n")
-			.filter(Boolean),
+	const coORelease = tepTrongCay(TAI_LIEU.ref.release);
+	const conTrongCay = tepTrongCay(TAI_LIEU.ref.cay);
+	return new Set(
+		doi.filter((tep) => coORelease.has(tep) && conTrongCay.has(tep)),
 	);
-	return new Set(doi.filter((tep) => coORelease.has(tep)));
 }
 
 function tapTepTrongMucChoRe(noiDung) {
@@ -158,7 +164,8 @@ function kiemAgentMd() {
 	return [
 		...thieu.map((t) => `tai lieu thieu tep hang: ${t}`),
 		...thua.map(
-			(t) => `tai lieu thua tep hang (khong con trong diff giao release): ${t}`,
+			(t) =>
+				`tai lieu thua tep hang (khong con trong diff giao release va cay): ${t}`,
 		),
 	];
 }
