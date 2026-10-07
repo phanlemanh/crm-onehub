@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent (E6, E7, E11: duong kiem doc lap tuan tu, tac tu cham tuoi rieng)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d1797513ac081c1dabd72f9e30b82dcffc87cfdd
+verified_commit: 6d454331d2927e9f38a0251a77555c75fb9a32e2
 human_signoff: Manh Phan 2026-10-07
 ---
 
@@ -214,3 +214,7 @@ Round 3: moi eval dat; suite agent-okr do vi eve dev cua phep do E22 chay chong.
 Round 4: REJECT — AI Gateway cua team het ngan sach (402) nen phep do model that khong chay duoc.
 Round 5: BLOCKED — E6, E7, E11 (cung mot lenh do-mo-hinh.mjs) bi cong cu giet o 600 giay khi thuoc con cho bo test cua cay (6 tien trinh); E10 moi (AC-9) dat, bay lenh suite deu xanh. Cach go: chay lai lenh do bang tran cong cu dai hon.
 Round 5 (duong kiem doc lap tuan tu cho lenh do-mo-hinh.mjs): E6, E7, E11 dat — [e22] n_dau 53, final_output 0, outputSchema 0, goc-khong-zdr 0; [e17] n_dau 20, final_output 0, outputSchema 0, goc-khong-zdr 0. Moi eval dat, verdict PASS.
+
+### Re-pin lần 1 — 2026-10-07, do gop onehub (#288, #290) sau chu ky Cong 2
+run_id: repin-20261007T044231Z-91573
+sha: 6d454331d2927e9f38a0251a77555c75fb9a32e2 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E2 (E2 không khai paths), E9 (E9 không khai paths) · AC không có chốt máy: AC-8 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 1/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
