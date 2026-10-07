@@ -673,6 +673,7 @@ tiêu, còn thứ được mở ở đây là đích của KR.
 **Điều học được**: một ô chữ mỗi mục tiêu, người sửa được mục tiêu ghi — thường lúc chấm —
 đơn vị sẽ làm gì khác ở kỳ sau. Ai mở được mục tiêu đều đọc được. Không bắt buộc để đóng kỳ. Đề xuất
 2026-09-27, chốt tại Cổng Phạm vi.
+Riêng mục tiêu học tập: bắt buộc trước khi đóng kỳ — xem «Loại mục tiêu». Chốt 2026-10-07.
 _Avoid_: bài học, rút kinh nghiệm, retro
 Vì sao: «rút kinh nghiệm» mang giọng kiểm điểm người; ô này nói về cách làm của đơn vị.
 

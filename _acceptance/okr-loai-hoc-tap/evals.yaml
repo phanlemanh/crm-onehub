@@ -74,7 +74,7 @@ evals:
     executor: test
     cmd: config:executors.test.olht_dom
     paths: ["apps/app/app/(app)/[slug]/okr/cham-diem.tsx", apps/app/lib/messages/okr-khep.ts, apps/app/test/okr-hoc-tap.dom.tsx, apps/app/test/okr-hoc-tap-chon.dom.tsx]
-    expected: "Cùng lệnh E8 — dựng màn chấm điểm với bảng chấm giả: mục tiêu học tập cachDoc chua-tra-loi, diem null → nhãn «Chưa trả lời» hiện, dưới ô điều học được có chữ «Bắt buộc trước khi khép kỳ»; cachDoc da-tra-loi → nhãn «Đã trả lời»; mục tiêu cam-ket cùng màn → không có chữ «Bắt buộc trước khi khép kỳ». CHIỀU ĐỎ: bản sao cham-diem ẩn nhãn khi diem null → ca chua-tra-loi đỏ, ghim «hoc-tap diem trong mat nhan cach doc»."
+    expected: "Cùng lệnh E8 — dựng màn chấm điểm với bảng chấm giả: mục tiêu học tập cachDoc chua-tra-loi, diem null → nhãn «Chưa trả lời» hiện, dưới ô điều học được có chữ «Bắt buộc trước khi đóng kỳ»; cachDoc da-tra-loi → nhãn «Đã trả lời»; mục tiêu cam-ket cùng màn → không có chữ «Bắt buộc trước khi đóng kỳ». CHIỀU ĐỎ: bản sao cham-diem ẩn nhãn khi diem null → ca chua-tra-loi đỏ, ghim «hoc-tap diem trong mat nhan cach doc»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
@@ -95,7 +95,7 @@ evals:
       - "Cảnh cây (canh-cay.mjs) trước màn đầu tiên; lệch cây → mã 2"
       - "Gieo qua API thật trong phiên đo: quản trị Q, chu kỳ đang chạy năm 2031; chu kỳ quá hạn 2024 Q1 ở pha Chấm điểm có mục tiêu học tập H «Kiểm gói dùng thử» (KR CHƯA chấm) và một mục tiêu cam kết đã chấm"
       - "Bước 1 — mở Mục tiêu › Theo đơn vị của chu kỳ 2031 ở 1440/vi, bấm Thêm mục tiêu, mở Select Loại → ba lựa chọn Cam kết, Tham vọng, Học tập → ảnh olht-chon-loai.png; chọn Học tập, điền tên, lưu → mục tiêu mới mang chip «Học tập»; okr.objective trả kind hoc-tap"
-      - "Bước 2 — mở màn chấm điểm của chu kỳ 2024 Q1 khi KR của H còn trống điểm → H mang nhãn «Chưa trả lời» và chú thích «Bắt buộc trước khi khép kỳ» → ảnh olht-cham-chua.png; rồi chấm KR của H qua API"
+      - "Bước 2 — mở màn chấm điểm của chu kỳ 2024 Q1 khi KR của H còn trống điểm → H mang nhãn «Chưa trả lời» và chú thích «Bắt buộc trước khi đóng kỳ» → ảnh olht-cham-chua.png; rồi chấm KR của H qua API"
       - "Bước 3 — Cài đặt › OKR, hàng 2024 Q1 → Khép kỳ → hộp chặn liệt kê «Kiểm gói dùng thử», không có nút khép → ảnh olht-dong-chan.png"
       - "Bước 4 — mở màn chấm điểm, đặt dấu window.__mocMan, ghi điều học được cho H, bấm lưu → nhãn «Đã trả lời» và dấu còn nguyên (không tải lại) → ảnh olht-cham-da.png; đi sang Cài đặt › OKR bằng bấm điều hướng trong app (không goto, dấu vẫn còn) → Khép kỳ → hộp xác nhận → khép → hàng 2024 Q1 mang pha «Đã đóng»; okr.cycles trả phase da-dong"
       - "Bước 5 — mở màn chấm điểm ở 390 → không cuộn ngang → ảnh olht-390.png"

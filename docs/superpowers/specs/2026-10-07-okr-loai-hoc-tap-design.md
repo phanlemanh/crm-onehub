@@ -62,7 +62,7 @@ Mục tiêu nháp, chờ duyệt hay đã bỏ không chặn khép kỳ: chúng 
 
 `cham-diem.tsx`: nhãn cách đọc cạnh điểm đọc `m.cachDoc[mt.cachDoc]`; với học tập nhãn hiện
 cả khi điểm còn trống. Ô «Điều học được» của mục tiêu học tập có `FieldDescription`
-«Bắt buộc trước khi khép kỳ» / «Required before the cycle closes». Lưu điều học được phải làm
+«Bắt buộc trước khi đóng kỳ» / «Required before the cycle closes». Lưu điều học được phải làm
 mới `okr.bangCham` (qua `cache.okr`, danh sách làm mới đã gồm `bangCham`) để nhãn đổi ngay và hộp
 khép kỳ mở bằng bấm không đọc bảng cũ — kiểm `onSuccess` của mutation `ghiDieuHocDuoc` ở S3.
 Tên mục tiêu trong hộp chặn là dữ liệu người nhập: bọc `translate="no"`.
@@ -110,7 +110,7 @@ dùng; không thêm chuyển động, không thêm điều khiển.
 <!-- <<<UX-STATE-TABLE -->
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
-| ST-chamdiem-hoctap-chua | Chấm điểm | nhãn «Chưa trả lời» + chú thích «Bắt buộc trước khi khép kỳ» dưới ô điều học được | ghi điều học được |
+| ST-chamdiem-hoctap-chua | Chấm điểm | nhãn «Chưa trả lời» + chú thích «Bắt buộc trước khi đóng kỳ» dưới ô điều học được | ghi điều học được |
 | ST-chamdiem-hoctap-da | Chấm điểm | nhãn «Đã trả lời» | không cần gì |
 | ST-dongky-chan-hoctap | Hộp khép kỳ | tiêu đề chặn + danh sách «Mục tiêu học tập chưa ghi điều học được» | sang Chấm điểm ghi |
 | ST-dongky-xacnhan | Hộp khép kỳ | hộp xác nhận như hôm nay | Khép kỳ / Huỷ |

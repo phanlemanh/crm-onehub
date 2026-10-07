@@ -16,7 +16,7 @@
 - Tệp chữ dùng chung (`apps/app/lib/messages/*.ts`, `CONTEXT.md`, `_acceptance/config.yaml`) chỉ thêm dòng (luật 7 của đợt sau-14-10).
 - Khoá messages mới có hàm → thêm dòng `GHIM` trong `apps/app/test/messages-guard.spec.ts`.
 - Lệnh nặng chạy nền khi giữ khoá đợt → bọc `node scripts/dieu-phoi/giu-nhip.mjs --`; S4 và ghim lại xin khoá qua `xin/`.
-- Nhãn: «Học tập»/«Learning», «Đã trả lời»/«Answered», «Chưa trả lời»/«Not yet answered», «Bắt buộc trước khi khép kỳ»/«Required before the cycle closes».
+- Nhãn: «Học tập»/«Learning», «Đã trả lời»/«Answered», «Chưa trả lời»/«Not yet answered», «Bắt buộc trước khi đóng kỳ»/«Required before the cycle closes».
 
 ## Review Focus
 

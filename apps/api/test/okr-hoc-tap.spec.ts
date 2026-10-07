@@ -352,11 +352,9 @@ describe("khep-bien", () => {
 			ok(await sangPha(ky, "cham-diem"), `sang cham diem ${trangThai}`);
 			const r = await sangPha(ky, "da-dong");
 			ket[trangThai] = r.status;
-			if (trangThai === "da-bo")
-				ghim(r.status === 200, "hoc-tap da bo van chan khep");
-			if (trangThai === "cho-duyet")
-				ghim(r.status === 200, "hoc-tap cho duyet van chan khep");
 		}
+		ghim(ket["da-bo"] === 200, "hoc-tap da bo van chan khep");
+		ghim(ket["cho-duyet"] === 200, "hoc-tap cho duyet van chan khep");
 		expect({
 			soDong: da.length,
 			tap: new Set(da),
