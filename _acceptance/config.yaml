@@ -1285,6 +1285,11 @@ executors:
     kbk_api_nhan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t nhan"'
     kbk_api_bo_qua: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t bo-qua" && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi-de-xuat.dom.tsx -t bo-qua'
     kbk_api_chan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t chan"'
+    kbk_tab_rong: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t tab-rong"
+    kbk_dang_lam: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t dang-lam"
+    kbk_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t loi-gui"
+    kbk_khoa: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khoa"
+    kbk_hoi_lai: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t hoi-lai"
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh

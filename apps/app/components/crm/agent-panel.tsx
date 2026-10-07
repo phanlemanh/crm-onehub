@@ -1,17 +1,8 @@
 "use client";
 
-import Checkmark from "@carbon/icons-react/es/Checkmark";
-import CircleDash from "@carbon/icons-react/es/CircleDash";
 import Document from "@carbon/icons-react/es/Document";
 import LogoGithub from "@carbon/icons-react/es/LogoGithub";
 import LogoLinkedin from "@carbon/icons-react/es/LogoLinkedin";
-import Send from "@carbon/icons-react/es/Send";
-import Warning from "@carbon/icons-react/es/Warning";
-import {
-	Message,
-	MessageContent,
-	MessageResponse,
-} from "@crm/ui/components/ai-elements/message";
 import {
 	Attachment,
 	AttachmentContent,
@@ -23,17 +14,18 @@ import {
 import { Button } from "@crm/ui/components/button";
 import {
 	Empty,
-	EmptyContent,
 	EmptyDescription,
 	EmptyHeader,
 	EmptyMedia,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { type CarbonIcon, Icon } from "@crm/ui/components/icon";
-import { Input } from "@crm/ui/components/input";
-import Logo from "@crm/ui/components/logo";
-import { Marker, MarkerContent, MarkerIcon } from "@crm/ui/components/marker";
-import { MessageAvatar } from "@crm/ui/components/message";
+import { KaraMark } from "@crm/ui/components/kara";
+import { KaraComposer } from "@crm/ui/components/kara/composer";
+import { KaraState } from "@crm/ui/components/kara/state";
+import { type KaraStep, KaraSteps } from "@crm/ui/components/kara/steps";
+import { KaraTurn } from "@crm/ui/components/kara/transcript";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	MessageScroller,
 	MessageScrollerButton,
@@ -42,7 +34,7 @@ import {
 	MessageScrollerProvider,
 	MessageScrollerViewport,
 } from "@crm/ui/components/message-scroller";
-import { Spinner } from "@crm/ui/components/spinner";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEveAgent } from "eve/react";
 import { useEffect, useEffectEvent, useRef, useState } from "react";
@@ -70,10 +62,14 @@ import {
 	pendingQuestion,
 	resolveThread,
 	type Source,
-	type Tone,
 	type TranscriptItem,
+	type TranscriptMessage,
 	toTranscript,
 } from "@/lib/agent-transcript";
+import {
+	type KaraBanGhiMessages,
+	karaBanGhiMessages,
+} from "@/lib/messages/kara-ban-ghi";
 import { useTRPC } from "@/lib/trpc/client";
 import { useRecordSheetView } from "./record-sheet/record-stack";
 
@@ -183,9 +179,10 @@ function ThreadWithHistory({
 }
 
 function Loading() {
+	const t = karaBanGhiMessages(useLocale());
 	return (
-		<div className="flex flex-1 items-center justify-center">
-			<Spinner />
+		<div className="flex flex-1 items-center justify-center p-5">
+			<KaraState kind="working" label={t.tab.dangMo} />
 		</div>
 	);
 }
@@ -201,14 +198,15 @@ function Thread({
 	thread: ThreadState | undefined;
 	onNewThread: () => void;
 }) {
-	const copy = recordCopy(record.kind);
+	const locale = useLocale();
+	const t = karaBanGhiMessages(locale);
+	const copy = recordCopy(record.kind, locale);
 	const agent = useEveAgent({
 		headers: recordHeader(record),
 		...(thread && "session" in thread
 			? { initialSession: thread.session, initialEvents: eventsOf(thread) }
 			: { initialEvents: eventsOf(thread) }),
 	});
-	const [draft, setDraft] = useState("");
 
 	const opening = useRef<string | null>(conversation?.title ?? null);
 
@@ -223,15 +221,21 @@ function Thread({
 	const busy = agent.status === "submitted" || agent.status === "streaming";
 	const messages = toTranscript(agent.data.messages);
 	const question = pendingQuestion(agent.data.messages);
+	const empty = messages.length === 0 && !busy;
 
 	const { locked, ended } = composerState(thread, busy);
 
 	const ask = (message: string) => {
 		if (!message.trim() || locked) return;
 		opening.current ||= message.trim();
-		setDraft("");
 		void agent.send({ message: message.trim() });
 	};
+
+	const lockedReason = ended
+		? t.tab.ketThuc
+		: thread?.status === "working" && !busy
+			? t.tab.ban
+			: undefined;
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col">
@@ -239,20 +243,16 @@ function Thread({
 				<MessageScroller className="flex-1">
 					<MessageScrollerViewport>
 						<MessageScrollerContent className="gap-3 px-4 py-4 sm:px-5">
-							{messages.length === 0 && !busy ? (
-								<Idle kind={record.kind} onAsk={ask} />
-							) : null}
+							{empty ? <Idle copy={copy} /> : null}
 
 							{messages.map((message) => (
 								<MessageScrollerItem key={message.id} messageId={message.id}>
-									<div className="space-y-3">
-										{message.items.map((item) =>
-											item.kind === "asked" &&
-											item.question.requestId === question?.requestId ? null : (
-												<Item key={item.id} item={item} />
-											),
-										)}
-									</div>
+									<Turns
+										message={message}
+										skip={question?.requestId ?? null}
+										t={t}
+										locale={locale}
+									/>
 								</MessageScrollerItem>
 							))}
 						</MessageScrollerContent>
@@ -262,27 +262,25 @@ function Thread({
 				</MessageScroller>
 			</MessageScrollerProvider>
 
-			{agent.error ? <Failure message={agent.error.message} /> : null}
-
-			{thread?.status === "working" && !busy ? (
-				<p className="border-t px-4 py-2 text-pretty text-muted-foreground text-xs sm:px-5">
-					Still working on the last question. Your next one can go in when it
-					finishes.
-				</p>
-			) : null}
-
-			{ended ? (
-				<div className="flex flex-col items-start gap-3 border-t px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-2">
-					<p className="text-pretty text-muted-foreground text-xs">
-						This conversation has ended.
-					</p>
-					<Button variant="outline" size="sm" onClick={onNewThread}>
-						Start a new conversation
-					</Button>
+			{agent.error ? (
+				<div className="border-t px-4 py-3 sm:px-5">
+					<Failure
+						message={agent.error.message}
+						t={t}
+						onRetry={() => ask(lastQuestion(messages) ?? opening.current ?? "")}
+					/>
 				</div>
 			) : null}
 
-			<div className="border-t px-4 py-3 sm:px-5">
+			<div className="flex flex-col gap-2 border-t px-4 py-3 sm:px-5">
+				{ended ? (
+					<div>
+						<Button variant="outline" size="sm" onClick={onNewThread}>
+							{t.tab.batDauMoi}
+						</Button>
+					</div>
+				) : null}
+
 				{question ? (
 					<AgentClarificationComposer
 						key={question.requestId}
@@ -291,143 +289,151 @@ function Thread({
 						onSubmit={(response) => agent.send({ inputResponses: [response] })}
 					/>
 				) : (
-					<form
-						className="flex min-w-0 items-center gap-2"
-						onSubmit={(event) => {
-							event.preventDefault();
-							ask(draft);
-						}}
-					>
-						<Input
-							value={draft}
-							onChange={(event) => setDraft(event.target.value)}
-							placeholder={copy.placeholder}
-							disabled={locked}
-						/>
-						<Button
-							type="submit"
-							size="icon-sm"
-							variant="outline"
-							disabled={locked}
-						>
-							{busy ? <Spinner /> : <Icon icon={Send} />}
-							<span className="sr-only">Ask</span>
-						</Button>
-					</form>
+					<KaraComposer
+						onSubmit={ask}
+						status={busy ? "busy" : "ready"}
+						placeholder={copy.choNhap}
+						label={t.tab.nhanO}
+						suggestions={empty ? copy.goiY : undefined}
+						suggestionsLabel={t.tab.nhanGoiY}
+						onSuggestion={ask}
+						lockedReason={lockedReason}
+					/>
 				)}
 			</div>
 		</div>
 	);
 }
 
-function Idle({
-	kind,
-	onAsk,
-}: {
-	kind: AgentRecord["kind"];
-	onAsk: (question: string) => void;
-}) {
-	const copy = recordCopy(kind);
-
+function Idle({ copy }: { copy: ReturnType<typeof recordCopy> }) {
 	return (
 		<Empty width="wide">
 			<EmptyHeader>
 				<EmptyMedia>
-					<Logo className="size-8" />
+					<KaraMark />
 				</EmptyMedia>
-				<EmptyTitle>{copy.title}</EmptyTitle>
-				<EmptyDescription>{copy.blurb}</EmptyDescription>
+				<EmptyTitle>{copy.tieuDe}</EmptyTitle>
+				<EmptyDescription>{copy.moTa}</EmptyDescription>
 			</EmptyHeader>
-
-			<EmptyContent layout="row">
-				{copy.suggestions.map((suggestion) => (
-					<Button
-						key={suggestion}
-						variant="outline"
-						size="sm"
-						onClick={() => onAsk(suggestion)}
-					>
-						{suggestion}
-					</Button>
-				))}
-			</EmptyContent>
 		</Empty>
 	);
 }
 
-function Failure({ message }: { message: string }) {
-	const hint = message.includes("not reachable")
-		? "Start it with `bun run dev`, or check AGENT_URL."
-		: message.includes("not configured")
-			? "Set AGENT_BRIDGE_SECRET for both the app and the agent."
-			: null;
+function Failure({
+	message,
+	t,
+	onRetry,
+}: {
+	message: string;
+	t: KaraBanGhiMessages;
+	onRetry: () => void;
+}) {
+	if (message.includes("not configured")) {
+		return <KaraState kind="unconfigured" description={t.tab.chuaBat} />;
+	}
 
 	return (
-		<div className="border-t px-4 py-3 text-xs sm:px-5">
-			<p className="wrap-break-word text-destructive">{message}</p>
-			{hint ? (
-				<p className="wrap-break-word text-muted-foreground text-xs">{hint}</p>
-			) : null}
-		</div>
+		<KaraState
+			kind="error"
+			what={t.tab.chuaTraLoi}
+			description={
+				message.includes("not reachable") ? t.tab.loiVang : t.tab.loiKhac
+			}
+			onRetry={onRetry}
+		/>
 	);
 }
 
-const TONE_ICONS = {
-	neutral: CircleDash,
-	success: Checkmark,
-	warning: Warning,
-} satisfies Record<Tone, CarbonIcon>;
+type DidItem = Extract<TranscriptItem, { kind: "did" }>;
+
+type Block =
+	| { kind: "turn"; item: Exclude<TranscriptItem, DidItem> }
+	| { kind: "steps"; id: string; items: DidItem[] };
+
+function blocksOf(items: readonly TranscriptItem[]): Block[] {
+	const blocks: Block[] = [];
+	for (const item of items) {
+		const last = blocks.at(-1);
+		if (item.kind !== "did") {
+			blocks.push({ kind: "turn", item });
+		} else if (last?.kind === "steps") {
+			blocks[blocks.length - 1] = { ...last, items: [...last.items, item] };
+		} else {
+			blocks.push({ kind: "steps", id: item.id, items: [item] });
+		}
+	}
+	return blocks;
+}
+
+function lastQuestion(messages: readonly TranscriptMessage[]): string | null {
+	const said = messages
+		.flatMap((message) => message.items)
+		.filter((item) => item.kind === "said" && item.mine);
+	const last = said.at(-1);
+	return last?.kind === "said" ? last.text : null;
+}
+
+function stepLabel(item: DidItem, t: KaraBanGhiMessages, locale: Locale) {
+	const viec = t.tab.buoc[item.tool];
+	if (!viec) return locale === "vi" ? t.tab.buocKhac : item.label;
+	const tach = item.label.indexOf(" — ");
+	return tach === -1 ? viec : `${viec}${item.label.slice(tach)}`;
+}
+
+function Turns({
+	message,
+	skip,
+	t,
+	locale,
+}: {
+	message: TranscriptMessage;
+	skip: string | null;
+	t: KaraBanGhiMessages;
+	locale: Locale;
+}) {
+	return (
+		<div className="space-y-3">
+			{blocksOf(message.items).map((block) => {
+				if (block.kind === "steps") {
+					const steps: KaraStep[] = block.items.map((item) => ({
+						id: item.id,
+						label: stepLabel(item, t, locale),
+						state: item.pending ? "running" : item.failed ? "error" : "done",
+					}));
+					const sources = block.items.flatMap((item) => item.sources);
+					return (
+						<div key={block.id} className="space-y-1.5">
+							<KaraSteps steps={steps} />
+							{sources.length > 0 ? <Sources sources={sources} /> : null}
+						</div>
+					);
+				}
+				const { item } = block;
+				if (item.kind === "said") {
+					return (
+						<KaraTurn key={item.id} from={item.mine ? "user" : "kara"}>
+							{item.text}
+						</KaraTurn>
+					);
+				}
+				if (item.kind === "asked") {
+					return item.question.requestId === skip ? null : (
+						<KaraTurn key={item.id} from="kara">
+							{item.question.prompt}
+						</KaraTurn>
+					);
+				}
+				return null;
+			})}
+		</div>
+	);
+}
 
 const SOURCE_ICONS = {
 	linkedin: LogoLinkedin,
 	github: LogoGithub,
 	web: Document,
 } satisfies Record<Source["network"], CarbonIcon>;
-
-function Item({ item }: { item: TranscriptItem }) {
-	if (item.kind === "said") {
-		return item.mine ? (
-			<Message className="min-w-0" from="user">
-				<MessageContent className="text-pretty">{item.text}</MessageContent>
-			</Message>
-		) : (
-			<div className="flex min-w-0 gap-2">
-				<AgentAvatar />
-				<Message className="min-w-0" from="assistant">
-					<MessageContent>
-						<MessageResponse>{item.text}</MessageResponse>
-					</MessageContent>
-				</Message>
-			</div>
-		);
-	}
-
-	if (item.kind === "asked") {
-		return (
-			<div className="w-full max-w-sm border-ring/50 border-l-2 bg-muted/40 px-3 py-2.5">
-				<p className="font-medium text-xs">Follow-up</p>
-				<MessageResponse className="mt-1.5 text-sm leading-5">
-					{item.question.prompt}
-				</MessageResponse>
-			</div>
-		);
-	}
-
-	if (item.kind === "reasoned") return null;
-
-	return (
-		<div className="min-w-0 space-y-1.5">
-			<Marker>
-				<MarkerIcon>
-					{item.pending ? <Spinner /> : <Icon icon={TONE_ICONS[item.tone]} />}
-				</MarkerIcon>
-				<MarkerContent>{item.label}</MarkerContent>
-			</Marker>
-
-			{item.sources.length > 0 ? <Sources sources={item.sources} /> : null}
-		</div>
-	);
-}
 
 function Sources({ sources }: { sources: Source[] }) {
 	return (
@@ -438,25 +444,17 @@ function Sources({ sources }: { sources: Source[] }) {
 						<Icon icon={SOURCE_ICONS[source.network]} />
 					</AttachmentMedia>
 					<AttachmentContent>
-						<AttachmentTitle>{source.title}</AttachmentTitle>
+						<AttachmentTitle translate="no">{source.title}</AttachmentTitle>
 					</AttachmentContent>
 
 					<AttachmentTrigger asChild>
 						<a href={source.url} target="_blank" rel="noreferrer noopener">
-							<span className="sr-only">Open {source.title}</span>
+							<span className="sr-only">{source.title}</span>
 						</a>
 					</AttachmentTrigger>
 				</Attachment>
 			))}
 		</AttachmentGroup>
-	);
-}
-
-function AgentAvatar() {
-	return (
-		<MessageAvatar square>
-			<Logo className="size-5" />
-		</MessageAvatar>
 	);
 }
 

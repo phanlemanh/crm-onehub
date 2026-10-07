@@ -114,15 +114,17 @@ describe("eventsOf", () => {
 
 describe("record context", () => {
 	it("asks about the thing you are actually looking at", () => {
-		expect(recordCopy("contact").title).toBe("Ask about this person");
-		expect(recordCopy("company").title).toBe("Ask about this company");
-		expect(recordCopy("deal").title).toBe("Ask about this deal");
+		expect(recordCopy("contact", "vi").tieuDe).toBe("Hỏi Kara về người này");
+		expect(recordCopy("company", "vi").tieuDe).toBe("Hỏi Kara về công ty này");
+		expect(recordCopy("deal", "vi").tieuDe).toBe("Hỏi Kara về thoả thuận này");
 	});
 
 	it("offers questions that suit the record", () => {
-		expect(recordCopy("company").suggestions.join(" ")).not.toContain("person");
-		expect(recordCopy("deal").suggestions.join(" ")).not.toContain("person");
-		expect(recordCopy("contact").suggestions[0]).toBe("Who is this person?");
+		expect(recordCopy("company", "vi").goiY.join(" ")).not.toContain(
+			"người này",
+		);
+		expect(recordCopy("deal", "vi").goiY.join(" ")).not.toContain("người này");
+		expect(recordCopy("contact", "vi").goiY[0]).toBe("Người này là ai?");
 	});
 
 	it("tells the agent which record it is on", () => {
@@ -154,15 +156,15 @@ describe("the panel", () => {
 
 	it("takes its copy from the record, never from a literal", () => {
 		for (const kind of ["contact", "company", "deal"] as const) {
-			const copy = recordCopy(kind);
-			for (const literal of [copy.title, copy.blurb, copy.placeholder]) {
+			const copy = recordCopy(kind, "vi");
+			for (const literal of [copy.tieuDe, copy.moTa, copy.choNhap]) {
 				expect(source()).not.toContain(literal);
 			}
 		}
 	});
 
 	it("offers a way out of a thread that has ended", () => {
-		expect(source()).toContain("Start a new conversation");
+		expect(source()).toContain("t.tab.batDauMoi");
 		expect(source()).toContain("onClick={onNewThread}");
 	});
 });
