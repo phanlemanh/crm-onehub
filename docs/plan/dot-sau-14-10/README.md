@@ -34,7 +34,7 @@ thêm phần vòng đời, K6a chờ thêm E5 và V2. Chi tiết ở mục 2.
 | Ngân sách mô hình cho các hàng Kara (K2, K3, K4, K6b) | Ngân sách team chạm trần 07/10 (lỗi 402); anh đang nạp 07/10 | Anh nạp; chưa nạp thì phép đo gọi mô hình thật đỏ giả |
 | Bài «số người gõ» của Trợ lý OKR chập chờn | Có chip riêng; chip gộp trước khi mở đợt thì bỏ hàng F13 | Anh bấm chip, hoặc để F13 làm |
 | Bài «người dùng huỷ» của cửa soạn OKR lắc theo tốc độ máy (`nguoi-huy-khong-lac`) | Đã ký Cổng 2; #294 đã gộp `onehub` mới, CI đang chạy lại | Anh gộp khi CI xanh |
-| Bài `chen-lien-ket` › «Esc đóng hộp và trả focus về trình soạn» của `packages/ui` chập chờn trên CI — có mặt trong 9 trên 12 lượt CI đỏ gần nhất (30/09–07/10), mọi lần trên nhánh không chạm `packages/ui`; tại chỗ xanh 8/8 | Có chip riêng, chưa chạy. Chưa sửa thì mỗi dãy tốn thêm lượt chạy lại CI | Anh bấm chip, hoặc phiên giám sát thêm vào P4 cạnh F13 |
+| Bài `chen-lien-ket` › «Esc đóng hộp và trả focus về trình soạn» của `packages/ui` chập chờn trên CI — có mặt trong 9 trên 12 lượt CI đỏ gần nhất (30/09–07/10), mọi lần trên nhánh không chạm `packages/ui`; tại chỗ xanh 8/8 | Đã xếp vào P4 thành hàng F14 `chen-lien-ket-khong-lac` (anh chốt 07/10) | Thợ P4 |
 
 ## 2. Dãy và hàng
 
@@ -46,7 +46,7 @@ trước. Ranh giới tệp lấy từ ba lượt khảo sát chỉ đọc 07/10
 | **P1 · Kara OKR** | K2 `soan-okr-trang-rieng` → K3 `kara-gop-y-luot-2` → K6a `kara-mot-ten` | K2 và K6a cùng nặng ở `okr-soan.ts`; K6a là câu chữ, làm cuối (chủ kho chốt 04/10: tính năng trước, chữ sau) và chờ K4, K6b, E5, V2 gộp — cả bốn đều thêm chữ vào tệp chữ mà K6a đổi |
 | **P2 · Kara bản ghi** | K4 `khung-ban-ghi-kara` → K6b `kara-trang-thai-toan-crm` → V2 `vong-doi-mot-cach-cat` | K4, K6b cùng `contact-sheet`, `company-sheet`, `contact-plans`, `crm.ts`; V2 chạm chính các ngăn bản ghi, `record-actions`, `bulk-actions` và `ArchivedList` của hai hàng đó nên đứng sau chúng, và chờ E7 vì cùng màn thoả thuận |
 | **P3 · Deal và CRM chung** | E7 `datatable-loc-ro` → E3 `danh-sach-keo-chung` → E1 `deal-va` → E4 `giai-doan-mac-dinh` (T3) → E6 `dieu-phoi-va` → E5 `tac-nhan-va` | E7 trước vì `data-table.tsx` là chỗ chồng lớn nhất với Kara; E4 sửa schema nên đứng một mình giữa dãy |
-| **P4 · Sửa nóng** | Lỗi do người dùng thật báo (ưu tiên cao nhất, phiên giám sát thêm hàng khi có) → F13 `so-moi-khong-chap-chon` → V2L `luat-kho-vong-doi` → F8 `neo-thuoc-het-han` | F13, V2L, F8 chỉ chạm bài kiểm, thước và công cụ, không chồng tệp với dãy nào; làm lúc khoá `s4` rảnh |
+| **P4 · Sửa nóng** | Lỗi do người dùng thật báo (ưu tiên cao nhất, phiên giám sát thêm hàng khi có) → F13 `so-moi-khong-chap-chon` → F14 `chen-lien-ket-khong-lac` → V2L `luat-kho-vong-doi` → F8 `neo-thuoc-het-han` | F13, F14, V2L, F8 chỉ chạm bài kiểm, thước và công cụ, không chồng tệp với dãy nào; làm lúc khoá `s4` rảnh |
 
 **Phần vòng đời trong đợt** (chuẩn `docs/vong-doi.md`, lượt 2 của mục «Đợt»). Mọi hàng có nút xoá, lưu trữ hay trạng
 thái kết thúc trả lời ba câu của mục «Tính năng mới phải trả lời ba câu ở Cổng Phạm vi» trong hợp đồng của mình.
@@ -58,6 +58,7 @@ thái kết thúc trả lời ba câu của mục «Tính năng mới phải tr�
 | V2 | Bộ chữ thống nhất trên màn thoả thuận, cá nhân, công ty; toast «Hoàn tác» khi lưu trữ ở mọi nơi; dải «Đã lưu trữ ngày … · Khôi phục» khi mở bản đã cất; nút «Đã lưu trữ» trên Kanban thoả thuận; danh sách liên quan trong ngăn bản ghi chỉ hiện bản đang dùng kèm «+n đã lưu trữ» | Xem dòng P2 ở bảng trên |
 | V2L | Luật thứ bảy «vòng đời» của `scripts/luat-kho` (nút xoá trên bản ghi có lịch sử, danh sách mặc định lẫn bản đã cất, hai cách cất song song) và chạy thước đó trong `acceptance.yml` | Chỉ chạm công cụ và CI; làm sau E3, E5, V2 thì thước gặp ít ca cũ hơn, nhưng không phải chờ |
 | F13 | Bài `nop-ban-nhap` › «số người gõ…» đỏ một lần trên CI của #290 (số thử 41 tình cờ có trong gói gửi mô hình); làm bài tất định mà không nới phép kiểm sản phẩm | Ca CI đỏ không do mã đang xét làm tốn một lượt chạy lại mỗi lần |
+| F14 | Bài `chen-lien-ket` › «Esc đóng hộp và trả focus về trình soạn» của `packages/ui` đỏ ở 9 trên 12 lượt CI hỏng gần nhất (30/09–07/10), mọi lần trên nhánh không chạm `packages/ui`, kèm `TypeError … commandManager` của tiptap; tại chỗ xanh 8/8. Tìm gốc (trình soạn huỷ trước khi trả focus, hay chờ một nhịp chưa đủ trên máy CI chậm), sửa cho tất định bằng chờ có điều kiện, không nới phép kiểm | Ca CI đỏ không do mã đang xét làm tốn một lượt chạy lại mỗi lần — đo trên đúng các PR 07/10 |
 
 Không vào đợt: K5 `chat-deal-mot-khung` (lộ trình ghi sau 07/12; chồng nặng với K4 và E5), 7n (hạn 14/12, chưa có
 hồ sơ cơ hội), F9–F12 (chờ Cổng Đáng; ký xong thì giám sát xếp vào P4, F9 trước). Vòng đời lượt 3 (chiến dịch «Đang
@@ -108,5 +109,5 @@ Sau khi anh duyệt thẻ, phiên giám sát:
 | Tệp | Nội dung |
 |---|---|
 | `dieu-phoi.config.json` | `nhanh_chinh: onehub`, ngưỡng giữ như mẫu, `bao_ve` 12 mục (schema, migrations, bản đồ, lộ trình, `bun.lock`, các tệp chữ dùng chung) |
-| `hang-viec.json` | 4 dãy, 15 hàng, 188 glob (bổ sung 07/10 chiều: V2, F13, V2L; E3, E5 thêm ranh giới); đã qua `kiemHangViec` và `kiemCauHinh` của cả `onehub` sau #288 lẫn nhánh `feat/dieu-phoi-va-bien` |
+| `hang-viec.json` | 4 dãy, 16 hàng, 191 glob (bổ sung 07/10 chiều: V2, F13, V2L; E3, E5 thêm ranh giới; 07/10 tối: F14, không chồng tệp với hàng nào); đã qua `kiemHangViec` và `kiemCauHinh` của cả `onehub` sau #288 lẫn nhánh `feat/dieu-phoi-va-bien` |
 | `LUAT-rieng.md` | Luật riêng crm cho Nhật ký đợt: 12 luật rút từ Nhật ký 04–06/10, ba luật (13–15) từ lượt `don-okr-nhap-sai` 07/10 |
