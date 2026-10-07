@@ -1,23 +1,41 @@
-# Review findings: tro-ly-okr-bo-final-output (round 3)
+# Review findings — tro-ly-okr-bo-final-output (vòng 4)
 
 ## Trong hợp đồng
 
-Không có finding nào.
+Không có finding nào map được vào AC.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **A crash before the log is cleared leaves the previous run's 'KET THUC ma <n>' line in place, and the grader takes that as the result**
-  Người dùng thấy gì: Phép đo thử Trợ lý OKR với model thật có thể đọc nhầm kết quả của lần chạy trước. Nếu lần chạy mới hỏng ngay từ đầu, người chấm vẫn có thể thấy một kết quả «đạt» cũ và ghi nhận như thật.
+- **The model measurement script hard-codes millisecond values instead of building them from one minute/second base**
+  Người dùng thấy gì: Các con số thời gian trong công cụ đo được viết thẳng thay vì đặt từ một đơn vị gốc. Người dùng không thấy gì khác đi: sản phẩm chạy như cũ, chỉ là sau này sửa một số có thể làm dòng báo thời gian ghi lệch.
+  file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Stopping the measurement only kills the direct child; the `eve eval` started under it keeps running after the 'KET THUC' line**
+  Người dùng thấy gì: Nếu người vận hành ngắt lượt đo giữa chừng, tiến trình gọi model thật có thể vẫn chạy ngầm và tiếp tục tốn tiền, trong khi nhật ký đã báo là đã dừng. Sản phẩm của người dùng cuối không bị ảnh hưởng.
   file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **If the process is killed by a signal, no 'KET THUC' line is written, so a grader waiting for that line has no ending**
-  Người dùng thấy gì: Nếu phép đo Trợ lý OKR bị công cụ cắt ngang giữa chừng, người chấm không nhận được dấu hiệu kết thúc nên không biết lần đo đã xong hay đã chết. Phải chạy lại phép đo, và những lần đo dài có thể phải làm lại nhiều lần.
+- **The 'tests running in this tree' check matches by path prefix, so it also counts worktrees nested inside the tree**
+  Người dùng thấy gì: Khi đo từ thư mục chính, công cụ có thể tưởng bộ test của một bản làm việc khác đang chạy nên chờ lâu, tối đa 45 phút, rồi vẫn đo. Chỉ làm chậm lượt đo, không làm sai chức năng nào của sản phẩm.
   file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
   severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): «bộ test của cây đã yên» được chấp nhận chỉ vì đếm ra 0, không có đối chứng dương nào chứng minh bộ đếm thấy được một tiến trình test đang chạy**
+  Người dùng thấy gì: Dòng nhật ký báo bộ test đã yên có thể in ra dù công cụ thực ra không nhìn thấy test nào đang chạy. Người đọc bằng chứng không phân biệt được lần chờ thật với lần chờ mù, nên số đo của một lượt có thể chạy chồng mà không ai biết.
+  file: `_acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **New missing-data rule in the weekly summary instructions can never reach the model (r3)**
+  Người dùng thấy gì: Khi tóm tắt tuần mà thiếu dữ liệu, dòng dặn trợ lý «không làm gì, trả lời done» được viết thêm nhưng thực tế không bao giờ đến được trợ lý. Việc vẫn được bảo vệ bằng quy định chung ở chỗ khác, nên người dùng không thấy khác biệt, chỉ là có một dòng dặn thừa.
+  file: `apps/agent/agent/lib/okr/chi-dan-tom-tat.ts`
+  severity: medium
   Đề xuất: known-limits
 
 - **The old output schema ketQuaTroLy is still the app's source for "da-nop", while the agent now writes it from its own config (r2)**

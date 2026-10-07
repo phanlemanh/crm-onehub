@@ -2,18 +2,18 @@
 schema_version: 2
 feature_slug: tro-ly-okr-bo-final-output
 verdict: REJECT
-failed_evals: []
+failed_evals: ["E6","E7"]
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a8e5ae61297a969e7a518613cfe3d92821b43e18
+verified_commit: b87f7ae15e3b6c9be44d37ef1e903fd10ec96eef
 human_signoff:
 ---
 
 # Evidence Report: tro-ly-okr-bo-final-output
 
-Vòng 3. Tám eval của tính năng đều đạt (bốn eval mang sang từ vòng 2, hai eval đo bằng model thật chạy lại ở vòng này, hai eval judgment giữ hội đồng cũ). Tổng thể là REJECT vì một lệnh suite hồi quy không gắn eval nào chạy đỏ: gói `agent-okr` có một ca (không tên) trong `test/app-rieng.integration.spec.ts` đỏ vì gốc `apps/agent` đang có một tiến trình `eve dev` không phải của bài thử. Chi tiết ở mục Lệnh suite.
+Vòng 4. Hai eval đo bằng model thật (E6, E7) chạy lại sau khi thước chờ bộ test yên 120 giây, và cả hai đều đỏ: cả hai lượt đo model đều ra mã 3 với 0 mẫu đầu, không đủ số lời gọi tối thiểu để kết luận. Bốn eval test (E1, E3, E4, E5) mang sang từ vòng 2, hai eval judgment giữ hội đồng cũ. Bảy lệnh suite hồi quy đều xanh ở vòng này, kể cả gói `agent-okr` đã đỏ ở vòng 3.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -22,8 +22,8 @@ Vòng 3. Tám eval của tính năng đều đạt (bốn eval mang sang từ v�
 | E3 | AC-2 | test | PASS |
 | E4 | AC-3 | test | PASS |
 | E5 | AC-4 | test | PASS |
-| E6 | AC-5 | script | PASS |
-| E7 | AC-6 | script | PASS |
+| E6 | AC-5 | script | FAIL |
+| E7 | AC-6 | script | FAIL |
 | E9 | AC-8 | judgment | PASS |
 
 ## Evidence
@@ -65,22 +65,30 @@ Vòng 3. Tám eval của tính năng đều đạt (bốn eval mang sang từ v�
     carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E6
-  run_id: minted-tro-ly-okr-bo-final-output-E6-r3
-  exit_code: 0
+  run_id: minted-tro-ly-okr-bo-final-output-E6-r4
+  exit_code: 1
   baseline: red
+  runs: 1
   verifier: config:executors.script.tbf_do_mo_hinh
-  verified_at: 2026-10-07T00:59:17Z
+  verified_at: 2026-10-07T01:35:09Z
   output: |
-    KET THUC ma 0
+    bo test yen 120 giay, bat dau do
+    [e22] xong sau 158 giay, ma 3
+    [e22] ma 3 · n_dau 0 · het-tran 0 · final_output 0 · outputSchema 0 · empty-log 0 → DO mau qua nho: 0
+    E6 doi n_dau tu 18 tro len; do duoc 0.
 
 - eval: E7
-  run_id: minted-tro-ly-okr-bo-final-output-E7-r3
-  exit_code: 0
+  run_id: minted-tro-ly-okr-bo-final-output-E7-r4
+  exit_code: 1
   baseline: red
+  runs: 1
   verifier: config:executors.script.tbf_do_mo_hinh
-  verified_at: 2026-10-07T00:59:17Z
+  verified_at: 2026-10-07T01:35:09Z
   output: |
-    KET THUC ma 0
+    [e17] xong sau 48 giay, ma 3
+    [e17] ma 3 · n_dau 0 · het-tran 0 · final_output 0 · outputSchema 0 → DO mau qua nho: 0
+    E7 doi n_dau tu 1 tro len; do duoc 0.
+    KET THUC ma 1 · luot 76110-2026-10-07T01:38:58.595Z
 
 ### Judgment
 
@@ -107,41 +115,41 @@ Vòng 3. Tám eval của tính năng đều đạt (bốn eval mang sang từ v�
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_api-r3
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_api-r4
   exit_code: 0
-  verified_at: 2026-10-07T00:59:17Z
+  verified_at: 2026-10-07T01:35:09Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_app_filter_crm_ui-r4
   exit_code: 0
-  verified_at: 2026-10-07T00:59:17Z
+  verified_at: 2026-10-07T01:35:09Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_agent_filter_crm_aut-r4
   exit_code: 0
-  verified_at: 2026-10-07T00:59:17Z
+  verified_at: 2026-10-07T01:35:09Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
-  exit_code: 1
-  verified_at: 2026-10-07T00:59:17Z
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_test_filter_agent_okr_filter_crm-r4
+  exit_code: 0
+  verified_at: 2026-10-07T01:35:09Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-10-07T00:59:17Z
+  verified_at: 2026-10-07T01:35:09Z
 
 - cmd: bun run lint:slop
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_lint_slop-r3
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-10-07T00:59:17Z
+  verified_at: 2026-10-07T01:35:09Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bunx_turbo_run_build_force-r3
+  run_id: minted-tro-ly-okr-bo-final-output-SUITE-bunx_turbo_run_build_force-r4
   exit_code: 0
-  verified_at: 2026-10-07T00:59:17Z
+  verified_at: 2026-10-07T01:35:09Z
 
-Lệnh fail không gắn eval: lệnh suite thứ tư (gói `agent-okr`, `@crm/env`, `@crm/ai-okr`, `@crm/telemetry`, `@crm/validation`) không gắn eval nào. Trong 133 ca của `agent-okr`, 132 qua và 1 ca không tên đỏ ở `test/app-rieng.integration.spec.ts` dòng 349: bài thử từ chối khởi động vì gốc `apps/agent` đang có một tiến trình `eve dev` không phải của bài thử (pid 20587) và yêu cầu dừng tiến trình đó rồi chạy lại. Nguyên nhân bề ngoài là môi trường, nhưng máy không dừng tiến trình của phiên khác và không chạy lại, nên vòng này không được tính là sạch.
+Lệnh fail gắn eval: `bun _acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs` kết thúc đỏ và phủ E6, E7. Không có lệnh fail nào không gắn eval. Nhật ký cho thấy thước đã chờ bộ test của cây yên 120 giây trước khi đo, nên lần này không phải chạy chồng với bộ test. Cả hai lượt đo model (E22 sau 158 giây, E17 sau 48 giây) đều ra mã 3 và 0 mẫu đầu; đầu ra cắt ngắn không cho thấy nguyên nhân (không có dấu hết trần, final_output hay outputSchema), nên chưa xác định được vì sao eval của hai tính năng kia không sinh ra lượt gọi model nào.
 
 ## Known limits
 
@@ -159,4 +167,5 @@ none — every multi-run eval is uniform
 
 Round 1: E6, E7 failed — thuoc do mo hinh ra ket qua do ngay lan dau. Returned to implementation.
 Round 2: BLOCKED — lenh do mo hinh E6, E7 chay 20–35 phut bi cong cu cat o khoang 600 giay, chua co dong ket thuc. Returned to implementation (thuoc ghi nhat ky co dong KET THUC).
-Round 3: REJECT — E6, E7 dat (dong KET THUC ma 0), bon eval khac mang sang tu round 2, nhung lenh suite agent-okr do vi tien trinh eve dev ngoai bai thu o goc apps/agent; escalate to user.
+Round 3: REJECT — E6, E7 dat, bon eval khac mang sang tu round 2, nhung lenh suite agent-okr do vi tien trinh eve dev ngoai bai thu o goc apps/agent.
+Round 4: REJECT — suite xanh het, nhung E6, E7 do: sau khi cho bo test yen, ca hai luot do model (E22, E17) ra ma 3 voi 0 mau dau, khong du so loi goi toi thieu. Returned to implementation.
