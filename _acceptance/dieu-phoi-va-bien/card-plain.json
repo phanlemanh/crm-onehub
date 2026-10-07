@@ -1,0 +1,140 @@
+{
+  "feature_plain": "Bộ điều phối giờ chặn được mọi lượt kiểm S4 kể cả từ bản chép, bắt cấu hình đợt gõ sai ngay ở nhịp đầu, chạy bộ kiểm của nó ở cổng đẩy mã và CI, giữ khoá cho thợ đang chờ việc nền dài, và kéo dài hạn giữ khoá thật khi gia hạn được duyệt.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ chặn mọi lượt kiểm S4 khi phiên chưa được cấp lượt — kể cả khi chạy từ bản chép đổi tên mà kho này thật sự dùng."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ từ chối tệp cấu hình đợt gõ sai (danh sách tệp bảo vệ viết thành một chuỗi, thiếu hạn giữ khoá của một loại việc, tên khoá gõ nhầm) và nói đúng chỗ sai."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ từ chối bảng hàng việc của đợt gõ sai (thiếu mã phiên, phiên trùng, hàng giao cho phiên không có, danh sách viết thành chuỗi) và nói đúng chỗ sai."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ chặn lượt kiểm S4 khi cấu hình đợt sai, nhưng không chặn lệnh thường và không làm phiền hai hook kia vì tệp mà chúng không đọc."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ chạy bộ kiểm của bộ điều phối mỗi lần đẩy mã và trên CI của công ty."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ báo đỏ ở cổng đẩy mã nếu bộ kiểm bộ điều phối chạy thiếu ca, có ca đỏ hoặc không in tổng kết."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ giữ khoá của thợ suốt lúc một việc nền dài đang chạy, nhờ một lệnh bọc chạm tín hiệu sống mỗi phút."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ nhắc thợ đang giữ khoá chạy việc nặng ở nền qua lệnh bọc, kèm sẵn đúng dòng lệnh để chép."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ kéo dài hạn giữ khoá khi máy duyệt yêu cầu gia hạn, đúng một lần, và chỉ duyệt khi phiên đang giữ đúng khoá đó."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ kéo dài hạn khi giám sát duyệt yêu cầu gia hạn, nhưng không bao giờ cộng vào lượt sau hay vào khoá đã sang tay phiên khác."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ giữ nguyên các luật cũ của bộ điều phối: không chữ riêng của crm, không chú thích, hằng thời gian một chỗ, bộ kiểm cũ vẫn xanh."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-2",
+      "p": "Sẽ KHÔNG chặn nhầm các workflow khác (chạy song song, tệp vắng, workflow tên khác)."
+    },
+    {
+      "id": "AC-5",
+      "p": "Chặn máy cấp khoá hay duyệt tệp bảo vệ khi cấu hình sai — đợt đứng yên và báo giám sát một lần, thay vì làm sai trong im lặng."
+    },
+    {
+      "id": "AC-15",
+      "p": "Chặn cổng đẩy mã làm hỏng kho chung: bộ kiểm điều phối chạy trong hook không còn được đổi cấu hình, commit, nhánh hay worktree của kho thật (sự cố core.bare sáng 07/10)."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG sửa các hạn chế đã ghi ở vòng trước (đường dẫn thư mục làm việc chưa chuẩn hoá, danh sách loại việc khai ở ba chỗ, vài ô đo mỏng)."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG đổi luật máy tự duyệt gia hạn — vẫn là trần 60 phút đã ký, chỉ thêm điều kiện phải đang giữ khoá."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG đặt trần tổng cho một khoá được giữ mãi bằng lệnh bọc — giám sát thấy trên bảng."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG nhận ra lượt kiểm S4 nếu nó chỉ được gọi bằng mã chạy lại."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG đo giả định rằng các tác tử con của lượt kiểm S4 tự giữ nhịp cho khoá."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG đưa bộ kiểm bộ điều phối vào lệnh kiểm chung có cơ sở dữ liệu — nó đi đường riêng ở cổng đẩy và CI."
+    },
+    {
+      "id": "OOS-7",
+      "p": "KHÔNG mở đợt sau-14-10, không làm hàng gộp tự động, không đổi bộ máy của kit."
+    }
+  ],
+  "scope_plain": "Bảy thứ cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Năm chỗ hở owner chọn mở hợp đồng mới đều có tiêu chí: nhận diện S4 (AC-1, AC-2), cấu hình gõ sai (AC-3 tới AC-6), bộ kiểm ở cổng (AC-7, AC-8), giữ khoá khi chờ (AC-9, AC-10), gia hạn (AC-11, AC-12); cộng luật cũ và tài liệu (AC-13, AC-14)."
+    },
+    {
+      "i": 1,
+      "p": "Mỗi luật được đo cả chiều đúng lẫn chiều đỏ có tên lỗi, có chiều «không chặn oan», và đi trọn vòng từ chỗ ghi tới chỗ đọc ở nhịp thật."
+    },
+    {
+      "i": 2,
+      "p": "Mọi cách gọi một lượt kiểm S4 đều được đo — tên gốc, bản chép, tên lạ, gọi theo tên, mã nội tuyến; riêng gọi chỉ bằng mã chạy lại để ngoài."
+    },
+    {
+      "i": 3,
+      "p": "Hai người duyệt gia hạn đều có tiêu chí: máy (AC-11) và giám sát (AC-12); owner đi qua giám sát."
+    },
+    {
+      "i": 4,
+      "p": "GIẢ ĐỊNH cần anh gạch: trong lúc lượt kiểm S4 chạy, các tác tử con tự giữ nhịp cho khoá nên không cần lệnh bọc; vòng này không đo — sai thì khoá S4 vẫn có thể bị thu giữa một lượt dài hơn 90 phút."
+    },
+    {
+      "i": 5,
+      "p": "Thêm khi mở lại hợp đồng: cổng được đo ở cả môi trường hook pre-push (biến GIT_DIR trỏ worktree liên kết), không chỉ ở dòng lệnh thường và CI (AC-15)."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Phép đo giữ khoá khi chờ không thể bắt được lỗi «chỉ chạm tín hiệu sống một lần lúc đầu» — đã sửa: đo lại giữa lúc lệnh đang chạy và thêm khoá của phiên thứ hai."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo cấu hình gõ sai chỉ thử một loại việc thay vì đủ bốn — đã sửa: tách đủ 16 ô cho cấu hình và 13 ô cho bảng hàng việc."
+    },
+    {
+      "i": 2,
+      "p": "Chưa đo chéo «tệp sai mà hook không đọc thì hook đó không được đổi hành vi» — đã sửa: thêm hai ca chéo."
+    },
+    {
+      "i": 3,
+      "p": "Phép đo trên bản chép thật giả định mọi bản chép đều là S4 — đã sửa: đọc danh tính thật của từng tệp rồi so."
+    },
+    {
+      "i": 4,
+      "p": "Lời duyệt gia hạn của giám sát có thể cộng nhầm vào khoá đã sang tay phiên khác — đã sửa: thêm điều kiện khoá còn do chính phiên đó giữ."
+    }
+  ]
+}

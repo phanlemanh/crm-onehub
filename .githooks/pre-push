@@ -25,6 +25,7 @@ fail() {
 }
 
 ROOT="$(git rev-parse --show-toplevel)"
+unset $(git rev-parse --local-env-vars)
 LOG="$(mktemp)"
 RUNS_BEFORE="$(mktemp)"
 trap 'rm -f "$LOG" "$RUNS_BEFORE"' EXIT
@@ -33,8 +34,8 @@ ls -1 "$ROOT/.turbo/runs" 2>/dev/null >"$RUNS_BEFORE" || true
 export TURBO_FORCE=true
 export TURBO_RUN_SUMMARY=true
 
-for task in check-types lint lint:slop test build; do
-	echo "pre-push: bun run $task"
+for task in check-types lint lint:slop test build test:dieu-phoi; do
+	echo "pre-push: bun run $task" | tee -a "$LOG"
 	bun run "$task" 2>&1 | tee -a "$LOG" || fail "$task"
 done
 

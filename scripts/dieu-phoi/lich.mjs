@@ -40,6 +40,10 @@ export function xetHanThue({ chu, nhipTuoiPhut, nowMs, cfg }) {
   return { hanhDong: 'thu-hoi' };
 }
 
+export function hanGiaHan({ hanCu, nowMs, phut }) {
+  return new Date(Math.max(Date.parse(hanCu), nowMs) + phut * PHUT_MS).toISOString();
+}
+
 export function chonHangKe(hangViec, phien, tienDo) {
   const cua = hangViec.hang.filter((h) => h.day === phien);
   const dangLam = cua.find((h) => tienDo.get(h.slug) === 'dang');

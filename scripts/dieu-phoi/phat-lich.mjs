@@ -4,10 +4,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { veBang } from './bang.mjs';
-import { kiemCoBan, kiemDon, kiemYeuCau } from './hinh-dang.mjs';
+import { docCauHinh, docHangViec, kiemCoBan, kiemDon, kiemYeuCau } from './hinh-dang.mjs';
 import { GIAY_MS, NHIP, PHUT_MS } from './cau-hinh.mjs';
 import { docJson, ghiJsonNguyenTu, ghiSuKien } from './dot.mjs';
-import { capLuot, chonHangKe, xetHanThue } from './lich.mjs';
+import { capLuot, chonHangKe, hanGiaHan, xetHanThue } from './lich.mjs';
 import { danhGiaSucKhoe, docApLuc, docLoad, docRssLonNhat, docSwap } from './suc-khoe.mjs';
 import { xetYeuCau } from './yeu-cau.mjs';
 
@@ -132,6 +132,7 @@ function xuLyYeuCau(thuMuc, cfg, hangViec, io, trangThaiCu, nowMs) {
     ranhGioiThem: docJson(pThem, {}),
     nhanhChamTep: nhanhMo(io, cfg),
     nhanhCua: () => null,
+    khoaCua: (phien) => CAC_TAI_NGUYEN.filter((tn) => docJson(path.join(thuMuc, 'khoa', tn, 'chu.json'))?.phien === phien),
     yeuCauGanDay: tatCa.filter((y) => nowMs - Date.parse(y.luc) < MOT_NGAY_MS).map((y) => ({ ...y, id: y._ten })),
   };
   for (const y of choXet) {
@@ -149,6 +150,54 @@ function xuLyYeuCau(thuMuc, cfg, hangViec, io, trangThaiCu, nowMs) {
       nguCanh = { ...nguCanh, ranhGioiThem: moi };
     }
     ghiSuKien(thuMuc, { loai: 'yeu-cau', id: y._ten, phien: y.phien, kieu: y.loai, ket_qua: kq.ket_qua });
+  }
+  return [...daBao];
+}
+
+function chonTaiNguyen(thuMuc, yc, tra) {
+  const ten = tra.tai_nguyen ?? yc.noi_dung?.tai_nguyen;
+  if (ten !== undefined) return { taiNguyen: ten };
+  const dangGiu = CAC_TAI_NGUYEN.filter((tn) => docJson(path.join(thuMuc, 'khoa', tn, 'chu.json'))?.phien === yc.phien);
+  if (dangGiu.length === 1) return { taiNguyen: dangGiu[0] };
+  return { loi: dangGiu.length === 0 ? `${yc.phien} không còn giữ khoá nào` : `${yc.phien} giữ ${dangGiu.join(', ')} — tra-loi phải nêu tai_nguyen` };
+}
+
+function apGiaHan(thuMuc, nowMs, daBaoCu) {
+  const daBao = new Set(daBaoCu);
+  for (const y of docThuMucJson(thuMuc, 'yeu-cau', kiemYeuCau).filter((x) => x.loai === 'gia-han')) {
+    const dau = `gia-han:${y._ten}`;
+    if (daBao.has(dau)) continue;
+    const tra = docJson(path.join(thuMuc, 'tra-loi', `${y._ten}.json`));
+    if (tra?.ket_qua !== 'duyet') continue;
+    const bao = (ly_do) => {
+      ghiSuKien(thuMuc, { loai: 'gia-han-khong-ap', id: y._ten, phien: y.phien, ly_do, can_phan: true });
+      daBao.add(dau);
+    };
+    const { taiNguyen, loi } = chonTaiNguyen(thuMuc, y, tra);
+    if (loi) {
+      bao(loi);
+      continue;
+    }
+    const pChu = path.join(thuMuc, 'khoa', String(taiNguyen), 'chu.json');
+    const chu = CAC_TAI_NGUYEN.includes(taiNguyen) ? docJson(pChu) : null;
+    if (!chu || chu.phien !== y.phien) {
+      bao(`khoá ${taiNguyen} không còn do ${y.phien} giữ`);
+      continue;
+    }
+    if (Date.parse(y.luc) < Date.parse(chu.cap_luc)) continue;
+    if ((chu.gia_han_theo ?? []).includes(y._ten)) {
+      daBao.add(dau);
+      continue;
+    }
+    const phut = [tra.uoc_phut, y.noi_dung?.uoc_phut].find((v) => v !== undefined);
+    if (!(Number.isFinite(phut) && phut > 0)) {
+      bao('tra-loi duyệt nhưng không có số phút dương');
+      continue;
+    }
+    const hanMoi = hanGiaHan({ hanCu: chu.han_thue_den, nowMs, phut });
+    ghiJsonNguyenTu(pChu, { ...chu, han_thue_den: hanMoi, gia_han_theo: [...(chu.gia_han_theo ?? []), y._ten] });
+    ghiSuKien(thuMuc, { loai: 'gia-han', tai_nguyen: taiNguyen, phien: y.phien, han_moi: hanMoi, theo_yeu_cau: y._ten });
+    daBao.add(dau);
   }
   return [...daBao];
 }
@@ -191,8 +240,8 @@ function capNhatHangKe(thuMuc, hangViec, tienDo) {
 
 export async function motNhip(thuMuc, io) {
   const nowMs = io.nowMs();
-  const cfg = docJson(path.join(thuMuc, 'dieu-phoi.config.json'));
-  const hangViec = docJson(path.join(thuMuc, 'hang-viec.json'));
+  const cfg = docCauHinh(thuMuc);
+  const hangViec = docHangViec(thuMuc);
   const pTrangThai = path.join(thuMuc, 'trang-thai.json');
   const cu = docJson(pTrangThai, {});
 
@@ -209,9 +258,9 @@ export async function motNhip(thuMuc, io) {
   if (!sucKhoe.giamTai && cu.trang_thai === 'giam-tai') ghiSuKien(thuMuc, { loai: 'het-giam-tai' });
   if (sucKhoe.canNguoi && cu.can_nguoi !== sucKhoe.canNguoi) ghiSuKien(thuMuc, { loai: 'can-nguoi', tin: sucKhoe.canNguoi, dich: 'owner', can_phan: true });
 
+  const daBao = apGiaHan(thuMuc, nowMs, xuLyYeuCau(thuMuc, cfg, hangViec, io, cu, nowMs));
   const dangGiu = xuLyKhoa(thuMuc, cfg, nowMs);
   const hangCho = capPhat(thuMuc, cfg, hangViec, dangGiu, sucKhoe.giamTai, nowMs);
-  const daBao = xuLyYeuCau(thuMuc, cfg, hangViec, io, cu, nowMs);
   const day = capNhatHangKe(thuMuc, hangViec, tienDoCua(hangViec, cfg, io));
   const lienKetCua = new Map(hangViec.day.map((d) => [d.id, d.link]));
   const choNguoi = docThuMucJson(thuMuc, 'cho-nguoi').map(({ phien, loai, tin, luc }) => ({ phien, loai, tin, luc, link: lienKetCua.get(phien) }));
@@ -288,7 +337,13 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === fs.realpathSync(proces
     process.stderr.write(`phat-lich: đã có bộ phát lịch đang chạy cho ${thuMuc}\n`);
     process.exit(3);
   }
-  const cfg = docJson(path.join(thuMuc, 'dieu-phoi.config.json'));
+  let cfg;
+  try {
+    cfg = docCauHinh(thuMuc, { canGocKho: true });
+  } catch (e) {
+    process.stderr.write(`phat-lich: ${e.message}\n`);
+    process.exit(1);
+  }
   const io = { ...IO_THAT, chay: (cmd, args, opts) => IO_THAT.chay(cmd, args, { cwd: cfg.goc_kho, ...opts }) };
   const vong = taoVong(thuMuc, io);
   await vong();
