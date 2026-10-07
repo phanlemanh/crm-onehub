@@ -323,6 +323,7 @@ export function DanhMucTable() {
 				onRowClick={(hang) => openRecord({ kind: "plan", id: hang.id })}
 				onRowHover={(hang) => prefetchRecord({ kind: "plan", id: hang.id })}
 				empty={loiView ?? (khongKhop ? khongKhopView : undefined)}
+				filteredEmpty={loiView ?? (khongKhop ? khongKhopView : undefined)}
 			/>
 		);
 	}

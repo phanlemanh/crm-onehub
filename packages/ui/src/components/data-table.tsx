@@ -128,6 +128,7 @@ export type DataTableProps<TRow, TSub> = {
 	search?: ReactNode;
 	meta?: ReactNode;
 	empty?: ReactNode;
+	filteredEmpty?: ReactNode;
 	searchActive?: boolean;
 	onClearFilters?: () => void;
 	className?: string;
@@ -426,6 +427,7 @@ export function DataTable<TRow, TSub = unknown>({
 	search,
 	meta,
 	empty,
+	filteredEmpty,
 	searchActive,
 	onClearFilters,
 	className,
@@ -718,6 +720,8 @@ export function DataTable<TRow, TSub = unknown>({
 						<div className="absolute inset-x-0 top-11 bottom-0 flex items-center justify-center px-4 py-8 text-center text-muted-foreground">
 							{loading ? (
 								<Spinner />
+							) : filterActive && filteredEmpty != null ? (
+								filteredEmpty
 							) : filterActive ? (
 								<Empty>
 									<EmptyHeader>

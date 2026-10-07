@@ -438,3 +438,34 @@ describe("so-dem", () => {
 		expect(soTrong(noi, ["Mở", "Đóng"])).toEqual(["2", "0"]);
 	});
 });
+
+describe("rong-rieng", () => {
+	test("noi goi dua filteredEmpty thi man rieng thang o rong chung khi dang loc", async () => {
+		const o = await ve({
+			query: truyVan({ owner: ["u1"] }),
+			filteredEmpty: "MAN-RIENG-CUA-BANG",
+		});
+		const chu = o.textContent ?? "";
+		expect({
+			manRieng: chu.includes("MAN-RIENG-CUA-BANG"),
+			oChung: chu.includes(vi.noMatch),
+		}).toEqual({ manRieng: true, oChung: false });
+	});
+
+	test("doi chung: filteredEmpty vang thi van la o rong chung", async () => {
+		const o = await ve({
+			query: truyVan({ owner: ["u1"] }),
+			filteredEmpty: undefined,
+		});
+		expect((o.textContent ?? "").includes(vi.noMatch)).toBe(true);
+	});
+
+	test("khong loc thi filteredEmpty khong hien, cau cua man hien", async () => {
+		const o = await ve({ filteredEmpty: "MAN-RIENG-CUA-BANG" });
+		const chu = o.textContent ?? "";
+		expect({
+			manRieng: chu.includes("MAN-RIENG-CUA-BANG"),
+			cauMan: chu.includes(CAU_CUA_MAN),
+		}).toEqual({ manRieng: false, cauMan: true });
+	});
+});
