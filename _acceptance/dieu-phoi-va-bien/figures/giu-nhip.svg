@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1200 908" xmlns="http://www.w3.org/2000/svg" font-family="'Geist', sans-serif">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap&amp;subset=vietnamese');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="140" y1="88" x2="140" y2="736" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="420" y1="88" x2="420" y2="736" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="700" y1="88" x2="700" y2="736" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="960" y1="88" x2="960" y2="736" stroke="rgba(23,23,23,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+
+      <rect x="612" y="412" width="572" height="196" rx="4" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <rect x="612" y="412" width="48" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <text x="636" y="424" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">LOOP</text>
+      <text x="752" y="448" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[khi lệnh con còn chạy]</text>
+
+      <rect x="416" y="136" width="8" height="96" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="416" y="284" width="8" height="52" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <rect x="696" y="380" width="8" height="324" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="0.8"/>
+      <rect x="956" y="524" width="8" height="40" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+
+      <line x1="140" y1="144" x2="416" y2="144" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <rect x="222" y="122" width="112" height="16" rx="2" fill="#fafafa"/>
+      <text x="278" y="134" fill="#171717" font-size="10" text-anchor="middle">Bash nền, lệnh nặng</text>
+      <rect x="210" y="150" width="136" height="16" rx="2" fill="#fafafa"/>
+      <text x="278" y="162" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">run_in_background: true</text>
+
+      <path d="M 424 176 L 452 176 Q 460 176 460 184 L 460 192 Q 460 200 452 200 L 428 200" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="472" y="186" fill="#171717" font-size="10">đang giữ khoá + nền + chưa bọc</text>
+      <text x="472" y="200" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">khoá s4 hoặc duong-nen</text>
+
+      <line x1="416" y1="228" x2="144" y2="228" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="198" y="206" width="160" height="16" rx="2" fill="#fafafa"/>
+      <text x="278" y="218" fill="#171717" font-size="10" text-anchor="middle">thoát 2 + dòng lệnh đã bọc</text>
+      <rect x="186" y="234" width="184" height="16" rx="2" fill="#fafafa"/>
+      <text x="278" y="246" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">node …/giu-nhip.mjs -- &lt;lệnh&gt;</text>
+
+      <line x1="140" y1="292" x2="416" y2="292" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <rect x="218" y="270" width="120" height="16" rx="2" fill="#fafafa"/>
+      <text x="278" y="282" fill="#171717" font-size="10" text-anchor="middle">gọi lại qua lệnh bọc</text>
+
+      <line x1="416" y1="328" x2="144" y2="328" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="250" y="306" width="56" height="16" rx="2" fill="#fafafa"/>
+      <text x="278" y="318" fill="#171717" font-size="10" text-anchor="middle">thoát 0</text>
+
+      <line x1="140" y1="384" x2="696" y2="384" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <rect x="492" y="362" width="136" height="16" rx="2" fill="#fafafa"/>
+      <text x="560" y="374" fill="#171717" font-size="10" text-anchor="middle">Bash nền chạy lệnh bọc</text>
+
+      <path d="M 704 472 L 732 472 Q 740 472 740 480 L 740 488 Q 740 496 732 496 L 708 496" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="752" y="482" fill="#171717" font-size="9" font-family="'Geist Mono', monospace">chạm khoa/&lt;tn&gt;/nhip</text>
+      <text x="752" y="496" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">mỗi 1′ · NHIP.giuNhipMs</text>
+
+      <path d="M 964 532 L 992 532 Q 1000 532 1000 540 L 1000 548 Q 1000 556 992 556 L 968 556" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="1012" y="538" fill="#171717" font-size="10" font-weight="600">hết hạn + nhip mới</text>
+      <text x="1012" y="554" fill="#006B4F" font-size="10" font-weight="600">→ gia hạn, không thu hồi</text>
+      <text x="1012" y="570" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">sự kiện gia-han</text>
+
+      <path d="M 704 636 L 732 636 Q 740 636 740 644 L 740 652 Q 740 660 732 660 L 708 660" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="752" y="652" fill="#171717" font-size="10">lệnh con thoát (mã N)</text>
+
+      <line x1="696" y1="700" x2="144" y2="700" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <rect x="500" y="678" width="120" height="16" rx="2" fill="#fafafa"/>
+      <text x="560" y="690" fill="#171717" font-size="10" text-anchor="middle">trả đúng mã thoát N</text>
+      <rect x="186" y="706" width="184" height="16" rx="2" fill="#fafafa"/>
+      <text x="278" y="718" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">0 → 0 · 3 → 3 · chuyển SIGTERM</text>
+
+      <rect x="40" y="32" width="200" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="140" y="56" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">Phiên thợ</text>
+      <text x="140" y="74" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">đang giữ khoá s4</text>
+
+      <rect x="320" y="32" width="200" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="420" y="56" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">Hook chặn S4</text>
+      <text x="420" y="74" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">hook-chan-s4.mjs</text>
+
+      <rect x="600" y="32" width="200" height="56" rx="6" fill="#fafafa"/>
+      <rect x="600" y="32" width="200" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="700" y="56" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">Lệnh bọc</text>
+      <text x="700" y="74" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">giu-nhip.mjs -- &lt;lệnh&gt;</text>
+
+      <rect x="860" y="32" width="200" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="960" y="56" fill="#171717" font-size="12" font-weight="600" text-anchor="middle">Bộ phát lịch</text>
+      <text x="960" y="74" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">phat-lich.mjs · mỗi nhịp</text>
+
+      <rect x="40" y="760" width="640" height="72" rx="6" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <rect x="52" y="772" width="72" height="16" rx="2" fill="none" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="88" y="784" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">GIẢ ĐỊNH</text>
+      <text x="136" y="785" fill="#171717" font-size="11">Workflow S4 không đi qua lệnh bọc. Khoá <tspan font-family="'Geist Mono', monospace">s4</tspan> giữ nhịp nhờ hook <tspan font-family="'Geist Mono', monospace">PostToolUse</tspan></text>
+      <text x="136" y="803" fill="#171717" font-size="11">chạy cho lời gọi công cụ của agent con, trong worktree của phiên.</text>
+      <text x="136" y="821" fill="#575757" font-size="11">Vòng này không đo; nếu sai, khoá có thể bị thu giữa một lượt S4 dài hơn 90′.</text>
+
+      <text x="720" y="784" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', serif">Cùng lệnh, không qua lệnh bọc:</text>
+      <text x="720" y="804" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', serif">nhịp cũ 20′ → khoá bị thu hồi</text>
+      <text x="720" y="822" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">sự kiện thu-hoi · chiều đỏ của AC-9</text>
+
+      <line x1="40" y1="856" x2="1160" y2="856" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="874" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+      <line x1="40" y1="890" x2="68" y2="890" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="76" y="894" fill="#575757" font-size="9">gọi</text>
+      <line x1="140" y1="890" x2="168" y2="890" stroke="#575757" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+      <text x="176" y="894" fill="#575757" font-size="9">trả về</text>
+      <line x1="252" y1="890" x2="280" y2="890" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="288" y="894" fill="#575757" font-size="9">khoá được gia hạn</text>
+      <rect x="412" y="884" width="8" height="12" fill="rgba(23,23,23,0.06)" stroke="#575757" stroke-width="0.8"/>
+      <text x="428" y="894" fill="#575757" font-size="9">đang chạy</text>
+      <rect x="520" y="884" width="28" height="12" rx="2" fill="rgba(23,23,23,0.02)" stroke="rgba(23,23,23,0.22)" stroke-width="1"/>
+      <text x="556" y="894" fill="#575757" font-size="9">khung lặp</text>
+      <rect x="640" y="884" width="28" height="12" rx="2" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="676" y="894" fill="#575757" font-size="9">giả định chưa đo</text>
+    </svg>

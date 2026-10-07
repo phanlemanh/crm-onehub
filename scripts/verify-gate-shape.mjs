@@ -3,9 +3,9 @@ import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkNodeTest } from "./gate-shape-node-test.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const SHAPE_FILE = join(ROOT, ".githooks", "gate-shape.json");
 const RUNS_DIR = join(ROOT, ".turbo", "runs");
 const COVERAGE_LINE = /Finished in [^\n]*? on (\d+) files with (\d+) rules/g;
 
@@ -17,6 +17,8 @@ function arg(name) {
 function readJson(path) {
 	return JSON.parse(readFileSync(path, "utf8"));
 }
+
+const SHAPE_FILE = arg("--shape") || join(ROOT, ".githooks", "gate-shape.json");
 
 function readShape() {
 	if (!existsSync(SHAPE_FILE)) {
@@ -240,6 +242,10 @@ for (const checker of shape.checkers) {
 		checkTurbo(checker, packages, ledger, problems, report);
 	} else if (checker.kind === "oxlint") {
 		checkOxlint(checker, log, problems, report);
+	} else if (checker.kind === "node-test") {
+		const result = checkNodeTest(checker, log, { root: ROOT });
+		problems.push(...result.problems);
+		report.push(...result.report);
 	} else {
 		problems.push(
 			`checker '${checker.id}' has an unknown kind '${checker.kind}'`,
