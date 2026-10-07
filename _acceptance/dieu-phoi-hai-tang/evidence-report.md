@@ -1,19 +1,17 @@
 ---
 schema_version: 2
 feature_slug: dieu-phoi-hai-tang
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e3e11575eec5cc698e63e974c82f485d05f73adc
+verified_commit: 659199342932de838cb0b5ae7a78b5ea0804ddf5
 human_signoff:
 ---
 
 # Evidence Report: dieu-phoi-hai-tang
-
-Vòng 3. Mọi lệnh máy và mọi lệnh suite đều xanh (45 eval, 7 lệnh suite), nhưng verdict là REJECT: bước phân loại phạm vi giữ lại một phát hiện trong hợp đồng, mức high, thuộc AC-9 (hai yêu cầu viec-phu đến cùng một nhịp gộp vào nhau, không ai nhận can_phan). Chi tiết ở review-findings.md, mục "Trong hợp đồng". Không eval máy nào đỏ, nên failed_evals để trống.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -66,497 +64,492 @@ Vòng 3. Mọi lệnh máy và mọi lệnh suite đều xanh (45 eval, 7 lệnh
 ## Evidence
 
 - eval: E1
-  run_id: minted-dieu-phoi-hai-tang-E1-r3
+  run_id: minted-dieu-phoi-hai-tang-E1-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_lich
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/lich.test.mjs
-    ℹ duration_ms 41.854667
-
-- eval: E3
-  run_id: minted-dieu-phoi-hai-tang-E3-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_lich
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/lich.test.mjs
-    ℹ duration_ms 41.854667
-
-- eval: E5
-  run_id: minted-dieu-phoi-hai-tang-E5-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_lich
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/lich.test.mjs
-    ℹ duration_ms 41.854667
-
-- eval: E15
-  run_id: minted-dieu-phoi-hai-tang-E15-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_lich
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/lich.test.mjs
-    ℹ duration_ms 41.854667
+    ℹ duration_ms 41.380042
 
 - eval: E2
-  run_id: minted-dieu-phoi-hai-tang-E2-r3
+  run_id: minted-dieu-phoi-hai-tang-E2-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_phat_lich
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/phat-lich.test.mjs
-    ℹ duration_ms 158.861125
+    ℹ duration_ms 128.340083
+
+- eval: E3
+  run_id: minted-dieu-phoi-hai-tang-E3-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_lich
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/lich.test.mjs
+    ℹ duration_ms 41.380042
 
 - eval: E4
-  run_id: minted-dieu-phoi-hai-tang-E4-r3
+  run_id: minted-dieu-phoi-hai-tang-E4-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_phat_lich
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/phat-lich.test.mjs
-    ℹ duration_ms 158.861125
+    ℹ duration_ms 128.340083
+
+- eval: E5
+  run_id: minted-dieu-phoi-hai-tang-E5-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_lich
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/lich.test.mjs
+    ℹ duration_ms 41.380042
 
 - eval: E6
-  run_id: minted-dieu-phoi-hai-tang-E6-r3
+  run_id: minted-dieu-phoi-hai-tang-E6-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_phat_lich
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/phat-lich.test.mjs
-    ℹ duration_ms 158.861125
-
-- eval: E8
-  run_id: minted-dieu-phoi-hai-tang-E8-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_phat_lich
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
-    ℹ duration_ms 158.861125
-
-- eval: E14
-  run_id: minted-dieu-phoi-hai-tang-E14-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_phat_lich
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
-    ℹ duration_ms 158.861125
-
-- eval: E16
-  run_id: minted-dieu-phoi-hai-tang-E16-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_phat_lich
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
-    ℹ duration_ms 158.861125
-
-- eval: E18
-  run_id: minted-dieu-phoi-hai-tang-E18-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_phat_lich
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
-    ℹ duration_ms 158.861125
-
-- eval: E19
-  run_id: minted-dieu-phoi-hai-tang-E19-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_phat_lich
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
-    ℹ duration_ms 158.861125
+    ℹ duration_ms 128.340083
 
 - eval: E7
-  run_id: minted-dieu-phoi-hai-tang-E7-r3
+  run_id: minted-dieu-phoi-hai-tang-E7-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_suc_khoe
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/suc-khoe.test.mjs
-    ℹ duration_ms 59.838125
+    ℹ todo 0
+    ℹ duration_ms 40.885083
+
+- eval: E8
+  run_id: minted-dieu-phoi-hai-tang-E8-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_phat_lich
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+    ℹ duration_ms 128.340083
 
 - eval: E9
-  run_id: minted-dieu-phoi-hai-tang-E9-r3
+  run_id: minted-dieu-phoi-hai-tang-E9-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_hook_s4
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/hook-chan-s4.test.mjs
-    ℹ duration_ms 53.574583
+    ℹ duration_ms 62.507458
 
 - eval: E10
-  run_id: minted-dieu-phoi-hai-tang-E10-r3
+  run_id: minted-dieu-phoi-hai-tang-E10-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_hook_s4
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/hook-chan-s4.test.mjs
-    ℹ duration_ms 53.574583
+    ℹ duration_ms 62.507458
 
 - eval: E11
-  run_id: minted-dieu-phoi-hai-tang-E11-r3
+  run_id: minted-dieu-phoi-hai-tang-E11-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.script.dph_hook_that
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node _acceptance/dieu-phoi-hai-tang/rang/hook-that.mjs
     KET LUAN: xanh
 
 - eval: E12
-  run_id: minted-dieu-phoi-hai-tang-E12-r3
+  run_id: minted-dieu-phoi-hai-tang-E12-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_hook_nhip
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/hook-nhip-cho-nguoi.test.mjs
-    ℹ duration_ms 41.986625
+    (đuôi đầu ra rỗng; lệnh kết thúc sạch)
 
 - eval: E13
-  run_id: minted-dieu-phoi-hai-tang-E13-r3
+  run_id: minted-dieu-phoi-hai-tang-E13-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_yeu_cau
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/yeu-cau.test.mjs
-    (lệnh không in dòng tóm tắt cuối)
+    ℹ duration_ms 44.907417
+
+- eval: E14
+  run_id: minted-dieu-phoi-hai-tang-E14-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_phat_lich
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+    ℹ duration_ms 128.340083
+
+- eval: E15
+  run_id: minted-dieu-phoi-hai-tang-E15-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_lich
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/lich.test.mjs
+    ℹ duration_ms 41.380042
+
+- eval: E16
+  run_id: minted-dieu-phoi-hai-tang-E16-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_phat_lich
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+    ℹ duration_ms 128.340083
 
 - eval: E17
-  run_id: minted-dieu-phoi-hai-tang-E17-r3
+  run_id: minted-dieu-phoi-hai-tang-E17-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_bang
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/bang.test.mjs
-    ℹ duration_ms 85.996541
+    ℹ duration_ms 39.381541
+
+- eval: E18
+  run_id: minted-dieu-phoi-hai-tang-E18-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_phat_lich
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+    ℹ duration_ms 128.340083
+
+- eval: E19
+  run_id: minted-dieu-phoi-hai-tang-E19-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_phat_lich
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/phat-lich.test.mjs
+    ℹ duration_ms 128.340083
 
 - eval: E20
-  run_id: minted-dieu-phoi-hai-tang-E20-r3
+  run_id: minted-dieu-phoi-hai-tang-E20-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.test.dph_cli
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node --test scripts/dieu-phoi/test/cli.test.mjs
-    (lệnh không in dòng tóm tắt cuối)
+    ℹ duration_ms 232.943917
 
 - eval: E21
-  run_id: ""
+  run_id: minted-dieu-phoi-hai-tang-E21-r4
   exit_code: 0
   baseline: red
   verifier: config:executors.script.dph_thu_kho
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
   output: |
     node _acceptance/dieu-phoi-hai-tang/rang/thu-kho.mjs
-    KET LUAN: xanh
-
-- eval: E39
-  run_id: ""
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_thu_kho
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/thu-kho.mjs
-    KET LUAN: xanh
-
-- eval: E23
-  run_id: minted-dieu-phoi-hai-tang-E23-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_ranh_gioi
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/ranh-gioi.mjs
-    KET LUAN: cay that sach · chieu do bat du 6/6
-
-- eval: E24
-  run_id: minted-dieu-phoi-hai-tang-E24-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_tat_ca
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    bun run test:dieu-phoi
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E25
-  run_id: minted-dieu-phoi-hai-tang-E25-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E26
-  run_id: minted-dieu-phoi-hai-tang-E26-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E27
-  run_id: minted-dieu-phoi-hai-tang-E27-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E28
-  run_id: minted-dieu-phoi-hai-tang-E28-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E29
-  run_id: minted-dieu-phoi-hai-tang-E29-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E30
-  run_id: minted-dieu-phoi-hai-tang-E30-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E31
-  run_id: minted-dieu-phoi-hai-tang-E31-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E32
-  run_id: minted-dieu-phoi-hai-tang-E32-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E33
-  run_id: minted-dieu-phoi-hai-tang-E33-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E34
-  run_id: minted-dieu-phoi-hai-tang-E34-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E35
-  run_id: minted-dieu-phoi-hai-tang-E35-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E43
-  run_id: minted-dieu-phoi-hai-tang-E43-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E44
-  run_id: minted-dieu-phoi-hai-tang-E44-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E45
-  run_id: minted-dieu-phoi-hai-tang-E45-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_dot_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E36
-  run_id: minted-dieu-phoi-hai-tang-E36-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_nhip_that
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
-    M15 DO: permission-prompt (permission_prompt -> bo-qua, tep null)
-    KET LUAN: xanh, 3/3 dot bien bi bat
-
-- eval: E37
-  run_id: minted-dieu-phoi-hai-tang-E37-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_nhip_that
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
-    M15 DO: permission-prompt (permission_prompt -> bo-qua, tep null)
-    KET LUAN: xanh, 3/3 dot bien bi bat
-
-- eval: E38
-  run_id: minted-dieu-phoi-hai-tang-E38-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.script.dph_nhip_that
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
-    M15 DO: permission-prompt (permission_prompt -> bo-qua, tep null)
-    KET LUAN: xanh, 3/3 dot bien bi bat
-
-- eval: E40
-  run_id: minted-dieu-phoi-hai-tang-E40-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/bien.test.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E41
-  run_id: minted-dieu-phoi-hai-tang-E41-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/bien.test.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-- eval: E42
-  run_id: minted-dieu-phoi-hai-tang-E42-r3
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dph_bien
-  verified_at: 2026-10-06T23:33:48Z
-  output: |
-    node --test scripts/dieu-phoi/test/bien.test.mjs
-    (lệnh không in dòng tóm tắt cuối)
-
-### Judgment
-
-Panel giữ nguyên từ round 2 — inputs không đổi, không chấm lại; rationale xem round 2.
+    (đuôi đầu ra rỗng; bộ đo kết thúc sạch)
 
 - eval: E22
-  judged_by: judge panel (carried from round 2)
+  judged_by: judge panel (fresh context) — panel giữ nguyên từ round 2, inputs không đổi, không chấm lại; rationale xem round 2
   verdict: PASS
+  rationale: Đề xuất của máy là PASS; ba thẩm phán đã bỏ phiếu ở round 2 và inputs không đổi nên phiếu được mang sang nguyên vẹn.
   votes:
     - domain-correctness: PASS (r2)
     - operational-feasibility: PASS (r2)
     - spec-alignment: PASS (r2)
   human_override:  # chi nguoi ghi
 
+- eval: E23
+  run_id: minted-dieu-phoi-hai-tang-E23-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_ranh_gioi
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/ranh-gioi.mjs
+    KET LUAN: cay that sach · chiều do bat du 6/6
+
+- eval: E24
+  run_id: minted-dieu-phoi-hai-tang-E24-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_tat_ca
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    bun run test:dieu-phoi
+    ℹ duration_ms 244.078292
+
+- eval: E25
+  run_id: minted-dieu-phoi-hai-tang-E25-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E26
+  run_id: minted-dieu-phoi-hai-tang-E26-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E27
+  run_id: minted-dieu-phoi-hai-tang-E27-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E28
+  run_id: minted-dieu-phoi-hai-tang-E28-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E29
+  run_id: minted-dieu-phoi-hai-tang-E29-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E30
+  run_id: minted-dieu-phoi-hai-tang-E30-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E31
+  run_id: minted-dieu-phoi-hai-tang-E31-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E32
+  run_id: minted-dieu-phoi-hai-tang-E32-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E33
+  run_id: minted-dieu-phoi-hai-tang-E33-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E34
+  run_id: minted-dieu-phoi-hai-tang-E34-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E35
+  run_id: minted-dieu-phoi-hai-tang-E35-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E36
+  run_id: minted-dieu-phoi-hai-tang-E36-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_nhip_that
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
+    KET LUAN: xanh, 3/3 dot bien bi bat
+
+- eval: E37
+  run_id: minted-dieu-phoi-hai-tang-E37-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_nhip_that
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
+    KET LUAN: xanh, 3/3 dot bien bi bat
+
+- eval: E38
+  run_id: minted-dieu-phoi-hai-tang-E38-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_nhip_that
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
+    KET LUAN: xanh, 3/3 dot bien bi bat
+
+- eval: E39
+  run_id: minted-dieu-phoi-hai-tang-E39-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_thu_kho
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/thu-kho.mjs
+    (đuôi đầu ra rỗng; bộ đo kết thúc sạch)
+
+- eval: E40
+  run_id: minted-dieu-phoi-hai-tang-E40-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/bien.test.mjs
+    (đuôi đầu ra rỗng; lệnh kết thúc sạch)
+
+- eval: E41
+  run_id: minted-dieu-phoi-hai-tang-E41-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/bien.test.mjs
+    (đuôi đầu ra rỗng; lệnh kết thúc sạch)
+
+- eval: E42
+  run_id: minted-dieu-phoi-hai-tang-E42-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.dph_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node --test scripts/dieu-phoi/test/bien.test.mjs
+    (đuôi đầu ra rỗng; lệnh kết thúc sạch)
+
+- eval: E43
+  run_id: minted-dieu-phoi-hai-tang-E43-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E44
+  run_id: minted-dieu-phoi-hai-tang-E44-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
+- eval: E45
+  run_id: minted-dieu-phoi-hai-tang-E45-r4
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.script.dph_dot_bien
+  verified_at: 2026-10-07T00:04:41Z
+  output: |
+    node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
+    KET LUAN: 27 dot bien, moi ca ghim deu do
+
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_test_filter_api-r3
+  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_test_filter_api-r4
   exit_code: 0
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
+  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_test_filter_app_filter_crm_ui-r4
   exit_code: 0
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
+  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_test_filter_agent_filter_crm_aut-r4
   exit_code: 0
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
+  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_test_filter_agent_okr_filter_crm-r4
   exit_code: 0
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-dieu-phoi-hai-tang-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-dieu-phoi-hai-tang-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
 
 - cmd: bun run lint:slop
-  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_lint_slop-r3
+  run_id: minted-dieu-phoi-hai-tang-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-dieu-phoi-hai-tang-SUITE-bunx_turbo_run_build_force-r3
+  run_id: minted-dieu-phoi-hai-tang-SUITE-bunx_turbo_run_build_force-r4
   exit_code: 0
-  verified_at: 2026-10-06T23:33:48Z
+  verified_at: 2026-10-07T00:04:41Z
 
 ## Known limits
 
@@ -568,10 +561,11 @@ none — mọi eval feature đều red trên baseline (có phân biệt)
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval chạy nhiều lần đều đồng nhất (không eval nào có runs lớn hơn 1)
 
 ## Iterations
 
-Round 1: trả về ở Cổng 2 — mở lại hợp đồng, thêm AC-16..18 kiểm biên, nới ranh giới, thêm ca worktree lồng; README bỏ /loop. Quay lại implementation.
-Round 2: REJECT, 4 phát hiện trong hợp đồng; sửa ở e3e11575 (viec-phu không còn tự gộp, test đo quan hệ cho bảo vệ, cap_luc, luật tự nhường, viec-phu). Quay lại verify.
-Round 3: 45 eval và 7 lệnh suite xanh, nhưng còn 1 phát hiện high trong hợp đồng (AC-9): hai yêu cầu viec-phu cùng nhịp gộp vào nhau, không ai nhận can_phan. REJECT, chuyển cho người quyết.
+Round 1: không có chi tiết trong dữ liệu của lượt này; xem run-log.jsonl.
+Round 2: REJECT, 4 finding trong hợp đồng. Trả về implementation (sửa ở e3e11575e).
+Round 3: REJECT, chạm trần 3 round; người chọn lối 2 và tiếp tục. Sửa ở 659199342: viec-phu chỉ gộp vào yêu cầu cũ hơn.
+Round 4: PASS tại 659199342932de838cb0b5ae7a78b5ea0804ddf5. Toàn bộ eval máy xanh, lệnh suite xanh, E22 giữ phiếu từ round 2.

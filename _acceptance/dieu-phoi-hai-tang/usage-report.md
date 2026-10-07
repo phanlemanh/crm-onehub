@@ -163,3 +163,53 @@ wall: 948s
 - **claude-sonnet-5-5**: 5 agent · 14 calls · out 25,146 · in 28 · cache_read 929,178 · cache_create 548,331
 - **claude-haiku-4-5-20251001**: 22 agent · 46 calls · out 37,522 · in 412 · cache_read 2,196,795 · cache_create 1,008,597
 
+### S4 round 4 — wf_046c4e1c-3c8 (29 agent, 114,427 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:bugs | claude-opus-5-5 | 15 | 22,837 | 30 | 2,051,794 | 257 |
+| review:measurement | claude-opus-5-5 | 19 | 17,089 | 38 | 3,025,260 | 204 |
+| synthesize:report | claude-sonnet-5-5 | 3 | 16,015 | 6 | 265,486 | 91 |
+| review:conventions | claude-opus-5-5 | 11 | 13,372 | 22 | 1,243,608 | 147 |
+| triage | claude-sonnet-5-5 | 2 | 5,409 | 4 | 96,803 | 40 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-4-5-20251001 | 6 | 4,271 | 50 | 390,544 | 231 |
+| machine:bunx turbo run build --force | claude-haiku-4-5-20251001 | 2 | 3,358 | 18 | 93,411 | 97 |
+| baseline:diffBase | claude-sonnet-5-5 | 4 | 2,746 | 8 | 289,797 | 29 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-4-5-20251001 | 2 | 2,633 | 18 | 93,458 | 84 |
+| machine:node _acceptance/dieu-phoi-hai-tang/rang | claude-haiku-4-5-20251001 | 2 | 2,049 | 18 | 93,433 | 51 |
+| machine:bun run test -- --filter=api | claude-haiku-4-5-20251001 | 2 | 2,018 | 18 | 66,744 | 211 |
+| machine:node --test scripts/dieu-phoi/test/bien. | claude-haiku-4-5-20251001 | 2 | 1,931 | 18 | 93,428 | 23 |
+| machine:node _acceptance/dieu-phoi-hai-tang/rang | claude-haiku-4-5-20251001 | 2 | 1,659 | 18 | 93,432 | 21 |
+| machine:node _acceptance/dieu-phoi-hai-tang/rang | claude-haiku-4-5-20251001 | 2 | 1,644 | 18 | 93,433 | 19 |
+| machine:node --test scripts/dieu-phoi/test/lich. | claude-haiku-4-5-20251001 | 2 | 1,573 | 18 | 93,430 | 20 |
+| machine:node --test scripts/dieu-phoi/test/yeu-c | claude-haiku-4-5-20251001 | 2 | 1,564 | 18 | 93,435 | 19 |
+| machine:bun run test:dieu-phoi | claude-haiku-4-5-20251001 | 2 | 1,486 | 18 | 93,415 | 20 |
+| machine:node --test scripts/dieu-phoi/test/hook- | claude-haiku-4-5-20251001 | 2 | 1,413 | 18 | 93,437 | 17 |
+| machine:node --test scripts/dieu-phoi/test/suc-k | claude-haiku-4-5-20251001 | 2 | 1,402 | 18 | 93,435 | 16 |
+| machine:bunx turbo run lint --force | claude-haiku-4-5-20251001 | 2 | 1,396 | 18 | 93,411 | 18 |
+| machine:node --test scripts/dieu-phoi/test/phat- | claude-haiku-4-5-20251001 | 2 | 1,311 | 18 | 93,434 | 18 |
+| machine:node _acceptance/dieu-phoi-hai-tang/rang | claude-haiku-4-5-20251001 | 2 | 1,168 | 18 | 93,432 | 25 |
+| machine:node --test scripts/dieu-phoi/test/hook- | claude-haiku-4-5-20251001 | 2 | 1,113 | 18 | 93,434 | 16 |
+| machine:node --test scripts/dieu-phoi/test/bang. | claude-haiku-4-5-20251001 | 2 | 1,110 | 18 | 93,428 | 15 |
+| machine:node _acceptance/dieu-phoi-hai-tang/rang | claude-haiku-4-5-20251001 | 2 | 1,044 | 18 | 93,434 | 14 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-4-5-20251001 | 2 | 985 | 18 | 93,432 | 194 |
+| machine:node --test scripts/dieu-phoi/test/cli.t | claude-haiku-4-5-20251001 | 2 | 925 | 18 | 93,430 | 13 |
+| machine:bun run lint:slop | claude-haiku-4-5-20251001 | 2 | 624 | 18 | 93,409 | 10 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 282 | 4 | 89,710 | 7 |
+
+
+wall: 984s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 2,746 | 289,797 | 29 | 00:04:49 | 00:05:18 |
+| machine | 22 | 36,677 | 2,325,879 | 845 | 00:04:49 | 00:18:54 |
+| review | 3 | 53,298 | 6,320,662 | 259 | 00:05:08 | 00:09:26 |
+| triage | 1 | 5,409 | 96,803 | 40 | 00:18:54 | 00:19:34 |
+| capture | 1 | 282 | 89,710 | 7 | 00:19:34 | 00:19:42 |
+| synthesize | 1 | 16,015 | 265,486 | 91 | 00:19:42 | 00:21:13 |
+
+- **claude-opus-5-5**: 3 agent · 45 calls · out 53,298 · in 90 · cache_read 6,320,662 · cache_create 493,291
+- **claude-sonnet-5-5**: 4 agent · 11 calls · out 24,452 · in 22 · cache_read 741,796 · cache_create 446,969
+- **claude-haiku-4-5-20251001**: 22 agent · 48 calls · out 36,677 · in 428 · cache_read 2,325,879 · cache_create 1,029,983
+

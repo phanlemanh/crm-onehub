@@ -1,89 +1,87 @@
-# Review findings: dieu-phoi-hai-tang (round 3)
+# Review findings: dieu-phoi-hai-tang (round 4)
 
 ## Trong hợp đồng
 
-- **Two viec-phu requests that arrive in the same tick get merged into each other, so neither reaches the supervisor**
-  file: scripts/dieu-phoi/yeu-cau.mjs:51
-  severity: high
-  AC: AC-9
-  source: bugs
-  detail: This comes from the HEAD fix (phat-lich.mjs:135 now builds yeuCauGanDay with `id: y._ten` for every request less than 24 h old). The candidate list holds every pending request, including ones not judged yet. The time check `luc - Date.parse(c.luc) < MOT_NGAY_MS` also passes when c is newer than yc, because the difference is negative. So when A and B both land in yeu-cau/ before one tick (same kho, same normalized tieu_de or a shared tep), A matches B and B matches A. Both get ket_qua 'gop' with boi 'may', tra-loi/ is written for both, and no can_phan event is emitted. The side task disappears with nobody escalated. I reproduced it: calling xetYeuCau(A, {yeuCauGanDay:[A,B]}) returns {ket_qua:'gop', voi:'P2-1'}, and xetYeuCau(B, …) returns {ket_qua:'gop', voi:'P1-1'}. Fix: only merge into a request that is older (Date.parse(c.luc) < luc, with the id as tiebreak) or into one that has already been processed (has a tra-loi entry or is in daBao).
-  rationale: AC-9(a) hứa viec-phu trùng thì gop với voi là id cũ; hai yêu cầu cùng nhịp gộp vào nhau (voi trỏ tới yêu cầu mới hơn) và không sinh can_phan, nên làm AC-9 thất bại.
+Không có finding nào trong hợp đồng.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **nhanhMo turns gh/git failures into an empty map, so the machine approves cham-tep requests**
-  Người dùng thấy gì: Khi công cụ kiểm tra nhánh đang mở bị lỗi (mất mạng, hết đăng nhập, cấu hình nhánh chính sai), hệ thống vẫn tự duyệt yêu cầu sửa tệp mà không báo ai. Hai phiên có thể cùng sửa một tệp và đụng nhau về sau.
-  file: `scripts/dieu-phoi/phat-lich.mjs`
-  severity: high
+- **dieu-phoi.config.json and hang-viec.json are not checked when read; a `bao_ve` written as a string lets the machine approve edits to protected files**
+  Người dùng thấy gì: Nếu người điền tay tệp cấu hình đợt sai kiểu (ví dụ ghi danh sách tệp được bảo vệ thành một chuỗi thay vì danh sách), máy sẽ tự duyệt việc sửa các tệp lẽ ra phải do người quyết, và không báo gì. Lỗi này dễ xảy ra khi mở đợt và đi theo hướng nguy hiểm.
+  file: `scripts/dieu-phoi/yeu-cau.mjs`
+  severity: medium
   Đề xuất: new-contract
 
-- **tienDoCua cannot tell a missing ref from a missing contract, so dependent rows can wait forever with no event**
-  Người dùng thấy gì: Nếu tên nhánh chính trong cấu hình đặt sai, các việc phụ thuộc việc khác sẽ chờ mãi mà không ai được báo. Người giám sát chỉ thấy hàng không nhúc nhích.
-  file: `scripts/dieu-phoi/phat-lich.mjs`
+- **The rule that `day.worktree` must be a realpath is never checked; a trailing slash or symlinked path silently turns off the waiting-for-you hook**
+  Người dùng thấy gì: Nếu người mở đợt gõ đường dẫn thư mục làm việc của thợ có dấu gạch chéo cuối hoặc đi qua đường tắt, bảng quyết định sẽ không bao giờ hiện việc đang chờ người của thợ đó và không có báo lỗi nào. Người giám sát phải nhập đúng đường dẫn thật như README dặn.
+  file: `scripts/dieu-phoi/dot.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **The new test suite is outside the gate: pre-push and CI never run test:dieu-phoi**
-  Người dùng thấy gì: Bộ kiểm tra của công cụ điều phối chỉ chạy khi có người gọi tay. Một lỗi mới trong các hook chạy ở mọi phiên vẫn có thể qua cổng đẩy và CI mà không ai thấy.
+- **The dieu-phoi tests run in no gate: not in `bun run test`, not in pre-push, not in CI, even though the hooks run in every crm session**
+  Người dùng thấy gì: Bộ kiểm tra của công cụ điều phối không chạy trong lệnh test chung, trước khi đẩy mã hay trên CI. Nếu sau này ai đó sửa hỏng công cụ, mọi phiên làm việc trong kho có thể bị chặn nhầm hoặc để lọt việc nặng mà không cổng nào báo đỏ.
   file: `package.json`
   severity: medium
   Đề xuất: new-contract
 
-- **The dieu-phoi config files are read with no shape check, even though this round added boundary checks for xin/ and yeu-cau/**
-  Người dùng thấy gì: Nếu người giám sát sửa tay tệp cấu hình và thiếu một khoá, bộ phát lịch có thể cấp khoá rồi lỗi, lặp lại mỗi phút mà chỉ báo lỗi chung chung. Phiên thợ có thể bị cấp lượt rồi thu lại liên tục.
-  file: `scripts/dieu-phoi/phat-lich.mjs`
+- **The set of request kinds and resources is declared in three separate places that can drift apart**
+  Người dùng thấy gì: Danh sách các loại việc được xin nằm ở nhiều chỗ. Khi sau này thêm một loại việc mới mà quên sửa đủ chỗ, đơn hợp lệ có thể bị loại hoặc một khoá có thể không bao giờ được thu hồi. Hiện tại chưa gây lỗi.
+  file: `scripts/dieu-phoi/hinh-dang.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **hook-nhip and hook-cho-nguoi swallow errors with an empty catch even when a run is active**
-  Người dùng thấy gì: Khi hook báo nhịp của một phiên thợ bị lỗi, không ai biết vì sao. Rồi lượt của thợ bị thu hồi vì nhịp cũ mà không để lại dấu vết lý do.
-  file: `scripts/dieu-phoi/hook-nhip.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **phat-lich hard-codes the threshold '60″' next to the constant NHIP.khoaTrongMs**
-  Người dùng thấy gì: Nếu ai đổi thời gian chờ cho khoá trống, câu giải thích hiển thị cho người giám sát vẫn ghi con số cũ. Chỉ gây hiểu nhầm nhẹ, không ảnh hưởng việc cấp lượt.
-  file: `scripts/dieu-phoi/phat-lich.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **scripts/dieu-phoi does not follow the repo's Biome formatting (tabs, double quotes, sorted imports)**
-  Người dùng thấy gì: Mã của công cụ điều phối trình bày khác quy ước chung của kho (thụt lề, nháy). Không đổi hành vi nào, chỉ làm mã nhìn lệch.
-  file: `scripts/dieu-phoi/lich.mjs`
-  severity: low
-  Đề xuất: wont-fix
-
-- **Open-branch check in cham-tep fails open: a gh/git failure, a branch not fetched yet, or more than 30 PRs all lead to machine approval**
-  Người dùng thấy gì: Khi chưa kiểm tra được nhánh nào đang mở (lỗi mạng, nhánh mới chưa tải về, hơn 30 PR), hệ thống vẫn tự duyệt yêu cầu sửa tệp. Hai phiên có thể sửa trùng một tệp mà không ai được báo.
-  file: `scripts/dieu-phoi/phat-lich.mjs`
+- **The S4 lock check misses the per-round Workflow script copies this repo actually runs, so S4 can start without the lock**
+  Người dùng thấy gì: Trong thực tế các lượt kiểm S4 được chạy từ bản sao có tên kèm tên tính năng và số vòng, và công cụ chặn hiện không nhận ra chúng. Hai lượt S4 vẫn có thể chạy cùng lúc mà không giữ khoá, đúng sự cố ngày 04/10 mà tính năng này sinh ra để ngăn.
+  file: `scripts/dieu-phoi/hook-chan-s4.mjs`
   severity: high
   Đề xuất: new-contract
 
-- **The «cần người» event repeats on every 0.1 GB change in the largest process's RSS**
-  Người dùng thấy gì: Khi một tiến trình ngốn bộ nhớ cứ dao động, người giám sát bị báo lại liên tục, mỗi lần chỉ khác vài chục MB. Thông báo ồn làm người đọc dễ bỏ qua cảnh báo thật.
-  file: `scripts/dieu-phoi/phat-lich.mjs`
+- **A lock is taken back mid-run when its holder waits on a long background job, so a second heavy lane can start**
+  Người dùng thấy gì: Khi một thợ chạy việc rất dài ở nền (như ghim lại khoảng 70 phút) và ngồi chờ, khoá của họ có thể bị thu hồi giữa chừng và giao cho thợ khác. Khi đó hai việc nặng chạy cùng lúc trên máy, trong khi báo cáo chỉ nói khoá bị bỏ rơi.
+  file: `scripts/dieu-phoi/lich.mjs`
   severity: medium
   Đề xuất: new-contract
 
-- **A dangling dieu-phoi-hien-tai symlink blocks both `mo` and `dong` with confusing errors**
-  Người dùng thấy gì: Nếu thư mục của đợt bị xoá tay, không thể mở đợt mới cũng không đóng được đợt cũ. Người dùng phải tự xoá liên kết thừa mới làm tiếp được.
-  file: `scripts/dieu-phoi/dieu-phoi.mjs`
-  severity: low
+- **An approved `gia-han` extension request never extends the lease**
+  Người dùng thấy gì: Thợ xin giữ khoá thêm giờ sẽ nhận được câu trả lời đã duyệt, nhưng thời hạn giữ khoá thực tế không đổi. Họ có thể mất khoá giữa chừng dù tưởng đã được gia hạn.
+  file: `scripts/dieu-phoi/yeu-cau.mjs`
+  severity: medium
+  Đề xuất: new-contract
+
+- **Shape 2 (no writer-to-reader round trip): the heartbeat file that hook-nhip writes is never read by motNhip in any test**
+  Người dùng thấy gì: Bộ kiểm tra chưa chứng minh được đường đi trọn vẹn của tín hiệu còn sống của thợ tới quyết định gia hạn hay thu hồi khoá. Nếu phần này bị sửa hỏng, bộ kiểm tra vẫn xanh. Chủ kho đã biết và chấp nhận ở vòng trước.
+  file: `scripts/dieu-phoi/test/phat-lich.test.mjs`
+  severity: high
   Đề xuất: known-limits
 
-- **Hình dạng 3 (assert chuỗi có mặt thay cho quan hệ): ca 'ba ca đỏ' của yeu-cau.test.mjs vẫn khớp cả câu DUYỆT, mà E13 vẫn dẫn nó làm bằng chứng**
-  Người dùng thấy gì: Một phép kiểm tra cũ vẫn xanh dù luật bảo vệ tệp bị gỡ, nhưng luật đó đã có phép kiểm tra đúng ở chỗ khác. Hành vi cho người dùng không sai.
+- **Shape 3 (asserts a substring is present while the promise is ket_qua + reason): the regex 'danh sách bảo vệ' also matches the approval reason**
+  Người dùng thấy gì: Hai bài kiểm tra về tệp được bảo vệ có thể xanh dù máy duyệt nhầm, nhưng một bài kiểm tra khác trong bộ vẫn bắt được lỗi đó. Không có hậu quả mới cho người dùng.
   file: `scripts/dieu-phoi/test/yeu-cau.test.mjs`
-  severity: low
+  severity: medium
   Đề xuất: wont-fix
 
-- **Hình dạng 4 (assert âm tính tự đúng, không chạy luật cũ): nửa 'luật cũ không cấp ai' ở lich.test.mjs vẫn là hằng đúng, mà E3 vẫn ghi là đã đo**
-  Người dùng thấy gì: Một phép kiểm tra so sánh với luật cũ luôn xanh vì không thật sự chạy luật cũ. Việc cấp lượt thực tế của công cụ vẫn được kiểm đúng ở chỗ khác.
+- **Shape 3/4 (substring only, no exit code, no anchor): case 'khoá thuộc phiên khác → exit 2' never asserts exit 2**
+  Người dùng thấy gì: Bài kiểm tra cho trường hợp khoá đang thuộc phiên khác chưa kiểm mã thoát, nên nếu sau này công cụ để lọt lệnh trong trường hợp đó thì bộ kiểm tra vẫn xanh. Hiện công cụ vẫn chặn đúng.
+  file: `scripts/dieu-phoi/test/hook-chan-s4.test.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Shape 4 (lone negative assertion that cannot fail): 'luật cũ không cấp ai' in lich.test is a tautology**
+  Người dùng thấy gì: Một ca kiểm tra luôn xanh và không chứng minh gì, nhưng bài kiểm tra thật cho cùng việc đã có ở chỗ khác. Không ảnh hưởng người dùng.
   file: `scripts/dieu-phoi/test/lich.test.mjs`
   severity: low
   Đề xuất: wont-fix
+
+- **Shape 2 (fake io answers regardless of arguments): the git diff mock does not check which branch is being diffed**
+  Người dùng thấy gì: Phép đo giả lập chưa kiểm được là hệ thống so đúng nhánh của yêu cầu hay không. Nếu sau này so nhầm nhánh thì phép đo vẫn xanh. Rủi ro thấp.
+  file: `_acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+## Chưa adversarial-verify (refuter chết)
+
+Không có.
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
