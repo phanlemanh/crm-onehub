@@ -4,30 +4,17 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { giuPid, motNhip, taoVong, trangThaiHopDong } from '../phat-lich.mjs';
+import { CFG_PHAT_LICH, hangViecHai } from './mau-thu.mjs';
 
 const tam = () => fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'dp-')));
 const NOW = Date.parse('2026-10-05T12:00:00Z');
-const CFG = {
-  nhanh_chinh: 'onehub',
-  han_thue_phut: { s4: 90, 'ghim-lai': 40, 'duong-nen': 40, merge: 120 },
-  nhip_cu_phut: 10,
-  suc_khoe: { swap_gb: 8, ap_luc_muc: 2, rss_gb: 8 },
-  bao_ve: [],
-  s4_tran_gom_phut: 60,
-};
+const CFG = CFG_PHAT_LICH;
 function dung({ swapUsed = 1024 } = {}) {
   const dot = tam();
   const w1 = tam();
   const w2 = tam();
   fs.writeFileSync(path.join(dot, 'dieu-phoi.config.json'), JSON.stringify(CFG));
-  fs.writeFileSync(path.join(dot, 'hang-viec.json'), JSON.stringify({
-    dot: 'thu',
-    day: [{ id: 'P1', worktree: w1, link: 'claude://x/1' }, { id: 'P2', worktree: w2, link: 'claude://x/2' }],
-    hang: [
-      { ma: 'A', slug: 'a', day: 'P1', moc: '2026-10-12', uu_tien: 1, ranh_gioi: ['apps/a/**'] },
-      { ma: 'B', slug: 'b', day: 'P2', moc: '2026-10-14', uu_tien: 1, ranh_gioi: ['apps/b/**'] },
-    ],
-  }));
+  fs.writeFileSync(path.join(dot, 'hang-viec.json'), JSON.stringify(hangViecHai({ dot: 'thu', w1, w2, link: true })));
   for (const d of ['khoa', 'xin', 'yeu-cau', 'tra-loi', 'cho-nguoi', 'tiep']) fs.mkdirSync(path.join(dot, d));
   const io = {
     nowMs: () => NOW,

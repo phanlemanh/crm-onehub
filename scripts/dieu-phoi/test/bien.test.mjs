@@ -10,17 +10,11 @@ import { chamNhip } from '../hook-nhip.mjs';
 import { capLuot } from '../lich.mjs';
 import { motNhip } from '../phat-lich.mjs';
 import { xetYeuCau } from '../yeu-cau.mjs';
+import { CFG_BIEN, hangViecHai } from './mau-thu.mjs';
 
 const tam = () => fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'dp-')));
 const NOW = Date.parse('2026-10-05T12:00:00Z');
-const CFG = {
-  nhanh_chinh: 'main',
-  han_thue_phut: { s4: 90, 'ghim-lai': 40, 'duong-nen': 40, merge: 120 },
-  nhip_cu_phut: 10,
-  suc_khoe: { swap_gb: 8, ap_luc_muc: 2, rss_gb: 8 },
-  bao_ve: ['packages/db/prisma/schema.prisma'],
-  s4_tran_gom_phut: 60,
-};
+const CFG = CFG_BIEN;
 const IO = {
   nowMs: () => NOW,
   chay: (cmd, args) => {
@@ -38,14 +32,7 @@ function dung() {
   const w1 = tam();
   const w2 = tam();
   fs.writeFileSync(path.join(dot, 'dieu-phoi.config.json'), JSON.stringify(CFG));
-  fs.writeFileSync(path.join(dot, 'hang-viec.json'), JSON.stringify({
-    dot: 'bien',
-    day: [{ id: 'P1', worktree: w1 }, { id: 'P2', worktree: w2 }],
-    hang: [
-      { ma: 'A', slug: 'a', day: 'P1', moc: '2026-10-12', uu_tien: 1, ranh_gioi: ['apps/a/**'] },
-      { ma: 'B', slug: 'b', day: 'P2', moc: '2026-10-14', uu_tien: 1, ranh_gioi: ['apps/b/**'] },
-    ],
-  }));
+  fs.writeFileSync(path.join(dot, 'hang-viec.json'), JSON.stringify(hangViecHai({ dot: 'bien', w1, w2 })));
   for (const d of ['khoa', 'xin', 'yeu-cau', 'tra-loi', 'cho-nguoi', 'tiep']) fs.mkdirSync(path.join(dot, d));
   return { dot, w1, w2 };
 }
@@ -118,7 +105,7 @@ test('worktree lồng: cwd trong worktree git lồng không thuộc khoá của 
   assert.equal(phienCuaCwd(hv, longThuc), 'P1');
   assert.equal(phienCuaCwd({ day: [{ id: 'P0', worktree: chinh }] }, longThuc), null);
   const dot = tam();
-  fs.writeFileSync(path.join(dot, 'dieu-phoi.config.json'), '{}');
+  fs.writeFileSync(path.join(dot, 'dieu-phoi.config.json'), JSON.stringify(CFG));
   fs.mkdirSync(path.join(dot, 'khoa', 's4'), { recursive: true });
   fs.writeFileSync(path.join(dot, 'khoa', 's4', 'chu.json'), JSON.stringify({ phien: 'P0', worktree: chinh }));
   const wf = (cwd) => JSON.stringify({ tool_name: 'Workflow', cwd, tool_input: { scriptPath: '/x/acceptance-verify.js' } });

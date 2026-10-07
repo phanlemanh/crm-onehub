@@ -1268,6 +1268,9 @@ executors:
     dph_cli: node --test scripts/dieu-phoi/test/cli.test.mjs
     dph_tat_ca: bun run test:dieu-phoi
     dph_bien: node --test scripts/dieu-phoi/test/bien.test.mjs
+    dph_hinh_dang: node --test scripts/dieu-phoi/test/hinh-dang.test.mjs
+    dph_giu_nhip: node --test scripts/dieu-phoi/test/giu-nhip.test.mjs
+    dph_gia_han: node --test scripts/dieu-phoi/test/gia-han.test.mjs
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
@@ -1945,6 +1948,10 @@ executors:
     dph_ranh_gioi: node _acceptance/dieu-phoi-hai-tang/rang/ranh-gioi.mjs
     dph_dot_bien: node _acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs
     dph_nhip_that: node _acceptance/dieu-phoi-hai-tang/rang/nhip-that.mjs
+    dpvb_cong: bun _acceptance/dieu-phoi-va-bien/rang/cong.mjs
+    dpvb_dot_bien: node _acceptance/dieu-phoi-va-bien/rang/dot-bien.mjs
+    dpvb_s4_that: node _acceptance/dieu-phoi-va-bien/rang/s4-that.mjs
+    dpvb_git_sach: node _acceptance/dieu-phoi-va-bien/rang/git-sach.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
