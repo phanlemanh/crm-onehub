@@ -17,7 +17,7 @@ lệnh `mo`, không phải cấu hình đang chạy.
 | Hợp đồng nối tiếp lần hai: tệp `tra-loi` gia hạn hỏng làm đứng cả nhịp; lệnh bọc hỏng khi lệnh gốc có `TZ=…` đứng trước | Anh chọn «mở hợp đồng mới» ở Cổng 2 của `dieu-phoi-va-bien` | Khuyến nghị gộp trước khi mở đợt — lỗi đầu làm bộ phát lịch đứng, đúng thước §6 số 2 |
 | Duyệt thẻ đóng đợt `dieu-phoi-1410` (`.acceptance-runs/dieu-phoi-1410/the-dong-dot.md`) | Chờ anh — một chạm «đóng đợt» | Anh |
 | Tắt «Auto-archive sessions when their pull request closes» | Đã tắt | — |
-| Claude Code trong app desktop ≥ 2.1.288 (lệnh nền không bị giới hạn thời gian) | CLI 2.1.289; bản trong app chưa kiểm được từ phiên máy | Anh: Claude → Check for Updates, lúc không phiên nào đang chạy S4 |
+| Claude Code trong app desktop ≥ 2.1.288 (lệnh nền không bị giới hạn thời gian) | Đạt — app 2.26454.0 chạy Claude Code 2.1.289 cho mọi phiên (kiểm 07/10, app tự nâng lúc 05:04); CLI 2.1.289 | — |
 | Docker và Postgres chạy (`lsof -nP -iTCP:5432 -sTCP:LISTEN`) | 07/10 đầu phiên Docker tắt, cả bốn suite đỏ giả; đã mở lại | Phiên giám sát kiểm mỗi lần thức |
 | Chế độ quyền của phiên giám sát (mặc định của máy: auto) | Anh chọn giữ hay đổi | Anh |
 | Cổng Đáng F9–F12 (vệ sinh thước) | Chưa ký — ba hàng có `opportunity.md` ở `stage: discovery` | Anh, nếu muốn chúng vào đợt |
