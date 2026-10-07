@@ -141,10 +141,6 @@ const en = {
 		views: (n: string) => `${n} views`,
 	},
 	facts: {
-		added: "Added to the record.",
-		accept: "Accept",
-		dismiss: "Reject",
-		dismissed: "Dismissed — it won't be suggested again.",
 		pricing: "Pricing",
 		careers: "Careers",
 	},
@@ -461,10 +457,6 @@ const vi = {
 		views: (n: string) => `${n} lượt xem`,
 	},
 	facts: {
-		added: "Đã thêm vào hồ sơ.",
-		accept: "Nhận",
-		dismiss: "Bác",
-		dismissed: "Đã bỏ hẳn — sẽ không gợi ý lại.",
 		pricing: "Bảng giá",
 		careers: "Tuyển dụng",
 	},

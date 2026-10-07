@@ -133,6 +133,7 @@ const KHONG_DAU = new Set([
 	"banNhap.kr",
 	"loaiDong.kr-moi",
 	"cuoc.xem",
+	"tabs.agent",
 ]);
 
 function mienDau(khoa: string): boolean {

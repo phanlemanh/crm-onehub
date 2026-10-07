@@ -29,16 +29,19 @@ import {
 	type DetailSheetTab,
 	DetailSheetTabs,
 } from "@/components/detail-sheet";
+import { crmMessages } from "@/lib/messages/crm";
 import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { useRecordStack } from "./record-stack";
 
 export function KhungTaiLoi({ onRetry }: { onRetry?: () => void }) {
-	const t = karaBanGhiMessages(useLocale()).khung;
+	const locale = useLocale();
+	const m = crmMessages(locale);
+	const t = karaBanGhiMessages(locale).khung;
 	return (
 		<div className="flex min-h-0 flex-1 items-center justify-center p-6">
 			<Empty border="solid" size="compact" data-khung-tai-loi="">
 				<EmptyHeader>
-					<EmptyTitle>{t.loiTieuDe}</EmptyTitle>
+					<EmptyTitle>{m.misc.recordNotLoaded}</EmptyTitle>
 					<EmptyDescription>{t.loiMoTa}</EmptyDescription>
 				</EmptyHeader>
 				{onRetry ? (

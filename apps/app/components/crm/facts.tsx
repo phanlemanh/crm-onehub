@@ -12,10 +12,7 @@ import { flushSync } from "react-dom";
 import { toast } from "sonner";
 import { LocalDateTime } from "@/components/local-date-time";
 import type { ContactFact, FactReceipt, FactTruoc } from "@/lib/contact-facts";
-import {
-	type KaraBanGhiMessages,
-	karaBanGhiMessages,
-} from "@/lib/messages/kara-ban-ghi";
+import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
@@ -33,22 +30,6 @@ export function FactProvenance({ fact }: { fact: ContactFact }) {
 			sourceUrl={fact.sourceUrl}
 		/>
 	);
-}
-
-function bienNhan(
-	receipt: FactReceipt,
-	t: KaraBanGhiMessages["deXuat"],
-	onUndo: (() => void) | undefined,
-): ProposedChangeDecided {
-	return {
-		decision: receipt.decision === "accept" ? "accepted" : "dismissed",
-		text: receipt.loi
-			? t.hoanTacLoi
-			: receipt.decision === "accept"
-				? t.daThem
-				: t.daBo,
-		onUndo: receipt.loi ? undefined : onUndo,
-	};
 }
 
 export function FactSuggestion({
@@ -102,6 +83,16 @@ export function FactSuggestion({
 			? () => undo.mutate({ factId: receipt.fact.id, truoc: receipt.truoc })
 			: undefined;
 
+	const decided: ProposedChangeDecided | undefined = receipt && {
+		decision: receipt.decision === "accept" ? "accepted" : "dismissed",
+		text: receipt.loi
+			? t.hoanTacLoi
+			: receipt.decision === "accept"
+				? t.daThem
+				: t.daBo,
+		onUndo: receipt.loi ? undefined : hoanTac,
+	};
+
 	return (
 		<div ref={khung}>
 			<KaraProposal
@@ -110,7 +101,7 @@ export function FactSuggestion({
 				value={<span translate="no">{fact.value}</span>}
 				rationale={fact.evidence.map((item) => item.detail).join(" · ")}
 				pending={decide.isPending}
-				decided={receipt ? bienNhan(receipt, t, hoanTac) : undefined}
+				decided={decided}
 				actions={[
 					{
 						id: "nhan",
@@ -151,7 +142,7 @@ export function FactGroupLabel({ facts }: { facts: readonly ContactFact[] }) {
 	if (facts.length === 0) return null;
 	return (
 		<KaraLabel
-			scope={t.nhan(facts.length)}
+			scope={t.nhan.replace("{n}", String(facts.length))}
 			reason={t.viSao}
 			readAt={ngayDoc(facts, locale)}
 		/>
