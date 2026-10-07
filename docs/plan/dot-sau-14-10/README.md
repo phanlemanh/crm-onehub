@@ -21,18 +21,20 @@ thêm phần vòng đời, K6a chờ thêm E5 và V2. Chi tiết ở mục 2.
 | Việc | Trạng thái 07/10 | Ai |
 |---|---|---|
 | Gộp `dieu-phoi-hai-tang` (tầng máy 1a) | Xong — #288, 07/10 | — |
-| Gộp `dieu-phoi-va-bien` (hook nhận bản chép S4, kiểm hình dạng cấu hình, test vào cổng, giữ nhịp, gia hạn) | Đã ký Cổng 2 07/10; PR chưa mở | Phiên vá biên mở PR, anh gộp |
-| Hợp đồng nối tiếp lần hai: tệp `tra-loi` gia hạn hỏng làm đứng cả nhịp; lệnh bọc hỏng khi lệnh gốc có `TZ=…` đứng trước | Anh chọn «mở hợp đồng mới» ở Cổng 2 của `dieu-phoi-va-bien` | Khuyến nghị gộp trước khi mở đợt — lỗi đầu làm bộ phát lịch đứng, đúng thước §6 số 2 |
-| Duyệt thẻ đóng đợt `dieu-phoi-1410` (`.acceptance-runs/dieu-phoi-1410/the-dong-dot.md`) | Chờ anh — một chạm «đóng đợt» | Anh |
+| Gộp `dieu-phoi-va-bien` (hook nhận bản chép S4, kiểm hình dạng cấu hình, test vào cổng, giữ nhịp, gia hạn) | Xong — #291, 07/10 | — |
+| Hợp đồng nối tiếp lần hai: tệp `tra-loi` gia hạn hỏng làm đứng cả nhịp; lệnh bọc hỏng khi lệnh gốc có `TZ=…` đứng trước; `pre-push` dùng hook của chính cây | Xong — #298 (`dieu-phoi-truoc-mo-dot`), 07/10. #296 làm trùng hai mục đầu, đã đóng | — |
+| Duyệt thẻ đóng đợt `dieu-phoi-1410` (`.acceptance-runs/dieu-phoi-1410/the-dong-dot.md`) | Xong — đóng 07/10; không còn symlink `dieu-phoi-hien-tai` | — |
 | Tắt «Auto-archive sessions when their pull request closes» | Đã tắt | — |
 | Claude Code trong app desktop ≥ 2.1.288 (lệnh nền không bị giới hạn thời gian) | Đạt — app 2.26454.0 chạy Claude Code 2.1.289 cho mọi phiên (kiểm 07/10, app tự nâng lúc 05:04); CLI 2.1.289 | — |
 | Docker và Postgres chạy (`lsof -nP -iTCP:5432 -sTCP:LISTEN`) | 07/10 đầu phiên Docker tắt, cả bốn suite đỏ giả; đã mở lại | Phiên giám sát kiểm mỗi lần thức |
 | Chế độ quyền của phiên giám sát (mặc định của máy: auto) | Anh chọn giữ hay đổi | Anh |
 | Cổng Đáng F9–F12 (vệ sinh thước) | Chưa ký — ba hàng có `opportunity.md` ở `stage: discovery` | Anh, nếu muốn chúng vào đợt |
-| Thư mục chính `~/dev/crm` về `onehub` mới nhất (`git pull --ff-only origin onehub`) | 07/10 chiều còn chậm 73 commit | Anh, hoặc phiên giám sát nếu không phiên nào đang làm ở đó |
-| Bản vá ba lỗ của bộ kit nghiệm thu: vòng sửa S4 làm rơi mục ngoài hợp đồng của vòng trước, rơi khung ảnh ui-check mang sang, bộ đếm vật/thước tính cả phần gộp từ onehub | Đang chạy ở phiên riêng trên `acceptance-gate-kit` | Gộp và cài cùng phiên bản trước khi mở đợt; chưa có thì áp luật 13 của `LUAT-rieng.md` |
-| Ngân sách mô hình cho các hàng Kara (K2, K3, K4, K6b) | Ngân sách team chạm trần 07/10 (lỗi 402) | Anh nạp; chưa nạp thì phép đo gọi mô hình thật đỏ giả |
+| Thư mục chính `~/dev/crm` về `onehub` mới nhất (`git pull --ff-only origin onehub`) | Đã kéo 07/10 sau #297; kiểm lại ngay trước lệnh `mo` | Phiên giám sát |
+| Bản vá ba lỗ của bộ kit nghiệm thu: vòng sửa S4 làm rơi mục ngoài hợp đồng của vòng trước, rơi khung ảnh ui-check mang sang, bộ đếm vật/thước tính cả phần gộp từ onehub | Còn ở nhánh `fix/luot-sua-giu-du-dem-dung` của kit, chưa có PR; bản đang cài 2.24.0 khớp `main` của kit (kiểm 07/10) | Gộp và cài cùng phiên bản trước khi mở đợt; chưa có thì áp luật 13 của `LUAT-rieng.md` |
+| Ngân sách mô hình cho các hàng Kara (K2, K3, K4, K6b) | Ngân sách team chạm trần 07/10 (lỗi 402); anh đang nạp 07/10 | Anh nạp; chưa nạp thì phép đo gọi mô hình thật đỏ giả |
 | Bài «số người gõ» của Trợ lý OKR chập chờn | Có chip riêng; chip gộp trước khi mở đợt thì bỏ hàng F13 | Anh bấm chip, hoặc để F13 làm |
+| Bài «người dùng huỷ» của cửa soạn OKR lắc theo tốc độ máy (`nguoi-huy-khong-lac`) | Đã ký Cổng 2; #294 đã gộp `onehub` mới, CI đang chạy lại | Anh gộp khi CI xanh |
+| Bài `chen-lien-ket` › «Esc đóng hộp và trả focus về trình soạn» của `packages/ui` chập chờn trên CI — có mặt trong 9 trên 12 lượt CI đỏ gần nhất (30/09–07/10), mọi lần trên nhánh không chạm `packages/ui`; tại chỗ xanh 8/8 | Có chip riêng, chưa chạy. Chưa sửa thì mỗi dãy tốn thêm lượt chạy lại CI | Anh bấm chip, hoặc phiên giám sát thêm vào P4 cạnh F13 |
 
 ## 2. Dãy và hàng
 
