@@ -136,7 +136,7 @@ evals:
       - "Bấm dòng gập → M3 → ảnh E12-ngan-da-bo (nút «Dùng lại», menu có «Xoá mục tiêu»); bấm «Dùng lại» → ảnh E12-sau-dung-lai (M3 về danh sách chính, nhãn «Nháp», dòng gập «Đã bỏ (1)»)"
       - "Lặp danh sách ở 390/vi → ảnh E12-danh-sach-390; mở dòng gập → E12-da-bo-mo-390"
       - "Mở {APP_URL}/<slug>/okr bằng tài khoản người phụ trách M4 (dev:session) ở 1440/vi → ảnh E12-cua-toi (dòng gập «Đã bỏ (1)» đóng)"
-      - "Mọi ảnh ghi ở _acceptance/don-okr-nhap-sai/evidence/ (đường suy từ gốc kho)"
+      - "Chạy với BANG_CHUNG=_acceptance/don-okr-nhap-sai/evidence (đường tuyệt đối suy từ gốc kho) để mười ảnh nằm trong hồ sơ; thiếu biến thì thước ghi vào .acceptance-runs/don-okr-nhap-sai/evidence"
     expected: |
       Script khẳng định TẬP tên ảnh trong evidence/ có tiền tố E12- bằng đúng mười tên
       viết trước: E12-danh-sach, E12-da-bo-mo, E12-menu-nhap-sach, E12-hoi-xoa,
