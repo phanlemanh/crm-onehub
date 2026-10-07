@@ -1279,6 +1279,8 @@ executors:
     dph_hinh_dang: node --test scripts/dieu-phoi/test/hinh-dang.test.mjs
     dph_giu_nhip: node --test scripts/dieu-phoi/test/giu-nhip.test.mjs
     dph_gia_han: node --test scripts/dieu-phoi/test/gia-han.test.mjs
+    nhkl_duong_cham: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t khong-lac-duong-cham"
+    nhkl_fetch_gia: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t fetch-gia-theo-that"
     dph_tra_loi: node --test scripts/dieu-phoi/test/tra-loi.test.mjs
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
