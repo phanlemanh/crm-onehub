@@ -20,7 +20,7 @@ nhận theo nhóm; đi 0 → 1 → 2 → 3. K1 (`bo-xuong-kara`, #258) dựng s�
 
 1. Đường `/<slug>/okr/soan/<cuộc>`; nút «Soạn» và «Tiếp tục» mở trang; link cũ `?cuocSoan=` chuyển sang trang.
 2. Trang ẩn đầu trang OKR (tab, chọn chu kỳ); đầu riêng: «← Theo đơn vị» · đơn vị · chu kỳ · lượt.
-3. Hai ô co giãn bằng `resizable` của shadcn, hội thoại mặc định 380 px; ≤ 640 px hai tab.
+3. Hai ô co giãn bằng `resizable` của shadcn, hội thoại mặc định 380 px; dưới 1024 px hai tab (sửa sau gap-probe F1: 640 → 1024).
 4. Bản nháp là `KaraArtifact`: đầu khung là chỗ duy nhất nói trạng thái; chân khung có «Đưa vào» và «còn thiếu».
 5. Dòng thay thẻ: Mục tiêu là một nhóm, KR là dòng; nút gọi theo hậu quả; nhận cả nhóm.
 6. Hoàn tác mọi quyết định; hoàn tác Mục tiêu kéo KR đã quyết của nó về chờ; sau «Đưa vào» thì hết.
@@ -45,9 +45,10 @@ trang soạn tự đặt đầu của mình. `tabTuDuong` không đổi.
 
 ### Khung
 
-`TrangSoan` = đầu trang + thân. Thân rộng (> 640 px) là `ResizablePanelGroup` ngang: ô hội thoại (mặc định
+`TrangSoan` = đầu trang + thân. Thân rộng (≥ 1024 px) là `ResizablePanelGroup` ngang: ô hội thoại (mặc định
 380 px quy ra phần trăm theo bề rộng thân, tối thiểu 300 px, tối đa 50%) · `ResizableHandle withHandle` · ô bản
-nháp. Thân hẹp (≤ 640 px) là `Tabs` hai tab «Trò chuyện» / «Bản nháp (n)», tab đang mở nằm trên URL
+nháp. Ngưỡng 1024 px vì dưới đó thân hẹp hơn 760 px, không giữ được cùng lúc «mặc định 380» và «tối đa nửa thân»;
+`SOAN_UI.khoHep` đổi từ 640 sang `(max-width: 1023px)`. Thân hẹp (< 1024 px) là `Tabs` hai tab «Trò chuyện» / «Bản nháp (n)», tab đang mở nằm trên URL
 (`?tab=ban-nhap`, nuqs) theo luật «URL là trạng thái». Cỡ ô không lưu (YAGNI); mở lại về mặc định.
 
 `resizable` cài vào `packages/ui` bằng CLI shadcn (bậc 2 của `docs/design.md`), `--dry-run` trước, không
@@ -134,7 +135,8 @@ thoại «Sẽ gửi kèm lượt sau: …». Kara đọc khối như chữ thư
 ### Số đã gõ
 
 `SoDaGo` đổi khoá từ `kr.id` sang `khoaDong`; ghi kèm vào `sessionStorage` theo `cuocSoanId` (bọc try/catch, hỏng
-thì chỉ sống trong bộ nhớ). Kara nộp lại, đổi tab hẹp, tải lại trang trong cùng phiên trình duyệt đều giữ số.
+thì chỉ sống trong bộ nhớ). Đọc `sessionStorage` chỉ sau khi gắn vào trang (không trong lúc dựng ở máy chủ), để
+bản dựng máy chủ và bản hydrate cùng một cây; ô số hiện giá trị đã lưu ngay sau lần gắn đầu. Kara nộp lại, đổi tab hẹp, tải lại trang trong cùng phiên trình duyệt đều giữ số.
 «Đưa vào» gửi số theo `deXuatId` của dòng hiện tại như hôm nay.
 
 ### Cổng mồ côi
@@ -146,6 +148,8 @@ cổng đi tiếp qua `packages/ui/src/components/kara/*.tsx` như cầu (Ngoài
 ## Xử lý lỗi
 
 - Quyết hay hoàn tác bị API từ chối → `error` tại dòng (chữ theo `lyDoQuyet`), dòng giữ nguyên, chữ đang sửa còn.
+  Lỗi tRPC `CONFLICT` (dòng của lần nộp cũ, cuộc không còn đang soạn) cũng hiện tại dòng, bằng chữ riêng
+  `lyDoQuyet.dongCu` / `lyDoQuyet.cuocKhongDang` chọn theo mã, không đẩy lên vùng lỗi chung.
 - Mạng lỗi khi quyết → như trên, chữ chung «Kara chưa ghi được quyết định này».
 - Kara hỏng / quá 45 giây / hết lượt / chưa cấu hình / cuộc đóng → giữ hành vi đã có của R1h và
   `soan-okr-song-lai`; chỉ đổi khung sang `KaraState` và `KaraRetry`.
@@ -171,7 +175,7 @@ cổng đi tiếp qua `packages/ui/src/components/kara/*.tsx` như cầu (Ngoài
   hay cả nhóm, hỏi Kara về dòng chưa ưng → «Đưa vào» → xác nhận (điểm ra: biên nhận «Đã tạo N Mục tiêu» với
   «Xem trên Theo đơn vị»).
 - Biên: cuộc đã có từ trước («Tiếp tục») · Kara nộp lại khi người đang sửa một dòng · KR mốc không cần số ·
-  Mục tiêu bị bỏ qua kéo KR · link cũ `?cuocSoan=` · khổ ≤ 640 px.
+  Mục tiêu bị bỏ qua kéo KR · link cũ `?cuocSoan=` · khổ dưới 1024 px.
 - Lỗi & quay lại: quyết bị từ chối → lỗi tại dòng, sửa và thử lại · Kara hỏng → «Kara chưa trả lời được» +
   «Thử lại» trong hội thoại · hết lượt → ô soạn khoá kèm lý do và «Mở cuộc mới» · lối về luôn là «← Theo đơn vị».
 
@@ -199,7 +203,7 @@ cổng đi tiếp qua `packages/ui/src/components/kara/*.tsx` như cầu (Ngoài
 | ST-soan-het-luot | Trang soạn | ô soạn khoá, lý do + «Mở cuộc mới» | mở cuộc mới hoặc quyết nốt và đưa vào |
 | ST-soan-da-dua-vao | Trang soạn | biên nhận «Đã tạo 3 Mục tiêu» + «Xem trên Theo đơn vị»; dòng chỉ đọc | sang Theo đơn vị |
 | ST-soan-khong-mo | Trang soạn | `KaraState error` «Không mở được cuộc soạn» | Thử lại hoặc ← Theo đơn vị |
-| ST-soan-hep | Trang soạn ≤ 640 px | hai tab «Trò chuyện» / «Bản nháp (n)», tab trên URL | đổi tab |
+| ST-soan-hep | Trang soạn < 1024 px | hai tab «Trò chuyện» / «Bản nháp (n)», tab trên URL | đổi tab |
 <!-- UX-STATE-TABLE>>> -->
 
 ### 4. Hành vi
