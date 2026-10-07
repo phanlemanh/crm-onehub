@@ -34,6 +34,8 @@ const DOT_BIEN = [
 	{ ma: "M20", tep: "yeu-cau.mjs", tim: "    if (khopMot(baoVe, t)) return { ket_qua: 'can_phan', ly_do: `${t} thuộc danh sách bảo vệ` };\n", thay: "", ghim: [["bien", "cham-tep bảo vệ: migrations và chung_chi_them → can_phan đúng lý do; tệp thường cùng ngữ cảnh → duyệt"]] },
 	{ ma: "M21", tep: "phat-lich.mjs", tim: "      cap_luc: new Date(nowMs).toISOString(),\n", thay: "", ghim: [["bien", "chu.json khi cấp: cap_luc là giờ nhịp và han_thue_den = cap_luc + han_thue_phut theo loại"]] },
 	{ ma: "M22", tep: "phat-lich.mjs", tim: ".map((y) => ({ ...y, id: y._ten }))", thay: "", ghim: [["bien", "viec-phu ở nhịp thật: yêu cầu đầu → can_phan cho giám sát; yêu cầu trùng sau → gộp với id yêu cầu cũ"]] },
+	{ ma: "M23", tep: "yeu-cau.mjs", tim: "      truocDo(c, yc) &&\n", thay: "", ghim: [["bien", "viec-phu trùng tới cùng nhịp: yêu cầu cũ hơn lên giám sát, yêu cầu mới hơn gộp vào nó; cùng giờ thì so mã"]] },
+	{ ma: "M23b", tep: "yeu-cau.mjs", tim: " || (lc === ly && String(c.id) < String(yc.id))", thay: " || lc === ly", ghim: [["bien", "viec-phu trùng tới cùng nhịp: yêu cầu cũ hơn lên giám sát, yêu cầu mới hơn gộp vào nó; cùng giờ thì so mã"]] },
 ];
 
 const ghi = (s) => process.stdout.write(`${s}\n`);

@@ -180,3 +180,17 @@ test('viec-phu ở nhịp thật: yêu cầu đầu → can_phan cho giám sát;
   assert.deepEqual([tl.ket_qua, tl.boi, tl.voi, tl.ly_do], ['gop', 'may', 'P1-1', 'trùng yêu cầu P1-1']);
   assert.equal(suKien(dot).filter((s) => s.loai === 'yeu-cau' && s.id === 'P1-1' && s.can_phan).length, 1);
 });
+
+test('viec-phu trùng tới cùng nhịp: yêu cầu cũ hơn lên giám sát, yêu cầu mới hơn gộp vào nó; cùng giờ thì so mã', async () => {
+  for (const [lucP1, lucP2] of [['2026-10-05T11:00:00Z', '2026-10-05T11:05:00Z'], ['2026-10-05T11:00:00Z', '2026-10-05T11:00:00Z']]) {
+    const { dot } = dung();
+    ghi(path.join(dot, 'yeu-cau', 'P2-1.json'), { phien: 'P2', loai: 'viec-phu', hang: 'b', noi_dung: { kho: 'crm', tieu_de: 'Sửa ca chập chờn' }, luc: lucP2 });
+    ghi(path.join(dot, 'yeu-cau', 'P1-1.json'), { phien: 'P1', loai: 'viec-phu', hang: 'a', noi_dung: { kho: 'crm', tieu_de: 'sửa ca chập chờn' }, luc: lucP1 });
+    await motNhip(dot, IO);
+    assert.equal(fs.existsSync(path.join(dot, 'tra-loi', 'P1-1.json')), false, lucP2);
+    const len = suKien(dot).filter((s) => s.loai === 'yeu-cau' && s.id === 'P1-1');
+    assert.deepEqual(len.map((s) => [s.can_phan, s.ly_do]), [[true, 'việc phụ mới']], lucP2);
+    const tl = JSON.parse(fs.readFileSync(path.join(dot, 'tra-loi', 'P2-1.json'), 'utf8'));
+    assert.deepEqual([tl.ket_qua, tl.voi], ['gop', 'P1-1'], lucP2);
+  }
+});

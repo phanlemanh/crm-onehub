@@ -45,6 +45,12 @@ function xetChamTep(yc, nguCanh, cfg) {
 
 const chuanHoa = (s) => (s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
 
+const truocDo = (c, yc) => {
+  const lc = Date.parse(c.luc);
+  const ly = Date.parse(yc.luc);
+  return lc < ly || (lc === ly && String(c.id) < String(yc.id));
+};
+
 function xetViecPhu(yc, nguCanh) {
   const luc = Date.parse(yc.luc);
   const tepMoi = yc.noi_dung?.tep ?? [];
@@ -52,6 +58,7 @@ function xetViecPhu(yc, nguCanh) {
     (c) =>
       c.loai === 'viec-phu' &&
       c.id !== yc.id &&
+      truocDo(c, yc) &&
       luc - Date.parse(c.luc) < MOT_NGAY_MS &&
       c.noi_dung?.kho === yc.noi_dung?.kho &&
       (chuanHoa(c.noi_dung?.tieu_de) === chuanHoa(yc.noi_dung?.tieu_de) ||
