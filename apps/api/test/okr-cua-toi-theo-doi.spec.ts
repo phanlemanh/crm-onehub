@@ -74,6 +74,17 @@ const mineCua = (cookie: string, cycleId: string) =>
 	doc<Mine>("okr.mine", cookie, { cycleId });
 const noi = (r: Mine, id: string): Mang[] =>
 	MANG.filter((k) => r[k].some((m) => m.id === id));
+type TapId = Record<Mang, string[]>;
+const tap = (r: Mine): TapId => ({
+	objectives: r.objectives.map((m) => m.id).sort(),
+	daBo: r.daBo.map((m) => m.id).sort(),
+	dangTheoDoi: r.dangTheoDoi.map((m) => m.id).sort(),
+});
+const lap = (r: Mine): number => {
+	const tatCa = MANG.flatMap((k) => r[k].map((m) => m.id));
+	return tatCa.length - new Set(tatCa).size;
+};
+const xep = (ids: string[]): string[] => [...ids].sort();
 
 function ghim(dung: boolean, thongDiep: string): void {
 	if (!dung) throw new Error(thongDiep);
@@ -127,26 +138,28 @@ describe("mine-vai", () => {
 		expect(nhap.status).toBe("nhap");
 		const r = await mineCua(s.cu, s.cycleId);
 		ghim(!noi(r, m5).includes("objectives"), "M5 o objectives");
-		expect({
-			m1: noi(r, m1),
-			m2: noi(r, m2),
-			m3: noi(r, m3),
-			m4: noi(r, m4),
-			m5: noi(r, m5),
-			m6: noi(r, m6),
-		}).toEqual({
-			m1: ["objectives"],
-			m2: ["objectives"],
-			m3: ["objectives"],
-			m4: ["objectives"],
-			m5: ["dangTheoDoi"],
+		expect({ tap: tap(r), lap: lap(r), m6: noi(r, m6) }).toEqual({
+			tap: {
+				objectives: xep([m1, m2, m3, m4]),
+				daBo: [],
+				dangTheoDoi: [m5],
+			},
+			lap: 0,
 			m6: [],
 		});
 	});
 
 	test("mine-vai: doi chung — M5 la cua V nen o objectives cua V", async () => {
 		const r = await mineCua(s.cv, s.cycleId);
-		expect(noi(r, m[4])).toEqual(["objectives"]);
+		const [, m2, m3, m4, m5, m6] = m;
+		expect({ tap: tap(r), lap: lap(r) }).toEqual({
+			tap: {
+				objectives: xep([m2, m3, m4, m5, m6]),
+				daBo: [],
+				dangTheoDoi: [],
+			},
+			lap: 0,
+		});
 	});
 });
 
@@ -161,12 +174,10 @@ describe("trung-vai", () => {
 		const ten = ["T1", "T2", "T3", "T4"];
 		for (const [i, id] of t.entries())
 			ghim(!noi(r, id).includes("dangTheoDoi"), `${ten[i]} o dangTheoDoi`);
-		expect(t.map((id) => noi(r, id))).toEqual([
-			["objectives"],
-			["objectives"],
-			["objectives"],
-			["objectives"],
-		]);
+		expect({ tap: tap(r), lap: lap(r) }).toEqual({
+			tap: { objectives: xep(t), daBo: [], dangTheoDoi: [] },
+			lap: 0,
+		});
 	});
 });
 
@@ -185,14 +196,10 @@ describe("da-bo", () => {
 		for (const id of [d[0], ...d.slice(2), d5]) await bo(id);
 		const r = await mineCua(s.cu, s.cycleId);
 		ghim(!noi(r, d5).includes("dangTheoDoi"), "D5 o dangTheoDoi");
-		expect({
-			bonVai: d.map((id) => noi(r, id)),
-			d5: noi(r, d5),
-			d6: noi(r, d6),
-		}).toEqual({
-			bonVai: [["daBo"], ["daBo"], ["daBo"], ["daBo"]],
+		expect({ tap: tap(r), lap: lap(r), d5: noi(r, d5) }).toEqual({
+			tap: { objectives: [], daBo: xep(d), dangTheoDoi: [d6] },
+			lap: 0,
 			d5: [],
-			d6: ["dangTheoDoi"],
 		});
 	});
 });
@@ -203,7 +210,7 @@ describe("hien-thi", () => {
 		const h = await mt(s.cycleId, ONEHUB, s.v);
 		await congBo(h, s.v);
 		await theoDoi(h, true, s.cu);
-		const truoc = noi(await mineCua(s.cu, s.cycleId), h);
+		const truoc = tap(await mineCua(s.cu, s.cycleId));
 		ok(
 			await goi("okr.datHienThi", {
 				objectiveId: h,
@@ -212,8 +219,9 @@ describe("hien-thi", () => {
 			}),
 			"gioi han",
 		);
-		const gioiHan = noi(await mineCua(s.cu, s.cycleId), h);
-		ghim(gioiHan.length === 0, "H lo du bi gioi han");
+		const rGioiHan = await mineCua(s.cu, s.cycleId);
+		ghim(noi(rGioiHan, h).length === 0, "H lo du bi gioi han");
+		const gioiHan = tap(rGioiHan);
 		ok(
 			await goi("okr.datHienThi", {
 				objectiveId: h,
@@ -222,11 +230,12 @@ describe("hien-thi", () => {
 			}),
 			"cong khai",
 		);
-		const sau = noi(await mineCua(s.cu, s.cycleId), h);
+		const sau = tap(await mineCua(s.cu, s.cycleId));
+		const chiH = { objectives: [], daBo: [], dangTheoDoi: [h] };
 		expect({ truoc, gioiHan, sau }).toEqual({
-			truoc: ["dangTheoDoi"],
-			gioiHan: [],
-			sau: ["dangTheoDoi"],
+			truoc: chiH,
+			gioiHan: { objectives: [], daBo: [], dangTheoDoi: [] },
+			sau: chiH,
 		});
 	});
 });
@@ -237,16 +246,18 @@ describe("bo-theo-doi", () => {
 		const f = await mt(s.cycleId, ONEHUB, s.v);
 		await congBo(f, s.v);
 		await theoDoi(f, true, s.cu);
-		const bat = noi(await mineCua(s.cu, s.cycleId), f);
+		const bat = tap(await mineCua(s.cu, s.cycleId));
 		await theoDoi(f, false, s.cu);
-		const tat = noi(await mineCua(s.cu, s.cycleId), f);
-		ghim(tat.length === 0, "F con o dangTheoDoi sau khi tat");
+		const rTat = await mineCua(s.cu, s.cycleId);
+		ghim(noi(rTat, f).length === 0, "F con o dangTheoDoi sau khi tat");
+		const tat = tap(rTat);
 		await theoDoi(f, true, s.cu);
-		const batLai = noi(await mineCua(s.cu, s.cycleId), f);
+		const batLai = tap(await mineCua(s.cu, s.cycleId));
+		const chiF = { objectives: [], daBo: [], dangTheoDoi: [f] };
 		expect({ bat, tat, batLai }).toEqual({
-			bat: ["dangTheoDoi"],
-			tat: [],
-			batLai: ["dangTheoDoi"],
+			bat: chiF,
+			tat: { objectives: [], daBo: [], dangTheoDoi: [] },
+			batLai: chiF,
 		});
 	});
 });
