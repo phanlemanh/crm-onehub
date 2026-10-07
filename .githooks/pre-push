@@ -25,6 +25,7 @@ fail() {
 }
 
 ROOT="$(git rev-parse --show-toplevel)"
+unset $(git rev-parse --local-env-vars)
 LOG="$(mktemp)"
 RUNS_BEFORE="$(mktemp)"
 trap 'rm -f "$LOG" "$RUNS_BEFORE"' EXIT

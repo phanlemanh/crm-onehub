@@ -5,6 +5,8 @@ import { join } from "node:path";
 const SUMMARY_LINE = /^(?:ℹ|#) (tests|fail) (\d+)\s*$/gm;
 const SECTION_MARK = "pre-push: bun run ";
 
+export const withoutGitVars = (env) => Object.fromEntries(Object.entries(env).filter(([key]) => !key.startsWith("GIT_")));
+
 export function nodeTestSummary(text) {
 	const seen = {};
 	for (const match of text.matchAll(SUMMARY_LINE)) seen[match[1]] = Number(match[2]);
@@ -31,6 +33,7 @@ export function runReference(root, dir) {
 	if (files.length === 0) return null;
 	const run = spawnSync("node", ["--test", "--test-reporter=tap", ...files], {
 		cwd: root,
+		env: withoutGitVars(process.env),
 		encoding: "utf8",
 	});
 	return nodeTestSummary(`${run.stdout || ""}${run.stderr || ""}`);
