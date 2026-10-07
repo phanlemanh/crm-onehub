@@ -607,7 +607,7 @@ describe("kara-ban-ghi", () => {
 			{
 				ten: "contact",
 				duong: "contacts.byId",
-				lay: caNhanGia,
+				lay: lanDauLoi(caNhanGia),
 				man: <ContactSheet contactId="ct-1" />,
 				url: "?record=contact:ct-1",
 				chu: "Hà",
@@ -615,7 +615,7 @@ describe("kara-ban-ghi", () => {
 			{
 				ten: "company",
 				duong: "companies.byId",
-				lay: congTyGia,
+				lay: lanDauLoi(congTyGia),
 				man: <CompanySheet companyId="co-1" />,
 				url: "?record=company:co-1",
 				chu: "Thép Hòa Phát",
@@ -623,7 +623,7 @@ describe("kara-ban-ghi", () => {
 			{
 				ten: "deal",
 				duong: "deals.byId",
-				lay: thoaThuanGia,
+				lay: lanDauLoi(thoaThuanGia),
 				man: <DealSheet dealId="d-1" />,
 				url: "?record=deal:d-1",
 				chu: "Hợp đồng thép quý 4",
@@ -635,7 +635,7 @@ describe("kara-ban-ghi", () => {
 			datLai();
 			dat("users.list", () => []);
 			dat("onboarding.listTemplates", () => []);
-			dat(o.duong, lanDauLoi(o.lay));
+			dat(o.duong, o.lay);
 			await mo(
 				<DetailSheet open onOpenChange={() => {}}>
 					{o.man}
