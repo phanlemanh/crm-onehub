@@ -11,6 +11,7 @@ context until you read them, and the rules in them are not optional.
 | `.env`, configuration, which variables exist and why | `docs/environment.md` |
 | UI in `apps/app` or `packages/ui` | `docs/design.md` (below) |
 | Bất cứ trang nào dưới `/settings` — khung trang, thanh bên, cách lưu, danh sách | `docs/settings.md` |
+| Loại bản ghi mới, danh sách, nút xoá hay lưu trữ, trạng thái kết thúc (bỏ, đóng, kết thúc) | `docs/vong-doi.md` |
 | Bản mẫu giao diện dưới `/proto`, thêm một proto cho phiên design-pass | `docs/proto.md` |
 | Cài hay dùng một thành phần, ví dụ hay block ReUI (`@reui/…`) | `docs/reui.md` |
 | Agent chat UI — AI Elements owns the conversation; check its register before building anything | `docs/chat-ui.md` |
