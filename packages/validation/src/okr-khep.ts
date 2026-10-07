@@ -67,9 +67,23 @@ export function diemMucTieu(
 	);
 }
 
-export const CACH_DOC = ["tot", "duoi-muc-tot", "dat", "chua-tron"] as const;
+export const CACH_DOC = [
+	"tot",
+	"duoi-muc-tot",
+	"dat",
+	"chua-tron",
+	"da-tra-loi",
+	"chua-tra-loi",
+] as const;
 export type CachDoc = (typeof CACH_DOC)[number];
-export function cachDoc(loai: LoaiMucTieu, diem: number): CachDoc {
+export function cachDoc(
+	loai: LoaiMucTieu,
+	diem: number | null,
+	dieuHocDuoc: string,
+): CachDoc | null {
+	if (loai === "hoc-tap")
+		return dieuHocDuoc.trim() ? "da-tra-loi" : "chua-tra-loi";
+	if (diem === null) return null;
 	if (loai === "tham-vong")
 		return diem >= OKR_KHEP.nguongThamVong ? "tot" : "duoi-muc-tot";
 	return diem >= 1 ? "dat" : "chua-tron";
