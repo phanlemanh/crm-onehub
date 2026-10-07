@@ -5,7 +5,7 @@ slug: dieu-phoi-gia-han-va-lenh-boc
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-gia-han-va-lenh-boc-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
@@ -59,3 +59,5 @@ Không dùng skill morphological-scan: phạm vi là đúng hai lỗi owner đã
 ## Notes
 
 - Mã chỉ sửa `scripts/dieu-phoi/phat-lich.mjs` và `scripts/dieu-phoi/giu-nhip.mjs`; test mới ở `scripts/dieu-phoi/test/gia-han-va-lenh-boc.test.mjs`.
+- Known limits (Cổng 2, 07/10): tệp `tra-loi` đúng dạng object mà sai kiểu một trường (`uoc_phut` là chuỗi, `tai_nguyen` là mảng) không bị coi là hỏng — nhịp báo `gia-han-khong-ap` với lý do dễ nhầm và tệp ở lại `tra-loi/` (Ngoài-1; sửa đúng là `kiemTraLoi` trong `hinh-dang.mjs`).
+- Known limits (Cổng 2, 07/10): `scripts/dieu-phoi/README.md` chưa hướng dẫn xử sự kiện `tra-loi-hong` và chưa nói `giu-nhip.mjs` nhận biến môi trường đặt trước lệnh (Ngoài-2).
