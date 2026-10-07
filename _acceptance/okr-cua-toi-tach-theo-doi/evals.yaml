@@ -110,7 +110,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.ctt_man
     paths: ["apps/app/app/(app)/[slug]/okr/**", "apps/app/components/crm/record-sheet/objective-sheet.tsx", apps/app/lib/trpc/cache.ts, apps/api/src/okr/**, _acceptance/okr-cua-toi-tach-theo-doi/rang/**]
-    expected: "Cùng lệnh E11 — bước 3 và 4: M5 rời màn không tải lại trang (không có điều hướng document mới giữa bấm tắt và đọc màn) và okr.mine đọc lại khớp; M5 trở lại nhóm sau khi theo dõi lại. CHIỀU ĐỎ (--chieu-do --chi E12): bản sao objective-sheet.tsx bỏ cache.okr ở onSuccess → bước 3 đỏ, thông điệp ghim «buoc 3: M5 con tren man sau khi tat»."
+    expected: "Cùng lệnh E11 — bước 3 và 4: M5 rời màn không tải lại trang (không có điều hướng document mới giữa bấm tắt và đọc màn) và okr.mine đọc lại khớp; M5 trở lại nhóm sau khi theo dõi lại. CHIỀU ĐỎ (--chieu-do E12): bản sao apps/app/lib/trpc/cache.ts cho cache.okr làm mới okr.mine bằng một khoá không khớp (khung mục tiêu vẫn cập nhật, danh sách thì không) → bước 3 đỏ, thông điệp ghim «buoc 3: M5 con tren man sau khi tat»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
 
   - id: E13

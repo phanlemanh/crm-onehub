@@ -18,16 +18,16 @@ const CAY_DO = {
 		ghim: /buoc 1: M5 trong bang chinh/,
 	},
 	E12: {
-		nhan: "ban sao objective-sheet.tsx bo cache.okr khi theo doi xong",
+		nhan: "ban sao cache.ts bo okr.mine khoi danh sach lam moi cua cache.okr",
 		tenCay: "ctt-chieu-do-e12",
 		chiBuoc: "3",
-		tep: "apps/app/components/crm/record-sheet/objective-sheet.tsx",
+		tep: "apps/app/lib/trpc/cache.ts",
 		cam: (s) =>
 			s.replace(
-				'onSuccess: () => cache.okr(mt.id, { settle: "record" }),',
-				"onSuccess: () => undefined,",
+				"\t\t\t\t\ttrpc.okr.mine.queryKey(),\n",
+				"\t\t\t\t\ttrpc.okr.mine.queryKey({ cycleId: \"__khong-khop__\" }),\n",
 			),
-		dauVet: "onSuccess: () => undefined,",
+		dauVet: '"__khong-khop__"',
 		ghim: /buoc 3: M5 con tren man sau khi tat/,
 	},
 };
@@ -253,10 +253,20 @@ try {
 				window.__cttDau = 1;
 			});
 			await d.bamSel(t, "[data-nut='theo-doi'][aria-pressed='true']");
-			await d.doi(
-				t,
-				() => window.__tim("[data-nut='theo-doi'][aria-pressed='false']").length > 0,
-			);
+			const nutDoi = await t
+				.waitForFunction(
+					() =>
+						window.__tim("[data-nut='theo-doi'][aria-pressed='false']").length >
+						0,
+					{ timeout: 10_000 },
+				)
+				.then(() => true)
+				.catch(() => false);
+			if (!nutDoi) {
+				await t.close();
+				d.dat(3, false, "nut trong khung van Dang theo doi sau khi tat");
+				return;
+			}
 			await t.keyboard.press("Escape");
 			await cho(800);
 			const roi = await t
