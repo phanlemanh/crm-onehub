@@ -5,10 +5,10 @@ slug: khung-ban-ghi-kara
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-07-khung-ban-ghi-kara-design.md
-approved_by:
-approved_at:
+approved_by: Phan Le Manh
+approved_at: 2026-10-07T14:04:10Z
 ---
 
 # Acceptance Contract: khung-ban-ghi-kara
@@ -69,3 +69,5 @@ Source input: `docs/plan/lo-trinh-okr.json` hàng K4 · `_acceptance/khung-ban-g
 - Ba eval đã ký bị thay bởi hồ sơ này (bảng «eval cũ → AC mới» trong design doc): `the-gop-y-okr/E10` → AC-6, `logo-onehub/E14` → AC-1; ca «màn cũ: thông tin liên hệ vẫn là thẻ» trong `apps/app/test/nen-kara-man-cu.dom.tsx` (eval `nen-kara/E3` đã nghỉ, thay bởi `gop-y-dung-cho#AC-5`) chuyển sang AC-6. Các hồ sơ đã ký có `paths` giao diff ghim lại cuối vòng, dưới khoá `ghim-lai` của đợt, sau Cổng Bằng chứng.
 - Điều kiện của giám sát khi duyệt chạm tệp (yêu cầu P2-5): trong `the-gop-y-okr.dom.tsx` chỉ chuyển ca thông tin liên hệ; mỗi hồ sơ cũ chỉ thêm `status`/`superseded_by` vào đúng một eval; thẻ Cổng 2 nêu ba eval bị thay và danh sách hồ sơ ghim lại.
 - `decideFact` đổi đúng một chỗ: một mốc thời gian chung cho `supersededAt` và `decidedAt`, để hoàn tác khớp đúng lần nhận.
+- Known limits (Cổng Phạm vi, anh duyệt theo khuyến nghị của design-pass): ở khổ 375 dòng biên nhận «Đã thêm theo Kara · Hoàn tác» trong ô thuộc tính hẹp xuống hai dòng — đọc được, bấm được; thành phần biên nhận chưa có cách xếp gọn cho ô hẹp.
+- Nút gọi Kara dùng chung (`NutKara`) dựng ở `packages/ui/src/components/kara/ban-ghi.tsx` để nút tra cứu không tự nhập icon ở chỗ gọi (finding Nhóm 2 của design-pass, anh duyệt làm ở S3).
