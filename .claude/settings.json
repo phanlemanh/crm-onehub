@@ -2,6 +2,55 @@
   "worktree": {
     "bgIsolation": "none"
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Workflow|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 10,
+            "command": "f=\"$CLAUDE_PROJECT_DIR/scripts/dieu-phoi/hook-chan-s4.mjs\"; [ -f \"$f\" ] || exit 0; exec node \"$f\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 10,
+            "command": "f=\"$CLAUDE_PROJECT_DIR/scripts/dieu-phoi/hook-nhip.mjs\"; [ -f \"$f\" ] || exit 0; exec node \"$f\""
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt|permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 10,
+            "command": "f=\"$CLAUDE_PROJECT_DIR/scripts/dieu-phoi/hook-cho-nguoi.mjs\"; [ -f \"$f\" ] || exit 0; exec node \"$f\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 10,
+            "command": "f=\"$CLAUDE_PROJECT_DIR/scripts/dieu-phoi/hook-cho-nguoi.mjs\"; [ -f \"$f\" ] || exit 0; exec node \"$f\""
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "acceptance-gate@acceptance-gate-kit": true,
     "feature-loop@acceptance-gate-kit": true,

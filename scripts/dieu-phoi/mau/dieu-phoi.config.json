@@ -1,0 +1,9 @@
+{
+  "nhanh_chinh": "main",
+  "tick_giay": 5,
+  "han_thue_phut": { "s4": 90, "ghim-lai": 40, "duong-nen": 40, "merge": 120 },
+  "nhip_cu_phut": 10,
+  "suc_khoe": { "swap_gb": 8, "ap_luc_muc": 2, "rss_gb": 8 },
+  "s4_tran_gom_phut": 60,
+  "bao_ve": []
+}
