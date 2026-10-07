@@ -2,3 +2,4 @@
 {"id":"d-20261007T205500Z-2","type":"descope","stage":"S1","at":"2026-10-07T20:55:00Z","decision":"Không dời nhãn sang gói dùng chung cho bot dựng câu từ cùng nguồn.","why":"Đổi mã sản phẩm của hai app, ngoài ranh giới hàng F15.","cost_if_wrong":"Câu của bot và nhãn trên màn vẫn là hai bản chữ, chỉ được giữ khớp bằng bài kiểm."}
 {"id":"d-20261007T205500Z-3","type":"descope","stage":"S1","at":"2026-10-07T20:55:00Z","decision":"bỏ coverage-scan — hai trục (nơi đặt × bốn bài của khối cau-chao) liệt tay đủ trong Coverage.","why":"Không gian nhỏ, bốn bài đã liệt từ bản ghim.","cost_if_wrong":"đổi lại không có bằng chứng độ phủ từ bộ quét"}
 {"id":"d-20261007T205500Z-4","type":"descope","stage":"S1","at":"2026-10-07T20:55:00Z","decision":"bỏ đặc-tả-UX — chỉ dời bài kiểm, không màn nào đổi.","why":"surfaces rỗng.","cost_if_wrong":"cấu trúc không khai trước — owner thấy nó lần đầu trong code"}
+{"id":"d-20261007T210256Z-5","type":"seal","gate":1,"at":"2026-10-07T21:02:48Z"}

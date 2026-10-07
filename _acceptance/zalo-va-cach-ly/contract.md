@@ -5,9 +5,9 @@ slug: zalo-va-cach-ly
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-07T21:02:48Z
 design_doc: _acceptance/zalo-va-cach-ly/design.md
 ---
 

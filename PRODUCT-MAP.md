@@ -11,11 +11,11 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>130 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>42 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
-  HS["Hồ sơ hỏng<br/>1 việc"]
+  HS["Hồ sơ hỏng<br/>2 việc"]
 ```
 
 > **Bốn cổng người** — mỗi cổng là một câu hỏi chỉ người trả lời được:
@@ -45,6 +45,7 @@ flowchart TD
 ## Đang làm
 
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
+- Bài kiểm Zalo của apps/agent thôi nhập mã apps/app; hai bài «câu chào» xuyên ứng dụng và hàm nhãn điều hướng dời nguyên văn sang test của apps/app — luật cách ly hai agent xanh trở lại (`zalo-va-cach-ly`)
 
 ## Đã giao — chờ phiên nghiệm thu
 
@@ -231,3 +232,4 @@ flowchart TD
 ## Hồ sơ hỏng
 
 - `ban-mau-okr` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
+- `so-moi-khong-chap-chon` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
