@@ -2116,6 +2116,25 @@ const GHI_VAO_KY_AN = {
 			);
 		},
 	},
+	xoaMucTieu: {
+		gieo: async (b) => {
+			const id = await gieoCoMucTieu(await b.kyChay());
+			return lenh(
+				() => goi("okr.xoaMucTieu", { id }),
+				() => mucTieuDb(id),
+			);
+		},
+	},
+	dungLaiMucTieu: {
+		gieo: async (b) => {
+			const id = await gieoCoMucTieu(await b.kyChay());
+			ok(await goi("okr.dropObjective", { id }), "bo truoc khi dung lai");
+			return lenh(
+				() => goi("okr.dungLaiMucTieu", { id }),
+				() => mucTieuDb(id),
+			);
+		},
+	},
 	createKeyResult: {
 		gieo: async (b) => {
 			const objectiveId = await gieoCoMucTieu(await b.kyChay());
