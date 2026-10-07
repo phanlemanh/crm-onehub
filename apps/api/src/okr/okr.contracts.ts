@@ -397,6 +397,8 @@ export const objectiveOutput = mucTieuOutput.extend({
 		guiDuyet: z.boolean(),
 		duyet: z.boolean(),
 		rutDuyet: z.boolean(),
+		xoa: z.boolean(),
+		dungLai: z.boolean(),
 	}),
 	themKrLe: z.boolean(),
 });
@@ -435,6 +437,7 @@ export const okOutput = z.object({
 	id: z.string(),
 	canhBao: z.string().nullable(),
 });
+export const dungLaiOutput = okOutput.extend({ canGuiDuyet: z.boolean() });
 export const createKrInput = krInput.extend({ objectiveId: ma });
 export const updateKrInput = krInput
 	.partial()
