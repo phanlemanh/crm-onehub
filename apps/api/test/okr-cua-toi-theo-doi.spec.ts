@@ -106,7 +106,7 @@ async function bonVai(s: San): Promise<[string, string, string, string]> {
 
 describe("mine-vai", () => {
 	let s: San;
-	let m: string[];
+	let m: [string, string, string, string, string, string];
 	beforeAll(async () => {
 		s = await sanMoi("vai");
 		const [m1, m2, m3, m4] = await bonVai(s);
@@ -160,10 +160,7 @@ describe("trung-vai", () => {
 		const r = await mineCua(s.cu, s.cycleId);
 		const ten = ["T1", "T2", "T3", "T4"];
 		for (const [i, id] of t.entries())
-			ghim(
-				!noi(r, id).includes("dangTheoDoi"),
-				`${ten[i]} o dangTheoDoi`,
-			);
+			ghim(!noi(r, id).includes("dangTheoDoi"), `${ten[i]} o dangTheoDoi`);
 		expect(t.map((id) => noi(r, id))).toEqual([
 			["objectives"],
 			["objectives"],
