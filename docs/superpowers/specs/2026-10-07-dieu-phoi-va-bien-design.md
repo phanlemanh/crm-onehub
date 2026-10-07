@@ -18,6 +18,20 @@ gộp lúc mở vòng. PR của vòng này nhắm `onehub` và chỉ gộp SAU #
 | 4 | 6 | Thợ chờ một việc nền dài thì không có lời gọi công cụ nào → hook nhịp im → hết hạn thuê + nhịp cũ → thu hồi giữa chừng | `giu-nhip.mjs` (mới), `hook-chan-s4.mjs`, `cau-hinh.mjs` | Lệnh bọc `giu-nhip.mjs -- <lệnh>`: chạy lệnh con, chạm `nhip` của khoá mình mỗi `NHIP.giuNhipMs` (1′) tới khi lệnh con thoát, trả đúng mã thoát. Hook chặn S4 ép dùng: lệnh nặng được phân loại, chạy nền (`run_in_background: true`), phiên đang giữ khoá, chưa bọc → thoát 2 kèm đúng dòng lệnh đã bọc |
 | 5 | 7 | `gia-han` được máy duyệt nhưng `han_thue_den` không đổi | `yeu-cau.mjs`, `lich.mjs`, `phat-lich.mjs` | Máy chỉ duyệt khi phiên đang giữ đúng một khoá khớp (`noi_dung.tai_nguyen` tuỳ chọn); mỗi nhịp áp mọi `gia-han` có `tra-loi` duyệt (máy hay giám sát) vào `chu.json`: `han_moi = max(hạn cũ, bây giờ) + phút`, ghi id vào `chu.gia_han_theo` để không áp hai lần, bỏ qua yêu cầu viết trước `cap_luc` của lượt hiện tại |
 
+### Lỗ thứ sáu — tìm ra lúc đẩy, sau chữ ký Cổng 2 (hợp đồng mở lại 07/10, AC-15)
+
+Git chạy hook pre-push với `GIT_DIR` trỏ vào kho thật. Bộ test điều phối gọi `git init`, `git commit`,
+`git worktree add` trong thư mục tạm; trong môi trường hook chúng nhắm vào kho thật. Với gitdir của worktree
+liên kết, `git init` ghi `core.bare=true` vào `.git/config` chung (sự cố 09:25 ngày 07/10, xảy ra ở lượt
+tham chiếu của checker `node-test`). Vá ở hai cửa vào, không vá trong từng test:
+
+- `.githooks/pre-push` gỡ mọi biến cục bộ của git (`unset $(git rev-parse --local-env-vars)`) ngay sau khi
+  lấy `ROOT`, nên mọi lệnh của cổng chạy như ở dòng lệnh thường;
+- `runReference` của checker chạy `node --test` với môi trường đã lọc bỏ biến `GIT_*`.
+
+Đo bằng `rang/git-sach.mjs`: kho nháp có worktree liên kết, chạy tệp pre-push thật với `bun` giả và lượt tham
+chiếu thật, khẳng định kho nháp không đổi; bản sao bỏ bước gỡ biến thì kho nháp bị đổi.
+
 ## 2. Quyết định thiết kế
 
 - **Danh tính thay vì tên tệp (lỗ 1).** Đổi đuôi so khớp từ `acceptance-verify.js` sang tiền tố vẫn

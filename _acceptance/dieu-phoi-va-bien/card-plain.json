@@ -56,6 +56,10 @@
       "p": "Chặn máy cấp khoá hay duyệt tệp bảo vệ khi cấu hình sai — đợt đứng yên và báo giám sát một lần, thay vì làm sai trong im lặng."
     },
     {
+      "id": "AC-15",
+      "p": "Chặn cổng đẩy mã làm hỏng kho chung: bộ kiểm điều phối chạy trong hook không còn được đổi cấu hình, commit, nhánh hay worktree của kho thật (sự cố core.bare sáng 07/10)."
+    },
+    {
       "id": "OOS-1",
       "p": "KHÔNG sửa các hạn chế đã ghi ở vòng trước (đường dẫn thư mục làm việc chưa chuẩn hoá, danh sách loại việc khai ở ba chỗ, vài ô đo mỏng)."
     },
@@ -105,6 +109,10 @@
     {
       "i": 4,
       "p": "GIẢ ĐỊNH cần anh gạch: trong lúc lượt kiểm S4 chạy, các tác tử con tự giữ nhịp cho khoá nên không cần lệnh bọc; vòng này không đo — sai thì khoá S4 vẫn có thể bị thu giữa một lượt dài hơn 90 phút."
+    },
+    {
+      "i": 5,
+      "p": "Thêm khi mở lại hợp đồng: cổng được đo ở cả môi trường hook pre-push (biến GIT_DIR trỏ worktree liên kết), không chỉ ở dòng lệnh thường và CI (AC-15)."
     }
   ],
   "gap_probe_plain": [

@@ -1930,6 +1930,7 @@ executors:
     dpvb_cong: bun _acceptance/dieu-phoi-va-bien/rang/cong.mjs
     dpvb_dot_bien: node _acceptance/dieu-phoi-va-bien/rang/dot-bien.mjs
     dpvb_s4_that: node _acceptance/dieu-phoi-va-bien/rang/s4-that.mjs
+    dpvb_git_sach: node _acceptance/dieu-phoi-va-bien/rang/git-sach.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

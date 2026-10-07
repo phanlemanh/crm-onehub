@@ -5,7 +5,7 @@ slug: dieu-phoi-va-bien
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, config, ci]
-status: signed-off
+status: approved
 design_doc: docs/superpowers/specs/2026-10-07-dieu-phoi-va-bien-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
@@ -46,6 +46,7 @@ Thuật ngữ (thêm vào thuật ngữ của `dieu-phoi-hai-tang`):
 - AC-12: Given một yêu cầu `gia-han` đã `can_phan`, When giám sát ghi `tra-loi/<id>.json` `ket_qua: duyet` (có hoặc không có `uoc_phut` riêng), Then nếu khoá còn do chính phiên yêu cầu giữ, nhịp kế kéo dài đúng một lần theo số phút của `tra-loi` nếu có, không thì của yêu cầu; yêu cầu viết trước `cap_luc` của lượt hiện tại không áp vào lượt đó; khoá đã sang tay phiên khác thì hạn của phiên đó không đổi và có một sự kiện `can_phan` nêu id; `tra-loi` duyệt mà không có số phút dương nào → không đổi hạn, một sự kiện `can_phan` nêu id, không lặp ở nhịp sau.
 - AC-13: Given cây sau vòng, When quét và chạy lại, Then mọi tệp `.mjs`/`.json` dưới `scripts/dieu-phoi/` ngoài `test/` vẫn qua ranh giới mã cũ (không `onehub`, `crm`, `/Users/`, `gh pr merge`, `--auto`, dòng chú thích, số thời gian ngoài `cau-hinh.mjs`) và `cau-hinh.mjs` có `giuNhipMs`; `bun run test:dieu-phoi` xanh; bộ đột biến cũ `_acceptance/dieu-phoi-hai-tang/rang/dot-bien.mjs` vẫn thoát 0 (mọi mốc cũ còn, mọi ca ghim cũ đỏ dưới đột biến của nó).
 - AC-14: Given `scripts/dieu-phoi/mau/LUAT.md` và `README.md`, When một phiên thợ đọc LUAT trước S1 và phiên giám sát đọc README, Then thợ biết chạy việc nền dài khi giữ khoá bằng lệnh bọc (kèm lệnh mẫu) và cách xin `gia-han` (`noi_dung.uoc_phut`, `noi_dung.tai_nguyen` khi giữ nhiều khoá); giám sát biết hai tệp cấu hình được kiểm hình dạng ở mỗi nhịp, sai thì có sự kiện `loi-nhip` nêu trường, và duyệt `gia-han` bằng `tra-loi` là đủ để hạn được kéo dài (judgment).
+- AC-15: Given một kho có worktree liên kết và `GIT_DIR` trỏ vào gitdir của worktree đó (đúng môi trường git dựng cho hook pre-push), When vòng lệnh thật của `.githooks/pre-push` chạy tới `test:dieu-phoi` và checker `node-test` chạy lượt tham chiếu trên mọi tệp test, Then kho mà `GIT_DIR` trỏ tới không đổi: `core.bare` giữ `false`, không có commit, nhánh hay worktree mới; lượt tham chiếu vẫn chạy đủ ca (số ca > 0, 0 đỏ); và cùng phép đo trên bản sao đã bỏ bước gỡ biến `GIT_*` thì kho bị đổi (đối chứng: lỗ này có thật).
 
 ## Coverage
 
@@ -55,11 +56,13 @@ Chân ngành: khoá có hạn thuê theo `[NGÀNH: Kubernetes coordination.k8s.i
 và `[NGÀNH: etcd lease KeepAlive]` (người giữ chủ động gia hạn trong lúc làm việc dài → lệnh bọc);
 kiểm cấu hình đóng theo `[NGÀNH: JSON Schema additionalProperties: false]`.
 
-- Trục lỗ hổng: nhận diện S4 (AC-1, AC-2) | hình dạng cấu hình (AC-3, AC-4, AC-5, AC-6) | cổng test (AC-7, AC-8) | nhịp khi chờ nền (AC-9, AC-10) | gia hạn theo yêu cầu (AC-11, AC-12) | ranh giới và tài liệu (AC-13, AC-14)  [thước CE: năm mục owner chọn ở dòng `d-20261007T002515Z-16`, mỗi mục ≥ 1 AC]
+- Trục lỗ hổng: nhận diện S4 (AC-1, AC-2) | hình dạng cấu hình (AC-3, AC-4, AC-5, AC-6) | cổng test (AC-7, AC-8, AC-15) | nhịp khi chờ nền (AC-9, AC-10) | gia hạn theo yêu cầu (AC-11, AC-12) | ranh giới và tài liệu (AC-13, AC-14)  [thước CE: năm mục owner chọn ở dòng `d-20261007T002515Z-16`, mỗi mục ≥ 1 AC]
 - Trục chiều đo: xanh-đúng (mọi AC) | đỏ-có-tên (AC-1, AC-3, AC-4, AC-5, AC-8, AC-10, AC-11, AC-12) | chiều im — không chặn oan, không đổi hành vi cũ (AC-2, AC-6, AC-10, AC-13) | vòng ghi → đọc ở nhịp thật (AC-5, AC-9, AC-11, AC-12)  [thước CE: khuôn MEASURE-BIRTH + bộ đột biến mẫu của vòng trước]
 - Trục đường vào của S4 workflow: `scriptPath` tên gốc | tên bản chép | tên lạ có meta | `name` | `script` nội tuyến | chỉ `resumeFromRunId` (Never — không có danh tính để đọc)  [thước CE: tham số của công cụ Workflow — `scriptPath`, `script`, `name`, `resumeFromRunId`]
 - Trục người duyệt gia hạn: máy (AC-11) | giám sát (AC-12) | owner trực tiếp — đi qua giám sát, không đường riêng  [thước CE: README mục «Trong đợt»]
 - [GIẢ ĐỊNH] Trong lúc S4 Workflow chạy, lời gọi công cụ của các agent con kích hoạt hook PostToolUse với `cwd` trong worktree của phiên, nên khoá `s4` không cần lệnh bọc cho chính Workflow. Vòng này KHÔNG đo giả định này; nếu sai, khoá `s4` vẫn có thể bị thu giữa một lượt S4 dài hơn hạn thuê 90′ — người gạch tại Cổng 1.
+
+- Trục môi trường chạy cổng (thêm khi mở lại hợp đồng 07/10): dòng lệnh thường | hook pre-push với `GIT_DIR` của worktree liên kết (AC-15) | hook với `GIT_DIR` của kho thường (cùng AC-15, cùng bước gỡ biến) | CI (AC-7)  [thước CE: sự cố core.bare 09:25 ngày 07/10, tái hiện trên kho nháp]
 
 ## Out of scope
 
@@ -85,4 +88,5 @@ Bỏ — hồ sơ không có `opportunity.md` (vòng nối tiếp từ Cổng 2,
   - Ngoài-3: yêu cầu `gia-han` viết trước `cap_luc` của lượt hiện tại mà được duyệt thì bị bỏ qua không có sự kiện nào; `tra-loi` vẫn ghi `duyet`.
   - Ngoài-4: test kiểm hình dạng dựng tay bản cấu hình sau `moDot` thay vì đọc tệp do `moDot` ghi ra; `moDot` ghi thêm khoá mới thì đợt thật hỏng mà test vẫn xanh.
   - Ngoài-5: `cli.test.mjs` chỉ xem hook thoát 2 trong đợt, không ghim thông điệp, nên không phân biệt chặn đúng lý do với lỗi nội bộ.
+- Mở lại hợp đồng sau chữ ký Cổng 2 lượt 2 (sổ quyết định d-20261007T023802Z-19): lần đẩy đầu của nhánh lộ ra test điều phối chạy trong hook pre-push bật `core.bare=true` ở `.git/config` chung; thêm AC-15, sửa trong vòng này.
 - Mở hợp đồng mới (sổ quyết định, dòng revisit gate2): Ngoài-1 tệp `tra-loi` gia hạn hỏng làm đứng cả nhịp; Ngoài-2 lệnh bọc gợi ý hỏng khi lệnh gốc có biến môi trường đứng trước.
