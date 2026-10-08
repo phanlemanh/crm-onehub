@@ -5,9 +5,9 @@ slug: menu-con-loc-dien-thoai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-08T01:40:16Z
 design_doc: docs/superpowers/specs/2026-10-08-menu-con-loc-dien-thoai-design.md
 ---
 
