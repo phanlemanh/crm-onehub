@@ -1,0 +1,111 @@
+mot-luot: da cho 18s de toi luot
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_optimistic_kare_ec244b_do · app http://localhost:4632 · api http://localhost:4159
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+-- chua co cong agent-okr trong phien — mo phien do rieng
+-- phien do co agent-okr: cay optimistic-kare-ec244b-soan · agent-okr cong 60539
+phien-do: kho crm_optimistic_kare_ec244b_soan_do · app http://localhost:4195 · api http://localhost:4746
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+AGENT-OKR GIA http://127.0.0.1:60539 · okr.soan
+PHAN E2-driver (buoc 1-7)
+BUOC 1: ban nhap co 7 dong [data-dong] (mong 2+5), dang nhap truong phong, o trang soan
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step1.png
+DUNG buoc 1: 7 dong ban nhap (2 Muc tieu x 5 KR... 2+5)
+BUOC 2: ma tran khoang rong, viet truoc 3 o
+   o 1024x768: than 920 px · hoi thoai mac dinh 380 px · keo trai het 300 px · keo phai het 459.5 px (nua than 460) · thanh 1 role=separator aria-label=«Đổi cỡ hội thoại và bản nháp»
+DUNG 1024x768 mac dinh trong [372,388]
+DUNG 1024x768 keo trai het >= 300
+DUNG 1024x768 keo phai het <= nua than + 2
+DUNG 1024x768 thanh role=separator va aria-label thanhKeo
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step2-1024.png
+   o 1280x900: than 1176 px · hoi thoai mac dinh 380 px · keo trai het 300 px · keo phai het 587.5 px (nua than 588) · thanh 1 role=separator aria-label=«Đổi cỡ hội thoại và bản nháp»
+DUNG 1280x900 mac dinh trong [372,388]
+DUNG 1280x900 keo trai het >= 300
+DUNG 1280x900 keo phai het <= nua than + 2
+DUNG 1280x900 thanh role=separator va aria-label thanhKeo
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step2-1280.png
+   o 1440x1000: than 1280 px · hoi thoai mac dinh 380 px · keo trai het 300 px · keo phai het 639.5 px (nua than 640) · thanh 1 role=separator aria-label=«Đổi cỡ hội thoại và bản nháp»
+DUNG 1440x1000 mac dinh trong [372,388]
+DUNG 1440x1000 keo trai het >= 300
+DUNG 1440x1000 keo phai het <= nua than + 2
+DUNG 1440x1000 thanh role=separator va aria-label thanhKeo
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step2-1440.png
+DUNG buoc 2: so dong ma tran = 3 (dong 3)
+BUOC 3-5 o 1440x1000
+BUOC 3: keo +300 bang page.mouse: 380 -> 639.5 (tang 259.5)
+DUNG buoc 3: o hoi thoai rong them > 200 px
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step3.png
+   Tab lan 18 dat focus len thanh
+DUNG buoc 4: Tab dat focus len thanh
+BUOC 4: ArrowRight x2: 380 -> 507.90625 · focus-visible true · box-shadow rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 107, 79) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px · outline none
+DUNG buoc 4: ArrowRight lam o hoi thoai rong them
+DUNG buoc 4: vong focus hien (focus-visible va shadow/outline)
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-focus-thanh.png
+BUOC 5: lan chuot (page.mouse.wheel)
+   ban nhap o cao 1000: scrollTop 0 -> 300 · window.scrollY 0
+DUNG buoc 5: ban nhap (cao 1000) scrollTop tang va window.scrollY = 0
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step5-ban-nhap.png
+   hoi thoai o cao 1000: khong co vung tran
+   hoi thoai o cao 600: scrollTop 19 -> 20 · window.scrollY 0
+DUNG buoc 5: hoi thoai (cao 600) scrollTop tang va window.scrollY = 0
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step5-hoi-thoai.png
+BUOC 6: ma tran kho hep, viet truoc 3 o
+-- het gio cho: 7 dong
+   o 375x812: resizable-handle 0 · tablist hien 1 · tab ["Trò chuyện","Bản nháp (7)"]
+DUNG 375x812 khong co resizable-handle
+DUNG 375x812 co tablist hai tab
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step6-375-truoc.png
+   sau bam Ban nhap: URL /onehub-center/okr/soan/cmuylnaek0003fnty6h73l87a?tab=ban-nhap
+DUNG 375x812 URL co tab=ban-nhap
+DUNG 375x812 sau reload tab Ban nhap dang chon
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step6-375-sau-reload.png
+-- het gio cho: 7 dong
+   o 768x1024: resizable-handle 0 · tablist hien 1 · tab ["Trò chuyện","Bản nháp (7)"]
+DUNG 768x1024 khong co resizable-handle
+DUNG 768x1024 co tablist hai tab
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step6-768-truoc.png
+   sau bam Ban nhap: URL /onehub-center/okr/soan/cmuylnaek0003fnty6h73l87a?tab=ban-nhap
+DUNG 768x1024 URL co tab=ban-nhap
+DUNG 768x1024 sau reload tab Ban nhap dang chon
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step6-768-sau-reload.png
+-- het gio cho: 7 dong
+   o 1023x768: resizable-handle 0 · tablist hien 1 · tab ["Trò chuyện","Bản nháp (7)"]
+DUNG 1023x768 khong co resizable-handle
+DUNG 1023x768 co tablist hai tab
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step6-1023-truoc.png
+   sau bam Ban nhap: URL /onehub-center/okr/soan/cmuylnaek0003fnty6h73l87a?tab=ban-nhap
+DUNG 1023x768 URL co tab=ban-nhap
+DUNG 1023x768 sau reload tab Ban nhap dang chon
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step6-1023-sau-reload.png
+DUNG buoc 6: so dong ma tran = 3 (dong 3)
+BUOC 7: scrollWidth == innerWidth
+-- het gio cho: 7 dong
+   375: scrollWidth 375 innerWidth 375
+DUNG buoc 7: 375 scrollWidth == innerWidth
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step7-375.png
+DUNG 375 khong loi console (0)
+-- het gio cho: 7 dong
+   768: scrollWidth 768 innerWidth 768
+DUNG buoc 7: 768 scrollWidth == innerWidth
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step7-768.png
+DUNG 768 khong loi console (0)
+   1024: scrollWidth 1024 innerWidth 1024
+DUNG buoc 7: 1024 scrollWidth == innerWidth
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step7-1024.png
+DUNG 1024 khong loi console (0)
+   1440: scrollWidth 1440 innerWidth 1440
+DUNG buoc 7: 1440 scrollWidth == innerWidth
+   ANH /Users/manh-macmini/dev/crm/.claude/worktrees/optimistic-kare-ec244b/_acceptance/soan-okr-trang-rieng/evidence/E2-step7-1440.png
+DUNG 1440 khong loi console (0)
+KET LUAN: 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0

@@ -1,0 +1,1 @@
+E1b driver: puppeteer in man.mjs (no read_network_requests tool). console errors captured by driver: 0 (404 on /okr/soan/khong-co filtered by driver as expected). network: n-a (driver)

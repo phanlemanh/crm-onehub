@@ -1,0 +1,5 @@
+E12b network truth (verifier doc lap, lan chay 2026-10-08 07:5x)
+driver: puppeteer ben trong man.mjs, khong co read_network_requests; chi doc console/pageerror
+lan xanh (--phan dua-vao): "DUNG console khong loi (0)", ma thoat 0
+lan do (--kiem-do-do dem-sai): ma thoat 1, 'so muc tieu: 2 != 3'
+request that bai khong ghi theo tung URL -> networkObserved = n-a (driver)

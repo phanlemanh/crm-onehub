@@ -72,6 +72,8 @@ export type ProposedChangeProps = Omit<
 	decided?: ProposedChangeDecided;
 	error?: ReactNode;
 	lockedReason?: ReactNode;
+	lockedReasonHidden?: boolean;
+	media?: boolean;
 	editing?: ProposedChangeEditing;
 	actions: readonly ProposedChangeAction[];
 };
@@ -351,6 +353,8 @@ export function ProposedChange({
 	decided,
 	error,
 	lockedReason,
+	lockedReasonHidden = false,
+	media = true,
 	editing,
 	actions,
 	...props
@@ -375,7 +379,10 @@ export function ProposedChange({
 	);
 	const khoa =
 		!decided && lockedReason ? (
-			<p id={idKhoa} className="text-muted-foreground">
+			<p
+				id={idKhoa}
+				className={lockedReasonHidden ? "sr-only" : "text-muted-foreground"}
+			>
 				{lockedReason}
 			</p>
 		) : null;
@@ -437,7 +444,7 @@ export function ProposedChange({
 			data-decided={decided?.decision}
 			{...props}
 		>
-			{decided ? null : (
+			{decided || !media ? null : (
 				<ItemMedia>
 					<span className="text-muted-foreground">
 						<Icon icon={AiGenerate} />

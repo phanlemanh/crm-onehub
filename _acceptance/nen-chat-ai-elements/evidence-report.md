@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c2194108ee1258c40d635c28ed628e43cd233131
+verified_commit: 1ee2d1a897afacdf3e7f57a8de57bc5a7a5caffe
 human_signoff: Mạnh 10/09/2026 — ký lại trên bằng chứng vòng 7 sau khi hoà onehub và sửa lớp chuỗi thứ năm. Bảng đăng ký và kế hoạch chuyển đã sửa trước khi ký, theo quyết định của chủ kho. Các mục còn lại ghi ở Known limits của hợp đồng.
 ---
 
@@ -255,3 +255,7 @@ sha: ab5c600cd7e710031147763c108126087bb9249c · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 15 — 2026-10-04, do gộp onehub 2498c97b sau chữ ký Cổng 2 của bo-xuong-kara
 run_id: repin-20261004T213037Z-56124
 sha: c2194108ee1258c40d635c28ed628e43cd233131 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng
+
+### Re-pin lần 16 — 2026-10-08, do hoá cũ do K2 soan-okr-trang-rieng sửa mo-coi và kara/*
+run_id: repin-20261008T071130Z-98368
+sha: 1ee2d1a897afacdf3e7f57a8de57bc5a7a5caffe · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

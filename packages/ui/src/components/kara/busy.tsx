@@ -2,7 +2,7 @@
 
 import { createContext, type ReactNode, useContext } from "react";
 
-export type KaraBusyState = { label: ReactNode } | null;
+export type KaraBusyState = { label: ReactNode; reasonShown?: boolean } | null;
 
 const KaraBusyContext = createContext<KaraBusyState>(null);
 
