@@ -4,8 +4,6 @@ import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { vanTay, ZALO_GETME } from "@crm/db/zalo-getme";
 import { suKienGetMe } from "@crm/validation/zalo-getme";
-import { khungUngDungMessages } from "../../app/lib/messages/khung-ung-dung";
-import { nhacQuaZaloMessages } from "../../app/lib/messages/nhac-qua-zalo";
 import {
 	capabilities,
 	capabilitiesMarkdown,
@@ -366,11 +364,6 @@ function chuoiCuaLoi(): string[] {
 	);
 }
 
-function nhanDieuHuongKhac(): string[] {
-	const k = khungUngDungMessages("vi");
-	return [...Object.values(k.rail), k.header.homepage, k.header.accountMenu];
-}
-
 describe("cau-chao", () => {
 	test("cau-chao: nguoi chua noi nhan bot thi nhan dung cau huong dan", async () => {
 		const z = zaloGia();
@@ -386,35 +379,6 @@ describe("cau-chao", () => {
 		expect(z.guiToi("ZCC").map((g) => g.body.text)).toEqual([
 			ZALO.loi.huongDan,
 		]);
-	});
-
-	test("cau-chao: cau huong dan chi toi Nhắc buổi sáng va nut Nối Zalo", () => {
-		const cau = ZALO.loi.huongDan;
-		const nhan = khungUngDungMessages("vi").header.nhacBuoiSang;
-		const nut = nhacQuaZaloMessages("vi").khoiZalo.noi;
-		expect(cau.includes(nhan), "cau-chao: thieu nhan Nhắc buổi sáng").toBe(
-			true,
-		);
-		expect(cau.includes(nut), "cau-chao: thieu nhan nut Nối Zalo").toBe(true);
-		const viTri = cau.indexOf(nhan);
-		for (const khac of nhanDieuHuongKhac()) {
-			const o = cau.indexOf(khac);
-			expect(
-				o < 0 || o > viTri,
-				`cau-chao: nhan ${khac} dung truoc Nhắc buổi sáng`,
-			).toBe(true);
-		}
-	});
-
-	test("cau-chao: doi chung, nhan Cài đặt chen truoc thi bi bat", () => {
-		const nhan = khungUngDungMessages("vi").header.nhacBuoiSang;
-		const sai = `mở Cài đặt › ${nhan}`;
-		const viTri = sai.indexOf(nhan);
-		const bat = nhanDieuHuongKhac().some((k) => {
-			const o = sai.indexOf(k);
-			return o >= 0 && o < viTri;
-		});
-		expect(bat).toBe(true);
 	});
 
 	test("cau-chao: khong cau nao cua bot con chu Thông báo của bạn", () => {

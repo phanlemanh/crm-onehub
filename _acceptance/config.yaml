@@ -1264,7 +1264,8 @@ executors:
     r1g_token_sai: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t token-sai"'
     r1g_kiem_tam: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t kiem-tam"'
     r1g_kiem_tu_choi: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t kiem-tu-choi"'
-    r1g_cau_chao: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t cau-chao"'
+    r1g_cau_chao: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t cau-chao" && cd apps/app && bun test ./test/zalo-cau-chao-nhan.spec.ts'
+    zvc_agent_ca_tep: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts"'
     r1g_nang_luc: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t nang-luc"'
     r1g_su_kien: 'bun run test -- "cd apps/agent && bun test test/zalo-va.integration.spec.ts -t su-kien"'
     r1g_ngay_cuoi_ky: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tra-loi-tin-nhac-nguong.integration.spec.ts -t ngay-cuoi-ky"'
@@ -1972,6 +1973,8 @@ executors:
     nbn_dao_thu_tu_xanh: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs xanh
     nbn_dao_thu_tu_do: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/dao-thu-tu.mjs do
     nbn_quet_mau: bun _acceptance/nop-ban-nhap-chon-theo-khoa/rang/quet-mau.mjs
+    zvc_nguyen_van_xanh: bun _acceptance/zalo-va-cach-ly/rang/nguyen-van.mjs xanh
+    zvc_nguyen_van_do: bun _acceptance/zalo-va-cach-ly/rang/nguyen-van.mjs do
     smk_va_cham_xanh: bun _acceptance/so-moi-khong-chap-chon/rang/va-cham.mjs xanh
     smk_va_cham_do: bun _acceptance/so-moi-khong-chap-chon/rang/va-cham.mjs do
     k1_ai_elements: 'node _acceptance/bo-xuong-kara/rang/ai-elements.mjs'

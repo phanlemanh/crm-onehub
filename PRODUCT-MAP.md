@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>2 việc"]
+  GD --> B["Sắp mở vòng<br/>3 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>133 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>46 việc"] --> GG{"Cổng Giá trị"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>132 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>48 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -37,12 +37,12 @@ flowchart TD
 
 ## Sắp mở vòng
 
+- Eval gọi model thật chỉ chạy khi đầu vào của nó đổi (prompt, model, dữ liệu mẫu), và chấm theo biên thống kê thay vì một ngưỡng cứng sát điểm đo (`eval-model-that-dung-luc`)
 - Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần sau mỗi lần gộp vào onehub (và mỗi đêm), không còn nằm trong lượt ghim lại của một hồ sơ (`kiem-cheo-sau-gop`)
 - Thước đo của hồ sơ đã ký neo vào mốc cố định của chính lượt đó, không so với origin/onehub hay merge-base, nên không tự đỏ khi các lượt sau gộp vào (`thuoc-khong-tu-het-han`)
 
 ## Đang làm
 
-- Eval model thật của Kho tài liệu (E15) chỉ gọi model khi đầu vào đổi, tách lỗi hạ tầng khỏi lỗi model, giữ nhật ký theo lượt, và hỏi lại một lần khi sát ngưỡng thay vì đỏ cứng (`eval-model-that-dung-luc`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -75,6 +75,8 @@ flowchart TD
 - «Menu con của bộ lọc mở được trên điện thoại — không còn nằm ngoài màn ở khổ 375» (`menu-con-loc-dien-thoai`)
 - Kế hoạch hiện ra ở mọi chỗ người đã đứng — tab 30 ngày đầu ở sheet Công ty, mục 30 ngày đầu ở sheet Cá nhân, bước giao cho tôi trong thẻ Tasks, lọc và chia cột theo người được giao, chuyển việc 30 ngày khi một người nghỉ (`moi-phia-deu-thay-ke-hoach`)
 - Nền giao diện của Kara trong packages/ui — dấu tia sáng, nhãn Kara có ô «vì sao», ProposedChange hai độ dày (inline không viền, card), dòng biên nhận có Hoàn tác, phản hồi chung — để mọi màn AI sau đó dựng trên một bộ (`nen-kara`)
+- Tách «Đang theo dõi» khỏi tab «Của tôi» của OKR (`okr-cua-toi-tach-theo-doi`)
+- Loại mục tiêu thứ ba «Học tập» cho OKR (`okr-loai-hoc-tap`)
 - OKR và tổ chức vá — dựng cây và đặt OKR không vấp (R1d) (`okr-to-chuc-va`)
 - Số OKR tự chảy — KR của khối kinh doanh lấy số từ danh mục chỉ số CRM có định nghĩa cố định; mỗi ngày chụp giá trị thành lịch sử không đổi; bấm vào con số ra danh sách bản ghi đằng sau; KR ngoài CRM nhận số qua khoá API và Google Sheets (`so-okr-tu-chay`)
 - Soạn OKR cùng Trợ lý — người sửa được OKR của một đơn vị mở một cuộc đối thoại với Trợ lý OKR cho đơn vị và chu kỳ đang lập kế hoạch; Trợ lý mang bối cảnh (hồ sơ công ty và chiến lược từ Kho tài liệu, đơn vị · mô tả · chức danh, OKR cấp trên và ngang cấp, kỳ trước tóm gọn, số CRM dạng tổng) vào cuộc, hỏi vài câu, đưa bản nháp bộ OKR trên bảng sống cạnh chat; người nhận · sửa · bác từng dòng, «Đưa vào bộ OKR» tạo cả bộ ở trạng thái nháp; chạy trên app eve riêng, vai «chỉ OKR» đi qua đường mới; dựng và đo trên bộ OKR mẫu (`soan-okr-cung-tro-ly`)
@@ -187,8 +189,6 @@ flowchart TD
 - Trả ổ cắm buổi khai thác về trạng thái trung tính, và thu phép đo ổ cắm về đúng hai ổ thiết kế (`o-cam-khai-thac-trung-tinh`)
 - Ô nhập số tiền thoả thuận đọc đúng theo tiếng đang dùng và số chữ số lẻ của đồng tiền, từ chối chuỗi mơ hồ (`o-so-tien-doc-theo-tieng`) — đã giao — máy thông, cửa veto còn mở
 - Ô soạn hội thoại không còn giả chữ — con trỏ đứng ở đầu ô trống, chữ gợi ý không nằm trong dòng chữ; thẻ lỗi hội thoại hiện mã lỗi; agent ghi log lý do lỗi của hội thoại (`o-soan-va-ly-do-loi`)
-- Tách «Đang theo dõi» khỏi tab «Của tôi» của OKR (`okr-cua-toi-tach-theo-doi`)
-- Loại mục tiêu thứ ba «Học tập» cho OKR (`okr-loai-hoc-tap`)
 - Soát ảnh OKR lượt 3 — hộp Nhập thấy đủ bảy cột và đánh dấu dòng hỏng ở 1440; hàng thẻ Cài đặt ở 390 tự đưa thẻ đang mở vào tầm nhìn; bộ chọn chu kỳ bỏ nhãn loại lặp; gợi ý tên chu kỳ theo năm hiện tại tính ở server (`okr-soat-anh-luot-3`)
 - Trang 30 ngày đầu theo khuôn trang danh sách của deals (`onboarding-giong-deals`)
 - Phiên chết về trang đăng nhập — người mang cookie phiên đã hết không còn thấy landing của hãng ở / hay trang «không còn trong không gian làm việc»; proxy tách 401 của workspace.get khỏi «không biết», trang / và /het-quyen tự kiểm phiên (`phien-chet-ve-dang-nhap`)
@@ -228,6 +228,7 @@ flowchart TD
 - Màn Kết nối › Zalo in «trả lời lần cuối» theo múi giờ của xưởng (Asia/Ho_Chi_Minh) thay vì giờ UTC của máy chủ (`zalo-gio-theo-mui-gio-xuong`)
 - Khi Zalo nhận đăng ký nhưng gọi thử địa chỉ nhận tin hỏng, màn Kết nối › Zalo hiện đúng bot vừa lưu kèm cảnh báo «Đăng ký lại», và cảnh báo giữ nguyên qua các nhịp kiểm cho tới lần đăng ký lại thành công (`zalo-goi-thu-hong-hien-dung-bot`)
 - Bot Zalo nhận tin qua webhook — tin mã tới là nối ngay, không còn mất giữa hai nhịp cron; cron chỉ kiểm bot sống; hai lệnh tay đăng ký webhook và đọc tin cho bot thử (`zalo-qua-webhook`) — đã giao — máy thông, bằng chứng xanh-sạch
+- Bài kiểm Zalo của apps/agent thôi nhập mã apps/app; hai bài «câu chào» xuyên ứng dụng và hàm nhãn điều hướng dời nguyên văn sang test của apps/app — luật cách ly hai agent xanh trở lại (`zalo-va-cach-ly`) — đã giao — không đo, khai ở Cổng Đáng
 - Webhook Zalo đọc được thân thật {event_name, message} mà production gửi (và vẫn đọc khuôn có vỏ ok/result theo tài liệu), để người nhắn mã cho bot được nối và nhận trả lời; Zalo giả của test dựng khuôn thật (`zalo-webhook-doc-khuon-that`)
 
 ## Đã nghiệm thu giá trị
