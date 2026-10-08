@@ -11,6 +11,30 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "trang-lo-trinh-trong-crm",
+		ten: "Trang Lộ trình trong CRM — chỉ đọc",
+		states: [
+			{ id: "ST-lotrinh-day-du", nhan: "Đầy đủ — lộ trình OKR, mọi nhóm" },
+			{ id: "ST-lotrinh-loc", nhan: "Lọc theo nhóm okr" },
+			{ id: "ST-lotrinh-tre", nhan: "Hôm nay 20/12 — có việc đã qua mốc" },
+			{ id: "ST-lotrinh-dang-tai", nhan: "Đang tải" },
+			{
+				id: "ST-lotrinh-chua-co-khoi",
+				nhan: "Lộ trình chưa được xuất cho trang",
+			},
+			{ id: "ST-lotrinh-khoi-hong", nhan: "Dữ liệu lộ trình hỏng" },
+			{ id: "ST-lotrinh-tep-vang", nhan: "Bản đang chạy không mang lộ trình" },
+			{
+				id: "ST-lotrinh-lo-loi",
+				nhan: "Một lộ trình lỗi, các lộ trình khác vẫn xem được",
+			},
+			{
+				id: "ST-lotrinh-khuon-moi",
+				nhan: "Dữ liệu mới hơn trang — vẫn hiện, có cảnh báo",
+			},
+		],
+	},
+	{
 		slug: "kho-tai-lieu",
 		ten: "Kho tài liệu — lượt 1 viết, duyệt, đọc; các lượt sau",
 		states: [

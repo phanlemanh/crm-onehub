@@ -1,0 +1,226 @@
+schema_version: 1
+slug: trang-lo-trinh-trong-crm
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ltc_hien
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "packages/validation/src/lo-trinh-du-lieu.ts"
+      - "apps/app/test/lo-trinh.dom.tsx"
+      - "LO-TRINH.html"
+    expected: |
+      lo-trinh.dom.tsx describe "hien": doc LO-TRINH.html o goc kho (suy goc tu vi tri tep test, khong hardcode),
+      docDuLieu ban chep -> khuon Zod -> render thanh phan trang. Quan he, khong chuoi co dinh:
+        1 so the [data-lo-trinh-the] == duLieu.lo_trinh.length, thu tu tep trung lo_trinh[i].tep, the dau aria-selected
+        2 bon so [data-tien-do=da_giao|dang_lam|chua_bat_dau|khac] bang tien_do cua lo trinh dang chon
+        3 tap [data-viec-ma] tren man == tap hang.ma cua lo trinh dang chon (khong thua khong thieu)
+        4 voi MOI hang: dong [data-viec-ma=<ma>] mang dung cau_giao, nhom, trang_thai cua hang (ma tran toan phan:
+          so assert = so hang, in ten hang dau tien sai)
+        5 bam the thu hai -> dong 3 va 4 dung cho lo trinh thu hai
+      Doi chung duong: tep mau cua bo ve kit (apps/app/test/fixtures/lo-trinh/LO-TRINH.mau.html) qua cung duong cho xanh.
+      CHIEU DO: ban sao doi trang_thai cua mot hang trong thanh phan (vd hien nhom_trang_thai thay chu) -> dong 4 do
+      voi thong diep ghim "viec <ma> lech trang thai cua khoi". LO-TRINH.html goc chua mang khoi -> do voi thong diep
+      ghim "LO-TRINH.html chưa mang khối — cần kit 2.27".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.ltc_loc
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/test/lo-trinh.dom.tsx"
+    expected: |
+      describe "loc": NuqsTestingAdapter, khoi tu tep mau cua bo ve. Voi MOI gia tri nhom co trong lo trinh dau:
+        1 chon nhom -> tap [data-viec-ma] == tap ma cua hang co nhom do; so dong == dem hang
+        2 tham so nhom tren URL == gia tri da chon
+        3 dung lai trang voi URL do (searchParams khoi tao) -> cung tap ma
+      Them: lo trinh co hang nhom "" -> co lua chon "Không nhóm" va chon no cho dung cac hang nhom rong;
+      URL mang nhom la "khong-co-that" -> tap ma == moi hang.
+      Doi chung: "Tất cả" -> moi hang. CHIEU DO: ban sao loc theo nhom_trang_thai thay nhom -> dong 1 do voi thong diep
+      ghim "loc nhom <gia tri> lech hang".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ltc_ngay
+    paths:
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/test/lo-trinh-ngay.spec.ts"
+    expected: |
+      lo-trinh-ngay.spec.ts chay hai lan: TZ=Asia/Ho_Chi_Minh va TZ=UTC. Khoi tu tep mau cua bo ve.
+      Ma tran viet truoc: voi MOI moc co ngay hop le, ba ngay D = ngay-1, ngay, ngay+1:
+        1 ham hom-nay-nguoi-xem tu mot Date dung 23:30 va 00:30 gio dia phuong ra dung YYYY-MM-DD dia phuong
+        2 danh dau "da qua" cua moc == (moc.ngay < D && moc.con_viec)
+        3 viecTre(lo, D) == ham doi chieu chep tu dac ta (so sanh mang theo thu tu)
+        4 dung ngay moc -> khong danh dau
+      CHIEU DO: ban sao doi < thanh <= -> dong 4 do voi thong diep ghim "dung ngay moc bi tinh la da qua";
+      ban sao lay ngay UTC thay ngay dia phuong -> dong 1 do o TZ=Asia/Ho_Chi_Minh luc 00:30.
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.ltc_viec_ke
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/test/lo-trinh.dom.tsx"
+    expected: |
+      describe "viec-ke": khoi tu tep mau cua bo ve, lo trinh co hang_ke, can_sua, da_bac va it nhat mot hang co co.
+        1 [data-viec-ke] mang hang_ke.ma va hang_ke.cau_giao; chuoi hang_ke.lenh KHONG co o bat ky dau trong DOM
+        2 voi MOI hang co co: moi cau co hien nguyen van duoi [data-viec-ma=<ma>]
+        3 nut gap "Chỗ cần sửa trong kế hoạch (n)" voi n == can_sua.length, aria-expanded=false mac dinh; tuong tu
+          "Việc đã bác (n)" voi lo trinh co da_bac
+        4 mo muc gap -> moi can_sua.chu hien nguyen van
+      Doi chung: lo trinh hang_ke null -> khong co [data-viec-ke]. CHIEU DO: ban sao hien lenh -> dong 1 do voi
+      thong diep ghim "lo dong lenh mo viec".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ltc_khoan_dung
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/test/lo-trinh.dom.tsx"
+    expected: |
+      describe "khoan-dung": cac ca DAN TU tep mau cua bo ve (khong dung khoi tay): bo the script; thay noi dung khoi
+      bang "{khong"; doi khuon thanh "khac"; phien_ban 99; xoa khoa hang cua mot lo trinh; dat loi cho lo trinh thu hai;
+      them ca tep vang (ham doc tep tra null). Ma tran 7 dong, moi dong:
+        tep vang -> [data-lo-trinh-trang=tep-vang], 0 [data-viec-ma]
+        khong khoi -> [data-lo-trinh-trang=chua-co-khoi] + cau cua bo doc, 0 [data-viec-ma]
+        khong JSON -> [data-lo-trinh-trang=khoi-hong], 0 [data-viec-ma]
+        khuon la -> [data-lo-trinh-trang=khoi-hong] + cau mang ten khuon, 0 [data-viec-ma]
+        phien ban 99 -> co [data-viec-ma] + canh bao "mới hơn bộ đọc"
+        thieu khoa hang -> the do hien 0 viec, khong nem, cac the khac du
+        lo trinh co loi -> the do hien cau loi nguyen van, the khac du viec
+      Moi dong render khong nem (khong console.error). CHIEU DO: ban sao bo nhanh tep-vang -> dong 1 nem, thong diep
+      ghim "trang vo khi tep vang".
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.ltc_ban_chep
+    paths:
+      - "apps/app/lib/lo-trinh/doc-du-lieu.js"
+      - "packages/validation/src/lo-trinh-du-lieu.ts"
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "scripts/lo-trinh.mjs"
+      - "_acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs"
+    expected: |
+      rang/ban-chep.mjs (suy goc kho tu vi tri tep), ba dong DUNG/SAI:
+        1 than ham docDuLieu trong apps/app/lib/lo-trinh/doc-du-lieu.js == than ham cung ten trong scripts/lo-trinh.mjs
+          (cat tu "export function docDuLieu" toi dau } dong ham, so tung byte)
+        2 tap khoa cua khuon Zod tung cap (goc, lo_trinh, hang_ke, can_sua, tien_do, hang, moc, da_bac) == bang KHUON
+          ben trong docDuLieu (hai chieu, in khoa thua/thieu)
+        3 khong tep nao duoi cac duong paths cua trang chua "_acceptance" hay "docs/plan"
+      scripts/lo-trinh.mjs chua co docDuLieu -> ma 2 "chưa có hàm gốc — cần kit 2.27".
+      Doi chung duong: ban hien tai xanh 3/3. CHIEU DO: ban sao them mot dau cach vao doc-du-lieu.js -> dong 1 do voi
+      thong diep ghim "ban chep lech ham goc"; them khoa "thua" vao khuon -> dong 2 do "khuon thua khoa thua".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ltc_vai
+    paths:
+      - "apps/app/lib/khung-dieu-huong.ts"
+      - "apps/app/lib/pham-vi-man.ts"
+      - "apps/app/proxy.ts"
+      - "apps/app/test/pham-vi-man.spec.ts"
+      - "apps/app/test/khung-dieu-huong.spec.ts"
+    expected: |
+      pham-vi-man.spec.ts va khung-dieu-huong.spec.ts, -t lo-trinh. Ma tran 3 vai x 2 cau:
+        chi OKR: mucRailChoVai co khoa loTrinh; dieuHuongTheoVai("/<slug>/lo-trinh") == "ok"
+        du quyen: co khoa loTrinh; "ok"
+        chua dang nhap: proxy tra chuyen huong ve /sign-in cho /<slug>/lo-trinh
+      Doi chung: chi OKR van bi chan o /<slug>/deals (khong noi quyen khac). CHIEU DO: ban sao bo dong cho phep trong
+      RAIL_CHI_OKR -> dong chi OKR do voi thong diep ghim "vai chi OKR khong thay Lo trinh".
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ltc_ban_dung
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/lib/lo-trinh/**"
+      - "_acceptance/trang-lo-trinh-trong-crm/rang/ban-dung.mjs"
+    expected: |
+      rang/ban-dung.mjs dung apps/app that (next build, distDir rieng), hai dong DUNG/SAI:
+        1 tep .nft.json cua duong [slug]/lo-trinh liet LO-TRINH.html va duong do giai ve dung LO-TRINH.html o goc kho
+        2 ham giai duong tep cua trang, goi tu thu muc chay cua ban dung, tra cung tep do va doc ra cung noi dung
+      CHIEU DO: ban sao bo outputFileTracingIncludes -> dong 1 do voi thong diep ghim "ban dung khong mang LO-TRINH.html".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.ltc_chi_doc
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/test/lo-trinh.dom.tsx"
+    expected: |
+      describe "chi-doc": render trang du lieu tu tep mau, mo moi muc gap.
+        1 0 input, textarea, select, [contenteditable]; moi button thuoc dung ba loai: the lo trinh, nut loc, nut gap
+          (dem theo data-slot, in nut la)
+        2 trpc gia ghi nhan moi loi goi: 0 mutation; trang khong goi fetch nao
+      CHIEU DO: ban sao them mot nut "Sửa" -> dong 1 do voi thong diep ghim "nut la tren trang chi doc".
+
+  - id: E10
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ltc_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/trang-lo-trinh-trong-crm/evidence dat tuong minh: lenh cua ltc_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/trang-lo-trinh-trong-crm/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/lib/messages/lo-trinh.ts"
+      - "_acceptance/trang-lo-trinh-trong-crm/rang/do-man.mjs"
+    expected: |
+      Nguoi do mang vai chi OKR (tien-de tao trong kho do rieng, don sau khi do). Ma tran viet truoc 4 o, moi o mot dong
+      DUNG/SAI va mot anh evidence/<canh>.png:
+        rail-1440: thanh dieu huong co muc "Lộ trình"; bam -> URL ket thuc /lo-trinh, khong ve /ngoai-pham-vi
+        day-du-1440: [data-tien-do] du 4, [data-viec-ma] >= 1, [data-lo-trinh-moc] >= 1, scrollWidth <= 1440
+        loc-375: kho 375, chon nhom dau tien cua bo loc -> moi [data-viec-ma] con lai mang nhom do; scrollWidth <= 375
+        khong-dich-1440: moi phan tu mang chu cua tep ke hoach (cau giao, chu trang thai, ten moc) nam trong to tien
+          co translate="no"
+      Tien de: LO-TRINH.html cua cay mang khoi (kit 2.27); chua mang -> KHONG DO DUOC ma 2 "LO-TRINH.html chưa mang khối".
+      CHIEU DO: tren dinh truoc vong nay -> rail-1440 SAI "khong thay muc Lo trinh".
+
+  - id: E11
+    criterion: AC-11
+    executor: judgment
+    inputs:
+      - apps/app/lib/messages/lo-trinh.ts
+      - docs/superpowers/specs/2026-10-09-trang-lo-trinh-trong-crm-design.md
+    question: |
+      Doc phan tieng Viet cua tep loi (vi) cua trang Lo trinh. Mot truong phong ban khong dung git, doc moi nhan va
+      cau trong tep do, co hieu (a) trang cho biet gi, (b) trang chi doc va doi ke hoach o dau, (c) khi khong co du lieu
+      thi nen bao ai — ma khong gap ten tep, ten lenh, hay chu noi bo cua bo cong cu (kit, khoi, khuon, hang, ho so)?
+      Doi chieu voi muc "Mục đích" va "Màn" cua tep thiet ke. Neu tung cau vi pham, trich nguyen cau.
+    expected: |
+      PASS khi ca ba y (a)(b)(c) co cau tuong ung trong tep loi va khong cau nao mang ten tep, ten lenh hay chu noi bo.
+
+  - id: E12
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.ltc_thiet_ke
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/app/(app)/[slug]/lo-trinh/**"
+    expected: |
+      design-gate.mjs --mode static cho tung tep .tsx duoi apps/app/components/lo-trinh va trang: khong P0.
+      CHIEU DO: ban sao them className doi mau cho mot Badge -> P0 do.
