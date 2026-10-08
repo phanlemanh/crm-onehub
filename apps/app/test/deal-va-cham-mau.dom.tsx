@@ -213,6 +213,7 @@ describe("cham-mau", () => {
 		expect(o[4]?.dich).toBe("no");
 		expect(o[5]?.tone, "ma la van co cham").toBe(null);
 		expect(o[5]?.chu).toBe("Cũ");
+		expect(o[5]?.dich, "ma la thieu translate").toBe("no");
 		expect(k.querySelectorAll('[data-slot="indicator-dot"]').length).toBe(4);
 	});
 
