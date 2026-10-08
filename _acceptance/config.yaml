@@ -1375,7 +1375,7 @@ executors:
     ltc_viec_ke: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t viec-ke
     ltc_khoan_dung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t khoan-dung
     ltc_chi_doc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t chi-doc
-    ltc_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-ngay.spec.ts && TZ=UTC bun test ./test/lo-trinh-ngay.spec.ts
+    ltc_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-ngay.spec.ts && TZ=UTC bun test ./test/lo-trinh-ngay.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t ngay
     ltc_vai: cd apps/app && bun test ./test/pham-vi-man.spec.ts ./test/khung-dieu-huong.spec.ts ./test/proxy-lo-trinh.spec.ts -t lo-trinh
   script:
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"

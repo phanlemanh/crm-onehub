@@ -27,8 +27,9 @@ tệp trong git luôn khớp hồ sơ.
   một ký tự. Hàm tự đủ, không ném, trả `{ duLieu, canhBao }`.
 - **Phân tích ở biên.** `packages/validation/src/lo-trinh-du-lieu.ts` giữ khuôn Zod của phiên bản 1 (đúng
   bảng khoá `LO-TRINH-DU-LIEU-KHOA`), xuất kiểu bằng `z.infer`. `duLieu` đi qua khuôn đúng một lần ở trang
-  máy chủ; từ đó trở xuống chỉ có kiểu đã phân tích. Khuôn không khớp là lỗi thật có tên đường khoá, không
-  nuốt thành danh sách rỗng.
+  máy chủ; từ đó trở xuống chỉ có kiểu đã phân tích. Khoá thiếu thì `docDuLieu` đã điền rỗng theo kiểu, đúng
+  như đặc tả khối quy định; khoá sai kiểu là lỗi thật có tên đường khoá (khung «dữ liệu lộ trình hỏng»),
+  không nuốt thành danh sách rỗng.
 - **Không tự tính trạng thái.** Chữ trạng thái, nhóm trạng thái, tiến độ, việc kế, cờ, chỗ cần sửa đều đọc
   thẳng từ khối. Không mã nào của trang đọc `_acceptance/` hay tệp kế hoạch. Việc duy nhất trang tự làm là so
   ngày mốc với hôm nay, bằng hai hàm `mocQuaConViec` và `viecTre` chép nguyên từ khối
@@ -61,6 +62,9 @@ chỉ OKR.
   - Thu gọn mặc định: «Chỗ cần sửa trong kế hoạch (n)», «Việc đã bác (n)».
 - **Cảnh báo của bộ đọc** (`canhBao`, ví dụ khuôn mới hơn bộ đọc) hiện thành khung ở đầu trang.
 
+Mọi câu máy của bộ đọc (lý do không có khối, câu lỗi của một lộ trình, đường khoá sai kiểu) chỉ nằm trong
+phần gập «Chi tiết cho đội sản phẩm» của khung tương ứng; người xem đọc câu thường của trang.
+
 Chữ của tệp kế hoạch — câu giao, tên lộ trình, chữ trạng thái, cờ, tên mốc — hiện nguyên văn ở cả hai ngôn
 ngữ giao diện và mang `translate="no"`. Nhãn của trang theo tệp lời `apps/app/lib/messages/lo-trinh.ts`.
 
@@ -87,10 +91,10 @@ ngữ giao diện và mang `translate="no"`. Nhãn của trang theo tệp lời 
 | ST-lotrinh-day-du | Lộ trình | thẻ lộ trình, tiến độ, việc kế, danh sách việc, mốc | chọn nhóm, đọc |
 | ST-lotrinh-dang-tai | Lộ trình | khung chờ của PageShell | chờ |
 | ST-lotrinh-tre | Lộ trình | khung cảnh báo liệt mã các việc trễ | đọc, hỏi người phụ trách |
-| ST-lotrinh-chua-co-khoi | Lộ trình | Empty: lộ trình chưa có dữ liệu cho trang này; chữ của bộ đọc hiện nhỏ, không dịch | báo đội sản phẩm |
-| ST-lotrinh-khoi-hong | Lộ trình | Empty: dữ liệu lộ trình hỏng (khối không phải JSON, khuôn lạ, sai khuôn) + câu của bộ đọc | báo đội sản phẩm |
+| ST-lotrinh-chua-co-khoi | Lộ trình | Empty: lộ trình chưa có ở đây; câu của bộ đọc trong phần gập «Chi tiết cho đội sản phẩm» | báo đội sản phẩm |
+| ST-lotrinh-khoi-hong | Lộ trình | Empty: không đọc được lộ trình (khối không phải JSON, khuôn lạ, sai kiểu); câu của bộ đọc và đường khoá trong phần gập | báo đội sản phẩm |
 | ST-lotrinh-tep-vang | Lộ trình | Empty: không đọc được lộ trình trong bản đang chạy | báo đội sản phẩm |
-| ST-lotrinh-lo-loi | Lộ trình | khung lỗi trong thẻ của lộ trình hỏng, câu `loi` nguyên văn | đọc thẻ khác |
+| ST-lotrinh-lo-loi | Lộ trình | khung lỗi trong thẻ của lộ trình hỏng, câu `loi` nguyên văn trong phần gập | đọc thẻ khác |
 | ST-lotrinh-khuon-moi | Lộ trình | dữ liệu đầy đủ + khung vàng «khuôn mới hơn bộ đọc» | đọc như thường |
 <!-- UX-STATE-TABLE>>> -->
 
@@ -137,7 +141,8 @@ LO-TRINH.html (gốc kho, do bộ vẽ của kit sinh)
 - Bài kiểm thành phần so từng việc trên màn với từng hàng của khối (cùng lượt vẽ).
 - Bài kiểm so bản chép `docDuLieu` với hàm của bộ kit theo văn bản.
 - Bài kiểm luật ngày chạy ma trận ngày × hai múi giờ.
-- Bản dựng thật: danh sách tệp của đường `/[slug]/lo-trinh` có `LO-TRINH.html`.
+- Bản dựng thật: danh sách tệp của đường `/[slug]/lo-trinh` có `LO-TRINH.html`, và hàm đọc của trang chạy
+  trong bản sao chỉ gồm đúng các tệp đó vẫn đọc ra khối.
 - Đo màn thật: hai khổ, vai chỉ OKR.
 
 ## Không làm

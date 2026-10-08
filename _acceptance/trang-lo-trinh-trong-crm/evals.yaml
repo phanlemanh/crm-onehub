@@ -52,6 +52,7 @@ evals:
       - "apps/app/lib/lo-trinh/**"
       - "apps/app/components/lo-trinh/**"
       - "apps/app/test/lo-trinh-ngay.spec.ts"
+      - "apps/app/test/lo-trinh.dom.tsx"
     expected: |
       lo-trinh-ngay.spec.ts chay hai lan: TZ=Asia/Ho_Chi_Minh va TZ=UTC. Khoi tu tep mau cua bo ve.
       Ma tran viet truoc: voi MOI moc co ngay hop le, ba ngay D = ngay-1, ngay, ngay+1:
@@ -59,8 +60,13 @@ evals:
         2 danh dau "da qua" cua moc == (moc.ngay < D && moc.con_viec)
         3 viecTre(lo, D) == ham doi chieu chep tu dac ta (so sanh mang theo thu tu)
         4 dung ngay moc -> khong danh dau
+      Them lo-trinh.dom.tsx describe "ngay" (TZ=Asia/Ho_Chi_Minh, dong ho gia 00:30 dung ngay cua moc 2026-12-14 va
+      ngay sau no), tu tep mau:
+        5 [data-lo-trinh-moc] mang dau "da qua" dung tap moc ma mocQuaConViec tra true (ma tran moi moc)
+        6 [data-lo-trinh-tre] liet ma DUNG thu tu mang viecTre(lo, D)
+        7 renderToString (lan render may chu) khong co [data-lo-trinh-tre] va khong co dau "da qua" nao
       CHIEU DO: ban sao doi < thanh <= -> dong 4 do voi thong diep ghim "dung ngay moc bi tinh la da qua";
-      ban sao lay ngay UTC thay ngay dia phuong -> dong 1 do o TZ=Asia/Ho_Chi_Minh luc 00:30.
+      ban sao lay ngay UTC thay ngay dia phuong -> dong 1 va dong 5 do o TZ=Asia/Ho_Chi_Minh luc 00:30.
 
   - id: E4
     criterion: AC-4
@@ -97,9 +103,14 @@ evals:
         khong JSON -> [data-lo-trinh-trang=khoi-hong], 0 [data-viec-ma]
         khuon la -> [data-lo-trinh-trang=khoi-hong] + cau mang ten khuon, 0 [data-viec-ma]
         phien ban 99 -> co [data-viec-ma] + canh bao "mới hơn bộ đọc"
-        thieu khoa hang -> the do hien 0 viec, khong nem, cac the khac du
-        lo trinh co loi -> the do hien cau loi nguyen van, the khac du viec
-      Moi dong render khong nem (khong console.error). CHIEU DO: ban sao bo nhanh tep-vang -> dong 1 nem, thong diep
+        thieu khoa hang -> the do hien 0 viec (rong theo dac ta khoi), khong nem, cac the khac du
+        sai kieu (hang cua lo trinh dau la chuoi) -> [data-lo-trinh-trang=khoi-hong], phan gap chi tiet mang duong
+          khoa "lo_trinh.0.hang", 0 [data-viec-ma]
+        lo trinh co loi -> the do hien cau thuong + cau loi trong phan gap, the khac du viec
+      Moi khung trong: cau may cua bo doc CHI nam trong [data-lo-trinh-chi-tiet] (phan gap), khong o noi khac cua khung.
+      Moi dong render khong nem (khong console.error). Ghi van ban DOM cua 8 ca ra
+      .acceptance-runs/trang-lo-trinh-trong-crm/khoan-dung-chu.txt de soat tay.
+      CHIEU DO (them): ban sao Zod dung .catch([]) cho hang -> dong sai kieu do voi thong diep ghim "sai kieu bi nuot thanh rong". CHIEU DO: ban sao bo nhanh tep-vang -> dong 1 nem, thong diep
       ghim "trang vo khi tep vang".
 
   - id: E6
@@ -156,7 +167,10 @@ evals:
       rang/ban-dung.mjs dung apps/app that (next build, distDir rieng), hai dong DUNG/SAI:
         1 tep .nft.json cua duong [slug]/lo-trinh liet LO-TRINH.html va duong do giai ve dung LO-TRINH.html o goc kho
         2 ham giai duong tep cua trang, goi tu thu muc chay cua ban dung, tra cung tep do va doc ra cung noi dung
-      CHIEU DO: ban sao bo outputFileTracingIncludes -> dong 1 do voi thong diep ghim "ban dung khong mang LO-TRINH.html".
+        3 chep DUNG cac tep ma .nft.json cua duong liet sang mot thu muc tam (giu cau truc tuong doi, KHONG co goc kho
+          canh do), goi ham doc tep cua trang voi thu muc chay la ban sao do -> docDuLieu tra duLieu khac null
+      CHIEU DO: ban sao bo outputFileTracingIncludes -> dong 1 do voi thong diep ghim "ban dung khong mang LO-TRINH.html";
+      ban sao ham doc tep tim tep theo goc kho (process.cwd()/../../) -> dong 3 do voi thong diep ghim "trang doc tep ngoai ban dung".
 
   - id: E9
     criterion: AC-9

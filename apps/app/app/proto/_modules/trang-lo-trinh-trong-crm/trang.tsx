@@ -108,6 +108,23 @@ function DauTrang() {
 	);
 }
 
+function ChiTietDoi({ chu }: { chu: string }) {
+	return (
+		<Collapsible data-lo-trinh-chi-tiet>
+			<CollapsibleTrigger asChild>
+				<Button size="sm" variant="ghost">
+					Chi tiết cho đội sản phẩm
+				</Button>
+			</CollapsibleTrigger>
+			<CollapsibleContent>
+				<p className="px-3 py-2 text-muted-foreground text-xs" translate="no">
+					{chu}
+				</p>
+			</CollapsibleContent>
+		</Collapsible>
+	);
+}
+
 function KhungTrong({
 	ca,
 	tieuDe,
@@ -125,11 +142,7 @@ function KhungTrong({
 				<EmptyTitle>{tieuDe}</EmptyTitle>
 				<EmptyDescription>{moTa}</EmptyDescription>
 			</EmptyHeader>
-			{cauMay ? (
-				<p className="text-muted-foreground text-xs" translate="no">
-					{cauMay}
-				</p>
-			) : null}
+			{cauMay ? <ChiTietDoi chu={cauMay} /> : null}
 		</Empty>
 	);
 }
@@ -362,11 +375,10 @@ function TheLoTrinh({
 			<Alert data-lo-trinh-trang="lo-loi" variant="destructive">
 				<AlertTitle>Không đọc được lộ trình này</AlertTitle>
 				<AlertDescription>
-					Đội sản phẩm cần sửa tệp kế hoạch. Các lộ trình khác vẫn xem được.
-					<span className="mt-1 block" translate="no">
-						{loTrinh.loi}
-					</span>
+					Đội sản phẩm cần sửa kế hoạch của lộ trình này. Các lộ trình khác vẫn
+					xem được.
 				</AlertDescription>
+				<ChiTietDoi chu={loTrinh.loi} />
 			</Alert>
 		);
 	}
@@ -446,10 +458,8 @@ function CoDuLieu({
 					<AlertTitle>Trang có thể thiếu một phần</AlertTitle>
 					<AlertDescription>
 						Dữ liệu lộ trình mới hơn trang này; phần trang hiểu được vẫn đúng.
-						<span className="mt-1 block" translate="no">
-							{canhBao.join(" · ")}
-						</span>
 					</AlertDescription>
+					<ChiTietDoi chu={canhBao.join(" · ")} />
 				</Alert>
 			) : null}
 			<Tabs defaultValue={dau}>
