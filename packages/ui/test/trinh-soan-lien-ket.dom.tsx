@@ -202,6 +202,7 @@ describe("chen-lien-ket-ui", () => {
 				`input[aria-label="${NHAN_LIEN_KET_TRANG.tim}"]`,
 			),
 		).toBeNull();
+		await choTraFocus(editor);
 		expect(editor.view.dom.contains(document.activeElement)).toBe(true);
 	});
 });
@@ -378,3 +379,17 @@ describe("chen-lien-ket-go", () => {
 		expect(loi).toEqual([]);
 	});
 });
+
+const CHO_FOCUS = { tranMs: 2000, buocMs: 10 } as const;
+
+async function choTraFocus(editor: Editor): Promise<void> {
+	const het = Date.now() + CHO_FOCUS.tranMs;
+	while (
+		!editor.view.dom.contains(document.activeElement) &&
+		Date.now() < het
+	) {
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, CHO_FOCUS.buocMs));
+		});
+	}
+}

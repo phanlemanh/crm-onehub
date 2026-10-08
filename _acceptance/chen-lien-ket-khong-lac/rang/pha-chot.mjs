@@ -32,6 +32,19 @@ const CHU_LOI = "commandManager";
 const LOP_CHAN = "if (editor && !editor.isDestroyed) editor.commands.focus();";
 const GOI_CU = "editor?.commands.focus();";
 const DAU_SO_SANH = "error: expect(received).toEqual(expected)";
+const DAU_SO_SANH_ESC = "error: expect(received).toBe(expected)";
+const BAI_ESC = "chen-lien-ket: Esc dong hop va tra focus ve trinh soan";
+const DONG_FOCUS =
+	"\t\texpect(editor.view.dom.contains(document.activeElement)).toBe(true);\n";
+const DONG_CHO = "\t\tawait choTraFocus(editor);\n";
+const CHO_CHAM_MS = 60;
+const HAN_ESC_MS = { duoi: 1500, tren: 4000 };
+const CHE_DO = ["xanh", "do", "cham", "mat"];
+const DOT_BIEN = {
+	do: GOI_CU,
+	cham: `setTimeout(() => { ${LOP_CHAN} }, ${CHO_CHAM_MS});`,
+	mat: "",
+};
 
 const NOI = {
 	"trinh-soan-lien-ket.dom.tsx": [
@@ -86,7 +99,10 @@ function kiemBanGhim() {
 	const i = hien.indexOf(DAU_KHOI_MOI);
 	if (i < 0 || dem(hien, DAU_KHOI_MOI) !== 1)
 		throw new KhongDo("khong thay dung mot khoi chen-lien-ket-go");
-	return hien.slice(0, i) === ghim;
+	return (
+		hien.slice(0, i) ===
+		thayMotLan(ghim, DONG_FOCUS, `${DONG_CHO}${DONG_FOCUS}`, "khang dinh focus")
+	);
 }
 
 function ganGoi(thuMuc) {
@@ -119,8 +135,8 @@ function dungBanSao(chieu) {
 		let chu = readFileSync(nguon(ten), "utf8");
 		for (const [cu, moi] of doi)
 			chu = thayMotLan(chu, cu, moi, `${ten}: ${cu}`);
-		if (ten === "trinh-soan-lien-ket-trang.tsx" && chieu === "do")
-			chu = thayMotLan(chu, LOP_CHAN, GOI_CU, "lop chan");
+		if (ten === "trinh-soan-lien-ket-trang.tsx" && chieu in DOT_BIEN)
+			chu = thayMotLan(chu, LOP_CHAN, DOT_BIEN[chieu], "lop chan");
 		if (
 			ten === "trinh-soan-lien-ket-trang.tsx" &&
 			chieu === "xanh" &&
@@ -132,7 +148,14 @@ function dungBanSao(chieu) {
 	return thuMuc;
 }
 
-function chay(thuMuc) {
+function vietBanGhimVao(thuMuc) {
+	let chu = readFileSync(BAN_GHIM, "utf8");
+	for (const [cu, moi] of NOI["trinh-soan-lien-ket.dom.tsx"])
+		chu = thayMotLan(chu, cu, moi, `ban ghim: ${cu}`);
+	writeFileSync(join(thuMuc, "trinh-soan-lien-ket.dom.tsx"), chu);
+}
+
+function chay(thuMuc, loc) {
 	const kq = spawnSync(
 		"bun",
 		[
@@ -140,6 +163,7 @@ function chay(thuMuc) {
 			"--preload",
 			join(UI, "test", "setup-dom.ts"),
 			"./trinh-soan-lien-ket.dom.tsx",
+			...(loc ? ["-t", loc] : []),
 		],
 		{
 			cwd: thuMuc,
@@ -159,6 +183,81 @@ function khoiBaiMoi(dong) {
 		.slice(0, ket)
 		.findLastIndex((d) => d.startsWith(DAU_SO_SANH));
 	return dau < 0 ? null : { dau, ket };
+}
+
+function khoiEsc(dong) {
+	const ket = dong.findIndex((d) =>
+		d.includes(`(fail) chen-lien-ket-ui > ${BAI_ESC}`),
+	);
+	if (ket < 0) return null;
+	const dau = dong
+		.slice(0, ket)
+		.findLastIndex((d) => d.startsWith(DAU_SO_SANH_ESC));
+	return dau < 0
+		? null
+		: { khoi: dong.slice(dau, ket + 1), dongFail: dong[ket] };
+}
+
+function motBaiChay(dong) {
+	return dong.some((d) => /^Ran 1 test across 1 file/.test(d));
+}
+
+function chamCham(thuMuc) {
+	const moi = chay(thuMuc, BAI_ESC);
+	const okMoi =
+		moi.ma === 0 &&
+		motBaiChay(moi.dong) &&
+		moi.dong.some((d) => /^\s*1 pass$/.test(d));
+	vietBanGhimVao(thuMuc);
+	const cu = chay(thuMuc, BAI_ESC);
+	const k = khoiEsc(cu.dong);
+	const okCu =
+		cu.ma !== 0 &&
+		motBaiChay(cu.dong) &&
+		k !== null &&
+		[
+			"Expected: true",
+			"Received: false",
+			"trinh-soan-lien-ket.dom.tsx:205",
+		].every((c) => k.khoi.some((d) => d.includes(c)));
+	const ra = [
+		`bai Esc moi tren ban sao cham: ${okMoi ? "pass" : `KHONG pass (ma ${moi.ma})`}`,
+		`bai Esc cu tren ban sao cham: ${okCu ? "do dung chu ky :205 Expected true / Received false" : `KHONG do dung chu ky (ma ${cu.ma})`}`,
+	];
+	if (!okMoi) ra.push("bai Esc moi khong cho du", ...moi.dong.slice(-30));
+	if (!okCu)
+		ra.push("ban sao cham khong tai hien loi cu", ...cu.dong.slice(-30));
+	return { ma: okMoi && okCu ? 0 : 1, ra };
+}
+
+function chamMat(thuMuc) {
+	const r = chay(thuMuc, BAI_ESC);
+	const k = khoiEsc(r.dong);
+	const ms = k ? Number(/\[([\d.]+)ms\]/.exec(k.dongFail)?.[1]) : Number.NaN;
+	const loi = [];
+	if (!k) loi.push("(a) khong co dong (fail) cua bai Esc");
+	else {
+		if (
+			!["Expected: true", "Received: false"].every((c) =>
+				k.khoi.some((d) => d.includes(c)),
+			)
+		)
+			loi.push("(b) khoi bai Esc thieu Expected true / Received false");
+		if (!(ms >= HAN_ESC_MS.duoi && ms <= HAN_ESC_MS.tren))
+			loi.push(
+				`(d) thoi gian bai ${ms}ms ngoai ${HAN_ESC_MS.duoi}–${HAN_ESC_MS.tren}`,
+			);
+	}
+	if (r.dong.some((d) => /timed out/i.test(d))) loi.push("(c) co timed out");
+	if (!motBaiChay(r.dong)) loi.push("khong dung 1 bai duoc chay");
+	return {
+		ma: loi.length === 0 ? 0 : 1,
+		ra: [
+			`bai Esc tren ban sao khong tra focus: ${loi.length === 0 ? `do dung sau ${ms}ms` : "LECH"}`,
+			...loi,
+			...(loi.length ? r.dong.slice(-30) : []),
+		],
+	};
 }
 
 function cham(chieu, { ma, dong }) {
@@ -199,8 +298,8 @@ function cham(chieu, { ma, dong }) {
 
 function chinh() {
 	const chieu = process.argv[2];
-	if (chieu !== "xanh" && chieu !== "do") {
-		console.log("KHONG DO DUOC: doi so phai la xanh hoac do");
+	if (!CHE_DO.includes(chieu)) {
+		console.log(`KHONG DO DUOC: doi so phai la ${CHE_DO.join(" | ")}`);
 		process.exit(2);
 	}
 	let thuMuc;
@@ -214,7 +313,12 @@ function chinh() {
 			return;
 		}
 		thuMuc = dungBanSao(chieu);
-		const ket = cham(chieu, chay(thuMuc));
+		const ket =
+			chieu === "cham"
+				? chamCham(thuMuc)
+				: chieu === "mat"
+					? chamMat(thuMuc)
+					: cham(chieu, chay(thuMuc));
 		for (const d of ket.ra) console.log(d);
 		process.exitCode = ket.ma;
 	} catch (e) {
