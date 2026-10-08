@@ -1,5 +1,5 @@
 import { db } from "@crm/db";
-import { guiZalo, zaloGoiTho, zaloToken } from "./zalo-api";
+import { guiZalo, moTaLoiZalo, zaloGoiTho, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
 import {
 	chatCuaToken,
@@ -103,7 +103,7 @@ export async function traLoiVe(
 		}
 	} catch (loi) {
 		console.error(
-			`[zalo] gui tra loi hong message_id=${hang.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
+			`[zalo] gui tra loi hong message_id=${hang.messageId}: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
 		);
 		await db.zaloHoi.update({
 			where: { id: hang.id },
@@ -129,7 +129,7 @@ async function dongVaBao(
 		await guiZalo(bot, hang.zaloChatId, cau, { fetcher: deps.fetcher });
 	} catch (loi) {
 		console.error(
-			`[zalo] gui bao loi hong message_id=${hang.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
+			`[zalo] gui bao loi hong message_id=${hang.messageId}: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
 		);
 	}
 }
@@ -183,7 +183,7 @@ export async function moPhien(
 		});
 	} catch (loi) {
 		console.error(
-			`[zalo] sendChatAction hong message_id=${deps.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
+			`[zalo] sendChatAction hong message_id=${deps.messageId}: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
 		);
 	}
 	try {
@@ -194,7 +194,7 @@ export async function moPhien(
 		});
 	} catch (loi) {
 		console.error(
-			`[zalo] khong mo duoc phien message_id=${deps.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
+			`[zalo] khong mo duoc phien message_id=${deps.messageId}: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
 		);
 		await loiVe(
 			{ hoiId: y.hoiId },

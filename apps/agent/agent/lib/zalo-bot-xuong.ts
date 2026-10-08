@@ -8,12 +8,12 @@ import type {
 	DatBotYeuCau,
 	GuiThuPhanHoi,
 } from "@crm/validation/zalo-cau-noi";
-import { parseZaloSetWebhook } from "@crm/validation/zalo-update";
-import { z } from "zod";
+import { docLoiZalo, parseZaloSetWebhook } from "@crm/validation/zalo-update";
 import { guiQuaSlackThu } from "./nhac-ke-hoach";
 import {
 	guiZalo,
-	LoiHttpZalo,
+	moTaLoiZalo,
+	moTaTuChoi,
 	zaloGoi,
 	zaloGoiTho,
 	zaloToken,
@@ -77,15 +77,6 @@ function baoLoiZalo(method: string, lop: string): void {
 	console.error(`[zalo] ${method} hong: ${lop}`);
 }
 
-const loiMang = z.object({ code: z.string().min(1) });
-
-function lopLoi(loi: Error): string {
-	if (loi instanceof LoiHttpZalo) return `http-${loi.status}`;
-	const mang = loiMang.safeParse(loi);
-	if (mang.success) return `mang (${mang.data.code})`;
-	return `tra-loi-la (${loi.name})`;
-}
-
 async function docBot(
 	fetcher: typeof fetch,
 	token: string,
@@ -95,15 +86,18 @@ async function docBot(
 	try {
 		phan = await zaloGoiTho(fetcher, token, "getMe", {});
 	} catch (loi) {
-		baoLoiZalo(
-			"getMe",
-			`mang (${loi instanceof Error ? loi.name : "khong-ro"})`,
-		);
+		baoLoiZalo("getMe", loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro");
 	}
 	const ket = phanLopGetMe(phan);
 	if (ket.loai === "duoc") return ket;
-	if (phan !== null && ket.loi.ketLuan === "tam-loi") {
-		baoLoiZalo("getMe", ket.loi.lop);
+	if (phan !== null) {
+		const than = docLoiZalo(phan.than);
+		baoLoiZalo(
+			"getMe",
+			than
+				? `${ket.loi.lop} ${moTaTuChoi(than.maLoi, than.moTa)}`
+				: ket.loi.lop,
+		);
 	}
 	await ghiAnToan(ghi, "dat-bot", token, ket.loi);
 	return ket;
@@ -187,7 +181,7 @@ async function guiDuocKhong(
 		await gui();
 		return true;
 	} catch (loi) {
-		baoLoiZalo(method, loi instanceof Error ? lopLoi(loi) : "khong-ro");
+		baoLoiZalo(method, loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro");
 		return false;
 	}
 }

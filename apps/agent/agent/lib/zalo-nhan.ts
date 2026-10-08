@@ -8,7 +8,7 @@ import {
 import type { ZaloMessage } from "@crm/validation/zalo-update";
 import { lienKetKeHoach } from "./nhac-ke-hoach";
 import { BuocDoi, cauTraLoi, xongTheoTinNhac } from "./tra-loi-nhac";
-import { guiZalo } from "./zalo-api";
+import { guiZalo, moTaLoiZalo } from "./zalo-api";
 import { gioNhac } from "./zalo-bot-xuong";
 import { ZALO } from "./zalo-config";
 import { dangBan, hoiTacTu, tokenPhien, type YeuCauHoi } from "./zalo-hoi";
@@ -163,7 +163,7 @@ async function batDauLai(
 		await guiZalo(token, moi.chatId, ZALO.loi.daMoi, { fetcher: deps.fetcher });
 	} catch (loi) {
 		console.error(
-			`[zalo] bat dau lai hong message_id=${messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
+			`[zalo] bat dau lai hong message_id=${messageId}: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
 		);
 	}
 }
@@ -206,7 +206,7 @@ export async function xuLyTinDen(
 		});
 	} catch (loi) {
 		console.error(
-			`[zalo] gui tra loi hong message_id=${tin.message_id}: ${String(loi)}`,
+			`[zalo] gui tra loi hong message_id=${tin.message_id}: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
 		);
 	}
 	return "xong";

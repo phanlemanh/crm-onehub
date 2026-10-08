@@ -1,6 +1,13 @@
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
-import { parseZaloSend } from "@crm/validation/zalo-update";
+import {
+	docLoiZalo,
+	type LoiThanZalo,
+	parseZaloSend,
+	ZaloHinhDangLa,
+	ZaloTuChoi,
+} from "@crm/validation/zalo-update";
+import { z } from "zod";
 import { ZALO } from "./zalo-config";
 
 async function docCaiDat() {
@@ -30,9 +37,47 @@ export class LoiHttpZalo extends Error {
 	constructor(
 		method: string,
 		readonly status: number,
+		readonly maLoi: number | null = null,
+		readonly moTa: string | null = null,
 	) {
 		super(`Zalo ${method} tra HTTP ${status}.`);
 	}
+}
+
+async function docThanLoi(res: Response): Promise<LoiThanZalo | null> {
+	const chu = (await res.text().catch(() => "")).slice(0, ZALO.nhatKy.tranThan);
+	try {
+		return docLoiZalo(JSON.parse(chu));
+	} catch {
+		return null;
+	}
+}
+
+const loiMangCo = z.object({ code: z.string().min(1) });
+
+function cat(moTa: string | null): string {
+	return moTa ? moTa.slice(0, ZALO.nhatKy.tranMoTa) : "-";
+}
+
+export function moTaTuChoi(maLoi: number | null, moTa: string | null): string {
+	return `zalo-tu-choi ${maLoi ?? "-"} «${cat(moTa)}»`;
+}
+
+export function moTaLoiZalo(loi: Error): string {
+	if (loi instanceof LoiHttpZalo) {
+		const than =
+			loi.maLoi !== null || loi.moTa !== null
+				? ` ${moTaTuChoi(loi.maLoi, loi.moTa)}`
+				: "";
+		return `http-${loi.status}${than}`;
+	}
+	if (loi instanceof ZaloTuChoi) return moTaTuChoi(loi.maLoi, loi.moTa);
+	if (loi instanceof ZaloHinhDangLa) {
+		return `hinh-dang-la khoa=${loi.khoa.join(",")}`;
+	}
+	const mang = loiMangCo.safeParse(loi);
+	if (mang.success) return `mang (${mang.data.code})`;
+	return loi.name;
 }
 
 export function zaloApiGoc(): string {
@@ -50,8 +95,16 @@ export async function zaloGoi(
 		headers: { "Content-Type": "application/json; charset=utf-8" },
 		body: JSON.stringify(body),
 	});
-	if (!res.ok && res.status !== ZALO.http.hetTin) {
-		throw new LoiHttpZalo(method, res.status);
+	const hetTin =
+		method === ZALO.poll.lenhKeo && res.status === ZALO.http.hetTin;
+	if (!res.ok && !hetTin) {
+		const loi = await docThanLoi(res);
+		throw new LoiHttpZalo(
+			method,
+			res.status,
+			loi?.maLoi ?? null,
+			loi?.moTa ?? null,
+		);
 	}
 	return res.json();
 }
