@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>4 việc"]
+  GD --> B["Sắp mở vòng<br/>3 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>133 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>45 việc"] --> GG{"Cổng Giá trị"}
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>134 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>46 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -37,19 +37,18 @@ flowchart TD
 
 ## Sắp mở vòng
 
-- Các ca kiểm chập chờn theo máy thôi làm đỏ cả lượt dài hay CI — làm kín từng ca, dọn trạng thái sót trước mỗi lượt, ca chưa kín thì cách ly có người phụ trách (`ca-chap-chon-cach-ly`)
 - Eval gọi model thật chỉ chạy khi đầu vào của nó đổi (prompt, model, dữ liệu mẫu), và chấm theo biên thống kê thay vì một ngưỡng cứng sát điểm đo (`eval-model-that-dung-luc`)
 - Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần sau mỗi lần gộp vào onehub (và mỗi đêm), không còn nằm trong lượt ghim lại của một hồ sơ (`kiem-cheo-sau-gop`)
 - Thước đo của hồ sơ đã ký neo vào mốc cố định của chính lượt đó, không so với origin/onehub hay merge-base, nên không tự đỏ khi các lượt sau gộp vào (`thuoc-khong-tu-het-han`)
 
 ## Đang làm
 
-- «Ở mọi nơi, lỗi tải không còn hiện như chưa có gì; lưu trữ bản ghi có Hoàn tác» — dòng thời gian, hoạt động trên website và 30 ngày đầu của ngăn bản ghi có khung «không tải được» kèm «Thử lại» thay vì rỗng hay biến mất; tóm tắt tuần nói «Kara đang…» và lỗi theo ai-ux; lưu trữ cá nhân, công ty, thoả thuận có Hoàn tác ngay trên toast; bước Kara không lưu được hiện khác bước đã lưu; ba việc chữ (`kara-trang-thai-toan-crm`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
 
 - Bộ xương Kara trong packages/ui — sáu khối KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact, một nút «Thử lại», và ba điểm cắm cho K2: co giãn trong thanh kéo, khoá đề xuất khi Kara đang soạn, nhận theo nhóm (`bo-xuong-kara`)
+- Ca kiểm chập chờn theo máy thôi làm đỏ lượt dài — dọn eve mồ côi của lượt bị ngắt, chờ route thật có trần, trần hook dựng Nest có tên, công tắc bỏ ca tới được test (`ca-chap-chon-cach-ly`)
 - Việc, sáng kiến, ghi nhận và mẫu nằm cạnh KR — việc tự gõ và sáng kiến (chiến dịch hay kế hoạch 30 ngày có sẵn) gắn vào KR, bằng chứng cho KR mốc, ghi nhận đồng nghiệp trên mục tiêu, mẫu OKR theo cấp và đơn vị (lượt 8a — SK-01, SK-02, CI-05, CI-06, MT-07) (`canh-kr-okr`)
 - Cập nhật tuần OKR — màn «Cập nhật tuần của tôi» gom mọi KR tôi phụ trách, điền sẵn số tuần trước, ghi giá trị · mức tự tin · một dòng ghi chú; nhắc buổi sáng và thẻ «việc của tôi» dẫn thẳng vào màn; bình luận và nhắc tên trên mục tiêu và KR; chuyển KR khi người nghỉ (`cap-nhat-tuan-okr`)
 - Cây tổ chức hai cấp dưới gốc OneHub — bộ phận chứa phòng ban — có người, có trưởng, dựng và nhập hàng loạt ở Cài đặt › Tổ chức (`cau-truc-to-chuc`)
@@ -229,6 +228,7 @@ flowchart TD
 - Màn Kết nối › Zalo in «trả lời lần cuối» theo múi giờ của xưởng (Asia/Ho_Chi_Minh) thay vì giờ UTC của máy chủ (`zalo-gio-theo-mui-gio-xuong`)
 - Khi Zalo nhận đăng ký nhưng gọi thử địa chỉ nhận tin hỏng, màn Kết nối › Zalo hiện đúng bot vừa lưu kèm cảnh báo «Đăng ký lại», và cảnh báo giữ nguyên qua các nhịp kiểm cho tới lần đăng ký lại thành công (`zalo-goi-thu-hong-hien-dung-bot`)
 - Bot Zalo nhận tin qua webhook — tin mã tới là nối ngay, không còn mất giữa hai nhịp cron; cron chỉ kiểm bot sống; hai lệnh tay đăng ký webhook và đọc tin cho bot thử (`zalo-qua-webhook`) — đã giao — máy thông, bằng chứng xanh-sạch
+- Bài kiểm Zalo của apps/agent thôi nhập mã apps/app; hai bài «câu chào» xuyên ứng dụng và hàm nhãn điều hướng dời nguyên văn sang test của apps/app — luật cách ly hai agent xanh trở lại (`zalo-va-cach-ly`) — đã giao — không đo, khai ở Cổng Đáng
 - Webhook Zalo đọc được thân thật {event_name, message} mà production gửi (và vẫn đọc khuôn có vỏ ok/result theo tài liệu), để người nhắn mã cho bot được nối và nhận trả lời; Zalo giả của test dựng khuôn thật (`zalo-webhook-doc-khuon-that`)
 
 ## Đã nghiệm thu giá trị
