@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { resolve } from "node:path";
+import { join, resolve } from "node:path";
 
 const GOC = resolve(import.meta.dirname, "..", "..", "..");
 const CHO = [
@@ -22,9 +22,19 @@ const CHO = [
 	"apps/app/lib/messages/kara-ban-ghi.ts",
 ];
 const TIEN_TO_HO_SO = "_acceptance/zalo-hoi-okr-khong-chet/";
-const CHI_THEM = ["_acceptance/config.yaml", ".env.example", "_acceptance/tro-ly-okr-nen/run-log.jsonl"];
-const MA_TRAN_NGOAI_OKR = ["builder", "team-agent", "research", "zalo", "may-soan", "kho", "okr-soan"];
-const BIEN_BO_DE = "TRO_LY_OKR_BO_DE";
+const CHI_THEM = [
+	"_acceptance/config.yaml",
+	".env.example",
+	"_acceptance/tro-ly-okr-nen/run-log.jsonl",
+];
+const { TRO_LY_OKR } = await import(
+	join(GOC, "apps/agent/agent/lib/okr/config.ts")
+);
+const { SESSION_PURPOSES } = await import(
+	join(GOC, "packages/validation/src/phien-tac-tu.ts")
+);
+const MA_TRAN_NGOAI_OKR = SESSION_PURPOSES.filter((p) => p !== "okr");
+const BIEN_BO_DE = TRO_LY_OKR.ngoaiPhien.bienBoDe;
 const DONG_THEM = {
 	"apps/agent/agent/lib/zalo-config.ts": 1,
 	"packages/telemetry/src/allowlist.ts": 1,
@@ -50,18 +60,25 @@ function dongDoi(base, tep) {
 	const dong = git(["diff", "-U0", base, "HEAD", "--", tep])
 		.split("\n")
 		.filter((d) => /^[+-]/.test(d) && !/^(\+\+\+|---)/.test(d));
-	return { them: dong.filter((d) => d.startsWith("+")), bo: dong.filter((d) => d.startsWith("-")) };
+	return {
+		them: dong.filter((d) => d.startsWith("+")),
+		bo: dong.filter((d) => d.startsWith("-")),
+	};
 }
 
 function kiemDanhSach(ds) {
 	if (ds.length === 0) return { ma: 2, dong: ["diff rong"] };
 	const ngoai = ngoaiRanhGioi(ds);
-	return { ma: ngoai.length > 0 ? 1 : 0, dong: ngoai.map((t) => `ngoai ranh gioi: ${t}`) };
+	return {
+		ma: ngoai.length > 0 ? 1 : 0,
+		dong: ngoai.map((t) => `ngoai ranh gioi: ${t}`),
+	};
 }
 
 function doiChung() {
 	const rong = kiemDanhSach([]);
-	if (rong.ma !== 2 || rong.dong[0] !== "diff rong") return "doi chung rong khong thoat 2";
+	if (rong.ma !== 2 || rong.dong[0] !== "diff rong")
+		return "doi chung rong khong thoat 2";
 	console.log("doi chung: diff rong -> ma 2");
 	for (const tep of [
 		"apps/agent/agent/subagents/tro_ly_okr/agent.ts",
@@ -80,7 +97,9 @@ if (loiDoiChung) {
 	process.exit(1);
 }
 const base = git(["merge-base", "HEAD", "origin/onehub"]).trim();
-const ds = git(["diff", "--name-only", base, "HEAD"]).split("\n").filter(Boolean);
+const ds = git(["diff", "--name-only", base, "HEAD"])
+	.split("\n")
+	.filter(Boolean);
 const kiem = kiemDanhSach(ds);
 if (kiem.ma === 2) {
 	console.error(kiem.dong[0]);
@@ -89,16 +108,35 @@ if (kiem.ma === 2) {
 const loi = [...kiem.dong];
 for (const tep of CHI_THEM.filter((t) => ds.includes(t)))
 	if (dongDoi(base, tep).bo.length > 0) loi.push(`${tep}: co dong bo`);
-for (const [tep, can] of Object.entries(DONG_THEM).filter(([t]) => ds.includes(t))) {
+for (const [tep, can] of Object.entries(DONG_THEM).filter(([t]) =>
+	ds.includes(t),
+)) {
 	const { them, bo } = dongDoi(base, tep);
-	if (them.length !== can || bo.length !== 0 || !them.every((d) => d.includes(TEN_CONG_CU)))
+	if (
+		them.length !== can ||
+		bo.length !== 0 ||
+		!them.every((d) => d.includes(TEN_CONG_CU))
+	)
 		loi.push(`${tep}: khong dung dong them da khai`);
 }
-if (ds.includes(".env.example") && !dongDoi(base, ".env.example").them.some((d) => d.includes(BIEN_BO_DE)))
-	loi.push(".env.example: khong khai TRO_LY_OKR_BO_DE");
+if (ds.includes(".env.example")) {
+	const { them } = dongDoi(base, ".env.example");
+	const khai = them.filter((d) => d.includes(BIEN_BO_DE));
+	const la = them.filter((d) => !d.startsWith("+#"));
+	if (
+		khai.length === 0 ||
+		la.length > 0 ||
+		!them.at(-1)?.includes(`${BIEN_BO_DE}=`)
+	)
+		loi.push(".env.example: them ngoai khoi khai TRO_LY_OKR_BO_DE");
+}
 if (ds.includes("apps/agent/test/okr-uy-quyen.spec.ts")) {
 	const { them, bo } = dongDoi(base, "apps/agent/test/okr-uy-quyen.spec.ts");
-	if (![...them, ...bo].every((d) => MA_TRAN_NGOAI_OKR.some((m) => d.includes(`["${m}"`))))
+	if (
+		![...them, ...bo].every((d) =>
+			MA_TRAN_NGOAI_OKR.some((m) => d.includes(`["${m}"`)),
+		)
+	)
 		loi.push("okr-uy-quyen.spec.ts: doi dong ngoai ma tran ngoai okr");
 }
 if (ds.includes("_acceptance/tro-ly-okr-nen/run-log.jsonl")) {
@@ -113,12 +151,20 @@ if (ds.includes("_acceptance/tro-ly-okr-nen/run-log.jsonl")) {
 	if (hong) loi.push("tro-ly-okr-nen: doi ngoai phan ghim lai");
 }
 if (ds.includes("_acceptance/tro-ly-okr-nen/evidence-report.md")) {
-	const { them, bo } = dongDoi(base, "_acceptance/tro-ly-okr-nen/evidence-report.md");
-	const chu = git(["show", "HEAD:_acceptance/tro-ly-okr-nen/evidence-report.md"]);
+	const { them, bo } = dongDoi(
+		base,
+		"_acceptance/tro-ly-okr-nen/evidence-report.md",
+	);
+	const chu = git([
+		"show",
+		"HEAD:_acceptance/tro-ly-okr-nen/evidence-report.md",
+	]);
 	const repin = chu.slice(chu.indexOf("### Re-pin"));
 	const lech =
 		bo.some((d) => !d.startsWith("-verified_commit:")) ||
-		them.some((d) => !d.startsWith("+verified_commit:") && !repin.includes(d.slice(1)));
+		them.some(
+			(d) => !d.startsWith("+verified_commit:") && !repin.includes(d.slice(1)),
+		);
 	if (lech) loi.push("tro-ly-okr-nen: doi ngoai phan ghim lai");
 }
 if (loi.length > 0) {

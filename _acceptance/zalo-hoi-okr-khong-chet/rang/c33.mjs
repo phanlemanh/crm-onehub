@@ -1,5 +1,11 @@
 import { spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import {
+	copyFileSync,
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	rmSync,
+} from "node:fs";
 import { join, resolve } from "node:path";
 import { KhongDo } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
@@ -10,7 +16,12 @@ const NHAN_BO = "c33-okr";
 const CHAM = "_acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts";
 const CHAY_CHAM = join(".acceptance-runs", "tro-ly-doc-kho", "cham-bo-do");
 const THU_MUC_CONG_CU = "apps/agent/agent/tools";
-const BANG_CHUNG = join(GOC, ".acceptance-runs", "zalo-hoi-okr-khong-chet", "c33");
+const BANG_CHUNG = join(
+	GOC,
+	".acceptance-runs",
+	"zalo-hoi-okr-khong-chet",
+	"c33",
+);
 const SO_LUOT_XANH = 6;
 const TRAN_EP = 6;
 const TRAN_LUOT_MS = 40 * 60_000;
@@ -20,7 +31,9 @@ const XONG_CONG_CU = /✓ tro_ly_okr\b/;
 const GOI_CON = /→ subagent tro_ly_okr\b/;
 
 const { ZALO } = await import(join(GOC, "apps/agent/agent/lib/zalo-config.ts"));
-const { TRO_LY_OKR } = await import(join(GOC, "apps/agent/agent/lib/okr/config.ts"));
+const { TRO_LY_OKR } = await import(
+	join(GOC, "apps/agent/agent/lib/okr/config.ts")
+);
 const TAC_TU_LOI = ZALO.loi.tacTuLoi;
 const DONG_NGOAI_OKR = `${TRO_LY_OKR.ngoaiPhien.dongNgoaiOkr}zalo`;
 const BIEN_BO_DE = TRO_LY_OKR.ngoaiPhien.bienBoDe;
@@ -35,7 +48,10 @@ function chayMotLuot(goc, thuMuc, bienThem = {}) {
 		maxBuffer: 64 * 1024 * 1024,
 	});
 	const ra = `${r.stdout ?? ""}\n${r.stderr ?? ""}`;
-	if (r.status === 2 || r.status === null) throw new KhongDo(`cham-bo-do khong chay duoc (ma ${r.status}): ${ra.slice(-600)}`);
+	if (r.status === 2 || r.status === null)
+		throw new KhongDo(
+			`cham-bo-do khong chay duoc (ma ${r.status}): ${ra.slice(-600)}`,
+		);
 	for (const tep of ["ket-qua.jsonl", "eve.log"]) {
 		const nguon = join(goc, CHAY_CHAM, tep);
 		if (!existsSync(nguon)) throw new KhongDo(`luot khong de lai ${tep}`);
@@ -72,8 +88,14 @@ function docLuot(thuMuc) {
 function loiCuaLuotXanh(l) {
 	const loi = [];
 	if (l.goiCon && !l.quaHookMoi) loi.push("goi that khong qua hook moi");
-	if (l.hang.length !== 1 || l.hang[0].ketQua !== "da-tra-loi" || l.hang[0].loi !== null)
-		loi.push(`c33 ZaloHoi ${l.hang.map((h) => `${h.ketQua}${h.loi ? ` (${h.loi})` : ""}`).join(",") || "vang"}`);
+	if (
+		l.hang.length !== 1 ||
+		l.hang[0].ketQua !== "da-tra-loi" ||
+		l.hang[0].loi !== null
+	)
+		loi.push(
+			`c33 ZaloHoi ${l.hang.map((h) => `${h.ketQua}${h.loi ? ` (${h.loi})` : ""}`).join(",") || "vang"}`,
+		);
 	if (l.uyQuyen) loi.push("uy quyen OKR giet luot");
 	const tin = l.tin;
 	if (tin.length !== 1 || tin[0] === TAC_TU_LOI || !/okr/i.test(tin[0] ?? ""))
@@ -94,7 +116,9 @@ function xanh() {
 			return 1;
 		}
 		if (l.goiCon) coGoi++;
-		console.log(`luot ${lan}: ZaloHoi da-tra-loi, mot tin co OKR${l.goiCon ? ", co goi subagent" : ""} — ${l.tin[0].slice(0, 160)}`);
+		console.log(
+			`luot ${lan}: ZaloHoi da-tra-loi, mot tin co OKR${l.goiCon ? ", co goi subagent" : ""} — ${l.tin[0].slice(0, 160)}`,
+		);
 	}
 	console.log(`co goi subagent: ${coGoi}/${SO_LUOT_XANH}`);
 	console.log(`C33: ${SO_LUOT_XANH}/${SO_LUOT_XANH} luot dat`);
@@ -102,12 +126,16 @@ function xanh() {
 }
 
 function sachTep(tep) {
-	const r = spawnSync("git", ["status", "--porcelain", "--", tep], { cwd: GOC, encoding: "utf8" });
+	const r = spawnSync("git", ["status", "--porcelain", "--", tep], {
+		cwd: GOC,
+		encoding: "utf8",
+	});
 	return r.status === 0 && r.stdout.trim() === "";
 }
 
 function epGoi() {
-	if (!sachTep(THU_MUC_CONG_CU)) throw new KhongDo(`${THU_MUC_CONG_CU} dang co thay doi chua commit`);
+	if (!sachTep(THU_MUC_CONG_CU))
+		throw new KhongDo(`${THU_MUC_CONG_CU} dang co thay doi chua commit`);
 	for (let lan = 1; lan <= TRAN_EP; lan++) {
 		const thuMuc = join(BANG_CHUNG, `ep-${lan}`);
 		rmSync(thuMuc, { recursive: true, force: true });
@@ -123,7 +151,9 @@ function epGoi() {
 			return 1;
 		}
 		if (l.goiCon) {
-			console.log(`EP: luot ${lan} goi subagent that, luot song — ${l.tin[0].slice(0, 160)}`);
+			console.log(
+				`EP: luot ${lan} goi subagent that, luot song — ${l.tin[0].slice(0, 160)}`,
+			);
 			return 0;
 		}
 		console.log(`luot ${lan}: khong goi tro_ly_okr, luot song`);
