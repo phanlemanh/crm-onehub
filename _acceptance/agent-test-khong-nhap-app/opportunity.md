@@ -31,4 +31,4 @@ Nguồn: giám sát đợt sau-14-10 mở hàng E1c (09/10). Cổng Đáng chờ
 - Câu hỏi phép đo trả lời: [đề xuất] luật kho có xanh trở lại trên onehub sau khi gộp, mà phép đo đi trọn vòng của `deal-va` vẫn còn?
 - Kết quả nào là SỐNG: [đề xuất] `scripts/luat-kho/do-cay.mjs` thoát 0 (6/6 luật áp dụng xanh) trên cây sau gộp; ca kiểm `stage-id` của agent vẫn đọc đầu ra công cụ qua đúng schema mà app dùng.
 - Kết quả nào là CHẾT: [đề xuất] luật kho còn đỏ, hoặc phép đo đi trọn vòng bị bỏ.
-- Timebox: [đề xuất] lượt CI đầu tiên sau khi gộp; không phiên nghiệm thu.
+- Timebox: [đề xuất] một lần chạy tay `node scripts/luat-kho/do-cay.mjs` trên sha gộp của PR này, trong ngày gộp, kết quả ghi vào `run-log.jsonl` của hồ sơ (CI chưa chạy luật kho); không phiên nghiệm thu.

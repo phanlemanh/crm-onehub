@@ -37,12 +37,15 @@ evals:
     paths:
       - "apps/app/lib/agent-transcript.ts"
       - "apps/app/test/agent-results.spec.ts"
+      - "packages/validation/src/deal-list.ts"
       - "_acceptance/agent-test-khong-nhap-app/rang/app-dung-goi.mjs"
     expected: |
-      rang/app-dung-goi.mjs: (1) apps/app/lib/agent-transcript.ts nhap parseDealListResult tu "@crm/validation/deal-list";
-      (2) khong con "const dealListItem" hay "type DealListItem = {" trong tep; (3) chay `cd apps/app && bun test
-      ./test/agent-results.spec.ts` thoat 0 va so ca pass >= 9. CHIEU DO: --tep mot ban sao con schema viet tay -> (2) do
-      voi thong diep ghim "app con schema viet tay".
+      (A) agent-results.spec.ts describe "cung-ham-goi": bon dau vao cua E2 -> JSON.stringify(dealListResultOf(x)) ===
+      JSON.stringify(parseDealListResult(x)) (4 khang dinh, so chuoi). (B) rang/app-dung-goi.mjs: tep agent-transcript.ts
+      khong con "z.object" nao cho danh sach thoa thuan (dealListItem, dealListResult) va khong "type DealListItem = {";
+      roi chay `cd apps/app && bun test ./test/agent-results.spec.ts` thoat 0. CHIEU DO: ban sao dealListResultOf dung schema
+      rieng khong stageId -> (A) dong 1 do voi thong diep ghim "app doc khac goi"; --tep ban sao con schema viet tay -> (B)
+      do voi "app con schema viet tay".
 
   - id: E4
     criterion: AC-4
@@ -55,8 +58,10 @@ evals:
       - "packages/validation/src/deal-list.ts"
     expected: |
       giai-doan-agent.integration.spec.ts -t stage-id: ca round-trip goi default export cua tools/list_deals.ts, doc ket qua
-      bang parseDealListResult cua "@crm/validation/deal-list"; moi thoa thuan fixture co stageId dung; tep khong co dong
-      import nao chua "/app/". CHIEU DO: ban sao toModelOutput khong spread -> do voi thong diep ghim "model khong thay stageId".
+      bang parseDealListResult cua "@crm/validation/deal-list"; moi thoa thuan fixture co stageId dung; voi moi khoa cua
+      dealListItem.shape, JSON cua gia tri da parse bang JSON cua gia tri trong dau ra that (parse khong mat hay doi truong
+      nao schema khai); tep khong co dong import nao chua "/app/". CHIEU DO them: ban sao schema bo truong currency -> do voi
+      thong diep ghim "parse lam mat truong currency". CHIEU DO: ban sao toModelOutput khong spread -> do voi thong diep ghim "model khong thay stageId".
 
   - id: E5
     criterion: AC-5
@@ -65,7 +70,7 @@ evals:
     paths:
       - "_acceptance/agent-test-khong-nhap-app/rang/ghim.mjs"
     expected: |
-      rang/ghim.mjs chay scripts/pre-merge-check.sh . --base origin/onehub tai HEAD: khong dong "evidence is stale" nao goi
-      ten deal-va; dong kind "repin" cuoi cua _acceptance/deal-va/run-log.jsonl co sha bang verified_commit cua bao cao
-      deal-va va evals_exit toan dat. Doi chung duong: luoi in "rules ran". CHIEU DO: --ho-so them mot slug chua ghim -> do
+      rang/ghim.mjs chay scripts/pre-merge-check.sh . --base origin/onehub (sau git fetch) tai HEAD: 0 dong "evidence is
+      stale" cho MOI slug; voi deal-va, soan-okr-cung-tro-ly, tro-ly-okr-tom-tat: dong kind "repin" cuoi co sha bang
+      verified_commit cua bao cao va bang mot commit cua nhanh nay (git merge-base --is-ancestor), evals_exit toan dat. Doi chung duong: luoi in "rules ran". CHIEU DO: --ho-so them mot slug chua ghim -> do
       voi thong diep ghim "ho so chua ghim lai".
