@@ -97,7 +97,7 @@
 **Files:**
 - Create: `_acceptance/ca-chap-chon-cach-ly/rang/mo-coi.mjs` (E4 `xanh`, E5 `do`)
 - Create: `_acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs` (E9; `--tu-danh-sach <tệp>`)
-- Create: `_acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs` (E7, `SO_CAP_KHAI = 10`)
+- Create: `_acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs` (E7, `SO_CAP_KHAI = 9`)
 - Create: `_acceptance/ca-chap-chon-cach-ly/rang/ban-sao.mjs` (dựng và gỡ git worktree ngoài kho, liên kết `node_modules` của gốc và từng gói, liên kết `.env`)
 
 **Evals phục vụ:** E4, E5, E7, E9 · **independent:** false (cần Task 1–3)
@@ -119,9 +119,9 @@
   - Lấy danh sách bằng `git merge-base HEAD origin/onehub`, rồi `git diff --name-only <base> HEAD`.
   - Bốn tiền tố cấm khớp bằng `^(apps/[^/]+/(src|agent|app)|packages/[^/]+/src)/`.
   - `--tu-danh-sach` đọc danh sách tệp tay.
-- [ ] **Step 4: `dot-bien.mjs`.** Mười cặp như E7. Mỗi cặp:
+- [ ] **Step 4: `dot-bien.mjs`.** Chín cặp như E7. Mỗi cặp:
   - dựng bản sao, đo chiều xanh, phá bằng `thayMotLan`, đo chiều đỏ, khẳng định thông điệp ghim;
   - in dòng `<cặp> <tên> xanh=0 do=<mã> ghim=ok`.
   - Thêm bước tiền đề cho E6: đếm `test(` ở merge-base cho hai spec `tai-lieu`.
-- [ ] **Step 5:** chạy cả bốn script. Kỳ vọng: E4 xanh ba lượt; E5 «DO DUNG»; E7 đủ 10 cặp; E9 «0 ma san pham».
+- [ ] **Step 5:** chạy cả bốn script. Kỳ vọng: E4 xanh ba lượt; E5 «DO DUNG»; E7 đủ 9 cặp; E9 «0 ma san pham».
 - [ ] **Step 6:** commit `test(ca-chap-chon-cach-ly): ban do mo coi, pha thu, pham vi`.
