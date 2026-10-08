@@ -85,6 +85,14 @@ nội dung mỗi hàng. `organization/danh-sach-keo.tsx` còn lo nội dung hàn
 (`sap-luu-loi.dom.tsx`); kết quả của «Hoàn tác» được hứa (toast «Đã trả thứ tự cũ»); giai đoạn cuối nhóm và người
 không quyền có dòng đo; «Hoàn tác» lưu trữ về đúng chỗ cũ; sàn thiết kế quét theo `git diff`.
 
+## Eval đã ký được thay
+
+Anh chọn ở Cổng Bằng chứng 2026-10-08 (Treo-2: «thay AC-8»), lối kit 2.24 `superseded_by`:
+
+| Eval cũ | Đo gì | Thay bởi | Vì sao |
+|---|---|---|---|
+| giai-doan-thoa-thuan/E15 | Chrome thật trang Giai đoạn, gồm bước menu «Xoá» → «Chuyển và xoá» của `rang/man-giai-doan.mjs` | danh-sach-keo-chung#AC-8 | vòng này cố ý đổi «Xoá» thành «Lưu trữ», «Chuyển và lưu trữ»; thước cũ không sửa |
+
 ## Loại
 
 - **Mỗi trang tự giữ thứ tự tạm, chỉ sửa Ngoài-8 tại chỗ**: lại thành hai bản chép, lệch tiếp ở lần sửa sau.
