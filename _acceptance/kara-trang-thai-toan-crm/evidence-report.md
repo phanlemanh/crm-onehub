@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 3ae8f29a97d0fef5be33876e5162eb7679502fd5
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-08 — ký Cổng Bằng chứng trên vòng chấm 2 (14/14 eval đạt, 7/7 lệnh suite xanh, hội đồng E14 đạt; vòng này không đo đường nền). Một phát hiện trong hợp đồng ở AC-4 được chấp nhận: tiêu đề lỗi theo khuôn ai-ux «Kara chưa tải tóm tắt tuần được». Mười hai mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 5, 6 mở hợp đồng mới; Ngoài-2–4, 7–12 ghi Known limits. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
 # Evidence Report: kara-trang-thai-toan-crm

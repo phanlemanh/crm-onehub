@@ -5,7 +5,7 @@ slug: kara-trang-thai-toan-crm
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-08-kara-trang-thai-toan-crm-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T05:06:50Z
@@ -65,3 +65,15 @@ này (P2-14). Anh chọn K6b dựng toast lưu trữ có Hoàn tác dùng chung 
 - Vòng đời (luật 14 của đợt, `docs/vong-doi.md` «ba câu»): (1) Dọn thế nào — không đổi: cá nhân, công ty, thoả thuận vẫn Lưu trữ → Khôi phục → Xoá vĩnh viễn, K6b chỉ thêm Hoàn tác vào toast lưu trữ; (2) «Lịch sử» — không đổi, K6b không thêm nút Xoá; (3) Danh sách mặc định — không đổi: lọc bản ghi đang dùng, nút «Đã lưu trữ» có sẵn; bản ghi hoàn tác về lại danh sách chính.
 - Ranh giới của giám sát (`hang-viec.json`) có `bulk-actions.tsx` và `archived-list.tsx`; theo lựa chọn (a) K6b không chạm hai tệp đó.
 - Tệp ngoài ranh giới (toast tạo, «Sửa Mục tiêu», mảnh mới trong `packages/ui`, khoá chữ, bài kiểm, proto) xin ở yêu cầu P2-15.
+- **AC-4 (chủ kho quyết ở Cổng Bằng chứng 2026-10-08):** tiêu đề lỗi tóm tắt tuần theo khuôn ai-ux «Kara chưa <làm gì> được» (`docs/ai-ux.md`), nên màn hiện «Kara chưa tải tóm tắt tuần được» thay cho chữ «Kara chưa tải được tóm tắt tuần» của tiêu chí; E4 ghim đúng chữ trên màn.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-08):**
+  - Ngoài-2 — nếu việc làm mới ngầm mục «Hoạt động trên website» bị lỗi trong lúc người dùng đang đọc, nội dung đang xem bị thay bằng khung lỗi dù dữ liệu cũ vẫn dùng được.
+  - Ngoài-3 — hai chỗ đang tự vẽ cùng một khung chờ, nên sau này sửa kiểu khung chờ phải sửa hai nơi và dễ lệch nhau.
+  - Ngoài-4 — `docs/vong-doi.md` vẫn nói chưa có thông báo lưu trữ có Hoàn tác dùng chung.
+  - Ngoài-7 — răng `return null` đọc chữ điều kiện, không đo màn; một lần sửa sau có thể làm mục «Hoạt động trên website» hay «30 ngày đầu» lại biến mất lúc tải hay lỗi mà răng không đỏ (bài DOM của E2, E3 vẫn canh lúc tải và lúc lỗi).
+  - Ngoài-8 — nếu ngăn tạo mới hiện nhầm tên hay nhầm chữ trên thông báo «Đã thêm …», bước kiểm tự động vẫn có thể xanh.
+  - Ngoài-9 — sau khi Hoàn tác lỗi, nếu menu của ngăn bị khoá hoặc không cho Khôi phục nữa thì bước kiểm tự động không phát hiện.
+  - Ngoài-10 — một mục lỗi mà biến mất hẳn thay vì ẩn đúng khi chưa có dữ liệu, bước kiểm tự động vẫn có thể xanh nhầm.
+  - Ngoài-11 — khối Tóm tắt tuần có thể giữ lại hiệu ứng chờ cũ hoặc mất dòng «Tải lại» khi chờ quá lâu mà bước kiểm tự động không báo.
+  - Ngoài-12 — khung lỗi web mất nút «Thử lại» nhưng vùng khác trên trang vẫn có nút đó thì bước kiểm màn vẫn đạt.
+- Hợp đồng mới (Cổng Bằng chứng 2026-10-08): Ngoài-1 và Ngoài-5 — «Tải thêm» hay làm mới ngầm dòng thời gian bị lỗi thì các hoạt động đang xem biến mất, chỉ còn khung lỗi; Ngoài-6 — Kara bỏ qua một việc vô hại (liên hệ đã có ảnh) vẫn hiện «Kara chưa lưu được» và tự mở khối bước.
