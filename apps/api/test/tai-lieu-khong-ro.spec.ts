@@ -8,6 +8,7 @@ import {
 	duyet,
 	hoi,
 	ok,
+	TAI_LIEU_SAN,
 	type TraLoi,
 	taoTrang,
 	traLai,
@@ -125,7 +126,7 @@ beforeAll(async () => {
 			`proposals ${ai}`,
 		).choToiDuyet;
 	for (const s of TRANG_THAI) slugCua[s] = await gieo(s);
-});
+}, TAI_LIEU_SAN.hookMs);
 
 function thay(bang: Record<TrangThai, readonly Ai[]>, ai: Ai, s: TrangThai) {
 	return (bang[s] as readonly Ai[]).includes(ai);
