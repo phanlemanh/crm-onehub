@@ -513,16 +513,23 @@ describe("doi-bot-hoi", () => {
 
 describe("doi-bot-dong-y", () => {
 	test("đồng ý: đăng ký bot mới rồi gỡ liên kết trong một giao dịch", async () => {
+		const haiBot = { [TOKEN_CU]: BOT_CU, [TOKEN_MOI]: BOT_MOI };
+		await gieoBot(TOKEN_CU, 3);
+		await datBotThu(
+			{ token: TOKEN_MOI, xacNhanDoiBot: true },
+			zaloHaiBot({ bot: haiBot, setWebhook: "ok-false" }).fetcher,
+		);
+		if ((await db.zaloLink.count()) !== 3)
+			throw new Error("zalo tu choi ma lien ket da bi go");
+		expect((await botDangLuu())?.zaloBotToken).toBe(TOKEN_CU);
+
 		await gieoBot(TOKEN_CU, 3);
 		const nk = batNhatKy();
 		let ok: Awaited<ReturnType<typeof datBot>>;
 		try {
 			ok = await datBotThu(
 				{ token: TOKEN_MOI, xacNhanDoiBot: true },
-				zaloHaiBot({
-					bot: { [TOKEN_CU]: BOT_CU, [TOKEN_MOI]: BOT_MOI },
-					setWebhook: "ok",
-				}).fetcher,
+				zaloHaiBot({ bot: haiBot, setWebhook: "ok" }).fetcher,
 			);
 		} finally {
 			nk.tra();
@@ -538,31 +545,17 @@ describe("doi-bot-dong-y", () => {
 		expect(dong).toEqual(["[zalo] doi bot: go 3 lien ket"]);
 
 		await gieoBot(TOKEN_CU, 3);
-		await datBotThu(
-			{ token: TOKEN_MOI, xacNhanDoiBot: true },
-			zaloHaiBot({
-				bot: { [TOKEN_CU]: BOT_CU, [TOKEN_MOI]: BOT_MOI },
-				setWebhook: "ok-false",
-			}).fetcher,
-		);
-		if ((await db.zaloLink.count()) !== 3)
-			throw new Error("zalo tu choi ma lien ket da bi go");
-		expect((await botDangLuu())?.zaloBotToken).toBe(TOKEN_CU);
-
-		await gieoBot(TOKEN_CU, 3);
 		const hong = spyOn(lienKetDb, "goHetLienKet").mockImplementation(
-			async () => {
-				throw new Error("go lien ket hong");
+			async (tx) => {
+				await tx.zaloLink.deleteMany({});
+				throw new Error("go lien ket hong giua chung");
 			},
 		);
 		const nk2 = batNhatKy();
 		try {
 			await datBotThu(
 				{ token: TOKEN_MOI, xacNhanDoiBot: true },
-				zaloHaiBot({
-					bot: { [TOKEN_CU]: BOT_CU, [TOKEN_MOI]: BOT_MOI },
-					setWebhook: "ok",
-				}).fetcher,
+				zaloHaiBot({ bot: haiBot, setWebhook: "ok" }).fetcher,
 			);
 		} finally {
 			nk2.tra();
