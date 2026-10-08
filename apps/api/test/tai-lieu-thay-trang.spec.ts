@@ -20,6 +20,7 @@ import {
 	ma,
 	ok,
 	phien,
+	TAI_LIEU_SAN,
 	type TraLoi,
 	taoTrang,
 	traLai,
@@ -186,7 +187,7 @@ beforeAll(async () => {
 	SLUG["may-soan"] = (await trangTuNguon(ma("May soan"), "DANG_SOAN")).slug;
 	SLUG["go-tay"] = (await trangTuNguon(ma("Go tay"), "CAN_GO_TAY")).slug;
 	SLUG.loi = (await trangTuNguon(ma("Loi soan"), "LOI", LY_DO_LOI)).slug;
-});
+}, TAI_LIEU_SAN.hookMs);
 
 describe("thay-trang", () => {
 	test("ma-tran: moi nguoi mo duoc dung nhung trang danh sach cho thay, khong trang nao khac", async () => {
