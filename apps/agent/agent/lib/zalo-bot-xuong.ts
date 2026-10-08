@@ -128,6 +128,10 @@ async function docBot(
 	return ket;
 }
 
+export function diaChiWebhook(goc: URL): string {
+	return new URL(ZALO.webhook.duong, goc).toString();
+}
+
 type KetDangKy = "duoc" | "tu-choi" | "xac-minh-hong";
 
 async function dangKy(
@@ -187,7 +191,7 @@ export async function datBot(
 		return { outcome: "valid", tenBot, webhook: "can-https" };
 	}
 	const khoa = randomBytes(ZALO.webhook.khoa.sinhByte).toString("hex");
-	const url = new URL(ZALO.webhook.duong, goc).toString();
+	const url = diaChiWebhook(goc);
 	const truoc = await chupCot();
 	await ghiCot({
 		zaloBotToken: token,

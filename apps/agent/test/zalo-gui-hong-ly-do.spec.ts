@@ -16,7 +16,8 @@ import {
 	moTaLoiZalo,
 	zaloGoi,
 } from "../agent/lib/zalo-api";
-import { datBot } from "../agent/lib/zalo-bot-xuong";
+import { kiemBot } from "../agent/lib/zalo-bot";
+import { datBot, diaChiWebhook } from "../agent/lib/zalo-bot-xuong";
 import { ZALO } from "../agent/lib/zalo-config";
 import {
 	datKhoaLech,
@@ -354,6 +355,7 @@ type BotGia = { id: string; ten: string };
 type ChonHaiBot = {
 	bot: Record<string, BotGia>;
 	setWebhook: "ok" | "ok-false";
+	webhookUrl?: string;
 };
 
 function zaloHaiBot(chon: ChonHaiBot) {
@@ -402,6 +404,12 @@ function zaloHaiBot(chon: ChonHaiBot) {
 					updated_at: 1,
 					verification: { ok: true, url, outcome: ZALO.webhook.xacMinhOk },
 				},
+			});
+		}
+		if (method === "getWebhookInfo" && chon.webhookUrl) {
+			return Response.json({
+				ok: true,
+				result: { url: chon.webhookUrl, updated_at: 1 },
 			});
 		}
 		return Response.json(
@@ -607,5 +615,59 @@ describe("cung-bot", () => {
 			chay++;
 		}
 		expect(chay).toBe(3);
+	});
+});
+
+describe("ly-do-ben", () => {
+	test("lý do khoá lệch chỉ mất khi đăng ký lại thành công", async () => {
+		const datKhoaLechBang403 = async () => {
+			const tin = JSON.stringify(
+				thanWebhook({ messageId: "ben-1", fromId: "zben", text: "chao" }),
+			);
+			const r = await guiWebhook(tin, KHOA_SAI, { env: BIEN });
+			expect(r.status).toBe(403);
+			expect(await lyDoHienTai()).toBe("khoa-lech");
+		};
+		const haiBot = { [TOKEN_CU]: BOT_CU, [TOKEN_MOI]: BOT_MOI };
+		const nk = batNhatKy();
+		try {
+			await gieoBot(TOKEN_CU, 0);
+			await datKhoaLechBang403();
+			await khongBienToken(() =>
+				kiemBot({
+					fetcher: zaloHaiBot({
+						bot: haiBot,
+						setWebhook: "ok",
+						webhookUrl: diaChiWebhook(GOC_WEB),
+					}).fetcher,
+				}),
+			);
+			if ((await lyDoHienTai()) !== "khoa-lech")
+				throw new Error("nhip kiem xoa ly do khoa-lech");
+
+			await datBotThu(
+				{ token: TOKEN_CU },
+				zaloHaiBot({ bot: haiBot, setWebhook: "ok-false" }).fetcher,
+			);
+			if ((await lyDoHienTai()) === null)
+				throw new Error("dang ky hong ma xoa ly do");
+
+			await datKhoaLechBang403();
+			await datBotThu(
+				{ token: TOKEN_CU },
+				zaloHaiBot({ bot: haiBot, setWebhook: "ok" }).fetcher,
+			);
+			expect(await lyDoHienTai()).toBeNull();
+
+			await datKhoaLechBang403();
+			await datBotThu(
+				{ token: TOKEN_MOI },
+				zaloHaiBot({ bot: haiBot, setWebhook: "ok" }).fetcher,
+			);
+			expect(await lyDoHienTai()).toBeNull();
+			expect((await botDangLuu())?.zaloBotToken).toBe(TOKEN_MOI);
+		} finally {
+			nk.tra();
+		}
 	});
 });
