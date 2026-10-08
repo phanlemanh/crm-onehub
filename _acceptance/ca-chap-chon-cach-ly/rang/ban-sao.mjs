@@ -4,6 +4,7 @@ import { join, resolve } from "node:path";
 
 export const GOC = resolve(import.meta.dirname, "..", "..", "..");
 const NHOM = ["apps", "packages", "tools"];
+const SINH_SAN = [join("packages", "db", "src", "generated")];
 
 export class KhongDo extends Error {}
 
@@ -18,6 +19,8 @@ export function dungBanSao(ten) {
 	git(["worktree", "add", "--detach", dich, "HEAD"]);
 	symlinkSync(join(GOC, "node_modules"), join(dich, "node_modules"));
 	if (existsSync(join(GOC, ".env"))) symlinkSync(join(GOC, ".env"), join(dich, ".env"));
+	for (const tep of SINH_SAN)
+		if (existsSync(join(GOC, tep))) symlinkSync(join(GOC, tep), join(dich, tep));
 	for (const nhom of NHOM) {
 		if (!existsSync(join(GOC, nhom))) continue;
 		for (const goi of readdirSync(join(GOC, nhom))) {
