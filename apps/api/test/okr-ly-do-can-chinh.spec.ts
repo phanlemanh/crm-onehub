@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { NOT_A_MEMBER } from "@crm/auth";
 import { db } from "@crm/db";
 import type { CuocSoan } from "@crm/db/okr-cuoc-soan";
 import { dongSoan, noiDungSoan } from "@crm/validation/okr-tro-ly";
@@ -11,6 +12,8 @@ import {
 	type SoanDuaVaoOutput,
 	type SoanQuyetOutput,
 } from "../src/okr/okr.contracts";
+import { OKR } from "../src/okr/okr-config";
+import { mintPhien } from "./phien-thu";
 import {
 	CHU_KY_Q4,
 	DON_VI,
@@ -29,6 +32,7 @@ import {
 	dungUngDung,
 	ghiCauHinh,
 	goi,
+	goiRest,
 	ketThucMau,
 	mt,
 	nguoi,
@@ -113,7 +117,8 @@ async function nhanVaDuaVao(
 		),
 		`dua vao ${duong}`,
 	);
-	expect(ra.ok).toBe(true);
+	if (!ra.ok)
+		throw new Error(`dua vao ${duong} bi tu choi: ${ra.lyDo} ${ra.chiTiet}`);
 }
 
 async function canChinhTaoRa(deXuatId: string) {
@@ -502,6 +507,121 @@ describe("do-nguong", () => {
 			} finally {
 				await db.okrAlignment.delete({ where: { id: thieu.id } });
 			}
+		},
+		CHO_DB,
+	);
+});
+
+const BI_MAT = "bi-mat-l1";
+const NGUOI_NGOAI = "ldcc-nguoi-ngoai-kho";
+
+describe("quyen-xem", () => {
+	test(
+		"mục tiêu có căn chỉnh mang lý do không chuyển được sang giới hạn; người ngoài workspace bị 403 không thấy lý do",
+		async () => {
+			const nguon = await db.okrObjective.findFirst({
+				where: {
+					cycleId: CHU_KY_Q4,
+					departmentId: DON_VI.kdBac.departmentId,
+					status: "cong-bo",
+					hienThi: "cong-khai",
+				},
+				select: { id: true },
+				orderBy: { id: "asc" },
+			});
+			if (!nguon) throw new Error("khong co muc tieu cong khai cua kd-bac");
+			await db.okrAlignment.deleteMany({
+				where: {
+					OR: [
+						{ objectiveId: nguon.id },
+						{ targetObjectiveId: nguon.id },
+						{ targetKeyResult: { objectiveId: nguon.id } },
+					],
+				},
+			});
+			const cu = { objectiveId: nguon.id };
+			ok(
+				await goi(
+					app,
+					"okr.addAlignment",
+					"mutation",
+					{
+						objectiveId: cu.objectiveId,
+						targetObjectiveId: DICH,
+						targetKeyResultId: null,
+					},
+					cTruong,
+				),
+				"gan that",
+			);
+			const g = await db.okrAlignment.findFirstOrThrow({
+				where: { objectiveId: cu.objectiveId, targetObjectiveId: DICH },
+			});
+			await db.okrAlignment.update({
+				where: { id: g.id },
+				data: { lyDo: BI_MAT },
+			});
+			const doi = await goi(
+				app,
+				"okr.datHienThi",
+				"mutation",
+				{ objectiveId: cu.objectiveId, hienThi: "gioi-han", nguoiXem: [] },
+				cTruong,
+			);
+			const sau = await db.okrObjective.findUniqueOrThrow({
+				where: { id: cu.objectiveId },
+				select: { hienThi: true, ownerUserId: true, cycleId: true },
+			});
+			const conLyDo = await db.okrAlignment.findUnique({
+				where: { id: g.id },
+				select: { lyDo: true },
+			});
+			if (
+				doi.status !== 400 ||
+				doi.loi !== OKR.thongDiep.hienThi.conCanChinh(1) ||
+				sau.hienThi !== "cong-khai" ||
+				conLyDo?.lyDo !== BI_MAT
+			)
+				throw new Error(
+					`doi gioi han khi co ly do bi lot: ${doi.status} ${doi.loi}`,
+				);
+
+			await db.user.upsert({
+				where: { id: NGUOI_NGOAI },
+				create: {
+					id: NGUOI_NGOAI,
+					name: "Người ngoài kho",
+					email: `${NGUOI_NGOAI}@ngoai.test`,
+				},
+				update: {},
+			});
+			try {
+				const { cookie } = await mintPhien(NGUOI_NGOAI);
+				const vao = { cycleId: sau.cycleId };
+				const traLoi = [
+					await goi(app, "okr.mine", "query", vao, cookie),
+					await goiRest(app, "GET", "/okr/mine", vao, cookie),
+				];
+				for (const t of traLoi) {
+					expect([t.status, t.loi]).toEqual([403, NOT_A_MEMBER]);
+					if (JSON.stringify(t).includes(BI_MAT))
+						throw new Error("lo ly do cho nguoi ngoai");
+				}
+			} finally {
+				await db.session.deleteMany({ where: { userId: NGUOI_NGOAI } });
+				await db.user.delete({ where: { id: NGUOI_NGOAI } });
+			}
+
+			const cChu = (await mintPhien(sau.ownerUserId)).cookie;
+			const cuaChu = await goi(
+				app,
+				"okr.mine",
+				"query",
+				{ cycleId: sau.cycleId },
+				cChu,
+			);
+			if (!JSON.stringify(cuaChu.data).includes(BI_MAT))
+				throw new Error("doi chung: chu muc tieu khong thay ly do");
 		},
 		CHO_DB,
 	);
