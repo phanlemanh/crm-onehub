@@ -18,8 +18,9 @@ evals:
       - "packages/ui/src/components/data-table.tsx"
       - "_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"
     expected: |
-      Ma tran viet truoc 6 o, moi o mot dong "DUNG <kho>: <canh> — <so lieu tho>" va mot anh
-      evidence/<canh>-<kho>.png; dong dem "6/6 o". Cac o 375 chay trong viewport hasTouch: true,
+      Ma tran viet truoc 5 o, moi o mot dong "DUNG <kho>: <canh> — <so lieu tho>" va mot anh
+      evidence/<canh>-<kho>.png; dong dem "5/5 o" (phep do dung du lieu mau san co cua kho do, khong
+      dung du lieu tam nen khong co o don). Cac o 375 chay trong viewport hasTouch: true,
       isMobile: true; mo «Loc», mo tieu chi va chon lua chon deu bang page.touchscreen.tap tai tam phan
       tu; dong DUNG in pointerType da ghi nhan (mong "touch"):
         giai-doan-375: menu con Giai doan cua thoa thuan — hop [data-slot=dropdown-menu-sub-content]
@@ -27,11 +28,10 @@ evals:
         cham-375: tap mot giai doan trong menu con do -> location.search mang stage=<id giai doan vua tap>
         cong-ty-375: menu con Cong ty cua ca nhan — hop va o tim (input trong hop) left >= 7, right <= 368;
           go "xa" vao o tim -> value cua o tim bang "xa"
-        doi-chung-1440: menu con Giai doan cua thoa thuan — left hop >= right cua muc Giai doan - 2
-          (khong dich khi du cho)
+        doi-chung-1440: menu con Giai doan cua thoa thuan — vi tri hop bang vi tri khi tat lop dich
+          (style.translate = none), lech <= 1 px, hop trong khung; in phia Radix dat (data-side)
         hang-loat-768: chon 1 dong o danh sach thoa thuan, mo menu thao tac hang loat, mo menu con doi
           nguoi phu trach — hop left >= 0, right <= 768
-        don: kho do sach du lieu tam
       CHIEU DO (pha-thu o S3 tren ban sao dropdown-menu.tsx): bo lop dich ngang -> giai-doan-375 SAI voi
       so lieu ghim "right <so> > 368" (tai hien so do 07/10: left 359) va cham-375 SAI (tap khong trung).
 
@@ -66,9 +66,9 @@ evals:
       - "packages/ui/src/components/dropdown-menu.tsx"
       - "_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"
     expected: |
-      Dong "DUNG 1440: doi-chung-1440" in left hop menu con va right muc Giai doan; left >= right - 2.
-      Anh: menu con nam ben phai menu cha, khong de len.
-      CHIEU DO: ban sao dich vo dieu kien (luon -translate-x-1/2) -> doi-chung-1440 SAI.
+      Dong "DUNG 1440: doi-chung-1440" in phia Radix dat, left hop, left khi tat lop dich, do lech (mong 0).
+      Anh: menu con nam canh menu cha (phia Radix chon), khong de len.
+      CHIEU DO: ban sao dich vo dieu kien (luon -translate-x-1/2) -> doi-chung-1440 SAI vi lech > 1 px.
 
   - id: E4
     criterion: AC-4
@@ -85,9 +85,9 @@ evals:
       - "_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"
     expected: |
       Kiem KHONG HOI QUY (khong phai bang chung cho phan sua): dong "DUNG 768: hang-loat-768" voi hop menu
-      con left >= 0, right <= 768. Cung lan do chay them o hang-loat-768 tren ban merge-base (do-man.mjs
-      --doi-chung-goc dung worktree tam o merge-base) va in so cua ban goc canh so cua ban moi; ban goc tran
-      thi dong ghi "ban goc tran, ban moi khong"; ban goc khong tran thi ghi "khong hoi quy".
+      con left >= 0, right <= 768. Cung o do doc them vi tri hop khi tat lop dich ngay tren trang
+      (style.translate = none — chinh la vi tri cua ban truoc vong nay) va in so ban goc canh ban moi; ban
+      goc tran thi dong ghi "ban goc tran, ban moi khong"; ban goc khong tran thi ghi "khong hoi quy".
 
   - id: E5
     criterion: AC-5

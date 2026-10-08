@@ -1,34 +1,100 @@
 {
   "feature_plain": "Trên điện thoại, menu con của bộ lọc tự dịch vào trong màn để người dùng chạm chọn được; trên màn rộng không đổi gì.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ để menu con «Giai đoạn» nằm trọn trong màn điện thoại 375 và chạm vào một giai đoạn thì bảng lọc đúng giai đoạn đó."},
-    {"id": "AC-2", "p": "Sẽ để menu con có ô tìm (Công ty) cũng nằm trọn trong màn điện thoại, gõ tìm được."},
-    {"id": "AC-4", "p": "Sẽ giữ menu con của thao tác hàng loạt trong màn ở khổ máy tính bảng 768 — kiểm không hồi quy, so cạnh bản cũ."},
-    {"id": "AC-5", "p": "Sẽ sửa một chỗ trong thành phần menu dùng chung, nên mọi menu con đúng cùng lúc; lớp riêng của nơi gọi vẫn ghép thêm được."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ để menu con «Giai đoạn» nằm trọn trong màn điện thoại 375 và chạm vào một giai đoạn thì bảng lọc đúng giai đoạn đó."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ để menu con có ô tìm (Công ty) cũng nằm trọn trong màn điện thoại, gõ tìm được."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ giữ menu con của thao tác hàng loạt trong màn ở khổ máy tính bảng 768 — kiểm không hồi quy, so cạnh bản cũ."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ sửa một chỗ trong thành phần menu dùng chung, nên mọi menu con đúng cùng lúc; lớp riêng của nơi gọi vẫn ghép thêm được."
+    }
   ],
   "wont_do": [
-    {"id": "AC-3", "p": "Sẽ KHÔNG dịch menu con trên màn rộng khi đủ chỗ — nó vẫn mở bên phải menu cha như cũ."},
-    {"id": "AC-6", "p": "Sẽ KHÔNG làm hỏng bảng dùng chung và bộ lọc — năm bài kiểm sẵn có vẫn xanh nguyên kỳ vọng."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG sửa nơi gọi ngoài bộ thành phần dùng chung — không thêm lớp đổi vị trí ở các màn."},
-    {"id": "OOS-1", "p": "Không đổi menu con thành dạng «đi sâu rồi quay lại» trên điện thoại."},
-    {"id": "OOS-2", "p": "Không sửa tệp thao tác hàng loạt của dãy P2 — chúng được lợi qua thành phần dùng chung."},
-    {"id": "OOS-3", "p": "Không đo trên màn thật ca menu con bị lật sang trái mà vẫn thiếu chỗ — chỉ kiểm lớp."},
-    {"id": "OOS-4", "p": "Không đổi bề rộng hay chiều cao tối đa của menu con."}
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG dịch menu con trên màn rộng khi đủ chỗ — nó đứng đúng chỗ Radix đặt như trước vòng này (ở 1440 là lật sang trái vì nút «Lọc» sát mép phải)."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ KHÔNG làm hỏng bảng dùng chung và bộ lọc — năm bài kiểm sẵn có vẫn xanh nguyên kỳ vọng."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ KHÔNG sửa nơi gọi ngoài bộ thành phần dùng chung — không thêm lớp đổi vị trí ở các màn."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không đổi menu con thành dạng «đi sâu rồi quay lại» trên điện thoại."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không sửa tệp thao tác hàng loạt của dãy P2 — chúng được lợi qua thành phần dùng chung."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không đo trên màn thật ca menu con bị lật sang trái mà vẫn thiếu chỗ — chỉ kiểm lớp."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi bề rộng hay chiều cao tối đa của menu con."
+    }
   ],
   "scope_plain": "Bốn việc để sau, có lý do:",
   "coverage_plain": [
-    {"i": 0, "p": "Ba ca chỗ trống — đủ chỗ, thiếu cả hai phía, lật trái vẫn thiếu — đều có tiêu chí (AC-3 đủ chỗ, AC-1 thiếu chỗ, AC-5 lớp cho cả hai phía)."},
-    {"i": 1, "p": "Mọi nơi dùng menu con đã kê: bộ lọc bảng, bộ lọc có ô tìm, Kanban, thao tác hàng loạt (AC-1, AC-2, AC-4)."},
-    {"i": 2, "p": "Ba khổ: điện thoại 375, máy tính bảng 768 (thao tác hàng loạt chỉ có từ khổ này), màn rộng 1440."},
-    {"i": 3, "p": "Lõi thành tiêu chí: chạm chọn trên điện thoại, ô tìm, không dịch khi đủ chỗ, thao tác hàng loạt, lớp thành phần, hồi quy, sàn thiết kế."},
-    {"i": 4, "p": "Để sau: đo ca lật trái trên màn thật; Kanban ở 375 (cùng thành phần, cùng lớp)."},
-    {"i": 5, "p": "Không bao giờ: tự viết lại định vị; đổi sang dạng đi-sâu."}
+    {
+      "i": 0,
+      "p": "Ba ca chỗ trống — đủ chỗ (kể cả khi Radix lật sang trái), thiếu cả hai phía, lật trái vẫn thiếu — đều có tiêu chí (AC-3 không dịch, AC-1 thiếu chỗ, AC-5 lớp cho cả hai phía)."
+    },
+    {
+      "i": 1,
+      "p": "Mọi nơi dùng menu con đã kê: bộ lọc bảng, bộ lọc có ô tìm, Kanban, thao tác hàng loạt (AC-1, AC-2, AC-4)."
+    },
+    {
+      "i": 2,
+      "p": "Ba khổ: điện thoại 375, máy tính bảng 768 (thao tác hàng loạt chỉ có từ khổ này), màn rộng 1440."
+    },
+    {
+      "i": 3,
+      "p": "Lõi thành tiêu chí: chạm chọn trên điện thoại, ô tìm, không dịch khi đủ chỗ, thao tác hàng loạt, lớp thành phần, hồi quy, sàn thiết kế."
+    },
+    {
+      "i": 4,
+      "p": "Để sau: đo ca lật trái trên màn thật; Kanban ở 375 (cùng thành phần, cùng lớp)."
+    },
+    {
+      "i": 5,
+      "p": "Không bao giờ: tự viết lại định vị; đổi sang dạng đi-sâu."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Phép kiểm «không chạm nơi gọi» ban đầu đếm cả bản đồ sản phẩm do máy vẽ lại khi ký cổng nên sẽ đỏ oan — đã sửa: chỉ đếm dòng thêm chạm menu con ở các màn."},
-    {"i": 1, "p": "Phép đo màn ban đầu bấm bằng chuột trong khi lời hứa là chạm trên điện thoại — đã sửa: đo bằng sự kiện chạm, có in loại con trỏ."},
-    {"i": 2, "p": "Ngưỡng mép phải không có dung sai làm tròn điểm ảnh — đã sửa: cho lệch 1 px, in số thô."},
-    {"i": 3, "p": "Ô thao tác hàng loạt ở 768 có thể xanh cả trên bản cũ — đã sửa: ghi rõ là kiểm không hồi quy và in số của bản cũ cạnh bản mới."},
-    {"i": 4, "p": "Vế «nơi gọi ghi đè lề» không có phép đo — đã bỏ vế đó khỏi tiêu chí; lề 8 px đo ở màn thật."}
+    {
+      "i": 0,
+      "p": "Phép kiểm «không chạm nơi gọi» ban đầu đếm cả bản đồ sản phẩm do máy vẽ lại khi ký cổng nên sẽ đỏ oan — đã sửa: chỉ đếm dòng thêm chạm menu con ở các màn."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo màn ban đầu bấm bằng chuột trong khi lời hứa là chạm trên điện thoại — đã sửa: đo bằng sự kiện chạm, có in loại con trỏ."
+    },
+    {
+      "i": 2,
+      "p": "Ngưỡng mép phải không có dung sai làm tròn điểm ảnh — đã sửa: cho lệch 1 px, in số thô."
+    },
+    {
+      "i": 3,
+      "p": "Ô thao tác hàng loạt ở 768 có thể xanh cả trên bản cũ — đã sửa: ghi rõ là kiểm không hồi quy và in số của bản cũ cạnh bản mới."
+    },
+    {
+      "i": 4,
+      "p": "Vế «nơi gọi ghi đè lề» không có phép đo — đã bỏ vế đó khỏi tiêu chí; lề 8 px đo ở màn thật."
+    }
   ]
 }
