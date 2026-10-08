@@ -1,0 +1,246 @@
+schema_version: 1
+slug: datatable-loc-ro
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.dlr_rong_vi_loc
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "packages/ui/test/data-table-loc-ro.dom.tsx"
+    expected: |
+      data-table-loc-ro.dom.tsx, describe "rong-vi-loc": ma tran viet truoc 8 dong, moi dong mot
+      lan dung DataTable (createRoot + NuqsTestingAdapter + LocaleProvider vi) voi rows [] va
+      empty="CAU-CUA-MAN":
+        1 tieu chi thuong {owner:["u1"]} -> Empty (data-slot="empty") co messages("vi").table.noMatch
+          va noMatchDescription, KHONG co "CAU-CUA-MAN"
+        2 tieu chi truong tuy chinh {"field:k":["o1"]} -> nhu dong 1
+        3 bo loc trang thai: tabs khai, query.tab "closed", filters {status:["closed"]} -> nhu dong 1
+        4 searchActive true, filters rong -> nhu dong 1
+        5 tron 1+2+3+4 -> nhu dong 1
+        6 khong loc: tab "all", tabId "status", filters {status:["all"]}, searchActive false ->
+          co "CAU-CUA-MAN", KHONG co noMatch
+        7 khong loc, filters {} -> co "CAU-CUA-MAN"
+        8 loading true + nguon loc dong 5 -> co spinner (role="status"), KHONG co noMatch lan
+          "CAU-CUA-MAN"
+      so assert noi dung = 8 dong ket qua; in bang 8 dong.
+      CHIEU DO (pha-thu o S3 tren ban sao data-table.tsx): tinh "dang loc" bang
+      Object.values(query.filters).some(v => v.length > 0) (dem ca khoa trang thai "all") -> dong 6
+      do voi thong diep ghim "dong 6 khong-loc: phai hien cau cua man".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dlr_nut_bo_loc
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/test/data-table-loc-ro.dom.tsx"
+    expected: |
+      describe "nut-bo-loc": nguon loc dong 1 cua E1 va onClearFilters = ham dem -> dung 1 nut co
+      chu messages("vi").table.resetFilters trong Empty; click -> ham dem = 1 (khong 0, khong 2).
+      Doi chung cung fixture khong truyen onClearFilters -> 0 nut co chu do, noMatch van hien.
+      CHIEU DO: bo dieu kien onClearFilters (luon ve nut, onClick undefined) -> ca doi chung do,
+      thong diep ghim "khong onClearFilters thi khong co nut Bo loc".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dlr_bang_bo_loc
+    paths:
+      - "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
+      - "apps/app/app/(app)/[slug]/companies/companies-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/members-table.tsx"
+      - "apps/app/test/bang-crm-loc-ro.dom.tsx"
+    expected: |
+      bang-crm-loc-ro.dom.tsx, describe "bo-loc": ma tran viet truoc 4 bang (ContactsTable,
+      CompaniesTable, DealsTable o dang bang, MembersTable), trpc gia theo khuon chuyen-okr.dom.tsx
+      (kieu dau ra = RouterOutputs cua thu tuc list tung bang) tra rows [] va ghi lai MOI dau vao
+      cua thu tuc list. NuqsTestingAdapter hasMemory voi searchParams dung san: q=abc, mot tieu chi
+      thuong, HAI truong tuy chinh cung dang chon fields={"k1":["o1"],"k2":["o2"]} (tru thanh vien),
+      status=closed (thoa thuan), archived=true (tru thanh vien), sort=<cot sap duoc>, dir=desc,
+      page=3. Bam nut table.resetFilters MOT lan, cho onUrlUpdate lang -> URL cuoi: khong q, khong
+      tieu chi, fields vang hoac {} (khong con k1, khong con k2), status vang hoac all (thoa thuan),
+      page vang hoac 1; archived, sort, dir giu nguyen. Dau vao list cuoi cung: q "", moi tieu chi
+      [], fields {}, archived giu, sort/dir giu. 4 dong ket qua, moi dong ghim ten bang.
+      CHIEU DO (chay ngay o S3, ghi vao evidence): onClearFilters cua ContactsTable doi thanh goi
+      query.setFilter lan luot tung tieu chi (ke ca field:k1, field:k2) roi setTab (ban sao) -> dong
+      ca-nhan do voi thong diep ghim "fields con k1" (setFilter thu hai doc fields cu, ghi lai k1).
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dlr_bo_chon
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "packages/ui/test/data-table-loc-ro.dom.tsx"
+    expected: |
+      describe "bo-chon": DataTableFacetMenu voi hai tieu chi A (thuong) va B (searchable), moi tieu
+      chi mot lua chon dang chon; mo menu Loc -> mo menu con A -> co dung 1 muc chu
+      messages("vi").table.clearFilters == "Bỏ chọn"; bam -> onFilterChange("A", []) dung 1 lan, 0 lan
+      cho B. Lap lai voi B (menu co o tim) -> co muc, bam -> onFilterChange("B", []). Doi chung:
+      tieu chi khong chon gi -> 0 muc. Sau khi bam "Bỏ chọn", menu con van mo (muc cua tieu chi van trong
+      DOM, aria-expanded cua trigger van true). Bo chu vi cua packages/ui: khong gia tri nao bang
+      "Bỏ hết tiêu chí". en: clearFilters == "Clear".
+      CHIEU DO: bo muc o nhanh searchable (ban sao) -> dong B do "menu co o tim thieu Bo chon".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dlr_so_dem
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/test/data-table-loc-ro.dom.tsx"
+    expected: |
+      describe "so-dem": DataTable voi facet owner options [u1,u2,u3], facetCounts {owner:{u1:4,u2:0}}
+      (u3 vang): mo menu con -> ba muc hien, so in theo thu tu 4, 0, 0 (doc textContent cua span so
+      trong tung muc); tick u3 -> setFilter("owner",["u3"]). Facet thu hai "x" khong co muc trong
+      facetCounts -> muc cua no khong co span so. Tabs {id:"status", options open/closed}, facetCounts
+      {status:{open:2, closed:0}} -> menu trang thai co ca "closed" kem so 0.
+      Doi chung duong cung fixture: facetCounts {owner:{u1:4,u2:1,u3:7}} -> so 4,1,7.
+      CHIEU DO: giu dong `if (tabCounts?.[option.value] === 0) return null` (ban sao) -> ca tabs do
+      "lua chon trang thai so 0 phai hien"; bo tra cuu dem (ban sao) -> ca so do "so 4,0,0".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dlr_bang_so_0
+    paths:
+      - "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
+      - "apps/app/app/(app)/[slug]/companies/companies-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/members-table.tsx"
+      - "apps/app/components/crm/fields/field-facets.tsx"
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/test/bang-crm-loc-ro.dom.tsx"
+    expected: |
+      Kieu du lieu cua trpc gia la RouterOutputs cua tung thu tuc (check-types bat lech khuon); khoa
+      facetCounts cua truong tuy chinh rut tu chinh field-facets ("field:" + key) — tren app that khuon
+      nay duoc E8 canh "truong-tuy-chinh" chung.
+      describe "so-0": ma tran viet truoc bang x tieu chi = ca nhan {owner, company, activity,
+      field:k} + cong ty {owner, enrichment, activity, field:k} + thoa thuan {owner, stage, closing,
+      field:k} + thanh vien {role} = 13 o. trpc gia: users 2 nguoi, fields.filters mot truong k co 2
+      lua chon, deals stage 3 giai doan, companies.options 2 cong ty; facetCounts cho moi tieu chi
+      chi co MOT gia tri > 0, con lai vang. Moi o: mo menu con -> so muc = so lua chon nguon (tinh
+      tu chinh fixture, khong ghi tay) va co it nhat mot muc mang so 0. 13 dong ket qua.
+      Ca "tu-do": ca nhan title/seniority/persona va cong ty industry, URL chon gia tri "GHIM" khong
+      co trong facetCounts -> menu con co muc "GHIM" kem so 0; 4 dong.
+      Ca "kanban": DealsTable view=board -> menu Loc (DataTableFacetMenu) in so cho owner.
+      CHIEU DO: tra lai `.filter((option) => (facetCounts?.owner?.[option.value] ?? 0) > 0)` o
+      contacts-table (ban sao) -> o ca-nhan/owner do voi ten o; bo gop lua chon dang chon o tieu
+      chi title (ban sao) -> ca tu-do do "GHIM".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.dlr_bang_khong_loc
+    paths:
+      - "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
+      - "apps/app/app/(app)/[slug]/companies/companies-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/lib/messages/contacts.ts"
+      - "apps/app/lib/messages/companies.ts"
+      - "apps/app/lib/messages/deals.ts"
+      - "apps/app/test/bang-crm-loc-ro.dom.tsx"
+    expected: |
+      describe "khong-loc": 3 bang x 2 che do x 2 ngon ngu viet truoc = 12 o; rows [], URL rong.
+      Che do thuong: vi -> dung "Chưa có thoả thuận nào." / "Chưa có cá nhân nào." / "Chưa có công ty
+      nào."; en -> "No deals yet." / "No contacts yet." / "No companies yet."; khong chua "bộ lọc" /
+      "filter" / "match". Che do archived=true -> cau emptyArchived cu (doc tu messages, khong ghi tay)
+      va khong co noMatch cua packages/ui. 12 dong.
+      CHIEU DO: bang thoa thuan truyen searchActive true co dinh (ban sao) -> o thoa-thuan/thuong do
+      "khong loc thi hien cau cua man".
+
+  - id: E8
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dlr_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/datatable-loc-ro/evidence dat tuong minh: lenh cua dlr_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng cua cay, do-man.mjs tu chan cay, chup, don)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/datatable-loc-ro/evidence/
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "_acceptance/datatable-loc-ro/rang/do-man.mjs"
+    expected: |
+      Kho do co it nhat 1 thoa thuan va 1 giai doan khong co thoa thuan nao, va mot truong tuy chinh
+      dang lua chon cua ca nhan co 2 lua chon, mot lua chon chua ai dung (do-man.mjs dung bang Prisma
+      tren kho do rieng crm_<cay>_do, tu choi khi DATABASE_URL tro kho khac). Ma tran viet truoc 6 o:
+      1440 x 4 canh — menu-giai-doan (menu con Giai doan mo, giai doan rong mang "0", lua chon nam
+      trong khung nhin) · rong-vi-loc (chon giai doan rong qua menu: "Không có kết quả nào khớp bộ
+      lọc" va nut "Bỏ lọc" trong khung nhin, tran ngang 0px) · sau-bo-loc (truoc khi bam dia chi da
+      mang stage; bam "Bỏ lọc": bang co >= 1 dong, location.search khong con stage/fields/q) ·
+      truong-tuy-chinh (danh sach ca nhan, menu con cua truong do: lua chon chua ai dung hien kem "0"
+      — doi chieu khuon dem cua API that); 375 x 2 canh — rong-vi-loc (mo thang dia chi
+      /deals?stage=<giai doan rong>: cau va nut trong khung nhin, tran ngang 0px) · sau-bo-loc (nhu
+      1440). Moi o mot dong "DUNG <kho>: <canh> — <so lieu>" va mot anh evidence/<canh>-<kho>.png;
+      dong dem "6/6 o". Anh rong-vi-loc: tieu de, mo ta, nut thay ro, khong de len thanh cong cu.
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.dlr_chu
+    paths:
+      - "packages/ui/src/lib/messages.ts"
+      - "apps/app/lib/messages/contacts.ts"
+      - "apps/app/lib/messages/companies.ts"
+      - "apps/app/lib/messages/deals.ts"
+      - "packages/ui/test/data-table-locale.spec.tsx"
+    expected: |
+      messages-guard.spec.ts xanh (vi co dau, khong trong, du en). data-table-locale.spec.tsx them
+      ca "loc-ro-chu": ma tran viet truoc 7 khoa (table.noMatch, table.noMatchDescription,
+      table.resetFilters, table.clearFilters, deals.empty, contacts.empty, companies.empty) -> moi
+      khoa: en != vi va en khong khop /[À-ỹ]/; 7 dong. Ca "loc-ro-en": DataTable locale en, nguon loc
+      dong 1 cua E1, onClearFilters -> chua messages("en").table.noMatch, noMatchDescription,
+      resetFilters (khang dinh duong ca ba); mo menu con co lua chon dang chon -> co "Clear"; toan
+      bo textContent khong khop /[À-ỹ]/. Ca "loc-ro-vi" doi xung: chua ban vi cua ba khoa.
+      CHIEU DO: chep cau vi vao en.table.noMatchDescription (ban sao) -> dong noMatchDescription do
+      voi thong diep ghim "en lot chu Viet: table.noMatchDescription".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.dlr_hoi_quy
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/app/(app)/[slug]/okr/loc-okr.tsx"
+      - "apps/app/test/loc-okr-ten.spec.ts"
+      - "apps/app/test/loc-okr-tai-truoc.spec.ts"
+      - "packages/ui/test/render-diff.spec.tsx"
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "packages/ui/test/data-table-locale.spec.tsx"
+    expected: |
+      Nam tep thoat 0: loc-okr-ten.spec.ts, loc-okr-tai-truoc.spec.ts (apps/app),
+      render-diff.spec.tsx, lai-ra-man.spec.tsx, data-table-locale.spec.tsx (packages/ui). Hai tep OKR
+      khong doi so voi merge-base (git diff --quiet $(git merge-base HEAD origin/onehub) -- hai tep do
+      la mot phan cua lenh). Chieu do thu hai: ban sao sua mot ky vong trong loc-okr-ten.spec.ts ->
+      buoc git diff thoat 1.
+      CHIEU DO: tra lai cho DataTableFacetMenu in so khi facetCounts vang (in "0" moi muc, ban sao) ->
+      loc-okr-ten hoac render-diff do (nhan OKR da mang "· n", them so thu hai).
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.dlr_san_thiet_ke
+    paths:
+      - "packages/ui/src/components/data-table.tsx"
+      - "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
+      - "apps/app/app/(app)/[slug]/companies/companies-table.tsx"
+      - "apps/app/app/(app)/[slug]/deals/deals-table.tsx"
+      - "apps/app/app/(app)/[slug]/settings/members/members-table.tsx"
+      - "apps/app/components/crm/fields/field-facets.tsx"
+      - "_acceptance/datatable-loc-ro/rang/khong-ghi-de.mjs"
+    expected: |
+      design-gate.mjs --mode static cho sau tep tren khong P0; rang/khong-ghi-de.mjs so moi phan tu
+      JSX nhap tu @crm/ui trong bon bang voi merge-base origin/onehub: 0 className moi mang lop trong
+      ma tran tien to viet truoc — p, px, py, pt, pr, pb, pl, ps, pe, m, mx, my, mt, mr, mb, ml, ms,
+      me, gap, gap-x, gap-y, space-x, space-y, rounded, bg, border-<mau>, text-<mau>; in "0 lop moi".
+      CHIEU DO: --tu-thu chay mot ca do cho MOI tien to (bom lop do vao mot Button cua deals-table
+      trong ban sao) -> so ca do = so tien to, moi ca in ten tep va ten lop; thieu mot ca la thuoc do.
