@@ -101,7 +101,7 @@ const vi = {
 		dongNguon: (n: string, ngay: string) =>
 			`Trợ lý OKR tóm tắt từ ${n} lần cập nhật · tuần ${ngay}`,
 		dangTai: "Đang tải tóm tắt tuần…",
-		dangSoan: "Trợ lý OKR đang tóm tắt tuần này…",
+		dangSoan: "Kara đang tóm tắt tuần này…",
 		dangSoanMoTa:
 			"Thường xong trong vài phút. Khối tự hiện khi có câu, không cần tải lại.",
 		quaHanMoTa: "Vẫn chưa xong sau hai phút. Tải lại để xem lần nữa.",
@@ -114,6 +114,7 @@ const vi = {
 			"Mọi câu đều dựa vào Mục tiêu bạn không xem được. Bảng đáng bàn bên dưới vẫn đủ các KR bạn xem được.",
 		loi: "Không tải được tóm tắt tuần",
 		loiMoTa: "Bảng đáng bàn bên dưới vẫn dùng được.",
+		loiKara: "Kara chưa tải được tóm tắt tuần",
 		nhanTrichDan: (ngay: string) => `Cập nhật ${ngay}`,
 		nhanTrichDanThem: (ngay: string, n: string) => `Cập nhật ${ngay} +${n}`,
 		capNhat: "Cập nhật",
@@ -122,7 +123,8 @@ const vi = {
 		ghiChu: "Ghi chú",
 		xemDienBien: "Xem diễn biến KR",
 		phanHoiNhom: "Tóm tắt tuần này có hữu ích không",
-		daGhi: "Cảm ơn, đã ghi",
+		daGhi:
+			"Đã ghi — quản trị viên thấy số phản hồi này ở Toàn cảnh › Sức khoẻ chương trình.",
 		phanHoiLoi: "Không gửi được phản hồi. Thử lại.",
 	},
 	quanTri: {
@@ -301,7 +303,7 @@ const en: OkrToanCanhMessages = {
 		dongNguon: (n: string, ngay: string) =>
 			`The OKR assistant summarised ${n} updates · week of ${ngay}`,
 		dangTai: "Loading the weekly summary…",
-		dangSoan: "The OKR assistant is summarising this week…",
+		dangSoan: "Kara is summarising this week…",
 		dangSoanMoTa:
 			"This usually takes a few minutes. The block fills in by itself — no need to reload.",
 		quaHanMoTa: "Still not done after two minutes. Reload to check again.",
@@ -314,6 +316,7 @@ const en: OkrToanCanhMessages = {
 			"Every sentence rests on objectives you can't see. The table below still has every KR you can see.",
 		loi: "Couldn't load the weekly summary",
 		loiMoTa: "The table below still works.",
+		loiKara: "Kara couldn't load this week's summary",
 		nhanTrichDan: (ngay: string) => `Update ${ngay}`,
 		nhanTrichDanThem: (ngay: string, n: string) => `Update ${ngay} +${n}`,
 		capNhat: "Update",
@@ -322,7 +325,7 @@ const en: OkrToanCanhMessages = {
 		ghiChu: "Note",
 		xemDienBien: "See KR history",
 		phanHoiNhom: "Was this week's summary useful",
-		daGhi: "Thanks, noted",
+		daGhi: "Noted — admins see these counts under Overview › Programme health.",
 		phanHoiLoi: "Couldn't send your feedback. Try again.",
 	},
 	quanTri: {
