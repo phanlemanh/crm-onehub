@@ -5,7 +5,9 @@ slug: sua-paths-e5-soan-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-08
 design_doc: docs/superpowers/specs/2026-10-08-sua-paths-e5-soan-okr-design.md
 ---
 
