@@ -1,4 +1,10 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
+import {
+	copyFileSync,
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -25,6 +31,7 @@ const ANH = [
 	"dtg-xem-cu-loi-1440.png",
 	"dtg-sau-thu-lai-1440.png",
 	"dtg-xem-cu-loi-390.png",
+	"dtg-do-390.txt",
 ];
 
 const { chay, HEP, MA, moDo, RONG } = await import(
@@ -260,6 +267,30 @@ try {
 				() => document.querySelector("[data-dtg-loi]") !== null,
 			);
 			if (conThongBao) loi.push("thong bao con sau thu lai");
+			await t.evaluate(() => {
+				const cuoi = [
+					...document.querySelectorAll("[data-slot=timeline] > li"),
+				].at(-1);
+				let p = cuoi?.parentElement ?? null;
+				while (p && getComputedStyle(p).overflowY !== "auto")
+					p = p.parentElement;
+				if (p) p.scrollTop = p.scrollHeight;
+			});
+			await new Promise((r) => setTimeout(r, 500));
+			const cuoiDanhSach = await t.evaluate(() => {
+				const li = [
+					...document.querySelectorAll("[data-slot=timeline] > li"),
+				].at(-1);
+				const r = li?.getBoundingClientRect();
+				return {
+					chu: (li?.textContent ?? "").trim().slice(0, 40),
+					trongKhung: r ? r.bottom <= window.innerHeight + 1 : false,
+				};
+			});
+			console.log(
+				`  sau thu lai: dong cuoi «${cuoiDanhSach.chu}» trong khung ${cuoiDanhSach.trongKhung}`,
+			);
+			if (!cuoiDanhSach.trongKhung) loi.push("dong cuoi khong trong khung");
 			await chup(t, "dtg-sau-thu-lai-1440.png");
 			console.log(
 				`  xem cu: ${truoc} dong -> loi giu ${sau} dong -> thu lai ${SO_HOAT_DONG} dong`,
@@ -281,6 +312,55 @@ try {
 			if (khungLoi) loi.push("390 khung loi thay ca danh sach");
 			if (man.tran.length > 0) loi.push(`390 tran: ${man.tran.join(", ")}`);
 			if (!man.trongKhung) loi.push("390 nut Thu lai ngoai khung nhin");
+			const hang = await t.evaluate(
+				(nut) => {
+					const ra = [];
+					for (const c of nut) {
+						const el = [...document.querySelectorAll("button")].find((b) =>
+							(b.textContent ?? "").trim().startsWith(c),
+						);
+						let p = el?.parentElement ?? null;
+						while (
+							p &&
+							p !== document.body &&
+							!(p.scrollWidth > p.clientWidth + 1)
+						)
+							p = p.parentElement;
+						const coCuon = p !== null && p !== document.body;
+						const kieu = coCuon ? getComputedStyle(p).overflowX : "-";
+						ra.push({
+							nut: c,
+							khung: coCuon
+								? `${p.tagName.toLowerCase()}[data-slot=${p.getAttribute("data-slot") ?? "-"}]`
+								: "khong co",
+							overflowX: kieu,
+							scrollWidth: coCuon ? p.scrollWidth : 0,
+							clientWidth: coCuon ? p.clientWidth : 0,
+							cuonDuoc: coCuon && (kieu === "auto" || kieu === "scroll"),
+						});
+					}
+					return {
+						ra,
+						trang: `${document.documentElement.scrollWidth}/${document.documentElement.clientWidth}`,
+					};
+				},
+				["Việc cần làm", "Đã xong"],
+			);
+			const dongDo = [
+				`390 — trang scrollWidth/clientWidth ${hang.trang}`,
+				...hang.ra.map(
+					(h) =>
+						`hang co nut «${h.nut}»: khung cuon ${h.khung}, overflow-x ${h.overflowX}, scrollWidth ${h.scrollWidth} > clientWidth ${h.clientWidth}, cuon ngang duoc ${h.cuonDuoc}`,
+				),
+			];
+			for (const l of dongDo) console.log(`  ${l}`);
+			writeFileSync(
+				join(process.env.BANG_CHUNG, "dtg-do-390.txt"),
+				`${dongDo.join("\n")}\n`,
+			);
+			console.log(
+				"  hai hang tren la hanh vi co san truoc K6c (activity-composer.tsx va ToggleGroup cua timeline.tsx khong doi) — ghi so, khong tinh vao buoc",
+			);
 			await t.close();
 			d.dat(2, loi.length === 0, loi.join(" · "));
 		});

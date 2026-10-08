@@ -1,0 +1,3 @@
+390 — trang scrollWidth/clientWidth 390/390
+hang co nut «Việc cần làm»: khung cuon div[data-slot=input-group-addon], overflow-x visible, scrollWidth 438 > clientWidth 348, cuon ngang duoc false
+hang co nut «Đã xong»: khung cuon div[data-slot=-], overflow-x visible, scrollWidth 459 > clientWidth 390, cuon ngang duoc false

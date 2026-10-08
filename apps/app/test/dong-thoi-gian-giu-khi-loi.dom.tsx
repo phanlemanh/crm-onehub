@@ -79,6 +79,14 @@ const khung = () => document.querySelector("[data-vung-tai-loi]");
 const thongBao = (loai: "xem-cu" | "lam-moi") =>
 	document.querySelector<HTMLElement>(`[data-dtg-loi="${loai}"]`);
 const dong = () => [...document.querySelectorAll("[data-slot=timeline] > li")];
+const dungTruoc = (truoc: Element | null, sau: Element | null) =>
+	truoc !== null &&
+	sau !== null &&
+	(truoc.compareDocumentPosition(sau) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+const laChu = (chuCan: string) =>
+	[...document.querySelectorAll("body *")].find(
+		(e) => e.children.length === 0 && (e.textContent ?? "").trim() === chuCan,
+	) ?? null;
 const idDong = () =>
 	dong()
 		.map((li) => /Ghi chú ([a-z][0-9])/.exec(li.textContent ?? "")?.[1] ?? "?")
@@ -252,6 +260,10 @@ describe("dong-thoi-gian-giu-khi-loi", () => {
 		const tb = thongBao("lam-moi") as HTMLElement;
 		expect(idDong()).toBe("a1,a2,a3");
 		expect(chu(tb)).toContain(VI.timeline.lamMoiLoi);
+		phai(
+			dungTruoc(tb, dong()[0] ?? null),
+			"dtg: thong bao lam moi khong o phia tren",
+		);
 		expect(tb.getAttribute("role")).toBe("alert");
 		expect(chu(document.body).includes("boom-lam-moi")).toBe(false);
 		hong = false;
@@ -287,6 +299,10 @@ describe("dong-thoi-gian-giu-khi-loi", () => {
 		phai(khung() === null, "dtg: lam moi loi thay ca danh sach");
 		phai(thongBao("lam-moi") !== null, "dtg: lam moi loi tren rong im lang");
 		expect(chu(document.body).includes(VI.timeline.empty.allTitle)).toBe(true);
+		phai(
+			dungTruoc(thongBao("lam-moi"), laChu(VI.timeline.empty.allTitle)),
+			"dtg: thong bao lam moi khong o phia tren",
+		);
 		o.push("rong");
 
 		expect(o.length).toBe(2);
