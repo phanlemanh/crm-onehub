@@ -5,7 +5,7 @@ slug: zalo-gui-hong-ghi-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T17:08:19Z
 design_doc: _acceptance/zalo-gui-hong-ghi-ly-do/design.md
@@ -83,3 +83,7 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 - Ranh giới (sẽ xin `cham-tep`): `apps/agent/agent/lib/zalo-api.ts`, `zalo-bot-xuong.ts`, `zalo-nhan.ts`, `zalo-tra-loi.ts`, `zalo-hoi.ts`, `zalo-webhook.ts`, `zalo-config.ts`; `packages/validation/src/zalo-update.ts`, `packages/validation/src/zalo-cau-noi.ts`; `apps/api/src/zalo/zalo.service.ts`, `zalo-cau-noi.service.ts`, `zalo.router.ts`, `zalo.contracts.ts`; `apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx`, `apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx`, `apps/app/app/(app)/[slug]/settings/connections/zalo/trang-thai-webhook.tsx`, `apps/agent/agent/lib/zalo-bot.ts`, tệp chữ Zalo trong `apps/app/lib/messages/`, `apps/app/test/messages-guard.spec.ts` (ghim khoá chữ mới); `packages/db/src/zalo-lien-ket.ts` (đếm và gỡ hết liên kết), `packages/db/src/kenh-thong-bao.ts` (`canNoiLai`); `docs/connections.md`; bài thử `apps/agent/test/zalo-gui-hong-ly-do*.spec.ts`, `apps/api/test/zalo-doi-bot*.spec.ts`, `apps/app/test/zalo-doi-bot*.dom.tsx`.
 - Ranh giới bổ sung ở S3 (cham-tep P5-33): tệp chữ là `apps/app/lib/messages/nhac-qua-zalo.ts`; bốn tệp kiểm dom `apps/app/test/loi-tac-tu-zalo.dom.tsx`, `apps/app/test/nhac-dong-tom-tat.dom.tsx`, `apps/app/test/nhac-qua-zalo.dom.tsx`, `apps/app/test/noi-zalo-cho-nguoi-moi.dom.tsx` chỉ thêm `canNoiLai: false` vào dữ liệu giả của `zalo.cuaToi` cho khớp khuôn mới.
 - Ranh giới bổ sung ở S3 (giám sát chuyển lời anh duyệt, 08/10): `docs/plan/lo-trinh-zalo.md` — luật mục 8 của sổ đòi cập nhật bảng mục 7 trong cùng PR; đính chính 4b (#166), 4c (#168), hàng T (Zalo chạy production từ 26/09), thêm R1g (#276) và H4.
+- Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-08 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 2:
+  - Ngoài-1 / Ngoài-5: agent chạy ở địa chỉ không phải https mà còn liên kết thì xác nhận «Gỡ liên kết và đổi bot» lưu bot mới nhưng không gỡ liên kết cũ (nhánh `can-https` của `datBot`). Bản chạy thật dùng https nên chưa gặp.
+  - Ngoài-2: một yêu cầu lạ có header khoá bất kỳ cũng bật cảnh báo «Zalo đang gửi tin bằng khoá cũ» (AC-12 chủ ý không đọc thân); «Đăng ký lại» xoá cảnh báo. `docs/connections.md` đã nói đúng điều này.
+  - Ngoài-3: `maBotCua` gọi getMe của token cũ không qua `phanLopGetMe`, không ghi AgentEvent `zalo.getme-loi`, và lỗi không để lại dòng nhật ký — quyết định «đổi bot hay không» lúc đó dựa vào phần số của token mà không ai thấy.
