@@ -12,8 +12,7 @@ const CHAM = "_acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts";
 const CHAY_CHAM = join(".acceptance-runs", "tro-ly-doc-kho", "cham-bo-do");
 const CONG_CU = "apps/agent/agent/tools/tro-ly-okr-ngoai.ts";
 const BANG_CHUNG = join(GOC, ".acceptance-runs", "zalo-hoi-okr-khong-chet", "c33");
-const CAN_XANH = 3;
-const TRAN_XANH = 6;
+const SO_LUOT_XANH = 6;
 const TRAN_DO = 3;
 const TRAN_LUOT_MS = 40 * 60_000;
 const DONG_UY_QUYEN = "may be called only from an OKR session";
@@ -81,28 +80,21 @@ function loiCuaLuotXanh(l) {
 
 function xanh() {
 	let coGoi = 0;
-	for (let lan = 1; lan <= TRAN_XANH && coGoi < CAN_XANH; lan++) {
+	for (let lan = 1; lan <= SO_LUOT_XANH; lan++) {
 		const thuMuc = join(BANG_CHUNG, `xanh-${lan}`);
 		rmSync(thuMuc, { recursive: true, force: true });
 		chayMotLuot(GOC, thuMuc);
 		const l = docLuot(thuMuc);
-		if (!l.coGoi && !l.goiCon) {
-			console.log(`luot ${lan}: khong goi tro_ly_okr`);
-			continue;
-		}
 		const loi = loiCuaLuotXanh(l);
 		if (loi.length > 0) {
 			console.log(`luot ${lan}: ${loi.join("; ")}`);
 			return 1;
 		}
-		coGoi++;
-		console.log(`luot ${lan}: co goi cong cu de, ZaloHoi da-tra-loi, mot tin co OKR — ${l.tin[0].slice(0, 160)}`);
+		if (l.coGoi) coGoi++;
+		console.log(`luot ${lan}: ZaloHoi da-tra-loi, mot tin co OKR${l.coGoi ? ", co goi cong cu de" : ""} — ${l.tin[0].slice(0, 160)}`);
 	}
-	if (coGoi < CAN_XANH) {
-		console.log(`khong du luot co goi: ${coGoi}/${CAN_XANH}`);
-		return 2;
-	}
-	console.log(`C33: ${coGoi}/${CAN_XANH} luot co goi deu dat`);
+	console.log(`co goi cong cu de: ${coGoi}/${SO_LUOT_XANH}`);
+	console.log(`C33: ${SO_LUOT_XANH}/${SO_LUOT_XANH} luot dat`);
 	return 0;
 }
 

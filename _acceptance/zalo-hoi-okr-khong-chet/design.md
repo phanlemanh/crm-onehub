@@ -37,7 +37,7 @@ Ghi nhớ 26/09 «eve bỏ công cụ động khi replay»: trên production, �
 - Tái hiện c33 qua Zalo bằng máy đo `tro-ly-doc-kho/rang/cham-bo-do.ts` (eve dev thật, Zalo giả, model thật như production) với một bộ câu riêng chỉ có c33, chạy ba lượt; đọc thẳng `ket-qua.jsonl` (`ketQua`) và `eve.log` của lượt — không dựa vào nhãn của bộ chấm (bộ chấm trên onehub còn tính ZaloHoi `loi` là «không chuyển», lỗi đó F12 sửa).
 - Ma trận resolver × tám mục đích phiên, gọi thẳng resolver thật.
 - Bản sao không có tệp mới → lượt c33 đỏ với dòng «may be called only from an OKR session» (chiều đỏ của AC-1).
-- Chỉ tính lượt mà model gốc thật sự gọi `tro_ly_okr` (dòng «→ tro_ly_okr» trong `eve.log`), đủ ba lượt, trần sáu: model thật có thể không gọi, và lượt không gọi không chứng gì về bản đè.
+- Sáu lượt c33 liền, lượt nào cũng phải trả lời có nghĩa và không chết; KHÔNG đòi model gọi `tro_ly_okr` (đo 08/10: có công cụ đè thì 0/6 lượt gọi — model đọc mô tả «không dùng được ở đây» rồi tự trả lời). Số lượt có gọi chỉ ghi lại; đường có gọi do ma trận resolver (E2) và cặp phá (E5) chứng. Chủ kho chốt cách đo này ở Cổng 1 ngày 08/10.
 - Phiên OKR thật không bị đè: chạy lại E9 của tro-ly-okr-nen (eve thật, cổng `calledSubagent('tro_ly_okr')`).
 
 ## Đặc tả UX

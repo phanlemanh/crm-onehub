@@ -5,9 +5,9 @@ slug: zalo-hoi-okr-khong-chet
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-10-08T10:29:20Z
+status: draft
+approved_by:
+approved_at:
 design_doc: _acceptance/zalo-hoi-okr-khong-chet/design.md
 ---
 
@@ -23,7 +23,7 @@ Source input: `opportunity.md` (bằng chứng máy đo + nhật ký production)
 
 ## Criteria
 
-- AC-1: Given bàn đo của tro-ly-doc-kho (kho đo dùng-một-lần, `eve dev` thật của `apps/agent`, Zalo giả, model gốc thật như production) và một bộ câu chỉ có c33 «KR doanh thu quý này đang đạt bao nhiêu phần trăm?», When c33 được gửi qua `/zalo/webhook` ba lượt liền, Then ở ba lượt mà model gốc có gọi `tro_ly_okr`: lời gọi đi tới công cụ đè (không có lời gọi subagent `tro_ly_okr` thật); hàng ZaloHoi của tin kết thúc `da-tra-loi`; Zalo giả nhận đúng một tin trả lời, khác `ZALO.loi.tacTuLoi` và có chữ «OKR»; `eve.log` của lượt không có dòng «may be called only from an OKR session».
+- AC-1: Given bàn đo của tro-ly-doc-kho (kho đo dùng-một-lần, `eve dev` thật của `apps/agent`, Zalo giả, model gốc thật như production) và một bộ câu chỉ có c33 «KR doanh thu quý này đang đạt bao nhiêu phần trăm?», When c33 được gửi qua `/zalo/webhook` sáu lượt liền, Then cả sáu lượt: hàng ZaloHoi của tin kết thúc `da-tra-loi`; Zalo giả nhận đúng một tin trả lời, khác `ZALO.loi.tacTuLoi` và có chữ «OKR»; `eve.log` của lượt không có dòng «may be called only from an OKR session» và không có lời gọi subagent `tro_ly_okr` thật; không đòi model gọi `tro_ly_okr` — số lượt có gọi công cụ đè chỉ ghi lại; đường có gọi do AC-2 (E2, ma trận resolver) và cặp phá E5 chứng.
 - AC-2: Given mỗi giá trị `purpose` trong `SESSION_PURPOSES` (tám giá trị), When công cụ động `tro-ly-okr-ngoai` giải ở `step.started` với `purpose` đó, Then `purpose` `okr` nhận `null` (subagent `tro_ly_okr` thật còn nguyên); bảy giá trị còn lại nhận đúng một công cụ tên `tro_ly_okr`, và gọi `execute` của nó trả `{ ok: false, reason }` với `reason` bằng `TRO_LY_OKR.ngoaiPhien.lyDo`.
 - AC-3: Given hook `okr-uy-quyen`, When một lượt có `purpose` khác `okr` vẫn xin gọi subagent `tro_ly_okr` thật, hoặc lượt có `purpose` `okr` gọi công cụ khác hay gọi `tro_ly_okr` lần hai, Then hook chặn như trước — ma trận của `okr-uy-quyen.spec.ts` xanh không sửa.
 - AC-4: Given diff của vòng so với merge-base với `onehub`, Then chỉ các tệp `apps/agent/agent/tools/tro-ly-okr-ngoai.ts`, `apps/agent/agent/lib/okr/config.ts`, `apps/agent/test/okr-uy-quyen-ngoai.spec.ts`, `_acceptance/zalo-hoi-okr-khong-chet/**`, `PRODUCT-MAP.md`, `LO-TRINH.html`, các dòng THÊM vào `_acceptance/config.yaml`, và chỉ dòng THÊM mang tên `tro-ly-okr-ngoai` ở `apps/agent/agent/lib/zalo-config.ts` (một dòng, `ZALO.hoi.congCu.doc`), `packages/telemetry/src/allowlist.ts` (một dòng, `AGENT_TOOLS`), `apps/app/lib/agent-transcript.ts` (một dòng, `TOOL_VERBS`) và `apps/app/lib/messages/kara-ban-ghi.ts` (hai dòng, nhãn en và vi) đổi — riêng `apps/agent/test/okr-uy-quyen.spec.ts` không đổi một dòng.
@@ -46,7 +46,7 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 
 ## Đường đo
 
-- «c33 và mọi câu hỏi KR/OKR khác qua Zalo trên máy đo có ZaloHoi `da-tra-loi`, không `MODEL_CALL_FAILED`»: số từ E1 (ba lượt c33) · AC-1. Các câu OKR khác: E15 của tro-ly-doc-kho chạy lại khi F12 round 3.
+- «c33 và mọi câu hỏi KR/OKR khác qua Zalo trên máy đo có ZaloHoi `da-tra-loi`, không `MODEL_CALL_FAILED`»: số từ E1 (sáu lượt c33 liền) · AC-1. Các câu OKR khác: E15 của tro-ly-doc-kho chạy lại khi F12 round 3.
 - «0 dòng «may be called only from an OKR session» trên production hai tuần sau khi (A) được gỡ»: không có bộ đếm máy; người đo chạy `vercel logs -p crm-onehub-agent … --query "OKR session"` · AC-1.
 
 ## Out of scope
