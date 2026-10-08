@@ -31,6 +31,13 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyTitle,
+} from "@crm/ui/components/empty";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TablePagination } from "@crm/ui/components/table-pagination";
 import {
@@ -121,6 +128,9 @@ export type DataTableProps<TRow, TSub> = {
 	search?: ReactNode;
 	meta?: ReactNode;
 	empty?: ReactNode;
+	filteredEmpty?: ReactNode;
+	searchActive?: boolean;
+	onClearFilters?: () => void;
 	className?: string;
 	tableClassName?: string;
 	layout?: DataTableLayout;
@@ -210,6 +220,16 @@ function SortIndicator({
 	);
 }
 
+export function facetValueOptions(
+	counts: Record<string, number> | undefined,
+	selected: string[],
+): { value: string; label: string }[] {
+	const known = Object.keys(counts ?? {}).sort();
+	return [...known, ...selected.filter((value) => !known.includes(value))].map(
+		(value) => ({ value, label: value }),
+	);
+}
+
 function facetLabel(facet: DataTableFacet, selected: string[]): string {
 	if (selected.length === 0) return facet.label;
 	if (selected.length === 1) {
@@ -223,15 +243,28 @@ function toggle(selected: string[], value: string, checked: boolean): string[] {
 	return checked ? [...selected, value] : selected.filter((v) => v !== value);
 }
 
+function FacetCount({ count }: { count: number | undefined }) {
+	if (count === undefined) return null;
+	return (
+		<span data-slot="facet-count" className="tabular-nums opacity-60">
+			{count}
+		</span>
+	);
+}
+
 function FacetSubmenu({
 	facet,
 	selected,
+	counts,
 	onChange,
 }: {
 	facet: DataTableFacet;
 	selected: string[];
+	counts?: Record<string, number>;
 	onChange: (values: string[]) => void;
 }) {
+	const countOf = (value: string) =>
+		counts === undefined ? undefined : (counts[value] ?? 0);
 	const msg = useMessages();
 	return (
 		<DropdownMenuSub>
@@ -256,6 +289,16 @@ function FacetSubmenu({
 						<CommandList label={msg.table.facetOptions}>
 							<CommandEmpty>{facet.empty ?? msg.table.facetEmpty}</CommandEmpty>
 							<CommandGroup>
+								{selected.length > 0 && (
+									<CommandItem
+										forceMount
+										value={`${facet.id}:clear`}
+										disabled={facet.stale}
+										onSelect={() => onChange([])}
+									>
+										{msg.table.clearFilters}
+									</CommandItem>
+								)}
 								{facet.options.map((option) => {
 									const checked = selected.includes(option.value);
 									return (
@@ -272,7 +315,8 @@ function FacetSubmenu({
 												checked={checked}
 												className="pointer-events-none"
 											/>
-											<span className="truncate">{option.label}</span>
+											<span className="flex-1 truncate">{option.label}</span>
+											<FacetCount count={countOf(option.value)} />
 										</CommandItem>
 									);
 								})}
@@ -283,7 +327,12 @@ function FacetSubmenu({
 					<div className="max-h-72 overflow-y-auto">
 						{selected.length > 0 && (
 							<>
-								<DropdownMenuItem onSelect={() => onChange([])}>
+								<DropdownMenuItem
+									onSelect={(event) => {
+										event.preventDefault();
+										onChange([]);
+									}}
+								>
 									{msg.table.clearFilters}
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
@@ -300,7 +349,8 @@ function FacetSubmenu({
 										onChange(toggle(selected, option.value, next))
 									}
 								>
-									{option.label}
+									<span className="flex-1">{option.label}</span>
+									<FacetCount count={countOf(option.value)} />
 								</DropdownMenuCheckboxItem>
 							);
 						})}
@@ -315,10 +365,12 @@ export function DataTableFacetMenu({
 	facets,
 	filters,
 	onFilterChange,
+	counts,
 }: {
 	facets: DataTableFacet[];
 	filters: Record<string, string[]>;
 	onFilterChange: (id: string, values: string[]) => void;
+	counts?: Record<string, Record<string, number>>;
 }) {
 	const msg = useMessages();
 	if (facets.length === 0) return null;
@@ -347,6 +399,7 @@ export function DataTableFacetMenu({
 						key={facet.id}
 						facet={facet}
 						selected={filters[facet.id] ?? []}
+						counts={counts?.[facet.id]}
 						onChange={(values) => onFilterChange(facet.id, values)}
 					/>
 				))}
@@ -374,6 +427,9 @@ export function DataTable<TRow, TSub = unknown>({
 	search,
 	meta,
 	empty,
+	filteredEmpty,
+	searchActive,
+	onClearFilters,
 	className,
 	tableClassName,
 	layout = "fill",
@@ -443,6 +499,12 @@ export function DataTable<TRow, TSub = unknown>({
 	).length;
 	const activeFilterCount =
 		(tabs && query.tab !== "all" ? 1 : 0) + activeFacetFilterCount;
+	const filterActive =
+		searchActive === true ||
+		(tabs != null && query.tab !== "all") ||
+		Object.entries(query.filters).some(
+			([id, values]) => id !== query.tabId && values.length > 0,
+		);
 
 	return (
 		<div className={cn(LAYOUT_CLASS[layout].root, className)}>
@@ -528,17 +590,21 @@ export function DataTable<TRow, TSub = unknown>({
 									<DropdownMenuRadioItem value="all">
 										<span className="flex-1">{tabs.allLabel ?? "All"}</span>
 									</DropdownMenuRadioItem>
-									{tabs.options.map((option) => {
-										if (tabCounts?.[option.value] === 0) return null;
-										return (
-											<DropdownMenuRadioItem
-												key={option.value}
-												value={option.value}
-											>
-												<span className="flex-1">{option.label}</span>
-											</DropdownMenuRadioItem>
-										);
-									})}
+									{tabs.options.map((option) => (
+										<DropdownMenuRadioItem
+											key={option.value}
+											value={option.value}
+										>
+											<span className="flex-1">{option.label}</span>
+											<FacetCount
+												count={
+													tabCounts === undefined
+														? undefined
+														: (tabCounts[option.value] ?? 0)
+												}
+											/>
+										</DropdownMenuRadioItem>
+									))}
 								</DropdownMenuRadioGroup>
 							</DropdownMenuContent>
 						</DropdownMenu>
@@ -551,6 +617,7 @@ export function DataTable<TRow, TSub = unknown>({
 							facets={availableFacets}
 							filters={query.filters}
 							onFilterChange={query.setFilter}
+							counts={facetCounts}
 						/>
 						{(sortableColumns.length > 0 || anyExpandable) && (
 							<DropdownMenu>
@@ -651,7 +718,33 @@ export function DataTable<TRow, TSub = unknown>({
 				overlay={
 					deferredRows.length === 0 ? (
 						<div className="absolute inset-x-0 top-11 bottom-0 flex items-center justify-center px-4 py-8 text-center text-muted-foreground">
-							{loading ? <Spinner /> : (empty ?? msg.table.noResults)}
+							{loading ? (
+								<Spinner />
+							) : filterActive && filteredEmpty != null ? (
+								filteredEmpty
+							) : filterActive ? (
+								<Empty>
+									<EmptyHeader>
+										<EmptyTitle>{msg.table.noMatch}</EmptyTitle>
+										<EmptyDescription>
+											{msg.table.noMatchDescription}
+										</EmptyDescription>
+									</EmptyHeader>
+									{onClearFilters && (
+										<EmptyContent>
+											<Button
+												variant="outline"
+												size="sm"
+												onClick={onClearFilters}
+											>
+												{msg.table.resetFilters}
+											</Button>
+										</EmptyContent>
+									)}
+								</Empty>
+							) : (
+								(empty ?? msg.table.noResults)
+							)}
 						</div>
 					) : null
 				}
