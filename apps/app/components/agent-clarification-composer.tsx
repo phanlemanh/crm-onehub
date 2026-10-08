@@ -1,6 +1,7 @@
 "use client";
 
 import { AsyncButtonContent } from "@crm/ui/components/async-action";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Questionnaire,
 	QuestionnaireActions,
@@ -15,6 +16,7 @@ import {
 } from "@crm/ui/components/questionnaire";
 import type { EveMessageInputRequest } from "eve/react";
 import { type FormEvent, useState } from "react";
+import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { AGENT_COMPOSER_CLASS_NAME } from "./agent-composer-frame";
 
 const OPTION_VALUE_PREFIX = "option:";
@@ -32,6 +34,7 @@ export function AgentClarificationComposer({
 	pending: boolean;
 	onSubmit: (response: ClarificationResponse) => Promise<void>;
 }) {
+	const t = karaBanGhiMessages(useLocale()).hoiLai;
 	const options = question.options ?? [];
 	const [transportError, setTransportError] = useState<string | null>(null);
 	const showFreeform =
@@ -68,12 +71,8 @@ export function AgentClarificationComposer({
 					: { requestId: question.requestId, text: value }
 			) satisfies ClarificationResponse;
 			await onSubmit(response);
-		} catch (error) {
-			setTransportError(
-				error instanceof Error && error.message.trim()
-					? error.message
-					: "Unable to submit. Check your connection and try again.",
-			);
+		} catch {
+			setTransportError(t.loiGui);
 		}
 	};
 
@@ -88,9 +87,7 @@ export function AgentClarificationComposer({
 			<QuestionnaireItem name="response" required>
 				<QuestionnaireTitle>{question.prompt}</QuestionnaireTitle>
 				<QuestionnaireDescription>
-					{options.length > 0
-						? "Choose an answer, then submit."
-						: "Add the detail the agent needs to continue."}
+					{options.length > 0 ? t.goiYChon : t.goiYTuDo}
 				</QuestionnaireDescription>
 				<QuestionnaireChoices>
 					{options.map((option) => (
@@ -109,13 +106,13 @@ export function AgentClarificationComposer({
 					))}
 					{showFreeform ? (
 						<QuestionnaireInput
-							aria-label={options.length > 0 ? "Another answer" : "Your answer"}
-							placeholder="Add the detail the agent needs"
+							aria-label={options.length > 0 ? t.nhanKhac : t.nhanTraLoi}
+							placeholder={t.choNhap}
 							disabled={pending}
 						/>
 					) : null}
 				</QuestionnaireChoices>
-				<QuestionnaireError />
+				<QuestionnaireError>{t.batBuoc}</QuestionnaireError>
 			</QuestionnaireItem>
 			{transportError ? (
 				<p role="alert" className="text-destructive text-xs">
@@ -126,9 +123,9 @@ export function AgentClarificationComposer({
 				<QuestionnaireSubmit disabled={pending} aria-busy={pending} size="sm">
 					<AsyncButtonContent
 						status={pending ? "pending" : "idle"}
-						pendingLabel="Submitting"
+						pendingLabel={t.dangGui}
 					>
-						Submit answer
+						{t.guiTraLoi}
 					</AsyncButtonContent>
 				</QuestionnaireSubmit>
 			</QuestionnaireActions>
