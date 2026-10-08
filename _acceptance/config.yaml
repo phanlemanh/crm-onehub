@@ -2008,6 +2008,10 @@ executors:
     zvc_nguyen_van_do: bun _acceptance/zalo-va-cach-ly/rang/nguyen-van.mjs do
     smk_va_cham_xanh: bun _acceptance/so-moi-khong-chap-chon/rang/va-cham.mjs xanh
     smk_va_cham_do: bun _acceptance/so-moi-khong-chap-chon/rang/va-cham.mjs do
+    clk_pha_chot_xanh: bun _acceptance/chen-lien-ket-khong-lac/rang/pha-chot.mjs xanh
+    clk_pha_chot_do: bun _acceptance/chen-lien-ket-khong-lac/rang/pha-chot.mjs do
+    clk_pha_chot_cham: bun _acceptance/chen-lien-ket-khong-lac/rang/pha-chot.mjs cham
+    clk_pha_chot_mat: bun _acceptance/chen-lien-ket-khong-lac/rang/pha-chot.mjs mat
     k1_ai_elements: 'node _acceptance/bo-xuong-kara/rang/ai-elements.mjs'
     k1_phong_mau: 'bun _acceptance/bo-xuong-kara/rang/man.mjs'
     k1_tai_lieu: 'node _acceptance/bo-xuong-kara/rang/tai-lieu.mjs'
