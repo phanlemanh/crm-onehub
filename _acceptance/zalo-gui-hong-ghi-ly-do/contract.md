@@ -5,9 +5,9 @@ slug: zalo-gui-hong-ghi-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-08T17:08:19Z
 design_doc: _acceptance/zalo-gui-hong-ghi-ly-do/design.md
 ---
 
