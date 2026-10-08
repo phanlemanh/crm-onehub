@@ -29,7 +29,7 @@ Cổng Đáng: build — chủ kho ký cho E3, E1, E4, E5, E6 lúc 2026-10-07T13
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] sau khi lưu trữ giai đoạn Demo, mọi thoả thuận tạo mới có luôn nằm ở một giai đoạn đang dùng không?
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu, người thử lưu trữ giai đoạn đầu của nhóm Đang mở rồi tạo thoả thuận mới: thoả thuận hiện ngay ở cột Đang mở đầu tiên còn lại của Kanban, 0 lần hỏi; không đường tạo nào trong mã sản phẩm (`apps/**`, `packages/**` trừ kiểm thử, eval, mã sinh) còn dựa vào mặc định của cơ sở dữ liệu.
-- Kết quả nào là CHẾT: [đề xuất] một thoả thuận mới nằm ở giai đoạn đã lưu trữ (không thấy trên Kanban).
-- Timebox: [đề xuất] phiên nghiệm thu đầu tiên sau khi lên production, cùng phiên với `danh-sach-keo-chung`, chậm nhất 2026-10-21.
+- Câu hỏi phép đo trả lời: sau khi lưu trữ giai đoạn Demo, mọi thoả thuận tạo mới có luôn nằm ở một giai đoạn đang dùng không?
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, người thử lưu trữ giai đoạn đầu của nhóm Đang mở rồi tạo thoả thuận mới: thoả thuận hiện ngay ở cột Đang mở đầu tiên còn lại của Kanban, 0 lần hỏi; không đường tạo nào trong mã sản phẩm (`apps/**`, `packages/**` trừ kiểm thử, eval, mã sinh) còn dựa vào mặc định của cơ sở dữ liệu.
+- Kết quả nào là CHẾT: một thoả thuận mới nằm ở giai đoạn đã lưu trữ (không thấy trên Kanban).
+- Timebox: phiên nghiệm thu đầu tiên sau khi lên production, cùng phiên với `danh-sach-keo-chung`, chậm nhất 2026-10-21.
