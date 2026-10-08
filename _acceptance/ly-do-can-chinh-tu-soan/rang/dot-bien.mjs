@@ -75,11 +75,11 @@ const CAP = [
 	],
 	[
 		"i bo cat khoang trang",
-		BAI("dua-vao"),
+		BAI("visao-rong"),
 		CAN_CHINH,
 		"const lyDo = viSao.trim();",
 		"const lyDo = viSao;",
-		"dua vao lam roi ly do",
+		"ly do rong thanh chuoi rong",
 	],
 ];
 

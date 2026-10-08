@@ -7,7 +7,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.ldcc_dua_vao
     paths: [apps/api/src/okr/soan-dua-vao.ts, apps/api/src/okr/okr.service.ts, packages/db/prisma/schema.prisma, apps/api/test/okr-ly-do-can-chinh.spec.ts]
-    expected: "exit 0; bài API gieo cuộc soạn và dòng nháp bằng gieoCuoc/gieoDongNhap của apps/api/test/soan-okr-san.ts (cùng bàn thử của soan-okr-dua-vao.spec.ts, không ghi hàng tay), dòng căn chỉnh nháp mang nguyên văn viSao «  Tăng tỷ lệ chốt thêm khoảng 9 tỷ  » (khoảng trắng hai đầu) ghi qua chính bộ ghi nháp (dongCanChinhMoi cắt rồi lưu — nếu bộ ghi cắt trước khi lưu thì bài ghi thêm một dòng cũ có khoảng trắng qua noiDungSoan, nêu rõ lý do); chạy «Đưa vào OKR» THẬT qua cả hai đường DUONG = trpc và rest; mỗi đường đọc lại hàng okrAlignment vừa tạo từ CSDL (theo taoRaId của dòng nháp): lyDo === 'Tăng tỷ lệ chốt thêm khoảng 9 tỷ' (ghim nguyên văn đã cắt), lyDoTuKara === true, canCu === null; số mục tiêu và KR đưa vào khớp như bài cũ. Sai thì ném «dua vao lam roi ly do» (lyDo khác) hoặc «mat dau Kara» (lyDoTuKara khác true). CHIỀU ĐỎ (rang/dot-bien.mjs): cặp (a) bản sao bỏ truyền lyDo ở soan-dua-vao.ts → đỏ «dua vao lam roi ly do»; cặp (b) bản sao không đặt lyDoTuKara → đỏ «mat dau Kara»; cặp (i) bản sao bỏ bước cắt khoảng trắng → đỏ «dua vao lam roi ly do»."
+    expected: "exit 0; bài API gieo cuộc soạn và dòng nháp bằng gieoCuoc/gieoDongNhap của apps/api/test/soan-okr-san.ts (cùng bàn thử của soan-okr-dua-vao.spec.ts, không ghi hàng tay), dòng căn chỉnh nháp mang nguyên văn viSao «  Tăng tỷ lệ chốt thêm khoảng 9 tỷ  » (khoảng trắng hai đầu) ghi qua chính bộ ghi nháp (dongCanChinhMoi cắt rồi lưu — nếu bộ ghi cắt trước khi lưu thì bài ghi thêm một dòng cũ có khoảng trắng qua noiDungSoan, nêu rõ lý do); chạy «Đưa vào OKR» THẬT qua cả hai đường DUONG = trpc và rest; mỗi đường đọc lại hàng okrAlignment vừa tạo từ CSDL (theo taoRaId của dòng nháp): lyDo === 'Tăng tỷ lệ chốt thêm khoảng 9 tỷ' (ghim nguyên văn đã cắt), lyDoTuKara === true, canCu === null; số mục tiêu và KR đưa vào khớp như bài cũ. Sai thì ném «dua vao lam roi ly do» (lyDo khác) hoặc «mat dau Kara» (lyDoTuKara khác true). CHIỀU ĐỎ (rang/dot-bien.mjs): cặp (a) bản sao bỏ truyền lyDo ở soan-dua-vao.ts → đỏ «dua vao lam roi ly do»; cặp (b) bản sao không đặt lyDoTuKara → đỏ «mat dau Kara». Bước cắt khoảng trắng trên đường này có hai lớp: dongSoanTuHang đọc dòng bằng dongSoan (viSao .trim()), rồi lyDoTuSoan cắt lần nữa — bỏ lớp sau không đổi gì ở E1, nên cặp (i) đo ở E2."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -16,7 +16,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.ldcc_visao_rong
     paths: [apps/api/src/okr/soan-dua-vao.ts, apps/api/test/okr-ly-do-can-chinh.spec.ts]
-    expected: "exit 0; hai dòng viết trước (đếm = 2): viSao '' và viSao '   ' — dữ liệu cũ mà bộ ghi hiện tại không sinh ra (dongCanChinhMoi đòi ít nhất một ký tự), nên bài gieo dòng nháp bằng gieoDongNhap rồi đặt noiDung.viSao bằng Prisma, kèm khẳng định noiDungSoan vẫn parse được hàng đó (đối chứng: bản đọc thật nhận nó); «Đưa vào OKR» trả ok, căn chỉnh có lyDo === null và lyDoTuKara === false. Sai thì ném «ly do rong thanh chuoi rong». CHIỀU ĐỎ: cặp (c) bản sao bỏ bước đổi chuỗi rỗng thành null → đỏ «ly do rong thanh chuoi rong»."
+    expected: "exit 0; hai dòng viết trước (đếm = 2): viSao '' và viSao '   ' — dữ liệu cũ mà bộ ghi hiện tại không sinh ra (dongCanChinhMoi đòi ít nhất một ký tự), nên bài gieo dòng nháp bằng gieoDongNhap rồi đặt noiDung.viSao bằng Prisma, kèm khẳng định noiDungSoan vẫn parse được hàng đó (đối chứng: bản đọc thật nhận nó); «Đưa vào OKR» trả ok, căn chỉnh có lyDo === null và lyDoTuKara === false. Sai thì ném «ly do rong thanh chuoi rong». CHIỀU ĐỎ: cặp (c) bản sao bỏ bước đổi chuỗi rỗng thành null → đỏ «ly do rong thanh chuoi rong»; cặp (i) bản sao bỏ bước cắt khoảng trắng của lyDoTuSoan → '   ' thành lý do, đỏ «ly do rong thanh chuoi rong»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E3
@@ -84,7 +84,7 @@ evals:
     executor: script
     cmd: config:executors.script.ldcc_dot_bien
     paths: [apps/api/src/okr/soan-dua-vao.ts, apps/api/src/okr/okr.service.ts, apps/api/src/okr/can-chinh.ts, packages/db/prisma/migrations/*_ly_do_can_chinh/migration.sql, apps/api/test/okr-ly-do-can-chinh.spec.ts, _acceptance/ly-do-can-chinh-tu-soan/rang/dot-bien.mjs]
-    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 8: mỗi cặp (a)–(g) và (i) như ghi ở E1–E3, E5, E6 (cặp (h) bỏ cùng bản thay AC-6) — xanh trước khi phá, đỏ sau khi phá, thông điệp ghim nằm trên dòng «error:» của bun; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 8: mỗi cặp (a)–(g) và (i) như ghi ở E1–E3, E5, E6 ((i) ở E2) (cặp (h) bỏ cùng bản thay AC-6) — xanh trước khi phá, đỏ sau khi phá, thông điệp ghim nằm trên dòng «error:» của bun; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
