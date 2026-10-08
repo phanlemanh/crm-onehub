@@ -249,10 +249,10 @@ describe("k2-khung", () => {
 					]);
 					await nhanTab(tab[1]);
 					expect(`tab khong tren url: ${urlDoi.at(-1) ?? ""}`).toBe(
-						"tab khong tren url: ?tab=ban-nhap",
+						"tab khong tren url: ?tabSoan=ban-nhap",
 					);
 					await don();
-					await moTrang(false, true, "?tab=ban-nhap");
+					await moTrang(false, true, "?tabSoan=ban-nhap");
 					expect(qa('[role="tab"]')[1]?.getAttribute("aria-selected")).toBe(
 						"true",
 					);
@@ -896,7 +896,13 @@ const nop = (
 				toolCallId: `goi-${id}`,
 				state: "output-available",
 				input,
-				output: {},
+				output: {
+					ketQua: "da-ghi",
+					lyDo: "",
+					soDong: 0,
+					biLoai: [],
+					giuNguyen: [],
+				},
 			},
 		],
 	}) as unknown as ReturnType<typeof nguoiNoi>;
@@ -1000,7 +1006,7 @@ describe("k2-hoi-dong", () => {
 		const tra = beRong(375);
 		try {
 			await datBanNhap([mt("1", "Giữ khách lớn miền Bắc")]);
-			await moTrang(false, true, "?tab=ban-nhap");
+			await moTrang(false, true, "?tabSoan=ban-nhap");
 			await bam(nutTrong("1", "hoi"));
 			await nhip(3);
 			expect(urlDoi.at(-1)).toBe("");
