@@ -5,7 +5,7 @@ slug: dong-thoi-gian-loi-dung-luot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-08-dong-thoi-gian-loi-dung-luot-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T17:08:35Z
@@ -53,3 +53,8 @@ mới có thể tắt dù chưa làm mới được. Chỉ sửa `timeline.tsx`;
 - Vòng đời (luật 14): (1) Dọn thế nào — không đổi; (2) «Lịch sử» — không đổi; (3) Danh sách mặc định — không đổi.
 - Giả định thiết kế: không lệnh nào ghi thẳng vào cache dòng thời gian (grep 0 chỗ) và không dùng `maxPages` — xem design doc.
 - `timeline.tsx` nằm trong `paths` của hồ sơ đã ký `dong-thoi-gian-giu-khi-loi` và `kara-trang-thai-toan-crm`; AC-5 chạy lại đúng các bài của hai hồ sơ đó, và hai hồ sơ sẽ được ghim lại trước khi gộp.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-09):**
+  - Ngoài-1 — trí nhớ lỗi theo từng bản ghi và tab sống trong một kho riêng của trang suốt phiên làm việc, cạnh bộ đệm TanStack thay vì suy ra từ nó; người dùng không thấy ảnh hưởng.
+  - Ngoài-2 — ô «giu-qua-doi-tab» của E3 không ghim điều kiện «không tải lại»; nếu sau này tab tự tải lại khi quay về, bài kiểm có thể không thấy.
+  - Ngoài-3 — `paths` của eval thiếu tệp phụ trợ mà bài kiểm dựa vào, nên sửa tệp đó không làm hồ sơ hoá cũ.
+  - Ngoài-4 — bộ đếm nhấp nháy (MutationObserver) chỉ được kiểm bằng 0 và đã tỏ ra mù khi phá thử; bằng chứng «không nhấp nháy» yếu hơn mức nó trông.
