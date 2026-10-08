@@ -224,7 +224,8 @@ export function MembersTable() {
 	const t = thanhVienMessages(locale);
 	const trpc = useTRPC();
 	const cache = useCrmCache();
-	const { query, input } = useTableQuery(membersSearchParams);
+	const { query, input, currentView, applyView } =
+		useTableQuery(membersSearchParams);
 	const tieuDeId = useId();
 
 	const workspace = useQuery(trpc.workspace.get.queryOptions());
@@ -317,11 +318,10 @@ export function MembersTable() {
 		{
 			id: "role",
 			label: t.bang.vaiTro,
-			options: roles(t).flatMap((role) =>
-				(facetCounts?.role?.[role] ?? 0) > 0
-					? [{ value: role, label: t.vaiTro[role] }]
-					: [],
-			),
+			options: roles(t).map((role) => ({
+				value: role,
+				label: t.vaiTro[role],
+			})),
 		},
 	];
 
@@ -368,6 +368,10 @@ export function MembersTable() {
 					getRowId={(row) => row.id}
 					loading={members.isFetching}
 					empty={t.bang.trong}
+					searchActive={input.q !== ""}
+					onClearFilters={() =>
+						applyView({ ...currentView, q: "", filters: {} })
+					}
 				/>
 			</Card>
 

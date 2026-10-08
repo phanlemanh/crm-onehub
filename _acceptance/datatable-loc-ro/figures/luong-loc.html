@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luồng lọc danh sách</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 80ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1040px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình · Sơ đồ trạng thái · datatable-loc-ro</p>
+    <h1>Lọc ra bảng rỗng thì bảng nói vì sao và chỉ đường ra</h1>
+    <p class="sub">Một bảng danh sách khi lọc: lựa chọn mang số 0 vẫn tick được (phương án A); bảng rỗng vì lọc tự đưa nút «Bỏ lọc»; «Bỏ chọn» trong menu con chỉ gỡ riêng tiêu chí đó. Bảng rỗng không lọc giữ câu «Chưa có … nào.».</p>
+
+    <svg viewBox="0 0 1296 616" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+      </defs>
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LUỒNG LỌC · BẢNG DANH SÁCH · AC-1 · AC-2 · AC-3 · AC-4 · AC-5 · AC-7</text>
+
+      <path d="M54 228 L144 228" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M48 236 L48 456 Q48 464 56 464 L144 464" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M384 208 L544 208" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M544 256 L384 256" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M824 228 L968 228" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M600 168 L600 128 Q600 120 608 120 L672 120 Q680 120 680 128 L680 168" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M1040 168 L1040 136 Q1040 128 1032 128 L768 128 Q760 128 760 136 L760 168" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <path d="M1104 288 L1104 336 Q1104 344 1096 344 L272 344 Q264 344 264 336 L264 288" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+      <circle cx="48" cy="228" r="6" fill="#171717"/>
+
+      <rect x="144" y="168" width="240" height="120" rx="8" fill="#fafafa"/>
+      <rect x="144" y="168" width="240" height="120" rx="8" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <rect x="160" y="184" width="64" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="192" y="195.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">ĐIỂM RA</text>
+      <text x="160" y="224" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Bảng có dòng</text>
+      <text x="160" y="244" fill="#575757" font-size="12" font-family="'Geist', sans-serif">danh sách thu theo bộ lọc,</text>
+      <text x="160" y="260" fill="#575757" font-size="12" font-family="'Geist', sans-serif">hoặc chưa lọc gì</text>
+
+      <rect x="544" y="168" width="280" height="120" rx="8" fill="#fafafa"/>
+      <rect x="544" y="168" width="280" height="120" rx="8" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <rect x="560" y="184" width="84" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="602" y="195.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-4 · AC-5</text>
+      <text x="560" y="224" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Menu con một tiêu chí</text>
+      <text x="560" y="244" fill="#575757" font-size="12" font-family="'Geist', sans-serif">mỗi lựa chọn kèm số, kể cả «0»</text>
+      <text x="560" y="260" fill="#575757" font-size="12" font-family="'Geist', sans-serif">«Bỏ chọn» ở đầu khi đã chọn</text>
+      <text x="560" y="276" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">ST-menu-tieu-chi-co-so</text>
+
+      <rect x="968" y="168" width="280" height="120" rx="8" fill="#fafafa"/>
+      <rect x="968" y="168" width="280" height="120" rx="8" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="984" y="184" width="84" height="16" rx="2" fill="#006B4F"/>
+      <text x="1026" y="195.5" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-1 · AC-2</text>
+      <text x="984" y="224" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Bảng rỗng vì lọc</text>
+      <text x="984" y="244" fill="#171717" font-size="12" font-family="'Geist', sans-serif">«Không có kết quả nào khớp bộ lọc»</text>
+      <text x="984" y="260" fill="#575757" font-size="12" font-family="'Geist', sans-serif">kèm nút «Bỏ lọc»</text>
+      <text x="984" y="276" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace">ST-bang-rong-vi-loc</text>
+
+      <rect x="144" y="416" width="240" height="96" rx="8" fill="#fafafa"/>
+      <rect x="144" y="416" width="240" height="96" rx="8" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <rect x="160" y="432" width="40" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+      <text x="180" y="443.5" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">AC-7</text>
+      <text x="160" y="472" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Bảng rỗng không lọc</text>
+      <text x="160" y="490" fill="#575757" font-size="12" font-family="'Geist', sans-serif">«Chưa có … nào.» theo màn</text>
+      <text x="160" y="504" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">ST-bang-rong-khong-loc</text>
+
+      <rect x="64" y="206" width="72" height="14" rx="2" fill="#fafafa"/>
+      <text x="100" y="217" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">CÓ BẢN GHI</text>
+
+      <rect x="60" y="312" width="84" height="14" rx="2" fill="#fafafa"/>
+      <text x="62" y="323" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">KHÔNG BẢN GHI</text>
+      <rect x="60" y="330" width="84" height="14" rx="2" fill="#fafafa"/>
+      <text x="62" y="341" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.06em">KHÔNG LỌC</text>
+
+      <rect x="448" y="186" width="32" height="14" rx="2" fill="#fafafa"/>
+      <text x="464" y="197" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LỌC</text>
+
+      <rect x="400" y="264" width="128" height="14" rx="2" fill="#fafafa"/>
+      <text x="464" y="275" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TICK LỰA CHỌN SỐ &gt; 0</text>
+
+      <rect x="836" y="206" width="120" height="14" rx="2" fill="#fafafa"/>
+      <text x="896" y="217" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">TICK LỰA CHỌN SỐ 0</text>
+
+      <rect x="612" y="96" width="56" height="14" rx="2" fill="#fafafa"/>
+      <text x="640" y="107" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">BỎ CHỌN</text>
+      <text x="640" y="84" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">gỡ riêng tiêu chí đó, menu vẫn mở</text>
+
+      <rect x="836" y="104" width="128" height="14" rx="2" fill="#fafafa"/>
+      <text x="900" y="115" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LỌC · SỬA TIÊU CHÍ</text>
+
+      <rect x="628" y="352" width="104" height="14" rx="2" fill="#fafafa"/>
+      <text x="680" y="363" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">BỎ LỌC · AC-3</text>
+      <text x="680" y="384" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">xoá tiêu chí, trạng thái, tìm kiếm · giữ «Đã lưu trữ» và sắp xếp</text>
+
+      <line x1="40" y1="556" x2="1256" y2="556" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="584" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <circle cx="136" cy="580" r="6" fill="#171717"/>
+      <text x="152" y="584" fill="#575757" font-size="11" font-family="'Geist', sans-serif">mở danh sách</text>
+      <rect x="248" y="575" width="16" height="10" rx="2" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="276" y="584" fill="#575757" font-size="11" font-family="'Geist', sans-serif">trạng thái</text>
+      <rect x="352" y="575" width="16" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="380" y="584" fill="#575757" font-size="11" font-family="'Geist', sans-serif">chỗ người dễ kẹt</text>
+      <line x1="496" y1="580" x2="524" y2="580" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+      <text x="536" y="584" fill="#575757" font-size="11" font-family="'Geist', sans-serif">thao tác của người</text>
+      <line x1="664" y1="580" x2="692" y2="580" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="704" y="584" fill="#575757" font-size="11" font-family="'Geist', sans-serif">đường ra khỏi chỗ kẹt</text>
+      <text x="840" y="584" fill="#575757" font-size="11" font-family="'Geist', sans-serif">ST-… = mã trạng thái trong bảng trạng thái của bản thiết kế</text>
+    </svg>
+
+    <footer>Hình luong-loc · datatable-loc-ro · chiếu mục «Đặc tả UX» của bản thiết kế 07/10 · Cổng Phạm vi · 2026-10-07</footer>
+  </div>
+</body>
+</html>

@@ -6,6 +6,7 @@ import {
 	DataTable,
 	type DataTableColumn,
 	type DataTableFacet,
+	facetValueOptions,
 } from "@crm/ui/components/data-table";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -156,7 +157,7 @@ export function ContactsTable() {
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
 	const table = useTableQuery(contactsSearchParams);
-	const { query, input, setArchived } = table;
+	const { query, input, setArchived, currentView, applyView } = table;
 
 	const contacts = useQuery({
 		...trpc.contacts.list.queryOptions(input),
@@ -199,7 +200,7 @@ export function ContactsTable() {
 	};
 
 	const facetCounts = contacts.data?.facetCounts;
-	const fieldFacets = useFieldFacets("CONTACT", facetCounts);
+	const fieldFacets = useFieldFacets("CONTACT");
 
 	const facets: DataTableFacet[] = [
 		{
@@ -211,7 +212,7 @@ export function ContactsTable() {
 					value: user.id,
 					label: user.name,
 				})),
-			].filter((option) => (facetCounts?.owner?.[option.value] ?? 0) > 0),
+			],
 		},
 		{
 			id: "company",
@@ -227,35 +228,33 @@ export function ContactsTable() {
 					value: company.id,
 					label: company.name,
 				})),
-			].filter((option) => (facetCounts?.company?.[option.value] ?? 0) > 0),
+			],
 		},
 		{
 			id: "title",
 			label: m.facets.title,
-			options: Object.keys(facetCounts?.title ?? {})
-				.sort()
-				.map((value) => ({ value, label: value })),
+			options: facetValueOptions(facetCounts?.title, query.filters.title ?? []),
 		},
 		{
 			id: "seniority",
 			label: m.facets.seniority,
-			options: Object.keys(facetCounts?.seniority ?? {})
-				.sort()
-				.map((value) => ({ value, label: value })),
+			options: facetValueOptions(
+				facetCounts?.seniority,
+				query.filters.seniority ?? [],
+			),
 		},
 		{
 			id: "persona",
 			label: m.facets.persona,
-			options: Object.keys(facetCounts?.persona ?? {})
-				.sort()
-				.map((value) => ({ value, label: value })),
+			options: facetValueOptions(
+				facetCounts?.persona,
+				query.filters.persona ?? [],
+			),
 		},
 		{
 			id: "activity",
 			label: m.facets.activity,
-			options: activityFacetOptions(locale).filter(
-				(option) => (facetCounts?.activity?.[option.value] ?? 0) > 0,
-			),
+			options: activityFacetOptions(locale),
 		},
 		...fieldFacets,
 	];
@@ -308,6 +307,8 @@ export function ContactsTable() {
 			onRowHover={(row) => prefetchRecord({ kind: "contact", id: row.id })}
 			onRowClick={(row) => openRecord({ kind: "contact", id: row.id })}
 			empty={input.archived ? m.emptyArchived : m.empty}
+			searchActive={input.q !== ""}
+			onClearFilters={() => applyView({ ...currentView, q: "", filters: {} })}
 		/>
 	);
 }

@@ -6,6 +6,7 @@ import {
 	DataTable,
 	type DataTableColumn,
 	type DataTableFacet,
+	facetValueOptions,
 } from "@crm/ui/components/data-table";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import {
@@ -195,7 +196,7 @@ export function CompaniesTable() {
 	const trpc = useTRPC();
 	const prefetchRecord = usePrefetchRecord();
 	const table = useTableQuery(companiesSearchParams);
-	const { query, input, setArchived } = table;
+	const { query, input, setArchived, currentView, applyView } = table;
 
 	const companies = useQuery({
 		...trpc.companies.list.queryOptions(input),
@@ -215,7 +216,7 @@ export function CompaniesTable() {
 	);
 
 	const facetCounts = companies.data?.facetCounts;
-	const fieldFacets = useFieldFacets("COMPANY", facetCounts);
+	const fieldFacets = useFieldFacets("COMPANY");
 
 	const facets: DataTableFacet[] = [
 		{
@@ -227,28 +228,25 @@ export function CompaniesTable() {
 					value: user.id,
 					label: user.name,
 				})),
-			].filter((option) => (facetCounts?.owner?.[option.value] ?? 0) > 0),
+			],
 		},
 		{
 			id: "industry",
 			label: m.facets.industry,
-			options: Object.keys(facetCounts?.industry ?? {})
-				.sort()
-				.map((value) => ({ value, label: value })),
+			options: facetValueOptions(
+				facetCounts?.industry,
+				query.filters.industry ?? [],
+			),
 		},
 		{
 			id: "enrichment",
 			label: m.facets.enrichment,
-			options: enrichmentFacetOptions(locale).filter(
-				(option) => (facetCounts?.enrichment?.[option.value] ?? 0) > 0,
-			),
+			options: enrichmentFacetOptions(locale),
 		},
 		{
 			id: "activity",
 			label: m.facets.activity,
-			options: activityFacetOptions(locale).filter(
-				(option) => (facetCounts?.activity?.[option.value] ?? 0) > 0,
-			),
+			options: activityFacetOptions(locale),
 		},
 		...fieldFacets,
 	];
@@ -301,6 +299,8 @@ export function CompaniesTable() {
 			onRowHover={(row) => prefetchRecord({ kind: "company", id: row.id })}
 			onRowClick={(row) => openRecord({ kind: "company", id: row.id })}
 			empty={input.archived ? m.emptyArchived : m.empty}
+			searchActive={input.q !== ""}
+			onClearFilters={() => applyView({ ...currentView, q: "", filters: {} })}
 		/>
 	);
 }
