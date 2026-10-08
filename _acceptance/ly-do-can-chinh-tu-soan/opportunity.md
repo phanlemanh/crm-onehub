@@ -3,10 +3,10 @@ schema_version: 1
 slug: ly-do-can-chinh-tu-soan
 feature: "Lý do Kara viết cho dòng căn chỉnh ở Soạn OKR đi theo căn chỉnh vào OKR thật"
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-08T16:40:19Z
 prototype:
   base_commit: 57dd87bf1
   disposition: archive
@@ -34,10 +34,10 @@ trên sheet), L3 (cây có lý do và lọc), L4 (gắn tay và đề xuất Kar
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] sau khi lên production, căn chỉnh đưa vào từ Soạn OKR có giữ lý do Kara đã viết không?
-- Kết quả nào là SỐNG: [đề xuất] trong hai tuần đầu, câu SQL `rang/do-nguong.sql` (căn chỉnh nối `okrDeXuat` qua `taoRaId` có `lyDo` rỗng trong khi `viSao` sau khi cắt khoảng trắng khác rỗng) đếm 0 trên production — gồm cả căn chỉnh mới lẫn căn chỉnh cũ đã điền lại.
-- Kết quả nào là CHẾT: [đề xuất] câu đó đếm từ 1 trở lên.
-- Timebox: [đề xuất] hai tuần sau khi lên production (tới 22/10/2026).
+- Câu hỏi phép đo trả lời: sau khi lên production, căn chỉnh đưa vào từ Soạn OKR có giữ lý do Kara đã viết không?
+- Kết quả nào là SỐNG: trong hai tuần đầu, câu SQL `rang/do-nguong.sql` (căn chỉnh nối `okrDeXuat` qua `taoRaId` có `lyDo` rỗng trong khi `viSao` sau khi cắt khoảng trắng khác rỗng) đếm 0 trên production — gồm cả căn chỉnh mới lẫn căn chỉnh cũ đã điền lại.
+- Kết quả nào là CHẾT: câu đó đếm từ 1 trở lên.
+- Timebox: hai tuần sau khi lên production (tới 22/10/2026).
 
 ## Kết quả prototype
 
@@ -58,8 +58,8 @@ Không dựng prototype: hàng này không có màn mới. Bản vẽ của phi�
 
 ## Cổng 0
 
-- **decision:** chờ anh. Ghi nhớ của phiên Logic Tree nói anh đã ký `build` cho L1–L4 lúc 2026-10-08T10:21:40Z, nhưng
-  LUAT.md của đợt chưa có dòng ký đó, nên máy không tự ghi. Anh xác nhận một câu là đủ.
+- **decision = build.** Căn cứ: Phan Le Manh gõ «Cổng Đáng L1–L4: build» trong phiên P5 lúc 2026-10-08T16:40:19Z.
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng ở mục «Ngưỡng chết / ngưỡng UAT», đã gỡ nhãn đề xuất.
 - **disposition = archive.** Căn cứ: không có prototype.
 
 ## Thước đo thành công → ứng viên criterion
