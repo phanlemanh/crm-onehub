@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -64,6 +68,59 @@ function ghiToast(loai: GoiToast["loai"]) {
 
 type MoiGhi = { onSuccess?: unknown; onError?: unknown; onSettled?: unknown };
 
+function sapTheoLoai(stages: Hang[]): Hang[] {
+	const thu = { OPEN: 0, WON: 1, LOST: 2 };
+	return [...stages].sort(
+		(a, b) => thu[a.kind] - thu[b.kind] || a.position - b.position,
+	);
+}
+
+const HIEU_UNG: Record<string, (v: DauVaoGhi) => void> = {
+	"giaiDoan.archive": (v) => {
+		const ma = String(v.id);
+		const g = duLieu.stages.find((x) => x.id === ma);
+		if (!g) return;
+		duLieu = { ...duLieu, stages: duLieu.stages.filter((x) => x.id !== ma) };
+		daCat = [
+			{
+				id: g.id,
+				label: g.label,
+				kind: g.kind,
+				archivedAt: new Date().toISOString(),
+			},
+			...daCat,
+		];
+	},
+	"giaiDoan.restore": (v) => {
+		const ma = String(v.id);
+		const c = daCat.find((x) => x.id === ma);
+		if (!c) return;
+		daCat = daCat.filter((x) => x.id !== ma);
+		const cuoi = Math.max(
+			-1,
+			...duLieu.stages.filter((x) => x.kind === c.kind).map((x) => x.position),
+		);
+		duLieu = {
+			...duLieu,
+			stages: sapTheoLoai([
+				...duLieu.stages,
+				hang(c.id, c.label, c.kind, cuoi + 1),
+			]),
+		};
+	},
+	"giaiDoan.reorder": (v) => {
+		const thuTu = [v.ids ?? []].flat();
+		duLieu = {
+			...duLieu,
+			stages: sapTheoLoai(
+				duLieu.stages.map((x) =>
+					thuTu.includes(x.id) ? { ...x, position: thuTu.indexOf(x.id) } : x,
+				),
+			),
+		};
+	},
+};
+
 function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa | Promise<TRa>) {
 	return {
 		queryKey: (v?: TVao) => (v === undefined ? [ten] : [ten, v]),
@@ -77,7 +134,9 @@ function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa | Promise<TRa>) {
 			mutationFn: async (v: DauVaoGhi) => {
 				goiGhi.push({ ten, v });
 				const lam = ketQuaGhi[ten];
-				return lam ? lam() : { id: "x" };
+				if (lam) return lam();
+				HIEU_UNG[ten]?.(v);
+				return { id: "x" };
 			},
 			...tuyChon,
 		}),
@@ -104,10 +163,13 @@ mock.module("@/lib/trpc/client", () => ({
 }));
 
 mock.module("@/lib/trpc/cache", () => ({
-	useCrmCache: () => ({
-		giaiDoan: async () => undefined,
-		deal: async () => undefined,
-	}),
+	useCrmCache: () => {
+		const qc = useQueryClient();
+		return {
+			giaiDoan: () => qc.invalidateQueries(),
+			deal: async () => undefined,
+		};
+	},
 }));
 
 mock.module("@/components/page-transition", () => ({
@@ -126,6 +188,7 @@ const { GiaiDoanSettings, LyDoGiaiDoan } = await import(
 	"@/app/(app)/[slug]/settings/giai-doan/giai-doan-settings"
 );
 const { settingsMessages } = await import("@/lib/messages/settings");
+const { messages: uiMessages } = await import("@crm/ui/lib/messages");
 const { NHOM_CAI_DAT } = await import("@/lib/cai-dat-dieu-huong");
 const t = settingsMessages("vi");
 
@@ -419,6 +482,7 @@ function thuTuThe(kind: Hang["kind"]): string[] {
 }
 
 const GOC_MO = BAY.filter((g) => g.kind === "OPEN").map((g) => g.id);
+const daLuuChu = uiMessages("vi").sortableList.saved;
 
 describe("luu-loi", () => {
 	afterEach(() => {
@@ -440,7 +504,8 @@ describe("luu-loi", () => {
 					? "cu"
 					: "giu thu tu vua keo khi luu loi",
 			loi: goiToast.filter((x) => x.loai === "loi").map((x) => x.chu),
-			daLuu: goiToast.filter((x) => x.action !== undefined).length,
+			daLuu: goiToast.filter((x) => x.loai === "xong" && x.chu === daLuuChu)
+				.length,
 			taiLai: soLanDoc - docTruoc <= 1,
 		}).toEqual({
 			goi: 1,
@@ -457,7 +522,8 @@ describe("luu-loi", () => {
 		await keoLen("Qualified to buy");
 		expect({
 			goi: goiGhi.find((g) => g.ten === "giaiDoan.reorder")?.v,
-			daLuu: goiToast.filter((x) => x.action !== undefined).length,
+			daLuu: goiToast.filter((x) => x.loai === "xong" && x.chu === daLuuChu)
+				.length,
 		}).toEqual({
 			goi: {
 				kind: "OPEN",
@@ -511,21 +577,64 @@ describe("luu-tru-ngay", () => {
 				t.giaiDoan.hoanTac,
 			],
 		});
+		const lucBam = thuTuThe("OPEN");
+		expect(
+			lucBam.includes("QUALIFIED_TO_BUY")
+				? "gia lap khong bo giai doan khoi danh sach"
+				: "khu hoi",
+		).toBe("khu hoi");
 		await act(async () => toastLuu?.action?.onClick());
 		await act(async () => toastLuu?.action?.onClick());
 		await cho();
-		const sau = goiGhi
-			.filter((g) => g.ten !== "giaiDoan.archive")
-			.map((g) => g.ten);
+		const sau = goiGhi.filter((g) => g.ten !== "giaiDoan.archive");
 		expect(
-			sau.join() === "giaiDoan.restore,giaiDoan.reorder"
+			sau.map((g) => g.ten).join() === "giaiDoan.restore,giaiDoan.reorder" &&
+				[sau[1]?.v.ids ?? []].flat().join() === GOC_MO.join()
 				? "dung"
 				: "hoan tac luu tru khong tra dung cho cu",
 		).toBe("dung");
-		expect(goiGhi.filter((g) => g.ten !== "giaiDoan.archive")).toEqual([
-			{ ten: "giaiDoan.restore", v: { id: "QUALIFIED_TO_BUY" } },
-			{ ten: "giaiDoan.reorder", v: { kind: "OPEN", ids: GOC_MO } },
-		]);
+		expect({
+			goi: sau,
+			lucBam,
+			sauCung: thuTuThe("OPEN"),
+		}).toEqual({
+			goi: [
+				{ ten: "giaiDoan.restore", v: { id: "QUALIFIED_TO_BUY" } },
+				{ ten: "giaiDoan.reorder", v: { kind: "OPEN", ids: GOC_MO } },
+			],
+			lucBam: GOC_MO.filter((id) => id !== "QUALIFIED_TO_BUY"),
+			sauCung: GOC_MO,
+		});
+	});
+
+	test("luu-tru-ngay: luu tru lai roi Hoan tac lan hai van chay; tra loi thi bam lai duoc", async () => {
+		const k = await dung();
+		const soRestore = () =>
+			goiGhi.filter((g) => g.ten === "giaiDoan.restore").length;
+		const toastMoi = () =>
+			goiToast.filter((x) => x.action !== undefined).at(-1);
+		await chonMuc(k, "QUALIFIED_TO_BUY", t.giaiDoan.luuTru);
+		await act(async () => toastMoi()?.action?.onClick());
+		await cho();
+		await chonMuc(k, "QUALIFIED_TO_BUY", t.giaiDoan.luuTru);
+		await act(async () => toastMoi()?.action?.onClick());
+		await cho();
+		expect(
+			soRestore() === 2 ? "dung" : "hoan tac luu tru lan hai khong chay",
+		).toBe("dung");
+		await chonMuc(k, "QUALIFIED_TO_BUY", t.giaiDoan.luuTru);
+		ketQuaGhi["giaiDoan.restore"] = async () => {
+			throw new Error("mang");
+		};
+		const lan3 = toastMoi();
+		await act(async () => lan3?.action?.onClick());
+		await cho();
+		await act(async () => lan3?.action?.onClick());
+		await cho();
+		expect({
+			restore: soRestore(),
+			loi: goiToast.filter((x) => x.loai === "loi").map((x) => x.chu),
+		}).toEqual({ restore: 4, loi: ["mang", "mang"] });
 	});
 
 	test("luu-tru-ngay: khoi phuc xong ma sap lai bi tu choi thi bao loi", async () => {
@@ -543,15 +652,45 @@ describe("luu-tru-ngay", () => {
 	});
 
 	test("luu-tru-ngay: trang khong con chu Xoa cho giai doan, vi va en", async () => {
+		duLieu = giaiDoanListOutput.parse({
+			canManage: true,
+			tran: 7,
+			stages: BAY,
+		});
 		const vi = await dung();
-		const chuVi = vi.textContent ?? "";
+		const mucVi = (await moMenu(vi, "QUALIFIED_TO_BUY")).map(
+			(m) => m.textContent ?? "",
+		);
+		const chuVi = document.body.textContent ?? "";
 		act(() => root?.unmount());
 		khung?.remove();
 		const en = await dung("en");
-		expect({
-			vi: chuVi.includes("Xoá"),
-			en: (en.textContent ?? "").includes("Delete"),
-		}).toEqual({ vi: false, en: false });
+		const tEn = settingsMessages("en").giaiDoan;
+		const mucEn = (await moMenu(en, "QUALIFIED_TO_BUY")).map(
+			(m) => m.textContent ?? "",
+		);
+		const chuEn = document.body.textContent ?? "";
+		const thay = {
+			viCoLuuTru: mucVi.some((c) => c.includes(t.giaiDoan.luuTru)),
+			enCoLuuTru: mucEn.some((c) => c.includes(tEn.luuTru)),
+			viTran: chuVi.includes(t.giaiDoan.datTranLuuTru.replace("{so}", "7")),
+			enTran: chuEn.includes(tEn.datTranLuuTru.replace("{so}", "7")),
+			viXoa: /xoá/i.test(chuVi),
+			enDelete: /delete|remove/i.test(chuEn),
+		};
+		expect(
+			thay.viXoa || thay.enDelete
+				? "trang con chu Xoa cho giai doan"
+				: "khong con",
+		).toBe("khong con");
+		expect(thay).toEqual({
+			viCoLuuTru: true,
+			enCoLuuTru: true,
+			viTran: true,
+			enTran: true,
+			viXoa: false,
+			enDelete: false,
+		});
 	});
 
 	test("luu-tru-ngay: giai doan cuoi nhom khoa Luu tru va khong goi archive; doi chung nhom nhieu giai doan goi", async () => {
@@ -571,10 +710,31 @@ describe("luu-tru-ngay", () => {
 			stages: BAY,
 		});
 		const k = await dung();
-		expect({
-			tay: tayCam(k).every(khoa),
-			menu: nutMenu(k).every(khoa),
-		}).toEqual({ tay: true, menu: true });
+		const tay = tayCam(k);
+		const menu = nutMenu(k);
+		const khoaKhach = { tay: tay.map(khoa), menu: menu.map(khoa) };
+		act(() => root?.unmount());
+		khung?.remove();
+		duLieu = giaiDoanListOutput.parse({
+			canManage: true,
+			tran: 20,
+			stages: BAY,
+		});
+		const q = await dung();
+		const khoaQuanTri = {
+			tay: tayCam(q).map(khoa),
+			menu: nutMenu(q).map(khoa),
+		};
+		expect({ khoaKhach, khoaQuanTri }).toEqual({
+			khoaKhach: {
+				tay: BAY.map(() => true),
+				menu: BAY.map(() => true),
+			},
+			khoaQuanTri: {
+				tay: BAY.map(() => false),
+				menu: BAY.map(() => false),
+			},
+		});
 	});
 });
 
@@ -753,14 +913,18 @@ describe("da-luu-tru", () => {
 		const [dau] = nutKhoiPhuc(k);
 		if (!(dau instanceof HTMLElement))
 			throw new Error("khong co nut Khoi phuc");
+		const dongDau = k.querySelectorAll("[data-luu-tru]").length;
 		await act(async () => dau.click());
 		await cho();
+		const dongSauKhoiPhuc = k.querySelectorAll("[data-luu-tru]").length;
 		expect({
 			goi: goiGhi.filter((g) => g.ten === "giaiDoan.restore"),
 			toast: goiToast.filter((x) => x.loai === "xong").map((x) => x.chu),
+			dong: [dongDau, dongSauKhoiPhuc],
 		}).toEqual({
 			goi: [{ ten: "giaiDoan.restore", v: { id: "CU_MO" } }],
 			toast: [t.giaiDoan.daKhoiPhucTen.replace("{ten}", "Cũ mở")],
+			dong: [2, 1],
 		});
 		ketQuaGhi["giaiDoan.restore"] = async () => {
 			throw new Error("trung");
@@ -773,7 +937,7 @@ describe("da-luu-tru", () => {
 		expect({
 			loi: goiToast.filter((x) => x.loai === "loi").map((x) => x.chu),
 			dong: k.querySelectorAll("[data-luu-tru]").length,
-		}).toEqual({ loi: ["trung"], dong: 2 });
+		}).toEqual({ loi: ["trung"], dong: 1 });
 	});
 
 	test("da-luu-tru: nguoi khong quan tri thay Khoi phuc khoa", async () => {

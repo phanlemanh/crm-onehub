@@ -30,7 +30,6 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { SortableSaveList } from "@crm/ui/components/sortable-list";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
 import { toast } from "sonner";
 import { PageShellDescription } from "@/components/page-shell";
 import {
@@ -247,7 +246,6 @@ export function GiaiDoanSettings() {
 	const cache = useCrmCache();
 	const giaiDoan = useGiaiDoan();
 	const hop = useHopThoaiGiaiDoan();
-	const daHoanTac = useRef(new Set<string>());
 
 	const reorder = useMutation(trpc.giaiDoan.reorder.mutationOptions());
 	const archive = useMutation(trpc.giaiDoan.archive.mutationOptions());
@@ -256,16 +254,21 @@ export function GiaiDoanSettings() {
 	const sapXep = (kind: LoaiGiaiDoanHien, ids: string[]) =>
 		reorder.mutateAsync({ kind, ids }).finally(() => cache.giaiDoan());
 
-	const hoanTacLuuTru = (g: GiaiDoanHien, truoc: string[]) => {
-		if (daHoanTac.current.has(g.id)) return;
-		daHoanTac.current.add(g.id);
-		restore
-			.mutateAsync({ id: g.id })
-			.then(() => reorder.mutateAsync({ kind: g.kind, ids: truoc }))
-			.then(() => toast.success(t.daKhoiPhucTen.replace("{ten}", g.label)))
-			.catch((error: Error) => toast.error(error.message))
-			.finally(() => void cache.giaiDoan());
-	};
+	const hoanTacLuuTru = (g: GiaiDoanHien, truoc: string[]) =>
+		restore.mutateAsync({ id: g.id }).then(
+			() =>
+				reorder
+					.mutateAsync({ kind: g.kind, ids: truoc })
+					.then(() => toast.success(t.daKhoiPhucTen.replace("{ten}", g.label)))
+					.catch((error: Error) => toast.error(error.message))
+					.then(() => true)
+					.finally(() => void cache.giaiDoan()),
+			(error: Error) => {
+				toast.error(error.message);
+				void cache.giaiDoan();
+				return false;
+			},
+		);
 
 	const luuTru = (g: GiaiDoanHien) => {
 		if (g.dealCount > 0) {
@@ -279,10 +282,17 @@ export function GiaiDoanSettings() {
 			.mutateAsync({ id: g.id })
 			.then(async () => {
 				await Promise.all([cache.giaiDoan(), cache.deal()]);
+				let daTra = false;
 				toast.success(t.daLuuTruTen.replace("{ten}", g.label), {
 					action: {
 						label: t.hoanTac,
-						onClick: () => hoanTacLuuTru(g, truoc),
+						onClick: () => {
+							if (daTra) return;
+							daTra = true;
+							void hoanTacLuuTru(g, truoc).then((duoc) => {
+								daTra = duoc;
+							});
+						},
 					},
 				});
 			})

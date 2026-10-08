@@ -884,7 +884,7 @@ describe("khoi-phuc", () => {
 				coB: cuaToi.some((g) => g.id === b),
 				coC: cuaToi.some((g) => g.id === c),
 				moiCatTruoc: [...ngay].sort().reverse(),
-				khoa: Object.keys(daCat[0] ?? {}).sort(),
+				khoa: daCat.map((g) => Object.keys(g).sort().join()),
 				soSong: await db.dealStage.count({
 					where: { id: { in: daCat.map((g) => g.id) }, archivedAt: null },
 				}),
@@ -895,7 +895,7 @@ describe("khoi-phuc", () => {
 			coB: true,
 			coC: true,
 			moiCatTruoc: ngay,
-			khoa: ["archivedAt", "id", "kind", "label"],
+			khoa: daCat.map(() => "archivedAt,id,kind,label"),
 			soSong: 0,
 		});
 
