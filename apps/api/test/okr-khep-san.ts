@@ -57,7 +57,7 @@ export async function gieoMucTieuCongBo(
 	cycleId: string,
 	krs: KrGieo[],
 	tuy: {
-		kind?: "cam-ket" | "tham-vong";
+		kind?: "cam-ket" | "tham-vong" | "hoc-tap";
 		unit?: Json;
 		ownerUserId?: string;
 		ai?: AiHoacCookie;

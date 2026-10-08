@@ -5,6 +5,7 @@ import type { BanNhap, MucTieuNhap } from "@crm/validation/okr-cuoc-soan";
 import { PHIEN_CHO_EVE } from "@crm/validation/okr-cuoc-soan";
 import { dongSoanTuHang, noiDungSoan } from "@crm/validation/okr-tro-ly";
 import { TRO_LY_OKR_SOAN } from "../agent/lib/config";
+import { goiKiemTu, goiSoan } from "../agent/lib/goi-soan";
 import type { KetQuaNop } from "../agent/lib/nop-ban-nhap";
 import type { NguCanhPhien } from "../agent/lib/phien";
 import nopBanNhap from "../agent/tools/nop_ban_nhap";
@@ -43,7 +44,7 @@ async function nop(input: BanNhap, ctx: NguCanhPhien): Promise<KetQuaNop> {
 }
 
 const PHIEN_1 = `${TIEN_TO}phien-1`;
-const SO_NGUOI_GO = 37;
+const GOI_Y = { k13: 100, nguoiGo: 37, phienCu: 41, tenTrang: 2031 } as const;
 
 const nguCanh = (
 	sessionId: string,
@@ -65,11 +66,25 @@ const nguCanh = (
 	},
 });
 
+async function soVangKhoiGoi(
+	cuocSoanId: string,
+	goiY: number,
+): Promise<number> {
+	const goi = await goiSoan(cuocSoanId, { vai: "member" });
+	if (!goi) throw new Error(`thieu goi cua cuoc ${cuocSoanId}`);
+	const { soTrongGoi } = await goiKiemTu(goi, { soNguoiGo: new Set() });
+	const vang = (so: number): number =>
+		soTrongGoi.has(String(so)) ? vang(so + 1) : so;
+	return vang(goiY);
+}
+
 let canh: Awaited<ReturnType<typeof gieoCanhGoi>>;
+let soK13: number = GOI_Y.k13;
 beforeAll(async () => {
 	await moXuong();
 	canh = await gieoCanhGoi({ vaiNguoiMo: "member" });
 	await capNhatPhien(db, canh.cuocSoanId, PHIEN_1);
+	soK13 = await soVangKhoiGoi(canh.cuocSoanId, GOI_Y.k13);
 }, 60_000);
 afterAll(donDep);
 
@@ -120,7 +135,7 @@ function banNhapTron(
 					},
 					{
 						khoa: "k13",
-						ten: "Đạt 100 % đối tác gia hạn",
+						ten: `Đạt ${soK13} % đối tác gia hạn`,
 						kieu: "tang-toi",
 						donVi: "%",
 						viSao: "số mới → so-moi",
@@ -288,7 +303,8 @@ describe("nop-ban-nhap", () => {
 				quyetLuc: new Date(),
 			},
 		});
-		const lai = banNhapLai(`Có ${SO_NGUOI_GO} đại lý mới ở miền Trung`);
+		const so = await soVangKhoiGoi(canh.cuocSoanId, GOI_Y.nguoiGo);
+		const lai = banNhapLai(`Có ${so} đại lý mới ở miền Trung`);
 		const chuaGo = await nop(lai, ctx);
 		expect(chuaGo.biLoai.find((x) => x.khoa === "m3")?.maLoai).toBe("so-moi");
 		await db.agentEvent.create({
@@ -296,7 +312,7 @@ describe("nop-ban-nhap", () => {
 				id: `${TIEN_TO}sk-go-1`,
 				sessionId: PHIEN_1,
 				type: TRO_LY_OKR_SOAN.suKien.nguoiGo,
-				data: { message: `Tôi muốn ${SO_NGUOI_GO} đại lý mới` },
+				data: { message: `Tôi muốn ${so} đại lý mới` },
 				emittedAt: new Date(),
 			},
 		});
@@ -332,7 +348,7 @@ describe("nop-ban-nhap", () => {
 			sessionId: cu,
 		});
 		await capNhatPhien(db, cuoc.id, song);
-		const so = SO_NGUOI_GO + 4;
+		const so = await soVangKhoiGoi(cuoc.id, GOI_Y.phienCu);
 		const lai = banNhapLai(`Có ${so} đại lý mới ở miền Trung`);
 		const ctx = nguCanh(song, canh.nguoiMo.id, cuoc.id);
 		const m3 = (ra: KetQuaNop) =>
@@ -359,6 +375,7 @@ describe("nop-ban-nhap", () => {
 			nguoiMoUserId: canh.nguoiMo.id,
 			sessionId: phien,
 		});
+		const so = await soVangKhoiGoi(cuoc.id, GOI_Y.tenTrang);
 		const kr = (khoa: string, ten: string, viSao: string) => ({
 			khoa,
 			ten,
@@ -389,7 +406,7 @@ describe("nop-ban-nhap", () => {
 							kr(
 								"k3",
 								"Tỷ lệ khách quay lại lưu trú",
-								"Bám định hướng vận hành 2031",
+								`Bám định hướng vận hành ${so}`,
 							),
 						],
 					},
@@ -402,7 +419,7 @@ describe("nop-ban-nhap", () => {
 				khoa: "k3",
 				ten: "Tỷ lệ khách quay lại lưu trú",
 				maLoai: "so-moi",
-				viPham: "số mới: 2031",
+				viPham: `số mới: ${so}`,
 			},
 		]);
 		expect(ra.soDong).toBe(3);
