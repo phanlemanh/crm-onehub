@@ -5,7 +5,7 @@ slug: dong-thoi-gian-loi-dung-luot
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-08-dong-thoi-gian-loi-dung-luot-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T17:08:35Z

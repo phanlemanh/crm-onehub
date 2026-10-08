@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3ad30171053b328e11642e95d81724d8c90db14f
+verified_commit: 6d4f6837cee3025dacf8ecd05cd454ae9ff916f4
 human_signoff:
 ---
 
@@ -25,95 +25,95 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-dong-thoi-gian-loi-dung-luot-E1-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtl_lam_moi_roi_xem_cu
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
   output: |
-    Ran 1 test across 1 file. [1127.00ms]
+    Ran 1 test across 1 file. [914.00ms]
 
 - eval: E2
-  run_id: minted-dong-thoi-gian-loi-dung-luot-E2-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtl_xem_cu_roi_lam_moi
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
   output: |
-    Ran 1 test across 1 file. [1001.00ms]
+    Ran 1 test across 1 file. [1039.00ms]
 
 - eval: E3
-  run_id: minted-dong-thoi-gian-loi-dung-luot-E3-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtl_thu_lai_lam_moi
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
   output: |
-    Ran 1 test across 1 file. [967.00ms]
+    Ran 1 test across 1 file. [1044.00ms]
 
 - eval: E4
-  run_id: minted-dong-thoi-gian-loi-dung-luot-E4-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtl_doi_tab
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
   output: |
-    Ran 1 test across 1 file. [1.72s]
+    Ran 1 test across 1 file. [1343.00ms]
 
 - eval: E5
-  run_id: ""
+  run_id: minted-dong-thoi-gian-loi-dung-luot-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtl_hoi_quy_k6c
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
   output: |
-    Ran 4 tests across 1 file. [1.61s]
+    Ran 4 tests across 1 file. [1.52s]
 
 - eval: E6
-  run_id: minted-dong-thoi-gian-loi-dung-luot-E6-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kts_dong_thoi_gian
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
   output: |
-    Ran 1 test across 1 file. [1200.00ms]
+    Ran 1 test across 1 file. [1009.00ms]
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bun_run_test_filter_api-r1
+  run_id: ""
   exit_code: 0
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: ""__ab9404
+  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
 
 - cmd: bunx turbo run lint --force
-  run_id: ""__128f7f
+  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
 
 - cmd: bun run lint:slop
-  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bun_run_lint_slop-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-dong-thoi-gian-loi-dung-luot-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-08T18:28:44Z
+  verified_at: 2026-10-08T19:00:55Z
 
 ## Known limits
 
@@ -121,16 +121,15 @@ human_signoff:
 
 ## Analyst
 
-carried tu round truoc — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi). Field baseline cua tung eval ghi n-a vi round nay khong do.
+carried tu round truoc — baseline khong do lai round nay.
 
-Eval không-phân-biệt (xanh trên cả HEAD lẫn baseline): không có eval nào được liệt kê. Lệnh suite xanh cả hai phía là regression-guard thông thường, không liệt kê.
-
-Ghi chú máy: mã run_id của E5 và phần đầu mã của hai lệnh suite (app/@crm/ui và turbo lint) do bộ máy tính ra rỗng, được chép nguyên văn từ bản đồ mã, không tự đặt lại.
+none — khong co eval khong-phan-biet nao duoc liet ke; cac lenh suite xanh-ca-hai-phia la regression-guard binh thuong.
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy 1 lần, deterministic, không có pass_rate hỗn hợp)
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E1-E6 đều xanh, bảy lệnh suite hồi quy xanh; verdict PASS, chờ người ký ở Cổng Bằng chứng.
+Round 1: PASS kèm hai phát hiện trong hợp đồng (AC-3, AC-4) — quay lại sửa: nhớ lỗi theo khoá tab qua QueryClient, E3/E4 thêm ô đổi tab và quay lại.
+Round 2: PASS — sáu eval và bảy lệnh suite đều xanh trên commit đã ghim; không có phát hiện trong hợp đồng.
