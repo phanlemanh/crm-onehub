@@ -62,7 +62,7 @@ evals:
     executor: script
     cmd: config:executors.script.zghl_dot_bien
     paths: [apps/agent/agent/lib/zalo-api.ts, apps/agent/agent/lib/zalo-tra-loi.ts, apps/agent/agent/lib/zalo-nhan.ts, apps/agent/agent/lib/zalo-webhook.ts, apps/agent/agent/lib/zalo-bot-xuong.ts, apps/agent/agent/lib/zalo-bot.ts, packages/validation/src/zalo-update.ts, apps/api/src/zalo/zalo.service.ts, packages/db/src/kenh-thong-bao.ts, "apps/app/app/(app)/[slug]/settings/connections/zalo/trang-thai-webhook.tsx", packages/validation/src/zalo-cau-noi.ts, "apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx", apps/agent/test/zalo-gui-hong-ly-do.spec.ts, apps/api/test/zalo-doi-bot.spec.ts, apps/app/test/zalo-doi-bot.dom.tsx, _acceptance/zalo-gui-hong-ghi-ly-do/rang/dot-bien.mjs]
-    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 18: mỗi cặp (a)–(r) như ghi ở E1–E6, E9, E10, E12, E14–E19 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 20: mỗi cặp (a)–(t) như ghi ở E1–E6, E9, E10, E12, E14–E19 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
@@ -104,7 +104,7 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.zghl_chup
     paths: [apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx, apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx]
-    expected: "Trên bàn đo (do:man, kho dùng-một-lần, agent giả trả can-xac-nhan-doi-bot cho Lưu bot), chụp ở 1440 và 390: (1) Kết nối › Zalo sau khi bấm Lưu với token bot khác — ConfirmDialog nêu tên bot mới và «3 liên kết», nút «Gỡ liên kết và đổi bot», nút Huỷ; (2) «Thông báo của bạn» của người A ở E12 — dòng báo cần nối lại cạnh «Nối Zalo»; (3) Kết nối › Zalo khi zaloWebhookLyDo = khoa-lech — cảnh báo khoá lệch và nút «Đăng ký lại». Ảnh lưu ở _acceptance/zalo-gui-hong-ghi-ly-do/evidence/E13-*.png; người chấm nhìn ảnh."
+    expected: "Trên bàn đo (do:man, kho dùng-một-lần, agent giả trả can-xac-nhan-doi-bot cho Lưu bot), chụp ở 1440 và 390: (1) Kết nối › Zalo sau khi bấm Lưu với token bot khác — ConfirmDialog nêu tên bot mới và «3 liên kết», nút «Gỡ liên kết và đổi bot», nút Huỷ; (2) «Thông báo của bạn» của người A ở E12 — dòng báo cần nối lại cạnh «Nối Zalo»; Ảnh lưu ở _acceptance/zalo-gui-hong-ghi-ly-do/evidence/E13-*.png; người chấm nhìn ảnh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
   - id: E14
@@ -130,7 +130,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.zghl_webhook_403
     paths: [apps/agent/agent/lib/zalo-webhook.ts, packages/validation/src/zalo-update.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
-    expected: "exit 0; kho thử có AppSetting với token và khoá «khoa-dung-h4»; ba dòng gửi nhanWebhook THẬT (Request thật) với thân webhook dựng bằng thanWebhook có chữ «chu-rieng-tu-h4»: (1) header «khoa-sai-h4» ba lần liền → cả ba trả 403; đúng ba dòng «[zalo] webhook 403 ly_do=khoa-lech» (mỗi yêu cầu một dòng), không dòng nào chứa «khoa-sai-h4», «khoa-dung-h4» hay «chu-rieng-tu-h4»; zaloWebhookLyDo = «khoa-lech»; spy cho thấy lệnh ghi AppSetting chạy đúng một lần (lần hai, ba không ghi lại); (2) không có token/khoá trong AppSetting và env → 404, một dòng «[zalo] webhook 404 ly_do=chua-co-bot», zaloWebhookLyDo không đổi; (3) đối chứng: header đúng → 200, không dòng «webhook 403». CHIỀU ĐỎ: cặp (o) bản sao bỏ lệnh đặt lý do ở nhánh 403 → dòng (1) đỏ «403 khong dat ly do khoa-lech»."
+    expected: "exit 0; kho thử có AppSetting với token và khoá «khoa-dung-h4»; năm dòng gửi nhanWebhook THẬT (Request thật), thân tin dựng bằng thanWebhook của test/support/zalo-tin.ts có chữ «chu-rieng-tu-h4»: (1) header «khoa-sai-h4», ba yêu cầu ĐỒNG THỜI (Promise.all) rồi ba yêu cầu lần lượt → cả sáu trả 403, đúng sáu dòng «[zalo] webhook 403 ly_do=khoa-lech», zaloWebhookLyDo = «khoa-lech», và tổng count trả về của mọi lệnh ghi lý do = 1 (đọc qua spy trên giá trị trả về, không đếm số lần gọi) — sai thì ném «403 ghi lai moi yeu cau»; (2) không header, thân tin hợp lệ → 403, một dòng «ly_do=thieu-khoa», zaloWebhookLyDo không đổi; (3) header sai, thân không đúng khuôn Zalo ({\"x\":1}) → 403, một dòng «ly_do=khoa-lech», zaloWebhookLyDo không đổi — sai thì ném «ke la bat canh bao gia»; (4) không có token/khoá trong AppSetting và env → 404, một dòng «ly_do=chua-co-bot», không đổi CSDL; (5) đối chứng: header đúng → 200, không dòng «webhook 403». Không dòng nào chứa «khoa-sai-h4», «khoa-dung-h4» hay «chu-rieng-tu-h4». CHIỀU ĐỎ: cặp (o) bản sao bỏ lệnh đặt lý do ở nhánh 403 → dòng (1) đỏ «403 khong dat ly do khoa-lech»; cặp (s) bản sao bỏ điều kiện «lý do hiện khác khoa-lech» của lệnh ghi → dòng (1) đỏ «403 ghi lai moi yeu cau»; cặp (t) bản sao bỏ điều kiện «thân đọc được là tin Zalo» → dòng (3) đỏ «ke la bat canh bao gia»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E17
@@ -138,15 +138,16 @@ evals:
     executor: test
     cmd: config:executors.test.zghl_ly_do_ben
     paths: [apps/agent/agent/lib/zalo-bot.ts, apps/agent/agent/lib/zalo-bot-xuong.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
-    expected: "exit 0; kho thử có zaloWebhookLyDo = «khoa-lech» do chính nhánh 403 của E16 đặt (không gieo tay). Ba ca: (1) chạy kiemBot THẬT với fetcher giả trả getMe ok và getWebhookInfo {ok:true,result:{url}} → lý do vẫn «khoa-lech» (sai thì ném «nhip kiem xoa ly do khoa-lech»); (2) Đăng ký lại (datBot, cùng token) với setWebhook giả trả {ok:false} → lý do giữ «khoa-lech» hoặc thành «zalo-tu-choi», không thành null; (3) Đăng ký lại với setWebhook ok → lý do = null. CHIỀU ĐỎ: cặp (p) bản sao bỏ «khoa-lech» khỏi danh sách lý do nhịp kiểm không được xoá → ca (1) đỏ «nhip kiem xoa ly do khoa-lech»."
+    expected: "exit 0; kho thử có zaloWebhookLyDo = «khoa-lech» do chính nhánh 403 của E16 đặt (không gieo tay). Bốn ca: (1) chạy kiemBot THẬT với fetcher giả trả getMe ok và getWebhookInfo {ok:true,result:{url}} với url dựng bằng CHÍNH hàm dựng địa chỉ webhook mà datBot dùng (không gõ tay) → lý do vẫn «khoa-lech» (sai thì ném «nhip kiem xoa ly do khoa-lech»); (2) Đăng ký lại (datBot, cùng token) với setWebhook giả trả {ok:false} → lý do khác null (sai thì ném «dang ky hong ma xoa ly do»); (3) Đăng ký lại với setWebhook ok → lý do = null; (4) Lưu bot bằng token của bot khác khi 0 liên kết, setWebhook ok → lý do = null. CHIỀU ĐỎ: cặp (p) bản sao bỏ «khoa-lech» khỏi danh sách lý do nhịp kiểm không được xoá → ca (1) đỏ «nhip kiem xoa ly do khoa-lech»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E18
     criterion: AC-13
     executor: test
     cmd: config:executors.test.zghl_canh_bao_khoa
-    paths: [apps/api/src/zalo/zalo.service.ts, apps/api/test/zalo-doi-bot.spec.ts]
-    expected: "exit 0; zalo.xuong THẬT qua router API: kho thử có zaloWebhookLyDo = «khoa-lech» (đặt bằng chính nhánh 403 của nhanWebhook như E16, không gieo tay) → trạng thái webhook trả về là «khoa-lech»; đối chứng: lý do null và có zaloWebhookUrl → «da-dang-ky». CHIỀU ĐỎ: cặp (q) bản sao cho API ánh xạ khoa-lech về da-dang-ky → đỏ «khoa-lech bi giau o API»."
+    layer: backend-effect
+    paths: [apps/api/src/zalo/zalo.service.ts, apps/api/src/zalo/zalo.contracts.ts, packages/validation/src/zalo-update.ts, apps/api/test/zalo-doi-bot.spec.ts]
+    expected: "exit 0; zalo.xuong THẬT qua router API: kho thử có zaloWebhookLyDo gieo bằng hằng ZALO_LY_DO xuất từ @crm/validation/zalo-update (phần tử «khoa-lech», không gõ chuỗi tay; phía sinh lý do đã đo ở E16) → trạng thái webhook trả về là «khoa-lech»; đối chứng: lý do null và có zaloWebhookUrl → «da-dang-ky». CHIỀU ĐỎ: cặp (q) bản sao cho API ánh xạ khoa-lech về da-dang-ky → đỏ «khoa-lech bi giau o API»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E19
@@ -156,3 +157,12 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/settings/connections/zalo/trang-thai-webhook.tsx", apps/app/test/zalo-doi-bot.dom.tsx]
     expected: "exit 0; bài DOM dựng trang-thai-webhook.tsx THẬT với trạng thái «khoa-lech» → có chữ cảnh báo khoá lệch (đọc từ tệp chữ Zalo, không gõ tay) và đúng một nút tên «Đăng ký lại»; bấm nút → mutation dangKyLai giả nhận đúng một lời gọi; với trạng thái «da-dang-ky» → không có chữ cảnh báo đó. Chỉ so giá trị nguyên thuỷ (luật 35). CHIỀU ĐỎ: cặp (r) bản sao bỏ nhánh khoa-lech khỏi trang-thai-webhook.tsx → đỏ «khong co canh bao khoa lech»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E20
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.zghl_chup
+    paths: ["apps/app/app/(app)/[slug]/settings/connections/zalo/trang-thai-webhook.tsx", "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx", apps/api/src/zalo/zalo.service.ts, apps/api/src/zalo/zalo.contracts.ts]
+    expected: "Trên bàn đo (do:man, kho dùng-một-lần), zaloWebhookLyDo đặt bằng một yêu cầu 403 thật (header lệch, thân tin Zalo hợp lệ) gửi tới agent của bàn đo; chụp Kết nối › Zalo ở 1440 và 390: cảnh báo khoá lệch hiện cùng nút «Đăng ký lại». Ảnh ở _acceptance/zalo-gui-hong-ghi-ly-do/evidence/E20-*.png; người chấm nhìn ảnh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
