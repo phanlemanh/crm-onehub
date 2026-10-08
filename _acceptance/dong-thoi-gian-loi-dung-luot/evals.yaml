@@ -64,10 +64,10 @@ evals:
       exit 0; tab Tat ca co thong bao xem-cu (trang "c1" loi) -> bam tab «Ghi chú» (filter notes, tra 2 muc khong loi) ->
       khong [data-dtg-loi] nao; doi chung duong: tab Ghi chu co lan doc lai loi -> invalidate -> [data-dtg-loi=lam-moi]
       !== null. O quay lai: QueryClient dat staleTime 30000 (nhu app) -> tab Tat ca loi xem cu -> sang Ghi chu -> quay lai
-      Tat ca (khong luot tai lai luc gan) -> [data-dtg-loi=xem-cu] !== null. Moi bai dat lai dong ho that (setSystemTime())
-      truoc khi chay.
-      CHIEU DO ghim: ban sao giu co loi qua doi khoa -> do "dtl: thong bao theo sang tab moi"; ban sao lay trang thai
-      hien tai lam moc khi doi khoa -> do "dtl: quay lai tab loi mat thong bao".
+      Tat ca: TanStack 5.101 tai lai trang dau (luot loi dat isInvalidated: true, query.js:388) -> dung 1 lan goi khong
+      cursor; trong luc lan tai lai treo, MutationObserver dem so lan chen [data-dtg-loi] === 0; giai -> khong
+      [data-dtg-loi], nut «Xem cũ hơn» !== null. Moi bai dat lai dong ho that (setSystemTime()) truoc khi chay.
+      CHIEU DO ghim: ban sao giu co loi qua doi khoa -> do "dtl: thong bao theo sang tab moi" (ca o sang tab va o quay lai).
 
   - id: E5
     criterion: AC-5

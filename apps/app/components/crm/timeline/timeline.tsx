@@ -19,6 +19,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 import { cn } from "@crm/ui/lib/utils";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
+import { useEffect, useRef, useState } from "react";
 import { DetailSheetEmpty, SECTION_TITLE } from "@/components/detail-sheet";
 import { type CrmMessages, crmMessages } from "@/lib/messages/crm";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -150,6 +151,90 @@ function TimelineDay({
 	);
 }
 
+type LoiTheoLuot = { xemCu: boolean; lamMoi: boolean };
+
+const KHONG_LOI: LoiTheoLuot = { xemCu: false, lamMoi: false };
+
+type LuotTai = {
+	isFetching: boolean;
+	isError: boolean;
+	isFetchNextPageError: boolean;
+	errorUpdateCount: number;
+	dataUpdatedAt: number;
+	soTrang: number | null;
+};
+
+type MocDaThay = { khoa: string; loi: number; du: number; soTrang: number };
+
+const mocMoi = (khoa: string): MocDaThay => ({
+	khoa,
+	loi: -1,
+	du: 0,
+	soTrang: 0,
+});
+
+function useLoiTheoLuot(luot: LuotTai, khoa: string): LoiTheoLuot {
+	const [loi, datLoi] = useState<{ khoa: string; loi: LoiTheoLuot }>({
+		khoa,
+		loi: KHONG_LOI,
+	});
+	const daThay = useRef<MocDaThay>(mocMoi(khoa));
+	const {
+		isFetching,
+		isError,
+		isFetchNextPageError,
+		errorUpdateCount,
+		dataUpdatedAt,
+		soTrang,
+	} = luot;
+
+	useEffect(() => {
+		if (daThay.current.khoa !== khoa) daThay.current = mocMoi(khoa);
+		if (isFetching || soTrang === null) return;
+		const truoc = daThay.current;
+		const goc = (hienCo: { khoa: string; loi: LoiTheoLuot }) =>
+			hienCo.khoa === khoa ? hienCo.loi : KHONG_LOI;
+		if (isError) {
+			if (errorUpdateCount === truoc.loi) return;
+			daThay.current = {
+				...truoc,
+				loi: errorUpdateCount,
+				du: dataUpdatedAt,
+				soTrang,
+			};
+			datLoi((hienCo) => ({
+				khoa,
+				loi: isFetchNextPageError
+					? { ...goc(hienCo), xemCu: true }
+					: { ...goc(hienCo), lamMoi: true },
+			}));
+			return;
+		}
+		if (dataUpdatedAt === truoc.du) return;
+		const trangKeDuoc = truoc.du !== 0 && soTrang > truoc.soTrang;
+		daThay.current = {
+			...truoc,
+			loi: errorUpdateCount,
+			du: dataUpdatedAt,
+			soTrang,
+		};
+		datLoi((hienCo) => ({
+			khoa,
+			loi: trangKeDuoc ? { ...goc(hienCo), xemCu: false } : KHONG_LOI,
+		}));
+	}, [
+		khoa,
+		isFetching,
+		isError,
+		isFetchNextPageError,
+		errorUpdateCount,
+		dataUpdatedAt,
+		soTrang,
+	]);
+
+	return loi.khoa === khoa ? loi.loi : KHONG_LOI;
+}
+
 export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 	const trpc = useTRPC();
 	const hydrated = useHydrated();
@@ -182,7 +267,18 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 	const entries = history.data?.pages.flatMap((page) => page.entries) ?? [];
 	const pinnedEntries = tab === "all" ? (pinned.data?.entries ?? []) : [];
 	const chuaCoTrang = history.data === undefined;
-	const thongBaoLamMoi = history.isRefetchError ? (
+	const loi = useLoiTheoLuot(
+		{
+			isFetching: history.isFetching,
+			isError: history.isError,
+			isFetchNextPageError: history.isFetchNextPageError,
+			errorUpdateCount: history.errorUpdateCount,
+			dataUpdatedAt: history.dataUpdatedAt,
+			soTrang: history.data?.pages.length ?? null,
+		},
+		JSON.stringify([anchor, tab]),
+	);
+	const thongBaoLamMoi = loi.lamMoi ? (
 		<div className="pt-3">
 			<Alert data-dtg-loi="lam-moi">
 				<AlertDescription>{m.timeline.lamMoiLoi}</AlertDescription>
@@ -267,7 +363,7 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 						/>
 					))}
 
-					{history.isFetchNextPageError ? (
+					{loi.xemCu ? (
 						<div className="mt-4">
 							<Alert data-dtg-loi="xem-cu">
 								<AlertDescription>{m.timeline.xemCuLoi}</AlertDescription>
