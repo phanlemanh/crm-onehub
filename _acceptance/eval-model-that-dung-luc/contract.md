@@ -5,9 +5,9 @@ slug: eval-model-that-dung-luc
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-08T06:19:48Z
 design_doc: _acceptance/eval-model-that-dung-luc/design.md
 ---
 
