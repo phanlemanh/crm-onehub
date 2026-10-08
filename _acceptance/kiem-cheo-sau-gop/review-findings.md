@@ -1,41 +1,29 @@
-# Review findings: kiem-cheo-sau-gop (round 4)
+# Review findings: kiem-cheo-sau-gop (round 5)
 
 ## Trong hợp đồng
 
-- **So expected_exit bằng phép bằng tuyệt đối: lệch luật của làn thật (AC-10, không phạt một cải thiện), nên báo đỏ giả**
+- **The night run decodes the lane's stdout chunk by chunk, so a non-ASCII eval command can be corrupted before the bisect re-runs it**
+  file: `scripts/kiem-cheo/dem.mjs:71`
+  severity: low
   AC: AC-6
-  file: `scripts/kiem-cheo/dem.mjs:334`
-  severity: high
-  source: conventions
-  detail: Làn thật (feature-loop 2.24.0 scripts/repin-lane.mjs, dòng 592, 620-622 và 678) coi một eval là lệch khi `e.exit !== e.expected && !(e.expected !== 0 && e.exit === 0)`. Nghĩa là eval khai expected_exit khác 0 mà nay trả 0 vẫn đạt (hetGioiHan, chú thích 'AC-10: không phạt một cải thiện'). Bản sửa ở dem.mjs lại so `x.ma !== kyVong(D, x.slug, x.id)` (dòng 334), và trong `chay` trả `r.ma === kyVong(sha, …) ? 0 : 1` (dòng 349). Ví dụ: hồ sơ khai `expected_exit: 2`, rồi một lần gộp sửa xong giới hạn đó nên eval trả 0 ở D. Làn thoát 0 và báo xanh. kiem-cheo thì lọc eval này vào danh sách đỏ; phanLoai thấy D 'hỏng' (0≠2 → 1) còn các sha cũ 'đạt' (2 → 0), xếp nó thành do-moi ở chính lần gộp đã sửa, và ket_qua thành 'do'. Thế là báo hồi quy giả cho một cải thiện, ngược với lần chạy làn ngay trước đó trong cùng lượt. Tệp `_acceptance/kiem-cheo-sau-gop/rang/lan-gia.mjs:75` (`if (ma !== e.kyVong) doBatKy = true`) chép lại cùng phép so lệch này, nên làn giả cũng không còn giống làn thật. Pha-thử (l)/(m) không phủ trường hợp 'khai 2, nay trả 0'. Phép so nên dùng đúng vị từ `lech` của làn, ở cả bộ lọc, ở `chay` và ở lan-gia.
-
-- **dem.mjs counts an eval as red when it declares a nonzero expected_exit and now exits 0, but the real lane counts that as green (AC-10), so the nightly run reports a false do-moi**
-  AC: AC-6
-  file: `scripts/kiem-cheo/dem.mjs:334`
-  severity: high
   source: bugs
-  detail: The red filter at dem.mjs:333-335 is `x.ma !== kyVong(D, x.slug, x.id)`. The bisection probe at line 349 is `r.ma === kyVong(sha, e.slug, e.id) ? 0 : 1`. Both use strict equality against the declared expected_exit. The kit lane the run reads (feature-loop 2.24.0 scripts/repin-lane.mjs:592 and 620-625) uses a different rule. Its mismatch test is `!(x === e.expected) && !(e.expected !== 0 && x === 0)`, and `hetHan = e.expected !== 0 && e.exit === 0` is passed with the comment "AC-10: không phạt một cải thiện". So an eval that declares a known limitation and then exits 0 is green in the lane: the lane exits 0 and writes no red line. The repo already has evals like this: _acceptance/man-cai-dat-noi-tieng-viet/evals.yaml:122 (expected_exit: 2) and _acceptance/tro-ly-okr-de-xuat/evals.yaml:225 (expected_exit: 1). Failure scenario: a merge fixes one of those limitations, so the eval now exits 0 at D. The lane exits 0 and is green. In dem.mjs, 0 !== 2, so the eval enters `do_`. In phanLoai, chay(D) returns 1, so it is not chap-chon. The run then either reports do-san (when the eval is signed off at T, because the 0 !== 2 rule also counts T as red, though it really exited 2 as declared) or bisects and names the fixing merge as `do-moi`. The day result becomes `do` and the person is notified, while the lane itself is green. The new guard at line 360 (`lan.ma !== 0 && do_.length === 0`) does not catch this, because the lane exit is 0. The fake lane _acceptance/kiem-cheo-sau-gop/rang/lan-gia.mjs:75 (`ma !== e.kyVong`) copies the same strict rule. Cases (l)/(m) in pha-thu.mjs never cover the expected!=0 && exit==0 case, so the gap slips past the tests too. Fix: use the kit's rule in both places, i.e. red only when `ma !== kv && !(kv !== 0 && ma === 0)`.
+  detail: In taoChay, `dau += b` (and `ra += b`) turns each stdout Buffer chunk into a string on its own. When a chunk boundary falls inside a multi-byte UTF-8 character, that character becomes U+FFFD. JSON.parse does not fail on this. docKetLan then returns a `lech[].cmd` string that differs from the command the lane actually ran, and luotTho runs that altered string unchanged at D, T and each merge during the bisect. A real command with non-ASCII text exists in the config: r1c_hoi_y_dom has `-t 'thanh công bố'`. The corrupted filter matches no tests, so the eval fails at every sha. The run then files do-san, or blames a do-moi on the first merge where the hồ sơ appears, with no error. The fault only shows when the lane's JSON is larger than one pipe read (several slugs in the tap), but the cause is certain. The kit's own chay-lenh.mjs collects the Buffers and runs Buffer.concat(...).toString('utf8') once at the end; `con.stdout.setEncoding('utf8')` also fixes it.
+  rationale: AC-6 requires re-running exactly the same command at D, T and each merge; a command corrupted by chunked decoding is no longer the command the lane ran, so the classification can be wrong.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **taoKyVong nuốt lỗi đọc/parse evals.yaml và bỏ errs của expectedExits, lệch pattern 'khai sai thì không tha gì' của kho**
-  Người dùng thấy gì: Nếu một hồ sơ nghiệm thu bị hỏng hay khai sai phần mã thoát mong đợi, kiểm tra ban đêm có thể lặng lẽ bỏ qua chỗ hỏng đó và vẫn báo kết quả như bình thường. Người đọc báo cáo sẽ không biết là hồ sơ đó đã không được đọc đúng.
+- **The lane's `cham_ho_so_da_thong` result is never read: it is dropped, or reported under the wrong reason**
+  Người dùng thấy gì: If a check run wrongly writes into a dossier that was already signed off, the night report may say it could not read the result, or may even say all is green. The real cause is not named, so the person reading it may chase the wrong thing or miss a failure.
   file: `scripts/kiem-cheo/dem.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 2 (hand-written fake writer shaped like the reader) + shape 5 (incomplete matrix): lan-gia.mjs decides red with dem.mjs's own rule `ma !== kyVong`, not the real lane's `lech`, and no cell covers expected_exit≠0 with exit 0**
-  Người dùng thấy gì: Bộ thử dùng một bản làn giả không giống hẳn làn thật ở trường hợp «đã khai có giới hạn nhưng nay chạy xanh». Vì vậy bài thử vẫn báo đạt dù kiểm tra ban đêm có thể báo nhầm ở đúng trường hợp này.
-  file: `_acceptance/kiem-cheo-sau-gop/rang/lan-gia.mjs`
-  severity: high
-  Đề xuất: known-limits
-
-- **Shape 3 (presence of one string instead of the relation): kho-that only asserts ket_qua === "xanh", and on the real repo after this round's dem.mjs change it passes while dem records two false red entries**
-  Người dùng thấy gì: Phép thử trên kho thật chỉ nhìn kết quả cuối là «xanh», nên không thấy hai hồ sơ đã bị ghi nhầm là đỏ sẵn trong báo cáo ngày. Người xem kết quả thử có thể tin là mọi thứ sạch trong khi báo cáo còn dòng sai.
-  file: `_acceptance/kiem-cheo-sau-gop/rang/kho-that.mjs`
-  severity: medium
+- **E5 runs rang/lan-gia.mjs, whose JSON output changed this round, but E5's `paths` do not list it**
+  Người dùng thấy gì: If the stand-in lane used by one check is changed later, that check may keep showing an old pass instead of being re-run. A breakage could then go unnoticed until someone re-runs it by hand.
+  file: `_acceptance/kiem-cheo-sau-gop/evals.yaml`
+  severity: low
   Đề xuất: known-limits
 
 - **Shape 2: hand-written fixture shaped like the reader. The launchd check runs a stub kiem-cheo:chay, not the real script (r3)**
@@ -97,5 +85,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `_acceptance/kiem-cheo-sau-gop/rang/ranh-gioi.mjs`
   severity: medium
   Đề xuất: new-contract
+
+## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

@@ -170,3 +170,46 @@ wall: 1042s
 - **claude-sonnet-5-5**: 5 agent · 19 calls · out 18,382 · in 38 · cache_read 1,424,102 · cache_create 496,943
 - **claude-haiku-5-5**: 12 agent · 24 calls · out 18,609 · in 48 · cache_read 1,425,476 · cache_create 729,127
 
+
+### S4 round 5 — wf_38829bfa-7bb — wf_38829bfa-7bb (20 agent, 64,173 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:bugs | claude-opus-5-5 | 19 | 18,799 | 38 | 2,348,657 | 247 |
+| synthesize:report | claude-sonnet-5-5 | 5 | 8,533 | 10 | 459,185 | 108 |
+| review:measurement | claude-opus-5-5 | 12 | 8,416 | 24 | 1,273,214 | 105 |
+| review:conventions | claude-opus-5-5 | 10 | 4,944 | 20 | 979,499 | 68 |
+| refute:dem.mjs | claude-sonnet-5-5 | 8 | 2,791 | 16 | 670,849 | 43 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,787 | 4 | 121,716 | 69 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 2,340 | 4 | 121,686 | 233 |
+| machine:node --test "scripts/kiem-cheo/test/*.te | claude-haiku-5-5 | 2 | 1,981 | 4 | 121,686 | 13 |
+| baseline:diffBase | claude-sonnet-5-5 | 4 | 1,903 | 8 | 276,043 | 41 |
+| machine:node _acceptance/kiem-cheo-sau-gop/rang/ | claude-haiku-5-5 | 2 | 1,664 | 4 | 121,696 | 36 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,631 | 4 | 121,661 | 10 |
+| triage | claude-sonnet-5-5 | 2 | 1,517 | 4 | 88,388 | 25 |
+| machine:node --test scripts/dieu-phoi/test/lich. | claude-haiku-5-5 | 2 | 1,323 | 4 | 121,684 | 9 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 1,242 | 4 | 86,651 | 208 |
+| machine:node _acceptance/kiem-cheo-sau-gop/rang/ | claude-haiku-5-5 | 2 | 1,171 | 4 | 121,695 | 19 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 958 | 4 | 121,677 | 213 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 829 | 4 | 121,659 | 24 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 602 | 4 | 121,655 | 7 |
+| machine:node _acceptance/kiem-cheo-sau-gop/rang/ | claude-haiku-5-5 | 2 | 385 | 4 | 121,698 | 6 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 357 | 4 | 85,916 | 11 |
+
+
+wall: 953s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 1,903 | 276,043 | 41 | 16:01:46 | 16:02:26 |
+| machine | 12 | 16,913 | 1,425,164 | 764 | 16:01:46 | 16:14:30 |
+| review | 3 | 32,159 | 4,601,370 | 249 | 16:01:46 | 16:05:54 |
+| triage | 1 | 1,517 | 88,388 | 25 | 16:14:30 | 16:14:55 |
+| refute | 1 | 2,791 | 670,849 | 43 | 16:14:55 | 16:15:39 |
+| capture | 1 | 357 | 85,916 | 11 | 16:15:39 | 16:15:50 |
+| synthesize | 1 | 8,533 | 459,185 | 108 | 16:15:50 | 16:17:39 |
+
+- **claude-opus-5-5**: 3 agent · 41 calls · out 32,159 · in 82 · cache_read 4,601,370 · cache_create 340,203
+- **claude-sonnet-5-5**: 5 agent · 21 calls · out 15,101 · in 42 · cache_read 1,580,381 · cache_create 508,205
+- **claude-haiku-5-5**: 12 agent · 24 calls · out 16,913 · in 48 · cache_read 1,425,164 · cache_create 728,599
+
