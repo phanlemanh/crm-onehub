@@ -6,7 +6,7 @@ evals:
     executor: test
     cmd: config:executors.test.zghl_mo_ta
     paths: [apps/agent/agent/lib/zalo-api.ts, packages/validation/src/zalo-update.ts, apps/agent/agent/lib/zalo-config.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
-    expected: "exit 0; ma trận viết trước chín dòng (đếm số dòng đã chạy = 9): mỗi dòng dựng một fetcher giả trả đúng phản hồi của dòng đó (Response thật với status và thân JSON), gọi guiZalo THẬT (zalo-api.ts → zaloGoi → parseZaloSend), bắt lỗi rồi gọi moTaLoiZalo(loi). Khẳng định chuỗi mô tả bằng đúng giá trị viết trước của dòng (zalo-tu-choi 403 «<ghim>», zalo-tu-choi - «-», hinh-dang-la khoa=<khoá>, http-401, http-403, http-429, http-500, http-408, mang (ECONNRESET)); sai thì ném «<dòng>: mo ta <thực> khac <mong>». Thêm một dòng description dài hơn ZALO.nhatKy.tranMoTa: mô tả có đúng tranMoTa ký tự của description. CHIỀU ĐỎ (rang/dot-bien.mjs): cặp (a) bản sao cho moTaLoiZalo trả loi.name như cũ → dòng 1 đỏ «mo ta Error khac»; cặp (b) bản sao bỏ cắt trần → dòng dài đỏ «khong cat o tran»."
+    expected: "exit 0; ma trận viết trước mười hai dòng (đếm số dòng đã chạy = 12): mỗi dòng dựng một fetcher giả trả đúng phản hồi của dòng đó (Response thật với status và thân), gọi guiZalo THẬT (zalo-api.ts → zaloGoi → parseZaloSend), bắt lỗi rồi gọi moTaLoiZalo(loi). Khẳng định chuỗi mô tả bằng đúng giá trị viết trước của dòng: HTTP 200 ok:false → zalo-tu-choi 403 «<ghim>»; HTTP 200 {ok:false} → zalo-tu-choi - «-»; HTTP 200 thân lạ → hinh-dang-la khoa=<khoá>; HTTP 400, 401, 403, 404, 408, 429 kèm thân {ok:false,error_code,description:'<ghim>'} → http-<mã> zalo-tu-choi <mã> «<ghim>»; HTTP 500 thân chữ không phải JSON → http-500; lỗi mạng → mang (ECONNRESET); sai thì ném «<dòng>: mo ta <thực> khac <mong>», riêng sáu dòng HTTP có thân mà thiếu ghim thì ném «<dòng>: mat description». Thêm một dòng description dài hơn ZALO.nhatKy.tranMoTa: mô tả có đúng tranMoTa ký tự của description. CHIỀU ĐỎ (rang/dot-bien.mjs): cặp (a) bản sao cho moTaLoiZalo trả loi.name như cũ → dòng 1 đỏ «mo ta Error khac»; cặp (b) bản sao bỏ cắt trần → dòng dài đỏ «khong cat o tran»; cặp (l) bản sao cho zaloGoi ném LoiHttpZalo mà không đọc thân → dòng HTTP 403 đỏ «http-403: mat description»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E2
@@ -22,7 +22,7 @@ evals:
     executor: test
     cmd: config:executors.test.zghl_bay_cho
     paths: [apps/agent/agent/lib/zalo-bot-xuong.ts, apps/agent/agent/lib/zalo-tra-loi.ts, apps/agent/agent/lib/zalo-nhan.ts, apps/agent/agent/lib/zalo-hoi.ts, apps/agent/agent/lib/zalo-api.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
-    expected: "exit 0; ma trận bảy chỗ viết trước (đếm = 7). Mỗi chỗ chạy hàm THẬT xuất từ tệp của nó (guiThu, traLoiVe, loiVe, đường sendChatAction và đường không mở được phiên của zalo-tra-loi, batDauLai qua xuLyTinDen, dongHoiQuaHan) với fetcher giả trả HTTP 200 {ok:false,error_code:403,description:'ghim-ly-do-h4'} và DB của kho thử khi hàm cần; spyOn(console, 'error') thu dòng; khẳng định có đúng một dòng bắt đầu «[zalo]» chứa «zalo-tu-choi 403 «ghim-ly-do-h4»» — sai thì ném «<chỗ>: khong co ly do». CHIỀU ĐỎ: cặp (d) bản sao trả một chỗ (zalo-tra-loi.ts trả lời phiên) về loi.name → dòng đó đỏ «tra-loi-phien: khong co ly do»."
+    expected: "exit 0; ma trận tám chỗ viết trước (đếm = 8). Mỗi chỗ chạy hàm THẬT xuất từ tệp của nó (guiThu, getMe của datBot, traLoiVe, loiVe, đường sendChatAction và đường không mở được phiên của zalo-tra-loi, batDauLai qua xuLyTinDen, dongHoiQuaHan) với fetcher giả trả HTTP 200 {ok:false,error_code:403,description:'ghim-ly-do-h4'} và DB của kho thử khi hàm cần; spyOn(console, 'error') thu dòng; khẳng định có đúng một dòng bắt đầu «[zalo]» chứa «zalo-tu-choi 403 «ghim-ly-do-h4»» — sai thì ném «<chỗ>: khong co ly do». CHIỀU ĐỎ: cặp (d) bản sao trả một chỗ (zalo-tra-loi.ts trả lời phiên) về loi.name → dòng đó đỏ «tra-loi-phien: khong co ly do»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E4
@@ -46,7 +46,7 @@ evals:
     executor: test
     cmd: config:executors.test.zghl_rieng_tu
     paths: [apps/agent/agent/lib/zalo-api.ts, apps/agent/agent/lib/zalo-nhan.ts, apps/agent/agent/lib/zalo-tra-loi.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
-    expected: "exit 0; chạy lại đầu vào của E1 dòng 1, E3 và E4 với token «tok-rieng-tu-h4», chat id «chat-rieng-tu-h4» và chữ tin «chu-rieng-tu-h4»; gom mọi dòng console đã thu; đối chứng dương: ít nhất một dòng «[zalo]» đã được thu; khẳng định không dòng nào chứa ba chuỗi đó — có thì ném «lo <chuỗi> trong nhat ky». CHIỀU ĐỎ: cặp (g) bản sao cho moTaLoiZalo nối thêm loi.message gốc của zaloGoi (có đường dẫn mang token) → đỏ «lo tok-rieng-tu-h4 trong nhat ky»."
+    expected: "exit 0; chạy lại đầu vào của E1 dòng 1, E3 và E4 với token «tok-rieng-tu-h4», chat id «chat-rieng-tu-h4» và chữ tin «chu-rieng-tu-h4», THÊM hai dòng: lỗi mạng mà fetcher ném Error có message chứa URL «…/bottok-rieng-tu-h4/sendMessage» và code ECONNRESET, và HTTP 401 kèm thân lỗi; gom cả dòng của hai chỗ in String(loi) ở zalo-nhan.ts (khong ghi duoc, gui tra loi hong); gom mọi dòng console đã thu; đối chứng dương: ít nhất một dòng «[zalo]» đã được thu; khẳng định không dòng nào chứa ba chuỗi đó — có thì ném «lo <chuỗi> trong nhat ky». CHIỀU ĐỎ: cặp (g) bản sao cho moTaLoiZalo nối thêm loi.message gốc của zaloGoi (có đường dẫn mang token) → đỏ «lo tok-rieng-tu-h4 trong nhat ky»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -61,13 +61,14 @@ evals:
     criterion: AC-3
     executor: script
     cmd: config:executors.script.zghl_dot_bien
-    paths: [apps/agent/agent/lib/zalo-api.ts, apps/agent/agent/lib/zalo-tra-loi.ts, apps/agent/agent/lib/zalo-nhan.ts, apps/agent/agent/lib/zalo-webhook.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts, _acceptance/zalo-gui-hong-ghi-ly-do/rang/dot-bien.mjs]
-    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 9: mỗi cặp (a)–(i) như ghi ở E1–E6, E9, E10 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    paths: [apps/agent/agent/lib/zalo-api.ts, apps/agent/agent/lib/zalo-tra-loi.ts, apps/agent/agent/lib/zalo-nhan.ts, apps/agent/agent/lib/zalo-webhook.ts, apps/agent/agent/lib/zalo-bot-xuong.ts, packages/validation/src/zalo-update.ts, apps/api/src/zalo/zalo.service.ts, packages/db/src/kenh-thong-bao.ts, packages/validation/src/zalo-cau-noi.ts, "apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx", apps/agent/test/zalo-gui-hong-ly-do.spec.ts, apps/api/test/zalo-doi-bot.spec.ts, apps/app/test/zalo-doi-bot.dom.tsx, _acceptance/zalo-gui-hong-ghi-ly-do/rang/dot-bien.mjs]
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 14: mỗi cặp (a)–(n) như ghi ở E1–E6, E9, E10, E12, E14, E15 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E9
     criterion: AC-7
     executor: test
+    layer: backend-effect
     cmd: config:executors.test.zghl_doi_bot
     paths: [apps/agent/agent/lib/zalo-bot-xuong.ts, packages/validation/src/zalo-cau-noi.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
     expected: "exit 0; kho thử có AppSetting với token cũ «111:cu» (bot «Bot Cũ»), khoá cũ và ba zaloLink gieo bằng hàm nối thật (noiBangMa của @crm/db/zalo-lien-ket qua mã do taoMaLienKet sinh — không ghi hàng tay). Fetcher giả: getMe(token cũ) → id «111», getMe(token mới «222:moi») → id «222», tên «Bot Mới». Gọi datBot THẬT với token mới, không xacNhanDoiBot → kết quả { outcome: 'can-xac-nhan-doi-bot', soLienKet: 3, tenBotMoi: 'Bot Mới' }; AppSetting (token, khoá, tên) và ba zaloLink giữ nguyên; fetcher KHÔNG nhận setWebhook. Ca phụ: getMe(token cũ) trả 401 → so phần <số> của hai token, vẫn ra can-xac-nhan-doi-bot. CHIỀU ĐỎ (cặp h): bản sao bỏ bước hỏi → đỏ «doi bot khong hoi, da go 3 lien ket»."
@@ -78,7 +79,7 @@ evals:
     executor: test
     cmd: config:executors.test.zghl_doi_bot_dong_y
     paths: [apps/agent/agent/lib/zalo-bot-xuong.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
-    expected: "exit 0; cùng bàn thử E9, gọi datBot với xacNhanDoiBot: true. Hai ca: (1) setWebhook giả trả {ok:true,result:{url,…}} → AppSetting mang token và tên bot mới, count(zaloLink) = 0, đúng một dòng console «[zalo] doi bot: go 3 lien ket», dòng đó không chứa «moi» hay «cu» (phần bí mật của token); (2) setWebhook giả trả {ok:false} → AppSetting còn token cũ và count(zaloLink) = 3. CHIỀU ĐỎ (cặp i): bản sao gỡ liên kết TRƯỚC setWebhook → ca (2) đỏ «zalo tu choi ma lien ket da bi go»."
+    expected: "exit 0; cùng bàn thử E9, gọi datBot với xacNhanDoiBot: true. Hai ca: (1) setWebhook giả trả {ok:true,result:{url,…}} → AppSetting mang token và tên bot mới, count(zaloLink) = 0, đúng một dòng console «[zalo] doi bot: go 3 lien ket», dòng đó không chứa «moi» hay «cu» (phần bí mật của token); (2) setWebhook giả trả {ok:false} → AppSetting còn token cũ và count(zaloLink) = 3; (3) setWebhook ok nhưng spyOn bước gỡ liên kết của giao dịch ném lỗi → AppSetting còn token cũ, count(zaloLink) = 3, và một dòng [zalo] nêu lý do. CHIỀU ĐỎ: cặp (i) bản sao gỡ liên kết TRƯỚC setWebhook → ca (2) đỏ «zalo tu choi ma lien ket da bi go»; cặp (j) bản sao tách ghi AppSetting và gỡ liên kết thành hai lệnh rời → ca (3) đỏ «go lien ket khong nguyen tu»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
@@ -94,7 +95,7 @@ evals:
     executor: test
     cmd: config:executors.test.zghl_can_noi_lai
     paths: [apps/api/src/zalo/zalo.service.ts, apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx, apps/api/test/zalo-doi-bot.spec.ts]
-    expected: "exit 0; kho thử: người A có NotificationPreference.channel = ZALO và không zaloLink; người B chưa từng chọn (không có NotificationPreference); người C có ZALO và còn zaloLink. Gọi zalo.cuaToi THẬT qua router của API cho từng người: A → canNoiLai = true; B → false; C → false. CHIỀU ĐỎ: bản sao cho canNoiLai luôn false → dòng A đỏ «A khong duoc bao noi lai»."
+    expected: "exit 0; kho thử: người A có NotificationPreference.channel = ZALO và không zaloLink; người B chưa từng chọn (không có NotificationPreference); người C có ZALO và còn zaloLink. Gọi zalo.cuaToi THẬT qua router của API cho từng người: A → canNoiLai = true; B → false; C → false. CHIỀU ĐỎ: cặp (k) bản sao cho canNoiLai luôn false → dòng A đỏ «A khong duoc bao noi lai»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E13
@@ -105,3 +106,20 @@ evals:
     paths: [apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx, apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx]
     expected: "Trên bàn đo (do:man, kho dùng-một-lần, agent giả trả can-xac-nhan-doi-bot cho Lưu bot), chụp ở 1440 và 390: (1) Kết nối › Zalo sau khi bấm Lưu với token bot khác — ConfirmDialog nêu tên bot mới và «3 liên kết», nút «Gỡ liên kết và đổi bot», nút Huỷ; (2) «Thông báo của bạn» của người A ở E12 — dòng báo cần nối lại cạnh «Nối Zalo». Ảnh lưu ở _acceptance/zalo-gui-hong-ghi-ly-do/evidence/E13-*.png; người chấm nhìn ảnh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E14
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.zghl_doi_bot_api
+    paths: [apps/api/src/zalo/zalo.service.ts, apps/api/src/zalo/zalo-cau-noi.service.ts, apps/api/src/zalo/zalo.router.ts, apps/api/src/zalo/zalo.contracts.ts, packages/validation/src/zalo-cau-noi.ts, apps/api/test/zalo-doi-bot.spec.ts]
+    expected: "exit 0; gọi zalo.luuBot THẬT qua router tRPC của API với quản trị viên, agent giả (Bun.serve) ghi lại thân mỗi lần nhận /internal/zalo/bot: lần 1 agent giả trả {outcome:'can-xac-nhan-doi-bot', soLienKet:3, tenBotMoi:'Bot Mới'} → API trả đúng ba trường đó cho màn; lần 2 gọi luuBot với xacNhanDoiBot:true → thân agent giả nhận có xacNhanDoiBot === true (sai thì ném «co xac nhan bi bo o API»). CHIỀU ĐỎ: cặp (m) bản sao bỏ xacNhanDoiBot khỏi schema đầu vào của luuBot → đỏ «co xac nhan bi bo o API»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E15
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.zghl_doi_bot_dom
+    paths: [apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx, apps/app/test/zalo-doi-bot.dom.tsx]
+    expected: "exit 0; bài DOM dựng o-token.tsx THẬT với mutation luuBot giả đếm lời gọi: lần gọi đầu trả can-xac-nhan-doi-bot → ConfirmDialog mở với chữ nêu «Bot Mới» và «3»; (1) bấm Huỷ → hộp đóng, tổng số lời gọi vẫn là 1; (2) mở lại, bấm «Gỡ liên kết và đổi bot» → đúng một lời gọi mới với xacNhanDoiBot: true. Chỉ so giá trị nguyên thuỷ (chuỗi, số, boolean), không đưa phần tử DOM vào toEqual (luật 35). CHIỀU ĐỎ: cặp (n) bản sao cho nút xác nhận gọi luuBot không cờ → đỏ «xac nhan khong gui co»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

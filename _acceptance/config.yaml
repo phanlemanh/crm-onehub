@@ -974,6 +974,8 @@ executors:
     zghl_doi_bot_dong_y: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t doi-bot-dong-y
     zghl_cung_bot: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t cung-bot
     zghl_can_noi_lai: cd apps/api && bun test test/zalo-doi-bot.spec.ts -t can-noi-lai
+    zghl_doi_bot_api: cd apps/api && bun test test/zalo-doi-bot.spec.ts -t luu-bot-qua-api
+    zghl_doi_bot_dom: cd apps/app && bun test ./test/zalo-doi-bot.dom.tsx
     tln_chuyen_tiep: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chuyen-tiep.spec.ts"
     tln_cach_ly_tinh: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-cach-ly.spec.ts
     tln_chi_tieu_api: bun run test -- "cd apps/api && bun test test/tro-ly-okr-chi-tieu.spec.ts"

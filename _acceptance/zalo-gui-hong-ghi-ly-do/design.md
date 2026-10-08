@@ -43,3 +43,11 @@ Căn cứ: sau hai lần Lưu bot ngày 30/09, bot hiện tại khác bot cũ; c
 - **Gỡ khi đồng ý.** Gọi lại `luuBot` với `xacNhanDoiBot: true` → `datBot` đăng ký bot mới như hôm nay; chỉ khi đăng ký thành công mới xoá mọi `zaloLink` trong một giao dịch, rồi ghi một dòng vết `[zalo] doi bot: go <n> lien ket` (mã bot cũ/mới chỉ ghi phần số). Đăng ký hỏng → không gỡ gì.
 - **Cần nối lại.** Người có `NotificationPreference.channel = ZALO` mà không còn `zaloLink` thấy trên «Thông báo của bạn» một dòng «Bot Zalo của công ty đã đổi hoặc liên kết đã gỡ — nối lại để nhận nhắc qua Zalo» cạnh nút «Nối Zalo» sẵn có. Không thêm cột: trạng thái suy từ hai bảng đang có.
 - **Ngoại lệ có chủ đích.** `docs/connections.md` ghi «An admin cannot unlink someone else's Zalo». Đổi bot là ngoại lệ duy nhất: quản trị gỡ TẤT CẢ liên kết cùng lúc, sau khi xác nhận, vì liên kết với bot cũ đã vô hiệu. Ghi vào `docs/connections.md`.
+
+## Sửa sau phản biện (S1, 08/10)
+
+- `zaloGoi` đọc thân phản hồi (có trần độ dài) TRƯỚC khi ném `LoiHttpZalo`; lỗi mang thêm `maLoi`, `moTa` khi thân là `{ok:false,…}`, và `moTaLoiZalo` in `http-<mã> zalo-tu-choi <mã> «<mô tả>»`. Bảng lỗi chính thức của Zalo trả lỗi bằng mã HTTP và dặn đọc `description`, nên bỏ thân ở nhánh HTTP lỗi là mất đúng lý do cần tìm.
+- Ghi `AppSetting` (token, khoá, tên bot mới) và gỡ mọi `zaloLink` nằm trong MỘT `db.$transaction`, chạy sau khi `setWebhook` nhận. Hỏng ở bất kỳ bước ghi nào → không đổi gì.
+- AC-7, AC-8 đi qua app → API (`zalo.luuBot`, schema đầu vào có `xacNhanDoiBot`) → agent: đo bằng router API thật với agent giả (E14) và bài DOM của `o-token.tsx` (E15).
+- Đếm và gỡ hết liên kết đặt ở `packages/db/src/zalo-lien-ket.ts` (cùng nhà với `noiBangMa`, `ghiSai`, `goLienKet`); `canNoiLai` tính ở `packages/db/src/kenh-thong-bao.ts` (cùng nhà với `kenhSeDungCua`).
+- Tám chỗ gọi Zalo ghi lý do: bảy chỗ gửi + `getMe` khi Lưu bot.

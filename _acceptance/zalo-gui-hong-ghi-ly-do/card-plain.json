@@ -1,0 +1,39 @@
+{
+  "feature_plain": "Lưu bot Zalo của một bot khác thì máy hỏi trước rồi gỡ liên kết cũ để mọi người nối lại; Zalo gửi hỏng thì nhật ký nói lý do Zalo đưa ra.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ ghi đúng lý do Zalo đưa ra (mã lỗi và câu mô tả) cho mười dạng phản hồi hỏng, kể cả khi Zalo trả mã HTTP lỗi."},
+    {"id": "AC-2", "p": "Sẽ coi «hết giờ» (408) là lỗi khi gửi tin, chỉ giữ nghĩa «hết tin» cho bước kéo tin."},
+    {"id": "AC-3", "p": "Sẽ ghi lý do ở cả tám chỗ gọi Zalo: gửi thử, kiểm bot khi Lưu, trả lời, báo lỗi, báo đang gõ, không mở được cuộc trò chuyện, bắt đầu lại, báo quá hạn."},
+    {"id": "AC-4", "p": "Sẽ ghi một dòng nói vì sao khi một tin Zalo tới mà không mở cuộc trò chuyện nào."},
+    {"id": "AC-5", "p": "Sẽ nhận ra tin thử Zalo gửi lúc Lưu bot, không ghi nhầm là tin hỏng."},
+    {"id": "AC-7", "p": "Sẽ hỏi lại khi Lưu bot của một bot khác, nêu tên bot mới và số liên kết sẽ gỡ; bấm Huỷ thì không đổi gì."},
+    {"id": "AC-8", "p": "Sẽ chỉ gỡ liên kết khi đã đồng ý và Zalo đã nhận bot mới; hỏng giữa chừng thì giữ nguyên bot cũ và mọi liên kết."},
+    {"id": "AC-10", "p": "Sẽ báo trên trang Thông báo của bạn cho người đã chọn Zalo mà nay mất liên kết rằng cần nối lại."},
+    {"id": "AC-11", "p": "Sẽ chỉ sửa đúng các tệp đã khai, không migration."}
+  ],
+  "wont_do": [
+    {"id": "AC-6", "p": "Chặn mọi dòng nhật ký ghi token bot, mã chat hay chữ tin nhắn."},
+    {"id": "AC-9", "p": "Sẽ KHÔNG hỏi hay gỡ gì khi Lưu lại cùng bot, bật bot lần đầu, hoặc chưa ai nối."},
+    {"id": "OOS-1", "p": "KHÔNG gỡ webhook của bot cũ — cần token bot cũ, máy không có."},
+    {"id": "OOS-2", "p": "KHÔNG tự báo cho người dùng Zalo phải nối lại — anh tự báo."},
+    {"id": "OOS-3", "p": "KHÔNG ghi nguyên văn phản hồi của Zalo vào nhật ký."},
+    {"id": "OOS-4", "p": "KHÔNG thêm cột mã bot vào cơ sở dữ liệu — anh chọn lối không migration."},
+    {"id": "OOS-5", "p": "KHÔNG đụng đường gửi Slack."}
+  ],
+  "scope_plain": "Ngoài phạm vi là những việc cần token bot cũ, cần báo người dùng, hoặc cần đổi cơ sở dữ liệu.",
+  "coverage_plain": [
+    {"i": 0, "p": "Trục phản hồi của Zalo: mười dạng, mỗi dạng một dòng đo (AC-1, AC-2)."},
+    {"i": 2, "p": "Trục chỗ gọi Zalo: tám chỗ, mỗi chỗ chạy thật với một lời từ chối có chữ ghim (AC-3)."},
+    {"i": 4, "p": "Trục tin vào không mở cuộc trò chuyện: bốn nhánh và tin thử (AC-4, AC-5)."},
+    {"i": 6, "p": "Trục Lưu bot: lần đầu, cùng bot, bot khác (Huỷ, đồng ý, Zalo nhận hay từ chối), bot khác không ai nối (AC-7, AC-8, AC-9)."},
+    {"i": 8, "p": "Trục người dùng sau đổi bot: đã chọn Zalo hay chưa (AC-10)."},
+    {"i": 11, "p": "Đối chiếu: bảng mã lỗi chính thức của Zalo Bot; mỗi bot một webhook, mã người dùng gắn với bot."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Lỗi HTTP từng chỉ ghi mã, mất câu mô tả của Zalo — nay giữ cả hai, thêm mã 400 và 404."},
+    {"i": 1, "p": "Phép đo lộ token không có đường nào để token lọt — nay thêm lỗi mạng có token trong địa chỉ."},
+    {"i": 2, "p": "Lời hứa «gỡ cùng một giao dịch» chưa có phép đo — nay tiêm lỗi giữa giao dịch và có phép phá riêng."},
+    {"i": 3, "p": "Chưa đo trọn đường màn → API → agent — nay có phép đo qua API thật và bài thử màn bấm Huỷ/đồng ý."},
+    {"i": 4, "p": "Ranh giới thiếu ba tệp, đếm thiếu một chỗ gọi Zalo — đã bổ sung."}
+  ]
+}
