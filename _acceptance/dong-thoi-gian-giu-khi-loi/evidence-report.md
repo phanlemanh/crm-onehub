@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: dong-thoi-gian-giu-khi-loi
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3e22135231b7a075cd6851c59304f74720367599
+verified_commit: ba0ce75f2fc6b205489b57e380985f5f31d4611b
 human_signoff:
 ---
 
 # Evidence Report: dong-thoi-gian-giu-khi-loi
 
-Round 1. Mọi eval máy xanh; còn một mục judgment (E7) chờ người quyết ở Cổng 2.
+Round 2. Mọi eval máy xanh; mục judgment E7 có ba phiếu cùng chấm đạt. Bằng chứng thay trọn báo cáo vòng trước; lịch sử vòng nằm ở mục Iterations.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -23,124 +23,116 @@ Round 1. Mọi eval máy xanh; còn một mục judgment (E7) chờ người quy
 | E4 | AC-4 | test | PASS |
 | E5 | AC-5 | test | PASS |
 | E6 | AC-6 | ui-check | PASS |
-| E7 | AC-6 | judgment | UNCERTAIN |
+| E7 | AC-6 | judgment | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-dong-thoi-gian-giu-khi-loi-E1-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtg_xem_cu
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
   output: |
-    Ran 1 test across 1 file. [1075.00ms]
+    Ran 1 test across 1 file. [792.00ms]
 
 - eval: E2
-  run_id: minted-dong-thoi-gian-giu-khi-loi-E2-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtg_thu_lai
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
   output: |
-    Ran 1 test across 1 file. [1384.00ms]
+    Ran 1 test across 1 file. [1048.00ms]
 
 - eval: E3
-  run_id: minted-dong-thoi-gian-giu-khi-loi-E3-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtg_lam_moi
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
   output: |
-    Ran 1 test across 1 file. [1390.00ms]
+    Ran 1 test across 1 file. [1005.00ms]
 
 - eval: E4
-  run_id: minted-dong-thoi-gian-giu-khi-loi-E4-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kts_dong_thoi_gian
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
   output: |
-    Ran 1 test across 1 file. [1.51s]
+    Ran 1 test across 1 file. [1092.00ms]
 
 - eval: E5
-  run_id: minted-dong-thoi-gian-giu-khi-loi-E5-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.dtg_en
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
   output: |
-    Ran 1 test across 1 file. [1.52s]
+    Ran 1 test across 1 file. [1218.00ms]
 
 - eval: E6
-  run_id: minted-dong-thoi-gian-giu-khi-loi-E6-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dtg_man
-  verified_at: 2026-10-08T11:39:40Z
-  screenshot: evidence/E6-step1.png   # frames: E6-step1.png, E6-step2.png, E6-step3.png
+  verified_at: 2026-10-08T12:55:42Z
+  screenshot: evidence/E6-step1.png
   observed: |
-    Frame 1 (1440): tab "Hoạt động" hiển thị đến "Ghi chú gọi khách số 30", không có dòng thứ 31; cuối danh sách có khung "Không tải được hoạt động cũ hơn." kèm nút "Thử lại" trong khung nhìn, không có khung lỗi "Không tải được hoạt động". Khớp Expected.
-    Frame 2 (1440, sau khi bỏ chặn và bấm "Thử lại"): thông báo lỗi biến mất, danh sách nối tiếp có "Ghi chú gọi khách số 31" và tiêu đề ngày "THỨ 4, 30 THG 9, 2026"; khớp bản in "35 dong" của lệnh.
-    Frame 3 (390, bottom-sheet): danh sách cuộn tới số 30, khung "Không tải được hoạt động cũ hơn." và nút "Thử lại" hiện trọn trong khung nhìn, không cắt ngang, không thanh cuộn ngang. Khớp Expected.
+    E6-step1.png (1440, tab Hoạt động): danh sách dừng ở «Ghi chú gọi khách số 30», cuối có thông báo «Không tải được hoạt động cũ hơn.» kèm nút «Thử lại», không có khung lỗi «Không tải được hoạt động». E6-step2.png (sau Thử lại): danh sách dài tới «Ghi chú gọi khách số 35» ở đáy khung, hết thông báo lỗi. E6-step3.png (390): thông báo và nút «Thử lại» hiện đủ ở cuối danh sách, trang không tràn ngang (390/390); hai hàng có sẵn (nút soạn, tab lọc) bị cắt mép phải, đã ghi vào dtg-do-390.txt.
   network_observed: n-a (driver)
-  output: |
-    Chạy qua tien-de.mjs, phiên đo riêng (kho dùng-một-lần, app và api cổng tự do, tự dọn, cổng đóng sau lượt).
-    "dong-thoi-gian-giu-khi-loi man: dat"; buoc 1 dat ("xem cu: 30 dong -> loi giu 30 dong -> thu lai 35 dong"); buoc 2 dat (scrollWidth trang và ngăn không vượt clientWidth, nút trong khung nhìn).
-    Ba ảnh evidence_required tồn tại; mỗi ảnh đã mở bằng Read và khớp Expected. Không có E6-network.txt vì driver không đọc được network.
-
-- eval: E7
-  judged_by: judge-subagent (fresh context), ba lăng kính domain-correctness / operational-feasibility / spec-alignment
-  verdict: UNCERTAIN
-  rationale: Điểm 1 và 2 đạt ở cả 1440 và 390 (12 hoạt động đã tải vẫn hiện nguyên, chỉ có một dòng "Không tải được hoạt động cũ hơn." và một nút "Thử lại", không lỗi thô, không khung lỗi thay danh sách). Điểm 3 chỉ đạt một nửa vì ảnh sau thử lại cắt trước cuối danh sách. Điểm 4 chưa kết luận được vì ở 390 hàng nút soạn và hàng tab lọc bị cắt chữ, ảnh không cho biết đó là dải cuộn ngang có chủ đích hay tràn.
-  required_evidence:
-    - Ảnh dtg-sau-thu-lai-1440 chụp sau khi cuộn tới cuối danh sách (thấy mục 35) và không còn dòng "Không tải được hoạt động cũ hơn." hay nút "Thử lại"; lấy bằng cách chạy lại răng màn E6, cuộn vùng cuộn của sheet xuống đáy rồi chụp sau khi bấm Thử lại.
-    - Số đo DOM ở 390 trong bản chụp lỗi (document.documentElement.scrollWidth bằng 390) và hai hàng bị cắt (hàng nút soạn, hàng tab lọc) có overflow-x là auto hoặc scroll với scrollWidth lớn hơn clientWidth, kèm ảnh sau khi cuộn ngang hai hàng đó; lấy bằng javascript_exec trong Playwright của răng màn E6 hoặc nhật ký đo của nó.
-    - Văn bản AC-6 trong contract.md nói rõ phạm vi "không bị cắt chữ hay nút" chỉ tính cho dải lỗi cuối danh sách hay cho cả hàng tab và hàng nút phía trên.
-  human_override:  # chi nguoi ghi
-
-### Judge panel (đề xuất, ba phiếu cùng một hướng)
-
-- domain-correctness: UNCERTAIN — (1) và (2) đạt: ảnh lỗi 1440 giữ nguyên 12 hoạt động đã tải (số 19–30), dòng cuối "Không tải được hoạt động cũ hơn." kèm một nút "Thử lại" duy nhất, không lỗi thô, khớp ai-ux.md mục 7. (3) đạt một nửa: có mục 31 nối vào dưới "THỨ 4, 30 THG 9, 2026" và dòng lỗi đã rời chỗ cũ, nhưng ảnh cắt ở y=900 nên không thấy mục 32–35, không xác nhận được thông báo lỗi đã hết hẳn. (4) chưa chắc: ở 390 hàng nút soạn bị cắt thành "Vi…" và tab lọc cắt ở "Đã xong"; dòng lỗi và nút "Thử lại" vừa khung.
-- operational-feasibility: UNCERTAIN — Điểm 1 và 2 đạt ở cả 1440 và 390. Điểm 3 chưa chứng minh được: ảnh sau thử lại dừng ở số 31 nên chưa chắc dòng lỗi đã mất. Điểm 4 chưa rõ: ở 390 hàng nút bị cắt thành "Vi…" và hàng tab thành "Đã xon…", ảnh không cho biết dải cuộn ngang có chủ đích hay tràn ngang.
-- spec-alignment: UNCERTAIN — Đạt (1) và (2). (3) đạt một nửa vì khung ảnh cắt trước cuối danh sách. (4) chưa kết luận được vì ở 390 hàng nút "Việc cần làm" chỉ hiện "Vi" và hàng tab "Đã xong" sát mép; cần xác định phạm vi chữ AC-6 "không bị cắt chữ hay nút" có tính cho hai hàng phía trên hay chỉ cho dải lỗi cuối danh sách.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
 
 - cmd: bun run lint:slop
-  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_lint_slop-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-dong-thoi-gian-giu-khi-loi-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-08T11:39:40Z
+  verified_at: 2026-10-08T12:55:42Z
+
+### Judgment
+
+- eval: E7
+  judged_by: judge-subagent (fresh context), ba phiếu theo ba góc nhìn
+  verdict: PASS
+  rationale: Ba phiếu cùng chấm đạt. Ở ảnh 1440 và 390, danh sách đã tải vẫn hiện nguyên, dải «Không tải được hoạt động cũ hơn.» nằm dưới danh sách kèm đúng một nút «Thử lại» (viền, không icon, không lỗi thô). Sau Thử lại, hoạt động 31 đến 35 nối vào, dải lỗi biến mất. Ở 390 trang đo 390/390. Hai hàng đầu tab bị cắt ở 390 được các phiếu coi là có sẵn từ trước và ngoài phạm vi chấm.
+  votes:
+    - domain-correctness: PASS — Danh sách vẫn hiện nguyên (số 20 đến 30 ở 1440, nhóm theo ngày), dải lỗi ở đáy kèm đúng một nút «Thử lại»; sau Thử lại hoạt động 31 đến 35 nối vào và dải lỗi mất. Ở 390 không có chữ hay nút của dải lỗi và danh sách bị cắt hoặc tràn ngang, trang đo 390/390. Hai hàng đầu tab bị cắt (nút «Việc cần làm», hàng lọc «Đã xong») được ghi là có sẵn và nằm ngoài phạm vi theo ghi chú của người ra đề, nên không tính vào phán quyết này.
+    - operational-feasibility: PASS — Ba mốc đều thấy trong ảnh: 30 hoạt động đã tải còn nguyên và dải lỗi nằm dưới danh sách; dải ghi «Không tải được hoạt động cũ hơn.» kèm một nút «Thử lại», không lỗi thô, khớp ai-ux.md mục 7; sau Thử lại hoạt động 35 nằm ở đáy. Ở 390 trang đo 390/390, dải lỗi và các dòng danh sách không bị cắt. Hai hàng đầu tab bị cắt là hành vi có từ trước K6c, ngoài phạm vi câu hỏi.
+    - spec-alignment: PASS — Ảnh lỗi (1440 và 390) giữ danh sách (20 đến 30 ở 1440, 26 đến 30 ở 390) và chỉ thêm một dải cuối với đúng một nút «Thử lại» (viền, không icon, không lỗi thô), khớp ai-ux.md mục 7. Ảnh sau thử lại cho thấy 31 đến 35 nối vào, dòng cuối là số 35, dải lỗi biến mất. Ở 390 trang đo 390/390; hai hàng đầu tab bị cắt là hành vi có sẵn, ngoài phạm vi AC-6 và đã báo riêng.
+  required_evidence:
+    - (judge không nêu bằng-chứng-thiếu)
+  human_override:  # chi nguoi ghi
 
 ## Known limits
 
@@ -148,14 +140,15 @@ Round 1. Mọi eval máy xanh; còn một mục judgment (E7) chờ người quy
 
 ## Analyst
 
-carried từ round trước — baseline không đo lại round này.
+carried tu round truoc — baseline khong do lai round nay
 
-Không có eval nào xanh trên cả HEAD lẫn baseline cần liệt kê. Các lệnh suite xanh cả hai phía là regression-guard bình thường.
+Không có eval nào không-phân-biệt được. Các lệnh suite xanh cả hai phía là lưới hồi quy bình thường, không liệt kê.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval chạy một lần, xác định, không có phương sai.
 
 ## Iterations
 
-Round 1: E1–E6 xanh, ba phiếu judge E7 cùng UNCERTAIN (ảnh sau thử lại chưa thấy cuối danh sách; hàng nút và hàng tab bị cắt chữ ở 390 chưa rõ có chủ đích). Chờ người quyết ở Cổng 2.
+Round 1: mọi eval máy xanh; E7 chờ người quyết vì ba phiếu chưa chốt điểm (4) về hai hàng bị cắt ở 390 (nút soạn «Việc cần làm», hàng lọc «Đã xong») và E3 chưa đo vị trí «phía trên». Trả về thực thi.
+Round 2: E3 đã đo vị trí «phía trên» (commit 6da22975b); thêm bằng chứng E7 (đáy danh sách, số đo 390) và ghi số đo hai hàng bị cắt vào dtg-do-390.txt; mọi eval máy xanh, ba phiếu E7 cùng chấm đạt. Đường nền không đo lại vòng này.
