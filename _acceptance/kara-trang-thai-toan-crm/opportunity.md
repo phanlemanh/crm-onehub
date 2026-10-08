@@ -38,6 +38,10 @@ trên onehub 1596ad65 ngày 08/10:
   trạng thái «Kara đang…» như các chỗ Kara khác (ai-ux §7).
 - **Lưu trữ bản ghi không có Hoàn tác**: lưu trữ thoả thuận, cá nhân, công ty (`record-actions.tsx`) chỉ
   hiện toast «Đã lưu trữ…»; lưu trữ đơn vị và khuôn kế hoạch trong Cài đặt thì có «Hoàn tác».
+- **Bước Kara không lưu được vẫn hiện xong** (Ngoài-5 của `khung-ban-ghi-kara`, Cổng 2 2026-10-08, giám sát gộp
+  vào K6b ở P2-14): trong tab Kara của ngăn bản ghi, công cụ `record_fact`/`write_brief` trả `stored: false` /
+  `written: false` nhưng `KaraSteps` vẫn vẽ bước «xong» như đã lưu (`agent-panel.tsx` bỏ `item.tone` của
+  `lib/agent-transcript.ts`) — người dùng tưởng thông tin đã vào hồ sơ.
 - **Ba việc chữ**: toast tạo bản ghi «<tên> added.» viết cứng tiếng Anh trong `create-contact-sheet.tsx`,
   `create-company-sheet.tsx`, `create-deal-sheet.tsx`; «Sửa Mục tiêu» (`okr-gop-y.ts`) cạnh «Sửa mục tiêu»
   (`okr.ts`); «Cảm ơn, đã ghi» (`okr-toan-canh.ts`) không nói điều gì xảy ra tiếp.
@@ -49,7 +53,8 @@ trên onehub 1596ad65 ngày 08/10:
   có lấy lại được ngay bằng Hoàn tác không?
 - Kết quả nào là SỐNG: lái thử người lạ gây lỗi tải ở dòng thời gian, hoạt động web, kế hoạch cá nhân và tóm
   tắt tuần, lần nào cũng gặp trạng thái lỗi có «Thử lại»; lưu trữ rồi Hoàn tác đưa bản ghi về đúng chỗ; thước
-  máy đếm 0 nhánh `return null` khi tải hay lỗi trong các vùng con của ranh giới và 0 toast «added.» viết cứng.
+  máy đếm 0 nhánh `return null` khi tải hay lỗi trong các vùng con của ranh giới và 0 toast «added.» viết cứng;
+  bước Kara không lưu được hiện khác bước đã lưu, kèm lý do.
 - Kết quả nào là CHẾT: còn một vùng con của ranh giới nuốt lỗi thành rỗng hay biến mất; hoặc Hoàn tác lưu
   trữ không đưa bản ghi về trạng thái trước.
 - Timebox: 1,5 ngày máy theo lộ trình, mốc 09/11.
