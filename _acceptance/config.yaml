@@ -1283,6 +1283,15 @@ executors:
     nhkl_duong_cham: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t khong-lac-duong-cham"
     nhkl_fetch_gia: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t fetch-gia-theo-that"
     dph_tra_loi: node --test scripts/dieu-phoi/test/tra-loi.test.mjs
+    olht_mot_nguon: "cd packages/validation && bun test test/okr-loai-hoc-tap.spec.ts -t mot-nguon"
+    olht_tinh_trang: "cd packages/validation && bun test test/okr-loai-hoc-tap.spec.ts -t tinh-trang"
+    olht_cach_doc: "cd packages/validation && bun test test/okr-loai-hoc-tap.spec.ts -t cach-doc"
+    olht_soan_nhan: "cd packages/validation && bun test test/okr-loai-hoc-tap.spec.ts -t soan-nhan"
+    olht_api_tao: 'bun run test -- "cd apps/api && bun test test/okr-hoc-tap.spec.ts -t tao-hoc-tap"'
+    olht_bang_cham: 'bun run test -- "cd apps/api && bun test test/okr-hoc-tap.spec.ts -t bang-cham"'
+    olht_khep: 'bun run test -- "cd apps/api && bun test test/okr-hoc-tap.spec.ts -t khep-chan"'
+    olht_khep_bien: 'bun run test -- "cd apps/api && bun test test/okr-hoc-tap.spec.ts -t khep-bien"'
+    olht_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoc-tap.dom.tsx && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-hoc-tap-chon.dom.tsx"
     ctt_chia: "cd apps/api && bun test test/okr-cua-toi-chia.spec.ts"
     ctt_mine: 'bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t mine-vai"'
     ctt_trung_vai: 'bun run test -- "cd apps/api && bun test test/okr-cua-toi-theo-doi.spec.ts -t trung-vai"'
@@ -1979,6 +1988,9 @@ executors:
     dptm_hook_cay: node _acceptance/dieu-phoi-truoc-mo-dot/rang/hook-cay.mjs
     dptm_dot_bien: node _acceptance/dieu-phoi-truoc-mo-dot/rang/dot-bien.mjs
     dptm_readme_khoa: node _acceptance/dieu-phoi-truoc-mo-dot/rang/readme-khoa.mjs
+    olht_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/okr-loai-hoc-tap/rang/man-hoc-tap.mjs"'
+    olht_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/cham-diem.tsx" "apps/app/app/(app)/[slug]/settings/okr/hop-thoai-dong-ky.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    olht_dot_bien: node _acceptance/okr-loai-hoc-tap/rang/dot-bien.mjs
     ctt_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/okr-cua-toi-tach-theo-doi/rang/man-theo-doi.mjs"'
     ctt_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/cua-toi.tsx" "apps/app/app/(app)/[slug]/okr/nhom-da-bo.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     ctt_dot_bien: node _acceptance/okr-cua-toi-tach-theo-doi/rang/dot-bien.mjs
