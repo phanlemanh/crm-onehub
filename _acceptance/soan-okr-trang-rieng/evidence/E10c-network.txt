@@ -1,0 +1,3 @@
+E10c network: driver = puppeteer-core script (man.mjs) qua tien-de/phien-do, khong co read_network_requests -> n-a (driver).
+Console loi do script gom: 0 (dong "DUNG console khong loi (0)") o lan xanh.
+Lan do (chieu do bo-quyet): exit 1, "buoc 3: mo hinh khong thay quyet".

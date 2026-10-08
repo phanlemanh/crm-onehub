@@ -9,7 +9,8 @@ export type DongKr = Extract<DongSoan, { loai: "kr-moi" }>;
 export type DongCanChinh = Extract<DongSoan, { loai: "can-chinh-moi" }>;
 export type NhanDong = "vua-them" | "vua-sua" | "vua-chuyen" | "da-bo";
 export type SoKr = { khoiDiem: string; dich: string };
-export type SoDaGo = Readonly<Record<string, SoKr | undefined>>;
+export type SoGo = SoKr & { khoaDong?: string };
+export type SoDaGo = Readonly<Record<string, SoGo | undefined>>;
 export type KhoiNhap = {
 	mucTieu: DongMucTieu;
 	kr: DongKr[];
@@ -27,6 +28,7 @@ export type LyDoLuot = Extract<
 export type KetSoBanNhap = {
 	dong: DongSoan[];
 	nhan: ReadonlyMap<string, NhanDong>;
+	truocTen: ReadonlyMap<string, string>;
 };
 export type DemDuaVao = { soMucTieu: number; soKr: number };
 export type LuotTroLy = { loiDan: string; cauHoi: CauHoi[] };

@@ -139,9 +139,9 @@ describe("man-chua-cau-hinh", () => {
 		datDanhSach({ cuoc: { ...CUOC, soLuot: 0 } });
 		await moMan(false, false);
 		expect(
-			chu("[data-man-chua-cau-hinh] [data-slot='empty-title']"),
+			chu("[data-kara-state='unconfigured'] [data-slot='empty-description']"),
 			"man mo phien khi chua cau hinh",
-		).toBe(m.nut.chuaCauHinh);
+		).toBe(m.trang.chuaCauHinh);
 		expect(q("textarea"), "man mo phien khi chua cau hinh").toBeNull();
 		expect(soLanMoAgent, "man mo phien khi chua cau hinh").toBe(0);
 		expect(daGui).toEqual([]);
@@ -176,7 +176,7 @@ describe("loi-chua-cau-hinh", () => {
 			chu('[data-tu-choi="chua-cau-hinh"]'),
 			"loi chua cau hinh hien chu chung",
 		).toBe(m.nut.chuaCauHinh);
-		expect(q('[data-nut="thu-lai"]')).toBeNull();
+		expect(q('[data-luot="loi"] [data-slot="kara-retry"]')).toBeNull();
 		expect(q('[data-luot="loi"]')).toBeNull();
 	});
 
@@ -188,7 +188,7 @@ describe("loi-chua-cau-hinh", () => {
 		await moMan();
 		expect(q('[data-tu-choi="chua-cau-hinh"]')).toBeNull();
 		expect(q('[data-luot="loi"]')).not.toBeNull();
-		expect(q('[data-nut="thu-lai"]')).not.toBeNull();
+		expect(q('[data-luot="loi"] [data-slot="kara-retry"]')).not.toBeNull();
 	});
 
 	test("loi-chua-cau-hinh: loi mang khong status -> nhu hom nay", async () => {

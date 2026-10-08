@@ -84,7 +84,9 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 			onSuccess: async (contact) => {
 				await cache.contact(contact.id);
 				toast.success(
-					`${[contact.firstName, contact.lastName].filter(Boolean).join(" ")} added.`,
+					m.created(
+						[contact.firstName, contact.lastName].filter(Boolean).join(" "),
+					),
 				);
 				await setOpen(null);
 				setFirstName("");

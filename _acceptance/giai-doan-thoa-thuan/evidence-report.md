@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7035c37dbc3fe3b0d43c10e600287a6ea8c6aa39
+verified_commit: 8c62e048e6bd7e2971c583ce581ab5edc55238a5
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -277,3 +277,7 @@ sha: 6e56b3c148d998bc06e93f626c106514267e994b · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-08, do gộp onehub c803963e (#304); giai-doan-thoa-thuan/E15 thay bởi danh-sach-keo-chung#AC-8; thước E1 neo theo migration
 run_id: repin-20261008T080729Z-36869
 sha: 7035c37dbc3fe3b0d43c10e600287a6ea8c6aa39 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-08, do gộp onehub 591bc8fb (#312 K2, #314 K6b)
+run_id: repin-20261008T103205Z-75569
+sha: 8c62e048e6bd7e2971c583ce581ab5edc55238a5 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

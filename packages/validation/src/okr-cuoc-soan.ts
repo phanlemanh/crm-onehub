@@ -87,6 +87,11 @@ export type KrNhap = z.infer<typeof krNhap>;
 export type MucTieuNhap = z.infer<typeof mucTieuNhap>;
 export type BanNhap = z.infer<typeof banNhap>;
 
+export function docBanNhap(value: unknown): BanNhap | null {
+	const r = banNhap.safeParse(value);
+	return r.success ? r.data : null;
+}
+
 export function parseBanNhap(value: unknown): BanNhap {
 	const r = banNhap.safeParse(value);
 	if (!r.success)
