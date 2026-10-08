@@ -1,0 +1,80 @@
+schema_version: 1
+slug: luat-kho-vong-doi
+
+evals:
+  - id: E1
+    criterion: AC-5, AC-6, AC-7
+    executor: script
+    cmd: config:executors.script.luat_kho_cay_du
+    paths:
+      - "scripts/luat-kho/**"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/api/src/**"
+    expected: |
+      exit 0; node scripts/luat-kho/do-cay.mjs --du-luat tren cay that in bay dong XANH (sau luat cu va vong-doi),
+      dong «XANH vong-doi: … (nen 2 tep, 2 dong cu)» — dung hai vi tri AgentDefinition (dong model trong schema.prisma,
+      loi findMany cua list trong apps/api/src/agent/agent-definitions.service.ts); KET LUAN «7/7 luat ap dung xanh, 0
+      khong ap dung», chieu do N/N voi N = 32 ca cu + dung 7 ca vong-doi co ten: vd-hai-cot, vd-list-khong-loc,
+      vd-xoa-khong-kiem (do) va vd-mot-cot, vd-list-loc-qua-ham-phu, vd-xoa-kiem-qua-ham-phu, vd-khong-ten-list (xanh) —
+      ca 7 ten in trong dong «chieu do -> DUNG pha-<ten>». Mot ca khong bat hay bat nham -> ma 2 «thuoc hong, khong tin
+      duoc». Dieu kien vao S4: ban sua vi pham cach-ly-hai-agent cua #321 (P3) nam trong HEAD; chua co thi luot cham
+      BLOCKED co ten «cho ban sua #321», khong REJECT.
+
+  - id: E2
+    criterion: AC-1, AC-2, AC-3, AC-4, AC-5, AC-6
+    executor: script
+    cmd: config:executors.script.lkv_pha
+    paths:
+      - "scripts/luat-kho/**"
+      - "_acceptance/luat-kho-vong-doi/rang/**"
+    expected: |
+      rang/pha.mjs (goc kho tu import.meta.dirname) chep apps/, packages/, .oxlintrc.json vao thu muc tam roi chay
+      CHINH do-cay.mjs --chi-do <ban sao> sau tung o, moi o mot cap tren cung ban sao: vat lanh -> khong dong DO
+      vong-doi; pha -> dong DO ghim dung tep:dong va cum chu cua dieu. Ma tran viet truoc, so assert = so o:
+      (c1) them deletedAt vao mot mo hinh chi co archivedAt -> «mo hinh <Ten> co hai cach cat»; doi chung: chi archivedAt;
+      (b1) phuong thuc listX goi .company.findMany khong loc -> «list lan ban da cat: company»; doi chung: co
+      archivedFilter; (b2) loc qua ham this.buildWhereX cung lop co archivedFilter -> xanh; doi chung: ham phu khong co
+      -> do; (b3) cung loi goi trong phuong thuc layTheoId -> xanh; trong tep test/ -> xanh; tren mo hinh khong co
+      archivedAt -> xanh;
+      (a1) purgeX goi .division.delete khong kiem -> «xoa vinh vien khong kiem da luu tru: division»; doi chung: kiem
+      archivedAt truc tiep; (a2) kiem qua ham phu this.lyDo cung lop -> xanh; doi chung: ham phu khong nhac archivedAt
+      -> do; (a3) deleteMany co where archivedAt -> xanh; (a4) purgeY goi .division.deleteMany khong kiem -> do cung cum
+      chu;
+      (b4) cung listX khong loc dat trong apps/agent/... -> khong dong DO; dat trong apps/api/src/x.spec.ts -> khong
+      dong DO;
+      (n1) bo deletedAt cua AgentDefinition -> «NEN THUA vong-doi» goi ten schema.prisma; (n2) them archivedAt: null vao
+      loi findMany cua list trong apps/api/src/agent/agent-definitions.service.ts -> «NEN THUA vong-doi» goi ten tep do;
+      (k1) xoa schema.prisma, --du-luat -> «KHONG DO DUOC: thieu luat: vong-doi», ma 2; khong co -> «KHONG AP DUNG:
+      vong-doi», sau luat kia van in dong ket qua; (k2) xoa apps/api, --du-luat -> «KHONG DO DUOC: thieu luat:
+      vong-doi», ma 2;
+      (h1) ban sao do-cay.mjs co ham luat vong-doi tra rong -> ma 2 «thuoc hong, khong tin duoc»; (h2) ban sao co ham phu
+      mot buoc luon tra «co archivedAt» -> ma 2 vi bat nham.
+      Ma 0 khi moi o dat, ma 1 goi ten o hong; cay noi goi lenh khong doi (bam git status truoc/sau).
+
+  - id: E3
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.lkv_ci
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/luat-kho-vong-doi/rang/ci.mjs"
+    expected: |
+      rang/ci.mjs doc .github/workflows/acceptance.yml bang bo doc YAML: co dung mot job chay buoc
+      `bun install --frozen-lockfile` roi buoc `run: node scripts/luat-kho/do-cay.mjs --du-luat` (nguyen van, khong
+      `|| true`, khong `continue-on-error`), job chay khi pull_request vao onehub. Chieu do cung luot: ban sao YAML bo
+      buoc do -> ma 1 goi ten «thieu buoc luat kho»; ban sao them `continue-on-error: true` -> ma 1 goi ten
+      «job khong chan». Ma 0 khi ban that dat va hai chieu do do dung cho.
+
+  - id: E4
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.lkv_thoi_gian
+    paths:
+      - "scripts/luat-kho/**"
+      - "_acceptance/luat-kho-vong-doi/rang/thoi-gian.mjs"
+    expected: |
+      rang/thoi-gian.mjs chay do-cay.mjs --du-luat ba lan tren cay HEAD va ba lan tren ban git archive cua sha goc CO DINH
+      532e33175 (goc nhanh cua vong, khong dung merge-base dong), ban archive dung node_modules cua cay dang xet (duong
+      suy tu import.meta.dirname); moi luot o ca hai ben phai in dong KET LUAN, khong in -> ma 2. Lay trung vi tung ben;
+      ma 0 khi trung vi HEAD - trung vi goc <= 120 giay, in ca hai so. Chieu do: bien LKV_TRAN_GIAY nho hon chenh lech
+      that -> ma 1 goi ten «vuot tran».
