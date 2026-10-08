@@ -201,6 +201,14 @@ describe("tom-tat-moc", () => {
 				id,
 				tool: "nop_ban_nhap",
 				input,
+				output: {
+					ketQua: "da-ghi",
+					lyDo: "",
+					soDong: 0,
+					biLoai: [],
+					giuNguyen: [],
+				},
+				failed: false,
 				pending: false,
 			}) as unknown as TranscriptItem;
 		const items: TranscriptItem[] = [
