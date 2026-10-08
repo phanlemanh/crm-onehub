@@ -1,0 +1,40 @@
+{
+  "feature_plain": "Ở ngăn bản ghi và khối tóm tắt tuần, một vùng tải hỏng sẽ nói rõ là không tải được và có «Thử lại», thay vì trông như chưa có gì hay biến mất; lưu trữ cá nhân, công ty, thoả thuận có «Hoàn tác» ngay trên thông báo; bước Kara chưa lưu được hiện khác bước đã lưu.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ giữ mục «Hoạt động trên website» khi đang tải (khung chờ) và khi lỗi (khung «không tải được» kèm «Thử lại»); khách chưa nhận diện thì mục vẫn ẩn."},
+    {"id": "AC-3", "p": "Sẽ giữ mục «30 ngày đầu» khi đang tải và khi lỗi, cùng một khung lỗi với dòng thời gian; chưa có kế hoạch thì mục vẫn ẩn."},
+    {"id": "AC-4", "p": "Sẽ cho khối tóm tắt tuần nói «Kara đang tóm tắt tuần này…» khi chờ và «Kara chưa tải được tóm tắt tuần» kèm «Thử lại» khi lỗi, đúng bộ trạng thái của Kara."},
+    {"id": "AC-5", "p": "Sẽ hiện «Hoàn tác» trên thông báo «Đã lưu trữ <tên>.» ở ba loại ngăn; bấm là bản ghi về đang dùng trên máy chủ, bấm nhiều lần cũng chỉ khôi phục một lần."},
+    {"id": "AC-6", "p": "Sẽ báo «Chưa hoàn tác được. Bản ghi vẫn ở mục Đã lưu trữ.» khi hoàn tác hỏng, không in lỗi thô, và «Khôi phục» trong menu vẫn dùng được."},
+    {"id": "AC-7", "p": "Sẽ cho bước Kara không lưu được hiện trạng thái «chưa lưu» — chấm màu cảnh báo, tiêu đề «Kara chưa lưu được: <bước>» — khác bước đã lưu; tab tiếng Việt không in lý do tiếng Anh của tác tử."},
+    {"id": "AC-8", "p": "Sẽ cho thông báo tạo bản ghi nói «Đã thêm <tên>.» bằng tiếng Việt."},
+    {"id": "AC-10", "p": "Sẽ cho lời cảm ơn sau khi chấm tóm tắt tuần nói rõ quản trị viên thấy số phản hồi ở Toàn cảnh › Sức khoẻ chương trình."},
+    {"id": "AC-11", "p": "Sẽ có ảnh bản chạy thật ở 1440 và 390 để một người ngoài xác nhận khung lỗi không trông như chỗ trống và thông báo có «Hoàn tác»."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sẽ KHÔNG còn hiện «chưa có hoạt động» khi dòng thời gian tải hỏng — thay bằng khung «Không tải được hoạt động» kèm «Thử lại»."},
+    {"id": "AC-9", "p": "Sẽ KHÔNG còn «Sửa Mục tiêu» viết hoa ở đâu trong OKR — chỉ một cách viết «Sửa mục tiêu»."},
+    {"id": "OOS-1", "p": "Hoàn tác lưu trữ ở bảng, Kanban, Cài đặt và dải báo bản ghi đã lưu trữ để cho V2 — V2 dùng lại thông báo của hàng này."},
+    {"id": "OOS-2", "p": "Khung bản ghi nói đúng lý do (đã xoá, không có quyền, mất kết nối) để cho hàng K4b."},
+    {"id": "OOS-3", "p": "Tóm tắt quản trị vẫn báo lỗi kiểu cũ."},
+    {"id": "OOS-4", "p": "Lỗi khi tải thêm trang sau của dòng thời gian chưa sửa."},
+    {"id": "OOS-5", "p": "Lý do vì sao Kara không lưu chưa có bản tiếng Việt — lý do do tác tử viết, phải sửa ở phía tác tử."},
+    {"id": "OOS-6", "p": "Chưa có phím tắt hoàn tác cho thông báo."}
+  ],
+  "scope_plain": "Sáu việc cố ý để lại, phần lớn thuộc hàng V2 và K4b đã có lịch:",
+  "coverage_plain": [
+    {"i": 0, "p": "Máy quét đủ các vùng và trạng thái bằng bảng chéo (`coverage-scan.md`), tự dựng trục vì đây là lượt sửa ngang nhiều vùng."},
+    {"i": 1, "p": "Trục vùng: dòng thời gian, hoạt động trên website, 30 ngày đầu, tóm tắt tuần, thông báo lưu trữ ba loại, bước Kara, chữ — lấy từ khảo sát 04/10 và Ngoài-5 của K4."},
+    {"i": 2, "p": "Trục trạng thái: đang tải, lỗi, rỗng thật, thành công, hoàn tác được, hoàn tác hỏng — đối chiếu bộ trạng thái của Kara, luật vòng đời, và hai chuẩn ngành (Material Design Snackbar, NN/g về thông báo lỗi) chờ anh gạch."},
+    {"i": 3, "p": "Khổ và ngôn ngữ: ảnh 1440 và 390 ở AC-11; tiếng Anh đo ở AC-1, AC-5, AC-7, AC-8."},
+    {"i": 4, "p": "Giữ nguyên có chủ ý: mục không có dữ liệu thật thì vẫn ẩn; dòng thời gian khi đang tải giữ chỉ báo cũ."},
+    {"i": 5, "p": "Để sau: Hoàn tác ở bảng và Cài đặt (V2), khung bản ghi theo lý do (K4b), tóm tắt quản trị, tải thêm, phím tắt."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ngưỡng thành công đòi bước chưa lưu «kèm lý do», nhưng tiêu chí lại cấm in lý do tiếng Anh — đã bỏ cụm đó khỏi ngưỡng (máy tự thêm sau khi anh ký), ghi sổ để anh xem."},
+    {"i": 1, "p": "Phép đo bước «chưa lưu» chưa nhìn màu chấm — đã thêm ô so màu chấm cảnh báo với chấm đã lưu."},
+    {"i": 2, "p": "Phép đo hoạt động web thiếu ca rỗng thật, và luật quét «biến mất khi lỗi» có thể báo nhầm nhánh rỗng hợp lệ — đã thêm ca rỗng và khai trước nhánh nào hợp lệ."},
+    {"i": 3, "p": "Phép đo chữ «added.» và «Sửa Mục tiêu» chỉ soi vài tệp — đã mở ra toàn bộ tệp giao diện và tệp chữ."},
+    {"i": 4, "p": "Độ phủ tiếng Anh tuyên chạy ngang nhưng gần như không đo — đã thêm ca tiếng Anh cho khung lỗi, thông báo lưu trữ và tab Kara."}
+  ]
+}
