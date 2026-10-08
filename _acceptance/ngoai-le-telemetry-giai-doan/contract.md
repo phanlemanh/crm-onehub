@@ -54,4 +54,4 @@ theo luật 26); `_acceptance/ngoai-le-telemetry-giai-doan/opportunity.md`; hàn
 ## Notes
 
 - Không mã sản phẩm, không giao diện, không migration.
-- Đường nền đo trên onehub `c1067c163`.
+- Đường nền đo xanh trên `9e521c748` (onehub `c1067c163` + hồ sơ S1), 2026-10-08T19:30:35Z; lần đo đầu đỏ giả vì ghi tệp hồ sơ vào cây khi đang chạy.

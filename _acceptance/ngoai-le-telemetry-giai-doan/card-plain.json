@@ -1,0 +1,29 @@
+{
+  "feature_plain": "Tài liệu kỹ thuật ghi đúng chỗ duy nhất mã sản phẩm được dùng bảy giai đoạn gốc (số liệu ẩn danh), và thước canh luật bắt mọi lần dùng khác, kể cả trong gói số liệu ẩn danh.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho thước canh luật quét thêm gói số liệu ẩn danh; trên mã thật nó vẫn xanh và in ra từng dòng được cho phép."},
+    {"id": "AC-2", "p": "Sẽ bắt một mã giai đoạn gốc viết bằng chữ ở bất kỳ tệp nào của gói số liệu ẩn danh."},
+    {"id": "AC-3", "p": "Sẽ bắt mã giai đoạn gốc viết bằng chữ ngay trong tệp được cho phép, kể cả khi nó nằm cùng dòng với tên hằng."},
+    {"id": "AC-4", "p": "Sẽ bắt tên hằng dùng ở tệp khác, và phần quét cũ ngoài gói số liệu ẩn danh không yếu đi."},
+    {"id": "AC-5", "p": "Sẽ ghi ngoại lệ này vào tài liệu kỹ thuật, đúng mục nói về giai đoạn thoả thuận."},
+    {"id": "AC-6", "p": "Sẽ ghim lại hồ sơ đã ký «giai đoạn thoả thuận» vì thước của nó vừa đổi, và mọi phép đo máy của hồ sơ đó vẫn đạt."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "KHÔNG đổi cách số liệu ẩn danh xếp khoá giai đoạn — thiết kế đã duyệt ở vòng trước."},
+    {"id": "OOS-2", "p": "KHÔNG sửa phần mô tả chữ của phép đo cũ trong hồ sơ đã ký (danh sách thư mục cũ vẫn ghi như cũ)."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Nơi chèn: tệp thường của gói số liệu ẩn danh, tệp được cho phép, tệp ngoài gói — đủ khi mỗi nơi có một ca đỏ."},
+    {"i": 1, "p": "Dạng chèn: mã viết bằng chữ, tên hằng — đủ khi cả hai dạng đều có ca ở mỗi nơi."},
+    {"i": 2, "p": "Sáu ô nơi × dạng: năm ô phải đỏ, một ô (tên hằng trong tệp được cho phép) là ngoại lệ có tên."},
+    {"i": 3, "p": "Mỗi lời hứa có một tiêu chí: thước xanh trên mã thật, ba nhóm ca đỏ, tài liệu, hồ sơ đã ký."},
+    {"i": 4, "p": "Không bao giờ: bỏ cả tệp được cho phép ra khỏi phạm vi quét."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa có ca mã gốc nằm cùng dòng với tên hằng — đã thêm, và thước phải xét mọi từ trên dòng chứ không chỉ từ đầu."},
+    {"i": 1, "p": "Hai cách đếm số tệp quét lệch nhau — đã thống nhất một công thức."},
+    {"i": 2, "p": "Ngờ phép đo lần ghim lại so sai trường — bác: khuôn của bộ công cụ quy định đúng trường đó."},
+    {"i": 3, "p": "Chiều đỏ neo vào bản trước khi gộp, sẽ hết đỏ sau khi gộp — đã đổi sang bản đột biến tự dựng."},
+    {"i": 4, "p": "Thiếu ca tên hằng dùng ngoài gói số liệu ẩn danh — đã thêm."}
+  ]
+}
