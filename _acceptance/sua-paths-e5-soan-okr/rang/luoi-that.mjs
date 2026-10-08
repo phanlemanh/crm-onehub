@@ -43,6 +43,10 @@ if (viPham.length) {
   const vi = viPham.some(([l, i]) => l.includes('evidence is stale') && tepDoi(i).includes(TEP_NGOAI));
   console.log(vi ? `luoi-that do: ho so cu vi ${path.basename(TEP_NGOAI)}` : 'luoi-that do: vi pham khac');
 } else {
-  console.log(`luoi-that xanh: ho so khong cu vi ${path.basename(TEP_NGOAI)}`);
+  const ok = tatCa.some((l) => l.startsWith(`OK [${SLUG_HO_SO}]`));
+  const boQua = tatCa.some((l) => l.startsWith(`NOTE [${SLUG_HO_SO}]`) && l.includes('bỏ qua theo paths') && l.includes(TEP_NGOAI));
+  if (!ok) { sai++; console.log(`luoi-that khong soi ho so: thieu dong OK [${SLUG_HO_SO}]`); }
+  if (!boQua) { sai++; console.log(`luoi-that khong loc theo paths: thieu NOTE bo qua ${path.basename(TEP_NGOAI)}`); }
+  if (ok && boQua) console.log(`luoi-that xanh: ho so khong cu vi ${path.basename(TEP_NGOAI)} (OK + NOTE bo qua theo paths)`);
 }
 ketLuan(sai);
