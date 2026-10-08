@@ -1,0 +1,51 @@
+schema_version: 1
+feature_slug: zalo-hoi-okr-khong-chet
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.zhok_c33
+    paths: [apps/agent/agent/tools/tro-ly-okr-ngoai.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/agent/hooks/okr-uy-quyen.ts, apps/agent/agent/lib/okr/uy-quyen.ts, "apps/agent/agent/subagents/tro_ly_okr/**", _acceptance/zalo-hoi-okr-khong-chet/rang/c33.mjs, _acceptance/zalo-hoi-okr-khong-chet/bo-do/c33.json]
+    expected: "exit 0; rang/c33.mjs chạy `bun _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts --bo _acceptance/zalo-hoi-okr-khong-chet/bo-do/c33.json` (bàn đo thật: kho đo dùng-một-lần, eve dev của apps/agent, Zalo giả, model gốc thật) cho tới khi có ĐỦ BA lượt «có gọi», trần sáu lượt. Mỗi lượt đọc thư mục lượt mà chính lượt đó in («thu muc luot: <dir>»), tệp <dir>/luot-1/eve.log (chayLuot «luot-1» chạy cả câu kho lẫn câu Zalo trong một eve eval) và <dir>/luot-1/ket-qua.jsonl. Một lượt là «có gọi» khi eve.log có dòng lời gọi công cụ «→ tro_ly_okr» kèm «✓ tro_ly_okr»; có «→ subagent tro_ly_okr» thì in «goi subagent that» và tính là sai; không dòng nào → in «khong goi tro_ly_okr», không tính vào ba. Với mỗi lượt có gọi: (1) ket-qua.jsonl có đúng một hàng luot 2 id c33, ketQua = «da-tra-loi», loi = null — sai thì in «c33 ZaloHoi <ketQua>»; (2) eve.log không chứa «may be called only from an OKR session» — có thì in «uy quyen OKR giet luot»; (3) ô «trả lời trên Zalo» của c33 trong bảng «Lượt hai» của <dir>/cham-bo-do.md tách theo « / » (cham-bo-do nối các tin Zalo giả nhận bằng « / ») ra đúng một tin; tin đó khác nguyên văn ZALO.loi.tacTuLoi (import từ apps/agent/agent/lib/zalo-config.ts) và chứa «OKR» không phân biệt hoa thường — sai thì in «tra loi khong co nghia: <chữ>». Một lượt sai → exit 1; hết sáu lượt mà chưa đủ ba lượt có gọi → exit 2 «khong du luot co goi: <k>/3»; bàn đo không chạy được → exit 2. CHIỀU ĐỎ (cùng lệnh, cờ --do): trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly) đã xoá tools/tro-ly-okr-ngoai.ts, chạy tới ba lượt: đạt chiều đỏ khi có ít nhất một lượt mà eve.log của chính lượt đó có «→ subagent tro_ly_okr» và «may be called only from an OKR session» (in «uy quyen OKR giet luot»); cả ba lượt không gọi tro_ly_okr → exit 2 (không kết luận), không phải exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.zhok_ngoai
+    paths: [apps/agent/agent/tools/tro-ly-okr-ngoai.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/okr-uy-quyen-ngoai.spec.ts]
+    expected: "exit 0; ma trận viết trước, số dòng = SESSION_PURPOSES.length = 8 (bài khẳng định hai số bằng nhau): mỗi giá trị purpose dựng ctx bằng phienAudit(<id>, purpose) của test/support/eve-kieu.ts — cùng fixture mà okr-chi-tro-ly.spec.ts dùng cho resolver step.started — rồi gọi THẲNG resolver step.started của tools/tro-ly-okr-ngoai.ts. okr → null, sai thì ném «phien okr bi de tro_ly_okr». Bảy giá trị còn lại → object có đúng một khoá «tro_ly_okr» (sai thì ném «<purpose>: khong de tro_ly_okr»); gọi execute({}) → { ok: false, reason } với reason === TRO_LY_OKR.ngoaiPhien.lyDo. Vế «okr còn nguyên subagent thật» trên eve thật đo ở E6. CHIỀU ĐỎ (rang/dot-bien.mjs): cặp (a) bản sao cho resolver trả null với purpose zalo → dòng zalo đỏ «zalo: khong de tro_ly_okr»; cặp (b) bản sao bỏ điều kiện purpose (luôn đè) → dòng okr đỏ «phien okr bi de tro_ly_okr»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.tln_uy_quyen
+    paths: [apps/agent/agent/hooks/okr-uy-quyen.ts, apps/agent/agent/lib/okr/uy-quyen.ts, apps/agent/test/okr-uy-quyen.spec.ts]
+    expected: "exit 0; okr-uy-quyen.spec.ts của tro-ly-okr-nen vẫn xanh; tệp đó không đổi một dòng so với merge-base (đo ở E4). Chiều đỏ: cặp (c) của rang/dot-bien.mjs — bản sao cho quyetUyQuyen trả cho:true khi purpose khác okr → bài đỏ (ma trận mong LOI_UY_QUYEN.ngoaiOkr)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.zhok_pham_vi
+    paths: [_acceptance/zalo-hoi-okr-khong-chet/rang/pham-vi.mjs]
+    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải nằm trong đúng danh sách apps/agent/agent/tools/tro-ly-okr-ngoai.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/okr-uy-quyen-ngoai.spec.ts, _acceptance/zalo-hoi-okr-khong-chet/**, PRODUCT-MAP.md, LO-TRINH.html, _acceptance/config.yaml; với _acceptance/config.yaml thì diff -U0 không có dòng bỏ nào; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng trong cùng lệnh, trên danh sách dựng sẵn: rỗng → thoát 2 «diff rong»; có apps/agent/test/okr-uy-quyen.spec.ts → «ngoai ranh gioi: apps/agent/test/okr-uy-quyen.spec.ts»; có apps/agent/agent/lib/zalo-chi-dan.ts → «ngoai ranh gioi: apps/agent/agent/lib/zalo-chi-dan.ts»; thiếu một đối chứng thì exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.zhok_dot_bien
+    paths: [apps/agent/agent/tools/tro-ly-okr-ngoai.ts, apps/agent/agent/lib/okr/uy-quyen.ts, apps/agent/test/okr-uy-quyen-ngoai.spec.ts, _acceptance/zalo-hoi-okr-khong-chet/rang/dot-bien.mjs]
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây, SO_CAP_KHAI = 3: cặp (a), (b) như E2, (c) như E3 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.tln_dau_cuoi
+    paths: [apps/agent/agent/tools/tro-ly-okr-ngoai.ts, "apps/agent/agent/subagents/tro_ly_okr/**", "apps/agent/agent/lib/okr/**", apps/agent/agent/hooks/okr-uy-quyen.ts]
+    expected: "exit 0; chạy lại E9 của tro-ly-okr-nen (rang/cach-ly-dau-cuoi.mjs --lan 3, không sửa): việc OKR nền thật, eve thật, model thật có cờ ZDR, ba lần; cổng của eval đòi calledSubagent('tro_ly_okr', {count:1}) và phiên con chỉ gọi nop_de_xuat — nếu công cụ đè chiếm tên ở purpose okr thì không có phiên con và cổng đỏ. Không có khoá Gateway → mã 2, không xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
