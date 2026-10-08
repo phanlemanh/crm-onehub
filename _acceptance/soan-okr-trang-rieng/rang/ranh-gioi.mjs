@@ -5,7 +5,8 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = resolve(HERE, "..", "..", "..");
-const NHANH_CHINH = "origin/onehub";
+const MERGE_K2 = "b633a7e3bf45bfc3732e11014a240961f187e610";
+const GHIM_K2 = "84792891f23f46ceb07e09290105f2a29b9b2616";
 const MA_HANG = "K2";
 const PHIEN = "P1";
 const DOT = ".acceptance-runs/dieu-phoi-sau-14-10";
@@ -163,20 +164,20 @@ function xet({ tep, xoa, hunk, dongHopDong, coNhapResizable }, nguon) {
 	return loi;
 }
 
-function docThat(mb) {
-	const tep = git("diff", "--name-only", mb).split("\n").filter(Boolean);
+function docThat(mb, dich) {
+	const tep = git("diff", "--name-only", mb, dich).split("\n").filter(Boolean);
 	const xoa = new Map(
-		git("diff", "--numstat", mb)
+		git("diff", "--numstat", mb, dich)
 			.split("\n")
 			.filter(Boolean)
 			.map((l) => l.split("\t"))
 			.map(([, x, t]) => [t, Number(x) || 0]),
 	);
 	const hunk = tep.includes(HOP_DONG)
-		? hunkMoi(git("diff", "-U0", mb, "--", HOP_DONG))
+		? hunkMoi(git("diff", "-U0", mb, dich, "--", HOP_DONG))
 		: [];
-	const dongHopDong = readFileSync(join(GOC, HOP_DONG), "utf8").split("\n");
-	const coNhapResizable = git("grep", "-l", NHAP_RESIZABLE, "--", MAT_SOAN)
+	const dongHopDong = git("show", `${dich}:${HOP_DONG}`).split("\n");
+	const coNhapResizable = git("grep", "-l", NHAP_RESIZABLE, dich, "--", MAT_SOAN)
 		.split("\n")
 		.some(Boolean);
 	return { tep, xoa, hunk, dongHopDong, coNhapResizable };
@@ -218,17 +219,20 @@ if (process.argv.includes("--kiem-do-do")) {
 }
 
 let mb;
+let dich;
 try {
-	mb = git("merge-base", "HEAD", NHANH_CHINH).trim();
+	git("merge-base", "--is-ancestor", GHIM_K2, `${MERGE_K2}^2`);
+	dich = GHIM_K2;
+	mb = git("merge-base", `${MERGE_K2}^1`, dich).trim();
 } catch {
-	boCuoc(`khong co ref ${NHANH_CHINH} — chay git fetch origin onehub`);
+	boCuoc(`khong co merge ${MERGE_K2.slice(0, 9)} cua K2 — chay git fetch origin onehub`);
 }
-const that = docThat(mb);
+const that = docThat(mb, dich);
 if (that.tep.length === 0) {
-	console.log(`RONG: khong co tep nao doi so voi ${NHANH_CHINH} (${mb.slice(0, 9)}) — da gop`);
-	process.exit(0);
+	console.log(`RONG: ghim ${GHIM_K2.slice(0, 9)} cua K2 khong mang tep nao`);
+	process.exit(2);
 }
-console.log(`so voi ${NHANH_CHINH} tai ${mb.slice(0, 9)}: ${that.tep.length} tep doi`);
+console.log(`ghim ${GHIM_K2.slice(0, 9)} cua K2 trong merge ${MERGE_K2.slice(0, 9)} (${mb.slice(0, 9)}..${dich.slice(0, 9)}): ${that.tep.length} tep doi`);
 const loi = xet(that, nguon);
 if (loi.length > 0) {
 	for (const l of loi) console.log(`   ${l}`);

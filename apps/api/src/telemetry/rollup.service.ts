@@ -26,6 +26,7 @@ import {
 	restoreCounters,
 	telemetryDisabled,
 } from "@crm/telemetry";
+import { DEAL_STAGE_KEYS, permittedDealStage } from "@crm/telemetry/allowlist";
 import { zaloHoiKetQua } from "@crm/validation/zalo-hoi";
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
@@ -493,7 +494,7 @@ export class RollupService {
 			contactSources,
 			companySources,
 			stages,
-			stageIds,
+			stageRows,
 			types,
 			syncs,
 			threads,
@@ -511,7 +512,7 @@ export class RollupService {
 			this.db.contact.groupBy({ by: ["source"], _count: { _all: true } }),
 			this.db.company.groupBy({ by: ["source"], _count: { _all: true } }),
 			this.db.deal.groupBy({ by: ["stage"], _count: { _all: true } }),
-			this.db.dealStage.findMany({ select: { id: true } }),
+			this.db.dealStage.findMany({ select: { id: true, kind: true } }),
 			this.db.activity.groupBy({ by: ["type"], _count: { _all: true } }),
 			this.db.mailboxSync.groupBy({ by: ["status"], _count: { _all: true } }),
 			this.db.emailThread.count({ where: { createdAt: { gte: since } } }),
@@ -557,6 +558,7 @@ export class RollupService {
 			this.db.appSetting.count({ where: { trackingPaused: true } }),
 		]);
 
+		const stageKinds = new Map(stageRows.map((row) => [row.id, row.kind]));
 		const configured = syncs.reduce((sum, row) => sum + row._count._all, 0);
 
 		return {
@@ -582,8 +584,14 @@ export class RollupService {
 				Object.values(RecordSource),
 			),
 			deals_by_stage: countsOf(
-				stages.map((row) => ({ key: row.stage, count: row._count._all })),
-				stageIds.map((row) => row.id),
+				stages.map((row) => ({
+					key: permittedDealStage(
+						row.stage,
+						stageKinds.get(row.stage) ?? "OPEN",
+					),
+					count: row._count._all,
+				})),
+				DEAL_STAGE_KEYS,
 			),
 			activities_by_type: countsOf(
 				types.map((row) => ({ key: row.type, count: row._count._all })),

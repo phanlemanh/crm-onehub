@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { GIAI_DOAN_GOC, type LoaiGiaiDoan } from "@crm/db/giai-doan";
 import { demChiSo } from "@crm/db/okr-chi-so";
+import { DEAL_STAGE_KEYS } from "@crm/telemetry/allowlist";
 import { ConversionService } from "../src/currency/conversion.service";
 import { DashboardService } from "../src/dashboard/dashboard.service";
 import { RollupService } from "../src/telemetry/rollup.service";
@@ -182,16 +183,72 @@ describe("okr-telemetry", () => {
 		expect(dem, `chot-duoc ${dem} != ${mong}`).toBe(mong);
 	});
 
-	it("deals_by_stage khoa bang id, khong mang nhan", async () => {
-		const rollup = new RollupService(db, {} as never);
-		const crm = await (rollup as unknown as CoCrm).crm(new Date(0));
-		const theoStage = crm.deals_by_stage;
-		for (const id of Object.values(moi)) {
-			expect(theoStage[id], `deals_by_stage thieu ${id}`).toBeGreaterThan(0);
-		}
-		const chuoi = JSON.stringify(crm);
-		for (const n of Object.values(nhan)) {
-			expect(chuoi.includes(n), `payload mang nhan ${n}`).toBe(false);
+	it("deals-by-stage tap khoa dong", async () => {
+		const goc = await db.dealStage.findUniqueOrThrow({
+			where: { id: GIAI_DOAN_GOC.CONTRACT_SENT },
+			select: { label: true },
+		});
+		const nhanMoi = `Đã gửi bản ký ${suffix}`;
+		const cat = `${tienTo}-cat`;
+		await db.dealStage.create({
+			data: {
+				id: cat,
+				label: `Nhãn đã cất ${suffix}`,
+				kind: "OPEN",
+				position: 61,
+				archivedAt: new Date(),
+			},
+		});
+		await db.dealStage.update({
+			where: { id: GIAI_DOAN_GOC.CONTRACT_SENT },
+			data: { label: nhanMoi },
+		});
+		try {
+			const rollup = new RollupService(db, {} as never);
+			const [crm, cu, thoaThuan] = await Promise.all([
+				(rollup as unknown as CoCrm).crm(new Date(0)),
+				db.deal.groupBy({ by: ["stage"], _count: { _all: true } }),
+				db.deal.findMany({
+					select: { stage: true, giaiDoan: { select: { kind: true } } },
+				}),
+			]);
+			const theoStage = crm.deals_by_stage;
+			const tapGoc = new Set<string>(Object.values(GIAI_DOAN_GOC));
+			const mong = new Map<string, number>();
+			for (const t of thoaThuan) {
+				const khoa = tapGoc.has(t.stage)
+					? t.stage
+					: `other_${t.giaiDoan.kind.toLowerCase()}`;
+				mong.set(khoa, (mong.get(khoa) ?? 0) + 1);
+			}
+
+			expect(
+				Object.keys(theoStage).sort(),
+				"deals_by_stage co khoa ngoai tap dong",
+			).toEqual([...DEAL_STAGE_KEYS].sort());
+			for (const ma of tapGoc) {
+				expect(theoStage[ma], `deals_by_stage ${ma}`).toBe(mong.get(ma) ?? 0);
+			}
+			for (const kind of ["open", "won", "lost"]) {
+				const khoa = `other_${kind}`;
+				expect(mong.get(khoa) ?? 0, `fixture thieu ${khoa}`).toBeGreaterThan(0);
+				expect(theoStage[khoa], `deals_by_stage ${khoa}`).toBe(mong.get(khoa));
+			}
+			const tong = Object.values(theoStage).reduce((a, b) => a + b, 0);
+			const tongCu = cu.reduce((a, r) => a + r._count._all, 0);
+			expect(tong, `tong ${tong} != ${tongCu}`).toBe(tongCu);
+			for (const id of [...Object.values(moi), cat]) {
+				expect(Object.keys(theoStage).includes(id), `khoa ${id}`).toBe(false);
+			}
+			const chuoi = JSON.stringify(crm);
+			for (const n of [...Object.values(nhan), nhanMoi]) {
+				expect(chuoi.includes(n), `payload mang nhan ${n}`).toBe(false);
+			}
+		} finally {
+			await db.dealStage.update({
+				where: { id: GIAI_DOAN_GOC.CONTRACT_SENT },
+				data: { label: goc.label },
+			});
 		}
 	});
 });

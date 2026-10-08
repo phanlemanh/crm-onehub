@@ -81,7 +81,7 @@ async function mot(st, id, cuoc, rong, nen, doDo, dem) {
 	try {
 		const nha = st.khoa ? await khoaBangCuoc() : null;
 		const tabMo = st.tabMo ?? st.tab;
-		const thamSo = tabMo && rong < 1024 ? `?tab=${tabMo}` : "";
+		const thamSo = tabMo && rong < 1024 ? `?tabSoan=${tabMo}` : "";
 		const som = doDo === "chup-som" && id === "ST-soan-co-nhap" && dem.som === 0;
 		if (som) {
 			dem.som += 1;
