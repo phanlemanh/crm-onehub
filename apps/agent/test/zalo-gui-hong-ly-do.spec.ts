@@ -280,7 +280,7 @@ describe("webhook-thu", () => {
 });
 
 describe("webhook-403", () => {
-	test("khoá lệch đặt lý do bền đúng một lần, kẻ lạ không bật cảnh báo", async () => {
+	test("khoá lệch đặt lý do bền đúng một lần, không đọc thân", async () => {
 		const zalo = zaloGia({ send: "ok" });
 		let tong = 0;
 		const deps: PhuThuocWebhook = {
@@ -323,11 +323,13 @@ describe("webhook-403", () => {
 			expect(demDong(nk, "[zalo] webhook 403 ly_do=thieu-khoa")).toBe(1);
 			expect(await lyDoHienTai()).toBeNull();
 
-			const la = await guiWebhook(JSON.stringify({ x: 1 }), KHOA_SAI, deps);
-			expect(la.status).toBe(403);
+			const yc = yeuCauWebhook(tin(10), KHOA_SAI);
+			const khongDoc = await nhanWebhook(yc.request, deps);
+			expect(khongDoc.status).toBe(403);
+			if (yc.request.bodyUsed || yc.soLanKeo() !== 0)
+				throw new Error("doc than khi khoa sai");
 			expect(demDong(nk, "[zalo] webhook 403 ly_do=khoa-lech")).toBe(7);
-			if ((await lyDoHienTai()) !== null)
-				throw new Error("ke la bat canh bao gia");
+			expect(await lyDoHienTai()).toBe("khoa-lech");
 
 			const truoc = await db.appSetting.findUnique({
 				where: { id: SETTINGS_ID },
@@ -482,6 +484,16 @@ const datBotThu = (yeuCau: DatBotYeuCau, fetcher: typeof fetch) =>
 afterAll(async () => {
 	await db.zaloLink.deleteMany({});
 	await db.zaloLinkCode.deleteMany({});
+	await db.appSetting.updateMany({
+		where: { id: SETTINGS_ID },
+		data: {
+			zaloBotToken: null,
+			zaloWebhookSecret: null,
+			zaloBotName: null,
+			zaloWebhookUrl: null,
+			zaloWebhookLyDo: null,
+		},
+	});
 	await donDep();
 });
 

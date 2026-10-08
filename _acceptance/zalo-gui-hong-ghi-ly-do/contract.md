@@ -5,9 +5,9 @@ slug: zalo-gui-hong-ghi-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
-approved_by: Phan Le Manh
-approved_at: 2026-10-08T12:00:00Z
+status: draft
+approved_by:
+approved_at:
 design_doc: _acceptance/zalo-gui-hong-ghi-ly-do/design.md
 ---
 
@@ -33,7 +33,7 @@ Source input: `opportunity.md`, `design.md`.
 - AC-8 (cross-layer): Given hộp xác nhận của AC-7, When quản trị bấm «Gỡ liên kết và đổi bot» và Zalo nhận đăng ký bot mới, Then bot mới được lưu và mọi `zaloLink` bị xoá trong CÙNG một giao dịch với việc ghi `AppSetting`, và nhật ký có đúng một dòng `[zalo] doi bot: go <n> lien ket`; And nếu Zalo từ chối đăng ký, hoặc một bước ghi CSDL của giao dịch đó hỏng, thì bot cũ và mọi liên kết giữ nguyên; And nút xác nhận gửi `xacNhanDoiBot: true` qua API tới agent, Huỷ không gọi gì.
 - AC-9: Given Lưu bot bằng token của CÙNG bot (hoặc bật bot lần đầu, hoặc không còn liên kết nào), When Lưu, Then không hỏi xác nhận và không gỡ liên kết nào — hành vi như hôm nay.
 - AC-10: Given một người đã chọn nhận nhắc qua Zalo (`NotificationPreference.channel = ZALO`) mà không còn liên kết Zalo, When mở «Thông báo của bạn», Then thấy dòng báo cần nối lại cạnh nút «Nối Zalo»; And người chưa từng chọn Zalo không thấy dòng đó.
-- AC-12: Given `/zalo/webhook` nhận một yêu cầu bị từ chối — header `x-bot-api-secret-token` có mà không khớp khoá đang lưu (403), header vắng (403), hoặc tới khi chưa có bot (404) — When `nhanWebhook` xử lý, Then nhật ký có đúng một dòng lần lượt `[zalo] webhook 403 ly_do=khoa-lech`, `[zalo] webhook 403 ly_do=thieu-khoa`, `[zalo] webhook 404 ly_do=chua-co-bot`, không chứa thân tin, header hay khoá; And CHỈ khi header có mà lệch VÀ thân đọc được là tin Zalo (`parseZaloWebhook` nhận, hoặc là sự kiện thử) thì `AppSetting.zaloWebhookLyDo` thành `"khoa-lech"` (không cột mới) — header vắng hay thân rác thì không đổi gì trong CSDL; And nhiều yêu cầu như thế, gửi lần lượt hay đồng thời, chỉ làm hàng `AppSetting` đổi đúng một lần.
+- AC-12: Given `/zalo/webhook` nhận một yêu cầu bị từ chối — header `x-bot-api-secret-token` có mà không khớp khoá đang lưu (403), header vắng (403), hoặc tới khi chưa có bot (404) — When `nhanWebhook` xử lý, Then nhật ký có đúng một dòng lần lượt `[zalo] webhook 403 ly_do=khoa-lech`, `[zalo] webhook 403 ly_do=thieu-khoa`, `[zalo] webhook 404 ly_do=chua-co-bot`, không chứa thân tin, header hay khoá; And khi header có mà lệch thì `AppSetting.zaloWebhookLyDo` thành `"khoa-lech"` (không cột mới) mà KHÔNG đọc thân yêu cầu — giữ lời hứa «khoá sai thì không đọc thân» của hồ sơ đã ký `zalo-qua-webhook` (bài `webhook-khoa`) — header vắng thì không đổi gì trong CSDL; And nhiều yêu cầu như thế, gửi lần lượt hay đồng thời, chỉ làm hàng `AppSetting` đổi đúng một lần.
 - AC-13 (cross-layer): Given `zaloWebhookLyDo = "khoa-lech"`, When quản trị mở Cài đặt › Kết nối › Zalo, Then màn hiện cảnh báo khoá lệch kèm nút «Đăng ký lại»; And nhịp kiểm bot (`kiemBot`, `getWebhookInfo`) KHÔNG xoá lý do đó; And chỉ một lần Đăng ký lại hay Lưu bot thành công mới đưa nó về null; lần hỏng thì lý do không về null (giữ `khoa-lech` hoặc thành `zalo-tu-choi`, cả hai đều hiện cảnh báo).
 - AC-11: Given diff của vòng so với merge-base với `onehub`, Then chỉ các tệp khai trong `## Notes` (mục Ranh giới), `_acceptance/zalo-gui-hong-ghi-ly-do/**`, `PRODUCT-MAP.md`, `LO-TRINH.html` và các dòng THÊM vào `_acceptance/config.yaml` đổi.
 

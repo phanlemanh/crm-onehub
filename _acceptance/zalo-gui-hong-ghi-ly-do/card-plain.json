@@ -35,7 +35,7 @@
     },
     {
       "id": "AC-12",
-      "p": "Sẽ ghi một dòng mỗi khi webhook Zalo bị từ chối, và chỉ bật cảnh báo «khoá lệch» khi chính Zalo gửi tin bằng khoá cũ — máy quét lạ không bật được."
+      "p": "Sẽ ghi một dòng mỗi khi webhook Zalo bị từ chối, và bật cảnh báo «khoá lệch» mỗi khi có khoá mà sai — không đọc nội dung yêu cầu, giữ lời hứa đã ký «khoá sai thì không đọc thân»."
     },
     {
       "id": "AC-13",

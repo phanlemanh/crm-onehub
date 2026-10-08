@@ -40,22 +40,6 @@ export async function datKhoaLech(): Promise<number> {
 	return count;
 }
 
-function laTinZalo(tho: string): boolean {
-	let than: unknown;
-	try {
-		than = JSON.parse(tho);
-	} catch {
-		return false;
-	}
-	if (moTaThanWebhook(than).messageId === ZALO.nhatKy.maThu) return true;
-	try {
-		parseZaloWebhook(than);
-		return true;
-	} catch {
-		return false;
-	}
-}
-
 function bam(giaTri: string): Buffer {
 	return createHash("sha256").update(giaTri).digest();
 }
@@ -114,8 +98,7 @@ export async function nhanWebhook(
 	}
 	if (!khopKhoa(header, bien.khoa)) {
 		ghiTuChoi(ZALO.http.cam, ZALO.nhatKy.tuChoiWebhook.khoaLech);
-		if (laTinZalo(await request.text()))
-			await (deps.datKhoaLech ?? datKhoaLech)();
+		await (deps.datKhoaLech ?? datKhoaLech)();
 		return traVe(ZALO.http.cam);
 	}
 	const tin = docCapNhat(await request.text());

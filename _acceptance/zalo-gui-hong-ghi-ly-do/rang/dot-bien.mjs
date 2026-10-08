@@ -6,7 +6,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 20;
+const SO_CAP_KHAI = 19;
 const TRAN_MS = 600_000;
 const AGENT = (t) =>
 	`cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t ${t}`;
@@ -16,8 +16,8 @@ const DOM = (t) =>
 const ZAPI = "apps/agent/agent/lib/zalo-api.ts";
 const XUONG = "apps/agent/agent/lib/zalo-bot-xuong.ts";
 const WEBHOOK = "apps/agent/agent/lib/zalo-webhook.ts";
-const DAT_KHOA = `		if (laTinZalo(await request.text()))
-			await (deps.datKhoaLech ?? datKhoaLech)();`;
+const DAT_KHOA = `		await (deps.datKhoaLech ?? datKhoaLech)();
+`;
 
 const CAP = [
 	[
@@ -137,7 +137,7 @@ const CAP = [
 		AGENT("webhook-403"),
 		WEBHOOK,
 		DAT_KHOA,
-		"\t\tawait request.text();",
+		"",
 		"403 khong dat ly do khoa-lech",
 	],
 	[
@@ -171,14 +171,6 @@ const CAP = [
 		"\t\t\tOR: [{ zaloWebhookLyDo: null }, { zaloWebhookLyDo: { not: lyDo } }],\n",
 		"",
 		"403 ghi lai moi yeu cau",
-	],
-	[
-		"t ke la bat",
-		AGENT("webhook-403"),
-		WEBHOOK,
-		"if (laTinZalo(await request.text()))",
-		"if ((await request.text()) !== null)",
-		"ke la bat canh bao gia",
 	],
 ];
 
