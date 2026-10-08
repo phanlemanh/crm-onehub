@@ -5,7 +5,7 @@ slug: ly-do-tu-choi-nop-theo-locale
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
 design_doc: docs/superpowers/specs/2026-10-09-ly-do-tu-choi-nop-theo-locale-design.md
