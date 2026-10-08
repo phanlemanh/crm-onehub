@@ -1299,6 +1299,12 @@ executors:
     k2_khoi: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-moc.spec.ts -t khoi-ngu-canh"
     k2_api_hoan: bun run test -- "cd apps/api && bun test test/soan-okr-hoan-tac.spec.ts -t k2-api-hoan"
     k2_api_nhom: bun run test -- "cd apps/api && bun test test/soan-okr-hoan-tac.spec.ts -t k2-api-nhom"
+    k2b_tab: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-khong-lac.dom.tsx -t k2b-tab
+    k2b_khoa: cd apps/app && bun test ./lib/search-param-keys.test.ts
+    k2b_nhom_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-khong-lac.dom.tsx -t k2b-nhom-loi
+    k2b_nhom_ui: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/kara-proposal-group-loi.dom.tsx
+    k2b_moc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/soan-okr-khong-lac.spec.ts -t k2b-moc-ba && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-khong-lac.dom.tsx -t k2b-moc-dom
+    k2b_moc_hong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/soan-okr-khong-lac.spec.ts -t k2b-moc-hong
     kbk_api_nhan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t nhan"'
     kbk_api_bo_qua: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t bo-qua" && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi-de-xuat.dom.tsx -t bo-qua'
     kbk_api_chan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t chan"'
@@ -2080,6 +2086,10 @@ executors:
     k2_tai_lieu: node _acceptance/soan-okr-trang-rieng/rang/tai-lieu.mjs
     k2_san_thiet_ke: '{ find "apps/app/app/(app)/[slug]/okr/soan" -name "*.tsx"; printf "%s\n" packages/ui/src/components/resizable.tsx packages/ui/src/components/kara/proposal.tsx; } | while IFS= read -r t; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     k2_man_so: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan so"'
+    k2b_mot_nguon: bun _acceptance/soan-okr-khong-lac/rang/mot-nguon.mjs
+    k2b_dot_bien: bun _acceptance/soan-okr-khong-lac/rang/dot-bien.mjs
+    k2b_ranh_gioi: node _acceptance/soan-okr-khong-lac/rang/ranh-gioi.mjs
+    k2b_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-khong-lac/rang/man.mjs"'
     dlr_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/datatable-loc-ro/rang/do-man.mjs"'
     dlr_san_thiet_ke: 'for t in packages/ui/src/components/data-table.tsx "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx" "apps/app/app/(app)/[slug]/companies/companies-table.tsx" "apps/app/app/(app)/[slug]/deals/deals-table.tsx" "apps/app/app/(app)/[slug]/settings/members/members-table.tsx" apps/app/components/crm/fields/field-facets.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done && bun _acceptance/datatable-loc-ro/rang/khong-ghi-de.mjs'
     olht_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/okr-loai-hoc-tap/rang/man-hoc-tap.mjs"'
