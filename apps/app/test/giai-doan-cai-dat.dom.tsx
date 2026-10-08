@@ -43,8 +43,11 @@ let daCat: {
 	kind: Hang["kind"];
 	archivedAt: string;
 }[] = [];
-let goiGhi: { ten: string; v: unknown }[] = [];
-let ketQuaGhi: Record<string, (v: unknown) => Promise<unknown>> = {};
+type DauVaoGhi = {
+	readonly [khoa: string]: string | readonly string[] | undefined;
+};
+let goiGhi: { ten: string; v: DauVaoGhi }[] = [];
+let ketQuaGhi: Record<string, () => Promise<{ id: string }>> = {};
 
 type GoiToast = {
 	loai: "thuong" | "xong" | "loi";
@@ -71,10 +74,10 @@ function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa | Promise<TRa>) {
 		}),
 		mutationOptions: (tuyChon?: MoiGhi) => ({
 			mutationKey: [ten],
-			mutationFn: async (v: unknown) => {
+			mutationFn: async (v: DauVaoGhi) => {
 				goiGhi.push({ ten, v });
 				const lam = ketQuaGhi[ten];
-				return lam ? lam(v) : { id: "x" };
+				return lam ? lam() : { id: "x" };
 			},
 			...tuyChon,
 		}),

@@ -72,17 +72,21 @@ mock.module("sonner", () => ({
 	Toaster: () => null,
 }));
 
-let daGoi: { ten: string; dauVao: unknown }[] = [];
+type DauVao = {
+	readonly [khoa: string]: string | number | readonly string[] | undefined;
+};
+type ChonGhi = { onSuccess?: () => void; onError?: (e: Error) => void };
+let daGoi: { ten: string; dauVao: DauVao }[] = [];
 let tuChoi = new Map<string, string>();
 
 function thuTuc<TRa>(ten: string, doc: () => TRa) {
 	return {
 		queryKey: () => [ten],
 		queryOptions: () => ({ queryKey: [ten], queryFn: async () => doc() }),
-		mutationOptions: (chon: object = {}) => ({
+		mutationOptions: (chon: ChonGhi = {}) => ({
 			...chon,
 			mutationKey: [ten],
-			mutationFn: async (dauVao: unknown) => {
+			mutationFn: async (dauVao: DauVao) => {
 				daGoi.push({ ten, dauVao: JSON.parse(JSON.stringify(dauVao)) });
 				const loi = tuChoi.get(ten);
 				if (loi !== undefined) throw new Error(loi);
