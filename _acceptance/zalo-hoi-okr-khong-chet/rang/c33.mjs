@@ -1,7 +1,8 @@
 import { spawnSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, renameSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { dungBanSao, goBanSao, KhongDo } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
+import { KhongDo } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
 const GOC = resolve(import.meta.dirname, "..", "..", "..");
 const HO_SO = "_acceptance/zalo-hoi-okr-khong-chet";
@@ -105,10 +106,17 @@ function xanh() {
 	return 0;
 }
 
+function sachTep(tep) {
+	const r = spawnSync("git", ["status", "--porcelain", "--", tep], { cwd: GOC, encoding: "utf8" });
+	return r.status === 0 && r.stdout.trim() === "";
+}
+
 function chieuDo() {
-	const goc = dungBanSao("zhok-c33");
+	if (!sachTep(CONG_CU)) throw new KhongDo(`${CONG_CU} dang co thay doi chua commit, khong pha tai cho`);
+	const goc = GOC;
+	const cat = join(tmpdir(), `zhok-c33-${process.pid}.ts`);
+	renameSync(join(GOC, CONG_CU), cat);
 	try {
-		rmSync(join(goc, CONG_CU));
 		let coGoi = 0;
 		for (let lan = 1; lan <= TRAN_DO; lan++) {
 			const thuMuc = join(BANG_CHUNG, `do-${lan}`);
@@ -129,7 +137,8 @@ function chieuDo() {
 		console.log("chieu do: co goi subagent ma khong thay dong uy quyen");
 		return 1;
 	} finally {
-		goBanSao(goc);
+		renameSync(cat, join(GOC, CONG_CU));
+		if (!sachTep(CONG_CU)) console.log(`CANH BAO: ${CONG_CU} chua ve nguyen trang`);
 	}
 }
 
