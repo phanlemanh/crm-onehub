@@ -3,6 +3,7 @@ import {
 	type BanNhap,
 	banNhap,
 	docKetQuaNop,
+	LY_DO_TU_CHOI_NOP,
 } from "@crm/validation/okr-cuoc-soan";
 import type { EveMessage } from "eve/react";
 import { gioNopCuoi, luotNop } from "@/app/(app)/[slug]/okr/soan/moc-nop";
@@ -104,7 +105,7 @@ describe("k2b-moc-ba", () => {
 	test("ba lần nộp: lần bị từ chối không thành mốc và không làm gốc so sánh", () => {
 		const tin = [
 			daGhi("n1", LAN_1),
-			tuChoi("n2", LAN_2, "so moi: 2031"),
+			tuChoi("n2", LAN_2, LY_DO_TU_CHOI_NOP.chuKyKhongLapKeHoach),
 			daGhi("n3", LAN_3),
 		];
 		const { mocs, khongThanh } = luotTu(tin);
@@ -127,11 +128,11 @@ describe("k2b-moc-ba", () => {
 		expect(khongThanh.length).toBe(1);
 		expect(khongThanh[0]?.itemId.startsWith("n2")).toBe(true);
 		expect(khongThanh[0]?.loai).toBe("tu-choi");
-		expect(khongThanh[0]?.lyDo).toBe("so moi: 2031");
+		expect(khongThanh[0]?.lyDo).toBe("chuKyKhongLapKeHoach");
 	});
 
 	test("giờ «sửa lúc» theo lần đã ghi cuối, không theo lần bị từ chối", () => {
-		const tin = [daGhi("n1", LAN_1), tuChoi("n2", LAN_2, "x")];
+		const tin = [daGhi("n1", LAN_1), tuChoi("n2", LAN_2, LY_DO_TU_CHOI_NOP.cuocKhongDang)];
 		const transcript = toTranscript(tin);
 		const su = [
 			{ data: { turnId: "luot-n1" }, meta: { at: "2026-10-08T03:10:00.000Z" } },
@@ -142,9 +143,11 @@ describe("k2b-moc-ba", () => {
 	});
 
 	test("kết quả nộp đọc ở biên bằng docKetQuaNop của packages/validation", () => {
-		expect(docKetQuaNop(ketQua("tu-choi", "y"))).toEqual({
+		expect(
+			docKetQuaNop(ketQua("tu-choi", LY_DO_TU_CHOI_NOP.cuocKhongDang)),
+		).toEqual({
 			ketQua: "tu-choi",
-			lyDo: "y",
+			lyDo: "cuocKhongDang",
 		});
 		expect(docKetQuaNop({ ketQua: "la" })).toBe(null);
 	});
