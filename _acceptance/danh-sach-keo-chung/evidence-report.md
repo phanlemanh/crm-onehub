@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 8931c977fd7125f5d6dc676b16e127941f45b48f
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-08
 ---
 
 # Evidence Report: danh-sach-keo-chung

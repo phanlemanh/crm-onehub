@@ -5,7 +5,7 @@ slug: danh-sach-keo-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T05:06:29Z
 design_doc: docs/superpowers/specs/2026-10-08-danh-sach-keo-chung-design.md
@@ -78,3 +78,14 @@ Quét bằng `morphological-scan` preset test-matrix (S1, 08/10).
 - Không migration (cột `archivedAt` đã có). Thủ tục mới chỉ đọc / ghi, không trí khôn (AGENTS.md).
 - Tệp ngoài ranh giới đã được giám sát duyệt: P3-15 (`apps/api/src/giai-doan/*`, hai bài kiểm API, `cache.ts`, `to-chuc.ts`), P3-16 (`packages/ui/src/lib/messages.ts`, `docs/api.md`, tệp thiết kế).
 - Đường nền đo xanh trên onehub `4685fbe12` (2026-10-08T04:43:02Z).
+- Tệp ngoài ranh giới duyệt thêm: P3-17, P3-18 (`_acceptance/config.yaml` khoá `dsk_`, `apps/app/test/sap-luu-loi.dom.tsx`), P3-20 (xoá 10 khoá chữ chết ở `settings.ts`, `to-chuc.ts`).
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-08 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1–2:
+
+- Ngoài-1: Nếu bấm Hoàn tác sau khi lưu trữ một giai đoạn mà việc khôi phục bị lỗi (ví dụ mất mạng), thông báo biến mất ngay và người dùng chỉ thấy báo lỗi, không bấm Hoàn tác lại được. Giai đoạn vẫn nằm ở mục Đã lưu trữ và khôi phục được từ đó.
+- Ngoài-2: Nếu người dùng kéo hai lần liên tiếp rồi bấm Hoàn tác ở thông báo của lần kéo đầu, thứ tự cuối cùng trên máy chủ có thể không khớp với những gì màn hình hiện, hoặc lần kéo thứ hai bị lùi theo.
+- Ngoài-4: Nếu giữa lúc lưu trữ và lúc bấm Hoàn tác có người thêm giai đoạn mới cùng nhóm, giai đoạn vẫn được khôi phục nhưng màn hình báo lỗi; nếu người dùng đã tự sắp lại nhóm trước đó, Hoàn tác có thể ghi đè thứ tự mới bằng thứ tự cũ.
+
+Mở hợp đồng mới (Ngoài-3, Ngoài-5 — cùng một lỗi): danh sách «Đã lưu trữ» tải lỗi thì mục gập biến mất, không thông báo, không nút thử lại.
+
+Thước E15 của hồ sơ đã ký `giai-doan-thoa-thuan` còn bấm menu «Xoá» — vòng này cố ý đổi chữ đó (AC-7, AC-8); chưa sửa thước (Treo-2 phê ở Cổng Bằng chứng).
