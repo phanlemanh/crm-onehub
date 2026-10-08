@@ -1,0 +1,30 @@
+{
+  "feature_plain": "Khi Kara nộp bản nháp bị từ chối, người soạn OKR đọc được lý do bằng câu tiếng Việt có dấu hay câu tiếng Anh theo ngôn ngữ trang, thay cho mã máy không dấu như «chu ky khong o pha lap ke hoach».",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ hiện đúng câu tiếng Việt có dấu cho từng lý do trong bảy lý do từ chối, đúng bảng câu anh duyệt ở cổng này."},
+    {"id": "AC-2", "p": "Sẽ hiện đúng câu tiếng Anh cho từng lý do khi trang ở tiếng Anh, không còn câu tiếng Anh nối mã tiếng Việt."},
+    {"id": "AC-4", "p": "Sẽ giữ danh sách lý do ở đúng một chỗ dùng chung cho Kara và trang soạn, để hai bên không lệch nhau."},
+    {"id": "AC-5", "p": "Sẽ giữ nguyên giá trị của từng lý do như hôm nay, nên cuộc soạn cũ mở lại vẫn ra câu đúng."},
+    {"id": "AC-6", "p": "Sẽ có câu cho mọi lý do ở cả hai ngôn ngữ; thiếu một câu thì bản dựng báo lỗi ngay."},
+    {"id": "AC-7", "p": "Sẽ chứng minh các bài đo bắt được lỗi: năm bản sao cố ý làm hỏng đều phải bị bắt, và mã thật trả lại nguyên vẹn."},
+    {"id": "AC-8", "p": "Sẽ giữ vòng này trong ranh giới đã giao; thước ranh giới vẫn đúng cả sau khi vòng gộp vào nhánh chính."}
+  ],
+  "wont_do": [
+    {"id": "AC-3", "p": "Sẽ KHÔNG hiện chuỗi lạ khi lý do không nhận ra được (Kara bản mới hơn) hay để trống — chỉ hiện «Kara nộp bản nháp chưa được»."},
+    {"id": "AC-9", "p": "Chặn mã máy lọt ra màn thật: trên trang đang chạy, ở tiếng Việt (điện thoại và máy tính) và tiếng Anh, kể cả sau khi tải lại trang."},
+    {"id": "OOS-1", "p": "Không làm các mục ngoài hợp đồng khác của K2b — anh đã quyết riêng; thước «một chỗ khai» là hàng K2d."},
+    {"id": "OOS-2", "p": "Không đổi lời Kara nói hay cách Kara nộp lại sau khi bị từ chối."},
+    {"id": "OOS-3", "p": "Không đổi giá trị của các lý do — đổi thì cuộc soạn cũ mất lý do."},
+    {"id": "OOS-4", "p": "Không đụng trường hợp công cụ nộp bị lỗi (khác với bị từ chối) — dòng «chưa được» không lý do của K2b giữ nguyên."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Không chạy quét độ phủ vì không gian đã liệt kê đủ: bảy lý do × hai ngôn ngữ (AC-1, AC-2) cộng hai ca ngoài danh sách là lạ và rỗng (AC-3); một chỗ khai (AC-4), giá trị cũ và đường ghi → đọc thật (AC-5), bảng câu (AC-6); AC-7 chứng bài đo bắt được lỗi, AC-8 ranh giới, AC-9 màn thật."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Ranh giới chưa ghi rõ tệp nơi Kara ghi kết quả nộp được phép đổi (dòng lý do) — đã ghi rõ, kèm bài đo bắt đổi lan ra ngoài dòng đó."},
+    {"i": 1, "p": "Bài đo so câu trên màn với chính bảng câu trong mã, nên đổi chỗ hai câu hay viết câu không dấu vẫn qua — nay so với bảng câu anh duyệt (tệp riêng) và đòi câu tiếng Việt có dấu."},
+    {"i": 2, "p": "Tệp ghi giá trị cũ của lý do là bản chép tay, có thể chép sai mà không ai biết — nay bài đo tự đối chiếu với mã của commit 577f23b2b, và đổi một giá trị trong mã thật phải bị bắt."},
+    {"i": 3, "p": "Bài đo màn thật chưa mở lại trang, nên cuộc đã lưu mở lại mất lý do mà không ai thấy — nay mỗi lượt tải lại trang rồi đo lại, có ảnh trước và sau."},
+    {"i": 4, "p": "Hai lời hứa chưa có phép đo: lần bị từ chối không làm gốc so sánh, và thiếu một câu thì bản dựng báo lỗi — đã thêm cả hai."}
+  ]
+}
