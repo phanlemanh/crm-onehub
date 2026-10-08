@@ -36,6 +36,12 @@ type TraLoi =
 
 type CoHoi = { coHoi: boolean };
 
+type LyDoBoQua = (typeof ZALO.nhatKy.boQua)[keyof typeof ZALO.nhatKy.boQua];
+
+function ghiBoQua(messageId: string, lyDo: LyDoBoQua): void {
+	console.error(`[zalo] bo qua message_id=${messageId} ly_do=${lyDo}`);
+}
+
 async function khongMa(
 	tx: Prisma.TransactionClient,
 	tin: ZaloMessage,
@@ -49,7 +55,10 @@ async function khongMa(
 		where: { zaloUserId: tin.from.id },
 		include: { crmUser: { select: { name: true } } },
 	});
-	if (!lienKet) return gui(ZALO.loi.huongDan);
+	if (!lienKet) {
+		ghiBoQua(tin.message_id, ZALO.nhatKy.boQua.chuaNoi);
+		return gui(ZALO.loi.huongDan);
+	}
 	const lenh = docLenh(text);
 	if (lenh?.lenh === "xong-thieu-so") return gui(ZALO.loi.thieuSo);
 	if (lenh?.lenh === "xong") {
@@ -113,9 +122,15 @@ async function xuLyDb(
 		data: [{ messageId: tin.message_id, seenAt: now }],
 		skipDuplicates: true,
 	});
-	if (count === 0) return null;
+	if (count === 0) {
+		ghiBoQua(tin.message_id, ZALO.nhatKy.boQua.daGap);
+		return null;
+	}
 	const tu = tin.from.id;
-	if (await dangBiChan(tx, tu, now)) return null;
+	if (await dangBiChan(tx, tu, now)) {
+		ghiBoQua(tin.message_id, ZALO.nhatKy.boQua.biChan);
+		return null;
+	}
 	const ma = chuanHoaMa(tin.text ?? "");
 	if (!ma) return khongMa(tx, tin, now, chon);
 	const ket = await noiBangMa(tx, {
@@ -173,7 +188,10 @@ export async function xuLyTinDen(
 	tin: ZaloMessage,
 	deps: PhuThuocNhan,
 ): Promise<KetQuaTin> {
-	if (!laTinRieng(tin)) return "bo-qua";
+	if (!laTinRieng(tin)) {
+		ghiBoQua(tin.message_id, ZALO.nhatKy.boQua.khongRieng);
+		return "bo-qua";
+	}
 	let traLoi: TraLoi | null;
 	try {
 		traLoi = await ghiTin(tin, deps.now, { coHoi: deps.hoi !== undefined });
