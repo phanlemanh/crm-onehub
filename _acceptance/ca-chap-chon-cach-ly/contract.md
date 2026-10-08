@@ -5,7 +5,7 @@ slug: ca-chap-chon-cach-ly
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -68,3 +68,17 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 - Không migration. Không đổi mã sản phẩm.
 - Hạn chế đã biết khi giao: gốc của lỗi `Expected: 404 Received: 503` đêm 06/10 chưa tái hiện được. AC-3 chỉ đổi kết cục của nó: chờ qua được nếu nhất thời, đỏ có tên nếu không.
 - Tệp ngoài ranh giới hàng: `khoi-dong.ts`, `tai-lieu-san.ts`, `turbo.json`, `khoi-dong-don.spec.ts` (mới). Giám sát đã duyệt ở yêu cầu `P5-4` và `P5-6`.
+- Hạn chế đã biết, chủ kho chọn ở Cổng 2 (sổ quyết định, các dòng «Ngoài-<số>: ghi Known limits», 08/10):
+  - Ngoài-2: `SOKR_KHONG_CHAY_AGENT_CU` chưa có mục trong `.env.example`.
+  - Ngoài-3: `ban-sao.mjs` dựng bản sao ở `/private/tmp`, nên chỉ chạy được trên macOS; bị giết giữa chừng thì có thể để sót worktree tạm.
+  - Ngoài-4: các hàm kiểm tiến trình (`songCon`, `cayCon`, `ps`) còn chép ở `khoi-dong.ts`, `eve-gia.ts` và `mo-coi.mjs`.
+  - Ngoài-5: bước nhận eve trong khoá so dòng lệnh với `/node_modules/.bin/eve dev` chung, không kèm gốc. Mô tả của E2 nói có kèm gốc.
+  - Ngoài-8: `spawn` thất bại thì `pid ?? 0` trong bài kiểm có thể làm bước kiểm còn sống đúng oan.
+  - Ngoài-9: `mo-coi.mjs` chỉ theo dõi eve mồ côi của `apps/agent-okr`; eve mồ côi của `apps/agent` cùng lượt bị giết không được bàn đo dừng.
+  - Ngoài-10: E9 không có đối chứng dương cho việc danh sách diff thật có nội dung.
+  - Ngoài-11: AC-2 chỉ có một ca `sleep` cho «không phải eve dev của gốc đó».
+  - Ngoài-12: AC-1 hứa «dừng trước khi eve mới được gọi», nhưng bài chỉ đo «rồi cũng chết».
+  - Ngoài-13: vế «vẫn ném lỗi có tên» của AC-2 chỉ được đo bằng một cụm chữ, trên bản sao đã phá.
+  - Ngoài-14: «lỗi ra trước khi hook hết giờ» được đo bằng cách so hai hằng, không đo thời điểm thật.
+  - Ngoài-15: E3 ca (2) hứa «số lần hỏi > 3», bài chỉ đếm lần hỏi sau khi máy đã mở.
+- Ngoài-6 và Ngoài-7 (ghi `chu.json` không nguyên tử; khe tranh khoá do lượt chờ chèn giữa kiểm và gỡ): chủ kho chọn mở hợp đồng mới ở Cổng 2 (luật 26 của đợt `sau-14-10`).
