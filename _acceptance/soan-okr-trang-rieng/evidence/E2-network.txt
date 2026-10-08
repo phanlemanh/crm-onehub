@@ -1,3 +1,1 @@
-E2 network truth: driver = puppeteer scripts (man.mjs --phan khung + khung chup frame), khong co read_network_requests.
-Driver chi doc console error (bo tieng on dev) va pageerror: 0 loi o ca hai lan chay ("console khong loi (0)").
-networkObserved = n-a (driver)
+driver = puppeteer trong man.mjs (khong co duong doc network); console loi: 0 (assertion "console khong loi (0)" DUNG). networkObserved = n-a (driver)

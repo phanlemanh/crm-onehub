@@ -1,1 +1,4 @@
-Driver: puppeteer qua man.mjs va script doc lap (khong co read_network_requests). Console do trong harness (t.loi): 0 loi, khong co cau hydration, ca lan chay man.mjs --phan so lan lan chay doc lap (100,150,5,9). networkObserved = n-a (driver)
+Driver: puppeteer qua man.mjs (khong co read_network_requests). Console do trong harness (t.loi), lan chay 08/10 07:5x:
+- man.mjs --phan so: "DUNG console khong loi (0)", khong co cau hydration; bon o (100,150,5,9) sau nop lai, sau doi tab, sau tai lai; ma thoat 0.
+- --kiem-do-do khoa-theo-id: "mat so sau nop lai", ma 1. --kiem-do-do doc-luc-dung: "mat so sau tai lai", ma 1.
+networkObserved = n-a (driver)

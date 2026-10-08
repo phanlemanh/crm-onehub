@@ -1,7 +1,3 @@
-E14 network: driver = puppeteer script man.mjs (khong co read_network_requests); console gom boi script (pageerror + console.error), ket qua: 0 SAI ma thoat 0
-PHAN ma-tran
-DUNG keo bang chuot doi co o hoi thoai
-DUNG phim mui ten doi co o hoi thoai
-DUNG so anh dung 78
-DUNG anh dau vao cua E15 du va khac rong
-KET LUAN: 0 SAI — ma thoat 0
+E14 network/console truth: driver = puppeteer script (man.mjs --phan ma-tran), no browser-tool network reader.
+Console: script collects pageerror + console.error per page (t.loi); main run "KET LUAN: 0 SAI" => 0 console errors across 78 captures (expected 404 for ST-soan-khong-mo and 500 for ST-soan-loi are filtered by script by design).
+networkObserved: n-a (driver)
