@@ -1,0 +1,58 @@
+mot-luot: da cho 129s de toi luot
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_optimistic_kare_ec244b_do · app http://localhost:4503 · api http://localhost:4122
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+-- chua co cong agent-okr trong phien — mo phien do rieng
+-- phien do co agent-okr: cay optimistic-kare-ec244b-soan · agent-okr cong 52115
+phien-do: kho crm_optimistic_kare_ec244b_soan_do · app http://localhost:4620 · api http://localhost:4763
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+AGENT-OKR GIA http://127.0.0.1:52115 · okr.soan
+PHAN khung
+   o 1024x768: than 920.0 · mac dinh 380.0 · nho nhat 300.0 · lon nhat 459.5 · thanh separator «Đổi cỡ hội thoại và bản nháp»
+DUNG 1024 mac dinh trong [372, 388]
+DUNG 1024 khong nho hon 300 px va khong lon hon nua than + 2
+DUNG 1024 thanh role=separator, aria-label «Đổi cỡ hội thoại và bản nháp»
+   o 1280x900: than 1176.0 · mac dinh 380.0 · nho nhat 300.0 · lon nhat 587.5 · thanh separator «Đổi cỡ hội thoại và bản nháp»
+DUNG 1280 mac dinh trong [372, 388]
+DUNG 1280 khong nho hon 300 px va khong lon hon nua than + 2
+DUNG 1280 thanh role=separator, aria-label «Đổi cỡ hội thoại và bản nháp»
+   o 1440x1000: than 1280.0 · mac dinh 380.0 · nho nhat 300.0 · lon nhat 639.5 · thanh separator «Đổi cỡ hội thoại và bản nháp»
+DUNG 1440 mac dinh trong [372, 388]
+DUNG 1440 khong nho hon 300 px va khong lon hon nua than + 2
+DUNG 1440 thanh role=separator, aria-label «Đổi cỡ hội thoại và bản nháp»
+   so o kho rong: 3
+DUNG so o kho rong 3 == 3
+   1440 keo +300: 380.0 → 639.5 px
+DUNG 1440 keo rong them > 200 px
+   ANH _acceptance/soan-okr-trang-rieng/evidence/E2-focus-thanh.png
+   Tab toi thanh true · ArrowRight x2: 380.0 → 507.9 px · vong focus rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(0, 107, 79) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px
+DUNG Tab dat focus len thanh
+DUNG ArrowRight hai lan lam o hoi thoai rong ra
+DUNG vong focus thay duoc
+   lan ban nhap: 0 → 400 · lan hoi thoai: 0 → 276 · window.scrollY 0 · trang 600/600
+DUNG lan chuot cuon ban nhap va hoi thoai, trang khong cuon
+DUNG 375x812: khong thanh keo (0), hai tab ["Trò chuyện","Bản nháp (7)"]
+DUNG 375 tab tren url va giu sau tai lai
+DUNG 768x1024: khong thanh keo (0), hai tab ["Trò chuyện","Bản nháp (7)"]
+DUNG 768 tab tren url va giu sau tai lai
+DUNG 1023x768: khong thanh keo (0), hai tab ["Trò chuyện","Bản nháp (7)"]
+DUNG 1023 tab tren url va giu sau tai lai
+   so o kho hep: 3
+DUNG so o kho hep 3 == 3
+DUNG 375 px scrollWidth 375 == innerWidth 375
+DUNG 768 px scrollWidth 768 == innerWidth 768
+DUNG 1024 px scrollWidth 1024 == innerWidth 1024
+DUNG 1440 px scrollWidth 1440 == innerWidth 1440
+DUNG console khong loi (0)
+KET LUAN: 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0

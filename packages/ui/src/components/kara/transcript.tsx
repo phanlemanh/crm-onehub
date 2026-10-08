@@ -109,16 +109,21 @@ export function KaraSystemLine({ children }: { children: ReactNode }) {
 
 export type KaraCheckpointProps = {
 	summary: string;
+	label?: string;
 	onSelect: () => void;
 };
 
-export function KaraCheckpoint({ summary, onSelect }: KaraCheckpointProps) {
+export function KaraCheckpoint({
+	summary,
+	label,
+	onSelect,
+}: KaraCheckpointProps) {
 	const msg = useMessages();
 	return (
 		<Marker variant="separator" data-kara-turn="checkpoint">
 			<MarkerContent>
 				<Button variant="ghost" size="xs" type="button" onClick={onSelect}>
-					{msg.karaKhung.moc(summary)}
+					{label ?? msg.karaKhung.moc(summary)}
 				</Button>
 			</MarkerContent>
 		</Marker>

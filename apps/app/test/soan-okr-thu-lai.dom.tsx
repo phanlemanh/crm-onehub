@@ -89,8 +89,9 @@ const SAN =
 	1;
 
 const moTa = () =>
-	q('[data-luot="loi"] [data-slot="alert-description"]')?.textContent ?? "";
-const nutThu = () => q('[data-nut="thu-lai"]') as HTMLButtonElement | null;
+	q('[data-luot="loi"] [data-slot="empty-description"]')?.textContent ?? "";
+const nutThu = () =>
+	q('[data-luot="loi"] [data-slot="kara-retry"]') as HTMLButtonElement | null;
 
 async function moManLoi(coTiepNoi: boolean): Promise<void> {
 	datDanhSach({ cuoc: { ...CUOC, soLuot: 0 } });

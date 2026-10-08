@@ -1,0 +1,300 @@
+slug: soan-okr-trang-rieng
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.k2_duong
+    expected: "exit 0; bài DOM apps/app/test/soan-okr-trang.dom.tsx -t k2-duong, ma trận viết trước 5 ô: (a) NutSoan với soanMo trả cuộc mới → router.push gọi đúng 1 lần với '/<slug>/okr/soan/<id>' và không có [data-slot=sheet-content] nào trong cây; (b) NutSoan có cuocDang → bấm «Tiếp tục» → push '/<slug>/okr/soan/<idDang>'; (c) Theo đơn vị dựng với searchParams cuocSoan=<id> → router.replace gọi 1 lần với '/<slug>/okr/soan/<id>', router.push 0 lần; (d) DauTrangOkr dựng với usePathname '/<slug>/okr/soan/<id>' → không có tablist nào và không có ô chọn chu kỳ; với '/<slug>/okr/theo-don-vi' → có tablist (đối chứng dương); (e) TrangSoan với soanDanhSach trả cuộc → đầu trang có liên kết chữ messages(vi).okrSoan.trang.veTheoDonVi trỏ duongTheoDonVi(slug, donViCua(cuoc)), chữ tên đơn vị có translate=no, tên chu kỳ, và chữ lượt messages(vi).man.luot(n, 12); soanDanhSach lỗi NOT_FOUND → KaraState error chứa chữ khongMo và liên kết về Theo đơn vị. Bài in số ô và đòi bằng 5. Chiều đỏ ghim: bản sao nut-soan.tsx còn mở ManSoan dạng sheet phải đỏ 'con sheet'; bản sao thanh-tab.tsx bỏ nhánh trang soạn phải đỏ 'dau trang okr tren trang soan'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/test/soan-okr-trang.dom.tsx", "apps/app/test/khung-soan-okr.tsx"]
+
+  - id: E1b
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.k2_man_duong
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs); agent-okr chạy bằng mô hình giả; đăng nhập dev:session trưởng phòng kd-bac của bộ mẫu, chu kỳ ở pha lap-ke-hoach"
+      - "Bước 1 (1440): mở Theo đơn vị của phòng, bấm «Soạn» → page.url() khớp /okr/soan/<id>; không có [data-slot=sheet-content]; không có role=tablist; ảnh E1b-soan-moi.png"
+      - "Bước 2: mở /<slug>/okr/theo-don-vi?ky=<ky>&don=pb:<id>&cuocSoan=<id> → URL thành /okr/soan/<id>; history.length không tăng so với trước khi mở"
+      - "Bước 3: bấm «← Theo đơn vị» → URL là theo-don-vi với ky và don của cuộc"
+      - "Bước 4: mở /<slug>/okr/soan/khong-co → KaraState error với tiêu đề messages(vi).karaKhung.chuaDuoc(trang.khongMo) («Kara chưa mở cuộc soạn được» — ý «Không mở được cuộc soạn» của AC-1 viết theo khuôn lỗi §7 docs/ai-ux.md mà AC-3 bắt) và liên kết về Theo đơn vị; ảnh E1b-khong-mo.png"
+    expected: "exit 0; man.mjs --phan duong in 'buoc N: dat' cho 4 bước, không lỗi console. Chiều đỏ: --kiem-do-do push-link-cu (bản sao đổi replace thành push) phải in 'buoc 2: link cu them lich su' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.k2_man_khung
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả nộp bản nháp 2 Mục tiêu × 5 KR; đăng nhập trưởng phòng; mở trang soạn"
+      - "Ma trận khổ rộng viết trước {1024×768, 1280×900, 1440×1000} = 3 ô: mỗi ô in bề rộng thân, bề rộng [data-o=hoi-thoai] mặc định (đòi trong [372, 388] px), rồi sau kéo hết cỡ trái và phải (đòi ≥ 300 px và ≤ nửa thân + 2 px); thanh [data-slot=resizable-handle] có aria-label bằng messages(vi).trang.thanhKeo và role=separator; số dòng in phải bằng 3"
+      - "Ở 1440: kéo thanh bằng page.mouse (down, move +300 px, up): ô hội thoại rộng thêm > 200 px"
+      - "Focus thanh bằng Tab, bấm ArrowRight hai lần: bề rộng ô hội thoại tăng; ảnh vòng focus E2-focus-thanh.png"
+      - "Lăn chuột (page.mouse.wheel, không gán scrollTop) trên thân bản nháp: scrollTop của thân bản nháp tăng, window.scrollY = 0; tương tự ô hội thoại"
+      - "Ma trận khổ hẹp viết trước {375×812, 768×1024, 1023×768} = 3 ô: không có [data-slot=resizable-handle]; có tablist hai tab; bấm tab «Bản nháp» → URL có tab=ban-nhap; reload → tab Bản nháp đang chọn"
+      - "Với 375, 768, 1024, 1440: documentElement.scrollWidth == innerWidth"
+    expected: "exit 0; man.mjs --phan khung in từng số đo. Chiều đỏ ghim: --kiem-do-do khoa-thanh (bản sao bỏ ResizableHandle, chia cố định) phải in 'thanh khong doi co' và mã 1; --kiem-do-do cuon-trang (thân overflow visible) phải in 'trang cuon thay o' và mã 1; --kiem-do-do tab-khong-url phải in 'tab khong tren url' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/resizable.tsx", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.k2_khung
+    expected: "exit 0; bài DOM -t k2-khung, ma trận viết trước 4 ô theo kết quả matchMedia giả của SOAN_UI.khoHep {rộng 1440, rộng 1024, hẹp 1023, hẹp 375}: ô rộng: có đúng một [data-slot=resizable-panel-group] với hai [data-slot=resizable-panel] (ô hội thoại trước, bản nháp sau) và một [data-slot=resizable-handle] role=separator mang aria-label messages(vi).trang.thanhKeo; ô hội thoại mang defaultSize = SOAN_UI.ocHoiThoai.macDinhPx (380, số nguyên = pixel theo react-resizable-panels v4), minSize = 300 (pixel), maxSize = '50' (chuỗi = phần trăm) — đọc từ prop của ResizablePanel giả lập ghi lại props; không có tablist; ô hẹp: không có resizable-handle, có tablist hai tab với chữ tabTroChuyen và tabBanNhap(n); bấm tab Bản nháp → nuqs ghi tab=ban-nhap (adapter thử nghiệm ghi lại URL); dựng lại với tab=ban-nhap sẵn trên URL → tab Bản nháp đang chọn. Bài in số ô và đòi bằng 4. Chiều đỏ ghim: bản sao để SOAN_UI.khoHep ở 640 phải đỏ 'o 1023 khong phai hai tab'; bản sao giữ tab trong useState phải đỏ 'tab khong tren url'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/resizable.tsx", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.k2_trang_thai
+    expected: "exit 0; bài DOM -t k2-trang-thai, ma trận viết trước 6 ô {đang mở, Kara đang soạn bản nháp rỗng, có bản nháp, không mở được, chưa cấu hình, cuộc đóng}: mỗi ô có đúng một [data-slot=kara-artifact]; ô có bản nháp: tiêu đề chứa messages(vi).banNhap.tieuDe và dòng phụ chứa messages(vi).banNhap.meta(9, '10:42') với giờ lần nộp cuối 10:42 (TZ Asia/Ho_Chi_Minh); ô đang mở và ô đang soạn rỗng: [data-kara-state=working] trong thân, ô đang soạn rỗng chứa chữ messages(vi).banNhap.dangSoanDau và KHÔNG chứa chữ messages(vi).banNhap.rong; ô không mở được: [data-kara-state=error]; ô chưa cấu hình: [data-kara-state=unconfigured]; ô cuộc đóng: chữ cuocDong; cả 6 ô: không có [data-slot=spinner], không có [data-slot=alert] nào chứa chữ 'Kara đang'. Bài in số ô và đòi bằng 6. Chiều đỏ ghim: bản sao trả Empty «Chưa có dòng nào» khi đang soạn phải đỏ 'rong khi dang soan'; bản sao dùng Spinner cho đang mở phải đỏ 'spinner tran'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/lib/messages/okr-soan.ts", "packages/ui/src/components/kara/artifact.tsx", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.k2_dong
+    expected: "exit 0; bài DOM -t k2-dong, bản nháp viết trước 2 Mục tiêu, mỗi cái {KR có số, KR mốc, căn chỉnh}, Mục tiêu 2 có thêm một biến thể đã bỏ qua: số [data-slot=kara-proposal-group] = 2; mỗi nhóm đúng một [data-slot=kara-label], các dòng con 0 kara-label; không có [data-slot=confirmation] hay [data-density=card] nào trong [data-slot=kara-artifact]; mỗi dòng chờ: đúng một button[data-variant=default] với chữ theo loại {Mục tiêu: themMucTieu, KR: themKr, căn chỉnh: themCanChinh} (bảng ba dòng viết trước), một button[data-variant=outline] chữ «Sửa» (căn chỉnh: 0), một button[data-variant=ghost] chữ «Bỏ qua»; KR có số: hai input nhãn «Khởi điểm», «Đích» bên trong chính [data-dong=<id>] ở cả trạng thái chờ và đã nhận; KR mốc: 0 input; Mục tiêu đã bỏ qua: 0 dòng KR con hiển thị. Bài in số khẳng định và đòi bằng số viết trước. Chiều đỏ ghim: bản sao dùng density=card phải đỏ 'the card trong ban nhap'; bản sao để nút «Nhận» trần phải đỏ 'nut khong theo hau qua: Nhận'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/lib/messages/okr-soan.ts", "packages/ui/src/components/kara/proposal.tsx", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.k2_quyet
+    expected: "exit 0; bài DOM -t k2-quyet với tRPC giả ghi lại lời gọi, ma trận viết trước {Mục tiêu, KR, căn chỉnh} × {nhận, sửa rồi nhận, bỏ qua} (căn chỉnh không có sửa) = 8 ô: sau quyết, dòng thành role=status chứa nút «Hoàn tác»; bấm «Hoàn tác» → đúng 1 lời gọi soanQuyet {deXuatId: <id dòng>, quyet: 'hoan'}; sau khi danh sách trả dòng về cho → dòng lại có đủ nút như lúc đầu (so tập chữ nút); thêm 4 ô: Mục tiêu đã nhận có 3 KR đã quyết → nút hoàn tác/biên nhận chứa messages(vi).banNhap.hoanKem(3); API trả {ok:false, lyDo:'chua-quyet'} → chữ lyDoQuyet['chua-quyet'] trong [data-dong=<id>] (đối chứng dương); tRPC giả ném TRPCClientError CONFLICT với câu dòng cũ → chữ lyDoQuyet.dongCu trong [data-dong=<id>], dòng vẫn ở biên nhận đã quyết; ném CONFLICT với câu cuộc không còn đang soạn → chữ lyDoQuyet.cuocKhongDang trong [data-dong=<id>], không có [data-slot=alert] ngoài dòng. Bài in số ô và đòi bằng 12. Chiều đỏ ghim: bản sao the-nhap không truyền onUndo cho dòng bỏ qua phải đỏ 'bo qua khong hoan tac'; bản sao đẩy lỗi CONFLICT ra toast thay vì dòng phải đỏ 'loi conflict ngoai dong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/lib/messages/okr-soan.ts", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.k2_api_hoan
+    expected: "exit 0; bài API apps/api/test/soan-okr-hoan-tac.spec.ts -t k2-api-hoan trên kho _test, cuộc gieo qua đường thật (soanMo + nộp bản nháp qua nopBanNhap của agent-okr hay hàm ghi dùng chung), ma trận viết trước: {Mục tiêu, KR, căn chỉnh} × {nhan, sua, bac} → hoan: đọc lại hàng okrDeXuat: trangThai='cho', giaTriCuoi, nguoiQuyet, quyetLuc đều null (8 ô); Mục tiêu nhan + 2 KR nhan + 1 KR bac → hoan Mục tiêu → cả 4 hàng cho; Mục tiêu bac (kéo 3 KR bac) → hoan → 4 hàng cho; từ chối (đọc lại mọi hàng của cuộc trước/sau, so bằng nhau): hoan dòng đang cho → {ok:false, lyDo:'chua-quyet'}; hoan dòng của lần nộp cũ không còn trong tập hiện → ConflictException với câu T.dongCu; cuộc da-dua-vao → ConflictException câu T.soan.cuocKhongDang. Gọi qua tRPC và REST (POST /okr/soan/lines/{id}/decision). Đối chứng dương: quyet 'nhan' trước đó ghi đúng trangThai nhan. Chiều đỏ ghim: bản sao ghiHoan không xoá quyetLuc phải đỏ 'quyetLuc con sau hoan'; bản sao hoan Mục tiêu không kéo KR phải đỏ 'kr con quyet sau hoan muc tieu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/okr/soan-ban-nhap.ts", "apps/api/src/okr/soan.service.ts", "apps/api/src/okr/okr.contracts.ts", "apps/api/test/soan-okr-hoan-tac.spec.ts"]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.k2_nhom
+    expected: "exit 0; bài DOM -t k2-nhom: Mục tiêu chờ với KR a (đủ hai số), b (một số), c (mốc): nút [data-slot=kara-batch] có chữ messages(vi).banNhap.themNhom(2); bấm → đúng 1 lời gọi soanQuyet {deXuatId: <id Mục tiêu>, quyet:'nhan', kem:[a,c]} (thứ tự theo bản nháp); sau khi danh sách trả ba dòng nhan → một role=status chứa messages(vi).banNhap.daThemNhom(1, 2) và nút «Hoàn tác»; bấm → 1 lời gọi {deXuatId:<Mục tiêu>, quyet:'hoan'}; xoá số của a → nút nhóm chữ themNhom(1); Mục tiêu không còn KR batchable → nút disabled. Chiều đỏ ghim: bản sao tính batchable cả KR thiếu số phải đỏ 'gui kr thieu so: b'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/lib/messages/okr-soan.ts", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E6b
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.k2_api_nhom
+    expected: "exit 0; bài API -t k2-api-nhom: soanQuyet {quyet:'nhan', kem:[a,c]} trên Mục tiêu chờ → ba hàng nhan với quyetLuc bằng nhau (so giá trị), b vẫn cho; hoan Mục tiêu → ba hàng cho; từ chối không ghi gì (so ảnh mọi hàng trước/sau): kem chứa KR của Mục tiêu khác → {ok:false, lyDo:'kem-sai'}; kem chứa KR đã quyết → {ok:false, lyDo:'kem-sai'}; kem với quyet khác 'nhan' hay trên dòng KR → lỗi parse của soanQuyetInput. Chiều đỏ ghim: bản sao ghiNhom ngoài giao dịch (KR thứ hai ném sau khi Mục tiêu đã ghi) phải đỏ 'ghi nua chung: muc tieu nhan, kr cho'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/api/src/okr/soan-ban-nhap.ts", "apps/api/src/okr/soan.service.ts", "apps/api/src/okr/okr.contracts.ts", "apps/api/test/soan-okr-hoan-tac.spec.ts"]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.k2_khoa
+    expected: "exit 0; bài DOM -t k2-khoa: trang với agent giả status 'streaming', bản nháp có dòng chờ, dòng đã quyết, nhóm có KR batchable và đủ số để đưa vào: đầu [data-slot=kara-artifact] có role=status chứa messages(vi) karaKhung.dangSoan (sau trễ); mọi button và input trong [data-the-cho] có disabled thật; mọi nút «Hoàn tác», [data-slot=kara-batch], [data-nut=dua-vao] disabled; mỗi nút chính chờ có aria-describedby trỏ phần tử chứa karaKhung.dangSoanKhoa; ô soạn có nút aria-label messages(vi).promptInput.stop, bấm → agent.stop gọi 1 lần; rerender status 'ready' → không nút nào ở trên còn disabled (đối chứng dương). Chiều đỏ ghim: bản sao không truyền busy cho KaraArtifact phải đỏ 'dong cho mo khi kara soan'; bản sao để Đưa vào ngoài khoá phải đỏ 'dua vao mo khi kara soan'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/kara/**", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.k2_luat
+    expected: "exit 0; bài đơn vị apps/app/test/soan-okr-moc.spec.ts -t tom-tat-moc, ma trận viết trước 7 ô cho tomTatMoc(truoc, sau) với hai bản nháp hợp lệ theo banNhap: {lần đầu (truoc null) → {mucTieu:2, kr:5}; thêm 1 KR; sửa chữ 1 Mục tiêu; chuyển 1 KR (cùng khoa KR, khác khoa Mục tiêu); bỏ 1 KR; cả bốn cùng lúc → {them:1, sua:1, chuyen:1, bo:1}; không đổi gì → rỗng}; dongDoiDau trả khoaDong của dòng đổi đầu tiên theo thứ tự bản nháp sau; đầu vào không qua parseBanNhap → tomTatMoc trả {docDuoc:false}, không ném. Fixture bản nháp sinh bằng chính banNhap.parse của @crm/validation/okr-cuoc-soan (round-trip qua bên viết), không chép tay hình dạng. Chiều đỏ ghim: bản sao so KR theo khoa KR một mình (bỏ khoa Mục tiêu) phải đỏ 'chuyen khong dem: 0 != 1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts", "packages/validation/src/okr-cuoc-soan.ts", "apps/app/test/soan-okr-moc.spec.ts"]
+
+  - id: E8b
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.k2_moc_dom
+    expected: "exit 0; bài DOM -t k2-moc: transcript giả có hai did nop_ban_nhap (input là hai bản nháp của E8) và một did có input hỏng: ba [data-kara-turn=checkpoint] với chữ lần lượt messages(vi).moc.dau(2,5), moc.doi({them:1,sua:1,chuyen:1,bo:1}), moc.khongDoc; bấm mốc hai → Element.scrollIntoView được gọi trên [data-khoa-dong=<dòng đổi đầu>] và dòng đó mang data-noi trong lúc nổi; nhãn «vừa sửa» là button, bấm → scrollIntoView gọi trên mốc mới nhất; dòng vừa sửa có del chứa chữ cũ và chữ mới ngoài del; mốc trỏ dòng đã không còn → scrollIntoView trên đầu bản nháp, không ném. Chiều đỏ ghim: bản sao mốc không có onSelect phải đỏ 'moc khong noi ban nhap'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/kara/proposal.tsx", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E8c
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.k2_man_moc
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả nộp hai lần theo kịch bản viết trước (lần hai: +1 KR, sửa 1 Mục tiêu, chuyển 1 KR, bỏ 1 KR); đăng nhập trưởng phòng"
+      - "Bước 1 (1440): hai mốc có đúng chữ của AC-8; ảnh E8c-moc-1440.png"
+      - "Bước 2: bấm mốc hai → dòng đổi đầu tiên nằm trong khung nhìn của ô bản nháp (getBoundingClientRect so với ô) và mang data-noi; ảnh E8c-noi-dong.png"
+      - "Bước 3: bấm nhãn «vừa sửa» → mốc hai nằm trong khung nhìn của ô hội thoại"
+      - "Bước 4: reload → hai mốc giữ đúng chữ"
+    expected: "exit 0; man.mjs --phan moc in 'buoc N: dat' cho 4 bước. Chiều đỏ: --kiem-do-do moc-tu-bo-nho (bản sao tính mốc từ trạng thái trong bộ nhớ thay vì transcript) phải in 'buoc 4: moc mat sau tai lai' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.k2_hoi_dong
+    expected: "exit 0; bài DOM -t k2-hoi-dong: bấm nút «Hỏi Kara về dòng này» của KR 'Tăng số đại lý gắn bó' → [data-slot=kara-context] chứa 'KR · Tăng số đại lý gắn bó', document.activeElement là textarea ô soạn; gõ 'ngắn hơn', gửi → agent.send nhận đúng một message m với docKhoi(m) = {dong: {loai:'kr', chu:'Tăng số đại lý gắn bó'}, quyet: []} và phần người = 'ngắn hơn'; transcript có tin người m → bong bóng chứa chip chữ dòng và 'ngắn hơn', không chứa dấu mở/đóng khối (hằng của khoi-ngu-canh.ts); gỡ chip rồi gửi 'x' → message = 'x' đúng nguyên văn; khổ hẹp: bấm nút trên dòng → tab Trò chuyện được chọn. Chiều đỏ ghim: bản sao bong bóng không tách khối phải đỏ 'lo dau khoi trong bong bong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E9b
+    criterion: AC-9
+    executor: ui-check
+    layer: backend-effect
+    cmd: config:executors.script.k2_man_hoi_dong
+    steps:
+      - "Cảnh cây; phiên đo riêng; agent-okr với mô hình giả ghi đầu vào mỗi lời gọi ra tệp ndjson (dau-loi-goi.ndjson); đăng nhập trưởng phòng; có bản nháp"
+      - "Bấm «Hỏi Kara về dòng này» trên KR thứ nhất, gõ 'ngắn hơn', gửi; chờ lượt xong"
+      - "Đọc dòng cuối dau-loi-goi.ndjson: tin người cuối chứa chữ KR thứ nhất và 'ngắn hơn'; ảnh E9b-chip.png của bong bóng"
+    expected: "exit 0; man.mjs --phan hoi-dong in tin mô hình nhận và 'dat'. Chiều đỏ: --kiem-do-do bo-khoi (bản sao gửi chỉ chữ người) phải in 'mo hinh khong thay dong' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.k2_khoi
+    expected: "exit 0; bài đơn vị soan-okr-moc.spec.ts -t khoi-ngu-canh: ma trận viết trước 6 ô khứ hồi docKhoi(vietKhoi(x)) == x với x ∈ {chỉ dòng, chỉ quyết (2 mục), cả hai, không có gì (vietKhoi trả chữ người nguyên văn), chữ người chứa đúng dấu mở khối, tên dòng có xuống dòng}; hàng quyết: [nhan KR 1.2, bac MT 2, nhan KR 1.3, hoan KR 1.3] → rút gọn còn đúng hai mục đầu; tin không có khối → docKhoi trả {khoi:null, nguoi:<nguyên văn>}. Chiều đỏ ghim: bản sao docKhoi tách theo xuống dòng đầu tiên phải đỏ 'khu hoi lech: ten dong co xuong dong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/khoi-ngu-canh.ts", "apps/app/test/soan-okr-moc.spec.ts"]
+
+  - id: E10b
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.k2_he_thong
+    expected: "exit 0; bài DOM -t k2-he-thong: nhận KR 1.2, bỏ qua Mục tiêu 2 trên bảng → [data-kara-turn=system] cuối hội thoại chứa messages(vi).heThong.seGui và tên hai dòng; nhận rồi hoàn tác KR 1.3 → dòng hệ thống không chứa tên KR 1.3; gửi 'tiếp' → agent.send nhận message có docKhoi(...).quyet dài 2; transcript có tin người đó → một [data-kara-turn=system] đứng liền trước [data-kara-turn=user] của tin ấy, bong bóng chỉ chứa 'tiếp'. Chiều đỏ ghim: bản sao không xoá hàng sau khi gửi phải đỏ 'hang quyet gui hai lan'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E10c
+    criterion: AC-10
+    executor: ui-check
+    layer: backend-effect
+    cmd: config:executors.script.k2_man_he_thong
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả ghi đầu vào; đăng nhập trưởng phòng; có bản nháp"
+      - "Nhận KR 1.2, bỏ qua Mục tiêu 2 trên bảng; ảnh E10c-se-gui.png"
+      - "Gửi 'tiếp'; chờ lượt xong; dòng cuối dau-loi-goi.ndjson chứa tên KR 1.2 và Mục tiêu 2"
+      - "Reload: dòng hệ thống đứng liền trước bong bóng 'tiếp'"
+    expected: "exit 0; man.mjs --phan he-thong in 'dat' từng bước. Chiều đỏ: --kiem-do-do bo-quyet (bản sao không gửi hàng quyết) phải in 'mo hinh khong thay quyet' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.k2_so
+    expected: "exit 0; bài DOM -t k2-so: gõ (100, 150) cho KR chờ khoaDong A và (5, 9) cho KR đã nhận B; danh sách trả lần nộp mới (id dòng mới, khoaDong giữ) → hai ô của A và B vẫn mang 100/150 và 5/9; đổi tab hẹp sang Trò chuyện rồi về → còn; unmount rồi mount lại cùng cuocSoanId (sessionStorage giả) → còn; sessionStorage ném khi ghi → vẫn giữ trong bộ nhớ, không lỗi; lần nộp bỏ B → B không có trong đối số soanDuaVao; guiDuaVao gửi kr[].deXuatId = id dòng của lần nộp hiện tại. Chiều đỏ ghim: bản sao khoá số theo kr.id phải đỏ 'mat so sau nop lai: A'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E11b
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.k2_man_so
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả nộp 2 Mục tiêu × 5 KR; đăng nhập trưởng phòng; mở trang soạn ở 1440"
+      - "Gõ (100, 150) cho KR chờ thứ nhất; nhận KR thứ hai rồi gõ (5, 9) cho nó"
+      - "Gửi một câu để mô hình giả nộp lại bản nháp giữ nguyên khoá hai KR ấy (kịch bản viết trước); chờ lượt xong; đọc inputValue bốn ô → đúng (100, 150, 5, 9)"
+      - "page.reload(); chờ bản nháp hiện; đọc inputValue bốn ô → đúng (100, 150, 5, 9); ảnh E11b-sau-tai-lai.png"
+      - "Gom console từ lúc mở trang: 0 lỗi, không có câu hydration nào"
+    expected: "exit 0; man.mjs --phan so in giá trị bốn ô sau nộp lại và sau tải lại. Chiều đỏ ghim: --kiem-do-do khoa-theo-id (bản sao khoá số theo kr.id) phải in 'mat so sau nop lai' và mã 1; --kiem-do-do doc-luc-dung (bản sao đọc sessionStorage trong lúc dựng) phải in 'loi hydration' hoặc 'mat so sau tai lai' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.k2_dua_vao
+    expected: "exit 0; bài DOM -t k2-dua-vao: một KR đã nhận thiếu Đích → [data-nut=dua-vao] disabled, [data-slot=kara-artifact-footer] có danh sách còn thiếu với một button chữ tên KR; bấm → document.activeElement là input Đích của KR đó; gõ số → nút bật, chữ messages(vi).banNhap.duaVao(2,5); bấm → hộp xác nhận chứa tên đơn vị và chu kỳ; xác nhận → soanDuaVao gọi 1 lần; sau ok → role=status chứa daTao(2) và liên kết theo-don-vi; 0 nút «Hoàn tác» và 0 button[data-variant=default] trong các dòng. Chiều đỏ ghim: bản sao để Hoàn tác sau đưa vào phải đỏ 'hoan tac sau dua vao'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/test/soan-okr-trang.dom.tsx"]
+
+  - id: E12b
+    criterion: AC-12
+    executor: ui-check
+    layer: backend-effect
+    cmd: config:executors.script.k2_man_dua_vao
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả nộp 2 Mục tiêu × 5 KR; đăng nhập trưởng phòng"
+      - "Kịch bản viết trước, số mong đợi suy từ chính kịch bản (không viết tay): gõ đủ hai số cho bốn KR có số; nhận cả nhóm ở cả hai Mục tiêu; với KR thứ năm chỉ gõ Khởi điểm rồi nhận lẻ; trước mỗi bước script in số dòng nhận, số dòng chờ, số mục còn thiếu"
+      - "Ảnh E12b-con-thieu.png: chân bản nháp liệt đúng một mục còn thiếu (KR thứ năm); bấm mục → focus vào ô Đích của KR đó; gõ Đích"
+      - "Đưa vào, xác nhận; ảnh E12b-da-dua-vao.png"
+      - "Đọc CSDL kho đo: okrCuocSoan.trangThai='da-dua-vao' và duaVaoLuc khác null; số OkrObjective và OkrKeyResult tạo từ cuộc bằng số Mục tiêu và KR đã nhận theo kịch bản; khoiDiem/dich của mỗi KR bằng số đã gõ"
+    expected: "exit 0; man.mjs --phan dua-vao in từng số đếm. Chiều đỏ: --kiem-do-do dem-sai (đòi thêm một Mục tiêu so với kịch bản) phải in 'so muc tieu: <thật> != <đòi>' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/api/src/okr/soan-dua-vao.ts", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
+
+  - id: E13
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.k2_mo_coi
+    expected: "exit 0; rang/mo-coi-hai-chieu.mjs (đường suy từ vị trí script): (a) đọc mo-coi.mjs, MIEN_TRU là mảng rỗng; (b) chạy node _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs → mã 0, dòng MO COI (0), không dòng MIEN TRU THUA; (c) chiều đỏ trên bản sao cây ở thư mục tạm ngoài gói: bỏ import KaraArtifact khỏi trang soạn → mo-coi.mjs mã 1 và in 'MO COI: artifact.tsx'; bản sao mo-coi.mjs không đi qua kara/ (giữ cách tìm cũ) trên cây thật → in 'MO COI: artifact.tsx' (chứng rằng phép dạy cổng là cần). In từng mục."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/nen-chat-ai-elements/rang/mo-coi.mjs", "packages/ui/src/components/kara/**", "packages/ui/src/components/ai-elements/**", "apps/app/app/(app)/[slug]/okr/soan/**", "_acceptance/soan-okr-trang-rieng/rang/mo-coi-hai-chieu.mjs"]
+
+  - id: E13b
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.k2_ranh_gioi
+    expected: "exit 0; rang/ranh-gioi.mjs: merge-base HEAD với origin/onehub (không có ref → mã 2 có tên); git diff --name-only: mọi tệp khớp ranh giới K2 (đọc từ hang-viec.json của đợt nếu có, không thì danh sách hằng ở đầu script chép từ đó) hoặc danh sách đã duyệt {okr.contracts.ts, packages/ui/package.json, bun.lock, packages/ui/src/components/resizable.tsx, các tệp duyệt ở P1-4} — tệp lạ in 'ngoai ranh gioi: <tệp>'; numstat bốn tệp chung: cột xoá = 0; okr.contracts.ts: mọi hunk nằm trong khối soanQuyetInput/soanQuyetOutput; resizable.tsx có mặt và được import từ một tệp dưới okr/soan/. Diff rỗng (đã gộp) → 'RONG' mã 0. Chiều đỏ ghim: --kiem-do-do (danh sách giả có apps/app/x.tsx và 1 dòng xoá ở thanh-tab.tsx) phải in 'ngoai ranh gioi: apps/app/x.tsx' và 'xoa dong o tep chung: thanh-tab.tsx' rồi mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["_acceptance/soan-okr-trang-rieng/rang/ranh-gioi.mjs"]
+
+  - id: E13c
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.k2_tai_lieu
+    expected: "exit 0; rang/tai-lieu.mjs đọc bảng «What is in the tree today» của docs/chat-ui.md (tách hàng theo |): hàng artifact.tsx và task.tsx không còn chữ 'exemption' hay 'K2' trong ô lý do và nêu trang soạn (okr/soan) là nơi dùng; đoạn «The one sanctioned exception…» không còn nêu artifact.tsx, task.tsx. Chiều đỏ ghim: bản sao chat-ui.md giữ chữ exemption ở hàng task.tsx phải in 'con mien tru: task.tsx' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["docs/chat-ui.md", "_acceptance/soan-okr-trang-rieng/rang/tai-lieu.mjs"]
+
+  - id: E14
+    criterion: AC-14
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.k2_man_ma_tran
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả theo kịch bản viết trước; đăng nhập trưởng phòng"
+      - "Rút tập trạng thái từ khối UX-STATE-TABLE của design doc (đọc tệp, đường suy từ vị trí script); mỗi id phải có một cách dựng trong script — thiếu → 'thieu trang thai: <id>' mã 1"
+      - "Ở khổ dưới 1024 px, trạng thái của bản nháp (co-nhap, dang-soan, moc, da-quyet, con-thieu, da-dua-vao, hep) mở bằng ?tab=ban-nhap, trạng thái của hội thoại (mo-dau, hoi-dong, loi, het-luot) bằng ?tab=tro-chuyen — bảng viết trước trong script; trước khi chụp kiểm tab đang chọn đúng bảng, sai → 'sai tab: <id>' mã 1"
+      - "Mỗi trạng thái × {1440×1000, 768×1024, 375×812} × {light, dark}: chụp _acceptance/soan-okr-trang-rieng/evidence/E14-<id>-<khổ>-<nền>.png; scrollWidth == innerWidth; ST-soan-dang-soan chờ có trần (≤ 5 s) role=status trong đầu bản nháp chứa chữ bận trước khi chụp"
+      - "Gom console: 0 lỗi (pageerror và console.error) trên toàn lượt"
+    expected: "exit 0; man.mjs --phan ma-tran in số ảnh = số trạng thái × 3 × 2 và mọi tệp inputs của E15 có mặt > 0 byte. Chiều đỏ: --kiem-do-do tran (chèn div 2000 px) phải in 'tran ngang' mã 1; --kiem-do-do chup-som phải in 'thieu chu ban' mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/kara/**", "packages/ui/src/components/resizable.tsx", "docs/superpowers/specs/2026-10-07-soan-okr-trang-rieng-design.md", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
+
+  - id: E15
+    criterion: AC-15
+    executor: judgment
+    inputs:
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-co-nhap-1440-light.png"
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-co-nhap-375-light.png"
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-dang-soan-1440-light.png"
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-dang-soan-375-light.png"
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-da-quyet-1440-light.png"
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-da-quyet-375-light.png"
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-con-thieu-1440-light.png"
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-con-thieu-375-light.png"
+      - "_acceptance/soan-okr-trang-rieng/evidence/E14-ST-soan-dang-soan-1440-dark.png"
+      - "docs/ai-ux.md"
+    question: "Nhìn chín ảnh trang Soạn OKR — có bản nháp, Kara đang soạn, đã quyết, còn thiếu, ở 1440 và 375, thêm đang soạn nền tối — đối chiếu mục 3, 5, 6, 7 của docs/ai-ux.md: (1) phân biệt ngay hội thoại và bản nháp không? (2) mỗi dòng chờ có đúng một nút chính nhận ra ngay và biết dòng nào đã quyết không? (3) ở ảnh đang soạn hiểu vì sao nút khoá không? (4) ở ảnh còn thiếu biết phải làm gì để đưa vào không? PASS chỉ khi cả bốn đạt."
+    expected: "Hội đồng đọc ảnh và luật: hai vùng tách bạch; một nút chính mỗi dòng chờ; biên nhận phân biệt được với dòng chờ; lý do khoá đọc được; còn thiếu chỉ ra việc phải làm."
+    evidence_required: [run_id, verdict, verifier, verified_at, rationale]
+
+  - id: E16
+    criterion: AC-14
+    executor: script
+    cmd: config:executors.script.k2_san_thiet_ke
+    expected: "exit 0; design-gate.mjs --mode static trên từng .tsx dưới apps/app/app/(app)/[slug]/okr/soan/ (liệt bằng find, không gõ tay) cộng packages/ui/src/components/resizable.tsx và kara/proposal.tsx; năm lỗi nền P0 bằng 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/resizable.tsx", "packages/ui/src/components/kara/proposal.tsx"]

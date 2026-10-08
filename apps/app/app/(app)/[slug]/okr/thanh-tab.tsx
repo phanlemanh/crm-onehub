@@ -17,6 +17,7 @@ import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 import { okrParsers } from "./okr-search-params";
+import { laTrangSoan } from "./soan/luat-ban-nhap";
 import { DUONG, TAB, type TabOkr, tabTuDuong } from "./tab-okr";
 
 export type NhanHoiY = "moi" | number | null;
@@ -76,6 +77,7 @@ export function DauTrangOkr({
 }) {
 	const m = okrMessages(useLocale());
 	const tab = tabTuDuong(usePathname());
+	if (laTrangSoan(usePathname() ?? "")) return null;
 	return (
 		<div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3">
 			<div className="col-start-1 row-start-1 min-w-0 md:col-span-2">

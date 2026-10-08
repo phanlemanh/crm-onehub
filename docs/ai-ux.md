@@ -132,6 +132,7 @@ Không dùng `Spinner` trần, `Shimmer` trần hay `Alert` đứng yên cho lú
 | `gop-y-dung-cho` | T2 | Đã làm. Khu OKR: chip «Kara · N góp ý» trên hàng Mục tiêu (Của tôi, Theo đơn vị) và mặt lọc «Góp ý của Kara»; khung chi tiết có vùng Kara (nhãn, «Vì sao?», nhờ đọc), góp ý neo dưới KR qua điểm cắm `duoiKr`/`sauTenKr` của `okr/diem-cam.ts`, biên nhận có Hoàn tác, dấu «đổi theo Kara» sau tên KR; hai hộp Sửa bỏ cột góp ý, chỉ còn dòng dẫn sang khung |
 | `tu-vung-tac-tu` | T2 | Phần `packages/ui` đã gộp vào `bo-xuong-kara`; phần màn (tên Kara và tiếng Việt trên tab bản ghi, Soạn OKR, Tài liệu, thông tin liên hệ có nhãn và hoàn tác) chuyển sang K4 `khung-ban-ghi-kara` và K6a `kara-mot-ten` |
 | `bo-xuong-kara` | T2 | Sáu khối trong `packages/ui/src/components/kara/` và một nút «Thử lại»; ba điểm cắm cho Soạn OKR trang riêng (co giãn trong thanh kéo, khoá khi Kara đang soạn, nhận theo nhóm); chưa nối màn nào trước 14/10 |
+| `soan-okr-trang-rieng` | T2 | K2 — Soạn OKR thành trang riêng `/okr/soan/<cuộc>`: hội thoại `KaraTranscript` + `KaraComposer` cạnh bản nháp `KaraArtifact` (hai ô co giãn từ 1024 px, hai tab dưới đó); dòng đề xuất inline với Thêm · Sửa · Bỏ qua · Hỏi Kara, nhận cả nhóm, biên nhận có Hoàn tác về lần nộp mới nhất; khoá khi Kara đang soạn; mốc mỗi lần nộp nối hai chiều với dòng đổi; dòng hệ thống báo quyết sẽ gửi kèm. Màn đầu tiên dùng cả sáu khối |
 | `tac-tu-xin-duyet` | T3 | Tab bản ghi: công cụ ghi thành đề xuất |
 
 Bản mẫu: `/proto/gop-y-dung-cho`.

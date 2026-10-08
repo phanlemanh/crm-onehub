@@ -1,0 +1,2 @@
+E8c network truth: driver = puppeteer trong man.mjs (khong co read_network_requests cua cong cu). Console loi: 0 (assertion "DUNG console khong loi (0)" trong lan chay xanh 2026-10-08).
+Phien do rieng: app localhost:4882 / api localhost:4894 (khac dev_server.url 3000) -> khong doc duoc wire tu cong cu: n-a (driver).
