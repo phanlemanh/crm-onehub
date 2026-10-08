@@ -4,9 +4,10 @@ import type { CuocSoan } from "@crm/db/okr-cuoc-soan";
 import { dongSoan, noiDungSoan } from "@crm/validation/okr-tro-ly";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { lyDoTuSoan } from "../src/okr/can-chinh";
-import type {
-	SoanDuaVaoOutput,
-	SoanQuyetOutput,
+import {
+	mineOutput,
+	type SoanDuaVaoOutput,
+	type SoanQuyetOutput,
 } from "../src/okr/okr.contracts";
 import {
 	DON_VI,
@@ -27,6 +28,7 @@ import {
 	goi,
 	ketThucMau,
 	mt,
+	nguoi,
 	ok,
 	phienMau,
 	tienDongHo,
@@ -248,6 +250,90 @@ describe("gan-tay", () => {
 				where: { objectiveId: cu.objectiveId, targetObjectiveId: DICH },
 			});
 			expect([g.lyDo, g.canCu, g.lyDoTuKara]).toEqual([null, null, false]);
+		},
+		CHO_DB,
+	);
+});
+
+describe("muc-tin", () => {
+	test(
+		"mỗi căn chỉnh trên mucTieuOutput có lý do, căn cứ, dấu Kara và mức tin đúng",
+		async () => {
+			const cuoc = await gieoCuoc({ donVi: DON_VI.kdBac, nguoiMo: QUAN_TRI });
+			const muc = await gieoMuc(cuoc, "m", "Ký đều có mức tin", LY_DO_KARA);
+			await nhanVaDuaVao(cuoc, [muc], "trpc");
+			const goc = await canChinhTaoRa(muc.canChinh);
+			const nguon = await db.okrObjective.findUniqueOrThrow({
+				where: { id: goc.objectiveId },
+				select: { cycleId: true, ownerUserId: true },
+			});
+			const krDich = await db.okrKeyResult.findMany({
+				where: { objectiveId: DICH },
+				select: { id: true },
+				orderBy: { position: "asc" },
+				take: 2,
+			});
+			expect(krDich).toHaveLength(2);
+			for (const k of krDich)
+				ok(
+					await goi(
+						app,
+						"okr.addAlignment",
+						"mutation",
+						{
+							objectiveId: goc.objectiveId,
+							targetObjectiveId: null,
+							targetKeyResultId: k.id,
+						},
+						cTruong,
+					),
+					`gan ${k.id}`,
+				);
+			const theoDich = new Map(
+				(
+					await db.okrAlignment.findMany({
+						where: { objectiveId: goc.objectiveId },
+						select: {
+							id: true,
+							targetObjectiveId: true,
+							targetKeyResultId: true,
+						},
+					})
+				).map((g) => [g.targetKeyResultId ?? g.targetObjectiveId ?? "", g.id]),
+			);
+			const DONG = [
+				["chua-co-ly-do", krDich[0]?.id ?? "", null, null],
+				["dat-cuoc", krDich[1]?.id ?? "", "Lý do", null],
+				["co-so-lieu", DICH, "Lý do", "Căn cứ"],
+			] as const;
+			for (const [, dich, lyDo, canCu] of DONG)
+				await db.okrAlignment.update({
+					where: { id: theoDich.get(dich) ?? "" },
+					data: { lyDo, canCu, lyDoTuKara: false },
+				});
+			const cChu = nguon.ownerUserId === nguoi(QUAN_TRI) ? cQuanTri : cTruong;
+			const mine = mineOutput.parse(
+				ok(
+					await goi(app, "okr.mine", "query", { cycleId: nguon.cycleId }, cChu),
+					"mine",
+				),
+			);
+			const mucTieu = mine.objectives.find((o) => o.id === goc.objectiveId);
+			if (!mucTieu) throw new Error("mine khong co muc tieu cua chu");
+			let chay = 0;
+			for (const [mong, dich, lyDo, canCu] of DONG) {
+				const a = mucTieu.alignments.find(
+					(x) => x.alignmentId === theoDich.get(dich),
+				);
+				if (!a) throw new Error(`${mong}: khong thay can chinh`);
+				for (const khoa of ["lyDo", "canCu", "lyDoTuKara", "mucTin"])
+					if (!(khoa in a)) throw new Error(`thieu khoa ${khoa}`);
+				expect([a.lyDo, a.canCu, a.lyDoTuKara]).toEqual([lyDo, canCu, false]);
+				if (a.mucTin !== mong)
+					throw new Error(`${mong}: muc tin ${a.mucTin} khac ${mong}`);
+				chay++;
+			}
+			expect(chay).toBe(3);
 		},
 		CHO_DB,
 	);

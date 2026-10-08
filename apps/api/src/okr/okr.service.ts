@@ -76,7 +76,12 @@ import { z } from "zod";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
-import { dungCayCanChinh, LY_DO_TRONG, type LyDoCanChinh } from "./can-chinh";
+import {
+	dungCayCanChinh,
+	LY_DO_TRONG,
+	type LyDoCanChinh,
+	mucTinCanChinh,
+} from "./can-chinh";
 import {
 	anhVetViec,
 	chonHangViec,
@@ -1754,6 +1759,10 @@ export class OkrService {
 						unitName: tenDonVi(dich),
 						objectiveTitle: dich.title,
 						keyResultTitle: g.targetKeyResult?.title ?? null,
+						lyDo: g.lyDo,
+						canCu: g.canCu,
+						lyDoTuKara: g.lyDoTuKara,
+						mucTin: mucTinCanChinh(g.lyDo, g.canCu),
 					};
 				}),
 				canEdit: this.quyenOkr.suaDuocDonVi(q, viewerId, {

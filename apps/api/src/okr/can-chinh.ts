@@ -16,6 +16,22 @@ export const LY_DO_TRONG: LyDoCanChinh = {
 	lyDoTuKara: false,
 };
 
+export const MUC_TIN_CAN_CHINH = [
+	"chua-co-ly-do",
+	"dat-cuoc",
+	"co-so-lieu",
+] as const;
+
+export type MucTinCanChinh = (typeof MUC_TIN_CAN_CHINH)[number];
+
+export function mucTinCanChinh(
+	lyDo: string | null,
+	canCu: string | null,
+): MucTinCanChinh {
+	if (!lyDo) return "chua-co-ly-do";
+	return canCu ? "co-so-lieu" : "dat-cuoc";
+}
+
 export function lyDoTuSoan(viSao: string): LyDoCanChinh {
 	const lyDo = viSao.trim();
 	return lyDo ? { lyDo, canCu: null, lyDoTuKara: true } : LY_DO_TRONG;
