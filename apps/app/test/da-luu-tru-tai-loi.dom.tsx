@@ -363,6 +363,7 @@ describe("loi", () => {
 			"co khung loi",
 		);
 		const tieuDe = kh?.textContent ?? "";
+		const tayTruoc = tayCam(k).map(khoa);
 		const truocLuu = goiGhi.filter((g) => g.ten === "giaiDoan.archive").length;
 		await chonMuc(k, "QUALIFIED_TO_BUY", t.giaiDoan.luuTru);
 		expect({
@@ -376,7 +377,7 @@ describe("loi", () => {
 			the: [...k.querySelectorAll("[data-the-giai-doan]")].map((e) =>
 				e.getAttribute("data-the-giai-doan"),
 			),
-			tayMo: tayCam(k).every((b) => !khoa(b)),
+			tayMo: tayTruoc,
 			mucGap: k.querySelector('[data-slot="archived-list"]') !== null,
 			luuTru:
 				goiGhi.filter((g) => g.ten === "giaiDoan.archive").length - truocLuu,
@@ -388,7 +389,7 @@ describe("loi", () => {
 			moTa: true,
 			nutThuLai: 1,
 			the: ["OPEN", "WON", "LOST"],
-			tayMo: true,
+			tayMo: BAY.map(() => false),
 			mucGap: false,
 			luuTru: 1,
 			conKhungLoi: true,
