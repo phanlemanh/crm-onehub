@@ -1,42 +1,75 @@
-# Review findings: menu-con-loc-dien-thoai (round 1)
+# Review findings: menu-con-loc-dien-thoai (round 2)
 
 ## Trong hợp đồng
 
-- **khong-cham-noi-goi.mjs does not check lines inside a multi-line DropdownMenuSubContent tag, though E7 says it does**
-  file: `_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs:30`
-  severity: medium
-  AC: AC-7
-  source: conventions
-  detail: E7 in evals.yaml promises to count added lines that "chua 'DropdownMenuSubContent' hoac nam trong the DropdownMenuSubContent" (contain the name, or sit inside the tag). `dongThemCham` only flags a `+` line when `dong.includes(DAU)` is true, and it reads a `git diff -U0`, so there are no context lines to tell it that a line sits inside an open tag. A real call site already opens the tag on its own line: apps/app/app/(app)/[slug]/contacts/contacts-bulk-actions.tsx:201-202 has `<DropdownMenuSubContent` on line 201 and `className="w-64 p-0"` on line 202. If someone edits only that className line (for example adds `-translate-x-40`), the diff line does not contain the name, the guard prints "0 dong them o noi goi" and exits 0, and the eval reports PASS. That is exactly the call-site override that docs/design.md forbids ("Do not override component styles with className") and that AC-7 is meant to catch. The `--tu-thu` self-test only uses a single-line diff, so it cannot show this gap. Either track the open tag across lines (with enough diff context, for example -U on the whole file, or by parsing HEAD's file at the changed line numbers), or narrow E7's expected text to what the script actually checks. Memory rule «Luật đo phải chạm lời hứa» (a measurement must check the promise it makes) applies.
-
-- **khong-cham-noi-goi.mjs misses className edits inside a multi-line DropdownMenuSubContent tag, so E7 can pass when it should fail**
-  file: `_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs:32`
-  severity: medium
-  AC: AC-7
-  source: bugs
-  detail: The E7 contract (evals.yaml lines 135-141) promises to count added lines under apps/ that either contain "DropdownMenuSubContent" or sit inside a DropdownMenuSubContent tag. `dongThemCham` only does the first. It flags a `+` line only when that line itself contains the text `DropdownMenuSubContent`, and the diff is read with `git diff -U0`, so the script has no context to tell that a line is inside an open tag. One real call site already uses the multi-line form: apps/app/app/(app)/[slug]/contacts/contacts-bulk-actions.tsx lines 201-203 open `<DropdownMenuSubContent` on one line and put `className="w-64 p-0"` on the next. If someone changes that line to `className="w-64 p-0 -translate-x-40"`, the diff's only added line is the className line. It does not contain DAU, so the script prints "DUNG 0 dong them o noi goi" and exits 0. That is exactly the call-site position override AC-7 is meant to forbid. The `--tu-thu` self-test does not catch this gap because its fake diff (DIFF_GIA) only covers the single-line form. To fix it, track whether each added line is still inside an open `<DropdownMenuSubContent` tag, up to the closing `>`, using diff context (for example `-U` with enough lines, or reading the file at HEAD). Also add a multi-line case to DIFF_GIA.
-
-- **Hình dạng 5 — tuyên quét LỚP «dòng thêm chứa hoặc nằm trong thẻ DropdownMenuSubContent» nhưng chỉ bắt điểm-case thẻ một dòng**
-  file: `_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs:31`
-  severity: high
-  AC: AC-7
-  source: measurement
-  detail: Expected của E7 hứa đếm dòng THÊM «chứa "DropdownMenuSubContent" HOẶC nằm trong thẻ DropdownMenuSubContent». Nhưng dongThemCham chỉ giữ dòng thoả `dong.startsWith("+") && dong.includes(DAU)` (dòng 31), đọc trên `git diff -U0` (dòng 41). Vì vậy không có nhánh nào xét dòng nằm bên trong thẻ. Kho đã có sẵn một nơi gọi viết thẻ nhiều dòng: apps/app/app/(app)/[slug]/contacts/contacts-bulk-actions.tsx:201-202, với `<DropdownMenuSubContent` ở một dòng và `className="w-64 p-0"` ở dòng sau. Sửa dòng đó thành `className="w-64 p-0 -translate-x-40"` sẽ cho ra dòng diff `+ className=...` không chứa DAU, nên răng vẫn in «0 dong them o noi goi» và thoát 0, dù AC-7 bị vi phạm. Đối chứng duy nhất (--tu-thu, DIFF_GIA ở dòng 9) chỉ có một ca: className nằm cùng dòng với tên thẻ trong bulk-actions.tsx. Không có ma trận viết trước gồm hai ca «cùng dòng» và «dòng sau trong thẻ», nên lớp lỗi «nằm trong thẻ» được tuyên mà không có mã và không có ca kiểm.
+Không có.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 4 — assertion âm tính một mình: lệnh E7 chạy khong-cham-noi-goi không kèm --tu-thu**
+- **cong-ty-375 dùng sleep 800 ms và đếm mọi command-item, nên «còn >= 1 mục công ty» có thể xanh nhờ danh sách cũ**
+  Người dùng thấy gì: Phép kiểm trên điện thoại cho ô tìm Công ty có thể báo đạt dù danh sách vừa lọc chưa kịp cập nhật, nên nó chưa chứng minh được là gõ tên công ty thì ra đúng công ty đó. Menu vẫn mở trọn trong màn và gõ vào ô vẫn hiện chữ.
+  file: `_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **--tu-thu của khong-cham-noi-goi không còn dùng diff giả như E7 hứa; bộ đọc hunk của lượt thật không có ca tự thử**
+  Người dùng thấy gì: Công cụ canh việc không ai chỉnh vị trí menu con ở nơi gọi có phần tự thử không còn đi qua đường đọc thay đổi thật. Nếu phần đọc đó hỏng, công cụ vẫn báo sạch trong khi có thể có chỗ chỉnh lọt qua.
+  file: `_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Răng bỏ nhánh «dòng thêm chứa DropdownMenuSubContent» mà E7 vẫn hứa**
+  Người dùng thấy gì: Công cụ canh nơi gọi menu con hiện chỉ bắt chỗ chỉnh vị trí nằm ngay trong thẻ menu con. Một cách viết vòng như đổi tên khi nhập hoặc gói qua biến có thể không bị bắt, nhưng hiện chưa có chỗ nào làm vậy.
+  file: `_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **The E7 guard stopped counting added lines that contain "DropdownMenuSubContent" but sit outside a tag, which the contract still requires**
+  Người dùng thấy gì: Ai đó có thể đổi tên menu con khi nhập vào rồi chỉnh vị trí ở nơi gọi mà công cụ canh không phát hiện. Hiện chưa có nơi gọi nào làm vậy, nên người dùng chưa thấy ảnh hưởng.
+  file: `_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **cong-ty-375 counts company items without waiting for the search result, so stale unfiltered options can make it pass**
+  Người dùng thấy gì: Phép kiểm ô tìm Công ty trên điện thoại có thể đạt khi danh sách cũ chưa lọc còn hiện. Nó chưa chứng minh được kết quả tìm ra đúng, nhưng menu vẫn nằm gọn trong màn và gõ chữ vẫn hiện.
+  file: `_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): mẫu tự thử của khong-cham-noi-goi đưa thẳng số dòng, bỏ qua bộ đọc diff**
+  Người dùng thấy gì: Phần tự thử của công cụ canh nơi gọi menu con không chạy qua đường đọc thay đổi thật, nên nếu đường đó hỏng thì phần tự thử vẫn xanh và công cụ có thể báo sạch nhầm.
+  file: `_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (kiểm âm tính đứng một mình): lệnh E7 chỉ kiểm «0 dòng thêm», không chạy đối chứng dương --tu-thu**
+  Người dùng thấy gì: Khi chạy kiểm tự động, công cụ canh việc không ai chỉnh vị trí menu con chỉ báo «không thấy gì» mà không tự chứng minh là nó còn bắt được lỗi. Nếu công cụ hỏng, kết quả sạch vẫn trông như đạt.
+  file: `_acceptance/config.yaml`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (kiểm «có mặt» trong khi lời hứa là quan hệ): đếm mục Công ty sau khi gõ không gắn với chữ vừa gõ**
+  Người dùng thấy gì: Phép kiểm ô tìm Công ty chỉ chứng minh có ít nhất một mục hiện ra sau khi gõ, chưa chứng minh mục đó khớp chữ vừa gõ. Việc menu mở gọn trong màn thì vẫn được kiểm đúng.
+  file: `_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 — assertion âm tính một mình: lệnh E7 chạy khong-cham-noi-goi không kèm --tu-thu (r1)**
   Người dùng thấy gì: Phép kiểm cuối cùng xác nhận không ai tự ý dịch vị trí menu con ở nơi gọi chỉ cho kết quả xanh hoặc đỏ, không tự chứng minh nó còn bắt được lỗi thật. Nếu bộ lọc của nó hỏng lặng lẽ, người duyệt vẫn thấy xanh và có thể tin nhầm.
   file: `_acceptance/config.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 3 — assert «chuỗi có mặt» cho lớp dịch phía trái, trong khi lời hứa là quan hệ dịch theo phần tràn**
+- **Hình dạng 3 — assert «chuỗi có mặt» cho lớp dịch phía trái, trong khi lời hứa là quan hệ dịch theo phần tràn (r1)**
   Người dùng thấy gì: Trên điện thoại, nếu menu cha nằm sát mép phải và menu con bị lật sang trái mà vẫn thiếu chỗ, chưa có phép đo nào xác nhận menu con thật sự dịch vào trong màn. Ca này hiếm và đã được ghi nhận là chưa đo.
   file: `packages/ui/test/menu-con-dich-vao.dom.tsx`
   severity: medium
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
+
+Không có.
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

@@ -1,1 +1,1 @@
-driver: bun script do-man.mjs (playwright), khong co read_network_requests; network n-a (driver)
+driver: bash mot-luot.sh + do-man.mjs (playwright script); khong co duong doc network. networkObserved=n-a (driver)

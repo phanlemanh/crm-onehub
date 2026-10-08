@@ -1,17 +1,18 @@
+mot-luot: da cho 60s de toi luot
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-phien-do: kho crm_epic_gates_7891a0_do · app http://localhost:4868 · api http://localhost:4455
+phien-do: kho crm_epic_gates_7891a0_do · app http://localhost:4157 · api http://localhost:4376
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 $ bun scripts/dev-session.ts ada@trycomp.ai
 DUNG 375: giai-doan — hop left 159 right 367 rong 208 trong khung 375 (mong [7, 368]), tran ngang 0px, con tro touch
 DUNG 375: cham — tap «Demo booked» (con tro touch) → stage=DEMO_BOOKED (mong DEMO_BOOKED)
-SAI 375: cong-ty — hop left 2.3 right 367, o tim left 26.3 right 367, gia tri «xa», con tro touch
+DUNG 375: cong-ty — hop left 159 right 367, o tim left 183 right 367, go «Att» → gia tri «Att», 2 muc cong ty trong khung, con tro touch
 DUNG 1440: doi-chung — Radix dat menu con phia left; hop left 865, khi tat lop dich left 865, lech 0px (mong 0, khong dich khi du cho), hop trong khung true
 DUNG 768: hang-loat — ban moi left 351 right 460.3; ban goc (tat lop dich) left 351 right 460 — khong hoi quy
 DUNG 5/5 o
 ANH _acceptance/menu-con-loc-dien-thoai/evidence
-KET LUAN: 5 DUNG, 1 SAI — ma thoat 1
+KET LUAN: 6 DUNG, 0 SAI — ma thoat 0
 -- tiền đề làn đo: đã dọn contextDevApiKey
 -- tiền đề làn đo: đã dọn ảnh đại diện
-phien-do: xong — mã 1
+phien-do: xong — mã 0

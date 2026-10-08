@@ -1,1 +1,1 @@
-n-a (driver): script playwright do-man.mjs, khong doc network
+driver: bun + playwright script (do-man.mjs); no browser-tool network reader. app-traffic by script only.

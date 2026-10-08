@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: menu-con-loc-dien-thoai
-verdict: REJECT
-failed_evals: [E2]
+verdict: PASS
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6bf2b8c33eb8c4394c9a9244a00a27ffe1b82bfd
+verified_commit: 483fbb30a55f10f4e034552fad01d2f84a9c5db6
 human_signoff:
 ---
 
@@ -16,7 +16,7 @@ human_signoff:
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
 | E1 | AC-1 | ui-check | PASS |
-| E2 | AC-2 | ui-check | FAIL |
+| E2 | AC-2 | ui-check | PASS |
 | E3 | AC-3 | ui-check | PASS |
 | E4 | AC-4 | ui-check | PASS |
 | E5 | AC-5 | test | PASS |
@@ -26,120 +26,117 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-menu-con-loc-dien-thoai-E1-r1
+  run_id: minted-menu-con-loc-dien-thoai-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mcl_do_man
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
   screenshot: evidence/E1-step1.png
   observed: |
-    375 wide, Thoả thuận page: the Giai doan submenu opens on the right and ends at about x=367, fully inside the screen, listing Demo booked 5 through Unqualified 4; after the tap the "Loc (1)" badge shows and the list holds 5 deals, all Demo booked (stage=DEMO_BOOKED).
-    Ca nhan page at 375: the Cong ty submenu and its search box (value "xa") sit inside the screen (right about 367), with only "Khong cong ty nao khop." below; 1440 shows the Giai doan submenu to the left of its parent with 0px difference from the layer-off position; 768 bulk menu submenu (Ada Okafor, Marcus Lindqvist, Priya Raman) lies inside [0,768]. All five frames agree with the DUNG lines.
+    giai-doan-375.png (375 wide): Thoả thuận page, filter «Lọc» menu open with Phụ trách / Giai đoạn / Hạn chót. The Giai đoạn submenu is open and sits on the right edge, fully inside the frame (about x159..367), listing Demo booked 5, Qualified to buy 8, Decision maker in 2, Contract sent 5, Closed won 0, Closed lost 3, Unqualified 4. Not clipped, no horizontal overflow. Matches expected.
+    cham-375.png: same submenu after tapping Demo booked. The filter badge shows «Lọc (1)», a «Bỏ chọn» row and a check mark appear on Demo booked 5, and the table beneath is filtered to 5 rows, all Demo booked, footer "5 thoả thuận · 231.000 US$". Matches the stage=DEMO_BOOKED assertion.
+    cong-ty-375.png: Cá nhân page, filter menu open, Công ty submenu at right with search box holding «Att» and two checkbox items, Attio 3 and Nhà Đất Thủ Đức 2. The submenu and search box are inside the 375 frame (right edge about 367). Matches expected.
+    doi-chung-1440.png: 1440 desktop view, Lọc menu at top right, Giai đoạn submenu opens to the left of the menu (data-side left), listing the 7 stages with counts. It is inside the viewport and overlays the table without clipping. Matches expected.
+    hang-loat-768.png: 768 wide, 1 row selected («Đã chọn 1 dòng», Wise — expansion ticked), «Hành động» menu open with Giao người phụ trách / Đổi giai đoạn / Lưu trữ. The Giao người phụ trách submenu opens to the left, listing Ada Okafor, Marcus Lindqvist and Priya Raman, fully inside 0..768. Matches expected.
+    No frame contradicts the Expected values.
   network_observed: n-a (driver)
 
 - eval: E2
-  run_id: minted-menu-con-loc-dien-thoai-E2-r1
-  exit_code: 1
-  baseline: n-a
-  verifier: config:executors.script.mcl_do_man
-  verified_at: 2026-10-08T02:19:39Z
-  screenshot: evidence/E2-step2.png
-  observed: |
-    Frame E2-step2.png (cong-ty-375.png, 375x812, dark theme, trang "Cá nhân"). Thấy rõ: ô tìm trong menu con "Công ty", nằm trọn trong màn (mép phải sát ~367), chứa chữ "xa" với icon kính lúp; menu cha có các hàng Phụ trách, Công ty (đang chọn), Chức danh, Hoạt động.
-    NHƯNG vùng danh sách trong menu con chỉ hiện trạng thái rỗng "Không công ty nào khớp." — không có mục công ty nào hiển thị trong menu con (bộ lọc "xa" loại hết). Các tên công ty Mercury/Pennylane/Ramp/Cal.com/Monzo chỉ là cột bảng nền của trang, không phải mục của menu con. Vế "ít nhất một mục công ty thấy rõ trong màn" của Expected không thoả.
-  network_observed: n-a (driver)
-  output: |
-    Lệnh chạy mã thoát 0 với "KET LUAN 6 DUNG, 0 SAI": hộp 159..367 và ô tìm 183..367 đều trong [7, 368], value ô tìm là "xa", con trỏ touch.
-    Phần ảnh của Expected mâu thuẫn: ảnh chỉ có "Không công ty nào khớp." (gõ "xa" lọc hết), nên eval bị chấm không đạt dù lệnh thoát 0. Lệnh ui-check:E2 là lệnh không đạt duy nhất của vòng này và nó gắn với E2.
-
-- eval: E3
-  run_id: minted-menu-con-loc-dien-thoai-E3-r1
+  run_id: minted-menu-con-loc-dien-thoai-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mcl_do_man
-  verified_at: 2026-10-08T02:19:39Z
-  screenshot: evidence/doi-chung-1440.png
+  verified_at: 2026-10-08T02:41:33Z
+  screenshot: evidence/E2-step1.png
   observed: |
-    1440x900, dark theme, Thoả thuận table: the «Lọc» menu is open with Phụ trách, Giai đoạn (highlighted), Hạn chốt; the Giai đoạn submenu opens to the LEFT of the parent, right edge about x=1073 where the parent starts, left edge near x=865, so they sit side by side and do not overlap.
-    Seven stages are listed (Demo booked 5 through Unqualified 4); the submenu is fully inside the viewport, matching Expected.
+    E2-step1.png và E2-step2.png đều là bản sao của cong-ty-375.png, ảnh chụp mới ở lần chạy này (09:42), viewport 375 px. Trong ảnh có trang "Cá nhân", panel "Lọc" đang mở, và menu cha liệt kê Phụ trách, Công ty, Chức danh, Hoạt động. Menu con "Công ty" mở ra bên phải, không bị cắt ở mép màn. Ô tìm trong menu con hiện chữ "Att". Hai mục công ty nhìn rõ bên dưới: "Attio" (3) và "Nhà Đất Thủ Đức" (2). Ô tìm và các mục nằm trọn trong khung 375 px, nên khớp Expected (ô tìm và ít nhất một mục công ty thấy rõ).
+  network_observed: n-a (driver)
+
+- eval: E3
+  run_id: minted-menu-con-loc-dien-thoai-E3-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.mcl_do_man
+  verified_at: 2026-10-08T02:41:33Z
+  screenshot: evidence/E3-step2.png
+  observed: |
+    E3-step2.png and doi-chung-1440.png are the same file (142878 bytes). It is a 1440 px dark-theme screenshot of the Thoả thuận page. The Lọc menu is open on the right and lists Phụ trách, Giai đoạn (highlighted) and Hạn chốt. The Giai đoạn submenu is open to the LEFT of the parent menu, spanning about x=865 to 1073 and abutting the parent's left edge at about 1073 without covering it. Its rows are Demo booked 5, Qualified to buy 8, Decision maker in 2, Contract sent 5, Closed won 0, Closed lost 3 and Unqualified 4. The whole submenu is inside the viewport. It overlays the table underneath (Giá trị and Phụ trách columns) but not the parent menu. This matches the expected image, "menu con nam canh menu cha (phia Radix chon), khong de len" (the submenu sits beside the parent menu, on Radix's chosen side, and does not overlap it). The log numbers match the picture: box left 865, deviation 0.
   network_observed: n-a (driver)
 
 - eval: E4
-  run_id: minted-menu-con-loc-dien-thoai-E4-r1
+  run_id: minted-menu-con-loc-dien-thoai-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.mcl_do_man
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
   screenshot: evidence/E4-step1.png
   observed: |
-    Frame hang-loat-768.png (copied to E4-step1.png and E4-step2.png): 768 px wide, "Da chon 1 dong" (Wise — expansion ticked), the "Hanh dong" menu is open with Giao nguoi phu trach, Doi giai doan and Luu tru.
-    The Giao nguoi phu trach submenu opens to the left of the parent with Ada Okafor, Marcus Lindqvist and Priya Raman, about x 351..460 inside 768: not clipped, not overlapping the parent, no horizontal overflow. Matches Expected.
+    Mo that file E4-step1.png (= copy cua hang-loat-768.png vua do luc 09:42; E4-step2.png la ban sao cung noi dung). Frame rong 768 px: trang "Thoa thuan", dong "Da chon 1 dong", dong "Wise — expansion" co o tich xanh, nut "Hanh dong" dang mo. Menu cha co "Giao nguoi phu trach" (dang sang, co mui ten >), "Doi giai doan", "Luu tru". Menu con cua "Giao nguoi phu trach" mo sang TRAI menu cha voi 3 muc: Ada Okafor, Marcus Lindqvist, Priya Raman; hop menu con nam tron trong khung (khoang x 351-460), khong tran mep phai/trai, khong de len menu cha. Khop Expected: left >= 0, right <= 768, khong tran.
   network_observed: n-a (driver)
 
 - eval: E5
-  run_id: minted-menu-con-loc-dien-thoai-E5-r1
+  run_id: minted-menu-con-loc-dien-thoai-E5-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.mcl_lop
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
   output: |
-    menu-con-dich-vao.dom.tsx, describe "lop-dich": 1 run, 1 pass, no variance.
+    Ran 3 tests across 1 file. [817.00ms]
 
 - eval: E6
-  run_id: ""
+  run_id: minted-menu-con-loc-dien-thoai-E6-r2
   exit_code: 0
   baseline: green
   verifier: config:executors.test.mcl_hoi_quy
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
   output: |
-    Five test files unchanged against the merge-base; apps/app bang-crm-loc-ro.dom.tsx ran 9 tests across 1 file, all passed.
+    Ran 9 tests across 1 file. [3.42s]
 
 - eval: E7
-  run_id: minted-menu-con-loc-dien-thoai-E7-r1
+  run_id: minted-menu-con-loc-dien-thoai-E7-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.mcl_san_thiet_ke
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
   output: |
-    design-gate.mjs --mode static on dropdown-menu.tsx: no P0.
-    khong-cham-noi-goi.mjs: KET LUAN 1 DUNG, 0 SAI.
+    (đuôi output rỗng — hai lệnh nối nhau đều hoàn tất)
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-menu-con-loc-dien-thoai-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-menu-con-loc-dien-thoai-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
 
 - cmd: bun run lint:slop
-  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_lint_slop-r1
+  run_id: minted-menu-con-loc-dien-thoai-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-menu-con-loc-dien-thoai-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-menu-con-loc-dien-thoai-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-08T02:19:39Z
+  verified_at: 2026-10-08T02:41:33Z
 
 ## Known limits
 
@@ -147,12 +144,19 @@ human_signoff:
 
 ## Analyst
 
-Eval không phân biệt (xanh cả trên nhánh lẫn baseline): E6. Nó là bộ hồi quy cho năm tệp kiểm cũ và pass trên cả code trước tính năng, nên chỉ chứng minh harness, không chứng minh phần sửa. Cần xác nhận đây là regression-guard có chủ ý (đúng với ý của AC-6) hoặc viết lại để assert hành vi mới.
+Eval không phân biệt (xanh trên cả HEAD lẫn baseline diffBase) — là regression-guard có chủ ý, cần xác nhận hoặc viết lại để assert hành vi mới:
+
+- E6 (executor mcl_hoi_quy): lệnh `git diff --quiet $(git merge-base HEAD origin/onehub) -- packages/ui/test/data-table-loc-ro.dom.tsx packages/ui/test/data-table-locale.spec.tsx packages/ui/test/render-diff.spec.tsx packages/ui/test/lai-ra-man.spec.tsx apps/app/test/bang-crm-loc-ro.dom.tsx && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx ./test/data-table-locale.spec.tsx ./test/render-diff.spec.tsx ./test/lai-ra-man.spec.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-crm-loc-ro.dom.tsx` — baseline green. Đây là chốt không hồi quy theo AC-6 (năm tệp kiểm cũ giữ nguyên, không sửa kỳ vọng), không chứng minh phần sửa.
 
 ## Variance
 
 none — every multi-run eval is uniform
 
+## Judge
+
+Không có eval judgment trong hợp đồng này — không có panel để đề xuất, không có mục chờ human_override.
+
 ## Iterations
 
-Round 1: E2 failed — the 375px screenshot of the Cong ty submenu shows only the empty state "Không công ty nào khớp." because the search text "xa" matches no sample company, so the "at least one company item visible" half of Expected is not met even though the coordinates are inside [7, 368]. Returned to implementation.
+Round 1: E2 không đạt — cảnh ô tìm Công ty lọc hết nên menu con rỗng, ảnh không có mục nào; răng khong-cham-noi-goi cũng chưa bắt thẻ nhiều dòng. Returned to implementation (sửa ở 483fbb30a).
+Round 2: E1, E2, E3, E4, E5, E6, E7 đều đạt; bảy lệnh suite đạt. Verdict PASS, chờ người ký ở Cổng Bằng chứng.
