@@ -468,7 +468,10 @@ describe("muc-ca-nhan-man", () => {
 			trongSheet(<ContactSheet contactId={CA_NHAN_C} />),
 			`?record=contact:${CA_NHAN_C}`,
 		);
-		await cho(() => tieuDeMuc(), "muc 30 ngay dau");
+		await cho(
+			() => document.body.querySelector("[data-ke-hoach]") !== null,
+			"dong ke hoach",
+		);
 
 		const goi = daGoi.filter((g) => g.duong === "onboarding.plansOfContact");
 		expect(goi.length, "dung mot loi goi plansOfContact").toBe(1);

@@ -406,6 +406,7 @@ const GHIM = {
 		"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 		"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 	],
+	"companies:created": ["Đã thêm 1.", "Đã thêm 12."],
 	"companies:bulk.reassigned": [
 		"Đã đổi người phụ trách cho 1.",
 		"Đã đổi người phụ trách cho 12.",
