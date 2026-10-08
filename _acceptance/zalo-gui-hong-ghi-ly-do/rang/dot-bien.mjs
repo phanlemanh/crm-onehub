@@ -6,7 +6,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 20;
+const SO_CAP_KHAI = 21;
 const TRAN_MS = 600_000;
 const AGENT = (t) =>
 	`bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t ${t}"`;
@@ -180,6 +180,14 @@ const CAP = [
 		"\t\ttokenCu === null\n\t\t\t? { ...botMoi, zaloWebhookSecret: khoa }\n\t\t\t: { zaloWebhookSecret: khoa },",
 		"\t\t{ ...botMoi, zaloWebhookSecret: khoa },",
 		"bot moi ghi ngoai giao dich truoc setWebhook",
+	],
+	[
+		"v bo go webhook bot moi",
+		AGENT("doi-bot-dong-y"),
+		XUONG,
+		"\t\t\tawait goWebhookBotMoi(fetcher, token);\n",
+		"",
+		"doi bot hong ma bot moi van tro webhook",
 	],
 ];
 

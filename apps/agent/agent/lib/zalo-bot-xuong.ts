@@ -11,6 +11,7 @@ import type {
 } from "@crm/validation/zalo-cau-noi";
 import {
 	docLoiZalo,
+	parseZaloDeleteWebhook,
 	parseZaloGetMe,
 	parseZaloSetWebhook,
 } from "@crm/validation/zalo-update";
@@ -214,7 +215,10 @@ export async function datBot(
 	};
 	if (soLienKet > 0) {
 		const goDuoc = await chotDoiBot(cuoi, truoc);
-		if (!goDuoc) return { outcome: "invalid", reason: ZALO.loi.dangKyHong };
+		if (!goDuoc) {
+			await goWebhookBotMoi(fetcher, token);
+			return { outcome: "invalid", reason: ZALO.loi.dangKyHong };
+		}
 	} else {
 		await ghiCot(cuoi);
 	}
@@ -242,6 +246,19 @@ async function chotDoiBot(
 		);
 		await traVe(truoc);
 		return false;
+	}
+}
+
+async function goWebhookBotMoi(
+	fetcher: typeof fetch,
+	token: string,
+): Promise<void> {
+	try {
+		parseZaloDeleteWebhook(await zaloGoi(fetcher, token, "deleteWebhook", {}));
+	} catch (loi) {
+		console.error(
+			`[zalo] go webhook bot moi hong: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
+		);
 	}
 }
 

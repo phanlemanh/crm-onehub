@@ -162,10 +162,12 @@ describe("doi-bot-dom", () => {
 		const vo = await mo(<OToken daBat goiToken="cuoi" />);
 		await luuToken(vo);
 		await cho(hopMo, "hop xac nhan mo");
-		expect([chuTrang().includes(TEN_MOI), chuTrang().includes("3")]).toEqual([
-			true,
-			true,
-		]);
+		const hop = document.querySelector('[role="alertdialog"], [role="dialog"]');
+		const cauHoi = t.doiBotThan(TEN_MOI, HOI_DOI_BOT.soLienKet);
+		if (!hop?.textContent?.includes(cauHoi))
+			throw new Error(
+				`hop xac nhan khong neu dung ten bot va so lien ket: ${hop?.textContent ?? "khong co hop"}`,
+			);
 		await bam(t.doiBotThoi);
 		await cho(() => !hopMo(), "hop xac nhan dong");
 		expect(goi.length).toBe(1);

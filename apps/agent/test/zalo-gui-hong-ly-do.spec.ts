@@ -211,44 +211,66 @@ const demDong = (nk: NhatKy, dung: string) =>
 const coChua = (nk: NhatKy, chu: string) =>
 	nk.dong.filter((d) => d.includes(chu)).length;
 
+type DuLieuLuot = {
+	token: string;
+	tokenMoi: string;
+	chat: string;
+	nguoiZalo: string;
+	chu: string;
+	tien: string;
+};
+
+const LUOT_THUONG: DuLieuLuot = {
+	token: TOKEN,
+	tokenMoi: "333:moi",
+	chat: "chat-bay-cho",
+	nguoiZalo: "z-bay-cho",
+	chu: "chao",
+	tien: "bc",
+};
+
+const DONG_BO_QUA = ["khong-rieng", "da-gap", "bi-chan", "chua-noi"] as const;
+
+async function chayBoQua(r: DuLieuLuot) {
+	await db.zaloUpdateSeen.deleteMany({});
+	await db.zaloLinkAttempt.deleteMany({});
+	const zalo = zaloGia({ send: "ok" });
+	const deps = {
+		env: { token: r.token, khoa: KHOA_DUNG },
+		fetcher: zalo.fetcher,
+	};
+	const tu = (i: number) => `${r.nguoiZalo}-q${i}`;
+	const id = (i: number) => `${r.tien}q-${i}`;
+	const gui = (chon: ChonTin) =>
+		guiWebhook(JSON.stringify(thanWebhook(chon)), KHOA_DUNG, deps);
+	for (let i = 0; i < ZALO_LIEN_KET.doMa.toiDa; i++) {
+		await ghiSai(db, tu(3), new Date());
+	}
+	const nk = batNhatKy();
+	try {
+		await gui({ messageId: id(1), fromId: tu(1), chatType: "GROUP" });
+		await gui({ messageId: id(2), fromId: tu(2), text: r.chu });
+		await gui({ messageId: id(2), fromId: tu(2), text: r.chu });
+		await gui({ messageId: id(3), fromId: tu(3), text: r.chu });
+		await gui({ messageId: id(4), fromId: tu(4), text: r.chu });
+	} finally {
+		nk.tra();
+	}
+	let chay = 0;
+	for (const [i, lyDo] of DONG_BO_QUA.entries()) {
+		const dong = `[zalo] bo qua message_id=${id(i + 1)} ly_do=${lyDo}`;
+		if (demDong(nk, dong) !== 1)
+			throw new Error(`${lyDo}: khong co dong bo qua`);
+		chay++;
+	}
+	return { chay, dong: nk.dong, huongDan: zalo.guiToi(tu(4)) };
+}
+
 describe("bo-qua", () => {
 	test("bốn nhánh bỏ qua đều ghi mã nhánh", async () => {
-		await db.zaloUpdateSeen.deleteMany({});
-		await db.zaloLinkAttempt.deleteMany({});
-		const zalo = zaloGia({ send: "ok" });
-		const deps = { env: BIEN, fetcher: zalo.fetcher };
-		const gui = (chon: ChonTin) =>
-			guiWebhook(JSON.stringify(thanWebhook(chon)), KHOA_DUNG, deps);
-		for (let i = 0; i < ZALO_LIEN_KET.doMa.toiDa; i++) {
-			await ghiSai(db, "zbq3", new Date());
-		}
-		const nk = batNhatKy();
-		try {
-			await gui({ messageId: "bq-1", fromId: "zbq1", chatType: "GROUP" });
-			await gui({ messageId: "bq-2", fromId: "zbq2", text: "chao" });
-			await gui({ messageId: "bq-2", fromId: "zbq2", text: "chao" });
-			await gui({ messageId: "bq-3", fromId: "zbq3", text: "chao" });
-			await gui({ messageId: "bq-4", fromId: "zbq4", text: "chao" });
-		} finally {
-			nk.tra();
-		}
-		const DONG = [
-			["khong-rieng", "bq-1"],
-			["da-gap", "bq-2"],
-			["bi-chan", "bq-3"],
-			["chua-noi", "bq-4"],
-		] as const;
-		let chay = 0;
-		for (const [lyDo, id] of DONG) {
-			const dong = `[zalo] bo qua message_id=${id} ly_do=${lyDo}`;
-			if (demDong(nk, dong) !== 1)
-				throw new Error(`${lyDo}: khong co dong bo qua`);
-			chay++;
-		}
-		expect(chay).toBe(4);
-		expect(zalo.guiToi("zbq4").map((g) => g.body.text)).toEqual([
-			ZALO.loi.huongDan,
-		]);
+		const ket = await chayBoQua(LUOT_THUONG);
+		expect(ket.chay).toBe(4);
+		expect(ket.huongDan.map((g) => g.body.text)).toEqual([ZALO.loi.huongDan]);
 	});
 });
 
@@ -303,15 +325,22 @@ describe("webhook-403", () => {
 		await datLyDo(null);
 		const nk = batNhatKy();
 		try {
-			const dongThoi = await Promise.all(
-				[1, 2, 3].map((i) => guiWebhook(tin(i), KHOA_SAI, deps)),
-			);
-			const lanLuot: Response[] = [];
-			for (const i of [4, 5, 6])
-				lanLuot.push(await guiWebhook(tin(i), KHOA_SAI, deps));
-			expect([...dongThoi, ...lanLuot].map((r) => r.status)).toEqual([
+			const guiSai = async (i: number) => {
+				const yc = yeuCauWebhook(tin(i), KHOA_SAI);
+				return { yc, res: await nhanWebhook(yc.request, deps) };
+			};
+			const dongThoi = await Promise.all([1, 2, 3].map(guiSai));
+			const lanLuot: Awaited<ReturnType<typeof guiSai>>[] = [];
+			for (const i of [4, 5, 6]) lanLuot.push(await guiSai(i));
+			const sauLech = [...dongThoi, ...lanLuot];
+			expect(sauLech.map((k) => k.res.status)).toEqual([
 				403, 403, 403, 403, 403, 403,
 			]);
+			const daDoc = sauLech.filter(
+				(k) => k.yc.request.bodyUsed || k.yc.soLanKeo() !== 0,
+			).length;
+			if (daDoc !== 0)
+				throw new Error(`doc than khi khoa sai: ${daDoc}/6 yeu cau`);
 			expect(demDong(nk, "[zalo] webhook 403 ly_do=khoa-lech")).toBe(6);
 			if ((await lyDoHienTai()) !== "khoa-lech")
 				throw new Error("403 khong dat ly do khoa-lech");
@@ -411,6 +440,9 @@ function zaloHaiBot(chon: ChonHaiBot) {
 					verification: { ok: true, url, outcome: ZALO.webhook.xacMinhOk },
 				},
 			});
+		}
+		if (method === "deleteWebhook") {
+			return Response.json({ ok: true, result: { url: "", updated_at: 1 } });
 		}
 		if (method === "getWebhookInfo" && chon.webhookUrl) {
 			return Response.json({
@@ -564,10 +596,11 @@ describe("doi-bot-dong-y", () => {
 			},
 		);
 		const nk2 = batNhatKy();
+		const zaloHong = zaloHaiBot({ bot: haiBot, setWebhook: "ok" });
 		try {
 			await datBotThu(
 				{ token: TOKEN_MOI, xacNhanDoiBot: true },
-				zaloHaiBot({ bot: haiBot, setWebhook: "ok" }).fetcher,
+				zaloHong.fetcher,
 			);
 		} finally {
 			nk2.tra();
@@ -578,6 +611,9 @@ describe("doi-bot-dong-y", () => {
 			(await botDangLuu())?.zaloBotToken !== TOKEN_CU
 		)
 			throw new Error("go lien ket khong nguyen tu");
+		if (zaloHong.soGoi("deleteWebhook") !== 1)
+			throw new Error("doi bot hong ma bot moi van tro webhook");
+		expect((await botDangLuu())?.zaloWebhookSecret).toBe("khoa-cu");
 		expect(
 			nk2.dong.filter((d) => d.startsWith("[zalo] doi bot hong")).length,
 		).toBe(1);
@@ -725,12 +761,13 @@ const MOI_LENH = ["getMe", "sendMessage", "sendChatAction"] as const;
 async function gieoHoi(
 	messageId: string,
 	hoiLuc = new Date(),
+	chat = LUOT_THUONG.chat,
 ): Promise<string> {
 	const h = await db.zaloHoi.create({
 		data: {
 			messageId,
 			crmUserId: "bay-cho-nguoi",
-			zaloChatId: "chat-bay-cho",
+			zaloChatId: chat,
 			hoiLuc,
 			ketQua: "dang-hoi",
 		},
@@ -738,11 +775,11 @@ async function gieoHoi(
 	return h.id;
 }
 
-function yeuCau(hoiId: string): YeuCauHoi {
+function yeuCau(hoiId: string, r: DuLieuLuot = LUOT_THUONG): YeuCauHoi {
 	return {
 		hoiId,
-		chatId: "chat-bay-cho",
-		text: "chao",
+		chatId: r.chat,
+		text: r.chu,
 		auth: {
 			authenticator: "zalo",
 			principalType: "user",
@@ -750,7 +787,7 @@ function yeuCau(hoiId: string): YeuCauHoi {
 			attributes: {
 				purpose: "zalo",
 				userId: "bay-cho-nguoi",
-				zaloChatId: "chat-bay-cho",
+				zaloChatId: r.chat,
 				hoiId,
 			},
 		},
@@ -774,123 +811,135 @@ async function noiNguoi(zaloUserId: string): Promise<string> {
 
 type ChoBay = readonly [string, () => Promise<unknown>];
 
-describe("bay-cho", () => {
-	test("tám chỗ gửi Zalo đều ghi lý do Zalo từ chối", async () => {
-		await db.zaloHoi.deleteMany({});
-		await db.zaloUpdateSeen.deleteMany({});
-		await gieoBot(TOKEN_CU, 0);
-		const nguoiThu = await noiNguoi("z-bay-cho");
-		const tatCa = tuChoiCho(MOI_LENH);
-		const CHO: readonly ChoBay[] = [
-			[
-				"gui-thu",
-				() => khongBienToken(() => guiThu(nguoiThu, { fetcher: tatCa })),
-			],
-			[
-				"dat-bot-getme",
-				() =>
-					khongBienToken(() =>
-						datBot({ token: "333:moi" }, GOC_WEB, {
-							fetcher: tatCa,
-							ghi: async () => {},
-						}),
-					),
-			],
-			[
-				"tra-loi-phien",
-				async () =>
-					traLoiVe({ hoiId: await gieoHoi("bc-3") }, "chao", {
+function choBay(r: DuLieuLuot, nguoiThu: string): readonly ChoBay[] {
+	const tatCa = tuChoiCho(MOI_LENH);
+	const id = (i: number) => `${r.tien}-${i}`;
+	return [
+		[
+			"gui-thu",
+			() => khongBienToken(() => guiThu(nguoiThu, { fetcher: tatCa })),
+		],
+		[
+			"dat-bot-getme",
+			() =>
+				khongBienToken(() =>
+					datBot({ token: r.tokenMoi }, GOC_WEB, {
 						fetcher: tatCa,
-						token: TOKEN,
+						ghi: async () => {},
 					}),
-			],
-			[
-				"loi-ve",
-				async () =>
-					loiVe(
-						{ hoiId: await gieoHoi("bc-4") },
-						{ fetcher: tatCa, token: TOKEN },
-					),
-			],
-			[
-				"send-chat-action",
-				async () =>
-					moPhien(yeuCau(await gieoHoi("bc-5")), {
-						hoi: async () => ({ id: "phien-bc-5" }),
-						fetcher: tuChoiCho(["sendChatAction"]),
-						token: TOKEN,
-						messageId: "bc-5",
-					}),
-			],
-			[
-				"khong-mo-phien",
-				async () =>
-					moPhien(yeuCau(await gieoHoi("bc-6")), {
-						hoi: async () => {
-							throw new Error("eve khong mo duoc");
-						},
-						fetcher: tuChoiCho(["sendMessage"]),
-						token: TOKEN,
-						messageId: "bc-6",
-					}),
-			],
-			[
-				"bat-dau-lai",
-				async () => {
-					const cho: Promise<unknown>[] = [];
-					await xuLyTinDen(
-						TOKEN,
-						parseZaloWebhook(
-							thanWebhook({
-								messageId: "bc-7",
-								fromId: "z-bay-cho",
-								text: ZALO.lenh.moi[0],
-							}),
-						).message,
-						{
-							fetcher: tatCa,
-							now: new Date(),
-							hoi: {
-								hoi: async () => ({ id: "phien-bc-7" }),
-								datLai: async () => null,
-								waitUntil: (p) => {
-									cho.push(p);
-								},
+				),
+		],
+		[
+			"tra-loi-phien",
+			async () =>
+				traLoiVe({ hoiId: await gieoHoi(id(3), new Date(), r.chat) }, r.chu, {
+					fetcher: tatCa,
+					token: r.token,
+				}),
+		],
+		[
+			"loi-ve",
+			async () =>
+				loiVe(
+					{ hoiId: await gieoHoi(id(4), new Date(), r.chat) },
+					{ fetcher: tatCa, token: r.token },
+				),
+		],
+		[
+			"send-chat-action",
+			async () =>
+				moPhien(yeuCau(await gieoHoi(id(5), new Date(), r.chat), r), {
+					hoi: async () => ({ id: `phien-${id(5)}` }),
+					fetcher: tuChoiCho(["sendChatAction"]),
+					token: r.token,
+					messageId: id(5),
+				}),
+		],
+		[
+			"khong-mo-phien",
+			async () =>
+				moPhien(yeuCau(await gieoHoi(id(6), new Date(), r.chat), r), {
+					hoi: async () => {
+						throw new Error("eve khong mo duoc");
+					},
+					fetcher: tuChoiCho(["sendMessage"]),
+					token: r.token,
+					messageId: id(6),
+				}),
+		],
+		[
+			"bat-dau-lai",
+			async () => {
+				const cho: Promise<unknown>[] = [];
+				await xuLyTinDen(
+					r.token,
+					parseZaloWebhook(
+						thanWebhook({
+							messageId: id(7),
+							fromId: r.nguoiZalo,
+							text: ZALO.lenh.moi[0],
+						}),
+					).message,
+					{
+						fetcher: tatCa,
+						now: new Date(),
+						hoi: {
+							hoi: async () => ({ id: `phien-${id(7)}` }),
+							datLai: async () => null,
+							waitUntil: (p) => {
+								cho.push(p);
 							},
 						},
-					);
-					expect(cho.length).toBe(1);
-					await Promise.all(cho);
-				},
-			],
-			[
-				"qua-han",
-				async () => {
-					await gieoHoi(
-						"bc-8",
-						new Date(Date.now() - ZALO.hoi.hanTraLoiMs - 1000),
-					);
-					return dongHoiQuaHan({ fetcher: tatCa, token: TOKEN });
-				},
-			],
-		];
-		let chay = 0;
-		for (const [ten, goi] of CHO) {
-			const nk = batNhatKy();
-			try {
-				await goi();
-			} finally {
-				nk.tra();
-			}
-			const coLyDo = nk.dong.filter(
-				(d) =>
-					d.startsWith("[zalo]") && d.includes(`zalo-tu-choi 403 «${GHIM}»`),
-			);
-			if (coLyDo.length !== 1) throw new Error(`${ten}: khong co ly do`);
-			chay++;
+					},
+				);
+				expect(cho.length).toBe(1);
+				await Promise.all(cho);
+			},
+		],
+		[
+			"qua-han",
+			async () => {
+				await gieoHoi(
+					id(8),
+					new Date(Date.now() - ZALO.hoi.hanTraLoiMs - 1000),
+					r.chat,
+				);
+				return dongHoiQuaHan({ fetcher: tatCa, token: r.token });
+			},
+		],
+	];
+}
+
+async function chayChoBay(r: DuLieuLuot) {
+	await db.zaloHoi.deleteMany({});
+	await db.zaloUpdateSeen.deleteMany({});
+	await db.zaloLinkAttempt.deleteMany({});
+	await gieoBot(r.token, 0);
+	const nguoiThu = await noiNguoi(r.nguoiZalo);
+	const dong: string[] = [];
+	let chay = 0;
+	for (const [ten, goi] of choBay(r, nguoiThu)) {
+		const nk = batNhatKy();
+		try {
+			await goi();
+		} finally {
+			nk.tra();
 		}
-		expect(chay).toBe(8);
-		await db.zaloHoi.deleteMany({});
+		dong.push(...nk.dong);
+		const coLyDo = nk.dong.filter(
+			(d) => d.startsWith("[zalo]") && d.includes(`zalo-tu-choi 403 «${GHIM}»`),
+		);
+		if (coLyDo.length !== 1) throw new Error(`${ten}: khong co ly do`);
+		chay++;
+	}
+	await db.zaloHoi.deleteMany({});
+	return { chay, dong };
+}
+
+describe("bay-cho", () => {
+	test("tám chỗ gửi Zalo đều ghi lý do Zalo từ chối", async () => {
+		const ket = await chayChoBay(LUOT_THUONG);
+		expect(ket.chay).toBe(8);
 	});
 });
 
@@ -980,7 +1029,21 @@ describe("rieng-tu", () => {
 		} finally {
 			nk.tra();
 		}
-		const tatCaDong = [...nk.dong, ...moTa];
+		const rieng: DuLieuLuot = {
+			token: TOKEN_RT,
+			tokenMoi: TOKEN_RT,
+			chat: CHAT_RT,
+			nguoiZalo: `${CHAT_RT}-nguoi`,
+			chu: CHU_RT,
+			tien: "rt",
+		};
+		const bay = await chayChoBay(rieng);
+		const boQua = await chayBoQua(rieng);
+		if (bay.chay + boQua.chay !== 12)
+			throw new Error(
+				`rieng tu chi phu ${bay.chay}/8 cho gui va ${boQua.chay}/4 nhanh bo qua`,
+			);
+		const tatCaDong = [...nk.dong, ...moTa, ...bay.dong, ...boQua.dong];
 		expect(
 			nk.dong.filter((d) => d.startsWith("[zalo]")).length,
 		).toBeGreaterThan(0);

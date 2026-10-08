@@ -188,7 +188,8 @@ follow, and none of them is a gap to fill later.
   không ghi gì tới khi được đồng ý. Đồng ý thì tác tử đăng ký bot mới trước; Zalo
   nhận rồi mới đổi bot và gỡ mọi `zaloLink` trong cùng một giao dịch. Chỉ khoá webhook
   mới được ghi trước `setWebhook`, vì Zalo gọi thử webhook bằng khoá đó; token và tên
-  bot mới chỉ vào giao dịch. Người đã chọn
+  bot mới chỉ vào giao dịch. Giao dịch hỏng thì khoá cũ được trả lại và webhook vừa
+  đăng ký cho bot mới bị gỡ (`deleteWebhook`). Người đã chọn
   Zalo mà mất liên kết thấy «cần nối lại» trên «Thông báo của bạn». Đây là ngoại lệ
   duy nhất của luật trên. Cùng bot (mã bot của `getMe` trùng) thì không hỏi và không
   gỡ gì.
