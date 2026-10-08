@@ -1,0 +1,57 @@
+slug: sua-paths-e5-soan-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.f19_loc_bat
+    expected: "exit 0; rang/loc-paths.mjs --phan bat: dựng cây bằng dungCayPaths(git ls-files -z), gọi phanLoaiMucPaths cho từng mục paths của mọi eval trong _acceptance/soan-okr-cung-tro-ly/evals.yaml ở HEAD, rồi staleByPaths; in 'muc bi tu choi: 0' và 'apply: true'. Chiều đỏ, cùng lệnh, cùng hàm: --doc-tu b633a7e3 đọc evals.yaml qua git show ở onehub b633a7e3 → exit 1, in 'apply: false' và lý do bắt đầu 'paths-khong-tro-toi-tep:E5:'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/soan-okr-cung-tro-ly/evals.yaml, _acceptance/sua-paths-e5-soan-okr/rang/loc-paths.mjs, lib/evidence-core.cjs, lib/eval-yaml.cjs]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.f19_loc_chon
+    expected: "exit 0; rang/loc-paths.mjs --phan chon, ma trận viết trước. (a) Theo từng eval, bằng evalPathsOf + pathGlobToRe: settings/organization/to-chuc.tsx khớp ≥1 mục của E5, lib/messages/tro-ly-okr.ts khớp ≥1 mục của E17 — in 'dat to-chuc.tsx khop E5', 'dat tro-ly-okr.ts khop E17'. (b) staleByPaths với 4 tệp trên cây HEAD: to-chuc.tsx và tro-ly-okr.ts → kept; .github/workflows/acceptance.yml và scripts/dieu-phoi/giu-nhip.mjs → skipped; so tập kept/skipped bằng nhau từng phần tử, in 4 dòng 'dat <tệp> <kept|skipped>'. Chiều đỏ: --ban-sao e5-lech dựng bản sao evals.yaml (trong .acceptance-runs/sua-paths-e5-soan-okr/) với E5 trỏ settings/okr/** → exit 1, in 'sai to-chuc.tsx: khong khop E5'; --ban-sao e5-cu với E5 trả về settings/to-chuc/** → exit 1, in 'sai giu-nhip.mjs: mong skipped, thay kept'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/soan-okr-cung-tro-ly/evals.yaml, _acceptance/sua-paths-e5-soan-okr/rang/loc-paths.mjs, lib/evidence-core.cjs, "apps/app/app/(app)/[slug]/settings/organization/to-chuc.tsx", apps/app/lib/messages/tro-ly-okr.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.f19_chi_doi
+    expected: "exit 0; rang/chi-doi-paths.mjs đọc evals.yaml ở HEAD và ở b633a7e3 (git show) bằng parseEvals của lib/eval-yaml.cjs: danh sách id cùng thứ tự; mọi trường ngoài paths bằng nhau theo JSON.stringify. Rồi git diff -U0 b633a7e3 HEAD -- tệp đó: đúng 2 dòng '-' và 2 dòng '+'; mỗi cặp bằng nhau sau khi thay đúng một chuỗi cũ bằng chuỗi mới viết trước (E5 to-chuc/** → organization/**, E17 okr-tro-ly.ts → tro-ly-okr.ts); in 'doi: 2 muc paths, 0 truong khac, 2-/2+'. Chiều đỏ: --ban-sao doi-expected đổi một chữ trong expected của E5 → exit 1, in 'doi-ngoai-paths:E5:expected'; --ban-sao thieu-e17 giữ đường cũ của E17 → exit 1, in 'thieu-doi:E17'; --ban-sao doi-trich-dan đổi kiểu trích dẫn một dòng ngoài paths → exit 1, in 'doi-byte-ngoai-paths'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/soan-okr-cung-tro-ly/evals.yaml, _acceptance/sua-paths-e5-soan-okr/rang/chi-doi-paths.mjs, lib/eval-yaml.cjs]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.f19_ghim
+    expected: "exit 0; rang/ghim-mot-lan.mjs: (1) git diff <merge-base với origin/onehub>..HEAD -- _acceptance/soan-okr-cung-tro-ly/run-log.jsonl có đúng một dòng '+' mang kind:repin, và đó là dòng kind:repin cuối của tệp; (2) git merge-base --is-ancestor <commit cuối đổi evals.yaml của hồ sơ> <sha của dòng> thoát 0; (3) sha == verified_commit của evidence-report.md; suites_exit mọi phần tử 0; tập khoá evals_exit == tập eval test/script không status: not-run của evals.yaml HEAD (tính bằng parseEvals), mọi mã 0; (4) human_signoff bằng bản ở b633a7e3 (git show); in 'ghim: <run_id> · <n>/<n> eval may 0 · chu ky giu nguyen'. Chiều đỏ: --ban-sao repin-cu bỏ dòng repin mới khỏi bản sao → exit 1, in 'repin-khong-trong-vong'; --ban-sao mot-eval-do đổi một mã evals_exit thành 1 → exit 1, in 'eval-do:<id>'; --ban-sao thieu-eval bỏ một khoá khỏi evals_exit → exit 1, in 'thieu-eval:<id>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/soan-okr-cung-tro-ly/run-log.jsonl, _acceptance/soan-okr-cung-tro-ly/evidence-report.md, _acceptance/soan-okr-cung-tro-ly/evals.yaml, _acceptance/sua-paths-e5-soan-okr/rang/ghim-mot-lan.mjs]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.f19_pre_merge
+    expected: "exit 0; rang/pre-merge.mjs: đòi git status --porcelain rỗng ngoài .acceptance-runs/ và apps/app/public/ (tệp mốc canh-cay) — cây bẩn thì exit 1, in 'cay-ban:<tệp>'; git fetch origin onehub, in sha HEAD và sha origin/onehub; chạy bash scripts/pre-merge-check.sh . --base origin/onehub (không --slug), ghi trọn đầu ra vào .acceptance-runs/sua-paths-e5-soan-okr/pre-merge.txt, đòi mã 0 và không dòng nào bắt đầu 'VIOLATION [soan-okr-cung-tro-ly]'; in 'pre-merge: clean'. Chiều đỏ của bộ đọc: --doc-tep <tệp> cho bộ đọc một đầu ra mẫu có 'VIOLATION [soan-okr-cung-tro-ly]: evidence is stale' và mã 1 → exit 1, in 'vi-pham:soan-okr-cung-tro-ly'. Chiều đỏ của lưới thật nằm ở E7."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/soan-okr-cung-tro-ly/**, _acceptance/sua-paths-e5-soan-okr/rang/pre-merge.mjs, scripts/pre-merge-check.sh, lib/evidence-core.cjs]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.f19_ranh_gioi
+    expected: "exit 0; rang/ranh-gioi.mjs lấy git diff --name-only $(git merge-base HEAD origin/onehub)..HEAD, so từng tệp với danh sách ranh giới viết trước của AC-6 (ba tệp đích danh trong _acceptance/soan-okr-cung-tro-ly/, sáu mẫu còn lại); contract.md của hồ sơ đã ký không có trong danh sách; với _acceptance/soan-okr-cung-tro-ly/run-log.jsonl và _acceptance/config.yaml đọc git diff -U0, đòi 0 dòng '-' ngoài dòng tiêu đề; in 'ranh-gioi: <n> tep, 0 ngoai', 'run-log: +<k> -0', 'config: +<k> -0'. Chiều đỏ: --them apps/app/lib/x.ts → exit 1, in 'ngoai-ranh-gioi:apps/app/lib/x.ts'; --them _acceptance/soan-okr-cung-tro-ly/contract.md → exit 1, in 'ngoai-ranh-gioi:_acceptance/soan-okr-cung-tro-ly/contract.md'; --diff-mau <tệp> có một dòng '-' trong config.yaml → exit 1, in 'xoa-dong:_acceptance/config.yaml'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/sua-paths-e5-soan-okr/rang/ranh-gioi.mjs, _acceptance/config.yaml, _acceptance/soan-okr-cung-tro-ly/**]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.f19_luoi_that
+    expected: "exit 0; rang/luoi-that.mjs dựng git worktree tạm ở .acceptance-runs/sua-paths-e5-soan-okr/sao-luoi/ từ HEAD (dọn trong finally, kể cả khi lỗi), commit trên nhánh tạm: một byte thêm vào cuối scripts/dieu-phoi/giu-nhip.mjs (dòng trống) + tệp mới _acceptance/soan-okr-cung-tro-ly/.cham-f19; chạy bash scripts/pre-merge-check.sh . --base <HEAD gốc> trên bản sao (không --slug), đòi không dòng 'VIOLATION [soan-okr-cung-tro-ly]'; in 'luoi-that xanh: ho so khong cu vi giu-nhip.mjs'. Chiều đỏ, cùng lệnh, cùng bản sao: --doc-tu b633a7e3 thêm vào commit đó evals.yaml của b633a7e3 → đòi có dòng 'VIOLATION [soan-okr-cung-tro-ly]: evidence is stale' chứa 'scripts/dieu-phoi/giu-nhip.mjs', exit 1, in 'luoi-that do: ho so cu vi giu-nhip.mjs'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/soan-okr-cung-tro-ly/evals.yaml, _acceptance/sua-paths-e5-soan-okr/rang/luoi-that.mjs, scripts/pre-merge-check.sh, lib/evidence-core.cjs]
