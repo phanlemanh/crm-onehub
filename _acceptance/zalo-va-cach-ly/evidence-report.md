@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 91e41d7cae019ffd824b031ecb3608e90e0a206e
+verified_commit: d606e250c7c36a783d93d9114051654c5e576dec
 human_signoff: Phan Le Manh 2026-10-07
 ---
 
@@ -121,3 +121,7 @@ none — every multi-run eval is uniform
 
 Round 1: E1, E2, E3, E4, E5 passed and all 7 suite commands passed — no failures; no return to implementation.
 
+
+### Re-pin lần 1 — 2026-10-08, do zalo-va-cach-ly (F15): gộp onehub 6a0900fb; luật cách ly xanh; r1g_cau_chao chạy thêm tệp app
+run_id: repin-20261008T001307Z-83174
+sha: d606e250c7c36a783d93d9114051654c5e576dec · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
