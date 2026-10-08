@@ -75,51 +75,62 @@ function sapTheoLoai(stages: Hang[]): Hang[] {
 	);
 }
 
-const HIEU_UNG: Record<string, (v: DauVaoGhi) => void> = {
-	"giaiDoan.archive": (v) => {
-		const ma = String(v.id);
-		const g = duLieu.stages.find((x) => x.id === ma);
-		if (!g) return;
-		duLieu = { ...duLieu, stages: duLieu.stages.filter((x) => x.id !== ma) };
-		daCat = [
-			{
-				id: g.id,
-				label: g.label,
-				kind: g.kind,
-				archivedAt: new Date().toISOString(),
-			},
-			...daCat,
-		];
-	},
-	"giaiDoan.restore": (v) => {
-		const ma = String(v.id);
-		const c = daCat.find((x) => x.id === ma);
-		if (!c) return;
-		daCat = daCat.filter((x) => x.id !== ma);
-		const cuoi = Math.max(
-			-1,
-			...duLieu.stages.filter((x) => x.kind === c.kind).map((x) => x.position),
-		);
-		duLieu = {
-			...duLieu,
-			stages: sapTheoLoai([
-				...duLieu.stages,
-				hang(c.id, c.label, c.kind, cuoi + 1),
-			]),
-		};
-	},
-	"giaiDoan.reorder": (v) => {
-		const thuTu = [v.ids ?? []].flat();
-		duLieu = {
-			...duLieu,
-			stages: sapTheoLoai(
-				duLieu.stages.map((x) =>
-					thuTu.includes(x.id) ? { ...x, position: thuTu.indexOf(x.id) } : x,
+const HIEU_UNG = new Map<string, (v: DauVaoGhi) => void>([
+	[
+		"giaiDoan.archive",
+		(v: DauVaoGhi) => {
+			const ma = String(v.id);
+			const g = duLieu.stages.find((x) => x.id === ma);
+			if (!g) return;
+			duLieu = { ...duLieu, stages: duLieu.stages.filter((x) => x.id !== ma) };
+			daCat = [
+				{
+					id: g.id,
+					label: g.label,
+					kind: g.kind,
+					archivedAt: new Date().toISOString(),
+				},
+				...daCat,
+			];
+		},
+	],
+	[
+		"giaiDoan.restore",
+		(v: DauVaoGhi) => {
+			const ma = String(v.id);
+			const c = daCat.find((x) => x.id === ma);
+			if (!c) return;
+			daCat = daCat.filter((x) => x.id !== ma);
+			const cuoi = Math.max(
+				-1,
+				...duLieu.stages
+					.filter((x) => x.kind === c.kind)
+					.map((x) => x.position),
+			);
+			duLieu = {
+				...duLieu,
+				stages: sapTheoLoai([
+					...duLieu.stages,
+					hang(c.id, c.label, c.kind, cuoi + 1),
+				]),
+			};
+		},
+	],
+	[
+		"giaiDoan.reorder",
+		(v: DauVaoGhi) => {
+			const thuTu = [v.ids ?? []].flat();
+			duLieu = {
+				...duLieu,
+				stages: sapTheoLoai(
+					duLieu.stages.map((x) =>
+						thuTu.includes(x.id) ? { ...x, position: thuTu.indexOf(x.id) } : x,
+					),
 				),
-			),
-		};
-	},
-};
+			};
+		},
+	],
+]);
 
 function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa | Promise<TRa>) {
 	return {
@@ -135,7 +146,7 @@ function thuTuc<TVao, TRa>(ten: string, doc: (v: TVao) => TRa | Promise<TRa>) {
 				goiGhi.push({ ten, v });
 				const lam = ketQuaGhi[ten];
 				if (lam) return lam();
-				HIEU_UNG[ten]?.(v);
+				HIEU_UNG.get(ten)?.(v);
 				return { id: "x" };
 			},
 			...tuyChon,
