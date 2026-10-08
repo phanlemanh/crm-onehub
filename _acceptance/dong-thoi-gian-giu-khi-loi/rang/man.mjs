@@ -31,6 +31,7 @@ const ANH = [
 	"dtg-xem-cu-loi-1440.png",
 	"dtg-sau-thu-lai-1440.png",
 	"dtg-xem-cu-loi-390.png",
+	"dtg-390-cuon-ngang.png",
 	"dtg-do-390.txt",
 ];
 
@@ -312,55 +313,93 @@ try {
 			if (khungLoi) loi.push("390 khung loi thay ca danh sach");
 			if (man.tran.length > 0) loi.push(`390 tran: ${man.tran.join(", ")}`);
 			if (!man.trongKhung) loi.push("390 nut Thu lai ngoai khung nhin");
-			const hang = await t.evaluate(
-				(nut) => {
-					const ra = [];
-					for (const c of nut) {
-						const el = [...document.querySelectorAll("button")].find((b) =>
-							(b.textContent ?? "").trim().startsWith(c),
-						);
-						let p = el?.parentElement ?? null;
-						while (
-							p &&
-							p !== document.body &&
-							!(p.scrollWidth > p.clientWidth + 1)
-						)
-							p = p.parentElement;
-						const coCuon = p !== null && p !== document.body;
-						const kieu = coCuon ? getComputedStyle(p).overflowX : "-";
-						ra.push({
-							nut: c,
-							khung: coCuon
-								? `${p.tagName.toLowerCase()}[data-slot=${p.getAttribute("data-slot") ?? "-"}]`
-								: "khong co",
-							overflowX: kieu,
-							scrollWidth: coCuon ? p.scrollWidth : 0,
-							clientWidth: coCuon ? p.clientWidth : 0,
-							cuonDuoc: coCuon && (kieu === "auto" || kieu === "scroll"),
-						});
+			const cat = await t.evaluate(() => {
+				const ngan = document.querySelector(
+					"[data-slot='sheet-content'],[data-slot='drawer-content']",
+				);
+				const phanTu = [
+					...(ngan?.querySelectorAll(
+						"button, [data-slot=timeline] > li, [data-dtg-loi]",
+					) ?? []),
+				];
+				const ketQua = { tong: phanTu.length, cuon: new Set(), catMat: [] };
+				for (const el of phanTu) {
+					const r = el.getBoundingClientRect();
+					if (r.width === 0) continue;
+					let p = el.parentElement;
+					while (p && p !== document.body) {
+						const kieu = getComputedStyle(p).overflowX;
+						if (kieu !== "visible") break;
+						p = p.parentElement;
 					}
-					return {
-						ra,
-						trang: `${document.documentElement.scrollWidth}/${document.documentElement.clientWidth}`,
-					};
-				},
-				["Việc cần làm", "Đã xong"],
-			);
+					if (!p || p === document.body) continue;
+					const kieu = getComputedStyle(p).overflowX;
+					const k = p.getBoundingClientRect();
+					const vuot = r.right > k.right + 1 || r.left < k.left - 1;
+					if (!vuot) continue;
+					if (kieu === "auto" || kieu === "scroll") {
+						ketQua.cuon.add(
+							`${p.tagName.toLowerCase()} ${p.scrollWidth}/${p.clientWidth}`,
+						);
+						continue;
+					}
+					ketQua.catMat.push(
+						`«${(el.textContent ?? "").trim().slice(0, 24)}» bi ${p.tagName.toLowerCase()}[overflow-x ${kieu}] cat`,
+					);
+				}
+				return {
+					tong: ketQua.tong,
+					cuon: [...ketQua.cuon],
+					catMat: ketQua.catMat,
+					trang: `${document.documentElement.scrollWidth}/${document.documentElement.clientWidth}`,
+				};
+			});
 			const dongDo = [
-				`390 — trang scrollWidth/clientWidth ${hang.trang}`,
-				...hang.ra.map(
-					(h) =>
-						`hang co nut «${h.nut}»: khung cuon ${h.khung}, overflow-x ${h.overflowX}, scrollWidth ${h.scrollWidth} > clientWidth ${h.clientWidth}, cuon ngang duoc ${h.cuonDuoc}`,
+				`390 — trang scrollWidth/clientWidth ${cat.trang}; ${cat.tong} phan tu trong ngan (nut, dong hoat dong, thong bao)`,
+				...cat.cuon.map(
+					(c) => `khung cuon ngang (vuot khung nhung cuon duoc): ${c}`,
 				),
+				...(cat.catMat.length === 0
+					? ["khong phan tu nao bi cat ma khong cuon duoc"]
+					: cat.catMat),
 			];
 			for (const l of dongDo) console.log(`  ${l}`);
 			writeFileSync(
 				join(process.env.BANG_CHUNG, "dtg-do-390.txt"),
 				`${dongDo.join("\n")}\n`,
 			);
-			console.log(
-				"  hai hang tren la hanh vi co san truoc K6c (activity-composer.tsx va ToggleGroup cua timeline.tsx khong doi) — ghi so, khong tinh vao buoc",
+			if (cat.catMat.length > 0)
+				loi.push(`390 bi cat: ${cat.catMat.join(", ")}`);
+			const toiCuoi = await t.evaluate(
+				(chuCan) => {
+					const ngan = document.querySelector(
+						"[data-slot='sheet-content'],[data-slot='drawer-content']",
+					);
+					for (const e of ngan?.querySelectorAll("*") ?? []) {
+						const kieu = getComputedStyle(e).overflowX;
+						if (
+							(kieu === "auto" || kieu === "scroll") &&
+							e.scrollWidth > e.clientWidth + 1
+						)
+							e.scrollLeft = e.scrollWidth;
+					}
+					const w = document.documentElement.clientWidth;
+					return chuCan.map((c) => {
+						const b = [...document.querySelectorAll("button")].find((x) =>
+							(x.textContent ?? "").trim().startsWith(c),
+						);
+						const r = b?.getBoundingClientRect();
+						return { c, thay: r ? r.left >= 0 && r.right <= w + 1 : false };
+					});
+				},
+				["Việc cần làm", "Đã xong"],
 			);
+			for (const n of toiCuoi) {
+				console.log(`  cuon toi cuoi: «${n.c}» trong khung nhin ${n.thay}`);
+				if (!n.thay) loi.push(`390 «${n.c}» khong voi toi duoc khi cuon`);
+			}
+			await new Promise((r) => setTimeout(r, 300));
+			await chup(t, "dtg-390-cuon-ngang.png");
 			await t.close();
 			d.dat(2, loi.length === 0, loi.join(" · "));
 		});

@@ -1,3 +1,4 @@
-390 — trang scrollWidth/clientWidth 390/390
-hang co nut «Việc cần làm»: khung cuon div[data-slot=input-group-addon], overflow-x visible, scrollWidth 438 > clientWidth 348, cuon ngang duoc false
-hang co nut «Đã xong»: khung cuon div[data-slot=-], overflow-x visible, scrollWidth 459 > clientWidth 390, cuon ngang duoc false
+390 — trang scrollWidth/clientWidth 390/390; 50 phan tu trong ngan (nut, dong hoat dong, thong bao)
+khung cuon ngang (vuot khung nhung cuon duoc): div 428/328
+khung cuon ngang (vuot khung nhung cuon duoc): div 381/350
+khong phan tu nao bi cat ma khong cuon duoc

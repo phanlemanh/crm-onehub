@@ -201,26 +201,28 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 			<div className="flex shrink-0 flex-col gap-2 border-b px-5 py-3">
 				<ActivityComposer anchor={anchor} />
 
-				<ToggleGroup
-					type="single"
-					value={tab}
-					onValueChange={(next) => {
-						if (next) void setTab(next as TimelineTab);
-					}}
-					size="sm"
-					spacing={0}
-				>
-					{TIMELINE_TABS.map((option) => (
-						<ToggleGroupItem key={option} value={option}>
-							{tabLabels(m)[option]}
-							{counts.data?.[option] ? (
-								<span className="tabular-nums opacity-60">
-									{counts.data[option]}
-								</span>
-							) : null}
-						</ToggleGroupItem>
-					))}
-				</ToggleGroup>
+				<div className="min-w-0 overflow-x-auto">
+					<ToggleGroup
+						type="single"
+						value={tab}
+						onValueChange={(next) => {
+							if (next) void setTab(next as TimelineTab);
+						}}
+						size="sm"
+						spacing={0}
+					>
+						{TIMELINE_TABS.map((option) => (
+							<ToggleGroupItem key={option} value={option}>
+								{tabLabels(m)[option]}
+								{counts.data?.[option] ? (
+									<span className="tabular-nums opacity-60">
+										{counts.data[option]}
+									</span>
+								) : null}
+							</ToggleGroupItem>
+						))}
+					</ToggleGroup>
+				</div>
 			</div>
 
 			{history.isPending ? (

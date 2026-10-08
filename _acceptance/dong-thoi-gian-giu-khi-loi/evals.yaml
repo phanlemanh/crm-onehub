@@ -106,18 +106,21 @@ evals:
       thong bao «Không tải được hoạt động cũ hơn.» + «Thử lại» hien o cuoi, so dong van 30, khong khung «Không tải được
       hoạt động»; bo chan, bam «Thử lại» -> 35 dong, cuon vung danh sach toi day, dong cuoi (so 35) nam trong khung
       nhin, khong con [data-dtg-loi]; buoc 2 (390) lap buoc 1 den luc thong bao hien, scrollWidth <=
-      clientWidth cua trang va ngan, nut «Thử lại» trong khung nhin; ghi so do hai hang co san bi cat (nut soan, loc tab)
-      vao dtg-do-390.txt — chi ghi, khong tinh vao buoc. Tep trong evidence_required ton tai sau luot; ho so
+      clientWidth cua trang va ngan, nut «Thử lại» trong khung nhin; MOI nut, dong hoat dong va thong bao trong ngan: phan
+      tu vuot khung cha gan nhat co overflow-x khac visible thi khung do phai cuon duoc (auto/scroll), khung hidden/clip
+      cat mat la do "390 bi cat: ..."; cuon cac dai cuon ngang toi cuoi thi «Việc cần làm» va «Đã xong» nam trong khung
+      nhin; so do ghi vao dtg-do-390.txt. Tep trong evidence_required ton tai sau luot; ho so
       da signed-off/machine-cleared thi anh chi o .acceptance-runs/, khong chep vao ho so.
       CHIEU DO ghim: --chieu-do khong chan lot xem cu -> do "man: khong thay thong bao xem cu loi".
     steps:
       - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
       - "Buoc 1 (1440): ngan ca nhan, tab Hoat dong, cuon toi cuoi, chan lot xem cu, bam «Xem cũ hơn» -> dtg-xem-cu-loi-1440.png; dem dong truoc/sau; bo chan, bam «Thử lại», cuon toi day -> dtg-sau-thu-lai-1440.png (dong 35 trong khung)"
-      - "Buoc 2 (390): lap buoc 1 den luc thong bao hien -> dtg-xem-cu-loi-390.png; do tran ngang trang/ngan; ghi so do hai hang nut soan va loc tab vao dtg-do-390.txt"
+      - "Buoc 2 (390): lap buoc 1 den luc thong bao hien -> dtg-xem-cu-loi-390.png; do tran ngang trang/ngan va moi phan tu trong ngan (dtg-do-390.txt); cuon cac dai ngang toi cuoi -> dtg-390-cuon-ngang.png"
     evidence_required:
       - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-xem-cu-loi-1440.png"
       - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-sau-thu-lai-1440.png"
       - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-xem-cu-loi-390.png"
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-390-cuon-ngang.png"
       - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-do-390.txt"
 
   - id: E7
@@ -128,15 +131,14 @@ evals:
       - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-xem-cu-loi-1440.png"
       - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-sau-thu-lai-1440.png"
       - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-xem-cu-loi-390.png"
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-390-cuon-ngang.png"
       - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-do-390.txt"
       - "docs/ai-ux.md"
     question: |
       Ghi chú cho người chấm: ảnh chụp tab Hoạt động của một cá nhân có 35 hoạt động; trang đầu tải 30, lượt «Xem cũ hơn»
       bị chặn có chủ đích để gây lỗi tải trang kế; ảnh thứ hai chụp sau khi bỏ chặn, bấm «Thử lại» và cuộn vùng danh sách
-      tới đáy (dòng cuối là hoạt động số 35). Phạm vi «không có gì tràn ngang» của AC-6 là trang và ngăn bản ghi —
-      dtg-do-390.txt ghi trang 390/390. Tệp đó cũng ghi hai hàng ở đầu tab (nút soạn «Việc cần làm» và hàng lọc «Đã xong»)
-      bị cắt ở 390 mà không cuộn ngang được: đây là hành vi có sẵn từ trước K6c (activity-composer.tsx và hàng lọc của
-      timeline.tsx không đổi trong lượt này), được báo riêng cho chủ sản phẩm; người chấm xét dải lỗi và danh sách.
+      tới đáy (dòng cuối là hoạt động số 35). Ảnh dtg-390-cuon-ngang.png chụp cùng màn 390 sau khi cuộn các dải cuộn
+      ngang của ngăn tới cuối; dtg-do-390.txt là số đo của phép đo máy ở 390.
       Nhìn ba ảnh và đối chiếu docs/ai-ux.md mục 7 (một nút «Thử lại» duy nhất, không lỗi thô): (1) ở ảnh lỗi, danh sách
       hoạt động có còn hiện không, hay bị thay bằng một khung lỗi hay chỗ trống? (2) thông báo ở cuối có nói rõ là không
       tải được phần cũ hơn và có «Thử lại» không? (3) ảnh sau thử lại có cho thấy hoạt động cũ hơn đã nối vào và thông
