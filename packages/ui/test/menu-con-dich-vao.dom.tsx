@@ -69,7 +69,7 @@ async function moMenuCon(lopNoiGoi?: string): Promise<HTMLElement> {
 
 const BIEN = "--radix-popper-available-width";
 
-function lopDich(hop: HTMLElement): { phai: boolean; trai: boolean } {
+function lopDich(hop: HTMLElement) {
 	const lop = hop.className.split(/\s+/);
 	return {
 		phai: lop.some(
