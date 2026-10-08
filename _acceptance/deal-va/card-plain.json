@@ -1,0 +1,34 @@
+{
+  "feature_plain": "Bảng thoả thuận Kara trả lời lại có chấm màu giai đoạn giống thẻ Kanban, và số liệu ẩn danh gửi về chỉ còn 10 cột giai đoạn cố định.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ xếp mọi giai đoạn vào 10 khoá cố định: bảy giai đoạn gốc giữ tên mã cũ, giai đoạn tự tạo gộp vào «khác» theo loại Đang mở, Chốt được, Không thành."},
+    {"id": "AC-4", "p": "Sẽ cho Kara trả kèm mã giai đoạn của từng thoả thuận, không chỉ nhãn, và mã đó đi tới tận bảng hiện trong cuộc trò chuyện."},
+    {"id": "AC-5", "p": "Sẽ vẫn mở được các cuộc trò chuyện cũ chưa có mã giai đoạn, không làm mất cả bảng."},
+    {"id": "AC-6", "p": "Sẽ tô chấm xanh dương, xanh lá, đỏ cho Đang mở, Chốt được, Không thành, đúng màu chip của cùng giai đoạn trên thẻ Kanban, với nhãn giai đoạn hiện hành."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG gửi về số liệu ẩn danh một cột nào mang mã giai đoạn tự tạo hay nhãn quản trị viên gõ; tổng vẫn bằng số thoả thuận."},
+    {"id": "AC-3", "p": "Sẽ KHÔNG để tài liệu số liệu ẩn danh còn câu cũ: dòng giai đoạn liệt kê đủ 10 khoá."},
+    {"id": "AC-7", "p": "Sẽ KHÔNG xoá hay nới khẳng định nào của bài kiểm cũ, trừ đúng ca số liệu giai đoạn được thay."},
+    {"id": "AC-8", "p": "Sẽ KHÔNG vi phạm sàn thiết kế ở tệp bảng thoả thuận Kara."},
+    {"id": "OOS-1", "p": "KHÔNG tô màu cho cuộc trò chuyện lưu từ 29/09 tới nay: chúng chỉ có nhãn, đoán ngược ra giai đoạn dễ tô sai."},
+    {"id": "OOS-2", "p": "KHÔNG thêm chấm cho kết quả tìm kiếm của Kara."},
+    {"id": "OOS-3", "p": "KHÔNG đổi số liệu ẩn danh nào khác."}
+  ],
+  "scope_plain": "Ba thứ để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Loại giai đoạn: gốc, tự tạo ba loại, tự tạo đã lưu trữ, gốc đổi nhãn — đủ khi số đếm khớp từng loại (AC-1, AC-2)."},
+    {"i": 1, "p": "Đời cuộc trò chuyện: có mã mới, trước 29/09, từ 29/09 tới nay, mã lạ — đủ khi mỗi đời ra đúng chấm hay đúng chữ (AC-5, AC-6)."},
+    {"i": 2, "p": "Đầu vào lạ cho bộ lọc khoá: mã lạ, chuỗi rỗng, nhãn có dấu — đủ khi đều rơi vào «khác» (AC-1)."},
+    {"i": 3, "p": "Mỗi lời hứa chính có một tiêu chí đo: khoá đóng, tài liệu, Kara trả mã, bản ghi cũ, chấm đúng màu, không hồi quy, sàn thiết kế."},
+    {"i": 4, "p": "Để sau: chấm giai đoạn ở kết quả tìm kiếm của Kara — chưa có màn nào vẽ nó bằng chấm."},
+    {"i": 5, "p": "Không bao giờ: đoán giai đoạn từ nhãn; gửi nhãn giai đoạn trong số liệu ẩn danh."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa có phép đo nối đầu ra thật của công cụ Kara với bảng — đã thêm: gọi đúng công cụ, đọc qua bộ đọc của app, mã giai đoạn phải còn."},
+    {"i": 1, "p": "Ngưỡng «khác màu Kanban» chưa được đo — đã thêm: so màu chấm ở bảng Kara với chip Kanban của cùng giai đoạn, ba cặp."},
+    {"i": 2, "p": "Không có phép đo trên màn thật — để lại: phiên nghiệm thu nhìn bằng mắt; có ghi bỏ có tên trong sổ."},
+    {"i": 3, "p": "Phép so tổng số liệu chưa neo vào cách đếm cũ — đã sửa thành so với cách đếm cũ cùng lượt."},
+    {"i": 4, "p": "Kiểm hồi quy chỉ nhìn mã thoát — đã thêm chốt: không khẳng định cũ nào bị xoá, trừ ca được thay."}
+  ]
+}
