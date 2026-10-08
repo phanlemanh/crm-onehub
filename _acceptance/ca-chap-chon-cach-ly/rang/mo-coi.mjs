@@ -9,6 +9,7 @@ const NODE_TOI_THIEU = 24;
 const CHO_EVE_MS = 120_000;
 const NHIP_MS = 300;
 const TRAN_LUOT_MS = 300_000;
+const TRE_MS = [0, 3_000, 6_000, 10_000, 15_000];
 const LOI_MO_COI = "dang co eve dev khong phai cua bai thu";
 const MOC_DON = "\t\t\t\tawait dungMoCoi(khoa);\n";
 const KHOA = join(GOC, "node_modules", ".cache", "crm-eve-khoa");
@@ -45,7 +46,7 @@ function daGhiCong(trangThai, dongLenh) {
 	}
 }
 
-async function dungMoCoi(goiApp) {
+async function dungMoCoi(goiApp, tre) {
 	const tien = spawn("bun", ["test", "test/app-rieng.integration.spec.ts"], {
 		cwd: goiApp,
 		stdio: "ignore",
@@ -60,14 +61,23 @@ async function dungMoCoi(goiApp) {
 		len = eve > 0 && daGhiCong(trangThai, ps(eve, "command="));
 		if (!len) await Bun.sleep(NHIP_MS);
 	}
+	await Bun.sleep(tre);
+	const cay = eve ? [eve, ...cayCon(eve)] : [];
+	for (const p of cay) daThay.add(p);
 	process.kill(tien.pid, "SIGKILL");
 	testDaGiet.add(tien.pid);
 	await Bun.sleep(1_000);
-	if (!len || !song(eve) || ps(eve, "ppid=") !== "1")
-		throw new KhongDo(`khong dung duoc eve mo coi (eve ${eve || "vang"}, da len: ${len})`);
-	const cay = [eve, ...cayCon(eve)];
-	for (const p of cay) daThay.add(p);
-	return cay;
+	const conSong = len && song(eve) && ps(eve, "ppid=") === "1";
+	console.log(`thu tre ${tre} ms: eve ${eve || "vang"} da len ${len}, mo coi ${conSong}`);
+	return conSong ? cay : null;
+}
+
+async function dungMoCoiThat(goiApp) {
+	for (const tre of TRE_MS) {
+		const cay = await dungMoCoi(goiApp, tre);
+		if (cay) return cay;
+	}
+	throw new KhongDo(`khong dung duoc eve mo coi sau ${TRE_MS.length} lan thu`);
 }
 
 function chayCa(goiApp) {
@@ -106,7 +116,7 @@ async function main() {
 		const goiApp = join(goc, "apps", "agent-okr");
 		let dat = 0;
 		for (let n = 1; n <= SO_LUOT[CHE_DO]; n++) {
-			const cay = await dungMoCoi(goiApp);
+			const cay = await dungMoCoiThat(goiApp);
 			const log = chayCa(goiApp);
 			if (CHE_DO === "xanh") {
 				const xanh = /\b1 pass\b/.test(log) && /\b0 fail\b/.test(log);
