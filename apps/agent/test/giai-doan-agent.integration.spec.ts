@@ -1,9 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { GIAI_DOAN_GOC, type LoaiGiaiDoan } from "@crm/db/giai-doan";
+import { dealListResultOf } from "../../app/lib/agent-transcript";
 import { readDealHistory } from "../agent/lib/accounts";
 import { listDeals } from "../agent/lib/lookup";
 import { dealPreamble } from "../agent/lib/preamble";
+import listDealsTool from "../agent/tools/list_deals";
 
 const suffix = process.env.TEST_RUN_ID ?? "giai-doan-agent";
 const domain = `gd-agent-${suffix}.test`;
@@ -124,5 +126,50 @@ describe("giai-doan-agent", () => {
 		);
 		expect(moDau.includes(nhan.OPEN), "mo dau thieu nhan").toBe(true);
 		expect(moDau.includes(moi.OPEN), "mo dau in id").toBe(false);
+	});
+});
+
+describe("stage-id", () => {
+	it("list_deals tra stageId va nhan hien hanh o moi status", async () => {
+		const theoId = new Map(thoaThuan.map((t) => [t.id, t.stage]));
+		for (const status of ["open", "won", "lost"] as const) {
+			const ra = await listDeals({ status, ownerId: userId, limit: 100 });
+			const cua = ra.deals.filter((d) => theoId.has(d.id));
+			expect(cua.length, `${status}: khong co thoa thuan`).toBeGreaterThan(0);
+			for (const d of cua) {
+				const ma = theoId.get(d.id) as string;
+				const gd = await db.dealStage.findUniqueOrThrow({
+					where: { id: ma },
+					select: { label: true },
+				});
+				expect(d.stageId, "list_deals thieu stageId").toBe(ma);
+				expect(d.stage).toBe(gd.label);
+			}
+		}
+	});
+
+	it("dau ra cong cu doc qua dealListResultOf van giu stageId", async () => {
+		const theoId = new Map(thoaThuan.map((t) => [t.id, t.stage]));
+		const ra = await listDealsTool.execute(
+			{ status: "all", ownerId: userId, limit: 100 },
+			{} as never,
+		);
+		const doc = dealListResultOf(ra as never);
+		expect(doc === null, "bo doc cua app tra null").toBe(false);
+		const cua = (doc?.deals ?? []).filter((d) => theoId.has(d.id));
+		expect(cua.length).toBe(thoaThuan.length);
+		for (const d of cua) {
+			expect(d.stageId, "ban ghi mat stageId").toBe(theoId.get(d.id) ?? "");
+		}
+		const model = listDealsTool.toModelOutput?.(ra as never) as {
+			value: { deals: { id: string; stageId?: string }[] };
+		};
+		const choModel = model.value.deals.filter((d) => theoId.has(d.id));
+		expect(choModel.length).toBe(thoaThuan.length);
+		for (const d of choModel) {
+			expect(d.stageId, "model khong thay stageId").toBe(
+				theoId.get(d.id) ?? "",
+			);
+		}
 	});
 });

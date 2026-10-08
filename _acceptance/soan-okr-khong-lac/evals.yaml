@@ -1,0 +1,88 @@
+slug: soan-okr-khong-lac
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.k2b_tab
+    expected: "exit 0; bài DOM apps/app/test/soan-okr-khong-lac.dom.tsx -t k2b-tab, ma trận viết trước 3 bước × 3 ô: (1) khổ hẹp, chọn tab Bản nháp, bật «chỉ dòng chờ»; (2) gọi useRecordStack().open({kind:'contact',id}) thật trong cùng NuqsTestingAdapter, rồi đặt tab ngăn 'activity' bằng useRecordSheetView; (3) gọi useRecordStack().close() thật. Mỗi bước so ba giá trị nguyên thuỷ: aria-selected của tab Bản nháp === 'true', trạng thái nút lọc === 'on', và (bước 2) giá trị tham số tab của ngăn === 'activity'. Chiều đỏ ghim ở E8 (đột biến khoá tab về 'tab') — ca đỏ in 'tab soan doi sang tro-chuyen o buoc 2'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/bang-nhap.tsx", "apps/app/app/(app)/[slug]/okr/soan/cau-hinh.ts", apps/app/lib/search-param-keys.ts, apps/app/test/soan-okr-khong-lac.dom.tsx]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.k2b_khoa
+    expected: "exit 0; apps/app/lib/search-param-keys.test.ts: ca sẵn có «gives every feature its own url key» xanh với hai khoá mới; ca mới «trang soạn đọc khoá đã đăng ký» đòi SEARCH_PARAM.okr.tabSoan === 'tabSoan', SEARCH_PARAM.okr.locSoan === 'locSoan', cả hai có trong RESERVED_SEARCH_PARAM_KEYS, và mã nguồn soan/cau-hinh.ts không chứa chuỗi 'thamSo'. Chiều đỏ ghim ở E8: đột biến tabSoan về 'tab' làm ca «gives every feature its own url key» đỏ (số khoá đăng ký khác số khoá giữ chỗ)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/search-param-keys.ts, apps/app/lib/search-param-keys.test.ts, "apps/app/app/(app)/[slug]/okr/soan/cau-hinh.ts"]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.k2b_nhom_loi
+    expected: "exit 0; bài DOM -t k2b-nhom-loi, ma trận viết trước 3 ca lỗi: CONFLICT khi cuộc dang → câu m.loiQuyet.dongCu; CONFLICT khi cuộc da-dua-vao → m.loiQuyet.cuocKhongDang; lỗi mạng → m.loiQuyet.mang. Mỗi ca so giá trị nguyên thuỷ: textContent của [data-loi=nhom] trong [data-slot=kara-proposal-group] bằng đúng câu, biên nhận nhóm còn (querySelector !== null), nút Hoàn tác không disabled. Ca thứ tư: lần bấm sau mutation thành công → [data-loi=nhom] === null và nút nhóm «Thêm cả…» hiện lại. Chiều đỏ ghim ở E8 (đột biến bỏ truyền lỗi) — ca đỏ in 'khong thay loi duoi bien nhan nhom'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/the-nhap.tsx", "apps/app/app/(app)/[slug]/okr/soan/bang-nhap.tsx", packages/ui/src/components/kara/proposal.tsx, apps/app/lib/messages/okr-soan.ts, apps/app/test/soan-okr-khong-lac.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.k2b_nhom_ui
+    expected: "exit 0; packages/ui/test/kara-proposal-group-loi.dom.tsx: KaraProposalGroup với batchDecided {text, onUndo, error:'X'} → phần tử [data-slot=field-error] có textContent 'X', là con của [data-slot=kara-proposal-group], đứng ngay sau [data-slot=proposed-change-receipt] (nextElementSibling); không error → không có [data-slot=field-error] (đối chứng). Kèm bun run lint:slop xanh trên the-nhap.tsx (không className tại chỗ). Chiều đỏ: E8 vết (d) bỏ vẽ error trong proposal.tsx → ca đỏ in 'thieu field-error trong nhom'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/ui/src/components/kara/proposal.tsx, packages/ui/test/kara-proposal-group-loi.dom.tsx, "apps/app/app/(app)/[slug]/okr/soan/the-nhap.tsx"]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.k2b_moc
+    expected: "exit 0; apps/app/test/soan-okr-khong-lac.spec.ts -t k2b-moc: transcript viết trước có 3 lời gọi nop_ban_nhap, output dựng bằng ketQuaNop thật của agent (parse round-trip, không viết tay) — da-ghi, tu-choi lyDo 'so moi: 2031' với bản nháp bằng lần 1 cộng 2 KR, da-ghi bằng lần 1 cộng 1 KR. Transcript dựng qua bộ chuyển thật của app (toTranscript/transcriptFrom ở apps/app/lib/agent-transcript.ts) từ các part eve dạng output-available, không dựng TranscriptItem bằng tay. mocTuTranscript trả đúng 2 mốc (itemId lần 1 và 3); mốc lần 3 có themKr === 1 và các đếm khác 0; danh sách lần không thành có đúng 1 phần tử (itemId lần 2, lyDo 'so moi: 2031'); gioNopCuoi trả giờ của lượt chứa lần 3. Kèm ca DOM -t k2b-moc-dom: hội thoại có đúng 2 [data-slot=kara-checkpoint] và 1 dòng hệ thống có textContent chứa m.moc.nopKhongThanh. Chiều đỏ ghim ở E8: vết (c) bỏ xét ketQua → ca đỏ in 'so moc 3, mong 2'; vết (e) gốc so sánh không lọc → ca đỏ in 'goc so sanh sai: themKr 1 mong, thay -1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", packages/validation/src/okr-cuoc-soan.ts, apps/app/test/soan-okr-khong-lac.spec.ts, apps/app/test/soan-okr-khong-lac.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.k2b_moc_hong
+    expected: "exit 0; spec -t k2b-moc-hong, ma trận viết trước 2 ca: (a) lời gọi failed (output vắng, errorText có) giữa hai lần da-ghi; (b) output không qua docKetQuaNop (ketQua: 'la') giữa hai lần da-ghi. Mỗi ca: đúng 2 mốc; mốc thứ hai so với lần da-ghi đầu (không với lần hỏng); lần hỏng có trong danh sách không thành với loai 'loi' cho (a) và 'khong-doc' cho (b). DOM: (a) hiện m.moc.nopKhongThanh, (b) hiện m.moc.nopKhongDoc. Chiều đỏ ghim ở E8: vết (c) → ca (b) đỏ in 'lan khong doc thanh moc'; vết (e) → ca (a) đỏ in 'goc so sanh sai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts", packages/validation/src/okr-cuoc-soan.ts, apps/app/test/soan-okr-khong-lac.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.k2b_mot_nguon
+    expected: "exit 0; _acceptance/soan-okr-khong-lac/rang/mot-nguon.mjs: (1) quan hệ: ketQuaNop.shape.ketQua.options của agent (import thật) bằng từng phần tử KET_QUA_NOP của packages/validation, cùng thứ tự; (2) khai tập: trong apps/agent-okr/agent/**/*.ts, apps/app/app/(app)/[slug]/okr/soan/** và packages/validation/src/** chỉ đúng một khai báo tập chứa \"da-ghi\" (z.enum([…]) hay mảng as const), ở packages/validation/src/okr-cuoc-soan.ts — chỗ DÙNG giá trị (return, ===) không tính; (3) moc-nop.ts nhập docKetQuaNop từ @crm/validation/okr-cuoc-soan; (4) round-trip: kết quả của tuChoi thật (ketQuaNop.parse) qua docKetQuaNop trả ketQua 'tu-choi' và đúng lyDo. In 'mot-nguon: KET_QUA_NOP 1 cho, agent + app dung chung'. Chiều đỏ: --ban-sao them-tap dựng bản sao nop-ban-nhap.ts khai lại z.enum([\"da-ghi\",\"tu-choi\"]) → exit 1, in 'tap ket qua khai 2 cho'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/okr-cuoc-soan.ts, apps/agent-okr/agent/lib/nop-ban-nhap.ts, "apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts", _acceptance/soan-okr-khong-lac/rang/mot-nguon.mjs]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.k2b_dot_bien
+    expected: "exit 0; _acceptance/soan-okr-khong-lac/rang/dot-bien.mjs: chiều xanh trước — E1, E2, E3, E4, E5, E6 xanh trên cây lành (không xanh thì exit 2 'KHONG DO DUOC'); rồi năm vết, mỗi vết sửa tạm đúng một tệp và trả lại trong finally: (a) search-param-keys.ts tabSoan: 'tab' → k2b-tab đỏ có 'tab soan doi sang tro-chuyen o buoc 2' và search-param-keys.test.ts đỏ; (b) the-nhap.tsx bỏ error khỏi batchDecided → k2b-nhom-loi đỏ có 'khong thay loi duoi bien nhan nhom'; (c) moc-nop.ts bỏ điều kiện ketQua → k2b-moc đỏ có 'so moc 3, mong 2' và k2b-moc-hong đỏ có 'lan khong doc thanh moc'; (d) proposal.tsx bỏ vẽ batchDecided.error → kara-proposal-group-loi đỏ có 'thieu field-error trong nhom'; (e) moc-nop.ts lấy gốc so sánh từ lời gọi nộp liền trước bất kể kết quả → k2b-moc đỏ có 'goc so sanh sai'. Sau mỗi vết so sha256 tệp với trước vết, khác thì exit 3 'TEP KHONG TRA LAI'. In 'dot-bien: 5/5 vet bi bat, tep tra lai nguyen'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/soan-okr-khong-lac/rang/dot-bien.mjs, apps/app/lib/search-param-keys.ts, "apps/app/app/(app)/[slug]/okr/soan/the-nhap.tsx", "apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts", packages/ui/src/components/kara/proposal.tsx, apps/app/test/soan-okr-khong-lac.dom.tsx, apps/app/test/soan-okr-khong-lac.spec.ts, packages/ui/test/kara-proposal-group-loi.dom.tsx]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.k2b_ranh_gioi
+    expected: "exit 0; _acceptance/soan-okr-khong-lac/rang/ranh-gioi.mjs: git diff --name-only $(git merge-base HEAD origin/onehub)..HEAD, mỗi tệp khớp một mẫu viết trước (ranh giới hàng K2b + danh sách cham-tep P1-26); _acceptance/config.yaml chỉ dòng '+'; trong apps/agent-okr/agent/lib/nop-ban-nhap.ts mọi dòng '-' khớp mẫu ketQua cũ và mọi dòng '+' khớp mẫu ketQua mới hoặc dòng import KET_QUA_NOP; in 'ranh-gioi: <n> tep, 0 ngoai'. Chiều đỏ: --them apps/app/lib/x.ts → exit 1 'ngoai-ranh-gioi:apps/app/lib/x.ts'; --diff-mau <tệp có một dòng '-' ngoài dòng ketQua cho nop-ban-nhap.ts> → exit 1 'nop-ban-nhap doi ngoai dong ketQua'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/soan-okr-khong-lac/rang/ranh-gioi.mjs, _acceptance/config.yaml, apps/agent-okr/agent/lib/nop-ban-nhap.ts]
+
+  - id: E10
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.k2b_man
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs, do:man); agent-okr thật với mô hình giả có kịch bản viết trước (rang/kich-ban.mjs của soan-okr-trang-rieng được nhập lại, không sửa); đăng nhập dev:session trưởng phòng của bộ mẫu"
+      - "Trạng thái ST-soan-hep-co-ban-ghi (390 và 1440): mở trang soạn, chọn tab Bản nháp (390), bật «chỉ dòng chờ»; mở một bản ghi bằng URL ?record=contact:<id> như ô tìm nhanh, chọn tab «Hoạt động» trong ngăn; đóng ngăn bằng nút đóng của ngăn. Đòi: aria-selected của tab Bản nháp === 'true' và bộ lọc còn bật sau khi đóng; ảnh khi ngăn mở và sau khi đóng"
+      - "Trạng thái ST-soan-hoan-nhom-loi (390 và 1440): nhận cả nhóm, chặn lệnh hoàn tác của tRPC trả 409 CONFLICT; bấm Hoàn tác; đòi [data-loi=nhom] hiện câu «dòng cũ» và biên nhận nhóm còn; ảnh"
+      - "Trạng thái ST-soan-nop-tu-choi (390 và 1440): kịch bản mô hình giả nộp hợp lệ, rồi nộp bản nháp vi phạm luật (công cụ thật trả tu-choi), rồi nộp hợp lệ thêm một KR; đòi đúng 2 [data-slot=kara-checkpoint] và 1 dòng hệ thống chứa câu «Kara nộp bản nháp chưa được»; mốc thứ hai ghi «thêm 1 KR»; ảnh"
+      - "Chiều đỏ: --kiem-do-do nop chạy cùng kịch bản trên bản sao app mà mocTuTranscript bỏ xét kết quả (dot-bien bản sao CONG_SAO) → đòi thấy 3 mốc, in 'so moc 3, mong 2'"
+    expected: "exit 0; 3 trạng thái × 2 khổ = 6 ảnh trong _acceptance/soan-okr-khong-lac/evidence/; mỗi bước in 'dat'; chiều đỏ in 'so moc 3, mong 2' và exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/lib/search-param-keys.ts, packages/ui/src/components/kara/proposal.tsx, packages/validation/src/okr-cuoc-soan.ts, apps/agent-okr/agent/lib/nop-ban-nhap.ts, _acceptance/soan-okr-khong-lac/rang/man.mjs]

@@ -47,7 +47,7 @@ import {
 } from "./khoi-ngu-canh";
 import type { CuocSoan } from "./kieu";
 import type { LyDoHong } from "./loi-cua";
-import type { MocNop, TomTatMoc } from "./moc-nop";
+import type { MocNop, NopKhongThanh, TomTatMoc } from "./moc-nop";
 import { tachLuotTroLy } from "./tach-cau-hoi";
 
 type LyDoSoan = keyof OkrSoanMessages["lyDo"];
@@ -157,6 +157,7 @@ function buocCua(
 function TinNhan({
 	tin,
 	mocs,
+	khongThanh,
 	goiY,
 	s,
 	m,
@@ -164,6 +165,7 @@ function TinNhan({
 }: {
 	tin: TranscriptMessage;
 	mocs: ReadonlyMap<string, MocNop>;
+	khongThanh: ReadonlyMap<string, NopKhongThanh>;
 	goiY: boolean;
 	s: CuocDangSoan;
 	m: OkrSoanMessages;
@@ -195,6 +197,19 @@ function TinNhan({
 					/>,
 				);
 			}
+			continue;
+		}
+		const hong = item.kind === "did" ? khongThanh.get(item.id) : undefined;
+		if (hong) {
+			ra.push(
+				<KaraSystemLine key={item.id}>
+					<span data-nop-khong-thanh={hong.loai}>
+						{hong.loai === "khong-doc"
+							? m.moc.nopKhongDoc
+							: m.moc.nopKhongThanh(hong.lyDo)}
+					</span>
+				</KaraSystemLine>,
+			);
 			continue;
 		}
 		const moc = item.kind === "did" ? mocs.get(item.id) : undefined;
@@ -375,6 +390,9 @@ export function HoiThoaiSoan({
 	const cuoiKara = tuKara.at(-1)?.id ?? null;
 	const loiMo = s.moLai.data?.ok === false ? s.moLai.data.lyDo : null;
 	const mocs = new Map(s.mocs.map((x) => [x.itemId, x] as const));
+	const khongThanh = new Map(
+		s.nopKhongThanh.map((x) => [x.itemId, x] as const),
+	);
 	const rong = s.transcript.length === 0 && !s.dangTraLoi;
 	return (
 		<>
@@ -419,6 +437,7 @@ export function HoiThoaiSoan({
 						key={tin.id}
 						tin={tin}
 						mocs={mocs}
+						khongThanh={khongThanh}
 						goiY={tin.id === cuoiKara && !s.khoaSoan}
 						s={s}
 						m={m}
