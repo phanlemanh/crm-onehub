@@ -37,8 +37,16 @@ function dongDoi(base, tep) {
 	return { them: dong.filter((d) => d.startsWith("+")), bo: dong.filter((d) => d.startsWith("-")) };
 }
 
+function kiemDanhSach(ds) {
+	if (ds.length === 0) return { ma: 2, dong: ["diff rong"] };
+	const ngoai = ngoaiRanhGioi(ds);
+	return { ma: ngoai.length > 0 ? 1 : 0, dong: ngoai.map((t) => `ngoai ranh gioi: ${t}`) };
+}
+
 function doiChung() {
-	if (ngoaiRanhGioi([]).length !== 0) return "doi chung rong";
+	const rong = kiemDanhSach([]);
+	if (rong.ma !== 2 || rong.dong[0] !== "diff rong") return "doi chung rong khong thoat 2";
+	console.log("doi chung: diff rong -> ma 2");
 	const a = ngoaiRanhGioi(["apps/agent/test/okr-uy-quyen.spec.ts"]);
 	const b = ngoaiRanhGioi(["apps/agent/agent/lib/zalo-chi-dan.ts"]);
 	if (a[0] !== "apps/agent/test/okr-uy-quyen.spec.ts") return "doi chung okr-uy-quyen.spec.ts khong bi bat";
@@ -55,11 +63,12 @@ if (loiDoiChung) {
 }
 const base = git(["merge-base", "HEAD", "origin/onehub"]).trim();
 const ds = git(["diff", "--name-only", base, "HEAD"]).split("\n").filter(Boolean);
-if (ds.length === 0) {
-	console.error("diff rong");
+const kiem = kiemDanhSach(ds);
+if (kiem.ma === 2) {
+	console.error(kiem.dong[0]);
 	process.exit(2);
 }
-const loi = ngoaiRanhGioi(ds).map((t) => `ngoai ranh gioi: ${t}`);
+const loi = [...kiem.dong];
 for (const tep of CHI_THEM.filter((t) => ds.includes(t)))
 	if (dongDoi(base, tep).bo.length > 0) loi.push(`${tep}: co dong bo`);
 for (const tep of MOT_DONG.filter((t) => ds.includes(t))) {
