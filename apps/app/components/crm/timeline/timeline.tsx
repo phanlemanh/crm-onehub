@@ -11,6 +11,7 @@ import type { CarbonIcon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { dateFormat } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { cn } from "@crm/ui/lib/utils";
@@ -209,6 +210,15 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 			{history.isPending ? (
 				<div className="flex min-h-0 flex-1 items-center justify-center">
 					<Spinner />
+				</div>
+			) : history.isError ? (
+				<div className="flex min-h-0 flex-1 items-center justify-center p-5">
+					<VungTaiLoi
+						tieuDe={m.timeline.loiTieuDe}
+						moTa={m.vungCon.loiMoTa}
+						onThuLai={() => void history.refetch()}
+						dangTai={history.isFetching}
+					/>
 				</div>
 			) : entries.length === 0 && pinnedEntries.length === 0 ? (
 				<DetailSheetEmpty

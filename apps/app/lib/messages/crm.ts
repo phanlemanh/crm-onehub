@@ -2,6 +2,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
 	timeline: {
+		loiTieuDe: "Couldn't load activity",
 		openIn: (mailbox: string) => `Open in ${mailbox}`,
 		allDay: "All day",
 		joinCall: "Join call",
@@ -128,8 +129,13 @@ const en = {
 		unassigned: "Unassigned",
 		formerMember: "Former member",
 	},
+	vungCon: {
+		loiMoTa: "Check your connection and try again.",
+		dangTai: "Loading",
+	},
 	web: {
 		title: "Website activity",
+		loiTieuDe: "Couldn't load website activity",
 		pageViews: "Page views",
 		lastSeen: " · last seen ",
 		originalSource: "Original source",
@@ -317,6 +323,7 @@ export type CrmMessages = typeof en;
 
 const vi = {
 	timeline: {
+		loiTieuDe: "Không tải được hoạt động",
 		openIn: (mailbox: string) => `Mở trong ${mailbox}`,
 		allDay: "Cả ngày",
 		joinCall: "Vào cuộc gọi",
@@ -444,8 +451,13 @@ const vi = {
 		unassigned: "Chưa giao",
 		formerMember: "Đã rời đội",
 	},
+	vungCon: {
+		loiMoTa: "Kiểm tra kết nối rồi thử lại.",
+		dangTai: "Đang tải",
+	},
 	web: {
 		title: "Hoạt động trên website",
+		loiTieuDe: "Không tải được hoạt động trên website",
 		pageViews: "Lượt xem trang",
 		lastSeen: " · lần cuối ",
 		originalSource: "Nguồn đầu tiên",
