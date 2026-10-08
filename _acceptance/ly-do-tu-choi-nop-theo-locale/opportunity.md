@@ -29,10 +29,10 @@ Cổng 2 lúc 2026-10-08T16:47:19Z (luật 26 của đợt `sau-14-10`); ảnh
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] người soạn có hiểu vì sao Kara nộp chưa được, ở cả tiếng Việt lẫn tiếng Anh, không thấy mã máy.
-- Kết quả nào là SỐNG: [đề xuất] ở lái-thử người-lạ trước R1, kịch bản gây một lần nộp bị từ chối (chu kỳ rời pha Lập kế hoạch) ở mỗi ngôn ngữ; người thử kể lại đúng lý do và không gặp chữ không dấu.
-- Kết quả nào là CHẾT: [đề xuất] người thử đọc thấy mã máy, hoặc không kể lại được lý do ở cả hai ngôn ngữ.
-- Timebox: [đề xuất] lái-thử người-lạ kế tiếp của dãy Kara OKR.
+- Câu hỏi phép đo trả lời: người soạn có hiểu vì sao Kara nộp chưa được, ở cả tiếng Việt lẫn tiếng Anh, không thấy mã máy.
+- Kết quả nào là SỐNG: ở lái-thử người-lạ trước R1, kịch bản gây một lần nộp bị từ chối (chu kỳ rời pha Lập kế hoạch) ở mỗi ngôn ngữ; người thử kể lại đúng lý do và không gặp chữ không dấu.
+- Kết quả nào là CHẾT: người thử đọc thấy mã máy, hoặc không kể lại được lý do ở cả hai ngôn ngữ.
+- Timebox: lái-thử người-lạ kế tiếp của dãy Kara OKR.
 
 ## Nguồn ngoài & phạm vi kế thừa
 
@@ -44,7 +44,7 @@ Cổng 2 lúc 2026-10-08T16:47:19Z (luật 26 của đợt `sau-14-10`); ảnh
 
 - **decision = build.** Căn cứ: luật 26 — Ngoài-1 của `soan-okr-khong-lac`, Cổng 2 2026-10-08T16:47:19Z.
 - **disposition = archive.** Căn cứ: không có prototype.
-- **Ngưỡng UAT chốt cùng lúc ký:** [đề xuất] như mục Ngưỡng — chờ anh duyệt ở Cổng 1 (luật 27).
+- **Ngưỡng UAT chốt cùng lúc ký:** như mục Ngưỡng — anh duyệt ở Cổng 1 ngày 2026-10-09 (luật 27).
 
 ## Thước đo thành công → ứng viên criterion
 
