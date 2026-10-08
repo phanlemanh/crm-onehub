@@ -22,7 +22,7 @@ function cauExpect(nguon) {
 			else if (c === ")" || c === "]" || c === "}") sau -= 1;
 			else if (c === ";" && sau === 0) break;
 		}
-		ra.push(nguon.slice(i, j).replace(/\s+/g, " ").trim());
+		ra.push(nguon.slice(i, j).replace(/\s+/g, "").replace(/,([)\]}])/g, "$1"));
 		i = nguon.indexOf("expect(", j);
 	}
 	return ra;
@@ -37,7 +37,9 @@ function mat(truoc, sau) {
 		if (n > 0) con.set(c, n - 1);
 		else thieu.push(c);
 	}
-	const sai = thieu.filter((c) => !CHO_PHEP.some((m) => c.includes(m)));
+	const sai = thieu.filter(
+		(c) => !CHO_PHEP.some((m) => c.includes(m.replace(/\s+/g, ""))),
+	);
 	return { sai, choPhep: thieu.length - sai.length };
 }
 
