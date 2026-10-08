@@ -35,23 +35,36 @@ function song(pid) {
 	}
 }
 
+function daGhiCong(trangThai, dongLenh) {
+	const cong = dongLenh.match(/--port (\d+)/)?.[1];
+	if (!cong) return false;
+	try {
+		return readFileSync(trangThai, "utf8").includes(`:${cong}`);
+	} catch {
+		return false;
+	}
+}
+
 async function dungMoCoi(goiApp) {
 	const tien = spawn("bun", ["test", "test/app-rieng.integration.spec.ts"], {
 		cwd: goiApp,
 		stdio: "ignore",
 	});
 	const dau = `${goiApp}/node_modules/.bin/eve dev`;
+	const trangThai = join(goiApp, ".eve", "dev-server-state.v1.json");
 	const het = Date.now() + CHO_EVE_MS;
 	let eve = 0;
-	while (Date.now() < het && !eve) {
+	let len = false;
+	while (Date.now() < het && !len) {
 		eve = cayCon(tien.pid).find((p) => ps(p, "command=").includes(dau)) ?? 0;
-		if (!eve) await Bun.sleep(NHIP_MS);
+		len = eve > 0 && daGhiCong(trangThai, ps(eve, "command="));
+		if (!len) await Bun.sleep(NHIP_MS);
 	}
 	process.kill(tien.pid, "SIGKILL");
 	testDaGiet.add(tien.pid);
 	await Bun.sleep(1_000);
-	if (!eve || !song(eve) || ps(eve, "ppid=") !== "1")
-		throw new KhongDo(`khong dung duoc eve mo coi (eve ${eve || "vang"})`);
+	if (!len || !song(eve) || ps(eve, "ppid=") !== "1")
+		throw new KhongDo(`khong dung duoc eve mo coi (eve ${eve || "vang"}, da len: ${len})`);
 	const cay = [eve, ...cayCon(eve)];
 	for (const p of cay) daThay.add(p);
 	return cay;
