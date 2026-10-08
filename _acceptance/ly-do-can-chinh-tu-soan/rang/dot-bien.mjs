@@ -69,7 +69,7 @@ const CAP = [
 		"g bo dieu kien khac rong",
 		BAI("dien-lai"),
 		MIGRATION,
-		String.raw` AND btrim(COALESCE(d."noiDung"->>'viSao', ''), E' \t\n\r ') <> ''`,
+		String.raw` AND btrim(COALESCE(d."noiDung"->>'viSao', ''), E' \t\n\r\u00a0') <> ''`,
 		"",
 		"D: dien lai sai",
 	],

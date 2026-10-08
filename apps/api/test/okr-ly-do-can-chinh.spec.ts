@@ -180,7 +180,7 @@ describe("dua-vao", () => {
 					`Bán lẻ ký đều ${duong}`,
 					LY_DO_KARA,
 				);
-				await datViSao(muc.canChinh, `  ${LY_DO_KARA} \n`);
+				await datViSao(muc.canChinh, `  ${LY_DO_KARA}\u00a0\n`);
 				await nhanVaDuaVao(cuoc, [muc], duong);
 				const g = await canChinhTaoRa(muc.canChinh);
 				if (g.lyDo !== LY_DO_KARA)
@@ -195,7 +195,7 @@ describe("dua-vao", () => {
 
 describe("visao-rong", () => {
 	test("viSao rỗng hay chỉ khoảng trắng thì không có lý do, không mang dấu Kara; bộ ghi không sinh ra nó", () => {
-		const RONG = ["", "   ", " \n\t"] as const;
+		const RONG = ["", "   ", "\u00a0\n\t"] as const;
 		let chay = 0;
 		for (const viSao of RONG) {
 			const ra = lyDoTuSoan(viSao);
