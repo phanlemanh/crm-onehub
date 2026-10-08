@@ -1,0 +1,2 @@
+driver: man.mjs (playwright qua man-lib.mjs) — khong co read_network_requests; networkObserved = n-a (driver). Log: /var/folders/9d/08v498213jd2lcnpvdlky46m0000gn/T//kbk-e16-run.log
+503 tu tac nhan vang o buoc 2 la kich thich co chu dich cua buoc (man.mjs bo qua co ghi chu).

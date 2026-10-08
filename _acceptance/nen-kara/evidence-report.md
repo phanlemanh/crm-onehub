@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 787b6a34842f17cdf14e6beca7f6aef7b92f6c45
+verified_commit: 9315f0aec7b0fb77cd2a3b43d91f869ca2946a1d
 human_signoff: Phan Le Manh 2026-10-03
 ---
 
@@ -238,3 +238,11 @@ sha: 7273fe74b579dfdaeb558a5d6afc1514a1cea03b · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-06, do sửa thước đỏ lô 2-4 (c2)
 run_id: repin-20261006T093159Z-42780
 sha: 787b6a34842f17cdf14e6beca7f6aef7b92f6c45 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E10, E13 · diff chạm vật đo ngoài làn máy: E10, E13 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-9, AC-12
+
+### Re-pin lần 4 — 2026-10-08, do gộp onehub sau chữ ký Cổng 2 của khung-ban-ghi-kara; eval của the-gop-y-okr, logo-onehub, nen-kara bị thay hay sửa ở vòng này
+run_id: repin-20261008T004656Z-80562
+sha: beac40ab8472f735a5e7ecc79a03ae01ea1d37cf · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E14 · thay bởi hồ sơ đã ký: E3→gop-y-dung-cho#AC-5, E14→gop-y-dung-cho#AC-14 · ngoài làn máy: E10, E13 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-3, AC-9, AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-08, do gộp onehub sau #303 (datatable-loc-ro)
+run_id: repin-20261008T011613Z-35007
+sha: 9315f0aec7b0fb77cd2a3b43d91f869ca2946a1d · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E14 · thay bởi hồ sơ đã ký: E3→gop-y-dung-cho#AC-5, E14→gop-y-dung-cho#AC-14 · ngoài làn máy: E10, E13 · AC không có chốt máy: AC-3, AC-9, AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

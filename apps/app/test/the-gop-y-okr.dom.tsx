@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { factDecisionInput } from "../../api/src/contacts/contacts.contracts";
 import {
 	bam,
@@ -15,19 +15,13 @@ import {
 
 const { FactSuggestion } = await import("@/components/crm/facts");
 type ContactFact = import("@/lib/contact-facts").ContactFact;
+type FactReceipt = import("@/lib/contact-facts").FactReceipt;
 
 afterEach(dongHet);
 
-function hangNut(o: ParentNode): { chu: string; kieu: string | null }[] {
-	return [...o.querySelectorAll<HTMLButtonElement>("button")].map((b) => ({
-		chu: b.textContent?.trim() ?? "",
-		kieu: b.getAttribute("data-variant"),
-	}));
-}
-
 const FACT: ContactFact = {
 	id: "fact-1",
-	field: "jobTitle",
+	field: "title",
 	value: "Giám đốc kinh doanh miền Bắc",
 	score: 0.62,
 	band: "POSSIBLE",
@@ -41,49 +35,58 @@ const FACT: ContactFact = {
 	observedAt: "2026-09-20T03:00:00.000Z",
 };
 
-async function moThongTin(): Promise<void> {
-	datMacDinh([]);
-	dat("contacts.decideFact", (vao) => ({
-		applied: vao?.decision === "accept",
-	}));
-	await mo(<FactSuggestion fact={FACT} contactId="ct-1" />);
+function TheThongTin() {
+	const [receipt, setReceipt] = useState<FactReceipt | undefined>();
+	return (
+		<FactSuggestion
+			fact={FACT}
+			contactId="ct-1"
+			current="Trưởng phòng"
+			truoc={{ value: "Trưởng phòng" }}
+			receipt={receipt}
+			onReceipt={setReceipt}
+		/>
+	);
+}
+
+async function moThongTin(): Promise<HTMLElement> {
+	await mo(<TheThongTin />);
 	await cho(
 		() => document.querySelector('[data-slot="proposed-change"]') !== null,
 		"the thong tin",
 	);
-}
-
-async function caThongTin() {
-	await moThongTin();
 	const t = document.querySelector<HTMLElement>(
 		'[data-slot="proposed-change"]',
 	);
 	if (!t) throw new Error("khong thay the thong tin");
-	expect(t.getAttribute("data-kind")).toBe("compact");
-	expect(hangNut(t)).toEqual([
-		{ chu: "Nhận", kieu: "default" },
-		{ chu: "Bác", kieu: "ghost" },
-	]);
+	return t;
 }
 
 describe("the-gop-y-okr — gợi ý thông tin của Cá nhân", () => {
-	test("thong-tin: thẻ gọn, Nhận chính, Bác mờ, mỗi nút gọi decideFact đúng một lần", async () => {
-		await caThongTin();
-		const u = userEvent.setup({ document, pointerEventsCheck: 0 });
-		await u.click(nut("Nhận"));
-		await cho(() => goiCua("contacts.decideFact").length === 1, "goi nhan");
-		await cho(() => !nut("Bác").disabled, "het cho");
-		await u.click(nut("Bác"));
-		await cho(() => goiCua("contacts.decideFact").length === 2, "goi bac");
-		const quyet = goiCua("contacts.decideFact").map((g) =>
-			factDecisionInput.parse(g.dauVao),
-		);
-		if (quyet[0]?.decision !== "accept" || quyet[1]?.decision !== "dismiss")
-			throw new Error("decideFact sai quyet");
-		expect(quyet).toEqual([
-			{ factId: FACT.id, decision: "accept" },
-			{ factId: FACT.id, decision: "dismiss" },
-		]);
+	test("thong-tin: neo tại chỗ, một nút chính đúng hậu quả, mỗi nút gọi decideFact đúng một lần", async () => {
+		for (const [bamNut, quyet] of [
+			["Thay giá trị hiện có", "accept"],
+			["Bỏ qua", "dismiss"],
+		] as const) {
+			datMacDinh([]);
+			dat("contacts.decideFact", (vao) => ({
+				applied: vao?.decision === "accept",
+			}));
+			const t = await moThongTin();
+			expect(t.getAttribute("data-density")).toBe("inline");
+			const chinh = t.querySelectorAll('button[data-variant="default"]');
+			expect([...chinh].map((b) => b.textContent?.trim())).toEqual([
+				"Thay giá trị hiện có",
+			]);
+			expect(nutCo("Nhận")).toBeNull();
+			await bam(nut(bamNut));
+			await cho(() => goiCua("contacts.decideFact").length === 1, "goi");
+			const vao = factDecisionInput.parse(
+				goiCua("contacts.decideFact")[0]?.dauVao,
+			);
+			expect(vao).toEqual({ factId: FACT.id, decision: quyet });
+			await dongHet();
+		}
 		expect(() =>
 			factDecisionInput.parse({ factId: FACT.id, decision: "maybe" }),
 		).toThrow();
@@ -94,11 +97,11 @@ describe("the-gop-y-okr — gợi ý thông tin của Cá nhân", () => {
 		dat("contacts.decideFact", () => {
 			throw new Error("Không ghi được");
 		});
-		await mo(<FactSuggestion fact={FACT} contactId="ct-1" />);
-		await cho(() => nutCo("Nhận") !== null, "the thong tin");
-		await bam(nut("Nhận"));
+		await moThongTin();
+		await bam(nut("Thay giá trị hiện có"));
 		await cho(() => goiCua("contacts.decideFact").length === 1, "da goi");
-		await cho(() => !nut("Nhận").disabled, "nut mo lai");
-		expect(nut("Bác").disabled).toBe(false);
+		await cho(() => !nut("Thay giá trị hiện có").disabled, "nut mo lai");
+		expect(nut("Bỏ qua").disabled).toBe(false);
+		expect(nutCo("Hoàn tác")).toBeNull();
 	});
 });

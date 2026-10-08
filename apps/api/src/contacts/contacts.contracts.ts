@@ -75,6 +75,16 @@ export const factDecisionInput = z.object({
 
 export type FactDecisionInput = z.infer<typeof factDecisionInput>;
 
+export const undoFactDecisionInput = z.object({
+	factId: z.string(),
+	truoc: z.union([
+		z.object({ value: z.string().nullable() }),
+		z.object({ firstName: z.string(), lastName: z.string().nullable() }),
+	]),
+});
+
+export type UndoFactDecisionInput = z.infer<typeof undoFactDecisionInput>;
+
 const fieldValueOutput = z.union([
 	z.string(),
 	z.number(),
@@ -279,4 +289,9 @@ export const decideFactOutput = z.object({
 	contactId: z.string(),
 	field: z.string(),
 	applied: z.boolean(),
+});
+
+export const undoFactDecisionOutput = z.object({
+	contactId: z.string(),
+	field: z.string(),
 });

@@ -11,6 +11,7 @@ import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import {
 	BadRequestException,
 	ConflictException,
+	ForbiddenException,
 	Injectable,
 	Logger,
 	NotFoundException,
@@ -48,6 +49,7 @@ import type {
 	ContactRow,
 	ContactUpdateInput,
 	FactDecisionInput,
+	UndoFactDecisionInput,
 } from "./contacts.contracts";
 
 const OWNER_SELECT = {
@@ -79,6 +81,27 @@ const FACT_COLUMNS: FactColumns = {
 	twitterUrl: "twitterUrl",
 	githubUrl: "githubUrl",
 };
+
+const FACT_CONTACT_SELECT = {
+	firstName: true,
+	lastName: true,
+	title: true,
+	seniority: true,
+	function: true,
+	linkedinUrl: true,
+	twitterUrl: true,
+	githubUrl: true,
+} as const;
+
+type FactTruoc = UndoFactDecisionInput["truoc"];
+
+function tenDayDu(firstName: string | null, lastName: string | null): string {
+	return [firstName, lastName].filter(Boolean).join(" ");
+}
+
+function chuanTen(value: string): string {
+	return value.trim().split(/\s+/).join(" ");
+}
 
 const SORTABLE: OrderByColumns<Prisma.ContactOrderByWithRelationInput[]> = {
 	name: (dir) => [{ lastName: dir }, { firstName: dir }],
@@ -738,6 +761,7 @@ export class ContactsService {
 
 		const accepted = input.decision === "accept";
 		const column = FACT_COLUMNS[fact.field];
+		const at = new Date();
 
 		await this.db.$transaction(async (tx) => {
 			if (accepted) {
@@ -748,7 +772,7 @@ export class ContactsService {
 						id: { not: fact.id },
 						status: { in: [FactStatus.APPLIED, FactStatus.PROPOSED] },
 					},
-					data: { status: FactStatus.SUPERSEDED, supersededAt: new Date() },
+					data: { status: FactStatus.SUPERSEDED, supersededAt: at },
 				});
 			}
 
@@ -757,7 +781,7 @@ export class ContactsService {
 				data: {
 					status: accepted ? FactStatus.APPLIED : FactStatus.DISMISSED,
 					decidedById: userId,
-					decidedAt: new Date(),
+					decidedAt: at,
 				},
 			});
 
@@ -791,6 +815,134 @@ export class ContactsService {
 		});
 
 		return { contactId: fact.contactId, field: fact.field, applied: accepted };
+	}
+
+	async undoFactDecision(
+		input: UndoFactDecisionInput,
+		userId: string,
+	): Promise<{ contactId: string; field: string }> {
+		const fact = await this.db.contactFact.findUnique({
+			where: { id: input.factId },
+			select: {
+				id: true,
+				contactId: true,
+				field: true,
+				value: true,
+				status: true,
+				decidedById: true,
+				decidedAt: true,
+			},
+		});
+
+		if (!fact) {
+			throw new NotFoundException(`No fact with id ${input.factId}.`);
+		}
+
+		if (
+			fact.status !== FactStatus.APPLIED &&
+			fact.status !== FactStatus.DISMISSED
+		) {
+			throw new ConflictException("That suggestion has not been decided.");
+		}
+
+		if (fact.decidedById !== userId) {
+			throw new ForbiddenException("Only the person who decided can undo it.");
+		}
+
+		if ((fact.field === "name") !== "firstName" in input.truoc) {
+			throw new BadRequestException(
+				"The previous value does not match the field.",
+			);
+		}
+
+		await this.db.$transaction(async (tx) => {
+			if (fact.status === FactStatus.APPLIED) {
+				await this.traLaiCot(tx, fact, input.truoc);
+			}
+
+			await tx.contactFact.update({
+				where: { id: fact.id },
+				data: {
+					status: FactStatus.PROPOSED,
+					decidedById: null,
+					decidedAt: null,
+				},
+			});
+		});
+
+		this.logger.log({
+			message: "Fact decision undone",
+			factId: fact.id,
+			contactId: fact.contactId,
+			field: fact.field,
+		});
+
+		return { contactId: fact.contactId, field: fact.field };
+	}
+
+	private async traLaiCot(
+		tx: Prisma.TransactionClient,
+		fact: {
+			contactId: string;
+			field: string;
+			value: string;
+			decidedAt: Date | null;
+		},
+		truoc: FactTruoc,
+	): Promise<void> {
+		const contact = await tx.contact.findUniqueOrThrow({
+			where: { id: fact.contactId },
+			select: FACT_CONTACT_SELECT,
+		});
+		const column = FACT_COLUMNS[fact.field];
+		const hienTai =
+			"firstName" in truoc
+				? tenDayDu(contact.firstName, contact.lastName)
+				: (Object.entries(contact).find(([khoa]) => khoa === column)?.[1] ??
+					null);
+		const daNhan = "firstName" in truoc ? chuanTen(fact.value) : fact.value;
+
+		if (hienTai !== daNhan) {
+			throw new ConflictException(
+				"The field changed after the suggestion was accepted.",
+			);
+		}
+
+		const giaTriCu =
+			"firstName" in truoc
+				? tenDayDu(truoc.firstName, truoc.lastName)
+				: truoc.value;
+
+		await tx.contact.update({
+			where: { id: fact.contactId },
+			data:
+				"firstName" in truoc
+					? { firstName: truoc.firstName, lastName: truoc.lastName }
+					: column
+						? { [column]: truoc.value }
+						: {},
+		});
+
+		const biThay = await tx.contactFact.findMany({
+			where: {
+				contactId: fact.contactId,
+				field: fact.field,
+				status: FactStatus.SUPERSEDED,
+				supersededAt: fact.decidedAt,
+			},
+			select: { id: true, value: true },
+		});
+
+		for (const f of biThay) {
+			await tx.contactFact.update({
+				where: { id: f.id },
+				data: {
+					status:
+						f.value === giaTriCu ? FactStatus.APPLIED : FactStatus.PROPOSED,
+					supersededAt: null,
+				},
+			});
+		}
 	}
 
 	private searchFilter(q: string): Prisma.ContactWhereInput {
