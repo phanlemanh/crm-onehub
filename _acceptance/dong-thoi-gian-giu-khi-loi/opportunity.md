@@ -36,11 +36,11 @@ khung lỗi:
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: khi «Xem cũ hơn» hay một lượt làm mới ngầm của dòng thời gian bị lỗi, người dùng có
+- Câu hỏi phép đo trả lời: khi «Xem cũ hơn» hay một lượt làm mới ngầm của dòng thời gian bị lỗi, người dùng có
   giữ được những hoạt động đang đọc và thử lại đúng phần bị hỏng không?
-- [đề xuất] Kết quả nào là SỐNG: lái thử người lạ chặn lượt «Xem cũ hơn» và lượt làm mới ở dòng thời gian, lần nào danh
+- Kết quả nào là SỐNG: lái thử người lạ chặn lượt «Xem cũ hơn» và lượt làm mới ở dòng thời gian, lần nào danh
   sách đang đọc cũng còn nguyên kèm thông báo và «Thử lại»; «Thử lại» sau lỗi «Xem cũ hơn» chỉ tải trang còn thiếu —
   bài kiểm đếm 0 lần trang đầu bị gọi lại.
-- [đề xuất] Kết quả nào là CHẾT: còn một lối lỗi xảy ra sau khi đã có dữ liệu mà làm danh sách biến mất hay bị thay bằng
+- Kết quả nào là CHẾT: còn một lối lỗi xảy ra sau khi đã có dữ liệu mà làm danh sách biến mất hay bị thay bằng
   khung lỗi trọn vùng; hoặc «Thử lại» tải lại từ trang đầu.
-- [đề xuất] Timebox: 0,5 ngày máy.
+- Timebox: 0,5 ngày máy.

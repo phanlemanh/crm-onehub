@@ -5,10 +5,10 @@ slug: dong-thoi-gian-giu-khi-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
 design_doc: docs/superpowers/specs/2026-10-08-dong-thoi-gian-giu-khi-loi-design.md
-approved_by:
-approved_at:
+approved_by: Phan Le Manh
+approved_at: 2026-10-08T10:15:22Z
 ---
 
 # Acceptance Contract: dong-thoi-gian-giu-khi-loi
