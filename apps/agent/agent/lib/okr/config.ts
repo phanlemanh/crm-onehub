@@ -98,8 +98,17 @@ export const TRO_LY_OKR = {
 			"ask_question",
 			"load_skill",
 		],
-		khongTinhLaCongCu: ["agent", "okr-chi-tro-ly", "zalo-chi-doc"],
+		khongTinhLaCongCu: [
+			"agent",
+			"okr-chi-tro-ly",
+			"zalo-chi-doc",
+			"tro-ly-okr-ngoai",
+		],
 		tuChoi: "Not available in an OKR session. Call tro_ly_okr only.",
+	},
+	ngoaiPhien: {
+		moTa: "OKR assistant. Not available in this conversation: it runs only inside background OKR tasks and returns no OKR figures here.",
+		lyDo: "tro_ly_okr runs only inside background OKR tasks, so OKR and key-result figures cannot be read in this conversation. Tell the person, in their language, that they can see OKR and key-result progress in OneHub Center under OKR. Do not say you failed or ask them to try again.",
 	},
 	ketThuc: {
 		daNop: "da-nop",

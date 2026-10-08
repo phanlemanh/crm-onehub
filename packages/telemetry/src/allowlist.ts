@@ -142,6 +142,7 @@ export const AGENT_TOOLS = [
 	"set_chat_title",
 	"set_contact_socials",
 	"set_field_value",
+	"tro-ly-okr-ngoai",
 	"web_fetch",
 	"write_brief",
 	"write_workspace_profile",
