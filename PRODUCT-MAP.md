@@ -15,7 +15,7 @@ flowchart TD
   GB --> DG["Đã giao<br/>131 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>42 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
-  HS["Hồ sơ hỏng<br/>2 việc"]
+  HS["Hồ sơ hỏng<br/>3 việc"]
 ```
 
 > **Bốn cổng người** — mỗi cổng là một câu hỏi chỉ người trả lời được:
@@ -234,3 +234,4 @@ flowchart TD
 
 - `ban-mau-okr` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
 - `so-moi-khong-chap-chon` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
+- `zalo-va-cach-ly` — không đọc được hồ sơ (`(workspace)`): không có contract.md lẫn opportunity.md
