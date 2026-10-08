@@ -48,14 +48,14 @@ chỉ OKR.
 
 - **Đầu trang:** tiêu đề «Lộ trình», một câu mô tả: việc đội sản phẩm đang làm cho CRM; trang chỉ để
   xem, muốn đổi kế hoạch thì báo đội sản phẩm.
-- **Một thẻ cho mỗi lộ trình của kho** (hôm nay: OKR, Kho tài liệu, Việc và Dự án), giữ trên đường dẫn
-  (`?lo=`). Trong mỗi thẻ:
-  - Tiến độ: bốn con số «Đã giao · Đang làm · Chưa bắt đầu · Khác» trên tổng, đúng `tien_do`.
+- **Một thẻ cho mỗi lộ trình của kho** (hôm nay: OKR, Kho tài liệu, Việc và Dự án), kiểu gạch chân kèm số
+  việc, giữ trên đường dẫn (`?lo=`). Trong mỗi thẻ:
+  - Tiến độ: bốn ô số «Đã giao (x/tổng) · Đang làm · Chưa bắt đầu · Khác», đúng `tien_do`.
   - Việc kế tiếp: mã và câu giao của `hang_ke`; không hiện dòng lệnh mở việc.
   - Việc trễ: các việc gắn một mốc đã qua mà chưa giao, nếu có — khung cảnh báo.
   - Lọc theo nhóm: các giá trị `nhom` có trong lộ trình đó, cộng «Tất cả» và «Không nhóm» khi có việc không
     nhóm; giữ trên đường dẫn (`?nhom=`) để gửi cho người khác.
-  - Danh sách việc (danh sách dọc ở mọi khổ): câu giao làm dòng chính; dòng phụ gồm trạng thái (chấm màu
+  - Danh sách việc (bảng ở máy tính, thẻ dọc ở điện thoại — nếp của Tài liệu): câu giao làm dòng chính; kèm trạng thái (chấm màu
     theo nhóm trạng thái + chữ của khối) · mã · nhóm · mốc (ngày của mốc đầu tiên chứa việc đó, kèm «trễ»
     khi việc nằm trong danh sách việc trễ của luật ngày). Việc có cờ hiện cờ ngay dưới dòng.
   - Mốc: danh sách mốc theo ngày, mốc đã qua mà còn việc chưa giao được đánh dấu.
@@ -101,24 +101,29 @@ ngữ giao diện và mang `translate="no"`. Nhãn của trang theo tệp lời 
 ### 4. Hành vi
 
 - Thẻ và bộ lọc giữ trên đường dẫn (`?lo=`, `?nhom=`); giá trị lạ trên đường dẫn rơi về mặc định, không lỗi
-- Khổ 375px: danh sách dọc như khổ rộng, bộ lọc xuống dòng, không cuộn ngang
+- Từ md: bảng bốn cột (Việc · Nhóm · Trạng thái · Mốc); dưới md: thẻ dọc, bộ lọc cuộn ngang trong khung riêng, trang không cuộn ngang
 - Phần phụ thuộc ngày (đã qua, trễ) chỉ hiện sau khi trình duyệt nhận trang; số liệu khác hiện ngay
 - Số dùng `tabular-nums`; ngày hiện theo `Intl.DateTimeFormat` của ngôn ngữ giao diện
 
 ### 5. Xuất xứ component
 
+Đối chiếu ngày 09/10 với bảy màn đang chạy (Thoả thuận, Onboarding, Liên hệ, Nhắc buổi sáng, Toàn cảnh OKR,
+Tài liệu, Tổng quan) ở hai khổ; trang theo nếp của Tài liệu và Toàn cảnh OKR — hai trang cùng loại «đọc là chính».
+
 | Component | Nấc (dùng / ghép / mở rộng / tạo) | Vì sao (1 dòng) |
 |---|---|---|
-| PageShell, PageShellTitle | dùng | khung trang của mọi trang ứng dụng |
-| Tabs | dùng | một thẻ mỗi lộ trình |
-| ToggleGroup | dùng | bộ lọc nhóm ít giá trị, thấy hết một lần |
-| Item, ItemGroup | dùng | danh sách việc và mốc — một việc một khối, đọc được ở 375px |
-| Progress | dùng | thanh tỉ lệ đã giao trên tổng |
-| StatusIndicator | dùng | chấm màu nhóm trạng thái |
-| danh sách định nghĩa (dl) | tạo tại chỗ | bốn con số tiến độ — `StatTile` là nút bấm, trang chỉ đọc; xem finding Nhóm 2 |
-| Alert | dùng | việc trễ, cảnh báo bộ đọc, lỗi một lộ trình |
-| Empty | dùng | các trạng thái không có dữ liệu |
-| Collapsible | dùng | chỗ cần sửa, việc đã bác |
+| PageShell + Header/Heading/Title/Description | dùng | khung mọi trang; tiêu đề lớn + một câu mô tả; trang chỉ đọc nên không có nút hành động |
+| Tabs, TabsList variant="line" + Badge secondary đếm việc | dùng | nếp thẻ con của Toàn cảnh OKR và Tài liệu |
+| StatGroup + StatCard | dùng | bốn con số tiến độ, đúng nếp Toàn cảnh OKR |
+| ToggleGroup outline sm, số đếm `text-muted-foreground tabular-nums` | dùng | nếp chip lọc của Tài liệu |
+| SimpleTable surface="page" (từ md) · Item outline (dưới md) | dùng | nếp danh sách của Tài liệu: bảng ở máy tính, thẻ dọc ở điện thoại |
+| StatusIndicator size="sm" | dùng | chấm trạng thái; ánh xạ màu theo nếp chung (đã giao → success, đang làm → info, còn lại → neutral) |
+| Card + CardHeader/Title/Description | dùng | mục «Việc kế tiếp» và «Mốc»; không dùng SectionHeading — các trang hiện có đều dùng CardTitle |
+| Timeline (ReUI, đã cài trong packages/ui) | dùng | mục Mốc theo ngày, dạng thanh mốc như block ReUI `timeline-5`; mốc đã qua tô đậm |
+| Alert warning | dùng | việc trễ, cảnh báo khuôn mới |
+| Empty (không viền) + EmptyContent | dùng | khung trống theo nếp «Chưa có …» / «Không tải được …» kèm điều vẫn dùng được |
+| Collapsible + Button ghost | dùng | «Chi tiết cho đội sản phẩm», chỗ cần sửa, việc đã bác |
+| Skeleton theo hình mục | dùng | lúc đang tải giữ tiêu đề trang, khung chờ theo đúng hình bốn ô số + bảng (docs/settings.md mục Trạng thái) |
 
 ### 6. Khuôn IA đã chọn + căn cứ
 

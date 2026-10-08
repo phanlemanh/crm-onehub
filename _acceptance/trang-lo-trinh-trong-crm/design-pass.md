@@ -12,8 +12,8 @@ ds_skill: web-design-guidelines
 states: [ST-lotrinh-day-du, ST-lotrinh-loc, ST-lotrinh-tre, ST-lotrinh-dang-tai, ST-lotrinh-chua-co-khoi, ST-lotrinh-khoi-hong, ST-lotrinh-tep-vang, ST-lotrinh-lo-loi, ST-lotrinh-khuon-moi]
 breakpoints: [mobile-375, desktop-1280]
 themes: [light, dark]
-patched: 3
-deferred: 2
+patched: 10
+deferred: 1
 ---
 # design-pass — trang-lo-trinh-trong-crm
 
@@ -53,11 +53,18 @@ không cài vào crm. Các trạng thái lỗi dùng đúng câu của hàm `doc
 
 ### Nhóm 1 — vá-được-trong-từ-vựng-token (đã vá tại chỗ)
 
-- Khổ 375 tràn ngang: trạng thái ở cột phải bóp câu giao còn vài chữ một dòng, bộ lọc chung hàng tiêu đề — chuyển trạng thái vào dòng phụ dưới câu giao, bộ lọc xuống hàng riêng; 19/19 ảnh không tràn.
-- Thanh thẻ kiểu gạch chân dính chữ ba tên lộ trình — đổi sang kiểu nền mặc định của Tabs.
-- Chữ «đã qua» gắn cả việc đã giao làm người đọc tưởng trễ — chỉ đánh «trễ» cho việc nằm trong danh sách việc trễ của luật ngày.
+- Khổ 375 tràn ngang: trạng thái ở cột phải bóp câu giao, bộ lọc chung hàng tiêu đề — trạng thái vào dòng phụ, bộ lọc xuống hàng riêng; 19/19 ảnh không tràn.
+- Chữ «đã qua» gắn cả việc đã giao làm người đọc tưởng trễ — chỉ đánh «Trễ» cho việc trong danh sách việc trễ của luật ngày.
+- Đối chiếu bảy màn đang chạy (09/10), sửa theo nếp chung:
+  - Tiêu đề trang tự đặt cỡ chữ → PageShell + PageShellTitle + PageShellDescription (tiêu đề lớn, một câu mô tả).
+  - Thẻ lộ trình kiểu nền → kiểu gạch chân kèm số việc, như Toàn cảnh OKR và Tài liệu.
+  - Bốn con số vẽ tại chỗ → StatGroup + StatCard của Toàn cảnh OKR (bỏ finding «thiếu ô số chỉ đọc»: kho đã có).
+  - Danh sách thẻ ở mọi khổ → bảng ở máy tính, thẻ dọc ở điện thoại, như Tài liệu.
+  - Tiêu đề mục bằng SectionHeading → Card + CardTitle, như mọi trang hiện có.
+  - Mốc dạng danh sách → Timeline của ReUI (đã cài), theo block `timeline-5`.
+  - Khung trống viền liền → Empty không viền + EmptyContent, chữ theo nếp «Chưa có …» / «Không tải được …».
+  - «Khác» tô vàng → neutral (vàng của kho dành cho chờ/rủi ro, «xếp lại sau» không phải rủi ro).
 
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)
 
-- `packages/ui` chưa có ô số liệu chỉ đọc: `StatTile` là nút bấm, trang chỉ đọc không được có nút lạ — bản mẫu vẽ bốn con số bằng danh sách định nghĩa tại chỗ; đề xuất thêm một thành phần số liệu chỉ đọc vào `packages/ui` ở S3.
-- Nhóm hiện bằng mã trần của tệp kế hoạch (`okr`, `tro-ly`, `crm-chung`, `ve-sinh`) — «crm-chung», «ve-sinh» khó hiểu với trưởng phòng ban; tệp kế hoạch có từ vựng nhưng khối dữ liệu không chở tên hiển thị của nhóm. Đề xuất: xin bộ kit thêm tên hiển thị của nhóm vào khối; tới lúc đó trang hiện mã trần.
+- Nhóm hiện bằng mã trần của tệp kế hoạch (`okr`, `tro-ly`, `crm-chung`, `ve-sinh`) — «crm-chung», «ve-sinh» khó hiểu với trưởng phòng ban; khối dữ liệu không chở tên hiển thị của nhóm. Đề xuất đã mở sang kho kit; tới lúc đó trang hiện mã trần.
