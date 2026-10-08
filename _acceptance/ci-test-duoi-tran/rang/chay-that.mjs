@@ -73,6 +73,18 @@ function chinh() {
 		loi.push(
 			`(c) thoi gian tuong ${tuong.toFixed(0)}s khong < ${HE_SO_CHONG} × tong ${tong.toFixed(0)}s`,
 		);
+	const tepMoi = tomTat().filter((t) => !truoc.includes(t));
+	const thieuThat = thieu(tepMoi, null);
+	if (thieuThat.length > 0)
+		loi.push(`(e) tom tat turbo thieu goi: ${thieuThat.join(", ")}`);
+	const tepNhomDau = tepMoi.find((t) =>
+		(goiTrongTomTat(t) ?? []).includes(NHOM_TEST[0].goi[0]),
+	);
+	const thieuDo = tepNhomDau ? thieu(tepMoi, tepNhomDau) : [];
+	if (JSON.stringify(thieuDo) !== JSON.stringify([...NHOM_TEST[0].goi].sort()))
+		loi.push(
+			`(e) chieu do: bo tom tat nhom ${NHOM_TEST[0].ten} nhung phep dem bao thieu ${thieuDo.join(", ") || "khong gi"}`,
+		);
 	const vg = spawnSync(
 		"bun",
 		[join(GOC, "scripts", "verify-gate-shape.mjs"), "--runs-before", fileTruoc],
@@ -88,18 +100,6 @@ function chinh() {
 	if (vanDeTest.length > 0)
 		loi.push(
 			`(d) verify-gate-shape: ${vanDeTest.map((d) => d.trim()).join(" | ")}`,
-		);
-	const tepMoi = tomTat().filter((t) => !truoc.includes(t));
-	const thieuThat = thieu(tepMoi, null);
-	if (thieuThat.length > 0)
-		loi.push(`(e) tom tat turbo thieu goi: ${thieuThat.join(", ")}`);
-	const tepNhomDau = tepMoi.find((t) =>
-		(goiTrongTomTat(t) ?? []).includes(NHOM_TEST[0].goi[0]),
-	);
-	const thieuDo = tepNhomDau ? thieu(tepMoi, tepNhomDau) : [];
-	if (JSON.stringify(thieuDo) !== JSON.stringify([...NHOM_TEST[0].goi].sort()))
-		loi.push(
-			`(e) chieu do: bo tom tat nhom ${NHOM_TEST[0].ten} nhung phep dem bao thieu ${thieuDo.join(", ") || "khong gi"}`,
 		);
 	for (const n of nhom)
 		console.log(`nhom ${n.ten}: ma ${n.ma} · ${n.csdl} · ${n.giay}s`);

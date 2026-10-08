@@ -119,11 +119,12 @@ export async function chayNhom(nhom, { testRun, goc, songSong }) {
 		while (hang.length > 0) {
 			const n = hang.shift();
 			const k = await chayMotNhom(n, testRun, goc);
-			process.stdout.write(
-				`\n===== nhom ${k.ten} =====\n${k.chu.endsWith("\n") ? k.chu : `${k.chu}\n`}`,
-			);
-			console.log(
-				`nhom ${k.ten}: ma ${k.ma} · CSDL ${k.csdl} · ${k.giay.toFixed(1)}s`,
+			const than = k.chu.endsWith("\n") ? k.chu : `${k.chu}\n`;
+			await new Promise((xong) =>
+				process.stdout.write(
+					`\n===== nhom ${k.ten} =====\n${than}nhom ${k.ten}: ma ${k.ma} · CSDL ${k.csdl} · ${k.giay.toFixed(1)}s\n`,
+					xong,
+				),
 			);
 			ket.push(k);
 		}

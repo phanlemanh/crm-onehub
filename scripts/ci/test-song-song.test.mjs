@@ -29,6 +29,7 @@ await new Promise((r) => setTimeout(r, Number(process.env.CTD_NGU || 0)));
 appendFileSync(process.env.CTD_SO, JSON.stringify({ doiSo, bat, ket: Date.now() }) + "\\n");
 console.log("test-run: crm_gia" + process.pid + "_test is this run's database");
 if (process.env.CTD_KHONG_XUONG) process.stdout.write("dong cuoi khong xuong dong");
+if (doiSo.includes("--filter=" + process.env.CTD_NHIEU)) for (let i = 0; i < 60000; i++) process.stdout.write("dong dai cua nhom lon ".repeat(4) + i + "\\n");
 const doNhom = (process.env.CTD_DO || "").split(",").filter(Boolean);
 process.exit(doiSo.some((a) => doNhom.includes(a.replace("--filter=", ""))) ? 1 : 0);
 `,
@@ -39,8 +40,9 @@ const TAT_CA = NHOM_TEST.flatMap((n) => n.goi).sort();
 function chay(doiSo, env = {}) {
 	const so = join(TAM, `so-${Math.random().toString(36).slice(2)}.jsonl`);
 	writeFileSync(so, "");
-	const r = spawnSync("node", [CLI, "--test-run", GIA, ...doiSo], {
+	const r = spawnSync("bun", [CLI, "--test-run", GIA, ...doiSo], {
 		encoding: "utf8",
+		maxBuffer: 1 << 26,
 		env: { ...process.env, CTD_SO: so, ...env },
 	});
 	const dong = readFileSync(so, "utf8")
@@ -149,6 +151,16 @@ describe("ctd-cli", () => {
 		);
 	});
 
+	test("(f) mot nhom in rat nhieu dong: dong ket qua cua moi nhom van o dau dong", () => {
+		const r = chay([], { CTD_NHIEU: "api" });
+		assert.equal(r.ma, 0, r.ra.slice(-500));
+		const dau = [...r.ra.matchAll(/^nhom (\S+): ma 0 · CSDL \S+ · /gm)]
+			.map((m) => m[1])
+			.sort();
+		assert.deepEqual(dau, NHOM_TEST.map((n) => n.ten).sort());
+		assert.doesNotMatch(r.ra, /\Snhom \S+: ma \d+ · CSDL/);
+	});
+
 	for (const n of NHOM_TEST) {
 		test(`(f) nhom ${n.ten} do -> CLI thoat khac 0, goi ten nhom`, () => {
 			const r = chay([], { CTD_DO: n.goi[0] });
@@ -182,7 +194,7 @@ describe("ctd-cli", () => {
 		const cau = readFileSync(join(GOC, "_acceptance", "config.yaml"), "utf8");
 		const lenh = /^\s+nbn_ca_tep: bun run test -- "(.+)"$/m.exec(cau)?.[1];
 		assert.ok(lenh, "khong thay lenh nbn_ca_tep trong config.yaml");
-		const quaCli = spawnSync("node", [CLI, "--test-run", GIA, lenh], {
+		const quaCli = spawnSync("bun", [CLI, "--test-run", GIA, lenh], {
 			encoding: "utf8",
 			env: { ...process.env, CTD_IN_ARGV: "1" },
 		});
