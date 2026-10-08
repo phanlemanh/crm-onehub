@@ -1376,14 +1376,14 @@ executors:
     dlt_dang_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t dang-tai
     dlt_khong_quan_tri: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t khong-quan-tri
     dlt_hoi_quy: 'git diff --quiet cf003458611be9efadd4b71cbda61dc04df02d2b -- apps/app/test/giai-doan-cai-dat.dom.tsx && node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx" --mode static && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/giai-doan-cai-dat.dom.tsx'
-    ldcc_dua_vao: cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t dua-vao
-    ldcc_visao_rong: cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t visao-rong
-    ldcc_gan_tay: cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t gan-tay
-    ldcc_can_chinh_cu: cd apps/api && bun test test/okr-can-chinh.spec.ts
-    ldcc_muc_tin: cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t muc-tin
-    ldcc_dien_lai: cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t dien-lai
-    ldcc_quyen_xem: cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t quyen-xem
-    ldcc_do_nguong: cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t do-nguong
+    ldcc_dua_vao: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t dua-vao"
+    ldcc_visao_rong: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t visao-rong"
+    ldcc_gan_tay: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t gan-tay"
+    ldcc_can_chinh_cu: bun run test -- "cd apps/api && bun test test/okr-can-chinh.spec.ts"
+    ldcc_muc_tin: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t muc-tin"
+    ldcc_dien_lai: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t dien-lai"
+    ldcc_quyen_xem: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t quyen-xem"
+    ldcc_do_nguong: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t do-nguong"
   script:
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
     kbk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-ban-ghi-kara/rang/man.mjs"'
