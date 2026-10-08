@@ -185,6 +185,7 @@ khác thay»): eval cũ khai `status: not-run` + `superseded_by`, hồ sơ này 
 |---|---|---|---|
 | the-gop-y-okr/E10 | thẻ thông tin liên hệ gọn, «Nhận» tô màu, «Bác» mờ, bấm cả hai trên cùng thẻ | khung-ban-ghi-kara#AC-6 | ai-ux 01/10: neo tại chỗ, nút gọi đúng hậu quả, nhận xong thu thành biên nhận |
 | logo-onehub/E14 | `agent-panel.tsx` có đúng 2 chỗ `<Logo` (màn trống, avatar) | khung-ban-ghi-kara#AC-1 | ai-ux §2: logo hãng làm ảnh đại diện của AI — gỡ; dấu Kara thay |
+| logo-onehub/E13 | ảnh `agent-sang`/`agent-toi`: logo OneHub trong khoảng rỗng tab Agent, không ô tô nền, cao ≥ 28 px | khung-ban-ghi-kara#AC-1 | thêm 08/10 khi làn ghim lại đỏ (repin-20261008T002206Z-95072); cùng lý do với E14, giám sát duyệt chạm ở P2-10 |
 | nen-kara-man-cu.dom.tsx ca «man-cu: thông tin liên hệ vẫn là thẻ» (eval nen-kara/E3 đã nghỉ) | `FactSuggestion` ở `density=card` | khung-ban-ghi-kara#AC-6 | K4 là lượt nối mà ca này chờ |
 
 ## Kiểm thử
