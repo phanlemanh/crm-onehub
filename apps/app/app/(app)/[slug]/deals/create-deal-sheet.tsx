@@ -106,7 +106,7 @@ function CreateDealForm({ companyId }: { companyId?: string }) {
 		trpc.deals.create.mutationOptions({
 			onSuccess: async (deal) => {
 				await cache.deal(deal.id);
-				toast.success(`${deal.name} added.`);
+				toast.success(m.created(deal.name));
 				await setOpen(null);
 				edit({ name: "", amount: "", currency: "", closeDate: "" });
 				openRecord({ kind: "deal", id: deal.id });
