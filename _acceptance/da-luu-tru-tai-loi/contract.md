@@ -5,7 +5,7 @@ slug: da-luu-tru-tai-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T09:07:14Z
 design_doc: docs/superpowers/specs/2026-10-08-da-luu-tru-tai-loi-design.md
