@@ -14,9 +14,9 @@ import { KIEM_CHEO } from "./cau-hinh.mjs";
 import { duongLan } from "./doc-lan.mjs";
 import { layKhoa, pidSong, voiKhoa } from "./khoa.mjs";
 import { canMoc, docMoc, ghiMoc, lanGop, tepDoi } from "./moc.mjs";
+import { docKetLan, lech } from "./phan-xu.mjs";
 import { maKyVong, tapCham } from "./tap-cham.mjs";
 import { laTepChinh } from "./tep-chinh.mjs";
-import { docKetLan, lech } from "./phan-xu.mjs";
 import { phanLoai } from "./thu-pham.mjs";
 
 const KQ = KIEM_CHEO.ketQua;
