@@ -1,0 +1,1 @@
+driver: bun script do-man.mjs (playwright), khong co read_network_requests; network n-a (driver)

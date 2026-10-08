@@ -1,35 +1,112 @@
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import ts from "typescript";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const GOC = join(HERE, "..", "..", "..");
-const DAU = "DropdownMenuSubContent";
+const THE = "DropdownMenuSubContent";
 
-const DIFF_GIA = [
-	"diff --git a/apps/app/components/crm/bulk-actions.tsx b/apps/app/components/crm/bulk-actions.tsx",
-	"--- a/apps/app/components/crm/bulk-actions.tsx",
-	"+++ b/apps/app/components/crm/bulk-actions.tsx",
-	"@@ -106 +106 @@",
-	'-			<DropdownMenuSubContent className="max-h-72 overflow-y-auto">',
-	'+			<DropdownMenuSubContent className="max-h-72 overflow-y-auto -translate-x-40">',
-].join("\n");
+const MAU_THU = [
+	{
+		ten: "cung-dong",
+		tep: "apps/app/components/crm/bulk-actions.tsx",
+		nguon: [
+			"export function A() {",
+			"	return (",
+			'		<DropdownMenuSubContent className="max-h-72 -translate-x-40">',
+			"			<span />",
+			"		</DropdownMenuSubContent>",
+			"	);",
+			"}",
+		].join("\n"),
+		dongThem: [3],
+	},
+	{
+		ten: "dong-sau-trong-the",
+		tep: "apps/app/app/(app)/[slug]/contacts/contacts-bulk-actions.tsx",
+		nguon: [
+			"export function B() {",
+			"	return (",
+			"		<DropdownMenuSubContent",
+			'			className="w-64 p-0 -translate-x-40"',
+			"		>",
+			"			<span />",
+			"		</DropdownMenuSubContent>",
+			"	);",
+			"}",
+		].join("\n"),
+		dongThem: [4],
+	},
+	{
+		ten: "doi-chung-ngoai-the",
+		tep: "apps/app/components/crm/bulk-actions.tsx",
+		nguon: [
+			"export function C() {",
+			'	const lop = "-translate-x-40";',
+			"	return <DropdownMenuSubContent>{lop}</DropdownMenuSubContent>;",
+			"}",
+		].join("\n"),
+		dongThem: [2],
+	},
+];
 
 function git(...a) {
 	return execFileSync("git", ["-C", GOC, ...a], { encoding: "utf8" });
 }
 
-export function dongThemCham(diff) {
-	const ra = [];
+export function vungThe(tep, nguon) {
+	const sf = ts.createSourceFile(
+		tep,
+		nguon,
+		ts.ScriptTarget.Latest,
+		true,
+		ts.ScriptKind.TSX,
+	);
+	const vung = [];
+	const duyet = (n) => {
+		if (
+			(ts.isJsxOpeningElement(n) || ts.isJsxSelfClosingElement(n)) &&
+			n.tagName.getText(sf) === THE
+		) {
+			const dau = sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1;
+			const cuoi = sf.getLineAndCharacterOfPosition(n.getEnd()).line + 1;
+			vung.push([dau, cuoi]);
+		}
+		ts.forEachChild(n, duyet);
+	};
+	duyet(sf);
+	return vung;
+}
+
+export function dongCham(tep, nguon, dongThem) {
+	const vung = vungThe(tep, nguon);
+	const cacDong = nguon.split("\n");
+	return dongThem
+		.filter((so) => vung.some(([a, b]) => so >= a && so <= b))
+		.map((so) => `${tep}:${so}: ${(cacDong[so - 1] ?? "").trim()}`);
+}
+
+function dongThemTheoTep(moc) {
+	const diff = git("diff", "-U0", moc, "HEAD", "--", "apps");
+	const ra = new Map();
 	let tep = null;
 	for (const dong of diff.split("\n")) {
 		if (dong.startsWith("+++ ")) {
-			tep = dong.slice(4).replace(/^b\//, "");
+			tep =
+				dong.slice(4) === "/dev/null"
+					? null
+					: dong.slice(4).replace(/^b\//, "");
 			continue;
 		}
-		if (!tep || !tep.startsWith("apps/")) continue;
-		if (dong.startsWith("+") && dong.includes(DAU))
-			ra.push(`${tep}: ${dong.slice(1).trim()}`);
+		const khoi = dong.match(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/);
+		if (tep && khoi) {
+			const dau = Number(khoi[1]);
+			const so = khoi[2] === undefined ? 1 : Number(khoi[2]);
+			const ds = ra.get(tep) ?? [];
+			for (let i = 0; i < so; i += 1) ds.push(dau + i);
+			ra.set(tep, ds);
+		}
 	}
 	return ra;
 }
@@ -38,7 +115,11 @@ const dong = [];
 const ghi = (dat, chu) => dong.push({ dat, chu });
 
 const moc = git("merge-base", "HEAD", "origin/onehub").trim();
-const that = dongThemCham(git("diff", "-U0", moc, "HEAD", "--", "apps"));
+const that = [];
+for (const [tep, so] of dongThemTheoTep(moc)) {
+	if (!/\.(tsx|jsx)$/.test(tep)) continue;
+	that.push(...dongCham(tep, git("show", `HEAD:${tep}`), so));
+}
 ghi(
 	that.length === 0,
 	that.length === 0
@@ -47,11 +128,14 @@ ghi(
 );
 
 if (process.argv.includes("--tu-thu")) {
-	const gia = dongThemCham(DIFF_GIA);
-	const bat = gia.some((d) =>
-		d.startsWith("apps/app/components/crm/bulk-actions.tsx:"),
-	);
-	ghi(bat, `tu-thu diff gia: ${bat ? `do — ${gia.join(" | ")}` : "KHONG bat"}`);
+	for (const m of MAU_THU) {
+		const bat = dongCham(m.tep, m.nguon, m.dongThem);
+		const mong = m.ten === "doi-chung-ngoai-the" ? 0 : 1;
+		ghi(
+			bat.length === mong,
+			`tu-thu ${m.ten}: ${bat.length === 0 ? "khong bat" : `do — ${bat.join(" | ")}`} (mong ${mong === 1 ? "do" : "khong bat"})`,
+		);
+	}
 }
 
 for (const d of dong) console.log(`${d.dat ? "DUNG" : "SAI"} ${d.chu}`);

@@ -27,7 +27,8 @@ evals:
           co left >= 7 va right <= 368 (dung sai 1 px lam tron DPR, in so tho), width > 0
         cham-375: tap mot giai doan trong menu con do -> location.search mang stage=<id giai doan vua tap>
         cong-ty-375: menu con Cong ty cua ca nhan — hop va o tim (input trong hop) left >= 7, right <= 368;
-          go "xa" vao o tim -> value cua o tim bang "xa"
+          go 3 ky tu dau ten cong ty thu nhat trong menu con vao o tim -> value cua o tim bang dung 3 ky
+          tu do va con >= 1 muc cong ty nam trong khung
         doi-chung-1440: menu con Giai doan cua thoa thuan — vi tri hop bang vi tri khi tat lop dich
           (style.translate = none), lech <= 1 px, hop trong khung; in phia Radix dat (data-side)
         hang-loat-768: chon 1 dong o danh sach thoa thuan, mo menu thao tac hang loat, mo menu con doi
@@ -49,7 +50,8 @@ evals:
       - "packages/ui/src/components/dropdown-menu.tsx"
       - "_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"
     expected: |
-      Dong "DUNG 375: cong-ty-375" voi toa do hop va o tim trong khoang [7, 368] va value o tim "xa".
+      Dong "DUNG 375: cong-ty-375" voi toa do hop va o tim trong khoang [7, 368], value o tim bang 3 ky tu
+      vua go va so muc cong ty trong khung >= 1.
       Anh: o tim va it nhat mot muc cong ty thay ro trong man.
 
   - id: E3

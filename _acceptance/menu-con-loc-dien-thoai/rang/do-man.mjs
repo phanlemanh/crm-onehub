@@ -259,20 +259,43 @@ async function doCongTy375(cookie, slug) {
 		});
 		await choBang(p);
 		await moTieuChi(p, true, c.facets.company);
+		const mau = await p.evaluate((boQua) => {
+			const nhan = [
+				...document.querySelectorAll(
+					'[data-slot="dropdown-menu-sub-content"] [data-slot="command-item"] span.flex-1',
+				),
+			]
+				.map((x) => x.textContent?.trim() ?? "")
+				.find((t) => t.length >= 3 && t !== boQua);
+			return nhan ? nhan.slice(0, 3) : null;
+		}, c.noCompany);
+		if (!mau) khongDo("menu con Cong ty khong co cong ty nao truoc khi go");
 		await bam(p, true, `${HOP} input`, null);
-		await p.keyboard.type("xa");
-		await new Promise((r) => setTimeout(r, 300));
+		await p.keyboard.type(mau);
+		await new Promise((r) => setTimeout(r, 800));
 		const s = await p.evaluate(hopVaTrig, c.facets.company);
 		const giaTri = await p.evaluate(
 			() =>
 				document.querySelector('[data-slot="dropdown-menu-sub-content"] input')
 					?.value ?? null,
 		);
+		const soMuc = await p.evaluate(
+			(w) =>
+				[
+					...document.querySelectorAll(
+						'[data-slot="dropdown-menu-sub-content"] [data-slot="command-item"]',
+					),
+				].filter((x) => {
+					const b = x.getBoundingClientRect();
+					return b.width > 0 && b.left >= 0 && b.right <= w;
+				}).length,
+			375,
+		);
 		await p.screenshot({ path: join(RA, "cong-ty-375.png") });
 		kiem(
 			"cong-ty-375",
-			`375: cong-ty — hop left ${s.hop?.left} right ${s.hop?.right}, o tim left ${s.oTim?.left} right ${s.oTim?.right}, gia tri «${giaTri}», con tro ${s.loaiTro}`,
-			trong(s.hop, s.w) && trong(s.oTim, s.w) && giaTri === "xa",
+			`375: cong-ty — hop left ${s.hop?.left} right ${s.hop?.right}, o tim left ${s.oTim?.left} right ${s.oTim?.right}, go «${mau}» → gia tri «${giaTri}», ${soMuc} muc cong ty trong khung, con tro ${s.loaiTro}`,
+			trong(s.hop, s.w) && trong(s.oTim, s.w) && giaTri === mau && soMuc >= 1,
 		);
 	} finally {
 		await ctx.close();
