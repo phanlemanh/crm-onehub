@@ -865,3 +865,103 @@ describe("bay-cho", () => {
 		await db.zaloHoi.deleteMany({});
 	});
 });
+
+const TOKEN_RT = "tok-rieng-tu-h4";
+const CHAT_RT = "chat-rieng-tu-h4";
+const CHU_RT = "chu-rieng-tu-h4";
+
+function mangLoTok(): typeof fetch {
+	return (async (input: Parameters<typeof fetch>[0]) => {
+		throw Object.assign(new Error(`fetch failed ${String(input)}`), {
+			code: "ECONNRESET",
+		});
+	}) as typeof fetch;
+}
+
+async function moTaRieng(fetcher: typeof fetch): Promise<string> {
+	const loi = await guiZalo(TOKEN_RT, CHAT_RT, CHU_RT, { fetcher }).then(
+		() => null,
+		(e: Error) => e,
+	);
+	if (!loi) throw new Error("gui khong hong");
+	return moTaLoiZalo(loi);
+}
+
+describe("rieng-tu", () => {
+	test("nhật ký không mang token, mã chat hay chữ tin", async () => {
+		await db.zaloHoi.deleteMany({});
+		await db.zaloUpdateSeen.deleteMany({});
+		const tatCa = tuChoiCho(MOI_LENH);
+		const gieoHoiRieng = async (messageId: string, hoiLuc = new Date()) => {
+			const h = await db.zaloHoi.create({
+				data: {
+					messageId,
+					crmUserId: "rieng-tu-nguoi",
+					zaloChatId: CHAT_RT,
+					hoiLuc,
+					ketQua: "dang-hoi",
+				},
+			});
+			return h.id;
+		};
+		const nk = batNhatKy();
+		const moTa: string[] = [];
+		try {
+			moTa.push(await moTaRieng(phanHoi(200, thanLoi(403))));
+			moTa.push(await moTaRieng(phanHoi(401, thanLoi(401))));
+			moTa.push(await moTaRieng(mangLoTok()));
+			await traLoiVe({ hoiId: await gieoHoiRieng("rt-1") }, CHU_RT, {
+				fetcher: tatCa,
+				token: TOKEN_RT,
+			});
+			await loiVe(
+				{ hoiId: await gieoHoiRieng("rt-2") },
+				{ fetcher: mangLoTok(), token: TOKEN_RT },
+			);
+			await gieoHoiRieng(
+				"rt-3",
+				new Date(Date.now() - ZALO.hoi.hanTraLoiMs - 1000),
+			);
+			await dongHoiQuaHan({ fetcher: tatCa, token: TOKEN_RT });
+			const tinRieng = (chon: ChonTin) =>
+				parseZaloWebhook(thanWebhook({ ...chon, text: CHU_RT })).message;
+			await xuLyTinDen(
+				TOKEN_RT,
+				{
+					...tinRieng({ messageId: "rt-4", fromId: CHAT_RT }),
+					chat: { id: CHAT_RT, chat_type: "GROUP" },
+				},
+				{ fetcher: tatCa, now: new Date() },
+			);
+			await xuLyTinDen(
+				TOKEN_RT,
+				tinRieng({ messageId: "rt-5", fromId: CHAT_RT }),
+				{
+					fetcher: tatCa,
+					now: new Date(),
+				},
+			);
+			await xuLyTinDen(
+				TOKEN_RT,
+				tinRieng({ messageId: "rt-6", fromId: CHAT_RT }),
+				{
+					fetcher: tatCa,
+					now: new Date(Number.NaN),
+				},
+			);
+		} finally {
+			nk.tra();
+		}
+		const tatCaDong = [...nk.dong, ...moTa];
+		expect(
+			nk.dong.filter((d) => d.startsWith("[zalo]")).length,
+		).toBeGreaterThan(0);
+		expect(coChua(nk, "gui tra loi hong")).toBeGreaterThan(0);
+		expect(coChua(nk, "khong ghi duoc")).toBe(1);
+		for (const bi of [TOKEN_RT, CHAT_RT, CHU_RT]) {
+			if (tatCaDong.some((d) => d.includes(bi)))
+				throw new Error(`lo ${bi} trong nhat ky`);
+		}
+		await db.zaloHoi.deleteMany({});
+	});
+});
