@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import {
+	chmodSync,
 	mkdirSync,
 	mkdtempSync,
 	readFileSync,
@@ -26,7 +27,7 @@ const doiSo = process.argv.slice(2);
 if (process.env.CTD_IN_ARGV) { console.log(JSON.stringify(doiSo)); process.exit(0); }
 const bat = Date.now();
 await new Promise((r) => setTimeout(r, Number(process.env.CTD_NGU || 0)));
-appendFileSync(process.env.CTD_SO, JSON.stringify({ doiSo, bat, ket: Date.now() }) + "\\n");
+appendFileSync(process.env.CTD_SO, JSON.stringify({ loai: "nhom", doiSo, bat, ket: Date.now() }) + "\\n");
 console.log("test-run: crm_gia" + process.pid + "_test is this run's database");
 if (process.env.CTD_KHONG_XUONG) process.stdout.write("dong cuoi khong xuong dong");
 if (doiSo.includes("--filter=" + process.env.CTD_NHIEU)) for (let i = 0; i < 60000; i++) process.stdout.write("dong dai cua nhom lon ".repeat(4) + i + "\\n");
@@ -35,21 +36,43 @@ process.exit(doiSo.some((a) => doNhom.includes(a.replace("--filter=", ""))) ? 1 
 `,
 );
 
+const GIA_TURBO = join(TAM, "turbo-gia.mjs");
+writeFileSync(
+	GIA_TURBO,
+	`#!/usr/bin/env node
+import { appendFileSync } from "node:fs";
+const bat = Date.now();
+await new Promise((r) => setTimeout(r, 50));
+appendFileSync(process.env.CTD_SO, JSON.stringify({ loai: "turbo", doiSo: process.argv.slice(2), bat, ket: Date.now() }) + "\\n");
+process.exit(process.env.CTD_TURBO_DO ? 1 : 0);
+`,
+);
+chmodSync(GIA_TURBO, 0o755);
+
 const TAT_CA = NHOM_TEST.flatMap((n) => n.goi).sort();
 
 function chay(doiSo, env = {}) {
 	const so = join(TAM, `so-${Math.random().toString(36).slice(2)}.jsonl`);
 	writeFileSync(so, "");
-	const r = spawnSync("bun", [CLI, "--test-run", GIA, ...doiSo], {
-		encoding: "utf8",
-		maxBuffer: 1 << 26,
-		env: { ...process.env, CTD_SO: so, ...env },
-	});
+	const r = spawnSync(
+		"bun",
+		[CLI, "--test-run", GIA, "--turbo", GIA_TURBO, ...doiSo],
+		{
+			encoding: "utf8",
+			maxBuffer: 1 << 26,
+			env: { ...process.env, CTD_SO: so, ...env },
+		},
+	);
 	const dong = readFileSync(so, "utf8")
 		.split("\n")
 		.filter(Boolean)
 		.map((d) => JSON.parse(d));
-	return { ma: r.status, ra: `${r.stdout}\n${r.stderr}`, spawn: dong };
+	return {
+		ma: r.status,
+		ra: `${r.stdout}\n${r.stderr}`,
+		spawn: dong.filter((d) => d.loai === "nhom"),
+		turbo: dong.filter((d) => d.loai === "turbo"),
+	};
 }
 
 function workspaceGia(them) {
@@ -173,6 +196,32 @@ describe("ctd-cli", () => {
 		});
 	}
 
+	test("(j) dung truoc dung mot lan, truoc moi nhom, du 11 goi; nhom nhan --only", () => {
+		const r = chay([]);
+		assert.equal(r.ma, 0, r.ra);
+		assert.equal(r.turbo.length, 1);
+		assert.deepEqual(r.turbo[0].doiSo, [
+			"run",
+			"build",
+			...goiCoTest(GOC).map((g) => `--filter=${g}^...`),
+		]);
+		assert.ok(
+			r.spawn.every((n) => n.bat >= r.turbo[0].ket),
+			"nhom bat dau truoc khi dung xong",
+		);
+		assert.ok(r.spawn.every((n) => n.doiSo.includes("--only")));
+	});
+
+	test("(k) dung truoc do -> thoat 3, goi ten, 0 nhom chay", () => {
+		const r = chay([], { CTD_TURBO_DO: "1" });
+		assert.equal(r.ma, 3, r.ra);
+		assert.match(
+			r.ra,
+			/test-song-song: dung truoc DO \(ma 1\), khong nhom nao chay/,
+		);
+		assert.equal(r.spawn.length, 0);
+	});
+
 	test("(g) goi thua ngoai bon nhom -> thoat khac 0, goi ten goi, 0 lan spawn", () => {
 		const goc = workspaceGia(["@crm/goi-moi"]);
 		const r = chay(["--goc", goc]);
@@ -182,6 +231,7 @@ describe("ctd-cli", () => {
 			/test-song-song: goi @crm\/goi-moi khong thuoc nhom nao/,
 		);
 		assert.equal(r.spawn.length, 0);
+		assert.equal(r.turbo.length, 0);
 	});
 
 	test("(g) doi chung: workspace gia du 11 goi -> chay", () => {

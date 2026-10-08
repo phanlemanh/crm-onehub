@@ -23,6 +23,11 @@ evals:
       (h) test-run gia in JSON argv; `bun run test -- "<lenh co dau cach va nhay>"` (lay mot lenh co that trong
           _acceptance/config.yaml) cho argv trung tung byte voi loi goi thang test-run gia cung doi so;
       (i) gioi han song song: test-run gia ghi thoi diem bat dau/ket thuc; voi --song-song 2 khong luc nao co qua 2 nhom chay.
+      (j) dung truoc: turbo gia ghi doi so; dung MOT lan `run build --filter=<goi>^...` cho du 11 goi (rut tu workspace),
+          ket thuc truoc khi nhom nao bat dau; moi nhom nhan `--only` (khong dung lai phu thuoc);
+      (k) dung truoc thoat 1 -> CLI thoat 3, goi "dung truoc DO", 0 nhom chay;
+      (l) dau ra nhom khong ket thuc xuong dong, va mot nhom in 60000 dong: dong ket qua cua MOI nhom van o dau dong
+          (CLI chay bang bun nhu package.json).
       Moi o do ghim thong diep (ten goi / ten nhom), khong chi ma thoat.
 
   - id: E2
@@ -38,7 +43,7 @@ evals:
       - "_acceptance/ci-test-duoi-tran/rang/**"
     expected: |
       rang/chay-that.mjs (goc kho tu import.meta.dirname): ghi danh sach .turbo/runs truoc, chay `bun run test` voi
-      TURBO_RUN_SUMMARY=true. Ma 0 khi dong thoi: (a) thoat 0; (b) dau ra co DUNG bon dong ket qua nhom
+      TURBO_RUN_SUMMARY=true va TURBO_FORCE=true (dung nhu pre-push). Ma 0 khi dong thoi: (a) thoat 0; (b) dau ra co DUNG bon dong ket qua nhom
       «nhom <ten>: ma 0 · CSDL crm_<id>_test · <giay>s», bon ten CSDL khac nhau; (c) thoi gian tuong < 0.75 × tong
       thoi gian bon nhom (chung minh chay chong nhau, khong noi tiep); (d) chay scripts/verify-gate-shape.mjs voi
       --runs-before cua luot: khong van de nao thuoc checker 'test' (moi goi khong mien tru deu co trong cac ban tom

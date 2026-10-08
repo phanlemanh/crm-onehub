@@ -40,7 +40,7 @@ function chinh() {
 		encoding: "utf8",
 		timeout: TRAN_MS,
 		maxBuffer: 1 << 28,
-		env: { ...process.env, TURBO_RUN_SUMMARY: "true" },
+		env: { ...process.env, TURBO_RUN_SUMMARY: "true", TURBO_FORCE: "true" },
 	});
 	const tuong = (Date.now() - bat) / 1000;
 	if (r.error) {

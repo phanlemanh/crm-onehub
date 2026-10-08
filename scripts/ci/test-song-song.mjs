@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { CHAY_TEST, NHOM_TEST } from "./cau-hinh.mjs";
 
 const GOC_KHO = resolve(import.meta.dirname, "..", "..");
-const CO_RIENG = ["--test-run", "--goc", "--song-song"];
+const CO_RIENG = ["--test-run", "--goc", "--song-song", "--turbo"];
 
 function docJson(duong) {
 	return JSON.parse(readFileSync(duong, "utf8"));
@@ -86,10 +86,14 @@ function chayMotNhom(n, testRun, goc) {
 	const bat = Date.now();
 	return new Promise((xong) => {
 		const ra = [];
-		const con = spawn("bun", [testRun, ...n.goi.map((g) => `--filter=${g}`)], {
-			cwd: goc,
-			env: moiTruongNhom(),
-		});
+		const con = spawn(
+			"bun",
+			[testRun, ...n.goi.map((g) => `--filter=${g}`), CHAY_TEST.coChiNhom],
+			{
+				cwd: goc,
+				env: moiTruongNhom(),
+			},
+		);
 		con.stdout.on("data", (b) => ra.push(b));
 		con.stderr.on("data", (b) => ra.push(b));
 		const het = (ma, loiKhoi) => {
@@ -135,9 +139,13 @@ export async function chayNhom(nhom, { testRun, goc, songSong }) {
 	return ket;
 }
 
-function chuyenThang(lenh, goc) {
+export function lenhDungTruoc(goi) {
+	return ["run", "build", ...goi.map((g) => `--filter=${g}^...`)];
+}
+
+function chuyenThang(lenh, goc, chuongTrinh = "bun") {
 	return new Promise((xong) => {
-		const con = spawn("bun", lenh, { cwd: goc, stdio: "inherit" });
+		const con = spawn(chuongTrinh, lenh, { cwd: goc, stdio: "inherit" });
 		con.on("error", () => xong(CHAY_TEST.maKhongChay));
 		con.on("close", (ma, tin) =>
 			xong(ma ?? CHAY_TEST.maTinHieuGoc + (os.constants.signals[tin] ?? 0)),
@@ -153,10 +161,19 @@ export async function chinh(argv) {
 		: join(goc, CHAY_TEST.testRun);
 	const thang = chuyenDoiSo(conLai, testRun);
 	if (thang) return chuyenThang(thang, goc);
-	const loi = dungNhom(goiCoTest(goc), NHOM_TEST);
+	const goi = goiCoTest(goc);
+	const loi = dungNhom(goi, NHOM_TEST);
 	if (loi.length > 0) {
 		for (const l of loi) console.error(`test-song-song: ${l}`);
 		return CHAY_TEST.maSaiNhom;
+	}
+	const turbo = co.turbo ? resolve(co.turbo) : join(goc, CHAY_TEST.turbo);
+	const dung = await chuyenThang(lenhDungTruoc(goi), goc, turbo);
+	if (dung !== 0) {
+		console.error(
+			`test-song-song: dung truoc DO (ma ${dung}), khong nhom nao chay`,
+		);
+		return CHAY_TEST.maDungTruoc;
 	}
 	const songSong =
 		Number(co["song-song"]) ||

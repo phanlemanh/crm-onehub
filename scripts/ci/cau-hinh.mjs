@@ -17,11 +17,14 @@ export const NHOM_TEST = [
 export const CHAY_TEST = {
 	tranSongSong: 4,
 	testRun: "packages/db/scripts/test-run.ts",
+	turbo: "node_modules/.bin/turbo",
+	coChiNhom: "--only",
 	gateShape: ".githooks/gate-shape.json",
 	checker: "test",
 	msMoiGiay: 1000,
 	maKhongChay: 1,
 	maSaiNhom: 2,
+	maDungTruoc: 3,
 	maTinHieuGoc: 128,
 	bienRiengMoiLuot: ["TEST_RUN_ID"],
 };
