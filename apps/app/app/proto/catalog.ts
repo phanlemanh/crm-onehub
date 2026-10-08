@@ -14,10 +14,12 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		slug: "trang-lo-trinh-trong-crm",
 		ten: "Trang Lộ trình trong CRM — chỉ đọc",
 		states: [
-			{ id: "ST-lotrinh-day-du", nhan: "Đầy đủ — lộ trình OKR, mọi nhóm" },
-			{ id: "ST-lotrinh-loc", nhan: "Lọc theo nhóm okr" },
+			{ id: "ST-lotrinh-day-du", nhan: "Theo nhóm — tất cả nhóm" },
+			{ id: "ST-lotrinh-theo-moc", nhan: "Theo mốc" },
+			{ id: "ST-lotrinh-toan-canh", nhan: "Toàn cảnh" },
+			{ id: "ST-lotrinh-loc", nhan: "Theo nhóm — chọn nhóm okr" },
 			{ id: "ST-lotrinh-tre", nhan: "Hôm nay 20/12 — có việc đã qua mốc" },
-			{ id: "ST-lotrinh-bang-cot", nhan: "Xem dạng bảng cột theo trạng thái" },
+			{ id: "ST-lotrinh-bang-cot", nhan: "Theo nhóm — dạng bảng cột" },
 			{ id: "ST-lotrinh-chi-tiet", nhan: "Mở chi tiết một việc (LT2)" },
 			{ id: "ST-lotrinh-dang-tai", nhan: "Đang tải" },
 			{
