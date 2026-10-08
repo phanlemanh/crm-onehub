@@ -995,6 +995,46 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "soan-okr-trang-rieng",
+		ten: "Soạn OKR trang riêng — hội thoại cạnh bản nháp Kara, dòng inline, hoàn tác, mốc nộp",
+		states: [
+			{ id: "ST-soan-dang-mo", nhan: "Đang mở cuộc soạn" },
+			{ id: "ST-soan-mo-dau", nhan: "Kara mở đầu, bản nháp đầu đang soạn" },
+			{
+				id: "ST-soan-co-nhap",
+				nhan: "Có bản nháp — dòng chờ, ô số, nhận cả nhóm",
+			},
+			{
+				id: "ST-soan-dang-soan",
+				nhan: "Kara đang soạn — dòng chờ khoá, ô soạn là Dừng",
+			},
+			{
+				id: "ST-soan-moc",
+				nhan: "Hai mốc nộp, dòng vừa sửa có diff và đang nổi",
+			},
+			{
+				id: "ST-soan-da-quyet",
+				nhan: "Đã quyết — biên nhận có Hoàn tác, sẽ gửi kèm lượt sau",
+			},
+			{
+				id: "ST-soan-con-thieu",
+				nhan: "Còn thiếu số — Đưa vào khoá, danh sách còn thiếu",
+			},
+			{
+				id: "ST-soan-hoi-dong",
+				nhan: "Hỏi Kara về một dòng — chip trên ô soạn",
+			},
+			{ id: "ST-soan-loi", nhan: "Kara chưa trả lời được — Thử lại" },
+			{ id: "ST-soan-het-luot", nhan: "Hết lượt — ô soạn khoá, mở cuộc mới" },
+			{
+				id: "ST-soan-da-dua-vao",
+				nhan: "Đã đưa vào — biên nhận, dòng chỉ đọc",
+			},
+			{ id: "ST-soan-khong-mo", nhan: "Không mở được cuộc soạn" },
+			{ id: "ST-soan-hep", nhan: "Khổ hẹp — hai tab" },
+		],
+	},
+	{
 		slug: "khung-ban-ghi-kara",
 		ten: "Kara trong ngăn bản ghi — tab Kara, đề xuất thông tin liên hệ, khung tải lỗi",
 		states: [

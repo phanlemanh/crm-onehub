@@ -41,6 +41,7 @@ import {
 	locOkr,
 	okrParsers,
 } from "../okr-search-params";
+import { useChuyenLinkCuSoan } from "../soan/chuyen-link-cu";
 import { NutSoan } from "../soan/nut-soan";
 import { ChuaChuKy, DangTai, DonKhongThay, Loi, Rong } from "../trang-thai-okr";
 
@@ -143,6 +144,7 @@ const dangCho = (q: { isPending: boolean; isPlaceholderData: boolean }) =>
 	q.isPending || q.isPlaceholderData;
 
 export function TheoDonVi({ cauNoiOkr = false }: { cauNoiOkr?: boolean }) {
+	useChuyenLinkCuSoan();
 	const locale = useLocale();
 	const m = okrMessages(locale);
 	const mt = okrToanCanhMessages(locale);

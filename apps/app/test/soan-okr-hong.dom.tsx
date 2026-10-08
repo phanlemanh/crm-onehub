@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { KARA_TRE_MS } from "@crm/ui/components/kara/state";
 import type { MessageStreamEvent } from "eve/client";
+import { act } from "react";
 import {
 	bam,
 	batDongHoGia,
@@ -36,7 +38,7 @@ const TIN_CU = {
 };
 
 const coLoi = () =>
-	chu('[data-luot="loi"] [data-slot="alert-title"]') === m.hoiThoai.loi;
+	chu('[data-luot="loi"] [data-slot="empty-title"]') === m.hoiThoai.loi;
 
 const CHET_SAU_MS = 5_000;
 const LUOT = "luot-1";
@@ -121,10 +123,10 @@ describe("hong — tac nhan chet giua chung", () => {
 		});
 		await moMan();
 		expect(coLoi()).toBe(true);
-		expect(chu('[data-luot="loi"] [data-slot="alert-description"]')).toBe(
+		expect(chu('[data-luot="loi"] [data-slot="empty-description"]')).toBe(
 			m.hoiThoai.loiMoTaKhac,
 		);
-		expect(q('[data-nut="thu-lai"]')).not.toBeNull();
+		expect(q('[data-luot="loi"] [data-slot="kara-retry"]')).not.toBeNull();
 		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
 	});
 
@@ -144,17 +146,22 @@ describe("hong — tac nhan chet giua chung", () => {
 			daPhanLoai.every((t) => t === "working"),
 			CHET_IM_KHONG_CO_KET_THUC,
 		).toBe(true);
-		expect(q('[role="status"][aria-busy="true"]')).not.toBeNull();
+		expect(
+			q('[data-kara-turn="kara"] [data-kara-state="working"]'),
+		).not.toBeNull();
 		expect(coLoi()).toBe(false);
 		await troi(SOAN_UI.hanKhongSuKienMs - SOAN_UI.hoiLuongMs - 1_200);
 		expect(coLoi()).toBe(false);
 		await troi(SOAN_UI.hoiLuongMs + 1_300);
 		expect(daPhanLoai.at(-1), CHET_IM_KHONG_CO_KET_THUC).toBe("working");
 		expect(coLoi(), CHET_IM_PHAI_BAO_LOI).toBe(true);
-		expect(chu('[data-luot="loi"] [data-slot="alert-description"]')).toBe(
+		expect(chu('[data-luot="loi"] [data-slot="empty-description"]')).toBe(
 			m.hoiThoai.loiMoTa,
 		);
-		expect(q('[data-nut="thu-lai"]'), CHET_IM_PHAI_BAO_LOI).not.toBeNull();
+		expect(
+			q('[data-luot="loi"] [data-slot="kara-retry"]'),
+			CHET_IM_PHAI_BAO_LOI,
+		).not.toBeNull();
 		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
 	});
 
@@ -169,7 +176,10 @@ describe("hong — tac nhan chet giua chung", () => {
 		expect(coLoi()).toBe(false);
 		await troi(1_100);
 		expect(coLoi(), CHET_IM_PHAI_BAO_LOI).toBe(true);
-		expect(q('[data-nut="thu-lai"]'), CHET_IM_PHAI_BAO_LOI).not.toBeNull();
+		expect(
+			q('[data-luot="loi"] [data-slot="kara-retry"]'),
+			CHET_IM_PHAI_BAO_LOI,
+		).not.toBeNull();
 	});
 
 	test("(a) phiên còn sống: không báo lỗi", async () => {
@@ -198,7 +208,7 @@ describe("hong — 45 giay khong su kien", () => {
 		expect(coLoi()).toBe(false);
 		await troi(SOAN_UI.hanKhongSuKienMs - 44_000 + 1);
 		expect(coLoi()).toBe(true);
-		expect(q('[data-nut="thu-lai"]')).not.toBeNull();
+		expect(q('[data-luot="loi"] [data-slot="kara-retry"]')).not.toBeNull();
 	});
 
 	test("(b) đúng mốc 45 giây mới báo, sự kiện mới dời mốc", async () => {
@@ -214,7 +224,7 @@ describe("hong — 45 giay khong su kien", () => {
 		expect(coLoi()).toBe(false);
 		await troi(SOAN_UI.hanKhongSuKienMs - 44_000 + 100);
 		expect(coLoi()).toBe(true);
-		expect(chu('[data-luot="loi"] [data-slot="alert-description"]')).toBe(
+		expect(chu('[data-luot="loi"] [data-slot="empty-description"]')).toBe(
 			m.hoiThoai.loiMoTa,
 		);
 	});
@@ -233,7 +243,6 @@ describe("hong — 45 giay khong su kien", () => {
 describe("hong — Thu lai roi van im", () => {
 	test("Thử lại mà eve vẫn không có sự kiện: hẹn giờ lại và báo lại, không quay mãi", async () => {
 		const { tuyChonAgent } = await import("./khung-soan-okr");
-		const { act } = await import("react");
 		const fetchCu = globalThis.fetch;
 		const daHuyLuot: string[] = [];
 		globalThis.fetch = (async (input: RequestInfo | URL) => {
@@ -271,7 +280,7 @@ describe("hong — Thu lai roi van im", () => {
 			await datAgent({ status: "streaming", events: suKien });
 			await troi(SOAN_UI.hanKhongSuKienMs + 100);
 			expect(coLoi()).toBe(true);
-			await bam(q('[data-nut="thu-lai"]'));
+			await bam(q('[data-luot="loi"] [data-slot="kara-retry"]'));
 			await troi(20);
 			expect(daDung).toBe(0);
 			expect(daHuyLuot.filter((u) => u.endsWith("/cancel"))).toHaveLength(1);
@@ -333,7 +342,7 @@ describe("hong — Thu lai", () => {
 		await bam(q('[data-o-soan] button[type="submit"]'));
 		expect(daGui).toEqual(["Giữ khách là chính"]);
 		await datAgent({ status: "error", error: new Error("dut mang") });
-		await bam(q('[data-nut="thu-lai"]'));
+		await bam(q('[data-luot="loi"] [data-slot="kara-retry"]'));
 		expect(daGui).toEqual(["Giữ khách là chính", "Giữ khách là chính"]);
 		expect(goiCua("okr.soanMo")).toHaveLength(0);
 		expect(daDung).toBe(0);
@@ -347,7 +356,7 @@ describe("hong — Thu lai", () => {
 		});
 		await moMan();
 		const truoc = goiCua("okr.soanDanhSach").length;
-		await bam(q('[data-nut="thu-lai"]'));
+		await bam(q('[data-luot="loi"] [data-slot="kara-retry"]'));
 		await cho(() => goiCua("okr.soanMo").length === 1, "goi soanMo");
 		expect(goiCua("okr.soanMo")[0]?.dauVao).toEqual({
 			cycleId: CUOC.cycleId,
@@ -376,22 +385,32 @@ describe("hong — luong nap len dang chay", () => {
 			events: LUOT_CHAY as never,
 		});
 	const oSoan = () => q("[data-o-soan] textarea") as HTMLTextAreaElement;
-	const chiBao = () =>
-		q('[role="status"][aria-live="polite"][aria-busy="true"]')?.textContent ??
-		null;
+	const nutDung = () =>
+		q('[data-slot="kara-composer"] button[aria-label="Dừng"]');
+	const nutGui = () =>
+		q('[data-slot="kara-composer"] button[aria-label="Gửi"]');
+	const coChiBao = () =>
+		q('[data-kara-turn="kara"] [data-kara-state="working"]') !== null;
+	const chiBao = async () => {
+		if (!coChiBao()) return null;
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, KARA_TRE_MS + 50));
+		});
+		return q('[data-kara-turn="kara"] [data-kara-state="working"]')
+			?.textContent;
+	};
 
 	test("mở lại khi Trợ lý đang trả lời: hiện «đang soạn», ô soạn khoá, không gợi ý", async () => {
 		dangChay();
 		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
 		await moMan();
-		expect(chiBao()).toContain(m.hoiThoai.dangSoan);
-		expect(oSoan().disabled).toBe(true);
+		expect(await chiBao()).toContain(m.hoiThoai.dangSoan);
+		expect(nutDung()).not.toBeNull();
+		expect(nutGui()).toBeNull();
 		expect(q('[data-o-soan="khoa"]')).not.toBeNull();
-		expect(chu("[data-o-soan-ghi]")).toBe(m.hoiThoai.khoaKhiSoan);
 		expect(q("[data-goi-y]")).toBeNull();
-		expect((q('[data-nut="dua-vao"]') as HTMLButtonElement).disabled).toBe(
-			true,
-		);
+		const duaVao = q('[data-nut="dua-vao"]') as HTMLButtonElement | null;
+		expect(duaVao === null || duaVao.disabled).toBe(true);
 	});
 
 	test("mở lại khi lượt đã xong: không chỉ báo, ô soạn mở", async () => {
@@ -406,16 +425,16 @@ describe("hong — luong nap len dang chay", () => {
 		});
 		await datAgent({ data: { messages: [noiTroLy("a0", MO_DAU)] } });
 		await moMan();
-		expect(chiBao()).toBeNull();
+		expect(await chiBao()).toBeNull();
 		expect(oSoan().disabled).toBe(false);
-		expect(chu("[data-o-soan-ghi]")).toBe(m.hoiThoai.phim);
+		expect(nutGui()).not.toBeNull();
 	});
 
 	test("lượt đang chạy xong ở lần hỏi lại: ô soạn mở, bảng đọc lại", async () => {
 		batDongHoGia();
 		dangChay();
 		await moMan();
-		expect(oSoan().disabled).toBe(true);
+		expect(nutDung()).not.toBeNull();
 		const doc = goiCua("okr.soanDanhSach").length;
 		const moTruoc = soLanMoAgent;
 		datThread({
@@ -428,8 +447,8 @@ describe("hong — luong nap len dang chay", () => {
 			events: [...LUOT_CHAY, { ...TIN_CU, type: "session.waiting" }] as never,
 		});
 		await troi(SOAN_UI.hoiLuongMs + 200);
-		await cho(() => oSoan()?.disabled === false, "o soan mo lai");
-		expect(chiBao()).toBeNull();
+		await cho(() => nutGui() !== null, "o soan mo lai");
+		expect(coChiBao()).toBe(false);
 		expect(goiCua("okr.soanDanhSach").length).toBeGreaterThan(doc);
 		expect(soLanMoAgent).toBe(moTruoc + 1);
 	});
@@ -442,6 +461,6 @@ describe("hong — luong nap len dang chay", () => {
 		expect(coLoi()).toBe(false);
 		await troi(1_100);
 		expect(coLoi()).toBe(true);
-		expect(q('[data-nut="thu-lai"]')).not.toBeNull();
+		expect(q('[data-luot="loi"] [data-slot="kara-retry"]')).not.toBeNull();
 	});
 });

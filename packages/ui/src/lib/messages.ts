@@ -105,6 +105,8 @@ const en = {
 		dangSoan: "Kara is drafting…",
 		nhomDeXuat: (n: string) =>
 			n === "1" ? "1 suggestion" : `${n} suggestions`,
+		mocDau: (s: string) => `Kara drafted the first version: ${s}`,
+		daQuyetHet: "all decided",
 	},
 	artifact: {
 		dong: "Close",
@@ -341,6 +343,8 @@ const vi = {
 		dangSoanKhoa: "Kara đang soạn — xong sẽ quyết được.",
 		dangSoan: "Kara đang soạn…",
 		nhomDeXuat: (n: string) => `${n} đề xuất`,
+		mocDau: (s: string) => `Kara soạn bản nháp đầu: ${s}`,
+		daQuyetHet: "đã quyết hết",
 	},
 	artifact: {
 		dong: "Đóng",

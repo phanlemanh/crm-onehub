@@ -21,7 +21,7 @@ function clientNhapCauNoi(nguon: string): boolean {
 }
 
 describe("cau-noi-server", () => {
-	test("trang server tinh co va truyen xuong NutSoan, ManSoan", () => {
+	test("trang server tinh co va truyen xuong NutSoan, TrangSoan", () => {
 		const page = doc("app/(app)/[slug]/okr/theo-don-vi/page.tsx");
 		expect(page, "trang khong tinh co cau noi").toMatch(
 			/import \{[^}]*\bokrBridgeConfigured\b[^}]*\} from "@\/lib\/agent-bridge"/,
@@ -33,10 +33,13 @@ describe("cau-noi-server", () => {
 			doc("app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"),
 			"theo don vi khong truyen co",
 		).toMatch(/<NutSoan[\s\S]*?cauNoi=\{cauNoiOkr\}/);
-		expect(
-			doc("app/(app)/[slug]/okr/soan/nut-soan.tsx"),
-			"man soan khong nhan co cau noi",
-		).toMatch(/<ManSoan[\s\S]*?cauNoi=\{cauNoi\}/);
+		const trangSoan = doc("app/(app)/[slug]/okr/soan/[cuocSoanId]/page.tsx");
+		expect(trangSoan, "man soan khong nhan co cau noi").toMatch(
+			/import \{[^}]*\bokrBridgeConfigured\b[^}]*\} from "@\/lib\/agent-bridge"/,
+		);
+		expect(trangSoan, "man soan khong nhan co cau noi").toMatch(
+			/<TrangSoan[\s\S]*?cauNoi=\{okrBridgeConfigured\(\)\}/,
+		);
 	});
 
 	test("khong tep client nao import agent-bridge", () => {
