@@ -20,31 +20,31 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: medium
   Đề xuất: known-limits
 
-- **Soạn OKR page uses URL keys `tab` and `loc` outside SEARCH_PARAM, and both keys already belong to other features** (r1)
+- **(r1) Soạn OKR page uses URL keys `tab` and `loc` outside SEARCH_PARAM, and both keys already belong to other features**
   Người dùng thấy gì: Ở màn hình hẹp, mở hoặc đóng một bản ghi bên cạnh có thể làm trang soạn nhảy từ tab Bản nháp về tab Trò chuyện, và tab của bản ghi có thể hiện sai.
   file: `apps/app/app/(app)/[slug]/okr/soan/cau-hinh.ts`
   severity: medium
   Đề xuất: new-contract
 
-- **Failed group undo shows no error** (r1)
+- **(r1) Failed group undo shows no error**
   Người dùng thấy gì: Khi bấm Hoàn tác trên biên nhận cả nhóm mà hệ thống từ chối hoặc mất mạng, màn hình không đổi và không có thông báo nào, nên người dùng tưởng đã hoàn tác mà thực ra chưa.
   file: `apps/app/app/(app)/[slug]/okr/soan/the-nhap.tsx`
   severity: medium
   Đề xuất: new-contract
 
-- **Rejected or failed submissions still create a checkpoint and become the diff baseline** (r1)
+- **(r1) Rejected or failed submissions still create a checkpoint and become the diff baseline**
   Người dùng thấy gì: Nếu Kara nộp bản nháp mà bị từ chối, hội thoại vẫn hiện mốc như đã nộp thành công, và lần nộp sau bị so với một bản chưa từng được lưu nên số liệu thay đổi hiển thị sai.
   file: `apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts`
   severity: medium
   Đề xuất: new-contract
 
-- **«Còn thiếu» buttons do nothing while the pending-only filter is on** (r1)
+- **(r1) «Còn thiếu» buttons do nothing while the pending-only filter is on**
   Người dùng thấy gì: Khi đang bật chế độ chỉ xem dòng chờ, bấm vào mục Còn thiếu không có phản ứng gì, và người dùng không thấy cách tìm ô số còn thiếu cho tới khi tắt bộ lọc.
   file: `apps/app/app/(app)/[slug]/okr/soan/bang-nhap.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): cau-noi-server soi regex trên mã nguồn trang soạn thay vì đo cờ TrangSoan nhận lúc chạy** (r1)
+- **(r1) Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): cau-noi-server soi regex trên mã nguồn trang soạn thay vì đo cờ TrangSoan nhận lúc chạy**
   Người dùng thấy gì: Một kiểm tra nội bộ xem trang soạn có truyền đúng cờ cấu hình Kara hay không chỉ đọc chữ trong mã nguồn nên có thể báo xanh dù cờ sai, hoặc báo đỏ dù trang vẫn chạy đúng.
   file: `apps/app/test/soan-okr-song-lai.spec.ts`
   severity: low
