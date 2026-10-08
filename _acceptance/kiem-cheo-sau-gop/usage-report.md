@@ -46,3 +46,42 @@ wall: 1055s
 - **claude-sonnet-5-5**: 12 agent · 46 calls · out 31,059 · in 92 · cache_read 3,537,585 · cache_create 1,320,283
 - **claude-haiku-5-5**: 11 agent · 22 calls · out 14,796 · in 44 · cache_read 1,408,981 · cache_create 776,766
 
+### S4 round 2 — wf_8e673ce9-670 (18 agent, 61,808 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:bugs | claude-opus-5-5 | 24 | 14,263 | 48 | 3,384,243 | 189 |
+| review:measurement | claude-opus-5-5 | 15 | 12,939 | 30 | 2,116,242 | 169 |
+| synthesize:report | claude-sonnet-5-5 | 3 | 7,956 | 6 | 234,300 | 59 |
+| review:conventions | claude-opus-5-5 | 12 | 7,237 | 24 | 1,442,664 | 92 |
+| triage | claude-sonnet-5-5 | 2 | 3,081 | 4 | 100,353 | 35 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 2,439 | 4 | 131,329 | 232 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,222 | 4 | 131,359 | 64 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,400 | 4 | 131,304 | 8 |
+| machine:node --test "scripts/kiem-cheo/test/*.te | claude-haiku-5-5 | 2 | 1,352 | 4 | 131,329 | 12 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 1,287 | 4 | 131,302 | 31 |
+| machine:node --test scripts/dieu-phoi/test/lich. | claude-haiku-5-5 | 2 | 1,274 | 4 | 131,327 | 8 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 1,167 | 4 | 96,294 | 254 |
+| refute:dem.mjs | claude-sonnet-5-5 | 3 | 1,123 | 6 | 199,334 | 17 |
+| machine:node _acceptance/kiem-cheo-sau-gop/rang/ | claude-haiku-5-5 | 2 | 1,116 | 4 | 131,339 | 30 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,047 | 4 | 131,320 | 234 |
+| machine:node _acceptance/kiem-cheo-sau-gop/rang/ | claude-haiku-5-5 | 2 | 823 | 4 | 131,341 | 7 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 741 | 4 | 131,298 | 7 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 341 | 4 | 95,559 | 9 |
+
+
+wall: 951s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 11 | 14,868 | 1,409,542 | 831 | 09:28:44 | 09:42:34 |
+| review | 3 | 34,439 | 6,943,149 | 190 | 09:28:44 | 09:31:54 |
+| triage | 1 | 3,081 | 100,353 | 35 | 09:42:34 | 09:43:09 |
+| refute | 1 | 1,123 | 199,334 | 17 | 09:43:09 | 09:43:26 |
+| capture | 1 | 341 | 95,559 | 9 | 09:43:26 | 09:43:35 |
+| synthesize | 1 | 7,956 | 234,300 | 59 | 09:43:35 | 09:44:35 |
+
+- **claude-opus-5-5**: 3 agent · 51 calls · out 34,439 · in 102 · cache_read 6,943,149 · cache_create 428,016
+- **claude-sonnet-5-5**: 4 agent · 10 calls · out 12,501 · in 20 · cache_read 629,546 · cache_create 444,926
+- **claude-haiku-5-5**: 11 agent · 22 calls · out 14,868 · in 44 · cache_read 1,409,542 · cache_create 775,124
+
