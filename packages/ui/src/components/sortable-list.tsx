@@ -151,7 +151,6 @@ export function SortableSaveList({
 	const [dangLuu, setDangLuu] = useState(false);
 	const song = useRef(true);
 	const moiNhat = useRef(ids);
-	const dangTra = useRef(false);
 	moiNhat.current = ids;
 	useEffect(() => {
 		song.current = true;
@@ -169,20 +168,22 @@ export function SortableSaveList({
 		change: SortableChange,
 		truoc: string[],
 		xong: () => void,
-	): Promise<void> => {
+	): Promise<boolean> => {
 		hienThi(change.ids);
 		setDangLuu(true);
 		return onSave(change).then(
 			() => {
-				if (!song.current) return;
+				if (!song.current) return true;
 				setDangLuu(false);
 				xong();
+				return true;
 			},
 			(error: Error) => {
-				if (!song.current) return;
+				if (!song.current) return false;
 				hienThi(truoc);
 				setDangLuu(false);
 				toast.error(error.message);
+				return false;
 			},
 		);
 	};
@@ -193,13 +194,14 @@ export function SortableSaveList({
 	) => {
 		if (locked) return;
 		const truoc = hien;
+		let daTra = false;
 		const hoanTac = () => {
-			if (dangTra.current || !song.current) return;
-			dangTra.current = true;
+			if (daTra || !song.current) return;
+			daTra = true;
 			void luu({ ids: truoc, id: move.id, index: move.from }, next, () =>
 				toast.success(msg.sortableList.restored),
-			).finally(() => {
-				dangTra.current = false;
+			).then((duoc) => {
+				daTra = duoc;
 			});
 		};
 		void luu({ ids: next, id: move.id, index: move.to }, truoc, () =>

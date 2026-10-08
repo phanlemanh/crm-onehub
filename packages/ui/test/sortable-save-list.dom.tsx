@@ -322,6 +322,10 @@ describe("hoan-tac", () => {
 			traXong: [[m.restored, true]],
 			goi: 2,
 		});
+		await act(async () => t?.action?.onClick());
+		expect(goiLuu.length, "hoan tac lan hai sau khi da tra van goi luu").toBe(
+			2,
+		);
 	});
 
 	test("hoan-tac: tra loi thi giu thu tu moi va bao loi", async () => {
@@ -335,6 +339,8 @@ describe("hoan-tac", () => {
 			thuTu: thuTu(),
 			loi: goiToast.filter((x) => x.loai === "loi").map((x) => x.chu),
 		}).toEqual({ thuTu: ["b", "a", "c"], loi: ["y"] });
+		await act(async () => t?.action?.onClick());
+		expect(goiLuu.length, "tra loi thi khong cho bam Hoan tac lai").toBe(3);
 	});
 
 	test("hoan-tac: tieng Anh dung hai chu", async () => {
