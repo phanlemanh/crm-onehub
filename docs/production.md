@@ -287,9 +287,16 @@ dùng CLI. Muốn MCP thấy, chủ kho cấp quyền lại cho kết nối MCP 
   khi kết luận một năng lực đang tắt.
 - **`off  Zalo reminders (ZALO_BOT_TOKEN)` không có nghĩa bot tắt.** Token dán trên
   màn nằm trong `AppSetting`; biến môi trường chỉ là đường lùi.
-- **403 ở `/zalo/webhook` không để lại dòng log** (xem bảng ở trên). Ngày 08/10,
-  bảy ngày gần nhất chỉ có hai request tới đường này, cả hai 403: 06/10 03:41:43Z
-  và 08/10 07:13:35Z. Nguyên nhân chưa đo.
+- **Zalo hỏng im lặng 30/09 → 08/10, và 403 ở `/zalo/webhook` không để lại dòng
+  log** (xem bảng ở trên). Log agent: 200 đều tới `2026-09-30T09:16:17Z`, ngay sau
+  hai lần `POST /internal/zalo/bot` (Lưu bot) lúc 08:48:03Z và 09:15:48Z; rồi sáu
+  ngày không request nào; rồi 403 lúc `2026-10-06T03:41:43Z` và
+  `2026-10-08T07:13:35Z`; Lưu bot lại lúc `2026-10-08T11:01:36Z` thì 200 trở lại.
+  Lời giải thích của thợ P5 khớp cả ba đoạn: ngày 30/09 bot được Lưu bằng token của
+  một bot khác, `datBot` sinh khoá webhook mới cho bot mới, còn bot cũ vẫn giữ
+  webhook trỏ về production với khoá cũ — người dùng nhắn bot cũ thì ra 403. Zalo
+  không gửi mã bot trong webhook, nên máy chưa chứng được đó là bot cũ. Bài học:
+  Lưu bot sang token khác là đổi bot, và màn không nói gì.
 - **Kết nối cơ sở dữ liệu chập chờn.** 24 giờ tới 08/10 10:00Z: ở app chín dòng
   `[prisma:error] Invalid prisma.session.findFirst() invocation: Database error.
   Code: 08P01. Message: Authentication timed out`, ba dòng `Connection terminated
