@@ -1,27 +1,81 @@
 {
   "feature_plain": "Lý do Kara viết cho một căn chỉnh ở Soạn OKR nay đi theo căn chỉnh vào OKR thật, kể cả các căn chỉnh đã đưa vào trước đây, và mỗi căn chỉnh biết mình đang «chưa có lý do», «đặt cược» hay «có số liệu».",
   "will_do": [
-    { "id": "AC-1", "p": "Sẽ chép câu «vì sao» của Kara (đã cắt khoảng trắng thừa) sang căn chỉnh thật khi bấm «Đưa vào OKR», kèm dấu đây là chữ của Kara." },
-    { "id": "AC-2", "p": "Sẽ để căn chỉnh không lý do khi dòng nháp cũ có câu «vì sao» trống — không lưu một chuỗi rỗng." },
-    { "id": "AC-3", "p": "Sẽ giữ nguyên cách gắn căn chỉnh tay: không lý do vẫn lưu được, không thêm lỗi mới." },
-    { "id": "AC-4", "p": "Sẽ trả kèm mỗi căn chỉnh của mục tiêu: lý do, căn cứ, dấu Kara và mức tin (chưa có lý do / đặt cược / có số liệu)." },
-    { "id": "AC-5", "p": "Sẽ điền lại lý do cho các căn chỉnh đã đưa vào từ Soạn trước đây, không đè lý do người đã viết." },
-    { "id": "AC-7", "p": "Sẽ chỉ thêm cột vào bảng căn chỉnh — không xoá, không đổi kiểu cột nào." },
-    { "id": "AC-8", "p": "Sẽ chỉ chạm đúng các tệp đã khai trong ranh giới." }
+    {
+      "id": "AC-1",
+      "p": "Sẽ chép câu «vì sao» của Kara (đã cắt khoảng trắng thừa) sang căn chỉnh thật khi bấm «Đưa vào OKR», kèm dấu đây là chữ của Kara."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ không bao giờ lưu một lý do rỗng: câu «vì sao» rỗng hay chỉ khoảng trắng thành «chưa có lý do» — và bộ ghi dòng soạn vốn đã không cho sinh ra câu rỗng."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ giữ nguyên cách gắn căn chỉnh tay: không lý do vẫn lưu được; bài thử cũ của căn chỉnh chỉ thêm bốn trường mới vào dữ liệu giả, không đổi phép kiểm nào."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ trả kèm mỗi căn chỉnh của mục tiêu: lý do, căn cứ, dấu Kara và mức tin (chưa có lý do / đặt cược / có số liệu)."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ điền lại lý do cho các căn chỉnh đã đưa vào từ Soạn trước đây, không đè lý do người đã viết."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ chỉ thêm cột vào bảng căn chỉnh — không xoá, không đổi kiểu cột nào."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ chỉ chạm đúng các tệp đã khai trong ranh giới."
+    }
   ],
   "wont_do": [
-    { "id": "AC-6", "p": "Sẽ KHÔNG để lý do của một mục tiêu riêng tư lộ qua bất kỳ đường đọc OKR nào cho người không xem được mục tiêu đó." },
-    { "id": "OOS-1", "p": "Chưa hiện lý do trên sheet mục tiêu — việc của L2." },
-    { "id": "OOS-2", "p": "Chưa hiện lý do trên cây căn chỉnh và chưa có bộ lọc «Chưa có lý do» — việc của L3." },
-    { "id": "OOS-3", "p": "Chưa có ô lý do khi gắn tay, chưa có lý do trên đề xuất căn chỉnh của Kara, Kara chưa soạn căn cứ — việc của L4." },
-    { "id": "OOS-4", "p": "Chưa sửa được lý do sau khi đã đưa vào — việc của L4." },
-    { "id": "OOS-5", "p": "Không dọn bảng đề xuất cũ sau khi điền lại." }
+    {
+      "id": "AC-6",
+      "p": "Sẽ KHÔNG để lý do của một mục tiêu riêng tư lộ qua bất kỳ đường đọc OKR nào cho người không xem được mục tiêu đó."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Chưa hiện lý do trên sheet mục tiêu — việc của L2."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Chưa hiện lý do trên cây căn chỉnh và chưa có bộ lọc «Chưa có lý do» — việc của L3."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Chưa có ô lý do khi gắn tay, chưa có lý do trên đề xuất căn chỉnh của Kara, Kara chưa soạn căn cứ — việc của L4."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Chưa sửa được lý do sau khi đã đưa vào — việc của L4."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không dọn bảng đề xuất cũ sau khi điền lại."
+    }
   ],
   "gap_probe_plain": [
-    { "i": 0, "p": "Bản thiết kế quên cột «dấu Kara» mà hợp đồng có — đã sửa cho khớp: ba cột, bốn trường trả về." },
-    { "i": 1, "p": "Phép đo «không lộ lý do» chưa có danh sách đường đọc viết sẵn — đã khai tám đường lõi qua cả tRPC và REST, cộng mọi đường đọc còn lại, và đòi mỗi lần gọi trúng dữ liệu đã gieo." },
-    { "i": 2, "p": "Phép đo chưa ghim việc cắt khoảng trắng, và ca «câu vì sao trống» không tạo được bằng bộ ghi hiện tại — đã ghim nguyên văn, thêm cặp phá, và nói rõ ca trống là dữ liệu cũ." },
-    { "i": 3, "p": "Phép đo gắn tay thiếu nhãn «đọc lại CSDL» — đã thêm." },
-    { "i": 4, "p": "Ngưỡng sống/chết chưa có câu SQL cố định và đếm nhầm câu chỉ có khoảng trắng — đã commit câu SQL có cắt khoảng trắng và thêm phép đo chạy chính câu đó; Cổng Đáng còn chờ anh." }
+    {
+      "i": 0,
+      "p": "Bản thiết kế quên cột «dấu Kara» mà hợp đồng có — đã sửa cho khớp: ba cột, bốn trường trả về."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo «không lộ lý do» chưa có danh sách đường đọc viết sẵn — đã khai tám đường lõi qua cả tRPC và REST, cộng mọi đường đọc còn lại, và đòi mỗi lần gọi trúng dữ liệu đã gieo."
+    },
+    {
+      "i": 2,
+      "p": "Phép đo chưa ghim việc cắt khoảng trắng, và ca «câu vì sao trống» không tạo được bằng bộ ghi hiện tại — đã ghim nguyên văn, thêm cặp phá, và nói rõ ca trống là dữ liệu cũ."
+    },
+    {
+      "i": 3,
+      "p": "Phép đo gắn tay thiếu nhãn «đọc lại CSDL» — đã thêm."
+    },
+    {
+      "i": 4,
+      "p": "Ngưỡng sống/chết chưa có câu SQL cố định và đếm nhầm câu chỉ có khoảng trắng — đã commit câu SQL có cắt khoảng trắng và thêm phép đo chạy chính câu đó; Cổng Đáng còn chờ anh."
+    }
   ]
 }
