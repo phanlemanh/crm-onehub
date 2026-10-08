@@ -33,3 +33,13 @@ Nguồn: `opportunity.md` (S0). Mục tiêu duy nhất: lần hỏng kế tiếp
 ## Đặc tả UX
 
 Không chạm màn web.
+
+## Đổi bot (lối 1, chủ kho chọn 08/10 qua giám sát)
+
+Căn cứ: sau hai lần Lưu bot ngày 30/09, bot hiện tại khác bot cũ; các `zaloLink` nối với bot cũ hết hiệu lực âm thầm (Gửi thử, tin nhắc chết); chủ kho nối lại tài khoản lúc 11:10Z ngày 08/10 thì Gửi thử qua và phiên Zalo trả lời được (log `wrun_41M4DKA89N0GRRFVZ2G3XH0YMK`).
+
+- **Nhận ra bot khác.** Trong `datBot` (`zalo-bot-xuong.ts`), sau `getMe` của token mới: mã bot mới = `result.id`. Mã bot đang dùng = `getMe` của token đang lưu (`AppSetting.zaloBotToken`, rơi về `ZALO_BOT_TOKEN`); `getMe` cũ hỏng hay không có token cũ thì so phần `<số>` trước dấu `:` của hai token (dạng token do Zalo cấp, `docs/connections.md`). Không có token cũ → không phải «đổi bot» (bật lần đầu).
+- **Hỏi trước khi gỡ.** Bot khác và có `n > 0` liên kết `zaloLink` → `datBot` KHÔNG lưu gì, trả `{ outcome: "can-xac-nhan-doi-bot", soLienKet: n, tenBotMoi }`. Màn Kết nối › Zalo mở `ConfirmDialog` (`packages/ui`): «Đổi sang bot «<tên>» sẽ gỡ n liên kết Zalo. Mọi người đã nối phải nối lại.» Nút xác nhận «Gỡ liên kết và đổi bot». Huỷ → không đổi gì.
+- **Gỡ khi đồng ý.** Gọi lại `luuBot` với `xacNhanDoiBot: true` → `datBot` đăng ký bot mới như hôm nay; chỉ khi đăng ký thành công mới xoá mọi `zaloLink` trong một giao dịch, rồi ghi một dòng vết `[zalo] doi bot: go <n> lien ket` (mã bot cũ/mới chỉ ghi phần số). Đăng ký hỏng → không gỡ gì.
+- **Cần nối lại.** Người có `NotificationPreference.channel = ZALO` mà không còn `zaloLink` thấy trên «Thông báo của bạn» một dòng «Bot Zalo của công ty đã đổi hoặc liên kết đã gỡ — nối lại để nhận nhắc qua Zalo» cạnh nút «Nối Zalo» sẵn có. Không thêm cột: trạng thái suy từ hai bảng đang có.
+- **Ngoại lệ có chủ đích.** `docs/connections.md` ghi «An admin cannot unlink someone else's Zalo». Đổi bot là ngoại lệ duy nhất: quản trị gỡ TẤT CẢ liên kết cùng lúc, sau khi xác nhận, vì liên kết với bot cũ đã vô hiệu. Ghi vào `docs/connections.md`.

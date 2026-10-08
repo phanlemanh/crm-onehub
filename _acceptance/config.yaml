@@ -964,6 +964,16 @@ executors:
     tln_tran_khong: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-viec.integration.spec.ts -t tran-khong"
     tln_dong_viec: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-viec.integration.spec.ts -t dong-viec"
     tln_uy_quyen: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen.spec.ts
+    zghl_mo_ta: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t mo-ta
+    zghl_408: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t 408
+    zghl_bay_cho: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t bay-cho
+    zghl_bo_qua: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t bo-qua
+    zghl_webhook_thu: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t webhook-thu
+    zghl_rieng_tu: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t rieng-tu
+    zghl_doi_bot: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t doi-bot-hoi
+    zghl_doi_bot_dong_y: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t doi-bot-dong-y
+    zghl_cung_bot: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t cung-bot
+    zghl_can_noi_lai: cd apps/api && bun test test/zalo-doi-bot.spec.ts -t can-noi-lai
     tln_chuyen_tiep: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chuyen-tiep.spec.ts"
     tln_cach_ly_tinh: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-cach-ly.spec.ts
     tln_chi_tieu_api: bun run test -- "cd apps/api && bun test test/tro-ly-okr-chi-tieu.spec.ts"
@@ -2070,6 +2080,9 @@ executors:
     cccl_cong_tac: bun _acceptance/ca-chap-chon-cach-ly/rang/cong-tac.mjs
     cccl_pham_vi: bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs
     cccl_du_ca: bun _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs
+    zghl_pham_vi: bun _acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs
+    zghl_dot_bien: bun _acceptance/zalo-gui-hong-ghi-ly-do/rang/dot-bien.mjs
+    zghl_chup: bun _acceptance/zalo-gui-hong-ghi-ly-do/rang/chup.mjs
     mcl_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"'
     mcl_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target packages/ui/src/components/dropdown-menu.tsx --mode static && bun _acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs'
   design:

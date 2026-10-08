@@ -50,11 +50,11 @@ evals:
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
-    criterion: AC-7
+    criterion: AC-11
     executor: script
     cmd: config:executors.script.zghl_pham_vi
     paths: [_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs]
-    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải nằm trong danh sách ranh giới của AC-7; _acceptance/config.yaml chỉ có dòng thêm; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng cùng lệnh qua chính hàm kiểm: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/nhac-ke-hoach.ts → «ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts»."
+    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải nằm trong danh sách Ranh giới ở ## Notes của contract.md (script đọc danh sách từ chính contract.md, không chép tay); _acceptance/config.yaml chỉ có dòng thêm; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng cùng lệnh qua chính hàm kiểm: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/nhac-ke-hoach.ts → «ngoai ranh gioi: apps/agent/agent/lib/nhac-ke-hoach.ts»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -62,5 +62,46 @@ evals:
     executor: script
     cmd: config:executors.script.zghl_dot_bien
     paths: [apps/agent/agent/lib/zalo-api.ts, apps/agent/agent/lib/zalo-tra-loi.ts, apps/agent/agent/lib/zalo-nhan.ts, apps/agent/agent/lib/zalo-webhook.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts, _acceptance/zalo-gui-hong-ghi-ly-do/rang/dot-bien.mjs]
-    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 7: mỗi cặp (a)–(g) như ghi ở E1–E6 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 9: mỗi cặp (a)–(i) như ghi ở E1–E6, E9, E10 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.zghl_doi_bot
+    paths: [apps/agent/agent/lib/zalo-bot-xuong.ts, packages/validation/src/zalo-cau-noi.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
+    expected: "exit 0; kho thử có AppSetting với token cũ «111:cu» (bot «Bot Cũ»), khoá cũ và ba zaloLink gieo bằng hàm nối thật (noiBangMa của @crm/db/zalo-lien-ket qua mã do taoMaLienKet sinh — không ghi hàng tay). Fetcher giả: getMe(token cũ) → id «111», getMe(token mới «222:moi») → id «222», tên «Bot Mới». Gọi datBot THẬT với token mới, không xacNhanDoiBot → kết quả { outcome: 'can-xac-nhan-doi-bot', soLienKet: 3, tenBotMoi: 'Bot Mới' }; AppSetting (token, khoá, tên) và ba zaloLink giữ nguyên; fetcher KHÔNG nhận setWebhook. Ca phụ: getMe(token cũ) trả 401 → so phần <số> của hai token, vẫn ra can-xac-nhan-doi-bot. CHIỀU ĐỎ (cặp h): bản sao bỏ bước hỏi → đỏ «doi bot khong hoi, da go 3 lien ket»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.zghl_doi_bot_dong_y
+    paths: [apps/agent/agent/lib/zalo-bot-xuong.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
+    expected: "exit 0; cùng bàn thử E9, gọi datBot với xacNhanDoiBot: true. Hai ca: (1) setWebhook giả trả {ok:true,result:{url,…}} → AppSetting mang token và tên bot mới, count(zaloLink) = 0, đúng một dòng console «[zalo] doi bot: go 3 lien ket», dòng đó không chứa «moi» hay «cu» (phần bí mật của token); (2) setWebhook giả trả {ok:false} → AppSetting còn token cũ và count(zaloLink) = 3. CHIỀU ĐỎ (cặp i): bản sao gỡ liên kết TRƯỚC setWebhook → ca (2) đỏ «zalo tu choi ma lien ket da bi go»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.zghl_cung_bot
+    paths: [apps/agent/agent/lib/zalo-bot-xuong.ts, apps/agent/test/zalo-gui-hong-ly-do.spec.ts]
+    expected: "exit 0; ba dòng viết trước: (1) token mới cùng bot (getMe cùng id «111») → không hỏi, lưu, count(zaloLink) = 3; (2) chưa có token cũ (bật lần đầu) → không hỏi, lưu; (3) bot khác nhưng 0 liên kết → không hỏi, lưu. Mỗi dòng: outcome khác can-xac-nhan-doi-bot và không có dòng «doi bot». Đối chứng dương trong cùng tệp: E9 chạy cùng bàn thử ra can-xac-nhan."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.zghl_can_noi_lai
+    paths: [apps/api/src/zalo/zalo.service.ts, apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx, apps/api/test/zalo-doi-bot.spec.ts]
+    expected: "exit 0; kho thử: người A có NotificationPreference.channel = ZALO và không zaloLink; người B chưa từng chọn (không có NotificationPreference); người C có ZALO và còn zaloLink. Gọi zalo.cuaToi THẬT qua router của API cho từng người: A → canNoiLai = true; B → false; C → false. CHIỀU ĐỎ: bản sao cho canNoiLai luôn false → dòng A đỏ «A khong duoc bao noi lai»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.zghl_chup
+    paths: [apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx, apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx]
+    expected: "Trên bàn đo (do:man, kho dùng-một-lần, agent giả trả can-xac-nhan-doi-bot cho Lưu bot), chụp ở 1440 và 390: (1) Kết nối › Zalo sau khi bấm Lưu với token bot khác — ConfirmDialog nêu tên bot mới và «3 liên kết», nút «Gỡ liên kết và đổi bot», nút Huỷ; (2) «Thông báo của bạn» của người A ở E12 — dòng báo cần nối lại cạnh «Nối Zalo». Ảnh lưu ở _acceptance/zalo-gui-hong-ghi-ly-do/evidence/E13-*.png; người chấm nhìn ảnh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
