@@ -5,9 +5,9 @@ slug: khoa-eve-khong-tranh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-10-08T16:50:30Z
+status: draft
+approved_by:
+approved_at:
 design_doc: _acceptance/khoa-eve-khong-tranh/design.md
 ---
 
@@ -30,7 +30,7 @@ Source input: `opportunity.md`, `design.md`, `review-findings.md` của ca-chap-
 - AC-2: Given khoá của một gốc cũ (chủ đã chết) với một `eve dev` mồ côi còn sống, và lượt C đã phán khoá đó cũ, When — trước khi C kịp giành — lượt B giành khoá cũ, dừng `eve dev` mồ côi, lấy khoá mới và ghi `eve dev` con của mình, Then C KHÔNG dừng `eve dev` của B và KHÔNG xoá khoá của B (`chu.json` vẫn mang `pid` và `ma` của B); And C chờ tiếp rồi ném lỗi gọi tên `pid` của B khi hết trần chờ; And thư mục khoá cha không còn thư mục `.cu-*` nào.
 - AC-3: Given khoá cũ với một `eve dev` mồ côi còn sống và chỉ một lượt chờ, When lượt đó gọi `giuKhoaEve`, Then `eve dev` mồ côi bị dừng, lượt đó giữ khoá với `ma` mới, và không còn thư mục `.cu-*` nào — các ca `mo-coi`, `ngoai-khoa`, `cho-route` của `khoi-dong-don.spec.ts` vẫn xanh như trước.
 - AC-4: Given lượt A đang giữ khoá của một gốc, và khoá đó đã bị thay bằng khoá của lượt B (thư mục khoá của A bị đổi tên đi, B lấy khoá mới), When A gọi `ghiConVaoKhoa`, Then A ném lỗi có chữ «da doi chu» và không ghi gì vào khoá của B; And When A gọi `traKhoaEve` cho gốc đó, hoặc tiến trình A thoát (bộ dọn lúc `exit`), Then khoá của B còn nguyên.
-- AC-5: Given diff của vòng so với merge-base với `onehub`, Then chỉ các tệp `apps/agent-okr/test/support/khoi-dong.ts`, `apps/agent-okr/test/khoa-eve*.spec.ts`, `_acceptance/khoa-eve-khong-tranh/**` và các dòng THÊM vào `_acceptance/config.yaml` đổi.
+- AC-5: Given diff của vòng so với merge-base với `onehub`, Then chỉ các tệp `apps/agent-okr/test/support/khoi-dong.ts`, `apps/agent-okr/test/khoa-eve*.spec.ts`, `_acceptance/khoa-eve-khong-tranh/**`, `PRODUCT-MAP.md`, `LO-TRINH.html` (bản đồ máy vẽ lại ở mỗi cổng) và các dòng THÊM vào `_acceptance/config.yaml` đổi.
 - AC-6: Given hai dấu khoá (số `ino` thư mục, `mtime` thư mục, `ma` trong `chu.json` hoặc vắng), When lượt chờ so dấu khoá đã xét với dấu khoá vừa giành, Then chỉ coi là cùng một khoá khi cả ba phần bằng nhau — `ma` vắng chỉ bằng `ma` vắng — nên một khoá tạo lại trùng số `ino` (ext4 cấp lại `ino` ngay sau khi xoá) vẫn bị nhận là khoá khác.
 
 ## Coverage

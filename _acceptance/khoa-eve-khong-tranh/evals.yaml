@@ -54,7 +54,7 @@ evals:
     executor: script
     cmd: config:executors.script.kekt_pham_vi
     paths: [_acceptance/khoa-eve-khong-tranh/rang/pham-vi.mjs]
-    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải khớp một trong apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve*.spec.ts, _acceptance/khoa-eve-khong-tranh/**, _acceptance/config.yaml; với _acceptance/config.yaml thì diff -U0 không có dòng bỏ nào; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng trong cùng lệnh, trên danh sách dựng sẵn: danh sách rỗng → thoát 2 «diff rong»; danh sách có apps/agent-okr/agent/agent.ts → thông điệp «ngoai ranh gioi: apps/agent-okr/agent/agent.ts»; thiếu một trong hai đối chứng thì exit 1."
+    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải khớp một trong apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve*.spec.ts, _acceptance/khoa-eve-khong-tranh/**, PRODUCT-MAP.md, LO-TRINH.html, _acceptance/config.yaml; với _acceptance/config.yaml thì diff -U0 không có dòng bỏ nào; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng trong cùng lệnh, trên danh sách dựng sẵn: danh sách rỗng → thoát 2 «diff rong»; danh sách có apps/agent-okr/agent/agent.ts → thông điệp «ngoai ranh gioi: apps/agent-okr/agent/agent.ts»; thiếu một trong hai đối chứng thì exit 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
