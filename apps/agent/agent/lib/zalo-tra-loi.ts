@@ -1,5 +1,11 @@
 import { db } from "@crm/db";
-import { guiZalo, moTaLoiZalo, zaloGoiTho, zaloToken } from "./zalo-api";
+import {
+	guiZalo,
+	moTaLoiZalo,
+	moTaPhanTho,
+	zaloGoiTho,
+	zaloToken,
+} from "./zalo-api";
 import { ZALO } from "./zalo-config";
 import {
 	chatCuaToken,
@@ -177,10 +183,17 @@ export async function moPhien(
 	deps: PhuThuocMoPhien,
 ): Promise<void> {
 	try {
-		await zaloGoiTho(deps.fetcher, deps.token, "sendChatAction", {
-			chat_id: y.chatId,
-			action: "typing",
-		});
+		const hong = moTaPhanTho(
+			await zaloGoiTho(deps.fetcher, deps.token, "sendChatAction", {
+				chat_id: y.chatId,
+				action: "typing",
+			}),
+		);
+		if (hong) {
+			console.error(
+				`[zalo] sendChatAction hong message_id=${deps.messageId}: ${hong}`,
+			);
+		}
 	} catch (loi) {
 		console.error(
 			`[zalo] sendChatAction hong message_id=${deps.messageId}: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,

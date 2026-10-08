@@ -123,12 +123,21 @@ export async function guiZalo(
 	);
 }
 
+export type PhanTho = { status: number; than: unknown };
+
+export function moTaPhanTho(phan: PhanTho): string | null {
+	const loi = docLoiZalo(phan.than);
+	const tuChoi = loi ? moTaTuChoi(loi.maLoi, loi.moTa) : null;
+	if (phan.status === ZALO.http.ok) return tuChoi;
+	return tuChoi ? `http-${phan.status} ${tuChoi}` : `http-${phan.status}`;
+}
+
 export async function zaloGoiTho(
 	fetcher: typeof fetch,
 	token: string,
 	method: string,
 	body: Record<string, string>,
-): Promise<{ status: number; than: unknown }> {
+): Promise<PhanTho> {
 	const res = await fetcher(`${zaloApiGoc()}/bot${token}/${method}`, {
 		method: "POST",
 		headers: { "Content-Type": "application/json; charset=utf-8" },

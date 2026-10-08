@@ -10,6 +10,7 @@ import {
 } from "@crm/db/zalo-lien-ket";
 import type { DatBotYeuCau } from "@crm/validation/zalo-cau-noi";
 import { parseZaloGetUpdates } from "@crm/validation/zalo-update";
+import { parseZaloWebhook } from "@crm/validation/zalo-webhook";
 import {
 	guiZalo,
 	LoiHttpZalo,
@@ -17,8 +18,11 @@ import {
 	zaloGoi,
 } from "../agent/lib/zalo-api";
 import { kiemBot } from "../agent/lib/zalo-bot";
-import { datBot, diaChiWebhook } from "../agent/lib/zalo-bot-xuong";
+import { datBot, diaChiWebhook, guiThu } from "../agent/lib/zalo-bot-xuong";
 import { ZALO } from "../agent/lib/zalo-config";
+import { dongHoiQuaHan, type YeuCauHoi } from "../agent/lib/zalo-hoi";
+import { xuLyTinDen } from "../agent/lib/zalo-nhan";
+import { loiVe, moPhien, traLoiVe } from "../agent/lib/zalo-tra-loi";
 import {
 	datKhoaLech,
 	nhanWebhook,
@@ -669,5 +673,195 @@ describe("ly-do-ben", () => {
 		} finally {
 			nk.tra();
 		}
+	});
+});
+
+const TU_CHOI_GHIM = { ok: false, error_code: 403, description: GHIM };
+
+function tuChoiCho(lenh: readonly string[]): typeof fetch {
+	return (async (input: Parameters<typeof fetch>[0]) => {
+		const method = String(input).split("/").at(-1) ?? "";
+		if (lenh.includes(method)) return Response.json(TU_CHOI_GHIM);
+		if (method === "sendMessage") {
+			return Response.json({
+				ok: true,
+				result: { message_id: "m-ok", date: 1 },
+			});
+		}
+		return Response.json({ ok: true, result: true });
+	}) as typeof fetch;
+}
+
+const MOI_LENH = ["getMe", "sendMessage", "sendChatAction"] as const;
+
+async function gieoHoi(
+	messageId: string,
+	hoiLuc = new Date(),
+): Promise<string> {
+	const h = await db.zaloHoi.create({
+		data: {
+			messageId,
+			crmUserId: "bay-cho-nguoi",
+			zaloChatId: "chat-bay-cho",
+			hoiLuc,
+			ketQua: "dang-hoi",
+		},
+	});
+	return h.id;
+}
+
+function yeuCau(hoiId: string): YeuCauHoi {
+	return {
+		hoiId,
+		chatId: "chat-bay-cho",
+		text: "chao",
+		auth: {
+			authenticator: "zalo",
+			principalType: "user",
+			principalId: "bay-cho-nguoi",
+			attributes: {
+				purpose: "zalo",
+				userId: "bay-cho-nguoi",
+				zaloChatId: "chat-bay-cho",
+				hoiId,
+			},
+		},
+		continuationToken: "tok-bay-cho",
+	};
+}
+
+async function noiNguoi(zaloUserId: string): Promise<string> {
+	await moXuong();
+	const nguoi = await gieoNguoi(`nguoi ${zaloUserId}`);
+	const { ma } = await taoMaLienKet(db, nguoi.id);
+	const ket = await noiBangMa(db, {
+		ma,
+		zaloUserId,
+		tenZalo: zaloUserId,
+		now: new Date(),
+	});
+	if (ket.loai !== "da-noi") throw new Error("gieo lien ket hong");
+	return nguoi.id;
+}
+
+type ChoBay = readonly [string, () => Promise<unknown>];
+
+describe("bay-cho", () => {
+	test("tám chỗ gửi Zalo đều ghi lý do Zalo từ chối", async () => {
+		await db.zaloHoi.deleteMany({});
+		await db.zaloUpdateSeen.deleteMany({});
+		await gieoBot(TOKEN_CU, 0);
+		const nguoiThu = await noiNguoi("z-bay-cho");
+		const tatCa = tuChoiCho(MOI_LENH);
+		const CHO: readonly ChoBay[] = [
+			[
+				"gui-thu",
+				() => khongBienToken(() => guiThu(nguoiThu, { fetcher: tatCa })),
+			],
+			[
+				"dat-bot-getme",
+				() =>
+					khongBienToken(() =>
+						datBot({ token: "333:moi" }, GOC_WEB, {
+							fetcher: tatCa,
+							ghi: async () => {},
+						}),
+					),
+			],
+			[
+				"tra-loi-phien",
+				async () =>
+					traLoiVe({ hoiId: await gieoHoi("bc-3") }, "chao", {
+						fetcher: tatCa,
+						token: TOKEN,
+					}),
+			],
+			[
+				"loi-ve",
+				async () =>
+					loiVe(
+						{ hoiId: await gieoHoi("bc-4") },
+						{ fetcher: tatCa, token: TOKEN },
+					),
+			],
+			[
+				"send-chat-action",
+				async () =>
+					moPhien(yeuCau(await gieoHoi("bc-5")), {
+						hoi: async () => ({ id: "phien-bc-5" }),
+						fetcher: tuChoiCho(["sendChatAction"]),
+						token: TOKEN,
+						messageId: "bc-5",
+					}),
+			],
+			[
+				"khong-mo-phien",
+				async () =>
+					moPhien(yeuCau(await gieoHoi("bc-6")), {
+						hoi: async () => {
+							throw new Error("eve khong mo duoc");
+						},
+						fetcher: tuChoiCho(["sendMessage"]),
+						token: TOKEN,
+						messageId: "bc-6",
+					}),
+			],
+			[
+				"bat-dau-lai",
+				async () => {
+					const cho: Promise<unknown>[] = [];
+					await xuLyTinDen(
+						TOKEN,
+						parseZaloWebhook(
+							thanWebhook({
+								messageId: "bc-7",
+								fromId: "z-bay-cho",
+								text: ZALO.lenh.moi[0],
+							}),
+						).message,
+						{
+							fetcher: tatCa,
+							now: new Date(),
+							hoi: {
+								hoi: async () => ({ id: "phien-bc-7" }),
+								datLai: async () => null,
+								waitUntil: (p) => {
+									cho.push(p);
+								},
+							},
+						},
+					);
+					expect(cho.length).toBe(1);
+					await Promise.all(cho);
+				},
+			],
+			[
+				"qua-han",
+				async () => {
+					await gieoHoi(
+						"bc-8",
+						new Date(Date.now() - ZALO.hoi.hanTraLoiMs - 1000),
+					);
+					return dongHoiQuaHan({ fetcher: tatCa, token: TOKEN });
+				},
+			],
+		];
+		let chay = 0;
+		for (const [ten, goi] of CHO) {
+			const nk = batNhatKy();
+			try {
+				await goi();
+			} finally {
+				nk.tra();
+			}
+			const coLyDo = nk.dong.filter(
+				(d) =>
+					d.startsWith("[zalo]") && d.includes(`zalo-tu-choi 403 «${GHIM}»`),
+			);
+			if (coLyDo.length !== 1) throw new Error(`${ten}: khong co ly do`);
+			chay++;
+		}
+		expect(chay).toBe(8);
+		await db.zaloHoi.deleteMany({});
 	});
 });
