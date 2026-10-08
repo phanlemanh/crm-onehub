@@ -6,6 +6,7 @@ import {
 	readdirSync,
 	readFileSync,
 	symlinkSync,
+	writeFileSync,
 } from "node:fs";
 import os from "node:os";
 import { join, resolve } from "node:path";
@@ -49,7 +50,40 @@ function chay(kho, doiSo, env = {}, { dem = DEM } = {}) {
 	};
 }
 
+const LAN_CAT_CHU = `const lenh = "node kiem.js 'thanh công bố'";
+const json = JSON.stringify({
+	suites: [{ cmd: "true", exit: 0 }],
+	slugs: { ky: { evals_exit: { E1: 1 }, lech: [{ id: "E1", cmd: lenh, expected: 0, exit: 1 }] } },
+});
+const b = Buffer.from(json, "utf8");
+const o = b.indexOf(Buffer.from("ô", "utf8")) + 1;
+process.stdout.write(b.subarray(0, o), () => {
+	setTimeout(() => process.stdout.write(b.subarray(o), () => process.exit(1)), 200);
+});
+`;
+
 describe("kcs-dem", () => {
+	test("lenh co dau bi cat giua hai lan ghi stdout van giu nguyen khi chay lai", () => {
+		const kho = taoKho();
+		kho.ghi("kiem.js", "process.exit(0);\n");
+		kho.hoSo("ky", { paths: ["a.txt"] });
+		kho.git("add", "-A");
+		kho.git("commit", "-q", "-m", "ho so");
+		kho.git("push", "-q", "origin", "onehub");
+		const T = kho.sha();
+		kho.gop({ "a.txt": "b" });
+		const lan = join(mkdtempSync(join(os.tmpdir(), "kcs-lan-")), "lan.mjs");
+		writeFileSync(lan, LAN_CAT_CHU);
+		const r = chay(kho, ["--tu", T], { KIEM_CHEO_LAN: lan });
+		assert.equal(r.ma, 0, r.ra);
+		assert.deepEqual(
+			r.ket?.do?.map((d) => [d.loai, d.lenh]),
+			[["chap-chon", "node kiem.js 'thanh công bố'"]],
+			JSON.stringify(r.ket),
+		);
+		kho.don();
+	});
+
 	test("goi qua duong symlink van chay luot, khong thoat 0 im lang", () => {
 		const kho = taoKho();
 		kho.gop({ "a.txt": "a" });

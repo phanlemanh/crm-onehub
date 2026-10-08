@@ -65,6 +65,8 @@ function taoChay({ tranMs }) {
 				detached: true,
 				env: process.env,
 			});
+			con.stdout.setEncoding("utf8");
+			con.stderr.setEncoding("utf8");
 			const nhan = (b) => {
 				ra += b;
 			};
