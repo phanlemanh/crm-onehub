@@ -1,16 +1,16 @@
-mot-luot: da cho 21s de toi luot
+mot-luot: da cho 786s de toi luot
 -- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
-phien-do: kho crm_optimistic_kare_ec244b_do · app http://localhost:4826 · api http://localhost:4457
+phien-do: kho crm_optimistic_kare_ec244b_do · app http://localhost:4687 · api http://localhost:4593
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
 -- chua co cong agent-okr trong phien — mo phien do rieng
--- phien do co agent-okr: cay optimistic-kare-ec244b-soan · agent-okr cong 49947
-phien-do: kho crm_optimistic_kare_ec244b_soan_do · app http://localhost:4161 · api http://localhost:4267
+-- phien do co agent-okr: cay optimistic-kare-ec244b-soan · agent-okr cong 65160
+phien-do: kho crm_optimistic_kare_ec244b_soan_do · app http://localhost:4733 · api http://localhost:4753
 -- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
 -- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
 -- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
-AGENT-OKR GIA http://127.0.0.1:49947 · okr.soan
+AGENT-OKR GIA http://127.0.0.1:65160 · okr.soan
 PHAN hoi-dong
    chip «KR · Tăng số đại lý gắn bó» · nut go true · focus o soan true
 buoc 1: dat

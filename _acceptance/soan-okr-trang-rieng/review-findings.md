@@ -1,79 +1,73 @@
-# Review findings: soan-okr-trang-rieng (round 1)
+# Review findings — soan-okr-trang-rieng (round 2)
 
 ## Trong hợp đồng
 
-- **Hình dạng 3 (khẳng định một chuỗi có mặt trong khi lời hứa là quan hệ giữa các giá trị): dòng phụ «n dòng · sửa lúc HH:MM» không phép đo nào so giờ với lần nộp cuối**
-  file: `apps/app/test/soan-okr-trang.dom.tsx:301`
-  severity: high
+- **Hoàn tác một Mục tiêu tính cả các KR mà Kara đã bỏ, rồi báo Kara là người dùng đã hoàn tác chúng**
+  file: `apps/app/app/(app)/[slug]/okr/soan/the-nhap.tsx:458`
+  severity: medium
+  source: bugs
+  AC: AC-5
+  detail: Ở luat-ban-nhap.ts:103-108, soBanNhap tạo dòng «da-bo» từ những dòng đang chờ của lượt trước mà lần nộp mới không còn. Các dòng này được gán giả `trangThai: "bac"`. cayNhap gắn chúng vào Mục tiêu cha vẫn còn trong bản nháp theo chaKhoa (luat-ban-nhap.ts:36-41). Ở NhomMucTieu, dòng 458 tính `keo = con.filter((d) => HOAN_DUOC.has(d.trangThai))`, và HOAN_DUOC có "bac", nên các dòng da-bo giả này bị tính vào keo. Hậu quả có hai.
+
+  Thứ nhất, biên nhận của Mục tiêu đã nhận ghi «· hoàn tác kèm N KR» với N đếm dư. Ví dụ, người dùng nhận Mục tiêu 1. Ở lượt sau, Kara nộp lại và bỏ một KR đang chờ của nó. Biên nhận khi đó tính luôn KR đã bỏ, trong khi ghiHoan ở API (soan-ban-nhap.ts) chỉ kéo các KR đã quyết thật trong tập hiện. Với Mục tiêu đã bỏ qua, `soAn = con.length` cũng đếm dư theo cùng cách.
+
+  Thứ hai, khi bấm Hoàn tác, bang-nhap.tsx:121 gọi `s.themQuyetBang([d, ...keo].map((x) => quyetCua(x, "hoan")))`. Lệnh này thêm mục «hoan» cho cả KR da-bo. KR đó chưa từng có quyết định nào trong hàng chờ, nên rutGonQuyet (khoi-ngu-canh.ts:61-69) không tìm thấy cặp để triệt tiêu và giữ nguyên mục ấy. Kết quả: dòng hệ thống hiện «Sẽ gửi kèm lượt sau: … Bạn đã hoàn tác KR «X»». Khối ngữ cảnh của lượt kế cũng gửi cho Kara một quyết định người dùng không hề làm, với một KR mà chính Kara vừa bỏ.
+
+  Hướng sửa: lọc dòng da-bo khỏi keo và soAn, ví dụ loại các dòng có `n.s.nhan.get(d.khoaDong) === "da-bo"`.
+
+- **Hình dạng 4 (khẳng định thiếu đối chứng): E11b bước 1 «số giữ qua nộp lại» không chứng điều kiện id dòng đã đổi, và chiều đỏ khoa-theo-id dựng lỗi bằng tải lại trang chứ không bằng nộp lại**
+  file: `_acceptance/soan-okr-trang-rieng/rang/man-so.mjs:88`
+  severity: medium
+  source: measurement
+  AC: AC-11
+  detail: Lời hứa của AC-11 là số được khoá theo khoaDong nên vẫn còn sau một lần nộp lại làm đổi id dòng. Dòng 87-88 chỉ IN `id dong doi sau nop lai: X/N`, gom trên cả 7 dòng, và không có kiem/buoc nào đòi id của hai dòng đang đo (k11, k12) phải khác trước. Bằng chứng E11b-output.html ghi 6/7, nghĩa là có một dòng giữ nguyên id, và script không nói được đó có phải k11 hay k12 không. Nếu dòng giữ id rơi đúng vào dòng đang đo, buoc(1) `giongSo(sauNop)` vẫn xanh với bản khoá theo kr.id. Chiều đỏ không bù được chỗ này: nhánh `doDo === "khoa-theo-id"` (dòng 89-107) viết lại sessionStorage sang khoá giả `id-cu-${i}` rồi `t.p.reload()` TRƯỚC khi đọc sauNop. Vì vậy chữ «mat so sau nop lai» sinh ra từ việc mất kho khi tải lại, tức là cùng cơ chế với doc-luc-dung, chứ không từ việc khoá theo id qua lượt nộp lại. Bản ghi đỏ còn cho thấy cả ba bước cùng đỏ một lúc. Hai hướng sửa: (a) đòi id của k11 và k12 sau nộp lại khác id trước, có thông điệp ghim; (b) cho chiều đỏ đi đúng đường nộp lại, không chèn reload.
+
+- **Hình dạng 3 (khẳng định chuỗi có mặt trong khi lời hứa là quan hệ): dòng phụ «n dòng · sửa lúc HH:MM» chỉ có MỘT lần nộp nên không phân biệt được lần nộp cuối với lần nộp đầu**
+  file: `apps/app/test/soan-okr-trang.dom.tsx:336`
+  severity: low
+  source: measurement
   AC: AC-3
-  source: measurement
-  detail: AC-3 hứa dòng phụ là «n dòng · sửa lúc HH:MM theo lần nộp cuối», và E3 hứa đo meta(9, '10:42') với giờ nộp cuối 10:42. Ô co-nhap của k2-trang-thai chỉ có `expect(dau?.textContent).toContain(m.man.soDong("7"))`. Trong bang-nhap.tsx:194-198 có hai nhánh: `gio ? m.dong.meta(String(soDong), gio) : m.man.soDong(String(soDong))`. Chuỗi «7 dòng» nằm trong cả hai nhánh, nên phép đo xanh dù giờ đúng, giờ sai hay không có giờ. Không bài nào trong apps/app/test gọi gioNopCuoi hay gioNop, và chẳng chứa «sửa lúc» ngoài bản ghim chữ của messages-guard. soan-okr.dom.tsx:839 cũng chỉ `toContain(m.man.soDong("7"))`. Ở man-ma-tran.mjs:56, dấu nhận của ST-soan-co-nhap là `coChu('[data-slot="kara-artifact-header"]', "dòng")`, nên tầng màn cũng không đo giờ. Giờ HH:MM lấy từ lần nộp cuối vì vậy không được đo ở tầng nào.
-  lý do vào hợp đồng: AC-3 hứa dòng phụ «n dòng · sửa lúc HH:MM» theo lần nộp cuối; phép đo hiện tại xanh cả khi giờ sai hoặc vắng, nên lời hứa đó chưa được chứng minh.
+  detail: E3 hứa giờ trên dòng phụ là «giờ lần nộp cuối». Ca co-nhap (dòng 328-357) chỉ dựng một tin nop (`nop("n-gio", ...)` với turnId luot-gio) và một sự kiện turn.started lúc 03:42Z, rồi `toContain(m.dong.meta("9", "10:42"))`. Có một lần nộp thì «cuối» trùng «đầu». Bên viết `gioNopCuoi` trong moc-nop.ts:140 dùng `transcript.findLast(...)`, và một bản sửa sai thành `find(...)` (lấy lần nộp đầu) vẫn xanh. grep cả apps/app/test không có bài nào khác gọi gioNopCuoi hay ghim meta với hai lần nộp khác giờ. Đây là phần còn sót của finding round 1 về dòng phụ: phép đo đã thêm giờ, nhưng quan hệ «cuối» trong số nhiều lần nộp vẫn chưa được thực thi. Cần ít nhất hai lần nộp ở hai turn khác giờ, rồi đòi giờ của lần sau.
 
-- **Hình dạng 3 (đo có mặt thay vì quan hệ đúng N): E12b đếm Mục tiêu và KR chỉ trong hàng có tên mong đợi, nên tạo thừa thì không thấy**
-  file: `_acceptance/soan-okr-trang-rieng/rang/man-so.mjs:181`
-  severity: high
-  AC: AC-12
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): k2-khung đọc prop đã dựng nhưng ép thành chuỗi, nên đơn vị px/% chỉ được kiểm trên hằng CO_O_HOI_THOAI/SOAN_UI**
+  file: `apps/app/test/soan-okr-trang.dom.tsx:204`
+  severity: low
   source: measurement
-  detail: AC-12 hứa xác nhận «tạo đúng N Mục tiêu và M KR». Câu đếm `SELECT count(*) ... FROM "okrObjective" WHERE "cycleId"=$1 AND "departmentId"=$2 AND title = $3` truyền tham số TEN.m1, và câu KR ở dòng 182-185 cũng JOIN với `o.title = $3` (TEN.m1). Kịch bản bỏ qua Mục tiêu m2 ở dòng 148. Nếu bản lỗi vẫn tạo Mục tiêu m2 và các KR của nó, mt.n vẫn là 1 và kr.length vẫn là 3, nên bước 4 xanh. Phép đo chỉ chứng hàng mong đợi có mặt, không chứng tổng số tạo ra bằng N và M. Chiều đỏ ghim `dem-sai` chỉ nâng canMt lên 2, tức là đổi kỳ vọng chứ không đổi sản phẩm. Vì thế nó không bao giờ chạm được trường hợp tạo thừa. Hướng sửa: đếm mọi okrObjective và okrKeyResult của đơn vị và chu kỳ, so trước và sau khi đưa vào.
-  lý do vào hợp đồng: AC-12 hứa xác nhận tạo đúng N Mục tiêu và M KR; phép đo chỉ đếm hàng có tên mong đợi nên không bắt được việc tạo thừa.
-
-- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): k2-khung so hằng CO_O_HOI_THOAI chứ không đọc prop ResizablePanel đã dựng**
-  file: `apps/app/test/soan-okr-trang.dom.tsx:178`
-  severity: medium
   AC: AC-2
-  source: measurement
-  detail: E2b hứa defaultSize/minSize/maxSize được «đọc từ prop của ResizablePanel giả lập ghi lại props». Bài thật làm hai việc: `expect(KhungSoanXuat.CO_O_HOI_THOAI).toEqual({defaultSize: SOAN_UI..., minSize..., maxSize...})`, rồi so SOAN_UI với [380, 300, "50"]. Cả hai chỉ so một hằng xuất khẩu với một hằng cấu hình. Ô hội thoại ở khung-soan.tsx:90-92 nhận cỡ qua `{...CO_O_HOI_THOAI}`. Một bản sao bỏ dòng spread đó, hoặc truyền defaultSize khác, vẫn làm k2-khung xanh. Lý do là phần dựng ở dòng 192-207 chỉ đếm tay kéo, tab và data-o, không đọc cỡ ô nào.
-  lý do vào hợp đồng: AC-2 hứa ô hội thoại mặc định 380 px, tối thiểu 300 px, tối đa nửa thân; phép đo chỉ so hằng với hằng nên bỏ dòng truyền cỡ vào ô vẫn xanh.
-
-- **Hình dạng 5 (tuyên bố cả lớp nhưng chỉ đo vài điểm): E2 hứa ma trận khổ viết trước và mỗi ô tự cuộn, nhưng phanKhung chỉ đo 1440 và chỉ ô bản nháp**
-  file: `_acceptance/soan-okr-trang-rieng/rang/man.mjs:209`
-  severity: medium
-  AC: AC-2
-  source: measurement
-  detail: AC-2 và AC-14 hứa «mỗi ô cuộn riêng». Các bước của E2 hứa ba điều: ma trận rộng viết trước {1024×768, 1280×900, 1440×1000} đo cỡ mặc định và hai biên kéo cho từng ô, rồi «số dòng in phải bằng 3»; ma trận hẹp {375×812, 768×1024, 1023×768}; và lăn chuột trên bản nháp «tương tự ô hội thoại». phanKhung không làm đủ. Nó chỉ dựng một khổ 1440×640 (dòng 157) và đo cỡ cùng kéo ở đó. Vòng hai tab chỉ lặp [768, 375] (dòng 222), thiếu 1023. Không có bản in nào đếm số ô. Ở dòng 204-210, script tính `{ hoi, ban }`, nhưng dòng 215 chỉ khẳng định `oCuon.ban`. `oCuon.hoi` bị bỏ, nên ô hội thoại tự cuộn không được đo ở E2. Ở E14, man-ma-tran.mjs:121 cũng chỉ kiểm trang không cuộn.
-  lý do vào hợp đồng: AC-2 hứa mỗi ô cuộn riêng và các khổ 375, 768, 1024, 1440 không tràn; phép đo chỉ phủ một khổ, thiếu 1023 và bỏ ô hội thoại.
-
-- **Hình dạng 4 (khẳng định thiếu đối chứng): E8c bước 2 và 3 khẳng định đích «trong khung nhìn» mà không chứng trước khi bấm nó nằm ngoài khung**
-  file: `_acceptance/soan-okr-trang-rieng/rang/man.mjs:296`
-  severity: medium
-  AC: AC-8
-  source: measurement
-  detail: Ở bước 2, `trongKhung(t.p, "fieldset[data-noi]")` chỉ kiểm dòng nổi nằm trong khung cuộn sau khi bấm mốc. Theo kịch bản NOP_2 (kich-ban.mjs:65), dòng đổi đầu tiên là Mục tiêu m1 bị sửa chữ, tức dòng trên cùng của bản nháp. Bản nháp đang ở đầu và khổ là 1440×760, nên dòng này đã nằm trong khung trước khi bấm. Vì vậy, phần «đưa vào khung nhìn» xanh cả khi trang không cuộn tới. Ở bước 3 (dòng 299-317), script gán scrollTop=0 cho vùng cuộn của hội thoại nếu tìm thấy, nhưng không khẳng định mốc mới nhất đã ra khỏi khung trước khi bấm «vừa sửa». Nếu hội thoại vừa khung, `cuon` là undefined và mocVao đúng một cách tầm thường. Không có trạng thái đầu âm nào làm đối chứng, nên phép đo không phân biệt được «bấm làm cuộn» với «đích vốn đã hiện».
-  lý do vào hợp đồng: AC-8 hứa bấm mốc đưa dòng đổi vào khung nhìn và bấm nhãn «vừa sửa» đưa mốc mới nhất vào khung nhìn; phép đo thiếu trạng thái đầu ngoài khung nên không phân biệt được cuộn thật với đích vốn đã hiện.
+  detail: E2b hứa: ô hội thoại mang defaultSize 380 (số nguyên = pixel), minSize 300 (pixel), maxSize '50' (chuỗi = phần trăm), «đọc từ prop của ResizablePanel». Kiểu dữ liệu ở đây là ý nghĩa: react-resizable-panels 4.14 đọc số là px và chuỗi không đơn vị là %. Phép đo trên prop đã dựng là `expect(`co o hoi thoai: ${o?.defaultSize}/${o?.minSize}/${o?.maxSize}`).toBe("co o hoi thoai: 380/300/50")`. Template literal xoá mất kiểu, nên `maxSize={50}` (50 px) hay `defaultSize="380"` (380 %) trên phần tử đã dựng vẫn ra đúng chuỗi ấy. Hai expect phía sau (dòng 209-218) mới so kiểu, nhưng so trên hằng `KhungSoanXuat.CO_O_HOI_THOAI` và `SOAN_UI.ocHoiThoai`, tức là trên chỉ dẫn chứ không trên đầu ra. Một ghi đè tại chỗ gọi sau `{...CO_O_HOI_THOAI}` ở khung-soan.tsx:92 sẽ lọt. Nên so bằng `toEqual({defaultSize: 380, minSize: 300, maxSize: "50"})` trên `propsDaDung(...)`. Lớp màn E2 đo bề rộng pixel nên đỡ được phần nào; vì vậy mức thấp.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Soạn OKR page uses URL keys `tab` and `loc` outside SEARCH_PARAM, and both keys already belong to other features**
+- **Soạn OKR page uses URL keys `tab` and `loc` outside SEARCH_PARAM, and both keys already belong to other features** (r1)
   Người dùng thấy gì: Ở màn hình hẹp, mở hoặc đóng một bản ghi bên cạnh có thể làm trang soạn nhảy từ tab Bản nháp về tab Trò chuyện, và tab của bản ghi có thể hiện sai.
   file: `apps/app/app/(app)/[slug]/okr/soan/cau-hinh.ts`
   severity: medium
   Đề xuất: new-contract
 
-- **Failed group undo shows no error**
+- **Failed group undo shows no error** (r1)
   Người dùng thấy gì: Khi bấm Hoàn tác trên biên nhận cả nhóm mà hệ thống từ chối hoặc mất mạng, màn hình không đổi và không có thông báo nào, nên người dùng tưởng đã hoàn tác mà thực ra chưa.
   file: `apps/app/app/(app)/[slug]/okr/soan/the-nhap.tsx`
   severity: medium
   Đề xuất: new-contract
 
-- **Rejected or failed submissions still create a checkpoint and become the diff baseline**
+- **Rejected or failed submissions still create a checkpoint and become the diff baseline** (r1)
   Người dùng thấy gì: Nếu Kara nộp bản nháp mà bị từ chối, hội thoại vẫn hiện mốc như đã nộp thành công, và lần nộp sau bị so với một bản chưa từng được lưu nên số liệu thay đổi hiển thị sai.
   file: `apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts`
   severity: medium
   Đề xuất: new-contract
 
-- **«Còn thiếu» buttons do nothing while the pending-only filter is on**
+- **«Còn thiếu» buttons do nothing while the pending-only filter is on** (r1)
   Người dùng thấy gì: Khi đang bật chế độ chỉ xem dòng chờ, bấm vào mục Còn thiếu không có phản ứng gì, và người dùng không thấy cách tìm ô số còn thiếu cho tới khi tắt bộ lọc.
   file: `apps/app/app/(app)/[slug]/okr/soan/bang-nhap.tsx`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): cau-noi-server soi regex trên mã nguồn trang soạn thay vì đo cờ TrangSoan nhận lúc chạy**
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): cau-noi-server soi regex trên mã nguồn trang soạn thay vì đo cờ TrangSoan nhận lúc chạy** (r1)
   Người dùng thấy gì: Một kiểm tra nội bộ xem trang soạn có truyền đúng cờ cấu hình Kara hay không chỉ đọc chữ trong mã nguồn nên có thể báo xanh dù cờ sai, hoặc báo đỏ dù trang vẫn chạy đúng.
   file: `apps/app/test/soan-okr-song-lai.spec.ts`
   severity: low
   Đề xuất: known-limits
 
-⚠ Cụm ngoài vùng phủ: 2/10 lỗi rơi vào file không bộ đo nào phủ (_acceptance/soan-okr-trang-rieng/rang/man-so.mjs, apps/app/test/soan-okr-song-lai.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
+Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

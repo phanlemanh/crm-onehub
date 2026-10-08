@@ -1,1 +1,1 @@
-Driver: puppeteer trong man.mjs (khong co read_network_requests). Console do trong harness: 0 loi, khong co cau hydration. networkObserved = n-a (driver)
+Driver: puppeteer qua man.mjs va script doc lap (khong co read_network_requests). Console do trong harness (t.loi): 0 loi, khong co cau hydration, ca lan chay man.mjs --phan so lan lan chay doc lap (100,150,5,9). networkObserved = n-a (driver)
