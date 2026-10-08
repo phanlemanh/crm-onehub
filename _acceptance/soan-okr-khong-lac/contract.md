@@ -5,7 +5,7 @@ slug: soan-okr-khong-lac
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08
 design_doc: docs/superpowers/specs/2026-10-08-soan-okr-khong-lac-design.md
@@ -59,3 +59,10 @@ Ngưỡng ở `opportunity.md` (đang `[đề xuất]`) đo ở lái-thử ngư�
   `apps/agent-okr/agent/lib/nop-ban-nhap.ts` (một dòng + một import), design doc, kế hoạch, bản đồ sản phẩm.
 - Chiều đỏ của AC-8 sửa tạm tệp sản phẩm trong cây rồi trả lại trong `finally` (khuôn `dot-bien-lib.mjs` của kho);
   lượt đo này phải chạy tuần tự, không song song với lượt S4 khác.
+- Known limits (Ngoài-2, Cổng 2): kết quả nộp có hai mô tả — bản đầy đủ ở agent, bản rút gọn ở
+  `packages/validation`; agent đổi hình dạng kết quả thì màn chỉ hiện «không đọc được kết quả», không đỏ lúc dựng.
+- Known limits (Ngoài-3, Cổng 2): bài kiểm E5 dựng kết quả nộp bằng tay, không qua schema thật của agent.
+- Known limits (Ngoài-5, Cổng 2): dòng «Kara nộp bản nháp chưa được» của lần lỗi công cụ chưa có bài đo trên màn.
+- Known limits (Ngoài-6, Cổng 2): một nhánh so gốc sau lần nộp lỗi chưa có chiều đỏ riêng.
+- Known limits (Ngoài-7, Cổng 2): bài đọc kết quả chỉ chứng đọc được dữ liệu do chính bài kiểm tạo.
+- Known limits (Ngoài-8, Cổng 2): giờ «sửa lúc» theo lần nộp đã ghi cuối chưa có chiều đỏ riêng.
