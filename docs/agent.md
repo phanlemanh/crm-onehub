@@ -1241,6 +1241,11 @@ Ba điều đo được trên eve 0.29.4 ở lượt này, đừng thiết kế 
   `tools/zalo-chi-doc.ts`; bản thay không đè được một `subagent` — phiên con vẫn chạy,
   nên lần gọi `tro_ly_okr` thứ hai hay gọi `agent_runner` chỉ làm lượt hỏng, và dữ liệu
   được giữ bằng kiểm ở tool của phiên con (`nop_de_xuat` từ chối khi việc đã đóng).
+  Từ 08/10 (`zalo-hoi-okr-khong-chet`), `okr-uy-quyen` KHÔNG ném khi `tro_ly_okr` bị gọi
+  ngoài phiên OKR: ném chỉ giết lượt Zalo mà không chặn được gì. Hook ghi một dòng
+  `[okr-uy-quyen] ngoai-okr purpose=<purpose>`; phiên con không tìm thấy việc nên
+  `nop_de_xuat`, `nop_tom_tat` trả «not an OKR session». Công cụ đè `tro-ly-okr-ngoai`
+  chỉ đổi mô tả model thấy để nó ít gọi hơn — nó không chặn lời gọi.
 - **Phiên con không thừa kế thuộc tính phiên.** Tool và chỉ dẫn động của `tro_ly_okr`
   tìm việc qua phiên gốc: `ctx.session.parent.rootSessionId` ở tool, token
   `subagent:<phiên cha>:<callId>` ở chỉ dẫn động và ở hook (`lib/phien-con.ts`), rồi

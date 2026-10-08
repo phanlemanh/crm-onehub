@@ -7,7 +7,6 @@ export const SUBAGENT_TRO_LY_OKR = "tro_ly_okr";
 export const LOI_UY_QUYEN = {
 	khacTroLy: "An OKR session may only call tro_ly_okr.",
 	lanHai: "tro_ly_okr may be called only once per OKR session.",
-	ngoaiOkr: "tro_ly_okr may be called only from an OKR session.",
 } as const;
 
 export type HanhDongYeuCau = {
@@ -21,7 +20,7 @@ export type QuyetUyQuyen =
 	| { cho: true; daGoi: string[] }
 	| { cho: false; loi: (typeof LOI_UY_QUYEN)[keyof typeof LOI_UY_QUYEN] };
 
-const laGoiTroLy = (a: HanhDongYeuCau) =>
+export const laGoiTroLy = (a: HanhDongYeuCau) =>
 	a.kind === "subagent-call" && a.subagentName === SUBAGENT_TRO_LY_OKR;
 
 export function quyetUyQuyen(
@@ -29,11 +28,7 @@ export function quyetUyQuyen(
 	daGoi: readonly string[],
 	moi: readonly HanhDongYeuCau[],
 ): QuyetUyQuyen {
-	if (purpose !== "okr") {
-		return moi.some(laGoiTroLy)
-			? { cho: false, loi: LOI_UY_QUYEN.ngoaiOkr }
-			: { cho: true, daGoi: [...daGoi] };
-	}
+	if (purpose !== "okr") return { cho: true, daGoi: [...daGoi] };
 	if (moi.some((a) => !laGoiTroLy(a))) {
 		return { cho: false, loi: LOI_UY_QUYEN.khacTroLy };
 	}

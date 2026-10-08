@@ -109,6 +109,8 @@ export const TRO_LY_OKR = {
 	ngoaiPhien: {
 		moTa: "OKR assistant. Not available in this conversation: it runs only inside background OKR tasks and returns no OKR figures here.",
 		lyDo: "tro_ly_okr runs only inside background OKR tasks, so OKR and key-result figures cannot be read in this conversation. Tell the person, in their language, that they can see OKR and key-result progress in OneHub Center under OKR. Do not say you failed or ask them to try again.",
+		bienBoDe: "TRO_LY_OKR_BO_DE",
+		dongNgoaiOkr: "[okr-uy-quyen] ngoai-okr purpose=",
 	},
 	ketThuc: {
 		daNop: "da-nop",
