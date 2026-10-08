@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 77c4aea3309e79b3228469cd79e8029037755757
+verified_commit: beac40ab8472f735a5e7ecc79a03ae01ea1d37cf
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -249,3 +249,7 @@ Round 5: chủ kho ký cho phép chạy tiếp trên hợp đồng đã ở tr�
 ### Re-pin lần 1 — 2026-09-25, do hoá cũ do gộp onehub 739c8701 (#139, #140) để giải xung đột PR #141
 run_id: repin-20260925T140435Z-71954
 sha: 77c4aea3309e79b3228469cd79e8029037755757 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10
+
+### Re-pin lần 2 — 2026-10-08, do gộp onehub sau chữ ký Cổng 2 của khung-ban-ghi-kara; eval của the-gop-y-okr, logo-onehub, nen-kara bị thay hay sửa ở vòng này
+run_id: repin-20261008T004656Z-80562
+sha: beac40ab8472f735a5e7ecc79a03ae01ea1d37cf · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E13, E14 · thay bởi hồ sơ đã ký: E13→khung-ban-ghi-kara#AC-1, E14→khung-ban-ghi-kara#AC-1 · ngoài làn máy: E11 · diff chạm vật đo ngoài làn máy: E11 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
