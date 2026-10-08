@@ -9,6 +9,7 @@ import {
 import { db } from "@crm/db";
 import { SETTINGS_ID } from "@crm/db/settings";
 import { noiBangMa, taoMaLienKet } from "@crm/db/zalo-lien-ket";
+import type { DatBotPhanHoi, DatBotYeuCau } from "@crm/validation/zalo-cau-noi";
 import { ZALO_LY_DO } from "@crm/validation/zalo-update";
 import type { INestApplication } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
@@ -37,7 +38,7 @@ function datBien(k: Bien, v: string | undefined): void {
 	else process.env[k] = v;
 }
 
-function tacTuGia(traLoi: object[]) {
+function tacTuGia(traLoi: DatBotPhanHoi[]) {
 	const than: string[] = [];
 	const hang = [...traLoi];
 	const mayChu = Bun.serve({
@@ -61,7 +62,7 @@ async function quanTri(ten: string): Promise<string> {
 	return (await mintPhien(q.id)).cookie;
 }
 
-async function luuBot(cookie: string, input: object) {
+async function luuBot(cookie: string, input: DatBotYeuCau) {
 	return request(app.getHttpServer())
 		.post("/api/trpc/zalo.luuBot")
 		.set("cookie", cookie)
