@@ -43,18 +43,18 @@ evals:
 
   - id: E6
     criterion: AC-5
-    executor: test
-    cmd: config:executors.test.cccl_tai_lieu
-    paths: [apps/api/test/tai-lieu-san.ts, apps/api/test/tai-lieu-khong-ro.spec.ts, apps/api/test/tai-lieu-thay-trang.spec.ts]
-    expected: "exit 0; `bun run test -- \"cd apps/api && bun test test/tai-lieu-khong-ro.spec.ts test/tai-lieu-thay-trang.spec.ts\"` trên CSDL riêng của lượt: 0 fail; số «(pass)» trong log ≥ số ca `test(` của hai tệp ở merge-base (script đếm ở rang/dot-bien.mjs bước tiền đề, in «CA: <n>»)."
+    executor: script
+    cmd: config:executors.script.cccl_du_ca
+    paths: [apps/api/test/tai-lieu-san.ts, apps/api/test/tai-lieu-khong-ro.spec.ts, apps/api/test/tai-lieu-thay-trang.spec.ts, _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs]
+    expected: "exit 0; rang/du-ca.mjs đếm số ca `test(` của hai spec tai-lieu ở merge-base với origin/onehub (git merge-base hoặc git show lỗi → exit 2 có tên; đếm được 0 ca → exit 2), rồi chạy `bun run test -- \"cd apps/api && bun test test/tai-lieu-khong-ro.spec.ts test/tai-lieu-thay-trang.spec.ts\"` trên CSDL riêng của lượt, đọc số «N pass» và «M fail» của tóm tắt bun; in «CA MERGE-BASE: <c> · PASS: <N> · FAIL: <M>»; exit 0 chỉ khi M = 0 và N ≥ c, N < c → exit 1 «it ca hon merge-base: N < c». Chiều đỏ ở cặp (g) của E7."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
     criterion: AC-5
     executor: script
     cmd: config:executors.script.cccl_dot_bien
-    paths: [apps/api/test/tai-lieu-san.ts, apps/api/test/tai-lieu-khong-ro.spec.ts, apps/api/test/tai-lieu-thay-trang.spec.ts, apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoi-dong-don.spec.ts, turbo.json, _acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs]
-    expected: "exit 0; rang/dot-bien.mjs chạy trên bản sao cây (git worktree ngoài kho), SO_CAP_KHAI = 9, mỗi cặp in một dòng «<cặp> <tên> xanh=… do=…» và phải có xanh trước-phá, đỏ sau-phá với thông điệp ghim của cặp. Cặp (a) E1, (b) E2, (c) và (c') E3 như ghi ở ba eval đó. Cặp (d1) (d2) (d3) — MA TRẬN 3 hook: cài `await Bun.sleep(6000)` vào đầu (d1) beforeAll của dungSan(), (d2) beforeAll của tai-lieu-khong-ro, (d3) beforeAll của tai-lieu-thay-trang; còn trần TAI_LIEU_SAN.hookMs thì spec tương ứng xanh; bỏ đối số trần khỏi ĐÚNG hook đó thì đỏ với log chứa «timed out». Cặp (e) công tắc: bản sao bỏ SOKR_KHONG_CHAY_AGENT_CU khỏi globalPassThroughEnv → lệnh của E8 với biến bật không còn bỏ ca (ghim «cong tac khong toi test»). Cặp (f) phạm vi: chạy rang/pham-vi.mjs với danh sách viết tay chứa apps/api/src/app.module.ts → đỏ «cham ma san pham: apps/api/src/app.module.ts». Số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    paths: [apps/api/test/tai-lieu-san.ts, apps/api/test/tai-lieu-khong-ro.spec.ts, apps/api/test/tai-lieu-thay-trang.spec.ts, apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoi-dong-don.spec.ts, turbo.json, _acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs, _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs]
+    expected: "exit 0; rang/dot-bien.mjs chạy trên bản sao cây (git worktree ngoài kho), SO_CAP_KHAI = 10, mỗi cặp in một dòng «<cặp> <tên> xanh=… do=…» và phải có xanh trước-phá, đỏ sau-phá với thông điệp ghim của cặp. Cặp (a) E1, (b) E2, (c) và (c') E3 như ghi ở ba eval đó. Cặp (d1) (d2) (d3) — MA TRẬN 3 hook: cài `await Bun.sleep(6000)` vào đầu (d1) beforeAll của dungSan(), (d2) beforeAll của tai-lieu-khong-ro, (d3) beforeAll của tai-lieu-thay-trang; còn trần TAI_LIEU_SAN.hookMs thì spec tương ứng xanh; bỏ đối số trần khỏi ĐÚNG hook đó thì đỏ với log chứa «timed out». Cặp (e) công tắc: bản sao bỏ SOKR_KHONG_CHAY_AGENT_CU khỏi globalPassThroughEnv → lệnh của E8 với biến bật không còn bỏ ca (ghim «cong tac khong toi test»). Cặp (g) đủ ca: bản sao đổi ca đầu của tai-lieu-khong-ro thành test.skip → rang/du-ca.mjs đỏ «it ca hon merge-base». Cặp (f) phạm vi: chạy rang/pham-vi.mjs với danh sách viết tay chứa apps/api/src/app.module.ts → đỏ «cham ma san pham: apps/api/src/app.module.ts». Số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8

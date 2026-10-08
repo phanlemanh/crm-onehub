@@ -1301,7 +1301,6 @@ executors:
     cccl_mo_coi: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t mo-coi"
     cccl_ngoai_khoa: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t ngoai-khoa"
     cccl_cho_route: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t cho-route"
-    cccl_tai_lieu: 'bun run test -- "cd apps/api && bun test test/tai-lieu-khong-ro.spec.ts test/tai-lieu-thay-trang.spec.ts"'
   script:
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
@@ -2000,6 +1999,7 @@ executors:
     cccl_dot_bien: bun _acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs
     cccl_cong_tac: bun _acceptance/ca-chap-chon-cach-ly/rang/cong-tac.mjs
     cccl_pham_vi: bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs
+    cccl_du_ca: bun _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

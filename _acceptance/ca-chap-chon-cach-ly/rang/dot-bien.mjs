@@ -1,9 +1,9 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { dungBanSao, GOC, goBanSao, KhongDo, thayMotLan } from "./ban-sao.mjs";
+import { dungBanSao, goBanSao, KhongDo, thayMotLan } from "./ban-sao.mjs";
 
-const SO_CAP_KHAI = 9;
+const SO_CAP_KHAI = 10;
 const TRAN_LENH_MS = 600_000;
 const KHOI_DONG = "apps/agent-okr/test/support/khoi-dong.ts";
 const SAN = "apps/api/test/tai-lieu-san.ts";
@@ -72,6 +72,12 @@ const CAP = [
 		ghim: "cong tac khong toi test",
 	},
 	{
+		ten: "g du ca",
+		lenh: "bun _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs",
+		pha: [[KHONG_RO, '\ttest("khong-ro: list va get theo ma tran', '\ttest.skip("khong-ro: list va get theo ma tran']],
+		ghim: "it ca hon merge-base",
+	},
+	{
 		ten: "f pham vi",
 		lenh: "bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs --tu-danh-sach .cccl-ds.txt",
 		ds: { lanh: "turbo.json\napps/agent-okr/test/support/khoi-dong.ts\n", pha: "turbo.json\napps/api/src/app.module.ts\n" },
@@ -97,15 +103,7 @@ function apDung(goc, ds) {
 	};
 }
 
-function demCa(spec) {
-	const base = spawnSync("git", ["merge-base", "HEAD", "origin/onehub"], { cwd: GOC, encoding: "utf8" }).stdout.trim();
-	const src = spawnSync("git", ["show", `${base}:${spec}`], { cwd: GOC, encoding: "utf8" }).stdout;
-	return (src.match(/^\s*test\(/gm) ?? []).length;
-}
-
 function main() {
-	const caGoc = demCa(KHONG_RO) + demCa(THAY_TRANG);
-	console.log(`CA: ${caGoc}`);
 	const goc = dungBanSao("dot-bien");
 	let dat = 0;
 	let daChay = 0;
