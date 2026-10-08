@@ -14,7 +14,12 @@ import {
 	dat,
 	dinhVi,
 	don,
+	go,
+	goiCua,
+	kr,
+	m,
 	mo,
+	moTrang,
 	mt,
 	nhip,
 	TrangSoan,
@@ -148,5 +153,78 @@ describe("k2b-tab", () => {
 		} finally {
 			tra();
 		}
+	});
+});
+
+const nutHoanTac = (goc: Element | null) =>
+	[...(goc?.querySelectorAll<HTMLButtonElement>("button") ?? [])].find(
+		(b) => b.textContent?.trim() === "Hoàn tác",
+	) ?? null;
+const oNhap = (id: string) =>
+	document.getElementById(id) as HTMLInputElement | null;
+const nhomEl = () => q('[data-slot="kara-proposal-group"]');
+const loiNhom = () =>
+	nhomEl()?.querySelector("[data-loi=nhom]")?.textContent ?? null;
+
+describe("k2b-nhom-loi", () => {
+	const NHOM = [
+		mt("1", "Giữ khách lớn miền Bắc"),
+		kr("11", "1", "Khách lớn ký lại hợp đồng"),
+		kr("13", "1", "Rà soát tuyến trước hạn", "cho", "moc"),
+	];
+	const DA_NHAN = NHOM.map((d) => ({ ...d, trangThai: "nhan" as const }));
+
+	async function nhanCaNhom(): Promise<void> {
+		datDanhSach({ dong: NHOM });
+		await moTrang();
+		await go(oNhap("dich-11"), "10");
+		datDanhSach({ dong: DA_NHAN });
+		await bam(q('[data-slot="kara-batch"]'));
+		await nhip(10);
+	}
+
+	const CA = [
+		{ ten: "conflict-dang", trangThai: "dang", loi: "conflict", chu: () => m.loiQuyet.dongCu },
+		{ ten: "conflict-dong", trangThai: "da-dua-vao", loi: "conflict", chu: () => m.loiQuyet.cuocKhongDang },
+		{ ten: "mang", trangThai: "dang", loi: "mang", chu: () => m.loiQuyet.mang },
+	] as const;
+
+	for (const ca of CA) {
+		test(`hoàn tác cả nhóm bị từ chối (${ca.ten}): câu lỗi dưới biên nhận nhóm, biên nhận còn, bấm lại được`, async () => {
+			await nhanCaNhom();
+			dat("okr.soanQuyet", () => {
+				throw ca.loi === "conflict"
+					? Object.assign(new Error("Conflict"), { data: { code: "CONFLICT" } })
+					: new Error("Failed to fetch");
+			});
+			datDanhSach({ dong: DA_NHAN, cuoc: { ...CUOC, trangThai: ca.trangThai } });
+			await bam(nutHoanTac(nhomEl()));
+			await nhip(10);
+			expect(loiNhom() === null ? "khong thay loi duoi bien nhan nhom" : "co").toBe("co");
+			expect(loiNhom()).toBe(ca.chu());
+			const bienNhan = nhomEl()?.querySelector("[data-slot=proposed-change-receipt]") ?? null;
+			expect(bienNhan === null ? "mat bien nhan" : "con").toBe("con");
+			const nut = nutHoanTac(nhomEl());
+			expect(ca.trangThai === "dang" ? (nut?.disabled ?? true) : nut === null).toBe(
+				ca.trangThai !== "dang",
+			);
+		});
+	}
+
+	test("thử lại thành công: câu lỗi biến mất và nhóm về chờ", async () => {
+		await nhanCaNhom();
+		dat("okr.soanQuyet", () => {
+			throw Object.assign(new Error("Conflict"), { data: { code: "CONFLICT" } });
+		});
+		await bam(nutHoanTac(nhomEl()));
+		await nhip(10);
+		expect(loiNhom()).toBe(m.loiQuyet.dongCu);
+		dat("okr.soanQuyet", () => ({ ok: true }));
+		datDanhSach({ dong: NHOM });
+		await bam(nutHoanTac(nhomEl()));
+		await nhip(10);
+		expect(loiNhom()).toBe(null);
+		expect(goiCua("okr.soanQuyet").at(-1)?.dauVao).toEqual({ deXuatId: "1", quyet: "hoan" });
+		expect(q('[data-slot="kara-batch"]') === null ? "khong ve cho" : "ve cho").toBe("ve cho");
 	});
 });
