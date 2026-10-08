@@ -1313,6 +1313,14 @@ executors:
     kbk_khung_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi"
     kbk_tra_cuu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t tra-cuu"
     kbk_them_nhanh: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ngan-ban-ghi-giu.dom.tsx -t them-nhanh"
+    kts_dong_thoi_gian: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-trang-thai-vung.dom.tsx -t dong-thoi-gian"
+    kts_web: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-trang-thai-vung.dom.tsx -t web"
+    kts_ke_hoach: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-trang-thai-vung.dom.tsx -t ke-hoach"
+    kts_buoc_chua_luu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-trang-thai-vung.dom.tsx -t buoc-chua-luu"
+    kts_tom_tat: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-tom-tat.dom.tsx -t kts-tom-tat"
+    kts_da_ghi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/tro-ly-okr-tom-tat.dom.tsx -t kts-da-ghi"
+    kts_hoan_tac: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-trang-thai-luu-tru.dom.tsx -t luu-tru-hoan-tac"
+    kts_hoan_tac_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-trang-thai-luu-tru.dom.tsx -t hoan-tac-hong"
     dlr_rong_vi_loc: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx -t rong-vi-loc
     dlr_nut_bo_loc: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx -t nut-bo-loc
     dlr_bo_chon: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx -t bo-chon
@@ -1346,6 +1354,8 @@ executors:
   script:
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
     kbk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-ban-ghi-kara/rang/man.mjs"'
+    kts_chu: "bun _acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
+    kts_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-trang-thai-toan-crm/rang/man.mjs"'
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs
     ctk_pha_thu_xanh: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs xanh
     ctk_pha_thu_do: node _acceptance/chan-trung-khoa-ban-nhap/rang/pha-thu.mjs do

@@ -2,7 +2,6 @@
 
 import ArrowRight from "@carbon/icons-react/es/ArrowRight";
 import Renew from "@carbon/icons-react/es/Renew";
-import Warning from "@carbon/icons-react/es/Warning";
 import {
 	InlineCitation,
 	InlineCitationCard,
@@ -20,12 +19,6 @@ import {
 	InlineCitationText,
 } from "@crm/ui/components/ai-elements/inline-citation";
 import { AiFeedback } from "@crm/ui/components/ai-feedback";
-import {
-	Alert,
-	AlertAction,
-	AlertDescription,
-	AlertTitle,
-} from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import {
 	Card,
@@ -40,9 +33,9 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { Icon } from "@crm/ui/components/icon";
+import { KaraState } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { ConfidenceIndicator } from "@crm/ui/components/okr-status";
-import { Shimmer } from "@crm/ui/components/shimmer";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { OKR_TOM_TAT } from "@crm/validation/okr-tom-tat";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -287,21 +280,12 @@ export function KhoiTomTat({
 	if (tt.isError)
 		return (
 			<section aria-label={m.tieuDe} data-trang-thai="ST-tomtat-loi">
-				<Alert>
-					<Icon icon={Warning} />
-					<AlertTitle>{m.loi}</AlertTitle>
-					<AlertDescription>{m.loiMoTa}</AlertDescription>
-					<AlertAction>
-						<Button
-							onClick={() => void tt.refetch()}
-							size="xs"
-							variant="outline"
-						>
-							<Icon icon={Renew} data-icon="inline-start" />
-							{mt.thuLai}
-						</Button>
-					</AlertAction>
-				</Alert>
+				<KaraState
+					kind="error"
+					what={m.loiKara}
+					description={m.loiMoTa}
+					onRetry={() => void tt.refetch()}
+				/>
 			</section>
 		);
 
@@ -321,9 +305,7 @@ export function KhoiTomTat({
 			batDau !== null && tt.dataUpdatedAt - batDau >= OKR_TOM_TAT.tranChoMs;
 		noiDung = (
 			<CardContent aria-busy="true" data-trang-thai="ST-tomtat-dang-soan">
-				<p aria-live="polite" className="text-sm">
-					<Shimmer>{m.dangSoan}</Shimmer>
-				</p>
+				<KaraState kind="working" label={m.dangSoan} delayMs={0} />
 				<p className="text-muted-foreground text-xs">
 					{quaHan ? m.quaHanMoTa : m.dangSoanMoTa}
 				</p>

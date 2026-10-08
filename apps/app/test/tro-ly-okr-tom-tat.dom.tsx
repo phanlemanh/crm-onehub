@@ -580,9 +580,7 @@ const CA = {
 		await cho(() => trangThai("ST-tomtat-da-phan-hoi") !== null, "da phan hoi");
 		expect(dangNhan(phanHoi.useful)).toBe(true);
 		expect(dangNhan(phanHoi.notUseful)).toBe(false);
-		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(
-			"Cảm ơn, đã ghi",
-		);
+		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(m.daGhi);
 		await bam(nutPhanHoi(phanHoi.notUseful));
 		await cho(
 			() => goiCua("okr.troLyTomTatPhanHoi").length === 1,
@@ -594,9 +592,7 @@ const CA = {
 		});
 		await cho(() => dangNhan(phanHoi.notUseful), "doi y");
 		expect(dangNhan(phanHoi.useful)).toBe(false);
-		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(
-			"Cảm ơn, đã ghi",
-		);
+		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(m.daGhi);
 	},
 	"ST-tomtat-loi": async () => {
 		let hong = true;
@@ -607,7 +603,7 @@ const CA = {
 		await moBang();
 		await cho(() => trangThai("ST-tomtat-loi") !== null, "loi");
 		const o = trangThai("ST-tomtat-loi");
-		expect(chu(o)).toContain("Không tải được tóm tắt tuần");
+		expect(chu(o)).toContain(msgUi.karaKhung.chuaDuoc(m.loiKara));
 		expect(chu(o)).toContain(m.loiMoTa);
 		await cho(
 			() => document.getElementById("dang-ban") !== null,
@@ -837,4 +833,66 @@ describe("dang soan hoi lai", () => {
 		await troi(OKR_TOM_TAT.hoiLaiMs * 4);
 		expect(goiCua("okr.troLyTomTat").length).toBe(truocKhiRoi);
 	}, 30_000);
+});
+
+describe("kts", () => {
+	test("kts-tom-tat-dang-soan: Kara dang tom tat bang chi bao cua Kara", async () => {
+		tomTatHienTai = () => tomTat({ dangSoan: true });
+		await moBang();
+		await cho(() => trangThai("ST-tomtat-dang-soan") !== null, "dang soan");
+		const o = trangThai("ST-tomtat-dang-soan");
+		if (!o?.querySelector("[data-kara-state=working]"))
+			throw new Error("tom-tat: dang soan khong phai chi bao Kara");
+		expect(m.dangSoan).toBe("Kara đang tóm tắt tuần này…");
+		expect(chu(o)).toContain(m.dangSoan);
+	});
+
+	test("kts-tom-tat-loi: Kara chua tai duoc, Thu lai, khong Alert", async () => {
+		let hong = true;
+		tomTatHienTai = () => {
+			if (hong) throw new Error("boom-tom-tat");
+			return ban();
+		};
+		await moBang();
+		await cho(() => trangThai("ST-tomtat-loi") !== null, "loi");
+		const o = trangThai("ST-tomtat-loi");
+		if (o?.querySelector("[data-slot=alert]"))
+			throw new Error("tom-tat: loi con Alert");
+		if (!o?.querySelector("[data-kara-state=error]"))
+			throw new Error("tom-tat: loi khong phai trang thai Kara");
+		const tieuDe = chu(o?.querySelector("[data-slot=empty-title]") ?? null);
+		if (tieuDe.includes("Kara chưa Kara"))
+			throw new Error("tom-tat: tieu de loi lap chu Kara");
+		expect(tieuDe).toBe("Kara chưa tải tóm tắt tuần được");
+		expect(chu(o)).toContain(m.loiMoTa);
+		expect(chu(o)).not.toContain("boom-tom-tat");
+		const thuLai = [...(o?.querySelectorAll("button") ?? [])].find(
+			(b) => chu(b) === mt.thuLai,
+		);
+		if (!thuLai) throw new Error("khong co nut Thu lai");
+		const truoc = goiCua("okr.troLyTomTat").length;
+		hong = false;
+		await bam(thuLai);
+		await cho(() => trangThai("ST-tomtat-co-cau") !== null, "thu lai xong");
+		expect(goiCua("okr.troLyTomTat").length).toBe(truoc + 1);
+	});
+
+	test("kts-da-ghi: loi cam on noi dieu gi xay ra", async () => {
+		await moCoCau();
+		await bam(nutPhanHoi(phanHoi.useful));
+		await cho(
+			() => goiCua("okr.troLyTomTatPhanHoi").length === 1,
+			"goi phan hoi",
+		);
+		await cho(
+			() => chu(khoi()?.querySelector('[role="status"]') ?? null) !== "",
+			"cam on",
+		);
+		const camOn = chu(khoi()?.querySelector('[role="status"]') ?? null);
+		if (camOn === "Cảm ơn, đã ghi")
+			throw new Error("da-ghi: loi cam on khong noi gi xay ra");
+		expect(camOn).toBe(
+			"Đã ghi — quản trị viên thấy số phản hồi này ở Toàn cảnh › Sức khoẻ chương trình.",
+		);
+	});
 });

@@ -318,7 +318,7 @@ export function HopThoaiMucTieu({ hinh }: { hinh: HinhHop }) {
 		<Sheet open modal={false}>
 			<SheetContent side="right" size={coCot ? "assist" : undefined}>
 				<SheetHeader>
-					<SheetTitle>Sửa Mục tiêu</SheetTitle>
+					<SheetTitle>Sửa mục tiêu</SheetTitle>
 				</SheetHeader>
 				<SheetBody split={coCot}>
 					<FormMucTieu hinh={hinh} />
