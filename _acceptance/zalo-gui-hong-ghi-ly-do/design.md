@@ -1,0 +1,35 @@
+# zalo-gui-hong-ghi-ly-do — thiết kế
+
+Nguồn: `opportunity.md` (S0). Mục tiêu duy nhất: lần hỏng kế tiếp của Zalo tự nói lý do trong nhật ký production, để chẩn đoán chiều RA mà không phải gửi tin thật.
+
+## Hiện trạng (đọc 08/10)
+
+- `zaloGoi` (`apps/agent/agent/lib/zalo-api.ts`) ném `LoiHttpZalo(method, status)` khi HTTP không ok, TRỪ 408 — ngoại lệ dành cho long-poll `getUpdates` nhưng áp cho mọi lệnh.
+- `parseZaloSend` (`packages/validation/src/zalo-update.ts`) ném `Error("Zalo rejected the message (<description|error_code|hinh dang la>)")` — lý do có trong `message`.
+- Bảy chỗ ghi lỗi gửi chỉ in tên lớp lỗi (`loi.name`) hoặc lớp thô: `lopLoi`/`baoLoiZalo` trong `zalo-bot-xuong.ts` (gửi thử, `getMe`), `zalo-tra-loi.ts` dòng 106, 132, 186, 197, `zalo-nhan.ts` dòng 166, `zalo-hoi.ts` dòng 244. Hai chỗ in `String(loi)` (`zalo-nhan.ts` 182, 209) thì có lý do.
+- `xuLyTinDen` (`zalo-nhan.ts`) có bốn nhánh không ghi gì: không phải chat riêng/bot, `message_id` đã gặp, người gửi bị chặn, người chưa nối được trả hướng dẫn thành công.
+- Sự kiện `webhook-test` của Zalo (không `from`, `chat`) ghi «webhook sai khuon» dù là sự kiện hợp lệ của bước đăng ký.
+
+## Cách sửa
+
+1. **Một lớp lỗi có tên cho lời từ chối của Zalo.** `packages/validation/src/zalo-update.ts` thêm `ZaloTuChoi extends Error` với `maLoi: number | null`, `moTa: string | null`; và `ZaloHinhDangLa extends Error` với `khoa: string[]` (tên khoá cấp đầu của thân, không giá trị). `parseZaloSend` ném hai lớp này thay cho `Error` thô; `message` giữ nguyên chữ cũ để mọi chỗ đang đọc `message` không đổi.
+2. **Một hàm mô tả lỗi dùng chung.** `moTaLoiZalo(loi: unknown): string` trong `zalo-api.ts`: `http-<mã>` · `zalo-tu-choi <maLoi|-> «<moTa cắt ≤ ZALO.nhatKy.tranMoTa>»` · `hinh-dang-la khoa=<…>` · `mang (<code>)` · còn lại `<tên lớp>`. Bảy chỗ ghi lỗi gửi và `lopLoi` gọi nó. Không bao giờ in token, chat id hay chữ tin nhắn — `moTa` là chữ hệ thống của Zalo.
+3. **408 chỉ là «hết tin» với `getUpdates`.** `zaloGoi` chỉ cho 408 lọt khi `method === "getUpdates"`; lệnh khác nhận `LoiHttpZalo(…, 408)` → `http-408`.
+4. **Nhánh bỏ qua có tên.** Mỗi nhánh im của `xuLyTinDen` ghi đúng một dòng `[zalo] bo qua message_id=<id> ly_do=<khong-rieng|da-gap|bi-chan|chua-noi>` (mã nhánh là hằng trong `ZALO.nhatKy.boQua`). Không in `from.id` hay chữ tin.
+5. **`webhook-test` là sự kiện thử.** `nhanWebhook` nhận ra `message.message_id === ZALO.webhook.maThu` («webhook-test»): ghi một dòng `[zalo] webhook-test` và trả 200; thân hỏng thật vẫn ghi «sai khuon».
+
+## Đã cân và bỏ
+
+- Ghi nguyên thân phản hồi của Zalo: có thể mang dữ liệu người dùng ở ca thành công lạ; chỉ ghi tên khoá.
+- Sửa luôn chuyện «mã người dùng đổi theo bot» (nếu có): chưa có căn cứ; hàng này chỉ làm lý do hiện ra.
+
+## Đo
+
+- Ma trận phản hồi Zalo × hàm mô tả (HTTP 200 `ok:false` có/không mô tả, thân lạ, 401, 403, 429, 500, 408 ở `sendMessage`, 408 ở `getUpdates`, lỗi mạng).
+- Mỗi chỗ ghi trong bảy chỗ: chạy đường thật với `fetcher` giả trả `{ok:false,error_code:403,description:"<chữ ghim>"}`, bắt `console.error`, khẳng định dòng có chữ ghim.
+- Bốn nhánh bỏ qua × một dòng mã nhánh; `webhook-test` × một dòng; thân hỏng thật vẫn «sai khuon».
+- Không dòng nào chứa token, chat id hay chữ tin (đối chứng: chèn các chuỗi đó vào đầu vào, tìm vắng trong nhật ký).
+
+## Đặc tả UX
+
+Không chạm màn web.
