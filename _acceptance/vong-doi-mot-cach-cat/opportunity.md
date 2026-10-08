@@ -37,16 +37,16 @@ viễn». Hôm nay ba bảng CRM lệch chuẩn ở năm chỗ:
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: người dùng ba bảng CRM có dọn và lấy lại bản ghi theo đúng một cách không — lưu
+- Câu hỏi phép đo trả lời: người dùng ba bảng CRM có dọn và lấy lại bản ghi theo đúng một cách không — lưu
   trữ nhầm thì «Hoàn tác» ngay ở toast, mở một bản đã cất thì biết ngay nó đã cất và khôi phục được tại chỗ, không sửa
   nhầm một bản đã cất?
-- [đề xuất] Kết quả nào là SỐNG: lái thử người lạ lưu trữ nhầm ba cá nhân bằng thao tác hàng loạt rồi lấy lại bằng
+- Kết quả nào là SỐNG: lái thử người lạ lưu trữ nhầm ba cá nhân bằng thao tác hàng loạt rồi lấy lại bằng
   «Hoàn tác» mà không phải mở «Đã lưu trữ»; mở một thoả thuận đã lưu trữ từ đường dẫn, đọc được dải báo và khôi phục
   từ dải báo, không lần nào cố sửa một ô của bản đã cất. Bài kiểm đếm 0 đường lưu trữ thiếu «Hoàn tác» ở ba bảng, 0 nút
   xem ghi «Lưu trữ» trần, 0 hộp xác nhận xoá vĩnh viễn ghi «Xoá» trần.
-- [đề xuất] Kết quả nào là CHẾT: còn một đường lưu trữ (một bản hay hàng loạt) ở ba bảng không có «Hoàn tác»; hoặc
+- Kết quả nào là CHẾT: còn một đường lưu trữ (một bản hay hàng loạt) ở ba bảng không có «Hoàn tác»; hoặc
   một bản ghi đã lưu trữ mở ra vẫn sửa được như bản đang dùng mà không báo gì.
-- [đề xuất] Timebox: 1 ngày máy.
+- Timebox: 1 ngày máy.
 
 ## Đường đo
 
