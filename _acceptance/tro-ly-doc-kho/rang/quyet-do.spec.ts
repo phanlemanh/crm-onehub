@@ -5,16 +5,24 @@ import {
 	mkdirSync,
 	mkdtempSync,
 	readdirSync,
+	readFileSync,
 	rmSync,
 	writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { docKetQua } from "../../../apps/agent/evals/tro-ly-kho/ke-hoach";
 import {
 	bamDauVao,
 	CHAM_BO_DO,
 	type ChiSo,
+	cauHoiLai,
+	cauLuotMot,
+	chamTungCau,
 	chonHoiLai,
+	type DongTungCau,
+	docTungCau,
+	dongTungCau,
 	docBanGhi,
 	docBanGhiHead,
 	doModel,
@@ -24,8 +32,10 @@ import {
 	gop,
 	type KetCucMot,
 	keHoachHoiLai,
+	ketCucHai,
 	ketCucZalo,
 	ketLuan,
+	khuonBo,
 	moThuMucLuot,
 	type NhomCau,
 	nhanHaiCau,
@@ -36,6 +46,19 @@ import {
 } from "./quyet-do";
 
 const GOC = resolve(import.meta.dir, "..", "..", "..");
+const MAU_THAT = join(import.meta.dir, "mau-luot-that");
+const BO_THAT = khuonBo.parse(
+	JSON.parse(
+		readFileSync(
+			join(GOC, "_acceptance/tro-ly-doc-kho/bo-do/mam-tam.json"),
+			"utf8",
+		),
+	),
+);
+const hangThat = () =>
+	docTungCau(readFileSync(join(MAU_THAT, "cham-tung-cau.jsonl"), "utf8"));
+const quaTep = (ds: readonly DongTungCau[]) =>
+	docTungCau(ds.map((d) => JSON.stringify(d)).join("\n"));
 const NGAY_MS = 24 * 60 * 60 * 1000;
 const BAY = new Date("2026-10-08T00:00:00Z");
 const donDep: string[] = [];
@@ -419,6 +442,45 @@ describe("vung-xam", () => {
 		expect(new Set(chon.mot)).toEqual(new Set(coTrang));
 		expect(new Set(chon.hai)).toEqual(new Set(quyDinh));
 	});
+
+	test("hàng đo thật, bộ câu thật: dung trang và chuyen quy dinh cùng xám thì lượt Zalo hỏi lại đủ mọi câu quy định", () => {
+		let haSai = 6;
+		let haKhongChuyen = 4;
+		const ds = hangThat().map((d) => {
+			if (d.luot === 2 && d.ketCuc === "loi")
+				return { ...d, ketCuc: "khong-hang" as const };
+			if (d.luot === 1 && d.nhom === "co-trang" && haSai > 0) {
+				haSai--;
+				return { ...d, ketCuc: "TRA_LOI-sai" as const };
+			}
+			if (
+				d.luot === 2 &&
+				d.nhom !== "khong-phai-quy-dinh" &&
+				haKhongChuyen > 0
+			) {
+				haKhongChuyen--;
+				return { ...d, ketCuc: "khong-hang" as const };
+			}
+			return d;
+		});
+		const { mot, hai, kl } = chamTungCau(quaTep(ds), CHAM_BO_DO.nguong);
+		expect(kl.xam).toEqual(["dungTrang", "chuyenQuyDinh"] satisfies ChiSo[]);
+		const luotMot = cauLuotMot(BO_THAT.cau);
+		const chon = cauHoiLai(keHoachHoiLai(kl, mot, hai), luotMot, BO_THAT.cau);
+		const quyDinh = luotMot.map((c) => c.id);
+		const coTrang = luotMot
+			.filter((c) => c.nhom !== "khong-co")
+			.map((c) => c.id);
+		if (chon.hai.length !== quyDinh.length)
+			throw new Error(
+				`hoi lai Zalo thieu cau: ${chon.hai.length}/${quyDinh.length}`,
+			);
+		expect(chon.hai.map((c) => c.id)).toEqual(quyDinh);
+		expect(chon.mot.map((c) => c.id)).toEqual(coTrang);
+		expect(chon.mot.filter((c) => quyDinh.includes(c.id)).length).toBe(
+			coTrang.length,
+		);
+	});
 });
 
 const BANG_ZALO = [
@@ -446,6 +508,42 @@ describe("nhan-loi zalo", () => {
 			chay++;
 		}
 		expect(chay).toBe(11);
+	});
+
+	test("kết quả eval thật đi qua ketCucHai, ghi hàng, đọc lại: ZaloHoi loi của c33 ra KHONG DO DUOC", () => {
+		const nhomCua = new Map(BO_THAT.cau.map((c) => [c.id, c.nhom]));
+		const ketCucCu = new Map(
+			hangThat().map((d) => [`${d.luot}:${d.id}`, d.ketCuc]),
+		);
+		const ket = docKetQua(
+			readFileSync(join(MAU_THAT, "ket-qua.jsonl"), "utf8"),
+		);
+		const ds = ket.map((k) => {
+			const nhom = nhomCua.get(k.id);
+			if (!nhom) throw new Error(`cau ${k.id} khong co trong bo`);
+			const cu = ketCucCu.get(`${k.luot}:${k.id}`);
+			if (!cu) throw new Error(`cau ${k.id} khong co hang da cham`);
+			if (k.luot === 1) return dongTungCau({ id: k.id, nhom, ketCuc: cu }, 1);
+			const coHang = cu === "co-hang";
+			return dongTungCau(
+				{ id: k.id, nhom, ketCuc: ketCucHai(k, coHang) },
+				2,
+				false,
+				{ ketQua: k.ketQua, loi: k.loi, coHang },
+			);
+		});
+		const { kl } = chamTungCau(quaTep(ds), CHAM_BO_DO.nguong);
+		if (kl.ma !== 2)
+			throw new Error("ZaloHoi loi that bi tinh la khong-chuyen");
+		expect(kl.dong[0]).toBe("KHONG DO DUOC: 1 cau loi (c33)");
+		const sua = ds.map((d) =>
+			d.id === "c33" && d.luot === 2
+				? { ...d, ketCuc: "khong-hang" as const }
+				: d,
+		);
+		expect(chamTungCau(quaTep(sua), CHAM_BO_DO.nguong).kl.dong[0]).toBe(
+			"KHONG DO DUOC: 1 cau loi (c33)",
+		);
 	});
 });
 

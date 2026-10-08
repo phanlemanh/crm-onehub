@@ -225,6 +225,133 @@ export function ketCucZalo(ketQua: string | null, coHang: boolean): KetCucHai {
 	return coHang ? "co-hang" : "khong-hang";
 }
 
+export type KetZalo = { ketQua: string | null; loi: string | null };
+
+export function ketCucHai(k: KetZalo | undefined, coHang: boolean): KetCucHai {
+	if (!k || k.loi) return "loi";
+	return ketCucZalo(k.ketQua, coHang);
+}
+
+const CAC_NHOM = [
+	"co-trang",
+	"khong-co",
+	"khong-dau",
+	"khong-phai-quy-dinh",
+] as const satisfies readonly NhomCau[];
+const CAC_KET_CUC = [
+	"khong-co-ket-qua",
+	"LOI",
+	"TRA_LOI-du",
+	"TRA_LOI-sai",
+	"TU_CHOI",
+	"loi",
+	"co-hang",
+	"khong-hang",
+] as const satisfies readonly (KetCucMot | KetCucHai)[];
+
+export const khuonCau = z.object({
+	id: z.string().min(1),
+	nhom: z.enum(CAC_NHOM),
+	cau: z.string().min(2).max(500),
+	mong: z.array(z.array(z.string().min(1)).min(1)).optional(),
+	kho: z.enum(["nguong-ngoai-le", "hai-trang"]).optional(),
+	bienTheCua: z.string().optional(),
+	tam: z.boolean().optional(),
+});
+export const khuonBo = z.object({
+	nhan: z.string().min(1),
+	nguon: z.string().min(1),
+	cau: z.array(khuonCau).min(1),
+});
+export type Cau = z.infer<typeof khuonCau>;
+
+export const khuonDongTungCau = z.object({
+	luot: z.union([z.literal(1), z.literal(2)]),
+	id: z.string().min(1),
+	nhom: z.enum(CAC_NHOM),
+	ketCuc: z.enum(CAC_KET_CUC),
+	khongQuaKiem: z.boolean(),
+	zalo: z
+		.object({
+			ketQua: z.string().nullable(),
+			loi: z.string().nullable(),
+			coHang: z.boolean(),
+		})
+		.optional(),
+});
+export type DongTungCau = z.infer<typeof khuonDongTungCau>;
+
+export function dongTungCau(
+	r: { id: string; nhom: NhomCau; ketCuc: KetCucMot | KetCucHai },
+	luot: 1 | 2,
+	khongQuaKiem = false,
+	zalo?: KetZalo & { coHang: boolean },
+): DongTungCau {
+	return {
+		luot,
+		id: r.id,
+		nhom: r.nhom,
+		ketCuc: r.ketCuc,
+		khongQuaKiem,
+		...(zalo ? { zalo } : {}),
+	};
+}
+
+export function docTungCau(chu: string): DongTungCau[] {
+	return chu
+		.split("\n")
+		.filter(Boolean)
+		.map((d, i) => {
+			const r = khuonDongTungCau.safeParse(JSON.parse(d));
+			if (!r.success)
+				throw new Error(`dong ${i + 1} sai khuon: ${r.error.message}`);
+			return r.data;
+		});
+}
+
+function nhanTuKetCuc(d: DongTungCau): string {
+	if (d.luot === 2)
+		return nhanHaiCau(
+			d.zalo ? ketCucHai(d.zalo, d.zalo.coHang) : (d.ketCuc as KetCucHai),
+		);
+	return nhanMotCau(d.nhom, d.ketCuc as KetCucMot);
+}
+
+export function chamTungCau(ds: readonly DongTungCau[], nguong: Nguong) {
+	const mot: CauMot[] = ds
+		.filter((d) => d.luot === 1)
+		.map((d) => ({ id: d.id, nhom: d.nhom, nhan: nhanTuKetCuc(d) }));
+	const hai: CauHai[] = ds
+		.filter((d) => d.luot === 2)
+		.map((d) => ({
+			id: d.id,
+			quyDinh: d.nhom !== "khong-phai-quy-dinh",
+			nhan: nhanTuKetCuc(d),
+		}));
+	const kiem = ds.filter((d) => d.luot === 1 && d.khongQuaKiem).length;
+	return { mot, hai, kl: ketLuan(mot, hai, nguong, kiem) };
+}
+
+export function cauLuotMot<T extends { nhom: NhomCau }>(
+	cau: readonly T[],
+): T[] {
+	return cau.filter((c) => c.nhom !== "khong-phai-quy-dinh");
+}
+
+export function cauHoiLai<T extends { id: string }>(
+	hoiLai: readonly HoiLai[],
+	cauMot: readonly T[],
+	cauHai: readonly T[],
+): { mot: T[]; hai: T[] } {
+	const chon = chonHoiLai(hoiLai);
+	const theoMot = new Set(chon.mot);
+	const theoHai = new Set(chon.hai);
+	return {
+		mot: cauMot.filter((c) => theoMot.has(c.id)),
+		hai: cauHai.filter((c) => theoHai.has(c.id)),
+	};
+}
+
 export function gop(l1: Dem, l2: Dem, t: number, chieu: Chieu): KetGop {
 	const g = { k: l1.k + l2.k, n: l1.n + l2.n };
 	const r = g.n === 0 ? 0 : g.k / g.n;

@@ -12,27 +12,30 @@ import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
 	bamDauVao,
-	type CauHai,
-	type CauMot,
 	CHAM_BO_DO,
 	type ChiSo,
-	chonHoiLai,
+	cauHoiLai,
+	cauLuotMot,
+	chamTungCau,
 	type Dem,
 	docBanGhi,
 	docBanGhiHead,
 	doModel,
 	dongKetLuot,
 	donLuotCu,
+	type DongTungCau,
+	docTungCau,
+	dongTungCau,
 	ghiBanGhi,
 	gop,
 	type KetCucHai,
 	type KetCucMot,
 	keHoachHoiLai,
-	ketCucZalo,
-	ketLuan,
+	ketCucHai,
+	khuonBo,
+	type Cau,
 	type ModelIds,
 	moThuMucLuot,
-	type NhomCau,
 	nhanHaiCau,
 	nhanMotCau,
 	quyetDungLai,
@@ -81,42 +84,6 @@ function khongDo(cau: string): never {
 	process.exit(2);
 }
 
-type DongTungCau = {
-	luot: 1 | 2;
-	id: string;
-	nhom: NhomCau;
-	ketCuc: KetCucMot | KetCucHai;
-	khongQuaKiem: boolean;
-};
-
-function nhanTuKetCuc(d: DongTungCau): string {
-	return d.luot === 1
-		? nhanMotCau(d.nhom, d.ketCuc as KetCucMot)
-		: nhanHaiCau(d.ketCuc as KetCucHai);
-}
-
-function chamTungCau(ds: readonly DongTungCau[]) {
-	const mot: CauMot[] = ds
-		.filter((d) => d.luot === 1)
-		.map((d) => ({ id: d.id, nhom: d.nhom, nhan: nhanTuKetCuc(d) }));
-	const hai: CauHai[] = ds
-		.filter((d) => d.luot === 2)
-		.map((d) => ({
-			id: d.id,
-			quyDinh: d.nhom !== "khong-phai-quy-dinh",
-			nhan: nhanTuKetCuc(d),
-		}));
-	const kiem = ds.filter((d) => d.luot === 1 && d.khongQuaKiem).length;
-	return { mot, hai, kl: ketLuan(mot, hai, NGUONG, kiem) };
-}
-
-function docTungCau(tep: string): DongTungCau[] {
-	return readFileSync(tep, "utf8")
-		.split("\n")
-		.filter(Boolean)
-		.map((d) => JSON.parse(d) as DongTungCau);
-}
-
 if (coCo("--ghi-ban-ghi")) {
 	const tep = giaTri("--ghi-ban-ghi");
 	if (!tep || !existsSync(tep))
@@ -137,10 +104,20 @@ if (coCo("--cham-lai")) {
 	const thuMuc = giaTri("--cham-lai");
 	const tep = thuMuc ? join(thuMuc, TEP_TUNG_CAU) : "";
 	if (!existsSync(tep)) khongDo(`khong co ${TEP_TUNG_CAU} trong ${thuMuc}`);
-	const { mot, hai, kl } = chamTungCau(docTungCau(tep));
+	const { mot, hai, kl } = chamTungCau(
+		docTungCau(readFileSync(tep, "utf8")),
+		NGUONG,
+	);
 	for (const d of kl.dong) console.log(d);
-	for (const h of keHoachHoiLai(kl, mot, hai))
+	const hoiLai = keHoachHoiLai(kl, mot, hai);
+	for (const h of hoiLai)
 		console.log(`CAN HOI LAI: ${h.chiSo} (${h.ids.length} cau)`);
+	if (hoiLai.length > 0) {
+		const chon = cauHoiLai(hoiLai, mot, hai);
+		console.log(
+			`HOI LAI: luot kho ${chon.mot.length} cau, luot zalo ${chon.hai.length} cau`,
+		);
+	}
 	process.exit(kl.ma);
 }
 
@@ -221,25 +198,6 @@ if (!process.env[BIEN_QUYET]) {
 }
 const quyet = JSON.parse(process.env[BIEN_QUYET] ?? "{}") as Quyet;
 
-const yeuCau = createRequire(join(AGENT, "package.json"));
-const { z } = yeuCau("zod") as typeof import("zod");
-
-const khuonCau = z.object({
-	id: z.string().min(1),
-	nhom: z.enum(["co-trang", "khong-co", "khong-dau", "khong-phai-quy-dinh"]),
-	cau: z.string().min(2).max(500),
-	mong: z.array(z.array(z.string().min(1)).min(1)).optional(),
-	kho: z.enum(["nguong-ngoai-le", "hai-trang"]).optional(),
-	bienTheCua: z.string().optional(),
-	tam: z.boolean().optional(),
-});
-const khuonBo = z.object({
-	nhan: z.string().min(1),
-	nguon: z.string().min(1),
-	cau: z.array(khuonCau).min(1),
-});
-type Cau = z.infer<typeof khuonCau>;
-
 const docBo = khuonBo.safeParse(JSON.parse(readFileSync(tepBo, "utf8")));
 if (!docBo.success)
 	khongDo(`bo cau sai khuon: ${docBo.error.message.slice(0, 400)}`);
@@ -299,20 +257,21 @@ type Luot2 = {
 	conGoi: string;
 	ketQua: string;
 	traLoi: string;
+	zalo?: { ketQua: string | null; loi: string | null; coHang: boolean };
 };
 
 function dongCua(
 	r: { cau: Cau; ketCuc: KetCucMot | KetCucHai },
 	luot: 1 | 2,
 	khongQuaKiem = false,
+	zalo?: Luot2["zalo"],
 ): DongTungCau {
-	return {
+	return dongTungCau(
+		{ id: r.cau.id, nhom: r.cau.nhom, ketCuc: r.ketCuc },
 		luot,
-		id: r.cau.id,
-		nhom: r.cau.nhom,
-		ketCuc: r.ketCuc,
 		khongQuaKiem,
-	};
+		zalo,
+	);
 }
 
 function trichCua(traLoi: ReturnType<typeof parseTraLoi>): Set<string> {
@@ -447,14 +406,15 @@ async function nhanHai(
 				where: { zaloHoiId: k.zaloHoiId, kenh: "ZALO" },
 			})) > 0
 		: false;
-	const ketCuc = ketCucZalo(k.ketQua, coHang);
+	const ketCuc = ketCucHai(k, coHang);
 	return {
 		cau: c,
 		ketCuc,
 		nhan: nhanHaiCau(ketCuc),
 		conGoi: k.conGoi.join(", ") || "—",
-		ketQua: `${k.ketQua ?? "?"}${k.loi ? ` (${k.loi})` : ""}`,
+		ketQua: k.ketQua ?? "?",
 		traLoi: traLoiCua(k.messageId),
+		zalo: { ketQua: k.ketQua, loi: k.loi, coHang },
 	};
 }
 
@@ -538,7 +498,7 @@ try {
 			),
 		};
 	};
-	const cauMot = bo.cau.filter((c) => c.nhom !== "khong-phai-quy-dinh");
+	const cauMot = cauLuotMot(bo.cau);
 	console.log(
 		`-- bo ${relative(GOC, tepBo)} (${bo.nhan}): ${bo.cau.length} cau; gieo ${slugCua.size} trang`,
 	);
@@ -611,7 +571,7 @@ try {
 		}
 		const tungCau = [
 			...mot.map((r) => dongCua(r, 1, r.khongQuaKiem)),
-			...hai.map((r) => dongCua(r, 2)),
+			...hai.map((r) => dongCua(r, 2, false, r.zalo)),
 		];
 		writeFileSync(
 			join(thuMuc, TEP_TUNG_CAU),
@@ -623,21 +583,15 @@ try {
 
 	const tu = new Date();
 	const l1 = await chayLuot("luot-1", cauMot, bo.cau);
-	const c1 = chamTungCau(l1.tungCau);
+	const c1 = chamTungCau(l1.tungCau, NGUONG);
 	const tong = [...c1.kl.dong];
 	let maThoat = c1.kl.ma;
 	const hoiLai = keHoachHoiLai(c1.kl, c1.mot, c1.hai);
 	const gopCua = new Map<ChiSo, ReturnType<typeof gop>>();
 	if (hoiLai.length > 0) {
-		const chon = chonHoiLai(hoiLai);
-		const theoMot = new Set(chon.mot);
-		const theoHai = new Set(chon.hai);
-		const l2 = await chayLuot(
-			"hoi-lai",
-			cauMot.filter((c) => theoMot.has(c.id)),
-			bo.cau.filter((c) => theoHai.has(c.id)),
-		);
-		const c2 = chamTungCau(l2.tungCau);
+		const chon = cauHoiLai(hoiLai, cauMot, bo.cau);
+		const l2 = await chayLuot("hoi-lai", chon.mot, chon.hai);
+		const c2 = chamTungCau(l2.tungCau, NGUONG);
 		if (c2.kl.ma === 2) {
 			maThoat = 2;
 			tong.push(`hoi lai: ${c2.kl.dong[0]}`);
