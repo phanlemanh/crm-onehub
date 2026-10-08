@@ -603,7 +603,7 @@ const CA = {
 		await moBang();
 		await cho(() => trangThai("ST-tomtat-loi") !== null, "loi");
 		const o = trangThai("ST-tomtat-loi");
-		expect(chu(o)).toContain(m.loiKara);
+		expect(chu(o)).toContain(msgUi.karaKhung.chuaDuoc(m.loiKara));
 		expect(chu(o)).toContain(m.loiMoTa);
 		await cho(
 			() => document.getElementById("dang-ban") !== null,
@@ -860,8 +860,10 @@ describe("kts", () => {
 			throw new Error("tom-tat: loi con Alert");
 		if (!o?.querySelector("[data-kara-state=error]"))
 			throw new Error("tom-tat: loi khong phai trang thai Kara");
-		expect(m.loiKara).toBe("Kara chưa tải được tóm tắt tuần");
-		expect(chu(o)).toContain(m.loiKara);
+		const tieuDe = chu(o?.querySelector("[data-slot=empty-title]") ?? null);
+		if (tieuDe.includes("Kara chưa Kara"))
+			throw new Error("tom-tat: tieu de loi lap chu Kara");
+		expect(tieuDe).toBe("Kara chưa tải tóm tắt tuần được");
 		expect(chu(o)).toContain(m.loiMoTa);
 		expect(chu(o)).not.toContain("boom-tom-tat");
 		const thuLai = [...(o?.querySelectorAll("button") ?? [])].find(

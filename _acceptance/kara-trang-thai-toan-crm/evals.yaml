@@ -64,9 +64,11 @@ evals:
       exit 0; KhoiTomTat that. Ba o: (a) dangSoan=true -> [data-trang-thai=ST-tomtat-dang-soan] chua
       [data-kara-state=working] voi chu "Kara đang tóm tắt tuần này…", khong phan tu [data-slot=shimmer] / khong
       class shimmer; qua han (dong ho gia cua bai) -> mo ta qua han + nut "Tải lại"; (b) truy van loi ->
-      [data-trang-thai=ST-tomtat-loi] chua [data-kara-state=error] "Kara chưa tải được tóm tắt tuần" +
+      [data-trang-thai=ST-tomtat-loi] chua [data-kara-state=error] co tieu de [data-slot=empty-title] DUNG BANG
+      "Kara chưa tải tóm tắt tuần được" (khuon chuaDuoc cua KaraState; khong lap "Kara chưa Kara") +
       "Bảng đáng bàn bên dưới vẫn dùng được." + "Thử lại", khong [data-slot=alert]; bam Thu lai -> troLyTomTat goi them
-      dung 1. CHIEU DO ghim: ban sao giu Alert -> do "tom-tat: loi con Alert".
+      dung 1. CHIEU DO ghim: ban sao giu Alert -> do "tom-tat: loi con Alert"; ban sao truyen ca cau vao `what`
+      -> do "tom-tat: tieu de loi lap chu Kara".
 
   - id: E5
     criterion: AC-5
@@ -225,11 +227,12 @@ evals:
     steps:
       - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
       - "Buoc 1 (1440): ngan ca nhan co hoat dong web; chan request tracking.contactActivity bang chan request cua puppeteer -> kts-web-loi-1440.png; innerText co 'Không tải được hoạt động trên website' va 'Thử lại'"
-      - "Buoc 2 (1440): luu tru ca nhan qua menu -> kts-toast-luu-tru-1440.png co 'Đã lưu trữ <tên>.' va 'Hoàn tác'; bam -> kts-sau-hoan-tac-1440.png"
+      - "Buoc 2 (1440): luu tru ca nhan qua menu -> kts-toast-luu-tru-1440.png co 'Đã lưu trữ <tên>.' va 'Hoàn tác'; mo lai menu ngan thay 'Khôi phục cá nhân' (trang thai da luu tru) -> kts-da-luu-tru-1440.png; bam Hoan tac -> kts-sau-hoan-tac-1440.png"
       - "Buoc 3 (390): lap buoc 1, 2 o kho 390 -> kts-web-loi-390.png, kts-toast-luu-tru-390.png; scrollWidth <= clientWidth cua trang va ngan; nut Hoan tac nam trong khung nhin"
     evidence_required:
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-web-loi-1440.png"
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-toast-luu-tru-1440.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-da-luu-tru-1440.png"
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-sau-hoan-tac-1440.png"
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-web-loi-390.png"
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-toast-luu-tru-390.png"
@@ -241,13 +244,19 @@ evals:
     inputs:
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-web-loi-1440.png"
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-toast-luu-tru-1440.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-da-luu-tru-1440.png"
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-sau-hoan-tac-1440.png"
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-web-loi-390.png"
       - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-toast-luu-tru-390.png"
       - "docs/ai-ux.md"
       - "docs/vong-doi.md"
     question: |
-      Nhìn năm ảnh (1440 và 390) và đối chiếu docs/ai-ux.md mục 7 và docs/vong-doi.md mục «Ba cách dọn»: (1) mục
+      Ghi chú cho người chấm: bản ghi trong phép đo được gieo không có dữ liệu web, nên ở ảnh lưu trữ và ảnh sau hoàn
+      tác mục «Hoạt động trên website» ẩn — đúng AC-2 (chưa nhận diện thì ẩn mục); ảnh lỗi web là ảnh chặn riêng truy
+      vấn đó. Ở 390, ô «Công ty» của dải đầu ngăn co tên thành dấu ba chấm là hành vi đã ký ở hồ sơ khung-ban-ghi-kara;
+      tên đầy đủ nằm ở mục Chi tiết. Dải báo «Đã lưu trữ ngày …» đầu ngăn là việc của V2 (Out of scope); dấu hiệu đã lưu
+      trữ ở đây là mục «Khôi phục …» trong menu ngăn (kts-da-luu-tru-1440.png).
+      Nhìn sáu ảnh (1440 và 390) và đối chiếu docs/ai-ux.md mục 7 và docs/vong-doi.md mục «Ba cách dọn»: (1) mục
       «Hoạt động trên website» khi không tải được có nói rõ là không tải được và có «Thử lại» không, hay trông như
       một chỗ trống / chưa có gì? (2) toast lưu trữ có «Hoàn tác» và đúng tên bản ghi không? (3) ảnh sau hoàn tác có
       cho thấy bản ghi về trạng thái đang dùng không? (4) ở 390 có chữ hay nút nào bị cắt hoặc tràn ngang không? Nêu

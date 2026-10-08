@@ -169,6 +169,16 @@ async function moWebLoi(chu, rong, nguoi, ten) {
 	dich.searchParams.set("tab", "overview");
 	await t.goto(dich.toString(), { waitUntil: "load" });
 	await choChu(t, VI.web.loiTieuDe, "khung loi hoat dong web");
+	await t.evaluate(() => {
+		for (const e of document.querySelectorAll(
+			"nextjs-portal, [data-nextjs-toast]",
+		))
+			e.remove();
+		document
+			.querySelector("[data-vung-tai-loi]")
+			?.scrollIntoView({ block: "center" });
+	});
+	await new Promise((r) => setTimeout(r, 500));
 	const m = await docMan(t);
 	await chupNgan(t, ten);
 	await t.close();
@@ -228,7 +238,18 @@ try {
 				await choChu(t, VI.sheet.archived(ten), `toast luu tru ${loai}`);
 				const daLuu = await d.hoi(chu.cookie, `${THU_TUC[loai]}.byId`, { id });
 				if (daLuu.archivedAt == null) loi.push(`${loai}: chua luu tru`);
-				if (loai === "contact") await chupNgan(t, "kts-toast-luu-tru-1440.png");
+				if (loai === "contact") {
+					await chupNgan(t, "kts-toast-luu-tru-1440.png");
+					await moMenu(t);
+					await choChu(
+						t,
+						VI.sheet.restore(DANH_TU.contact),
+						"muc Khoi phuc khi da luu tru",
+					);
+					await chupNgan(t, "kts-da-luu-tru-1440.png");
+					await t.keyboard.press("Escape");
+					await new Promise((r) => setTimeout(r, 400));
+				}
 				if (!CHIEU_DO) await bamChu(t, "button", VI.sheet.hoanTac);
 				await new Promise((r) => setTimeout(r, 1500));
 				const sau = await d.hoi(chu.cookie, `${THU_TUC[loai]}.byId`, { id });
@@ -284,6 +305,7 @@ try {
 	for (const ten of [
 		"kts-web-loi-1440.png",
 		"kts-toast-luu-tru-1440.png",
+		"kts-da-luu-tru-1440.png",
 		"kts-sau-hoan-tac-1440.png",
 		"kts-web-loi-390.png",
 		"kts-toast-luu-tru-390.png",
