@@ -12,6 +12,8 @@ export function TrangLoTrinhMau({ state }: { state: string }) {
 				homNay={state === STATE.tre ? NGAY_TRE : NGAY_MAU}
 				key={state}
 				nhomBanDau={state === STATE.loc ? "okr" : undefined}
+				xemBanDau={state === STATE.bangCot ? "bang-cot" : undefined}
+				chonBanDau={state === STATE.chiTiet ? "LT2" : undefined}
 			/>
 		</LocaleProvider>
 	);

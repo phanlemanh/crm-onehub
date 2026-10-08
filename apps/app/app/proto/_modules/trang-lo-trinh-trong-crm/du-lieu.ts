@@ -70,6 +70,8 @@ export const STATE = {
 	tepVang: "ST-lotrinh-tep-vang",
 	loLoi: "ST-lotrinh-lo-loi",
 	khuonMoi: "ST-lotrinh-khuon-moi",
+	bangCot: "ST-lotrinh-bang-cot",
+	chiTiet: "ST-lotrinh-chi-tiet",
 } as const;
 
 export const NGAY_MAU = "2026-10-09";

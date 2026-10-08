@@ -17,6 +17,8 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-lotrinh-day-du", nhan: "Đầy đủ — lộ trình OKR, mọi nhóm" },
 			{ id: "ST-lotrinh-loc", nhan: "Lọc theo nhóm okr" },
 			{ id: "ST-lotrinh-tre", nhan: "Hôm nay 20/12 — có việc đã qua mốc" },
+			{ id: "ST-lotrinh-bang-cot", nhan: "Xem dạng bảng cột theo trạng thái" },
+			{ id: "ST-lotrinh-chi-tiet", nhan: "Mở chi tiết một việc (LT2)" },
 			{ id: "ST-lotrinh-dang-tai", nhan: "Đang tải" },
 			{
 				id: "ST-lotrinh-chua-co-khoi",

@@ -9,11 +9,11 @@ reaction: nac-1 (anh-gui-kem-the-cong)
 options:
 divergence: skipped — danh sách một cột chọn theo tra mẫu Mobbin, kanban loại vì 44/64 việc OKR đã giao (sổ quyết định, dòng approach thứ hai)
 ds_skill: web-design-guidelines
-states: [ST-lotrinh-day-du, ST-lotrinh-loc, ST-lotrinh-tre, ST-lotrinh-dang-tai, ST-lotrinh-chua-co-khoi, ST-lotrinh-khoi-hong, ST-lotrinh-tep-vang, ST-lotrinh-lo-loi, ST-lotrinh-khuon-moi]
+states: [ST-lotrinh-day-du, ST-lotrinh-loc, ST-lotrinh-tre, ST-lotrinh-dang-tai, ST-lotrinh-chua-co-khoi, ST-lotrinh-khoi-hong, ST-lotrinh-tep-vang, ST-lotrinh-lo-loi, ST-lotrinh-khuon-moi, ST-lotrinh-bang-cot, ST-lotrinh-chi-tiet]
 breakpoints: [mobile-375, desktop-1280]
 themes: [light, dark]
 patched: 10
-deferred: 1
+deferred: 3
 ---
 # design-pass — trang-lo-trinh-trong-crm
 
@@ -68,3 +68,5 @@ không cài vào crm. Các trạng thái lỗi dùng đúng câu của hàm `doc
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)
 
 - Nhóm hiện bằng mã trần của tệp kế hoạch (`okr`, `tro-ly`, `crm-chung`, `ve-sinh`) — «crm-chung», «ve-sinh» khó hiểu với trưởng phòng ban; khối dữ liệu không chở tên hiển thị của nhóm. Đề xuất đã mở sang kho kit; tới lúc đó trang hiện mã trần.
+- Rà mở rộng 09/10 — chế độ bảng cột (dùng `Board` chỉ đọc của Thoả thuận) và ngăn chi tiết một việc dựng được bằng thành phần sẵn có; CHƯA nằm trong hợp đồng (AC-9 hiện chỉ cho chọn thẻ, lọc, mở mục gập) — chờ chủ kho quyết mở rộng phạm vi.
+- Chữ trong tệp kế hoạch viết cho đội sản phẩm lộ ra trước trưởng phòng ban: chữ trạng thái «Sắp mở vòng», «Đã giao — chờ phiên nghiệm thu»; «bật khi» mang «(ngưỡng đề xuất — chốt ở Cổng Đáng)». Bản mẫu đặt nhãn nhóm trạng thái dễ hiểu làm chữ chính, chữ của khối làm dòng phụ; gốc phải sửa ở cách viết kế hoạch hoặc kit thêm một câu cho người xem.
