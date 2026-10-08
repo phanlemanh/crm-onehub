@@ -1,0 +1,135 @@
+feature_slug: dong-thoi-gian-giu-khi-loi
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtg_xem_cu
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/dong-thoi-gian-giu-khi-loi.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; Timeline that, tRPC gia (khung-gop-y.tsx). activities.timeline tra trang dau 3 muc (nextCursor "c1"),
+      trang co cursor "c1" nem loi "boom-trang-ke". Bam «Xem cũ hơn» -> cho thong bao [data-dtg-loi=xem-cu] hien:
+      chu cua crmMessages("vi").timeline.xemCuLoi, co nut «Thử lại» (karaKhung.thuLai) ben trong, role="alert";
+      so dong [data-slot=timeline] > li truoc va sau bang nhau (3 === 3) va danh sach id cua dong (chuoi) bang nhau theo
+      thu tu; khong [data-vung-tai-loi]; khong chu rong cua tab; textContent khong chua "boom-trang-ke"; nut «Xem cũ hơn»
+      khong con (thong bao thay cho). Chi so gia tri nguyen thuy (luat 35).
+      CHIEU DO ghim: ban sao timeline.tsx giu nhanh isError cu -> do "dtg: xem cu loi thay ca danh sach".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtg_thu_lai
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "apps/app/test/dong-thoi-gian-giu-khi-loi.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; nhu E1 den luc thong bao hien. Ma tran viet truoc 2 o: (a) thu lai loi lan nua: bam «Thử lại» trong thong
+      bao -> goiCua("activities.timeline") (loc khong upcoming) tang dung 1, lan goi moi co dauVao.cursor === "c1",
+      khong lan goi moi nao thieu cursor (trang dau khong goi lai); thong bao van hien, 3 dong van nguyen; (b) thu lai
+      thanh cong: trang "c1" tra 2 muc nextCursor null -> bam «Thử lại» -> 5 dong theo thu tu id (3 cu roi 2 moi), thong
+      bao bien mat, khong nut «Xem cũ hơn» (het trang); dem lan goi khong cursor sau trang dau = 0; (c) thu lai thanh
+      cong con trang: trang "c1" tra 2 muc nextCursor "c2" -> 5 dong, thong bao bien mat, CO nut «Xem cũ hơn» (doi chung
+      duong cho o (b)); bam no -> lan goi moi co dauVao.cursor === "c2"; (d) dang tai: trang "c1" treo tren promise chua
+      giai -> nut «Thử lại» co disabled === true, bam them -> so lan goi tang dung 1 (khong goi chong).
+      CHIEU DO ghim: ban sao timeline.tsx cho «Thử lại» goi refetch() -> do "dtg: thu lai tai lai trang dau"; ban sao an
+      nut «Xem cũ hơn» sau loi -> do "dtg: xem cu khong quay lai".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtg_lam_moi
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/dong-thoi-gian-giu-khi-loi.dom.tsx"
+    expected: |
+      exit 0; Timeline that trong cung QueryClient voi mot con nho goi queryClient.invalidateQueries() (bai tu dung,
+      khong sua bo dung chung). Trang dau 3 muc tai xong; dat lan doc sau nem "boom-lam-moi"; invalidate -> cho thong bao
+      [data-dtg-loi=lam-moi] (chu timeline.lamMoiLoi, nut «Thử lại», role="alert"); 3 dong van nguyen theo id; khong
+      [data-vung-tai-loi]; khong "boom-lam-moi". Sua lan doc tra 4 muc -> bam «Thử lại» -> goi tang >= 1, thong bao
+      bien mat, 4 dong. O thu hai (rong): trang dau 0 muc (chu rong cua tab hien) -> lan doc sau nem -> invalidate -> chu
+      rong van hien CUNG thong bao [data-dtg-loi=lam-moi]; doi chung duong: rong khong loi thi khong co [data-dtg-loi].
+      CHIEU DO ghim: ban sao timeline.tsx giu nhanh isError cu -> do "dtg: lam moi loi thay ca danh sach"; ban sao nhanh
+      rong khong gan thong bao -> do "dtg: lam moi loi tren rong im lang".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kts_dong_thoi_gian
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "apps/app/test/kara-trang-thai-vung.dom.tsx"
+    expected: |
+      exit 0; chinh bai dong-thoi-gian cua kara-trang-thai-toan-crm (E1 cua ho so do), chay lai khong sua. Bon o (ten dung
+      nhu bai day vao o[]): "loi" — tai dau loi -> [data-vung-tai-loi] «Không tải được hoạt động», khong chu rong;
+      "loi-sang-rong" — bam «Thử lại» (refetch khi CHUA co trang nao) -> goi tang dung 1, het khung, chu rong hien;
+      "rong" — rong that, khong khung loi; "en" — tai dau loi o LocaleProvider en. Ca bon o deu o nhanh chua co du lieu
+      (isError && !data) hoac thanh cong — khong o nao phu thuoc nhanh loi-khi-co-du-lieu ma K6c doi.
+      expect(o.length).toBe(4). K6c khong duoc lam bai nay do.
+      CHIEU DO (da ghim o ho so goc): ban sao timeline.tsx bo nhanh loi tai dau -> do "dong-thoi-gian: loi hien nhu rong".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtg_en
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/dong-thoi-gian-giu-khi-loi.dom.tsx"
+    expected: |
+      exit 0; nhu E1 va E3 trong <LocaleProvider locale="en">: thong bao xem-cu chua crmMessages("en").timeline.xemCuLoi,
+      thong bao lam-moi chua timeline.lamMoiLoi ban en; khong ky tu tieng Viet co dau trong ca hai thong bao. Cap khoa
+      en/vi moi cung co trong apps/app/test/messages-guard.spec.ts (bun run test).
+      CHIEU DO ghim: ban sao crm.ts de ban en bang chu Viet -> do "dtg: thong bao en con chu Viet".
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dtg_man
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "apps/app/lib/messages/crm.ts"
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/rang/man.mjs"
+    expected: |
+      exit 0 va "dong-thoi-gian-giu-khi-loi man: dat"; buoc 1 (1440) ca nhan gieo 35 hoat dong, tab Hoat dong hien 30
+      dong; chan lot «Xem cũ hơn» bang doi dau vao lo tRPC co cursor sang limit 1000 (may chu tra BAD_REQUEST that) ->
+      thong bao «Không tải được hoạt động cũ hơn.» + «Thử lại» hien o cuoi, so dong van 30, khong khung «Không tải được
+      hoạt động»; bo chan, bam «Thử lại» -> 35 dong; buoc 2 (390) lap buoc 1 den luc thong bao hien, scrollWidth <=
+      clientWidth cua trang va ngan, nut «Thử lại» trong khung nhin. Anh trong evidence_required ton tai sau luot; ho so
+      da signed-off/machine-cleared thi anh chi o .acceptance-runs/, khong chep vao ho so.
+      CHIEU DO ghim: --chieu-do khong chan lot xem cu -> do "man: khong thay thong bao xem cu loi".
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
+      - "Buoc 1 (1440): ngan ca nhan, tab Hoat dong, cuon toi cuoi, chan lot xem cu, bam «Xem cũ hơn» -> dtg-xem-cu-loi-1440.png; dem dong truoc/sau; bo chan, bam «Thử lại» -> dtg-sau-thu-lai-1440.png"
+      - "Buoc 2 (390): lap buoc 1 den luc thong bao hien -> dtg-xem-cu-loi-390.png; do tran ngang"
+    evidence_required:
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-xem-cu-loi-1440.png"
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-sau-thu-lai-1440.png"
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-xem-cu-loi-390.png"
+
+  - id: E7
+    criterion: AC-6
+    executor: judgment
+    layer: ui-observed
+    inputs:
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-xem-cu-loi-1440.png"
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-sau-thu-lai-1440.png"
+      - "_acceptance/dong-thoi-gian-giu-khi-loi/evidence/dtg-xem-cu-loi-390.png"
+      - "docs/ai-ux.md"
+    question: |
+      Ghi chú cho người chấm: ảnh chụp tab Hoạt động của một cá nhân có 35 hoạt động; trang đầu tải 30, lượt «Xem cũ hơn»
+      bị chặn có chủ đích để gây lỗi tải trang kế; ảnh thứ hai chụp sau khi bỏ chặn và bấm «Thử lại».
+      Nhìn ba ảnh và đối chiếu docs/ai-ux.md mục 7 (một nút «Thử lại» duy nhất, không lỗi thô): (1) ở ảnh lỗi, danh sách
+      hoạt động có còn hiện không, hay bị thay bằng một khung lỗi hay chỗ trống? (2) thông báo ở cuối có nói rõ là không
+      tải được phần cũ hơn và có «Thử lại» không? (3) ảnh sau thử lại có cho thấy hoạt động cũ hơn đã nối vào và thông
+      báo đã hết không? (4) ở 390 có chữ hay nút nào bị cắt hoặc tràn ngang không? Nêu từng điểm kèm ảnh.
