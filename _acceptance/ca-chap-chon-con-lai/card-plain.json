@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Ba bài thử hay đỏ rồi chạy lại xanh trên CI sẽ chạy tất định: hai bài đối chứng của hàng đợi việc nền không còn phụ thuộc lúc Postgres tự cập nhật thống kê, và bài soát số của gói soạn OKR không còn phụ thuộc giờ đồng hồ.",
+  "will_do": [
+    { "id": "AC-1", "p": "Sẽ tắt việc Postgres tự cập nhật thống kê cho bảng hàng đợi trong đúng lúc nhóm bài đó chạy, rồi trả lại đúng như cũ — kể cả khi lần trước bài bị giết để lại cờ tắt." },
+    { "id": "AC-2", "p": "Sẽ giữ nguyên hai bài đối chứng (vẫn đòi đủ 3 hàng); nếu kế hoạch truy vấn vẫn đổi thì lỗi nói thẳng «kế hoạch đổi» kèm đủ số thống kê để biết vì sao, thay vì «3 thành 2»." },
+    { "id": "AC-4", "p": "Sẽ cho hàm sinh tên thử của bộ gieo OKR chỉ dùng chữ cái, vẫn duy nhất khi gọi 10 000 lần trong cùng một mili-giây." },
+    { "id": "AC-6", "p": "Sẽ chỉ chạm hai tệp bài thử, tệp bộ gieo và hồ sơ — cộng tệp mã gói soạn nếu anh giữ AC-7." }
+  ],
+  "wont_do": [
+    { "id": "AC-3", "p": "Sẽ KHÔNG đổi một dòng phép kiểm nào của hai bài thật (giữ đúng giới hạn khi lấy việc và khi bỏ việc hết lượt)." },
+    { "id": "AC-5", "p": "Sẽ KHÔNG đổi phép kiểm của bài soát số: nó phải xanh cả khi đồng hồ đặt đúng mốc từng làm nó đỏ." },
+    { "id": "AC-7", "p": "(Anh quyết giữ hay bỏ) Sẽ KHÔNG để chữ số nằm trong id của bản ghi bị tính là «số đã có trong gói» — phép soát «số mới» của Soạn OKR không bị một id tình cờ đánh lừa." },
+    { "id": "OOS-1", "p": "Không xử ca chập chờn của hộp chèn liên kết — đã là hàng F14 của P4." },
+    { "id": "OOS-2", "p": "Không đổi câu truy vấn lấy việc và bỏ việc — chúng đã đúng, chỉ bài đối chứng chập chờn." }
+  ],
+  "gap_probe_plain": [
+    { "i": 0, "p": "Gói soạn còn một nguồn chữ số thứ hai: id của bản ghi trong gói không được loại trước khi trích số, nên bài soát số có thể còn đỏ sau khi đã sửa tên thử. Máy đề xuất AC-7 sửa luôn ở mã gói soạn — anh quyết giữ hay bỏ." },
+    { "i": 1, "p": "Kiểm kế hoạch truy vấn TRƯỚC khi chạy để lọt một lần cập nhật thống kê rơi vào giữa; đã đổi sang đọc kế hoạch và thống kê SAU khi chạy, chỉ khi số hàng lệch." },
+    { "i": 2, "p": "Trả lại cờ bằng lệnh «xoá cờ» sẽ sai nếu cờ đã tắt từ trước; đã đổi sang đặt lại đúng giá trị cũ, thêm bài cho ca cờ đã tắt sẵn, và mỗi lượt phá thử chạy trên kho riêng." },
+    { "i": 3, "p": "Kế hoạch có thể đổi cả khi không ai cập nhật thống kê (bảng nở thêm trang); lỗi nay in thêm số trang và số hàng chết để phân biệt hai nguyên nhân." },
+    { "i": 4, "p": "Luật «chỉ một dòng đổi» ở tệp bộ gieo quá chặt; đã nới thành chỉ chặn đổi ngoài hàm sinh tên." }
+  ]
+}
