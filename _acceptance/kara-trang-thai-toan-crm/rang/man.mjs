@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,6 +16,8 @@ if (!process.env.PHIEN_DO || !process.env.API_URL) {
 
 process.env.BANG_CHUNG ??= join(GOC, ".acceptance-runs", HO_SO, "evidence");
 const NOI_GIU = join(GOC, "_acceptance", HO_SO, "evidence");
+const HOP_DONG = join(GOC, "_acceptance", HO_SO, "contract.md");
+const DA_THONG_CONG = new Set(["signed-off", "machine-cleared"]);
 
 const { chay, HEP, MA, moDo, RONG } = await import(
 	"../../kho-tai-lieu/rang/man-lib.mjs"
@@ -301,15 +303,24 @@ try {
 			d.dat(3, loi.length === 0, loi.join(" · "));
 		});
 
-	mkdirSync(NOI_GIU, { recursive: true });
-	for (const ten of [
-		"kts-web-loi-1440.png",
-		"kts-toast-luu-tru-1440.png",
-		"kts-da-luu-tru-1440.png",
-		"kts-sau-hoan-tac-1440.png",
-		"kts-web-loi-390.png",
-		"kts-toast-luu-tru-390.png",
-	]) {
+	const trangThai =
+		/^status:\s*(\S+)/m.exec(readFileSync(HOP_DONG, "utf8"))?.[1] ?? "";
+	const daThongCong = DA_THONG_CONG.has(trangThai);
+	if (daThongCong)
+		console.log(
+			`  ho so ${trangThai}: khong chep anh sang _acceptance/${HO_SO}/evidence/ — anh o ${process.env.BANG_CHUNG}`,
+		);
+	if (!daThongCong) mkdirSync(NOI_GIU, { recursive: true });
+	for (const ten of daThongCong
+		? []
+		: [
+				"kts-web-loi-1440.png",
+				"kts-toast-luu-tru-1440.png",
+				"kts-da-luu-tru-1440.png",
+				"kts-sau-hoan-tac-1440.png",
+				"kts-web-loi-390.png",
+				"kts-toast-luu-tru-390.png",
+			]) {
 		const nguon = join(process.env.BANG_CHUNG, ten);
 		if (existsSync(nguon) && !CHIEU_DO) copyFileSync(nguon, join(NOI_GIU, ten));
 	}
