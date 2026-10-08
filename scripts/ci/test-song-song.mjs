@@ -12,8 +12,21 @@ function docJson(duong) {
 	return JSON.parse(readFileSync(duong, "utf8"));
 }
 
-export function goiCoTest(goc) {
+function goiTrongWorkspace(goc) {
 	const goiGoc = docJson(join(goc, "package.json"));
+	const ra = [];
+	for (const mau of goiGoc.workspaces ?? []) {
+		const thuMuc = join(goc, mau.replace(/\/\*$/, ""));
+		if (!existsSync(thuMuc)) continue;
+		for (const ten of readdirSync(thuMuc)) {
+			const tep = join(thuMuc, ten, "package.json");
+			if (existsSync(tep)) ra.push(docJson(tep));
+		}
+	}
+	return ra;
+}
+
+export function goiCoTest(goc) {
 	const mienTru = new Set(
 		Object.keys(
 			(docJson(join(goc, CHAY_TEST.gateShape)).checkers ?? []).find(
@@ -21,15 +34,24 @@ export function goiCoTest(goc) {
 			)?.exempt ?? {},
 		),
 	);
+	return goiTrongWorkspace(goc)
+		.filter((goi) => goi.scripts?.test && !mienTru.has(goi.name))
+		.map((goi) => goi.name)
+		.sort();
+}
+
+export function lenhThieuTran(goc, tranMs) {
+	const { khoaScript, boQua, lenhChay } = CHAY_TEST.tranMoiCa;
+	const coTran = new RegExp(`(^|\\s)--timeout[ =]${tranMs}(\\s|$)`);
 	const ra = [];
-	for (const mau of goiGoc.workspaces ?? []) {
-		const thuMuc = join(goc, mau.replace(/\/\*$/, ""));
-		if (!existsSync(thuMuc)) continue;
-		for (const ten of readdirSync(thuMuc)) {
-			const tep = join(thuMuc, ten, "package.json");
-			if (!existsSync(tep)) continue;
-			const goi = docJson(tep);
-			if (goi.scripts?.test && !mienTru.has(goi.name)) ra.push(goi.name);
+	for (const goi of goiTrongWorkspace(goc)) {
+		for (const [khoa, lenh] of Object.entries(goi.scripts ?? {})) {
+			if (!khoaScript.test(khoa) || boQua.test(lenh)) continue;
+			for (const doan of lenh.split("&&").map((d) => d.trim())) {
+				if (lenhChay.test(doan) && !coTran.test(doan)) {
+					ra.push(`${goi.name}: ${khoa} — ${doan}`);
+				}
+			}
 		}
 	}
 	return ra.sort();

@@ -13,7 +13,7 @@
 	},
 	"scripts": {
 		"check-types": "tsc --noEmit",
-		"test": "bun test --preload ./test/setup-dom.ts && bun ./test/chay-tung-tep-dom.ts --preload ./test/setup-dom.ts",
+		"test": "bun test --timeout 15000 --preload ./test/setup-dom.ts && bun ./test/chay-tung-tep-dom.ts --timeout 15000 --preload ./test/setup-dom.ts",
 		"rang:chat": "bun test --preload ./test/setup-dom.ts test/rang-chat.spec.ts",
 		"ui:add": "bun --env-file=../../.env run shadcn add",
 		"lint": "biome check .",

@@ -12,7 +12,7 @@
 	"scripts": {
 		"check-types": "tsc --noEmit",
 		"lint": "biome check .",
-		"test": "bun test",
+		"test": "bun test --timeout 15000",
 		"clean": "rm -rf .turbo node_modules"
 	},
 	"dependencies": {

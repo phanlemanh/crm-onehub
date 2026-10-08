@@ -11,8 +11,14 @@ import {
 import os from "node:os";
 import { join, resolve } from "node:path";
 import { after, describe, test } from "node:test";
-import { NHOM_TEST } from "./cau-hinh.mjs";
-import { chuyenDoiSo, dungNhom, goiCoTest, ketQua } from "./test-song-song.mjs";
+import { CHAY_TEST, NHOM_TEST } from "./cau-hinh.mjs";
+import {
+	chuyenDoiSo,
+	dungNhom,
+	goiCoTest,
+	ketQua,
+	lenhThieuTran,
+} from "./test-song-song.mjs";
 
 const GOC = resolve(import.meta.dirname, "..", "..");
 const CLI = join(GOC, "scripts", "ci", "test-song-song.mjs");
@@ -151,6 +157,31 @@ describe("ctd-ham", () => {
 			'cd a && bun test "x y"',
 		]);
 		assert.equal(chuyenDoiSo([], "/t.ts"), null);
+	});
+
+	test("(f) workspace that: moi lenh bun test cua moi goi mang tran moi ca", () => {
+		assert.deepEqual(lenhThieuTran(GOC, CHAY_TEST.tranMoiCaMs), []);
+	});
+
+	test("(g) thieu tran hay sai tran -> goi ten goi, script va lenh", () => {
+		const goc = workspaceGia([]);
+		const tran = CHAY_TEST.tranMoiCaMs;
+		writeFileSync(
+			join(goc, "pk", "app", "package.json"),
+			JSON.stringify({
+				name: "app",
+				scripts: {
+					test: `bun test --timeout ${tran} && bun run test:dom`,
+					"test:dom": "bun x/chay-tung-tep-dom.ts --timeout 5000",
+					"test:watch": "bun test --watch",
+				},
+			}),
+		);
+		const thieu = lenhThieuTran(goc, tran);
+		assert.ok(thieu.includes("app: test:dom — bun x/chay-tung-tep-dom.ts --timeout 5000"));
+		assert.ok(thieu.includes("api: test — bun test"));
+		assert.ok(!thieu.some((d) => d.startsWith("app: test —")));
+		assert.ok(!thieu.some((d) => d.includes("test:watch")));
 	});
 });
 

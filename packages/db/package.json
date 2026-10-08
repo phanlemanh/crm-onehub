@@ -77,7 +77,7 @@
 		"db:studio": "prisma studio",
 		"db:test": "bun scripts/test-db.ts",
 		"db:do": "bun scripts/measure-db.ts",
-		"test": "bun test",
+		"test": "bun test --timeout 15000",
 		"dev:prepare": "bun scripts/prepare-dev.ts",
 		"lint": "biome check .",
 		"postinstall": "prisma generate",

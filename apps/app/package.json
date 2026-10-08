@@ -8,8 +8,8 @@
 		"start": "next start",
 		"typegen": "next typegen",
 		"check-types": "tsc --noEmit",
-		"test": "bun test && bun run test:dom",
-		"test:dom": "TZ=Asia/Ho_Chi_Minh bun ../../packages/ui/test/chay-tung-tep-dom.ts --preload ../../packages/ui/test/setup-dom.ts",
+		"test": "bun test --timeout 15000 && bun run test:dom",
+		"test:dom": "TZ=Asia/Ho_Chi_Minh bun ../../packages/ui/test/chay-tung-tep-dom.ts --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts",
 		"lint": "biome check ."
 	},
 	"dependencies": {
