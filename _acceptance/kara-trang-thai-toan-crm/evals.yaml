@@ -14,7 +14,8 @@ evals:
       "boom-timeline" -> [data-vung-tai-loi] co chu "Không tải được hoạt động", co nut "Thử lại", textContent khong
       chua "boom-timeline" va khong chua chu rong cua tab (lay tu crmMessages("vi") — vd "Chưa có hoạt động");
       bam "Thử lại" -> goiCua("activities.timeline") tang dung 1; (b) timeline tra trang rong -> chu rong cu hien,
-      khong [data-vung-tai-loi]. expect(o.length).toBe(2).
+      khong [data-vung-tai-loi]; (c) nhu (a) voi LocaleProvider "en" -> chu cua crmMessages("en")/ui "en", khong ky tu
+      tieng Viet co dau trong [data-vung-tai-loi]. expect(o.length).toBe(3).
       CHIEU DO ghim: ban sao timeline.tsx bo nhanh isError -> do "dong-thoi-gian: loi hien nhu rong".
 
   - id: E2
@@ -27,11 +28,12 @@ evals:
       - "packages/ui/src/components/vung-tai-loi.tsx"
       - "apps/app/test/kara-trang-thai-vung.dom.tsx"
     expected: |
-      exit 0; WebsiteActivity that cho contactId va cho companyId. Ma tran viet truoc 2 dau vao x 4 trang thai
-      (cho, loi, chua-nhan-dien, co du lieu) = 8 o, expect(o.length).toBe(8): cho -> section co tieu de
+      exit 0; WebsiteActivity that cho contactId va cho companyId. Ma tran viet truoc 2 dau vao x 5 trang thai
+      (cho, loi, chua-nhan-dien, rong that, co du lieu) = 10 o, expect(o.length).toBe(10): cho -> section co tieu de
       "Hoạt động trên website" + chu sr-only "Đang tải"; loi -> "Không tải được hoạt động trên website" + "Thử lại",
       bam -> goi lai dung thu tuc (tracking.contactActivity hoac tracking.companyActivity) dung 1 lan, khong chu loi
-      tho; chua-nhan-dien (identified=false) -> khong co section; co du lieu -> "Lượt xem trang".
+      tho; chua-nhan-dien (identified=false) -> khong co section; rong that (identified=true, pages=[], firstTouch=null)
+      -> khong co section; co du lieu -> "Lượt xem trang".
       CHIEU DO ghim: ban sao tra lai `return null` khi loi -> do "web: loi lam mat muc".
 
   - id: E3
@@ -78,7 +80,8 @@ evals:
     expected: |
       exit 0; RecordActions that + Toaster that. Ma tran 3 loai (contact, company, deal): mo menu, chon "Lưu trữ …"
       -> <loai>.archive goi 1 lan voi id; toast "Đã lưu trữ <tên>." co nut "Hoàn tác"; bam Hoan tac HAI lan ->
-      <loai>.restore goi dung 1 lan voi {id}; toast "Đã khôi phục <tên>." hien. expect(o.length).toBe(3).
+      <loai>.restore goi dung 1 lan voi {id}; toast "Đã khôi phục <tên>." hien; them 1 o contact voi LocaleProvider "en":
+      toast "<name> was archived." co nut "Undo". expect(o.length).toBe(4).
       CHIEU DO ghim: ban sao record-actions goi toast cu khong action -> do "luu-tru: toast khong co Hoan tac".
 
   - id: E6
@@ -128,8 +131,10 @@ evals:
       {stored:false, reason:"Evidence rejected."}, write_brief {written:false, reason:"Nothing new."}, record_fact
       {stored:true}, mot cong cu output-error -> data-trang-thai lan luot "chua-luu","chua-luu","xong","loi";
       chu doc man cua hai buoc dau "chưa lưu được"; textContent khong chua "Evidence rejected." va khong chua
-      "Nothing new." (giao dien vi). O rieng khong co buoc loi: tieu de khoi buoc la "Kara chưa lưu được: <nhãn bước>".
-      expect(o.length).toBe(5). CHIEU DO ghim: ban sao agent-panel bo nhanh tone warning -> do
+      "Nothing new." (giao dien vi); cham [data-slot=indicator-dot] cua hai buoc chua-luu co data-tone="warning", buoc
+      xong co data-tone="success" (doi chung duong cung luot). O rieng khong co buoc loi: tieu de khoi buoc la
+      "Kara chưa lưu được: <nhãn bước>". O tieng Anh: textContent chua "Evidence rejected." (tab en giu ly do).
+      expect(o.length).toBe(7). CHIEU DO ghim: ban sao agent-panel bo nhanh tone warning -> do
       "buoc-chua-luu: buoc khong luu hien xong".
 
   - id: E9
@@ -147,10 +152,12 @@ evals:
       - "_acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
     expected: |
       exit 0; rang chu.mjs (TypeScript compiler API, danh sach tep viet truoc, so tep khai truoc = so tep doc duoc,
-      lech -> ma 2 "khong do duoc"). Phan AC-8: 3 tep create-*-sheet x 0 chuoi ket thuc "added." viet cung; ham
+      lech -> ma 2 "khong do duoc"). Phan AC-8: moi tep apps/app/**/*.tsx lay bang `git ls-files` (so tep chup truoc =
+      so tep doc duoc) x 0 chuoi/template literal ket thuc "added." trong tep giao dien; ham
       chu "da them" cua contacts/companies/deals goi voi ten "Hà" tra dung "Đã thêm Hà." (vi) va "Hà added." (en) —
       goi ham that bang import, khong doc chu nguon. In tung dong + "KET LUAN: n cho sai — ma thoat x".
-      CHIEU DO ghim: ban sao tra lai `${deal.name} added.` -> do "chu: create-deal-sheet con added viet cung".
+      CHIEU DO ghim: ban sao tra lai `${deal.name} added.` -> do "chu: create-deal-sheet con added viet cung"; ban sao
+      them `${x} added.` vao mot tep tsx khac -> do goi ten tep do.
 
   - id: E10
     criterion: AC-9
@@ -162,9 +169,9 @@ evals:
       - "apps/app/lib/messages/okr.ts"
       - "_acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
     expected: |
-      exit 0; cung luot chu.mjs. Phan AC-9: duyet MOI gia tri chuoi cua okrGopYMessages("vi") va okrMessages("vi")
-      (import that, di de quy) -> 0 gia tri bang "Sửa Mục tiêu"; va >= 1 gia tri bang "Sửa mục tiêu" o moi tep (doi
-      chung duong). CHIEU DO ghim: ban sao tra lai "Sửa Mục tiêu" -> do "chu: con Sua Muc tieu viet hoa".
+      exit 0; cung luot chu.mjs. Phan AC-9: moi tep apps/app/lib/messages/*.ts va apps/app/**/*.tsx (git ls-files) x
+      moi chuoi/template literal/JSX text -> 0 chuoi CHUA "Sửa Mục tiêu"; va >= 1 chuoi bang "Sửa mục tiêu" trong
+      okr-gop-y.ts va okr.ts (doi chung duong). CHIEU DO ghim: ban sao tra lai "Sửa Mục tiêu" -> do "chu: con Sua Muc tieu viet hoa".
 
   - id: E11
     criterion: AC-10
@@ -191,10 +198,12 @@ evals:
       - "apps/app/components/crm/timeline/timeline.tsx"
       - "_acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
     expected: |
-      exit 0; cung luot chu.mjs. Phan vung con: trong 3 tep viet truoc, moi `return null` duoc phan loai bang
-      compiler API theo dieu kien dung ngay truoc no; dieu kien doc `isPending`, `isLoading`, `isError`, `error` hay
-      `!query.data`/`!activity` khi chua co du lieu -> la cho sai. Ma tran 3 tep, in so return null va so cho sai tung
-      tep. CHIEU DO ghim: ban sao them `if (company.isError) return null;` -> do "chu: website-activity return null khi loi".
+      exit 0; cung luot chu.mjs. Phan vung con: ma tran viet truoc theo tung tep (timeline.tsx, website-activity.tsx,
+      contact-plans.tsx), moi dong la mot `return null` mong doi kem nhan: website-activity "chua-nhan-dien" (dieu kien
+      doc identified) va "rong" (pages rong va khong firstTouch); contact-plans "rong" (data.length === 0); timeline 0
+      dong. Compiler API tim moi `return null` cua 3 tep, doc dieu kien bao no; so tim thay phai bang so da khai va nhan
+      khop tung dong; mot `return null` duoi dieu kien doc isPending/isLoading/isError/error la cho sai. Doi chung duong:
+      ma tran khai dung tren cay xanh ra 0 cho sai. CHIEU DO ghim: ban sao them `if (company.isError) return null;` -> do "chu: website-activity return null khi loi".
 
   - id: E13
     criterion: AC-11

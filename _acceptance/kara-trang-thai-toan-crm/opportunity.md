@@ -54,7 +54,7 @@ trên onehub 1596ad65 ngày 08/10:
 - Kết quả nào là SỐNG: lái thử người lạ gây lỗi tải ở dòng thời gian, hoạt động web, kế hoạch cá nhân và tóm
   tắt tuần, lần nào cũng gặp trạng thái lỗi có «Thử lại»; lưu trữ rồi Hoàn tác đưa bản ghi về đúng chỗ; thước
   máy đếm 0 nhánh `return null` khi tải hay lỗi trong các vùng con của ranh giới và 0 toast «added.» viết cứng;
-  bước Kara không lưu được hiện khác bước đã lưu, kèm lý do.
+  bước Kara không lưu được hiện khác bước đã lưu.
 - Kết quả nào là CHẾT: còn một vùng con của ranh giới nuốt lỗi thành rỗng hay biến mất; hoặc Hoàn tác lưu
   trữ không đưa bản ghi về trạng thái trước.
 - Timebox: 1,5 ngày máy theo lộ trình, mốc 09/11.
