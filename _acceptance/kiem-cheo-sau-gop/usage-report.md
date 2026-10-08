@@ -128,3 +128,45 @@ wall: 909s
 - **claude-sonnet-5-5**: 5 agent · 18 calls · out 18,655 · in 36 · cache_read 1,299,721 · cache_create 511,212
 - **claude-haiku-5-5**: 12 agent · 24 calls · out 16,911 · in 48 · cache_read 1,425,500 · cache_create 729,252
 
+
+### S4 round 4 — wf_c00bbce6-d70 — wf_c00bbce6-d70 (20 agent, 64,465 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:measurement | claude-opus-5-5 | 20 | 15,297 | 40 | 2,476,335 | 193 |
+| synthesize:report | claude-sonnet-5-5 | 4 | 9,904 | 8 | 356,279 | 65 |
+| review:bugs | claude-opus-5-5 | 9 | 6,116 | 18 | 908,790 | 75 |
+| review:conventions | claude-opus-5-5 | 11 | 6,061 | 22 | 1,054,438 | 86 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 3,585 | 4 | 121,685 | 33 |
+| refute:dem.mjs | claude-sonnet-5-5 | 6 | 2,797 | 12 | 510,252 | 74 |
+| triage | claude-sonnet-5-5 | 2 | 2,786 | 4 | 90,986 | 58 |
+| refute:dem.mjs | claude-sonnet-5-5 | 5 | 2,523 | 10 | 380,643 | 72 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,055 | 4 | 121,742 | 75 |
+| machine:node --test "scripts/kiem-cheo/test/*.te | claude-haiku-5-5 | 2 | 1,979 | 4 | 121,712 | 12 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,829 | 4 | 121,703 | 238 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,802 | 4 | 121,687 | 10 |
+| machine:node --test scripts/dieu-phoi/test/lich. | claude-haiku-5-5 | 2 | 1,770 | 4 | 121,710 | 10 |
+| machine:node _acceptance/kiem-cheo-sau-gop/rang/ | claude-haiku-5-5 | 2 | 1,340 | 4 | 121,722 | 33 |
+| machine:node _acceptance/kiem-cheo-sau-gop/rang/ | claude-haiku-5-5 | 2 | 991 | 4 | 121,724 | 8 |
+| machine:node _acceptance/kiem-cheo-sau-gop/rang/ | claude-haiku-5-5 | 2 | 918 | 4 | 121,721 | 19 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 807 | 4 | 86,677 | 229 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 797 | 4 | 121,712 | 239 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 736 | 4 | 121,681 | 8 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 372 | 4 | 85,942 | 8 |
+
+
+wall: 1042s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 12 | 18,609 | 1,425,476 | 832 | 15:22:24 | 15:36:16 |
+| review | 3 | 27,474 | 4,439,563 | 195 | 15:22:24 | 15:25:39 |
+| triage | 1 | 2,786 | 90,986 | 58 | 15:36:16 | 15:37:15 |
+| refute | 2 | 5,320 | 890,895 | 78 | 15:37:15 | 15:38:32 |
+| capture | 1 | 372 | 85,942 | 8 | 15:38:33 | 15:38:41 |
+| synthesize | 1 | 9,904 | 356,279 | 65 | 15:38:41 | 15:39:46 |
+
+- **claude-opus-5-5**: 3 agent · 40 calls · out 27,474 · in 80 · cache_read 4,439,563 · cache_create 326,737
+- **claude-sonnet-5-5**: 5 agent · 19 calls · out 18,382 · in 38 · cache_read 1,424,102 · cache_create 496,943
+- **claude-haiku-5-5**: 12 agent · 24 calls · out 18,609 · in 48 · cache_read 1,425,476 · cache_create 729,127
+
