@@ -2081,6 +2081,13 @@ executors:
     cccl_cong_tac: bun _acceptance/ca-chap-chon-cach-ly/rang/cong-tac.mjs
     cccl_pham_vi: bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs
     cccl_du_ca: bun _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs
+    f19_loc_bat: node _acceptance/sua-paths-e5-soan-okr/rang/loc-paths.mjs --phan bat
+    f19_loc_chon: node _acceptance/sua-paths-e5-soan-okr/rang/loc-paths.mjs --phan chon
+    f19_chi_doi: node _acceptance/sua-paths-e5-soan-okr/rang/chi-doi-paths.mjs
+    f19_ghim: node _acceptance/sua-paths-e5-soan-okr/rang/ghim-mot-lan.mjs
+    f19_pre_merge: node _acceptance/sua-paths-e5-soan-okr/rang/pre-merge.mjs
+    f19_ranh_gioi: node _acceptance/sua-paths-e5-soan-okr/rang/ranh-gioi.mjs
+    f19_luoi_that: node _acceptance/sua-paths-e5-soan-okr/rang/luoi-that.mjs
     mcl_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"'
     mcl_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target packages/ui/src/components/dropdown-menu.tsx --mode static && bun _acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs'
     kcs_pha_thu: node _acceptance/kiem-cheo-sau-gop/rang/pha-thu.mjs
