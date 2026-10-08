@@ -5,9 +5,9 @@ slug: ca-chap-chon-con-lai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-08T23:56:23Z
 design_doc: docs/superpowers/specs/2026-10-08-ca-chap-chon-con-lai-design.md
 ---
 
