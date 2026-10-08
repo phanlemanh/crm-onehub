@@ -5,7 +5,7 @@ slug: chen-lien-ket-khong-lac
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T01:15:59Z
 design_doc: _acceptance/chen-lien-ket-khong-lac/design.md
@@ -52,3 +52,4 @@ Trên sản phẩm, đây là một lỗi console khi người dùng rời trìn
 ## Notes
 
 - Tiền đề cũ của hàng (9/12 lượt CI đỏ) sai; số đo thật nằm trong Context. Cổng Đáng vẫn `build` (luật 16 của đợt).
+- Known limits (Cổng 2, Ngoài-1): khi khối Esc trong tệp test bị đổi ngoài phần cách chờ, `rang/pha-chot.mjs xanh` vẫn đỏ đúng nhưng in «tep test cu bi doi ngoai khoi moi» thay vì nêu khối Esc — câu chẩn đoán trỏ sai chỗ, màu không sai.
