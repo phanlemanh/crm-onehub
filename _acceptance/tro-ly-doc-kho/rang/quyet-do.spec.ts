@@ -14,6 +14,7 @@ import {
 	bamDauVao,
 	CHAM_BO_DO,
 	type ChiSo,
+	chonHoiLai,
 	docBanGhi,
 	docBanGhiHead,
 	doModel,
@@ -23,6 +24,7 @@ import {
 	gop,
 	type KetCucMot,
 	keHoachHoiLai,
+	ketCucZalo,
 	ketLuan,
 	moThuMucLuot,
 	type NhomCau,
@@ -381,12 +383,69 @@ describe("vung-xam", () => {
 		expect(hoi).toEqual([
 			{
 				chiSo: "dungTrang",
+				luot: 1,
 				ids: [
 					...Array.from({ length: 15 }, (_, i) => `c${i}`),
 					...Array.from({ length: 5 }, (_, i) => `s${i}`),
 				],
 			},
 		]);
+	});
+
+	test("dung trang và chuyen quy dinh cùng xám, chồng id: hỏi lại đủ bộ của mỗi lượt", () => {
+		const coTrang = Array.from({ length: 20 }, (_, i) => `c${i}`);
+		const khongCo = Array.from({ length: 6 }, (_, i) => `k${i}`);
+		const khongPhai = Array.from({ length: 10 }, (_, i) => `z${i}`);
+		const mot = [
+			...coTrang.map((id, i) =>
+				cauMot(id, "co-trang", i < 15 ? "dung-trang" : "sai"),
+			),
+			...khongCo.map((id) => cauMot(id, "khong-co", "tu-choi-dung")),
+		];
+		const quyDinh = [...coTrang, ...khongCo];
+		const hai = [
+			...quyDinh.map((id, i) =>
+				cauHai(id, true, i < 23 ? "chuyen" : "khong-chuyen"),
+			),
+			...khongPhai.map((id) => cauHai(id, false, "khong-chuyen")),
+		];
+		const kl = ketLuan(mot, hai, CHAM_BO_DO.nguong);
+		expect(kl.xam).toEqual(["dungTrang", "chuyenQuyDinh"] satisfies ChiSo[]);
+		const chon = chonHoiLai(keHoachHoiLai(kl, mot, hai));
+		if (chon.hai.length !== quyDinh.length)
+			throw new Error(
+				`hoi lai Zalo thieu cau: ${chon.hai.length}/${quyDinh.length}`,
+			);
+		expect(new Set(chon.mot)).toEqual(new Set(coTrang));
+		expect(new Set(chon.hai)).toEqual(new Set(quyDinh));
+	});
+});
+
+const BANG_ZALO = [
+	["da-tra-loi", true, "co-hang"],
+	["da-tra-loi", false, "khong-hang"],
+	["gui-hong", false, "loi"],
+	["tu-choi-vai", false, "loi"],
+	["tu-choi-tran-phut", false, "loi"],
+	["tu-choi-tran-ngay", false, "loi"],
+	["tu-choi-tran-thang", false, "loi"],
+	["dang-ban", false, "loi"],
+	["loi", false, "loi"],
+	["dang-hoi", false, "loi"],
+	[null, false, "loi"],
+] as const satisfies readonly (readonly [string | null, boolean, string])[];
+
+describe("nhan-loi zalo", () => {
+	test("mọi kết cục ZaloHoi khác da-tra-loi là loi, không phải model bỏ sót", () => {
+		let chay = 0;
+		for (const [ketQua, coHang, mong] of BANG_ZALO) {
+			const ra = ketCucZalo(ketQua, coHang);
+			if (ketQua !== "da-tra-loi" && ra !== "loi")
+				throw new Error(`ZaloHoi ${ketQua} bi tinh la loi cua model`);
+			expect(`${ketQua}:${ra}`).toBe(`${ketQua}:${mong}`);
+			chay++;
+		}
+		expect(chay).toBe(11);
 	});
 });
 

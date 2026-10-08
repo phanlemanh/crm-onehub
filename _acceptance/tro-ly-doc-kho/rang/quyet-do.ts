@@ -188,7 +188,7 @@ export function keHoachHoiLai(
 	kl: KetLuan,
 	mot: readonly CauMot[],
 	hai: readonly CauHai[],
-): { chiSo: ChiSo; ids: string[] }[] {
+): HoiLai[] {
 	if (kl.ma === 2) return [];
 	const cua = {
 		dungTrang: mot.filter((c) => c.nhom !== "khong-co").map((c) => c.id),
@@ -196,7 +196,33 @@ export function keHoachHoiLai(
 		chuyenQuyDinh: hai.filter((c) => c.quyDinh).map((c) => c.id),
 		chuyenNham: hai.filter((c) => !c.quyDinh).map((c) => c.id),
 	} satisfies Record<ChiSo, string[]>;
-	return kl.xam.map((chiSo) => ({ chiSo, ids: cua[chiSo] }));
+	return kl.xam.map((chiSo) => ({
+		chiSo,
+		luot: LUOT_CUA[chiSo],
+		ids: cua[chiSo],
+	}));
+}
+
+export type HoiLai = { chiSo: ChiSo; luot: 1 | 2; ids: string[] };
+export type ChonHoiLai = { mot: string[]; hai: string[] };
+
+const LUOT_CUA = {
+	dungTrang: 1,
+	tuChoiDung: 1,
+	chuyenQuyDinh: 2,
+	chuyenNham: 2,
+} as const satisfies Record<ChiSo, 1 | 2>;
+
+export function chonHoiLai(hoiLai: readonly HoiLai[]): ChonHoiLai {
+	const theo = (luot: 1 | 2) => [
+		...new Set(hoiLai.filter((h) => h.luot === luot).flatMap((h) => h.ids)),
+	];
+	return { mot: theo(1), hai: theo(2) };
+}
+
+export function ketCucZalo(ketQua: string | null, coHang: boolean): KetCucHai {
+	if (ketQua !== "da-tra-loi") return "loi";
+	return coHang ? "co-hang" : "khong-hang";
 }
 
 export function gop(l1: Dem, l2: Dem, t: number, chieu: Chieu): KetGop {

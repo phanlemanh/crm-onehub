@@ -16,6 +16,7 @@ import {
 	type CauMot,
 	CHAM_BO_DO,
 	type ChiSo,
+	chonHoiLai,
 	type Dem,
 	docBanGhi,
 	docBanGhiHead,
@@ -27,6 +28,7 @@ import {
 	type KetCucHai,
 	type KetCucMot,
 	keHoachHoiLai,
+	ketCucZalo,
 	ketLuan,
 	type ModelIds,
 	moThuMucLuot,
@@ -445,7 +447,7 @@ async function nhanHai(
 				where: { zaloHoiId: k.zaloHoiId, kenh: "ZALO" },
 			})) > 0
 		: false;
-	const ketCuc: KetCucHai = coHang ? "co-hang" : "khong-hang";
+	const ketCuc = ketCucZalo(k.ketQua, coHang);
 	return {
 		cau: c,
 		ketCuc,
@@ -627,16 +629,13 @@ try {
 	const hoiLai = keHoachHoiLai(c1.kl, c1.mot, c1.hai);
 	const gopCua = new Map<ChiSo, ReturnType<typeof gop>>();
 	if (hoiLai.length > 0) {
-		const ids = new Set(hoiLai.flatMap((h) => h.ids));
-		const theoMot = new Set(
-			hoiLai
-				.filter((h) => h.chiSo === "dungTrang" || h.chiSo === "tuChoiDung")
-				.flatMap((h) => h.ids),
-		);
+		const chon = chonHoiLai(hoiLai);
+		const theoMot = new Set(chon.mot);
+		const theoHai = new Set(chon.hai);
 		const l2 = await chayLuot(
 			"hoi-lai",
 			cauMot.filter((c) => theoMot.has(c.id)),
-			bo.cau.filter((c) => ids.has(c.id) && !theoMot.has(c.id)),
+			bo.cau.filter((c) => theoHai.has(c.id)),
 		);
 		const c2 = chamTungCau(l2.tungCau);
 		if (c2.kl.ma === 2) {
