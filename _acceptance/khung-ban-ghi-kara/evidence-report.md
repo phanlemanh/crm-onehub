@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: beac40ab8472f735a5e7ecc79a03ae01ea1d37cf
+verified_commit: 9315f0aec7b0fb77cd2a3b43d91f869ca2946a1d
 human_signoff: Phan Le Manh 2026-10-08 — ký Cổng Bằng chứng trên vòng chấm 2 (17/17 eval đạt, 7/7 lệnh suite xanh, hội đồng E17 đạt, 0 phát hiện trong hợp đồng; vòng này không đo đường nền). Mười hai mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 6–10 ghi Known limits; Ngoài-4, 5 mở hợp đồng mới; Ngoài-3, 11, 12 chấp nhận không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -278,3 +278,7 @@ Round 2: 16 eval máy xanh, 7 lệnh suite xanh, E17 đề xuất PASS tại com
 ### Re-pin lần 1 — 2026-10-08, do gộp onehub sau chữ ký Cổng 2 của khung-ban-ghi-kara; eval của the-gop-y-okr, logo-onehub, nen-kara bị thay hay sửa ở vòng này
 run_id: repin-20261008T004656Z-80562
 sha: beac40ab8472f735a5e7ecc79a03ae01ea1d37cf · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E16, E17 (E17 không khai paths) · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-08, do gộp onehub sau #303 (datatable-loc-ro)
+run_id: repin-20261008T011613Z-35007
+sha: 9315f0aec7b0fb77cd2a3b43d91f869ca2946a1d · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E16, E17 (E17 không khai paths) · AC không có chốt máy: AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
