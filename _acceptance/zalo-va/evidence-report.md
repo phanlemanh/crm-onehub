@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0971326f082085b10597f13003cfa48437922f66
+verified_commit: d606e250c7c36a783d93d9114051654c5e576dec
 human_signoff: Phan Le Manh 2026-10-05 — ký Cổng 2 trên verdict PASS 9/9 eval (S4 round 1, wf_4081063d-f20). Ngoài-1, 2, 3 ghi Known limits; Ngoài-4 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -185,3 +185,7 @@ sha: 753faa20cd70440628fbbf3f007a5da3a98c4312 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-06, do zalo-va (R1g): ca nang-luc chạy được không khoá như CI #276; E11 tra-loi-tin-nhac sang judgment (chủ kho duyệt 06/10); gộp onehub e8645db7
 run_id: repin-20261006T010601Z-43596
 sha: 0971326f082085b10597f13003cfa48437922f66 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng
+
+### Re-pin lần 3 — 2026-10-08, do zalo-va-cach-ly (F15): gộp onehub 6a0900fb; luật cách ly xanh; r1g_cau_chao chạy thêm tệp app
+run_id: repin-20261008T001307Z-83174
+sha: d606e250c7c36a783d93d9114051654c5e576dec · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
