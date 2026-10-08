@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, readdirSync, readFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdtempSync,
+	readdirSync,
+	readFileSync,
+	symlinkSync,
+} from "node:fs";
 import os from "node:os";
 import { join, resolve } from "node:path";
 import { describe, test } from "node:test";
@@ -9,10 +15,10 @@ import { taoKho } from "./kho-gia.mjs";
 
 const DEM = resolve(import.meta.dirname, "..", "dem.mjs");
 
-function chay(kho, doiSo, env = {}) {
+function chay(kho, doiSo, env = {}, { dem = DEM } = {}) {
 	const tam = mkdtempSync(join(os.tmpdir(), "kcs-dem-"));
 	const thongBao = join(tam, "thong-bao.txt");
-	const r = spawnSync("node", [DEM, "--goc", kho.goc, ...doiSo], {
+	const r = spawnSync("node", [dem, "--goc", kho.goc, ...doiSo], {
 		encoding: "utf8",
 		env: {
 			...process.env,
@@ -44,6 +50,17 @@ function chay(kho, doiSo, env = {}) {
 }
 
 describe("kcs-dem", () => {
+	test("goi qua duong symlink van chay luot, khong thoat 0 im lang", () => {
+		const kho = taoKho();
+		kho.gop({ "a.txt": "a" });
+		const lienKet = join(mkdtempSync(join(os.tmpdir(), "kcs-lk-")), "dem.mjs");
+		symlinkSync(DEM, lienKet);
+		const r = chay(kho, [], {}, { dem: lienKet });
+		assert.equal(r.ma, 2, r.ra);
+		assert.equal(r.ket?.ket_qua, "loi");
+		kho.don();
+	});
+
 	test("(c) moc vang -> ma 2, bao mot lan ket_qua loi, goi ten lenh --tu", () => {
 		const kho = taoKho();
 		kho.gop({ "a.txt": "a" });

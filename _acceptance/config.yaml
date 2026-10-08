@@ -2066,6 +2066,7 @@ executors:
     mcl_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target packages/ui/src/components/dropdown-menu.tsx --mode static && bun _acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs'
     kcs_pha_thu: node _acceptance/kiem-cheo-sau-gop/rang/pha-thu.mjs
     kcs_ranh_gioi: node _acceptance/kiem-cheo-sau-gop/rang/ranh-gioi.mjs
+    kcs_kho_that: node _acceptance/kiem-cheo-sau-gop/rang/kho-that.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

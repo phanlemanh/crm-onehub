@@ -7,7 +7,6 @@ import nodeFs, {
 	writeFileSync,
 } from "node:fs";
 import { join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import { timThuMucDot } from "../dieu-phoi/dot.mjs";
 import { chamNhip } from "../dieu-phoi/hook-nhip.mjs";
 import { bao, ngayLuot } from "./bao.mjs";
@@ -16,6 +15,7 @@ import { docLan, duongLan } from "./doc-lan.mjs";
 import { layKhoa, pidSong, voiKhoa } from "./khoa.mjs";
 import { canMoc, docMoc, ghiMoc, lanGop, tepDoi } from "./moc.mjs";
 import { tapCham } from "./tap-cham.mjs";
+import { laTepChinh } from "./tep-chinh.mjs";
 import { phanLoai } from "./thu-pham.mjs";
 
 const KQ = KIEM_CHEO.ketQua;
@@ -82,12 +82,23 @@ function taoChay({ tranMs }) {
 	};
 }
 
-function hoSoTai({ git, goc, sha }) {
+function hoSoTai({ goc, sha }) {
 	const dich = join(goc, KIEM_CHEO.thuMuc, `ho-so-${sha.slice(0, 12)}`);
 	rmSync(dich, { recursive: true, force: true });
 	mkdirSync(dich, { recursive: true });
-	const tar = execFileSync("git", ["-C", goc, "archive", sha, "_acceptance"]);
-	execFileSync("tar", ["-x", "-C", dich], { input: tar });
+	execFileSync(
+		"bash",
+		[
+			"-c",
+			'set -o pipefail; g="$1" s="$2" d="$3"; shift 3; git -C "$g" archive "$s" -- "$@" | tar -x -C "$d"',
+			"kiem-cheo",
+			goc,
+			sha,
+			dich,
+			...KIEM_CHEO.tepHoSo,
+		],
+		{ stdio: ["ignore", "ignore", "pipe"] },
+	);
 	return dich;
 }
 
@@ -240,7 +251,7 @@ async function luotTho({ co, goc, ket, now }) {
 		if (co.tu) ghiMoc(goc, { sha: D, luc: new Date(now()).toISOString() });
 		return KIEM_CHEO.ma.xong;
 	}
-	const hoSoD = hoSoTai({ git, goc, sha: D });
+	const hoSoD = hoSoTai({ goc, sha: D });
 	const tap = tapCham({ goc: hoSoD, tepDoi: tepDoi(git, T, D) });
 	rmSync(hoSoD, { recursive: true, force: true });
 	const ho_so = tap.map((h) => h.slug);
@@ -353,10 +364,7 @@ async function luotTho({ co, goc, ket, now }) {
 	}
 }
 
-if (
-	process.argv[1] &&
-	fileURLToPath(import.meta.url) === resolve(process.argv[1])
-) {
+if (laTepChinh(import.meta.url)) {
 	luot(process.argv.slice(2))
 		.then((ma) => {
 			process.exitCode = ma;

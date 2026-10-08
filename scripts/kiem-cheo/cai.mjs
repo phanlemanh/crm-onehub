@@ -9,8 +9,8 @@ import {
 } from "node:fs";
 import os from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import { KIEM_CHEO } from "./cau-hinh.mjs";
+import { laTepChinh } from "./tep-chinh.mjs";
 
 const CHUONG_TRINH = ["bun", "node", "git"];
 
@@ -77,10 +77,7 @@ export function caiDat({
 	return tep;
 }
 
-if (
-	process.argv[1] &&
-	fileURLToPath(import.meta.url) === resolve(process.argv[1])
-) {
+if (laTepChinh(import.meta.url)) {
 	const [lenh, ...conLai] = process.argv.slice(2);
 	if (lenh !== "cai" && lenh !== "go") {
 		process.stderr.write("dung: cai.mjs cai|go [--goc <thu muc>]\n");

@@ -31,6 +31,7 @@ export const KIEM_CHEO = {
 	},
 	daKy: ["signed-off", "machine-cleared"],
 	boQuaTien: ["_acceptance/"],
+	tepHoSo: ["_acceptance/*/contract.md", "_acceptance/*/evals.yaml"],
 	ketQua: {
 		xanh: "xanh",
 		do: "do",
