@@ -51,3 +51,10 @@ Căn cứ: sau hai lần Lưu bot ngày 30/09, bot hiện tại khác bot cũ; c
 - AC-7, AC-8 đi qua app → API (`zalo.luuBot`, schema đầu vào có `xacNhanDoiBot`) → agent: đo bằng router API thật với agent giả (E14) và bài DOM của `o-token.tsx` (E15).
 - Đếm và gỡ hết liên kết đặt ở `packages/db/src/zalo-lien-ket.ts` (cùng nhà với `noiBangMa`, `ghiSai`, `goLienKet`); `canNoiLai` tính ở `packages/db/src/kenh-thong-bao.ts` (cùng nhà với `kenhSeDungCua`).
 - Tám chỗ gọi Zalo ghi lý do: bảy chỗ gửi + `getMe` khi Lưu bot.
+
+## Phần A — webhook 403/404 phải lên tiếng (giám sát chuyển từ phiên bản đồ production, PR #315; chủ kho duyệt ở Cổng 1)
+
+- Nhánh 403 của `nhanWebhook` (khoá header không khớp): ghi `[zalo] webhook 403 ly_do=khoa-lech` (không thân, không header, không khoá) và đặt `AppSetting.zaloWebhookLyDo = "khoa-lech"` bằng `updateMany` có điều kiện «lý do hiện khác khoa-lech» — nhiều yêu cầu 403 liền chỉ ghi CSDL một lần. Nhánh 404 (chưa có bot): chỉ ghi `[zalo] webhook 404 ly_do=chua-co-bot`.
+- `ZALO_LY_DO` (`packages/validation/src/zalo-update.ts`) thêm «khoa-lech». Nhịp kiểm (`ghiUrlKhiKhongCoHong` trong `zalo-bot.ts`) hiện chỉ giữ «zalo-tu-choi»; thêm «khoa-lech» vào danh sách lý do nhịp kiểm không được xoá. `datBot` thành công (Đăng ký lại hay Lưu bot) vẫn đặt lý do về null như hôm nay.
+- API `zalo.xuong` đưa trạng thái «khoa-lech» ra màn; `trang-thai-webhook.tsx` thêm một nhánh cảnh báo dùng lại nút «Đăng ký lại» sẵn có.
+- Căn cứ: hai lần 403 ngày 06/10, 08/10 im lặng hoàn toàn trên màn (P5-28). Phần B (canary mỗi giờ) để sau.
