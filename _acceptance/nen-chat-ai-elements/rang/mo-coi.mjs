@@ -20,20 +20,6 @@ const BO_QUA = new Set([
 ]);
 
 const MIEN_TRU = [];
-MIEN_TRU.push(
-	{
-		tep: "artifact.tsx",
-		ly_do:
-			"bộ xương Kara K1 (bo-xuong-kara) — KaraArtifact dựng trên nó, chưa màn nào trong apps/** nối tới trước 14/10",
-		het_han: "K2 soan-okr-trang-rieng gộp — K2 nối màn Soạn OKR thì xoá mục này",
-	},
-	{
-		tep: "task.tsx",
-		ly_do:
-			"bộ xương Kara K1 (bo-xuong-kara) — KaraSteps dựng trên nó, chưa màn nào trong apps/** nối tới trước 14/10",
-		het_han: "K2 soan-okr-trang-rieng gộp — K2 nối màn Soạn OKR thì xoá mục này",
-	},
-);
 
 const boMienTru = new Map(MIEN_TRU.map((m) => [m.tep, m]));
 
@@ -111,14 +97,16 @@ const nhapAiElements = (chu, t) =>
 const thang = tep.filter((t) => nhapAiElements(chuUngDung, t));
 
 const THANH_PHAN = dirname(THU_MUC);
-const cau = (liet(THANH_PHAN) ?? [])
-	.filter((d) => d.isFile() && d.name.endsWith(".tsx"))
-	.map((d) => d.name)
-	.filter((c) =>
-		new RegExp(`@crm/ui/components/${ghim(ten(c))}(?![\\w/-])`).test(
-			chuUngDung,
-		),
-	);
+const THU_MUC_CAU = ["", "kara"];
+const cau = THU_MUC_CAU.flatMap((con) =>
+	(liet(join(THANH_PHAN, con)) ?? [])
+		.filter((d) => d.isFile() && d.name.endsWith(".tsx"))
+		.map((d) => (con ? `${con}/${d.name}` : d.name)),
+).filter((c) =>
+	new RegExp(`@crm/ui/components/${ghim(ten(c))}(?![\\w/-])`).test(
+		chuUngDung,
+	),
+);
 const quaCau = new Map();
 for (const c of cau) {
 	const nguon = readFileSync(join(THANH_PHAN, c), "utf8");

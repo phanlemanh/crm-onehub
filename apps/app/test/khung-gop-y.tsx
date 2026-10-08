@@ -52,6 +52,15 @@ function thuTuc(duong: string) {
 			queryKey: [duong, vao ?? null],
 			queryFn: async () => doc(vao),
 		}),
+		infiniteQueryOptions: (
+			vao?: DauVao,
+			chon?: { getNextPageParam?: (trang: never) => unknown },
+		) => ({
+			queryKey: [duong, vao ?? null, "vo-han"],
+			queryFn: async () => doc(vao),
+			initialPageParam: null,
+			getNextPageParam: chon?.getNextPageParam ?? (() => undefined),
+		}),
 		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [duong],

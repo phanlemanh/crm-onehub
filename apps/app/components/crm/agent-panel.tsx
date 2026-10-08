@@ -396,7 +396,9 @@ function stepLabel(item: DidItem, t: KaraBanGhiMessages, locale: Locale) {
 	const viec = new Map(Object.entries(t.tab.buoc)).get(item.tool);
 	if (!viec) return locale === "vi" ? t.tab.buocKhac : item.label;
 	const tach = item.label.indexOf(" — ");
-	return tach === -1 ? viec : `${viec}${item.label.slice(tach)}`;
+	return tach === -1 || locale === "vi"
+		? viec
+		: `${viec}${item.label.slice(tach)}`;
 }
 
 function Turns({
@@ -417,7 +419,13 @@ function Turns({
 					const steps: KaraStep[] = block.items.map((item) => ({
 						id: item.id,
 						label: stepLabel(item, t, locale),
-						state: item.pending ? "running" : item.failed ? "error" : "done",
+						state: item.pending
+							? "running"
+							: item.failed
+								? "error"
+								: item.tone === "warning"
+									? "unsaved"
+									: "done",
 					}));
 					const sources = block.items.flatMap((item) => item.sources);
 					return (
