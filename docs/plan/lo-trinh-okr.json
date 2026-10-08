@@ -1247,6 +1247,41 @@
       "trang_thai": "chưa mở"
     },
     {
+      "ma": "LT1",
+      "slug": "trang-lo-trinh-trong-crm",
+      "hang": "T2",
+      "khoa": "crm-trang-lo-trinh",
+      "nhom": "crm-chung",
+      "thu_tu": 430,
+      "ten": "Trang Lộ trình trong CRM",
+      "ten_ngan": "Trang Lộ trình",
+      "ngay": "2026-10-08",
+      "cau_giao": "«Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi»",
+      "bat_khi": "Bốn tuần sau khi giao, tin hỏi tiến độ của chủ kho còn dưới một nửa nền 23/48; trang khớp từng hàng với LO-TRINH.html cùng lượt vẽ (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho chốt 08/10: đội sản phẩm và trưởng phòng ban không dùng git được XEM lộ trình ngay trong CRM; chỉ đọc, nguồn vẫn là git. Trang đọc tệp dữ liệu lộ trình do bộ kit xuất (hàng X1 trên lộ trình kit, mốc 2.27 dự kiến), không tự tính trạng thái. Nền: 23/48 tin ở phiên điều phối OKR 23–26/09 là hỏi tiến độ (cap-nhat-tuan-okr).",
+      "buoc_ke": "Chờ crm nhận bộ kit có X1",
+      "trang_thai": "chưa mở"
+    },
+    {
+      "ma": "LT2",
+      "slug": "gui-tin-hieu-trong-crm",
+      "hang": "T2",
+      "khoa": "crm-gui-tin-hieu",
+      "nhom": "crm-chung",
+      "thu_tu": 435,
+      "dung_tren": [
+        "LT1"
+      ],
+      "ten": "Gửi tín hiệu trong CRM",
+      "ten_ngan": "Gửi tín hiệu",
+      "ngay": "2026-10-08",
+      "cau_giao": "«Tôi bấm Gửi tín hiệu ở bất kỳ màn nào, kể điều mình gặp, rồi thấy nó đã vào nhóm nào, thành việc nào, đã giao chưa»",
+      "bat_khi": "Một tháng sau khi giao, ít nhất 20 tín hiệu từ ít nhất 3 phòng ban, tín hiệu nào cũng có trạng thái trả về người gửi (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho chốt 08/10: người không dùng git được GỬI TÍN HIỆU (phản hồi, sự cố, ý tưởng, bản phạm vi dạng văn bản). Ghi theo khuôn tín hiệu của bộ kit (hàng L3 trên lộ trình kit); bộ kit gom nhóm, chủ kho chọn nhóm vào bản phạm vi. CRM chỉ ghi tín hiệu, không ghi ý định hay trạng thái.",
+      "buoc_ke": "Chờ crm nhận bộ kit có L3",
+      "trang_thai": "chưa mở"
+    },
+    {
       "ma": "F8",
       "slug": "neo-thuoc-het-han",
       "hang": "T2",
