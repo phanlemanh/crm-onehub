@@ -5,7 +5,7 @@ slug: ca-chap-chon-cach-ly
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: verified
 approved_by:
 approved_at:
 veto_state: mo
