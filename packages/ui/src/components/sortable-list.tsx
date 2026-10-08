@@ -205,7 +205,7 @@ export function SortableSaveList({
 			});
 		};
 		void luu({ ids: next, id: move.id, index: move.to }, truoc, () =>
-			toast(msg.sortableList.saved, {
+			toast.success(msg.sortableList.saved, {
 				action: { label: msg.sortableList.undo, onClick: hoanTac },
 			}),
 		);

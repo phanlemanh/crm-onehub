@@ -290,7 +290,7 @@ describe("hoan-tac", () => {
 	test("hoan-tac: toast da luu co nut Hoan tac, bam thi gui thu tu cu mot lan", async () => {
 		await luuXong();
 		const m = messages("vi").sortableList;
-		const t = goiToast.find((x) => x.loai === "thuong");
+		const t = goiToast.find((x) => x.action !== undefined);
 		expect({ chu: t?.chu, nut: t?.action?.label }).toEqual({
 			chu: m.saved,
 			nut: m.undo,
@@ -310,7 +310,9 @@ describe("hoan-tac", () => {
 			goi: [{ ids: ["a", "b", "c"], id: "a", index: 0 }],
 		});
 		await xa(h2);
-		const traXong = goiToast.filter((x) => x.loai === "xong");
+		const traXong = goiToast.filter(
+			(x) => x.loai === "xong" && x.chu === m.restored,
+		);
 		expect({
 			thuTu: thuTu(),
 			khoa: moiTayKhoa(),
@@ -330,7 +332,7 @@ describe("hoan-tac", () => {
 
 	test("hoan-tac: tra loi thi giu thu tu moi va bao loi", async () => {
 		await luuXong();
-		const t = goiToast.find((x) => x.loai === "thuong");
+		const t = goiToast.find((x) => x.action !== undefined);
 		const h2 = hen();
 		henLuu.push(h2);
 		await act(async () => t?.action?.onClick());
@@ -346,7 +348,7 @@ describe("hoan-tac", () => {
 	test("hoan-tac: tieng Anh dung hai chu", async () => {
 		await luuXong("en");
 		const m = messages("en").sortableList;
-		const t = goiToast.find((x) => x.loai === "thuong");
+		const t = goiToast.find((x) => x.action !== undefined);
 		expect([t?.chu, t?.action?.label]).toEqual([m.saved, m.undo]);
 	});
 });

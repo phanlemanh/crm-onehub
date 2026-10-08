@@ -437,7 +437,7 @@ describe("luu-loi", () => {
 					? "cu"
 					: "giu thu tu vua keo khi luu loi",
 			loi: goiToast.filter((x) => x.loai === "loi").map((x) => x.chu),
-			daLuu: goiToast.filter((x) => x.loai === "thuong").length,
+			daLuu: goiToast.filter((x) => x.action !== undefined).length,
 			taiLai: soLanDoc - docTruoc <= 1,
 		}).toEqual({
 			goi: 1,
@@ -454,7 +454,7 @@ describe("luu-loi", () => {
 		await keoLen("Qualified to buy");
 		expect({
 			goi: goiGhi.find((g) => g.ten === "giaiDoan.reorder")?.v,
-			daLuu: goiToast.filter((x) => x.loai === "thuong").length,
+			daLuu: goiToast.filter((x) => x.action !== undefined).length,
 		}).toEqual({
 			goi: {
 				kind: "OPEN",
@@ -491,7 +491,7 @@ describe("luu-tru-ngay", () => {
 		});
 		await cho(2);
 		await chonMuc(k, "QUALIFIED_TO_BUY", t.giaiDoan.luuTru);
-		const toastLuu = goiToast.find((x) => x.loai === "thuong");
+		const toastLuu = goiToast.find((x) => x.action !== undefined);
 		expect({
 			coLuuTru: chu.some((c) => c.includes(t.giaiDoan.luuTru)),
 			coXoa: chu.some((c) => c.includes("Xoá")),
@@ -531,7 +531,7 @@ describe("luu-tru-ngay", () => {
 		};
 		const k = await dung();
 		await chonMuc(k, "QUALIFIED_TO_BUY", t.giaiDoan.luuTru);
-		const toastLuu = goiToast.find((x) => x.loai === "thuong");
+		const toastLuu = goiToast.find((x) => x.action !== undefined);
 		await act(async () => toastLuu?.action?.onClick());
 		await cho();
 		expect(goiToast.filter((x) => x.loai === "loi").map((x) => x.chu)).toEqual([
@@ -633,7 +633,9 @@ describe("luu-tru-chuyen", () => {
 		if (!n) throw new Error("khong co nut Chuyen va luu tru");
 		await act(async () => n.click());
 		await cho();
-		const xong = goiToast.filter((x) => x.loai === "xong");
+		const xong = goiToast.filter(
+			(x) => x.loai === "xong" && x.chu.includes("Demo booked"),
+		);
 		expect(
 			xong.every((x) => x.action === undefined)
 				? "dung"

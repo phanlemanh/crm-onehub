@@ -279,7 +279,7 @@ export function GiaiDoanSettings() {
 			.mutateAsync({ id: g.id })
 			.then(async () => {
 				await Promise.all([cache.giaiDoan(), cache.deal()]);
-				toast(t.daLuuTruTen.replace("{ten}", g.label), {
+				toast.success(t.daLuuTruTen.replace("{ten}", g.label), {
 					action: {
 						label: t.hoanTac,
 						onClick: () => hoanTacLuuTru(g, truoc),
