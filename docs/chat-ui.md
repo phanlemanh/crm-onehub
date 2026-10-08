@@ -143,12 +143,12 @@ by three cases in `test/agent-transcript.spec.ts`, and **nothing renders it**.
 | `message.tsx` | imported by the record sheet's Agent tab and the builder |
 | `reasoning.tsx` | imported by the builder |
 | `shimmer.tsx` | imported by `reasoning.tsx` — no file outside the folder touches it |
-| `conversation.tsx` | imported by `apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx` (`Conversation`, `ConversationContent`, `ConversationEmptyState`) and by the transcript of the Documents «Ask» tab (`tai-lieu/hoi.tsx`) — the orphan gate's exemption for the scroll measurement is gone (`MIEN_TRU` in `mo-coi.mjs` is empty) |
+| `conversation.tsx` | the body of `KaraTranscript` (`packages/ui/src/components/kara/transcript.tsx`), which the OKR drafting page renders in `apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx` (`Conversation`, `ConversationContent`, `ConversationEmptyState`), and imported by the transcript of the Documents «Ask» tab (`tai-lieu/hoi.tsx`) — the orphan gate's exemption for the scroll measurement is gone (`MIEN_TRU` in `mo-coi.mjs` is empty) |
 | `inline-citation.tsx` | trích dẫn của khối Tóm tắt tuần — the weekly summary block on the OKR board cites the KRs and updates behind each sentence. Pulled back by the CLI in `tro-ly-okr-tom-tat`; the card is a `Popover` that opens on click, tap, Enter and Space, and still on hover for a mouse, and the trigger shows a given label instead of a URL hostname. The Documents «Ask» tab uses only `InlineCitationSource` and `InlineCitationQuote`, shown open under each sentence |
-| `prompt-input.tsx` | `PromptInput`, `PromptInputBody`, `PromptInputTextarea`, `PromptInputFooter`, `PromptInputTools`, `PromptInputSubmit` — the composer of `okr/soan/hoi-thoai-soan.tsx` and of the Documents «Ask» tab, which goes through `PromptInputProvider` so a failed send keeps the typed question; pulled 2026-09-30 with the CLI; its strings are in `messages.ts` under `promptInput` |
+| `prompt-input.tsx` | `PromptInput`, `PromptInputBody`, `PromptInputTextarea`, `PromptInputFooter`, `PromptInputTools`, `PromptInputSubmit` — the body of `KaraComposer`, the composer of the OKR drafting page (`okr/soan/hoi-thoai-soan.tsx`), and the composer of the Documents «Ask» tab, which goes through `PromptInputProvider` so a failed send keeps the typed question; pulled 2026-09-30 with the CLI; its strings are in `messages.ts` under `promptInput` |
 | `suggestion.tsx` | `Suggestions` and `Suggestion` — the answer chips under an assistant question in the OKR drafting chat, and the three starter questions of the empty «Ask» tab (`Suggestions xuongDong` wraps them instead of scrolling); pulled 2026-09-30 with `prompt-input.tsx`. The accept · edit · reject card that once lived at `packages/ui/src/components/suggestion.tsx` is gone (`proposed-change.tsx` replaced it) |
-| `artifact.tsx` | `Artifact`, `ArtifactHeader`, `ArtifactTitle`, `ArtifactActions`, `ArtifactContent` — the body of `KaraArtifact`, the draft panel of the Kara skeleton (`packages/ui/src/components/kara/`). Pulled 2026-10-04 with the CLI in `bo-xuong-kara` (K1); icons are Carbon, «Close» goes through `messages.ts` (`artifact.dong`), the shadow and the `className` sizing of its buttons are gone. No `apps/**` file reaches it before 14/10, so the orphan gate carries a named exemption until K2 `soan-okr-trang-rieng` wires the OKR drafting page |
-| `task.tsx` | `Task`, `TaskTrigger`, `TaskContent`, `TaskItem` — the body of `KaraSteps` («Kara đã làm N bước»), with step names in plain language. Pulled with `artifact.tsx`; the trigger is a real `button`, the icons are Carbon. Same named exemption until K2. `tool.tsx` was deliberately not pulled: it renders tool input and output as JSON through `code-block`, which is Not-for-this-product |
+| `artifact.tsx` | `Artifact`, `ArtifactHeader`, `ArtifactTitle`, `ArtifactActions`, `ArtifactContent` — the body of `KaraArtifact`, the draft panel of the Kara skeleton (`packages/ui/src/components/kara/`). Pulled 2026-10-04 with the CLI in `bo-xuong-kara` (K1); icons are Carbon, «Close» goes through `messages.ts` (`artifact.dong`), the shadow and the `className` sizing of its buttons are gone. The OKR drafting page (`okr/soan/bang-nhap.tsx`, `soan-okr-trang-rieng`) renders the draft through `KaraArtifact`, so the orphan gate reaches it through `kara/artifact.tsx` |
+| `task.tsx` | `Task`, `TaskTrigger`, `TaskContent`, `TaskItem` — the body of `KaraSteps` («Kara đã làm N bước»), with step names in plain language. Pulled with `artifact.tsx`; the trigger is a real `button`, the icons are Carbon. The OKR drafting page (`okr/soan/hoi-thoai-soan.tsx`) shows a turn's steps through `KaraSteps`, so the orphan gate reaches it through `kara/steps.tsx`. `tool.tsx` was deliberately not pulled: it renders tool input and output as JSON through `code-block`, which is Not-for-this-product |
 
 Of the 19 vendored files deleted in the `nen-chat-ai-elements` round, 14 are still
 gone — four of them Adopted (`model-selector`, `plan`, `sources`, `tool`), the
@@ -167,11 +167,14 @@ commit is **not** a complete change — the component has to reach a screen in
 the same change, or the gate blocks the push. That is the intended friction:
 the register says which component is right, the gate says it may not sit unused.
 
+The gate counts a file under `packages/ui/src/components/` or
+`packages/ui/src/components/kara/` as a bridge: when `apps/**` imports the bridge
+and the bridge imports an AI Elements file, that file is reachable. This is how
+`artifact.tsx` and `task.tsx` stay alive — through `KaraArtifact` and `KaraSteps`.
+
 The one sanctioned exception is a named entry in `MIEN_TRU` of `mo-coi.mjs`, with
-a reason and an expiry. `artifact.tsx` and `task.tsx` carry one each: the Kara
-skeleton landed in `packages/ui` before 14/10, when no `apps/app` change may
-merge, and K2 wires the first screen. When K2 lands, delete both entries — the
-gate prints `MIEN TRU THUA` for an entry whose file is no longer orphaned.
+a reason and an expiry. The list is empty today. The gate prints `MIEN TRU THUA`
+for an entry whose file is no longer orphaned, so an expired entry cannot linger.
 
 ### Available — 6
 

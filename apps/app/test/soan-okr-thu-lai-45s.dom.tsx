@@ -109,7 +109,8 @@ afterEach(async () => {
 
 const moTa = () =>
 	q('[data-luot="loi"] [aria-live="polite"]')?.textContent ?? "";
-const nutThu = () => q('[data-nut="thu-lai"]') as HTMLButtonElement | null;
+const nutThu = () =>
+	q('[data-luot="loi"] [data-slot="kara-retry"]') as HTMLButtonElement | null;
 const coLoi = () => q('[data-luot="loi"]') !== null;
 
 async function moManQua45s(suKien = SU_KIEN_DAU): Promise<void> {
