@@ -64,7 +64,7 @@ export function taoKho() {
 		ghi(
 			`_acceptance/${slug}/evals.yaml`,
 			evals ??
-				`schema_version: 1\nslug: ${slug}\nevals:\n  - id: E1\n    executor: script\n    cmd: node kiem.mjs\n    paths:\n${paths.map((p) => `      - "${p}"`).join("\n")}\n`,
+				`schema_version: 1\nslug: ${slug}\nevals:\n  - id: E1\n    executor: script\n    cmd: node kiem.js\n    paths:\n${paths.map((p) => `      - "${p}"`).join("\n")}\n`,
 		);
 	};
 	return {
