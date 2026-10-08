@@ -36,11 +36,13 @@ function evalsCua(root, slug) {
 	for (const dong of text.split("\n")) {
 		const id = /^\s*- id: (\S+)/.exec(dong);
 		if (id) {
-			hienTai = { id: id[1], cmd: null };
+			hienTai = { id: id[1], cmd: null, kyVong: 0 };
 			ra.push(hienTai);
 		}
 		const cmd = /^\s+cmd: (.+)$/.exec(dong);
 		if (cmd && hienTai) hienTai.cmd = cmd[1];
+		const kv = /^\s+expected_exit: (\d+)/.exec(dong);
+		if (kv && hienTai) hienTai.kyVong = Number(kv[1]);
 	}
 	return ra.filter((e) => e.cmd);
 }
@@ -70,7 +72,7 @@ for (const slug of slugs) {
 			? 0
 			: (spawnSync("bash", ["-c", e.cmd], { cwd: root, encoding: "utf8" })
 					.status ?? 1);
-		if (ma !== 0) doBatKy = true;
+		if (ma !== e.kyVong) doBatKy = true;
 		console.log(dongEval(slug, e.id, e.cmd, ma));
 	}
 }

@@ -14,7 +14,7 @@ import { KIEM_CHEO } from "./cau-hinh.mjs";
 import { docLan, duongLan } from "./doc-lan.mjs";
 import { layKhoa, pidSong, voiKhoa } from "./khoa.mjs";
 import { canMoc, docMoc, ghiMoc, lanGop, tepDoi } from "./moc.mjs";
-import { tapCham } from "./tap-cham.mjs";
+import { maKyVong, tapCham } from "./tap-cham.mjs";
 import { laTepChinh } from "./tep-chinh.mjs";
 import { phanLoai } from "./thu-pham.mjs";
 
@@ -100,6 +100,21 @@ function hoSoTai({ goc, sha }) {
 		{ stdio: ["ignore", "ignore", "pipe"] },
 	);
 	return dich;
+}
+
+function taoKyVong(git) {
+	const nho = new Map();
+	return (sha, slug, id) => {
+		const khoa = `${sha} ${slug}`;
+		if (!nho.has(khoa)) {
+			let bang = new Map();
+			try {
+				bang = maKyVong(git("show", `${sha}:_acceptance/${slug}/evals.yaml`));
+			} catch {}
+			nho.set(khoa, bang);
+		}
+		return nho.get(khoa).get(id) ?? 0;
+	};
 }
 
 function coOTai(git, slug, id) {
@@ -313,8 +328,11 @@ async function luotTho({ co, goc, ket, now }) {
 						`suite do o D: ${suiteDo.map((s) => `${s.i} (${s.lenh}) ma ${s.ma}`).join("; ")}`,
 					);
 				}
+				const kyVong = taoKyVong(git);
 				const do_ = [];
-				for (const e of doc.eval.filter((x) => x.ma !== 0)) {
+				for (const e of doc.eval.filter(
+					(x) => x.ma !== kyVong(D, x.slug, x.id),
+				)) {
 					if (!e.lenh) {
 						do_.push({
 							ho_so: e.slug,
@@ -328,7 +346,7 @@ async function luotTho({ co, goc, ket, now }) {
 						await datCay({ git, cay, sha, chay: may.chay });
 						const r = await may.chay(e.lenh, cay);
 						if (r.vuot) throw new VuotTran();
-						return r.ma;
+						return r.ma === kyVong(sha, e.slug, e.id) ? 0 : 1;
 					};
 					const kq = await phanLoai({
 						D,
@@ -338,6 +356,11 @@ async function luotTho({ co, goc, ket, now }) {
 						coO: coOTai(git, e.slug, e.id),
 					});
 					do_.push({ ho_so: e.slug, eval: e.id, ...kq, lenh: e.lenh });
+				}
+				if (lan.ma !== 0 && do_.length === 0) {
+					throw new Error(
+						`lan thoat ${lan.ma} nhung khong doc duoc dong do nao (log ${log})`,
+					);
 				}
 				const ket_qua = do_.some((d) => d.loai === KIEM_CHEO.loaiDo.doMoi)
 					? KQ.do

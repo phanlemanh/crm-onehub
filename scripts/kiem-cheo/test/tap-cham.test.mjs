@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { after, describe, test } from "node:test";
-import { duongCua, khuon, tapCham } from "../tap-cham.mjs";
+import { duongCua, khuon, maKyVong, tapCham } from "../tap-cham.mjs";
 import { taoKho } from "./kho-gia.mjs";
 
 const kho = taoKho();
@@ -101,4 +101,12 @@ describe("kcs-tap-cham", () => {
 			["a/**", "b/c.ts"],
 		);
 	});
+});
+
+test("maKyVong doc expected_exit khai tren eval, vang thi 0", () => {
+	const bang = maKyVong(
+		"schema_version: 1\nslug: s\nevals:\n  - id: E1\n    executor: script\n    cmd: node a.js\n    expected_exit: 2\n  - id: E2\n    executor: script\n    cmd: node b.js\n",
+	);
+	assert.equal(bang.get("E1"), 2);
+	assert.equal(bang.get("E2"), 0);
 });

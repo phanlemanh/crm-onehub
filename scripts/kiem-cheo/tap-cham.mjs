@@ -5,9 +5,13 @@ import { KIEM_CHEO } from "./cau-hinh.mjs";
 
 const require = createRequire(import.meta.url);
 const { evalPathsOf, pathGlobToRe } = require("../../lib/evidence-core.cjs");
-const { parseEvals } = require("../../lib/eval-yaml.cjs");
+const { parseEvals, expectedExits } = require("../../lib/eval-yaml.cjs");
 
 export const khuon = pathGlobToRe;
+
+export function maKyVong(text) {
+	return expectedExits(text).byId;
+}
 
 export function duongCua(text) {
 	return parseEvals(text, []).flatMap((e) => evalPathsOf(text, e.id) ?? []);

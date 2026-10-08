@@ -37,11 +37,26 @@ function chupCayGoi() {
 	return h.digest("hex");
 }
 
-function dungKho({ hoSoTuT = true, sanPhamT = "tot", gop }) {
+const KIEM_KY_VONG = `const fs = require("node:fs");
+process.exit(fs.readFileSync("san-pham.txt", "utf8").startsWith("tot") ? 2 : 1);
+`;
+const EVALS_KY_VONG = `schema_version: 1
+slug: ky
+evals:
+  - id: E1
+    executor: script
+    cmd: node kiem-ky-vong.js
+    expected_exit: 2
+    paths:
+      - "san-pham.txt"
+`;
+
+function dungKho({ hoSoTuT = true, sanPhamT = "tot", gop, evals }) {
 	const kho = taoKho();
 	kho.ghi("kiem.js", KIEM);
+	kho.ghi("kiem-ky-vong.js", KIEM_KY_VONG);
 	kho.ghi("san-pham.txt", sanPhamT);
-	if (hoSoTuT) kho.hoSo("ky", { paths: ["san-pham.txt"] });
+	if (hoSoTuT) kho.hoSo("ky", { paths: ["san-pham.txt"], evals });
 	kho.git("add", "-A");
 	kho.git("commit", "-q", "-m", "nen");
 	kho.git("push", "-q", "origin", "onehub");
@@ -49,7 +64,7 @@ function dungKho({ hoSoTuT = true, sanPhamT = "tot", gop }) {
 	const M = [];
 	for (const g of gop) {
 		if (g.hoSo) {
-			kho.hoSo("ky", { paths: ["san-pham.txt"] });
+			kho.hoSo("ky", { paths: ["san-pham.txt"], evals });
 		}
 		M.push(kho.gop(g.tep ?? {}));
 	}
@@ -304,6 +319,48 @@ o(
 		if (!/vuot tran/.test(r.ket.ly_do))
 			throw new Error(`ly_do: ${r.ket.ly_do}`);
 		bang(r.ket.do, [], "khong duoc ghi phan loai do lenh bi giet");
+		bang(r.moc, null, "moc.json");
+		kho.don();
+	},
+);
+
+o("(l) eval khai expected_exit 2, pha o M2 -> do-moi M2, khong do-san", () => {
+	const { kho, T, M } = dungKho({
+		evals: EVALS_KY_VONG,
+		gop: [khac("x.txt"), sanPham("hong"), khac("y.txt")],
+	});
+	const r = chay({ kho, T });
+	bang(r.ket?.ket_qua, "do", "ket_qua");
+	bang(
+		r.ket?.do?.map((d) => [d.loai, d.lan_gop]),
+		[["do-moi", M[1]]],
+		"do",
+	);
+	kho.don();
+});
+
+o(
+	"(m) eval tra dung expected_exit 2 o moi lan gop -> xanh, khong muc do nao",
+	() => {
+		const { kho, T } = dungKho({
+			evals: EVALS_KY_VONG,
+			gop: [khac("x.txt"), sanPham("tot2")],
+		});
+		const r = chay({ kho, T });
+		bang(r.ket?.ket_qua, "xanh", "ket_qua");
+		bang(r.ket?.do, [], "do");
+		kho.don();
+	},
+);
+
+o(
+	"(n) lan thoat 1 ma moi dong deu dat -> khong-chay-duoc, moc khong tien",
+	() => {
+		const { kho, T } = dungKho({ gop: [sanPham("tot2")] });
+		const r = chay({ kho, T, env: { KCS_LAN_MA: "1" } });
+		bang(r.ket?.ket_qua, "khong-chay-duoc", "ket_qua");
+		if (!/khong doc duoc dong do/.test(r.ket.ly_do))
+			throw new Error(`ly_do: ${r.ket.ly_do}`);
 		bang(r.moc, null, "moc.json");
 		kho.don();
 	},
