@@ -28,6 +28,7 @@ export const zaloCuaToiOutput = z.object({
 	lech: z.boolean(),
 	dongTroLyOkr: z.boolean(),
 	laTruongPhong: z.boolean(),
+	canNoiLai: z.boolean(),
 });
 export type ZaloCuaToi = z.infer<typeof zaloCuaToiOutput>;
 
@@ -49,7 +50,7 @@ export const zaloXuongOutput = z.object({
 	nguonToken: z.enum(["man-hinh", "env"]).nullable(),
 	goiToken: z.string().nullable(),
 	webhook: z.object({
-		trangThai: z.enum(["da-dang-ky", "can-https", "chua-dang-ky"]),
+		trangThai: z.enum(["da-dang-ky", "can-https", "chua-dang-ky", "khoa-lech"]),
 		url: z.string().nullable(),
 	}),
 });
@@ -57,9 +58,19 @@ export type ZaloXuong = z.infer<typeof zaloXuongOutput>;
 
 export const zaloLuuBotInput = z.object({
 	token: z.string().trim().min(1).optional(),
+	xacNhanDoiBot: z.literal(true).optional(),
 });
-export const zaloLuuBotOutput = z.object({
-	tenBot: z.string(),
-	webhook: z.enum(WEBHOOK_KET),
-});
+export const zaloLuuBotOutput = z.discriminatedUnion("ketQua", [
+	z.object({
+		ketQua: z.literal("da-luu"),
+		tenBot: z.string(),
+		webhook: z.enum(WEBHOOK_KET),
+	}),
+	z.object({
+		ketQua: z.literal("can-xac-nhan-doi-bot"),
+		soLienKet: z.number().int().positive(),
+		tenBotMoi: z.string(),
+	}),
+]);
+export type ZaloLuuBot = z.infer<typeof zaloLuuBotOutput>;
 export const zaloGuiThuOutput = z.object({ kenh: z.enum(["zalo", "slack"]) });
