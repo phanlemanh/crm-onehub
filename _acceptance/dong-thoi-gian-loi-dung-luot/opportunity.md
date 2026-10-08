@@ -33,10 +33,10 @@ lỗi được giữ qua các lượt tải sau, còn hai cờ đó suy theo hư
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: khi lỗi «Xem cũ hơn» và lỗi làm mới chồng lên nhau, thông báo có luôn nói đúng lượt
+- Câu hỏi phép đo trả lời: khi lỗi «Xem cũ hơn» và lỗi làm mới chồng lên nhau, thông báo có luôn nói đúng lượt
   nào đã hỏng không — không báo lỗi khi lượt đang chạy, không tự tắt khi chưa có lượt làm mới nào thành công?
-- [đề xuất] Kết quả nào là SỐNG: bài kiểm treo từng lượt tải giữa chừng ở cả hai thứ tự chồng lỗi, đếm 0 lần thông báo
+- Kết quả nào là SỐNG: bài kiểm treo từng lượt tải giữa chừng ở cả hai thứ tự chồng lỗi, đếm 0 lần thông báo
   sai lượt hiện ra trong lúc đang tải; lái thử người lạ gây hai lỗi chồng nhau mà không thấy thông báo nhảy qua lại.
-- [đề xuất] Kết quả nào là CHẾT: còn một thứ tự chồng lỗi mà thông báo hiện cho lượt chưa hỏng, hoặc cảnh báo làm mới
+- Kết quả nào là CHẾT: còn một thứ tự chồng lỗi mà thông báo hiện cho lượt chưa hỏng, hoặc cảnh báo làm mới
   biến mất trước khi một lượt làm mới thật sự thành công.
-- [đề xuất] Timebox: 0,5 ngày máy.
+- Timebox: 0,5 ngày máy.
