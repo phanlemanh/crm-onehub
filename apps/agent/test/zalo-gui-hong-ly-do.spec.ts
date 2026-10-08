@@ -581,6 +581,29 @@ describe("doi-bot-dong-y", () => {
 		expect(
 			nk2.dong.filter((d) => d.startsWith("[zalo] doi bot hong")).length,
 		).toBe(1);
+
+		await gieoBot(TOKEN_CU, 3);
+		const zaloThat = zaloHaiBot({ bot: haiBot, setWebhook: "ok" }).fetcher;
+		let luc: Awaited<ReturnType<typeof botDangLuu>> | undefined;
+		const doLuc = (async (
+			input: Parameters<typeof fetch>[0],
+			init?: RequestInit,
+		) => {
+			if (String(input).endsWith("/setWebhook")) {
+				luc = await botDangLuu();
+				const than: { secret_token?: string } = JSON.parse(
+					String(init?.body ?? "{}"),
+				);
+				if (luc?.zaloWebhookSecret !== than.secret_token)
+					throw new Error("khoa moi chua ghi luc zalo xac minh");
+			}
+			return zaloThat(input, init);
+		}) as typeof fetch;
+		await datBotThu({ token: TOKEN_MOI, xacNhanDoiBot: true }, doLuc);
+		if (luc?.zaloBotToken !== TOKEN_CU || luc?.zaloBotName !== BOT_CU.ten)
+			throw new Error("bot moi ghi ngoai giao dich truoc setWebhook");
+		expect((await botDangLuu())?.zaloBotToken).toBe(TOKEN_MOI);
+		expect(await db.zaloLink.count()).toBe(0);
 	});
 });
 

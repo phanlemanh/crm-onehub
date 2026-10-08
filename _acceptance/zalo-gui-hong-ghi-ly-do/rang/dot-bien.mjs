@@ -6,11 +6,12 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 19;
+const SO_CAP_KHAI = 20;
 const TRAN_MS = 600_000;
 const AGENT = (t) =>
-	`cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t ${t}`;
-const API = (t) => `cd apps/api && bun test test/zalo-doi-bot.spec.ts -t ${t}`;
+	`bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t ${t}"`;
+const API = (t) =>
+	`bun run test -- "cd apps/api && bun test test/zalo-doi-bot.spec.ts -t ${t}"`;
 const DOM = (t) =>
 	`cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/zalo-doi-bot.dom.tsx -t ${t}`;
 const ZAPI = "apps/agent/agent/lib/zalo-api.ts";
@@ -171,6 +172,14 @@ const CAP = [
 		"\t\t\tOR: [{ zaloWebhookLyDo: null }, { zaloWebhookLyDo: { not: lyDo } }],\n",
 		"",
 		"403 ghi lai moi yeu cau",
+	],
+	[
+		"u ghi bot moi truoc setWebhook",
+		AGENT("doi-bot-dong-y"),
+		XUONG,
+		"\t\ttokenCu === null\n\t\t\t? { ...botMoi, zaloWebhookSecret: khoa }\n\t\t\t: { zaloWebhookSecret: khoa },",
+		"\t\t{ ...botMoi, zaloWebhookSecret: khoa },",
+		"bot moi ghi ngoai giao dich truoc setWebhook",
 	],
 ];
 

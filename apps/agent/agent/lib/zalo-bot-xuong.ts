@@ -195,20 +195,23 @@ export async function datBot(
 	const khoa = randomBytes(ZALO.webhook.khoa.sinhByte).toString("hex");
 	const url = diaChiWebhook(goc);
 	const truoc = await chupCot();
-	await ghiCot({
-		zaloBotToken: token,
-		zaloWebhookSecret: khoa,
-		zaloBotName: tenBot,
-	});
+	const botMoi = { zaloBotToken: token, zaloBotName: tenBot };
+	await ghiCot(
+		tokenCu === null
+			? { ...botMoi, zaloWebhookSecret: khoa }
+			: { zaloWebhookSecret: khoa },
+	);
 	const ket = await dangKy(fetcher, token, url, khoa);
 	if (ket === "tu-choi") {
-		await ghiCot({ ...truoc, zaloWebhookLyDo: "zalo-tu-choi" });
+		await traVe({ ...truoc, zaloWebhookLyDo: "zalo-tu-choi" });
 		return { outcome: "invalid", reason: ZALO.loi.dangKyHong };
 	}
-	const cuoi: Partial<CotZalo> =
-		ket === "xac-minh-hong"
+	const cuoi: Partial<CotZalo> = {
+		...botMoi,
+		...(ket === "xac-minh-hong"
 			? { zaloWebhookUrl: null, zaloWebhookLyDo: "zalo-tu-choi" }
-			: { zaloWebhookUrl: url, zaloWebhookLyDo: null };
+			: { zaloWebhookUrl: url, zaloWebhookLyDo: null }),
+	};
 	if (soLienKet > 0) {
 		const goDuoc = await chotDoiBot(cuoi, truoc);
 		if (!goDuoc) return { outcome: "invalid", reason: ZALO.loi.dangKyHong };
@@ -234,11 +237,21 @@ async function chotDoiBot(
 		console.error(`[zalo] doi bot: go ${n} lien ket`);
 		return true;
 	} catch (loi) {
-		await ghiCot(truoc);
 		console.error(
 			`[zalo] doi bot hong, giu bot cu: ${loi instanceof Error ? loi.name : "khong-ro"}`,
 		);
+		await traVe(truoc);
 		return false;
+	}
+}
+
+async function traVe(truoc: Partial<CotZalo>): Promise<void> {
+	try {
+		await ghiCot(truoc);
+	} catch (loi) {
+		console.error(
+			`[zalo] tra lai cai dat bot hong: ${loi instanceof Error ? loi.name : "khong-ro"}`,
+		);
 	}
 }
 
