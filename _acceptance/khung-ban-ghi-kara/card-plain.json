@@ -1,0 +1,42 @@
+{
+  "feature_plain": "Mở ngăn một cá nhân, công ty hay thoả thuận, người dùng gặp cùng một Kara như ở OKR: nói tiếng Việt, có dấu tia sáng, báo «Kara đang…» khi chờ, lỗi có «Thử lại», đề xuất thông tin liên hệ nằm ngay dưới trường và nhận xong vẫn hoàn tác được.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đổi tên tab thành «Kara», thay logo OneHub bằng dấu Kara, và mời hỏi bằng tiếng Việt với ba câu gợi ý hợp từng loại bản ghi."},
+    {"id": "AC-3", "p": "Sẽ báo «Kara chưa trả lời được» kèm nút «Thử lại» gửi lại đúng câu vừa hỏi khi gửi lỗi, và báo «Kara chưa được bật» khi thiếu cấu hình."},
+    {"id": "AC-4", "p": "Sẽ khoá ô soạn kèm lý do khi Kara còn đang trả lời câu trước hay cuộc đã kết thúc, và có nút «Bắt đầu cuộc mới» mở lại ô soạn."},
+    {"id": "AC-5", "p": "Sẽ nói tiếng Việt ở câu Kara hỏi lại và ở danh sách hội thoại."},
+    {"id": "AC-7", "p": "Sẽ thu đề xuất đã nhận thành dòng «Đã thêm theo Kara · Hoàn tác»; bấm Hoàn tác thì trường về đúng giá trị cũ và đề xuất chờ lại."},
+    {"id": "AC-8", "p": "Sẽ thu đề xuất đã bỏ qua thành dòng «Đã bỏ qua · Hoàn tác»; Hoàn tác đưa đề xuất về chờ mà không đổi trường."},
+    {"id": "AC-12", "p": "Sẽ hỏi «Bỏ những gì vừa nhập?» khi người lỡ đóng ngăn hay bấm Huỷ lúc biểu mẫu thêm nhanh đang có chữ."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG còn vòng xoay chờ trơn trong tab Kara — chỗ chờ nói «Kara đang …»."},
+    {"id": "AC-6", "p": "Sẽ KHÔNG còn nút «Nhận» trần hay khung thẻ quanh đề xuất — đề xuất neo dưới trường, nút nói đúng việc sẽ làm."},
+    {"id": "AC-9", "p": "Chặn hoàn tác khi trường đã bị sửa sau lần nhận hoặc khi không phải người đã quyết bấm — không dữ liệu nào đổi, màn nói rõ vì sao."},
+    {"id": "AC-10", "p": "Sẽ KHÔNG in lỗi thô khi tải bản ghi hỏng — khung báo «Không tải được bản ghi này» kèm «Thử lại»."},
+    {"id": "AC-11", "p": "Sẽ KHÔNG còn biểu tượng đũa phép và vòng xoay trơn ở nút tra cứu — nút mang dấu Kara và báo «Kara đang tra cứu…»."},
+    {"id": "OOS-1", "p": "KHÔNG đổi cách Kara tự ghi thông tin vào hồ sơ — việc đó thuộc một lượt riêng sau (Kara xin duyệt trước khi ghi)."},
+    {"id": "OOS-2", "p": "KHÔNG ghi vết «theo đề xuất của Kara» vào tab Hoạt động — cần đổi cấu trúc dữ liệu, để sau."},
+    {"id": "OOS-3", "p": "KHÔNG đụng trang Chat và không gom Chat với tab thoả thuận về một khung — đó là lượt K5."},
+    {"id": "OOS-4", "p": "KHÔNG thêm nút «Hữu ích / Không hữu ích» và trích dẫn nguồn kiểu mới trong tab — để K5."},
+    {"id": "OOS-5", "p": "KHÔNG thêm nút dừng Kara giữa chừng trong tab."},
+    {"id": "OOS-6", "p": "KHÔNG giữ chữ của biểu mẫu thêm nhanh khi người chuyển sang tab khác trong ngăn."},
+    {"id": "OOS-7", "p": "KHÔNG cho hoàn tác sau khi đã đóng ngăn — lúc đó người sửa trường như thường."}
+  ],
+  "scope_plain": "Bảy việc người duyệt có thể chờ nhưng lượt này cố ý không làm:",
+  "coverage_plain": [
+    {"i": 0, "p": "Bộ tiêu chí được rút từ một lần quét ba chiều độc lập, không phải liệt kê theo trí nhớ."},
+    {"i": 1, "p": "Chiều bề mặt: đủ sáu chỗ Kara hoặc trạng thái tải xuất hiện trong ngăn bản ghi — tab Kara, đề xuất thông tin, nút tra cứu, khung tải, ngăn thêm nhanh, tab kế hoạch (đối chiếu khảo sát production 04/10)."},
+    {"i": 2, "p": "Chiều loại bản ghi: cá nhân, công ty, thoả thuận — ba ngăn đều có tab Kara."},
+    {"i": 3, "p": "Chiều trạng thái: đang làm, rỗng, lỗi, bận hay kết thúc, đã quyết, đã hoàn tác, hoàn tác bị chặn — theo bảng trạng thái của luật Kara."},
+    {"i": 4, "p": "Hai tổ hợp không tồn tại nên bỏ: đề xuất thông tin chỉ có ở cá nhân, tra cứu không có ở thoả thuận."},
+    {"i": 5, "p": "Bốn việc để sau (vết ở tab Hoạt động, Hoàn tác cho thông tin Kara tự ghi, nút Hữu ích, trích dẫn) — đều nằm trong phần không làm."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo hoàn tác chưa bắt được lỗi «khôi phục nhầm đề xuất của một lần nhận cũ hơn» — đã thêm đúng ca đó và chiều đỏ của nó."},
+    {"i": 1, "p": "Phép đo «Bắt đầu cuộc mới» chỉ kiểm nút có gọi hàm, chưa kiểm ô soạn có mở lại không — đã đổi sang kiểm ô soạn thật sau khi bấm."},
+    {"i": 2, "p": "Phép đếm «0 gợi ý lập trình viên» chỉ quét chữ trên màn, gợi ý giấu trong thông báo nổi sẽ lọt — đã thêm lượt quét mọi chuỗi với danh sách cấm viết trước."},
+    {"i": 3, "p": "Người chấm bằng mắt chưa được xem ảnh ngăn công ty và ảnh một trạng thái lỗi — đã thêm hai ảnh và hỏi thẳng về trạng thái."},
+    {"i": 4, "p": "Phép đo nút tra cứu chưa chứng minh biểu tượng đũa phép đã biến mất ở lúc đang chạy — đã đếm nó bằng 0 ở cả ba trạng thái."}
+  ]
+}

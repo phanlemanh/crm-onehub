@@ -27,6 +27,8 @@ import {
 	contactUpdateArgs,
 	decideFactOutput,
 	factDecisionInput,
+	undoFactDecisionInput,
+	undoFactDecisionOutput,
 } from "./contacts.contracts";
 import { ContactsService } from "./contacts.service";
 
@@ -175,5 +177,17 @@ export class ContactsRouter {
 		@Input() input: z.infer<typeof factDecisionInput>,
 	) {
 		return this.contacts.decideFact(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: undoFactDecisionInput,
+		output: undoFactDecisionOutput,
+		meta: restMeta("POST", "/contacts/undo-fact-decision", ["Contacts"]),
+	})
+	async undoFactDecision(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof undoFactDecisionInput>,
+	) {
+		return this.contacts.undoFactDecision(input, ctx.user.id);
 	}
 }

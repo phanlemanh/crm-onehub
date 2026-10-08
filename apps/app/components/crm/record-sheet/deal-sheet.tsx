@@ -182,6 +182,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
+			onRetry={() => void query.refetch()}
 			title={deal?.name ?? m.deal.fallbackTitle}
 			description={
 				deal ? (

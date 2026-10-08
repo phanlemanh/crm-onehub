@@ -94,6 +94,8 @@ evals:
     paths: ["docs/superpowers/specs/2026-09-29-the-gop-y-okr-design.md", "packages/ui/src/components/proposed-change.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx", "apps/app/components/crm/facts.tsx", "apps/app/test/the-gop-y-okr.dom.tsx"]
 
   - id: E10
+    status: not-run
+    superseded_by: khung-ban-ghi-kara#AC-6
     criterion: AC-10
     executor: test
     cmd: config:executors.test.tgy_thong_tin

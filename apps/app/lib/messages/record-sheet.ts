@@ -4,7 +4,7 @@ const en = {
 	tabs: {
 		overview: "Overview",
 		activity: "Activity",
-		agent: "Agent",
+		agent: "Kara",
 		details: "Details",
 		deals: "Deals",
 		contacts: "Contacts",
@@ -199,7 +199,7 @@ const vi = {
 	tabs: {
 		overview: "Tổng quan",
 		activity: "Hoạt động",
-		agent: "Tác nhân",
+		agent: "Kara",
 		details: "Chi tiết",
 		deals: "Thoả thuận",
 		contacts: "Cá nhân",
