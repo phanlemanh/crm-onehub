@@ -42,7 +42,6 @@ const vi = {
 		boTruong: "Bỏ trưởng",
 		timNguoi: "Tìm người",
 		khongThay: "Không thấy ai",
-		keo: "Kéo để sắp thứ tự, hoặc dùng phím Space rồi mũi tên lên xuống.",
 		pbTrong: {
 			title: "Phòng ban chưa có ai",
 			body: "Thêm người từ danh sách thành viên OneHub Center, hoặc nhập cả phòng ban từ bảng tính.",
@@ -54,7 +53,6 @@ const vi = {
 		chuaCoTrong: "Mọi thành viên đã có phòng ban chính.",
 		daDatTruong: "Đã đặt trưởng cho {ten}",
 		daBoTruong: "Đã bỏ trưởng của {ten}",
-		daSap: "Đã lưu thứ tự mới",
 	},
 	gan: {
 		tieuDe: "Gắn phòng ban vào {bp}",
@@ -252,7 +250,6 @@ const en: ToChucMessages = {
 		boTruong: "Remove head",
 		timNguoi: "Search people",
 		khongThay: "No one found",
-		keo: "Drag to reorder, or press Space then the up and down arrows.",
 		pbTrong: {
 			title: "No one in this department yet",
 			body: "Add people from the member list, or import the whole department from a spreadsheet.",
@@ -264,7 +261,6 @@ const en: ToChucMessages = {
 		chuaCoTrong: "Every member has a primary department.",
 		daDatTruong: "Head set for {ten}",
 		daBoTruong: "Head removed from {ten}",
-		daSap: "New order saved",
 	},
 	gan: {
 		tieuDe: "Add departments to {bp}",

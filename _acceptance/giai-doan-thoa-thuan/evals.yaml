@@ -257,6 +257,8 @@ evals:
       giai doan WON moi".
 
   - id: E15
+    status: not-run
+    superseded_by: danh-sach-keo-chung#AC-8
     criterion: AC-13
     executor: ui-check
     layer: ui-observed

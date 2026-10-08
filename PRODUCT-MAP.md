@@ -12,8 +12,8 @@ flowchart TD
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>132 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>50 việc"] --> GG{"Cổng Giá trị"}
+  GB --> DG["Đã giao<br/>134 việc"]
+  GB --> CN["Chờ phiên nghiệm thu<br/>53 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -56,9 +56,12 @@ flowchart TD
 - Chỉ quản trị và chủ đổi được định nghĩa trường của cả đội — thành viên thường vẫn xem được, nhưng mọi đường đổi đều khoá, cả trên màn lẫn khi gọi thẳng máy chủ (`chi-quan-tri-sua-duoc-truong`)
 - Cửa vào đăng nhập cho người mới — trang /sign-in nói cách vào ở khối «Lần đầu vào?» (bước tính theo nút đang bật), báo lỗi khi better-auth trả về vì địa chỉ chưa được cho phép, theo giao diện máy thay vì ép tối; bốn trang AuthShell khác giữ bố cục (`cua-vao-dang-nhap`)
 - Cửa vào vá — Quên mật khẩu giữ logo, đăng xuất lỗi báo tiếng Việt, API không đọc được phiên thì không đá người còn phiên về đăng nhập mà hiện trang lỗi có «Thử lại»; trả nợ thước cua-vao-dang-nhap (`cua-vao-va`)
+- «Đã lưu trữ» ở Cài đặt › Giai đoạn báo lỗi tải và cho thử lại thay vì biến mất (`da-luu-tru-tai-loi`)
+- «Kéo để sắp xếp ở Tổ chức và Giai đoạn chạy giống nhau; giai đoạn thoả thuận lưu trữ và khôi phục được» (`danh-sach-keo-chung`)
 - Khu OKR trong CRM — quản trị mở chu kỳ năm và quý; mỗi cấp đặt mục tiêu với KR đủ sáu kiểu, căn chỉnh vào cấp trên, công bố; nhập bộ OKR quý 4 từ bảng tính có xem trước; mọi sửa đổi để lại vết (`dat-okr-trong-crm`)
 - «Bảng rỗng vì đang lọc thì nói rõ, nút bỏ lọc đúng tên, lựa chọn có số 0 vẫn hiện» (`datatable-loc-ro`)
 - Đổi tên sản phẩm trên mọi chữ người đọc từ «CRM» sang «OneHub Center» (trùng tên miền onehub.center), và làm lại cột trái /sign-in theo hướng A — nền lưới chấm bằng token cho năm trang AuthShell, dòng neo cỡ lớn, ba bước nối bằng đường dọc, không Card (`doi-ten-onehub-center`)
+- «Dòng thời gian giữ các hoạt động đã tải khi «Xem cũ hơn» hay làm mới ngầm bị lỗi» — lỗi sau khi đã có dữ liệu không thay danh sách bằng khung lỗi; thông báo tại chỗ kèm «Thử lại» tải đúng phần hỏng (`dong-thoi-gian-giu-khi-loi`)
 - Hỏi ý mục tiêu — trước mỗi kỳ đặt OKR cả công ty góp ý cho mục tiêu công ty, người gom xếp ý thành chủ đề, người chọn (CEO) viết trước rồi kết luận từng chủ đề bằng lý do tự viết, chủ đề chọn thành bản nháp mục tiêu cấp OneHub, ai góp cũng thấy ý mình đi đâu và vì sao (bước 1–2 chu kỳ OKR, hạng mục 11 lộ trình OKR) (`dot-hoi-y-tuong-okr`)
 - Mục tiêu có mức hiển thị giới hạn, có bước duyệt nhẹ tuỳ chọn, và tái cơ cấu giữa kỳ không làm OKR mồ côi — mức công khai hay giới hạn áp trên mọi đường đọc OKR, ô «Công bố cần duyệt» của Chương trình OKR với một người duyệt suy từ cây, cây tổ chức không lưu trữ hay xoá được đơn vị còn OKR, chuyển OKR sang đơn vị khác, danh sách OKR mồ côi (lượt 8c — MT-06, QT-02, TC-06) (`gioi-han-duyet-cay-okr`)
 - Góp ý của Kara ở khu OKR đặt đúng chỗ — «Kara · N góp ý» trên thẻ Mục tiêu, đề xuất neo ngay dưới từng KR ở khung chi tiết với biên nhận có Hoàn tác, hộp Sửa chỉ còn một dòng dẫn sang (`gop-y-dung-cho`)
@@ -113,6 +116,7 @@ flowchart TD
 - Chân lái từng component ra màn — đo lớp chữ tiếng Anh nằm ở giá trị mặc định của tham số, và giải toả bảng mười dòng của vòng trước bằng đo thay vì khai (`chan-lai-component-ra-man`)
 - Bản nháp OKR có hai Mục tiêu trùng khoá, hay hai KR trùng khoá dưới cùng một Mục tiêu, bị schema banNhap từ chối ở biên công cụ nop_ban_nhap — agent nhận lỗi nêu đúng ô và nộp lại (`chan-trung-khoa-ban-nhap`)
 - Chặn uỷ thác agent_builder ở lượt không mang CREATE_AGENT — hiện tại chốt quyền ném exception, con không có cửa ra, và hội thoại treo "đang chạy nền" vĩnh viễn không một thẻ lỗi (`chan-uy-thac-sai-luot`)
+- Hộp chèn liên kết tới trang không trả focus về trình soạn đã bị huỷ — hết lỗi chưa bắt khi gỡ trình soạn lúc hộp đang mở (`chen-lien-ket-khong-lac`)
 - Đưa danh sách ai-được-vào CRM từ biến môi trường vào bảng lời cho phép, quản trên màn Members với hai khối tách bạch — gỡ thành viên là cắt quyền thật, rút lời cho phép chỉ chặn người chưa có tài khoản (`cho-phep-ai-vao-o-man-hinh`)
 - Ca «chủ cuối cùng» của api xanh bất kể trong workspace còn chủ lạ từ tệp khác — tiền đề «chu là chủ duy nhất» được lập tường minh trong ca và trả lại sau ca (`chu-cuoi-cung-tien-de`)
 - Chữ mặc định của thư viện ngoài — dựng thước cho lớp chữ mà mọi bộ quét tĩnh đều mù, rồi vá cái nó tìm ra (`chu-mac-dinh-thu-vien-ngoai`)
@@ -203,6 +207,7 @@ flowchart TD
 - Soạn OKR khi chưa cấu hình cầu nối — nút không mời mở cuộc, màn nói thẳng chưa bật, cuộc chưa có lượt không bị tính vào trần, có hướng dẫn dựng apps/agent-okr trên Vercel (`soan-okr-song-lai`)
 - Sửa và ẩn chu kỳ OKR tạo nhầm — chu kỳ trống ở lập kế hoạch sửa được mọi ô, chu kỳ chưa đóng sửa được tên, chu kỳ trống gỡ được, chu kỳ có dữ liệu ẩn được có lý do và hiện lại được; chu kỳ ẩn vắng khỏi mọi ô chọn, kỳ mặc định, kiểm quý chồng, mang sang, nhắc và ghi mới; vết luôn còn (`sua-an-chu-ky-okr`)
 - Người quản trị sửa, sắp xếp, lưu trữ và khôi phục bộ phận và khuôn; người điều phối đóng, mở lại kế hoạch và đánh dấu bậc phễu — chỉ quản trị được đổi cấu hình (`sua-luu-tru-dieu-phoi`)
+- Sửa hai paths chết (E5, E17) trong evals.yaml của hồ sơ đã ký soan-okr-cung-tro-ly để lưới hoá cũ lọc theo paths được, rồi ghim lại hồ sơ một lần (`sua-paths-e5-soan-okr`) — đã giao — không đo, khai ở Cổng Đáng
 - Sửa hai lỗi môi trường làm suite test đỏ, và nối dây cổng nghiệm thu vào bản kit đang cài (`sua-test-do-thu-tu-nap`)
 - Tác nhân chạy đúng với mọi model trong danh mục — khuôn model thấy di động giữa các nhà cung cấp, model giải theo vai lúc chạy thay vì ghim theo bản Tác nhân, lượt mà bộ chạy hỏng hoặc chưa nộp kết quả thì ghi Hỏng (`tac-nhan-model-rieng`)
 - soSanh bỏ vòng Myers mức khối vô ích khi cận dưới số bước sửa đã vượt trần, để ca tat-dinh của tai-lieu-diff hết đỏ chập chờn trên CI (`tai-lieu-diff-bo-myers-vo-ich`)
