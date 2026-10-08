@@ -29,7 +29,7 @@ const vi = {
 		huy: "Huỷ",
 		themDoiTrong: "Thêm KR đối trọng",
 		suaKrNay: "Sửa KR này",
-		suaMucTieu: "Sửa Mục tiêu",
+		suaMucTieu: "Sửa mục tiêu",
 		khoaSua: "Mục tiêu đang khoá sửa nên chưa quyết được góp ý này.",
 	},
 	bienNhan: {

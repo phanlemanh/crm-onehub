@@ -12,11 +12,13 @@ import type { AuthedTrpcContext } from "../trpc/context.types";
 import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.middleware";
 import { restMeta } from "../trpc/openapi";
 import {
+	giaiDoanArchivedOutput,
 	giaiDoanArchiveInput,
 	giaiDoanCreateInput,
 	giaiDoanListOutput,
 	giaiDoanRenameInput,
 	giaiDoanReorderInput,
+	giaiDoanRestoreInput,
 	giaiDoanWriteOutput,
 } from "./giai-doan.contracts";
 import { GiaiDoanService } from "./giai-doan.service";
@@ -82,5 +84,25 @@ export class GiaiDoanRouter {
 		@Input() input: z.infer<typeof giaiDoanArchiveInput>,
 	) {
 		return this.giaiDoan.archive(ctx.user.id, input);
+	}
+
+	@Query({
+		output: giaiDoanArchivedOutput,
+		meta: restMeta("GET", "/deal-stages/archived", ["Deal stages"]),
+	})
+	async archived() {
+		return this.giaiDoan.archived();
+	}
+
+	@Mutation({
+		input: giaiDoanRestoreInput,
+		output: giaiDoanWriteOutput,
+		meta: restMeta("POST", "/deal-stages/{id}/restore", ["Deal stages"]),
+	})
+	async restore(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof giaiDoanRestoreInput>,
+	) {
+		return this.giaiDoan.restore(ctx.user.id, input);
 	}
 }

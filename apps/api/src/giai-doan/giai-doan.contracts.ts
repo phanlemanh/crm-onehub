@@ -37,9 +37,25 @@ export const giaiDoanArchiveInput = z.object({
 	moveTo: z.string().min(1).optional(),
 });
 
+export const giaiDoanRestoreInput = z.object({
+	id: z.string().min(1),
+});
+
+export const giaiDoanArchivedOutput = z.array(
+	z.object({
+		id: z.string(),
+		label: z.string(),
+		kind: loaiGiaiDoan,
+		archivedAt: z.string(),
+	}),
+);
+
+export type GiaiDoanArchived = z.infer<typeof giaiDoanArchivedOutput>;
+
 export const giaiDoanWriteOutput = z.object({ id: z.string() });
 
 export type GiaiDoanCreateInput = z.infer<typeof giaiDoanCreateInput>;
 export type GiaiDoanRenameInput = z.infer<typeof giaiDoanRenameInput>;
 export type GiaiDoanReorderInput = z.infer<typeof giaiDoanReorderInput>;
 export type GiaiDoanArchiveInput = z.infer<typeof giaiDoanArchiveInput>;
+export type GiaiDoanRestoreInput = z.infer<typeof giaiDoanRestoreInput>;

@@ -1357,6 +1357,10 @@ stages.
   per kind, labels unique case-insensitively after trimming, at most
   `GIAI_DOAN.tran.tong` live stages, and `reorder` must list exactly the live stages
   of one kind. The kind of a stage never changes.
+- **Archived stages come back through `restore`.** `giaiDoan.archived` lists them
+  newest first; `restore` runs under the same `FOR UPDATE`, refuses a label a live
+  stage uses, the cap, and a stage that is not archived, and puts the stage last in
+  its kind. There is no purge: history keeps the id.
 - **The timeline carries labels.** `activities.timeline` resolves the ids in a
   `STAGE_CHANGE` meta, archived stages included, and returns `stageChange`; screens
   print it and never look labels up themselves.

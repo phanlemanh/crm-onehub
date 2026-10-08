@@ -25,7 +25,7 @@ import { dashboardSummaryInput, dashboardSummaryOutput } from "../dashboard/dash
 import { dealListInput, dealListOutput, dealBoardInput, dealBoardOutput, dealIdInput, dealDetailOutput, dealCreateInput, dealCreateOutput, dealUpdateArgs, dealMutateOutput, setStageInput, dealSetStageOutput, dealContactsInput, dealContactOptionsOutput, dealAttachContactInput, dealContactLinkOutput, dealDetachContactInput, dealContactRoleInput, dealContactRoleOutput, dealBulkOwnerInput, dealBulkResultOutput, dealBulkStageInput, dealBulkInput } from "../deals/deals.contracts";
 import { enrichmentQueueInput } from "@crm/validation/enrichment-queue";
 import { fieldAccessOutput, fieldListInput, fieldListOutput, fieldByKeyInput, serializedFieldOutput, fieldEntityInput, fieldFiltersOutput, fieldIdInput, fieldCoverageOutput, fieldCreateInput, fieldUpdateArgs, fieldReorderInput, fieldReorderOutput, fieldDeleteOutput, fieldBackfillOutput } from "../fields/fields.contracts";
-import { giaiDoanListOutput, giaiDoanCreateInput, giaiDoanWriteOutput, giaiDoanRenameInput, giaiDoanReorderInput, giaiDoanArchiveInput } from "../giai-doan/giai-doan.contracts";
+import { giaiDoanListOutput, giaiDoanCreateInput, giaiDoanWriteOutput, giaiDoanRenameInput, giaiDoanReorderInput, giaiDoanArchiveInput, giaiDoanArchivedOutput, giaiDoanRestoreInput } from "../giai-doan/giai-doan.contracts";
 import { googleConnectionStatusOutput, setAutoCreateInput, suppressDomainInput, suppressDomainOutput, threadInput, emailThreadOutput, calendarEventInput, calendarEventOutput } from "../google/google.contracts";
 import { purgeSyncedDataOutput, revokeAccessOutput, microsoftConnectionStatusOutput, setOutlookAutoCreateInput } from "../microsoft/microsoft.contracts";
 import { okrAccessOutput, cyclesOutput, createCycleInput, okOutput, setCyclePhaseInput, aiChiTieuOutput, troLyDichInput, troLySanSangOutput, troLyDeXuatOutput, troLyDanhSachOutput, troLyQuyetInput, troLyQuyetOutput, troLyAnInput, troLyAnOutput, troLySoDoInput, troLySoDoOutput, xuHuongKrInput, xuHuongKrOutput, donViSoanVao, soanSanSangOutput, soanMoVao, soanMoOutput, soanDanhSachCuocOutput, cuocIdInput, soanTangLuotOutput, soanDanhSachOutput, soanQuyetInput, soanQuyetOutput, soanDuaVaoOutput, soanAnOutput, soanSoDoInput, soanSoDoOutput, datHienThiOutput, programOutput, setProgramInput, byUnitInput, byUnitOutput, countByUnitInput, okrCountByUnitOutput, mineInput, mineOutput, objectiveInput, objectiveOutput, createObjectiveInput, updateObjectiveInput, idInput, chuyenDonViXemTruocOutput, chuyenDonViOutput, moCoiOutput, dungLaiOutput, createKrInput, updateKrInput, alignmentTreeInput, alignmentTreeOutput, alignmentTargetsInput, alignmentTargetsOutput, alignmentInput, okrImportInput, okrImportPreviewOutput, okrImportApplyInput, okrImportApplyOutput, capNhatTuanOutput, moCapNhatOutput, guiCapNhatOutput, viecCuaToiOutput, thanhVienOutput, commentsOutput, addCommentOutput, mauInput, mauOutput, luuMauVao, followOutput, transferOkrOutput } from "../okr/okr.contracts";
@@ -614,6 +614,13 @@ const appRouter = t.router({
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     archive: publicProcedure
       .input(giaiDoanArchiveInput)
+      .output(giaiDoanWriteOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    archived: publicProcedure
+      .output(giaiDoanArchivedOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    restore: publicProcedure
+      .input(giaiDoanRestoreInput)
       .output(giaiDoanWriteOutput)
       .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
