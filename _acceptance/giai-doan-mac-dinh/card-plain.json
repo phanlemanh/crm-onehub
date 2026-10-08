@@ -1,32 +1,31 @@
 {
-  "feature_plain": "Thoả thuận tạo mới không bao giờ rơi vào giai đoạn quản trị viên đã lưu trữ — cơ sở dữ liệu thôi tự gán giai đoạn Demo, và dữ liệu mẫu chỉ dùng giai đoạn còn dùng.",
+  "feature_plain": "Thoả thuận tạo mới không rơi vào giai đoạn quản trị viên đã lưu trữ — ghim cách chọn giai đoạn khi Demo đã cất, dữ liệu mẫu chỉ dùng giai đoạn còn dùng, và một phép quét bắt mọi chỗ trong mã tạo thoả thuận mà quên giai đoạn.",
   "will_do": [
-    {"id": "AC-3", "p": "Sẽ đặt thoả thuận tạo mới (không chọn giai đoạn) vào giai đoạn Đang mở còn dùng đầu tiên, kể cả khi Demo đã lưu trữ, và nó hiện đúng cột trên Kanban."},
-    {"id": "AC-4", "p": "Sẽ cho dữ liệu mẫu chỉ dùng giai đoạn còn dùng, theo đúng loại Đang mở / Chốt được / Không thành."},
-    {"id": "AC-5", "p": "Sẽ bắt mọi chỗ tạo thoả thuận quên giai đoạn ngay lúc kiểm mã, kể cả lệnh ghi thẳng vào cơ sở dữ liệu."}
+    {"id": "AC-1", "p": "Sẽ đặt thoả thuận tạo mới (không chọn giai đoạn) vào giai đoạn Đang mở còn dùng đầu tiên, kể cả khi Demo đã lưu trữ, và nó hiện đúng cột trên Kanban."},
+    {"id": "AC-2", "p": "Sẽ cho dữ liệu mẫu chỉ dùng giai đoạn còn dùng, đúng loại Đang mở / Chốt được / Không thành; đo trên một kho riêng tạo rồi xoá."}
   ],
   "wont_do": [
-    {"id": "AC-1", "p": "Sẽ KHÔNG còn mặc định Demo cho giai đoạn của thoả thuận trong mô hình dữ liệu; một bước đổi cơ sở dữ liệu duy nhất, xếp sau bước của L1."},
-    {"id": "AC-2", "p": "Sẽ KHÔNG để cơ sở dữ liệu nhận một thoả thuận thiếu giai đoạn."},
-    {"id": "AC-6", "p": "Sẽ KHÔNG xoá hay nới khẳng định nào của các bài kiểm cũ; chỉ thêm giai đoạn vào chỗ chúng tạo thoả thuận."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG để tám hồ sơ đã ký bị cũ bằng chứng: ghim lại cả tám trong vòng này."},
-    {"id": "OOS-1", "p": "KHÔNG đổi cách API chọn giai đoạn mặc định — đã đúng, chỉ ghim thêm ca Demo đã lưu trữ."},
-    {"id": "OOS-2", "p": "KHÔNG đặt trí khôn chọn giai đoạn vào cơ sở dữ liệu (trigger, hàm)."},
-    {"id": "OOS-3", "p": "KHÔNG đổi dữ liệu mẫu ngoài thoả thuận."}
+    {"id": "AC-3", "p": "Sẽ KHÔNG để chỗ nào trong mã sản phẩm tạo thoả thuận mà không gán giai đoạn — phép quét theo kiểu dữ liệu bắt mọi dạng tạo, kể cả lồng và ghi thẳng cơ sở dữ liệu."},
+    {"id": "AC-4", "p": "Sẽ KHÔNG nới bài kiểm cũ nào, và vòng này KHÔNG đổi mô hình dữ liệu hay cơ sở dữ liệu."},
+    {"id": "OOS-1", "p": "KHÔNG bỏ mặc định Demo trong cơ sở dữ liệu — đó là lối A, tách thành hàng sau."},
+    {"id": "OOS-2", "p": "KHÔNG đổi cách API chọn giai đoạn mặc định — đã đúng, chỉ ghim thêm ca Demo đã lưu trữ."},
+    {"id": "OOS-3", "p": "KHÔNG sửa 9 chỗ trong bài kiểm đang dựa vào mặc định — chỉ là dữ liệu kiểm thử; lối A sẽ sửa."},
+    {"id": "OOS-4", "p": "KHÔNG đổi dữ liệu mẫu ngoài thoả thuận."}
   ],
-  "scope_plain": "Ba thứ để ngoài vòng này:",
+  "scope_plain": "Bốn thứ để ngoài vòng này:",
   "coverage_plain": [
-    {"i": 0, "p": "Đường tạo thoả thuận: API, dữ liệu mẫu, bài kiểm và eval, lệnh ghi thẳng — 34 chỗ, 9 chỗ đang dựa vào mặc định."},
+    {"i": 0, "p": "Đường tạo thoả thuận: API, dữ liệu mẫu, mã sản phẩm khác, ghi thẳng cơ sở dữ liệu — 34 chỗ hôm nay, 9 chỗ dựa vào mặc định đều trong bài kiểm."},
     {"i": 1, "p": "Giai đoạn Đang mở đầu: còn dùng, đã lưu trữ — đủ khi ca đã lưu trữ có kiểm."},
-    {"i": 2, "p": "Loại thoả thuận mẫu: mở, chốt được, không thành — đủ khi cả ba loại có mặt và đúng giai đoạn."},
-    {"i": 3, "p": "Mỗi lời hứa có một tiêu chí: mô hình và bước đổi cơ sở dữ liệu, cơ sở dữ liệu từ chối, API, dữ liệu mẫu, kiểm mã, hồi quy, tám hồ sơ."},
-    {"i": 4, "p": "Không bao giờ đặt lại lâu dài một mặc định trỏ vào giai đoạn cụ thể."}
+    {"i": 2, "p": "Loại thoả thuận mẫu: mở, chốt được, không thành — đủ khi cả ba có mặt và đúng giai đoạn."},
+    {"i": 3, "p": "Mỗi lời hứa có một tiêu chí: API khi Demo đã cất, dữ liệu mẫu, phép quét mã sản phẩm, không hồi quy."},
+    {"i": 4, "p": "Để sau: bỏ mặc định ở cơ sở dữ liệu (lối A), khi hai hồ sơ đang kẹt đã gỡ."},
+    {"i": 5, "p": "Không bao giờ đặt trí khôn chọn giai đoạn vào cơ sở dữ liệu."}
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Kiểm mã có thể chạy trên bản sinh cũ còn mặc định — đã thêm bước sinh lại rồi đọc kiểu sinh ra."},
-    {"i": 1, "p": "Phép kiểm trùng mốc sẽ đỏ vĩnh viễn sau gộp — đã đổi sang so thư mục khác tên cùng mốc, có lấy bản mới trước."},
-    {"i": 2, "p": "Chạy dữ liệu mẫu trên kho dùng chung làm lệch bài kiểm khác — đã chuyển sang kho riêng tạo rồi xoá trong ca."},
-    {"i": 3, "p": "Chưa có tiêu chí cho việc ghim lại tám hồ sơ — đã thêm, và đếm lại đúng 5 tệp, 9 chỗ."},
-    {"i": 4, "p": "Thiếu đường lùi và chưa quét lệnh ghi thẳng — đã thêm cả hai; nói rõ chọn lối B thì ngưỡng phải sửa."}
+    {"i": 0, "p": "Phép quét theo chữ bỏ sót tạo lồng, bí danh, ghi thẳng viết khác — đã đổi sang quét theo kiểu dữ liệu, mỗi dạng có ca đỏ."},
+    {"i": 1, "p": "Có chữ «stage» chưa chắc đã gán giai đoạn — nay đòi đúng khoá trên chính dữ liệu tạo, và giá trị không được để trống."},
+    {"i": 2, "p": "Ngưỡng ghi «trong mã» rộng hơn hợp đồng — đã sửa ngưỡng thành «trong mã sản phẩm»."},
+    {"i": 3, "p": "Thiết kế còn đặt lối A làm chính — đã viết lại theo lối B, và ghim rằng vòng này không đổi mô hình dữ liệu."},
+    {"i": 4, "p": "Chốt bài kiểm cũ không ghim mốc so — đã ghim mốc và thêm ca sửa ký tự trong chuỗi."}
   ]
 }
