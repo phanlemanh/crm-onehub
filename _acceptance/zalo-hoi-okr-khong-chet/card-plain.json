@@ -1,88 +1,26 @@
 {
-  "feature_plain": "Ai hỏi bot Zalo về KR hay OKR sẽ nhận một câu trả lời chỉ chỗ xem trong OneHub Center, thay vì «Tôi chưa trả lời được câu này».",
+  "feature_plain": "Hỏi bot Zalo về KR hay OKR thì bot luôn trả lời một câu có nghĩa — kể cả khi trợ lý AI vẫn chọn gọi Trợ lý OKR, lượt trả lời không còn chết thành «Tôi chưa trả lời được câu này».",
   "will_do": [
-    {
-      "id": "AC-1",
-      "p": "Sẽ cho câu «KR doanh thu quý này đang đạt bao nhiêu phần trăm?» qua Zalo nhận đúng một tin trả lời có nói tới OKR ở cả sáu lần hỏi liền bằng model thật, không lần nào chết — không đòi model phải gọi Trợ lý OKR."
-    },
-    {
-      "id": "AC-2",
-      "p": "Sẽ thay Trợ lý OKR bằng một lời từ chối có lý do ở mọi loại phiên trừ việc OKR nền, đo đủ tám loại phiên."
-    },
-    {
-      "id": "AC-4",
-      "p": "Sẽ chỉ thêm một tệp công cụ, một hằng chữ trong cấu hình OKR, một tệp bài thử và hồ sơ; bài thử cũ của hook không đổi một dòng."
-    },
-    {
-      "id": "AC-5",
-      "p": "Sẽ để việc OKR nền vẫn gọi đúng Trợ lý OKR thật — chạy lại phép đo đầu-cuối có sẵn của tro-ly-okr-nen."
-    }
+    { "id": "AC-1", "p": "Sẽ trả lời câu c33 về KR có nghĩa trong sáu lượt thật liền trên Zalo, kể cả lượt mà trợ lý AI vẫn gọi Trợ lý OKR." },
+    { "id": "AC-2", "p": "Sẽ cho trợ lý AI ngoài việc OKR thấy Trợ lý OKR là «không dùng được ở đây», để nó ít gọi hơn; việc OKR nền vẫn thấy Trợ lý OKR thật." },
+    { "id": "AC-3", "p": "Sẽ để chốt uỷ quyền OKR chỉ ghi một dòng nhật ký, không giết lượt, khi Trợ lý OKR bị gọi ngoài việc OKR; trong việc OKR thì vẫn chặn như cũ." },
+    { "id": "AC-4", "p": "Sẽ chỉ chạm đúng các tệp đã khai, gồm cả lượt ghim lại hồ sơ đã ký tro-ly-okr-nen." },
+    { "id": "AC-5", "p": "Sẽ giữ nguyên việc OKR nền: nó vẫn gọi Trợ lý OKR thật và chỉ nộp đề xuất." },
+    { "id": "AC-7", "p": "Sẽ chứng trên máy thật rằng khi trợ lý AI gọi Trợ lý OKR thật, lượt Zalo vẫn sống và trả lời có nghĩa." }
   ],
   "wont_do": [
-    {
-      "id": "AC-3",
-      "p": "Chặn Trợ lý OKR thật chạy ngoài việc OKR nền như hôm nay — chốt dữ liệu OKR không nới."
-    },
-    {
-      "id": "OOS-1",
-      "p": "KHÔNG sửa chuyện tin Zalo không tới được production từ 30/09 (webhook trả 403) — việc riêng, cần anh xem trang Zalo trên production."
-    },
-    {
-      "id": "OOS-2",
-      "p": "KHÔNG sửa nhật ký gửi Zalo đang vứt lý do Zalo từ chối — việc riêng."
-    },
-    {
-      "id": "OOS-3",
-      "p": "KHÔNG cho Zalo trả số liệu KR thật — tính năng mới, đụng chốt ZDR."
-    },
-    {
-      "id": "OOS-4",
-      "p": "KHÔNG đổi chỉ dẫn của bot Zalo."
-    },
-    {
-      "id": "OOS-5",
-      "p": "KHÔNG đo được ca eve bỏ qua công cụ thay thế khi chạy lại một bước — ghi là giới hạn đã biết."
-    }
-  ],
-  "scope_plain": "Hai lỗi Zalo khác tìm thấy ở S0 tách ra việc riêng; hàng này chỉ chặn đúng cách câu hỏi OKR làm chết lượt.",
-  "coverage_plain": [
-    {
-      "i": 0,
-      "p": "Trục loại phiên: đủ tám loại, mỗi loại một dòng đo (AC-2)."
-    },
-    {
-      "i": 2,
-      "p": "Trục điều model xin: Trợ lý OKR, công cụ khác, gọi lần hai — hook cũ vẫn chặn như trước (AC-3)."
-    },
-    {
-      "i": 4,
-      "p": "Trục đường chạy: gọi thẳng hàm (AC-2, AC-3) và eve thật với model thật qua Zalo và qua việc OKR nền (AC-1, AC-5)."
-    },
-    {
-      "i": 7,
-      "p": "Đối chiếu: tài liệu eve nói công cụ động cùng tên đè bản khai sẵn; kho đã dùng mẫu này hai lần."
-    }
+    { "id": "AC-6", "p": "Sẽ KHÔNG để Trợ lý OKR chạy dưới một cuộc hỏi Zalo ghi được đề xuất hay tóm tắt nào — kể cả khi đúng lúc đó có việc OKR nền của người khác đang chạy." },
+    { "id": "OOS-1", "p": "Không xử webhook Zalo trả 403 — đã thành hàng H4." },
+    { "id": "OOS-2", "p": "Không sửa nhật ký vứt lý do của Zalo — đã thành hàng H4." },
+    { "id": "OOS-3", "p": "Zalo chưa trả số liệu OKR thật cho câu hỏi KR." },
+    { "id": "OOS-4", "p": "Không đổi chỉ dẫn của kênh Zalo." },
+    { "id": "OOS-5", "p": "Không đo riêng chuyện eve bỏ công cụ động khi chạy lại — phép đo ép gọi đã đo đúng hậu quả của nó." }
   ],
   "gap_probe_plain": [
-    {
-      "i": 0,
-      "p": "Phép đo Zalo chưa kiểm model có gọi Trợ lý OKR không — nay chỉ tính lượt có gọi, đủ ba, trần sáu."
-    },
-    {
-      "i": 1,
-      "p": "Ranh giới thiếu tệp bản đồ do máy vẽ — đã thêm; không cần ghim lại hồ sơ khác vì bộ kit chỉ soi hồ sơ trong diff."
-    },
-    {
-      "i": 2,
-      "p": "Bài thử cũ của hook có thể bị nới mà không ai thấy — nay ranh giới cấm sửa nó."
-    },
-    {
-      "i": 3,
-      "p": "Chưa có lượt thật nào chứng việc OKR nền không bị thay — đã thêm tiêu chí và chạy lại phép đo đầu-cuối có sẵn."
-    },
-    {
-      "i": 4,
-      "p": "Đếm «đúng một tin» từ bảng báo cáo — giữ cách tách theo dấu nối của bàn đo; đếm thẳng từ Zalo giả để lại sau."
-    }
+    { "i": 0, "p": "Phép đo cũ cất tệp ra khỏi cây trong lúc các phép đo khác chạy song song, nên dễ xanh hay đỏ oan — nay tắt bằng một công tắc chỉ cho lượt đo, không chạm cây." },
+    { "i": 1, "p": "Phép đo chính còn coi «trợ lý AI gọi Trợ lý OKR» là lỗi, trong khi hướng mới cho phép — đã sửa: gọi mà lượt vẫn sống là đúng." },
+    { "i": 2, "p": "Phép đo ép gọi chưa đòi câu trả lời có nghĩa — đã đòi đủ như phép đo chính." },
+    { "i": 3, "p": "Chưa đo ca có việc OKR của người khác đang chạy — đã thêm ca đó và một cặp phá." },
+    { "i": 4, "p": "Ranh giới chưa cho lượt ghim lại hồ sơ đã ký tro-ly-okr-nen — đã cho, giới hạn đúng phần ghim lại." }
   ]
 }

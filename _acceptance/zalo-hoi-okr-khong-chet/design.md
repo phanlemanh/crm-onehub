@@ -43,3 +43,29 @@ Ghi nhớ 26/09 «eve bỏ công cụ động khi replay»: trên production, �
 ## Đặc tả UX
 
 Không chạm màn web. Câu trả lời trên Zalo là chữ của model; hợp đồng chỉ hứa nó không phải câu lỗi chung và có nhắc OKR.
+
+
+## Sửa sau S4 round 1 (08/10)
+
+S4 round 1 REJECT. Phản biện chỉ ra, và `docs/agent.md` («Ba điều đo được trên eve 0.29.4») xác nhận: bản thay động cùng
+tên KHÔNG đè được một subagent. eve vẫn phát `subagent-call` theo bảng công cụ tĩnh, nên khi model vẫn gọi `tro_ly_okr`
+ở phiên Zalo, hook `okr-uy-quyen` ném lỗi và lượt chết như cũ. Sáu lượt xanh của E1 là do mô tả mới làm model không gọi
+(0/6 lượt gọi). Chủ kho duyệt hướng mới 08/10 («Duyệt hướng mới H1»):
+
+1. **Hook không ném ngoài phiên OKR.** `quyetUyQuyen` trả `cho: true` khi `purpose` khác `okr`; hook ghi một dòng
+   `[okr-uy-quyen] ngoai-okr purpose=<purpose>` (không mang chữ câu hỏi) rồi để lượt đi tiếp. Hai nhánh trong phiên
+   OKR (`khacTroLy`, `lanHai`) giữ nguyên. Ném ở đây vốn không chặn được gì — hook chỉ quan sát (`docs/agent.md`) — nó
+   chỉ giết lượt.
+2. **Phiên con tự từ chối.** Subagent chạy dưới phiên Zalo không có hàng `okr-*`, nên `nop_de_xuat` và `nop_tom_tat` trả
+   `tu-choi` «not an OKR session» (`viecCuaPhienCon` trả `null`). Công cụ dựng sẵn của subagent tắt bằng `disableTool()`,
+   sandbox `deny-all` — AC-7 của `tro-ly-okr-nen` — nên không mở thêm đường đọc hay ghi. Phiên con chờ tối đa
+   `TRO_LY_OKR.timViecCon` (8 × 250 ms) trước khi kết luận không có việc.
+3. **Giữ công cụ đè.** Nó không chặn được lời gọi, nhưng mô tả «Not available in this conversation» làm model gọi ít
+   hơn (0/6 lượt, so với 1/3 khi cất nó đi) — đỡ một lượt phiên con và chi phí của nó.
+4. **Đo ép gọi (AC-7, E8).** `c33.mjs --ep` chạy bàn đo với công tắc `TRO_LY_OKR_BO_DE=1` truyền vào tiến trình
+   `eve dev` của lượt: resolver của công cụ đè trả `null`, model thấy subagent thật như khi eve bỏ công cụ động ở bước
+   replay. Không sửa hay cất tệp nào trong cây — round 1 cất tệp tại chỗ, nên trong lúc S4 chạy song song, E1, E2 và
+   các bộ kiểm quét `agent/tools/` có thể đọc phải cây thiếu tệp, và tệp không về nếu tiến trình bị giết. Biến khai ở
+   `.env.example`, để trống ở production. Chiều `--do` cũ của E1 bỏ: chiều đỏ trên eve thật đã đo ở round 1 (`do-3`).
+5. **E6 xếp hàng qua `mot-luot.sh`.** Round 1 E6 đỏ «pass 0/3» vì dựng `eve` trong lúc E1 giữ `eve dev`.
+6. **Hằng tên.** Khoá của công cụ đè dùng `SUBAGENT_TRO_LY_OKR` thay cho chữ `"tro_ly_okr"` viết tay.

@@ -5,9 +5,9 @@ slug: zalo-hoi-okr-khong-chet
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-10-08T11:55:28Z
+status: draft
+approved_by:
+approved_at:
 design_doc: _acceptance/zalo-hoi-okr-khong-chet/design.md
 ---
 
@@ -23,11 +23,13 @@ Source input: `opportunity.md` (bằng chứng máy đo + nhật ký production)
 
 ## Criteria
 
-- AC-1: Given bàn đo của tro-ly-doc-kho (kho đo dùng-một-lần, `eve dev` thật của `apps/agent`, Zalo giả, model gốc thật như production) và một bộ câu chỉ có c33 «KR doanh thu quý này đang đạt bao nhiêu phần trăm?», When c33 được gửi qua `/zalo/webhook` sáu lượt liền, Then cả sáu lượt: hàng ZaloHoi của tin kết thúc `da-tra-loi`; Zalo giả nhận đúng một tin trả lời, khác `ZALO.loi.tacTuLoi` và có chữ «OKR»; `eve.log` của lượt không có dòng «may be called only from an OKR session» và không có lời gọi subagent `tro_ly_okr` thật; không đòi model gọi `tro_ly_okr` — số lượt có gọi công cụ đè chỉ ghi lại; đường có gọi do AC-2 (E2, ma trận resolver) và cặp phá E5 chứng.
+- AC-1: Given bàn đo của tro-ly-doc-kho (kho đo dùng-một-lần, `eve dev` thật của `apps/agent`, Zalo giả, model gốc thật như production) với công cụ đè `tro-ly-okr-ngoai` bật như production và một bộ câu chỉ có c33 «KR doanh thu quý này đang đạt bao nhiêu phần trăm?», When c33 được gửi qua `/zalo/webhook` sáu lượt liền, Then cả sáu lượt: hàng ZaloHoi của tin kết thúc `da-tra-loi`; Zalo giả nhận đúng một tin trả lời, khác `ZALO.loi.tacTuLoi` và có chữ «OKR»; `eve.log` của lượt không có dòng «may be called only from an OKR session»; lượt nào model vẫn gọi subagent `tro_ly_okr` thật thì hợp lệ khi `eve.log` có dòng `[okr-uy-quyen] ngoai-okr purpose=zalo` — số lượt có gọi chỉ ghi lại; đường có gọi khi không có công cụ đè đo ở AC-7.
 - AC-2: Given mỗi giá trị `purpose` trong `SESSION_PURPOSES` (tám giá trị), When công cụ động `tro-ly-okr-ngoai` giải ở `step.started` với `purpose` đó, Then `purpose` `okr` nhận `null` (subagent `tro_ly_okr` thật còn nguyên); bảy giá trị còn lại nhận đúng một công cụ tên `tro_ly_okr`, và gọi `execute` của nó trả `{ ok: false, reason }` với `reason` bằng `TRO_LY_OKR.ngoaiPhien.lyDo`.
-- AC-3: Given hook `okr-uy-quyen`, When một lượt có `purpose` khác `okr` vẫn xin gọi subagent `tro_ly_okr` thật, hoặc lượt có `purpose` `okr` gọi công cụ khác hay gọi `tro_ly_okr` lần hai, Then hook chặn như trước — ma trận của `okr-uy-quyen.spec.ts` xanh không sửa.
-- AC-4: Given diff của vòng so với merge-base với `onehub`, Then chỉ các tệp `apps/agent/agent/tools/tro-ly-okr-ngoai.ts`, `apps/agent/agent/lib/okr/config.ts`, `apps/agent/test/okr-uy-quyen-ngoai.spec.ts`, `_acceptance/zalo-hoi-okr-khong-chet/**`, `PRODUCT-MAP.md`, `LO-TRINH.html`, các dòng THÊM vào `_acceptance/config.yaml`, và chỉ dòng THÊM mang tên `tro-ly-okr-ngoai` ở `apps/agent/agent/lib/zalo-config.ts` (một dòng, `ZALO.hoi.congCu.doc`), `packages/telemetry/src/allowlist.ts` (một dòng, `AGENT_TOOLS`), `apps/app/lib/agent-transcript.ts` (một dòng, `TOOL_VERBS`) và `apps/app/lib/messages/kara-ban-ghi.ts` (hai dòng, nhãn en và vi) đổi — riêng `apps/agent/test/okr-uy-quyen.spec.ts` không đổi một dòng.
+- AC-3: Given hook `okr-uy-quyen`, When một lượt có `purpose` khác `okr` xin gọi subagent `tro_ly_okr` thật, Then hook KHÔNG ném (lượt không hỏng), ghi đúng một dòng `[okr-uy-quyen] ngoai-okr purpose=<purpose>` không mang chữ nào của câu hỏi, và không đổi giá trị `uyQuyenOkrState`; When lượt có `purpose` `okr` gọi công cụ khác hay gọi `tro_ly_okr` lần hai, Then hook ném như trước (`khacTroLy`, `lanHai`) — ma trận viết trước tám `purpose` × ba loại xin.
+- AC-4: Given diff của vòng so với merge-base với `onehub`, Then chỉ các tệp `apps/agent/agent/tools/tro-ly-okr-ngoai.ts`, `apps/agent/agent/lib/okr/config.ts`, `apps/agent/agent/lib/okr/uy-quyen.ts`, `.env.example` (chỉ dòng THÊM khai `TRO_LY_OKR_BO_DE`), `_acceptance/tro-ly-okr-nen/run-log.jsonl` (chỉ dòng THÊM của lượt ghim lại) và `_acceptance/tro-ly-okr-nen/evidence-report.md` (chỉ dòng `verified_commit` và mục «### Re-pin» thêm cuối — ghim lại hồ sơ đã ký đó trong cùng PR vì `okr-uy-quyen.spec.ts` và hook của nó đổi), `apps/agent/agent/hooks/okr-uy-quyen.ts`, `apps/agent/test/okr-uy-quyen-ngoai.spec.ts`, `apps/agent/test/okr-uy-quyen.spec.ts` (chỉ các dòng ma trận của `purpose` khác `okr`), `docs/agent.md` (đính chính đoạn «Hook chỉ quan sát»), `_acceptance/zalo-hoi-okr-khong-chet/**`, `PRODUCT-MAP.md`, `LO-TRINH.html`, các dòng THÊM vào `_acceptance/config.yaml`, và chỉ dòng THÊM mang tên `tro-ly-okr-ngoai` ở `apps/agent/agent/lib/zalo-config.ts` (một dòng, `ZALO.hoi.congCu.doc`), `packages/telemetry/src/allowlist.ts` (một dòng, `AGENT_TOOLS`), `apps/app/lib/agent-transcript.ts` (một dòng, `TOOL_VERBS`) và `apps/app/lib/messages/kara-ban-ghi.ts` (hai dòng, nhãn en và vi) đổi.
 - AC-5: Given một việc OKR nền chạy thật (`purpose` `okr`, `eve` thật, model thật có cờ ZDR) sau bản sửa, When lượt gốc của việc đó gọi `tro_ly_okr`, Then đó là subagent thật (`tro_ly_okr` con chạy và chỉ gọi `nop_de_xuat`), không phải công cụ đè trả `{ ok: false }`.
+- AC-6: Given một phiên con `tro_ly_okr` mà phiên gốc không có hàng `okr-*` nào (như phiên Zalo), When phiên con gọi `nop_de_xuat` và `nop_tom_tat` bằng đầu vào hợp lệ — kể cả khi đúng lúc đó có một việc `okr-de-xuat` đang chạy gắn một phiên gốc KHÁC —, Then cả hai trả `tu-choi` «not an OKR session» và không ghi hàng `okrDeXuat`, `okrTomTat` nào; đối chứng: phiên gốc có việc `okr-de-xuat` của chính nó đang chạy thì `nop_de_xuat` ghi được.
+- AC-7: Given bàn đo của AC-1 với công cụ đè tắt bằng công tắc đo `TRO_LY_OKR_BO_DE=1` truyền vào tiến trình `eve dev` của lượt (không sửa, không cất tệp nào trong cây; như khi eve bỏ công cụ động ở bước replay), When c33 được gửi lần lượt tới khi có ít nhất một lượt tác nhân gốc gọi subagent `tro_ly_okr` thật (tối đa sáu lượt), Then mọi lượt đã chạy đạt đủ ba điều của AC-1 (ZaloHoi `da-tra-loi`; đúng một tin, khác `ZALO.loi.tacTuLoi`, có «OKR»; không có «may be called only from an OKR session»); lượt có gọi có thêm dòng `[okr-uy-quyen] ngoai-okr purpose=zalo`; sáu lượt không lượt nào gọi thì phép đo thoát 2 «khong ep duoc goi», không xanh. Khi `TRO_LY_OKR_BO_DE` vắng (production), công cụ đè giải như AC-2.
 
 ## Coverage
 
@@ -39,8 +41,8 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
   - Thước CE: các nhánh của `quyetUyQuyen` (`lib/okr/uy-quyen.ts`).
 - **Trục C — đường chạy:** model giả gọi thẳng resolver/hook | `eve dev` thật + model thật qua Zalo.
   - Thước CE: bàn thử `okr-uy-quyen.spec.ts`; máy đo `cham-bo-do.ts`.
-- **Ô Core:** A×B1 qua resolver (AC-2) · A×B qua hook (AC-3) · zalo×B1 trên `eve dev` thật (AC-1) · okr×B1 trên `eve` thật (AC-5) · ranh giới (AC-4).
-- **Đối chiếu ngành:** [NGÀNH: eve `defineDynamic` — «a dynamic tool whose name matches an authored one overrides it», `eve/docs/guides/dynamic-capabilities.md`]; mẫu sẵn trong kho: `tools/zalo-chi-doc.ts`, `tools/okr-chi-tro-ly.ts`.
+- **Ô Core:** A×B1 qua resolver (AC-2) · A×B qua hook (AC-3) · zalo×B1 trên `eve dev` thật không gọi (AC-1) và có gọi subagent thật (AC-7) · công cụ nộp của phiên con ngoài OKR (AC-6) · okr×B1 trên `eve` thật (AC-5) · ranh giới (AC-4).
+- **Đối chiếu ngành:** [NGÀNH: eve `defineDynamic` — «a dynamic tool whose name matches an authored one overrides it», `eve/docs/guides/dynamic-capabilities.md`] — nhưng `docs/agent.md` (đo trên eve 0.29.4) ghi bản thay KHÔNG đè được subagent: lời gọi vẫn tới phiên con, nên lối sửa thật là hook không ném (AC-3), công cụ đè chỉ giảm số lần gọi; mẫu sẵn trong kho: `tools/zalo-chi-doc.ts`, `tools/okr-chi-tro-ly.ts`.
 - **Later:**
   - cho Zalo đọc số liệu OKR thật (tính năng mới, đụng ZDR).
 
@@ -55,9 +57,12 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 - (B) Nhật ký `sendMessage hong: tra-loi-la` vứt `description` của Zalo — hàng riêng.
 - Zalo trả số liệu OKR thật cho câu hỏi KR.
 - Đổi chỉ dẫn kênh Zalo (`lib/zalo-chi-dan.ts`).
-- eve bỏ qua công cụ động ở bước replay (ghi nhớ 26/09): không đo được bằng máy ở vòng này.
+- eve bỏ qua công cụ động ở bước replay (ghi nhớ 26/09): không đo replay riêng — AC-7 đo đúng hậu quả của nó (model thấy subagent thật) bằng cách cất công cụ đè.
 
 ## Notes
 
 - Không migration. Không đổi API.
 - Tệp ngoài ranh giới ban đầu: `apps/agent/agent/tools/tro-ly-okr-ngoai.ts` (giám sát duyệt P5-22); `lib/zalo-config.ts` và `packages/telemetry/src/allowlist.ts` mỗi tệp một dòng, do hai bài canh quét `agent/tools/` (`zalo-chi-doc.spec.ts`, `allowlist.spec.ts`) — xin ở P5-23, P5-24.
+
+- Sửa sau S4 round 1 (REJECT, 08/10): phản biện chỉ ra công cụ đè không đè được subagent (`docs/agent.md`); chủ kho duyệt hướng mới 08/10 («Duyệt hướng mới H1»): hook không ném ngoài phiên OKR, công cụ nộp tự từ chối (AC-6), đo ép gọi (AC-7); E6 chạy qua `mot-luot.sh` vì đụng `eve dev` của E1.
+- Subagent `tro_ly_okr` chỉ có công cụ nộp; công cụ dựng sẵn (web, bash…) tắt bằng `disableTool()` và sandbox `deny-all` — lời hứa AC-7 của hồ sơ đã ký `tro-ly-okr-nen` — nên phiên con chạy dưới phiên Zalo không mở thêm đường đọc hay ghi nào.
