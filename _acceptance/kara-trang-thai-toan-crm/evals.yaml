@@ -216,6 +216,12 @@ evals:
       - "packages/ui/src/components/vung-tai-loi.tsx"
       - "packages/ui/src/lib/bao-luu-tru.ts"
       - "_acceptance/kara-trang-thai-toan-crm/rang/man.mjs"
+    expected: |
+      exit 0 va "kara-trang-thai-toan-crm man: dat"; buoc 1 (1440) muc «Hoạt động trên website» hien khung «Không tải được
+      hoạt động trên website» kem «Thử lại» khi tracking.contactActivity bi doi dau vao sai kieu (loi that cua may chu,
+      cac thu tuc cung lo khong anh huong); buoc 2 ba loai luu tru -> toast «Đã lưu trữ <tên>.» + «Hoàn tác» -> archivedAt
+      ve null qua API; buoc 3 (390) khong tran ngang, nut «Hoàn tác» nam trong khung nhin. Nam anh trong evidence_required
+      ton tai sau luot. CHIEU DO ghim: --chieu-do bo bam Hoan tac -> do "luu-tru: sau hoan tac van con ngay luu tru".
     steps:
       - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
       - "Buoc 1 (1440): ngan ca nhan co hoat dong web; chan request tracking.contactActivity bang chan request cua puppeteer -> kts-web-loi-1440.png; innerText co 'Không tải được hoạt động trên website' va 'Thử lại'"
