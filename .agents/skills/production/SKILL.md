@@ -23,6 +23,9 @@ này là các lệnh. Mọi lệnh dưới đây đã chạy thật trên Mac mi
 - Chạy `vercel logs` luôn kèm `--no-branch`, nếu không CLI lọc theo nhánh git đang
   đứng và trả rỗng.
 
+Mọi khối dưới đây dùng hai biến này. Mỗi lần gọi công cụ Bash là một shell mới,
+nên dán khối này vào đầu mỗi lệnh:
+
 ```bash
 SC=phanlemanh-8330s-projects
 DUAN=(crm-onehub-app crm-onehub-api crm-onehub-agent agent-okr)
