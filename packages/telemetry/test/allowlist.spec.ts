@@ -2,14 +2,17 @@ import { describe, expect, it } from "bun:test";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { TASK_KINDS } from "@crm/db/agent-tasks";
+import { GIAI_DOAN_GOC } from "@crm/db/giai-doan";
 import {
 	AGENT_TOOLS,
 	ALLOWED_PROPERTIES,
 	bucket,
+	DEAL_STAGE_KEYS,
 	dayBucket,
 	EVIDENCE_KINDS,
 	OTHER,
 	permitted,
+	permittedDealStage,
 	permittedErrorClass,
 	permittedEvidenceKind,
 	permittedMethod,
@@ -135,6 +138,63 @@ describe("permittedTaskKind", () => {
 
 	it("buckets anything else", () => {
 		expect(permittedTaskKind("contact:ada@example.test")).toBe(OTHER);
+	});
+});
+
+const LOAI = ["OPEN", "WON", "LOST"] as const;
+
+const KHAC = {
+	OPEN: "other_open",
+	WON: "other_won",
+	LOST: "other_lost",
+} as const;
+
+describe("permittedDealStage", () => {
+	it("giu ma giai doan goc o moi loai", () => {
+		for (const ma of Object.values(GIAI_DOAN_GOC)) {
+			for (const kind of LOAI) {
+				expect(permittedDealStage(ma, kind), `${ma}/${kind}`).toBe(ma);
+			}
+		}
+	});
+
+	it("ma tu tao vao khoa khac theo loai", () => {
+		for (const ma of ["ckz9x1abc0000", "", "Đã gửi hợp đồng"]) {
+			for (const kind of LOAI) {
+				expect(
+					permittedDealStage(ma, kind),
+					"ma tu tao lot ra ngoai tap khoa",
+				).toBe(KHAC[kind]);
+			}
+		}
+	});
+
+	it("DEAL_STAGE_KEYS dung muoi khoa", () => {
+		expect(DEAL_STAGE_KEYS.length).toBe(10);
+		expect(new Set(DEAL_STAGE_KEYS).size).toBe(10);
+		expect([...DEAL_STAGE_KEYS]).toEqual([
+			...Object.values(GIAI_DOAN_GOC),
+			"other_open",
+			"other_won",
+			"other_lost",
+		]);
+	});
+});
+
+describe("telemetry-md-deals-by-stage", () => {
+	it("dong deals_by_stage liet ke du tap khoa", () => {
+		const md = readFileSync(join(REPO, "docs", "telemetry.md"), "utf8");
+		const dong = md
+			.split("\n")
+			.filter((d) => d.startsWith("| `deals_by_stage` |"));
+		expect(dong.length).toBe(1);
+		for (const khoa of DEAL_STAGE_KEYS) {
+			expect(
+				dong[0]?.includes(`\`${khoa}\``),
+				`tai lieu thieu khoa ${khoa}`,
+			).toBe(true);
+		}
+		expect(dong[0]?.includes("get a cuid")).toBe(false);
 	});
 });
 
