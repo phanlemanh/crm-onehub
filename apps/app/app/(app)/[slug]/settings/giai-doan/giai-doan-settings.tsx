@@ -209,6 +209,30 @@ function DaLuuTruGiaiDoan({ canManage }: { canManage: boolean }) {
 	const rows = daCat.data ?? [];
 	const theoId = new Map(rows.map((g) => [g.id, g]));
 
+	if (daCat.data === undefined && daCat.errorUpdateCount > 0) {
+		return (
+			<Empty border="solid" data-da-luu-tru-loi>
+				<EmptyHeader>
+					<EmptyTitle>{t.loiTaiDaLuuTru}</EmptyTitle>
+					<EmptyDescription>{t.loiTaiMoTa}</EmptyDescription>
+				</EmptyHeader>
+				<EmptyContent>
+					<Button
+						variant="outline"
+						disabled={daCat.isFetching}
+						onClick={() => void daCat.refetch()}
+					>
+						{t.thuLai}
+					</Button>
+				</EmptyContent>
+			</Empty>
+		);
+	}
+
+	if (daCat.data === undefined) {
+		return <Skeleton className="h-8 w-40" data-da-luu-tru-dang-tai />;
+	}
+
 	return (
 		<ArchivedList
 			label={t.daLuuTru}
