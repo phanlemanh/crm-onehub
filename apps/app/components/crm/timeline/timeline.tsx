@@ -6,8 +6,10 @@ import Email from "@carbon/icons-react/es/Email";
 import Events from "@carbon/icons-react/es/Events";
 import Task from "@carbon/icons-react/es/Task";
 import Time from "@carbon/icons-react/es/Time";
+import { Alert, AlertAction, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import type { CarbonIcon } from "@crm/ui/components/icon";
+import { KaraRetry } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
@@ -179,39 +181,55 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 
 	const entries = history.data?.pages.flatMap((page) => page.entries) ?? [];
 	const pinnedEntries = tab === "all" ? (pinned.data?.entries ?? []) : [];
+	const chuaCoTrang = history.data === undefined;
+	const thongBaoLamMoi = history.isRefetchError ? (
+		<div className="pt-3">
+			<Alert data-dtg-loi="lam-moi">
+				<AlertDescription>{m.timeline.lamMoiLoi}</AlertDescription>
+				<AlertAction>
+					<KaraRetry
+						onClick={() => void history.refetch()}
+						disabled={history.isFetching}
+					/>
+				</AlertAction>
+			</Alert>
+		</div>
+	) : null;
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col">
 			<div className="flex shrink-0 flex-col gap-2 border-b px-5 py-3">
 				<ActivityComposer anchor={anchor} />
 
-				<ToggleGroup
-					type="single"
-					value={tab}
-					onValueChange={(next) => {
-						if (next) void setTab(next as TimelineTab);
-					}}
-					size="sm"
-					spacing={0}
-				>
-					{TIMELINE_TABS.map((option) => (
-						<ToggleGroupItem key={option} value={option}>
-							{tabLabels(m)[option]}
-							{counts.data?.[option] ? (
-								<span className="tabular-nums opacity-60">
-									{counts.data[option]}
-								</span>
-							) : null}
-						</ToggleGroupItem>
-					))}
-				</ToggleGroup>
+				<div className="min-w-0 overflow-x-auto">
+					<ToggleGroup
+						type="single"
+						value={tab}
+						onValueChange={(next) => {
+							if (next) void setTab(next as TimelineTab);
+						}}
+						size="sm"
+						spacing={0}
+					>
+						{TIMELINE_TABS.map((option) => (
+							<ToggleGroupItem key={option} value={option}>
+								{tabLabels(m)[option]}
+								{counts.data?.[option] ? (
+									<span className="tabular-nums opacity-60">
+										{counts.data[option]}
+									</span>
+								) : null}
+							</ToggleGroupItem>
+						))}
+					</ToggleGroup>
+				</div>
 			</div>
 
 			{history.isPending ? (
 				<div className="flex min-h-0 flex-1 items-center justify-center">
 					<Spinner />
 				</div>
-			) : history.isError ? (
+			) : history.isError && chuaCoTrang ? (
 				<div className="flex min-h-0 flex-1 items-center justify-center p-5">
 					<VungTaiLoi
 						tieuDe={m.timeline.loiTieuDe}
@@ -221,13 +239,17 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 					/>
 				</div>
 			) : entries.length === 0 && pinnedEntries.length === 0 ? (
-				<DetailSheetEmpty
-					icon={EMPTY_ICONS[tab]}
-					title={emptyStates(m)[tab].title}
-					description={emptyStates(m)[tab].description}
-				/>
+				<div className="flex min-h-0 flex-1 flex-col">
+					{thongBaoLamMoi ? <div className="px-5">{thongBaoLamMoi}</div> : null}
+					<DetailSheetEmpty
+						icon={EMPTY_ICONS[tab]}
+						title={emptyStates(m)[tab].title}
+						description={emptyStates(m)[tab].description}
+					/>
+				</div>
 			) : (
 				<div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-4">
+					{thongBaoLamMoi}
 					{pinnedEntries.length > 0 ? (
 						<TimelineDay
 							label={m.timeline.outstanding}
@@ -245,7 +267,19 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 						/>
 					))}
 
-					{history.hasNextPage ? (
+					{history.isFetchNextPageError ? (
+						<div className="mt-4">
+							<Alert data-dtg-loi="xem-cu">
+								<AlertDescription>{m.timeline.xemCuLoi}</AlertDescription>
+								<AlertAction>
+									<KaraRetry
+										onClick={() => void history.fetchNextPage()}
+										disabled={history.isFetchingNextPage}
+									/>
+								</AlertAction>
+							</Alert>
+						</div>
+					) : history.hasNextPage ? (
 						<Button
 							variant="outline"
 							size="sm"
