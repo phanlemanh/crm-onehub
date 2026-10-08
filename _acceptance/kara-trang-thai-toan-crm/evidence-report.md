@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2d84785a970bd4e6061b3101c49406360d1b2d9d
+verified_commit: 6622a94ec8d3e85f889f747a27e0d8b3297edbd1
 human_signoff: Phan Le Manh 2026-10-08 — ký Cổng Bằng chứng trên vòng chấm 2 (14/14 eval đạt, 7/7 lệnh suite xanh, hội đồng E14 đạt; vòng này không đo đường nền). Một phát hiện trong hợp đồng ở AC-4 được chấp nhận: tiêu đề lỗi theo khuôn ai-ux «Kara chưa tải tóm tắt tuần được». Mười hai mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 5, 6 mở hợp đồng mới; Ngoài-2–4, 7–12 ghi Known limits. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -249,3 +249,7 @@ sha: 524159ff22d80e97a3d00a7d0f1114ecc3c73c66 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-08, do hoá cũ do gộp onehub b633a7e3 (#312 K2)
 run_id: repin-20261008T085621Z-67421
 sha: 2d84785a970bd4e6061b3101c49406360d1b2d9d · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-08, do hoá cũ do gộp onehub 6f59c0ad sau chữ ký; K6c đổi timeline.tsx trong vùng đo của K6b
+run_id: repin-20261008T151524Z-47744
+sha: 6622a94ec8d3e85f889f747a27e0d8b3297edbd1 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

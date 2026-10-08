@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0e68c383df9649e16b9659cffef1855370e592d7
+verified_commit: 6622a94ec8d3e85f889f747a27e0d8b3297edbd1
 human_signoff: Phan Le Manh 2026-10-08 — ký Cổng Bằng chứng trên vòng chấm 3 (7/7 eval đạt, 7/7 lệnh suite xanh, hội đồng E7 đạt, 0 phát hiện trong hợp đồng; ba vòng không đo đường nền). Bảy mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 5 mở hợp đồng mới (cùng gốc cờ lỗi TanStack); Ngoài-3, 4, 6, 7 ghi Known limits. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -152,3 +152,7 @@ none — every multi-run eval is uniform
 Round 1: mọi eval máy xanh; E7 chờ người quyết vì ba phiếu chưa chốt điểm (4) về hai hàng bị cắt ở 390 (nút soạn «Việc cần làm», hàng lọc «Đã xong») và E3 chưa đo vị trí «phía trên». Trả về thực thi.
 Round 2: E3 đã đo vị trí «phía trên» (commit 6da22975b); thêm bằng chứng E7 (đáy danh sách, số đo 390) và ghi số đo hai hàng bị cắt vào dtg-do-390.txt; mọi eval máy xanh, ba phiếu E7 cùng chấm đạt. Ba phát hiện AC-6 trong hợp đồng (E7 bị viết hẹp giữa S4, răng màn đo tràn 390 mà vẫn đậu, số đo «cuộn ngang được» luôn sai) trả về thực thi.
 Round 3: hai hàng nút ở 390 cuộn ngang được và răng màn đo cắt cho mọi phần tử (commit 199cd8fb0); E1–E6 xanh, E6 có thêm khung E6-step4 chụp hai dải đã cuộn tới cuối, ba phiếu E7 cùng chấm đạt, bảy lệnh suite xanh. Ba phát hiện ngoài hợp đồng chuyển người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-08, do hoá cũ do gộp onehub 6f59c0ad sau chữ ký; K6c đổi timeline.tsx trong vùng đo của K6b
+run_id: repin-20261008T151524Z-47744
+sha: 6622a94ec8d3e85f889f747a27e0d8b3297edbd1 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · ngoài làn máy: E6, E7 (E7 không khai paths) · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
