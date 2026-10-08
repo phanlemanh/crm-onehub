@@ -94,6 +94,11 @@ const goiCursor = (c: string) =>
 const goiKhongCursor = () =>
 	goiLichSu().filter((g) => g.dauVao?.cursor === undefined).length;
 
+const nutTab = (nhan: string) =>
+	[...document.querySelectorAll<HTMLElement>("button")]
+		.filter((b) => (b.textContent ?? "").trim().startsWith(nhan))
+		.at(-1) ?? null;
+
 const thongBao = (loai: "xem-cu" | "lam-moi") =>
 	document.querySelector<HTMLElement>(`[data-dtg-loi="${loai}"]`);
 const dong = () => [...document.querySelectorAll("[data-slot=timeline] > li")];
@@ -319,15 +324,35 @@ describe("dong-thoi-gian-loi-dung-luot", () => {
 		await nhip(10);
 		phai(thongBao("lam-moi") !== null, "dtl: canh bao lam moi tat sau xem cu");
 		o.push("xem-cu-khong-tat");
-		expect(o.length).toBe(2);
+		await dongHet();
+
+		const cach3: CachDoc = {
+			dau: truocLuot.dau,
+			c1: () => ({ entries: TRANG_HAI, nextCursor: null }),
+			ghiChu: () => ({ entries: GHI_CHU, nextCursor: null }),
+		};
+		datLichSu(cach3);
+		await moTimeline();
+		await act(async () => datStale(30_000));
+		cach3.dau = () => {
+			throw new Error("boom-lam-moi");
+		};
+		await goiLamMoi();
+		await cho(() => thongBao("lam-moi") !== null, "lam moi loi");
+		await bam(nut(VI.timeline.showOlder));
+		await cho(() => dong().length === 5, "xem cu thanh cong");
+		await bam(nutTab(VI.timeline.tabs.notes) as HTMLElement);
+		await cho(() => dong().length === 2, "sang ghi chu");
+		await bam(nutTab(VI.timeline.tabs.all) as HTMLElement);
+		await cho(() => dong().length === 5, "quay lai tat ca");
+		await nhip(10);
+		phai(thongBao("lam-moi") !== null, "dtl: canh bao lam moi mat khi doi tab");
+		o.push("giu-qua-doi-tab");
+		expect(o.length).toBe(3);
 	});
 
 	test("dtl-doi-tab: thong bao khong theo sang tab moi, quay lai tab loi tai lai", async () => {
 		const o: string[] = [];
-		const nutTab = (nhan: string) =>
-			[...document.querySelectorAll<HTMLElement>("button")]
-				.filter((b) => (b.textContent ?? "").trim().startsWith(nhan))
-				.at(-1) ?? null;
 
 		const cach: CachDoc = {
 			dau: truocLuot.dau,
@@ -372,7 +397,7 @@ describe("dong-thoi-gian-loi-dung-luot", () => {
 		await cho(() => dong().length === 2, "sang ghi chu");
 		cach2.dau = () => treo.p;
 		const truoc = goiKhongCursor();
-		const dem = demChen("[data-dtg-loi]");
+		const dem = demChen('[data-dtg-loi="lam-moi"]');
 		await bam(nutTab(VI.timeline.tabs.all) as HTMLElement);
 		await cho(
 			() => goiKhongCursor() === truoc + 1,
@@ -380,8 +405,9 @@ describe("dong-thoi-gian-loi-dung-luot", () => {
 		);
 		await nhip(10);
 		dem.dung();
+		phai(thongBao("xem-cu") !== null, "dtl: quay lai tab loi mat thong bao");
 		phai(
-			dem.dem() === 0 && document.querySelector("[data-dtg-loi]") === null,
+			dem.dem() === 0 && thongBao("lam-moi") === null,
 			"dtl: thong bao theo sang tab moi",
 		);
 		await act(async () => {
@@ -392,6 +418,43 @@ describe("dong-thoi-gian-loi-dung-luot", () => {
 		expect(document.querySelector("[data-dtg-loi]") === null).toBe(true);
 		expect(nutCo(VI.timeline.showOlder) !== null).toBe(true);
 		o.push("quay-lai");
+		await dongHet();
+
+		const treo2 = hoan();
+		const cach4: CachDoc = {
+			dau: truocLuot.dau,
+			c1: () => {
+				throw new Error("boom-trang-ke");
+			},
+			ghiChu: () => ({ entries: GHI_CHU, nextCursor: null }),
+		};
+		datLichSu(cach4);
+		await moTimeline();
+		await act(async () => datStale(30_000));
+		await bam(nut(VI.timeline.showOlder));
+		await cho(() => thongBao("xem-cu") !== null, "xem cu loi 2");
+		await bam(nutTab(VI.timeline.tabs.notes) as HTMLElement);
+		await cho(() => dong().length === 2, "sang ghi chu 2");
+		cach4.dau = () => treo2.p;
+		const truoc2 = goiKhongCursor();
+		await bam(nutTab(VI.timeline.tabs.all) as HTMLElement);
+		await cho(() => goiKhongCursor() === truoc2 + 1, "quay lai tai lai 2");
+		await nhip(10);
+		expect(thongBao("xem-cu") !== null).toBe(true);
+		expect(thongBao("lam-moi") === null).toBe(true);
+		await act(async () => {
+			treo2.tuChoi(new Error("boom-quay-lai"));
+		});
+		await cho(
+			() => thongBao("lam-moi") !== null || thongBao("xem-cu") !== null,
+			"thong bao sau tai lai hong",
+		);
+		await nhip(10);
+		phai(
+			thongBao("lam-moi") !== null && thongBao("xem-cu") !== null,
+			"dtl: quay lai tai lai hong sai loai thong bao",
+		);
+		o.push("quay-lai-loi");
 		await dongHet();
 
 		const cach3: CachDoc = {
@@ -420,6 +483,6 @@ describe("dong-thoi-gian-loi-dung-luot", () => {
 			"dtl: thong bao theo sang tab moi",
 		);
 		o.push("sang-tab-co-cache");
-		expect(o.length).toBe(4);
+		expect(o.length).toBe(5);
 	});
 });

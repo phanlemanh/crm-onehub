@@ -49,8 +49,10 @@ evals:
       exit 0; thong bao lam-moi hien; lan doc lai tra promise do bai giu -> bam «Thử lại» cua thong bao -> nut co
       disabled === true, bam them -> so lan goi khong cursor tang dung 1; thong bao VAN hien trong luc treo; giai promise
       -> thong bao === null. O doi chung: thong bao lam-moi hien + xem cu thanh cong (trang "c1" tra 2 muc) -> thong bao
-      lam-moi VAN !== null (chi luot lam moi thanh cong moi tat).
-      CHIEU DO ghim: ban sao tat lamMoi khi so trang tang -> do "dtl: canh bao lam moi tat sau xem cu".
+      lam-moi VAN !== null (chi luot lam moi thanh cong moi tat). O giu qua doi tab: staleTime 30000, lam moi loi -> xem
+      cu thanh cong (5 dong) -> sang Ghi chu -> quay lai Tat ca (khong tai lai) -> thong bao lam-moi VAN !== null.
+      CHIEU DO ghim: ban sao tat lamMoi khi so trang tang -> do "dtl: canh bao lam moi tat sau xem cu"; ban sao nho loi
+      theo lan gan (khong theo QueryClient) -> do "dtl: canh bao lam moi mat khi doi tab".
 
   - id: E4
     criterion: AC-4
@@ -65,14 +67,14 @@ evals:
       khong [data-dtg-loi] nao; doi chung duong: tab Ghi chu co lan doc lai loi -> invalidate -> [data-dtg-loi=lam-moi]
       !== null. O quay lai: QueryClient dat staleTime 30000 (nhu app) -> tab Tat ca loi xem cu -> sang Ghi chu -> quay lai
       Tat ca: TanStack 5.101 tai lai trang dau (luot loi dat isInvalidated: true, query.js:388) -> dung 1 lan goi khong
-      cursor; trong luc lan tai lai treo, MutationObserver dem so lan chen [data-dtg-loi] === 0; giai -> khong
-      [data-dtg-loi], nut «Xem cũ hơn» !== null. Moi bai dat lai dong ho that (setSystemTime()) truoc khi chay.
+      cursor; trong luc lan tai lai treo, thong bao xem-cu cua chinh tab do hien lai (AC-4 «hien lai dung loai») va
+      MutationObserver dem so lan chen [data-dtg-loi=lam-moi] === 0; giai -> khong [data-dtg-loi], nut «Xem cũ hơn»
+      !== null. O quay lai loi: nhu tren nhung lan tai lai bi tu choi -> ca lam-moi va xem-cu !== null (nhu AC-2 o c). Moi bai dat lai dong ho that (setSystemTime()) truoc khi chay.
       O sang tab co cache: Ghi chu da tai (staleTime 30000) -> Tat ca loi xem cu -> sang Ghi chu tu cache -> khong
       [data-dtg-loi] nao chen vao va khong con sau 10 nhip.
       CHIEU DO ghim: ban sao dung lai co cua luot dang chay (isRefetchError/isFetchNextPageError) -> do "dtl: thong bao theo
-      sang tab moi" (o quay lai: luot tai lai khi quay ve hien «khong lam moi duoc» luc dang chay). Ban sao bo chot dat lai
-      theo khoa KHONG do duoc trong jsdom: phan tu thong bao cu duoc React giu nguyen va effect xoa no trong cung luot act,
-      nen chop mot nhip khong quan sat duoc — chot giu lai nhu lop phong thu, ghi o so quyet dinh.
+      sang tab moi"; ban sao nho loi theo lan gan -> do "dtl: quay lai tab loi mat thong bao" va "dtl: quay lai tai lai
+      hong sai loai thong bao".
 
   - id: E5
     criterion: AC-5

@@ -17,9 +17,14 @@ import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { dateFormat } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { cn } from "@crm/ui/lib/utils";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+	type QueryClient,
+	useInfiniteQuery,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DetailSheetEmpty, SECTION_TITLE } from "@/components/detail-sheet";
 import { type CrmMessages, crmMessages } from "@/lib/messages/crm";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -164,21 +169,57 @@ type LuotTai = {
 	soTrang: number | null;
 };
 
-type MocDaThay = { khoa: string; loi: number; du: number; soTrang: number };
+type MocDaThay = { loi: number; du: number; soTrang: number };
 
-const mocMoi = (khoa: string): MocDaThay => ({
-	khoa,
-	loi: -1,
-	du: 0,
-	soTrang: 0,
-});
+type NhoLoi = { loi: LoiTheoLuot; moc: MocDaThay };
+
+const NHO_MOI: NhoLoi = {
+	loi: KHONG_LOI,
+	moc: { loi: -1, du: 0, soTrang: 0 },
+};
+
+const nhoTheoClient = new WeakMap<QueryClient, Map<string, NhoLoi>>();
+
+function soTheoClient(client: QueryClient): Map<string, NhoLoi> {
+	const coSan = nhoTheoClient.get(client);
+	if (coSan) return coSan;
+	const moi = new Map<string, NhoLoi>();
+	nhoTheoClient.set(client, moi);
+	return moi;
+}
+
+function buocKe(nho: NhoLoi, luot: LuotTai): NhoLoi | null {
+	const {
+		isFetching,
+		isError,
+		isFetchNextPageError,
+		errorUpdateCount,
+		dataUpdatedAt,
+		soTrang,
+	} = luot;
+	if (isFetching || soTrang === null) return null;
+	const { moc, loi } = nho;
+	if (isError) {
+		if (errorUpdateCount === moc.loi) return null;
+		return {
+			loi: isFetchNextPageError
+				? { ...loi, xemCu: true }
+				: { ...loi, lamMoi: true },
+			moc: { loi: errorUpdateCount, du: dataUpdatedAt, soTrang },
+		};
+	}
+	if (dataUpdatedAt === moc.du) return null;
+	const trangKeDuoc = moc.du !== 0 && soTrang > moc.soTrang;
+	return {
+		loi: trangKeDuoc ? { ...loi, xemCu: false } : KHONG_LOI,
+		moc: { loi: errorUpdateCount, du: dataUpdatedAt, soTrang },
+	};
+}
 
 function useLoiTheoLuot(luot: LuotTai, khoa: string): LoiTheoLuot {
-	const [loi, datLoi] = useState<{ khoa: string; loi: LoiTheoLuot }>({
-		khoa,
-		loi: KHONG_LOI,
-	});
-	const daThay = useRef<MocDaThay>(mocMoi(khoa));
+	const client = useQueryClient();
+	const so = soTheoClient(client);
+	const [, veLai] = useState(0);
 	const {
 		isFetching,
 		isError,
@@ -189,40 +230,19 @@ function useLoiTheoLuot(luot: LuotTai, khoa: string): LoiTheoLuot {
 	} = luot;
 
 	useEffect(() => {
-		if (daThay.current.khoa !== khoa) daThay.current = mocMoi(khoa);
-		if (isFetching || soTrang === null) return;
-		const truoc = daThay.current;
-		const goc = (hienCo: { khoa: string; loi: LoiTheoLuot }) =>
-			hienCo.khoa === khoa ? hienCo.loi : KHONG_LOI;
-		if (isError) {
-			if (errorUpdateCount === truoc.loi) return;
-			daThay.current = {
-				...truoc,
-				loi: errorUpdateCount,
-				du: dataUpdatedAt,
-				soTrang,
-			};
-			datLoi((hienCo) => ({
-				khoa,
-				loi: isFetchNextPageError
-					? { ...goc(hienCo), xemCu: true }
-					: { ...goc(hienCo), lamMoi: true },
-			}));
-			return;
-		}
-		if (dataUpdatedAt === truoc.du) return;
-		const trangKeDuoc = truoc.du !== 0 && soTrang > truoc.soTrang;
-		daThay.current = {
-			...truoc,
-			loi: errorUpdateCount,
-			du: dataUpdatedAt,
+		const ke = buocKe(so.get(khoa) ?? NHO_MOI, {
+			isFetching,
+			isError,
+			isFetchNextPageError,
+			errorUpdateCount,
+			dataUpdatedAt,
 			soTrang,
-		};
-		datLoi((hienCo) => ({
-			khoa,
-			loi: trangKeDuoc ? { ...goc(hienCo), xemCu: false } : KHONG_LOI,
-		}));
+		});
+		if (ke === null) return;
+		so.set(khoa, ke);
+		veLai((n) => n + 1);
 	}, [
+		so,
 		khoa,
 		isFetching,
 		isError,
@@ -232,7 +252,7 @@ function useLoiTheoLuot(luot: LuotTai, khoa: string): LoiTheoLuot {
 		soTrang,
 	]);
 
-	return loi.khoa === khoa ? loi.loi : KHONG_LOI;
+	return so.get(khoa)?.loi ?? KHONG_LOI;
 }
 
 export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
