@@ -29,7 +29,9 @@
 4. Một dòng đề xuất cũ có `taoRaId` trỏ tới một căn chỉnh đã bị gỡ rồi gắn lại (id mới): câu điền lại không được gắn lý do sang căn chỉnh khác. Nối bằng `taoRaId = a.id` là đúng id, nên căn chỉnh mới giữ trống. Task 4 thêm ca E.
 5. Xuất kỳ (`xuatKy`) và cây căn chỉnh đọc `mucTieuOutput`: bốn trường mới không được làm hỏng khuôn xuất. Task 3 chạy lại `okr-xuat.spec`, hay bài đang phủ `xuatKy`, sau khi đổi khuôn.
 
-## Câu hỏi cho Cổng 1.5 (sửa hợp đồng)
+## Câu hỏi cho Cổng 1.5 (sửa hợp đồng) — đã chốt
+
+Chủ kho duyệt 08/10 16:02Z: «Duyệt kế hoạch L1; AC-6 theo bản thay». AC-6, E7 và E10 đã sửa theo bản thay dưới đây.
 
 AC-6 gieo «mục tiêu giới hạn có căn chỉnh», nhưng kho đã chặn trạng thái đó bằng hai chốt có bài kiểm:
 - Gắn căn chỉnh vào hoặc từ mục tiêu giới hạn bị từ chối: `gioiHanKhongCanChinh`, đo ở `okr-hien-thi.spec.ts:413`, `soan-okr-dua-vao.spec.ts:1559`.
@@ -182,15 +184,16 @@ Evals phục vụ: E5. Độc lập: sau Task 1.
 
 Evals phục vụ: E6, E11. Độc lập: sau Task 1–2.
 
-### Task 5: Quyền xem (theo quyết định Cổng 1.5)
+### Task 5: Quyền xem (bản thay AC-6 đã duyệt)
 
 **Files:**
 - Test: khối `quyen-xem` trong `apps/api/test/okr-ly-do-can-chinh.spec.ts`
 
-- [ ] **Step 1 (nếu anh duyệt bản thay):**
-  - Gắn căn chỉnh có `lyDo` «bi-mat-l1» vào một mục tiêu công khai. Đổi mục tiêu đó sang giới hạn qua đường đổi hiển thị thật. Kỳ vọng 400 `conCanChinh(1)`, `lyDo` còn nguyên.
-  - Người ngoài workspace gọi `okr.mine` → 403 `NOT_A_MEMBER`, thân trả về không chứa «bi-mat-l1».
-- [ ] **Step 1 (nếu anh giữ AC-6 như cũ):** dựng ma trận 8×2 cộng phần quét như E7. Bước gieo sẽ ném `gioiHanKhongCanChinh`, nên eval phải khai giới hạn — máy khuyên bản thay.
+- [ ] **Step 1:**
+  - Gắn căn chỉnh vào một mục tiêu công khai của X, rồi đặt `lyDo` «bi-mat-l1».
+  - X đổi mục tiêu đó sang giới hạn qua thủ tục đổi hiển thị thật. Kỳ vọng 400 với `OKR.thongDiep.hienThi.conCanChinh(1)`. Đọc lại: vẫn công khai, `lyDo` còn nguyên. Sai → ném `doi gioi han khi co ly do bi lot`.
+  - Người ngoài workspace gọi `okr.mine` qua tRPC và REST. Kỳ vọng 403 `NOT_A_MEMBER`, thân trả về không chứa «bi-mat-l1». Có → ném `lo ly do cho nguoi ngoai`.
+  - Đối chứng: X gọi `okr.mine` thấy «bi-mat-l1».
 - [ ] **Step 2:** Chạy `-t quyen-xem`. Commit.
 
 Evals phục vụ: E7 (sau khi sửa). Độc lập: sau Task 2.

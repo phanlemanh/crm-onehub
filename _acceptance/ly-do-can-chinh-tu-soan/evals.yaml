@@ -59,8 +59,8 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.ldcc_quyen_xem
-    paths: [apps/api/src/okr/okr.service.ts, apps/api/src/okr/can-chinh.ts, apps/api/test/okr-ly-do-can-chinh.spec.ts]
-    expected: "exit 0; gieo mục tiêu cá nhân giới hạn người xem của X với căn chỉnh tới một KR công ty, lyDo 'bi-mat-l1'; Y là thành viên không xem được mục tiêu đó. Ma trận viết trước, chép từ AC-6 của contract: (a) tám thủ tục lõi mine, byUnit, objective, alignmentTree, cayCanChinh, danhSach, toanCanh, xuatKy, mỗi thủ tục một đầu vào ghim (kỳ, đơn vị, id mục tiêu chứa K), gọi bằng phiên của Y qua tRPC VÀ qua REST (đường restMeta của router) — 16 lời gọi; (b) mọi thủ tục query khác của okr.router.ts, liệt kê theo tên trong bài, gọi một lần qua tRPC. Bài rút tập thủ tục query thật của router lúc chạy; tập (a) ∪ (b) khác tập đó thì ném «ma tran lech router: <tên>». Với mỗi lời gọi ở (a), phản hồi phải chứa id mục tiêu của K (không thì ném «khong trung du lieu: <thủ tục>/<đường>»); với mọi lời gọi, JSON.stringify của phản hồi không chứa 'bi-mat-l1' — có thì ném «lo ly do qua <thủ tục>». Đối chứng dương: X gọi okr.mine thấy 'bi-mat-l1' (không thấy thì ném «doi chung: chu muc tieu khong thay ly do»). CHIỀU ĐỎ: cặp (h) bản sao đưa alignments của mục tiêu nguồn vào phần trả của KR đích mà không lọc quyền → đỏ «lo ly do qua <thủ tục>»."
+    paths: [apps/api/src/okr/okr-hien-thi.service.ts, apps/api/src/okr/okr.service.ts, apps/api/test/okr-ly-do-can-chinh.spec.ts]
+    expected: "exit 0; hai ca: (1) gieo mục tiêu công khai của X có căn chỉnh (addAlignment thật) rồi đặt lyDo 'bi-mat-l1' bằng Prisma; X đổi hiển thị sang gioi-han qua thủ tục đổi hiển thị THẬT của router → 400 với thông điệp đúng bằng OKR.thongDiep.hienThi.conCanChinh(1) (rút từ okr-config, không gõ tay), đọc lại CSDL: mục tiêu vẫn cong-khai, căn chỉnh còn lyDo 'bi-mat-l1' — sai thì ném «doi gioi han khi co ly do bi lot»; (2) một người ngoài workspace (có phiên, không là thành viên) gọi okr.mine qua tRPC và qua REST → cả hai 403 NOT_A_MEMBER, JSON.stringify thân trả về không chứa 'bi-mat-l1' — có thì ném «lo ly do cho nguoi ngoai». Đối chứng dương: X gọi okr.mine thấy 'bi-mat-l1' (không thấy thì ném «doi chung: chu muc tieu khong thay ly do»)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
@@ -84,7 +84,7 @@ evals:
     executor: script
     cmd: config:executors.script.ldcc_dot_bien
     paths: [apps/api/src/okr/soan-dua-vao.ts, apps/api/src/okr/okr.service.ts, apps/api/src/okr/can-chinh.ts, packages/db/prisma/migrations/*_ly_do_can_chinh/migration.sql, apps/api/test/okr-ly-do-can-chinh.spec.ts, _acceptance/ly-do-can-chinh-tu-soan/rang/dot-bien.mjs]
-    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 9: mỗi cặp (a)–(i) như ghi ở E1–E3, E5–E7 — xanh trước khi phá, đỏ sau khi phá, thông điệp ghim nằm trên dòng «error:» của bun; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 8: mỗi cặp (a)–(g) và (i) như ghi ở E1–E3, E5, E6 (cặp (h) bỏ cùng bản thay AC-6) — xanh trước khi phá, đỏ sau khi phá, thông điệp ghim nằm trên dòng «error:» của bun; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
