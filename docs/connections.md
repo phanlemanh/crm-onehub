@@ -193,8 +193,9 @@ follow, and none of them is a gap to fill later.
   Zalo mà mất liên kết thấy «cần nối lại» trên «Thông báo của bạn». Đây là ngoại lệ
   duy nhất của luật trên. Cùng bot (mã bot của `getMe` trùng) thì không hỏi và không
   gỡ gì.
-- **Webhook 403 vì khoá lệch để lại cảnh báo.** Một tin Zalo hợp lệ tới với khoá sai
-  (thường là bot cũ vẫn trỏ về đây) ghi lý do `khoa-lech`. Kết nối › Zalo hiện
+- **Webhook 403 vì khoá lệch để lại cảnh báo.** Một yêu cầu có header khoá mà sai
+  (thường là bot cũ vẫn trỏ về đây) ghi lý do `khoa-lech` mà không đọc thân — nên một
+  yêu cầu lạ có header bất kỳ cũng bật được cảnh báo này. Kết nối › Zalo hiện
   «Zalo đang gửi tin bằng khoá cũ» kèm «Đăng ký lại». Lý do chỉ mất khi đăng ký lại
   thành công; nhịp kiểm của tác tử không xoá nó. Mỗi lần bỏ qua một tin hay từ chối
   webhook, nhật ký ghi `ly_do=` (mã nhánh), và mỗi lần Zalo từ chối ghi mã lỗi cùng
