@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 0e68c383df9649e16b9659cffef1855370e592d7
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-08 — ký Cổng Bằng chứng trên vòng chấm 3 (7/7 eval đạt, 7/7 lệnh suite xanh, hội đồng E7 đạt, 0 phát hiện trong hợp đồng; ba vòng không đo đường nền). Bảy mục ngoài hợp đồng định đoạt từng mục — Ngoài-1, 2, 5 mở hợp đồng mới (cùng gốc cờ lỗi TanStack); Ngoài-3, 4, 6, 7 ghi Known limits. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
 # Evidence Report: dong-thoi-gian-giu-khi-loi

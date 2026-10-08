@@ -5,7 +5,7 @@ slug: dong-thoi-gian-giu-khi-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-08-dong-thoi-gian-giu-khi-loi-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T10:15:22Z
@@ -56,3 +56,10 @@ Không đổi API.
 - Vòng đời (luật 14, `docs/vong-doi.md` «ba câu»): (1) Dọn thế nào — không đổi; (2) «Lịch sử» — không đổi, dòng thời gian vẫn là lịch sử hoạt động; (3) Danh sách mặc định — không đổi.
 - `timeline.tsx` nằm trong `paths` của E1 thuộc hồ sơ đã ký `kara-trang-thai-toan-crm`; AC-4 giữ đúng hành vi E1 đo, và hồ sơ đó sẽ được ghim lại trước khi gộp.
 - Bộ dựng thử chung `apps/app/test/khung-gop-y.tsx` chuyển `pageParam` thành `cursor` (yêu cầu P2-26) để đo AC-2.
+- Ở 390, hàng nút soạn và hàng lọc tab được bọc khung cuộn ngang (`activity-composer.tsx`, `timeline.tsx`) để AC-6 đạt nguyên văn — sổ quyết định vòng S4-r2.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-08):**
+  - Ngoài-3 — răng màn bỏ qua mọi lỗi console trên trang đo, không chỉ lỗi cố ý gây ra; một lỗi lạ khác trên màn này có thể lọt qua.
+  - Ngoài-4 — răng màn xác nhận dòng cuối nằm trong khung sau khi thử lại, chưa khẳng định đúng là hoạt động số 35.
+  - Ngoài-6 — chưa phép đo máy nào khẳng định thông báo «Không tải được hoạt động cũ hơn» nằm ở cuối danh sách; chỉ ảnh chụp cho thấy.
+  - Ngoài-7 — nút «Thử lại» của thông báo làm mới chưa được đo là tắt khi đang tải.
+- Hợp đồng mới (Cổng Bằng chứng 2026-10-08): Ngoài-1, Ngoài-2, Ngoài-5 — cùng gốc: khi lỗi làm mới và lỗi «Xem cũ hơn» chồng nhau, thông báo có thể hiện nhầm trong lúc lượt tải sau còn chạy, vì cờ lỗi của TanStack suy theo lượt đang chạy chứ không theo lượt đã hỏng.
