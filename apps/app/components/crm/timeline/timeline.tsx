@@ -188,7 +188,7 @@ function soTheoClient(client: QueryClient): Map<string, NhoLoi> {
 	return moi;
 }
 
-function buocKe(nho: NhoLoi, luot: LuotTai): NhoLoi | null {
+function buocKe(nho: NhoLoi, luot: LuotTai): NhoLoi {
 	const {
 		isFetching,
 		isError,
@@ -197,10 +197,10 @@ function buocKe(nho: NhoLoi, luot: LuotTai): NhoLoi | null {
 		dataUpdatedAt,
 		soTrang,
 	} = luot;
-	if (isFetching || soTrang === null) return null;
+	if (isFetching || soTrang === null) return nho;
 	const { moc, loi } = nho;
 	if (isError) {
-		if (errorUpdateCount === moc.loi) return null;
+		if (errorUpdateCount === moc.loi) return nho;
 		return {
 			loi: isFetchNextPageError
 				? { ...loi, xemCu: true }
@@ -208,7 +208,7 @@ function buocKe(nho: NhoLoi, luot: LuotTai): NhoLoi | null {
 			moc: { loi: errorUpdateCount, du: dataUpdatedAt, soTrang },
 		};
 	}
-	if (dataUpdatedAt === moc.du) return null;
+	if (dataUpdatedAt === moc.du) return nho;
 	const trangKeDuoc = moc.du !== 0 && soTrang > moc.soTrang;
 	return {
 		loi: trangKeDuoc ? { ...loi, xemCu: false } : KHONG_LOI,
@@ -230,7 +230,8 @@ function useLoiTheoLuot(luot: LuotTai, khoa: string): LoiTheoLuot {
 	} = luot;
 
 	useEffect(() => {
-		const ke = buocKe(so.get(khoa) ?? NHO_MOI, {
+		const truoc = so.get(khoa) ?? NHO_MOI;
+		const ke = buocKe(truoc, {
 			isFetching,
 			isError,
 			isFetchNextPageError,
@@ -238,7 +239,7 @@ function useLoiTheoLuot(luot: LuotTai, khoa: string): LoiTheoLuot {
 			dataUpdatedAt,
 			soTrang,
 		});
-		if (ke === null) return;
+		if (ke === truoc) return;
 		so.set(khoa, ke);
 		veLai((n) => n + 1);
 	}, [
