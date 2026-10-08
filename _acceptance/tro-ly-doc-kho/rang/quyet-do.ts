@@ -287,14 +287,15 @@ export function dongTungCau(
 	khongQuaKiem = false,
 	zalo?: KetZalo & { coHang: boolean },
 ): DongTungCau {
-	return {
+	const d: DongTungCau = {
 		luot,
 		id: r.id,
 		nhom: r.nhom,
 		ketCuc: r.ketCuc,
 		khongQuaKiem,
-		...(zalo ? { zalo } : {}),
 	};
+	if (!zalo) return d;
+	return { ...d, zalo };
 }
 
 export function docTungCau(chu: string): DongTungCau[] {
@@ -338,11 +339,13 @@ export function cauLuotMot<T extends { nhom: NhomCau }>(
 	return cau.filter((c) => c.nhom !== "khong-phai-quy-dinh");
 }
 
+export type CauHoiLai<T> = { mot: T[]; hai: T[] };
+
 export function cauHoiLai<T extends { id: string }>(
 	hoiLai: readonly HoiLai[],
 	cauMot: readonly T[],
 	cauHai: readonly T[],
-): { mot: T[]; hai: T[] } {
+): CauHoiLai<T> {
 	const chon = chonHoiLai(hoiLai);
 	const theoMot = new Set(chon.mot);
 	const theoHai = new Set(chon.hai);

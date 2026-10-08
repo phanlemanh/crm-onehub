@@ -65,12 +65,12 @@ try {
 		loi = 1;
 	} else console.log(`ROUND-TRIP: ${dongTong.length} dong tong khop luot that, ma ${r1.ma}`);
 
-	const sach = goc.map((d) => ({
-		...d,
-		khongQuaKiem: false,
-		ketCuc: d.ketCuc === "LOI" || d.ketCuc === "khong-co-ket-qua" ? "TRA_LOI-sai" : d.ketCuc === "loi" ? "khong-hang" : d.ketCuc,
-		...(d.zalo && d.ketCuc === "loi" ? { zalo: { ketQua: "da-tra-loi", loi: null, coHang: false } } : {}),
-	}));
+	const sach = goc.map((d) => {
+		const ketCuc = d.ketCuc === "LOI" || d.ketCuc === "khong-co-ket-qua" ? "TRA_LOI-sai" : d.ketCuc === "loi" ? "khong-hang" : d.ketCuc;
+		const moi = { ...d, khongQuaKiem: false, ketCuc };
+		if (d.zalo && d.ketCuc === "loi") moi.zalo = { ketQua: "da-tra-loi", loi: null, coHang: false };
+		return moi;
+	});
 
 	const motLoi = sach.map((d) => ({ ...d }));
 	const dau = motLoi.find((d) => d.luot === 1);
