@@ -1,4 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { readdirSync, readFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { db } from "@crm/db";
 import type { CuocSoan } from "@crm/db/okr-cuoc-soan";
 import { dongSoan, noiDungSoan } from "@crm/validation/okr-tro-ly";
@@ -10,6 +12,7 @@ import {
 	type SoanQuyetOutput,
 } from "../src/okr/okr.contracts";
 import {
+	CHU_KY_Q4,
 	DON_VI,
 	type DonViSan,
 	type Duong,
@@ -334,6 +337,171 @@ describe("muc-tin", () => {
 				chay++;
 			}
 			expect(chay).toBe(3);
+		},
+		CHO_DB,
+	);
+});
+
+const GOC_KHO = resolve(import.meta.dir, "..", "..", "..");
+const THU_MUC_MIGRATION = join(
+	GOC_KHO,
+	"packages",
+	"db",
+	"prisma",
+	"migrations",
+);
+
+function cauDienLai(): string {
+	const tim = readdirSync(THU_MUC_MIGRATION).filter((t) =>
+		t.endsWith("_ly_do_can_chinh"),
+	);
+	if (tim.length !== 1) throw new Error("khong thay migration ly do");
+	const cau = readFileSync(
+		join(THU_MUC_MIGRATION, tim[0] ?? "", "migration.sql"),
+		"utf8",
+	)
+		.split(";")
+		.map((c) => c.trim())
+		.filter((c) => c.startsWith("UPDATE"));
+	if (cau.length !== 1) throw new Error("khong thay migration ly do");
+	return cau[0] ?? "";
+}
+
+async function nguonTrong(soLuong: number): Promise<string[]> {
+	const ds = await db.okrObjective.findMany({
+		where: {
+			cycleId: CHU_KY_Q4,
+			id: { not: DICH },
+			alignments: { none: { targetObjectiveId: DICH } },
+		},
+		select: { id: true },
+		orderBy: { id: "asc" },
+		take: soLuong,
+	});
+	if (ds.length !== soLuong) throw new Error("khong du muc tieu nguon");
+	return ds.map((d) => d.id);
+}
+
+async function ganTho(objectiveId: string, lyDo: string | null = null) {
+	return db.okrAlignment.create({
+		data: {
+			objectiveId,
+			targetObjectiveId: DICH,
+			targetKeyResultId: null,
+			lyDo,
+			canCu: null,
+			lyDoTuKara: false,
+		},
+	});
+}
+
+async function gieoDeXuatCho(
+	cuoc: CuocSoan,
+	khoa: string,
+	taoRaId: string,
+	viSao: string,
+): Promise<string> {
+	const [id] = (await gieoDongNhap(
+		cuoc,
+		[
+			{
+				loai: "can-chinh-moi",
+				khoa,
+				chaKhoa: "x",
+				dichId: DICH,
+				loaiDich: "muc-tieu",
+			},
+		],
+		"nhan",
+	)) as [string];
+	await db.okrDeXuat.update({ where: { id }, data: { taoRaId } });
+	await datViSao(id, viSao);
+	return id;
+}
+
+describe("dien-lai", () => {
+	test(
+		"câu điền lại của migration chép viSao sang căn chỉnh cũ chưa có lý do, đúng năm ca",
+		async () => {
+			const cuoc = await gieoCuoc({
+				donVi: DON_VI.kinhDoanh,
+				nguoiMo: QUAN_TRI,
+			});
+			const [nA, nB, nC, nD, nE] = (await nguonTrong(5)) as [
+				string,
+				string,
+				string,
+				string,
+				string,
+			];
+			const A = await ganTho(nA);
+			await gieoDeXuatCho(cuoc, "dl-a", A.id, "Lý do cũ A");
+			const B = await ganTho(nB);
+			const C = await ganTho(nC, "Người viết");
+			await gieoDeXuatCho(cuoc, "dl-c", C.id, "Lý do cũ C");
+			const D = await ganTho(nD);
+			await gieoDeXuatCho(cuoc, "dl-d", D.id, "   ");
+			const eCu = await ganTho(nE);
+			await gieoDeXuatCho(cuoc, "dl-e", eCu.id, "Lý do E\n");
+			await db.okrAlignment.delete({ where: { id: eCu.id } });
+			const E = await ganTho(nE);
+			await db.$executeRawUnsafe(cauDienLai());
+			const doc = async (id: string) =>
+				db.okrAlignment.findUniqueOrThrow({
+					where: { id },
+					select: { lyDo: true, lyDoTuKara: true },
+				});
+			const MONG = [
+				["A", A.id, { lyDo: "Lý do cũ A", lyDoTuKara: true }],
+				["B", B.id, { lyDo: null, lyDoTuKara: false }],
+				["C", C.id, { lyDo: "Người viết", lyDoTuKara: false }],
+				["D", D.id, { lyDo: null, lyDoTuKara: false }],
+				["E", E.id, { lyDo: null, lyDoTuKara: false }],
+			] as const;
+			let chay = 0;
+			for (const [ca, id, mong] of MONG) {
+				const thuc = await doc(id);
+				if (thuc.lyDo !== mong.lyDo || thuc.lyDoTuKara !== mong.lyDoTuKara)
+					throw new Error(`${ca}: dien lai sai (${JSON.stringify(thuc)})`);
+				chay++;
+			}
+			expect(chay).toBe(5);
+		},
+		CHO_DB,
+	);
+});
+
+describe("do-nguong", () => {
+	test(
+		"câu đo ngưỡng đếm 0 căn chỉnh thiếu lý do mà dòng nháp có; bắt được một ca thiếu",
+		async () => {
+			const cauDo = readFileSync(
+				join(
+					import.meta.dir,
+					"..",
+					"..",
+					"..",
+					"_acceptance",
+					"ly-do-can-chinh-tu-soan",
+					"rang",
+					"do-nguong.sql",
+				),
+				"utf8",
+			);
+			const dem = async () =>
+				((await db.$queryRawUnsafe(cauDo)) as { thieu: number }[])[0]?.thieu;
+			const truoc = await dem();
+			if (truoc !== 0) throw new Error(`do nguong dem ${truoc}, mong 0`);
+			const cuoc = await gieoCuoc({ donVi: DON_VI.hoTro, nguoiMo: QUAN_TRI });
+			const [n] = (await nguonTrong(1)) as [string];
+			const thieu = await ganTho(n);
+			await gieoDeXuatCho(cuoc, "dn-x", thieu.id, "Lý do");
+			try {
+				if ((await dem()) !== 1)
+					throw new Error("do nguong khong bat duoc ca thieu");
+			} finally {
+				await db.okrAlignment.delete({ where: { id: thieu.id } });
+			}
 		},
 		CHO_DB,
 	);
