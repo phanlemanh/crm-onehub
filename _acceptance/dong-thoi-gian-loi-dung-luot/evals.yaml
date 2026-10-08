@@ -52,7 +52,7 @@ evals:
       lam-moi VAN !== null (chi luot lam moi thanh cong moi tat). O giu qua doi tab: staleTime 30000, lam moi loi -> xem
       cu thanh cong (5 dong) -> sang Ghi chu -> quay lai Tat ca (khong tai lai) -> thong bao lam-moi VAN !== null.
       CHIEU DO ghim: ban sao tat lamMoi khi so trang tang -> do "dtl: canh bao lam moi tat sau xem cu"; ban sao nho loi
-      theo lan gan (khong theo QueryClient) -> do "dtl: canh bao lam moi mat khi doi tab".
+      dat lai khi khoa doi -> do "dtl: canh bao lam moi mat khi doi tab".
 
   - id: E4
     criterion: AC-4
@@ -72,9 +72,8 @@ evals:
       !== null. O quay lai loi: nhu tren nhung lan tai lai bi tu choi -> ca lam-moi va xem-cu !== null (nhu AC-2 o c). Moi bai dat lai dong ho that (setSystemTime()) truoc khi chay.
       O sang tab co cache: Ghi chu da tai (staleTime 30000) -> Tat ca loi xem cu -> sang Ghi chu tu cache -> khong
       [data-dtg-loi] nao chen vao va khong con sau 10 nhip.
-      CHIEU DO ghim: ban sao dung lai co cua luot dang chay (isRefetchError/isFetchNextPageError) -> do "dtl: thong bao theo
-      sang tab moi"; ban sao nho loi theo lan gan -> do "dtl: quay lai tab loi mat thong bao" va "dtl: quay lai tai lai
-      hong sai loai thong bao".
+      CHIEU DO ghim: ban sao dung lai co cua luot dang chay (isRefetchError/isFetchNextPageError) -> do "dtl: quay lai tab
+      loi mat thong bao"; ban sao dat lai bo nho loi khi khoa doi -> do "dtl: quay lai tab loi mat thong bao".
 
   - id: E5
     criterion: AC-5
