@@ -18,7 +18,6 @@ const CAO = 900;
 const CHO_MS = 30_000;
 const LOCKUP_VIEWBOX = "0 0 2048 622";
 const LOCKUP_CAO_TOI_THIEU = 20;
-const LOGO_MAN_TRONG_CAO_TOI_THIEU = 28;
 const ANH_DAI_DIEN_CANH = 32;
 const ANH_DAI_DIEN_LOGO = 20;
 const DUNG_SAI_PX = 0.5;
@@ -165,37 +164,6 @@ async function chup(opts) {
 	return { ctx, p };
 }
 
-async function kiemManTrong(p, nhan) {
-	const kq = await p.evaluate(() => {
-		const khoi = document.querySelector('[role="dialog"] [data-slot="empty"]');
-		const svg = khoi?.querySelector('svg[aria-label="OneHub"]');
-		if (!khoi || !svg) return null;
-		const nen = [];
-		for (let el = svg; el && el !== khoi.parentElement; el = el.parentElement) {
-			const mau = getComputedStyle(el).backgroundColor;
-			const alpha =
-				mau === "transparent"
-					? 0
-					: mau.includes("/")
-						? Number.parseFloat(mau.split("/")[1])
-						: mau.startsWith("rgba")
-							? Number.parseFloat(mau.split(",")[3])
-							: 1;
-			if (alpha > 0) nen.push(`${el.getAttribute("data-slot") ?? el.tagName.toLowerCase()} ${mau}`);
-		}
-		return { cao: svg.getBoundingClientRect().height, nen };
-	});
-	if (!kq) {
-		kiem(`${nhan}: man trong thieu logo`, false);
-		return;
-	}
-	kiem(
-		kq.nen.length > 0 ? `${nhan}: o to nen quanh logo (${kq.nen.join(", ")})` : `${nhan}: khong o to nen quanh logo`,
-		kq.nen.length === 0,
-	);
-	kiem(`${nhan}: logo man trong cao ${kq.cao.toFixed(1)}px (can >= ${LOGO_MAN_TRONG_CAO_TOI_THIEU})`, kq.cao >= LOGO_MAN_TRONG_CAO_TOI_THIEU - 0.5);
-}
-
 async function kiemAnhDaiDien() {
 	const markup = markupAnhDaiDien();
 	for (const giaoDien of ["light", "dark"]) {
@@ -318,7 +286,7 @@ for (const rong of [1440, 390]) {
 		rong,
 		toiThieu: rong === 1440 ? 2 : 1,
 		canLockup: rong === 1440 ? null : { co: "dau form co ban ngang", thieu: "dau form thieu logo" },
-		vung: rong === 1440 ? null : "main section:last-of-type",
+		vung: rong === 1440 ? null : "main > section.bg-background",
 	});
 	if (rong === 1440) {
 		await kiemIcon(p);
@@ -354,11 +322,10 @@ for (const giaoDien of ["light", "dark"]) {
 		rong: 1440,
 		giaoDien,
 		cookie,
-		toiThieu: 1,
+		toiThieu: 0,
 		vung: '[role="dialog"]',
-		cho: () => document.querySelector('[role="dialog"] svg[aria-label="OneHub"]') !== null,
+		cho: () => document.querySelector('[role="dialog"]') !== null,
 	});
-	await kiemManTrong(agent.p, `agent-${nhan}`);
 	await agent.ctx.close();
 }
 

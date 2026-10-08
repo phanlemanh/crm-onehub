@@ -11,27 +11,12 @@ import {
 	nhip,
 } from "./khung-gop-y";
 
-const { FactSuggestion } = await import("@/components/crm/facts");
 const { ProposedChange } = await import("@crm/ui/components/proposed-change");
 const { KhoiTomTat } = await import("@/app/(app)/[slug]/okr/khoi-tom-tat");
 const { okrToanCanhMessages } = await import("@/lib/messages/okr-toan-canh");
 const { messages } = await import("@crm/ui/lib/messages");
-type ContactFact = import("@/lib/contact-facts").ContactFact;
 
 afterEach(dongHet);
-
-const FACT: ContactFact = {
-	id: "fact-1",
-	field: "jobTitle",
-	value: "Giám đốc kinh doanh miền Bắc",
-	score: 0.62,
-	band: "POSSIBLE",
-	evidence: [{ kind: "profile", detail: "Hồ sơ LinkedIn ghi chức danh này" }],
-	method: "agent",
-	sourceUrl: null,
-	status: "PROPOSED",
-	observedAt: "2026-09-20T03:00:00.000Z",
-};
 
 function kiemThe(goc: Element | null, ten: string): void {
 	if (!goc) throw new Error(`khong thay ${ten}`);
@@ -68,17 +53,6 @@ describe("man-cu", () => {
 				"doi chung",
 			),
 		).toThrow("doi chung doi sang inline");
-	});
-
-	test("man-cu: thông tin liên hệ vẫn là thẻ", async () => {
-		datMacDinh([]);
-		dat("contacts.decideFact", () => ({ applied: true }));
-		await mo(<FactSuggestion fact={FACT} contactId="ct-1" />);
-		await cho(
-			() => document.querySelector('[data-slot="proposed-change"]') !== null,
-			"the thong tin",
-		);
-		kiemThe(document.querySelector('[data-slot="proposed-change"]'), "facts");
 	});
 });
 

@@ -19,7 +19,7 @@ import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { dien } from "./plan-copy";
-import { AddRow } from "./record-parts";
+import { AddRow, KhungTaiLoi } from "./record-parts";
 import { useOpenRecord } from "./record-stack";
 
 type HangKeHoach = RouterOutputs["onboarding"]["plansOfCompany"][number];
@@ -100,14 +100,7 @@ export function CompanyPlans({
 	}
 
 	if (query.isError) {
-		return (
-			<div className="flex flex-col items-center gap-2 py-10 text-center">
-				<p className="font-medium text-sm">{m.loi}</p>
-				<Button variant="outline" size="sm" onClick={() => query.refetch()}>
-					{m.thuLai}
-				</Button>
-			</div>
-		);
+		return <KhungTaiLoi onRetry={() => void query.refetch()} />;
 	}
 
 	if (query.data.length === 0) {
