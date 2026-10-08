@@ -22,7 +22,7 @@ evals:
     executor: test
     cmd: config:executors.test.emtdl_bam
     paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
-    expected: "exit 0; MA TRẬN VIẾT TRƯỚC 6 dòng: 5 lớp đầu vào (một tệp dưới apps/agent/agent, một tệp của paths E15, bun.lock, tệp bộ câu, id model Gateway trả) — đổi riêng lớp đó trên bộ đầu vào gốc → băm khác băm gốc; dòng thứ 6: đổi riêng tệp bản ghi _acceptance/tro-ly-doc-kho/evidence/cham-bo-do.md → băm KHÔNG đổi; bài khẳng định đã chạy đúng 6 dòng; cùng bộ đầu vào gọi hai lần → cùng băm; danh sách tệp của phạm vi băm do chính hàm liệt kê tệp của quyet-do.ts sinh ra trên kho thật (git ls-files), và khẳng định nó chứa apps/agent/agent/agent.ts, bun.lock, _acceptance/tro-ly-doc-kho/bo-do/mam-tam.json. CHIỀU ĐỎ (cặp c): bản sao bỏ bun.lock khỏi phạm vi → dòng bun.lock đỏ «doi bun.lock ma bam khong doi»."
+    expected: "exit 0; MA TRẬN VIẾT TRƯỚC 6 dòng: 5 lớp đầu vào (một tệp dưới apps/agent/agent, một tệp của paths E15, bun.lock, tệp bộ câu, id model Gateway trả) — đổi riêng lớp đó trên bộ đầu vào gốc → băm khác băm gốc; dòng thứ 6: đổi riêng tệp bản ghi _acceptance/tro-ly-doc-kho/evidence/cham-bo-do.md → băm KHÔNG đổi; bài khẳng định đã chạy đúng 6 dòng; cùng bộ đầu vào gọi hai lần → cùng băm; danh sách tệp của phạm vi băm do chính hàm liệt kê tệp của quyet-do.ts sinh ra trên kho thật (git ls-files), và khẳng định nó chứa apps/agent/agent/agent.ts, bun.lock, _acceptance/tro-ly-doc-kho/bo-do/mam-tam.json. CHIỀU ĐỎ (cặp c): bản sao bỏ bun.lock khỏi CHAM_BO_DO.phamViThem → ca phạm vi trên kho thật đỏ «pham vi thieu bun.lock»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E4

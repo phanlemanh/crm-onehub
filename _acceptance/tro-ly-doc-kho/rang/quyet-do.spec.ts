@@ -193,7 +193,7 @@ describe("bam", () => {
 	test("phạm vi băm trên kho thật có lời dặn, gói, bộ câu; không có tệp bản ghi", () => {
 		const ds = phamViBam(GOC);
 		expect(ds).toContain("apps/agent/agent/agent.ts");
-		expect(ds).toContain("bun.lock");
+		if (!ds.includes("bun.lock")) throw new Error("pham vi thieu bun.lock");
 		expect(ds).toContain("_acceptance/tro-ly-doc-kho/bo-do/mam-tam.json");
 		expect(ds).toContain("_acceptance/tro-ly-doc-kho/rang/quyet-do.ts");
 		expect(ds).not.toContain(CHAM_BO_DO.banGhi);
