@@ -11,7 +11,7 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { dungGocGia, type GocGia, songCon } from "./support/eve-gia";
 import {
 	cungDau,
@@ -118,9 +118,8 @@ function docChu(khoa: string): { pid: number; ma?: string; con: unknown[] } {
 }
 
 function conCu(khoa: string): string[] {
-	return readdirSync(dirname(khoa)).filter((t) =>
-		t.includes(KHOI_DONG.khoa.duoiCu),
-	);
+	const dau = `${basename(khoa)}${KHOI_DONG.khoa.duoiCu}`;
+	return readdirSync(dirname(khoa)).filter((t) => t.startsWith(dau));
 }
 
 function ngu(): number {
