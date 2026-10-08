@@ -455,7 +455,8 @@ export function NhomMucTieu({
 	const bac = mt.trangThai === "bac";
 	const con: DongSoan[] = [...khoi.kr, ...khoi.canChinh];
 	const ganNhom = khoi.kr.filter((kr) => laCho(kr) && laDuSo(kr, n.s.so));
-	const keo = con.filter((d) => HOAN_DUOC.has(d.trangThai));
+	const conThat = con.filter((d) => n.s.nhan.get(d.khoaDong) !== "da-bo");
+	const keo = conThat.filter((d) => HOAN_DUOC.has(d.trangThai));
 	const nhomDaNhan = n.s.nhomDaNhan.get(mt.id);
 	const trongNhom = new Set(nhomDaNhan ? [mt.id, ...nhomDaNhan] : []);
 	const nhan = `${m.banNhap.mucTieu(String(stt))} · ${m.banNhap.loai[mt.loaiMucTieu]}`;
@@ -496,7 +497,7 @@ export function NhomMucTieu({
 					d={mt}
 					nhan={nhan}
 					keo={keo}
-					soCon={con.length}
+					soCon={conThat.length}
 				/>
 			) : null}
 			{bac

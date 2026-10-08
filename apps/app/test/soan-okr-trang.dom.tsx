@@ -200,9 +200,11 @@ describe("k2-khung", () => {
 			const o = propsDaDung(
 				q('[data-slot="resizable-panel"][data-o="hoi-thoai"]'),
 			);
-			expect(
-				`co o hoi thoai: ${o?.defaultSize}/${o?.minSize}/${o?.maxSize}`,
-			).toBe("co o hoi thoai: 380/300/50");
+			expect({
+				defaultSize: o?.defaultSize,
+				minSize: o?.minSize,
+				maxSize: o?.maxSize,
+			}).toEqual({ defaultSize: 380, minSize: 300, maxSize: "50" });
 		} finally {
 			tra();
 		}
@@ -336,16 +338,25 @@ describe("k2-trang-thai", () => {
 					data: {
 						messages: [
 							{
-								...nop("n-gio", banNhap.parse(NOP_1)),
-								metadata: { turnId: "luot-gio" },
+								...nop("n-gio-1", banNhap.parse(NOP_1)),
+								metadata: { turnId: "luot-gio-1" },
+							},
+							{
+								...nop("n-gio-2", banNhap.parse(NOP_2)),
+								metadata: { turnId: "luot-gio-2" },
 							},
 						],
 					},
 					events: [
 						{
 							type: "turn.started",
-							meta: { id: "e-gio", at: "2026-10-01T03:42:00.000Z" },
-							data: { sequence: 1, turnId: "luot-gio" },
+							meta: { id: "e-gio-1", at: "2026-10-01T03:10:00.000Z" },
+							data: { sequence: 1, turnId: "luot-gio-1" },
+						},
+						{
+							type: "turn.started",
+							meta: { id: "e-gio-2", at: "2026-10-01T03:42:00.000Z" },
+							data: { sequence: 2, turnId: "luot-gio-2" },
 						},
 					] as never,
 				});
@@ -521,6 +532,32 @@ describe("k2-quyet", () => {
 		await bam(nutHoanTac(dongEl("1")));
 		await nhip(5);
 		expect(dongEl("1")?.textContent).toContain(m.lyDoQuyet["chua-quyet"]);
+	});
+
+	test("KR Kara vừa bỏ không tính vào «kèm N KR» và không thành quyết định hoàn tác gửi Kara", async () => {
+		await datBanNhap([
+			mt("1", "Giữ khách lớn miền Bắc", "nhan"),
+			kr("11", "1", "Khách lớn ký lại hợp đồng", "nhan"),
+			kr("14", "1", "Khách lớn tăng đơn"),
+		]);
+		await moTrang();
+		await datAgent({ status: "streaming" });
+		await datBanNhap([
+			mt("1", "Giữ khách lớn miền Bắc", "nhan"),
+			kr("11", "1", "Khách lớn ký lại hợp đồng", "nhan"),
+		]);
+		await datAgent({ status: "ready" });
+		await cho(() => q('[data-nhan="da-bo"]') !== null, "dong da bo");
+		expect(`kem: ${dongEl("1")?.textContent}`).toContain(m.dong.kemKr("1"));
+		dat("okr.soanQuyet", () => ({ ok: true }));
+		await bam(nutHoanTac(dongEl("1")));
+		await nhip(10);
+		const heThong = qa('[data-kara-turn="system"]')
+			.map((o) => o.textContent)
+			.join(" | ");
+		expect(`quyet ma: ${heThong.includes("Khách lớn tăng đơn")}`).toBe(
+			"quyet ma: false",
+		);
 	});
 
 	test("lỗi CONFLICT hiện tại dòng: cuộc còn đang soạn thì «dòng cũ», cuộc đã đưa vào thì «cuộc đã đóng»; không có cảnh báo ngoài dòng", async () => {

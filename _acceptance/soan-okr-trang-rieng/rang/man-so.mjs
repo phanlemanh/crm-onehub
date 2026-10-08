@@ -1,4 +1,3 @@
-import { SOAN_UI } from "../../../apps/app/app/(app)/[slug]/okr/soan/cau-hinh.ts";
 import { tre } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
 import { DEM, LENH, TEN } from "./kich-ban.mjs";
 import {
@@ -19,6 +18,7 @@ import {
 	moCuoc,
 	mui,
 	sql,
+	the,
 	trang,
 } from "./man-chung.mjs";
 
@@ -55,9 +55,41 @@ async function docSo(p) {
 	);
 }
 
-const SO = { [`${TEN.k11}/khoi`]: "10", [`${TEN.k11}/dich`]: "20", [`${TEN.k12}/khoi`]: "50", [`${TEN.k12}/dich`]: "30" };
+const SO = { [`${TEN.k11}/khoi`]: "100", [`${TEN.k11}/dich`]: "150", [`${TEN.k12}/khoi`]: "5", [`${TEN.k12}/dich`]: "9" };
 const giongSo = (so) => Object.entries(SO).every(([k, v]) => so[k] === v);
 const inSo = (so) => Object.entries(so).map(([k, v]) => `${k}=${v}`).join(" · ");
+
+function doiDong(du) {
+	const chaMoi = new Map(du.dong.filter((d) => d.loai === "muc-tieu-moi").map((d) => [d.khoa, d.id]));
+	return {
+		...du,
+		dong: du.dong.map((d) =>
+			d.loai === "muc-tieu-moi"
+				? { ...d, khoa: d.id, khoaDong: `id:${d.id}` }
+				: { ...d, khoa: d.id, khoaDong: `id:${d.id}`, chaKhoa: chaMoi.get(d.chaKhoa) ?? d.chaKhoa },
+		),
+	};
+}
+
+function khoaTheoId(than) {
+	const mot = (o) => (o?.result?.data?.dong ? { ...o, result: { ...o.result, data: doiDong(o.result.data) } } : o);
+	return Array.isArray(than) ? than.map(mot) : mot(than);
+}
+
+async function giaKhoaTheoId(t) {
+	await t.p.setRequestInterception(true);
+	t.p.on("request", async (r) => {
+		if (!r.url().includes("okr.soanDanhSach")) return r.continue();
+		try {
+			const res = await fetch(r.url(), { headers: { ...r.headers(), cookie: `${the.tl.ten}=${the.tl.gia}; lang=vi` } });
+			const than = khoaTheoId(await res.json());
+			await r.respond({ status: res.status, contentType: "application/json", body: JSON.stringify(than) });
+		} catch {
+			await r.continue();
+		}
+	});
+	ghi("   (chieu do khoa-theo-id: khoa cua moi dong dat bang id dong, tu dau toi cuoi)");
+}
 
 async function bamTab(p, i) {
 	await p.evaluate((i) => {
@@ -71,6 +103,7 @@ export async function phanSo({ doDo, nop1 }) {
 	const cuoc = await moCuoc();
 	const t = await trang({ rong: 1440, cao: 900 });
 	try {
+		if (doDo === "khoa-theo-id") await giaKhoaTheoId(t);
 		if (!(await mo(t, cuoc.id)) || !(await nop1(t))) await khongDo("khong dung duoc ban nhap dau");
 		await bamTrongDong(t.p, TEN.k12, m.dong.themKr);
 		await choBienNhan(t.p, TEN.k12);
@@ -80,34 +113,18 @@ export async function phanSo({ doDo, nop1 }) {
 		}
 		const dau = await docSo(t.p);
 		ghi(`   da go: ${inSo(dau)}`);
-		const idCu = await t.p.evaluate(() => [...document.querySelectorAll("[data-dong]")].map((d) => d.getAttribute("data-dong")));
+		const idCua = (ten) =>
+			t.p.evaluate((ten) => [...document.querySelectorAll("[data-dong]")].find((d) => d.checkVisibility() && d.textContent?.includes(ten))?.getAttribute("data-dong") ?? null, ten);
+		const idCu = { cho: await idCua(TEN.k11), nhan: await idCua(TEN.k12) };
 		if (!(await guiTin(t, LENH.nopLai))) await khongDo("Kara khong nop lai");
 		await choThay(t.p, (chon) => document.querySelectorAll(chon).length === 2, "moc nop lai", MAN.cho.luotMs, CHON.moc);
 		await choYen(t.p);
-		const idMoi = await t.p.evaluate(() => [...document.querySelectorAll("[data-dong]")].map((d) => d.getAttribute("data-dong")));
-		ghi(`   id dong doi sau nop lai: ${idMoi.filter((x) => !idCu.includes(x)).length}/${idMoi.length}`);
-		if (doDo === "khoa-theo-id") {
-			await t.p.evaluate(
-				(tien, idMoi) => {
-					for (const k of Object.keys(sessionStorage).filter((x) => x.startsWith(tien))) {
-						const so = JSON.parse(sessionStorage.getItem(k) ?? "{}");
-						const theoId = Object.fromEntries(
-							Object.values(so).map((v, i) => [`id-cu-${i}`, { khoiDiem: v.khoiDiem, dich: v.dich }]),
-						);
-						sessionStorage.setItem(k, JSON.stringify(theoId));
-					}
-					return idMoi.length;
-				},
-				SOAN_UI.khoaSo,
-				idMoi,
-			);
-			ghi("   (chieu do khoa-theo-id: so luu theo id dong cu, doc lai trang)");
-			await t.p.reload({ waitUntil: "load" });
-			await choYen(t.p);
-		}
+		const idMoi = { cho: await idCua(TEN.k11), nhan: await idCua(TEN.k12) };
+		ghi(`   id KR cho: ${idCu.cho} → ${idMoi.cho} · id KR da nhan: ${idCu.nhan} → ${idMoi.nhan}`);
+		const doiId = idCu.cho && idMoi.cho && idCu.cho !== idMoi.cho;
 		const sauNop = await docSo(t.p);
 		ghi(`   sau nop lai: ${inSo(sauNop)}`);
-		buoc(1, giongSo(sauNop) ? null : "mat so sau nop lai");
+		buoc(1, !doiId ? "khong dung duoc doi chung: id KR cho khong doi sau nop lai" : giongSo(sauNop) ? null : "mat so sau nop lai");
 		await t.p.setViewport({ width: 375, height: MAN.kho[375].cao });
 		await tre(MAN.cho.yenMs);
 		await bamTab(t.p, 0);
@@ -125,6 +142,7 @@ export async function phanSo({ doDo, nop1 }) {
 		await tre(MAN.cho.yenMs);
 		const sauTai = await docSo(t.p);
 		ghi(`   sau tai lai: ${inSo(sauTai)}`);
+		await anh(t, "E11b-sau-tai-lai", doDo);
 		const hydrat = t.loi.find((l) => /hydrat/i.test(l));
 		buoc(3, hydrat ? "loi hydration" : giongSo(sauTai) ? null : "mat so sau tai lai");
 		if (!doDo) kiem(`console khong loi (${t.loi.length})`, t.loi.length === 0);
