@@ -5,7 +5,7 @@ slug: menu-con-loc-dien-thoai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T01:49:39Z
 design_doc: docs/superpowers/specs/2026-10-08-menu-con-loc-dien-thoai-design.md
@@ -60,3 +60,16 @@ Quét bằng `morphological-scan` preset test-matrix (S1, 08/10).
 
 - Không migration, không đổi API.
 - Đường nền đo xanh trên onehub `f7ef8adaa` (2026-10-08T01:06:24Z).
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-08 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1–2:
+
+- Ngoài-1: Phép kiểm trên điện thoại cho ô tìm Công ty có thể báo đạt dù danh sách vừa lọc chưa kịp cập nhật, nên nó chưa chứng minh được là gõ tên công ty thì ra đúng công ty đó. Menu vẫn mở trọn trong màn và gõ vào ô vẫn hiện chữ.
+- Ngoài-2: Công cụ canh việc không ai chỉnh vị trí menu con ở nơi gọi có phần tự thử không còn đi qua đường đọc thay đổi thật. Nếu phần đọc đó hỏng, công cụ vẫn báo sạch trong khi có thể có chỗ chỉnh lọt qua.
+- Ngoài-3: Công cụ canh nơi gọi menu con hiện chỉ bắt chỗ chỉnh vị trí nằm ngay trong thẻ menu con. Một cách viết vòng như đổi tên khi nhập hoặc gói qua biến có thể không bị bắt, nhưng hiện chưa có chỗ nào làm vậy.
+- Ngoài-4: Ai đó có thể đổi tên menu con khi nhập vào rồi chỉnh vị trí ở nơi gọi mà công cụ canh không phát hiện. Hiện chưa có nơi gọi nào làm vậy, nên người dùng chưa thấy ảnh hưởng.
+- Ngoài-5: Phép kiểm ô tìm Công ty trên điện thoại có thể đạt khi danh sách cũ chưa lọc còn hiện. Nó chưa chứng minh được kết quả tìm ra đúng, nhưng menu vẫn nằm gọn trong màn và gõ chữ vẫn hiện.
+- Ngoài-6: Phần tự thử của công cụ canh nơi gọi menu con không chạy qua đường đọc thay đổi thật, nên nếu đường đó hỏng thì phần tự thử vẫn xanh và công cụ có thể báo sạch nhầm.
+- Ngoài-7: Khi chạy kiểm tự động, công cụ canh việc không ai chỉnh vị trí menu con chỉ báo «không thấy gì» mà không tự chứng minh là nó còn bắt được lỗi. Nếu công cụ hỏng, kết quả sạch vẫn trông như đạt.
+- Ngoài-8: Phép kiểm ô tìm Công ty chỉ chứng minh có ít nhất một mục hiện ra sau khi gõ, chưa chứng minh mục đó khớp chữ vừa gõ. Việc menu mở gọn trong màn thì vẫn được kiểm đúng.
+- Ngoài-9: Phép kiểm cuối cùng xác nhận không ai tự ý dịch vị trí menu con ở nơi gọi chỉ cho kết quả xanh hoặc đỏ, không tự chứng minh nó còn bắt được lỗi thật. Nếu bộ lọc của nó hỏng lặng lẽ, người duyệt vẫn thấy xanh và có thể tin nhầm.
+- Ngoài-10: Trên điện thoại, nếu menu cha nằm sát mép phải và menu con bị lật sang trái mà vẫn thiếu chỗ, chưa có phép đo nào xác nhận menu con thật sự dịch vào trong màn. Ca này hiếm và đã được ghi nhận là chưa đo.
