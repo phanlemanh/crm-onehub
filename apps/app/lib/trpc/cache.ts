@@ -440,7 +440,7 @@ export function useCrmCache(): CrmCache {
 
 		giaiDoan: (options) =>
 			run(
-				[trpc.giaiDoan.list.queryKey()],
+				[trpc.giaiDoan.list.queryKey(), trpc.giaiDoan.archived.queryKey()],
 				[
 					...listKeys(),
 					trpc.deals.byId.queryKey(),

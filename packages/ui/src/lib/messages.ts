@@ -98,6 +98,8 @@ const en = {
 		buocDangChay: "In progress",
 		buocLoi: "This step failed",
 		buocLoiTieuDe: (s: string) => `Kara couldn't finish: ${s}`,
+		buocChuaLuu: "Not saved",
+		buocChuaLuuTieuDe: (s: string) => `Kara couldn't save: ${s}`,
 		chuaDuoc: (s: string) => `Kara couldn't ${s}`,
 		thuLai: "Try again",
 		chuaBatTieuDe: "Kara isn't turned on here",
@@ -105,6 +107,8 @@ const en = {
 		dangSoan: "Kara is drafting…",
 		nhomDeXuat: (n: string) =>
 			n === "1" ? "1 suggestion" : `${n} suggestions`,
+		mocDau: (s: string) => `Kara drafted the first version: ${s}`,
+		daQuyetHet: "all decided",
 	},
 	artifact: {
 		dong: "Close",
@@ -131,6 +135,10 @@ const en = {
 	},
 	sortableList: {
 		reorder: (label: string) => `Reorder ${label}`,
+		hint: "Drag to reorder, or press Space then the up and down arrows.",
+		saved: "New order saved",
+		undo: "Undo",
+		restored: "Previous order restored",
 	},
 	skeletonSwap: {
 		loaded: (label: string) => `${label} loaded`,
@@ -335,12 +343,16 @@ const vi = {
 		buocDangChay: "Đang chạy",
 		buocLoi: "Bước này hỏng",
 		buocLoiTieuDe: (s: string) => `Kara chưa xong bước: ${s}`,
+		buocChuaLuu: "Chưa lưu được",
+		buocChuaLuuTieuDe: (s: string) => `Kara chưa lưu được: ${s}`,
 		chuaDuoc: (s: string) => `Kara chưa ${s} được`,
 		thuLai: "Thử lại",
 		chuaBatTieuDe: "Kara chưa được bật ở đây",
 		dangSoanKhoa: "Kara đang soạn — xong sẽ quyết được.",
 		dangSoan: "Kara đang soạn…",
 		nhomDeXuat: (n: string) => `${n} đề xuất`,
+		mocDau: (s: string) => `Kara soạn bản nháp đầu: ${s}`,
+		daQuyetHet: "đã quyết hết",
 	},
 	artifact: {
 		dong: "Đóng",
@@ -367,6 +379,10 @@ const vi = {
 	},
 	sortableList: {
 		reorder: (label: string) => `Đổi thứ tự ${label}`,
+		hint: "Kéo để sắp thứ tự, hoặc dùng phím Space rồi mũi tên lên xuống.",
+		saved: "Đã lưu thứ tự mới",
+		undo: "Hoàn tác",
+		restored: "Đã trả thứ tự cũ",
 	},
 	skeletonSwap: {
 		loaded: (label: string) => `Đã tải xong ${label}`,

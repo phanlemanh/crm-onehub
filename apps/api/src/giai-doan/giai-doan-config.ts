@@ -11,5 +11,6 @@ export const GIAI_DOAN_API = {
 		dichSai: "Move the deals to another live stage of the same kind.",
 		khongCo: "That stage no longer exists.",
 		danhSachLech: "The order must list every stage of that kind exactly once.",
+		chuaLuuTru: "Only an archived stage can be restored.",
 	},
 } as const;

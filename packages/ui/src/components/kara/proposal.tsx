@@ -9,38 +9,55 @@ import {
 	type ProposedChangeProps,
 	ProposedChangeReceipt,
 } from "@crm/ui/components/proposed-change";
-import { type ReactNode, useId } from "react";
+import { createContext, type ReactNode, useContext, useId } from "react";
 
-function KhoaKhiBan({ ban, children }: { ban: boolean; children: ReactNode }) {
+const TrongNhom = createContext(false);
+
+function KhoaKhiBan({
+	ban,
+	noi = false,
+	children,
+}: {
+	ban: boolean;
+	noi?: boolean;
+	children: ReactNode;
+}) {
 	return (
 		<fieldset
 			disabled={ban}
 			data-slot="kara-khoa"
-			className="m-0 min-w-0 border-0 p-0"
+			data-noi={noi ? "" : undefined}
+			className="m-0 min-w-0 rounded-md border-0 p-0 transition-colors duration-700 data-[noi]:bg-accent motion-reduce:transition-none"
 		>
 			{children}
 		</fieldset>
 	);
 }
 
-export type KaraProposalProps = ProposedChangeProps;
+export type KaraProposalProps = ProposedChangeProps & { highlighted?: boolean };
 
 export function KaraProposal({
 	actions,
 	lockedReason,
 	decided,
+	highlighted = false,
+	media,
 	...props
 }: KaraProposalProps) {
 	const msg = useMessages();
-	const ban = useKaraBusy() !== null;
+	const busy = useKaraBusy();
+	const trongNhom = useContext(TrongNhom);
+	const ban = busy !== null;
 	const choKhoa = ban && !decided;
 	return (
-		<KhoaKhiBan ban={ban}>
+		<KhoaKhiBan ban={ban} noi={highlighted}>
 			<ProposedChange
 				{...props}
+				media={media ?? !trongNhom}
 				decided={decided}
 				actions={choKhoa ? actions.map((a) => ({ ...a, disabled: true })) : actions}
 				lockedReason={choKhoa ? msg.karaKhung.dangSoanKhoa : lockedReason}
+				lockedReasonHidden={choKhoa && busy?.reasonShown === true}
 			/>
 		</KhoaKhiBan>
 	);
@@ -78,10 +95,14 @@ export function KaraProposalGroup({
 	const idLyDo = useId();
 	return (
 		<section data-slot="kara-proposal-group" className="flex flex-col gap-2">
-			<div className="flex flex-wrap items-center justify-between gap-2">
+			<div className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
 				<KaraLabel
 					scope={scope}
-					text={msg.karaKhung.nhomDeXuat(String(cho.length))}
+					text={
+						cho.length === 0
+							? msg.karaKhung.daQuyetHet
+							: msg.karaKhung.nhomDeXuat(String(cho.length))
+					}
 					reason={reason}
 					readAt={readAt}
 				/>
@@ -113,7 +134,9 @@ export function KaraProposalGroup({
 					/>
 				</KhoaKhiBan>
 			) : null}
-			<div className="flex flex-col gap-1">{children}</div>
+			<TrongNhom.Provider value>
+				<div className="flex flex-col gap-1">{children}</div>
+			</TrongNhom.Provider>
 		</section>
 	);
 }
