@@ -38,9 +38,9 @@ chối bản chưa lưu trữ; (3) vi phạm cũ của `AgentDefinition` vào n�
   <tệp>:<dòng> xoa vinh vien khong kiem da luu tru: <mô hình>` và thoát 1; kiểm ở chính phương thức hoặc qua một hàm phụ
   một bước (như `purgeDepartment` → `lyDoKhongXoa`) thì xanh.
 - AC-5: Given cây onehub hiện tại, When chạy `node scripts/luat-kho/do-cay.mjs --du-luat`, Then dòng `vong-doi` báo XANH
-  với nền đúng hai vị trí của `AgentDefinition` (dòng model trong schema, lời `findMany` của `list` trong
-  `agent-definitions.service.ts`), mỗi vị trí ghi trong `scripts/luat-kho/cau-hinh.mjs` theo tệp và chữ của dòng; dọn một
-  vị trí khỏi mã thì thước in `NEN THUA vong-doi: …` cho vị trí đó.
+  với nền đúng hai chỗ của `AgentDefinition` (dòng model trong schema, lời `findMany` của `list` trong
+  `agent-definitions.service.ts`), mỗi chỗ ghi trong `scripts/luat-kho/cau-hinh.mjs` theo tệp và chữ của dòng; dọn một
+  chỗ khỏi mã thì thước in `NEN THUA vong-doi: …` cho chỗ đó.
 - AC-6: Given thiếu `schema.prisma` hoặc không có app Nest, When chạy thước với `--du-luat`, Then in `KHONG DO DUOC: thieu
   luat: vong-doi` và thoát 2; không cờ thì in `KHONG AP DUNG: vong-doi — …` và sáu luật kia vẫn chạy.
 - AC-7: Given mỗi lượt thước, When phần tự gài chạy trên bản gương tmpdir, Then có ca đỏ cho từng điều (AC-1, AC-2, AC-4)
