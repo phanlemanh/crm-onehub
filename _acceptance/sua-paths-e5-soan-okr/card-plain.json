@@ -1,0 +1,80 @@
+{
+ "feature_plain": "Hồ sơ đã ký của tính năng soạn OKR cùng Kara thôi bị coi là cũ mỗi khi một PR chạm nó vì một tệp nó không hề đo; đổi lại, hồ sơ được ghim lại một lần trong vòng này.",
+ "will_do": [
+  {
+   "id": "AC-2",
+   "p": "Sẽ lọc đúng: màn Cây tổ chức và chữ của trợ lý OKR vẫn được canh bởi đúng phép đo của chúng (E5, E17), còn hai tệp công cụ không liên quan thì bị bỏ qua."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ chỉ đổi đúng hai đường dẫn trong bộ phép đo của hồ sơ đã ký — lệnh, kỳ vọng, chiều đỏ giữ nguyên từng byte."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ ghim lại hồ sơ đúng một lần trong vòng này, mọi phép đo máy xanh, chữ ký cũ của anh giữ nguyên."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ chỉ chạm các tệp đã xin; hợp đồng đã ký không đổi, nhật ký chạy và tệp cấu hình chỉ thêm dòng."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ KHÔNG còn đường dẫn nào của hồ sơ trỏ vào chỗ trống — nên bộ lọc «chỉ cũ khi vật đo đổi» bật lại cho hồ sơ này."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ KHÔNG để lưới trước-khi-gộp báo hồ sơ này vi phạm khi đẩy nhánh."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ KHÔNG còn coi hồ sơ là cũ khi một PR chỉ chạm tệp nằm ngoài vật hồ sơ đo — đo qua đúng lưới thật trên một bản sao tạm, cả chiều xanh lẫn chiều đỏ."
+  },
+  {
+   "id": "OOS-1",
+   "p": "KHÔNG sửa 11 hồ sơ đã ký khác cùng bệnh — giám sát đề xuất gộp vào hàng F10, chờ anh quyết."
+  },
+  {
+   "id": "OOS-2",
+   "p": "KHÔNG dựng răng chặn PR làm đường dẫn của hồ sơ đã ký thành chết — việc của bộ công cụ nghiệm thu."
+  },
+  {
+   "id": "OOS-3",
+   "p": "KHÔNG thu hẹp phép đo luật kho (E27): nó đo cả cây mã nên vẫn buộc ghim lại sau mọi PR chạm mã — vòng này không xoá được phần lớn lượt ghim lại."
+  },
+  {
+   "id": "OOS-4",
+   "p": "KHÔNG đổi lệnh, kỳ vọng hay chiều đỏ của phép đo nào trong hồ sơ đã ký."
+  }
+ ],
+ "scope_plain": "Phạm vi đúng một hồ sơ, đúng hai đường dẫn; phần lớn lượt ghim lại vẫn còn vì luật kho đo cả cây.",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Bỏ quét độ phủ có tên: việc một chiều. Bảy tiêu chí trả lời năm câu — bộ lọc bật chưa, lọc đúng chưa, lưới thật có hết coi cũ không, có lỡ đổi gì ngoài hai đường dẫn không, hồ sơ còn ký và còn xanh không."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Phép đo lượt ghim lại không buộc lượt đó thuộc vòng này — đã thêm điều kiện và chiều đỏ."
+  },
+  {
+   "i": 1,
+   "p": "Chưa có phép đo nào chạy qua lưới thật — đã thêm AC-7 trên bản sao tạm, và buộc cây đã commit trước khi đo."
+  },
+  {
+   "i": 2,
+   "p": "Vế «tệp đúng được giữ» không đo được gì vì luật kho giữ mọi tệp mã — đã đổi sang đo theo từng phép đo."
+  },
+  {
+   "i": 3,
+   "p": "So sau khi đọc YAML không bắt được việc ghi lại cả tệp — đã thêm so từng byte."
+  },
+  {
+   "i": 4,
+   "p": "Ranh giới cho phép sửa cả hợp đồng đã ký — đã khoá: hợp đồng không đổi, nhật ký chỉ thêm dòng."
+  }
+ ]
+}
