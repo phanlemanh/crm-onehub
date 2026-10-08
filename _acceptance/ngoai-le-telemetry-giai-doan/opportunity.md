@@ -33,7 +33,7 @@ chứng 2026-10-08 — luật 26 của đợt sau-14-10 tính là Cổng Đáng 
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] một lần rẽ nhánh mới theo mã giai đoạn gốc ở gói telemetry, ngoài ngoại lệ đã khai, có bị thước bắt trước khi gộp không?
-- Kết quả nào là SỐNG: [đề xuất] thước `khong-re-theo-ten` đỏ khi bản sao chèn một mã gốc vào tệp telemetry bất kỳ (kể cả `allowlist.ts`), xanh trên cây thật; `docs/api.md` nêu đúng ngoại lệ này.
-- Kết quả nào là CHẾT: [đề xuất] thước vẫn xanh khi bản sao chèn `"CLOSED_WON"` vào một tệp dưới `packages/telemetry/src`.
-- Timebox: [đề xuất] lượt CI đầu tiên sau khi gộp; không cần phiên nghiệm thu (không có người dùng cuối).
+- Câu hỏi phép đo trả lời: một lần rẽ nhánh mới theo mã giai đoạn gốc ở gói telemetry, ngoài ngoại lệ đã khai, có bị thước bắt trước khi gộp không?
+- Kết quả nào là SỐNG: thước `khong-re-theo-ten` đỏ khi bản sao chèn một mã gốc vào tệp telemetry bất kỳ (kể cả `allowlist.ts`), xanh trên cây thật; `docs/api.md` nêu đúng ngoại lệ này.
+- Kết quả nào là CHẾT: thước vẫn xanh khi bản sao chèn `"CLOSED_WON"` vào một tệp dưới `packages/telemetry/src`.
+- Timebox: lượt CI đầu tiên sau khi gộp; không cần phiên nghiệm thu (không có người dùng cuối).
