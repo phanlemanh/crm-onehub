@@ -7,7 +7,7 @@
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
 - **Shape 3 (asserts the strings are present when the promise is a value-to-slot relation): E1 checks the title and description by substring on the whole frame's textContent**
-  Người dùng thấy gì: Bai kiem tu dong chi xac nhan khung bao loi co du hai cau chu, khong xac nhan cau nao nam o dong tieu de, cau nao o dong mo ta. Neu sau nay hai cau bi doi cho cho nhau, nguoi dung se thay thong bao dao nguoc thu tu ma bai kiem van bao xanh.
+  Người dùng thấy gì: Bài kiểm tự động chỉ xác nhận khung báo lỗi có đủ hai câu chữ, không xác nhận câu nào nằm ở dòng tiêu đề, câu nào ở dòng mô tả. Nếu sau này hai câu bị đổi chỗ cho nhau, người dùng sẽ thấy thông báo đảo ngược thứ tự mà bài kiểm vẫn báo xanh.
   file: `apps/app/test/da-luu-tru-tai-loi.dom.tsx`
   severity: low
   Đề xuất: known-limits
