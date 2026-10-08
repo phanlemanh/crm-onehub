@@ -145,10 +145,10 @@ async function datViSao(deXuatId: string, viSao: string): Promise<void> {
 	});
 }
 
-const DON_VI_THEO_DUONG: Record<Duong, DonViSan> = {
+const DON_VI_THEO_DUONG = {
 	trpc: DON_VI.kdBac,
 	rest: DON_VI.kdNam,
-};
+} satisfies Record<Duong, DonViSan>;
 
 beforeAll(async () => {
 	await batDauMau();
