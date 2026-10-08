@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 86c1bf66643d1430bf6cd73e330e93f9195d450b
+verified_commit: af387d3ab496a88bb613e602d1daf60980dc24e4
 human_signoff:
 ---
 
@@ -27,113 +27,113 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-deal-va-E1-r1
+  run_id: minted-deal-va-E1-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dva_khoa
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
   output: |
-    Ran 3 tests across 1 file. [16.00ms]
+    Ran 3 tests across 1 file. [12.00ms]
 
 - eval: E2
-  run_id: muzre2vt0abe
+  run_id: muzs0dz3ew2x
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dva_rollup
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
   output: |
-    test-run: dropped crm_muzre2vt0abe_test
+    test-run: dropped crm_muzs0dz3ew2x_test
 
 - eval: E3
-  run_id: minted-deal-va-E3-r1
+  run_id: minted-deal-va-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dva_tai_lieu
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
   output: |
-    Ran 1 test across 1 file. [16.00ms]
+    Ran 1 test across 1 file. [11.00ms]
 
 - eval: E4
-  run_id: muzre2orqsj5
+  run_id: muzs0daleedk
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dva_agent
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
   output: |
-    test-run: dropped crm_muzre2orqsj5_test
+    test-run: dropped crm_muzs0daleedk_test
 
 - eval: E5
-  run_id: minted-deal-va-E5-r1
+  run_id: minted-deal-va-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dva_ban_ghi
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
   output: |
-    Ran 3 tests across 1 file. [75.00ms]
+    Ran 3 tests across 1 file. [72.00ms]
 
 - eval: E6
-  run_id: minted-deal-va-E6-r1
+  run_id: minted-deal-va-E6-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dva_cham_mau
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
   output: |
-    Ran 2 tests across 1 file. [1457.00ms]
+    Ran 2 tests across 1 file. [582.00ms]
 
 - eval: E7
-  run_id: minted-deal-va-E7-r1
+  run_id: minted-deal-va-E7-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dva_hoi_quy
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
   output: |
-    Ran 65 tests across 5 files. [12.35s]
+    rang khong-xoa-expect (che do tu thu va che do that) va bon tep kiem san co deu xanh; chuoi lenh chay sach den cuoi.
 
 - eval: E8
-  run_id: design-gate-063fa74c21
+  run_id: design-gate-43b847480b
   exit_code: 0
-  baseline: green
+  baseline: n-a
   verifier: config:executors.script.dva_san_thiet_ke
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
   output: |
-    design-gate static tren deal-list-result.tsx: lenh thoat sach, khong P0.
+    design-gate static tren deal-list-result.tsx: lenh chay sach, khong P0.
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-deal-va-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-deal-va-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-deal-va-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-deal-va-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-deal-va-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-deal-va-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-deal-va-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-deal-va-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-deal-va-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-deal-va-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
 
 - cmd: bun run lint:slop
-  run_id: minted-deal-va-SUITE-bun_run_lint_slop-r1
+  run_id: minted-deal-va-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-deal-va-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-deal-va-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-08T16:36:06Z
+  verified_at: 2026-10-08T16:53:55Z
 
 ## Known limits
 
@@ -141,7 +141,9 @@ human_signoff:
 
 ## Analyst
 
-E8 (design-gate static tren apps/app/components/agent-builder/deal-list-result.tsx): baseline green. Eval pass tren ca HEAD lan code cu, nen no chung minh harness thiet ke chu khong phai hanh vi moi cua feature. Day la regression-guard co chu y cho AC-8 (khong them P0 ve thiet ke); nhung E1 den E7 deu red tren baseline (co phan biet) mo ta hanh vi moi.
+carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi).
+
+E8 (design-gate static tren apps/app/components/agent-builder/deal-list-result.tsx): pass tren ca HEAD lan baseline round 1, nen no chung minh harness thiet ke chu khong phai hanh vi moi cua feature. Day la regression-guard co chu y cho AC-8 (khong them P0 ve thiet ke); cac eval E1 den E7 mo ta hanh vi moi.
 
 ## Variance
 
@@ -150,3 +152,4 @@ none — every multi-run eval is uniform (moi eval chay mot lan, khong eval nao 
 ## Iterations
 
 Round 1: E1 den E8 va bay lenh suite deu xanh; verdict PASS.
+Round 2: ban viet lai rang khong-xoa-expect (so cau expect nguyen cau thay vi dong diff) va bon lenh suite cung E1 den E8 deu xanh tren commit af387d3ab; verdict PASS.
