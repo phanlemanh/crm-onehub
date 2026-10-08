@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 057f9a854058d929ab788dc8091fd2bc6b18c57d
+verified_commit: 84792891f23f46ceb07e09290105f2a29b9b2616
 human_signoff:
 ---
 
@@ -397,3 +397,7 @@ none — every multi-run eval is uniform
 Round 1: E1b, E14 không đạt trong lượt chạy đó (REJECT), kèm các phát hiện về phép đo; trả về triển khai và vá phép đo.
 Round 2: toàn bộ eval máy và ui-check đạt; E13, E13b, E13c, E16 giữ nguyên từ round 1; E15 hội đồng ba lens đều đạt. Verdict PASS.
 Round 3: sau bản vá hoàn tác Mục tiêu không kéo KR Kara vừa bỏ và lần gộp origin/onehub, mọi eval chạm paths chạy lại và đạt (kể cả E13, E16); E8 giữ từ round 2, E13b và E13c giữ từ round 1; E15 hội đồng ba lens đều đạt. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-08, do hoá cũ do gộp onehub c803963e trước PR
+run_id: repin-20261008T070544Z-53591
+sha: 84792891f23f46ceb07e09290105f2a29b9b2616 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2, E8c, E9b, E10c, E11b, E12b, E14, E15 (E15 không khai paths) · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
