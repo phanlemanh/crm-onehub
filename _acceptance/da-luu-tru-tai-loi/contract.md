@@ -5,7 +5,7 @@ slug: da-luu-tru-tai-loi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T09:07:14Z
 design_doc: docs/superpowers/specs/2026-10-08-da-luu-tru-tai-loi-design.md
@@ -58,3 +58,11 @@ Quét bằng `morphological-scan` preset test-matrix (S1, 08/10).
 
 - Không đổi API, không migration. Nhánh xếp chồng trên `feat/danh-sach-keo-chung` (#311 chưa gộp).
 - Đường nền đo xanh trên `cf003458` (đỉnh E3, 2026-10-08T08:55:54Z).
+- #311 (E3) gộp onehub 45d4fde5 trong lúc vòng chạy; nhánh đã gộp onehub sau đó (a392df7f), vòng 2 chấm trên mốc onehub.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-08 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1–2:
+
+- Ngoài-1: Bài kiểm tự động chỉ xác nhận khung báo lỗi có đủ hai câu chữ, không xác nhận câu nào nằm ở dòng tiêu đề, câu nào ở dòng mô tả. Nếu sau này hai câu bị đổi chỗ cho nhau, người dùng sẽ thấy thông báo đảo ngược thứ tự mà bài kiểm vẫn báo xanh.
+- Ngoài-2: Sau khi bấm «Thử lại» trên màn thật, phép đo không kiểm lại rằng ba thẻ nhóm giai đoạn vẫn còn. Nếu «Thử lại» vô tình làm hỏng cả trang, phép đo vẫn có thể báo đạt.
+- Ngoài-3: Trong lúc đang thử lại sau lỗi, phép kiểm không xác nhận danh sách đã lưu trữ chưa hiện ra nhầm. Người dùng có thể thoáng thấy danh sách sai mà phép kiểm không bắt được.
+- Ngoài-4: Nếu sau này dữ liệu danh sách giai đoạn đã lưu trữ đổi dạng, bài kiểm vẫn xanh dù màn hình đọc sai dữ liệu. Rủi ro chỉ xảy ra khi có người đổi dạng dữ liệu đó, không ảnh hưởng người dùng hiện tại.
