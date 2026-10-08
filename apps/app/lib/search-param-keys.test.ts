@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "bun:test";
 import { companiesSearchParams } from "@/app/(app)/[slug]/companies/companies-search-params";
 import { contactsSearchParams } from "@/app/(app)/[slug]/contacts/contacts-search-params";
@@ -79,5 +80,16 @@ describe("list tables", () => {
 		]) {
 			expect(Object.keys(table.parsers)).toContain(SEARCH_PARAM.list.fields);
 		}
+	});
+	it("trang soạn đọc khoá đã đăng ký", () => {
+		expect(SEARCH_PARAM.okr.tabSoan).toBe("tabSoan");
+		expect(SEARCH_PARAM.okr.locSoan).toBe("locSoan");
+		expect(RESERVED_SEARCH_PARAM_KEYS.has(SEARCH_PARAM.okr.tabSoan)).toBe(true);
+		expect(RESERVED_SEARCH_PARAM_KEYS.has(SEARCH_PARAM.okr.locSoan)).toBe(true);
+		const cauHinh = readFileSync(
+			new URL("../app/(app)/[slug]/okr/soan/cau-hinh.ts", import.meta.url),
+			"utf8",
+		);
+		expect(cauHinh.includes("thamSo")).toBe(false);
 	});
 });

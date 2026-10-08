@@ -15,6 +15,7 @@ import {
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import type { ReactNode } from "react";
 import { okrSoanMessages } from "@/lib/messages/okr-soan";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { SOAN_UI } from "./cau-hinh";
 
 export const TAB_SOAN = ["tro-chuyen", "ban-nhap"] as const;
@@ -31,7 +32,7 @@ const laTab = (v: string): v is TabSoan =>
 
 export function useTabSoan() {
 	return useQueryState(
-		SOAN_UI.thamSo.tab,
+		SEARCH_PARAM.okr.tabSoan,
 		parseAsStringLiteral(TAB_SOAN).withDefault("tro-chuyen"),
 	);
 }
