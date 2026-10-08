@@ -103,6 +103,12 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.zghl_chup
+    steps:
+      - "Chạy NGUYÊN VĂN từ gốc kho: AGENT_URL=http://127.0.0.1:3591 AGENT_BRIDGE_SECRET=bi-mat-chup-h4 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh \"bun _acceptance/zalo-gui-hong-ghi-ly-do/rang/chup.mjs\" — không gọi thẳng chup.mjs (mot-luot.sh dựng phiên đo và agent giả)"
+      - "chup.mjs chạy cảnh cây trước màn đầu; lệch cây hay bàn đo không dựng được → mã 2"
+      - "Kết nối › Zalo ở 1440 và 390: dán token bot khác vào ô token, bấm Lưu → ConfirmDialog nêu tên bot mới và «3 liên kết», nút «Gỡ liên kết và đổi bot» và Huỷ → ảnh evidence/E13-doi-bot-<rộng>.png"
+      - "«Thông báo của bạn» của người A ở 1440 và 390 → dòng báo cần nối lại cạnh «Nối Zalo» → ảnh evidence/E13-can-noi-lai-<rộng>.png"
+      - "Đọc dòng «E13 …» trong output; mọi dòng kiểm phải đạt, rồi mở từng ảnh E13-*.png để chấm"
     paths: [apps/app/app/(app)/[slug]/settings/connections/zalo/o-token.tsx, apps/app/app/(app)/[slug]/settings/notifications/khoi-zalo.tsx]
     expected: "Trên bàn đo (do:man, kho dùng-một-lần, agent giả trả can-xac-nhan-doi-bot cho Lưu bot), chụp ở 1440 và 390: (1) Kết nối › Zalo sau khi bấm Lưu với token bot khác — ConfirmDialog nêu tên bot mới và «3 liên kết», nút «Gỡ liên kết và đổi bot», nút Huỷ; (2) «Thông báo của bạn» của người A ở E12 — dòng báo cần nối lại cạnh «Nối Zalo»; Ảnh lưu ở _acceptance/zalo-gui-hong-ghi-ly-do/evidence/E13-*.png; người chấm nhìn ảnh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
@@ -163,6 +169,11 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.zghl_chup
+    steps:
+      - "Chạy NGUYÊN VĂN từ gốc kho: AGENT_URL=http://127.0.0.1:3591 AGENT_BRIDGE_SECRET=bi-mat-chup-h4 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh \"bun _acceptance/zalo-gui-hong-ghi-ly-do/rang/chup.mjs\" — không gọi thẳng chup.mjs; cùng một lượt với E13"
+      - "chup.mjs gửi một yêu cầu webhook 403 thật (header lệch, thân tin Zalo hợp lệ) tới agent của bàn đo; dòng «E20: webhook khoa lech tra status=403» và «E20: ly do sau 403 la khoa-lech» phải đạt"
+      - "Kết nối › Zalo ở 1440 và 390 → cảnh báo khoá lệch cùng nút «Đăng ký lại», không tràn ngang → ảnh evidence/E20-khoa-lech-<rộng>.png"
+      - "Đọc dòng «E20 …» trong output; mọi dòng kiểm phải đạt, rồi mở từng ảnh E20-*.png để chấm"
     paths: ["apps/app/app/(app)/[slug]/settings/connections/zalo/trang-thai-webhook.tsx", "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx", apps/api/src/zalo/zalo.service.ts, apps/api/src/zalo/zalo.contracts.ts]
     expected: "Trên bàn đo (do:man, kho dùng-một-lần), zaloWebhookLyDo đặt bằng một yêu cầu 403 thật (header lệch, thân tin Zalo hợp lệ) gửi tới agent của bàn đo; chụp Kết nối › Zalo ở 1440 và 390: cảnh báo khoá lệch hiện cùng nút «Đăng ký lại». Ảnh ở _acceptance/zalo-gui-hong-ghi-ly-do/evidence/E20-*.png; người chấm nhìn ảnh."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
