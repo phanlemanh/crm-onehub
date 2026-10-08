@@ -1,0 +1,71 @@
+schema_version: 1
+slug: agent-test-khong-nhap-app
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.atk_luat_kho
+    paths:
+      - "apps/agent/test/**"
+      - "scripts/luat-kho/**"
+    expected: |
+      node scripts/luat-kho/do-cay.mjs: thoat 0, dong KET LUAN "cay xanh", khong dong nao bat dau "DO cach-ly-hai-agent".
+      Doi chung va chieu do co san trong chinh luat: ca "pha-test-cua-agent-nhap-app-khong-phai-nest" (test cua agent nhap
+      app thuong -> DO cach-ly-hai-agent goi ten tep) phai in "DUNG" trong cung lan chay — rang/luat-kho.mjs khang dinh
+      dong do co mat va chieu do N/N.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.atk_parse
+    paths:
+      - "packages/validation/src/deal-list.ts"
+      - "packages/validation/test/deal-list.spec.ts"
+    expected: |
+      packages/validation/test/deal-list.spec.ts. Ma tran 4 dong (gia tri nguyen thuy): (1) du truong co stageId "gd-1" ->
+      deals[0].stageId === "gd-1"; (2) khong stageId -> ket qua khac null, deals.length dung, stageId === null; (3) stageId
+      la so 7 -> ket qua khac null, stageId === null; (4) thieu deals -> null. Fixture dong 1 rut tu dung khuon ca stage-id
+      cua apps/app/test/agent-results.spec.ts.
+      CHIEU DO: ban sao schema bat buoc stageId -> dong 2 do voi thong diep ghim "ban ghi cu roi ca bang".
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.atk_app_dung_goi
+    paths:
+      - "apps/app/lib/agent-transcript.ts"
+      - "apps/app/test/agent-results.spec.ts"
+      - "_acceptance/agent-test-khong-nhap-app/rang/app-dung-goi.mjs"
+    expected: |
+      rang/app-dung-goi.mjs: (1) apps/app/lib/agent-transcript.ts nhap parseDealListResult tu "@crm/validation/deal-list";
+      (2) khong con "const dealListItem" hay "type DealListItem = {" trong tep; (3) chay `cd apps/app && bun test
+      ./test/agent-results.spec.ts` thoat 0 va so ca pass >= 9. CHIEU DO: --tep mot ban sao con schema viet tay -> (2) do
+      voi thong diep ghim "app con schema viet tay".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.atk_agent
+    paths:
+      - "apps/agent/test/giai-doan-agent.integration.spec.ts"
+      - "apps/agent/agent/lib/lookup.ts"
+      - "packages/validation/src/deal-list.ts"
+    expected: |
+      giai-doan-agent.integration.spec.ts -t stage-id: ca round-trip goi default export cua tools/list_deals.ts, doc ket qua
+      bang parseDealListResult cua "@crm/validation/deal-list"; moi thoa thuan fixture co stageId dung; tep khong co dong
+      import nao chua "/app/". CHIEU DO: ban sao toModelOutput khong spread -> do voi thong diep ghim "model khong thay stageId".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.atk_ghim
+    paths:
+      - "_acceptance/agent-test-khong-nhap-app/rang/ghim.mjs"
+    expected: |
+      rang/ghim.mjs chay scripts/pre-merge-check.sh . --base origin/onehub tai HEAD: khong dong "evidence is stale" nao goi
+      ten deal-va; dong kind "repin" cuoi cua _acceptance/deal-va/run-log.jsonl co sha bang verified_commit cua bao cao
+      deal-va va evals_exit toan dat. Doi chung duong: luoi in "rules ran". CHIEU DO: --ho-so them mot slug chua ghim -> do
+      voi thong diep ghim "ho so chua ghim lai".
