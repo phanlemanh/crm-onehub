@@ -33,6 +33,8 @@ export const KHOI_DONG = {
 		choTrangThaiMs: 10 * SECOND_MS,
 	},
 	congBan: { dau: "EADDRINUSE", soLanThu: 3 },
+	moCoi: { dau: "/node_modules/.bin/eve dev" },
+	sanSang: { choMs: 30 * SECOND_MS, nhipMs: 300 },
 	khoa: {
 		thuMuc: [APP, "..", "..", "node_modules", ".cache", "crm-eve-khoa"],
 		tep: "chu.json",
@@ -120,9 +122,14 @@ export type TuyChonKhoiDong = {
 };
 
 const trangThaiEve = z.object({ url: z.string().url() });
+const conKhoaEve = z.object({
+	pid: z.number().int().positive(),
+	batDau: z.string().min(1),
+});
 const chuKhoaEve = z.object({
 	pid: z.number().int().positive(),
 	tep: z.string(),
+	con: z.array(conKhoaEve).default([]),
 });
 type ChuKhoaEve = z.infer<typeof chuKhoaEve>;
 
@@ -160,6 +167,54 @@ function chuKhoa(khoa: string): ChuKhoaEve | null {
 	}
 }
 
+function docPs(pid: number, cot: "lstart=" | "command="): string | null {
+	const r = spawnSync("ps", ["-o", cot, "-p", String(pid)], {
+		encoding: "utf8",
+	});
+	return r.status === 0 ? r.stdout.trim() || null : null;
+}
+
+function cayCon(pid: number): number[] {
+	const r = spawnSync("pgrep", ["-P", String(pid)], { encoding: "utf8" });
+	const con = (r.stdout ?? "").split("\n").filter(Boolean).map(Number);
+	return con.flatMap((c) => [c, ...cayCon(c)]);
+}
+
+function laEveDaGhi(c: z.infer<typeof conKhoaEve>): boolean {
+	return (
+		docPs(c.pid, "lstart=") === c.batDau &&
+		(docPs(c.pid, "command=") ?? "").includes(KHOI_DONG.moCoi.dau)
+	);
+}
+
+async function dungMoCoi(khoa: string): Promise<void> {
+	const can = (chuKhoa(khoa)?.con ?? [])
+		.filter(laEveDaGhi)
+		.flatMap((c) => [c.pid, ...cayCon(c.pid)]);
+	for (const pid of can) guiTinHieu(pid, "SIGTERM");
+	const het = Date.now() + KHOI_DONG.dungMs;
+	while (can.some(songCon) && Date.now() < het)
+		await Bun.sleep(KHOI_DONG.nhipMs);
+	for (const pid of can.filter(songCon)) guiTinHieu(pid, "SIGKILL");
+}
+
+function guiTinHieu(pid: number, tin: NodeJS.Signals): void {
+	try {
+		process.kill(pid, tin);
+	} catch {}
+}
+
+export function ghiConVaoKhoa(goc: string, pid: number): void {
+	const khoa = khoaDangGiu.get(thatCua(goc));
+	if (!khoa) throw new Error(`khong giu khoa cua ${goc}`);
+	const chu = chuKhoa(khoa);
+	if (!chu) throw new Error(`khoa cua ${goc} khong doc duoc`);
+	const batDau = docPs(pid, "lstart=");
+	if (!batDau) throw new Error(`khong doc duoc gio khoi dong cua pid ${pid}`);
+	const moi: ChuKhoaEve = { ...chu, con: [...chu.con, { pid, batDau }] };
+	writeFileSync(join(khoa, KHOI_DONG.khoa.tep), JSON.stringify(moi));
+}
+
 function khoaCu(khoa: string): boolean {
 	try {
 		const chu = chuKhoa(khoa);
@@ -180,13 +235,16 @@ async function giuMot(that: string): Promise<void> {
 			const chu: ChuKhoaEve = {
 				pid: process.pid,
 				tep: basename(process.argv[1] ?? "?"),
+				con: [],
 			};
 			writeFileSync(join(khoa, KHOI_DONG.khoa.tep), JSON.stringify(chu));
 			khoaDangGiu.set(that, khoa);
 			return;
 		} catch {
-			if (khoaCu(khoa)) rmSync(khoa, { recursive: true, force: true });
-			else await Bun.sleep(KHOI_DONG.khoa.nhipMs);
+			if (khoaCu(khoa)) {
+				await dungMoCoi(khoa);
+				rmSync(khoa, { recursive: true, force: true });
+			} else await Bun.sleep(KHOI_DONG.khoa.nhipMs);
 		}
 	}
 	const chu = chuKhoa(khoa);
@@ -251,6 +309,29 @@ async function hoi(url: string): Promise<boolean> {
 	}
 }
 
+export type TranCho = { readonly choMs: number; readonly nhipMs: number };
+
+export async function choRoute(
+	url: string,
+	tran: TranCho = KHOI_DONG.sanSang,
+): Promise<number> {
+	const het = Date.now() + tran.choMs;
+	let cuoi = "khong ket noi";
+	do {
+		try {
+			const r = await fetch(url, {
+				signal: AbortSignal.timeout(KHOI_DONG.hoiMs),
+			});
+			if (r.status !== 503) return r.status;
+			cuoi = "503";
+		} catch {
+			cuoi = "khong ket noi";
+		}
+		await Bun.sleep(tran.nhipMs);
+	} while (Date.now() < het);
+	throw new Error(`route ${url} chua san sang sau ${tran.choMs} ms: ${cuoi}`);
+}
+
 async function choGhiTrangThai(goc: string, cong: number): Promise<void> {
 	const tep = join(goc, ...KHOI_DONG.trung.trangThai);
 	const het = Date.now() + KHOI_DONG.trung.choTrangThaiMs;
@@ -281,6 +362,7 @@ async function moEve(
 	});
 	tien.stdout?.on("data", (d) => log.push(String(d)));
 	tien.stderr?.on("data", (d) => log.push(String(d)));
+	if (tien.pid) ghiConVaoKhoa(goc, tien.pid);
 	const url = `http://127.0.0.1:${cong}`;
 	const dung = () =>
 		new Promise<void>((ok) => {
@@ -303,6 +385,12 @@ async function moEve(
 		}
 		if (await hoi(`${url}/eve/v1/health`)) {
 			await choGhiTrangThai(goc, cong);
+			try {
+				await choRoute(`${url}/health`);
+			} catch (loi) {
+				await dung();
+				throw loi;
+			}
 			return { kieu: "song", may: { url, cong, goc, tien, log, dung } };
 		}
 		await Bun.sleep(KHOI_DONG.nhipMs);
