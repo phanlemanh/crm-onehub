@@ -5,7 +5,7 @@ slug: deal-va
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T15:57:47Z
 design_doc: _acceptance/deal-va/design.md
@@ -71,3 +71,16 @@ Quét bằng `morphological-scan` preset test-matrix (S1, 08/10).
   do `deal-va#AC-2` thay. `giai-doan-thoa-thuan/E14` có `lookup.ts` trong `paths`. Ghim lại `giai-doan-thoa-thuan`
   trước khi đẩy.
 - Đường nền đo xanh trên onehub `6f59c0ad2` (2026-10-08T15:48:18Z).
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-08 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1–2:
+
+- Ngoài-1: Phần mô tả cách kiểm tra 'không làm yếu các bài kiểm sẵn có' vẫn ghi theo cách cũ, trong khi cách kiểm thật đã chặt hơn. Người đọc hồ sơ có thể hiểu sai kiểm tra này đang làm gì, nhưng sản phẩm không bị ảnh hưởng.
+- Ngoài-2: Nếu ai đó chỉ sửa khoảng trắng trong chữ mà một bài kiểm mong đợi (ví dụ tên giai đoạn), bước canh sẽ không báo. Nguy cơ là một bài kiểm cũ bị đổi nhẹ mà không ai hay.
+- Ngoài-3: Sau khi tính năng đã gộp vào nhánh chính, bước canh bài kiểm sẽ luôn báo xanh vì không còn gì để so. Lần kiểm lại sau này có thể cho kết quả tốt giả.
+- Ngoài-4: Một bài kiểm cũ có thể bị tắt đi mà bước canh vẫn báo xanh. Khi đó một phần bảo vệ đang có sẽ mất mà không ai thấy.
+- Ngoài-5: Nếu có thay đổi chưa lưu vào lịch sử làm yếu một bài kiểm cũ, bước canh sẽ không thấy nhưng bước chạy kiểm vẫn dùng bản đã sửa. Kết quả xanh có thể không phản ánh đúng bản sắp giao.
+- Ngoài-6: Bước canh chỉ bắt được việc sửa hay xoá câu mong đợi, chưa bắt được các cách khác làm bài kiểm cũ mất tác dụng như đổi dữ liệu đầu vào hay chuyển câu sang chỗ không chạy. Cam kết 'bài kiểm cũ không bị làm yếu' vì vậy chưa được bảo đảm đầy đủ.
+- Ngoài-8: Hình dạng dữ liệu danh sách thoả thuận Kara trả vẫn được viết tay ở hai nơi, nên sau này sửa một nơi mà quên nơi kia thì bảng thoả thuận có thể hiện thiếu hoặc sai thông tin. Hiện tại hai nơi vẫn khớp nhau.
+- Ngoài-9: Mô tả của một bước kiểm nói sai mã kết quả khi bước tự thử bắt được lỗi giả. Sản phẩm không bị ảnh hưởng, chỉ có nguy cơ người đọc sau này hiểu nhầm và sửa sai bước kiểm.
+
+Mở hợp đồng mới (Ngoài-7): Số liệu ẩn danh theo giai đoạn nay dựa vào danh sách bảy giai đoạn gốc, trong khi tài liệu kỹ thuật vẫn nói danh sách đó chỉ dành cho dữ liệu mẫu và kiểm thử, và công cụ canh luật không báo gì. Người dùng không thấy khác biệt, nhưng tài liệu và công cụ canh có thể khiến người sửa sau này hiểu sai.
