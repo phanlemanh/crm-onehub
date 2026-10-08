@@ -896,7 +896,13 @@ const nop = (
 				toolCallId: `goi-${id}`,
 				state: "output-available",
 				input,
-				output: {},
+				output: {
+					ketQua: "da-ghi",
+					lyDo: "",
+					soDong: 0,
+					biLoai: [],
+					giuNguyen: [],
+				},
 			},
 		],
 	}) as unknown as ReturnType<typeof nguoiNoi>;

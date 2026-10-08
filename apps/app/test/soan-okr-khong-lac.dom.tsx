@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { type BanNhap, banNhap } from "@crm/validation/okr-cuoc-soan";
 import { act } from "react";
 import {
 	useRecordSheetView,
@@ -12,6 +13,7 @@ import {
 	datDanhSach,
 	datLai,
 	dat,
+	datAgent,
 	dinhVi,
 	don,
 	go,
@@ -21,6 +23,7 @@ import {
 	mo,
 	moTrang,
 	mt,
+	nguoiNoi,
 	nhip,
 	TrangSoan,
 	urlDoi,
@@ -226,5 +229,112 @@ describe("k2b-nhom-loi", () => {
 		expect(loiNhom()).toBe(null);
 		expect(goiCua("okr.soanQuyet").at(-1)?.dauVao).toEqual({ deXuatId: "1", quyet: "hoan" });
 		expect(q('[data-slot="kara-batch"]') === null ? "khong ve cho" : "ve cho").toBe("ve cho");
+	});
+});
+
+type KrVao = BanNhap["mucTieu"][number]["kr"][number];
+
+const krv = (khoa: string, ten: string): KrVao => ({
+	khoa,
+	ten,
+	kieu: "tang-toi",
+	donVi: "hợp đồng",
+	khoiDiemGoiY: null,
+	viSao: "Vì số đo được.",
+});
+
+const banVoi = (kr: KrVao[]): BanNhap =>
+	banNhap.parse({
+		mucTieu: [
+			{
+				khoa: "a",
+				ten: "Đối tác lớn gắn bó",
+				viSaoLucNay: "Quý này cần.",
+				loai: "cam-ket",
+				viSao: "Vì đối tác lớn.",
+				canChinhId: null,
+				kr,
+			},
+			{
+				khoa: "b",
+				ten: "Mở tuyến mới",
+				viSaoLucNay: "Quý này cần.",
+				loai: "cam-ket",
+				viSao: "Vì tuyến mới.",
+				canChinhId: null,
+				kr: [krv("b1", "Chuyến chạy thử"), krv("b2", "Hợp đồng thử")],
+			},
+		],
+	});
+
+const GOC_DOM = [krv("a1", "Doanh số đối tác lớn"), krv("a2", "Số đại lý gắn bó")];
+
+const tinNop = (
+	id: string,
+	input: unknown,
+	output: unknown,
+): ReturnType<typeof nguoiNoi> =>
+	({
+		id,
+		role: "assistant",
+		parts: [
+			{
+				type: "tool-nop_ban_nhap",
+				toolCallId: `goi-${id}`,
+				state: "output-available",
+				input,
+				output,
+			},
+		],
+	}) as unknown as ReturnType<typeof nguoiNoi>;
+
+const kq = (ketQua: string, lyDo = "") => ({
+	ketQua,
+	lyDo,
+	soDong: 0,
+	biLoai: [],
+	giuNguyen: [],
+});
+
+describe("k2b-moc-dom", () => {
+	test("hội thoại: hai mốc cho hai lần đã ghi, một dòng hệ thống ở chỗ lần bị từ chối", async () => {
+		datDanhSach({ dong: [mt("1", "Đối tác lớn gắn bó")] });
+		await moTrang();
+		await datAgent({
+			status: "ready",
+			data: {
+				messages: [
+					tinNop("n1", banVoi(GOC_DOM), kq("da-ghi")),
+					tinNop("n2", banVoi([...GOC_DOM, krv("a3", "Đối tác mới ký"), krv("a4", "Đơn trả chậm")]), kq("tu-choi", "so moi: 2031")),
+					tinNop("n3", banVoi([...GOC_DOM, krv("a3", "Đối tác mới ký")]), kq("da-ghi")),
+				],
+			},
+		});
+		await nhip(10);
+		const moc = qa('[data-kara-turn="checkpoint"]');
+		expect(moc.length === 2 ? "dung" : `so moc ${moc.length}, mong 2`).toBe("dung");
+		const he = qa("[data-nop-khong-thanh]");
+		expect(he.map((o) => o.getAttribute("data-nop-khong-thanh"))).toEqual(["tu-choi"]);
+		expect(he[0]?.textContent ?? "").toBe(m.moc.nopKhongThanh("so moi: 2031"));
+		expect(moc[1]?.textContent ?? "").toContain(m.moc.themKr("1"));
+	});
+
+	test("kết quả nộp không đọc được: dòng hệ thống riêng, không mốc", async () => {
+		datDanhSach({ dong: [mt("1", "Đối tác lớn gắn bó")] });
+		await moTrang();
+		await datAgent({
+			status: "ready",
+			data: {
+				messages: [
+					tinNop("n1", banVoi(GOC_DOM), kq("da-ghi")),
+					tinNop("n2", banVoi(GOC_DOM), { ketQua: "la" }),
+				],
+			},
+		});
+		await nhip(10);
+		expect(qa('[data-kara-turn="checkpoint"]').length).toBe(1);
+		const he = qa("[data-nop-khong-thanh]");
+		expect(he.map((o) => o.getAttribute("data-nop-khong-thanh"))).toEqual(["khong-doc"]);
+		expect(he[0]?.textContent ?? "").toBe(m.moc.nopKhongDoc);
 	});
 });

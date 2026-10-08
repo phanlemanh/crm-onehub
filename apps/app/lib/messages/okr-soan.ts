@@ -323,6 +323,9 @@ const vi = {
 		bo: (n: string) => `bỏ ${n}`,
 		khongDoi: "không đổi dòng nào",
 		khongDoc: "Kara nộp bản nháp",
+		nopKhongThanh: (lyDo: string | null) =>
+			lyDo ? `Kara nộp bản nháp chưa được — ${lyDo}` : "Kara nộp bản nháp chưa được",
+		nopKhongDoc: "Kara nộp bản nháp nhưng không đọc được kết quả",
 	},
 	buoc: {
 		read_file: "đọc tài liệu của đơn vị",
@@ -667,6 +670,9 @@ const en: OkrSoanMessages = {
 		bo: (n: string) => `${n} dropped`,
 		khongDoi: "no lines changed",
 		khongDoc: "Kara submitted the draft",
+		nopKhongThanh: (lyDo: string | null) =>
+			lyDo ? `Kara could not submit the draft — ${lyDo}` : "Kara could not submit the draft",
+		nopKhongDoc: "Kara submitted the draft but the result could not be read",
 	},
 	buoc: {
 		read_file: "read the unit's documents",
