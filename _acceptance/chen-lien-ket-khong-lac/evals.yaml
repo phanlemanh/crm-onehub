@@ -3,7 +3,7 @@ slug: chen-lien-ket-khong-lac
 
 evals:
   - id: E1
-    criterion: AC-1, AC-2, AC-4
+    criterion: AC-1, AC-2, AC-4, AC-6
     executor: test
     cmd: config:executors.test.tdk_chen_lien_ket_ui
     paths:
@@ -33,7 +33,9 @@ evals:
       Tien de ban ghim: fixtures/test-truoc.dom.tsx.txt phai trung tung byte `git show 0426cc9d0:packages/ui/test/trinh-soan-lien-ket.dom.tsx`
       (lech -> ma 2 "ban ghim khong con la writer that").
       Ma 0 khi dong thoi: (a) tep test o HEAD bo DUNG khoi cuoi bat dau bang `describe("chen-lien-ket-go"` trung tung
-      byte voi ban ghim — moi bai cu (ke ca Esc), ham tro giup, afterEach, hang cho giu nguyen (AC-4; lech -> ma 1
+      byte voi ban ghim, TRU khoi bai «Esc» — moi bai cu khac, ham tro giup, afterEach, hang cho giu nguyen; khoi bai «Esc»
+      o HEAD = khoi o ban ghim cong DUNG MOT dong chen `\t\tawait choTraFocus(editor);` ngay truoc khang dinh focus (so
+      tung byte; chen khac, doi dong khac, hay doi cach bam Esc -> ma 1 "khoi Esc doi ngoai cach cho") (AC-4; lech -> ma 1
       "tep test cu bi doi ngoai khoi moi"); (b) bun thoat 0, "0 fail"; (c) dem dong chua "commandManager" tren
       stdout CONG stderr = 0 (AC-5). Bai do hay co dong commandManager -> ma 1 kem duoi log.
       CAP HAI CHIEU tren CUNG ban sao: chieu do la E3 (chi khac lop chan bi go), dung CUNG ham dem.
@@ -54,3 +56,37 @@ evals:
       thi khong loi chua bat»; khoi dau ra cua chinh bai do (tu dau bai toi dong "(fail)" cua no) chua "commandManager"
       — loi bai moi bat duoc, khong phai dong console cua bai khac; va con >= 2 dong "commandManager" NGOAI khoi do
       (doi chung duong: ham dem thay duoc dong console jsdom do afterEach cua bai cu in ra). Thieu dieu nao -> ma 1.
+
+  - id: E4
+    criterion: AC-4, AC-6
+    executor: script
+    cmd: config:executors.script.clk_pha_chot_cham
+    paths:
+      - "packages/ui/test/trinh-soan-lien-ket.dom.tsx"
+      - "packages/ui/src/components/trinh-soan-lien-ket-trang.tsx"
+      - "packages/ui/src/components/trinh-soan.tsx"
+      - "_acceptance/chen-lien-ket-khong-lac/rang/**"
+      - "_acceptance/chen-lien-ket-khong-lac/fixtures/**"
+    expected: |
+      rang/pha-chot.mjs cham: cung ban sao nhu E2 (thanh phan HEAD giu lop chan), them dot bien: loi goi tra focus trong
+      onCloseAutoFocus boc trong setTimeout 60 ms (moc vang/lap -> ma 2). Chay RIENG bai «Esc» (-t ten chinh xac) hai lan
+      tren CUNG ban sao, moi lan doi dung 1 bai duoc chay: (1) tep test HEAD -> bai Esc la (pass); (2) tep test ban ghim
+      -> DUNG mot dong (fail) mang ten bai Esc, va khoi dau ra cua chinh bai do co "Expected: true", "Received: false" va
+      "trinh-soan-lien-ket.dom.tsx:205" (chu ky luot CI 37591762331 lan 1). Ma 0 khi ca hai dung; (1) khong pass -> ma 1
+      "bai Esc moi khong cho du"; (2) khong dung chu ky -> ma 1 "ban sao cham khong tai hien loi cu".
+
+  - id: E5
+    criterion: AC-4, AC-6
+    executor: script
+    cmd: config:executors.script.clk_pha_chot_mat
+    paths:
+      - "packages/ui/test/trinh-soan-lien-ket.dom.tsx"
+      - "packages/ui/src/components/trinh-soan-lien-ket-trang.tsx"
+      - "_acceptance/chen-lien-ket-khong-lac/rang/**"
+    expected: |
+      rang/pha-chot.mjs mat: cung ban sao, dot bien: bo HAN loi goi tra focus trong onCloseAutoFocus, giu e.preventDefault()
+      (moc vang/lap -> ma 2). Chay RIENG bai «Esc» cua tep HEAD. Ma 0 khi dong thoi: (a) DUNG mot dong (fail) mang ten bai
+      Esc; (b) khoi dau ra cua chinh bai do co "Expected: true" va "Received: false"; (c) khong co "timed out" (han cho nho
+      hon tran moi bai cua bun); (d) thoi gian bai (so trong ngoac vuong cua dong fail) trong khoang 1500–4000 ms (han ~2000
+      ms). Thieu dieu nao -> ma 1 goi ten dieu do. Day la doi chung: vong cho co dieu kien khong duoc nuot hoi quy «khong
+      tra focus».

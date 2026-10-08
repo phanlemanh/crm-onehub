@@ -23,12 +23,23 @@ Thử tại chỗ: gỡ trình soạn lúc hộp mở rồi chờ một `setTime
 - Thành phần: `if (editor && !editor.isDestroyed) editor.commands.focus();` — giữ `e.preventDefault()`.
 - Bài mới, trong một `describe("chen-lien-ket-go")` riêng ở CUỐI tệp DOM: lắng `error` trên `window`, đẩy
   CHUỖI thông điệp (`String(e.error?.message ?? e.message)`, không đẩy đối tượng sự kiện — so đối tượng DOM làm
-  bun treo), mở hộp, gỡ trình soạn, chờ một nhịp `setTimeout(0)`, đòi `toEqual([])`. Phần còn lại của tệp
-  không đổi một byte.
-- Bài «Esc» không đổi.
+  bun treo), mở hộp, gỡ trình soạn, chờ một nhịp `setTimeout(0)`, đòi `toEqual([])`. Phần còn lại của tệp không
+  đổi một byte, trừ một dòng chờ chèn vào bài «Esc» (xem «Bổ sung 08/10»).
+- Bài «Esc»: chỉ đổi cách chờ (xem «Bổ sung 08/10»).
 
 ## Đo
 
 Bản sao ở `.acceptance-runs/chen-lien-ket-khong-lac/sao-*` gồm tệp kiểm và hai thành phần, import nối vào bản
 sao. Chiều xanh: thành phần HEAD → cả tệp xanh, 0 dòng `commandManager`, khối bài Esc trùng byte với bản ghim.
 Chiều đỏ: gỡ lớp chặn → đúng bài mới đỏ, đầu ra có `commandManager`.
+
+## Bổ sung 08/10 — bài «Esc» chờ có điều kiện
+
+Đếm lại mọi lần chạy từ 30/09: bài «Esc» đỏ thật 1/111 (run 37591762331 lần 1, focus false ở dòng 205). Gốc: Radix trả
+focus qua `setTimeout(0)`; bài chờ đúng một nhịp 20 ms rồi kiểm — trên máy CI quá tải, hẹn giờ của Radix chạy sau nhịp đó.
+
+Cách sửa (chỉ bài kiểm): chèn đúng một dòng `await choTraFocus(editor);` trước khẳng định focus — hàm khai ở khối cuối tệp, — mỗi 10 ms kiểm
+`editor.view.dom.contains(document.activeElement)`, dừng khi đúng hoặc hết hạn 2000 ms; sau đó GIỮ NGUYÊN hai khẳng định cũ.
+Hạn 2000 ms đủ rộng cho máy CI quá tải, đủ hẹp để một hồi quy «không trả focus» vẫn đỏ (sau 2 giây).
+
+Chiều đỏ (E4): bản sao mà thành phần trả focus sau 60 ms (boc `setTimeout`) — bài cũ 20 ms đỏ đúng chữ ký CI, bài mới xanh.
