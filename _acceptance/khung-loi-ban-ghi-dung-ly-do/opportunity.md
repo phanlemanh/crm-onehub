@@ -31,11 +31,11 @@ có cách đúng: đọc `error.data.code === "NOT_FOUND"` và hiện «không t
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: khi một bản ghi mở ra không tải được, người dùng có biết ngay là bản ghi đã bị
+- Câu hỏi phép đo trả lời: khi một bản ghi mở ra không tải được, người dùng có biết ngay là bản ghi đã bị
   xoá, là mình không có quyền, hay là mạng chập — và có đúng một việc nên làm tiếp (đóng ngăn, hay thử lại) không?
-- [đề xuất] Kết quả nào là SỐNG: lái thử người lạ mở đường dẫn tới một cá nhân đã xoá và gặp «không còn» kèm «Đóng»,
+- Kết quả nào là SỐNG: lái thử người lạ mở đường dẫn tới một cá nhân đã xoá và gặp «không còn» kèm «Đóng»,
   không bấm «Thử lại» lần nào; bài kiểm đếm 0 khung lỗi «kiểm tra kết nối» cho lỗi NOT_FOUND hay FORBIDDEN ở bốn ngăn
   bản ghi.
-- [đề xuất] Kết quả nào là CHẾT: còn một ngăn bản ghi bảo người dùng kiểm tra mạng khi bản ghi đã bị xoá hay khi họ
+- Kết quả nào là CHẾT: còn một ngăn bản ghi bảo người dùng kiểm tra mạng khi bản ghi đã bị xoá hay khi họ
   không có quyền; hoặc lỗi mạng ở ngăn nào đó không có «Thử lại».
-- [đề xuất] Timebox: 0,5 ngày máy.
+- Timebox: 0,5 ngày máy.
