@@ -1,32 +1,3 @@
 {
-  "feature_plain": "Khi danh sách giai đoạn đã lưu trữ không tải được, quản trị viên thấy báo lỗi ngay chỗ «Đã lưu trữ» kèm nút «Thử lại», thay vì mục này biến mất như thể không có gì.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ hiện khung báo lỗi có «Thử lại» ở chỗ «Đã lưu trữ» khi tải lỗi; ba nhóm giai đoạn vẫn dùng bình thường, lưu trữ vẫn chạy."},
-    {"id": "AC-2", "p": "Sẽ chỉ tải lại danh sách đã lưu trữ khi bấm «Thử lại» — không tải lại trang hay danh sách giai đoạn đang dùng — rồi hiện «Đã lưu trữ (n)»."},
-    {"id": "AC-3", "p": "Sẽ giữ khung báo lỗi trong lúc đang thử lại (nút khoá), và cho bấm lại nếu vẫn lỗi."}
-  ],
-  "wont_do": [
-    {"id": "AC-4", "p": "Sẽ KHÔNG để trống chỗ «Đã lưu trữ» lúc đang tải — hiện khung xương; không có giai đoạn đã lưu trữ thì vẫn không hiện gì như trước."},
-    {"id": "AC-5", "p": "Sẽ KHÔNG khoá «Thử lại» theo quyền — người không quản trị cũng thấy lỗi và thử lại được."},
-    {"id": "AC-6", "p": "Sẽ KHÔNG để khung lỗi tràn màn ở máy tính hay điện thoại — đo trên app thật, gồm cả lúc đang thử lại và lúc thử lại thành công."},
-    {"id": "AC-7", "p": "Sẽ KHÔNG làm hỏng các bài kiểm sẵn có của trang Giai đoạn, và không vi phạm sàn thiết kế."},
-    {"id": "OOS-1", "p": "Không thêm trạng thái lỗi vào thành phần «Đã lưu trữ» dùng chung cho mọi trang."},
-    {"id": "OOS-2", "p": "Không đổi cách báo lỗi khi cả danh sách giai đoạn không tải được (đã có từ trước)."},
-    {"id": "OOS-3", "p": "Không đổi cách báo khi khôi phục bị chặn (đã có ở vòng trước)."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Năm kết cục tải — đang tải, lỗi, thử lại được, thử lại vẫn lỗi, rỗng — mỗi kết cục có tiêu chí (AC-1 tới AC-4)."},
-    {"i": 1, "p": "Hai vai — quản trị viên và người không quản trị (AC-5)."},
-    {"i": 2, "p": "Hai khổ màn — máy tính 1440 và điện thoại 375 (AC-6)."},
-    {"i": 3, "p": "Mỗi phần cốt lõi đều có tiêu chí đo: lỗi, thử lại, vẫn lỗi, đang tải và rỗng, không quản trị, màn thật, hồi quy."},
-    {"i": 4, "p": "Để sau: đưa trạng thái lỗi vào thành phần dùng chung."},
-    {"i": 5, "p": "Không bao giờ ở vòng này: gộp danh sách đã lưu trữ vào danh sách giai đoạn."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Cách làm ban đầu khiến khung báo lỗi nháy thành khung xương ngay khi bấm «Thử lại», vì thư viện tải dữ liệu xoá lỗi lúc tải lại. Đã sửa: giữ khung lỗi theo «đã từng lỗi», nút khoá lúc đang tải, và đo cả lúc đang thử lại trên app thật."},
-    {"i": 1, "p": "Phép đo màn thật chặn yêu cầu theo đường dẫn, mà app gộp nhiều yêu cầu làm một — có thể chặn lây cả danh sách chính. Đã sửa: chỉ đo khi yêu cầu đi riêng, đi chung thì báo không đo được; ghim đủ ba nhóm và không có lỗi của cả trang."},
-    {"i": 2, "p": "Tiêu chí màn thật hứa nhiều hơn phép đo. Đã sửa: hứa không tràn ngang sau khi cuộn tới cuối trang, phần thử lại chỉ đo ở máy tính."},
-    {"i": 3, "p": "Hứa «lưu trữ vẫn chạy khi đang lỗi» mà chưa đo. Đã thêm phép đo."},
-    {"i": 4, "p": "Chưa nói phiên nghiệm thu dựng lỗi thế nào. Đã ghi: người điều phối chặn yêu cầu trong công cụ trình duyệt của máy thử, không báo trước."}
-  ]
+  "feature_plain": "Khi danh sách giai đoạn đã lưu trữ không tải được, quản trị viên thấy báo lỗi ngay chỗ «Đã lưu trữ» kèm nút «Thử lại», thay vì mục này biến mất như thể không có gì."
 }
