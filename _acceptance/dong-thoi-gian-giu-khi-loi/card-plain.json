@@ -1,32 +1,4 @@
 {
   "feature_plain": "Ở tab Hoạt động của ngăn bản ghi, khi «Xem cũ hơn» hay lượt làm mới tự động bị lỗi, danh sách đang đọc vẫn còn nguyên; một thông báo nhỏ tại chỗ kèm «Thử lại» chỉ tải lại đúng phần bị hỏng.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ giữ nguyên các hoạt động đang hiện khi «Xem cũ hơn» lỗi, và báo «Không tải được hoạt động cũ hơn.» kèm «Thử lại» ở cuối danh sách, thay chỗ nút."},
-    {"id": "AC-2", "p": "Sẽ cho «Thử lại» chỉ tải đúng trang còn thiếu (không tải lại từ đầu), tắt nút khi đang tải, và trả lại nút «Xem cũ hơn» khi còn trang."},
-    {"id": "AC-3", "p": "Sẽ giữ nguyên danh sách (hoặc trạng thái rỗng) khi lượt làm mới tự động lỗi, và báo «Không làm mới được hoạt động. Đang hiện bản đã tải.» kèm «Thử lại» phía trên."},
-    {"id": "AC-5", "p": "Sẽ có bản tiếng Anh cho cả hai thông báo, lấy từ tệp chữ chung."}
-  ],
-  "wont_do": [
-    {"id": "AC-4", "p": "Sẽ KHÔNG đổi hai trạng thái K6b đã làm: tải lần đầu lỗi vẫn là khung «Không tải được hoạt động», chưa có gì vẫn là trạng thái rỗng."},
-    {"id": "OOS-1", "p": "Mục «Việc cần làm» của tab Tất cả tải lỗi vẫn ẩn im lặng — có thể tách thành một hàng riêng."},
-    {"id": "OOS-2", "p": "Số đếm trên từng tab tải lỗi vẫn chỉ ẩn số."},
-    {"id": "OOS-3", "p": "Hoạt động trên website làm mới lỗi vẫn như K6b (anh đã ghi Known limits)."},
-    {"id": "OOS-4", "p": "Không làm tự tải khi cuộn tới cuối — vẫn bấm «Xem cũ hơn»."}
-  ],
-  "scope_plain": "Phạm vi gọn trong một tệp màn (timeline.tsx) và tệp chữ; không đổi máy chủ hay dữ liệu.",
-  "coverage_plain": [
-    {"i": 0, "p": "Độ phủ được quét theo ma trận lối tải × kết cục (coverage-scan.md)."},
-    {"i": 1, "p": "Ba lối tải của danh sách: lần đầu, «Xem cũ hơn», làm mới tự động — cả ba đều có tiêu chí (AC-4, AC-1/2, AC-3)."},
-    {"i": 2, "p": "Bốn kết cục: thành công, lỗi, thử lại được, thử lại vẫn lỗi — đo ở AC-1 đến AC-3."},
-    {"i": 3, "p": "Khổ 1440 và 390 đo bằng ảnh thật (AC-6), tiếng Anh đo ở AC-5."},
-    {"i": 4, "p": "Hai trạng thái K6b giữ nguyên, có bài kiểm canh không hồi quy (AC-4)."},
-    {"i": 5, "p": "Để sau: «Việc cần làm» lỗi, số đếm tab lỗi, tự tải khi cuộn."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Thiếu: làm mới lỗi khi tab đang rỗng sẽ biến một lỗi đang thấy thành «chưa có gì» → đã thêm vào AC-3 và bài kiểm (E3)."},
-    {"i": 1, "p": "Thiếu: chưa kiểm nút «Xem cũ hơn» quay lại sau khi thử lại được và còn trang → đã thêm ô vào E2."},
-    {"i": 2, "p": "Thiếu: «Thử lại» bấm hai lần nhanh có thể gọi chồng → AC-2 thêm vế nút tắt khi đang tải, E2 thêm ô."},
-    {"i": 3, "p": "Thông báo làm mới không có ảnh 390 → để sau: cùng thành phần với thông báo «Xem cũ hơn» đã chụp ở 390; AC-6 ghi rõ."},
-    {"i": 4, "p": "Bài kiểm K6b dùng lại (E4) chưa kể đủ bốn ô → đã kể đủ và xác nhận không ô nào đụng hành vi mới."}
-  ]
+  "analyst_plain": ""
 }
