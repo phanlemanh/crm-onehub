@@ -28,11 +28,11 @@
   ],
   "wont_do": [
     {
-      "id": "OOS-2",
+      "id": "OOS-1",
       "p": "Không ghim lại khoảng 30 hồ sơ đã ký đo cả gói giao diện — lưới gộp không đòi, bộ kiểm toàn gói vẫn chạy lại."
     },
     {
-      "id": "OOS-3",
+      "id": "OOS-2",
       "p": "Không đổi cách Radix trả con trỏ, không nâng phiên bản thư viện."
     }
   ],
