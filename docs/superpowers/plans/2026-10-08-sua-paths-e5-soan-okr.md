@@ -401,11 +401,17 @@ try {
   don();
 }
 console.log(`   dau ra: ${ghiRa(`luoi-that-${co['doc-tu'] ? 'do' : 'xanh'}.txt`, out)}`);
-const dong = out.split('\n').filter((l) => l.startsWith(`VIOLATION [${SLUG_HO_SO}]`));
-if (dong.length) {
+const tatCa = out.split('\n');
+const viPham = tatCa.map((l, i) => [l, i]).filter(([l]) => l.startsWith(`VIOLATION [${SLUG_HO_SO}]`));
+const tepDoi = (i) => {
+  const ds = [];
+  for (let k = i + 1; k < tatCa.length && /^\s{2,}\S/.test(tatCa[k]); k++) ds.push(tatCa[k].trim());
+  return ds;
+};
+if (viPham.length) {
   sai++;
-  for (const l of dong) console.log(`   ${l.slice(0, 220)}`);
-  const vi = dong.some((l) => l.includes('evidence is stale') && l.includes(TEP_NGOAI));
+  for (const [l, i] of viPham) console.log(`   ${l.slice(0, 160)} (${tepDoi(i).length} tep doi)`);
+  const vi = viPham.some(([l, i]) => l.includes('evidence is stale') && tepDoi(i).includes(TEP_NGOAI));
   console.log(vi ? `luoi-that do: ho so cu vi ${path.basename(TEP_NGOAI)}` : 'luoi-that do: vi pham khac');
 } else {
   console.log(`luoi-that xanh: ho so khong cu vi ${path.basename(TEP_NGOAI)}`);
@@ -419,7 +425,7 @@ ketLuan(sai);
 - `node _acceptance/sua-paths-e5-soan-okr/rang/ranh-gioi.mjs --them _acceptance/soan-okr-cung-tro-ly/contract.md` → exit 1
 - `node _acceptance/sua-paths-e5-soan-okr/rang/ranh-gioi.mjs --diff-mau <tệp có một dòng '-x'>` → exit 1 `xoa-dong:_acceptance/config.yaml`
 - `node _acceptance/sua-paths-e5-soan-okr/rang/pre-merge.mjs --doc-tep <tệp mẫu có 'VIOLATION [soan-okr-cung-tro-ly]: evidence is stale'> --ma 1` → exit 1 `vi-pham:soan-okr-cung-tro-ly`
-- `node _acceptance/sua-paths-e5-soan-okr/rang/luoi-that.mjs --doc-tu b633a7e3b` → exit 1 `luoi-that do: ho so cu vi giu-nhip.mjs`
+- Chiều đỏ của E7 chạy ở Task 3: lưới in tối đa 10 tệp đổi, nên với pin cũ `giu-nhip.mjs` không nằm trong danh sách; sau khi ghim lại, nó là tệp đổi duy nhất.
 
 - [ ] **Step 5: Commit** — `test(acceptance): răng F19 E5–E7`
 
@@ -508,7 +514,7 @@ Làn đỏ → dừng, đọc nhật ký trong `.acceptance-runs/soan-okr-cung-t
 - [ ] **Step 5: Chạy E4 xanh + ba chiều đỏ, E7 xanh, E5, E6 xanh**
 
 - `node _acceptance/sua-paths-e5-soan-okr/rang/ghim-mot-lan.mjs` → exit 0 · `--ban-sao repin-cu` → `repin-khong-trong-vong` · `--ban-sao mot-eval-do` → `eval-do:E1` · `--ban-sao thieu-eval` → `thieu-eval:E1`
-- `node _acceptance/sua-paths-e5-soan-okr/rang/luoi-that.mjs` → exit 0 `luoi-that xanh`
+- `node _acceptance/sua-paths-e5-soan-okr/rang/luoi-that.mjs` → exit 0 `luoi-that xanh` · `node _acceptance/sua-paths-e5-soan-okr/rang/luoi-that.mjs --doc-tu b633a7e3b` → exit 1 `luoi-that do: ho so cu vi giu-nhip.mjs`
 - `node _acceptance/sua-paths-e5-soan-okr/rang/ranh-gioi.mjs` → exit 0 · `node _acceptance/sua-paths-e5-soan-okr/rang/pre-merge.mjs` → exit 0 trên cây sạch
 
 - [ ] **Step 6: Nhả khoá `s4`** (đọc `chu.json` trước khi `rm`), đặt contract `status: implemented`, vào S4.
