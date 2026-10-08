@@ -1,0 +1,239 @@
+feature_slug: kara-trang-thai-toan-crm
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kts_dong_thoi_gian
+    paths:
+      - "apps/app/components/crm/timeline/**"
+      - "packages/ui/src/components/vung-tai-loi.tsx"
+      - "apps/app/test/kara-trang-thai-vung.dom.tsx"
+    expected: |
+      exit 0; Timeline that, tRPC gia (khung-gop-y.tsx). Ma tran viet truoc 2 o: (a) activities.timeline nem loi
+      "boom-timeline" -> [data-vung-tai-loi] co chu "Không tải được hoạt động", co nut "Thử lại", textContent khong
+      chua "boom-timeline" va khong chua chu rong cua tab (lay tu crmMessages("vi") — vd "Chưa có hoạt động");
+      bam "Thử lại" -> goiCua("activities.timeline") tang dung 1; (b) timeline tra trang rong -> chu rong cu hien,
+      khong [data-vung-tai-loi]. expect(o.length).toBe(2).
+      CHIEU DO ghim: ban sao timeline.tsx bo nhanh isError -> do "dong-thoi-gian: loi hien nhu rong".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kts_web
+    paths:
+      - "apps/app/components/crm/website-activity.tsx"
+      - "packages/ui/src/components/vung-tai-loi.tsx"
+      - "apps/app/test/kara-trang-thai-vung.dom.tsx"
+    expected: |
+      exit 0; WebsiteActivity that cho contactId va cho companyId. Ma tran viet truoc 2 dau vao x 4 trang thai
+      (cho, loi, chua-nhan-dien, co du lieu) = 8 o, expect(o.length).toBe(8): cho -> section co tieu de
+      "Hoạt động trên website" + chu sr-only "Đang tải"; loi -> "Không tải được hoạt động trên website" + "Thử lại",
+      bam -> goi lai dung thu tuc (tracking.contactActivity hoac tracking.companyActivity) dung 1 lan, khong chu loi
+      tho; chua-nhan-dien (identified=false) -> khong co section; co du lieu -> "Lượt xem trang".
+      CHIEU DO ghim: ban sao tra lai `return null` khi loi -> do "web: loi lam mat muc".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kts_ke_hoach
+    paths:
+      - "apps/app/components/crm/record-sheet/contact-plans.tsx"
+      - "packages/ui/src/components/vung-tai-loi.tsx"
+      - "apps/app/test/kara-trang-thai-vung.dom.tsx"
+    expected: |
+      exit 0; ContactPlans that. Ma tran 4 o (cho, loi, rong, co ke hoach): cho -> section "30 ngày đầu" + sr-only
+      "Đang tải"; loi -> [data-vung-tai-loi] "Không tải được kế hoạch" + "Thử lại" (cung data-vung-tai-loi voi E1/E2),
+      bam -> onboarding.plansOfContact goi them dung 1; rong -> khong section; co ke hoach -> ten cong ty.
+      CHIEU DO ghim: ban sao tra lai `return null` khi dang tai -> do "ke-hoach: dang tai bien mat".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kts_tom_tat
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx"
+      - "apps/app/lib/messages/okr-toan-canh.ts"
+      - "apps/app/test/tro-ly-okr-tom-tat.dom.tsx"
+    expected: |
+      exit 0; KhoiTomTat that. Ba o: (a) dangSoan=true -> [data-trang-thai=ST-tomtat-dang-soan] chua
+      [data-kara-state=working] voi chu "Kara đang tóm tắt tuần này…", khong phan tu [data-slot=shimmer] / khong
+      class shimmer; qua han (dong ho gia cua bai) -> mo ta qua han + nut "Tải lại"; (b) truy van loi ->
+      [data-trang-thai=ST-tomtat-loi] chua [data-kara-state=error] "Kara chưa tải được tóm tắt tuần" +
+      "Bảng đáng bàn bên dưới vẫn dùng được." + "Thử lại", khong [data-slot=alert]; bam Thu lai -> troLyTomTat goi them
+      dung 1. CHIEU DO ghim: ban sao giu Alert -> do "tom-tat: loi con Alert".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: ui-flow
+    cmd: config:executors.test.kts_hoan_tac
+    paths:
+      - "apps/app/components/crm/record-sheet/record-actions.tsx"
+      - "packages/ui/src/lib/bao-luu-tru.ts"
+      - "apps/app/test/kara-trang-thai-luu-tru.dom.tsx"
+    expected: |
+      exit 0; RecordActions that + Toaster that. Ma tran 3 loai (contact, company, deal): mo menu, chon "Lưu trữ …"
+      -> <loai>.archive goi 1 lan voi id; toast "Đã lưu trữ <tên>." co nut "Hoàn tác"; bam Hoan tac HAI lan ->
+      <loai>.restore goi dung 1 lan voi {id}; toast "Đã khôi phục <tên>." hien. expect(o.length).toBe(3).
+      CHIEU DO ghim: ban sao record-actions goi toast cu khong action -> do "luu-tru: toast khong co Hoan tac".
+
+  - id: E6
+    criterion: AC-5
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.kts_man
+    paths:
+      - "apps/app/components/crm/record-sheet/record-actions.tsx"
+      - "packages/ui/src/lib/bao-luu-tru.ts"
+      - "apps/app/components/crm/website-activity.tsx"
+      - "packages/ui/src/components/vung-tai-loi.tsx"
+      - "_acceptance/kara-trang-thai-toan-crm/rang/man.mjs"
+    expected: |
+      exit 0; chay qua phien do rieng (tien-de.mjs --chay), khong dung kho chung. Buoc luu-tru: voi moi loai
+      (contact, company, deal) gieo mot ban ghi dang dung, mo ngan that, chon "Lưu trữ" trong menu, cho toast co
+      "Hoàn tác", bam -> doc lai qua API <loai>.byId: archivedAt === null; dong thoi truoc khi bam doc byId:
+      archivedAt !== null (doi chung duong cung ban ghi). In "luu-tru <loai>: da luu tru -> hoan tac -> dang dung".
+      CHIEU DO ghim: --chieu-do bo buoc bam Hoan tac -> do "luu-tru: sau hoan tac van con ngay luu tru".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: ui-flow
+    cmd: config:executors.test.kts_hoan_tac_loi
+    paths:
+      - "apps/app/components/crm/record-sheet/record-actions.tsx"
+      - "packages/ui/src/lib/bao-luu-tru.ts"
+      - "apps/app/test/kara-trang-thai-luu-tru.dom.tsx"
+    expected: |
+      exit 0; <loai>.restore nem loi "boom-restore". Bam Hoan tac -> toast "Chưa hoàn tác được. Bản ghi vẫn ở mục Đã lưu trữ.",
+      document.body.textContent khong chua "boom-restore"; sau do ngan (archivedAt khac null) mo menu thay "Khôi phục …",
+      bam -> restore goi them 1 lan. CHIEU DO ghim: ban sao in error.message -> do "hoan-tac-loi: lo chu loi tho".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: ui-flow
+    cmd: config:executors.test.kts_buoc_chua_luu
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "packages/ui/src/components/kara/steps.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "apps/app/test/kara-trang-thai-vung.dom.tsx"
+    expected: |
+      exit 0; AgentPanel that voi useEveAgent gia. Ma tran 4 buoc viet truoc trong mot luot Kara: record_fact
+      {stored:false, reason:"Evidence rejected."}, write_brief {written:false, reason:"Nothing new."}, record_fact
+      {stored:true}, mot cong cu output-error -> data-trang-thai lan luot "chua-luu","chua-luu","xong","loi";
+      chu doc man cua hai buoc dau "chưa lưu được"; textContent khong chua "Evidence rejected." va khong chua
+      "Nothing new." (giao dien vi). O rieng khong co buoc loi: tieu de khoi buoc la "Kara chưa lưu được: <nhãn bước>".
+      expect(o.length).toBe(5). CHIEU DO ghim: ban sao agent-panel bo nhanh tone warning -> do
+      "buoc-chua-luu: buoc khong luu hien xong".
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    layer: logic
+    cmd: config:executors.script.kts_chu
+    paths:
+      - "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/app/(app)/[slug]/companies/create-company-sheet.tsx"
+      - "apps/app/app/(app)/[slug]/deals/create-deal-sheet.tsx"
+      - "apps/app/lib/messages/contacts.ts"
+      - "apps/app/lib/messages/companies.ts"
+      - "apps/app/lib/messages/deals.ts"
+      - "_acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
+    expected: |
+      exit 0; rang chu.mjs (TypeScript compiler API, danh sach tep viet truoc, so tep khai truoc = so tep doc duoc,
+      lech -> ma 2 "khong do duoc"). Phan AC-8: 3 tep create-*-sheet x 0 chuoi ket thuc "added." viet cung; ham
+      chu "da them" cua contacts/companies/deals goi voi ten "Hà" tra dung "Đã thêm Hà." (vi) va "Hà added." (en) —
+      goi ham that bang import, khong doc chu nguon. In tung dong + "KET LUAN: n cho sai — ma thoat x".
+      CHIEU DO ghim: ban sao tra lai `${deal.name} added.` -> do "chu: create-deal-sheet con added viet cung".
+
+  - id: E10
+    criterion: AC-9
+    executor: script
+    layer: logic
+    cmd: config:executors.script.kts_chu
+    paths:
+      - "apps/app/lib/messages/okr-gop-y.ts"
+      - "apps/app/lib/messages/okr.ts"
+      - "_acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
+    expected: |
+      exit 0; cung luot chu.mjs. Phan AC-9: duyet MOI gia tri chuoi cua okrGopYMessages("vi") va okrMessages("vi")
+      (import that, di de quy) -> 0 gia tri bang "Sửa Mục tiêu"; va >= 1 gia tri bang "Sửa mục tiêu" o moi tep (doi
+      chung duong). CHIEU DO ghim: ban sao tra lai "Sửa Mục tiêu" -> do "chu: con Sua Muc tieu viet hoa".
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    layer: ui-flow
+    cmd: config:executors.test.kts_da_ghi
+    paths:
+      - "apps/app/app/(app)/[slug]/okr/khoi-tom-tat.tsx"
+      - "apps/app/lib/messages/okr-toan-canh.ts"
+      - "apps/app/test/tro-ly-okr-tom-tat.dom.tsx"
+    expected: |
+      exit 0; KhoiTomTat co ban tom tat that (khuon cua bai hien co). Bam "Hữu ích" -> troLyTomTatPhanHoi goi 1 lan
+      {huuIch:true}; chu cam on hien la "Đã ghi — quản trị viên thấy số phản hồi này ở Toàn cảnh › Sức khoẻ chương trình."
+      va khong con "Cảm ơn, đã ghi". CHIEU DO ghim: ban sao giu chu cu -> do "da-ghi: loi cam on khong noi gi xay ra".
+
+  - id: E12
+    criterion: AC-2
+    executor: script
+    layer: logic
+    cmd: config:executors.script.kts_chu
+    paths:
+      - "apps/app/components/crm/website-activity.tsx"
+      - "apps/app/components/crm/record-sheet/contact-plans.tsx"
+      - "apps/app/components/crm/timeline/timeline.tsx"
+      - "_acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
+    expected: |
+      exit 0; cung luot chu.mjs. Phan vung con: trong 3 tep viet truoc, moi `return null` duoc phan loai bang
+      compiler API theo dieu kien dung ngay truoc no; dieu kien doc `isPending`, `isLoading`, `isError`, `error` hay
+      `!query.data`/`!activity` khi chua co du lieu -> la cho sai. Ma tran 3 tep, in so return null va so cho sai tung
+      tep. CHIEU DO ghim: ban sao them `if (company.isError) return null;` -> do "chu: website-activity return null khi loi".
+
+  - id: E13
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kts_man
+    paths:
+      - "apps/app/components/crm/website-activity.tsx"
+      - "apps/app/components/crm/record-sheet/record-actions.tsx"
+      - "packages/ui/src/components/vung-tai-loi.tsx"
+      - "packages/ui/src/lib/bao-luu-tru.ts"
+      - "_acceptance/kara-trang-thai-toan-crm/rang/man.mjs"
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
+      - "Buoc 1 (1440): ngan ca nhan co hoat dong web; chan request tracking.contactActivity bang chan request cua puppeteer -> kts-web-loi-1440.png; innerText co 'Không tải được hoạt động trên website' va 'Thử lại'"
+      - "Buoc 2 (1440): luu tru ca nhan qua menu -> kts-toast-luu-tru-1440.png co 'Đã lưu trữ <tên>.' va 'Hoàn tác'; bam -> kts-sau-hoan-tac-1440.png"
+      - "Buoc 3 (390): lap buoc 1, 2 o kho 390 -> kts-web-loi-390.png, kts-toast-luu-tru-390.png; scrollWidth <= clientWidth cua trang va ngan; nut Hoan tac nam trong khung nhin"
+    evidence_required:
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-web-loi-1440.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-toast-luu-tru-1440.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-sau-hoan-tac-1440.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-web-loi-390.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-toast-luu-tru-390.png"
+
+  - id: E14
+    criterion: AC-11
+    executor: judgment
+    layer: ui-observed
+    inputs:
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-web-loi-1440.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-toast-luu-tru-1440.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-sau-hoan-tac-1440.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-web-loi-390.png"
+      - "_acceptance/kara-trang-thai-toan-crm/evidence/kts-toast-luu-tru-390.png"
+      - "docs/ai-ux.md"
+      - "docs/vong-doi.md"
+    question: |
+      Nhìn năm ảnh (1440 và 390) và đối chiếu docs/ai-ux.md mục 7 và docs/vong-doi.md mục «Ba cách dọn»: (1) mục
+      «Hoạt động trên website» khi không tải được có nói rõ là không tải được và có «Thử lại» không, hay trông như
+      một chỗ trống / chưa có gì? (2) toast lưu trữ có «Hoàn tác» và đúng tên bản ghi không? (3) ảnh sau hoàn tác có
+      cho thấy bản ghi về trạng thái đang dùng không? (4) ở 390 có chữ hay nút nào bị cắt hoặc tràn ngang không? Nêu
+      từng điểm kèm ảnh.
