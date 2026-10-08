@@ -36,7 +36,18 @@ const git = (...doi) =>
 
 function mocTruoc() {
 	if (process.env.GDTT_MOC) return process.env.GDTT_MOC;
-	return git("merge-base", "HEAD", "origin/onehub");
+	const them = git(
+		"log",
+		"--diff-filter=A",
+		"--format=%H",
+		"--",
+		`packages/db/prisma/migrations/${VONG}`,
+	)
+		.split("\n")
+		.filter(Boolean)
+		.at(-1);
+	if (!them) throw new Error(`khong tim thay commit them migration ${VONG}`);
+	return git("rev-parse", `${them}^`);
 }
 
 function kyVong(moc) {

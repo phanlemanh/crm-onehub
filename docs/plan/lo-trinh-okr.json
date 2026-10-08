@@ -1018,7 +1018,7 @@
       "cau_giao": "«Tôi soạn bộ OKR trên một trang riêng, bản nháp rộng bên cạnh cuộc trò chuyện»",
       "hang": "T2",
       "slug": "soan-okr-trang-rieng",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "khoa": "kara-2",
       "ten": "Soạn OKR hoàn thiện",
       "ten_ngan": "Soạn OKR trang riêng",
@@ -1028,7 +1028,7 @@
         "K1"
       ],
       "ghi_chu": "Chủ kho chốt 04/10: trang riêng có thanh kéo đổi cỡ (không sheet); khoá dòng chưa quyết khi Kara đang soạn; có nhận theo nhóm («Thêm cả Mục tiêu và KR đã đủ số»); mốc nộp nối hai chiều, hỏi Kara từ dòng, Hoàn tác mọi quyết định. Gom: biên nhận có Hoàn tác, trạng thái chờ/lỗi theo khuôn chung, Ngoài-12/13 của soan-okr-cung-tro-ly. «Kara sập không trừ lượt» và «Thử lại nói rõ vì sao» tách sang R1h.",
-      "buoc_ke": "Sau lượt K1",
+      "buoc_ke": "Đã gộp 08/10 15:39 (#312); còn UAT",
       "ngay": "2026-10-04"
     },
     {
@@ -1055,7 +1055,7 @@
       "cau_giao": "«Kara trong hồ sơ bản ghi có một khung chung»",
       "hang": "T2",
       "slug": "khung-ban-ghi-kara",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "khoa": "kara-4",
       "ten": "Khung Kara trong bản ghi",
       "ten_ngan": "Khung bản ghi",
@@ -1066,7 +1066,7 @@
         "R1a"
       ],
       "ghi_chu": "Chạy song song với K2–K3 khi chủ kho duyệt bố cục. Gom: tab Kara tiếng Việt có Thử lại và «Kara đang…», thông tin liên hệ có biên nhận và Hoàn tác, khung tải lỗi có Thử lại, StatusIndicator, kế hoạch công ty báo lỗi, hỏi lại khi lỡ đóng ngăn tạo (hop-thoai-giu-cho Ngoài-1/2).",
-      "buoc_ke": "Chờ chủ kho duyệt bố cục",
+      "buoc_ke": "Đã gộp 08/10 09:17 (#306); còn lái thử và UAT",
       "ngay": "2026-10-04"
     },
     {
@@ -1081,8 +1081,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Ở mọi nơi, lỗi tải không còn hiện như chưa có gì; lưu trữ bản ghi có Hoàn tác»",
       "ghi_chu": "C4a dòng thời gian, C4b hoạt động web, C4c kế hoạch cá nhân, C5a tóm tắt tuần «Kara đang…», bốn việc chữ.",
-      "buoc_ke": "Sau K4",
-      "trang_thai": "chưa mở",
+      "buoc_ke": "Đã gộp 08/10 16:47 (#314)",
+      "trang_thai": "đã lên onehub",
       "dung_tren": [
         "K1",
         "K4"
@@ -1183,8 +1183,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Kéo để sắp xếp ở Tổ chức và Giai đoạn chạy giống nhau»",
       "ghi_chu": "Khảo sát lộ trình 04/10. giai-doan-thoa-thuan Ngoài-2.",
-      "buoc_ke": "Sau 14/10",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp 08/10 18:52 (#311); UAT cùng da-luu-tru-tai-loi",
+      "trang_thai": "đã lên onehub"
     },
     {
       "ma": "E4",
@@ -1243,8 +1243,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Bảng rỗng vì đang lọc thì nói rõ, nút bỏ lọc đúng tên, lựa chọn có số 0 vẫn hiện»",
       "ghi_chu": "Khảo sát lộ trình 04/10. data-table.tsx:654.",
-      "buoc_ke": "Sau 14/10",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp 08/10 07:29 (#303)",
+      "trang_thai": "đã lên onehub"
     },
     {
       "ma": "F8",
@@ -1303,8 +1303,8 @@
       "ngay": "2026-10-06",
       "cau_giao": "«Ca kiểm chập chờn theo máy không làm đỏ cả lượt dài hay CI»",
       "ghi_chu": "Hạt giống 06/10 (#277): app-rieng chạy cạnh, .eve sót, tai-lieu-* hết giờ, nguoi-huy.",
-      "buoc_ke": "Chờ chủ kho ký Cổng Đáng",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp 08/10 12:09 (#310)",
+      "trang_thai": "đã lên onehub"
     },
     {
       "ma": "F12",

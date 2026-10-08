@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
-import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	Dialog,
 	DialogClose,
@@ -188,27 +187,12 @@ function HopThoaiXoa({
 		trpc.giaiDoan.archive.mutationOptions({
 			onSuccess: async () => {
 				await Promise.all([cache.giaiDoan(), cache.deal()]);
-				toast.success(t.daXoa);
+				toast.success(t.daLuuTruTen.replace("{ten}", giaiDoan.label));
 				dong();
 			},
 			onError: (error) => toast.error(error.message),
 		}),
 	);
-
-	if (giaiDoan.dealCount === 0) {
-		return (
-			<ConfirmDialog
-				open
-				onOpenChange={(mo) => !mo && dong()}
-				tieuDe={t.xoaTieuDe.replace("{ten}", giaiDoan.label)}
-				than={t.xoaThan}
-				nut={t.xoa}
-				thoi={t.huy}
-				pending={xoa.isPending}
-				onConfirm={() => xoa.mutate({ id: giaiDoan.id })}
-			/>
-		);
-	}
 
 	const cungLoai = stages.filter(
 		(g) => g.kind === giaiDoan.kind && g.id !== giaiDoan.id,
@@ -219,10 +203,10 @@ function HopThoaiXoa({
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>
-						{t.xoaTieuDe.replace("{ten}", giaiDoan.label)}
+						{t.luuTruTieuDe.replace("{ten}", giaiDoan.label)}
 					</DialogTitle>
 					<DialogDescription>
-						{t.conThoaThuan.replace("{so}", String(giaiDoan.dealCount))}
+						{t.conThoaThuanLuuTru.replace("{so}", String(giaiDoan.dealCount))}
 					</DialogDescription>
 				</DialogHeader>
 				<Field className="px-4">
@@ -246,12 +230,11 @@ function HopThoaiXoa({
 						<Button variant="outline">{t.huy}</Button>
 					</DialogClose>
 					<Button
-						variant="destructive"
 						disabled={dich === "" || xoa.isPending}
 						onClick={() => xoa.mutate({ id: giaiDoan.id, moveTo: dich })}
 					>
 						{xoa.isPending ? <Spinner /> : null}
-						{t.chuyenVaXoa}
+						{t.chuyenVaLuuTru}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
@@ -282,7 +265,7 @@ export function HopThoaiGiaiDoan({
 		);
 	}
 	const xoa = hop.xoa ? theoId.get(hop.xoa) : undefined;
-	if (xoa) {
+	if (xoa && xoa.dealCount > 0) {
 		return (
 			<HopThoaiXoa
 				key={xoa.id}
