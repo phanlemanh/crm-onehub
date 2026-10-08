@@ -1,0 +1,31 @@
+{
+  "feature_plain": "Khi một bản ghi mở ra không tải được, ngăn nói đúng lý do: bản ghi đã bị xoá, bạn không có quyền, hay mạng chập — kèm đúng một việc nên làm tiếp (Đóng, hoặc Thử lại).",
+  "will_do": [
+    {"id": "AC-4", "p": "Sẽ cho mục «Kế hoạch» trong ngăn công ty nói đúng lý do như ngăn bản ghi; hai lý do đầu không có nút vì ngăn công ty vẫn dùng được."},
+    {"id": "AC-5", "p": "Sẽ có bản tiếng Anh cho cả ba khung, lấy từ tệp chữ chung."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sẽ KHÔNG bảo «kiểm tra kết nối» khi bản ghi đã bị xoá: hiện «Bản ghi này không còn» kèm «Đóng» (về ngăn trước), không «Thử lại» — ở cả cá nhân, công ty, thoả thuận, kế hoạch; đo mã thật từ máy chủ."},
+    {"id": "AC-2", "p": "Sẽ KHÔNG bảo «kiểm tra kết nối» khi người xem không có quyền: hiện «Bạn không có quyền xem bản ghi này» kèm «Đóng»; đo mã thật từ máy chủ."},
+    {"id": "AC-3", "p": "Sẽ KHÔNG đổi khung lỗi mạng (Thử lại gọi lại đúng một lần), và ngăn kế hoạch nay cũng có nút «Thử lại»."},
+    {"id": "OOS-1", "p": "Phiên hết hạn vẫn hiện khung kiểm tra kết nối — đã có đường đăng nhập lại."},
+    {"id": "OOS-2", "p": "Bản ghi lưu trữ và dải báo lưu trữ — việc của V2."},
+    {"id": "OOS-3", "p": "Ngăn mục tiêu và KR của OKR đã có cách riêng."},
+    {"id": "OOS-4", "p": "Các mục con khác trong ngăn (dòng thời gian, hoạt động web, 30 ngày đầu) không đổi."}
+  ],
+  "scope_plain": "Sửa khung chung của ngăn bản ghi, bốn ngăn, mục «Kế hoạch» của công ty và tệp chữ; không đổi máy chủ.",
+  "coverage_plain": [
+    {"i": 0, "p": "Độ phủ quét theo ma trận ngăn × mã lỗi (coverage-scan.md)."},
+    {"i": 1, "p": "Năm nơi hiện lỗi: cá nhân, công ty, thoả thuận, kế hoạch, mục «Kế hoạch» của công ty."},
+    {"i": 2, "p": "Ba mã lỗi: không còn, không có quyền, khác — hai mã đầu đo cả trên máy chủ thật (E9, E10)."},
+    {"i": 3, "p": "Khổ 1440 và 390 chụp thật với một cá nhân vừa xoá (AC-6); tiếng Anh ở AC-5."},
+    {"i": 4, "p": "Để sau: phiên hết hạn, bản ghi lưu trữ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Mã «không có quyền» chỉ đo bằng lỗi viết tay → đã thêm phép đo trên máy chủ thật (người bị gỡ khỏi workspace) và gắn nhãn xuyên lớp cho AC-1, AC-2."},
+    {"i": 1, "p": "Chưa kiểm máy chủ trả đúng mã «không còn» cho công ty, thoả thuận, kế hoạch → phép đo máy chủ thật kiểm cả bốn loại."},
+    {"i": 2, "p": "«Đóng về ngăn trước» chỉ đếm lời gọi → đã đo đường dẫn sau khi đóng một ngăn chồng lên ngăn công ty."},
+    {"i": 3, "p": "Chưa rõ «Đóng» trong mục «Kế hoạch» đóng gì → mục con không có nút nào cho hai lý do đầu."},
+    {"i": 4, "p": "«Không in lỗi thô» chưa có chiều đỏ → đã ghim bằng bản sao cố tình in lỗi."}
+  ]
+}
