@@ -1,0 +1,77 @@
+schema_version: 1
+slug: zalo-va-cach-ly
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.luat_kho_cay_du
+    paths:
+      - "apps/agent/test/**"
+      - "apps/app/test/**"
+      - "scripts/luat-kho/**"
+    expected: |
+      do-cay --du-luat thoat 0, VA dong "XANH cach-ly-hai-agent: <n> tep, 0 vi pham moi" khong kem "(nen …)", VA dong
+      tu kiem "chieu do -> DUNG pha-test-cua-agent-nhap-app-khong-phai-nest" co mat (luat van bat dung mau loi nay —
+      khong bi noi), VA "chieu do <k>/<k>". Tren onehub 0426cc9d0 lenh nay thoat 1 voi
+      "DO cach-ly-hai-agent: apps/agent/test/zalo-va.integration.spec.ts:7" — chieu do da do o S1.
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.zvc_agent_ca_tep
+    paths:
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+      - "apps/agent/agent/lib/zalo-*.ts"
+    expected: |
+      Ca tep zalo-va.integration.spec.ts chay tren CSDL rieng cua luot, thoat 0, "0 fail".
+
+  - id: E3
+    criterion: AC-3, AC-5
+    executor: test
+    cmd: config:executors.test.r1g_cau_chao
+    paths:
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+      - "apps/app/test/zalo-cau-chao-nhan.spec.ts"
+      - "apps/agent/agent/lib/zalo-config.ts"
+      - "apps/app/lib/messages/khung-ung-dung.ts"
+      - "apps/app/lib/messages/nhac-qua-zalo.ts"
+    expected: |
+      Lenh r1g_cau_chao (cua ho so da ky zalo-va) chay -t cau-chao tren spec agent roi tep app moi, thoat 0; dau ra co
+      DUNG hai dong tong ket "2 pass" (agent: «nguoi chua noi», «khong cau nao con chu Thông báo»; app: «cau huong dan
+      chi toi…», «doi chung…») va "0 fail".
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.zvc_nguyen_van_xanh
+    paths:
+      - "apps/agent/test/zalo-va.integration.spec.ts"
+      - "apps/app/test/zalo-cau-chao-nhan.spec.ts"
+      - "_acceptance/zalo-va-cach-ly/rang/**"
+      - "_acceptance/zalo-va-cach-ly/fixtures/**"
+    expected: |
+      rang/nguyen-van.mjs xanh (goc kho tu import.meta.dirname): ban ghim fixtures/zalo-va-truoc.spec.ts.txt phai trung
+      `git show 0426cc9d0:apps/agent/test/zalo-va.integration.spec.ts` (lech -> ma 2). Tach theo tieu de hai bai
+      («cau-chao: cau huong dan chi toi…», «cau-chao: doi chung, nhan Cài đặt…») va ham nhanDieuHuongKhac tu ban ghim
+      va tu tep app moi; than tung khoi trung tung byte (khoi vang -> ma 2). Spec agent o HEAD BANG ban ghim bo DUNG ba
+      khoi do va hai dong import ../../app (so bang, khong so tap con). Tep app moi: DUNG ba dong import cho ZALO
+      (../../agent/agent/lib/zalo-config), khungUngDungMessages, nhacQuaZaloMessages (../lib/messages/...), va khong
+      khai `const|let|function` nao trung ba ten do. Ma 0 kem bon dong "<muc>: nguyen van" (hai bai, ham, spec agent)
+      va dong "import: dung nguon"; lech -> ma 1 goi ten muc.
+      CAP HAI CHIEU tren CUNG ban ghim: chieu do la E5.
+
+  - id: E5
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.zvc_nguyen_van_do
+    paths:
+      - "_acceptance/zalo-va-cach-ly/rang/**"
+      - "_acceptance/zalo-va-cach-ly/fixtures/**"
+      - "apps/app/test/zalo-cau-chao-nhan.spec.ts"
+    expected: |
+      Cung bo so nhu E4, chay ba dot bien trong bo nho, moi dot bien phai ap DUNG mot lan (khong -> ma 2 "dot bien khong ap
+      duoc: <ten>"): (1) tep app bo `expect(bat).toBe(true);` cua bai doi chung -> bo so bao "doi chung: lech";
+      (2) spec agent o HEAD bo mot khang dinh `expect(` cua bai «khong cau nao con chu Thông báo» -> bao "spec agent: lech";
+      (3) tep app thay import khungUngDungMessages bang hang khai tai cho -> bao "import: lech". Ma 0 khi ca ba dot bien bi
+      bat dung muc va khong muc nao khac lech; dot bien nao lot -> ma 1 goi ten dot bien.
