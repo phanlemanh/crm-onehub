@@ -57,14 +57,22 @@ try {
 
 	const r1 = chamLai(banSao);
 	const tongThat = readFileSync(join(luot, "cham-bo-do.md"), "utf8");
-	const dongChiSo = r1.ra.split("\n").filter((d) => /^(dungTrang|tuChoiDung|chuyenQuyDinh|chuyenNham): /.test(d));
-	const lech = dongChiSo.filter((d) => !tongThat.includes(`- ${d}`));
-	if (dongChiSo.length !== 4 || lech.length > 0) {
-		console.error(`cham lai khong khop luot that (${dongChiSo.length} dong, lech: ${lech.join(" | ")})`);
+	const dongTong = r1.ra.split("\n").filter((d) => /^(dungTrang|tuChoiDung|chuyenQuyDinh|chuyenNham): |^KHONG DO DUOC: /.test(d));
+	const lech = dongTong.filter((d) => !tongThat.includes(`- ${d}`));
+	const duDong = r1.ma === 2 ? dongTong.length === 1 : dongTong.length === 4;
+	if (!duDong || lech.length > 0) {
+		console.error(`cham lai khong khop luot that (${dongTong.length} dong, ma ${r1.ma}, lech: ${lech.join(" | ")})`);
 		loi = 1;
-	} else console.log(`ROUND-TRIP: 4 dong chi so khop luot that, ma ${r1.ma}`);
+	} else console.log(`ROUND-TRIP: ${dongTong.length} dong tong khop luot that, ma ${r1.ma}`);
 
-	const motLoi = goc.map((d) => ({ ...d }));
+	const sach = goc.map((d) => ({
+		...d,
+		khongQuaKiem: false,
+		ketCuc: d.ketCuc === "LOI" || d.ketCuc === "khong-co-ket-qua" ? "TRA_LOI-sai" : d.ketCuc === "loi" ? "khong-hang" : d.ketCuc,
+		...(d.zalo && d.ketCuc === "loi" ? { zalo: { ketQua: "da-tra-loi", loi: null, coHang: false } } : {}),
+	}));
+
+	const motLoi = sach.map((d) => ({ ...d }));
 	const dau = motLoi.find((d) => d.luot === 1);
 	dau.ketCuc = "LOI";
 	ghiDong(tep, motLoi);
@@ -74,11 +82,6 @@ try {
 		loi = 1;
 	} else console.log(`LOI: ma 2, KHONG DO DUOC: 1 cau loi (${dau.id})`);
 
-	const sach = goc.map((d) => ({
-		...d,
-		khongQuaKiem: false,
-		ketCuc: d.ketCuc === "LOI" || d.ketCuc === "khong-co-ket-qua" ? "TRA_LOI-sai" : d.ketCuc === "loi" ? "khong-hang" : d.ketCuc,
-	}));
 	const coTrang = sach.filter((d) => d.luot === 1 && d.nhom !== "khong-co");
 	const n = coTrang.length;
 	const se = Math.sqrt((NGUONG * (1 - NGUONG)) / n);

@@ -53,7 +53,7 @@ const CAP = [
 	{
 		ten: "h cham-lai",
 		lenh: "bun _acceptance/eval-model-that-dung-luc/rang/cham-lai.mjs",
-		pha: [CHAM, "? nhanMotCau(d.nhom, d.ketCuc as KetCucMot)", '? d.nhom === "khong-co" ? (d.ketCuc === "TU_CHOI" ? "tu-choi-dung" : "sai") : d.ketCuc === "TRA_LOI-du" ? "dung-trang" : "sai"'],
+		pha: [CHAM, '\t\tdocTungCau(readFileSync(tep, "utf8")),\n', '\t\tdocTungCau(readFileSync(tep, "utf8")).map((d) => (d.ketCuc === "LOI" ? { ...d, ketCuc: "TRA_LOI-sai" as const } : d)),\n'],
 		ghim: "cham-bo-do khong dung ham nhan",
 	},
 ];
