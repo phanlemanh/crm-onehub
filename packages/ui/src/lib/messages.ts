@@ -135,6 +135,10 @@ const en = {
 	},
 	sortableList: {
 		reorder: (label: string) => `Reorder ${label}`,
+		hint: "Drag to reorder, or press Space then the up and down arrows.",
+		saved: "New order saved",
+		undo: "Undo",
+		restored: "Previous order restored",
 	},
 	skeletonSwap: {
 		loaded: (label: string) => `${label} loaded`,
@@ -375,6 +379,10 @@ const vi = {
 	},
 	sortableList: {
 		reorder: (label: string) => `Đổi thứ tự ${label}`,
+		hint: "Kéo để sắp thứ tự, hoặc dùng phím Space rồi mũi tên lên xuống.",
+		saved: "Đã lưu thứ tự mới",
+		undo: "Hoàn tác",
+		restored: "Đã trả thứ tự cũ",
 	},
 	skeletonSwap: {
 		loaded: (label: string) => `Đã tải xong ${label}`,

@@ -5,7 +5,6 @@ import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
@@ -180,25 +179,12 @@ export function ChiTietBoPhan({
 									: t.chuaCoTruong,
 							}))}
 							sua={hd.sua}
-							dangGhi={doi.isPending}
-							ghi={(moi, id, xong) =>
-								doi.mutate(
-									{ id, divisionId: bp.id, index: moi.indexOf(id) },
-									{
-										onSuccess: async () => {
-											toast.success(m.daSap);
-											await lamMoi();
-											xong();
-										},
-										onError: (e) => {
-											xong();
-											toast.error(e.message);
-										},
-									},
-								)
+							ghi={({ id, index }) =>
+								doi
+									.mutateAsync({ id, divisionId: bp.id, index })
+									.then(() => lamMoi())
 							}
 						/>
-						<p className="text-muted-foreground text-xs">{m.keo}</p>
 					</>
 				)}
 			</div>
