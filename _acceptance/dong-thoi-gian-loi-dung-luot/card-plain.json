@@ -1,31 +1,4 @@
 {
   "feature_plain": "Khi lỗi «Xem cũ hơn» và lỗi làm mới chồng lên nhau ở tab Hoạt động, thông báo luôn nói đúng lượt tải đã hỏng: không báo lỗi khi lượt đang chạy, không tự tắt cảnh báo làm mới khi chưa làm mới được.",
-  "will_do": [
-    {"id": "AC-1", "p": "Sẽ giữ cảnh báo «Không làm mới được» khi người bấm «Xem cũ hơn», không báo lỗi «xem cũ» trong lúc trang kế đang tải, và chỉ hiện nó nếu trang kế thật sự lỗi."},
-    {"id": "AC-2", "p": "Sẽ giữ thông báo «xem cũ» khi danh sách tự làm mới, không báo lỗi «làm mới» trong lúc đang chạy; làm mới được thì hết cả hai và nút «Xem cũ hơn» quay lại."},
-    {"id": "AC-4", "p": "Sẽ không mang thông báo của tab này sang tab khác, và hiện lại đúng thông báo khi quay về một tab vẫn đang lỗi."}
-  ],
-  "wont_do": [
-    {"id": "AC-3", "p": "Sẽ KHÔNG tắt cảnh báo làm mới cho tới khi một lượt làm mới thật sự thành công; nút «Thử lại» của nó tắt khi đang tải."},
-    {"id": "AC-5", "p": "Sẽ KHÔNG đổi các hành vi K6c và K6b đã ký — chạy lại nguyên các bài của hai hồ sơ đó."},
-    {"id": "OOS-1", "p": "Mục «Việc cần làm» tải lỗi vẫn ẩn im lặng."},
-    {"id": "OOS-2", "p": "Các khoảng hở đo đã ghi Known limits ở K6c giữ nguyên."},
-    {"id": "OOS-3", "p": "Chữ, vị trí và giao diện hai thông báo giữ nguyên K6c."}
-  ],
-  "scope_plain": "Chỉ sửa timeline.tsx; không đổi máy chủ, chữ hay thành phần.",
-  "coverage_plain": [
-    {"i": 0, "p": "Độ phủ quét theo ma trận lỗi trước × lượt kế × thời điểm (coverage-scan.md)."},
-    {"i": 1, "p": "Lỗi đang hiện trước: không, «xem cũ», «làm mới»."},
-    {"i": 2, "p": "Lượt kế: «Xem cũ hơn» hoặc làm mới."},
-    {"i": 3, "p": "Ba thời điểm quan sát: đang chạy, xong được, xong lỗi — bài kiểm treo từng lượt giữa chừng (AC-1, AC-2)."},
-    {"i": 4, "p": "Các ô một lỗi đơn lẻ đã có ở K6c, chạy lại để canh không hồi quy (AC-5)."},
-    {"i": 5, "p": "Để sau: «Việc cần làm» lỗi, các khoảng hở đo của K6c."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Giả định «mọi thay đổi dữ liệu là một lượt tải» chưa ghi ra → đã kiểm kho không có lệnh ghi thẳng cache dòng thời gian, ghi giả định vào thiết kế và hợp đồng (để sau nếu có lệnh ghi mới)."},
-    {"i": 1, "p": "Chưa nói cách xử khi quay lại một tab đang lỗi trong bộ nhớ → đã ghi mốc so sánh, AC-4 thêm vế quay lại, bài kiểm thêm ô dùng thời gian giữ cache như app."},
-    {"i": 2, "p": "Chưa đo nút «Xem cũ hơn» bị tắt khi đang tải → đã thêm vào AC-1 và E1."},
-    {"i": 3, "p": "«0 lần hiện sai» mà chỉ đọc màn một lần → đã đếm mọi lần chèn thông báo suốt lúc đang tải."},
-    {"i": 4, "p": "Nhận lượt mới bằng dấu thời gian mili-giây dễ trượt → đổi sang bộ đếm lỗi, bài kiểm đặt lại đồng hồ thật."}
-  ]
+  "analyst_plain": ""
 }
