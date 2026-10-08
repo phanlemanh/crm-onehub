@@ -9,6 +9,7 @@ evals:
     paths:
       - "scripts/kiem-cheo/**"
       - "package.json"
+      - "_acceptance/kiem-cheo-sau-gop/rang/lan-gia.mjs"
     expected: |
       node --test scripts/kiem-cheo/*.test.mjs thoat 0. Kho git gia dung trong thu muc tam (nhanh onehub voi ba merge
       commit first-parent M1 M2 M3 sau goc T, moi merge doi mot tep san pham rieng), ho so gia trong _acceptance/.
@@ -40,10 +41,11 @@ evals:
           cu; go -> tep khong con, bootout duoc goi;
       (j) --nhanh nhap: kho gia co nhanh nhap re tu onehub voi mot merge -> khoang gop la merge cua nhanh nhap, khong
           phai cua onehub;
-      (k) bo doc dong lan: mau dong lay tu MOT LUOT GHIM LAI THAT (tep fixtures/lan-that.txt trich nguyen van tu nhat
-          ky lan, dau tep ghi phien ban feature-loop va duong log goc) -> rut dung slug, E, lenh, ma cua tung dong va
-          dung mang ma suite; ca do: phien ban feature-loop giai duoc qua scripts/resolve-plugin.mjs khac phien ban
-          ghi trong fixture -> do, thong diep «mau dong lan cu: <ban fixture> != <ban dang cai>».
+      (k) phan quyet cua lan: kho gia co mot ho so voi ma tran expected_exit {0, 2} x ma thoat {0, 1, 2}; chay CHINH
+          lan ghim lai dang cai (giai qua scripts/resolve-plugin.mjs) va lan gia rang/lan-gia.mjs tren cung kho ->
+          docKetLan doc JSON stdout cua ca hai; lech(ma, kyVong) cua phan-xu.mjs khop tung o voi mang lech cua lan
+          that (khai 2 ma tra 0 la dat); lan gia cho dung tap lech (id + lenh da giai), dung ma thoat, dung mang ma
+          suite nhu lan that; stdout khong co JSON hoac slug thieu mang lech -> loi goi ten, khong tra mang rong.
 
   - id: E2
     criterion: AC-5
@@ -68,8 +70,9 @@ evals:
     expected: |
       rang/pha-thu.mjs (goc kho tu import.meta.dirname) dung kho git gia trong thu muc tam: goc T, ba lan gop M1 M2
       M3 vao onehub, mot ho so signed-off gia co eval script `node kiem.mjs` doc tep san pham; lan ve dung chinh
-      scripts/kiem-cheo/dem.mjs voi lan ghim lai gia qua KIEM_CHEO_LAN (lan gia in dung khuon dong
-      «[lane] <slug> <E>: <lenh> → exit <ma> (» cua lan that va chay that lenh eval trong cay rieng). Ma 0 khi moi o
+      scripts/kiem-cheo/dem.mjs voi lan ghim lai gia qua KIEM_CHEO_LAN (lan gia in JSON cung khuon lan that —
+      suites, slugs.<slug>.lech — dung chung lech() voi dem.mjs, da doi chieu voi lan that o E1 (k), va chay that
+      lenh eval trong cay rieng). Ma 0 khi moi o
       dat, ma 1 goi ten o hong:
       (a) doi chung: khong pha -> ket_qua xanh, mot tep ngay;
       (b) pha o M2 -> ket_qua do, mot muc do-moi, lan_gop = sha cua M2 (khong phai M1, M3);
@@ -83,7 +86,10 @@ evals:
           do-san); doi chung cung fixture: ho so co tu T, pha o T -> do-san;
       (h) lan gia ghi argv: khong co --write, co dung mot --slug cho moi ho so cua tap AC-1 va khong slug nao khac;
       (i) tran luot: KIEM_CHEO_TRAN_PHUT rat nho va lan gia ngu dai (sinh mot tien trinh con) -> khong-chay-duoc goi
-          ten «vuot tran», khong con tien trinh con nao song, khoa tay da tra, moc.json khong doi.
+          ten «vuot tran», khong con tien trinh con nao song, khoa tay da tra, moc.json khong doi;
+      (l)(m)(o) eval khai expected_exit 2: pha o M2 (tra 1) -> do-moi M2, khong do-san; tra 2 o moi lan gop -> xanh,
+          0 muc do; mot lan gop lam no tra 0 (cai thien) -> xanh, 0 muc do;
+      (n) lan thoat 1 ma JSON khong co eval lech nao -> khong-chay-duoc, moc.json khong doi.
       Moi o ghim thong diep (ten o, sha), khong chi ma thoat.
 
   - id: E4
@@ -113,8 +119,9 @@ evals:
     expected: |
       rang/kho-that.mjs (goc kho tu import.meta.dirname): git clone --shared --no-checkout chinh kho nay vao thu muc tam,
       dat refs/heads/onehub = b633a7e3, origin tro ve chinh ban sao (fetch noi bo), roi chay CHINH scripts/kiem-cheo/dem.mjs
-      --goc <ban sao> --tu feba7e77 voi KIEM_CHEO_LAN = lan nhanh (in moi eval xanh theo mau dong cua fixtures/lan-that.txt,
-      khong chay lenh eval), KIEM_CHEO_DUNG_CAY=true. Ma 0 khi dong thoi: (a) lenh thoat 0, tep ngay ket_qua xanh;
+      --goc <ban sao> --tu feba7e77 voi KIEM_CHEO_LAN = lan nhanh (lan gia voi KCS_XANH_HET: in JSON moi eval
+      thoat 0, khong chay lenh eval), KIEM_CHEO_DUNG_CAY=true. Ma 0 khi dong thoi: (a) lenh thoat 0, tep ngay ket_qua
+      xanh va mang do rong;
       (b) lan_gop = [c803963e, 0b257e15, b633a7e3] dung thu tu (sha day du); (c) ho_so = dung tap rut doc lap bang
       evalPathsOf + pathGlobToRe cua lib/evidence-core.cjs tren `git diff --name-only T..D` va contract.md/evals.yaml doc bang
       `git show D:<duong>` (khong qua tap-cham.mjs), va tap chua it nhat mot ho so chi khai paths kieu mot dong; (d) moc.json
