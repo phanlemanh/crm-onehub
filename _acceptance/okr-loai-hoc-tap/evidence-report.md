@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 31583f0d0797e17df56ccc280c6c0041a4485ee4
+verified_commit: 99b0446bac9e705c0cf88510d8880e36a6eff7af
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -289,3 +289,7 @@ sha: 9f089158e1ff78e3182416c2884c170007e36b0b · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-08, do them opportunity.md (O3) dua hai ho so vao diff; ghim lai tren onehub moi
 run_id: repin-20261008T031249Z-26572
 sha: 31583f0d0797e17df56ccc280c6c0041a4485ee4 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-08, do gop onehub c803963e (#304) vao nhanh O3
+run_id: repin-20261008T070007Z-41549
+sha: 99b0446bac9e705c0cf88510d8880e36a6eff7af · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
