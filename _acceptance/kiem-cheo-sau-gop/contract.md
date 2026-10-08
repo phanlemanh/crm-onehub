@@ -5,9 +5,9 @@ slug: kiem-cheo-sau-gop
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: implemented
-approved_by: Phan Le Manh
-approved_at: 2026-10-08T07:35:15Z
+status: draft
+approved_by:
+approved_at:
 design_doc: _acceptance/kiem-cheo-sau-gop/design.md
 ---
 
@@ -35,6 +35,7 @@ giữ bản rút gọn trong lượt ghim lại, chuyển lời hứa AC-9 sang 
 - AC-9: Given một lượt kết thúc với bất kỳ kết quả nào ở AC-2, AC-3, AC-4, AC-6, AC-7, AC-8, hoặc thoát khác 0 vì lỗi bất ngờ (kể cả `git fetch` lỗi), When báo, Then `.acceptance-runs/kiem-cheo/<YYYY-MM-DD>.json` có `ket_qua`, `tu`, `den`, `lan_gop`, `ho_so` và mỗi mục `do` có `ho_so`, `eval`, `loai`, `lenh` (cộng `lan_gop` khi `do-moi`); kết quả `do`, `khong-chay-duoc` hoặc `loi` thì có đợt sống → một tệp `yeu-cau/kiem-cheo-<n>.json` loai `can-nguoi` (ghi tệp tạm rồi đổi tên), không có đợt → một thông báo macOS; không tự mở PR, không tự mở phiên.
 - AC-10: Given `bun run kiem-cheo:cai` (anh tự chạy), When chạy, Then nó ghi `~/Library/LaunchAgents/<nhãn>.plist` chạy `kiem-cheo:chay` lúc 01:00 mỗi ngày với thư mục làm việc là gốc kho — chương trình là đường dẫn tuyệt đối tới `bun`, `EnvironmentVariables.PATH` chứa thư mục của `bun`, `node`, `git`, và `StandardOutPath`/`StandardErrorPath` trỏ `.acceptance-runs/kiem-cheo/launchd.log` — rồi nạp nó; lệnh của plist chạy được dưới môi trường trống (`env -i`, PATH hệ thống); chạy lại không sinh bản thứ hai; `bun run kiem-cheo:go` gỡ nạp và xoá tệp.
 - AC-11: Given mã của vòng này, When đọc `scripts/kiem-cheo/`, Then làn ghim lại được gọi qua `scripts/resolve-plugin.mjs` (không có bản chép `repin-lane` nào trong kho) và không tệp nào gọi model hay AI Gateway trực tiếp.
+- AC-12: Given bản sao `git clone --shared` của chính kho này (lịch sử git thật, 184 hồ sơ thật, `_acceptance/` ~315 MB) với mốc `T` = `feba7e77` và đỉnh `D` = `b633a7e3` (ba lần gộp thật #304, #308, #312), When chạy `dem.mjs` đầu-cuối với làn ghim lại thay bằng làn nhanh in mọi eval xanh, Then lượt thoát 0 với kết quả `xanh`, `lan_gop` đúng ba sha đó, `ho_so` bằng đúng tập rút bằng `evalPathsOf` của kit trên cùng `T..D` và chứa ít nhất một hồ sơ chỉ khai `paths` kiểu một dòng, không lỗi bộ đệm, mốc tiến tới `D`; và cây làm việc nơi gọi lệnh không đổi.
 
 ## Coverage
 
@@ -42,7 +43,7 @@ giữ bản rút gọn trong lượt ghim lại, chuyển lời hứa AC-9 sang 
 - Trục B — khoảng gộp: 0 lần gộp | 1 | nhiều | mốc vắng/không còn [thước CE: `git log --first-parent origin/onehub`]
 - Trục C — kết cục eval: xanh | chập chờn | đỏ sẵn | đỏ mới | không chạy được [thước CE: ngành — git bisect, Chromium Findit, Google TAP]
 - Trục D — kênh báo: có đợt | không đợt; tệp ngày luôn ghi [thước CE: lựa chọn «chỉ báo» của anh ở S1]
-- Core → AC: A → AC-4, AC-5, AC-7; B → AC-1, AC-2, AC-3; C → AC-6, AC-8; D → AC-9. Khởi động → AC-10; ranh giới kit/model → AC-11; lời hứa cũ → việc sau ký (Notes). Bản quét: `coverage-scan.md`.
+- Core → AC: A → AC-4, AC-5, AC-7; B → AC-1, AC-2, AC-3; C → AC-6, AC-8; D → AC-9. Khởi động → AC-10; ranh giới kit/model → AC-11; quy mô thật → AC-12; lời hứa cũ → việc sau ký (Notes). Bản quét: `coverage-scan.md`.
 
 ## Đường đo
 

@@ -100,3 +100,24 @@ evals:
       @crm/ai-okr hay chua AI_GATEWAY. Chieu do cung lan chay: ban sao scripts/kiem-cheo/ trong thu muc tam them mot
       dong `import { generateText } from "ai"` -> (c) do goi ten tep; them mot tep repin-lane.mjs gia vao danh sach
       tep cua ban sao -> (a) do goi ten tep. Ma 0 khi ban that sach va ca hai chieu do do dung cho.
+
+  - id: E5
+    criterion: AC-12, AC-1
+    executor: script
+    cmd: config:executors.script.kcs_kho_that
+    paths:
+      - "scripts/kiem-cheo/**"
+      - "lib/evidence-core.cjs"
+      - "lib/eval-yaml.cjs"
+      - "_acceptance/kiem-cheo-sau-gop/rang/kho-that.mjs"
+    expected: |
+      rang/kho-that.mjs (goc kho tu import.meta.dirname): git clone --shared --no-checkout chinh kho nay vao thu muc tam,
+      dat refs/heads/onehub = b633a7e3, origin tro ve chinh ban sao (fetch noi bo), roi chay CHINH scripts/kiem-cheo/dem.mjs
+      --goc <ban sao> --tu feba7e77 voi KIEM_CHEO_LAN = lan nhanh (in moi eval xanh theo mau dong cua fixtures/lan-that.txt,
+      khong chay lenh eval), KIEM_CHEO_DUNG_CAY=true. Ma 0 khi dong thoi: (a) lenh thoat 0, tep ngay ket_qua xanh;
+      (b) lan_gop = [c803963e, 0b257e15, b633a7e3] dung thu tu (sha day du); (c) ho_so = dung tap rut doc lap bang
+      evalPathsOf + pathGlobToRe cua lib/evidence-core.cjs tren `git diff --name-only T..D` va contract.md/evals.yaml doc bang
+      `git show D:<duong>` (khong qua tap-cham.mjs), va tap chua it nhat mot ho so chi khai paths kieu mot dong; (d) moc.json
+      sha = b633a7e3; (e) bam `git status --porcelain` cua cay noi goi lenh khong doi. Chieu do cung luot: ban sao scripts/
+      (kiem-cheo, dieu-phoi, lib) voi hoSoTai thay bang ban cu (execFileSync git archive ca _acceptance, khong maxBuffer) chay
+      tren cung ban sao kho -> ket_qua loi, ly_do chua ENOBUFS. Thieu dieu nao -> ma 1 goi ten dieu do.
