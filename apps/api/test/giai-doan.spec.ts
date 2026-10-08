@@ -2,7 +2,8 @@ import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db, type Prisma } from "@crm/db";
-import { GIAI_DOAN_GOC, type LoaiGiaiDoan } from "@crm/db/giai-doan";
+import { GIAI_DOAN, GIAI_DOAN_GOC, type LoaiGiaiDoan } from "@crm/db/giai-doan";
+import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { ActivitiesService } from "../src/activities/activities.service";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { ActivityStampService } from "../src/crm/activity-stamp.service";
@@ -644,6 +645,7 @@ describe("bat-bien", () => {
 		expect(mutation, "danh sach mutation giaiDoan").toEqual([
 			"archive",
 			"rename",
+			"restore",
 		]);
 		for (const ten of mutation) {
 			const { id } = await giaiDoan.create(userId, {
@@ -654,6 +656,9 @@ describe("bat-bien", () => {
 				ten === "rename" ? { id, label: `Kind lạ đổi ${suffix}` } : { id };
 			if (ten === "rename") {
 				await giaiDoan.rename(userId, { ...input, kind: "WON" } as never);
+			} else if (ten === "restore") {
+				await giaiDoan.archive(userId, { id });
+				await giaiDoan.restore(userId, { ...input, kind: "WON" } as never);
 			} else {
 				await giaiDoan.archive(userId, { ...input, kind: "WON" } as never);
 			}
@@ -759,5 +764,149 @@ describe("dong-thoi", () => {
 			tuyChon[0]?.timeout,
 			"xoa: transaction dung thoi han mac dinh 5s",
 		).toBe(GIAI_DOAN_API.thoiHan.xoaMs);
+	});
+});
+
+async function maLoi(p: Promise<unknown>): Promise<string> {
+	try {
+		await p;
+		return "";
+	} catch (error) {
+		return error instanceof BadRequestException
+			? "BAD_REQUEST"
+			: error instanceof NotFoundException
+				? "NOT_FOUND"
+				: String(error);
+	}
+}
+
+async function catTam(ten: string, kind: LoaiGiaiDoan = "OPEN") {
+	const id = await taoGiaiDoan(kind, ten, 80);
+	await giaiDoan.archive(userId, { id });
+	return id;
+}
+
+async function archivedAtCua(id: string) {
+	return (
+		await db.dealStage.findUniqueOrThrow({
+			where: { id },
+			select: { archivedAt: true },
+		})
+	).archivedAt;
+}
+
+describe("khoi-phuc", () => {
+	it("ve cuoi nhom, chan trung ten / du tran / chua cat / khong co; archived chi tra giai doan da cat", async () => {
+		const M = GIAI_DOAN_API.messages;
+
+		const a = await catTam("kp-mot");
+		await giaiDoan.restore(userId, { id: a });
+		const songMo = await db.dealStage.findMany({
+			where: { kind: "OPEN", archivedAt: null },
+			select: { id: true, position: true },
+		});
+		const viTriA = songMo.find((g) => g.id === a)?.position ?? -1;
+		expect(
+			{
+				archivedAt: await archivedAtCua(a),
+				cuoi: songMo.every((g) => g.id === a || g.position < viTriA),
+			},
+			"1 khoi phuc khong ve cuoi nhom",
+		).toEqual({ archivedAt: null, cuoi: true });
+		expect((await songCuaLoai("OPEN")).at(-1), "7 list sau restore").toBe(a);
+
+		const b = await catTam("kp-trung");
+		const tenB = (
+			await db.dealStage.findUniqueOrThrow({
+				where: { id: b },
+				select: { label: true },
+			})
+		).label;
+		const songTrung = await giaiDoan.create(userId, {
+			label: `  ${tenB.toLocaleUpperCase("vi")}  `,
+			kind: "LOST",
+		});
+		const ngayB = await archivedAtCua(b);
+		expect(
+			{
+				ma: await maLoi(giaiDoan.restore(userId, { id: b })),
+				loi: await loiCua(giaiDoan.restore(userId, { id: b })),
+				archivedAt: await archivedAtCua(b),
+			},
+			"2 khoi phuc trung ten duoc chap nhan",
+		).toEqual({ ma: "BAD_REQUEST", loi: M.trung, archivedAt: ngayB });
+		await giaiDoan.archive(userId, { id: songTrung.id });
+
+		const c = await catTam("kp-tran");
+		const song = await db.dealStage.count({ where: { archivedAt: null } });
+		const them: string[] = [];
+		for (let i = song; i < GIAI_DOAN.tran.tong; i += 1) {
+			them.push(await taoGiaiDoan("WON", `kp-day-${i}`, 90 + i));
+		}
+		try {
+			expect(
+				{
+					ma: await maLoi(giaiDoan.restore(userId, { id: c })),
+					loi: await loiCua(giaiDoan.restore(userId, { id: c })),
+					song: await db.dealStage.count({ where: { archivedAt: null } }),
+				},
+				"3 khoi phuc khi du tran duoc chap nhan",
+			).toEqual({
+				ma: "BAD_REQUEST",
+				loi: M.tran,
+				song: GIAI_DOAN.tran.tong,
+			});
+		} finally {
+			await db.dealStage.deleteMany({ where: { id: { in: them } } });
+		}
+
+		expect(
+			{
+				dangSong: await maLoi(giaiDoan.restore(userId, { id: a })),
+				thongDiep: await loiCua(giaiDoan.restore(userId, { id: a })),
+				khongCo: await maLoi(
+					giaiDoan.restore(userId, { id: `${tienTo}-khong-co` }),
+				),
+			},
+			"4-5 khoi phuc giai doan song / khong co",
+		).toEqual({
+			dangSong: "BAD_REQUEST",
+			thongDiep: M.chuaLuuTru,
+			khongCo: "NOT_FOUND",
+		});
+
+		const daCat = await giaiDoan.archived();
+		const cuaToi = daCat.filter((g) => g.id.startsWith(tienTo));
+		const ngay = cuaToi.map((g) => g.archivedAt);
+		expect(
+			{
+				coA: daCat.some((g) => g.id === a),
+				coB: cuaToi.some((g) => g.id === b),
+				coC: cuaToi.some((g) => g.id === c),
+				moiCatTruoc: [...ngay].sort().reverse(),
+				khoa: Object.keys(daCat[0] ?? {}).sort(),
+				soSong: await db.dealStage.count({
+					where: { id: { in: daCat.map((g) => g.id) }, archivedAt: null },
+				}),
+			},
+			"6 archived sai",
+		).toEqual({
+			coA: false,
+			coB: true,
+			coC: true,
+			moiCatTruoc: ngay,
+			khoa: ["archivedAt", "id", "kind", "label"],
+			soSong: 0,
+		});
+
+		const ngayDau = await archivedAtCua(c);
+		await giaiDoan.restore(userId, { id: c });
+		await new Promise((r) => setTimeout(r, 5));
+		await giaiDoan.archive(userId, { id: c });
+		const ngaySau = await archivedAtCua(c);
+		expect(
+			(ngaySau?.getTime() ?? 0) > (ngayDau?.getTime() ?? 0),
+			"8 cat lai sau khi khoi phuc khong lay ngay moi",
+		).toBe(true);
 	});
 });
