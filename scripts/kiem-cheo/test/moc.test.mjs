@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { after, describe, test } from "node:test";
 import { KIEM_CHEO } from "../cau-hinh.mjs";
