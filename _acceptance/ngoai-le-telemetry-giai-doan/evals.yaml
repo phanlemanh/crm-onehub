@@ -1,0 +1,105 @@
+schema_version: 1
+slug: ngoai-le-telemetry-giai-doan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nlt_that
+    paths:
+      - "_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs"
+      - "_acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs"
+      - "packages/telemetry/src/**"
+    expected: |
+      rang/thu-thuoc.mjs --ca that: chay thuoc tren cay that. Ma tran:
+        1 thuoc thoat 0
+        2 "so tep da quet: N" voi N = so tep git ls-files duoi .ts/.tsx/.mjs/.js duoi BAY thu muc (apps/api/src,
+          apps/agent/agent, apps/app/app, apps/app/components, apps/app/lib, packages/db/src, packages/telemetry/src)
+          tru bon mau TRU cu ap cho ca bay — rang tu dem bang danh sach rieng, khong doc danh sach cua thuoc
+        3 tap dong "CHO PHEP packages/telemetry/src/allowlist.ts:<n>: GIAI_DOAN_GOC" bang dung tap so dong cua
+          allowlist.ts co chu GIAI_DOAN_GOC (doi chung duong: tap khong rong)
+      CHIEU DO: --thuoc mot ban dot bien tu dung (bo packages/telemetry/src khoi THU_MUC) -> dong 2 do voi thong diep
+      ghim "thuoc khong quet packages/telemetry/src".
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nlt_chu_telemetry
+    paths:
+      - "_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs"
+      - "_acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs"
+    expected: |
+      rang/thu-thuoc.mjs --ca chu-telemetry: ban sao cay (git archive vao thu muc tam ngoai kho, git init) chen
+      dong `const x = "CLOSED_WON";` vao cuoi packages/telemetry/src/events.ts. Thuoc thoat 1 va in dong
+      "HONG packages/telemetry/src/events.ts:<dong chen>: CLOSED_WON". Doi chung duong: cung ban sao chua chen
+      -> thoat 0.
+      CHIEU DO: --thuoc ban dot bien tu dung (bo packages/telemetry/src khoi THU_MUC) -> do voi thong diep ghim
+      "thuoc khong bat CLOSED_WON trong telemetry".
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nlt_chu_allowlist
+    paths:
+      - "_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs"
+      - "_acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs"
+    expected: |
+      rang/thu-thuoc.mjs --ca chu-allowlist: ban sao chen `if (id === "CLOSED_WON") return id;` vao cuoi
+      packages/telemetry/src/allowlist.ts. Thuoc thoat 1, in "HONG packages/telemetry/src/allowlist.ts:<dong chen>:
+      CLOSED_WON". Ca (c) cung dong: ban sao chen `export const w = Object.values(GIAI_DOAN_GOC).find((c) => c ===
+      "CLOSED_WON");` vao cuoi allowlist.ts -> thoat 1, in "HONG …allowlist.ts:<dong>: CLOSED_WON" VA "CHO PHEP
+      …allowlist.ts:<cung dong>: GIAI_DOAN_GOC". Doi chung duong: ban sao chua chen thoat 0.
+      CHIEU DO: (1) --thuoc ban dot bien bo ca tep allowlist.ts khoi quet -> do voi thong diep ghim "ngoai le nuot ca
+      tep allowlist.ts"; (2) --thuoc ban dot bien chi xet tu khop dau tien cua dong -> ca (c) do voi thong diep ghim
+      "ngoai le theo dong khong theo tu".
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.nlt_ten_ngoai
+    paths:
+      - "_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs"
+      - "_acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs"
+    expected: |
+      rang/thu-thuoc.mjs --ca ten-ngoai: hai ban sao rieng. (a) chen `export const y = GIAI_DOAN_GOC;` vao
+      packages/telemetry/src/index.ts -> thoat 1, "HONG packages/telemetry/src/index.ts:<dong>: GIAI_DOAN_GOC".
+      (b) chen `const z = "DEMO_BOOKED";` vao apps/api/src/telemetry/rollup.service.ts -> thoat 1, "HONG
+      apps/api/src/telemetry/rollup.service.ts:<dong>: DEMO_BOOKED". (c) chen `const v = GIAI_DOAN_GOC;` vao
+      apps/api/src/telemetry/rollup.service.ts -> thoat 1, "HONG …rollup.service.ts:<dong>: GIAI_DOAN_GOC".
+      3 khang dinh + doi chung duong chung.
+      CHIEU DO: --thuoc mot ban thuoc cho phep GIAI_DOAN_GOC o moi tep telemetry -> (a) do voi thong diep ghim
+      "ngoai le khong theo tep".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.nlt_tai_lieu
+    paths:
+      - "docs/api.md"
+      - "_acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs"
+    expected: |
+      rang/thu-thuoc.mjs --ca tai-lieu: doc docs/api.md, rut muc "## Deal stages are rows" toi "## " ke tiep, lay
+      gach dau dong co chu GIAI_DOAN_GOC. Ma tran: dung mot gach nhu vay; gach do chua ca bon chuoi
+      "@crm/telemetry/allowlist", "deals_by_stage", "permittedDealStage", "DEAL_STAGE_KEYS" (4 khang dinh) va
+      "allowlist.ts"; khong con cau "for the seed and tests only — product".
+      CHIEU DO: --tai-lieu mot ban sao docs/api.md bo cac chuoi ngoai le khoi gach do (rang tu dung) -> do voi thong
+      diep ghim "tai lieu thieu ngoai le telemetry".
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.nlt_ghim_gdtt
+    paths:
+      - "_acceptance/giai-doan-thoa-thuan/run-log.jsonl"
+      - "_acceptance/giai-doan-thoa-thuan/evidence-report.md"
+      - "_acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs"
+    expected: |
+      rang/thu-thuoc.mjs --ca ghim-gdtt: doc dong kind "repin" cuoi cua _acceptance/giai-doan-thoa-thuan/run-log.jsonl.
+      Ma tran: (1) sha cua dong do bang verified_commit trong evidence-report.md cua ho so do; (2) noi dung thuoc
+      khong-re-theo-ten.mjs tai sha do bang noi dung tai HEAD (git show); (3) evals_exit co E17 va moi gia tri bang
+      ky vong (0, tru id khai expected_exit); (4) suites_exit toan 0.
+      CHIEU DO: --run-log mot ban sao run-log bo dong repin moi -> (2) do voi thong diep ghim "ghim cu khong chua thuoc moi".
