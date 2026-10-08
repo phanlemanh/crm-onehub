@@ -1,5 +1,5 @@
 {
- "feature_plain": "Hồ sơ đã ký của tính năng soạn OKR cùng Kara thôi bị coi là cũ mỗi khi một PR chạm nó vì một tệp nó không hề đo; đổi lại, hồ sơ được ghim lại một lần trong vòng này.",
+ "feature_plain": "Hồ sơ đã ký của tính năng soạn OKR cùng Kara bật lại bộ lọc «chỉ cũ khi vật đo đổi»: hai đường dẫn chết đã trỏ đúng tệp, hồ sơ được ghim lại một lần, và lưới thật trên bản sao tạm không còn coi nó cũ khi PR chỉ chạm tệp ngoài vật đo.",
  "will_do": [
   {
    "id": "AC-2",
@@ -76,5 +76,6 @@
    "i": 4,
    "p": "Ranh giới cho phép sửa cả hợp đồng đã ký — đã khoá: hợp đồng không đổi, nhật ký chỉ thêm dòng."
   }
- ]
+ ],
+ "analyst_plain": ""
 }
