@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d606e250c7c36a783d93d9114051654c5e576dec
+verified_commit: 7d7b078b020736645f8d004fe2fcbdd143c88c41
 human_signoff: Manh Phan 2026-10-02
 ---
 
@@ -383,3 +383,7 @@ sha: 68478e877021999d6c540e4dd4a93e6d57549890 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-08, do zalo-va-cach-ly (F15): gộp onehub 6a0900fb; luật cách ly xanh; r1g_cau_chao chạy thêm tệp app
 run_id: repin-20261008T001307Z-83174
 sha: d606e250c7c36a783d93d9114051654c5e576dec · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · diff chạm vật đo ngoài làn máy: E13, E29 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-08, do gộp onehub f7ef8ada (#303) vào nhánh của #304
+run_id: repin-20261008T012241Z-40437
+sha: 7d7b078b020736645f8d004fe2fcbdd143c88c41 · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
