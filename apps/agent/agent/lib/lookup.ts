@@ -98,6 +98,7 @@ export async function listDeals(options: DealListOptions = {}) {
 		select: {
 			id: true,
 			name: true,
+			stage: true,
 			giaiDoan: { select: { label: true } },
 			amount: true,
 			currency: true,
@@ -135,6 +136,7 @@ export async function listDeals(options: DealListOptions = {}) {
 				id: deal.id,
 				name: deal.name,
 				stage: deal.giaiDoan.label,
+				stageId: deal.stage,
 				amount: deal.amount === null ? null : Number(deal.amount),
 				currency: deal.currency,
 				company: deal.company,

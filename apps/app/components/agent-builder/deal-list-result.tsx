@@ -91,7 +91,7 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 									<CompanyCell company={deal.company} />
 								</TableCell>
 								<TableCell className="overflow-hidden px-3 py-3">
-									<Stage stage={deal.stage} />
+									<Stage stage={deal.stage} stageId={deal.stageId} />
 								</TableCell>
 								<TableCell className="overflow-hidden px-3 py-3 text-right">
 									{deal.amount === null ? (
@@ -141,10 +141,11 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 	);
 }
 
-function Stage({ stage }: { stage: string }) {
+function Stage({ stage, stageId }: { stage: string; stageId: string | null }) {
 	const giaiDoan = useGiaiDoan();
-	return giaiDoan.theoId.has(stage) ? (
-		<DealStageIndicator stage={stage} />
+	const ma = stageId ?? stage;
+	return giaiDoan.theoId.has(ma) ? (
+		<DealStageIndicator stage={ma} />
 	) : (
 		<span className="text-muted-foreground" translate="no">
 			{stage}
