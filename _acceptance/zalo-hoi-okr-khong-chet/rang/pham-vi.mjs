@@ -5,7 +5,14 @@ const GOC = resolve(import.meta.dirname, "..", "..", "..");
 const CHO = [
 	"apps/agent/agent/tools/tro-ly-okr-ngoai.ts",
 	"apps/agent/agent/lib/okr/config.ts",
+	"apps/agent/agent/lib/okr/uy-quyen.ts",
+	"apps/agent/agent/hooks/okr-uy-quyen.ts",
 	"apps/agent/test/okr-uy-quyen-ngoai.spec.ts",
+	"apps/agent/test/okr-uy-quyen.spec.ts",
+	"docs/agent.md",
+	".env.example",
+	"_acceptance/tro-ly-okr-nen/run-log.jsonl",
+	"_acceptance/tro-ly-okr-nen/evidence-report.md",
 	"PRODUCT-MAP.md",
 	"LO-TRINH.html",
 	"_acceptance/config.yaml",
@@ -15,7 +22,9 @@ const CHO = [
 	"apps/app/lib/messages/kara-ban-ghi.ts",
 ];
 const TIEN_TO_HO_SO = "_acceptance/zalo-hoi-okr-khong-chet/";
-const CHI_THEM = ["_acceptance/config.yaml"];
+const CHI_THEM = ["_acceptance/config.yaml", ".env.example", "_acceptance/tro-ly-okr-nen/run-log.jsonl"];
+const MA_TRAN_NGOAI_OKR = ["builder", "team-agent", "research", "zalo", "may-soan", "kho", "okr-soan"];
+const BIEN_BO_DE = "TRO_LY_OKR_BO_DE";
 const DONG_THEM = {
 	"apps/agent/agent/lib/zalo-config.ts": 1,
 	"packages/telemetry/src/allowlist.ts": 1,
@@ -54,12 +63,14 @@ function doiChung() {
 	const rong = kiemDanhSach([]);
 	if (rong.ma !== 2 || rong.dong[0] !== "diff rong") return "doi chung rong khong thoat 2";
 	console.log("doi chung: diff rong -> ma 2");
-	const a = ngoaiRanhGioi(["apps/agent/test/okr-uy-quyen.spec.ts"]);
-	const b = ngoaiRanhGioi(["apps/agent/agent/lib/zalo-chi-dan.ts"]);
-	if (a[0] !== "apps/agent/test/okr-uy-quyen.spec.ts") return "doi chung okr-uy-quyen.spec.ts khong bi bat";
-	if (b[0] !== "apps/agent/agent/lib/zalo-chi-dan.ts") return "doi chung zalo-chi-dan.ts khong bi bat";
-	console.log(`doi chung: ngoai ranh gioi: ${a[0]}`);
-	console.log(`doi chung: ngoai ranh gioi: ${b[0]}`);
+	for (const tep of [
+		"apps/agent/agent/subagents/tro_ly_okr/agent.ts",
+		"apps/agent/agent/lib/zalo-chi-dan.ts",
+		"_acceptance/tro-ly-okr-nen/contract.md",
+	]) {
+		if (ngoaiRanhGioi([tep])[0] !== tep) return `doi chung ${tep} khong bi bat`;
+		console.log(`doi chung: ngoai ranh gioi: ${tep}`);
+	}
 	return null;
 }
 
@@ -82,6 +93,33 @@ for (const [tep, can] of Object.entries(DONG_THEM).filter(([t]) => ds.includes(t
 	const { them, bo } = dongDoi(base, tep);
 	if (them.length !== can || bo.length !== 0 || !them.every((d) => d.includes(TEN_CONG_CU)))
 		loi.push(`${tep}: khong dung dong them da khai`);
+}
+if (ds.includes(".env.example") && !dongDoi(base, ".env.example").them.some((d) => d.includes(BIEN_BO_DE)))
+	loi.push(".env.example: khong khai TRO_LY_OKR_BO_DE");
+if (ds.includes("apps/agent/test/okr-uy-quyen.spec.ts")) {
+	const { them, bo } = dongDoi(base, "apps/agent/test/okr-uy-quyen.spec.ts");
+	if (![...them, ...bo].every((d) => MA_TRAN_NGOAI_OKR.some((m) => d.includes(`["${m}"`))))
+		loi.push("okr-uy-quyen.spec.ts: doi dong ngoai ma tran ngoai okr");
+}
+if (ds.includes("_acceptance/tro-ly-okr-nen/run-log.jsonl")) {
+	const { them } = dongDoi(base, "_acceptance/tro-ly-okr-nen/run-log.jsonl");
+	const hong = them.some((d) => {
+		try {
+			return !String(JSON.parse(d.slice(1)).kind ?? "").startsWith("repin");
+		} catch {
+			return true;
+		}
+	});
+	if (hong) loi.push("tro-ly-okr-nen: doi ngoai phan ghim lai");
+}
+if (ds.includes("_acceptance/tro-ly-okr-nen/evidence-report.md")) {
+	const { them, bo } = dongDoi(base, "_acceptance/tro-ly-okr-nen/evidence-report.md");
+	const chu = git(["show", "HEAD:_acceptance/tro-ly-okr-nen/evidence-report.md"]);
+	const repin = chu.slice(chu.indexOf("### Re-pin"));
+	const lech =
+		bo.some((d) => !d.startsWith("-verified_commit:")) ||
+		them.some((d) => !d.startsWith("+verified_commit:") && !repin.includes(d.slice(1)));
+	if (lech) loi.push("tro-ly-okr-nen: doi ngoai phan ghim lai");
 }
 if (loi.length > 0) {
 	for (const d of loi) console.error(d);

@@ -1,68 +1,61 @@
 import { spawnSync } from "node:child_process";
 import { dungBanSao, goBanSao, KhongDo, thayMotLan } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 3;
+const SO_CAP_KHAI = 7;
 const TRAN_MS = 300_000;
 const NGOAI = "apps/agent/agent/tools/tro-ly-okr-ngoai.ts";
 const UY_QUYEN = "apps/agent/agent/lib/okr/uy-quyen.ts";
-const SPEC = (tep) => `cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/${tep}`;
+const HOOK = "apps/agent/agent/hooks/okr-uy-quyen.ts";
+const NOP = "apps/agent/agent/lib/okr/nop-de-xuat.ts";
+const DOC = "apps/agent/agent/lib/okr/doc.ts";
+const SPEC = (tep, t) => `cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/${tep}${t ? ` -t ${t}` : ""}`;
+const NGOAI_SPEC = "okr-uy-quyen-ngoai.spec.ts";
 
 const CAP = [
-	{
-		ten: "a zalo-khong-de",
-		lenh: SPEC("okr-uy-quyen-ngoai.spec.ts"),
-		pha: [NGOAI, 'purposeOf(ctx) === "okr"', '(purposeOf(ctx) === "okr" || purposeOf(ctx) === "zalo")'],
-		ghim: "zalo: khong de tro_ly_okr",
-	},
-	{
-		ten: "b luon-de",
-		lenh: SPEC("okr-uy-quyen-ngoai.spec.ts"),
-		pha: [NGOAI, 'purposeOf(ctx) === "okr"', "false"],
-		ghim: "phien okr bi de tro_ly_okr",
-	},
-	{
-		ten: "c hook-de-lot",
-		lenh: SPEC("okr-uy-quyen.spec.ts"),
-		pha: [UY_QUYEN, "? { cho: false, loi: LOI_UY_QUYEN.ngoaiOkr }", "? { cho: true, daGoi: [...daGoi] }"],
-		ghim: "tro_ly_okr may be called only from an OKR session.",
-	},
+	["a zalo-khong-de", SPEC(NGOAI_SPEC, "tro-ly-okr-ngoai"), NGOAI, 'purposeOf(ctx) === "okr"', '(purposeOf(ctx) === "okr" || purposeOf(ctx) === "zalo")', "zalo: khong de tro_ly_okr"],
+	["b luon-de", SPEC(NGOAI_SPEC, "tro-ly-okr-ngoai"), NGOAI, 'purposeOf(ctx) === "okr"', "false", "phien okr bi de tro_ly_okr"],
+	["g cong-tac-lot", SPEC(NGOAI_SPEC, "cong-tac"), NGOAI, " || boDe()", "", "cong tac bo de khong tat"],
+	["c okr-khac-lot", SPEC(NGOAI_SPEC, "hook"), UY_QUYEN, "return { cho: false, loi: LOI_UY_QUYEN.khacTroLy };", "return { cho: true, daGoi: [...daGoi] };", "okr: khac tro ly khong bi chan"],
+	["d hook-nem-lai", SPEC(NGOAI_SPEC, "hook"), HOOK, "console.warn(`${TRO_LY_OKR.ngoaiPhien.dongNgoaiOkr}${purpose}`);", "throw new Error(`${TRO_LY_OKR.ngoaiPhien.dongNgoaiOkr}${purpose}`);", "hook van giet luot"],
+	["e nop-bo-kiem", SPEC(NGOAI_SPEC, "nop-ngoai"), NOP, '\tif (!hang) return khongGhi("tu-choi", "not an OKR session");\n', "", "hang.kind"],
+	["f viec-phien-khac", SPEC(NGOAI_SPEC, "nop-ngoai"), DOC, "\t\twhere: { sessionId, kind: { in: [...LOAI_VIEC_TRO_LY_OKR] } },", "\t\twhere: { kind: { in: [...LOAI_VIEC_TRO_LY_OKR] }, finishedAt: null },", "nhan viec cua phien khac"],
 ];
 
-function chay(goc, lenh) {
-	const r = spawnSync("sh", ["-c", lenh], { cwd: goc, encoding: "utf8", timeout: TRAN_MS, maxBuffer: 64 * 1024 * 1024 });
-	return { ma: r.status, log: `${r.stdout}\n${r.stderr}` };
+function lenh(cwd, cmd) {
+	const r = spawnSync("sh", ["-c", cmd], { cwd, encoding: "utf8", timeout: TRAN_MS, maxBuffer: 64 * 1024 * 1024 });
+	return { ma: r.status, ra: `${r.stdout}\n${r.stderr}` };
 }
 
-function main() {
-	const goc = dungBanSao("zhok-dot-bien");
-	let dat = 0;
-	let daChay = 0;
-	try {
-		for (const cap of CAP) {
-			daChay++;
-			const xanh = chay(goc, cap.lenh);
-			const hoan = thayMotLan(goc, ...cap.pha);
-			const pha = chay(goc, cap.lenh);
-			hoan();
-			const ghim = pha.log.includes(cap.ghim);
-			const ok = xanh.ma === 0 && pha.ma !== 0 && ghim;
-			console.log(`${cap.ten} xanh=${xanh.ma} do=${pha.ma} ghim=${ghim ? "ok" : "thieu"}`);
-			if (ok) dat++;
-			else console.error(`${cap.ten}:\n--- xanh\n${xanh.log.slice(-1200)}\n--- do\n${pha.log.slice(-1200)}`);
-		}
-	} finally {
-		goBanSao(goc);
-	}
-	if (daChay !== SO_CAP_KHAI) {
-		console.error(`da chay ${daChay} cap, khai ${SO_CAP_KHAI}`);
-		return 1;
-	}
-	return dat === SO_CAP_KHAI ? 0 : 1;
-}
+const coGhim = (ra, ghim) => ra.split("\n").some((d) => d.startsWith("error:") && d.includes(ghim));
 
+const banSao = dungBanSao("zhok-dot-bien");
+let daChay = 0;
+const hong = [];
 try {
-	process.exit(main());
+	for (const [ten, cmd, tep, cu, moi, ghim] of CAP) {
+		daChay += 1;
+		const truoc = lenh(banSao, cmd);
+		const traLai = thayMotLan(banSao, tep, cu, moi);
+		let sau;
+		try {
+			sau = lenh(banSao, cmd);
+		} finally {
+			traLai();
+		}
+		console.log(`${ten} xanh=${truoc.ma} do=${sau.ma} ghim=${coGhim(sau.ra, ghim) ? "ok" : "thieu"}`);
+		if (!(truoc.ma === 0 && sau.ma !== 0 && coGhim(sau.ra, ghim)))
+			hong.push(`${ten}\n--- truoc\n${truoc.ra.slice(-1200)}\n--- sau\n${sau.ra.slice(-1200)}`);
+	}
 } catch (loi) {
-	console.error(loi.message);
+	goBanSao(banSao);
+	console.log(`KHONG DO DUOC: ${loi.message}`);
 	process.exit(loi instanceof KhongDo ? 2 : 1);
 }
+goBanSao(banSao);
+for (const h of hong) console.error(h);
+if (daChay !== SO_CAP_KHAI) {
+	console.log(`da chay ${daChay} cap, khai ${SO_CAP_KHAI}`);
+	process.exit(1);
+}
+console.log(`DOT BIEN: ${SO_CAP_KHAI - hong.length}/${SO_CAP_KHAI} cap dat`);
+process.exit(hong.length === 0 ? 0 : 1);
