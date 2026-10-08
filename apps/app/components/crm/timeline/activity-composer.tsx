@@ -111,24 +111,26 @@ export function ActivityComposer({ anchor }: { anchor: TimelineAnchor }) {
 				/>
 
 				<InputGroupAddon align="block-end" className="gap-2 border-t">
-					<ToggleGroup
-						type="single"
-						value={type}
-						onValueChange={(next) => next && setType(next as ComposableType)}
-						size="sm"
-						spacing={0}
-					>
-						{TYPES.map((option) => (
-							<ToggleGroupItem
-								key={option}
-								value={option}
-								aria-label={activityLabel(option, locale)}
-							>
-								<ActivityIcon type={option} />
-								{activityLabel(option, locale)}
-							</ToggleGroupItem>
-						))}
-					</ToggleGroup>
+					<div className="min-w-0 overflow-x-auto">
+						<ToggleGroup
+							type="single"
+							value={type}
+							onValueChange={(next) => next && setType(next as ComposableType)}
+							size="sm"
+							spacing={0}
+						>
+							{TYPES.map((option) => (
+								<ToggleGroupItem
+									key={option}
+									value={option}
+									aria-label={activityLabel(option, locale)}
+								>
+									<ActivityIcon type={option} />
+									{activityLabel(option, locale)}
+								</ToggleGroupItem>
+							))}
+						</ToggleGroup>
+					</div>
 
 					{isTask ? (
 						<Popover>

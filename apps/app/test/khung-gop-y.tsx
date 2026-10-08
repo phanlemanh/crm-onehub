@@ -57,7 +57,8 @@ function thuTuc(duong: string) {
 			chon?: { getNextPageParam?: (trang: never) => unknown },
 		) => ({
 			queryKey: [duong, vao ?? null, "vo-han"],
-			queryFn: async () => doc(vao),
+			queryFn: async ({ pageParam }: { pageParam: string | null }) =>
+				doc(pageParam === null ? vao : { ...vao, cursor: pageParam }),
 			initialPageParam: null,
 			getNextPageParam: chon?.getNextPageParam ?? (() => undefined),
 		}),

@@ -97,7 +97,7 @@ async function phanHoiDong() {
 		ghi(`   mo hinh nhan (go chip): ${tin2.replace(/\n/g, " ⏎ ").slice(0, 200)}`);
 		buoc(4, tin2.includes(TEN.k22) ? "go chip ma tin van mang chu dong" : null);
 		await t.p.setViewport({ width: 375, height: MAN.kho[375].cao });
-		await moTrang(t, cuoc.id, "?tab=ban-nhap");
+		await moTrang(t, cuoc.id, "?tabSoan=ban-nhap");
 		await choThay(t.p, () => [...document.querySelectorAll("[data-dong]")].some((o) => o.checkVisibility()), "tab ban nhap", 15000);
 		await bamTrongDong(t.p, TEN.k22, m.dong.hoiKara);
 		const hep = await choThay(
