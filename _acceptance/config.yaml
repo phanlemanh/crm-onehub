@@ -1379,7 +1379,7 @@ executors:
     dva_hoi_quy: 'bun _acceptance/deal-va/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/deal-va/rang/khong-xoa-expect.mjs && bun run test -- "cd apps/api && bun test test/giai-doan-bao-cao.spec.ts" && bun run test -- "cd apps/agent && bun test test/giai-doan-agent.integration.spec.ts" && (cd apps/app && bun test ./test/agent-results.spec.ts) && (cd packages/telemetry && bun test)'
     gmd_tao_khi_cat: 'bun run test -- "cd apps/api && bun test test/giai-doan.spec.ts -t tao-khi-dau-da-cat"'
     gmd_seed: 'bun run test -- "cd apps/api && bun test --timeout 400000 test/giai-doan-seed.spec.ts"'
-    gmd_hoi_quy: 'bun _acceptance/giai-doan-mac-dinh/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/giai-doan-mac-dinh/rang/khong-xoa-expect.mjs && bun run test -- "cd apps/api && bun test test/giai-doan.spec.ts" && bun run check-types'
+    gmd_hoi_quy: 'bun _acceptance/giai-doan-mac-dinh/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/giai-doan-mac-dinh/rang/khong-xoa-expect.mjs --moc c1067c163 && test -z "$(git diff --name-only c1067c163..HEAD -- packages/db/prisma/schema.prisma packages/db/prisma/migrations)" && bun run test -- "cd apps/api && bun test test/giai-doan.spec.ts" && bun run check-types'
     dlt_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t "^loi"
     dlt_thu_lai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t thu-lai
     dlt_van_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t van-loi

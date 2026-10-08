@@ -44,12 +44,19 @@ evals:
       - "packages/**"
       - "_acceptance/giai-doan-mac-dinh/rang/duong-tao.mjs"
     expected: |
-      rang/duong-tao.mjs (goc kho suy tu vi tri tep): git ls-files duoi apps/ va packages/ duoi .ts/.tsx/.mjs, tru thu muc
-      test/, evals/, generated/, tep *.spec.*, *.dom.*, *.eval.*, *.test.*. Voi moi lan khop `.deal.create(`,
-      `.deal.createMany(`, `.deal.upsert(` lay tron khoi ngoac (dem ngoac), va moi `INSERT INTO "deal"` lay tron cau lenh.
-      Ma tran: in "<n> loi goi, <m> lenh SQL" (n > 0 — doi chung chong quet rong); moi khoi chua `stage` hoac `giaiDoan`;
-      khoi thieu -> in "THIEU <tep>:<dong>" va thoat 1. --tu-thu: thu muc tam co mot tep goi db.deal.create({ data: { name }})
-      -> thoat 1 goi ten tep do; mot tep co stage -> thoat 0.
+      rang/duong-tao.mjs (goc kho suy tu vi tri tep) dung TypeScript compiler API voi tsconfig cua tung goi trong apps/ va
+      packages/ (sau db:generate cua cay): duyet moi object literal ngoai thu muc test/, evals/, generated/ va tep
+      *.spec.*, *.dom.*, *.eval.*, *.test.*; lay kieu ngu canh (checker.getContextualType) — ten kieu khop
+      /^Deal(Unchecked)?Create(Many)?(Without\w+)?Input$/ hoac la nhanh create cua upsert/connectOrCreate cua Deal. Ma tran:
+        1 in "<n> object tao thoa thuan, <m> lenh SQL" — n > 0 (doi chung chong quet rong), va n >= so lan khop chuoi
+          `.deal.create(`/`.deal.upsert(` trong cung tap tep (kiem ke bang duong khac)
+        2 moi object co khoa stage hoac giaiDoan; kieu cua gia tri stage khong chua undefined
+        3 moi chuoi khop /insert\s+into\s+("?public"?\.)?"?deal"?\b/i trong tep ma san pham co cot stage
+        4 vi pham -> "THIEU <tep>:<dong> <dang>" va thoat 1
+      --tu-thu: thu muc tam co tsconfig va kieu Prisma gia lap dung ten that, moi dang mot tep thieu stage — goi thang,
+      long qua quan he (company.create data.deals.create), createMany, connectOrCreate, upsert chi co stage o update,
+      bi danh (const d = tx.deal), stage tuy chon (stage?: string), SQL chu thuong khong ngoac, "public"."deal" — moi tep
+      thoat 1 goi dung tep:dong; tep co stage day du thoat 0. In "tu-thu N/N".
 
   - id: E4
     criterion: AC-4
@@ -60,5 +67,8 @@ evals:
       - "apps/api/test/giai-doan.spec.ts"
       - "_acceptance/giai-doan-mac-dinh/rang/khong-xoa-expect.mjs"
     expected: |
-      rang/khong-xoa-expect.mjs (so tron cau expect, chuan hoa khoang trang — khuon cua deal-va, --tu-thu) tren
-      giai-doan.spec.ts: khong cau expect san co nao mat; roi chay tron giai-doan.spec.ts va `bun run check-types` — thoat 0.
+      rang/khong-xoa-expect.mjs --moc c1067c163 (moc ghim trong lenh, khong suy tu merge-base) tren giai-doan.spec.ts: so
+      tron cau expect, chuan hoa khoang trang ngoai chuoi; khong cau expect san co nao mat. --tu-thu co them doi chung: sua
+      mot ky tu trong chuoi ben trong expect -> thoat 1 goi dung dong. Roi: `git diff --name-only c1067c163..HEAD --
+      packages/db/prisma/schema.prisma packages/db/prisma/migrations` rong; chay tron giai-doan.spec.ts va `bun run
+      check-types` — thoat 0.
