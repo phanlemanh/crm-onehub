@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cfa18a79bdaedfac24353eb03d5443074ec91ff0
+verified_commit: eaebd612ba2f18634277e20e42fd431f992ca41b
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -283,3 +283,7 @@ none — every multi-run eval is uniform
 
 Round 1: REJECT — E8, E9, E10 do; AC-8 ghi token va ten bot moi ngoai giao dich truoc setWebhook. Returned to implementation.
 Round 2: PASS — doi bot chi ghi khoa truoc setWebhook, token va ten bot vao giao dich, go webhook bot moi khi giao dich hong; rieng-tu chay lai ca hai ma tran; tat ca 20 eval va 7 lenh suite xanh.
+
+### Re-pin lần 1 — 2026-10-08, do hoa cu do gop onehub sau chu ky
+run_id: repin-20261008T233044Z-62764
+sha: eaebd612ba2f18634277e20e42fd431f992ca41b · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E13 (E13 không khai paths), E20 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
