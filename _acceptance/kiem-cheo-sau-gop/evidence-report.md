@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 924875d7f0f7302df3600bb27559b17092501b27
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-09 — ký Cổng 2 trên verdict PASS 5/5 eval (S4 vòng 6, wf_686b6af2-c44). Ngoài-1..5, 7..9 (thẻ vòng 5) và Ngoài-1 (thẻ vòng 6) ghi Known limits; Ngoài-6 (vòng 5) và Ngoài-2 (vòng 6) chấp nhận, không sửa; Ngoài-10..12 (vòng 5) mở hợp đồng mới; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: kiem-cheo-sau-gop

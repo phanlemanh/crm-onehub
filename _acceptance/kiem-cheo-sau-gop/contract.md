@@ -5,7 +5,7 @@ slug: kiem-cheo-sau-gop
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08
 design_doc: _acceptance/kiem-cheo-sau-gop/design.md
@@ -75,3 +75,21 @@ giữ bản rút gọn trong lượt ghim lại, chuyển lời hứa AC-9 sang 
   đã dùng).» Vế kiểm chéo chuyển sang `kiem-cheo-sau-gop#AC-6`. Vế «năm spec Zalo đã ký không bị sửa
   so với merge-base» bị BỎ, không chuyển (dòng `descope` có tên trong sổ): nó là chốt một lần cho chính vòng
   `tra-loi-tin-nhac`, đã đạt khi vòng đó gộp.
+- Known limit (Cổng 2, Ngoài-1 thẻ vòng 5): một lần chạy eval lỡ ghi vào hồ sơ đã ký thì báo cáo đêm có thể nói «không
+  đọc được kết quả», thậm chí báo xanh, mà không gọi tên nguyên nhân thật (dem.mjs không đọc khoá
+  `cham_ho_so_da_thong` của làn).
+- Known limit (Cổng 2, Ngoài-2 thẻ vòng 5): `paths` của E5 không liệt `rang/lan-gia.mjs`; đổi làn giả về sau có thể
+  không làm E5 hoá cũ, lần đạt cũ vẫn đứng cho tới khi có người chạy lại.
+- Known limit (Cổng 2, Ngoài-3 thẻ vòng 5): bài kiểm cài lịch 1 giờ sáng chỉ thử với một lệnh giả, chưa thử lệnh thật
+  của kho; lệnh thật hỏng khi máy khởi động theo lịch thì bài vẫn xanh.
+- Known limit (Cổng 2, Ngoài-4 thẻ vòng 5): bài «lượt không có gì để đo thì không xin khoá, không dựng cây» chỉ nhìn
+  sau khi mọi thứ đã dọn; lượt đó lỡ xin khoá thì bài vẫn không đỏ.
+- Known limit (Cổng 2, Ngoài-5 thẻ vòng 5): khi mốc kiểm lần trước mất, hỏng hay không còn trên nhánh chính, chỉ ca
+  «mất» được thử đầu-cuối; hai ca còn lại chưa.
+- Known limit (Cổng 2, Ngoài-7 thẻ vòng 5): đơn xin khoá của lượt đêm bị bộ phát lịch từ chối thì lượt chờ 6 giờ rồi
+  chỉ ghi «khoá bận», không ai được báo lý do thật là đơn hỏng.
+- Known limit (Cổng 2, Ngoài-8 thẻ vòng 5): bài thử «tệp ngày luôn đủ trường» dùng dữ liệu tự dựng, không dùng tệp
+  thật do lượt đêm ghi.
+- Known limit (Cổng 2, Ngoài-9 thẻ vòng 5): bài thử chưa chứng minh đơn xin khoá hợp lệ ngay lúc bộ phát lịch đọc nó.
+- Known limit (Cổng 2, Ngoài-1 thẻ vòng 6): E1 (`node --test "scripts/kiem-cheo/test/*.test.mjs"`) vẫn thoát 0 khi
+  mẫu tên tệp không khớp bài nào; đổi tên hay dời tệp kiểm thì E1 vẫn xanh dù không bài nào chạy.
