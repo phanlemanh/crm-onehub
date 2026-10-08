@@ -970,6 +970,7 @@ executors:
     zhok_ngoai: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen-ngoai.spec.ts"
     zhok_hook: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen-ngoai.spec.ts -t hook && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen.spec.ts"
     zhok_nop_ngoai: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen-ngoai.spec.ts -t nop-ngoai"
+    zhok_khong_viec: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen-ngoai.spec.ts -t khong-viec"
     tln_chuyen_tiep: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chuyen-tiep.spec.ts"
     tln_cach_ly_tinh: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-cach-ly.spec.ts
     tln_chi_tieu_api: bun run test -- "cd apps/api && bun test test/tro-ly-okr-chi-tieu.spec.ts"

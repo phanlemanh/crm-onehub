@@ -69,3 +69,27 @@ tên KHÔNG đè được một subagent. eve vẫn phát `subagent-call` theo b
    `.env.example`, để trống ở production. Chiều `--do` cũ của E1 bỏ: chiều đỏ trên eve thật đã đo ở round 1 (`do-3`).
 5. **E6 xếp hàng qua `mot-luot.sh`.** Round 1 E6 đỏ «pass 0/3» vì dựng `eve` trong lúc E1 giữ `eve dev`.
 6. **Hằng tên.** Khoá của công cụ đè dùng `SUBAGENT_TRO_LY_OKR` thay cho chữ `"tro_ly_okr"` viết tay.
+
+## Sửa sau S4 round 3 (08/10)
+
+S4 round 3 REJECT, chỉ E8: lượt ép gọi `ep-1` có `→ subagent tro_ly_okr` và dòng hook mới, ZaloHoi `da-tra-loi`,
+nhưng tin Zalo là «…không có trong phần xem qua Zalo của OneHub Center. Bạn vui lòng mở OneHub Center trên máy tính để
+xem chi tiết KR.» — không có «OKR». Lượt `ep-2` trước đó xanh chỉ vì lần bốc thăm đó model nói «OKR».
+
+Nguyên nhân: trên đường subagent thật, phiên con không có việc (`viecCuaPhienCon` trả `null`), nên
+`instructions/viec.ts` trả `null` — phiên con không nhận chỉ dẫn nào và trả lời tuỳ ý; câu chỉ sang OKR
+(`TRO_LY_OKR.ngoaiPhien.lyDo`) chỉ nằm trong `execute` của công cụ đè. eve bỏ công cụ động ở bước replay, nên đây cũng
+là đường production của mọi lượt Zalo sau lượt đầu, không chỉ là đường đo.
+
+1. **Phiên con không có việc nhận một chỉ dẫn cố định (AC-8).** Ở `session.started`, khi không tìm thấy hàng việc,
+   `viec.ts` trả `defineInstructions({ markdown: TRO_LY_OKR.ngoaiPhien.chiDanKhongViec })`: không gọi công cụ nào, trả
+   về nguyên văn `lyDo`. Việc đã kết thúc vẫn `null`; có việc thì như cũ. `chiDanKhongViec` dựng từ `lyDo` trong
+   `lib/okr/config.ts`, không chép tay. Một phiên OKR thật mà tìm việc hụt (quá `timViecCon`) cũng nhận chỉ dẫn này — vốn
+   trước đây nó đã không có chỉ dẫn và không nộp được gì, nên không mất gì.
+2. **Công tắc đo không chạy ở production (AC-2).** `boDe()` thêm điều kiện `NODE_ENV !== "production"`, như `ghiDe()`
+   ở `lib/okr-sheets.ts`; bàn đo chạy `eve dev` không đặt `NODE_ENV=production` nên E8 không đổi. Chú thích ở
+   `.env.example` theo cùng lời của `OKR_SHEETS_*`.
+3. **Đã cân và bỏ:** sửa chỉ dẫn kênh Zalo (`lib/zalo-chi-dan.ts`) để tác nhân gốc luôn nói «OKR» — đổi giọng mọi câu
+   trả lời Zalo, nằm ngoài hàng sửa nóng; nới thước E8 bỏ điều «có OKR» — bỏ đúng lời hứa của AC-7.
+4. **Thước:** E4 đòi các đối chứng mà `rang/pham-vi.mjs` hiện chưa cài (phát hiện t4 của round 3) — round 4 cài đủ
+   trước khi chấm.

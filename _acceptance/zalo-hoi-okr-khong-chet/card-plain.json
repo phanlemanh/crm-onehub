@@ -1,26 +1,85 @@
 {
   "feature_plain": "Hỏi bot Zalo về KR hay OKR thì bot luôn trả lời một câu có nghĩa — kể cả khi trợ lý AI vẫn chọn gọi Trợ lý OKR, lượt trả lời không còn chết thành «Tôi chưa trả lời được câu này».",
   "will_do": [
-    { "id": "AC-1", "p": "Sẽ trả lời câu c33 về KR có nghĩa trong sáu lượt thật liền trên Zalo, kể cả lượt mà trợ lý AI vẫn gọi Trợ lý OKR." },
-    { "id": "AC-2", "p": "Sẽ cho trợ lý AI ngoài việc OKR thấy Trợ lý OKR là «không dùng được ở đây», để nó ít gọi hơn; việc OKR nền vẫn thấy Trợ lý OKR thật." },
-    { "id": "AC-3", "p": "Sẽ để chốt uỷ quyền OKR chỉ ghi một dòng nhật ký, không giết lượt, khi Trợ lý OKR bị gọi ngoài việc OKR; trong việc OKR thì vẫn chặn như cũ." },
-    { "id": "AC-4", "p": "Sẽ chỉ chạm đúng các tệp đã khai, gồm cả lượt ghim lại hồ sơ đã ký tro-ly-okr-nen." },
-    { "id": "AC-5", "p": "Sẽ giữ nguyên việc OKR nền: nó vẫn gọi Trợ lý OKR thật và chỉ nộp đề xuất." },
-    { "id": "AC-7", "p": "Sẽ chứng trên máy thật rằng khi trợ lý AI gọi Trợ lý OKR thật, lượt Zalo vẫn sống và trả lời có nghĩa." }
+    {
+      "id": "AC-1",
+      "p": "Sẽ trả lời câu c33 về KR có nghĩa trong sáu lượt thật liền trên Zalo, kể cả lượt mà trợ lý AI vẫn gọi Trợ lý OKR."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ cho trợ lý AI ngoài việc OKR thấy Trợ lý OKR là «không dùng được ở đây», để nó ít gọi hơn; việc OKR nền vẫn thấy Trợ lý OKR thật; công tắc chỉ-để-đo không có tác dụng trên bản chạy thật."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ để chốt uỷ quyền OKR chỉ ghi một dòng nhật ký, không giết lượt, khi Trợ lý OKR bị gọi ngoài việc OKR; trong việc OKR thì vẫn chặn như cũ."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ chỉ chạm đúng các tệp đã khai, gồm cả lượt ghim lại hồ sơ đã ký tro-ly-okr-nen."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ giữ nguyên việc OKR nền: nó vẫn gọi Trợ lý OKR thật và chỉ nộp đề xuất."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ chứng trên máy thật rằng khi trợ lý AI gọi Trợ lý OKR thật, lượt Zalo vẫn sống và trả lời có nghĩa."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ cho Trợ lý OKR, khi bị gọi dưới một cuộc hỏi Zalo không có việc OKR nào, nhận đúng một chỉ dẫn: trả về câu chỉ người hỏi sang mục OKR của OneHub Center, không làm gì khác."
+    }
   ],
   "wont_do": [
-    { "id": "AC-6", "p": "Sẽ KHÔNG để Trợ lý OKR chạy dưới một cuộc hỏi Zalo ghi được đề xuất hay tóm tắt nào — kể cả khi đúng lúc đó có việc OKR nền của người khác đang chạy." },
-    { "id": "OOS-1", "p": "Không xử webhook Zalo trả 403 — đã thành hàng H4." },
-    { "id": "OOS-2", "p": "Không sửa nhật ký vứt lý do của Zalo — đã thành hàng H4." },
-    { "id": "OOS-3", "p": "Zalo chưa trả số liệu OKR thật cho câu hỏi KR." },
-    { "id": "OOS-4", "p": "Không đổi chỉ dẫn của kênh Zalo." },
-    { "id": "OOS-5", "p": "Không đo riêng chuyện eve bỏ công cụ động khi chạy lại — phép đo ép gọi đã đo đúng hậu quả của nó." }
+    {
+      "id": "AC-6",
+      "p": "Sẽ KHÔNG để Trợ lý OKR chạy dưới một cuộc hỏi Zalo ghi được đề xuất hay tóm tắt nào — kể cả khi đúng lúc đó có việc OKR nền của người khác đang chạy."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không xử webhook Zalo trả 403 — đã thành hàng H4."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không sửa nhật ký vứt lý do của Zalo — đã thành hàng H4."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Zalo chưa trả số liệu OKR thật cho câu hỏi KR."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi chỉ dẫn của kênh Zalo."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không đo riêng chuyện eve bỏ công cụ động khi chạy lại — phép đo ép gọi đã đo đúng hậu quả của nó."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Câu trả lời cuối trên Zalo vẫn do trợ lý AI viết: AC-8 chỉ bảo đảm nó nhận được câu chỉ sang OKR; chữ «OKR» trên tin Zalo đo ở AC-7."
+    }
   ],
   "gap_probe_plain": [
-    { "i": 0, "p": "Phép đo cũ cất tệp ra khỏi cây trong lúc các phép đo khác chạy song song, nên dễ xanh hay đỏ oan — nay tắt bằng một công tắc chỉ cho lượt đo, không chạm cây." },
-    { "i": 1, "p": "Phép đo chính còn coi «trợ lý AI gọi Trợ lý OKR» là lỗi, trong khi hướng mới cho phép — đã sửa: gọi mà lượt vẫn sống là đúng." },
-    { "i": 2, "p": "Phép đo ép gọi chưa đòi câu trả lời có nghĩa — đã đòi đủ như phép đo chính." },
-    { "i": 3, "p": "Chưa đo ca có việc OKR của người khác đang chạy — đã thêm ca đó và một cặp phá." },
-    { "i": 4, "p": "Ranh giới chưa cho lượt ghim lại hồ sơ đã ký tro-ly-okr-nen — đã cho, giới hạn đúng phần ghim lại." }
+    {
+      "i": 0,
+      "p": "Phép đo cũ cất tệp ra khỏi cây trong lúc các phép đo khác chạy song song, nên dễ xanh hay đỏ oan — nay tắt bằng một công tắc chỉ cho lượt đo, không chạm cây."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo chính còn coi «trợ lý AI gọi Trợ lý OKR» là lỗi, trong khi hướng mới cho phép — đã sửa: gọi mà lượt vẫn sống là đúng."
+    },
+    {
+      "i": 2,
+      "p": "Phép đo ép gọi chưa đòi câu trả lời có nghĩa — đã đòi đủ như phép đo chính."
+    },
+    {
+      "i": 3,
+      "p": "Chưa đo ca có việc OKR của người khác đang chạy — đã thêm ca đó và một cặp phá."
+    },
+    {
+      "i": 4,
+      "p": "Ranh giới chưa cho lượt ghim lại hồ sơ đã ký tro-ly-okr-nen — đã cho, giới hạn đúng phần ghim lại."
+    }
   ]
 }
