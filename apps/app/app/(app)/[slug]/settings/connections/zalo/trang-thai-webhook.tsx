@@ -15,7 +15,11 @@ import { ZALO_MAN } from "@/lib/nhac-qua-zalo-man";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
-export type TrangThaiWebhook = "da-dang-ky" | "can-https" | "chua-dang-ky";
+export type TrangThaiWebhook =
+	| "da-dang-ky"
+	| "can-https"
+	| "chua-dang-ky"
+	| "khoa-lech";
 
 export function TrangThaiWebhookZalo({
 	trangThai,
@@ -31,7 +35,7 @@ export function TrangThaiWebhookZalo({
 	const dangKyLai = useMutation(
 		trpc.zalo.luuBot.mutationOptions({
 			onSuccess: async (kq) => {
-				if (kq.webhook === "zalo-tu-choi") {
+				if (kq.ketQua !== "da-luu" || kq.webhook === "zalo-tu-choi") {
 					toast.warning(t.dangKyLaiChuaXong);
 				} else {
 					toast.success(t.daDangKyLai);
@@ -65,12 +69,15 @@ export function TrangThaiWebhookZalo({
 		);
 	}
 
+	const khoaLech = trangThai === "khoa-lech";
 	return (
 		<Alert variant="warning">
 			<Icon icon={Warning} />
-			<AlertTitle>{t.chuaWebhookTieuDe}</AlertTitle>
+			<AlertTitle>
+				{khoaLech ? t.khoaLechTieuDe : t.chuaWebhookTieuDe}
+			</AlertTitle>
 			<AlertDescription>
-				<p>{t.chuaWebhookMoTa}</p>
+				<p>{khoaLech ? t.khoaLechMoTa : t.chuaWebhookMoTa}</p>
 				{canManage ? (
 					<Button
 						variant="outline"

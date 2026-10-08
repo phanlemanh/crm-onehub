@@ -170,7 +170,7 @@ describe("o-token-canh-bao", () => {
 	for (const ngonNgu of NGON_NGU) {
 		test(`o-token-canh-bao: (${ngonNgu}) goi thu hong -> mot canh bao goi ten bot va ten nut, o trong, lam moi, tai lai`, async () => {
 			const nhanNut = await nhanNutDangKyLai(ngonNgu);
-			phanHoi = { tenBot: TEN_MOI, webhook: "zalo-tu-choi" };
+			phanHoi = { ketQua: "da-luu", tenBot: TEN_MOI, webhook: "zalo-tu-choi" };
 			const vo = await mo(<OToken daBat goiToken="cuoi" />, ngonNgu);
 			await luuToken(vo);
 			const canhBao = toasts.filter((x) => x.loai === "warning");
@@ -208,7 +208,7 @@ describe("o-token-canh-bao", () => {
 	}
 
 	test("o-token-canh-bao: doi chung, goi thu duoc -> mot thanh cong Da bat, khong canh bao", async () => {
-		phanHoi = { tenBot: TEN_MOI, webhook: "da-dang-ky" };
+		phanHoi = { ketQua: "da-luu", tenBot: TEN_MOI, webhook: "da-dang-ky" };
 		const vo = await mo(<OToken daBat goiToken="cuoi" />, "vi");
 		await luuToken(vo);
 		expect(toasts, "goi thu duoc la thanh cong").toEqual([
@@ -237,7 +237,7 @@ describe("dang-ky-lai-canh-bao", () => {
 	const t = nhacQuaZaloMessages("vi").ketNoi;
 
 	test("dang-ky-lai-canh-bao: van goi thu hong -> canh bao, khong bao da dang ky lai, tai lai", async () => {
-		phanHoi = { tenBot: TEN_MOI, webhook: "zalo-tu-choi" };
+		phanHoi = { ketQua: "da-luu", tenBot: TEN_MOI, webhook: "zalo-tu-choi" };
 		await bamDangKyLai();
 		expect(
 			{
@@ -251,7 +251,7 @@ describe("dang-ky-lai-canh-bao", () => {
 	});
 
 	test("dang-ky-lai-canh-bao: doi chung, goi thu duoc -> Da dang ky nhan tin lai", async () => {
-		phanHoi = { tenBot: TEN_MOI, webhook: "da-dang-ky" };
+		phanHoi = { ketQua: "da-luu", tenBot: TEN_MOI, webhook: "da-dang-ky" };
 		await bamDangKyLai();
 		expect(toasts, "dang ky lai duoc thi bao thanh cong").toEqual([
 			{ loai: "success", chu: t.daDangKyLai },
