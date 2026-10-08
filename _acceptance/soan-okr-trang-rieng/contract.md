@@ -5,7 +5,7 @@ slug: soan-okr-trang-rieng
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-07
 design_doc: docs/superpowers/specs/2026-10-07-soan-okr-trang-rieng-design.md
@@ -95,3 +95,11 @@ Bốn ngưỡng của `opportunity.md` đo ở lái-thử người-lạ trước
 - Kara của phép đo màn chạy bằng mô hình giả có kịch bản viết trước (`apps/agent-okr/test/support/mo-hinh-gia.ts`),
   không gọi mô hình thật.
 - Mô tả PR ghi dòng «bậc 2 — resizable» theo `docs/design.md`.
+- Known limits (Ngoài-1, Cổng 2): chiều đỏ `khoa-theo-id` của phép đo số nuốt lỗi chặn phản hồi của chính nó;
+  một chiều đỏ hỏng không tự báo.
+- Known limits (Ngoài-2, Cổng 2): ca DOM «KR Kara vừa bỏ không thành quyết định hoàn tác» chỉ đòi tên KR đã bỏ
+  vắng mặt, chưa có đối chứng dương.
+- Known limits (Ngoài-6, Cổng 2): khi đang lọc «chỉ dòng chờ», bấm mục «Còn thiếu» không phản ứng; tắt bộ lọc
+  thì tới được ô số.
+- Known limits (Ngoài-7, Cổng 2): bài `cau-noi-server` kiểm cờ cầu nối bằng cách đọc mã nguồn trang soạn, không
+  đo cờ `TrangSoan` nhận lúc chạy.
