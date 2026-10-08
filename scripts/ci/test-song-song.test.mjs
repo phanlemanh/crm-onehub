@@ -37,6 +37,7 @@ appendFileSync(process.env.CTD_SO, JSON.stringify({ loai: "nhom", doiSo, bat, ke
 console.log("test-run: crm_gia" + process.pid + "_test is this run's database");
 if (process.env.CTD_KHONG_XUONG) process.stdout.write("dong cuoi khong xuong dong");
 if (doiSo.includes("--filter=" + process.env.CTD_NHIEU)) for (let i = 0; i < 60000; i++) process.stdout.write("dong dai cua nhom lon ".repeat(4) + i + "\\n");
+if (process.env.CTD_TAT_CA_DO) process.exit(1);
 const doNhom = (process.env.CTD_DO || "").split(",").filter(Boolean);
 process.exit(doiSo.some((a) => doNhom.includes(a.replace("--filter=", ""))) ? 1 : 0);
 `,
@@ -66,7 +67,7 @@ function chay(doiSo, env = {}) {
 		{
 			encoding: "utf8",
 			maxBuffer: 1 << 26,
-			env: { ...process.env, CTD_SO: so, ...env },
+			env: { ...process.env, CI: "true", CTD_SO: so, ...env },
 		},
 	);
 	const dong = readFileSync(so, "utf8")
@@ -178,7 +179,11 @@ describe("ctd-ham", () => {
 			}),
 		);
 		const thieu = lenhThieuTran(goc, tran);
-		assert.ok(thieu.includes("app: test:dom — bun x/chay-tung-tep-dom.ts --timeout 5000"));
+		assert.ok(
+			thieu.includes(
+				"app: test:dom — bun x/chay-tung-tep-dom.ts --timeout 5000",
+			),
+		);
 		assert.ok(thieu.includes("api: test — bun test"));
 		assert.ok(!thieu.some((d) => d.startsWith("app: test —")));
 		assert.ok(!thieu.some((d) => d.includes("test:watch")));
@@ -186,6 +191,40 @@ describe("ctd-ham", () => {
 });
 
 describe("ctd-cli", () => {
+	test("(m) tai cho: khong CI, khong co -> mot luot test-run argv rong, khong dung truoc, khong nhom", () => {
+		const r = chay([], { CI: "", CTD_IN_ARGV: "1" });
+		assert.equal(r.ma, 0, r.ra);
+		assert.equal(
+			r.turbo.length,
+			0,
+			`dung truoc khong duoc chay tai cho: ${r.ra}`,
+		);
+		const argv = r.ra.split("\n").filter((d) => d.startsWith("["));
+		assert.deepEqual(
+			argv,
+			["[]"],
+			`test-run phai nhan dung mot lan voi argv rong: ${r.ra}`,
+		);
+		assert.doesNotMatch(r.ra, /^nhom /m, "tai cho khong duoc co dong nhom");
+	});
+
+	test("(m) tai cho: test-run thoat 1 -> CLI thoat 1", () => {
+		const r = chay([], { CI: "", CTD_DO: "", CTD_TAT_CA_DO: "1" });
+		assert.equal(r.ma, 1, r.ra);
+	});
+
+	for (const [nhan, doiSo, env] of [
+		["CI=true", [], { CI: "true" }],
+		["--song-song 1 khong CI", ["--song-song", "1"], { CI: "" }],
+	]) {
+		test(`(m) ${nhan} -> bon nhom`, () => {
+			const r = chay(doiSo, env);
+			assert.equal(r.ma, 0, r.ra);
+			assert.equal(r.spawn.length, 4, `phai chay bon nhom: ${r.ra}`);
+			assert.equal(r.turbo.length, 1, r.ra);
+		});
+	}
+
 	test("(f) doi chung: bon nhom xanh -> CLI thoat 0, bon dong ket qua, bon CSDL khac nhau", () => {
 		const r = chay([]);
 		assert.equal(r.ma, 0, r.ra);

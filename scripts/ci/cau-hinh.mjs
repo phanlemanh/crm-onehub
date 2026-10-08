@@ -29,6 +29,7 @@ export const CHAY_TEST = {
 	maDungTruoc: 3,
 	maTinHieuGoc: 128,
 	bienRiengMoiLuot: ["TEST_RUN_ID"],
+	batSongSong: { bien: "CI", giaTri: "true" },
 	tranMoiCaMs: 15 * MS_MOI_GIAY,
 	tranMoiCa: {
 		khoaScript: /^test(:|$)/,

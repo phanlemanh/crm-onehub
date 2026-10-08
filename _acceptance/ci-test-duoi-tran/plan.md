@@ -13,3 +13,11 @@
 - Verify: lượt 3 xanh — tường 227 s, tổng nhóm 714 s, 4 tóm tắt. `ci-thoi-gian` trả 2 khi chưa có CI. Phục vụ E2, E3.
 
 ### Task 3: PR nháp `--base onehub` để CI đo AC-6.
+
+### Task 4 (independent: false): chọn chế độ — song song chỉ khi `CI=true` hoặc cờ `--song-song` (AC-7)
+- Không đối số, không CI, không cờ → một lượt `test-run.ts` argv rỗng, không dựng trước, không nhóm (như trước vòng này).
+- Biến bật nằm ở `CHAY_TEST.batSongSong`; bộ kiểm đặt `CI` tường minh cho mọi ca CLI để không phụ thuộc máy chạy.
+- Verify: ô (m) của E1 — tại chỗ 1 lượt argv rỗng, 0 dựng trước; CI=true → bốn nhóm; `--song-song 1` → bốn nhóm; phá-thử: bỏ nhánh chọn chế độ → ô (m) đỏ ghim thông điệp. Phục vụ E1.
+
+### Task 5 (independent: true): trần chờ mỗi ca 15 s ở 11 `package.json` (AC-8) — đã làm ở S3 lượt trước (8bf0f205f)
+- `CHAY_TEST.tranMoiCaMs`, `lenhThieuTran`, ô (f)(g) của `ctd-ham`. Phục vụ E1.

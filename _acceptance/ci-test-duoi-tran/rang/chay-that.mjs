@@ -35,7 +35,7 @@ function chinh() {
 	const fileTruoc = join(os.tmpdir(), `ctd-truoc-${process.pid}.txt`);
 	writeFileSync(fileTruoc, truoc.join("\n"));
 	const bat = Date.now();
-	const r = spawnSync("bun", ["run", "test"], {
+	const r = spawnSync("bun", ["run", "test", "--song-song", "4"], {
 		cwd: GOC,
 		encoding: "utf8",
 		timeout: TRAN_MS,

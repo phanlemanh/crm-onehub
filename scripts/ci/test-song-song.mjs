@@ -183,6 +183,10 @@ export async function chinh(argv) {
 		: join(goc, CHAY_TEST.testRun);
 	const thang = chuyenDoiSo(conLai, testRun);
 	if (thang) return chuyenThang(thang, goc);
+	const { bien, giaTri } = CHAY_TEST.batSongSong;
+	if (co["song-song"] === undefined && process.env[bien] !== giaTri) {
+		return chuyenThang([testRun], goc);
+	}
 	const goi = goiCoTest(goc);
 	const loi = dungNhom(goi, NHOM_TEST);
 	if (loi.length > 0) {

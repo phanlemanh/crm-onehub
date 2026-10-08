@@ -5,7 +5,7 @@ slug: ci-test-duoi-tran
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T05:55:55Z
 design_doc: _acceptance/ci-test-duoi-tran/design.md
