@@ -68,7 +68,15 @@ export function bao({
 	const thuMuc = join(goc, KIEM_CHEO.thuMuc);
 	mkdirSync(thuMuc, { recursive: true });
 	const tep = join(thuMuc, `${ngayLuot(now())}.json`);
-	ghiNguyenTu(tep, `${JSON.stringify(ketQua, null, 2)}\n`);
+	const day = {
+		tu: null,
+		den: null,
+		lan_gop: [],
+		ho_so: [],
+		do: [],
+		...ketQua,
+	};
+	ghiNguyenTu(tep, `${JSON.stringify(day, null, 2)}\n`);
 	if (!KIEM_CHEO.baoNguoi.includes(ketQua.ket_qua)) return { tep };
 	const noiDung = tomTat(ketQua);
 	if (dot && existsSync(join(dot, "yeu-cau"))) {

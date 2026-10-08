@@ -1,41 +1,16 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { join } from "node:path";
 import { KIEM_CHEO } from "./cau-hinh.mjs";
 
-export function khuon(glob) {
-	let re = "";
-	for (let i = 0; i < glob.length; i++) {
-		const c = glob[i];
-		if (c === "*" && glob[i + 1] === "*" && glob[i + 2] === "/") {
-			re += "(?:.*/)?";
-			i += 2;
-		} else if (c === "*" && glob[i + 1] === "*") {
-			re += ".*";
-			i += 1;
-		} else if (c === "*") {
-			re += "[^/]*";
-		} else {
-			re += c.replace(/[.+?^${}()|[\]\\]/g, "\\$&");
-		}
-	}
-	return new RegExp(`^${re}$`);
-}
+const require = createRequire(import.meta.url);
+const { evalPathsOf, pathGlobToRe } = require("../../lib/evidence-core.cjs");
+const { parseEvals } = require("../../lib/eval-yaml.cjs");
+
+export const khuon = pathGlobToRe;
 
 export function duongCua(text) {
-	const ra = [];
-	let thut = -1;
-	for (const dong of text.split("\n")) {
-		const mo = dong.match(/^(\s*)paths:\s*$/);
-		if (mo) {
-			thut = mo[1].length;
-			continue;
-		}
-		if (thut < 0) continue;
-		const muc = dong.match(/^(\s*)-\s+"?([^"#]+?)"?\s*$/);
-		if (muc && muc[1].length >= thut) ra.push(muc[2]);
-		else thut = -1;
-	}
-	return ra;
+	return parseEvals(text, []).flatMap((e) => evalPathsOf(text, e.id) ?? []);
 }
 
 export function trangThai(goc, slug) {

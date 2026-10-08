@@ -48,7 +48,10 @@ export function taoKho() {
 		dem += 1;
 		const ten = `viec-${dem}`;
 		git("checkout", "-q", "-b", ten, nhanh);
-		for (const [tep, noiDung] of Object.entries(tepMap)) ghi(tep, noiDung);
+		for (const [tep, noiDung] of Object.entries(tepMap)) {
+			if (noiDung === null) rmSync(join(goc, tep), { force: true });
+			else ghi(tep, noiDung);
+		}
 		git("add", "-A");
 		git("commit", "-q", "-m", ten);
 		git("checkout", "-q", nhanh);
@@ -56,7 +59,10 @@ export function taoKho() {
 		git("push", "-q", "origin", nhanh);
 		return git("rev-parse", "HEAD");
 	};
-	const hoSo = (slug, { status = "signed-off", paths = [], evals } = {}) => {
+	const hoSo = (
+		slug,
+		{ status = "signed-off", paths = [], evals, kieuDong = false } = {},
+	) => {
 		ghi(
 			`_acceptance/${slug}/contract.md`,
 			`---\nslug: ${slug}\nstatus: ${status}\n---\n`,
@@ -64,7 +70,9 @@ export function taoKho() {
 		ghi(
 			`_acceptance/${slug}/evals.yaml`,
 			evals ??
-				`schema_version: 1\nslug: ${slug}\nevals:\n  - id: E1\n    executor: script\n    cmd: node kiem.js\n    paths:\n${paths.map((p) => `      - "${p}"`).join("\n")}\n`,
+				(kieuDong
+					? `schema_version: 1\nslug: ${slug}\nevals:\n  - id: E1\n    executor: script\n    cmd: node kiem.js\n    paths: [${paths.map((p) => `"${p}"`).join(", ")}]\n`
+					: `schema_version: 1\nslug: ${slug}\nevals:\n  - id: E1\n    executor: script\n    cmd: node kiem.js\n    paths:\n${paths.map((p) => `      - "${p}"`).join("\n")}\n`),
 		);
 	};
 	return {

@@ -9,6 +9,7 @@ const GOC = resolve(import.meta.dirname, "..", "..", "..");
 const DEM = join(GOC, "scripts", "kiem-cheo", "dem.mjs");
 const LAN_GIA = join(import.meta.dirname, "lan-gia.mjs");
 const KIEM = `const fs = require("node:fs");
+if (fs.existsSync("cham.txt")) Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 20000);
 const dem = process.env.KCS_DEM;
 if (dem) {
   const n = (fs.existsSync(dem) ? Number(fs.readFileSync(dem, "utf8")) : 0) + 1;
@@ -271,6 +272,38 @@ o(
 		}
 		if (song) throw new Error(`tien trinh con ${pid} van song`);
 		bang(r.khoa, false, "khoa s4 con");
+		bang(r.moc, null, "moc.json");
+		kho.don();
+	},
+);
+
+o(
+	"(j) lan thoat ma 4 (tu dung o tran cua lan) -> khong-chay-duoc, moc khong tien",
+	() => {
+		const { kho, T } = dungKho({ gop: [sanPham("tot2")] });
+		const r = chay({ kho, T, env: { KCS_LAN_MA: "4" } });
+		bang(r.ket?.ket_qua, "khong-chay-duoc", "ket_qua");
+		if (!/lan dung som \(ma 4[,)]/.test(r.ket.ly_do))
+			throw new Error(`ly_do: ${r.ket.ly_do}`);
+		bang(r.moc, null, "moc.json");
+		kho.don();
+	},
+);
+
+o(
+	"(k) tran no giua lenh tim nhi phan -> khong-chay-duoc vuot tran, khong phan loai",
+	() => {
+		const { kho, T } = dungKho({
+			gop: [
+				{ tep: { "cham.txt": "1" } },
+				{ tep: { "cham.txt": null, "san-pham.txt": "hong" } },
+			],
+		});
+		const r = chay({ kho, T, env: { KIEM_CHEO_TRAN_PHUT: "0.08" } });
+		bang(r.ket?.ket_qua, "khong-chay-duoc", "ket_qua");
+		if (!/vuot tran/.test(r.ket.ly_do))
+			throw new Error(`ly_do: ${r.ket.ly_do}`);
+		bang(r.ket.do, [], "khong duoc ghi phan loai do lenh bi giet");
 		bang(r.moc, null, "moc.json");
 		kho.don();
 	},

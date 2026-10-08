@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { after, describe, test } from "node:test";
 import { duongCua, khuon, tapCham } from "../tap-cham.mjs";
 import { taoKho } from "./kho-gia.mjs";
@@ -16,6 +18,10 @@ kho.hoSo("dang-lam-cham", {
 	status: "implemented",
 	paths: ["apps/api/src/**"],
 });
+kho.hoSo("dong-cham", {
+	paths: ["apps/api/src/**", "khac/**"],
+	kieuDong: true,
+});
 kho.hoSo("rang-cham", {
 	paths: ["_acceptance/rang-cham/rang/**", "apps/khong-doi/**"],
 });
@@ -28,6 +34,22 @@ const TEP_DOI = [
 ];
 
 describe("kcs-tap-cham", () => {
+	test("(b) ho so that chi khai paths kieu mot dong (bo-xuong-kara) van doc duoc glob", () => {
+		const goc = resolve(import.meta.dirname, "..", "..", "..");
+		const text = readFileSync(
+			join(goc, "_acceptance", "bo-xuong-kara", "evals.yaml"),
+			"utf8",
+		);
+		assert.ok(
+			/paths:\s*\[/.test(text),
+			"fixture that phai co paths kieu mot dong",
+		);
+		assert.ok(
+			duongCua(text).length > 0,
+			"paths kieu mot dong khong duoc roi thanh rong",
+		);
+	});
+
 	test("(b) dung hai ho so da ky bi cham, theo thu tu ten", () => {
 		const tap = tapCham({
 			goc: kho.goc,
@@ -35,7 +57,7 @@ describe("kcs-tap-cham", () => {
 		});
 		assert.deepEqual(
 			tap.map((h) => h.slug),
-			["ky-cham", "may-cham"],
+			["dong-cham", "ky-cham", "may-cham"],
 			"tap cham phai la ho so signed-off/machine-cleared co paths khop",
 		);
 	});

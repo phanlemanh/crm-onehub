@@ -72,4 +72,6 @@ for (const slug of slugs) {
 		console.log(dongEval(slug, e.id, e.cmd, ma));
 	}
 }
-process.exit(doBatKy ? 1 : 0);
+process.exit(
+	process.env.KCS_LAN_MA ? Number(process.env.KCS_LAN_MA) : doBatKy ? 1 : 0,
+);

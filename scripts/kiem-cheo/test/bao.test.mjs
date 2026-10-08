@@ -110,6 +110,21 @@ describe("kcs-bao", () => {
 		});
 	}
 
+	test("(h) dau vao thieu khoa (loi som) -> tep ngay van du khoa", () => {
+		const { goc } = moi("thieu-khoa");
+		bao({
+			goc,
+			ketQua: { ket_qua: "loi", ly_do: "moc vang" },
+			dot: null,
+			thongBao: () => {},
+			now: () => NOW,
+		});
+		const ngay = JSON.parse(readFileSync(tepNgay(goc), "utf8"));
+		for (const k of ["ket_qua", "tu", "den", "lan_gop", "ho_so", "do"]) {
+			assert.ok(k in ngay, `tep ngay thieu ${k}`);
+		}
+	});
+
 	for (const ketQua of ["xanh", "khong-gop-moi", "bo-luot-khoa-ban"]) {
 		test(`(h) ${ketQua} -> 0 yeu-cau, 0 thong bao, van co tep ngay`, () => {
 			const { goc, dot } = moi(`im-${ketQua}`);

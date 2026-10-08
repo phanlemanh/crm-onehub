@@ -130,6 +130,7 @@ async function dungCay({ git, goc, cay, sha, chay }) {
 	if (existsSync(env)) symlinkSync(env, join(cay, ".env"));
 	const lenh = process.env.KIEM_CHEO_DUNG_CAY ?? DUNG_CAY_MAC_DINH;
 	const r = await chay(lenh, cay);
+	if (r.vuot) throw new VuotTran();
 	if (r.ma !== 0) throw new Error(`dung cay: \`${lenh}\` thoat ${r.ma}`);
 }
 
@@ -137,6 +138,7 @@ async function datCay({ git, cay, sha, chay }) {
 	git("-C", cay, "checkout", "--detach", "-q", sha);
 	const lenh = process.env.KIEM_CHEO_DUNG_CAY ?? DUNG_CAY_MAC_DINH;
 	const r = await chay(lenh, cay);
+	if (r.vuot) throw new VuotTran();
 	if (r.ma !== 0)
 		throw new Error(`dung cay o ${sha.slice(0, 9)}: thoat ${r.ma}`);
 }
@@ -285,6 +287,9 @@ async function luotTho({ co, goc, ket, now }) {
 					tep: log,
 				});
 				if (lan.vuot) throw new VuotTran();
+				if (!KIEM_CHEO.lan.maHopLe.includes(lan.ma)) {
+					throw new Error(`lan dung som (ma ${lan.ma}, log ${log})`);
+				}
 				const doc = docLan(lan.ra);
 				if (doc.suite.length === 0) {
 					throw new Error(
@@ -310,7 +315,9 @@ async function luotTho({ co, goc, ket, now }) {
 					}
 					const chay = async (sha) => {
 						await datCay({ git, cay, sha, chay: may.chay });
-						return (await may.chay(e.lenh, cay)).ma;
+						const r = await may.chay(e.lenh, cay);
+						if (r.vuot) throw new VuotTran();
+						return r.ma;
 					};
 					const kq = await phanLoai({
 						D,

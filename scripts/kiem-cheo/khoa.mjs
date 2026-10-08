@@ -48,6 +48,7 @@ async function quaBoPhatLich({ f, thuMuc, cay, moc, now, cho, choToiDaMs }) {
 	const don = join(thuMuc, "xin", TEN_DON);
 	const chuTep = join(thuMuc, "khoa", loai, "chu.json");
 	f.mkdirSync(join(thuMuc, "xin"), { recursive: true });
+	f.mkdirSync(cay, { recursive: true });
 	ghiNguyenTu(
 		f,
 		don,

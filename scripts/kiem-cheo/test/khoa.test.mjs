@@ -11,6 +11,7 @@ import fs, {
 import os from "node:os";
 import { join } from "node:path";
 import { after, describe, test } from "node:test";
+import { kiemDon } from "../../dieu-phoi/hinh-dang.mjs";
 import { KIEM_CHEO } from "../cau-hinh.mjs";
 import { layKhoa, voiKhoa } from "../khoa.mjs";
 
@@ -33,7 +34,7 @@ function dotGia(ten, pid) {
 }
 
 const DON = `${KIEM_CHEO.khoa.phien}-${KIEM_CHEO.khoa.loai}.json`;
-const CAY = "/tam/cay-rieng";
+const CAY = join(tam, "kho", ".acceptance-runs", "kiem-cheo", "cay");
 
 function capCho(d, phien) {
 	return async () => {
@@ -86,6 +87,10 @@ describe("kcs-khoa", () => {
 		assert.equal(don.worktree, CAY);
 		assert.equal(don.moc, "2026-10-07");
 		assert.equal(khoa.loai, "dot");
+		assert.doesNotThrow(
+			() => kiemDon(don),
+			"don phai qua kiemDon that cua bo phat lich (worktree la thu muc ton tai)",
+		);
 		khoa.tra();
 		assert.ok(!existsSync(join(d, "khoa", "s4")), "tra khoa phai xoa khoa/s4");
 	});
