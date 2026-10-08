@@ -3,11 +3,13 @@ slug: ci-test-duoi-tran
 
 evals:
   - id: E1
-    criterion: AC-2, AC-3, AC-4
+    criterion: AC-2, AC-3, AC-4, AC-7, AC-8
     executor: test
     cmd: config:executors.test.ctd_don_vi
     paths:
       - "scripts/ci/**"
+      - "apps/*/package.json"
+      - "packages/*/package.json"
     expected: |
       node --test scripts/ci/test-song-song.test.mjs thoat 0. Ma tran viet truoc, mot assert moi o:
       (a) dungNhom tren danh sach goi that cua workspace: du 11 goi, moi goi dung mot nhom -> ok;
@@ -28,6 +30,11 @@ evals:
       (k) dung truoc thoat 1 -> CLI thoat 3, goi "dung truoc DO", 0 nhom chay;
       (l) dau ra nhom khong ket thuc xuong dong, va mot nhom in 60000 dong: dong ket qua cua MOI nhom van o dau dong
           (CLI chay bang bun nhu package.json).
+      (m) chon che do: khong doi so, khong CI va khong --song-song -> test-run gia nhan DUNG MOT lan voi argv rong,
+          turbo gia khong duoc goi (0 lan dung truoc), dau ra khong co dong «nhom»; test-run gia thoat 1 -> CLI thoat 1;
+          doi chung cung workspace: CI=true -> bon nhom; --song-song 1 (khong CI) -> bon nhom;
+      (n) tran moi ca: lenhThieuTran tren workspace that -> rong; workspace gia co lenh `bun test` thieu --timeout va
+          lenh chay-tung-tep-dom mang --timeout 5000 -> goi ten DUNG goi, script va lenh do; script --watch bi bo qua.
       Moi o do ghim thong diep (ten goi / ten nhom), khong chi ma thoat.
 
   - id: E2
@@ -42,7 +49,7 @@ evals:
       - ".githooks/**"
       - "_acceptance/ci-test-duoi-tran/rang/**"
     expected: |
-      rang/chay-that.mjs (goc kho tu import.meta.dirname): ghi danh sach .turbo/runs truoc, chay `bun run test` voi
+      rang/chay-that.mjs (goc kho tu import.meta.dirname): ghi danh sach .turbo/runs truoc, chay `bun run test --song-song 4` voi
       TURBO_RUN_SUMMARY=true va TURBO_FORCE=true (dung nhu pre-push). Ma 0 khi dong thoi: (a) thoat 0; (b) dau ra co DUNG bon dong ket qua nhom
       «nhom <ten>: ma 0 · CSDL crm_<id>_test · <giay>s», bon ten CSDL khac nhau; (c) thoi gian tuong < 0.75 × tong
       thoi gian bon nhom (chung minh chay chong nhau, khong noi tiep); (d) chay scripts/verify-gate-shape.mjs voi
@@ -63,6 +70,6 @@ evals:
       rang/ci-thoi-gian.mjs: lay cac luot workflow CI da hoan tat cua nhanh (gh run list --branch <nhanh> --workflow CI);
       chon luot MOI NHAT ma `git rev-parse <sha>:<p>` trung HEAD voi p = scripts/ci, package.json,
       packages/db/scripts/test-run.ts; in run id va sha da chon. Ma 0 khi job «check-types, lint, test» conclusion
-      success, dai < 22 phut, buoc «Run bun run test» < 16 phut. Khong luot nao khop -> ma 2 "KHONG DO DUOC: chua co
+      success, dai < 22 phut, buoc «Run bun run test» < 19 phut. Khong luot nao khop -> ma 2 "KHONG DO DUOC: chua co
       luot CI cho cay hien tai".
       Dai hon nguong -> ma 1 kem so phut. Chieu do da do o S1: 10 luot CI xanh truoc vong nay 19.3–29.0 phut.

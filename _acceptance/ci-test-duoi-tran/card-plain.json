@@ -1,30 +1,96 @@
 {
-  "feature_plain": "PR vào onehub thôi bị huỷ vì CI chạm trần 30 phút: bộ kiểm các gói chạy theo nhóm song song (mỗi nhóm một cơ sở dữ liệu riêng) thay vì lần lượt từng gói.",
+  "feature_plain": "Bộ kiểm trên CI chạy theo bốn nhóm song song (mỗi nhóm một cơ sở dữ liệu riêng) để job CI xong sớm hơn khoảng 22%; trên máy tại chỗ vẫn chạy tuần tự như cũ.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ chạy bộ kiểm theo bốn nhóm, nhóm dài trước, số nhóm chạy cùng lúc bằng số nhân của máy (tối đa 4), mỗi nhóm một cơ sở dữ liệu riêng."},
-    {"id": "AC-2", "p": "Sẽ dừng ngay, gọi tên gói, nếu có gói nào thiếu nhóm hay nằm ở hai nhóm — trước khi chạy bất kỳ bài nào."},
-    {"id": "AC-3", "p": "Sẽ báo đỏ và gọi tên nhóm nếu bất kỳ nhóm nào đỏ — không nuốt lỗi."},
-    {"id": "AC-4", "p": "Sẽ giữ nguyên mọi lệnh đo dạng «bun run test -- \"<lệnh>\"» từng byte."},
-    {"id": "AC-5", "p": "Sẽ giữ cổng trước khi đẩy vẫn thấy đủ mọi gói đã chạy bộ kiểm."},
-    {"id": "AC-6", "p": "Sẽ làm job CI của chính PR xanh dưới 22 phút, bước kiểm dưới 16 phút (trước: 19–29 phút, 7/10 lượt ≥ 27)."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ chạy bộ kiểm theo bốn nhóm, nhóm dài trước, mỗi nhóm một cơ sở dữ liệu riêng — CHỈ khi chạy trên CI hoặc có cờ --song-song gõ tường minh."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ dừng ngay, gọi tên gói, nếu có gói nào thiếu nhóm hay nằm ở hai nhóm — trước khi chạy bất kỳ bài nào."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ giữ nguyên mọi lệnh đo dạng «bun run test -- \"<lệnh>\"» từng byte."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ giữ cổng trước khi đẩy vẫn thấy đủ mọi gói đã chạy bộ kiểm."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ làm job CI của chính PR xanh dưới 22 phút, bước kiểm dưới 19 phút (tuần tự đo 22,3 phút; lượt song song vừa đo 17,5 phút)."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ giữ «bun run test» trên máy tại chỗ (kể cả cổng trước khi đẩy) chạy tuần tự như trước vòng này — một lượt, một cơ sở dữ liệu, không nhóm nào — vì máy đang chạy năm phiên thợ và đã báo áp lực bộ nhớ."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ nâng trần chờ mặc định mỗi ca kiểm từ 5 lên 15 giây ở cả 11 gói (cờ --timeout 15000): trên 2 nhân, chạy song song làm mỗi ca chậm 1,52 lần (đo 534 ca), và một ca 3,4 giây chạm trần 5 giây. Ca tự đặt trần giữ nguyên; gói nào quên cờ thì bộ kiểm gọi tên."
+    }
   ],
   "wont_do": [
-    {"id": "OOS-1", "p": "Không nâng trần hay sửa tệp CI của hãng."},
-    {"id": "OOS-2", "p": "Không làm nhanh từng gói (gói API 7 phút sẽ là đường găng) — hồ sơ riêng nếu cần nhanh hơn."},
-    {"id": "OOS-3", "p": "Không dời bài kiểm riêng của công ty sang luồng CI riêng."}
+    {
+      "id": "AC-3",
+      "p": "Chặn mọi nhóm đỏ bị nuốt: nhóm nào đỏ thì cả lệnh đỏ và gọi tên nhóm đó."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không nâng trần hay sửa tệp CI của hãng."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không làm nhanh từng gói (gói API 7 phút sẽ là đường găng) — hồ sơ riêng nếu cần nhanh hơn."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không dời bài kiểm riêng của công ty sang luồng CI riêng."
+    }
   ],
   "scope_plain": "Chỉ đổi cách chạy bộ kiểm; mọi bài kiểm giữ nguyên.",
   "coverage_plain": [
-    {"i": 0, "p": "Đã liệt đủ 11 gói có bộ kiểm (rút từ khai báo workspace), mỗi gói vào đúng một nhóm (AC-2)."},
-    {"i": 1, "p": "Đã xét ba kết cục của một nhóm: xanh, đỏ, không chạy được (AC-3)."},
-    {"i": 2, "p": "Đã xét bốn cách gọi: không đối số, có đối số, trong cổng trước khi đẩy, trong CI (AC-1, AC-4, AC-5, AC-6)."},
-    {"i": 3, "p": "Mỗi trục có tiêu chí đo riêng."}
+    {
+      "i": 0,
+      "p": "Đã liệt đủ 11 gói có bộ kiểm (rút từ khai báo workspace), mỗi gói vào đúng một nhóm (AC-2) và mỗi gói mang trần chờ 15 giây (AC-8)."
+    },
+    {
+      "i": 1,
+      "p": "Đã xét ba kết cục của một nhóm: xanh, đỏ, không chạy được (AC-3)."
+    },
+    {
+      "i": 2,
+      "p": "Đã xét năm cách gọi: trên CI hoặc có cờ (bốn nhóm), tại chỗ (tuần tự như cũ), có đối số, trong cổng trước khi đẩy, trong CI (AC-1, AC-4, AC-5, AC-6, AC-7)."
+    },
+    {
+      "i": 3,
+      "p": "Đã xét trần chờ ở cả lệnh bun test lẫn bộ chạy từng tệp giao diện; lệnh --watch bỏ qua (AC-8)."
+    },
+    {
+      "i": 4,
+      "p": "Mỗi trục có tiêu chí đo riêng."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Chưa đo mã thoát thật của trình chạy khi một nhóm đỏ. Đã sửa: bài kiểm chạy chính trình chạy với tiến trình con giả, mỗi nhóm lần lượt đỏ, có đối chứng xanh; gói thừa thì không khởi nhóm nào."},
-    {"i": 1, "p": "Chưa đo đối số có dấu cách đi qua nguyên vẹn. Đã sửa: so từng byte với lời gọi thẳng, dùng một lệnh đo có thật."},
-    {"i": 2, "p": "Giả định máy CI 4 nhân chưa đo — kho private chạy máy 2 nhân. Đã sửa: số nhóm cùng lúc theo số nhân, nhóm dài trước; ngưỡng hạ về job dưới 22 phút cho có cơ sở."},
-    {"i": 3, "p": "Kiểm cổng trước khi đẩy thiếu đối chứng. Đã sửa: tự đếm đủ 11 gói từ bản tóm tắt của lượt, có chiều đỏ."},
-    {"i": 4, "p": "Đo thời gian CI có thể kẹt khi ghim lại sau này. Đã sửa: chọn lượt CI mới nhất có cây trùng hiện tại."}
+    {
+      "i": 0,
+      "p": "Chưa đo mã thoát thật của trình chạy khi một nhóm đỏ. Đã sửa: bài kiểm chạy chính trình chạy với tiến trình con giả, mỗi nhóm lần lượt đỏ, có đối chứng xanh; gói thừa thì không khởi nhóm nào."
+    },
+    {
+      "i": 1,
+      "p": "Chưa đo đối số có dấu cách đi qua nguyên vẹn. Đã sửa: so từng byte với lời gọi thẳng, dùng một lệnh đo có thật."
+    },
+    {
+      "i": 2,
+      "p": "Giả định máy CI 4 nhân chưa đo — kho private chạy máy 2 nhân. Đã sửa: số nhóm cùng lúc theo số nhân, nhóm dài trước; ngưỡng hạ về job dưới 22 phút cho có cơ sở."
+    },
+    {
+      "i": 3,
+      "p": "Kiểm cổng trước khi đẩy thiếu đối chứng. Đã sửa: tự đếm đủ 11 gói từ bản tóm tắt của lượt, có chiều đỏ."
+    },
+    {
+      "i": 4,
+      "p": "Đo thời gian CI có thể kẹt khi ghim lại sau này. Đã sửa: chọn lượt CI mới nhất có cây trùng hiện tại."
+    }
   ]
 }
