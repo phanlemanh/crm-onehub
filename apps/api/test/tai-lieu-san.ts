@@ -4,12 +4,15 @@ import { join } from "node:path";
 import type { WorkspaceRole } from "@crm/auth";
 import { db } from "@crm/db";
 import type { KhoNguon } from "@crm/db/blob-nguon";
+import { MINUTE_MS } from "@crm/db/okr-tro-ly-danh-muc";
 import type { LoaiTrang } from "@crm/validation/tai-lieu";
 import { diffHash, soSanh } from "@crm/validation/tai-lieu-diff";
 import type { INestApplication } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import request from "supertest";
 import { gieoThanhVien, mintPhien } from "./phien-thu";
+
+export const TAI_LIEU_SAN = { hookMs: 2 * MINUTE_MS } as const;
 
 export const TIEN_TO = `ktl${(process.env.TEST_RUN_ID ?? "").slice(0, 8)}`;
 let dem = 0;
@@ -275,7 +278,7 @@ export function dungSan(thayKho?: KhoNguon): void {
 			await gieoThanhVien(id, VAI[ai]);
 			phien[ai] = { nguoi: id, cookie: (await mintPhien(id)).cookie };
 		}
-	});
+	}, TAI_LIEU_SAN.hookMs);
 
 	afterAll(async () => {
 		await app.close();
