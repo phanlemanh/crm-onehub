@@ -1,11 +1,6 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import {
-	existsSync,
-	mkdtempSync,
-	readdirSync,
-	readFileSync,
-} from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import os from "node:os";
 import { join, resolve } from "node:path";
 import { taoKho } from "../../../scripts/kiem-cheo/test/kho-gia.mjs";
