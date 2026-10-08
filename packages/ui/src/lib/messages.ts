@@ -21,6 +21,10 @@ const en = {
 		facetOptions: "Options",
 		facetEmpty: "Nothing matches.",
 		noResults: "No results found.",
+		noMatch: "Nothing matches these filters",
+		noMatchDescription:
+			"Change or clear a filter, or clear the search, to see the list again.",
+		resetFilters: "Clear filters",
 	},
 	pagination: {
 		previous: "Previous",
@@ -238,7 +242,7 @@ export type Messages = typeof en;
 
 const vi = {
 	table: {
-		clearFilters: "Bỏ hết tiêu chí",
+		clearFilters: "Bỏ chọn",
 		clearSelection: "Bỏ chọn",
 		selected: (count: string) => `Đã chọn ${count} dòng`,
 		filters: "Lọc",
@@ -257,6 +261,10 @@ const vi = {
 		facetOptions: "Các lựa chọn",
 		facetEmpty: "Không có gì khớp.",
 		noResults: "Không tìm thấy kết quả nào.",
+		noMatch: "Không có kết quả nào khớp bộ lọc",
+		noMatchDescription:
+			"Đổi hoặc bỏ bớt bộ lọc, hay xoá từ khoá tìm, để thấy lại danh sách.",
+		resetFilters: "Bỏ lọc",
 	},
 	pagination: {
 		previous: "Trước",
