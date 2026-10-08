@@ -233,6 +233,8 @@ evals:
       apps/app/components/app-header.tsx.
 
   - id: E13
+    status: not-run
+    superseded_by: khung-ban-ghi-kara#AC-1
     criterion: AC-11
     executor: script
     cmd: config:executors.test.lgo_chup
@@ -251,6 +253,8 @@ evals:
       "o to nen quanh logo (svg".
 
   - id: E14
+    status: not-run
+    superseded_by: khung-ban-ghi-kara#AC-1
     criterion: AC-11
     executor: script
     cmd: config:executors.script.lgo_o_agent

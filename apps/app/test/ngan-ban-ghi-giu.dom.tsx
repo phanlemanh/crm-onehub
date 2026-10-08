@@ -8,6 +8,11 @@ import { act, useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { DetailSheet, DetailSheetHeader } from "@/components/detail-sheet";
 import { crmMessages } from "@/lib/messages/crm";
+import { dat, dongHet, mo as moSan, trangThai } from "./khung-gop-y";
+
+const { QuickAddContact, QuickAddDeal, AttachDealContact } = await import(
+	"@/components/crm/record-sheet/quick-add"
+);
 
 const RONG_MAY_TINH = 1440;
 const RONG_DIEN_THOAI = 375;
@@ -311,5 +316,181 @@ describe("ngan-ban-ghi", () => {
 			{ laDrawer: true, con: false, hoi: 0, lich: [false] },
 			"ngan-ban-ghi: o tu luu giu drawer",
 		);
+	});
+});
+
+type BieuMau = "lien-he" | "thoa-thuan" | "gan-nguoi";
+
+function NganThem({
+	bieuMau,
+	ghi,
+}: {
+	bieuMau: BieuMau;
+	ghi: (mo: boolean) => void;
+}) {
+	const [mo, datMo] = useState(true);
+	const [dangThem, datDangThem] = useState(true);
+	const xong = () => datDangThem(false);
+	return (
+		<DetailSheet
+			open={mo}
+			onOpenChange={(v) => {
+				ghi(v);
+				datMo(v);
+			}}
+		>
+			<DetailSheetHeader title="Thép Hòa Phát" description="Công ty" />
+			{dangThem && bieuMau === "lien-he" ? (
+				<QuickAddContact companyId="co-1" ownerId="u-1" onDone={xong} />
+			) : null}
+			{dangThem && bieuMau === "thoa-thuan" ? (
+				<QuickAddDeal
+					companyId="co-1"
+					companyName="Thép Hòa Phát"
+					ownerId="u-1"
+					onDone={xong}
+				/>
+			) : null}
+			{dangThem && bieuMau === "gan-nguoi" ? (
+				<AttachDealContact
+					dealId="d-1"
+					companyName="Thép Hòa Phát"
+					onDone={xong}
+				/>
+			) : null}
+		</DetailSheet>
+	);
+}
+
+function datDuLieuThem() {
+	trangThai.daGoi = [];
+	dat("users.me", () => ({ id: "u-1", name: "Hải", email: "hai@onehub.vn" }));
+	dat("currency.settings", () => ({ reportingCurrency: "VND" }));
+	dat("deals.contactOptions", () => [
+		{ id: "c-1", firstName: "Lan", lastName: "Trần", title: null },
+	]);
+	dat("contacts.create", () => ({ id: "c-moi", firstName: "Minh" }));
+	dat("deals.create", () => ({ id: "d-moi", name: "Hợp đồng thép" }));
+	dat("deals.attachContact", () => ({ contactId: "c-1" }));
+}
+
+function oChu(): HTMLInputElement {
+	const phan = document.querySelector<HTMLInputElement>(
+		"form input:not([type='hidden']):not([type='checkbox'])",
+	);
+	if (!phan) throw new Error("khong thay o nhap cua bieu mau them nhanh");
+	return phan;
+}
+
+async function moThem(bieuMau: BieuMau, ghi: (mo: boolean) => void) {
+	datDuLieuThem();
+	await moSan(<NganThem bieuMau={bieuMau} ghi={ghi} />);
+	await cho();
+}
+
+const CHU_GO = "Trần Minh";
+const BIEU_MAU = ["lien-he", "thoa-thuan", "gan-nguoi"] as const;
+const TEN_THANH_PHAN = {
+	"lien-he": "QuickAddContact",
+	"thoa-thuan": "QuickAddDeal",
+	"gan-nguoi": "AttachDealContact",
+} as const satisfies Record<BieuMau, string>;
+const TEN_CACH = {
+	esc: "Esc",
+	x: "X",
+	huy: "Huy",
+	"lop-phu": "lop phu",
+} as const;
+
+describe("them-nhanh", () => {
+	test("them-nhanh: lỡ đóng ngăn hay bấm Huỷ khi đang gõ thì hỏi lại, Tiếp tục sửa giữ chữ", async () => {
+		const o: string[] = [];
+		for (const bieuMau of BIEU_MAU) {
+			for (const cach of ["esc", "lop-phu", "x", "huy"] as const) {
+				const lich: boolean[] = [];
+				await moThem(bieuMau, (v) => lich.push(v));
+				await go(oChu(), CHU_GO);
+				if (cach === "esc") await esc();
+				if (cach === "lop-phu") await bamLopPhu();
+				if (cach === "x") await act(async () => nutX().click());
+				if (cach === "huy") await bam(crmMessages("vi").sheet.cancel);
+				await cho();
+				if (cach === "lop-phu") {
+					khop(
+						{ con: ngan(), hoi: hoi(), chu: oChu().value, lich },
+						{ con: true, hoi: 0, chu: CHU_GO, lich: [] },
+						`them-nhanh: ${bieuMau} bam ra ngoai mat chu`,
+					);
+				} else {
+					if (hoi() !== 1)
+						throw new Error(
+							`them-nhanh: ${TEN_THANH_PHAN[bieuMau]} ${TEN_CACH[cach]} mat chu`,
+						);
+					await bam("Tiếp tục sửa");
+					khop(
+						{ con: ngan(), hoi: hoi(), chu: oChu().value },
+						{ con: true, hoi: 0, chu: CHU_GO },
+						`them-nhanh: ${bieuMau} ${cach} tiep tuc sua mat chu`,
+					);
+				}
+				o.push(`${bieuMau}:${cach}`);
+				await dongHet();
+			}
+		}
+
+		for (const bieuMau of BIEU_MAU) {
+			const lich: boolean[] = [];
+			await moThem(bieuMau, (v) => lich.push(v));
+			await esc();
+			khop(
+				{ con: ngan(), hoi: hoi(), lich },
+				{ con: false, hoi: 0, lich: [false] },
+				`them-nhanh: ${bieuMau} trong ma van hoi`,
+			);
+			o.push(`${bieuMau}:trong`);
+			await dongHet();
+		}
+
+		for (const bieuMau of BIEU_MAU) {
+			const lich: boolean[] = [];
+			await moThem(bieuMau, (v) => lich.push(v));
+			await go(oChu(), CHU_GO);
+			if (bieuMau === "gan-nguoi") {
+				const chon = document.querySelector<HTMLElement>("[role='combobox']");
+				if (!chon) throw new Error("khong thay o chon nguoi");
+				await act(async () => {
+					chon.focus();
+					chon.dispatchEvent(
+						new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+					);
+				});
+				await cho(50);
+				const lan = [...document.querySelectorAll("[role='option']")].find(
+					(p) => p.textContent?.includes("Lan"),
+				) as HTMLElement | undefined;
+				if (!lan) throw new Error("khong thay lua chon Lan");
+				await act(async () => {
+					lan.dispatchEvent(
+						new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+					);
+				});
+				await cho(50);
+			}
+			const gui = document.querySelector<HTMLButtonElement>(
+				"form button[type='submit']",
+			);
+			if (!gui) throw new Error("khong thay nut luu");
+			await act(async () => gui.click());
+			await cho(50);
+			await esc();
+			khop(
+				{ con: ngan(), hoi: hoi(), lich },
+				{ con: false, hoi: 0, lich: [false] },
+				`them-nhanh: ${bieuMau} luu xong van hoi`,
+			);
+			o.push(`${bieuMau}:luu-xong`);
+			await dongHet();
+		}
+		expect(o.length).toBe(18);
 	});
 });

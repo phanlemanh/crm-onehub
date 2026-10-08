@@ -1,0 +1,1 @@
+driver: bun + playwright script (do-man.mjs); no browser-tool network reader. app-traffic by script only.

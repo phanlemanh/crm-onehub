@@ -12,9 +12,11 @@ import {
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { LocalDateTime } from "@/components/local-date-time";
+import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
@@ -40,7 +42,8 @@ export function ConversationPicker({
 	onNew: () => void;
 	busy: boolean;
 }) {
-	const label = current?.title ?? "New conversation";
+	const t = karaBanGhiMessages(useLocale()).hoiThoai;
+	const label = current?.title ?? t.moi;
 
 	return (
 		<div className="flex min-w-0 items-center gap-2 border-b px-4 py-2 sm:px-5">
@@ -51,22 +54,24 @@ export function ConversationPicker({
 						size="sm"
 						className="min-w-0 flex-1 justify-start px-2 font-normal"
 					>
-						<span className="truncate">{label}</span>
+						<span className="truncate" translate="no">
+							{label}
+						</span>
 						<Icon icon={ChevronDown} data-icon="inline-end" />
 					</Button>
 				</DropdownMenuTrigger>
 
 				<DropdownMenuContent align="start" className="w-72">
 					{conversations.length === 0 ? (
-						<DropdownMenuItem disabled>Nothing yet</DropdownMenuItem>
+						<DropdownMenuItem disabled>{t.chuaCo}</DropdownMenuItem>
 					) : (
 						conversations.map((conversation) => (
 							<DropdownMenuItem
 								key={conversation.id}
 								onSelect={() => onSelect(conversation)}
 							>
-								<span className="min-w-0 flex-1 truncate">
-									{conversation.title ?? "Untitled"}
+								<span className="min-w-0 flex-1 truncate" translate="no">
+									{conversation.title ?? t.chuaDatTen}
 								</span>
 								<span className="shrink-0 text-muted-foreground text-xs">
 									<LocalDateTime
@@ -81,7 +86,7 @@ export function ConversationPicker({
 					<DropdownMenuSeparator />
 					<DropdownMenuItem onSelect={onNew}>
 						<Icon icon={Add} data-icon="inline-start" />
-						New conversation
+						{t.moi}
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
@@ -103,6 +108,7 @@ function Forget({
 	busy: boolean;
 }) {
 	const trpc = useTRPC();
+	const t = karaBanGhiMessages(useLocale()).hoiThoai;
 	const conversations = useConversationCache();
 
 	const remove = useMutation(
@@ -110,9 +116,9 @@ function Forget({
 			onSuccess: async () => {
 				await conversations.invalidate();
 				onDone();
-				toast.success("Conversation deleted.");
+				toast.success(t.daXoa);
 			},
-			onError: (error) => toast.error(error.message),
+			onError: () => toast.error(t.loiXoa),
 		}),
 	);
 
@@ -124,7 +130,7 @@ function Forget({
 			onClick={() => remove.mutate({ id: conversation.id })}
 		>
 			<Icon icon={TrashCan} />
-			<span className="sr-only">Delete this conversation</span>
+			<span className="sr-only">{t.nhanXoa}</span>
 		</Button>
 	);
 }

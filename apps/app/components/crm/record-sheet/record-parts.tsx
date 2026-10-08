@@ -2,9 +2,17 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyTitle,
+} from "@crm/ui/components/empty";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
+import { KaraRetry } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTableRow } from "@crm/ui/components/simple-table";
 import { Spinner } from "@crm/ui/components/spinner";
@@ -22,12 +30,35 @@ import {
 	DetailSheetTabs,
 } from "@/components/detail-sheet";
 import { crmMessages } from "@/lib/messages/crm";
+import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { useRecordStack } from "./record-stack";
+
+export function KhungTaiLoi({ onRetry }: { onRetry?: () => void }) {
+	const locale = useLocale();
+	const m = crmMessages(locale);
+	const t = karaBanGhiMessages(locale).khung;
+	return (
+		<div className="flex min-h-0 flex-1 items-center justify-center p-6">
+			<Empty border="solid" size="compact" data-khung-tai-loi="">
+				<EmptyHeader>
+					<EmptyTitle>{m.misc.recordNotLoaded}</EmptyTitle>
+					<EmptyDescription>{t.loiMoTa}</EmptyDescription>
+				</EmptyHeader>
+				{onRetry ? (
+					<EmptyContent>
+						<KaraRetry onClick={onRetry} />
+					</EmptyContent>
+				) : null}
+			</Empty>
+		</div>
+	);
+}
 
 export function RecordSheetFrame({
 	loading,
 	error,
 	errorView,
+	onRetry,
 	title,
 	description,
 	note,
@@ -42,6 +73,7 @@ export function RecordSheetFrame({
 	loading: boolean;
 	error: string | null;
 	errorView?: ReactNode;
+	onRetry?: () => void;
 	title: ReactNode;
 	description?: ReactNode;
 	note?: ReactNode;
@@ -53,7 +85,6 @@ export function RecordSheetFrame({
 	onTabChange: (tab: string) => void;
 	cuonCaKhung?: boolean;
 }) {
-	const m = crmMessages(useLocale());
 	const { stack, close } = useRecordStack();
 	const kho = useKhoMan();
 	const cuon = cuonCaKhung && kho === "dien-thoai";
@@ -77,10 +108,7 @@ export function RecordSheetFrame({
 			) : error && errorView ? (
 				errorView
 			) : error ? (
-				<div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-1 p-6 text-center">
-					<p className="font-medium text-sm">{m.misc.recordNotLoaded}</p>
-					<p className="text-muted-foreground text-xs">{error}</p>
-				</div>
+				<KhungTaiLoi onRetry={onRetry} />
 			) : (
 				<>
 					{stats}
