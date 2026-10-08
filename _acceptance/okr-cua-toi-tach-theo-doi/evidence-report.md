@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: edc9b1253b4409cdb487d53c1b50e7d5cff36c62
+verified_commit: 31583f0d0797e17df56ccc280c6c0041a4485ee4
 human_signoff: Phan Le Manh 2026-10-07
 ---
 
@@ -248,3 +248,7 @@ none — khong eval nao chay nhieu lan; moi eval deterministic va deu thong nhat
 
 Round 1: lenh suite bun run test --filter=api do, cong them mot phat hien muc trung binh (E2/E3/E4 chi kiem id co mat thay vi so ca tap id va «dung mot lan»). Tra ve implementation; commit 0715bbd2b so tron tap id va cho test so-gop doc ca dangTheoDoi.
 Round 2: PASS — E2, E3, E4, E5, E6, E12, E15 va bay lenh suite chay lai tren cay edc9b1253b44 deu xanh; E1, E7, E8, E9, E10, E11, E13, E14 mang tu round 1 (frame goc cua E11 va E13 xem evidence round 1). Khong co muc judgment, khong co panel judge.
+
+### Re-pin lần 1 — 2026-10-08, do them opportunity.md (O3) dua hai ho so vao diff; ghim lai tren onehub moi
+run_id: repin-20261008T031249Z-26572
+sha: 31583f0d0797e17df56ccc280c6c0041a4485ee4 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E11, E12, E13 · diff chạm vật đo ngoài làn máy: E11, E12, E13 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
