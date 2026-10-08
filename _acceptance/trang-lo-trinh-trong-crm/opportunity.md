@@ -3,10 +3,10 @@ schema_version: 1
 slug: trang-lo-trinh-trong-crm
 feature: «Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi»
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-08T16:34:40Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -61,10 +61,10 @@ CRM không ghi ý định, không ghi trạng thái, không ký cổng; mỗi kh
 > đổi dù trang làm đúng việc. Vế «trang khớp từng hàng với LO-TRINH.html» là tiêu chí làm đúng, chuyển
 > xuống «Thước đo → ứng viên criterion».
 
-- Câu hỏi phép đo trả lời: [đề xuất] trưởng phòng ban có tự biết việc của phòng mình đang ở đâu, không phải hỏi ai, bốn tuần sau khi trang lên production?
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu, ít nhất 3 trưởng phòng ban, mỗi người được hỏi về một việc của phòng mình, trả lời đúng trạng thái và mốc từ trang trong vòng một phút mà không hỏi lại; và tỷ lệ tin hỏi tiến độ của chủ kho, đếm cùng cách với nền 23/48, dưới một nửa nền (dưới 24%)
-- Kết quả nào là CHẾT: [đề xuất] dưới 2 trưởng phòng ban trả lời đúng từ trang; hoặc trang hiện một trạng thái khác `LO-TRINH.html` cùng lượt vẽ mà không ai biết
-- Timebox: [đề xuất] bốn tuần kể từ ngày trang lên production; ngày chưa có vì vòng chưa xếp đợt
+- Câu hỏi phép đo trả lời: trưởng phòng ban có tự biết việc của phòng mình đang ở đâu, không phải hỏi ai, bốn tuần sau khi trang lên production?
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, ít nhất 3 trưởng phòng ban, mỗi người được hỏi về một việc của phòng mình, trả lời đúng trạng thái và mốc từ trang trong vòng một phút mà không hỏi lại; và tỷ lệ tin hỏi tiến độ của chủ kho, đếm cùng cách với nền 23/48, dưới một nửa nền (dưới 24%)
+- Kết quả nào là CHẾT: dưới 2 trưởng phòng ban trả lời đúng từ trang; hoặc trang hiện một trạng thái khác `LO-TRINH.html` cùng lượt vẽ mà không ai biết
+- Timebox: bốn tuần kể từ ngày trang lên production; ngày chưa có vì vòng chưa xếp đợt
 
 Bản máy dựng từ hàng, giữ làm sử liệu:
 
@@ -84,9 +84,9 @@ Chưa dựng. Vòng chạm màn hình: bản bấm được làm ở nghi thức
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
-- **disposition = …** Căn cứ: …
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **decision = build** Căn cứ: chủ kho ký «build» 2026-10-08T16:34:40Z trên bản trình gồm ngưỡng đo ở trưởng phòng ban (thay ngưỡng của hàng) và «nhóm» hiểu là luồng việc như tệp kế hoạch đang ghi; lọc theo phòng ban thật để sau, cần kit thêm một trường riêng (giả định 1). Vòng chưa chạy: chờ chủ kho xếp đợt, crm nhận kit 2.27, và #313 gộp.
+- **disposition = —** Căn cứ: không có bản mẫu dựng trước Cổng Đáng.
+- **Ngưỡng UAT chốt cùng lúc ký:** như mục «Ngưỡng chết / ngưỡng UAT» ở trên, đã gỡ tiền tố đề xuất.
 
 ## Thước đo thành công → ứng viên criterion
 

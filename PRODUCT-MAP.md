@@ -6,8 +6,8 @@
 
 ```mermaid
 flowchart TD
-  A["Đang cân nhắc cơ hội<br/>10 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>3 việc"]
+  A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
+  GD --> B["Sắp mở vòng<br/>4 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
@@ -34,13 +34,13 @@ flowchart TD
 - Thẻ góp ý của Trợ lý OKR thôi để viền «ô được chỉ» kẹt sau khi thoát sửa, trả focus về thẻ, bỏ lời nhắc sai trong hộp Sửa KR, và làm dòng đã quyết đọc được (`the-gop-y-sua-nhanh`)
 - Gợi ý thông tin của tác tử ở tab Tổng quan của Cá nhân trải hết hàng, nói rõ là tác tử đề xuất và độ tin, và đặt giá trị cũ cạnh giá trị mới (`the-thong-tin-ca-nhan`)
 - Ô tìm trong trang thành viên chiến dịch phải tìm TRONG phân khúc, không thay thế phân khúc (`tim-trong-phan-khuc`)
-- «Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi» (`trang-lo-trinh-trong-crm`)
 
 ## Sắp mở vòng
 
 - Eval gọi model thật chỉ chạy khi đầu vào của nó đổi (prompt, model, dữ liệu mẫu), và chấm theo biên thống kê thay vì một ngưỡng cứng sát điểm đo (`eval-model-that-dung-luc`)
 - Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần sau mỗi lần gộp vào onehub (và mỗi đêm), không còn nằm trong lượt ghim lại của một hồ sơ (`kiem-cheo-sau-gop`)
 - Thước đo của hồ sơ đã ký neo vào mốc cố định của chính lượt đó, không so với origin/onehub hay merge-base, nên không tự đỏ khi các lượt sau gộp vào (`thuoc-khong-tu-het-han`)
+- «Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi» (`trang-lo-trinh-trong-crm`)
 
 ## Đang làm
 
