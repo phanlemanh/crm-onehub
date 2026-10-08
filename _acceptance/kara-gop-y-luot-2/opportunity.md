@@ -30,10 +30,10 @@ lúc 2026-10-07T13:13:50Z (luật 16 của đợt `sau-14-10`).
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] người phụ trách có còn bị lạc ở vùng Kara (vùng biến mất, chờ mãi, không hoàn tác được, nhờ không được cho KR của mình) không.
-- Kết quả nào là SỐNG: [đề xuất] ở lái-thử người-lạ trước R1, kịch bản gây đủ bốn điều kiện (tắt mạng khi mở khung, mở khung lúc Kara đang đọc dở, nhận một Căn chỉnh rồi muốn bỏ, người phụ trách hai KR); 0 lần vấp ở bốn loại đó.
-- Kết quả nào là CHẾT: [đề xuất] ≥ 1 lần vấp cùng loại ở cả hai người thử.
-- Timebox: [đề xuất] lái-thử người-lạ kế tiếp của dãy Kara OKR, trước khi gom ca thật N1 → 9b.
+- Câu hỏi phép đo trả lời: người phụ trách có còn bị lạc ở vùng Kara (vùng biến mất, chờ mãi, không hoàn tác được, nhờ không được cho KR của mình) không.
+- Kết quả nào là SỐNG: ở lái-thử người-lạ trước R1, kịch bản gây đủ bốn điều kiện (tắt mạng khi mở khung, mở khung lúc Kara đang đọc dở, nhận một Căn chỉnh rồi muốn bỏ, người phụ trách hai KR); 0 lần vấp ở bốn loại đó.
+- Kết quả nào là CHẾT: ≥ 1 lần vấp cùng loại ở cả hai người thử.
+- Timebox: lái-thử người-lạ kế tiếp của dãy Kara OKR, trước khi gom ca thật N1 → 9b.
 
 ## Nguồn ngoài & phạm vi kế thừa
 
@@ -45,7 +45,7 @@ lúc 2026-10-07T13:13:50Z (luật 16 của đợt `sau-14-10`).
 
 - **decision = build.** Căn cứ: luật 16 — anh ký `build` cả 16 hàng lúc 2026-10-07T13:13:50Z.
 - **disposition = archive.** Căn cứ: không có prototype.
-- **Ngưỡng UAT chốt cùng lúc ký:** [đề xuất] như mục Ngưỡng — chờ anh duyệt ở Cổng 1 (luật 27).
+- **Ngưỡng UAT chốt cùng lúc ký:** như mục Ngưỡng — anh duyệt ở Cổng 1 ngày 2026-10-09 (luật 27).
 
 ## Thước đo thành công → ứng viên criterion
 
