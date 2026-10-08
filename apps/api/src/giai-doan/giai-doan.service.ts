@@ -12,15 +12,18 @@ import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { DealsService } from "../deals/deals.service";
 import {
+	type GiaiDoanArchived,
 	type GiaiDoanArchiveInput,
 	type GiaiDoanCreateInput,
 	type GiaiDoanList,
 	type GiaiDoanRenameInput,
 	type GiaiDoanReorderInput,
+	type GiaiDoanRestoreInput,
 	giaiDoanArchiveInput,
 	giaiDoanCreateInput,
 	giaiDoanRenameInput,
 	giaiDoanReorderInput,
+	giaiDoanRestoreInput,
 } from "./giai-doan.contracts";
 import { GIAI_DOAN_API } from "./giai-doan-config";
 
@@ -172,6 +175,49 @@ export class GiaiDoanService {
 			moved: ketQua.moved,
 		});
 		return { id: ketQua.id };
+	}
+
+	async archived(): Promise<GiaiDoanArchived> {
+		const rows = await this.db.dealStage.findMany({
+			where: { archivedAt: { not: null } },
+			orderBy: [{ archivedAt: "desc" }, { id: "asc" }],
+			select: { id: true, label: true, kind: true, archivedAt: true },
+		});
+		return rows.flatMap((g) =>
+			g.archivedAt === null
+				? []
+				: [{ ...g, archivedAt: g.archivedAt.toISOString() }],
+		);
+	}
+
+	async restore(userId: string, raw: GiaiDoanRestoreInput) {
+		await this.requireManager(userId);
+		const input = giaiDoanRestoreInput.parse(raw);
+		const ketQua = await this.db.$transaction(async (tx) => {
+			const song = await this.khoaSong(tx);
+			const g = await tx.dealStage.findUnique({
+				where: { id: input.id },
+				select: { id: true, label: true, kind: true, archivedAt: true },
+			});
+			if (!g) throw new NotFoundException(M.khongCo);
+			if (g.archivedAt === null) throw new BadRequestException(M.chuaLuuTru);
+			if (song.length >= GIAI_DOAN.tran.tong) {
+				throw new BadRequestException(M.tran);
+			}
+			if (this.nhanTrung(song, g.label)) {
+				throw new BadRequestException(M.trung);
+			}
+			const cung = song.filter((s) => s.kind === g.kind);
+			const position =
+				cung.length === 0 ? 0 : Math.max(...cung.map((s) => s.position)) + 1;
+			return tx.dealStage.update({
+				where: { id: g.id },
+				data: { archivedAt: null, position },
+				select: { id: true },
+			});
+		});
+		this.logger.log({ message: "Deal stage restored", stageId: ketQua.id });
+		return ketQua;
 	}
 
 	private async canManage(userId: string): Promise<boolean> {

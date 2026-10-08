@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lưới hoá cũ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1340px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 60rem;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Luồng quyết định · Cổng 1 · sửa đường dẫn E5, E17</p>
+    <h1>Khi nào một hồ sơ đã ký bị coi là cũ</h1>
+    <p class="sub">Chỉ một đường dẫn trỏ vào chỗ không còn tệp là đủ tắt bộ lọc cho cả hồ sơ. Sửa hai đường dẫn bật lại bộ lọc, nhưng luật kho vẫn giữ phần lớn các lượt ghim lại.</p>
+
+    <svg viewBox="0 88 1340 432" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-warn" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#b42318"/></marker>
+      </defs>
+
+      <rect x="0" y="88" width="1340" height="432" fill="#fafafa"/>
+
+      <line x1="192" y1="180" x2="232" y2="180" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="392" y1="180" x2="432" y2="180" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="632" y1="180" x2="688" y2="180" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="532" y1="244" x2="532" y2="316" stroke="#b42318" stroke-width="1.4" marker-end="url(#arrow-warn)"/>
+      <line x1="888" y1="180" x2="928" y2="180" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="1088" y1="180" x2="1136" y2="180" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <line x1="1008" y1="240" x2="1008" y2="316" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="646" y="156" width="28" height="16" rx="2" fill="#fafafa"/>
+      <text x="660" y="168" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">CÓ</text>
+
+      <rect x="540" y="272" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="544" y="284" fill="#b42318" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">KHÔNG</text>
+
+      <rect x="1090" y="156" width="44" height="16" rx="2" fill="#fafafa"/>
+      <text x="1112" y="168" fill="#006B4F" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">KHÔNG</text>
+
+      <rect x="1016" y="272" width="28" height="16" rx="2" fill="#fafafa"/>
+      <text x="1020" y="284" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">CÓ</text>
+
+      <rect x="32" y="152" width="160" height="56" rx="20" fill="#fafafa"/>
+      <rect x="32" y="152" width="160" height="56" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="112" y="176" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Một PR chạm vào</text>
+      <text x="112" y="192" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">thư mục hồ sơ</text>
+      <text x="112" y="228" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">_acceptance/</text>
+      <text x="112" y="240" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">soan-okr-cung-tro-ly/</text>
+
+      <rect x="232" y="152" width="160" height="56" rx="6" fill="#fafafa"/>
+      <rect x="232" y="152" width="160" height="56" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="312" y="176" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lưới trước khi gộp</text>
+      <text x="312" y="192" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">soi hồ sơ đó</text>
+      <text x="312" y="228" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">scripts/pre-merge-check.sh</text>
+
+      <polygon points="532,116 632,180 532,244 432,180" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="532" y="170" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mọi đường dẫn</text>
+      <text x="532" y="184" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">của hồ sơ trỏ tới</text>
+      <text x="532" y="198" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">tệp có thật?</text>
+
+      <rect x="688" y="140" width="200" height="80" rx="6" fill="#fafafa"/>
+      <rect x="688" y="140" width="200" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="788" y="168" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ lọc bật</text>
+      <text x="788" y="186" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">chỉ cũ khi tệp đổi khớp</text>
+      <text x="788" y="202" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">thứ hồ sơ đo</text>
+      <text x="788" y="240" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-1 · AC-2</text>
+
+      <polygon points="1008,120 1088,180 1008,240 928,180" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1008" y="170" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tệp đổi</text>
+      <text x="1008" y="184" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">thuộc mã</text>
+      <text x="1008" y="198" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ứng dụng?</text>
+
+      <rect x="1136" y="144" width="176" height="72" rx="20" fill="#fafafa"/>
+      <rect x="1136" y="144" width="176" height="72" rx="20" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1224" y="164" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">SAU KHI SỬA</text>
+      <text x="1224" y="184" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hồ sơ không cũ</text>
+      <text x="1224" y="202" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">khỏi phải ghim lại</text>
+      <text x="1224" y="236" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">AC-7 · vd. đổi giu-nhip.mjs</text>
+
+      <rect x="412" y="316" width="240" height="72" rx="20" fill="#fafafa"/>
+      <rect x="412" y="316" width="240" height="72" rx="20" fill="rgba(180,35,24,0.06)" stroke="#b42318" stroke-width="1.4"/>
+      <text x="532" y="336" fill="#b42318" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">HÔM NAY</text>
+      <text x="532" y="356" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ lọc tắt cho cả hồ sơ</text>
+      <text x="532" y="374" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">mọi tệp mã đổi đều làm hồ sơ cũ</text>
+      <text x="532" y="408" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">E5 · settings/to-chuc/**</text>
+      <text x="532" y="420" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">E17 · lib/messages/okr-tro-ly.ts</text>
+
+      <rect x="888" y="316" width="240" height="72" rx="20" fill="#fafafa"/>
+      <rect x="888" y="316" width="240" height="72" rx="20" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1008" y="336" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">GIỚI HẠN ĐÃ KHAI</text>
+      <text x="1008" y="356" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Vẫn cũ, đúng luật</text>
+      <text x="1008" y="374" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">luật kho đo cả cây mã nguồn</text>
+      <text x="1008" y="408" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">E27 · apps/** · packages/**</text>
+      <text x="1008" y="420" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">3/4 lượt gộp gần nhất · OOS-3</text>
+
+      <line x1="40" y1="452" x2="1300" y2="452" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="472" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <line x1="40" y1="496" x2="68" y2="496" stroke="#b42318" stroke-width="1.4" marker-end="url(#arrow-warn)"/>
+      <text x="80" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Hôm nay: một đường dẫn chết tắt bộ lọc</text>
+
+      <line x1="340" y1="496" x2="368" y2="496" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="380" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Sau khi sửa: tệp ngoài vùng đo không làm cũ</text>
+
+      <rect x="676" y="488" width="28" height="16" rx="8" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="716" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Kết cục · giới hạn đã khai, ngoài phạm vi vòng này</text>
+
+      <polygon points="1036,496 1048,488 1060,496 1048,504" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1072" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Câu hỏi</text>
+
+      <rect x="1152" y="488" width="28" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1192" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Bước</text>
+    </svg>
+  </div>
+</body>
+</html>

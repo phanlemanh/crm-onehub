@@ -362,6 +362,10 @@ const GHIM_OKR_SOAN = {
 	"okr-soan:moc.sua": ["sửa 1", "sửa 12"],
 	"okr-soan:moc.chuyen": ["chuyển 1", "chuyển 12"],
 	"okr-soan:moc.bo": ["bỏ 1", "bỏ 12"],
+	"okr-soan:moc.nopKhongThanh": [
+		"Kara nộp bản nháp chưa được — 1",
+		"Kara nộp bản nháp chưa được — 12",
+	],
 	"okr-soan:heThong.seGui": [
 		"Sẽ gửi kèm lượt sau: 1",
 		"Sẽ gửi kèm lượt sau: 12",

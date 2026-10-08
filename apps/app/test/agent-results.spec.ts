@@ -124,3 +124,34 @@ describe("anchorResults", () => {
 		expect(anchored.size).toBe(0);
 	});
 });
+
+describe("stage-id", () => {
+	const dauRa = (stageId?: string | number) => {
+		const p = page("open", ["d1"]);
+		return {
+			...p,
+			deals: p.deals.map((d) =>
+				stageId === undefined ? d : { ...d, stageId },
+			),
+		};
+	};
+
+	it("giu stageId co mat", () => {
+		const ra = dealListResultOf(dauRa("gd-1") as never);
+		expect(ra?.deals[0]?.stageId).toBe("gd-1");
+	});
+
+	it("ban ghi cu khong stageId van doc duoc", () => {
+		const ra = dealListResultOf(dauRa() as never);
+		expect(ra === null, "ban ghi cu roi ca bang").toBe(false);
+		expect(ra?.deals.length).toBe(1);
+		expect(ra?.deals[0]?.stageId).toBe(null);
+		expect(ra?.deals[0]?.stage).toBe("Discovery");
+	});
+
+	it("stageId sai kieu thanh null, khong roi ca bang", () => {
+		const ra = dealListResultOf(dauRa(7) as never);
+		expect(ra === null, "ban ghi cu roi ca bang").toBe(false);
+		expect(ra?.deals[0]?.stageId).toBe(null);
+	});
+});

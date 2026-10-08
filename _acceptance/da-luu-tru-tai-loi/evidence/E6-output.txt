@@ -1,0 +1,17 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_epic_gates_7891a0_do · app http://localhost:4289 · api http://localhost:4646
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts ada@trycomp.ai
+DUNG 1440: loi — khung {"left":304,"right":1124} nut {"left":685,"right":743}; the 3; loi ca trang false
+DUNG 1440: dang-thu-lai — khung con true; nut khoa true; khung xuong false; the 3
+DUNG 1440: thu-lai — muc gap «Đã lưu trữ (1)»; khung loi con false; trang khong tai lai true
+DUNG 375: loi — khung {"left":16,"right":359} nut {"left":158,"right":217}; scrollWidth 375; the 3; loi ca trang false
+DUNG 4/4 o
+ANH _acceptance/da-luu-tru-tai-loi/evidence
+KET LUAN: 5 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0
