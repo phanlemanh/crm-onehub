@@ -1,0 +1,102 @@
+schema_version: 1
+slug: kiem-cheo-sau-gop
+
+evals:
+  - id: E1
+    criterion: AC-1, AC-2, AC-3, AC-4, AC-7, AC-9, AC-10
+    executor: test
+    cmd: config:executors.test.kcs_don_vi
+    paths:
+      - "scripts/kiem-cheo/**"
+      - "package.json"
+    expected: |
+      node --test scripts/kiem-cheo/*.test.mjs thoat 0. Kho git gia dung trong thu muc tam (nhanh onehub voi ba merge
+      commit first-parent M1 M2 M3 sau goc T, moi merge doi mot tep san pham rieng), ho so gia trong _acceptance/.
+      Ma tran viet truoc, moi o mot assert, moi o do ghim thong diep:
+      (a) lanGop(T, M3) = [M1, M2, M3] dung thu tu; lanGop(M3, M3) = [];
+      (b) tapCham: 4 ho so gia (signed-off cham, machine-cleared cham, signed-off khong cham, implemented cham) ->
+          dung hai ho so dau; tep doi trong _acceptance/ khong lam ho so nao bi cham; doi chung: bo glob khop khoi
+          evals.yaml cua ho so 1 -> ho so 1 roi khoi tap;
+      (c) moc.json vang / JSON hong / sha khong tren first-parent -> ma 2, thong diep goi DUNG ly do va chua
+          `kiem-cheo:chay -- --tu`; ham bao gia duoc goi DUNG MOT lan voi ket_qua loi va ly do do (khong im lang);
+          git fetch gia that bai -> cung loi, cung bao mot lan;
+      (d) 0 lan gop -> ket_qua khong-gop-moi, khong don xin, khong cay; tap rong -> xanh, 0 ho so, moc tien toi D;
+      (e) canMoc: lan kiem truoc cach 19 gio -> khong moc; 21 gio -> moc = ngay cua M1 (lan gop cu nhat chua kiem);
+      (f) khoa co dot: thu muc dot gia co phat-lich.pid = pid cua chinh tien trinh kiem -> don xin/kiem-cheo-s4.json
+          dung khoa phien/slug/loai/luc/worktree (+ moc o ca 21 gio), duoc ghi qua tep tam roi doi ten (khong luc
+          nao ton tai tep don rong); chu.json ghi phien kiem-cheo -> lay duoc; chu.json ghi P3 tron thoi gian cho ->
+          bo-luot-khoa-ban goi ten P3; ham chay nem loi -> khoa van duoc tra (don xoa / khoa tay xoa);
+      (g) khoa khong dot: pid trong phat-lich.pid khong song -> mkdir khoa/s4 + chu.json phien kiem-cheo, xong thi
+          khong con; khoa/s4 da co -> bo-luot-khoa-ban;
+      (h) bao: ket_qua do co dot -> dung mot tep yeu-cau/kiem-cheo-<n>.json loai can-nguoi; khong dot -> ham thong
+          bao gia duoc goi dung mot lan; xanh -> 0 yeu-cau, 0 thong bao; moi tep ngay co du khoa ket_qua tu den
+          lan_gop ho_so, moi muc do-moi co lan_gop;
+      (i) cai/go voi HOME tam va launchctl gia: plist co StartCalendarInterval 01:00, WorkingDirectory = goc kho,
+          ProgramArguments[0] la duong dan tuyet doi thuc thi duoc toi bun va phan con lai chay kiem-cheo:chay,
+          EnvironmentVariables.PATH chua thu muc cua bun, node, git, StandardOutPath va StandardErrorPath tro
+          .acceptance-runs/kiem-cheo/launchd.log; chay dung ProgramArguments cua plist duoi `env -i HOME=<tam>
+          PATH=/usr/bin:/bin:/usr/sbin:/sbin` voi --tu tren kho gia -> thoat 0 (doi chung: plist bo PATH -> khong tim
+          thay bun, thoat khac 0); cai hai lan -> mot tep, launchctl bootstrap mot lan moi lan cai sau khi bootout ban
+          cu; go -> tep khong con, bootout duoc goi;
+      (j) --nhanh nhap: kho gia co nhanh nhap re tu onehub voi mot merge -> khoang gop la merge cua nhanh nhap, khong
+          phai cua onehub;
+      (k) bo doc dong lan: mau dong lay tu MOT LUOT GHIM LAI THAT (tep fixtures/lan-that.txt trich nguyen van tu nhat
+          ky lan, dau tep ghi phien ban feature-loop va duong log goc) -> rut dung slug, E, lenh, ma cua tung dong va
+          dung mang ma suite; ca do: phien ban feature-loop giai duoc qua scripts/resolve-plugin.mjs khac phien ban
+          ghi trong fixture -> do, thong diep «mau dong lan cu: <ban fixture> != <ban dang cai>».
+
+  - id: E2
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.kcs_lich
+    paths:
+      - "scripts/dieu-phoi/lich.mjs"
+      - "scripts/dieu-phoi/test/lich.test.mjs"
+    expected: |
+      node --test scripts/dieu-phoi/test/lich.test.mjs thoat 0, gom ca moi: hai don s4 cung luc — don kiem-cheo co
+      moc 2026-10-07 (slug khong co trong hang-viec) va don cua hang chua co moc, don kiem-cheo luc muon hon ->
+      xepHang dat don kiem-cheo truoc; doi chung cung fixture: bo moc khoi don kiem-cheo -> don som hon dung truoc.
+      Ca cu cua lich.test.mjs giu nguyen (don mo_merge van dung dau, moc theo slug van thang khi don khong mang moc).
+
+  - id: E3
+    criterion: AC-6, AC-8
+    executor: script
+    cmd: config:executors.script.kcs_pha_thu
+    paths:
+      - "scripts/kiem-cheo/**"
+      - "_acceptance/kiem-cheo-sau-gop/rang/**"
+    expected: |
+      rang/pha-thu.mjs (goc kho tu import.meta.dirname) dung kho git gia trong thu muc tam: goc T, ba lan gop M1 M2
+      M3 vao onehub, mot ho so signed-off gia co eval script `node kiem.mjs` doc tep san pham; lan ve dung chinh
+      scripts/kiem-cheo/dem.mjs voi lan ghim lai gia qua KIEM_CHEO_LAN (lan gia in dung khuon dong
+      «[lane] <slug> <E>: <lenh> → exit <ma> (» cua lan that va chay that lenh eval trong cay rieng). Ma 0 khi moi o
+      dat, ma 1 goi ten o hong:
+      (a) doi chung: khong pha -> ket_qua xanh, mot tep ngay;
+      (b) pha o M2 -> ket_qua do, mot muc do-moi, lan_gop = sha cua M2 (khong phai M1, M3);
+      (c) pha o T (truoc moc) -> do-san, khong muc do-moi, ket_qua khong phai do;
+      (d) eval do lan dau, xanh khi chay lai (tep dem trong thu muc tam) -> chap-chon;
+      (e) cay lam viec noi goi lenh: bam noi dung moi tep git-theo-doi va danh sach tep chua theo doi truoc/sau tung
+          o — khong doi; lan gia ghi cwd cua no -> nam duoi .acceptance-runs/kiem-cheo/cay;
+      (f) bun install cua cay rieng thay bang lenh gia that bai (KIEM_CHEO_DUNG_CAY) -> khong-chay-duoc goi ten buoc,
+          moc.json khong doi; suite cua lan gia do -> khong-chay-duoc, moc.json khong doi;
+      (g) ho so moi trong khoang: ho so gia vao o M1 (chua co o T), pha o M2 -> do-moi, lan_gop = sha M2 (khong phai
+          do-san); doi chung cung fixture: ho so co tu T, pha o T -> do-san;
+      (h) lan gia ghi argv: khong co --write, co dung mot --slug cho moi ho so cua tap AC-1 va khong slug nao khac;
+      (i) tran luot: KIEM_CHEO_TRAN_PHUT rat nho va lan gia ngu dai (sinh mot tien trinh con) -> khong-chay-duoc goi
+          ten «vuot tran», khong con tien trinh con nao song, khoa tay da tra, moc.json khong doi.
+      Moi o ghim thong diep (ten o, sha), khong chi ma thoat.
+
+  - id: E4
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.kcs_ranh_gioi
+    paths:
+      - "scripts/**"
+      - "_acceptance/kiem-cheo-sau-gop/rang/ranh-gioi.mjs"
+    expected: |
+      rang/ranh-gioi.mjs: (a) git ls-files khong co tep nao ten repin-lane* ngoai bo nho dem plugin; (b) dem.mjs goi
+      lan qua scripts/resolve-plugin.mjs --plugin feature-loop (doc ma nguon: co loi goi resolve-plugin va khong co
+      duong dan tuyet doi toi .claude/plugins/cache); (c) khong tep nao trong scripts/kiem-cheo/ import ai, @ai-sdk/*,
+      @crm/ai-okr hay chua AI_GATEWAY. Chieu do cung lan chay: ban sao scripts/kiem-cheo/ trong thu muc tam them mot
+      dong `import { generateText } from "ai"` -> (c) do goi ten tep; them mot tep repin-lane.mjs gia vao danh sach
+      tep cua ban sao -> (a) do goi ten tep. Ma 0 khi ban that sach va ca hai chieu do do dung cho.

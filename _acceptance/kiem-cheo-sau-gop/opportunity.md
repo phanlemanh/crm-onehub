@@ -50,8 +50,8 @@ Số đo (R1g `zalo-va`, ký Cổng 2 05/10 15:11):
   kho; mỗi lần gộp vào onehub có đúng một kết quả kiểm chéo (xanh, hoặc đỏ gọi tên hồ sơ, eval và lần gộp
   gây đỏ) trong vòng 24 giờ; một hồi quy chéo cố ý (phá thử trên nhánh nháp) bị bắt trong lượt đầu tiên.
 - Kết quả nào là CHẾT: [đề xuất] Có lần gộp không có kết quả kiểm chéo sau 48 giờ, hoặc kiểm chéo đỏ mà
-  không gọi được tên lần gộp gây đỏ, hoặc nó lại chiếm khoá `s4` lúc có phiên đang chờ — tức chỉ dời 14 giờ
-  máy sang chỗ khác.
+  không gọi được tên lần gộp gây đỏ, hoặc một lượt giữ khoá `s4` quá trần một lượt (90 phút) trong lúc có phiên
+  khác đang chờ — tức chỉ dời 14 giờ máy sang chỗ khác.
 - Timebox: [đề xuất] làm trong đợt sau-14-10 (dãy P4); đo lần đầu hai tuần sau ngày gộp.
 
 ## Hạng mục cùng lớp
