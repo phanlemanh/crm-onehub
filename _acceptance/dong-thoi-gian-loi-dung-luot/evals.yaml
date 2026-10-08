@@ -67,7 +67,12 @@ evals:
       Tat ca: TanStack 5.101 tai lai trang dau (luot loi dat isInvalidated: true, query.js:388) -> dung 1 lan goi khong
       cursor; trong luc lan tai lai treo, MutationObserver dem so lan chen [data-dtg-loi] === 0; giai -> khong
       [data-dtg-loi], nut «Xem cũ hơn» !== null. Moi bai dat lai dong ho that (setSystemTime()) truoc khi chay.
-      CHIEU DO ghim: ban sao giu co loi qua doi khoa -> do "dtl: thong bao theo sang tab moi" (ca o sang tab va o quay lai).
+      O sang tab co cache: Ghi chu da tai (staleTime 30000) -> Tat ca loi xem cu -> sang Ghi chu tu cache -> khong
+      [data-dtg-loi] nao chen vao va khong con sau 10 nhip.
+      CHIEU DO ghim: ban sao dung lai co cua luot dang chay (isRefetchError/isFetchNextPageError) -> do "dtl: thong bao theo
+      sang tab moi" (o quay lai: luot tai lai khi quay ve hien «khong lam moi duoc» luc dang chay). Ban sao bo chot dat lai
+      theo khoa KHONG do duoc trong jsdom: phan tu thong bao cu duoc React giu nguyen va effect xoa no trong cung luot act,
+      nen chop mot nhip khong quan sat duoc — chot giu lai nhu lop phong thu, ghi o so quyet dinh.
 
   - id: E5
     criterion: AC-5

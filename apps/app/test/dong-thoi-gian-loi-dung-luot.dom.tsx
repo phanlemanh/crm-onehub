@@ -392,6 +392,34 @@ describe("dong-thoi-gian-loi-dung-luot", () => {
 		expect(document.querySelector("[data-dtg-loi]") === null).toBe(true);
 		expect(nutCo(VI.timeline.showOlder) !== null).toBe(true);
 		o.push("quay-lai");
-		expect(o.length).toBe(3);
+		await dongHet();
+
+		const cach3: CachDoc = {
+			dau: truocLuot.dau,
+			c1: () => {
+				throw new Error("boom-trang-ke");
+			},
+			ghiChu: () => ({ entries: GHI_CHU, nextCursor: null }),
+		};
+		datLichSu(cach3);
+		await moTimeline();
+		await act(async () => datStale(30_000));
+		await bam(nutTab(VI.timeline.tabs.notes) as HTMLElement);
+		await cho(() => dong().length === 2, "ghi chu lan dau");
+		await bam(nutTab(VI.timeline.tabs.all) as HTMLElement);
+		await cho(() => dong().length === 3, "ve tat ca");
+		await bam(nut(VI.timeline.showOlder));
+		await cho(() => thongBao("xem-cu") !== null, "xem cu loi");
+		const demCache = demChen("[data-dtg-loi]");
+		await bam(nutTab(VI.timeline.tabs.notes) as HTMLElement);
+		await cho(() => dong().length === 2, "ghi chu tu cache");
+		await nhip(10);
+		demCache.dung();
+		phai(
+			demCache.dem() === 0 && document.querySelector("[data-dtg-loi]") === null,
+			"dtl: thong bao theo sang tab moi",
+		);
+		o.push("sang-tab-co-cache");
+		expect(o.length).toBe(4);
 	});
 });
