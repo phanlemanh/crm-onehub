@@ -1,0 +1,332 @@
+schema_version: 1
+slug: khung-ban-ghi-kara
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_tab_rong
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "apps/app/lib/agent-record.ts"
+      - "apps/app/lib/messages/kara-ban-ghi.ts"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
+    expected: |
+      exit 0; AgentPanel that voi useEveAgent gia (mock.module eve/react) va tRPC gia. Ma tran viet truoc
+      3 loai (contact, company, deal) x 6 o (tieu de, mo ta, cho goi y o soan, 3 cau goi y) = 18 o,
+      expect(o.length).toBe(18); moi o so chu hien (innerText) voi ban viet truoc tieng Viet trong bai
+      (khong rut tu tep chu, de bat ca tep chu sai). Moi loai: khong co [data-slot=logo] / svg cua Logo
+      trong tab, co dau Kara ([data-slot=kara-mark] hoac avatar KaraAvatar); recordSheetMessages("vi")
+      .tabs.agent === "Kara". Ba nut goi y nam trong khoang rong [data-slot=empty] (xuong dong duoc, khong
+      nam trong hang cuon cua o soan). Bam cau goi y thu hai -> agent.send goi dung mot lan voi {message: <cau do>}.
+      CHIEU DO ghim: ban sao agent-panel.tsx tra <Logo vao khoang rong -> do "tab-rong: con logo OneHub";
+      doi mot goi y cua deal trong tep chu -> do "tab-rong: deal goi y 2"; ban sao tra goi y ve hang cuon
+      cua o soan -> do "tab-rong: contact goi y nam ngoai o trong".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_dang_lam
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
+    expected: |
+      exit 0; ba ca: (a) hoi thoai cu dang tai qua 1 giay (dong ho gia cua bai, khong setSystemTime) ->
+      [data-kara-state=working] hien chu "Kara đang mở cuộc trò chuyện…"; (b) loi cua Kara co mot buoc
+      dang chay -> [data-kara-steps] voi buoc [data-trang-thai=dang-chay]; (c) buoc xong co nguon linkedin
+      -> [data-trang-thai=xong] va the <a href> cua nguon mo duoc. Moi ca: so [data-slot=spinner] trong
+      tab === 0. CHIEU DO ghim: ban sao tra <Spinner /> cho buoc dang chay -> do "dang-lam: spinner tran".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_loi
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "apps/app/lib/messages/kara-ban-ghi.ts"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
+    expected: |
+      exit 0; ma tran viet truoc 3 loi gia cua agent.error: "Agent is not reachable at http://127.0.0.1:2000",
+      "Agent bridge is not configured", "Unexpected token < in JSON" = 3 o. Hai o dau va o ba: chu
+      "Kara chưa trả lời được" + nut "Thử lại"; o hai (bang muc 7 hang Tat): o soan khoa, aria-describedby
+      tro toi dong "Kara chưa được bật cho hồ sơ. Hỏi được ngay khi quản trị viên bật trong Cài đặt.", khong
+      hop trang thai [data-kara-state], khong nut Thu lai. Moi o: document.body.textContent khong chua chuoi nao trong danh sach cam viet truoc
+      ["bun run dev", "AGENT_URL", "AGENT_BRIDGE_SECRET", "not reachable", "not configured", "Unexpected token"].
+      O mot: gui "Họ còn làm ở đó không?" roi loi; bam Thu lai -> agent.send goi lan hai voi dung message do.
+      CHIEU DO ghim: ban sao in error.message -> do "loi: lo chuoi cam not reachable"; ban sao khong khoa o
+      soan khi chua bat -> do (cho het han tai cau chua bat, o soan khong mang dong ly do).
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_khoa
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
+    expected: |
+      exit 0; hai ca: thread status working (khong ban o phia khach) -> o soan [data-slot=kara-composer]
+      textarea disabled, chu ly do "Kara vẫn đang trả lời câu trước…" hien qua aria-describedby; thread
+      ended -> textarea disabled, chu "Cuộc trò chuyện này đã kết thúc." va nut "Bắt đầu cuộc mới". Ca ended
+      dung noi giu thread THAT (bo chuyen nuqs thu cua kho, khong ham gia): bam nut -> man dung lai voi cuoc
+      moi, textarea cua [data-slot=kara-composer] het disabled, chu ket thuc va nut "Bắt đầu cuộc mới" bien mat.
+      Doi chung: thread ready -> textarea khong disabled. CHIEU DO ghim: ban sao bo lockedReason khi ended ->
+      do "khoa: ket thuc van go duoc"; ban sao giu trang thai ended sau khi doi thread -> do
+      "khoa: cuoc moi van khoa".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    layer: logic
+    cmd: config:executors.script.kbk_chu_cung
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "apps/app/components/crm/agent-conversations.tsx"
+      - "apps/app/components/agent-clarification-composer.tsx"
+      - "apps/app/components/agent-session-limit-composer.tsx"
+      - "apps/app/components/crm/facts.tsx"
+      - "apps/app/components/crm/enrichment-actions.tsx"
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/components/crm/record-sheet/company-plans.tsx"
+      - "apps/app/lib/agent-record.ts"
+      - "_acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
+    expected: |
+      exit 0; rang/chu-cung.mjs tu suy goc kho tu vi tri cua no, chay hai luot tren danh sach tep viet truoc
+      9 tep (dem 9; tep thieu tren dia -> ma 2 "khong do duoc: thieu <tep>"). Luot 1: bo quet AST chu cung JSX co
+      san (_acceptance/nhan-ung-dung-noi-tieng-viet/rang/chu-cung-jsx.mjs) cong quet chuoi trong lib/agent-record.ts
+      (moi gia tri chuoi hien thi phai den tu tep chu). Luot 2: quet MOI chuoi literal (ca ngoai JSX: hang so,
+      toast, nhanh trang thai) voi danh sach cam viet truoc 5 muc ["bun run dev", "AGENT_URL",
+      "AGENT_BRIDGE_SECRET", "Start it with", "Set AGENT"]; so phep kiem = 9 tep x 5 muc = 45, in so do va doi
+      expect bang 45. In "<tep>: <so> chu cung" va "<tep>: <so> goi y lap trinh vien" moi tep; tong 0 -> ma 0;
+      khac 0 -> ma 1 goi ten tep va dong. CHIEU DO ghim: ban sao agent-conversations.tsx them
+      <span>Nothing yet</span> -> ma 1 ghim "agent-conversations.tsx: 1 chu cung"; ban sao agent-panel.tsx chen
+      hang "Start it with bun run dev" vao mot loi goi toast() -> ma 1 ghim
+      "agent-panel.tsx: 1 goi y lap trinh vien".
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_hoi_lai
+    paths:
+      - "apps/app/components/agent-clarification-composer.tsx"
+      - "apps/app/components/crm/agent-conversations.tsx"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
+    expected: |
+      exit 0; AgentClarificationComposer that voi mot cau hoi co lua chon va mot cau hoi tu do, locale vi:
+      ma tran viet truoc 6 chu (nut gui, chu dang gui, cho nhap, nhan an tra loi khac, goi y chon roi gui,
+      loi gui) = 6 o, moi o so voi ban viet truoc tieng Viet. ConversationPicker voi 0 va 2 hoi thoai
+      (mot khong ten): "Cuộc trò chuyện mới", chu chua co, chu chua dat ten, nhan an nut xoa, toast da xoa
+      = 5 o. Tong 11. CHIEU DO ghim: ban sao tra "Submit answer" -> do "hoi-lai: nut gui".
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_de_xuat_cho
+    paths:
+      - "apps/app/components/crm/facts.tsx"
+      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
+      - "apps/app/lib/contact-facts.ts"
+      - "apps/app/test/kara-ban-ghi-de-xuat.dom.tsx"
+    expected: |
+      exit 0; FactSuggestion that, tRPC gia. Ma tran 2 o (truong trong, truong co gia tri): goc
+      [data-slot=proposed-change] mang data-density=inline (khong khung the); dung mot button[data-variant=default],
+      ten "Thêm vào hồ sơ" (truong trong) / "Thay giá trị hiện có" (truong co gia tri); "Bỏ qua" la nut chu;
+      khong nut nao co ten dung bang "Nhận". Muc Chi tiet cua ContactOverview voi 2 de xuat cho hai truong:
+      dung 1 [data-slot=kara-label] voi chu "Kara · 2 đề xuất", co nut "Vì sao?". CHIEU DO ghim: ban sao
+      dat density="card" -> do "de-xuat: con khung the"; ban sao lap KaraLabel tren tung de xuat -> do
+      "de-xuat: nhan lap 2 lan".
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    layer: ui-flow
+    cmd: config:executors.test.kbk_ui_nhan
+    paths:
+      - "apps/app/components/crm/facts.tsx"
+      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
+      - "apps/app/test/kara-ban-ghi-de-xuat.dom.tsx"
+    expected: |
+      exit 0; FactSuggestion that, tRPC gia ghi loi goi. Bam nut chinh -> contacts.decideFact dung mot
+      lan; dong bien nhan theo dung dong tu cua nut: truong trong -> "Đã thêm theo Kara", truong co gia tri ->
+      "Đã thay theo Kara"; kem nut "Hoàn tác". Bam Hoan tac -> contacts.undoFactDecision
+      dung mot lan; payload parse bang schema input that undoFactDecisionInput import tu
+      apps/api/src/contacts/contacts.contracts.ts, mang factId cua de xuat va truoc = gia tri truong truoc khi
+      nhan (ca truong trong: value null; ca ten: firstName/lastName cu); sau do de xuat cho hien lai va
+      document.activeElement la nut chinh cua no. Ca trong ngan that (ContactSheet trong DetailSheet, bo dem
+      lam moi goi invalidateQueries that, contacts.byId doi theo giai doan cho -> da ap -> cho): sau Hoan tac
+      de xuat con va focus nam tren "Thay giá trị hiện có". CHIEU DO ghim: ban sao gui truoc = gia tri de
+      xuat -> do "nhan: truoc sai gia tri"; ban sao xoa bien nhan truoc khi tai lai, hoac Tong quan doc
+      contact qua prop -> do "nhan: focus roi khoi nut chinh"; ban sao bien nhan luon "Đã thêm" -> do
+      toContain "Đã thay theo Kara".
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kbk_api_nhan
+    paths:
+      - "apps/api/src/contacts/contacts.service.ts"
+      - "apps/api/src/contacts/contacts.router.ts"
+      - "apps/api/src/contacts/contacts.contracts.ts"
+      - "apps/api/test/hoan-tac-thong-tin.spec.ts"
+    expected: |
+      exit 0; Postgres that, goi thu tuc tRPC that qua ung dung Nest (cookie mot thanh vien). Ma tran viet
+      truoc 3 truong (title co gia tri cu, githubUrl trong, name) x (nhan, hoan tac) : sau nhan doc lai hang
+      contact co cot = fact.value, fact APPLIED; sau hoan tac cot = truoc (title cu; githubUrl null; firstName
+      va lastName cu dung tung o), fact PROPOSED, decidedById va decidedAt null. Dem ca = 3.
+      CHIEU DO ghim: ban sao bo dong ghi cot khi hoan tac -> do "nhan: title khong ve gia tri cu".
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kbk_api_bo_qua
+    paths:
+      - "apps/api/src/contacts/contacts.service.ts"
+      - "apps/api/test/hoan-tac-thong-tin.spec.ts"
+    expected: |
+      exit 0; Postgres that: bo qua -> fact DISMISSED, cot khong doi; hoan tac -> fact PROPOSED, decided*
+      null, cot van khong doi (doc lai hang contact, so tung cot FACT_COLUMNS va firstName/lastName).
+      Kem ca DOM trong kara-ban-ghi-de-xuat.dom.tsx -t bo-qua: bien nhan "Đã bỏ qua" + Hoan tac goi
+      undoFactDecision mot lan. CHIEU DO ghim: ban sao de hoan tac bo qua ghi cot -> do "bo-qua: cot doi".
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kbk_api_chan
+    paths:
+      - "apps/api/src/contacts/contacts.service.ts"
+      - "apps/api/src/contacts/contacts.router.ts"
+      - "apps/api/test/hoan-tac-thong-tin.spec.ts"
+    expected: |
+      exit 0; Postgres that. Ma tran viet truoc 3 ca chan = (truong da sua sau lan nhan, nguoi khac nguoi da
+      quyet, de xuat con PROPOSED), expect(ca.length).toBe(3): moi ca loi tRPC dung ma (CONFLICT, FORBIDDEN,
+      CONFLICT) va chup hang contact + moi contactFact cung contact truoc/sau bang nhau tung truong.
+      Ca phuc hoi: truong co fact W da bi SUPERSEDED tu mot lan nhan TRUOC (moc cu t0), mot fact APPLIED
+      (gia tri X) va mot PROPOSED khac (Y); nhan fact Z -> X va Y SUPERSEDED cung moc decidedAt cua Z; hoan tac
+      voi truoc = X -> X ve APPLIED, Y ve PROPOSED, ca hai supersededAt null, cot = X; doi chung: W van
+      SUPERSEDED va supersededAt van bang t0. CHIEU DO ghim: ban sao bo kiem nguoi da quyet -> do
+      "chan: nguoi khac hoan tac duoc"; ban sao bo dieu kien khop moc supersededAt === decidedAt -> do
+      "chan: phuc hoi fact cua lan nhan khac".
+
+  - id: E12
+    criterion: AC-9
+    executor: test
+    layer: ui-flow
+    cmd: config:executors.test.kbk_ui_hoan_tac_loi
+    paths:
+      - "apps/app/components/crm/facts.tsx"
+      - "apps/app/test/kara-ban-ghi-de-xuat.dom.tsx"
+    expected: |
+      exit 0; tRPC gia: undoFactDecision nem loi CONFLICT. Sau nhan, bam Hoan tac -> dong bien nhan doi
+      thanh "Trường này đã đổi sau khi nhận — không hoàn tác được", khong con nut "Hoàn tác", khong toast
+      chu tho cua loi. Loi khac (khong phai CONFLICT, vd mat ket noi): toast "Chưa hoàn tác được. Thử lại nhé.",
+      bien nhan giu nguyen va con nut "Hoàn tác". CHIEU DO ghim: ban sao giu nut Hoan tac khi loi -> do
+      "hoan-tac-loi: con nut"; ban sao coi moi loi la xung dot -> do (cho het han "bao thu lai").
+
+  - id: E13
+    criterion: AC-10
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_khung_loi
+    paths:
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/company-plans.tsx"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
+    expected: |
+      exit 0; ma tran 3 ngan (contact, company, deal) x (byId loi lan dau, thanh cong lan hai) = 3 ca: khung
+      hien "Không tải được bản ghi này" + mo ta + nut "Thử lại", textContent khong chua thong diep loi gia
+      "Lỗi máy chủ 500 chi tiết"; bam Thu lai -> byId goi lan hai, ten ban ghi hien. CompanyPlans voi
+      plansOfCompany loi: cung chu tieu de va cung nut [data-slot=kara-retry]. CHIEU DO ghim: ban sao in
+      error trong khung -> do "khung-loi: lo thong diep tho".
+
+  - id: E14
+    criterion: AC-11
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_tra_cuu
+    paths:
+      - "apps/app/components/crm/enrichment-actions.tsx"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
+    expected: |
+      exit 0; EnrichmentActions va ContactEnrichmentAction that, tRPC gia. Ma tran 3 o (nghi, dang chay, loi) x
+      2 nut = 6 o: moi o dem svg cua MagicWand trong nut === 0 (nhan dien bang duong ve path rut tu
+      @carbon/icons-react/es/MagicWand luc chay, khong viet tay); o nghi co dau Kara (icon AiGenerate). Dang
+      chay -> chu nut "Kara đang tra cứu…", so [data-slot=spinner] === 0; loi "boom-500" -> toast chu tieng
+      Viet khong chua "boom-500". Doi chung duong: cung bo dem tren mot nut dung MagicWand dung tay trong bai
+      tra 1. CHIEU DO ghim: ban sao tra MagicWand -> do "tra-cuu: con MagicWand"; ban sao giu MagicWand canh dau
+      Kara o nhanh dang chay -> do "tra-cuu: MagicWand con o dang chay".
+
+  - id: E15
+    criterion: AC-12
+    executor: test
+    layer: ui-flow
+    cmd: config:executors.test.kbk_them_nhanh
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "packages/ui/src/components/sheet.tsx"
+      - "apps/app/test/ngan-ban-ghi-giu.dom.tsx"
+    expected: |
+      exit 0; DetailSheet that boc ba bieu mau that (QuickAddContact, QuickAddDeal, AttachDealContact).
+      Ma tran viet truoc 3 bieu mau x 4 cach dong (Esc, bam lop phu, nut dong, nut Huy) khi da go = 12 o:
+      Esc, nut dong, nut Huy -> hop "Bỏ những gì vừa nhập?" hien, bam "Tiếp tục sửa" -> chu go con nguyen;
+      bam lop phu -> ngan van mo, khong hop, chu con nguyen (co che giu cho da ky cua hop-thoai-giu-cho;
+      lech voi chu AC-12, ghi so d-20261007T143827Z-12, trinh o Cong 2). Doi chung 3 bieu mau
+      x (trong -> Esc dong khong hoi) = 3 o, 3 bieu mau x (luu xong -> dong khong hoi) = 3 o. Tong 18,
+      expect(o.length).toBe(18). Ca cu ngan-ban-ghi cua tep van xanh. CHIEU DO ghim: ban sao bo khai thay doi
+      o QuickAddDeal -> do "them-nhanh: QuickAddDeal Esc mat chu".
+
+  - id: E16
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.kbk_man
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs: phien do rieng cua cay, kho crm_<cay>_do"
+      - "Gieo bang Prisma trong man.mjs: mot cong ty, mot ca nhan co title 'Trưởng phòng' va mot ContactFact PROPOSED title 'Giám đốc kinh doanh', mot thoa thuan"
+      - "Buoc 1 (1440): mo ngan ca nhan, tab Kara -> chup kbk-kara-ca-nhan-1440.png; innerText co 'Kara' va mot cau goi y tieng Viet, khong 'Ask about'"
+      - "Buoc 2 (1440): cung o ngan cong ty va thoa thuan -> kbk-kara-cong-ty-1440.png, kbk-kara-thoa-thuan-1440.png; o ngan ca nhan bam goi y dau tien -> phien do khong chay tac nhan nen tab phai hien mot trang thai Kara (innerText chua 'Kara chưa trả lời được' hoac 'Kara chưa được bật', khong chua 'bun run dev', 'AGENT_URL', 'not reachable') -> kbk-kara-trang-thai-1440.png; in ten trang thai da thay"
+      - "Buoc 3 (1440): tab Tong quan ca nhan -> de xuat duoi truong Chuc danh, nhan 'Kara · 1 đề xuất' -> kbk-de-xuat-1440.png; bam 'Thay giá trị hiện có' -> doc lai qua API contacts.byId: title = 'Giám đốc kinh doanh' -> kbk-bien-nhan-1440.png; bam 'Hoàn tác' -> contacts.byId: title = 'Trưởng phòng', de xuat hien lai -> kbk-hoan-tac-1440.png"
+      - "Buoc 4 (390): lap buoc 1 va 3 o kho 390 -> kbk-kara-ca-nhan-390.png, kbk-de-xuat-390.png; scrollWidth <= clientWidth cua trang va cua ngan; ba goi y ca nhan co mat va khong nut goi y nao vuot mep khung nhin (do '390 goi y bi cat'); khong phan tu con nao cua mot <dd> vuot mep phai cua <dd> do (do '390 o thong tin tran')"
+    paths:
+      - "apps/app/components/crm/agent-panel.tsx"
+      - "apps/app/components/crm/facts.tsx"
+      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "apps/api/src/contacts/contacts.service.ts"
+      - "_acceptance/khung-ban-ghi-kara/rang/man.mjs"
+    expected: "exit 0; man.mjs in 'buoc N: dat' cho 4 buoc; chu doc bang innerText (khong page.content); anh o .acceptance-runs/khung-ban-ghi-kara/evidence/ va chep sang _acceptance/khung-ban-ghi-kara/evidence/. Khong mo duoc phien do -> KHONG DO DUOC ma 2 (khong bao xanh). CHIEU DO: --chieu-do bo qua cu bam Hoan tac (bien nhan con nguyen) -> 'buoc 3: hoan tac lan hai van con nut' ma 1. Anh chup theo khung nhin sau khi ngan dung yen (chup fullPage lam ngan chay lai hieu ung truot)."
+
+  - id: E17
+    criterion: AC-13
+    executor: judgment
+    inputs:
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-ca-nhan-1440.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-cong-ty-1440.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-thoa-thuan-1440.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-trang-thai-1440.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-de-xuat-1440.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-bien-nhan-1440.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-kara-ca-nhan-390.png"
+      - "_acceptance/khung-ban-ghi-kara/evidence/kbk-de-xuat-390.png"
+      - "docs/ai-ux.md"
+    question: |
+      Nhìn tám ảnh ngăn bản ghi và đối chiếu docs/ai-ux.md mục 1, 2, 3, 5, 6, 7: một người không làm lượt này
+      có thấy đây là cùng một Kara như luật mô tả không — tab Kara của cả ba loại ngăn (cá nhân, công ty, thoả
+      thuận) giống nhau, ảnh trạng thái dùng đúng chữ và thành phần của bảng mục 7 (không gợi ý cho lập trình
+      viên), tên «Kara», dấu tia sáng không tô màu thương hiệu,
+      nhãn «Kara · N đề xuất» một lần ở đầu nhóm, đề xuất neo ngay dưới trường không khung thẻ, nút gọi đúng
+      hậu quả, dòng biên nhận có Hoàn tác? Ở ảnh 390 có chữ hay nút nào bị cắt hoặc tràn không? Nêu từng
+      chỗ lệch kèm tên ảnh.
+    expected: "PASS khi không có chỗ lệch luật nào thấy được trong ảnh; mỗi chỗ lệch nêu tên ảnh và mục luật."

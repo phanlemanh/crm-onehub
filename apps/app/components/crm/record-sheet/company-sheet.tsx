@@ -256,6 +256,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
+			onRetry={() => void query.refetch()}
 			title={company?.name ?? m.company.fallbackTitle}
 			description={
 				company ? (

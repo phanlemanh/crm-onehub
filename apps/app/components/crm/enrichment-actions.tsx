@@ -1,14 +1,14 @@
 "use client";
 
-import MagicWand from "@carbon/icons-react/es/MagicWand";
 import Renew from "@carbon/icons-react/es/Renew";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
+import { NutKara } from "@crm/ui/components/kara/ban-ghi";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { crmMessages } from "@/lib/messages/crm";
+import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 
@@ -19,7 +19,9 @@ export function EnrichmentActions({
 	companyId: string;
 	hasDomain: boolean;
 }) {
-	const m = crmMessages(useLocale());
+	const locale = useLocale();
+	const m = crmMessages(locale);
+	const t = karaBanGhiMessages(locale).traCuu;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -31,7 +33,7 @@ export function EnrichmentActions({
 					result.queued ? m.enrichment.lookingUp : m.enrichment.againRunning,
 				);
 			},
-			onError: (error) => toast.error(error.message),
+			onError: () => toast.error(t.loi),
 		}),
 	);
 
@@ -43,7 +45,7 @@ export function EnrichmentActions({
 					result.queued ? m.enrichment.brief : m.enrichment.already,
 				);
 			},
-			onError: (error) => toast.error(error.message),
+			onError: () => toast.error(t.loi),
 		}),
 	);
 
@@ -52,35 +54,35 @@ export function EnrichmentActions({
 			<Button
 				variant="outline"
 				size="sm"
+				aria-busy={enrich.isPending || undefined}
 				disabled={!hasDomain || enrich.isPending}
 				onClick={() => enrich.mutate({ id: companyId })}
 			>
 				{enrich.isPending ? (
-					<Spinner />
+					t.dangChay
 				) : (
-					<Icon icon={Renew} data-icon="inline-start" />
+					<>
+						<Icon icon={Renew} data-icon="inline-start" />
+						<span className="hidden sm:inline">{m.enrichment.reEnrich}</span>
+					</>
 				)}
-				<span className="hidden sm:inline">{m.enrichment.reEnrich}</span>
 			</Button>
 
-			<Button
-				size="sm"
-				disabled={!hasDomain || research.isPending}
+			<NutKara
+				nhan={t.nhoKara}
+				dangChay={research.isPending ? t.dangChay : null}
+				gonTrenDienThoai
+				disabled={!hasDomain}
 				onClick={() => research.mutate({ id: companyId })}
-			>
-				{research.isPending ? (
-					<Spinner />
-				) : (
-					<Icon icon={MagicWand} data-icon="inline-start" />
-				)}
-				<span className="hidden sm:inline">{m.enrichment.research}</span>
-			</Button>
+			/>
 		</>
 	);
 }
 
 export function ContactEnrichmentAction({ contactId }: { contactId: string }) {
-	const m = crmMessages(useLocale());
+	const locale = useLocale();
+	const m = crmMessages(locale);
+	const t = karaBanGhiMessages(locale).traCuu;
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 
@@ -92,23 +94,16 @@ export function ContactEnrichmentAction({ contactId }: { contactId: string }) {
 					result.queued ? m.enrichment.again : m.enrichment.againRunning,
 				);
 			},
-			onError: (error) => toast.error(error.message),
+			onError: () => toast.error(t.loi),
 		}),
 	);
 
 	return (
-		<Button
-			variant="outline"
-			size="sm"
-			disabled={enrich.isPending}
+		<NutKara
+			nhan={t.lai}
+			dangChay={enrich.isPending ? t.dangChay : null}
+			gonTrenDienThoai
 			onClick={() => enrich.mutate({ id: contactId })}
-		>
-			{enrich.isPending ? (
-				<Spinner />
-			) : (
-				<Icon icon={Renew} data-icon="inline-start" />
-			)}
-			<span className="hidden sm:inline">{m.enrichment.reEnrich}</span>
-		</Button>
+		/>
 	);
 }
