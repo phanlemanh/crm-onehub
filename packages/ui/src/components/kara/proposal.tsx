@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
+import { FieldError } from "@crm/ui/components/field";
 import { KaraLabel } from "@crm/ui/components/kara";
 import { useKaraBusy } from "@crm/ui/components/kara/busy";
 import { useMessages } from "@crm/ui/components/locale-provider";
@@ -75,7 +76,7 @@ export type KaraProposalGroupProps = {
 	readAt?: string;
 	scope?: ReactNode;
 	batch?: { label: ReactNode; onAccept: (ids: string[]) => void };
-	batchDecided?: { text: ReactNode; onUndo?: () => void };
+	batchDecided?: { text: ReactNode; onUndo?: () => void; error?: ReactNode };
 	children: ReactNode;
 };
 
@@ -132,6 +133,9 @@ export function KaraProposalGroup({
 						text={batchDecided.text}
 						onUndo={batchDecided.onUndo}
 					/>
+					{batchDecided.error ? (
+						<FieldError data-loi="nhom">{batchDecided.error}</FieldError>
+					) : null}
 				</KhoaKhiBan>
 			) : null}
 			<TrongNhom.Provider value>
