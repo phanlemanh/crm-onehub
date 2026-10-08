@@ -28,12 +28,14 @@ Chủ kho chọn phương án A ngày 07/10:
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: người mở «Của tôi» có còn thấy OKR không phải của mình lẫn trong danh sách chính không, và khi cần thì có tìm được mục mình đang theo dõi không?
-- [đề xuất] Kết quả nào là SỐNG:
+Ngưỡng soạn sau khi gộp, anh duyệt 08/10 trong phiên giám sát.
+
+- Câu hỏi phép đo trả lời: người mở «Của tôi» có còn thấy OKR không phải của mình lẫn trong danh sách chính không, và khi cần thì có tìm được mục mình đang theo dõi không?
+- Kết quả nào là SỐNG:
   - ở lái-thử người-lạ, ≥ 4/5 người chỉ đúng đâu là mục tiêu của mình, đâu là mục đang theo dõi;
   - ≥ 4/5 người tự mở được nhóm «Đang theo dõi» khi được hỏi về một mục mình theo dõi;
   - 0 báo cáo «thấy OKR người khác trong Của tôi» trong 2 tuần sau khi giao.
-- [đề xuất] Kết quả nào là CHẾT:
+- Kết quả nào là CHẾT:
   - lại có báo cáo thấy OKR người khác trong danh sách chính; hoặc
   - ≥ 2/5 người không tìm thấy mục mình theo dõi vì nhóm gập sẵn.
-- [đề xuất] Timebox: một vòng feature-loop T2 (đã giao 07/10). Đo trong 2 tuần sau khi giao.
+- Timebox: một vòng feature-loop T2 (đã giao 07/10). Đo trong 2 tuần sau khi giao.

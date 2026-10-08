@@ -31,12 +31,14 @@ Chủ kho chốt ngày 07/10:
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: đơn vị có dùng loại «Học tập» đúng chỗ, cho mục tiêu kiểm giả thuyết, và có ghi được điều học được khi đóng kỳ không?
-- [đề xuất] Kết quả nào là SỐNG:
+Ngưỡng soạn sau khi gộp, anh duyệt 08/10 trong phiên giám sát.
+
+- Câu hỏi phép đo trả lời: đơn vị có dùng loại «Học tập» đúng chỗ, cho mục tiêu kiểm giả thuyết, và có ghi được điều học được khi đóng kỳ không?
+- Kết quả nào là SỐNG:
   - kỳ OKR kế có ≥ 1 mục tiêu học tập đã công bố;
   - 100% mục tiêu học tập có «Điều học được» khi kỳ đóng;
   - không ai báo nhãn «Trượt» trên mục tiêu học tập.
-- [đề xuất] Kết quả nào là CHẾT:
+- Kết quả nào là CHẾT:
   - sau một kỳ không đơn vị nào dùng loại này; hoặc
   - ≥ 2 trường hợp (Kara hoặc người duyệt bắt được) chọn «Học tập» để né «Trượt» cho một mục tiêu thực chất là cam kết.
-- [đề xuất] Timebox: một vòng feature-loop T2 (đã giao 08/10). Đo ở kỳ OKR kế.
+- Timebox: một vòng feature-loop T2 (đã giao 08/10). Đo ở kỳ OKR kế.
