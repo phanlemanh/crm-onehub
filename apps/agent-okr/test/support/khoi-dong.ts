@@ -502,7 +502,7 @@ export async function khoiDongEve(v: TuyChonKhoiDong = {}): Promise<MayEve> {
 	gocDangChay.add(that);
 	const xong = () => {
 		gocDangChay.delete(that);
-		if (tuGiu) traKhoa(that);
+		if (tuGiu) goNeuCuaMinh(that);
 	};
 	try {
 		const lan = await moEveDoiCong(EVE, goc, v);
