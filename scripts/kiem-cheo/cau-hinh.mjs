@@ -26,7 +26,6 @@ export const KIEM_CHEO = {
 		plugin: "feature-loop",
 		tep: "scripts/repin-lane.mjs",
 		giaiBang: "scripts/resolve-plugin.mjs",
-		moTaPlugin: ".claude-plugin/plugin.json",
 		maHopLe: [0, 1],
 	},
 	daKy: ["signed-off", "machine-cleared"],

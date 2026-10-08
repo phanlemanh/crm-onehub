@@ -157,6 +157,11 @@ function kiemChieuXanh(kho, tam) {
 		hong(`(a) khong co dung mot tep ngay (thay ${r.tepNgay.length})`);
 		return;
 	}
+	if ((r.ket.do ?? []).length > 0) {
+		hong(
+			`(a) lan xanh het ma tep ngay co ${r.ket.do.length} muc do: ${r.ket.do.map((d) => `${d.ho_so} ${d.eval} ${d.loai}`).join("; ")}`,
+		);
+	}
 	if (r.ket.ket_qua !== "xanh") {
 		hong(`(a) ket_qua ${r.ket.ket_qua}: ${r.ket.ly_do ?? ""}`);
 	}

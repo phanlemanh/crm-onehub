@@ -11,11 +11,12 @@ import { timThuMucDot } from "../dieu-phoi/dot.mjs";
 import { chamNhip } from "../dieu-phoi/hook-nhip.mjs";
 import { bao, ngayLuot } from "./bao.mjs";
 import { KIEM_CHEO } from "./cau-hinh.mjs";
-import { docLan, duongLan } from "./doc-lan.mjs";
+import { duongLan } from "./doc-lan.mjs";
 import { layKhoa, pidSong, voiKhoa } from "./khoa.mjs";
 import { canMoc, docMoc, ghiMoc, lanGop, tepDoi } from "./moc.mjs";
 import { maKyVong, tapCham } from "./tap-cham.mjs";
 import { laTepChinh } from "./tep-chinh.mjs";
+import { docKetLan, lech } from "./phan-xu.mjs";
 import { phanLoai } from "./thu-pham.mjs";
 
 const KQ = KIEM_CHEO.ketQua;
@@ -58,6 +59,7 @@ function taoChay({ tranMs }) {
 		new Promise((xong) => {
 			if (vuot) throw new VuotTran();
 			let ra = "";
+			let dau = "";
 			con = spawn("bash", ["-c", lenh], {
 				cwd,
 				detached: true,
@@ -66,12 +68,15 @@ function taoChay({ tranMs }) {
 			const nhan = (b) => {
 				ra += b;
 			};
-			con.stdout.on("data", nhan);
+			con.stdout.on("data", (b) => {
+				dau += b;
+				nhan(b);
+			});
 			con.stderr.on("data", nhan);
 			con.on("close", (ma) => {
 				con = null;
 				if (tep) writeFileSync(tep, ra);
-				xong({ ma: ma ?? 1, ra, vuot });
+				xong({ ma: ma ?? 1, ra, dau, vuot });
 			});
 		});
 	return {
@@ -316,11 +321,11 @@ async function luotTho({ co, goc, ket, now }) {
 				if (!KIEM_CHEO.lan.maHopLe.includes(lan.ma)) {
 					throw new Error(`lan dung som (ma ${lan.ma}, log ${log})`);
 				}
-				const doc = docLan(lan.ra);
-				if (doc.suite.length === 0) {
-					throw new Error(
-						`khong doc duoc dau ra lan (ma ${lan.ma}, log ${log})`,
-					);
+				let doc;
+				try {
+					doc = docKetLan(lan.dau);
+				} catch (e) {
+					throw new Error(`${e.message} (ma ${lan.ma}, log ${log})`);
 				}
 				const suiteDo = doc.suite.filter((s) => s.ma !== 0);
 				if (suiteDo.length > 0) {
@@ -330,23 +335,12 @@ async function luotTho({ co, goc, ket, now }) {
 				}
 				const kyVong = taoKyVong(git);
 				const do_ = [];
-				for (const e of doc.eval.filter(
-					(x) => x.ma !== kyVong(D, x.slug, x.id),
-				)) {
-					if (!e.lenh) {
-						do_.push({
-							ho_so: e.slug,
-							eval: e.id,
-							loai: "trung-lenh",
-							lenh: null,
-						});
-						continue;
-					}
+				for (const e of doc.lech) {
 					const chay = async (sha) => {
 						await datCay({ git, cay, sha, chay: may.chay });
 						const r = await may.chay(e.lenh, cay);
 						if (r.vuot) throw new VuotTran();
-						return r.ma === kyVong(sha, e.slug, e.id) ? 0 : 1;
+						return lech(r.ma, kyVong(sha, e.slug, e.id)) ? 1 : 0;
 					};
 					const kq = await phanLoai({
 						D,
@@ -357,9 +351,9 @@ async function luotTho({ co, goc, ket, now }) {
 					});
 					do_.push({ ho_so: e.slug, eval: e.id, ...kq, lenh: e.lenh });
 				}
-				if (lan.ma !== 0 && do_.length === 0) {
+				if (lan.ma !== 0 && doc.lech.length === 0) {
 					throw new Error(
-						`lan thoat ${lan.ma} nhung khong doc duoc dong do nao (log ${log})`,
+						`lan thoat ${lan.ma} nhung khong doc duoc eval lech nao (log ${log})`,
 					);
 				}
 				const ket_qua = do_.some((d) => d.loai === KIEM_CHEO.loaiDo.doMoi)

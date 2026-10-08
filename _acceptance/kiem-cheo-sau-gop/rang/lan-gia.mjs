@@ -1,50 +1,39 @@
 import { spawn, spawnSync } from "node:child_process";
-import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
+import {
+	appendFileSync,
+	existsSync,
+	readFileSync,
+	writeFileSync,
+} from "node:fs";
+import { createRequire } from "node:module";
 import { join, resolve } from "node:path";
+import { lech } from "../../../scripts/kiem-cheo/phan-xu.mjs";
+import { maKyVong } from "../../../scripts/kiem-cheo/tap-cham.mjs";
 
 const GOC_KHO = resolve(import.meta.dirname, "..", "..", "..");
-const MAU = readFileSync(
-	join(GOC_KHO, "scripts", "kiem-cheo", "fixtures", "lan-that.txt"),
-	"utf8",
-).split("\n");
-const MAU_SUITE = MAU.find((d) => d.startsWith("[lane] suite "));
-const MAU_EVAL = MAU.find(
-	(d) => /^\[lane\] \S+ E\w+: /.test(d) && !d.includes("(đã chạy)"),
+const require = createRequire(import.meta.url);
+const { resolveConfigKey, isRepinMachineEval } = require(
+	join(GOC_KHO, "lib", "evidence-core.cjs"),
 );
-
-function dongSuite(lenh, ma) {
-	const [dau, sau] = MAU_SUITE.split(": ");
-	const duoi = sau.slice(sau.indexOf(" → exit "));
-	return `${dau.replace(/\d+\/\d+$/, "1/1")}: ${lenh}${duoi.replace(/exit \d+/, `exit ${ma}`)}`;
-}
-
-function dongEval(slug, id, lenh, ma) {
-	const [dau, ...sau] = MAU_EVAL.split(": ");
-	const conLai = sau.join(": ");
-	const duoi = conLai.slice(conLai.indexOf(" → exit "));
-	const [, slugMau, idMau] = dau.split(" ");
-	return `${dau.replace(slugMau, slug).replace(idMau, id)}: ${lenh}${duoi.replace(/exit \d+/, `exit ${ma}`)}`;
-}
+const { parseEvals } = require(join(GOC_KHO, "lib", "eval-yaml.cjs"));
 
 function evalsCua(root, slug) {
 	const text = readFileSync(
 		join(root, "_acceptance", slug, "evals.yaml"),
 		"utf8",
 	);
-	const ra = [];
-	let hienTai = null;
-	for (const dong of text.split("\n")) {
-		const id = /^\s*- id: (\S+)/.exec(dong);
-		if (id) {
-			hienTai = { id: id[1], cmd: null, kyVong: 0 };
-			ra.push(hienTai);
-		}
-		const cmd = /^\s+cmd: (.+)$/.exec(dong);
-		if (cmd && hienTai) hienTai.cmd = cmd[1];
-		const kv = /^\s+expected_exit: (\d+)/.exec(dong);
-		if (kv && hienTai) hienTai.kyVong = Number(kv[1]);
-	}
-	return ra.filter((e) => e.cmd);
+	const cauHinh = join(root, "_acceptance", "config.yaml");
+	const configText = existsSync(cauHinh) ? readFileSync(cauHinh, "utf8") : "";
+	const kyVong = maKyVong(text);
+	return parseEvals(text, ["executor", "cmd", "status", "criterion"])
+		.filter((e) => isRepinMachineEval(e))
+		.map((e) => {
+			let cmd = String(e.cmd || "").trim();
+			if (cmd.startsWith("config:")) {
+				cmd = resolveConfigKey(configText, cmd.slice("config:".length)) ?? cmd;
+			}
+			return { id: e.id, cmd, expected: kyVong.get(e.id) ?? 0 };
+		});
 }
 
 const argv = process.argv.slice(2);
@@ -64,18 +53,30 @@ if (process.env.KCS_NGU) {
 }
 
 const suiteMa = Number(process.env.KCS_SUITE_MA ?? 0);
-console.log(dongSuite("bun run test", suiteMa));
-let doBatKy = suiteMa !== 0;
+const out = {
+	run_id: "lan-gia",
+	suites: [{ cmd: "bun run test", exit: suiteMa }],
+	slugs: {},
+};
+let red = suiteMa !== 0;
 for (const slug of slugs) {
+	const evalsExit = {};
+	const ds = [];
 	for (const e of evalsCua(root, slug)) {
-		const ma = process.env.KCS_XANH_HET
+		const exit = process.env.KCS_XANH_HET
 			? 0
 			: (spawnSync("bash", ["-c", e.cmd], { cwd: root, encoding: "utf8" })
 					.status ?? 1);
-		if (ma !== e.kyVong) doBatKy = true;
-		console.log(dongEval(slug, e.id, e.cmd, ma));
+		evalsExit[e.id] = exit;
+		process.stderr.write(`[lane] ${slug} ${e.id}: ${e.cmd} → exit ${exit}\n`);
+		if (lech(exit, e.expected)) {
+			red = true;
+			ds.push({ ...e, exit });
+		}
 	}
+	out.slugs[slug] = { evals_exit: evalsExit, lech: ds };
 }
+process.stdout.write(`${JSON.stringify(out, null, 2)}\n`);
 process.exit(
-	process.env.KCS_LAN_MA ? Number(process.env.KCS_LAN_MA) : doBatKy ? 1 : 0,
+	process.env.KCS_LAN_MA ? Number(process.env.KCS_LAN_MA) : red ? 1 : 0,
 );

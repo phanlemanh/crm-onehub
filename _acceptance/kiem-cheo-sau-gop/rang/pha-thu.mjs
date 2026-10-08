@@ -38,7 +38,8 @@ function chupCayGoi() {
 }
 
 const KIEM_KY_VONG = `const fs = require("node:fs");
-process.exit(fs.readFileSync("san-pham.txt", "utf8").startsWith("tot") ? 2 : 1);
+const sp = fs.readFileSync("san-pham.txt", "utf8");
+process.exit(sp.startsWith("sach") ? 0 : sp.startsWith("tot") ? 2 : 1);
 `;
 const EVALS_KY_VONG = `schema_version: 1
 slug: ky
@@ -359,9 +360,23 @@ o(
 		const { kho, T } = dungKho({ gop: [sanPham("tot2")] });
 		const r = chay({ kho, T, env: { KCS_LAN_MA: "1" } });
 		bang(r.ket?.ket_qua, "khong-chay-duoc", "ket_qua");
-		if (!/khong doc duoc dong do/.test(r.ket.ly_do))
+		if (!/khong doc duoc eval lech nao/.test(r.ket.ly_do))
 			throw new Error(`ly_do: ${r.ket.ly_do}`);
 		bang(r.moc, null, "moc.json");
+		kho.don();
+	},
+);
+
+o(
+	"(o) eval khai expected_exit 2, mot lan gop lam no tra 0 (cai thien) -> xanh, khong muc do nao",
+	() => {
+		const { kho, T } = dungKho({
+			evals: EVALS_KY_VONG,
+			gop: [khac("x.txt"), sanPham("sach"), khac("y.txt")],
+		});
+		const r = chay({ kho, T });
+		bang(r.ket?.ket_qua, "xanh", "ket_qua");
+		bang(r.ket?.do, [], "do");
 		kho.don();
 	},
 );
