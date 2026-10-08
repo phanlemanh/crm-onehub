@@ -1,0 +1,141 @@
+schema_version: 1
+slug: menu-con-loc-dien-thoai
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mcl_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/menu-con-loc-dien-thoai/evidence dat tuong minh: lenh cua mcl_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng cua cay, do-man.mjs tu chan cay, chup, don)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/menu-con-loc-dien-thoai/evidence/
+    paths:
+      - "packages/ui/src/components/dropdown-menu.tsx"
+      - "packages/ui/src/components/data-table.tsx"
+      - "_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"
+    expected: |
+      Ma tran viet truoc 6 o, moi o mot dong "DUNG <kho>: <canh> — <so lieu tho>" va mot anh
+      evidence/<canh>-<kho>.png; dong dem "6/6 o". Cac o 375 chay trong viewport hasTouch: true,
+      isMobile: true; mo «Loc», mo tieu chi va chon lua chon deu bang page.touchscreen.tap tai tam phan
+      tu; dong DUNG in pointerType da ghi nhan (mong "touch"):
+        giai-doan-375: menu con Giai doan cua thoa thuan — hop [data-slot=dropdown-menu-sub-content]
+          co left >= 7 va right <= 368 (dung sai 1 px lam tron DPR, in so tho), width > 0
+        cham-375: tap mot giai doan trong menu con do -> location.search mang stage=<id giai doan vua tap>
+        cong-ty-375: menu con Cong ty cua ca nhan — hop va o tim (input trong hop) left >= 7, right <= 368;
+          go "xa" vao o tim -> value cua o tim bang "xa"
+        doi-chung-1440: menu con Giai doan cua thoa thuan — left hop >= right cua muc Giai doan - 2
+          (khong dich khi du cho)
+        hang-loat-768: chon 1 dong o danh sach thoa thuan, mo menu thao tac hang loat, mo menu con doi
+          nguoi phu trach — hop left >= 0, right <= 768
+        don: kho do sach du lieu tam
+      CHIEU DO (pha-thu o S3 tren ban sao dropdown-menu.tsx): bo lop dich ngang -> giai-doan-375 SAI voi
+      so lieu ghim "right <so> > 368" (tai hien so do 07/10: left 359) va cham-375 SAI (tap khong trung).
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mcl_do_man
+    steps:
+      - "Cung lan do voi E1 (dedupe lenh); doc dong cong-ty-375"
+      - "Mo anh cong-ty-375.png"
+    inputs:
+      - _acceptance/menu-con-loc-dien-thoai/evidence/
+    paths:
+      - "packages/ui/src/components/dropdown-menu.tsx"
+      - "_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG 375: cong-ty-375" voi toa do hop va o tim trong khoang [7, 368] va value o tim "xa".
+      Anh: o tim va it nhat mot muc cong ty thay ro trong man.
+
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mcl_do_man
+    steps:
+      - "Cung lan do voi E1; doc dong doi-chung-1440"
+      - "Mo anh doi-chung-1440.png"
+    inputs:
+      - _acceptance/menu-con-loc-dien-thoai/evidence/
+    paths:
+      - "packages/ui/src/components/dropdown-menu.tsx"
+      - "_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG 1440: doi-chung-1440" in left hop menu con va right muc Giai doan; left >= right - 2.
+      Anh: menu con nam ben phai menu cha, khong de len.
+      CHIEU DO: ban sao dich vo dieu kien (luon -translate-x-1/2) -> doi-chung-1440 SAI.
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.mcl_do_man
+    steps:
+      - "Cung lan do voi E1; doc dong hang-loat-768"
+      - "Mo anh hang-loat-768.png"
+    inputs:
+      - _acceptance/menu-con-loc-dien-thoai/evidence/
+    paths:
+      - "packages/ui/src/components/dropdown-menu.tsx"
+      - "_acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"
+    expected: |
+      Kiem KHONG HOI QUY (khong phai bang chung cho phan sua): dong "DUNG 768: hang-loat-768" voi hop menu
+      con left >= 0, right <= 768. Cung lan do chay them o hang-loat-768 tren ban merge-base (do-man.mjs
+      --doi-chung-goc dung worktree tam o merge-base) va in so cua ban goc canh so cua ban moi; ban goc tran
+      thi dong ghi "ban goc tran, ban moi khong"; ban goc khong tran thi ghi "khong hoi quy".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.mcl_lop
+    paths:
+      - "packages/ui/src/components/dropdown-menu.tsx"
+      - "packages/ui/test/menu-con-dich-vao.dom.tsx"
+    expected: |
+      menu-con-dich-vao.dom.tsx, describe "lop-dich": mo DropdownMenu va menu con trong jsdom (khuon
+      bam pointer + click SubTrigger cua data-table-loc-ro.dom.tsx). Ma tran viet truoc 3 dong:
+        1 khong truyen className -> className cua [data-slot=dropdown-menu-sub-content] chua ca hai lop
+          dich: mot lop bat dau "data-[side=right]:translate-x-" va mot lop bat dau
+          "data-[side=left]:translate-x-", ca hai nhac "--radix-popper-available-width"
+        2 truyen className="max-h-72" -> chua "max-h-72" VA van chua hai lop dich o dong 1
+        3 data-slot="dropdown-menu-sub-content" giu nguyen
+      (Le 8 px mac dinh khong doc duoc trong jsdom — hieu qua cua no do o E1: mep phai <= 367 o kho 375.)
+      CHIEU DO: ban sao bo lop data-[side=right] -> dong 1 do voi thong diep ghim "thieu lop dich phia phai".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.mcl_hoi_quy
+    paths:
+      - "packages/ui/src/components/dropdown-menu.tsx"
+      - "packages/ui/src/components/data-table.tsx"
+      - "packages/ui/test/data-table-loc-ro.dom.tsx"
+      - "packages/ui/test/data-table-locale.spec.tsx"
+      - "packages/ui/test/render-diff.spec.tsx"
+      - "packages/ui/test/lai-ra-man.spec.tsx"
+      - "apps/app/test/bang-crm-loc-ro.dom.tsx"
+    expected: |
+      Nam tep thoat 0, va git diff --quiet $(git merge-base HEAD origin/onehub) tren chinh nam tep kiem
+      do (khong sua ky vong).
+      CHIEU DO: ban sao doi data-slot cua menu con -> data-table-loc-ro (bo-chon, so-dem) do.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.mcl_san_thiet_ke
+    paths:
+      - "packages/ui/src/components/dropdown-menu.tsx"
+      - "_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs"
+    expected: |
+      design-gate.mjs --mode static cho dropdown-menu.tsx khong P0; rang/khong-cham-noi-goi.mjs: trong diff
+      so voi merge-base origin/onehub, chi xet tep duoi apps/ (khong xet tep ve lai boi may nhu
+      PRODUCT-MAP.md, LO-TRINH.html, _acceptance/**, docs/**), dem dong THEM chua "DropdownMenuSubContent"
+      hoac nam trong the DropdownMenuSubContent -> 0; in "0 dong them o noi goi". Doi chung duong: chay tren
+      chinh nhanh sau commit ky Cong 1 (co PRODUCT-MAP.md doi) -> 0. CHIEU DO: --tu-thu dung mot diff gia
+      them className vao DropdownMenuSubContent trong apps/app/components/crm/bulk-actions.tsx -> do, goi
+      ten tep va dong.
