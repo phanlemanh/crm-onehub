@@ -140,9 +140,10 @@ const MA_TRAN = [
   { tep: '.github/workflows/acceptance.yml', mong: 'skipped' },
   { tep: 'scripts/dieu-phoi/giu-nhip.mjs', mong: 'skipped' },
 ];
+const DONG_E5 = (g) => `paths: ["${g}", apps/app/lib/messages/to-chuc.ts`;
 const BAN_SAO = {
-  'e5-lech': (t) => doiChuoi(t, DOI[0].moi, 'apps/app/app/(app)/[slug]/settings/okr/**'),
-  'e5-cu': (t) => doiChuoi(t, DOI[0].moi, DOI[0].cu),
+  'e5-lech': (t) => doiChuoi(t, DONG_E5(DOI[0].moi), DONG_E5('apps/app/app/(app)/[slug]/settings/okr/**')),
+  'e5-cu': (t) => doiChuoi(t, DONG_E5(DOI[0].moi), DONG_E5(DOI[0].cu)),
 };
 
 const goc = co['doc-tu'] ? docTaiRef(co['doc-tu'], EVALS) : docTep(EVALS);
