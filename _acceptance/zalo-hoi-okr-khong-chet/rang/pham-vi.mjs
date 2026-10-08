@@ -11,10 +11,17 @@ const CHO = [
 	"_acceptance/config.yaml",
 	"apps/agent/agent/lib/zalo-config.ts",
 	"packages/telemetry/src/allowlist.ts",
+	"apps/app/lib/agent-transcript.ts",
+	"apps/app/lib/messages/kara-ban-ghi.ts",
 ];
 const TIEN_TO_HO_SO = "_acceptance/zalo-hoi-okr-khong-chet/";
 const CHI_THEM = ["_acceptance/config.yaml"];
-const MOT_DONG = ["apps/agent/agent/lib/zalo-config.ts", "packages/telemetry/src/allowlist.ts"];
+const DONG_THEM = {
+	"apps/agent/agent/lib/zalo-config.ts": 1,
+	"packages/telemetry/src/allowlist.ts": 1,
+	"apps/app/lib/agent-transcript.ts": 1,
+	"apps/app/lib/messages/kara-ban-ghi.ts": 2,
+};
 const TEN_CONG_CU = "tro-ly-okr-ngoai";
 
 function git(args) {
@@ -71,10 +78,10 @@ if (kiem.ma === 2) {
 const loi = [...kiem.dong];
 for (const tep of CHI_THEM.filter((t) => ds.includes(t)))
 	if (dongDoi(base, tep).bo.length > 0) loi.push(`${tep}: co dong bo`);
-for (const tep of MOT_DONG.filter((t) => ds.includes(t))) {
+for (const [tep, can] of Object.entries(DONG_THEM).filter(([t]) => ds.includes(t))) {
 	const { them, bo } = dongDoi(base, tep);
-	if (them.length !== 1 || bo.length !== 0 || !them[0].includes(TEN_CONG_CU))
-		loi.push(`${tep}: khong phai mot dong them`);
+	if (them.length !== can || bo.length !== 0 || !them.every((d) => d.includes(TEN_CONG_CU)))
+		loi.push(`${tep}: khong dung dong them da khai`);
 }
 if (loi.length > 0) {
 	for (const d of loi) console.error(d);

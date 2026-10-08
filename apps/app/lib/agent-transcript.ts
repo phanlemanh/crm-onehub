@@ -63,6 +63,7 @@ const VERBS: ToolVerbs = {
 	write_workspace_profile: "Wrote up who we are",
 	"zalo-chi-doc": "Kept the Zalo chat read-only",
 	"okr-chi-tro-ly": "Kept the OKR session to the OKR assistant",
+	"tro-ly-okr-ngoai": "Kept OKR figures out of this conversation",
 	research_person: "Researched them on the web",
 	research_company: "Read the company's site",
 	enrich_company: "Looked up the company",
