@@ -1,0 +1,37 @@
+{
+  "feature_plain": "Người phụ trách Mục tiêu và KR không còn bị lạc ở vùng Kara trong khung Mục tiêu: vùng không biến mất khi lỗi, không chờ mãi, nhận nhầm «Căn chỉnh» thì hoàn tác được, người phụ trách nhiều KR nhờ được Kara, chữ và ngày giờ nhất quán ở cả hai ngôn ngữ.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho vùng Kara một khung như hai vùng bên cạnh; dấu tia sáng chỉ còn ở nhãn vùng, mỗi góp ý không mang dấu riêng."},
+    {"id": "AC-2", "p": "Sẽ giữ vùng Kara khi danh sách góp ý tải lỗi, kèm câu lỗi và «Thử lại» tải lại danh sách (không trừ lượt)."},
+    {"id": "AC-3", "p": "Sẽ báo bằng câu khi bấm «Nhờ Kara góp ý» mà lỗi, kèm «Thử lại» — không còn im lặng."},
+    {"id": "AC-4", "p": "Sẽ thôi «Kara đang đọc…» mãi: quá 30 giây kể từ lúc khung thấy Kara đang đọc thì chuyển sang lỗi có «Thử lại»."},
+    {"id": "AC-5", "p": "Sẽ nói vì sao Kara tạm nghỉ và khi nào mở lại (hết lượt, tạm nghỉ, chưa bật), thay cho nút «Thử lại» xám không lời."},
+    {"id": "AC-6", "p": "Sẽ hiện câu sản phẩm khi nhận, sửa, bác hay hoàn tác một góp ý mà lỗi — không mã máy, không câu tiếng Anh của trình duyệt."},
+    {"id": "AC-7", "p": "Sẽ cho Hoàn tác sau khi nhận «Căn chỉnh», gỡ đúng liên kết vừa tạo và không bao giờ gỡ liên kết có từ trước."},
+    {"id": "AC-8", "p": "Sẽ cho hai lần Hoàn tác liền nhau mỗi lần một kết quả, lỗi của lần nào hiện đúng dòng của lần đó."},
+    {"id": "AC-9", "p": "Sẽ cập nhật chip «Kara · N góp ý chờ» và mục «Của tôi» khi Kara đọc xong, kể cả khi đã đóng khung."},
+    {"id": "AC-11", "p": "Sẽ dùng đúng số ít, số nhiều ở năm câu đếm tiếng Anh («1 suggestion», «2 suggestions»)."},
+    {"id": "AC-12", "p": "Sẽ cho dòng dẫn trong hộp Sửa Mục tiêu nói đúng chỗ góp ý nằm, kể cả khi Kara hỏi cho cả bộ KR."},
+    {"id": "AC-13", "p": "Sẽ đưa con trỏ tới đúng góp ý của KR khi bấm «Xem góp ý» trong hộp Sửa KR, và làm nổi góp ý đó."},
+    {"id": "AC-14", "p": "Sẽ dùng một khuôn ngày giờ cho năm chỗ (giờ Kara đọc, tab Vết, nút soạn, danh sách cuộc soạn, dòng «sửa lúc») và hai tab Ghi nhận, Trao đổi — cùng giờ Việt Nam ở cả hai ngôn ngữ."},
+    {"id": "AC-15", "p": "Sẽ giữ vòng trong ranh giới đã giao, và chụp màn thật của mười trạng thái ở máy tính và điện thoại."}
+  ],
+  "wont_do": [
+    {"id": "AC-10", "p": "Chặn việc người phụ trách nhiều KR chỉ nhờ được cho KR đầu: Kara đọc cả Mục tiêu nhưng người đó chỉ thấy góp ý của KR mình sửa được; góp ý cấp Mục tiêu bị ẩn và không quyết được; ai không sửa được KR nào vẫn bị từ chối."},
+    {"id": "OOS-1", "p": "Không đổi cách gửi lời nhờ hay danh sách góp ý ở máy chủ (lối khác của câu 2 và 3)."},
+    {"id": "OOS-2", "p": "Không dọn việc Kara bị treo ở máy chủ — «Thử lại» sau khi quá hạn có thể chờ thêm 30 giây nữa."},
+    {"id": "OOS-3", "p": "Không đổi chữ «góp ý chờ» sang «đề xuất» (lối khác của câu 4)."},
+    {"id": "OOS-4", "p": "Không làm lại các mục khác của lượt một mà anh đã định đoạt ở Cổng 2 của nó."},
+    {"id": "OOS-5", "p": "Không đổi bố cục khung Mục tiêu, bảng KR hay danh sách OKR."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Không chạy quét độ phủ vì phạm vi là danh sách đóng mười lăm mục của hàng K3 trong lộ trình, mỗi mục một tiêu chí (AC-1 đến AC-14); AC-15 giữ ranh giới và chụp màn thật. Mỗi bài đo máy có bản cố ý làm hỏng để chứng nó bắt được lỗi."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Hoàn tác Căn chỉnh chỉ được thử trên dữ liệu đặt sẵn, chưa thử ca cùng đích hay đường nhận thật — nay thử trọn đường nhận → làm mới → Hoàn tác với ba ca, có bản cố ý gỡ nhầm phải bị bắt, và bấm Hoàn tác thật trên màn."},
+    {"i": 1, "p": "Nới quyền cho người phụ trách nhiều KR chưa thử phía chặn: họ có thể thấy và nhận góp ý cấp Mục tiêu — nay đòi góp ý đó bị ẩn và quyết bị từ chối, đối chứng với người sửa được Mục tiêu, và thử trên màn thật."},
+    {"i": 2, "p": "Bài đo màn định rút ngắn 30 giây chờ bằng một biến không tồn tại — nay chờ đúng 30 giây thật, và ghi rõ trang đọc con số 30 giây từ đâu."},
+    {"i": 3, "p": "Bài đo câu lỗi chỉ thử nút Nhận — nay thử cả bốn hành động với bốn loại lỗi (16 ô)."},
+    {"i": 4, "p": "Bài đo ngày giờ chỉ kiểm mã có gọi hàm chung, chưa so chữ hiện ra — nay so chữ thật ở năm chỗ và hai tab, cả hai ngôn ngữ."}
+  ]
+}
