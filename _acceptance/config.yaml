@@ -1358,6 +1358,10 @@ executors:
     ctt_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-theo-doi.dom.tsx"
     cccl_mo_coi: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t mo-coi"
     cccl_ngoai_khoa: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t ngoai-khoa"
+    ccl_khoi_tasks: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tasks.integration.spec.ts -t 'a limited lock subquery'"
+    ccl_ca_that: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tasks.integration.spec.ts -t 'still (retires|claims) exactly the limit'"
+    ccl_goi_dong_ho: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test --preload ../../_acceptance/ca-chap-chon-con-lai/rang/dong-ho-26.ts test/goi-soan.integration.spec.ts -t goiKiemTu"
+    ccl_id_trong_goi: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/goi-soan.integration.spec.ts -t id-trong-goi"
     cccl_cho_route: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t cho-route"
     mcl_lop: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/menu-con-dich-vao.dom.tsx -t lop-dich
     mcl_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- packages/ui/test/data-table-loc-ro.dom.tsx packages/ui/test/data-table-locale.spec.tsx packages/ui/test/render-diff.spec.tsx packages/ui/test/lai-ra-man.spec.tsx apps/app/test/bang-crm-loc-ro.dom.tsx && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx ./test/data-table-locale.spec.tsx ./test/render-diff.spec.tsx ./test/lai-ra-man.spec.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-crm-loc-ro.dom.tsx'
@@ -2107,6 +2111,10 @@ executors:
     ctt_dot_bien: node _acceptance/okr-cua-toi-tach-theo-doi/rang/dot-bien.mjs
     cccl_mo_coi_xanh: bun _acceptance/ca-chap-chon-cach-ly/rang/mo-coi.mjs xanh
     cccl_mo_coi_do: bun _acceptance/ca-chap-chon-cach-ly/rang/mo-coi.mjs do
+    ccl_ma: bun _acceptance/ca-chap-chon-con-lai/rang/ma.ts
+    ccl_pham_vi: bun _acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs
+    ccl_dot_bien: bun _acceptance/ca-chap-chon-con-lai/rang/dot-bien.mjs
+    ccl_lap: bun _acceptance/ca-chap-chon-con-lai/rang/lap.mjs
     cccl_dot_bien: bun _acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs
     cccl_cong_tac: bun _acceptance/ca-chap-chon-cach-ly/rang/cong-tac.mjs
     cccl_pham_vi: bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs

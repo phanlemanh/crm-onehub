@@ -1,0 +1,66 @@
+schema_version: 1
+feature_slug: ca-chap-chon-con-lai
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ccl_khoi_tasks
+    paths: [apps/agent/test/tasks.integration.spec.ts]
+    expected: "exit 0; khối «a limited lock subquery when the planner re-runs it per row» có thêm một ca đọc pg_class.reloptions của agentTask TRONG khối (sau beforeAll) và đòi chứa 'autovacuum_enabled=false' — thiếu thì ném «autovacuum van bat trong khoi»; khối kế «a limited lock subquery: tra lai sau khoi» đọc lại reloptions và đòi bằng đúng giá trị đọc được trước khối (beforeAll của khối lưu lại) — khác thì ném «autovacuum khong duoc tra lai»; ô điều kiện đầu viết trước: khối «a limited lock subquery: da tat tu truoc» đặt sẵn autovacuum_enabled=false rồi chạy lại hai bước beforeAll/afterAll của khối (cùng hàm dùng chung) và đòi reloptions sau đó vẫn là autovacuum_enabled=false (RESET vô điều kiện thì ném «autovacuum khong duoc tra lai»). CHIỀU ĐỎ: cặp (c) của rang/dot-bien.mjs — bản sao bỏ câu ALTER TABLE … SET (autovacuum_enabled = false) → đỏ «autovacuum van bat trong khoi»; cặp (d) bản sao bỏ câu RESET ở afterAll → đỏ «autovacuum khong duoc tra lai»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ccl_dot_bien
+    paths: [apps/agent/test/tasks.integration.spec.ts, apps/agent-okr/test/support/gieo.ts, _acceptance/ca-chap-chon-con-lai/rang/dot-bien.mjs]
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), mỗi bên của mỗi cặp chạy qua bun run test -- (kho riêng, drop khi xong), SO_CAP_KHAI = 6, mỗi cặp xanh trước khi phá và đỏ sau khi phá với thông điệp ghim trên dòng «error:» của bun: (a) bản sao chèn một câu ANALYZE \"agentTask\" ở dòng ngay trước lời gọi probe() của ca «the fixture bites: a subquery joined in FROM» (sau mọi bước khác của ca) → đỏ «ke hoach doi», và dòng lỗi chứa đủ «reltuples=», «relpages=», «so_trang=», «n_dead_tup=», «last_analyze=», «last_autoanalyze=»; (b) bản sao chèn cùng câu ngay sau staleStatistics() của ca «the fixture bites for due work too» → đỏ «ke hoach doi»; (c), (d) như E1; (e) như E5; (f) như E8. Hai ca đối chứng ở bản không phá vẫn đòi đúng số hàng bằng rows như hôm nay (không nới). Số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ccl_ca_that
+    paths: [apps/agent/test/tasks.integration.spec.ts, apps/agent/agent/lib/tasks.ts]
+    expected: "exit 0; hai ca «retireExhausted still retires exactly the limit» và «claimDue still claims exactly the limit» chạy xanh; E6 đo rằng các dòng expect của hai ca này không đổi so với merge-base."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ccl_ma
+    paths: [apps/agent-okr/test/support/gieo.ts, _acceptance/ca-chap-chon-con-lai/rang/ma.ts]
+    expected: "exit 0; rang/ma.ts (chạy bằng bun) nhập ma và TIEN_TO THẬT từ apps/agent-okr/test/support/gieo.ts, với ba mốc giờ viết trước (đếm = 3, gồm 1791498237630) đặt Date.now cố định rồi gọi ma() 10 000 lần: mọi chuỗi bắt đầu bằng TIEN_TO (không thì «ma mat tien to»), phần sau TIEN_TO khớp /^[a-z]+$/ (có chữ số thì «ma co chu so: <chuỗi>»), và Set có đúng 10 000 phần tử (không thì «ma trung lap»); in «MA: 3 moc, 30000 chuoi, 0 chu so». Đối chứng dương cùng lệnh: công thức cũ `${TIEN_TO}${t.toString(36)}x${n}` ở mốc 1791498237630 bị chính hàm kiểm bắt «ma co chu so» — không bắt thì exit 1. CHIỀU ĐỎ: cặp (e) của rang/dot-bien.mjs trả ma() về công thức cũ → E5 đỏ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.ccl_goi_dong_ho
+    paths: [apps/agent-okr/test/support/gieo.ts, apps/agent-okr/test/goi-soan.integration.spec.ts, _acceptance/ca-chap-chon-con-lai/rang/dong-ho-26.ts]
+    expected: "exit 0; bun test --preload của _acceptance/ca-chap-chon-con-lai/rang/dong-ho-26.ts (setSystemTime(new Date(1791498237630))) chạy goi-soan.integration.spec.ts -t goiKiemTu không sửa bài: xanh. CHIỀU ĐỎ: cặp (e) của rang/dot-bien.mjs — bản sao trả ma() về `${TIEN_TO}${Date.now().toString(36)}x${++dem}` → đỏ «so cap nhat tuan khong in lot» (đúng thông điệp của CI 37171465448)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.ccl_pham_vi
+    paths: [_acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs]
+    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải là apps/agent/test/tasks.integration.spec.ts, apps/agent-okr/test/support/gieo.ts, apps/agent-okr/test/goi-soan.integration.spec.ts, apps/agent-okr/agent/lib/goi-soan.ts, _acceptance/ca-chap-chon-con-lai/**, docs/superpowers/**, PRODUCT-MAP.md, LO-TRINH.html hoặc _acceptance/config.yaml; config.yaml không có dòng bỏ; với gieo.ts, dòng TIEN_TO và mọi export khác ngoài ma giữ nguyên (diff -U0 không bỏ dòng nào khác dòng khai báo ma); goi-soan.integration.spec.ts không có dòng bỏ; goi-soan.ts chỉ được đổi khi evals.yaml còn E8; trong tasks.integration.spec.ts, mọi dòng expect( của hai ca thật (retireExhausted/claimDue) và hai dòng toHaveLength(rows) của hai ca đối chứng không bị bỏ; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng trong cùng lệnh: danh sách rỗng → mã 2 «diff rong»; có apps/agent/agent/lib/tasks.ts → «ngoai ranh gioi: apps/agent/agent/lib/tasks.ts»; một dòng bỏ ở dòng TIEN_TO của gieo.ts → «gieo.ts: doi ngoai ma»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ccl_lap
+    paths: [apps/agent/test/tasks.integration.spec.ts, apps/agent-okr/test/support/gieo.ts]
+    expected: "exit 0; rang/lap.mjs chạy 20 lần khối tasks (-t \"a limited lock subquery\") và 20 lần goiKiemTu ở giờ thường, mỗi lần qua bun run test -- (kho riêng); in «LAP: tasks 20/20, goiKiemTu 20/20»; một lần đỏ thì in tên ca và dòng error: rồi exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.ccl_id_trong_goi
+    paths: [apps/agent-okr/agent/lib/goi-soan.ts, apps/agent-okr/test/goi-soan.integration.spec.ts]
+    expected: "exit 0 (chỉ khi Cổng 1 giữ AC-7); ca mới «id-trong-goi» của goi-soan.integration.spec.ts lấy gói THẬT bằng goiCua của bài, dựng bản sao gói đổi giá trị id của một nút ở lớp 1 và một nút ở lớp 2a (không thuộc capTren/ungVienCanChinh) thành 'cid26x' và 'cid27x' — ma trận viết trước hai dòng (đếm = 2) — rồi gọi goiKiemTu THẬT: 26 và 27 không có trong soTrongGoi (có thì ném «id trong goi bi trich so: <so>»); đối chứng dương cùng ca: các số thật đã đòi ở ca goiKiemTu ('85', '70', '18') vẫn có (thiếu thì ném «go id lam mat so that»), và goiThanhChiDan của bản sao vẫn chứa 'cid26x' (gỡ để trích số, không gỡ khỏi chỉ dẫn). CHIỀU ĐỎ: cặp (f) của rang/dot-bien.mjs — bản sao trả hàm gỡ id về idCuaGoi cũ (chỉ capTren, ungVienCanChinh) → đỏ «id trong goi bi trich so: 26»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
