@@ -3,10 +3,10 @@ schema_version: 1
 slug: agent-test-khong-nhap-app
 feature: Test của agent không nhập mã của app; danh sách thoả thuận Kara trả có một schema dùng chung
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build        # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Phan Le Manh
+decided_at: 2026-10-08T23:31:49Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -24,11 +24,11 @@ lại kế tiếp. Gốc sâu hơn là Ngoài-8 của `deal-va`: hình dạng da
 yêu cầu cho payload một app ghi, app khác đọc. Người gặp: người gộp PR kế tiếp (lưới luật kho đỏ), không có người
 dùng cuối.
 
-Nguồn: giám sát đợt sau-14-10 mở hàng E1c (09/10). Cổng Đáng chờ anh ký.
+Nguồn: giám sát đợt sau-14-10 mở hàng E1c (09/10). Cổng Đáng: anh ký `build` — «hàng sửa lỗi luật kho do #321».
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] luật kho có xanh trở lại trên onehub sau khi gộp, mà phép đo đi trọn vòng của `deal-va` vẫn còn?
-- Kết quả nào là SỐNG: [đề xuất] `scripts/luat-kho/do-cay.mjs` thoát 0 (6/6 luật áp dụng xanh) trên cây sau gộp; ca kiểm `stage-id` của agent vẫn đọc đầu ra công cụ qua đúng schema mà app dùng.
-- Kết quả nào là CHẾT: [đề xuất] luật kho còn đỏ, hoặc phép đo đi trọn vòng bị bỏ.
-- Timebox: [đề xuất] một lần chạy tay `node scripts/luat-kho/do-cay.mjs` trên sha gộp của PR này, trong ngày gộp, kết quả ghi vào `run-log.jsonl` của hồ sơ (CI chưa chạy luật kho); không phiên nghiệm thu.
+- Câu hỏi phép đo trả lời: luật kho có xanh trở lại trên onehub sau khi gộp, mà phép đo đi trọn vòng của `deal-va` vẫn còn?
+- Kết quả nào là SỐNG: `scripts/luat-kho/do-cay.mjs` thoát 0 (6/6 luật áp dụng xanh) trên cây sau gộp; ca kiểm `stage-id` của agent vẫn đọc đầu ra công cụ qua đúng schema mà app dùng.
+- Kết quả nào là CHẾT: luật kho còn đỏ, hoặc phép đo đi trọn vòng bị bỏ.
+- Timebox: một lần chạy tay `node scripts/luat-kho/do-cay.mjs` trên sha gộp của PR này, trong ngày gộp, kết quả ghi vào `run-log.jsonl` của hồ sơ (CI chưa chạy luật kho); không phiên nghiệm thu.
