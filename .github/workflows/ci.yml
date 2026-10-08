@@ -19,9 +19,51 @@ env:
 
 jobs:
   check:
-    name: check-types, lint, test
+    name: check-types, lint
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 20
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/crm_test?schema=public
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/crm_test?schema=public
+      ALLOWED_SIGN_IN: example.com
+      BETTER_AUTH_SECRET: ci-only-secret-regenerate-for-any-real-deployment
+      API_URL: http://localhost:3001
+      APP_URL: http://localhost:3000
+      GOOGLE_CLIENT_ID: ci-only-google-client-id
+      GOOGLE_CLIENT_SECRET: ci-only-google-client-secret
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run check-types
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+
+      - run: bun run lint
+
+      - run: bun run lint:slop
+
+  test:
+    name: test (${{ matrix.o.ten }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        o:
+          - ten: api
+            loc: --filter=api
+          - ten: app-ui
+            loc: --filter=app --filter=@crm/ui
+          - ten: con-lai
+            loc: --filter=!api --filter=!app --filter=!@crm/ui
 
     services:
       postgres:
@@ -60,12 +102,12 @@ jobs:
       - name: Apply migrations
         run: bun run db:deploy
 
-      - run: bun run check-types
-        env:
-          NODE_OPTIONS: --max-old-space-size=6144
+      - run: bun run test -- ${{ matrix.o.loc }}
 
-      - run: bun run lint
-
-      - run: bun run lint:slop
-
-      - run: bun run test
+  ci-ok:
+    name: ci-ok
+    if: always()
+    needs: [check, test]
+    runs-on: ubuntu-24.04
+    steps:
+      - run: test "${{ needs.check.result }}" = success && test "${{ needs.test.result }}" = success
