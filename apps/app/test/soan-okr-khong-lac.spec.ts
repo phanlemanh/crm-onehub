@@ -58,9 +58,19 @@ const ketQua = (ketQua: "da-ghi" | "tu-choi", lyDo = "") => ({
 	giuNguyen: [],
 });
 
-type Phan = Record<string, unknown>;
+type KetQuaGia = {
+	ketQua: string;
+	lyDo?: string;
+	soDong?: number;
+	biLoai?: string[];
+	giuNguyen?: string[];
+};
 
-const nop = (id: string, input: unknown, phan: Phan): EveMessage =>
+type Phan =
+	| { state: "output-available"; output: KetQuaGia }
+	| { state: "output-error"; errorText: string };
+
+const nop = (id: string, input: BanNhap, phan: Phan): EveMessage =>
 	({
 		id,
 		role: "assistant",
@@ -75,13 +85,16 @@ const nop = (id: string, input: unknown, phan: Phan): EveMessage =>
 		],
 	}) as unknown as EveMessage;
 
-const daGhi = (id: string, input: unknown) =>
+const daGhi = (id: string, input: BanNhap) =>
 	nop(id, input, { state: "output-available", output: ketQua("da-ghi") });
-const tuChoi = (id: string, input: unknown, lyDo: string) =>
-	nop(id, input, { state: "output-available", output: ketQua("tu-choi", lyDo) });
-const loi = (id: string, input: unknown) =>
+const tuChoi = (id: string, input: BanNhap, lyDo: string) =>
+	nop(id, input, {
+		state: "output-available",
+		output: ketQua("tu-choi", lyDo),
+	});
+const loi = (id: string, input: BanNhap) =>
 	nop(id, input, { state: "output-error", errorText: "het gio" });
-const khongDoc = (id: string, input: unknown) =>
+const khongDoc = (id: string, input: BanNhap) =>
 	nop(id, input, { state: "output-available", output: { ketQua: "la" } });
 
 const luotTu = (tin: EveMessage[]) =>
@@ -95,16 +108,22 @@ describe("k2b-moc-ba", () => {
 			daGhi("n3", LAN_3),
 		];
 		const { mocs, khongThanh } = luotTu(tin);
+		expect(mocs.length === 2 ? "dung" : `so moc ${mocs.length}, mong 2`).toBe(
+			"dung",
+		);
 		expect(
-			mocs.length === 2 ? "dung" : `so moc ${mocs.length}, mong 2`,
-		).toBe("dung");
-		expect(mocs.map((x) => x.itemId.startsWith("n1") || x.itemId.startsWith("n3"))).toEqual([true, true]);
+			mocs.map((x) => x.itemId.startsWith("n1") || x.itemId.startsWith("n3")),
+		).toEqual([true, true]);
 		const tom = mocs[1]?.tom;
 		const themKr = tom && tom.docDuoc && !tom.dau ? tom.themKr : -9;
 		expect(
 			themKr === 1 ? "dung" : `goc so sanh sai: themKr 1 mong, thay ${themKr}`,
 		).toBe("dung");
-		expect(tom && tom.docDuoc && !tom.dau ? [tom.themMucTieu, tom.sua, tom.chuyen, tom.bo] : null).toEqual([0, 0, 0, 0]);
+		expect(
+			tom && tom.docDuoc && !tom.dau
+				? [tom.themMucTieu, tom.sua, tom.chuyen, tom.bo]
+				: null,
+		).toEqual([0, 0, 0, 0]);
 		expect(khongThanh.length).toBe(1);
 		expect(khongThanh[0]?.itemId.startsWith("n2")).toBe(true);
 		expect(khongThanh[0]?.loai).toBe("tu-choi");
@@ -134,7 +153,11 @@ describe("k2b-moc-ba", () => {
 describe("k2b-moc-hong", () => {
 	const CA = [
 		{ ten: "loi", tao: (id: string) => loi(id, LAN_2), loai: "loi" },
-		{ ten: "khong-doc", tao: (id: string) => khongDoc(id, LAN_2), loai: "khong-doc" },
+		{
+			ten: "khong-doc",
+			tao: (id: string) => khongDoc(id, LAN_2),
+			loai: "khong-doc",
+		},
 	] as const;
 	for (const ca of CA) {
 		test(`lần nộp ${ca.ten} không thành mốc, không làm gốc so sánh`, () => {
