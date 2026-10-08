@@ -1,0 +1,123 @@
+schema_version: 1
+slug: giai-doan-mac-dinh
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.gmd_migration
+    paths:
+      - "packages/db/prisma/schema.prisma"
+      - "packages/db/prisma/migrations/**"
+      - "_acceptance/giai-doan-mac-dinh/rang/migration.mjs"
+    expected: |
+      rang/migration.mjs (goc kho suy tu vi tri tep). Ma tran:
+        1 khoi `model Deal {` cua schema.prisma: dong cua truong `stage` khong chua "@default" (doi chung duong: dong do
+          ton tai va chua "DealStage" o truong giaiDoan ngay sau)
+        2 dung mot thu muc packages/db/prisma/migrations/*_giai_doan_mac_dinh
+        3 moc 14 so cua no > 20261010184651
+        4 sau `git fetch origin onehub`: khong thu muc nao KHAC TEN (tren origin/onehub hay trong cay) co cung moc 14
+          so; doi chung duong: chinh thu muc cua vong co mat tren ref van xanh; doi chung am: ban sao cay them thu muc
+          gia cung moc khac ten -> do voi thong diep ghim "moc migration trung"
+        5 migration.sql bo chu thich va khoang trang bang dung `ALTER TABLE "deal" ALTER COLUMN "stage" DROP DEFAULT;`
+      CHIEU DO: --schema mot ban sao schema.prisma con @default("DEMO_BOOKED") -> dong 1 do voi thong diep ghim
+      "deal.stage con mac dinh".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gmd_db
+    paths:
+      - "packages/db/prisma/migrations/**"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      giai-doan.spec.ts describe "mac-dinh-db" tren co so du lieu cua luot (da chay moi migration). Ma tran:
+        1 information_schema.columns (table_name 'deal', column_name 'stage'): column_default la null
+        2 INSERT thô vao "deal" (id, name, "companyId", "updatedAt") khong co stage -> bi tu choi, thong diep loi chua
+          "stage"; dem hang theo id sau do = 0
+        3 doi chung duong: cung lenh co "stage" = giai doan OPEN song -> ghi duoc, dem = 1 (don dep sau ca)
+      CHIEU DO: ban sao migration bo trong (khong DROP DEFAULT) chay tren kho rieng -> dong 1 do voi thong diep ghim
+      "deal.stage con mac dinh trong co so du lieu".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gmd_tao_khi_cat
+    paths:
+      - "apps/api/src/deals/deals.service.ts"
+      - "apps/api/test/giai-doan.spec.ts"
+    expected: |
+      giai-doan.spec.ts describe "tao-khi-dau-da-cat": chuyen het thoa thuan khoi giai doan OPEN dau (position nho
+      nhat), luu tru no qua GiaiDoanService.archive; ky vong tinh doc lap: giai doan OPEN song position nho nhat tu
+      db.dealStage. Ma tran: (1) DealsService.create khong stage -> stage bang ky vong; (2) khac ma giai doan da cat;
+      (3) deals.board co thoa thuan o cot cua ky vong. Khoi phuc giai doan sau ca (restore + reorder).
+      CHIEU DO: ban sao giaiDoanMoDau bo dieu kien "archivedAt" IS NULL -> do voi thong diep ghim "tao moi vao giai doan da cat".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gmd_seed
+    paths:
+      - "packages/db/prisma/seed.ts"
+      - "apps/api/test/giai-doan-seed.spec.ts"
+    expected: |
+      giai-doan-seed.spec.ts: tao co so du lieu dung-mot-lan <kho cua luot>_seed, prisma migrate deploy len do, luu tru
+      DEMO_BOOKED (khong thoa thuan), chay `bun packages/db/prisma/seed.ts` bang tien trinh con voi DATABASE_URL cua kho
+      do (perl alarm 300), thoat 0; drop kho trong afterAll. Ma tran tren moi thoa thuan "seed-deal-*": (1) stage thuoc tap giai doan song; (2) closedAt khac null <=> kind WON/LOST;
+      (3) co it nhat mot thoa thuan moi kind OPEN, WON, LOST (doi chung duong cho 1 va 2); (4) moi from/to cua activity
+      STAGE_CHANGE seed la id co trong dealStage; (5) khong thoa thuan seed nao o DEMO_BOOKED; (6) sau seed, dealStage DEMO_BOOKED van co archivedAt khac
+      null; (7) so hang deal trong co so du lieu dung chung cua luot truoc va sau ca bang nhau (khong ro sang tep khac).
+      CHIEU DO: ban sao seed.ts dung lai OPEN_STAGES viet cung -> dong 5 do voi thong diep ghim "seed vao giai doan da cat".
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.gmd_kieu
+    paths:
+      - "_acceptance/giai-doan-mac-dinh/rang/kieu.mjs"
+      - "packages/db/prisma/schema.prisma"
+      - "apps/**"
+      - "packages/**"
+    expected: |
+      rang/kieu.mjs: (1) chay `bun run db:generate` cua cay roi doc kieu sinh ra: trong DealUncheckedCreateInput truong
+      `stage` khong co dau `?`; (2) `bun run check-types` thoat 0; (3) git grep `INSERT INTO "deal"` va $executeRaw/
+      $queryRaw cham bang deal trong apps/ va packages/ (tru test/, evals/): moi lenh tim thay co cot stage, hoac rong.
+      CHIEU DO chay trong S4 (khong dung ket qua luc viet): ban sao bo `stage` o mot loi goi record-delete.spec.ts ->
+      (2) do voi "Property 'stage' is missing"; tep gia chua INSERT INTO "deal" thieu stage -> (3) do voi thong diep ghim
+      "chen tho thieu stage".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.gmd_hoi_quy
+    paths:
+      - "_acceptance/giai-doan-mac-dinh/rang/khong-xoa-expect.mjs"
+      - "apps/api/test/giai-doan.spec.ts"
+      - "apps/api/test/currency-totals.integration.spec.ts"
+      - "apps/api/test/fields.spec.ts"
+      - "apps/api/test/okr-mau.spec.ts"
+      - "apps/api/test/record-delete.spec.ts"
+      - "apps/agent/evals/okr/cach-ly.eval.ts"
+    expected: |
+      rang/khong-xoa-expect.mjs (so tron cau expect, chuan hoa khoang trang — khuon cua deal-va, --tu-thu) tren nam tep
+      kiem api + apps/agent/evals/okr/cach-ly.eval.ts: khong cau expect san co nao mat; roi chay tron giai-doan.spec.ts,
+      currency-totals.integration.spec.ts, fields.spec.ts, okr-mau.spec.ts, record-delete.spec.ts — thoat 0. cach-ly.eval.ts
+      (goi model that) khong chay — do bang E5 va chot khong xoa expect.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.gmd_ghim
+    paths:
+      - "_acceptance/giai-doan-mac-dinh/rang/ghim.mjs"
+    expected: |
+      rang/ghim.mjs chay scripts/pre-merge-check.sh . --base origin/onehub tai HEAD, loc dong "evidence is stale": khong
+      dong nao goi ten mot trong 8 slug (tro-ly-okr-nen, chi-quan-tri-sua-duoc-truong, truong-tu-tao-o-cai-dat,
+      bo-okr-mau, canh-kr-okr, dot-hoi-y-tuong-okr, gioi-han-duyet-cay-okr, tro-ly-okr-tom-tat); va moi slug do co dong
+      kind "repin" voi sha bang HEAD hoac bang commit cuoi cham tep kiem cua no. Doi chung duong: luoi chay that (in
+      "rules ran").
+      CHIEU DO: --ho-so them mot slug chua ghim -> do voi thong diep ghim "ho so chua ghim lai".
