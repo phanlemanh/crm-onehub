@@ -1,0 +1,123 @@
+schema_version: 1
+slug: da-luu-tru-tai-loi
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.dlt_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx"
+      - "apps/app/lib/messages/settings.ts"
+      - "apps/app/test/da-luu-tru-tai-loi.dom.tsx"
+    expected: |
+      da-luu-tru-tai-loi.dom.tsx describe "loi": trang GiaiDoanSettings that voi trpc gia (khuon giai-doan-cai-dat.dom.tsx),
+      giaiDoan.archived gia nem loi. Ma tran viet truoc 5 dong:
+        1 co [data-slot=empty] mang data-da-luu-tru-loi, thuoc tinh border solid (class border-solid)
+        2 tieu de bang dung settings.giaiDoan.loiTaiDaLuuTru, mo ta bang loiTaiMoTa
+        3 co dung 1 nut "Thử lại" (settings.giaiDoan.thuLai) trong khung loi
+        4 ba [data-the-giai-doan] OPEN, WON, LOST van hien du hang; tay keo khong khoa (quan tri)
+        5 khong co [data-slot=archived-list]
+        6 bam "Lưu trữ" o menu giai doan trong QUALIFIED_TO_BUY -> giaiDoan.archive goi dung 1 lan; khung loi van hien
+      Doi chung duong: archived tra [] -> 0 khung loi (dong 1 la quan he, khong phai chuoi co mat).
+      CHIEU DO: tren dinh E3 (truoc vong nay) -> dong 1 do voi thong diep ghim "loi tai da luu tru bi giau".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dlt_thu_lai
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx"
+      - "apps/app/test/da-luu-tru-tai-loi.dom.tsx"
+    expected: |
+      describe "thu-lai": archived gia nem loi lan dau, lan sau tra 2 giai doan. Ma tran 4 dong:
+        1 bam "Thử lại" -> so lan goi archived tang dung 1
+        2 so lan goi list KHONG doi giua truoc va sau khi bam
+        3 khong con khung loi; nut gap "Đã lưu trữ (2)" hien
+        4 doi chung: truoc khi bam co khung loi (dong 3 khong xanh vi chua tung loi)
+      CHIEU DO: ban sao nut goi lam moi ca trang (cache.giaiDoan) -> dong 2 do voi thong diep ghim "thu lai tai lai ca danh sach dang dung".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dlt_van_loi
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx"
+      - "apps/app/test/da-luu-tru-tai-loi.dom.tsx"
+    expected: |
+      describe "van-loi": QueryClient that (khong gia useQuery), queryFn cua archived nem loi; lan tai lai thu hai treo
+      bang Promise do test giu. Ma tran 4 dong + 1 quan he:
+        1 bam "Thử lại" khi dang treo -> nut disabled VA khung loi van hien VA khong co [data-da-luu-tru-dang-tai]
+          (thong diep ghim "khung loi nhay sang khung xuong khi thu lai")
+        2 nha Promise bang loi -> khung loi van hien, nut het disabled
+        3 bam lan nua -> so lan goi archived tang them 1
+        4 khong co [data-slot=archived-list] o moi thoi diem
+      CHIEU DO: ban sao bo khoa nut khi dang tai lai -> dong 1 do voi thong diep ghim "nut thu lai mo khi dang tai".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dlt_dang_tai
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx"
+      - "apps/app/test/da-luu-tru-tai-loi.dom.tsx"
+    expected: |
+      describe "dang-tai": archived treo. Ma tran 3 dong:
+        1 co [data-slot=skeleton] mang data-da-luu-tru-dang-tai, sau ba the nhom
+        2 khong co khung loi, khong co [data-slot=archived-list]
+        3 nha Promise bang [] -> khong con khung xuong, khong co khoi nao (doi chung: danh sach rong)
+      CHIEU DO: tren dinh E3 -> dong 1 do voi thong diep ghim "dang tai tra rong".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dlt_khong_quan_tri
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx"
+      - "apps/app/test/da-luu-tru-tai-loi.dom.tsx"
+    expected: |
+      describe "khong-quan-tri": canManage false, archived nem loi. Ma tran 2 dong:
+        1 khung loi hien, nut "Thử lại" khong disabled
+        2 bam -> archived duoc goi them 1 lan
+      Doi chung duong: cung trang, tay keo cua nguoi khong quan tri van khoa (khong doi quyen khac).
+      CHIEU DO: ban sao khoa nut theo canManage -> dong 1 do.
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dlt_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/da-luu-tru-tai-loi/evidence dat tuong minh: lenh cua dlt_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/da-luu-tru-tai-loi/evidence/
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx"
+      - "_acceptance/da-luu-tru-tai-loi/rang/do-man.mjs"
+    expected: |
+      Truoc khi do: tao qua db mot giai doan da luu tru rieng cua lan do; don sau khi do.
+      Ma tran viet truoc 4 o, moi o mot dong DUNG/SAI va mot anh evidence/<canh>.png:
+        loi-1440: page.setRequestInterception, abort moi request co "giaiDoan.archived" trong URL; mo trang ->
+          khung [data-da-luu-tru-loi] va nut "Thử lại" left >= 0, right <= 1440; ba the nhom hien
+        loi-375: nhu tren o kho 375, cuon toi cuoi trang -> khung va nut trong 0..375 theo chieu ngang, scrollWidth <= 375
+        dang-thu-lai-1440: giu (khong tra) request archived tiep theo, bam "Thử lại" -> [data-da-luu-tru-loi] con,
+          nut disabled, khong co [data-da-luu-tru-dang-tai]
+        thu-lai-1440: tha request do bang phan hoi that (continue) -> [data-slot=archived-list] hien voi so (n) >= 1,
+          khong co dieu huong trang (performance navigation count khong doi)
+      Tien de moi o: request bi chan/giu chi mang dung thu tuc giaiDoan.archived (doc tu duong /api/trpc/<thu tuc>);
+      di chung lo voi thu tuc khac -> KHONG DO DUOC ma 2 goi ten lo. Moi o ghim: du 3 [data-the-giai-doan], khong co khung
+      loi cua ca trang (settings.giaiDoan.loiTai). Cho khung loi toi 20 giay (app thu lai 1 lan voi loi 5xx).
+      CHIEU DO: tren dinh E3 (truoc vong nay) -> loi-1440 SAI "khong thay khung loi".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.dlt_hoi_quy
+    paths:
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx"
+      - "apps/app/test/giai-doan-cai-dat.dom.tsx"
+    expected: |
+      git diff --quiet <dinh E3 cf003458> -- apps/app/test/giai-doan-cai-dat.dom.tsx (khong sua ky vong) roi tep thoat 0;
+      design-gate.mjs --mode static cho giai-doan-settings.tsx: khong P0.
