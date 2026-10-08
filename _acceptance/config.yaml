@@ -975,11 +975,11 @@ executors:
     zghl_cung_bot: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t cung-bot
     zghl_can_noi_lai: cd apps/api && bun test test/zalo-doi-bot.spec.ts -t can-noi-lai
     zghl_doi_bot_api: cd apps/api && bun test test/zalo-doi-bot.spec.ts -t luu-bot-qua-api
-    zghl_doi_bot_dom: cd apps/app && bun test ./test/zalo-doi-bot.dom.tsx
+    zghl_doi_bot_dom: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/zalo-doi-bot.dom.tsx
     zghl_webhook_403: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t webhook-403
     zghl_ly_do_ben: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t ly-do-ben
     zghl_canh_bao_khoa: cd apps/api && bun test test/zalo-doi-bot.spec.ts -t canh-bao-khoa
-    zghl_canh_bao_dom: cd apps/app && bun test ./test/zalo-doi-bot.dom.tsx -t canh-bao-khoa
+    zghl_canh_bao_dom: cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/zalo-doi-bot.dom.tsx -t canh-bao-khoa
     tln_chuyen_tiep: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-chuyen-tiep.spec.ts"
     tln_cach_ly_tinh: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-cach-ly.spec.ts
     tln_chi_tieu_api: bun run test -- "cd apps/api && bun test test/tro-ly-okr-chi-tieu.spec.ts"

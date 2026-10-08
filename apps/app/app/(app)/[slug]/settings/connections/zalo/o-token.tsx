@@ -44,7 +44,7 @@ export function OToken({
 	const luu = useMutation(
 		trpc.zalo.luuBot.mutationOptions({
 			onSuccess: async (kq, bien) => {
-				if (kq.ketQua === "can-xac-nhan-doi-bot") {
+				if ("ketQua" in kq) {
 					setDoiBot({
 						token: bien.token ?? "",
 						soLienKet: kq.soLienKet,

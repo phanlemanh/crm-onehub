@@ -35,7 +35,7 @@ export function TrangThaiWebhookZalo({
 	const dangKyLai = useMutation(
 		trpc.zalo.luuBot.mutationOptions({
 			onSuccess: async (kq) => {
-				if (kq.ketQua !== "da-luu" || kq.webhook === "zalo-tu-choi") {
+				if ("ketQua" in kq || kq.webhook === "zalo-tu-choi") {
 					toast.warning(t.dangKyLaiChuaXong);
 				} else {
 					toast.success(t.daDangKyLai);

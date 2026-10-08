@@ -60,9 +60,8 @@ export const zaloLuuBotInput = z.object({
 	token: z.string().trim().min(1).optional(),
 	xacNhanDoiBot: z.literal(true).optional(),
 });
-export const zaloLuuBotOutput = z.discriminatedUnion("ketQua", [
+export const zaloLuuBotOutput = z.union([
 	z.object({
-		ketQua: z.literal("da-luu"),
 		tenBot: z.string(),
 		webhook: z.enum(WEBHOOK_KET),
 	}),

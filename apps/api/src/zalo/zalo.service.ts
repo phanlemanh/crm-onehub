@@ -98,11 +98,7 @@ export class ZaloService {
 		if (ket.data.outcome !== "valid") {
 			throw new BadRequestException(ket.data.reason);
 		}
-		return {
-			ketQua: "da-luu",
-			tenBot: ket.data.tenBot,
-			webhook: ket.data.webhook,
-		};
+		return { tenBot: ket.data.tenBot, webhook: ket.data.webhook };
 	}
 
 	async guiThu(userId: string) {

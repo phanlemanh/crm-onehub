@@ -172,11 +172,13 @@ export async function datBot(
 	}
 	const { tenBot } = bot;
 	const tokenCu = await zaloToken();
+	const lienKetCu =
+		tokenCu !== null && tokenCu !== token ? await demLienKet(db) : 0;
 	const doiBot =
 		tokenCu !== null &&
-		tokenCu !== token &&
+		lienKetCu > 0 &&
 		(await maBotCua(fetcher, tokenCu)) !== bot.maBot;
-	const soLienKet = doiBot ? await demLienKet(db) : 0;
+	const soLienKet = doiBot ? lienKetCu : 0;
 	if (soLienKet > 0 && yeuCau.xacNhanDoiBot !== true) {
 		return { outcome: "can-xac-nhan-doi-bot", soLienKet, tenBotMoi: tenBot };
 	}
