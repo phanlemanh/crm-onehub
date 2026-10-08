@@ -32,7 +32,7 @@ Cổng Đáng: build — chủ kho ký cho E3, E1, E4, E5, E6 lúc 2026-10-07T13
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] người dùng nhìn danh sách thoả thuận Kara trả có nhận ra ngay giai đoạn của từng thoả thuận bằng màu như ở bảng Kanban không?
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu, người thử hỏi Kara một danh sách thoả thuận và chỉ đúng thoả thuận đang ở giai đoạn chốt được / không thành chỉ bằng màu, 0 lần hỏi; số liệu ẩn danh `deals_by_stage` chỉ còn tập khoá cố định theo loại giai đoạn.
-- Kết quả nào là CHẾT: [đề xuất] danh sách vẫn chỉ có chữ, hoặc màu ở danh sách khác màu cùng giai đoạn trên Kanban.
-- Timebox: [đề xuất] phiên nghiệm thu đầu tiên sau khi lên production, cùng phiên với `danh-sach-keo-chung`, chậm nhất 2026-10-21.
+- Câu hỏi phép đo trả lời: người dùng nhìn danh sách thoả thuận Kara trả có nhận ra ngay giai đoạn của từng thoả thuận bằng màu như ở bảng Kanban không?
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, người thử hỏi Kara một danh sách thoả thuận và chỉ đúng thoả thuận đang ở giai đoạn chốt được / không thành chỉ bằng màu, 0 lần hỏi; số liệu ẩn danh `deals_by_stage` chỉ còn tập khoá cố định theo loại giai đoạn.
+- Kết quả nào là CHẾT: danh sách vẫn chỉ có chữ, hoặc màu ở danh sách khác màu cùng giai đoạn trên Kanban.
+- Timebox: phiên nghiệm thu đầu tiên sau khi lên production, cùng phiên với `danh-sach-keo-chung`, chậm nhất 2026-10-21.
