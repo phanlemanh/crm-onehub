@@ -11,10 +11,6 @@ import { readAgentModel } from "@crm/db/settings";
 import { CONTACT_CAP_REASON } from "@crm/db/tracking";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
-	DEAL_STAGE_KEYS,
-	permittedDealStage,
-} from "@crm/telemetry/allowlist";
-import {
 	bucket,
 	claimRollup,
 	dayBucket,
@@ -30,6 +26,7 @@ import {
 	restoreCounters,
 	telemetryDisabled,
 } from "@crm/telemetry";
+import { DEAL_STAGE_KEYS, permittedDealStage } from "@crm/telemetry/allowlist";
 import { zaloHoiKetQua } from "@crm/validation/zalo-hoi";
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";

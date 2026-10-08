@@ -1,11 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { GIAI_DOAN_GOC, type LoaiGiaiDoan } from "@crm/db/giai-doan";
+import { dealListResultOf } from "../../app/lib/agent-transcript";
 import { readDealHistory } from "../agent/lib/accounts";
 import { listDeals } from "../agent/lib/lookup";
 import { dealPreamble } from "../agent/lib/preamble";
 import listDealsTool from "../agent/tools/list_deals";
-import { dealListResultOf } from "../../app/lib/agent-transcript";
 
 const suffix = process.env.TEST_RUN_ID ?? "giai-doan-agent";
 const domain = `gd-agent-${suffix}.test`;

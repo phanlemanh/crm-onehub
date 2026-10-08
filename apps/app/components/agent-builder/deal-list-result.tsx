@@ -141,13 +141,7 @@ export function DealListResultTable({ result }: { result: DealListResult }) {
 	);
 }
 
-function Stage({
-	stage,
-	stageId,
-}: {
-	stage: string;
-	stageId: string | null;
-}) {
+function Stage({ stage, stageId }: { stage: string; stageId: string | null }) {
 	const giaiDoan = useGiaiDoan();
 	const ma = stageId ?? stage;
 	return giaiDoan.theoId.has(ma) ? (

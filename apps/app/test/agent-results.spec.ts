@@ -126,7 +126,7 @@ describe("anchorResults", () => {
 });
 
 describe("stage-id", () => {
-	const dauRa = (stageId?: unknown) => {
+	const dauRa = (stageId?: string | number) => {
 		const p = page("open", ["d1"]);
 		return {
 			...p,
