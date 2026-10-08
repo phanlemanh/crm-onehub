@@ -3,7 +3,11 @@ export const SOAN_UI = {
 	choKhepMs: 15_000,
 	giuPhienMs: 60_000,
 	hoiLuongMs: 3_000,
-	khoHep: "(max-width: 640px)",
+	khoHep: "(max-width: 1023px)",
+	noiMs: 2_000,
+	ocHoiThoai: { macDinhPx: 380, toiThieuPx: 300, toiDaPhanTram: "50" },
+	khoaSo: "okr-soan-so:",
+	thamSo: { tab: "tab", loc: "loc" },
 	luotMoDau:
 		"Bắt đầu cuộc soạn: nói điều bạn đã biết về đơn vị này và hỏi tôi.",
 	congCuNop: "nop_ban_nhap",

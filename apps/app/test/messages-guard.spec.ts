@@ -133,6 +133,9 @@ const KHONG_DAU = new Set([
 	"banNhap.kr",
 	"loaiDong.kr-moi",
 	"cuoc.xem",
+	"dong.nguCanh",
+	"moc.themKr",
+	"loai.kr",
 	"tabs.agent",
 ]);
 
@@ -342,6 +345,37 @@ const GHIM_OKR_SOAN = {
 	],
 	"okr-soan:soDo.luot": ["1 lượt", "12 lượt"],
 	"okr-soan:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
+	"okr-soan:dong.meta": ["1 dòng · sửa lúc A", "12 dòng · sửa lúc A"],
+	"okr-soan:dong.themNhom": [
+		"Thêm cả Mục tiêu và 1 KR đã đủ số",
+		"Thêm cả Mục tiêu và 12 KR đã đủ số",
+	],
+	"okr-soan:dong.daThemNhom": [
+		"Đã thêm Mục tiêu 1 và A KR",
+		"Đã thêm Mục tiêu 12 và A KR",
+	],
+	"okr-soan:dong.kemKr": [" · hoàn tác kèm 1 KR", " · hoàn tác kèm 12 KR"],
+	"okr-soan:dong.nguCanh": ["1 · A", "12 · A"],
+	"okr-soan:moc.dau": ["1 Mục tiêu · A KR", "12 Mục tiêu · A KR"],
+	"okr-soan:moc.themMucTieu": ["+1 Mục tiêu", "+12 Mục tiêu"],
+	"okr-soan:moc.themKr": ["+1 KR", "+12 KR"],
+	"okr-soan:moc.sua": ["sửa 1", "sửa 12"],
+	"okr-soan:moc.chuyen": ["chuyển 1", "chuyển 12"],
+	"okr-soan:moc.bo": ["bỏ 1", "bỏ 12"],
+	"okr-soan:heThong.seGui": [
+		"Sẽ gửi kèm lượt sau: 1",
+		"Sẽ gửi kèm lượt sau: 12",
+	],
+	"okr-soan:heThong.cach.nhan": ["Bạn đã thêm 1 «A»", "Bạn đã thêm 12 «A»"],
+	"okr-soan:heThong.cach.sua": [
+		"Bạn đã sửa rồi thêm 1 «A»",
+		"Bạn đã sửa rồi thêm 12 «A»",
+	],
+	"okr-soan:heThong.cach.bac": ["Bạn đã bỏ qua 1 «A»", "Bạn đã bỏ qua 12 «A»"],
+	"okr-soan:heThong.cach.hoan": [
+		"Bạn đã hoàn tác 1 «A»",
+		"Bạn đã hoàn tác 12 «A»",
+	],
 } satisfies Record<string, [string, string]>;
 
 const GHIM = {

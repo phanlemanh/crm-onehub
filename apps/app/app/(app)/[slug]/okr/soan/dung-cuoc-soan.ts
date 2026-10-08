@@ -17,9 +17,17 @@ import { OKR_SOAN_CUA, okrSoanHeader } from "@/lib/okr-soan-record";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import { SOAN_UI } from "./cau-hinh";
+import { cuonToiDong, cuonToiMocCuoi, sauMotNhip } from "./cuon";
 import { guiHuyLuot, kieuKhep, luotDangChay } from "./huy-luot";
+import {
+	dongKhoi,
+	type QuyetBang,
+	rutGonQuyet,
+	vietKhoi,
+} from "./khoi-ngu-canh";
 import type {
 	CuocSoan,
+	DongKr,
 	DongSoan,
 	DonViSoan,
 	KetSoBanNhap,
@@ -40,6 +48,8 @@ import {
 	krThieuSo,
 	soBanNhap,
 } from "./luat-ban-nhap";
+import { gioNopCuoi, mocTuTranscript } from "./moc-nop";
+import { docSoDaLuu, ghiSoDaLuu, khoaSo } from "./so-theo-khoa";
 
 export function donViCua(cuoc: CuocSoan): DonViSoan {
 	return {
@@ -117,7 +127,7 @@ export function usePhienCuoc(cuoc: CuocSoan) {
 	};
 }
 
-export function useNhapCuoc(dong: readonly DongSoan[]) {
+export function useNhapCuoc(dong: readonly DongSoan[], cuocSoanId: string) {
 	const [xet, setXet] = useState<BanNhapDaXet>(() => ({
 		nguon: dong,
 		goc: dong,
@@ -130,6 +140,10 @@ export function useNhapCuoc(dong: readonly DongSoan[]) {
 	const [chu, setChu] = useState("");
 	const khaiSo = useKhaiThayDoi();
 	const khaiChu = useKhaiThayDoi();
+	useMountEffect(() => {
+		const daLuu = docSoDaLuu(cuocSoanId);
+		if (Object.keys(daLuu).length > 0) setSo(daLuu);
+	});
 	return {
 		ket: xet.ket,
 		luotBatDau: () =>
@@ -139,8 +153,19 @@ export function useNhapCuoc(dong: readonly DongSoan[]) {
 				ket: soBanNhap(cu.nguon, cu.nguon),
 			})),
 		so,
-		datSo: (krId: string, moi: SoKr) => {
-			setSo((cu) => ({ ...cu, [krId]: moi }));
+		datSo: (kr: DongKr, moi: SoKr) => {
+			setSo((cu) => {
+				const sau = {
+					...cu,
+					[khoaSo(kr)]: {
+						khoiDiem: moi.khoiDiem,
+						dich: moi.dich,
+						khoaDong: kr.khoaDong,
+					},
+				};
+				ghiSoDaLuu(cuocSoanId, sau);
+				return sau;
+			});
 			khaiSo(true);
 		},
 		xongSo: () => khaiSo(false),
@@ -265,6 +290,12 @@ export function useCuocSoan({
 	const dangTraLoi = busy || thread?.status === "working";
 	const soSuKien = agent.events.length + eventsOf(thread).length;
 
+	const [quyetBang, setQuyetBang] = useState<QuyetBang[]>([]);
+	const [dongNoi, setDongNoi] = useState<string | null>(null);
+	const [hoiVeDong, datHoiVeDong] = useState<DongSoan | null>(null);
+	const [nhomDaNhan, setNhomDaNhan] = useState<
+		ReadonlyMap<string, readonly string[]>
+	>(new Map());
 	const [lanThu, setLanThu] = useState(0);
 	const [lyDoTruoc, setLyDoTruoc] = useState<LyDoHong | null>(null);
 	const [mocThu, setMocThu] = useState<number | null>(null);
@@ -306,7 +337,16 @@ export function useCuocSoan({
 	const gui = (chu: string) => {
 		const s = chu.trim();
 		if (!s || khoaSoan) return;
-		void guiThang(s);
+		const tin = vietKhoi(
+			{
+				dong: hoiVeDong ? dongKhoi(hoiVeDong) : null,
+				quyet: rutGonQuyet(quyetBang),
+			},
+			s,
+		);
+		setQuyetBang([]);
+		datHoiVeDong(null);
+		void guiThang(tin);
 	};
 
 	useMountEffect(() => {
@@ -351,6 +391,16 @@ export function useCuocSoan({
 	);
 
 	const cay = cayNhap(nhap.ket.dong);
+	const transcript = toTranscript(agent.data.messages);
+	const themQuyetBang = (moi: readonly QuyetBang[]) =>
+		setQuyetBang((cu) => [...cu, ...moi]);
+	const noiDong = (khoa: string) => {
+		setDongNoi(khoa);
+		setTimeout(
+			() => setDongNoi((cu) => (cu === khoa ? null : cu)),
+			SOAN_UI.noiMs,
+		);
+	};
 	return {
 		agent,
 		busy,
@@ -373,8 +423,36 @@ export function useCuocSoan({
 		gui,
 		thuLai,
 		moLai,
-		transcript: toTranscript(agent.data.messages),
+		transcript,
+		mocs: mocTuTranscript(transcript.flatMap((t) => t.items)),
+		dung: () => agent.stop(),
+		gioNopCuoi: gioNopCuoi(transcript, agent.data.messages, agent.events),
 		nhan: nhap.ket.nhan,
+		truocTen: nhap.ket.truocTen,
+		quyetBang: rutGonQuyet(quyetBang),
+		themQuyetBang,
+		boQuyetBang: () => {
+			const gui = rutGonQuyet(quyetBang);
+			setQuyetBang([]);
+			return gui;
+		},
+		dongNoi,
+		noiDong,
+		cuonToiMocCuoi: () => sauMotNhip(cuonToiMocCuoi),
+		cuonToiDong: (khoa: string) => {
+			noiDong(khoa);
+			sauMotNhip(() => cuonToiDong(khoa));
+		},
+		hoiVeDong,
+		datHoiVeDong,
+		nhomDaNhan,
+		ghiNhom: (mucTieuId: string, krIds: readonly string[] | null) =>
+			setNhomDaNhan((cu) => {
+				const sau = new Map(cu);
+				if (krIds) sau.set(mucTieuId, krIds);
+				else sau.delete(mucTieuId);
+				return sau;
+			}),
 		cay,
 		so: nhap.so,
 		datSo: nhap.datSo,

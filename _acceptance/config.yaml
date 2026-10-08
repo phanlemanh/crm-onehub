@@ -1283,6 +1283,22 @@ executors:
     nhkl_duong_cham: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t khong-lac-duong-cham"
     nhkl_fetch_gia: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-khong-tru-luot.spec.ts -t fetch-gia-theo-that"
     dph_tra_loi: node --test scripts/dieu-phoi/test/tra-loi.test.mjs
+    k2_duong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-duong
+    k2_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-khung
+    k2_trang_thai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-trang-thai
+    k2_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-dong
+    k2_quyet: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-quyet
+    k2_nhom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-nhom
+    k2_khoa: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-khoa
+    k2_moc_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-moc
+    k2_hoi_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-hoi-dong
+    k2_he_thong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-he-thong
+    k2_so: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-so
+    k2_dua_vao: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-trang.dom.tsx -t k2-dua-vao
+    k2_luat: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-moc.spec.ts -t tom-tat-moc"
+    k2_khoi: bun run test -- "cd apps/app && export TZ=Asia/Ho_Chi_Minh && bun test ./test/soan-okr-moc.spec.ts -t khoi-ngu-canh"
+    k2_api_hoan: bun run test -- "cd apps/api && bun test test/soan-okr-hoan-tac.spec.ts -t k2-api-hoan"
+    k2_api_nhom: bun run test -- "cd apps/api && bun test test/soan-okr-hoan-tac.spec.ts -t k2-api-nhom"
     kbk_api_nhan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t nhan"'
     kbk_api_bo_qua: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t bo-qua" && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi-de-xuat.dom.tsx -t bo-qua'
     kbk_api_chan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t chan"'
@@ -2018,6 +2034,18 @@ executors:
     dptm_hook_cay: node _acceptance/dieu-phoi-truoc-mo-dot/rang/hook-cay.mjs
     dptm_dot_bien: node _acceptance/dieu-phoi-truoc-mo-dot/rang/dot-bien.mjs
     dptm_readme_khoa: node _acceptance/dieu-phoi-truoc-mo-dot/rang/readme-khoa.mjs
+    k2_man_duong: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan duong"'
+    k2_man_khung: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan khung"'
+    k2_man_moc: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan moc"'
+    k2_man_hoi_dong: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan hoi-dong"'
+    k2_man_he_thong: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan he-thong"'
+    k2_man_dua_vao: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan dua-vao"'
+    k2_man_ma_tran: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan ma-tran"'
+    k2_mo_coi: node _acceptance/soan-okr-trang-rieng/rang/mo-coi-hai-chieu.mjs
+    k2_ranh_gioi: node _acceptance/soan-okr-trang-rieng/rang/ranh-gioi.mjs
+    k2_tai_lieu: node _acceptance/soan-okr-trang-rieng/rang/tai-lieu.mjs
+    k2_san_thiet_ke: '{ find "apps/app/app/(app)/[slug]/okr/soan" -name "*.tsx"; printf "%s\n" packages/ui/src/components/resizable.tsx packages/ui/src/components/kara/proposal.tsx; } | while IFS= read -r t; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    k2_man_so: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-trang-rieng/rang/man.mjs --phan so"'
     dlr_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/datatable-loc-ro/rang/do-man.mjs"'
     dlr_san_thiet_ke: 'for t in packages/ui/src/components/data-table.tsx "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx" "apps/app/app/(app)/[slug]/companies/companies-table.tsx" "apps/app/app/(app)/[slug]/deals/deals-table.tsx" "apps/app/app/(app)/[slug]/settings/members/members-table.tsx" apps/app/components/crm/fields/field-facets.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done && bun _acceptance/datatable-loc-ro/rang/khong-ghi-de.mjs'
     olht_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/okr-loai-hoc-tap/rang/man-hoc-tap.mjs"'

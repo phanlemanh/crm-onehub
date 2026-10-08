@@ -21,7 +21,7 @@ export type KaraArtifactProps = {
 	meta?: ReactNode;
 	actions?: ReactNode;
 	footer?: ReactNode;
-	busy?: { label?: string } | null;
+	busy?: { label?: string; reasonShown?: boolean } | null;
 	children: ReactNode;
 };
 
@@ -35,7 +35,9 @@ export function KaraArtifact({
 }: KaraArtifactProps) {
 	const msg = useMessages();
 	const chuBan = busy ? (busy.label ?? msg.karaKhung.dangSoan) : null;
-	const trangThai: KaraBusyState = chuBan ? { label: chuBan } : null;
+	const trangThai: KaraBusyState = chuBan
+		? { label: chuBan, reasonShown: busy?.reasonShown === true }
+		: null;
 	return (
 		<KaraBusyProvider busy={trangThai}>
 			<Artifact
