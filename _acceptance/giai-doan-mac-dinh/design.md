@@ -14,7 +14,11 @@ Hiện trạng đo được (08/10):
   `apps/api/test/fields.spec.ts`, `apps/api/test/okr-mau.spec.ts`, `apps/api/test/record-delete.spec.ts` (3).
 - `seed.ts` không tạo hàng `OkrAlignment` nào: migration L1 (`20261010184651`, P5) không làm seed lệch.
 
-## Quyết định (chờ anh chốt ở Cổng 1 — giám sát khuyên A)
+## Quyết định (chờ anh chốt ở Cổng 1 — giám sát đổi khuyến nghị sang B, 08/10)
+
+Hợp đồng soạn theo **B**; A là lối thay, tách hàng sau khi `tro-ly-okr-nen` và `bo-okr-mau` gỡ kẹt (tra-loi/P3-51).
+Với B, phép quét «không đường tạo nào trong mã sản phẩm dựa vào mặc định» (`rang/duong-tao.mjs`) thay cho việc bỏ mặc
+định ở cơ sở dữ liệu.
 
 1. **A — bỏ mặc định của `deal.stage`.** `schema.prisma` xoá `@default("DEMO_BOOKED")`; một migration
    `<mốc>_giai_doan_mac_dinh` (mốc lớn hơn `20261010184651`) chỉ chứa
