@@ -21,6 +21,12 @@ export const KIEM_CHEO = {
 		tepPid: "phat-lich.pid",
 	},
 	luot: { tranPhut: 90, dungMemMs: 10 * GIAY_MS },
+	lan: {
+		plugin: "feature-loop",
+		tep: "scripts/repin-lane.mjs",
+		giaiBang: "scripts/resolve-plugin.mjs",
+		moTaPlugin: ".claude-plugin/plugin.json",
+	},
 	daKy: ["signed-off", "machine-cleared"],
 	boQuaTien: ["_acceptance/"],
 	ketQua: {
