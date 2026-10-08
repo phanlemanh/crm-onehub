@@ -132,7 +132,10 @@ describe("k2b-moc-ba", () => {
 	});
 
 	test("giờ «sửa lúc» theo lần đã ghi cuối, không theo lần bị từ chối", () => {
-		const tin = [daGhi("n1", LAN_1), tuChoi("n2", LAN_2, LY_DO_TU_CHOI_NOP.cuocKhongDang)];
+		const tin = [
+			daGhi("n1", LAN_1),
+			tuChoi("n2", LAN_2, LY_DO_TU_CHOI_NOP.cuocKhongDang),
+		];
 		const transcript = toTranscript(tin);
 		const su = [
 			{ data: { turnId: "luot-n1" }, meta: { at: "2026-10-08T03:10:00.000Z" } },
