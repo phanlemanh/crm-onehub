@@ -5,10 +5,18 @@ const co = doiCo(process.argv.slice(2));
 let sai = 0;
 const bao = (dong) => { sai++; console.log(dong); };
 
+const SLUG_VONG = 'sua-paths-e5-soan-okr';
+
 function docKetQua(out, ma) {
-  if (ma !== 0) bao(`ma-thoat:${ma}`);
-  const dong = out.split('\n').filter((l) => l.startsWith(`VIOLATION [${SLUG_HO_SO}]`));
-  if (dong.length) bao(`vi-pham:${SLUG_HO_SO} — ${dong[0].slice(0, 160)}`);
+  const viPham = out.split('\n').filter((l) => l.startsWith('VIOLATION ['));
+  const cuaHoSo = viPham.filter((l) => l.startsWith(`VIOLATION [${SLUG_HO_SO}]`));
+  const cuaVong = viPham.filter((l) => l.startsWith(`VIOLATION [${SLUG_VONG}]`));
+  const khac = viPham.filter((l) => !cuaHoSo.includes(l) && !cuaVong.includes(l));
+  if (cuaHoSo.length) bao(`vi-pham:${SLUG_HO_SO} — ${cuaHoSo[0].slice(0, 160)}`);
+  for (const l of khac) bao(`vi-pham-khac:${(l.match(/^VIOLATION \[([^\]]+)\]/) || [])[1]} — ${l.slice(0, 120)}`);
+  if (ma === 0) return;
+  if (co['buoc-cuoi'] || cuaVong.length === 0 || khac.length || cuaHoSo.length) bao(`ma-thoat:${ma}`);
+  else console.log(`   chua toi buoc cuoi: ${cuaVong.length} vi pham cua chinh vong ${SLUG_VONG} duoc tha`);
 }
 
 if (co['doc-tep']) {
