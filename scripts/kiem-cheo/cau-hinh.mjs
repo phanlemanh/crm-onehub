@@ -5,6 +5,7 @@ const GIO_MS = 60 * PHUT_MS;
 export const KIEM_CHEO = {
 	donVi: { giayMs: GIAY_MS, phutMs: PHUT_MS, gioMs: GIO_MS },
 	lich: { gio: 1, phut: 0 },
+	muiGio: "Asia/Ho_Chi_Minh",
 	nhanhChinh: "onehub",
 	remote: "origin",
 	thuMuc: ".acceptance-runs/kiem-cheo",
