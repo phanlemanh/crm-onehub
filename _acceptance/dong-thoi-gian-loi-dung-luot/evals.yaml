@@ -1,0 +1,94 @@
+feature_slug: dong-thoi-gian-loi-dung-luot
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtl_lam_moi_roi_xem_cu
+    paths:
+      - "apps/app/components/crm/timeline/timeline.tsx"
+      - "apps/app/test/dong-thoi-gian-loi-dung-luot.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; Timeline that, tRPC gia (khung-gop-y.tsx), mot con nho goi queryClient.invalidateQueries(). Trang dau 3 muc
+      (nextCursor "c1"); lan doc lai trang dau nem "boom-lam-moi" -> invalidate -> cho [data-dtg-loi=lam-moi]. Ma tran viet
+      truoc 3 o, moi o mot lan mo moi: (a) dang tai: trang "c1" tra promise do bai giu -> bam «Xem cũ hơn» -> cho lan goi
+      cursor "c1" -> [data-dtg-loi=xem-cu] === null va [data-dtg-loi=lam-moi] !== null (doc lai sau 10 nhip trong luc con
+      treo), nut «Xem cũ hơn» !== null va disabled === true, bam them -> so lan goi cursor "c1" van la 1; MutationObserver
+      gan tu luc bam toi luc giai promise dem so lan chen [data-dtg-loi=xem-cu] === 0; (b) xong thanh cong: giai promise voi 2 muc -> 5 dong, [data-dtg-loi=lam-moi] VAN !== null, khong xem-cu;
+      (c) xong loi: promise reject -> ca hai thong bao !== null. Chi so gia tri nguyen thuy (luat 35).
+      CHIEU DO ghim: ban sao timeline.tsx dung lai co isFetchNextPageError/isRefetchError -> do "dtl: thong bao xem cu hien khi dang tai" (o a) va "dtl: canh bao lam moi tat sau xem cu" (o b).
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtl_xem_cu_roi_lam_moi
+    paths:
+      - "apps/app/components/crm/timeline/timeline.tsx"
+      - "apps/app/test/dong-thoi-gian-loi-dung-luot.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; trang dau 3 muc (nextCursor "c1"), trang "c1" nem "boom-trang-ke" -> bam «Xem cũ hơn» -> cho
+      [data-dtg-loi=xem-cu]. Ma tran viet truoc 3 o, moi o mot lan mo moi: (a) dang tai: lan doc lai trang dau tra promise
+      do bai giu -> invalidate -> cho lan goi khong cursor -> [data-dtg-loi=lam-moi] === null va [data-dtg-loi=xem-cu]
+      !== null (doc lai sau 10 nhip); MutationObserver dem so lan chen [data-dtg-loi=lam-moi] tu luc invalidate toi luc
+      giai promise === 0; (b) lam moi thanh cong: giai promise -> ca hai === null, nut «Xem cũ hơn» !== null;
+      (c) lam moi loi: promise reject -> ca hai !== null.
+      CHIEU DO ghim: ban sao dung lai co cua luot dang chay -> do "dtl: canh bao lam moi hien khi dang tai".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtl_thu_lai_lam_moi
+    paths:
+      - "apps/app/components/crm/timeline/timeline.tsx"
+      - "apps/app/test/dong-thoi-gian-loi-dung-luot.dom.tsx"
+    expected: |
+      exit 0; thong bao lam-moi hien; lan doc lai tra promise do bai giu -> bam «Thử lại» cua thong bao -> nut co
+      disabled === true, bam them -> so lan goi khong cursor tang dung 1; thong bao VAN hien trong luc treo; giai promise
+      -> thong bao === null. O doi chung: thong bao lam-moi hien + xem cu thanh cong (trang "c1" tra 2 muc) -> thong bao
+      lam-moi VAN !== null (chi luot lam moi thanh cong moi tat).
+      CHIEU DO ghim: ban sao tat lamMoi khi so trang tang -> do "dtl: canh bao lam moi tat sau xem cu".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtl_doi_tab
+    paths:
+      - "apps/app/components/crm/timeline/timeline.tsx"
+      - "apps/app/test/dong-thoi-gian-loi-dung-luot.dom.tsx"
+    expected: |
+      exit 0; tab Tat ca co thong bao xem-cu (trang "c1" loi) -> bam tab «Ghi chú» (filter notes, tra 2 muc khong loi) ->
+      khong [data-dtg-loi] nao; doi chung duong: tab Ghi chu co lan doc lai loi -> invalidate -> [data-dtg-loi=lam-moi]
+      !== null. O quay lai: QueryClient dat staleTime 30000 (nhu app) -> tab Tat ca loi xem cu -> sang Ghi chu -> quay lai
+      Tat ca (khong luot tai lai luc gan) -> [data-dtg-loi=xem-cu] !== null. Moi bai dat lai dong ho that (setSystemTime())
+      truoc khi chay.
+      CHIEU DO ghim: ban sao giu co loi qua doi khoa -> do "dtl: thong bao theo sang tab moi"; ban sao lay trang thai
+      hien tai lam moc khi doi khoa -> do "dtl: quay lai tab loi mat thong bao".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dtl_hoi_quy_k6c
+    paths:
+      - "apps/app/components/crm/timeline/timeline.tsx"
+      - "apps/app/test/dong-thoi-gian-giu-khi-loi.dom.tsx"
+    expected: |
+      exit 0; chay nguyen tep dong-thoi-gian-giu-khi-loi.dom.tsx cua ho so da ky K6c, khong sua bai: 4 test
+      (dtg-xem-cu-loi, dtg-thu-lai, dtg-lam-moi, dtg-en) deu pass.
+      CHIEU DO (da ghim o ho so goc): pha thu cua K6c.
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kts_dong_thoi_gian
+    paths:
+      - "apps/app/components/crm/timeline/timeline.tsx"
+      - "apps/app/test/kara-trang-thai-vung.dom.tsx"
+    expected: |
+      exit 0; bai dong-thoi-gian cua kara-trang-thai-toan-crm (tai dau loi, loi sang rong, rong, en) xanh khong sua.

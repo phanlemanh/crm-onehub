@@ -1325,6 +1325,11 @@ executors:
     dtg_thu_lai: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-giu-khi-loi.dom.tsx -t dtg-thu-lai"
     dtg_lam_moi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-giu-khi-loi.dom.tsx -t dtg-lam-moi"
     dtg_en: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-giu-khi-loi.dom.tsx -t dtg-en"
+    dtl_lam_moi_roi_xem_cu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-loi-dung-luot.dom.tsx -t dtl-lam-moi-roi-xem-cu"
+    dtl_xem_cu_roi_lam_moi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-loi-dung-luot.dom.tsx -t dtl-xem-cu-roi-lam-moi"
+    dtl_thu_lai_lam_moi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-loi-dung-luot.dom.tsx -t dtl-thu-lai-lam-moi"
+    dtl_doi_tab: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-loi-dung-luot.dom.tsx -t dtl-doi-tab"
+    dtl_hoi_quy_k6c: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-giu-khi-loi.dom.tsx"
     dlr_rong_vi_loc: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx -t rong-vi-loc
     dlr_nut_bo_loc: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx -t nut-bo-loc
     dlr_bo_chon: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx -t bo-chon
