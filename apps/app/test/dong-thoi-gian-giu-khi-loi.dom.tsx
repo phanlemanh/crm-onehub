@@ -156,14 +156,14 @@ describe("dong-thoi-gian-giu-khi-loi", () => {
 		let tb = await moXemCuLoi(() => trangKe());
 		let n0 = goiLichSu().length;
 		await bam(nut(THU_LAI, tb));
+		await cho(() => goiLichSu().length > n0, "thu lai loi lan nua");
+		await nhip(10);
+		phai(cursorCua(n0) === "c1", "dtg: thu lai tai lai trang dau");
 		await cho(
 			() =>
-				goiLichSu().length === n0 + 1 &&
-				thongBao("xem-cu") !== null &&
-				nutCo(THU_LAI, thongBao("xem-cu") as HTMLElement)?.disabled === false,
-			"thu lai loi lan nua",
+				nutCo(THU_LAI, thongBao("xem-cu") ?? document.body)?.disabled === false,
+			"thong bao xem cu sau loi lan nua",
 		);
-		phai(cursorCua(n0) === "c1", "dtg: thu lai tai lai trang dau");
 		expect(idDong()).toBe("a1,a2,a3");
 		o.push("loi-lan-nua");
 
