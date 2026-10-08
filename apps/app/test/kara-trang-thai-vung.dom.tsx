@@ -3,6 +3,7 @@ import type { ReactElement } from "react";
 import {
 	bam,
 	cho,
+	type DauVao,
 	dat,
 	dongHet,
 	goiCua,
@@ -63,8 +64,13 @@ function phai(dieu: boolean, thongDiep: string) {
 
 afterEach(dongHet);
 
-const lichSu = (vao: unknown) =>
-	(vao as { filter?: string } | undefined)?.filter !== "upcoming";
+type KetQuaCongCu = {
+	readonly stored?: boolean;
+	readonly written?: boolean;
+	readonly reason?: string;
+};
+
+const lichSu = (vao: DauVao) => vao?.filter !== "upcoming";
 
 function datTimeline(hong: () => boolean) {
 	dat("activities.timelineCounts", () => ({}));
@@ -279,7 +285,7 @@ describe("kara-trang-thai-vung", () => {
 			id: string,
 			toolName: string,
 			state: string,
-			output?: unknown,
+			output?: KetQuaCongCu,
 			errorText?: string,
 		) => ({
 			type: "dynamic-tool" as const,
@@ -287,8 +293,8 @@ describe("kara-trang-thai-vung", () => {
 			toolCallId: id,
 			state,
 			input: {},
-			...(output === undefined ? {} : { output }),
-			...(errorText === undefined ? {} : { errorText }),
+			output,
+			errorText,
 		});
 		const luot = (parts: unknown[]) => [
 			{

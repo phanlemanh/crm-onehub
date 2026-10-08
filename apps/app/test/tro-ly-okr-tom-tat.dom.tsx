@@ -580,9 +580,7 @@ const CA = {
 		await cho(() => trangThai("ST-tomtat-da-phan-hoi") !== null, "da phan hoi");
 		expect(dangNhan(phanHoi.useful)).toBe(true);
 		expect(dangNhan(phanHoi.notUseful)).toBe(false);
-		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(
-			m.daGhi,
-		);
+		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(m.daGhi);
 		await bam(nutPhanHoi(phanHoi.notUseful));
 		await cho(
 			() => goiCua("okr.troLyTomTatPhanHoi").length === 1,
@@ -594,9 +592,7 @@ const CA = {
 		});
 		await cho(() => dangNhan(phanHoi.notUseful), "doi y");
 		expect(dangNhan(phanHoi.useful)).toBe(false);
-		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(
-			m.daGhi,
-		);
+		expect(chu(khoi()?.querySelector('[role="status"]') ?? null)).toBe(m.daGhi);
 	},
 	"ST-tomtat-loi": async () => {
 		let hong = true;

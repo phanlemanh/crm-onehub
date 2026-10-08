@@ -82,6 +82,7 @@ type DealChoices = {
 };
 
 function CreateDealForm({ companyId }: { companyId?: string }) {
+	const m = dealMessages(useLocale());
 	const openRecord = useOpenRecord();
 	const trpc = useTRPC();
 	const cache = useCrmCache();
