@@ -11,7 +11,7 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>133 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>45 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
@@ -44,6 +44,7 @@ flowchart TD
 
 ## Đang làm
 
+- «Ở mọi nơi, lỗi tải không còn hiện như chưa có gì; lưu trữ bản ghi có Hoàn tác» — dòng thời gian, hoạt động trên website và 30 ngày đầu của ngăn bản ghi có khung «không tải được» kèm «Thử lại» thay vì rỗng hay biến mất; tóm tắt tuần nói «Kara đang…» và lỗi theo ai-ux; lưu trữ cá nhân, công ty, thoả thuận có Hoàn tác ngay trên toast; bước Kara không lưu được hiện khác bước đã lưu; ba việc chữ (`kara-trang-thai-toan-crm`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
