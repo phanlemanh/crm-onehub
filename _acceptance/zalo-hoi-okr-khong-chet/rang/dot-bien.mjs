@@ -26,7 +26,7 @@ function lenh(cwd, cmd) {
 	return { ma: r.status, ra: `${r.stdout}\n${r.stderr}` };
 }
 
-const coGhim = (ra, ghim) => ra.split("\n").some((d) => d.startsWith("error:") && d.includes(ghim));
+const coGhim = (ra, ghim) => ra.split("\n").some((d) => /^(error|[A-Za-z]*Error):/.test(d) && d.includes(ghim));
 
 const banSao = dungBanSao("zhok-dot-bien");
 let daChay = 0;
