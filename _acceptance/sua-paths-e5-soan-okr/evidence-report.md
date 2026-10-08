@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 5f9acb1f61dd6f1cd078c0fe26fc2856293202ff
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-08
 ---
 
 # Evidence Report: sua-paths-e5-soan-okr

@@ -5,7 +5,7 @@ slug: sua-paths-e5-soan-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08
 design_doc: docs/superpowers/specs/2026-10-08-sua-paths-e5-soan-okr-design.md
@@ -59,3 +59,8 @@ xanh không (AC-4, AC-5).
 - Sửa hai chuỗi bằng thay chuỗi nguyên văn, không bằng regex (bài học «regex cắt nhầm [slug]»).
 - Tệp ngoài ranh giới hàng đã xin `cham-tep` (`yeu-cau/P1-19.json`): `_acceptance/config.yaml` (thêm khoá `f19_*`),
   design doc và kế hoạch của vòng, bản đồ sản phẩm.
+- Known limits (Ngoài-4, Cổng 2): răng E4 không đòi mảng `suites_exit` khác rỗng — một lần ghim lại không chạy bộ
+  kiểm nào vẫn được báo đạt.
+- Known limits (AC-5, Cổng 2): vế «`pre-merge-check` thoát 0» chỉ đúng sau khi ký, nên lượt chấm S4 không đo được
+  nó; lúc chấm E5 tha đúng vi phạm của chính hồ sơ vòng. Vế này chốt bằng `rang/pre-merge.mjs --buoc-cuoi` chạy
+  ngay trước khi đẩy và kiểm `pre-merge` của CI trên PR.
