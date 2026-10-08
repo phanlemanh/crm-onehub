@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 8931c977fd7125f5d6dc676b16e127941f45b48f
+verified_commit: 543a610103c993601e01b1a0b79afdf0b0c79553
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -209,3 +209,7 @@ none — every multi-run eval is uniform
 
 Round 1: không eval máy nào đỏ; vòng bị REJECT vì review có 1 phát hiện mức high trong hợp đồng (AC-7): nút Hoàn tác của toast lưu trữ giai đoạn chỉ dùng được một lần, kèm 6 phát hiện thước đo mức medium/low trong hợp đồng (E5, E7, E9, E10). Returned to implementation.
 Round 2: 13 eval máy và 7 lệnh suite đạt trên commit 8931c977; bản sửa S4-r1 làm Hoàn tác lưu trữ gắn với từng thông báo và thêm phép đo khứ hồi; review không còn phát hiện trong hợp đồng. Bản đồ run_id của E3, E7, E12 ghi chuỗi rỗng, chép nguyên văn từ bản đồ.
+
+### Re-pin lần 1 — 2026-10-08, do gộp onehub feba7e77 (F11) trước khi mở PR
+run_id: repin-20261008T063546Z-60354
+sha: 543a610103c993601e01b1a0b79afdf0b0c79553 · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E4, E11 · AC không có chốt máy: AC-4, AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
