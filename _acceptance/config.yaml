@@ -44,6 +44,13 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    htl_may_chu_luu_tru: 'bun run test -- "cd apps/api && bun test test/hoan-tac-loat-dung-id.spec.ts -t htl-luu-tru"'
+    htl_may_chu_hoan_tac: 'bun run test -- "cd apps/api && bun test test/hoan-tac-loat-dung-id.spec.ts -t htl-hoan-tac"'
+    htl_hoan_tac_dung_id: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-hoan-tac-dung-id"
+    htl_hoan_tac_thieu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-hoan-tac-thieu"
+    htl_luu_tru_bo_qua: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-luu-tru-bo-qua"
+    htl_en: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-en"
+    htl_cap_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
     gtd_qua_gio: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t qua-gio"
     gtd_thoi_luong: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t thoi-luong"
     gtd_do: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t tep-do"
@@ -1459,6 +1466,7 @@ executors:
     dt_man_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t goi-y-moi-gioi'
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
   script:
+    htl_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoan-tac-loat-dung-id/rang/man.mjs"'
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
     kbk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-ban-ghi-kara/rang/man.mjs"'
     kts_chu: "bun _acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
