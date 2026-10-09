@@ -280,7 +280,6 @@ describe("tim-bang", () => {
 		["+84 901 234 444", "P--"],
 		["234 444", "P--"],
 		["0912345444", "-Q-"],
-		["R12", "--R"],
 	];
 
 	for (const [q, ra] of BANG) {
@@ -290,6 +289,17 @@ describe("tim-bang", () => {
 			);
 		});
 	}
+
+	test("tim-bang: 12 duoi nguong khong loc theo so", async () => {
+		const ten = (id: string) =>
+			db.contact
+				.findUniqueOrThrow({ where: { id }, select: { firstName: true } })
+				.then((c) => c.firstName.includes("12"));
+		const mong = `${(await ten(pId)) ? "P" : "-"}${(await ten(qId)) ? "Q" : "-"}R`;
+		expect(`tim-bang: 12 -> ${await tim("12")}`).toBe(
+			`tim-bang: 12 -> ${mong}`,
+		);
+	});
 
 	test("tim-bang: dong co so hien phone", async () => {
 		const { rows } = await contacts.list({

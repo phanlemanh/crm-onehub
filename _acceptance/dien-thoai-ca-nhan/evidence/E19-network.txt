@@ -1,0 +1,2 @@
+driver: do-man.mjs (playwright qua mot-luot.sh); khong co browser tool network rieng.
+Dong: DUNG so-sai-375: 375: 0 yeu cau contacts.create (dem yeu cau mang trong do-man)

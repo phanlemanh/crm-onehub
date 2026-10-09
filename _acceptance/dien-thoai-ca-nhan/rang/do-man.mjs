@@ -19,6 +19,7 @@ const APP = process.env.APP_URL ?? "http://localhost:3000";
 const NGUOI = process.env.NGUOI ?? "ada@trycomp.ai";
 const CHO_MS = 90_000;
 const CHO_GHI_MS = 15_000;
+const CHO_LOC_MS = 20_000;
 const MA_TRAN = [
 	"them-tab-1440",
 	"them-tab-375",
@@ -214,7 +215,7 @@ async function doThemTab(kho, cookie, slug, congTy, oMa) {
 				c?.source === "MANUAL" &&
 				c?.companyId === congTy.id,
 		);
-		return { ten, so: mong };
+		return { ten, so: mong, id: c?.id };
 	} finally {
 		await ctx.close();
 	}
@@ -266,8 +267,9 @@ async function doSoSai(cookie, slug, congTy) {
 		await new Promise((r) => setTimeout(r, 1000));
 		const loi = await p.evaluate(
 			() =>
-				document.querySelector('[data-slot="field-error"]')?.innerText?.trim() ??
-				"",
+				document
+					.querySelector('[data-slot="field-error"]')
+					?.innerText?.trim() ?? "",
 		);
 		const conTro = await p.evaluate(
 			(sel) => document.activeElement === document.querySelector(sel),
@@ -315,17 +317,41 @@ async function doBang(cookie, slug, nguoi) {
 		const thay = await choDong(p, nguoi.ten);
 		const chuDong = await p.evaluate(
 			(t) =>
-				[...document.querySelectorAll('[data-slot="table"] tbody tr')]
-					.find((tr) => (tr.innerText ?? "").includes(t))
-					?.innerText ?? "",
+				[...document.querySelectorAll('[data-slot="table"] tbody tr')].find(
+					(tr) => (tr.innerText ?? "").includes(t),
+				)?.innerText ?? "",
 			nguoi.ten,
 		);
 		const hien = hienThiSoDienThoai(nguoi.so);
 		await p.screenshot({ path: join(RA, "bang-1440.png") });
+		await p.goto(`${APP}/${slug}/contacts?record=contact:${nguoi.id}`, {
+			waitUntil: "networkidle0",
+			timeout: CHO_MS,
+		});
+		const lienKet = await p
+			.waitForFunction(
+				() => {
+					const a = [...document.querySelectorAll('a[href^="tel:"]')].find(
+						(x) => x.getClientRects().length > 0,
+					);
+					return a
+						? `${a.getAttribute("href")}|${(a.innerText ?? "").trim()}`
+						: false;
+				},
+				{ timeout: CHO_MS },
+			)
+			.then((h) => h.jsonValue())
+			.catch(() => "khong co|");
+		const [href, chuGoi] = String(lienKet).split("|");
+		await p.screenshot({ path: join(RA, "bang-1440-ngan.png") });
 		kiem(
 			"bang-1440",
-			`1440: cot sau «Tên» la «${sauTen}»; dong cua ${nguoi.ten} ${thay ? "co" : "khong co"}, chua «${hien}» ${chuDong.includes(hien)}`,
-			sauTen === "Điện thoại" && thay && chuDong.includes(hien),
+			`1440: cot sau «Tên» la «${sauTen}»; dong cua ${nguoi.ten} ${thay ? "co" : "khong co"}, chua «${hien}» ${chuDong.includes(hien)}; ngan chi tiet: lien ket ${href} chu «${chuGoi}»`,
+			sauTen === "Điện thoại" &&
+				thay &&
+				chuDong.includes(hien) &&
+				href === `tel:${nguoi.so}` &&
+				chuGoi === hien,
 		);
 	} finally {
 		await ctx.close();
@@ -333,11 +359,46 @@ async function doBang(cookie, slug, nguoi) {
 }
 
 async function goTim(p, chu) {
-	const o = await p.$(`input[placeholder="${cm.search}"]`);
+	const sel = `input[placeholder="${cm.search}"]`;
+	const o = await p.$(sel);
 	if (!o) khongDo(`khong thay o tim «${cm.search}»`);
-	await o.click({ clickCount: 3 });
-	await p.keyboard.press("Backspace");
+	await p.$eval(sel, (x) => {
+		const dat = Object.getOwnPropertyDescriptor(
+			HTMLInputElement.prototype,
+			"value",
+		)?.set;
+		dat?.call(x, "");
+		x.dispatchEvent(new Event("input", { bubbles: true }));
+	});
+	await o.click();
 	await o.type(chu);
+	const giaTri = await p.$eval(sel, (x) => x.value);
+	if (giaTri !== chu) khongDo(`o tim mang «${giaTri}» thay vi «${chu}»`);
+}
+
+async function choLocXong(p, ten) {
+	return p
+		.waitForFunction(
+			(t) => {
+				const dong = [
+					...document.querySelectorAll('[data-slot="table"] tbody tr'),
+				];
+				return (
+					dong.length > 0 &&
+					dong.every((tr) => (tr.innerText ?? "").includes(t))
+				);
+			},
+			{ timeout: CHO_LOC_MS },
+			ten,
+		)
+		.then(() => true)
+		.catch(() => false);
+}
+
+async function demDong(p) {
+	return p.evaluate(
+		() => document.querySelectorAll('[data-slot="table"] tbody tr').length,
+	);
 }
 
 async function doTimBang(cookie, slug, nguoi) {
@@ -352,16 +413,20 @@ async function doTimBang(cookie, slug, nguoi) {
 			`+84 ${quocNoi.slice(0, 3)} ${quocNoi.slice(3, 6)} ${quocNoi.slice(6)}`,
 			`0${quocNoi}`,
 		];
+		const truoc = await demDong(p);
 		const ketQua = [];
 		for (const chu of cachGo) {
 			await goTim(p, chu);
-			ketQua.push(`${chu} -> ${(await choDong(p, nguoi.ten)) ? "co" : "khong"}`);
+			const loc = await choLocXong(p, nguoi.ten);
+			ketQua.push(
+				`${chu} -> ${loc ? "chi con" : "KHONG chi con"} dong cua nguoi do (${await demDong(p)} dong)`,
+			);
 		}
 		await p.screenshot({ path: join(RA, "tim-bang-1440.png") });
 		kiem(
 			"tim-bang-1440",
-			`1440: ${ketQua.join("; ")}`,
-			ketQua.every((k) => k.endsWith("-> co")),
+			`1440: truoc khi tim ${truoc} dong; ${ketQua.join("; ")}`,
+			truoc > 1 && ketQua.every((k) => k.includes("-> chi con")),
 		);
 	} finally {
 		await ctx.close();
@@ -385,9 +450,9 @@ async function doCmdk(cookie, slug, nguoi, congTy) {
 		const dongPhu = await p
 			.waitForFunction(
 				(t) =>
-					[...document.querySelectorAll("[cmdk-item]")]
-						.find((x) => (x.innerText ?? "").includes(t))
-						?.innerText ?? false,
+					[...document.querySelectorAll("[cmdk-item]")].find((x) =>
+						(x.innerText ?? "").includes(t),
+					)?.innerText ?? false,
 				{ timeout: CHO_MS },
 				nguoi.ten,
 			)
@@ -397,7 +462,8 @@ async function doCmdk(cookie, slug, nguoi, congTy) {
 		kiem(
 			"cmdk-1440",
 			`1440: muc ca nhan «${String(dongPhu).replace(/\s+/g, " ")}» (mong co ten cong ty «${congTy.name}»)`,
-			String(dongPhu).includes(nguoi.ten) && String(dongPhu).includes(congTy.name),
+			String(dongPhu).includes(nguoi.ten) &&
+				String(dongPhu).includes(congTy.name),
 		);
 	} finally {
 		await ctx.close();
