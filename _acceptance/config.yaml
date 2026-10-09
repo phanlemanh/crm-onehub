@@ -2042,7 +2042,7 @@ executors:
     gdtt_migration: 'bun _acceptance/giai-doan-thoa-thuan/rang/migration-du-lieu.mjs'
     gdtt_man_chrome: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/giai-doan-thoa-thuan/rang/man-giai-doan.mjs"'
     gdtt_khong_re_theo_ten: 'bun _acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs'
-    gdtt_san_thiet_ke: 'bun _acceptance/giai-doan-thoa-thuan/rang/san-thiet-ke.mjs'
+    gdtt_san_thiet_ke: 'GDTT_MOC=b2012cbd750182983fa7a17e87e8a050b511c6df GDTT_DINH=cf5006d4d bun _acceptance/giai-doan-thoa-thuan/rang/san-thiet-ke.mjs'
     tgy_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"'
     tgy_ten_goi: 'node _acceptance/the-gop-y-okr/rang/ten-goi.mjs'
     tgy_san_thiet_ke: 'for t in "packages/ui/src/components/proposed-change.tsx" "packages/ui/src/components/ai-elements/confirmation.tsx" "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/components/crm/facts.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
@@ -2198,6 +2198,12 @@ executors:
     dsk_mot_thanh_phan: bun _acceptance/danh-sach-keo-chung/rang/mot-thanh-phan.mjs --tu-thu && bun _acceptance/danh-sach-keo-chung/rang/mot-thanh-phan.mjs
     dsk_san_thiet_ke: bun _acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs --tu-thu && bun _acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs
     dva_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target apps/app/components/agent-builder/deal-list-result.tsx --mode static'
+    nlt_that: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca that
+    nlt_chu_telemetry: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca chu-telemetry
+    nlt_chu_allowlist: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca chu-allowlist
+    nlt_ten_ngoai: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca ten-ngoai
+    nlt_tai_lieu: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca tai-lieu
+    nlt_ghim_gdtt: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca ghim-gdtt
     atk_luat_kho: bun _acceptance/agent-test-khong-nhap-app/rang/luat-kho.mjs
     atk_app_dung_goi: bun _acceptance/agent-test-khong-nhap-app/rang/app-dung-goi.mjs --tu-thu && bun _acceptance/agent-test-khong-nhap-app/rang/app-dung-goi.mjs
     atk_ghim: bun _acceptance/agent-test-khong-nhap-app/rang/ghim.mjs
