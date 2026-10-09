@@ -3,10 +3,10 @@ schema_version: 1
 slug: dien-thoai-o-deal-cong-ty
 feature: «Số điện thoại hiện ở thoả thuận và ở tab Cá nhân của công ty»
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:
-decided_by:
-decided_at:
+stage: decided              # discovery | decided | archived
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-09T22:59:27Z
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -21,9 +21,9 @@ DT1 cho nhập và tìm số, nhưng ở thoả thuận — nơi sale làm việ
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: sale có gọi được người trong thoả thuận mà không phải mở hồ sơ từng người không.
-- Kết quả nào là SỐNG: [đề xuất] trong phiên nghiệm thu, 3/3 sale tìm và đọc được số của người phụ trách thoả thuận ngay trong ngăn thoả thuận, không mở ngăn cá nhân.
-- Kết quả nào là CHẾT: [đề xuất] có sale phải mở ngăn cá nhân mới thấy số.
-- Timebox: [đề xuất] nửa ngày công; đọc cùng phiên nghiệm thu DT1 ngày 23/10.
+- Kết quả nào là SỐNG: trong phiên nghiệm thu, 3/3 sale tìm và đọc được số của người phụ trách thoả thuận ngay trong ngăn thoả thuận, không mở ngăn cá nhân.
+- Kết quả nào là CHẾT: có sale phải mở ngăn cá nhân mới thấy số.
+- Timebox: nửa ngày công; đọc cùng phiên nghiệm thu DT1 ngày 23/10.
 
 ## Out of scope từ khám phá
 
