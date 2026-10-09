@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: cab0599a6de73d1284ef97ba51d9c6c8f3a6d9a7
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-09
 ---
 
 # Evidence Report: kara-gop-y-luot-2

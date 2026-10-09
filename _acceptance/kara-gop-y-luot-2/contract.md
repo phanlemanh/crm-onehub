@@ -5,7 +5,7 @@ slug: kara-gop-y-luot-2
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
 design_doc: docs/superpowers/specs/2026-10-09-kara-gop-y-luot-2-design.md
@@ -69,3 +69,12 @@ Ngưỡng ở `opportunity.md` (đang `[đề xuất]`) đo ở lái-thử ngư�
 - `cham-tep` (P1-35, P1-36): `packages/ui/src/components/kara/state.tsx` (prop thêm), `apps/app/lib/okr-search-params.ts`
   (một khoá), `apps/app/test/messages-guard.spec.ts`, `packages/ui/src/lib/format.ts` (một hàm), ba tệp `soan/`, tệp kiểm
   API mới, `_acceptance/config.yaml`, design doc, kế hoạch, bản đồ.
+- Known limits (Ngoài-1, Cổng 2): quyền nhờ Kara cho cả Mục tiêu đếm chủ KR bằng Prisma (`coKrSuaDuoc`), không qua
+  `ghiDuocKr`; luật ai sửa được KR mở rộng thì nút hiện mà máy chủ trả 403.
+- Known limits (Ngoài-2, Cổng 2): Hoàn tác Căn chỉnh đoán mã liên kết vừa tạo bằng so cache; cache trống hay làm mới lỗi
+  thì biên nhận không có Hoàn tác.
+- Known limits (Ngoài-3, Ngoài-7, Cổng 2): vòng hỏi lại sau khi đóng khung dừng ở lần tải lỗi đầu, số góp ý chờ trên chip
+  và Của tôi giữ số cũ tới khi tải lại trang.
+- Known limits (Ngoài-5, Cổng 2): nhận Căn chỉnh thì dòng góp ý biến mất một thoáng trước khi hiện biên nhận.
+- Known limits (Ngoài-8, Cổng 2): E5 đếm «Thử lại xám» trên trạng thái off không dựng nút Thử lại.
+- Known limits (Ngoài-9, Cổng 2): «giờ Việt Nam» của AC-14 đo bằng đọc mã; phép đo đầu ra chạy với TZ đã là giờ Việt Nam.
