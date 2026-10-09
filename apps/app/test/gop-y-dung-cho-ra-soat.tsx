@@ -230,7 +230,7 @@ describe("trang-thai-kara", () => {
 				() => nhom()?.getAttribute("data-nhom-kara") === "loi",
 				"trang thai loi qua han",
 			);
-			const thuLai = nut(m.vung.thuLai, nhom() ?? document);
+			const thuLai = nut(ui.karaKhung.thuLai, nhom() ?? document);
 			if ((thuLai as HTMLButtonElement).disabled)
 				throw new Error("thu lai bi khoa khi qua han");
 			await bamChuot(thuLai);
@@ -277,16 +277,21 @@ describe("trang-thai-kara", () => {
 			() => goiCua("okr.troLyDeXuat").length === 1,
 			"goi nho Kara doc lai",
 		);
-		await nhip(10);
-		if (!nhom()?.textContent?.includes(m.vung.dangDoc))
-			throw new Error("doc lai khong hien dang doc");
+		await choLau(
+			() => nhom()?.textContent?.includes(m.vung.dangDoc) === true,
+			"doc lai khong hien dang doc",
+			3000,
+		);
 		pha = "loi";
 		await choLau(
-			() => nhom()?.textContent?.includes(m.vung.loi) === true,
+			() =>
+				nhom()?.textContent?.includes(ui.karaKhung.chuaDuoc(m.vung.viecDoc)) ===
+				true,
 			"doc lai hong khong bao loi",
 		);
 		expect(
-			(nut(m.vung.thuLai, nhom() ?? document) as HTMLButtonElement).disabled,
+			(nut(ui.karaKhung.thuLai, nhom() ?? document) as HTMLButtonElement)
+				.disabled,
 		).toBe(false);
 		expect(
 			qs(`[data-gop-y="${D_TEN.id}"] [data-slot=proposed-change-receipt]`),
