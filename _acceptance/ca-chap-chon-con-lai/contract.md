@@ -5,7 +5,7 @@ slug: ca-chap-chon-con-lai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T07:52:08Z
 design_doc: docs/superpowers/specs/2026-10-08-ca-chap-chon-con-lai-design.md
@@ -59,5 +59,7 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 
 - Không migration. Không đổi mã sản phẩm.
 - Ranh giới: `apps/agent/test/tasks.integration.spec.ts`, `apps/agent-okr/test/goi-soan.integration.spec.ts`, `apps/agent-okr/test/support/gieo.ts` (xin chạm tệp P5-49 — ngoài ranh giới ban đầu của hàng), `_acceptance/ca-chap-chon-con-lai/**`.
+- Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-09 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1:
+  - Ngoài-2: chữ của E1 gọi hai khối thử là «tra lai sau khoi» và «da tat tu truoc»; tên thật trong `tasks.integration.spec.ts` là «autovacuum is handed back after the block» và «autovacuum already off before the block». Lệnh `-t 'a limited lock subquery'` vẫn chọn đúng các ca.
 - Sửa sau Cổng 1 (09/10, chủ kho): AC-7 bản duyệt đầu tả một gói không thể có — gói chỉ mang id ở `lop2a.capTren` và `lop2a.ungVienCanChinh`, và `idCuaGoi` đã gỡ hết chúng trước khi trích số (đọc lúc S3). AC-7 đổi thành phép canh hồi quy cho việc gỡ đó; `goi-soan.ts` ra khỏi Ranh giới.
 - `ALTER TABLE … SET (autovacuum_enabled = false)` chạy trên kho thử; bài bị giết giữa chừng thì `crm_test` giữ cờ đó cho tới `bun run db:test --reset`.
