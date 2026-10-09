@@ -5,7 +5,7 @@ slug: ly-do-can-chinh-tu-soan
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T00:15:44Z
 design_doc: docs/superpowers/specs/2026-10-08-ly-do-can-chinh-tu-soan-design.md
