@@ -5,11 +5,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { db } from "@crm/db";
 import { GIAI_DOAN_GOC } from "@crm/db/giai-doan";
-import { databaseName, runScopedUrl } from "@crm/db/test-database";
-import {
-	dropDatabase,
-	withMaintenance,
-} from "../../../packages/db/scripts/test-db-admin";
+import { runScopedUrl } from "@crm/db/test-database";
 
 const GOI_DB = resolve(import.meta.dirname, "..", "..", "..", "packages", "db");
 const GIAY_SEED = 300;
@@ -45,6 +41,13 @@ const ra = [];
 for (const [q, v] of JSON.parse(process.env.CAU_SQL)) ra.push((await k.query(q, v)).rows);
 await k.end();
 console.log(JSON.stringify(ra));
+`;
+
+const XOA_KHO = `
+import { databaseName } from "./src/test-database.ts";
+import { dropDatabase, withMaintenance } from "./scripts/test-db-admin.ts";
+const url = process.env.KHO_SEED;
+await withMaintenance(url, (client) => dropDatabase(client, databaseName(url)));
 `;
 
 function sql<T>(cau: [string, unknown[]][]): T[][] {
@@ -121,18 +124,24 @@ beforeAll(async () => {
 		id: String(r.id),
 		stage: String(r.stage),
 		kind: String(r.kind),
-		closedAt: r.closedAt,
+		closedAt: r.closedAt ?? null,
 	}));
-	chuyen = (chuyenRows ?? []).map((c) => ({ from: c.from, to: c.to }));
+	chuyen = (chuyenRows ?? []).map((c) => ({
+		from: c.from ?? null,
+		to: c.to ?? null,
+	}));
 	dem.sau = await db.deal.count();
 }, MS_TEST);
 
 afterAll(async () => {
 	rmSync(thuMuc, { recursive: true, force: true });
 	if (khoSeed) {
-		await withMaintenance(khoSeed, (client) =>
-			dropDatabase(client, databaseName(khoSeed)),
-		);
+		const xoa = spawnSync("bun", ["-e", XOA_KHO], {
+			cwd: GOI_DB,
+			encoding: "utf8",
+			env: { ...process.env, KHO_SEED: khoSeed },
+		});
+		if (xoa.status !== 0) throw new Error(`xoa kho seed: ${xoa.stderr}`);
 	}
 });
 

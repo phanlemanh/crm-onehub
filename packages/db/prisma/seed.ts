@@ -745,11 +745,11 @@ async function giaiDoanSong(): Promise<GiaiDoanSong> {
 		orderBy: [{ kind: "asc" }, { position: "asc" }],
 		select: { id: true, kind: true },
 	});
-	const theoLoai: Record<LoaiGiaiDoan, string[]> = {
-		OPEN: [],
-		WON: [],
-		LOST: [],
-	};
+	const theoLoai = {
+		OPEN: [] as string[],
+		WON: [] as string[],
+		LOST: [] as string[],
+	} satisfies Record<LoaiGiaiDoan, string[]>;
 	for (const row of rows) theoLoai[row.kind].push(row.id);
 	for (const kind of ["OPEN", "WON", "LOST"] as const) {
 		if (theoLoai[kind].length === 0) {

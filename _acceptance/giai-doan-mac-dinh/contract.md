@@ -5,7 +5,7 @@ slug: giai-doan-mac-dinh
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T23:31:25Z
 design_doc: _acceptance/giai-doan-mac-dinh/design.md
