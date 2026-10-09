@@ -12,8 +12,9 @@ evals:
       - "apps/api/src/**"
     expected: |
       exit 0; node scripts/luat-kho/do-cay.mjs --du-luat tren cay that in bay dong XANH (sau luat cu va vong-doi),
-      dong «XANH vong-doi: … (nen 2 tep, 2 dong cu)» — dung hai vi tri AgentDefinition (dong model trong schema.prisma,
-      loi findMany cua list trong apps/api/src/agent/agent-definitions.service.ts); KET LUAN «7/7 luat ap dung xanh, 0
+      dong «XANH vong-doi: … (nen 3 tep, 3 dong cu)» — dung ba cho: dong model AgentDefinition trong schema.prisma, loi
+      findMany cua list trong apps/api/src/agent/agent-definitions.service.ts, loi fieldDefinition.delete trong
+      apps/api/src/fields/fields.service.ts; KET LUAN «7/7 luat ap dung xanh, 0
       khong ap dung», chieu do N/N voi N = 32 ca cu + dung 7 ca vong-doi co ten: vd-hai-cot, vd-list-khong-loc,
       vd-xoa-khong-kiem (do) va vd-mot-cot, vd-list-loc-qua-ham-phu, vd-xoa-kiem-qua-ham-phu, vd-khong-ten-list (xanh) —
       ca 7 ten in trong dong «chieu do -> DUNG pha-<ten>». Mot ca khong bat hay bat nham -> ma 2 «thuoc hong, khong tin

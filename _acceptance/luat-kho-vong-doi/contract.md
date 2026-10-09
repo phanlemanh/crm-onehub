@@ -38,8 +38,9 @@ chối bản chưa lưu trữ; (3) vi phạm cũ của `AgentDefinition` vào n�
   <tệp>:<dòng> xoa vinh vien khong kiem da luu tru: <mô hình>` và thoát 1; kiểm ở chính phương thức hoặc qua một hàm phụ
   một bước (như `purgeDepartment` → `lyDoKhongXoa`) thì xanh.
 - AC-5: Given cây onehub hiện tại, When chạy `node scripts/luat-kho/do-cay.mjs --du-luat`, Then dòng `vong-doi` báo XANH
-  với nền đúng hai chỗ của `AgentDefinition` (dòng model trong schema, lời `findMany` của `list` trong
-  `agent-definitions.service.ts`), mỗi chỗ ghi trong `scripts/luat-kho/cau-hinh.mjs` theo tệp và chữ của dòng; dọn một
+  với nền đúng ba chỗ — hai của `AgentDefinition` (dòng model trong schema, lời `findMany` của `list` trong
+  `agent-definitions.service.ts`) và lời `fieldDefinition.delete` của `FieldsService.delete` trong `fields.service.ts`
+  (vi phạm thật thấy ở S3, ghi ở sổ quyết định) —, mỗi chỗ ghi trong `scripts/luat-kho/cau-hinh.mjs` theo tệp và chữ của dòng; dọn một
   chỗ khỏi mã thì thước in `NEN THUA vong-doi: …` cho chỗ đó.
 - AC-6: Given thiếu `schema.prisma` hoặc không có app Nest, When chạy thước với `--du-luat`, Then in `KHONG DO DUOC: thieu
   luat: vong-doi` và thoát 2; không cờ thì in `KHONG AP DUNG: vong-doi — …` và sáu luật kia vẫn chạy.

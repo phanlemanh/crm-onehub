@@ -29,7 +29,7 @@ Hiện trạng trên onehub `532e3317` (đo 08/10 bằng bản thử của luậ
 | --- | --- | --- | --- |
 | (c) | 11 mô hình có `archivedAt` | 1 | `AgentDefinition` có thêm `deletedAt` — vào nền |
 | (b) | 8 phương thức `list*` gọi `findMany` | 1 | `apps/api/src/agent/agent-definitions.service.ts` `list` (`agentDefinition`) — vào nền |
-| (a) | 3 lời `delete`/`deleteMany` | 0 | `purgeDivision` kiểm trực tiếp; `purgeTemplate` kiểm trực tiếp; `purgeDepartment` kiểm qua `lyDoKhongXoa` |
+| (a) | 3 lời `delete`/`deleteMany` (bản thử bằng biểu thức chính quy) | 0 | `purgeDivision`, `purgeTemplate` kiểm trực tiếp; `purgeDepartment` kiểm qua `lyDoKhongXoa`. S3: luật đọc cây cú pháp thấy thêm `FieldsService.delete` (`fields.service.ts`) xoá `fieldDefinition` không kiểm đã lưu trữ — vi phạm thật, vào nền |
 
 Bản cài đặt chạy lại bảng này trên cây thật trước S4; ca «đúng chuẩn» nào bị bắt thì sửa luật, không đưa vào nền.
 
@@ -39,7 +39,7 @@ chặn oan hàng loạt — đúng điều kiện CHẾT của hồ sơ cơ hộ
 ## Gắn vào do-cay.mjs
 
 - `cau-hinh.mjs`: thêm `luat.vongDoi` (tên `vong-doi`, đường schema, hai cột cất, tiền tố `list`, tên lời xoá) và
-  `nen["vong-doi"]` với hai vị trí `AgentDefinition`.
+  `nen["vong-doi"]` với ba chỗ: hai của `AgentDefinition` và `FieldsService.delete` (thấy ở S3).
 - `phanTich` (đã đọc cây TypeScript) thêm một danh sách «phương thức lớp»: tên, dòng, các lời gọi `.<x>.findMany/delete/
   deleteMany(`, các lời gọi `this.<tên>(`, và tập định danh xuất hiện trong thân.
 - `HAM_LUAT["vong-doi"]` áp cho tệp trong app Nest và không phải tệp kiểm; `kiemSchema(goc)` chạy một lần như
@@ -59,7 +59,7 @@ phạm đó vào nền (che một vi phạm thật); P3 sửa (P4-40).
 
 ## Bài đo
 
-- E1 — chính thước trên cây thật (`luat_kho_cay_du`, khoá đã có): bảy dòng XANH, nền đúng hai vị trí, tự gài N/N.
+- E1 — chính thước trên cây thật (`luat_kho_cay_du`, khoá đã có): bảy dòng XANH, nền đúng ba chỗ, tự gài N/N.
 - E2 — `rang/pha.mjs`: ma trận phá thử trên bản sao, mỗi ô một cặp đỏ/xanh cùng bản sao, thông điệp ghim.
 - E3 — `rang/ci.mjs`: đọc `acceptance.yml` bằng bộ đọc YAML, có đúng lệnh, không `continue-on-error`; chiều đỏ trên bản sao.
 - E4 — `rang/thoi-gian.mjs`: trung vị ba lượt HEAD so với ba lượt merge-base, chênh ≤ 120 s.
