@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { NOP, SOAN, diemRe, doiCo, git, ketLuan } from "./chung.mjs";
+import { NOP, SOAN, doiCo, git, ketLuan } from "./chung.mjs";
 
 const co = doiCo(process.argv.slice(2));
 const TIEN_TO = [
@@ -26,8 +26,12 @@ const DICH_DANH = new Set([
 ]);
 const CHI_THEM = ["_acceptance/config.yaml", "apps/app/test/messages-guard.spec.ts"];
 
-const goc = diemRe();
-const tep = git(["diff", "--name-only", goc, "HEAD"]).split("\n").filter(Boolean);
+const MERGE_K2B = "577f23b2b92b98f27bf5301867da0f023c165419";
+const GHIM_K2B = "34badf2a782c6e68ead5f3c45fd757a1a0ffd003";
+git(["merge-base", "--is-ancestor", GHIM_K2B, `${MERGE_K2B}^2`]);
+const goc = git(["merge-base", `${MERGE_K2B}^1`, GHIM_K2B]).trim();
+const dich = GHIM_K2B;
+const tep = git(["diff", "--name-only", goc, dich]).split("\n").filter(Boolean);
 if (co.them) tep.push(co.them);
 let sai = 0;
 const bao = (dong) => {
@@ -40,9 +44,9 @@ for (const t of tep)
 const dongDoi = (diff, dau) =>
 	diff.split("\n").filter((l) => l.startsWith(dau) && !l.startsWith(dau.repeat(3))).map((l) => l.slice(1));
 for (const t of CHI_THEM)
-	if (dongDoi(git(["diff", "-U0", goc, "HEAD", "--", t]), "-").length) bao(`xoa-dong:${t}`);
+	if (dongDoi(git(["diff", "-U0", goc, dich, "--", t]), "-").length) bao(`xoa-dong:${t}`);
 
-const diffNop = co["diff-mau"] ? fs.readFileSync(co["diff-mau"], "utf8") : git(["diff", "-U0", goc, "HEAD", "--", NOP]);
+const diffNop = co["diff-mau"] ? fs.readFileSync(co["diff-mau"], "utf8") : git(["diff", "-U0", goc, dich, "--", NOP]);
 const BO_DUOC = [/^\tketQua: z\.enum\(\["da-ghi", "tu-choi"\]\),$/, /^import \{ type BanNhap, laChoGiuPhien \} from "@crm\/validation\/okr-cuoc-soan";$/];
 const THEM_DUOC = [/^\tketQua: z\.enum\(KET_QUA_NOP\),$/, /^import \{$/, /^\ttype BanNhap,$/, /^\tKET_QUA_NOP,$/, /^\tlaChoGiuPhien,$/, /^\} from "@crm\/validation\/okr-cuoc-soan";$/];
 const lech = [

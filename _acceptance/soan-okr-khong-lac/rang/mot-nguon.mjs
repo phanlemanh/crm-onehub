@@ -32,9 +32,9 @@ const moc = docTep(`${SOAN}/moc-nop.ts`);
 if (!/docKetQuaNop[\s\S]*from "@crm\/validation\/okr-cuoc-soan"/.test(moc))
 	bao("moc-nop.ts khong nhap docKetQuaNop tu @crm/validation/okr-cuoc-soan");
 
-const ra = agent.ketQuaNop.parse({ ketQua: "tu-choi", lyDo: "so moi: 2031", soDong: 0, biLoai: [], giuNguyen: [] });
+const ra = agent.ketQuaNop.parse({ ketQua: "tu-choi", lyDo: v.LY_DO_TU_CHOI_NOP.chuKyKhongLapKeHoach, soDong: 0, biLoai: [], giuNguyen: [] });
 const doc = v.docKetQuaNop(ra);
-if (doc?.ketQua !== "tu-choi" || doc?.lyDo !== "so moi: 2031")
+if (doc?.ketQua !== "tu-choi" || doc?.lyDo !== "chuKyKhongLapKeHoach")
 	bao(`round-trip sai: ${JSON.stringify(doc)}`);
 
 if (!sai) console.log("mot-nguon: KET_QUA_NOP 1 cho, agent + app dung chung");
