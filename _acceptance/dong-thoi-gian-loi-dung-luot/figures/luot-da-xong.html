@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thông báo theo lượt đã xong</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap&subset=vietnamese" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub { color: var(--color-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 1000px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hai làn so sánh · Cổng Phạm vi K6e</p>
+    <h1>Thông báo lỗi theo lượt đã xong, không theo lượt đang chạy</h1>
+    <p class="sub">AC liên quan: AC-1 (kịch bản A), AC-2 (kịch bản B)</p>
+
+    <svg viewBox="0 88 1320 700" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect x="0" y="88" width="1320" height="700" fill="#fafafa"/>
+
+      <text x="1288" y="108" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.14em">THỜI GIAN →</text>
+
+<line x1="516" y1="140" x2="552" y2="140" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="904" y1="140" x2="940" y2="140" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="32" y1="168" x2="1288" y2="168" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<line x1="32" y1="272" x2="1288" y2="272" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<line x1="32" y1="376" x2="1288" y2="376" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="32" y="136" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.14em">KỊCH BẢN A</text>
+<text x="32" y="152" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.08em">AC-1</text>
+<rect x="168" y="120" width="344" height="40" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/><text x="340" y="144" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Làm mới hỏng</text>
+<rect x="556" y="120" width="344" height="40" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="5,4"/><text x="728" y="144" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bấm Xem cũ hơn (đang tải)</text>
+<rect x="944" y="120" width="344" height="40" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/><text x="1116" y="144" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trang kế tải được</text>
+<text x="32" y="216" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">K6c hôm nay</text>
+<text x="32" y="232" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">cờ của lượt đang chạy</text>
+<text x="32" y="320" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">K6e</text>
+<text x="32" y="336" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">theo lượt vừa xong</text>
+<rect x="168" y="176" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="168" y="176" width="344" height="88" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<rect x="180" y="188" width="76" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="218" y="199" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LÀM MỚI</text>
+<rect x="264" y="188" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="298" y="199" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="180" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hiện «làm mới»</text>
+<text x="180" y="250" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Lượt làm mới vừa hỏng</text>
+<rect x="556" y="176" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="556" y="176" width="344" height="88" rx="6" fill="rgba(180,35,24,0.06)" stroke="#b42318" stroke-width="1"/>
+<rect x="568" y="188" width="76" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="606" y="199" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">LÀM MỚI</text>
+<rect x="652" y="188" width="68" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="686" y="199" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">XEM CŨ</text>
+<text x="888" y="199" fill="#b42318" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.1em">SAI</text>
+<text x="568" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hiện «xem cũ», mất «làm mới»</text>
+<text x="568" y="250" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Lượt đang tải chưa hỏng mà đã báo lỗi</text>
+<rect x="944" y="176" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="944" y="176" width="344" height="88" rx="6" fill="rgba(180,35,24,0.06)" stroke="#b42318" stroke-width="1"/>
+<rect x="956" y="188" width="76" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="994" y="199" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">LÀM MỚI</text>
+<rect x="1040" y="188" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="1074" y="199" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="1276" y="199" fill="#b42318" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.1em">SAI</text>
+<text x="956" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Mất luôn «làm mới»</text>
+<text x="956" y="250" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Trang đầu vẫn chưa làm mới được</text>
+<rect x="168" y="280" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="168" y="280" width="344" height="88" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<rect x="180" y="292" width="76" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="218" y="303" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LÀM MỚI</text>
+<rect x="264" y="292" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="298" y="303" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="180" y="336" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hiện «làm mới»</text>
+<text x="180" y="354" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Như K6c</text>
+<rect x="556" y="280" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="556" y="280" width="344" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+<rect x="568" y="292" width="76" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="606" y="303" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LÀM MỚI</text>
+<rect x="652" y="292" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="686" y="303" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="888" y="303" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.1em">ĐÚNG</text>
+<text x="568" y="336" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Giữ «làm mới», không hiện «xem cũ»</text>
+<text x="568" y="354" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Chưa lượt nào xong, không đổi gì</text>
+<rect x="944" y="280" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="944" y="280" width="344" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+<rect x="956" y="292" width="76" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="994" y="303" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LÀM MỚI</text>
+<rect x="1040" y="292" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="1074" y="303" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="1276" y="303" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.1em">ĐÚNG</text>
+<text x="956" y="336" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hoạt động cũ hơn nối vào</text>
+<text x="956" y="354" fill="#575757" font-size="12" font-family="'Geist', sans-serif">«Làm mới» vẫn hiện tới khi làm mới được</text>
+
+<line x1="516" y1="436" x2="552" y2="436" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="904" y1="436" x2="940" y2="436" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="32" y1="464" x2="1288" y2="464" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<line x1="32" y1="568" x2="1288" y2="568" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<line x1="32" y1="672" x2="1288" y2="672" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="32" y="432" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.14em">KỊCH BẢN B</text>
+<text x="32" y="448" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.08em">AC-2</text>
+<rect x="168" y="416" width="344" height="40" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/><text x="340" y="440" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Xem cũ hơn hỏng</text>
+<rect x="556" y="416" width="344" height="40" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="5,4"/><text x="728" y="440" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Làm mới nền (đang chạy)</text>
+<rect x="944" y="416" width="344" height="40" rx="6" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1"/><text x="1116" y="440" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Làm mới được</text>
+<text x="32" y="512" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">K6c hôm nay</text>
+<text x="32" y="528" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">cờ của lượt đang chạy</text>
+<text x="32" y="616" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">K6e</text>
+<text x="32" y="632" fill="#575757" font-size="8" font-family="'Geist Mono', monospace">theo lượt vừa xong</text>
+<rect x="168" y="472" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="168" y="472" width="344" height="88" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<rect x="180" y="484" width="76" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="218" y="495" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">LÀM MỚI</text>
+<rect x="264" y="484" width="68" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="298" y="495" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">XEM CŨ</text>
+<text x="180" y="528" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hiện «xem cũ»</text>
+<text x="180" y="546" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Lượt «Xem cũ hơn» vừa hỏng</text>
+<rect x="556" y="472" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="556" y="472" width="344" height="88" rx="6" fill="rgba(180,35,24,0.06)" stroke="#b42318" stroke-width="1"/>
+<rect x="568" y="484" width="76" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="606" y="495" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LÀM MỚI</text>
+<rect x="652" y="484" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="686" y="495" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="888" y="495" fill="#b42318" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.1em">SAI</text>
+<text x="568" y="528" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hiện «làm mới», mất «xem cũ»</text>
+<text x="568" y="546" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Lượt đang chạy chưa hỏng mà đã báo lỗi</text>
+<rect x="944" y="472" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="944" y="472" width="344" height="88" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<rect x="956" y="484" width="76" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="994" y="495" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">LÀM MỚI</text>
+<rect x="1040" y="484" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="1074" y="495" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="1276" y="495" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.1em">ĐÚNG</text>
+<text x="956" y="528" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hết cả hai thông báo</text>
+<text x="956" y="546" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Kết quả đúng — chỉ sai lúc đang chạy</text>
+<rect x="168" y="576" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="168" y="576" width="344" height="88" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<rect x="180" y="588" width="76" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="218" y="599" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">LÀM MỚI</text>
+<rect x="264" y="588" width="68" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="298" y="599" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">XEM CŨ</text>
+<text x="180" y="632" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hiện «xem cũ»</text>
+<text x="180" y="650" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Như K6c</text>
+<rect x="556" y="576" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="556" y="576" width="344" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+<rect x="568" y="588" width="76" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="606" y="599" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">LÀM MỚI</text>
+<rect x="652" y="588" width="68" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="686" y="599" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">XEM CŨ</text>
+<text x="888" y="599" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.1em">ĐÚNG</text>
+<text x="568" y="632" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Giữ «xem cũ», không hiện «làm mới»</text>
+<text x="568" y="650" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Chưa lượt nào xong, không đổi gì</text>
+<rect x="944" y="576" width="344" height="88" rx="6" fill="#fafafa"/>
+<rect x="944" y="576" width="344" height="88" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+<rect x="956" y="588" width="76" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="994" y="599" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">LÀM MỚI</text>
+<rect x="1040" y="588" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="1074" y="599" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="1276" y="599" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="end" letter-spacing="0.1em">ĐÚNG</text>
+<text x="956" y="632" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Hết cả hai thông báo</text>
+<text x="956" y="650" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Nút «Xem cũ hơn» quay lại</text>
+
+      <text x="32" y="704" fill="#575757" font-size="12" font-style="italic" font-family="'Lora', serif">K6e chỉ đổi thông báo khi không còn lượt nào chạy — theo lượt vừa xong.</text>
+
+<line x1="32" y1="720" x2="1288" y2="720" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="32" y="740" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+<rect x="32" y="752" width="76" height="16" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/><text x="70" y="763" fill="#171717" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">LÀM MỚI</text>
+<text x="116" y="764" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Thông báo đang hiện</text>
+<rect x="236" y="752" width="68" height="16" rx="2" fill="none" stroke="#666666" stroke-width="0.8" stroke-dasharray="3,2" opacity="0.6"/><text x="270" y="763" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em" opacity="0.6" text-decoration="line-through">XEM CŨ</text>
+<text x="312" y="764" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Thông báo không hiện</text>
+<rect x="436" y="752" width="24" height="16" rx="4" fill="#f2f2f2" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="5,4"/>
+<text x="468" y="764" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Lượt tải đang chạy</text>
+<rect x="580" y="752" width="24" height="16" rx="4" fill="rgba(180,35,24,0.06)" stroke="#b42318" stroke-width="1"/>
+<text x="612" y="764" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Thông báo sai lượt (K6c)</text>
+<rect x="752" y="752" width="24" height="16" rx="4" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1"/>
+<text x="784" y="764" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Thông báo đúng lượt (K6e)</text>
+<rect x="932" y="752" width="24" height="16" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+<text x="964" y="764" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Hai làn giống nhau</text>
+    </svg>
+  </div>
+</body>
+</html>
