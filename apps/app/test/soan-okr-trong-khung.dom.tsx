@@ -35,11 +35,14 @@ const { donViCua, duongMoCuoc } = await import(
 	"@/app/(app)/[slug]/okr/soan/luat-ban-nhap"
 );
 const { crmMessages } = await import("@/lib/messages/crm");
+const { messages: uiMessages } = await import("@crm/ui/lib/messages");
+const { KARA_TRE_MS } = await import("@crm/ui/components/kara/state");
 const { SEARCH_PARAM } = await import("@/lib/search-param-keys");
 
 const q = (s: string) => document.querySelector(s);
 const qa = (s: string) => [...document.querySelectorAll(s)];
 const mc = crmMessages("vi");
+const mui = uiMessages("vi");
 
 function beRong(rong: number): () => void {
 	const goc = window.matchMedia;
@@ -364,9 +367,12 @@ describe("sk-dau", () => {
 				expect(
 					dauKara?.querySelector("[data-kara-state='working']"),
 				).not.toBeNull();
+				await act(async () => {
+					await new Promise((xong) => setTimeout(xong, KARA_TRE_MS + 50));
+				});
 				expect(
-					`mot ten kara: ${dauKara?.textContent?.includes("Trợ lý")}`,
-				).toBe("mot ten kara: false");
+					`mot ten kara: ${dauKara?.textContent?.includes(mui.karaKhung.dangSoan)} / ${dauKara?.textContent?.includes("Trợ lý")}`,
+				).toBe("mot ten kara: true / false");
 				expect(document.body.textContent?.includes(m.banNhap.rong)).toBe(false);
 			} else if (ca === "co-nhap") {
 				datDanhSach({ dong: BAN_NHAP });

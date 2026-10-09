@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: soan-okr-trong-khung
-verdict: REJECT
-failed_evals: [E11]
+verdict: PENDING-JUDGMENT
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: be1324ba1248855cc031fefa2b770aa36231aa2c
+verified_commit: 81081ebf69281006470cf40911640b500dab519e
 human_signoff:
 ---
 
 # Evidence Report: soan-okr-trong-khung
 
-Round 1. Một eval đỏ: E11 (ma trận 54 ô, ô ST-khung-hoi-dong 1024 nền tối có lỗi console). Lệnh đỏ duy nhất không gắn eval nào khác: `ui-check:E11` (gắn E11).
+Round 2. Mọi eval máy đều xanh. Còn một mục judgment (E12) chưa ngã ngũ, nên báo cáo dừng ở PENDING-JUDGMENT để người quyết ở Cổng 2.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -31,275 +31,254 @@ Round 1. Một eval đỏ: E11 (ma trận 54 ô, ô ST-khung-hoi-dong 1024 nền
 | E8 | AC-8 | ui-check | PASS |
 | E9 | AC-9 | script | PASS |
 | E10 | AC-10 | script | PASS |
-| E11 | AC-11 | ui-check | FAIL |
-| E12 | AC-12 | judgment | PASS (đề xuất của hội đồng, chờ người) |
-| E13 | AC-11 | script | PASS |
+| E11 | AC-11 | ui-check | PASS |
+| E12 | AC-12 | judgment | UNCERTAIN |
+| E13 | AC-11 | script | PASS (carry-forward từ round 1) |
 | E14 | AC-13 | ui-check | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: ""
+  run_id: minted-soan-okr-trong-khung-E1-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.sk_duong
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
   output: |
-    Ran 6 tests across 1 file. [4.01s]
+    Ran 6 tests across 1 file. [2.55s]
 
 - eval: E1b
-  run_id: minted-soan-okr-trong-khung-E1b-r1
+  run_id: minted-soan-okr-trong-khung-E1b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sk_man_duong
-  verified_at: 2026-10-09T12:56:09Z
-  screenshot: evidence/E1b-step1.png
+  verified_at: 2026-10-09T13:23:41Z
+  screenshot: evidence/E1b-soan-moi.png
   observed: |
-    Đã mở bằng Read từng frame. E1b-step1.png (1440x1000): khung Kara dính mép phải, rộng khoảng 380px, tiêu đề «Soạn OKR», phụ đề «Kinh doanh miền Bắc · Năm kế · mẫu», dải «Kara · lượt 0/12», ô nhập; không có trang soạn riêng toàn màn hình. Khớp Expected bước 1.
-    E1b-step4.png: khung Kara bên phải, nút đóng X, thẻ lỗi «Kara chưa mở cuộc soạn được», dòng «Cuộc này không còn, hoặc bạn không xem được nó.» và nút «Thử lại». Khớp Expected bước 4. Bước 2 và 3 không có ảnh theo steps.
+    E1b-soan-moi.png (1440x1000): trang nen xam trong, khung sheet ben phai (rong ~380px) tieu de "Soan OKR", phu de "Kinh doanh mien Bac · Nam ke · mau", dong "Kara · luot 0/12", bong Kara icon AI, o nhap "Tra loi, hoac noi ban muon doi gi trong ban nhap...", nut dong X. Khong co trang soan rieng ngoai khung; khop expected buoc 1. E1b-khong-mo.png: khung sheet hep ben phai, tieu de "Soan OKR", the loi voi chu "Kara chua mo cuoc soan duoc" va "Cuoc nay khong con, hoac ban khong xem duoc no.", nut "Thu lai", nut dong X; khop expected buoc 4 (trang thai error, chu khongMo).
   network_observed: n-a (driver)
   output: |
-    man.mjs --phan duong: 4 bước đạt, console không lỗi (0). KET LUAN: 0 SAI.
-    Chiều đỏ --kiem-do-do push-link-cu qua mot-luot.sh: in 'buoc 3: link cu them lich su' (history.length 4 -> 7), 'KET LUAN: 1 SAI'. Đúng Expected.
+    Frame đã lưu: E1b-soan-moi.png, E1b-khong-mo.png, E1b-step1.png, E1b-step4.png, E1b-network.txt trong _acceptance/soan-okr-trong-khung/evidence/. Driver là script Playwright nên không có tool đọc network riêng.
 
 - eval: E2
   run_id: ""
   exit_code: 0
   baseline: red
   verifier: config:executors.test.sk_record
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
   output: |
-    Ran 5 tests across 1 file. [2.95s]
+    Ran 5 tests across 1 file. [2.32s]
 
 - eval: E2b
-  run_id: minted-soan-okr-trong-khung-E2b-r1
+  run_id: E2b-verify-20261009
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sk_man_trang_khac
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
   screenshot: evidence/E2b-tren-deals.png
   observed: |
-    E2b-tren-deals.png (1440x1000), đã mở bằng Read: bên phải là khung sheet rộng khoảng 380px (cột Kara) có tiêu đề «Soạn OKR», phụ đề «Kinh doanh miền Bắc · Năm kế · mẫu», nút đóng X, dải «Kara · lượt 0/12» và ô nhập. Phần nền bên trái là mảng xám phẳng (lớp phủ của sheet), không thấy danh sách thoả thuận trong frame này.
-    E2b-tren-cua-toi.png: cùng khung «Soạn OKR», «Kara · lượt 1/12», có tin Kara «Kỳ trước phòng đạt 82 %. Ưu tiên quý này là gì?». Không có frame SAU khi đóng khung; việc trang nền còn nguyên do man.mjs xác nhận bằng tiêu đề trang trước và sau khi đóng.
+    E2b-tren-deals.png (1440x1000, đã mở bằng Read): bên phải là khung sheet rộng khoảng 380px, viền xanh, tiêu đề «Soạn OKR», phụ đề «Kinh doanh miền Bắc · Năm kế · mẫu», nút đóng X, dải «Kara · lượt 0/12», ô nhập «Trả lời, hoặc nói bạn muốn đổi gì trong bản nháp...». Nền trái là mảng xám phẳng (lớp phủ sheet) nên không thấy danh sách thoả thuận trong frame; việc trang nền còn nguyên do man.mjs xác nhận bằng tiêu đề trang «Thoả thuận» trước và sau khi đóng và pathname. E2b-tren-cua-toi.png (đã mở bằng Read): cùng khung «Soạn OKR», «Kara · lượt 1/12», tin Kara «Kỳ trước phòng đạt 82 %. Ưu tiên quý này là gì?» kèm gợi ý «Giữ chân · Mở rộng». Khớp Expected: khung hiện tiêu đề «Soạn OKR» trên cả hai trang, pathname giữ nguyên. Hạn chế: không có frame sau khi đóng, bước 3 chỉ được xác nhận bằng số liệu của man.mjs (pathname, URL không còn record, tiêu đề trang nền).
   network_observed: n-a (driver)
   output: |
-    man.mjs --phan trang-khac qua mot-luot.sh: 'deals: dat', 'cua-toi: dat', KET LUAN: 0 SAI. Pathname giữ nguyên /deals và /okr; console 0 lỗi.
-    Chiều đỏ --kiem-do-do host-chi-okr: in 'deals: khong mo khung', 'KET LUAN: 2 SAI'. Đúng Expected.
+    Frame đã lưu: E2b-tren-deals.png (= E2b-step1.png), E2b-tren-cua-toi.png (= E2b-step2.png), E2b-network.txt. Console 0 lỗi, driver là script playwright nên network ghi n-a (driver).
 
 - eval: E3
-  run_id: minted-soan-okr-trong-khung-E3-r1
+  run_id: minted-soan-okr-trong-khung-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sk_man_be_ngang
-  verified_at: 2026-10-09T12:56:09Z
-  screenshot: evidence/E3-step1.png
+  verified_at: 2026-10-09T13:23:41Z
+  screenshot: evidence/E3-1024.png
   observed: |
-    Đã mở bằng Read từng frame. E3-1024.png: khung Soạn OKR cao hết màn, cột Kara bên phải rộng khoảng 380px, bản nháp bên trái khoảng 611px, không thanh kéo. E3-1280.png, E3-1440.png, E3-1920.png: cột Kara vẫn khoảng 380px ở mép phải, bản nháp 800px, phần nền app bên trái rộng ra theo khổ, không tràn ngang.
-    E3-co-nhap-1440.png: cuộc đã có nháp, ô bản nháp hiện ở bên trái cột Kara. Tất cả khớp Expected; số liệu trong log khớp hình.
+    E3-1024.png: khung Soạn OKR cao tron man (768), tieu de «Soạn OKR», ban nhap o ben trai (~611px) voi cac KR/Muc tieu, cot Kara ben phai ~380px chua hoi thoai (luot 2/12, 'Đã ghi bản nháp') va o soan o day; khong co thanh keo; khong tran ngang. E3-1280.png: cot Kara 380px sat mep phai, ban nhap 800px ben trai cot Kara, phan nen app ben trai rong ra, khong tran ngang. E3-1440.png: tuong tu, ban nhap 800px, cot Kara 380px, nen app rong hon, nut 'Đưa vào OKR' o chan ban nhap. E3-1920.png: khung van 1181px tong (800 + 380) o mep phai, nen app chiem ~740px ben trai, cot Kara van 380px. E3-co-nhap-1440.png: cuoc da co nhap, ban nhap (Muc tieu 1 · Cam ket, KR...) hien ngay ben trai cot Kara, khong qua trang thai chi Kara. Tat ca khop Expected va khop so lieu log.
   network_observed: n-a (driver)
   output: |
-    man.mjs --phan be-ngang: 4 ô đạt, khung-cuon thay ô (lăn thân 0 -> 0, khung 400). KET LUAN: 0 SAI.
+    khung-cuon: 4 o in 'khung cuon thay o' (cot kara 380.0 / R 380.0 → dat).
+    Frames: E3-1024.png, E3-1280.png, E3-1440.png, E3-1920.png, E3-co-nhap-1440.png trong evidence/. E3-network.txt giữ ghi chú driver.
 
 - eval: E3b
-  run_id: minted-soan-okr-trong-khung-E3b-r1
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.sk_khung
-  verified_at: 2026-10-09T12:56:09Z
-  output: |
-    Ran 5 tests across 1 file. [2.68s]
-
-- eval: E4
-  run_id: minted-soan-okr-trong-khung-E4-r1
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.script.sk_man_khung_lien
-  verified_at: 2026-10-09T12:56:09Z
-  screenshot: evidence/E4-rong-light.png
-  observed: |
-    Đã mở bằng Read cả 4 frame. E4-rong-light.png (1440x1000) và E4-rong-dark.png: hai cột trong MỘT khung ngoài, trái «Bản nháp» và phải «Kara · lượt 2/12», chỉ một đường kẻ dọc chia đôi, hai dòng đầu cùng cao, chân hai ô sát đáy, không khung lồng.
-    E4-hep-light.png và E4-hep-dark.png: sheet hẹp chỉ có cột Kara, không khung lồng, không cột bản nháp. Không frame nào mâu thuẫn Expected.
-  network_observed: n-a (driver)
-  output: |
-    man.mjs --phan khung-lien: 4 ô đạt. KET LUAN: 0 SAI.
-
-- eval: E5
   run_id: ""
   exit_code: 0
   baseline: red
-  verifier: config:executors.test.sk_dau
-  verified_at: 2026-10-09T12:56:09Z
+  verifier: config:executors.test.sk_khung
+  verified_at: 2026-10-09T13:23:41Z
   output: |
-    Ran 1 test across 1 file. [2.73s]
+    Ran 5 tests across 1 file. [2.39s]
+
+- eval: E4
+  run_id: minted-soan-okr-trong-khung-E4-r2
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.script.sk_man_khung_lien
+  verified_at: 2026-10-09T13:23:41Z
+  screenshot: evidence/E4-rong-light.png
+  observed: |
+    Đã mở bằng Read cả 4 ảnh. E4-hep-light.png (1440x1000): nền sáng, khung Soạn OKR trượt từ phải rộng khoảng 380px, viền liền kín; dòng đầu "Kara · lượt 1/12", câu hỏi của Kara và gợi ý "Giữ chân · Mở rộng", ô soạn sát đáy, không có ô bản nháp. E4-hep-dark.png: giống trên nền tối, viền xanh lục mảnh quanh khung, không có khung lồng. E4-rong-light.png: khung rộng khoảng 1180px, hai cột; trái là "Bản nháp · Kara · 7 dòng" với nhóm Mục tiêu và các KR, phải là "Kara · lượt 2/12". Dòng đầu hai cột thẳng hàng cùng cao 44 (y ≈ 93), chỉ một đường kẻ dọc, chân bản nháp có nút "Đưa vào bộ OKR · 0 Mục tiêu, 0 KR" sát đáy. E4-rong-dark.png: bố cục y hệt trên nền tối, một đường kẻ chia, hai dòng đầu thẳng hàng. Khớp Expected: một khung liền, không khung lồng.
+  network_observed: n-a (driver)
+  output: |
+    Bốn frame E4-hep-light, E4-hep-dark, E4-rong-light, E4-rong-dark trong evidence/. Script tự chụp bằng trình duyệt, network ghi n-a (driver).
+
+- eval: E5
+  run_id: minted-soan-okr-trong-khung-E5-r2
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.sk_dau
+  verified_at: 2026-10-09T13:23:41Z
+  output: |
+    Ran 1 test across 1 file. [2.47s]
 
 - eval: E6
-  run_id: minted-soan-okr-trong-khung-E6-r1
+  run_id: minted-soan-okr-trong-khung-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sk_man_hep
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
   screenshot: evidence/E6-375.png
   observed: |
-    Đã mở bằng Read cả 3 ảnh. E6-375.png: ngăn kéo phủ kín khung nhìn 375x812, tiêu đề «Soạn OKR», hai tab «Trò chuyện» / «Bản nháp (7)» với Bản nháp đang chọn, chân khung nút «Đưa vào bộ OKR · 0 Mục tiêu, 0 KR», không tràn ngang.
-    E6-768.png (sheet rộng 736 sát phải) và E6-1023.png (sheet khoảng 801): cùng tiêu đề, hai tab, Bản nháp đang chọn, không tràn ngang. Cả ba khớp Expected.
+    Đã mở bằng Read cả 3 ảnh. E6-375.png: ngăn kéo phủ kín khung nhìn 375x812 (thanh kéo ở đỉnh), tiêu đề «Soạn OKR», phụ đề «Kinh doanh miền Bắc · Năm kế · mẫu», hai tab «Trò chuyện» / «Bản nháp (7)» với Bản nháp đang chọn, nội dung bản nháp (Mục tiêu 1, các KR với nút Thêm Mục tiêu/Thêm KR/Sửa/Bỏ qua), chân khung nút «Đưa vào bộ OKR · 0 Mục tiêu, 0 KR», không tràn ngang. E6-768.png: sheet bên phải rộng ~736 cao tròn màn, cùng tiêu đề, hai tab, danh sách bản nháp, không tràn ngang. E6-1023.png: sheet bên phải khoảng 801 rộng (từ x~222 đến 1023), cùng tiêu đề, hai tab, nền trái là trang chính, không tràn ngang. Cả ba khớp Expected.
   network_observed: n-a (driver)
   output: |
-    man.mjs --phan hep: 3 ô đạt ('DUNG so o 3 == 3'). KET LUAN: 0 SAI.
-    Chiều đỏ --kiem-do-do ngan-keo-88: in '375: khung khong phu toan man', KET LUAN: 1 SAI. Đúng Expected.
+    Ba frame E6-375.png, E6-768.png, E6-1023.png trong evidence/. man.mjs tự chụp bằng Playwright; network ghi n-a (driver).
 
 - eval: E7
-  run_id: minted-soan-okr-trong-khung-E7-r1
+  run_id: minted-soan-okr-trong-khung-E7-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.test.sk_dong
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
   output: |
-    Ran 8 tests across 1 file. [4.47s]
+    Ran 8 tests across 1 file. [3.20s]
 
 - eval: E7b
-  run_id: minted-soan-okr-trong-khung-E7b-r1
+  run_id: minted-soan-okr-trong-khung-E7b-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sk_man_dong
-  verified_at: 2026-10-09T12:56:09Z
-  screenshot: evidence/E7b-hoi-dong.png
+  verified_at: 2026-10-09T13:23:41Z
+  screenshot: evidence/E7b-step1.png
   observed: |
-    E7b-hoi-dong.png (1440x1000): giữa nền xám là hộp hỏi «Kara đang soạn. Đóng khung?» kèm «Lượt này vẫn chạy khi bạn đóng. Mở lại cuộc soạn để xem bản nháp mới.»; hai nút «Ở lại» (có focus ring) và «Đóng» (đỏ). Khung Kara phía sau không thấy trong ảnh vì lớp phủ; việc khung còn mở do assertion DOM kiểm.
-    E7b-vuot-375.png (375x812): khung «Soạn OKR» với tab «Trò chuyện» / «Bản nháp (7)», trên đó hộp hỏi cùng hai nút «Đóng» / «Ở lại». Khớp bước 3.
+    Đã mở và đọc từng ảnh. Ảnh 1 (E7b-hoi-dong.png, 1440x1000, chụp sau Escape khi Kara đang soạn): hộp hỏi ở giữa màn hình, tiêu đề «Kara đang soạn. Đóng khung?», mô tả «Lượt này vẫn chạy khi bạn đóng. Mở lại cuộc soạn để xem bản nháp mới.», hai nút «Ở lại» (viền, đang focus) và «Đóng» (đỏ). Nền phía sau hộp là xám trơn; các dòng log DOM xác nhận khung vẫn mở trước và sau «Ở lại». Ảnh 2 (E7b-vuot-375.png, 375x812, sau vuốt 300 px khi Kara đang soạn): hộp hỏi cùng tiêu đề và mô tả, nút «Đóng» (đỏ) và «Ở lại» xếp dọc; phía sau mờ thấy khung «Soạn OKR» với thẻ Trò chuyện/Bản nháp (7) và «Kara · lượt 2/12». Bước 4 (Escape khi rảnh) không có ảnh, kiểm bằng DOM: record null, khung đóng, hộp hỏi không còn.
   network_observed: n-a (driver)
   output: |
-    man.mjs --phan dong: bước 1 đến 4 đều 'dat'. KET LUAN: 0 SAI.
-    Chiều đỏ --kiem-do-do khong-giu: in 'buoc 1: ra ngoai dong khung', KET LUAN: 1 SAI. Đúng Expected.
+    Hai frame có ảnh, bước 4 chỉ kiểm bằng DOM. Kịch bản chạy trong mot-luot.sh nên không đọc được network; E7b-network.txt ghi n-a (driver).
 
 - eval: E8
-  run_id: e8-20261009-mot-luot
+  run_id: minted-soan-okr-trong-khung-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sk_man_luot
-  verified_at: 2026-10-09T12:56:09Z
-  screenshot: evidence/E8-step1.png
+  verified_at: 2026-10-09T13:23:41Z
+  screenshot: evidence/E8-dong-mo-lai.png
   observed: |
-    Đã mở bằng Read cả 3 frame (1440x1000). step1: khung «Soan OKR» mở lại từ URL, cột trái Bản nháp có Mục tiêu 1 và các KR, cột phải Kara «lượt 2/12» với dòng 'Kara soạn bản nháp đầu: 2 Mục tiêu · 5 KR'; khớp Expected (lượt tăng, bản nháp 2 Mục tiêu sau khi đóng giữa lượt).
-    step2: khung hiện lại sau khi đóng khung Mục tiêu, Kara «lượt 3/12» đang soạn. step3: sau reload, «lượt 4/12», lịch sử có 'Kara sửa bản nháp: +1 KR · sửa 1 · chuyển 1 · bỏ 1', bản nháp đã đổi mới. Không frame nào mâu thuẫn Expected.
+    Đã mở bằng Read cả 3 frame của lượt này, đều là khung Soạn OKR 1440 (hai ngăn: Bản nháp bên trái, hội thoại Kara bên phải). E8-dong-mo-lai.png: khung mở lại sau ca đóng, không tải lại trang; bản nháp hiện thật (chip «Kara · 7 dòng · sửa lúc 20:33», Mục tiêu 1 «Giữ chân đối tác lớn» cùng các KR), hội thoại «Kara soạn bản nháp đầu: 2 Mục tiêu · 5 KR», đầu ngăn «Kara · lượt 2/12». E8-chong-quay-lai.png: sau khi đóng khung Mục tiêu chồng lên, khung soạn hiện lại với «Kara · lượt 3/12», tin «Sửa bản nháp, chậm.» và biểu tượng Kara trống (đang soạn); các nút Thêm/Sửa và ô số mờ (đang khoá). E8-tai-lai.png: sau tải lại trang khung mở lại từ URL, «Kara · lượt 4/12», hội thoại đủ ba lượt, bản nháp mới có «Đối tác lớn gắn bó lâu dài» và KR «Tăng số đại lý gắn bó». Không frame nào mâu thuẫn Expected.
   network_observed: n-a (driver)
   output: |
-    man.mjs --phan luot: ca tải lại, CSDL trước soLuot 3 / nộp 2, sau soLuot 4 / nộp 3; hộp trình duyệt chỉ hiện khi Kara đang soạn. 'tai lai: dat'.
-    Chiều đỏ --kiem-do-do dung-khi-dong: in 'dong: so lan nop khong tang', KET LUAN: 1 SAI. Đúng Expected.
+    Frame lượt này: E8-dong-mo-lai.png, E8-chong-quay-lai.png, E8-tai-lai.png trong evidence/. Chữ «Kara đang soạn…» sau tải lại do script xác nhận trong DOM, không đọc từ ảnh.
 
 - eval: E9
   run_id: ""
   exit_code: 0
   baseline: red
   verifier: config:executors.script.sk_k2_song
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
   output: |
     k2 song: 17/17 xanh
 
 - eval: E10
-  run_id: minted-soan-okr-trong-khung-E10-r1
+  run_id: minted-soan-okr-trong-khung-E10-r2
   exit_code: 0
   baseline: red
   verifier: config:executors.script.sk_luat
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
   output: |
     ranh gioi: dat
 
 - eval: E11
-  run_id: minted-soan-okr-trong-khung-E11-r1
-  exit_code: 1
+  run_id: minted-soan-okr-trong-khung-E11-r2
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sk_man_ma_tran
-  verified_at: 2026-10-09T12:56:09Z
-  screenshot: evidence/E11-ST-khung-hoi-dong-1024-dark.png
+  verified_at: 2026-10-09T13:23:41Z
+  screenshot: evidence/E11-step1.png
   observed: |
-    Đã mở bằng Read: E11-ST-khung-hoi-dong-1024-dark.png (ô đỏ): hộp hỏi «Kara đang soạn. Đóng khung?» với «Lượt này vẫn chạy khi bạn đóng...», hai nút «Ở lại» (viền focus) và «Đóng» (đỏ), nền tối; góc dưới trái có huy hiệu Next.js đỏ «1 Issue», khớp lỗi hydration mà console bắt được. Nội dung hộp hỏi đúng, nhưng ô vẫn đỏ vì console có lỗi.
-    Các ô khác đã mở (doi-chieu-khung-muc-tieu-1440-dark, rong-1440-light, rong-dang-soan-1440-dark, dien-thoai-375-light, hep-rong-1440-light) khớp Expected: hai ô một khung, cột Kara khoảng 380px, bản nháp 800px, drawer 375 hai thẻ, không tràn ngang.
+    Đã mở bằng Read 8 ảnh. khung-hep-rong 1440 sáng: khung Sheet trượt từ phải, rộng khoảng 381px, chỉ cột Kara («Kara · lượt 1/12», câu hỏi cùng gợi ý, ô nhập), không có bản nháp, viền liền, không tràn ngang. khung-rong 1440 sáng: khung rộng khoảng 1181px, bản nháp bên trái với nút «Đưa vào bộ OKR · 0 Mục tiêu, 0 KR», cột Kara 380px bên phải lượt 2/12, không tràn. khung-rong-đang-soạn 1440 tối: hai ô cùng bố cục, có dải «Kara đang soạn — xong sẽ quyết được.» trên bản nháp và «Trợ lý OKR đang soạn…» ở cột Kara. khung-hoi-dong 1024 tối: hộp hỏi «Kara đang soạn. Đóng khung?» với «Lượt này vẫn chạy khi bạn đóng. Mở lại cuộc soạn để xem bản nháp mới.», hai nút «Ở lại» và «Đóng»; ô này từng đỏ ở round 1 vì lỗi hydration trong console, lần này không có lỗi. khung-điện-thoại 375 sáng: drawer toàn màn với hai thẻ «Trò chuyện» và «Bản nháp (7)», không tràn. Ảnh đối chiếu khung Mục tiêu 1440 tối: khung chi tiết «Giữ chân đối tác lớn» cùng dáng (tiêu đề, phụ đề phòng, viền xanh liền). khung-đang-mở 1440 sáng: «Đang mở cuộc soạn…» đúng trạng thái chờ. khung-không-mở 768 tối: «Kara chưa mở cuộc soạn được» kèm nút «Thử lại». Không ô nào tràn ngang; khớp Expected.
   network_observed: n-a (driver)
   output: |
-    man.mjs --phan ma-tran qua mot-luot.sh, chờ lượt 153s. Số ô 54 == 54; 53/54 ô đạt.
-    Ô đỏ: ST-khung-hoi-dong 1024 dark, dòng console nguyên văn: "console loi — Hydration failed because the server rendered HTML didn't match the client..." (khung sheet-content 992x768, hoi 380, nhap 611).
-    Ô cùng trạng thái ở 1024 light, 1440 cả hai nền, 768, 375 đều đạt. Chỉ chạy một lượt nên chưa phân biệt được lỗi ổn định hay chập chờn: nguyên nhân gốc chưa rõ.
-    Chiều đỏ --kiem-do-do tran-ngang chưa chạy vì ma trận chính đã đỏ.
-    KET LUAN: 1 SAI.
+    54 tệp E11-<ST>-<khổ>-<nền>.png cùng doi-chieu-khung-muc-tieu-1440-dark.png trong evidence/; đầu ra lưu ở evidence/E11-run-output.txt, ghi chú mạng ở E11-network.txt. Console đã được script kiểm từng ô và không có lỗi. Ghi chú: ở ảnh khung-rong-đang-soạn 1440 tối, cột Kara vẫn ghi «Trợ lý OKR đang soạn…» (điểm đã nêu ở round 1, mục 7 ai-ux).
 
 - eval: E12
-  judged_by: hội đồng 3 ống kính (fresh context)
-  verdict: PASS (đề xuất)
-  rationale: Hai ống kính domain-correctness và spec-alignment đạt, operational-feasibility chưa chắc. Cả bốn ý chính (Kara cột phải với bản nháp trái, khung cùng dáng khung Mục tiêu, hai ô một đường kẻ, hộp hỏi nói lượt vẫn chạy) đạt trên ảnh; ảnh tĩnh không chứng minh được chuyển động trượt, và chữ «Trợ lý OKR đang soạn…» ở ảnh nền tối trái mục 1 và 7 của ai-ux.md.
+  judged_by: judge panel (fresh context) — domain-correctness, operational-feasibility, spec-alignment
+  verdict: UNCERTAIN
+  rationale: Ba lăng kính không đồng ý nhau (một FAIL, một UNCERTAIN, một PASS) nên đề xuất của panel là UNCERTAIN; người quyết ở Cổng 2. Bố cục Kara cột phải, bản nháp bên trái, hai ô chung một khung và hộp hỏi nói rõ lượt vẫn chạy đều được ba lăng kính xác nhận; điểm vướng là chữ «Trợ lý OKR» ở ảnh nền tối đang soạn (trái luật một tên ở mục 1 ai-ux) và ý «cùng dáng khung Mục tiêu» mà ảnh tĩnh không có trang nền thật để chứng minh.
+  votes:
+    - domain-correctness: FAIL — Bố cục đạt: Kara ở cột phải, bản nháp bên trái, hai ô chung một khung với một đường kẻ dọc, hộp hỏi nói rõ lượt vẫn chạy khi đóng. Nhưng ảnh nền tối «đang soạn» ghi «Trợ lý OKR đang soạn…» ở cả đầu cột Kara lẫn dòng hội thoại, đúng cái tên mục 1 của ai-ux.md cấm, nên người xem không thấy rõ Kara là ai đang soạn. Hàng đầu ô bản nháp ở ảnh đó cũng chen chữ «Kara đang soạn — xong sẽ quyết được.» sát nhãn «Kara · 7 dòng», lệch dòng so với ảnh sáng.
+    - operational-feasibility: UNCERTAIN — Ba trong bốn ý đạt rõ: (1) Kara ở cột phải với nhãn «Kara · lượt n/12» và bản nháp ở bên trái (điện thoại có hai tab Trò chuyện / Bản nháp (7)). (3) Hai ô chung một khung, một đường kẻ dọc, hai dòng đầu thẳng hàng. (4) Hộp hỏi nói rõ «Lượt này vẫn chạy khi bạn đóng. Mở lại cuộc soạn để xem bản nháp mới.» Ý (2) thì ảnh tĩnh không chứng minh được: không ảnh nào có trang nền thật phía sau khung và ảnh tĩnh không cho thấy việc trượt từ phải. Đầu khung chỉ giống ở dáng chung (tiêu đề, dòng phụ, nút đóng, viền xanh).
+    - spec-alignment: PASS — Cả bốn ý đạt. (1) Kara ở cột phải («Kara · lượt n/12») và bản nháp ở ô trái («Bản nháp · Kara · 7 dòng»), đúng mục «Kara ở đâu»; ở điện thoại là hai tab «Trò chuyện | Bản nháp (7)». (2) Khung trượt từ phải, đầu khung có tiêu đề, dòng phụ và nút đóng, viền xanh mép trái và nền phía sau giống ảnh đối chiếu chi tiết Mục tiêu. (3) Hai ô chia nhau đúng một đường kẻ dọc, hai dòng đầu thẳng hàng. (4) Hộp hỏi ghi «Lượt này vẫn chạy khi bạn đóng. Mở lại cuộc soạn để xem bản nháp mới.» với hai nút «Ở lại» và «Đóng». Một điểm lệch ngoài bốn ý: ảnh nền tối ghi «Trợ lý OKR đang soạn…» ở đầu cột Kara và trong hội thoại, trái luật một tên ở mục 1 và chữ «Kara đang <động từ>…» ở mục 7 của ai-ux.md.
+  required_evidence:
+    - Chụp lại E11-ST-khung-rong-dang-soan-1440-dark.png (khung rộng, đang soạn, nền tối) mà đầu cột Kara và dòng hội thoại đang soạn đều đọc «Kara đang <động từ> …», không còn chữ «Trợ lý OKR» (đối chiếu docs/ai-ux.md mục 1 và mục 7). Nguồn lệnh chụp, lăng kính domain-correctness.
+    - Ảnh cùng cảnh đó cho thấy hàng đầu ô bản nháp ở trạng thái bận không chen chữ: «Bản nháp», nhãn Kara và câu «Kara đang soạn…» thẳng hàng với hàng «Kara · lượt n/12» của cột phải, như ảnh E11-ST-khung-rong-1440-light.png. Lăng kính domain-correctness.
+    - Ảnh chụp khung Soạn OKR mở trên trang thật phía sau (ví dụ màn /okr hoặc /okr/soan với ?record=soan:<cuộc>), bản sáng và bản tối, cạnh ảnh doi-chieu-khung-muc-tieu-1440-dark.png cũng có trang nền hiện sau khung; lấy từ lệnh chụp màn của _acceptance/soan-okr-trong-khung (rang/mot-luot.sh), không để nền trống. Lăng kính operational-feasibility.
+    - Bằng chứng khung Soạn OKR trượt từ phải: chuỗi khung hình hoặc kiểm tra tự động cho thấy cùng cỡ sheet và cùng hoạt ảnh vào với khung chi tiết Mục tiêu, lấy từ evidence của eval về hoạt ảnh sheet hoặc từ nguồn kara/dock.tsx. Lăng kính operational-feasibility.
   human_override:  # chi nguoi ghi
 
 - eval: E13
   run_id: minted-soan-okr-trong-khung-E13-r1
   exit_code: 0
-  baseline: red
   verifier: config:executors.script.sk_san_thiet_ke
   verified_at: 2026-10-09T12:56:09Z
+  carried_from_round: 1
   output: |
-    design-gate.mjs --mode static trên từng .tsx của khu soạn, soan-sheet, sheet, drawer và kara/: năm lỗi nền P0 bằng 0.
+    carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E14
-  run_id: minted-soan-okr-trong-khung-E14-r1
+  run_id: minted-soan-okr-trong-khung-E14-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.sk_man_dua_vao
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
   screenshot: evidence/E14-sau-dua-vao.png
   observed: |
-    E14-sau-dua-vao.png (đã mở bằng Read): màn «OKR theo đơn vị», tab «Theo đơn vị», phòng «Kinh doanh miền Bắc», đầu danh sách «2 mục tiêu · 5 KR» với «Giữ chân đối tác lớn» (3 KR) và «Mở kênh đại lý miền Trung» (2 KR), trạng thái «Nháp». Khung Soạn OKR đã đóng. Nút của phòng vẫn là «Soạn OKR cùng Trợ lý». Khớp Expected: M1 = D1 = 2 mà không tải lại trang.
+    Frame E14-sau-dua-vao.png (đã mở bằng Read): màn «OKR theo đơn vị», tab «Theo đơn vị» đang chọn, phòng «Kinh doanh miền Bắc», dòng phụ «Phòng ban · Trưởng Nguyễn Thị Lan · 2 mục tiêu · 5 KR». Danh sách hiện 2 Mục tiêu: «Giữ chân đối tác lớn» (3 KR) và «Mở kênh đại lý miền Trung» (2 KR), cả hai trạng thái «Nháp». Khung Soạn OKR đã đóng (không thấy sheet). Nút của phòng là «Soạn OKR cùng Trợ lý», không có chữ «Tiếp tục». Khớp Expected: M1 = D1 = 2 mà không tải lại trang. Đối chiếu frame chiều đỏ (không-làm-mới): cùng màn nhưng hiện «0 mục tiêu · 0 KR» và trang rỗng dù CSDL đã có 2 Mục tiêu, đúng là trang nền cũ bị chặn bởi assertion đo.
   network_observed: n-a (driver)
   output: |
-    man.mjs --phan dua-vao: in M0, D0, D1, M1 và 'dat'.
-    Chiều đỏ --kiem-do-do khong-lam-moi: in 'trang nen cu sau dua vao', KET LUAN: 1 SAI (D1 2 nhưng M1 0). Đúng Expected.
+    Frame xanh đã lưu ở evidence/E14-sau-dua-vao.png; frame chiều đỏ nằm ngoài evidence chính để đối chiếu. Driver là playwright trong man.mjs nên network ghi n-a (driver).
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-soan-okr-trong-khung-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-soan-okr-trong-khung-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-soan-okr-trong-khung-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: ""__ab9404
   exit_code: 0
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: ""
+  run_id: minted-soan-okr-trong-khung-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-soan-okr-trong-khung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-soan-okr-trong-khung-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-soan-okr-trong-khung-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-soan-okr-trong-khung-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
 
 - cmd: bun run lint:slop
-  run_id: minted-soan-okr-trong-khung-SUITE-bun_run_lint_slop-r1
+  run_id: minted-soan-okr-trong-khung-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-09T12:56:09Z
+  verified_at: 2026-10-09T13:23:41Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-soan-okr-trong-khung-SUITE-bunx_turbo_run_build_force-r1
+  run_id: ""__959ed4
   exit_code: 0
-  verified_at: 2026-10-09T12:56:09Z
-
-### Hội đồng E12 (đề xuất, người quyết ở Cổng 2)
-
-Đề xuất của panel: PASS. Bình chọn từng ống kính, mọi ý bất đồng giữ nguyên:
-
-- domain-correctness: PASS — Cả bốn ý đạt. Kara luôn ở cột phải và bản nháp ở ô trái, khớp mục «Kara ở đâu» của ai-ux.md; khung neo mép phải cùng dáng khung Mục tiêu; hai ô chia nhau một đường kẻ dọc; hộp hỏi ghi «Lượt này vẫn chạy khi bạn đóng». Hai điểm lệch ngoài bốn ý: ảnh nền tối ghi «Trợ lý OKR đang soạn…» trái mục 1 và 7 của ai-ux.md (phải là «Kara đang <động từ>…»); chữ «Kara đang soạn — xong sẽ quyết được.» lệch dòng hơi so với nhãn Kara.
-- operational-feasibility: UNCERTAIN — Ý (1), (3), (4) đạt. Ý (2) chưa chứng minh được: trong cả năm ảnh và ảnh đối chiếu, phía sau khung chỉ là nền trống, không thấy trang nền, và ảnh tĩnh không cho thấy khung trượt từ phải. Ảnh nền tối có «Trợ lý OKR đang soạn…» trái mục 1 của ai-ux.md và lệch dòng «Kara đang soạn» ngay cạnh.
-  - bằng chứng còn thiếu 1: ảnh 1440 px của khung Soạn OKR mở trên trang OKR thật (có danh sách Mục tiêu hiện mờ phía sau), cùng khổ và chủ đề với doi-chieu-khung-muc-tieu-1440-dark.png, lấy bằng lượt đo mở ?record=soan:<cuộc> trước khi che nền.
-  - bằng chứng còn thiếu 2: ảnh E11-ST-khung-rong-dang-soan-1440-dark.png chụp lại sau khi đổi «Trợ lý OKR đang soạn…» thành «Kara đang <động từ> <thứ>…» theo mục 7 của docs/ai-ux.md, hoặc ghi rõ vì sao «Trợ lý OKR» là ngoại lệ chấp nhận được trong mục 1.
-  - bằng chứng còn thiếu 3: ảnh chuỗi hai khung mở từ trạng thái đóng (khung Soạn OKR và khung Mục tiêu, mỗi khung ít nhất hai khung hình giữa chuyển động), hoặc một dòng ghi nhận cùng hướng trượt và cùng cỡ sheet `kara` lấy từ mã nguồn khung.
-- spec-alignment: PASS — Cả bốn ý đạt. Kara cột phải, bản nháp mở thêm về trái; ảnh điện thoại có hai tab «Trò chuyện» và «Bản nháp (7)», đúng mục 11 của ai-ux.md; đầu khung cùng dáng ảnh đối chiếu; một đường kẻ dọc, hai dòng đầu thẳng hàng; hộp hỏi «Kara đang soạn. Đóng khung?» nói lượt vẫn chạy. Ảnh tĩnh không chứng minh chuyển động trượt; trang nền sau khung trống ở cả hai ảnh nên ngang nhau. Chữ «Trợ lý OKR đang soạn…» trái mục 1 và 7 của ai-ux.md, không đổi verdict nhưng nên sửa.
-
-human_override cho E12 để TRỐNG, người điền ở Cổng 2.
+  verified_at: 2026-10-09T13:23:41Z
 
 ## Known limits
 
@@ -307,12 +286,13 @@ human_override cho E12 để TRỐNG, người điền ở Cổng 2.
 
 ## Analyst
 
-none — mọi eval feature kiểu test và script đều red trên baseline (có phân biệt); các eval ui-check chạy được chỉ trên cây hiện tại (baseline n-a).
+none — moi eval feature deu red tren baseline (co phan biet)
 
 ## Variance
 
-none — mọi eval chạy một lượt, không có eval nhiều lượt. Lưu ý E11 chỉ chạy một lượt nên chưa phân biệt được lỗi ổn định hay chập chờn.
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: E11 failed — ô ST-khung-hoi-dong 1024 nền tối có lỗi console «Hydration failed because the server rendered HTML didn't match the client...», 53/54 ô còn lại đạt; nguyên nhân gốc chưa rõ (một lượt, chưa chẩn đoán). Returned to implementation.
+Round 1: E11 đỏ — ô hội đồng 1024 tối báo lỗi hydration trong console; bốn phát hiện đo lường trong hợp đồng (AC-2, AC-7, AC-10, AC-13) được ghi. Quay lại triển khai.
+Round 2: mọi eval máy xanh, round này không còn phát hiện trong hợp đồng. E12 chưa ngã ngũ (ba lăng kính: FAIL, UNCERTAIN, PASS) nên PENDING-JUDGMENT; người quyết ở Cổng 2. E13 giữ nguyên từ round 1.

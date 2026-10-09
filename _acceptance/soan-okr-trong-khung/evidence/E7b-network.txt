@@ -1,1 +1,1 @@
-n-a (driver): man.mjs la kich ban playwright trong mot-luot.sh, khong co duong doc network cua browser tool
+n-a (driver): man.mjs la kich ban puppeteer/playwright trong mot-luot.sh, khong co duong doc network cua browser tool; ket qua xanh exit 0, do exit 1 ghi nhan tu log
