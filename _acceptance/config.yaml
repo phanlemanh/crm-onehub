@@ -28,6 +28,9 @@ feature_loop:
     - tro-ly-okr-nen/E12
     - tro-ly-okr-tom-tat/E9
     - tro-ly-okr-tom-tat/E17
+    - zalo-hoi-okr-khong-chet/E1
+    - zalo-hoi-okr-khong-chet/E6
+    - zalo-hoi-okr-khong-chet/E8
     - tro-ly-okr-bo-final-output/E6
     - tro-ly-okr-bo-final-output/E7
     - tro-ly-okr-bo-final-output/E11
@@ -964,6 +967,10 @@ executors:
     tln_tran_khong: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-viec.integration.spec.ts -t tran-khong"
     tln_dong_viec: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tro-ly-okr-viec.integration.spec.ts -t dong-viec"
     tln_uy_quyen: cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen.spec.ts
+    zhok_ngoai: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen-ngoai.spec.ts"
+    zhok_hook: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen-ngoai.spec.ts -t hook && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen.spec.ts"
+    zhok_nop_ngoai: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen-ngoai.spec.ts -t nop-ngoai"
+    zhok_khong_viec: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/okr-uy-quyen-ngoai.spec.ts -t khong-viec"
     zghl_mo_ta: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t mo-ta"
     zghl_408: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t 408"
     zghl_bay_cho: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/zalo-gui-hong-ly-do.spec.ts -t bay-cho"
@@ -2184,6 +2191,11 @@ executors:
     cccl_cong_tac: bun _acceptance/ca-chap-chon-cach-ly/rang/cong-tac.mjs
     cccl_pham_vi: bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs
     cccl_du_ca: bun _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs
+    zhok_c33: bun _acceptance/zalo-hoi-okr-khong-chet/rang/c33.mjs
+    zhok_pham_vi: bun _acceptance/zalo-hoi-okr-khong-chet/rang/pham-vi.mjs
+    zhok_dot_bien: bun _acceptance/zalo-hoi-okr-khong-chet/rang/dot-bien.mjs
+    zhok_ep: bun _acceptance/zalo-hoi-okr-khong-chet/rang/c33.mjs --ep
+    zhok_dau_cuoi: bun _acceptance/zalo-hoi-okr-khong-chet/rang/dau-cuoi.mjs
     kekt_pham_vi: bun _acceptance/khoa-eve-khong-tranh/rang/pham-vi.mjs
     kekt_dot_bien: bun _acceptance/khoa-eve-khong-tranh/rang/dot-bien.mjs
     kekt_lap: bun _acceptance/khoa-eve-khong-tranh/rang/dot-bien.mjs --lap 20 --cap a,b,c
