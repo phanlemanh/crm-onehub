@@ -5,7 +5,7 @@ slug: ban-gieo-gop-y-sau-nop
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: approved
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
