@@ -5,9 +5,9 @@ slug: luat-kho-vong-doi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-09
 design_doc: _acceptance/luat-kho-vong-doi/design.md
 ---
 

@@ -46,10 +46,10 @@ người dùng gặp.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: `[đề xuất]` Luật thứ bảy chạy ở mỗi PR và bắt được một vi phạm vòng đời mới trước khi gộp, mà không chặn oan PR nào.
-- Kết quả nào là SỐNG: `[đề xuất]` Trong 14 ngày sau khi gộp: luật chạy ở CI mọi PR vào `onehub`; 0 lần chặn oan (vi phạm báo ra mà người soát thấy là đúng chuẩn); mỗi ca phá thử của luật (gài một vi phạm mới vào bản gương) bị bắt ở mọi lượt.
-- Kết quả nào là CHẾT: `[đề xuất]` Có PR phải tắt luật hay thêm vào nền một dòng đúng chuẩn chỉ để qua CI; hoặc luật làm bước CI chứa nó dài thêm quá 2 phút.
-- Timebox: `[đề xuất]` làm trong đợt `sau-14-10` (dãy P4); đo lần đầu 14 ngày sau ngày gộp.
+- Câu hỏi phép đo trả lời: Luật thứ bảy chạy ở mỗi PR và bắt được một vi phạm vòng đời mới trước khi gộp, mà không chặn oan PR nào.
+- Kết quả nào là SỐNG: Trong 14 ngày sau khi gộp: luật chạy ở CI mọi PR vào `onehub`; 0 lần chặn oan (vi phạm báo ra mà người soát thấy là đúng chuẩn); mỗi ca phá thử của luật (gài một vi phạm mới vào bản gương) bị bắt ở mọi lượt.
+- Kết quả nào là CHẾT: Có PR phải tắt luật hay thêm vào nền một dòng đúng chuẩn chỉ để qua CI; hoặc luật làm bước CI chứa nó dài thêm quá 2 phút.
+- Timebox: làm trong đợt `sau-14-10` (dãy P4); đo lần đầu 14 ngày sau ngày gộp.
 
 ## Hạng mục cùng lớp
 
@@ -57,4 +57,4 @@ E3 `danh-sach-keo-chung`, E5 `tac-nhan-va`, V2 `vong-doi-mot-cach-cat` (cùng ch
 
 ## Quyết định Cổng Đáng
 
-07/10/2026 13:13:50Z, chủ kho: «Ký build cả 16 hàng» (luật 16 của đợt), gồm V2L. Ngưỡng giữ `[đề xuất]` theo luật 27 tới khi anh duyệt Cổng Phạm vi. Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.
+07/10/2026 13:13:50Z, chủ kho: «Ký build cả 16 hàng» (luật 16 của đợt), gồm V2L. Ngưỡng giữ theo luật 27 tới khi anh duyệt Cổng Phạm vi. Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.
