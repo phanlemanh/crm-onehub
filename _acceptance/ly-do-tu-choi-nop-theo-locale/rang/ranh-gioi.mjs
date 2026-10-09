@@ -28,6 +28,7 @@ const CHAM_TEP = [
 	"PRODUCT-MAP.md",
 	"LO-TRINH.html",
 	"_acceptance/soan-okr-khong-lac/rang/man.mjs",
+	"_acceptance/soan-okr-khong-lac/rang/mot-nguon.mjs",
 	"_acceptance/soan-okr-khong-lac/rang/ranh-gioi.mjs",
 	"_acceptance/soan-okr-khong-lac/decisions.jsonl",
 	"_acceptance/soan-okr-khong-lac/evidence-report.md",
