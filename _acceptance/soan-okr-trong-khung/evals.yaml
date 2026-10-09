@@ -21,7 +21,7 @@ evals:
       - "Bước 4: mở theo-don-vi?record=soan:khong-co → khung có [data-kara-state=error] với chữ messages(vi).karaKhung.chuaDuoc(trang.khongMo); bấm nút đóng → URL không còn record; ảnh E1b-khong-mo.png"
     expected: "exit 0; man.mjs --phan duong in 'buoc N: dat' cho 4 bước, console không lỗi. Chiều đỏ: --kiem-do-do push-link-cu (bản sao đổi replace thành push) phải in 'buoc 3: link cu them lich su' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/**"]
 
   - id: E2
     criterion: AC-2
@@ -43,7 +43,7 @@ evals:
       - "Lặp với trang OKR Của tôi /<slug>/okr?record=soan:<id>"
     expected: "exit 0; man.mjs --phan trang-khac in 'dat' cho 2 trang. Chiều đỏ: --kiem-do-do host-chi-okr (bản sao host chỉ dựng SoanSheet khi pathname chứa /okr/) phải in 'deals: khong mo khung' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/components/crm/record-sheet/**", "apps/app/app/(app)/[slug]/layout.tsx", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/components/crm/record-sheet/**", "apps/app/app/(app)/[slug]/layout.tsx", "_acceptance/soan-okr-trong-khung/rang/**"]
 
   - id: E3
     criterion: AC-3
@@ -57,7 +57,7 @@ evals:
       - "Mở một cuộc đã có nháp ở 1440 → [data-o=ban-nhap] có ngay ở lần dựng đầu (không qua trạng thái chỉ Kara: ảnh chụp lúc networkidle đầu tiên đã có ô bản nháp)"
     expected: "exit 0; man.mjs --phan be-ngang in từng số đo theo ô, số dòng ô bằng 4. Chiều đỏ ghim: --kiem-do-do kara-co-gian (bản sao cột Kara flex-1) phải in 'cot kara doi be ngang' và mã 1; --kiem-do-do kara-w96 (bản sao khung cột Kara đặt w-96) phải in 'cot kara khong theo token' và mã 1; --kiem-do-do token-420 (bản sao globals.css đặt --container-assist-rail 420px, đối chứng dương) phải in 'cot kara: 420.0 / R 420.0 → dat' rồi 'R 420.0 ngoai [372, 388]' và mã 1 — cột theo token, còn phép ghim giá trị token bắt việc đổi chuẩn; --kiem-do-do khung-cuon (bản sao sheet-content overflow-y-auto, thân ô overflow visible) phải in 'khung cuon thay o' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/detail-sheet.tsx", "packages/ui/src/components/sheet.tsx", "packages/ui/src/components/kara/**", "packages/ui/src/styles/globals.css", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/detail-sheet.tsx", "packages/ui/src/components/sheet.tsx", "packages/ui/src/components/kara/**", "packages/ui/src/styles/globals.css", "_acceptance/soan-okr-trong-khung/rang/**"]
 
   - id: E3b
     criterion: AC-3
@@ -80,7 +80,7 @@ evals:
       - "Ảnh E4-<khung>-<nền>.png"
     expected: "exit 0; man.mjs --phan khung-lien in kết quả từng ô, số ô bằng 4. Chiều đỏ ghim: --kiem-do-do khung-long (bản sao bọc cột Kara trong KaraArtifact có viền) phải in 'khung long trong khung' và mã 1; --kiem-do-do dau-lech (bản sao dòng đầu bản nháp cao gấp đôi) phải in 'dau o khong thang hang' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/kara/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/kara/**", "_acceptance/soan-okr-trong-khung/rang/**"]
 
   - id: E5
     criterion: AC-5
@@ -102,7 +102,7 @@ evals:
       - "Ảnh E6-<khổ>.png"
     expected: "exit 0; man.mjs --phan hep in số đo từng ô, số ô bằng 3. Chiều đỏ ghim: --kiem-do-do ngan-keo-88 (bản sao để ngăn kéo cao 88dvh) phải in '375: khung khong phu toan man' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/responsive-sheet.tsx", "packages/ui/src/components/drawer.tsx", "packages/ui/src/components/sheet.tsx", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/responsive-sheet.tsx", "packages/ui/src/components/drawer.tsx", "packages/ui/src/components/sheet.tsx", "_acceptance/soan-okr-trong-khung/rang/**"]
 
   - id: E7
     criterion: AC-7
@@ -124,7 +124,7 @@ evals:
       - "Chờ lượt xong; bấm Escape → khung đóng ngay, không hộp hỏi"
     expected: "exit 0; man.mjs --phan dong in 'dat' cho 4 bước. Chiều đỏ: --kiem-do-do khong-giu (bản sao bỏ bộ giữ) phải in 'ra ngoai dong khung' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/responsive-sheet.tsx", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/responsive-sheet.tsx", "_acceptance/soan-okr-trong-khung/rang/**"]
 
   - id: E8
     criterion: AC-8
@@ -138,7 +138,7 @@ evals:
       - "Ca chồng: gửi lượt 3 (chậm 8 giây); khi đang soạn mở record thêm objective:<id Mục tiêu có thật> (useRecordStack.open qua liên kết trong khung hoặc URL replace) → khung Mục tiêu hiện; đóng khung Mục tiêu sau 2 giây → khung soạn hiện lại với «Kara đang soạn…» rồi bản nháp mới khi lượt xong; CSDL soLuot tăng đúng 1"
     expected: "exit 0; man.mjs --phan luot in số đọc từ CSDL trước/sau cho ba ca và 'dat'. Chiều đỏ ghim: --kiem-do-do dung-khi-dong (bản sao gọi huỷ lượt phía máy chủ khi khung tháo) phải in 'dong: so lan nop khong tang' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/**"]
 
   - id: E9
     criterion: AC-9
@@ -168,7 +168,7 @@ evals:
       - "Mỗi ô: ảnh E11-<ST>-<khổ>-<nền>.png; documentElement.scrollWidth == innerWidth; window.scrollY = 0; bề ngang cột Kara và bản nháp theo AC-3 (khổ ≥ 1024) và AC-6 (khổ < 1024); console không có lỗi"
     expected: "exit 0; man.mjs --phan ma-tran in một dòng mỗi ô và tổng; mọi ô đạt. Chiều đỏ: --kiem-do-do tran-ngang (bản sao cho bản nháp min-w 1200px) phải in ô tràn đầu tiên và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/**", "packages/ui/src/components/sheet.tsx", "packages/ui/src/components/drawer.tsx", "packages/ui/src/components/kara/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/**", "packages/ui/src/components/sheet.tsx", "packages/ui/src/components/drawer.tsx", "packages/ui/src/components/kara/**", "_acceptance/soan-okr-trong-khung/rang/**"]
 
   - id: E12
     criterion: AC-12
@@ -204,4 +204,4 @@ evals:
       - "Bấm nút đóng khung (không page.reload): đọc CSDL D1; đếm Mục tiêu trên màn M1; đòi D1 = D0 + 2 và M1 = D1; nút soạn của phòng không chứa chữ messages(vi).okrSoan.nut.tiep cho cuộc vừa đưa vào; ảnh E14-sau-dua-vao.png"
     expected: "exit 0; man.mjs --phan dua-vao in M0, D0, D1, M1 và 'dat'. Chiều đỏ ghim: --kiem-do-do khong-lam-moi (bản sao bỏ bước làm mới truy vấn Theo đơn vị sau Đưa vào) phải in 'trang nen cu sau dua vao' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/theo-don-vi/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/theo-don-vi/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/**"]
