@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9f706b3a79fc2fb8f5bbb7ebdf2d9d7a8a52bc5a
+verified_commit: 4881672fbfdf00e7a9d70d88e15671a664ce5d25
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -258,3 +258,7 @@ Round 1: moi eval xanh, khong eval nao fail, khong judgment item cho nguoi. Verd
 ### Re-pin lần 1 — 2026-10-09, do gộp onehub a9e8bc75 (#339) sau chữ ký Cổng 2; mở đường PR
 run_id: repin-20261009T143021Z-87860
 sha: 9f706b3a79fc2fb8f5bbb7ebdf2d9d7a8a52bc5a · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E15c · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-09, do gộp onehub 2d7c4898 (#340) cho PR #342
+run_id: repin-20261009T153307Z-26171
+sha: 4881672fbfdf00e7a9d70d88e15671a664ce5d25 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E15c · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
