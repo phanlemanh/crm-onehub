@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 1d35649d7a9a185a50cb67678cd9f083610d84f3
+verified_commit: b201a7280cdc43bffd596d4588a7d34148923843
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -136,3 +136,7 @@ Round 2: đã sửa (so trường theo hợp của schema và trường bộ đ�
 ### Re-pin lần 1 — 2026-10-09, do gộp onehub e86cf730 sau chữ ký; ghim.mjs sửa vòng tự tham chiếu
 run_id: repin-20261009T023915Z-67771
 sha: 1d35649d7a9a185a50cb67678cd9f083610d84f3 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-09, do dòng đo ngưỡng sau gộp kéo hồ sơ vào nhánh E1b; gộp onehub ecbce631
+run_id: repin-20261009T070547Z-31779
+sha: b201a7280cdc43bffd596d4588a7d34148923843 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
