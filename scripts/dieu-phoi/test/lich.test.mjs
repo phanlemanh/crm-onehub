@@ -84,3 +84,27 @@ test('chonHangKe: tiếp hàng đang làm; chọn hàng đủ phụ thuộc theo
   assert.deepEqual(chonHangKe(HV, 'P1', td({ a: 'gop', d: 'gop', b: 'dang' })), { hang: null, cho: 'phu-thuoc' });
   assert.deepEqual(chonHangKe(HV, 'P1', td({ a: 'gop', c: 'gop', d: 'ky' })), { hang: null, xong: true });
 });
+
+test('xepHang: đơn kiem-cheo mang moc xếp trước đơn s4 của hàng chưa có mốc', () => {
+  const kq = xepHang([
+    don('P4', 'zz', 's4', '2026-10-08T01:00:00Z'),
+    don('kiem-cheo', 'kiem-cheo-sau-gop', 's4', '2026-10-08T02:00:00Z', { moc: '2026-10-07' }),
+  ], HV);
+  assert.deepEqual(kq.map((d) => d.phien), ['kiem-cheo', 'P4']);
+});
+
+test('xepHang: đối chứng — đơn kiem-cheo không mang moc thì đơn sớm hơn đứng trước', () => {
+  const kq = xepHang([
+    don('P4', 'zz', 's4', '2026-10-08T01:00:00Z'),
+    don('kiem-cheo', 'kiem-cheo-sau-gop', 's4', '2026-10-08T02:00:00Z'),
+  ], HV);
+  assert.deepEqual(kq.map((d) => d.phien), ['P4', 'kiem-cheo']);
+});
+
+test('xepHang: thợ tự ghi moc vào đơn không chen được hàng', () => {
+  const kq = xepHang([
+    don('P4', 'zz', 's4', '2026-10-08T01:00:00Z'),
+    don('P3', 'yy', 's4', '2026-10-08T02:00:00Z', { moc: '2000-01-01' }),
+  ], HV);
+  assert.deepEqual(kq.map((d) => d.phien), ['P4', 'P3'], 'moc trong đơn của phiên thợ phải bị bỏ qua');
+});
