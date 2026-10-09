@@ -1,1 +1,1 @@
-n-a (driver): bang-1440 duoc do boi do-man.mjs qua mot-luot.sh, khong co duong doc network
+driver: do-man.mjs (playwright qua mot-luot.sh); khong co browser tool network rieng. Dong DUNG them-tab/bang-1440 khong bao request app fail.

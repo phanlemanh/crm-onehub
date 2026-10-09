@@ -1,1 +1,1 @@
-driver: do-man.mjs script (khong phai browser tool co read_network_requests) -> n-a (driver)
+n-a (driver): script do-man.mjs, khong co browser tool network

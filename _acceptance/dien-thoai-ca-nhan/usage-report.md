@@ -113,3 +113,57 @@ wall: 1040s
 - **claude-opus-5-5**: 3 agent · 49 calls · out 5,875 · in 98 · cache_read 5,485,510 · cache_create 344,997
 - **claude-haiku-5-5**: 19 agent · 38 calls · out 16,140 · in 76 · cache_read 2,290,144 · cache_create 1,158,613
 
+### S4 round 3 — wf_ac307aed-b1b (32 agent, 50,539 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 7 | 11,672 | 14 | 767,804 | 118 |
+| review:bugs | claude-opus-5-5 | 25 | 3,580 | 50 | 3,044,388 | 195 |
+| triage | claude-sonnet-5-5 | 2 | 2,778 | 4 | 90,831 | 25 |
+| ui:E1 | claude-sonnet-5-5 | 6 | 2,721 | 12 | 478,511 | 167 |
+| review:measurement | claude-opus-5-5 | 22 | 2,648 | 44 | 3,113,639 | 251 |
+| review:conventions | claude-opus-5-5 | 7 | 2,165 | 14 | 608,649 | 76 |
+| ui:E20 | claude-sonnet-5-5 | 7 | 2,111 | 14 | 582,903 | 576 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,074 | 4 | 122,346 | 71 |
+| baseline:diffBase | claude-sonnet-5-5 | 7 | 2,031 | 14 | 582,863 | 63 |
+| ui:E17 | claude-sonnet-5-5 | 6 | 1,953 | 12 | 469,796 | 452 |
+| ui:E19 | claude-sonnet-5-5 | 8 | 1,851 | 16 | 663,342 | 705 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 1,629 | 4 | 122,322 | 237 |
+| ui:E16 | claude-sonnet-5-5 | 6 | 1,625 | 12 | 462,246 | 396 |
+| ui:E18 | claude-sonnet-5-5 | 6 | 1,506 | 12 | 532,361 | 261 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,438 | 4 | 122,291 | 12 |
+| machine:for t in "apps/app/components/crm/record | claude-haiku-5-5 | 2 | 1,282 | 4 | 122,589 | 13 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,155 | 4 | 122,338 | 244 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-5-5 | 2 | 1,041 | 4 | 122,360 | 15 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 947 | 4 | 122,289 | 29 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-5-5 | 2 | 848 | 4 | 122,360 | 15 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-5-5 | 2 | 844 | 4 | 122,362 | 17 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-5-5 | 2 | 459 | 4 | 122,441 | 11 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-5-5 | 2 | 333 | 4 | 122,382 | 8 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 291 | 4 | 122,316 | 289 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 214 | 4 | 122,285 | 8 |
+| machine:bun run test -- "cd apps/api && bun test | claude-haiku-5-5 | 2 | 208 | 4 | 122,368 | 12 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-5-5 | 2 | 202 | 4 | 122,385 | 10 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-5-5 | 2 | 201 | 4 | 122,378 | 10 |
+| machine:cd apps/app && bun test --preload ../../ | claude-haiku-5-5 | 2 | 201 | 4 | 122,378 | 10 |
+| machine:cd packages/validation && bun test test/ | claude-haiku-5-5 | 2 | 193 | 4 | 122,340 | 7 |
+| machine:bun run test -- "cd apps/agent && bun te | claude-haiku-5-5 | 2 | 190 | 4 | 122,355 | 11 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 148 | 4 | 86,371 | 11 |
+
+
+wall: 1063s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 2,031 | 582,863 | 63 | 04:15:33 | 04:16:37 |
+| machine | 19 | 13,750 | 2,324,885 | 902 | 04:15:33 | 04:30:35 |
+| ui | 6 | 11,767 | 3,189,159 | 707 | 04:15:47 | 04:27:34 |
+| review | 3 | 8,393 | 6,766,676 | 255 | 04:15:53 | 04:20:08 |
+| triage | 1 | 2,778 | 90,831 | 25 | 04:30:38 | 04:31:03 |
+| capture | 1 | 148 | 86,371 | 11 | 04:31:05 | 04:31:16 |
+| synthesize | 1 | 11,672 | 767,804 | 118 | 04:31:18 | 04:33:16 |
+
+- **claude-sonnet-5-5**: 10 agent · 57 calls · out 28,396 · in 114 · cache_read 4,717,028 · cache_create 1,176,731
+- **claude-opus-5-5**: 3 agent · 54 calls · out 8,393 · in 108 · cache_read 6,766,676 · cache_create 384,003
+- **claude-haiku-5-5**: 19 agent · 38 calls · out 13,750 · in 76 · cache_read 2,324,885 · cache_create 1,122,011
+

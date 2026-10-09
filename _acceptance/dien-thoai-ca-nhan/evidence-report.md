@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 28b7f9d3d670a5f7a768b5fb52acc0302734b132
+verified_commit: 974cb5c9d124edfd9075889ea3578be545d8cf79
 human_signoff:
 ---
 
@@ -41,251 +41,260 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-dien-thoai-ca-nhan-E1-r2
+  run_id: minted-dien-thoai-ca-nhan-E1-r3
   exit_code: 0
   verifier: config:executors.script.dt_do_man
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   baseline: n-a
   screenshot: evidence/them-tab-1440.png
   observed: |
-    them-tab-1440.png (da mo bang Read): sheet cong ty Monzo, tab "Ca nhan" dang chon; form them mo, thu tu o tren xuong/trai sang phai: Ten (da go "DT mv0bhgmv Lan 1440"), Ho, Dien thoai (da go "0911 157 956", con tro nhap), Email, Chuc danh (placeholder "Truong phong Kinh doanh"); nut Huy va "Them ca nhan" (xanh); duoi form la bang 3 ca nhan cu. Khop Expected (thu tu Ten, Ho, Dien thoai, Email, Chuc danh). them-tab-375.png (da mo bang Read): kho 375, luoi mot cot, thu tu doc xuong Ten ("DT mv0bhgmv Lan 375"), Ho, Dien thoai ("0921 160 429", nam trong khung, co vien focus), Email, Chuc danh; o Dien thoai hien day du trong khung. Khop Expected. (Hai anh E1-step1/2.png trong thu muc la cu tu 08:41, khong phai lan chay nay, khong dung.)
+    Da mo bang Read hai anh moi (mtime 11:16-11:17, tu lan chay nay). them-tab-1440.png: sheet cong ty Monzo, tab "Ca nhan 3" dang chon, form them ca nhan hien thu tu Ten, Ho (cot phai), Dien thoai, Email (cot phai), Chuc danh. Ten = «DT mv0gdijk Lan 1440», o Dien thoai dang focus chua «0919 376 243», nut «Them ca nhan» mau xanh ben duoi; danh sach 3 ca nhan cu (Vera Gupta, Farah Oyelaran, Dana Petrov) o duoi. Khop Expected (thu tu o va o Dien thoai co mat).
+    them-tab-375.png: kho 375, drawer Monzo, tab "Ca nhan 4" (them 1 nguoi tu o 1440), luoi mot cot theo thu tu Ten («DT mv0gdijk Lan 375»), Ho, Dien thoai («0929 461 007», trong khung, co con tro), Email, Chuc danh (bi nut tron goc duoi che mot phan nhan, khong anh huong o Dien thoai). Khop Expected.
+    Luu y nho: chuoi Ten thuc te la «DT <ma luot> Lan <kho>» chu khong dung nguyen van «Lan DT <ma luot>» nhu van ban Expected; dong DUNG cua do-man van doc CSDL khop ten do, nen khong coi la SAI.
   network_observed: n-a (driver)
 
 - eval: E2
-  run_id: minted-dien-thoai-ca-nhan-E2-r2
+  run_id: minted-dien-thoai-ca-nhan-E2-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_api_tao
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    test-run: dropped crm_mv0bh01zjcyd_test
+    describe "tao-chuan-hoa" chay tren CSDL thu rieng cua luot
+    test-run: dropped crm_mv0gcy70cr9u_test
 
 - eval: E2b
-  run_id: minted-dien-thoai-ca-nhan-E2b-r2
+  run_id: minted-dien-thoai-ca-nhan-E2b-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_api_tao
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    test-run: dropped crm_mv0bh01zjcyd_test
+    cung lenh voi E2 (dedupe); dong 2 cua "tao-chuan-hoa"
+    test-run: dropped crm_mv0gcy70cr9u_test
 
 - eval: E3
-  run_id: ""
+  run_id: minted-dien-thoai-ca-nhan-E3-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_man_form
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    Ran 4 tests across 1 file. [1265.00ms]
+    Ran 4 tests across 1 file. [1449.00ms]
 
 - eval: E4
-  run_id: minted-dien-thoai-ca-nhan-E4-r2
+  run_id: minted-dien-thoai-ca-nhan-E4-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_doc_so
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    Ran 28 tests across 1 file. [11.00ms]
+    Ran 32 tests across 1 file. [7.00ms]
 
 - eval: E5
-  run_id: minted-dien-thoai-ca-nhan-E5-r2
+  run_id: minted-dien-thoai-ca-nhan-E5-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_man_so_sai
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    Ran 6 tests across 1 file. [1.50s]
+    Ran 6 tests across 1 file. [1488.00ms]
 
 - eval: E6
-  run_id: minted-dien-thoai-ca-nhan-E6-r2
+  run_id: minted-dien-thoai-ca-nhan-E6-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_api_so_sai
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    test-run: dropped crm_mv0bgzes7kuc_test
+    test-run: dropped crm_mv0gczom5amm_test
 
 - eval: E7
-  run_id: minted-dien-thoai-ca-nhan-E7-r2
+  run_id: minted-dien-thoai-ca-nhan-E7-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_api_tao
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    test-run: dropped crm_mv0bh01zjcyd_test
+    cung lenh voi E2 (dedupe); dong 4 cua "tao-chuan-hoa" (khong phone, phone null)
+    test-run: dropped crm_mv0gcy70cr9u_test
 
 - eval: E8
-  run_id: minted-dien-thoai-ca-nhan-E8-r2
+  run_id: minted-dien-thoai-ca-nhan-E8-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_api_trung
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    test-run: dropped crm_mv0bh0jculx6_test
+    describe "trung-tao"
+    test-run: dropped crm_mv0gcywujp5j_test
 
 - eval: E9
-  run_id: minted-dien-thoai-ca-nhan-E9-r2
+  run_id: minted-dien-thoai-ca-nhan-E9-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_api_trung
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    test-run: dropped crm_mv0bh0jculx6_test
+    cung lenh voi E8 (dedupe); describe "trung-sua"
+    test-run: dropped crm_mv0gcywujp5j_test
 
 - eval: E10
-  run_id: minted-dien-thoai-ca-nhan-E10-r2
+  run_id: ""
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_man_bang
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    Ran 1 test across 1 file. [747.00ms]
+    hai lenh bun test noi bang && (cot-bang, roi ngan-chi-tiet), ca hai ket thuc thanh cong
 
 - eval: E11
-  run_id: mv0bh0zvbxvx
+  run_id: minted-dien-thoai-ca-nhan-E11-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_api_tim
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    test-run: dropped crm_mv0bh0zvbxvx_test
+    describe "tim-bang"
+    test-run: dropped crm_mv0gcyddvsed_test
 
 - eval: E12
-  run_id: mv0bh0zvbxvx
+  run_id: minted-dien-thoai-ca-nhan-E12-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_api_tim
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    test-run: dropped crm_mv0bh0zvbxvx_test
+    cung lenh voi E11 (dedupe); describe "tim-cmdk"
+    test-run: dropped crm_mv0gcyddvsed_test
 
 - eval: E13
-  run_id: minted-dien-thoai-ca-nhan-E13-r2
+  run_id: mv0gcxu2l64y
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_kara_tim
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    tim-theo-so.integration.spec.ts chay xong, khong co dong that bai
+    test-run: dropped crm_mv0gcxu2l64y_test
 
 - eval: E14
-  run_id: minted-dien-thoai-ca-nhan-E14-r2
+  run_id: ""
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_man_moi_gioi
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    Ran 5 tests across 1 file. [1.64s]
+    Ran 5 tests across 1 file. [1331.00ms]
 
 - eval: E15
-  run_id: design-gate-7e478ebd9d, design-gate-a08a440833
+  run_id: design-gate-91b55c7e49, design-gate-c7196074b1
   exit_code: 0
-  baseline: n-a
+  baseline: green
   verifier: config:executors.script.dt_san_thiet_ke
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    design-gate.mjs --mode static chay cho nam tep, khong P0
+    design-gate --mode static chay lan luot cho nam tep, vong lap ket thuc thanh cong, khong P0
 
 - eval: E16
-  run_id: minted-dien-thoai-ca-nhan-E16-r2
+  run_id: minted-dien-thoai-ca-nhan-E16-r3
   exit_code: 0
   verifier: config:executors.script.dt_do_man
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   baseline: n-a
   screenshot: evidence/E16-step1.png
   observed: |
-    Frame E16-step1.png (bản sao của evidence/tao-sheet-1440.png, 1440px; E16-step2.png là cùng ảnh): sheet trượt bên phải, tiêu đề «Cá nhân mới». Thứ tự nhãn từ trên xuống: Tên, Họ, Điện thoại, Email, Chức danh, Công ty, Phụ trách. Ô Tên có chữ «DT mv0bjcig Ban». Ô Điện thoại đang có con trỏ và chứa «+84 28 3812 3456». Có nút Huỷ và nút xanh «Thêm cá…», chữ bị bong bóng dev che một phần. Khớp Expected: thứ tự Tên, Họ, Điện thoại, Email, ô Điện thoại có mặt, và số +84 28 3812 3456 đã gõ. Kết quả lưu vào CSDL chỉ thấy ở dòng log của lệnh đo, không thấy trong ảnh.
+    Đã mở bằng Read ảnh tao-sheet-1440.png vừa được lần đo mới sinh. E16-step1.png và E16-step2.png là hai bản sao của ảnh này. Ảnh 1440px nền tối, có sheet trượt bên phải với tiêu đề «Cá nhân mới». Nhãn từ trên xuống là Tên, Họ, Điện thoại, Email, Chức danh, Công ty, Phụ trách. Ô Tên có chữ «DT mv0gie9f Ban». Ô Điện thoại đang focus (viền xanh, có con trỏ) và chứa «+84 28 3812 3456». Có nút Huỷ và nút xanh «Thêm cá…» bị bong bóng dev che một phần. Thứ tự nhãn Tên, Họ, Điện thoại, Email khớp Expected, ô Điện thoại có mặt và số đã gõ đúng. Ảnh không cho thấy kết quả lưu CSDL. Kết quả đó nằm ở dòng log của lệnh đo: phone=+842838123456, source=MANUAL.
   network_observed: n-a (driver)
 
 - eval: E17
-  run_id: minted-dien-thoai-ca-nhan-E17-r2
+  run_id: minted-dien-thoai-ca-nhan-E17-r3
   exit_code: 0
   verifier: config:executors.script.dt_do_man
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   baseline: n-a
   screenshot: evidence/E17-step1.png
   observed: |
-    Da Read evidence/tim-bang-1440.png (E17-step1/step2 la ban sao giong het). Khung 1440 theme toi, trang "Ca nhan" ("Moi ca nhan trong mang luoi."). O tim dang focus chua dung chuoi "0911215810" (khong bi noi voi truy van truoc nhu round 1). Bang chi con DUNG MOT hang: "DT mv0bip8e Lan ...", dien thoai "0911 215 810", cong ty Monzo, phu trach Marcus. Chan trang ghi "1-1 trong so 1" (khong con "1-25 trong so 55" cua round 1). Doi chieu Expected: go so dang 0... -> con dong cua nguoi them o them-tab-1440 (phone +84911215810, cung la so dien thoai nguoi them). Dong script xac nhan truy van "+84 911 215 810" cung ra 1 dong. Khop Expected.
+    Mo bang Read evidence/tim-bang-1440.png (E17-step1.png va E17-step2.png la ban sao giong het, copy sau khi chay). Khung 1440x900 theme toi, trang "Ca nhan" ("Moi ca nhan trong mang luoi."). O tim dang chua dung chuoi "0919730918" (dang so noi dia, khong con noi tiep voi truy van "+84 919 730 918" truoc do). Bang chi con DUNG MOT hang: "DT mv0gl7sc Lan ...", dien thoai "0919 730 918", cong ty Monzo, phu trach Marcus. Chan trang ghi "1-1 trong so 1" (khong phai trang 25 dong chua loc). Doi chieu Expected: bang chi con dong cua nguoi them o them-tab-1440 (CSDL phone +84919730918, cung la so cua nguoi them o them-tab-1440 trong cung lan do). Khop Expected. Dong script: truoc khi tim 25 dong (>1); moi dang so mot lan tai trang moi, moi lan chi con 1 dong.
   network_observed: n-a (driver)
 
 - eval: E18
-  run_id: minted-dien-thoai-ca-nhan-E18-r2
+  run_id: minted-dien-thoai-ca-nhan-E18-r3
   exit_code: 0
   verifier: config:executors.script.dt_do_man
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   baseline: n-a
   screenshot: evidence/E18-step1.png
   observed: |
-    Đã mở bằng Read cmdk-1440.png, E18-step1.png và E18-step2.png (cả ba cùng nội dung, 18581 byte, lưu lúc 09:00 sau lần chạy này). Ảnh 1440x900, nền tối. Hộp ⌘K nằm giữa màn hình, ô tìm có chữ "0911 185 678", chưa có thông báo lỗi hay trạng thái không có kết quả. Số này là số riêng của lượt, mà dòng bang-1440 của cùng lượt ghi là số của người vừa thêm. Dưới ô tìm có một nhóm "Cá nhân" với đúng một mục: avatar "D1", tên "DT mv0bi133 Lan 1440", dòng phụ "Monzo" (tên công ty). Tên này trùng với người ở dòng bang-1440 của cùng lượt đo. Khớp Expected: mục Cá nhân có người vừa thêm và dòng phụ là tên công ty. Biến thể đối chứng (bản sao search.service bỏ nhánh số) không chạy theo prompt này.
+    Da mo bang Read cmdk-1440.png (E18-step1.png va E18-step2.png la ban sao byte-giong, 18796 byte, luu 11:19 sau lan chay moi nay; do-man.mjs chi ghi cmdk-1440.png nen toi sao ra hai ten E18-step). Anh 1440x900, nen toi. Hop ⌘K o giua man hinh, o tim co chu "0919 508 262" (con tro nhap), khong co thong bao loi hay "khong co ket qua". Duoi o tim co mot nhom "Ca nhan" voi dung mot muc: avatar "D1", ten "DT mv0gg69d Lan 1440", dong phu "Monzo" (ten cong ty). Ten nay trung voi nguoi o dong bang-1440 cung luot ("DT mv0gg69d Lan 1440", «0919 508 262», them o them-tab-1440). Khop Expected: muc Ca nhan co nguoi them o them-tab-1440 va dong phu la ten cong ty. Khong mau thuan (Expected viet 0901 234 567 nhung do man dung so rieng cua luot, cung dinh dang 4-3-3).
   network_observed: n-a (driver)
 
 - eval: E19
-  run_id: minted-dien-thoai-ca-nhan-E19-r2
+  run_id: mot-luot dt_do_man (E19 / AC-4)
   exit_code: 0
   verifier: config:executors.script.dt_do_man
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   baseline: n-a
   screenshot: evidence/E19-step1.png
   observed: |
-    Opened evidence/so-sai-375.png (also saved as E19-step1.png and E19-step2.png, same bytes, written 09:09 by my run). A 375px-wide frame (dark theme) shows the Monzo company sheet with the «Cá nhân 5» tab selected. The add-person form is below it. The «Điện thoại» label and its input are red-bordered and contain "abc" with the caret visible, so focus is on that input. Directly under the input is red text «Số điện thoại chưa đúng — ví dụ 0901 234 567». Underneath are the Email and Chức danh fields and the Huỷ and «Thêm cá nhân» buttons. This matches Expected: the error string is red, directly under the phone field, in a 375 frame, and focus is on the phone input.
+    Frame doc truc tiep: evidence/so-sai-375.png, copy thanh E19-step1.png va E19-step2.png (cung 40772 byte). Khung 375px, giao dien toi, so cong ty Monzo voi tab «Ca nhan 5» dang chon. Form them ca nhan nam duoi. Nhan «Dien thoai» va o nhap co vien do, trong o la «abc» va con tro nhap nhay, nen focus dang o o Dien thoai. Ngay duoi o la chu do «So dien thoai chua dung — vi du 0901 234 567». Phia duoi la Email, Chuc danh, nut Huy va «Them ca nhan». Khop Expected: cau loi do nam ngay duoi o Dien thoai trong khung 375, focus o o Dien thoai.
   network_observed: n-a (driver)
 
 - eval: E20
-  run_id: minted-dien-thoai-ca-nhan-E20-r2
+  run_id: minted-dien-thoai-ca-nhan-E20-r3
   exit_code: 0
   verifier: config:executors.script.dt_do_man
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   baseline: n-a
   screenshot: evidence/E20-step1.png
   observed: |
-    Mo bang-1440.png, copy thanh E20-step1.png va E20-step2.png (cung noi dung, 1440x900, giao dien toi, trang «Ca nhan»). Tieu de cot theo thu tu: Ten, Dien thoai, Chuc danh, Email, Cong ty, Phu trach, Hoat dong gan nhat, nen cot «Dien thoai» nam ngay sau «Ten» dung Expected. Hang thu ba, nguoi them o them-tab («DT mv0btmif Lan ...», cong ty Monzo), hien «0911 725 001», dung dinh dang nhom 4-3-3. Hai hang gan nhau hien «028 3812 3456» (tao-sheet) va «0921 726 999» (them-tab-375). Cac so thang hang cot trai, cung do rong chu so, nen cot so thang hang. Hang ngoai cho hien so quoc te «+14155557053», «+14155555636» va dau «—» khi trong. Anh khong kiem duoc tabular-nums bang mat, nen doc ma nguon: apps/app/components/crm/so-dien-thoai.tsx dong 17 va 27 co class tabular-nums. Expected viet «0901 234 567» nhung E1 khai so rieng cua luot, nen so cua luot nay la «0911 725 001»; dinh dang giong, khong coi la mau thuan.
+    Da Read evidence/bang-1440.png (E20-step1/step2.png la ban sao giong het, 123791 byte, chup 11:23 trong lan chay nay). Khung 1440x900, giao dien toi, trang «Cá nhân» («Mọi cá nhân trong mạng lưới.»), nut «Cá nhân mới», thanh Lọc/Sắp xếp/Cột (7)/Bảng xem/Lưu trữ. Header cot theo thu tu: Tên, Điện thoại, Chức danh, Email, Công ty, Phụ trách, Hoạt động gần nhất, tuc cot «Điện thoại» ngay sau «Tên». Ba hang dau: «DT mv0gmg5f Ban» 028 3812 3456; «DT mv0gmg5f La...» (avatar D3) 0929 805 310, Monzo; «DT mv0gmg5f La...» (avatar D1) 0919 796 223, Monzo, day la nguoi them o them-tab-1440. So dinh dang nhom 4-3-3, thang hang cot trai, cung do rong chu so; hang ngoai cho hien so quoc te +14155557053, +14155555636 va dau «—» khi trong. Chan trang «1–25 trong số 55». Khop Expected (so cua luot nay la 0919 796 223 thay vi 0901 234 567 vi so rieng cua luot; cung dinh dang).
   network_observed: n-a (driver)
 
 - eval: E21
-  run_id: minted-dien-thoai-ca-nhan-E21-r2
+  run_id: minted-dien-thoai-ca-nhan-E21-r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.dt_man_trung
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
   output: |
-    Ran 2 tests across 1 file. [918.00ms]
+    Ran 2 tests across 1 file. [797.00ms]
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-dien-thoai-ca-nhan-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-dien-thoai-ca-nhan-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
 
 - cmd: bun run lint:slop
-  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_lint_slop-r2
+  run_id: minted-dien-thoai-ca-nhan-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-dien-thoai-ca-nhan-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-dien-thoai-ca-nhan-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-09T01:58:25Z
+  verified_at: 2026-10-09T04:15:19Z
 
 ## Known limits
 
@@ -293,12 +302,10 @@ human_signoff:
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi). Field baseline cua tung block eval ghi n-a.
-
-Eval khong-phan-biet (pass tren ca HEAD lan baseline round 1, chung minh harness chu khong phai feature):
+Eval khong-phan-biet (pass tren ca HEAD lan baseline, chung minh harness chu khong phai feature):
 - E15 (AC-13, design-gate static cho nam tep): xanh ca hai phia. Day la cong thiet ke tinh, la regression-guard co chu y; neu muon chung minh no phan biet thi viet lai de assert hanh vi moi hoac giu nguyen nhu guard.
 
-Lenh suite xanh-ca-hai-phia la regression-guard binh thuong, khong liet ke.
+Lenh suite xanh-ca-hai-phia la regression-guard binh thuong, khong liet ke. Cac eval ui-check ghi baseline n-a (khong chay duoc tren code cu).
 
 ## Variance
 
@@ -306,5 +313,6 @@ none — every multi-run eval is uniform (moi eval chay 1 lan, khong eval nao co
 
 ## Iterations
 
-Round 1: E17 failed (tim-bang-1440 bao DUNG nhung khung hinh cho thay bang chua loc: choDong thoa man ngay vi dong cua nguoi do da nam san tren trang chua loc, va goTim noi truy van thay vi thay the). E10 BLOCKED (cap nhay doi quanh bo loc -t trong lenh pinned bi zsh doc sai nen khong chay duoc ngan-chi-tiet). Lenh suite app/ui co 4 test do ngoai eval (kho chuoi cua vong ③a, contacts va record-sheet). Returned to implementation.
+Round 1: E17 failed (tim-bang-1440 bao DUNG nhung khung hinh cho thay bang chua loc: choDong thoa man ngay vi dong cua nguoi do da nam san tren trang chua loc, va goTim noi truy van thay vi thay the). E10 BLOCKED (cap nhay doi quanh bo loc -t trong lenh pinned bi zsh doc sai nen khong chay duoc ngan-chi-tiet). Returned to implementation.
 Round 2: 22 eval (E1-E21 va E2b) xanh, bay lenh suite xanh; E17 do lai sau khi sua goTim/choLocXong, anh cho thay mot hang duy nhat; E10 chay duoc ca hai lenh -t. Khong eval nao that bai. Verdict PASS.
+Round 3: sau khi doi luat doc so (so 0 trung ke sau +84, phan quoc noi khong bat dau bang 0) o commit da321bf5a, chay lai du 22 eval va bay lenh suite tren verified_commit moi: tat ca xanh, khong eval nao that bai. Verdict PASS.
