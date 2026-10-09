@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 23e2944080df4da17ad22093d6e974108aca04ed
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-09 — ký Cổng Bằng chứng trên vòng chấm 3 (15/15 eval đạt, 7/7 lệnh suite xanh, hội đồng E13 đạt, 0 phát hiện trong hợp đồng; vòng 1 và 2 REJECT đã sửa sản phẩm và phép đo). Tám mục ngoài hợp đồng: Ngoài-1, 2, 3 (Hoàn tác hàng loạt, cùng gốc) và Ngoài-7 (mảnh dùng chung) mở hợp đồng mới; Ngoài-4, 6, 8 ghi Known limits; Ngoài-5 chấp nhận, không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi (bốn tệp chữ, đổi lời E13 theo ngả A) được phê toàn bộ.
 ---
 
 # Evidence Report: vong-doi-mot-cach-cat

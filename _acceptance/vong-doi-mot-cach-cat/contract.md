@@ -5,7 +5,7 @@ slug: vong-doi-mot-cach-cat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-09-vong-doi-mot-cach-cat-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
@@ -62,3 +62,11 @@ cất, nút xem ghi «Lưu trữ» trần, hộp xoá vĩnh viễn hàng loạt 
 - Vòng đời (luật 14): (1) Dọn thế nào — không đổi: cá nhân, công ty, thoả thuận đi Lưu trữ → Khôi phục → Xoá vĩnh viễn; V2 thêm «Hoàn tác» cho đường hàng loạt. (2) «Lịch sử» — không đổi (ba loại không có Xoá trần). (3) Danh sách mặc định — không đổi: chỉ bản đang dùng; thứ đã cất tìm lại ở nút «Đã lưu trữ», nay có ở cả Kanban thoả thuận.
 - Hoàn tác gửi lại đúng danh sách id đã gửi đi lưu trữ (`variables.ids`), vì kết quả hàng loạt của API chỉ đếm, không trả id nào thành công. Khôi phục một bản chưa lưu trữ là không-đổi ở máy chủ (`restore` đặt `archivedAt: null`), nên id bị bỏ qua lúc lưu trữ không hỏng gì. Hạn chế đã biết: một bản có người khác lưu trữ giữa lúc tải danh sách và lúc bấm sẽ bị Hoàn tác khôi phục theo.
 - Ranh giới: `deals-table.tsx` vào ranh giới theo P2-36 (giám sát duyệt — chỉ thêm nút «Đã lưu trữ» ở nhánh Kanban). Ba tệp ngăn bản ghi trùng K4b (`khung-loi-ban-ghi-dung-ly-do`); K4b gộp trước, V2 tự gỡ xung đột (P2-37).
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-09):**
+  - Ngoài-4 — răng màn E12 bước 1 đọc `updatedAt` của thoả thuận đã cất một lần sau khoảng 600 ms, trong khi đối chứng dương chờ tới 6 giây; một lần ghi chậm có thể lọt. Ô mô tả chưa có đối chứng dương.
+  - Ngoài-6 — trên bản ghi đã lưu trữ, nút «Thử lại» của vùng con tải lỗi và các nút mở bản ghi liên quan (người trong «Đang tới đâu», kế hoạch) cũng tắt theo vùng khoá.
+  - Ngoài-8 — chưa phép kiểm nào ghim nút «Đã lưu trữ» nằm cùng chỗ ở dạng bảng và Kanban; chỉ kiểm có mặt.
+- Chấp nhận, không sửa (Cổng Bằng chứng 2026-10-09): Ngoài-5 — kiểm «thoả thuận đã cất vắng trên Kanban trước khi bấm» không có đối chứng dương rằng Kanban đã tải xong.
+- Hợp đồng mới (Cổng Bằng chứng 2026-10-09):
+  - Ngoài-1, Ngoài-2, Ngoài-3 — cùng gốc: lưu trữ hàng loạt chỉ trả số đếm, không trả id thật sự đã cất. Hoàn tác báo xanh che lỗi khôi phục thật và có thể đếm dư; khôi phục cả bản người khác vừa cất; lưu trữ một phần in câu lỗi tiếng Anh thô của máy chủ.
+  - Ngoài-7 — dải báo «Đã lưu trữ» và vùng khoá chỉ đọc nằm trong `apps/app`, chưa thành mảnh dùng chung ở `packages/ui` như `docs/vong-doi.md` dặn.
