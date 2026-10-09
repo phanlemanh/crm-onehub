@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d
+verified_commit: 67860795b1e1047e571d58a2d28667c9106bcfbe
 human_signoff: Manh Phan 2026-10-01
 ---
 
@@ -304,3 +304,7 @@ sha: e6dbcf7dcc29a8ac12d9d2d84ec533458c6c4733 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-03, do hoá cũ sau khi gộp onehub có #234 muc-tieu-va-kr
 run_id: repin-20261003T095736Z-43153
 sha: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta
+
+### Re-pin lần 5 — 2026-10-09, do E1c gỡ nhập chéo app trong test agent (luật kho cach-ly-hai-agent)
+run_id: repin-20261009T000523Z-85374
+sha: 67860795b1e1047e571d58a2d28667c9106bcfbe · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9, E20 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: af387d3ab496a88bb613e602d1daf60980dc24e4
+verified_commit: 67860795b1e1047e571d58a2d28667c9106bcfbe
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -153,3 +153,7 @@ none — every multi-run eval is uniform (moi eval chay mot lan, khong eval nao 
 
 Round 1: E1 den E8 va bay lenh suite deu xanh; verdict PASS.
 Round 2: ban viet lai rang khong-xoa-expect (so cau expect nguyen cau thay vi dong diff) va bon lenh suite cung E1 den E8 deu xanh tren commit af387d3ab; verdict PASS.
+
+### Re-pin lần 1 — 2026-10-09, do E1c gỡ nhập chéo app trong test agent (luật kho cach-ly-hai-agent)
+run_id: repin-20261009T000523Z-85374
+sha: 67860795b1e1047e571d58a2d28667c9106bcfbe · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
