@@ -238,7 +238,8 @@ evals:
       judgment do chủ kho duyệt 06/10.
     inputs:
       - _acceptance/tra-loi-tin-nhac/run-log.jsonl
-      - _acceptance/tra-loi-tin-nhac/rang/ho-so-cham.mjs
+    status: not-run
+    superseded_by: kiem-cheo-sau-gop#AC-6
   - id: E12
     criterion: AC-10
     executor: test

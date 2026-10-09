@@ -2,7 +2,6 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { TRO_LY_OKR_SOAN } from "../../../apps/agent-okr/agent/lib/config.ts";
 import { crmMessages } from "../../../apps/app/lib/messages/crm.ts";
 import { recordSheetMessages } from "../../../apps/app/lib/messages/record-sheet.ts";
 import { tre } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
@@ -36,6 +35,7 @@ import { bam, ROOT, SOAN } from "./chung.mjs";
 const TU_DAY = fileURLToPath(import.meta.url);
 const TEP_DAY = path.relative(ROOT, TU_DAY);
 const EVIDENCE = path.join(ROOT, "_acceptance/soan-okr-khong-lac/evidence");
+const CAU_K2C = JSON.parse(fs.readFileSync(path.join(ROOT, "_acceptance/ly-do-tu-choi-nop-theo-locale/rang/cau-da-duyet.json"), "utf8"));
 const KHO = {
 	390: { rong: 390, cao: 844 },
 	1440: { rong: 1440, cao: 1000 },
@@ -252,7 +252,7 @@ async function trangThaiNop(t, cuocId) {
 			[m.moc.themKr(String(DEM.nop2.themKr)), m.moc.sua(String(DEM.nop2.sua)), m.moc.chuyen(String(DEM.nop2.chuyen)), m.moc.bo(String(DEM.nop2.bo))].join(" · "),
 		),
 	];
-	const canDong = m.moc.nopKhongThanh(TRO_LY_OKR_SOAN.tuChoi.chuKyKhongLapKeHoach);
+	const canDong = m.moc.nopKhongThanh(CAU_K2C.vi.chuKyKhongLapKeHoach);
 	const co = await t.p.evaluate((chon) => {
 		const thuTu = [...document.querySelectorAll('[data-kara-turn="checkpoint"],[data-nop-khong-thanh]')].map((d) =>
 			d.matches('[data-kara-turn="checkpoint"]') ? "moc" : `khong-thanh:${d.getAttribute("data-nop-khong-thanh")}`,

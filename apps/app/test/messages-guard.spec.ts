@@ -245,6 +245,10 @@ const GHIM_OKR_GOP_Y = {
 		"Đã hoàn tác — tên KR trở lại «1»",
 		"Đã hoàn tác — tên KR trở lại «12»",
 	],
+	"okr-gop-y:bienNhan.hoanTacCanChinh": [
+		"Đã hoàn tác — bỏ góp vào «1»",
+		"Đã hoàn tác — bỏ góp vào «12»",
+	],
 	"okr-gop-y:bienNhan.hoanTacMucTieu": [
 		"Đã hoàn tác — tên Mục tiêu trở lại «1»",
 		"Đã hoàn tác — tên Mục tiêu trở lại «12»",
@@ -638,6 +642,10 @@ const GHIM = {
 	"nhac-qua-zalo:ketNoi.daNoiSo": [
 		"1/A người đã nối Zalo",
 		"12/A người đã nối Zalo",
+	],
+	"nhac-qua-zalo:ketNoi.doiBotThan": [
+		"Đổi sang bot «1» sẽ gỡ A liên kết Zalo. Mọi người đã nối phải nối lại.",
+		"Đổi sang bot «12» sẽ gỡ A liên kết Zalo. Mọi người đã nối phải nối lại.",
 	],
 	"settings-ket-noi:them.daCamRoi": ["1 đã cắm rồi.", "12 đã cắm rồi."],
 	"settings-ket-noi:google.dongBoHong": ["Đồng bộ hỏng: 1", "Đồng bộ hỏng: 12"],

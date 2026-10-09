@@ -144,3 +144,41 @@ export function initialsFromName(name: string | null | undefined): string {
 	const last = parts[parts.length - 1] ?? first;
 	return (first.slice(0, 1) + last.slice(0, 1)).toUpperCase();
 }
+
+export function formatNgayGio(
+	at: string | number | Date,
+	locale: Locale,
+	cach: { timeZone: string; phan: "ngay-gio" | "ngay" | "ngay-thang" | "gio" },
+): string {
+	const luc = new Date(at);
+	if (Number.isNaN(luc.getTime())) return "—";
+	const phan = new Map(
+		dateFormat(locale, {
+			timeZone: cach.timeZone,
+			day: "2-digit",
+			month: "2-digit",
+			year: "numeric",
+			hour: "2-digit",
+			minute: "2-digit",
+			hourCycle: "h23",
+		})
+			.formatToParts(luc)
+			.map((p) => [p.type, p.value]),
+	);
+	const ngayThang =
+		locale === "vi"
+			? `${phan.get("day")}/${phan.get("month")}`
+			: `${phan.get("month")}/${phan.get("day")}`;
+	const ngay = `${ngayThang}/${phan.get("year")}`;
+	const gio = `${phan.get("hour")}:${phan.get("minute")}`;
+	switch (cach.phan) {
+		case "ngay-thang":
+			return ngayThang;
+		case "ngay":
+			return ngay;
+		case "gio":
+			return gio;
+		case "ngay-gio":
+			return locale === "vi" ? `${gio} ${ngay}` : `${ngay}, ${gio}`;
+	}
+}

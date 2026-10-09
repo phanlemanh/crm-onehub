@@ -10,6 +10,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@crm/ui/components/popover";
+import { formatNgayGio } from "@crm/ui/lib/format";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
@@ -18,7 +19,7 @@ import { parseAsString, useQueryState } from "nuqs";
 import type { ReactNode } from "react";
 import { toast } from "sonner";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
-import { dauThangSau, homNayVn, ngayThangVn } from "@/lib/okr-chu-ky-nhan";
+import { dauThangSau, homNayVn, OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
 import type { DonChonOkr } from "../okr-search-params";
@@ -142,7 +143,8 @@ export function NutSoan({
 	canEdit: boolean;
 	cauNoi: boolean;
 }) {
-	const m = okrSoanMessages(useLocale());
+	const locale = useLocale();
+	const m = okrSoanMessages(locale);
 	const trpc = useTRPC();
 	const router = useRouter();
 	const { slug } = useParams<{ slug: string }>();
@@ -264,7 +266,10 @@ export function NutSoan({
 						<>
 							{chu(
 								m.nut.tiepMoTa(
-									ngayThangVn(new Date(cuocDang.moLuc)),
+									formatNgayGio(cuocDang.moLuc, locale, {
+										timeZone: OKR_CHU_KY.muiGio,
+										phan: "ngay-thang",
+									}),
 									String(cuocDang.soLuot),
 									String(cuocDang.soDongTong - cuocDang.soDongNhan),
 								),

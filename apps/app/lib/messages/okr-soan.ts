@@ -1,4 +1,5 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import type { LyDoTuChoiNop } from "@crm/validation/okr-cuoc-soan";
 import type { MaLyDoHong } from "@/lib/cua-okr-config";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
@@ -328,6 +329,15 @@ const vi = {
 				? `Kara nộp bản nháp chưa được — ${lyDo}`
 				: "Kara nộp bản nháp chưa được",
 		nopKhongDoc: "Kara nộp bản nháp nhưng không đọc được kết quả",
+		lyDoTuChoi: {
+			cuocKhongThuocPhien: "cuộc soạn này thuộc một cuộc trò chuyện khác",
+			cuocKhongDang: "cuộc soạn đã đóng",
+			donViChuaBat: "đơn vị chưa bật Kara soạn OKR",
+			saiMucDich: "cuộc trò chuyện này không dùng để soạn OKR",
+			chuKyKhongLapKeHoach: "chu kỳ đã rời pha «Lập kế hoạch»",
+			dongTrungKhoa: "bản nháp có hai dòng trùng nhau",
+			phienKhongSong: "cuộc trò chuyện đã hết hạn — mở lại trang soạn",
+		} satisfies Record<LyDoTuChoiNop, string>,
 	},
 	buoc: {
 		read_file: "đọc tài liệu của đơn vị",
@@ -677,6 +687,16 @@ const en: OkrSoanMessages = {
 				? `Kara could not submit the draft — ${lyDo}`
 				: "Kara could not submit the draft",
 		nopKhongDoc: "Kara submitted the draft but the result could not be read",
+		lyDoTuChoi: {
+			cuocKhongThuocPhien:
+				"this drafting session belongs to another conversation",
+			cuocKhongDang: "the drafting session has closed",
+			donViChuaBat: "Kara drafting isn't turned on for this unit",
+			saiMucDich: "this conversation isn't for drafting OKRs",
+			chuKyKhongLapKeHoach: "the cycle has left Planning",
+			dongTrungKhoa: "the draft has two duplicate lines",
+			phienKhongSong: "the conversation has expired — reopen the drafting page",
+		} satisfies Record<LyDoTuChoiNop, string>,
 	},
 	buoc: {
 		read_file: "read the unit's documents",

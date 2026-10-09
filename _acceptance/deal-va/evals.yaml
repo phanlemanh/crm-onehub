@@ -1,0 +1,157 @@
+schema_version: 1
+slug: deal-va
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dva_khoa
+    paths:
+      - "packages/telemetry/src/allowlist.ts"
+      - "packages/telemetry/test/allowlist.spec.ts"
+    expected: |
+      allowlist.spec.ts describe "permittedDealStage". Ma tran viet truoc:
+        1 moi ma cua Object.values(GIAI_DOAN_GOC) (doc tu @crm/db/giai-doan, khong chep tay) x ca ba kind OPEN, WON,
+          LOST -> tra chinh ma do (7 x 3 = 21 khang dinh)
+        2 ba dau vao la ("ckz9x1abc0000", "", "Đã gửi hợp đồng") x ba kind -> "other_open", "other_won", "other_lost"
+          theo kind (9 khang dinh)
+        3 DEAL_STAGE_KEYS: do dai 10, new Set cung 10, bang dung [...7 ma goc, "other_open", "other_won", "other_lost"]
+          (so mang chuoi)
+      CHIEU DO: ban sao permittedDealStage tra id cho moi ma -> dong 2 do voi thong diep ghim
+      "ma tu tao lot ra ngoai tap khoa".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dva_rollup
+    paths:
+      - "apps/api/src/telemetry/rollup.service.ts"
+      - "packages/telemetry/src/allowlist.ts"
+      - "apps/api/test/giai-doan-bao-cao.spec.ts"
+    expected: |
+      giai-doan-bao-cao.spec.ts, describe "okr-telemetry", ca "deals-by-stage tap khoa dong" (thay ca cu
+      "deals_by_stage khoa bang id"). Fixture san co cua tep (giai doan moi ba loai co thoa thuan, giai doan goc) them:
+      mot giai doan tu tao OPEN da luu tru khong thoa thuan, va doi nhan CONTRACT_SENT sang mot nhan co dau (tra lai
+      sau ca). Gia tri ky vong tinh bang ham doc lap trong bai kiem tu db.deal.findMany + dealStage (khong so cung).
+      Ma tran 6 dong:
+        1 Object.keys(deals_by_stage).sort() bang [...DEAL_STAGE_KEYS].sort()
+        2 tung ma goc: gia tri bang so thoa thuan o giai doan do
+        3 other_open / other_won / other_lost: bang tong thoa thuan o giai doan tu tao cung loai (ky vong > 0 voi
+          fixture nay — doi chung duong cho ca ba)
+        4 tong cac gia tri bang tong cac gia tri cua deal.groupBy({ by: ["stage"] }) chay cung luc tren cung fixture
+          (quan he voi cach dem cu, khong phai so tuyet doi)
+        5 khong khoa nao la id cua giai doan tu tao (ke ca giai doan da luu tru)
+        6 JSON.stringify(phan CRM) khong chua nhan nao cua fixture, ke ca nhan moi cua CONTRACT_SENT
+      CHIEU DO: ban sao rollup bo permittedDealStage (countsOf theo id nhu cu) -> dong 1 do voi thong diep ghim
+      "deals_by_stage co khoa ngoai tap dong".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dva_tai_lieu
+    paths:
+      - "docs/telemetry.md"
+      - "packages/telemetry/src/allowlist.ts"
+      - "packages/telemetry/test/allowlist.spec.ts"
+    expected: |
+      allowlist.spec.ts describe "telemetry-md-deals-by-stage": doc docs/telemetry.md, rut dong bang bat dau
+      "| `deals_by_stage` |". Ma tran:
+        1 dung mot dong nhu vay
+        2 moi khoa cua DEAL_STAGE_KEYS xuat hien trong dong do dang `<khoa>` (10 khang dinh)
+        3 dong do khong chua "get a cuid"
+      CHIEU DO: ban sao docs/telemetry.md giu dong cu -> dong 2 do voi thong diep ghim "tai lieu thieu khoa other_open".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dva_agent
+    paths:
+      - "apps/agent/agent/lib/lookup.ts"
+      - "apps/agent/test/giai-doan-agent.integration.spec.ts"
+    expected: |
+      giai-doan-agent.integration.spec.ts, describe moi "stage-id" dung fixture san co cua tep (giai doan moi ba loai
+      + thoa thuan o giai doan goc). Ma tran viet truoc: ba status (open, won, lost) x moi thoa thuan cua fixture tra
+      ve -> stageId bang ma giai doan cua thoa thuan trong fixture va stage bang nhan hien hanh doc tu db.dealStage
+      (so chuoi). Doi chung: tap id tra ve khong rong o ca ba status.
+      Round-trip qua cong cu that: goi default export cua apps/agent/agent/tools/list_deals.ts — execute({ status:
+      "all" }) — dua ket qua qua dealListResultOf nhap tu apps/app/lib/agent-transcript.ts: ket qua khac null va moi
+      deals[i].stageId bang ma trong fixture; toModelOutput(cung ket qua).value.deals[i].stageId cung bang ma do.
+      CHIEU DO: ban sao lookup bo stageId -> do voi thong diep ghim "list_deals thieu stageId"; ban sao toModelOutput
+      ghi de deals bang cac truong co dinh (khong spread) -> dong round-trip do voi thong diep ghim "model khong thay stageId".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dva_ban_ghi
+    paths:
+      - "apps/app/lib/agent-transcript.ts"
+      - "apps/app/test/agent-results.spec.ts"
+    expected: |
+      agent-results.spec.ts describe "stage-id". Ma tran:
+        1 dau ra co stageId "gd-1" -> dealListResultOf(...).deals[0].stageId === "gd-1"
+        2 dau ra cu khong co stageId -> ket qua khac null, deals.length dung, deals[0].stageId === null,
+          deals[0].stage giu nguyen
+        3 stageId la so 7 -> deals[0].stageId === null, ket qua khac null (khong rot ca bang)
+      CHIEU DO: ban sao schema bat buoc stageId -> dong 2 do voi thong diep ghim "ban ghi cu roi ca bang".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.dva_cham_mau
+    paths:
+      - "apps/app/components/agent-builder/deal-list-result.tsx"
+      - "apps/app/components/crm/deal-stage.tsx"
+      - "apps/app/lib/giai-doan.ts"
+      - "apps/app/test/deal-va-cham-mau.dom.tsx"
+    expected: |
+      deal-va-cham-mau.dom.tsx: render DealListResultTable that (jsdom), mock @/lib/trpc/client theo khuon
+      giai-doan-timeline.dom.tsx; giaiDoan.list tra ba giai doan gd-mo (OPEN, "Làm quen"), gd-thang (WON,
+      "Đã ký"), gd-thua (LOST, "Rớt") va CLOSED_WON (WON, "Chốt"). Moi so sanh chi dung gia tri nguyen thuy
+      (chuoi, so, boolean) — khong dua phan tu DOM vao toEqual. Ma tran 7 dong, moi dong mot hang:
+        1 stageId gd-mo, stage "Nhãn cũ" -> o giai doan co [data-slot=indicator-dot] data-tone "info", chu "Làm quen"
+        2 stageId gd-thang -> data-tone "success", chu "Đã ký"
+        3 stageId gd-thua -> data-tone "error", chu "Rớt"
+        4 khong stageId, stage "CLOSED_WON" -> data-tone "success", chu "Chốt"
+        5 khong stageId, stage "Đã gửi hợp đồng" -> khong co indicator-dot, chu "Đã gửi hợp đồng", co translate="no"
+        6 stageId "gd-da-cat" (khong co trong list), stage "Cũ" -> khong co indicator-dot, chu "Cũ"
+        7 doi chung: so indicator-dot cua ca bang bang 4
+        8 quan he voi Kanban: render DealStageMenu (chip giai doan cua the bang Kanban, components/crm/stage-change.tsx,
+          boc NuqsTestingAdapter theo khuon giai-doan-menu.dom.tsx) cho gd-mo, gd-thang, gd-thua; data-tone cua chip bang
+          data-tone o hang 1, 2, 3 cua bang Kara (3 cap). Doi chung: ba tone doi mot khac nhau.
+      Chay voi perl alarm 60 + --timeout 20000; RSS ghi bang /usr/bin/time -l.
+      CHIEU DO: ban sao Stage tra theoId theo deal.stage nhu cu -> dong 1 do voi thong diep ghim
+      "hang co stageId khong co cham".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dva_hoi_quy
+    paths:
+      - "_acceptance/deal-va/rang/khong-xoa-expect.mjs"
+      - "apps/app/test/agent-results.spec.ts"
+      - "apps/agent/test/giai-doan-agent.integration.spec.ts"
+      - "apps/api/test/giai-doan-bao-cao.spec.ts"
+      - "packages/telemetry/test/allowlist.spec.ts"
+    expected: |
+      Chay tron bon tep: agent-results.spec.ts, giai-doan-agent.integration.spec.ts, giai-doan-bao-cao.spec.ts (ca
+      tong-quan va okr-telemetry), packages/telemetry bun test. Thoat 0. Cac ca san co khong doi ky vong (tru ca
+      deals_by_stage duoc thay o E2 — khai o Notes cua hop dong).
+      Chot truoc khi chay: rang/khong-xoa-expect.mjs doc git diff $(git merge-base HEAD origin/onehub) tren bon tep kiem,
+      dem dong bi xoa chua "expect("; chi cho phep hai dong cua ca cu (thong diep "deals_by_stage thieu", "payload mang
+      nhan"); con dong nao khac -> thoat 1 va in nguyen van dong do. --tu-thu: mot diff gia xoa mot expect khac -> thoat 1.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.dva_san_thiet_ke
+    paths:
+      - "apps/app/components/agent-builder/deal-list-result.tsx"
+    expected: |
+      design-gate.mjs --mode static tren deal-list-result.tsx: khong P0, thoat 0.

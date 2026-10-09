@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+import { parseDealListResult } from "@crm/validation/deal-list";
 import { anchorResults } from "../lib/agent-results";
 import {
 	type DealListResult,
@@ -123,4 +124,63 @@ describe("anchorResults", () => {
 
 		expect(anchored.size).toBe(0);
 	});
+});
+
+describe("stage-id", () => {
+	const dauRa = (stageId?: string | number) => {
+		const p = page("open", ["d1"]);
+		return {
+			...p,
+			deals: p.deals.map((d) =>
+				stageId === undefined ? d : { ...d, stageId },
+			),
+		};
+	};
+
+	it("giu stageId co mat", () => {
+		const ra = dealListResultOf(dauRa("gd-1") as never);
+		expect(ra?.deals[0]?.stageId).toBe("gd-1");
+	});
+
+	it("ban ghi cu khong stageId van doc duoc", () => {
+		const ra = dealListResultOf(dauRa() as never);
+		expect(ra === null, "ban ghi cu roi ca bang").toBe(false);
+		expect(ra?.deals.length).toBe(1);
+		expect(ra?.deals[0]?.stageId).toBe(null);
+		expect(ra?.deals[0]?.stage).toBe("Discovery");
+	});
+
+	it("stageId sai kieu thanh null, khong roi ca bang", () => {
+		const ra = dealListResultOf(dauRa(7) as never);
+		expect(ra === null, "ban ghi cu roi ca bang").toBe(false);
+		expect(ra?.deals[0]?.stageId).toBe(null);
+	});
+});
+
+describe("cung-ham-goi", () => {
+	const dauRa = (stageId?: string | number) => {
+		const p = page("open", ["d1"]);
+		return {
+			...p,
+			deals: p.deals.map((d) =>
+				stageId === undefined ? d : { ...d, stageId },
+			),
+		};
+	};
+	const { deals: _bo, ...saiHinh } = dauRa("gd-1");
+	const dauVao = [
+		["co stageId", dauRa("gd-1")],
+		["khong stageId", dauRa()],
+		["stageId sai kieu", dauRa(7)],
+		["sai hinh", saiHinh],
+	] as const;
+
+	for (const [ten, x] of dauVao) {
+		it(ten, () => {
+			expect(
+				JSON.stringify(dealListResultOf(x as never)),
+				"app doc khac goi",
+			).toBe(JSON.stringify(parseDealListResult(x)));
+		});
+	}
 });
