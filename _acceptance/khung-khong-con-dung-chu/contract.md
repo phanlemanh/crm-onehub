@@ -5,7 +5,7 @@ slug: khung-khong-con-dung-chu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T15:56:07Z
 design_doc: docs/superpowers/specs/2026-10-09-khung-khong-con-dung-chu-design.md
@@ -40,3 +40,9 @@ Source input: Ngoài-2 của `khung-loi-ban-ghi-dung-ly-do` (K4b), Cổng 2 2026
 ## Notes
 
 - Không đổi thành phần, không migration, không đổi API.
+
+Known limits — anh chọn ở Cổng Bằng chứng 2026-10-10, từ S4 round 1:
+
+- Ngoài-1: Hai phép kiểm «không sửa kỳ vọng cũ» (`kkc_hoi_quy`, `kkc_canh_chu`) tính mốc bằng merge-base với `origin/onehub`; sau khi gộp, mốc trùng HEAD nên phép kiểm luôn xanh, và thiếu ref thì so cây với chỉ mục mà không báo lỗi.
+- Trong-AC-1 xoá-thật: Phép đo API (E7) chỉ gọi bốn thủ tục bằng id chưa từng có; chưa xoá thật một công ty, thoả thuận hay kế hoạch rồi gọi lại. Ca bản ghi vừa xoá chỉ đo cho cá nhân, qua màn (E6).
+- Trong-AC-2 tiếng Anh trên khung: Câu mô tả tiếng Anh chỉ so trong bảng chữ (E1); bài DOM tiếng Anh (E3) kiểm tiêu đề, nút và không có dấu tiếng Việt, chưa đọc câu mô tả trên khung.
