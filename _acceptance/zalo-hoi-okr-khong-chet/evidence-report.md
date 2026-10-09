@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: zalo-hoi-okr-khong-chet
-verdict: REJECT
-failed_evals: ["E8"]
+verdict: PASS
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 121278631ddddb4a807dc64ab7a1cb87df522b00
+verified_commit: c872f78101255fee033478b8a58da379b6c58810
 human_signoff:
 ---
 
 # Evidence Report: zalo-hoi-okr-khong-chet
 
-Round 3. Nội dung thay trọn round cũ; lịch sử các round nằm ở mục Iterations.
+Round 4. Nội dung thay trọn round cũ; lịch sử các round nằm ở mục Iterations.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -24,120 +24,130 @@ Round 3. Nội dung thay trọn round cũ; lịch sử các round nằm ở mụ
 | E5 | AC-2 | script | PASS |
 | E6 | AC-5 | script | PASS |
 | E7 | AC-6 | test | PASS |
-| E8 | AC-7 | script | FAIL |
+| E8 | AC-7 | script | PASS |
+| E9 | AC-8 | test | PASS |
 
-Lệnh fail không gắn eval: không có. Lệnh duy nhất đỏ là `bun _acceptance/zalo-hoi-okr-khong-chet/rang/c33.mjs --ep`, đã gắn E8 và nằm trong khối E8 bên dưới.
+Lệnh fail không gắn eval: không có.
 
 ## Evidence
 
 - eval: E1
-  run_id: minted-zalo-hoi-okr-khong-chet-E1-r3
+  run_id: ""
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.zhok_c33
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
   output: |
     C33: 6/6 luot dat
 
 - eval: E2
-  run_id: muzuri05lp4x
+  run_id: mv0a3eg514f3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zhok_ngoai
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
   output: |
-    test-run: dropped crm_muzuri05lp4x_test
+    test-run: dropped crm_mv0a3eg514f3_test
 
 - eval: E3
-  run_id: muzurinkj7uz
+  run_id: mv0a3e1cf3xa
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zhok_hook
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
   output: |
-    test-run: dropped crm_muzurinkj7uz_test
+    test-run: dropped crm_mv0a3e1cf3xa_test
 
 - eval: E4
-  run_id: minted-zalo-hoi-okr-khong-chet-E4-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-E4-r4
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.zhok_pham_vi
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
   output: |
-    PHAM VI: 32 tep, 0 ngoai ranh gioi
+    PHAM VI: 33 tep, 0 ngoai ranh gioi
 
 - eval: E5
-  run_id: minted-zalo-hoi-okr-khong-chet-E5-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-E5-r4
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.zhok_dot_bien
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
   output: |
-    DOT BIEN: 7/7 cap dat
+    DOT BIEN: 9/9 cap dat
 
 - eval: E6
-  run_id: minted-zalo-hoi-okr-khong-chet-E6-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-E6-r4
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.script.zhok_dau_cuoi
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
   output: |
     phien-do: xong — mã 0
 
 - eval: E7
-  run_id: muzurijygsb4
+  run_id: mv0a3dvx73r3
   exit_code: 0
-  baseline: n-a
+  baseline: red
   verifier: config:executors.test.zhok_nop_ngoai
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
   output: |
-    test-run: dropped crm_muzurijygsb4_test
+    test-run: dropped crm_mv0a3dvx73r3_test
 
 - eval: E8
-  run_id: minted-zalo-hoi-okr-khong-chet-E8-r3
-  exit_code: 1
-  baseline: n-a
+  run_id: minted-zalo-hoi-okr-khong-chet-E8-r4
+  exit_code: 0
+  baseline: red
   verifier: config:executors.script.zhok_ep
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
   output: |
-    luot 1: tra loi khong co nghia: Rất tiếc, thông tin về phần trăm đạt được của KR doanh thu quý này không có trong phần xem qua Zalo của OneHub Center. Bạn vui lòng mở OneHub Center trên máy tính để xem
+    EP: luot 1 goi subagent that, luot song — Tiến độ các KR (kể cả KR doanh thu) không được xem qua Zalo. Bạn mở OneHub Center, vào mục OKR để xem số phần trăm đạt được của KR doanh thu quý này nhé.
+
+- eval: E9
+  run_id: mv0a3ds7tygh
+  exit_code: 0
+  baseline: red
+  verifier: config:executors.test.zhok_khong_viec
+  verified_at: 2026-10-09T01:20:03Z
+  output: |
+    test-run: dropped crm_mv0a3ds7tygh_test
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_test_filter_api-r3
+  run_id: ""
   exit_code: 0
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_test_filter_app_filter_crm_ui-r4
   exit_code: 0
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_test_filter_agent_filter_crm_aut-r4
   exit_code: 0
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_test_filter_agent_okr_filter_crm-r4
   exit_code: 0
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bunx_turbo_run_lint_force-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bunx_turbo_run_lint_force-r4
   exit_code: 0
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
 
 - cmd: bun run lint:slop
-  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_lint_slop-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bun_run_lint_slop-r4
   exit_code: 0
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bunx_turbo_run_build_force-r3
+  run_id: minted-zalo-hoi-okr-khong-chet-SUITE-bunx_turbo_run_build_force-r4
   exit_code: 0
-  verified_at: 2026-10-08T18:10:10Z
+  verified_at: 2026-10-09T01:20:03Z
 
 ## Known limits
 
@@ -145,14 +155,15 @@ Lệnh fail không gắn eval: không có. Lệnh duy nhất đỏ là `bun _acc
 
 ## Analyst
 
-carried tu round 2 — baseline khong do lai round nay. Evals.yaml khong doi tu lan baseline cuoi (round 2), nen field baseline cua tung block eval ghi n-a. Khong co eval khong-phan-biet duoc liet ke. Lenh suite xanh-ca-hai-phia la regression-guard binh thuong, khong liet ke.
+none — moi eval feature deu red tren baseline (co phan biet)
 
 ## Variance
 
-none — moi eval chay mot lan (runs 1), khong eval nao co pass_rate hon hop.
+none — every multi-run eval is uniform
 
 ## Iterations
 
 Round 1: hook cu giet luot tren eve that (do-3 do) va E6 vuong eve dev dang chay o E1/E8. Returned to implementation.
 Round 2: BLOCKED — E6 lenh bi chan, E2/E5 dung CSDL chung. Returned to implementation (lenh do cham CSDL co kho rieng, E6 qua dau-cuoi.mjs, E8 vao model_evals).
 Round 3: E8 failed — o HEAD 121278631 luot 1 cua c33 --ep co goi subagent that, nhung tin Zalo tra loi khong chua chu «OKR» nen phep kiem (3) do. Bay eval con lai va nam lenh suite xanh.
+Round 4: chin eval (E1-E9) va bay lenh suite xanh o HEAD c872f7810; moi eval feature deu red tren baseline. Phien con khong viec nay tra cau lyDo nen E8 qua, E9 them cho AC-8.
