@@ -393,6 +393,7 @@ export function HoiThoaiSoan({
 	moMoc: (moc: MocNop) => void;
 }) {
 	const m = okrSoanMessages(useLocale());
+	const mui = useMessages();
 	const { slug } = useParams<{ slug: string }>();
 	const tuKara = s.transcript.filter((t) => !t.mine);
 	const cuoiKara = tuKara.at(-1)?.id ?? null;
@@ -413,7 +414,7 @@ export function HoiThoaiSoan({
 					}
 				/>
 				{s.dangTraLoi ? (
-					<KaraState kind="working" label={m.hoiThoai.dangSoan} />
+					<KaraState kind="working" label={mui.karaKhung.dangSoan} />
 				) : null}
 			</KaraDockHeader>
 			<KaraDockBody scroll={false}>

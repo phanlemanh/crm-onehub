@@ -364,6 +364,9 @@ describe("sk-dau", () => {
 				expect(
 					dauKara?.querySelector("[data-kara-state='working']"),
 				).not.toBeNull();
+				expect(
+					`mot ten kara: ${dauKara?.textContent?.includes("Trợ lý")}`,
+				).toBe("mot ten kara: false");
 				expect(document.body.textContent?.includes(m.banNhap.rong)).toBe(false);
 			} else if (ca === "co-nhap") {
 				datDanhSach({ dong: BAN_NHAP });
