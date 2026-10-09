@@ -99,7 +99,6 @@ evals:
   - id: E4
     criterion: AC-4
     executor: test
-    layer: ui-observed
     cmd: config:executors.test.dpv_them_buoc_dom
     paths:
       - "apps/app/components/crm/record-sheet/plan-steps.tsx"
@@ -115,7 +114,6 @@ evals:
   - id: E5
     criterion: AC-5
     executor: test
-    layer: ui-observed
     cmd: config:executors.test.dpv_them_buoc_dom
     paths:
       - "apps/app/components/crm/record-sheet/plan-steps.tsx"
@@ -144,7 +142,6 @@ evals:
   - id: E6b
     criterion: AC-6
     executor: test
-    layer: ui-observed
     cmd: config:executors.test.dpv_them_buoc_dom
     paths:
       - "apps/app/components/crm/record-sheet/plan-steps.tsx"
@@ -177,7 +174,6 @@ evals:
   - id: E7b
     criterion: AC-7
     executor: test
-    layer: ui-observed
     cmd: config:executors.test.dpv_the_qua_han_dom
     paths:
       - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
@@ -193,7 +189,6 @@ evals:
   - id: E8
     criterion: AC-8
     executor: test
-    layer: ui-observed
     cmd: config:executors.test.dpv_the_qua_han_dom
     paths:
       - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"

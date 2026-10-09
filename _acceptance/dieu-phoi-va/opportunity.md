@@ -27,7 +27,7 @@ Cổng Đáng: build — chủ kho ký cho E3, E1, E4, E5, E6 lúc 2026-10-07T13
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: sau khi lên production, mã đối tác lệch có tới tay người, kế hoạch rỗng có thêm được bước, và thẻ quá hạn có nói đúng số không? [đề xuất]
-- Kết quả nào là SỐNG: ở phiên nghiệm thu, (1) mọi mã lệch của lô thật trong 7 ngày đầu đều thành việc mở của người phụ trách kế hoạch, 0 hàng `onboarding-identify` rút vì hết lượt; (2) người thử thêm được bước đầu cho một kế hoạch rỗng và bước cho một bộ phận chưa có bước, 0 lần hỏi; (3) số trên thẻ «Việc quá hạn» bằng số đếm thẳng trong cơ sở dữ liệu cho cùng người. [đề xuất]
+- Kết quả nào là SỐNG: ở phiên nghiệm thu, (1) mọi mã lệch của lô thật trong 7 ngày đầu đều thành việc mở của người cầm trịch kế hoạch, 0 hàng `onboarding-identify` rút vì hết lượt; (2) người thử thêm được bước đầu cho một kế hoạch rỗng và bước cho một bộ phận chưa có bước, 0 lần hỏi; (3) số trên thẻ «Việc quá hạn» bằng số đếm thẳng trong cơ sở dữ liệu cho cùng người. [đề xuất]
 - Kết quả nào là CHẾT: một mã lệch không thành việc của ai; hoặc kế hoạch rỗng vẫn không thêm được bước từ màn; hoặc thẻ ghi số khác số đếm thật. [đề xuất]
 - Timebox: phiên nghiệm thu đầu tiên sau khi lên production, chậm nhất 2026-10-21. [đề xuất]
 

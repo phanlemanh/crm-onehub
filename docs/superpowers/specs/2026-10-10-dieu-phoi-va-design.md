@@ -24,7 +24,7 @@ design-pass có tên.
 
 ## Thiết kế
 
-### 1. Mã lệch thành việc cho người phụ trách kế hoạch (1A')
+### 1. Mã lệch thành việc cho người cầm trịch kế hoạch (1A')
 
 API giữ nguyên luật `docs/api.md` («No identity guessing»: mã không khớp ghi `AgentTask`, tác nhân quyết) và
 giữ nguyên `onboardingMatchNeeded`. Thay đổi nằm ở hai chỗ:
@@ -43,10 +43,10 @@ giữ nguyên `onboardingMatchNeeded`. Thay đổi nằm ở hai chỗ:
      trách — `DashboardService` lọc «Của tôi» theo `createdById`), `planId`, `companyId` của kế hoạch,
      `dueAt` = đầu ngày hôm nay giờ Việt Nam, `subject` «Gắn mã nền tảng <mã> vào đúng cá nhân», `body` một
      câu nói lô nào báo, `meta` `{ agent: "onboarding-identify", platformBrokerId }`. Rồi đóng `AgentTask`
-     với kết quả «đã giao việc cho người phụ trách».
+     với kết quả «đã giao việc cho người cầm trịch».
 
 Việc hiện ngay trong ngày ở dòng thời gian của kế hoạch (bộ lọc việc chưa xong). Thẻ «Việc quá hạn» của Tổng
-quan chỉ đếm việc có hạn trước hôm nay, nên việc chưa xong lên thẻ đó của người phụ trách từ hôm sau — không
+quan chỉ đếm việc có hạn trước hôm nay, nên việc chưa xong lên thẻ đó của người cầm trịch từ hôm sau — không
 đặt hạn lùi để ép nó lên sớm.
 
 Việc này không mang dấu Kara: không có phán đoán của mô hình, chỉ là định tuyến xác định (`docs/ai-ux.md` áp
