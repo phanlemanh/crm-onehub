@@ -1,6 +1,8 @@
 "use client";
 
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { Skeleton } from "@crm/ui/components/skeleton";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import type { Locale } from "@crm/ui/lib/locale";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -28,7 +30,8 @@ export function WebsiteActivity({
 }) {
 	const trpc = useTRPC();
 	const locale = useLocale();
-	const m = crmMessages(locale).web;
+	const crm = crmMessages(locale);
+	const m = crm.web;
 
 	const company = useQuery({
 		...trpc.tracking.companyActivity.queryOptions({
@@ -44,7 +47,31 @@ export function WebsiteActivity({
 		enabled: Boolean(contactId) && !companyId,
 	});
 
-	const activity = companyId ? company.data : contact.data;
+	const query = companyId ? company : contact;
+	const activity = query.data;
+
+	if (query.isLoading)
+		return (
+			<DetailSheetSection title={m.title}>
+				<div aria-busy="true" className="flex flex-col gap-2">
+					<span className="sr-only">{crm.vungCon.dangTai}</span>
+					<Skeleton className="h-4 w-2/3" />
+					<Skeleton className="h-4 w-1/2" />
+				</div>
+			</DetailSheetSection>
+		);
+
+	if (query.isError)
+		return (
+			<DetailSheetSection title={m.title}>
+				<VungTaiLoi
+					tieuDe={m.loiTieuDe}
+					moTa={crm.vungCon.loiMoTa}
+					onThuLai={() => void query.refetch()}
+					dangTai={query.isFetching}
+				/>
+			</DetailSheetSection>
+		);
 
 	if (!activity?.identified) return null;
 	if (activity.pages.length === 0 && !activity.firstTouch) return null;

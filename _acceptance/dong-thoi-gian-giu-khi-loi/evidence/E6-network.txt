@@ -1,0 +1,1 @@
+network: khong co driver doc network (bun/playwright script); console BAD_REQUEST bi co y gay ra boi buoc

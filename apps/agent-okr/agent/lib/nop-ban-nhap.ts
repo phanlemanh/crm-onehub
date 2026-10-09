@@ -7,7 +7,12 @@ import {
 	nacCuaDonVi,
 	type TRANG_THAI_DE_XUAT,
 } from "@crm/db/okr-tro-ly-danh-muc";
-import { type BanNhap, laChoGiuPhien } from "@crm/validation/okr-cuoc-soan";
+import {
+	type BanNhap,
+	KET_QUA_NOP,
+	laChoGiuPhien,
+	lyDoTuChoiGhi,
+} from "@crm/validation/okr-cuoc-soan";
 import {
 	type DongKiemSoan,
 	dongBiLoaiSoan,
@@ -35,8 +40,8 @@ type TrangThaiGiu = (typeof TRO_LY_OKR_SOAN.trangThaiGiuKhoa)[number];
 const GIU = TRO_LY_OKR_SOAN.giuNguyen;
 
 export const ketQuaNop = z.object({
-	ketQua: z.enum(["da-ghi", "tu-choi"]),
-	lyDo: z.string(),
+	ketQua: z.enum(KET_QUA_NOP),
+	lyDo: lyDoTuChoiGhi,
 	soDong: z.number().int(),
 	biLoai: z.array(dongBiLoaiSoan),
 	giuNguyen: z.array(
@@ -67,7 +72,7 @@ type DaQuyet = {
 
 const TU_CHOI = TRO_LY_OKR_SOAN.tuChoi;
 
-const tuChoi = (lyDo: string): KetQuaNop => ({
+const tuChoi = (lyDo: (typeof TU_CHOI)[keyof typeof TU_CHOI]): KetQuaNop => ({
 	ketQua: "tu-choi",
 	lyDo,
 	soDong: 0,

@@ -1,5 +1,7 @@
 import { db } from "@crm/db";
 import type { LoaiGiaiDoan } from "@crm/db/giai-doan";
+import { caNhanCoSo } from "@crm/db/so-dien-thoai";
+import { soQuocNoiDeTim } from "@crm/validation/so-dien-thoai";
 import { domainOf, normalise } from "./names";
 
 export type RecordKind = "contact" | "company" | "deal";
@@ -98,6 +100,7 @@ export async function listDeals(options: DealListOptions = {}) {
 		select: {
 			id: true,
 			name: true,
+			stage: true,
 			giaiDoan: { select: { label: true } },
 			amount: true,
 			currency: true,
@@ -135,6 +138,7 @@ export async function listDeals(options: DealListOptions = {}) {
 				id: deal.id,
 				name: deal.name,
 				stage: deal.giaiDoan.label,
+				stageId: deal.stage,
 				amount: deal.amount === null ? null : Number(deal.amount),
 				currency: deal.currency,
 				company: deal.company,
@@ -192,6 +196,8 @@ async function searchContacts(
 	email: string | null,
 	limit: number,
 ): Promise<ContactHit[]> {
+	const digits = soQuocNoiDeTim(term);
+	const byPhone = new Set(digits ? await caNhanCoSo(db, digits) : []);
 	const contains = words.flatMap((word) => [
 		{ firstName: { contains: word, mode: "insensitive" as const } },
 		{ lastName: { contains: word, mode: "insensitive" as const } },
@@ -206,6 +212,7 @@ async function searchContacts(
 					: []),
 				...contains,
 				{ company: { name: { contains: term, mode: "insensitive" as const } } },
+				...(byPhone.size > 0 ? [{ id: { in: [...byPhone] } }] : []),
 			],
 		},
 		orderBy: [{ lastActivityAt: "desc" }, { createdAt: "asc" }],
@@ -225,7 +232,9 @@ async function searchContacts(
 		.map((row) => {
 			const name = [row.firstName, row.lastName].filter(Boolean).join(" ");
 			return {
-				score: score(term, [name, row.email ?? "", row.company?.name ?? ""]),
+				score: byPhone.has(row.id)
+					? 4
+					: score(term, [name, row.email ?? "", row.company?.name ?? ""]),
 				hit: {
 					kind: "contact" as const,
 					id: row.id,

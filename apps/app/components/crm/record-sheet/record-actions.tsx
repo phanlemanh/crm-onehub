@@ -23,6 +23,7 @@ import {
 } from "@crm/ui/components/dropdown-menu";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { baoDaLuuTru } from "@crm/ui/lib/bao-luu-tru";
 import type { Locale } from "@crm/ui/lib/locale";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -49,7 +50,7 @@ const RECORD_PROCEDURES = {
 	deal: "deals",
 } satisfies Record<EntityKind, "companies" | "contacts" | "deals">;
 
-function useArchiveRecord(record: EntityRef) {
+function useArchiveRecord(record: EntityRef, onHoanTac: () => void) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
 	const trpc = useTRPC();
@@ -57,12 +58,14 @@ function useArchiveRecord(record: EntityRef) {
 
 	const handlers = {
 		onSuccess: (archived: { name: string }) => {
-			toast.success(
-				m.sheet.archived(
+			baoDaLuuTru({
+				thongDiep: m.sheet.archived(
 					archived.name ||
 						m.sheet.fallbackName(recordNoun(record.kind, locale)),
 				),
-			);
+				nhanHoanTac: m.sheet.hoanTac,
+				onHoanTac,
+			});
 			void cache[record.kind](record.id);
 		},
 		onError: (error: { message: string }) => toast.error(error.message),
@@ -73,7 +76,7 @@ function useArchiveRecord(record: EntityRef) {
 	);
 }
 
-function useRestoreRecord(record: EntityRef) {
+function useRestoreRecord(record: EntityRef, tuHoanTac = false) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
 	const trpc = useTRPC();
@@ -89,7 +92,8 @@ function useRestoreRecord(record: EntityRef) {
 			);
 			void cache[record.kind](record.id);
 		},
-		onError: (error: { message: string }) => toast.error(error.message),
+		onError: (error: { message: string }) =>
+			toast.error(tuHoanTac ? m.sheet.hoanTacLoi : error.message),
 	};
 
 	return useMutation(
@@ -136,11 +140,18 @@ export function RecordActions({
 	const locale = useLocale();
 	const m = crmMessages(locale);
 	const [confirming, setConfirming] = useState(false);
-	const archive = useArchiveRecord(record);
 	const restore = useRestoreRecord(record);
+	const hoanTac = useRestoreRecord(record, true);
+	const archive = useArchiveRecord(record, () =>
+		hoanTac.mutate({ id: record.id }),
+	);
 	const purge = usePurgeRecord(record);
 
-	const pending = archive.isPending || restore.isPending || purge.isPending;
+	const pending =
+		archive.isPending ||
+		restore.isPending ||
+		hoanTac.isPending ||
+		purge.isPending;
 
 	return (
 		<>

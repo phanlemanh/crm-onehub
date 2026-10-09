@@ -83,6 +83,7 @@ const DA_NOI: ZaloCuaToi = {
 	lech: false,
 	dongTroLyOkr: true,
 	laTruongPhong: false,
+	canNoiLai: false,
 };
 
 const CAU_API = "Zalo chưa nhận tin thử. Thử lại sau ít phút.";

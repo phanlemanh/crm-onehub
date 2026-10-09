@@ -15,7 +15,12 @@ export const ZALO = {
 		tuChoi: { tu: 400, den: 500 },
 		tamLoi: [408, 429],
 	},
-	poll: { toiDaMoiNhip: 20, timeoutGiay: 1, giuDauMs: 7 * DAY_MS },
+	poll: {
+		toiDaMoiNhip: 20,
+		timeoutGiay: 1,
+		giuDauMs: 7 * DAY_MS,
+		lenhKeo: "getUpdates",
+	},
 	pollTay: { timeoutGiay: 30 },
 	webhook: {
 		duong: "/zalo/webhook",
@@ -26,6 +31,22 @@ export const ZALO = {
 	},
 	chatRieng: "PRIVATE",
 	tranKyTu: 2_000,
+	nhatKy: {
+		tranMoTa: 200,
+		tranThan: 4_000,
+		boQua: {
+			khongRieng: "khong-rieng",
+			daGap: "da-gap",
+			biChan: "bi-chan",
+			chuaNoi: "chua-noi",
+		},
+		tuChoiWebhook: {
+			khoaLech: "khoa-lech",
+			thieuKhoa: "thieu-khoa",
+			chuaCoBot: "chua-co-bot",
+		},
+		maThu: "webhook-test",
+	},
 	hoi: {
 		toiDaTin: 3,
 		an: "[đã ẩn]",
@@ -54,6 +75,7 @@ export const ZALO = {
 				"search_crm",
 				"zalo-chi-doc",
 				"okr-chi-tro-ly",
+				"tro-ly-okr-ngoai",
 			],
 			ghi: [
 				"archive_field",

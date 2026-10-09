@@ -80,7 +80,7 @@ export class ZaloRouter {
 		@Ctx() ctx: AuthedTrpcContext,
 		@Input() input: z.infer<typeof zaloLuuBotInput>,
 	) {
-		return this.zalo.luuBot(ctx.user.id, input.token);
+		return this.zalo.luuBot(ctx.user.id, input.token, input.xacNhanDoiBot);
 	}
 
 	@Mutation({

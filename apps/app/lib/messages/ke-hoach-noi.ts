@@ -17,7 +17,6 @@ const en = {
 		khongKhuon: "Not from a template",
 		batDau: "started {ngay}",
 		loi: "Couldn't load plans",
-		thuLai: "Try again",
 	},
 	caNhan: {
 		tieuDe: "First 30 days",
@@ -71,7 +70,6 @@ const vi: KeHoachNoiMessages = {
 		khongKhuon: "Không từ khuôn",
 		batDau: "bắt đầu {ngay}",
 		loi: "Không tải được kế hoạch",
-		thuLai: "Thử lại",
 	},
 	caNhan: {
 		tieuDe: "30 ngày đầu",

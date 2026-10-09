@@ -48,7 +48,7 @@ import {
 	krThieuSo,
 	soBanNhap,
 } from "./luat-ban-nhap";
-import { gioNopCuoi, mocTuTranscript } from "./moc-nop";
+import { gioNopCuoi, luotNop } from "./moc-nop";
 import { docSoDaLuu, ghiSoDaLuu, khoaSo } from "./so-theo-khoa";
 
 export function donViCua(cuoc: CuocSoan): DonViSoan {
@@ -401,6 +401,7 @@ export function useCuocSoan({
 			SOAN_UI.noiMs,
 		);
 	};
+	const luot = luotNop(transcript.flatMap((t) => t.items));
 	return {
 		agent,
 		busy,
@@ -424,7 +425,8 @@ export function useCuocSoan({
 		thuLai,
 		moLai,
 		transcript,
-		mocs: mocTuTranscript(transcript.flatMap((t) => t.items)),
+		mocs: luot.mocs,
+		nopKhongThanh: luot.khongThanh,
 		dung: () => agent.stop(),
 		gioNopCuoi: gioNopCuoi(transcript, agent.data.messages, agent.events),
 		nhan: nhap.ket.nhan,

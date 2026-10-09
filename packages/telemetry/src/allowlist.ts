@@ -1,4 +1,5 @@
 import { TASK_KINDS } from "@crm/db/agent-tasks";
+import { GIAI_DOAN_GOC, type LoaiGiaiDoan } from "@crm/db/giai-doan";
 
 export const ALLOWED_PROPERTIES = [
 	"crm_version",
@@ -142,6 +143,7 @@ export const AGENT_TOOLS = [
 	"set_chat_title",
 	"set_contact_socials",
 	"set_field_value",
+	"tro-ly-okr-ngoai",
 	"web_fetch",
 	"write_brief",
 	"write_workspace_profile",
@@ -231,6 +233,25 @@ const TASK_KIND_SET = new Set<string>(TASK_KINDS);
 
 export function permittedTaskKind(kind: string | null | undefined): string {
 	return kind && TASK_KIND_SET.has(kind) ? kind : OTHER;
+}
+
+const STAGE_OTHER = {
+	OPEN: "other_open",
+	WON: "other_won",
+	LOST: "other_lost",
+} as const satisfies Record<LoaiGiaiDoan, string>;
+
+export const DEAL_STAGE_KEYS = [
+	...Object.values(GIAI_DOAN_GOC),
+	STAGE_OTHER.OPEN,
+	STAGE_OTHER.WON,
+	STAGE_OTHER.LOST,
+] as const;
+
+const ORIGINAL_STAGES = new Set<string>(Object.values(GIAI_DOAN_GOC));
+
+export function permittedDealStage(id: string, kind: LoaiGiaiDoan): string {
+	return ORIGINAL_STAGES.has(id) ? id : STAGE_OTHER[kind];
 }
 
 export const SYNC_SOURCES = ["gmail", "calendar", "outlook"] as const;

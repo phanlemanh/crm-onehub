@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Khi Kara nộp bản nháp OKR mà máy chủ từ chối, hội thoại nói lý do bằng một câu đọc được theo ngôn ngữ người dùng đang chọn (tiếng Việt có dấu hoặc tiếng Anh), không còn ghép mã máy không dấu vào câu; lý do lạ hay rỗng thì chỉ hiện «Kara nộp bản nháp chưa được».",
+  "scope_plain": "Phần bỏ ngoài đã khai từ Cổng 1, không đổi:"
+}

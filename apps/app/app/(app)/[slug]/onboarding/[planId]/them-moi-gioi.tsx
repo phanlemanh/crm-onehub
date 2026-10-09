@@ -4,6 +4,7 @@ import { Combobox, type ComboboxOption } from "@crm/ui/components/combobox";
 import { Field, FieldLabel } from "@crm/ui/components/field";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useSearchInput } from "@crm/ui/hooks/use-search-input";
+import { hienThiSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useId, useState } from "react";
 import { contactName } from "@/components/crm/contact-name";
@@ -13,7 +14,7 @@ import { useTRPC } from "@/lib/trpc/client";
 
 const SO_GOI_Y = 20;
 
-function ChonCaNhan({
+export function ChonCaNhan({
 	id,
 	value,
 	onValueChange,
@@ -39,7 +40,11 @@ function ChonCaNhan({
 		return {
 			value: c.id,
 			label: contactName(c),
-			hint: daCo ? m.tao.moiGioi.daTrongPheu : (c.email ?? undefined),
+			hint: daCo
+				? m.tao.moiGioi.daTrongPheu
+				: c.phone
+					? hienThiSoDienThoai(c.phone)
+					: (c.email ?? undefined),
 			disabled: daCo,
 		};
 	});

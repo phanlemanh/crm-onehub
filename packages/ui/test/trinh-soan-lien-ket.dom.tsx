@@ -202,6 +202,7 @@ describe("chen-lien-ket-ui", () => {
 				`input[aria-label="${NHAN_LIEN_KET_TRANG.tim}"]`,
 			),
 		).toBeNull();
+		await choTraFocus(editor);
 		expect(editor.view.dom.contains(document.activeElement)).toBe(true);
 	});
 });
@@ -353,3 +354,42 @@ describe("kn-loi-tim", () => {
 		expect(sai).toEqual([]);
 	});
 });
+
+describe("chen-lien-ket-go", () => {
+	test("chen-lien-ket: go trinh soan khi hop dang mo thi khong loi chua bat", async () => {
+		const loi: string[] = [];
+		const nghe = (e: ErrorEvent) => {
+			loi.push(String(e.error?.message ?? e.message));
+		};
+		window.addEventListener("error", nghe);
+		try {
+			await mo("Một đoạn.\n");
+			await bam(nutLienKetTrang());
+			expect(
+				document.body.querySelector(
+					`input[aria-label="${NHAN_LIEN_KET_TRANG.tim}"]`,
+				),
+			).not.toBeNull();
+			act(() => root?.unmount());
+			root = null;
+			await new Promise((r) => setTimeout(r, 0));
+		} finally {
+			window.removeEventListener("error", nghe);
+		}
+		expect(loi).toEqual([]);
+	});
+});
+
+const CHO_FOCUS = { tranMs: 2000, buocMs: 10 } as const;
+
+async function choTraFocus(editor: Editor): Promise<void> {
+	const het = Date.now() + CHO_FOCUS.tranMs;
+	while (
+		!editor.view.dom.contains(document.activeElement) &&
+		Date.now() < het
+	) {
+		await act(async () => {
+			await new Promise((r) => setTimeout(r, CHO_FOCUS.buocMs));
+		});
+	}
+}
