@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 06d8b5620fe5ab0676d4dd72408dc9d2b6910884
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-09 — ký Cổng 2 trên verdict PASS 5/5 eval (S4 vòng 1, wf_776b90a1-496). Ngoài-1..4 (thước do-7-ngay.mjs) và hai phát hiện trong hợp đồng mức thấp gom vào hợp đồng mới; Ngoài-5, 6 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: ci-ma-tran-ba-o

@@ -5,7 +5,7 @@ slug: ci-ma-tran-ba-o
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
 design_doc: _acceptance/ci-ma-tran-ba-o/design.md
@@ -74,3 +74,7 @@ CLAUDE.md đang cấm sửa `ci.yml`.
   (luật 47, 09/10): bước test chạy thành ma trận ba ô trên ba máy. Kéo bản mới của hãng về `release` rồi gộp sang
   `onehub` mà đụng tệp này thì giữ bản của OneHub, chỉ chép tay phần hãng đổi mà OneHub cần.»
 - Đóng PR nháp #323 khi vòng này gộp.
+- Known limit (Cổng 2, Ngoài-5): E1 chỉ chắc rằng biến môi trường của ô test còn đủ tên; đổi giá trị hay cấu hình cơ
+  sở dữ liệu thì E1 vẫn xanh.
+- Known limit (Cổng 2, Ngoài-6): «số đo 10,1′ và 11,2′ là của đúng cấu hình được gộp» dựa vào bản chép
+  `rang/ci-323.yml` và blob sha ghi tay, chưa được máy đối chiếu lại với chính lượt đã chạy.
