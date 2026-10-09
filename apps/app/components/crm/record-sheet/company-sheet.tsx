@@ -69,7 +69,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { CompanyPlans } from "./company-plans";
 import { QuickAddContact, QuickAddDeal } from "./quick-add";
-import { RecordActions } from "./record-actions";
+import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
 import {
 	AddRow,
 	CompanyAbout,
@@ -304,36 +304,44 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 			}
 			stats={
 				company ? (
-					<DetailSheetStats>
-						<DetailSheetStat label={m.company.openPipeline}>
-							{openDeals.some((deal) => deal.amountCents !== null) ? (
-								<span className="tabular-nums">
-									{formatMoney(
-										openValueCents,
-										company.reportingCurrency,
-										locale,
-									)}
-								</span>
-							) : (
-								<EmptyCellValue />
-							)}
-							{openUncounted > 0 ? (
-								<span className="text-muted-foreground">
-									{" "}
-									{m.company.unconverted(String(openUncounted))}
-								</span>
-							) : null}
-						</DetailSheetStat>
-						<DetailSheetStat label={m.company.openDeals}>
-							<span className="tabular-nums">{openDeals.length}</span>
-						</DetailSheetStat>
-						<DetailSheetStat label={m.company.nextClose}>
-							{closing ? <LocalDay date={closing} /> : <EmptyCellValue />}
-						</DetailSheetStat>
-						<DetailSheetStat label={m.company.fields.owner}>
-							<OwnerCell owner={company.owner} />
-						</DetailSheetStat>
-					</DetailSheetStats>
+					<>
+						{company.archivedAt ? (
+							<DaiLuuTru
+								record={{ kind: "company", id: company.id }}
+								archivedAt={company.archivedAt}
+							/>
+						) : null}
+						<DetailSheetStats>
+							<DetailSheetStat label={m.company.openPipeline}>
+								{openDeals.some((deal) => deal.amountCents !== null) ? (
+									<span className="tabular-nums">
+										{formatMoney(
+											openValueCents,
+											company.reportingCurrency,
+											locale,
+										)}
+									</span>
+								) : (
+									<EmptyCellValue />
+								)}
+								{openUncounted > 0 ? (
+									<span className="text-muted-foreground">
+										{" "}
+										{m.company.unconverted(String(openUncounted))}
+									</span>
+								) : null}
+							</DetailSheetStat>
+							<DetailSheetStat label={m.company.openDeals}>
+								<span className="tabular-nums">{openDeals.length}</span>
+							</DetailSheetStat>
+							<DetailSheetStat label={m.company.nextClose}>
+								{closing ? <LocalDay date={closing} /> : <EmptyCellValue />}
+							</DetailSheetStat>
+							<DetailSheetStat label={m.company.fields.owner}>
+								<OwnerCell owner={company.owner} />
+							</DetailSheetStat>
+						</DetailSheetStats>
+					</>
 				) : null
 			}
 			tabs={tabs}
@@ -368,107 +376,109 @@ function CompanyOverview({ company }: { company: Company }) {
 	const isSavingField = savingValue(update);
 
 	return (
-		<DetailSheetBody>
-			<DetailSheetSplit>
-				<DetailSheetMain>
-					<CompanyAbout
-						title={m.section.about}
-						description={company.description}
-					/>
+		<KhoaLuuTru khoa={company.archivedAt !== null}>
+			<DetailSheetBody>
+				<DetailSheetSplit>
+					<DetailSheetMain>
+						<CompanyAbout
+							title={m.section.about}
+							description={company.description}
+						/>
 
-					<WebsiteActivity companyId={company.id} />
-				</DetailSheetMain>
+						<WebsiteActivity companyId={company.id} />
+					</DetailSheetMain>
 
-				<DetailSheetRail>
-					<DetailSheetSection
-						title={m.company.details}
-						action={<FieldsCog kind="company" />}
-					>
-						<DetailSheetProperties columns={1}>
-							<InlineField
-								label={m.company.fields.name}
-								value={company.name}
-								saving={isSaving("name")}
-								onSave={(name) => name && save({ name })}
-							/>
-							<InlineField
-								label={m.company.fields.domain}
-								value={company.domain}
-								type="url"
-								placeholder={m.company.domainPlaceholder}
-								saving={isSaving("domain")}
-								onSave={(domain) => save({ domain })}
-							/>
-							<InlineField
-								label={m.company.fields.website}
-								value={company.website}
-								type="url"
-								placeholder={m.company.websitePlaceholder}
-								saving={isSaving("website")}
-								onSave={(website) => save({ website })}
-							/>
-							<InlineField
-								label={m.company.fields.phone}
-								value={company.phone}
-								type="tel"
-								saving={isSaving("phone")}
-								onSave={(phone) => save({ phone })}
-							/>
-							<InlineField
-								label={m.company.fields.email}
-								value={company.email}
-								type="email"
-								saving={isSaving("email")}
-								onSave={(email) => save({ email })}
-							/>
-							<InlineField
-								label={m.company.fields.city}
-								value={company.city}
-								saving={isSaving("city")}
-								onSave={(city) => save({ city })}
-							/>
-							<InlineField
-								label={m.company.fields.country}
-								value={company.country}
-								saving={isSaving("country")}
-								onSave={(country) => save({ country })}
-							/>
-							<InlineSelectField
-								label={m.company.fields.owner}
-								value={company.owner?.id ?? UNASSIGNED}
-								options={[
-									{ value: UNASSIGNED, label: m.company.fields.unassigned },
-									...(users.data ?? []).map((user) => ({
-										value: user.id,
-										label: user.name,
-									})),
-								]}
-								emptyValue={UNASSIGNED}
-								onSave={(ownerId) =>
-									save({ ownerId: ownerId === UNASSIGNED ? null : ownerId })
-								}
-							/>
-							<RecordFields
-								fields={company.fields}
-								saving={isSavingField}
-								onSave={saveFields}
-							/>
-						</DetailSheetProperties>
-					</DetailSheetSection>
-
-					<DetailSheetPending
-						fields={pendingFields(company, locale)}
-						running={isEnriching(company.enrichmentStatus, company.queued)}
-					/>
-
-					{hasCompanyLinks(company) ? (
-						<DetailSheetSection title={m.section.links}>
-							<CompanySocials company={company} />
+					<DetailSheetRail>
+						<DetailSheetSection
+							title={m.company.details}
+							action={<FieldsCog kind="company" />}
+						>
+							<DetailSheetProperties columns={1}>
+								<InlineField
+									label={m.company.fields.name}
+									value={company.name}
+									saving={isSaving("name")}
+									onSave={(name) => name && save({ name })}
+								/>
+								<InlineField
+									label={m.company.fields.domain}
+									value={company.domain}
+									type="url"
+									placeholder={m.company.domainPlaceholder}
+									saving={isSaving("domain")}
+									onSave={(domain) => save({ domain })}
+								/>
+								<InlineField
+									label={m.company.fields.website}
+									value={company.website}
+									type="url"
+									placeholder={m.company.websitePlaceholder}
+									saving={isSaving("website")}
+									onSave={(website) => save({ website })}
+								/>
+								<InlineField
+									label={m.company.fields.phone}
+									value={company.phone}
+									type="tel"
+									saving={isSaving("phone")}
+									onSave={(phone) => save({ phone })}
+								/>
+								<InlineField
+									label={m.company.fields.email}
+									value={company.email}
+									type="email"
+									saving={isSaving("email")}
+									onSave={(email) => save({ email })}
+								/>
+								<InlineField
+									label={m.company.fields.city}
+									value={company.city}
+									saving={isSaving("city")}
+									onSave={(city) => save({ city })}
+								/>
+								<InlineField
+									label={m.company.fields.country}
+									value={company.country}
+									saving={isSaving("country")}
+									onSave={(country) => save({ country })}
+								/>
+								<InlineSelectField
+									label={m.company.fields.owner}
+									value={company.owner?.id ?? UNASSIGNED}
+									options={[
+										{ value: UNASSIGNED, label: m.company.fields.unassigned },
+										...(users.data ?? []).map((user) => ({
+											value: user.id,
+											label: user.name,
+										})),
+									]}
+									emptyValue={UNASSIGNED}
+									onSave={(ownerId) =>
+										save({ ownerId: ownerId === UNASSIGNED ? null : ownerId })
+									}
+								/>
+								<RecordFields
+									fields={company.fields}
+									saving={isSavingField}
+									onSave={saveFields}
+								/>
+							</DetailSheetProperties>
 						</DetailSheetSection>
-					) : null}
-				</DetailSheetRail>
-			</DetailSheetSplit>
-		</DetailSheetBody>
+
+						<DetailSheetPending
+							fields={pendingFields(company, locale)}
+							running={isEnriching(company.enrichmentStatus, company.queued)}
+						/>
+
+						{hasCompanyLinks(company) ? (
+							<DetailSheetSection title={m.section.links}>
+								<CompanySocials company={company} />
+							</DetailSheetSection>
+						) : null}
+					</DetailSheetRail>
+				</DetailSheetSplit>
+			</DetailSheetBody>
+		</KhoaLuuTru>
 	);
 }
 

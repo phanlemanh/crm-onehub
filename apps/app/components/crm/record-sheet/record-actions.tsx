@@ -4,6 +4,7 @@ import Archive from "@carbon/icons-react/es/Archive";
 import OverflowMenuVertical from "@carbon/icons-react/es/OverflowMenuVertical";
 import TrashCan from "@carbon/icons-react/es/TrashCan";
 import Undo from "@carbon/icons-react/es/Undo";
+import { Alert, AlertAction, AlertTitle } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
@@ -17,8 +18,9 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { baoDaLuuTru } from "@crm/ui/lib/bao-luu-tru";
 import type { Locale } from "@crm/ui/lib/locale";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { toast } from "sonner";
+import { LocalDateTime } from "@/components/local-date-time";
 import { companyMessages } from "@/lib/messages/companies";
 import { contactMessages } from "@/lib/messages/contacts";
 import { crmMessages } from "@/lib/messages/crm";
@@ -192,5 +194,62 @@ export function RecordActions({
 				pending={purge.isPending}
 			/>
 		</>
+	);
+}
+
+const NGAY_LUU_TRU: Intl.DateTimeFormatOptions = {
+	day: "2-digit",
+	month: "2-digit",
+	year: "numeric",
+};
+
+export function DaiLuuTru({
+	record,
+	archivedAt,
+}: {
+	record: EntityRef;
+	archivedAt: string;
+}) {
+	const m = crmMessages(useLocale());
+	const restore = useRestoreRecord(record);
+	return (
+		<div className="shrink-0 border-b p-3">
+			<Alert data-dai-luu-tru="">
+				<Icon icon={Archive} />
+				<AlertTitle>
+					{m.sheet.daLuuTruNgay}{" "}
+					<LocalDateTime date={archivedAt} options={NGAY_LUU_TRU} />
+				</AlertTitle>
+				<AlertAction>
+					<Button
+						variant="outline"
+						size="sm"
+						disabled={restore.isPending}
+						onClick={() => restore.mutate({ id: record.id })}
+					>
+						<Icon icon={Undo} data-icon="inline-start" />
+						{m.bulk.restore}
+					</Button>
+				</AlertAction>
+			</Alert>
+		</div>
+	);
+}
+
+export function KhoaLuuTru({
+	khoa,
+	children,
+}: {
+	khoa: boolean;
+	children: ReactNode;
+}) {
+	return (
+		<fieldset
+			disabled={khoa}
+			data-khoa-luu-tru={khoa ? "" : undefined}
+			className="contents"
+		>
+			{children}
+		</fieldset>
 	);
 }

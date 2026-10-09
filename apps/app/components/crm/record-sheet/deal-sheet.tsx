@@ -65,7 +65,7 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { AttachDealContact } from "./quick-add";
-import { RecordActions } from "./record-actions";
+import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
 import { AddRow, RecordSheetFrame } from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
 
@@ -209,11 +209,13 @@ export function DealSheet({ dealId }: { dealId: string }) {
 			actions={
 				deal ? (
 					<>
-						<DealStageMenu
-							dealId={deal.id}
-							stage={deal.stage}
-							variant="control"
-						/>
+						<KhoaLuuTru khoa={deal.archivedAt !== null}>
+							<DealStageMenu
+								dealId={deal.id}
+								stage={deal.stage}
+								variant="control"
+							/>
+						</KhoaLuuTru>
 						<RecordActions
 							record={{ kind: "deal", id: deal.id }}
 							name={deal.name}
@@ -228,34 +230,42 @@ export function DealSheet({ dealId }: { dealId: string }) {
 			}
 			stats={
 				deal ? (
-					<DetailSheetStats>
-						<DetailSheetStat label={m.deal.fields.amount}>
-							{deal.amountCents === null ? (
-								<EmptyCellValue />
-							) : (
-								<span className="tabular-nums">
-									{formatMoney(
-										deal.amountCents,
-										dealCurrency(deal.currency),
-										locale,
-									)}
-								</span>
-							)}
-						</DetailSheetStat>
-						<DetailSheetStat label={m.deal.expectedClose}>
-							{deal.expectedCloseDate ? (
-								<LocalDay date={deal.expectedCloseDate} />
-							) : (
-								<EmptyCellValue />
-							)}
-						</DetailSheetStat>
-						<DetailSheetStat label={m.deal.inStage}>
-							<LocalRelativeTime date={deal.stageChangedAt} />
-						</DetailSheetStat>
-						<DetailSheetStat label={m.deal.fields.owner}>
-							<OwnerCell owner={deal.owner} />
-						</DetailSheetStat>
-					</DetailSheetStats>
+					<>
+						{deal.archivedAt ? (
+							<DaiLuuTru
+								record={{ kind: "deal", id: deal.id }}
+								archivedAt={deal.archivedAt}
+							/>
+						) : null}
+						<DetailSheetStats>
+							<DetailSheetStat label={m.deal.fields.amount}>
+								{deal.amountCents === null ? (
+									<EmptyCellValue />
+								) : (
+									<span className="tabular-nums">
+										{formatMoney(
+											deal.amountCents,
+											dealCurrency(deal.currency),
+											locale,
+										)}
+									</span>
+								)}
+							</DetailSheetStat>
+							<DetailSheetStat label={m.deal.expectedClose}>
+								{deal.expectedCloseDate ? (
+									<LocalDay date={deal.expectedCloseDate} />
+								) : (
+									<EmptyCellValue />
+								)}
+							</DetailSheetStat>
+							<DetailSheetStat label={m.deal.inStage}>
+								<LocalRelativeTime date={deal.stageChangedAt} />
+							</DetailSheetStat>
+							<DetailSheetStat label={m.deal.fields.owner}>
+								<OwnerCell owner={deal.owner} />
+							</DetailSheetStat>
+						</DetailSheetStats>
+					</>
 				) : null
 			}
 			tabs={tabs}
@@ -293,92 +303,94 @@ function DealOverview({ deal }: { deal: Deal }) {
 	const isSaving = savingField(update);
 
 	return (
-		<DetailSheetBody>
-			<DetailSheetSection title={m.deal.stageSection}>
-				<StageStepper dealId={deal.id} stage={deal.stage} />
+		<KhoaLuuTru khoa={deal.archivedAt !== null}>
+			<DetailSheetBody>
+				<DetailSheetSection title={m.deal.stageSection}>
+					<StageStepper dealId={deal.id} stage={deal.stage} />
 
-				{deal.closedReason ? (
+					{deal.closedReason ? (
+						<DetailSheetProperties>
+							<DetailSheetProperty label={m.deal.closed}>
+								{deal.closedAt ? (
+									<LocalDateTime date={deal.closedAt} options={DATE_OPTIONS} />
+								) : (
+									<EmptyCellValue />
+								)}
+							</DetailSheetProperty>
+							<DetailSheetProperty label={m.deal.reason} wide>
+								{deal.closedReason}
+							</DetailSheetProperty>
+						</DetailSheetProperties>
+					) : null}
+				</DetailSheetSection>
+
+				<DetailSheetSection
+					title={m.deal.details}
+					action={<FieldsCog kind="deal" />}
+				>
 					<DetailSheetProperties>
-						<DetailSheetProperty label={m.deal.closed}>
-							{deal.closedAt ? (
-								<LocalDateTime date={deal.closedAt} options={DATE_OPTIONS} />
-							) : (
-								<EmptyCellValue />
-							)}
-						</DetailSheetProperty>
-						<DetailSheetProperty label={m.deal.reason} wide>
-							{deal.closedReason}
-						</DetailSheetProperty>
+						<InlineField
+							label={m.deal.fields.name}
+							value={deal.name}
+							saving={isSaving("name")}
+							onSave={(name) => name && save({ name })}
+						/>
+						<InlineMoneyField
+							label={m.deal.fields.amount}
+							cents={deal.amountCents}
+							currency={currency}
+							saving={isSaving("amountCents")}
+							onSave={(amountCents) => save({ amountCents })}
+						/>
+						<InlineSelectField
+							label={m.deal.fields.currency}
+							value={currency}
+							options={currencyOptions(currency, m)}
+							onSave={(currency) => save({ currency })}
+						/>
+						<ReportedValue deal={deal} />
+						<InlineDateField
+							label={m.deal.fields.closeDate}
+							value={deal.expectedCloseDate}
+							saving={isSaving("expectedCloseDate")}
+							onSave={(next) => save({ expectedCloseDate: next || null })}
+						/>
+						<InlineCompanyField
+							value={deal.company.id}
+							company={deal.company}
+							saving={isSaving("companyId")}
+							onSave={(companyId) => save({ companyId })}
+						/>
+						<InlineSelectField
+							label={m.deal.fields.owner}
+							value={deal.owner.id}
+							options={(users.data ?? []).map((user) => ({
+								value: user.id,
+								label: user.name,
+							}))}
+							onSave={(ownerId) => save({ ownerId })}
+						/>
+						<RecordFields
+							fields={deal.fields}
+							saving={isSavingField}
+							onSave={saveFields}
+						/>
 					</DetailSheetProperties>
-				) : null}
-			</DetailSheetSection>
+				</DetailSheetSection>
 
-			<DetailSheetSection
-				title={m.deal.details}
-				action={<FieldsCog kind="deal" />}
-			>
-				<DetailSheetProperties>
-					<InlineField
-						label={m.deal.fields.name}
-						value={deal.name}
-						saving={isSaving("name")}
-						onSave={(name) => name && save({ name })}
+				<DetailSheetSection title={m.deal.description}>
+					<InlineTextArea
+						label={m.deal.description}
+						value={deal.description}
+						placeholder={m.deal.descriptionHint(deal.company.name)}
+						saving={isSaving("description")}
+						onSave={(description) => save({ description })}
 					/>
-					<InlineMoneyField
-						label={m.deal.fields.amount}
-						cents={deal.amountCents}
-						currency={currency}
-						saving={isSaving("amountCents")}
-						onSave={(amountCents) => save({ amountCents })}
-					/>
-					<InlineSelectField
-						label={m.deal.fields.currency}
-						value={currency}
-						options={currencyOptions(currency, m)}
-						onSave={(currency) => save({ currency })}
-					/>
-					<ReportedValue deal={deal} />
-					<InlineDateField
-						label={m.deal.fields.closeDate}
-						value={deal.expectedCloseDate}
-						saving={isSaving("expectedCloseDate")}
-						onSave={(next) => save({ expectedCloseDate: next || null })}
-					/>
-					<InlineCompanyField
-						value={deal.company.id}
-						company={deal.company}
-						saving={isSaving("companyId")}
-						onSave={(companyId) => save({ companyId })}
-					/>
-					<InlineSelectField
-						label={m.deal.fields.owner}
-						value={deal.owner.id}
-						options={(users.data ?? []).map((user) => ({
-							value: user.id,
-							label: user.name,
-						}))}
-						onSave={(ownerId) => save({ ownerId })}
-					/>
-					<RecordFields
-						fields={deal.fields}
-						saving={isSavingField}
-						onSave={saveFields}
-					/>
-				</DetailSheetProperties>
-			</DetailSheetSection>
+				</DetailSheetSection>
 
-			<DetailSheetSection title={m.deal.description}>
-				<InlineTextArea
-					label={m.deal.description}
-					value={deal.description}
-					placeholder={m.deal.descriptionHint(deal.company.name)}
-					saving={isSaving("description")}
-					onSave={(description) => save({ description })}
-				/>
-			</DetailSheetSection>
-
-			<WhereItStands deal={deal} />
-		</DetailSheetBody>
+				<WhereItStands deal={deal} />
+			</DetailSheetBody>
+		</KhoaLuuTru>
 	);
 }
 
