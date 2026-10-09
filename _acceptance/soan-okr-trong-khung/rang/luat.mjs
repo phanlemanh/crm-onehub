@@ -42,7 +42,8 @@ function globSangRe(mau) {
 
 export function muc1(dongThem) {
 	const sai = dongThem.filter(
-		(d) => KHU_KHONG_SO.some((k) => d.tep.startsWith(k)) && BE_NGANG_SO.test(d.chu),
+		(d) =>
+			KHU_KHONG_SO.some((k) => d.tep.startsWith(k)) && BE_NGANG_SO.test(d.chu),
 	);
 	return sai.length === 0
 		? null
@@ -50,12 +51,16 @@ export function muc1(dongThem) {
 }
 
 export function muc2({ sheet, dock, globals }) {
-	if (!/\bkara:\s*"/.test(sheet)) return "muc 2: sheet.tsx khong co bien the kara";
+	if (!/\bkara:\s*"/.test(sheet))
+		return "muc 2: sheet.tsx khong co bien the kara";
 	if (!/rail:\s*"[^"]*--container-assist-rail/.test(dock))
 		return "muc 2: cot kara khong lay --container-assist-rail";
 	if (!/fill:\s*"[^"]*--container-assist\)/.test(dock))
 		return "muc 2: ban nhap khong lay --container-assist";
-	if (!/--container-assist-rail:\s*380px/.test(globals) || !/--container-assist:\s*800px/.test(globals))
+	if (
+		!/--container-assist-rail:\s*380px/.test(globals) ||
+		!/--container-assist:\s*800px/.test(globals)
+	)
 		return "muc 2: globals.css khong con hai token 380px va 800px";
 	return null;
 }
@@ -81,14 +86,19 @@ export function muc5(aiUx) {
 	const cuoi = sau.search(/^## /m);
 	const than = cuoi < 0 ? sau : sau.slice(0, cuoi);
 	const thieu = CHU_MUC.filter((c) => !than.includes(c));
-	return thieu.length === 0 ? null : `muc 5: muc kara o dau thieu chu ${thieu.join(", ")}`;
+	return thieu.length === 0
+		? null
+		: `muc 5: muc kara o dau thieu chu ${thieu.join(", ")}`;
 }
 
 export function muc6(evalsK2) {
 	const loi = [];
 	for (const e of evalsK2.evals) {
 		const thay = THAY_K2.includes(e.id);
-		if (thay && (e.status !== "not-run" || !CON_TRO.test(e.superseded_by ?? "")))
+		if (
+			thay &&
+			(e.status !== "not-run" || !CON_TRO.test(e.superseded_by ?? ""))
+		)
 			loi.push(`${e.id} chua khai thay`);
 		if (!thay && e.superseded_by) loi.push(`${e.id} khai thay ngoai bang`);
 	}
@@ -100,7 +110,9 @@ export function muc6(evalsK2) {
 export function ranhGioi(tep, globs) {
 	const re = globs.map(globSangRe);
 	const ngoai = tep.filter((t) => !re.some((r) => r.test(t)));
-	return ngoai.length === 0 ? null : `ranh gioi: ngoai ranh — ${ngoai.join(", ")}`;
+	return ngoai.length === 0
+		? null
+		: `ranh gioi: ngoai ranh — ${ngoai.join(", ")}`;
 }
 
 function dongThemTuDiff(diff) {
@@ -108,20 +120,43 @@ function dongThemTuDiff(diff) {
 	let tep = "";
 	for (const dong of diff.split("\n")) {
 		if (dong.startsWith("+++ b/")) tep = dong.slice(6);
-		else if (dong.startsWith("+") && !dong.startsWith("+++")) ra.push({ tep, chu: dong.slice(1) });
+		else if (dong.startsWith("+") && !dong.startsWith("+++"))
+			ra.push({ tep, chu: dong.slice(1) });
 	}
 	return ra;
 }
 
 function docVatThat() {
 	const nen = nenGoc();
-	const diff = git("diff", "-U0", nen, "--", ...KHU_KHONG_SO.map((k) => `${k}*.tsx`), `${SOAN}/**/*.tsx`);
+	const diff = git(
+		"diff",
+		"-U0",
+		nen,
+		"--",
+		...KHU_KHONG_SO.map((k) => `${k}*.tsx`),
+		`${SOAN}/**/*.tsx`,
+	);
 	const tepDiff = git("diff", "--name-only", nen).split("\n").filter(Boolean);
-	const tepMoi = git("diff", "--name-only", "--diff-filter=A", nen, "--", "packages/ui/src/components/kara/")
+	const tepMoi = git(
+		"diff",
+		"--name-only",
+		"--diff-filter=A",
+		nen,
+		"--",
+		"packages/ui/src/components/kara/",
+	)
 		.split("\n")
 		.filter((t) => t.endsWith(".tsx"))
-		.map((t) => `@crm/ui/components/kara/${t.split("/").pop().replace(/\.tsx$/, "")}`);
-	const tepSoan = git("ls-files", "--", `${SOAN}/`).split("\n").filter((t) => /\.tsx?$/.test(t));
+		.map(
+			(t) =>
+				`@crm/ui/components/kara/${t
+					.split("/")
+					.pop()
+					.replace(/\.tsx$/, "")}`,
+		);
+	const tepSoan = git("ls-files", "--", `${SOAN}/`)
+		.split("\n")
+		.filter((t) => /\.tsx?$/.test(t));
 	const nguonSoan = tepSoan.map((t) => ({ tep: t, chu: doc(t) }));
 	return {
 		dongThem: dongThemTuDiff(diff),
@@ -134,7 +169,8 @@ function docVatThat() {
 		nguonSoan,
 		aiUx: doc("docs/ai-ux.md"),
 		evalsK2: Bun.YAML.parse(doc("_acceptance/soan-okr-trang-rieng/evals.yaml")),
-		globs: JSON.parse(readFileSync(join(hoSo, "rang/ranh-gioi.json"), "utf8")).globs,
+		globs: JSON.parse(readFileSync(join(hoSo, "rang/ranh-gioi.json"), "utf8"))
+			.globs,
 	};
 }
 
@@ -155,12 +191,21 @@ if (tuThu) {
 	const ca = [
 		{
 			ten: "be ngang so",
-			doi: { ...v, dongThem: [...v.dongThem, { tep: `${SOAN}/khung-soan.tsx`, chu: '<div className="w-[380px]">' }] },
+			doi: {
+				...v,
+				dongThem: [
+					...v.dongThem,
+					{ tep: `${SOAN}/khung-soan.tsx`, chu: '<div className="w-[380px]">' },
+				],
+			},
 			cho: "muc 1: be ngang so o cho goi",
 		},
 		{
 			ten: "bo luat kara o dau",
-			doi: { ...v, aiUx: v.aiUx.replace(/^##[^\n]*Kara ở đâu/m, "## 11. Khác") },
+			doi: {
+				...v,
+				aiUx: v.aiUx.replace(/^##[^\n]*Kara ở đâu/m, "## 11. Khác"),
+			},
 			cho: "muc 5: thieu luat kara o dau",
 		},
 		{
@@ -173,7 +218,9 @@ if (tuThu) {
 	for (const c of ca) {
 		const loi = kiem(c.doi).filter(Boolean);
 		const dat = loi.some((l) => l.startsWith(c.cho));
-		console.log(`tu-thu ${c.ten}: ${dat ? "do dung" : "KHONG DO"} — ${loi.join(" | ")}`);
+		console.log(
+			`tu-thu ${c.ten}: ${dat ? "do dung" : "KHONG DO"} — ${loi.join(" | ")}`,
+		);
 		if (!dat) sai += 1;
 	}
 	process.exit(sai === 0 ? 1 : 3);
@@ -181,5 +228,5 @@ if (tuThu) {
 
 const loi = kiem(v);
 const ten = ["muc 1", "muc 2", "muc 3", "muc 4", "muc 5", "muc 6", "ranh gioi"];
-loi.forEach((l, i) => console.log(l ?? `${ten[i]}: dat`));
+for (const [i, l] of loi.entries()) console.log(l ?? `${ten[i]}: dat`);
 process.exit(loi.some(Boolean) ? 1 : 0);

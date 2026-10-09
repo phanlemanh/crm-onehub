@@ -35,8 +35,11 @@ function giaiLenh(ref, cfg) {
 	if (!ref.startsWith("config:")) return ref;
 	let nut = cfg;
 	for (const phan of ref.slice("config:".length).split(".")) nut = nut?.[phan];
-	if (typeof nut !== "string") throw new Error(`khong giai duoc ${ref}`);
-	return nut;
+	const lenh = String(nut ?? "");
+	if (lenh === "" || lenh.startsWith("[object")) {
+		throw new Error(`khong giai duoc ${ref}`);
+	}
+	return lenh;
 }
 
 function chay(id, lenh) {
@@ -88,7 +91,10 @@ if (tuThu) {
 	const e4 = song.find((e) => e.id === "E4");
 	let ma = 1;
 	try {
-		writeFileSync(tep, `${pha}\nfunction KaraProposalGroupPha() {\n\treturn null;\n}\n`);
+		writeFileSync(
+			tep,
+			`${pha}\nfunction KaraProposalGroupPha() {\n\treturn null;\n}\n`,
+		);
 		ma = chay("E4", giaiLenh(e4.cmd, cfg));
 	} finally {
 		writeFileSync(tep, goc_);
