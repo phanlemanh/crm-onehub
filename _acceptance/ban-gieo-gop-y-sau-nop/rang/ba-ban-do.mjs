@@ -52,12 +52,21 @@ if (thieu.length) {
 	process.exit(2);
 }
 
+function khongDo(cau) {
+	console.log(`KHONG DO DUOC: ${cau}`);
+	process.exit(2);
+}
+
 function trangThaiBangChung() {
 	const r = spawnSync(
 		"git",
 		["status", "--porcelain", "--untracked-files=all", "--", ...BANG_CHUNG],
 		{ cwd: GOC, encoding: "utf8" },
 	);
+	if (r.error || r.status !== 0)
+		khongDo(
+			`git status cua bang chung ba ho so hong (ma ${r.status}): ${(r.stderr || String(r.error ?? "")).trim()}`,
+		);
 	return new Set(r.stdout.split("\n").filter(Boolean));
 }
 
@@ -65,8 +74,21 @@ function traBangChung(truoc) {
 	const moi = [...trangThaiBangChung()].filter((d) => !truoc.has(d));
 	const sua = moi.filter((d) => !d.startsWith("??")).map((d) => d.slice(3));
 	const them = moi.filter((d) => d.startsWith("??")).map((d) => d.slice(3));
-	if (sua.length) spawnSync("git", ["checkout", "--", ...sua], { cwd: GOC });
+	if (sua.length) {
+		const r = spawnSync("git", ["checkout", "--", ...sua], {
+			cwd: GOC,
+			encoding: "utf8",
+		});
+		if (r.error || r.status !== 0)
+			khongDo(
+				`khong tra lai duoc ${sua.length} tep bang chung (ma ${r.status}): ${(r.stderr || String(r.error ?? "")).trim()}`,
+			);
+	}
 	for (const t of them) rmSync(join(GOC, t), { force: true });
+	const sau = trangThaiBangChung();
+	const con = [...sau].filter((d) => !truoc.has(d));
+	if (con.length)
+		khongDo(`bang chung con lech sau khi tra lai: ${con.join(", ")}`);
 	return sua.length + them.length;
 }
 
