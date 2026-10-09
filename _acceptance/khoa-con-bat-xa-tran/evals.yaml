@@ -97,8 +97,6 @@ evals:
       - "apps/api/test/go-la-cat-quyen.spec.ts"
       - "apps/api/test/setup.ts"
       - "apps/api/package.json"
-      - "apps/api/bunfig.toml"
-      - "bunfig.toml"
       - ".github/workflows/ci.yml"
       - ".github/workflows/acceptance.yml"
       - "_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs"

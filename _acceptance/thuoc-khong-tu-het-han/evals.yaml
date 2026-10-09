@@ -56,8 +56,8 @@ evals:
       - "_acceptance/thuoc-khong-tu-het-han/rang/hai-thuoc.mjs"
     expected: |
       exit 0; rang/hai-thuoc.mjs --e10 tren cung kieu cay tam cong mot commit khong ten: ban cu thoat 1 «COMMIT KHONG TEN»; ban
-      neo thoat 0 va in dung tap commit ghim san (so commit va danh sach sha) cua a62adb16..52e00cad2^2; day cha-dau cua onehub
-      co dung mot commit gop cham _acceptance/slack-thieu-quyen-email/ va dung mot cham _acceptance/ha-tran-thang-hoi-zalo/; them
+      neo thoat 0 va in dung tap commit ghim san (so commit va danh sach sha) cua a62adb16..52e00cad2^2; commit gop dau tien
+      dua contract.md cua moi ho so len onehub (day cha-dau) dung la sha neo 52e00cad2 va 9dc1a037c; them
       --gia-tep apps/agent/agent/lib/run-runtime.ts -> ma 1 «TEP HANG»; --gia-commit-khong-ten -> ma 1 «COMMIT KHONG TEN».
       expected moi cua E10 co «52e00cad2», khong con «origin/onehub», criterion van AC-10.
 
