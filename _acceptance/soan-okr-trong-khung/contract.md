@@ -59,7 +59,15 @@ Artifacts (chat trái — đối chứng, bị loại vì chat là thứ chính 
 
 ## Đường đo
 
-Bỏ — vòng không có `opportunity.md` (thoả thuận trực tiếp với chủ kho 09/10, không qua Cổng Đáng); xem sổ quyết định.
+Ngưỡng ở `opportunity.md` (còn `[đề xuất]`, chờ chủ kho chốt) đo ở lái-thử người-lạ rồi phiên nghiệm thu:
+
+- «≥ 2/3 đưa được bộ OKR vào trong ≤ 15 phút»: thời gian = `okrCuocSoan.duaVaoLuc − createdAt` của cuộc mỗi người
+  thử (CSDL); tỉ lệ từ nhật ký lái thử. AC-9 giữ phép đo «Đưa vào» của K2 (ghi `duaVaoLuc`), AC-13 bảo đảm đóng khung
+  xong thấy ngay kết quả.
+- «0 lần mất lượt hay mất số khi đóng và mở lại khung»: nhật ký vấp của lái thử. AC-7, AC-8 bảo đảm trên phiên đo.
+- «≥ 4/5 lần nhìn đầu chỉ đúng Kara và bản nháp»: nhật ký lái thử (câu hỏi «Kara ở đâu, bản nháp ở đâu?» trước khi
+  người bấm gì). AC-12 là phép chấm gần nhất trên ảnh.
+- «≥ 2/3 muốn quay lại trang riêng» (chết): câu hỏi cuối buổi lái thử, ghi vào nhật ký.
 
 ## Out of scope
 
