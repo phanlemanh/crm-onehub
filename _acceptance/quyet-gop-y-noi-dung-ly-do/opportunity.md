@@ -30,7 +30,7 @@ Câu lý do phía máy chủ (`OKR.thongDiep`, `apps/api/src/okr/okr-config.ts`)
 | # | Giả định | Nếu sai thì | Phép thử rẻ nhất | Trạng thái |
 |---|---|---|---|---|
 | 1 | Mọi lỗi cố định của `troLyQuyet` đi ra dưới `BAD_REQUEST`/`FORBIDDEN` kèm một câu sản phẩm | Có lỗi cố định ra dưới mã khác, vẫn thành câu thử lại | Liệt mọi `throw` trên đường `troLyQuyet` → `ghiTheoDong` → `okr.*Trong` | Chưa đo — làm ở S1 |
-| 2 | Người dùng tiếng Anh cũng phải thấy lý do bằng tiếng Anh | Hiện câu tiếng Việt trên giao diện tiếng Anh — đúng lớp lỗi K2c vừa sửa | Quyết định của anh ở Cổng Phạm vi | Chờ anh |
+| 2 | Người dùng tiếng Anh cũng phải thấy lý do bằng tiếng Anh | Hiện câu tiếng Việt trên giao diện tiếng Anh — đúng lớp lỗi K2c vừa sửa | Quyết định của anh | Có — anh chọn ngả A (2026-10-09): máy chủ trả mã lý do có tên, app dịch theo ngôn ngữ |
 
 ## Ngưỡng chết / ngưỡng UAT
 
@@ -54,7 +54,7 @@ Câu lý do phía máy chủ (`OKR.thongDiep`, `apps/api/src/okr/okr-config.ts`)
 
 - Mỗi lý do cố định của `troLyQuyet` hiện đúng câu lý do dưới góp ý → AC.
 - Lỗi tạm thời (5xx, quá tải) vẫn là câu thử lại → AC.
-- Ở tiếng Anh: theo quyết định của anh ở Cổng Phạm vi.
+- Ở cả tiếng Việt lẫn tiếng Anh, câu lý do theo ngôn ngữ trang, không lộ mã → AC (ngả A).
 
 ## Out of scope từ khám phá
 
