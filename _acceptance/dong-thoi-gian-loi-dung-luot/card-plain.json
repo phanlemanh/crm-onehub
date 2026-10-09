@@ -1,0 +1,4 @@
+{
+  "feature_plain": "Khi lỗi «Xem cũ hơn» và lỗi làm mới chồng lên nhau ở tab Hoạt động, thông báo luôn nói đúng lượt tải đã hỏng: không báo lỗi khi lượt đang chạy, không tự tắt cảnh báo làm mới khi chưa làm mới được.",
+  "analyst_plain": ""
+}
