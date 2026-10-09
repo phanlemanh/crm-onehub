@@ -5,7 +5,7 @@ slug: thuoc-7-ngay-loc-pr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
 design_doc: _acceptance/thuoc-7-ngay-loc-pr/design.md
@@ -84,3 +84,16 @@ Vòng này viết lại thước tại chỗ, và thay E5 của F21 (`ci-ma-tran
   gộp trước chữ ký Cổng 2.
 - Hai eval đọc GitHub thật trên cửa sổ cũ cố định. GitHub giữ nhật ký lượt chạy 90 ngày, nên sau khoảng đầu tháng 1/2027 hai
   eval đó mất dữ liệu đo.
+- Known limit (Cổng 2, Ngoài-1): `--tu`/`--den` nhận mọi chuỗi ngày mà máy đọc được; mốc thiếu múi giờ bị đọc theo giờ máy
+  (lệch 7 giờ ở Mac mini), và dạng `--tu=…` bị bỏ qua không báo. Gõ đúng dạng ISO có `Z` như dòng Đường đo thì không gặp.
+- Known limit (Cổng 2, Ngoài-2): mốc mặc định đọc `origin/<nhánh>` trên máy, không tự kéo mới, và lỗi `git` chỉ báo «không
+  tìm được commit gộp». Ngày đo: `git fetch origin onehub` trước, và đọc dòng `cua so` (phải là 09/10 05:42:52Z → 16/10).
+- Known limit (Cổng 2, Ngoài-4, Ngoài-6): chiều đỏ của E5 coi mọi số khác 141 là đã bắt «thiếu trang», kể cả khi bản sao bỏ
+  phân trang chết giữa chừng; không ghim mã thoát hay con số 100.
+- Known limit (Cổng 2, Ngoài-5): bảng biên của `ketLuan` thử 10 trong 32 tổ hợp, và phép chốt «số assert = số ô» so với
+  một số viết tay.
+- Known limit (Cổng 2, Ngoài-7): chưa có ca thử lượt chạy lại mà attempt cuối xanh.
+- Known limit (Cổng 2, Ngoài-8): E6 chỉ thử luật từ chối của bộ kit trên bản sao đã ký; trước chữ ký trên cây thật nó chỉ
+  nhận lý do «hồ sơ thay chưa ký».
+- Known limit (Cổng 2, Ngoài-9): câu GitHub ghi khi người dùng dừng tay chưa từng chụp thật; lượt dừng tay đầu tiên có câu
+  khác dự kiến sẽ làm thước thoát 2 gọi tên câu đó.
