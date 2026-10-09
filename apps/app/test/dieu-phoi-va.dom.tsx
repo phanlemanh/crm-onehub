@@ -375,7 +375,7 @@ describe("ke-hoach-rong", () => {
 		await moKeHoach([]);
 		await cho(
 			() => nutCo(m.addStep) !== undefined,
-			"nut them buoc trong khung trong",
+			"ke hoach rong khong co nut them buoc",
 		);
 		expect(
 			document.body.textContent?.includes(m.noSteps.title),
