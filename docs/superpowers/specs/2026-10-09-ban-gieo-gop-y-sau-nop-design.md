@@ -23,6 +23,9 @@ export function kiemNopXong(kq, viec) // ném Error có tên khi không phải �
 - Việc chưa đóng (`finishedAt === null`) hoặc đóng bằng kết cục khác `da-nop` (đọc hằng
   `TRO_LY_OKR.ketThuc.daNop` của `apps/agent/agent/lib/okr/config.ts`, không chép chuỗi) → ném
   `viec <id> khong dong bang da-nop sau khi nop (<outcome>)`.
+- `gieoGopY` gieo xong thì in đúng một dòng dấu hiệu dương ra stdout:
+  `gieo-gop-y: xong A <id> (<n> dong cho), B <id> (rong)`. Dòng này là bằng chứng một bàn đo đã qua bước gieo,
+  không phụ thuộc cách bàn đo tự in kết luận.
 - Bỏ lời gọi `completeTask` và dòng nhập của nó. Phần còn lại của `nop()` (xếp việc, chặn `dungLai`, đặt lease,
   `noteSession`, kiểm số dòng và dòng bị loại) giữ nguyên. `SAN`, `gieoGopY`, `datLaiGopY`, `dongKho` giữ nguyên.
 
@@ -31,19 +34,29 @@ Cách kiểm này đã chạy ở bàn gieo riêng của K3 (`_acceptance/kara-g
 
 ## Đo
 
-- E1 (AC-1): `rang/gieo-thu.mjs` trong phiên đo riêng: nạp bộ OKR mẫu, `gieoGopY`, rồi đọc thẳng CSDL đo: A có
-  đúng ba dòng `cho`, B không dòng nào, hai việc đã đóng bằng `da-nop`.
+Không phép đo nào phá tệp `san-gop-y.mjs` thật: mọi vết đặt trên một bản sao cạnh nó
+(`_acceptance/gop-y-dung-cho/rang/.san-gop-y-vet-<pid>.mjs`, cùng thư mục để đường nhập tương đối còn đúng, xoá
+trong `finally`). `gieo-thu.mjs` và `kiem-nop.mjs` nhận đường dẫn bàn gieo qua biến `BAN_GIEO` (mặc định tệp thật).
+
+- E1 (AC-1, AC-2): `rang/gieo-thu.mjs` trong phiên đo riêng: nạp bộ OKR mẫu, `gieoGopY`, đọc thẳng CSDL đo: A có
+  đúng ba dòng `cho`, B không dòng nào, hai việc đã đóng bằng `da-nop`, và đầu ra có dòng `gieo-gop-y: xong`. Rồi
+  ca từ chối THẬT: gọi lại `nopDeXuatVao` trên việc của A đã đóng (đúng ngữ cảnh phiên con), nhận `tu-choi`, đọc
+  hàng `agentTask` từ CSDL, đưa cả hai vào `kiemNopXong` và đòi nó ném.
 - E2 (AC-2): `rang/kiem-nop.mjs` gọi `kiemNopXong` với ma trận viết trước bốn ca (da-ghi + da-nop → qua; tu-choi;
   da-ghi + việc chưa đóng; da-ghi + kết cục `loi`), không cần CSDL.
 - E3 (AC-3): `rang/ba-ban-do.mjs` chạy bốn khoá bàn đo của ba hồ sơ (`gy_man_that`, `r1a_man_khung`,
-  `r1a_man_thanh`, `r1d_man_okr`), đòi không bàn nào dừng ở bước gieo, ghi dòng kết luận từng bàn vào
-  `.acceptance-runs/ban-gieo-gop-y-sau-nop/ba-ban-do.txt`. Bàn đo đỏ ở bước đo thì không làm E3 đỏ — nó thành
-  mục ngoài hợp đồng cho Cổng 2.
-- E4 (AC-4): `rang/ranh-gioi.mjs` theo khuôn của K3: chỉ `san-gop-y.mjs`, thư mục hồ sơ và `config.yaml` (chỉ dòng
-  `+`) đổi.
-- E5 (AC-5): `rang/dot-bien.mjs` hai vết trên tệp thật, trả lại trong `finally`: (a) đặt lại lời gọi
-  `completeTask` bắt buộc → E1 đỏ «da dong truoc khi nop xong»; (b) bỏ kiểm kết cục trong `kiemNopXong` → E2 đỏ
-  «ca loi: khong nem».
+  `r1a_man_thanh`, `r1d_man_okr`). Một lệnh qua bước gieo khi và chỉ khi đầu ra có dòng `gieo-gop-y: xong`; thiếu
+  thì «khong qua buoc gieo: <khoá>», bất kể lệnh in lỗi gì. In ra stdout bốn dòng
+  `<khoá>: ma <mã> · <dòng KET LUAN hay KHONG DO DUOC cuối>` (dòng nào thiếu cả hai thì E3 đỏ) và ghi cùng nội dung
+  vào `_acceptance/ban-gieo-gop-y-sau-nop/evidence/ba-ban-do.txt`. Bàn đỏ ở bước đo không làm E3 đỏ — nó thành
+  mục ngoài hợp đồng cho Cổng 2. Bộ phân loại cũng chạy được trên một tệp đầu ra có sẵn (`--phan-loai <tệp>`).
+- E4 (AC-4): `rang/ranh-gioi.mjs` theo khuôn của K3: chỉ `san-gop-y.mjs`, thư mục hồ sơ, `config.yaml` (chỉ dòng
+  `+`) và các tệp chạm tệp đã duyệt (P1-49) đổi.
+- E5 (AC-5): `rang/dot-bien.mjs` ba vết trên bản sao: (a) đặt lại `completeTask` bắt buộc → `gieo-thu` (BAN_GIEO =
+  bản sao) đỏ «da dong truoc khi nop xong»; (b) bỏ kiểm kết cục trong `kiemNopXong` → `kiem-nop` đỏ
+  «ca loi: khong nem»; (c) `kiemNopXong` luôn ném «vet-c» → `gieo-thu` đỏ có «vet-c» (chứng minh `nop()` gọi hàm
+  kiểm trên đường thật), và `ba-ban-do --phan-loai` trên chính đầu ra đó in «khong qua buoc gieo» (chứng minh
+  bộ phân loại dựa vào dấu hiệu dương, không vào chuỗi lỗi). Tệp thật so băm trước và sau: phải không đổi.
 
 ## Không làm
 
