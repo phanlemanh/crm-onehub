@@ -497,8 +497,8 @@ describe("khoa-gui", () => {
 			() => qs("[data-slot=field-error]", can) !== null,
 			"loi trong de xuat",
 		);
-		expect(qs("[data-slot=field-error]", can)?.textContent).toContain(
-			"Mất kết nối",
+		expect(qs("[data-slot=field-error]", can)?.textContent).toBe(
+			m.loiDong["chua-san-sang"],
 		);
 		expect((nut(m.dong.canChinh, can) as HTMLButtonElement).disabled).toBe(
 			false,
@@ -588,7 +588,7 @@ describe("trang-thai-kara", () => {
 			ds: dsTroLy([], { maKetThuc: "loi" }),
 			sanSang: SAN_SANG,
 			nhom: "loi",
-			chu: m.vung.loi,
+			chu: ui.karaKhung.chuaDuoc(m.vung.viecDoc),
 			nutKara: null,
 		},
 		{
@@ -638,6 +638,11 @@ describe("trang-thai-kara", () => {
 			if (ca.nhom !== null)
 				await cho(() => nhom() !== null, `nhom kara ${ca.ten}`);
 			await nhip(8);
+			if (ca.ten === "dang-doc")
+				await choHet(
+					() => nhom()?.textContent?.includes(m.vung.dangDoc) === true,
+					"chu dang doc hien sau do tre cua KaraState",
+				);
 			const n = nhom();
 			kiemCa(
 				{
