@@ -6,7 +6,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 9;
+const SO_CAP_KHAI = 10;
 const TRAN_MS = 300_000;
 const NGOAI = "apps/agent/agent/tools/tro-ly-okr-ngoai.ts";
 const UY_QUYEN = "apps/agent/agent/lib/okr/uy-quyen.ts";
@@ -90,6 +90,14 @@ const CAP = [
 		"\t\t\tif (!hang)\n\t\t\t\treturn defineInstructions({\n\t\t\t\t\tmarkdown: TRO_LY_OKR.ngoaiPhien.chiDanKhongViec,\n\t\t\t\t});\n",
 		"\t\t\tif (!hang) return null;\n",
 		"phien con khong viec khong co chi dan",
+	],
+	[
+		"j hook-lo-input",
+		SPEC(NGOAI_SPEC, "hook"),
+		HOOK,
+		"\t\t\t\t\tconsole.warn(`${TRO_LY_OKR.ngoaiPhien.dongNgoaiOkr}${purpose}`);",
+		"\t\t\t\t\tconsole.warn(`${TRO_LY_OKR.ngoaiPhien.dongNgoaiOkr}${purpose} ${JSON.stringify(event.data.actions.map((a) => a.input))}`);",
+		"lo cau hoi trong log",
 	],
 ];
 

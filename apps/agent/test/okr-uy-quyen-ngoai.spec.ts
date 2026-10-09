@@ -90,11 +90,11 @@ describe("cong-tac-bo-de", () => {
 });
 
 const CAU_HOI_RIENG = "cau-hoi-rieng-h1";
-const troLy = (callId: string): HanhDongYeuCau => ({
-	kind: "subagent-call",
-	callId,
-	subagentName: SUBAGENT_TRO_LY_OKR,
-});
+const troLy = (callId: string): HanhDongYeuCau =>
+	Object.assign(
+		{ kind: "subagent-call", callId, subagentName: SUBAGENT_TRO_LY_OKR },
+		{ description: CAU_HOI_RIENG, input: { message: CAU_HOI_RIENG } },
+	);
 const congKhac = (callId: string): HanhDongYeuCau => ({
 	kind: "tool-call",
 	callId,
