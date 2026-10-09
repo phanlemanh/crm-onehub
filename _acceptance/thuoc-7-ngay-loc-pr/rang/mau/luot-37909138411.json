@@ -1,0 +1,81 @@
+{
+ "run": {
+  "id": 37909138411,
+  "path": ".github/workflows/ci.yml",
+  "event": "pull_request",
+  "head_branch": "feat/luat-kho-vong-doi",
+  "head_sha": "f1fdd8c2cce66b8d4f5b35bc90d7f043b7091f77",
+  "run_attempt": 1,
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-10-09T09:06:27Z",
+  "pull_requests": []
+ },
+ "jobs": [
+  {
+   "id": 113749769586,
+   "run_id": 37909138411,
+   "run_attempt": 1,
+   "name": "check-types, lint",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T09:06:29Z",
+   "completed_at": "2026-10-09T09:10:16Z"
+  },
+  {
+   "id": 113749769830,
+   "run_id": 37909138411,
+   "run_attempt": 1,
+   "name": "test (app-ui)",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T09:06:29Z",
+   "completed_at": "2026-10-09T09:16:44Z"
+  },
+  {
+   "id": 113749770126,
+   "run_id": 37909138411,
+   "run_attempt": 1,
+   "name": "test (api)",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T09:06:29Z",
+   "completed_at": "2026-10-09T09:16:09Z"
+  },
+  {
+   "id": 113749770171,
+   "run_id": 37909138411,
+   "run_attempt": 1,
+   "name": "test (con-lai)",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T09:06:31Z",
+   "completed_at": "2026-10-09T09:13:52Z"
+  },
+  {
+   "id": 113753364611,
+   "run_id": 37909138411,
+   "run_attempt": 1,
+   "name": "ci-ok",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T09:16:47Z",
+   "completed_at": "2026-10-09T09:16:51Z"
+  }
+ ],
+ "annotations": {},
+ "pulls": [
+  {
+   "number": 335,
+   "state": "closed",
+   "merged_at": "2026-10-09T09:35:41Z",
+   "head": {
+    "ref": "feat/luat-kho-vong-doi",
+    "sha": "fc7ff8f53102a1d155578e2343fae11d000530d0"
+   },
+   "base": {
+    "ref": "onehub"
+   }
+  }
+ ]
+}
