@@ -33,12 +33,16 @@ describe("cau-noi-server", () => {
 			doc("app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx"),
 			"theo don vi khong truyen co",
 		).toMatch(/<NutSoan[\s\S]*?cauNoi=\{cauNoiOkr\}/);
-		const trangSoan = doc("app/(app)/[slug]/okr/soan/[cuocSoanId]/page.tsx");
-		expect(trangSoan, "man soan khong nhan co cau noi").toMatch(
+		const layout = doc("app/(app)/[slug]/layout.tsx");
+		expect(layout, "man soan khong nhan co cau noi").toMatch(
 			/import \{[^}]*\bokrBridgeConfigured\b[^}]*\} from "@\/lib\/agent-bridge"/,
 		);
-		expect(trangSoan, "man soan khong nhan co cau noi").toMatch(
-			/<TrangSoan[\s\S]*?cauNoi=\{okrBridgeConfigured\(\)\}/,
+		expect(layout, "man soan khong nhan co cau noi").toMatch(
+			/<RecordSheetHost cauNoiOkr=\{okrBridgeConfigured\(\)\} \/>/,
+		);
+		const host = doc("components/crm/record-sheet/record-sheet-host.tsx");
+		expect(host, "man soan khong nhan co cau noi").toMatch(
+			/<SoanSheet[\s\S]*?cauNoi=\{cauNoiOkr\}/,
 		);
 	});
 

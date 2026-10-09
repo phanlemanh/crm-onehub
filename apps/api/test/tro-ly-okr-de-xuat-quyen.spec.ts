@@ -68,13 +68,22 @@ const DOC_DANH_SACH = {
 	"muc-tieu-phong-ban": ["truong-phong-ban", "phu-trach-kr"],
 	"kr-phong-ban": ["truong-phong-ban"],
 } satisfies Record<Dich, readonly Nguoi[]>;
+const NHO_DUOC = {
+	"muc-tieu-onehub": ["quan-tri"],
+	"muc-tieu-phong-ban": ["truong-phong-ban", "phu-trach-kr"],
+	"kr-phong-ban": ["truong-phong-ban"],
+} satisfies Record<Dich, readonly Nguoi[]>;
 const LY_DO_NAC = { tat: "tat", an: "don-vi-chua-bat" } as const;
 
 type KyVong = "bat" | "403" | { lyDo: string };
 
 function kyVong(nguoi: Nguoi, dich: Dich, nac: Nac, thuTuc: ThuTuc): KyVong {
 	const duoc: readonly Nguoi[] =
-		thuTuc === "troLyDanhSach" ? DOC_DANH_SACH[dich] : SUA_DUOC[dich];
+		thuTuc === "troLyDanhSach"
+			? DOC_DANH_SACH[dich]
+			: thuTuc === "troLySanSang" || thuTuc === "troLyDeXuat"
+				? NHO_DUOC[dich]
+				: SUA_DUOC[dich];
 	if (!duoc.includes(nguoi)) return "403";
 	return nac === "bat" ? "bat" : { lyDo: LY_DO_NAC[nac] };
 }

@@ -1,0 +1,276 @@
+feature_slug: vong-doi-mot-cach-cat
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vdc_hoan_tac_loat
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/app/(app)/[slug]/*/*-bulk-actions.tsx"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/vong-doi-mot-cach-cat.dom.tsx"
+    expected: |
+      exit 0; ma tran viet truoc 3 loai (ContactsBulkActions, CompaniesBulkActions, DealsBulkActions that, tRPC gia,
+      Toaster that) x 2 ket qua (du: requested 3 succeeded 3 failed 0; mot phan: requested 3 succeeded 2 failed 1):
+      mo menu, chon «Lưu trữ» (crmMessages("vi").bulk.archive) -> bulkArchive nhan dung {ids:[a,b,c]}; toast co chu
+      bulk.archived cua loai (o mot phan: chu bulkMenu.leftAlone voi so 1) va nut «Hoàn tác» (sheet.hoanTac); bam nut
+      -> bulkRestore goi dung 1 lan voi {ids:[a,b,c]}; bam lan hai -> van 1 lan; sau do co toast bulk.restored va so lan
+      goi truy van danh sach cua loai (list) tren tRPC gia tang sau khoi phuc (danh sach duoc lam moi). Bam bang
+      userEvent. Chi so sanh gia tri nguyen thuy. expect(o.length).toBe(6).
+      CHIEU DO ghim: ban sao bo action Hoan tac (goi reportBulk nhu cu) -> do "vdc: luu tru loat khong co hoan tac";
+      ban sao Hoan tac goi bulkRestore voi mang rong -> do "vdc: hoan tac sai id"; ban sao bo chot mot lan -> do
+      "vdc: hoan tac goi hai lan"; ban sao bo lam moi danh sach sau khoi phuc -> do "vdc: hoan tac khong lam moi danh sach".
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vdc_may_chu
+    paths:
+      - "apps/api/src/contacts/**"
+      - "apps/api/src/companies/**"
+      - "apps/api/src/deals/**"
+      - "apps/api/src/crm/bulk.ts"
+      - "apps/api/test/vong-doi-mot-cach-cat.spec.ts"
+    expected: |
+      exit 0; tren co so du lieu that cua luot test: voi moi loai (contacts, companies, deals) gieo 3 ban ghi dang dung,
+      goi bulkArchive([a,b,c]) qua service that -> succeeded 3, ca 3 co archivedAt khac null va KHONG co trong list mac
+      dinh (archived false); goi bulkRestore([a,b,c]) -> succeeded 3, ca 3 archivedAt null va CO trong list mac dinh.
+      Ca id bi bo qua: bulkArchive([a, id-khong-ton-tai]) -> succeeded 1 failed 1; bulkRestore cung mang -> a ve
+      archivedAt null, khong nem. expect(loai.length).toBe(3).
+      CHIEU DO ghim: ban sao bulkRestore bo qua phan tu dau -> do "vdc: may chu khong khoi phuc du".
+
+  - id: E3
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kts_hoan_tac
+    paths:
+      - "apps/app/components/crm/record-sheet/record-actions.tsx"
+      - "apps/app/test/kara-trang-thai-luu-tru.dom.tsx"
+    expected: |
+      exit 0; bai luu-tru-hoan-tac cua ho so da ky kara-trang-thai-toan-crm chay lai khong sua: luu tru mot ban tu menu
+      ngan (3 loai) co toast «Hoàn tác», bam khoi phuc dung mot lan.
+
+  - id: E4
+    criterion: AC-2
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vdc_hoan_tac_loi
+    paths:
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/app/(app)/[slug]/*/*-bulk-actions.tsx"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/vong-doi-mot-cach-cat.dom.tsx"
+    expected: |
+      exit 0; 3 loai, bulkArchive thanh cong, bulkRestore nem loi co message "loi-tho-may-chu": bam «Hoàn tác» -> co
+      toast chu crmMessages("vi").bulk.hoanTacLoi; textContent cua vung toast KHONG chua "loi-tho-may-chu"; ban en ->
+      crmMessages("en").bulk.hoanTacLoi, khong ky tu tieng Viet co dau. expect(o.length).toBe(3).
+      CHIEU DO ghim: ban sao onError in error.message -> do "vdc: hoan tac loi in loi tho".
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vdc_dai_bao
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/vong-doi-mot-cach-cat.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; ma tran 3 ngan (ContactSheet, CompanySheet, DealSheet that, tRPC gia) x 2 trang thai: byId tra archivedAt
+      "2026-09-15T03:00:00.000Z" -> co dung mot [data-dai-luu-tru] o dau than ngan, chu chua crmMessages("vi") cua dai bao
+      va ngay 15/09/2026, nut «Khôi phục»; bam -> restore nhan dung {id} 1 lan; tRPC gia tra ban ghi archivedAt null o
+      lan doc sau -> byId duoc doc lai (so lan goi tang), [data-dai-luu-tru] mat VA so cho bat trong [role=tabpanel]
+      (dem nhu E6) > 0. byId tra archivedAt null -> khong co [data-dai-luu-tru]. Ban en: chu en,
+      khong ky tu tieng Viet co dau trong dai. expect(o.length).toBe(6).
+      CHIEU DO ghim: ban sao bo dai bao o DealSheet -> do "vdc: ngan da cat khong bao"; ban sao nut Khoi phuc goi archive
+      -> do "vdc: dai bao goi sai lenh"; ban sao an dai bang state cuc bo, khong lam moi byId -> do "vdc: khoi phuc xong o
+      van khoa".
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vdc_chi_doc
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/vong-doi-mot-cach-cat.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; 3 ngan that voi archivedAt khac null. Bo chon cho sua: button, input, textarea, select, [role=combobox],
+      [role=button], [contenteditable="true"], [tabindex]:not([tabindex="-1"]). Trong noi dung tab chi tiet
+      ([role=tabpanel] dang mo), moi phan tu khop bo chon NGOAI [data-dai-luu-tru] phai tat — xet bang
+      el.matches(":disabled") (tinh ca fieldset cha) voi phan tu la form control, va phan tu khong phai form control thi
+      khong duoc co (dem rieng, mong 0). Dem so cho bat = 0 va dem tong > 0 de chung bai do dung cho. Ma tran viet truoc
+      cac o sua da biet: ContactSheet (ten, email, cong ty, chu so huu, truong tuy chinh), CompanySheet (ten, ten mien,
+      chu so huu, truong tuy chinh), DealSheet (ten, gia tri, cong ty, mo ta, truong tuy chinh, menu giai doan tren dau
+      ngan) — moi o bam bang userEvent: khong co input, textarea, [role=listbox], [role=dialog] moi nao mo, mutation
+      update cua loai goi 0 lan; expect(o.length).toBe(15). Nut menu «…» cua ngan KHONG tat, mo ra co «Khôi phục …» va
+      «Xoá vĩnh viễn …». Doi chung: cung ngan voi archivedAt null -> so cho bat > 0. expect(ngan.length).toBe(3).
+      CHIEU DO ghim: ban sao bo khoa o CompanySheet -> do "vdc: ngan da cat van sua duoc"; ban sao de o mo ta DealSheet ra
+      ngoai vung khoa -> do "vdc: mo ta ban da cat van sua duoc"; ban sao khoa ca menu «…» -> do "vdc: khoa ca khoi phuc".
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vdc_kanban
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "apps/app/lib/messages/deals.ts"
+      - "apps/app/test/vong-doi-mot-cach-cat.dom.tsx"
+    expected: |
+      exit 0; DealsTable that trong NuqsTestingAdapter voi "view=board": thanh cong cu co nut ten dealMessages("vi")
+      .archivedToggle ("Đã lưu trữ"); bam -> onUrlUpdate co archived=true, view van board, bang thoa thuan da luu tru hien
+      (deals.list nhan archived true) va nut o trang thai dang chon (variant contrast hay aria-pressed); bam lai ->
+      archived mat khoi URL, DealsBoard hien lai (deals.board duoc goi). Doi chung "view=table": nut van co, cung vi tri.
+      CHIEU DO ghim: ban sao bo nut o nhanh board -> do "vdc: kanban khong co da luu tru".
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vdc_chu
+    paths:
+      - "apps/app/lib/messages/*.ts"
+      - "apps/app/components/crm/bulk-actions.tsx"
+      - "apps/app/components/crm/record-sheet/record-actions.tsx"
+      - "apps/app/app/(app)/[slug]/*/*-bulk-actions.tsx"
+      - "apps/app/test/vong-doi-mot-cach-cat.dom.tsx"
+    expected: |
+      exit 0; (a) ba kho chu: dealMessages/contactMessages/companyMessages("vi").archivedToggle === "Đã lưu trữ", ban en
+      === "Archived"; (b) crmMessages("vi").fields.archivedNote va fields.archiveBody khong chua "ẩn"/"Ẩn", ban en khong
+      chua "hidden"/"Hidden"; (c) 3 loai: o che do Da luu tru, chon «Xoá vĩnh viễn» trong menu hang loat -> hop hoi lai co
+      nut xac nhan "Xoá vĩnh viễn", co chu hau qua cua loai; double click nut -> bulkPurge goi 1 lan; (d) RecordActions
+      cua ban da cat: «Xoá vĩnh viễn …» -> hop co nut "Xoá vĩnh viễn", double click -> purge goi 1 lan. Ban en cua (c),
+      (d): "Delete forever". expect(o.length).toBe(6) cho (c)+(d).
+      CHIEU DO ghim: ban sao crm.ts bulkMenu.confirmDelete "Xoá" -> do "vdc: hop xoa vinh vien ghi Xoa tran"; ban sao bo
+      pending -> do "vdc: xoa vinh vien goi hai lan".
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vdc_cap_chu
+    paths:
+      - "apps/app/lib/messages/*.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    expected: |
+      exit 0; messages-guard cua kho chay lai khong sua: moi khoa chu moi cua V2 co du cap en/vi, khoa en khong co chu
+      Viet.
+
+  - id: E10
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dlr_bang_so_0
+    paths:
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "apps/app/test/bang-crm-loc-ro.dom.tsx"
+    expected: |
+      exit 0; bai so-0 cua ho so da ky datatable-loc-ro chay lai khong sua (gom ca "kanban: menu Loc cua Kanban thoa
+      thuan in so"): thanh cong cu Kanban giu menu Loc va so dem.
+
+  - id: E11
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.dlr_bang_khong_loc
+    paths:
+      - "apps/app/app/(app)/[slug]/*/*-table.tsx"
+      - "apps/app/lib/messages/*.ts"
+      - "apps/app/test/bang-crm-loc-ro.dom.tsx"
+    expected: |
+      exit 0; bai khong-loc cua ho so da ky datatable-loc-ro chay lai khong sua: che do luu tru cua ba bang giu cau rong
+      cu.
+
+  - id: E12
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vdc_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/app/(app)/[slug]/deals/**"
+      - "apps/app/lib/messages/*.ts"
+      - "_acceptance/vong-doi-mot-cach-cat/rang/man.mjs"
+    expected: |
+      exit 0 va "vong-doi-mot-cach-cat man: dat"; buoc 1 (1440) gieo thoa thuan roi luu tru qua db -> mo
+      /deals?record=deal:<id> -> [data-dai-luu-tru] co chu dai bao va nut «Khôi phục»; o ten thoa thuan trong tab chi
+      tiet :disabled; bam o ten va o mo ta -> khong co input, textarea nao mo, updatedAt cua thoa thuan trong db khong
+      doi; chup vdc-ngan-da-cat-1440.png. Buoc 2 (1440) mo /deals?view=board -> nut «Đã lưu trữ» tren thanh
+      cong cu; chup vdc-kanban-1440.png; bam -> URL co archived=true va bang hien thoa thuan da cat. Buoc 3 (390) lap
+      buoc 1 va 2: scrollWidth <= clientWidth cua trang va ngan, nut «Khôi phục» va «Đã lưu trữ» trong khung nhin; chup
+      vdc-ngan-da-cat-390.png, vdc-kanban-390.png. Buoc 4 bam «Khôi phục» o dai bao -> dai mat, db archivedAt null.
+      Buoc 5 (1440) gieo 3 ca nhan, mo /contacts, chon 3 dong -> «Thao tác» -> «Lưu trữ» -> toast co «Hoàn tác» trong
+      khung nhin -> bam -> 3 dong co lai trong bang, db archivedAt null ca 3; chup vdc-hoan-tac-loat-1440.png.
+      Ho so da signed-off/machine-cleared thi khong chep anh vao ho so.
+      CHIEU DO ghim: --chieu-do mo thoa thuan dang dung -> do "man: khong thay dai luu tru".
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
+      - "Buoc 1 (1440): thoa thuan da cat -> vdc-ngan-da-cat-1440.png"
+      - "Buoc 2 (1440): Kanban -> vdc-kanban-1440.png; bam Da luu tru"
+      - "Buoc 3 (390): lap buoc 1-2 -> vdc-ngan-da-cat-390.png, vdc-kanban-390.png; do tran ngang"
+      - "Buoc 4: bam Khoi phuc o dai bao -> dai mat, archivedAt null"
+      - "Buoc 5 (1440): luu tru 3 ca nhan hang loat roi Hoan tac -> vdc-hoan-tac-loat-1440.png"
+    evidence_required:
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-ngan-da-cat-1440.png"
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-ngan-da-cat-390.png"
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-kanban-1440.png"
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-kanban-390.png"
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-hoan-tac-loat-1440.png"
+
+  - id: E13
+    criterion: AC-7
+    executor: judgment
+    inputs:
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-ngan-da-cat-1440.png"
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-ngan-da-cat-390.png"
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-kanban-1440.png"
+      - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-kanban-390.png"
+      - "docs/vong-doi.md"
+      - "CONTEXT.md"
+    question: |
+      Ghi chú cho người chấm: hai ảnh đầu chụp ngăn một thoả thuận đã lưu trữ ở khổ 1440 và 390; hai ảnh sau chụp Kanban
+      thoả thuận ở khổ 1440 và 390.
+      Ngoài phạm vi AC-7 (chủ kho xác nhận 2026-10-09, có từ trước lượt này, mở hàng riêng): chữ bị cắt bằng «…» ở hàng
+      số liệu đầu ngăn và ở thanh giai đoạn khi khổ hẹp, và nhãn giai đoạn tràn khỏi viền thẻ trên Kanban. Đừng chấm
+      trượt vì hai điều này; mọi chỗ cắt hay tràn khác vẫn chấm như câu (5).
+      Nhìn bốn ảnh: (1) người đọc có hiểu ngay thoả thuận này đã được cất (không bị xoá, không phải lỗi) và lấy lại bằng
+      nút nào không? (2) các ô của thoả thuận đã cất có trông là không sửa được không, hay trông như sửa được mà bấm
+      không ăn? (3) trên Kanban, nút «Đã lưu trữ» có dễ thấy và đọc như chỗ xem (không như một hành động cất) không?
+      (4) chữ có đúng bộ chữ của `docs/vong-doi.md` — «Đã lưu trữ», «Khôi phục» — không có «Lưu trữ» trần cho nút xem,
+      không có «ẩn»? (5) ở 390 có chữ hay nút nào bị cắt hoặc tràn ngang không? Nêu từng điểm kèm ảnh.
+
+  - id: E14
+    criterion: AC-2
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kts_hoan_tac_loi
+    paths:
+      - "apps/app/components/crm/record-sheet/record-actions.tsx"
+      - "apps/app/test/kara-trang-thai-luu-tru.dom.tsx"
+    expected: |
+      exit 0; bai hoan-tac-hong cua ho so da ky kara-trang-thai-toan-crm chay lai khong sua: Hoan tac mot ban tu menu
+      ngan that bai thi bao ro, khong chu loi tho.
+
+  - id: E15
+    criterion: AC-1
+    executor: script
+    layer: logic
+    cmd: config:executors.script.vdc_duong_luu_tru
+    paths:
+      - "apps/app/**/*.tsx"
+      - "_acceptance/vong-doi-mot-cach-cat/rang/duong-luu-tru.mjs"
+    expected: |
+      exit 0 va "vong-doi-mot-cach-cat duong-luu-tru: dat"; script suy goc kho tu vi tri cua no, quet moi tep .tsx duoi
+      apps/app (bo test) tim loi goi archive/bulkArchive mutationOptions cua contacts, companies, deals (ca dang chung
+      trpc[RECORD_PROCEDURES[...]].archive). Ma tran viet truoc 4 cho: record-sheet/record-actions.tsx,
+      contacts-bulk-actions.tsx, companies-bulk-actions.tsx, deals-bulk-actions.tsx; tap cho tim thay === tap ma tran
+      (cho moi ngoai ma tran -> do "duong-luu-tru: cho luu tru moi chua khai"), va moi tep goi baoDaLuuTru hoac hook
+      luu tru loat dung chung cua components/crm/bulk-actions.tsx. In bang cho -> co Hoan tac. expect 4/4.
+      CHIEU DO ghim: --chieu-do them mot tep gia goi contacts.bulkArchive voi reportBulk tran -> do "duong-luu-tru: cho
+      khong co hoan tac".

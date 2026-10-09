@@ -1,0 +1,101 @@
+schema_version: 1
+slug: thuoc-7-ngay-loc-pr
+
+evals:
+  - id: E1
+    criterion: AC-1, AC-2, AC-3, AC-4, AC-5
+    executor: script
+    cmd: config:executors.script.t7n_don_vi
+    paths:
+      - "_acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs"
+      - "_acceptance/thuoc-7-ngay-loc-pr/rang/**"
+    expected: |
+      exit 0; node --test chay cac ham xuat cua do-7-ngay.mjs tren JSON that chup tu GitHub (rang/mau/), moi luat mot
+      cap xanh/do cung mau, thong diep ghim:
+      - ganPr: luot cua PR da gop (pull_requests rong) -> vao mau; PR base khac -> «base khac»; khong PR -> «khong gan
+        duoc». Ban sao doc pull_requests cua luot thay vi commits/<sha>/pulls -> luot PR da gop roi khoi mau, ca do.
+      - xepHuy: ba cau annotation that -> tran / de / tay; job huy khong co started_at -> «chua chay»; job da chay chi co
+        «The operation was canceled.» -> loi «khong xep duoc» goi ten job; da chay khong annotation -> cung loi. Ban sao xep theo thoi luong >= tran - 1 phut -> ca job de 30 phut do.
+      - tongHop: luot co lan 1 huy vi tran, lan 2 xanh -> dem 1 tran va 1 luot xanh; job dai nhat chi tinh lan cuoi.
+        Ban sao bo filter lan chay -> dem 0 tran, ca do.
+      - ketLuan: bang bien 10/9 luot xanh, trung vi 15/15,01/20/20,01, 0/1 tran, cua so dong/chua -> SONG / CHET /
+        «giua hai nguong» / chua ket luan va ma 0/3 dung tung o (ma tran viet truoc, so assert = so o).
+      - trungVi chi tren luot xanh: mau 10 luot xanh 10 phut tron voi 3 luot huy 30 phut va 3 luot do 2 phut -> trung vi
+        10, SONG; ban sao tinh tren moi luot -> do, thong diep ghim «trung vi lan luot khong xanh». So luot chan: 10 luot
+        xanh, hai gia tri giua 14 va 16,5 -> trung vi 15,25, «giua hai nguong».
+      - cuaSo: «2026-10-09T12:42:52+07:00» -> tu 2026-10-09T05:42:52Z, den 2026-10-16T05:42:52Z; --tu/--den ghi de.
+
+  - id: E2
+    criterion: AC-1, AC-2, AC-3, AC-6
+    executor: script
+    cmd: config:executors.script.t7n_cua_so_cu
+    paths:
+      - "_acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs"
+      - "_acceptance/thuoc-7-ngay-loc-pr/rang/cua-so-cu.mjs"
+    expected: |
+      exit 0; chay do-7-ngay.mjs --nhanh onehub --tu 2026-10-08T16:00:00Z --den 2026-10-09T04:00:00Z tren GitHub that,
+      mot lan bang node, mot lan bang bun. Ca hai lan: ma 3; in 20 luot ci.yml, 18 vao mau, 2 khong gan duoc PR, 0 base
+      khac, 3 huy vi tran (gom lan 1 cua luot 37841386976), 2 bi de, 0 huy tay, 0 luot xanh, 18 khong mang hinh ma tran.
+      Doi chung duong — cua so 2026-10-09T05:42:52Z -> 2026-10-09T09:20:00Z (sau #331, hinh ma tran): ma 3; 5 luot, 5 vao
+      mau, 5 luot xanh, 0 huy, job dai nhat moi luot 10,25 / 10,78 / 10,45 / 10,03 / 10,55 phut (sai so 0,01), trung vi
+      tam 10,45. Hai dau ra node va bun trung tung dong so. So do tinh o S0 bang duong doc lap (gh api runs + jobs
+      filter=all + annotations tung job). Lech mot so -> ma 1 goi ten dong lech.
+
+  - id: E3
+    criterion: AC-4, AC-5
+    executor: script
+    cmd: config:executors.script.t7n_mac_dinh
+    paths:
+      - "_acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs"
+      - "_acceptance/thuoc-7-ngay-loc-pr/rang/mac-dinh.mjs"
+    expected: |
+      exit 0; chay dung dong lenh Duong do (khong --tu) hai lan, node va bun, tren GitHub that; hai dau ra trung dong
+      cua so va moi dong so dem. Dong cua so bat dau dung gio UTC cua
+      `git log -1 --first-parent --format=%cI origin/onehub -- .github/workflows/ci.yml` (hom nay 2026-10-09T05:42:52Z),
+      ket thuc +7 ngay. Truoc gio ket thuc: in «cua so chua dong», khong co chu SONG hay CHET, ma 3. Sau gio ket thuc: ma
+      0 hoac 3 va dong ket luan khop so luot xanh in ra (>= 10 -> SONG/CHET/«giua hai nguong», < 10 -> chua du mau).
+      Ca hai pha: so luot xanh va so huy vi tran thuoc in bang so dem doc lap cua eval (gh api runs?event=pull_request tren
+      cung cua so, loc PR base onehub qua commits/<sha>/pulls, ci-ok success o lan chay cuoi; annotation «exceeded the
+      maximum execution time» o moi lan chay). Lech -> ma 1 in ca hai so.
+
+  - id: E4
+    criterion: AC-2, AC-7
+    executor: script
+    cmd: config:executors.script.t7n_loi_gh
+    paths:
+      - "_acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs"
+      - "_acceptance/thuoc-7-ngay-loc-pr/rang/gh-gia.mjs"
+    expected: |
+      exit 0; dat mot `gh` gia dau PATH va chay do-7-ngay.mjs bang node. Bon o: (a) gh tra du lieu lanh -> ma 3, co dong
+      so luot (doi chung duong); (b) gh thoat 1 o lenh doc jobs -> ma 2, in «gh api … /jobs» , khong co dong «ket luan»;
+      (c) gh tra JSON hong -> ma 2, cung luat; (d) mot job huy chi co annotation «The operation was canceled.» -> ma 2, in
+      id luot, ten job va nguyen cau. O nao lech -> ma 1 goi ten o.
+
+  - id: E5
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.t7n_phan_trang
+    paths:
+      - "_acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs"
+      - "_acceptance/thuoc-7-ngay-loc-pr/rang/phan-trang.mjs"
+    expected: |
+      exit 0; chay do-7-ngay.mjs --nhanh onehub --tu 2026-10-04T00:00:00Z --den 2026-10-09T00:00:00Z bang node: dong tong
+      luot ci.yml in 141 (dem o S0 bang gh api --paginate doc lap; trang dau chi tra 100). In so khac 141 -> ma 1.
+      Bien duoi (mot trang, khong can lat): cua so 2026-10-08T16:00:00Z -> 2026-10-09T04:00:00Z in dung 20, khong dem
+      trung. Ban sao bo --paginate -> cua so rong in 100, ca do goi ten «thieu trang».
+
+  - id: E6
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.t7n_noi_f21
+    paths:
+      - "_acceptance/ci-ma-tran-ba-o/evals.yaml"
+      - "_acceptance/thuoc-7-ngay-loc-pr/contract.md"
+      - "_acceptance/thuoc-7-ngay-loc-pr/design.md"
+      - "_acceptance/thuoc-7-ngay-loc-pr/rang/noi-f21.mjs"
+    expected: |
+      exit 0; doc _acceptance/ci-ma-tran-ba-o/evals.yaml bang lib/eval-yaml.cjs: E5 co status not-run va superseded_by
+      thuoc-7-ngay-loc-pr#AC-4. Goi chungThayBoi cua lib/evidence-core.cjs tren cay that: ok khi hop dong nay signed-off;
+      truoc chu ky chi duoc tra «ho-so-thay-chua-ky». Tren ban sao tam (hop dong nay dat signed-off, bao cao co khoi
+      eval cua AC-4 ma 0): ok; doi con tro thanh #AC-99 -> «ac-thay-vang»; xoa the ci-ma-tran-ba-o/E5 khoi hop dong va design doc ->
+      «thay-khong-nhan». Lech -> ma 1 goi ten o.
