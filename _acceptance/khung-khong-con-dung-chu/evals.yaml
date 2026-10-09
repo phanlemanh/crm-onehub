@@ -15,8 +15,10 @@ evals:
             khong chua «Đã có người»
         en: khung.khongCon.moTa bang dung «It may have been deleted, or the link is wrong.»; khong chua «permanently»;
             khong chua «Someone deleted»
-      Doi chung duong: tieuDe va dong cua khongCon (vi, en) giu nguyen chuoi cu.
-      CHIEU DO: ban sao tra lai cau cu -> dong vi do voi thong diep ghim "kkc-chu vi: moTa".
+      Doi chung duong (so literal, khong so voi messages): vi tieuDe «Bản ghi này không còn», dong «Đóng»; en tieuDe
+      «This record no longer exists», dong «Close».
+      CHIEU DO: ban sao tra lai cau cu -> dong vi do voi thong diep ghim "kkc-chu vi: moTa"; ban sao doi dong tieng Anh ->
+      dong "kkc-chu en: tieu de va nut giu nguyen" do.
 
   - id: E2
     criterion: AC-1
@@ -46,9 +48,11 @@ evals:
     paths:
       - "apps/app/lib/messages/kara-ban-ghi.ts"
       - "apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
     expected: |
-      git diff --quiet $(git merge-base HEAD origin/onehub) tren apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx (khong sua
-      ky vong), roi chay tep do tron (klg-khong-con, klg-khong-quyen, klg-mat-ket-noi, klg-ke-hoach-cong-ty, klg-en) -> thoat 0.
+      git diff --quiet $(git merge-base HEAD origin/onehub) tren apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx VA
+      apps/app/test/kara-ban-ghi.dom.tsx (khong sua ky vong), roi chay tron tep K4b (klg-khong-con, klg-khong-quyen,
+      klg-mat-ket-noi, klg-ke-hoach-cong-ty, klg-en) va bai khung-loi cua K4 (kara-ban-ghi.dom.tsx -t khung-loi) -> thoat 0.
       CHIEU DO: ban sao doi tieuDe cua khongCon -> klg-khong-con do.
 
   - id: E5
@@ -79,3 +83,22 @@ evals:
       Phep do man cua ho so K4b chay lai khong sua: o 1440 va 390, mo ca nhan da xoa -> khung [data-ly-do=khong-con] chua
       tieu de, cau mo ta MOI (man.mjs doc tu messages) va nut «Đóng»; bam Dong -> ngan dong. In "khung-loi-ban-ghi-dung-ly-do man: dat".
       Anh: cau «Có thể bản ghi đã bị xoá, hoặc đường dẫn không đúng.» nam tron trong khung, khong tran ngang.
+
+  - id: E7
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.klg_ma_that
+    paths:
+      - "apps/api/src/contacts/**"
+      - "apps/api/src/companies/**"
+      - "apps/api/src/deals/**"
+      - "_acceptance/khung-loi-ban-ghi-dung-ly-do/rang/ma-that.mjs"
+    expected: |
+      Phep do ma that cua ho so K4b chay lai khong sua, tren phien tien-de: contacts.byId, companies.byId, deals.byId,
+      onboarding.planById voi id vua xoa (Xoa trong CONTEXT.md la lam mat ban ghi, cung duong voi xoa vinh vien) va id CHUA
+      TUNG CO (dai dien duong dan sai hay cat cut) -> error.data.code === "NOT_FOUND"; in bang thu tuc -> ma that va
+      "khung-loi-ban-ghi-dung-ly-do ma-that: dat". Day la tien de cua cau moi: ca hai nguyen nhan cau nhac toi deu toi khung
+      «không còn».
+      CHIEU DO (cua ho so K4b, ghim): --chieu-do goi contacts.byId voi id con song -> do "ma-that: khong con nhung tra du lieu".
+
