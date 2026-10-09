@@ -234,9 +234,7 @@ export function useGopYMucTieu({
 	const locale = useLocale();
 	const mGopY = okrGopYMessages(locale);
 	const coDich = objectiveId !== null;
-	const dich = canEdit
-		? { objectiveId: objectiveId ?? "" }
-		: { objectiveId: objectiveId ?? "", keyResultId: krSuaDuoc[0] };
+	const dich = { objectiveId: objectiveId ?? "" };
 	const nhoDuoc = canEdit || krSuaDuoc.length > 0;
 	const [batDau, setBatDau] = useState<number | null>(null);
 	const [thayDocLuc, setThayDocLuc] = useState<number | null>(null);
