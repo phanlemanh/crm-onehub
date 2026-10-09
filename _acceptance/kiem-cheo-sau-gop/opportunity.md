@@ -41,6 +41,19 @@ Số đo (R1g `zalo-va`, ký Cổng 2 05/10 15:11):
 - Khi job đỏ: tự mở PR revert, tự mở chip sửa, hay chỉ báo điều phối?
 - Có giữ lại một bản rút gọn trong lượt ghim lại (chỉ hồ sơ có `paths` chạm **tệp mã sản phẩm** của diff, bỏ tệp test và `_acceptance/**`) không?
 
+## Ngưỡng chết / ngưỡng UAT
+
+- Câu hỏi phép đo trả lời: Kiểm chéo «có làm hỏng hồ sơ đã ký khác không» chạy một lần cho mỗi
+  lần gộp vào onehub mà không còn nằm trong lượt ghim lại của hồ sơ nào, và vẫn bắt được một hồi quy chéo
+  thật.
+- Kết quả nào là SỐNG: Hai tuần sau khi bật: 0 lượt ghim lại của hồ sơ nào chạy kiểm chéo toàn
+  kho; mỗi lần gộp vào onehub có đúng một kết quả kiểm chéo (xanh, hoặc đỏ gọi tên hồ sơ, eval và lần gộp
+  gây đỏ) trong vòng 24 giờ; một hồi quy chéo cố ý (phá thử trên nhánh nháp) bị bắt trong lượt đầu tiên.
+- Kết quả nào là CHẾT: Có lần gộp không có kết quả kiểm chéo sau 48 giờ, hoặc kiểm chéo đỏ mà
+  không gọi được tên lần gộp gây đỏ, hoặc một lượt giữ khoá `s4` quá trần một lượt (90 phút) trong lúc có phiên
+  khác đang chờ — tức chỉ dời 14 giờ máy sang chỗ khác.
+- Timebox: làm trong đợt sau-14-10 (dãy P4); đo lần đầu hai tuần sau ngày gộp.
+
 ## Hạng mục cùng lớp
 
 `ca-chap-chon-cach-ly`, `eval-model-that-dung-luc`, `thuoc-khong-tu-het-han` (hồ sơ cơ hội cùng đợt); phần sửa ở bộ kit đi chip riêng sang `~/dev/acceptance-gate-kit`.
