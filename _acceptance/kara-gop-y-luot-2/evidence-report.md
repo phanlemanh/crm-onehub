@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: cab0599a6de73d1284ef97ba51d9c6c8f3a6d9a7
+verified_commit: 9f706b3a79fc2fb8f5bbb7ebdf2d9d7a8a52bc5a
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -254,3 +254,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: moi eval xanh, khong eval nao fail, khong judgment item cho nguoi. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-09, do gộp onehub a9e8bc75 (#339) sau chữ ký Cổng 2; mở đường PR
+run_id: repin-20261009T143021Z-87860
+sha: 9f706b3a79fc2fb8f5bbb7ebdf2d9d7a8a52bc5a · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E15c · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
