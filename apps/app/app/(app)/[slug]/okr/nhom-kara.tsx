@@ -121,10 +121,7 @@ export function DeXuatNeo({
 		? {
 				decision: k.ket,
 				text: chuBienNhan(d, k, m),
-				onUndo:
-					k.ket === "accepted" && !k.daHoanTac && d.loai === "viet-lai"
-						? () => gopY.hoanTac(d)
-						: undefined,
+				onUndo: gopY.coHoanTac(d) ? () => void gopY.hoanTac(d) : undefined,
 			}
 		: undefined;
 	const boQua: ProposedChangeAction = {
@@ -201,6 +198,7 @@ export function DeXuatNeo({
 			actions={actions.map((a) => ({ ...a, disabled: khoa || a.disabled }))}
 			before={d.loai === "viet-lai" ? (d.truoc ?? "") : undefined}
 			data-gop-y={d.id}
+			data-trang-thai={gopY.trangThai(d.id)}
 			decided={decided}
 			editing={
 				sua === null

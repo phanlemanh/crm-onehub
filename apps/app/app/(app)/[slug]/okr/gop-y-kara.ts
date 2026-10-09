@@ -54,6 +54,13 @@ export function loaiLoiNho(cause: unknown): LoaiLoiNho {
 	return ma === "FORBIDDEN" ? "khong-quyen" : "khac";
 }
 
+export type TrangThaiDong =
+	| "cho"
+	| "dang-quyet"
+	| "da-quyet"
+	| "dang-hoan-tac"
+	| "da-hoan-tac";
+
 export type LoaiLoiDong = "khong-con" | "da-cu" | "chua-san-sang" | "mat-mang";
 
 export function loaiLoiDong(cause: unknown): LoaiLoiDong {
@@ -355,29 +362,55 @@ export function useGopYMucTieu({
 			.finally(() => setDangQuyet(null));
 	};
 
-	const hoanTac = (d: DongHien) => {
-		const truoc = d.truoc;
-		if (d.loai !== "viet-lai" || d.truong === null || truoc === null) return;
-		const xong = {
-			onSuccess: () => {
-				setKetCua((cu) => {
-					const k = cu[d.id];
-					return k ? { ...cu, [d.id]: { ...k, daHoanTac: true } } : cu;
-				});
-				if (objectiveId) void cache.okr(objectiveId);
-			},
-			onError: (cause: unknown) => baoLoi(d.id, cause),
-		};
+	const [dangHoan, setDangHoan] = useState<Readonly<Record<string, boolean>>>(
+		{},
+	);
+	const datDangHoan = (id: string, dang: boolean) =>
+		setDangHoan((cu) => ({ ...cu, [id]: dang }));
+
+	const coHoanTac = (d: DongHien): boolean => {
+		const k = ketCua[d.id];
+		if (k?.ket !== "accepted" || k.daHoanTac) return false;
+		return d.loai === "viet-lai" && d.truong !== null && d.truoc !== null;
+	};
+
+	const chayHoanTac = async (d: DongHien) => {
+		const truoc = d.truoc ?? "";
 		if (d.truong === "kr.title" && d.keyResultId) {
-			suaKr.mutate({ id: d.keyResultId, title: truoc }, xong);
+			await suaKr.mutateAsync({ id: d.keyResultId, title: truoc });
 			return;
 		}
-		suaMucTieu.mutate(
+		await suaMucTieu.mutateAsync(
 			d.truong === "title"
 				? { id: d.objectiveId, title: truoc }
 				: { id: d.objectiveId, whyNow: truoc },
-			xong,
 		);
+	};
+
+	const hoanTac = async (d: DongHien) => {
+		if (!coHoanTac(d) || dangHoan[d.id]) return;
+		datDangHoan(d.id, true);
+		xoaLoi(d.id);
+		try {
+			await chayHoanTac(d);
+			setKetCua((cu) => {
+				const k = cu[d.id];
+				return k ? { ...cu, [d.id]: { ...k, daHoanTac: true } } : cu;
+			});
+			if (objectiveId) void cache.okr(objectiveId);
+		} catch (cause) {
+			baoLoi(d.id, cause);
+		} finally {
+			datDangHoan(d.id, false);
+		}
+	};
+
+	const trangThai = (id: string): TrangThaiDong => {
+		if (dangHoan[id]) return "dang-hoan-tac";
+		const k = ketCua[id];
+		if (k?.daHoanTac) return "da-hoan-tac";
+		if (k) return "da-quyet";
+		return dangQuyet === id ? "dang-quyet" : "cho";
 	};
 
 	const ban: KaraBusyState =
@@ -398,6 +431,8 @@ export function useGopYMucTieu({
 		loiDong,
 		quyet,
 		hoanTac,
+		coHoanTac,
+		trangThai,
 		coHoiDoiTrong: dongCho.some(
 			(d) =>
 				d.loai === "hoi" &&
