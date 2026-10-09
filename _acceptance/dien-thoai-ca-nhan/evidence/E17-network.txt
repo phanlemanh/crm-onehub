@@ -1,1 +1,1 @@
-n-a (driver): do-man.mjs la puppeteer script, khong co tool doc network
+driver: do-man.mjs script (khong phai browser tool co read_network_requests) -> n-a (driver)

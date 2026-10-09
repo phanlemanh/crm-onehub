@@ -1,2 +1,2 @@
 driver: do-man.mjs (playwright qua mot-luot.sh); khong co browser tool network rieng.
-Dong: DUNG so-sai-375: 375: 0 yeu cau contacts.create (dem yeu cau mang trong do-man)
+Dong: DUNG so-sai-375: 375: 0 yeu cau contacts.create; loi «Số điện thoại chưa đúng — ví dụ 0901 234 567»; con tro o o Dien thoai true (lan chay 09:08, EXIT=0, 8 DUNG 0 SAI)
