@@ -91,10 +91,11 @@ evals:
     paths:
       - "_acceptance/ci-ma-tran-ba-o/evals.yaml"
       - "_acceptance/thuoc-7-ngay-loc-pr/contract.md"
+      - "_acceptance/thuoc-7-ngay-loc-pr/design.md"
       - "_acceptance/thuoc-7-ngay-loc-pr/rang/noi-f21.mjs"
     expected: |
       exit 0; doc _acceptance/ci-ma-tran-ba-o/evals.yaml bang lib/eval-yaml.cjs: E5 co status not-run va superseded_by
       thuoc-7-ngay-loc-pr#AC-4. Goi chungThayBoi cua lib/evidence-core.cjs tren cay that: ok khi hop dong nay signed-off;
       truoc chu ky chi duoc tra «ho-so-thay-chua-ky». Tren ban sao tam (hop dong nay dat signed-off, bao cao co khoi
-      eval cua AC-4 ma 0): ok; doi con tro thanh #AC-99 -> «ac-thay-vang»; xoa the ci-ma-tran-ba-o/E5 khoi hop dong ->
+      eval cua AC-4 ma 0): ok; doi con tro thanh #AC-99 -> «ac-thay-vang»; xoa the ci-ma-tran-ba-o/E5 khoi hop dong va design doc ->
       «thay-khong-nhan». Lech -> ma 1 goi ten o.

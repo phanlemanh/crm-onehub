@@ -124,6 +124,12 @@ describe("tongHopLuot", () => {
 		assert.equal(t.dangChay, true);
 		assert.equal(t.xanh, false);
 	});
+	test("luot dang chay chua co job ci-ok -> khong xep vao hinh nao (maTran null)", () => {
+		const run = { ...MA_TRAN_XANH.run, status: "in_progress", conclusion: null };
+		const jobs = MA_TRAN_XANH.jobs.filter((j) => j.name !== "ci-ok");
+		assert.equal(tongHopLuot(run, jobs, () => "de").maTran, null);
+		assert.equal(tongHopLuot(MA_TRAN_XANH.run, jobs, () => "de").maTran, false);
+	});
 	test("job thieu completed_at bi bo khoi max, khong nem", () => {
 		const jobs = MA_TRAN_XANH.jobs.map((j) => (j.name === "test (app-ui)" ? { ...j, completed_at: null } : j));
 		const t = tongHopLuot(MA_TRAN_XANH.run, jobs, () => "de");

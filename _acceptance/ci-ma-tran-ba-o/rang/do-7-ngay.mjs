@@ -46,7 +46,7 @@ export function tongHopLuot(run, jobs, xep) {
 	const dung = { ...BO_DEM_RONG };
 	for (const j of jobs.filter((x) => x.conclusion === "cancelled")) dung[xep(j)] += 1;
 	return {
-		maTran: Boolean(ciOk),
+		maTran: dangChay ? null : Boolean(ciOk),
 		dangChay,
 		xanh: !dangChay && ciOk?.conclusion === "success",
 		daiNhatPhut: daXong.length ? Math.max(...daXong.map(phutGiua)) : null,
@@ -180,7 +180,7 @@ function inKetQua({ cs, runs, dem, mau }, nhanh) {
 		`base khac: ${dem["base-khac"]}`,
 		`dang chay: ${mau.filter((l) => l.dangChay).length}`,
 		`luot xanh: ${xanh.length}`,
-		`khong mang hinh ma tran: ${mau.filter((l) => !l.maTran).length}`,
+		`khong mang hinh ma tran: ${mau.filter((l) => l.maTran === false).length}`,
 		`dung vi tran: ${dung.tran}`,
 		`bi de: ${dung.de}`,
 		`dung tay: ${dung.tay}`,
