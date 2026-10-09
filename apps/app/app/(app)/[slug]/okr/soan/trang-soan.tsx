@@ -5,7 +5,7 @@ import { KaraState } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useRecordStack } from "@/components/crm/record-sheet/record-stack";
 import { DetailSheetHeader } from "@/components/detail-sheet";
 import type { Thread } from "@/lib/agent-session";
@@ -52,7 +52,16 @@ function GiuKhiSoan({
 	dangSoan: boolean;
 	m: OkrSoanMessages;
 }) {
-	const khai = useKhaiThayDoi(m.trang.hoiDong);
+	const loiHoi = useMemo(
+		() => ({
+			tieuDe: m.trang.hoiDong.tieuDe,
+			than: m.trang.hoiDong.than,
+			nut: m.trang.hoiDong.nut,
+			thoi: m.trang.hoiDong.thoi,
+		}),
+		[m],
+	);
+	const khai = useKhaiThayDoi(loiHoi);
 	useEffect(() => {
 		khai(dangSoan);
 		if (!dangSoan) return;

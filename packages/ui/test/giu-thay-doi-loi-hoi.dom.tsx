@@ -3,13 +3,13 @@ import { act, type ReactElement, useLayoutEffect } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { type LoiHoi, useKhaiThayDoi } from "../src/components/giu-thay-doi";
 import { LocaleProvider } from "../src/components/locale-provider";
-import { messages } from "../src/lib/messages";
 import {
 	Sheet,
 	SheetClose,
 	SheetContent,
 	SheetTitle,
 } from "../src/components/sheet";
+import { messages } from "../src/lib/messages";
 
 let root: Root | null = null;
 

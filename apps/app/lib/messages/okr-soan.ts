@@ -283,8 +283,6 @@ const vi = {
 	},
 	trang: {
 		tieuDe: "Soạn OKR",
-		veTheoDonVi: "Theo đơn vị",
-		thanhKeo: "Đổi cỡ hội thoại và bản nháp",
 		khongMo: "mở cuộc soạn",
 		khongMoMoTa: "Cuộc này không còn, hoặc bạn không xem được nó.",
 		chuaCauHinh: "Quản trị cần nối Kara · OKR trong Cài đặt trước khi soạn.",
@@ -645,8 +643,6 @@ const en: OkrSoanMessages = {
 	},
 	trang: {
 		tieuDe: "Draft OKRs",
-		veTheoDonVi: "By unit",
-		thanhKeo: "Resize conversation and draft",
 		khongMo: "open this drafting session",
 		khongMoMoTa: "The session is gone, or you can't see it.",
 		chuaCauHinh:
