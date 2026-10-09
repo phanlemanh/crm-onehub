@@ -23,9 +23,7 @@ const vi = {
 		rong: "Kara không thấy chỗ nào cần sửa",
 		rongMoTa: (gio: string) =>
 			`Tên, «vì sao lúc này» và các KR đã đọc ổn lúc ${gio}. Sửa xong thì nhờ Kara đọc lại.`,
-		loi: "Kara chưa đọc được Mục tiêu này",
 		loiMoTa: "Lượt đọc bị ngắt giữa chừng. Chưa có gì bị ghi vào Mục tiêu.",
-		thuLai: "Thử lại",
 		hetLuot: "Bạn đã dùng hết lượt góp ý hôm nay. Mở lại lúc 00:00 ngày mai.",
 		tamNghi: (ngay: string) => `Kara tạm nghỉ tới ${ngay}.`,
 	},
@@ -134,9 +132,7 @@ const en: OkrGopYMessages = {
 		rong: "Kara found nothing to change",
 		rongMoTa: (gio: string) =>
 			`The title, “why now” and the KRs read well at ${gio}. Ask Kara again after you edit.`,
-		loi: "Kara couldn't read this objective",
 		loiMoTa: "The read was interrupted. Nothing was written to the objective.",
-		thuLai: "Try again",
 		hetLuot:
 			"You have used today's feedback requests. They reopen at 00:00 tomorrow.",
 		tamNghi: (ngay: string) => `Kara is paused until ${ngay}.`,

@@ -1,7 +1,9 @@
-import { describe, test } from "bun:test";
+import { describe, setSystemTime, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { KaraState } from "@crm/ui/components/kara/state";
+import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
+import { act } from "react";
 import {
 	bamChuot,
 	chiTietTu,
@@ -29,7 +31,15 @@ import {
 	thaoHet,
 	ui,
 } from "./khung-gop-y-dung-cho";
-import { demTiaSang, vungKara } from "./khung-gop-y-luot-2";
+import {
+	datDongHo,
+	demTiaSang,
+	KHUNG,
+	trangThaiKara,
+	vungKara,
+} from "./khung-gop-y-luot-2";
+
+const { nhipHoiLai } = await import("@/app/(app)/[slug]/okr/gop-y-kara");
 
 const MAU_KARA_STATE = join(
 	import.meta.dir,
@@ -286,6 +296,86 @@ describe("k3-nho-loi", () => {
 			);
 			await thaoHet();
 			kho.daGhi = [];
+		}
+	});
+});
+
+describe("k3-qua-han", () => {
+	const T0 = Date.parse("2026-10-09T03:00:00.000Z");
+	const DANG_DOC = () =>
+		dsTroLy([], { dangSoan: true, maKetThuc: null, docLuc: null });
+	const MA_TRAN = [
+		{
+			ten: "duoi-tran",
+			lech: TRO_LY_OKR_TRAN.tranChoMs - 1000,
+			mong: "working",
+		},
+		{ ten: "qua-tran", lech: TRO_LY_OKR_TRAN.tranChoMs + 1000, mong: "error" },
+	] as const;
+
+	test("k3-qua-han khung mo luc Kara dang doc va khong bam Nho: duoi tran con dang doc, qua tran sang loi co Thu lai", async () => {
+		for (const ca of MA_TRAN) {
+			try {
+				datDongHo(T0);
+				kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 0 }));
+				kho.troLy = DANG_DOC;
+				const san = await dungSheet();
+				await cho(() => trangThaiKara() === "working", `${ca.ten} dang doc`);
+				datDongHo(T0 + ca.lech);
+				await san.veLai(KHUNG());
+				await nhip(4);
+				const thuc = trangThaiKara();
+				if (ca.mong === "error" && thuc === "working")
+					throw new Error("cho mai khi khung mo luc kara dang doc");
+				kiemCa(
+					{
+						trangThai: thuc,
+						coThuLai:
+							qs("[data-slot=kara-retry]", vungKara() ?? document.body) !==
+							null,
+						daNho: goiCua("okr.troLyDeXuat").length,
+					},
+					{ trangThai: ca.mong, coThuLai: ca.mong === "error", daNho: 0 },
+					(k) => `${ca.ten} sai: ${k}`,
+				);
+			} finally {
+				setSystemTime();
+				await thaoHet();
+			}
+		}
+	});
+
+	test("k3-qua-han doc xong muon: qua tran van hoi lai cham, Kara doc xong thi bo loi va hien gop y", async () => {
+		kiemCa(
+			{
+				duoi: nhipHoiLai(0, TRO_LY_OKR_TRAN.tranChoMs - 1),
+				qua: nhipHoiLai(0, TRO_LY_OKR_TRAN.tranChoMs + 1),
+			},
+			{ duoi: TRO_LY_OKR_TRAN.hoiLaiMs, qua: TRO_LY_OKR_TRAN.tranChoMs },
+			(k) => `nhip hoi lai sau qua han sai: ${k}`,
+		);
+		let xong = false;
+		try {
+			datDongHo(T0);
+			kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 0 }));
+			kho.troLy = () => (xong ? dsTroLy([D_DOI_TRONG]) : DANG_DOC());
+			const san = await dungSheet();
+			await cho(() => trangThaiKara() === "working", "dang doc");
+			datDongHo(T0 + TRO_LY_OKR_TRAN.tranChoMs + 1000);
+			await san.veLai(KHUNG());
+			await cho(() => trangThaiKara() === "error", "qua han");
+			xong = true;
+			await act(async () => {
+				await san.client.invalidateQueries({
+					queryKey: ["okr.troLyDanhSach"],
+				});
+			});
+			await cho(
+				() => nhom()?.getAttribute("data-nhom-kara") === "co-gop-y",
+				"doc xong muon van ket loi",
+			);
+		} finally {
+			setSystemTime();
 		}
 	});
 });

@@ -102,10 +102,10 @@ function nhomTheoCho(ds: readonly DongHien[]): NhomGopY {
 	return { capBo, viSao, theoKr };
 }
 
-function nhipHoiLai(batDau: number | null, bayGio: number): number | false {
-	return batDau !== null && bayGio - batDau < TRO_LY_OKR_TRAN.tranChoMs
+export function nhipHoiLai(tu: number, bayGio: number): number {
+	return bayGio - tu < TRO_LY_OKR_TRAN.tranChoMs
 		? TRO_LY_OKR_TRAN.hoiLaiMs
-		: false;
+		: TRO_LY_OKR_TRAN.tranChoMs;
 }
 
 type CacheDanhSach = {
@@ -170,6 +170,7 @@ export function useGopYMucTieu({
 		: { objectiveId: objectiveId ?? "", keyResultId: krSuaDuoc[0] };
 	const nhoDuoc = canEdit || krSuaDuoc.length > 0;
 	const [batDau, setBatDau] = useState<number | null>(null);
+	const [thayDocLuc, setThayDocLuc] = useState<number | null>(null);
 	const [ketCua, setKetCua] = useState<Readonly<Record<string, KetDong>>>({});
 	const [daQuyet, setDaQuyet] = useState<readonly DongHien[]>([]);
 	const [loiDong, setLoiDong] = useState<Readonly<Record<string, string>>>({});
@@ -188,7 +189,7 @@ export function useGopYMucTieu({
 		retry: false,
 		refetchInterval: (q) =>
 			q.state.data?.dangSoan === true
-				? nhipHoiLai(batDau ?? q.state.dataUpdatedAt, Date.now())
+				? nhipHoiLai(thayDocLuc ?? Date.now(), Date.now())
 				: false,
 	});
 	const deXuat = useMutation(trpc.okr.troLyDeXuat.mutationOptions());
@@ -224,6 +225,9 @@ export function useGopYMucTieu({
 	);
 	const conCho = dongCho.filter((d) => ketCua[d.id] === undefined).length;
 	const dangSoan = ds?.dangSoan === true;
+	if (dangSoan && thayDocLuc === null) setThayDocLuc(Date.now());
+	if (!dangSoan && thayDocLuc !== null && danhSach.dataUpdatedAt > thayDocLuc)
+		setThayDocLuc(null);
 	const vuaSoan = useRef(false);
 	useEffect(() => {
 		if (vuaSoan.current && !dangSoan && objectiveId)
@@ -231,9 +235,10 @@ export function useGopYMucTieu({
 		vuaSoan.current = dangSoan;
 	}, [dangSoan, objectiveId, cache]);
 	const quaHan =
-		batDau !== null &&
 		dangSoan &&
-		danhSach.dataUpdatedAt - batDau >= TRO_LY_OKR_TRAN.tranChoMs;
+		thayDocLuc !== null &&
+		Math.max(Date.now(), danhSach.dataUpdatedAt) - thayDocLuc >=
+			TRO_LY_OKR_TRAN.tranChoMs;
 	const maKetThuc = ds?.maKetThuc ?? null;
 
 	const noiDung: NoiDungKara = (() => {
@@ -273,7 +278,9 @@ export function useGopYMucTieu({
 					void sanSang.refetch();
 					return;
 				}
-				setBatDau(Date.now());
+				const luc = Date.now();
+				setBatDau(luc);
+				setThayDocLuc(luc);
 				void danhSach.refetch();
 			},
 		});

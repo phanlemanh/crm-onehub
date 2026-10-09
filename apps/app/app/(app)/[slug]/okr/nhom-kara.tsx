@@ -26,7 +26,6 @@ import type {
 	ProposedChangeDecided,
 	ProposedChangeKind,
 } from "@crm/ui/components/proposed-change";
-import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
 import type { Locale } from "@crm/ui/lib/locale";
 import { type ReactNode, useId, useState } from "react";
 import {
@@ -260,33 +259,6 @@ function NutNhoKara({ gopY, nhan }: { gopY: GopYMucTieu; nhan: string }) {
 	);
 }
 
-function KhoiLoi({ gopY, laVung }: { gopY: GopYMucTieu; laVung?: boolean }) {
-	const m = okrGopYMessages(useLocale());
-	return (
-		<Empty
-			border="solid"
-			data-nhom-kara={laVung ? "loi" : undefined}
-			size="compact"
-		>
-			<EmptyHeader>
-				<EmptyTitle>{m.vung.loi}</EmptyTitle>
-				<EmptyDescription>{m.vung.loiMoTa}</EmptyDescription>
-			</EmptyHeader>
-			<EmptyContent>
-				<Button
-					disabled={gopY.nut.loai !== "mo" || gopY.dangGui}
-					onClick={gopY.nho}
-					size="sm"
-					type="button"
-					variant="outline"
-				>
-					{m.vung.thuLai}
-				</Button>
-			</EmptyContent>
-		</Empty>
-	);
-}
-
 function KhoiLoiKara({ gopY, moTa }: { gopY: GopYMucTieu; moTa: string }) {
 	const m = okrGopYMessages(useLocale());
 	return (
@@ -302,12 +274,13 @@ function KhoiLoiKara({ gopY, moTa }: { gopY: GopYMucTieu; moTa: string }) {
 function SauKhiQuyetHet({ gopY }: { gopY: GopYMucTieu }) {
 	const m = okrGopYMessages(useLocale());
 	if (gopY.docLai === "dang-doc")
-		return <ThinkingIndicator label={m.vung.dangDoc} />;
+		return <KaraState kind="working" label={m.vung.dangDoc} />;
 	if (gopY.docLai === "nho-loi")
 		return (
 			<KhoiLoiKara gopY={gopY} moTa={m.vung.nhoLoi[gopY.loiNho ?? "khac"]} />
 		);
-	if (gopY.docLai === "loi") return <KhoiLoi gopY={gopY} />;
+	if (gopY.docLai === "loi")
+		return <KhoiLoiKara gopY={gopY} moTa={m.vung.loiMoTa} />;
 	return (
 		<div>
 			<NutNhoKara gopY={gopY} nhan={m.vung.docLai} />
@@ -333,7 +306,7 @@ export function VungKara({
 		case "dang-doc":
 			return (
 				<div data-nhom-kara="dang-doc">
-					<ThinkingIndicator label={m.vung.dangDoc} />
+					<KaraState kind="working" label={m.vung.dangDoc} />
 				</div>
 			);
 		case "chua-goi":
@@ -361,7 +334,11 @@ export function VungKara({
 				</Empty>
 			);
 		case "loi":
-			return <KhoiLoi gopY={gopY} laVung />;
+			return (
+				<div data-nhom-kara="loi">
+					<KhoiLoiKara gopY={gopY} moTa={m.vung.loiMoTa} />
+				</div>
+			);
 		case "nho-loi":
 			return (
 				<div data-nhom-kara="nho-loi">
