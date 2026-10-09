@@ -69,7 +69,7 @@ const vi = {
 	chipAria: (n: string, ten: string) =>
 		`Kara có ${n} góp ý chờ cho «${ten}», mở khung chi tiết`,
 	danSang: {
-		moTaMucTieu: "Quyết ngay dưới từng KR.",
+		moTaMucTieu: "Góp ý nằm trong vùng Kara của Mục tiêu này.",
 		moTaKr: "Quyết ngay dưới KR này.",
 		xem: "Xem góp ý",
 	},
@@ -197,7 +197,7 @@ const en: OkrGopYMessages = {
 			? `Kara has 1 suggestion waiting for “${ten}”, open details`
 			: `Kara has ${n} suggestions waiting for “${ten}”, open details`,
 	danSang: {
-		moTaMucTieu: "Decide right under each KR.",
+		moTaMucTieu: "Suggestions are in the Kara section of this objective.",
 		moTaKr: "Decide right under this KR.",
 		xem: "See suggestions",
 	},

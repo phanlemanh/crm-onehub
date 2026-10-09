@@ -3,17 +3,24 @@ import {
 	bamChuot,
 	chiTietTu,
 	cho,
+	D_DOI_TRONG,
+	D_KR1,
+	D_KR2,
 	docCua,
 	dsTroLy,
+	dung,
 	dungSheet,
 	goiCua,
+	HopThoaiMucTieu,
 	KR_1,
 	KR_2,
 	kho,
 	kiemCa,
 	MT_ID,
 	mtSheet,
+	okrGopYMessages,
 	qs,
+	thaoHet,
 } from "./khung-gop-y-dung-cho";
 
 describe("k3-nhieu-kr", () => {
@@ -44,5 +51,48 @@ describe("k3-nhieu-kr", () => {
 			},
 			(k) => `nho nhieu kr sai: ${k}`,
 		);
+	});
+});
+
+describe("k3-cau-dan", () => {
+	const CA = [
+		{ ten: "gop-y-duoi-kr", ds: [D_KR1, D_KR2] },
+		{ ten: "cau-hoi-ca-bo", ds: [D_DOI_TRONG] },
+	] as const;
+
+	test("k3-cau-dan hop Sua Muc tieu: cau dan dung khi gop y nam duoi KR lan khi la cau hoi cho ca bo KR, vi va en", async () => {
+		for (const locale of ["vi", "en"] as const)
+			for (const ca of CA) {
+				const mL = okrGopYMessages(locale);
+				kho.troLy = () => dsTroLy([...ca.ds]);
+				await dung(
+					<HopThoaiMucTieu
+						dong={() => {}}
+						yeuCau={{
+							loai: "sua",
+							mucTieu: mtSheet({ soGopYCho: ca.ds.length }),
+						}}
+					/>,
+					"",
+					locale,
+				);
+				await cho(
+					() => qs("[data-dan-sang]") !== null,
+					`${locale}/${ca.ten} dong dan`,
+				);
+				const cau =
+					qs("[data-dan-sang] [data-slot=item-description]")?.textContent ?? "";
+				if (
+					ca.ten === "cau-hoi-ca-bo" &&
+					(cau.includes("dưới từng KR") || cau.includes("under each KR"))
+				)
+					throw new Error("cau dan sai cho cau hoi ca bo");
+				kiemCa(
+					{ cau },
+					{ cau: mL.danSang.moTaMucTieu },
+					() => `${locale}/${ca.ten} cau dan sai`,
+				);
+				await thaoHet();
+			}
 	});
 });
