@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 0c2fbef3ae14586d75ad44e193cecfea12a309b4
-human_signoff:
+human_signoff: "Phan Le Manh 2026-10-10 — ký Cổng 2 trên verdict PASS 5/5 eval (S4 vòng 2, wf_003b4d90-ae4); Ngoài-1 mở hợp đồng mới; đồng ý cắt; phê hết Treo"
 ---
 
 # Evidence Report: thuoc-khong-tu-het-han
