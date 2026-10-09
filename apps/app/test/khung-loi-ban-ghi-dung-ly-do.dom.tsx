@@ -248,6 +248,10 @@ function datNen() {
 
 const khung = () => document.querySelector("[data-khung-tai-loi]");
 const lyDo = () => khung()?.getAttribute("data-ly-do") ?? null;
+
+function chot(dung: boolean, thongDiep: string): void {
+	if (!dung) throw new Error(thongDiep);
+}
 const chuKhung = () => khung()?.textContent ?? "";
 
 async function moNgan(
@@ -284,6 +288,8 @@ describe("khung-loi-ban-ghi-dung-ly-do", () => {
 			const ghi = { record: "chua" as string | null };
 			await moNgan(n, `record=${n.ref}`, ghi);
 			await cho(() => khung() !== null, `${n.ten} khung`);
+			chot(lyDo() !== "mat-ket-noi", "klg: khong con hien nhu mat ket noi");
+			chot(!chuKhung().includes("khong-con-tho"), "klg: in loi tho");
 			expect(lyDo()).toBe("khong-con");
 			expect(chuKhung().includes(VI.khongCon.tieuDe)).toBe(true);
 			expect(chuKhung().includes(VI.khongCon.moTa)).toBe(true);
@@ -307,6 +313,7 @@ describe("khung-loi-ban-ghi-dung-ly-do", () => {
 		await cho(() => khung() !== null, "chong ngan khung");
 		await bam(nut(VI.khongCon.dong, khung() as Element));
 		await cho(() => ghi.record !== "chua", "chong ngan dong");
+		chot(ghi.record !== null, "klg: dong xoa ca chong");
 		expect(ghi.record).toBe("company:co-1");
 	});
 
@@ -320,6 +327,7 @@ describe("khung-loi-ban-ghi-dung-ly-do", () => {
 			const ghi = { record: "chua" as string | null };
 			await moNgan(n, `record=${n.ref}`, ghi);
 			await cho(() => khung() !== null, `${n.ten} khung`);
+			chot(lyDo() !== "mat-ket-noi", "klg: khong quyen hien nhu mat ket noi");
 			expect(lyDo()).toBe("khong-quyen");
 			expect(chuKhung().includes(VI.khongQuyen.tieuDe)).toBe(true);
 			expect(chuKhung().includes(VI.khongQuyen.moTa)).toBe(true);
@@ -354,6 +362,12 @@ describe("khung-loi-ban-ghi-dung-ly-do", () => {
 			expect(chuKhung().includes(KHONG_TAI)).toBe(true);
 			expect(chuKhung().includes(VI.loiMoTa)).toBe(true);
 			expect(chuKhung().includes("mang-tho")).toBe(false);
+			chot(
+				nutCo(THU_LAI, khung() as Element) !== null,
+				n.ten === "plan"
+					? "klg: ke hoach khong co thu lai"
+					: `klg: ${n.ten} khong co thu lai`,
+			);
 			const truoc = goiCua(n.duong).length;
 			await bam(nut(THU_LAI, khung() as Element));
 			await cho(() => khung() === null, `${n.ten} tai lai`);
@@ -382,6 +396,7 @@ describe("khung-loi-ban-ghi-dung-ly-do", () => {
 			});
 			await mo(<CompanyPlans companyId="co-1" companyName="Thép Hòa Phát" />);
 			await cho(() => khung() !== null, `${c.ma} khung`);
+			chot(lyDo() === c.ly, "klg: ke hoach cong ty sai ly do");
 			expect(lyDo()).toBe(c.ly);
 			const soNut = khung()?.querySelectorAll("button").length ?? -1;
 			expect(soNut).toBe(c.coThuLai ? 1 : 0);
@@ -422,6 +437,7 @@ describe("khung-loi-ban-ghi-dung-ly-do", () => {
 			await cho(() => khung() !== null, `${c.ma} khung en`);
 			expect(chuKhung().includes(c.tieuDe)).toBe(true);
 			expect(nutCo(c.nut, khung() as Element) === null).toBe(false);
+			chot(!DAU_VIET.test(chuKhung()), "klg: khung en con chu Viet");
 			expect(DAU_VIET.test(chuKhung())).toBe(false);
 			o.push(c.ma);
 			await dongHet();
