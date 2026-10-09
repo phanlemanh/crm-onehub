@@ -22,6 +22,7 @@ import { useFieldFacets } from "@/components/crm/fields/field-facets";
 import { OwnerCell } from "@/components/crm/owner-cell";
 import { usePrefetchRecord } from "@/components/crm/record-sheet/record-prefetch";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
+import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { ListSearch } from "@/components/data-table/list-search";
 import { SavedViewsMenu } from "@/components/data-table/saved-views-menu";
 import { useTableQuery } from "@/components/data-table/use-table-query";
@@ -35,7 +36,9 @@ import { contactsSearchParams } from "./contacts-search-params";
 
 type ContactRow = RouterOutputs["contacts"]["list"]["rows"][number];
 
-function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
+export function columnsFor(
+	m: ContactMessages,
+): DataTableColumn<ContactRow>[] {
 	return [
 		{
 			id: "name",
@@ -54,6 +57,14 @@ function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 					<span className="truncate font-medium">{contactName(row)}</span>
 				</span>
 			),
+		},
+		{
+			id: "phone",
+			header: m.headers.phone,
+			width: "w-[14%]",
+			hideBelow: "md",
+			cell: (row) =>
+				row.phone ? <SoDienThoai so={row.phone} /> : <EmptyCellValue />,
 		},
 		{
 			id: "title",

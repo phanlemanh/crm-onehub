@@ -128,6 +128,8 @@ const en = {
 		firstName: "First name",
 		lastName: "Last name",
 		rolePlaceholder: "Head of Security",
+		phonePlaceholder: "0901 234 567",
+		phoneInvalid: "That is not a phone number — for example 0901 234 567",
 	},
 	deal: {
 		fallbackTitle: "Deal",
@@ -322,6 +324,8 @@ const vi = {
 		firstName: "Tên",
 		lastName: "Họ",
 		rolePlaceholder: "Trưởng phòng Kinh doanh",
+		phonePlaceholder: "0901 234 567",
+		phoneInvalid: "Số điện thoại chưa đúng — ví dụ 0901 234 567",
 	},
 	deal: {
 		fallbackTitle: "Thoả thuận",

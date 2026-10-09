@@ -43,6 +43,7 @@ import {
 	savingValue,
 } from "@/components/crm/inline-field";
 import { OwnerCell } from "@/components/crm/owner-cell";
+import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { ContactSocials } from "@/components/crm/social-links";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { Timeline } from "@/components/crm/timeline/timeline";
@@ -267,12 +268,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 						</DetailSheetStat>
 						<DetailSheetStat label={m.contact.fields.phone}>
 							{contact.phone ? (
-								<a
-									href={`tel:${contact.phone}`}
-									className="underline-offset-2 hover:underline"
-								>
-									{contact.phone}
-								</a>
+								<SoDienThoai so={contact.phone} goi />
 							) : (
 								<EmptyCellValue />
 							)}
@@ -423,6 +419,7 @@ function ContactOverview({ contact: banDau }: { contact: Contact }) {
 						label={m.contact.fields.phone}
 						value={contact.phone}
 						type="tel"
+						render={(phone) => <SoDienThoai so={phone} />}
 						saving={isSaving("phone")}
 						onSave={(phone) => save({ phone })}
 					/>
