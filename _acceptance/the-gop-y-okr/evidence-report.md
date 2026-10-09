@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 9315f0aec7b0fb77cd2a3b43d91f869ca2946a1d
+verified_commit: 99ab35a30335c5f765410f94905e06d237d72c74
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -267,3 +267,7 @@ sha: beac40ab8472f735a5e7ecc79a03ae01ea1d37cf · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-08, do gộp onehub sau #303 (datatable-loc-ro)
 run_id: repin-20261008T011613Z-35007
 sha: 9315f0aec7b0fb77cd2a3b43d91f869ca2946a1d · suites: 7 lệnh exit 0 · evals: 2/2 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E4, E5, E6, E7, E8, E9, E10, E15, E16 · thay bởi hồ sơ đã ký: E3→gop-y-dung-cho#AC-7, E4→gop-y-dung-cho#AC-5, E5→gop-y-dung-cho#AC-5, E6→gop-y-dung-cho#AC-12, E7→gop-y-dung-cho#AC-10, E8→gop-y-dung-cho#AC-12, E9→gop-y-dung-cho#AC-11, E10→khung-ban-ghi-kara#AC-6, E15→gop-y-dung-cho#AC-14, E16→gop-y-dung-cho#AC-12 · ngoài làn máy: E1, E11, E13, E14 · diff chạm vật đo ngoài làn máy: E1, E11, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-3, AC-4, AC-5, AC-6, AC-7, AC-8, AC-9, AC-10, AC-11, AC-13, AC-14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-09, do thuoc-khong-tu-het-han sửa paths; hồ sơ hoá cũ do onehub đổi vật
+run_id: repin-20261009T224054Z-34604
+sha: 99ab35a30335c5f765410f94905e06d237d72c74 · suites: 7 lệnh exit 0 · evals: 2/2 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E3, E4, E5, E6, E7, E8, E9, E10, E15, E16 · thay bởi hồ sơ đã ký: E3→gop-y-dung-cho#AC-7, E4→gop-y-dung-cho#AC-5, E5→gop-y-dung-cho#AC-5, E6→gop-y-dung-cho#AC-12, E7→gop-y-dung-cho#AC-10, E8→gop-y-dung-cho#AC-12, E9→gop-y-dung-cho#AC-11, E10→khung-ban-ghi-kara#AC-6, E15→gop-y-dung-cho#AC-14, E16→gop-y-dung-cho#AC-12 · ngoài làn máy: E1, E11, E13, E14 · diff chạm vật đo ngoài làn máy: E1, E11, E13, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-3, AC-4, AC-5, AC-6, AC-7, AC-8, AC-9, AC-10, AC-11, AC-13, AC-14 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

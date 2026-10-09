@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: c256d2b362c39519365e3876cc3f341d560e95ee
+verified_commit: 99ab35a30335c5f765410f94905e06d237d72c74
 human_signoff: Manh Phan 2026-09-27
 ---
 
@@ -152,3 +152,7 @@ sha: 417e1f6fcb908b59262c47ee423a79e346938400 · suites: 4 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-09-27, do gộp origin/onehub d8fd171f (vá lối rò Slack #170) để PR #168 hết xung đột
 run_id: repin-20260927T061046Z-62246
 sha: c256d2b362c39519365e3876cc3f341d560e95ee · suites: 4 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng
+
+### Re-pin lần 5 — 2026-10-09, do thuoc-khong-tu-het-han sửa paths; hồ sơ hoá cũ do onehub đổi vật
+run_id: repin-20261009T224054Z-34604
+sha: 99ab35a30335c5f765410f94905e06d237d72c74 · suites: 7 lệnh exit 0 · evals: 7/7 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

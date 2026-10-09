@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b8d12ee60847ee8f7a7e20099b568012d993ca10
+verified_commit: 99ab35a30335c5f765410f94905e06d237d72c74
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -219,3 +219,7 @@ none — every multi-run eval is uniform (không eval nào trong vòng này có 
 ## Iterations
 
 Round 1: mọi eval máy pass ngay lần chạy đầu (E1–E12, gồm E4b/E5b/E9b, và ui-check E11u); bốn lệnh suite hồi quy (bun run test, bunx turbo run lint --force, bun run lint:slop, bunx turbo run build --force) đều xanh. Không có vòng quay lại implementation.
+
+### Re-pin lần 1 — 2026-10-09, do thuoc-khong-tu-het-han sửa paths; hồ sơ hoá cũ do onehub đổi vật
+run_id: repin-20261009T224054Z-34604
+sha: 99ab35a30335c5f765410f94905e06d237d72c74 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E11u · diff chạm vật đo ngoài làn máy: E11u — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
