@@ -1,0 +1,207 @@
+slug: soan-okr-trong-khung
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.sk_duong
+    expected: "exit 0; bài DOM apps/app/test/soan-okr-trong-khung.dom.tsx -t sk-duong, ma trận viết trước 5 ô: (a) NutSoan với soanMo trả cuộc mới → router.push 0 lần, adapter nuqs thử nghiệm ghi record=soan:<id> đúng 1 lần, đường giữ /<slug>/okr/theo-don-vi; (b) NutSoan có cuocDang, bấm «Tiếp tục» → record=soan:<idDang>, router.push 0 lần; (c) Theo đơn vị dựng với cuocSoan=<id> → URL ghi bằng history replace thành record=soan:<id> và không còn cuocSoan; (d) hàm đích của đường cũ (dùng chung với [cuocSoanId]/page.tsx) với cuộc có đơn vị pb:x và chu kỳ k → '/<slug>/okr/theo-don-vi?ky=k&don=pb:x&record=soan:<id>', với cuộc không có → '/<slug>/okr/theo-don-vi?record=soan:<id>'; (e) RecordSheetHost với stack [soan:<id không có>] → trong [data-slot=sheet-content] có [data-kara-state=error] chứa chữ khongMo và nút đóng. Bài in số ô và đòi bằng 5. Chiều đỏ ghim: bản sao nut-soan.tsx còn router.push(duongTrangSoan) phải đỏ 'van day sang trang rieng'; bản sao chuyen-link-cu.ts dùng push phải đỏ 'link cu them lich su'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/components/crm/record-sheet/**", "apps/app/test/soan-okr-trong-khung.dom.tsx", "apps/app/test/khung-soan-okr.tsx"]
+
+  - id: E1b
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sk_man_duong
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs); agent-okr chạy bằng mô hình giả; đăng nhập dev:session trưởng phòng kd-bac của bộ mẫu, chu kỳ pha lap-ke-hoach"
+      - "Bước 1 (1440): ở Theo đơn vị của phòng bấm «Soạn» → page.url() có đường /okr/theo-don-vi và record=soan:<id>; có [data-slot=sheet-content][data-size=kara]; không có phần tử [data-trang-soan] ngoài khung; ảnh E1b-soan-moi.png"
+      - "Bước 2: lưu history.length, mở /<slug>/okr/soan/<id> → URL thành theo-don-vi?ky=<ky của cuộc>&don=<đơn vị của cuộc>&record=soan:<id>; history.length tăng đúng 1 so với trước khi mở (một mục cho lần mở, không thêm mục cho lần chuyển)"
+      - "Bước 3: mở link cũ theo-don-vi?ky=..&don=..&cuocSoan=<id> → URL mang record=soan:<id>, không còn cuocSoan, history.length không tăng thêm so với bước mở"
+      - "Bước 4: mở theo-don-vi?record=soan:khong-co → khung có [data-kara-state=error] với chữ messages(vi).karaKhung.chuaDuoc(trang.khongMo); bấm nút đóng → URL không còn record; ảnh E1b-khong-mo.png"
+    expected: "exit 0; man.mjs --phan duong in 'buoc N: dat' cho 4 bước, console không lỗi. Chiều đỏ: --kiem-do-do push-link-cu (bản sao đổi replace thành push) phải in 'buoc 3: link cu them lich su' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.sk_record
+    expected: "exit 0; bài -t sk-record, ma trận viết trước 4 ô: (a) parse 'soan:abc' của record-stack trả {kind:'soan', id:'abc'} (đối chứng: 'khong-loai:abc' trả null); (b) recordHref(slug, 'soan', id) = '/<slug>/okr/theo-don-vi?record=soan%3A<id>' hoặc dạng giải mã tương đương — bài so bằng URLSearchParams, không so chuỗi; (c) RecordSheetHost dựng dưới đường /<slug>/deals với stack [soan:<id>] → trong [data-slot=sheet-content] có đầu khung chứa messages(vi).okrSoan.trang.tieuDe; (d) gọi close() của useRecordStack → adapter ghi record=null, đường giữ /<slug>/deals. Bài in số ô và đòi bằng 4. Chiều đỏ ghim: bản sao RECORD_KINDS bỏ 'soan' phải đỏ 'soan khong la ban ghi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/components/crm/record-sheet/**", "apps/app/lib/record-href.ts", "apps/app/test/soan-okr-trong-khung.dom.tsx"]
+
+  - id: E2b
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sk_man_trang_khac
+    steps:
+      - "Cảnh cây; phiên đo riêng; đăng nhập trưởng phòng; có một cuộc soạn của phòng"
+      - "Mở /<slug>/deals?record=soan:<id> → khung [data-size=kara] hiện với tiêu đề «Soạn OKR»; pathname vẫn /<slug>/deals; ảnh E2b-tren-deals.png"
+      - "Bấm nút đóng → pathname /<slug>/deals, URL không còn record; danh sách thoả thuận vẫn hiện"
+      - "Lặp với /<slug>/okr/cua-toi?record=soan:<id>"
+    expected: "exit 0; man.mjs --phan trang-khac in 'dat' cho 2 trang. Chiều đỏ: --kiem-do-do host-chi-okr (bản sao host chỉ dựng SoanSheet khi pathname chứa /okr/) phải in 'deals: khong mo khung' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/components/crm/record-sheet/**", "apps/app/app/(app)/[slug]/layout.tsx", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sk_man_be_ngang
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả: lượt 1 trả lời không nộp, lượt 2 nộp bản nháp 2 Mục tiêu × 5 KR; đăng nhập trưởng phòng"
+      - "Đọc getComputedStyle(documentElement) lấy R = --container-assist-rail và A = --container-assist (px). Ma trận khổ viết trước {1024×768, 1280×900, 1440×1000, 1920×1080} = 4 ô. Mỗi ô: mở cuộc mới → đo getBoundingClientRect của [data-o=hoi-thoai] (đòi |width − R| ≤ 1, và R trong [372, 388]) và đòi không có [data-o=ban-nhap]; gửi lượt 2 qua ô soạn, chờ [data-o=ban-nhap] hiện mà không page.reload → đòi |[data-o=hoi-thoai].width − R| ≤ 1 và .right lệch ≤ 1 px so với trước khi nộp; [data-o=ban-nhap].width ≤ A + 1; [data-slot=sheet-content].width ≤ innerWidth − 32 + 1; đòi không có [data-slot=resizable-handle]"
+      - "Mỗi ô: [data-slot=sheet-content].height = innerHeight ± 1; documentElement.scrollWidth == innerWidth; lăn bằng page.mouse.wheel trên thân bản nháp → scrollTop thân tăng, sheet-content.scrollTop = 0, window.scrollY = 0"
+      - "Mở một cuộc đã có nháp ở 1440 → [data-o=ban-nhap] có ngay ở lần dựng đầu (không qua trạng thái chỉ Kara: ảnh chụp lúc networkidle đầu tiên đã có ô bản nháp)"
+    expected: "exit 0; man.mjs --phan be-ngang in từng số đo theo ô, số dòng ô bằng 4. Chiều đỏ ghim: --kiem-do-do kara-co-gian (bản sao cột Kara flex-1) phải in 'cot kara doi be ngang' và mã 1; --kiem-do-do kara-w96 (bản sao khung cột Kara đặt w-96) phải in 'cot kara khong theo token' và mã 1; --kiem-do-do token-420 (bản sao globals.css đặt --container-assist-rail 420px) phải đo cột Kara 420 ± 1 và in 'dat'; --kiem-do-do khung-cuon (bản sao sheet-content overflow-y-auto, thân ô overflow visible) phải in 'khung cuon thay o' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/detail-sheet.tsx", "packages/ui/src/components/sheet.tsx", "packages/ui/src/components/kara/**", "packages/ui/src/styles/globals.css", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+
+  - id: E3b
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.sk_khung
+    expected: "exit 0; bài DOM -t sk-khung, ma trận viết trước 4 ô theo matchMedia giả của SOAN_UI.khoHep × có/không dòng nháp {rộng rỗng, rộng có nháp, hẹp rỗng, hẹp có nháp}: ô rộng rỗng: đúng một [data-o=hoi-thoai], không có [data-o=ban-nhap], không có tablist; ô rộng có nháp: [data-o=ban-nhap] đứng TRƯỚC [data-o=hoi-thoai] theo thứ tự tài liệu (compareDocumentPosition), không có [data-slot=resizable-handle] hay [data-slot=resizable-panel-group]; [data-slot=sheet-content] mang data-size=kara; chuyển từ rỗng sang có nháp bằng cách nạp lần nộp đầu vào bộ đệm truy vấn → nút ô soạn giữ nguyên nút DOM cũ (cùng tham chiếu phần tử, tức không tháo dựng lại cột Kara); ô hẹp: tablist hai tab chữ tabTroChuyen và tabBanNhap(n). Bài in số ô và đòi bằng 4. Chiều đỏ ghim: bản sao đặt ô bản nháp sau cột Kara phải đỏ 'ban nhap khong o ben trai'; bản sao còn ResizableHandle phải đỏ 'con thanh keo'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "packages/ui/src/components/sheet.tsx", "apps/app/test/soan-okr-trong-khung.dom.tsx"]
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sk_man_khung_lien
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả nộp bản nháp 2 Mục tiêu × 5 KR; đăng nhập trưởng phòng; 1440"
+      - "Ma trận viết trước {khung hẹp, khung rộng} × {light, dark} = 4 ô. Mỗi ô với từng ô có trong {[data-o=hoi-thoai] > khung đầu tiên, [data-o=ban-nhap] > [data-slot=kara-artifact]}: getComputedStyle đòi border{Top,Right,Bottom,Left}Width ≥ 1px và borderStyle solid cả bốn cạnh, borderTopLeftRadius bằng giá trị rounded-lg của theme (đọc từ một phần tử mẫu class rounded-lg dựng tạm), borderColor của hai ô bằng nhau; màu viền khác màu nền khung (so chuỗi rgb)"
+      - "Ô soạn [data-slot=prompt-input] hoặc textarea của cột Kara nằm trong khung cột Kara (closest); nút «Đưa vào» nằm trong [data-slot=kara-artifact]"
+      - "Lăn thân mỗi ô tới cuối bằng page.mouse.wheel: phần tử con cuối của thân có .bottom ≤ .top của chân ô đó + 1"
+      - "Ảnh E4-<khung>-<nền>.png"
+    expected: "exit 0; man.mjs --phan khung-lien in kết quả từng ô, số ô bằng 4. Chiều đỏ ghim: --kiem-do-do cot-kara-tran (bản sao bỏ khung cột Kara) phải in 'cot kara khong co khung' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/kara/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.sk_dau
+    expected: "exit 0; bài DOM -t sk-dau, ma trận viết trước 4 ô {đang mở, có nháp, không mở được, chưa cấu hình}: mỗi ô có đúng một [data-slot=sheet-header] trong [data-slot=sheet-content] chứa tiêu đề messages(vi).okrSoan.trang.tieuDe; ô có nháp: mô tả chứa tên đơn vị trong phần tử translate=no, tên chu kỳ và messages(vi).okrSoan.man.luot(n, 12); không ô nào có liên kết chữ trang.veTheoDonVi, phần tử [data-slot=page-shell-title], role=tablist ngoài tab soạn, hay ô chọn chu kỳ; ô đang mở có tiêu đề trước khi dữ liệu về. Bài in số ô và đòi bằng 4. Chiều đỏ ghim: bản sao còn DauTrangSoan phải đỏ 'con dau trang rieng'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/detail-sheet.tsx", "apps/app/lib/messages/okr-soan.ts", "apps/app/test/soan-okr-trong-khung.dom.tsx"]
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sk_man_hep
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả nộp bản nháp; đăng nhập trưởng phòng; mỗi khổ một phiên trình duyệt (context mới)"
+      - "Ma trận khổ viết trước {375×812, 768×1024, 1023×768} = 3 ô. Ô 768 và 1023: khung [data-slot=sheet-content] width ≤ 808; có tablist hai tab. Ô 375: phần tử khung (drawer-content hoặc sheet-content) width = innerWidth ± 2 và height = innerHeight ± 2; có tablist hai tab"
+      - "Mỗi ô: bấm tab «Bản nháp» bằng mousedown (tab Radix) → URL có tabSoan=ban-nhap; page.reload → tab Bản nháp đang chọn; documentElement.scrollWidth == innerWidth"
+      - "Ảnh E6-<khổ>.png"
+    expected: "exit 0; man.mjs --phan hep in số đo từng ô, số ô bằng 3. Chiều đỏ ghim: --kiem-do-do ngan-keo-88 (bản sao để ngăn kéo cao 88dvh) phải in '375: khung khong phu toan man' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/responsive-sheet.tsx", "packages/ui/src/components/drawer.tsx", "packages/ui/src/components/sheet.tsx", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.sk_dong
+    expected: "exit 0; bài DOM -t sk-dong, ma trận viết trước {Kara đang soạn, Kara rảnh} × {bấm ra ngoài (pointerdown trên lớp phủ), Esc, nút đóng} = 6 ô: đang soạn × ra ngoài → khung vẫn mở, không có hộp hỏi; đang soạn × Esc và × nút đóng → có [role=alertdialog] chứa chữ messages(vi).okrSoan.dong.hoiTieuDe và hoiMoTa; bấm «Ở lại» → hộp đóng, khung mở, hàm agent.stop giả gọi 0 lần; lặp rồi bấm «Đóng» → stack rỗng, agent.stop gọi 0 lần; rảnh × cả ba → khung đóng ngay, không có alertdialog; sau đóng document.activeElement là nút đã mở khung. Bài in số ô và đòi bằng 6. Chiều đỏ ghim: bản sao không chặn onInteractOutside khi đang soạn phải đỏ 'ra ngoai dong khung khi dang soan'; bản sao gọi agent.stop khi đóng phải đỏ 'dong khung dung luot'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/detail-sheet.tsx", "apps/app/components/responsive-sheet.tsx", "packages/ui/src/components/giu-thay-doi.tsx", "apps/app/test/soan-okr-trong-khung.dom.tsx"]
+
+  - id: E7b
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sk_man_dong
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả trả lời chậm 8 giây ở lượt 2; đăng nhập trưởng phòng; 1440"
+      - "Gửi lượt 2; khi [data-kara-state=working] hiện: page.mouse.click ở toạ độ (40, 400) ngoài khung → khung vẫn mở; bấm Escape → hộp hỏi hiện, ảnh E7b-hoi-dong.png; bấm «Ở lại» → hộp đóng, khung mở"
+      - "Ở 375: vuốt ngăn từ đầu khung xuống 300 px bằng page.mouse (down, move, up) khi Kara đang soạn → hộp hỏi hiện"
+      - "Chờ lượt xong; bấm Escape → khung đóng ngay, không hộp hỏi"
+    expected: "exit 0; man.mjs --phan dong in 'dat' cho 4 bước. Chiều đỏ: --kiem-do-do khong-giu (bản sao bỏ bộ giữ) phải in 'ra ngoai dong khung' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/responsive-sheet.tsx", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+
+  - id: E8
+    criterion: AC-8
+    executor: ui-check
+    layer: backend-effect
+    cmd: config:executors.script.sk_man_luot
+    steps:
+      - "Cảnh cây; phiên đo riêng (kho crm_<cây>_do); mô hình giả: lượt 2 trả lời chậm 8 giây rồi nộp bản nháp 2 Mục tiêu × 5 KR; đăng nhập trưởng phòng; 1440"
+      - "Ca đóng: đọc từ CSDL okrCuocSoan.soLuot và số lần nộp của cuộc (bảng nộp bản nháp) trước khi gửi; gửi lượt 2; khi đang soạn bấm nút đóng rồi «Đóng» trong hộp hỏi; chờ 12 giây; đọc lại CSDL → soLuot tăng đúng 1 và số lần nộp tăng đúng 1; mở lại record=soan:<id> → [data-o=ban-nhap] có 2 Mục tiêu, không có mốc lỗi ([data-moc=loi] = 0), không page.reload"
+      - "Ca tải lại: gửi lượt 4 (chậm 8 giây); khi đang soạn ghi lại sự kiện dialog của page (đòi một dialog kiểu beforeunload, chấp nhận nó) rồi page.reload; khung mở lại từ URL hiện «Kara đang soạn…» rồi bản nháp mới; CSDL soLuot tăng đúng 1; ở Kara rảnh page.reload không sinh dialog nào"
+      - "Ca chồng: gửi lượt 3 (chậm 8 giây); khi đang soạn mở record thêm objective:<id Mục tiêu có thật> (useRecordStack.open qua liên kết trong khung hoặc URL replace) → khung Mục tiêu hiện; đóng khung Mục tiêu sau 2 giây → khung soạn hiện lại với «Kara đang soạn…» rồi bản nháp mới khi lượt xong; CSDL soLuot tăng đúng 1"
+    expected: "exit 0; man.mjs --phan luot in số đọc từ CSDL trước/sau cho ba ca và 'dat'. Chiều đỏ ghim: --kiem-do-do dung-khi-dong (bản sao gọi huỷ lượt phía máy chủ khi khung tháo) phải in 'dong: so lan nop khong tang' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.sk_k2_song
+    expected: "exit 0; rang/k2-song.mjs đọc _acceptance/soan-okr-trang-rieng/evals.yaml, rút mọi eval executor test|script không khai status not-run (sau lượt này: E3, E4, E5, E5b, E6, E6b, E7, E8, E8b, E9, E10, E10b, E11, E12, E13, E13b, E13c, E16), in danh sách trước khi chạy và đòi danh sách ấy đúng bằng tập viết trước trong script (lệch là đỏ 'tap k2 song doi'), giải từng cmd qua _acceptance/config.yaml, chạy lần lượt, in 'id: exit n' từng dòng và thoát 0 chỉ khi mọi mã bằng 0. Chiều đỏ ghim: --tu-thu chạy trên bản sao cây có bang-nhap.tsx bỏ KaraArtifact phải in 'E3: exit 1' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/test/**", "apps/api/test/soan-okr-hoan-tac.spec.ts", "_acceptance/soan-okr-trang-rieng/**", "_acceptance/soan-okr-trong-khung/rang/k2-song.mjs"]
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.sk_luat
+    expected: "exit 0; rang/luat.mjs kiểm 6 mục viết trước và in từng mục: (1) diff so với merge-base onehub trên các tệp .tsx của khu soạn và record-sheet không có chuỗi khớp /\\b(w|min-w|max-w)-\\[\\d+px\\]/ hay style width bằng số; (2) sheet.tsx có biến thể size 'kara', và cột Kara cùng ô bản nháp lấy bề ngang từ token: lớp của khung cột Kara chứa --container-assist-rail, lớp ô bản nháp chứa --container-assist (đòi CẢ HAI), và globals.css vẫn khai hai token với 380px và 800px; (3) có tệp mới trong packages/ui/src/components/kara/ được khu soạn import; (4) không còn 'ResizablePanelGroup' dưới okr/soan; (5) docs/ai-ux.md có tiêu đề mục chứa 'Kara ở đâu' và mục đó có các chữ 'phải', 'trái', 'Soạn OKR', 'K5'; (6) evals.yaml của soan-okr-trang-rieng: năm ô E1, E1b, E2, E2b, E14 mang status not-run và superseded_by khớp ^soan-okr-trong-khung#AC-\\d+$, ô khác không mang; cộng ranh giới: mọi tệp trong diff khớp danh sách glob trong rang/ranh-gioi.json. Chiều đỏ ghim: --tu-thu trên bản sao có khung-soan.tsx thêm 'w-[380px]' phải in 'muc 1: be ngang so o cho goi' và mã 1; bản sao docs/ai-ux.md bỏ mục phải in 'muc 5: thieu luat kara o dau'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/**", "packages/ui/src/**", "docs/ai-ux.md", "_acceptance/soan-okr-trang-rieng/evals.yaml", "_acceptance/soan-okr-trong-khung/rang/luat.mjs", "_acceptance/soan-okr-trong-khung/rang/ranh-gioi.json"]
+
+  - id: E11
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sk_man_ma_tran
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả theo kịch bản cho từng trạng thái của bảng trạng thái design doc; đăng nhập trưởng phòng; mỗi khổ một phiên trình duyệt"
+      - "Ma trận viết trước: 10 trạng thái ST-khung-* × khổ {1440, 1024, 768, 375} × nền {light, dark}, trừ ô vô nghĩa liệt sẵn trong script (ST-khung-dien-thoai chỉ ở 375; ST-khung-rong*, ST-khung-da-dua-vao không ở trạng thái hẹp) và trừ ST-khung-chua-cau-hinh — trạng thái thiếu biến cầu nối của tiến trình app, không dựng được bằng kịch bản mô hình; bài DOM E5 ô «chưa cấu hình» phủ nó — script in tổng số ô và đòi bằng số viết trước"
+      - "Ảnh đối chiếu: ở 1440 nền tối mở ?record=objective:<id Mục tiêu có thật của phòng> trên Theo đơn vị, chụp đúng tên doi-chieu-khung-muc-tieu-1440-dark.png; thiếu ảnh này script in 'thieu anh doi chieu' và mã 1"
+      - "Mỗi ô: ảnh E11-<ST>-<khổ>-<nền>.png; documentElement.scrollWidth == innerWidth; window.scrollY = 0; bề ngang cột Kara và bản nháp theo AC-3 (khổ ≥ 1024) và AC-6 (khổ < 1024); console không có lỗi"
+    expected: "exit 0; man.mjs --phan ma-tran in một dòng mỗi ô và tổng; mọi ô đạt. Chiều đỏ: --kiem-do-do tran-ngang (bản sao cho bản nháp min-w 1200px) phải in ô tràn đầu tiên và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/**", "packages/ui/src/components/sheet.tsx", "packages/ui/src/components/drawer.tsx", "packages/ui/src/components/kara/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
+
+  - id: E12
+    criterion: AC-12
+    executor: judgment
+    inputs:
+      - "_acceptance/soan-okr-trong-khung/evidence/E11-ST-khung-hep-rong-1440-light.png"
+      - "_acceptance/soan-okr-trong-khung/evidence/E11-ST-khung-rong-1440-light.png"
+      - "_acceptance/soan-okr-trong-khung/evidence/E11-ST-khung-rong-dang-soan-1440-dark.png"
+      - "_acceptance/soan-okr-trong-khung/evidence/E7b-hoi-dong.png"
+      - "_acceptance/soan-okr-trong-khung/evidence/E11-ST-khung-dien-thoai-375-light.png"
+      - "_acceptance/soan-okr-trong-khung/evidence/doi-chieu-khung-muc-tieu-1440-dark.png"
+      - "docs/ai-ux.md"
+    question: "Nhìn năm ảnh khung Soạn OKR (chỉ Kara, có bản nháp, đang soạn nền tối, hộp hỏi khi đóng, điện thoại) cạnh ảnh đối chiếu khung chi tiết Mục tiêu, và mục «Kara ở đâu» của docs/ai-ux.md: (1) nói được ngay Kara ở đâu và bản nháp ở đâu không? (2) có thấy đây là cùng một kiểu khung với chi tiết Mục tiêu — trượt từ phải, đầu khung cùng dáng, trang nền phía sau — không? (3) hai ô đều có khung liền, không ô nào trông «trôi» không? (4) hộp hỏi có nói rõ điều gì xảy ra với lượt Kara đang chạy nếu đóng không? PASS chỉ khi cả bốn đạt."
+    expected: "Hội đồng đọc ảnh và luật: Kara cột phải, bản nháp bên trái; khung cùng dáng khung Mục tiêu; hai ô có viền liền; hộp hỏi nói lượt vẫn chạy và mở lại để xem tiếp."
+    evidence_required: [run_id, verdict, verifier, verified_at, rationale]
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.sk_san_thiet_ke
+    expected: "exit 0; design-gate.mjs --mode static trên từng .tsx dưới apps/app/app/(app)/[slug]/okr/soan/ và apps/app/components/crm/record-sheet/soan-sheet.tsx (liệt bằng find, không gõ tay) cộng các .tsx mới hoặc sửa dưới packages/ui/src/components/kara/ và packages/ui/src/components/sheet.tsx, drawer.tsx; năm lỗi nền P0 bằng 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/soan-sheet.tsx", "packages/ui/src/components/kara/**", "packages/ui/src/components/sheet.tsx", "packages/ui/src/components/drawer.tsx"]
+
+  - id: E14
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.sk_man_dua_vao
+    steps:
+      - "Cảnh cây; phiên đo riêng; mô hình giả nộp bản nháp 2 Mục tiêu × 5 KR; đăng nhập trưởng phòng; 1440"
+      - "Mở Theo đơn vị của phòng, đếm Mục tiêu trên màn (M0) và đọc từ CSDL số Mục tiêu của phòng trong chu kỳ (D0); bấm «Soạn», để Kara nộp, nhận cả nhóm, gõ đủ số, «Đưa vào», xác nhận; chờ biên nhận"
+      - "Bấm nút đóng khung (không page.reload): đọc CSDL D1; đếm Mục tiêu trên màn M1; đòi D1 = D0 + 2 và M1 = D1; nút soạn của phòng không chứa chữ messages(vi).okrSoan.nut.tiepTuc cho cuộc vừa đưa vào; ảnh E14-sau-dua-vao.png"
+    expected: "exit 0; man.mjs --phan dua-vao in M0, D0, D1, M1 và 'dat'. Chiều đỏ ghim: --kiem-do-do khong-lam-moi (bản sao bỏ bước làm mới truy vấn Theo đơn vị sau Đưa vào) phải in 'trang nen cu sau dua vao' và mã 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/theo-don-vi/**", "apps/app/components/crm/record-sheet/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
