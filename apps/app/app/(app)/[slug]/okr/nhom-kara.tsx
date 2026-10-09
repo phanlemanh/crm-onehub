@@ -2,13 +2,6 @@
 
 import AiGenerate from "@carbon/icons-react/es/AiGenerate";
 import { Button } from "@crm/ui/components/button";
-import {
-	Empty,
-	EmptyContent,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyTitle,
-} from "@crm/ui/components/empty";
 import { Field, FieldDescription } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import {
@@ -18,43 +11,28 @@ import {
 	ItemDescription,
 } from "@crm/ui/components/item";
 import { KaraLabel, KaraMark } from "@crm/ui/components/kara";
+import { KaraProposal } from "@crm/ui/components/kara/proposal";
+import { KaraState } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import {
-	ProposedChange,
-	type ProposedChangeAction,
-	type ProposedChangeDecided,
-	type ProposedChangeKind,
+import type {
+	ProposedChangeAction,
+	ProposedChangeDecided,
+	ProposedChangeKind,
 } from "@crm/ui/components/proposed-change";
-import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
-import type { Locale } from "@crm/ui/lib/locale";
+import { formatNgayGio } from "@crm/ui/lib/format";
 import { type ReactNode, useId, useState } from "react";
 import {
 	type OkrGopYMessages,
 	okrGopYMessages,
 } from "@/lib/messages/okr-gop-y";
 import { dauThangSau, homNayVn, OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
-import type { CachQuyet, GopYMucTieu, KetDong } from "./gop-y-kara";
+import type { CachQuyet, GopYMucTieu, KetDong, LyDoTat } from "./gop-y-kara";
 import type { DongHien } from "./the-gop-y-props";
 
 export type LoiDiKr =
 	| { loai: "kr-moi" }
 	| { loai: "sua-kr"; keyResultId: string }
 	| { loai: "sua-muc-tieu" };
-
-const DINH_DANG_GIO = { vi: "vi-VN", en: "en-US" } satisfies Record<
-	Locale,
-	string
->;
-
-function gioDoc(luc: string, locale: Locale): string {
-	return new Intl.DateTimeFormat(DINH_DANG_GIO[locale], {
-		hour: "2-digit",
-		minute: "2-digit",
-		day: "2-digit",
-		month: "2-digit",
-		timeZone: OKR_CHU_KY.muiGio,
-	}).format(new Date(luc));
-}
 
 function tomTatCua(d: DongHien, m: OkrGopYMessages): string {
 	const ma = d.maVanDe;
@@ -77,6 +55,8 @@ function chuBienNhan(
 		return m.bienNhan.boQuaHoi(tomTatCua(d, m));
 	}
 	if (k.daHoanTac) {
+		if (d.loai === "can-chinh")
+			return m.bienNhan.hoanTacCanChinh(d.tenDich ?? "");
 		if (d.truong === "whyNow") return m.bienNhan.hoanTacViSao;
 		if (d.truong === "title") return m.bienNhan.hoanTacMucTieu(d.truoc ?? "");
 		return m.bienNhan.hoanTacKr(d.truoc ?? "");
@@ -128,10 +108,7 @@ export function DeXuatNeo({
 		? {
 				decision: k.ket,
 				text: chuBienNhan(d, k, m),
-				onUndo:
-					k.ket === "accepted" && !k.daHoanTac && d.loai === "viet-lai"
-						? () => gopY.hoanTac(d)
-						: undefined,
+				onUndo: gopY.coHoanTac(d) ? () => void gopY.hoanTac(d) : undefined,
 			}
 		: undefined;
 	const boQua: ProposedChangeAction = {
@@ -204,10 +181,13 @@ export function DeXuatNeo({
 		];
 	}
 	return (
-		<ProposedChange
+		<KaraProposal
 			actions={actions.map((a) => ({ ...a, disabled: khoa || a.disabled }))}
 			before={d.loai === "viet-lai" ? (d.truoc ?? "") : undefined}
 			data-gop-y={d.id}
+			data-highlighted={gopY.noi === d.id ? "true" : undefined}
+			data-kara-proposal-kr={d.keyResultId ?? undefined}
+			data-trang-thai={gopY.trangThai(d.id)}
 			decided={decided}
 			editing={
 				sua === null
@@ -215,10 +195,13 @@ export function DeXuatNeo({
 					: { value: sua, onChange: setSua, onCancel: () => setSua(null) }
 			}
 			error={gopY.loiDong[d.id]}
+			highlighted={gopY.noi === d.id}
 			kind={kind}
 			lockedReason={gopY.ghiDuoc ? undefined : m.de.khoaSua}
+			media={false}
 			pending={gopY.dangQuyet === d.id}
 			rationale={rationale}
+			tabIndex={-1}
 			value={value}
 		/>
 	);
@@ -258,38 +241,69 @@ function NutNhoKara({ gopY, nhan }: { gopY: GopYMucTieu; nhan: string }) {
 	);
 }
 
-function KhoiLoi({ gopY, laVung }: { gopY: GopYMucTieu; laVung?: boolean }) {
+function cauTat(vi: LyDoTat, m: OkrGopYMessages): string {
+	switch (vi) {
+		case "het-luot":
+			return m.vung.hetLuot;
+		case "tam-nghi":
+			return m.vung.tamNghi(dauThangSau(homNayVn(new Date())));
+		case "chua-bat":
+			return m.vung.chuaBat;
+		case "tam-tat":
+			return m.vung.tamTat;
+	}
+}
+
+function KhoiTat({ vi, nhan }: { vi: LyDoTat; nhan: string }) {
 	const m = okrGopYMessages(useLocale());
+	const id = useId();
 	return (
-		<Empty
-			border="solid"
-			data-nhom-kara={laVung ? "loi" : undefined}
-			size="compact"
-		>
-			<EmptyHeader>
-				<EmptyTitle>{m.vung.loi}</EmptyTitle>
-				<EmptyDescription>{m.vung.loiMoTa}</EmptyDescription>
-			</EmptyHeader>
-			<EmptyContent>
-				<Button
-					disabled={gopY.nut.loai !== "mo" || gopY.dangGui}
-					onClick={gopY.nho}
-					size="sm"
-					type="button"
-					variant="outline"
-				>
-					{m.vung.thuLai}
-				</Button>
-			</EmptyContent>
-		</Empty>
+		<KaraState
+			kind="off"
+			describedBy={id}
+			reason={cauTat(vi, m)}
+			action={
+				<div>
+					<Button
+						aria-describedby={id}
+						data-nut="nho-kara"
+						disabled
+						size="sm"
+						type="button"
+						variant="outline"
+					>
+						<Icon data-icon="inline-start" icon={AiGenerate} />
+						{nhan}
+					</Button>
+				</div>
+			}
+		/>
+	);
+}
+
+function KhoiLoiKara({ gopY, moTa }: { gopY: GopYMucTieu; moTa: string }) {
+	const m = okrGopYMessages(useLocale());
+	if (gopY.tat !== null) return <KhoiTat nhan={m.vung.docLai} vi={gopY.tat} />;
+	return (
+		<KaraState
+			kind="error"
+			what={m.vung.viecDoc}
+			description={moTa}
+			onRetry={gopY.thuLai}
+		/>
 	);
 }
 
 function SauKhiQuyetHet({ gopY }: { gopY: GopYMucTieu }) {
 	const m = okrGopYMessages(useLocale());
 	if (gopY.docLai === "dang-doc")
-		return <ThinkingIndicator label={m.vung.dangDoc} />;
-	if (gopY.docLai === "loi") return <KhoiLoi gopY={gopY} />;
+		return <KaraState kind="working" label={m.vung.dangDoc} />;
+	if (gopY.docLai === "nho-loi")
+		return (
+			<KhoiLoiKara gopY={gopY} moTa={m.vung.nhoLoi[gopY.loiNho ?? "khac"]} />
+		);
+	if (gopY.docLai === "loi")
+		return <KhoiLoiKara gopY={gopY} moTa={m.vung.loiMoTa} />;
 	return (
 		<div>
 			<NutNhoKara gopY={gopY} nhan={m.vung.docLai} />
@@ -308,14 +322,19 @@ export function VungKara({
 }) {
 	const locale = useLocale();
 	const m = okrGopYMessages(locale);
-	const docLuc = gopY.docLuc ? gioDoc(gopY.docLuc, locale) : undefined;
+	const docLuc = gopY.docLuc
+		? formatNgayGio(gopY.docLuc, locale, {
+				timeZone: OKR_CHU_KY.muiGio,
+				phan: "ngay-gio",
+			})
+		: undefined;
 	switch (gopY.noiDung) {
 		case "tat":
 			return null;
 		case "dang-doc":
 			return (
 				<div data-nhom-kara="dang-doc">
-					<ThinkingIndicator label={m.vung.dangDoc} />
+					<KaraState kind="working" label={m.vung.dangDoc} />
 				</div>
 			);
 		case "chua-goi":
@@ -332,18 +351,47 @@ export function VungKara({
 			);
 		case "rong":
 			return (
-				<Empty border="solid" data-nhom-kara="rong" size="compact">
-					<EmptyHeader>
-						<EmptyTitle>{m.vung.rong}</EmptyTitle>
-						<EmptyDescription>{m.vung.rongMoTa(docLuc ?? "")}</EmptyDescription>
-					</EmptyHeader>
-					<EmptyContent>
-						<NutNhoKara gopY={gopY} nhan={m.vung.docLai} />
-					</EmptyContent>
-				</Empty>
+				<div data-nhom-kara="rong">
+					<KaraState
+						kind="empty"
+						title={m.vung.rong}
+						description={m.vung.rongMoTa(docLuc ?? "")}
+						action={
+							gopY.tat !== null ? (
+								<KhoiTat nhan={m.vung.docLai} vi={gopY.tat} />
+							) : (
+								<NutNhoKara gopY={gopY} nhan={m.vung.docLai} />
+							)
+						}
+					/>
+				</div>
 			);
 		case "loi":
-			return <KhoiLoi gopY={gopY} laVung />;
+			return (
+				<div data-nhom-kara="loi">
+					<KhoiLoiKara gopY={gopY} moTa={m.vung.loiMoTa} />
+				</div>
+			);
+		case "nho-loi":
+			return (
+				<div data-nhom-kara="nho-loi">
+					<KhoiLoiKara
+						gopY={gopY}
+						moTa={m.vung.nhoLoi[gopY.loiNho ?? "khac"]}
+					/>
+				</div>
+			);
+		case "tai-loi":
+			return (
+				<div data-nhom-kara="tai-loi">
+					<KaraState
+						kind="error"
+						what={m.vung.viecTai}
+						description={m.vung.taiLoiMoTa}
+						onRetry={gopY.taiLai}
+					/>
+				</div>
+			);
 		case "co-gop-y":
 			return (
 				<div className="flex flex-col gap-1" data-nhom-kara="co-gop-y">
