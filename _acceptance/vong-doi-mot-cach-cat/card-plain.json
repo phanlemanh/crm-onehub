@@ -1,0 +1,36 @@
+{
+  "feature_plain": "Ở ba bảng cá nhân, công ty, thoả thuận: lưu trữ nhầm nhiều dòng thì bấm «Hoàn tác» ngay trên thông báo; mở một bản ghi đã cất thì thấy dải «Đã lưu trữ ngày … · Khôi phục» và không sửa nhầm được; Kanban thoả thuận có nút «Đã lưu trữ»; chữ nút và hộp hỏi lại đúng bộ chữ vòng đời.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho «Hoàn tác» trên thông báo sau khi lưu trữ nhiều dòng ở ba bảng; bấm là các dòng quay lại danh sách, và máy chủ thật khôi phục đủ."},
+    {"id": "AC-2", "p": "Sẽ báo rõ «Chưa hoàn tác được. Các bản ghi vẫn ở mục Đã lưu trữ.» khi hoàn tác hỏng, không in lỗi kỹ thuật."},
+    {"id": "AC-3", "p": "Sẽ hiện dải «Đã lưu trữ ngày … · Khôi phục» ở đầu ngăn bản ghi đã cất; bấm Khôi phục là dải mất và sửa được lại."},
+    {"id": "AC-4", "p": "Sẽ khoá mọi chỗ sửa trong ngăn bản ghi đã cất, chỉ để lại Khôi phục và Xoá vĩnh viễn."},
+    {"id": "AC-5", "p": "Sẽ có nút «Đã lưu trữ» trên Kanban thoả thuận; bấm xem thoả thuận đã cất, bấm lại về Kanban."},
+    {"id": "AC-6", "p": "Sẽ đổi nút xem thành «Đã lưu trữ», nút xác nhận thành «Xoá vĩnh viễn» (bấm hai lần vẫn chỉ xoá một lần), bỏ chữ «ẩn» khỏi mô tả lưu trữ trường."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Chưa lọc bản đã cất khỏi danh sách liên quan trong ngăn (công ty → cá nhân, thoả thuận) — cần sửa máy chủ chỗ E4 đang sửa; đề nghị hàng riêng."},
+    {"id": "OOS-2", "p": "Chưa bỏ hộp hỏi lại khi lưu trữ một trường — chỉ đổi chữ; đề nghị hàng riêng."},
+    {"id": "OOS-3", "p": "Chưa đưa giai đoạn thoả thuận và tác nhân về nếp lưu trữ — trang Cài đặt; đề nghị hàng riêng."},
+    {"id": "OOS-4", "p": "Chưa đổi «Xoá hẳn» ở Cài đặt › Tổ chức — một hồ sơ đã ký ghim chữ đó."},
+    {"id": "OOS-5", "p": "Luật kho «vòng đời» chạy ở CI là hàng V2L (P4)."},
+    {"id": "OOS-6", "p": "Máy chủ chưa chặn sửa bản đã cất — V2 chỉ khoá trên màn hình."},
+    {"id": "OOS-7", "p": "Dòng thời gian, ghi chú, Kara của bản đã cất vẫn dùng được như hôm nay."},
+    {"id": "OOS-8", "p": "Chưa gom nút «Đã lưu trữ» của ba bảng thành một mảnh dùng chung."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Phủ bằng phép quét không gian tính năng quanh một loại bản ghi (bảng quét đi kèm hồ sơ)."},
+    {"i": 1, "p": "Ba loại bản ghi — cá nhân, công ty, thoả thuận — đều được đo ở mọi tiêu chí AC-1 đến AC-4 và AC-6."},
+    {"i": 2, "p": "Năm việc vòng đời — lưu trữ kèm Hoàn tác, xem «Đã lưu trữ», mở bản đã cất, khôi phục, xoá vĩnh viễn — mỗi việc có tiêu chí riêng; chuẩn ngành: NN/g «quyền kiểm soát của người dùng», Material 3 thông báo có Hoàn tác."},
+    {"i": 3, "p": "Sáu chỗ trên màn: bảng, Kanban, menu hàng loạt, menu ngăn, ngăn bản ghi đều có tiêu chí; danh sách liên quan để sau (OOS-1)."},
+    {"i": 4, "p": "Khổ 1440 và 390 đo trên bản chạy thật (AC-7); tiếng Anh đo ở AC-2, AC-3, AC-6."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo khoá-chỗ-sửa chỉ đếm vài kiểu nút và chỉ bấm thử ô tên — nay đếm mọi kiểu phần tử bấm được và bấm thử đủ 15 ô sửa của ba ngăn."},
+    {"i": 1, "p": "Phép đo chưa nói cách xét «đã tắt» và cách bấm, nên có thể đỏ oan hoặc xanh oan — nay xét như trình duyệt và bấm như người, thêm bước bấm thử trên trình duyệt thật."},
+    {"i": 2, "p": "Chưa đo «các dòng hiện lại» sau Hoàn tác — nay đo danh sách được tải lại, và thêm bước lưu trữ rồi Hoàn tác trên trình duyệt thật."},
+    {"i": 3, "p": "Chưa đo «sửa được lại» sau khi khôi phục từ dải báo — nay đếm chỗ sửa bật lại."},
+    {"i": 4, "p": "Mẫu số «6 đường lưu trữ» là số cố định — nay một phép đo liệt kê mọi chỗ gọi lưu trữ trong ứng dụng; thêm thước đếm số lần người lạ cố sửa bản đã cất."}
+  ],
+  "decisions_plain": []
+}

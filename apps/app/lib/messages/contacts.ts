@@ -108,7 +108,7 @@ const vi = {
 	search: "Tìm theo tên, email hoặc công ty…",
 	noCompany: "Chưa thuộc công ty nào",
 	namePlaceholder: "Nguyễn Thị Lan",
-	archivedToggle: "Lưu trữ",
+	archivedToggle: "Đã lưu trữ",
 	create: {
 		title: "Cá nhân mới",
 		newButton: "Cá nhân mới",

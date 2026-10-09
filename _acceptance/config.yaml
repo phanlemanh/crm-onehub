@@ -1377,6 +1377,14 @@ executors:
     dtg_thu_lai: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-giu-khi-loi.dom.tsx -t dtg-thu-lai"
     dtg_lam_moi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-giu-khi-loi.dom.tsx -t dtg-lam-moi"
     dtg_en: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-giu-khi-loi.dom.tsx -t dtg-en"
+    vdc_hoan_tac_loat: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/vong-doi-mot-cach-cat.dom.tsx -t vdc-hoan-tac-loat"
+    vdc_hoan_tac_loi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/vong-doi-mot-cach-cat.dom.tsx -t vdc-hoan-tac-loi"
+    vdc_dai_bao: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/vong-doi-mot-cach-cat.dom.tsx -t vdc-dai-bao"
+    vdc_chi_doc: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/vong-doi-mot-cach-cat.dom.tsx -t vdc-chi-doc"
+    vdc_kanban: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/vong-doi-mot-cach-cat.dom.tsx -t vdc-kanban"
+    vdc_chu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/vong-doi-mot-cach-cat.dom.tsx -t vdc-chu"
+    vdc_cap_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
+    vdc_may_chu: 'bun run test -- "cd apps/api && bun test test/vong-doi-mot-cach-cat.spec.ts"'
     klg_khong_con: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t klg-khong-con"
     klg_khong_quyen: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t klg-khong-quyen"
     klg_mat_ket_noi: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t klg-mat-ket-noi"
@@ -1472,6 +1480,8 @@ executors:
     kts_chu: "bun _acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
     kts_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-trang-thai-toan-crm/rang/man.mjs"'
     dtg_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dong-thoi-gian-giu-khi-loi/rang/man.mjs"'
+    vdc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/vong-doi-mot-cach-cat/rang/man.mjs"'
+    vdc_duong_luu_tru: bun _acceptance/vong-doi-mot-cach-cat/rang/duong-luu-tru.mjs
     klg_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-loi-ban-ghi-dung-ly-do/rang/man.mjs"'
     klg_ma_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-loi-ban-ghi-dung-ly-do/rang/ma-that.mjs"'
     gtd_bo_that: bun _acceptance/gioi-han-tep-dom/rang/bo-that.mjs

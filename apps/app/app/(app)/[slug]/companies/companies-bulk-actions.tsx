@@ -18,6 +18,8 @@ import {
 	BulkActionsMenu,
 	BulkDeleteDialog,
 	BulkOwnerMenu,
+	baoHoanTacLoat,
+	baoLuuTruLoat,
 	reportBulk,
 } from "@/components/crm/bulk-actions";
 import { companyMessages } from "@/lib/messages/companies";
@@ -79,15 +81,30 @@ export function CompaniesBulkActions({
 		}),
 	);
 
+	const hoanTac = useMutation(
+		trpc.companies.bulkRestore.mutationOptions({
+			onSuccess: async (result) => {
+				await cache.company();
+				baoHoanTacLoat({
+					result,
+					restored: (count) => m.bulk.restored(companies(count, locale)),
+					locale,
+				});
+			},
+			onError: () => toast.error(c.bulk.hoanTacLoi),
+		}),
+	);
+
 	const archive = useMutation(
 		trpc.companies.bulkArchive.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "company", ids: variables.ids });
-				reportBulk(
+				baoLuuTruLoat({
 					result,
-					(count) => m.bulk.archived(companies(count, locale)),
+					done: (count) => m.bulk.archived(companies(count, locale)),
 					locale,
-				);
+					onHoanTac: () => hoanTac.mutate({ ids: variables.ids }),
+				});
 				onDone();
 			},
 			onError,
@@ -154,6 +171,7 @@ export function CompaniesBulkActions({
 					title={m.bulk.confirmDelete(companies(ids.length, locale))}
 					description={c.bulk.cannotUndo}
 					onConfirm={() => purge.mutate({ ids })}
+					pending={purge.isPending}
 				/>
 			</>
 		);
