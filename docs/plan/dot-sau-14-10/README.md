@@ -93,7 +93,7 @@ cũng để sau: nó sửa schema, mà schema đã có E4 trong đợt này.
 - LT1 chỉ **thêm** vào thanh điều hướng, `proxy.ts`, `next.config.ts`, `proto/catalog.ts`, `proto/registry.ts`
   (K2 cũng chỉ-thêm) và `_acceptance/config.yaml` (khai ở `chung_chi_them`). Tệp chữ mới `lo-trinh.ts` và
   `khung-ung-dung.ts` khớp ranh giới K6a; K6a gộp trước NM3 nên trước LT1.
-- LT1 còn hai điều kiện mở ngoài đợt, ghi ở mục «Điều kiện mở» của kế hoạch: crm đã nhận kit ≥ 2.27, và hàng LT1
+- LT1 còn hai điều kiện mở ngoài đợt, ghi ở mục «Điều kiện mở» của kế hoạch: crm đã nhận kit ≥ 2.26 (có khối dữ liệu lộ trình), và hàng LT1
   có trên `docs/plan/lo-trinh-okr.json` của `onehub` (#313). Thiếu một trong hai thì thợ P2 dừng trước Task 1.
 - Đo chồng tệp lại sau bổ sung 07/10: không hàng nào của hai dãy khác nhau chồng tệp ngoài `bao_ve`; V2 chồng K4 và
   K6b ở 6 tệp, cùng dãy P2 và đứng sau cả hai.
