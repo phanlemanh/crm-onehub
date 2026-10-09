@@ -1,11 +1,7 @@
 "use client";
 
+import { KaraDock } from "@crm/ui/components/kara/dock";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import {
-	ResizableHandle,
-	ResizablePanel,
-	ResizablePanelGroup,
-} from "@crm/ui/components/resizable";
 import {
 	Tabs,
 	TabsContent,
@@ -16,15 +12,9 @@ import { parseAsStringLiteral, useQueryState } from "nuqs";
 import type { ReactNode } from "react";
 import { okrSoanMessages } from "@/lib/messages/okr-soan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
-import { SOAN_UI } from "./cau-hinh";
 
 export const TAB_SOAN = ["tro-chuyen", "ban-nhap"] as const;
 
-export const CO_O_HOI_THOAI = {
-	defaultSize: SOAN_UI.ocHoiThoai.macDinhPx,
-	minSize: SOAN_UI.ocHoiThoai.toiThieuPx,
-	maxSize: SOAN_UI.ocHoiThoai.toiDaPhanTram,
-} as const;
 export type TabSoan = (typeof TAB_SOAN)[number];
 
 const laTab = (v: string): v is TabSoan =>
@@ -52,56 +42,64 @@ export function KhungSoan({
 	const [tab, datTab] = useTabSoan();
 	if (hep)
 		return (
-			<Tabs
-				value={tab}
-				onValueChange={(v) => {
-					if (laTab(v)) void datTab(v);
-				}}
-				className="flex min-h-0 flex-1 flex-col"
-				data-khung="hep"
-			>
-				<TabsList aria-label={m.man.tabs} className="w-full">
-					<TabsTrigger value="tro-chuyen">{m.man.tabTroChuyen}</TabsTrigger>
-					<TabsTrigger value="ban-nhap">
-						{m.man.tabBanNhap(String(soDong))}
-					</TabsTrigger>
-				</TabsList>
-				<TabsContent
-					value="tro-chuyen"
-					className="flex min-h-0 flex-1 flex-col"
-					data-o="hoi-thoai"
+			<KaraDock side="fill" alone data-khung="hep">
+				<Tabs
+					value={tab}
+					onValueChange={(v) => {
+						if (laTab(v)) void datTab(v);
+					}}
+					className="flex min-h-0 flex-1 flex-col gap-0"
 				>
-					{hoiThoai}
-				</TabsContent>
-				<TabsContent
-					value="ban-nhap"
-					className="flex min-h-0 flex-1 flex-col"
-					data-o="ban-nhap"
-				>
-					{banNhap}
-				</TabsContent>
-			</Tabs>
+					<TabsList
+						variant="line"
+						aria-label={m.man.tabs}
+						className="w-full shrink-0 justify-start border-b px-4"
+					>
+						<TabsTrigger value="tro-chuyen">{m.man.tabTroChuyen}</TabsTrigger>
+						<TabsTrigger value="ban-nhap">
+							{m.man.tabBanNhap(String(soDong))}
+						</TabsTrigger>
+					</TabsList>
+					<TabsContent
+						value="tro-chuyen"
+						className="flex min-h-0 flex-1 flex-col"
+						data-o="hoi-thoai"
+						data-cot="hoi-thoai"
+					>
+						{hoiThoai}
+					</TabsContent>
+					<TabsContent
+						value="ban-nhap"
+						className="flex min-h-0 flex-1 flex-col"
+						data-o="ban-nhap"
+						data-cot="ban-nhap"
+					>
+						{banNhap}
+					</TabsContent>
+				</Tabs>
+			</KaraDock>
 		);
 	return (
-		<ResizablePanelGroup
-			orientation="horizontal"
-			className="min-h-0 flex-1"
-			data-khung="rong"
-		>
-			<ResizablePanel
-				id="hoi-thoai"
-				{...CO_O_HOI_THOAI}
-				groupResizeBehavior="preserve-pixel-size"
+		<div className="flex min-h-0 flex-1" data-khung="rong">
+			{soDong > 0 ? (
+				<KaraDock
+					side="fill"
+					aria-label={m.man.banNhap}
+					data-o="ban-nhap"
+					data-cot="ban-nhap"
+				>
+					{banNhap}
+				</KaraDock>
+			) : null}
+			<KaraDock
+				side="rail"
+				alone={soDong === 0}
+				aria-label={m.man.tabTroChuyen}
 				data-o="hoi-thoai"
+				data-cot="hoi-thoai"
 			>
-				<div className="flex h-full min-h-0 flex-col gap-3 pe-4">
-					{hoiThoai}
-				</div>
-			</ResizablePanel>
-			<ResizableHandle withHandle aria-label={m.trang.thanhKeo} />
-			<ResizablePanel id="ban-nhap" data-o="ban-nhap">
-				<div className="flex h-full min-h-0 flex-col ps-4">{banNhap}</div>
-			</ResizablePanel>
-		</ResizablePanelGroup>
+				{hoiThoai}
+			</KaraDock>
+		</div>
 	);
 }

@@ -8,6 +8,7 @@ import { AppIconRail, AppIconRailFallback } from "@/components/app-icon-rail";
 import { QuickSwitcher } from "@/components/crm/quick-switcher";
 import { RecordSheetHost } from "@/components/crm/record-sheet/record-sheet-host";
 import { MobileNavProvider } from "@/components/mobile-nav";
+import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { API_URL } from "@/lib/env";
 import { requireMailboxAccess } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
@@ -33,7 +34,7 @@ export default function AppLayout({
 					</div>
 
 					<Suspense fallback={null}>
-						<RecordSheetHost />
+						<RecordSheetHost cauNoiOkr={okrBridgeConfigured()} />
 					</Suspense>
 
 					<Suspense fallback={null}>

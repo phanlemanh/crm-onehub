@@ -1,16 +1,31 @@
 "use client";
 
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
-import { useParams, useRouter } from "next/navigation";
-import { parseAsString, useQueryState } from "nuqs";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { parseAsArrayOf, parseAsString, useQueryStates } from "nuqs";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
-import { duongTrangSoan } from "./luat-ban-nhap";
 
 export function useChuyenLinkCuSoan(): void {
-	const [cuocSoan] = useQueryState(SEARCH_PARAM.okr.cuocSoan, parseAsString);
+	const [q] = useQueryStates({
+		[SEARCH_PARAM.okr.cuocSoan]: parseAsString,
+		[SEARCH_PARAM.record.stack]: parseAsArrayOf(parseAsString, ",").withDefault(
+			[],
+		),
+	});
 	const router = useRouter();
-	const { slug } = useParams<{ slug: string }>();
+	const duong = usePathname();
+	const thamSo = useSearchParams();
+	const cuocSoan = q[SEARCH_PARAM.okr.cuocSoan];
+	const chong = q[SEARCH_PARAM.record.stack];
 	useMountEffect(() => {
-		if (cuocSoan) router.replace(duongTrangSoan(slug, cuocSoan));
+		if (!cuocSoan) return;
+		const khoa = `soan:${cuocSoan}`;
+		const moi = new URLSearchParams(thamSo.toString());
+		moi.delete(SEARCH_PARAM.okr.cuocSoan);
+		moi.set(
+			SEARCH_PARAM.record.stack,
+			[...chong.filter((muc) => muc !== khoa), khoa].join(","),
+		);
+		router.replace(`${duong}?${moi.toString()}`);
 	});
 }
