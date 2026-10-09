@@ -364,6 +364,80 @@
       "s4": "local"
     },
     {
+      "ma": "NM1",
+      "slug": "khung-man-chung",
+      "day": "P3",
+      "uu_tien": 7,
+      "sau": [
+        "E5"
+      ],
+      "ranh_gioi": [
+        "apps/app/components/page-shell.tsx",
+        "apps/app/components/page-shell-loading.tsx",
+        "apps/app/app/(app)/[slug]/page.tsx",
+        "apps/app/app/(app)/[slug]/contacts/page.tsx",
+        "apps/app/app/(app)/[slug]/onboarding/page.tsx",
+        "apps/app/app/(app)/[slug]/onboarding/danh-muc-table.tsx",
+        "apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx",
+        "apps/app/app/(app)/[slug]/okr/layout.tsx",
+        "apps/app/app/(app)/[slug]/okr/page.tsx",
+        "apps/app/app/(app)/[slug]/okr/trang-thai-okr.tsx",
+        "apps/app/app/(app)/[slug]/okr/toan-canh/page.tsx",
+        "apps/app/app/(app)/[slug]/okr/toan-canh/toan-canh.tsx",
+        "apps/app/app/(app)/[slug]/tai-lieu/page.tsx",
+        "apps/app/app/(app)/[slug]/tai-lieu/danh-sach.tsx",
+        "apps/app/app/(app)/[slug]/tai-lieu/dang-tai.tsx",
+        "apps/app/app/(app)/[slug]/tai-lieu/loi-tai.tsx",
+        "apps/app/app/(app)/[slug]/reminders/page.tsx",
+        "apps/app/test/khung-man-*.dom.tsx",
+        "_acceptance/khung-man-chung/**"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "NM2",
+      "slug": "loc-va-kieu-xem-chung",
+      "day": "P3",
+      "uu_tien": 8,
+      "sau": [
+        "NM1",
+        "V2"
+      ],
+      "ranh_gioi": [
+        "packages/ui/src/components/toggle-group.tsx",
+        "packages/ui/src/components/view-switch.tsx",
+        "apps/app/app/(app)/[slug]/onboarding/danh-muc-cong-cu.tsx",
+        "apps/app/app/(app)/[slug]/onboarding/onboarding-search-params.ts",
+        "apps/app/app/(app)/[slug]/tai-lieu/danh-sach-trang.tsx",
+        "apps/app/app/(app)/[slug]/tai-lieu/danh-sach-loc.ts",
+        "apps/app/app/(app)/[slug]/tai-lieu/tai-lieu-search-params.ts",
+        "apps/app/test/loc-va-kieu-xem-*.dom.tsx",
+        "packages/ui/test/loc-va-kieu-xem-*.dom.tsx",
+        "_acceptance/loc-va-kieu-xem-chung/**"
+      ],
+      "s4": "local"
+    },
+    {
+      "ma": "NM3",
+      "slug": "mau-trang-thai-chung",
+      "day": "P3",
+      "uu_tien": 9,
+      "sau": [
+        "NM2",
+        "K6a"
+      ],
+      "ranh_gioi": [
+        "packages/ui/src/components/status-tone.ts",
+        "packages/ui/src/components/okr-status.tsx",
+        "packages/ui/src/components/attendee-list.tsx",
+        "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx",
+        "apps/app/app/(app)/[slug]/tai-lieu/bang-nguon.tsx",
+        "packages/ui/test/mau-trang-thai-*.dom.tsx",
+        "_acceptance/mau-trang-thai-chung/**"
+      ],
+      "s4": "local"
+    },
+    {
       "ma": "F13",
       "slug": "so-moi-khong-chap-chon",
       "day": "P4",
