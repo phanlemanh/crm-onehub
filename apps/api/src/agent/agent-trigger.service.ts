@@ -5,6 +5,10 @@ import { RECORD_ID_COLUMNS } from "@crm/db/fields";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { fieldBackfillPayload } from "@crm/validation/field-backfill";
 import type { DocSheetPayload } from "@crm/validation/okr-nguon";
+import {
+	LOAI_VIEC_MA_LECH,
+	parseOnboardingIdentifyPayload,
+} from "@crm/validation/onboarding-identify";
 import type { SoanTuNguonPayload } from "@crm/validation/tai-lieu-nguon";
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
@@ -103,13 +107,17 @@ export class AgentTriggerService {
 		planId: string,
 		platformBrokerId: string,
 	): Promise<boolean> {
+		const payload = parseOnboardingIdentifyPayload({
+			planId,
+			platformBrokerId,
+		});
 		return this.enqueue(
 			{
-				kind: "onboarding-identify",
-				reason: `Lô từ nền tảng mang mã ${platformBrokerId} không khớp cá nhân nào trong kế hoạch ${planId}.`,
+				kind: LOAI_VIEC_MA_LECH,
+				reason: `Lô từ nền tảng mang mã ${payload.platformBrokerId} không khớp cá nhân nào trong kế hoạch ${payload.planId}.`,
 				priority: PRIORITY.identify,
 				budget: 2,
-				payload: { planId, platformBrokerId },
+				payload,
 				subject: [
 					{ path: ["planId"], value: planId },
 					{ path: ["platformBrokerId"], value: platformBrokerId },

@@ -53,6 +53,7 @@
 		"./okr-vet": "./src/okr-vet.ts",
 		"./onboarding-activity": "./src/onboarding-activity.ts",
 		"./onboarding-ingest": "./src/onboarding-ingest.ts",
+		"./onboarding-identify": "./src/onboarding-identify.ts",
 		"./onboarding-template": "./src/onboarding-template.ts",
 		"./saved-view": "./src/saved-view.ts",
 		"./vai-workspace": "./src/vai-workspace.ts",
