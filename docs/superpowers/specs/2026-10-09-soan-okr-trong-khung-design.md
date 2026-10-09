@@ -47,12 +47,27 @@ Phương án bị loại:
 phải nên khi ô bản nháp xuất hiện, khung mở thêm về bên trái còn cột Kara đứng yên. Không thanh kéo đổi cỡ (thay
 AC-2 của K2). Không hoạt ảnh bề rộng — chỉ hoạt ảnh trượt vào sẵn có của sheet.
 
-**Hai ô có khung liền.** Cột Kara bọc trong cùng kiểu khung với `KaraArtifact` (viền đủ bốn cạnh, `rounded-lg`); ô
-soạn nằm trong chân khung của cột Kara như «Đưa vào» nằm trong chân bản nháp. Khung bao dựng trong `packages/ui`
-(`components/kara/`), không ở chỗ gọi.
+**Một bề mặt liền, theo khuôn «dock» của ReUI `ai-chat-2`.** Chủ kho chỉ bốn block ReUI (`ai-chat-2`, `-4`, `-6`,
+`-8`) ngày 09/10. Chụp và đọc cả bốn (bản xem trước, 1440 px): cả bốn đặt trang/vật phẩm bên trái và cột trợ lý bên
+phải — khớp quyết định «Kara bên phải». Điều chung đáng lấy:
+- Trang và cột trợ lý là MỘT bề mặt: chia bằng một đường kẻ dọc, không thẻ có viền lồng trong khung, không khoảng đệm
+  giữa hai ô. Đây là lời giải đúng cho «mất khung»: không vẽ thêm khung cho cột chat, mà bỏ khung riêng của cả hai ô
+  để khung ngoài bao trọn cả hai.
+- Đầu mảnh: cột trợ lý có một dòng đầu thấp (dấu + tên + việc phụ); trang không có thẻ tiêu đề riêng. Ở khung soạn:
+  hai ô mỗi bên một dòng đầu 44 px thẳng hàng — bản nháp «Bản nháp · Kara · n dòng · sửa lúc …» và «Chỉ dòng chờ»;
+  cột Kara «Kara · Lượt n/12» và «Kara đang soạn…» khi bận. «Lượt n/12» rời đầu khung sang cột Kara vì nó nói về Kara.
+- Ô soạn dính đáy cột, gợi ý câu nằm ngay trên ô soạn; câu trả lời mang việc làm tiếp (Insert ở `-2`, Approve ở `-8`,
+  câu hỏi có lựa chọn ở `-6`) — ở khung soạn những việc đó đã nằm trên dòng nháp (K2), không đổi.
 
-**Đầu khung một dòng.** `DetailSheetHeader`: tiêu đề «Soạn OKR», mô tả «<đơn vị> · <chu kỳ> · Lượt n/12», nút đóng.
-Bỏ «← Theo đơn vị» — đóng khung là về trang đang đứng.
+Không lấy: `ai-chat-4` đẩy trang sang trái và để trang dùng được (không lớp phủ). Khung soạn giữ lớp phủ như mọi khung
+bản ghi — chủ kho đòi cùng UX với khung deal. Đẩy trang là khuôn cho một Kara chung toàn ứng dụng sau K5, không phải
+vòng này. Block Pro chỉ là bản vẽ bố cục (`docs/design.md` bậc 4): dựng lại bằng thành phần của kho, không cài.
+
+Trong `packages/ui`: `KaraArtifact` thêm biến thể không viền cho ô trong khung (`docked`), và khung cột Kara là thành
+phần mới ở tệp mới trong `components/kara/` cùng dáng đầu–thân–đáy, không ở chỗ gọi.
+
+**Đầu khung một dòng.** `DetailSheetHeader`: tiêu đề «Soạn OKR», mô tả «<đơn vị> · <chu kỳ>», nút đóng. Bỏ
+«← Theo đơn vị» — đóng khung là về trang đang đứng.
 
 **Khổ hẹp.**
 - 768–1023 px: khung rộng tối đa `--container-assist`, hai tab «Trò chuyện» / «Bản nháp (n)» của K2, tab trên URL.
@@ -94,7 +109,7 @@ Chạm — gửi giám sát qua `yeu-cau/` trước S2:
 - `apps/app/app/(app)/[slug]/okr/soan/**` (trừ `bang-nhap.tsx`, `the-nhap.tsx`, `hoi-thoai-soan.tsx` ngoài vỏ khung)
 - `apps/app/components/crm/record-sheet/{record-stack.ts,record-sheet-host.tsx,soan-sheet.tsx}`
 - `apps/app/components/{detail-sheet.tsx,responsive-sheet.tsx}`, `apps/app/lib/record-href.ts`
-- `packages/ui/src/components/sheet.tsx`, `packages/ui/src/components/drawer.tsx`, `packages/ui/src/components/kara/` (khung cột Kara)
+- `packages/ui/src/components/sheet.tsx`, `packages/ui/src/components/drawer.tsx`, `packages/ui/src/components/kara/` (khung cột Kara ở tệp mới; biến thể `docked` trong `artifact.tsx`; không đụng `state.tsx`)
 - `apps/app/lib/messages/okr-soan.ts`, `docs/ai-ux.md`
 - `_acceptance/soan-okr-trang-rieng/evals.yaml` (chỉ năm ô bảng trên), `_acceptance/config.yaml` (khoá `sk_*`)
 - thử nghiệm mới `apps/app/test/soan-okr-trong-khung.dom.tsx`, đồ thử `apps/app/test/khung-soan-okr.tsx`
@@ -138,9 +153,9 @@ Giám sát trả lời 09/10 (`tra-loi/soan-trong-khung-1.json`): phiên này l�
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
 | ST-khung-dang-mo | Khung soạn | đầu khung giữ «Soạn OKR», thân `KaraState working` «Đang mở cuộc soạn…» | chờ / đóng |
-| ST-khung-hep-rong | Khung soạn (hẹp) | chỉ cột Kara có khung, lời mở đầu, ô soạn | gõ cho Kara |
+| ST-khung-hep-rong | Khung soạn (hẹp) | chỉ cột Kara phủ khung, dòng đầu «Kara · Lượt n/12», lời mở đầu, ô soạn ở đáy | gõ cho Kara |
 | ST-khung-dang-soan-dau | Khung soạn (hẹp) | cột Kara «Kara đang soạn…», ô soạn thành «Dừng» | chờ / Dừng |
-| ST-khung-rong | Khung soạn (rộng) | bản nháp trái, Kara phải, hai khung liền | quyết dòng, hỏi Kara |
+| ST-khung-rong | Khung soạn (rộng) | bản nháp trái, Kara phải, một bề mặt chia bằng một đường kẻ | quyết dòng, hỏi Kara |
 | ST-khung-rong-dang-soan | Khung soạn (rộng) | dòng chờ khoá kèm lý do, «Dừng» | chờ / Dừng |
 | ST-khung-hoi-dong | Khung soạn | Kara đang soạn mà người đóng → `ConfirmDialog` «Kara đang soạn. Đóng khung?» | Ở lại / Đóng |
 | ST-khung-khong-mo | Khung soạn | `KaraState error` «Kara chưa mở cuộc soạn được» | đóng |
@@ -151,6 +166,7 @@ Giám sát trả lời 09/10 (`tra-loi/soan-trong-khung-1.json`): phiên này l�
 
 ### 4. Hành vi
 
+- Bề mặt: một đường kẻ dọc chia hai ô; không viền riêng trong khung; dòng đầu hai ô 44 px thẳng hàng.
 - Bề ngang: cột Kara = `--container-assist-rail`; bản nháp ≤ `--container-assist`; khung ≤ `100% − 2rem`; không thanh kéo.
 - Hai ô và khung không cuộn; mỗi ô cuộn thân riêng; trang nền không cuộn khi khung mở.
 - `beforeunload` chỉ khi Kara đang soạn. Esc lần đầu lên hộp hỏi khi đang soạn; focus về nút đã mở khung khi đóng; `overscroll-behavior: contain` trên thân ô.
@@ -163,10 +179,11 @@ Giám sát trả lời 09/10 (`tra-loi/soan-trong-khung-1.json`): phiên này l�
 | `DetailSheet`, `DetailSheetHeader` | dùng | khung bản ghi chung — đúng điều chủ kho đòi |
 | `SheetContent` cỡ `kara` | mở rộng (`packages/ui`) | bề rộng theo nội dung từ hai token có sẵn; luật «biến thể ở packages/ui» |
 | `DrawerContent` phủ toàn màn | mở rộng (`packages/ui`) | ngăn kéo 88dvh của bản ghi khác không đủ chỗ soạn |
-| khung cột Kara | tạo trong `packages/ui/src/components/kara/` | cột chat cần cùng khung với `KaraArtifact`; chưa có thành phần nào |
+| khung cột Kara | tạo ở tệp mới trong `packages/ui/src/components/kara/` | đầu mảnh–thân cuộn–ô soạn ở đáy, không viền riêng; chưa có thành phần nào |
+| `KaraArtifact` biến thể `docked` | mở rộng (`packages/ui`) | bản nháp nằm phẳng trong khung, không thẻ lồng |
 | `KaraArtifact`, `KaraState`, `ConfirmDialog`, `Tabs` | dùng | khuôn Kara §5–7 `docs/ai-ux.md`, hỏi lại theo `docs/design.md` |
 
-Tra ReUI cho «chat side panel / sheet chat»: chỉ có block Pro dựng trên `frame` (bậc 4, bản vẽ bố cục) — không cài.
+Tra ReUI «ai chat side panel»: block Pro `ai-chat-2`, `-4`, `-6`, `-8` (bậc 4, bản vẽ bố cục, chủ kho chỉ) — rút bố cục, không cài.
 
 ### 6. Khuôn IA đã chọn + căn cứ
 

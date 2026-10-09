@@ -1,45 +1,144 @@
 {
   "feature_plain": "Trưởng phòng soạn bộ OKR với Kara ngay trong khung trượt từ phải như chi tiết deal: Kara luôn ở mép phải, bản nháp mở thêm sang trái, trang đang đứng vẫn nằm phía sau.",
   "will_do": [
-    { "id": "AC-1", "p": "Sẽ mở cuộc soạn trong khung trượt từ phải khi bấm «Soạn» hay «Tiếp tục», và đưa đường cũ, liên kết cũ về đúng khung đó." },
-    { "id": "AC-3", "p": "Sẽ mở khung chỉ có cột Kara rộng 380 px, rồi khi Kara nộp bản nháp đầu thì mở thêm bản nháp sang trái mà Kara không dời chỗ." },
-    { "id": "AC-4", "p": "Sẽ cho cột Kara và bản nháp mỗi bên một khung liền đủ bốn cạnh — hết cảm giác «mất khung» của cột chat." },
-    { "id": "AC-5", "p": "Sẽ thay đầu trang lớn bằng một dòng đầu khung: «Soạn OKR», đơn vị, chu kỳ, lượt, nút đóng." },
-    { "id": "AC-9", "p": "Sẽ giữ nguyên mọi việc soạn đã có: nhận, sửa, bỏ qua, hoàn tác, hỏi Kara từ dòng, gõ số, «Đưa vào»." },
-    { "id": "AC-11", "p": "Sẽ có ảnh mọi trạng thái của khung ở bốn khổ màn, nền sáng và tối, không tràn ngang." },
-    { "id": "AC-13", "p": "Sẽ cho trang Theo đơn vị phía sau hiện ngay các Mục tiêu vừa đưa vào khi đóng khung, không cần tải lại." }
+    {
+      "id": "AC-1",
+      "p": "Sẽ mở cuộc soạn trong khung trượt từ phải khi bấm «Soạn» hay «Tiếp tục», và đưa đường cũ, liên kết cũ về đúng khung đó."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ mở khung chỉ có cột Kara rộng 380 px, rồi khi Kara nộp bản nháp đầu thì mở thêm bản nháp sang trái mà Kara không dời chỗ."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ biến khung soạn thành một bề mặt liền như ReUI ai-chat-2: bản nháp và Kara chia bằng một đường kẻ, không khung lồng, mỗi bên một dòng đầu mảnh thẳng hàng."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ thay đầu trang lớn bằng một dòng đầu khung «Soạn OKR · đơn vị · chu kỳ»; số lượt dời sang dòng đầu cột Kara."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ giữ nguyên mọi việc soạn đã có: nhận, sửa, bỏ qua, hoàn tác, hỏi Kara từ dòng, gõ số, «Đưa vào»."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ có ảnh mọi trạng thái của khung ở bốn khổ màn, nền sáng và tối, không tràn ngang."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ cho trang Theo đơn vị phía sau hiện ngay các Mục tiêu vừa đưa vào khi đóng khung, không cần tải lại."
+    }
   ],
   "wont_do": [
-    { "id": "AC-2", "p": "Chặn việc phải rời trang đang đứng: liên kết tới một cuộc soạn mở khung ngay trên trang đó (Thoả thuận, OKR của tôi)." },
-    { "id": "AC-6", "p": "Sẽ KHÔNG để điện thoại dùng ngăn kéo thấp — dưới 768 px khung phủ toàn màn với hai tab." },
-    { "id": "AC-7", "p": "Chặn lỡ tay đóng khi Kara đang soạn: bấm ra ngoài không đóng, Esc hay nút đóng thì hỏi lại; Kara rảnh thì đóng ngay." },
-    { "id": "AC-8", "p": "Sẽ KHÔNG dừng lượt Kara khi đóng khung, mở bản ghi khác chồng lên hay tải lại trang — mở lại là nối tiếp." },
-    { "id": "AC-10", "p": "Sẽ KHÔNG viết bề ngang bằng số ở chỗ gọi: hai bề ngang lấy từ chuẩn chung, và luật «Kara ở đâu» vào tài liệu AI của kho." },
-    { "id": "OOS-1", "p": "Khung deal chưa đổi — chuyển tab Agent thành cột Kara bên phải là việc K5." },
-    { "id": "OOS-2", "p": "Lỗi «Không đọc lại được các lượt trước» trong ảnh của anh chưa sửa ở đây — kiểm riêng." },
-    { "id": "OOS-3", "p": "Kara chưa gửi liên kết mở bản ghi trong câu trả lời — vòng này chỉ làm cho liên kết đó mở được ở mọi trang." },
-    { "id": "OOS-4", "p": "Không đổi cách soạn của bản trang riêng — chỉ đổi vỏ." },
-    { "id": "OOS-5", "p": "Không có thanh kéo đổi cỡ và không nhớ bề ngang theo người." }
+    {
+      "id": "AC-2",
+      "p": "Chặn việc phải rời trang đang đứng: liên kết tới một cuộc soạn mở khung ngay trên trang đó (Thoả thuận, OKR của tôi)."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ KHÔNG để điện thoại dùng ngăn kéo thấp — dưới 768 px khung phủ toàn màn với hai tab."
+    },
+    {
+      "id": "AC-7",
+      "p": "Chặn lỡ tay đóng khi Kara đang soạn: bấm ra ngoài không đóng, Esc hay nút đóng thì hỏi lại; Kara rảnh thì đóng ngay."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ KHÔNG dừng lượt Kara khi đóng khung, mở bản ghi khác chồng lên hay tải lại trang — mở lại là nối tiếp."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ KHÔNG viết bề ngang bằng số ở chỗ gọi: hai bề ngang lấy từ chuẩn chung, và luật «Kara ở đâu» vào tài liệu AI của kho."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Khung deal chưa đổi — chuyển tab Agent thành cột Kara bên phải là việc K5."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Lỗi «Không đọc lại được các lượt trước» trong ảnh của anh chưa sửa ở đây — kiểm riêng."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Kara chưa gửi liên kết mở bản ghi trong câu trả lời — vòng này chỉ làm cho liên kết đó mở được ở mọi trang."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không đổi cách soạn của bản trang riêng — chỉ đổi vỏ."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không có thanh kéo đổi cỡ và không nhớ bề ngang theo người."
+    }
   ],
   "scope_plain": "Năm phép đo của bản trang riêng (đường trang riêng, thanh kéo) thôi chạy và trỏ sang AC-1, AC-3, AC-11 của vòng này; các phép đo khác của bản đó vẫn chạy (AC-9).",
   "coverage_plain": [
-    { "i": 0, "p": "Đường vào: sáu cách mở cuộc soạn — Soạn, Tiếp tục, đường cũ, liên kết cũ, liên kết trên trang khác, mã không có — đều đo ở AC-1, AC-2." },
-    { "i": 1, "p": "Nội dung khung: tám trạng thái từ đang mở tới đã đưa vào — đo ở AC-3, AC-4, AC-5 và ma trận ảnh AC-11." },
-    { "i": 2, "p": "Cách rời khung: ra ngoài, Esc, nút đóng, vuốt, bản ghi chồng lên, tải lại — đo ở AC-7, AC-8." },
-    { "i": 3, "p": "Khổ và nền: ba dải khổ màn, sáng và tối — đo ở AC-3, AC-6, AC-11." },
-    { "i": 4, "p": "Phần làm ngay: đường vào, khung theo khổ, rời khung khi Kara soạn, giữ cách soạn cũ, trang nền sau khi đưa vào, luật bề ngang." },
-    { "i": 5, "p": "Để sau: cột Kara trong khung deal (K5), Kara gửi liên kết trong câu trả lời, nhớ bề ngang theo người." },
-    { "i": 6, "p": "Không làm: thanh kéo đổi cỡ (anh chốt bề ngang cố định), giữ trang riêng song song với khung." },
-    { "i": 7, "p": "Cần anh gạch: cột Kara 380 px theo chuẩn sẵn có, thay vì đúng 400 px anh nói." },
-    { "i": 8, "p": "Cần anh gạch: màn 768–1023 px dùng hai tab, không hai ô cạnh nhau." },
-    { "i": 9, "p": "Cần anh gạch: chỉ hỏi lại khi Kara đang soạn; số đã gõ chưa đưa vào không gây hỏi vì đã được giữ." },
-    { "i": 10, "p": "Cần anh gạch: đóng khung khi Kara đang soạn không dừng lượt — AC-8 đo điều này, không tin suông." }
+    {
+      "i": 0,
+      "p": "Đường vào: sáu cách mở cuộc soạn — Soạn, Tiếp tục, đường cũ, liên kết cũ, liên kết trên trang khác, mã không có — đều đo ở AC-1, AC-2."
+    },
+    {
+      "i": 1,
+      "p": "Nội dung khung: tám trạng thái từ đang mở tới đã đưa vào — đo ở AC-3, AC-4, AC-5 và ma trận ảnh AC-11."
+    },
+    {
+      "i": 2,
+      "p": "Cách rời khung: ra ngoài, Esc, nút đóng, vuốt, bản ghi chồng lên, tải lại — đo ở AC-7, AC-8."
+    },
+    {
+      "i": 3,
+      "p": "Khổ và nền: ba dải khổ màn, sáng và tối — đo ở AC-3, AC-6, AC-11."
+    },
+    {
+      "i": 4,
+      "p": "Phần làm ngay: đường vào, khung theo khổ, rời khung khi Kara soạn, giữ cách soạn cũ, trang nền sau khi đưa vào, luật bề ngang."
+    },
+    {
+      "i": 5,
+      "p": "Để sau: cột Kara trong khung deal (K5), Kara gửi liên kết trong câu trả lời, nhớ bề ngang theo người."
+    },
+    {
+      "i": 6,
+      "p": "Không làm: thanh kéo đổi cỡ (anh chốt bề ngang cố định), giữ trang riêng song song với khung."
+    },
+    {
+      "i": 7,
+      "p": "Cần anh gạch: cột Kara 380 px theo chuẩn sẵn có, thay vì đúng 400 px anh nói."
+    },
+    {
+      "i": 8,
+      "p": "Cần anh gạch: màn 768–1023 px dùng hai tab, không hai ô cạnh nhau."
+    },
+    {
+      "i": 9,
+      "p": "Cần anh gạch: chỉ hỏi lại khi Kara đang soạn; số đã gõ chưa đưa vào không gây hỏi vì đã được giữ."
+    },
+    {
+      "i": 10,
+      "p": "Cần anh gạch: đóng khung khi Kara đang soạn không dừng lượt — AC-8 đo điều này, không tin suông."
+    }
   ],
   "gap_probe_plain": [
-    { "i": 0, "p": "Phép chấm ảnh cần một ảnh đối chiếu khung chi tiết Mục tiêu mà chưa ai chụp — đã thêm bước chụp, thiếu ảnh là đỏ." },
-    { "i": 1, "p": "Trang Theo đơn vị phía sau không tự làm mới sau «Đưa vào» — đã thêm AC-13 đo số Mục tiêu trên màn bằng số trong cơ sở dữ liệu." },
-    { "i": 2, "p": "Chưa đo tải lại trang giữa lượt — đã thêm vế tải lại vào AC-7, AC-8: chỉ hỏi khi Kara đang soạn, mở lại thì nối tiếp." },
-    { "i": 3, "p": "Phép đo bề ngang so với khoảng số nên cột Kara đặt cứng vẫn lọt — nay so đúng với giá trị chuẩn chung, có ca phá thử." },
-    { "i": 4, "p": "Trạng thái «Kara chưa bật» không dựng được trên màn đo — loại khỏi ma trận ảnh, bài kiểm giao diện đã phủ nó." }
+    {
+      "i": 0,
+      "p": "Phép chấm ảnh cần một ảnh đối chiếu khung chi tiết Mục tiêu mà chưa ai chụp — đã thêm bước chụp, thiếu ảnh là đỏ."
+    },
+    {
+      "i": 1,
+      "p": "Trang Theo đơn vị phía sau không tự làm mới sau «Đưa vào» — đã thêm AC-13 đo số Mục tiêu trên màn bằng số trong cơ sở dữ liệu."
+    },
+    {
+      "i": 2,
+      "p": "Chưa đo tải lại trang giữa lượt — đã thêm vế tải lại vào AC-7, AC-8: chỉ hỏi khi Kara đang soạn, mở lại thì nối tiếp."
+    },
+    {
+      "i": 3,
+      "p": "Phép đo bề ngang so với khoảng số nên cột Kara đặt cứng vẫn lọt — nay so đúng với giá trị chuẩn chung, có ca phá thử."
+    },
+    {
+      "i": 4,
+      "p": "Trạng thái «Kara chưa bật» không dựng được trên màn đo — loại khỏi ma trận ảnh, bài kiểm giao diện đã phủ nó."
+    }
   ]
 }

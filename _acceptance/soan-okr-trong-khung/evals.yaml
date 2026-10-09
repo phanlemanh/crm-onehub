@@ -74,11 +74,11 @@ evals:
     cmd: config:executors.script.sk_man_khung_lien
     steps:
       - "Cảnh cây; phiên đo riêng; mô hình giả nộp bản nháp 2 Mục tiêu × 5 KR; đăng nhập trưởng phòng; 1440"
-      - "Ma trận viết trước {khung hẹp, khung rộng} × {light, dark} = 4 ô. Mỗi ô với từng ô có trong {[data-o=hoi-thoai] > khung đầu tiên, [data-o=ban-nhap] > [data-slot=kara-artifact]}: getComputedStyle đòi border{Top,Right,Bottom,Left}Width ≥ 1px và borderStyle solid cả bốn cạnh, borderTopLeftRadius bằng giá trị rounded-lg của theme (đọc từ một phần tử mẫu class rounded-lg dựng tạm), borderColor của hai ô bằng nhau; màu viền khác màu nền khung (so chuỗi rgb)"
-      - "Ô soạn [data-slot=prompt-input] hoặc textarea của cột Kara nằm trong khung cột Kara (closest); nút «Đưa vào» nằm trong [data-slot=kara-artifact]"
-      - "Lăn thân mỗi ô tới cuối bằng page.mouse.wheel: phần tử con cuối của thân có .bottom ≤ .top của chân ô đó + 1"
+      - "Ma trận viết trước {khung hẹp, khung rộng} × {light, dark} = 4 ô. Mỗi ô: trong [data-slot=sheet-content] đếm phần tử con cháu của [data-o=ban-nhap] và [data-o=hoi-thoai] (gồm chính hai ô) có getComputedStyle đủ bốn borderWidth ≥ 1px VÀ borderTopLeftRadius > 0 mà bao trọn bề ngang ô (width ≥ 90% ô) — đòi bằng 0 (không khung lồng); ô rộng: [data-o=hoi-thoai] có borderLeftWidth ≥ 1px và [data-o=ban-nhap] có borderRightWidth = 0 (đúng một đường kẻ chia); dòng đầu của hai ô ([data-o] > :first-child) có height bằng nhau ± 1 và top bằng nhau ± 1"
+      - "Ô soạn (textarea của cột Kara) nằm trong [data-o=hoi-thoai] và .bottom của nó ≥ .bottom của [data-o=hoi-thoai] − 24; nút «Đưa vào» nằm trong [data-o=ban-nhap] và .bottom ≥ .bottom ô − 24"
+      - "Lăn thân mỗi ô tới cuối bằng page.mouse.wheel: phần tử con cuối của thân có .bottom ≤ .top của đáy ô đó + 1"
       - "Ảnh E4-<khung>-<nền>.png"
-    expected: "exit 0; man.mjs --phan khung-lien in kết quả từng ô, số ô bằng 4. Chiều đỏ ghim: --kiem-do-do cot-kara-tran (bản sao bỏ khung cột Kara) phải in 'cot kara khong co khung' và mã 1."
+    expected: "exit 0; man.mjs --phan khung-lien in kết quả từng ô, số ô bằng 4. Chiều đỏ ghim: --kiem-do-do khung-long (bản sao bọc cột Kara trong KaraArtifact có viền) phải in 'khung long trong khung' và mã 1; --kiem-do-do dau-lech (bản sao dòng đầu bản nháp cao gấp đôi) phải in 'dau o khong thang hang' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/kara/**", "_acceptance/soan-okr-trong-khung/rang/man.mjs"]
 
@@ -86,7 +86,7 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.sk_dau
-    expected: "exit 0; bài DOM -t sk-dau, ma trận viết trước 4 ô {đang mở, có nháp, không mở được, chưa cấu hình}: mỗi ô có đúng một [data-slot=sheet-header] trong [data-slot=sheet-content] chứa tiêu đề messages(vi).okrSoan.trang.tieuDe; ô có nháp: mô tả chứa tên đơn vị trong phần tử translate=no, tên chu kỳ và messages(vi).okrSoan.man.luot(n, 12); không ô nào có liên kết chữ trang.veTheoDonVi, phần tử [data-slot=page-shell-title], role=tablist ngoài tab soạn, hay ô chọn chu kỳ; ô đang mở có tiêu đề trước khi dữ liệu về. Bài in số ô và đòi bằng 4. Chiều đỏ ghim: bản sao còn DauTrangSoan phải đỏ 'con dau trang rieng'."
+    expected: "exit 0; bài DOM -t sk-dau, ma trận viết trước 4 ô {đang mở, có nháp, không mở được, chưa cấu hình}: mỗi ô có đúng một [data-slot=sheet-header] trong [data-slot=sheet-content] chứa tiêu đề messages(vi).okrSoan.trang.tieuDe; ô có nháp: mô tả chứa tên đơn vị trong phần tử translate=no và tên chu kỳ, KHÔNG chứa messages(vi).okrSoan.man.luot(n, 12); dòng đầu [data-o=hoi-thoai] chứa [data-slot=kara-mark] và chữ luot(n, 12); không ô nào có liên kết chữ trang.veTheoDonVi, phần tử [data-slot=page-shell-title], role=tablist ngoài tab soạn, hay ô chọn chu kỳ; ô đang mở có tiêu đề trước khi dữ liệu về. Bài in số ô và đòi bằng 4. Chiều đỏ ghim: bản sao còn DauTrangSoan phải đỏ 'con dau trang rieng'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/components/crm/record-sheet/**", "apps/app/components/detail-sheet.tsx", "apps/app/lib/messages/okr-soan.ts", "apps/app/test/soan-okr-trong-khung.dom.tsx"]
 
