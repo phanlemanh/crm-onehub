@@ -2,7 +2,7 @@ import { EnrichmentStatus, FactBand, FactStatus, RecordSource } from "@crm/db";
 import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
 import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { z } from "zod";
-import { bulkIdsInput } from "../crm/bulk";
+import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
 import { recordFieldValues } from "../fields/fields.contracts";
 import { activityFacetInput, listInput } from "../trpc/list-input";
 
@@ -288,12 +288,7 @@ export const contactEnrichOutput = z.object({
 	queued: z.boolean(),
 });
 
-export const bulkResultOutput = z.object({
-	requested: z.number(),
-	succeeded: z.number(),
-	failed: z.number(),
-	message: z.string().nullable(),
-});
+export const bulkResultOutput = crmBulkResultOutput;
 
 export const decideFactOutput = z.object({
 	contactId: z.string(),

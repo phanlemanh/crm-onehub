@@ -872,11 +872,44 @@ export class DealsService {
 	}
 
 	async bulkArchive(ids: string[]): Promise<BulkResult> {
-		return runBulk(ids, (id) => this.archive(id));
+		return runBulk(ids, (id) => this.archiveIfActive(id));
 	}
 
 	async bulkRestore(ids: string[]): Promise<BulkResult> {
-		return runBulk(ids, (id) => this.restore(id));
+		return runBulk(ids, (id) => this.restoreIfArchived(id));
+	}
+
+	private async archiveIfActive(id: string): Promise<{ id: string } | null> {
+		const { count } = await this.db.deal.updateMany({
+			where: { id, archivedAt: null },
+			data: { archivedAt: new Date() },
+		});
+		if (count > 0) {
+			this.logger.log({ message: "Deal archived", dealId: id });
+			return { id };
+		}
+		return this.skippedOrMissing(id);
+	}
+
+	private async restoreIfArchived(id: string): Promise<{ id: string } | null> {
+		const { count } = await this.db.deal.updateMany({
+			where: { id, archivedAt: { not: null } },
+			data: { archivedAt: null },
+		});
+		if (count > 0) {
+			this.logger.log({ message: "Deal restored", dealId: id });
+			return { id };
+		}
+		return this.skippedOrMissing(id);
+	}
+
+	private async skippedOrMissing(id: string): Promise<null> {
+		const found = await this.db.deal.findUnique({
+			where: { id },
+			select: { id: true },
+		});
+		if (!found) throw new NotFoundException(`No deal with id ${id}.`);
+		return null;
 	}
 
 	async bulkPurge(ids: string[]): Promise<BulkResult> {

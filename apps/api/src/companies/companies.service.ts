@@ -555,11 +555,44 @@ export class CompaniesService {
 	}
 
 	async bulkArchive(ids: string[]): Promise<BulkResult> {
-		return runBulk(ids, (id) => this.archive(id));
+		return runBulk(ids, (id) => this.archiveIfActive(id));
 	}
 
 	async bulkRestore(ids: string[]): Promise<BulkResult> {
-		return runBulk(ids, (id) => this.restore(id));
+		return runBulk(ids, (id) => this.restoreIfArchived(id));
+	}
+
+	private async archiveIfActive(id: string): Promise<{ id: string } | null> {
+		const { count } = await this.db.company.updateMany({
+			where: { id, archivedAt: null },
+			data: { archivedAt: new Date() },
+		});
+		if (count > 0) {
+			this.logger.log({ message: "Company archived", companyId: id });
+			return { id };
+		}
+		return this.skippedOrMissing(id);
+	}
+
+	private async restoreIfArchived(id: string): Promise<{ id: string } | null> {
+		const { count } = await this.db.company.updateMany({
+			where: { id, archivedAt: { not: null } },
+			data: { archivedAt: null },
+		});
+		if (count > 0) {
+			this.logger.log({ message: "Company restored", companyId: id });
+			return { id };
+		}
+		return this.skippedOrMissing(id);
+	}
+
+	private async skippedOrMissing(id: string): Promise<null> {
+		const found = await this.db.company.findUnique({
+			where: { id },
+			select: { id: true },
+		});
+		if (!found) throw new NotFoundException(`No company with id ${id}.`);
+		return null;
 	}
 
 	async bulkPurge(ids: string[]): Promise<BulkResult> {
