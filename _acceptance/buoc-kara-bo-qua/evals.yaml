@@ -10,13 +10,23 @@ evals:
     paths:
       - "apps/agent/agent/lib/portrait.ts"
       - "apps/agent/test/portrait-bo-qua.spec.ts"
+      - "packages/validation/src/eve-tool.ts"
+      - "_acceptance/buoc-kara-bo-qua/rang/bo-qua-dung-cho.mjs"
     expected: |
-      portrait-bo-qua.spec.ts tren CSDL thu cua luot (blob gia bat). Ma tran viet truoc 4 dong:
-        1 storePortrait voi lien he co imageUrl da mirror, force false -> {skipped:true, stored:false, reason "They already have a photo."}; imageUrl khong doi
-        2 runPortrait voi lien he co imageUrl, force false -> skipped true, stored false, cung reason
-        3 storePortrait voi nguon trung anh dang co -> reason "Unchanged.", skipped true
-        4 doi chung duong: storePortrait voi nguon tai hong (mirror tra null) -> stored false, KHONG co skipped
-      CHIEU DO: ban sao bo skipped o nhanh «already have a photo» -> dong 1 do voi thong diep ghim "portrait-bo-qua: da co anh".
+      Hai phan, cung lenh.
+      (a) rang/bo-qua-dung-cho.mjs doc portrait.ts: dem MOI khoi `return { stored: false ... }`; ma tran DAN XUAT tu tep (so dong
+      = so khoi dem duoc, in ra): khoi co reason «They already have a photo.» hoac «Unchanged.» PHAI co skipped: true; moi khoi khac
+      («could not be fetched», thieu Blob, «No such contact.», «No photo on the profile.», nguon het han...) PHAI KHONG co skipped.
+      CHIEU DO (--tu-thu tren ban sao): gan skipped cho «No photo on the profile.» -> do, ghim "bo-qua-dung-cho: No photo on the profile.".
+      (b) portrait-bo-qua.spec.ts tren CSDL thu cua luot (blob gia bat), goi ham THAT:
+        1 storePortrait voi ca nhan co imageUrl da mirror, force false -> skipped true, stored false, reason «They already have a photo.»; imageUrl khong doi
+        2 runPortrait voi ca nhan co imageUrl, force false -> skipped true, cung reason
+        3 storePortrait voi nguon trung anh dang co -> reason «Unchanged.», skipped true
+        4 doi chung: storePortrait voi nguon tai hong (mirror tra null) -> stored false, KHONG co khoa skipped
+        5 doi chung: runPortrait voi ca nhan khong ton tai -> «No such contact.», KHONG co khoa skipped
+        6 di qua khuon chung: eveToolOutcome.parse(ket cuc THAT cua dong 1).skipped === true (khoa khong bi luoc)
+      CHIEU DO: ban sao bo skipped o nhanh «already have a photo» -> dong 1 do, ghim "portrait-bo-qua: da co anh"; ban sao bo
+      skipped khoi eveToolOutcome -> dong 6 do, ghim "portrait-bo-qua: khuon luoc skipped".
 
   - id: E2
     criterion: AC-2
@@ -28,9 +38,14 @@ evals:
       - "packages/validation/src/agent-transcript.ts"
       - "apps/app/test/agent-transcript.spec.ts"
     expected: |
-      agent-transcript.spec.ts, describe "bo-qua". Ma tran 4 dong: outcomeTone voi output {stored:false, skipped:true} -> "neutral";
-      {written:false, skipped:true} -> "neutral"; muc did dung tu phan tool do -> skipped true; parseAgentTranscriptItem mot muc
-      did KHONG co truong skipped -> skipped false. CHIEU DO: ban sao outcomeTone bo nhanh skipped -> dong 1 do, ghim "bo-qua: neutral".
+      agent-transcript.spec.ts, describe "bo-qua". Ma tran 6 dong:
+        1 outcomeTone voi output {stored:false, skipped:true, reason:"They already have a photo."} (dung nguyen hinh ket cuc THAT ma E1 dong 1 in ra) -> "neutral"
+        2 {written:false, skipped:true} -> "neutral"
+        3 doi chung duong: {stored:false} -> "warning"
+        4 doi chung duong: {written:false} -> "warning"
+        5 muc did dung qua toTranscript tu phan tool cua dong 1 -> skipped true, tone "neutral"
+        6 muc did tu phan tool {stored:true} -> KHONG co khoa skipped (truongCua khong co "skipped"); tep mau JSON cu doc lai van khop
+      CHIEU DO: ban sao outcomeTone bo nhanh skipped -> dong 1 do, ghim "bo-qua: neutral".
 
   - id: E3
     criterion: AC-3
@@ -68,8 +83,10 @@ evals:
       - "apps/app/lib/agent-transcript.ts"
       - "apps/app/test/buoc-kara-bo-qua.dom.tsx"
     expected: |
-      Cung tep E3, describe "khung-tao": muc did dung qua toItems tu phan tool co output {stored:false, skipped:true} -> tone khac
-      "warning", nen nhanh canh bao cua agent-builder-chat (item.tone === "warning") khong chay; doi chung: output {stored:false} -> "warning".
+      Cung tep E3, describe "khung-tao": render AgentToolStep THAT cua agent-builder-chat voi muc did dung qua toTranscript tu phan
+      tool co output {stored:false, skipped:true} -> trong DOM KHONG co icon canh bao (svg mang lop text-warning), co icon xong;
+      doi chung duong cung ca: output {stored:false} -> icon canh bao co mat. CHIEU DO: ban sao AgentToolStep doc stored === false
+      thay vi tone -> do, ghim "khung-tao: canh bao bo qua".
 
   - id: E6
     criterion: AC-6
@@ -96,3 +113,16 @@ evals:
       git diff $(git merge-base HEAD origin/onehub) tren ba tep kiem chi THEM dong (khong dong nao bi xoa hay sua: dem dong «-» bang 0
       ngoai tieu de diff), roi chay tron ba tep -> thoat 0.
 
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.kbq_anh
+    paths:
+      - "apps/agent/agent/lib/portrait.ts"
+      - "packages/validation/src/eve-tool.ts"
+      - "apps/agent/test/portrait-bo-qua.spec.ts"
+    expected: |
+      Cung lenh E1 (dedupe); dong 6 cua phan (b): ket cuc THAT cua runPortrait/storePortrait o ca bo qua di qua
+      eveToolOutcome.parse van giu skipped === true — phia agent cua chuoi agent -> khuon chung -> app (phia app la E2 dong 1, 5).

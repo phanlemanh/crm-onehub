@@ -22,7 +22,7 @@ Source input: Ngoài-6 của `kara-trang-thai-toan-crm` (K6b), Cổng 2 2026-10-
 ## Criteria
 
 - AC-1: (cross-layer) Given một cá nhân đã có ảnh đã lưu bản sao, When công cụ ảnh của Kara chạy không ép thay (cả hai đường `storePortrait` và `runPortrait`), Then kết cục mang `skipped: true` và `stored: false` với lý do «They already have a photo.», bản ghi không đổi; When nguồn ảnh trùng ảnh đang có, Then kết cục «Unchanged.» cũng mang `skipped: true`.
-- AC-2: Given kết cục một bước có `skipped: true`, When dựng dòng thời gian Kara, Then màu kết cục là trung tính (không phải cảnh báo) và mục mang `skipped: true`; dữ liệu cũ không có trường `skipped` vẫn đọc được với `skipped: false`.
+- AC-2: (cross-layer) Given kết cục thật của công cụ ảnh ở ca bỏ qua, When đi qua kiểu kết cục dùng chung và dựng dòng thời gian Kara, Then màu kết cục là trung tính (không phải cảnh báo) và mục mang `skipped: true`; mục không bỏ qua thì vắng hẳn trường `skipped` (dữ liệu cũ và tệp mẫu không đổi), và `{stored: false}` hay `{written: false}` không kèm `skipped` vẫn là cảnh báo.
 - AC-3: Given ngăn Kara của bản ghi có một bước bỏ qua và các bước khác xong, When ngăn hiện, Then bước đó hiện «Đã bỏ qua» với chấm trung tính, KHÔNG hiện «Chưa lưu được», danh sách bước KHÔNG tự mở và tiêu đề danh sách bước là «Đã làm N bước».
 - AC-4: Given ca hỏng thật (không lấy được ảnh: `stored: false` không kèm `skipped`; hoặc `written: false`), When như AC-2 và AC-3, Then vẫn là cảnh báo, bước «Chưa lưu được» và danh sách tự mở — không hồi quy.
 - AC-5: Given khung tạo tác nhân hiển thị một bước có kết cục bỏ qua, When khung hiện, Then không hiện dấu cảnh báo cho bước đó.
@@ -38,7 +38,9 @@ Source input: Ngoài-6 của `kara-trang-thai-toan-crm` (K6b), Cổng 2 2026-10-
 - Các công cụ khác của Kara (chưa có công cụ nào khác trả «không lưu» cho việc vô hại).
 - Đổi chữ «Chưa lưu được» của ca hỏng thật.
 - «No photo on the profile.» (không tìm thấy ảnh) giữ là «Chưa lưu được» — người xem nên biết Kara không tìm được ảnh.
+- Bước của các lượt Kara chạy trước bản này vẫn hiện «Chưa lưu được» — không suy lại từ chữ lý do.
 
 ## Notes
 
-- Không migration; trường `skipped` của mục dòng thời gian mặc định `false`.
+- Không migration; trường `skipped` của mục dòng thời gian chỉ có mặt khi bằng `true`.
+- Đã quét ba tệp kiểm cũ: không bài nào so tuyệt đối cả mục `did`; `agent-transcript.spec.ts` có bài so tập trường với tệp mẫu JSON — vì thế `skipped` vắng khi không bỏ qua, tệp mẫu không đổi.

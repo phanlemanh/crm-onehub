@@ -1,0 +1,28 @@
+{
+  "feature_plain": "Khi Kara bỏ qua một việc vì không cần làm (cá nhân đã có ảnh, ảnh không đổi), bước đó hiện «Đã bỏ qua» màu xám và danh sách bước không tự mở — thôi báo «Kara chưa lưu được» như thất bại.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ để công cụ tìm ảnh của Kara tự đánh dấu «bỏ qua» khi cá nhân đã có ảnh hoặc ảnh không đổi."},
+    {"id": "AC-3", "p": "Sẽ hiện bước đó là «Đã bỏ qua» với chấm xám trong ngăn Kara, danh sách bước không tự mở, tiêu đề vẫn «Đã làm N bước»."},
+    {"id": "AC-4", "p": "Sẽ giữ nguyên báo «Kara chưa lưu được» và tự mở danh sách khi Kara hỏng thật (không lấy được ảnh, không tìm thấy ảnh)."},
+    {"id": "AC-6", "p": "Sẽ hiện «Skipped» ở giao diện tiếng Anh."},
+    {"id": "AC-7", "p": "Sẽ để các bài kiểm cũ của dòng thời gian Kara và danh sách bước chạy lại xanh, chỉ thêm ca mới, không sửa kỳ vọng cũ."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG tô cảnh báo cho bước bỏ qua khi dựng dòng thời gian Kara — đo bằng kết cục thật của công cụ đi qua kiểu dùng chung; bước không bỏ qua thì không mang thêm trường nào."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG hiện dấu cảnh báo cho bước bỏ qua trong khung tạo tác nhân."},
+    {"id": "OOS-1", "p": "Không đụng các công cụ khác của Kara (chưa có công cụ nào khác báo «không lưu» cho việc vô hại)."},
+    {"id": "OOS-2", "p": "Không đổi chữ «Chưa lưu được» của ca hỏng thật."},
+    {"id": "OOS-3", "p": "«Không tìm thấy ảnh trên hồ sơ» vẫn là «Chưa lưu được» — người xem nên biết Kara không tìm được ảnh."},
+    {"id": "OOS-4", "p": "Các lượt Kara đã chạy trước bản này vẫn hiện «Chưa lưu được» — không đoán lại từ chữ lý do."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Không quét độ phủ: một công cụ, một cờ, hai chỗ hiển thị đã liệt kê đủ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa đo trọn đường từ công cụ của Kara tới màn hình — có thể cờ «bỏ qua» bị rơi mất giữa đường mà bài kiểm vẫn xanh. Đã sửa: dùng kết cục thật của công cụ đi qua kiểu dùng chung, kèm đối chứng."},
+    {"i": 1, "p": "Bài kiểm chưa canh hết các chỗ công cụ ảnh báo «không lưu», nên có thể gắn nhầm «bỏ qua» cho ca không tìm thấy ảnh. Đã sửa: đếm mọi chỗ trong tệp và đòi «bỏ qua» đúng hai ca vô hại."},
+    {"i": 2, "p": "Thêm trường mới cho mọi bước có thể làm đỏ bài kiểm cũ so với tệp mẫu. Đã sửa: chỉ ghi trường khi thật sự bỏ qua, tệp mẫu và dữ liệu cũ không đổi."},
+    {"i": 3, "p": "Phép đo khung tạo tác nhân chỉ suy luận, không nhìn khung thật. Đã sửa: render đúng thành phần của khung và kiểm dấu cảnh báo vắng."},
+    {"i": 4, "p": "Chưa nói gì về các lượt Kara cũ. Đã ghi rõ: lượt cũ vẫn hiện «Chưa lưu được»."}
+  ]
+}
