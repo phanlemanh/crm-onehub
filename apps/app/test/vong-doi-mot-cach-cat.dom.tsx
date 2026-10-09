@@ -10,8 +10,20 @@ import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 
-type Lay = (vao: unknown) => unknown;
-type LoiGoi = { duong: string; vao: unknown };
+type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| Json[]
+	| { [khoa: string]: Json };
+type DauVao = Json | undefined;
+type Lay = (vao: DauVao) => unknown;
+type LoiGoi = { duong: string; vao: DauVao };
+type TuyChonGhi = {
+	onSuccess?: (kq: Json, vao: DauVao) => void;
+	onError?: (e: Error) => void;
+};
 
 let daGoi: LoiGoi[] = [];
 const duLieu = new Map<string, Lay>();
@@ -23,15 +35,18 @@ function dat(duong: string, lay: Lay): void {
 const goiCua = (duong: string) => daGoi.filter((g) => g.duong === duong);
 
 function thuTuc(duong: string) {
-	const doc = async (vao: unknown): Promise<unknown> => {
+	const doc = async (vao: DauVao): Promise<unknown> => {
 		daGoi.push({ duong, vao });
 		const lay = duLieu.get(duong);
 		return lay ? lay(vao) : null;
 	};
 	return {
-		queryKey: (vao?: unknown) => (vao === undefined ? [duong] : [duong, vao]),
+		queryKey: (vao?: DauVao) => (vao === undefined ? [duong] : [duong, vao]),
 		pathKey: () => [duong],
-		queryOptions: (vao?: unknown, chon?: object) =>
+		queryOptions: (
+			vao?: DauVao | typeof skipToken,
+			chon?: { enabled?: boolean },
+		) =>
 			vao === skipToken
 				? { queryKey: [duong, "skip"], queryFn: skipToken }
 				: {
@@ -39,16 +54,16 @@ function thuTuc(duong: string) {
 						queryKey: [duong, vao ?? null],
 						queryFn: async () => doc(vao),
 					},
-		infiniteQueryOptions: (vao?: unknown) => ({
+		infiniteQueryOptions: (vao?: DauVao) => ({
 			queryKey: [duong, vao ?? null, "vo-han"],
 			queryFn: async () => doc(vao),
 			initialPageParam: null,
 			getNextPageParam: () => undefined,
 		}),
-		mutationOptions: (chon?: object) => ({
+		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [duong],
-			mutationFn: async (vao: unknown) => (await doc(vao)) ?? { id: "ok" },
+			mutationFn: async (vao: DauVao) => (await doc(vao)) ?? { id: "ok" },
 		}),
 	};
 }
@@ -314,15 +329,14 @@ const vungToast = () =>
 	document.querySelector("[data-sonner-toaster]")?.textContent ?? "";
 
 function DanhSach({ loai }: { loai: Loai }) {
-	const trpc = trpcGia as Record<
-		string,
-		{ list: { queryOptions: (v: unknown) => object } }
-	>;
-	useQuery(
-		trpc[THU_TUC[loai]]?.list.queryOptions({ archived: false }) as Parameters<
-			typeof useQuery
-		>[0],
-	);
+	const duong = `${THU_TUC[loai]}.list`;
+	useQuery({
+		queryKey: [duong, { archived: false }],
+		queryFn: async () => {
+			daGoi.push({ duong, vao: { archived: false } });
+			return duLieu.get(duong)?.({ archived: false }) ?? null;
+		},
+	});
 	return null;
 }
 
@@ -543,9 +557,11 @@ const CHON_SUA =
 	'button, input, textarea, select, [role=combobox], [role=button], [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
 const FORM = "button, input, textarea, select";
 
-function demChoSua(): { tong: number; bat: number; khongForm: number } {
+type DemSua = { tong: number; bat: number; khongForm: number };
+
+function demChoSua(): DemSua {
 	const tab = tabDangMo();
-	if (!tab) return { tong: 0, bat: 0, khongForm: 0 };
+	if (!tab) return { tong: 0, bat: 0, khongForm: 0 } satisfies DemSua;
 	const tat = [...tab.querySelectorAll<HTMLElement>(CHON_SUA)].filter(
 		(e) => e.closest("[data-dai-luu-tru]") === null,
 	);
