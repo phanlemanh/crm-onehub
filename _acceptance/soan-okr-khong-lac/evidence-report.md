@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 34badf2a782c6e68ead5f3c45fd757a1a0ffd003
+verified_commit: 38e3e4815280a164ef3a8a6125bcae55f9e03a6b
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -199,3 +199,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, determi
 ## Iterations
 
 Round 1: cả 10 eval máy và 7 lệnh suite đạt ở lần chạy đầu; không có eval hỏng, không có mục chờ người chấm.
+
+### Re-pin lần 1 — 2026-10-09, do K2c (ly-do-tu-choi-nop-theo-locale) đổi nop-ban-nhap.ts thuộc paths của K2b; ghim lại ở tip sau gộp onehub 59d20767
+run_id: repin-20261009T093838Z-83779
+sha: 38e3e4815280a164ef3a8a6125bcae55f9e03a6b · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
