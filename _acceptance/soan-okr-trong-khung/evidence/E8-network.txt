@@ -1,0 +1,1 @@
+E8 network: driver la script Playwright trong man.mjs (khong co duong doc network cua browser tool) -> n-a (driver). Lan chay: Fri Oct  9 20:58:00 +07 2026

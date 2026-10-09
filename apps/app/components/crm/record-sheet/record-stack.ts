@@ -20,6 +20,7 @@ export const RECORD_KINDS = [
 	"objective",
 	"so-kr",
 	"kr",
+	"soan",
 ] as const;
 
 export type RecordKind = (typeof RECORD_KINDS)[number];
@@ -118,6 +119,11 @@ export function useRecordStack() {
 
 	const closeAll = useCallback(() => write([], "replace"), [write]);
 
+	const thayDinh = useCallback(
+		(ref: RecordRef) => write([...stack.slice(0, -1), ref], "replace"),
+		[stack, write],
+	);
+
 	const lotDuoi = useCallback(
 		(ref: RecordRef) => {
 			const key = recordKey(ref);
@@ -136,6 +142,7 @@ export function useRecordStack() {
 		open,
 		close,
 		closeAll,
+		thayDinh,
 		lotDuoi,
 	};
 }

@@ -12,6 +12,11 @@ import {
 	KaraBusyProvider,
 	type KaraBusyState,
 } from "@crm/ui/components/kara/busy";
+import {
+	KaraDockBody,
+	KaraDockFooter,
+	KaraDockHeader,
+} from "@crm/ui/components/kara/dock";
 import { KaraState } from "@crm/ui/components/kara/state";
 import { useMessages } from "@crm/ui/components/locale-provider";
 import type { ReactNode } from "react";
@@ -22,6 +27,7 @@ export type KaraArtifactProps = {
 	actions?: ReactNode;
 	footer?: ReactNode;
 	busy?: { label?: string; reasonShown?: boolean } | null;
+	variant?: "card" | "docked";
 	children: ReactNode;
 };
 
@@ -31,6 +37,7 @@ export function KaraArtifact({
 	actions,
 	footer,
 	busy,
+	variant = "card",
 	children,
 }: KaraArtifactProps) {
 	const msg = useMessages();
@@ -38,6 +45,41 @@ export function KaraArtifact({
 	const trangThai: KaraBusyState = chuBan
 		? { label: chuBan, reasonShown: busy?.reasonShown === true }
 		: null;
+	if (variant === "docked")
+		return (
+			<KaraBusyProvider busy={trangThai}>
+				<div
+					data-slot="kara-artifact"
+					data-variant="docked"
+					data-ban={chuBan ? "" : undefined}
+					className="flex h-full min-h-0 min-w-0 flex-col"
+				>
+					<KaraDockHeader>
+						<div
+							data-slot="kara-artifact-header"
+							className="flex min-w-0 flex-1 items-center justify-between gap-3"
+						>
+							<div className="flex min-w-0 items-baseline gap-2 truncate">
+								<ArtifactTitle>{title}</ArtifactTitle>
+								<KaraMark scope={meta} />
+								{chuBan ? <KaraState kind="working" label={chuBan} /> : null}
+							</div>
+							{actions ? <ArtifactActions>{actions}</ArtifactActions> : null}
+						</div>
+					</KaraDockHeader>
+					<KaraDockBody>
+						<div data-slot="kara-artifact-content" className="text-sm">
+							{children}
+						</div>
+					</KaraDockBody>
+					{footer ? (
+						<KaraDockFooter divided>
+							<div data-slot="kara-artifact-footer">{footer}</div>
+						</KaraDockFooter>
+					) : null}
+				</div>
+			</KaraBusyProvider>
+		);
 	return (
 		<KaraBusyProvider busy={trangThai}>
 			<Artifact

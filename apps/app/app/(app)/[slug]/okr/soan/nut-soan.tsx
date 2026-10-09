@@ -14,10 +14,10 @@ import { formatNgayGio } from "@crm/ui/lib/format";
 import type { PhaChuKy } from "@crm/validation/okr-chu-ky";
 import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { skipToken, useMutation, useQuery } from "@tanstack/react-query";
-import { useParams, useRouter } from "next/navigation";
 import { parseAsString, useQueryState } from "nuqs";
 import type { ReactNode } from "react";
 import { toast } from "sonner";
+import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { dauThangSau, homNayVn, OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -25,7 +25,6 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { DonChonOkr } from "../okr-search-params";
 import { DanhSachCuoc } from "./danh-sach-cuoc";
 import type { DonViSoan } from "./kieu";
-import { duongTrangSoan } from "./luat-ban-nhap";
 
 const PHA_SOAN = "lap-ke-hoach" satisfies PhaChuKy;
 const TRAN_CUOC_KY = String(TRO_LY_OKR_TRAN.soan.cuocMoiDonViMoiKy);
@@ -146,9 +145,8 @@ export function NutSoan({
 	const locale = useLocale();
 	const m = okrSoanMessages(locale);
 	const trpc = useTRPC();
-	const router = useRouter();
-	const { slug } = useParams<{ slug: string }>();
-	const moTrang = (id: string) => router.push(duongTrangSoan(slug, id));
+	const moBanGhi = useOpenRecord();
+	const moTrang = (id: string) => moBanGhi({ kind: "soan", id });
 	const [dsCuoc, datDsCuoc] = useQueryState(
 		SEARCH_PARAM.okr.dsCuoc,
 		parseAsString,
