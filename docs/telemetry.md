@@ -156,7 +156,7 @@ sent.
 | --- | --- |
 | `contacts_bucket`, `companies_bucket`, `deals_bucket`, `activities_bucket` | Sizes, in bands |
 | `contacts_by_source`, `companies_by_source` | Counts by `MANUAL` / `IMPORT` / `EMAIL` / `CALENDAR` |
-| `deals_by_stage` | Counts keyed by deal-stage id (the seven original stages keep their old enum strings as ids; stages an admin adds get a cuid). Never the label an admin typed, never amounts |
+| `deals_by_stage` | Counts on a closed set of ten keys: the seven original stages by their old enum strings (`DEMO_BOOKED`, `QUALIFIED_TO_BUY`, `DECISION_MAKER_BOUGHT_IN`, `CONTRACT_SENT`, `CLOSED_WON`, `CLOSED_LOST`, `UNQUALIFIED_TO_BUY`), and every stage an admin adds summed into `other_open`, `other_won` or `other_lost` by its kind. Never a stage id an admin created, never the label anyone typed, never amounts |
 | `activities_by_type` | Counts by `ActivityType` |
 | `mailbox_sync_configured` | Whether any `MailboxSync` row exists |
 | `mailbox_sync_status` | Counts by `GoogleSyncStatus` |

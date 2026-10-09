@@ -75,6 +75,8 @@ export const SEARCH_PARAM = {
 		cuocSoan: "cuocSoan",
 		dsCuoc: "dsCuoc",
 		cuocSoanAn: "cuocSoanAn",
+		tabSoan: "tabSoan",
+		locSoan: "locSoan",
 	},
 	taiLieu: {
 		tab: "tabTaiLieu",

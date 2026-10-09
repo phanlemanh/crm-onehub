@@ -1,0 +1,1 @@
+n-a (driver): man.mjs chay puppeteer qua tien-de.mjs, khong co read_network_requests

@@ -6,6 +6,11 @@ import type {
 	Tone,
 } from "@crm/validation/agent-transcript";
 import {
+	type DealListItem,
+	type DealListResult,
+	parseDealListResult,
+} from "@crm/validation/deal-list";
+import {
 	type EveStreamEvent,
 	eveTurnFailure,
 	eveTurnReference,
@@ -25,7 +30,6 @@ import {
 	type EveMessageInputRequest,
 	type EveMessagePart,
 } from "eve/react";
-import { z } from "zod";
 
 export type TranscriptItem =
 	| SaidItem
@@ -409,95 +413,10 @@ function hostOf(url: string): string {
 	}
 }
 
-export type DealListItem = {
-	id: string;
-	name: string;
-	stage: string;
-	amount: number | null;
-	currency: string;
-	company: {
-		id: string;
-		name: string;
-		domain: string | null;
-		iconUrl: string | null;
-		iconDarkUrl: string | null;
-		iconTone: string | null;
-		logoUrl: string | null;
-	};
-	owner: {
-		id: string;
-		name: string;
-		email: string;
-		image: string | null;
-	} | null;
-	daysSinceLastActivity: number;
-	neverActive: boolean;
-	expectedCloseDate: string | null;
-};
-
-export type DealListResult = {
-	asOf: string;
-	criteria: {
-		status: string;
-		inactiveForDays: number | null;
-		companyId: string | null;
-		ownerId: string | null;
-	};
-	deals: DealListItem[];
-	hasMore: boolean;
-};
-
-const requiredText = z.string().min(1);
-
-const finiteNumber = z.number().refine((value) => Number.isFinite(value));
-
-const optionalText = z.string().min(1).nullable().catch(null);
-
-const dealListItem = z.object({
-	id: requiredText,
-	name: requiredText,
-	stage: requiredText,
-	amount: finiteNumber.nullable(),
-	currency: requiredText,
-	company: z.object({
-		id: requiredText,
-		name: requiredText,
-		domain: optionalText,
-		iconUrl: optionalText,
-		iconDarkUrl: optionalText,
-		iconTone: optionalText,
-		logoUrl: optionalText,
-	}),
-	owner: z
-		.object({
-			id: requiredText,
-			name: requiredText,
-			email: requiredText,
-			image: optionalText,
-		})
-		.nullable(),
-	daysSinceLastActivity: finiteNumber,
-	neverActive: z.boolean().catch(false),
-	expectedCloseDate: requiredText.nullable(),
-});
-
-const dealListResult = z
-	.object({
-		asOf: requiredText,
-		criteria: z.object({
-			status: requiredText,
-			inactiveForDays: finiteNumber.nullable(),
-			companyId: requiredText.nullable(),
-			ownerId: requiredText.nullable(),
-		}),
-		deals: z.array(dealListItem),
-		hasMore: z.boolean().catch(false),
-	})
-	.nullable()
-	.catch(null);
+export type { DealListItem, DealListResult };
 
 export function dealListResultOf(value: EveToolOutput): DealListResult | null {
-	return dealListResult.parse(value);
+	return parseDealListResult(value);
 }
 
 export function groupDealListPages(

@@ -5,7 +5,6 @@ import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { useTRPC } from "@/lib/trpc/client";
@@ -78,25 +77,8 @@ export function ChiTietGoc({
 								phu: dien(t.soPhongBan, { n: bp.departments.length }),
 							}))}
 							sua={hd.sua}
-							dangGhi={sap.isPending}
-							ghi={(ids, _id, xong) =>
-								sap.mutate(
-									{ ids },
-									{
-										onSuccess: async () => {
-											toast.success(m.daSap);
-											await lamMoi();
-											xong();
-										},
-										onError: (e) => {
-											xong();
-											toast.error(e.message);
-										},
-									},
-								)
-							}
+							ghi={({ ids }) => sap.mutateAsync({ ids }).then(() => lamMoi())}
 						/>
-						<p className="text-muted-foreground text-xs">{m.keo}</p>
 					</>
 				)}
 			</div>

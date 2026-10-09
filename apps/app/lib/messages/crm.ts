@@ -2,6 +2,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 
 const en = {
 	timeline: {
+		loiTieuDe: "Couldn't load activity",
 		openIn: (mailbox: string) => `Open in ${mailbox}`,
 		allDay: "All day",
 		joinCall: "Join call",
@@ -26,6 +27,8 @@ const en = {
 			done: "Done",
 		},
 		showOlder: "Show older",
+		xemCuLoi: "Couldn't load older activity.",
+		lamMoiLoi: "Couldn't refresh activity. Showing what was already loaded.",
 		oneMessage: "1 message",
 		messages: (n: string) => `${n} messages`,
 		viaGmail: "via Gmail",
@@ -128,8 +131,13 @@ const en = {
 		unassigned: "Unassigned",
 		formerMember: "Former member",
 	},
+	vungCon: {
+		loiMoTa: "Check your connection and try again.",
+		dangTai: "Loading",
+	},
 	web: {
 		title: "Website activity",
+		loiTieuDe: "Couldn't load website activity",
 		pageViews: "Page views",
 		lastSeen: " · last seen ",
 		originalSource: "Original source",
@@ -300,6 +308,8 @@ const en = {
 		confirmDeleteForever: "Delete forever",
 		fallbackName: (noun: string) => `The ${noun}`,
 		archived: (name: string) => `${name} was archived.`,
+		hoanTac: "Undo",
+		hoanTacLoi: "Couldn't undo. The record is still under Archived.",
 		restored: (name: string) => `${name} was restored.`,
 		deletedForever: (name: string) => `${name} was deleted forever.`,
 	},
@@ -317,6 +327,7 @@ export type CrmMessages = typeof en;
 
 const vi = {
 	timeline: {
+		loiTieuDe: "Không tải được hoạt động",
 		openIn: (mailbox: string) => `Mở trong ${mailbox}`,
 		allDay: "Cả ngày",
 		joinCall: "Vào cuộc gọi",
@@ -342,6 +353,8 @@ const vi = {
 			done: "Đã xong",
 		},
 		showOlder: "Xem cũ hơn",
+		xemCuLoi: "Không tải được hoạt động cũ hơn.",
+		lamMoiLoi: "Không làm mới được hoạt động. Đang hiện bản đã tải.",
 		oneMessage: "1 thư",
 		messages: (n: string) => `${n} thư`,
 		viaGmail: "qua Gmail",
@@ -444,8 +457,13 @@ const vi = {
 		unassigned: "Chưa giao",
 		formerMember: "Đã rời đội",
 	},
+	vungCon: {
+		loiMoTa: "Kiểm tra kết nối rồi thử lại.",
+		dangTai: "Đang tải",
+	},
 	web: {
 		title: "Hoạt động trên website",
+		loiTieuDe: "Không tải được hoạt động trên website",
 		pageViews: "Lượt xem trang",
 		lastSeen: " · lần cuối ",
 		originalSource: "Nguồn đầu tiên",
@@ -615,6 +633,8 @@ const vi = {
 		confirmDeleteForever: "Xoá vĩnh viễn",
 		fallbackName: (noun: string) => `${noun} này`,
 		archived: (name: string) => `Đã lưu trữ ${name}.`,
+		hoanTac: "Hoàn tác",
+		hoanTacLoi: "Chưa hoàn tác được. Bản ghi vẫn ở mục Đã lưu trữ.",
 		restored: (name: string) => `Đã khôi phục ${name}.`,
 		deletedForever: (name: string) => `Đã xoá vĩnh viễn ${name}.`,
 	},

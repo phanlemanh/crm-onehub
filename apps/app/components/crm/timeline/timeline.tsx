@@ -6,16 +6,25 @@ import Email from "@carbon/icons-react/es/Email";
 import Events from "@carbon/icons-react/es/Events";
 import Task from "@carbon/icons-react/es/Task";
 import Time from "@carbon/icons-react/es/Time";
+import { Alert, AlertAction, AlertDescription } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import type { CarbonIcon } from "@crm/ui/components/icon";
+import { KaraRetry } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { dateFormat } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { cn } from "@crm/ui/lib/utils";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+	type QueryClient,
+	useInfiniteQuery,
+	useQuery,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
+import { useEffect, useState } from "react";
 import { DetailSheetEmpty, SECTION_TITLE } from "@/components/detail-sheet";
 import { type CrmMessages, crmMessages } from "@/lib/messages/crm";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -147,6 +156,106 @@ function TimelineDay({
 	);
 }
 
+type LoiTheoLuot = { xemCu: boolean; lamMoi: boolean };
+
+const KHONG_LOI: LoiTheoLuot = { xemCu: false, lamMoi: false };
+
+type LuotTai = {
+	isFetching: boolean;
+	isError: boolean;
+	isFetchNextPageError: boolean;
+	errorUpdateCount: number;
+	dataUpdatedAt: number;
+	soTrang: number | null;
+};
+
+type MocDaThay = { loi: number; du: number; soTrang: number };
+
+type NhoLoi = { loi: LoiTheoLuot; moc: MocDaThay };
+
+const NHO_MOI: NhoLoi = {
+	loi: KHONG_LOI,
+	moc: { loi: -1, du: 0, soTrang: 0 },
+};
+
+const nhoTheoClient = new WeakMap<QueryClient, Map<string, NhoLoi>>();
+
+function soTheoClient(client: QueryClient): Map<string, NhoLoi> {
+	const coSan = nhoTheoClient.get(client);
+	if (coSan) return coSan;
+	const moi = new Map<string, NhoLoi>();
+	nhoTheoClient.set(client, moi);
+	return moi;
+}
+
+function buocKe(nho: NhoLoi, luot: LuotTai): NhoLoi {
+	const {
+		isFetching,
+		isError,
+		isFetchNextPageError,
+		errorUpdateCount,
+		dataUpdatedAt,
+		soTrang,
+	} = luot;
+	if (isFetching || soTrang === null) return nho;
+	const { moc, loi } = nho;
+	if (isError) {
+		if (errorUpdateCount === moc.loi) return nho;
+		return {
+			loi: isFetchNextPageError
+				? { ...loi, xemCu: true }
+				: { ...loi, lamMoi: true },
+			moc: { loi: errorUpdateCount, du: dataUpdatedAt, soTrang },
+		};
+	}
+	if (dataUpdatedAt === moc.du) return nho;
+	const trangKeDuoc = moc.du !== 0 && soTrang > moc.soTrang;
+	return {
+		loi: trangKeDuoc ? { ...loi, xemCu: false } : KHONG_LOI,
+		moc: { loi: errorUpdateCount, du: dataUpdatedAt, soTrang },
+	};
+}
+
+function useLoiTheoLuot(luot: LuotTai, khoa: string): LoiTheoLuot {
+	const client = useQueryClient();
+	const so = soTheoClient(client);
+	const [, veLai] = useState(0);
+	const {
+		isFetching,
+		isError,
+		isFetchNextPageError,
+		errorUpdateCount,
+		dataUpdatedAt,
+		soTrang,
+	} = luot;
+
+	useEffect(() => {
+		const truoc = so.get(khoa) ?? NHO_MOI;
+		const ke = buocKe(truoc, {
+			isFetching,
+			isError,
+			isFetchNextPageError,
+			errorUpdateCount,
+			dataUpdatedAt,
+			soTrang,
+		});
+		if (ke === truoc) return;
+		so.set(khoa, ke);
+		veLai((n) => n + 1);
+	}, [
+		so,
+		khoa,
+		isFetching,
+		isError,
+		isFetchNextPageError,
+		errorUpdateCount,
+		dataUpdatedAt,
+		soTrang,
+	]);
+
+	return so.get(khoa)?.loi ?? KHONG_LOI;
+}
+
 export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 	const trpc = useTRPC();
 	const hydrated = useHydrated();
@@ -178,46 +287,86 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 
 	const entries = history.data?.pages.flatMap((page) => page.entries) ?? [];
 	const pinnedEntries = tab === "all" ? (pinned.data?.entries ?? []) : [];
+	const chuaCoTrang = history.data === undefined;
+	const loi = useLoiTheoLuot(
+		{
+			isFetching: history.isFetching,
+			isError: history.isError,
+			isFetchNextPageError: history.isFetchNextPageError,
+			errorUpdateCount: history.errorUpdateCount,
+			dataUpdatedAt: history.dataUpdatedAt,
+			soTrang: history.data?.pages.length ?? null,
+		},
+		JSON.stringify([anchor, tab]),
+	);
+	const thongBaoLamMoi = loi.lamMoi ? (
+		<div className="pt-3">
+			<Alert data-dtg-loi="lam-moi">
+				<AlertDescription>{m.timeline.lamMoiLoi}</AlertDescription>
+				<AlertAction>
+					<KaraRetry
+						onClick={() => void history.refetch()}
+						disabled={history.isFetching}
+					/>
+				</AlertAction>
+			</Alert>
+		</div>
+	) : null;
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col">
 			<div className="flex shrink-0 flex-col gap-2 border-b px-5 py-3">
 				<ActivityComposer anchor={anchor} />
 
-				<ToggleGroup
-					type="single"
-					value={tab}
-					onValueChange={(next) => {
-						if (next) void setTab(next as TimelineTab);
-					}}
-					size="sm"
-					spacing={0}
-				>
-					{TIMELINE_TABS.map((option) => (
-						<ToggleGroupItem key={option} value={option}>
-							{tabLabels(m)[option]}
-							{counts.data?.[option] ? (
-								<span className="tabular-nums opacity-60">
-									{counts.data[option]}
-								</span>
-							) : null}
-						</ToggleGroupItem>
-					))}
-				</ToggleGroup>
+				<div className="min-w-0 overflow-x-auto">
+					<ToggleGroup
+						type="single"
+						value={tab}
+						onValueChange={(next) => {
+							if (next) void setTab(next as TimelineTab);
+						}}
+						size="sm"
+						spacing={0}
+					>
+						{TIMELINE_TABS.map((option) => (
+							<ToggleGroupItem key={option} value={option}>
+								{tabLabels(m)[option]}
+								{counts.data?.[option] ? (
+									<span className="tabular-nums opacity-60">
+										{counts.data[option]}
+									</span>
+								) : null}
+							</ToggleGroupItem>
+						))}
+					</ToggleGroup>
+				</div>
 			</div>
 
 			{history.isPending ? (
 				<div className="flex min-h-0 flex-1 items-center justify-center">
 					<Spinner />
 				</div>
+			) : history.isError && chuaCoTrang ? (
+				<div className="flex min-h-0 flex-1 items-center justify-center p-5">
+					<VungTaiLoi
+						tieuDe={m.timeline.loiTieuDe}
+						moTa={m.vungCon.loiMoTa}
+						onThuLai={() => void history.refetch()}
+						dangTai={history.isFetching}
+					/>
+				</div>
 			) : entries.length === 0 && pinnedEntries.length === 0 ? (
-				<DetailSheetEmpty
-					icon={EMPTY_ICONS[tab]}
-					title={emptyStates(m)[tab].title}
-					description={emptyStates(m)[tab].description}
-				/>
+				<div className="flex min-h-0 flex-1 flex-col">
+					{thongBaoLamMoi ? <div className="px-5">{thongBaoLamMoi}</div> : null}
+					<DetailSheetEmpty
+						icon={EMPTY_ICONS[tab]}
+						title={emptyStates(m)[tab].title}
+						description={emptyStates(m)[tab].description}
+					/>
+				</div>
 			) : (
 				<div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-4">
+					{thongBaoLamMoi}
 					{pinnedEntries.length > 0 ? (
 						<TimelineDay
 							label={m.timeline.outstanding}
@@ -235,7 +384,19 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 						/>
 					))}
 
-					{history.hasNextPage ? (
+					{loi.xemCu ? (
+						<div className="mt-4">
+							<Alert data-dtg-loi="xem-cu">
+								<AlertDescription>{m.timeline.xemCuLoi}</AlertDescription>
+								<AlertAction>
+									<KaraRetry
+										onClick={() => void history.fetchNextPage()}
+										disabled={history.isFetchingNextPage}
+									/>
+								</AlertAction>
+							</Alert>
+						</div>
+					) : history.hasNextPage ? (
 						<Button
 							variant="outline"
 							size="sm"

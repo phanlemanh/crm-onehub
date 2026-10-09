@@ -82,7 +82,7 @@ function CreateCompanyForm() {
 		trpc.companies.create.mutationOptions({
 			onSuccess: async (company) => {
 				await cache.company(company.id);
-				toast.success(`${company.name} added.`);
+				toast.success(m.created(company.name));
 				await setOpen(null);
 				setName("");
 				setDomain("");

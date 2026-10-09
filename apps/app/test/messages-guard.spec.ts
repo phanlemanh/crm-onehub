@@ -362,6 +362,10 @@ const GHIM_OKR_SOAN = {
 	"okr-soan:moc.sua": ["sửa 1", "sửa 12"],
 	"okr-soan:moc.chuyen": ["chuyển 1", "chuyển 12"],
 	"okr-soan:moc.bo": ["bỏ 1", "bỏ 12"],
+	"okr-soan:moc.nopKhongThanh": [
+		"Kara nộp bản nháp chưa được — 1",
+		"Kara nộp bản nháp chưa được — 12",
+	],
 	"okr-soan:heThong.seGui": [
 		"Sẽ gửi kèm lượt sau: 1",
 		"Sẽ gửi kèm lượt sau: 12",
@@ -406,6 +410,7 @@ const GHIM = {
 		"Ít nhất 1 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 		"Ít nhất 12 ký tự. Không cần chữ hoa hay ký tự đặc biệt.",
 	],
+	"companies:created": ["Đã thêm 1.", "Đã thêm 12."],
 	"companies:bulk.reassigned": [
 		"Đã đổi người phụ trách cho 1.",
 		"Đã đổi người phụ trách cho 12.",
@@ -633,6 +638,10 @@ const GHIM = {
 	"nhac-qua-zalo:ketNoi.daNoiSo": [
 		"1/A người đã nối Zalo",
 		"12/A người đã nối Zalo",
+	],
+	"nhac-qua-zalo:ketNoi.doiBotThan": [
+		"Đổi sang bot «1» sẽ gỡ A liên kết Zalo. Mọi người đã nối phải nối lại.",
+		"Đổi sang bot «12» sẽ gỡ A liên kết Zalo. Mọi người đã nối phải nối lại.",
 	],
 	"settings-ket-noi:them.daCamRoi": ["1 đã cắm rồi.", "12 đã cắm rồi."],
 	"settings-ket-noi:google.dongBoHong": ["Đồng bộ hỏng: 1", "Đồng bộ hỏng: 12"],
