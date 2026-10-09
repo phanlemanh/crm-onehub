@@ -5,7 +5,7 @@ slug: agent-test-khong-nhap-app
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T23:31:49Z
 design_doc: _acceptance/agent-test-khong-nhap-app/design.md
@@ -54,3 +54,15 @@ Ngoài-8 của `deal-va`.
   AC-2, AC-3 bỏ, AC-4 đổi thành «không nhập từ app, `stageId` có trong `execute` và `toModelOutput`». Mất phép đo
   bộ đọc của app mà `deal-va/E4` đã hứa.
 - Tệp ngoài ranh giới xin ở P3-52.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-09 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 1–2:
+
+- Ngoài-1: Nếu sau này ai sửa cách công cụ trả danh sách thoả thuận cho Kara, bằng chứng của phép kiểm này có thể không bị đánh dấu là đã cũ, nên có thể không ai nhắc kiểm lại. Hiện tại chưa gây sai kết quả nào.
+- Ngoài-2: Phép kiểm ghim lại có thể chấp nhận một mốc ghim không thuộc nhánh này, nên bằng chứng có thể gắn với bản code khác bản sắp gộp mà vẫn báo đạt.
+- Ngoài-3: Dữ liệu mẫu trong bài kiểm thiếu vài trường mà Kara luôn trả thật, nên bài kiểm có thể xanh trong khi chưa thử đúng hình dạng dữ liệu thật.
+- Ngoài-4: Phép kiểm ghim lại có thể chấp nhận mốc ghim không còn trong lịch sử nhánh (ví dụ sau khi sửa lại commit), nên bằng chứng có thể trỏ vào bản code không tồn tại trên máy chủ sau khi đẩy lên.
+- Ngoài-5: Khi mạng lỗi lúc lấy bản mới nhất, phép kiểm ghim lại vẫn chạy trên bản cũ và vẫn có thể báo đạt, nên người xem tin kết quả đã so với bản mới nhất trong khi chưa phải.
+- Ngoài-6: Phép kiểm chỉ chắc mốc ghim nằm sau điểm rẽ nhánh chứ chưa chắc nằm trên nhánh này, nên một mốc của nơi khác vẫn có thể lọt qua.
+- Ngoài-7: Nếu ai lỡ xoá hoặc bỏ qua nhóm kiểm so sánh app với gói, phép kiểm vẫn báo xanh nhờ các ca cũ, nên có thể mất bảo vệ mà không ai biết.
+- Ngoài-8: Nếu sau này có người viết lại danh sách thoả thuận bằng tay dưới một tên khác, phép kiểm sẽ không phát hiện, dẫn tới hai bản định nghĩa lệch nhau như trước.
+- Ngoài-9: Một dòng ghim thiếu danh sách kết quả kiểm vẫn có thể được tính là đạt, nên có hồ sơ báo đã kiểm lại trong khi thực ra chưa chạy eval nào.
