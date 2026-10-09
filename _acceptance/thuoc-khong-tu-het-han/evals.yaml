@@ -1,0 +1,77 @@
+schema_version: 1
+slug: thuoc-khong-tu-het-han
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.tkh_paths_chet
+    paths:
+      - "_acceptance/thuoc-khong-tu-het-han/rang/paths-chet.mjs"
+      - "_acceptance/thuoc-khong-tu-het-han/rang/danh-sach.json"
+      - "_acceptance/thuoc-khong-tu-het-han/rang/neo.mjs"
+    expected: |
+      exit 0; rang/paths-chet.mjs nap globToRe tu feature-loop/scripts/carry-plan.mjs (giai qua resolve-plugin.mjs). Moc neo
+      (rang/neo.mjs): commit gop cua vong tren day cha-dau cua origin/onehub neu da co, khong thi HEAD; in moc. (1) 20 eval cua
+      rang/danh-sach.json, doc evals.yaml va git ls-tree O MOC NEO: 0 glob chet. (2) Doi chung duong: quet moi ho so da ky o
+      a9e8bc75a (git show + ls-tree tai sha do) ra DUNG tap 20 cap ho-so/eval cua danh sach, khong thua khong thieu, so tung
+      glob. (3) Doi chung bo khop: «[[]slug]» tren tep co «[slug]» -> chet; «…/giai-doan/» khong ** -> chet. Ban sao danh sach
+      them mot eval co glob «apps/khong-co/**» -> ma 1 goi ten no.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.tkh_chi_paths
+    paths:
+      - "_acceptance/thuoc-khong-tu-het-han/rang/chi-paths.mjs"
+      - "_acceptance/thuoc-khong-tu-het-han/rang/danh-sach.json"
+      - "_acceptance/thuoc-khong-tu-het-han/rang/neo.mjs"
+    expected: |
+      exit 0; rang/chi-paths.mjs so 14 tep evals.yaml cua rang/danh-sach.json giua a9e8bc75a va moc neo (git show tai hai sha,
+      doc bang lib/eval-yaml.cjs moi truong): tap eval doi paths DUNG bang 20 eval cua danh sach; moi truong khac giong het;
+      cung tap id; o ha-tran-thang-hoi-zalo va slack-thieu-quyen-email moi eval khac E7/E10 giong het. Chieu do: ban sao doi mot
+      chu trong expected -> ma 1 «<ho so>/<eval>: expected»; ban sao xoa mot eval -> ma 1 «thieu eval»; ban sao bo sua paths cua
+      mot eval trong danh sach -> ma 1 «paths khong doi».
+
+  - id: E3
+    criterion: AC-3, AC-6
+    executor: script
+    cmd: config:executors.script.tkh_e7
+    paths:
+      - "_acceptance/ha-tran-thang-hoi-zalo/rang/khong-cham-da-ky.mjs"
+      - "_acceptance/thuoc-khong-tu-het-han/rang/hai-thuoc.mjs"
+    expected: |
+      exit 0; rang/hai-thuoc.mjs --e7 dung ban clone --shared tam tu kho, checkout a9e8bc75a, them mot commit tong hop sua
+      _acceptance/hoi-crm-qua-zalo/contract.md. Tren cay do: ban cu cua khong-cham-da-ky.mjs (git show a9e8bc75a:…) thoat 1 voi
+      thong diep ghim cua no; ban neo (cay lam viec) thoat 0, in «ok: khong cham ho so da ky» va «9dc1a037c». Ban neo chay o hai
+      ref (cay tam va cay lam viec) cho dau ra giong het. Ban sao ban neo co tap doi them «_acceptance/hoi-crm-qua-zalo/contract.md»
+      -> ma 1 goi ten tep do. expected moi cua E7 co «9dc1a037c», khong con «origin/onehub», criterion van AC-6.
+
+  - id: E4
+    criterion: AC-4, AC-6
+    executor: script
+    cmd: config:executors.script.tkh_e10
+    paths:
+      - "_acceptance/slack-thieu-quyen-email/rang/khong-sua-tep-hang.mjs"
+      - "_acceptance/thuoc-khong-tu-het-han/rang/hai-thuoc.mjs"
+    expected: |
+      exit 0; rang/hai-thuoc.mjs --e10 tren cung kieu cay tam cong mot commit khong ten: ban cu thoat 1 «COMMIT KHONG TEN»; ban
+      neo thoat 0 va in dung tap commit ghim san (so commit va danh sach sha) cua a62adb16..52e00cad2^2; day cha-dau cua onehub
+      co dung mot commit gop cham _acceptance/slack-thieu-quyen-email/ va dung mot cham _acceptance/ha-tran-thang-hoi-zalo/; them
+      --gia-tep apps/agent/agent/lib/run-runtime.ts -> ma 1 «TEP HANG»; --gia-commit-khong-ten -> ma 1 «COMMIT KHONG TEN».
+      expected moi cua E10 co «52e00cad2», khong con «origin/onehub», criterion van AC-10.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.tkh_kiem_ke
+    paths:
+      - "_acceptance/thuoc-khong-tu-het-han/kiem-ke.md"
+      - "_acceptance/thuoc-khong-tu-het-han/rang/kiem-ke.mjs"
+      - "_acceptance/thuoc-khong-tu-het-han/rang/mau-moc-troi/**"
+    expected: |
+      exit 0; rang/kiem-ke.mjs doc sha va so lieu trong kiem-ke.md, git archive sha do vao thu muc tam, chay lai lenh quet: so tep
+      nhac moc troi, danh sach tep, so eval thieu paths trung tung dong. Bo mau rang/mau-moc-troi/ (viet san, moi tep mot dang:
+      origin/onehub, onehub tran, merge-base, ..HEAD, HEAD~N, @{u}, git ls-files khong ref, git diff khong ref; mot tep neo sha
+      cu the): lenh quet dem dung moi tep dang troi va KHONG dem tep neo sha (so assert = so tep mau, rut tu danh sach tep). Chieu
+      do: ban sao kiem-ke.md sua mot con so -> ma 1 goi ten dong lech.

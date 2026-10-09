@@ -1,0 +1,33 @@
+{
+  "feature_plain": "Các lượt gộp sau không còn phải chạy ghim lại thừa hay sửa thước chỉ vì một thước cũ trỏ vào tệp đã dời, hoặc vì nó tự so với onehub đang trôi.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ sửa phần «tệp nào thước này đo» của 20 phép đo ở 14 hồ sơ đã ký đang trỏ vào tệp không còn, đo bằng đúng cách bộ kit đọc, ở một mốc cố định."},
+    {"id": "AC-2", "p": "Sẽ chỉ đổi đúng phần đó; lệnh, kỳ vọng và tiêu chí của 14 hồ sơ đã ký giữ nguyên từng chữ."},
+    {"id": "AC-3", "p": "Sẽ neo thước «không chạm hồ sơ Hỏi CRM qua Zalo» vào chính lần gộp của nó (PR #168), để nó thôi đỏ ở mọi nhánh khác."},
+    {"id": "AC-5", "p": "Sẽ lập danh sách các thước còn so với mốc trôi và các phép đo chưa khai tệp đo, đo trên một sha cố định để chính danh sách không tự hết hạn."},
+    {"id": "AC-6", "p": "Sẽ giữ tên, tiêu chí và thông điệp của hai thước neo lại; chỉ mốc đổi, và vế «kiểm trước khi gộp» của thước Zalo được giao cho lượt kiểm chéo đêm."}
+  ],
+  "wont_do": [
+    {"id": "AC-4", "p": "Chặn việc thước «không sửa tệp của hãng» (Slack thiếu quyền email) đỏ vì commit của nhánh khác: neo nó vào chính lần gộp PR #187."},
+    {"id": "OOS-1", "p": "Không sửa 162 tệp thước còn nhắc mốc trôi — chỉ liệt kê; sửa từng cái khi lượt kiểm chéo đêm báo nó đỏ."},
+    {"id": "OOS-2", "p": "Không khai thêm tệp đo cho 868 phép đo đang thiếu — luật 34 chỉ cho liệt kê."},
+    {"id": "OOS-3", "p": "Không viết luật chặn thước mới dùng mốc trôi ở kho này — việc của bộ kit, sẽ xin mở việc riêng."},
+    {"id": "OOS-4", "p": "Không đụng thước tài liệu của Trả lời tin nhắn — đã sửa từ trước, đang xanh."},
+    {"id": "OOS-5", "p": "Không đụng thước migration của Giai đoạn thoả thuận — đã sửa ở #311."},
+    {"id": "OOS-6", "p": "Vế «kiểm trước khi gộp» của thước Zalo bị bỏ và không ai canh cho tới khi anh cho cài lượt kiểm chéo đêm."}
+  ],
+  "scope_plain": "Những thứ cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ ba kiểu tệp đo bị chết (tệp dời hay xoá, thư mục thiếu **, ngoặc vuông thoát sai) cộng kiểu ký tự đại diện, đều có ca thật trong 20 phép đo (AC-1, AC-2)."},
+    {"i": 1, "p": "Đủ năm kiểu mốc trôi, kể cả kiểu đo cả kho ở hiện tại mà phản biện chỉ ra; hai thước còn đỏ và bộ mẫu kiểm kê phủ chúng (AC-3, AC-4, AC-5, AC-6)."},
+    {"i": 2, "p": "Mỗi lối xử lý có tiêu chí riêng: sửa ngay, kiểm kê để sửa khi đỏ, hay chuyển cho bộ kit (AC-5 cho kiểm kê)."},
+    {"i": 3, "p": "Phần «sửa khi đỏ» cho 162 tệp là giả định chờ anh gạch ở cổng này."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo tệp chết của chính vòng này đo cả kho ở hiện tại, nên nó sẽ tự đỏ khi một PR sau dời tệp — đúng lỗi vòng này đi sửa. Đã sửa: chỉ đo 20 phép đo ghi sẵn, ở mốc cố định, kèm đối chứng tìm lại đủ 20 ở mốc gốc."},
+    {"i": 1, "p": "Phép đo «chỉ đổi tệp đo» lấy mọi hồ sơ đổi, không ghim 14 tệp, nên đỏ oan vì PR khác hoặc xanh khi sửa thiếu. Đã sửa: so đúng 14 tệp giữa hai mốc cố định, tập đổi phải đúng 20."},
+    {"i": 2, "p": "Hai thước neo lại chỉ được thử trên nhánh hiện tại, sau gộp bản cũ cũng xanh nên phép thử không chứng gì. Đã sửa: dựng một bản sao kho tạm có commit chạm hồ sơ khác và commit không tên; bản cũ phải đỏ, bản mới phải xanh."},
+    {"i": 3, "p": "Lệnh kiểm kê chưa chắc bắt đủ các dạng mốc trôi, con số 162 có thể thấp. Đã sửa: thêm bộ mẫu mười tệp, mỗi dạng một tệp, và một tệp neo sha không được đếm."},
+    {"i": 4, "p": "Hợp đồng dựa vào lượt kiểm chéo đêm mà không nói nó chưa được cài. Đã sửa: ghi rõ vế đó không ai canh tới khi anh cho cài; việc chuyển sang bộ kit đi qua đơn xin việc phụ."}
+  ]
+}
