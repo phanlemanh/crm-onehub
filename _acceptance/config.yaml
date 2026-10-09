@@ -2023,7 +2023,7 @@ executors:
     gdtt_migration: 'bun _acceptance/giai-doan-thoa-thuan/rang/migration-du-lieu.mjs'
     gdtt_man_chrome: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/giai-doan-thoa-thuan/rang/man-giai-doan.mjs"'
     gdtt_khong_re_theo_ten: 'bun _acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs'
-    gdtt_san_thiet_ke: 'bun _acceptance/giai-doan-thoa-thuan/rang/san-thiet-ke.mjs'
+    gdtt_san_thiet_ke: 'GDTT_MOC=b2012cbd750182983fa7a17e87e8a050b511c6df GDTT_DINH=cf5006d4d bun _acceptance/giai-doan-thoa-thuan/rang/san-thiet-ke.mjs'
     tgy_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/the-gop-y-okr/rang/man-the-gop-y.mjs"'
     tgy_ten_goi: 'node _acceptance/the-gop-y-okr/rang/ten-goi.mjs'
     tgy_san_thiet_ke: 'for t in "packages/ui/src/components/proposed-change.tsx" "packages/ui/src/components/ai-elements/confirmation.tsx" "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/components/crm/facts.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
