@@ -5,7 +5,7 @@ slug: ngoai-le-telemetry-giai-doan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T23:32:08Z
 design_doc: _acceptance/ngoai-le-telemetry-giai-doan/design.md
