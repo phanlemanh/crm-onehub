@@ -217,6 +217,9 @@ async function kiemNgan(t, deal, loi) {
 			});
 			await t.mouse.click(r.x, r.y);
 			await cho(400);
+			await t.keyboard.type(" sua thu");
+			await t.keyboard.press("Enter");
+			await cho(600);
 		} else loi.push(`khong thay o ${nhan}`);
 		const mo = await t.evaluate(
 			(sel) =>
@@ -233,6 +236,54 @@ async function kiemNgan(t, deal, loi) {
 	});
 	if (sau.updatedAt.getTime() !== deal.updatedAt.getTime())
 		loi.push("updatedAt doi sau khi bam o");
+}
+
+async function doiChungDangDung(chu, loi) {
+	const deal = await gieoThoaThuan(chu, false);
+	const t = await d.moTrang(chu.cookie, RONG, `/deals?record=deal:${deal.id}`);
+	await choThay(
+		t,
+		(n) => document.body.innerText.includes(n),
+		deal.name,
+		"thoa thuan dang dung",
+	);
+	const o = await t.evaluateHandle((n) => {
+		const tab = document.querySelector(
+			'[role="tabpanel"][data-state="active"]',
+		);
+		const l = [...(tab?.querySelectorAll("label") ?? [])].find(
+			(x) => (x.textContent ?? "").trim() === n,
+		);
+		return l?.parentElement?.querySelector("button") ?? null;
+	}, RS.deal.fields.name);
+	if (!(await o.evaluate((x) => Boolean(x)))) {
+		loi.push("doi chung: khong thay o ten");
+		await t.close();
+		return;
+	}
+	await o.evaluate((x) => x.scrollIntoView({ block: "center" }));
+	await o.click();
+	await cho(400);
+	const moO = await t.evaluate(
+		(sel) =>
+			document.querySelectorAll(`${sel} input:not([type=hidden])`).length,
+		NGAN,
+	);
+	if (moO === 0) loi.push("doi chung: bam o ten khong mo cho sua");
+	await t.keyboard.type(" sua thu");
+	await t.keyboard.press("Enter");
+	let doi = false;
+	for (let lan = 0; lan < 20 && !doi; lan += 1) {
+		await cho(300);
+		const sau = await d.db.deal.findUniqueOrThrow({
+			where: { id: deal.id },
+			select: { updatedAt: true },
+		});
+		doi = sau.updatedAt.getTime() !== deal.updatedAt.getTime();
+	}
+	if (!doi) loi.push("doi chung: sua o ten khong ghi xuong db");
+	console.log(`  doi chung dang dung: mo cho sua ${moO > 0}, ghi db ${doi}`);
+	await t.close();
 }
 
 async function kanban(chu, rong, ten, loi) {
@@ -262,6 +313,7 @@ try {
 			await kiemNgan(t, deal, loi);
 			await chup(t, "vdc-ngan-da-cat-1440.png");
 			await t.close();
+			if (!CHIEU_DO) await doiChungDangDung(chu, loi);
 			d.dat(1, loi.length === 0, loi.join(" · "));
 		});
 
@@ -270,6 +322,11 @@ try {
 			const loi = [];
 			const deal = await gieoThoaThuan(chu, true);
 			const t = await kanban(chu, RONG, "vdc-kanban-1440.png", loi);
+			const truocBam = await t.evaluate(
+				(ten) => document.body.innerText.includes(ten),
+				deal.name,
+			);
+			if (truocBam) loi.push("Kanban hien ca thoa thuan da cat truoc khi bam");
 			await bamNut(t, DEAL.archivedToggle);
 			await choThay(
 				t,
