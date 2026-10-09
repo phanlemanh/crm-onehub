@@ -221,8 +221,8 @@ async function doOBang(p, cotNhan, tenCot, tenP, tenQ) {
 				const ro = oP.getBoundingClientRect();
 				const cao = Number.parseFloat(getComputedStyle(chuSo).lineHeight);
 				hinh = {
-					scrollWidth: chuSo.scrollWidth,
-					clientWidth: chuSo.clientWidth,
+					scrollWidth: oP.scrollWidth,
+					clientWidth: oP.clientWidth,
 					caoChu: Math.round(rc.height),
 					motDong: Math.round(cao),
 					trongO:
@@ -259,7 +259,7 @@ async function doDeal(kho, ma, lang, cookie, slug, g) {
 	try {
 		await moBang(
 			p,
-			`${APP}/${slug}/deals?record=deal:${g.deal.id}`,
+			`${APP}/${slug}/deals?record=deal:${g.deal.id}&tab=contacts`,
 			c.role,
 			g.p.firstName,
 		);
@@ -353,7 +353,7 @@ async function doChonNguoi(cookie, slug, g) {
 	try {
 		await moBang(
 			p,
-			`${APP}/${slug}/deals?record=deal:${g.deal.id}`,
+			`${APP}/${slug}/deals?record=deal:${g.deal.id}&tab=contacts`,
 			c.role,
 			g.p.firstName,
 		);
