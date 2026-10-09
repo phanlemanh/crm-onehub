@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import {
 	existsSync,
+	mkdirSync,
 	mkdtempSync,
 	readFileSync,
 	rmSync,
@@ -13,6 +14,7 @@ import path from "node:path";
 const GOC = path.resolve(import.meta.dirname, "..", "..", "..");
 const ts = createRequire(path.join(GOC, "package.json"))("typescript");
 
+const DUOI = /\.(ts|tsx|mts|cts)$/;
 const BO_QUA = [
 	/(^|\/)test\//,
 	/(^|\/)evals\//,
@@ -26,11 +28,53 @@ const PHUONG_THUC = new Set([
 	"createManyAndReturn",
 	"upsert",
 ]);
-const SQL_CHEN =
-	/insert\s+into\s+(?:"?public"?\s*\.\s*)?"?deal"?\s*\(([^)]*)\)/gi;
-const CHUOI_TAO = /\.deal\.(create|createMany|upsert)\(/g;
-const CO_THE =
-	/\.deal\b|\bdeals\s*:|insert\s+into\s+(?:"?public"?\s*\.\s*)?"?deal"?\b/i;
+const LONG = ["create", "createMany", "connectOrCreate"];
+const MAC_DINH = {
+	strict: true,
+	target: ts.ScriptTarget.ES2022,
+	module: ts.ModuleKind.ESNext,
+	moduleResolution: ts.ModuleResolutionKind.Bundler,
+	skipLibCheck: true,
+	noEmit: true,
+};
+
+function quanHeDeal(schema) {
+	const ten = new Set();
+	let model = null;
+	for (const dong of readFileSync(schema, "utf8").split("\n")) {
+		const m = dong.match(/^model (\w+) \{/);
+		if (m) {
+			model = m[1];
+			continue;
+		}
+		const q = `${dong} `.match(/^\s+(\w+)\s+Deal(\[\]|\?)?\s/);
+		if (q && model) ten.add(q[1]);
+	}
+	return ten;
+}
+
+function sqlChen(chu) {
+	const ra = [];
+	const mau =
+		/insert\s+into\s+(?:"?public"?\s*\.\s*)?"?deal"?(?=[\s(;`'"]|$)/gi;
+	for (const k of chu.matchAll(mau)) {
+		const sau = chu.slice(k.index + k[0].length).replace(/^\s+/, "");
+		const dong = chu.slice(0, k.index).split("\n").length;
+		if (!sau.startsWith("(")) {
+			ra.push({ dong, loi: "chen tho khong liet cot" });
+			continue;
+		}
+		const cot = sau
+			.slice(1, sau.indexOf(")"))
+			.split(",")
+			.map((c) => c.trim().replace(/^"|"$/g, "").toLowerCase());
+		ra.push({
+			dong,
+			loi: cot.includes("stage") ? null : "chen tho thieu stage",
+		});
+	}
+	return ra;
+}
 
 function tenKieu(t, da = new Set()) {
 	if (!t || da.has(t)) return [];
@@ -45,123 +89,148 @@ function coUndefined(t) {
 	return (t.types ?? []).some((c) => c.flags & ts.TypeFlags.Undefined);
 }
 
-function quetGoi(thuMuc) {
-	const cauHinh = path.join(thuMuc, "tsconfig.json");
+function cauHinhGoi(thu) {
+	const tep = path.join(thu, "tsconfig.json");
+	if (!existsSync(tep)) return MAC_DINH;
 	const doc = ts.getParsedCommandLineOfConfigFile(
-		cauHinh,
+		tep,
 		{},
 		{ ...ts.sys, onUnRecoverableConfigFileDiagnostic: () => {} },
 	);
-	if (!doc) return { doiTuong: 0, sql: 0, chuoi: 0, thieu: [] };
-	const tep = doc.fileNames.filter((f) => {
-		const tuongDoi = path.relative(GOC, f);
-		if (BO_QUA.some((r) => r.test(tuongDoi))) return false;
-		return CO_THE.test(readFileSync(f, "utf8"));
-	});
-	if (tep.length === 0) return { doiTuong: 0, sql: 0, chuoi: 0, thieu: [] };
-	const chuongTrinh = ts.createProgram(tep, doc.options);
-	const kiem = chuongTrinh.getTypeChecker();
-	const thieu = [];
-	let doiTuong = 0;
-	let sql = 0;
-	let chuoi = 0;
-	for (const f of tep) {
-		const nguon = chuongTrinh.getSourceFile(f);
-		if (!nguon) continue;
-		const tuongDoi = path.relative(GOC, f);
-		const chu = nguon.getFullText();
-		chuoi += (chu.match(CHUOI_TAO) ?? []).length;
-		for (const k of chu.matchAll(SQL_CHEN)) {
-			sql += 1;
-			if (!/"?stage"?/i.test(k[1])) {
-				const dong = chu.slice(0, k.index).split("\n").length;
-				thieu.push(`THIEU ${tuongDoi}:${dong} chen tho thieu stage`);
-			}
-		}
-		const kiemDoiTuong = (lit) => {
-			if (!lit || !ts.isObjectLiteralExpression(lit)) return;
-			doiTuong += 1;
-			const kieu = kiem.getTypeAtLocation(lit);
-			const khoa = kieu.getProperty("stage") ?? kieu.getProperty("giaiDoan");
-			const dong = nguon.getLineAndCharacterOfPosition(lit.getStart()).line + 1;
-			if (!khoa) thieu.push(`THIEU ${tuongDoi}:${dong} khong gan stage`);
-			else if (coUndefined(kiem.getTypeOfSymbolAtLocation(khoa, lit))) {
-				thieu.push(`THIEU ${tuongDoi}:${dong} stage co the undefined`);
-			}
-		};
-		const thuoc = (lit, ten) =>
-			lit && ts.isObjectLiteralExpression(lit)
-				? lit.properties.find(
-						(p) => ts.isPropertyAssignment(p) && p.name.getText() === ten,
-					)?.initializer
-				: undefined;
-		const motHayNhieu = (gt) => {
-			if (!gt) return;
-			if (ts.isArrayLiteralExpression(gt))
-				for (const e of gt.elements) kiemDoiTuong(e);
-			else kiemDoiTuong(gt);
-		};
-		const di = (nut) => {
-			if (
-				ts.isCallExpression(nut) &&
-				ts.isPropertyAccessExpression(nut.expression) &&
-				PHUONG_THUC.has(nut.expression.name.text)
-			) {
-				const nhan = kiem.getTypeAtLocation(nut.expression.expression);
-				if (tenKieu(nhan).some((t) => /^DealDelegate$/.test(t))) {
-					const doi = nut.arguments[0];
-					const pt = nut.expression.name.text;
-					if (pt === "upsert") kiemDoiTuong(thuoc(doi, "create"));
-					else motHayNhieu(thuoc(doi, "data"));
-				}
-			}
-			if (
-				ts.isPropertyAssignment(nut) &&
-				nut.name.getText() === "deals" &&
-				ts.isObjectLiteralExpression(nut.initializer)
-			) {
-				motHayNhieu(thuoc(nut.initializer, "create"));
-				motHayNhieu(thuoc(thuoc(nut.initializer, "createMany"), "data"));
-				const noi = thuoc(nut.initializer, "connectOrCreate");
-				if (noi && ts.isArrayLiteralExpression(noi))
-					for (const e of noi.elements) kiemDoiTuong(thuoc(e, "create"));
-				else kiemDoiTuong(thuoc(noi, "create"));
-			}
-			ts.forEachChild(nut, di);
-		};
-		di(nguon);
-	}
-	return { doiTuong, sql, chuoi, thieu };
-}
-
-function cacGoi(goc) {
-	const ra = [];
-	for (const cha of ["apps", "packages"]) {
-		const thu = path.join(goc, cha);
-		if (!existsSync(thu)) continue;
-		for (const ten of execFileSync("ls", [thu], { encoding: "utf8" })
-			.split("\n")
-			.filter(Boolean)) {
-			if (existsSync(path.join(thu, ten, "tsconfig.json")))
-				ra.push(path.join(thu, ten));
-		}
-	}
-	return ra;
+	return doc ? { ...doc.options, noEmit: true } : MAC_DINH;
 }
 
 function quet(goc) {
+	const quanHe = quanHeDeal(path.join(goc, "packages/db/prisma/schema.prisma"));
+	const coThe = new RegExp(
+		`\\.deal\\b|\\b(${[...quanHe].join("|")})\\s*:|insert\\s+into`,
+		"i",
+	);
+	const chuoiTao = new RegExp(
+		`\\.deal\\.(create|createMany|createManyAndReturn|upsert)\\(|\\b(${[...quanHe].join("|")})\\s*:\\s*\\{\\s*(create|createMany|connectOrCreate)\\b`,
+		"g",
+	);
+	const tatCa = execFileSync(
+		"git",
+		["-C", goc, "ls-files", "--", "apps", "packages"],
+		{ encoding: "utf8" },
+	)
+		.split("\n")
+		.filter((t) => DUOI.test(t) && !BO_QUA.some((r) => r.test(t)));
+	const theoGoi = new Map();
+	for (const t of tatCa) {
+		if (!coThe.test(readFileSync(path.join(goc, t), "utf8"))) continue;
+		const goi = t.split("/").slice(0, 2).join("/");
+		theoGoi.set(goi, [...(theoGoi.get(goi) ?? []), t]);
+	}
+	const thieu = [];
+	let diem = 0;
 	let doiTuong = 0;
 	let sql = 0;
 	let chuoi = 0;
-	const thieu = [];
-	for (const goi of cacGoi(goc)) {
-		const r = quetGoi(goi);
-		doiTuong += r.doiTuong;
-		sql += r.sql;
-		chuoi += r.chuoi;
-		thieu.push(...r.thieu);
+	for (const [goi, tep] of theoGoi) {
+		const tuyet = tep.map((t) => path.join(goc, t));
+		const chuongTrinh = ts.createProgram(
+			tuyet,
+			cauHinhGoi(path.join(goc, goi)),
+		);
+		const kiem = chuongTrinh.getTypeChecker();
+		for (const f of tuyet) {
+			const nguon = chuongTrinh.getSourceFile(f);
+			if (!nguon) continue;
+			const tuongDoi = path.relative(goc, f);
+			const chu = nguon.getFullText();
+			chuoi += (chu.match(chuoiTao) ?? []).length;
+			for (const s of sqlChen(chu)) {
+				sql += 1;
+				if (s.loi) thieu.push(`THIEU ${tuongDoi}:${s.dong} ${s.loi}`);
+			}
+			const dongCua = (nut) =>
+				nguon.getLineAndCharacterOfPosition(nut.getStart()).line + 1;
+			const kiemKieu = (kieu, nut) => {
+				doiTuong += 1;
+				const khoa =
+					kieu?.getProperty("stage") ?? kieu?.getProperty("giaiDoan");
+				if (!khoa)
+					thieu.push(`THIEU ${tuongDoi}:${dongCua(nut)} khong gan stage`);
+				else if (coUndefined(kiem.getTypeOfSymbolAtLocation(khoa, nut))) {
+					thieu.push(
+						`THIEU ${tuongDoi}:${dongCua(nut)} stage co the undefined`,
+					);
+				}
+			};
+			const giaTri = (doi, ten) => {
+				if (!doi || !ts.isObjectLiteralExpression(doi)) return undefined;
+				for (const p of doi.properties) {
+					if (ts.isPropertyAssignment(p) && p.name.getText() === ten)
+						return p.initializer;
+					if (ts.isShorthandPropertyAssignment(p) && p.name.getText() === ten)
+						return p.name;
+				}
+				return undefined;
+			};
+			const motHayNhieu = (gt) => {
+				if (!gt) return;
+				if (ts.isArrayLiteralExpression(gt)) {
+					for (const e of gt.elements) kiemKieu(kiem.getTypeAtLocation(e), e);
+					return;
+				}
+				const kieu = kiem.getTypeAtLocation(gt);
+				if (kiem.isArrayType(kieu))
+					kiemKieu(kiem.getTypeArguments(kieu)[0], gt);
+				else kiemKieu(kieu, gt);
+			};
+			const trongDelegate = (nut) => {
+				for (let cha = nut.parent; cha; cha = cha.parent) {
+					if (
+						ts.isCallExpression(cha) &&
+						ts.isPropertyAccessExpression(cha.expression) &&
+						tenKieu(kiem.getTypeAtLocation(cha.expression.expression)).some(
+							(t) => /Delegate$/.test(t),
+						)
+					)
+						return true;
+				}
+				return false;
+			};
+			const di = (nut) => {
+				if (
+					ts.isCallExpression(nut) &&
+					ts.isPropertyAccessExpression(nut.expression) &&
+					PHUONG_THUC.has(nut.expression.name.text)
+				) {
+					const nhan = kiem.getTypeAtLocation(nut.expression.expression);
+					if (tenKieu(nhan).some((t) => t === "DealDelegate")) {
+						diem += 1;
+						const doi = nut.arguments[0];
+						if (nut.expression.name.text === "upsert")
+							motHayNhieu(giaTri(doi, "create"));
+						else motHayNhieu(giaTri(doi, "data"));
+					}
+				}
+				if (
+					ts.isPropertyAssignment(nut) &&
+					quanHe.has(nut.name.getText()) &&
+					ts.isObjectLiteralExpression(nut.initializer) &&
+					trongDelegate(nut)
+				) {
+					const long = nut.initializer;
+					if (LONG.some((k) => giaTri(long, k))) {
+						diem += 1;
+						motHayNhieu(giaTri(long, "create"));
+						motHayNhieu(giaTri(giaTri(long, "createMany"), "data"));
+						const noi = giaTri(long, "connectOrCreate");
+						if (noi && ts.isArrayLiteralExpression(noi))
+							for (const e of noi.elements) motHayNhieu(giaTri(e, "create"));
+						else if (noi) motHayNhieu(giaTri(noi, "create"));
+					}
+				}
+				ts.forEachChild(nut, di);
+			};
+			di(nguon);
+		}
 	}
-	return { doiTuong, sql, chuoi, thieu };
+	return { diem, doiTuong, sql, chuoi, thieu };
 }
 
 const KIEU_GIA = `
@@ -170,7 +239,9 @@ export type DealUncheckedCreateInput = { name: string; stage?: string; companyId
 export type DealCreateManyInput = { name: string; stage?: string };
 export type DealCreateWithoutCompanyInput = { name: string; stage?: string };
 type Long = { create?: DealCreateWithoutCompanyInput | DealCreateWithoutCompanyInput[]; createMany?: { data: DealCreateWithoutCompanyInput[] }; connectOrCreate?: { where: { id: string }; create: DealCreateWithoutCompanyInput } };
-export type CompanyCreateInput = { name: string; deals?: Long };
+export interface CompanyDelegate { create(a: { data: { name: string; deals?: Long } }): void }
+export interface UserDelegate { create(a: { data: { name: string; ownedDeals?: Long } }): void }
+export interface ActivityDelegate { create(a: { data: { type: string; deal?: { create?: DealCreateWithoutCompanyInput } } }): void }
 export interface DealDelegate {
 	create<T extends { data: DealCreateInput | DealUncheckedCreateInput }>(a: T): void;
 	createMany(a: { data: DealCreateManyInput[] }): void;
@@ -178,36 +249,85 @@ export interface DealDelegate {
 }
 export declare const db: {
 	deal: DealDelegate;
-	company: { create(a: { data: CompanyCreateInput }): void };
+	company: CompanyDelegate;
+	user: UserDelegate;
+	activity: ActivityDelegate;
 	$executeRawUnsafe(q: string): void;
 };
 `;
 
-const CA_DO = {
-	"goi-thang": 'db.deal.create({ data: { name: "x", companyId: "c" } });',
-	"long-quan-he":
-		'db.company.create({ data: { name: "c", deals: { create: [{ name: "x" }] } } });',
-	"create-many": 'db.deal.createMany({ data: [{ name: "x" }] });',
-	"connect-or-create":
-		'db.company.create({ data: { name: "c", deals: { connectOrCreate: { where: { id: "1" }, create: { name: "x" } } } } });',
-	"upsert-chi-update":
-		'db.deal.upsert({ where: { id: "1" }, update: { stage: "s" }, create: { name: "x", companyId: "c" } });',
-	"bi-danh":
-		'const d = db.deal;\nd.create({ data: { name: "x", companyId: "c" } });',
-	"stage-tuy-chon":
-		'export function f(v: { stage?: string }) {\n\tdb.deal.create({ data: { name: "x", companyId: "c", stage: v.stage } });\n}',
-	"sql-chu-thuong":
-		"db.$executeRawUnsafe(`insert into deal (id, name) values (1, 2)`);",
-	"sql-public":
-		'db.$executeRawUnsafe(`INSERT INTO "public"."deal" ("id", "name") VALUES (1, 2)`);',
-};
-const CA_XANH =
-	'db.deal.create({ data: { name: "x", companyId: "c", stage: "s" } });\ndb.$executeRawUnsafe(`INSERT INTO "deal" ("id", "stage") VALUES (1, 2)`);';
+const SCHEMA_GIA =
+	"model User {\n  ownedDeals Deal[]\n}\nmodel Company {\n  deals Deal[]\n}\nmodel Activity {\n  deal Deal? @relation\n}\n";
 
-function banTuThu(maNguon) {
+const CA_DO = {
+	"goi-thang": ['db.deal.create({ data: { name: "x", companyId: "c" } });', 2],
+	"long-deals": [
+		'db.company.create({ data: { name: "c", deals: { create: [{ name: "x" }] } } });',
+		2,
+	],
+	"long-ownedDeals": [
+		'db.user.create({ data: { name: "u", ownedDeals: { create: { name: "x" } } } });',
+		2,
+	],
+	"long-deal-don": [
+		'db.activity.create({ data: { type: "NOTE", deal: { create: { name: "x" } } } });',
+		2,
+	],
+	"create-many": ['db.deal.createMany({ data: [{ name: "x" }] });', 2],
+	"connect-or-create": [
+		'db.company.create({ data: { name: "c", deals: { connectOrCreate: { where: { id: "1" }, create: { name: "x" } } } } });',
+		2,
+	],
+	"upsert-chi-update": [
+		'db.deal.upsert({ where: { id: "1" }, update: { stage: "s" }, create: { name: "x", companyId: "c" } });',
+		2,
+	],
+	"bi-danh": [
+		'const d = db.deal;\nd.create({ data: { name: "x", companyId: "c" } });',
+		3,
+	],
+	"bien-co-kieu": [
+		'import type { DealUncheckedCreateInput } from "./kieu";\nconst data: DealUncheckedCreateInput = { name: "x", companyId: "c" };\ndb.deal.create({ data });',
+		4,
+	],
+	"stage-tuy-chon": [
+		'export function f(v: { stage?: string }) {\n\tdb.deal.create({ data: { name: "x", companyId: "c", stage: v.stage } });\n}',
+		3,
+	],
+	"sql-chu-thuong": [
+		"db.$executeRawUnsafe(`insert into deal (id, name) values (1, 2)`);",
+		2,
+	],
+	"sql-public": [
+		'db.$executeRawUnsafe(`INSERT INTO "public"."deal" ("id", "name") VALUES (1, 2)`);',
+		2,
+	],
+	"sql-cot-gan-ten": [
+		'db.$executeRawUnsafe(`INSERT INTO "deal" ("id", "name", "stageChangedAt") VALUES (1, 2, 3)`);',
+		2,
+	],
+	"sql-khong-liet-cot": [
+		"db.$executeRawUnsafe(`INSERT INTO deal SELECT * FROM deal_cu`);",
+		2,
+	],
+};
+const CA_SCRIPTS = [
+	'db.deal.create({ data: { name: "x", companyId: "c" } });',
+	2,
+];
+const CA_XANH =
+	'db.deal.create({ data: { name: "x", companyId: "c", stage: "s" } });\ndb.$executeRawUnsafe(`INSERT INTO "deal" ("id", "stage") VALUES (1, 2)`);\nexport const chu = { deal: { create: "Tao thoa thuan" }, deals: { create: "Tao" } };';
+
+function banTuThu(maNguon, thuMuc = "src") {
 	const goc = mkdtempSync(path.join(tmpdir(), "gmd-tao-"));
 	const goi = path.join(goc, "packages", "gia");
-	execFileSync("mkdir", ["-p", path.join(goi, "src")]);
+	mkdirSync(path.join(goi, "src"), { recursive: true });
+	mkdirSync(path.join(goi, thuMuc), { recursive: true });
+	mkdirSync(path.join(goc, "packages", "db", "prisma"), { recursive: true });
+	writeFileSync(
+		path.join(goc, "packages", "db", "prisma", "schema.prisma"),
+		SCHEMA_GIA,
+	);
 	writeFileSync(
 		path.join(goi, "tsconfig.json"),
 		JSON.stringify({
@@ -222,29 +342,38 @@ function banTuThu(maNguon) {
 		}),
 	);
 	writeFileSync(path.join(goi, "src", "kieu.ts"), KIEU_GIA);
+	const tuong = thuMuc === "src" ? "./kieu" : "../src/kieu";
 	writeFileSync(
-		path.join(goi, "src", "ca.ts"),
-		`import { db } from "./kieu";\n${maNguon}\n`,
+		path.join(goi, thuMuc, "ca.ts"),
+		`import { db } from "${tuong}";\n${maNguon.replace("./kieu", tuong)}\n`,
 	);
+	execFileSync("git", ["init", "-q"], { cwd: goc });
+	execFileSync("git", ["add", "-A"], { cwd: goc });
 	return goc;
+}
+
+function thuMot(ten, ma, dong, thuMuc, loi) {
+	const goc = banTuThu(ma, thuMuc);
+	try {
+		const r = quet(goc);
+		const mong = `packages/gia/${thuMuc}/ca.ts:${dong} `;
+		if (r.thieu.some((t) => t.startsWith(`THIEU ${mong}`))) return true;
+		loi.push(
+			`tu-thu: dang ${ten} lot — can THIEU ${mong}, duoc ${JSON.stringify(r.thieu)}`,
+		);
+		return false;
+	} finally {
+		rmSync(goc, { recursive: true, force: true });
+	}
 }
 
 if (process.argv.includes("--tu-thu")) {
 	let dung = 0;
 	const loi = [];
-	for (const [ten, ma] of Object.entries(CA_DO)) {
-		const goc = banTuThu(ma);
-		try {
-			const r = quet(goc);
-			if (r.thieu.some((t) => t.includes("packages/gia/src/ca.ts:"))) dung += 1;
-			else
-				loi.push(
-					`tu-thu: dang ${ten} lot (doi tuong ${r.doiTuong}, sql ${r.sql})`,
-				);
-		} finally {
-			rmSync(goc, { recursive: true, force: true });
-		}
-	}
+	for (const [ten, [ma, dong]] of Object.entries(CA_DO))
+		if (thuMot(ten, ma, dong, "src", loi)) dung += 1;
+	if (thuMot("ngoai-include", CA_SCRIPTS[0], CA_SCRIPTS[1], "scripts", loi))
+		dung += 1;
 	const goc = banTuThu(CA_XANH);
 	try {
 		const r = quet(goc);
@@ -256,7 +385,7 @@ if (process.argv.includes("--tu-thu")) {
 	} finally {
 		rmSync(goc, { recursive: true, force: true });
 	}
-	const tong = Object.keys(CA_DO).length + 1;
+	const tong = Object.keys(CA_DO).length + 2;
 	console.log(`tu-thu ${dung}/${tong}`);
 	for (const l of loi) console.error(l);
 	process.exit(dung === tong ? 0 : 2);
@@ -264,12 +393,12 @@ if (process.argv.includes("--tu-thu")) {
 
 const r = quet(GOC);
 console.log(
-	`${r.doiTuong} doi tuong tao thoa thuan, ${r.sql} lenh SQL, ${r.chuoi} lan khop chuoi`,
+	`${r.diem} diem tao, ${r.doiTuong} doi tuong tao thoa thuan, ${r.sql} lenh SQL, ${r.chuoi} lan khop chuoi`,
 );
 const loi = [...r.thieu];
 if (r.doiTuong === 0)
 	loi.push("quet rong: khong thay doi tuong tao thoa thuan nao");
-if (r.doiTuong < r.chuoi)
-	loi.push(`kiem ke lech: ${r.doiTuong} doi tuong < ${r.chuoi} lan khop chuoi`);
+if (r.diem < r.chuoi)
+	loi.push(`kiem ke lech: ${r.diem} diem tao < ${r.chuoi} lan khop chuoi`);
 for (const l of loi) console.error(l);
 process.exit(loi.length === 0 ? 0 : 1);
