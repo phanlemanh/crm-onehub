@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d57bc47daea22b61664622c6c6f08f65f3f85ca8
+verified_commit: 5766c379667b2431da8e63cf0e5792a8e8f15d17
 human_signoff: Phan Le Manh 2026-10-09 — ký Cổng Bằng chứng trên vòng chấm 3 (15/15 eval đạt, 7/7 lệnh suite xanh, hội đồng E13 đạt, 0 phát hiện trong hợp đồng; vòng 1 và 2 REJECT đã sửa sản phẩm và phép đo). Tám mục ngoài hợp đồng: Ngoài-1, 2, 3 (Hoàn tác hàng loạt, cùng gốc) và Ngoài-7 (mảnh dùng chung) mở hợp đồng mới; Ngoài-4, 6, 8 ghi Known limits; Ngoài-5 chấp nhận, không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi (bốn tệp chữ, đổi lời E13 theo ngả A) được phê toàn bộ.
 ---
 
@@ -253,3 +253,7 @@ sha: cd0ba45e8e669ed07c4f5b54140fca4ef3d79311 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-09, do ghim lại sau chữ ký V2 và gộp onehub
 run_id: repin-20261009T181420Z-43204
 sha: d57bc47daea22b61664622c6c6f08f65f3f85ca8 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13 (E13 không khai paths) · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-09, do ghim lại sau gộp onehub d089cb8d (K2e)
+run_id: repin-20261009T182742Z-38686
+sha: 5766c379667b2431da8e63cf0e5792a8e8f15d17 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
