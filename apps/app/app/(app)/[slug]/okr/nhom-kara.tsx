@@ -19,11 +19,11 @@ import {
 } from "@crm/ui/components/item";
 import { KaraLabel, KaraMark } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import {
-	ProposedChange,
-	type ProposedChangeAction,
-	type ProposedChangeDecided,
-	type ProposedChangeKind,
+import { KaraProposal } from "@crm/ui/components/kara/proposal";
+import type {
+	ProposedChangeAction,
+	ProposedChangeDecided,
+	ProposedChangeKind,
 } from "@crm/ui/components/proposed-change";
 import { ThinkingIndicator } from "@crm/ui/components/thinking-indicator";
 import type { Locale } from "@crm/ui/lib/locale";
@@ -204,7 +204,7 @@ export function DeXuatNeo({
 		];
 	}
 	return (
-		<ProposedChange
+		<KaraProposal
 			actions={actions.map((a) => ({ ...a, disabled: khoa || a.disabled }))}
 			before={d.loai === "viet-lai" ? (d.truoc ?? "") : undefined}
 			data-gop-y={d.id}
@@ -217,6 +217,7 @@ export function DeXuatNeo({
 			error={gopY.loiDong[d.id]}
 			kind={kind}
 			lockedReason={gopY.ghiDuoc ? undefined : m.de.khoaSua}
+			media={false}
 			pending={gopY.dangQuyet === d.id}
 			rationale={rationale}
 			value={value}

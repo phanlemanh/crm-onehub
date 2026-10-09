@@ -28,6 +28,7 @@ import {
 	ItemTitle,
 } from "@crm/ui/components/item";
 import { KaraTrace } from "@crm/ui/components/kara";
+import { KaraBusyProvider } from "@crm/ui/components/kara/busy";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	SimpleTable,
@@ -606,93 +607,98 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 
 	return (
 		<DetailSheetBody>
-			<KhuViSao mt={mt} />
-			{gopY.nhom.viSao.length > 0 ? (
-				<div className="flex flex-col gap-1 px-5 pb-3">
-					{gopY.nhom.viSao.map((d) => (
-						<DeXuatNeo d={d} gopY={gopY} key={d.id} moKr={moKr} />
-					))}
-				</div>
-			) : null}
-			<KhuGopVao mt={mt} />
-			<div
-				className="scroll-mt-4 px-5 py-3 empty:hidden"
-				data-vung-kara
-				ref={vung}
-			>
-				<VungKara gopY={gopY} moKr={moKr} soKr={mt.keyResults.length} />
-			</div>
-			<DetailSheetTable>
-				<BangKr
-					diemCam={{ ...diemKara, ...diemCam }}
-					mucTieu={mt}
-					keyResults={mt.keyResults}
-					kind={mt.kind}
-					expected={mt.expected}
-					danhDauCuaToi={false}
-					hoiDoiTrong={suaNoiDung(mt) && !gopY.coHoiDoiTrong}
-					canh={demCanh(mt)}
-					nhanHanhDong={m.cotThaoTac}
-					hanhDong={
-						coMenu
-							? (kr) => (
-									<MenuKr
-										mt={mt}
-										kr={kr}
-										capNhat={() => moCapNhat(kr)}
-										sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
-										xoa={() => setXoa(kr)}
-									/>
-								)
-							: undefined
-					}
-				/>
-			</DetailSheetTable>
-			{mt.keyResults.length > 0 ? (
-				<p className="px-5 pt-2 text-muted-foreground text-xs" data-tien-do-tu>
-					{m.tienDoTuSo(String(mt.progress), String(mt.keyResults.length))}
-				</p>
-			) : null}
-			{suaNoiDung(mt) || mt.themKrLe ? (
-				<div className="px-5 py-3">
-					<Button
-						size="sm"
-						variant="outline"
-						data-nut="them-kr"
-						aria-haspopup="dialog"
-						onClick={() => void datHopOkr({ loai: "kr-moi" })}
+			<KaraBusyProvider busy={gopY.ban}>
+				<KhuViSao mt={mt} />
+				{gopY.nhom.viSao.length > 0 ? (
+					<div className="flex flex-col gap-1 px-5 pb-3">
+						{gopY.nhom.viSao.map((d) => (
+							<DeXuatNeo d={d} gopY={gopY} key={d.id} moKr={moKr} />
+						))}
+					</div>
+				) : null}
+				<KhuGopVao mt={mt} />
+				{coVungKara ? (
+					<DetailSheetSection>
+						<div className="scroll-mt-4" data-vung-kara ref={vung}>
+							<VungKara gopY={gopY} moKr={moKr} soKr={mt.keyResults.length} />
+						</div>
+					</DetailSheetSection>
+				) : null}
+				<DetailSheetTable>
+					<BangKr
+						diemCam={{ ...diemKara, ...diemCam }}
+						mucTieu={mt}
+						keyResults={mt.keyResults}
+						kind={mt.kind}
+						expected={mt.expected}
+						danhDauCuaToi={false}
+						hoiDoiTrong={suaNoiDung(mt) && !gopY.coHoiDoiTrong}
+						canh={demCanh(mt)}
+						nhanHanhDong={m.cotThaoTac}
+						hanhDong={
+							coMenu
+								? (kr) => (
+										<MenuKr
+											mt={mt}
+											kr={kr}
+											capNhat={() => moCapNhat(kr)}
+											sua={() => void datHopOkr({ loai: "kr", id: kr.id })}
+											xoa={() => setXoa(kr)}
+										/>
+									)
+								: undefined
+						}
+					/>
+				</DetailSheetTable>
+				{mt.keyResults.length > 0 ? (
+					<p
+						className="px-5 pt-2 text-muted-foreground text-xs"
+						data-tien-do-tu
 					>
-						<Icon icon={Add} data-icon="inline-start" />
-						{m.themKr}
-					</Button>
-				</div>
-			) : null}
-			{hop ? (
-				<HopThoaiCapNhatKr
-					kr={krCapNhatTuSheet(mt, hop.kr)}
-					chuTen={hop.kr.owner.name}
-					ghiHo={!hop.kr.laCuaToi}
-					sessionId={hop.sessionId}
-					loiMo={moPhien.isError}
-					moLai={() => moCapNhat(hop.kr)}
-					dong={() => setHop(null)}
+						{m.tienDoTuSo(String(mt.progress), String(mt.keyResults.length))}
+					</p>
+				) : null}
+				{suaNoiDung(mt) || mt.themKrLe ? (
+					<div className="px-5 py-3">
+						<Button
+							size="sm"
+							variant="outline"
+							data-nut="them-kr"
+							aria-haspopup="dialog"
+							onClick={() => void datHopOkr({ loai: "kr-moi" })}
+						>
+							<Icon icon={Add} data-icon="inline-start" />
+							{m.themKr}
+						</Button>
+					</div>
+				) : null}
+				{hop ? (
+					<HopThoaiCapNhatKr
+						kr={krCapNhatTuSheet(mt, hop.kr)}
+						chuTen={hop.kr.owner.name}
+						ghiHo={!hop.kr.laCuaToi}
+						sessionId={hop.sessionId}
+						loiMo={moPhien.isError}
+						moLai={() => moCapNhat(hop.kr)}
+						dong={() => setHop(null)}
+					/>
+				) : null}
+				<ConfirmDialog
+					tone="destructive"
+					nut={m.hoiXoaKr.action}
+					thoi={m.hoiXoaKr.cancel}
+					tieuDe={dien(m.hoiXoaKr.title, { ten: xoa?.title ?? "" })}
+					than={m.hoiXoaKr.body}
+					open={xoa !== null}
+					pending={go.isPending}
+					onOpenChange={(mo) => {
+						if (!mo && !go.isPending) setXoa(null);
+					}}
+					onConfirm={() => {
+						if (xoa && !go.isPending) go.mutate({ id: xoa.id });
+					}}
 				/>
-			) : null}
-			<ConfirmDialog
-				tone="destructive"
-				nut={m.hoiXoaKr.action}
-				thoi={m.hoiXoaKr.cancel}
-				tieuDe={dien(m.hoiXoaKr.title, { ten: xoa?.title ?? "" })}
-				than={m.hoiXoaKr.body}
-				open={xoa !== null}
-				pending={go.isPending}
-				onOpenChange={(mo) => {
-					if (!mo && !go.isPending) setXoa(null);
-				}}
-				onConfirm={() => {
-					if (xoa && !go.isPending) go.mutate({ id: xoa.id });
-				}}
-			/>
+			</KaraBusyProvider>
 		</DetailSheetBody>
 	);
 }

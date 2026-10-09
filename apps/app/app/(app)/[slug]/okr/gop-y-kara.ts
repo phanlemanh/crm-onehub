@@ -1,5 +1,6 @@
 "use client";
 
+import type { KaraBusyState } from "@crm/ui/components/kara/busy";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	ketQuaTroLy,
@@ -14,6 +15,7 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { troLyOkrMessages } from "@/lib/messages/tro-ly-okr";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
@@ -141,7 +143,9 @@ export function useGopYMucTieu({
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const qc = useQueryClient();
-	const mTroLy = troLyOkrMessages(useLocale());
+	const locale = useLocale();
+	const mTroLy = troLyOkrMessages(locale);
+	const mGopY = okrGopYMessages(locale);
 	const coDich = objectiveId !== null;
 	const dich = canEdit
 		? { objectiveId: objectiveId ?? "" }
@@ -320,9 +324,15 @@ export function useGopYMucTieu({
 		);
 	};
 
+	const ban: KaraBusyState =
+		(dangSoan && !quaHan) || deXuat.isPending
+			? { label: mGopY.vung.dangDoc }
+			: null;
+
 	return {
 		noiDung,
 		nut,
+		ban,
 		nho,
 		dangGui: deXuat.isPending,
 		nhom: nhomTheoCho(tatCa),
