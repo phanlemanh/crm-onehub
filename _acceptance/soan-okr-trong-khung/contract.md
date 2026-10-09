@@ -5,7 +5,7 @@ slug: soan-okr-trong-khung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
 design_doc: docs/superpowers/specs/2026-10-09-soan-okr-trong-khung-design.md
@@ -82,3 +82,12 @@ Ngưỡng ở `opportunity.md` (chủ kho chốt 09/10) đo ở lái-thử ngư�
 - Bản mẫu `/proto/soan-okr-trong-khung` ghép từ thành phần thật, dữ liệu giả (S1-D).
 - Kara của phép đo màn chạy bằng mô hình giả có kịch bản viết trước (`apps/agent-okr/test/support/mo-hinh-gia.ts`).
 - Mô tả PR ghi dòng bậc theo `docs/design.md`: `DetailSheet` bậc 1; cỡ `kara`, ngăn kéo toàn màn và khung cột Kara bậc 5.
+- Known limits (Ngoài-3, Cổng 2): Bài kiểm tra tự động chỉ nhìn đầu cột Kara nên vẫn báo xanh dù phần trò chuyện bên dưới còn gọi trợ lý là «Trợ lý OKR». Lỗi hiển thị tên đó có thể lọt qua mà không ai được báo.
+- Known limits (Ngoài-4, Cổng 2): Một vài ảnh minh chứng cho người duyệt được chụp trước lần sửa nhãn cuối, nên còn hiện chữ «Trợ lý OKR» ở đầu cột. Người duyệt có thể xem một ảnh cũ mà tưởng đó là giao diện hiện tại. Ảnh đã chụp lại ở f57ec518: đầu cột đúng «Kara đang soạn…»; chữ «Trợ lý OKR» còn ở dòng hội thoại (Ngoài-1/2, giao K6a).
+- Known limits (Ngoài-5, Cổng 2): Thanh tab Trò chuyện/Bản nháp trên khổ hẹp được chỉnh kiểu tại chỗ thay vì thành một kiểu dùng chung. Người dùng không thấy khác biệt, nhưng sau này sửa giao diện thanh tab phải sửa ở hai nơi.
+- Known limits (Ngoài-6, Cổng 2): Mở một link soạn OKR cũ trong lúc địa chỉ đang mang thêm lựa chọn của bản ghi khác (tab, luồng trao đổi) thì các lựa chọn đó có thể bị áp nhầm sang khung soạn. Gặp hiếm vì link cũ thường mở từ ngoài vào.
+- Known limits (Ngoài-7, Cổng 2): Mở đường dẫn soạn OKR cũ có thể thoáng thấy khung trang trước khi được chuyển sang Theo đơn vị, thay vì chuyển ngay. Đích đến vẫn đúng.
+- Known limits (Ngoài-10, Cổng 2): Trên màn hình hẹp, nếu anh chị đóng khung khi đang ở tab Bản nháp thì lần mở cuộc soạn sau, kể cả cuộc mới chưa có bản nháp, sẽ mở thẳng tab Bản nháp thay vì Trò chuyện.
+- Known limits (Ngoài-11, Cổng 2): Một kiểm tra phụ chỉ xem bảng kích thước có khai đủ, không xem khung soạn có dùng đúng kích thước đó; kích thước thật vẫn được đo riêng bằng trình duyệt.
+- Known limits (Ngoài-12, Cổng 2): Một bài thử cũ về việc rời màn soạn khi chưa gõ gì chỉ kiểm không có hộp hỏi, nên không phát hiện được nếu nút đóng ngừng hoạt động.
+- Known limits (Ngoài-13, Cổng 2): Một bài thử của thành phần khung dùng chung chỉ kiểm không có hộp hỏi chứ không kiểm khung thật sự đóng, nên không bắt được lỗi nút đóng bị kẹt.
