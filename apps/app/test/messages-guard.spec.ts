@@ -643,6 +643,10 @@ const GHIM = {
 		"1/A người đã nối Zalo",
 		"12/A người đã nối Zalo",
 	],
+	"nhac-qua-zalo:ketNoi.doiBotThan": [
+		"Đổi sang bot «1» sẽ gỡ A liên kết Zalo. Mọi người đã nối phải nối lại.",
+		"Đổi sang bot «12» sẽ gỡ A liên kết Zalo. Mọi người đã nối phải nối lại.",
+	],
 	"settings-ket-noi:them.daCamRoi": ["1 đã cắm rồi.", "12 đã cắm rồi."],
 	"settings-ket-noi:google.dongBoHong": ["Đồng bộ hỏng: 1", "Đồng bộ hỏng: 12"],
 	"settings-ket-noi:slack.daKhopNguoi": [

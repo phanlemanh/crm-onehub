@@ -1,0 +1,2 @@
+Driver: bun chup.mjs (capture-only), khong co read_network_requests. n-a (driver)
+Webhook 403 that: "[zalo] webhook 403 ly_do=khoa-lech"

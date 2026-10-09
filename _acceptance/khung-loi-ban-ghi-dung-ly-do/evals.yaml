@@ -1,0 +1,165 @@
+feature_slug: khung-loi-ban-ghi-dung-ly-do
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: logic
+    cmd: config:executors.test.klg_khong_con
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/kara-ban-ghi.ts"
+      - "apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; ma tran viet truoc 4 ngan (ContactSheet, CompanySheet, DealSheet, PlanSheet that, tRPC gia) — byId cua ngan
+      nem loi co data.code "NOT_FOUND" va message "khong-con-tho": [data-khung-tai-loi][data-ly-do=khong-con] co tieu de
+      karaBanGhiMessages("vi").khung.khongCon.tieuDe va moTa, nut «Đóng» (khongCon.dong) !== null, KHONG nut «Thử lại»
+      (karaKhung.thuLai) trong khung, textContent khong chua khung.loiMoTa va khong chua "khong-con-tho"; bam «Đóng» ->
+      tham so record tren URL (onUrlUpdate cua bo dung thu) mat ngan do. expect(o.length).toBe(4). O chong ngan: mo voi
+      record=company:A,contact:B, contact B NOT_FOUND -> bam «Đóng» -> tham so record === "company:A"; doi chung mot ngan:
+      record=contact:B -> sau «Đóng» khong con tham so record.
+      CHIEU DO ghim: ban sao lyDoLoi luon tra "mat-ket-noi" -> do "klg: khong con hien nhu mat ket noi"; ban sao «Đóng» goi
+      closeAll -> do "klg: dong xoa ca chong"; ban sao in error.message trong khung -> do "klg: in loi tho".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: logic
+    cmd: config:executors.test.klg_khong_quyen
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/kara-ban-ghi.ts"
+      - "apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; nhu E1 voi data.code "FORBIDDEN": [data-ly-do=khong-quyen], tieu de khung.khongQuyen.tieuDe, nut «Đóng»,
+      khong «Thử lại», khong loiMoTa, khong loi tho; ca 4 ngan. expect(o.length).toBe(4).
+      CHIEU DO ghim: ban sao bo nhanh FORBIDDEN -> do "klg: khong quyen hien nhu mat ket noi".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.klg_mat_ket_noi
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx"
+      - "apps/app/test/khung-gop-y.tsx"
+    expected: |
+      exit 0; 4 ngan, byId lan dau nem loi data.code "INTERNAL_SERVER_ERROR", lan hai tra ban ghi: [data-ly-do=mat-ket-noi]
+      co «Không tải được bản ghi này» + loiMoTa + nut «Thử lại»; bam -> so lan goi byId tang dung 1, ten ban ghi hien.
+      Doi chung duong: ca PlanSheet co nut «Thử lại» (truoc K4b khong co).
+      CHIEU DO ghim: ban sao plan-sheet bo onRetry -> do "klg: ke hoach khong co thu lai".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: logic
+    cmd: config:executors.test.klg_ke_hoach_cong_ty
+    paths:
+      - "apps/app/components/crm/record-sheet/company-plans.tsx"
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx"
+    expected: |
+      exit 0; CompanyPlans that voi truy van ke hoach cua cong ty nem lan luot NOT_FOUND, FORBIDDEN, INTERNAL_SERVER_ERROR
+      -> [data-ly-do] lan luot khong-con, khong-quyen, mat-ket-noi; o khong-con va khong-quyen KHONG co nut nao (khong
+      «Đóng», khong «Thử lại»); chi o mat-ket-noi co «Thử lại». expect(o.length).toBe(3).
+      CHIEU DO ghim: ban sao company-plans khong truyen lyDo -> do "klg: ke hoach cong ty sai ly do".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.klg_en
+    paths:
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/lib/messages/kara-ban-ghi.ts"
+      - "apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx"
+    expected: |
+      exit 0; ContactSheet trong LocaleProvider en voi NOT_FOUND, FORBIDDEN, loi khac: chu cua karaBanGhiMessages("en"),
+      khong ky tu tieng Viet co dau trong khung; cap khoa en/vi moi co trong messages-guard (bun run test).
+      CHIEU DO ghim: ban sao kara-ban-ghi.ts de ban en bang chu Viet -> do "klg: khung en con chu Viet".
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.klg_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/kara-ban-ghi.ts"
+      - "_acceptance/khung-loi-ban-ghi-dung-ly-do/rang/man.mjs"
+    expected: |
+      exit 0 va "khung-loi-ban-ghi-dung-ly-do man: dat"; buoc 1 (1440) gieo ca nhan roi xoa vinh vien qua db -> mo
+      /contacts?record=contact:<id> -> innerText co khongCon.tieuDe va nut «Đóng», khong co loiMoTa, khong nut «Thử lại»;
+      chup klg-khong-con-1440.png; bam «Đóng» -> khong con [data-slot=sheet-content]. Buoc 2 (390) lap toi luc khung hien,
+      scrollWidth <= clientWidth cua trang va ngan, nut «Đóng» trong khung nhin; chup klg-khong-con-390.png. Ho so da
+      signed-off/machine-cleared thi khong chep anh vao ho so.
+      CHIEU DO ghim: --chieu-do mo ca nhan con song -> do "man: khong thay khung khong con".
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
+      - "Buoc 1 (1440): ca nhan da xoa -> klg-khong-con-1440.png; bam Dong -> ngan dong"
+      - "Buoc 2 (390): lap buoc 1 den luc khung hien -> klg-khong-con-390.png; do tran ngang"
+    evidence_required:
+      - "_acceptance/khung-loi-ban-ghi-dung-ly-do/evidence/klg-khong-con-1440.png"
+      - "_acceptance/khung-loi-ban-ghi-dung-ly-do/evidence/klg-khong-con-390.png"
+
+  - id: E7
+    criterion: AC-6
+    executor: judgment
+    layer: ui-observed
+    inputs:
+      - "_acceptance/khung-loi-ban-ghi-dung-ly-do/evidence/klg-khong-con-1440.png"
+      - "_acceptance/khung-loi-ban-ghi-dung-ly-do/evidence/klg-khong-con-390.png"
+      - "docs/ai-ux.md"
+    question: |
+      Ghi chú cho người chấm: hai ảnh chụp ngăn bản ghi khi mở đường dẫn tới một cá nhân vừa bị xoá vĩnh viễn, ở khổ
+      1440 và 390.
+      Nhìn hai ảnh: (1) người đọc có hiểu ngay bản ghi không còn nữa không, hay ảnh trông như lỗi mạng / chỗ trống?
+      (2) có đúng một việc nên làm tiếp (nút «Đóng») và không có «Thử lại» không? (3) có in thông điệp lỗi kỹ thuật nào
+      không? (4) ở 390 có chữ hay nút nào bị cắt hoặc tràn ngang không? Nêu từng điểm kèm ảnh.
+
+  - id: E8
+    criterion: AC-3
+    executor: test
+    layer: logic
+    cmd: config:executors.test.kbk_khung_loi
+    paths:
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/test/kara-ban-ghi.dom.tsx"
+    expected: |
+      exit 0; bai khung-loi cua ho so da ky khung-ban-ghi-kara (E13 cua ho so do) chay lai khong sua: loi khong co
+      data.code (Error thuong) -> khung «Không tải được bản ghi này» + mo ta + «Thử lại», khong loi tho; CompanyPlans cung
+      nut [data-slot=kara-retry].
+
+  - id: E9
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.klg_ma_that
+    paths:
+      - "apps/api/src/contacts/**"
+      - "apps/api/src/companies/**"
+      - "apps/api/src/deals/**"
+      - "apps/api/src/onboarding/**"
+      - "apps/api/src/trpc/middlewares/auth.middleware.ts"
+      - "_acceptance/khung-loi-ban-ghi-dung-ly-do/rang/ma-that.mjs"
+    expected: |
+      exit 0 va "khung-loi-ban-ghi-dung-ly-do ma-that: dat"; tren phien do that (tien-de): goi GET /api/trpc/<thu tuc> va doc
+      error.data.code (ca dang superjson error.json.data.code) cho: contacts.byId, companies.byId, deals.byId,
+      onboarding.planById voi id vua xoa vinh vien hoac chua tung co -> moi cai === "NOT_FOUND" (AC-1);
+      onboarding.plansOfCompany voi companyId khong ton tai -> ghi lai ma that (AC-4 doc so nay); nguoi da bi xoa dong member
+      goi contacts.byId -> === "FORBIDDEN" (AC-2). In bang thu tuc -> ma that.
+      CHIEU DO ghim: --chieu-do goi contacts.byId voi id con song bang nguoi la thanh vien -> do "ma-that: khong con nhung tra du lieu".
+
+  - id: E10
+    criterion: AC-2
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.klg_ma_that
+    paths:
+      - "apps/api/src/trpc/middlewares/auth.middleware.ts"
+      - "_acceptance/khung-loi-ban-ghi-dung-ly-do/rang/ma-that.mjs"
+    expected: |
+      exit 0; cung lenh E9, phan FORBIDDEN: nguoi bi xoa dong member trong workspace goi contacts.byId nhan error.data.code
+      === "FORBIDDEN" tu may chu that.

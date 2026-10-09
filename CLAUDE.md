@@ -11,7 +11,9 @@ Tách từ `trycompai/crm` (MIT). Sản phẩm nội bộ của OneHub, không b
 `origin` = `phanlemanh/crm-onehub`, nhánh làm việc `onehub`. `release` là bản
 gương của hãng — không sửa. `upstream` chỉ đọc. Kéo bản mới của hãng về
 `release` rồi merge sang `onehub`. CI riêng của công ty sống ở
-`.github/workflows/acceptance.yml`, không bao giờ vào `ci.yml` của hãng.
+`.github/workflows/acceptance.yml`. Riêng `.github/workflows/ci.yml` nay do OneHub giữ
+(luật 47, 09/10): bước test chạy thành ma trận ba ô trên ba máy. Kéo bản mới của hãng về `release` rồi gộp sang
+`onehub` mà đụng tệp này thì giữ bản của OneHub, chỉ chép tay phần hãng đổi mà OneHub cần.
 
 Phí bản rẽ là chi phí dài hạn lớn nhất ở đây. Sửa được ở hãng thì gửi lên hãng,
 đừng vá riêng.

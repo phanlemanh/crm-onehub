@@ -5,6 +5,8 @@ const en = {
 	moTa: "Only for you. Every morning at 08:30 OneHub Center gathers what needs your attention and sends it on one channel.",
 	khoiZalo: {
 		ten: "Your Zalo",
+		canNoiLai:
+			"The company's Zalo bot changed or your link was removed. Link again to get reminders on Zalo.",
 		tat: "Zalo is not switched on for this workspace. Ask an admin to turn it on under Connections › Zalo.",
 		chuaNoi:
 			"Get your reminders on Zalo. Connect, then send the 6-digit code to the bot.",
@@ -117,6 +119,14 @@ const en = {
 		canHttpsTieuDe: "Messages to the bot do not reach OneHub Center yet",
 		canHttpsMoTa:
 			"The agent has no https address, so Zalo cannot deliver messages. When testing on your machine, run",
+		doiBotTieuDe: "Switch to another Zalo bot?",
+		doiBotThan: (ten: string, n: number) =>
+			`Switching to the bot «${ten}» removes ${n} Zalo links. Everyone who linked must link again.`,
+		doiBotNut: "Remove links and switch bot",
+		doiBotThoi: "Cancel",
+		khoaLechTieuDe: "Zalo is sending with an old key",
+		khoaLechMoTa:
+			"Messages to the bot are being refused. A bot you replaced may still point here. Register again so this bot's messages come in.",
 		chuaWebhookTieuDe: "Zalo is not delivering messages to OneHub Center",
 		chuaWebhookMoTa:
 			"People who send their code will not be connected until you sign up again.",
@@ -131,6 +141,8 @@ const vi = {
 	moTa: "Chỉ áp cho bạn. Mỗi sáng 08:30 máy gom việc cần để ý và nhắn bạn ở một kênh.",
 	khoiZalo: {
 		ten: "Zalo của bạn",
+		canNoiLai:
+			"Bot Zalo của công ty đã đổi hoặc liên kết của bạn đã gỡ. Nối lại để nhận nhắc qua Zalo.",
 		tat: "Zalo chưa bật cho xưởng này. Nhờ quản trị viên bật trong Kết nối › Zalo.",
 		chuaNoi: "Nhận nhắc việc trên Zalo. Bấm nối, rồi nhắn mã 6 số cho bot.",
 		noi: "Nối Zalo",
@@ -241,6 +253,14 @@ const vi = {
 		canHttpsTieuDe: "Tin nhắn tới bot chưa về OneHub Center",
 		canHttpsMoTa:
 			"Tác tử chưa có địa chỉ https nên Zalo không giao tin về được. Khi thử tại máy, chạy",
+		doiBotTieuDe: "Đổi sang bot Zalo khác?",
+		doiBotThan: (ten: string, n: number) =>
+			`Đổi sang bot «${ten}» sẽ gỡ ${n} liên kết Zalo. Mọi người đã nối phải nối lại.`,
+		doiBotNut: "Gỡ liên kết và đổi bot",
+		doiBotThoi: "Huỷ",
+		khoaLechTieuDe: "Zalo đang gửi tin bằng khoá cũ",
+		khoaLechMoTa:
+			"Tin nhắn tới bot đang bị từ chối — có thể một bot đã thay vẫn trỏ về đây. Đăng ký lại để nhận tin từ bot này.",
 		chuaWebhookTieuDe: "Zalo chưa giao tin nhắn về OneHub Center",
 		chuaWebhookMoTa: "Người nhắn mã sẽ không được nối cho tới khi đăng ký lại.",
 		dangKyLai: "Đăng ký lại",
