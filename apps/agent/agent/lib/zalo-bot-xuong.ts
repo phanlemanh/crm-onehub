@@ -3,17 +3,23 @@ import { db } from "@crm/db";
 import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
 import { NHAC } from "@crm/db/onboarding-nhac";
 import { SETTINGS_ID } from "@crm/db/settings";
+import { demLienKet, goHetLienKet } from "@crm/db/zalo-lien-ket";
 import type {
 	DatBotPhanHoi,
 	DatBotYeuCau,
 	GuiThuPhanHoi,
 } from "@crm/validation/zalo-cau-noi";
-import { parseZaloSetWebhook } from "@crm/validation/zalo-update";
-import { z } from "zod";
+import {
+	docLoiZalo,
+	parseZaloDeleteWebhook,
+	parseZaloGetMe,
+	parseZaloSetWebhook,
+} from "@crm/validation/zalo-update";
 import { guiQuaSlackThu } from "./nhac-ke-hoach";
 import {
 	guiZalo,
-	LoiHttpZalo,
+	moTaLoiZalo,
+	moTaTuChoi,
 	zaloGoi,
 	zaloGoiTho,
 	zaloToken,
@@ -77,36 +83,54 @@ function baoLoiZalo(method: string, lop: string): void {
 	console.error(`[zalo] ${method} hong: ${lop}`);
 }
 
-const loiMang = z.object({ code: z.string().min(1) });
+type KetDocBot =
+	| Extract<KetGetMe, { loai: "loi" }>
+	| { loai: "duoc"; tenBot: string; maBot: string };
 
-function lopLoi(loi: Error): string {
-	if (loi instanceof LoiHttpZalo) return `http-${loi.status}`;
-	const mang = loiMang.safeParse(loi);
-	if (mang.success) return `mang (${mang.data.code})`;
-	return `tra-loi-la (${loi.name})`;
+function phanSoToken(token: string): string {
+	return token.split(":")[0] ?? token;
+}
+
+async function maBotCua(fetcher: typeof fetch, token: string): Promise<string> {
+	try {
+		const phan = await zaloGoiTho(fetcher, token, "getMe", {});
+		return parseZaloGetMe(phan.than).id;
+	} catch {
+		return phanSoToken(token);
+	}
 }
 
 async function docBot(
 	fetcher: typeof fetch,
 	token: string,
 	ghi: GhiGetMe,
-): Promise<KetGetMe> {
+): Promise<KetDocBot> {
 	let phan: PhanGetMe | null = null;
 	try {
 		phan = await zaloGoiTho(fetcher, token, "getMe", {});
 	} catch (loi) {
-		baoLoiZalo(
-			"getMe",
-			`mang (${loi instanceof Error ? loi.name : "khong-ro"})`,
-		);
+		baoLoiZalo("getMe", loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro");
 	}
 	const ket = phanLopGetMe(phan);
-	if (ket.loai === "duoc") return ket;
-	if (phan !== null && ket.loi.ketLuan === "tam-loi") {
-		baoLoiZalo("getMe", ket.loi.lop);
+	if (ket.loai === "duoc" && phan !== null) {
+		return { ...ket, maBot: parseZaloGetMe(phan.than).id };
+	}
+	if (ket.loai === "duoc") return { ...ket, maBot: phanSoToken(token) };
+	if (phan !== null) {
+		const than = docLoiZalo(phan.than);
+		baoLoiZalo(
+			"getMe",
+			than
+				? `${ket.loi.lop} ${moTaTuChoi(than.maLoi, than.moTa)}`
+				: ket.loi.lop,
+		);
 	}
 	await ghiAnToan(ghi, "dat-bot", token, ket.loi);
 	return ket;
+}
+
+export function diaChiWebhook(goc: URL): string {
+	return new URL(ZALO.webhook.duong, goc).toString();
 }
 
 type KetDangKy = "duoc" | "tu-choi" | "xac-minh-hong";
@@ -148,6 +172,17 @@ export async function datBot(
 			: { outcome: "zalo-loi", reason: ZALO.loi.zaloKhongTraLoi };
 	}
 	const { tenBot } = bot;
+	const tokenCu = await zaloToken();
+	const lienKetCu =
+		tokenCu !== null && tokenCu !== token ? await demLienKet(db) : 0;
+	const doiBot =
+		tokenCu !== null &&
+		lienKetCu > 0 &&
+		(await maBotCua(fetcher, tokenCu)) !== bot.maBot;
+	const soLienKet = doiBot ? lienKetCu : 0;
+	if (soLienKet > 0 && yeuCau.xacNhanDoiBot !== true) {
+		return { outcome: "can-xac-nhan-doi-bot", soLienKet, tenBotMoi: tenBot };
+	}
 	if (goc.protocol !== ZALO.webhook.giaoThucAnToan) {
 		await ghiCot({
 			zaloBotToken: token,
@@ -159,24 +194,82 @@ export async function datBot(
 		return { outcome: "valid", tenBot, webhook: "can-https" };
 	}
 	const khoa = randomBytes(ZALO.webhook.khoa.sinhByte).toString("hex");
-	const url = new URL(ZALO.webhook.duong, goc).toString();
+	const url = diaChiWebhook(goc);
 	const truoc = await chupCot();
-	await ghiCot({
-		zaloBotToken: token,
-		zaloWebhookSecret: khoa,
-		zaloBotName: tenBot,
-	});
+	const botMoi = { zaloBotToken: token, zaloBotName: tenBot };
+	await ghiCot(
+		tokenCu === null
+			? { ...botMoi, zaloWebhookSecret: khoa }
+			: { zaloWebhookSecret: khoa },
+	);
 	const ket = await dangKy(fetcher, token, url, khoa);
 	if (ket === "tu-choi") {
-		await ghiCot({ ...truoc, zaloWebhookLyDo: "zalo-tu-choi" });
+		await traVe({ ...truoc, zaloWebhookLyDo: "zalo-tu-choi" });
 		return { outcome: "invalid", reason: ZALO.loi.dangKyHong };
 	}
-	if (ket === "xac-minh-hong") {
-		await ghiCot({ zaloWebhookUrl: null, zaloWebhookLyDo: "zalo-tu-choi" });
-		return { outcome: "valid", tenBot, webhook: "zalo-tu-choi" };
+	const cuoi: Partial<CotZalo> = {
+		...botMoi,
+		...(ket === "xac-minh-hong"
+			? { zaloWebhookUrl: null, zaloWebhookLyDo: "zalo-tu-choi" }
+			: { zaloWebhookUrl: url, zaloWebhookLyDo: null }),
+	};
+	if (soLienKet > 0) {
+		const goDuoc = await chotDoiBot(cuoi, truoc);
+		if (!goDuoc) {
+			await goWebhookBotMoi(fetcher, token);
+			return { outcome: "invalid", reason: ZALO.loi.dangKyHong };
+		}
+	} else {
+		await ghiCot(cuoi);
 	}
-	await ghiCot({ zaloWebhookUrl: url, zaloWebhookLyDo: null });
-	return { outcome: "valid", tenBot, webhook: "da-dang-ky" };
+	return {
+		outcome: "valid",
+		tenBot,
+		webhook: ket === "xac-minh-hong" ? "zalo-tu-choi" : "da-dang-ky",
+	};
+}
+
+async function chotDoiBot(
+	cuoi: Partial<CotZalo>,
+	truoc: CotZalo,
+): Promise<boolean> {
+	try {
+		const n = await db.$transaction(async (tx) => {
+			await tx.appSetting.update({ where: { id: SETTINGS_ID }, data: cuoi });
+			return goHetLienKet(tx);
+		});
+		console.error(`[zalo] doi bot: go ${n} lien ket`);
+		return true;
+	} catch (loi) {
+		console.error(
+			`[zalo] doi bot hong, giu bot cu: ${loi instanceof Error ? loi.name : "khong-ro"}`,
+		);
+		await traVe(truoc);
+		return false;
+	}
+}
+
+async function goWebhookBotMoi(
+	fetcher: typeof fetch,
+	token: string,
+): Promise<void> {
+	try {
+		parseZaloDeleteWebhook(await zaloGoi(fetcher, token, "deleteWebhook", {}));
+	} catch (loi) {
+		console.error(
+			`[zalo] go webhook bot moi hong: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
+		);
+	}
+}
+
+async function traVe(truoc: Partial<CotZalo>): Promise<void> {
+	try {
+		await ghiCot(truoc);
+	} catch (loi) {
+		console.error(
+			`[zalo] tra lai cai dat bot hong: ${loi instanceof Error ? loi.name : "khong-ro"}`,
+		);
+	}
 }
 
 async function guiDuocKhong(
@@ -187,7 +280,7 @@ async function guiDuocKhong(
 		await gui();
 		return true;
 	} catch (loi) {
-		baoLoiZalo(method, loi instanceof Error ? lopLoi(loi) : "khong-ro");
+		baoLoiZalo(method, loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro");
 		return false;
 	}
 }

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 4ef2ad824bba72d2f7a9b7221f6b2358d5129447
+verified_commit: 3bacbd6bf1695a5b1ecf072e968d0f278836ee6b
 human_signoff: Manh Phan 2026-10-02
 ---
 
@@ -403,3 +403,15 @@ sha: 6add1723d00ee6ba3c52ff631349d87aeb84e610 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-08, do F19: paths E5/E17 trỏ tệp đang sống
 run_id: repin-20261008T115705Z-96996
 sha: 4ef2ad824bba72d2f7a9b7221f6b2358d5129447 · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · diff chạm vật đo ngoài làn máy: E13, E29 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-09, do E1c gỡ nhập chéo app trong test agent (luật kho cach-ly-hai-agent)
+run_id: repin-20261009T000523Z-85374
+sha: 67860795b1e1047e571d58a2d28667c9106bcfbe · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · diff chạm vật đo ngoài làn máy: E13, E29 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 11 — 2026-10-09, do E1c S4-r1 sửa vòng so trường trong test agent
+run_id: repin-20261009T003459Z-24463
+sha: 221c98a8faee6a66a4b19b56faf0aa062807132d · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 12 — 2026-10-09, do gộp onehub e86cf730 vào nhánh E1c
+run_id: repin-20261009T021828Z-69719
+sha: 3bacbd6bf1695a5b1ecf072e968d0f278836ee6b · suites: 7 lệnh exit 0 · evals: 25/25 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E22 · ngoài làn máy: E13, E24, E29 · diff chạm vật đo ngoài làn máy: E29 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

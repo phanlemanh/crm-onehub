@@ -1,4 +1,9 @@
 import type { Db } from "@crm/db";
+import { caNhanCoSo } from "@crm/db/so-dien-thoai";
+import {
+	hienThiSoDienThoai,
+	soQuocNoiDeTim,
+} from "@crm/validation/so-dien-thoai";
 import { Injectable } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 
@@ -22,6 +27,9 @@ export class SearchService {
 	async quick(q: string): Promise<{ hits: SearchHit[] }> {
 		const term = q.trim();
 		if (term.length < 2) return { hits: [] };
+
+		const digits = soQuocNoiDeTim(term);
+		const byPhone = digits ? await caNhanCoSo(this.db, digits) : [];
 
 		const [companies, contacts, deals] = await Promise.all([
 			this.db.company.findMany({
@@ -48,6 +56,7 @@ export class SearchService {
 						{ firstName: { contains: term, mode: "insensitive" } },
 						{ lastName: { contains: term, mode: "insensitive" } },
 						{ email: { contains: term, mode: "insensitive" } },
+						...(byPhone.length > 0 ? [{ id: { in: byPhone } }] : []),
 					],
 				},
 				take: PER_KIND,
@@ -57,6 +66,7 @@ export class SearchService {
 					firstName: true,
 					lastName: true,
 					email: true,
+					phone: true,
 					imageUrl: true,
 					company: { select: { name: true } },
 				},
@@ -101,7 +111,10 @@ export class SearchService {
 						label:
 							[contact.firstName, contact.lastName].filter(Boolean).join(" ") ||
 							(contact.email ?? "Unnamed"),
-						detail: contact.company?.name ?? contact.email,
+						detail:
+							contact.company?.name ??
+							(contact.phone ? hienThiSoDienThoai(contact.phone) : null) ??
+							contact.email,
 						iconUrl: null,
 						iconDarkUrl: null,
 						iconTone: null,
