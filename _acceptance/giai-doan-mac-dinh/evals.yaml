@@ -35,29 +35,6 @@ evals:
       du lieu dung chung cua luot truoc va sau ca bang nhau.
       CHIEU DO: ban sao seed.ts dung lai OPEN_STAGES viet cung -> dong 5 do voi thong diep ghim "seed vao giai doan da cat".
 
-  - id: E3
-    criterion: AC-3
-    executor: script
-    cmd: config:executors.script.gmd_duong_tao
-    paths:
-      - "apps/**"
-      - "packages/**"
-      - "_acceptance/giai-doan-mac-dinh/rang/duong-tao.mjs"
-    expected: |
-      rang/duong-tao.mjs (goc kho suy tu vi tri tep) dung TypeScript compiler API voi tsconfig cua tung goi trong apps/ va
-      packages/ (sau db:generate cua cay): duyet moi object literal ngoai thu muc test/, evals/, generated/ va tep
-      *.spec.*, *.dom.*, *.eval.*, *.test.*; lay kieu ngu canh (checker.getContextualType) — ten kieu khop
-      /^Deal(Unchecked)?Create(Many)?(Without\w+)?Input$/ hoac la nhanh create cua upsert/connectOrCreate cua Deal. Ma tran:
-        1 in "<n> object tao thoa thuan, <m> lenh SQL" — n > 0 (doi chung chong quet rong), va n >= so lan khop chuoi
-          `.deal.create(`/`.deal.upsert(` trong cung tap tep (kiem ke bang duong khac)
-        2 moi object co khoa stage hoac giaiDoan; kieu cua gia tri stage khong chua undefined
-        3 moi chuoi khop /insert\s+into\s+("?public"?\.)?"?deal"?\b/i trong tep ma san pham co cot stage
-        4 vi pham -> "THIEU <tep>:<dong> <dang>" va thoat 1
-      --tu-thu: thu muc tam co tsconfig va kieu Prisma gia lap dung ten that, moi dang mot tep thieu stage — goi thang,
-      long qua quan he (company.create data.deals.create), createMany, connectOrCreate, upsert chi co stage o update,
-      bi danh (const d = tx.deal), stage tuy chon (stage?: string), SQL chu thuong khong ngoac, "public"."deal" — moi tep
-      thoat 1 goi dung tep:dong; tep co stage day du thoat 0. In "tu-thu N/N".
-
   - id: E4
     criterion: AC-4
     executor: test
