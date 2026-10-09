@@ -1444,6 +1444,11 @@ executors:
     dt_man_bang: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t cot-bang && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t ngan-chi-tiet'
     dt_man_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t goi-y-moi-gioi'
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
+    kbq_anh: 'bun run test -- "cd apps/agent && bun test test/portrait-bo-qua.spec.ts"'
+    kbq_dong_thoi_gian: 'cd apps/app && bun test ./test/agent-transcript.spec.ts -t bo-qua'
+    kbq_ngan: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/buoc-kara-bo-qua.dom.tsx'
+    kbq_steps: 'cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/kara-trang-thai-ui.dom.tsx -t buoc-bo-qua'
+    kbq_hoi_quy: 'bash _acceptance/buoc-kara-bo-qua/rang/chi-them.sh && cd apps/app && bun test ./test/agent-transcript.spec.ts && cd ../../packages/ui && bun test --preload ./test/setup-dom.ts ./test/kara-trang-thai-ui.dom.tsx ./test/bo-xuong-kara.dom.tsx'
   script:
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
     kbk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-ban-ghi-kara/rang/man.mjs"'
