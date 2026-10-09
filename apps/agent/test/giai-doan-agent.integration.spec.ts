@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { db } from "@crm/db";
 import { GIAI_DOAN_GOC, type LoaiGiaiDoan } from "@crm/db/giai-doan";
-import { dealListResultOf } from "../../app/lib/agent-transcript";
+import { dealListItem, parseDealListResult } from "@crm/validation/deal-list";
 import { readDealHistory } from "../agent/lib/accounts";
 import { listDeals } from "../agent/lib/lookup";
 import { dealPreamble } from "../agent/lib/preamble";
@@ -129,6 +129,20 @@ describe("giai-doan-agent", () => {
 	});
 });
 
+const TRUONG_BO_DOC_APP = [
+	"id",
+	"name",
+	"stage",
+	"stageId",
+	"amount",
+	"currency",
+	"company",
+	"owner",
+	"daysSinceLastActivity",
+	"neverActive",
+	"expectedCloseDate",
+];
+
 describe("stage-id", () => {
 	it("list_deals tra stageId va nhan hien hanh o moi status", async () => {
 		const theoId = new Map(thoaThuan.map((t) => [t.id, t.stage]));
@@ -154,12 +168,25 @@ describe("stage-id", () => {
 			{ status: "all", ownerId: userId, limit: 100 },
 			{} as never,
 		);
-		const doc = dealListResultOf(ra as never);
+		const doc = parseDealListResult(ra);
 		expect(doc === null, "bo doc cua app tra null").toBe(false);
 		const cua = (doc?.deals ?? []).filter((d) => theoId.has(d.id));
 		expect(cua.length).toBe(thoaThuan.length);
 		for (const d of cua) {
 			expect(d.stageId, "ban ghi mat stageId").toBe(theoId.get(d.id) ?? "");
+		}
+		const goc = new Map(ra.deals.map((d) => [d.id, d]));
+		for (const d of cua) {
+			const that = goc.get(d.id);
+			for (const khoa of new Set([
+				...TRUONG_BO_DOC_APP,
+				...Object.keys(dealListItem.shape),
+			])) {
+				expect(
+					JSON.stringify(d[khoa as keyof typeof d]),
+					`parse lam mat truong ${khoa}`,
+				).toBe(JSON.stringify(that?.[khoa as keyof typeof that]));
+			}
 		}
 		const model = listDealsTool.toModelOutput?.(ra as never) as {
 			value: { deals: { id: string; stageId?: string }[] };
