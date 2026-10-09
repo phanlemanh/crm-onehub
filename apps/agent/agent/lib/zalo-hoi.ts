@@ -7,7 +7,7 @@ import {
 	type ZaloHoiKetQua,
 } from "@crm/validation/zalo-hoi";
 import { thanhVienPrincipal } from "./thanh-vien-principal";
-import { guiZalo, zaloToken } from "./zalo-api";
+import { guiZalo, moTaLoiZalo, zaloToken } from "./zalo-api";
 import { ZALO } from "./zalo-config";
 
 export type TinHoi = { messageId: string; chatId: string; text: string };
@@ -241,7 +241,7 @@ export async function dongHoiQuaHan(deps: PhuThuocDong = {}): Promise<number> {
 			});
 		} catch (loi) {
 			console.error(
-				`[zalo] gui bao loi qua han hong message_id=${hang.messageId}: ${loi instanceof Error ? loi.name : "loi"}`,
+				`[zalo] gui bao loi qua han hong message_id=${hang.messageId}: ${loi instanceof Error ? moTaLoiZalo(loi) : "khong-ro"}`,
 			);
 		}
 	}

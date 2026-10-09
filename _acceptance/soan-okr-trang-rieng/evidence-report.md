@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 84792891f23f46ceb07e09290105f2a29b9b2616
+verified_commit: f37104535f3dcb6b176e86498a24195038dc59f5
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -401,3 +401,7 @@ Round 3: sau bản vá hoàn tác Mục tiêu không kéo KR Kara vừa bỏ và
 ### Re-pin lần 1 — 2026-10-08, do hoá cũ do gộp onehub c803963e trước PR
 run_id: repin-20261008T070544Z-53591
 sha: 84792891f23f46ceb07e09290105f2a29b9b2616 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2, E8c, E9b, E10c, E11b, E12b, E14, E15 (E15 không khai paths) · diff chạm vật đo ngoài làn máy: E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-08, do K2b soan-okr-khong-lac đổi khoá tab của trang soạn (răng man và bài kiểm của K2, P1-28), sửa neo E13b (P1-31) và gộp onehub 9bc9e3d2
+run_id: repin-20261008T171917Z-85132
+sha: f37104535f3dcb6b176e86498a24195038dc59f5 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2, E8c, E9b, E10c, E11b, E12b, E14, E15 (E15 không khai paths) · diff chạm vật đo ngoài làn máy: E1b, E2, E8c, E9b, E10c, E11b, E12b, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
