@@ -5,7 +5,7 @@ slug: vong-doi-mot-cach-cat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: verified
 design_doc: docs/superpowers/specs/2026-10-09-vong-doi-mot-cach-cat-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
