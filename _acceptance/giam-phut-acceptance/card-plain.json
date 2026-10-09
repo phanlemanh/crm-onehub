@@ -1,0 +1,33 @@
+{
+  "feature_plain": "Mỗi lần đẩy mã, phần kiểm của công ty trên GitHub tốn ít phút tính tiền hơn, mà PR vẫn được kiểm đủ như cũ.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ chạy cho mỗi PR đúng những lệnh kiểm như hôm nay — không thiếu lệnh nào, không thêm lệnh nào."},
+    {"id": "AC-2", "p": "Sẽ chỉ chạy luật kho, bản đồ sản phẩm, kiểm trước gộp, kiểm bộ điều phối và lệnh dựng khi push lên onehub; bỏ phần test tác nhân OKR trên Node 24 (chưa đỏ lần nào khi push)."},
+    {"id": "AC-3", "p": "Sẽ huỷ lượt kiểm cũ của một PR khi PR đó được đẩy tiếp; lượt kiểm của onehub thì không bao giờ bị huỷ hay bỏ chờ."},
+    {"id": "AC-4", "p": "Sẽ gộp ba job nhỏ thành một, vẫn mang tên «acceptance gate»; một bước đỏ thì các bước sau vẫn chạy và báo kết quả."},
+    {"id": "AC-5", "p": "Sẽ giữ xanh mọi hồ sơ đã ký đang đo tệp này, không sửa thước đo nào của các hồ sơ đó."},
+    {"id": "AC-6", "p": "Sẽ có sẵn một lệnh đo số phút tính tiền theo PR và theo push trong 7 ngày, để chấm ngưỡng ở Cổng Giá trị."},
+    {"id": "AC-7", "p": "Sẽ không để PR nào kẹt chờ một tên check đã biến mất (hôm nay onehub chưa bắt buộc check nào)."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "KHÔNG sửa phần CI chính (ci.yml), để giữ nguyên đợt đo 7 ngày của F22."},
+    {"id": "OOS-2", "p": "KHÔNG dựng máy chạy CI riêng trên Mac mini và KHÔNG dời ổ Docker ở vòng này."},
+    {"id": "OOS-3", "p": "KHÔNG bỏ qua phần kiểm cho PR nháp hay PR chỉ sửa tài liệu."},
+    {"id": "OOS-4", "p": "KHÔNG thêm bộ nhớ đệm cho bước dựng hay bước cài phụ thuộc."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Ba loại sự kiện — PR, push onehub, push release — đều có tiêu chí nói lệnh nào chạy (AC-1, AC-2)."},
+    {"i": 1, "p": "Ba job còn lại sau khi gộp đều được đo: job gộp, lệnh dựng, tác nhân OKR (AC-1, AC-2, AC-4)."},
+    {"i": 2, "p": "Trường hợp onehub có check bắt buộc mang tên job cũ được đo bằng dữ liệu thật và dữ liệu giả (AC-7)."},
+    {"i": 3, "p": "Bước trong job gộp xanh, đỏ hay bị huỷ đều có quy định — đỏ vẫn chạy bước sau (AC-4)."},
+    {"i": 4, "p": "Đẩy chồng hai lượt cùng PR thì huỷ lượt cũ; hai lần gộp sát nhau vào onehub thì giữ cả hai (AC-3)."},
+    {"i": 5, "p": "Mỗi trục ở trên trỏ về ít nhất một tiêu chí; không quét bằng công cụ vì không gian nhỏ, đã liệt kê đủ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo «không mất lệnh» sẽ báo đỏ oan khi gộp job, vì gộp thì bỏ bước cài phụ thuộc bị lặp — đã sửa: tách lệnh kiểm (đếm từng lần) với bước chuẩn bị (chỉ cần có)."},
+    {"i": 1, "p": "Lời hứa cho lượt push chỉ có vế «không chạy gì thừa», nên xoá hẳn push vẫn qua — đã sửa: đo cả khối kích hoạt và đúng danh sách lệnh phải chạy khi push."},
+    {"i": 2, "p": "Gộp job làm mất tên check «luật kho» và «điều phối»; nếu onehub bắt buộc tên đó thì mọi PR sẽ kẹt — đã đo: onehub chưa bắt buộc check nào; thêm tiêu chí AC-7 canh việc này."},
+    {"i": 3, "p": "Thiết kế giả định cây sau khi gộp giống cây đã kiểm ở PR mà chưa đo — đo được: 26 trên 107 lần gộp trong 7 ngày bị lệch, và lệnh dựng đỏ 5 lần khi push trong 10 ngày. Máy đề xuất giữ lệnh dựng khi push — anh chốt."},
+    {"i": 4, "p": "Lượt PR bị huỷ giữa chừng sẽ kéo trung vị phút xuống, làm ngưỡng «sống» đạt giả — đã sửa: lượt huỷ đếm riêng, không vào trung vị."}
+  ]
+}
