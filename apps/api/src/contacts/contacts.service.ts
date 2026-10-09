@@ -306,7 +306,7 @@ export class ContactsService {
 	async create(input: ContactCreateInput) {
 		const email = normalizeEmail(input.email ?? "");
 		const phone = phoneOf(input.phone);
-		if (phone) await this.refuseTakenPhone(phone, null);
+		if (phone) await this.refuseTakenPhone(phone);
 
 		if (email) {
 			const existing = await this.db.contact.findFirst({
@@ -980,8 +980,8 @@ export class ContactsService {
 		};
 	}
 
-	private async refuseTakenPhone(phone: string, except: string | null) {
-		const holder = await caNhanTrungSo(this.db, soQuocNoi(phone), except);
+	private async refuseTakenPhone(phone: string) {
+		const holder = await caNhanTrungSo(this.db, soQuocNoi(phone));
 		if (holder) {
 			throw new ConflictException(
 				`${nameOf(holder)} already uses ${hienThiSoDienThoai(phone)}.`,
@@ -997,7 +997,7 @@ export class ContactsService {
 		if (current?.phone && soQuocNoi(current.phone) === soQuocNoi(phone)) {
 			return;
 		}
-		await this.refuseTakenPhone(phone, id);
+		await this.refuseTakenPhone(phone);
 	}
 
 	private companyFilter(

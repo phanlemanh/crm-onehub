@@ -31,13 +31,11 @@ export async function caNhanCoSo(db: Db, manh: string): Promise<string[]> {
 export async function caNhanTrungSo(
 	db: Db,
 	quocNoi: string,
-	boQua: string | null,
 ): Promise<NguoiGiuSo | null> {
 	const hang = await db.$queryRaw<NguoiGiuSo[]>`
 		SELECT id, "firstName", "lastName" FROM contact
 		WHERE "archivedAt" IS NULL AND phone IS NOT NULL
 			AND ${QUOC_NOI} = ${quocNoi}
-			AND id <> ${boQua ?? ""}
 		ORDER BY "createdAt" ASC
 		LIMIT 1
 	`;
