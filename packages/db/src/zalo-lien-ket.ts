@@ -81,6 +81,15 @@ export async function goLienKet(db: Db, userId: string): Promise<void> {
 	]);
 }
 
+export function demLienKet(db: DbGhi): Promise<number> {
+	return db.zaloLink.count();
+}
+
+export async function goHetLienKet(db: DbGhi): Promise<number> {
+	const { count } = await db.zaloLink.deleteMany({});
+	return count;
+}
+
 function conCuaSo(batDau: Date, now: Date): boolean {
 	return now.getTime() - batDau.getTime() < ZALO_LIEN_KET.doMa.cuaSoMs;
 }
