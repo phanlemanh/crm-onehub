@@ -40,7 +40,12 @@ export const CHAM_BO_DO = {
 		traLoiKhongQuaKiem: 0,
 	},
 	lenhGhi: "bun _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts --ghi-ban-ghi",
+	buocModel: /^\[agent\] · step \d+ /gm,
 } as const;
+
+export function demBuocModel(nhatKy: string): number {
+	return nhatKy.match(CHAM_BO_DO.buocModel)?.length ?? 0;
+}
 
 export type NhomCau =
 	| "co-trang"
@@ -353,6 +358,45 @@ export function cauHoiLai<T extends { id: string }>(
 		mot: cauMot.filter((c) => theoMot.has(c.id)),
 		hai: cauHai.filter((c) => theoHai.has(c.id)),
 	};
+}
+
+export type KetHoiLai = {
+	ma: 0 | 1 | 2;
+	dong: string[];
+	gopCua: Map<ChiSo, KetGop>;
+};
+
+export function ketHoiLai(
+	c1: KetLuan,
+	c2: KetLuan,
+	hoiLai: readonly HoiLai[],
+	nguong: Nguong,
+): KetHoiLai {
+	const gopCua = new Map<ChiSo, KetGop>();
+	if (c2.ma === 2) return { ma: 2, dong: [`hoi lai: ${c2.dong[0]}`], gopCua };
+	const dong: string[] = [];
+	for (const h of hoiLai) {
+		const g = gop(
+			c1.so[h.chiSo],
+			c2.so[h.chiSo],
+			nguongCua(h.chiSo, nguong),
+			CHIEU[h.chiSo],
+		);
+		gopCua.set(h.chiSo, g);
+		dong.push(`hoi lai ${h.chiSo}: ${g.dong}`);
+	}
+	const kiemDat = c2.traLoiKhongQuaKiem === nguong.traLoiKhongQuaKiem;
+	dong.push(
+		`hoi lai tra loi co trich khong qua kiem: ${c2.traLoiKhongQuaKiem} ${kiemDat ? "dat" : "khong-dat"}`,
+	);
+	const conKhongDat = CAC_CHI_SO.some(
+		(c) =>
+			!gopCua.has(c) &&
+			vungXam(c1.so[c].k, c1.so[c].n, nguongCua(c, nguong), CHIEU[c]) !== "dat",
+	);
+	const dat =
+		!conKhongDat && kiemDat && [...gopCua.values()].every((g) => g.dat);
+	return { ma: dat ? 0 : 1, dong, gopCua };
 }
 
 export function gop(l1: Dem, l2: Dem, t: number, chieu: Chieu): KetGop {

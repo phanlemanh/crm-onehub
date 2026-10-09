@@ -21,6 +21,7 @@ import {
 	chamTungCau,
 	chonHoiLai,
 	type DongTungCau,
+	demBuocModel,
 	docBanGhi,
 	docBanGhiHead,
 	docTungCau,
@@ -34,6 +35,7 @@ import {
 	keHoachHoiLai,
 	ketCucHai,
 	ketCucZalo,
+	ketHoiLai,
 	ketLuan,
 	khuonBo,
 	moThuMucLuot,
@@ -370,6 +372,39 @@ describe("vung-xam", () => {
 		expect(chay).toBe(13);
 	});
 
+	test("hỏi lại: trả lời có trích không kiểm được ở lượt hỏi lại giữ ngưỡng 0 của kết luận gộp", () => {
+		const luot = (dung: number, sai: number, tien: string) => [
+			...Array.from({ length: dung }, (_, i) =>
+				cauMot(`${tien}c${i}`, "co-trang", "dung-trang"),
+			),
+			...Array.from({ length: sai }, (_, i) =>
+				cauMot(`${tien}s${i}`, "co-trang", "sai"),
+			),
+			cauMot(`${tien}k0`, "khong-co", "tu-choi-dung"),
+		];
+		const mot1 = luot(15, 5, "a");
+		const c1 = ketLuan(mot1, [], CHAM_BO_DO.nguong);
+		expect(c1.xam).toEqual(["dungTrang"] satisfies ChiSo[]);
+		const hoi = keHoachHoiLai(c1, mot1, []);
+		const maTran: [number, 0 | 1][] = [
+			[0, 0],
+			[1, 1],
+		];
+		let chay = 0;
+		for (const [kiem, mong] of maTran) {
+			const c2 = ketLuan(luot(17, 3, "b"), [], CHAM_BO_DO.nguong, kiem);
+			const k = ketHoiLai(c1, c2, hoi, CHAM_BO_DO.nguong);
+			if (kiem > 0 && k.ma === 0)
+				throw new Error("hoi lai bo qua trich khong qua kiem");
+			expect([kiem, k.ma]).toEqual([kiem, mong]);
+			expect(k.dong).toContain(
+				`hoi lai tra loi co trich khong qua kiem: ${kiem} ${kiem === 0 ? "dat" : "khong-dat"}`,
+			);
+			chay++;
+		}
+		expect(chay).toBe(2);
+	});
+
 	test("nhóm rỗng không vào vùng xám", () => {
 		expect(vungXam(0, 0, 0.8, ">=")).toBe("dat");
 	});
@@ -573,6 +608,18 @@ describe("gop", () => {
 });
 
 describe("do-model", () => {
+	test("đếm lời gọi model theo dòng step của nhật ký eve", () => {
+		const nhatKy = [
+			"[agent] ▸ session wrun_1 on channel:crm",
+			"[agent] · step 0 tool-calls  in 7.4k out 104 cached 7.3k $0.0052",
+			"[agent] → subagent tro_ly_kho message=x",
+			"[agent] · step 1 stop  in 7.6k out 40 cached 7.3k $0.0050",
+			"[agent] ◂ tra loi · step 2 khong phai dong buoc",
+		].join("\n");
+		expect(demBuocModel(nhatKy)).toBe(2);
+		expect(demBuocModel("")).toBe(0);
+	});
+
 	test("hai lời dò trả hai id thật", async () => {
 		const kq = await doModel(async (vai) => ({
 			modelId: vai === "kho" ? "a/x" : "b/y",

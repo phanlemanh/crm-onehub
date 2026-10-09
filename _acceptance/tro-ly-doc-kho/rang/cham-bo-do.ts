@@ -18,8 +18,8 @@ import {
 	cauHoiLai,
 	cauLuotMot,
 	chamTungCau,
-	type Dem,
 	type DongTungCau,
+	demBuocModel,
 	docBanGhi,
 	docBanGhiHead,
 	docTungCau,
@@ -28,11 +28,12 @@ import {
 	dongTungCau,
 	donLuotCu,
 	ghiBanGhi,
-	gop,
+	type gop,
 	type KetCucHai,
 	type KetCucMot,
 	keHoachHoiLai,
 	ketCucHai,
+	ketHoiLai,
 	khuonBo,
 	type ModelIds,
 	moThuMucLuot,
@@ -130,7 +131,7 @@ if (
 	);
 if (!existsSync(tepBo)) khongDo(`khong co bo cau ${tepBo}`);
 
-type Quyet = { bam: string; modelIds: ModelIds; dong: string };
+type Quyet = { bam: string; modelIds: ModelIds; dong: string; soDo: number };
 
 async function quyetTruoc(): Promise<Quyet> {
 	const yeuCauAi = createRequire(join(AGENT, "package.json"));
@@ -144,7 +145,9 @@ async function quyetTruoc(): Promise<Quyet> {
 	const { DEFAULT_AGENT_MODEL } = await import(
 		join(GOC, "packages/db/src/settings.ts")
 	);
+	let soDo = 0;
 	const doRa = await doModel(async (vai) => {
+		soDo++;
 		const model =
 			vai === "kho"
 				? modelTaiLieu("hoi").model
@@ -172,11 +175,11 @@ async function quyetTruoc(): Promise<Quyet> {
 			bangChung,
 			`${q.dong}${nguonThu ? ` (nguon thu: ${nguonThu})` : ""}\n\n${md}`,
 		);
-		console.log("SO LOI GOI MODEL: 2");
+		console.log(`SO LOI GOI MODEL: ${soDo}`);
 		console.log(`ghi ${relative(GOC, bangChung)}`);
 		process.exit(0);
 	}
-	return { bam, modelIds: doRa.ids, dong: q.dong };
+	return { bam, modelIds: doRa.ids, dong: q.dong, soDo };
 }
 
 if (!process.env[BIEN_QUYET]) {
@@ -507,7 +510,9 @@ try {
 	donLuotCu(CHAY_GOC, CHAM_BO_DO.giuLuot - 1);
 	const thuMucLuot = moThuMucLuot(CHAY_GOC, new Date(), process.pid);
 	console.log(`thu muc luot: ${relative(GOC, thuMucLuot)}`);
-	let soLoiGoi = 2;
+	if (!Number.isInteger(quyet.soDo))
+		khongDo("quyet truoc thieu so loi do model");
+	let soLoiGoi = quyet.soDo;
 
 	async function chayLuot(
 		ten: string,
@@ -525,7 +530,6 @@ try {
 		const nhatKy = join(thuMuc, "eve.log");
 		writeFileSync(join(thuMuc, "ke-hoach.json"), JSON.stringify(keHoach));
 		writeFileSync(tepKetQua, "");
-		soLoiGoi += keHoach.mot.length + keHoach.hai.length;
 		mayChu.goi.length = 0;
 		const eve = await chayEve(
 			{
@@ -539,6 +543,7 @@ try {
 			},
 			nhatKy,
 		);
+		soLoiGoi += demBuocModel(readFileSync(nhatKy, "utf8"));
 		const ket = docKetQua(readFileSync(tepKetQua, "utf8"));
 		const ketMot = new Map(
 			ket.flatMap((k) => (k.luot === 1 ? [[k.id, k] as const] : [])),
@@ -592,26 +597,10 @@ try {
 		const chon = cauHoiLai(hoiLai, cauMot, bo.cau);
 		const l2 = await chayLuot("hoi-lai", chon.mot, chon.hai);
 		const c2 = chamTungCau(l2.tungCau, NGUONG);
-		if (c2.kl.ma === 2) {
-			maThoat = 2;
-			tong.push(`hoi lai: ${c2.kl.dong[0]}`);
-		} else {
-			const nguongCua = (c: ChiSo) =>
-				c === "chuyenNham" ? NGUONG.chuyenNhamToiDa : NGUONG[c];
-			for (const h of hoiLai) {
-				const g = gop(
-					c1.kl.so[h.chiSo],
-					c2.kl.so[h.chiSo] satisfies Dem,
-					nguongCua(h.chiSo),
-					h.chiSo === "chuyenNham" ? "<=" : ">=",
-				);
-				gopCua.set(h.chiSo, g);
-				tong.push(`hoi lai ${h.chiSo}: ${g.dong}`);
-			}
-			const conKhongDat = c1.kl.dong.some((d) => d.endsWith(" khong-dat"));
-			maThoat =
-				!conKhongDat && [...gopCua.values()].every((g) => g.dat) ? 0 : 1;
-		}
+		const k = ketHoiLai(c1.kl, c2.kl, hoiLai, NGUONG);
+		maThoat = k.ma;
+		tong.push(...k.dong);
+		for (const [c, g] of k.gopCua) gopCua.set(c, g);
 	}
 	const den = new Date();
 	const dem = await demHoiKho(db, tu, den);
