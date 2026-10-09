@@ -5,7 +5,7 @@ slug: khung-loi-ban-ghi-dung-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-09-khung-loi-ban-ghi-dung-ly-do-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
@@ -53,3 +53,9 @@ lại» kể cả khi bản ghi đã bị xoá (NOT_FOUND) hay người xem khô
 
 - Vòng đời (luật 14): (1) Dọn thế nào — không đổi; (2) «Lịch sử» — không đổi; (3) Danh sách mặc định — không đổi, «Đóng» trả về danh sách hay ngăn trước.
 - `KhungTaiLoi` được bài `kara-ban-ghi.dom.tsx` của hồ sơ đã ký `khung-ban-ghi-kara` dùng; lý do mặc định là «mất kết nối» để hành vi cũ giữ nguyên (E7 chạy lại bài đó).
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-09):**
+  - Ngoài-1 — răng màn E6 đỏ lần đầu vì lỗi 404 của `contacts.byId` có bị tính vào lỗi console hay không là tuỳ nhịp tải trang; lượt chấm chạy lại tới khi xanh và báo cáo chỉ ghi lần xanh.
+  - Ngoài-3 — răng màn tắt kiểm lỗi console từ sau lúc tải trang, nên một lỗi ngầm khi bấm «Đóng» có thể không bị bắt.
+  - Ngoài-4 — đường dẫn gõ sai hay bị cắt cụt cũng hiện «Bản ghi này không còn» kèm câu nói có người đã xoá vĩnh viễn (cùng gốc Ngoài-2).
+  - Ngoài-5 — hai trong ba ca lỗi của mục «Kế hoạch» trong ngăn công ty (NOT_FOUND, FORBIDDEN) chỉ đo bằng lỗi giả; máy chủ thật trả danh sách rỗng cho công ty không tồn tại.
+- Hợp đồng mới (Cổng Bằng chứng 2026-10-09): Ngoài-2 — câu mô tả của khung «không còn» nói chắc có người đã xoá vĩnh viễn, trong khi NOT_FOUND còn đến từ Xoá thường và từ đường dẫn sai; sửa chữ thành không nêu nguyên nhân.
