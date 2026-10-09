@@ -4,17 +4,8 @@ import Archive from "@carbon/icons-react/es/Archive";
 import OverflowMenuVertical from "@carbon/icons-react/es/OverflowMenuVertical";
 import TrashCan from "@carbon/icons-react/es/TrashCan";
 import Undo from "@carbon/icons-react/es/Undo";
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-} from "@crm/ui/components/alert-dialog";
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -190,24 +181,16 @@ export function RecordActions({
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			<AlertDialog open={confirming} onOpenChange={setConfirming}>
-				<AlertDialogContent>
-					<AlertDialogHeader>
-						<AlertDialogTitle>{m.sheet.confirmDelete(name)}</AlertDialogTitle>
-						<AlertDialogDescription>{consequence}</AlertDialogDescription>
-					</AlertDialogHeader>
-
-					<AlertDialogFooter>
-						<AlertDialogCancel>{m.sheet.cancel}</AlertDialogCancel>
-						<AlertDialogAction
-							variant="destructive"
-							onClick={() => purge.mutate({ id: record.id })}
-						>
-							{m.sheet.confirmDeleteForever}
-						</AlertDialogAction>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
+			<ConfirmDialog
+				open={confirming}
+				onOpenChange={setConfirming}
+				tieuDe={m.sheet.confirmDelete(name)}
+				than={consequence}
+				nut={m.sheet.confirmDeleteForever}
+				thoi={m.sheet.cancel}
+				onConfirm={() => purge.mutate({ id: record.id })}
+				pending={purge.isPending}
+			/>
 		</>
 	);
 }

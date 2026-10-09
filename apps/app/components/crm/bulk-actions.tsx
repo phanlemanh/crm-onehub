@@ -1,17 +1,8 @@
 "use client";
 
 import ChevronDown from "@carbon/icons-react/es/ChevronDown";
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-} from "@crm/ui/components/alert-dialog";
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -25,6 +16,7 @@ import {
 } from "@crm/ui/components/dropdown-menu";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Spinner } from "@crm/ui/components/spinner";
+import { baoDaLuuTru } from "@crm/ui/lib/bao-luu-tru";
 import type { Locale } from "@crm/ui/lib/locale";
 import type { ReactNode } from "react";
 import { toast } from "sonner";
@@ -60,6 +52,36 @@ export function reportBulk(
 	}
 
 	toast.success(done(result.succeeded));
+}
+
+export function baoLuuTruLoat({
+	result,
+	done,
+	locale,
+	onHoanTac,
+}: {
+	result: BulkResult;
+	done: (count: number) => string;
+	locale: Locale;
+	onHoanTac: () => void;
+}): void {
+	if (result.succeeded === 0) {
+		reportBulk(result, done, locale);
+		return;
+	}
+	const m = crmMessages(locale);
+	baoDaLuuTru({
+		thongDiep:
+			result.failed > 0
+				? m.bulkMenu.leftAlone(
+						done(result.succeeded),
+						String(result.failed),
+						result.message ? ` — ${result.message}` : ".",
+					)
+				: done(result.succeeded),
+		nhanHoanTac: m.sheet.hoanTac,
+		onHoanTac,
+	});
 }
 
 export function BulkActionsMenu({
@@ -134,29 +156,26 @@ export function BulkDeleteDialog({
 	title,
 	description,
 	onConfirm,
+	pending,
 }: {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	title: string;
 	description: string;
 	onConfirm: () => void;
+	pending: boolean;
 }) {
 	const m = crmMessages(useLocale());
 	return (
-		<AlertDialog open={open} onOpenChange={onOpenChange}>
-			<AlertDialogContent>
-				<AlertDialogHeader>
-					<AlertDialogTitle>{title}</AlertDialogTitle>
-					<AlertDialogDescription>{description}</AlertDialogDescription>
-				</AlertDialogHeader>
-
-				<AlertDialogFooter>
-					<AlertDialogCancel>{m.bulkMenu.cancel}</AlertDialogCancel>
-					<AlertDialogAction variant="destructive" onClick={onConfirm}>
-						{m.bulkMenu.confirmDelete}
-					</AlertDialogAction>
-				</AlertDialogFooter>
-			</AlertDialogContent>
-		</AlertDialog>
+		<ConfirmDialog
+			open={open}
+			onOpenChange={onOpenChange}
+			tieuDe={title}
+			than={description}
+			nut={m.bulkMenu.confirmDelete}
+			thoi={m.bulkMenu.cancel}
+			onConfirm={onConfirm}
+			pending={pending}
+		/>
 	);
 }
