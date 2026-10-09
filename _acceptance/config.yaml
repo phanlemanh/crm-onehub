@@ -1474,6 +1474,9 @@ executors:
     dt_man_bang: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t cot-bang && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t ngan-chi-tiet'
     dt_man_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t goi-y-moi-gioi'
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
+    kkc_chu: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-khong-con.dom.tsx -t kkc-chu'
+    kkc_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx apps/app/test/kara-ban-ghi.dom.tsx && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi'
+    kkc_canh_chu: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/messages-guard.spec.ts && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/messages-guard.spec.ts'
   script:
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
     kbk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-ban-ghi-kara/rang/man.mjs"'
