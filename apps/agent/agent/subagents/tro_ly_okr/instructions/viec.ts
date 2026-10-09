@@ -1,6 +1,7 @@
 import { okrTroLyViec } from "@crm/validation/okr-tro-ly";
 import { defineDynamic, defineInstructions } from "eve/instructions";
 import { MUC_TOM_TAT } from "../../../lib/okr/chi-dan-tom-tat";
+import { TRO_LY_OKR } from "../../../lib/okr/config";
 import {
 	dungGoiDeXuat,
 	goiThanhChiDan,
@@ -35,7 +36,11 @@ export default defineDynamic({
 	events: {
 		"session.started": async (_event, ctx) => {
 			const hang = await viecCuaPhienCon(ctx);
-			if (!hang || hang.finishedAt) return null;
+			if (!hang)
+				return defineInstructions({
+					markdown: TRO_LY_OKR.ngoaiPhien.chiDanKhongViec,
+				});
+			if (hang.finishedAt) return null;
 			const markdown = await chiDanCua(hang);
 			return markdown ? defineInstructions({ markdown }) : null;
 		},

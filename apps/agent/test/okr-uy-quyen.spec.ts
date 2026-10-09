@@ -86,10 +86,10 @@ describe("okr-uy-quyen", () => {
 				LOI_UY_QUYEN.lanHai,
 			],
 			["okr", "goi lai cung callId", [[troLy("a")], [troLy("a")]], "cho"],
-			["research", "tro_ly_okr", [[troLy("a")]], LOI_UY_QUYEN.ngoaiOkr],
-			["zalo", "tro_ly_okr", [[troLy("a")]], LOI_UY_QUYEN.ngoaiOkr],
-			["builder", "tro_ly_okr", [[troLy("a")]], LOI_UY_QUYEN.ngoaiOkr],
-			["team-agent", "tro_ly_okr", [[troLy("a")]], LOI_UY_QUYEN.ngoaiOkr],
+			["research", "tro_ly_okr", [[troLy("a")]], "cho"],
+			["zalo", "tro_ly_okr", [[troLy("a")]], "cho"],
+			["builder", "tro_ly_okr", [[troLy("a")]], "cho"],
+			["team-agent", "tro_ly_okr", [[troLy("a")]], "cho"],
 			["research", "search_crm", [[cong("search_crm", "a")]], "cho"],
 		];
 		const ra: [string, string, string][] = [];
