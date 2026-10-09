@@ -6,7 +6,8 @@ import { purposeOf } from "../lib/session-purpose";
 
 const { moTa, lyDo, bienBoDe } = TRO_LY_OKR.ngoaiPhien;
 
-const boDe = () => process.env[bienBoDe] === "1";
+const boDe = () =>
+	process.env.NODE_ENV !== "production" && process.env[bienBoDe] === "1";
 
 export default defineDynamic({
 	events: {

@@ -6,13 +6,14 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 7;
+const SO_CAP_KHAI = 9;
 const TRAN_MS = 300_000;
 const NGOAI = "apps/agent/agent/tools/tro-ly-okr-ngoai.ts";
 const UY_QUYEN = "apps/agent/agent/lib/okr/uy-quyen.ts";
 const HOOK = "apps/agent/agent/hooks/okr-uy-quyen.ts";
 const NOP = "apps/agent/agent/lib/okr/nop-de-xuat.ts";
 const DOC = "apps/agent/agent/lib/okr/doc.ts";
+const VIEC = "apps/agent/agent/subagents/tro_ly_okr/instructions/viec.ts";
 const SPEC = (tep, t) =>
 	`bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/${tep}${t ? ` -t ${t}` : ""}"`;
 const NGOAI_SPEC = "okr-uy-quyen-ngoai.spec.ts";
@@ -73,6 +74,22 @@ const CAP = [
 		"\t\twhere: { sessionId, kind: { in: [...LOAI_VIEC_TRO_LY_OKR] } },",
 		"\t\twhere: { kind: { in: [...LOAI_VIEC_TRO_LY_OKR] }, finishedAt: null },",
 		"nhan viec cua phien khac",
+	],
+	[
+		"h cong-tac-o-production",
+		SPEC(NGOAI_SPEC, "cong-tac"),
+		NGOAI,
+		'\tprocess.env.NODE_ENV !== "production" && process.env[bienBoDe] === "1";',
+		'\tprocess.env[bienBoDe] === "1";',
+		"cong tac bo de chay o production",
+	],
+	[
+		"i khong-viec-tra-null",
+		SPEC(NGOAI_SPEC, "khong-viec"),
+		VIEC,
+		"\t\t\tif (!hang)\n\t\t\t\treturn defineInstructions({\n\t\t\t\t\tmarkdown: TRO_LY_OKR.ngoaiPhien.chiDanKhongViec,\n\t\t\t\t});\n",
+		"\t\t\tif (!hang) return null;\n",
+		"phien con khong viec khong co chi dan",
 	],
 ];
 

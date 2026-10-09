@@ -11,9 +11,11 @@ import {
 	SESSION_PURPOSES,
 	type SessionPurpose,
 } from "../agent/lib/session-purpose";
+import viec from "../agent/subagents/tro_ly_okr/instructions/viec";
 import ngoai from "../agent/tools/tro-ly-okr-ngoai";
 import {
 	type CongCuGia,
+	type GiaiChiDan,
 	type GiaiCongCu,
 	type HanhDongYeuCau,
 	phienAudit,
@@ -72,6 +74,18 @@ describe("cong-tac-bo-de", () => {
 		expect(Object.keys((await giai("zalo")) ?? {})).toEqual([
 			SUBAGENT_TRO_LY_OKR,
 		]);
+		const moiTruong = process.env.NODE_ENV;
+		process.env[ten] = "1";
+		process.env.NODE_ENV = "production";
+		try {
+			if (Object.keys((await giai("zalo")) ?? {})[0] !== SUBAGENT_TRO_LY_OKR)
+				throw new Error("cong tac bo de chay o production");
+		} finally {
+			if (cu === undefined) delete process.env[ten];
+			else process.env[ten] = cu;
+			if (moiTruong === undefined) delete process.env.NODE_ENV;
+			else process.env.NODE_ENV = moiTruong;
+		}
 	});
 });
 
@@ -270,4 +284,36 @@ describe("nop-ngoai", () => {
 		if (that.ketQua !== "da-ghi" || (await demDeXuat()) <= truoc[0])
 			throw new Error("doi chung: viec OKR that khong ghi duoc");
 	}, 30_000);
+
+	describe("khong-viec", () => {
+		const chiDan = async (phienGoc: string): Promise<string | null> => {
+			const moc = viec.events["session.started"] as unknown as GiaiChiDan;
+			const ra = await moc({}, nguCanhCon(phienGoc) as never);
+			return ra?.markdown ?? null;
+		};
+
+		test("phiên con không có việc nhận đúng chỉ dẫn trả câu lyDo; có việc thì như cũ", async () => {
+			const { lyDo, chiDanKhongViec } = TRO_LY_OKR.ngoaiPhien;
+			expect(lyDo).toContain("OKR");
+			const khong = await chiDan(`${TIEN_TO}goc-khong-viec-h1`);
+			if (khong !== chiDanKhongViec || !khong.includes(lyDo))
+				throw new Error("phien con khong viec khong co chi dan");
+
+			const muc = await mucTieuCoKr(2);
+			const coViec = await moViecDeXuat({
+				objectiveId: muc.mucTieu,
+				nguoiYeuCau: (await gieoNguoi("Người yêu cầu có việc")).id,
+			});
+			const cua = await chiDan(coViec.phienGoc);
+			if (cua === null || cua.includes(lyDo))
+				throw new Error("phien con co viec nhan chi dan khong viec");
+
+			await db.agentTask.update({
+				where: { id: coViec.taskId },
+				data: { finishedAt: new Date() },
+			});
+			if ((await chiDan(coViec.phienGoc)) !== null)
+				throw new Error("viec da xong van nhan chi dan");
+		}, 30_000);
+	});
 });

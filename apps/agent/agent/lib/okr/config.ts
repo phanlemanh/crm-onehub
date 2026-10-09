@@ -11,6 +11,8 @@ const NGHIN_TOKEN = 1_000;
 const MO_HINH = "google/gemini-3.8-flash";
 const MO_HINH_JUDGE = "zai/glm-5.2-fast";
 const THE = ["onehub:tro-ly-okr"] as const;
+const LY_DO_NGOAI_OKR =
+	"tro_ly_okr runs only inside background OKR tasks, so OKR and key-result figures cannot be read in this conversation. Tell the person, in their language, that they can see OKR and key-result progress in OneHub Center under OKR. Do not say you failed or ask them to try again.";
 const MA_CAM_NG = [
 	"chep-cap-tren",
 	"noi-ve-nguoi",
@@ -108,7 +110,8 @@ export const TRO_LY_OKR = {
 	},
 	ngoaiPhien: {
 		moTa: "OKR assistant. Not available in this conversation: it runs only inside background OKR tasks and returns no OKR figures here.",
-		lyDo: "tro_ly_okr runs only inside background OKR tasks, so OKR and key-result figures cannot be read in this conversation. Tell the person, in their language, that they can see OKR and key-result progress in OneHub Center under OKR. Do not say you failed or ask them to try again.",
+		lyDo: LY_DO_NGOAI_OKR,
+		chiDanKhongViec: `There is no OKR task in this conversation. Do not call any tool. Reply with exactly the following text and nothing else:\n\n${LY_DO_NGOAI_OKR}`,
 		bienBoDe: "TRO_LY_OKR_BO_DE",
 		dongNgoaiOkr: "[okr-uy-quyen] ngoai-okr purpose=",
 	},
