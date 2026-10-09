@@ -14,6 +14,10 @@ const vi = {
 		viecTai: "tải góp ý",
 		taiLoiMoTa: "Góp ý không mất. Tải lại để xem tiếp.",
 		viecDoc: "đọc Mục tiêu này",
+		chuaBat:
+			"Đơn vị này chưa bật Kara góp ý. Mở lại khi quản trị bật trong Cài đặt OKR.",
+		tamTat:
+			"Kara đang tạm tắt ở đây. Mở lại khi quản trị bật lại trong Cài đặt OKR.",
 		nhoLoi: {
 			"khong-quyen":
 				"Bạn không sửa được Mục tiêu hay KR nào ở đây nên chưa nhờ Kara được.",
@@ -122,6 +126,10 @@ const en: OkrGopYMessages = {
 		viecTai: "load suggestions",
 		taiLoiMoTa: "Nothing was lost. Reload to see the suggestions.",
 		viecDoc: "read this objective",
+		chuaBat:
+			"Kara feedback is off for this unit. It reopens when an admin turns it on in OKR settings.",
+		tamTat:
+			"Kara is turned off here for now. It reopens when an admin turns it back on in OKR settings.",
 		nhoLoi: {
 			"khong-quyen":
 				"You can't edit this objective or any of its KRs, so Kara can't be asked here.",

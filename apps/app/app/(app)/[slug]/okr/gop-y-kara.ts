@@ -71,16 +71,18 @@ export type NhomGopY = {
 
 const DA_NOP = ketQuaTroLy.shape.trangThai.enum["da-nop"];
 
-const KHOA_KHI_CHUA_SAN_SANG = {
-	tat: null,
-	"viec-tat": null,
-	"don-vi-chua-bat": null,
+export type LyDoTat = "het-luot" | "tam-nghi" | "chua-bat" | "tam-tat";
+
+const TAT_KHI_CHUA_SAN_SANG = {
+	tat: "tam-tat",
+	"viec-tat": "tam-tat",
+	"don-vi-chua-bat": "chua-bat",
 	"het-tran-thang": "tam-nghi",
 	"het-tran-ngay": "het-luot",
-	"chua-noi-tac-tu": null,
-	"chua-co-khoa-mo-hinh": null,
-	"het-tran-gateway": null,
-} as const satisfies Record<LyDoKhongSanSang, "tam-nghi" | "het-luot" | null>;
+	"chua-noi-tac-tu": "tam-tat",
+	"chua-co-khoa-mo-hinh": "tam-tat",
+	"het-tran-gateway": "tam-tat",
+} as const satisfies Record<LyDoKhongSanSang, LyDoTat>;
 
 const KET_CUA_CACH = {
 	nhan: "accepted",
@@ -262,12 +264,18 @@ export function useGopYMucTieu({
 		return "yen";
 	})();
 
+	const tat: LyDoTat | null =
+		sanSang.data && !sanSang.data.bat
+			? TAT_KHI_CHUA_SAN_SANG[sanSang.data.lyDo]
+			: null;
+
 	const nut: NutKara = (() => {
 		const s = sanSang.data;
 		if (!s || (dangSoan && !quaHan) || !ghiDuoc) return { loai: "an" };
 		if (s.bat) return { loai: "mo" };
-		const vi = KHOA_KHI_CHUA_SAN_SANG[s.lyDo];
-		return vi === null ? { loai: "an" } : { loai: "khoa", vi };
+		return tat === "het-luot" || tat === "tam-nghi"
+			? { loai: "khoa", vi: tat }
+			: { loai: "an" };
 	})();
 
 	const nho = () => {
@@ -286,7 +294,10 @@ export function useGopYMucTieu({
 		});
 	};
 
-	const thuLai = () => nho();
+	const thuLai = () => {
+		if (nut.loai === "mo") nho();
+		else void sanSang.refetch();
+	};
 
 	const quyet = (d: DongHien, cach: CachQuyet, giaTri?: string) => {
 		if (dangQuyet !== null || !ghiDuoc) return;
@@ -386,6 +397,7 @@ export function useGopYMucTieu({
 		taiLai: () => void danhSach.refetch(),
 		loiNho,
 		thuLai,
+		tat,
 		daTai: !coDich || !nhoDuoc || danhSach.isError || ds !== undefined,
 	};
 }

@@ -2,13 +2,6 @@
 
 import AiGenerate from "@carbon/icons-react/es/AiGenerate";
 import { Button } from "@crm/ui/components/button";
-import {
-	Empty,
-	EmptyContent,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyTitle,
-} from "@crm/ui/components/empty";
 import { Field, FieldDescription } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import {
@@ -33,7 +26,7 @@ import {
 	okrGopYMessages,
 } from "@/lib/messages/okr-gop-y";
 import { dauThangSau, homNayVn, OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
-import type { CachQuyet, GopYMucTieu, KetDong } from "./gop-y-kara";
+import type { CachQuyet, GopYMucTieu, KetDong, LyDoTat } from "./gop-y-kara";
 import type { DongHien } from "./the-gop-y-props";
 
 export type LoiDiKr =
@@ -259,8 +252,49 @@ function NutNhoKara({ gopY, nhan }: { gopY: GopYMucTieu; nhan: string }) {
 	);
 }
 
+function cauTat(vi: LyDoTat, m: OkrGopYMessages): string {
+	switch (vi) {
+		case "het-luot":
+			return m.vung.hetLuot;
+		case "tam-nghi":
+			return m.vung.tamNghi(dauThangSau(homNayVn(new Date())));
+		case "chua-bat":
+			return m.vung.chuaBat;
+		case "tam-tat":
+			return m.vung.tamTat;
+	}
+}
+
+function KhoiTat({ vi, nhan }: { vi: LyDoTat; nhan: string }) {
+	const m = okrGopYMessages(useLocale());
+	const id = useId();
+	return (
+		<KaraState
+			kind="off"
+			describedBy={id}
+			reason={cauTat(vi, m)}
+			action={
+				<div>
+					<Button
+						aria-describedby={id}
+						data-nut="nho-kara"
+						disabled
+						size="sm"
+						type="button"
+						variant="outline"
+					>
+						<Icon data-icon="inline-start" icon={AiGenerate} />
+						{nhan}
+					</Button>
+				</div>
+			}
+		/>
+	);
+}
+
 function KhoiLoiKara({ gopY, moTa }: { gopY: GopYMucTieu; moTa: string }) {
 	const m = okrGopYMessages(useLocale());
+	if (gopY.tat !== null) return <KhoiTat nhan={m.vung.docLai} vi={gopY.tat} />;
 	return (
 		<KaraState
 			kind="error"
@@ -323,15 +357,20 @@ export function VungKara({
 			);
 		case "rong":
 			return (
-				<Empty border="solid" data-nhom-kara="rong" size="compact">
-					<EmptyHeader>
-						<EmptyTitle>{m.vung.rong}</EmptyTitle>
-						<EmptyDescription>{m.vung.rongMoTa(docLuc ?? "")}</EmptyDescription>
-					</EmptyHeader>
-					<EmptyContent>
-						<NutNhoKara gopY={gopY} nhan={m.vung.docLai} />
-					</EmptyContent>
-				</Empty>
+				<div data-nhom-kara="rong">
+					<KaraState
+						kind="empty"
+						title={m.vung.rong}
+						description={m.vung.rongMoTa(docLuc ?? "")}
+						action={
+							gopY.tat !== null ? (
+								<KhoiTat nhan={m.vung.docLai} vi={gopY.tat} />
+							) : (
+								<NutNhoKara gopY={gopY} nhan={m.vung.docLai} />
+							)
+						}
+					/>
+				</div>
 			);
 		case "loi":
 			return (

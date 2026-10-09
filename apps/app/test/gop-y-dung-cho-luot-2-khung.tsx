@@ -1,9 +1,10 @@
-import { describe, setSystemTime, test } from "bun:test";
+import { describe, expect, setSystemTime, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { KaraState } from "@crm/ui/components/kara/state";
 import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { act } from "react";
+import { troLySanSangOutput } from "../../api/src/okr/okr.contracts";
 import {
 	bamChuot,
 	chiTietTu,
@@ -40,6 +41,7 @@ import {
 } from "./khung-gop-y-luot-2";
 
 const { nhipHoiLai } = await import("@/app/(app)/[slug]/okr/gop-y-kara");
+const { dauThangSau, homNayVn } = await import("@/lib/okr-chu-ky-nhan");
 
 const MAU_KARA_STATE = join(
 	import.meta.dir,
@@ -377,5 +379,82 @@ describe("k3-qua-han", () => {
 		} finally {
 			setSystemTime();
 		}
+	});
+});
+
+describe("k3-tat", () => {
+	const LY_DO = [
+		{ ma: "het-luot", lyDo: "het-tran-ngay", cau: () => m.vung.hetLuot },
+		{
+			ma: "tam-nghi",
+			lyDo: "het-tran-thang",
+			cau: () => m.vung.tamNghi(dauThangSau(homNayVn(new Date()))),
+		},
+		{ ma: "chua-bat", lyDo: "don-vi-chua-bat", cau: () => m.vung.chuaBat },
+	] as const;
+	const VUNG = [
+		{ ten: "loi", ds: () => dsTroLy([], { maKetThuc: "loi" }) },
+		{ ten: "rong", ds: () => dsTroLy([]) },
+	] as const;
+
+	test("k3-tat 3 ly do x 2 trang thai vung: KaraState off noi ly do, khong Thu lai xam, nut tro toi cau ly do", async () => {
+		let soCa = 0;
+		for (const ld of LY_DO)
+			for (const v of VUNG) {
+				kho.sanSang = troLySanSangOutput.parse({ bat: false, lyDo: ld.lyDo });
+				kho.troLy = v.ds;
+				kho.chiTiet = () => chiTietTu(mtSheet());
+				await dungSheet();
+				await cho(
+					() =>
+						(vungKara()?.querySelector("[data-kara-state=off]") ?? null) !==
+						null,
+					`${ld.ma}/${v.ten} off`,
+				);
+				const vung = vungKara() ?? document.body;
+				const xam = qsa("button[disabled]", vung).filter(
+					(b) => b.textContent?.trim() === ui.karaKhung.thuLai,
+				).length;
+				if (xam > 0) throw new Error("thu lai xam khong ly do");
+				const moTa = qs(
+					"[data-kara-state=off] [data-slot=field-description]",
+					vung,
+				);
+				const nutVung = qs("[data-kara-state=off] button", vung);
+				kiemCa(
+					{
+						cau: moTa?.textContent ?? null,
+						coId: (moTa?.getAttribute("id") ?? "") !== "",
+						troToi:
+							nutVung?.getAttribute("aria-describedby") ===
+							moTa?.getAttribute("id"),
+					},
+					{ cau: ld.cau(), coId: true, troToi: true },
+					(k) => `${ld.ma}/${v.ten} sai: ${k}`,
+				);
+				soCa += 1;
+				await thaoHet();
+			}
+		expect(soCa).toBe(6);
+	});
+
+	test("k3-tat thu lai khi chua biet san sang: doc san sang loi thi Thu lai doc lai san sang, khong im lang", async () => {
+		kho.rieng.set("okr.troLySanSang", () => {
+			throw new TypeError("Failed to fetch");
+		});
+		kho.troLy = () => dsTroLy([], { maKetThuc: "loi" });
+		kho.chiTiet = () => chiTietTu(mtSheet());
+		await dungSheet();
+		await cho(() => trangThaiKara() === "error", "loi doc");
+		const truoc = docCua("okr.troLySanSang").length;
+		await bamChuot(
+			qs("[data-slot=kara-retry]", vungKara() ?? document.body) ??
+				document.body,
+		);
+		await cho(
+			() => docCua("okr.troLySanSang").length === truoc + 1,
+			"Thu lai im lang khi chua biet san sang",
+		);
+		expect(goiCua("okr.troLyDeXuat").length).toBe(0);
 	});
 });
