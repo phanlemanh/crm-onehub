@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f2420f31188b173c1a6de1a1a753cc3953ebb4b0
+verified_commit: 62f1190c3582e66fb2e00d68ae237f74cdb7d327
 human_signoff: Phan Le Manh 2026-10-09 — ký Cổng Bằng chứng trên vòng chấm 2 (10/10 eval đạt, 7/7 lệnh suite xanh, hội đồng E7 đạt, 0 phát hiện trong hợp đồng; vòng 1 sửa phép đếm «Thử lại đúng một lần»). Năm mục ngoài hợp đồng: Ngoài-2 mở hợp đồng mới (chữ «xoá vĩnh viễn» của khung không còn); Ngoài-1, 3, 4, 5 ghi Known limits. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
@@ -182,3 +182,7 @@ none — every multi-run eval is uniform
 
 Round 1: PASS với một phát hiện mức thấp trong hợp đồng; đã sửa (test Thử lại ghim đúng một lần gọi, bộ nhớ đệm tươi) và vào round 2.
 Round 2: toàn bộ eval máy, ui-check E6 và các lệnh suite đều đạt trên commit f2420f31188b173c1a6de1a1a753cc3953ebb4b0; E7 chờ người chốt ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-09, do ghim lại sau gộp onehub ecbce631 (DT1 #332 đổi contacts-table, create-contact-sheet, them-moi-gioi)
+run_id: repin-20261009T063555Z-90547
+sha: 62f1190c3582e66fb2e00d68ae237f74cdb7d327 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E6, E7 (E7 không khai paths) · diff chạm vật đo ngoài làn máy: E6 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
