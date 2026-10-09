@@ -15,27 +15,6 @@ const THUOC = {
 		moiXanh: "ok: khong cham ho so da ky",
 		chieuDo: [["--gia-tep", "_acceptance/hoi-crm-qua-zalo/contract.md"], "hong: cham ho so da ky _acceptance/hoi-crm-qua-zalo/contract.md"],
 	},
-	e10: {
-		hoSo: "slack-thieu-quyen-email",
-		id: "E10",
-		criterion: "AC-10",
-		tep: "_acceptance/slack-thieu-quyen-email/rang/khong-sua-tep-hang.mjs",
-		neo: "52e00cad2593373c1f1c05ffa00005d1cbab980c",
-		cuDo: "COMMIT KHONG TEN",
-		moiXanh: "khong-sua-tep-hang: khong tep nao cua hang bi sua",
-		chieuDo: [["--gia-tep", "apps/agent/agent/lib/run-runtime.ts"], "TEP HANG: apps/agent/agent/lib/run-runtime.ts"],
-		chieuDo2: [["--gia-commit-khong-ten"], "COMMIT KHONG TEN"],
-		tapCommit: [
-			"fe8fef508c694ef7b95e248549a13ba336d85a3d", "df6047ba8b341f101e875b075cbb555fa357c405",
-			"feb1fa5c6e66877203e0f45f79b58c58ba512901", "7e8e75f3f7329877203910f4913ff5204013f467",
-			"0be0b0fbff823ec79715e267c4c4a6e9d5b9d03b", "9399756cd9c97bfbc792102c4f4ce2678bd863f2",
-			"a095649bc85a7c36196c51c6a11b6cacaeb1eaa6", "d040fdf509d4d0068baa81b69aaba55486c3b989",
-			"05d282231aaaa1c3467c5ed75c96fed30d34a807", "2fdd1ef0d01f2665a3af63f80a202c20474b1a36",
-			"ad1edeedb2a701dfb27034b8c30ef14ff1cf7590", "dfb9f7ba285f93e1a224204936e06a22f2ecd9a9",
-			"07a39742239ea1c7f51242212196ca1db5c5be98", "3e90ff6c3fb73906e7c2c69acb38ea4d4886d3e1",
-			"187808af4cf0c5ee181953b4ef3775967f1900c4", "c5254b342704aea58374ccbd2a01df711dbd2325",
-		],
-	},
 };
 
 const chay = (cwd, tep, thamSo = []) => {

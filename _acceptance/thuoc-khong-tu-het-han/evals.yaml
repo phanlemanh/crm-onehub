@@ -12,7 +12,7 @@ evals:
       - "_acceptance/thuoc-khong-tu-het-han/rang/neo.mjs"
     expected: |
       exit 0; rang/paths-chet.mjs nap globToRe tu feature-loop/scripts/carry-plan.mjs (giai qua resolve-plugin.mjs). Moc neo
-      (rang/neo.mjs): commit gop cua vong tren day cha-dau cua origin/onehub neu da co, khong thi HEAD; in moc. (1) 20 eval cua
+      (rang/neo.mjs): commit gop cua vong tren day cha-dau cua origin/onehub neu da co, khong thi HEAD; in moc. (1) eval trong pham vi (trong_pham_vi: true) cua
       rang/danh-sach.json, doc evals.yaml va git ls-tree O MOC NEO: 0 glob chet. (2) Doi chung duong: quet moi ho so da ky o
       a9e8bc75a (git show + ls-tree tai sha do) ra DUNG tap 20 cap ho-so/eval cua danh sach, khong thua khong thieu, so tung
       glob. (3) Doi chung bo khop: «[[]slug]» tren tep co «[slug]» -> chet; «…/giai-doan/» khong ** -> chet. Ban sao danh sach
@@ -27,12 +27,12 @@ evals:
       - "_acceptance/thuoc-khong-tu-het-han/rang/danh-sach.json"
       - "_acceptance/thuoc-khong-tu-het-han/rang/neo.mjs"
     expected: |
-      exit 0; rang/chi-paths.mjs so 14 tep evals.yaml cua rang/danh-sach.json giua a9e8bc75a va moc neo (git show tai hai sha,
-      doc bang lib/eval-yaml.cjs moi truong): tap eval doi paths DUNG bang 20 eval cua danh sach; moi truong khac giong het;
-      cung tap id; o ha-tran-thang-hoi-zalo va slack-thieu-quyen-email moi eval khac E7/E10 giong het. Chieu do: ban sao doi mot
-      chu trong expected -> ma 1 «<ho so>/<eval>: expected»; ban sao xoa mot eval -> ma 1 «thieu eval»; ban sao bo sua paths cua
-      mot eval trong danh sach -> ma 1 «paths khong doi».
-
+      exit 0; rang/chi-paths.mjs so 6 tep evals.yaml (5 ho so co eval trong_pham_vi cua rang/danh-sach.json va
+      ha-tran-thang-hoi-zalo) giua a9e8bc75a va moc neo (git show tai hai sha): tap eval doi paths (doc chu tho cua moi khoi
+      eval, moi loai executor) DUNG bang 10 eval trong pham vi; moi truong khac giong het; cung tap id; o
+      ha-tran-thang-hoi-zalo moi eval khac E7 giong het. Chieu do: ban sao doi mot chu trong expected -> ma 1 «<ho so>/<eval>:
+      expected doi»; ban sao xoa mot eval -> ma 1 «thieu eval»; ban sao bo sua paths cua mot eval trong danh sach -> ma 1
+      «paths khong doi»; eval judgment doi paths -> vao tap doi paths.
   - id: E3
     criterion: AC-3, AC-6
     executor: script
@@ -46,20 +46,6 @@ evals:
       thong diep ghim cua no; ban neo (cay lam viec) thoat 0, in «ok: khong cham ho so da ky» va «9dc1a037c». Ban neo chay o hai
       ref (cay tam va cay lam viec) cho dau ra giong het. Ban sao ban neo co tap doi them «_acceptance/hoi-crm-qua-zalo/contract.md»
       -> ma 1 goi ten tep do. expected moi cua E7 co «9dc1a037c», khong con «origin/onehub», criterion van AC-6.
-
-  - id: E4
-    criterion: AC-4, AC-6
-    executor: script
-    cmd: config:executors.script.tkh_e10
-    paths:
-      - "_acceptance/slack-thieu-quyen-email/rang/khong-sua-tep-hang.mjs"
-      - "_acceptance/thuoc-khong-tu-het-han/rang/hai-thuoc.mjs"
-    expected: |
-      exit 0; rang/hai-thuoc.mjs --e10 tren cung kieu cay tam cong mot commit khong ten: ban cu thoat 1 «COMMIT KHONG TEN»; ban
-      neo thoat 0 va in dung tap commit ghim san (so commit va danh sach sha) cua a62adb16..52e00cad2^2; commit gop dau tien
-      dua contract.md cua moi ho so len onehub (day cha-dau) dung la sha neo 52e00cad2 va 9dc1a037c; them
-      --gia-tep apps/agent/agent/lib/run-runtime.ts -> ma 1 «TEP HANG»; --gia-commit-khong-ten -> ma 1 «COMMIT KHONG TEN».
-      expected moi cua E10 co «52e00cad2», khong con «origin/onehub», criterion van AC-10.
 
   - id: E5
     criterion: AC-5

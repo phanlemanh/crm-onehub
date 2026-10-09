@@ -23,7 +23,7 @@ evals:
     cmd: config:executors.test.sol_man_dom
     expected: "exit 0; bài DOM dựng ManSoan với cauNoi=false và một cuộc dang soLuot=0: có tiêu đề màn soạn và mô tả đơn vị · kỳ; [data-slot='empty'] chứa câu nut.chuaCauHinh; không textarea, không [data-slot='suggestion'], không bản nháp; fetch giả bắt mọi URL — không URL nào chứa /eve/agents/okr; hook phiên (useEveAgent) không được gọi. Đối chứng dương: cùng fixture với cauNoi=true thì có ô soạn và có request tới /eve/agents/okr. Chiều đỏ ghim: bản sao vẫn dựng hội thoại khi chưa cấu hình → 'man mo phien khi chua cau hinh'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", apps/app/test/soan-okr-song-lai.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", apps/app/test/soan-okr-song-lai.dom.tsx]
 
   - id: E4
     criterion: AC-3
@@ -106,7 +106,7 @@ evals:
     cmd: config:executors.script.sol_san_thiet_ke
     expected: "exit 0; sàn thiết kế chế độ tĩnh trên nut-soan.tsx, man-soan.tsx, hoi-thoai-soan.tsx: không lỗi P0 nào (low-contrast, gray-on-color, text-overflow, broken-image, body-text-viewport-edge). Chiều đỏ ghim: bản sao nut-soan.tsx chèn một phần tử text-gray-400 trên bg-blue-600 → REJECT, mã 2, hit 'gray-on-color'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/nut-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx"]
 
   - id: E13
     criterion: AC-2

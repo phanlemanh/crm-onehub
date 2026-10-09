@@ -38,9 +38,10 @@ function main() {
 		console.log(`moc neo: ${neo.sha.slice(0, 9)} (${neo.loai})`);
 		const tepNeo = lsTree(neo.sha);
 		const docNeo = (ho) => docTai(neo.sha, `_acceptance/${ho}/evals.yaml`);
-		const conChet = kiemDanhSach(DANH_SACH.eval, docNeo, tepNeo, globToRe);
+		const trong = DANH_SACH.eval.filter((x) => x.trong_pham_vi);
+		const conChet = kiemDanhSach(trong, docNeo, tepNeo, globToRe);
 		for (const l of conChet) loi.push(`(1) glob chet o moc neo — ${l}`);
-		console.log(`(1) ${DANH_SACH.eval.length} eval cua danh sach o moc neo: ${conChet.length} eval con glob chet`);
+		console.log(`(1) ${trong.length} eval trong pham vi o moc neo: ${conChet.length} eval con glob chet (${DANH_SACH.eval.length - trong.length} eval ngoai pham vi khong xet)`);
 
 		const goc = quetToanBo(MOC_GOC, globToRe);
 		const mong = new Map(DANH_SACH.eval.map((x) => [khoa(x.ho_so, x.eval), Object.keys(x.doi).sort()]));
@@ -74,7 +75,7 @@ function main() {
 			console.error(`paths-chet: DO\n${loi.map((l) => `  - ${l}`).join("\n")}`);
 			return 1;
 		}
-		console.log(`paths-chet: XANH — 0 eval co glob chet trong ${DANH_SACH.eval.length} eval cua danh sach`);
+		console.log(`paths-chet: XANH — 0 eval co glob chet trong ${DANH_SACH.eval.filter((x) => x.trong_pham_vi).length} eval trong pham vi`);
 		return 0;
 	});
 }

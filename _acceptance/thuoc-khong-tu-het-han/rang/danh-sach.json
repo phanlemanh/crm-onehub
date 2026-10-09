@@ -8,7 +8,9 @@
     "apps/app/app/(app)/[slug]/settings/giai-doan/": "apps/app/app/(app)/[slug]/settings/giai-doan/**",
     "apps/app/app/(app)/[slug]/settings/organization/": "apps/app/app/(app)/[slug]/settings/organization/**"
    },
-   "ly_do": "thu muc thieu ** — bo kit khop tron chuoi"
+   "ly_do": "thu muc thieu ** — bo kit khop tron chuoi",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "danh-sach-keo-chung",
@@ -16,7 +18,9 @@
    "doi": {
     "apps/app/app/(app)/[slug]/settings/organization/": "apps/app/app/(app)/[slug]/settings/organization/**"
    },
-   "ly_do": "thu muc thieu **"
+   "ly_do": "thu muc thieu **",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "danh-sach-keo-chung",
@@ -25,7 +29,9 @@
     "apps/app/app/(app)/[slug]/settings/giai-doan/": "apps/app/app/(app)/[slug]/settings/giai-doan/**",
     "apps/app/app/(app)/[slug]/settings/organization/": "apps/app/app/(app)/[slug]/settings/organization/**"
    },
-   "ly_do": "thu muc thieu **"
+   "ly_do": "thu muc thieu **",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "dien-thoai-ca-nhan",
@@ -33,7 +39,8 @@
    "doi": {
     "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx": "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx"
    },
-   "ly_do": "ngoac vuong thoat kieu shell — bo kit coi [ la ky tu thuong"
+   "ly_do": "ngoac vuong thoat kieu shell — bo kit coi [ la ky tu thuong",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "dien-thoai-ca-nhan",
@@ -41,7 +48,8 @@
    "doi": {
     "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx": "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx"
    },
-   "ly_do": "ngoac vuong thoat kieu shell — bo kit coi [ la ky tu thuong"
+   "ly_do": "ngoac vuong thoat kieu shell — bo kit coi [ la ky tu thuong",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "dien-thoai-ca-nhan",
@@ -49,7 +57,8 @@
    "doi": {
     "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx": "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx"
    },
-   "ly_do": "ngoac vuong thoat kieu shell — bo kit coi [ la ky tu thuong"
+   "ly_do": "ngoac vuong thoat kieu shell — bo kit coi [ la ky tu thuong",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "dien-thoai-ca-nhan",
@@ -57,7 +66,8 @@
    "doi": {
     "apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx": "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
    },
-   "ly_do": "ngoac vuong thoat kieu shell"
+   "ly_do": "ngoac vuong thoat kieu shell",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "dien-thoai-ca-nhan",
@@ -65,7 +75,8 @@
    "doi": {
     "apps/app/app/(app)/[[]slug]/onboarding/[[]planId]/them-moi-gioi.tsx": "apps/app/app/(app)/[slug]/onboarding/[planId]/them-moi-gioi.tsx"
    },
-   "ly_do": "ngoac vuong thoat kieu shell"
+   "ly_do": "ngoac vuong thoat kieu shell",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "dien-thoai-ca-nhan",
@@ -75,7 +86,8 @@
     "apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx": "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx",
     "apps/app/app/(app)/[[]slug]/onboarding/[[]planId]/them-moi-gioi.tsx": "apps/app/app/(app)/[slug]/onboarding/[planId]/them-moi-gioi.tsx"
    },
-   "ly_do": "ngoac vuong thoat kieu shell"
+   "ly_do": "ngoac vuong thoat kieu shell",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "doi-ten-onehub-center",
@@ -83,7 +95,8 @@
    "doi": {
     "apps/app/components/auth-shader.tsx": null
    },
-   "ly_do": "aeee1b660 xoa auth-shader.tsx; tep thay (packages/ui/src/components/luoi-cham.tsx) da co san trong paths nen chi bo glob chet"
+   "ly_do": "aeee1b660 xoa auth-shader.tsx; tep thay (packages/ui/src/components/luoi-cham.tsx) da co san trong paths nen chi bo glob chet",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "giai-doan-thoa-thuan",
@@ -91,7 +104,8 @@
    "doi": {
     "apps/app/lib/deal-stage.ts": "apps/app/lib/giai-doan.ts"
    },
-   "ly_do": "ecb9448b4 xoa deal-stage.ts, them giai-doan.ts (giai doan dong)"
+   "ly_do": "ecb9448b4 xoa deal-stage.ts, them giai-doan.ts (giai doan dong)",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "tong-quan-va-khung-noi-tieng-viet",
@@ -99,7 +113,9 @@
    "doi": {
     "apps/app/lib/deal-stage.ts": "apps/app/lib/giai-doan.ts"
    },
-   "ly_do": "ecb9448b4 xoa deal-stage.ts, them giai-doan.ts"
+   "ly_do": "ecb9448b4 xoa deal-stage.ts, them giai-doan.ts",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "khoa-con-bat-xa-tran",
@@ -108,7 +124,9 @@
     "apps/api/bunfig.toml": null,
     "bunfig.toml": null
    },
-   "ly_do": "hai tep chua tung co trong lich su kho — bo glob"
+   "ly_do": "hai tep chua tung co trong lich su kho — bo glob",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "nguon-keo-tha-reui",
@@ -116,7 +134,8 @@
    "doi": {
     "packages/ui/src/components/examples/**": null
    },
-   "ly_do": "thu muc chua tung co trong lich su kho — bo glob"
+   "ly_do": "thu muc chua tung co trong lich su kho — bo glob",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "soan-okr-song-lai",
@@ -124,7 +143,9 @@
    "doi": {
     "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx": "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx"
    },
-   "ly_do": "574292047 thay man-soan bang khung-soan (trang rieng)"
+   "ly_do": "574292047 thay man-soan bang khung-soan (trang rieng)",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "soan-okr-song-lai",
@@ -132,7 +153,9 @@
    "doi": {
     "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx": "apps/app/app/(app)/[slug]/okr/soan/khung-soan.tsx"
    },
-   "ly_do": "574292047 thay man-soan bang khung-soan (trang rieng)"
+   "ly_do": "574292047 thay man-soan bang khung-soan (trang rieng)",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "the-gop-y-okr",
@@ -140,7 +163,8 @@
    "doi": {
     "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx": "apps/app/app/(app)/[slug]/okr/the-gop-y-props.ts"
    },
-   "ly_do": "081c9b792 xoa cot-gop-y.tsx; bai packages/ui/test/proposed-change.dom.tsx nhap propsThe tu the-gop-y-props.ts (S4 r1 bat chon nham gop-y-kara.ts)"
+   "ly_do": "081c9b792 xoa cot-gop-y.tsx; bai packages/ui/test/proposed-change.dom.tsx nhap propsThe tu the-gop-y-props.ts (S4 r1 bat chon nham gop-y-kara.ts)",
+   "trong_pham_vi": true
   },
   {
    "ho_so": "to-chuc-danh-sach-chi-tiet",
@@ -148,7 +172,9 @@
    "doi": {
     "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx": "packages/ui/src/components/confirm-dialog.tsx"
    },
-   "ly_do": "e265f24da doi ConfirmDialog vao packages/ui"
+   "ly_do": "e265f24da doi ConfirmDialog vao packages/ui",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "tro-ly-doc-kho",
@@ -156,7 +182,9 @@
    "doi": {
     "packages/db/src/tai-lieu-suc-khoe*.ts": null
    },
-   "ly_do": "tep chua tung co trong lich su kho — bo glob"
+   "ly_do": "tep chua tung co trong lich su kho — bo glob",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   },
   {
    "ho_so": "tro-ly-okr-nen",
@@ -164,7 +192,9 @@
    "doi": {
     "packages/db/src/okr-can-chinh.ts": "packages/validation/src/okr-can-chinh.ts"
    },
-   "ly_do": "dd43b70c5 (chinh vong do) them tep o packages/validation; glob ghi nham goi"
+   "ly_do": "dd43b70c5 (chinh vong do) them tep o packages/validation; glob ghi nham goi",
+   "trong_pham_vi": false,
+   "ly_do_ngoai": "Loi 1 (chu kho 10/10): ho so co thuoc da chet/tu het han tu truoc tren onehub, ghim lai do 22:15Z; sua o F24"
   }
  ]
 }

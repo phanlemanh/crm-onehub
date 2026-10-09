@@ -184,7 +184,7 @@ evals:
     cmd: config:executors.test.tln_tien_do_api
     expected: "exit 0; các bài kiểm OKR sẵn có của API chạy nguyên, không sửa kỳ vọng: apps/api/test/okr.spec.ts và apps/api/test/okr-toan-canh-thuan.spec.ts (chỉ đổi dòng nhập đường dẫn); thêm ca so sánh alignmentTargets trước/sau trên cùng dữ liệu gieo (tập id so bằng)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: [packages/db/src/okr-tien-do.ts, packages/validation/src/okr-can-chinh.ts, apps/api/src/okr/**, apps/api/test/okr.spec.ts, apps/api/test/okr-toan-canh-thuan.spec.ts]
+    paths: [packages/db/src/okr-tien-do.ts, packages/db/src/okr-can-chinh.ts, apps/api/src/okr/**, apps/api/test/okr.spec.ts, apps/api/test/okr-toan-canh-thuan.spec.ts]
 
   - id: E22
     criterion: AC-14

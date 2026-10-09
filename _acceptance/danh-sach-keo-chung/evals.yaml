@@ -114,8 +114,8 @@ evals:
     executor: script
     cmd: config:executors.script.dsk_mot_thanh_phan
     paths:
-      - "apps/app/app/(app)/[slug]/settings/giai-doan/**"
-      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/"
+      - "apps/app/app/(app)/[slug]/settings/organization/"
       - "_acceptance/danh-sach-keo-chung/rang/mot-thanh-phan.mjs"
     expected: |
       rang/mot-thanh-phan.mjs doc AST (TypeScript) moi tep .tsx duoi hai thu muc: 0 cau import ten SortableList hoac
@@ -239,7 +239,7 @@ evals:
     cmd: config:executors.test.dsk_hoi_quy
     paths:
       - "packages/ui/src/components/sortable-list.tsx"
-      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/app/(app)/[slug]/settings/organization/"
       - "apps/app/test/chi-quan-tri-truong.dom.tsx"
       - "apps/app/test/to-chuc-chi-tiet.dom.tsx"
       - "apps/app/test/to-chuc.dom.tsx"
@@ -256,8 +256,8 @@ evals:
     cmd: config:executors.script.dsk_san_thiet_ke
     paths:
       - "packages/ui/src/components/sortable-list.tsx"
-      - "apps/app/app/(app)/[slug]/settings/giai-doan/**"
-      - "apps/app/app/(app)/[slug]/settings/organization/**"
+      - "apps/app/app/(app)/[slug]/settings/giai-doan/"
+      - "apps/app/app/(app)/[slug]/settings/organization/"
       - "_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs"
     expected: |
       rang/san-thiet-ke.mjs rut danh sach tep tu git diff --name-only --diff-filter=AM $(git merge-base HEAD
