@@ -132,6 +132,8 @@ lồng trong khung (vòng 1) sang một bề mặt chia bằng một đường k
 
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)
 
+- S3 (sau Cổng 1): bản mẫu nay dựng bằng `KaraDock`, `KaraArtifact variant="docked"` và cỡ sheet `kara` thật — 1024 px bản nháp ~610 px, 1440 px khung 1180 px, điện thoại phủ toàn màn. Còn lại: trong tab «Bản nháp (n)» dòng đầu bản nháp vẫn lặp chữ «Bản nháp» và dòng phụ bị cắt — cần `KaraArtifact` docked ẩn tiêu đề khi nằm trong tab; để sau, không chặn.
+
 - Chưa có cỡ sheet theo nội dung: bản mẫu dùng `md`/`2xl` có sẵn nên ở 1024 bản nháp chỉ còn ~270 px (`ST-khung-rong--1024`). S3 dựng cỡ `kara` trong `sheet.tsx` (trần `100% − 2rem`) — bản nháp ~560 px ở 1024 (AC-3, AC-10).
 - Dưới 768 khung là ngăn kéo 88dvh (`ST-khung-dien-thoai--375`), chưa phủ toàn màn. S3 thêm biến thể phủ toàn màn trong `drawer.tsx` (AC-6).
 - Bản mẫu vẽ dòng đầu và đường kẻ bằng `div` tại chỗ (vật liệu khung là scaffold): S3 dựng khung cột Kara ở tệp mới trong `packages/ui/src/components/kara/` và biến thể `docked` không viền cho `KaraArtifact` (AC-4, AC-10; giám sát: không sửa `kara/state.tsx`).

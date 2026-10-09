@@ -123,6 +123,20 @@ Không dùng `Spinner` trần, `Shimmer` trần hay `Alert` đứng yên cho lú
 | 8 | `InlineCitation`; thành phần phản hồi `AiFeedback` (`ai-feedback.tsx`) | có; tóm tắt tuần đã dùng `AiFeedback` |
 | 3, 5, 6, 7 | sáu khối dựng màn Kara (`kara/`): `KaraTranscript`, `KaraComposer`, `KaraSteps`, `KaraState`, `KaraProposal` (cùng `KaraProposalGroup` — nhãn một lần mỗi nhóm, nhận cả nhóm), `KaraArtifact`; `KaraBusy` là nguồn duy nhất của «Kara đang soạn» — khi bận đề xuất chưa quyết và «Hoàn tác» tự khoá | có — lượt `bo-xuong-kara`; chưa màn nào dùng trước 14/10 |
 
+## 11. Kara ở đâu
+
+Khi Kara và thứ Kara đang làm cùng hiện trên màn, Kara ở **cột phải**, còn vật phẩm (bản nháp, canvas, bản ghi) **mở
+thêm về bên trái**. Cột Kara cố định bề ngang `--container-assist-rail`; vật phẩm rộng tối đa `--container-assist`.
+Không thanh kéo đổi cỡ. Kara ở mép phải mọi màn để tay quen tìm tới; vật phẩm bên trái vì nó là thứ người quyết.
+
+Hai ô là **một bề mặt**: chia bằng đúng một đường kẻ dọc, không thẻ có viền lồng bên trong khung, mỗi ô một dòng đầu
+mảnh thẳng hàng (khuôn «dock» của ReUI `ai-chat-2`). Khung chưa có vật phẩm thì chỉ có cột Kara; vật phẩm tới thì
+khung mở rộng sang trái mà Kara không dời. Dưới 1024 px hai ô thành hai tab; dưới 768 px khung phủ toàn màn.
+
+Đang áp: Soạn OKR (khung bản ghi `?record=soan:<cuộc>`, lượt `soan-okr-trong-khung`). Khung deal chuyển tab Agent
+thành cột Kara bên phải ở K5 `chat-deal-mot-khung`. Thành phần: `KaraDock` (`kara/dock.tsx`), `KaraArtifact
+variant="docked"`, cỡ sheet `kara`.
+
 ## Lộ trình áp luật
 
 | Lượt | Cỡ | Làm gì |

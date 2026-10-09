@@ -10,8 +10,14 @@ import {
 	InputGroupText,
 } from "@crm/ui/components/input-group";
 import { KaraMark } from "@crm/ui/components/kara";
-import { KaraBusyProvider } from "@crm/ui/components/kara/busy";
+import { KaraArtifact } from "@crm/ui/components/kara/artifact";
 import { KaraComposer } from "@crm/ui/components/kara/composer";
+import {
+	KaraDock,
+	KaraDockBody,
+	KaraDockFooter,
+	KaraDockHeader,
+} from "@crm/ui/components/kara/dock";
 import {
 	KaraProposal,
 	KaraProposalGroup,
@@ -30,7 +36,7 @@ import {
 	TabsTrigger,
 } from "@crm/ui/components/tabs";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
-import { type ReactNode, useState } from "react";
+import { useState } from "react";
 import { DetailSheet, DetailSheetHeader } from "@/components/detail-sheet";
 import {
 	PageShellDescription,
@@ -503,98 +509,86 @@ const CHU = {
 	chuaCauHinh: "Kara chưa được bật cho không gian làm việc này.",
 } as const;
 
-function DauO({ children }: { children: ReactNode }) {
-	return (
-		<div className="flex h-11 shrink-0 items-center justify-between gap-3 border-b px-4">
-			{children}
-		</div>
-	);
-}
-
 function CotKara({ h, motMinh }: { h: Hinh; motMinh?: boolean }) {
 	return (
-		<section
+		<KaraDock
+			side={motMinh ? "fill" : "rail"}
+			alone={motMinh}
 			aria-label={M.tabTroChuyen}
 			data-o="hoi-thoai"
-			className={
-				motMinh
-					? "flex min-h-0 min-w-0 flex-1 flex-col"
-					: "flex min-h-0 w-(--container-assist-rail) shrink-0 flex-col border-l"
-			}
 		>
-			<DauO>
+			<KaraDockHeader>
 				<KaraMark scope={M.luot} />
 				{h.ban ? <KaraState kind="working" label={M.dangSoan} /> : null}
-			</DauO>
-			<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4">
+			</KaraDockHeader>
+			<KaraDockBody scroll={false}>
 				<HoiThoai h={h} />
-			</div>
-			<div className="shrink-0 px-4 pb-4">
+			</KaraDockBody>
+			<KaraDockFooter>
 				<OSoan h={h} />
-			</div>
-		</section>
+			</KaraDockFooter>
+		</KaraDock>
 	);
 }
 
 function OBanNhap({ h, trongTab }: { h: Hinh; trongTab?: boolean }) {
 	const coNhap = !["dang-mo", "khong-mo"].includes(h.banNhap);
 	return (
-		<section
+		<KaraDock
+			side="fill"
+			alone={trongTab}
 			aria-label={M.banNhap}
 			data-o="ban-nhap"
-			className="flex min-h-0 min-w-0 flex-1 flex-col"
 		>
-			<KaraBusyProvider
-				busy={h.ban ? { label: M.dangSoan, reasonShown: true } : null}
-			>
-				<DauO>
-					<div className="flex min-w-0 items-baseline gap-2 truncate">
-						{trongTab ? null : (
-							<span className="font-medium text-sm">{M.banNhap}</span>
-						)}
-						{coNhap ? <KaraMark scope={M.meta} /> : null}
-					</div>
-					{coNhap ? (
+			<KaraArtifact
+				variant="docked"
+				title={M.banNhap}
+				meta={coNhap ? M.meta : undefined}
+				actions={
+					coNhap ? (
 						<Button variant="ghost" size="sm" type="button">
 							{M.chiDongCho}
 						</Button>
-					) : null}
-				</DauO>
-				<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-5">
-					<div className="max-w-(--container-assist)">
-						<ThanBanNhap h={h} />
-					</div>
-				</div>
-				{coNhap && h.banNhap !== "da-dua-vao" ? (
-					<div className="shrink-0 border-t px-6 py-3">
+					) : undefined
+				}
+				footer={
+					coNhap && h.banNhap !== "da-dua-vao" ? (
 						<ChanBanNhap h={h} />
-					</div>
-				) : null}
-			</KaraBusyProvider>
-		</section>
+					) : undefined
+				}
+				busy={h.ban ? { label: M.dangSoan, reasonShown: true } : null}
+			>
+				<ThanBanNhap h={h} />
+			</KaraArtifact>
+		</KaraDock>
 	);
 }
 
 function HaiTab({ h }: { h: Hinh }) {
 	return (
-		<Tabs
-			defaultValue="ban-nhap"
-			className="flex min-h-0 flex-1 flex-col gap-0"
-		>
-			<TabsList
-				variant="line"
-				className="w-full shrink-0 justify-start border-b px-4"
+		<KaraDock side="fill" alone>
+			<Tabs
+				defaultValue="ban-nhap"
+				className="flex min-h-0 flex-1 flex-col gap-0"
 			>
-				<TabsTrigger value="tro-chuyen">{M.tabTroChuyen}</TabsTrigger>
-				<TabsTrigger value="ban-nhap">{M.tabBanNhap}</TabsTrigger>
-			</TabsList>
-			<TabsContent value="tro-chuyen" className="flex min-h-0 flex-1 flex-col">
-				<CotKara h={h} motMinh />
-			</TabsContent>
-			<TabsContent value="ban-nhap" className="flex min-h-0 flex-1 flex-col">
-				<OBanNhap h={h} trongTab />
-			</TabsContent>
-		</Tabs>
+				<TabsList
+					variant="line"
+					className="w-full shrink-0 justify-start border-b px-4"
+				>
+					<TabsTrigger value="tro-chuyen">{M.tabTroChuyen}</TabsTrigger>
+					<TabsTrigger value="ban-nhap">{M.tabBanNhap}</TabsTrigger>
+				</TabsList>
+				<TabsContent
+					value="tro-chuyen"
+					className="flex min-h-0 flex-1 flex-col"
+				>
+					<CotKara h={h} motMinh />
+				</TabsContent>
+				<TabsContent value="ban-nhap" className="flex min-h-0 flex-1 flex-col">
+					<OBanNhap h={h} trongTab />
+				</TabsContent>
+			</Tabs>
+		</KaraDock>
 	);
 }
 
@@ -616,7 +610,7 @@ function ThanKhung({ h }: { h: Hinh }) {
 				<KaraState kind="unconfigured" description={CHU.chuaCauHinh} />
 			</div>
 		);
-	if (h.chiKara) return <CotKara h={h} motMinh />;
+	if (h.chiKara) return <CotKara h={h} />;
 	if (h.hep) return <HaiTab h={h} />;
 	return (
 		<>
@@ -647,11 +641,7 @@ export function SoanOkrTrongKhungMau({ state }: { state: string }) {
 					<PageShellDescription>{CHU.nenMoTa}</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>
-			<DetailSheet
-				open
-				onOpenChange={() => {}}
-				size={h.chiKara || h.loiKhung ? "sm" : "2xl"}
-			>
+			<DetailSheet open onOpenChange={() => {}} size="kara">
 				<DetailSheetHeader
 					title={M.tieuDe}
 					description={
