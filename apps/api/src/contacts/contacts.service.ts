@@ -8,6 +8,13 @@ import {
 	type RecordSource,
 } from "@crm/db";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
+import { caNhanCoSo, caNhanTrungSo } from "@crm/db/so-dien-thoai";
+import {
+	docSoDienThoai,
+	hienThiSoDienThoai,
+	soQuocNoi,
+	soQuocNoiDeTim,
+} from "@crm/validation/so-dien-thoai";
 import {
 	BadRequestException,
 	ConflictException,
@@ -129,7 +136,8 @@ export class ContactsService {
 
 	async list(input: ContactListInput): Promise<ListResult<ContactRow>> {
 		const filterableFields = await this.fields.filterableFieldsFor("CONTACT");
-		const where = this.buildWhere(input, filterableFields);
+		const search = await this.searchWhere(input.q);
+		const where = this.buildWhere(input, filterableFields, search);
 		const { skip, take } = paginate(input);
 
 		const [rows, total, facetCounts] = await Promise.all([
@@ -143,6 +151,7 @@ export class ContactsService {
 					firstName: true,
 					lastName: true,
 					email: true,
+					phone: true,
 					title: true,
 					imageUrl: true,
 					source: true,
@@ -154,7 +163,7 @@ export class ContactsService {
 				},
 			}),
 			this.db.contact.count({ where }),
-			this.facetCounts(input, filterableFields),
+			this.facetCounts(input, filterableFields, search),
 		]);
 
 		const tableFields = await this.fields.tableValuesFor(
@@ -178,8 +187,10 @@ export class ContactsService {
 	async countMatching(input: ContactListInput): Promise<number> {
 		const filterableFields = await this.fields.filterableFieldsFor("CONTACT");
 
+		const search = await this.searchWhere(input.q);
+
 		return this.db.contact.count({
-			where: this.buildWhere(input, filterableFields),
+			where: this.buildWhere(input, filterableFields, search),
 		});
 	}
 
@@ -294,6 +305,8 @@ export class ContactsService {
 
 	async create(input: ContactCreateInput) {
 		const email = normalizeEmail(input.email ?? "");
+		const phone = phoneOf(input.phone);
+		if (phone) await this.refuseTakenPhone(phone);
 
 		if (email) {
 			const existing = await this.db.contact.findFirst({
@@ -326,7 +339,7 @@ export class ContactsService {
 					firstName: input.firstName.trim(),
 					lastName: blankToNull(input.lastName ?? ""),
 					email,
-					phone: blankToNull(input.phone ?? ""),
+					phone,
 					title: blankToNull(input.title ?? ""),
 					companyId,
 					ownerId: input.ownerId ?? null,
@@ -513,7 +526,11 @@ export class ContactsService {
 		const email =
 			input.email === undefined ? null : normalizeEmail(input.email);
 		if (input.email !== undefined) data.email = email;
-		if (input.phone !== undefined) data.phone = blankToNull(input.phone);
+		if (input.phone !== undefined) {
+			const phone = phoneOf(input.phone);
+			if (phone) await this.refuseChangedPhone(id, phone);
+			data.phone = phone;
+		}
 		if (input.title !== undefined) data.title = blankToNull(input.title);
 		if (input.linkedinUrl !== undefined) {
 			data.linkedinUrl = blankToNull(input.linkedinUrl);
@@ -945,9 +962,12 @@ export class ContactsService {
 		}
 	}
 
-	private searchFilter(q: string): Prisma.ContactWhereInput {
+	private async searchWhere(q: string): Promise<Prisma.ContactWhereInput> {
 		const term = q.trim();
 		if (!term) return {};
+
+		const digits = soQuocNoiDeTim(term);
+		const byPhone = digits ? await caNhanCoSo(this.db, digits) : [];
 
 		return {
 			OR: [
@@ -955,8 +975,29 @@ export class ContactsService {
 				{ lastName: { contains: term, mode: "insensitive" } },
 				{ email: { contains: term, mode: "insensitive" } },
 				{ company: { name: { contains: term, mode: "insensitive" } } },
+				...(byPhone.length > 0 ? [{ id: { in: byPhone } }] : []),
 			],
 		};
+	}
+
+	private async refuseTakenPhone(phone: string) {
+		const holder = await caNhanTrungSo(this.db, soQuocNoi(phone));
+		if (holder) {
+			throw new ConflictException(
+				`${nameOf(holder)} already uses ${hienThiSoDienThoai(phone)}.`,
+			);
+		}
+	}
+
+	private async refuseChangedPhone(id: string, phone: string) {
+		const current = await this.db.contact.findUnique({
+			where: { id },
+			select: { phone: true },
+		});
+		if (current?.phone && soQuocNoi(current.phone) === soQuocNoi(phone)) {
+			return;
+		}
+		await this.refuseTakenPhone(phone);
 	}
 
 	private companyFilter(
@@ -973,9 +1014,10 @@ export class ContactsService {
 	private buildWhere(
 		input: ContactListInput,
 		filterableFields: FieldDefinitionWithOptions[],
+		search: Prisma.ContactWhereInput,
 	): Prisma.ContactWhereInput {
 		const and: Prisma.ContactWhereInput[] = [
-			this.searchFilter(input.q),
+			search,
 			archivedFilter(input.archived),
 			...this.fields.fieldFilters(filterableFields, input.fields),
 		];
@@ -1004,9 +1046,10 @@ export class ContactsService {
 	private async facetCounts(
 		input: ContactListInput,
 		filterableFields: FieldDefinitionWithOptions[],
+		search: Prisma.ContactWhereInput,
 	) {
 		const where = {
-			AND: [this.searchFilter(input.q), archivedFilter(input.archived)],
+			AND: [search, archivedFilter(input.archived)],
 		};
 
 		const [
@@ -1085,6 +1128,11 @@ export class ContactsService {
 		}
 		throw cause;
 	}
+}
+
+function phoneOf(raw: string | undefined): string | null {
+	const read = docSoDienThoai(raw ?? "");
+	return read.kind === "ok" ? read.so : null;
 }
 
 function nameOf(contact: {

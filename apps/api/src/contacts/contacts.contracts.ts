@@ -1,5 +1,6 @@
 import { EnrichmentStatus, FactBand, FactStatus, RecordSource } from "@crm/db";
 import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
+import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { z } from "zod";
 import { bulkIdsInput } from "../crm/bulk";
 import { recordFieldValues } from "../fields/fields.contracts";
@@ -19,11 +20,19 @@ export const contactListInput = listInput.extend({
 
 export type ContactListInput = z.infer<typeof contactListInput>;
 
+const phoneInput = z
+	.string()
+	.trim()
+	.refine(
+		(value) => docSoDienThoai(value).kind !== "sai",
+		"That is not a phone number.",
+	);
+
 export const contactCreateInput = z.object({
 	firstName: z.string().trim().min(1, "A contact needs a first name."),
 	lastName: z.string().trim().optional(),
 	email: z.email("That is not an email address.").optional().or(z.literal("")),
-	phone: z.string().trim().optional(),
+	phone: phoneInput.optional(),
 	title: z.string().trim().optional(),
 	companyId: z.string().nullable().optional(),
 	ownerId: z.string().nullable().optional(),
@@ -35,7 +44,7 @@ const contactUpdateInput = z.object({
 	firstName: z.string().trim().min(1).optional(),
 	lastName: z.string().optional(),
 	email: z.string().optional(),
-	phone: z.string().optional(),
+	phone: phoneInput.optional(),
 	title: z.string().optional(),
 	linkedinUrl: z.string().optional(),
 	twitterUrl: z.string().optional(),
@@ -138,6 +147,7 @@ export const contactRowOutput = z.object({
 	firstName: z.string(),
 	lastName: z.string().nullable(),
 	email: z.string().nullable(),
+	phone: z.string().nullable(),
 	title: z.string().nullable(),
 	imageUrl: z.string().nullable(),
 	source: z.enum(
