@@ -5,7 +5,7 @@ slug: dien-thoai-ca-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T03:22:17Z
 design_doc: docs/superpowers/specs/2026-10-09-dien-thoai-ca-nhan-design.md
