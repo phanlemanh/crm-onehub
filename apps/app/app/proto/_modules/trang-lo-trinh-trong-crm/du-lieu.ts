@@ -87,7 +87,7 @@ export function dauVaoCuaState(state: string): DauVao {
 		return {
 			kieu: "chua-co-khoi",
 			canhBao: [
-				"trang chưa mang dữ liệu lộ trình — vẽ lại bằng bộ kit từ 2.27",
+				"trang chưa mang dữ liệu lộ trình — vẽ lại bằng bộ kit từ 2.26",
 			],
 		};
 	if (state === STATE.khoiHong)

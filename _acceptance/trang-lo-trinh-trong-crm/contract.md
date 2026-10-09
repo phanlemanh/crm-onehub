@@ -21,7 +21,7 @@ Người không dùng git — trưởng phòng ban, đội sản phẩm — mở
 hẹn mốc nào, còn bao lâu hay đã trễ, mà không phải hỏi. Trang theo đúng khung danh sách của Thoả thuận và
 Onboarding (chủ kho chốt 09/10, sau ba lượt bản mẫu): một danh sách việc cho mọi lộ trình của kho, thẻ vòng đời,
 lộ trình / nhóm / mốc là ba bộ lọc riêng, «Bảng | Bảng cột | Mốc», ngăn hồ sơ khi bấm. Trang chỉ đọc khối dữ
-liệu `lo-trinh-du-lieu` mà bộ vẽ của kit đặt trong `LO-TRINH.html` ở gốc kho (từ kit 2.27); nó không ghi gì và
+liệu `lo-trinh-du-lieu` mà bộ vẽ của kit đặt trong `LO-TRINH.html` ở gốc kho (từ kit 2.26); nó không ghi gì và
 không tự tính trạng thái — việc duy nhất tự làm là so ngày mốc với hôm nay.
 
 Source input: `_acceptance/trang-lo-trinh-trong-crm/opportunity.md` (Cổng Đáng `build` 2026-10-08, hàng LT1 của
@@ -76,7 +76,7 @@ Source input: `_acceptance/trang-lo-trinh-trong-crm/opportunity.md` (Cổng Đá
 
 ## Notes
 
-- Phụ thuộc: crm nhận bộ kit 2.27 (bộ vẽ đặt khối vào `LO-TRINH.html`, `scripts/lo-trinh.mjs` mang hàm `docDuLieu`) và phanlemanh/crm-onehub#313 (hàng LT1). Trước đó các phép đo đọc tệp gốc của kho dừng với câu ghim «LO-TRINH.html chưa mang khối».
+- Phụ thuộc: crm nhận bộ kit ≥ 2.26 (bộ vẽ đặt khối vào `LO-TRINH.html`, `scripts/lo-trinh.mjs` mang hàm `docDuLieu`) và phanlemanh/crm-onehub#313 (hàng LT1). Trước đó các phép đo đọc tệp gốc của kho dừng với câu ghim «LO-TRINH.html chưa mang khối».
 - Nếp chung đang được thống nhất ở phiên riêng «Thống nhất khuôn trang giữa các màn OneHub» (09/10): lọc vòng đời, vị trí nút cách xem, kiểu số đếm trong chip, khung lỗi, khung chờ. Vòng này viết mã sau phiên đó; nếp nào được chốt ở đó thì trang theo nếp ấy — AC-13 đo «đúng các điều khiển và thứ tự của màn Thoả thuận tại commit được đo», không đo một bản chụp cố định.
 - Tệp mẫu cho các ca khoan dung được dẫn từ khối thật của bộ vẽ (bỏ khối, làm hỏng JSON, đổi khuôn, tăng phiên bản, bỏ khoá, đổi kiểu) — không dựng khối bằng tay.
 - Chủ kho ràng buộc 08/10: vòng không chen vào trước 14/10, không cài bản kit chưa phát hành vào crm.

@@ -14,7 +14,7 @@ phút, ở phiên nghiệm thu (ngưỡng đã chốt ở Cổng Đáng).
 
 Một nguồn duy nhất: khối `<script type="application/json" id="lo-trinh-du-lieu">` trong `LO-TRINH.html` ở gốc
 kho, khuôn `lo-trinh-du-lieu` phiên bản 1 (đặc tả: `skills/acceptance/references/lo-trinh-du-lieu.md` của bộ
-kit, từ 2.27). Bộ vẽ của kit sinh khối đó cùng lượt với trang; CI của kho chạy `product-map.mjs --check` nên
+kit, từ 2.26). Bộ vẽ của kit sinh khối đó cùng lượt với trang; CI của kho chạy `product-map.mjs --check` nên
 tệp trong git luôn khớp hồ sơ.
 
 - **Đọc ở đâu.** Trang máy chủ đọc `LO-TRINH.html` từ chính cây đã dựng của bản đang chạy. Bản production dựng
@@ -37,7 +37,7 @@ tệp trong git luôn khớp hồ sơ.
 - **Hôm nay là ngày của người xem.** So ngày chạy ở trình duyệt, theo giờ máy người xem (`YYYY-MM-DD` dựng từ
   ngày địa phương). Trước khi trình duyệt nhận trang, phần phụ thuộc ngày chưa hiện (không lệch hydrat).
 
-Trước khi crm nhận bộ kit 2.27, `LO-TRINH.html` của kho chưa mang khối: trang hiện đúng câu «trang chưa mang
+Trước khi crm nhận bộ kit ≥ 2.26, `LO-TRINH.html` của kho chưa mang khối: trang hiện đúng câu «trang chưa mang
 dữ liệu lộ trình» của bộ đọc, không vỡ. Phép đo của vòng dùng tệp mẫu do chính bộ vẽ của kit sinh ra
 (round-trip), không dùng khối tự dựng tay.
 

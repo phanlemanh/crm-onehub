@@ -23,7 +23,7 @@ evals:
           Da giao / Khac); dong phu == trang_thai khi trang_thai khong thuoc tap chu cung nghia, vang khi thuoc
       Doi chung duong: tep mau cua bo ve kit (apps/app/test/fixtures/lo-trinh/LO-TRINH.mau.html) qua cung duong cho xanh.
       CHIEU DO: ban sao hien trang_thai lam nhan chinh -> dong 2 do voi thong diep ghim "viec <khoa> lech nhan trang thai";
-      LO-TRINH.html goc chua mang khoi -> do voi thong diep ghim "LO-TRINH.html chưa mang khối — cần kit 2.27".
+      LO-TRINH.html goc chua mang khoi -> do voi thong diep ghim "LO-TRINH.html chưa mang khối — cần kit ≥ 2.26".
 
   - id: E2
     criterion: AC-2
@@ -185,7 +185,7 @@ evals:
         1 than ham docDuLieu trong apps/app/lib/lo-trinh/doc-du-lieu.js == than ham cung ten trong scripts/lo-trinh.mjs
         2 tap khoa cua khuon Zod tung cap == bang KHUON ben trong docDuLieu (hai chieu, in khoa thua/thieu)
         3 khong tep nao duoi cac duong paths cua trang chua "_acceptance" hay "docs/plan"
-      scripts/lo-trinh.mjs chua co docDuLieu -> ma 2 "chưa có hàm gốc — cần kit 2.27".
+      scripts/lo-trinh.mjs chua co docDuLieu -> ma 2 "chưa có hàm gốc — cần kit ≥ 2.26".
       CHIEU DO: ban sao them mot dau cach vao doc-du-lieu.js -> dong 1 do "ban chep lech ham goc"; them khoa "thua" vao
       khuon -> dong 2 do "khuon thua khoa thua".
 
@@ -274,7 +274,7 @@ evals:
           [data-viec-khoa] mang [data-nhom-trang-thai] ben trong o Viec; scrollWidth cua thanh cong cu <= clientWidth
         bang-cot-375 va moc-375: chon tung cach xem -> noi dung hien, scrollWidth trang <= 375
         khong-dich-1280: moi phan tu mang chu cua tep ke hoach nam trong to tien co translate="no"
-      Tien de: LO-TRINH.html cua cay mang khoi (kit 2.27); chua mang -> KHONG DO DUOC ma 2 "LO-TRINH.html chưa mang khối".
+      Tien de: LO-TRINH.html cua cay mang khoi (kit ≥ 2.26); chua mang -> KHONG DO DUOC ma 2 "LO-TRINH.html chưa mang khối".
       CHIEU DO: tren dinh truoc vong nay -> rail-1280 SAI "khong thay muc Lo trinh".
 
   - id: E14
@@ -316,7 +316,7 @@ evals:
       rang/kiem-mau.mjs (suy goc kho tu vi tri tep): chay sinh-mau.mjs — bo ve cua kho (scripts/product-map.mjs) tren dau
       vao dong bang apps/app/test/fixtures/lo-trinh/nguon/ (ban sao tep ke hoach va ho so toi thieu) — ra thu muc tam, so
       tung byte voi apps/app/test/fixtures/lo-trinh/LO-TRINH.mau.html da commit. Mot dong DUNG/SAI.
-      scripts/lo-trinh.mjs chua co docDuLieu -> ma 2 "chưa có bộ vẽ mang khối — cần kit 2.27".
+      scripts/lo-trinh.mjs chua co docDuLieu -> ma 2 "chưa có bộ vẽ mang khối — cần kit ≥ 2.26".
       CHIEU DO: ban sao sua mot ky tu trong LO-TRINH.mau.html -> SAI voi thong diep ghim "tệp mẫu lệch bộ vẽ".
 
   - id: E17

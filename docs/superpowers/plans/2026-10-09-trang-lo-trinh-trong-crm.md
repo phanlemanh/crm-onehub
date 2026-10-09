@@ -35,7 +35,7 @@ phần khách. Thành phần khách dựng danh sách bằng `DataTable` và `Bo
 
 | Điều kiện | Kiểm bằng | Vì sao |
 |---|---|---|
-| crm đã nhận kit ≥ 2.27 | `grep -n 'export function docDuLieu' scripts/lo-trinh.mjs` có kết quả | Task 2, 3 chép hàm và chạy bộ vẽ của kho |
+| crm đã nhận kit ≥ 2.26 (có khối dữ liệu lộ trình) | `grep -n 'export function docDuLieu' scripts/lo-trinh.mjs` có kết quả | Task 2, 3 chép hàm và chạy bộ vẽ của kho |
 | PR crm-onehub#313 đã gộp | `git grep -n '"ma": "LT1"' origin/onehub -- docs/plan/lo-trinh-okr.json` | hàng LT1 có trên nhánh chính |
 | Phiên thống nhất khuôn trang đã gộp | `git log origin/onehub --oneline --grep 'khuôn trang'` hoặc mục mới trong `docs/design.md` | nếp thanh công cụ của Task 6 |
 | E7 `datatable-loc-ro` đã gộp | `git log origin/onehub --oneline --grep 'datatable-loc-ro'` | LT1 dùng `DataTable` mà E7 đang sửa |
@@ -231,7 +231,7 @@ export function phanTichLoTrinh(
 
 ### Task 2: Bộ đọc khối, đọc tệp, luật ngày
 
-**independent: false** (cần Task 1, cần kit 2.27) · phục vụ E4, E9, E11
+**independent: false** (cần Task 1, cần kit ≥ 2.26) · phục vụ E4, E9, E11
 
 **Files:**
 - Create: `apps/app/lib/lo-trinh/doc-du-lieu.js` (thân hàm `docDuLieu` chép nguyên từ `scripts/lo-trinh.mjs`)
@@ -410,7 +410,7 @@ tới gốc kho khi chạy dev. Task 8 đo đúng nhánh đầu.
 
 ### Task 3: Tệp mẫu từ bộ vẽ thật
 
-**independent: true** (cần kit 2.27) · phục vụ E16, đầu vào của E1–E8, E12
+**independent: true** (cần kit ≥ 2.26) · phục vụ E16, đầu vào của E1–E8, E12
 
 **Files:**
 - Create: `apps/app/test/fixtures/lo-trinh/nguon/` (bản sao tối thiểu: `_acceptance/config.yaml` chỉ mang khoá `lo_trinh`, ba tệp `docs/plan/lo-trinh-*.json` cắt còn ~12 hàng mỗi tệp gồm đủ: hàng có cờ, `theo_loi`, `bat_khi`, `vi_sao`, `dung_tren`, nhóm rỗng, «Xếp lại sau», một câu giao chứa `<`, một mốc chỉ có việc đã giao, một mốc còn việc; hai thư mục hồ sơ `_acceptance/<slug>/contract.md` tối thiểu để có trạng thái từ hồ sơ)
@@ -422,7 +422,7 @@ tới gốc kho khi chạy dev. Task 8 đo đúng nhánh đầu.
   cờ `--ghi` thì chép nó thành `fixtures/lo-trinh/LO-TRINH.mau.html`.
 - [ ] **Step 2:** `node _acceptance/trang-lo-trinh-trong-crm/rang/sinh-mau.mjs --ghi` → tệp mẫu có khối `id="lo-trinh-du-lieu"`.
 - [ ] **Step 3:** `kiem-mau.mjs` — gọi `sinh-mau.mjs` không `--ghi`, so từng byte với tệp đã commit, in một dòng DUNG/SAI; thiếu
-  `docDuLieu` trong `scripts/lo-trinh.mjs` → thoát 2 «chưa có bộ vẽ mang khối — cần kit 2.27». Phá thử: sửa một ký tự trong
+  `docDuLieu` trong `scripts/lo-trinh.mjs` → thoát 2 «chưa có bộ vẽ mang khối — cần kit ≥ 2.26». Phá thử: sửa một ký tự trong
   tệp mẫu → SAI «tệp mẫu lệch bộ vẽ»; trả lại bằng `--ghi`.
 - [ ] **Step 4:** Commit nguồn, tệp mẫu, hai script.
 
@@ -572,7 +572,7 @@ tham số `viec` (để gửi đường dẫn mở thẳng ngăn), `TimelineItem
 
 | Lượt | Việc | Ghi chú |
 |---|---|---|
-| 1 | Task 1, 3, 4, 5, 9 | độc lập; Task 3 cần kit 2.27 |
+| 1 | Task 1, 3, 4, 5, 9 | độc lập; Task 3 cần kit ≥ 2.26 |
 | 2 | Task 2 | cần 1 + 3 |
 | 3 | Task 6 | cần 2, 4; cần E7 đã gộp và nếp chung mới |
 | 4 | Task 7 | cần 5, 6 |
