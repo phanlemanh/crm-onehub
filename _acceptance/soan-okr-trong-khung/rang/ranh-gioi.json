@@ -29,6 +29,8 @@
 		"_acceptance/soan-okr-trong-khung/**",
 		"_acceptance/soan-okr-trang-rieng/evals.yaml",
 		"_acceptance/soan-okr-trang-rieng/rang/mo-coi-hai-chieu.mjs",
+		"_acceptance/soan-okr-trang-rieng/evidence-report.md",
+		"_acceptance/soan-okr-trang-rieng/run-log.jsonl",
 		"_acceptance/config.yaml",
 		"PRODUCT-MAP.md",
 		"LO-TRINH.html"
