@@ -39,6 +39,7 @@ phần khách. Thành phần khách dựng danh sách bằng `DataTable` và `Bo
 | PR crm-onehub#313 đã gộp | `git grep -n '"ma": "LT1"' origin/onehub -- docs/plan/lo-trinh-okr.json` | hàng LT1 có trên nhánh chính |
 | Phiên thống nhất khuôn trang đã gộp | `git log origin/onehub --oneline --grep 'khuôn trang'` hoặc mục mới trong `docs/design.md` | nếp thanh công cụ của Task 6 |
 | E7 `datatable-loc-ro` đã gộp | `git log origin/onehub --oneline --grep 'datatable-loc-ro'` | LT1 dùng `DataTable` mà E7 đang sửa |
+| NM3 `mau-trang-thai-chung` đã gộp | `git ls-tree origin/onehub packages/ui/src/components/status-tone.ts` có kết quả | `docs/design.md` mục «Màu trạng thái» cấm khai ánh xạ `tone` thứ sáu; còn / trễ / đã giao lấy `tone` từ đó |
 | Đã qua 14/10 | ngày hệ thống | ràng buộc chủ kho 08/10 |
 
 ## Ranh giới tệp (khai cho phiên điều phối)
@@ -47,12 +48,13 @@ phần khách. Thành phần khách dựng danh sách bằng `DataTable` và `Bo
 {
   "ma": "LT1",
   "slug": "trang-lo-trinh-trong-crm",
-  "sau": ["E7"],
+  "day": "P2",
+  "uu_tien": 4,
+  "sau": ["E7", "NM3"],
   "ranh_gioi": [
     "apps/app/app/(app)/[slug]/lo-trinh/**",
     "apps/app/components/lo-trinh/**",
     "apps/app/lib/lo-trinh/**",
-    "apps/app/lib/messages/lo-trinh.ts",
     "packages/validation/src/lo-trinh-du-lieu.ts",
     "packages/validation/test/lo-trinh-du-lieu.spec.ts",
     "apps/app/test/lo-trinh*",
@@ -64,6 +66,7 @@ phần khách. Thành phần khách dựng danh sách bằng `DataTable` và `Bo
     "docs/superpowers/plans/2026-10-09-trang-lo-trinh-trong-crm.md"
   ],
   "chung_chi_them": [
+    "apps/app/lib/messages/lo-trinh.ts",
     "apps/app/lib/khung-dieu-huong.ts",
     "apps/app/lib/pham-vi-man.ts",
     "apps/app/components/app-icon-rail.tsx",
