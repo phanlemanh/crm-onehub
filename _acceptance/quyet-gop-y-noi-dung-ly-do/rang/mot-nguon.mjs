@@ -1,8 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
+const { z } = createRequire(path.join(ROOT, "packages/validation/package.json"))("zod");
 const GOC_QUET = ["apps/api/src", "apps/app/app", "apps/app/lib", "packages/validation/src"];
 const KHAI = "packages/validation/src/okr-tro-ly.ts";
 const MIEN = ["apps/api/src/okr/tro-ly.service.ts", "apps/app/lib/messages/okr-gop-y.ts"];
@@ -54,9 +56,9 @@ for (const p of danhSach) {
 
 const { CAU_CUA_LY_DO_KHONG_QUYET } = await import(path.join(ROOT, "apps/api/src/okr/tro-ly.service.ts"));
 for (const ma of LY_DO_KHONG_QUYET) {
-	const cau = CAU_CUA_LY_DO_KHONG_QUYET[ma];
-	if (!Array.isArray(cau) || cau.length === 0) mot(`thieu anh xa: ${ma}`);
-	else if (cau.some((c) => typeof c !== "string")) mot(`hang khong phai chuoi: ${ma}`);
+	const cau = z.array(z.unknown()).min(1).safeParse(CAU_CUA_LY_DO_KHONG_QUYET[ma]);
+	if (!cau.success) mot(`thieu anh xa: ${ma}`);
+	else if (!z.array(z.string()).safeParse(cau.data).success) mot(`hang khong phai chuoi: ${ma}`);
 }
 
 const { okrGopYMessages } = await import(path.join(ROOT, "apps/app/lib/messages/okr-gop-y.ts"));

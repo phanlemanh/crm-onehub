@@ -4,8 +4,8 @@ import type { KaraBusyState } from "@crm/ui/components/kara/busy";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	ketQuaTroLy,
-	laLyDoKhongQuyet,
 	type LyDoKhongSanSang,
+	laLyDoKhongQuyet,
 	TRO_LY_OKR_TRAN,
 } from "@crm/validation/okr-tro-ly";
 import {

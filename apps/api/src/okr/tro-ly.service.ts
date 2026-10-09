@@ -116,7 +116,7 @@ export const CAU_CUA_LY_DO_KHONG_QUYET = {
 	"can-chinh-da-gan": [T.canChinh.daGan],
 } satisfies Record<LyDoKhongQuyet, readonly string[]>;
 
-export function lyDoKhongQuyetCua(loi: unknown): LyDoKhongQuyet | null {
+export function lyDoKhongQuyetCua(loi: Error): LyDoKhongQuyet | null {
 	if (
 		!(loi instanceof BadRequestException || loi instanceof ForbiddenException)
 	)
@@ -632,7 +632,7 @@ export class TroLyOkrService {
 				if (ghiOkr) await this.ghiTheoDong(tx, userId, hang.id, dong, giaTri);
 				return { ok: true };
 			})
-			.catch((loi: unknown): TroLyQuyetOutput => {
+			.catch((loi: Error): TroLyQuyetOutput => {
 				const lyDo = lyDoKhongQuyetCua(loi);
 				if (lyDo === null) throw loi;
 				return { ok: false, lyDo };

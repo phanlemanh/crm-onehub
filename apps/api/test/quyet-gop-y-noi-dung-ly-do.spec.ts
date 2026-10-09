@@ -47,7 +47,7 @@ type Ca = {
 let app: NestExpressApplication;
 let cookieTruong = "";
 let cookieXem = "";
-const hang: Record<LoaiDong, string> = { ten: "", kr: "", can: "" };
+const hang = { ten: "", kr: "", can: "" } satisfies Record<LoaiDong, string>;
 
 const khongDoi: TraLai = async () => {};
 
