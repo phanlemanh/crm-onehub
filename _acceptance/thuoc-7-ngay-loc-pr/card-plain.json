@@ -1,0 +1,36 @@
+{
+  "feature_plain": "Ngày đo 7 ngày của CI ma trận ba ô, anh gõ đúng lệnh đã ghi trong hồ sơ F21 và nhận con số thật của các PR vào onehub — hoặc một câu nói rõ vì sao chưa có số, không bao giờ một số đoán.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đếm mọi lượt CI của PR vào onehub, kể cả PR đã gộp; lượt của PR khác hay không tìm ra PR thì in riêng một dòng, không lẳng lặng bỏ."},
+    {"id": "AC-2", "p": "Sẽ xếp mỗi job bị dừng theo đúng lời GitHub ghi (chạm trần, bị lượt mới đè, người dừng tay, chưa kịp chạy), kể cả lần đã được chạy lại; gặp lời lạ thì dừng và gọi tên nó."},
+    {"id": "AC-3", "p": "Sẽ tính lượt xanh và job dài nhất trên lần chạy cuối của mỗi lượt; lượt không có hình ma trận được đếm riêng."},
+    {"id": "AC-4", "p": "Sẽ kết luận SỐNG, CHẾT hay giữa hai ngưỡng chỉ khi đủ 10 lượt xanh trong cửa sổ đã đóng, trung vị lấy trên lượt xanh; chưa đủ thì in số tạm và nói chưa kết luận."},
+    {"id": "AC-5", "p": "Sẽ tự lấy cửa sổ 7 ngày bắt đầu từ lúc gộp thay đổi CI gần nhất (hôm nay là lúc gộp #331), và in rõ cửa sổ đã đóng hay chưa."},
+    {"id": "AC-6", "p": "Sẽ chạy được bằng đúng dòng lệnh node ghi trong hồ sơ F21, và ra cùng số khi chạy bằng bun."},
+    {"id": "AC-7", "p": "Sẽ dừng và nói lệnh đọc GitHub nào hỏng khi GitHub trả lỗi, thay vì in một kết luận."},
+    {"id": "AC-8", "p": "Sẽ đọc đủ mọi lượt khi một tuần có hơn 100 lượt."},
+    {"id": "AC-9", "p": "Sẽ cho phép đo cũ của F21 nghỉ, trỏ sang tiêu chí mới này, và kiểm lại hồ sơ F21 vẫn sạch sau khi anh ký."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Không đo điều kiện «một gói có test không chạy ở ô nào» — phép đo khác của F21 đã lo, thước này chỉ nhắc một dòng."},
+    {"id": "OOS-2", "p": "Không đọc trần từ tệp CI của từng lượt — GitHub đã ghi lý do dừng, đọc tệp là đọc nhầm bản."},
+    {"id": "OOS-3", "p": "Không lưu số đo ra tệp — lần đo đầu anh đọc dòng in ra."},
+    {"id": "OOS-4", "p": "Không đếm lượt CI chạy khi đẩy thẳng lên main hay release."},
+    {"id": "OOS-5", "p": "Không sửa khoá cấu hình cũ của F21 — luật đợt chỉ cho thêm; khoá cũ nằm im, không phép đo nào gọi nó."}
+  ],
+  "scope_plain": "Năm thứ cố ý để ngoài vòng này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Mọi kiểu gắn lượt với PR đã phủ: PR mở, PR đã gộp, PR đóng không gộp, PR vào nhánh khác, không tìm ra PR — có ca thật cho từng kiểu (AC-1 gắn lượt với PR)."},
+    {"i": 1, "p": "Mọi kiểu kết cục của một job đã phủ, kể cả lời dừng lạ; chạm trần và bị đè có 30 ca thật, còn dừng tay và lượt dừng ở hình ma trận chưa từng xảy ra trên kho nên là giả định (AC-2 xếp job bị dừng, AC-7 lỗi đọc)."},
+    {"i": 2, "p": "Lượt được chạy lại đã phủ bằng một ca thật: lần 1 chạm trần, lần 2 xanh (AC-2, AC-3 tính trên lần cuối)."},
+    {"i": 3, "p": "Cửa sổ thời gian đã phủ: trước, trong, sau, và lúc cửa sổ chưa đóng (AC-4 kết luận, AC-5 cửa sổ mặc định)."},
+    {"i": 4, "p": "Mỗi trục có ít nhất một tiêu chí; chạy được, đọc nhiều trang và nối với F21 có tiêu chí riêng (AC-6, AC-8, AC-9)."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chưa phép đo nào thử thước trên lượt xanh thật có hình ma trận, nên một lỗi nhận lượt xanh sẽ lọt tới ngày đo. Đã sửa: thêm cửa sổ thật sau #331 (5 lượt xanh, số ghim từ đếm độc lập), và ngày đo so số của thước với số đếm thẳng từ GitHub."},
+    {"i": 1, "p": "Tiêu chí kết luận chưa nói trung vị lấy trên lượt nào, lượt dừng 30 phút có thể kéo ra CHẾT giả. Đã sửa: chỉ lấy trên lượt xanh, có cặp thử trộn lượt xanh, dừng và đỏ."},
+    {"i": 2, "p": "Chưa ai thấy GitHub ghi gì khi một job ở hình ma trận bị dừng, nên ngày đo có thể dừng vì một lời lạ. Đã sửa một phần: job chưa kịp chạy thì xếp riêng. Phần còn lại để ngỏ vì kho chưa có ca nào; nếu gặp, thước dừng và gọi tên lời đó, sửa trong ngày."},
+    {"i": 3, "p": "Chưa nói trung vị khi số lượt chẵn. Đã sửa: lấy trung bình hai giá trị giữa, có ô thử hai giá trị nằm hai phía ngưỡng 15 phút."},
+    {"i": 4, "p": "Chưa phép đo nào chạy đúng dòng lệnh không ghi cửa sổ bằng cả node lẫn bun. Đã sửa: phép đo cửa sổ mặc định chạy hai lần và so từng dòng."}
+  ]
+}
