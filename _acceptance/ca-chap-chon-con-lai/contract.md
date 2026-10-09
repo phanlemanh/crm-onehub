@@ -5,9 +5,9 @@ slug: ca-chap-chon-con-lai
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: approved
-approved_by: Phan Le Manh
-approved_at: 2026-10-08T23:56:23Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-08-ca-chap-chon-con-lai-design.md
 ---
 
@@ -31,8 +31,8 @@ Source input: `opportunity.md`, design doc, yêu cầu P5-5.
 - AC-3: Given hai ca thật của `describe` (`retireExhausted still retires exactly the limit`, `claimDue still claims exactly the limit`), When chạy trên mã sau bản sửa, Then cả hai xanh không đổi một dòng phép kiểm nào của chúng.
 - AC-4: Given `ma()` của `apps/agent-okr/test/support/gieo.ts`, When gọi 10 000 lần với `Date.now` cố định và lần lượt ở ba mốc giờ (gồm `1791498237630`), Then mọi chuỗi bắt đầu bằng `TIEN_TO`, không chứa chữ số nào sau `TIEN_TO`, và 10 000 chuỗi của mỗi mốc khác nhau đôi một.
 - AC-5: Given `setSystemTime(1791498237630)` nạp trước khi chạy `apps/agent-okr/test/goi-soan.integration.spec.ts -t goiKiemTu`, When bài chạy, Then xanh — «26» không có trong `soTrongGoi`, `kr(26)` là `so-moi` — không đổi phép kiểm nào của bài.
-- AC-7 (đề xuất — phản biện P0, Cổng 1 quyết giữ hay bỏ): Given một gói soạn mà JSON của lớp 1 hoặc lớp 2a mang một giá trị `id` (hay khoá kết thúc bằng `Id`) chứa dãy số đứng riêng — ví dụ `id` của một đơn vị là `cid26x` —, When `goiKiemTu` trích số trong gói, Then số đó (26) KHÔNG có trong `soTrongGoi`; And các số thật in trong gói (giá trị chấm, số khởi đầu, đích) vẫn có như hôm nay.
-- AC-6: Given diff của vòng so với merge-base với `onehub`, Then chỉ `apps/agent/test/tasks.integration.spec.ts`, `apps/agent-okr/test/support/gieo.ts` (chỉ khai báo `ma` và hàm mã hoá chỉ `ma` dùng), `apps/agent-okr/agent/lib/goi-soan.ts` (chỉ khi AC-7 được giữ: hàm loại bỏ id trước khi trích số), `_acceptance/ca-chap-chon-con-lai/**`, `docs/superpowers/**`, `PRODUCT-MAP.md`, `LO-TRINH.html` và các dòng THÊM vào `_acceptance/config.yaml` đổi; `apps/agent-okr/test/goi-soan.integration.spec.ts` chỉ có dòng THÊM (ca của AC-7), không dòng bỏ nào.
+- AC-7 (phép canh hồi quy): Given gói soạn THẬT mà `id` của một mục tiêu hoặc KR trong `lop2a.capTren` và `id` của một ứng viên trong `lop2a.ungVienCanChinh` chứa dãy số đứng riêng — ví dụ `cid26x`, `cid27x` —, When `goiKiemTu` trích số trong gói, Then 26 và 27 KHÔNG có trong `soTrongGoi`; And các số thật in trong gói (giá trị chấm, số khởi đầu, đích) vẫn có như hôm nay. Phép canh giữ việc gỡ id đã có ở `goi-soan.ts`; vòng không đổi tệp đó.
+- AC-6: Given diff của vòng so với merge-base với `onehub`, Then chỉ `apps/agent/test/tasks.integration.spec.ts`, `apps/agent-okr/test/support/gieo.ts` (chỉ khai báo `ma` và hàm mã hoá chỉ `ma` dùng), `_acceptance/ca-chap-chon-con-lai/**`, `docs/superpowers/**`, `PRODUCT-MAP.md`, `LO-TRINH.html` và các dòng THÊM vào `_acceptance/config.yaml` đổi; `apps/agent-okr/test/goi-soan.integration.spec.ts` chỉ có dòng THÊM (ca của AC-7), không dòng bỏ nào.
 
 ## Coverage
 
@@ -43,7 +43,7 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 - **Trục B — điều kiện tái hiện:** thống kê đứng yên | thống kê bị cập nhật giữa chừng · giờ thường | giờ đối kháng (base36 có dãy số đứng riêng).
   - Thước CE: hai phép tái hiện trong design (đã chạy 08/10).
 - **Trục C — phía:** đối chứng dương (fixture bites) | ca thật (`retireExhausted`, `claimDue`) | bộ gieo (`ma()`).
-- **Ô Core:** A1, A2 × B thống kê đứng yên và cập nhật (AC-1, AC-2) · ca thật giữ nguyên (AC-3) · `ma()` không chữ số, duy nhất (AC-4) · A3 × giờ đối kháng (AC-5) · id trong gói (AC-7) · ranh giới (AC-6).
+- **Ô Core:** A1, A2 × B thống kê đứng yên và cập nhật (AC-1, AC-2) · ca thật giữ nguyên (AC-3) · `ma()` không chữ số, duy nhất (AC-4) · A3 × giờ đối kháng (AC-5) · id của capTren và ứng viên căn chỉnh trong gói — canh hồi quy (AC-7) · ranh giới (AC-6).
 - **Later:** chạy lặp trên CI để đo tần suất trước/sau (chỉ đo được sau gộp — ngưỡng hai tuần ở `opportunity.md`).
 
 ## Đường đo
@@ -57,6 +57,7 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 
 ## Notes
 
-- Không migration. Mã sản phẩm chỉ đổi nếu AC-7 được giữ (`goi-soan.ts`).
-- Ranh giới: `apps/agent/test/tasks.integration.spec.ts`, `apps/agent-okr/test/goi-soan.integration.spec.ts`, `apps/agent-okr/test/support/gieo.ts` (xin chạm tệp P5-49 — ngoài ranh giới ban đầu của hàng), `apps/agent-okr/agent/lib/goi-soan.ts` (chỉ khi AC-7 giữ — sẽ xin chạm tệp), `_acceptance/ca-chap-chon-con-lai/**`.
+- Không migration. Không đổi mã sản phẩm.
+- Ranh giới: `apps/agent/test/tasks.integration.spec.ts`, `apps/agent-okr/test/goi-soan.integration.spec.ts`, `apps/agent-okr/test/support/gieo.ts` (xin chạm tệp P5-49 — ngoài ranh giới ban đầu của hàng), `_acceptance/ca-chap-chon-con-lai/**`.
+- Sửa sau Cổng 1 (09/10, chủ kho): AC-7 bản duyệt đầu tả một gói không thể có — gói chỉ mang id ở `lop2a.capTren` và `lop2a.ungVienCanChinh`, và `idCuaGoi` đã gỡ hết chúng trước khi trích số (đọc lúc S3). AC-7 đổi thành phép canh hồi quy cho việc gỡ đó; `goi-soan.ts` ra khỏi Ranh giới.
 - `ALTER TABLE … SET (autovacuum_enabled = false)` chạy trên kho thử; bài bị giết giữa chừng thì `crm_test` giữ cờ đó cho tới `bun run db:test --reset`.
