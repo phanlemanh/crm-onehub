@@ -61,10 +61,12 @@ function SheetContent({
 	onOpenAutoFocus?: (event: Event) => void;
 }) {
 	if (useResponsive()) {
+		const phuToanMan = size === "kara";
 		return (
 			<DrawerContent
+				phuToanMan={phuToanMan}
 				className={cn(
-					"data-[vaul-drawer-direction=bottom]:h-[88dvh]",
+					!phuToanMan && "data-[vaul-drawer-direction=bottom]:h-[88dvh]",
 					className,
 				)}
 				{...props}
