@@ -33,6 +33,7 @@ const THU_TU = [
 	L.hangSo.ten,
 	L.uiChung.ten,
 	L.cachLy.ten,
+	L.vongDoi.ten,
 ];
 
 class KhongDo extends Error {}
@@ -207,6 +208,46 @@ function nguonNhap(n) {
 	return null;
 }
 
+function phanTichLop(lop, sf, dong) {
+	const V = L.vongDoi;
+	const phuongThuc = new Map();
+	for (const m of lop.members) {
+		const ham =
+			ts.isPropertyDeclaration(m) &&
+			m.initializer &&
+			(ts.isArrowFunction(m.initializer) ||
+				ts.isFunctionExpression(m.initializer))
+				? m.initializer
+				: null;
+		const than = ts.isMethodDeclaration(m) ? m.body : ham?.body;
+		if (!than || !m.name || !ts.isIdentifier(m.name)) continue;
+		const goi = [];
+		const goiThis = new Set();
+		let coKiem = false;
+		const di = (n) => {
+			if (ts.isIdentifier(n) && V.dinhDanhKiem.includes(n.text)) coKiem = true;
+			if (
+				ts.isCallExpression(n) &&
+				ts.isPropertyAccessExpression(n.expression)
+			) {
+				const tenHam = n.expression.name.text;
+				const truoc = n.expression.expression;
+				if (truoc.kind === ts.SyntaxKind.ThisKeyword) goiThis.add(tenHam);
+				else if (ts.isPropertyAccessExpression(truoc))
+					goi.push({
+						truyCap: truoc.name.text,
+						ham: tenHam,
+						so: dong(n.getStart(sf)),
+					});
+			}
+			ts.forEachChild(n, di);
+		};
+		di(than);
+		phuongThuc.set(m.name.text, { goi, goiThis, coKiem });
+	}
+	return { phuongThuc };
+}
+
 const BO_NHO = new Map();
 
 function phanTich(tep, chu) {
@@ -227,9 +268,12 @@ function phanTich(tep, chu) {
 		record: [],
 		epKep: [],
 		thoiLuong: [],
+		lop: [],
 	};
 	const daThay = new Set();
 	const nut = (n) => {
+		if (ts.isClassDeclaration(n) || ts.isClassExpression(n))
+			ra.lop.push(phanTichLop(n, sf, dong));
 		const nguon = nguonNhap(n);
 		if (nguon)
 			ra.nhap.push({ so: dong(nguon.getStart(sf)), nguon: nguon.text });
@@ -360,7 +404,75 @@ const HAM_LUAT = {
 			...dong(t, vaoTest, (n) => `nhap test cua chinh app: ${n.nguon}`),
 		];
 	},
+	[L.vongDoi.ten]: (t, p, nc) => {
+		if (!nc.nest.some((a) => trong(t, a.thuMuc)) || laKiem(t)) return [];
+		const V = L.vongDoi;
+		const ra = [];
+		for (const lop of p.lop) {
+			const kiem = (m) =>
+				m.coKiem ||
+				[...m.goiThis].some((ten) => lop.phuongThuc.get(ten)?.coKiem);
+			for (const [ten, m] of lop.phuongThuc) {
+				if (kiem(m)) continue;
+				for (const g of m.goi) {
+					if (!nc.schema.cat.has(g.truyCap)) continue;
+					if (g.ham === V.hamDoc && ten.startsWith(V.tienToList))
+						ra.push({ so: g.so, chu: `list lan ban da cat: ${g.truyCap}` });
+					if (V.hamXoa.includes(g.ham))
+						ra.push({
+							so: g.so,
+							chu: `xoa vinh vien khong kiem da luu tru: ${g.truyCap}`,
+						});
+				}
+			}
+		}
+		return dong(t, ra);
+	},
 };
+
+function docSchema(goc) {
+	const V = L.vongDoi;
+	const duong = join(goc, V.schema);
+	if (!existsSync(duong)) return null;
+	const mo = [];
+	let hien = null;
+	readFileSync(duong, "utf8")
+		.split("\n")
+		.forEach((d, i) => {
+			const m = /^model\s+(\w+)\s*\{/.exec(d);
+			if (m) {
+				hien = { ten: m[1], so: i + 1, van: chuanHoa(d), cot: new Set() };
+				mo.push(hien);
+				return;
+			}
+			if (hien && /^\}/.test(d)) {
+				hien = null;
+				return;
+			}
+			const c = /^\s+(\w+)\s/.exec(d);
+			if (hien && c) hien.cot.add(c[1]);
+		});
+	const truyCap = (ten) => `${ten[0].toLowerCase()}${ten.slice(1)}`;
+	return {
+		mo,
+		cat: new Set(
+			mo.filter((x) => x.cot.has(V.cotDanhDau)).map((x) => truyCap(x.ten)),
+		),
+	};
+}
+
+function kiemSchema(schema) {
+	const V = L.vongDoi;
+	return schema.mo
+		.map((x) => ({ x, cot: V.cotCat.filter((c) => x.cot.has(c)) }))
+		.filter(({ cot }) => cot.length > 1)
+		.map(({ x, cot }) => ({
+			tep: V.schema,
+			so: x.so,
+			chu: `mo hinh ${x.ten} co hai cach cat: ${cot.join(", ")}`,
+			van: x.van,
+		}));
+}
 
 function kiemShadcn(goc) {
 	return LUAT_KHO_CAY.vung
@@ -388,6 +500,10 @@ function luatVang(nc) {
 						`app agent (${LUAT_KHO_CAY.ungDung.agent.goi} + ${LUAT_KHO_CAY.ungDung.agent.tep}) va app thu hai`,
 					]
 				: [],
+		[L.vongDoi.ten]:
+			nc.schema === null || nc.nest.length === 0
+				? [`${L.vongDoi.schema} va app Nest (${LUAT_KHO_CAY.ungDung.nest.goi})`]
+				: [],
 	};
 }
 
@@ -402,6 +518,7 @@ function kiemCay(goc) {
 		apps,
 		agent,
 		nest: apps.filter((a) => a.laNest),
+		schema: docSchema(goc),
 		cam: [
 			...new Set([
 				...L.triKhon.goiCam,
@@ -430,6 +547,8 @@ function kiemCay(goc) {
 	}
 	if (apDung.includes(L.uiChung.ten))
 		viPham[L.uiChung.ten].push(...kiemShadcn(goc));
+	if (apDung.includes(L.vongDoi.ten))
+		viPham[L.vongDoi.ten].push(...kiemSchema(nc.schema));
 	return {
 		tep: tep.length,
 		cam: nc.cam,
@@ -513,6 +632,7 @@ function chepGuong(goc) {
 		...LUAT_KHO_CAY.vung.flatMap((v) =>
 			lietKe(goc, v, (n) => n === L.uiChung.tepShadcn),
 		),
+		L.vongDoi.schema,
 		...tepNguon(goc, ox),
 	].filter((t) => existsSync(join(goc, t)));
 	const tam = mkdtempSync(join(tmpdir(), LUAT_KHO_CAY.tienToTam));
@@ -542,6 +662,25 @@ const tepMoi = (tep, chu, so = 1) => ({
 		return { moi: chu, ghim: `${tep}:${so}` };
 	},
 });
+
+const tepSua = (tep, them) => ({
+	tep,
+	doi: (cu) => {
+		if (cu === null) khongDo(`pha: thieu ${tep}`);
+		const goc = cu.endsWith("\n") ? cu : `${cu}\n`;
+		return { moi: `${goc}${them}`, ghim: `${tep}:${goc.split("\n").length}` };
+	},
+});
+
+const moHinhThu = (ten, cot) =>
+	`model ${ten} {\n  id String @id\n${cot.map((c) => `  ${c} DateTime?\n`).join("")}}\n`;
+
+const lopThu = (thanLop) =>
+	tepMoi(
+		`${THU.api}/src/thu.service.ts`,
+		`export class Thu {\n\tconstructor(private readonly db: never) {}\n${thanLop}}\n`,
+		4,
+	);
 
 const goiMoi = (thuMuc, phu) =>
 	tepMoi(
@@ -822,6 +961,73 @@ const PHA = [
 			...appAgent(THU.agentA),
 			appNest(),
 			nhapTu(`${THU.agentA}/test/support/gieo.ts`, `../../../${DO}api/src/x`),
+		],
+	},
+	{
+		ten: "vd-hai-cot",
+		luat: L.vongDoi.ten,
+		...tepSua(L.vongDoi.schema, moHinhThu("DoThuHaiCot", L.vongDoi.cotCat)),
+	},
+	{
+		ten: "vd-mot-cot",
+		luat: L.vongDoi.ten,
+		xanh: true,
+		...tepSua(
+			L.vongDoi.schema,
+			moHinhThu("DoThuMotCot", [L.vongDoi.cotDanhDau]),
+		),
+	},
+	{
+		ten: "vd-list-khong-loc",
+		luat: L.vongDoi.ten,
+		buoc: [
+			appNest(),
+			lopThu(
+				"\tasync listThu() {\n\t\treturn this.db.company.findMany({ where: {} });\n\t}\n",
+			),
+		],
+	},
+	{
+		ten: "vd-list-loc-qua-ham-phu",
+		luat: L.vongDoi.ten,
+		xanh: true,
+		buoc: [
+			appNest(),
+			lopThu(
+				"\tasync listThu() {\n\t\treturn this.db.company.findMany({ where: this.dieuKien() });\n\t}\n\tdieuKien() {\n\t\treturn { archivedAt: null };\n\t}\n",
+			),
+		],
+	},
+	{
+		ten: "vd-khong-ten-list",
+		luat: L.vongDoi.ten,
+		xanh: true,
+		buoc: [
+			appNest(),
+			lopThu(
+				"\tasync layTheoTen() {\n\t\treturn this.db.company.findMany({ where: {} });\n\t}\n",
+			),
+		],
+	},
+	{
+		ten: "vd-xoa-khong-kiem",
+		luat: L.vongDoi.ten,
+		buoc: [
+			appNest(),
+			lopThu(
+				"\tasync purgeThu(id: string) {\n\t\treturn this.db.division.delete({ where: { id } });\n\t}\n",
+			),
+		],
+	},
+	{
+		ten: "vd-xoa-kiem-qua-ham-phu",
+		luat: L.vongDoi.ten,
+		xanh: true,
+		buoc: [
+			appNest(),
+			lopThu(
+				'\tasync purgeThu(id: string) {\n\t\tawait this.lyDo(id);\n\t\treturn this.db.division.delete({ where: { id } });\n\t}\n\tasync lyDo(id: string) {\n\t\tconst d = await this.db.division.findUnique({ where: { id } });\n\t\tif (d.archivedAt === null) throw new Error("chua luu tru");\n\t}\n',
+			),
 		],
 	},
 	{
