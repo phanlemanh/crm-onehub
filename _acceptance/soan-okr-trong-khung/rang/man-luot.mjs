@@ -148,15 +148,19 @@ async function caChong(t, cuocId) {
 	const truoc = await docCuoc(cuocId);
 	const oid = await idMucTieu();
 	if (!oid) await khongDo("chong: khong co Muc tieu nao trong CSDL de mo chong");
+	ghi("   chong: mo lai khung soan bang tai trang (goto URL co record=soan) — nuqs khong nhan record doi tu ngoai sau khi chinh no da ghi (loi san co, ngoai AC-8)");
+	if (!(await moTrang(t, cuocId)) || !(await choYen(t.p))) await khongDo("chong: khong mo lai duoc khung soan bang tai trang");
 	if (!(await guiTin(t, LENH.chamNop2, { choXong: false }))) await khongDo("chong: luot 3 khong toi mo hinh");
 	if (!(await choDangSoan(t.p))) await khongDo("chong: khong thay Kara dang soan");
 	const coRouter = await t.p.evaluate((oid) => {
+		const r = window.next?.router;
+		if (!r) return false;
 		const q = new URLSearchParams(location.search);
 		q.set("record", `${q.get("record")},objective:${oid}`);
-		history.replaceState(null, "", `${location.pathname}?${q.toString()}`);
+		r.replace(`${location.pathname}?${q.toString()}`);
 		return true;
 	}, oid);
-	if (!coRouter) await khongDo("chong: khong URL replace duoc");
+	if (!coRouter) await khongDo("chong: khong co window.next.router de URL replace");
 	const moMt = await choThay(
 		t.p,
 		(khung) => [...document.querySelectorAll(khung)].some((k) => k.checkVisibility() && k.getAttribute("data-size") !== "kara" && !k.querySelector("[data-trang-soan]")),
