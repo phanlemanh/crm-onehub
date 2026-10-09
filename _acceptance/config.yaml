@@ -1507,6 +1507,9 @@ executors:
     lint_slop: "bun run lint:slop"
     luat_kho_cay: "node scripts/luat-kho/do-cay.mjs"
     luat_kho_cay_du: "node scripts/luat-kho/do-cay.mjs --du-luat"
+    lkv_pha: node _acceptance/luat-kho-vong-doi/rang/pha.mjs
+    lkv_ci: bun _acceptance/luat-kho-vong-doi/rang/ci.mjs
+    lkv_thoi_gian: node _acceptance/luat-kho-vong-doi/rang/thoi-gian.mjs
     tnm_goi_that: "bun _acceptance/tac-nhan-model-rieng/rang/goi-that.ts"
     tnm_tai_lieu: "node _acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs"
     bdk_tai_lieu: "node _acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"

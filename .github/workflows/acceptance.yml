@@ -49,6 +49,26 @@ jobs:
 
       - run: bun run test:dieu-phoi
 
+  luat-kho:
+    name: luật kho
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - run: bun install --frozen-lockfile
+
+      - run: node scripts/luat-kho/do-cay.mjs --du-luat
+
   build:
     name: lệnh dựng
     runs-on: ubuntu-24.04
