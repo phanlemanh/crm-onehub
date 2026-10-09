@@ -283,11 +283,15 @@ const vi = {
 	},
 	trang: {
 		tieuDe: "Soạn OKR",
-		veTheoDonVi: "Theo đơn vị",
-		thanhKeo: "Đổi cỡ hội thoại và bản nháp",
 		khongMo: "mở cuộc soạn",
 		khongMoMoTa: "Cuộc này không còn, hoặc bạn không xem được nó.",
 		chuaCauHinh: "Quản trị cần nối Kara · OKR trong Cài đặt trước khi soạn.",
+		hoiDong: {
+			tieuDe: "Kara đang soạn. Đóng khung?",
+			than: "Lượt này vẫn chạy khi bạn đóng. Mở lại cuộc soạn để xem bản nháp mới.",
+			nut: "Đóng",
+			thoi: "Ở lại",
+		},
 	},
 	dong: {
 		tieuDe: "Bản nháp",
@@ -639,12 +643,16 @@ const en: OkrSoanMessages = {
 	},
 	trang: {
 		tieuDe: "Draft OKRs",
-		veTheoDonVi: "By unit",
-		thanhKeo: "Resize conversation and draft",
 		khongMo: "open this drafting session",
 		khongMoMoTa: "The session is gone, or you can't see it.",
 		chuaCauHinh:
 			"An admin needs to connect Kara · OKR in Settings before drafting.",
+		hoiDong: {
+			tieuDe: "Kara is drafting. Close the panel?",
+			than: "This turn keeps running when you close. Reopen the session to see the new draft.",
+			nut: "Close",
+			thoi: "Stay",
+		},
 	},
 	dong: {
 		tieuDe: "Draft",

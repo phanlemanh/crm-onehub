@@ -1,9 +1,16 @@
 import { workspaceUrl } from "@/lib/workspace-url";
 
+type DanhSachBanGhi =
+	| "/companies"
+	| "/contacts"
+	| "/deals"
+	| "/onboarding"
+	| "/okr/theo-don-vi";
+
 export function recordHref(
 	slug: string,
-	list: "/companies" | "/contacts" | "/deals" | "/onboarding",
-	kind: "company" | "contact" | "deal" | "plan",
+	list: DanhSachBanGhi,
+	kind: "company" | "contact" | "deal" | "plan" | "soan",
 	id: string,
 ): string {
 	const query = new URLSearchParams({ record: `${kind}:${id}` });

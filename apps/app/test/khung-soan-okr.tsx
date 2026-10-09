@@ -252,9 +252,24 @@ mock.module("@/lib/agent-session", () => ({
 	},
 }));
 
-export const { TrangSoan } = await import(
+const { CuocSoanTrongKhung } = await import(
 	"@/app/(app)/[slug]/okr/soan/trang-soan"
 );
+const { DetailSheet } = await import("@/components/detail-sheet");
+
+export function TrangSoan({
+	cuocSoanId,
+	cauNoi,
+}: {
+	cuocSoanId: string;
+	cauNoi: boolean;
+}) {
+	return (
+		<DetailSheet open onOpenChange={() => {}} size="kara">
+			<CuocSoanTrongKhung cuocSoanId={cuocSoanId} cauNoi={cauNoi} />
+		</DetailSheet>
+	);
+}
 export const KhungSoanXuat = await import(
 	"@/app/(app)/[slug]/okr/soan/khung-soan"
 );

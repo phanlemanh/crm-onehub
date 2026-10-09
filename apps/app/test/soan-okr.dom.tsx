@@ -46,6 +46,7 @@ import {
 	soLanMoAgent,
 	troi,
 	tuyChonAgent,
+	urlDoi,
 } from "./khung-soan-okr";
 import { chuoiToTien, type KieuThat, kieuThat, ranhChanDay } from "./kieu-that";
 
@@ -62,24 +63,24 @@ const khoiCua = (id: string) =>
 	q(`[data-dong="${id}"]`)?.closest('[data-slot="kara-proposal-group"]') ??
 	null;
 
-const VE = '[data-nut="ve-theo-don-vi"]';
 const NUT_DUNG = '[data-slot="kara-composer"] button[aria-label="Dừng"]';
 const NUT_GUI = '[data-slot="kara-composer"] button[aria-label="Gửi"]';
 const LY_DO_KHOA =
 	'[data-slot="kara-composer"] > [data-slot="field-description"]';
 
-function bamVe(): boolean {
-	const ve = q(VE);
-	if (!ve) throw new Error("khong thay loi ve");
-	const e = new MouseEvent("click", {
-		bubbles: true,
-		cancelable: true,
-		button: 0,
-	});
-	act(() => {
-		ve.dispatchEvent(e);
-	});
-	return e.defaultPrevented;
+async function bamVe(): Promise<boolean> {
+	const dong = qa("[data-slot=sheet-header] button").find(
+		(b) => b.textContent?.trim() === "Đóng",
+	);
+	if (!dong) throw new Error("khong thay nut dong khung");
+	await act(async () => (dong as HTMLButtonElement).click());
+	await nhip(3);
+	return q('[role="alertdialog"]') !== null;
+}
+
+function banGhiCuoi(): string | null {
+	const chuoi = urlDoi.at(-1);
+	return chuoi === undefined ? null : new URLSearchParams(chuoi).get("record");
 }
 
 async function nhanTab(o: Element | undefined): Promise<void> {
@@ -234,7 +235,7 @@ describe("man soan — giu thay doi", () => {
 	test("chữ chưa gửi: rời trang phải hỏi lại", async () => {
 		await moMan();
 		await go(q("[data-o-soan] textarea"), "Ưu tiên giữ khách");
-		expect(bamVe(), "roi trang khong hoi").toBe(true);
+		expect(await bamVe(), "roi trang khong hoi").toBe(true);
 		await nhip(3);
 		expect(diTrang).toEqual([]);
 		expect(q('[role="alertdialog"]')).not.toBeNull();
@@ -242,7 +243,7 @@ describe("man soan — giu thay doi", () => {
 
 	test("không gõ gì: rời trang đi ngay", async () => {
 		await moMan();
-		expect(bamVe()).toBe(false);
+		expect(await bamVe()).toBe(false);
 		await nhip(3);
 		expect(q('[role="alertdialog"]')).toBeNull();
 	});
@@ -259,7 +260,7 @@ describe("man soan — giu cho chu va so", () => {
 		await datAgent({ status: "ready" });
 		await cho(() => soLanMoAgent === moTruoc + 1, "than mo lai");
 		expect((q("#dich-11") as HTMLInputElement).value).toBe("10");
-		expect(bamVe(), "roi trang khong hoi").toBe(true);
+		expect(await bamVe(), "roi trang khong hoi").toBe(true);
 		await nhip(3);
 		expect(diTrang).toEqual([]);
 		expect(q('[role="alertdialog"]')).not.toBeNull();
@@ -310,7 +311,10 @@ describe("man soan — cho giu phien", () => {
 		await datAgent({ status: "streaming" });
 		await datAgent({ status: "ready" });
 		await cho(
-			() => chu("[data-dau-soan]")?.includes("1/12") === true,
+			() =>
+				chu("[data-o=hoi-thoai] [data-slot=kara-dock-header]")?.includes(
+					"1/12",
+				) === true,
 			"cuoc doc lai",
 		);
 		expect(soLanMoAgent).toBe(moTruoc);
@@ -361,7 +365,6 @@ const DV_PB1 = {
 	departmentId: "pb-1",
 } as const;
 const BAT_CO_CUOC = { ...SAN_SANG_BAT, cuocDang: CUOC_DANG, soCuocDaDung: 1 };
-const TRANG_CUOC = (id: string) => `/ws/okr/soan/${id}`;
 const moThongTin = () => bam(q('[data-nut="thong-tin-soan"]'));
 const chuThongTin = () => q("[data-thong-tin-soan]")?.textContent ?? "";
 
@@ -508,16 +511,16 @@ describe("nut theo ly do", () => {
 		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
 		await bam(q('[data-nut-soan="nut"]'));
 		expect(goiCua("okr.soanMo")[0]?.dauVao).toEqual(DV_PB1);
-		await cho(() => diTrang.length > 0, "di trang soan");
-		expect(diTrang).toEqual([{ kieu: "push", duong: TRANG_CUOC(CUOC.id) }]);
+		await cho(() => banGhiCuoi() === `soan:${CUOC.id}`, "mo khung soan");
+		expect(diTrang).toEqual([]);
 	});
 
 	test("bấm Tiếp cuộc đang soạn không gọi soanMo, mở đúng cuộc", async () => {
 		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC });
 		await bam(q('[data-nut-soan="nut-tiep"] button'));
-		await cho(() => diTrang.length > 0, "di trang soan");
+		await cho(() => banGhiCuoi() === `soan:${CUOC.id}`, "mo khung soan");
 		expect(goiCua("okr.soanMo")).toHaveLength(0);
-		expect(diTrang).toEqual([{ kieu: "push", duong: TRANG_CUOC(CUOC.id) }]);
+		expect(diTrang).toEqual([]);
 	});
 
 	test("soanMo báo còn cuộc đang soạn: mở đúng cuộc đó", async () => {
@@ -528,8 +531,8 @@ describe("nut theo ly do", () => {
 		}));
 		await moKhung(DON_PB1, { sanSang: SAN_SANG_BAT });
 		await bam(q('[data-nut-soan="nut"]'));
-		await cho(() => diTrang.length > 0, "di trang soan");
-		expect(diTrang).toEqual([{ kieu: "push", duong: TRANG_CUOC("cuoc-cu") }]);
+		await cho(() => banGhiCuoi() === `soan:${"cuoc-cu"}`, "mo khung soan");
+		expect(diTrang).toEqual([]);
 	});
 
 	test("soanMo từ chối vì hết cuộc: không mở màn, đọc lại trạng thái sẵn sàng", async () => {
@@ -559,7 +562,12 @@ describe("nut theo ly do", () => {
 
 	test("tham số cuộc cũ trên URL chuyển sang trang soạn, không thêm lịch sử", async () => {
 		await moKhung(DON_PB1, { sanSang: BAT_CO_CUOC, thamSo: "cuocSoan=cuoc-1" });
-		expect(diTrang).toEqual([{ kieu: "replace", duong: TRANG_CUOC("cuoc-1") }]);
+		expect(
+			diTrang.map((d) => [
+				d.kieu,
+				new URL(d.duong, "http://x").searchParams.get("record"),
+			]),
+		).toEqual([["replace", `soan:${"cuoc-1"}`]]);
 	});
 
 	test("cuộc mở từ URL vẫn tới trang soạn khi trạng thái sẵn sàng đổi sang hết trần", async () => {
@@ -567,7 +575,12 @@ describe("nut theo ly do", () => {
 			sanSang: { bat: false, lyDo: "het-tran-thang" },
 			thamSo: "cuocSoan=cuoc-1",
 		});
-		expect(diTrang).toEqual([{ kieu: "replace", duong: TRANG_CUOC("cuoc-1") }]);
+		expect(
+			diTrang.map((d) => [
+				d.kieu,
+				new URL(d.duong, "http://x").searchParams.get("record"),
+			]),
+		).toEqual([["replace", `soan:${"cuoc-1"}`]]);
 		expect(q('[data-nut-soan="nut-het-tran"]')).not.toBeNull();
 	});
 
@@ -583,8 +596,8 @@ describe("nut theo ly do", () => {
 			"danh sach mo tu url",
 		);
 		await bam(q('[data-nut="mo-cuoc"]'));
-		await cho(() => diTrang.length > 0, "di trang soan");
-		expect(diTrang).toEqual([{ kieu: "push", duong: TRANG_CUOC(CUOC.id) }]);
+		await cho(() => banGhiCuoi() === `soan:${CUOC.id}`, "mo khung soan");
+		expect(diTrang).toEqual([]);
 		await cho(() => q('[data-cuoc="danh-sach"]') === null, "danh sach dong");
 	});
 
@@ -772,9 +785,7 @@ const CA = {
 		expect(q('[role="log"]')?.textContent).not.toContain("gợi ý:");
 		const oSoan = q('[data-o-soan="mo"] textarea') as HTMLTextAreaElement;
 		expect(oSoan.disabled).toBe(false);
-		expect(chu('[data-ban-nhap="rong"] [data-slot="empty-title"]')).toBe(
-			m.banNhap.rong,
-		);
+		expect(q('[data-o="ban-nhap"]')).toBeNull();
 		for (const ten of ["Conversation", "Suggestion", "PromptInput"] as const)
 			expect(dauVetAi(ten), `thieu ${ten}`).not.toBeNull();
 		await bam(goiY[0] ?? null);
@@ -934,8 +945,8 @@ const CA = {
 			departmentId: "pb-1",
 			boCuocDangId: CUOC.id,
 		});
-		await cho(() => diTrang.length === 1, "mo cuoc moi");
-		expect(diTrang).toEqual([{ kieu: "push", duong: TRANG_CUOC("cuoc-2") }]);
+		await cho(() => banGhiCuoi() === `soan:${"cuoc-2"}`, "mo cuoc moi");
+		expect(diTrang).toEqual([]);
 	},
 	"ST-soan-dua-vao-thieu-dich": async () => {
 		datDanhSach({ dong: DA_NHAN });
