@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 8b0a29c546c692bee717c28d6b26568214635d0b
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-09
 ---
 
 # Evidence Report: ly-do-tu-choi-nop-theo-locale

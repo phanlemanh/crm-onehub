@@ -5,7 +5,7 @@ slug: ly-do-tu-choi-nop-theo-locale
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
 design_doc: docs/superpowers/specs/2026-10-09-ly-do-tu-choi-nop-theo-locale-design.md
@@ -62,3 +62,12 @@ Ngưỡng ở `opportunity.md` (đang `[đề xuất]`) đo ở lái-thử ngư�
 - Tệp ngoài ranh giới xin `cham-tep` (`yeu-cau/P1-33.json`): `apps/agent-okr/agent/lib/config.ts` (khối `tuChoi`),
   `_acceptance/config.yaml` (thêm khoá `k2c_*`), design doc, kế hoạch, bản đồ sản phẩm.
 - Chiều đỏ của AC-7 và AC-9 sửa tạm tệp sản phẩm trong cây rồi trả lại trong `finally`; lượt đo phải chạy tuần tự.
+- Known limits (Ngoài-1, Cổng 2): mã `dongTrungKhoa` bị ném lỗi chứ không trả `tu-choi`, nên câu đã dịch cho nó
+  không bao giờ hiện; bản nháp trùng dòng chỉ thấy «Kara nộp bản nháp chưa được».
+- Known limits (Ngoài-2, Cổng 2): vết (a) của `dot-bien.mjs` và chiều đỏ `--kiem-do-do` của `man.mjs` bơm tên khoá,
+  không bơm giá trị chuỗi của mã.
+- Known limits (Ngoài-3, Cổng 2): `docMau` của `ranh-gioi.mjs` không lọc dòng `---`/`+++`, chiều đỏ `--diff-mau` luôn
+  thoát 1 với diff thật.
+- Known limits (Ngoài-4, Cổng 2): `docDot` nuốt lỗi đọc `hang-viec.json` rồi quay về ranh giới chép tay.
+- Known limits (Ngoài-5, Cổng 2): chiều đỏ `--kiem-do-do` của E9 nhận mọi lần thoát mã 1, không ghim thông điệp.
+- Known limits (Ngoài-6, Cổng 2): E8 xét dòng đổi theo nội dung, không theo khối chứa nó.
