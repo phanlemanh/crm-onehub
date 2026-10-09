@@ -5,7 +5,7 @@ slug: khung-khong-con-dung-chu
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T15:56:07Z
 design_doc: docs/superpowers/specs/2026-10-09-khung-khong-con-dung-chu-design.md
