@@ -11,6 +11,8 @@ const vi = {
 		nho: "Nhờ Kara góp ý",
 		docLai: "Nhờ Kara đọc lại",
 		dangDoc: "Kara đang đọc Mục tiêu này…",
+		viecTai: "tải góp ý",
+		taiLoiMoTa: "Góp ý không mất. Tải lại để xem tiếp.",
 		rong: "Kara không thấy chỗ nào cần sửa",
 		rongMoTa: (gio: string) =>
 			`Tên, «vì sao lúc này» và các KR đã đọc ổn lúc ${gio}. Sửa xong thì nhờ Kara đọc lại.`,
@@ -112,6 +114,8 @@ const en: OkrGopYMessages = {
 		nho: "Ask Kara for feedback",
 		docLai: "Ask Kara to read again",
 		dangDoc: "Kara is reading this objective…",
+		viecTai: "load suggestions",
+		taiLoiMoTa: "Nothing was lost. Reload to see the suggestions.",
 		rong: "Kara found nothing to change",
 		rongMoTa: (gio: string) =>
 			`The title, “why now” and the KRs read well at ${gio}. Ask Kara again after you edit.`,

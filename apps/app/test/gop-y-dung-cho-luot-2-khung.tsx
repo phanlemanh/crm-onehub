@@ -3,22 +3,31 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { KaraState } from "@crm/ui/components/kara/state";
 import {
+	bamChuot,
 	chiTietTu,
 	cho,
 	D_CAN,
 	D_DOI_TRONG,
 	D_TEN,
+	deXuat,
+	docCua,
 	dsTroLy,
 	dung,
 	dungSheet,
 	dungSheetCoGopY,
+	goiCua,
 	kho,
 	kiemCa,
+	LoiTrpc,
+	m,
 	mtSheet,
+	nhip,
 	nhom,
+	nut,
 	qs,
 	qsa,
 	thaoHet,
+	ui,
 } from "./khung-gop-y-dung-cho";
 import { demTiaSang, vungKara } from "./khung-gop-y-luot-2";
 
@@ -130,6 +139,91 @@ describe("k3-khung", () => {
 			{ soNut: nutQuyet.length > 0, nutMo: mo },
 			{ soNut: true, nutMo: 0 },
 			(k) => `kara ban ma nut quyet khong khoa: ${k}`,
+		);
+	});
+});
+
+describe("k3-tai-loi", () => {
+	const MA_TRAN = [
+		{
+			ten: "may-chu",
+			loi: () => new LoiTrpc("INTERNAL_SERVER_ERROR", "boom"),
+		},
+		{ ten: "mat-mang", loi: () => new TypeError("Failed to fetch") },
+	] as const;
+
+	test("k3-tai-loi vung con, KaraState loi voi cau tai loi, Thu lai chi tai lai danh sach", async () => {
+		for (const ca of MA_TRAN) {
+			kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 2 }));
+			kho.troLy = () => {
+				throw ca.loi();
+			};
+			await dungSheet();
+			await cho(
+				() => docCua("okr.troLyDanhSach").length > 0,
+				`${ca.ten} doc danh sach`,
+			);
+			await nhip(6);
+			if (vungKara() === null)
+				throw new Error("vung kara bien mat khi tai loi");
+			const loi = vungKara()?.querySelector("[data-kara-state=error]") ?? null;
+			kiemCa(
+				{
+					tieuDe:
+						loi?.querySelector("[data-slot=empty-title]")?.textContent ?? null,
+					moTa:
+						loi?.querySelector("[data-slot=empty-description]")?.textContent ??
+						null,
+				},
+				{
+					tieuDe: ui.karaKhung.chuaDuoc(m.vung.viecTai),
+					moTa: m.vung.taiLoiMoTa,
+				},
+				(k) => `${ca.ten} cau tai loi sai: ${k}`,
+			);
+			const docTruoc = docCua("okr.troLyDanhSach").length;
+			await bamChuot(
+				qs("[data-slot=kara-retry]", vungKara() ?? document.body) ??
+					document.body,
+			);
+			await cho(
+				() => docCua("okr.troLyDanhSach").length === docTruoc + 1,
+				`${ca.ten} tai lai`,
+			);
+			kiemCa(
+				{ nho: goiCua("okr.troLyDeXuat").length },
+				{ nho: 0 },
+				(k) => `${ca.ten} Thu lai goi nham Kara: ${k}`,
+			);
+			await thaoHet();
+			kho.daDoc = [];
+			kho.daGhi = [];
+		}
+	});
+
+	test("k3-tai-loi giu gop y khi hoi lai loi: da co danh sach thi lan hoi lai hong khong xoa gop y", async () => {
+		let hong = false;
+		kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 2 }));
+		kho.troLy = () => {
+			if (hong) throw new TypeError("Failed to fetch");
+			return dsTroLy([D_DOI_TRONG, D_CAN]);
+		};
+		await dungSheet();
+		await cho(
+			() => nhom()?.getAttribute("data-nhom-kara") === "co-gop-y",
+			"co gop y",
+		);
+		hong = true;
+		await bamChuot(nut(m.de.boQua, deXuat(D_DOI_TRONG.id) ?? document.body));
+		await cho(() => goiCua("okr.troLyQuyet").length === 1, "da quyet");
+		await nhip(10);
+		kiemCa(
+			{
+				nhom: nhom()?.getAttribute("data-nhom-kara") ?? null,
+				conCan: deXuat(D_CAN.id) !== null,
+			},
+			{ nhom: "co-gop-y", conCan: true },
+			(k) => `hoi lai loi xoa gop y dang hien: ${k}`,
 		);
 	});
 });

@@ -30,6 +30,7 @@ export type NoiDungKara =
 	| "dang-doc"
 	| "rong"
 	| "loi"
+	| "tai-loi"
 	| "co-gop-y";
 
 export type DocLaiKara = "yen" | "dang-doc" | "loi";
@@ -216,9 +217,9 @@ export function useGopYMucTieu({
 	const maKetThuc = ds?.maKetThuc ?? null;
 
 	const noiDung: NoiDungKara = (() => {
-		if (!nhoDuoc || danhSach.isError || (ds?.lyDo ?? null) !== null)
-			return "tat";
-		if (ds === undefined) return "tat";
+		if (!nhoDuoc) return "tat";
+		if (danhSach.isError && ds === undefined) return "tai-loi";
+		if (ds === undefined || ds.lyDo !== null) return "tat";
 		if (tatCa.length > 0) return "co-gop-y";
 		if (!ghiDuoc) return "tat";
 		if (dangSoan && !quaHan) return "dang-doc";
@@ -351,6 +352,7 @@ export function useGopYMucTieu({
 		docLuc: ds?.docLuc ?? null,
 		ghiDuoc,
 		docLai,
+		taiLai: () => void danhSach.refetch(),
 		daTai: !coDich || !nhoDuoc || danhSach.isError || ds !== undefined,
 	};
 }

@@ -18,8 +18,9 @@ import {
 	ItemDescription,
 } from "@crm/ui/components/item";
 import { KaraLabel, KaraMark } from "@crm/ui/components/kara";
-import { useLocale } from "@crm/ui/components/locale-provider";
 import { KaraProposal } from "@crm/ui/components/kara/proposal";
+import { KaraState } from "@crm/ui/components/kara/state";
+import { useLocale } from "@crm/ui/components/locale-provider";
 import type {
 	ProposedChangeAction,
 	ProposedChangeDecided,
@@ -345,6 +346,17 @@ export function VungKara({
 			);
 		case "loi":
 			return <KhoiLoi gopY={gopY} laVung />;
+		case "tai-loi":
+			return (
+				<div data-nhom-kara="tai-loi">
+					<KaraState
+						kind="error"
+						what={m.vung.viecTai}
+						description={m.vung.taiLoiMoTa}
+						onRetry={gopY.taiLai}
+					/>
+				</div>
+			);
 		case "co-gop-y":
 			return (
 				<div className="flex flex-col gap-1" data-nhom-kara="co-gop-y">
