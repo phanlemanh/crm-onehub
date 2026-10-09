@@ -46,7 +46,8 @@ const loi = (cau) => {
 if (TRO_LY_OKR_SOAN.tuChoi !== LY_DO_TU_CHOI_NOP) loi("khong cung doi tuong: TRO_LY_OKR_SOAN.tuChoi khac LY_DO_TU_CHOI_NOP");
 
 const sao = co["ban-sao"] === "them-tap" ? banSao() : null;
-const rong = typeof co["goc-rong"] === "string" ? gocRong(co["goc-rong"]) : null;
+const tenRong = co["goc-rong"];
+const rong = tenRong && tenRong !== true ? gocRong(tenRong) : null;
 const nen = sao?.goc ?? ROOT;
 const literal = Object.values(LY_DO_TU_CHOI_NOP).map((v) => `"${v}"`);
 try {

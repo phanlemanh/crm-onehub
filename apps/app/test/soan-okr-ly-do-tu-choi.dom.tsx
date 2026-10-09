@@ -36,15 +36,15 @@ const CAU: BangCau = JSON.parse(
 	),
 );
 
-const TIEN_TO: Record<NgonNgu, string> = {
+const TIEN_TO = {
 	vi: "Kara nộp bản nháp chưa được — ",
 	en: "Kara could not submit the draft — ",
-};
+} satisfies Record<NgonNgu, string>;
 
-const CHI: Record<NgonNgu, string> = {
+const CHI = {
 	vi: "Kara nộp bản nháp chưa được",
 	en: "Kara could not submit the draft",
-};
+} satisfies Record<NgonNgu, string>;
 
 const CO_DAU =
 	/[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i;

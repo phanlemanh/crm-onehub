@@ -453,7 +453,9 @@ export function tatDongHoGia(): void {
 	dongHoGia = false;
 }
 
-const ngonNgu: { hien: "vi" | "en" } = { hien: "vi" };
+type NgonNguKhung = { hien: "vi" | "en" };
+
+const ngonNgu: NgonNguKhung = { hien: "vi" };
 
 export function datNgonNgu(l: "vi" | "en"): void {
 	ngonNgu.hien = l;
