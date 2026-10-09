@@ -5,7 +5,7 @@ slug: dien-thoai-ca-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T03:22:17Z
 design_doc: docs/superpowers/specs/2026-10-09-dien-thoai-ca-nhan-design.md
@@ -81,3 +81,12 @@ Known limits — anh chọn ở Cổng Bằng chứng 2026-10-09 (lượt trả 
 - Ngoài-6: Luật đọc số viết hai nơi (hàm và câu truy vấn); đổi một nơi mà quên nơi kia thì chống trùng hỏng lặng.
 - Ngoài-9: Gõ một đoạn số ngắn khớp hơn 500 người thì danh sách có thể thiếu người và tổng số sai, không có dấu hiệu bị cắt.
 - Ngoài-11: Bài kiểm «Kara không lộ số» chỉ bắt dạng số liền mạch; số lộ ra ở dạng có dấu cách hay +84 thì không bắt.
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-09 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 3:
+
+- Ngoài-1 (r3): Cách hiểu số điện thoại viết ở hai chỗ (hàm đọc số và câu so trùng); đổi luật một chỗ mà quên chỗ kia thì chặn trùng ngừng bắt số cũ mà không báo lỗi.
+- Ngoài-2 (r3): Gõ một đoạn số ngắn khớp hơn 500 người thì danh sách có thể thiếu người, tổng sai, người đã lưu trữ chiếm chỗ; danh sách đối tượng chiến dịch có thể lặp hoặc sót người mà không cảnh báo.
+- Ngoài-3 (r3): Câu đếm nhóm trùng số chạy tay trước khi gộp (`rang/dem-trung.sql`) chưa hiểu dạng «+84 0…», nên con số đọc trước khi lên thấp hơn thực tế; không ảnh hưởng người dùng.
+- Ngoài-4 (r3): Gõ dở một số bắt đầu bằng +84 vào ô tìm thì chưa ra ai cho tới khi gõ đủ số; gõ bắt đầu bằng 0 thì ra sau vài chữ số.
+- Ngoài-5 (r3): Ma trận kiểm «mảnh số để tìm» chưa có dòng cho dạng «+84 0…»; hành vi đúng nhưng phép kiểm không bắt được nếu sau này hỏng.
+- Ngoài-6 (r3): Câu đếm nhóm trùng số là bản chép tay luật cũ, không rút từ hàm thật.
