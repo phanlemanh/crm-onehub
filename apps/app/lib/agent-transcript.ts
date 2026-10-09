@@ -254,6 +254,9 @@ export function toTranscript(
 							errorText: errorTextOf(part),
 							failed: state === "output-error",
 							tone: outcomeTone(part),
+							...(outcome(part)?.skipped === true
+								? { skipped: true as const }
+								: {}),
 							pending:
 								state === "input-streaming" ||
 								state === "input-available" ||
@@ -303,6 +306,7 @@ export function outcomeTone(part: EveMessagePart): Tone {
 	const result = outcome(part);
 	if (!result) return "neutral";
 
+	if (result.skipped === true) return "neutral";
 	if (result.applied === true || result.written === true) return "success";
 	if (result.stored === false || result.written === false) return "warning";
 
