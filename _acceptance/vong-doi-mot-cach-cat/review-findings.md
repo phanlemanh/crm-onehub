@@ -1,61 +1,51 @@
-# Review findings: vong-doi-mot-cach-cat (round 1)
+# Review findings: vong-doi-mot-cach-cat (round 2)
 
 ## Trong hợp đồng
 
-- **Shape 4 (negative assertion alone): E6's per-cell check cannot see the deal stage menu opening, because it never counts [role=menu]**
+- **Undo after a partial bulk archive always ends in a red error toast showing the raw server message**
+  file: `apps/app/app/(app)/[slug]/companies/companies-bulk-actions.tsx:105`
+  severity: medium
+  AC: AC-1
+  source: bugs
+  detail: `onHoanTac: () => hoanTac.mutate({ ids: variables.ids })` sends back every id that was submitted, including the ones the server already rejected. The same code is in contacts-bulk-actions.tsx and deals-bulk-actions.tsx. On the server, `archive()` only fails on NotFound: it uses `updateMany`, then `findUniqueOrThrow`, then `translate`. That means `restore(id)`, which calls `db.company.update({ where: { id } })`, fails on that same id with NotFound. `runBulk` then returns `failed >= 1` with `message = "No company with id …"`. The undo's `onSuccess` passes that result to `reportBulk`, and because `failed > 0` it calls `toast.error(leftAlone(..., ' — No company with id …'))`. So in the partial case that AC-1 describes ("some records left alone, Undo still offered"), clicking Undo restores every archived record correctly but still shows a red toast. That toast includes the raw server message, which AC-2 forbids, instead of the expected «Đã khôi phục …». The API spec confirms the server result: in the second test, `bulkRestore([id, gia])` on the server does fail 1, but the test never checks its result. The DOM test vdc-hoan-tac-loat (case `mot-phan`) hides the problem by mocking `bulkRestore` to return `3/0`, a result the server cannot produce for an id that failed archive. AGENTS.md says a fixture must not describe data that cannot exist. Possible fixes: restore only ids that were actually archived (needs ids back from the API), or treat `failed` on the undo path as expected and report only `succeeded`.
+  Lý do vào hợp đồng: AC-1 nêu đúng trường hợp lưu trữ một phần rồi bấm Hoàn tác phải báo «Đã khôi phục …»; finding cho thấy trường hợp đó ra toast đỏ kèm thông điệp thô (đụng cả AC-2).
+
+- **Hình dạng 4 (âm-tính-một-mình): E12 bước 1 kiểm «updatedAt không đổi» sau khi chỉ bấm ô, và không có thoả thuận đang dùng làm đối chứng**
+  file: `_acceptance/vong-doi-mot-cach-cat/rang/man.mjs:235`
+  severity: medium
   AC: AC-4
-  file: `apps/app/test/vong-doi-mot-cach-cat.dom.tsx:599`
-  severity: high
   source: measurement
-  detail: soChoMo() (line 599) counts only `input:not([type=hidden]), textarea, [role=listbox], [role=dialog]...`. The "__giai-doan__" cell (timO, line 577) is the DealStageMenu button. DealStageMenu is a DropdownMenu (apps/app/components/crm/stage-change.tsx:71), and when it opens it renders [role=menu], which soChoMo does not count. That button also sits outside the tabpanel, so demChoSua's bat===0 check (line 840) does not cover it. The assertion `soChoMo() === moTruoc` at line 831 is a negative check with no positive control: nowhere does the test click the same cell on a non-archived deal and confirm that soChoMo goes up. The stage cell therefore passes even if the stage menu still opens on an archived deal. That is one of the 15 cells counted by expect(o.length).toBe(15).
-  Lý do thuộc hợp đồng: AC-4 nêu rõ menu giai đoạn trên đầu ngăn thoả thuận phải tắt; phép đo hiện không thấy menu đó mở, nên tiêu chí chưa được chứng minh.
+  detail: Trong `kiemNgan` (dòng 162-236), mỗi ô tên và mô tả chỉ nhận một cú `t.mouse.click(r.x, r.y)`, không gõ, không blur, không Enter. Sau đó dòng 231-235 so `updatedAt` trong db với giá trị lúc gieo. Bấm thuần không ghi gì xuống db ngay cả khi ô sửa được, nên assert này luôn đạt và không đo được lời hứa «không gọi lệnh cập nhật». Kiểm «bấm không mở input/textarea/listbox» (dòng 225-228) cũng âm tính một mình: script không bấm cùng ô trên một thoả thuận đang dùng để thấy chỗ sửa có mở. Chiều đỏ duy nhất được ghim (`--chieu-do` -> «man: khong thay dai luu tru») chỉ chạm vào dải báo, không chạm vào hai assert này.
+  Lý do vào hợp đồng: phép đo màn thật cho lời hứa «không mở chỗ sửa, không gọi cập nhật» của AC-4 chỉ bấm suông và không có đối chứng dương, nên không chứng minh được AC-4.
 
-- **Shape 4 (negative assertion alone): the "Xoá vĩnh viễn" button is checked only as "not equal to 'Xoá'/'Delete'", not pinned to the promised string, and (d) has no English case**
-  AC: AC-6
-  file: `apps/app/test/vong-doi-mot-cach-cat.dom.tsx:957`
-  severity: medium
+- **Hình dạng 3 (assert có-mặt thay cho quan hệ trước/sau): E12 bước 2 chỉ kiểm tên thoả thuận đã cất có mặt sau khi bấm, không kiểm nó vắng mặt trước khi bấm**
+  file: `_acceptance/vong-doi-mot-cach-cat/rang/man.mjs:278`
+  severity: low
+  AC: AC-5
   source: measurement
-  detail: E8 promises the confirm button reads "Xoá vĩnh viễn" (en "Delete forever"). The test finds the button by the message key itself (`nutCo(c.bulkMenu.confirmDelete, hop)`), which is self-referential, and then only asserts `c.bulkMenu.confirmDelete !== (locale === "vi" ? "Xoá" : "Delete")`. Any other text, such as "Xoá luôn" or an empty string, passes. RecordActions (d) at line 997 is the same: `nutCo(VI.sheet.confirmDeleteForever, hop)` looks the button up by the message key and never compares it with "Xoá vĩnh viễn". The test also runs (d) only in vi, while the contract requires (c) and (d) in en ("Delete forever"). The bulk dialog (c) is never checked for "the consequence text for each record type" (only (d) checks the consequence text). (b) is also negative only: archivedNote/archiveBody "do not contain ẩn/hidden", with no positive pin.
-  Lý do thuộc hợp đồng: AC-6 ghim nút xác nhận là «Xoá vĩnh viễn» / «Delete forever» và hộp phải nêu hậu quả; phép kiểm không ghim đúng chữ và thiếu ca tiếng Anh.
-
-- **Shape 4 (negative assertion alone): the non-archived control in E5 asserts the banner is absent without waiting for the sheet to load the record**
-  AC: AC-3
-  file: `apps/app/test/vong-doi-mot-cach-cat.dom.tsx:738`
-  severity: medium
-  source: measurement
-  detail: In the `!daCat` branch, right after moNgan (which only waits nhip(10)), the test runs `expect(document.querySelector("[data-dai-luu-tru]") === null).toBe(true)`. Nothing shows the sheet has rendered the record (record name, active tabpanel, or the byId call count). If the sheet is still loading, renders an error, or renders nothing, the "no banner" assertion still passes. The archived branch waits with cho, but this branch has no positive witness, so the 3 "dang-dung" cells in the 6-cell matrix are not real controls.
-  Lý do thuộc hợp đồng: AC-3 nói bản ghi đang dùng không có dải báo; phép kiểm đối chứng có thể đúng khi ngăn chưa tải xong nên không chứng minh được vế này.
-
-- **Shape 3 (asserting presence when the promise is a relation): E15 checks that baoDaLuuTru/baoLuuTruLoat appears anywhere in the file, not that it is called in the archive mutation's onSuccess**
-  AC: AC-1
-  file: `_acceptance/vong-doi-mot-cach-cat/rang/duong-luu-tru.mjs:28`
-  severity: medium
-  source: measurement
-  detail: The script promises that every archive call site has Undo. GOI_LUU_TRU and CO_HOAN_TAC are tested separately against the whole file (line 58: `hoanTac: CO_HOAN_TAC.test(noiDung)`), so the script only checks that both strings exist in the same file. It does not check the relation "the bulkArchive/archive mutationOptions onSuccess calls baoLuuTruLoat/baoDaLuuTru". A file whose archive still uses bare reportBulk would pass whenever another place in the file (for example another mutation or a helper) has `baoLuuTruLoat(`. The --chieu-do only tests the case where the whole file lacks the string, so this gap is never driven red.
-  Lý do thuộc hợp đồng: AC-1 đòi mọi đường lưu trữ (kể cả từ menu ngăn) có Hoàn tác; script chỉ thấy chuỗi xuất hiện đâu đó trong tệp, không chứng minh đúng đường lưu trữ gọi nó.
-
-- **Shape 3 (asserting presence when the promise is a transition): step 5 of man.mjs checks "3 rows back in the table" with a condition that was already true before archiving**
-  AC: AC-1
-  file: `_acceptance/vong-doi-mot-cach-cat/rang/man.mjs:386`
-  severity: medium
-  source: measurement
-  detail: E12 step 5 promises that after clicking «Hoàn tác» the 3 rows come back into the table, which is a removed-then-returned transition. The script waits for `tbody tr >= 3` before archiving (line 347) and waits for the same condition again after Undo (lines 386-391). It never records that the rows left the table after archiving. If the table never removed the rows on archive and never refreshed after restore, the step still passes. The DB check `conCat === 0` proves the server restored the records, not that the UI refreshed.
-  Lý do thuộc hợp đồng: AC-1 đòi sau Hoàn tác các bản ghi hiện lại ở danh sách mặc định; điều kiện chờ đã đúng từ trước khi lưu trữ nên không chứng minh được việc biến mất rồi hiện lại.
+  detail: Lời hứa của AC-5/E12 là bấm «Đã lưu trữ» thì màn chuyển từ Kanban (không có bản đã cất) sang danh sách đã lưu trữ. Dòng 273-279 chỉ `choThay(document.body.innerText.includes(deal.name))` sau khi bấm, cộng thêm kiểm URL có archived=true. Script không đo tên đó vắng mặt trên Kanban trước khi bấm. Vì vậy một hồi quy làm Kanban hiện cả bản đã cất, hoặc làm nút chỉ đổi URL mà màn không đổi, vẫn qua được phần «bang hien thoa thuan da cat».
+  Lý do vào hợp đồng: AC-5 hứa bấm nút thì màn chuyển từ Kanban sang danh sách đã lưu trữ; phép đo chỉ kiểm trạng thái sau nên chưa chứng minh được sự chuyển đó.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **The archived-record banner (DaiLuuTru) and read-only lock (KhoaLuuTru) are built inside apps/app instead of packages/ui**
+- **KhoaLuuTru disables the retry and record-opening buttons in an archived record's detail tab**
+  Người dùng thấy gì: Khi mở một bản ghi đã lưu trữ, nút «Thử lại» (khi một vùng tải lỗi) và các nút mở sang thoả thuận hay kế hoạch liên quan đều bị tắt, nên người dùng không thử tải lại hay đi sang bản ghi liên quan được cho tới khi khôi phục bản ghi.
+  file: `apps/app/components/crm/record-sheet/record-actions.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (assert có-mặt thay cho quan hệ): vdc-kanban ghi «cùng vị trí» ở dạng bảng nhưng chỉ kiểm nút có mặt**
+  Người dùng thấy gì: Nút «Đã lưu trữ» có mặt ở cả dạng bảng và Kanban, nhưng chưa có phép kiểm nào bảo đảm nó nằm cùng chỗ ở hai dạng, nên sau này nút có thể lệch vị trí mà không ai hay.
+  file: `apps/app/test/vong-doi-mot-cach-cat.dom.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **The archived-record banner (DaiLuuTru) and read-only lock (KhoaLuuTru) are built inside apps/app instead of packages/ui (r1)**
   Người dùng thấy gì: Người dùng vẫn thấy dải báo «Đã lưu trữ» và nút Khôi phục đúng như hứa. Nhưng loại bản ghi tiếp theo cần dải báo này sẽ phải chép lại hoặc chui vào thư mục của CRM, nên giao diện dễ lệch nhau theo thời gian.
   file: `apps/app/components/crm/record-sheet/record-actions.tsx`
   severity: medium
   Đề xuất: new-contract
-
-- **Shape 3 (asserting presence when the promise is a relation): the "view=table" control in E7 checks only that the button exists, not that it is in "the same position"**
-  Người dùng thấy gì: Nút «Đã lưu trữ» ở dạng bảng có thể nằm lệch chỗ so với dạng Kanban, nên đôi khi người dùng phải nhìn quanh một chút để tìm. Nút vẫn có mặt và bấm được ở cả hai dạng.
-  file: `apps/app/test/vong-doi-mot-cach-cat.dom.tsx`
-  severity: low
-  Đề xuất: wont-fix
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
