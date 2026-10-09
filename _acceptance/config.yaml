@@ -1462,7 +1462,7 @@ executors:
     dt_man_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t goi-y-moi-gioi'
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
     dpv_ma_lech: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t ma-lech"'
-    dpv_mach_lien: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t mach-lien-ghi && cd ../agent && bun test test/dieu-phoi-va.spec.ts -t mach-lien-doc"'
+    dpv_mach_lien: 'bun run test -- "cd apps/api && DPV_MACH_LIEN=1 bun test test/dieu-phoi-va.spec.ts -t mach-lien-ghi && cd ../agent && DPV_MACH_LIEN=1 bun test test/dieu-phoi-va.spec.ts -t mach-lien-doc"'
     dpv_nhan_lo: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t nhan-lo"'
     dpv_khong_trung: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t khong-trung"'
     dpv_dong_som: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t dong-som"'

@@ -135,8 +135,9 @@ evals:
       - "apps/api/test/dieu-phoi-va.spec.ts"
     expected: |
       dieu-phoi-va.spec.ts (api) describe "bo-phan-hong": goi router onboarding.addStep that voi (a) departmentId khong co that,
-      (b) bo phan archivedAt khac null. Moi ca: TRPCError code BAD_REQUEST (khong INTERNAL_SERVER_ERROR), thong diep chua
-      chu "bộ phận", so OnboardingStep cua ke hoach khong doi. Doi chung duong: bo phan dang dung -> buoc duoc ghi.
+      (b) bo phan archivedAt khac null. Moi ca: loi BAD_REQUEST (khong INTERNAL_SERVER_ERROR), thong diep nem ma (ca a) hoac
+      ten (ca b) cua bo phan — dung thong diep san co TO_CHUC.thongDiep.khongCoBoPhan / ONBOARDING.thongDiep.boPhanDaLuuTru,
+      so OnboardingStep cua ke hoach khong doi. Doi chung duong: bo phan dang dung -> buoc duoc ghi.
       CHIEU DO: ban sao bo kiem bo phan -> ca (b) do voi thong diep ghim "addStep ghi buoc vao bo phan da luu tru".
 
   - id: E6b
