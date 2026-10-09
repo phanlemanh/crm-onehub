@@ -66,7 +66,7 @@ evals:
     paths:
       - "_acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs"
     expected: |
-      node rang/do-7-ngay.mjs --nhanh thu/ci-tach-job: doc moi luot ci.yml cua nhanh qua gh api; luot xanh = luot co job
+      bun rang/do-7-ngay.mjs --nhanh thu/ci-tach-job: doc moi luot ci.yml cua nhanh qua gh api; luot xanh = luot co job
       ci-ok success; job dai nhat = max(completed_at - started_at) tren cac job cua luot; huy vi tran = job cancelled
       co thoi luong >= timeout-minutes - 1 phut cua chinh job do; < 10 luot xanh -> in «chua du mau», khong ket luan
       SONG. Tren hai luot that cua #323 in: 2 luot xanh, job dai nhat 9,8 va 11,0 phut, 0 huy vi tran, «chua du mau»,

@@ -109,5 +109,6 @@ jobs:
     if: always()
     needs: [check, test]
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
     steps:
       - run: test "${{ needs.check.result }}" = success && test "${{ needs.test.result }}" = success
