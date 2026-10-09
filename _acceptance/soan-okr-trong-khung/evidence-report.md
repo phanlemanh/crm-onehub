@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f57ec5186e85e392f587f36832f282f3039567fe
+verified_commit: ffbcd4c2843f0985ccbe28d528c5a84748b7ed31
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -289,3 +289,7 @@ none — every multi-run eval is uniform
 
 Round 1: E11 đỏ — ô hội đồng 1024 tối báo lỗi hydration trong console; bốn phát hiện đo lường trong hợp đồng (AC-2, AC-7, AC-10, AC-13) được ghi. Quay lại triển khai.
 Round 2: mọi eval máy xanh trên cây đã ghim sau commit sửa nhãn một tên Kara ở đầu cột; E12 đề xuất PASS với ba lăng kính cùng PASS; E2b giữ nguyên từ round 1 vì delta không chạm paths của nó.
+
+### Re-pin lần 1 — 2026-10-09, do đỉnh nhánh sau gộp onehub a9e8bc75 và chữ ký Cổng 2 soan-okr-trong-khung
+run_id: repin-20261009T144916Z-54940
+sha: ffbcd4c2843f0985ccbe28d528c5a84748b7ed31 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2b, E3, E4, E6, E7b, E8, E11, E12 (E12 không khai paths), E14 · AC không có chốt máy: AC-4, AC-6, AC-8, AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

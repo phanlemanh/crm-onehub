@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: f37104535f3dcb6b176e86498a24195038dc59f5
+verified_commit: ffbcd4c2843f0985ccbe28d528c5a84748b7ed31
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -405,3 +405,7 @@ sha: 84792891f23f46ceb07e09290105f2a29b9b2616 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-08, do K2b soan-okr-khong-lac đổi khoá tab của trang soạn (răng man và bài kiểm của K2, P1-28), sửa neo E13b (P1-31) và gộp onehub 9bc9e3d2
 run_id: repin-20261008T171917Z-85132
 sha: f37104535f3dcb6b176e86498a24195038dc59f5 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E1b, E2, E8c, E9b, E10c, E11b, E12b, E14, E15 (E15 không khai paths) · diff chạm vật đo ngoài làn máy: E1b, E2, E8c, E9b, E10c, E11b, E12b, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-09, do đỉnh nhánh sau gộp onehub a9e8bc75 và chữ ký Cổng 2 soan-okr-trong-khung
+run_id: repin-20261009T144916Z-54940
+sha: ffbcd4c2843f0985ccbe28d528c5a84748b7ed31 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E2b, E3 · thay bởi hồ sơ đã ký: E1→soan-okr-trong-khung#AC-1, E2b→soan-okr-trong-khung#AC-3, E3→soan-okr-trong-khung#AC-5 · ngoài làn máy: E1b, E2, E8c, E9b, E10c, E11b, E12b, E14, E15 (E15 không khai paths) · diff chạm vật đo ngoài làn máy: E1b, E2, E8c, E9b, E10c, E11b, E12b, E14 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3, AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
