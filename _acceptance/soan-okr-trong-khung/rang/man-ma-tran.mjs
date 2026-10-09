@@ -148,6 +148,7 @@ async function mot(id, st, cuoc, rong, nen, doDo, dem) {
 			loiConsole.length > 0 ? `console loi — ${loiConsole[0].slice(0, 160)}` : null,
 		].filter((x) => x !== null);
 		const so1 = `khung ${h.slot ?? "-"} ${so(h.khung?.rong)}x${so(h.khung?.cao)} · hoi ${so(h.hoi?.rong)} · nhap ${so(h.nhap?.rong)}`;
+		for (const dong of loiConsole) ghi(`      console nguyen van: ${dong.slice(0, 4000)}`);
 		if (loi.length === 0) ghi(`   ${id} ${rong} ${nen}: dat (${so1})`);
 		else saiThem(`   ${id} ${rong} ${nen}: ${loi.join(" · ")} (${so1})`);
 		if (!thay) ghi(`      dang hien: ${await t.p.evaluate(() => `${location.pathname}${location.search} · ${(document.body.innerText ?? "").replace(/\s+/g, " ").slice(0, 200)}`)}`);
@@ -164,11 +165,16 @@ async function mot(id, st, cuoc, rong, nen, doDo, dem) {
 	}
 }
 
+const CHI_ST = process.env.SK_CHI_ST ?? null;
+const LAP = Number(process.env.SK_LAP ?? "1");
+
 async function chup(id, st, cuoc, doDo, dem) {
-	for (const rong of KHO) {
-		if ((VO_NGHIA[id] ?? []).includes(rong)) continue;
-		for (const nen of MAN.nen) await mot(id, st, cuoc, rong, nen, doDo, dem);
-	}
+	if (CHI_ST && CHI_ST !== id) return;
+	for (let lan = 0; lan < LAP; lan += 1)
+		for (const rong of KHO) {
+			if ((VO_NGHIA[id] ?? []).includes(rong)) continue;
+			for (const nen of MAN.nen) await mot(id, st, cuoc, rong, nen, doDo, dem);
+		}
 }
 
 async function lamMoi(t, cuocId) {

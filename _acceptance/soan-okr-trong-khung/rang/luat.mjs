@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -12,7 +12,12 @@ const KHU_KHONG_SO = [`${SOAN}/`, "apps/app/components/crm/record-sheet/"];
 const BE_NGANG_SO = /\b(?:w|min-w|max-w)-\[\d+px\]|width:\s*["']?\d+(?:px)?/;
 const THAY_K2 = ["E1", "E1b", "E2", "E2b", "E3", "E14"];
 const CON_TRO = /^soan-okr-trong-khung#AC-\d+$/;
-const CHU_MUC = ["phải", "trái", "Soạn OKR", "K5"];
+const QUAN_HE_MUC = [
+	{ ten: "Kara o cot phai", re: /Kara ở (?:\*\*)?cột phải/ },
+	{ ten: "vat pham mo them ve ben trai", re: /mở\s+(?:\*\*)?thêm về bên trái/ },
+	{ ten: "ap cho Soan OKR", re: /Đang áp:\s*Soạn OKR/ },
+	{ ten: "khung deal o K5", re: /K5/ },
+];
 
 const git = (...thamSo) =>
 	execFileSync("git", thamSo, { cwd: goc, encoding: "utf8", maxBuffer: 64e6 });
@@ -85,10 +90,10 @@ export function muc5(aiUx) {
 	const sau = aiUx.slice(dau + 3);
 	const cuoi = sau.search(/^## /m);
 	const than = cuoi < 0 ? sau : sau.slice(0, cuoi);
-	const thieu = CHU_MUC.filter((c) => !than.includes(c));
+	const thieu = QUAN_HE_MUC.filter((q) => !q.re.test(than)).map((q) => q.ten);
 	return thieu.length === 0
 		? null
-		: `muc 5: muc kara o dau thieu chu ${thieu.join(", ")}`;
+		: `muc 5: muc kara o dau thieu ${thieu.join(", ")}`;
 }
 
 export function muc6(evalsK2) {
@@ -120,7 +125,11 @@ function dongThemTuDiff(diff) {
 	let tep = "";
 	for (const dong of diff.split("\n")) {
 		if (dong.startsWith("+++ b/")) tep = dong.slice(6);
-		else if (dong.startsWith("+") && !dong.startsWith("+++"))
+		else if (
+			dong.startsWith("+") &&
+			!dong.startsWith("+++") &&
+			tep.endsWith(".tsx")
+		)
 			ra.push({ tep, chu: dong.slice(1) });
 	}
 	return ra;
@@ -133,8 +142,7 @@ function docVatThat() {
 		"-U0",
 		nen,
 		"--",
-		...KHU_KHONG_SO.map((k) => `${k}*.tsx`),
-		`${SOAN}/**/*.tsx`,
+		...KHU_KHONG_SO.map((k) => `:(literal)${k}`),
 	);
 	const tepDiff = git("diff", "--name-only", nen).split("\n").filter(Boolean);
 	const tepMoi = git(
@@ -154,9 +162,10 @@ function docVatThat() {
 					.pop()
 					.replace(/\.tsx$/, "")}`,
 		);
-	const tepSoan = git("ls-files", "--", `${SOAN}/`)
+	const tepSoan = git("ls-files", "--", `:(literal)${SOAN}/`)
 		.split("\n")
 		.filter((t) => /\.tsx?$/.test(t));
+	if (tepSoan.length === 0) throw new Error("khong doc duoc tep nao trong khu soan");
 	const nguonSoan = tepSoan.map((t) => ({ tep: t, chu: doc(t) }));
 	return {
 		dongThem: dongThemTuDiff(diff),
@@ -186,37 +195,51 @@ function kiem(v) {
 	];
 }
 
-const v = docVatThat();
+function suaTam(tep, doi, lam) {
+	const duong = join(goc, tep);
+	if (git("status", "--porcelain", "--", `:(literal)${tep}`).trim() !== "") {
+		console.log(`tu-thu tu choi: ${tep} dang co thay doi chua commit`);
+		process.exit(2);
+	}
+	const cu = readFileSync(duong, "utf8");
+	try {
+		writeFileSync(duong, doi(cu));
+		return lam();
+	} finally {
+		writeFileSync(duong, cu);
+	}
+}
+
 if (tuThu) {
 	const ca = [
 		{
-			ten: "be ngang so",
-			doi: {
-				...v,
-				dongThem: [
-					...v.dongThem,
-					{ tep: `${SOAN}/khung-soan.tsx`, chu: '<div className="w-[380px]">' },
-				],
-			},
+			ten: "be ngang so trong khu soan",
+			tep: `${SOAN}/khung-soan.tsx`,
+			doi: (cu) => `${cu}\nexport const PHA = <div className="w-[380px]" />;\n`,
 			cho: "muc 1: be ngang so o cho goi",
 		},
 		{
 			ten: "bo luat kara o dau",
-			doi: {
-				...v,
-				aiUx: v.aiUx.replace(/^##[^\n]*Kara ở đâu/m, "## 11. Khác"),
-			},
+			tep: "docs/ai-ux.md",
+			doi: (cu) => cu.replace(/^##[^\n]*Kara ở đâu/m, "## 11. Khác"),
 			cho: "muc 5: thieu luat kara o dau",
 		},
 		{
+			ten: "doi Kara sang cot trai",
+			tep: "docs/ai-ux.md",
+			doi: (cu) => cu.replace("Kara ở **cột phải**", "Kara ở **cột trái**"),
+			cho: "muc 5: muc kara o dau thieu Kara o cot phai",
+		},
+		{
 			ten: "tep ngoai ranh",
-			doi: { ...v, tepDiff: [...v.tepDiff, "apps/api/src/okr/okr.router.ts"] },
+			tep: "apps/api/src/okr/okr.router.ts",
+			doi: (cu) => `${cu}\n`,
 			cho: "ranh gioi: ngoai ranh",
 		},
 	];
 	let sai = 0;
 	for (const c of ca) {
-		const loi = kiem(c.doi).filter(Boolean);
+		const loi = suaTam(c.tep, c.doi, () => kiem(docVatThat()).filter(Boolean));
 		const dat = loi.some((l) => l.startsWith(c.cho));
 		console.log(
 			`tu-thu ${c.ten}: ${dat ? "do dung" : "KHONG DO"} — ${loi.join(" | ")}`,
@@ -226,6 +249,7 @@ if (tuThu) {
 	process.exit(sai === 0 ? 1 : 3);
 }
 
+const v = docVatThat();
 const loi = kiem(v);
 const ten = ["muc 1", "muc 2", "muc 3", "muc 4", "muc 5", "muc 6", "ranh gioi"];
 for (const [i, l] of loi.entries()) console.log(l ?? `${ten[i]}: dat`);

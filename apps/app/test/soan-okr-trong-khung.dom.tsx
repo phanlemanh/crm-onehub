@@ -74,6 +74,10 @@ function banGhiCuoi(): string | null {
 	return chuoi === undefined ? null : new URLSearchParams(chuoi).get("record");
 }
 
+function daBoRecord(truoc: number): boolean {
+	return urlDoi.length > truoc && banGhiCuoi() === null;
+}
+
 function datQuyen(): void {
 	dat("okr.access", () => ({
 		canManageProgram: false,
@@ -227,13 +231,20 @@ describe("sk-record", () => {
 		expect(q("[data-slot=sheet-content]")).toBeNull();
 	});
 
-	test("recordHref của soan trỏ Theo đơn vị mang record", () => {
+	test("recordHref của soan mở được khung soạn khi dùng làm địa chỉ", async () => {
 		const u = new URL(
-			recordHref("ws", "/okr/theo-don-vi", "soan", "cuoc-1"),
+			recordHref("ws", "/okr/theo-don-vi", "soan", CUOC.id),
 			"http://x",
 		);
 		expect(u.pathname).toBe("/ws/okr/theo-don-vi");
-		expect(u.searchParams.get("record")).toBe("soan:cuoc-1");
+		await moKhungBanGhi(u.search.slice(1));
+		await cho(() => q("[data-slot=sheet-header]") !== null, "dau khung");
+		expect(q("[data-slot=sheet-content]")?.getAttribute("data-size")).toBe(
+			"kara",
+		);
+		expect(q("[data-slot=sheet-header]")?.textContent).toContain(
+			m.trang.tieuDe,
+		);
 	});
 
 	test("mở trên trang Thoả thuận: khung soạn hiện ngay đó", async () => {
@@ -243,17 +254,18 @@ describe("sk-record", () => {
 		expect(q("[data-slot=sheet-header]")?.textContent).toContain(
 			m.trang.tieuDe,
 		);
-		expect(dinhVi.duong).toBe("/ws/deals");
+		expect(`roi trang: ${diTrang.length}`).toBe("roi trang: 0");
 	});
 
 	test("đóng khung khi Kara rảnh: bỏ record, đường giữ nguyên", async () => {
 		dinhVi.duong = "/ws/deals";
 		await moKhungBanGhi("record=soan:cuoc-1");
 		await cho(() => nutDong() !== null, "nut dong");
+		const truoc = urlDoi.length;
 		await act(async () => nutDong()?.click());
 		await nhip(5);
-		expect(banGhiCuoi()).toBeNull();
-		expect(dinhVi.duong).toBe("/ws/deals");
+		expect(`bo record: ${daBoRecord(truoc)}`).toBe("bo record: true");
+		expect(`roi trang: ${diTrang.length}`).toBe("roi trang: 0");
 	});
 
 	test("đếm ô sk-record", () => {
@@ -427,14 +439,15 @@ describe("sk-dong", () => {
 			await nhip(5);
 			expect(hop()?.textContent).toContain(m.trang.hoiDong.tieuDe);
 			expect(hop()?.textContent).toContain(m.trang.hoiDong.than);
-			await bam(nut(m.trang.hoiDong.thoi));
+			await bam(nut(m.trang.hoiDong.thoi, hop() ?? document.body));
 			expect(hop()).toBeNull();
 			expect(q("[data-slot=sheet-content]")).not.toBeNull();
 			await act(async () => nutDong()?.click());
 			await nhip(5);
-			await bam(nut(m.trang.hoiDong.nut));
+			const truoc = urlDoi.length;
+			await bam(nut(m.trang.hoiDong.nut, hop() ?? document.body));
 			await nhip(5);
-			expect(banGhiCuoi()).toBeNull();
+			expect(`bo record: ${daBoRecord(truoc)}`).toBe("bo record: true");
 			expect(`dong khung dung luot: ${daDung}`).toBe("dong khung dung luot: 0");
 		});
 	}
@@ -442,12 +455,13 @@ describe("sk-dong", () => {
 	for (const cach of ["ra-ngoai", "esc", "nut-dong"] as const) {
 		test(`Kara rảnh × ${cach}`, async () => {
 			await moKhiSoan(false);
+			const truoc = urlDoi.length;
 			if (cach === "ra-ngoai") await bamLopPhu();
 			else if (cach === "esc") await esc();
 			else await act(async () => nutDong()?.click());
 			await nhip(5);
 			expect(hop()).toBeNull();
-			expect(banGhiCuoi()).toBeNull();
+			expect(`bo record: ${daBoRecord(truoc)}`).toBe("bo record: true");
 		});
 	}
 
