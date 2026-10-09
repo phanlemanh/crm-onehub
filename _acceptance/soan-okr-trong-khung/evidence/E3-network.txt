@@ -1,0 +1,1 @@
+network: driver la man.mjs (Playwright noi bo qua mot-luot.sh), khong co duong doc network tu tool; khong ghi duoc

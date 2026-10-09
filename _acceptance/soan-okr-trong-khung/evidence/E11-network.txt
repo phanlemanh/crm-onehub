@@ -1,0 +1,2 @@
+Driver: man.mjs (playwright script, phien-do tu dung/tu don). Khong co duong doc network tu tool nay -> networkObserved = n-a (driver).
+Console error duy nhat do script bat: ST-khung-hoi-dong 1024 dark: Hydration failed because the server rendered HTML did not match the client.
