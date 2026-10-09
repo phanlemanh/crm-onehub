@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 974cb5c9d124edfd9075889ea3578be545d8cf79
+verified_commit: c6a618f3590f9d509aea22edf67aa7b1af36ccf4
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -316,3 +316,7 @@ none — every multi-run eval is uniform (moi eval chay 1 lan, khong eval nao co
 Round 1: E17 failed (tim-bang-1440 bao DUNG nhung khung hinh cho thay bang chua loc: choDong thoa man ngay vi dong cua nguoi do da nam san tren trang chua loc, va goTim noi truy van thay vi thay the). E10 BLOCKED (cap nhay doi quanh bo loc -t trong lenh pinned bi zsh doc sai nen khong chay duoc ngan-chi-tiet). Returned to implementation.
 Round 2: 22 eval (E1-E21 va E2b) xanh, bay lenh suite xanh; E17 do lai sau khi sua goTim/choLocXong, anh cho thay mot hang duy nhat; E10 chay duoc ca hai lenh -t. Khong eval nao that bai. Verdict PASS.
 Round 3: sau khi doi luat doc so (so 0 trung ke sau +84, phan quoc noi khong bat dau bang 0) o commit da321bf5a, chay lai du 22 eval va bay lenh suite tren verified_commit moi: tat ca xanh, khong eval nao that bai. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-09, do hoá cũ do gộp onehub sau chữ ký (#330 kiem-cheo, package.json gốc)
+run_id: repin-20261009T051019Z-68477
+sha: c6a618f3590f9d509aea22edf67aa7b1af36ccf4 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E1, E16, E17, E18, E19, E20 · diff chạm vật đo ngoài làn máy: E1, E16, E17, E20 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
