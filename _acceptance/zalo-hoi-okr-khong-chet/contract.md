@@ -5,7 +5,7 @@ slug: zalo-hoi-okr-khong-chet
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T23:53:07Z
 design_doc: _acceptance/zalo-hoi-okr-khong-chet/design.md
