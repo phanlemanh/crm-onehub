@@ -20,7 +20,7 @@ trên nhánh này trước khi gộp.
 
 ## Vòng chạy khi nào
 
-Chưa xếp đợt. Vòng chỉ bắt đầu khi chủ kho xếp nó vào một đợt sau 14/10 và crm đã nhận bộ kit 2.27 (bản
+Chưa xếp đợt. Vòng chỉ bắt đầu khi chủ kho xếp nó vào một đợt sau 14/10 và crm đã nhận bộ kit ≥ 2.26 (bản
 mang khối dữ liệu lộ trình, phanlemanh/acceptance-gate-kit#285).
 
 ## Đã đổi
