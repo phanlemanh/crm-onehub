@@ -79,6 +79,16 @@ export const LUAT_KHO_CAY = {
 			ten: "cach-ly-hai-agent",
 			thuMucTest: "test",
 		},
+		vongDoi: {
+			ten: "vong-doi",
+			schema: "packages/db/prisma/schema.prisma",
+			cotCat: ["archivedAt", "deletedAt"],
+			cotDanhDau: "archivedAt",
+			dinhDanhKiem: ["archivedAt", "archivedFilter"],
+			tienToList: "list",
+			hamDoc: "findMany",
+			hamXoa: ["delete", "deleteMany"],
+		},
 	},
 	nen: {
 		"khong-chu-thich": {
@@ -165,6 +175,15 @@ export const LUAT_KHO_CAY = {
 		"parse-o-bien": {
 			"packages/ui/src/components/markdown-reader.tsx": [
 				"properties?: Record<string, unknown>;",
+			],
+		},
+		"vong-doi": {
+			"packages/db/prisma/schema.prisma": ["model AgentDefinition {"],
+			"apps/api/src/agent/agent-definitions.service.ts": [
+				"const rows = await this.db.agentDefinition.findMany({",
+			],
+			"apps/api/src/fields/fields.service.ts": [
+				"await this.db.fieldDefinition.delete({ where: { id } });",
 			],
 		},
 		"hang-so-o-cau-hinh": {
