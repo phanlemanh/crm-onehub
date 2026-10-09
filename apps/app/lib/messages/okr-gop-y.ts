@@ -121,10 +121,13 @@ export type OkrGopYMessages = typeof vi;
 
 const en: OkrGopYMessages = {
 	vung: {
-		soCho: (n: string) => `${n} suggestions waiting`,
+		soCho: (n: string) =>
+			n === "1" ? "1 suggestion waiting" : `${n} suggestions waiting`,
 		daXemHet: "all suggestions reviewed",
 		lyDo: (soKr: string) =>
-			`Kara read the title, “why now” and ${soKr} KRs of this objective. Kara reads OKR data only.`,
+			soKr === "1"
+				? "Kara read the title, “why now” and 1 KR of this objective. Kara reads OKR data only."
+				: `Kara read the title, “why now” and ${soKr} KRs of this objective. Kara reads OKR data only.`,
 		moTaChuaGoi:
 			"Kara reads the title, “why now” and the KRs, then places each suggestion right under what it changes.",
 		nho: "Ask Kara for feedback",
@@ -188,9 +191,11 @@ const en: OkrGopYMessages = {
 		"trung-y": "two KRs say the same thing",
 		"muc-tieu-la-so": "the objective is a number",
 	},
-	chip: (n: string) => `${n} suggestions`,
+	chip: (n: string) => (n === "1" ? "1 suggestion" : `${n} suggestions`),
 	chipAria: (n: string, ten: string) =>
-		`Kara has ${n} suggestions waiting for “${ten}”, open details`,
+		n === "1"
+			? `Kara has 1 suggestion waiting for “${ten}”, open details`
+			: `Kara has ${n} suggestions waiting for “${ten}”, open details`,
 	danSang: {
 		moTaMucTieu: "Decide right under each KR.",
 		moTaKr: "Decide right under this KR.",
@@ -198,7 +203,10 @@ const en: OkrGopYMessages = {
 	},
 	loc: {
 		mat: "Kara suggestions",
-		coCho: (n: string) => `Has suggestions waiting · ${n}`,
+		coCho: (n: string) =>
+			n === "1"
+				? "Has a suggestion waiting · 1"
+				: `Has suggestions waiting · ${n}`,
 	},
 	dong: {
 		loai: {
