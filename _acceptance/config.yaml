@@ -1388,6 +1388,10 @@ executors:
     ctt_dom: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/okr-cua-toi-theo-doi.dom.tsx"
     cccl_mo_coi: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t mo-coi"
     cccl_ngoai_khoa: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t ngoai-khoa"
+    ccl_khoi_tasks: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tasks.integration.spec.ts -t 'a limited lock subquery'"
+    ccl_ca_that: bun run test -- "cd apps/agent && CRM_TELEMETRY_DISABLED=1 bun test test/tasks.integration.spec.ts -t 'still (retires|claims) exactly the limit'"
+    ccl_goi_dong_ho: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test --preload ../../_acceptance/ca-chap-chon-con-lai/rang/dong-ho-26.ts test/goi-soan.integration.spec.ts -t goiKiemTu"
+    ccl_id_trong_goi: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/goi-soan.integration.spec.ts -t id-trong-goi"
     cccl_cho_route: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t cho-route"
     kekt_ghi_tron: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t ghi-tron"
     kekt_hai_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t hai-luot"
@@ -2178,6 +2182,10 @@ executors:
     ctt_dot_bien: node _acceptance/okr-cua-toi-tach-theo-doi/rang/dot-bien.mjs
     cccl_mo_coi_xanh: bun _acceptance/ca-chap-chon-cach-ly/rang/mo-coi.mjs xanh
     cccl_mo_coi_do: bun _acceptance/ca-chap-chon-cach-ly/rang/mo-coi.mjs do
+    ccl_ma: bun _acceptance/ca-chap-chon-con-lai/rang/ma.ts
+    ccl_pham_vi: bun _acceptance/ca-chap-chon-con-lai/rang/pham-vi.mjs
+    ccl_dot_bien: bun _acceptance/ca-chap-chon-con-lai/rang/dot-bien.mjs
+    ccl_lap: bun _acceptance/ca-chap-chon-con-lai/rang/lap.mjs
     cccl_dot_bien: bun _acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs
     cccl_cong_tac: bun _acceptance/ca-chap-chon-cach-ly/rang/cong-tac.mjs
     cccl_pham_vi: bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs
