@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 1dda0fd83908c2316acaf479b407fc7fd23001f5
-human_signoff:
+human_signoff: "Phan Le Manh 2026-10-09 — ký Cổng 2 trên verdict PASS 4/4 eval (S4 vòng 2, wf_cfada493-e8d); Ngoài 1, 2, 3, 5, 7, 8, 9, 10, 11 ghi Known limits, Ngoài 4 và 6 chấp nhận không sửa; đồng ý cắt; phê hết Treo"
 ---
 
 # Evidence Report: luat-kho-vong-doi

@@ -5,7 +5,7 @@ slug: luat-kho-vong-doi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09
 design_doc: _acceptance/luat-kho-vong-doi/design.md
@@ -90,3 +90,13 @@ chối bản chưa lưu trữ; (3) vi phạm cũ của `AgentDefinition` vào n�
   đưa vi phạm đó vào nền. Điều kiện vào S4: bản sửa của P3 nằm trong HEAD; chưa có thì lượt chấm BLOCKED có tên «chờ bản
   sửa #321», không REJECT.
 - Ba câu vòng đời của `docs/vong-doi.md` không áp: vòng này không tạo loại bản ghi hay trạng thái kết thúc nào.
+- Known limit (Cổng 2, Ngoài-1, Ngoài-2): `paths` của E3 chưa có `packages/db/prisma.config.ts`; thêm biến `env(…)` mới
+  vào tệp đó thì bằng chứng cũ vẫn xanh trong khi job luật kho có thể đỏ ở bước cài.
+- Known limit (Cổng 2, Ngoài-3): E3 kiểm job khai đủ biến chứ không chạy thật bước cài; yêu cầu cài viết kiểu khác
+  (`process.env.X`, postinstall của gói khác) lọt qua.
+- Known limit (Cổng 2, Ngoài-5): `card-plain.json` của hồ sơ chứa HTML thay vì JSON diễn giải, thẻ duyệt hiện câu tiêu
+  chí bị cắt dở.
+- Known limit (Cổng 2, Ngoài-7, Ngoài-8): `rang/pha.mjs` và bộ tự gài của `do-cay.mjs` tính tổng từ chính số ô đã chạy;
+  xoá nhầm một ca thì vẫn báo đủ.
+- Known limit (Cổng 2, Ngoài-9, Ngoài-10): vài ô xanh của `rang/pha.mjs` và ô h1/h2 không có đối chứng dương ghim đúng ca.
+- Known limit (Cổng 2, Ngoài-11): E4 chỉ chứng minh chưa vượt trần, chiều đỏ khai ở `expected` không nằm trong lệnh.
