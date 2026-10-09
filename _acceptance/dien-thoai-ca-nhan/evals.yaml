@@ -82,9 +82,11 @@ evals:
       - "packages/validation/test/so-dien-thoai.spec.ts"
     expected: |
       so-dien-thoai.spec.ts: ma tran viet truoc, so assert = so phan tu.
-      describe "doc-so" 14 dong: "0901 234 567", "0901.234.567", "(+84) 901-234-567", "84901234567",
-        "+84901234567" -> ok "+84901234567"; "028 3812 3456" -> ok "+842838123456"; "+65 6123 4567" -> ok
-        "+6561234567"; "" va "   " -> rong; "abc", "12345", "0901 234 56", "+84 12", "1234567890123456" -> sai.
+      describe "doc-so" 18 dong: "0901 234 567", "0901.234.567", "(+84) 901-234-567", "84901234567",
+        "+84901234567", "+84 0901 234 567", "+84 (0) 901 234 567", "840901234567" -> ok "+84901234567";
+        "028 3812 3456" -> ok "+842838123456"; "+65 6123 4567" -> ok "+6561234567"; "" va "   " -> rong; "abc",
+        "12345", "0901 234 56", "+84 12", "1234567890123456", "00901234567" -> sai.
+      describe "so-quoc-noi": "+840901234567" (so tho cu co so 0 trung ke) -> "901234567", bang "+84901234567".
       describe "hien-so" 5 dong: "+84901234567" -> "0901 234 567"; "0901.234.567" (tho cu) -> "0901 234 567";
         "+842838123456" -> "028 3812 3456"; "+6561234567" -> "+6561234567"; "may le 123" (khong doc duoc) -> nguyen van.
       describe "manh-tim" 5 dong: "0901234567" -> "901234567"; "+84 901 234 567" -> "901234567"; "234 567" ->
@@ -151,10 +153,12 @@ evals:
       (db.contact.create, khong qua service) "0901.234.567". Ma tran 4 dong:
         1 create phone "+84 901 234 567" -> nem ConflictException, message chua ten A; dem ca nhan khong doi
         2 create phone "84901234567" -> Conflict
+        2b create phone "+84 0901 234 111" (so 0 trung ke) -> Conflict
         3 create phone "0901 234 568" (khac mot so) -> thanh cong (doi chung duong)
         4 luu tru A (archivedAt) roi create "+84901234567" -> thanh cong
+      Fixture them: A3 ghi thang phone tho "+84 0907 111 222"; create "0907 111 222" -> Conflict (SQL bo so 0 trung ke).
       CHIEU DO: ban sao caNhanTrungSo so bang chuoi tho thay vi so quoc noi -> dong 1 do voi thong diep ghim
-      "trung-tao: so tho cu phai chan".
+      "trung-tao: so tho cu phai chan"; ban sao SQL khong bo so 0 trung ke -> dong A3 do.
 
   - id: E9
     criterion: AC-7
@@ -321,8 +325,10 @@ evals:
       - "packages/db/src/so-dien-thoai.ts"
       - "_acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"
     expected: |
-      Dong "DUNG tim-bang-1440": bang Ca nhan, go "+84 901 234 567" vao o tim (that, qua mang) -> dong cua nguoi them o
-      them-tab-1440 co mat; go "0901234567" -> van co mat (in so dong tim thay moi lan).
+      Dong "DUNG tim-bang-1440": bang Ca nhan khong loc truoc (in so dong, mong > 1). MOI dang so mot lan tai trang
+      moi /contacts?q=<dang so> (khong go noi tiep tren bang da loc), cho phan hoi contacts.list mang dung q do roi
+      moi doc bang: "+84 901 234 567" va "0901234567" -> moi lan bang chi con dong cua nguoi them o them-tab-1440
+      (in so dong tim thay moi lan).
       CHIEU DO: ban sao searchFilter bo nhanh so -> SAI voi thong diep ghim "tim-bang: thieu nguoi".
 
   - id: E18

@@ -5,9 +5,9 @@ slug: dien-thoai-ca-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
-approved_by: Phan Le Manh
-approved_at: 2026-10-09T00:24:07Z
+status: draft
+approved_by:
+approved_at:
 design_doc: docs/superpowers/specs/2026-10-09-dien-thoai-ca-nhan-design.md
 ---
 
@@ -27,10 +27,10 @@ Source input: anh báo trực tiếp 09/10 (ảnh form); yêu cầu `DT-1` đợ
 
 - AC-1: (cross-layer) Given tab Cá nhân của một công ty trên app thật, When bấm «Thêm cá nhân», gõ Tên «Lan» và Điện thoại «0901 234 567» rồi bấm «Thêm cá nhân», Then form có ô «Điện thoại» nằm ngay sau Tên/Họ và trước Email, và cá nhân «Lan» được lưu thuộc công ty đó với số `+84901234567` và nguồn `MANUAL`.
 - AC-2: (cross-layer) Given trang Cá nhân, When mở «Cá nhân mới», gõ Tên và Điện thoại «+84 28 3812 3456» rồi lưu, Then sheet có ô «Điện thoại» ngay sau Tên/Họ, và cá nhân được lưu với số `+842838123456` và nguồn `MANUAL`.
-- AC-3: Given hàm đọc số dùng chung, When đọc từng dạng trong ma trận viết trước (`0901 234 567`, `0901.234.567`, `(+84) 901-234-567`, `84901234567`, `+84901234567`, `028 3812 3456`, `+65 6123 4567`, chuỗi rỗng, chỉ khoảng trắng, `abc`, `12345`, `0901 234 56`, `+84 12`, 16 chữ số), Then dạng VN ra `+84` + số quốc nội, số nước ngoài giữ `+<chữ số>`, rỗng ra «rỗng», còn lại ra «sai»; và hàm hiện số đọc số trước rồi mới định dạng: `0901 234 567` cho cả `+84901234567` lẫn số thô cũ `0901.234.567`, `028 3812 3456` cho `+842838123456`, `+6561234567` cho số nước ngoài, nguyên văn cho chuỗi cũ không đọc được (`máy lẻ 123`).
+- AC-3: Given hàm đọc số dùng chung, When đọc từng dạng trong ma trận viết trước (`0901 234 567`, `0901.234.567`, `(+84) 901-234-567`, `84901234567`, `+84901234567`, `028 3812 3456`, `+65 6123 4567`, `+84 0901 234 567`, `+84 (0) 901 234 567`, `840901234567`, chuỗi rỗng, chỉ khoảng trắng, `abc`, `12345`, `0901 234 56`, `+84 12`, 16 chữ số, `00901234567`), Then dạng VN ra `+84` + số quốc nội (số 0 trung kế sau `+84` bị bỏ — số quốc nội VN không bao giờ bắt đầu bằng 0), số nước ngoài giữ `+<chữ số>`, rỗng ra «rỗng», còn lại ra «sai»; và hàm hiện số đọc số trước rồi mới định dạng: `0901 234 567` cho cả `+84901234567` lẫn số thô cũ `0901.234.567`, `028 3812 3456` cho `+842838123456`, `+6561234567` cho số nước ngoài, nguyên văn cho chuỗi cũ không đọc được (`máy lẻ 123`).
 - AC-4: Given form «Thêm cá nhân» hoặc sheet «Cá nhân mới», When gõ Điện thoại «abc» hay «12345» rồi bấm lưu, Then không gọi API tạo cá nhân, dưới ô hiện «Số điện thoại chưa đúng — ví dụ 0901 234 567» và con trỏ về ô Điện thoại; When API nhận thẳng số sai (không qua form), Then trả lỗi đầu vào (BAD_REQUEST) và không tạo, không sửa gì.
 - AC-5: Given chỉ gõ Tên, không gõ số, When thêm cá nhân ở cả hai form, Then vẫn thêm được (số để trống) — điện thoại không bắt buộc.
-- AC-6: (cross-layer) Given một cá nhân chưa lưu trữ có số lưu THÔ từ trước `0901.234.567`, When tạo cá nhân mới với số `+84 901 234 567`, Then bị từ chối (CONFLICT) với câu nêu tên người đang giữ số, và không có dòng cá nhân mới nào; trên form, toast hiện câu đó và các ô Tên, Điện thoại giữ nguyên chữ đã gõ; When người giữ số đó đã lưu trữ, Then tạo được.
+- AC-6: (cross-layer) Given một cá nhân chưa lưu trữ có số lưu THÔ từ trước `0901.234.567`, When tạo cá nhân mới với số `+84 901 234 567`, Then bị từ chối (CONFLICT) với câu nêu tên người đang giữ số, và không có dòng cá nhân mới nào; trên form, toast hiện câu đó và các ô Tên, Điện thoại giữ nguyên chữ đã gõ; When tạo với dạng có số 0 trung kế `+84 0901 234 567` cho cùng số đó, Then cũng bị từ chối; When người giữ số đó đã lưu trữ, Then tạo được.
 - AC-7: Given hai cá nhân A (số `0901234567`) và B, When sửa số của B thành `+84901234567`, Then bị từ chối (CONFLICT) và số của B không đổi; When sửa số của A thành `+84 901 234 567` (cùng số, dạng khác), Then được và lưu `+84901234567`; When xoá trống số của A, Then lưu rỗng; Given dữ liệu cũ đã có A và C cùng chưa lưu trữ và cùng số thô `0901.234.567`, When sửa Chức danh của A (không gửi số) hoặc gửi lại chính số đó dưới dạng khác, Then sửa được — chỉ kiểm trùng khi số quốc nội thật sự đổi.
 - AC-8: Given bảng Cá nhân, When có người mang số `+84901234567`, người mang `+6561234567` và người không số, Then có cột «Điện thoại» ngay sau Tên hiện lần lượt `0901 234 567`, `+6561234567` và ô trống chuẩn; ngăn chi tiết của người đầu hiện `0901 234 567` với liên kết gọi `tel:+84901234567`.
 - AC-9: (cross-layer) Given cá nhân P có số chuẩn `+84901234567` và cá nhân Q có số thô cũ `0912.345.678`, When gõ vào ô tìm của bảng Cá nhân lần lượt `0901234567`, `+84 901 234 567`, `234 567`, `0912345678`, Then mỗi lần danh sách tìm được chứa đúng người mang số đó; When gõ `12` (dưới ngưỡng), Then không lọc theo số (tìm theo tên/email như cũ).
@@ -70,3 +70,14 @@ Quét bằng `morphological-scan` preset entity-feature (S1, 09/10) — `_accept
 
 - Không migration. Chặn trùng ở tầng ứng dụng: hai lần tạo đồng thời cùng một số có thể cùng lọt.
 - Đường nền đo trên onehub `0422d7976` (khoá `duong-nen` cấp cho P6).
+
+Known limits — anh chọn ở Cổng Bằng chứng 2026-10-09 (lượt trả lại để làm A), từ mục ngoài hợp đồng của S4 round 2:
+
+- Ngoài-1: Phép kiểm «gõ 12 thì không lọc theo số» lấy đáp án từ chính tên dữ liệu thử; tên thử vô tình chứa «12» thì phép kiểm không còn bắt được lỗi lọc nhầm theo số.
+- Ngoài-2: Ảnh ngăn chi tiết (số và liên kết gọi) do phép đo màn chụp chưa nằm trong bằng chứng chấm bằng mắt; chỉ dòng báo của phép đo khẳng định.
+- Ngoài-3: Khi phép đo tìm kiếm báo sai, thông báo chung không chứng được nguyên nhân là thiếu nhánh tìm theo số.
+- Ngoài-4: Mã lượt thử hiếm khi chứa «12»; khi chứa, phép kiểm «gõ 12» tự đổi đáp án.
+- Ngoài-5: Liên kết gọi trong ngăn chi tiết tự dựng thay vì dùng `Link` của kho: người đi bằng bàn phím không thấy viền đang chọn, gạch chân hơi khác chỗ khác.
+- Ngoài-6: Luật đọc số viết hai nơi (hàm và câu truy vấn); đổi một nơi mà quên nơi kia thì chống trùng hỏng lặng.
+- Ngoài-9: Gõ một đoạn số ngắn khớp hơn 500 người thì danh sách có thể thiếu người và tổng số sai, không có dấu hiệu bị cắt.
+- Ngoài-11: Bài kiểm «Kara không lộ số» chỉ bắt dạng số liền mạch; số lộ ra ở dạng có dấu cách hay +84 thì không bắt.
