@@ -1,10 +1,11 @@
 import { type ChildProcess, spawn, spawnSync } from "node:child_process";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import {
 	existsSync,
 	mkdirSync,
 	readFileSync,
 	realpathSync,
+	renameSync,
 	rmSync,
 	statSync,
 	writeFileSync,
@@ -40,6 +41,8 @@ export const KHOI_DONG = {
 		tep: "chu.json",
 		choMs: 5 * MINUTE_MS,
 		nhipMs: 500,
+		duoiTam: ".tam-",
+		duoiCu: ".cu-",
 	},
 	nodeToiThieu: 24,
 	bienBatBuoc: "CRM_EVE_BAT_BUOC",
@@ -129,16 +132,25 @@ const conKhoaEve = z.object({
 const chuKhoaEve = z.object({
 	pid: z.number().int().positive(),
 	tep: z.string(),
+	ma: z.string().min(1).optional(),
 	con: z.array(conKhoaEve).default([]),
 });
-type ChuKhoaEve = z.infer<typeof chuKhoaEve>;
+export type ChuKhoaEve = z.infer<typeof chuKhoaEve>;
 
-const khoaDangGiu = new Map<string, string>();
+export type DauKhoa = { ino: number; mtimeMs: number; ma: string | null };
+
+export type TuyChonGhiKhoa = { giuaGhi?: () => void };
+
+export type TuyChonGiuKhoa = TuyChonGhiKhoa & {
+	choMs?: number;
+	sauKhiXetCu?: () => Promise<void>;
+};
+
+const khoaDangGiu = new Map<string, { khoa: string; ma: string }>();
 const gocDangChay = new Set<string>();
 
 process.once("exit", () => {
-	for (const khoa of khoaDangGiu.values())
-		rmSync(khoa, { recursive: true, force: true });
+	for (const that of [...khoaDangGiu.keys()]) goNeuCuaMinh(that);
 });
 
 const thatCua = (goc: string) => realpathSync(goc);
@@ -146,6 +158,24 @@ const thatCua = (goc: string) => realpathSync(goc);
 function duongKhoa(that: string): string {
 	const bam = createHash("sha256").update(that).digest("hex").slice(0, 16);
 	return join(...KHOI_DONG.khoa.thuMuc, bam);
+}
+
+export function duongKhoaEve(goc: string): string {
+	return duongKhoa(thatCua(goc));
+}
+
+export function ghiChu(
+	khoa: string,
+	chu: ChuKhoaEve,
+	giuaGhi?: () => void,
+): void {
+	const tam = join(
+		khoa,
+		`${KHOI_DONG.khoa.tep}${KHOI_DONG.khoa.duoiTam}${randomUUID()}`,
+	);
+	writeFileSync(tam, JSON.stringify(chu));
+	giuaGhi?.();
+	renameSync(tam, join(khoa, KHOI_DONG.khoa.tep));
 }
 
 function songCon(pid: number): boolean {
@@ -157,7 +187,7 @@ function songCon(pid: number): boolean {
 	}
 }
 
-function chuKhoa(khoa: string): ChuKhoaEve | null {
+export function chuKhoa(khoa: string): ChuKhoaEve | null {
 	try {
 		return chuKhoaEve.parse(
 			JSON.parse(readFileSync(join(khoa, KHOI_DONG.khoa.tep), "utf8")),
@@ -204,48 +234,90 @@ function guiTinHieu(pid: number, tin: NodeJS.Signals): void {
 	} catch {}
 }
 
-export function ghiConVaoKhoa(goc: string, pid: number): void {
-	const khoa = khoaDangGiu.get(thatCua(goc));
-	if (!khoa) throw new Error(`khong giu khoa cua ${goc}`);
-	const chu = chuKhoa(khoa);
+export function ghiConVaoKhoa(
+	goc: string,
+	pid: number,
+	tuyChon: TuyChonGhiKhoa = {},
+): void {
+	const giu = khoaDangGiu.get(thatCua(goc));
+	if (!giu) throw new Error(`khong giu khoa cua ${goc}`);
+	const chu = chuKhoa(giu.khoa);
 	if (!chu) throw new Error(`khoa cua ${goc} khong doc duoc`);
+	if (chu.ma !== giu.ma) throw new Error(`khoa cua ${goc} da doi chu`);
 	const batDau = docPs(pid, "lstart=");
 	if (!batDau) throw new Error(`khong doc duoc gio khoi dong cua pid ${pid}`);
 	const moi: ChuKhoaEve = { ...chu, con: [...chu.con, { pid, batDau }] };
-	writeFileSync(join(khoa, KHOI_DONG.khoa.tep), JSON.stringify(moi));
+	ghiChu(giu.khoa, moi, tuyChon.giuaGhi);
 }
 
-function khoaCu(khoa: string): boolean {
+export function dauKhoaEve(khoa: string): DauKhoa {
+	const st = statSync(khoa);
+	return { ino: st.ino, mtimeMs: st.mtimeMs, ma: chuKhoa(khoa)?.ma ?? null };
+}
+
+export function cungDau(a: DauKhoa, b: DauKhoa): boolean {
+	return a.ino === b.ino && a.mtimeMs === b.mtimeMs && a.ma === b.ma;
+}
+
+function dauNeuCu(khoa: string): DauKhoa | null {
 	try {
+		const dau = dauKhoaEve(khoa);
 		const chu = chuKhoa(khoa);
-		if (chu !== null) return !songCon(chu.pid);
-		return Date.now() - statSync(khoa).mtimeMs > KHOI_DONG.khoa.nhipMs;
+		const cu =
+			chu !== null
+				? !songCon(chu.pid)
+				: Date.now() - dau.mtimeMs > KHOI_DONG.khoa.nhipMs;
+		return cu ? dau : null;
 	} catch {
-		return false;
+		return null;
 	}
 }
 
-async function giuMot(that: string): Promise<void> {
+export function xetKhoaCu(khoa: string): boolean {
+	return dauNeuCu(khoa) !== null;
+}
+
+async function gianhKhoaCu(khoa: string, dau: DauKhoa): Promise<void> {
+	const daGianh = `${khoa}${KHOI_DONG.khoa.duoiCu}${randomUUID()}`;
+	try {
+		renameSync(khoa, daGianh);
+	} catch {
+		return;
+	}
+	if (!cungDau(dau, dauKhoaEve(daGianh))) {
+		renameSync(daGianh, khoa);
+		return;
+	}
+	await dungMoCoi(daGianh);
+	rmSync(daGianh, { recursive: true, force: true });
+}
+
+async function giuMot(that: string, tuyChon: TuyChonGiuKhoa): Promise<void> {
 	const khoa = duongKhoa(that);
 	mkdirSync(join(...KHOI_DONG.khoa.thuMuc), { recursive: true });
+	const choMs = tuyChon.choMs ?? KHOI_DONG.khoa.choMs;
 	const batDau = Date.now();
-	while (Date.now() - batDau < KHOI_DONG.khoa.choMs) {
+	while (Date.now() - batDau < choMs) {
 		try {
 			mkdirSync(khoa);
-			const chu: ChuKhoaEve = {
-				pid: process.pid,
-				tep: basename(process.argv[1] ?? "?"),
-				con: [],
-			};
-			writeFileSync(join(khoa, KHOI_DONG.khoa.tep), JSON.stringify(chu));
-			khoaDangGiu.set(that, khoa);
-			return;
 		} catch {
-			if (khoaCu(khoa)) {
-				await dungMoCoi(khoa);
-				rmSync(khoa, { recursive: true, force: true });
+			const dau = dauNeuCu(khoa);
+			if (dau) {
+				if (tuyChon.sauKhiXetCu) await tuyChon.sauKhiXetCu();
+				await gianhKhoaCu(khoa, dau);
 			} else await Bun.sleep(KHOI_DONG.khoa.nhipMs);
+			continue;
 		}
+		const ma = randomUUID();
+		const chu: ChuKhoaEve = {
+			pid: process.pid,
+			tep: basename(process.argv[1] ?? "?"),
+			ma,
+			con: [],
+		};
+		ghiChu(khoa, chu, tuyChon.giuaGhi);
+		khoaDangGiu.set(that, { khoa, ma });
+		return;
 	}
 	const chu = chuKhoa(khoa);
 	throw new Error(
@@ -253,18 +325,22 @@ async function giuMot(that: string): Promise<void> {
 	);
 }
 
-function traKhoa(that: string): void {
-	const khoa = khoaDangGiu.get(that);
-	if (!khoa) return;
+function goNeuCuaMinh(that: string): void {
+	const giu = khoaDangGiu.get(that);
+	if (!giu) return;
 	khoaDangGiu.delete(that);
-	rmSync(khoa, { recursive: true, force: true });
+	if (chuKhoa(giu.khoa)?.ma === giu.ma)
+		rmSync(giu.khoa, { recursive: true, force: true });
 }
 
 export function traKhoaEve(cacGoc: readonly string[]): void {
-	for (const that of new Set(cacGoc.map(thatCua))) traKhoa(that);
+	for (const that of new Set(cacGoc.map(thatCua))) goNeuCuaMinh(that);
 }
 
-export async function giuKhoaEve(cacGoc: readonly string[]): Promise<void> {
+export async function giuKhoaEve(
+	cacGoc: readonly string[],
+	tuyChon: TuyChonGiuKhoa = {},
+): Promise<void> {
 	const can = [...new Set(cacGoc.map(thatCua))]
 		.filter((that) => !khoaDangGiu.has(that))
 		.sort();
@@ -274,7 +350,7 @@ export async function giuKhoaEve(cacGoc: readonly string[]): Promise<void> {
 		throw new Error(
 			`lay khoa eve sai thu tu: dang giu ${lon}, can ${truoc}; goi giuKhoaEve voi moi goc can dung truoc khi khoi dong`,
 		);
-	for (const that of can) await giuMot(that);
+	for (const that of can) await giuMot(that, tuyChon);
 }
 
 function pidNghe(url: string): string {
@@ -430,7 +506,7 @@ export async function khoiDongEve(v: TuyChonKhoiDong = {}): Promise<MayEve> {
 	gocDangChay.add(that);
 	const xong = () => {
 		gocDangChay.delete(that);
-		if (tuGiu) traKhoa(that);
+		if (tuGiu) goNeuCuaMinh(that);
 	};
 	try {
 		const lan = await moEveDoiCong(EVE, goc, v);
