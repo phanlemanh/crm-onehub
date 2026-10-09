@@ -623,11 +623,10 @@ describe("vong-doi-mot-cach-cat", () => {
 				chot(hoanTac !== null, "vdc: luu tru loat khong co hoan tac");
 				await nhip(10);
 				const dsTruoc = goiCua(`${t}.list`).length;
-				const nguoi = nguoiDung();
-				await act(async () => nguoi.click(hoanTac as HTMLButtonElement));
-				await nhip(3);
-				if (hoanTac?.isConnected)
-					await act(async () => nguoi.click(hoanTac as HTMLButtonElement));
+				await act(async () => {
+					(hoanTac as HTMLButtonElement).click();
+					(hoanTac as HTMLButtonElement).click();
+				});
 				await cho(
 					() => vungToast().includes(chuKhoiPhuc(loai, 3, "vi")),
 					`${loai}/${ket} da khoi phuc`,
@@ -728,7 +727,7 @@ describe("vong-doi-mot-cach-cat", () => {
 				await cho(
 					() => document.querySelector("[data-dai-luu-tru]") !== null,
 					`${n.loai} dai bao`,
-				);
+				).catch(() => null);
 				const dai = document.querySelector("[data-dai-luu-tru]") as Element;
 				chot(dai !== null, "vdc: ngan da cat khong bao");
 				expect((dai.textContent ?? "").includes(VI.sheet.daLuuTruNgay)).toBe(
@@ -742,13 +741,14 @@ describe("vong-doi-mot-cach-cat", () => {
 				const nut = nutCo(VI.bulk.restore, dai);
 				expect(nut === null).toBe(false);
 				await act(async () => nguoiDung().click(nut as HTMLButtonElement));
-				await cho(
-					() => goiCua(`${n.thuTuc}.restore`).length >= 1,
-					`${n.loai} goi khoi phuc`,
-				);
+				await nhip(5);
 				chot(
 					goiCua(`${n.thuTuc}.archive`).length === 0,
 					"vdc: dai bao goi sai lenh",
+				);
+				await cho(
+					() => goiCua(`${n.thuTuc}.restore`).length >= 1,
+					`${n.loai} goi khoi phuc`,
 				);
 				const vao = goiCua(`${n.thuTuc}.restore`)[0]?.vao as { id?: string };
 				expect(vao.id).toBe(n.id);
@@ -792,9 +792,6 @@ describe("vong-doi-mot-cach-cat", () => {
 			await moNgan(n);
 			await cho(() => tabDangMo() !== null, `${n.loai} tab`);
 			await nhip(10);
-			const d = demChoSua();
-			chot(d.tong > 0, `vdc: ${n.loai} khong dem duoc cho sua`);
-			chot(d.bat === 0 && d.khongForm === 0, "vdc: ngan da cat van sua duoc");
 			const capNhatTruoc = goiCua(`${n.thuTuc}.update`).length;
 			for (const nhan of n.oSua) {
 				const oSua = timO(nhan);
@@ -819,6 +816,9 @@ describe("vong-doi-mot-cach-cat", () => {
 				);
 				o.push(`${n.loai}/${nhan}`);
 			}
+			const d = demChoSua();
+			chot(d.tong > 0, `vdc: ${n.loai} khong dem duoc cho sua`);
+			chot(d.bat === 0 && d.khongForm === 0, "vdc: ngan da cat van sua duoc");
 			expect(goiCua(`${n.thuTuc}.update`).length - capNhatTruoc).toBe(0);
 			const menu = [
 				...document.querySelectorAll('button[aria-haspopup="menu"]'),
@@ -856,7 +856,9 @@ describe("vong-doi-mot-cach-cat", () => {
 	test("vdc-kanban: Kanban co nut Da luu tru, bam sang bang da luu tru, bam lai ve Kanban", async () => {
 		const m = dealMessages("vi");
 		await mo(<DealsTable />, { searchParams: "view=board" });
-		await cho(() => nutCo(m.archivedToggle) !== null, "nut kanban");
+		await cho(() => nutCo(m.archivedToggle) !== null, "nut kanban").catch(
+			() => null,
+		);
 		const nut = nutCo(m.archivedToggle);
 		chot(nut !== null, "vdc: kanban khong co da luu tru");
 		const bangTruoc = goiCua("deals.board").length;
