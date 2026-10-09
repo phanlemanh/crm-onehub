@@ -995,6 +995,22 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "soan-okr-trong-khung",
+		ten: "Soạn OKR trong khung bản ghi — Kara cột phải, bản nháp mở thêm về trái",
+		states: [
+			{ id: "ST-khung-dang-mo", nhan: "Đang mở cuộc soạn" },
+			{ id: "ST-khung-hep-rong", nhan: "Cuộc mới — chỉ cột Kara" },
+			{ id: "ST-khung-dang-soan-dau", nhan: "Kara đang soạn bản nháp đầu" },
+			{ id: "ST-khung-rong", nhan: "Có bản nháp — nháp trái, Kara phải" },
+			{ id: "ST-khung-rong-dang-soan", nhan: "Có bản nháp, Kara đang soạn" },
+			{ id: "ST-khung-hoi-dong", nhan: "Đóng khi Kara đang soạn — hỏi lại" },
+			{ id: "ST-khung-khong-mo", nhan: "Không mở được cuộc soạn" },
+			{ id: "ST-khung-chua-cau-hinh", nhan: "Kara chưa được bật" },
+			{ id: "ST-khung-da-dua-vao", nhan: "Đã đưa vào bộ OKR" },
+			{ id: "ST-khung-dien-thoai", nhan: "Điện thoại — hai tab" },
+		],
+	},
+	{
 		slug: "soan-okr-trang-rieng",
 		ten: "Soạn OKR trang riêng — hội thoại cạnh bản nháp Kara, dòng inline, hoàn tác, mốc nộp",
 		states: [

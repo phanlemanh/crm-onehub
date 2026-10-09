@@ -75,6 +75,7 @@ export function DetailSheet({
 }) {
 	const _m = crmMessages(useLocale());
 	const content = useRef<HTMLDivElement>(null);
+	const moTu = useRef<HTMLElement | null>(null);
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} tuNhanThayDoi={false}>
@@ -85,7 +86,18 @@ export function DetailSheet({
 				showCloseButton={false}
 				onOpenAutoFocus={(event) => {
 					event.preventDefault();
+					moTu.current =
+						document.activeElement instanceof HTMLElement
+							? document.activeElement
+							: null;
 					content.current?.focus();
+				}}
+				onCloseAutoFocus={(event) => {
+					const ve = moTu.current;
+					moTu.current = null;
+					if (!ve?.isConnected) return;
+					event.preventDefault();
+					ve.focus();
 				}}
 				className={cn("flex flex-col gap-0 p-0", className)}
 			>

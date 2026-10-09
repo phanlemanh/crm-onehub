@@ -1,0 +1,2 @@
+driver: script man.mjs (playwright trong tien-de), khong co read_network_requests
+networkObserved: n-a (driver)
