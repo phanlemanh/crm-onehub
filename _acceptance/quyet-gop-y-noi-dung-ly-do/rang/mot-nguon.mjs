@@ -1,0 +1,73 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
+const GOC_QUET = ["apps/api/src", "apps/app/app", "apps/app/lib", "packages/validation/src"];
+const KHAI = "packages/validation/src/okr-tro-ly.ts";
+const MIEN = ["apps/api/src/okr/tro-ly.service.ts", "apps/app/lib/messages/okr-gop-y.ts"];
+const KHOA = "satisfies Record<LyDoKhongQuyet";
+
+const argv = process.argv.slice(2);
+const banSao = argv[argv.indexOf("--ban-sao") + 1];
+const them = argv.includes("--ban-sao") && banSao === "them-tap";
+
+function* tep(goc) {
+	for (const muc of fs.readdirSync(goc, { withFileTypes: true })) {
+		const p = path.join(goc, muc.name);
+		if (muc.isDirectory()) {
+			if (muc.name !== "node_modules") yield* tep(p);
+		} else if (/\.(ts|tsx)$/.test(muc.name)) yield p;
+	}
+}
+
+const { LY_DO_KHONG_QUYET } = await import(path.join(ROOT, KHAI));
+const loi = [];
+const mot = (cau) => loi.push(cau);
+
+const danhSach = [];
+for (const g of GOC_QUET) {
+	const ds = [...tep(path.join(ROOT, g))];
+	if (ds.length === 0) mot(`goc rong: ${g}`);
+	danhSach.push(...ds);
+}
+if (them) danhSach.push(path.join(ROOT, "apps/app/lib/__ban-sao-them-tap__.ts"));
+
+const choKhai = new Set();
+for (const p of danhSach) {
+	const rel = path.relative(ROOT, p);
+	const noi = them && rel.endsWith("__ban-sao-them-tap__.ts")
+		? `export const X = ["${LY_DO_KHONG_QUYET[0]}"] as const;`
+		: fs.readFileSync(p, "utf8");
+	const co = LY_DO_KHONG_QUYET.filter((ma) => noi.includes(`"${ma}"`));
+	if (co.length === 0) continue;
+	if (rel === KHAI) {
+		choKhai.add(rel);
+		continue;
+	}
+	if (MIEN.includes(rel)) {
+		if (!noi.includes(KHOA)) mot(`mien ma khong khoa: ${rel}`);
+		continue;
+	}
+	mot(`ma khai them: ${rel}`);
+}
+
+const { CAU_CUA_LY_DO_KHONG_QUYET } = await import(path.join(ROOT, "apps/api/src/okr/tro-ly.service.ts"));
+for (const ma of LY_DO_KHONG_QUYET) {
+	const cau = CAU_CUA_LY_DO_KHONG_QUYET[ma];
+	if (!Array.isArray(cau) || cau.length === 0) mot(`thieu anh xa: ${ma}`);
+	else if (cau.some((c) => typeof c !== "string")) mot(`hang khong phai chuoi: ${ma}`);
+}
+
+const { okrGopYMessages } = await import(path.join(ROOT, "apps/app/lib/messages/okr-gop-y.ts"));
+for (const locale of ["vi", "en"]) {
+	const khoa = Object.keys(okrGopYMessages(locale).loiQuyet ?? {}).sort();
+	if (JSON.stringify(khoa) !== JSON.stringify([...LY_DO_KHONG_QUYET].sort()))
+		mot(`ban do ${locale} lech tap: ${khoa.join(",")}`);
+}
+
+if (loi.length) {
+	for (const l of loi) console.log(l);
+	process.exit(1);
+}
+console.log(`mot-nguon: ${LY_DO_KHONG_QUYET.length} ma, ${choKhai.size} cho khai, anh xa du, hai ban do du`);
