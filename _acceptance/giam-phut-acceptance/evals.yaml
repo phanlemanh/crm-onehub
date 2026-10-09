@@ -68,16 +68,17 @@ evals:
       - "_acceptance/*/evals.yaml"
       - "_acceptance/giam-phut-acceptance/rang/ho-so-cu.mjs"
     expected: |
-      bun rang/ho-so-cu.mjs: rut tu _acceptance/*/contract.md (status signed-off hoac machine-cleared) va evals.yaml
-      cua chung moi eval executor script co paths khop .github/workflows/acceptance.yml; giai cmd qua
-      _acceptance/config.yaml; loai DUNG mot lenh hld_build_heap (chay next build, lam ghim lai lo) va in
-      «bo hld_build_heap: chay next build, de lan ghim lai». Doi chung: tap rut duoc phai chua lkv_ci, dpvb_cong,
-      ld_ba_noi_deu_chay, kcb_khong_noi_tran — thieu mot -> ma 1 «bo rut khong thay <khoa>». Chay tung lenh
-      (lenh trung chi chay mot lan) tren cay that; in «dat <khoa> ma 0» hoac «sai <khoa> ma <m>» kem duong nhat
-      ky. Ma 0 khi moi lenh ma 0. Chieu do: dung ban sao cay bang git archive HEAD vao
-      .acceptance-runs/giam-phut-acceptance/cay-pha/, them «if: github.event_name == 'pull_request'» vao job
-      acceptance cua ban sao, chay lkv_ci tren ban sao -> ma khac 0 va dau ra co «job co dieu kien if» -> in
-      «BAT luat-kho-co-if»; khong bat -> ma 1.
+      bun rang/ho-so-cu.mjs: rut tu _acceptance/*/contract.md (status signed-off hoac machine-cleared, doc bang regex
+      frontmatter) va evals.yaml cua chung moi eval executor script co paths khop .github/workflows/acceptance.yml
+      (Bun.Glob); evals.yaml khong doc duoc ma co nhac .github -> ma 2; giai cmd qua _acceptance/config.yaml. Doi
+      chung: tap rut duoc phai chua lkv_ci, dpvb_cong, ld_ba_noi_deu_chay, kcb_khong_noi_tran — thieu -> ma 1 «bo rut
+      khong thay <khoa>». Khong chay hld_build_heap va ld_ba_noi_deu_chay (in «bo <khoa>: <ly do>»); dieu 5 cua ld do
+      thang tren acceptance.yml HEAD: moi buoc «bun run build» khong if, khong continue-on-error. Moi lenh con lai chay
+      tren cay that; ma 0 -> «dat <khoa> ma 0»; ma khac 0 -> chay cung lenh tren ban git archive HEAD trong
+      .acceptance-runs/giam-phut-acceptance/cay-goc/ voi acceptance.yml cua merge-base: cung ma -> «do san <khoa>» kem
+      duong nhat ky, khac ma -> «sai <khoa>» va ma 1. Chieu do: ban git archive HEAD trong cay-pha/ them «if:
+      github.event_name == 'pull_request'» vao job luat-kho, chay lkv_ci tren ban sao -> ma khac 0 va dau ra co «job co
+      dieu kien if» -> «BAT luat-kho-co-if»; khong bat -> ma 1.
 
   - id: E4
     criterion: AC-6

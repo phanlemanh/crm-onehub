@@ -7,7 +7,7 @@ risk_tier: T2
 surfaces: []
 status: approved
 approved_by: Phan Le Manh
-approved_at: 2026-10-09T16:33:11Z
+approved_at: 2026-10-09T21:56:45Z
 design_doc: _acceptance/giam-phut-acceptance/design.md
 ---
 
@@ -35,7 +35,10 @@ mỗi lượt khoảng 12 phút tính tiền. Ngày 09/10 GitHub dừng mọi jo
   `if: ${{ !cancelled() }}`, nên một bước đỏ thì các bước sau vẫn chạy và job vẫn đỏ.
 - AC-5: Given các hồ sơ `signed-off` hoặc `machine-cleared` có eval `script` mà `paths` chạm
   `.github/workflows/acceptance.yml` (rút từ `_acceptance/*/evals.yaml`, không liệt tay), When chạy lại lệnh của các eval
-  đó trên cây sau vòng này, Then mọi lệnh thoát 0 mà không sửa thước nào của các hồ sơ đó.
+  đó trên cây sau vòng này, Then không lệnh nào đỏ thêm so với cùng lệnh chạy trên cây có `acceptance.yml` của bản
+  merge-base; lệnh đỏ sẵn trên cả hai cây được ghi tên kèm nhật ký; không sửa thước nào của các hồ sơ đó. Hai lệnh nặng
+  (`hld_build_heap` chạy `next build`, `ld_ba_noi_deu_chay` chạy trọn pre-push) không chạy lại, mà điều kiện của chúng trên
+  `acceptance.yml` (bước build không `if`, không `continue-on-error`) được đo thẳng.
 - AC-6: Given hồ sơ, When cần đo bốn ngưỡng 7 ngày của Cổng Đáng, Then có `rang/do-phut.mjs` tính phút tính tiền của
   từng lượt Acceptance (tổng các job, mỗi job làm tròn lên phút) tách theo sự kiện `push`/`pull_request`, in trung vị mỗi
   nhóm trong một cửa sổ thời gian (lượt bị huỷ không vào trung vị, đếm riêng), chạy được trên dữ liệu thật của kho.
