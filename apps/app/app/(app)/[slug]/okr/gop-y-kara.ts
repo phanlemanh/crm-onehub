@@ -242,6 +242,7 @@ export function useGopYMucTieu({
 	const [daQuyet, setDaQuyet] = useState<readonly DongHien[]>([]);
 	const [loiDong, setLoiDong] = useState<Readonly<Record<string, string>>>({});
 	const [dangQuyet, setDangQuyet] = useState<string | null>(null);
+	const [noi, setNoi] = useState<string | null>(null);
 	const [thuTu, setThuTu] = useState<readonly string[]>([]);
 	const daDongBo = useRef(false);
 
@@ -514,6 +515,8 @@ export function useGopYMucTieu({
 		hoanTac,
 		coHoanTac,
 		trangThai,
+		noi,
+		datNoi: setNoi,
 		coHoiDoiTrong: dongCho.some(
 			(d) =>
 				d.loai === "hoi" &&

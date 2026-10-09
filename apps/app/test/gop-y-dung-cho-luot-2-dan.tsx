@@ -11,13 +11,18 @@ import {
 	dung,
 	dungSheet,
 	goiCua,
+	HopThoaiKr,
 	HopThoaiMucTieu,
+	HUNG,
 	KR_1,
 	KR_2,
 	kho,
 	kiemCa,
 	MT_ID,
+	m,
 	mtSheet,
+	nhip,
+	nut,
 	okrGopYMessages,
 	qs,
 	thaoHet,
@@ -94,5 +99,106 @@ describe("k3-cau-dan", () => {
 				);
 				await thaoHet();
 			}
+	});
+});
+
+describe("k3-neo-kr", () => {
+	const cuonGoc = HTMLElement.prototype.scrollIntoView;
+
+	test("k3-neo-kr Xem gop y tu hop Sua KR dua ma KR len URL", async () => {
+		for (const [kr, d] of [
+			[KR_2, D_KR2],
+			[KR_1, D_KR1],
+		] as const) {
+			kho.troLy = (vao) => dsTroLy(vao?.keyResultId === kr.id ? [d] : []);
+			const san = await dung(
+				<HopThoaiKr
+					chuMacDinh={HUNG.id}
+					dong={() => {}}
+					kr={kr}
+					mucTieu={mtSheet({ soGopYCho: 2 })}
+					objectiveId={MT_ID}
+					suaDuocCot
+				/>,
+			);
+			await cho(() => qs("[data-dan-sang]") !== null, `${kr.id} dong dan`);
+			await bamChuot(
+				nut(m.danSang.xem, qs("[data-dan-sang]") ?? document.body),
+			);
+			await cho(() => san.url().get("record") !== null, `${kr.id} mo khung`);
+			kiemCa(
+				{
+					record: san.url().get("record"),
+					neo: san.url().get("neoGopY"),
+					neoKr: san.url().get("neoGopYKr"),
+				},
+				{ record: `objective:${MT_ID}`, neo: "true", neoKr: kr.id },
+				(k) => `${kr.id} url sai: ${k}`,
+			);
+			await thaoHet();
+		}
+	});
+
+	test("k3-neo-kr khung mo tu URL neo KR: focus va lam noi gop y dau tien cua dung KR", async () => {
+		HTMLElement.prototype.scrollIntoView = () => {};
+		try {
+			for (const [kr, d] of [
+				[KR_2, D_KR2],
+				[KR_1, D_KR1],
+			] as const) {
+				kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 2 }));
+				kho.troLy = () => dsTroLy([D_KR1, D_KR2]);
+				const san = await dungSheet({
+					thamSo: `?record=objective:${MT_ID}&neoGopY=true&neoGopYKr=${kr.id}`,
+				});
+				await cho(
+					() => san.url().get("neoGopYKr") === null,
+					`${kr.id} bo khoa neo`,
+				);
+				await nhip(4);
+				const dang = document.activeElement;
+				if (dang === null || dang === document.body)
+					throw new Error("focus roi ve body");
+				const o = dang.closest("[data-kara-proposal-kr]");
+				kiemCa(
+					{
+						kr: o?.getAttribute("data-kara-proposal-kr") ?? null,
+						gopY: o?.getAttribute("data-gop-y") ?? null,
+						noi: o?.getAttribute("data-highlighted") ?? null,
+					},
+					{ kr: kr.id, gopY: d.id, noi: "true" },
+					(k) => `${kr.id} neo sai: ${k}`,
+				);
+				await thaoHet();
+			}
+		} finally {
+			HTMLElement.prototype.scrollIntoView = cuonGoc;
+		}
+	});
+
+	test("k3-neo-kr id la: khong co gop y cua KR do thi cuon toi vung Kara, bo ca hai khoa, khong lam noi dong nao", async () => {
+		const daCuon: string[] = [];
+		HTMLElement.prototype.scrollIntoView = function (this: HTMLElement) {
+			daCuon.push(this.hasAttribute("data-vung-kara") ? "vung" : "khac");
+		};
+		try {
+			kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 2 }));
+			kho.troLy = () => dsTroLy([D_DOI_TRONG, D_KR1]);
+			const san = await dungSheet({
+				thamSo: `?record=objective:${MT_ID}&neoGopY=true&neoGopYKr=kr-khong-co`,
+			});
+			await cho(() => san.url().get("neoGopY") === null, "bo khoa neo");
+			kiemCa(
+				{
+					neoKr: san.url().get("neoGopYKr"),
+					noi: qs("[data-highlighted=true]") !== null,
+					cuon: daCuon.join(","),
+				},
+				{ neoKr: null, noi: false, cuon: "vung" },
+				(k) => `neo id la sai: ${k}`,
+			);
+		} finally {
+			HTMLElement.prototype.scrollIntoView = cuonGoc;
+		}
 	});
 });

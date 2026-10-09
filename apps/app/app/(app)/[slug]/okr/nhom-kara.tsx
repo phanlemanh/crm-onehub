@@ -200,6 +200,8 @@ export function DeXuatNeo({
 			actions={actions.map((a) => ({ ...a, disabled: khoa || a.disabled }))}
 			before={d.loai === "viet-lai" ? (d.truoc ?? "") : undefined}
 			data-gop-y={d.id}
+			data-highlighted={gopY.noi === d.id ? "true" : undefined}
+			data-kara-proposal-kr={d.keyResultId ?? undefined}
 			data-trang-thai={gopY.trangThai(d.id)}
 			decided={decided}
 			editing={
@@ -208,11 +210,13 @@ export function DeXuatNeo({
 					: { value: sua, onChange: setSua, onCancel: () => setSua(null) }
 			}
 			error={gopY.loiDong[d.id]}
+			highlighted={gopY.noi === d.id}
 			kind={kind}
 			lockedReason={gopY.ghiDuoc ? undefined : m.de.khoaSua}
 			media={false}
 			pending={gopY.dangQuyet === d.id}
 			rationale={rationale}
+			tabIndex={-1}
 			value={value}
 		/>
 	);

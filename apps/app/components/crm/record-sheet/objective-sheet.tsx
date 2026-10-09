@@ -38,7 +38,7 @@ import {
 import { TableCell } from "@crm/ui/components/table";
 import { krTheoKara } from "@crm/validation/okr-theo-kara";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { BangKr, type DemCanhKr } from "@/app/(app)/[slug]/okr/bang-kr";
@@ -589,21 +589,34 @@ function TabKr({ mt, diemCam }: { mt: ChiTiet; diemCam?: DiemCam }) {
 	};
 	const vung = useRef<HTMLDivElement>(null);
 	const [neo, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
+	const [neoKr, setNeoKr] = useQueryState(
+		SEARCH_PARAM.okr.neoGopYKr,
+		parseAsString,
+	);
 	const coVungKara = gopY.noiDung !== "tat";
 	const khoKhung = useContext(CuonCaKhungContext);
+	const datNoi = gopY.datNoi;
 	useEffect(() => {
 		if (!neo || !gopY.daTai || khoKhung === "chua-biet") return;
-		if (coVungKara) {
-			const giam = window.matchMedia(
-				"(prefers-reduced-motion: reduce)",
-			).matches;
-			vung.current?.scrollIntoView({
-				block: "start",
-				behavior: giam ? "auto" : "smooth",
-			});
-		}
+		const giam = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		const cach: ScrollIntoViewOptions = {
+			block: "start",
+			behavior: giam ? "auto" : "smooth",
+		};
+		const goc = vung.current?.closest("[data-okr-sheet]") ?? document;
+		const noiDen = neoKr
+			? ([...goc.querySelectorAll<HTMLElement>("[data-kara-proposal-kr]")].find(
+					(o) => o.getAttribute("data-kara-proposal-kr") === neoKr,
+				) ?? null)
+			: null;
+		if (noiDen) {
+			noiDen.scrollIntoView({ ...cach, block: "center" });
+			noiDen.focus({ preventScroll: true });
+			datNoi(noiDen.getAttribute("data-gop-y"));
+		} else if (coVungKara) vung.current?.scrollIntoView(cach);
 		void setNeo(null);
-	}, [neo, gopY.daTai, coVungKara, setNeo, khoKhung]);
+		void setNeoKr(null);
+	}, [neo, neoKr, gopY.daTai, coVungKara, setNeo, setNeoKr, khoKhung, datNoi]);
 
 	return (
 		<DetailSheetBody>
