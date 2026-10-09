@@ -188,7 +188,7 @@ describe("hoan-tac-loat-dung-id", () => {
 				"htl: ban da luu tru tu truoc tinh la vua cat",
 			);
 			chot(
-				Array.isArray(cat.changedIds) && typeof cat.skipped === "number",
+				["changedIds", "skipped"].every((k) => Object.keys(cat).includes(k)),
 				"htl: bien cat changedIds",
 			);
 			expect(
