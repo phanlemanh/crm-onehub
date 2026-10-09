@@ -24,8 +24,32 @@ const MA_TRAN = [
 ];
 
 const GOI_LUU_TRU =
-	/trpc(?:\.(?:contacts|companies|deals)|\[RECORD_PROCEDURES\[[^\]]+\]\])\.(?:bulkArchive|archive)\.mutationOptions/;
+	/trpc(?:\.(?:contacts|companies|deals)|\[RECORD_PROCEDURES\[[^\]]+\]\])\.(?:bulkArchive|archive)\.mutationOptions\(/g;
 const CO_HOAN_TAC = /\bbaoDaLuuTru\(|\bbaoLuuTruLoat\(/;
+
+function khoiNgoac(noiDung, mo) {
+	const dong = { "(": ")", "{": "}" }[noiDung[mo]];
+	let sau = 0;
+	for (let i = mo; i < noiDung.length; i += 1) {
+		if (noiDung[i] === noiDung[mo]) sau += 1;
+		else if (noiDung[i] === dong) {
+			sau -= 1;
+			if (sau === 0) return noiDung.slice(mo, i + 1);
+		}
+	}
+	return noiDung.slice(mo);
+}
+
+function hoanTacCuaLoiGoi(noiDung, viTri) {
+	const thamSo = khoiNgoac(noiDung, viTri).slice(1, -1).trim();
+	if (CO_HOAN_TAC.test(thamSo)) return true;
+	const ten = /^([A-Za-z_$][\w$]*)$/.exec(thamSo)?.[1];
+	if (!ten) return false;
+	const truoc = noiDung.slice(0, viTri);
+	const khai = truoc.lastIndexOf(`const ${ten} = {`);
+	if (khai < 0) return false;
+	return CO_HOAN_TAC.test(khoiNgoac(noiDung, khai + `const ${ten} = `.length));
+}
 
 function quet(thuMuc, ra) {
 	for (const ten of readdirSync(thuMuc)) {
@@ -45,7 +69,10 @@ if (CHIEU_DO) {
 	gia = join(noi, "luu-tru-tran.tsx");
 	writeFileSync(
 		gia,
-		"const archive = useMutation(trpc.contacts.bulkArchive.mutationOptions({ onSuccess: (r) => reportBulk(r) }));\n",
+		[
+			"const archive = useMutation(trpc.contacts.bulkArchive.mutationOptions({ onSuccess: (r) => reportBulk(r) }));",
+			"const khac = useMutation(trpc.contacts.bulkRestore.mutationOptions({ onSuccess: (r) => baoLuuTruLoat({ result: r }) }));",
+		].join("\n"),
 	);
 	tep.push(gia);
 }
@@ -53,9 +80,13 @@ if (CHIEU_DO) {
 const tim = [];
 for (const t of tep) {
 	const noiDung = readFileSync(t, "utf8");
-	if (!GOI_LUU_TRU.test(noiDung)) continue;
+	const loiGoi = [...noiDung.matchAll(GOI_LUU_TRU)];
+	if (loiGoi.length === 0) continue;
 	const ten = t === gia ? "(tep gia chieu do)" : relative(GOC, t);
-	tim.push({ ten, hoanTac: CO_HOAN_TAC.test(noiDung) });
+	const hoanTac = loiGoi.every((m) =>
+		hoanTacCuaLoiGoi(noiDung, m.index + m[0].length - 1),
+	);
+	tim.push({ ten, hoanTac });
 }
 if (gia) rmSync(dirname(gia), { recursive: true, force: true });
 

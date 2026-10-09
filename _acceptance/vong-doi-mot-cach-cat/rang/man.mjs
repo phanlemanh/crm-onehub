@@ -139,6 +139,8 @@ async function gieoThoaThuan(chu, daCat) {
 			name: `Thoả thuận đã cất ${MA} ${Math.random().toString(36).slice(2, 6)}`,
 			companyId: congTy.id,
 			ownerId: chu.id,
+			createdAt: new Date("2026-09-01T03:00:00.000Z"),
+			stageChangedAt: new Date("2026-09-01T03:00:00.000Z"),
 			archivedAt: daCat ? new Date("2026-09-15T03:00:00.000Z") : null,
 		},
 		select: { id: true, name: true, updatedAt: true },
@@ -370,6 +372,14 @@ try {
 				VI.bulk.archive,
 			);
 			await muc.click();
+			try {
+				await t.waitForFunction(
+					() => document.querySelectorAll("tbody tr").length < 3,
+					{ timeout: 20_000 },
+				);
+			} catch {
+				loi.push("ba dong khong roi bang sau luu tru");
+			}
 			await choThay(
 				t,
 				(c) =>
