@@ -20,7 +20,12 @@ import {
 	ActivityStampService,
 	type StampTargets,
 } from "../crm/activity-stamp.service";
-import { type BulkResult, requireOwner, runBulk } from "../crm/bulk";
+import {
+	type BulkResult,
+	inRequestOrder,
+	requireOwner,
+	runBulk,
+} from "../crm/bulk";
 import { blankToNull, toCents } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
@@ -530,10 +535,15 @@ export class CompaniesService {
 		await requireOwner(this.db, ownerId);
 
 		const ids = [...new Set(input.ids)];
-		const { count } = await this.db.company.updateMany({
-			where: { id: { in: ids } },
-			data: { ownerId },
-		});
+		const changedIds = inRequestOrder(
+			ids,
+			await this.db.company.updateManyAndReturn({
+				where: { id: { in: ids } },
+				data: { ownerId },
+				select: { id: true },
+			}),
+		);
+		const count = changedIds.length;
 
 		this.logger.log({
 			message: "Companies reassigned",
@@ -547,6 +557,7 @@ export class CompaniesService {
 			skipped: 0,
 			failed: ids.length - count,
 			message: null,
+			changedIds,
 		};
 	}
 

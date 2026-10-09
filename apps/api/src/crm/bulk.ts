@@ -22,6 +22,14 @@ export const crmBulkResultOutput = z.object({
 
 export type BulkResult = z.infer<typeof crmBulkResultOutput>;
 
+export function inRequestOrder(
+	ids: string[],
+	rows: { id: string }[],
+): string[] {
+	const changed = new Set(rows.map((row) => row.id));
+	return ids.filter((id) => changed.has(id));
+}
+
 export async function requireOwner(
 	db: Db,
 	ownerId: string | null,

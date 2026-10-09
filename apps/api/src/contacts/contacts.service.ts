@@ -31,7 +31,12 @@ import {
 	ActivityStampService,
 	type StampTargets,
 } from "../crm/activity-stamp.service";
-import { type BulkResult, requireOwner, runBulk } from "../crm/bulk";
+import {
+	type BulkResult,
+	inRequestOrder,
+	requireOwner,
+	runBulk,
+} from "../crm/bulk";
 import { blankToNull, normalizeEmail, toCents } from "../crm/values";
 import { InjectDatabase } from "../database/database.constants";
 import { FieldsService } from "../fields/fields.service";
@@ -581,10 +586,15 @@ export class ContactsService {
 		await requireOwner(this.db, ownerId);
 
 		const ids = [...new Set(input.ids)];
-		const { count } = await this.db.contact.updateMany({
-			where: { id: { in: ids } },
-			data: { ownerId },
-		});
+		const changedIds = inRequestOrder(
+			ids,
+			await this.db.contact.updateManyAndReturn({
+				where: { id: { in: ids } },
+				data: { ownerId },
+				select: { id: true },
+			}),
+		);
+		const count = changedIds.length;
 
 		this.logger.log({
 			message: "Contacts reassigned",
@@ -598,6 +608,7 @@ export class ContactsService {
 			skipped: 0,
 			failed: ids.length - count,
 			message: null,
+			changedIds,
 		};
 	}
 
@@ -615,10 +626,15 @@ export class ContactsService {
 		}
 
 		const ids = [...new Set(input.ids)];
-		const { count } = await this.db.contact.updateMany({
-			where: { id: { in: ids } },
-			data: { companyId },
-		});
+		const changedIds = inRequestOrder(
+			ids,
+			await this.db.contact.updateManyAndReturn({
+				where: { id: { in: ids } },
+				data: { companyId },
+				select: { id: true },
+			}),
+		);
+		const count = changedIds.length;
 
 		this.logger.log({
 			message: "Contacts moved",
@@ -632,6 +648,7 @@ export class ContactsService {
 			skipped: 0,
 			failed: ids.length - count,
 			message: null,
+			changedIds,
 		};
 	}
 

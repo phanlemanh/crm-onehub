@@ -22,7 +22,12 @@ import {
 	ActivityStampService,
 	type StampTargets,
 } from "../crm/activity-stamp.service";
-import { type BulkResult, requireOwner, runBulk } from "../crm/bulk";
+import {
+	type BulkResult,
+	inRequestOrder,
+	requireOwner,
+	runBulk,
+} from "../crm/bulk";
 import {
 	blankToNull,
 	decimalFromCents,
@@ -827,10 +832,15 @@ export class DealsService {
 		await requireOwner(this.db, input.ownerId);
 
 		const ids = [...new Set(input.ids)];
-		const { count } = await this.db.deal.updateMany({
-			where: { id: { in: ids } },
-			data: { ownerId: input.ownerId },
-		});
+		const changedIds = inRequestOrder(
+			ids,
+			await this.db.deal.updateManyAndReturn({
+				where: { id: { in: ids } },
+				data: { ownerId: input.ownerId },
+				select: { id: true },
+			}),
+		);
+		const count = changedIds.length;
 
 		this.logger.log({
 			message: "Deals reassigned",
@@ -844,6 +854,7 @@ export class DealsService {
 			skipped: 0,
 			failed: ids.length - count,
 			message: null,
+			changedIds,
 		};
 	}
 
