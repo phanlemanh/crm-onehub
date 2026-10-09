@@ -1462,12 +1462,13 @@ executors:
     dt_man_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t goi-y-moi-gioi'
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
     dpv_ma_lech: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t ma-lech"'
+    dpv_mach_lien: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t mach-lien-ghi && cd ../agent && bun test test/dieu-phoi-va.spec.ts -t mach-lien-doc"'
     dpv_nhan_lo: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t nhan-lo"'
     dpv_khong_trung: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t khong-trung"'
     dpv_dong_som: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t dong-som"'
     dpv_bo_phan_hong: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t bo-phan-hong"'
     dpv_dem_qua_han: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t dem-qua-han"'
-    dpv_them_buoc_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t "ke-hoach-rong|bo-phan-khac"'
+    dpv_them_buoc_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t "ke-hoach-rong|bo-phan-khac|loi-bo-phan"'
     dpv_the_qua_han_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t the-qua-han'
   script:
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"

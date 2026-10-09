@@ -20,8 +20,32 @@ evals:
       TASK_KINDS va DIRECT_KINDS; (2) claimDue cua lan nghien cuu (except KHONG_VAO_LAN_NGHIEN_CUU) khong nhan hang do;
       (3) dung mot Activity TASK completedAt null cua ke hoach; (4) createdById = ownerId; (5) companyId cua ke hoach;
       (6) dueAt = dau ngay VN hom nay; (7) subject chua ma; (8) meta.platformBrokerId = ma; (9) AgentTask completedAt khac
-      null; (10) khong session nghien cuu nao duoc mo (runResearchLane tra 0).
-      CHIEU DO: ban sao bo "onboarding-identify" khoi DIRECT_KINDS -> dong 1 do voi thong diep ghim "onboarding-identify khong o lan truc tiep".
+      null; (10) khong session nghien cuu nao duoc mo cho hang do. Doi chung duong cho (2) va (10): gieo kem mot hang
+      kind "identify" hop le (co contact) — claimDue cua lan nghien cuu NHAN dung hang do, khong nhan hang onboarding-identify.
+      CHIEU DO: ban sao bo "onboarding-identify" khoi DIRECT_KINDS -> dong 1 do voi thong diep ghim "onboarding-identify khong o lan truc tiep";
+      ban sao dua onboarding-identify vao lan nghien cuu -> dong 2 do voi thong diep ghim "lan nghien cuu nhan onboarding-identify".
+
+  - id: E1c
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dpv_mach_lien
+    paths:
+      - "apps/api/src/agent/agent-trigger.service.ts"
+      - "apps/api/src/onboarding/onboarding-ingest.service.ts"
+      - "packages/db/src/agent-tasks.ts"
+      - "apps/agent/agent/lib/dispatch.ts"
+      - "apps/agent/agent/lib/ma-lech.ts"
+      - "apps/api/test/dieu-phoi-va.spec.ts"
+      - "apps/agent/test/dieu-phoi-va.spec.ts"
+    expected: |
+      Mach lien that trong CUNG mot luot `bun run test` (cung co so du lieu cua luot): (a) apps/api/test/dieu-phoi-va.spec.ts
+      describe "mach-lien-ghi" tao ke hoach mo id "dpv-mach-lien-<ma luot>" va goi OnboardingIngestController that voi lo
+      hai ma lech, KHONG don hang AgentTask; (b) apps/agent/test/dieu-phoi-va.spec.ts describe "mach-lien-doc" tim hang
+      onboarding-identify cua ke hoach do (khong tu gieo), chay mot luot lan truc tiep that. Ma tran: (1) dung hai hang
+      duoc nhan boi claimDue cua lan truc tiep; (2) dung hai Activity TASK mo, moi Activity mang dung mot ma; (3) ca hai
+      AgentTask dong; don ke hoach + Activity + AgentTask o cuoi (b).
+      CHIEU DO: ban sao writer dat runAt o tuong lai (hoac kind khac) -> dong 1 do voi thong diep ghim "lan truc tiep khong nhan hang API ghi".
 
   - id: E1b
     criterion: AC-1
@@ -37,8 +61,9 @@ evals:
       apps/api/test/dieu-phoi-va.spec.ts describe "nhan-lo": goi OnboardingIngestController that voi mot lo co mot ma khop
       va mot ma lech. Ma tran: (1) mot hang AgentTask kind onboarding-identify cho ma lech; (2) payload cua hang qua
       onboardingIdentifyPayload.parse va mang dung planId, platformBrokerId; (3) kind cua hang thuoc DIRECT_KINDS doc tu
-      @crm/db/agent-tasks (vong ghi -> doc khep bang mot schema).
-      CHIEU DO: ban sao agent-trigger ghi payload { plan: planId } -> dong 2 do voi thong diep ghim "payload onboarding-identify khong qua schema".
+      @crm/db/agent-tasks (vong ghi -> doc khep bang mot schema); (4) lo ba ma lech -> dung ba hang, moi hang qua schema
+      voi dung ma cua no (doi chung: lo mot ma lech -> mot hang).
+      CHIEU DO: ban sao gom ca lo vao mot hang -> dong 4 do voi thong diep ghim "ma lech bi gom vao mot hang"; ban sao agent-trigger ghi payload { plan: planId } -> dong 2 do voi thong diep ghim "payload onboarding-identify khong qua schema".
 
   - id: E2
     criterion: AC-2
@@ -116,6 +141,20 @@ evals:
       chu "bộ phận", so OnboardingStep cua ke hoach khong doi. Doi chung duong: bo phan dang dung -> buoc duoc ghi.
       CHIEU DO: ban sao bo kiem bo phan -> ca (b) do voi thong diep ghim "addStep ghi buoc vao bo phan da luu tru".
 
+  - id: E6b
+    criterion: AC-6
+    executor: test
+    layer: ui-observed
+    cmd: config:executors.test.dpv_them_buoc_dom
+    paths:
+      - "apps/app/components/crm/record-sheet/plan-steps.tsx"
+      - "apps/app/test/dieu-phoi-va.dom.tsx"
+    expected: |
+      dieu-phoi-va.dom.tsx describe "loi-bo-phan": addStep gia lap nem TRPCClientError BAD_REQUEST voi thong diep "Bộ phận
+      đã lưu trữ". Ma tran: (1) thong diep hien trong form; (2) o ten giu dung chu da go; (3) form van mo (o chon bo phan con
+      trong DOM). Doi chung duong: addStep thanh cong -> form dong.
+      CHIEU DO: ban sao dong form khi loi -> dong 3 do voi thong diep ghim "form dong khi luu loi".
+
   - id: E7
     criterion: AC-7
     executor: test
@@ -130,8 +169,9 @@ evals:
       createdById nguoi A), 3 TASK qua han cua nguoi B, 2 TASK cua A da xong, 2 TASK cua A han hom nay, 15 OnboardingStep
       qua han giao A trong ke hoach mo, 2 buoc qua han giao A trong ke hoach da dong. Goi dashboard.summary that. Ma tran:
       (1) "Cua toi" A: quaHan.viec = 25; (2) quaHan.buoc = 15; (3) overdueTasks.length = 10; (4) "Tat ca": quaHan.viec =
-      28 cong so TASK qua han san co dem doc lap bang db.activity.count cung dieu kien; (5) doi chung: viec han hom nay va
-      viec da xong khong dem.
+      28 cong so TASK qua han san co (so san co dem truoc khi gieo, mot lan, roi cong 28 viet truoc); (5) "Tat ca":
+      quaHan.buoc = 15 (van la buoc cua A, khong doi theo pham vi); (6) doi chung: viec han hom nay, viec da xong, buoc
+      trong ke hoach da dong khong dem.
       CHIEU DO: ban sao dem bang overdueTasks.length -> dong 1 do voi thong diep ghim "quaHan.viec bi tran 10".
 
   - id: E7b
