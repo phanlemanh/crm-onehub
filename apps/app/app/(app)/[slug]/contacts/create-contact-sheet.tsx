@@ -2,7 +2,12 @@
 
 import Add from "@carbon/icons-react/es/Add";
 import { Button } from "@crm/ui/components/button";
-import { Field, FieldGroup, FieldLabel } from "@crm/ui/components/field";
+import {
+	Field,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -24,9 +29,10 @@ import {
 	SheetTrigger,
 } from "@crm/ui/components/sheet";
 import { Spinner } from "@crm/ui/components/spinner";
+import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { type ComponentProps, Suspense, useId, useState } from "react";
+import { type ComponentProps, Suspense, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
@@ -67,6 +73,9 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 	);
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
+	const [phone, setPhone] = useState("");
+	const [phoneInvalid, setPhoneInvalid] = useState(false);
+	const phoneRef = useRef<HTMLInputElement>(null);
 	const [email, setEmail] = useState("");
 	const [title, setTitle] = useState("");
 	const [company, setCompany] = useState(companyId ?? NONE);
@@ -74,6 +83,7 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 
 	const firstNameId = useId();
 	const lastNameId = useId();
+	const phoneId = useId();
 	const emailId = useId();
 	const titleId = useId();
 
@@ -91,6 +101,7 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 				await setOpen(null);
 				setFirstName("");
 				setLastName("");
+				setPhone("");
 				setEmail("");
 				setTitle("");
 				openRecord({ kind: "contact", id: contact.id });
@@ -115,9 +126,15 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 					className="flex-1 overflow-y-auto px-4"
 					onSubmit={(event) => {
 						event.preventDefault();
+						if (docSoDienThoai(phone).kind === "sai") {
+							setPhoneInvalid(true);
+							phoneRef.current?.focus();
+							return;
+						}
 						create.mutate({
 							firstName,
 							lastName: lastName || undefined,
+							phone: phone || undefined,
 							email: email || undefined,
 							title: title || undefined,
 							companyId: company === NONE ? null : company,
@@ -147,6 +164,27 @@ function CreateContactForm({ companyId }: { companyId?: string }) {
 								onChange={(event) => setLastName(event.target.value)}
 								autoComplete="off"
 							/>
+						</Field>
+
+						<Field data-invalid={phoneInvalid || undefined}>
+							<FieldLabel htmlFor={phoneId}>{m.create.phone}</FieldLabel>
+							<Input
+								id={phoneId}
+								ref={phoneRef}
+								type="tel"
+								inputMode="tel"
+								value={phone}
+								onChange={(event) => {
+									setPhoneInvalid(false);
+									setPhone(event.target.value);
+								}}
+								placeholder={m.create.phonePlaceholder}
+								aria-invalid={phoneInvalid || undefined}
+								autoComplete="off"
+							/>
+							{phoneInvalid ? (
+								<FieldError>{m.create.phoneInvalid}</FieldError>
+							) : null}
 						</Field>
 
 						<Field>

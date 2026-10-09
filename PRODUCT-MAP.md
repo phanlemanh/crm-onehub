@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>4 việc"]
+  GD --> B["Sắp mở vòng<br/>3 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>134 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>58 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>61 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -38,7 +38,6 @@ flowchart TD
 ## Sắp mở vòng
 
 - Eval gọi model thật chỉ chạy khi đầu vào của nó đổi (prompt, model, dữ liệu mẫu), và chấm theo biên thống kê thay vì một ngưỡng cứng sát điểm đo (`eval-model-that-dung-luc`)
-- Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần sau mỗi lần gộp vào onehub (và mỗi đêm), không còn nằm trong lượt ghim lại của một hồ sơ (`kiem-cheo-sau-gop`)
 - Thước đo của hồ sơ đã ký neo vào mốc cố định của chính lượt đó, không so với origin/onehub hay merge-base, nên không tự đỏ khi các lượt sau gộp vào (`thuoc-khong-tu-het-han`)
 - «Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi» (`trang-lo-trinh-trong-crm`)
 
@@ -57,6 +56,7 @@ flowchart TD
 - Cây tổ chức hai cấp dưới gốc OneHub — bộ phận chứa phòng ban — có người, có trưởng, dựng và nhập hàng loạt ở Cài đặt › Tổ chức (`cau-truc-to-chuc`)
 - «Thành viên thường không nhờ chat sửa trường của cả đội; model bị gỡ thì chat lùi về mặc định và báo quản trị» (`chat-an-toan-truoc-r1`)
 - Chỉ quản trị và chủ đổi được định nghĩa trường của cả đội — thành viên thường vẫn xem được, nhưng mọi đường đổi đều khoá, cả trên màn lẫn khi gọi thẳng máy chủ (`chi-quan-tri-sua-duoc-truong`)
+- CI của kho chạy test thành ma trận ba ô song song trên ba máy, và ci.yml do OneHub tự giữ thay vì là tệp cấm sửa của hãng (`ci-ma-tran-ba-o`)
 - Cửa vào đăng nhập cho người mới — trang /sign-in nói cách vào ở khối «Lần đầu vào?» (bước tính theo nút đang bật), báo lỗi khi better-auth trả về vì địa chỉ chưa được cho phép, theo giao diện máy thay vì ép tối; bốn trang AuthShell khác giữ bố cục (`cua-vao-dang-nhap`)
 - Cửa vào vá — Quên mật khẩu giữ logo, đăng xuất lỗi báo tiếng Việt, API không đọc được phiên thì không đá người còn phiên về đăng nhập mà hiện trang lỗi có «Thử lại»; trả nợ thước cua-vao-dang-nhap (`cua-vao-va`)
 - «Đã lưu trữ» ở Cài đặt › Giai đoạn báo lỗi tải và cho thử lại thay vì biến mất (`da-luu-tru-tai-loi`)
@@ -64,6 +64,7 @@ flowchart TD
 - Khu OKR trong CRM — quản trị mở chu kỳ năm và quý; mỗi cấp đặt mục tiêu với KR đủ sáu kiểu, căn chỉnh vào cấp trên, công bố; nhập bộ OKR quý 4 từ bảng tính có xem trước; mọi sửa đổi để lại vết (`dat-okr-trong-crm`)
 - «Bảng rỗng vì đang lọc thì nói rõ, nút bỏ lọc đúng tên, lựa chọn có số 0 vẫn hiện» (`datatable-loc-ro`)
 - «Danh sách thoả thuận Kara trả có chấm màu giai đoạn; số liệu ẩn danh theo giai đoạn có tập khoá đóng» (`deal-va`)
+- «Số điện thoại là trường chính của cá nhân: nhập được lúc tạo, thấy ở bảng, tìm được theo số, không trùng» (`dien-thoai-ca-nhan`)
 - Đổi tên sản phẩm trên mọi chữ người đọc từ «CRM» sang «OneHub Center» (trùng tên miền onehub.center), và làm lại cột trái /sign-in theo hướng A — nền lưới chấm bằng token cho năm trang AuthShell, dòng neo cỡ lớn, ba bước nối bằng đường dọc, không Card (`doi-ten-onehub-center`)
 - «Dòng thời gian giữ các hoạt động đã tải khi «Xem cũ hơn» hay làm mới ngầm bị lỗi» — lỗi sau khi đã có dữ liệu không thay danh sách bằng khung lỗi; thông báo tại chỗ kèm «Thử lại» tải đúng phần hỏng (`dong-thoi-gian-giu-khi-loi`)
 - «Thông báo lỗi của dòng thời gian theo đúng lượt tải đã hỏng, không theo lượt đang chạy» — khi lỗi «Xem cũ hơn» và lỗi làm mới chồng nhau, thông báo chỉ đổi khi một lượt tải đã xong (`dong-thoi-gian-loi-dung-luot`)
@@ -78,6 +79,7 @@ flowchart TD
 - «Nguồn không kẹt mãi ở «đang đọc» khi máy soạn lỗi; «Soạn lại» chạy được; hộp chèn liên kết báo lỗi thay vì «không trang nào khớp»» (`kho-nguon-khong-ket`)
 - «Kara trong hồ sơ bản ghi có một khung chung» — tab Kara của ngăn cá nhân, công ty, thoả thuận nói tiếng Việt với dấu, trạng thái và «Thử lại» của Kara; đề xuất thông tin liên hệ neo tại chỗ, nhận xong có biên nhận và Hoàn tác (thêm lệnh hoàn tác ở API); khung bản ghi tải lỗi có «Thử lại»; nút tra cứu mang dấu Kara; ngăn thêm nhanh hỏi lại khi lỡ đóng (`khung-ban-ghi-kara`)
 - Khung OKR trước R1 — khung Mục tiêu và thanh Theo đơn vị hết chín lỗi trình bày, liên kết chéo hỏi lại trước khi bỏ thay đổi (`khung-okr-truoc-r1`)
+- Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần mỗi đêm cho mọi lần gộp vào onehub từ mốc trước, ngoài mọi lượt ghim lại; đỏ thì gọi tên lần gộp gây đỏ (`kiem-cheo-sau-gop`)
 - Màn OKR trước R1 — Hồi ý không bị thanh công bố che, Cập nhật tuần nói «đã xong tuần này», thẻ Toàn cảnh không nói ngược bảng (`man-okr-truoc-r1`)
 - Máy nhắc thay người canh — mỗi sáng một tin Slack riêng gom bước quá hạn, bước sắp hạn, kế hoạch im và mốc ngày 7 · 14 · 30; thẻ Tasks hiện cùng danh sách; ai cũng tự theo dõi được một kế hoạch (`may-nhac-truoc-nguoi`)
 - Máy soạn bản đề xuất — tải tệp quy định đang có (Word, PDF có chữ) lên kho tài liệu, máy soạn thành bản đề xuất có trích đoạn nguồn, chủ trang đọc nguồn cạnh nhau rồi duyệt (`may-soan-de-xuat`)
