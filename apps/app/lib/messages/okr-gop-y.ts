@@ -13,6 +13,13 @@ const vi = {
 		dangDoc: "Kara đang đọc Mục tiêu này…",
 		viecTai: "tải góp ý",
 		taiLoiMoTa: "Góp ý không mất. Tải lại để xem tiếp.",
+		viecDoc: "đọc Mục tiêu này",
+		nhoLoi: {
+			"khong-quyen":
+				"Bạn không sửa được Mục tiêu hay KR nào ở đây nên chưa nhờ Kara được.",
+			"mat-mang": "Mất kết nối nên lời nhờ chưa tới Kara. Chưa trừ lượt nào.",
+			khac: "Lời nhờ chưa tới Kara. Chưa có gì bị ghi vào Mục tiêu.",
+		},
 		rong: "Kara không thấy chỗ nào cần sửa",
 		rongMoTa: (gio: string) =>
 			`Tên, «vì sao lúc này» và các KR đã đọc ổn lúc ${gio}. Sửa xong thì nhờ Kara đọc lại.`,
@@ -116,6 +123,14 @@ const en: OkrGopYMessages = {
 		dangDoc: "Kara is reading this objective…",
 		viecTai: "load suggestions",
 		taiLoiMoTa: "Nothing was lost. Reload to see the suggestions.",
+		viecDoc: "read this objective",
+		nhoLoi: {
+			"khong-quyen":
+				"You can't edit this objective or any of its KRs, so Kara can't be asked here.",
+			"mat-mang":
+				"The connection dropped before the request reached Kara. No request was used.",
+			khac: "The request didn't reach Kara. Nothing was written to the objective.",
+		},
 		rong: "Kara found nothing to change",
 		rongMoTa: (gio: string) =>
 			`The title, “why now” and the KRs read well at ${gio}. Ask Kara again after you edit.`,

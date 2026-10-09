@@ -287,10 +287,26 @@ function KhoiLoi({ gopY, laVung }: { gopY: GopYMucTieu; laVung?: boolean }) {
 	);
 }
 
+function KhoiLoiKara({ gopY, moTa }: { gopY: GopYMucTieu; moTa: string }) {
+	const m = okrGopYMessages(useLocale());
+	return (
+		<KaraState
+			kind="error"
+			what={m.vung.viecDoc}
+			description={moTa}
+			onRetry={gopY.thuLai}
+		/>
+	);
+}
+
 function SauKhiQuyetHet({ gopY }: { gopY: GopYMucTieu }) {
 	const m = okrGopYMessages(useLocale());
 	if (gopY.docLai === "dang-doc")
 		return <ThinkingIndicator label={m.vung.dangDoc} />;
+	if (gopY.docLai === "nho-loi")
+		return (
+			<KhoiLoiKara gopY={gopY} moTa={m.vung.nhoLoi[gopY.loiNho ?? "khac"]} />
+		);
 	if (gopY.docLai === "loi") return <KhoiLoi gopY={gopY} />;
 	return (
 		<div>
@@ -346,6 +362,15 @@ export function VungKara({
 			);
 		case "loi":
 			return <KhoiLoi gopY={gopY} laVung />;
+		case "nho-loi":
+			return (
+				<div data-nhom-kara="nho-loi">
+					<KhoiLoiKara
+						gopY={gopY}
+						moTa={m.vung.nhoLoi[gopY.loiNho ?? "khac"]}
+					/>
+				</div>
+			);
 		case "tai-loi":
 			return (
 				<div data-nhom-kara="tai-loi">

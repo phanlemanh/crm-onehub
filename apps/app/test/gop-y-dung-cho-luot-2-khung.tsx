@@ -227,3 +227,65 @@ describe("k3-tai-loi", () => {
 		);
 	});
 });
+
+describe("k3-nho-loi", () => {
+	const MA_TRAN = [
+		{
+			ten: "403",
+			loai: "khong-quyen",
+			nem: () => new LoiTrpc("FORBIDDEN", "Forbidden resource"),
+		},
+		{
+			ten: "400",
+			loai: "khac",
+			nem: () => new LoiTrpc("BAD_REQUEST", "krKhacMucTieu"),
+		},
+		{
+			ten: "mat-mang",
+			loai: "mat-mang",
+			nem: () => new TypeError("Failed to fetch"),
+		},
+	] as const;
+
+	test("k3-nho-loi Nho Kara bi tu choi hay loi thi vung hien KaraState loi voi cau san pham va Thu lai", async () => {
+		for (const ca of MA_TRAN) {
+			kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 0 }));
+			kho.troLy = () => dsTroLy([], { maKetThuc: null, docLuc: null });
+			kho.ghiRieng.set("okr.troLyDeXuat", async () => {
+				throw ca.nem();
+			});
+			await dungSheet();
+			await cho(() => qs("[data-nut=nho-kara]") !== null, `${ca.ten} nut nho`);
+			await bamChuot(qs("[data-nut=nho-kara]") ?? document.body);
+			await cho(
+				() => goiCua("okr.troLyDeXuat").length === 1,
+				`${ca.ten} da goi`,
+			);
+			await nhip(6);
+			const loi = qsa("[data-kara-state=error]", vungKara() ?? document.body);
+			if (loi.length !== 1) throw new Error("nho kara loi ma khong co cau");
+			const chu = loi[0]?.textContent ?? "";
+			kiemCa(
+				{
+					tieuDe:
+						loi[0]?.querySelector("[data-slot=empty-title]")?.textContent ??
+						null,
+					moTa:
+						loi[0]?.querySelector("[data-slot=empty-description]")
+							?.textContent ?? null,
+					coThuLai: loi[0]?.querySelector("[data-slot=kara-retry]") !== null,
+					loCauTho: chu.includes(ca.nem().message),
+				},
+				{
+					tieuDe: ui.karaKhung.chuaDuoc(m.vung.viecDoc),
+					moTa: m.vung.nhoLoi[ca.loai],
+					coThuLai: true,
+					loCauTho: false,
+				},
+				(k) => `${ca.ten} sai: ${k}`,
+			);
+			await thaoHet();
+			kho.daGhi = [];
+		}
+	});
+});

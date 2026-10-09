@@ -15,6 +15,7 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
+import { z } from "zod";
 import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { troLyOkrMessages } from "@/lib/messages/tro-ly-okr";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -31,9 +32,25 @@ export type NoiDungKara =
 	| "rong"
 	| "loi"
 	| "tai-loi"
+	| "nho-loi"
 	| "co-gop-y";
 
-export type DocLaiKara = "yen" | "dang-doc" | "loi";
+export type DocLaiKara = "yen" | "dang-doc" | "loi" | "nho-loi";
+
+export type LoaiLoiNho = "khong-quyen" | "mat-mang" | "khac";
+
+const loiCoMa = z.object({ data: z.object({ code: z.string() }) });
+
+function maLoi(cause: unknown): string | null {
+	const doc = loiCoMa.safeParse(cause);
+	return doc.success ? doc.data.data.code : null;
+}
+
+export function loaiLoiNho(cause: unknown): LoaiLoiNho {
+	const ma = maLoi(cause);
+	if (ma === null) return "mat-mang";
+	return ma === "FORBIDDEN" ? "khong-quyen" : "khac";
+}
 
 export type NutKara =
 	| { loai: "an" }
@@ -175,6 +192,9 @@ export function useGopYMucTieu({
 				: false,
 	});
 	const deXuat = useMutation(trpc.okr.troLyDeXuat.mutationOptions());
+	const loiNho: LoaiLoiNho | null = deXuat.isError
+		? loaiLoiNho(deXuat.error)
+		: null;
 	const quyetDong = useMutation(trpc.okr.troLyQuyet.mutationOptions());
 	const suaMucTieu = useMutation(trpc.okr.updateObjective.mutationOptions());
 	const suaKr = useMutation(trpc.okr.updateKeyResult.mutationOptions());
@@ -222,6 +242,7 @@ export function useGopYMucTieu({
 		if (ds === undefined || ds.lyDo !== null) return "tat";
 		if (tatCa.length > 0) return "co-gop-y";
 		if (!ghiDuoc) return "tat";
+		if (loiNho !== null) return "nho-loi";
 		if (dangSoan && !quaHan) return "dang-doc";
 		if (quaHan || (maKetThuc !== null && maKetThuc !== DA_NOP)) return "loi";
 		if (maKetThuc === DA_NOP) return "rong";
@@ -229,6 +250,7 @@ export function useGopYMucTieu({
 	})();
 
 	const docLai: DocLaiKara = (() => {
+		if (loiNho !== null) return "nho-loi";
 		if (batDau === null) return "yen";
 		if (dangSoan && !quaHan) return "dang-doc";
 		if (quaHan || (maKetThuc !== null && maKetThuc !== DA_NOP)) return "loi";
@@ -256,6 +278,8 @@ export function useGopYMucTieu({
 			},
 		});
 	};
+
+	const thuLai = () => nho();
 
 	const quyet = (d: DongHien, cach: CachQuyet, giaTri?: string) => {
 		if (dangQuyet !== null || !ghiDuoc) return;
@@ -353,6 +377,8 @@ export function useGopYMucTieu({
 		ghiDuoc,
 		docLai,
 		taiLai: () => void danhSach.refetch(),
+		loiNho,
+		thuLai,
 		daTai: !coDich || !nhoDuoc || danhSach.isError || ds !== undefined,
 	};
 }
