@@ -16,9 +16,9 @@ evals:
       (a) jobs dung ba khoa acceptance, build, agent-okr-node24;
       (b) job acceptance: name «acceptance gate»; khong if, khong continue-on-error cap job; env co DATABASE_URL;
           chuoi buoc dung thu tu checkout (fetch-depth 0) -> setup-node (node-version 24) -> setup-bun ->
-          «bun install --frozen-lockfile» -> «node scripts/luat-kho/do-cay.mjs --du-luat» (khong if) -> buoc chay
-          product-map.mjs -> buoc chay pre-merge-check.sh -> «bun run test:dieu-phoi»; ba buoc sau luat kho co
-          if dung «${{ !cancelled() }}»;
+          «bun install --frozen-lockfile» -> «node scripts/luat-kho/do-cay.mjs --du-luat» (khong if) -> «bun run
+          test:dieu-phoi» -> buoc chay product-map.mjs -> buoc chay pre-merge-check.sh; ba buoc sau luat kho co
+          if dung «${{ !cancelled() }}»; khoa job la luat-kho (regex cua luat-kho-vong-doi neo o khoa nay);
       (c) agent-okr-node24: if cap job dung «github.event_name == 'pull_request'»; build: KHONG co if cap job; phan
           con lai cua hai job bang tung khoa voi ban o merge-base (git show $(git merge-base HEAD
           origin/onehub):.github/workflows/acceptance.yml, khong chep tay);
