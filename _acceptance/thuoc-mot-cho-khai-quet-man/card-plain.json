@@ -1,0 +1,100 @@
+{
+ "feature_plain": "Phép kiểm «tập kết quả nộp OKR chỉ khai một chỗ» thôi bỏ sót khu soạn OKR: nó đọc thật đủ ba khu mã, và khu nào đọc ra rỗng thì báo đỏ gọi tên thay vì im lặng xanh.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ đọc đủ ba khu mã (Kara soạn OKR, màn soạn, bộ kiểm dữ liệu chung), mỗi khu đếm đúng bằng số tệp kho đang theo dõi, và vẫn xanh trên mã hôm nay."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ báo đỏ, gọi tên tệp, khi bất kỳ khu nào khai lại tập kết quả nộp — kèm chứng cứ bản kiểm cũ bỏ lọt đúng ca khu màn soạn."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ báo đỏ «khu quét rỗng» gọi tên khu khi một khu không có tệp nào, thay vì xanh."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ giữ đường dẫn khu màn soạn khai đúng một chỗ trong bộ kiểm, và không còn dùng cách dò tệp đã gây lỗi."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ giữ nguyên lời hứa đã ký của phép kiểm K2b: lệnh cũ vẫn chạy, xanh và đỏ đúng như lúc ký."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ chỉ chạm các tệp trong ranh giới đã giao, và tệp cấu hình đo chỉ thêm dòng."
+  }
+ ],
+ "scope_plain": "Những việc cố ý để ngoài vòng này:",
+ "wont_do": [
+  {
+   "id": "OOS-1",
+   "p": "KHÔNG làm các mục ngoài hợp đồng khác của K2b — anh đã quyết riêng (K2c, hạn chế đã biết)."
+  },
+  {
+   "id": "OOS-2",
+   "p": "KHÔNG sửa phép kiểm của hồ sơ khác — đo 09/10 chỉ phép kiểm này mắc lỗi dò tệp."
+  },
+  {
+   "id": "OOS-3",
+   "p": "KHÔNG đổi hợp đồng hay danh sách eval đã ký của K2b."
+  },
+  {
+   "id": "OOS-4",
+   "p": "KHÔNG sửa mã sản phẩm — màn soạn hôm nay không khai lại tập (0 trong 22 tệp)."
+  }
+ ],
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Độ phủ là bảng ba khu mã × ba tình huống, viết tay đủ chín ô (không chạy bước quét tự động — có dòng sổ bỏ)."
+  },
+  {
+   "i": 1,
+   "p": "Cột: khu mã · mã lành · có khai trùng · khu rỗng."
+  },
+  {
+   "i": 2,
+   "p": "Khu Kara soạn OKR: lành ở AC-1 · khai trùng ở AC-2 · rỗng ở AC-3."
+  },
+  {
+   "i": 3,
+   "p": "Khu màn soạn: lành ở AC-1 · khai trùng ở AC-2 (chỗ lỗi gốc) · rỗng ở AC-3."
+  },
+  {
+   "i": 4,
+   "p": "Khu bộ kiểm dữ liệu chung: lành ở AC-1 · khai trùng ở AC-2 · rỗng ở AC-3."
+  },
+  {
+   "i": 5,
+   "p": "Thước đủ: ba khu đúng là ba khu mà phép kiểm K2b đã hứa quét (AC-7 của K2b)."
+  },
+  {
+   "i": 6,
+   "p": "AC-4 giữ một chỗ khai đường quét, AC-5 giữ lời hứa đã ký của K2b, AC-6 giữ ranh giới."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Bằng chứng «bản cũ bỏ lọt» lúc đầu chỉ chứng được bản cũ không hiểu cờ mới. Đã đổi: dựng một bản sao kho tạm, chạy cả bản cũ lẫn bản mới trên cùng bản sao — bản cũ xanh dù có khai trùng ở màn soạn, bản mới đỏ."
+  },
+  {
+   "i": 1,
+   "p": "Phép đếm hứa «bằng số tệp kho theo dõi» nhưng chưa có ca nào thử lệch một tệp. Đã thêm ca bỏ đúng một tệp phải báo «khong khop (21 / 22)», và in cả hai vế từng khu."
+  },
+  {
+   "i": 2,
+   "p": "Luật «một chỗ khai» lúc đầu sẽ báo đỏ oan vì một phép kiểm khác của K2b có đường tệp cụ thể. Đã đo hiện trạng, thu hẹp luật về đường khu màn soạn, và bắt mọi cách gọi dò tệp."
+  },
+  {
+   "i": 3,
+   "p": "Chưa đo xem sửa tệp dùng chung có làm cũ phép kiểm nhìn màn của K2b không. Đã đo: không phép kiểm nào của K2b khai tệp đó; chỉ phép kiểm mẫu số một (E7) bị chạm và sẽ ghim lại cuối nhánh."
+  },
+  {
+   "i": 4,
+   "p": "Ca «khu rỗng» chưa đòi mã thật còn nguyên sau lượt. Đã thêm: so dấu từng tệp thật và trạng thái git trước và sau, như ca khai trùng."
+  }
+ ]
+}
