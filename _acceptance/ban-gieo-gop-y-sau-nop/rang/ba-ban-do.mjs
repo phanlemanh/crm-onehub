@@ -1,5 +1,11 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+	existsSync,
+	mkdirSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,9 +15,14 @@ const BANG = join(
 	GOC,
 	"_acceptance/ban-gieo-gop-y-sau-nop/evidence/ba-ban-do.txt",
 );
-const KHOA = ["gy_man_that", "r1a_man_khung", "r1a_man_thanh", "r1d_man_okr"];
+const KHOA = ["gy_man_that", "r1a_man_chip", "r1d_man_okr"];
+const BANG_CHUNG = [
+	"_acceptance/gop-y-dung-cho/evidence",
+	"_acceptance/khung-okr-truoc-r1/evidence",
+	"_acceptance/okr-to-chuc-va/evidence",
+];
 const DAU_HIEU = /^gieo-gop-y: xong/m;
-const KET = /^(KET LUAN|KHONG DO DUOC)\b.*$/gm;
+const KET = /^(KET LUAN\b|KHONG DO DUOC\b|so o: \d+).*$/gm;
 
 export function phanLoai(text) {
 	const ket = [...text.matchAll(KET)].map((m) => m[0]);
@@ -41,10 +52,29 @@ if (thieu.length) {
 	process.exit(2);
 }
 
+function trangThaiBangChung() {
+	const r = spawnSync(
+		"git",
+		["status", "--porcelain", "--untracked-files=all", "--", ...BANG_CHUNG],
+		{ cwd: GOC, encoding: "utf8" },
+	);
+	return new Set(r.stdout.split("\n").filter(Boolean));
+}
+
+function traBangChung(truoc) {
+	const moi = [...trangThaiBangChung()].filter((d) => !truoc.has(d));
+	const sua = moi.filter((d) => !d.startsWith("??")).map((d) => d.slice(3));
+	const them = moi.filter((d) => d.startsWith("??")).map((d) => d.slice(3));
+	if (sua.length) spawnSync("git", ["checkout", "--", ...sua], { cwd: GOC });
+	for (const t of them) rmSync(join(GOC, t), { force: true });
+	return sua.length + them.length;
+}
+
 mkdirSync(RA, { recursive: true });
 const dong = [];
 const loi = [];
 for (const [k, l] of lenh) {
+	const truoc = trangThaiBangChung();
 	const r = spawnSync("bash", ["-c", l], {
 		cwd: GOC,
 		encoding: "utf8",
@@ -52,8 +82,9 @@ for (const [k, l] of lenh) {
 	});
 	const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
 	writeFileSync(join(RA, `ban-do-${k}.txt`), ra);
+	console.log(`tra lai ${traBangChung(truoc)} tep bang chung`);
 	const { qua, ket } = phanLoai(ra);
-	const d = `${k}: ma ${r.status} · ${ket ?? "(khong co KET LUAN hay KHONG DO DUOC)"}`;
+	const d = `${k}: ma ${r.status} · ${ket ?? "(khong co KET LUAN, KHONG DO DUOC hay so o)"}`;
 	dong.push(d);
 	console.log(d);
 	if (ket === null) loi.push(`thieu ket luan: ${k}`);

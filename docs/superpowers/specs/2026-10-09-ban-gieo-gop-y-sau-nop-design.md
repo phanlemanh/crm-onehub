@@ -44,10 +44,10 @@ trong `finally`). `gieo-thu.mjs` và `kiem-nop.mjs` nhận đường dẫn bàn 
   hàng `agentTask` từ CSDL, đưa cả hai vào `kiemNopXong` và đòi nó ném.
 - E2 (AC-2): `rang/kiem-nop.mjs` gọi `kiemNopXong` với ma trận viết trước bốn ca (da-ghi + da-nop → qua; tu-choi;
   da-ghi + việc chưa đóng; da-ghi + kết cục `loi`), không cần CSDL.
-- E3 (AC-3): `rang/ba-ban-do.mjs` chạy bốn khoá bàn đo của ba hồ sơ (`gy_man_that`, `r1a_man_khung`,
-  `r1a_man_thanh`, `r1d_man_okr`). Một lệnh qua bước gieo khi và chỉ khi đầu ra có dòng `gieo-gop-y: xong`; thiếu
-  thì «khong qua buoc gieo: <khoá>», bất kể lệnh in lỗi gì. In ra stdout bốn dòng
-  `<khoá>: ma <mã> · <dòng KET LUAN hay KHONG DO DUOC cuối>` (dòng nào thiếu cả hai thì E3 đỏ) và ghi cùng nội dung
+- E3 (AC-3): `rang/ba-ban-do.mjs` chạy ba khoá bàn đo gọi bàn gieo (`gy_man_that`, `r1a_man_chip`,
+  `r1d_man_okr`). Một lệnh qua bước gieo khi và chỉ khi đầu ra có dòng `gieo-gop-y: xong`; thiếu
+  thì «khong qua buoc gieo: <khoá>», bất kể lệnh in lỗi gì. In ra stdout ba dòng
+  `<khoá>: ma <mã> · <dòng kết quả cuối: KET LUAN, KHONG DO DUOC hay so o>` (dòng nào thiếu cả hai thì E3 đỏ) và ghi cùng nội dung
   vào `_acceptance/ban-gieo-gop-y-sau-nop/evidence/ba-ban-do.txt`. Bàn đỏ ở bước đo không làm E3 đỏ — nó thành
   mục ngoài hợp đồng cho Cổng 2. Bộ phân loại cũng chạy được trên một tệp đầu ra có sẵn (`--phan-loai <tệp>`).
 - E4 (AC-4): `rang/ranh-gioi.mjs` theo khuôn của K3: chỉ `san-gop-y.mjs`, thư mục hồ sơ, `config.yaml` (chỉ dòng

@@ -24,7 +24,7 @@ không chạy được nữa, nên các ô đo màn (`ui-check`) không đo lạ
   «viec … da dong truoc khi nop xong».
 - Ba bàn đo gọi `gieoGopY`, nên cả ba dừng ở bước chuẩn bị với `KHONG DO DUOC`:
   - `gop-y-dung-cho` — `rang/man-gop-y.mjs`, khoá `gy_man_that` (E2 và các ô `ui-check` khác).
-  - `khung-okr-truoc-r1` — `rang/man-khung.mjs`, khoá `r1a_man_khung`, `r1a_man_thanh`.
+  - `khung-okr-truoc-r1` — `rang/man-khung.mjs` phần `chip`, khoá `r1a_man_chip` (các phần khác không gieo).
   - `okr-to-chuc-va` — `rang/man-okr.mjs`, khoá `r1d_man_okr`.
 - Không lưới nào bắt được: eval `ui-check` không chạy trong làn ghim lại, và pre-merge chỉ đọc bằng chứng đã ký.
 - Bằng chứng: lượt đo màn đầu của K3 (`kara-gop-y-luot-2`, 09/10) dừng ở đúng câu đó khi nhập `gieoGopY`. K3 tránh
