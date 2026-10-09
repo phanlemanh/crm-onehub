@@ -58,6 +58,7 @@
 		"./tai-lieu-hoi": "./src/tai-lieu-hoi.ts",
 		"./tai-lieu-quyen": "./src/tai-lieu-quyen.ts",
 		"./tai-lieu-tim": "./src/tai-lieu-tim.ts",
+		"./so-dien-thoai": "./src/so-dien-thoai.ts",
 		"./test-database": "./src/test-database.ts",
 		"./tracking": "./src/tracking.ts",
 		"./workspace": "./src/workspace.ts",
