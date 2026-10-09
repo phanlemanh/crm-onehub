@@ -1,51 +1,63 @@
-# Review findings: khoa-eve-khong-tranh (round 1)
+# Review findings: khoa-eve-khong-tranh (round 2)
 
 ## Trong hợp đồng
 
-- **Hình dạng 5 — tuyên quét lớp (ba phần của dấu) nhưng ma trận không cô lập phần ino**
-  file: `apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts:232`
-  severity: high
-  AC: AC-6
-  source: measurement
-  detail: AC-6 hứa một quan hệ trên cả ba phần: cungDau chỉ trả true khi ino, mtimeMs và ma đều bằng nhau. Ma trận sáu dòng có một dòng chỉ đổi ma (dòng 2, l.208) và một dòng chỉ đổi mtime (dòng 3, l.214), nhưng không dòng nào chỉ đổi ino. Dòng 6 «hai thu muc khac» (l.232) so goc0 với dauTrong, mà hai dấu này khác nhau cả ở ma (uuid so với null, vì thư mục `trong` không có chu.json) lẫn mtime. Nên nếu bỏ hẳn `a.ino === b.ino` khỏi cungDau thì cả sáu dòng vẫn xanh: dòng 6 vẫn ra false nhờ ma. Bảng đột biến trong dot-bien.mjs cũng không có cặp nào bỏ ino (cặp h chỉ bỏ mtimeMs). Vậy ma trận khai đủ số dòng (6) nhưng không phải ma trận toàn phần theo từng phần của dấu, và phần ino không có phép đo nào giữ.
-  rationale: AC-6 đòi cả ba phần (ino, mtime, ma) đều phải bằng mới là cùng khoá, kể cả ca ino bị cấp lại; không phép đo nào làm đỏ khi bỏ phần ino nên AC-6 không được chứng minh ở phần ino.
+Không có phát hiện nào trong hợp đồng.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Spec đọc chu.json bằng JSON.parse trần với kiểu viết tay, cạnh schema zod chuKhoaEve đã có**
-  Người dùng thấy gì: Bài thử đọc tệp ghi chủ khoá theo cách riêng thay vì dùng chung khuôn đã có, nên nếu sau này đổi tên một trường thì bài thử có thể vẫn xanh mà không còn kiểm đúng. Không ảnh hưởng người dùng cuối; chỉ làm bài thử kém chắc về sau.
-  file: `apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts`
-  severity: medium
-  Đề xuất: wont-fix
-- **Ca so-dau dòng (5) và (2) dựng dấu khoá bằng tay, trái với E9 «dấu RÚT từ thư mục khoá thật… (không gõ tay)»**
-  Người dùng thấy gì: Hai trong sáu ca so sánh dấu khoá dùng dữ liệu dựng tay thay vì lấy từ khoá thật, nên một thay đổi nhỏ ở cách đọc dấu có thể lọt qua mà bài thử vẫn xanh. Người dùng không thấy gì; chỉ là bài kiểm chưa chặt như đã hứa.
-  file: `apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts`
-  severity: medium
-  Đề xuất: known-limits
-- **Spec mới chép lại các helper của khoi-dong-don.spec.ts thay vì dùng chung qua test/support**
-  Người dùng thấy gì: Bài thử mới chép lại vài đoạn phụ trợ của bài thử cũ, hai bản có thể lệch nhau dần. Không ảnh hưởng người dùng, chỉ tốn công bảo trì.
+- **The child script in the spec reads chu.json raw: no zod parse and a hardcoded file name**
+  Người dùng thấy gì: Chi anh huong cach viet bai thu: neu tep khoa doi dang, bai thu co the bao sai nguyen nhan that bai. Nguoi dung san pham khong thay gi; sua khong dang cong.
   file: `apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts`
   severity: low
   Đề xuất: wont-fix
-- **The new «da doi chu» throw leaves the eve dev it just spawned running, recorded in no lock**
-  Người dùng thấy gì: Khi một lượt thử phát hiện khoá đã bị lượt khác lấy, nó báo lỗi nhưng có thể để lại một tiến trình eve chạy ngầm không ai quản. Lượt thử sau trên cùng thư mục có thể gặp lỗi «đã có máy chủ đang chạy» và đỏ ngẫu nhiên.
+
+- **gianhKhoaCu: renaming back after a dau mismatch is unhandled, and the first rename swallows every error**
+  Người dùng thấy gì: Khi ba lan chay bai thu cung tranh mot goc, bai thu co the dung lai voi loi he thong kho hieu va de sot mot thu muc khoa tam; hoac che mat nguyen nhan that khi may khong du quyen. Chi xay ra o bai thu chay song song, hiem.
+  file: `apps/agent-okr/test/support/khoi-dong.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **moEve leaves the just-spawned eve dev running when ghiConVaoKhoa throws the new «da doi chu» error**
+  Người dùng thấy gì: Khi mot bai thu phat hien khoa da bi doi chu, tien trinh eve no vua bat van chay mo coi va giu cong. Lan chay bai thu ke tiep tren cung thu muc se do 'dev server dang chay' va khong tu hoi phuc duoc cho toi khi nguoi xu ly tay.
   file: `apps/agent-okr/test/support/khoi-dong.ts`
   severity: medium
   Đề xuất: new-contract
-- **In gianhKhoaCu the rename back is not caught: ENOTEMPTY rejects giuKhoaEve and strands B's live lock under a .cu- name, or the rename silently replaces a new empty lock**
-  Người dùng thấy gì: Khi ba lượt thử tranh nhau cùng một lúc rất hẹp, một lượt có thể báo lỗi lạ hoặc làm hai lượt cùng tin mình giữ khoá. Hiếm gặp và chỉ xảy ra ở bài thử nội bộ, không chạm khách hàng.
+
+- **gianhKhoaCu puts the lock back with an unchecked renameSync: it overwrites an empty new lock or throws raw ENOTEMPTY and strands the live lock under .cu-**
+  Người dùng thấy gì: Khi co luot chay thu ba chen vao dung luc luot cho tra khoa lai, hoac hai luot cung nghi minh giu khoa, hoac mot luot dung voi loi he thong kho hieu va khoa song con bi de ngoai cho cu. Chi xay ra khi ba bai thu tranh nhau trong khoang rat ngan.
   file: `apps/agent-okr/test/support/khoi-dong.ts`
   severity: low
   Đề xuất: known-limits
-- **Hình dạng 2 — dòng (5) của so-dau dựng dấu bằng tay, trái với khai «dấu RÚT, không gõ tay»**
-  Người dùng thấy gì: Một ca so sánh dấu khoá («vắng mã ở một bên») được dựng bằng dữ liệu tự bịa nên không đi qua đoạn đọc thật. Nếu đoạn đọc thật đổi cách xử lý chỗ vắng thì bài thử vẫn xanh.
+
+- **While a waiting run has the lock renamed away, the live owner's traKhoaEve or exit cleanup does nothing, and the restored lock blocks the owner's own process**
+  Người dùng thấy gì: Neu bai thu dang giu khoa ket thuc dung vao khoang rat ngan luot khac vua doi ten khoa cua no, khoa duoc tra lai khong co ai giu, va cac bai thu sau tren cung thu muc phai doi toi nam phut roi bao 'van bi giu'. Cua so rat hep.
+  file: `apps/agent-okr/test/support/khoi-dong.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính một mình): doi-chu chỉ kiểm 'khoá của B còn', không có đối chứng dương rằng chủ thật vẫn gỡ được khoá của chính mình**
+  Người dùng thấy gì: Khong co bai thu nao kiem rang bai thu dang giu khoa van go duoc khoa cua chinh no khi xong. Neu viec go nay hong, thu muc khoa tam se bi de lai sau moi lan chay ma khong ai thay.
   file: `apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts`
   severity: medium
   Đề xuất: known-limits
-- **Hình dạng 4 — luật «config.yaml chỉ thêm dòng» trong pham-vi.mjs không có đối chứng**
-  Người dùng thấy gì: Phép kiểm «tệp cấu hình chỉ được thêm dòng» chưa có ca đối chứng chứng minh nó thật sự bắt được dòng bị xoá. Không có dấu hiệu nó đang sai; nếu hỏng thì chỉ làm lọt một thay đổi ngoài phạm vi.
+
+- **Hình dạng 4 (âm tính một mình): dòng (1) của ghi-tron không thể đỏ — xetKhoaCu false ở lần lấy khoá đầu là do thư mục vừa mkdir còn mới, không do ghi trọn**
+  Người dùng thấy gì: Phep do lan lay khoa dau tien khong the bat duoc loi neu ai do doi cach ghi tep khoa ve kieu ghi de tai cho. Hanh vi hien tai van dung; chi mat mot lop canh bao som.
+  file: `apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 3 (kiểm chuỗi có mặt thay cho quan hệ): hai-luot bước (5) chỉ dò pid của B như chuỗi con trong toàn bộ thông điệp lỗi**
+  Người dùng thấy gì: Bai thu kiem 'loi co nhac so cua chu khoa' hoi long: neu sau nay loi nhac nham chu, bai thu van co the xanh do tinh co trung chuoi so. Khong anh huong nguoi dung hien tai.
+  file: `apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Hình dạng 4 (âm tính một mình): pham-vi.mjs kiểm 'config.yaml không có dòng bỏ' mà không có đối chứng dương**
+  Người dùng thấy gì: Lenh kiem pham vi co the bo sot mot dong bi xoa trong tep cau hinh nghiem thu neu dong do co noi dung dac biet. Hiem va chi anh huong cong cu kiem, khong anh huong san pham.
   file: `_acceptance/khoa-eve-khong-tranh/rang/pham-vi.mjs`
   severity: low
   Đề xuất: wont-fix
