@@ -3,10 +3,10 @@ schema_version: 1
 slug: ban-gieo-gop-y-sau-nop
 feature: "Bàn gieo góp ý dùng chung chạy lại được sau khi công cụ nộp của Trợ lý OKR tự đóng việc, để ba bàn đo màn OKR đo được lại"
 owner: phanlemanh@gmail.com
-stage: discovery
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-09T14:59:07Z
 prototype:
   base_commit: a9e8bc75a
   disposition: archive
@@ -55,7 +55,7 @@ không chạy được nữa, nên các ô đo màn (`ui-check`) không đo lạ
 
 ## Cổng 0
 
-- **decision = ___.** Ba ngả, máy khuyên `build`:
+- **decision = build.** Căn cứ: anh chọn «build» trong phiên P1 ngày 2026-10-09 (đơn `can-nguoi` P1-47). Ba ngả đã trình, máy khuyên `build`:
   - `build` — sửa đúng hàm `nop()` trong `san-gop-y.mjs` (ranh giới hàng K3b), chạy lại ba bàn đo, đem kết quả ra
     Cổng 2. Rẻ: một hàm, không chạm mã sản phẩm.
   - `park` — ghi «bàn đo màn không chạy lại được từ 07/10» vào Known limits của ba hồ sơ, để khi có vòng chạm màn
