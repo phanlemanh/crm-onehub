@@ -59,7 +59,7 @@ Artifacts (chat trái — đối chứng, bị loại vì chat là thứ chính 
 
 ## Đường đo
 
-Ngưỡng ở `opportunity.md` (còn `[đề xuất]`, chờ chủ kho chốt) đo ở lái-thử người-lạ rồi phiên nghiệm thu:
+Ngưỡng ở `opportunity.md` (chủ kho chốt 09/10) đo ở lái-thử người-lạ rồi phiên nghiệm thu:
 
 - «≥ 2/3 đưa được bộ OKR vào trong ≤ 15 phút»: thời gian = `okrCuocSoan.duaVaoLuc − createdAt` của cuộc mỗi người
   thử (CSDL); tỉ lệ từ nhật ký lái thử. AC-9 giữ phép đo «Đưa vào» của K2 (ghi `duaVaoLuc`), AC-13 bảo đảm đóng khung

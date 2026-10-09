@@ -43,10 +43,10 @@ giám sát soát lối ngày 09/10). Nguyên văn:
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: [đề xuất] khung soạn có giữ được nhịp soạn của trang riêng mà không mất lượt hay số, và người có tìm ngay ra Kara và bản nháp không.
-- Kết quả nào là SỐNG: [đề xuất] trong lái thử người lạ (≥ 3 người đóng vai trưởng phòng), ≥ 2/3 đưa được bộ OKR vào trong ≤ 15 phút (giữ ngưỡng K2), 0 lần mất lượt Kara hay mất số đã gõ khi đóng và mở lại khung, và ≥ 4/5 lần nhìn đầu người chỉ đúng Kara và bản nháp không cần hỏi.
-- Kết quả nào là CHẾT: [đề xuất] có ít nhất một lần mất lượt hay mất số do đóng khung; hoặc dưới 1/2 đưa được bộ OKR vào trong 15 phút; hoặc ≥ 2/3 người thử nói muốn quay lại trang riêng vì thiếu chỗ.
-- Timebox: [đề xuất] một buổi lái thử người lạ trong 2 ngày sau khi gộp vào onehub, trước phiên nghiệm thu.
+- Câu hỏi phép đo trả lời: khung soạn có giữ được nhịp soạn của trang riêng mà không mất lượt hay số, và người có tìm ngay ra Kara và bản nháp không.
+- Kết quả nào là SỐNG: trong lái thử người lạ (≥ 3 người đóng vai trưởng phòng), ≥ 2/3 đưa được bộ OKR vào trong ≤ 15 phút (giữ ngưỡng K2), 0 lần mất lượt Kara hay mất số đã gõ khi đóng và mở lại khung, và ≥ 4/5 lần nhìn đầu người chỉ đúng Kara và bản nháp không cần hỏi.
+- Kết quả nào là CHẾT: có ít nhất một lần mất lượt hay mất số do đóng khung; hoặc dưới 1/2 đưa được bộ OKR vào trong 15 phút; hoặc ≥ 2/3 người thử nói muốn quay lại trang riêng vì thiếu chỗ.
+- Timebox: một buổi lái thử người lạ trong 2 ngày sau khi gộp vào onehub, trước phiên nghiệm thu.
 
 ## Kết quả prototype
 
