@@ -129,6 +129,20 @@ describe("giai-doan-agent", () => {
 	});
 });
 
+const TRUONG_BO_DOC_APP = [
+	"id",
+	"name",
+	"stage",
+	"stageId",
+	"amount",
+	"currency",
+	"company",
+	"owner",
+	"daysSinceLastActivity",
+	"neverActive",
+	"expectedCloseDate",
+];
+
 describe("stage-id", () => {
 	it("list_deals tra stageId va nhan hien hanh o moi status", async () => {
 		const theoId = new Map(thoaThuan.map((t) => [t.id, t.stage]));
@@ -164,7 +178,10 @@ describe("stage-id", () => {
 		const goc = new Map(ra.deals.map((d) => [d.id, d]));
 		for (const d of cua) {
 			const that = goc.get(d.id);
-			for (const khoa of Object.keys(dealListItem.shape)) {
+			for (const khoa of new Set([
+				...TRUONG_BO_DOC_APP,
+				...Object.keys(dealListItem.shape),
+			])) {
 				expect(
 					JSON.stringify(d[khoa as keyof typeof d]),
 					`parse lam mat truong ${khoa}`,
