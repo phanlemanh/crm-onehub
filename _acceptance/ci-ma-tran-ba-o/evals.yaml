@@ -1,0 +1,87 @@
+schema_version: 1
+slug: ci-ma-tran-ba-o
+
+evals:
+  - id: E1
+    criterion: AC-1, AC-3
+    executor: script
+    cmd: config:executors.script.cmtb_hinh
+    paths:
+      - ".github/workflows/ci.yml"
+      - "_acceptance/ci-ma-tran-ba-o/rang/hinh.mjs"
+    expected: |
+      bun rang/hinh.mjs (goc kho tu import.meta.dirname) doc .github/workflows/ci.yml bang Bun.YAML: dung ba job check,
+      test, ci-ok; check co dung chuoi buoc install -> check-types (env NODE_OPTIONS=--max-old-space-size=6144) -> lint ->
+      lint:slop va khong co dich vu Postgres; test co strategy.fail-fast false, ma tran dung ba o ten api, app-ui,
+      con-lai voi bo loc «--filter=api», «--filter=app --filter=@crm/ui», «--filter=!api --filter=!app
+      --filter=!@crm/ui», dich vu postgres, buoc db:deploy truoc «bun run test -- ${{ matrix.o.loc }}»; ci-ok co needs
+      [check, test] va if always(); moi job timeout-minutes <= 20. Khong troi so voi onehub: rut tu `git show $(git
+      merge-base HEAD origin/onehub):.github/workflows/ci.yml` (khong liet tay) tap env cua job cu, tap lenh run cua job
+      cu va cac khoa cap goc (on, concurrency, permissions, env) — env moi o test chua du env cu; moi lenh run cu co o
+      check hoac test (rieng «bun run test» thay bang ban co bo loc); khoa cap goc giu nguyen.
+      AC-3 do bang chinh lenh: lay chuoi run cua buoc ci-ok, thay ${{ needs.check.result }} va ${{ needs.test.result }}
+      bang tung cap trong ma tran {success, failure, cancelled, skipped}^2 (16 o), chay bang bash -> ma 0 dung khi ca
+      hai la success, 15 o con lai ma khac 0. Chieu do cung luot: ban sao YAML bo «if: always()» -> «ci-ok co the bi bo
+      qua»; ban sao doi buoc ci-ok thanh «true» -> o (failure, success) ma 0 -> goi ten o; ban sao bo bien
+      GOOGLE_CLIENT_ID khoi o test -> goi ten bien do. Ma 0 khi ban that dat va ba chieu do do dung cho.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.cmtb_phu_goi
+    paths:
+      - ".github/workflows/ci.yml"
+      - "apps/*/package.json"
+      - "packages/*/package.json"
+      - "_acceptance/ci-ma-tran-ba-o/rang/phu-goi.mjs"
+    expected: |
+      bun rang/phu-goi.mjs: tap goi co script test rut tu workspaces cua package.json goc (khong liet glob); hai nguon cho
+      tung o cua ma tran: (1) chay CHINH duong CI — bun run test -- <bo loc> -- qua test-run.ts voi bien moi truong cua
+      job, doc dong «Running test in N packages» va danh sach goi turbo in ra (khong chay test: them --dry=json qua
+      duong do neu test-run.ts chuyen nguyen doi so, neu khong thi turbo run test <bo loc> --dry=json va ghi ro); (2) log
+      that cua hai luot #323 (gh run view --log --job cho tung o) — tap goi co nhom «<goi>:test». Ma 0 khi ca hai nguon
+      cho cung mot phan hoach: moi goi co test o dung mot o, khong thieu, khong hai o, o con-lai chi co bo loc loai tru.
+      Chieu do cung luot: ban sao ma tran o app-ui chi con «--filter=app» -> ma 1 goi ten «@crm/ui khong o o nao»;
+      ban sao bo o api -> goi ten «api»; o con-lai them «--filter=agent» -> «con-lai co bo loc duong».
+
+  - id: E3
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.cmtb_khop_323
+    paths:
+      - ".github/workflows/ci.yml"
+      - "_acceptance/ci-ma-tran-ba-o/rang/khop-323.mjs"
+    expected: |
+      bun rang/khop-323.mjs: doc ci.yml o HEAD va ban da do o #323 — ban chep rang/ci-323.yml voi blob sha ghim
+      c4c5f58e06e42e594b519c2a2e7eb40fb9afbfcb (git hash-object phai khop, khong can nhanh thu con song); parse ca hai bang
+      Bun.YAML, so sau tung job: ten job, runs-on, strategy, services, env, chuoi buoc (uses/run/with/env), needs, if —
+      ma 0 khi trung het; khac thi ma 1 in duong dan khoa khac. Kem kiem hai luot CI cua #323 (37860355090, 37862221635)
+      xanh qua gh api, in job dai nhat moi luot. Chieu do: ban sao HEAD doi bo loc o api -> ma 1 goi ten
+      «jobs.test.strategy.matrix».
+
+  - id: E5
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cmtb_do_7_ngay
+    paths:
+      - "_acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs"
+    expected: |
+      node rang/do-7-ngay.mjs --nhanh thu/ci-tach-job: doc moi luot ci.yml cua nhanh qua gh api; luot xanh = luot co job
+      ci-ok success; job dai nhat = max(completed_at - started_at) tren cac job cua luot; huy vi tran = job cancelled
+      co thoi luong >= timeout-minutes - 1 phut cua chinh job do; < 10 luot xanh -> in «chua du mau», khong ket luan
+      SONG. Tren hai luot that cua #323 in: 2 luot xanh, job dai nhat 9,8 va 11,0 phut, 0 huy vi tran, «chua du mau»,
+      ma 0. Chieu do: ban sao dinh nghia coi moi cancelled la huy vi tran tren du lieu gia mot luot cancelled 3 phut ->
+      ma 1 goi ten «huy vi tran sai»; du lieu gia mot job 21 phut cancelled -> dem 1 huy vi tran.
+
+  - id: E4
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cmtb_claude_md
+    paths:
+      - "CLAUDE.md"
+      - "_acceptance/ci-ma-tran-ba-o/rang/claude-md.mjs"
+    expected: |
+      node rang/claude-md.mjs: CLAUDE.md khong con chuoi «không bao giờ vào `ci.yml` của hãng» va chua nguyen van doan
+      thay the ghi o Notes cua contract.md (doc tu contract, khong chep tay vao script), nam trong muc «Kho này là bản
+      riêng»; acceptance.yml van duoc nhac la noi CI rieng song. Chieu do: ban sao CLAUDE.md o merge-base cua nhanh ->
+      ma 1 goi ten «con luat cu».
