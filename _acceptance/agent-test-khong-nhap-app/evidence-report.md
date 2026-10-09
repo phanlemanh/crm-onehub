@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 244b451706fe7f1e37f591d5dd686197be275596
+verified_commit: 1d35649d7a9a185a50cb67678cd9f083610d84f3
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -132,3 +132,7 @@ none — every multi-run eval is uniform
 
 Round 1: E4 gặp lỗi mức cao trong hợp đồng (AC-4) — phép kiểm mất-trường chỉ lặp trên khoá schema đã khai nên ca đỏ "schema bỏ trường currency" không đỏ được. Trả về triển khai.
 Round 2: đã sửa (so trường theo hợp của schema và trường bộ đọc app đã khai); cả năm eval máy và bảy lệnh suite đều đạt, không còn phát hiện trong hợp đồng.
+
+### Re-pin lần 1 — 2026-10-09, do gộp onehub e86cf730 sau chữ ký; ghim.mjs sửa vòng tự tham chiếu
+run_id: repin-20261009T023915Z-67771
+sha: 1d35649d7a9a185a50cb67678cd9f083610d84f3 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
