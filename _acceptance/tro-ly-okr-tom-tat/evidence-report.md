@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 67860795b1e1047e571d58a2d28667c9106bcfbe
+verified_commit: 221c98a8faee6a66a4b19b56faf0aa062807132d
 human_signoff: Manh Phan 2026-10-01
 ---
 
@@ -308,3 +308,7 @@ sha: 7282dbe45b2286f76d2c6fae39d04998a2a3e15d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 5 — 2026-10-09, do E1c gỡ nhập chéo app trong test agent (luật kho cach-ly-hai-agent)
 run_id: repin-20261009T000523Z-85374
 sha: 67860795b1e1047e571d58a2d28667c9106bcfbe · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · diff chạm vật đo ngoài làn máy: E9, E20 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 6 — 2026-10-09, do E1c S4-r1 sửa vòng so trường trong test agent
+run_id: repin-20261009T003459Z-24463
+sha: 221c98a8faee6a66a4b19b56faf0aa062807132d · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E23 · ngoài làn máy: E9, E20 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
