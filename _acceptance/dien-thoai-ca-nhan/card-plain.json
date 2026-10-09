@@ -1,0 +1,135 @@
+{
+  "feature_plain": "Sale nhập được số điện thoại ngay lúc thêm một người, thấy số ở bảng Cá nhân, gõ số là tìm ra người, và một số không thuộc về hai người.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ có ô Điện thoại ngay sau Tên/Họ trong form «Thêm cá nhân» của tab Cá nhân công ty; gõ «0901 234 567» thì người được lưu với số +84901234567."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ có ô Điện thoại tương tự trong sheet «Cá nhân mới» ở trang Cá nhân; số bàn «028 3812 3456» cũng lưu được."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ hiểu mọi cách gõ số quen thuộc (có cách, chấm, gạch, +84, 84, cả kiểu danh thiếp «+84 (0) 90…») và luôn hiện lại dạng «0901 234 567», kể cả số cũ lưu lộn xộn; «00…» bị coi là sai."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ chặn thêm người mới mang số đã thuộc một người khác — kể cả khi gõ kiểu «+84 0…» — báo tên người đó, và giữ nguyên chữ đã gõ để sửa; người đã lưu trữ thì không tính."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ chặn sửa số thành số của người khác, nhưng vẫn cho sửa các trường khác của người đã trùng số từ trước."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ có cột Điện thoại ngay sau Tên ở bảng Cá nhân, và số trong ngăn chi tiết bấm được để gọi."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ tìm được người bằng số trong ô tìm nhanh ⌘K."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ để Kara trong app tìm được người theo số, nhưng Kara không đọc số ra."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ cho ô chọn môi giới ở «30 ngày đầu» tìm theo số và hiện số dưới tên người."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-4",
+      "p": "Chặn số gõ sai («abc», «12345») ngay trên form, báo lỗi tiếng Việt cạnh ô, chưa gửi gì đi."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ KHÔNG bắt buộc nhập số — chỉ có Tên vẫn thêm được người."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ KHÔNG lọc theo số khi chữ tìm quá ngắn (như «12»); gõ đủ số thì bảng Cá nhân ra đúng người, kể cả số cũ."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ KHÔNG vẽ tay giao diện: ô và cột mới dùng đúng thành phần chung của kho."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Số ở thoả thuận và tab Cá nhân của công ty để sang hàng DT2."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Form web chỉ để lại số điện thoại để hàng riêng (đường an ninh cao)."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không gộp những người đã trùng số từ trước; chỉ chặn trùng mới."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không thêm ràng buộc trong cơ sở dữ liệu và không sửa lại số cũ."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Câu báo trùng số vẫn bằng tiếng Anh, như câu báo trùng email hiện nay."
+    },
+    {
+      "id": "OOS-6",
+      "p": "Kara qua Zalo vẫn không nói số điện thoại."
+    }
+  ],
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đã soát đủ năm việc với số: tạo, sửa, hiện, tìm, chống trùng."
+    },
+    {
+      "i": 1,
+      "p": "Đã soát đủ bảy chỗ người gặp số: hai form tạo, ngăn chi tiết, bảng Cá nhân, ô tìm nhanh, Kara, ô chọn môi giới."
+    },
+    {
+      "i": 2,
+      "p": "Đã soát đủ tám kiểu số người gõ hoặc dữ liệu cũ đang có, theo chuẩn số quốc tế và quy hoạch số VN."
+    },
+    {
+      "i": 3,
+      "p": "Mỗi ô cần làm đều có tiêu chí riêng, từ AC-1 (form tab công ty) tới AC-13 (thành phần chung)."
+    },
+    {
+      "i": 4,
+      "p": "Để sau: thoả thuận và công ty (DT2), form web chỉ có số, gộp người đã trùng, nhiều số mỗi người, câu báo trùng tiếng Việt."
+    },
+    {
+      "i": 5,
+      "p": "Không làm: bắt số là bắt buộc, Kara qua Zalo nói số, ràng buộc trong cơ sở dữ liệu."
+    },
+    {
+      "i": 6,
+      "p": "Máy giả định số bàn VN có 10 chữ số sau số 0 (như 028 3812 3456) — anh gạch nếu sai."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Người môi giới nạp từ listing có số lưu lộn xộn sẽ hiện số xấu trong ô chọn, và phép đo cũ dựng số đẹp nên không bắt được. Đã sửa: số cũ cũng hiện «0901 234 567», phép đo dùng đúng số lộn xộn như listing ghi, thêm ca gõ số vào ô chọn."
+    },
+    {
+      "i": 1,
+      "p": "Phép chụp màn của form «Cá nhân mới», ô tìm bảng và ⌘K đều tính chung cho tiêu chí đầu tiên, nên lỗi sẽ báo nhầm chỗ. Đã sửa: mỗi tiêu chí có phép chụp màn riêng, và form «Cá nhân mới» có phép kiểm lưu thật."
+    },
+    {
+      "i": 2,
+      "p": "Hai người đã trùng số từ trước có thể bị khoá sửa mọi thứ. Đã sửa: chỉ kiểm trùng khi số thật sự đổi, có phép đo riêng; thêm câu đếm số nhóm trùng trên production để anh chạy trước khi gộp."
+    },
+    {
+      "i": 3,
+      "p": "Thước 80% đếm theo nguồn «nhập tay» mà chưa ai kiểm hai form có gắn nguồn đó. Đã sửa: phép đo đọc lại nguồn của người vừa tạo."
+    },
+    {
+      "i": 4,
+      "p": "Khi báo trùng, form có thể xoá chữ đã gõ. Đã sửa: tiêu chí trùng thêm vế màn — báo tên người giữ số, giữ nguyên chữ — kèm phép kiểm riêng."
+    }
+  ]
+}
