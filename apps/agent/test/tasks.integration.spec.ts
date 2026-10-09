@@ -288,9 +288,9 @@ describe("scheduleTask", () => {
 });
 
 const AUTOVACUUM_OFF = "autovacuum_enabled=false";
-const restoredReloptions: { value: string[] | null | undefined } = {
-	value: undefined,
-};
+type RestoredReloptions = { value: string[] | null | undefined };
+
+const restoredReloptions: RestoredReloptions = { value: undefined };
 
 async function reloptions(): Promise<string[] | null> {
 	const [row] = await db.$queryRaw<{ reloptions: string[] | null }[]>`
