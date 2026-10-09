@@ -64,7 +64,9 @@ evals:
       `bun install --frozen-lockfile` roi buoc `run: node scripts/luat-kho/do-cay.mjs --du-luat` (nguyen van, khong
       `|| true`, khong `continue-on-error`), job chay khi pull_request vao onehub. Chieu do cung luot: ban sao YAML bo
       buoc do -> ma 1 goi ten «thieu buoc luat kho»; ban sao them `continue-on-error: true` -> ma 1 goi ten
-      «job khong chan». Ma 0 khi ban that dat va hai chieu do do dung cho.
+      «job khong chan»; job khai du moi bien ma packages/db/prisma.config.ts doi qua env("…") (rut tu tep, khong liet tay —
+      postinstall prisma generate cua bun install can) — ban sao bo DATABASE_URL khoi job -> ma 1 goi ten «thieu bien
+      DATABASE_URL». Ma 0 khi ban that dat va cac chieu do do dung cho.
 
   - id: E4
     criterion: AC-9

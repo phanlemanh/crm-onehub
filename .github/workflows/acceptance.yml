@@ -54,6 +54,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
 
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/crm_test?schema=public
+
     steps:
       - uses: actions/checkout@v5
 
