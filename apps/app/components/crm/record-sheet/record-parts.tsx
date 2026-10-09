@@ -33,18 +33,64 @@ import { crmMessages } from "@/lib/messages/crm";
 import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
 import { useRecordStack } from "./record-stack";
 
-export function KhungTaiLoi({ onRetry }: { onRetry?: () => void }) {
+export type LyDoLoi = "khong-con" | "khong-quyen" | "mat-ket-noi";
+
+export function lyDoLoi(
+	loi: { data?: { code?: string } | null } | null | undefined,
+): LyDoLoi {
+	const ma = loi?.data?.code;
+	if (ma === "NOT_FOUND") return "khong-con";
+	if (ma === "FORBIDDEN") return "khong-quyen";
+	return "mat-ket-noi";
+}
+
+export function KhungTaiLoi({
+	lyDo = "mat-ket-noi",
+	onRetry,
+	coDong = true,
+}: {
+	lyDo?: LyDoLoi;
+	onRetry?: () => void;
+	coDong?: boolean;
+}) {
 	const locale = useLocale();
 	const m = crmMessages(locale);
 	const t = karaBanGhiMessages(locale).khung;
+	const { close } = useRecordStack();
+	const chu =
+		lyDo === "khong-con"
+			? {
+					tieuDe: t.khongCon.tieuDe,
+					moTa: t.khongCon.moTa,
+					dong: t.khongCon.dong,
+				}
+			: lyDo === "khong-quyen"
+				? {
+						tieuDe: t.khongQuyen.tieuDe,
+						moTa: t.khongQuyen.moTa,
+						dong: t.khongQuyen.dong,
+					}
+				: null;
 	return (
 		<div className="flex min-h-0 flex-1 items-center justify-center p-6">
-			<Empty border="solid" size="compact" data-khung-tai-loi="">
+			<Empty
+				border="solid"
+				size="compact"
+				data-khung-tai-loi=""
+				data-ly-do={lyDo}
+			>
 				<EmptyHeader>
-					<EmptyTitle>{m.misc.recordNotLoaded}</EmptyTitle>
-					<EmptyDescription>{t.loiMoTa}</EmptyDescription>
+					<EmptyTitle>{chu ? chu.tieuDe : m.misc.recordNotLoaded}</EmptyTitle>
+					<EmptyDescription>{chu ? chu.moTa : t.loiMoTa}</EmptyDescription>
 				</EmptyHeader>
-				{onRetry ? (
+				{chu && coDong ? (
+					<EmptyContent>
+						<Button variant="outline" size="sm" onClick={close}>
+							{chu.dong}
+						</Button>
+					</EmptyContent>
+				) : null}
+				{!chu && onRetry ? (
 					<EmptyContent>
 						<KaraRetry onClick={onRetry} />
 					</EmptyContent>
@@ -59,6 +105,7 @@ export function RecordSheetFrame({
 	error,
 	errorView,
 	onRetry,
+	lyDo,
 	title,
 	description,
 	note,
@@ -74,6 +121,7 @@ export function RecordSheetFrame({
 	error: string | null;
 	errorView?: ReactNode;
 	onRetry?: () => void;
+	lyDo?: LyDoLoi;
 	title: ReactNode;
 	description?: ReactNode;
 	note?: ReactNode;
@@ -108,7 +156,7 @@ export function RecordSheetFrame({
 			) : error && errorView ? (
 				errorView
 			) : error ? (
-				<KhungTaiLoi onRetry={onRetry} />
+				<KhungTaiLoi lyDo={lyDo} onRetry={onRetry} />
 			) : (
 				<>
 					{stats}

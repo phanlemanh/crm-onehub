@@ -75,6 +75,7 @@ import {
 	CompanyAbout,
 	DealAmount,
 	DomainLink,
+	lyDoLoi,
 	MetaLine,
 	RecordSheetFrame,
 } from "./record-parts";
@@ -256,6 +257,7 @@ export function CompanySheet({ companyId }: { companyId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
+			lyDo={lyDoLoi(query.error)}
 			onRetry={() => void query.refetch()}
 			title={company?.name ?? m.company.fallbackTitle}
 			description={
