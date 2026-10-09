@@ -14,13 +14,13 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-- **The red direction promised in evals.yaml uses a flag the test script never reads, and no executor runs the red direction** (r1)
+- **(r1) The red direction promised in evals.yaml uses a flag the test script never reads, and no executor runs the red direction**
   Người dùng thấy gì: Kiểm thử chiều đỏ của thước canh ngoại lệ ghi sai cách chạy, và hệ thống nghiệm thu không tự chạy chiều đỏ. Nếu ai đó sửa thước cho yếu đi, có thể không có gì báo đỏ ngay.
   file: `_acceptance/ngoai-le-telemetry-giai-doan/evals.yaml`
   severity: medium
   Đề xuất: known-limits
 
-- **Chiều đỏ trong evals.yaml (E1–E4) bảo truyền cờ --thuoc mà thu-thuoc.mjs không đọc; cờ lạ bị bỏ qua im lặng nên chiều đỏ ra xanh** (r1)
+- **(r1) Chiều đỏ trong evals.yaml (E1–E4) bảo truyền cờ --thuoc mà thu-thuoc.mjs không đọc; cờ lạ bị bỏ qua im lặng nên chiều đỏ ra xanh**
   Người dùng thấy gì: Hướng dẫn kiểm tra chiều đỏ của thước ghi sai tên tuỳ chọn, và thước lại im lặng bỏ qua tuỳ chọn lạ. Người kiểm đúng theo hướng dẫn sẽ thấy kết quả xanh và có thể tưởng thước không bắt được lỗi.
   file: `_acceptance/ngoai-le-telemetry-giai-doan/evals.yaml`
   severity: medium
