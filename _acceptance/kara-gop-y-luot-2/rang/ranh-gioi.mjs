@@ -60,6 +60,7 @@ const CHAM_TEP = [
 	`docs/superpowers/specs/2026-10-09-${SLUG}-design.md`,
 	`docs/superpowers/plans/2026-10-09-${SLUG}.md`,
 	"PRODUCT-MAP.md",
+	"LO-TRINH.html",
 ];
 
 const CHAM_TEP_XIN = [
