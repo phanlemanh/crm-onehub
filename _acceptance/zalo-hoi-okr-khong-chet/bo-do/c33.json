@@ -1,0 +1,12 @@
+{
+	"nhan": "c33-okr",
+	"nguon": "Câu c33 của _acceptance/tro-ly-doc-kho/bo-do/mam-tam.json, tách riêng để tái hiện lỗi tro_ly_okr ngoài phiên OKR qua Zalo (F12 S4 round 2, 08/10).",
+	"cau": [
+		{
+			"id": "c33",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "KR doanh thu quý này đang đạt bao nhiêu phần trăm?",
+			"tam": true
+		}
+	]
+}
