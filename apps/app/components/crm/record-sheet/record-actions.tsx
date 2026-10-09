@@ -18,7 +18,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { baoDaLuuTru } from "@crm/ui/lib/bao-luu-tru";
 import type { Locale } from "@crm/ui/lib/locale";
 import { useMutation } from "@tanstack/react-query";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, type SyntheticEvent, useState } from "react";
 import { toast } from "sonner";
 import { LocalDateTime } from "@/components/local-date-time";
 import { companyMessages } from "@/lib/messages/companies";
@@ -236,6 +236,9 @@ export function DaiLuuTru({
 	);
 }
 
+const CHO_SUA =
+	"button, input, textarea, select, [role=combobox], [role=button], [contenteditable=true]";
+
 export function KhoaLuuTru({
 	khoa,
 	children,
@@ -243,11 +246,22 @@ export function KhoaLuuTru({
 	khoa: boolean;
 	children: ReactNode;
 }) {
+	const chan = (event: SyntheticEvent) => {
+		if (!khoa) return;
+		if (!(event.target instanceof Element)) return;
+		if (!event.target.closest(CHO_SUA)) return;
+		event.preventDefault();
+		event.stopPropagation();
+	};
 	return (
 		<fieldset
 			disabled={khoa}
 			data-khoa-luu-tru={khoa ? "" : undefined}
 			className="contents"
+			onPointerDownCapture={chan}
+			onMouseDownCapture={chan}
+			onClickCapture={chan}
+			onKeyDownCapture={chan}
 		>
 			{children}
 		</fieldset>
