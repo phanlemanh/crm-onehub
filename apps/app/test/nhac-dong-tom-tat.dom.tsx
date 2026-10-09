@@ -110,6 +110,7 @@ const GOC: ZaloCuaToi = {
 	lech: false,
 	dongTroLyOkr: true,
 	laTruongPhong: true,
+	canNoiLai: false,
 };
 
 function cuaToi(thay: Partial<ZaloCuaToi>): unknown {
