@@ -104,6 +104,12 @@ const vi = {
 	},
 	xuHuong: (moiTuan: string, uoc: string, donVi: string) =>
 		`Theo các lần cập nhật gần nhất (${moiTuan}/tuần), cuối kỳ ước khoảng ${[uoc, donVi.trim()].filter(Boolean).join(" ")}`,
+	loiDong: {
+		"khong-con": "Góp ý này không còn — có thể đã được quyết ở nơi khác.",
+		"da-cu": "Góp ý này đã cũ vì Mục tiêu vừa đổi. Danh sách đã tải lại.",
+		"chua-san-sang": "Chưa quyết được góp ý này lúc này. Thử lại sau ít phút.",
+		"mat-mang": "Mất kết nối nên chưa ghi được. Thử lại khi có mạng.",
+	},
 	vet: {
 		theoKara: "theo đề xuất của Kara",
 		suaTruong: (truong: string) => `Sửa ${truong}`,
@@ -219,6 +225,16 @@ const en: OkrGopYMessages = {
 	},
 	xuHuong: (moiTuan: string, uoc: string, donVi: string) =>
 		`Based on the latest updates (${moiTuan}/week), the period should end around ${[uoc, donVi.trim()].filter(Boolean).join(" ")}`,
+	loiDong: {
+		"khong-con":
+			"This suggestion is gone — it may have been decided elsewhere.",
+		"da-cu":
+			"This suggestion is out of date because the objective just changed. The list has been reloaded.",
+		"chua-san-sang":
+			"This suggestion can't be decided right now. Try again in a few minutes.",
+		"mat-mang":
+			"The connection dropped, so nothing was saved. Try again when you're back online.",
+	},
 	vet: {
 		theoKara: "suggested by Kara",
 		suaTruong: (truong: string) => `Edited ${truong}`,

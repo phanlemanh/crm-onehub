@@ -8,3 +8,4 @@ afterEach(async () => {
 });
 
 await import("./gop-y-dung-cho-luot-2-khung");
+await import("./gop-y-dung-cho-luot-2-dong");

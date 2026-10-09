@@ -16,8 +16,10 @@ import {
 } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
-import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
-import { troLyOkrMessages } from "@/lib/messages/tro-ly-okr";
+import {
+	type OkrGopYMessages,
+	okrGopYMessages,
+} from "@/lib/messages/okr-gop-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -50,6 +52,20 @@ export function loaiLoiNho(cause: unknown): LoaiLoiNho {
 	const ma = maLoi(cause);
 	if (ma === null) return "mat-mang";
 	return ma === "FORBIDDEN" ? "khong-quyen" : "khac";
+}
+
+export type LoaiLoiDong = "khong-con" | "da-cu" | "chua-san-sang" | "mat-mang";
+
+export function loaiLoiDong(cause: unknown): LoaiLoiDong {
+	const ma = maLoi(cause);
+	if (ma === null) return "mat-mang";
+	if (ma === "NOT_FOUND") return "khong-con";
+	if (ma === "CONFLICT") return "da-cu";
+	return "chua-san-sang";
+}
+
+export function cauLoiDong(cause: unknown, m: OkrGopYMessages): string {
+	return m.loiDong[loaiLoiDong(cause)];
 }
 
 export type NutKara =
@@ -164,7 +180,6 @@ export function useGopYMucTieu({
 	const cache = useCrmCache();
 	const qc = useQueryClient();
 	const locale = useLocale();
-	const mTroLy = troLyOkrMessages(locale);
 	const mGopY = okrGopYMessages(locale);
 	const coDich = objectiveId !== null;
 	const dich = canEdit
@@ -299,21 +314,24 @@ export function useGopYMucTieu({
 		else void sanSang.refetch();
 	};
 
+	const baoLoi = (id: string, cause: unknown) =>
+		setLoiDong((cu) => ({ ...cu, [id]: cauLoiDong(cause, mGopY) }));
+	const xoaLoi = (id: string) => setLoiDong(({ [id]: _bo, ...cu }) => cu);
+
 	const quyet = (d: DongHien, cach: CachQuyet, giaTri?: string) => {
 		if (dangQuyet !== null || !ghiDuoc) return;
 		const thuTuNay = tatCa.map((x) => x.id);
 		setDangQuyet(d.id);
-		setLoiDong(({ [d.id]: _bo, ...cu }) => cu);
-		quyetDong.mutate(
-			{ deXuatId: d.id, cach, giaTri },
-			{
-				onSuccess: (kq) => {
+		xoaLoi(d.id);
+		void quyetDong
+			.mutateAsync({ deXuatId: d.id, cach, giaTri })
+			.then(
+				(kq) => {
 					if (!kq.ok) {
 						void sanSang.refetch();
-						const s = mTroLy.troLy.sanSang;
 						setLoiDong((cu) => ({
 							...cu,
-							[d.id]: s.chuaSanSang(s.lyDo[kq.lyDo]),
+							[d.id]: mGopY.loiDong["chua-san-sang"],
 						}));
 						return;
 					}
@@ -329,16 +347,12 @@ export function useGopYMucTieu({
 					}));
 					if (objectiveId) void cache.okr(objectiveId);
 				},
-				onError: (e) => {
-					if (e.data?.code === "CONFLICT") {
-						void danhSach.refetch();
-						return;
-					}
-					setLoiDong((cu) => ({ ...cu, [d.id]: e.message }));
+				(cause: unknown) => {
+					if (loaiLoiDong(cause) === "da-cu") void danhSach.refetch();
+					baoLoi(d.id, cause);
 				},
-				onSettled: () => setDangQuyet(null),
-			},
-		);
+			)
+			.finally(() => setDangQuyet(null));
 	};
 
 	const hoanTac = (d: DongHien) => {
@@ -352,8 +366,7 @@ export function useGopYMucTieu({
 				});
 				if (objectiveId) void cache.okr(objectiveId);
 			},
-			onError: (e: { message: string }) =>
-				setLoiDong((cu) => ({ ...cu, [d.id]: e.message })),
+			onError: (cause: unknown) => baoLoi(d.id, cause),
 		};
 		if (d.truong === "kr.title" && d.keyResultId) {
 			suaKr.mutate({ id: d.keyResultId, title: truoc }, xong);

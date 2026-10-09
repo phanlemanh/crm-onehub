@@ -497,8 +497,8 @@ describe("khoa-gui", () => {
 			() => qs("[data-slot=field-error]", can) !== null,
 			"loi trong de xuat",
 		);
-		expect(qs("[data-slot=field-error]", can)?.textContent).toContain(
-			"Mất kết nối",
+		expect(qs("[data-slot=field-error]", can)?.textContent).toBe(
+			m.loiDong["chua-san-sang"],
 		);
 		expect((nut(m.dong.canChinh, can) as HTMLButtonElement).disabled).toBe(
 			false,
