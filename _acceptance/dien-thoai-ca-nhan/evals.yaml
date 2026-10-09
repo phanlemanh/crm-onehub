@@ -215,6 +215,7 @@ evals:
   - id: E12
     criterion: AC-10
     executor: test
+    layer: backend-effect
     cmd: config:executors.test.dt_api_tim
     paths:
       - "apps/api/src/search/search.service.ts"

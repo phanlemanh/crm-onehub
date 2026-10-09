@@ -5,9 +5,9 @@ slug: dien-thoai-ca-nhan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-09T00:24:07Z
 design_doc: docs/superpowers/specs/2026-10-09-dien-thoai-ca-nhan-design.md
 ---
 
@@ -28,14 +28,14 @@ Source input: anh báo trực tiếp 09/10 (ảnh form); yêu cầu `DT-1` đợ
 - AC-1: (cross-layer) Given tab Cá nhân của một công ty trên app thật, When bấm «Thêm cá nhân», gõ Tên «Lan» và Điện thoại «0901 234 567» rồi bấm «Thêm cá nhân», Then form có ô «Điện thoại» nằm ngay sau Tên/Họ và trước Email, và cá nhân «Lan» được lưu thuộc công ty đó với số `+84901234567` và nguồn `MANUAL`.
 - AC-2: (cross-layer) Given trang Cá nhân, When mở «Cá nhân mới», gõ Tên và Điện thoại «+84 28 3812 3456» rồi lưu, Then sheet có ô «Điện thoại» ngay sau Tên/Họ, và cá nhân được lưu với số `+842838123456` và nguồn `MANUAL`.
 - AC-3: Given hàm đọc số dùng chung, When đọc từng dạng trong ma trận viết trước (`0901 234 567`, `0901.234.567`, `(+84) 901-234-567`, `84901234567`, `+84901234567`, `028 3812 3456`, `+65 6123 4567`, chuỗi rỗng, chỉ khoảng trắng, `abc`, `12345`, `0901 234 56`, `+84 12`, 16 chữ số), Then dạng VN ra `+84` + số quốc nội, số nước ngoài giữ `+<chữ số>`, rỗng ra «rỗng», còn lại ra «sai»; và hàm hiện số đọc số trước rồi mới định dạng: `0901 234 567` cho cả `+84901234567` lẫn số thô cũ `0901.234.567`, `028 3812 3456` cho `+842838123456`, `+6561234567` cho số nước ngoài, nguyên văn cho chuỗi cũ không đọc được (`máy lẻ 123`).
-- AC-4: Given form «Thêm cá nhân» hoặc sheet «Cá nhân mới», When gõ Điện thoại «abc» hay «12345» rồi bấm lưu, Then không gửi gì lên máy chủ, dưới ô hiện «Số điện thoại chưa đúng — ví dụ 0901 234 567» và con trỏ về ô Điện thoại; When API nhận thẳng số sai (không qua form), Then trả lỗi đầu vào (BAD_REQUEST) và không tạo, không sửa gì.
+- AC-4: Given form «Thêm cá nhân» hoặc sheet «Cá nhân mới», When gõ Điện thoại «abc» hay «12345» rồi bấm lưu, Then không gọi API tạo cá nhân, dưới ô hiện «Số điện thoại chưa đúng — ví dụ 0901 234 567» và con trỏ về ô Điện thoại; When API nhận thẳng số sai (không qua form), Then trả lỗi đầu vào (BAD_REQUEST) và không tạo, không sửa gì.
 - AC-5: Given chỉ gõ Tên, không gõ số, When thêm cá nhân ở cả hai form, Then vẫn thêm được (số để trống) — điện thoại không bắt buộc.
-- AC-6: (cross-layer) Given một cá nhân đang hoạt động có số lưu THÔ từ trước `0901.234.567`, When tạo cá nhân mới với số `+84 901 234 567`, Then bị từ chối (CONFLICT) với câu nêu tên người đang giữ số, và không có dòng cá nhân mới nào; trên form, toast hiện câu đó và các ô Tên, Điện thoại giữ nguyên chữ đã gõ; When người giữ số đó đã lưu trữ, Then tạo được.
-- AC-7: Given hai cá nhân A (số `0901234567`) và B, When sửa số của B thành `+84901234567`, Then bị từ chối (CONFLICT) và số của B không đổi; When sửa số của A thành `+84 901 234 567` (cùng số, dạng khác), Then được và lưu `+84901234567`; When xoá trống số của A, Then lưu rỗng; Given dữ liệu cũ đã có A và C cùng đang hoạt động và cùng số thô `0901.234.567`, When sửa Chức danh của A (không gửi số) hoặc gửi lại chính số đó dưới dạng khác, Then sửa được — chỉ kiểm trùng khi số quốc nội thật sự đổi.
+- AC-6: (cross-layer) Given một cá nhân chưa lưu trữ có số lưu THÔ từ trước `0901.234.567`, When tạo cá nhân mới với số `+84 901 234 567`, Then bị từ chối (CONFLICT) với câu nêu tên người đang giữ số, và không có dòng cá nhân mới nào; trên form, toast hiện câu đó và các ô Tên, Điện thoại giữ nguyên chữ đã gõ; When người giữ số đó đã lưu trữ, Then tạo được.
+- AC-7: Given hai cá nhân A (số `0901234567`) và B, When sửa số của B thành `+84901234567`, Then bị từ chối (CONFLICT) và số của B không đổi; When sửa số của A thành `+84 901 234 567` (cùng số, dạng khác), Then được và lưu `+84901234567`; When xoá trống số của A, Then lưu rỗng; Given dữ liệu cũ đã có A và C cùng chưa lưu trữ và cùng số thô `0901.234.567`, When sửa Chức danh của A (không gửi số) hoặc gửi lại chính số đó dưới dạng khác, Then sửa được — chỉ kiểm trùng khi số quốc nội thật sự đổi.
 - AC-8: Given bảng Cá nhân, When có người mang số `+84901234567`, người mang `+6561234567` và người không số, Then có cột «Điện thoại» ngay sau Tên hiện lần lượt `0901 234 567`, `+6561234567` và ô trống chuẩn; ngăn chi tiết của người đầu hiện `0901 234 567` với liên kết gọi `tel:+84901234567`.
-- AC-9: (cross-layer) Given cá nhân P có số chuẩn `+84901234567` và cá nhân Q có số thô cũ `0912.345.678`, When gõ vào ô tìm của bảng Cá nhân lần lượt `0901234567`, `+84 901 234 567`, `234 567`, `0912345678`, Then mỗi lần kết quả chứa đúng người mang số đó; When gõ `12` (dưới ngưỡng), Then không lọc theo số (tìm theo tên/email như cũ).
+- AC-9: (cross-layer) Given cá nhân P có số chuẩn `+84901234567` và cá nhân Q có số thô cũ `0912.345.678`, When gõ vào ô tìm của bảng Cá nhân lần lượt `0901234567`, `+84 901 234 567`, `234 567`, `0912345678`, Then mỗi lần danh sách tìm được chứa đúng người mang số đó; When gõ `12` (dưới ngưỡng), Then không lọc theo số (tìm theo tên/email như cũ).
 - AC-10: (cross-layer) Given cá nhân P như AC-9, When gõ `0901 234 567` vào ⌘K, Then P có trong mục Cá nhân, dòng phụ là tên công ty, hoặc số (dạng hiện) khi P không có công ty.
-- AC-11: Given cá nhân P như AC-9, When Kara trong app tìm cá nhân bằng `0901234567`, Then kết quả có P; và kết quả tìm không mang số điện thoại của ai (Kara tìm được người qua số nhưng không đọc số ra).
+- AC-11: Given cá nhân P như AC-9, When Kara trong app tìm cá nhân bằng `0901234567`, Then danh sách tìm được có P; và danh sách đó không mang số điện thoại của ai (Kara tìm được người qua số nhưng không đọc số ra).
 - AC-12: Given ô chọn môi giới ở «30 ngày đầu», When gõ số của một người nạp từ listing (số thô `0901.234.567`, không email) dưới dạng `0901234567` hay `0901 234 567`, Then người đó vẫn hiện trong gợi ý và dòng gợi ý hiện số dạng `0901 234 567`; người có email mà không số thì gợi ý vẫn là email.
 - AC-13: Given các tệp giao diện vòng này sửa, When chạy sàn thiết kế của kho, Then không vi phạm P0; ô Điện thoại dùng `Input` của `@crm/ui` với `type="tel"` và nhãn bấm được, câu lỗi dùng `FieldError`, không `className` đổi màu/góc.
 
@@ -55,7 +55,7 @@ Quét bằng `morphological-scan` preset entity-feature (S1, 09/10) — `_accept
 
 - Thước: ≥ 80% cá nhân tạo tay có số sau hai tuần · số từ: `select count(*) filter (where phone is not null) * 100.0 / count(*) from contact where source = 'MANUAL' and "createdAt" >= <ngày lên>` trên production, đọc 23/10 · bảo đảm bởi: AC-1, AC-2 (form gửi và lưu số)
 - Thước: gõ số dạng `0…` hay `+84…` ra đúng người · số từ: phép đo màn `rang/do-man.mjs` (E16, E17) và bài kiểm API tìm theo số (E11, E12) · bảo đảm bởi: AC-9, AC-10
-- Thước phụ (trước ngày lên): số nhóm cá nhân đang hoạt động trùng số quốc nội trên production · số từ: `rang/dem-trung.sql` chạy chỉ-đọc trên production — việc tay của anh trước khi gộp, không chặn gộp (AC-7 bảo đảm người đã trùng sẵn vẫn sửa được); kết quả ghi vào Notes · bảo đảm bởi: AC-7 (người đã trùng sẵn vẫn sửa được)
+- Thước phụ (trước ngày lên): số nhóm cá nhân chưa lưu trữ trùng số quốc nội trên production · số từ: `rang/dem-trung.sql` chạy chỉ-đọc trên production — việc tay của anh trước khi gộp, không chặn gộp (AC-7 bảo đảm người đã trùng sẵn vẫn sửa được); kết quả ghi vào Notes · bảo đảm bởi: AC-7 (người đã trùng sẵn vẫn sửa được)
 
 ## Out of scope
 
