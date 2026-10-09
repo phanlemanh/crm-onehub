@@ -393,7 +393,9 @@ function CompanyOverview({ company }: { company: Company }) {
 					<DetailSheetRail>
 						<DetailSheetSection
 							title={m.company.details}
-							action={<FieldsCog kind="company" />}
+							action={
+								company.archivedAt ? undefined : <FieldsCog kind="company" />
+							}
 						>
 							<DetailSheetProperties columns={1}>
 								<InlineField

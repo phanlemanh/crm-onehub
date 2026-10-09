@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { AgentPanel } from "@/components/crm/agent-panel";
 import { InlineCompanyField } from "@/components/crm/company-picker";
 import { contactName } from "@/components/crm/contact-name";
+import { DealStageIndicator } from "@/components/crm/deal-stage";
 import { FieldsCog, RecordFields } from "@/components/crm/fields/record-fields";
 import {
 	InlineDateField,
@@ -210,13 +211,17 @@ export function DealSheet({ dealId }: { dealId: string }) {
 			actions={
 				deal ? (
 					<>
-						<KhoaLuuTru khoa={deal.archivedAt !== null}>
+						{deal.archivedAt ? (
+							<span data-giai-doan-tinh="" className="inline-flex items-center">
+								<DealStageIndicator stage={deal.stage} />
+							</span>
+						) : (
 							<DealStageMenu
 								dealId={deal.id}
 								stage={deal.stage}
 								variant="control"
 							/>
-						</KhoaLuuTru>
+						)}
 						<RecordActions
 							record={{ kind: "deal", id: deal.id }}
 							name={deal.name}
@@ -327,7 +332,7 @@ function DealOverview({ deal }: { deal: Deal }) {
 
 				<DetailSheetSection
 					title={m.deal.details}
-					action={<FieldsCog kind="deal" />}
+					action={deal.archivedAt ? undefined : <FieldsCog kind="deal" />}
 				>
 					<DetailSheetProperties>
 						<InlineField
@@ -383,7 +388,11 @@ function DealOverview({ deal }: { deal: Deal }) {
 					<InlineTextArea
 						label={m.deal.description}
 						value={deal.description}
-						placeholder={m.deal.descriptionHint(deal.company.name)}
+						placeholder={
+							deal.archivedAt
+								? undefined
+								: m.deal.descriptionHint(deal.company.name)
+						}
 						saving={isSaving("description")}
 						onSave={(description) => save({ description })}
 					/>

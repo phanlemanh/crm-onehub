@@ -398,7 +398,7 @@ function ContactOverview({ contact: banDau }: { contact: Contact }) {
 					action={
 						<div className="flex items-center gap-2">
 							<FactGroupLabel facts={deXuatCho} />
-							<FieldsCog kind="contact" />
+							{contact.archivedAt ? null : <FieldsCog kind="contact" />}
 						</div>
 					}
 				>

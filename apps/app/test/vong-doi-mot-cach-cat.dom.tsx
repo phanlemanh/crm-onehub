@@ -574,12 +574,11 @@ function demChoSua(): DemSua {
 }
 
 function timO(nhan: string): HTMLElement | null {
-	if (nhan === "__giai-doan__") {
-		const khoa = [...document.querySelectorAll("[data-khoa-luu-tru]")].find(
-			(k) => tabDangMo()?.contains(k) !== true,
+	if (nhan === "__giai-doan__")
+		return (
+			document.querySelector<HTMLElement>("[data-giai-doan-tinh] button") ??
+			document.querySelector<HTMLElement>("[data-giai-doan-tinh]")
 		);
-		return khoa?.querySelector<HTMLElement>("button") ?? null;
-	}
 	const tab = tabDangMo();
 	if (!tab) return null;
 	if (nhan === MO_TA)
@@ -598,8 +597,29 @@ function timO(nhan: string): HTMLElement | null {
 
 const soChoMo = () =>
 	document.querySelectorAll(
-		"input:not([type=hidden]), textarea, [role=listbox], [role=dialog]:not([data-slot=sheet-content]):not([data-slot=drawer-content])",
+		"input:not([type=hidden]), textarea, [role=listbox], [role=menu], [role=dialog]:not([data-slot=sheet-content]):not([data-slot=drawer-content])",
 	).length;
+
+const HAU_QUA: Record<Loai, (l: Locale) => string> = {
+	deal: (l) => dealMessages(l).bulk.deleteWarning,
+	contact: (l) => contactMessages(l).bulk.deleteWarning,
+	company: (l) => crmMessages(l).bulk.cannotUndo,
+};
+
+const DANH_TU: Record<Loai, (l: Locale) => string> = {
+	deal: (l) => dealMessages(l).noun,
+	contact: (l) => contactMessages(l).noun,
+	company: (l) => companyMessages(l).noun,
+};
+
+const NGAN_CHU: [Loai, Locale][] = [
+	["contact", "vi"],
+	["company", "vi"],
+	["deal", "vi"],
+	["contact", "en"],
+	["company", "en"],
+	["deal", "en"],
+];
 
 describe("vong-doi-mot-cach-cat", () => {
 	test("vdc-hoan-tac-loat: luu tru hang loat co Hoan tac, khoi phuc dung id mot lan, danh sach lam moi", async () => {
@@ -736,6 +756,11 @@ describe("vong-doi-mot-cach-cat", () => {
 				});
 				await moNgan(n);
 				if (!daCat) {
+					await cho(
+						() => (tabDangMo()?.textContent ?? "").includes(n.ten),
+						`${n.loai} da tai ban ghi`,
+					);
+					await nhip(5);
 					expect(document.querySelector("[data-dai-luu-tru]") === null).toBe(
 						true,
 					);
@@ -865,6 +890,18 @@ describe("vong-doi-mot-cach-cat", () => {
 			await cho(() => tabDangMo() !== null, `${n.loai} tab dang dung`);
 			await nhip(10);
 			expect(demChoSua().bat > 0).toBe(true);
+			if (n.loai === "deal") {
+				const truocMenu = soChoMo();
+				const giaiDoan = [
+					...document.querySelectorAll('button[aria-haspopup="menu"]'),
+				].find((b) => !(b.textContent ?? "").includes(VI.sheet.moreActions));
+				await bamTro(giaiDoan);
+				await cho(
+					() => soChoMo() > truocMenu,
+					"menu giai doan mo tren thoa thuan dang dung",
+				);
+				expect(document.querySelector("[role=menu]") === null).toBe(false);
+			}
 			ngan.push(n.loai);
 			await dongHet();
 		}
@@ -921,6 +958,10 @@ describe("vong-doi-mot-cach-cat", () => {
 		const truongEn = `${crmMessages("en").fields.archivedNote} ${crmMessages("en").fields.archiveBody}`;
 		expect(/ẩn/iu.test(truongVi)).toBe(false);
 		expect(/hidden/i.test(truongEn)).toBe(false);
+		expect(VI.fields.archivedNote).toBe("giữ giá trị, cất khỏi mọi nơi");
+		expect(crmMessages("en").fields.archivedNote).toBe(
+			"values kept, removed from every view",
+		);
 
 		const o: string[] = [];
 		for (const locale of ["vi", "en"] as const) {
@@ -950,11 +991,11 @@ describe("vong-doi-mot-cach-cat", () => {
 					`${loai} hop xoa`,
 				);
 				const hop = document.querySelector("[role=alertdialog]") as Element;
-				const xacNhan = nutCo(c.bulkMenu.confirmDelete, hop);
-				chot(
-					xacNhan !== null &&
-						c.bulkMenu.confirmDelete !== (locale === "vi" ? "Xoá" : "Delete"),
-					"vdc: hop xoa vinh vien ghi Xoa tran",
+				const chuNut = locale === "vi" ? "Xoá vĩnh viễn" : "Delete forever";
+				const xacNhan = nutCo(chuNut, hop);
+				chot(xacNhan !== null, "vdc: hop xoa vinh vien ghi Xoa tran");
+				expect((hop.textContent ?? "").includes(HAU_QUA[loai](locale))).toBe(
+					true,
 				);
 				const truoc = goiCua(`${t}.bulkPurge`).length;
 				await act(async () => (xacNhan as HTMLButtonElement).click());
@@ -969,7 +1010,8 @@ describe("vong-doi-mot-cach-cat", () => {
 				await dongHet();
 			}
 		}
-		for (const loai of LOAI) {
+		for (const [loai, locale] of NGAN_CHU) {
+			const c = crmMessages(locale);
 			const t = THU_TUC[loai];
 			dat(
 				`${t}.purge`,
@@ -985,17 +1027,21 @@ describe("vong-doi-mot-cach-cat", () => {
 					consequence="⟦hau qua⟧"
 					archivedAt={NGAY_CAT}
 				/>,
+				{ locale },
 			);
-			const danhTu = NGAN.find((n) => n.loai === loai)?.danhTu ?? "";
-			await chonMenu(VI.sheet.moreActions, VI.sheet.deleteForever(danhTu));
+			const danhTu = DANH_TU[loai](locale);
+			await chonMenu(c.sheet.moreActions, c.sheet.deleteForever(danhTu));
 			await cho(
 				() => document.querySelector("[role=alertdialog]") !== null,
 				`${loai} hop xoa ngan`,
 			);
 			const hop = document.querySelector("[role=alertdialog]") as Element;
 			expect((hop.textContent ?? "").includes("⟦hau qua⟧")).toBe(true);
-			const xacNhan = nutCo(VI.sheet.confirmDeleteForever, hop);
-			expect(xacNhan === null).toBe(false);
+			const xacNhan = nutCo(
+				locale === "vi" ? "Xoá vĩnh viễn" : "Delete forever",
+				hop,
+			);
+			chot(xacNhan !== null, "vdc: hop xoa vinh vien ghi Xoa tran");
 			const truoc = goiCua(`${t}.purge`).length;
 			await act(async () => (xacNhan as HTMLButtonElement).click());
 			await nhip(1);
@@ -1005,9 +1051,9 @@ describe("vong-doi-mot-cach-cat", () => {
 				goiCua(`${t}.purge`).length - truoc === 1,
 				"vdc: xoa vinh vien goi hai lan",
 			);
-			o.push(`ngan/${loai}`);
+			o.push(`ngan/${locale}/${loai}`);
 			await dongHet();
 		}
-		expect(o.length).toBe(9);
+		expect(o.length).toBe(12);
 	});
 });
