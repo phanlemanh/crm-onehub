@@ -1343,8 +1343,13 @@ stages.
 - **Behaviour follows `kind`, never a stage id.** `OPEN` · `WON` · `LOST` decide
   whether a deal is closed, whether a reason is required, and what the Overview, the
   OKR metric and the agent count. The rules live once, in `@crm/db/giai-doan`.
-  `GIAI_DOAN_GOC` names the seven original ids for the seed and tests only — product
-  code that branches on one of them is caught by the `khong-re-theo-ten` ruler.
+  `GIAI_DOAN_GOC` names the seven original ids for the seed and tests, with one named
+  product exception: `@crm/telemetry/allowlist` (`permittedDealStage`, `DEAL_STAGE_KEYS`)
+  keys the anonymous `deals_by_stage` count on those seven ids so it stays comparable
+  across installs, and folds every stage an admin adds into `other_<kind>`. Any other
+  product code that branches on an original id is caught by the `khong-re-theo-ten`
+  ruler, which scans `packages/telemetry/src` too and allows only the constant's name in
+  `allowlist.ts` — a literal id there is still caught.
 - **Every stage move goes through `DealsService.chuyenGiaiDoanTrongTx`**: one
   `STAGE_CHANGE` activity and one `deal.stage.changed` event per deal, inside the
   caller's transaction. `setStage`, `bulkSetStage` and a delete that moves deals all
