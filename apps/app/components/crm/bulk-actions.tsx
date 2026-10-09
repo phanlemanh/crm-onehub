@@ -54,6 +54,22 @@ export function reportBulk(
 	toast.success(done(result.succeeded));
 }
 
+export function baoHoanTacLoat({
+	result,
+	restored,
+	locale,
+}: {
+	result: BulkResult;
+	restored: (count: number) => string;
+	locale: Locale;
+}): void {
+	if (result.succeeded === 0) {
+		toast.error(crmMessages(locale).bulk.hoanTacLoi);
+		return;
+	}
+	toast.success(restored(result.succeeded));
+}
+
 export function baoLuuTruLoat({
 	result,
 	done,

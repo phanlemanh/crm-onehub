@@ -218,7 +218,10 @@ describe("vong-doi-mot-cach-cat", () => {
 			expect(`${l.ten}:${daCat.succeeded}/${daCat.failed}`).toBe(
 				`${l.ten}:1/1`,
 			);
-			await l.bulkRestore([id, gia]);
+			const hoanTac = await l.bulkRestore([id, gia]);
+			expect(`${l.ten}:${hoanTac.succeeded}/${hoanTac.failed}`).toBe(
+				`${l.ten}:1/1`,
+			);
 			expect(`${l.ten}:${(await l.archivedAt(id)) === null}`).toBe(
 				`${l.ten}:true`,
 			);

@@ -600,17 +600,17 @@ const soChoMo = () =>
 		"input:not([type=hidden]), textarea, [role=listbox], [role=menu], [role=dialog]:not([data-slot=sheet-content]):not([data-slot=drawer-content])",
 	).length;
 
-const HAU_QUA: Record<Loai, (l: Locale) => string> = {
-	deal: (l) => dealMessages(l).bulk.deleteWarning,
-	contact: (l) => contactMessages(l).bulk.deleteWarning,
-	company: (l) => crmMessages(l).bulk.cannotUndo,
-};
+const HAU_QUA = {
+	deal: (l: Locale) => dealMessages(l).bulk.deleteWarning,
+	contact: (l: Locale) => contactMessages(l).bulk.deleteWarning,
+	company: (l: Locale) => crmMessages(l).bulk.cannotUndo,
+} satisfies Record<Loai, (l: Locale) => string>;
 
-const DANH_TU: Record<Loai, (l: Locale) => string> = {
-	deal: (l) => dealMessages(l).noun,
-	contact: (l) => contactMessages(l).noun,
-	company: (l) => companyMessages(l).noun,
-};
+const DANH_TU = {
+	deal: (l: Locale) => dealMessages(l).noun,
+	contact: (l: Locale) => contactMessages(l).noun,
+	company: (l: Locale) => companyMessages(l).noun,
+} satisfies Record<Loai, (l: Locale) => string>;
 
 const NGAN_CHU: [Loai, Locale][] = [
 	["contact", "vi"],
@@ -634,12 +634,16 @@ describe("vong-doi-mot-cach-cat", () => {
 						? { requested: 3, succeeded: 3, failed: 0, message: null }
 						: { requested: 3, succeeded: 2, failed: 1, message: null },
 				);
-				dat(`${t}.bulkRestore`, () => ({
-					requested: 3,
-					succeeded: 3,
-					failed: 0,
-					message: null,
-				}));
+				dat(`${t}.bulkRestore`, () =>
+					ket === "du"
+						? { requested: 3, succeeded: 3, failed: 0, message: null }
+						: {
+								requested: 3,
+								succeeded: 2,
+								failed: 1,
+								message: "loi-tho-khong-co-id",
+							},
+				);
 				await mo(
 					<>
 						<DanhSach loai={loai} />
@@ -663,9 +667,21 @@ describe("vong-doi-mot-cach-cat", () => {
 					(hoanTac as HTMLButtonElement).click();
 					(hoanTac as HTMLButtonElement).click();
 				});
+				const soKhoiPhuc = ket === "du" ? 3 : 2;
 				await cho(
-					() => vungToast().includes(chuKhoiPhuc(loai, 3, "vi")),
+					() =>
+						vungToast().includes(chuKhoiPhuc(loai, soKhoiPhuc, "vi")) ||
+						vungToast().includes("loi-tho-khong-co-id"),
 					`${loai}/${ket} da khoi phuc`,
+				);
+				chot(
+					!vungToast().includes("loi-tho-khong-co-id") &&
+						document.querySelector("[data-sonner-toast][data-type=error]") ===
+							null,
+					"vdc: hoan tac mot phan bao loi tho",
+				);
+				expect(vungToast().includes(chuKhoiPhuc(loai, soKhoiPhuc, "vi"))).toBe(
+					true,
 				);
 				const goiKhoiPhuc = goiCua(`${t}.bulkRestore`);
 				const idKhoiPhuc = JSON.stringify(

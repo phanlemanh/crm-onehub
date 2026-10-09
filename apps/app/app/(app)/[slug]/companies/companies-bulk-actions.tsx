@@ -18,6 +18,7 @@ import {
 	BulkActionsMenu,
 	BulkDeleteDialog,
 	BulkOwnerMenu,
+	baoHoanTacLoat,
 	baoLuuTruLoat,
 	reportBulk,
 } from "@/components/crm/bulk-actions";
@@ -84,11 +85,11 @@ export function CompaniesBulkActions({
 		trpc.companies.bulkRestore.mutationOptions({
 			onSuccess: async (result) => {
 				await cache.company();
-				reportBulk(
+				baoHoanTacLoat({
 					result,
-					(count) => m.bulk.restored(companies(count, locale)),
+					restored: (count) => m.bulk.restored(companies(count, locale)),
 					locale,
-				);
+				});
 			},
 			onError: () => toast.error(c.bulk.hoanTacLoi),
 		}),
