@@ -78,7 +78,12 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { ContactPlans } from "./contact-plans";
 import { RecordActions } from "./record-actions";
-import { DealAmount, MetaLine, RecordSheetFrame } from "./record-parts";
+import {
+	DealAmount,
+	lyDoLoi,
+	MetaLine,
+	RecordSheetFrame,
+} from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
 
 type Contact = RouterOutputs["contacts"]["byId"];
@@ -165,6 +170,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
+			lyDo={lyDoLoi(query.error)}
 			onRetry={() => void query.refetch()}
 			title={contact ? contactName(contact) : m.contact.fallbackTitle}
 			description={
