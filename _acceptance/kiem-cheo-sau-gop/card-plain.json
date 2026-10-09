@@ -1,0 +1,120 @@
+{
+  "feature_plain": "Mỗi đêm, máy tự kiểm một lần xem các lần gộp vào onehub trong ngày có làm hỏng hồ sơ đã ký nào không; hỏng thì gọi tên đúng lần gộp gây hỏng và báo cho người — lượt ghim lại của từng hồ sơ không còn gánh việc này.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ gom mọi lần gộp từ mốc lần trước, và tự rút ra những hồ sơ đã ký có phần được đo bị các lần gộp đó chạm — không ai liệt tay."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ dừng và báo (không đoán) khi không biết mốc lần trước, kèm lệnh để người đặt mốc một lần."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ xin khoá chấm như một phiên thợ khi đang có đợt, chỉ chạy khi được cấp, luôn trả khoá — kể cả khi lỗi; chờ quá lâu thì bỏ lượt và báo ai đang giữ khoá."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ được ưu tiên xếp hàng khi đã quá 20 giờ chưa có kết quả, để không đói khoá vì đợt chạy cả đêm."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ phân biệt ba loại đỏ: chập chờn (chạy lại thì xanh), đỏ sẵn từ trước, và đỏ mới — với đỏ mới thì gọi tên đúng lần gộp gây ra, kể cả khi hồ sơ đó mới vào trong cùng ngày."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ tự giữ khoá bằng tay khi không có đợt nào mở, để ngoài đợt vẫn có kết quả."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ chạy trên một bản sao riêng của kho, không đụng cây làm việc của phiên nào; mỗi lượt có trần 90 phút, vượt thì dừng và trả khoá."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ ghi kết quả mỗi đêm vào một tệp theo ngày; đỏ hay hỏng thì báo người (qua phiên giám sát khi có đợt, bằng thông báo trên máy khi không) — không tự hoàn tác, không tự mở phiên sửa."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ cài lịch chạy 1 giờ sáng bằng một lệnh anh tự gõ (và gỡ bằng một lệnh), chạy được cả khi máy khởi động lại."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ gọi bộ chạy của kit đang cài trên máy, không chép kit vào kho, và không tự gọi mô hình AI."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ được đo trên chính kho này (lịch sử git thật, 184 hồ sơ thật, ~315 MB tài liệu nghiệm thu) với ba lần gộp có thật — không chỉ trên kho giả vài KB, nơi hai vòng chấm trước đã để lọt lỗi."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-2",
+      "p": "Sẽ KHÔNG xin khoá hay dựng bản sao khi không có lần gộp mới hoặc không hồ sơ đã ký nào bị chạm."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không chạy trên CI, không chép bộ chạy của kit vào kho."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không tự mở PR hoàn tác, không tự mở phiên sửa — chỉ báo."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không giữ bản rút gọn của kiểm chéo trong lượt ghim lại."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không chạy theo từng lần gộp — gom theo ngày."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Không tự làm phần dùng lại kết quả mô hình — đó là việc của F12."
+    }
+  ],
+  "scope_plain": "Phần sửa hồ sơ đã ký tra-loi-tin-nhac (lời hứa cũ chuyển sang đây) làm SAU khi vòng này ký Cổng 2, cùng PR — nguyên văn tiêu chí mới nằm ở Notes của hợp đồng để anh duyệt luôn ở thẻ này.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đã xét năm trạng thái của khoá lúc bắt đầu: có đợt và trống; có đợt, bận, chưa quá 20 giờ; có đợt, bận, quá 20 giờ; không đợt và trống; không đợt và bận (AC-4, AC-5, AC-7)."
+    },
+    {
+      "i": 1,
+      "p": "Đã xét khoảng gộp: không có lần gộp nào, một, nhiều, và mất mốc (AC-1, AC-2, AC-3)."
+    },
+    {
+      "i": 2,
+      "p": "Đã xét năm kết cục của một bài đo, theo cách git bisect, Chromium Findit và Google TAP tách: xanh, chập chờn, đỏ sẵn, đỏ mới, không chạy được (AC-6, AC-8)."
+    },
+    {
+      "i": 3,
+      "p": "Đã xét hai kênh báo: có đợt và không đợt; tệp theo ngày luôn ghi (AC-9)."
+    },
+    {
+      "i": 4,
+      "p": "Mỗi trục có tiêu chí đo riêng; lịch chạy, ranh giới kit và quy mô kho thật có tiêu chí riêng (AC-10, AC-11, AC-12)."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Bài đo dùng bộ chạy giả in đúng kiểu dòng mà chính máy đọc mong — bộ chạy thật in khác thì đêm nào cũng báo xanh mà không ai thấy. Đã sửa: mẫu dòng lấy nguyên văn từ một lượt chạy thật, đỏ khi phiên bản kit đổi; kiểm máy gọi bộ chạy ở chế độ chỉ đo; thêm cách phá thử trên nhánh nháp."
+    },
+    {
+      "i": 1,
+      "p": "Hồ sơ mới ký trong cùng ngày rồi bị làm hỏng ngay sẽ bị xếp nhầm là «đỏ sẵn». Đã sửa: hồ sơ vào trong khoảng thì truy từ lần gộp mang nó vào, có bài đo riêng."
+    },
+    {
+      "i": 2,
+      "p": "Lượt đêm có thể hỏng im lặng (lịch máy không thấy bun, hoặc mất mốc). Đã sửa: mọi lần hỏng đều báo; lịch dùng đường dẫn đầy đủ, ghi nhật ký, có bài chạy trong môi trường trống."
+    },
+    {
+      "i": 3,
+      "p": "Điều kiện «chiếm khoá khi có người chờ» được đo bằng một thước không bao giờ đỏ. Đã sửa: trần 90 phút một lượt, đường đo đếm phút giữ khoá khi có người chờ, và ngưỡng CHẾT viết lại theo trần."
+    },
+    {
+      "i": 4,
+      "p": "Lời hứa «năm bài kiểm Zalo không bị sửa» được nói là chuyển sang đây mà không ai đo. Đã sửa: bỏ có tên trong sổ quyết định để anh duyệt — nó là chốt một lần của vòng cũ, đã đạt."
+    }
+  ]
+}

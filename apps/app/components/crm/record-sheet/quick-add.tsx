@@ -3,7 +3,7 @@
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { DatePicker } from "@crm/ui/components/date-picker";
-import { Field, FieldLabel } from "@crm/ui/components/field";
+import { Field, FieldError, FieldLabel } from "@crm/ui/components/field";
 import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { Input } from "@crm/ui/components/input";
 import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
@@ -17,6 +17,7 @@ import {
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
 import { parseMoneyInput } from "@crm/ui/lib/money-input";
+import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -115,13 +116,17 @@ export function QuickAddContact({
 	const { nhap, doi, ban, xong } = useNhap({
 		firstName: "",
 		lastName: "",
+		phone: "",
 		email: "",
 		title: "",
 	});
-	const { firstName, lastName, email, title } = nhap;
+	const { firstName, lastName, phone, email, title } = nhap;
+	const [soSai, datSoSai] = useState(false);
+	const phoneRef = useRef<HTMLInputElement>(null);
 
 	const firstNameId = useId();
 	const lastNameId = useId();
+	const phoneId = useId();
 	const emailId = useId();
 	const titleId = useId();
 
@@ -144,16 +149,22 @@ export function QuickAddContact({
 			ready={firstName.trim() !== ""}
 			dirty={ban}
 			onCancel={onDone}
-			onSubmit={() =>
+			onSubmit={() => {
+				if (docSoDienThoai(phone).kind === "sai") {
+					datSoSai(true);
+					phoneRef.current?.focus();
+					return;
+				}
 				create.mutate({
 					firstName,
 					lastName: lastName || undefined,
+					phone: phone || undefined,
 					email: email || undefined,
 					title: title || undefined,
 					companyId,
 					ownerId,
-				})
-			}
+				});
+			}}
 		>
 			<Field>
 				<FieldLabel htmlFor={firstNameId}>{m.firstName}</FieldLabel>
@@ -173,6 +184,24 @@ export function QuickAddContact({
 					onChange={(event) => doi({ lastName: event.target.value })}
 					autoComplete="off"
 				/>
+			</Field>
+			<Field data-invalid={soSai || undefined}>
+				<FieldLabel htmlFor={phoneId}>{m.fields.phone}</FieldLabel>
+				<Input
+					id={phoneId}
+					ref={phoneRef}
+					type="tel"
+					inputMode="tel"
+					value={phone}
+					onChange={(event) => {
+						datSoSai(false);
+						doi({ phone: event.target.value });
+					}}
+					placeholder={m.phonePlaceholder}
+					aria-invalid={soSai || undefined}
+					autoComplete="off"
+				/>
+				{soSai ? <FieldError>{m.phoneInvalid}</FieldError> : null}
 			</Field>
 			<Field>
 				<FieldLabel htmlFor={emailId}>{m.fields.email}</FieldLabel>

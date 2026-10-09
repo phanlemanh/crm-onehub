@@ -1,0 +1,21 @@
+driver: tien-de.mjs --chay man.mjs (puppeteer script); khong co read_network_requests -> n-a (driver)
+chay 2026-10-09 11:54: exit 0, 'khung-loi-ban-ghi-dung-ly-do man: dat'; script bo qua console loi NOT_FOUND cua contacts.byId (kich thich cua buoc)
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_silly_tereshkova_e12be6_do · app http://localhost:4887 · api http://localhost:4294
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts "klgk0hr4wh@thu.test"
+  bo qua console cua trang nay: loi NOT_FOUND cua contacts.byId la chinh kich thich cua buoc
+  anh klg-khong-con-1440.png
+  1440: «Bản ghi này không còn Đã có người xoá vĩnh viễn bản ghi này nên không mở lại được. Đóng»
+buoc 1: dat
+  bo qua console cua trang nay: loi NOT_FOUND cua contacts.byId la chinh kich thich cua buoc
+  anh klg-khong-con-390.png
+  390: tran khong · Dong trong khung true
+buoc 2: dat
+khung-loi-ban-ghi-dung-ly-do man: dat
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0
