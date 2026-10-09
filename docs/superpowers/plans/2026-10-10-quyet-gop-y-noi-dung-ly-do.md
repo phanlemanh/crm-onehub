@@ -302,7 +302,7 @@ describe("k3c-ma-tran", () => {
 
 	test("k3c-ma-tran moi ly do co dinh tra { ok: false, lyDo }, gop y van cho, okr khong doi", async () => {
 		expect(MA_TRAN.map((c) => c.ma)).toEqual([...LY_DO_KHONG_QUYET]);
-		expect(MA_TRAN.length).toBe(13);
+		expect(MA_TRAN.length).toBe(9);
 		const lech: string[] = [];
 		for (const ca of MA_TRAN) {
 			const [id] = await gieoDong(MT, null, [await ca.dong()]);
@@ -817,7 +817,7 @@ if (loi.length) {
 console.log(`mot-nguon: ${LY_DO_KHONG_QUYET.length} ma, ${choKhai.size} cho khai, anh xa du, hai ban do du`);
 ```
 
-Run: `bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/mot-nguon.mjs` → `mot-nguon: 13 ma, 1 cho khai, anh xa du, hai ban
+Run: `bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/mot-nguon.mjs` → `mot-nguon: 9 ma, 1 cho khai, anh xa du, hai ban
 do du`. Run `… --ban-sao them-tap` → exit 1 `ma khai them: apps/app/lib/__ban-sao-them-tap__.ts`. Import
 `tro-ly.service.ts` từ gốc kho mà bun không bật decorator (lỗi cú pháp `@Injectable`): chạy phần (2) trong một tiến trình con
 `bun -e` với `cwd: apps/api` và in JSON ra stdout — không đổi điều kiện đo.
