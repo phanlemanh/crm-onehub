@@ -66,7 +66,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { AttachDealContact } from "./quick-add";
 import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
-import { AddRow, RecordSheetFrame } from "./record-parts";
+import { AddRow, lyDoLoi, RecordSheetFrame } from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
 
 type Deal = RouterOutputs["deals"]["byId"];
@@ -182,6 +182,7 @@ export function DealSheet({ dealId }: { dealId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
+			lyDo={lyDoLoi(query.error)}
 			onRetry={() => void query.refetch()}
 			title={deal?.name ?? m.deal.fallbackTitle}
 			description={

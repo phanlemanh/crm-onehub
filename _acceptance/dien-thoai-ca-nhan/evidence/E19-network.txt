@@ -1,0 +1,3 @@
+E19 network: driver = do-man.mjs (playwright script via mot-luot.sh), khong co browser tool doc network.
+Do-man.mjs tu dem yeu cau mang: "0 yeu cau contacts.create" (dong so-sai-375). Khong co dump failed requests/console tho.
+networkObserved = n-a (driver)

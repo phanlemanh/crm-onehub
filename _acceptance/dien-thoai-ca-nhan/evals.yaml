@@ -1,0 +1,401 @@
+schema_version: 1
+slug: dien-thoai-ca-nhan
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/dien-thoai-ca-nhan/evidence dat tuong minh: lenh cua dt_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng cua cay, do-man.mjs tu chan cay, chup, don)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo tung anh va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/dien-thoai-ca-nhan/evidence/
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/**"
+      - "apps/app/lib/messages/contacts.ts"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/api/src/contacts/**"
+      - "packages/validation/src/so-dien-thoai.ts"
+      - "packages/db/src/so-dien-thoai.ts"
+      - "_acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"
+    expected: |
+      Lan do man chay ma tran viet truoc 7 o (do-man.mjs MA_TRAN), moi o mot dong "DUNG|SAI <o>: <so lieu tho>" va
+      mot anh evidence/<o>.png; dong dem "7/7 o". E1 doc hai o cua AC-1:
+        them-tab-1440: tab Ca nhan cua mot cong ty, bam «Them ca nhan»; thu tu nhan cac o trong form (doc theo DOM)
+          la Ten, Ho, Dien thoai, Email, Chuc danh; o Dien thoai co type="tel"; go Ten «Lan DT <ma luot>», Dien thoai
+          «0901 234 567» (so rieng cua luot), bam them -> doc CSDL do: dung mot ca nhan ten do, companyId = cong ty
+          vua mo, phone = "+84901234567", source = "MANUAL" (in phone va source tho)
+        them-tab-375: nhu tren o kho 375 (luoi mot cot, thu tu giu nguyen); anh cho thay o Dien thoai trong khung
+      Nam o con lai thuoc E16 (AC-2), E17 (AC-9), E18 (AC-10), E19 (AC-4), E20 (AC-8).
+      CHIEU DO (pha-thu o S3 tren ban sao quick-add.tsx): bo o Dien thoai -> them-tab-1440 SAI voi thong diep ghim
+      "thieu o Dien thoai" va them-tab-375 SAI.
+
+  - id: E2
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt_api_tao
+    paths:
+      - "apps/api/src/contacts/**"
+      - "packages/validation/src/so-dien-thoai.ts"
+      - "apps/api/test/dien-thoai-ca-nhan.spec.ts"
+    expected: |
+      dien-thoai-ca-nhan.spec.ts, describe "tao-chuan-hoa": ContactsService.create tren CSDL thu rieng cua luot.
+      Ma tran viet truoc 4 dong, moi dong doc lai bang db.contact.findUnique:
+        1 phone "0901 234 567", companyId cong ty thu -> phone "+84901234567", companyId giu
+        2 phone "+84 28 3812 3456" -> "+842838123456"
+        3 phone "+65 6123 4567" -> "+6561234567"
+        4 khong truyen phone -> phone null (AC-5)
+      CHIEU DO: ban sao create bo buoc chuan hoa (luu nguyen chuoi) -> dong 1 do voi thong diep ghim
+      "tao-chuan-hoa: 0901 234 567 phai luu +84901234567".
+
+  - id: E3
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.dt_man_form
+    paths:
+      - "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/lib/messages/contacts.ts"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
+    expected: |
+      dien-thoai-ca-nhan.dom.tsx, describe "gui-so" (jsdom, trpc gia ghi lai doi so mutate). Ma tran 4 dong:
+        1 QuickAddContact: thu tu nhan Ten, Ho, Dien thoai, Email, Chuc danh; go Ten + Dien thoai "0901 234 567",
+          gui -> contacts.create nhan dung mot lan voi phone "0901 234 567" (may chu chuan hoa — E2)
+        2 CreateContactSheet: o Dien thoai ngay sau Ho; go "+84 28 3812 3456", gui -> mutate nhan phone do
+        3 QuickAddContact chi go Ten -> mutate nhan phone undefined (AC-5)
+        4 CreateContactSheet chi go Ten -> mutate nhan phone undefined
+      expect chi so gia tri nguyen thuy (luat 35). CHIEU DO: ban sao CreateContactSheet khong truyen phone ->
+      dong 2 do voi thong diep ghim "tao-sheet: thieu phone trong contacts.create".
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.dt_doc_so
+    paths:
+      - "packages/validation/src/so-dien-thoai.ts"
+      - "packages/validation/test/so-dien-thoai.spec.ts"
+    expected: |
+      so-dien-thoai.spec.ts: ma tran viet truoc, so assert = so phan tu.
+      describe "doc-so" 18 dong: "0901 234 567", "0901.234.567", "(+84) 901-234-567", "84901234567",
+        "+84901234567", "+84 0901 234 567", "+84 (0) 901 234 567", "840901234567" -> ok "+84901234567";
+        "028 3812 3456" -> ok "+842838123456"; "+65 6123 4567" -> ok "+6561234567"; "" va "   " -> rong; "abc",
+        "12345", "0901 234 56", "+84 12", "1234567890123456", "00901234567" -> sai.
+      describe "so-quoc-noi": "+840901234567" (so tho cu co so 0 trung ke) -> "901234567", bang "+84901234567".
+      describe "hien-so" 5 dong: "+84901234567" -> "0901 234 567"; "0901.234.567" (tho cu) -> "0901 234 567";
+        "+842838123456" -> "028 3812 3456"; "+6561234567" -> "+6561234567"; "may le 123" (khong doc duoc) -> nguyen van.
+      describe "manh-tim" 5 dong: "0901234567" -> "901234567"; "+84 901 234 567" -> "901234567"; "234 567" ->
+        "234567"; "12" -> null (duoi nguong SO_DIEN_THOAI.timToiThieu); "Lan 0901" -> null (co chu).
+      CHIEU DO: ban sao docSoDienThoai bo nhanh "84 khong dau cong" -> dong "84901234567" do voi thong diep ghim
+      "doc-so: 84901234567".
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.dt_man_so_sai
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/lib/messages/contacts.ts"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
+    expected: |
+      dien-thoai-ca-nhan.dom.tsx, describe "so-sai". Ma tran 4 dong: {QuickAddContact, CreateContactSheet} x
+      {"abc", "12345"}: bam gui -> mutate KHONG duoc goi (dem 0), co phan tu data-slot="field-error" voi
+      textContent dung bang chuoi loi rut tu messages vi, document.activeElement la o Dien thoai.
+      Doi chung duong cung fixture: go "0901 234 567" -> mutate goi 1 lan, khong co field-error.
+      CHIEU DO: ban sao bo kiem truoc khi gui -> dong "abc" do voi thong diep ghim "so-sai: mutate da bi goi".
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt_api_so_sai
+    paths:
+      - "apps/api/src/contacts/**"
+      - "packages/validation/src/so-dien-thoai.ts"
+      - "apps/api/test/dien-thoai-ca-nhan.spec.ts"
+    expected: |
+      dien-thoai-ca-nhan.spec.ts, describe "so-sai": contactCreateInput.safeParse va contactUpdateArgs.safeParse
+      voi phone "abc" va "12345" -> success false, message chua "That is not a phone number."; doi chung
+      "0901 234 567" va "" -> success true. Goi qua router (createCaller) voi phone "abc" -> loi BAD_REQUEST, dem
+      ca nhan truoc/sau bang nhau.
+      CHIEU DO: ban sao bo refine -> dong "abc" do voi thong diep ghim "so-sai: abc phai bi tu choi".
+
+  - id: E7
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dt_api_tao
+    paths:
+      - "apps/api/src/contacts/**"
+      - "apps/api/test/dien-thoai-ca-nhan.spec.ts"
+    expected: |
+      Cung lenh E2 (dedupe); dong 4 cua "tao-chuan-hoa": tao khong phone -> thanh cong, phone null.
+      Phia man: dong 3 va 4 cua E3.
+
+  - id: E8
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt_api_trung
+    paths:
+      - "apps/api/src/contacts/**"
+      - "packages/db/src/so-dien-thoai.ts"
+      - "packages/validation/src/so-dien-thoai.ts"
+      - "apps/api/test/dien-thoai-ca-nhan.spec.ts"
+    expected: |
+      dien-thoai-ca-nhan.spec.ts, describe "trung-tao". Fixture: ca nhan A dang hoat dong, phone ghi THANG vao CSDL
+      (db.contact.create, khong qua service) "0901.234.567". Ma tran 4 dong:
+        1 create phone "+84 901 234 567" -> nem ConflictException, message chua ten A; dem ca nhan khong doi
+        2 create phone "84901234567" -> Conflict
+        2b create phone "+84 0901 234 111" (so 0 trung ke) -> Conflict
+        3 create phone "0901 234 568" (khac mot so) -> thanh cong (doi chung duong)
+        4 luu tru A (archivedAt) roi create "+84901234567" -> thanh cong
+      Fixture them: A3 ghi thang phone tho "+84 0907 111 222"; create "0907 111 222" -> Conflict (SQL bo so 0 trung ke).
+      CHIEU DO: ban sao caNhanTrungSo so bang chuoi tho thay vi so quoc noi -> dong 1 do voi thong diep ghim
+      "trung-tao: so tho cu phai chan"; ban sao SQL khong bo so 0 trung ke -> dong A3 do.
+
+  - id: E9
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt_api_trung
+    paths:
+      - "apps/api/src/contacts/**"
+      - "packages/db/src/so-dien-thoai.ts"
+      - "apps/api/test/dien-thoai-ca-nhan.spec.ts"
+    expected: |
+      Cung lenh E8; describe "trung-sua". A phone "0901234567" (ghi thang), B khong so. Ma tran 3 dong:
+        1 update(B, phone "+84901234567") -> Conflict, B.phone van null
+        2 update(A, phone "+84 901 234 567") -> thanh cong, A.phone "+84901234567"
+        3 update(A, phone "") -> A.phone null
+      Fixture thu hai (ghi thang CSDL): A2 va C2 cung dang hoat dong, cung phone tho "0907.654.321". Them 2 dong:
+        4 update(A2, { title: "Truong phong" }) (khong gui phone) -> thanh cong
+        5 update(A2, { phone: "0907 654 321" }) (cung so quoc noi voi so hien co cua A2) -> thanh cong, khong Conflict
+      CHIEU DO: ban sao update khong bo qua chinh minh (boQua) -> dong 2 do voi thong diep ghim
+      "trung-sua: sua ve chinh so cua minh phai duoc"; ban sao luon kiem trung -> dong 5 do voi thong diep ghim
+      "trung-sua: sua truong khac bi chan".
+
+  - id: E10
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.dt_man_bang
+    paths:
+      - "apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx"
+      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
+      - "apps/api/src/contacts/contacts.contracts.ts"
+      - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
+    expected: |
+      dien-thoai-ca-nhan.dom.tsx, describe "cot-bang": dung cot cua bang Ca nhan voi 3 dong (phone "+84901234567",
+      "+6561234567", null). Ma tran 4 dong: id cot ngay sau "name" la "phone", tieu de "Dien thoai"; o dong 1
+      textContent "0901 234 567"; o dong 2 "+6561234567"; o dong 3 co data-slot cua EmptyCellValue.
+      describe "ngan-chi-tiet": ContactSheet voi phone "+84901234567" -> lien ket co href "tel:+84901234567" va
+      textContent "0901 234 567".
+      CHIEU DO: ban sao cot hien phone tho -> dong 1 do voi thong diep ghim "cot-bang: phai hien 0901 234 567".
+
+  - id: E11
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt_api_tim
+    paths:
+      - "apps/api/src/contacts/**"
+      - "apps/api/src/search/search.service.ts"
+      - "packages/db/src/so-dien-thoai.ts"
+      - "packages/validation/src/so-dien-thoai.ts"
+      - "apps/api/test/dien-thoai-ca-nhan.spec.ts"
+    expected: |
+      dien-thoai-ca-nhan.spec.ts, describe "tim-bang". Fixture: P phone "+84901234567", Q phone ghi thang "0912.345.678",
+      R khong so, ten R chua "12". Ma tran 5 dong voi ContactsService.list({ q }):
+        "0901234567" -> co P, khong Q; "+84 901 234 567" -> co P; "234 567" -> co P; "0912345678" -> co Q;
+        "12" -> co R (tim theo ten nhu cu), khong P, khong Q.
+      CHIEU DO: ban sao searchFilter bo nhanh so -> dong "0901234567" do voi thong diep ghim "tim-bang: thieu P".
+
+  - id: E12
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt_api_tim
+    paths:
+      - "apps/api/src/search/search.service.ts"
+      - "packages/db/src/so-dien-thoai.ts"
+      - "apps/api/test/dien-thoai-ca-nhan.spec.ts"
+    expected: |
+      Cung lenh E11; describe "tim-cmdk": SearchService voi "0901 234 567" -> hits co kind "contact", id P;
+      P co cong ty -> detail = ten cong ty; P2 khong cong ty, phone "+84907654321", tim "0907654321" -> detail
+      "0907 654 321". CHIEU DO: ban sao search.service bo nhanh so -> dong dau do, thong diep ghim "tim-cmdk: thieu P".
+
+  - id: E13
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.dt_kara_tim
+    paths:
+      - "apps/agent/agent/lib/lookup.ts"
+      - "packages/db/src/so-dien-thoai.ts"
+      - "apps/agent/test/tim-theo-so.integration.spec.ts"
+    expected: |
+      tim-theo-so.integration.spec.ts tren CSDL thu cua luot: P phone "+84901234567". Ma tran 3 dong:
+        1 ham tim ca nhan cua lookup.ts voi "0901234567" -> co P
+        2 moi hit tra ve: Object.keys khong chua "phone", va JSON.stringify(hit) khong chua "901234567"
+        3 doi chung: tim theo ten P -> co P (duong cu khong hong)
+      CHIEU DO: ban sao them phone vao select/hit -> dong 2 do voi thong diep ghim "kara-tim: lo so dien thoai".
+
+  - id: E14
+    criterion: AC-12
+    executor: test
+    cmd: config:executors.test.dt_man_moi_gioi
+    paths:
+      - "apps/app/app/(app)/[[]slug]/onboarding/[[]planId]/them-moi-gioi.tsx"
+      - "apps/api/src/contacts/contacts.contracts.ts"
+      - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
+    expected: |
+      dien-thoai-ca-nhan.dom.tsx, describe "goi-y-moi-gioi": contacts.list gia tra 2 dong — M (phone THO "0901.234.567"
+      nhu duong nap listing ghi — listing-ingest.service.ts luu blankToNull(item.phone), email null), N (phone null,
+      email "n@x.vn"). Ma tran 4 dong: hint cua M = "0901 234 567"; hint cua N = "n@x.vn"; go "0901234567" vao o tim
+      cua o chon -> option M van hien (o chon khong loc phia client theo ten); go "0901 234 567" -> option M van hien.
+      Tim theo so phia may chu di qua contacts.list (E11).
+      CHIEU DO: ban sao hint chi doc email -> dong M do voi thong diep ghim "goi-y-moi-gioi: M phai hien so"; ban sao
+      bat loc client cua o chon -> dong go so do voi thong diep ghim "goi-y-moi-gioi: M bi loc mat".
+
+  - id: E15
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.dt_san_thiet_ke
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx"
+      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
+      - "apps/app/app/(app)/[[]slug]/onboarding/[[]planId]/them-moi-gioi.tsx"
+    expected: |
+      design-gate.mjs --mode static cho nam tep tren: khong P0, thoat 0.
+      CHIEU DO: ban sao quick-add.tsx them <input> tran (khong qua @crm/ui) -> design-gate do, goi ten tep.
+
+  - id: E2b
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt_api_tao
+    paths:
+      - "apps/api/src/contacts/**"
+      - "packages/validation/src/so-dien-thoai.ts"
+      - "apps/api/test/dien-thoai-ca-nhan.spec.ts"
+    expected: |
+      Cung lenh E2 (dedupe); dong 2 cua "tao-chuan-hoa": phone "+84 28 3812 3456" -> CSDL "+842838123456",
+      source "MANUAL". CHIEU DO: nhu E2.
+
+  - id: E16
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt_do_man
+    steps:
+      - "Cung lan do voi E1 (dedupe lenh); doc dong tao-sheet-1440"
+      - "Mo anh evidence/tao-sheet-1440.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/dien-thoai-ca-nhan/evidence/
+    paths:
+      - "apps/app/app/(app)/[[]slug]/contacts/**"
+      - "apps/api/src/contacts/**"
+      - "packages/validation/src/so-dien-thoai.ts"
+      - "_acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG tao-sheet-1440": trang Ca nhan -> «Ca nhan moi»; thu tu nhan Ten, Ho, Dien thoai, Email; go Ten va
+      «+84 28 3812 3456», luu -> CSDL do phone = "+842838123456", source = "MANUAL" (in tho).
+      CHIEU DO: ban sao create-contact-sheet.tsx bo o Dien thoai -> SAI voi thong diep ghim "thieu o Dien thoai".
+
+  - id: E17
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt_do_man
+    steps:
+      - "Cung lan do voi E1 (dedupe lenh); doc dong tim-bang-1440"
+      - "Mo anh evidence/tim-bang-1440.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/dien-thoai-ca-nhan/evidence/
+    paths:
+      - "apps/app/app/(app)/[[]slug]/contacts/**"
+      - "apps/api/src/contacts/**"
+      - "packages/db/src/so-dien-thoai.ts"
+      - "_acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG tim-bang-1440": bang Ca nhan khong loc truoc (in so dong, mong > 1). MOI dang so mot lan tai trang
+      moi /contacts?q=<dang so> (khong go noi tiep tren bang da loc), cho phan hoi contacts.list mang dung q do roi
+      moi doc bang: "+84 901 234 567" va "0901234567" -> moi lan bang chi con dong cua nguoi them o them-tab-1440
+      (in so dong tim thay moi lan).
+      CHIEU DO: ban sao searchFilter bo nhanh so -> SAI voi thong diep ghim "tim-bang: thieu nguoi".
+
+  - id: E18
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt_do_man
+    steps:
+      - "Cung lan do voi E1 (dedupe lenh); doc dong cmdk-1440"
+      - "Mo anh evidence/cmdk-1440.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/dien-thoai-ca-nhan/evidence/
+    paths:
+      - "apps/api/src/search/search.service.ts"
+      - "packages/db/src/so-dien-thoai.ts"
+      - "_acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG cmdk-1440": mo ⌘K, go "0901 234 567" -> muc Ca nhan co nguoi them o them-tab-1440, dong phu la ten
+      cong ty. CHIEU DO: ban sao search.service bo nhanh so -> SAI voi thong diep ghim "tim-cmdk: thieu nguoi".
+
+  - id: E19
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt_do_man
+    steps:
+      - "Cung lan do voi E1 (dedupe lenh); doc dong so-sai-375"
+      - "Mo anh evidence/so-sai-375.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/dien-thoai-ca-nhan/evidence/
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "_acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG so-sai-375": form «Them ca nhan» go Dien thoai «abc», bam them -> 0 yeu cau contacts.create gui di (dem
+      yeu cau mang), duoi o hien dung chuoi loi rut tu messages vi, document.activeElement la o Dien thoai.
+      Anh: cau loi do ngay duoi o Dien thoai trong khung 375.
+
+  - id: E20
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt_do_man
+    steps:
+      - "Cung lan do voi E1 (dedupe lenh); doc dong bang-1440"
+      - "Mo anh evidence/bang-1440.png va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/dien-thoai-ca-nhan/evidence/
+    paths:
+      - "apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx"
+      - "apps/api/src/contacts/contacts.contracts.ts"
+      - "_acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG bang-1440": bang Ca nhan co cot «Dien thoai» ngay sau «Ten»; dong cua nguoi them o them-tab hien
+      "0901 234 567". Anh: cot so thang hang (tabular-nums).
+
+  - id: E21
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.dt_man_trung
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
+    expected: |
+      dien-thoai-ca-nhan.dom.tsx, describe "trung-giu-chu": trpc gia nem TRPCClientError data.code "CONFLICT", message
+      "Lan A already uses 0901 234 567.". Ma tran 2 dong {QuickAddContact, CreateContactSheet}: sau khi gui, toast loi
+      (sonner gia ghi lai) chua "Lan A"; input.value cua o Ten va o Dien thoai bang dung chu da go; form van mo.
+      CHIEU DO: ban sao reset form khi loi -> dong QuickAddContact do voi thong diep ghim "trung-giu-chu: mat chu da go".

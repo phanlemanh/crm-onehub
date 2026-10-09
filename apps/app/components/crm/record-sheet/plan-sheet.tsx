@@ -34,7 +34,7 @@ import type { RouterOutputs } from "@/lib/trpc/types";
 import { PlanBrokers } from "./plan-brokers";
 import { dien } from "./plan-copy";
 import { PlanSteps } from "./plan-steps";
-import { RecordSheetFrame } from "./record-parts";
+import { lyDoLoi, RecordSheetFrame } from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
 import { LoiTheoDoi, TheoDoiKeHoach } from "./theo-doi-ke-hoach";
 
@@ -162,6 +162,8 @@ export function PlanSheet({ planId }: { planId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
+			lyDo={lyDoLoi(query.error)}
+			onRetry={() => void query.refetch()}
 			title={plan?.company.name ?? m.subtitle}
 			description={
 				plan ? (

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 0971326f082085b10597f13003cfa48437922f66
+verified_commit: 0715876bd8d3abadf28c2f4e4083ddfac4ab4a9a
 human_signoff: Phan Le Manh 2026-09-25
 ---
 
@@ -282,3 +282,7 @@ sha: 753faa20cd70440628fbbf3f007a5da3a98c4312 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-06, do zalo-va (R1g): ca nang-luc chạy được không khoá như CI #276; E11 tra-loi-tin-nhac sang judgment (chủ kho duyệt 06/10); gộp onehub e8645db7
 run_id: repin-20261006T010601Z-43596
 sha: 0971326f082085b10597f13003cfa48437922f66 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E11 (E11 không khai paths)
+
+### Re-pin lần 7 — 2026-10-09, do E11 thay bởi kiem-cheo-sau-gop#AC-6, xoá ho-so-cham.mjs, gộp onehub
+run_id: repin-20261009T024607Z-36933
+sha: 0715876bd8d3abadf28c2f4e4083ddfac4ab4a9a · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E11 (E11 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
