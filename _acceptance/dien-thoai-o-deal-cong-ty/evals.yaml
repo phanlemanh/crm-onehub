@@ -13,8 +13,11 @@ evals:
     expected: |
       dien-thoai-o-deal-cong-ty.spec.ts, describe "deal-co-so", CSDL thu cua luot. Fixture qua writer THAT: ContactsService.create
       ca nhan P voi phone "0901 234 567" (luu +84901234567) va Q khong so, cung cong ty; deal gan P va Q; R cung cong ty chua gan.
-      Ma tran 3 dong: DealsService.byId -> contacts P.phone "+84901234567", Q.phone null; DealsService.contactOptions -> R co khoa
-      phone (null hoac so cua R). CHIEU DO: ban sao CONTACT_SELECT bo phone -> dong P do, ghim "deal-co-so: thieu phone".
+      R tao qua ContactsService.create voi phone "0901 234 569". Dau ra service PARSE bang chinh schema output cua router
+      (dealByIdOutput va schema output cua contactOptions trong deals.contracts.ts) truoc khi so — khoa bi zod loc thi do.
+      Ma tran 3 dong: byId -> P.phone "+84901234567", Q.phone null; contactOptions -> R.phone "+84901234569".
+      CHIEU DO: ban sao CONTACT_SELECT bo phone -> dong P do; ban sao dealContactSummaryOutput bo phone -> dong P do;
+      ca hai ghim "deal-co-so: thieu phone".
 
   - id: E2
     criterion: AC-2
@@ -25,8 +28,9 @@ evals:
       - "apps/api/src/companies/**"
       - "apps/api/test/dien-thoai-o-deal-cong-ty.spec.ts"
     expected: |
-      Cung lenh E1, describe "cong-ty-co-so": CompaniesService.byId cua cong ty fixture -> contacts P.phone "+84901234567",
-      Q.phone null. CHIEU DO: ban sao bo phone khoi select contacts cua companies.service -> do, ghim "cong-ty-co-so: thieu phone".
+      Cung lenh E1, describe "cong-ty-co-so": CompaniesService.byId cua cong ty fixture, PARSE bang companyDetailOutput ->
+      contacts P.phone "+84901234567", Q.phone null. CHIEU DO: ban sao bo phone khoi select contacts cua companies.service, hoac
+      khoi companyDetailContactOutput -> do, ghim "cong-ty-co-so: thieu phone".
 
   - id: E3
     criterion: AC-3
@@ -42,14 +46,17 @@ evals:
     paths:
       - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
       - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/components/crm/so-dien-thoai.tsx"
       - "apps/api/src/deals/**"
       - "_acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"
     expected: |
-      Ma tran viet truoc 5 o (do-man.mjs MA_TRAN), dong dem "5/5 o". E3 doc hai o:
+      Ma tran viet truoc 6 o (do-man.mjs MA_TRAN), dong dem "6/6 o". E3 doc hai o:
         deal-bang-1440: mo /deals?record=deal:<id> (deal gieo qua CSDL do, P co so rieng cua luot, Q khong so) -> tieu de cot cua
           bang nguoi theo thu tu: Ten, Dien thoai, Vai tro, Chuc danh, Email; dong P hien so dang 0xxx xxx xxx (in tho); dong Q o
           dien thoai la o trong chuan (—)
-        deal-bang-375: nhu tren o kho 375; o Dien thoai cua P nam tron trong khung (in left/right cua o)
+        deal-bang-375: nhu tren o kho 375; tren phan tu so cua P: scrollWidth <= clientWidth (khong bi cat), chieu cao hop chu
+          bang mot line-height (khong xuong dong), rect cua chu nam trong rect cua o (in so tho)
+      CHIEU DO 375 (pha-thu tren ban sao): ep be rong cot Dien thoai con 8% -> deal-bang-375 SAI, ghim "so bi cat o 375".
       CHIEU DO (pha-thu o S3 tren ban sao deal-sheet.tsx): bo cot Dien thoai -> deal-bang-1440 SAI, ghim "thieu cot Dien thoai".
 
   - id: E4
@@ -63,6 +70,8 @@ evals:
       - _acceptance/dien-thoai-o-deal-cong-ty/evidence/
     paths:
       - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/components/crm/so-dien-thoai.tsx"
       - "apps/api/src/companies/**"
       - "_acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"
     expected: |
@@ -93,6 +102,7 @@ evals:
       - _acceptance/dien-thoai-o-deal-cong-ty/evidence/
     paths:
       - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/api/src/deals/**"
       - "_acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"
     expected: |
       Dong "DUNG chon-nguoi-1440": trong ngan thoa thuan bam «Thêm cá nhân», mo o chon -> lua chon cua R (co so, chua gan) chua
@@ -104,14 +114,17 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.dt2_do_man
     steps:
-      - "Cung lan do voi E3; doc dong deal-bang-en-1440; mo anh deal-bang-en-1440.png"
+      - "Cung lan do voi E3; doc dong deal-bang-en-1440 va cong-ty-bang-en-1440; mo hai anh tuong ung"
     inputs:
       - _acceptance/dien-thoai-o-deal-cong-ty/evidence/
     paths:
       - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
       - "_acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"
     expected: |
       Dong "DUNG deal-bang-en-1440": cookie lang=en, mo ngan thoa thuan -> cot sau «Name» la «Phone».
+      Dong "DUNG cong-ty-bang-en-1440": cookie lang=en, mo /companies?record=company:<id>&tab=contacts -> cot sau cot ten la «Phone».
 
   - id: E7
     criterion: AC-7
@@ -122,5 +135,7 @@ evals:
       - "apps/app/components/crm/record-sheet/company-sheet.tsx"
       - "apps/app/components/crm/record-sheet/quick-add.tsx"
     expected: |
-      design-gate.mjs --mode static cho ba tep: khong P0, thoat 0. Va trong diff so merge-base origin/onehub cua deal-sheet.tsx va
-      company-sheet.tsx, o so dien thoai dung <SoDienThoai (grep dong them co "SoDienThoai"), khong tu dinh dang so.
+      design-gate.mjs --mode static cho ba tep: khong P0. rang/dung-so-chung.mjs: trong diff so merge-base origin/onehub, MOI tep
+      deal-sheet.tsx va company-sheet.tsx co >= 1 dong them khop "<SoDienThoai" (JSX, khong tinh dong import), va khong dong them
+      nao ap .replace( / .slice( / regex len phone; in so dong khop tung tep. CHIEU DO: --tu-thu tren diff gia thay JSX bang
+      phone.replace(...) -> do, ghim "dung-so-chung: tu dinh dang so".

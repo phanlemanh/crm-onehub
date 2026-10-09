@@ -23,7 +23,7 @@ Source input: anh báo 09/10 («khi thêm một người ở trong Deal thì thi
 
 - AC-1: (cross-layer) Given một thoả thuận có người mang số `+84901234567`, When đọc thoả thuận qua API, Then mỗi người trong thoả thuận mang `phone` (`+84901234567`, hoặc `null` khi không có số); và danh sách người có thể gắn vào thoả thuận cũng mang `phone`.
 - AC-2: (cross-layer) Given một công ty có người mang số, When đọc công ty qua API, Then mỗi người trong danh sách người của công ty mang `phone`.
-- AC-3: Given ngăn thoả thuận trên app thật, When xem bảng người, Then có cột «Điện thoại» ngay sau «Tên» hiện `0901 234 567`; người không có số hiện ô trống chuẩn; cột Email vẫn còn.
+- AC-3: Given ngăn thoả thuận trên app thật, When xem bảng người, Then có cột «Điện thoại» ngay sau «Tên» hiện `0901 234 567`; người không có số hiện ô trống chuẩn; cột Email vẫn còn; ở khổ 375 số hiện đủ trên một dòng, không bị cắt.
 - AC-4: Given ngăn công ty trên app thật, When xem tab Cá nhân, Then có cột «Điện thoại» ngay sau tên hiện `0901 234 567`; các cột khác của bảng giữ nguyên.
 - AC-5: Given ô chọn người khi bấm «Thêm cá nhân» trong thoả thuận, When mở ô chọn, Then mỗi lựa chọn hiện «tên · chức danh · 0901 234 567», bỏ vế nào trống (không có chức danh thì «tên · số»; không có số thì «tên · chức danh» như cũ).
 - AC-6: Given giao diện tiếng Anh, When như AC-3 và AC-4, Then tiêu đề cột là «Phone».
