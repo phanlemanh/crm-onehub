@@ -1,22 +1,27 @@
 import { tre } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
-import { DEM } from "./kich-ban.mjs";
-import { demCsdl, demManNen, duaVaoTatCa, xacNhanDuaVao } from "./dua-vao-chung.mjs";
 import {
-	anh,
+	demCsdl,
+	demManNen,
+	duaVaoTatCa,
+	xacNhanDuaVao,
+} from "./dua-vao-chung.mjs";
+import { DEM } from "./kich-ban.mjs";
+import {
 	APP,
+	anh,
 	choMoHinh,
 	choThay,
 	choYen,
 	chungTrang,
 	dongBangNut,
-	duongDonVi,
 	dungYen,
+	duongDonVi,
 	ghi,
 	KHUNG,
 	KY,
 	khongDo,
-	m,
 	MAN,
+	m,
 	nop1,
 	PHONG,
 	saiThem,
@@ -32,14 +37,18 @@ async function docNen(p) {
 	await choThay(
 		p,
 		() => {
-			const mo = document.querySelector("[data-don-vi] [data-slot='card-description']")?.innerText ?? "";
+			const mo =
+				document.querySelector("[data-don-vi] [data-slot='card-description']")
+					?.innerText ?? "";
 			return /\d+ mục tiêu/.test(mo);
 		},
 		"Theo don vi tai xong",
 		MAN.cho.manMs,
 	);
 	return p.evaluate((tiep) => {
-		const mo = document.querySelector("[data-don-vi] [data-slot='card-description']")?.innerText ?? "";
+		const mo =
+			document.querySelector("[data-don-vi] [data-slot='card-description']")
+				?.innerText ?? "";
 		const nhom = document.querySelector("[data-nhom-soan]");
 		return {
 			moTa: Number(/(\d+) mục tiêu/.exec(mo)?.[1] ?? Number.NaN),
@@ -51,7 +60,9 @@ async function docNen(p) {
 }
 
 function procCua(url) {
-	const duong = decodeURIComponent(new URL(url).pathname.split("/api/trpc/")[1] ?? "");
+	const duong = decodeURIComponent(
+		new URL(url).pathname.split("/api/trpc/")[1] ?? "",
+	);
 	return duong.split(",").filter(Boolean);
 }
 
@@ -60,28 +71,52 @@ async function giuTrangNenCu(t) {
 	let idCu = null;
 	await t.p.setRequestInterception(true);
 	t.p.on("request", async (r) => {
-		if (!idCu || r.method() !== "GET" || !r.url().startsWith(goc)) return r.continue();
+		if (!idCu || r.method() !== "GET" || !r.url().startsWith(goc))
+			return r.continue();
 		const procs = procCua(r.url());
 		if (!procs.includes("okr.danhSach")) return r.continue();
 		try {
-			const res = await fetch(r.url(), { headers: { ...r.headers(), cookie: `${the.tl.ten}=${the.tl.gia}; lang=vi` } });
+			const res = await fetch(r.url(), {
+				headers: {
+					...r.headers(),
+					cookie: `${the.tl.ten}=${the.tl.gia}; lang=vi`,
+				},
+			});
 			const than = await res.json();
 			const cu = Array.isArray(than)
 				? than.map((x, i) => {
 						const rows = x?.result?.data?.rows;
 						if (procs[i] !== "okr.danhSach" || !Array.isArray(rows)) return x;
-						return { ...x, result: { ...x.result, data: { ...x.result.data, rows: rows.filter((o) => idCu.has(o.id)) } } };
+						return {
+							...x,
+							result: {
+								...x.result,
+								data: {
+									...x.result.data,
+									rows: rows.filter((o) => idCu.has(o.id)),
+								},
+							},
+						};
 					})
 				: than;
-			await r.respond({ status: res.status, contentType: "application/json", body: JSON.stringify(cu) });
+			await r.respond({
+				status: res.status,
+				contentType: "application/json",
+				body: JSON.stringify(cu),
+			});
 		} catch {
 			await r.continue().catch(() => {});
 		}
 	});
 	return async () => {
-		const ds = await sql(`SELECT id FROM "okrObjective" WHERE "cycleId" = $1 AND "departmentId" = $2`, [KY, PHONG]);
+		const ds = await sql(
+			`SELECT id FROM "okrObjective" WHERE "cycleId" = $1 AND "departmentId" = $2`,
+			[KY, PHONG],
+		);
 		idCu = new Set(ds.map((x) => x.id));
-		ghi(`   (chieu do khong-lam-moi: sau Dua vao, okr.danhSach cua Theo don vi tra lai danh sach cu ${idCu.size} Muc tieu)`);
+		ghi(
+			`   (chieu do khong-lam-moi: sau Dua vao, okr.danhSach cua Theo don vi tra lai danh sach cu ${idCu.size} Muc tieu)`,
+		);
 	};
 }
 
@@ -93,30 +128,69 @@ export async function phanDuaVao({ doDo }) {
 		const truoc = await docNen(t.p);
 		const M0 = await demManNen(t.p);
 		const D0 = await demCsdl();
-		ghi(`   truoc: M0 ${M0} (mo ta ${truoc.moTa}) · D0 ${D0} · nut «${truoc.nut}»`);
-		if (!(await choThay(t.p, () => [...document.querySelectorAll('[data-nut-soan="nut"]')].some((b) => b.checkVisibility() && !b.disabled), "nut Soan", MAN.cho.manMs)))
+		ghi(
+			`   truoc: M0 ${M0} (mo ta ${truoc.moTa}) · D0 ${D0} · nut «${truoc.nut}»`,
+		);
+		if (
+			!(await choThay(
+				t.p,
+				() =>
+					[...document.querySelectorAll('[data-nut-soan="nut"]')].some(
+						(b) => b.checkVisibility() && !b.disabled,
+					),
+				"nut Soan",
+				MAN.cho.manMs,
+			))
+		)
 			await khongDo("khong co nut Soan cua phong");
 		const soVao = vao().length;
-		await t.p.evaluate(() => [...document.querySelectorAll('[data-nut-soan="nut"]')].find((b) => b.checkVisibility())?.click());
-		await choThay(t.p, (khung) => [...document.querySelectorAll(`:is(${khung}) [data-trang-soan]`)].some((o) => o.checkVisibility() && o.getAttribute("data-trang-soan") !== "dang-mo"), "khung soan", MAN.cho.manMs, KHUNG);
+		await t.p.evaluate(() =>
+			[...document.querySelectorAll('[data-nut-soan="nut"]')]
+				.find((b) => b.checkVisibility())
+				?.click(),
+		);
+		await choThay(
+			t.p,
+			(khung) =>
+				[...document.querySelectorAll(`:is(${khung}) [data-trang-soan]`)].some(
+					(o) =>
+						o.checkVisibility() &&
+						o.getAttribute("data-trang-soan") !== "dang-mo",
+				),
+			"khung soan",
+			MAN.cho.manMs,
+			KHUNG,
+		);
 		await dungYen(t.p);
-		if (!(await choMoHinh(soVao)) || !(await choYen(t.p))) await khongDo("luot mo dau khong xong");
+		if (!(await choMoHinh(soVao)) || !(await choYen(t.p)))
+			await khongDo("luot mo dau khong xong");
 		if (!(await nop1(t))) await khongDo("Kara khong nop ban nhap");
 		await duaVaoTatCa(t.p);
 		if (dongBang) await dongBang();
-		if (!(await xacNhanDuaVao(t.p))) await khongDo("khong co bien nhan Da tao sau Dua vao");
+		if (!(await xacNhanDuaVao(t.p)))
+			await khongDo("khong co bien nhan Da tao sau Dua vao");
 		await chungTrang(t.p, "sau Dua vao");
 		await choYen(t.p);
 		await t.p.evaluate(() => {
 			window.__chuaTaiLai = true;
 		});
 		const nut = await dongBangNut(t.p);
-		const dong = await choThay(t.p, (khung) => !new URLSearchParams(location.search).has("record") && ![...document.querySelectorAll(khung)].some((k) => k.checkVisibility()), "dong khung", 10000, KHUNG);
+		const dong = await choThay(
+			t.p,
+			(khung) =>
+				!new URLSearchParams(location.search).has("record") &&
+				![...document.querySelectorAll(khung)].some((k) => k.checkVisibility()),
+			"dong khung",
+			10000,
+			KHUNG,
+		);
 		const D1 = await demCsdl();
 		await choThay(
 			t.p,
 			(n) => {
-				const ds = [...document.querySelectorAll('[data-trang-thai="ST-donvi-danhsach"]')].find((o) => o.checkVisibility());
+				const ds = [
+					...document.querySelectorAll('[data-trang-thai="ST-donvi-danhsach"]'),
+				].find((o) => o.checkVisibility());
 				return (ds?.firstElementChild?.children.length ?? 0) === n;
 			},
 			"trang nen lam moi",
@@ -128,19 +202,23 @@ export async function phanDuaVao({ doDo }) {
 		const sau = await docNen(t.p);
 		const khongTaiLai = await t.p.evaluate(() => window.__chuaTaiLai === true);
 		await anh(t, "E14-sau-dua-vao", doDo);
-		ghi(`   M0 ${M0} · D0 ${D0} · D1 ${D1} · M1 ${M1} (mo ta ${sau.moTa}) · dong khung (nut ${nut}) ${dong} · khong tai lai trang ${khongTaiLai} · nut cua phong «${sau.nut}» (${sau.hinh ?? "-"})`);
+		ghi(
+			`   M0 ${M0} · D0 ${D0} · D1 ${D1} · M1 ${M1} (mo ta ${sau.moTa}) · dong khung (nut ${nut}) ${dong} · khong tai lai trang ${khongTaiLai} · nut cua phong «${sau.nut}» (${sau.hinh ?? "-"})`,
+		);
 		const loi =
 			!nut || !dong
 				? "khong dong duoc khung sau Dua vao"
 				: !khongTaiLai
 					? "trang da tai lai khi dong khung"
-				: D1 !== D0 + DEM.nop1.mucTieu
-					? `CSDL tang ${D1 - D0} Muc tieu, can ${DEM.nop1.mucTieu}`
-					: M1 !== D1
-						? "trang nen cu sau dua vao"
-						: sau.coTiep
-							? `nut cua phong con «${m.nut.tiep}» cho cuoc da dua vao`
-							: null;
+					: D1 !== D0 + DEM.nop1.mucTieu
+						? `CSDL tang ${D1 - D0} Muc tieu, can ${DEM.nop1.mucTieu}`
+						: M1 !== D1
+							? "trang nen cu sau dua vao"
+							: !sau.nut
+								? "khong thay nhom nut soan cua phong — khong do duoc Tiep tuc"
+								: sau.coTiep
+									? `nut cua phong con «${m.nut.tiep}» cho cuoc da dua vao`
+									: null;
 		if (loi) saiThem(loi);
 		else ghi("dua-vao: dat");
 	} finally {
