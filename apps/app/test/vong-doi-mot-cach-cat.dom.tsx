@@ -682,13 +682,16 @@ describe("vong-doi-mot-cach-cat", () => {
 				nguoiDung().click(nutCo(c.sheet.hoanTac) as HTMLButtonElement),
 			);
 			await cho(
-				() => vungToast().includes(c.bulk.hoanTacLoi),
+				() =>
+					vungToast().includes(c.bulk.hoanTacLoi) ||
+					vungToast().includes("loi-tho-may-chu"),
 				`${loai}/${locale} bao loi`,
 			);
 			chot(
 				!vungToast().includes("loi-tho-may-chu"),
 				"vdc: hoan tac loi in loi tho",
 			);
+			expect(vungToast().includes(c.bulk.hoanTacLoi)).toBe(true);
 			if (locale === "en") expect(DAU_VIET.test(c.bulk.hoanTacLoi)).toBe(false);
 			if (locale === "vi") o.push(loai);
 			for (const g of goc) {
