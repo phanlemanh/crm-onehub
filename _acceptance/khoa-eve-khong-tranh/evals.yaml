@@ -1,0 +1,82 @@
+schema_version: 1
+feature_slug: khoa-eve-khong-tranh
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.kekt_ghi_tron
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts]
+    expected: "exit 0; ma trận viết trước hai dòng, mỗi dòng một ca, đếm số ca đã chạy = 2: (1) lấy khoá lần đầu — giuKhoaEve([gốc tạm], {giuaGhi}) với giuaGhi chạy ở giữa hai bước ghi của hàm ghi chu.json THẬT; trong giuaGhi bài gọi xetKhoaCu(duongKhoaEve(gốc)) và đọc chu.json; (2) thêm eve con — sau khi giữ khoá, bài utimesSync thư mục khoá lùi quá KHOI_DONG.khoa.nhipMs (đúng điều kiện Ngoài-6 nổ: ghi đè tại chỗ không đổi mtime thư mục), rồi ghiConVaoKhoa(gốc, pid, {giuaGhi}) với pid của một tiến trình `sleep` do bài sinh. Thứ tự kiểm trong giuaGhi, mỗi lời kiểm một thông điệp ghim: TRƯỚC xetKhoaCu(khoa) phải false — sai thì ném «khoa song bi phan cu giua luc ghi»; SAU đó JSON.parse(chu.json) phải được và pid = process.pid — sai thì ném «chu.json khong doc duoc giua luc ghi». Ở dòng (1) chỉ kiểm xetKhoaCu false. Sau khi ghi xong readdir thư mục khoá chỉ còn đúng `chu.json`. CHIỀU ĐỎ (rang/dot-bien.mjs cặp a): bản sao đổi hàm ghi thành ghi đè tại chỗ (openSync 'w', giuaGhi, writeSync) → dòng (2) đỏ với thông điệp ghim «khoa song bi phan cu giua luc ghi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.kekt_hai_luot
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts]
+    expected: "exit 0; bàn thử của khoi-dong-don.spec.ts (gốc tạm có eve GIẢ của support/eve-gia.ts): tiến trình con bun nhập khoi-dong.ts THẬT lấy khoá, sinh eve giả E0, ghi vào khoá, bị SIGKILL → khoá cũ + E0 mồ côi (bài khẳng định cả hai, vắng thì ném «khong dung duoc canh khoa cu»). Bài (lượt C) gọi giuKhoaEve([gốc], {choMs: 3000, sauKhiXetCu}) với sauKhiXetCu chạy ĐÚNG một lần: sinh tiến trình con B (sống tiếp) gọi giuKhoaEve thật, sinh eve giả E1, ghiConVaoKhoa, in «SAN SANG <pidB> <pidE1>». Kết quả lời gọi của C bắt bằng try/catch (không dùng expect().rejects), rồi kiểm ĐÚNG thứ tự, mỗi bước một thông điệp ghim: (1) E1 còn sống (process.kill(pid, 0) không ném) — sai thì ném «eve cua luot B bi dung»; (2) chu.json mang pid = pidB và ma bằng ma B in ra — sai thì ném «khoa cua luot B bi go»; (3) E0 đã chết; (4) readdir thư mục khoá cha không có tên chứa «.cu-»; (5) cuối cùng mới kiểm lời gọi của C đã bị từ chối với thông điệp chứa pidB. CHIỀU ĐỎ: cặp (b) bản sao trả nhánh khoá cũ về lối cũ (await dungMoCoi(khoa) rồi rmSync(khoa), không đổi tên) và cặp (c) bản sao bỏ bước so dấu sau khi đổi tên → cả hai đỏ với thông điệp ghim «eve cua luot B bi dung»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.kekt_mot_luot
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts]
+    expected: "exit 0; khoá cũ + eve giả mồ côi dựng như E2 (tiến trình con thật, SIGKILL); bài gọi giuKhoaEve([gốc]) → trả về; eve mồ côi đã chết; chu.json mang pid = process.pid và một ma khác ma của khoá cũ; readdir thư mục khoá cha không có tên nào chứa «.cu-». CHIỀU ĐỎ (cặp d): bản sao bỏ rmSync thư mục đã giành sau khi dọn → đỏ với thông điệp ghim «con thu muc .cu- sau khi don»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.cccl_mo_coi
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoi-dong-don.spec.ts]
+    expected: "exit 0; hai ca mo-coi của khoi-dong-don.spec.ts (F11 E1) không sửa vẫn xanh trên khoi-dong.ts mới. Chiều đỏ đã lập ở F11 (cặp a của ca-chap-chon-cach-ly)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.cccl_ngoai_khoa
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoi-dong-don.spec.ts]
+    expected: "exit 0; hai ca ngoai-khoa của khoi-dong-don.spec.ts (F11 E2) không sửa vẫn xanh trên khoi-dong.ts mới. Chiều đỏ đã lập ở F11 (cặp b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.kekt_doi_chu
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts]
+    expected: "exit 0; bài (lượt A) giuKhoaEve([gốc]); bài renameSync thư mục khoá sang một tên tạm ngoài thư mục khoá cha (giả lượt dọn giành nhầm mà không trả lại được); tiến trình con B (sống tiếp) nhập khoi-dong.ts THẬT, giuKhoaEve([gốc]), in «SAN SANG <pidB>». Ba ca, mỗi ca bắt lỗi bằng try/catch rồi kiểm vật TRƯỚC, lời ném SAU: (1) A gọi ghiConVaoKhoa(gốc, pid sleep) → TRƯỚC chu.json vẫn có con = [] và pid = pidB (sai thì ném «ghi vao khoa nguoi khac»), SAU lời gọi đã ném với chữ «da doi chu»; (2) A gọi traKhoaEve([gốc]) → thư mục khoá còn và chu.json pid = pidB (sai thì ném «tra khoa go khoa nguoi khac»); (3) tiến trình con A' nhập khoi-dong.ts THẬT, giữ khoá, in «SAN SANG», bài đổi tên khoá đi, tiến trình con B' lấy khoá, bài nhắn A' gọi process.exit(0) → sau khi A' thoát, thư mục khoá còn và chu.json pid = pidB' (sai thì ném «don luc thoat go khoa nguoi khac»). CHIỀU ĐỎ: cặp (e) bản sao bỏ bước so ma trong ghiConVaoKhoa → ca (1) đỏ «ghi vao khoa nguoi khac»; cặp (f) bản sao bỏ bước so ma trong traKhoa → ca (2) đỏ «tra khoa go khoa nguoi khac»; cặp (g) bản sao cho bộ dọn lúc exit rmSync vô điều kiện → ca (3) đỏ «don luc thoat go khoa nguoi khac»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.kekt_pham_vi
+    paths: [_acceptance/khoa-eve-khong-tranh/rang/pham-vi.mjs]
+    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải khớp một trong apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve*.spec.ts, _acceptance/khoa-eve-khong-tranh/**, PRODUCT-MAP.md, LO-TRINH.html, _acceptance/config.yaml; với _acceptance/config.yaml thì diff -U0 không có dòng bỏ nào; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng trong cùng lệnh, trên danh sách dựng sẵn: danh sách rỗng → thoát 2 «diff rong»; danh sách có apps/agent-okr/agent/agent.ts → thông điệp «ngoai ranh gioi: apps/agent-okr/agent/agent.ts»; thiếu một trong hai đối chứng thì exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kekt_dot_bien
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts, _acceptance/khoa-eve-khong-tranh/rang/dot-bien.mjs]
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (git worktree ngoài kho, dựng bằng _acceptance/ca-chap-chon-cach-ly/rang/ban-sao.mjs), SO_CAP_KHAI = 8: mỗi cặp (a)–(h) như ghi ở E1, E2, E3, E6, E9 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; in một dòng mỗi cặp; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.kekt_dau
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts]
+    expected: "exit 0; ma trận viết trước trên cungDau (xuất từ khoi-dong.ts), dấu RÚT từ thư mục khoá thật do giuKhoaEve và hàm ghi chu.json thật tạo (không gõ tay), số dòng = 6: (1) cùng một thư mục khoá, đọc hai lần → bằng; (2) cùng thư mục, chu.json ghi lại với ma khác → khác; (3) cùng thư mục, utimesSync đổi mtime → khác; (4) thư mục khoá chưa có chu.json, đọc hai lần → bằng (ma vắng bằng ma vắng); (5) một bên ma vắng, bên kia có ma → khác; (6) hai thư mục khác nhau → khác. Đếm số dòng đã chạy = 6. CHIỀU ĐỎ (cặp h): bản sao bỏ mtimeMs khỏi phép so → dòng (3) đỏ với thông điệp ghim «ino trung coi la cung khoa»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.kekt_lap
+    paths: [apps/agent-okr/test/support/khoi-dong.ts, apps/agent-okr/test/khoa-eve-khong-tranh.spec.ts, _acceptance/khoa-eve-khong-tranh/rang/dot-bien.mjs]
+    expected: "exit 0; rang/dot-bien.mjs --lap 20 --cap a,b,c trên bản sao cây: mỗi cặp chạy bài 20 lần trên vật lành và 20 lần trên bản đã phá; in «<cặp> xanh 20/20 do 20/20 ghim 20/20»; một số nào dưới 20 → exit 1 và in số đếm thật. Đường đo của ngưỡng CHẾT ở opportunity.md («không đỏ đều 20/20 trên mã cũ»)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
