@@ -33,7 +33,7 @@ evals:
   criterion: AC-3
   executor: script
   cmd: config:executors.script.k2d_goc_rong
-  expected: 'exit 0; do.mjs goc-rong dựng cây tạm như E2, ma trận viết trước ba ca [agent, khu-soan, validation], mỗi ca làm rỗng đúng gốc đó (thư mục còn, không tệp), chạy bản thước mới → đòi exit 1, dòng «goc quet rong: <tên>» đúng tên ca, KHÔNG có dòng «mot-nguon: KET_QUA_NOP 1 cho» và KHÔNG có «Cannot find module» (gốc kiểm trước khi nạp mô-đun); số ca = 3; sha256 tệp thật và `git status --porcelain` trước/sau giống hệt. In «goc-rong: 3/3 goc rong bi bat; tep that nguyen». Chiều đỏ: `do.mjs goc-rong --tu-thu` chạy ca khu-soan bằng bản thước của `d089cb8d` (đã thoát 0 trên cây lành) → bản cũ quét rỗng vẫn thoát 0 → exit 1, in «goc-rong: khu-soan khong bi bat».'
+  expected: 'exit 0; do.mjs goc-rong dựng cây tạm như E2, ma trận viết trước ba ca [agent, khu-soan, validation], mỗi ca làm rỗng đúng gốc đó (thư mục còn, không tệp), chạy bản thước mới → đòi exit 1, dòng «goc quet rong: <tên>» đúng tên ca, KHÔNG có dòng «mot-nguon: KET_QUA_NOP 1 cho» và KHÔNG có «Cannot find module» (gốc kiểm trước khi nạp mô-đun); số ca = 3; sha256 tệp thật và `git status --porcelain` trước/sau giống hệt. In «goc-rong: 3/3 goc rong bi bat; tep that nguyen». Chiều đỏ: `do.mjs goc-rong --tu-thu` chạy ca khu-soan bằng bản thước của `d089cb8d` (đã thoát 0 trên cây lành) → bản cũ không có bước kiểm gốc nên không in «goc quet rong: khu-soan» (đo 09/10: nó thoát 1 vì đọc moc-nop.ts trong gốc rỗng — ENOENT, không phải vì quét) → exit 1, in «goc-rong: khu-soan khong bi bat».'
   evidence_required:
   - run_id
   - exit_code
