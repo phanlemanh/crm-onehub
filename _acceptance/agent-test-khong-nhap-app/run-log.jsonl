@@ -48,3 +48,4 @@
 {"ts":"2026-10-09T00:47:02Z","sha":"244b451706fe7f1e37f591d5dd686197be275596","round":2,"kind":"baseline","evals_hash":"fee33ae07f015025d354acc14aaf4143193055b080cf887cec84b9331f9a3ee5","non_discriminating":[{"cmd":"bun run test -- \"cd apps/agent && bun test test/giai-doan-agent.integration.spec.ts -t stage-id\"","evals":["E4"]}],"carried_from_round":1}
 {"ts":"2026-10-09T00:47:02Z","sha":"244b451706fe7f1e37f591d5dd686197be275596","round":2,"kind":"round-tally","verdict":"PASS","expected":12,"returned":12,"blocked":0}
 {"ts":"2026-10-09T00:47:02Z","sha":"244b451706fe7f1e37f591d5dd686197be275596","round":2,"kind":"chot-truong-nguoi","human_signoff":0,"human_override":0,"bypass_ack":0,"verified_at":12}
+{"kind":"thuoc-vat","ts":"2026-10-09T01:00:11Z","round":2,"san":"ea597eb855b39081501a119d40de97f0f13c0687","vat":[18,1],"thuoc":[0,0],"ho_so":[57,0],"nhat":0,"lan":0,"tep_thuoc":[]}
