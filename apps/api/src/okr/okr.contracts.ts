@@ -32,6 +32,7 @@ import {
 } from "@crm/validation/okr-muc-tieu";
 import { LOAI_NGUON_MAY, okrNguonDong } from "@crm/validation/okr-nguon";
 import {
+	lyDoKhongQuyet,
 	lyDoKhongSanSang,
 	MA_VAN_DE,
 	maLoaiDeXuat,
@@ -164,7 +165,10 @@ export const troLyQuyetInput = z.object({
 });
 export const troLyQuyetOutput = z.discriminatedUnion("ok", [
 	z.object({ ok: z.literal(true) }),
-	z.object({ ok: z.literal(false), lyDo: lyDoKhongSanSang }),
+	z.object({
+		ok: z.literal(false),
+		lyDo: z.union([lyDoKhongSanSang, lyDoKhongQuyet]),
+	}),
 ]);
 export const troLyAnInput = z.object({
 	thang: thang.optional(),
