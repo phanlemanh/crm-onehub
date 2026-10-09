@@ -1328,6 +1328,20 @@ executors:
     k2b_nhom_ui: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/kara-proposal-group-loi.dom.tsx
     k2b_moc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/soan-okr-khong-lac.spec.ts -t k2b-moc-ba && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-khong-lac.dom.tsx -t k2b-moc-dom
     k2b_moc_hong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/soan-okr-khong-lac.spec.ts -t k2b-moc-hong
+    k3_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-khung
+    k3_tai_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-tai-loi
+    k3_nho_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-nho-loi
+    k3_qua_han: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-qua-han
+    k3_tat: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-tat
+    k3_loi_dong: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-loi-dong
+    k3_can_chinh: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-can-chinh
+    k3_hai_hoan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-hai-hoan
+    k3_chip: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-chip
+    k3_nhieu_kr_ui: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-nhieu-kr
+    k3_cau_dan: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-cau-dan
+    k3_neo_kr: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-neo-kr
+    k3_nhieu_kr: 'bun run test -- "cd apps/api && bun test test/kara-gop-y-luot-2.spec.ts"'
+    k3_so_nhieu: cd apps/app && bun test ./test/gop-y-dung-cho-luot-2.spec.ts -t k3-so-nhieu
     k2c_vi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-vi
     k2c_en: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-en
     k2c_ngoai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-ngoai
@@ -2173,6 +2187,10 @@ executors:
     k2b_dot_bien: bun _acceptance/soan-okr-khong-lac/rang/dot-bien.mjs
     k2b_ranh_gioi: node _acceptance/soan-okr-khong-lac/rang/ranh-gioi.mjs
     k2b_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/soan-okr-khong-lac/rang/man.mjs"'
+    k3_ngay_gio: bun _acceptance/kara-gop-y-luot-2/rang/ngay-gio.mjs
+    k3_dot_bien: bun _acceptance/kara-gop-y-luot-2/rang/dot-bien.mjs
+    k3_ranh_gioi: node _acceptance/kara-gop-y-luot-2/rang/ranh-gioi.mjs
+    k3_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/kara-gop-y-luot-2/rang/man.mjs"'
     k2c_mot_nguon: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/mot-nguon.mjs
     k2c_gia_tri: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/gia-tri.mjs
     k2c_dot_bien: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs

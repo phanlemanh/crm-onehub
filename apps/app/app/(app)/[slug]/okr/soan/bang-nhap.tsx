@@ -12,6 +12,8 @@ import { Field, FieldDescription, FieldError } from "@crm/ui/components/field";
 import { KaraArtifact } from "@crm/ui/components/kara/artifact";
 import { KaraState } from "@crm/ui/components/kara/state";
 import { useLocale, useMessages } from "@crm/ui/components/locale-provider";
+import { formatNgayGio } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { docSoOkr } from "@crm/validation/okr-kr";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -19,6 +21,7 @@ import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { type ReactNode, useId, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
+import { OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { SOAN_UI } from "./cau-hinh";
 import { type CuocDangSoan, donViCua } from "./dung-cuoc-soan";
@@ -156,13 +159,12 @@ function DaDuaVao({
 	);
 }
 
-function gioNop(locale: string, at: number | null): string | null {
+function gioNop(locale: Locale, at: number | null): string | null {
 	if (at === null) return null;
-	return new Intl.DateTimeFormat(locale, {
-		hour: "2-digit",
-		minute: "2-digit",
-		hour12: false,
-	}).format(at);
+	return formatNgayGio(at, locale, {
+		timeZone: OKR_CHU_KY.muiGio,
+		phan: "gio",
+	});
 }
 
 export function BanNhap({
