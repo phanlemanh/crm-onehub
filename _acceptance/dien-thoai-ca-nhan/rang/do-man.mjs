@@ -416,17 +416,25 @@ async function doTimBang(cookie, slug, nguoi) {
 		const truoc = await demDong(p);
 		const ketQua = [];
 		for (const chu of cachGo) {
-			await goTim(p, chu);
+			await p.goto(`${APP}/${slug}/contacts?q=${encodeURIComponent(chu)}`, {
+				waitUntil: "networkidle0",
+				timeout: CHO_MS,
+			});
+			const oTim = await p
+				.$eval(`input[placeholder="${cm.search}"]`, (x) => x.value)
+				.catch(() => null);
+			if (oTim !== chu)
+				khongDo(`trang tai moi khong mang q: o tim «${oTim}» thay vi «${chu}»`);
 			const loc = await choLocXong(p, nguoi.ten);
 			ketQua.push(
-				`${chu} -> ${loc ? "chi con" : "KHONG chi con"} dong cua nguoi do (${await demDong(p)} dong)`,
+				`${chu} -> trang moi, ${loc ? "chi con" : "KHONG chi con"} dong cua nguoi do (${await demDong(p)} dong)`,
 			);
 		}
 		await p.screenshot({ path: join(RA, "tim-bang-1440.png") });
 		kiem(
 			"tim-bang-1440",
 			`1440: truoc khi tim ${truoc} dong; ${ketQua.join("; ")}`,
-			truoc > 1 && ketQua.every((k) => k.includes("-> chi con")),
+			truoc > 1 && ketQua.every((k) => k.includes(", chi con dong")),
 		);
 	} finally {
 		await ctx.close();
