@@ -132,6 +132,16 @@ const en = {
 	},
 	khung: {
 		loiMoTa: "Check your connection and try again.",
+		khongCon: {
+			tieuDe: "This record no longer exists",
+			moTa: "Someone deleted it permanently. It cannot be opened again.",
+			dong: "Close",
+		},
+		khongQuyen: {
+			tieuDe: "You don't have access to this record",
+			moTa: "Your account cannot open it here. Ask a workspace admin for access.",
+			dong: "Close",
+		},
 	},
 	traCuu: {
 		nhoKara: "Ask Kara to look up",
@@ -263,6 +273,16 @@ const vi: KaraBanGhiMessages = {
 	},
 	khung: {
 		loiMoTa: "Kiểm tra kết nối rồi thử lại.",
+		khongCon: {
+			tieuDe: "Bản ghi này không còn",
+			moTa: "Đã có người xoá vĩnh viễn bản ghi này nên không mở lại được.",
+			dong: "Đóng",
+		},
+		khongQuyen: {
+			tieuDe: "Bạn không có quyền xem bản ghi này",
+			moTa: "Tài khoản của bạn không mở được bản ghi này ở đây. Hãy nhờ người quản trị cấp quyền.",
+			dong: "Đóng",
+		},
 	},
 	traCuu: {
 		nhoKara: "Nhờ Kara tra cứu",

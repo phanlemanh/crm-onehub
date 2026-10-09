@@ -3,6 +3,7 @@ import {
 	type BanNhap,
 	docBanNhap,
 	docKetQuaNop,
+	type LyDoTuChoiNop,
 } from "@crm/validation/okr-cuoc-soan";
 import { chuanHoa } from "@crm/validation/okr-kiem";
 import type { MessageStreamEvent } from "eve/client";
@@ -37,7 +38,7 @@ export type MocNop = { itemId: string; tom: TomTatMoc };
 export type NopKhongThanh = {
 	itemId: string;
 	loai: "tu-choi" | "loi" | "khong-doc";
-	lyDo: string | null;
+	lyDo: LyDoTuChoiNop | null;
 };
 
 export type LuotNop = { mocs: MocNop[]; khongThanh: NopKhongThanh[] };
@@ -145,7 +146,7 @@ function khongThanh(item: DidNop): NopKhongThanh | null {
 	const kq = docKetQuaNop(item.output);
 	if (!kq) return { itemId: item.id, loai: "khong-doc", lyDo: null };
 	if (kq.ketQua === "tu-choi")
-		return { itemId: item.id, loai: "tu-choi", lyDo: kq.lyDo || null };
+		return { itemId: item.id, loai: "tu-choi", lyDo: kq.lyDo };
 	return null;
 }
 

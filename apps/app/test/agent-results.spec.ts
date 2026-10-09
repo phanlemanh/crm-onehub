@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+import { parseDealListResult } from "@crm/validation/deal-list";
 import { anchorResults } from "../lib/agent-results";
 import {
 	type DealListResult,
@@ -154,4 +155,32 @@ describe("stage-id", () => {
 		expect(ra === null, "ban ghi cu roi ca bang").toBe(false);
 		expect(ra?.deals[0]?.stageId).toBe(null);
 	});
+});
+
+describe("cung-ham-goi", () => {
+	const dauRa = (stageId?: string | number) => {
+		const p = page("open", ["d1"]);
+		return {
+			...p,
+			deals: p.deals.map((d) =>
+				stageId === undefined ? d : { ...d, stageId },
+			),
+		};
+	};
+	const { deals: _bo, ...saiHinh } = dauRa("gd-1");
+	const dauVao = [
+		["co stageId", dauRa("gd-1")],
+		["khong stageId", dauRa()],
+		["stageId sai kieu", dauRa(7)],
+		["sai hinh", saiHinh],
+	] as const;
+
+	for (const [ten, x] of dauVao) {
+		it(ten, () => {
+			expect(
+				JSON.stringify(dealListResultOf(x as never)),
+				"app doc khac goi",
+			).toBe(JSON.stringify(parseDealListResult(x)));
+		});
+	}
 });
