@@ -1,0 +1,23 @@
+{
+  "feature_plain": "Khi một bản ghi không mở được, khung báo lỗi thôi nói chắc «đã có người xoá vĩnh viễn» mà nói đúng các khả năng: bản ghi đã bị xoá, hoặc đường dẫn không đúng.",
+  "will_do": [
+    {"id": "AC-2", "p": "Sẽ hiện câu «It may have been deleted, or the link is wrong.» ở giao diện tiếng Anh."}
+  ],
+  "wont_do": [
+    {"id": "AC-1", "p": "Sẽ KHÔNG còn nói «Đã có người xoá vĩnh viễn» — câu mới «Có thể bản ghi đã bị xoá, hoặc đường dẫn không đúng.» hiện ở cả bốn ngăn; kèm phép đo mã lỗi thật chứng rằng cả bản ghi đã xoá lẫn đường dẫn sai đều ra khung này."},
+    {"id": "AC-3", "p": "Sẽ KHÔNG đổi tiêu đề, nút «Đóng» hay các khung lỗi khác; bài kiểm cũ của K4 và K4b chạy lại xanh mà không sửa kỳ vọng."},
+    {"id": "AC-4", "p": "Sẽ KHÔNG nới bộ canh chữ — câu tiếng Việt có dấu, khác bản tiếng Anh."},
+    {"id": "AC-5", "p": "Sẽ KHÔNG để câu mới tràn khung — chụp màn thật ở 1440 và 390, bấm «Đóng» thì ngăn đóng."},
+    {"id": "OOS-1", "p": "Tiêu đề «Bản ghi này không còn» giữ nguyên."},
+    {"id": "OOS-2", "p": "Không tách nguyên nhân ở máy chủ (đã xoá hay đường dẫn sai) — cần đổi API."},
+    {"id": "OOS-3", "p": "Không đổi chữ các khung lỗi khác."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Không quét độ phủ: chỉ một câu chữ ở hai ngôn ngữ."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Bài kiểm khung lỗi của K4 chưa được canh, nên ai đó có thể sửa kỳ vọng cho xanh. Đã sửa: canh cả bài của K4 và chạy lại nó."},
+    {"i": 1, "p": "Chưa có phép đo chứng rằng đường dẫn sai thật sự ra khung «không còn». Đã sửa: dùng lại phép đo mã lỗi thật của K4b (bản ghi vừa xoá và id chưa từng có đều ra NOT_FOUND)."},
+    {"i": 2, "p": "Tiêu đề và nút chưa được ghim nguyên văn. Đã sửa: ghim bốn chuỗi và thêm chiều đỏ cho nút tiếng Anh."}
+  ]
+}
