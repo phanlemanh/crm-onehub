@@ -1398,6 +1398,8 @@ executors:
     dva_ban_ghi: cd apps/app && bun test ./test/agent-results.spec.ts -t stage-id
     dva_cham_mau: cd apps/app && TZ=Asia/Ho_Chi_Minh perl -e 'alarm 60; exec @ARGV' bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/deal-va-cham-mau.dom.tsx
     dva_hoi_quy: 'bun _acceptance/deal-va/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/deal-va/rang/khong-xoa-expect.mjs && bun run test -- "cd apps/api && bun test test/giai-doan-bao-cao.spec.ts" && bun run test -- "cd apps/agent && bun test test/giai-doan-agent.integration.spec.ts" && (cd apps/app && bun test ./test/agent-results.spec.ts) && (cd packages/telemetry && bun test)'
+    atk_parse: cd packages/validation && bun test test/deal-list.spec.ts
+    atk_agent: 'bun run test -- "cd apps/agent && bun test test/giai-doan-agent.integration.spec.ts -t stage-id"'
     dlt_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t "^loi"
     dlt_thu_lai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t thu-lai
     dlt_van_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t van-loi
@@ -2154,6 +2156,9 @@ executors:
     nlt_ten_ngoai: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca ten-ngoai
     nlt_tai_lieu: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca tai-lieu
     nlt_ghim_gdtt: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca ghim-gdtt
+    atk_luat_kho: bun _acceptance/agent-test-khong-nhap-app/rang/luat-kho.mjs
+    atk_app_dung_goi: bun _acceptance/agent-test-khong-nhap-app/rang/app-dung-goi.mjs --tu-thu && bun _acceptance/agent-test-khong-nhap-app/rang/app-dung-goi.mjs
+    atk_ghim: bun _acceptance/agent-test-khong-nhap-app/rang/ghim.mjs
     dlt_do_man: 'APP_URL=${APP_URL:-http://localhost:3350} API_URL=${API_URL:-http://localhost:3351} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/da-luu-tru-tai-loi/rang/do-man.mjs"'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
