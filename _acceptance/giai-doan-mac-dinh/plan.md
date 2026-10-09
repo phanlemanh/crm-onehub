@@ -8,7 +8,6 @@ Hợp đồng: `_acceptance/giai-doan-mac-dinh/contract.md` (Cổng 1 ký 2026-1
 |---|---|---|
 | Thoả thuận tạo mới vào cột Đang mở đầu tiên còn dùng, kể cả khi Demo đã lưu trữ (hôm nay đã đúng — vòng này ghim lại bằng ca kiểm) | `apps/api/test/giai-doan.spec.ts` | AC-1 (tạo khi Demo đã cất) |
 | Dữ liệu mẫu chỉ dùng giai đoạn còn dùng, đúng loại | `packages/db/prisma/seed.ts`, `apps/api/test/giai-doan-seed.spec.ts` | AC-2 (seed theo giai đoạn sống) |
-| Không chỗ nào trong mã sản phẩm tạo thoả thuận mà quên giai đoạn — bị bắt trước khi gộp | `_acceptance/giai-doan-mac-dinh/rang/duong-tao.mjs` | AC-3 (quét đường tạo theo kiểu) |
 | Bài kiểm cũ không bị nới; mô hình dữ liệu không đổi | `rang/khong-xoa-expect.mjs`, `bun run check-types` | AC-4 (không hồi quy) |
 
 Thứ tự: 1 → 2 → 3 → 4 → 5. Không migration, không đổi `schema.prisma`, không đổi mã sản phẩm ngoài `seed.ts`.
@@ -28,7 +27,7 @@ Thứ tự: 1 → 2 → 3 → 4 → 5. Không migration, không đổi `schema.p
    bằng tiến trình con `DATABASE_URL=<kho seed>` (perl alarm 300), bảy dòng ma trận (E2), đếm `deal` của kho dùng chung
    trước/sau bằng nhau, `dropDatabase` trong `afterAll`. Phá-thử: bản sao seed giữ `OPEN_STAGES` viết cứng → đỏ dòng 5
    «seed vao giai doan da cat». Kiểm: `gmd_seed`. independent: false.
-4. **Phép quét đường tạo** — `rang/duong-tao.mjs`: TypeScript compiler API (`typescript` 5.9 của kho) mở `Program` theo
+4. **Đã cắt (Cổng 1 mở lại 09/10, hướng 1; bảo đảm sang E4b lối A).** ~~Phép quét đường tạo~~ — `rang/duong-tao.mjs`: TypeScript compiler API (`typescript` 5.9 của kho) mở `Program` theo
    `tsconfig` của từng gói trong `apps/` và `packages/` sau `db:generate`; duyệt object literal ngoài tệp kiểm/eval/mã
    sinh, lấy `checker.getContextualType`, khớp tên `/^Deal(Unchecked)?Create(Many)?(Without\w+)?Input$/` (gồm nhánh
    `create` của `upsert`/`connectOrCreate`); đòi khoá `stage`/`giaiDoan` với kiểu không chứa `undefined`; SQL chèn vào
@@ -41,6 +40,6 @@ Thứ tự: 1 → 2 → 3 → 4 → 5. Không migration, không đổi `schema.p
 
 ## Rủi ro đã biết
 
-- Bước 4 là phần nặng nhất (dựng `Program` cho nhiều gói); nếu chậm quá 3 phút sẽ giới hạn vào các gói có import
+- Bước 4 đã cắt khỏi hợp đồng (d-20261009T135712Z-11). Ghi cũ: bước 4 là phần nặng nhất (dựng `Program` cho nhiều gói); nếu chậm quá 3 phút sẽ giới hạn vào các gói có import
   `@crm/db` hay `@prisma/client`, ghi vào sổ.
 - `seed.ts` nằm dưới `packages/db/prisma` (đường T3) — chỉ đổi đường chọn giai đoạn, không đổi schema.
