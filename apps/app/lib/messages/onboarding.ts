@@ -207,6 +207,8 @@ const en = {
 		down: "Move down",
 		removeStep: "Remove step",
 		addStep: "Add a step",
+		addStepOtherDepartment: "Add a step in another department",
+		pickDepartment: "Department",
 		newStepLabel: "What needs doing",
 		newStepDue: "Due",
 		save: "Add",
@@ -441,6 +443,8 @@ type OnboardingMessages = {
 		down: string;
 		removeStep: string;
 		addStep: string;
+		addStepOtherDepartment: string;
+		pickDepartment: string;
 		newStepLabel: string;
 		newStepDue: string;
 		save: string;
@@ -705,6 +709,8 @@ const vi = {
 		down: "Xuống",
 		removeStep: "Bỏ bước",
 		addStep: "Thêm bước",
+		addStepOtherDepartment: "Thêm bước ở bộ phận khác",
+		pickDepartment: "Bộ phận",
 		newStepLabel: "Việc cần làm",
 		newStepDue: "Hạn",
 		save: "Thêm",

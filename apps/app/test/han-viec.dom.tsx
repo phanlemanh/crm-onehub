@@ -248,9 +248,26 @@ describe("dong-thoi-gian", () => {
 
 type CheDo = keyof typeof payload;
 
+const { buocQuaHan } = await import("@/app/(app)/[slug]/dong-buoc");
+
+function voiQuaHan<
+	T extends {
+		overdueTasks: unknown[];
+		mySteps: Parameters<typeof buocQuaHan>[0][];
+	},
+>(du: T): T & { quaHan: { viec: number; buoc: number } } {
+	return {
+		...du,
+		quaHan: {
+			viec: du.overdueTasks.length,
+			buoc: du.mySteps.filter((b) => buocQuaHan(b, new Date())).length,
+		},
+	};
+}
+
 function tongQuan(cheDo: CheDo): Json {
 	const thang = { count: 0, valueCents: 0 };
-	return {
+	return voiQuaHan({
 		scope: payload[cheDo].scope,
 		reportingCurrency: "VND",
 		unconverted: { count: 0, currencies: [] },
@@ -275,7 +292,7 @@ function tongQuan(cheDo: CheDo): Json {
 		recentActivity: [],
 		mySteps: [],
 		keHoachCanDeY: [],
-	};
+	});
 }
 
 const VIEC_U = payload.team.overdueTasks.find((v) => v.id === "VIEC_U");

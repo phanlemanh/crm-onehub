@@ -16,6 +16,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@crm/ui/components/dropdown-menu";
+import { FieldError } from "@crm/ui/components/field";
 import { Icon } from "@crm/ui/components/icon";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -24,6 +25,13 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@crm/ui/components/popover";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@crm/ui/components/select";
 import { formatDay, fromDay, toDay } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -85,7 +93,9 @@ function useGhiBuoc(planId: string) {
 		han: useMutation(trpc.onboarding.rescheduleStep.mutationOptions(xong)),
 		sap: useMutation(trpc.onboarding.reorderSteps.mutationOptions(xong)),
 		bo: useMutation(trpc.onboarding.removeStep.mutationOptions(xong)),
-		them: useMutation(trpc.onboarding.addStep.mutationOptions(xong)),
+		them: useMutation(
+			trpc.onboarding.addStep.mutationOptions({ onSuccess: xong.onSuccess }),
+		),
 	};
 }
 
@@ -260,19 +270,29 @@ function DongBuoc({
 	);
 }
 
+type BoPhanChon = { id: string; name: string };
+
 function ThemBuoc({
 	planId,
 	departmentId,
+	boPhan = [],
+	nhan,
 	ghi,
 }: {
 	planId: string;
-	departmentId: string;
+	departmentId?: string;
+	boPhan?: BoPhanChon[];
+	nhan?: string;
 	ghi: Ghi;
 }) {
 	const m = onboardingMessages(useLocale()).sheet;
 	const [mo, setMo] = useState(false);
-	const [nhan, setNhan] = useState("");
+	const [ten, setTen] = useState("");
 	const [han, setHan] = useState(toDay(new Date()));
+	const [chon, setChon] = useState(departmentId ?? "");
+	const [loi, setLoi] = useState<string | null>(null);
+	const chonBoPhan = departmentId === undefined;
+	const khoaLuu = ghi.them.isPending || ten.trim() === "" || chon === "";
 
 	if (!mo) {
 		return (
@@ -283,53 +303,77 @@ function ThemBuoc({
 				variant="ghost"
 			>
 				<Icon data-icon="inline-start" icon={Add} />
-				{m.addStep}
+				{nhan ?? m.addStep}
 			</Button>
 		);
 	}
 
 	return (
 		<form
-			className="flex items-center gap-2"
+			className="flex flex-col gap-2"
+			data-them-buoc=""
 			onSubmit={(e) => {
 				e.preventDefault();
-				if (nhan.trim() === "" || ghi.them.isPending) return;
+				if (khoaLuu) return;
+				setLoi(null);
 				ghi.them.mutate(
-					{ planId, departmentId, label: nhan.trim(), dueAt: han },
+					{ planId, departmentId: chon, label: ten.trim(), dueAt: han },
 					{
 						onSuccess: () => {
-							setNhan("");
+							setTen("");
+							setChon(departmentId ?? "");
 							setMo(false);
 						},
+						onError: (e) => setLoi(e.message),
 					},
 				);
 			}}
 		>
-			<Input
-				aria-label={m.newStepLabel}
-				autoFocus
-				onChange={(e) => setNhan(e.target.value)}
-				placeholder={m.newStepLabel}
-				value={nhan}
-			/>
-			<Input
-				aria-label={m.newStepDue}
-				className="w-40"
-				onChange={(e) => setHan(e.target.value)}
-				type="date"
-				value={han}
-			/>
-			<Button disabled={ghi.them.isPending} size="sm" type="submit">
-				{m.save}
-			</Button>
-			<Button
-				onClick={() => setMo(false)}
-				size="sm"
-				type="button"
-				variant="ghost"
-			>
-				{m.cancel}
-			</Button>
+			<div className="flex flex-wrap items-center gap-2">
+				{chonBoPhan ? (
+					<Select onValueChange={setChon} value={chon}>
+						<SelectTrigger aria-label={m.pickDepartment} autoFocus>
+							<SelectValue placeholder={m.pickDepartment} />
+						</SelectTrigger>
+						<SelectContent>
+							{boPhan.map((b) => (
+								<SelectItem key={b.id} value={b.id}>
+									<span translate="no">{b.name}</span>
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				) : null}
+				<Input
+					aria-label={m.newStepLabel}
+					autoFocus={!chonBoPhan}
+					onChange={(e) => setTen(e.target.value)}
+					placeholder={m.newStepLabel}
+					value={ten}
+				/>
+				<Input
+					aria-label={m.newStepDue}
+					className="w-40"
+					onChange={(e) => setHan(e.target.value)}
+					type="date"
+					value={han}
+				/>
+				<Button disabled={khoaLuu} size="sm" type="submit">
+					{m.save}
+				</Button>
+				<Button
+					onClick={() => {
+						setLoi(null);
+						setMo(false);
+					}}
+					size="sm"
+					type="button"
+					variant="ghost"
+				>
+					{m.cancel}
+				</Button>
+			</div>
+			{loi ? <FieldError>{loi}</FieldError> : null}
 		</form>
 	);
 }
@@ -344,6 +388,9 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 		trpc.onboarding.listSteps.queryOptions({ planId: plan.id }),
 	);
 	const users = useQuery(trpc.users.list.queryOptions());
+	const boPhan = useQuery(
+		trpc.onboarding.listDepartments.queryOptions({ archived: false }),
+	);
 	const doiCam = useMutation(
 		trpc.onboarding.setPlanOwner.mutationOptions({
 			onSuccess: () => {
@@ -357,6 +404,12 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 	const hang = buoc.data?.rows ?? [];
 	const ids = hang.map((b) => b.id);
 	const nguoi = (users.data ?? []).map((u) => ({ value: u.id, label: u.name }));
+	const tatCaBoPhan = (boPhan.data ?? []).map((b) => ({
+		id: b.id,
+		name: b.name,
+	}));
+	const coBuoc = new Set(hang.map((b) => b.departmentId));
+	const boPhanKhac = tatCaBoPhan.filter((b) => !coBuoc.has(b.id));
 
 	return (
 		<DetailSheetBody>
@@ -395,6 +448,11 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 
 			{buoc.isSuccess && hang.length === 0 ? (
 				<DetailSheetEmpty
+					action={
+						khoa ? undefined : (
+							<ThemBuoc boPhan={tatCaBoPhan} ghi={ghi} planId={plan.id} />
+						)
+					}
 					description={m.noSteps.body}
 					icon={CalendarIcon}
 					title={m.noSteps.title}
@@ -431,6 +489,16 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 					</DetailSheetSection>
 				))
 			)}
+			{!khoa && hang.length > 0 && boPhanKhac.length > 0 ? (
+				<DetailSheetSection>
+					<ThemBuoc
+						boPhan={boPhanKhac}
+						ghi={ghi}
+						nhan={m.addStepOtherDepartment}
+						planId={plan.id}
+					/>
+				</DetailSheetSection>
+			) : null}
 		</DetailSheetBody>
 	);
 }

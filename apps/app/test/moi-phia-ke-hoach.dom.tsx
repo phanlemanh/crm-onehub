@@ -510,9 +510,26 @@ describe("muc-ca-nhan-man", () => {
 	});
 });
 
+const { buocQuaHan } = await import("@/app/(app)/[slug]/dong-buoc");
+
+function voiQuaHan<
+	T extends {
+		overdueTasks: unknown[];
+		mySteps: Parameters<typeof buocQuaHan>[0][];
+	},
+>(du: T): T & { quaHan: { viec: number; buoc: number } } {
+	return {
+		...du,
+		quaHan: {
+			viec: du.overdueTasks.length,
+			buoc: du.mySteps.filter((b) => buocQuaHan(b, new Date())).length,
+		},
+	};
+}
+
 function tongQuanGia() {
 	const thang = { count: 0, valueCents: 0 };
-	return {
+	return voiQuaHan({
 		scope: "me",
 		reportingCurrency: "VND",
 		unconverted: { count: 0, currencies: [] },
@@ -557,7 +574,7 @@ function tongQuanGia() {
 			},
 		],
 		keHoachCanDeY: [],
-	};
+	});
 }
 
 describe("the-tasks-man", () => {

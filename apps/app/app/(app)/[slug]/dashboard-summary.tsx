@@ -5,6 +5,7 @@ import {
 	Card,
 	CardAction,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardPanel,
 	CardPanelEmpty,
@@ -198,8 +199,10 @@ export function DashboardSummary() {
 				]
 			: [];
 	const dong = [...taiLieu, ...theoHan, ...keHoach];
-	const soQuaHan =
+	const dangHienQuaHan =
 		overdueTasks.length + mySteps.filter((b) => buocQuaHan(b, now)).length;
+	const soQuaHan = summary.quaHan.viec + summary.quaHan.buoc;
+	const conSot = Math.max(0, soQuaHan - dangHienQuaHan);
 	const soIm = keHoachCanDeY.filter((k) => k.loai === "ke-hoach-im").length;
 	const moTaViec =
 		soQuaHan > 0
@@ -375,6 +378,13 @@ export function DashboardSummary() {
 							</SimpleTable>
 						)}
 					</CardPanel>
+					{conSot > 0 ? (
+						<CardFooter data-con-sot={conSot}>
+							<CardDescription>
+								{m.tasks.conSot(String(conSot))}
+							</CardDescription>
+						</CardFooter>
+					) : null}
 				</Card>
 			</div>
 
