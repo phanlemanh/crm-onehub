@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6f63334506063486d13c5e0b738bdb94c27d2b03
+verified_commit: 4bd67513ad547598949417caf8feaa2379391692
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -177,3 +177,7 @@ none — không eval nào chạy nhiều lượt, mọi eval đều xác định
 
 Round 1: REJECT — E1..E10 đều xanh nhưng vòng review có một phát hiện trong hợp đồng, mức cao, trên AC-6: ma trận so-dau không cô lập phần ino của dấu khoá. Quay lại triển khai.
 Round 2: PASS — ma trận so-dau rút dấu từ khoá thật, dòng (6) chỉ khác ino (a362b47a1); mười eval máy và bảy lệnh suite xanh trên cây ghim 6f6333450.
+
+### Re-pin lần 1 — 2026-10-09, do gộp onehub sau chữ ký Cổng 2
+run_id: repin-20261009T094841Z-74864
+sha: 4bd67513ad547598949417caf8feaa2379391692 · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
