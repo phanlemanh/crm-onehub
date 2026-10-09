@@ -33,6 +33,27 @@ Từ K3, `loaiLoiDong` (`apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`) xếp m�
 Ngoài tập (giữ nguyên đường cũ): `NOT_FOUND`, `CONFLICT` (đã có câu từ K3); `T.troLy.cachKhongHop`,
 `T.troLy.canGiaTri` (lỗi của chính client, không phải lý do của người dùng); lỗi của `hopLe` khi giá trị «Sửa» sai độ dài (thông điệp là câu Zod thay đổi theo luật, không phải một hằng — để vòng sau, vì đơn chạm tệp P1-53 chỉ cho thân `troLyQuyet`); lỗi Prisma, Zod của hàng hỏng, 5xx.
 
+## Câu cho người dùng — duyệt ở Cổng 1
+
+Mười ba câu, mỗi mã một câu riêng. Căn chỉnh gọi bên nhận là «đích» như câu máy chủ (`T.canChinh`), vì đích có thể là
+Mục tiêu hoặc KR.
+
+| Mã | Tiếng Việt | English |
+|---|---|---|
+| `ky-da-an` | Chu kỳ của Mục tiêu này đã ẩn nên không quyết được góp ý. | This objective's cycle is hidden, so the suggestion can't be decided. |
+| `ky-da-khoa` | Chu kỳ đang chấm điểm hoặc đã đóng nên Mục tiêu không sửa được nữa. | The cycle is being scored or is closed, so the objective can't be changed. |
+| `muc-tieu-da-bo` | Mục tiêu này đã bỏ nên không quyết được góp ý. | This objective was dropped, so the suggestion can't be decided. |
+| `dang-cho-duyet` | Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa. | The objective is awaiting approval, so its content, KRs and alignment are locked. Withdraw it to edit. |
+| `khong-sua-duoc-kr` | Chỉ người phụ trách KR này hoặc người sửa được Mục tiêu mới quyết được góp ý này. | Only the KR owner or someone who can edit the objective can decide this suggestion. |
+| `khong-sua-duoc-don-vi` | Bạn không sửa được OKR của đơn vị này nên không quyết được góp ý. | You can't edit this unit's OKRs, so the suggestion can't be decided. |
+| `so-sai-kieu` | Số trong góp ý không khớp kiểu đo của KR này. | The number in this suggestion doesn't fit how this KR is measured. |
+| `can-chinh-gioi-han` | Một bên đang ở mức giới hạn nên không căn chỉnh được. | One side is restricted, so they can't be aligned. |
+| `can-chinh-chinh-no` | Đích là chính Mục tiêu này nên không căn chỉnh được. | The target is this objective itself, so it can't be aligned. |
+| `can-chinh-cung-cap` | Đích không ở cấp cao hơn nên không căn chỉnh được. | The target isn't at a higher level, so it can't be aligned to. |
+| `can-chinh-chua-cong-bo` | Đích chưa công bố nên chưa căn chỉnh được. | The target is not published yet, so it can't be aligned to. |
+| `can-chinh-khac-chu-ky` | Đích thuộc chu kỳ khác nên không căn chỉnh được. | The target is in another cycle, so it can't be aligned to. |
+| `can-chinh-da-gan` | Mục tiêu này đã căn chỉnh vào đích đó rồi. | This objective is already aligned to that target. |
+
 ## Máy chủ
 
 - `okr.contracts.ts`: nhánh `ok: false` của `troLyQuyetOutput` nhận `lyDo: z.union([lyDoKhongSanSang, lyDoKhongQuyet])`.
@@ -41,7 +62,7 @@ Ngoài tập (giữ nguyên đường cũ): `NOT_FOUND`, `CONFLICT` (đã có c�
   `T.*`, không chép chuỗi; `T.soTheoKieu` đưa vào bằng `Object.values`).
 - `troLyQuyet` bọc cả `$transaction` trong `try/catch` ở NGOÀI giao dịch: lỗi có mã → `{ ok: false, lyDo }`, góp ý
   vẫn `cho` vì giao dịch đã huỷ (bước `updateMany` đặt trạng thái chạy trước `ghiTheoDong`); lỗi không có mã → ném lại
-  như cũ.
+  như cũ. Lỗi không phải lỗi HTTP (`Error`, Prisma, Zod của hàng hỏng) luôn ném lại và ra `INTERNAL_SERVER_ERROR`.
 
 ## App
 
@@ -52,11 +73,14 @@ Ngoài tập (giữ nguyên đường cũ): `NOT_FOUND`, `CONFLICT` (đã có c�
 ## Đo
 
 - E1 (API, CSDL kiểm): ma trận viết trước, mỗi mã một ca dựng đúng trạng thái gây lỗi, gọi `troLyQuyet` thật, đòi
-  `{ ok: false, lyDo: <mã> }` và góp ý vẫn `cho`; đếm số ca === số phần tử của `LY_DO_KHONG_QUYET`.
-- E2 (DOM): mỗi mã × hai ngôn ngữ, `troLyQuyet` giả trả `{ ok: false, lyDo }`, chữ dưới góp ý === câu của mã, không
-  lộ mã, tiếng Việt có dấu, tiếng Anh không có chữ Việt; ca lỗi 5xx vẫn là câu thử lại.
-- E3 (script): một chỗ khai tập mã; bảng ánh xạ phủ đủ tập; mỗi hằng trong bảng là chuỗi (không hàm).
-- E4 ranh giới, E5 đột biến (bỏ một dòng ánh xạ; bắt lỗi trong giao dịch thay vì ngoài; client lấy câu thử lại cho
+  `{ ok: false, lyDo: <mã> }`, góp ý vẫn `cho`, OKR không đổi; số ca === số phần tử của `LY_DO_KHONG_QUYET`.
+- E2 (API): lỗi ngoài tập giữ mã tRPC cũ (`NOT_FOUND`, `CONFLICT`, `BAD_REQUEST` của `cachKhongHop`); hàng góp ý hỏng ra
+  `INTERNAL_SERVER_ERROR`; `lyDoKhongQuyetCua` trả `null` cho câu lạ, `Error` và lỗi Prisma.
+- E3, E4 (DOM): mỗi mã × một ngôn ngữ, chữ dưới góp ý === câu của mã; mười ba câu khác nhau; câu
+  `can-chinh-chua-cong-bo` nói «chưa công bố» / «not published».
+- E5 (DOM): mã của tập không đọc lại `troLySanSang`; lý do «chưa sẵn sàng» và lỗi 5xx giữ câu thử lại.
+- E6 (script): một chỗ khai tập mã; bảng ánh xạ phủ đủ tập; hai bản đồ câu khoá bằng đúng tập.
+- E7 ranh giới, E8 đột biến (bỏ một dòng ánh xạ; bắt lỗi trong giao dịch thay vì ngoài; client lấy câu thử lại cho
   mọi `ok:false`).
 - Không ui-check: dòng lỗi dưới góp ý đã được bàn đo màn của K3 chụp (trạng thái `loi-dong`); vòng này chỉ đổi chữ của
   dòng đó (entry `descope` «bỏ ui-observed»).
