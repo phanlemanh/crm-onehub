@@ -900,6 +900,9 @@ function DanhSach({
 	];
 	const daGiao = quaLoc.filter((v) => v.nhom_trang_thai === "da-giao").length;
 	const soTre = quaLoc.filter((v) => v.tre).length;
+	const soTreVung = viec.filter(
+		(v) => v.tre && hopTim(v) && hopLoc(v, query.filters, "moc"),
+	).length;
 	const meta = (
 		<span>
 			{thuTu.length} việc · {daGiao}/{quaLoc.length} đã giao trong phạm vi lọc
@@ -954,15 +957,18 @@ function DanhSach({
 					<ChiTietDoi chu={l.loi ?? ""} />
 				</Alert>
 			))}
-			{!daBac && soTre && !query.filters.moc?.includes(TRE) ? (
+			{!daBac && soTreVung && !query.filters.moc?.includes(TRE) ? (
 				<Alert data-lo-trinh-tre variant="warning">
-					<AlertTitle>{soTre} việc đã qua mốc mà chưa giao</AlertTitle>
+					<AlertTitle>{soTreVung} việc đã qua mốc mà chưa giao</AlertTitle>
 					<AlertDescription>
 						Việc gắn một mốc đã qua mà kế hoạch chưa ghi là đã giao.
 					</AlertDescription>
 					<AlertAction>
 						<Button
-							onClick={() => query.setFilter("moc", [TRE])}
+							onClick={() => {
+								query.setFilter("moc", [TRE]);
+								query.setTab("all");
+							}}
 							size="sm"
 							variant="outline"
 						>

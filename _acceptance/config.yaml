@@ -2119,6 +2119,8 @@ executors:
     dlt_do_man: 'APP_URL=${APP_URL:-http://localhost:3350} API_URL=${API_URL:-http://localhost:3351} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/da-luu-tru-tai-loi/rang/do-man.mjs"'
     ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
     ltc_ban_dung: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-dung.mjs
+    ltc_mau: node _acceptance/trang-lo-trinh-trong-crm/rang/kiem-mau.mjs
+    ltc_loi: node _acceptance/trang-lo-trinh-trong-crm/rang/chu-cung.mjs && cd apps/app && bun test ./test/messages-guard.spec.ts
     ltc_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     ltc_do_man: 'APP_URL=${APP_URL:-http://localhost:3360} API_URL=${API_URL:-http://localhost:3361} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/trang-lo-trinh-trong-crm/rang/do-man.mjs"'
   design:

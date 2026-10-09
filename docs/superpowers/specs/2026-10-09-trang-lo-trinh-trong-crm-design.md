@@ -90,7 +90,9 @@ văn và mang `translate="no"`. Nhãn của trang theo tệp lời `apps/app/lib
 | Màn | MỘT việc của màn | Vào từ / ra tới |
 |---|---|---|
 | Lộ trình · Bảng | Việc nào chưa xong, của nhóm nào, hẹn mốc nào | thanh điều hướng / đường dẫn được gửi |
-| Lộ trình · Bảng cột | Nhìn việc chia theo một chiều chọn được (trạng thái, nhóm, mốc, lộ trình) | nút «Bảng cột» |
+| Lộ trình · Bảng cột | Nhìn việc chia theo một chiều chọn được (trạng thái, nhóm, lộ trình) | nút «Bảng cột» |
+| Lộ trình · Mốc | Mốc nào sắp tới, việc nào gắn với nó, việc nào chưa hẹn mốc | nút «Mốc» |
+| Lộ trình · Đã bác | Việc đã cân nhắc và quyết không làm, kèm lý do | nút bật «Đã bác» |
 | Ngăn hồ sơ việc | Vì sao, thành công khi nào, cần gì xong trước | bấm dòng / thẻ / việc liên quan |
 
 ### 3. Bảng trạng thái
@@ -103,7 +105,7 @@ văn và mang `translate="no"`. Nhãn của trang theo tệp lời `apps/app/lib
 | ST-lotrinh-loc | Bảng | lọc nhóm okr, «Lọc (1)» | bỏ lọc |
 | ST-lotrinh-tre | Bảng | lọc «Trễ mốc», nhãn «Trễ» ở cột mốc | bấm việc |
 | ST-lotrinh-bang-cot | Bảng cột | chia theo trạng thái | đổi cách chia, bấm thẻ |
-| ST-lotrinh-chia-moc | Bảng cột | chia theo mốc — mỗi mốc một cột theo ngày | bấm thẻ |
+| ST-lotrinh-chia-moc | Mốc | dòng thời gian các mốc có việc khớp lọc, thanh ngày bên trái, «Chưa hẹn mốc» gập | bấm việc |
 | ST-lotrinh-chi-tiet | Ngăn hồ sơ | dải bốn ô, chi tiết, cần xong trước, việc đang chờ | bấm việc liên quan, đóng |
 | ST-lotrinh-da-bac | Bảng | bảng việc đã bác kèm lý do | tắt «Đã bác» |
 | ST-lotrinh-dang-tai | Bảng | khung xương thanh công cụ + bảng | chờ |
@@ -165,6 +167,5 @@ LO-TRINH.html (gốc kho, do bộ vẽ của kit sinh)
 - Ghi ý định, trạng thái, chữ ký từ CRM.
 - Lọc theo phòng ban thật (cần kit thêm khoá).
 - Dòng «vẽ lúc …» (khối chưa mang thời điểm vẽ).
-- Tìm việc theo chữ.
 - Hiện dòng lệnh mở việc, hiện hồ sơ nghiệm thu.
 - Gộp lộ trình của kho khác.
