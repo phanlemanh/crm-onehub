@@ -212,7 +212,9 @@ function TinNhan({
 					<span data-nop-khong-thanh={hong.loai}>
 						{hong.loai === "khong-doc"
 							? m.moc.nopKhongDoc
-							: m.moc.nopKhongThanh(hong.lyDo)}
+							: m.moc.nopKhongThanh(
+									hong.lyDo ? m.moc.lyDoTuChoi[hong.lyDo] : null,
+								)}
 					</span>
 				</KaraSystemLine>,
 			);

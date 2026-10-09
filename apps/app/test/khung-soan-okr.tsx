@@ -468,6 +468,14 @@ export function tatDongHoGia(): void {
 	dongHoGia = false;
 }
 
+type NgonNguKhung = { hien: "vi" | "en" };
+
+const ngonNgu: NgonNguKhung = { hien: "vi" };
+
+export function datNgonNgu(l: "vi" | "en"): void {
+	ngonNgu.hien = l;
+}
+
 export async function mo(man: ReactElement, thamSo = ""): Promise<void> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
@@ -483,7 +491,7 @@ export async function mo(man: ReactElement, thamSo = ""): Promise<void> {
 				onUrlUpdate={(e) => urlDoi.push(e.queryString)}
 			>
 				<QueryClientProvider client={client}>
-					<LocaleProvider locale="vi">
+					<LocaleProvider locale={ngonNgu.hien}>
 						<TooltipProvider>{man}</TooltipProvider>
 					</LocaleProvider>
 				</QueryClientProvider>
@@ -520,6 +528,7 @@ export async function moTrang(
 export const moMan = moTrang;
 
 export async function don(): Promise<void> {
+	ngonNgu.hien = "vi";
 	tatDongHoGia();
 	for (const { o, root } of dangMo.splice(0)) {
 		await act(async () => root.unmount());
