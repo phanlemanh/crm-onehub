@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bcb3148c8c8b852019302c3b6407a9dd60478820
+verified_commit: f2420f31188b173c1a6de1a1a753cc3953ebb4b0
 human_signoff:
 ---
 
@@ -29,145 +29,140 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E1-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E1-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.klg_khong_con
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   output: |
-    cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t klg-khong-con
-    Ran 1 test across 1 file. [951.00ms]
+    Ran 1 test across 1 file. [1.64s]
 
 - eval: E2
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E2-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E2-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.klg_khong_quyen
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   output: |
-    cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t klg-khong-quyen
-    Ran 1 test across 1 file. [1263.00ms]
+    Ran 1 test across 1 file. [1.55s]
 
 - eval: E3
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E3-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E3-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.klg_mat_ket_noi
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   output: |
-    cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t klg-mat-ket-noi
-    Ran 1 test across 1 file. [1.77s]
+    Ran 1 test across 1 file. [1.85s]
 
 - eval: E4
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E4-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E4-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.klg_ke_hoach_cong_ty
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   output: |
-    cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t klg-ke-hoach-cong-ty
-    Ran 1 test across 1 file. [1189.00ms]
+    Ran 1 test across 1 file. [1194.00ms]
 
 - eval: E5
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E5-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E5-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.klg_en
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   output: |
-    cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx -t klg-en
-    Ran 1 test across 1 file. [1252.00ms]
+    Ran 1 test across 1 file. [1122.00ms]
 
 - eval: E6
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E6-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E6-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.klg_man
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   screenshot: evidence/E6-step1.png
   observed: |
-    E6-step1.png (1440x900): nền tối, sheet bên phải (từ x~460) có tiêu đề «Cá nhân», avatar «?» và nút X đóng; giữa sheet là hộp viền mờ chứa «Bản ghi này không còn», mô tả «Đã có người xoá vĩnh viễn bản ghi này nên không mở lại được.» và nút «Đóng». Không có loiMoTa chung chung, không có nút «Thử lại». Khớp Expected.
-    E6-step2.png (390x844): drawer đẩy từ dưới lên (từ y~170) có tay kéo, tiêu đề «Cá nhân», X, cùng hộp «Bản ghi này không còn», mô tả xuống dòng gọn và nút «Đóng» nằm trong khung; không thấy tràn ngang. Script đo scrollWidth không vượt clientWidth, nút Đóng trong khung. Khớp Expected.
+    Đã mở từng frame bằng Read. Ở 1440 (E6-step1.png): ngăn bên phải tiêu đề "Cá nhân", hộp "Bản ghi này không còn" cùng dòng "Đã có người xoá vĩnh viễn bản ghi này nên không mở lại được." và nút «Đóng»; không có lỗi mô tả, không có nút «Thử lại».
+    Ở 390 (E6-step2.png): ngăn dạng drawer có tay nắm, cùng hộp và dòng mô tả xuống dòng gọn, nút «Đóng» nằm trong khung nhìn, không tràn ngang. Ảnh chỉ cho thấy kết quả, không cho thấy thao tác bấm «Đóng»; bước đó do script tự kiểm.
   network_observed: n-a (driver)
 
 - eval: E8
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E8-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E8-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kbk_khung_loi
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   output: |
-    cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi
-    Ran 1 test across 1 file. [2.10s]
+    Ran 1 test across 1 file. [1431.00ms]
 
 - eval: E9
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E9-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E9-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.klg_ma_that
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   output: |
-    bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-loi-ban-ghi-dung-ly-do/rang/ma-that.mjs"
     phien-do: xong — mã 0
 
 - eval: E10
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E10-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-E10-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.klg_ma_that
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
   output: |
-    bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-loi-ban-ghi-dung-ly-do/rang/ma-that.mjs"
     phien-do: xong — mã 0
-
-### Judgment
-
-- eval: E7
-  judged_by: judge panel (3 lens, fresh context)
-  verdict: PASS
-  rationale: Cả ba lens đồng ý rằng ở cả hai khổ (1440 và 390) khung ghi rõ «Bản ghi này không còn» kèm câu giải thích, chỉ có nút «Đóng», không có «Thử lại», không có thông điệp kỹ thuật, và ở 390 khung không bị cắt hay tràn ngang.
-  panel_votes:
-    - domain-correctness: PASS — Người đọc hiểu ngay bản ghi đã bị xoá, không giống lỗi mạng hay chỗ trống; chỉ một nút «Đóng», không «Thử lại», không in thông điệp kỹ thuật; ở 390 thẻ nằm trọn trong khung (khoảng 24 đến 366 px trên 390 px).
-    - operational-feasibility: PASS — Chỉ có tiêu đề, dòng giải thích và một nút «Đóng»; ở 390 chữ xuống dòng gọn, hộp và nút nằm trọn trong khung, không bị cắt hay tràn ngang.
-    - spec-alignment: PASS — Khung ghi rõ «Bản ghi này không còn» kèm giải thích, không có «Thử lại», không có thông điệp lỗi kỹ thuật; ở 390 nút và khung nằm trọn chiều ngang.
-  human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
 
 - cmd: bun run lint:slop
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_lint_slop-r1
+  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-khung-loi-ban-ghi-dung-ly-do-SUITE-bunx_turbo_run_build_force-r1
+  run_id: ""
   exit_code: 0
-  verified_at: 2026-10-09T04:34:31Z
+  verified_at: 2026-10-09T04:54:14Z
+
+### Judgment
+
+Panel đề xuất cho E7 (ba lens, đều chấm trên hai ảnh klg-khong-con-1440.png và klg-khong-con-390.png). Để `human_override` trống cho người quyết ở Cổng 2.
+
+- eval: E7
+  judged_by: judge-subagent (fresh context), panel 3 lens
+  verdict: PASS
+  rationale: |
+    - domain-correctness: PASS — Cả hai ảnh ghi rõ «Bản ghi này không còn» kèm «Đã có người xoá vĩnh viễn bản ghi này nên không mở lại được.», nên người đọc hiểu ngay bản ghi đã bị xoá chứ không phải lỗi mạng hay chỗ trống. Chỉ có nút «Đóng», không có «Thử lại», không in thông điệp kỹ thuật; ở 390 chữ xuống dòng gọn, nút nằm trọn trong khung.
+    - operational-feasibility: PASS — Cùng tiêu đề và câu mô tả ở cả hai khổ, một nút «Đóng» duy nhất, không có «Thử lại», không có thông điệp kỹ thuật. Ở 390 thẻ và nút nằm trọn trong khung, không bị cắt hay tràn ngang.
+    - spec-alignment: PASS — Cùng một thẻ ở 1440 và 390, câu chữ nói rõ bản ghi đã bị xoá, chỉ có «Đóng», không có «Thử lại», không in thông điệp kỹ thuật, nút nằm trọn trong khung ở 390.
+  required_evidence:
+    - (judge không nêu bằng-chứng-thiếu)
+  human_override:  # chi nguoi ghi
 
 ## Known limits
 
@@ -175,12 +170,15 @@ human_signoff:
 
 ## Analyst
 
-carried tu round truoc — baseline khong do lai round nay. Không có eval nào được liệt kê là không-phân-biệt. Các lệnh suite xanh ở cả hai phía là regression-guard bình thường, không liệt kê.
+carried tu round 1 — baseline khong do lai round nay
+
+Không có eval nào liệt kê là không-phân-biệt: danh sách rỗng. Mọi block eval ghi `baseline: n-a` vì round này không đo lại. Các lệnh suite xanh ở cả hai phía là regression-guard bình thường, không liệt kê.
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy một lần, xác định)
+none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: mọi eval máy (E1 đến E6, E8 đến E10) và cả bảy lệnh suite đều đạt; E7 do hội đồng đề xuất PASS, ô human_override để trống cho người quyết ở Cổng 2. Không phải quay lại implementation.
+Round 1: PASS với một phát hiện mức thấp trong hợp đồng; đã sửa (test Thử lại ghim đúng một lần gọi, bộ nhớ đệm tươi) và vào round 2.
+Round 2: toàn bộ eval máy, ui-check E6 và các lệnh suite đều đạt trên commit f2420f31188b173c1a6de1a1a753cc3953ebb4b0; E7 chờ người chốt ở Cổng 2.
