@@ -1,5 +1,9 @@
 import { eveTurnReference } from "@crm/validation/eve-stream";
-import { type BanNhap, docBanNhap } from "@crm/validation/okr-cuoc-soan";
+import {
+	type BanNhap,
+	docBanNhap,
+	docKetQuaNop,
+} from "@crm/validation/okr-cuoc-soan";
 import { chuanHoa } from "@crm/validation/okr-kiem";
 import type { MessageStreamEvent } from "eve/client";
 import type { EveMessage } from "eve/react";
@@ -29,6 +33,14 @@ export type TomTatMoc =
 	| ({ docDuoc: true; dau: false; dongDoi: string[] } & DemDoi);
 
 export type MocNop = { itemId: string; tom: TomTatMoc };
+
+export type NopKhongThanh = {
+	itemId: string;
+	loai: "tu-choi" | "loi" | "khong-doc";
+	lyDo: string | null;
+};
+
+export type LuotNop = { mocs: MocNop[]; khongThanh: NopKhongThanh[] };
 
 export const khoaMucTieu = (khoa: string): string => `muc-tieu-moi:${khoa}`;
 
@@ -122,19 +134,44 @@ export function tomTatMoc(
 	return sau ? tomTatTu(truoc, sau) : { docDuoc: false };
 }
 
-export function mocTuTranscript(items: readonly TranscriptItem[]): MocNop[] {
-	const ra: MocNop[] = [];
+type DidNop = Extract<TranscriptItem, { kind: "did" }>;
+
+const laNop = (item: TranscriptItem): item is DidNop =>
+	item.kind === "did" && item.tool === SOAN_UI.congCuNop;
+
+function khongThanh(item: DidNop): NopKhongThanh | null {
+	if (item.pending) return null;
+	if (item.failed) return { itemId: item.id, loai: "loi", lyDo: null };
+	const kq = docKetQuaNop(item.output);
+	if (!kq) return { itemId: item.id, loai: "khong-doc", lyDo: null };
+	if (kq.ketQua === "tu-choi")
+		return { itemId: item.id, loai: "tu-choi", lyDo: kq.lyDo || null };
+	return null;
+}
+
+export function luotNop(items: readonly TranscriptItem[]): LuotNop {
+	const mocs: MocNop[] = [];
+	const hong: NopKhongThanh[] = [];
 	let truoc: BanNhap | null = null;
 	for (const item of items) {
-		if (item.kind !== "did" || item.tool !== SOAN_UI.congCuNop) continue;
+		if (!laNop(item) || item.pending) continue;
+		const loi = khongThanh(item);
+		if (loi) {
+			hong.push(loi);
+			continue;
+		}
 		const ban = docBanNhap(item.input);
-		ra.push({
+		mocs.push({
 			itemId: item.id,
 			tom: ban ? tomTatTu(truoc, ban) : { docDuoc: false },
 		});
 		if (ban) truoc = ban;
 	}
-	return ra;
+	return { mocs, khongThanh: hong };
+}
+
+export function mocTuTranscript(items: readonly TranscriptItem[]): MocNop[] {
+	return luotNop(items).mocs;
 }
 
 export function gioNopCuoi(
@@ -143,7 +180,7 @@ export function gioNopCuoi(
 	events: readonly MessageStreamEvent[],
 ): number | null {
 	const tin = transcript.findLast((t) =>
-		t.items.some((i) => i.kind === "did" && i.tool === SOAN_UI.congCuNop),
+		t.items.some((i) => laNop(i) && !i.pending && khongThanh(i) === null),
 	);
 	const luot = messages.find((x) => x.id === tin?.id)?.metadata?.turnId;
 	if (!luot) return null;

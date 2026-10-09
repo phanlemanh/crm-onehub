@@ -113,6 +113,14 @@ async function dauVaoHopLe(thuTuc: string): Promise<DauVao> {
 		}
 		case "archive":
 			return { id: await taoTam("xoa") };
+		case "restore": {
+			const id = await taoTam("kp");
+			await db.dealStage.update({
+				where: { id },
+				data: { archivedAt: new Date() },
+			});
+			return { id };
+		}
 		default:
 			throw new Error(`thieu dau vao cho ${thuTuc}`);
 	}
@@ -163,7 +171,7 @@ afterAll(async () => {
 describe("giai-doan-quyen", () => {
 	test("member va okr bi chan moi thu tuc ghi, du lieu khong doi", async () => {
 		const ds = mutationGiaiDoan();
-		expect(ds).toEqual(["archive", "create", "rename", "reorder"]);
+		expect(ds).toEqual(["archive", "create", "rename", "reorder", "restore"]);
 		let soCa = 0;
 		for (const vai of ["member", "okr"] as const) {
 			for (const thuTuc of ds) {

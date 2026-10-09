@@ -7,7 +7,6 @@ export const SOAN_UI = {
 	noiMs: 2_000,
 	ocHoiThoai: { macDinhPx: 380, toiThieuPx: 300, toiDaPhanTram: "50" },
 	khoaSo: "okr-soan-so:",
-	thamSo: { tab: "tab", loc: "loc" },
 	luotMoDau:
 		"Bắt đầu cuộc soạn: nói điều bạn đã biết về đơn vị này và hỏi tôi.",
 	congCuNop: "nop_ban_nhap",

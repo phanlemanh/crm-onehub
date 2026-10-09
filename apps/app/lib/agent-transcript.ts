@@ -414,6 +414,7 @@ export type DealListItem = {
 	id: string;
 	name: string;
 	stage: string;
+	stageId: string | null;
 	amount: number | null;
 	currency: string;
 	company: {
@@ -458,6 +459,7 @@ const dealListItem = z.object({
 	id: requiredText,
 	name: requiredText,
 	stage: requiredText,
+	stageId: requiredText.nullable().catch(null),
 	amount: finiteNumber.nullable(),
 	currency: requiredText,
 	company: z.object({

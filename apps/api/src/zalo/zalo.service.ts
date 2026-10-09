@@ -18,7 +18,7 @@ import {
 import { AgentAccessService } from "../agent/agent-access.service";
 import { InjectDatabase } from "../database/database.constants";
 import { ZALO_API } from "./zalo.config";
-import type { ZaloCuaToi, ZaloXuong } from "./zalo.contracts";
+import type { ZaloCuaToi, ZaloLuuBot, ZaloXuong } from "./zalo.contracts";
 import {
 	type NguyenNhanCauNoi,
 	ZaloCauNoiService,
@@ -56,8 +56,10 @@ function trangThaiWebhook(
 	url: string | null,
 	lyDo: string | null,
 ): TrangThaiWebhook {
+	const ly = docLyDo(lyDo);
+	if (ly === "khoa-lech") return "khoa-lech";
 	if (url) return "da-dang-ky";
-	return docLyDo(lyDo) === "can-https" ? "can-https" : "chua-dang-ky";
+	return ly === "can-https" ? "can-https" : "chua-dang-ky";
 }
 
 @Injectable()
@@ -68,7 +70,11 @@ export class ZaloService {
 		private readonly cauNoi: ZaloCauNoiService,
 	) {}
 
-	async luuBot(userId: string, token: string | undefined) {
+	async luuBot(
+		userId: string,
+		token: string | undefined,
+		xacNhanDoiBot?: true,
+	): Promise<ZaloLuuBot> {
 		const role = await this.access.assertMember(userId);
 		if (!canManageConnections(role)) {
 			throw new ForbiddenException(ZALO_THONG_DIEP.chiQuanTri);
@@ -76,11 +82,18 @@ export class ZaloService {
 		if (token !== undefined && !ZALO_API.botToken.test(token)) {
 			throw new BadRequestException(ZALO_THONG_DIEP.saiDang);
 		}
-		const ket = await this.cauNoi.datBot(token === undefined ? {} : { token });
+		const ket = await this.cauNoi.datBot({ token, xacNhanDoiBot });
 		if (!ket.ok) {
 			throw new BadRequestException(
 				ZALO_THONG_DIEP.cauNoi[ket.nguyenNhan](ket.status),
 			);
+		}
+		if (ket.data.outcome === "can-xac-nhan-doi-bot") {
+			return {
+				ketQua: "can-xac-nhan-doi-bot",
+				soLienKet: ket.data.soLienKet,
+				tenBotMoi: ket.data.tenBotMoi,
+			};
 		}
 		if (ket.data.outcome !== "valid") {
 			throw new BadRequestException(ket.data.reason);
@@ -171,6 +184,7 @@ export class ZaloService {
 			lech: k.lech,
 			dongTroLyOkr: uuTien?.dongTroLyOkr ?? true,
 			laTruongPhong: soPhongTruong > 0,
+			canNoiLai: k.uuTien === "ZALO" && lienKet.loai !== "da-noi",
 		};
 	}
 

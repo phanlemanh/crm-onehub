@@ -486,6 +486,7 @@ export function NhomMucTieu({
 					? {
 							text: m.dong.daThemNhom(String(stt), String(nhomDaNhan.length)),
 							onUndo: n.khoa ? undefined : () => n.hoan(mt, keo),
+							error: n.loi[mt.id],
 						}
 					: undefined
 			}

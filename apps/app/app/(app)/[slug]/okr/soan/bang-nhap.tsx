@@ -19,6 +19,7 @@ import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { type ReactNode, useId, useState } from "react";
 import { okrMessages } from "@/lib/messages/okr";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { SOAN_UI } from "./cau-hinh";
 import { type CuocDangSoan, donViCua } from "./dung-cuoc-soan";
 import { dongKhoi, type QuyetBang } from "./khoi-ngu-canh";
@@ -179,7 +180,7 @@ export function BanNhap({
 	const m = okrSoanMessages(locale);
 	const mui = useMessages();
 	const [loc, datLoc] = useQueryState(
-		SOAN_UI.thamSo.loc,
+		SEARCH_PARAM.okr.locSoan,
 		parseAsStringLiteral(LOC),
 	);
 	const n = useNguCanhThe(s, cuoc, loc === "cho", hoi, veMoc);

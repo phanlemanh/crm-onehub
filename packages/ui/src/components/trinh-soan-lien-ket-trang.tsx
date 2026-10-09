@@ -106,7 +106,7 @@ export function NutLienKetTrang({
 				align="start"
 				onCloseAutoFocus={(e) => {
 					e.preventDefault();
-					editor?.commands.focus();
+					if (editor && !editor.isDestroyed) editor.commands.focus();
 				}}
 			>
 				<Command shouldFilter={false}>

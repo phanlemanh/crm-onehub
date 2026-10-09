@@ -92,6 +92,20 @@ export function docBanNhap(value: unknown): BanNhap | null {
 	return r.success ? r.data : null;
 }
 
+export const KET_QUA_NOP = ["da-ghi", "tu-choi"] as const;
+
+export const ketQuaNopDoc = z.object({
+	ketQua: z.enum(KET_QUA_NOP),
+	lyDo: z.string(),
+});
+
+export type KetQuaNopDoc = z.infer<typeof ketQuaNopDoc>;
+
+export function docKetQuaNop(value: unknown): KetQuaNopDoc | null {
+	const r = ketQuaNopDoc.safeParse(value);
+	return r.success ? r.data : null;
+}
+
 export function parseBanNhap(value: unknown): BanNhap {
 	const r = banNhap.safeParse(value);
 	if (!r.success)
