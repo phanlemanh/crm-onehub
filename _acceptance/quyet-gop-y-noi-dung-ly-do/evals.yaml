@@ -1,0 +1,67 @@
+slug: quyet-gop-y-noi-dung-ly-do
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.k3c_api
+    expected: "exit 0; bun run test -- \"cd apps/api && bun test test/quyet-gop-y-noi-dung-ly-do.spec.ts -t k3c-ma-tran\" trên CSDL kiểm riêng: ma trận viết trước một ca cho mỗi phần tử của LY_DO_KHONG_QUYET (danh sách lấy từ chính tập trong packages/validation, đòi số ca === LY_DO_KHONG_QUYET.length === 13). Mỗi ca dựng trạng thái gây lỗi qua đường thật (Prisma trên bộ mẫu tro-ly-okr-san, hay thủ tục okr.* thật), gieo một góp ý chờ đúng loại (viet-lai hay can-chinh), gọi okr.troLyQuyet thật bằng cookie người phù hợp; đòi tra.status 200, data === { ok: false, lyDo: <mã> }; đọc lại okrDeXuat: trangThai vẫn 'cho'; và giá trị OKR đích (tên KR, tên Mục tiêu, liên kết căn chỉnh) không đổi. Ca lệch in '<mã>: <ok/lyDo/trangThai thật>'. Chiều đỏ ghim ở E8 (a) và (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/src/okr/okr.contracts.ts, packages/validation/src/okr-tro-ly.ts, apps/api/src/okr/okr.service.ts, apps/api/src/okr/okr-config.ts, apps/api/test/quyet-gop-y-noi-dung-ly-do.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.k3c_api_ngoai
+    expected: "exit 0; cùng tệp, -t k3c-ngoai: bốn ca viết trước — deXuatId không có → status 404 (NOT_FOUND); góp ý đã quyết → 409 (CONFLICT); cach 'sua' cho góp ý loại 'hoi' → 400 BAD_REQUEST với thông điệp T.troLy.cachKhongHop; và hàm thuần lyDoKhongQuyetCua(new BadRequestException('cau la')) → null. Đòi không ca nào trả { ok: false }. Đòi số ca === 4."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, apps/api/test/quyet-gop-y-noi-dung-ly-do.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.k3c_vi
+    expected: "exit 0; bài DOM apps/app/test/gop-y-dung-cho-k3c.dom.tsx -t k3c-vi trên khung chung khung-gop-y-dung-cho.tsx: mỗi mã của LY_DO_KHONG_QUYET (lấy từ tập, đòi === 13 ca) — okr.troLyQuyet giả trả { ok: false, lyDo: <mã> }, bấm quyết góp ý D_KR1 (hay D_CAN cho mã can-chinh-*); so chuỗi nguyên thuỷ textContent của [data-slot=field-error] dưới đúng góp ý === okrGopYMessages('vi').loiQuyet[<mã>]; câu đó khác loiDong['chua-san-sang']; có ít nhất một ký tự tiếng Việt có dấu; không chứa chuỗi mã. Chiều đỏ ghim ở E8 (c): 'cau sai cho <mã>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/lib/messages/okr-gop-y.ts, packages/validation/src/okr-tro-ly.ts, apps/app/test/gop-y-dung-cho-k3c.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.k3c_en
+    expected: "exit 0; cùng tệp, -t k3c-en: cùng ma trận 13 ca ở locale en; dòng lỗi === okrGopYMessages('en').loiQuyet[<mã>]; không có ký tự tiếng Việt có dấu; không chứa chuỗi mã."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/gop-y-dung-cho-k3c.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.k3c_san_sang
+    expected: "exit 0; cùng tệp, -t k3c-san-sang: hai ca — (1) troLyQuyet giả trả { ok: false, lyDo: 'can-chinh-chua-cong-bo' }: số lần đọc okr.troLySanSang sau khi quyết === số lần trước khi quyết; (2) trả { ok: false, lyDo: 'het-tran-ngay' }: dòng lỗi === loiDong['chua-san-sang'] và troLySanSang được đọc lại ít nhất một lần."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/test/gop-y-dung-cho-k3c.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.k3c_mot_nguon
+    expected: "exit 0; _acceptance/quyet-gop-y-noi-dung-ly-do/rang/mot-nguon.mjs: (1) quét apps/api/src, apps/app/app, apps/app/lib, packages/validation/src bằng fs (gốc suy từ vị trí script, mỗi gốc phải có ≥1 tệp): chuỗi mã của tập chỉ khai trong packages/validation/src/okr-tro-ly.ts (chỗ dùng mã trong bản đồ câu của okr-gop-y.ts được phép vì khoá bằng satisfies Record<LyDoKhongQuyet,…>); (2) import bảng ánh xạ xuất từ tro-ly.service.ts: mỗi mã của tập có ≥1 hằng, mỗi hằng là string; (3) import okrGopYMessages: khoá loiQuyet của vi và en bằng đúng tập. In 'mot-nguon: 13 ma, 1 cho khai, anh xa du, hai ban do du'. Chiều đỏ: --ban-sao them-tap (bản sao có thêm một tệp khai lại một mã) → exit 1 'ma khai them: <tệp>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/okr-tro-ly.ts, apps/api/src/okr/tro-ly.service.ts, apps/app/lib/messages/okr-gop-y.ts, _acceptance/quyet-gop-y-noi-dung-ly-do/rang/mot-nguon.mjs]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.k3c_ranh_gioi
+    expected: "exit 0; _acceptance/quyet-gop-y-noi-dung-ly-do/rang/ranh-gioi.mjs theo khuôn K3/K3b (tự chọn neo nhánh mở hay merge đưa hồ sơ lên): mỗi tệp khớp ranh giới hàng K3c (đọc hang-viec.json của đợt, không thì hằng chép); config.yaml và okr-tro-ly.ts chỉ dòng '+'; okr.contracts.ts: mọi dòng đổi nằm trong khối troLyQuyetOutput; tro-ly.service.ts: mọi dòng đổi nằm trong thân troLyQuyet, hàm lyDoKhongQuyetCua, bảng ánh xạ, hoặc dòng import. In 'ranh-gioi: <n> tep, 0 ngoai (neo <kieu>)'. Chiều đỏ: --them apps/app/lib/x.ts → exit 1 'ngoai-ranh-gioi:apps/app/lib/x.ts'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/quyet-gop-y-noi-dung-ly-do/rang/ranh-gioi.mjs, _acceptance/config.yaml]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.k3c_dot_bien
+    expected: "exit 0; _acceptance/quyet-gop-y-noi-dung-ly-do/rang/dot-bien.mjs: chiều xanh trước (k3c_api, k3c_vi, k3c_mot_nguon mã 0, không thì thoát 2 'KHONG DO DUOC'); ba vết trên tệp thật, chuỗi neo đúng một lần, trả lại trong finally, so băm sau mỗi vết (lệch → thoát 3): (a) bỏ dòng ánh xạ của can-chinh-chua-cong-bo → k3c_api đỏ có 'can-chinh-chua-cong-bo' hoặc k3c_mot_nguon đỏ 'thieu anh xa: can-chinh-chua-cong-bo'; (b) dời try/catch vào trong callback của $transaction → k3c_api đỏ 'gop y khong con cho'; (c) nhánh !kq.ok của app luôn dùng loiDong['chua-san-sang'] → k3c_vi đỏ 'cau sai cho'. In 'dot-bien: 3/3 vet bi bat, tep tra lai nguyen'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/tro-ly.service.ts, "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", _acceptance/quyet-gop-y-noi-dung-ly-do/rang/dot-bien.mjs]
