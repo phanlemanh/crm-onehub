@@ -1,0 +1,92 @@
+{
+  "feature_plain": "Hai bài thử chạy cùng lúc thôi giẫm lên khoá của nhau: không bài nào còn dừng nhầm máy eve dev của bài khác hay xoá nhầm khoá bài khác vừa lấy.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ ghi tệp chủ khoá trọn một lần, nên bài đang chờ đọc vào lúc nào cũng thấy chủ khoá còn sống, không tưởng khoá đã chết."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ vẫn dọn máy eve dev mồ côi của một lượt đã chết như hôm nay, và không để sót thư mục tạm nào sau khi dọn."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ cho bài đã mất khoá tự biết (báo lỗi «da doi chu»), và khi nó trả khoá hay thoát thì để yên khoá của bài khác."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ chỉ chạm tệp hỗ trợ khoá, bài thử khoá eve, hồ sơ, và hai tệp bản đồ máy vẽ lại ở mỗi cổng."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ nhận ra một khoá mới tạo lại dù hệ tệp cấp lại cùng số hiệu thư mục, nhờ so cả giờ tạo thư mục và mã khoá."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-2",
+      "p": "Chặn bài chờ thứ hai dừng máy hoặc xoá khoá mà bài chờ thứ nhất vừa lấy; bài thứ hai chờ tiếp rồi báo lỗi gọi tên bài đang giữ."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG dọn thư mục tạm còn sót khi chính bài đang dọn bị giết giữa chừng — hiếm, và không làm hai máy chạy chung một gốc."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG tự sửa ca ba bài cùng tranh trong vài mili giây; bài mất khoá chỉ biết ở lần ghi hay trả khoá kế tiếp."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG đụng khoá của apps/agent — nó không dùng tệp này."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG thay bằng thư viện khoá ngoài hay khoá của hệ điều hành."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG sửa các bài thử cũ của F11; chúng phải xanh nguyên như hiện nay."
+    }
+  ],
+  "scope_plain": "Phần để ngoài là các ca hiếm hơn hai khe F11 tìm ra, và mọi thứ ngoài tệp khoá của bài thử.",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Trục chỗ ghi tệp chủ khoá: lúc lấy khoá và lúc thêm máy con — cả hai có bài ép đọc đúng giữa lúc ghi (AC-1)."
+    },
+    {
+      "i": 2,
+      "p": "Trục trạng thái khoá lúc bài chờ giành: còn đúng khoá cũ (AC-3), đã bị bài khác giành trước, đã bị thay bằng khoá mới (AC-2, AC-6)."
+    },
+    {
+      "i": 4,
+      "p": "Trục người xoá khoá: bài chờ dọn khoá cũ, chủ trả khoá, tiến trình thoát (AC-3, AC-4)."
+    },
+    {
+      "i": 7,
+      "p": "Đối chiếu ngành: thư viện proper-lockfile cùng hình dạng khoá thư mục và báo «mất khoá»; phép đổi tên tệp của POSIX là nguyên tử."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Bài thử hai lượt kiểm «bị từ chối» trước nên phép phá có thể đỏ sai chỗ — đã viết lại để kiểm máy còn sống và khoá còn nguyên trước."
+    },
+    {
+      "i": 1,
+      "p": "Bộ dọn lúc tiến trình thoát chưa có phép đo — đã thêm ca thoát tiến trình và một phép phá riêng."
+    },
+    {
+      "i": 2,
+      "p": "Bài ghi trọn chưa dựng đúng điều kiện lỗi xảy ra (thư mục khoá đã cũ) — đã lùi giờ thư mục trước khi ghi."
+    },
+    {
+      "i": 3,
+      "p": "Chưa có luật khi khoá không có mã, và Linux cấp lại số hiệu thư mục — đã thêm giờ tạo vào dấu khoá và một tiêu chí mới (AC-6)."
+    },
+    {
+      "i": 4,
+      "p": "Ngưỡng «đỏ đều 20/20 trên mã cũ» chưa có phép đếm — đã thêm phép chạy 20 lần mỗi chiều (E10)."
+    }
+  ]
+}

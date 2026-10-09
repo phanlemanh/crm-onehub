@@ -1,0 +1,78 @@
+slug: ly-do-tu-choi-nop-theo-locale
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.k2c_vi
+    expected: "exit 0; bài DOM apps/app/test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-vi dựng hội thoại soạn thật (cùng khung bài DOM của K2b) ở locale vi, ma trận viết trước bảy ca — mỗi khoá của LY_DO_TU_CHOI_NOP một ca, lấy danh sách khoá từ chính tập trong packages/validation và đòi số ca === 7. Mỗi ca: transcript dựng bằng toTranscript thật gồm một lần nộp da-ghi rồi một lần tu-choi với lyDo = giá trị mã; so chuỗi nguyên thuỷ textContent của [data-nop-khong-thanh=tu-choi] === tiền tố cố định 'Kara nộp bản nháp chưa được — ' nối câu vi của mã đọc từ _acceptance/ly-do-tu-choi-nop-theo-locale/rang/cau-da-duyet.json (bảng câu duyệt ở Cổng 1, viết trước code, KHÔNG lấy từ messages); câu đó chứa ít nhất một ký tự tiếng Việt có dấu; dòng không chứa giá trị mã. Chiều đỏ ghim ở E7 (a): ca đỏ in 'lo ma may: <giá trị mã>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts", apps/app/lib/messages/okr-soan.ts, packages/validation/src/okr-cuoc-soan.ts, apps/app/test/soan-okr-ly-do-tu-choi.dom.tsx, _acceptance/ly-do-tu-choi-nop-theo-locale/rang/cau-da-duyet.json]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.k2c_en
+    expected: "exit 0; cùng tệp, -t k2c-en: cùng ma trận bảy ca ở locale en; textContent === tiền tố cố định 'Kara could not submit the draft — ' nối câu en của mã đọc từ _acceptance/ly-do-tu-choi-nop-theo-locale/rang/cau-da-duyet.json, không chứa giá trị mã, và không chứa ký tự tiếng Việt có dấu nào. Chiều đỏ ghim ở E7 (a): 'lo ma may: <giá trị mã>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts", apps/app/lib/messages/okr-soan.ts, packages/validation/src/okr-cuoc-soan.ts, apps/app/test/soan-okr-ly-do-tu-choi.dom.tsx, _acceptance/ly-do-tu-choi-nop-theo-locale/rang/cau-da-duyet.json]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.k2c_ngoai
+    expected: "exit 0; cùng tệp, -t k2c-ngoai: ma trận viết trước 2 lý do × 2 locale = 4 ca — lyDo 'ma-moi-cua-agent' (không thuộc tập) và lyDo rỗng. Mỗi ca: textContent của dòng hệ thống === m.moc.nopKhongThanh(null) của locale đó (so chuỗi đúng bằng), không chứa 'ma-moi-cua-agent'; số [data-kara-turn=checkpoint] === 1 (chỉ lần da-ghi). Thêm ca gốc so sánh (mỗi locale): da-ghi bản A → tu-choi mã lạ bản A+2 KR → da-ghi bản A+1 KR; đòi hai mốc và chữ mốc thứ hai === câu mốc của «+1 KR» (gốc so sánh là lần da-ghi đầu, không phải lần bị từ chối). Chiều đỏ ghim ở E7 (b): bộ đọc trả chuỗi thô làm ca 'ma-moi-cua-agent' in 'lo chuoi la: ma-moi-cua-agent'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", "apps/app/app/(app)/[slug]/okr/soan/moc-nop.ts", packages/validation/src/okr-cuoc-soan.ts, apps/app/test/soan-okr-ly-do-tu-choi.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.k2c_mot_nguon
+    expected: "exit 0; _acceptance/ly-do-tu-choi-nop-theo-locale/rang/mot-nguon.mjs: (1) quan hệ: TRO_LY_OKR_SOAN.tuChoi (import thật từ apps/agent-okr/agent/lib/config.ts) === LY_DO_TU_CHOI_NOP (import thật từ packages/validation) — cùng một đối tượng; (2) khai tập: duyệt đệ quy bằng fs.readdirSync (không dùng glob — tên thư mục [slug] là lớp ký tự trong glob, lỗi Ngoài-4 của K2b) ba gốc apps/agent-okr/agent, 'apps/app/app/(app)/[slug]/okr/soan', packages/validation/src; in số tệp .ts/.tsx mỗi gốc và đòi mỗi gốc > 0; đếm tệp chứa chuỗi literal của bất kỳ giá trị mã nào trong tập — đòi đúng 1 tệp (packages/validation/src/okr-cuoc-soan.ts). In 'mot-nguon: LY_DO_TU_CHOI_NOP 1 cho, agent tro vao, 3 goc quet (<a>/<b>/<c> tep)'. Chiều đỏ: --ban-sao them-tap chạy cùng quét trên bản sao cây ở thư mục tạm ngoài kho với một tệp dưới soan/ khai lại 'chu ky khong o pha lap ke hoach' → exit 1, in 'tap ma khai 2 cho: <tệp>'; --goc-rong <gốc> trỏ một gốc tới thư mục rỗng → exit 1, in 'goc quet rong: <gốc>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/okr-cuoc-soan.ts, apps/agent-okr/agent/lib/config.ts, "apps/app/app/(app)/[slug]/okr/soan/**", "apps/agent-okr/agent/**", _acceptance/ly-do-tu-choi-nop-theo-locale/rang/mot-nguon.mjs]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.k2c_gia_tri
+    expected: "exit 0; _acceptance/ly-do-tu-choi-nop-theo-locale/rang/gia-tri.mjs: (0) gốc kho suy từ vị trí script (git rev-parse --show-toplevel), chạy git show 577f23b2b:apps/agent-okr/agent/lib/config.ts, rút khối tuChoi và đòi nó trùng từng cặp với tệp mẫu rang/ly-do-goc.json — lệch thì exit 1 'mau lech nguon 577f23b2b'; (1) so tệp mẫu với LY_DO_TU_CHOI_NOP: cùng tập khoá, từng giá trị === ; (2) round-trip từ bên ghi thật: với mỗi mã, ketQuaNop.parse({ketQua:'tu-choi', lyDo: <giá trị>, soDong:0, biLoai:[], giuNguyen:[]}) bằng schema thật của agent rồi docKetQuaNop → lyDo === khoá mã ấy; ketQuaNop.parse với lyDo ngoài tập phải ném (bên ghi chặt). In 'gia-tri: 7/7 ma giu nguyen, 7/7 round-trip'. Chiều đỏ: --mau-sai (tệp mẫu đổi một giá trị) → exit 1, in 'mau lech nguon 577f23b2b'; vết (e) của E7 (bản sao đổi một giá trị trong LY_DO_TU_CHOI_NOP) → exit 1, in 'gia tri doi: <khoá>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/validation/src/okr-cuoc-soan.ts, apps/agent-okr/agent/lib/nop-ban-nhap.ts, apps/agent-okr/agent/lib/config.ts, _acceptance/ly-do-tu-choi-nop-theo-locale/rang/gia-tri.mjs, _acceptance/ly-do-tu-choi-nop-theo-locale/rang/ly-do-goc.json]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.k2c_ban_do
+    expected: "exit 0; apps/app/test/soan-okr-ly-do-tu-choi.spec.ts -t k2c-ban-do: với mỗi locale vi và en, Object.keys(okrSoanMessages(locale).moc.lyDoTuChoi) sắp xếp === Object.keys(LY_DO_TU_CHOI_NOP) sắp xếp (so chuỗi nối), và từng câu === câu cùng mã cùng locale trong _acceptance/ly-do-tu-choi-nop-theo-locale/rang/cau-da-duyet.json; rồi apps/app/test/messages-guard.spec.ts xanh. Chiều đỏ ghim trong cùng bài: hàm so dùng cho một bản đồ giả đổi chỗ hai câu phải trả 'cau sai cho ma: <khoá>' và bản đồ giả thiếu một mã phải trả 'thieu cau cho ma: <khoá>' (đối chứng: bản đồ thật trả rỗng). Vế «thiếu một mã thì check-types đỏ» đo ở vết (d) của E7."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr-soan.ts, packages/validation/src/okr-cuoc-soan.ts, apps/app/test/soan-okr-ly-do-tu-choi.spec.ts, apps/app/test/messages-guard.spec.ts, _acceptance/ly-do-tu-choi-nop-theo-locale/rang/cau-da-duyet.json]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.k2c_dot_bien
+    expected: "exit 0; _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs: chiều xanh trước — E1, E3, E4 xanh trên cây lành (không xanh thì exit 2 'KHONG DO DUOC'); rồi ba vết, mỗi vết sửa tạm đúng một tệp và trả lại trong finally: (a) hoi-thoai-soan.tsx ghép giá trị chuỗi của mã thay câu → k2c-vi đỏ có 'lo ma may:'; (b) okr-cuoc-soan.ts docKetQuaNop trả chuỗi lyDo thô → k2c-ngoai đỏ có 'lo chuoi la: ma-moi-cua-agent'; (c) config.ts của agent khai lại khối tuChoi bằng literal → mot-nguon đỏ có 'tap ma khai 2 cho' hoặc 'khong cung doi tuong'; (d) okr-soan.ts bỏ một mã khỏi bản đồ vi → bunx tsc --noEmit của apps/app exit khác 0 và lỗi nhắc tên khoá; (e) okr-cuoc-soan.ts đổi giá trị của chuKyKhongLapKeHoach → gia-tri đỏ có 'gia tri doi: chuKyKhongLapKeHoach'. Sau mỗi vết so sha256 tệp với trước vết, khác thì exit 3 'TEP KHONG TRA LAI'. In 'dot-bien: 5/5 vet bi bat, tep tra lai nguyen'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs, "apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx", packages/validation/src/okr-cuoc-soan.ts, apps/agent-okr/agent/lib/config.ts, apps/app/lib/messages/okr-soan.ts, apps/app/test/soan-okr-ly-do-tu-choi.dom.tsx]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.k2c_ranh_gioi
+    expected: "exit 0; _acceptance/ly-do-tu-choi-nop-theo-locale/rang/ranh-gioi.mjs tự chọn neo: commit đầu thêm _acceptance/ly-do-tu-choi-nop-theo-locale/contract.md là tổ tiên của origin/onehub → tìm merge M đưa nó lên (git rev-list --first-parent --ancestry-path <commit đầu>..origin/onehub, phần tử cuối) và đo merge-base(M^1, M^2)..M^2; chưa phải → đo merge-base(HEAD, origin/onehub)..HEAD; in neo đã chọn. Mỗi tệp khớp ranh giới hàng K2c (đọc hang-viec.json của đợt nếu có, không thì hằng chép) hoặc danh sách cham-tep (P1-33); _acceptance/config.yaml chỉ dòng '+'; config.ts của agent: mọi dòng '-' nằm trong khối tuChoi cũ, mọi dòng '+' là 'tuChoi: LY_DO_TU_CHOI_NOP,' hoặc dòng import; nop-ban-nhap.ts (thuộc ranh giới hàng): mọi dòng '-'/'+' là dòng lyDo của ketQuaNop, chữ ký hay thân hàm tuChoi, hoặc dòng import. In 'ranh-gioi: <n> tep, 0 ngoai (neo <kieu>)'. Chiều đỏ: --them apps/app/lib/x.ts → exit 1 'ngoai-ranh-gioi:apps/app/lib/x.ts'; --diff-mau <tệp có một dòng '-' ngoài khối tuChoi của config.ts> → exit 1 'config.ts doi ngoai khoi tuChoi'; --diff-mau-nop <tệp có một dòng '-' ngoài lyDo/tuChoi của nop-ban-nhap.ts> → exit 1 'nop-ban-nhap doi ngoai lyDo'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/ly-do-tu-choi-nop-theo-locale/rang/ranh-gioi.mjs, _acceptance/config.yaml, apps/agent-okr/agent/lib/config.ts, apps/agent-okr/agent/lib/nop-ban-nhap.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.k2c_man
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs, do:man), mỗi khổ/ngôn ngữ một tiến trình con tự mở phiên soạn riêng (kho riêng — bẫy dùng chung kho của K2b); agent-okr thật với mô hình giả có kịch bản viết trước (rang/kich-ban.mjs của soan-okr-trang-rieng nhập lại, không sửa); đăng nhập trưởng phòng của bộ mẫu"
+      - "Mỗi lượt (vi 390, vi 1440, en 1440): nộp hợp lệ; đưa chu kỳ rời pha lap-ke-hoach bằng sql; nộp lần hai (công cụ thật trả tu-choi chuKyKhongLapKeHoach); trả pha; nộp lại. Đòi: đúng một [data-nop-khong-thanh=tu-choi] có textContent === tiền tố của locale nối câu chuKyKhongLapKeHoach đọc từ rang/cau-da-duyet.json, không chứa giá trị mã; cookie lang đặt theo ngôn ngữ của lượt; ảnh. Rồi tải lại trang bằng điều hướng mới (đọc transcript đã lưu, không giữ trạng thái client) và đòi lại đúng dòng đó, cùng textContent; ảnh sau tải lại"
+      - "Chiều đỏ: --kiem-do-do tho sửa tạm hoi-thoai-soan.tsx ghép giá trị chuỗi của mã (vết (a) của E7) trên máy chủ dev của chính phiên đo rồi trả lại (băm sha) → lượt vi 1440 in 'lo ma may: chu ky khong o pha lap ke hoach' và exit 1"
+    expected: "exit 0; 6 ảnh trong _acceptance/ly-do-tu-choi-nop-theo-locale/evidence/ (E9-tu-choi-<vi-390|vi-1440|en-1440> và E9-tu-choi-<…>-tai-lai); mỗi lượt in 'dat'; chiều đỏ in 'lo ma may:' và exit 1, tệp trả lại nguyên."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/app/(app)/[slug]/okr/soan/**", apps/app/lib/messages/okr-soan.ts, packages/validation/src/okr-cuoc-soan.ts, apps/agent-okr/agent/lib/nop-ban-nhap.ts, apps/agent-okr/agent/lib/config.ts, _acceptance/ly-do-tu-choi-nop-theo-locale/rang/man.mjs, _acceptance/ly-do-tu-choi-nop-theo-locale/rang/cau-da-duyet.json]
