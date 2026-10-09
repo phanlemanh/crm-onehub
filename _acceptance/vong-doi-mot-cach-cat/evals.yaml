@@ -236,6 +236,9 @@ evals:
     question: |
       Ghi chú cho người chấm: hai ảnh đầu chụp ngăn một thoả thuận đã lưu trữ ở khổ 1440 và 390; hai ảnh sau chụp Kanban
       thoả thuận ở khổ 1440 và 390.
+      Ngoài phạm vi AC-7 (chủ kho xác nhận 2026-10-09, có từ trước lượt này, mở hàng riêng): chữ bị cắt bằng «…» ở hàng
+      số liệu đầu ngăn và ở thanh giai đoạn khi khổ hẹp, và nhãn giai đoạn tràn khỏi viền thẻ trên Kanban. Đừng chấm
+      trượt vì hai điều này; mọi chỗ cắt hay tràn khác vẫn chấm như câu (5).
       Nhìn bốn ảnh: (1) người đọc có hiểu ngay thoả thuận này đã được cất (không bị xoá, không phải lỗi) và lấy lại bằng
       nút nào không? (2) các ô của thoả thuận đã cất có trông là không sửa được không, hay trông như sửa được mà bấm
       không ăn? (3) trên Kanban, nút «Đã lưu trữ» có dễ thấy và đọc như chỗ xem (không như một hành động cất) không?
