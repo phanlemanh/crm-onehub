@@ -171,7 +171,7 @@ describe("trung-tao", () => {
 		aId = (await ghiThang("Giu So", "0901.234.111")).id;
 	});
 
-	for (const vao of ["+84 901 234 111", "84901234111"]) {
+	for (const vao of ["+84 901 234 111", "84901234111", "+84 0901 234 111"]) {
 		test(`trung-tao: so tho cu phai chan ${vao}`, async () => {
 			const truoc = await demCuaTa();
 			let loi = "";
@@ -186,6 +186,20 @@ describe("trung-tao", () => {
 			expect(await demCuaTa()).toBe(truoc);
 		});
 	}
+
+	test("trung-tao: so tho cu co so 0 trung ke van chan", async () => {
+		await ghiThang("Giu So A3", "+84 0907 111 222");
+		let loi = "";
+		try {
+			await contacts.create({
+				firstName: `${TEN} Moi A3`,
+				phone: "0907 111 222",
+			});
+		} catch (error) {
+			loi = (error as Error).constructor.name;
+		}
+		expect(`trung-tao A3: ${loi}`).toBe("trung-tao A3: ConflictException");
+	});
 
 	test("trung-tao: khac mot so thi tao duoc", async () => {
 		const tao = await contacts.create({

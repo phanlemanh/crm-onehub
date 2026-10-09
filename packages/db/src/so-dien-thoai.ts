@@ -13,8 +13,9 @@ const CHU_SO = Prisma.sql`regexp_replace(phone, '[^0-9]', '', 'g')`;
 
 const QUOC_NOI = Prisma.sql`
 	CASE
-		WHEN ${CHU_SO} ~ '^84[0-9]{9,10}$' THEN substr(${CHU_SO}, 3)
-		WHEN ${CHU_SO} ~ '^0[0-9]{9,10}$' THEN substr(${CHU_SO}, 2)
+		WHEN ${CHU_SO} ~ '^840[1-9][0-9]{8,9}$' THEN substr(${CHU_SO}, 4)
+		WHEN ${CHU_SO} ~ '^84[1-9][0-9]{8,9}$' THEN substr(${CHU_SO}, 3)
+		WHEN ${CHU_SO} ~ '^0[1-9][0-9]{8,9}$' THEN substr(${CHU_SO}, 2)
 		ELSE ${CHU_SO}
 	END
 `;

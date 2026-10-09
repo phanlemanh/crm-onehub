@@ -14,13 +14,13 @@ export type DocSo =
 
 const NGAN_CACH = /[\s.\-()]/g;
 const KY_TU_SO = /^[0-9+\s.\-()]+$/;
-const QN = `[0-9]{${SO_DIEN_THOAI.quocNoi.min},${SO_DIEN_THOAI.quocNoi.max}}`;
+const QN = `[1-9][0-9]{${SO_DIEN_THOAI.quocNoi.min - 1},${SO_DIEN_THOAI.quocNoi.max - 1}}`;
 const VN_KHONG = new RegExp(`^0(${QN})$`);
-const VN_MA = new RegExp(`^\\+?${SO_DIEN_THOAI.maVn}(${QN})$`);
+const VN_MA = new RegExp(`^\\+?${SO_DIEN_THOAI.maVn}0?(${QN})$`);
 const QUOC_TE = new RegExp(
 	`^\\+([0-9]{${SO_DIEN_THOAI.e164.min},${SO_DIEN_THOAI.e164.max}})$`,
 );
-const CHU_SO_VN_MA = new RegExp(`^${SO_DIEN_THOAI.maVn}(${QN})$`);
+const CHU_SO_VN_MA = new RegExp(`^${SO_DIEN_THOAI.maVn}0?(${QN})$`);
 
 export function docSoDienThoai(raw: string): DocSo {
 	const gon = raw.replace(NGAN_CACH, "");
@@ -75,11 +75,10 @@ export function soQuocNoiDeTim(term: string): string | null {
 	const so = chuSo(term);
 	if (so.length < SO_DIEN_THOAI.timToiThieu) return null;
 
-	if (
+	const sauMa =
 		so.startsWith(SO_DIEN_THOAI.maVn) &&
 		so.length - SO_DIEN_THOAI.maVn.length >= SO_DIEN_THOAI.quocNoi.min
-	) {
-		return so.slice(SO_DIEN_THOAI.maVn.length);
-	}
-	return so.startsWith("0") ? so.slice(1) : so;
+			? so.slice(SO_DIEN_THOAI.maVn.length)
+			: so;
+	return sauMa.startsWith("0") ? sauMa.slice(1) : sauMa;
 }

@@ -12,6 +12,9 @@ const DOC_SO: [string, string][] = [
 	["(+84) 901-234-567", "ok +84901234567"],
 	["84901234567", "ok +84901234567"],
 	["+84901234567", "ok +84901234567"],
+	["+84 0901 234 567", "ok +84901234567"],
+	["+84 (0) 901 234 567", "ok +84901234567"],
+	["840901234567", "ok +84901234567"],
 	["028 3812 3456", "ok +842838123456"],
 	["+65 6123 4567", "ok +6561234567"],
 	["", "rong"],
@@ -21,6 +24,7 @@ const DOC_SO: [string, string][] = [
 	["0901 234 56", "sai"],
 	["+84 12", "sai"],
 	["1234567890123456", "sai"],
+	["00901234567", "sai"],
 ];
 
 const HIEN_SO: [string, string][] = [
@@ -45,8 +49,8 @@ function tomTat(raw: string): string {
 }
 
 describe("doc-so", () => {
-	test("ma tran viet truoc du 14 dong", () => {
-		expect(DOC_SO.length).toBe(14);
+	test("ma tran viet truoc du 18 dong", () => {
+		expect(DOC_SO.length).toBe(18);
 	});
 
 	for (const [vao, ra] of DOC_SO) {
@@ -91,5 +95,6 @@ describe("so-quoc-noi", () => {
 		expect(soQuocNoi("+84901234567")).toBe("901234567");
 		expect(soQuocNoi("0901.234.567")).toBe("901234567");
 		expect(soQuocNoi("+6561234567")).toBe("6561234567");
+		expect(soQuocNoi("+840901234567")).toBe("901234567");
 	});
 });
