@@ -145,6 +145,7 @@ const companyDetailContactOutput = z.object({
 	firstName: z.string(),
 	lastName: z.string().nullable(),
 	email: z.string().nullable(),
+	phone: z.string().nullable(),
 	title: z.string().nullable(),
 	imageUrl: z.string().nullable(),
 	owner: ownerSummaryOutput.nullable(),
