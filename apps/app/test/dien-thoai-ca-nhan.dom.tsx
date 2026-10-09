@@ -35,7 +35,9 @@ afterEach(dongHet);
 
 async function moForm(ten: ThanhPhan) {
 	if (ten === "QuickAddContact") {
-		await mo(<QuickAddContact companyId="co-1" ownerId="u-1" onDone={() => {}} />);
+		await mo(
+			<QuickAddContact companyId="co-1" ownerId="u-1" onDone={() => {}} />,
+		);
 		return;
 	}
 	await mo(<CreateContactSheet />, { searchParams: "?new=true" });
@@ -59,7 +61,8 @@ function oTheoNhan(nhan: string): HTMLInputElement {
 }
 
 function nutGui(ten: ThanhPhan): HTMLButtonElement {
-	const chu = ten === "QuickAddContact" ? rs.company.addContact : cm.create.submit;
+	const chu =
+		ten === "QuickAddContact" ? rs.company.addContact : cm.create.submit;
 	const nut = [...document.querySelectorAll<HTMLButtonElement>("button")].find(
 		(b) => b.textContent?.trim() === chu,
 	);
@@ -144,7 +147,8 @@ describe("trung-giu-chu", () => {
 			await go(oTheoNhan("Điện thoại"), "0901 234 567");
 			await bam(nutGui(ten));
 			await cho(
-				() => document.body.textContent?.includes("Lan A already uses") ?? false,
+				() =>
+					document.body.textContent?.includes("Lan A already uses") ?? false,
 				"toast bao trung",
 			);
 			expect(
@@ -243,12 +247,18 @@ describe("goi-y-moi-gioi", () => {
 
 	test("goi-y-moi-gioi: M phai hien so", async () => {
 		await moChon();
-		expect(luaChon().some((t) => t.includes("Moi Gioi M") && t.includes("0901 234 567"))).toBe(true);
+		expect(
+			luaChon().some(
+				(t) => t.includes("Moi Gioi M") && t.includes("0901 234 567"),
+			),
+		).toBe(true);
 	});
 
 	test("goi-y-moi-gioi: N van hien email", async () => {
 		await moChon();
-		expect(luaChon().some((t) => t.includes("Moi Gioi N") && t.includes("n@x.vn"))).toBe(true);
+		expect(
+			luaChon().some((t) => t.includes("Moi Gioi N") && t.includes("n@x.vn")),
+		).toBe(true);
 	});
 
 	for (const so of ["0901234567", "0901 234 567"]) {

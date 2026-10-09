@@ -3,7 +3,13 @@ import {
 	hienThiSoDienThoai,
 } from "@crm/validation/so-dien-thoai";
 
-export function SoDienThoai({ so, goi = false }: { so: string; goi?: boolean }) {
+export function SoDienThoai({
+	so,
+	goi = false,
+}: {
+	so: string;
+	goi?: boolean;
+}) {
 	const hien = hienThiSoDienThoai(so);
 
 	if (!goi) {

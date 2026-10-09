@@ -32,13 +32,7 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import {
-	type ComponentProps,
-	Suspense,
-	useId,
-	useRef,
-	useState,
-} from "react";
+import { type ComponentProps, Suspense, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { CompanyPicker } from "@/components/crm/company-picker";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";

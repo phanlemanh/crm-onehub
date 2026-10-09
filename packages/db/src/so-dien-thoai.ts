@@ -1,5 +1,5 @@
-import { Prisma } from "./generated/prisma/client";
 import type { Db } from "./client";
+import { Prisma } from "./generated/prisma/client";
 
 export const TIM_THEO_SO = { gioiHan: 500 } as const;
 

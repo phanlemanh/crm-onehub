@@ -36,9 +36,7 @@ import { contactsSearchParams } from "./contacts-search-params";
 
 type ContactRow = RouterOutputs["contacts"]["list"]["rows"][number];
 
-export function columnsFor(
-	m: ContactMessages,
-): DataTableColumn<ContactRow>[] {
+export function columnsFor(m: ContactMessages): DataTableColumn<ContactRow>[] {
 	return [
 		{
 			id: "name",

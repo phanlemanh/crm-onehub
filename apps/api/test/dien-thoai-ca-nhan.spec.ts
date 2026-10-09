@@ -227,9 +227,7 @@ describe("trung-sua", () => {
 		} catch (error) {
 			loi = (error as Error).constructor.name;
 		}
-		expect(`${loi} ${(await docSo(bId)).phone}`).toBe(
-			"ConflictException null",
-		);
+		expect(`${loi} ${(await docSo(bId)).phone}`).toBe("ConflictException null");
 	});
 
 	test("trung-sua: sua ve chinh so cua minh phai duoc", async () => {
