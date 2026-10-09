@@ -41,3 +41,42 @@ wall: 912s
 - **claude-sonnet-5-5**: 5 agent · 18 calls · out 13,269 · in 36 · cache_read 1,235,597 · cache_create 493,533
 - **claude-haiku-5-5**: 13 agent · 26 calls · out 17,132 · in 52 · cache_read 1,545,671 · cache_create 781,865
 
+### S4 round 2 — wf_d00bf6d2-fd0 (19 agent, 36,949 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:measurement | claude-opus-5-5 | 7 | 5,435 | 14 | 661,120 | 66 |
+| review:conventions | claude-opus-5-5 | 10 | 5,211 | 20 | 903,010 | 66 |
+| synthesize:report | claude-sonnet-5-5 | 4 | 5,134 | 8 | 325,079 | 41 |
+| review:bugs | claude-opus-5-5 | 9 | 4,771 | 18 | 879,656 | 61 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,735 | 4 | 121,660 | 71 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,928 | 4 | 121,621 | 230 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,918 | 4 | 121,605 | 11 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 1,266 | 4 | 121,603 | 30 |
+| machine:bun _acceptance/ngoai-le-telemetry-giai- | claude-haiku-5-5 | 2 | 1,204 | 4 | 121,656 | 19 |
+| machine:bun _acceptance/ngoai-le-telemetry-giai- | claude-haiku-5-5 | 2 | 1,194 | 4 | 121,656 | 14 |
+| triage | claude-sonnet-5-5 | 2 | 929 | 4 | 87,938 | 11 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 824 | 4 | 121,630 | 233 |
+| machine:bun _acceptance/ngoai-le-telemetry-giai- | claude-haiku-5-5 | 2 | 814 | 4 | 121,656 | 17 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 748 | 4 | 86,595 | 222 |
+| machine:bun _acceptance/ngoai-le-telemetry-giai- | claude-haiku-5-5 | 2 | 708 | 4 | 121,650 | 9 |
+| machine:bun _acceptance/ngoai-le-telemetry-giai- | claude-haiku-5-5 | 2 | 691 | 4 | 121,655 | 7 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 689 | 4 | 121,599 | 7 |
+| machine:bun _acceptance/ngoai-le-telemetry-giai- | claude-haiku-5-5 | 2 | 384 | 4 | 121,657 | 8 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 366 | 4 | 85,858 | 8 |
+
+
+wall: 864s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 13 | 15,103 | 1,546,243 | 805 | 07:34:18 | 07:47:43 |
+| review | 3 | 15,417 | 2,443,786 | 67 | 07:34:18 | 07:35:25 |
+| triage | 1 | 929 | 87,938 | 11 | 07:47:43 | 07:47:54 |
+| capture | 1 | 366 | 85,858 | 8 | 07:47:54 | 07:48:02 |
+| synthesize | 1 | 5,134 | 325,079 | 41 | 07:48:02 | 07:48:43 |
+
+- **claude-opus-5-5**: 3 agent · 26 calls · out 15,417 · in 52 · cache_read 2,443,786 · cache_create 279,176
+- **claude-sonnet-5-5**: 3 agent · 8 calls · out 6,429 · in 16 · cache_read 498,875 · cache_create 302,838
+- **claude-haiku-5-5**: 13 agent · 26 calls · out 15,103 · in 52 · cache_read 1,546,243 · cache_create 782,604
+
