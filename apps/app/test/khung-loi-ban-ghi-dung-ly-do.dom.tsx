@@ -1,7 +1,18 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { UrlUpdateEvent } from "nuqs/adapters/testing";
 import type { ReactElement } from "react";
-import { bam, cho, dat, dongHet, goiCua, mo, nut, nutCo } from "./khung-gop-y";
+import {
+	bam,
+	cho,
+	dat,
+	dongHet,
+	goiCua,
+	mo,
+	nhip,
+	nut,
+	nutCo,
+} from "./khung-gop-y";
 
 const eveThat = await import("eve/react");
 mock.module("eve/react", () => ({
@@ -259,11 +270,27 @@ async function moNgan(
 	url: string,
 	ghi: { record: string | null },
 	locale: "vi" | "en" = "vi",
+	giuTuoi = false,
 ) {
-	await mo(
+	const ngan = (
 		<DetailSheet open onOpenChange={() => {}}>
 			<LocaleProvider locale={locale}>{o.man}</LocaleProvider>
-		</DetailSheet>,
+		</DetailSheet>
+	);
+	await mo(
+		giuTuoi ? (
+			<QueryClientProvider
+				client={
+					new QueryClient({
+						defaultOptions: { queries: { retry: false, staleTime: Infinity } },
+					})
+				}
+			>
+				{ngan}
+			</QueryClientProvider>
+		) : (
+			ngan
+		),
 		{
 			searchParams: url,
 			onUrlUpdate: (e: UrlUpdateEvent) => {
@@ -356,7 +383,7 @@ describe("khung-loi-ban-ghi-dung-ly-do", () => {
 				return n.lay();
 			});
 			const ghi = { record: "chua" as string | null };
-			await moNgan(n, `record=${n.ref}`, ghi);
+			await moNgan(n, `record=${n.ref}`, ghi, "vi", true);
 			await cho(() => khung() !== null, `${n.ten} khung`);
 			expect(lyDo()).toBe("mat-ket-noi");
 			expect(chuKhung().includes(KHONG_TAI)).toBe(true);
@@ -371,8 +398,13 @@ describe("khung-loi-ban-ghi-dung-ly-do", () => {
 			const truoc = goiCua(n.duong).length;
 			await bam(nut(THU_LAI, khung() as Element));
 			await cho(() => khung() === null, `${n.ten} tai lai`);
+			await nhip(10);
+			chot(
+				goiCua(n.duong).length - truoc === 1,
+				`klg: ${n.ten} thu lai goi khac mot lan`,
+			);
+			expect(goiCua(n.duong).length - truoc).toBe(1);
 			expect(goiKhiKhung).toBe(1);
-			expect(goiCua(n.duong).length - truoc >= 1).toBe(true);
 			expect((document.body.textContent ?? "").includes(n.ten_ban_ghi)).toBe(
 				true,
 			);
