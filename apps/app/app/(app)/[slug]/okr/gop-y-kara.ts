@@ -1,5 +1,6 @@
 "use client";
 
+import type { KaraBusyState } from "@crm/ui/components/kara/busy";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	ketQuaTroLy,
@@ -14,7 +15,11 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { troLyOkrMessages } from "@/lib/messages/tro-ly-okr";
+import { z } from "zod";
+import {
+	type OkrGopYMessages,
+	okrGopYMessages,
+} from "@/lib/messages/okr-gop-y";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
@@ -28,20 +33,78 @@ export type NoiDungKara =
 	| "dang-doc"
 	| "rong"
 	| "loi"
+	| "tai-loi"
+	| "nho-loi"
 	| "co-gop-y";
 
-export type DocLaiKara = "yen" | "dang-doc" | "loi";
+export type DocLaiKara = "yen" | "dang-doc" | "loi" | "nho-loi";
+
+export type LoaiLoiNho = "khong-quyen" | "mat-mang" | "khac";
+
+const loiCoMa = z.object({ data: z.object({ code: z.string() }) });
+
+function maLoi(cause: unknown): string | null {
+	const doc = loiCoMa.safeParse(cause);
+	return doc.success ? doc.data.data.code : null;
+}
+
+export function loaiLoiNho(cause: unknown): LoaiLoiNho {
+	const ma = maLoi(cause);
+	if (ma === null) return "mat-mang";
+	return ma === "FORBIDDEN" ? "khong-quyen" : "khac";
+}
+
+export type TrangThaiDong =
+	| "cho"
+	| "dang-quyet"
+	| "da-quyet"
+	| "dang-hoan-tac"
+	| "da-hoan-tac";
+
+export type LoaiLoiDong = "khong-con" | "da-cu" | "chua-san-sang" | "mat-mang";
+
+export function loaiLoiDong(cause: unknown): LoaiLoiDong {
+	const ma = maLoi(cause);
+	if (ma === null) return "mat-mang";
+	if (ma === "NOT_FOUND") return "khong-con";
+	if (ma === "CONFLICT") return "da-cu";
+	return "chua-san-sang";
+}
+
+export function cauLoiDong(cause: unknown, m: OkrGopYMessages): string {
+	return m.loiDong[loaiLoiDong(cause)];
+}
 
 export type NutKara =
 	| { loai: "an" }
 	| { loai: "mo" }
 	| { loai: "khoa"; vi: "het-luot" | "tam-nghi" };
 
+type NoiGop = RouterOutputs["okr"]["objective"]["alignments"][number];
+
 export type KetDong = {
 	ket: "accepted" | "skipped";
 	giaTri: string | null;
 	daHoanTac: boolean;
+	canChinhId: string | null;
 };
+
+function khopDich(g: NoiGop, d: DongHien): boolean {
+	return d.targetKeyResultId !== null
+		? g.targetKeyResultId === d.targetKeyResultId
+		: g.targetKeyResultId === null &&
+				g.targetObjectiveId === d.targetObjectiveId;
+}
+
+export function lienKetVuaTao(
+	truoc: readonly NoiGop[],
+	sau: readonly NoiGop[],
+	d: DongHien,
+): string | null {
+	const cu = new Set(truoc.map((g) => g.alignmentId));
+	const moi = sau.filter((g) => khopDich(g, d) && !cu.has(g.alignmentId));
+	return moi.length === 1 ? (moi[0]?.alignmentId ?? null) : null;
+}
 
 export type NhomGopY = {
 	capBo: DongHien[];
@@ -51,16 +114,18 @@ export type NhomGopY = {
 
 const DA_NOP = ketQuaTroLy.shape.trangThai.enum["da-nop"];
 
-const KHOA_KHI_CHUA_SAN_SANG = {
-	tat: null,
-	"viec-tat": null,
-	"don-vi-chua-bat": null,
+export type LyDoTat = "het-luot" | "tam-nghi" | "chua-bat" | "tam-tat";
+
+const TAT_KHI_CHUA_SAN_SANG = {
+	tat: "tam-tat",
+	"viec-tat": "tam-tat",
+	"don-vi-chua-bat": "chua-bat",
 	"het-tran-thang": "tam-nghi",
 	"het-tran-ngay": "het-luot",
-	"chua-noi-tac-tu": null,
-	"chua-co-khoa-mo-hinh": null,
-	"het-tran-gateway": null,
-} as const satisfies Record<LyDoKhongSanSang, "tam-nghi" | "het-luot" | null>;
+	"chua-noi-tac-tu": "tam-tat",
+	"chua-co-khoa-mo-hinh": "tam-tat",
+	"het-tran-gateway": "tam-tat",
+} as const satisfies Record<LyDoKhongSanSang, LyDoTat>;
 
 const KET_CUA_CACH = {
 	nhan: "accepted",
@@ -82,10 +147,35 @@ function nhomTheoCho(ds: readonly DongHien[]): NhomGopY {
 	return { capBo, viSao, theoKr };
 }
 
-function nhipHoiLai(batDau: number | null, bayGio: number): number | false {
-	return batDau !== null && bayGio - batDau < TRO_LY_OKR_TRAN.tranChoMs
+export function nhipHoiLai(tu: number, bayGio: number): number {
+	return bayGio - tu < TRO_LY_OKR_TRAN.tranChoMs
 		? TRO_LY_OKR_TRAN.hoiLaiMs
-		: false;
+		: TRO_LY_OKR_TRAN.tranChoMs;
+}
+
+const DANG_THEO = new WeakMap<QueryClient, Set<string>>();
+
+function theoDenXong(
+	qc: QueryClient,
+	objectiveId: string,
+	batDau: number,
+	hoi: () => Promise<RouterOutputs["okr"]["troLyDanhSach"]>,
+	xong: () => Promise<void>,
+): void {
+	const dang = DANG_THEO.get(qc) ?? new Set<string>();
+	DANG_THEO.set(qc, dang);
+	if (dang.has(objectiveId)) return;
+	dang.add(objectiveId);
+	const vong = async () => {
+		const ds = await hoi().catch(() => null);
+		if (ds?.dangSoan === true) {
+			setTimeout(() => void vong(), nhipHoiLai(batDau, Date.now()));
+			return;
+		}
+		dang.delete(objectiveId);
+		if (ds !== null) await xong();
+	};
+	setTimeout(() => void vong(), TRO_LY_OKR_TRAN.hoiLaiMs);
 }
 
 type CacheDanhSach = {
@@ -141,17 +231,18 @@ export function useGopYMucTieu({
 	const trpc = useTRPC();
 	const cache = useCrmCache();
 	const qc = useQueryClient();
-	const mTroLy = troLyOkrMessages(useLocale());
+	const locale = useLocale();
+	const mGopY = okrGopYMessages(locale);
 	const coDich = objectiveId !== null;
-	const dich = canEdit
-		? { objectiveId: objectiveId ?? "" }
-		: { objectiveId: objectiveId ?? "", keyResultId: krSuaDuoc[0] };
+	const dich = { objectiveId: objectiveId ?? "" };
 	const nhoDuoc = canEdit || krSuaDuoc.length > 0;
 	const [batDau, setBatDau] = useState<number | null>(null);
+	const [thayDocLuc, setThayDocLuc] = useState<number | null>(null);
 	const [ketCua, setKetCua] = useState<Readonly<Record<string, KetDong>>>({});
 	const [daQuyet, setDaQuyet] = useState<readonly DongHien[]>([]);
 	const [loiDong, setLoiDong] = useState<Readonly<Record<string, string>>>({});
 	const [dangQuyet, setDangQuyet] = useState<string | null>(null);
+	const [noi, setNoi] = useState<string | null>(null);
 	const [thuTu, setThuTu] = useState<readonly string[]>([]);
 	const daDongBo = useRef(false);
 
@@ -166,13 +257,31 @@ export function useGopYMucTieu({
 		retry: false,
 		refetchInterval: (q) =>
 			q.state.data?.dangSoan === true
-				? nhipHoiLai(batDau ?? q.state.dataUpdatedAt, Date.now())
+				? nhipHoiLai(thayDocLuc ?? Date.now(), Date.now())
 				: false,
 	});
 	const deXuat = useMutation(trpc.okr.troLyDeXuat.mutationOptions());
+	const loiNho: LoaiLoiNho | null = deXuat.isError
+		? loaiLoiNho(deXuat.error)
+		: null;
 	const quyetDong = useMutation(trpc.okr.troLyQuyet.mutationOptions());
 	const suaMucTieu = useMutation(trpc.okr.updateObjective.mutationOptions());
 	const suaKr = useMutation(trpc.okr.updateKeyResult.mutationOptions());
+	const goCanChinh = useMutation(trpc.okr.removeAlignment.mutationOptions());
+	const lienKetHienCo = (): readonly NoiGop[] | null =>
+		objectiveId
+			? (qc.getQueryData<RouterOutputs["okr"]["objective"]>(
+					trpc.okr.objective.queryKey({ id: objectiveId }),
+				)?.alignments ?? null)
+			: null;
+	const lienKetSauKhiNhan = async (
+		truoc: readonly NoiGop[] | null,
+		d: DongHien,
+	): Promise<string | null> => {
+		if (truoc === null || !objectiveId) return null;
+		await cache.okr(objectiveId);
+		return lienKetVuaTao(truoc, lienKetHienCo() ?? [], d);
+	};
 
 	const ds = danhSach.data;
 	const dongCho = ds?.dong ?? [];
@@ -199,6 +308,9 @@ export function useGopYMucTieu({
 	);
 	const conCho = dongCho.filter((d) => ketCua[d.id] === undefined).length;
 	const dangSoan = ds?.dangSoan === true;
+	if (dangSoan && thayDocLuc === null) setThayDocLuc(Date.now());
+	if (!dangSoan && thayDocLuc !== null && danhSach.dataUpdatedAt > thayDocLuc)
+		setThayDocLuc(null);
 	const vuaSoan = useRef(false);
 	useEffect(() => {
 		if (vuaSoan.current && !dangSoan && objectiveId)
@@ -206,17 +318,19 @@ export function useGopYMucTieu({
 		vuaSoan.current = dangSoan;
 	}, [dangSoan, objectiveId, cache]);
 	const quaHan =
-		batDau !== null &&
 		dangSoan &&
-		danhSach.dataUpdatedAt - batDau >= TRO_LY_OKR_TRAN.tranChoMs;
+		thayDocLuc !== null &&
+		Math.max(Date.now(), danhSach.dataUpdatedAt) - thayDocLuc >=
+			TRO_LY_OKR_TRAN.tranChoMs;
 	const maKetThuc = ds?.maKetThuc ?? null;
 
 	const noiDung: NoiDungKara = (() => {
-		if (!nhoDuoc || danhSach.isError || (ds?.lyDo ?? null) !== null)
-			return "tat";
-		if (ds === undefined) return "tat";
+		if (!nhoDuoc) return "tat";
+		if (danhSach.isError && ds === undefined) return "tai-loi";
+		if (ds === undefined || ds.lyDo !== null) return "tat";
 		if (tatCa.length > 0) return "co-gop-y";
 		if (!ghiDuoc) return "tat";
+		if (loiNho !== null) return "nho-loi";
 		if (dangSoan && !quaHan) return "dang-doc";
 		if (quaHan || (maKetThuc !== null && maKetThuc !== DA_NOP)) return "loi";
 		if (maKetThuc === DA_NOP) return "rong";
@@ -224,52 +338,85 @@ export function useGopYMucTieu({
 	})();
 
 	const docLai: DocLaiKara = (() => {
+		if (loiNho !== null) return "nho-loi";
 		if (batDau === null) return "yen";
 		if (dangSoan && !quaHan) return "dang-doc";
 		if (quaHan || (maKetThuc !== null && maKetThuc !== DA_NOP)) return "loi";
 		return "yen";
 	})();
 
+	const tat: LyDoTat | null =
+		sanSang.data && !sanSang.data.bat
+			? TAT_KHI_CHUA_SAN_SANG[sanSang.data.lyDo]
+			: null;
+
 	const nut: NutKara = (() => {
 		const s = sanSang.data;
 		if (!s || (dangSoan && !quaHan) || !ghiDuoc) return { loai: "an" };
 		if (s.bat) return { loai: "mo" };
-		const vi = KHOA_KHI_CHUA_SAN_SANG[s.lyDo];
-		return vi === null ? { loai: "an" } : { loai: "khoa", vi };
+		return tat === "het-luot" || tat === "tam-nghi"
+			? { loai: "khoa", vi: tat }
+			: { loai: "an" };
 	})();
 
 	const nho = () => {
 		if (!coDich || nut.loai !== "mo" || deXuat.isPending) return;
-		deXuat.mutate(dich, {
-			onSuccess: (kq) => {
+		const muc = objectiveId ?? "";
+		void deXuat.mutateAsync(dich).then(
+			(kq) => {
 				if (!kq.bat) {
 					void sanSang.refetch();
 					return;
 				}
-				setBatDau(Date.now());
+				const luc = Date.now();
+				setBatDau(luc);
+				setThayDocLuc(luc);
 				void danhSach.refetch();
+				theoDenXong(
+					qc,
+					muc,
+					luc,
+					() =>
+						qc.fetchQuery({
+							...trpc.okr.troLyDanhSach.queryOptions({ objectiveId: muc }),
+							staleTime: 0,
+						}),
+					() => cache.okr(muc),
+				);
 			},
-		});
+			() => void sanSang.refetch(),
+		);
 	};
+
+	const thuLai = () => {
+		if (nut.loai === "mo") nho();
+		else void sanSang.refetch();
+	};
+
+	const baoLoi = (id: string, cause: unknown) =>
+		setLoiDong((cu) => ({ ...cu, [id]: cauLoiDong(cause, mGopY) }));
+	const xoaLoi = (id: string) => setLoiDong(({ [id]: _bo, ...cu }) => cu);
 
 	const quyet = (d: DongHien, cach: CachQuyet, giaTri?: string) => {
 		if (dangQuyet !== null || !ghiDuoc) return;
 		const thuTuNay = tatCa.map((x) => x.id);
+		const truocLienKet =
+			d.loai === "can-chinh" && cach === "nhan" ? lienKetHienCo() : null;
 		setDangQuyet(d.id);
-		setLoiDong(({ [d.id]: _bo, ...cu }) => cu);
-		quyetDong.mutate(
-			{ deXuatId: d.id, cach, giaTri },
-			{
-				onSuccess: (kq) => {
+		xoaLoi(d.id);
+		void quyetDong
+			.mutateAsync({ deXuatId: d.id, cach, giaTri })
+			.then(
+				async (kq) => {
 					if (!kq.ok) {
 						void sanSang.refetch();
-						const s = mTroLy.troLy.sanSang;
 						setLoiDong((cu) => ({
 							...cu,
-							[d.id]: s.chuaSanSang(s.lyDo[kq.lyDo]),
+							[d.id]: mGopY.loiDong["chua-san-sang"],
 						}));
 						return;
 					}
+					const canChinhId = await lienKetSauKhiNhan(truocLienKet, d);
 					setThuTu(thuTuNay);
 					setDaQuyet((cu) => [...cu.filter((x) => x.id !== d.id), d]);
 					setKetCua((cu) => ({
@@ -278,51 +425,85 @@ export function useGopYMucTieu({
 							ket: KET_CUA_CACH[cach],
 							giaTri: giaTri ?? d.sau,
 							daHoanTac: false,
+							canChinhId,
 						},
 					}));
-					if (objectiveId) void cache.okr(objectiveId);
+					if (objectiveId && truocLienKet === null) void cache.okr(objectiveId);
 				},
-				onError: (e) => {
-					if (e.data?.code === "CONFLICT") {
-						void danhSach.refetch();
-						return;
-					}
-					setLoiDong((cu) => ({ ...cu, [d.id]: e.message }));
+				(cause: unknown) => {
+					if (loaiLoiDong(cause) === "da-cu") void danhSach.refetch();
+					baoLoi(d.id, cause);
 				},
-				onSettled: () => setDangQuyet(null),
-			},
-		);
+			)
+			.finally(() => setDangQuyet(null));
 	};
 
-	const hoanTac = (d: DongHien) => {
-		const truoc = d.truoc;
-		if (d.loai !== "viet-lai" || d.truong === null || truoc === null) return;
-		const xong = {
-			onSuccess: () => {
-				setKetCua((cu) => {
-					const k = cu[d.id];
-					return k ? { ...cu, [d.id]: { ...k, daHoanTac: true } } : cu;
-				});
-				if (objectiveId) void cache.okr(objectiveId);
-			},
-			onError: (e: { message: string }) =>
-				setLoiDong((cu) => ({ ...cu, [d.id]: e.message })),
-		};
-		if (d.truong === "kr.title" && d.keyResultId) {
-			suaKr.mutate({ id: d.keyResultId, title: truoc }, xong);
+	const [dangHoan, setDangHoan] = useState<Readonly<Record<string, boolean>>>(
+		{},
+	);
+	const datDangHoan = (id: string, dang: boolean) =>
+		setDangHoan((cu) => ({ ...cu, [id]: dang }));
+
+	const coHoanTac = (d: DongHien): boolean => {
+		const k = ketCua[d.id];
+		if (k?.ket !== "accepted" || k.daHoanTac) return false;
+		if (d.loai === "can-chinh") return k.canChinhId !== null;
+		return d.loai === "viet-lai" && d.truong !== null && d.truoc !== null;
+	};
+
+	const chayHoanTac = async (d: DongHien) => {
+		const canChinhId = ketCua[d.id]?.canChinhId ?? null;
+		if (d.loai === "can-chinh") {
+			if (canChinhId !== null) await goCanChinh.mutateAsync({ id: canChinhId });
 			return;
 		}
-		suaMucTieu.mutate(
+		const truoc = d.truoc ?? "";
+		if (d.truong === "kr.title" && d.keyResultId) {
+			await suaKr.mutateAsync({ id: d.keyResultId, title: truoc });
+			return;
+		}
+		await suaMucTieu.mutateAsync(
 			d.truong === "title"
 				? { id: d.objectiveId, title: truoc }
 				: { id: d.objectiveId, whyNow: truoc },
-			xong,
 		);
 	};
+
+	const hoanTac = async (d: DongHien) => {
+		if (!coHoanTac(d) || dangHoan[d.id]) return;
+		datDangHoan(d.id, true);
+		xoaLoi(d.id);
+		try {
+			await chayHoanTac(d);
+			setKetCua((cu) => {
+				const k = cu[d.id];
+				return k ? { ...cu, [d.id]: { ...k, daHoanTac: true } } : cu;
+			});
+			if (objectiveId) void cache.okr(objectiveId);
+		} catch (cause) {
+			baoLoi(d.id, cause);
+		} finally {
+			datDangHoan(d.id, false);
+		}
+	};
+
+	const trangThai = (id: string): TrangThaiDong => {
+		if (dangHoan[id]) return "dang-hoan-tac";
+		const k = ketCua[id];
+		if (k?.daHoanTac) return "da-hoan-tac";
+		if (k) return "da-quyet";
+		return dangQuyet === id ? "dang-quyet" : "cho";
+	};
+
+	const ban: KaraBusyState =
+		(dangSoan && !quaHan) || deXuat.isPending
+			? { label: mGopY.vung.dangDoc }
+			: null;
 
 	return {
 		noiDung,
 		nut,
+		ban,
 		nho,
 		dangGui: deXuat.isPending,
 		nhom: nhomTheoCho(tatCa),
@@ -332,6 +513,10 @@ export function useGopYMucTieu({
 		loiDong,
 		quyet,
 		hoanTac,
+		coHoanTac,
+		trangThai,
+		noi,
+		datNoi: setNoi,
 		coHoiDoiTrong: dongCho.some(
 			(d) =>
 				d.loai === "hoi" &&
@@ -341,6 +526,10 @@ export function useGopYMucTieu({
 		docLuc: ds?.docLuc ?? null,
 		ghiDuoc,
 		docLai,
+		taiLai: () => void danhSach.refetch(),
+		loiNho,
+		thuLai,
+		tat,
 		daTai: !coDich || !nhoDuoc || danhSach.isError || ds !== undefined,
 	};
 }

@@ -1,4 +1,5 @@
 import { expect, mock } from "bun:test";
+import type { Locale } from "@crm/ui/lib/locale";
 import {
 	QueryClient,
 	QueryClientProvider,
@@ -326,6 +327,7 @@ type Kho = {
 	daGhi: Goi[];
 	daLamMoi: string[];
 	ghiRieng: Map<string, (vao: DauVao) => Promise<KetQuaGhi>>;
+	rieng: Map<string, (vao: DauVao) => object>;
 };
 
 const khoMoi = (): Kho => ({
@@ -338,6 +340,7 @@ const khoMoi = (): Kho => ({
 	daGhi: [],
 	daLamMoi: [],
 	ghiRieng: new Map(),
+	rieng: new Map(),
 });
 
 export const kho: Kho = khoMoi();
@@ -347,6 +350,8 @@ export function datLai(): void {
 }
 
 export function docThuTuc(duong: string, vao: DauVao): object | null {
+	const rieng = kho.rieng.get(duong);
+	if (rieng) return rieng(vao);
 	switch (duong) {
 		case "okr.cycles":
 			return KY;
@@ -391,6 +396,7 @@ export function docThuTuc(duong: string, vao: DauVao): object | null {
 
 export type KetQuaGhi =
 	| { ok: true }
+	| { ok: false; lyDo: string }
 	| { bat: true; taskId: string; dungLai: boolean }
 	| { sessionId: string }
 	| { id: string; canhBao: null };
@@ -519,10 +525,15 @@ export type San = {
 	root: Root;
 	url: () => URLSearchParams;
 	veLai: (man: ReactElement) => Promise<void>;
+	client: QueryClient;
 };
 let dangMo: San[] = [];
 
-export async function dung(man: ReactElement, thamSo = ""): Promise<San> {
+export async function dung(
+	man: ReactElement,
+	thamSo = "",
+	locale: Locale = "vi",
+): Promise<San> {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	const root = createRoot(o);
@@ -541,7 +552,7 @@ export async function dung(man: ReactElement, thamSo = ""): Promise<San> {
 			searchParams={thamSo}
 		>
 			<QueryClientProvider client={client}>
-				<LocaleProvider locale="vi">
+				<LocaleProvider locale={locale}>
 					<TooltipProvider>
 						{noiDung}
 						<Toaster />
@@ -562,6 +573,7 @@ export async function dung(man: ReactElement, thamSo = ""): Promise<San> {
 				root.render(ve(moi));
 			});
 		},
+		client,
 	};
 	dangMo.push(san);
 	return san;

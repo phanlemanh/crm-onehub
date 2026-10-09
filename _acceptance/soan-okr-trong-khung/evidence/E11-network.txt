@@ -1,0 +1,3 @@
+driver: man.mjs (playwright rieng trong phien do), khong qua browser tool cua verifier.
+console: 54/54 o khong co loi console (script kiem moi o).
+network: n-a (driver).

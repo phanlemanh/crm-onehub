@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngưỡng khổ khung soạn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1280px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 72ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Hình 2 · Ngưỡng · soan-okr-trong-khung</p>
+    <h1>Ba dải bề ngang, ba cách bày khung soạn</h1>
+    <p class="sub">Cùng một khung soạn, bày theo bề ngang khung nhìn: từ 1024 hai ô cạnh nhau, từ 768 đến 1023 một khung hai tab, dưới 768 phủ toàn màn. Hình phác cùng tỉ lệ.</p>
+
+    <svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#fafafa"/>
+      <text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">HÌNH 2 · NGƯỠNG KHỔ · AC-3 · AC-6</text>
+      <text x="40" y="80" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">BỀ NGANG KHUNG NHÌN · RỘNG → HẸP</text>
+      <rect x="40" y="96" width="1120" height="384" rx="8" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <line x1="40" y1="224" x2="1160" y2="224" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <line x1="40" y1="352" x2="1160" y2="352" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <text x="64" y="136" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">DẢI 1 · AC-3</text>
+      <text x="64" y="164" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">≥ 1024: hai ô — bản nháp ≤ 800 trái, Kara 380 phải</text>
+      <text x="64" y="264" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">DẢI 2 · AC-6</text>
+      <text x="64" y="292" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">768–1023: khung ≤ 800, hai tab Trò chuyện / Bản nháp</text>
+      <text x="64" y="392" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">DẢI 3 · AC-6</text>
+      <text x="64" y="420" fill="#171717" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="start">&lt; 768: phủ toàn màn, hai tab</text>
+      <rect x="616" y="116" width="520" height="88" rx="4" fill="#f2f2f2" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="660" y="164" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">TRANG NỀN</text>
+      <rect x="708" y="116" width="428" height="88" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <rect x="712" y="120" width="284" height="80" rx="4" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+      <text x="854" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bản nháp</text>
+      <text x="854" y="176" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">≤ 800 · --container-assist</text>
+      <rect x="1000" y="120" width="132" height="80" rx="4" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="1066" y="156" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Kara</text>
+      <text x="1066" y="172" fill="#006B4F" font-size="8" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">380</text>
+      <text x="1066" y="188" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">--container-assist-rail</text>
+      <rect x="768" y="244" width="368" height="88" rx="4" fill="#f2f2f2" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="808" y="292" fill="#666666" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">TRANG NỀN</text>
+      <rect x="848" y="244" width="288" height="88" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="920" y="262" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trò chuyện</text>
+      <text x="1064" y="262" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">Bản nháp</text>
+      <line x1="852" y1="272" x2="1132" y2="272" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <line x1="892" y1="271" x2="948" y2="271" stroke="#171717" stroke-width="1.2"/>
+      <text x="992" y="308" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle">≤ 800 · --container-assist</text>
+      <rect x="1000" y="372" width="136" height="88" rx="4" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="1034" y="390" fill="#171717" font-size="9" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Trò chuyện</text>
+      <text x="1102" y="390" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">Bản nháp</text>
+      <line x1="1004" y1="400" x2="1132" y2="400" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+      <line x1="1006" y1="399" x2="1062" y2="399" stroke="#171717" stroke-width="1.2"/>
+      <text x="40" y="516" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Ghi chú: cột Kara = token <tspan font-family="'Geist Mono', monospace" fill="#171717">--container-assist-rail</tspan>; bản nháp = <tspan font-family="'Geist Mono', monospace" fill="#171717">--container-assist</tspan>.</text>
+      <line x1="40" y1="548" x2="1160" y2="548" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="576" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="start" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <rect x="128" y="567" width="16" height="10" rx="2" fill="#f2f2f2" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="156" y="576" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="start">khung nhìn, trang nền</text>
+      <rect x="312" y="567" width="16" height="10" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="340" y="576" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="start">khung soạn</text>
+      <rect x="436" y="567" width="16" height="10" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="464" y="576" fill="#575757" font-size="11" font-family="'Geist', sans-serif" text-anchor="start">cột Kara</text>
+    </svg>
+
+    <footer>Hình 2 · soan-okr-trong-khung · d-5 và [GIẢ ĐỊNH] ngưỡng khổ 1024 / 768 · Cổng Phạm vi · 2026-10-09</footer>
+  </div>
+</body>
+</html>

@@ -13,6 +13,7 @@ const O = [
 const KET_QUA = ["success", "failure", "cancelled", "skipped"];
 const LENH_TEST = "bun run test -- ${{ matrix.o.loc }}";
 const KHOA_GOC = ["on", "concurrency", "permissions", "env"];
+const NEN_TRUOC_GOP = "1dd4e587bf9d77b9eaa357df6ee1e8950178b169";
 
 const git = (...a) =>
 	execFileSync("git", ["-C", GOC, ...a], { encoding: "utf8" }).trim();
@@ -93,7 +94,7 @@ function ac3(wf) {
 }
 
 const that = readFileSync(join(GOC, TEP), "utf8");
-const goc = git("merge-base", "HEAD", "origin/onehub");
+const goc = NEN_TRUOC_GOP;
 const cu = Bun.YAML.parse(git("show", `${goc}:${TEP}`));
 const kiem = (chu) => {
 	const wf = Bun.YAML.parse(chu);
@@ -144,5 +145,5 @@ if (hong.length > 0) {
 	process.exit(1);
 }
 console.log(
-	`hinh: ${TEP} dung ba job, ma tran ${O.map((x) => x[0]).join(" · ")}, khong troi so voi onehub ${goc.slice(0, 9)}, ci-ok dung 16/16 o; ba chieu do dung cho`,
+	`hinh: ${TEP} dung ba job, ma tran ${O.map((x) => x[0]).join(" · ")}, khong troi so voi nen truoc gop #331 ${goc.slice(0, 9)}, ci-ok dung 16/16 o; ba chieu do dung cho`,
 );
