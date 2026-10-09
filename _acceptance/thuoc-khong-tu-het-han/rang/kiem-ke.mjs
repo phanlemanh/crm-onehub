@@ -7,6 +7,18 @@ import { GOC, MOC_GOC } from "./neo.mjs";
 const TEP_KIEM_KE = join(import.meta.dirname, "..", "kiem-ke.md");
 const MAU = join(import.meta.dirname, "mau-moc-troi");
 const DUOI_MA = /\.(mjs|cjs|js|ts|sh)$/;
+const MA_TRAN_MAU = {
+	"01-origin-onehub.mjs": ["origin/onehub"],
+	"02-onehub-tran.mjs": ["onehub tran"],
+	"03-merge-base.mjs": ["merge-base"],
+	"04-cham-cham-head.mjs": ["..HEAD"],
+	"05-head-n.mjs": ["HEAD~N"],
+	"06-upstream.mjs": ["@{u}"],
+	"07-ls-files.mjs": ["git ls-files khong ref"],
+	"08-diff-khong-ref.mjs": ["git diff khong ref"],
+	"09-neo-sha.mjs": [],
+	"10-neo-sha-show.mjs": [],
+};
 
 export const DANG_TROI = [
 	["origin/onehub", /origin\/onehub/],
@@ -114,13 +126,14 @@ function main() {
 	}
 	const loi = [];
 	const mau = readdirSync(MAU).sort();
-	for (const t of mau) {
+	if (JSON.stringify(mau) !== JSON.stringify(Object.keys(MA_TRAN_MAU).sort())) loi.push(`bo mau tren dia (${mau.join(", ")}) khac ma tran viet truoc`);
+	for (const [t, mong] of Object.entries(MA_TRAN_MAU)) {
 		const dang = dangTroiCua(readFileSync(join(MAU, t), "utf8"), true);
-		const laNeo = t.includes("-neo-");
-		if (laNeo && dang.length) loi.push(`mau ${t}: tep neo sha bi dem (${dang.join(", ")})`);
-		if (!laNeo && dang.length === 0) loi.push(`mau ${t}: dang troi khong bi dem`);
+		if (JSON.stringify(dang) !== JSON.stringify(mong)) loi.push(`mau ${t}: dem ${JSON.stringify(dang)}, mong ${JSON.stringify(mong)}`);
 	}
-	console.log(`bo mau: ${mau.length} tep, ${mau.filter((t) => !t.includes("-neo-")).length} dang troi, ${mau.filter((t) => t.includes("-neo-")).length} neo sha`);
+	const daBao = new Set(Object.values(MA_TRAN_MAU).flat());
+	for (const [ten] of DANG_TROI) if (!daBao.has(ten)) loi.push(`dang troi «${ten}» khong co mau nao`);
+	console.log(`bo mau: ${Object.keys(MA_TRAN_MAU).length} o cua ma tran viet truoc, ${daBao.size}/${DANG_TROI.length} dang troi co mau`);
 	const kk = docKiemKe();
 	if (!kk.sha) loi.push("kiem-ke.md thieu dong sha");
 	else {

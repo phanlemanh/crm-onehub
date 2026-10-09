@@ -14,6 +14,9 @@ function khoiEval(text) {
 	return ra;
 }
 
+const pathsTho = (khoi) =>
+	/\n    paths:\n(?:      - .*(?:\n|$))+/.exec(khoi)?.[0].trim() ?? /\n    paths:\s*\[.*\]/.exec(khoi)?.[0].trim() ?? null;
+
 const boPaths = (khoi) =>
 	khoi
 		.replace(/\n    paths:\n(?:      - .*(?:\n|$))+/, "\n")
@@ -46,7 +49,7 @@ export function soSanhTep(ho, cu, moi, { danhSach, boQua }) {
 		if (boPaths(khoi) !== boPaths(kMoi.get(id))) loi.push(`${ho}/${id}: ${truongDoi(boPaths(khoi), boPaths(kMoi.get(id)))} doi`);
 		const a = JSON.stringify(pCu.get(id) ?? null);
 		const b = JSON.stringify(pMoi.get(id) ?? null);
-		if (a !== b) doiPaths.push(id);
+		if (pathsTho(khoi) !== pathsTho(kMoi.get(id))) doiPaths.push(id);
 		const doi = doiCua.get(id);
 		if (!doi) continue;
 		const mong = (pCu.get(id) ?? []).flatMap((g) => (g in doi ? (doi[g] === null ? [] : [doi[g]]) : [g]));
@@ -80,6 +83,11 @@ function main() {
 		["xoa mot eval", cu.replace(/\n  - id: E12\n(?:(?!\n  - id: )[\s\S])*/, ""), "E12: thieu eval"],
 		["bo sua paths cua mot eval trong danh sach", cu, "E6: paths khong doi"],
 	];
+	const judgment = cu.replace(/(\n  - id: E6\n)/, "$1").replace(/\n  - id: E6\n(?:(?!\n  - id: )[\s\S])*/, (k) => k.replace(/executor: \w+/, "executor: judgment"));
+	const judgmentDoi = judgment.replace(/(\n  - id: E6\n(?:(?!\n  - id: )[\s\S])*?\n    paths:)/, "$1\n      - \"apps/them-moi/**\"");
+	const rJ = soSanhTep("danh-sach-keo-chung", judgment, judgmentDoi, { danhSach: [], boQua: undefined });
+	if (!rJ.doiPaths.includes("E6")) loi.push("chieu do «eval judgment doi paths»: khong vao tap doi paths");
+	else console.log("chieu do «eval judgment doi paths» -> DUNG vao tap doi paths");
 	for (const [ten, moi, can] of gia) {
 		const r = soSanhTep("danh-sach-keo-chung", cu, moi, { danhSach: DANH_SACH.eval, boQua: undefined });
 		if (!r.loi.some((l) => l.includes(can))) loi.push(`chieu do «${ten}»: khong bat «${can}» — ${r.loi.slice(0, 2).join("; ")}`);

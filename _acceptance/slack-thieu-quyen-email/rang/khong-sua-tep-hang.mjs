@@ -81,6 +81,7 @@ for (const [sha, msg] of rieng) {
 console.log(
 	`khong-sua-tep-hang: ${commits.length} commit mang ten, ${tep.size} tep da xet, ${rieng.length} commit rieng cua PR #187 (moc ${GOP_PR.slice(0, 9)})`,
 );
+if (args.includes("--liet-ke")) for (const c of commits) console.log(`commit: ${c}`);
 if (loi.length) {
 	console.error(loi.join("\n"));
 	process.exit(1);

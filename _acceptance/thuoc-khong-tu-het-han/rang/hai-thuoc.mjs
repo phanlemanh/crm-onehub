@@ -75,6 +75,9 @@ function kiemMot(ten, t, cay) {
 		const tap = git("log", "--no-merges", "--format=%H", `--grep=${t.hoSo}`, `a62adb16..${t.neo}^2`).trim().split("\n");
 		if (JSON.stringify(tap) !== JSON.stringify(t.tapCommit)) loi.push(`${ten} tap commit khac danh sach ghim (${tap.length} vs ${t.tapCommit.length})`);
 		if (!moiThat.ra.includes(`${t.tapCommit.length} commit mang ten`)) loi.push(`${ten} ban neo khong in ${t.tapCommit.length} commit mang ten`);
+		const lk = chay(GOC, join(GOC, t.tep), ["--liet-ke"]);
+		const inRa = [...lk.ra.matchAll(/^commit: ([0-9a-f]{40})$/gm)].map((m) => m[1]);
+		if (JSON.stringify(inRa) !== JSON.stringify(t.tapCommit)) loi.push(`${ten} tap sha thuoc in ra (${inRa.length}) khac danh sach ghim (${t.tapCommit.length})`);
 	}
 	const gopDau = git("log", "--first-parent", "--format=%H", "origin/onehub", "--", `_acceptance/${t.hoSo}/contract.md`).trim().split("\n").at(-1);
 	if (gopDau !== t.neo) loi.push(`${ten} commit gop dau tien dua ${t.hoSo} len onehub la ${gopDau.slice(0, 9)}, khong phai ${t.neo.slice(0, 9)}`);

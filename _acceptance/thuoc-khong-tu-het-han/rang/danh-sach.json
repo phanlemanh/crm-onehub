@@ -138,9 +138,9 @@
    "ho_so": "the-gop-y-okr",
    "eval": "E2",
    "doi": {
-    "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx": "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts"
+    "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx": "apps/app/app/(app)/[slug]/okr/the-gop-y-props.ts"
    },
-   "ly_do": "081c9b792 xoa cot-gop-y.tsx, logic gop y doi sang gop-y-kara.ts"
+   "ly_do": "081c9b792 xoa cot-gop-y.tsx; bai packages/ui/test/proposed-change.dom.tsx nhap propsThe tu the-gop-y-props.ts (S4 r1 bat chon nham gop-y-kara.ts)"
   },
   {
    "ho_so": "to-chuc-danh-sach-chi-tiet",
