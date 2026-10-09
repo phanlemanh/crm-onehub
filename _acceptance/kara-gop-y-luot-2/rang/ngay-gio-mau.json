@@ -1,0 +1,24 @@
+{
+	"moc": "2026-10-01T15:56:00.000Z",
+	"vi": {
+		"ngay-gio": "22:56 01/10/2026",
+		"ngay": "01/10/2026",
+		"ngay-thang": "01/10",
+		"gio": "22:56"
+	},
+	"en": {
+		"ngay-gio": "10/01/2026, 22:56",
+		"ngay": "10/01/2026",
+		"ngay-thang": "10/01",
+		"gio": "22:56"
+	},
+	"be-mat": {
+		"nhom-kara": "ngay-gio",
+		"bang-vet": "ngay-gio",
+		"ghi-nhan": "ngay-gio",
+		"trao-doi": "ngay-gio",
+		"nut-soan": "ngay-thang",
+		"danh-sach-cuoc": "ngay",
+		"bang-nhap": "gio"
+	}
+}

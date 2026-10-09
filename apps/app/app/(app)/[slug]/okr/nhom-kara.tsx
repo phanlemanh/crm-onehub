@@ -19,7 +19,7 @@ import type {
 	ProposedChangeDecided,
 	ProposedChangeKind,
 } from "@crm/ui/components/proposed-change";
-import type { Locale } from "@crm/ui/lib/locale";
+import { formatNgayGio } from "@crm/ui/lib/format";
 import { type ReactNode, useId, useState } from "react";
 import {
 	type OkrGopYMessages,
@@ -33,21 +33,6 @@ export type LoiDiKr =
 	| { loai: "kr-moi" }
 	| { loai: "sua-kr"; keyResultId: string }
 	| { loai: "sua-muc-tieu" };
-
-const DINH_DANG_GIO = { vi: "vi-VN", en: "en-US" } satisfies Record<
-	Locale,
-	string
->;
-
-function gioDoc(luc: string, locale: Locale): string {
-	return new Intl.DateTimeFormat(DINH_DANG_GIO[locale], {
-		hour: "2-digit",
-		minute: "2-digit",
-		day: "2-digit",
-		month: "2-digit",
-		timeZone: OKR_CHU_KY.muiGio,
-	}).format(new Date(luc));
-}
 
 function tomTatCua(d: DongHien, m: OkrGopYMessages): string {
 	const ma = d.maVanDe;
@@ -337,7 +322,12 @@ export function VungKara({
 }) {
 	const locale = useLocale();
 	const m = okrGopYMessages(locale);
-	const docLuc = gopY.docLuc ? gioDoc(gopY.docLuc, locale) : undefined;
+	const docLuc = gopY.docLuc
+		? formatNgayGio(gopY.docLuc, locale, {
+				timeZone: OKR_CHU_KY.muiGio,
+				phan: "ngay-gio",
+			})
+		: undefined;
 	switch (gopY.noiDung) {
 		case "tat":
 			return null;
