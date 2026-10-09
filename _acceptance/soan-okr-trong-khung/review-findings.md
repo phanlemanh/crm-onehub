@@ -8,33 +8,27 @@ Không có phát hiện nào trong hợp đồng ở round này.
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **luat.mjs --tu-thu now writes into real tracked source files in the shared worktree instead of a copy**
-  Người dùng thấy gì: Khi chạy kiểm tra nghiệm thu, một bài phá-thử tạm sửa vài tệp thật rồi trả lại. Nếu bài này chạy cùng lúc với các bài đo màn khác, kết quả đo có thể đỏ giả, và nếu bị ngắt giữa chừng thì tệp sửa dở có thể còn sót lại. Người dùng cuối không bị ảnh hưởng, chỉ ảnh hưởng độ tin cậy của lượt kiểm.
-  file: `_acceptance/soan-okr-trong-khung/rang/luat.mjs`
+- **Cột Kara vẫn mang hai tên cùng lúc: đầu dock đã đổi sang «Kara đang soạn…» nhưng lượt đang chạy trong thân vẫn là «Trợ lý OKR đang soạn…»**
+  Người dùng thấy gì: Khi Kara đang soạn, đầu cột ghi «Kara đang soạn…» nhưng ngay bên dưới, trong phần trò chuyện, vẫn ghi «Trợ lý OKR đang soạn…». Người dùng thấy hai tên khác nhau cho cùng một trợ lý AI trong cùng một cột.
+  file: `apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx`
+  severity: medium
+  Đề xuất: new-contract
+
+- **The "one name: Kara" fix only covers the column header; the conversation line still says "Trợ lý OKR"**
+  Người dùng thấy gì: Trong cùng một cột, đầu cột gọi trợ lý là «Kara» còn dòng trò chuyện đang chạy gọi là «Trợ lý OKR». Người dùng có thể tưởng là hai trợ lý khác nhau.
+  file: `apps/app/app/(app)/[slug]/okr/soan/hoi-thoai-soan.tsx`
+  severity: medium
+  Đề xuất: new-contract
+
+- **The new sk-dau test checks only the header for "Trợ lý", so the same column passes while it still shows "Trợ lý OKR"**
+  Người dùng thấy gì: Bài kiểm tra tự động chỉ nhìn đầu cột Kara nên vẫn báo xanh dù phần trò chuyện bên dưới còn gọi trợ lý là «Trợ lý OKR». Lỗi hiển thị tên đó có thể lọt qua mà không ai được báo.
+  file: `apps/app/test/soan-okr-trong-khung.dom.tsx`
   severity: medium
   Đề xuất: known-limits
 
-- **E13 expected text in evals.yaml was not updated to match the new luat.mjs mục 5 check and red cases**
-  Người dùng thấy gì: Phần chữ mô tả bài kiểm trong hồ sơ nghiệm thu còn nói bài kiểm đơn giản hơn thực tế. Người đọc hồ sơ sau này có thể không biết vì sao bài kiểm chặt hơn và có thêm ca thử. Tính năng cho người dùng không đổi.
-  file: `_acceptance/soan-okr-trong-khung/evals.yaml`
-  severity: low
-  Đề xuất: known-limits
-
-- **luat.mjs --tu-thu now edits the real worktree files, but E10 says it works on a copy**
-  Người dùng thấy gì: Bài phá-thử của kiểm tra nghiệm thu sửa thẳng tệp trong cây làm việc dù hồ sơ nói là chạy trên bản sao. Nếu bị ngắt giữa chừng, một tệp sản phẩm có thể còn dòng sửa dở. Đây là rủi ro cho người làm kho, không phải cho người dùng tính năng.
-  file: `_acceptance/soan-okr-trong-khung/rang/luat.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 3 (assert chuỗi có mặt thay cho quan hệ): mục 5 vẫn đo «khung deal ở K5» chỉ bằng /K5/**
-  Người dùng thấy gì: Bài kiểm tài liệu chỉ tìm chữ «K5» chứ chưa chắc câu đó thật sự hẹn dựng khung deal sau này. Nếu ai đó viết ngược nghĩa mà vẫn có chữ K5 thì bài kiểm vẫn qua. Người dùng cuối không thấy gì, nhưng lời hẹn trong tài liệu có thể sai mà không ai bắt được.
-  file: `_acceptance/soan-okr-trong-khung/rang/luat.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 4 (assertion âm tính một mình): E14 đòi nút phòng không còn «Tiếp tục» nhưng chưa lần nào thấy bộ dò coTiep bật**
-  Người dùng thấy gì: Bài kiểm nói nút của phòng không còn «Tiếp tục» sau khi đưa bộ OKR vào, nhưng chưa chứng minh được là nó sẽ báo đỏ nếu nút đó còn hiện. Nếu có lỗi nút «Tiếp tục» vẫn còn, bài kiểm có thể không thấy. Người dùng có thể gặp nút cũ mà không ai biết.
-  file: `_acceptance/soan-okr-trong-khung/rang/man-dua-vao.mjs`
+- **E11/E12 evidence mixes captures from before and after the label fix; the E12 judgment image still shows the old header**
+  Người dùng thấy gì: Một vài ảnh minh chứng cho người duyệt được chụp trước lần sửa nhãn cuối, nên còn hiện chữ «Trợ lý OKR» ở đầu cột. Người duyệt có thể xem một ảnh cũ mà tưởng đó là giao diện hiện tại.
+  file: `_acceptance/soan-okr-trong-khung/evidence/E11-ST-khung-rong-dang-soan-1440-dark.png`
   severity: medium
   Đề xuất: known-limits
 
@@ -71,6 +65,12 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
 - **Tham số tabSoan sót trên URL sau khi đóng khung, lần mở cuộc sau ở khổ hẹp rơi vào tab Bản nháp (r1)**
   Người dùng thấy gì: Trên màn hình hẹp, nếu anh chị đóng khung khi đang ở tab Bản nháp thì lần mở cuộc soạn sau, kể cả cuộc mới chưa có bản nháp, sẽ mở thẳng tab Bản nháp thay vì Trò chuyện.
   file: `apps/app/components/crm/record-sheet/record-stack.ts`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 1 (đo chỉ dẫn thay vì đầu ra): mục 2 grep định nghĩa biến thể trong dock.tsx, không xem cột Kara của khu soạn thực sự dùng biến thể nào (r1)**
+  Người dùng thấy gì: Một kiểm tra phụ chỉ xem bảng kích thước có khai đủ, không xem khung soạn có dùng đúng kích thước đó; kích thước thật vẫn được đo riêng bằng trình duyệt.
+  file: `_acceptance/soan-okr-trong-khung/rang/luat.mjs`
   severity: low
   Đề xuất: known-limits
 

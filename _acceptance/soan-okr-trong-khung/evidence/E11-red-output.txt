@@ -1,0 +1,75 @@
+mot-luot: da cho 48s de toi luot
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_soan_okr_trong_khung_do · app http://localhost:4835 · api http://localhost:4604
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+-- chua co cong agent-okr trong phien — mo phien do rieng
+-- phien do co agent-okr: cay soan-okr-trong-khung-soan · agent-okr cong 51072
+phien-do: kho crm_soan_okr_trong_khung_soan_do · app http://localhost:4717 · api http://localhost:4387
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+AGENT-OKR GIA http://127.0.0.1:51072 · okr.soan
+PHAN ma-tran · chieu do tran-ngang
+   trang thai: ST-khung-dang-mo, ST-khung-hep-rong, ST-khung-dang-soan-dau, ST-khung-rong, ST-khung-rong-dang-soan, ST-khung-hoi-dong, ST-khung-khong-mo, ST-khung-da-dua-vao, ST-khung-dien-thoai (bo ST-khung-chua-cau-hinh) · o vo nghia {"ST-khung-dien-thoai":[1440,1024,768],"ST-khung-rong":[768,375],"ST-khung-rong-dang-soan":[768,375],"ST-khung-da-dua-vao":[768,375]} · so o viet truoc 54, tinh tu bang 54
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-soan-dau 1440 light: dat (khung sheet-content 381.0x1000.0 · hoi 380.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-soan-dau 1440 dark: dat (khung sheet-content 381.0x1000.0 · hoi 380.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-soan-dau 1024 light: dat (khung sheet-content 381.0x768.0 · hoi 380.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-soan-dau 1024 dark: dat (khung sheet-content 381.0x768.0 · hoi 380.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-soan-dau 768 light: dat (khung sheet-content 736.0x1024.0 · hoi 735.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-soan-dau 768 dark: dat (khung sheet-content 736.0x1024.0 · hoi 735.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-soan-dau 375 light: dat (khung drawer-content 375.0x812.0 · hoi 375.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-soan-dau 375 dark: dat (khung drawer-content 375.0x812.0 · hoi 375.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-mo 1440 light: dat (khung sheet-content 162.3x1000.0 · hoi undefined · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-mo 1440 dark: dat (khung sheet-content 162.3x1000.0 · hoi undefined · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-mo 1024 light: dat (khung sheet-content 162.3x768.0 · hoi undefined · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-mo 1024 dark: dat (khung sheet-content 162.3x768.0 · hoi undefined · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-mo 768 light: dat (khung sheet-content 162.3x1024.0 · hoi undefined · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-mo 768 dark: dat (khung sheet-content 162.3x1024.0 · hoi undefined · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-mo 375 light: dat (khung drawer-content 375.0x812.0 · hoi undefined · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-dang-mo 375 dark: dat (khung drawer-content 375.0x812.0 · hoi undefined · nhap undefined)
+   (hop trinh duyet beforeunload — nhan)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-hep-rong 1440 light: dat (khung sheet-content 381.0x1000.0 · hoi 380.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-hep-rong 1440 dark: dat (khung sheet-content 381.0x1000.0 · hoi 380.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-hep-rong 1024 light: dat (khung sheet-content 381.0x768.0 · hoi 380.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-hep-rong 1024 dark: dat (khung sheet-content 381.0x768.0 · hoi 380.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-hep-rong 768 light: dat (khung sheet-content 736.0x1024.0 · hoi 735.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-hep-rong 768 dark: dat (khung sheet-content 736.0x1024.0 · hoi 735.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-hep-rong 375 light: dat (khung drawer-content 375.0x812.0 · hoi 375.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-hep-rong 375 dark: dat (khung drawer-content 375.0x812.0 · hoi 375.0 · nhap undefined)
+   (dot bien: ban nhap min-w 1200px)
+   ST-khung-rong 1440 light: TRAN ngang (scrollWidth 1440/1440; vuot mep: hoi-thoai 1233..1613) · ban nhap 1200.0 > A 800.0 (khung sheet-content 1408.0x1000.0 · hoi 380.0 · nhap 1200.0)
+   o tran dau tien: ST-khung-rong 1440 light
+KET LUAN: 1 SAI — ma thoat 1
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 1
+EXIT=1

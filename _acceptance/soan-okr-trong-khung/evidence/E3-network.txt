@@ -1,1 +1,2 @@
-network: driver la man.mjs (Playwright noi bo qua mot-luot.sh), khong co duong doc network tu tool; khong ghi duoc
+driver: script man.mjs (playwright trong tien-de), khong co read_network_requests
+networkObserved: n-a (driver)

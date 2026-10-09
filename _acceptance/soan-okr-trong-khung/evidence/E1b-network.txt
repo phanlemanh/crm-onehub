@@ -1,3 +1,1 @@
-E1b network: driver la script Playwright trong man.mjs, khong co tool doc network rieng
-Console (script): DUNG console khong loi (0)
-28:DUNG console khong loi (0)
+driver: man.mjs (Playwright script), khong co read_network_requests. Console: DUNG console khong loi (0). networkObserved=n-a (driver)

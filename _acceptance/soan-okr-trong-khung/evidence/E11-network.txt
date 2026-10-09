@@ -1,3 +1,3 @@
 driver: man.mjs (playwright rieng trong phien do), khong qua browser tool cua verifier.
-console loi: script kiem moi o (54/54 khong co loi console), in "console nguyen van" khi co - lan nay khong in dong nao.
-network: khong doc duoc bang tool verifier -> n-a (driver).
+console: 54/54 o khong co loi console (script kiem moi o).
+network: n-a (driver).
