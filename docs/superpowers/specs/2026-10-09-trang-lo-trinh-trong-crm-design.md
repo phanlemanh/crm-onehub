@@ -52,14 +52,19 @@ một bộ lọc riêng.
 - **Đầu trang:** tiêu đề «Lộ trình» + một câu; không nút hành động (trang chỉ xem).
 - **Một danh sách cho mọi lộ trình của kho** (bảng dữ liệu dùng chung `DataTable`), thanh công cụ đúng thứ tự
   của Thoả thuận: ô tìm (câu mô tả, mã) · thẻ vòng đời «Chưa xong» (mặc định) / «Đã giao» / «Xếp lại sau» /
-  «Tất cả» (như «Đang mở / Đã đóng» của Thoả thuận, «Đang chạy / Đã đóng» của Onboarding) · «Bảng | Bảng cột»
+  «Tất cả» (như «Đang mở / Đã đóng» của Thoả thuận, «Đang chạy / Đã đóng» của Onboarding) · «Bảng | Bảng cột | Mốc»
   · bên phải: «Lọc» (ba chiều riêng: **Lộ trình**, **Nhóm**, **Mốc** — mốc có «Trễ mốc» và «Chưa hẹn mốc»),
   «Sắp xếp», «Cột», nút bật «Đã bác» (như «Lưu trữ» của Thoả thuận).
 - **Cột:** Việc (câu mô tả đậm + mã · nhóm · số chỗ lệch) · Lộ trình (ẩn dưới md) · Trạng thái (ẩn dưới sm;
-  khổ hẹp hiện dưới câu mô tả) · Mốc (ngày, nhãn «Trễ»). Mặc định xếp theo mốc gần nhất. Dòng tổng dưới bảng
+  khổ hẹp hiện dưới câu mô tả) · Mốc (ngày, dưới là «còn n ngày» hoặc nhãn «Trễ n ngày» — theo ý dòng
+  «12 days left» của block ReUI `data-grid-filtering-4`). Mặc định xếp theo mốc gần nhất. Dòng tổng dưới bảng
   và phân trang như Thoả thuận.
-- **Bảng cột:** `Board` chỉ đọc của Thoả thuận; thanh công cụ thêm **«Chia cột theo»** Trạng thái / Nhóm / Mốc /
-  Lộ trình — đúng nếp «Chia cột theo» của Onboarding. Chia theo mốc cho dòng thời gian các mốc.
+- **Có việc trễ → khung cảnh báo trên bảng** «n việc đã qua mốc mà chưa giao» kèm nút «Xem việc trễ» (đặt bộ lọc
+  Mốc = Trễ mốc) — thay cho dải «ghim rủi ro» của `data-grid-filtering-4` bằng thành phần của kho.
+- **Cách xem «Mốc»:** dòng thời gian các mốc có việc trong phạm vi lọc, ngày nằm trên thanh bên trái (bố cục ví dụ
+  ReUI `c-timeline-2`, dựng bằng `Timeline` đã cài), mỗi mốc liệt việc gắn với nó; cuối là «Chưa hẹn mốc» gập.
+- **Bảng cột:** `Board` chỉ đọc của Thoả thuận; thanh công cụ thêm **«Chia cột theo»** Trạng thái / Nhóm / Lộ
+  trình — đúng nếp «Chia cột theo» của Onboarding. Mốc không chia cột (16 cột cuộn ngang) mà có cách xem riêng.
 - **Bấm một dòng/thẻ → ngăn hồ sơ bên phải** như hồ sơ thoả thuận: tiêu đề, dải bốn ô (Trạng thái · Mốc · Lộ
   trình · Nhóm), cờ lệch, «Chi tiết» (coi là thành công khi, vì sao), «Cần xong trước», «Việc đang chờ việc
   này» (bấm để chuyển).

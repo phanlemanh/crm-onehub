@@ -1,7 +1,12 @@
 "use client";
 
 import Search from "@carbon/icons-react/es/Search";
-import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
+import {
+	Alert,
+	AlertAction,
+	AlertDescription,
+	AlertTitle,
+} from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
 import { Board, type BoardColumn } from "@crm/ui/components/board";
 import { Button } from "@crm/ui/components/button";
@@ -35,6 +40,16 @@ import {
 	ItemGroup,
 	ItemTitle,
 } from "@crm/ui/components/item";
+import {
+	Timeline,
+	TimelineContent,
+	TimelineDate,
+	TimelineHeader,
+	TimelineIndicator,
+	TimelineItem,
+	TimelineSeparator,
+	TimelineTitle,
+} from "@crm/ui/components/reui/timeline";
 import { SectionHeading } from "@crm/ui/components/section-heading";
 import {
 	Sheet,
@@ -113,8 +128,8 @@ const KHONG_NHOM = "__khong-nhom";
 const KHONG_MOC = "__khong-moc";
 const TRE = "__tre";
 
-export type CachXem = "bang" | "bang-cot";
-export type ChiaCot = "trang-thai" | "nhom" | "moc" | "lo-trinh";
+export type CachXem = "bang" | "bang-cot" | "dong-thoi-gian";
+export type ChiaCot = "trang-thai" | "nhom" | "lo-trinh";
 
 export type BanDau = {
 	xem: CachXem;
@@ -139,8 +154,19 @@ type Viec = Hang & {
 	loTen: string;
 	moc: Moc | undefined;
 	tre: boolean;
+	conNgay: number | null;
 	khoa: string;
 };
+
+function soNgay(tu: string, toi: string) {
+	const a = Date.UTC(
+		...(tu.split("-").map(Number) as [number, number, number]),
+	);
+	const b = Date.UTC(
+		...(toi.split("-").map(Number) as [number, number, number]),
+	);
+	return Math.round((b - a) / 86400000);
+}
 
 function viecTre(loTrinh: LoTrinh, homNay: string) {
 	const theoMa = new Map(loTrinh.hang.map((h) => [h.ma, h]));
@@ -179,6 +205,10 @@ function phangViec(duLieu: DuLieu, homNay: string | null): Viec[] {
 			loTen: lo.ten ?? lo.tep,
 			moc: theoMoc.get(h.ma),
 			tre: tre.has(h.ma),
+			conNgay:
+				homNay !== null && theoMoc.get(h.ma)
+					? soNgay(homNay, theoMoc.get(h.ma)?.ngay ?? homNay)
+					: null,
 			khoa: `${lo.tep}#${h.ma}`,
 		}));
 	});
@@ -301,15 +331,28 @@ function TrangThai({ v }: { v: Hang }) {
 	);
 }
 
+function ChuConNgay({ v }: { v: Viec }) {
+	if (v.conNgay === null || v.nhom_trang_thai === "da-giao") return null;
+	if (v.tre)
+		return <Badge variant="outline">Trễ {Math.abs(v.conNgay)} ngày</Badge>;
+	if (v.conNgay === 0)
+		return <span className="text-muted-foreground text-xs">hôm nay</span>;
+	return (
+		<span className="text-muted-foreground text-xs tabular-nums">
+			còn {v.conNgay} ngày
+		</span>
+	);
+}
+
 function OMoc({ v }: { v: Viec }) {
 	if (!v.moc) return <EmptyCellValue />;
 	return (
 		<span
-			className="inline-flex items-center gap-2"
+			className="inline-flex flex-col items-end gap-0.5"
 			data-lo-trinh-moc-viec={v.moc.ngay}
 		>
-			{ngayDep(v.moc.ngay)}
-			{v.tre ? <Badge variant="outline">Trễ</Badge> : null}
+			<span className="tabular-nums">{ngayDep(v.moc.ngay)}</span>
+			<ChuConNgay v={v} />
 		</span>
 	);
 }
@@ -389,7 +432,8 @@ function NutCachXem({
 		<ToggleGroup
 			aria-label="Cách xem"
 			onValueChange={(v) => {
-				if (v === "bang" || v === "bang-cot") doiXem(v);
+				if (v === "bang" || v === "bang-cot" || v === "dong-thoi-gian")
+					doiXem(v);
 			}}
 			size="sm"
 			spacing={0}
@@ -399,6 +443,7 @@ function NutCachXem({
 		>
 			<ToggleGroupItem value="bang">Bảng</ToggleGroupItem>
 			<ToggleGroupItem value="bang-cot">Bảng cột</ToggleGroupItem>
+			<ToggleGroupItem value="dong-thoi-gian">Mốc</ToggleGroupItem>
 		</ToggleGroup>
 	);
 }
@@ -406,7 +451,6 @@ function NutCachXem({
 const CACH_CHIA: { v: ChiaCot; nhan: string }[] = [
 	{ v: "trang-thai", nhan: "Trạng thái" },
 	{ v: "nhom", nhan: "Nhóm" },
-	{ v: "moc", nhan: "Mốc" },
 	{ v: "lo-trinh", nhan: "Lộ trình" },
 ];
 
@@ -469,10 +513,7 @@ function cotBangCot(viec: Viec[], chia: ChiaCot): BoardColumn[] {
 			);
 		else if (chia === "nhom")
 			them(v.nhom || KHONG_NHOM, v.nhom || "Không nhóm", v.nhom || "~", v);
-		else if (chia === "lo-trinh") them(v.loTep, v.loTen, v.loTep, v);
-		else if (v.moc)
-			them(khoaMoc(v), `${ngayDep(v.moc.ngay)} · ${v.moc.ten}`, v.moc.ngay, v);
-		else them(KHONG_MOC, "Chưa hẹn mốc", "9999", v);
+		else them(v.loTep, v.loTen, v.loTep, v);
 	}
 	return [...nhom.entries()]
 		.sort((a, b) => a[1].thuTu.localeCompare(b[1].thuTu))
@@ -668,6 +709,103 @@ function BangDaBac({ duLieu }: { duLieu: DuLieu }) {
 	);
 }
 
+function DongThoiGian({
+	viec,
+	duLieu,
+	homNay,
+	moViec,
+}: {
+	viec: Viec[];
+	duLieu: DuLieu;
+	homNay: string | null;
+	moViec: (k: string) => void;
+}) {
+	const theoKhoa = new Map<string, { moc: Moc; lo: string; ds: Viec[] }>();
+	for (const lo of duLieu.lo_trinh)
+		for (const m of lo.moc)
+			theoKhoa.set(`${lo.tep}@${m.ngay}@${m.ten}`, {
+				moc: m,
+				lo: lo.ten ?? lo.tep,
+				ds: [],
+			});
+	for (const v of viec) theoKhoa.get(khoaMoc(v))?.ds.push(v);
+	const mocs = [...theoKhoa.values()]
+		.filter((x) => x.ds.length > 0)
+		.sort((a, b) => a.moc.ngay.localeCompare(b.moc.ngay));
+	const daQua =
+		homNay === null ? 0 : mocs.filter((x) => x.moc.ngay < homNay).length;
+	const khongMoc = viec.filter((v) => !v.moc);
+	if (!mocs.length && !khongMoc.length)
+		return (
+			<KhungTrong
+				ca="khong-khop"
+				moTa="Không việc nào khớp bộ lọc đang chọn."
+				tieuDe="Không có việc"
+			/>
+		);
+	return (
+		<div className="flex flex-col gap-6 rounded-lg border bg-card p-4 md:p-6">
+			<Timeline value={daQua}>
+				{mocs.map((x, i) => (
+					<TimelineItem
+						className="sm:group-data-[orientation=vertical]/timeline:ms-36"
+						data-lo-trinh-moc={x.moc.ngay}
+						key={`${x.lo}-${x.moc.ngay}-${x.moc.ten}`}
+						step={i + 1}
+					>
+						<TimelineHeader>
+							<TimelineSeparator />
+							<TimelineDate className="tabular-nums sm:group-data-[orientation=vertical]/timeline:absolute sm:group-data-[orientation=vertical]/timeline:-left-36 sm:group-data-[orientation=vertical]/timeline:w-24 sm:group-data-[orientation=vertical]/timeline:text-right">
+								{ngayDep(x.moc.ngay)}
+							</TimelineDate>
+							<TimelineTitle className="sm:-mt-0.5" translate="no">
+								{x.moc.ten}
+							</TimelineTitle>
+							<TimelineIndicator />
+						</TimelineHeader>
+						<TimelineContent className="flex flex-col gap-2 pt-1">
+							<span className="text-muted-foreground text-xs" translate="no">
+								{x.lo}
+							</span>
+							<ItemGroup className="gap-1">
+								{x.ds.map((v) => (
+									<DongLienQuan key={v.khoa} moViec={moViec} x={v} />
+								))}
+							</ItemGroup>
+						</TimelineContent>
+					</TimelineItem>
+				))}
+			</Timeline>
+			{khongMoc.length ? (
+				<Collapsible className="flex flex-col gap-2">
+					<SectionHeading
+						actions={
+							<CollapsibleTrigger asChild>
+								<Button size="sm" variant="ghost">
+									Xem
+								</Button>
+							</CollapsibleTrigger>
+						}
+						level={4}
+					>
+						Chưa hẹn mốc{" "}
+						<span className="text-muted-foreground tabular-nums">
+							{khongMoc.length}
+						</span>
+					</SectionHeading>
+					<CollapsibleContent>
+						<ItemGroup className="gap-1">
+							{khongMoc.map((v) => (
+								<DongLienQuan key={v.khoa} moViec={moViec} x={v} />
+							))}
+						</ItemGroup>
+					</CollapsibleContent>
+				</Collapsible>
+			) : null}
+		</div>
+	);
+}
+
 function DanhSach({
 	duLieu,
 	canhBao,
@@ -816,6 +954,23 @@ function DanhSach({
 					<ChiTietDoi chu={l.loi ?? ""} />
 				</Alert>
 			))}
+			{!daBac && soTre && !query.filters.moc?.includes(TRE) ? (
+				<Alert data-lo-trinh-tre variant="warning">
+					<AlertTitle>{soTre} việc đã qua mốc mà chưa giao</AlertTitle>
+					<AlertDescription>
+						Việc gắn một mốc đã qua mà kế hoạch chưa ghi là đã giao.
+					</AlertDescription>
+					<AlertAction>
+						<Button
+							onClick={() => query.setFilter("moc", [TRE])}
+							size="sm"
+							variant="outline"
+						>
+							Xem việc trễ
+						</Button>
+					</AlertAction>
+				</Alert>
+			) : null}
 			{daBac ? (
 				<div className="flex flex-col gap-3">
 					<div className="flex flex-wrap items-center justify-between gap-2">
@@ -825,6 +980,29 @@ function DanhSach({
 						{nutDaBac}
 					</div>
 					<BangDaBac duLieu={duLieu} />
+				</div>
+			) : xem === "dong-thoi-gian" ? (
+				<div className="flex min-w-0 flex-col gap-3">
+					<div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+						<TimViec doiQ={doiQ} q={q} />
+						<DataTableFacetMenu
+							counts={facetCounts}
+							facets={facets}
+							filters={query.filters}
+							onFilterChange={query.setFilter}
+						/>
+						<div className="flex gap-2 sm:ml-auto">
+							<NutCachXem doiXem={doiXem} xem={xem} />
+							{nutDaBac}
+						</div>
+					</div>
+					<DongThoiGian
+						duLieu={duLieu}
+						homNay={homNay}
+						moViec={doiChon}
+						viec={quaTab}
+					/>
+					<span className="text-muted-foreground text-sm">{meta}</span>
 				</div>
 			) : xem === "bang-cot" ? (
 				<div className="flex min-w-0 flex-col gap-3">

@@ -13,7 +13,7 @@ states: [ST-lotrinh-day-du, ST-lotrinh-tab, ST-lotrinh-loc, ST-lotrinh-tre, ST-l
 breakpoints: [mobile-375, desktop-1280]
 themes: [light, dark]
 patched: 14
-deferred: 3
+deferred: 4
 ---
 # design-pass — trang-lo-trinh-trong-crm
 
@@ -96,3 +96,10 @@ không cài vào crm. Các trạng thái lỗi dùng đúng câu của hàm `doc
 - Cột khai độ rộng bằng lớp tỉ lệ như Thoả thuận (`w-[14%]`…); khai «10rem» bị bảng dùng chung bỏ qua và bóp cột «Việc».
 - Ba lộ trình gộp vào một danh sách (cùng một kho — không trái «mỗi kho một trang»); lộ trình thành một bộ lọc và một cột.
 - Bỏ bốn ô số và mục «Dành cho đội sản phẩm» (việc kế tiếp, chỗ cần sửa): Thoả thuận không có ô số; thứ của đội sản phẩm đã có ở LO-TRINH.html.
+
+### Lượt ReUI (09/10, «có block/component nào đẹp và phù hợp hơn mà UX tương tự»)
+
+- Loại theo `docs/reui.md`: `data-grid`, `filters` (hệ bảng thứ hai cạnh DataTable), `gantt` và block dựng trên nó (kéo Base UI), `timeline-8` (Base UI). Không cài gì; lệnh xem thử `ui:add --dry-run --view` không ghi tệp.
+- Lấy bố cục, dựng bằng thành phần kho: «còn n ngày / Trễ n ngày» dưới ngày mốc và khung báo việc trễ có nút lọc (từ `data-grid-filtering-4`); cách xem «Mốc» với thanh ngày bên trái (từ ví dụ `c-timeline-2`, trên `Timeline` đã cài).
+- Bỏ: nhóm theo trạng thái ngay trong bảng (`solution-agents-2`) — thêm kiểu xem mà Thoả thuận không có; bộ đếm ở đầu trang — Thoả thuận để dòng tổng dưới bảng.
+- Nhóm 2 mới: thanh ngày bên trái của dòng thời gian đang đặt bằng lớp vị trí tại chỗ gọi (như ví dụ ReUI); `docs/design.md` đòi biến thể trong `packages/ui` — thêm biến thể «thanh ngày» cho `Timeline` ở S3.
