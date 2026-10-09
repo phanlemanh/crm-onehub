@@ -274,6 +274,19 @@ export function DealsTable() {
 		</ToggleGroup>
 	);
 
+	const archivedButton = (
+		<Button
+			variant={input.archived ? "contrast" : "outline"}
+			size="sm"
+			className="justify-start sm:justify-center"
+			aria-pressed={input.archived}
+			onClick={() => toggleArchived(!input.archived)}
+		>
+			<Archive data-icon="inline-start" />
+			{m.archivedToggle}
+		</Button>
+	);
+
 	if (board) {
 		return (
 			<div className="flex min-w-0 flex-col gap-3">
@@ -285,7 +298,10 @@ export function DealsTable() {
 						onFilterChange={query.setFilter}
 						counts={facetCounts}
 					/>
-					<div className="sm:ml-auto">{viewToggle}</div>
+					<div className="flex gap-2 sm:ml-auto">
+						{archivedButton}
+						{viewToggle}
+					</div>
 				</div>
 				<DealsBoard input={dealBoardInputFrom(input)} />
 			</div>
@@ -297,17 +313,7 @@ export function DealsTable() {
 			query={query}
 			search={<ListSearch placeholder={m.search} />}
 			leadingActions={viewToggle}
-			actions={
-				<Button
-					variant={input.archived ? "contrast" : "outline"}
-					size="sm"
-					className="justify-start sm:justify-center"
-					onClick={() => toggleArchived(!input.archived)}
-				>
-					<Archive data-icon="inline-start" />
-					{m.archivedToggle}
-				</Button>
-			}
+			actions={archivedButton}
 			columns={columns}
 			rows={rows}
 			total={deals.data?.total ?? 0}

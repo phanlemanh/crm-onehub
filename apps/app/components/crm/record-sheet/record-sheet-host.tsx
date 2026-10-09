@@ -12,8 +12,13 @@ import { ObjectiveSheet } from "./objective-sheet";
 import { PlanSheet } from "./plan-sheet";
 import { type RecordRef, recordKey, useRecordStack } from "./record-stack";
 import { SoKrSheet } from "./so-kr-sheet";
+import { SoanSheet } from "./soan-sheet";
 
-export function RecordSheetHost() {
+export function RecordSheetHost({
+	cauNoiOkr = false,
+}: {
+	cauNoiOkr?: boolean;
+}) {
 	const { stack, top, closeAll } = useRecordStack();
 
 	const [shown, setShown] = useState<RecordRef | null>(top);
@@ -25,6 +30,7 @@ export function RecordSheetHost() {
 		<>
 			<DetailSheet
 				open={stack.length > 0}
+				size={shown?.kind === "soan" ? "kara" : undefined}
 				onOpenChange={(next) => {
 					if (!next) closeAll();
 				}}
@@ -55,6 +61,14 @@ export function RecordSheetHost() {
 
 				{shown?.kind === "kr" ? (
 					<KrSheet key={recordKey(shown)} keyResultId={shown.id} />
+				) : null}
+
+				{shown?.kind === "soan" ? (
+					<SoanSheet
+						key={recordKey(shown)}
+						cuocSoanId={shown.id}
+						cauNoi={cauNoiOkr}
+					/>
 				) : null}
 			</DetailSheet>
 

@@ -20,6 +20,7 @@ const MO_COI = join(GOC, MO_COI_TUONG_DOI);
 const MAT_TRANG_SOAN = [
 	"apps/app/app/(app)/[slug]/okr/soan",
 	"apps/app/app/proto/_modules/soan-okr-trang-rieng",
+	"apps/app/app/proto/_modules/soan-okr-trong-khung",
 ];
 const NHAP_ARTIFACT =
 	/^import\s*(?:type\s*)?\{[^}]*\}\s*from\s*["']@crm\/ui\/components\/kara\/artifact["'];?\n/gm;

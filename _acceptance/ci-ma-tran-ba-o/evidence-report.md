@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 06d8b5620fe5ab0676d4dd72408dc9d2b6910884
+verified_commit: 052f8add12de078e8c08a93baa034e900c24594e
 human_signoff: Phan Le Manh 2026-10-09 — ký Cổng 2 trên verdict PASS 5/5 eval (S4 vòng 1, wf_776b90a1-496). Ngoài-1..4 (thước do-7-ngay.mjs) và hai phát hiện trong hợp đồng mức thấp gom vào hợp đồng mới; Ngoài-5, 6 ghi Known limits; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
@@ -120,3 +120,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1, E2, E3, E4, E5 passed; all suite commands green. No iteration needed.
+
+### Re-pin lần 1 — 2026-10-09, do hoá cũ do onehub đổi packages/*/package.json, lộ ra khi F22 thay E5
+run_id: repin-20261009T143926Z-45852
+sha: 052f8add12de078e8c08a93baa034e900c24594e · suites: 7 lệnh exit 0 · evals: 4/4 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E5 · thay bởi hồ sơ đã ký: E5→thuoc-7-ngay-loc-pr#AC-4 · AC không có chốt máy: AC-6 · chập chờn (đỏ lần đầu, đạt khi chạy lại): suite 4/7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

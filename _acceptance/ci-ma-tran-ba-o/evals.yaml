@@ -63,6 +63,8 @@ evals:
     criterion: AC-6
     executor: script
     cmd: config:executors.script.cmtb_do_7_ngay
+    status: not-run
+    superseded_by: thuoc-7-ngay-loc-pr#AC-4
     paths:
       - "_acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs"
     expected: |

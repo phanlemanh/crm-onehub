@@ -1,0 +1,42 @@
+mot-luot: da cho 201s de toi luot
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: kho crm_soan_okr_trong_khung_do · app http://localhost:4289 · api http://localhost:4609
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+-- chua co cong agent-okr trong phien — mo phien do rieng
+-- phien do co agent-okr: cay soan-okr-trong-khung-soan · agent-okr cong 63575
+phien-do: kho crm_soan_okr_trong_khung_soan_do · app http://localhost:4815 · api http://localhost:4327
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+AGENT-OKR GIA http://127.0.0.1:63575 · okr.soan
+PHAN luot
+   mo hinh gia: luot cham 8000 ms roi nop
+   dong: hop hoi true · bam «Đóng» true · khung dong true
+   dong: CSDL truoc soLuot 1 · so lan nop 0 — sau soLuot 2 · so lan nop 1
+   chung trang dong: mo lai: /onehub-center/okr/theo-don-vi?kyOkr=mau-okr-chu-ky-nam-ke&donOkr=pb:mau-okr-pb-kd-bac&record=soan:cmv110zyn0003kttysfirm9y9 · khung sheet-content[kara] · tieu de «Soạn OKR»
+   ANH _acceptance/soan-okr-trong-khung/evidence/E8-dong-mo-lai.png
+   dong: mo lai (khong tai lai trang: true) → ban nhap 2 Muc tieu ["Mục tiêu 1 · Cam kết","Mục tiêu 2 · Tham vọng"] · moc loi 0
+dong: dat
+   chong: mo lai khung soan bang tai trang (goto URL co record=soan) — nuqs khong nhan record doi tu ngoai sau khi chinh no da ghi (loi san co, ngoai AC-8)
+   chung trang chong: Muc tieu: /onehub-center/okr/theo-don-vi?kyOkr=mau-okr-chu-ky-nam-ke&donOkr=pb%3Amau-okr-pb-kd-bac&record=soan%3Acmv110zyn0003kttysfirm9y9%2Cobjective%3Amau-okr-mt-q3-kd-bac · khung sheet-content[2xl] · tieu de «Mở rộng tệp đối tác bán lẻ miền Bắc»
+   chung trang chong: quay lai khung soan: /onehub-center/okr/theo-don-vi?kyOkr=mau-okr-chu-ky-nam-ke&donOkr=pb:mau-okr-pb-kd-bac&record=soan:cmv110zyn0003kttysfirm9y9 · khung sheet-content[kara] · tieu de «Soạn OKR»
+   ANH _acceptance/soan-okr-trong-khung/evidence/E8-chong-quay-lai.png
+   chong: CSDL truoc soLuot 2 · so lan nop 1 — sau soLuot 3 · so lan nop 2
+   chong: khung Muc tieu mau-okr-mt-q3-kd-bac hien true · nut «Quay lại» true · quay lai thay Kara dang soan true · ban nhap moi «Đối tác lớn gắn bó lâu dài» true
+chong: dat
+   (hop trinh duyet beforeunload — nhan)
+   chung trang tai lai: khung mo lai tu URL: /onehub-center/okr/theo-don-vi?kyOkr=mau-okr-chu-ky-nam-ke&donOkr=pb:mau-okr-pb-kd-bac&record=soan:cmv110zyn0003kttysfirm9y9 · khung sheet-content[kara] · tieu de «Soạn OKR»
+   ANH _acceptance/soan-okr-trong-khung/evidence/E8-tai-lai.png
+   tai lai: CSDL truoc soLuot 3 · so lan nop 2 — sau soLuot 4 · so lan nop 3
+   tai lai: hop trinh duyet khi dang soan ["beforeunload"] · sau tai lai thay Kara dang soan true · ban nhap moi «Giữ chân đối tác lớn» true · hop khi Kara ranh []
+tai lai: dat
+KET LUAN: 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+EXIT=0
