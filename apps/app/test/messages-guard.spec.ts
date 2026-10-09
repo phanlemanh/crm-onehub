@@ -245,6 +245,10 @@ const GHIM_OKR_GOP_Y = {
 		"Đã hoàn tác — tên KR trở lại «1»",
 		"Đã hoàn tác — tên KR trở lại «12»",
 	],
+	"okr-gop-y:bienNhan.hoanTacCanChinh": [
+		"Đã hoàn tác — bỏ góp vào «1»",
+		"Đã hoàn tác — bỏ góp vào «12»",
+	],
 	"okr-gop-y:bienNhan.hoanTacMucTieu": [
 		"Đã hoàn tác — tên Mục tiêu trở lại «1»",
 		"Đã hoàn tác — tên Mục tiêu trở lại «12»",

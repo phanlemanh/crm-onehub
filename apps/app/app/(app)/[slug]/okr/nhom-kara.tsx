@@ -70,6 +70,8 @@ function chuBienNhan(
 		return m.bienNhan.boQuaHoi(tomTatCua(d, m));
 	}
 	if (k.daHoanTac) {
+		if (d.loai === "can-chinh")
+			return m.bienNhan.hoanTacCanChinh(d.tenDich ?? "");
 		if (d.truong === "whyNow") return m.bienNhan.hoanTacViSao;
 		if (d.truong === "title") return m.bienNhan.hoanTacMucTieu(d.truoc ?? "");
 		return m.bienNhan.hoanTacKr(d.truoc ?? "");

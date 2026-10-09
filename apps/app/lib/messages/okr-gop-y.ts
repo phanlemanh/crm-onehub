@@ -52,6 +52,7 @@ const vi = {
 		hoanTacMucTieu: (cu: string) =>
 			`Đã hoàn tác — tên Mục tiêu trở lại «${cu}»`,
 		hoanTacViSao: "Đã hoàn tác — câu cũ trở lại",
+		hoanTacCanChinh: (ten: string) => `Đã hoàn tác — bỏ góp vào «${ten}»`,
 		boQuaTen: (sau: string) => `Đã bỏ qua tên Kara đề xuất: «${sau}»`,
 		boQuaCau: (sau: string) => `Đã bỏ qua câu Kara đề xuất: «${sau}»`,
 		boQuaCanChinh: (ten: string) => `Đã bỏ qua góp ý góp vào «${ten}»`,
@@ -173,6 +174,8 @@ const en: OkrGopYMessages = {
 		hoanTacMucTieu: (cu: string) =>
 			`Undone — the Objective name is back to “${cu}”`,
 		hoanTacViSao: "Undone — the previous wording is back",
+		hoanTacCanChinh: (ten: string) =>
+			`Undone — no longer contributes to “${ten}”`,
 		boQuaTen: (sau: string) => `Skipped the name Kara suggested: “${sau}”`,
 		boQuaCau: (sau: string) => `Skipped Kara's wording: “${sau}”`,
 		boQuaCanChinh: (ten: string) => `Skipped aligning to “${ten}”`,

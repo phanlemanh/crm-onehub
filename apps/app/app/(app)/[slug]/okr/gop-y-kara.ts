@@ -80,11 +80,31 @@ export type NutKara =
 	| { loai: "mo" }
 	| { loai: "khoa"; vi: "het-luot" | "tam-nghi" };
 
+type NoiGop = RouterOutputs["okr"]["objective"]["alignments"][number];
+
 export type KetDong = {
 	ket: "accepted" | "skipped";
 	giaTri: string | null;
 	daHoanTac: boolean;
+	canChinhId: string | null;
 };
+
+function khopDich(g: NoiGop, d: DongHien): boolean {
+	return d.targetKeyResultId !== null
+		? g.targetKeyResultId === d.targetKeyResultId
+		: g.targetKeyResultId === null &&
+				g.targetObjectiveId === d.targetObjectiveId;
+}
+
+export function lienKetVuaTao(
+	truoc: readonly NoiGop[],
+	sau: readonly NoiGop[],
+	d: DongHien,
+): string | null {
+	const cu = new Set(truoc.map((g) => g.alignmentId));
+	const moi = sau.filter((g) => khopDich(g, d) && !cu.has(g.alignmentId));
+	return moi.length === 1 ? (moi[0]?.alignmentId ?? null) : null;
+}
 
 export type NhomGopY = {
 	capBo: DongHien[];
@@ -223,6 +243,21 @@ export function useGopYMucTieu({
 	const quyetDong = useMutation(trpc.okr.troLyQuyet.mutationOptions());
 	const suaMucTieu = useMutation(trpc.okr.updateObjective.mutationOptions());
 	const suaKr = useMutation(trpc.okr.updateKeyResult.mutationOptions());
+	const goCanChinh = useMutation(trpc.okr.removeAlignment.mutationOptions());
+	const lienKetHienCo = (): readonly NoiGop[] | null =>
+		objectiveId
+			? (qc.getQueryData<RouterOutputs["okr"]["objective"]>(
+					trpc.okr.objective.queryKey({ id: objectiveId }),
+				)?.alignments ?? null)
+			: null;
+	const lienKetSauKhiNhan = async (
+		truoc: readonly NoiGop[] | null,
+		d: DongHien,
+	): Promise<string | null> => {
+		if (truoc === null || !objectiveId) return null;
+		await cache.okr(objectiveId);
+		return lienKetVuaTao(truoc, lienKetHienCo() ?? [], d);
+	};
 
 	const ds = danhSach.data;
 	const dongCho = ds?.dong ?? [];
@@ -328,12 +363,14 @@ export function useGopYMucTieu({
 	const quyet = (d: DongHien, cach: CachQuyet, giaTri?: string) => {
 		if (dangQuyet !== null || !ghiDuoc) return;
 		const thuTuNay = tatCa.map((x) => x.id);
+		const truocLienKet =
+			d.loai === "can-chinh" && cach === "nhan" ? lienKetHienCo() : null;
 		setDangQuyet(d.id);
 		xoaLoi(d.id);
 		void quyetDong
 			.mutateAsync({ deXuatId: d.id, cach, giaTri })
 			.then(
-				(kq) => {
+				async (kq) => {
 					if (!kq.ok) {
 						void sanSang.refetch();
 						setLoiDong((cu) => ({
@@ -342,6 +379,7 @@ export function useGopYMucTieu({
 						}));
 						return;
 					}
+					const canChinhId = await lienKetSauKhiNhan(truocLienKet, d);
 					setThuTu(thuTuNay);
 					setDaQuyet((cu) => [...cu.filter((x) => x.id !== d.id), d]);
 					setKetCua((cu) => ({
@@ -350,9 +388,10 @@ export function useGopYMucTieu({
 							ket: KET_CUA_CACH[cach],
 							giaTri: giaTri ?? d.sau,
 							daHoanTac: false,
+							canChinhId,
 						},
 					}));
-					if (objectiveId) void cache.okr(objectiveId);
+					if (objectiveId && truocLienKet === null) void cache.okr(objectiveId);
 				},
 				(cause: unknown) => {
 					if (loaiLoiDong(cause) === "da-cu") void danhSach.refetch();
@@ -371,10 +410,16 @@ export function useGopYMucTieu({
 	const coHoanTac = (d: DongHien): boolean => {
 		const k = ketCua[d.id];
 		if (k?.ket !== "accepted" || k.daHoanTac) return false;
+		if (d.loai === "can-chinh") return k.canChinhId !== null;
 		return d.loai === "viet-lai" && d.truong !== null && d.truoc !== null;
 	};
 
 	const chayHoanTac = async (d: DongHien) => {
+		const canChinhId = ketCua[d.id]?.canChinhId ?? null;
+		if (d.loai === "can-chinh") {
+			if (canChinhId !== null) await goCanChinh.mutateAsync({ id: canChinhId });
+			return;
+		}
 		const truoc = d.truoc ?? "";
 		if (d.truong === "kr.title" && d.keyResultId) {
 			await suaKr.mutateAsync({ id: d.keyResultId, title: truoc });

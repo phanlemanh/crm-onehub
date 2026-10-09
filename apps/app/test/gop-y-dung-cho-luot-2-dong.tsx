@@ -4,6 +4,7 @@ import {
 	bamChuot,
 	chiTietTu,
 	cho,
+	D_CAN,
 	D_KR1,
 	D_KR2,
 	deXuat,
@@ -19,10 +20,12 @@ import {
 	mtSheet,
 	nhip,
 	nut,
+	nutCo,
 	qs,
 	thaoHet,
 	ui,
 } from "./khung-gop-y-dung-cho";
+import { lienKet, type NoiGop } from "./khung-gop-y-luot-2";
 
 describe("k3-loi-dong", () => {
 	const LOI = [
@@ -150,6 +153,142 @@ describe("k3-hai-hoan", () => {
 			{ loiKr1: loiCua(D_KR1.id), kr2: tt(D_KR2.id) },
 			{ loiKr1: m.loiDong["da-cu"], kr2: "da-hoan-tac" },
 			(k) => `hai hoan tac sai: ${k}`,
+		);
+	});
+});
+
+describe("k3-can-chinh", () => {
+	const X = "kr-goc";
+	const MA_TRAN = [
+		{
+			ten: "khac-dich",
+			truoc: [lienKet("y-cu", "kr-khac")],
+			sau: [lienKet("y-cu", "kr-khac"), lienKet("x-moi", X)],
+			go: "x-moi",
+		},
+		{
+			ten: "cung-dich",
+			truoc: [lienKet("x-cu", X)],
+			sau: [lienKet("x-cu", X), lienKet("x-moi", X)],
+			go: "x-moi",
+		},
+		{
+			ten: "khong-tao-moi",
+			truoc: [lienKet("x-cu", X)],
+			sau: [lienKet("x-cu", X)],
+			go: null,
+		},
+		{
+			ten: "hai-lien-ket-moi-cung-dich",
+			truoc: [],
+			sau: [lienKet("x-moi-1", X), lienKet("x-moi-2", X)],
+			go: null,
+		},
+	] as const;
+
+	async function nhanCanChinh(
+		ca: { truoc: readonly NoiGop[]; sau: readonly NoiGop[] },
+		goDi: string[],
+		goLoi: Error | null,
+	) {
+		let daNhan = false;
+		kho.chiTiet = () =>
+			chiTietTu(
+				mtSheet({
+					soGopYCho: 1,
+					alignments: [...(daNhan ? ca.sau : ca.truoc)],
+				}),
+			);
+		kho.troLy = () => dsTroLy([D_CAN]);
+		kho.ghiRieng.set("okr.troLyQuyet", async () => {
+			daNhan = true;
+			return { ok: true };
+		});
+		kho.ghiRieng.set("okr.removeAlignment", async (vao) => {
+			goDi.push(String(vao?.id));
+			if (goLoi) throw goLoi;
+			return { ok: true };
+		});
+		await dungSheet();
+		await cho(() => deXuat(D_CAN.id) !== null, "gop y can chinh");
+		await bamChuot(nut(m.dong.canChinh, deXuat(D_CAN.id) ?? document.body));
+		await cho(
+			() =>
+				qs(
+					"[data-slot=proposed-change-receipt]",
+					deXuat(D_CAN.id) ?? document.body,
+				) !== null,
+			"bien nhan can chinh",
+		);
+		await nhip(6);
+	}
+
+	test("k3-can-chinh nhan -> lam moi -> Hoan tac: go dung lien ket vua tao, khong bao gio go lien ket co tu truoc", async () => {
+		for (const ca of MA_TRAN) {
+			const goDi: string[] = [];
+			await nhanCanChinh(ca, goDi, null);
+			const dong = deXuat(D_CAN.id) ?? document.body;
+			const nutHoan = nutCo(ui.proposedChange.undo, dong);
+			if (ca.go === null) {
+				kiemCa(
+					{ coHoanTac: nutHoan !== null },
+					{ coHoanTac: false },
+					() => `${ca.ten}: co Hoan tac du khong biet lien ket nao vua tao`,
+				);
+				await thaoHet();
+				continue;
+			}
+			if (!nutHoan) throw new Error(`${ca.ten}: bien nhan khong co Hoan tac`);
+			await bamChuot(nutHoan);
+			await cho(() => goDi.length > 0, `${ca.ten} goi go lien ket`);
+			if (goDi.some((id) => id !== ca.go))
+				throw new Error(`go nham lien ket: ${goDi.join(",")}`);
+			await cho(
+				() =>
+					deXuat(D_CAN.id)?.getAttribute("data-trang-thai") === "da-hoan-tac",
+				`${ca.ten} ve cho`,
+			);
+			kiemCa(
+				{
+					soLan: goDi.length,
+					chu:
+						qs(
+							"[data-slot=proposed-change-decided]",
+							deXuat(D_CAN.id) ?? document.body,
+						)?.textContent ?? null,
+				},
+				{ soLan: 1, chu: m.bienNhan.hoanTacCanChinh(D_CAN.tenDich ?? "") },
+				(k) => `${ca.ten} sai: ${k}`,
+			);
+			await thaoHet();
+		}
+	});
+
+	test("k3-can-chinh Hoan tac loi thi cau loi duoi bien nhan, bien nhan con", async () => {
+		const goDi: string[] = [];
+		await nhanCanChinh(
+			MA_TRAN[1],
+			goDi,
+			new LoiTrpc("NOT_FOUND", "Không có căn chỉnh clx77"),
+		);
+		await bamChuot(
+			nut(ui.proposedChange.undo, deXuat(D_CAN.id) ?? document.body),
+		);
+		await cho(
+			() =>
+				qs("[data-slot=field-error]", deXuat(D_CAN.id) ?? document.body) !==
+				null,
+			"loi hoan tac",
+		);
+		kiemCa(
+			{
+				loi:
+					qs("[data-slot=field-error]", deXuat(D_CAN.id) ?? document.body)
+						?.textContent ?? null,
+				trangThai: deXuat(D_CAN.id)?.getAttribute("data-trang-thai") ?? null,
+			},
+			{ loi: m.loiDong["khong-con"], trangThai: "da-quyet" },
+			(k) => `hoan tac loi sai: ${k}`,
 		);
 	});
 });
