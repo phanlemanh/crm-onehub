@@ -15,6 +15,8 @@ const CA_THAT = [
 const DOI_CHUNG_DONG = "expect(await probe()).toHaveLength(rows);";
 const SO_DOI_CHUNG = 2;
 const DONG_MA = /^-export const ma = /;
+const DONG_MA_THEM = /^\+export const ma = /;
+const DAU_CHU_CAI = "const chuCai = ";
 
 function git(args) {
 	const r = spawnSync("git", args, {
@@ -31,6 +33,16 @@ function git(args) {
 
 const dongBo = (diff) =>
 	diff.split("\n").filter((d) => d.startsWith("-") && !d.startsWith("---"));
+const dongThem = (diff) =>
+	diff.split("\n").filter((d) => d.startsWith("+") && !d.startsWith("+++"));
+
+function khoiChuCai(chu) {
+	const dong = chu.split("\n");
+	const dau = dong.findIndex((d) => d.startsWith(DAU_CHU_CAI));
+	if (dau < 0) return new Set();
+	const cuoi = dong.findIndex((d, i) => i > dau && d === "};");
+	return new Set(cuoi < 0 ? [] : dong.slice(dau, cuoi + 1));
+}
 
 export function kiemDanhSach(ds) {
 	if (ds.length === 0) return { ma: 2, dong: ["diff rong"] };
@@ -53,8 +65,14 @@ function thanCa(chu, ten) {
 export const LUAT = {
 	chiThem: (tep, diff) =>
 		dongBo(diff).length > 0 ? `${tep}: co dong bo` : null,
-	gieo: (diff) =>
-		dongBo(diff).every((d) => DONG_MA.test(d)) ? null : "gieo.ts: doi ngoai ma",
+	gieo: (diff, chuMoi) => {
+		const khoi = khoiChuCai(chuMoi);
+		const boLa = dongBo(diff).some((d) => !DONG_MA.test(d));
+		const themLa = dongThem(diff).some(
+			(d) => !DONG_MA_THEM.test(d) && !khoi.has(d.slice(1)),
+		);
+		return boLa || themLa ? "gieo.ts: doi ngoai ma" : null;
+	},
 	tasks: (cu, moi) => {
 		for (const ten of CA_THAT) {
 			const than = thanCa(cu, ten);
@@ -68,6 +86,8 @@ export const LUAT = {
 	},
 };
 
+const GIEO_MOI = git(["show", `HEAD:${GIEO}`]);
+const GIEO_THEM = `--- a/${GIEO}\n+++ b/${GIEO}\n@@ -5,0 +6 @@\n+export const X = 1;`;
 const GIEO_HONG = `--- a/${GIEO}\n+++ b/${GIEO}\n@@ -4 +4 @@\n-export const TIEN_TO = "sokr-";\n+export const TIEN_TO = "sokr2-";`;
 const DOI_CHUNG = [
 	["rong", () => kiemDanhSach([]), 2, "diff rong"],
@@ -86,7 +106,16 @@ const DOI_CHUNG = [
 	[
 		"tien to gieo",
 		() => {
-			const loi = LUAT.gieo(GIEO_HONG);
+			const loi = LUAT.gieo(GIEO_HONG, GIEO_MOI);
+			return { ma: loi ? 1 : 0, dong: loi ? [loi] : [] };
+		},
+		1,
+		"gieo.ts: doi ngoai ma",
+	],
+	[
+		"them export gieo",
+		() => {
+			const loi = LUAT.gieo(GIEO_THEM, GIEO_MOI);
 			return { ma: loi ? 1 : 0, dong: loi ? [loi] : [] };
 		},
 		1,
@@ -118,7 +147,7 @@ for (const tep of [CONFIG, GOI_SPEC]) {
 	const l = LUAT.chiThem(tep, diffCua(tep));
 	if (l) loi.push(l);
 }
-const lGieo = LUAT.gieo(diffCua(GIEO));
+const lGieo = LUAT.gieo(diffCua(GIEO), GIEO_MOI);
 if (lGieo) loi.push(lGieo);
 const tasksCu = git(["show", `${coSo}:${TASKS}`]);
 const tasksMoi = git(["show", `HEAD:${TASKS}`]);

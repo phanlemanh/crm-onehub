@@ -16,12 +16,12 @@ const GOI_DONG_HO = `bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLE
 const ID_TRONG_GOI = `bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/goi-soan.integration.spec.ts -t id-trong-goi"`;
 const ANALYZE = '\t\tawait db.$executeRaw`ANALYZE "agentTask"`;\n';
 const TRUONG_THONG_KE = [
-	"reltuples=",
-	"relpages=",
-	"so_trang=",
-	"n_dead_tup=",
-	"last_analyze=",
-	"last_autoanalyze=",
+	["reltuples", /\breltuples=3(?=\s)/],
+	["relpages", /\brelpages=\d+(?=\s)/],
+	["so_trang", /\bso_trang=\d+(?=\s)/],
+	["n_dead_tup", /\bn_dead_tup=\d+(?=\s)/],
+	["last_analyze", /\blast_analyze=\d{4}-\d\d-\d\dT/],
+	["last_autoanalyze", /\blast_autoanalyze=(null|\d{4}-\d\d-\d\dT)/],
 ];
 const CA_FROM =
 	'\tit("the fixture bites: a subquery joined in FROM hands out every row", async () => {\n\t\tawait staleStatistics(MAX_ATTEMPTS);\n';
@@ -58,7 +58,7 @@ const BANG = [
 		ten: "d bo-tra-autovacuum",
 		lenh: KHOI_TASKS,
 		tep: TASKS,
-		cu: "\t\tawait autovacuumRestore(reloptionsBefore);\n",
+		cu: "\tawait autovacuumRestore(reloptionsBefore);\n",
 		moi: "",
 		ghim: "autovacuum khong duoc tra lai",
 	},
@@ -111,7 +111,9 @@ try {
 		}
 		const dong = dongLoi(sau.ra, cap.ghim);
 		const thieu = cap.duTruong
-			? TRUONG_THONG_KE.filter((t) => !dong?.includes(t))
+			? TRUONG_THONG_KE.filter(([, mau]) => !mau.test(dong ?? "")).map(
+					([t]) => t,
+				)
 			: [];
 		const dat = truoc.ma === 0 && sau.ma !== 0 && dong && thieu.length === 0;
 		console.log(

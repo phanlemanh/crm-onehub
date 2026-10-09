@@ -314,6 +314,17 @@ async function autovacuumRestore(before: string[] | null): Promise<void> {
 	);
 }
 
+let reloptionsBefore: string[] | null = null;
+
+async function tatTrongKhoi(): Promise<void> {
+	reloptionsBefore = await autovacuumOff();
+}
+
+async function traSauKhoi(): Promise<void> {
+	await autovacuumRestore(reloptionsBefore);
+	restoredReloptions.value = reloptionsBefore;
+}
+
 describe("a limited lock subquery when the planner re-runs it per row", () => {
 	const limit = 2;
 	const rows = 3;
@@ -338,12 +349,14 @@ describe("a limited lock subquery when the planner re-runs it per row", () => {
 		await insert(0, attempts);
 		await db.$executeRaw`ANALYZE "agentTask"`;
 		for (let index = 1; index < rows; index++) await insert(index, attempts);
+	}
+
+	async function reltuplesNow(): Promise<number> {
 		const [stats] = await db.$queryRaw<{ reltuples: number }[]>`
 			SELECT reltuples::float8 AS reltuples FROM pg_class WHERE relname = 'agentTask'
 		`;
-		if (!stats || stats.reltuples > 1) {
-			throw new Error(`statistics drifted: reltuples=${stats?.reltuples}`);
-		}
+		if (!stats) throw new Error("khong doc duoc reltuples cua agentTask");
+		return stats.reltuples;
 	}
 
 	const PROBE_SQL = `UPDATE "agentTask" AS t SET "outcome" = 'probe' FROM (SELECT c.id FROM "agentTask" AS c WHERE c.kind = '${kind}' AND c."finishedAt" IS NULL ORDER BY c."dueAt" ASC LIMIT ${limit} FOR UPDATE SKIP LOCKED) AS due WHERE t.id = due.id RETURNING t.id`;
@@ -375,18 +388,13 @@ describe("a limited lock subquery when the planner re-runs it per row", () => {
 
 	async function probe() {
 		const got = await db.$queryRawUnsafe<{ id: string }[]>(PROBE_SQL);
-		if (got.length !== rows) await planChanged(got.length);
+		if (got.length !== rows || (await reltuplesNow()) > 1)
+			await planChanged(got.length);
 		return got;
 	}
 
-	let reloptionsBefore: string[] | null = null;
-	beforeAll(async () => {
-		reloptionsBefore = await autovacuumOff();
-	});
-	afterAll(async () => {
-		await autovacuumRestore(reloptionsBefore);
-		restoredReloptions.value = reloptionsBefore;
-	});
+	beforeAll(tatTrongKhoi);
+	afterAll(traSauKhoi);
 
 	it("autovacuum stays off for the whole block", async () => {
 		if (!(await reloptions())?.includes(AUTOVACUUM_OFF))
@@ -441,10 +449,14 @@ describe("a limited lock subquery: autovacuum already off before the block", () 
 			`ALTER TABLE "agentTask" SET (${AUTOVACUUM_OFF})`,
 		);
 		try {
-			const before = await autovacuumOff();
-			await autovacuumRestore(before);
-			if (!(await reloptions())?.includes(AUTOVACUUM_OFF))
-				throw new Error("autovacuum khong duoc tra lai");
+			const preset = await reloptions();
+			await tatTrongKhoi();
+			await traSauKhoi();
+			const now = await reloptions();
+			if (JSON.stringify(now) !== JSON.stringify(preset))
+				throw new Error(
+					`autovacuum khong duoc tra lai: ${JSON.stringify(now)} khac ${JSON.stringify(preset)}`,
+				);
 		} finally {
 			await autovacuumRestore(original);
 		}
