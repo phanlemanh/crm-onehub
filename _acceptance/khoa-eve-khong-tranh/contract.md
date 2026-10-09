@@ -5,7 +5,7 @@ slug: khoa-eve-khong-tranh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T00:16:06Z
 design_doc: _acceptance/khoa-eve-khong-tranh/design.md
@@ -66,3 +66,10 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 
 - Không migration. Không đổi mã sản phẩm.
 - Tệp ngoài ranh giới hàng: không có (`config.yaml` chỉ thêm dòng).
+- Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-09 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 2:
+  - Ngoài-2: `gianhKhoaCu` không bắt lỗi khi trả tên khoá về sau dấu lệch, và lần đổi tên đầu nuốt mọi lỗi, nên lỗi thiếu quyền hiện ra là «khoa dang bi giu».
+  - Ngoài-4: ba lượt tranh một gốc, lượt thứ ba tạo khoá đúng khe trả tên: `renameSync` đè khoá rỗng mới (hai lượt cùng tin mình giữ khoá) hoặc ném `ENOTEMPTY` và để khoá sống dưới tên `.cu-*`.
+  - Ngoài-5: chủ khoá gọi `traKhoaEve` hay thoát đúng lúc khoá bị đổi tên đi thì không gỡ được; khoá trả về mang pid không ai giữ, các lượt sau chờ đủ 5 phút.
+  - Ngoài-6: không bài nào kiểm rằng chủ thật vẫn tự gỡ được khoá của mình.
+  - Ngoài-7: dòng (1) của `ghi-tron` không thể đỏ ở lần lấy khoá đầu.
+- Mở hợp đồng mới (Ngoài-3): `moEve` để `eve dev` vừa sinh chạy mồ côi khi `ghiConVaoKhoa` ném lỗi, lượt sau trên cùng gốc đỏ «A dev server is already running».
