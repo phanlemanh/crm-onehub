@@ -4,7 +4,16 @@ import { WORKSPACE_ID, workspaceSlug } from "@crm/db/workspace";
 export const TIEN_TO = "sokr-";
 export const BAN_CHUONG_TRINH = 8_100_001;
 let dem = 0;
-export const ma = () => `${TIEN_TO}${Date.now().toString(36)}x${++dem}`;
+const chuCai = (n: number): string => {
+	let ra = "";
+	let con = n;
+	do {
+		ra = String.fromCharCode(97 + (con % 26)) + ra;
+		con = Math.floor(con / 26);
+	} while (con > 0);
+	return ra;
+};
+export const ma = () => `${TIEN_TO}${chuCai(Date.now())}x${chuCai(++dem)}`;
 
 export async function moXuong(): Promise<void> {
 	await db.organization.upsert({

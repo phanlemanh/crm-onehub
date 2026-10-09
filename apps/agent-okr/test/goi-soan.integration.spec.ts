@@ -413,6 +413,43 @@ describe("goi-soan", () => {
 		]);
 	});
 
+	test("id-trong-goi: id cấp trên và ứng viên Căn chỉnh mang dãy số không vào soTrongGoi; số thật vẫn còn", async () => {
+		const goi = await goiCua(canh.cuocSoanId);
+		const mucTieu = goi.lop2a.capTren[0];
+		const ungVien = goi.lop2a.ungVienCanChinh[0];
+		if (!mucTieu || !ungVien)
+			throw new Error("goi khong co muc tieu cap tren hay ung vien can chinh");
+		const maTran: [string, string, string][] = [
+			["capTren", "cid26x", "26"],
+			["ungVienCanChinh", "cid4071x", "4071"],
+		];
+		const kiemGoc = await goiKiemTu(goi, { soNguoiGo: new Set() });
+		for (const [, , so] of maTran)
+			if (kiemGoc.soTrongGoi.has(so))
+				throw new Error(`goi goc da co so ${so}, ca khong do duoc`);
+		const banSao: GoiSoan = {
+			...goi,
+			lop2a: {
+				...goi.lop2a,
+				capTren: [{ ...mucTieu, id: "cid26x" }, ...goi.lop2a.capTren.slice(1)],
+				ungVienCanChinh: [
+					{ ...ungVien, id: "cid4071x" },
+					...goi.lop2a.ungVienCanChinh.slice(1),
+				],
+			},
+		};
+		const kiem = await goiKiemTu(banSao, { soNguoiGo: new Set() });
+		for (const [, , so] of maTran)
+			if (kiem.soTrongGoi.has(so))
+				throw new Error(`id trong goi bi trich so: ${so}`);
+		for (const so of ["85", "70", "18"])
+			if (!kiem.soTrongGoi.has(so))
+				throw new Error(`go id lam mat so that: ${so}`);
+		expect(goiThanhChiDan(banSao)).toContain("cid26x");
+		expect(goiThanhChiDan(banSao)).toContain("cid4071x");
+		expect(maTran.length).toBe(2);
+	});
+
 	test("instructions/goi: session.started đọc cuocSoanId và vai từ initiator, không đúc phiên, không có turn.started", async () => {
 		expect(Object.keys(phienBatDau)).toEqual(["session.started"]);
 		const cu = await docCuoc(db, canh.cuocSoanId);
