@@ -210,10 +210,11 @@ evals:
       - "apps/app/test/ke-hoach-sheet.dom.tsx"
       - "apps/app/test/moi-phia-ke-hoach.dom.tsx"
       - "apps/app/test/han-viec.dom.tsx"
+      - "apps/app/test/may-nhac.dom.tsx"
       - "_acceptance/dieu-phoi-va/rang/khong-xoa-expect.mjs"
     expected: |
-      rang/khong-xoa-expect.mjs (khuon cua giai-doan-mac-dinh, TEP = nam tep tren, --moc bat buoc) --tu-thu roi --moc d0ccad984:
-      moi cau expect( o moc con nguyen (chuan hoa khoang trang ngoai chuoi) -> thoat 0; roi chay lai nam tep bang lenh test
+      rang/khong-xoa-expect.mjs (khuon cua giai-doan-mac-dinh, TEP = sau tep tren, --moc bat buoc) --tu-thu roi --moc d0ccad984:
+      moi cau expect( o moc con nguyen (chuan hoa khoang trang ngoai chuoi) -> thoat 0; roi chay lai sau tep bang lenh test
       cua kho va bun run check-types, tat ca thoat 0.
       CHIEU DO: --tu-thu sua mot ky tu trong chuoi cua mot expect -> do voi thong diep ghim "expect bi sua".
 
