@@ -1382,6 +1382,8 @@ executors:
     cccl_cho_route: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t cho-route"
     mcl_lop: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/menu-con-dich-vao.dom.tsx -t lop-dich
     mcl_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- packages/ui/test/data-table-loc-ro.dom.tsx packages/ui/test/data-table-locale.spec.tsx packages/ui/test/render-diff.spec.tsx packages/ui/test/lai-ra-man.spec.tsx apps/app/test/bang-crm-loc-ro.dom.tsx && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx ./test/data-table-locale.spec.tsx ./test/render-diff.spec.tsx ./test/lai-ra-man.spec.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-crm-loc-ro.dom.tsx'
+    kcs_don_vi: 'node --test "scripts/kiem-cheo/test/*.test.mjs"'
+    kcs_lich: node --test scripts/dieu-phoi/test/lich.test.mjs
     dsk_dang_luu: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/sortable-save-list.dom.tsx -t dang-luu
     dsk_loi: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/sortable-save-list.dom.tsx -t loi
     dsk_hoan_tac: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/sortable-save-list.dom.tsx -t hoan-tac
@@ -2146,6 +2148,9 @@ executors:
     zghl_chup: AGENT_URL=http://127.0.0.1:3591 AGENT_BRIDGE_SECRET=bi-mat-chup-h4 bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/zalo-gui-hong-ghi-ly-do/rang/chup.mjs"
     mcl_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/menu-con-loc-dien-thoai/rang/do-man.mjs"'
     mcl_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target packages/ui/src/components/dropdown-menu.tsx --mode static && bun _acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs'
+    kcs_pha_thu: node _acceptance/kiem-cheo-sau-gop/rang/pha-thu.mjs
+    kcs_ranh_gioi: node _acceptance/kiem-cheo-sau-gop/rang/ranh-gioi.mjs
+    kcs_kho_that: node _acceptance/kiem-cheo-sau-gop/rang/kho-that.mjs
     dsk_do_man: 'APP_URL=${APP_URL:-http://localhost:3340} API_URL=${API_URL:-http://localhost:3341} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/danh-sach-keo-chung/rang/do-man.mjs"'
     dsk_mot_thanh_phan: bun _acceptance/danh-sach-keo-chung/rang/mot-thanh-phan.mjs --tu-thu && bun _acceptance/danh-sach-keo-chung/rang/mot-thanh-phan.mjs
     dsk_san_thiet_ke: bun _acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs --tu-thu && bun _acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs
