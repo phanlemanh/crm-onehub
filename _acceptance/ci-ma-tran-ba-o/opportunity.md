@@ -35,10 +35,10 @@ phối xếp lượt gộp theo thời gian CI.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- Câu hỏi phép đo trả lời: `[đề xuất]` CI của mọi PR vào `onehub` xong nhanh hơn rõ rệt mà không bỏ sót gói nào và không huỷ vì trần.
-- Kết quả nào là SỐNG: `[đề xuất]` Trong 7 ngày sau khi gộp: job dài nhất của lượt xanh có trung vị ≤ 15′ (trên ≥ 10 lượt); 0 lượt huỷ vì trần; mọi gói có test chạy ở đúng một ô.
-- Kết quả nào là CHẾT: `[đề xuất]` Có lượt huỷ vì trần, hoặc một gói có test không chạy ở ô nào, hoặc job dài nhất có trung vị > 20′.
-- Timebox: `[đề xuất]` làm ngay trong đợt `sau-14-10` (dãy P4, ưu tiên 1); đo lần đầu 7 ngày sau ngày gộp.
+- Câu hỏi phép đo trả lời: CI của mọi PR vào `onehub` xong nhanh hơn rõ rệt mà không bỏ sót gói nào và không huỷ vì trần.
+- Kết quả nào là SỐNG: Trong 7 ngày sau khi gộp: job dài nhất của lượt xanh có trung vị ≤ 15′ (trên ≥ 10 lượt); 0 lượt huỷ vì trần; mọi gói có test chạy ở đúng một ô.
+- Kết quả nào là CHẾT: Có lượt huỷ vì trần, hoặc một gói có test không chạy ở ô nào, hoặc job dài nhất có trung vị > 20′.
+- Timebox: làm ngay trong đợt `sau-14-10` (dãy P4, ưu tiên 1); đo lần đầu 7 ngày sau ngày gộp.
 
 ## Hạng mục cùng lớp
 
