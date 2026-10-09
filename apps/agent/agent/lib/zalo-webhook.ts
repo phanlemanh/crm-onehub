@@ -1,4 +1,6 @@
 import { createHash, timingSafeEqual } from "node:crypto";
+import { db } from "@crm/db";
+import { SETTINGS_ID } from "@crm/db/settings";
 import {
 	type MoTaThanWebhook,
 	moTaThanWebhook,
@@ -16,7 +18,27 @@ export type PhuThuocWebhook = {
 	now?: () => Date;
 	env?: BienWebhook;
 	hoi?: PhuThuocHoi;
+	datKhoaLech?: () => Promise<number>;
 };
+
+type LyDoTuChoiWebhook =
+	(typeof ZALO.nhatKy.tuChoiWebhook)[keyof typeof ZALO.nhatKy.tuChoiWebhook];
+
+function ghiTuChoi(status: number, lyDo: LyDoTuChoiWebhook): void {
+	console.error(`[zalo] webhook ${status} ly_do=${lyDo}`);
+}
+
+export async function datKhoaLech(): Promise<number> {
+	const lyDo = ZALO.nhatKy.tuChoiWebhook.khoaLech;
+	const { count } = await db.appSetting.updateMany({
+		where: {
+			id: SETTINGS_ID,
+			OR: [{ zaloWebhookLyDo: null }, { zaloWebhookLyDo: { not: lyDo } }],
+		},
+		data: { zaloWebhookLyDo: lyDo },
+	});
+	return count;
+}
 
 function bam(giaTri: string): Buffer {
 	return createHash("sha256").update(giaTri).digest();
@@ -45,6 +67,10 @@ function docCapNhat(tho: string): ZaloTinWebhook | null {
 		ghiSaiKhuon(moTaThanWebhook(undefined), "than khong phai JSON");
 		return null;
 	}
+	if (moTaThanWebhook(than).messageId === ZALO.nhatKy.maThu) {
+		console.error(`[zalo] ${ZALO.nhatKy.maThu}`);
+		return null;
+	}
 	try {
 		return parseZaloWebhook(than);
 	} catch (loi) {
@@ -61,8 +87,18 @@ export async function nhanWebhook(
 		token: await zaloToken(),
 		khoa: await zaloKhoaWebhook(),
 	};
-	if (!bien.token || !bien.khoa) return traVe(ZALO.http.khongCo);
-	if (!khopKhoa(request.headers.get(ZALO.webhook.header), bien.khoa)) {
+	if (!bien.token || !bien.khoa) {
+		ghiTuChoi(ZALO.http.khongCo, ZALO.nhatKy.tuChoiWebhook.chuaCoBot);
+		return traVe(ZALO.http.khongCo);
+	}
+	const header = request.headers.get(ZALO.webhook.header);
+	if (!header) {
+		ghiTuChoi(ZALO.http.cam, ZALO.nhatKy.tuChoiWebhook.thieuKhoa);
+		return traVe(ZALO.http.cam);
+	}
+	if (!khopKhoa(header, bien.khoa)) {
+		ghiTuChoi(ZALO.http.cam, ZALO.nhatKy.tuChoiWebhook.khoaLech);
+		await (deps.datKhoaLech ?? datKhoaLech)();
 		return traVe(ZALO.http.cam);
 	}
 	const tin = docCapNhat(await request.text());
