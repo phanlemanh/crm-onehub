@@ -380,9 +380,7 @@ export function DashboardSummary() {
 					</CardPanel>
 					{conSot > 0 ? (
 						<CardFooter data-con-sot={conSot}>
-							<CardDescription>
-								{m.tasks.conSot(String(conSot))}
-							</CardDescription>
+							{m.tasks.conSot(String(conSot))}
 						</CardFooter>
 					) : null}
 				</Card>

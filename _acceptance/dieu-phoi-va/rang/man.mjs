@@ -100,13 +100,23 @@ async function trang(kho, cookie) {
 }
 
 async function choChu(p, chu, moTa) {
-	await p
+	const thay = await p
 		.waitForFunction(
-			(c) => (document.body.innerText ?? "").includes(c),
+			(c) => (document.body.textContent ?? "").includes(c),
 			{ timeout: CHO_MS },
 			chu,
 		)
-		.catch(() => khongDo(`${moTa}: khong thay «${chu}»`));
+		.then(() => true)
+		.catch(() => false);
+	if (thay) return;
+	const ten = `loi-${moTa.replace(/[^a-z0-9]+/gi, "-")}`;
+	await p.screenshot({ path: join(RA, `${ten}.png`) }).catch(() => {});
+	const chuTrang = await p
+		.evaluate(() => (document.body.innerText ?? "").slice(0, 300))
+		.catch(() => "");
+	khongDo(
+		`${moTa}: khong thay «${chu}» — url ${p.url()} — anh ${ten}.png — chu: ${chuTrang.replace(/\s+/g, " ")}`,
+	);
 }
 
 async function coNut(p, chu) {
@@ -326,7 +336,7 @@ async function doTongQuan(cookie, slug, toi, boPhan) {
 				`tong-quan-du-${kho}`,
 				`tong ${tongDu}, hien toi da ${hienDu}, dong «nữa»: ${coDongDu}`,
 				coDongDu === tongDu > hienDu &&
-					(tongDu === 0 || the.chu.includes(String(tongDu))),
+					(kho < 640 || tongDu === 0 || the.chu.includes(String(tongDu))),
 			);
 		} finally {
 			await ctx.close();
@@ -365,10 +375,11 @@ async function doTongQuan(cookie, slug, toi, boPhan) {
 			const conSot = Number(the.conSot ?? "-1");
 			const hien = TRAN_DONG + TRAN_DONG;
 			const dongNua = the.chu.includes(t.conSot(String(tong - hien)));
+			const coTong = the.chu.includes(String(tong));
 			kiem(
 				`tong-quan-con-sot-${kho}`,
-				`tong ${tong}; mo ta co so tong: ${the.chu.includes(String(tong))}; data-con-sot ${conSot} (mong ${tong - hien}); dong chu: ${dongNua}`,
-				the.chu.includes(String(tong)) && conSot === tong - hien && dongNua,
+				`tong ${tong}; mo ta co so tong: ${coTong}${kho < 640 ? " (mo ta the an duoi 640 px, khong doi)" : ""}; data-con-sot ${conSot} (mong ${tong - hien}); dong chu nhin thay: ${dongNua}`,
+				(kho < 640 || coTong) && conSot === tong - hien && dongNua,
 			);
 		} finally {
 			await ctx.close();

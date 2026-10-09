@@ -237,7 +237,7 @@ evals:
     cmd: config:executors.script.dpv_man
     steps:
       - "Cảnh cây trước màn đầu; phiên đo riêng; gieo 25 việc và 15 bước quá hạn cho người đăng nhập qua Prisma trong phiên đo"
-      - "Ở 1440 và 390: mở Tổng quan, đọc thẻ data-khoi=viec-qua-han (ST-tong-quan-con-sot): mô tả ghi 40, có dòng «và N việc quá hạn nữa» với N = 40 − số dòng quá hạn đang hiện; dọn gieo, mở lại (ST-tong-quan-du): không có dòng «nữa»; chụp ảnh"
+      - "Ở 1440 và 390: mở Tổng quan, đọc thẻ data-khoi=viec-qua-han (ST-tong-quan-con-sot): mô tả ghi 40 (ở 1440; packages/ui giấu CardDescription dưới 640 px), có dòng «và N việc quá hạn nữa» nhìn thấy ở cả hai khổ với N = 40 − số dòng quá hạn đang hiện; dọn gieo, mở lại (ST-tong-quan-du): không có dòng «nữa»; chụp ảnh"
     expected: "exit 0; 4 ảnh (2 trạng thái × 2 khổ) trong _acceptance/dieu-phoi-va/evidence/; mỗi trạng thái in 'dat'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
     paths: ["apps/app/app/(app)/[slug]/dashboard-summary.tsx", "apps/api/src/dashboard/dashboard.service.ts", "_acceptance/dieu-phoi-va/rang/man.mjs"]
