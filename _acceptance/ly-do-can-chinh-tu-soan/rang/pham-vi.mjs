@@ -8,6 +8,7 @@ const TIEN_TO_DUOC = [`${HO_SO}/`, "docs/superpowers/"];
 const LUON_DUOC = ["PRODUCT-MAP.md", "LO-TRINH.html"];
 const CHI_THEM = "_acceptance/config.yaml";
 const KHONG_DOI = "apps/api/test/okr-can-chinh.spec.ts";
+const BON_TRUONG = ["lyDo", "canCu", "lyDoTuKara", "mucTin"];
 const MOC = "<mốc>";
 const MA_KHONG_DO = 2;
 
@@ -50,10 +51,17 @@ function khop(mau, tep) {
 	return re.test(tep);
 }
 
+export function bonTruong({ them, bo }) {
+	const dung = them.every((d) =>
+		BON_TRUONG.some((k) => d.slice(1).trim().startsWith(`${k}:`)),
+	);
+	return bo.length === 0 && dung && them.length > 0
+		? null
+		: `${KHONG_DOI}: doi ngoai bon truong`;
+}
+
 export function kiem(ds, mau) {
 	if (ds.length === 0) return { ma: MA_KHONG_DO, chu: "diff rong" };
-	if (ds.includes(KHONG_DOI))
-		return { ma: 1, chu: `${KHONG_DOI}: bai cu bi sua` };
 	const ngoai = ds.filter(
 		(t) =>
 			!TIEN_TO_DUOC.some((p) => t.startsWith(p)) &&
@@ -97,6 +105,30 @@ try {
 	if (bot.length > 0) {
 		console.log(`${CHI_THEM}: co ${bot.length} dong bo`);
 		process.exit(1);
+	}
+	const xau = bonTruong({
+		them: ["+\t\t\tlyDo: null,"],
+		bo: ['-\t\t\tunitName: "",'],
+	});
+	const lanh = bonTruong({
+		them: ["+\t\t\tlyDo: null,", '+\t\t\tmucTin: "chua-co-ly-do" as const,'],
+		bo: [],
+	});
+	if (xau !== `${KHONG_DOI}: doi ngoai bon truong` || lanh !== null)
+		throw new KhongDo("doi chung bon truong hong");
+	console.log(`doi chung: ${xau}`);
+	if (ds.includes(KHONG_DOI)) {
+		const dong = git(["diff", "-U0", goc, "HEAD", "--", KHONG_DOI])
+			.split("\n")
+			.filter((d) => /^[+-]/.test(d) && !/^(\+\+\+|---)/.test(d));
+		const loi = bonTruong({
+			them: dong.filter((d) => d.startsWith("+")),
+			bo: dong.filter((d) => d.startsWith("-")),
+		});
+		if (loi) {
+			console.log(loi);
+			process.exit(1);
+		}
 	}
 	const ket = kiem(ds, mau);
 	console.log(ket.chu);
