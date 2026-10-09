@@ -977,7 +977,7 @@ const KET_CUC_BO_QUA = {
 };
 
 describe("bo-qua", () => {
-	const tone = (output: unknown) =>
+	const tone = (output: EveToolOutput) =>
 		outcomeTone(tool("fetch_contact_photo", { output } as never) as never);
 
 	it("bo-qua: neutral — ket cuc that cua cong cu anh", () => {
@@ -1014,6 +1014,7 @@ describe("bo-qua", () => {
 				tool("fetch_contact_photo", { output: { stored: true } } as never),
 			]),
 		]);
-		expect("skipped" in (hang?.items[0] ?? {})).toBe(false);
+		const daLuu = JSON.parse(JSON.stringify(hang?.items[0] ?? {}));
+		expect("skipped" in daLuu).toBe(false);
 	});
 });

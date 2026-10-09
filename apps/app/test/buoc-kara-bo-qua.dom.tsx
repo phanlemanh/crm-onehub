@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { messages } from "@crm/ui/lib/messages";
+import type { EveToolOutput } from "@crm/validation/eve-tool";
 import type { EveMessage } from "eve/react";
 import { act } from "react";
 import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
@@ -26,7 +27,7 @@ const HONG = {
 	reason: "The photo could not be fetched. The record is unchanged.",
 };
 
-const tool = (toolName: string, output: unknown, id: string) => ({
+const tool = (toolName: string, output: EveToolOutput, id: string) => ({
 	type: "dynamic-tool",
 	toolName,
 	toolCallId: id,
@@ -35,7 +36,7 @@ const tool = (toolName: string, output: unknown, id: string) => ({
 	output,
 });
 
-function luot(giua: unknown) {
+function luot(giua: EveToolOutput) {
 	const [hang] = toTranscript([
 		{
 			id: "m1",
@@ -90,7 +91,7 @@ describe("ngan-hong", () => {
 });
 
 describe("khung-tao", () => {
-	const muc = (output: unknown) => {
+	const muc = (output: EveToolOutput) => {
 		const item = luot(output).items.find(
 			(i) => i.kind === "did" && i.tool === "fetch_contact_photo",
 		);

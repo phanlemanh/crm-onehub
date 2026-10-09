@@ -254,9 +254,7 @@ export function toTranscript(
 							errorText: errorTextOf(part),
 							failed: state === "output-error",
 							tone: outcomeTone(part),
-							...(outcome(part)?.skipped === true
-								? { skipped: true as const }
-								: {}),
+							skipped: outcome(part)?.skipped === true ? true : undefined,
 							pending:
 								state === "input-streaming" ||
 								state === "input-available" ||
