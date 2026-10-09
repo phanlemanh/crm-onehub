@@ -11,12 +11,23 @@ const vi = {
 		nho: "Nhờ Kara góp ý",
 		docLai: "Nhờ Kara đọc lại",
 		dangDoc: "Kara đang đọc Mục tiêu này…",
+		viecTai: "tải góp ý",
+		taiLoiMoTa: "Góp ý không mất. Tải lại để xem tiếp.",
+		viecDoc: "đọc Mục tiêu này",
+		chuaBat:
+			"Đơn vị này chưa bật Kara góp ý. Mở lại khi quản trị bật trong Cài đặt OKR.",
+		tamTat:
+			"Kara đang tạm tắt ở đây. Mở lại khi quản trị bật lại trong Cài đặt OKR.",
+		nhoLoi: {
+			"khong-quyen":
+				"Bạn không sửa được Mục tiêu hay KR nào ở đây nên chưa nhờ Kara được.",
+			"mat-mang": "Mất kết nối nên lời nhờ chưa tới Kara. Chưa trừ lượt nào.",
+			khac: "Lời nhờ chưa tới Kara. Chưa có gì bị ghi vào Mục tiêu.",
+		},
 		rong: "Kara không thấy chỗ nào cần sửa",
 		rongMoTa: (gio: string) =>
 			`Tên, «vì sao lúc này» và các KR đã đọc ổn lúc ${gio}. Sửa xong thì nhờ Kara đọc lại.`,
-		loi: "Kara chưa đọc được Mục tiêu này",
 		loiMoTa: "Lượt đọc bị ngắt giữa chừng. Chưa có gì bị ghi vào Mục tiêu.",
-		thuLai: "Thử lại",
 		hetLuot: "Bạn đã dùng hết lượt góp ý hôm nay. Mở lại lúc 00:00 ngày mai.",
 		tamNghi: (ngay: string) => `Kara tạm nghỉ tới ${ngay}.`,
 	},
@@ -41,6 +52,7 @@ const vi = {
 		hoanTacMucTieu: (cu: string) =>
 			`Đã hoàn tác — tên Mục tiêu trở lại «${cu}»`,
 		hoanTacViSao: "Đã hoàn tác — câu cũ trở lại",
+		hoanTacCanChinh: (ten: string) => `Đã hoàn tác — bỏ góp vào «${ten}»`,
 		boQuaTen: (sau: string) => `Đã bỏ qua tên Kara đề xuất: «${sau}»`,
 		boQuaCau: (sau: string) => `Đã bỏ qua câu Kara đề xuất: «${sau}»`,
 		boQuaCanChinh: (ten: string) => `Đã bỏ qua góp ý góp vào «${ten}»`,
@@ -57,7 +69,7 @@ const vi = {
 	chipAria: (n: string, ten: string) =>
 		`Kara có ${n} góp ý chờ cho «${ten}», mở khung chi tiết`,
 	danSang: {
-		moTaMucTieu: "Quyết ngay dưới từng KR.",
+		moTaMucTieu: "Góp ý nằm trong vùng Kara của Mục tiêu này.",
 		moTaKr: "Quyết ngay dưới KR này.",
 		xem: "Xem góp ý",
 	},
@@ -93,6 +105,12 @@ const vi = {
 	},
 	xuHuong: (moiTuan: string, uoc: string, donVi: string) =>
 		`Theo các lần cập nhật gần nhất (${moiTuan}/tuần), cuối kỳ ước khoảng ${[uoc, donVi.trim()].filter(Boolean).join(" ")}`,
+	loiDong: {
+		"khong-con": "Góp ý này không còn — có thể đã được quyết ở nơi khác.",
+		"da-cu": "Góp ý này đã cũ vì Mục tiêu vừa đổi. Danh sách đã tải lại.",
+		"chua-san-sang": "Chưa quyết được góp ý này lúc này. Thử lại sau ít phút.",
+		"mat-mang": "Mất kết nối nên chưa ghi được. Thử lại khi có mạng.",
+	},
 	vet: {
 		theoKara: "theo đề xuất của Kara",
 		suaTruong: (truong: string) => `Sửa ${truong}`,
@@ -103,21 +121,36 @@ export type OkrGopYMessages = typeof vi;
 
 const en: OkrGopYMessages = {
 	vung: {
-		soCho: (n: string) => `${n} suggestions waiting`,
+		soCho: (n: string) =>
+			n === "1" ? "1 suggestion waiting" : `${n} suggestions waiting`,
 		daXemHet: "all suggestions reviewed",
 		lyDo: (soKr: string) =>
-			`Kara read the title, “why now” and ${soKr} KRs of this objective. Kara reads OKR data only.`,
+			soKr === "1"
+				? "Kara read the title, “why now” and 1 KR of this objective. Kara reads OKR data only."
+				: `Kara read the title, “why now” and ${soKr} KRs of this objective. Kara reads OKR data only.`,
 		moTaChuaGoi:
 			"Kara reads the title, “why now” and the KRs, then places each suggestion right under what it changes.",
 		nho: "Ask Kara for feedback",
 		docLai: "Ask Kara to read again",
 		dangDoc: "Kara is reading this objective…",
+		viecTai: "load suggestions",
+		taiLoiMoTa: "Nothing was lost. Reload to see the suggestions.",
+		viecDoc: "read this objective",
+		chuaBat:
+			"Kara feedback is off for this unit. It reopens when an admin turns it on in OKR settings.",
+		tamTat:
+			"Kara is turned off here for now. It reopens when an admin turns it back on in OKR settings.",
+		nhoLoi: {
+			"khong-quyen":
+				"You can't edit this objective or any of its KRs, so Kara can't be asked here.",
+			"mat-mang":
+				"The connection dropped before the request reached Kara. No request was used.",
+			khac: "The request didn't reach Kara. Nothing was written to the objective.",
+		},
 		rong: "Kara found nothing to change",
 		rongMoTa: (gio: string) =>
 			`The title, “why now” and the KRs read well at ${gio}. Ask Kara again after you edit.`,
-		loi: "Kara couldn't read this objective",
 		loiMoTa: "The read was interrupted. Nothing was written to the objective.",
-		thuLai: "Try again",
 		hetLuot:
 			"You have used today's feedback requests. They reopen at 00:00 tomorrow.",
 		tamNghi: (ngay: string) => `Kara is paused until ${ngay}.`,
@@ -144,6 +177,8 @@ const en: OkrGopYMessages = {
 		hoanTacMucTieu: (cu: string) =>
 			`Undone — the Objective name is back to “${cu}”`,
 		hoanTacViSao: "Undone — the previous wording is back",
+		hoanTacCanChinh: (ten: string) =>
+			`Undone — no longer contributes to “${ten}”`,
 		boQuaTen: (sau: string) => `Skipped the name Kara suggested: “${sau}”`,
 		boQuaCau: (sau: string) => `Skipped Kara's wording: “${sau}”`,
 		boQuaCanChinh: (ten: string) => `Skipped aligning to “${ten}”`,
@@ -156,17 +191,22 @@ const en: OkrGopYMessages = {
 		"trung-y": "two KRs say the same thing",
 		"muc-tieu-la-so": "the objective is a number",
 	},
-	chip: (n: string) => `${n} suggestions`,
+	chip: (n: string) => (n === "1" ? "1 suggestion" : `${n} suggestions`),
 	chipAria: (n: string, ten: string) =>
-		`Kara has ${n} suggestions waiting for “${ten}”, open details`,
+		n === "1"
+			? `Kara has 1 suggestion waiting for “${ten}”, open details`
+			: `Kara has ${n} suggestions waiting for “${ten}”, open details`,
 	danSang: {
-		moTaMucTieu: "Decide right under each KR.",
+		moTaMucTieu: "Suggestions are in the Kara section of this objective.",
 		moTaKr: "Decide right under this KR.",
 		xem: "See suggestions",
 	},
 	loc: {
 		mat: "Kara suggestions",
-		coCho: (n: string) => `Has suggestions waiting · ${n}`,
+		coCho: (n: string) =>
+			n === "1"
+				? "Has a suggestion waiting · 1"
+				: `Has suggestions waiting · ${n}`,
 	},
 	dong: {
 		loai: {
@@ -196,6 +236,16 @@ const en: OkrGopYMessages = {
 	},
 	xuHuong: (moiTuan: string, uoc: string, donVi: string) =>
 		`Based on the latest updates (${moiTuan}/week), the period should end around ${[uoc, donVi.trim()].filter(Boolean).join(" ")}`,
+	loiDong: {
+		"khong-con":
+			"This suggestion is gone — it may have been decided elsewhere.",
+		"da-cu":
+			"This suggestion is out of date because the objective just changed. The list has been reloaded.",
+		"chua-san-sang":
+			"This suggestion can't be decided right now. Try again in a few minutes.",
+		"mat-mang":
+			"The connection dropped, so nothing was saved. Try again when you're back online.",
+	},
 	vet: {
 		theoKara: "suggested by Kara",
 		suaTruong: (truong: string) => `Edited ${truong}`,

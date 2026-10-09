@@ -229,18 +229,31 @@ export class TroLyOkrService {
 		userId: string,
 		dich: TroLyDichInput,
 	): Promise<{ cycleId: string }> {
-		const { mt } = await this.quyenOkr.assertXemMucTieu(
+		const { q, mt } = await this.quyenOkr.assertXemMucTieu(
 			userId,
 			dich.objectiveId,
 		);
 		if (!dich.keyResultId) {
-			await this.quyenOkr.assertSuaMucTieu(userId, dich.objectiveId);
-			return { cycleId: mt.cycleId };
+			if (this.quyenOkr.suaDuocDonVi(q, userId, mt))
+				return { cycleId: mt.cycleId };
+			if (await this.coKrSuaDuoc(userId, dich.objectiveId))
+				return { cycleId: mt.cycleId };
+			throw new ForbiddenException(T.khongSuaDuocDonVi);
 		}
 		const kr = await this.quyenOkr.assertSuaKr(userId, dich.keyResultId);
 		if (kr.objectiveId !== dich.objectiveId)
 			throw new BadRequestException(T.troLy.krKhacMucTieu);
 		return { cycleId: mt.cycleId };
+	}
+
+	private async coKrSuaDuoc(
+		userId: string,
+		objectiveId: string,
+	): Promise<boolean> {
+		const dem = await this.db.okrKeyResult.count({
+			where: { objectiveId, ownerUserId: userId },
+		});
+		return dem > 0;
 	}
 
 	private async lyDoNac(

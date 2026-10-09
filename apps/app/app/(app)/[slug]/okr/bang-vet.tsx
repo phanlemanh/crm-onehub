@@ -9,7 +9,7 @@ import {
 	SimpleTableRow,
 } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
-import { dateFormat, formatDay, toDay } from "@crm/ui/lib/format";
+import { formatDay, formatNgayGio } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
 import { BAC_GHI_DANH, MA_CHI_SO } from "@crm/validation/okr-chi-so";
 import { KIEU_KR, NGUON_KR } from "@crm/validation/okr-kr";
@@ -23,6 +23,7 @@ import { useQuery } from "@tanstack/react-query";
 import { okrMessages } from "@/lib/messages/okr";
 import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { okrSoMessages } from "@/lib/messages/okr-so";
+import { OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { type CayDuLieu, CELL } from "./kieu";
@@ -167,9 +168,10 @@ function tenViec(vet: Vet, doi: ThayDoi[], locale: Locale): string {
 }
 
 export function luc(at: string, locale: Locale): string {
-	const d = new Date(at);
-	const gio = dateFormat(locale, { hour: "2-digit", minute: "2-digit" });
-	return `${formatDay(toDay(d), locale)} ${gio.format(d)}`;
+	return formatNgayGio(at, locale, {
+		timeZone: OKR_CHU_KY.muiGio,
+		phan: "ngay-gio",
+	});
 }
 
 export function BangVet({
