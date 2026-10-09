@@ -57,4 +57,4 @@ E3 `danh-sach-keo-chung`, E5 `tac-nhan-va`, V2 `vong-doi-mot-cach-cat` (cùng ch
 
 ## Quyết định Cổng Đáng
 
-07/10/2026 13:13:50Z, chủ kho: «Ký build cả 16 hàng» (luật 16 của đợt), gồm V2L. Ngưỡng giữ theo luật 27 tới khi anh duyệt Cổng Phạm vi. Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.
+07/10/2026 13:13:50Z, chủ kho: «Ký build cả 16 hàng» (luật 16 của đợt), gồm V2L. Ngưỡng bỏ tiền tố «đề xuất» khi anh duyệt Cổng Phạm vi ngày 09/10 (luật 27). Các câu hỏi mở ở trên chuyển sang Cổng Phạm vi của vòng.
