@@ -7,6 +7,7 @@ const HOP_DONG = join(import.meta.dirname, "..", "contract.md");
 const CU = "không bao giờ vào `ci.yml` của hãng";
 const MUC = "## Kho này là bản riêng";
 const NOI_CI = "`.github/workflows/acceptance.yml`";
+const NEN_TRUOC_GOP = "1dd4e587bf9d77b9eaa357df6ee1e8950178b169";
 
 const gon = (s) => s.replace(/\s+/g, " ").trim();
 
@@ -35,11 +36,7 @@ const moi = doanMoi();
 const hong = kiem(readFileSync(join(GOC, "CLAUDE.md"), "utf8"), moi).map(
 	(l) => `ban that: ${l}`,
 );
-const goc = execFileSync(
-	"git",
-	["-C", GOC, "merge-base", "HEAD", "origin/onehub"],
-	{ encoding: "utf8" },
-).trim();
+const goc = NEN_TRUOC_GOP;
 const cu = execFileSync("git", ["-C", GOC, "show", `${goc}:CLAUDE.md`], {
 	encoding: "utf8",
 });

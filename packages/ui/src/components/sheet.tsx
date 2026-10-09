@@ -25,6 +25,7 @@ const sheetContentVariants = cva(
 				xl: "data-[side=left]:sm:max-w-4xl data-[side=right]:sm:max-w-4xl",
 				"2xl":
 					"data-[side=left]:sm:max-w-5xl data-[side=right]:sm:max-w-5xl data-[side=left]:lg:w-[68vw] data-[side=right]:lg:w-[68vw]",
+				kara: "data-[side=left]:sm:w-auto data-[side=right]:sm:w-auto data-[side=left]:sm:max-w-[calc(100%-2rem)] data-[side=right]:sm:max-w-[calc(100%-2rem)]",
 				assist:
 					"data-[side=left]:sm:max-w-(--container-sheet) data-[side=right]:sm:max-w-(--container-sheet) data-[side=left]:lg:w-(--container-assist) data-[side=right]:lg:w-(--container-assist) data-[side=left]:lg:max-w-[calc(100%-2rem)] data-[side=right]:lg:max-w-[calc(100%-2rem)]",
 			},
