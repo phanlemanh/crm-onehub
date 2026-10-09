@@ -45,6 +45,17 @@ giữ nguyên `onboardingMatchNeeded`. Thay đổi nằm ở hai chỗ:
      câu nói lô nào báo, `meta` `{ agent: "onboarding-identify", platformBrokerId }`. Rồi đóng `AgentTask`
      với kết quả «đã giao việc cho người cầm trịch».
 
+```mermaid
+flowchart LR
+  A[Lô từ nền tảng] --> B{Mã khớp cá nhân?}
+  B -- có --> C[Ghi danh vào kế hoạch]
+  B -- không --> D[API ghi AgentTask onboarding-identify]
+  D --> E[Làn trực tiếp của tác nhân, không mô hình]
+  E --> F{Mã đã khớp / kế hoạch đóng / payload hỏng / đã có việc mở?}
+  F -- có --> G[Đóng hàng chờ, ghi lý do, không tạo việc]
+  F -- không --> H[Việc TASK hạn hôm nay cho người cầm trịch kế hoạch]
+```
+
 Việc hiện ngay trong ngày ở dòng thời gian của kế hoạch (bộ lọc việc chưa xong). Thẻ «Việc quá hạn» của Tổng
 quan chỉ đếm việc có hạn trước hôm nay, nên việc chưa xong lên thẻ đó của người cầm trịch từ hôm sau — không
 đặt hạn lùi để ép nó lên sớm.
