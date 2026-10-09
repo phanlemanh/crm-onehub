@@ -1,0 +1,2 @@
+driver: bun tien-de.mjs --chay man.mjs (puppeteer script), khong co read_network_requests. Chay 1: exit 1 (loi console app: 1, 404 Failed to load resource /contacts?record=contact:<id>); chay lai 4 lan: exit 0 "man: dat".
+console loi chay 1: /contacts?record=contact:cmv0h3m9q0000xwtyybu605w4 console.error Failed to load resource 404
