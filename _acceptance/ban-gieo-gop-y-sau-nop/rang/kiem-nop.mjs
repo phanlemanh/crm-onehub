@@ -12,11 +12,12 @@ if (!existsSync(tep)) {
 	console.log(`KHONG DO DUOC: khong co ban gieo ${tep}`);
 	process.exit(2);
 }
-const { kiemNopXong } = await import(pathToFileURL(tep).href);
-if (typeof kiemNopXong !== "function") {
+const ban = await import(pathToFileURL(tep).href);
+if (!("kiemNopXong" in ban)) {
 	console.log("KHONG DO DUOC: ban gieo khong xuat kiemNopXong");
 	process.exit(2);
 }
+const { kiemNopXong } = ban;
 const XONG = TRO_LY_OKR.ketThuc.daNop;
 const luc = new Date("2026-10-09T15:00:00Z");
 const CA = [
