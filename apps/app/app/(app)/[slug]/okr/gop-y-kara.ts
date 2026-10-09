@@ -153,6 +153,31 @@ export function nhipHoiLai(tu: number, bayGio: number): number {
 		: TRO_LY_OKR_TRAN.tranChoMs;
 }
 
+const DANG_THEO = new WeakMap<QueryClient, Set<string>>();
+
+function theoDenXong(
+	qc: QueryClient,
+	objectiveId: string,
+	batDau: number,
+	hoi: () => Promise<RouterOutputs["okr"]["troLyDanhSach"]>,
+	xong: () => Promise<void>,
+): void {
+	const dang = DANG_THEO.get(qc) ?? new Set<string>();
+	DANG_THEO.set(qc, dang);
+	if (dang.has(objectiveId)) return;
+	dang.add(objectiveId);
+	const vong = async () => {
+		const ds = await hoi().catch(() => null);
+		if (ds?.dangSoan === true) {
+			setTimeout(() => void vong(), nhipHoiLai(batDau, Date.now()));
+			return;
+		}
+		dang.delete(objectiveId);
+		if (ds !== null) await xong();
+	};
+	setTimeout(() => void vong(), TRO_LY_OKR_TRAN.hoiLaiMs);
+}
+
 type CacheDanhSach = {
 	mine: QueryKey;
 	danhSach: QueryKey;
@@ -337,8 +362,9 @@ export function useGopYMucTieu({
 
 	const nho = () => {
 		if (!coDich || nut.loai !== "mo" || deXuat.isPending) return;
-		deXuat.mutate(dich, {
-			onSuccess: (kq) => {
+		const muc = objectiveId ?? "";
+		void deXuat.mutateAsync(dich).then(
+			(kq) => {
 				if (!kq.bat) {
 					void sanSang.refetch();
 					return;
@@ -347,8 +373,20 @@ export function useGopYMucTieu({
 				setBatDau(luc);
 				setThayDocLuc(luc);
 				void danhSach.refetch();
+				theoDenXong(
+					qc,
+					muc,
+					luc,
+					() =>
+						qc.fetchQuery({
+							...trpc.okr.troLyDanhSach.queryOptions({ objectiveId: muc }),
+							staleTime: 0,
+						}),
+					() => cache.okr(muc),
+				);
 			},
-		});
+			() => void sanSang.refetch(),
+		);
 	};
 
 	const thuLai = () => {

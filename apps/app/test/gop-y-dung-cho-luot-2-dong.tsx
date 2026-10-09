@@ -1,16 +1,23 @@
 import { describe, expect, test } from "bun:test";
+import { TRO_LY_OKR_TRAN } from "@crm/validation/okr-tro-ly";
 import { act } from "react";
+import { mineOutput } from "../../api/src/okr/okr.contracts";
 import {
 	bamChuot,
+	CuaToi,
 	chiTietTu,
 	cho,
 	D_CAN,
 	D_KR1,
 	D_KR2,
+	D_TEN,
+	danhSachTu,
 	deXuat,
 	dsTroLy,
+	dung,
 	dungSheet,
 	goChu,
+	goiCua,
 	type KetQuaGhi,
 	KR_1,
 	kho,
@@ -22,10 +29,12 @@ import {
 	nut,
 	nutCo,
 	qs,
+	qsa,
+	TheoDonVi,
 	thaoHet,
 	ui,
 } from "./khung-gop-y-dung-cho";
-import { lienKet, type NoiGop } from "./khung-gop-y-luot-2";
+import { choLau, KHUNG, lienKet, type NoiGop } from "./khung-gop-y-luot-2";
 
 describe("k3-loi-dong", () => {
 	const LOI = [
@@ -291,4 +300,68 @@ describe("k3-can-chinh", () => {
 			(k) => `hoan tac loi sai: ${k}`,
 		);
 	});
+});
+
+describe("k3-chip", () => {
+	test("k3-chip nho Kara roi dong khung khi Kara con doc: chip danh sach va Cua toi doi so moi khong tai lai trang", async () => {
+		for (const dongKhung of [true, false]) {
+			let pha: "chua" | "soan" | "xong" = "chua";
+			const mt = () => mtSheet({ soGopYCho: pha === "xong" ? 2 : 0 });
+			const datMine = () => {
+				kho.mine = mineOutput.parse({
+					dangTheoDoi: [],
+					objectives: [mt()],
+					daBo: [],
+				});
+			};
+			kho.danhSach = () => danhSachTu([mt()], pha === "xong" ? 1 : 0);
+			kho.chiTiet = () => chiTietTu(mt());
+			kho.troLy = () => {
+				if (pha === "xong") return dsTroLy([D_TEN, D_KR1]);
+				if (pha === "soan")
+					return dsTroLy([], { dangSoan: true, maKetThuc: null });
+				return dsTroLy([], { maKetThuc: null, docLuc: null });
+			};
+			kho.ghiRieng.set("okr.troLyDeXuat", async () => {
+				pha = "soan";
+				return { bat: true, taskId: "t-chip", dungLai: false };
+			});
+			datMine();
+			const DS = () => (
+				<>
+					<CuaToi />
+					<TheoDonVi />
+				</>
+			);
+			const san = await dung(
+				<>
+					{DS()}
+					{KHUNG()}
+				</>,
+			);
+			await cho(() => qs("[data-nut=nho-kara]") !== null, "nut nho");
+			await bamChuot(qs("[data-nut=nho-kara]") ?? document.body);
+			await cho(() => goiCua("okr.troLyDeXuat").length === 1, "da nho");
+			if (dongKhung) await san.veLai(DS());
+			pha = "xong";
+			datMine();
+			const chip = () =>
+				qsa("[data-chip-gop-y]").map(
+					(c) => c.textContent?.replace(/\s+/g, " ").trim() ?? "",
+				);
+			await choLau(
+				() =>
+					chip().length === 2 &&
+					chip().every((c) => c === `Kara · ${m.chip("2")}`),
+				"chip",
+				TRO_LY_OKR_TRAN.hoiLaiMs * 4,
+			).catch(() => {
+				throw new Error(
+					`chip dung so cu sau khi dong khung (dongKhung=${dongKhung}): ${chip().join(" | ")}`,
+				);
+			});
+			await thaoHet();
+			kho.daGhi = [];
+		}
+	}, 30_000);
 });
