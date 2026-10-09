@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** `okr.troLyQuyet` trả `{ ok: false, lyDo }` với mười ba mã lý do cố định có tên; app hiện câu của mã theo ngôn ngữ
+**Goal:** `okr.troLyQuyet` trả `{ ok: false, lyDo }` với chín mã lý do cố định có tên (bốn mã quyền và chu kỳ giữ lỗi HTTP — đơn P1-55, ngả C); app hiện câu của mã theo ngôn ngữ
 trang thay cho câu «thử lại sau ít phút».
 
 **Architecture:** Tập mã khai một chỗ ở `packages/validation/src/okr-tro-ly.ts`. Máy chủ bắt lỗi NGOÀI `$transaction`
@@ -60,7 +60,7 @@ thành mã, mọi lỗi khác ném lại. App đọc mã, lấy câu từ bản 
 Independent: không (Task 2, 3 dùng `LY_DO_KHONG_QUYET`, `CAU_CUA_LY_DO_KHONG_QUYET`).
 
 **Interfaces:**
-- Produces: `LY_DO_KHONG_QUYET` (tuple 13 chuỗi), `type LyDoKhongQuyet`, `lyDoKhongQuyet` (`z.enum`),
+- Produces: `LY_DO_KHONG_QUYET` (tuple 9 chuỗi), `type LyDoKhongQuyet`, `lyDoKhongQuyet` (`z.enum`),
   `laLyDoKhongQuyet(lyDo: string): lyDo is LyDoKhongQuyet` — từ `@crm/validation/okr-tro-ly`.
 - Produces: `CAU_CUA_LY_DO_KHONG_QUYET: Record<LyDoKhongQuyet, readonly string[]>` và
   `lyDoKhongQuyetCua(loi: unknown): LyDoKhongQuyet | null` — xuất từ `apps/api/src/okr/tro-ly.service.ts`.
@@ -409,12 +409,8 @@ export const troLyQuyetOutput = z.discriminatedUnion("ok", [
 
 ```ts
 export const CAU_CUA_LY_DO_KHONG_QUYET = {
-	"ky-da-an": [T.chuKy.kyDaAn],
-	"ky-da-khoa": [T.kyDaKhoa],
 	"muc-tieu-da-bo": [T.daBo],
 	"dang-cho-duyet": [T.dangChoDuyet],
-	"khong-sua-duoc-kr": [T.khongSuaDuocKr],
-	"khong-sua-duoc-don-vi": [T.khongSuaDuocDonVi],
 	"so-sai-kieu": Object.values(T.soTheoKieu),
 	"can-chinh-gioi-han": [T.canChinh.gioiHanKhongCanChinh],
 	"can-chinh-chinh-no": [T.canChinh.chinhNo],
@@ -586,17 +582,17 @@ function kiemMaTran(locale: Locale, doc: Map<LyDoKhongQuyet, string>, chuaCongBo
 	}
 	if (!(doc.get("can-chinh-chua-cong-bo") ?? "").includes(chuaCongBo))
 		lech.push(`cau sai cho can-chinh-chua-cong-bo: thieu «${chuaCongBo}»`);
-	expect(doc.size).toBe(13);
-	expect(theoCau.size, lech.join("\n")).toBe(13);
+	expect(doc.size).toBe(9);
+	expect(theoCau.size, lech.join("\n")).toBe(9);
 	expect(lech, lech.join("\n")).toEqual([]);
 }
 
 describe("k3c", () => {
-	test("k3c-vi 13 ma: cau tieng Viet cua tung ma duoi dung gop y", async () => {
+	test("k3c-vi 9 ma: cau tieng Viet cua tung ma duoi dung gop y", async () => {
 		kiemMaTran("vi", await maTran("vi"), "chưa công bố");
 	}, 120_000);
 
-	test("k3c-en 13 ma: cau tieng Anh cua tung ma, khong chu Viet", async () => {
+	test("k3c-en 9 ma: cau tieng Anh cua tung ma, khong chu Viet", async () => {
 		kiemMaTran("en", await maTran("en"), "not published");
 	}, 120_000);
 
@@ -666,14 +662,9 @@ Expected: FAIL biên dịch — `loiQuyet` không có trên `OkrGopYMessages`; g
 
 ```ts
 	loiQuyet: {
-		"ky-da-an": "Chu kỳ của Mục tiêu này đã ẩn nên không quyết được góp ý.",
-		"ky-da-khoa": "Chu kỳ đang chấm điểm hoặc đã đóng nên Mục tiêu không sửa được nữa.",
 		"muc-tieu-da-bo": "Mục tiêu này đã bỏ nên không quyết được góp ý.",
 		"dang-cho-duyet":
 			"Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa.",
-		"khong-sua-duoc-kr":
-			"Chỉ người phụ trách KR này hoặc người sửa được Mục tiêu mới quyết được góp ý này.",
-		"khong-sua-duoc-don-vi": "Bạn không sửa được OKR của đơn vị này nên không quyết được góp ý.",
 		"so-sai-kieu": "Số trong góp ý không khớp kiểu đo của KR này.",
 		"can-chinh-gioi-han": "Một bên đang ở mức giới hạn nên không căn chỉnh được.",
 		"can-chinh-chinh-no": "Đích là chính Mục tiêu này nên không căn chỉnh được.",
@@ -688,14 +679,9 @@ Trong `en`, sau `loiDong`:
 
 ```ts
 	loiQuyet: {
-		"ky-da-an": "This objective's cycle is hidden, so the suggestion can't be decided.",
-		"ky-da-khoa": "The cycle is being scored or is closed, so the objective can't be changed.",
 		"muc-tieu-da-bo": "This objective was dropped, so the suggestion can't be decided.",
 		"dang-cho-duyet":
 			"The objective is awaiting approval, so its content, KRs and alignment are locked. Withdraw it to edit.",
-		"khong-sua-duoc-kr":
-			"Only the KR owner or someone who can edit the objective can decide this suggestion.",
-		"khong-sua-duoc-don-vi": "You can't edit this unit's OKRs, so the suggestion can't be decided.",
 		"so-sai-kieu": "The number in this suggestion doesn't fit how this KR is measured.",
 		"can-chinh-gioi-han": "One side is restricted, so they can't be aligned.",
 		"can-chinh-chinh-no": "The target is this objective itself, so it can't be aligned.",

@@ -388,12 +388,8 @@ export const ketQuaTroLy = z.object({
 export type KetQuaTroLy = z.infer<typeof ketQuaTroLy>;
 
 export const LY_DO_KHONG_QUYET = [
-	"ky-da-an",
-	"ky-da-khoa",
 	"muc-tieu-da-bo",
 	"dang-cho-duyet",
-	"khong-sua-duoc-kr",
-	"khong-sua-duoc-don-vi",
 	"so-sai-kieu",
 	"can-chinh-gioi-han",
 	"can-chinh-chinh-no",

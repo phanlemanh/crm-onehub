@@ -105,12 +105,8 @@ type OkrDeXuat = Prisma.OkrDeXuatModel;
 const T = OKR.thongDiep;
 
 export const CAU_CUA_LY_DO_KHONG_QUYET = {
-	"ky-da-an": [T.chuKy.kyDaAn],
-	"ky-da-khoa": [T.kyDaKhoa],
 	"muc-tieu-da-bo": [T.daBo],
 	"dang-cho-duyet": [T.dangChoDuyet],
-	"khong-sua-duoc-kr": [T.khongSuaDuocKr],
-	"khong-sua-duoc-don-vi": [T.khongSuaDuocDonVi],
 	"so-sai-kieu": Object.values(T.soTheoKieu),
 	"can-chinh-gioi-han": [T.canChinh.gioiHanKhongCanChinh],
 	"can-chinh-chinh-no": [T.canChinh.chinhNo],

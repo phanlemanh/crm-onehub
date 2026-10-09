@@ -16,12 +16,8 @@ Từ K3, `loaiLoiDong` (`apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`) xếp m�
 
 | Mã | Ném từ (hằng câu) | Ý cho người dùng |
 |---|---|---|
-| `ky-da-an` | `T.chuKy.kyDaAn` | chu kỳ đã ẩn |
-| `ky-da-khoa` | `T.kyDaKhoa` | chu kỳ ở pha chấm điểm hoặc đã đóng |
 | `muc-tieu-da-bo` | `T.daBo` | Mục tiêu đã bỏ |
 | `dang-cho-duyet` | `T.dangChoDuyet` | Mục tiêu đang chờ duyệt |
-| `khong-sua-duoc-kr` | `T.khongSuaDuocKr` | không sửa được KR này |
-| `khong-sua-duoc-don-vi` | `T.khongSuaDuocDonVi` | không sửa được Mục tiêu của đơn vị này |
 | `so-sai-kieu` | mọi giá trị của `T.soTheoKieu` | số của KR không khớp kiểu KR |
 | `can-chinh-gioi-han` | `T.canChinh.gioiHanKhongCanChinh` | một bên bị giới hạn hiển thị |
 | `can-chinh-chinh-no` | `T.canChinh.chinhNo` | đích là chính Mục tiêu này |
@@ -30,22 +26,24 @@ Từ K3, `loaiLoiDong` (`apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`) xếp m�
 | `can-chinh-khac-chu-ky` | `T.canChinh.khacChuKy` | đích khác chu kỳ |
 | `can-chinh-da-gan` | `T.canChinh.daGan` | đã gắn vào đích đó rồi |
 
+Bốn lý do cố định giữ lỗi HTTP như cũ (chốt lại 2026-10-10, đơn P1-55, anh chọn ngả C): `T.chuKy.kyDaAn` và
+`T.kyDaKhoa` (400), `T.khongSuaDuocKr` và `T.khongSuaDuocDonVi` (403). Ba hồ sơ đã ký ghim đúng các mã HTTP đó
+(`tro-ly-okr-de-xuat`, `sua-an-chu-ky-okr` với luật «mọi lần ghi vào chu kỳ ẩn → 400», `kara-gop-y-luot-2`), và giao
+diện đã khoá nút quyết ở cả bốn tình huống (`ghiDuoc`), nên chúng chỉ tới người dùng khi trạng thái đổi giữa chừng — khi
+đó vẫn là câu «thử lại».
+
 Ngoài tập (giữ nguyên đường cũ): `NOT_FOUND`, `CONFLICT` (đã có câu từ K3); `T.troLy.cachKhongHop`,
 `T.troLy.canGiaTri` (lỗi của chính client, không phải lý do của người dùng); lỗi của `hopLe` khi giá trị «Sửa» sai độ dài (thông điệp là câu Zod thay đổi theo luật, không phải một hằng — để vòng sau, vì đơn chạm tệp P1-53 chỉ cho thân `troLyQuyet`); lỗi Prisma, Zod của hàng hỏng, 5xx.
 
 ## Câu cho người dùng — duyệt ở Cổng 1
 
-Mười ba câu, mỗi mã một câu riêng. Căn chỉnh gọi bên nhận là «đích» như câu máy chủ (`T.canChinh`), vì đích có thể là
+Chín câu, mỗi mã một câu riêng. Căn chỉnh gọi bên nhận là «đích» như câu máy chủ (`T.canChinh`), vì đích có thể là
 Mục tiêu hoặc KR.
 
 | Mã | Tiếng Việt | English |
 |---|---|---|
-| `ky-da-an` | Chu kỳ của Mục tiêu này đã ẩn nên không quyết được góp ý. | This objective's cycle is hidden, so the suggestion can't be decided. |
-| `ky-da-khoa` | Chu kỳ đang chấm điểm hoặc đã đóng nên Mục tiêu không sửa được nữa. | The cycle is being scored or is closed, so the objective can't be changed. |
 | `muc-tieu-da-bo` | Mục tiêu này đã bỏ nên không quyết được góp ý. | This objective was dropped, so the suggestion can't be decided. |
 | `dang-cho-duyet` | Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa. | The objective is awaiting approval, so its content, KRs and alignment are locked. Withdraw it to edit. |
-| `khong-sua-duoc-kr` | Chỉ người phụ trách KR này hoặc người sửa được Mục tiêu mới quyết được góp ý này. | Only the KR owner or someone who can edit the objective can decide this suggestion. |
-| `khong-sua-duoc-don-vi` | Bạn không sửa được OKR của đơn vị này nên không quyết được góp ý. | You can't edit this unit's OKRs, so the suggestion can't be decided. |
 | `so-sai-kieu` | Số trong góp ý không khớp kiểu đo của KR này. | The number in this suggestion doesn't fit how this KR is measured. |
 | `can-chinh-gioi-han` | Một bên đang ở mức giới hạn nên không căn chỉnh được. | One side is restricted, so they can't be aligned. |
 | `can-chinh-chinh-no` | Đích là chính Mục tiêu này nên không căn chỉnh được. | The target is this objective itself, so it can't be aligned. |
@@ -76,7 +74,7 @@ Mục tiêu hoặc KR.
   `{ ok: false, lyDo: <mã> }`, góp ý vẫn `cho`, OKR không đổi; số ca === số phần tử của `LY_DO_KHONG_QUYET`.
 - E2 (API): lỗi ngoài tập giữ mã tRPC cũ (`NOT_FOUND`, `CONFLICT`, `BAD_REQUEST` của `cachKhongHop`); hàng góp ý hỏng ra
   `INTERNAL_SERVER_ERROR`; `lyDoKhongQuyetCua` trả `null` cho câu lạ, `Error` và lỗi Prisma.
-- E3, E4 (DOM): mỗi mã × một ngôn ngữ, chữ dưới góp ý === câu của mã; mười ba câu khác nhau; câu
+- E3, E4 (DOM): mỗi mã × một ngôn ngữ, chữ dưới góp ý === câu của mã; chín câu khác nhau; câu
   `can-chinh-chua-cong-bo` nói «chưa công bố» / «not published».
 - E5 (DOM): mã của tập không đọc lại `troLySanSang`; lý do «chưa sẵn sàng» và lỗi 5xx giữ câu thử lại.
 - E6 (script): một chỗ khai tập mã; bảng ánh xạ phủ đủ tập; hai bản đồ câu khoá bằng đúng tập.

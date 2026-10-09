@@ -120,18 +120,6 @@ async function doiDich(
 
 const MA_TRAN: readonly Ca[] = [
 	{
-		ma: "ky-da-an",
-		dong: "ten",
-		cookie: () => cookieTruong,
-		dat: () => doiChuKy({ anLuc: new Date() }),
-	},
-	{
-		ma: "ky-da-khoa",
-		dong: "ten",
-		cookie: () => cookieTruong,
-		dat: () => doiChuKy({ phase: "cham-diem" }),
-	},
-	{
 		ma: "muc-tieu-da-bo",
 		dong: "ten",
 		cookie: () => cookieTruong,
@@ -142,18 +130,6 @@ const MA_TRAN: readonly Ca[] = [
 		dong: "ten",
 		cookie: () => cookieTruong,
 		dat: () => doiMucTieu(MT, { status: "cho-duyet" }),
-	},
-	{
-		ma: "khong-sua-duoc-kr",
-		dong: "kr",
-		cookie: () => cookieXem,
-		dat: async () => khongDoi,
-	},
-	{
-		ma: "khong-sua-duoc-don-vi",
-		dong: "ten",
-		cookie: () => cookieXem,
-		dat: async () => khongDoi,
 	},
 	{
 		ma: "so-sai-kieu",
@@ -216,6 +192,48 @@ const MA_TRAN: readonly Ca[] = [
 				await db.okrAlignment.delete({ where: { id: lk.id } });
 			};
 		},
+	},
+];
+
+const GIU_HTTP: readonly {
+	ten: string;
+	dong: LoaiDong;
+	cookie: () => string;
+	dat: () => Promise<TraLai>;
+	status: number;
+	cau: string;
+}[] = [
+	{
+		ten: "ky-da-an",
+		dong: "ten",
+		cookie: () => cookieTruong,
+		dat: () => doiChuKy({ anLuc: new Date() }),
+		status: 400,
+		cau: T.chuKy.kyDaAn,
+	},
+	{
+		ten: "ky-da-khoa",
+		dong: "ten",
+		cookie: () => cookieTruong,
+		dat: () => doiChuKy({ phase: "cham-diem" }),
+		status: 400,
+		cau: T.kyDaKhoa,
+	},
+	{
+		ten: "khong-sua-duoc-kr",
+		dong: "kr",
+		cookie: () => cookieXem,
+		dat: async () => khongDoi,
+		status: 403,
+		cau: T.khongSuaDuocKr,
+	},
+	{
+		ten: "khong-sua-duoc-don-vi",
+		dong: "ten",
+		cookie: () => cookieXem,
+		dat: async () => khongDoi,
+		status: 403,
+		cau: T.khongSuaDuocDonVi,
 	},
 ];
 
@@ -322,7 +340,7 @@ describe("k3c-ma-tran", () => {
 		"k3c-ma-tran moi ly do co dinh tra { ok: false, lyDo }, gop y van cho, okr khong doi",
 		async () => {
 			expect(MA_TRAN.map((c) => c.ma)).toEqual([...LY_DO_KHONG_QUYET]);
-			expect(MA_TRAN.length).toBe(13);
+			expect(MA_TRAN.length).toBe(9);
 			const lech: string[] = [];
 			for (const ca of MA_TRAN) {
 				const id = hang[ca.dong];
@@ -355,13 +373,14 @@ describe("k3c-ma-tran", () => {
 
 describe("k3c-ngoai", () => {
 	test(
-		"k3c-ngoai bay ca loi ngoai tap giu duong cu",
+		"k3c-ngoai muoi mot ca loi ngoai tap giu duong cu",
 		async () => {
 			const lech: string[] = [];
 			const ca = (ten: string, dung: boolean, thatTe: string) => {
 				if (!dung) lech.push(`k3c-ngoai ${ten}: ${thatTe}`);
 			};
 			let so = 0;
+			const ketQuaGoi: Awaited<ReturnType<typeof quyet>>[] = [];
 
 			await doiDauVao(app, cookieTruong, K3);
 			const { whyNow } = await db.okrObjective.findUniqueOrThrow({
@@ -426,6 +445,24 @@ describe("k3c-ngoai", () => {
 			);
 			so++;
 
+			for (const giu of GIU_HTTP) {
+				const traLai = await giu.dat();
+				try {
+					const tra = await quyet(hang[giu.dong], "nhan", giu.cookie());
+					const trangThai = await trangThaiCua(hang[giu.dong]);
+					ca(
+						`giu-http ${giu.ten}`,
+						tra.status === giu.status &&
+							tra.loi.includes(giu.cau) &&
+							trangThai === "cho",
+						`${tra.status} ${tra.loi} ${trangThai}`,
+					);
+					so++;
+					ketQuaGoi.push(tra);
+				} finally {
+					await traLai();
+				}
+			}
 			ca(
 				"cau-la",
 				lyDoKhongQuyetCua(new BadRequestException("cau la")) === null,
@@ -450,10 +487,10 @@ describe("k3c-ngoai", () => {
 			);
 			so++;
 
-			for (const t of [khong, xung, cach, loi500])
+			for (const t of [khong, xung, cach, loi500, ...ketQuaGoi])
 				if (JSON.stringify(t.data ?? null).includes('"ok":false'))
 					lech.push(`k3c-ngoai tra ok:false: ${JSON.stringify(t.data)}`);
-			expect(so).toBe(7);
+			expect(so).toBe(11);
 			expect(lech, lech.join("\n")).toEqual([]);
 		},
 		CHO_DB,
