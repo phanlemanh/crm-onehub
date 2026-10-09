@@ -1592,6 +1592,12 @@ executors:
     cmtb_khop_323: bun _acceptance/ci-ma-tran-ba-o/rang/khop-323.mjs
     cmtb_claude_md: node _acceptance/ci-ma-tran-ba-o/rang/claude-md.mjs
     cmtb_do_7_ngay: bun _acceptance/ci-ma-tran-ba-o/rang/do-7-ngay.mjs --nhanh thu/ci-tach-job
+    t7n_don_vi: "node --test _acceptance/thuoc-7-ngay-loc-pr/rang/do-7-ngay.test.mjs"
+    t7n_cua_so_cu: "node _acceptance/thuoc-7-ngay-loc-pr/rang/cua-so-cu.mjs"
+    t7n_mac_dinh: "node _acceptance/thuoc-7-ngay-loc-pr/rang/mac-dinh.mjs"
+    t7n_loi_gh: "node _acceptance/thuoc-7-ngay-loc-pr/rang/gh-gia.mjs"
+    t7n_phan_trang: "node _acceptance/thuoc-7-ngay-loc-pr/rang/phan-trang.mjs"
+    t7n_noi_f21: "node _acceptance/thuoc-7-ngay-loc-pr/rang/noi-f21.mjs"
     tnm_goi_that: "bun _acceptance/tac-nhan-model-rieng/rang/goi-that.ts"
     tnm_tai_lieu: "node _acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs"
     bdk_tai_lieu: "node _acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs"
