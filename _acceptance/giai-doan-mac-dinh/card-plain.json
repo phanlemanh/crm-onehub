@@ -66,11 +66,11 @@
   "gap_probe_plain": [
     {
       "i": 0,
-      "p": "Phép quét theo chữ bỏ sót tạo lồng, bí danh, ghi thẳng viết khác — đã đổi sang quét theo kiểu dữ liệu, mỗi dạng có ca đỏ."
+      "p": "Phép quét theo chữ bỏ sót tạo lồng, bí danh, ghi thẳng viết khác — sau hai vòng chấm, phép quét bị cắt cùng AC-3; bảo đảm chuyển sang lối A (E4b), nơi trình kiểm kiểu tự bắt mọi chỗ thiếu giai đoạn."
     },
     {
       "i": 1,
-      "p": "Có chữ «stage» chưa chắc đã gán giai đoạn — nay đòi đúng khoá trên chính dữ liệu tạo, và giá trị không được để trống."
+      "p": "Có chữ «stage» chưa chắc đã gán giai đoạn — mục này đi theo AC-3 sang lối A (E4b); vòng này không còn phép đo nào cho nó."
     },
     {
       "i": 2,
