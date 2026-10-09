@@ -5,7 +5,7 @@ slug: thuoc-mot-cho-khai-quet-man
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-10
 design_doc: docs/superpowers/specs/2026-10-09-thuoc-mot-cho-khai-quet-man-design.md
