@@ -1389,6 +1389,11 @@ executors:
     cccl_mo_coi: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t mo-coi"
     cccl_ngoai_khoa: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t ngoai-khoa"
     cccl_cho_route: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t cho-route"
+    kekt_ghi_tron: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t ghi-tron"
+    kekt_hai_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t hai-luot"
+    kekt_mot_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t mot-luot"
+    kekt_doi_chu: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t doi-chu"
+    kekt_dau: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t so-dau"
     mcl_lop: cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/menu-con-dich-vao.dom.tsx -t lop-dich
     mcl_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- packages/ui/test/data-table-loc-ro.dom.tsx packages/ui/test/data-table-locale.spec.tsx packages/ui/test/render-diff.spec.tsx packages/ui/test/lai-ra-man.spec.tsx apps/app/test/bang-crm-loc-ro.dom.tsx && cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/data-table-loc-ro.dom.tsx ./test/data-table-locale.spec.tsx ./test/render-diff.spec.tsx ./test/lai-ra-man.spec.tsx && cd ../../apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/bang-crm-loc-ro.dom.tsx'
     kcs_don_vi: 'node --test "scripts/kiem-cheo/test/*.test.mjs"'
@@ -2171,6 +2176,9 @@ executors:
     cccl_cong_tac: bun _acceptance/ca-chap-chon-cach-ly/rang/cong-tac.mjs
     cccl_pham_vi: bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs
     cccl_du_ca: bun _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs
+    kekt_pham_vi: bun _acceptance/khoa-eve-khong-tranh/rang/pham-vi.mjs
+    kekt_dot_bien: bun _acceptance/khoa-eve-khong-tranh/rang/dot-bien.mjs
+    kekt_lap: bun _acceptance/khoa-eve-khong-tranh/rang/dot-bien.mjs --lap 20 --cap a,b,c
     f19_loc_bat: node _acceptance/sua-paths-e5-soan-okr/rang/loc-paths.mjs --phan bat
     f19_loc_chon: node _acceptance/sua-paths-e5-soan-okr/rang/loc-paths.mjs --phan chon
     f19_chi_doi: node _acceptance/sua-paths-e5-soan-okr/rang/chi-doi-paths.mjs
