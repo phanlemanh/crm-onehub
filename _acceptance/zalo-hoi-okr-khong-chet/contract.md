@@ -5,7 +5,7 @@ slug: zalo-hoi-okr-khong-chet
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T23:53:07Z
 design_doc: _acceptance/zalo-hoi-okr-khong-chet/design.md
@@ -69,3 +69,10 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 - Sửa sau S4 round 1 (REJECT, 08/10): phản biện chỉ ra công cụ đè không đè được subagent (`docs/agent.md`); chủ kho duyệt hướng mới 08/10 («Duyệt hướng mới H1»): hook không ném ngoài phiên OKR, công cụ nộp tự từ chối (AC-6), đo ép gọi (AC-7); E6 chạy qua `mot-luot.sh` vì đụng `eve dev` của E1.
 - Sửa sau S4 round 3 (REJECT, 08/10, hết trần ba round): E8 đỏ vì trên đường subagent thật, phiên con không có việc thì không nhận chỉ dẫn nào (`viec.ts` trả `null`), nên câu chỉ sang OKR chỉ nằm ở công cụ đè — mà eve bỏ công cụ động khi replay, nên đó cũng là đường production của mọi lượt Zalo sau lượt đầu. Thêm AC-8, nới AC-4 thêm `instructions/viec.ts`, chặn công tắc đo ở production (AC-2), xin chủ kho duyệt round 4.
 - Subagent `tro_ly_okr` chỉ có công cụ nộp; công cụ dựng sẵn (web, bash…) tắt bằng `disableTool()` và sandbox `deny-all` — lời hứa AC-7 của hồ sơ đã ký `tro-ly-okr-nen` — nên phiên con chạy dưới phiên Zalo không mở thêm đường đọc hay ghi nào.
+- Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-09 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 4:
+  - Ngoài-1: `TRO_LY_OKR_BO_DE` chưa khai trong `turbo.json`, nên bật nó khi chạy agent bằng `bun run dev` thì công tắc đo không tới tiến trình. Phép đo chính thức và production không bị ảnh hưởng.
+  - Ngoài-2: `docs/environment.md` chưa có dòng cho `TRO_LY_OKR_BO_DE`; `.env.example` là chỗ duy nhất ghi nó, kèm điều kiện chỉ đọc khi `NODE_ENV` không phải production.
+  - Ngoài-4: kiểm âm «uy quyen OKR giet luot» trong `rang/c33.mjs` ghim vào thông điệp đã xoá khỏi code nên không thể đỏ; ca chết lượt do kiểm trạng thái đã trả lời bắt.
+  - Ngoài-5: luật `.env.example` trong `rang/pham-vi.mjs` kiểm «có mặt», chưa kiểm «đúng một dòng khai».
+- Mở hợp đồng mới (Ngoài-3): nhãn bản ghi hội thoại cho công cụ đè khoá theo tên tệp nên không hiện; màn hội thoại Kara ngoài phiên OKR in nguyên câu `lyDo` tiếng Anh (`apps/app/lib/agent-transcript.ts`).
+- E8 gọi model thật: làn trước chữ ký 05:32Z đỏ vì model không gọi `tro_ly_okr` trong 6 lượt, làn 10:41Z xanh trên cùng mã (sổ quyết định 09/10). E8 có thể đỏ lại theo khung giờ của model.
