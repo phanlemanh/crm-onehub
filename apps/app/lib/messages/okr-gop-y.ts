@@ -1,4 +1,5 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import type { LyDoKhongQuyet } from "@crm/validation/okr-tro-ly";
 
 const vi = {
 	vung: {
@@ -111,6 +112,20 @@ const vi = {
 		"chua-san-sang": "Chưa quyết được góp ý này lúc này. Thử lại sau ít phút.",
 		"mat-mang": "Mất kết nối nên chưa ghi được. Thử lại khi có mạng.",
 	},
+	loiQuyet: {
+		"muc-tieu-da-bo": "Mục tiêu này đã bỏ nên không quyết được góp ý.",
+		"dang-cho-duyet":
+			"Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa.",
+		"so-sai-kieu": "Số trong góp ý không khớp kiểu đo của KR này.",
+		"can-chinh-gioi-han":
+			"Một bên đang ở mức giới hạn nên không căn chỉnh được.",
+		"can-chinh-chinh-no":
+			"Đích là chính Mục tiêu này nên không căn chỉnh được.",
+		"can-chinh-cung-cap": "Đích không ở cấp cao hơn nên không căn chỉnh được.",
+		"can-chinh-chua-cong-bo": "Đích chưa công bố nên chưa căn chỉnh được.",
+		"can-chinh-khac-chu-ky": "Đích thuộc chu kỳ khác nên không căn chỉnh được.",
+		"can-chinh-da-gan": "Mục tiêu này đã căn chỉnh vào đích đó rồi.",
+	} satisfies Record<LyDoKhongQuyet, string>,
 	vet: {
 		theoKara: "theo đề xuất của Kara",
 		suaTruong: (truong: string) => `Sửa ${truong}`,
@@ -245,6 +260,24 @@ const en: OkrGopYMessages = {
 			"This suggestion can't be decided right now. Try again in a few minutes.",
 		"mat-mang":
 			"The connection dropped, so nothing was saved. Try again when you're back online.",
+	},
+	loiQuyet: {
+		"muc-tieu-da-bo":
+			"This objective was dropped, so the suggestion can't be decided.",
+		"dang-cho-duyet":
+			"The objective is awaiting approval, so its content, KRs and alignment are locked. Withdraw it to edit.",
+		"so-sai-kieu":
+			"The number in this suggestion doesn't fit how this KR is measured.",
+		"can-chinh-gioi-han": "One side is restricted, so they can't be aligned.",
+		"can-chinh-chinh-no":
+			"The target is this objective itself, so it can't be aligned.",
+		"can-chinh-cung-cap":
+			"The target isn't at a higher level, so it can't be aligned to.",
+		"can-chinh-chua-cong-bo":
+			"The target is not published yet, so it can't be aligned to.",
+		"can-chinh-khac-chu-ky":
+			"The target is in another cycle, so it can't be aligned to.",
+		"can-chinh-da-gan": "This objective is already aligned to that target.",
 	},
 	vet: {
 		theoKara: "suggested by Kara",
