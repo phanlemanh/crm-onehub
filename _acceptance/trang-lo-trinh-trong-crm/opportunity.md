@@ -37,7 +37,7 @@ CRM không ghi ý định, không ghi trạng thái, không ký cổng; mỗi kh
 
 - Đặc tả khối dữ liệu lộ trình của bộ kit — `skills/acceptance/references/lo-trinh-du-lieu.md` ở nhánh
   `vong/xuat-du-lieu-lo-trinh` của kho kit (hồ sơ `xuat-du-lieu-lo-trinh`, PR
-  phanlemanh/acceptance-gate-kit#285, đã ký Cổng Bằng chứng, chưa gộp). Từ kit 2.27, `LO-TRINH.html`
+  phanlemanh/acceptance-gate-kit#285, đã ký Cổng Bằng chứng, gộp 09/10). Từ kit 2.26, `LO-TRINH.html`
   mang khối `lo-trinh-du-lieu` phiên bản 1; bản chiếu chép nguyên hàm `docDuLieu(html)`, đọc thẳng mọi
   trạng thái, và chỉ tự làm một việc: so ngày mốc với hôm nay.
 - Hàng LT2 «Gửi tín hiệu trong CRM» đứng trên LT1 (`dung_tren: [LT1]`).
@@ -52,7 +52,7 @@ CRM không ghi ý định, không ghi trạng thái, không ký cổng; mỗi kh
 | 3 | Nền 23/48 đếm lại được bằng cùng cách sau bốn tuần | Ngưỡng «dưới một nửa nền» không so được: không biết lần đầu tin nào được tính là hỏi tiến độ | Ghi cách đếm (phiên nào, câu nào tính) vào hồ sơ trước khi giao | Chưa có tệp đếm trong kho; số do chủ kho đưa 08/10 |
 | 4 | Tin hỏi tiến độ của chủ kho giảm khi trưởng phòng ban có trang | Không giảm, vì tin trong phiên điều phối là chủ kho hỏi máy về việc đang chạy trong phiên — thứ trang lộ trình không hiện | Đọc lại mẫu tin của phiên 23–26/09: tin hỏi «lộ trình đến đâu» hay hỏi «phiên/vòng này đang làm gì» | Chưa thử — rẻ, làm được ngay ở S1 |
 | 5 | Bản CRM đang chạy đọc được `LO-TRINH.html` của nhánh chính | Trang hiện bản cũ, hoặc phải giữ khoá GitHub trong ứng dụng | Đọc tệp từ chính cây đã dựng của bản đang chạy (ứng dụng dựng từ nhánh chính) | Hướng làm, chốt ở S1 |
-| 6 | crm nhận kit 2.27 trước khi vòng chạy | Trang không có dữ liệu để đọc (trang cũ không mang khối) | Theo dõi phát hành kit | Chủ kho gộp #285 sau khi cắt 2.26.0, phát hành ở mốc 2.27; crm không cài bản kit chưa phát hành |
+| 6 | crm nhận kit ≥ 2.26 (có khối dữ liệu lộ trình) trước khi vòng chạy | Trang không có dữ liệu để đọc (trang cũ không mang khối) | Theo dõi phát hành kit | #285 gộp 09/10 và phát hành ở mốc 2.26.0 (chủ kho gọi «cắt 2.26» 09/10); crm không cài bản kit chưa phát hành |
 
 ## Ngưỡng chết / ngưỡng UAT
 
@@ -101,5 +101,5 @@ Chưa dựng. Vòng chạm màn hình: bản bấm được làm ở nghi thức
 - Ghi gì từ CRM vào lộ trình — ý định, trạng thái, chữ ký cổng. Nguồn ý định là git (chủ kho chốt 08/10).
 - Gửi tín hiệu từ CRM — là hàng LT2, đứng trên LT1.
 - Gộp lộ trình của nhiều kho vào một trang — mỗi kho một trang (chủ kho chốt 08/10).
-- Tự tính trạng thái từ hồ sơ khi trang chưa mang khối dữ liệu — trang báo «vẽ lại bằng kit từ 2.27», không dựng nguồn sự thật thứ hai.
+- Tự tính trạng thái từ hồ sơ khi trang chưa mang khối dữ liệu — trang báo «vẽ lại bằng kit từ 2.26», không dựng nguồn sự thật thứ hai.
 - Chen vào trước 14/10 hay cài bản kit chưa phát hành vào crm.
