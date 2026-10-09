@@ -1,26 +1,3 @@
 {
-  "feature_plain": "Gỡ lỗi luật kho do vòng trước gây ra: bài kiểm của agent thôi lấy mã từ ứng dụng web, và dạng dữ liệu danh sách thoả thuận Kara trả có một nguồn chung cho cả agent lẫn ứng dụng.",
-  "will_do": [
-    {"id": "AC-2", "p": "Sẽ có một bộ đọc chung cho danh sách thoả thuận: giữ mã giai đoạn khi có, đọc được bản ghi cũ thiếu mã, trả rỗng khi dữ liệu sai hình."},
-    {"id": "AC-3", "p": "Sẽ cho ứng dụng đọc danh sách thoả thuận bằng đúng bộ đọc chung đó, kết quả y hệt, không còn bản viết tay riêng."},
-    {"id": "AC-4", "p": "Sẽ giữ phép đo đi trọn vòng của vòng trước: đầu ra thật của công cụ Kara, đọc qua bộ đọc chung, không mất trường nào."},
-    {"id": "AC-5", "p": "Sẽ ghim lại hồ sơ đã ký bị chạm (deal-va và hai hồ sơ trợ lý OKR), để lưới trước khi gộp không báo bằng chứng cũ."}
-  ],
-  "wont_do": [
-    {"id": "AC-1", "p": "Sẽ KHÔNG để luật kho đỏ: bài kiểm của agent không nhập gì từ ứng dụng web."},
-    {"id": "OOS-1", "p": "KHÔNG đưa luật kho vào CI — việc của hàng khác (P4)."},
-    {"id": "OOS-2", "p": "KHÔNG bắt công cụ Kara kiểm dữ liệu lúc ghi — để sau."}
-  ],
-  "coverage_plain": [
-    {"i": 0, "p": "Đời bản ghi Kara: có mã giai đoạn, không có, sai kiểu, sai hình — đủ khi mỗi đời đọc ra đúng kết quả."},
-    {"i": 1, "p": "Bên dùng dạng dữ liệu: agent ghi, ứng dụng đọc, bài kiểm agent — đủ khi cả ba dùng một nguồn và luật kho xanh."},
-    {"i": 2, "p": "Mỗi lời hứa có một tiêu chí: luật kho, bộ đọc chung, ứng dụng dùng nó, phép đo trọn vòng, hồ sơ đã ký."},
-    {"i": 3, "p": "Để sau: công cụ Kara tự kiểm dữ liệu trước khi trả."}
-  ],
-  "gap_probe_plain": [
-    {"i": 0, "p": "Phép đo ghim lại chỉ nhìn một hồ sơ — đã mở ra mọi hồ sơ bị chạm, có tên hai hồ sơ trợ lý OKR."},
-    {"i": 1, "p": "«Ứng dụng đọc bằng đúng hàm chung» mới đo bằng chữ — đã đổi sang so kết quả từng cặp."},
-    {"i": 2, "p": "Chưa đo việc đọc làm mất trường — đã thêm so từng trường với đầu ra thật."},
-    {"i": 3, "p": "Mốc đo dựa vào CI chưa chạy luật kho — đổi sang một lần chạy tay trên bản gộp, ghi lại trong ngày."}
-  ]
+  "feature_plain": "Gỡ lỗi luật kho do vòng trước gây ra: bài kiểm của agent thôi lấy mã từ ứng dụng web, và dạng dữ liệu danh sách thoả thuận Kara trả có một nguồn chung cho cả agent lẫn ứng dụng."
 }
