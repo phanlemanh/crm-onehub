@@ -2,12 +2,14 @@ import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { messages } from "../../../packages/ui/src/lib/messages.ts";
 import { LY_DO_TU_CHOI_NOP } from "../../../packages/validation/src/okr-cuoc-soan.ts";
 import { tre } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
 import { LENH } from "../../soan-okr-trang-rieng/rang/kich-ban.mjs";
 import {
 	APP,
 	buoc,
+	CHON,
 	chuanBi,
 	choThay,
 	choYen,
@@ -163,6 +165,12 @@ async function con() {
 		const cuoc = await moCuoc();
 		const t = await trang(kho);
 		try {
+			if (lang !== "vi") {
+				await datNgonNgu(t, lang);
+				const mUi = messages(lang);
+				CHON.gui = `[data-slot="kara-composer"] button[aria-label="${mUi.promptInput.submit}"]`;
+				CHON.dung = `[data-slot="kara-composer"] button[aria-label="${mUi.promptInput.stop}"]`;
+			}
 			if (!(await mo(t, cuoc.id))) await khongDo("trang soan khong mo duoc luot dau");
 			if (!(await chonTroChuyen(t))) await khongDo("khong chon duoc tab Tro chuyen");
 			if (!(await guiTin(t, LENH.nop1))) await khongDo("lan nop dau khong xong luot");
@@ -177,10 +185,6 @@ async function con() {
 			if (!(await guiTin(t, LENH.nopLai))) await khongDo("lan nop lai khong xong luot");
 			await choThay(t.p, () => document.querySelectorAll('[data-kara-turn="checkpoint"]').length >= 2, "hai moc", MAN.cho.luotMs);
 			await choYen(t.p);
-			if (lang !== "vi") {
-				await datNgonNgu(t, lang);
-				await moLai(t, cuoc.id);
-			}
 			const dau = await docDong(t.p);
 			ghi(`   dong tu-choi (${lang}): ${JSON.stringify(dau)}`);
 			await anh(t, `E9-tu-choi-${luot}`);

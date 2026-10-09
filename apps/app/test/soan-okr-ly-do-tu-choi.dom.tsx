@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { messages } from "@crm/ui/lib/messages";
 import {
 	type BanNhap,
 	banNhap,
@@ -11,6 +12,7 @@ import {
 import type { EveMessage } from "eve/react";
 import { luotNop } from "@/app/(app)/[slug]/okr/soan/moc-nop";
 import { toTranscript } from "@/lib/agent-transcript";
+import { okrSoanMessages } from "@/lib/messages/okr-soan";
 import {
 	datAgent,
 	datDanhSach,
@@ -62,6 +64,35 @@ const krv = (khoa: string, ten: string): KrVao => ({
 	viSao: "Vì số đo được.",
 });
 
+const banVoi = (krA: KrVao[]): BanNhap =>
+	banNhap.parse({
+		mucTieu: [
+			{
+				khoa: "a",
+				ten: "Đối tác lớn gắn bó",
+				viSaoLucNay: "Quý này cần.",
+				loai: "cam-ket",
+				viSao: "Vì đối tác lớn.",
+				canChinhId: null,
+				kr: krA,
+			},
+			{
+				khoa: "b",
+				ten: "Mở tuyến mới",
+				viSaoLucNay: "Quý này cần.",
+				loai: "cam-ket",
+				viSao: "Vì tuyến mới.",
+				canChinhId: null,
+				kr: [krv("b1", "Chuyến chạy thử"), krv("b2", "Hợp đồng thử")],
+			},
+		],
+	});
+
+const GOC_A = [
+	krv("a1", "Doanh số đối tác lớn"),
+	krv("a2", "Số đại lý gắn bó"),
+];
+
 const BAN = banNhap.parse({
 	mucTieu: [
 		{
@@ -101,7 +132,11 @@ const kq = (ketQua: string, lyDo = ""): KetQuaGia => ({
 	giuNguyen: [],
 });
 
-const tinNop = (id: string, output: KetQuaGia): ReturnType<typeof nguoiNoi> =>
+const tinNop = (
+	id: string,
+	output: KetQuaGia,
+	input: BanNhap = BAN,
+): ReturnType<typeof nguoiNoi> =>
 	({
 		id,
 		role: "assistant",
@@ -110,7 +145,7 @@ const tinNop = (id: string, output: KetQuaGia): ReturnType<typeof nguoiNoi> =>
 				type: "tool-nop_ban_nhap",
 				toolCallId: `goi-${id}`,
 				state: "output-available",
-				input: BAN,
+				input,
 				output,
 			},
 		],
@@ -178,10 +213,50 @@ for (const ngonNgu of ["vi", "en"] as const) {
 	});
 }
 
+const DA_CHAY = { ca: 0 };
+
 describe("k2c-ngoai", () => {
 	for (const ngonNgu of ["vi", "en"] as const) {
+		test(`gốc so sánh ở ${ngonNgu}: lần bị từ chối với mã lạ không làm gốc, mốc hai đếm «+1 KR» so với lần đã ghi đầu`, async () => {
+			DA_CHAY.ca += 1;
+			datNgonNgu(ngonNgu);
+			datDanhSach({ dong: [mt("1", "Đối tác lớn gắn bó")] });
+			await moTrang();
+			const tin = [
+				tinNop("n1", kq("da-ghi"), banVoi(GOC_A)),
+				tinNop(
+					"n2",
+					kq("tu-choi", "ma-moi-cua-agent"),
+					banVoi([
+						...GOC_A,
+						krv("a3", "Đối tác mới ký"),
+						krv("a4", "Đơn trả chậm"),
+					]),
+				),
+				tinNop(
+					"n3",
+					kq("da-ghi"),
+					banVoi([...GOC_A, krv("a3", "Đối tác mới ký")]),
+				),
+			];
+			await datAgent({ status: "ready", data: { messages: tin } });
+			await nhip(10);
+			const moc = [
+				...document.querySelectorAll('[data-kara-turn="checkpoint"] button'),
+			].map((b) => b.textContent?.trim() ?? "");
+			expect(moc.length === 2 ? "dung" : `so moc ${moc.length}, mong 2`).toBe(
+				"dung",
+			);
+			const can = messages(ngonNgu).karaKhung.moc(
+				okrSoanMessages(ngonNgu).moc.themKr("1"),
+			);
+			expect(
+				moc[1] === can ? "dung" : `goc so sanh sai: «${moc[1]}», can «${can}»`,
+			).toBe("dung");
+		});
 		for (const lyDo of ["ma-moi-cua-agent", ""]) {
 			test(`lý do «${lyDo || "rỗng"}» ở ${ngonNgu}: câu không lý do, không thành mốc, bộ đọc trả null`, async () => {
+				DA_CHAY.ca += 1;
 				const { chu, soMoc, tin } = await dungHoiThoai(ngonNgu, lyDo);
 				const doc = docKetQuaNop(kq("tu-choi", lyDo));
 				const items = toTranscript(tin as unknown as EveMessage[]).flatMap(
@@ -203,4 +278,7 @@ describe("k2c-ngoai", () => {
 			});
 		}
 	}
+	test("ma trận k2c-ngoai chạy đủ 6 ca (2 lý do × 2 ngôn ngữ + 2 ca gốc so sánh)", () => {
+		expect(DA_CHAY.ca).toBe(6);
+	});
 });
