@@ -6,8 +6,8 @@ import type { ComponentProps, ReactNode } from "react";
 export type KaraDockSide = "rail" | "fill";
 
 const SIDE: Record<KaraDockSide, string> = {
-	rail: "w-(--container-assist-rail) shrink-0 border-l",
-	fill: "w-(--container-assist) min-w-0 shrink",
+	rail: "w-(--container-assist-rail) max-w-full shrink-0",
+	fill: "w-(--container-assist) max-w-full min-w-0 shrink",
 };
 
 export type KaraDockProps = Omit<ComponentProps<"section">, "className"> & {
@@ -22,7 +22,8 @@ export function KaraDock({ side, alone = false, ...props }: KaraDockProps) {
 			data-side={side}
 			className={cn(
 				"flex min-h-0 flex-col",
-				alone ? "min-w-0 flex-1" : SIDE[side],
+				SIDE[side],
+				alone ? "flex-1" : side === "rail" && "border-l",
 			)}
 			{...props}
 		/>
@@ -40,11 +41,21 @@ export function KaraDockHeader({ children }: { children: ReactNode }) {
 	);
 }
 
-export function KaraDockBody({ children }: { children: ReactNode }) {
+export function KaraDockBody({
+	children,
+	scroll = true,
+}: {
+	children: ReactNode;
+	scroll?: boolean;
+}) {
 	return (
 		<div
 			data-slot="kara-dock-body"
-			className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4"
+			className={
+				scroll
+					? "min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4"
+					: "flex min-h-0 flex-1 flex-col gap-3 px-4 pt-4"
+			}
 		>
 			{children}
 		</div>

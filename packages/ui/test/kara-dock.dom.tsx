@@ -39,7 +39,7 @@ describe("sk-kara-dock", () => {
 				</KaraDock>
 				<KaraDock side="rail" data-o="hoi-thoai">
 					<KaraDockHeader>Kara</KaraDockHeader>
-					<KaraDockBody>tin</KaraDockBody>
+					<KaraDockBody scroll={false}>tin</KaraDockBody>
 					<KaraDockFooter>o soan</KaraDockFooter>
 				</KaraDock>
 			</div>,
@@ -57,6 +57,10 @@ describe("sk-kara-dock", () => {
 		expect(
 			document.querySelectorAll("[data-slot=kara-dock-header]").length,
 		).toBe(2);
+		expect(
+			lop(document.querySelector("[data-slot=kara-dock-body]")),
+			"than cot kara tu cuon chong cuon",
+		).not.toContain("overflow-y-auto");
 	});
 
 	test("cột đứng một mình phủ hết bề ngang, không kẻ", () => {
@@ -72,15 +76,23 @@ describe("sk-kara-dock", () => {
 
 	test("KaraArtifact docked không viền, không bo; mặc định giữ khung thẻ", () => {
 		dung(
-			<KaraArtifact title="Bản nháp" variant="docked" footer={<span>chan</span>}>
+			<KaraArtifact
+				title="Bản nháp"
+				variant="docked"
+				footer={<span>chan</span>}
+			>
 				<p>than</p>
 			</KaraArtifact>,
 		);
 		const docked = document.querySelector("[data-slot=kara-artifact]");
 		expect(docked?.getAttribute("data-variant")).toBe("docked");
 		expect(lop(docked), "docked con vien").not.toMatch(/\bborder\b|rounded/);
-		expect(document.querySelector("[data-slot=kara-dock-header]")).not.toBeNull();
-		expect(document.querySelector("[data-slot=kara-dock-footer]")).not.toBeNull();
+		expect(
+			document.querySelector("[data-slot=kara-dock-header]"),
+		).not.toBeNull();
+		expect(
+			document.querySelector("[data-slot=kara-dock-footer]"),
+		).not.toBeNull();
 		act(() => root?.unmount());
 		root = null;
 		document.body.innerHTML = "";

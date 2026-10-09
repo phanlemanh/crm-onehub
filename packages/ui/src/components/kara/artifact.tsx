@@ -55,18 +55,27 @@ export function KaraArtifact({
 					className="flex h-full min-h-0 min-w-0 flex-col"
 				>
 					<KaraDockHeader>
-						<div className="flex min-w-0 items-baseline gap-2 truncate">
-							<ArtifactTitle>{title}</ArtifactTitle>
-							<KaraMark scope={meta} />
-							{chuBan ? <KaraState kind="working" label={chuBan} /> : null}
+						<div
+							data-slot="kara-artifact-header"
+							className="flex min-w-0 flex-1 items-center justify-between gap-3"
+						>
+							<div className="flex min-w-0 items-baseline gap-2 truncate">
+								<ArtifactTitle>{title}</ArtifactTitle>
+								<KaraMark scope={meta} />
+								{chuBan ? <KaraState kind="working" label={chuBan} /> : null}
+							</div>
+							{actions ? <ArtifactActions>{actions}</ArtifactActions> : null}
 						</div>
-						{actions ? <ArtifactActions>{actions}</ArtifactActions> : null}
 					</KaraDockHeader>
 					<KaraDockBody>
-						<div className="text-sm">{children}</div>
+						<div data-slot="kara-artifact-content" className="text-sm">
+							{children}
+						</div>
 					</KaraDockBody>
 					{footer ? (
-						<KaraDockFooter divided>{footer}</KaraDockFooter>
+						<KaraDockFooter divided>
+							<div data-slot="kara-artifact-footer">{footer}</div>
+						</KaraDockFooter>
 					) : null}
 				</div>
 			</KaraBusyProvider>

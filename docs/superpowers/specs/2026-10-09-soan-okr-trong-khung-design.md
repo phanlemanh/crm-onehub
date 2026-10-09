@@ -100,8 +100,9 @@ khai `status: not-run` kèm `superseded_by` trỏ tiêu chí đo lại (khuôn `
 | soan-okr-trang-rieng/E2 | màn: thanh kéo, ô 380 px kéo được 300–50% | AC-3 |
 | soan-okr-trang-rieng/E2b | DOM: `ResizablePanelGroup` hai ô, tab dưới 1024 | AC-3 |
 | soan-okr-trang-rieng/E14 | ma trận màn có kéo thanh bằng chuột và phím | AC-11 |
+| soan-okr-trang-rieng/E3 | ma trận sáu trạng thái, gồm ô bản nháp rỗng hiện «Kara đang soạn bản nháp đầu…» (thêm ở S3, xem sổ quyết định) | AC-5 |
 
-Mọi ô khác của K2 (E3–E13, E16) vẫn là lời hứa sống: AC-9 của vòng này chạy lại chúng trên khung mới.
+Mọi ô khác của K2 (E4–E13, E16) vẫn là lời hứa sống: AC-9 của vòng này chạy lại chúng trên khung mới.
 
 ## Ranh giới tệp
 

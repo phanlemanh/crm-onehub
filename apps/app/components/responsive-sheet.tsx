@@ -59,6 +59,7 @@ function SheetContent({
 	size?: SheetSize;
 	showCloseButton?: boolean;
 	onOpenAutoFocus?: (event: Event) => void;
+	onCloseAutoFocus?: (event: Event) => void;
 }) {
 	if (useResponsive()) {
 		const phuToanMan = size === "kara";

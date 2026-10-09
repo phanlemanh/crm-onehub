@@ -190,6 +190,7 @@ export function BanNhap({
 	const coNhap = s.cay.length > 0;
 	return (
 		<KaraArtifact
+			variant="docked"
 			title={m.dong.tieuDe}
 			meta={
 				coNhap

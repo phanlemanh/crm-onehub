@@ -29,7 +29,6 @@ import type {
 	CuocSoan,
 	DongKr,
 	DongSoan,
-	DonViSoan,
 	KetSoBanNhap,
 	SoDaGo,
 	SoKr,
@@ -44,6 +43,7 @@ import {
 import {
 	cayNhap,
 	demDuaVao,
+	donViCua,
 	krDuaVao,
 	krThieuSo,
 	soBanNhap,
@@ -51,14 +51,7 @@ import {
 import { gioNopCuoi, luotNop } from "./moc-nop";
 import { docSoDaLuu, ghiSoDaLuu, khoaSo } from "./so-theo-khoa";
 
-export function donViCua(cuoc: CuocSoan): DonViSoan {
-	return {
-		cycleId: cuoc.cycleId,
-		level: cuoc.level,
-		divisionId: cuoc.divisionId,
-		departmentId: cuoc.departmentId,
-	};
-}
+export { donViCua };
 
 export function useLuongCuoc(cuocSoanId: string) {
 	const trpc = useTRPC();
@@ -385,6 +378,9 @@ export function useCuocSoan({
 				if (!kq.ok) return;
 				nhap.xongSo();
 				void cache.okr();
+				void qc.invalidateQueries({
+					queryKey: trpc.okr.soanSanSang.pathKey(),
+				});
 			},
 			onSettled: docLai,
 		}),
