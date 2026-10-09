@@ -5,7 +5,9 @@ slug: thuoc-7-ngay-loc-pr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-09
 design_doc: _acceptance/thuoc-7-ngay-loc-pr/design.md
 ---
 

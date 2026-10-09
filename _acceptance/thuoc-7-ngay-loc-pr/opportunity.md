@@ -52,13 +52,13 @@ thoát 0 như đã đo xong.
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: Ngày đo của F21, thước in được con số trung vị và số lượt huỷ vì trần từ lượt CI
+- Câu hỏi phép đo trả lời: Ngày đo của F21, thước in được con số trung vị và số lượt huỷ vì trần từ lượt CI
   thật của PR vào `onehub`.
-- [đề xuất] Kết quả nào là SỐNG: Chạy đúng lệnh ghi trong hồ sơ F21 vào ngày đo cho ≥ 10 lượt xanh trong cửa sổ, và mỗi
+- Kết quả nào là SỐNG: Chạy đúng lệnh ghi trong hồ sơ F21 vào ngày đo cho ≥ 10 lượt xanh trong cửa sổ, và mỗi
   lượt huỷ được xếp vào «vì trần» hay «không vì trần» có căn cứ, không đoán.
-- [đề xuất] Kết quả nào là CHẾT: Ngày đo mà thước vẫn in «chưa đủ mẫu» dù GitHub có ≥ 10 lượt xanh của PR vào `onehub`,
+- Kết quả nào là CHẾT: Ngày đo mà thước vẫn in «chưa đủ mẫu» dù GitHub có ≥ 10 lượt xanh của PR vào `onehub`,
   hoặc thoát 0 khi đã phải đoán trần.
-- [đề xuất] Timebox: xong và gộp trước 2026-10-15 (mốc của hàng), để kịp ngày đo 7 ngày của F21.
+- Timebox: xong và gộp trước 2026-10-15 (mốc của hàng), để kịp ngày đo 7 ngày của F21.
 
 ## Hạng mục cùng lớp
 
@@ -66,5 +66,5 @@ F21 `ci-ma-tran-ba-o` (hồ sơ chủ của thước). F9 `kiem-cheo-sau-gop` v�
 
 ## Quyết định Cổng Đáng
 
-2026-10-09, chủ kho trả lời «Đồng ý» cho báo cáo của P4 nêu F22 đang chờ anh ký Cổng Đáng. Ngưỡng giữ tiền tố «đề
-xuất» tới Cổng Phạm vi (luật 27 của đợt).
+2026-10-09, chủ kho trả lời «Đồng ý» cho báo cáo của P4 nêu F22 đang chờ anh ký Cổng Đáng. Ngưỡng bỏ tiền tố «đề
+xuất» khi anh duyệt Cổng Phạm vi ngày 09/10 (luật 27 của đợt).
