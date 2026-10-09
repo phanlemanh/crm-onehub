@@ -4,7 +4,7 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.k3_khung
-    expected: "exit 0; bài DOM apps/app/test/gop-y-dung-cho-luot-2.dom.tsx -t k3-khung dựng khung Mục tiêu thật (khung bài gop-y-dung-cho.dom.tsx) với 3 góp ý chờ; so giá trị nguyên thuỷ: closest('[data-slot=detail-sheet-section]') của [data-vung-kara] khác null; số [data-slot=kara-mark] (tia sáng) trong vùng === 1 (nhãn vùng); số [data-slot=kara-proposal] === 3; khi KaraBusy bật thì mọi nút quyết trong vùng có disabled === true. Ca ghim mặc định của KaraState (yêu cầu của P1-35): KaraState empty không truyền action và off không truyền describedBy cho DOM giống hệt bản trước vòng (so outerHTML với fixture chép từ c1067c16, đọc theo tên). Chiều đỏ ghim ở E15 (a): bỏ media={false} → 'tia sang trong vung: 4, mong 1'."
+    expected: "exit 0; bài DOM apps/app/test/gop-y-dung-cho-luot-2.dom.tsx -t k3-khung dựng khung Mục tiêu thật (khung bài gop-y-dung-cho.dom.tsx) với 3 góp ý chờ; so giá trị nguyên thuỷ: closest('section') của [data-vung-kara] khác null và cùng className với section của vùng «Vì sao» (DetailSheetSection không có data-slot); số dấu tia sáng trong vùng ([data-slot=kara-mark] cộng [data-slot=proposed-change] > [data-slot=item-media]) === 1 (nhãn vùng); số [data-slot=kara-khoa] > [data-slot=proposed-change] === 3; khi KaraBusy bật thì mọi nút quyết trong vùng có disabled === true. Ca ghim mặc định của KaraState (yêu cầu của P1-35): KaraState empty không truyền action và off không truyền describedBy cho DOM giống hệt bản trước vòng (so outerHTML với fixture chép từ c1067c16, đọc theo tên). Chiều đỏ ghim ở E15 (a): bỏ media={false} → 'tia sang trong vung: 4, mong 1'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx, packages/ui/src/components/kara/state.tsx, apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
@@ -12,7 +12,7 @@ evals:
     criterion: AC-2
     executor: test
     cmd: config:executors.test.k3_tai_loi
-    expected: "exit 0; cùng tệp, -t k3-tai-loi: ma trận viết trước 2 ca — troLyDanhSach trả lỗi máy chủ và lỗi mạng. Mỗi ca: [data-vung-kara] còn; textContent của [data-slot=kara-state][data-kind=error] === câu tải lỗi của okr-gop-y.ts; bấm Thử lại → số lần gọi troLyDanhSach tăng 1 và số lần gọi troLyDeXuat === 0. Chiều đỏ ghim ở E15 (b): trả 'tat' khi lỗi → 'vung kara bien mat khi tai loi'."
+    expected: "exit 0; cùng tệp, -t k3-tai-loi: ma trận viết trước 2 ca — troLyDanhSach trả lỗi máy chủ và lỗi mạng. Mỗi ca: [data-vung-kara] còn; textContent của [data-kara-state=error] === câu tải lỗi của okr-gop-y.ts; bấm Thử lại → số lần gọi troLyDanhSach tăng 1 và số lần gọi troLyDeXuat === 0. Chiều đỏ ghim ở E15 (b): trả 'tat' khi lỗi → 'vung kara bien mat khi tai loi'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
@@ -20,7 +20,7 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.k3_nho_loi
-    expected: "exit 0; cùng tệp, -t k3-nho-loi: ma trận 3 ca — troLyDeXuat ném FORBIDDEN, BAD_REQUEST, lỗi mạng. Mỗi ca: sau khi bấm Nhờ Kara, có đúng một [data-slot=kara-state][data-kind=error] với câu sản phẩm (không chứa message của lỗi), có Thử lại. Chiều đỏ: bỏ onError → 'nho kara loi ma khong co cau'."
+    expected: "exit 0; cùng tệp, -t k3-nho-loi: ma trận 3 ca — troLyDeXuat ném FORBIDDEN, BAD_REQUEST, lỗi mạng. Mỗi ca: sau khi bấm Nhờ Kara, có đúng một [data-kara-state=error] với câu sản phẩm (không chứa message của lỗi), có Thử lại. Chiều đỏ: bỏ onError → 'nho kara loi ma khong co cau'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
@@ -28,7 +28,7 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.k3_qua_han
-    expected: "exit 0; cùng tệp, -t k3-qua-han, đồng hồ giả của bun (setSystemTime, khôi phục sau mỗi ca): danh sách trả dangSoan liên tục, khung mở mà không bấm Nhờ (việc do người khác). Ma trận 2 ca hai chiều: t = trần − 1 giây → [data-kind=working] còn; t = trần + 1 giây → [data-kind=error] có Thử lại. Trần đọc từ TRO_LY_OKR_TRAN.tranChoMs của @crm/validation/okr-tro-ly (không chép số). Chiều đỏ ghim ở E15 (c): quaHan đòi batDau !== null → ca trần+1 in 'cho mai khi khung mo luc kara dang doc'."
+    expected: "exit 0; cùng tệp, -t k3-qua-han, đồng hồ giả của bun (setSystemTime, khôi phục sau mỗi ca): danh sách trả dangSoan liên tục, khung mở mà không bấm Nhờ (việc do người khác). Ma trận 2 ca hai chiều: t = trần − 1 giây → [data-kara-state=working] còn; t = trần + 1 giây → [data-kara-state=error] có Thử lại. Trần đọc từ TRO_LY_OKR_TRAN.tranChoMs của @crm/validation/okr-tro-ly (không chép số). Chiều đỏ ghim ở E15 (c): quaHan đòi batDau !== null → ca trần+1 in 'cho mai khi khung mo luc kara dang doc'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", packages/validation/src/okr-tro-ly.ts, apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
@@ -36,7 +36,7 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.k3_tat
-    expected: "exit 0; cùng tệp, -t k3-tat: ma trận viết trước 3 lý do khoá (het-luot, tam-nghi, chua-bat) × 2 trạng thái vùng (lỗi, rỗng) = 6 ca. Mỗi ca: có [data-slot=kara-state][data-kind=off] với lý do đúng của mã; không có nút Thử lại nào disabled trong vùng (đếm button[disabled] có chữ Thử lại === 0); nút của vùng có aria-describedby trỏ tới id của câu lý do. Chiều đỏ: trả lại Thử lại disabled → 'thu lai xam khong ly do'."
+    expected: "exit 0; cùng tệp, -t k3-tat: ma trận viết trước 3 lý do khoá (het-luot, tam-nghi, chua-bat) × 2 trạng thái vùng (lỗi, rỗng) = 6 ca. Mỗi ca: có [data-kara-state=off] với lý do đúng của mã; không có nút Thử lại nào disabled trong vùng (đếm button[disabled] có chữ Thử lại === 0); nút của vùng có aria-describedby trỏ tới id của câu lý do. Chiều đỏ: trả lại Thử lại disabled → 'thu lai xam khong ly do'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", "apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", packages/ui/src/components/kara/state.tsx, apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
@@ -44,7 +44,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.k3_loi_dong
-    expected: "exit 0; cùng tệp, -t k3-loi-dong: ma trận viết trước 4 hành động (nhận, sửa, bác, hoàn tác) × 4 loại lỗi (NOT_FOUND với message chứa mã clx…, CONFLICT, kq.ok false lyDo chua-san-sang, lỗi mạng TypeError 'Failed to fetch') = 16 ô, đòi số ô chạy === 16. Mỗi ô: textContent dưới góp ý === câu của loại đó trong okr-gop-y.ts (so đúng bằng), không chứa 'clx', 'Trợ lý OKR', 'Failed to fetch', 'Chưa sẵn sàng'. Chiều đỏ ghim ở E15 (d): in e.message → 'lo cau tho: clx'."
+    expected: "exit 0; cùng tệp, -t k3-loi-dong: ma trận viết trước 4 hành động (nhận, sửa, bác, hoàn tác) × 4 loại lỗi (NOT_FOUND với message chứa mã clx…, CONFLICT, kq.ok false lyDo chua-san-sang, lỗi mạng TypeError 'Failed to fetch') = 16 ô — riêng cột hoàn tác, ô «chưa sẵn sàng» thay bằng BAD_REQUEST (hoàn tác đi qua thủ tục sửa Mục tiêu/KR, không trả ok: false), đòi số ô chạy === 16. Mỗi ô: textContent dưới góp ý === câu của loại đó trong okr-gop-y.ts (so đúng bằng), không chứa 'clx', 'Trợ lý OKR', 'Failed to fetch', 'Chưa sẵn sàng'. Chiều đỏ ghim ở E15 (d): in e.message → 'lo cau tho: clx'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
@@ -52,7 +52,7 @@ evals:
     criterion: AC-7
     executor: test
     cmd: config:executors.test.k3_can_chinh
-    expected: "exit 0; cùng tệp, -t k3-can-chinh, ma trận viết trước 3 ca chạy trọn đường nhận → làm mới → Hoàn tác (troLyQuyet giả trả kết quả nhận có đích; okr.objective giả trả danh sách liên kết TRƯỚC và SAU lần nhận): (1) trước [Y-cũ], sau [Y-cũ, X-mới] — Y đứng đầu danh sách; bấm Hoàn tác → removeAlignment gọi đúng một lần với id của X-mới, góp ý về chờ; (2) cùng đích — trước [X-cũ], sau [X-cũ, X-mới] → gỡ đúng id X-mới, không gỡ X-cũ; (3) cùng đích mà máy chủ không tạo liên kết mới — trước [X-cũ], sau [X-cũ] → biên nhận không có Hoàn tác (không gỡ liên kết người dùng tự tạo). Ca lỗi: removeAlignment ném → câu lỗi dưới biên nhận, biên nhận còn. Liên kết vừa tạo = liên kết có trong SAU mà không có trong TRƯỚC và khớp đích. Chiều đỏ ghim ở E15 (h): chọn liên kết đầu danh sách khớp đích → ca (1) in 'go nham lien ket: Y-cu' hoặc ca (2) in 'go nham lien ket: X-cu'."
+    expected: "exit 0; cùng tệp, -t k3-can-chinh, ma trận viết trước 3 ca chạy trọn đường nhận → làm mới → Hoàn tác (troLyQuyet giả trả kết quả nhận có đích; okr.objective giả trả danh sách liên kết TRƯỚC và SAU lần nhận): (1) trước [Y-cũ], sau [Y-cũ, X-mới] — Y đứng đầu danh sách; bấm Hoàn tác → removeAlignment gọi đúng một lần với id của X-mới, biên nhận chuyển sang «Đã hoàn tác» (data-trang-thai === 'da-hoan-tac'); (2) cùng đích — trước [X-cũ], sau [X-cũ, X-mới] → gỡ đúng id X-mới, không gỡ X-cũ; (3) cùng đích mà máy chủ không tạo liên kết mới — trước [X-cũ], sau [X-cũ] → biên nhận không có Hoàn tác (không gỡ liên kết người dùng tự tạo). Ca lỗi: removeAlignment ném → câu lỗi dưới biên nhận, biên nhận còn. Liên kết vừa tạo = liên kết có trong SAU mà không có trong TRƯỚC và khớp đích. Chiều đỏ ghim ở E15 (h): chọn liên kết đầu danh sách khớp đích → ca (1) in 'go nham lien ket: Y-cu' hoặc ca (2) in 'go nham lien ket: X-cu'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", "apps/app/app/(app)/[slug]/okr/nhom-kara.tsx", apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
@@ -60,7 +60,7 @@ evals:
     criterion: AC-8
     executor: test
     cmd: config:executors.test.k3_hai_hoan
-    expected: "exit 0; cùng tệp, -t k3-hai-hoan: hai KR đã nhận; mutation giả của lần một chờ một promise điều khiển tay, lần hai trả ngay; bấm Hoàn tác KR1 rồi KR2; giải lần hai → KR2 về chờ, KR1 vẫn biên nhận đang làm; giải lần một bằng lỗi → câu lỗi dưới KR1, KR2 không có lỗi. So bằng giá trị nguyên thuỷ (data-trang-thai từng dòng, textContent lỗi). Chiều đỏ ghim ở E15 (e): một callback chung → 'loi lan mot roi vao kr2' hoặc 'kr1 khong ve cho'."
+    expected: "exit 0; cùng tệp, -t k3-hai-hoan: hai KR đã nhận; mutation giả của lần một chờ một promise điều khiển tay, lần hai trả ngay; bấm Hoàn tác KR1 rồi KR2; giải lần hai → biên nhận KR2 chuyển sang «Đã hoàn tác», KR1 vẫn biên nhận đang làm; giải lần một bằng lỗi → câu lỗi dưới KR1, KR2 không có lỗi. So bằng giá trị nguyên thuỷ (data-trang-thai từng dòng, textContent lỗi). Chiều đỏ ghim ở E15 (e): một callback chung → 'loi lan mot roi vao kr2' hoặc 'kr1 khong sang da hoan tac'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
@@ -145,7 +145,7 @@ evals:
     cmd: config:executors.script.k3_man
     steps:
       - "Cảnh cây trước màn đầu; phiên đo riêng (tien-de.mjs, do:man), mỗi khổ một tiến trình con tự mở phiên riêng; bàn đo màn của gop-y-dung-cho (rang/man-gop-y.mjs, san-gop-y.mjs) nhập lại, không sửa; đăng nhập theo bộ mẫu"
-      - "Ở 1440 và 390 đi qua mười trạng thái của bảng UX-STATE-TABLE: có khung, đang đọc, quá hạn (chờ đúng trần thật TRO_LY_OKR_TRAN.tranChoMs, không rút ngắn, không biến môi trường mới), tải lỗi (chặn troLyDanhSach trả 500), Nhờ lỗi (chặn troLyDeXuat trả 403), hết lượt, căn chỉnh có Hoàn tác (bấm nhận Căn chỉnh thật rồi bấm Hoàn tác; đọc lại liên kết căn chỉnh qua API — số liên kết về như trước khi nhận, liên kết có sẵn còn nguyên), lỗi dòng (chặn quyết trả 404), neo KR, người phụ trách hai KR (đăng nhập người phụ trách hai KR của bộ mẫu, bấm Nhờ thật, đòi không có Forbidden và danh sách chỉ góp ý của KR họ). Mỗi trạng thái đòi dấu DOM của nó (data-kind, data-vung-kara, activeElement) và chụp ảnh khung nhìn"
+      - "Ở 1440 và 390 đi qua mười trạng thái của bảng UX-STATE-TABLE: có khung, đang đọc, quá hạn (chờ đúng trần thật TRO_LY_OKR_TRAN.tranChoMs, không rút ngắn, không biến môi trường mới), tải lỗi (chặn troLyDanhSach trả 500), Nhờ lỗi (chặn troLyDeXuat trả 403), hết lượt, căn chỉnh có Hoàn tác (bấm nhận Căn chỉnh thật rồi bấm Hoàn tác; đọc lại liên kết căn chỉnh qua API — số liên kết về như trước khi nhận, liên kết có sẵn còn nguyên), lỗi dòng (chặn quyết trả 404), neo KR, người phụ trách hai KR (đăng nhập người phụ trách hai KR của bộ mẫu, bấm Nhờ thật, đòi không có Forbidden và danh sách chỉ góp ý của KR họ). Mỗi trạng thái đòi dấu DOM của nó (data-kara-state, data-vung-kara, activeElement) và chụp ảnh khung nhìn"
     expected: "exit 0; 20 ảnh (10 trạng thái × 2 khổ) trong _acceptance/kara-gop-y-luot-2/evidence/; mỗi trạng thái in 'dat'; console không lỗi ngoài các yêu cầu bị chặn chủ đích."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
     paths: ["apps/app/app/(app)/[slug]/okr/**", apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/lib/messages/okr-gop-y.ts, _acceptance/kara-gop-y-luot-2/rang/man.mjs]
