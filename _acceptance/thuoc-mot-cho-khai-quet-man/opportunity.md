@@ -31,9 +31,9 @@ xanh, hai nơi lệch nhau và người dùng thấy trạng thái nộp sai mà
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: thước «một chỗ khai» của K2b có thật sự quét khu soạn không.
-- Kết quả nào là SỐNG: [đề xuất] trên cây lành, `mot-nguon.mjs` quét đủ ba lớp (agent, khu soạn, validation) với số tệp > 0 ở mỗi lớp và vẫn xanh; một bản sao khai lại tập trong khu soạn làm nó đỏ, gọi tên tệp.
-- Kết quả nào là CHẾT: [đề xuất] còn một lớp quét khớp 0 tệp mà phép đo vẫn xanh, hoặc khai trùng trong khu soạn không làm nó đỏ.
-- Timebox: [đề xuất] lượt S4 của chính hồ sơ; việc nội bộ của thước, không có phiên nghiệm thu người dùng.
+- Kết quả nào là SỐNG: trên cây lành, `mot-nguon.mjs` quét đủ ba lớp (agent, khu soạn, validation) với số tệp > 0 ở mỗi lớp và vẫn xanh; một bản sao khai lại tập trong khu soạn làm nó đỏ, gọi tên tệp.
+- Kết quả nào là CHẾT: còn một lớp quét khớp 0 tệp mà phép đo vẫn xanh, hoặc khai trùng trong khu soạn không làm nó đỏ.
+- Timebox: lượt S4 của chính hồ sơ; việc nội bộ của thước, không có phiên nghiệm thu người dùng.
 
 ## Nguồn ngoài & phạm vi kế thừa
 
@@ -45,7 +45,7 @@ xanh, hai nơi lệch nhau và người dùng thấy trạng thái nộp sai mà
 
 - **decision = build.** Căn cứ: luật 26 — Ngoài-4 của `soan-okr-khong-lac`, Cổng 2 2026-10-08T16:47:19Z.
 - **disposition = archive.** Căn cứ: không có prototype.
-- **Ngưỡng:** giữ `[đề xuất]` tới khi anh duyệt Cổng 1 (luật 27); đơn `yeu-cau/P7-14.json`.
+- **Ngưỡng UAT chốt cùng lúc ký:** như mục Ngưỡng — anh duyệt ở Cổng 1 ngày 2026-10-10 (luật 27; đơn `yeu-cau/P7-14.json`).
 
 ## Thước đo thành công → ứng viên criterion
 
