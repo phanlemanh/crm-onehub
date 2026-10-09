@@ -88,7 +88,7 @@ async function nhanVaDuaVao(
 	cuoc: CuocSoan,
 	muc: MucGieo[],
 	duong: Duong,
-): Promise<void> {
+): Promise<{ soMucTieu: number; soKr: number }> {
 	for (const m of muc)
 		for (const id of [m.mucTieu, m.kr, m.canChinh]) {
 			tienDongHo();
@@ -119,6 +119,7 @@ async function nhanVaDuaVao(
 	);
 	if (!ra.ok)
 		throw new Error(`dua vao ${duong} bi tu choi: ${ra.lyDo} ${ra.chiTiet}`);
+	return { soMucTieu: ra.soMucTieu, soKr: ra.soKr };
 }
 
 async function canChinhTaoRa(deXuatId: string) {
@@ -181,7 +182,11 @@ describe("dua-vao", () => {
 					LY_DO_KARA,
 				);
 				await datViSao(muc.canChinh, `  ${LY_DO_KARA}\u00a0\n`);
-				await nhanVaDuaVao(cuoc, [muc], duong);
+				const so = await nhanVaDuaVao(cuoc, [muc], duong);
+				if (so.soMucTieu !== 1 || so.soKr !== 1)
+					throw new Error(
+						`dua vao lech so muc tieu/KR (${duong}): ${so.soMucTieu}/${so.soKr}`,
+					);
 				const g = await canChinhTaoRa(muc.canChinh);
 				if (g.lyDo !== LY_DO_KARA)
 					throw new Error(`dua vao lam roi ly do (${duong}): ${g.lyDo}`);
@@ -495,6 +500,18 @@ describe("do-nguong", () => {
 			);
 			const dem = async () =>
 				((await db.$queryRawUnsafe(cauDo)) as { thieu: number }[])[0]?.thieu;
+			const cuocDua = await gieoCuoc({
+				donVi: DON_VI.kdNam,
+				nguoiMo: QUAN_TRI,
+			});
+			const mucDua = await gieoMuc(
+				cuocDua,
+				"dn",
+				"Hỗ trợ đo ngưỡng",
+				LY_DO_KARA,
+			);
+			await nhanVaDuaVao(cuocDua, [mucDua], "trpc");
+			await canChinhTaoRa(mucDua.canChinh);
 			const truoc = await dem();
 			if (truoc !== 0) throw new Error(`do nguong dem ${truoc}, mong 0`);
 			const cuoc = await gieoCuoc({ donVi: DON_VI.hoTro, nguoiMo: QUAN_TRI });
