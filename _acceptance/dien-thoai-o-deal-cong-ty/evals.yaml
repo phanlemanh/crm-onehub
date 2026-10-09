@@ -1,0 +1,126 @@
+schema_version: 1
+slug: dien-thoai-o-deal-cong-ty
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt2_api
+    paths:
+      - "apps/api/src/deals/**"
+      - "apps/api/test/dien-thoai-o-deal-cong-ty.spec.ts"
+    expected: |
+      dien-thoai-o-deal-cong-ty.spec.ts, describe "deal-co-so", CSDL thu cua luot. Fixture qua writer THAT: ContactsService.create
+      ca nhan P voi phone "0901 234 567" (luu +84901234567) va Q khong so, cung cong ty; deal gan P va Q; R cung cong ty chua gan.
+      Ma tran 3 dong: DealsService.byId -> contacts P.phone "+84901234567", Q.phone null; DealsService.contactOptions -> R co khoa
+      phone (null hoac so cua R). CHIEU DO: ban sao CONTACT_SELECT bo phone -> dong P do, ghim "deal-co-so: thieu phone".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.dt2_api
+    paths:
+      - "apps/api/src/companies/**"
+      - "apps/api/test/dien-thoai-o-deal-cong-ty.spec.ts"
+    expected: |
+      Cung lenh E1, describe "cong-ty-co-so": CompaniesService.byId cua cong ty fixture -> contacts P.phone "+84901234567",
+      Q.phone null. CHIEU DO: ban sao bo phone khoi select contacts cua companies.service -> do, ghim "cong-ty-co-so: thieu phone".
+
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt2_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/dien-thoai-o-deal-cong-ty/evidence dat tuong minh: lenh cua dt2_do_man (mot-luot.sh tu lay cong, tien-de.mjs dung kho do rieng cua cay, do-man.mjs gieo, chup, don)"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo anh deal-bang-1440.png va deal-bang-375.png doi chieu voi Expected"
+    inputs:
+      - _acceptance/dien-thoai-o-deal-cong-ty/evidence/
+    paths:
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/api/src/deals/**"
+      - "_acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"
+    expected: |
+      Ma tran viet truoc 5 o (do-man.mjs MA_TRAN), dong dem "5/5 o". E3 doc hai o:
+        deal-bang-1440: mo /deals?record=deal:<id> (deal gieo qua CSDL do, P co so rieng cua luot, Q khong so) -> tieu de cot cua
+          bang nguoi theo thu tu: Ten, Dien thoai, Vai tro, Chuc danh, Email; dong P hien so dang 0xxx xxx xxx (in tho); dong Q o
+          dien thoai la o trong chuan (—)
+        deal-bang-375: nhu tren o kho 375; o Dien thoai cua P nam tron trong khung (in left/right cua o)
+      CHIEU DO (pha-thu o S3 tren ban sao deal-sheet.tsx): bo cot Dien thoai -> deal-bang-1440 SAI, ghim "thieu cot Dien thoai".
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt2_do_man
+    steps:
+      - "Cung lan do voi E3; doc dong cong-ty-bang-1440; mo anh cong-ty-bang-1440.png"
+    inputs:
+      - _acceptance/dien-thoai-o-deal-cong-ty/evidence/
+    paths:
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "apps/api/src/companies/**"
+      - "_acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG cong-ty-bang-1440": mo /companies?record=company:<id>&tab=contacts -> cot Dien thoai ngay sau cot ten, dong P
+      hien so dang 0xxx xxx xxx; cot Chuc danh, Email, Phu trach con.
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.dt2_chon
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "apps/app/test/dien-thoai-o-deal-cong-ty.dom.tsx"
+    expected: |
+      dien-thoai-o-deal-cong-ty.dom.tsx, describe "chon-nguoi": AttachDealContact voi deals.contactOptions gia tra 3 dong theo
+      dung kieu dau ra cua API (A: chuc danh + phone "+84901234567"; B: phone, khong chuc danh; C: chuc danh, phone null).
+      Mo o chon -> chu ba lua chon lan luot «A … · Trưởng phòng · 0901 234 567», «B … · 0901 234 568», «C … · Kế toán».
+      CHIEU DO: ban sao bo ve so -> dong A do, ghim "chon-nguoi: thieu so".
+
+  - id: E5b
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt2_do_man
+    steps:
+      - "Cung lan do voi E3; doc dong chon-nguoi-1440; mo anh chon-nguoi-1440.png"
+    inputs:
+      - _acceptance/dien-thoai-o-deal-cong-ty/evidence/
+    paths:
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+      - "_acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG chon-nguoi-1440": trong ngan thoa thuan bam «Thêm cá nhân», mo o chon -> lua chon cua R (co so, chua gan) chua
+      so dang 0xxx xxx xxx. Anh: o chon mo, so hien canh ten.
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.dt2_do_man
+    steps:
+      - "Cung lan do voi E3; doc dong deal-bang-en-1440; mo anh deal-bang-en-1440.png"
+    inputs:
+      - _acceptance/dien-thoai-o-deal-cong-ty/evidence/
+    paths:
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "_acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"
+    expected: |
+      Dong "DUNG deal-bang-en-1440": cookie lang=en, mo ngan thoa thuan -> cot sau «Name» la «Phone».
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.dt2_san_thiet_ke
+    paths:
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/quick-add.tsx"
+    expected: |
+      design-gate.mjs --mode static cho ba tep: khong P0, thoat 0. Va trong diff so merge-base origin/onehub cua deal-sheet.tsx va
+      company-sheet.tsx, o so dien thoai dung <SoDienThoai (grep dong them co "SoDienThoai"), khong tu dinh dang so.
