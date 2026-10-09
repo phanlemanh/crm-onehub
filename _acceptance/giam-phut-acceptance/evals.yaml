@@ -13,8 +13,8 @@ evals:
     expected: |
       bun rang/hinh.mjs (goc kho suy tu import.meta.dirname) doc .github/workflows/acceptance.yml bang Bun.YAML.
       Ma tran viet truoc, moi o mot dong «dat <o>» hoac «sai <o>: <ly do>»:
-      (a) jobs dung ba khoa acceptance, build, agent-okr-node24;
-      (b) job acceptance: name «acceptance gate»; khong if, khong continue-on-error cap job; env co DATABASE_URL;
+      (a) jobs dung ba khoa luat-kho, build, agent-okr-node24;
+      (b) job luat-kho: name «acceptance gate»; khong if, khong continue-on-error cap job; env co DATABASE_URL;
           chuoi buoc dung thu tu checkout (fetch-depth 0) -> setup-node (node-version 24) -> setup-bun ->
           «bun install --frozen-lockfile» -> «node scripts/luat-kho/do-cay.mjs --du-luat» (khong if) -> «bun run
           test:dieu-phoi» -> buoc chay product-map.mjs -> buoc chay pre-merge-check.sh; ba buoc sau luat kho co
@@ -27,7 +27,7 @@ evals:
           tren bon ngu canh — PR 7 sha a, PR 7 sha b, push onehub sha a, push onehub sha b: hai PR cung nhom va
           cancel-in-progress true; hai push khac nhom va cancel-in-progress false; PR va push khac nhom.
       Ma 0 khi moi o dat. Chieu do cung luot tren ban sao YAML trong .acceptance-runs/giam-phut-acceptance/: them
-      if vao job acceptance -> ma 1 «sai b: job acceptance co if»; bo if cua buoc test:dieu-phoi -> «sai b: buoc
+      if vao job luat-kho -> ma 1 «sai b: job luat-kho co if»; bo if cua buoc test:dieu-phoi -> «sai b: buoc
       test:dieu-phoi thieu if !cancelled()»; bo if cua job agent-okr-node24 -> «sai c: agent-okr-node24 thieu if pull_request»; them if vao job build -> «sai c: build co if»; doi group
       thanh github.ref -> «sai d: hai push cung nhom»; doi name thanh «kiem» -> «sai b: ten job»; script thoat 1 cho
       tung ca va in «BAT <ca>»; mot ca khong bat -> thuoc hong, ma 1.
