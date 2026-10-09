@@ -1,13 +1,6 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@crm/ui/components/card";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { Field, FieldDescription, FieldLabel } from "@crm/ui/components/field";
 import {
@@ -35,6 +28,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@crm/ui/components/tabs";
+import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { useState } from "react";
 import { DetailSheet, DetailSheetHeader } from "@/components/detail-sheet";
 import {
@@ -515,9 +509,10 @@ function BanNhap({ h }: { h: Hinh }) {
 	);
 }
 
+const CHO_HOI_MS = 600;
+
 const CHU = {
 	chao: "Nói điều bạn đã biết về phòng này, mục tiêu của quý và điều đang vướng. Tôi soạn bản nháp đầu, bạn quyết từng dòng.",
-	kara: "Kara",
 	nen: "Theo đơn vị",
 	nenMoTa: "Mục tiêu và KR của từng phòng trong chu kỳ đang chọn.",
 	hoiTieuDe: "Kara đang soạn. Đóng khung?",
@@ -528,24 +523,24 @@ const CHU = {
 	chuaCauHinh: "Kara chưa được bật cho không gian làm việc này.",
 } as const;
 
-function CotKara({ h }: { h: Hinh }) {
+function CotKara({ h, motMinh }: { h: Hinh; motMinh?: boolean }) {
 	return (
 		<section
 			aria-label={M.tabTroChuyen}
 			data-o="hoi-thoai"
-			className="flex min-h-0 w-(--container-assist-rail) shrink-0 flex-col"
+			className={
+				motMinh
+					? "flex min-h-0 w-(--container-assist-rail) flex-1 flex-col"
+					: "flex min-h-0 w-(--container-assist-rail) shrink-0 flex-col"
+			}
 		>
-			<Card className="flex min-h-0 flex-1 flex-col">
-				<CardHeader>
-					<CardTitle>{CHU.kara}</CardTitle>
-				</CardHeader>
-				<CardContent className="min-h-0 flex-1 overflow-y-auto">
-					<HoiThoai h={h} />
-				</CardContent>
-				<CardFooter>
-					<OSoan h={h} />
-				</CardFooter>
-			</Card>
+			<KaraArtifact
+				title={M.tabTroChuyen}
+				footer={<OSoan h={h} />}
+				busy={h.ban ? { label: M.dangSoan } : null}
+			>
+				<HoiThoai h={h} />
+			</KaraArtifact>
 		</section>
 	);
 }
@@ -591,7 +586,7 @@ function ThanKhung({ h }: { h: Hinh }) {
 		);
 	if (h.loiKhung === "chua-cau-hinh")
 		return <KaraState kind="unconfigured" description={CHU.chuaCauHinh} />;
-	if (h.chiKara) return <CotKara h={h} />;
+	if (h.chiKara) return <CotKara h={h} motMinh />;
 	if (h.hep) return <HaiTab h={h} />;
 	return (
 		<>
@@ -608,7 +603,12 @@ function ThanKhung({ h }: { h: Hinh }) {
 
 export function SoanOkrTrongKhungMau({ state }: { state: string }) {
 	const h: Hinh = HINH[laHinh(state) ? state : "ST-khung-rong"];
-	const [hoi, datHoi] = useState(h.hoiDong === true);
+	const [hoi, datHoi] = useState(false);
+	useMountEffect(() => {
+		if (!h.hoiDong) return;
+		const hen = setTimeout(() => datHoi(true), CHO_HOI_MS);
+		return () => clearTimeout(hen);
+	});
 	return (
 		<div data-soan-khung={state}>
 			<PageShellHeader>
@@ -620,7 +620,7 @@ export function SoanOkrTrongKhungMau({ state }: { state: string }) {
 			<DetailSheet
 				open
 				onOpenChange={() => {}}
-				size={h.chiKara || h.loiKhung ? "sm" : "2xl"}
+				size={h.chiKara || h.loiKhung ? "md" : "2xl"}
 			>
 				<DetailSheetHeader
 					title={M.tieuDe}
