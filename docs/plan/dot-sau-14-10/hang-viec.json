@@ -544,6 +544,49 @@
       ],
       "chung_chi_them": [],
       "s4": "local"
+    },
+    {
+      "ma": "LT1",
+      "slug": "trang-lo-trinh-trong-crm",
+      "day": "P2",
+      "uu_tien": 4,
+      "sau": [
+        "E7",
+        "NM3"
+      ],
+      "ranh_gioi": [
+        "apps/app/app/(app)/[slug]/lo-trinh/**",
+        "apps/app/components/lo-trinh/**",
+        "apps/app/lib/lo-trinh/**",
+        "packages/validation/src/lo-trinh-du-lieu.ts",
+        "packages/validation/test/lo-trinh-du-lieu.spec.ts",
+        "apps/app/test/lo-trinh*",
+        "apps/app/test/proxy-lo-trinh.spec.ts",
+        "apps/app/test/fixtures/lo-trinh/**",
+        "apps/app/app/proto/_modules/trang-lo-trinh-trong-crm/**",
+        "_acceptance/trang-lo-trinh-trong-crm/**",
+        "docs/superpowers/specs/2026-10-09-trang-lo-trinh-trong-crm-design.md",
+        "docs/superpowers/plans/2026-10-09-trang-lo-trinh-trong-crm.md"
+      ],
+      "chung_chi_them": [
+        "apps/app/lib/messages/lo-trinh.ts",
+        "apps/app/lib/messages/khung-ung-dung.ts",
+        "apps/app/lib/khung-dieu-huong.ts",
+        "apps/app/lib/pham-vi-man.ts",
+        "apps/app/components/app-icon-rail.tsx",
+        "apps/app/lib/search-param-keys.ts",
+        "apps/app/proxy.ts",
+        "apps/app/next.config.ts",
+        "apps/app/test/khung-dieu-huong.spec.ts",
+        "apps/app/test/pham-vi-man.spec.ts",
+        "apps/app/test/thanh-bieu-tuong-hydrat.dom.tsx",
+        "packages/validation/package.json",
+        "packages/ui/src/components/reui/timeline.tsx",
+        "apps/app/app/proto/catalog.ts",
+        "apps/app/app/proto/registry.ts",
+        "_acceptance/config.yaml"
+      ],
+      "s4": "local"
     }
   ],
   "ngoai_hang_merge": []
