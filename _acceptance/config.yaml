@@ -1550,6 +1550,9 @@ executors:
     lint_slop: "bun run lint:slop"
     luat_kho_cay: "node scripts/luat-kho/do-cay.mjs"
     luat_kho_cay_du: "node scripts/luat-kho/do-cay.mjs --du-luat"
+    lkv_pha: node _acceptance/luat-kho-vong-doi/rang/pha.mjs
+    lkv_ci: bun _acceptance/luat-kho-vong-doi/rang/ci.mjs
+    lkv_thoi_gian: node _acceptance/luat-kho-vong-doi/rang/thoi-gian.mjs
     cmtb_hinh: bun _acceptance/ci-ma-tran-ba-o/rang/hinh.mjs
     cmtb_phu_goi: bun _acceptance/ci-ma-tran-ba-o/rang/phu-goi.mjs
     cmtb_khop_323: bun _acceptance/ci-ma-tran-ba-o/rang/khop-323.mjs
