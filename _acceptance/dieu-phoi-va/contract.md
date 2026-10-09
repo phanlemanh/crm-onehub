@@ -5,9 +5,9 @@ slug: dieu-phoi-va
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, agent, ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-09T23:09:11Z
 design_doc: docs/superpowers/specs/2026-10-10-dieu-phoi-va-design.md
 ---
 
