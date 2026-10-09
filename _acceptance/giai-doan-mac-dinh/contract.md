@@ -5,7 +5,7 @@ slug: giai-doan-mac-dinh
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T14:01:58Z
 design_doc: _acceptance/giai-doan-mac-dinh/design.md
@@ -72,3 +72,18 @@ Source input: hàng E4 của `docs/plan/lo-trinh-okr.json`; Ngoài-6 của `giai
 - Đường nền dùng lại bản xanh trên onehub `c1067c163` (luật 17).
 - `rang/duong-tao.mjs` và khoá `gmd_duong_tao` trong `_acceptance/config.yaml` ở lại nhưng không còn là phép đo của hợp
   đồng: không eval nào gọi chúng. E4b quyết giữ làm lưới tạm hay gỡ cùng lúc bỏ mặc định (gỡ khoá cần đơn `cham-tep`).
+
+Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-09 (Phan Le Manh), từ S4 round 1–3:
+
+- Ngoài-1: Thẻ quyết định vẫn ghi rằng việc quét mọi chỗ tạo thoả thuận đã được sửa xong, trong khi vòng này đã cắt việc đó. Người ký có thể tưởng thoả thuận tạo bằng đường khác ngoài API cũng đã được bảo vệ, dù thực tế chưa.
+- Ngoài-2: Thẻ quyết định tự mâu thuẫn: một chỗ nói phép quét mọi nơi tạo thoả thuận đã có, chỗ khác nói đã bỏ. Người duyệt có thể ký với niềm tin sai rằng bảo đảm này còn hiệu lực, trong khi nó đã được dời sang một đợt làm sau.
+- Ngoài-3: Một bảng chữ hay thông điệp vô hại có dạng giống lệnh tạo thoả thuận có thể làm cổng kiểm tra báo đỏ nhầm, dù không có thoả thuận nào được tạo. Người làm sẽ phải gỡ tay mỗi lần gặp.
+- Ngoài-4: Bài tự thử của cổng kiểm tra chưa chứng minh phần kiểm kê tự nó đỏ khi cần. Nếu phần này hỏng âm thầm thì sẽ không ai biết cho tới khi một đường tạo thoả thuận lọt qua.
+- Ngoài-5: Nếu lượt kiểm thử bị ngắt giữa chừng, một cơ sở dữ liệu tạm có thể bị bỏ lại trên máy và không tự được dọn. Không ảnh hưởng người dùng, chỉ tốn chỗ trên máy kiểm thử cho tới khi có người xoá tay.
+- Ngoài-6: Dữ liệu mẫu tự giữ một bản danh sách loại giai đoạn riêng. Nếu sau này thêm hay đổi loại giai đoạn mà quên sửa ở đây thì dữ liệu mẫu lệch âm thầm; chạy lại dữ liệu mẫu cũng có thể báo lỗi dù lẽ ra chỉ cần bỏ qua.
+- Ngoài-8: Trong dữ liệu mẫu, một số thoả thuận hiện dòng lịch sử đổi giai đoạn từ một giai đoạn sang chính nó (ví dụ từ Đủ điều kiện sang Đủ điều kiện). Chỉ thấy ở dữ liệu demo, nhưng xem hơi lạ.
+- Ngoài-9: Nếu lượt kiểm thử dữ liệu mẫu bị ngắt giữa chừng, cơ sở dữ liệu tạm bị bỏ lại trên máy kiểm thử mà không cơ chế nào tự dọn. Không ảnh hưởng người dùng.
+- Ngoài-10: Công cụ canh việc không ai âm thầm sửa các khẳng định kiểm thử cũ có bài tự thử hơi lỏng, nên nếu công cụ hỏng theo một kiểu hiếm thì bài tự thử vẫn có thể báo xanh.
+- Trong-AC-4: `paths` của E4 không liệt `packages/db/prisma/schema.prisma` và `packages/db/prisma/migrations/**`, nên bằng chứng «vòng này không chạm schema» không hoá cũ khi có commit chạm chúng. Giao E4b: E4b đổi schema (bỏ mặc định) và neo lại `gmd_hoi_quy` vào cặp sha gộp.
+
+Chấp nhận, không sửa (không ghi Known limits): Ngoài-7 (spec seed ép kiểu kết quả tiến trình con), Ngoài-11 (hai khẳng định chung một thông điệp).
