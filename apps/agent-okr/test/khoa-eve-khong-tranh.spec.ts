@@ -2,21 +2,21 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { type ChildProcess, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import {
-	mkdirSync,
 	readdirSync,
-	readFileSync,
 	renameSync,
 	rmSync,
 	utimesSync,
-	writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, dirname, join } from "node:path";
 import { dungGocGia, type GocGia, songCon } from "./support/eve-gia";
 import {
+	type ChuKhoaEve,
+	chuKhoa,
 	cungDau,
 	dauKhoaEve,
 	duongKhoaEve,
+	ghiChu,
 	ghiConVaoKhoa,
 	giuKhoaEve,
 	KHOI_DONG,
@@ -113,8 +113,10 @@ async function choChet(pid: number): Promise<boolean> {
 	return !songCon(pid);
 }
 
-function docChu(khoa: string): { pid: number; ma?: string; con: unknown[] } {
-	return JSON.parse(readFileSync(join(khoa, KHOI_DONG.khoa.tep), "utf8"));
+function docChu(khoa: string): ChuKhoaEve {
+	const chu = chuKhoa(khoa);
+	if (!chu) throw new Error(`khong doc duoc ${KHOI_DONG.khoa.tep} cua ${khoa}`);
+	return chu;
 }
 
 function conCu(khoa: string): string[] {
@@ -188,11 +190,15 @@ describe("so-dau", () => {
 	test(
 		"ma trận viết trước: sáu cặp dấu khoá",
 		async () => {
-			const goc = gocMoi();
-			await giuKhoaEve([goc.goc]);
+			const [goc, gocKhac, gocVang] = [gocMoi(), gocMoi(), gocMoi()];
+			await giuKhoaEve([goc.goc, gocKhac.goc, gocVang.goc]);
 			const khoa = duongKhoaEve(goc.goc);
+			const khoaKhac = duongKhoaEve(gocKhac.goc);
+			const khoaVang = duongKhoaEve(gocVang.goc);
 			const goc0 = dauKhoaEve(khoa);
 			const chu = docChu(khoa);
+			const datGio = (k: string, ms: number) =>
+				utimesSync(k, ms / 1000, ms / 1000);
 			const giaTri: [string, boolean, boolean][] = [];
 			giaTri.push([
 				"cung thu muc doc hai lan",
@@ -200,36 +206,47 @@ describe("so-dau", () => {
 				true,
 			]);
 
-			writeFileSync(
-				join(khoa, KHOI_DONG.khoa.tep),
-				JSON.stringify({ ...chu, ma: randomUUID() }),
-			);
-			utimesSync(khoa, goc0.mtimeMs / 1000, goc0.mtimeMs / 1000);
+			ghiChu(khoa, { ...chu, ma: randomUUID() });
+			datGio(khoa, goc0.mtimeMs);
 			giaTri.push(["ma khac", cungDau(goc0, dauKhoaEve(khoa)), false]);
-			writeFileSync(join(khoa, KHOI_DONG.khoa.tep), JSON.stringify(chu));
-			utimesSync(khoa, goc0.mtimeMs / 1000, goc0.mtimeMs / 1000);
+			ghiChu(khoa, chu);
+			datGio(khoa, goc0.mtimeMs);
 
-			const moi = (goc0.mtimeMs + 5_000) / 1000;
-			utimesSync(khoa, moi, moi);
+			datGio(khoa, goc0.mtimeMs + 5_000);
 			const doiGio = cungDau(goc0, dauKhoaEve(khoa));
 			if (doiGio) throw new Error("ino trung coi la cung khoa");
 			giaTri.push(["doi mtime", doiGio, false]);
 
-			const trong = join(dirname(khoa), `trong-${randomUUID()}`);
-			mkdirSync(trong);
-			donDep.push(() => rmSync(trong, { recursive: true, force: true }));
-			const dauTrong = dauKhoaEve(trong);
+			const gioVang = goc0.mtimeMs + 10_000;
+			const chuVang = docChu(khoaVang);
+			rmSync(join(khoaVang, KHOI_DONG.khoa.tep));
+			datGio(khoaVang, gioVang);
+			const dauVang = dauKhoaEve(khoaVang);
 			giaTri.push([
 				"ma vang hai ben",
-				cungDau(dauTrong, dauKhoaEve(trong)),
+				cungDau(dauVang, dauKhoaEve(khoaVang)),
 				true,
 			]);
-			giaTri.push([
-				"ma vang mot ben",
-				cungDau({ ...goc0, ma: null }, { ...goc0, ma: chu.ma ?? null }),
-				false,
-			]);
-			giaTri.push(["hai thu muc khac", cungDau(goc0, dauTrong), false]);
+			ghiChu(khoaVang, chuVang);
+			datGio(khoaVang, gioVang);
+			const dauCoMa = dauKhoaEve(khoaVang);
+			if (dauCoMa.ino !== dauVang.ino || dauCoMa.mtimeMs !== dauVang.mtimeMs)
+				throw new Error("ca ma vang mot ben khong co lap duoc ma");
+			giaTri.push(["ma vang mot ben", cungDau(dauVang, dauCoMa), false]);
+
+			const chuKhac = docChu(khoaKhac);
+			const gioChung = goc0.mtimeMs + 15_000;
+			ghiChu(khoaKhac, { ...chuKhac, ma: chu.ma });
+			datGio(khoa, gioChung);
+			datGio(khoaKhac, gioChung);
+			const dauMot = dauKhoaEve(khoa);
+			const dauHai = dauKhoaEve(khoaKhac);
+			if (dauMot.ma !== dauHai.ma || dauMot.mtimeMs !== dauHai.mtimeMs)
+				throw new Error("ca hai thu muc khac khong co lap duoc ino");
+			const haiThuMuc = cungDau(dauMot, dauHai);
+			ghiChu(khoaKhac, chuKhac);
+			if (haiThuMuc) throw new Error("hai khoa khac ino coi la mot");
+			giaTri.push(["hai thu muc khac", haiThuMuc, false]);
 
 			expect(giaTri.map(([ten, that]) => [ten, that])).toEqual(
 				giaTri.map(([ten, , mong]) => [ten, mong]),

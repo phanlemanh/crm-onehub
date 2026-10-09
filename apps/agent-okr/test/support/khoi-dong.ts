@@ -135,7 +135,7 @@ const chuKhoaEve = z.object({
 	ma: z.string().min(1).optional(),
 	con: z.array(conKhoaEve).default([]),
 });
-type ChuKhoaEve = z.infer<typeof chuKhoaEve>;
+export type ChuKhoaEve = z.infer<typeof chuKhoaEve>;
 
 export type DauKhoa = { ino: number; mtimeMs: number; ma: string | null };
 
@@ -164,7 +164,11 @@ export function duongKhoaEve(goc: string): string {
 	return duongKhoa(thatCua(goc));
 }
 
-function ghiChu(khoa: string, chu: ChuKhoaEve, giuaGhi?: () => void): void {
+export function ghiChu(
+	khoa: string,
+	chu: ChuKhoaEve,
+	giuaGhi?: () => void,
+): void {
 	const tam = join(
 		khoa,
 		`${KHOI_DONG.khoa.tep}${KHOI_DONG.khoa.duoiTam}${randomUUID()}`,
@@ -183,7 +187,7 @@ function songCon(pid: number): boolean {
 	}
 }
 
-function chuKhoa(khoa: string): ChuKhoaEve | null {
+export function chuKhoa(khoa: string): ChuKhoaEve | null {
 	try {
 		return chuKhoaEve.parse(
 			JSON.parse(readFileSync(join(khoa, KHOI_DONG.khoa.tep), "utf8")),
