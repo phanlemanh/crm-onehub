@@ -133,10 +133,9 @@ const S_GIA = {
 const chuCua = (sel: string) => qs(sel)?.textContent ?? "";
 const coChua = (chu: string, mong: string) => (chu.includes(mong) ? mong : chu);
 
-const DUNG: Record<
-	BeMat,
-	(locale: Locale, mau: string) => Promise<[string, string]>
-> = {
+type DungBeMat = (locale: Locale, mau: string) => Promise<[string, string]>;
+
+const DUNG = {
 	"nhom-kara": async (locale, mau) => {
 		kho.chiTiet = () => chiTietTu(mtSheet({ soGopYCho: 0 }));
 		kho.troLy = () => dsTroLy([], { docLuc: MOC_GIO });
@@ -277,7 +276,7 @@ const DUNG: Record<
 		);
 		return [coChua(chuCua('[data-slot="kara-artifact-header"]'), mong), mong];
 	},
-};
+} satisfies Record<BeMat, DungBeMat>;
 
 describe("k3-ngay-gio", () => {
 	test("k3-ngay-gio bay be mat x hai tieng cung mot khuon ngay gio, gio Viet Nam", async () => {
