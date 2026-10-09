@@ -5,11 +5,11 @@ route: http://localhost:3300/proto/trang-lo-trinh-trong-crm
 material: real-components
 context: standalone
 context_scenes: []
-reaction: nac-1 (anh-gui-kem-the-cong; chủ kho phản hồi 09/10 hai lượt: nhất quán với hệ, IA thứ tự khối)
+reaction: nac-1 (anh-gui-kem-the-cong; chủ kho phản hồi 09/10 ba lượt: nhất quán với hệ, IA thứ tự khối, theo khung Thoả thuận — nhóm/mốc là bộ lọc riêng)
 options:
 divergence: opened
 ds_skill: web-design-guidelines
-states: [ST-lotrinh-day-du, ST-lotrinh-theo-moc, ST-lotrinh-toan-canh, ST-lotrinh-loc, ST-lotrinh-tre, ST-lotrinh-bang-cot, ST-lotrinh-chi-tiet, ST-lotrinh-dang-tai, ST-lotrinh-chua-co-khoi, ST-lotrinh-khoi-hong, ST-lotrinh-tep-vang, ST-lotrinh-lo-loi, ST-lotrinh-khuon-moi]
+states: [ST-lotrinh-day-du, ST-lotrinh-tab, ST-lotrinh-loc, ST-lotrinh-tre, ST-lotrinh-bang-cot, ST-lotrinh-chia-moc, ST-lotrinh-chi-tiet, ST-lotrinh-da-bac, ST-lotrinh-dang-tai, ST-lotrinh-chua-co-khoi, ST-lotrinh-khoi-hong, ST-lotrinh-tep-vang, ST-lotrinh-lo-loi, ST-lotrinh-khuon-moi]
 breakpoints: [mobile-375, desktop-1280]
 themes: [light, dark]
 patched: 14
@@ -27,18 +27,20 @@ không cài vào crm. Các trạng thái lỗi dùng đúng câu của hàm `doc
 |---|---|---|---|
 | ST-lotrinh-day-du | mobile-375 | light | evidence/design-pass/ST-lotrinh-day-du--mobile-375.png |
 | ST-lotrinh-day-du | desktop-1280 | light | evidence/design-pass/ST-lotrinh-day-du--desktop-1280.png |
-| ST-lotrinh-theo-moc | mobile-375 | light | evidence/design-pass/ST-lotrinh-theo-moc--mobile-375.png |
-| ST-lotrinh-theo-moc | desktop-1280 | light | evidence/design-pass/ST-lotrinh-theo-moc--desktop-1280.png |
-| ST-lotrinh-toan-canh | mobile-375 | light | evidence/design-pass/ST-lotrinh-toan-canh--mobile-375.png |
-| ST-lotrinh-toan-canh | desktop-1280 | light | evidence/design-pass/ST-lotrinh-toan-canh--desktop-1280.png |
+| ST-lotrinh-tab | mobile-375 | light | evidence/design-pass/ST-lotrinh-tab--mobile-375.png |
+| ST-lotrinh-tab | desktop-1280 | light | evidence/design-pass/ST-lotrinh-tab--desktop-1280.png |
 | ST-lotrinh-loc | mobile-375 | light | evidence/design-pass/ST-lotrinh-loc--mobile-375.png |
 | ST-lotrinh-loc | desktop-1280 | light | evidence/design-pass/ST-lotrinh-loc--desktop-1280.png |
 | ST-lotrinh-tre | mobile-375 | light | evidence/design-pass/ST-lotrinh-tre--mobile-375.png |
 | ST-lotrinh-tre | desktop-1280 | light | evidence/design-pass/ST-lotrinh-tre--desktop-1280.png |
 | ST-lotrinh-bang-cot | mobile-375 | light | evidence/design-pass/ST-lotrinh-bang-cot--mobile-375.png |
 | ST-lotrinh-bang-cot | desktop-1280 | light | evidence/design-pass/ST-lotrinh-bang-cot--desktop-1280.png |
+| ST-lotrinh-chia-moc | mobile-375 | light | evidence/design-pass/ST-lotrinh-chia-moc--mobile-375.png |
+| ST-lotrinh-chia-moc | desktop-1280 | light | evidence/design-pass/ST-lotrinh-chia-moc--desktop-1280.png |
 | ST-lotrinh-chi-tiet | mobile-375 | light | evidence/design-pass/ST-lotrinh-chi-tiet--mobile-375.png |
 | ST-lotrinh-chi-tiet | desktop-1280 | light | evidence/design-pass/ST-lotrinh-chi-tiet--desktop-1280.png |
+| ST-lotrinh-da-bac | mobile-375 | light | evidence/design-pass/ST-lotrinh-da-bac--mobile-375.png |
+| ST-lotrinh-da-bac | desktop-1280 | light | evidence/design-pass/ST-lotrinh-da-bac--desktop-1280.png |
 | ST-lotrinh-dang-tai | mobile-375 | light | evidence/design-pass/ST-lotrinh-dang-tai--mobile-375.png |
 | ST-lotrinh-dang-tai | desktop-1280 | light | evidence/design-pass/ST-lotrinh-dang-tai--desktop-1280.png |
 | ST-lotrinh-chua-co-khoi | mobile-375 | light | evidence/design-pass/ST-lotrinh-chua-co-khoi--mobile-375.png |
@@ -85,3 +87,12 @@ không cài vào crm. Các trạng thái lỗi dùng đúng câu của hàm `doc
 - «Việc kế tiếp» và «Chỗ cần sửa» (chỉ đội sản phẩm cần) rời khỏi đầu trang, vào mục gập «Dành cho đội sản phẩm» ở Toàn cảnh.
 - Mốc thôi bị đẩy xuống đáy sau danh sách dài: thành một cách xem riêng; «Trễ mốc» thành khối đầu của Theo nhóm và ô số ở Toàn cảnh.
 - Còn mở: «Theo mốc» dài vì liệt cả mốc đã qua toàn việc đã giao — có thể thu gọn mốc đã qua; cột «Mốc» phần lớn là «—» vì dữ liệu (22/64 việc có mốc), không vì bố cục.
+
+### Lượt khung Thoả thuận (09/10, sau phản hồi «không thanh điều hướng con theo nhóm; dùng lọc hoặc thẻ như Thoả thuận; nhóm, mốc khác nhau nên tách riêng»)
+
+- Thanh nhóm bên trái và ba thẻ cách xem bị bỏ; trang thành một danh sách `DataTable` y khung Thoả thuận: tìm · thẻ vòng đời «Chưa xong / Đã giao / Xếp lại sau / Tất cả» · «Bảng | Bảng cột» · Lọc theo Lộ trình / Nhóm / Mốc (ba bộ lọc riêng) · Sắp xếp · Cột · «Đã bác» (như «Lưu trữ»).
+- Bảng cột thêm «Chia cột theo» Trạng thái / Nhóm / Mốc / Lộ trình — nếp của Onboarding; chia theo mốc thay cho cách xem «Theo mốc».
+- Thẻ vòng đời mặc định «Chưa xong» (như «Đang mở» / «Đang chạy»): lượt trước mặc định «Tất cả» xếp theo mốc nên việc đã giao từ tháng trước đứng đầu.
+- Cột khai độ rộng bằng lớp tỉ lệ như Thoả thuận (`w-[14%]`…); khai «10rem» bị bảng dùng chung bỏ qua và bóp cột «Việc».
+- Ba lộ trình gộp vào một danh sách (cùng một kho — không trái «mỗi kho một trang»); lộ trình thành một bộ lọc và một cột.
+- Bỏ bốn ô số và mục «Dành cho đội sản phẩm» (việc kế tiếp, chỗ cần sửa): Thoả thuận không có ô số; thứ của đội sản phẩm đã có ở LO-TRINH.html.

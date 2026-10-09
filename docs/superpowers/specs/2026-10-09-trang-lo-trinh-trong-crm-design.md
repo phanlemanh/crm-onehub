@@ -44,101 +44,96 @@ dữ liệu lộ trình» của bộ đọc, không vỡ. Phép đo của vòng 
 ## Màn
 
 Một màn `/[slug]/lo-trinh`, mục «Lộ trình» trên thanh điều hướng, mọi vai đã đăng nhập đều thấy, kể cả vai
-chỉ OKR. **Bố cục theo đúng khuôn của khu OKR** (Của tôi / Theo đơn vị / Toàn cảnh), vì từ 14/10 trưởng phòng
-ban dùng khu đó hằng ngày — họ không phải học cách đọc thứ hai.
+chỉ OKR. **Khung là khung danh sách của Thoả thuận và Onboarding** — cùng cấu trúc: một danh sách bản ghi
+(việc ↔ thoả thuận / kế hoạch), mỗi bản ghi có trạng thái, người/nhóm, mốc ngày. Chủ kho chốt 09/10: không
+dùng thanh điều hướng con theo nhóm; nhóm, mốc, lộ trình, trạng thái là các chiều khác nhau nên mỗi chiều là
+một bộ lọc riêng.
 
-- **Đầu trang:** tiêu đề «Lộ trình» + một câu: việc đội sản phẩm đang làm cho CRM; trang chỉ để xem, muốn đổi
-  kế hoạch thì báo đội sản phẩm. Không nút hành động.
-- **Hàng thẻ con = cách xem** (gạch chân, giữ trên đường dẫn `?xem=`): «Theo nhóm» (mặc định) · «Theo mốc» ·
-  «Toàn cảnh». **Bên phải hàng thẻ: bộ chọn lộ trình** (OKR · Kho tài liệu · Việc và Dự án, `?lo=`) — đúng chỗ
-  bộ chọn «Quý» của OKR; sau này bộ chọn kho đứng cạnh nó.
-- **Theo nhóm** (khuôn danh sách-chi tiết của «OKR theo đơn vị»): cột trái 18rem là danh sách nhóm kèm
-  «đã giao/tổng» (dưới lg đổi thành ô chọn); cột phải: tên nhóm + một dòng đếm, nút «Danh sách | Bảng cột»,
-  rồi việc chia ba khối theo câu người xem hỏi — **Trễ mốc** → **Sắp tới** (xếp theo ngày mốc, chưa hẹn mốc
-  xuống cuối) → **Đã giao** (thu gọn mặc định). Bảng cột là `Board` chỉ đọc của Thoả thuận, cột theo nhóm
-  trạng thái.
-- **Theo mốc:** dòng thời gian các mốc (ReUI Timeline), mỗi mốc kèm việc gắn với nó; cuối trang «Chưa hẹn mốc»
-  thu gọn.
-- **Toàn cảnh** (khuôn Toàn cảnh OKR): bốn ô số (Đã giao x/tổng · Đang làm · Chưa bắt đầu · Trễ mốc), bảng
-  «Theo nhóm» với thanh đã giao, rồi hai mục gập «Việc đã bác» và «Dành cho đội sản phẩm» (việc kế tiếp, chỗ
-  cần sửa trong kế hoạch — hai thứ chỉ đội sản phẩm cần).
-- **Bấm một việc ở bất kỳ đâu → ngăn chi tiết bên phải** (như bấm một thoả thuận): trạng thái, mốc, coi là
-  thành công khi, vì sao, cờ lệch, «Cần xong trước», «Việc đang chờ việc này» (bấm để chuyển sang việc đó).
-- **Nhãn trạng thái:** chữ chính là nhóm trạng thái dễ hiểu (Đã giao / Đang làm / Chưa bắt đầu / Khác); chữ
-  của khối hiện thành dòng phụ khi nó thêm nghĩa («Đã giao — chờ phiên nghiệm thu», «Sắp mở vòng»).
-- **Cảnh báo của bộ đọc** (`canhBao`) hiện thành khung ở dưới hàng thẻ.
+- **Đầu trang:** tiêu đề «Lộ trình» + một câu; không nút hành động (trang chỉ xem).
+- **Một danh sách cho mọi lộ trình của kho** (bảng dữ liệu dùng chung `DataTable`), thanh công cụ đúng thứ tự
+  của Thoả thuận: ô tìm (câu mô tả, mã) · thẻ vòng đời «Chưa xong» (mặc định) / «Đã giao» / «Xếp lại sau» /
+  «Tất cả» (như «Đang mở / Đã đóng» của Thoả thuận, «Đang chạy / Đã đóng» của Onboarding) · «Bảng | Bảng cột»
+  · bên phải: «Lọc» (ba chiều riêng: **Lộ trình**, **Nhóm**, **Mốc** — mốc có «Trễ mốc» và «Chưa hẹn mốc»),
+  «Sắp xếp», «Cột», nút bật «Đã bác» (như «Lưu trữ» của Thoả thuận).
+- **Cột:** Việc (câu mô tả đậm + mã · nhóm · số chỗ lệch) · Lộ trình (ẩn dưới md) · Trạng thái (ẩn dưới sm;
+  khổ hẹp hiện dưới câu mô tả) · Mốc (ngày, nhãn «Trễ»). Mặc định xếp theo mốc gần nhất. Dòng tổng dưới bảng
+  và phân trang như Thoả thuận.
+- **Bảng cột:** `Board` chỉ đọc của Thoả thuận; thanh công cụ thêm **«Chia cột theo»** Trạng thái / Nhóm / Mốc /
+  Lộ trình — đúng nếp «Chia cột theo» của Onboarding. Chia theo mốc cho dòng thời gian các mốc.
+- **Bấm một dòng/thẻ → ngăn hồ sơ bên phải** như hồ sơ thoả thuận: tiêu đề, dải bốn ô (Trạng thái · Mốc · Lộ
+  trình · Nhóm), cờ lệch, «Chi tiết» (coi là thành công khi, vì sao), «Cần xong trước», «Việc đang chờ việc
+  này» (bấm để chuyển).
+- **Nhãn trạng thái:** chữ chính là nhóm trạng thái dễ hiểu; chữ của khối thành dòng phụ khi thêm nghĩa.
+- Lộ trình lỗi hay khuôn mới hơn bộ đọc: khung cảnh báo trên bảng; các lộ trình khác vẫn hiện.
+- Bỏ khỏi trang: bốn ô số tổng quan, «Việc kế tiếp», «Chỗ cần sửa trong kế hoạch» — thứ của đội sản phẩm, đã có
+  ở `LO-TRINH.html`; tiến độ đọc từ dòng tổng và số đếm trong thẻ/bộ lọc.
 
 Mọi câu máy của bộ đọc chỉ nằm trong phần gập «Chi tiết cho đội sản phẩm». Chữ của tệp kế hoạch hiện nguyên
-văn ở cả hai ngôn ngữ giao diện và mang `translate="no"`. Nhãn của trang theo tệp lời `apps/app/lib/messages/lo-trinh.ts`.
+văn và mang `translate="no"`. Nhãn của trang theo tệp lời `apps/app/lib/messages/lo-trinh.ts`.
 
 <!-- <<<UX-SPEC-TEMPLATE -->
 ## Đặc tả UX
 
 ### 1. Luồng
 
-- Suôn sẻ: thanh điều hướng «Lộ trình» → «Theo nhóm» (mặc định) → chọn nhóm ở cột trái → đọc khối Trễ mốc / Sắp tới → bấm một việc → ngăn chi tiết (điểm ra: đóng ngăn, hoặc gửi đường dẫn đã chọn nhóm)
-- Biên: đường dẫn mang một nhóm không còn trong lộ trình → hiện mọi việc (bộ lọc chỉ liệt giá trị có thật nên danh sách không bao giờ rỗng vì lọc); lộ trình không có mốc; vai chỉ OKR
-- Lỗi & quay lại: tệp vắng, trang chưa mang khối, khối hỏng, khuôn lạ → một khung nói rõ chuyện gì và ai sửa, không có danh sách; một lộ trình mang lỗi → khung lỗi trong thẻ đó, các thẻ khác vẫn đọc được
+- Suôn sẻ: thanh điều hướng «Lộ trình» → danh sách «Chưa xong» xếp theo mốc → «Lọc» chọn nhóm/lộ trình/mốc → bấm một việc → ngăn hồ sơ (điểm ra: đóng ngăn, hoặc gửi đường dẫn đã lọc)
+- Biên: bộ lọc không còn việc nào → khung «không có việc khớp» + nút bỏ lọc (khung của bảng dùng chung); lộ trình không có mốc; vai chỉ OKR
+- Lỗi & quay lại: tệp vắng, chưa có khối, khối hỏng, khuôn lạ → khung trống thay cho bảng; một lộ trình lỗi → khung cảnh báo trên bảng, việc của các lộ trình khác vẫn hiện
 
 ### 2. Kiểm kê màn
 
 | Màn | MỘT việc của màn | Vào từ / ra tới |
 |---|---|---|
-| Lộ trình · Theo nhóm | Việc của một luồng đang ở đâu, cái gì trễ, cái gì sắp tới | thanh điều hướng / đường dẫn được gửi |
-| Lộ trình · Theo mốc | Mốc nào sắp tới và việc nào gắn với nó | thẻ con |
-| Lộ trình · Toàn cảnh | Cả lộ trình tới đâu, nhóm nào chậm | thẻ con |
-| Ngăn chi tiết việc | Vì sao, thành công khi nào, cần gì xong trước | bấm một việc / bấm việc liên quan |
+| Lộ trình · Bảng | Việc nào chưa xong, của nhóm nào, hẹn mốc nào | thanh điều hướng / đường dẫn được gửi |
+| Lộ trình · Bảng cột | Nhìn việc chia theo một chiều chọn được (trạng thái, nhóm, mốc, lộ trình) | nút «Bảng cột» |
+| Ngăn hồ sơ việc | Vì sao, thành công khi nào, cần gì xong trước | bấm dòng / thẻ / việc liên quan |
 
 ### 3. Bảng trạng thái
 
 <!-- <<<UX-STATE-TABLE -->
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
-| ST-lotrinh-day-du | Theo nhóm | cột nhóm + khối Sắp tới, Đã giao thu gọn | chọn nhóm, bấm việc |
-| ST-lotrinh-theo-moc | Theo mốc | dòng thời gian mốc kèm việc | bấm việc |
-| ST-lotrinh-toan-canh | Toàn cảnh | bốn ô số, bảng theo nhóm, mục gập | đọc |
-| ST-lotrinh-bang-cot | Theo nhóm | bảng cột theo trạng thái | bấm thẻ |
-| ST-lotrinh-chi-tiet | Ngăn chi tiết | trạng thái, mốc, thành công khi, cần xong trước, việc đang chờ | bấm việc liên quan, đóng |
-| ST-lotrinh-dang-tai | Lộ trình | khung chờ của PageShell | chờ |
-| ST-lotrinh-tre | Theo nhóm | khối «Trễ mốc» đứng đầu; ô «Trễ mốc» ở Toàn cảnh | bấm việc |
-| ST-lotrinh-chua-co-khoi | Lộ trình | Empty: lộ trình chưa có ở đây; câu của bộ đọc trong phần gập «Chi tiết cho đội sản phẩm» | báo đội sản phẩm |
-| ST-lotrinh-khoi-hong | Lộ trình | Empty: không đọc được lộ trình (khối không phải JSON, khuôn lạ, sai kiểu); câu của bộ đọc và đường khoá trong phần gập | báo đội sản phẩm |
-| ST-lotrinh-tep-vang | Lộ trình | Empty: không đọc được lộ trình trong bản đang chạy | báo đội sản phẩm |
-| ST-lotrinh-lo-loi | Lộ trình | khung lỗi trong thẻ của lộ trình hỏng, câu `loi` nguyên văn trong phần gập | đọc thẻ khác |
-| ST-lotrinh-khuon-moi | Lộ trình | dữ liệu đầy đủ + khung vàng «khuôn mới hơn bộ đọc» | đọc như thường |
+| ST-lotrinh-day-du | Bảng | thẻ «Chưa xong», xếp theo mốc, dòng tổng, phân trang | tìm, lọc, bấm dòng |
+| ST-lotrinh-tab | Bảng | thẻ «Đã giao» | đổi thẻ |
+| ST-lotrinh-loc | Bảng | lọc nhóm okr, «Lọc (1)» | bỏ lọc |
+| ST-lotrinh-tre | Bảng | lọc «Trễ mốc», nhãn «Trễ» ở cột mốc | bấm việc |
+| ST-lotrinh-bang-cot | Bảng cột | chia theo trạng thái | đổi cách chia, bấm thẻ |
+| ST-lotrinh-chia-moc | Bảng cột | chia theo mốc — mỗi mốc một cột theo ngày | bấm thẻ |
+| ST-lotrinh-chi-tiet | Ngăn hồ sơ | dải bốn ô, chi tiết, cần xong trước, việc đang chờ | bấm việc liên quan, đóng |
+| ST-lotrinh-da-bac | Bảng | bảng việc đã bác kèm lý do | tắt «Đã bác» |
+| ST-lotrinh-dang-tai | Bảng | khung xương thanh công cụ + bảng | chờ |
+| ST-lotrinh-chua-co-khoi | Lộ trình | Empty: chưa có lộ trình ở đây; câu của bộ đọc trong phần gập | báo đội sản phẩm |
+| ST-lotrinh-khoi-hong | Lộ trình | Empty: không tải được lộ trình; câu của bộ đọc trong phần gập | báo đội sản phẩm |
+| ST-lotrinh-tep-vang | Lộ trình | Empty: không tải được lộ trình | báo đội sản phẩm |
+| ST-lotrinh-lo-loi | Bảng | khung cảnh báo một lộ trình lỗi; việc các lộ trình khác vẫn hiện | đọc tiếp |
+| ST-lotrinh-khuon-moi | Bảng | dữ liệu đủ + khung vàng «trang có thể thiếu một phần» | đọc như thường |
 <!-- UX-STATE-TABLE>>> -->
 
 ### 4. Hành vi
 
-- Thẻ và bộ lọc giữ trên đường dẫn (`?lo=`, `?nhom=`); giá trị lạ trên đường dẫn rơi về mặc định, không lỗi
-- Từ md: bảng bốn cột (Việc · Nhóm · Trạng thái · Mốc); dưới md: thẻ dọc, bộ lọc cuộn ngang trong khung riêng, trang không cuộn ngang
-- Phần phụ thuộc ngày (đã qua, trễ) chỉ hiện sau khi trình duyệt nhận trang; số liệu khác hiện ngay
-- Số dùng `tabular-nums`; ngày hiện theo `Intl.DateTimeFormat` của ngôn ngữ giao diện
+- Thẻ, bộ lọc, cách xem, cách chia, tìm, trang giữ trên đường dẫn (cùng bộ tham số danh sách của Thoả thuận); giá trị lạ rơi về mặc định
+- Khổ hẹp: thẻ vòng đời gộp vào «Lọc (n)» như Thoả thuận; cột Lộ trình và Trạng thái ẩn, trạng thái hiện dưới câu mô tả
+- Phần phụ thuộc ngày (nhãn «Trễ», lọc «Trễ mốc») chỉ hiện sau khi trình duyệt nhận trang
+- Số dùng `tabular-nums`; ngày theo `Intl.DateTimeFormat`
 
 ### 5. Xuất xứ component
 
-Đối chiếu ngày 09/10 với bảy màn đang chạy (Thoả thuận, Onboarding, Liên hệ, Nhắc buổi sáng, Toàn cảnh OKR,
-Tài liệu, Tổng quan) ở hai khổ; trang theo nếp của Tài liệu và Toàn cảnh OKR — hai trang cùng loại «đọc là chính».
-
 | Component | Nấc (dùng / ghép / mở rộng / tạo) | Vì sao (1 dòng) |
 |---|---|---|
-| PageShell + Header/Heading/Title/Description | dùng | khung mọi trang; tiêu đề lớn + một câu mô tả; trang chỉ đọc nên không có nút hành động |
-| Tabs, TabsList variant="line" + Badge secondary đếm việc | dùng | nếp thẻ con của Toàn cảnh OKR và Tài liệu |
-| StatGroup + StatCard | dùng | bốn con số tiến độ, đúng nếp Toàn cảnh OKR |
-| ToggleGroup outline sm, số đếm `text-muted-foreground tabular-nums` | dùng | nếp chip lọc của Tài liệu |
-| SimpleTable surface="page" (từ md) · Item outline (dưới md) | dùng | nếp danh sách của Tài liệu: bảng ở máy tính, thẻ dọc ở điện thoại |
-| StatusIndicator size="sm" | dùng | chấm trạng thái; ánh xạ màu theo nếp chung (đã giao → success, đang làm → info, còn lại → neutral) |
-| Card + CardHeader/Title/Description | dùng | mục «Việc kế tiếp» và «Mốc»; không dùng SectionHeading — các trang hiện có đều dùng CardTitle |
-| Timeline (ReUI, đã cài trong packages/ui) | dùng | mục Mốc theo ngày, dạng thanh mốc như block ReUI `timeline-5`; mốc đã qua tô đậm |
-| Alert warning | dùng | việc trễ, cảnh báo khuôn mới |
-| Empty (không viền) + EmptyContent | dùng | khung trống theo nếp «Chưa có …» / «Không tải được …» kèm điều vẫn dùng được |
-| Collapsible + Button ghost | dùng | «Chi tiết cho đội sản phẩm», chỗ cần sửa, việc đã bác |
-| Skeleton theo hình mục | dùng | lúc đang tải giữ tiêu đề trang, khung chờ theo đúng hình bốn ô số + bảng (docs/settings.md mục Trạng thái) |
+| PageShell + Title/Description | dùng | khung mọi trang |
+| DataTable (tìm, tabs, facets, sắp xếp, cột, phân trang, dòng tổng) | dùng | khung danh sách của Thoả thuận và Onboarding |
+| ToggleGroup outline spacing 0 «Bảng \| Bảng cột», «Chia cột theo» | dùng | nút xem và chia cột của Thoả thuận / Onboarding |
+| Board (chỉ đọc) | dùng | bảng cột của Thoả thuận, không kéo-thả khi không truyền hàm di chuyển |
+| Sheet + dải ô + SectionHeading h4 | ghép | ngăn hồ sơ theo dáng hồ sơ thoả thuận |
+| StatusIndicator size sm | dùng | chấm trạng thái |
+| Badge outline «Trễ» | dùng | nhãn trễ ở cột mốc |
+| Button outline/contrast «Đã bác» | dùng | nút bật như «Lưu trữ» |
+| Alert, Empty, Collapsible, Skeleton | dùng | cảnh báo, khung trống, chi tiết cho đội sản phẩm, chờ tải |
 
 ### 6. Khuôn IA đã chọn + căn cứ
 
 Khuôn IA: danh-sách-chi-tiết (master-detail)
-Căn cứ: theo khuôn sẵn có của chính hệ — «OKR theo đơn vị» (cột nhóm 18rem + nội dung, khổ hẹp đổi ô chọn) và hàng thẻ con + bộ chọn phạm vi bên phải của khu OKR; đã thử một-cột-cuộn (lượt trước) và bỏ: 64 dòng dài, mốc rơi xuống đáy sau danh sách, việc kế tiếp và chỗ cần sửa (chỉ đội sản phẩm cần) chiếm chỗ đầu. Tra Mobbin 09/10 (Featurebase kanban, Shopify Rollouts bảng) cho phần bảng cột / danh sách.
+Căn cứ: khung danh sách + ngăn hồ sơ của chính hệ — Thoả thuận (`deals-table.tsx`: DataTable với tabs vòng đời, «Bảng | Bảng cột», Lọc theo chiều, ngăn hồ sơ) và Onboarding (`danh-muc-table.tsx`: cùng khung, «Chia cột theo» ở bảng cột). Hai phương án trước bị chủ kho bác 09/10: một-cột-cuộn (khối xếp theo dữ liệu, mốc rơi xuống đáy) và thanh nhóm bên trái kiểu OKR theo đơn vị (gộp nhóm thành điều hướng trong khi nhóm, mốc, lộ trình là các chiều lọc riêng).
 <!-- UX-SPEC-TEMPLATE>>> -->
 
 ## Đường đi của dữ liệu

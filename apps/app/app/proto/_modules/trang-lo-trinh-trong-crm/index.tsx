@@ -5,13 +5,17 @@ import { dauVaoCuaState, NGAY_MAU, NGAY_TRE, STATE } from "./du-lieu";
 import { BAN_DAU_MAC_DINH, type BanDau, TrangLoTrinh } from "./trang";
 
 function banDauCuaState(state: string): BanDau {
-	if (state === STATE.loc) return { ...BAN_DAU_MAC_DINH, nhom: "okr" };
-	if (state === STATE.bangCot) return { ...BAN_DAU_MAC_DINH, kieu: "bang-cot" };
-	if (state === STATE.chiTiet) return { ...BAN_DAU_MAC_DINH, chon: "LT2" };
-	if (state === STATE.theoMoc) return { ...BAN_DAU_MAC_DINH, xem: "theo-moc" };
-	if (state === STATE.toanCanh)
-		return { ...BAN_DAU_MAC_DINH, xem: "toan-canh" };
-	return BAN_DAU_MAC_DINH;
+	const md = BAN_DAU_MAC_DINH;
+	if (state === STATE.loc) return { ...md, loc: { nhom: ["okr"] } };
+	if (state === STATE.tre) return { ...md, loc: { moc: ["__tre"] } };
+	if (state === STATE.tab) return { ...md, tab: "da-giao" };
+	if (state === STATE.bangCot) return { ...md, xem: "bang-cot" };
+	if (state === STATE.chiaMoc)
+		return { ...md, xem: "bang-cot", chia: "moc", tab: "all" };
+	if (state === STATE.daBac) return { ...md, daBac: true };
+	if (state === STATE.chiTiet)
+		return { ...md, chon: "docs/plan/lo-trinh-okr.json#LT2" };
+	return md;
 }
 
 export function TrangLoTrinhMau({ state }: { state: string }) {

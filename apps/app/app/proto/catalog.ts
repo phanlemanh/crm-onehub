@@ -14,13 +14,14 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		slug: "trang-lo-trinh-trong-crm",
 		ten: "Trang Lộ trình trong CRM — chỉ đọc",
 		states: [
-			{ id: "ST-lotrinh-day-du", nhan: "Theo nhóm — tất cả nhóm" },
-			{ id: "ST-lotrinh-theo-moc", nhan: "Theo mốc" },
-			{ id: "ST-lotrinh-toan-canh", nhan: "Toàn cảnh" },
-			{ id: "ST-lotrinh-loc", nhan: "Theo nhóm — chọn nhóm okr" },
-			{ id: "ST-lotrinh-tre", nhan: "Hôm nay 20/12 — có việc đã qua mốc" },
-			{ id: "ST-lotrinh-bang-cot", nhan: "Theo nhóm — dạng bảng cột" },
-			{ id: "ST-lotrinh-chi-tiet", nhan: "Mở chi tiết một việc (LT2)" },
+			{ id: "ST-lotrinh-day-du", nhan: "Bảng — mặc định «Chưa xong»" },
+			{ id: "ST-lotrinh-tab", nhan: "Bảng — thẻ «Đã giao»" },
+			{ id: "ST-lotrinh-loc", nhan: "Bảng — lọc nhóm okr" },
+			{ id: "ST-lotrinh-tre", nhan: "Hôm nay 20/12 — lọc «Trễ mốc»" },
+			{ id: "ST-lotrinh-bang-cot", nhan: "Bảng cột — chia theo trạng thái" },
+			{ id: "ST-lotrinh-chia-moc", nhan: "Bảng cột — chia theo mốc" },
+			{ id: "ST-lotrinh-chi-tiet", nhan: "Ngăn hồ sơ một việc (LT2)" },
+			{ id: "ST-lotrinh-da-bac", nhan: "Việc đã bác" },
 			{ id: "ST-lotrinh-dang-tai", nhan: "Đang tải" },
 			{
 				id: "ST-lotrinh-chua-co-khoi",
@@ -30,7 +31,7 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-lotrinh-tep-vang", nhan: "Bản đang chạy không mang lộ trình" },
 			{
 				id: "ST-lotrinh-lo-loi",
-				nhan: "Một lộ trình lỗi, các lộ trình khác vẫn xem được",
+				nhan: "Một lộ trình lỗi, các lộ trình khác vẫn hiện",
 			},
 			{
 				id: "ST-lotrinh-khuon-moi",
