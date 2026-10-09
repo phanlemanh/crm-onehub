@@ -402,7 +402,7 @@ describe("ke-hoach-rong", () => {
 		expect(goi.planId).toBe("kh-1");
 		expect(goi.departmentId).toBe("bp-b");
 		expect(goi.label).toBe("Goi dien chao mung");
-		expect(typeof goi.dueAt).toBe("string");
+		expect(String(goi.dueAt)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 	});
 });
 
