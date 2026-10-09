@@ -182,6 +182,24 @@ follow, and none of them is a gap to fill later.
   Slack for the morning reminder live on «Thông báo của bạn»
   (`/settings/notifications`), the personal page in Settings. An admin cannot
   unlink someone else's Zalo.
+- **Đổi sang một bot khác gỡ mọi liên kết — sau khi hỏi.** Liên kết thuộc về bot đã
+  nhận mã, nên token của bot khác làm mọi liên kết cũ vô hiệu. Khi quản trị viên lưu
+  token của bot khác mà vẫn còn liên kết, màn hỏi lại («Gỡ liên kết và đổi bot») và
+  không ghi gì tới khi được đồng ý. Đồng ý thì tác tử đăng ký bot mới trước; Zalo
+  nhận rồi mới đổi bot và gỡ mọi `zaloLink` trong cùng một giao dịch. Chỉ khoá webhook
+  mới được ghi trước `setWebhook`, vì Zalo gọi thử webhook bằng khoá đó; token và tên
+  bot mới chỉ vào giao dịch. Giao dịch hỏng thì khoá cũ được trả lại và webhook vừa
+  đăng ký cho bot mới bị gỡ (`deleteWebhook`). Người đã chọn
+  Zalo mà mất liên kết thấy «cần nối lại» trên «Thông báo của bạn». Đây là ngoại lệ
+  duy nhất của luật trên. Cùng bot (mã bot của `getMe` trùng) thì không hỏi và không
+  gỡ gì.
+- **Webhook 403 vì khoá lệch để lại cảnh báo.** Một yêu cầu có header khoá mà sai
+  (thường là bot cũ vẫn trỏ về đây) ghi lý do `khoa-lech` mà không đọc thân — nên một
+  yêu cầu lạ có header bất kỳ cũng bật được cảnh báo này. Kết nối › Zalo hiện
+  «Zalo đang gửi tin bằng khoá cũ» kèm «Đăng ký lại». Lý do chỉ mất khi đăng ký lại
+  thành công; nhịp kiểm của tác tử không xoá nó. Mỗi lần bỏ qua một tin hay từ chối
+  webhook, nhật ký ghi `ly_do=` (mã nhánh), và mỗi lần Zalo từ chối ghi mã lỗi cùng
+  `description` của Zalo.
 
 ## The Questionnaire
 

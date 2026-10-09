@@ -155,7 +155,9 @@ export function KhoiZalo({
 
 	return (
 		<div className="flex flex-col gap-4">
-			<p className="text-muted-foreground text-sm">{t.chuaNoi}</p>
+			<p className="text-muted-foreground text-sm">
+				{du.canNoiLai ? t.canNoiLai : t.chuaNoi}
+			</p>
 			<StepList activeStep={buocDang} label={t.baBuoc} markCompleted={maCho}>
 				<StepListItem
 					step={BUOC.timBot}

@@ -76,3 +76,85 @@ Trong `apps/app`, mỗi mẫu dưới đây đã có thứ thay, và bị trả 
 
 Bảng này sẽ thành một luật `anti-slop` trong `tools/oxlint`. Tới lúc đó, nó được
 kiểm bằng mắt ở review.
+
+## Nếp màn trong app
+
+Ghi 09/10/2026 từ bảy màn đang chạy — Thoả thuận, Onboarding, Liên hệ, Nhắc buổi
+sáng, Toàn cảnh OKR, Tài liệu, Tổng quan — chụp ở 1280 và 375 khi dựng bản mẫu
+trang Lộ trình. Mỗi nếp dưới đây đã có ở ít nhất ba màn. Đây là **đích**; màn
+nào còn lệch thì theo dõi ở các hàng NM1–NM3 của `docs/plan/lo-trinh-okr.json`,
+không sửa lẻ. Trang dưới `/settings` theo `docs/settings.md`, tệp đó đứng trên
+mục này ở những gì nó nói riêng.
+
+### Khung trang
+
+- `PageShell` › `PageShellHeader` › `PageShellHeading` (`PageShellTitle` và
+  **một** câu `PageShellDescription`, luôn có) › `PageShellActions` bên phải.
+- Tiêu đề và câu mô tả dựng trong `page.tsx`, không trong mã khách hay layout:
+  lúc chờ tải và lúc lỗi người dùng vẫn biết mình đang ở màn nào.
+- Tối đa **một** nút `primary` ở đầu trang, và đó là nút «tạo». Trang chỉ đọc
+  không có nút chính. Nút bị khoá thì có một dòng nói vì sao, như luật «Không đủ
+  quyền» của `docs/settings.md`.
+- Bề rộng: màn danh sách và tổng quan để mặc định của `PageShell`. Trang một cột
+  chữ hay form (Nhắc buổi sáng) dùng `width="page"` theo bảng của
+  `docs/settings.md`.
+
+### Chờ tải và lỗi tải
+
+- **Chờ tải**: khung xương cùng hình với mục, giữ nguyên tiêu đề trang;
+  `PageShellFallback` khi chưa biết hình. Không vòng quay toàn trang
+  (`PageShellLoading`), không giấu tiêu đề.
+- **Lỗi tải**: `VungTaiLoi` — tiêu đề, một câu nói chuyện gì hỏng, nút thử lại.
+  Không dựng khung lỗi riêng ở màn.
+
+### Thẻ con của trang
+
+Khi một màn có nhiều trang con (mỗi thẻ là một đường dẫn riêng): `Tabs` với
+`TabsList variant="line"`, mỗi `TabsTrigger asChild` bọc một `Link` có
+`aria-current="page"` ở thẻ đang mở, số đếm là `Badge variant="secondary"`. Thanh
+thẻ nằm ngay dưới đầu trang.
+
+### Chip lọc và chuyển kiểu xem
+
+- Lọc một danh sách theo vài giá trị: `ToggleGroup variant="outline" size="sm"`.
+  Số đếm trong từng mục là chữ phụ `text-muted-foreground tabular-nums`, không
+  `opacity-*`.
+- Giá trị lọc ghi lên đường dẫn bằng `nuqs`, như các màn `DataTable`. Không tự
+  ghép chuỗi truy vấn rồi `router.push`.
+- Chuyển kiểu xem (bảng, Kanban, theo đơn vị…): `ViewSwitch` — nút trên máy
+  tính, ô chọn trên điện thoại. Không tự ghép `ToggleGroup`.
+
+### Danh sách
+
+- Cần tìm, lọc hoặc phân trang: `DataTable`.
+- Còn lại: `SimpleTable surface="page"` từ `md` trở lên, và cùng dữ liệu ấy
+  thành danh sách `Item variant="outline"` dưới `md`, như Tài liệu.
+
+### Ô số tổng quan
+
+Hàng số đầu màn (tổng, đạt, rủi ro…): `StatGroup` bọc các `StatCard`, như Toàn
+cảnh OKR.
+
+### Tiêu đề mục
+
+- Mục nằm trong `Card`: `CardTitle` và `CardDescription` trong `CardHeader`.
+- Mục không nằm trong thẻ: `SectionHeading`. Không `<h2>`–`<h4>` tự đặt cỡ chữ
+  (xem bảng «Dấu hiệu vẽ tay» ở trên).
+
+### Màu trạng thái
+
+Mọi chấm và nhãn trạng thái dùng `tone` của `StatusIndicator`, theo nghĩa chứ
+không theo khu:
+
+| Nghĩa | `tone` |
+| --- | --- |
+| xong, đạt, đã giao | `success` |
+| chờ, rủi ro, sắp trễ | `warning` |
+| hỏng, trễ, bị chặn | `error` |
+| nháp, chưa bắt đầu | `neutral` |
+| đang chạy | `info` |
+
+Bảng này chưa sống trong mã: hôm nay mỗi khu tự khai ánh xạ của mình
+(`okr-status.tsx`, `kara/steps.tsx`, `attendee-list.tsx`, `okr/tien-do-kr.tsx`,
+`tai-lieu/bang-nguon.tsx`). Khai thêm một bản thứ sáu là sai; dời về một chỗ
+trong `packages/ui` là việc của NM3.
