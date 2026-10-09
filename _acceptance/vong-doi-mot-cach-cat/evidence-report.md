@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 23e2944080df4da17ad22093d6e974108aca04ed
+verified_commit: cd0ba45e8e669ed07c4f5b54140fca4ef3d79311
 human_signoff: Phan Le Manh 2026-10-09 — ký Cổng Bằng chứng trên vòng chấm 3 (15/15 eval đạt, 7/7 lệnh suite xanh, hội đồng E13 đạt, 0 phát hiện trong hợp đồng; vòng 1 và 2 REJECT đã sửa sản phẩm và phép đo). Tám mục ngoài hợp đồng: Ngoài-1, 2, 3 (Hoàn tác hàng loạt, cùng gốc) và Ngoài-7 (mảnh dùng chung) mở hợp đồng mới; Ngoài-4, 6, 8 ghi Known limits; Ngoài-5 chấp nhận, không sửa. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi (bốn tệp chữ, đổi lời E13 theo ngả A) được phê toàn bộ.
 ---
 
@@ -245,3 +245,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, không 
 Round 1: ghi nhận từ commit 7698e32ab («ảnh chụp lại sau sửa vòng 1») rằng đã có một vòng sửa; chi tiết kết quả vòng 1 không nằm trong dữ liệu round này.
 Round 2: mọi eval máy xanh (E1 đến E12, E14, E15), E13 do panel đề xuất PASS với một phiếu chưa đủ căn cứ; lệnh suite `bun run lint:slop` đỏ vì lỗi anti-slop trong tệp test của tính năng; verdict REJECT, quay lại implementation.
 Round 3: mọi eval máy và mọi lệnh suite xanh trên commit 23e2944080df4da17ad22093d6e974108aca04ed (kể cả `bun run lint:slop` và `bunx turbo run build --force`); E13 do panel đề xuất PASS, chờ người ở Cổng 2; verdict PASS.
+
+### Re-pin lần 1 — 2026-10-09, do ghim lại sau chữ ký V2 và gộp onehub
+run_id: repin-20261009T165002Z-86228
+sha: cd0ba45e8e669ed07c4f5b54140fca4ef3d79311 · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E12, E13 (E13 không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
