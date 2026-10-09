@@ -109,10 +109,11 @@ Mọi ô khác của K2 (E4–E13, E16) vẫn là lời hứa sống: AC-9 của
 Chạm — gửi giám sát qua `yeu-cau/` trước S2:
 - `apps/app/app/(app)/[slug]/okr/soan/**` (trừ `bang-nhap.tsx`, `the-nhap.tsx`, `hoi-thoai-soan.tsx` ngoài vỏ khung)
 - `apps/app/components/crm/record-sheet/{record-stack.ts,record-sheet-host.tsx,soan-sheet.tsx}`
-- `apps/app/components/{detail-sheet.tsx,responsive-sheet.tsx}`, `apps/app/lib/record-href.ts`
+- `apps/app/components/{detail-sheet.tsx,responsive-sheet.tsx}`, `apps/app/lib/record-href.ts`, `apps/app/app/(app)/[slug]/layout.tsx` (truyền cờ cầu nối cho khung)
 - `packages/ui/src/components/sheet.tsx`, `packages/ui/src/components/drawer.tsx`, `packages/ui/src/components/kara/` (khung cột Kara ở tệp mới; biến thể `docked` trong `artifact.tsx`; không đụng `state.tsx`)
 - `apps/app/lib/messages/okr-soan.ts`, `docs/ai-ux.md`
-- `_acceptance/soan-okr-trang-rieng/evals.yaml` (chỉ năm ô bảng trên), `_acceptance/config.yaml` (khoá `sk_*`)
+- `_acceptance/soan-okr-trang-rieng/evals.yaml` (chỉ các ô bảng trên), `_acceptance/soan-okr-trang-rieng/rang/mo-coi-hai-chieu.mjs` (thêm mặt bản mẫu mới), `_acceptance/config.yaml` (khoá `sk_*`)
+- `packages/ui/src/components/giu-thay-doi.tsx` (câu hỏi riêng); thước của các hồ sơ trước: `apps/app/test/{soan-okr.dom.tsx,soan-okr-trang.dom.tsx,soan-okr-song-lai.spec.ts}`
 - thử nghiệm mới `apps/app/test/soan-okr-trong-khung.dom.tsx`, đồ thử `apps/app/test/khung-soan-okr.tsx`
 
 Giáp ranh đã biết (giám sát 09/10): P1 đang ở `okr/soan/**` (K2c S4, K3 S3, K2d chưa mở); P2 ở chồng khung bản ghi

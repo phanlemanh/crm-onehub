@@ -144,7 +144,7 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.sk_k2_song
-    expected: "exit 0; rang/k2-song.mjs đọc _acceptance/soan-okr-trang-rieng/evals.yaml, rút mọi eval executor test|script không khai status not-run (sau lượt này: E4, E5, E5b, E6, E6b, E7, E8, E8b, E9, E10, E10b, E11, E12, E13, E13b, E13c, E16), in danh sách trước khi chạy và đòi danh sách ấy đúng bằng tập viết trước trong script (lệch là đỏ 'tap k2 song doi'), giải từng cmd qua _acceptance/config.yaml, chạy lần lượt, in 'id: exit n' từng dòng và thoát 0 chỉ khi mọi mã bằng 0. Chiều đỏ ghim: --tu-thu chạy trên bản sao cây có bang-nhap.tsx bỏ nhóm đề xuất phải in 'E4: exit 1' và mã 1."
+    expected: "exit 0; rang/k2-song.mjs đọc _acceptance/soan-okr-trang-rieng/evals.yaml, rút mọi eval executor test|script không khai status not-run (sau lượt này: E4, E5, E5b, E6, E6b, E7, E8, E8b, E9, E10, E10b, E11, E12, E13, E13b, E13c, E16), in danh sách trước khi chạy và đòi danh sách ấy đúng bằng tập viết trước trong script (lệch là đỏ 'tap k2 song doi'), giải từng cmd qua _acceptance/config.yaml, chạy lần lượt, in 'id: exit n' từng dòng và thoát 0 chỉ khi mọi mã bằng 0. Chiều đỏ ghim: --tu-thu chạy trên the-nhap.tsx bỏ nhóm đề xuất (thay tạm rồi khôi phục) phải in 'E4: exit 1' và mã 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/test/**", "apps/api/test/soan-okr-hoan-tac.spec.ts", "_acceptance/soan-okr-trang-rieng/**", "_acceptance/soan-okr-trong-khung/rang/k2-song.mjs"]
 
