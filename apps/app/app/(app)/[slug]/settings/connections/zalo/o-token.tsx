@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@crm/ui/components/button";
+import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { Field, FieldError, FieldLabel } from "@crm/ui/components/field";
 import { Input } from "@crm/ui/components/input";
 import { useLocale } from "@crm/ui/components/locale-provider";
@@ -29,6 +30,11 @@ export function OToken({
 	const o = useRef<HTMLInputElement>(null);
 	const [nhap, setNhap] = useState("");
 	const [loi, setLoi] = useState<string | null>(null);
+	const [doiBot, setDoiBot] = useState<{
+		token: string;
+		soLienKet: number;
+		tenBotMoi: string;
+	} | null>(null);
 
 	const baoLoi = (chu: string) => {
 		setLoi(chu);
@@ -37,7 +43,16 @@ export function OToken({
 
 	const luu = useMutation(
 		trpc.zalo.luuBot.mutationOptions({
-			onSuccess: async (kq) => {
+			onSuccess: async (kq, bien) => {
+				if ("ketQua" in kq) {
+					setDoiBot({
+						token: bien.token ?? "",
+						soLienKet: kq.soLienKet,
+						tenBotMoi: kq.tenBotMoi,
+					});
+					return;
+				}
+				setDoiBot(null);
 				setNhap("");
 				setLoi(null);
 				if (kq.webhook === "zalo-tu-choi") {
@@ -97,6 +112,21 @@ export function OToken({
 					{luu.isPending ? t.dangKiem : daBat ? t.thayToken : t.luu}
 				</Button>
 			</div>
+			<ConfirmDialog
+				tieuDe={t.doiBotTieuDe}
+				than={doiBot ? t.doiBotThan(doiBot.tenBotMoi, doiBot.soLienKet) : ""}
+				nut={t.doiBotNut}
+				thoi={t.doiBotThoi}
+				tone="destructive"
+				open={doiBot !== null}
+				onOpenChange={(mo) => {
+					if (!mo) setDoiBot(null);
+				}}
+				pending={luu.isPending}
+				onConfirm={() => {
+					if (doiBot) luu.mutate({ token: doiBot.token, xacNhanDoiBot: true });
+				}}
+			/>
 		</form>
 	);
 }

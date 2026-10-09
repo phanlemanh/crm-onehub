@@ -7,6 +7,7 @@ export const ZALO_CAU_NOI = {
 
 export const datBotYeuCau = z.strictObject({
 	token: z.string().trim().min(1).optional(),
+	xacNhanDoiBot: z.literal(true).optional(),
 });
 export type DatBotYeuCau = z.infer<typeof datBotYeuCau>;
 
@@ -25,6 +26,11 @@ export const datBotPhanHoi = z.discriminatedUnion("outcome", [
 		reason: z.string().min(1),
 	}),
 	z.object({ outcome: z.literal("zalo-loi"), reason: z.string().min(1) }),
+	z.object({
+		outcome: z.literal("can-xac-nhan-doi-bot"),
+		soLienKet: z.number().int().positive(),
+		tenBotMoi: z.string().min(1),
+	}),
 ]);
 export type DatBotPhanHoi = z.infer<typeof datBotPhanHoi>;
 

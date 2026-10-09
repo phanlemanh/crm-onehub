@@ -13,6 +13,38 @@ export function maLoiZalo(value: unknown): number | null {
 	return ket.success ? (ket.data.error_code ?? null) : null;
 }
 
+export type LoiThanZalo = { maLoi: number | null; moTa: string | null };
+
+export function docLoiZalo(value: unknown): LoiThanZalo | null {
+	const ket = loiZalo.safeParse(value);
+	if (!ket.success) return null;
+	return {
+		maLoi: ket.data.error_code ?? null,
+		moTa: ket.data.description ?? null,
+	};
+}
+
+export class ZaloTuChoi extends Error {
+	constructor(
+		message: string,
+		readonly maLoi: number | null,
+		readonly moTa: string | null,
+	) {
+		super(message);
+		this.name = "ZaloTuChoi";
+	}
+}
+
+export class ZaloHinhDangLa extends Error {
+	constructor(
+		message: string,
+		readonly khoa: string[],
+	) {
+		super(message);
+		this.name = "ZaloHinhDangLa";
+	}
+}
+
 export const zaloMessage = z.object({
 	from: z.object({
 		id: z.string().min(1),
@@ -88,11 +120,19 @@ export type ZaloDaGui = { messageId: string };
 export function parseZaloSend(value: unknown): ZaloDaGui {
 	const ket = guiDuoc.safeParse(value);
 	if (ket.success) return { messageId: ket.data.result.message_id };
-	const loi = loiZalo.safeParse(value);
-	const lyDo = loi.success
-		? (loi.data.description ?? String(loi.data.error_code ?? "rejected"))
-		: "hinh dang la";
-	throw new Error(`Zalo rejected the message (${lyDo}).`);
+	const loi = docLoiZalo(value);
+	if (!loi) {
+		throw new ZaloHinhDangLa(
+			"Zalo rejected the message (hinh dang la).",
+			khoaCapDauCua(value).split(",").filter(Boolean),
+		);
+	}
+	const lyDo = loi.moTa ?? String(loi.maLoi ?? "rejected");
+	throw new ZaloTuChoi(
+		`Zalo rejected the message (${lyDo}).`,
+		loi.maLoi,
+		loi.moTa,
+	);
 }
 
 const thanBatKy = z.record(z.string(), z.unknown());
@@ -146,7 +186,7 @@ export function parseZaloDeleteWebhook(value: unknown): ZaloDaXoaWebhook {
 	return { url: ket.data.result.url };
 }
 
-export const ZALO_LY_DO = ["can-https", "zalo-tu-choi"] as const;
+export const ZALO_LY_DO = ["can-https", "zalo-tu-choi", "khoa-lech"] as const;
 export type ZaloLyDo = (typeof ZALO_LY_DO)[number];
 
 export function docLyDo(value: string | null): ZaloLyDo | null {
