@@ -134,7 +134,7 @@ const en = {
 		loiMoTa: "Check your connection and try again.",
 		khongCon: {
 			tieuDe: "This record no longer exists",
-			moTa: "Someone deleted it permanently. It cannot be opened again.",
+			moTa: "It may have been deleted, or the link is wrong.",
 			dong: "Close",
 		},
 		khongQuyen: {
@@ -275,7 +275,7 @@ const vi: KaraBanGhiMessages = {
 		loiMoTa: "Kiểm tra kết nối rồi thử lại.",
 		khongCon: {
 			tieuDe: "Bản ghi này không còn",
-			moTa: "Đã có người xoá vĩnh viễn bản ghi này nên không mở lại được.",
+			moTa: "Có thể bản ghi đã bị xoá, hoặc đường dẫn không đúng.",
 			dong: "Đóng",
 		},
 		khongQuyen: {
