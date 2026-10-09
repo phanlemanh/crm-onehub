@@ -1439,6 +1439,9 @@ executors:
     dva_ban_ghi: cd apps/app && bun test ./test/agent-results.spec.ts -t stage-id
     dva_cham_mau: cd apps/app && TZ=Asia/Ho_Chi_Minh perl -e 'alarm 60; exec @ARGV' bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/deal-va-cham-mau.dom.tsx
     dva_hoi_quy: 'bun _acceptance/deal-va/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/deal-va/rang/khong-xoa-expect.mjs && bun run test -- "cd apps/api && bun test test/giai-doan-bao-cao.spec.ts" && bun run test -- "cd apps/agent && bun test test/giai-doan-agent.integration.spec.ts" && (cd apps/app && bun test ./test/agent-results.spec.ts) && (cd packages/telemetry && bun test)'
+    gmd_tao_khi_cat: 'bun run test -- "cd apps/api && bun test test/giai-doan.spec.ts -t tao-khi-dau-da-cat"'
+    gmd_seed: 'bun run test -- "cd apps/api && bun test --timeout 400000 test/giai-doan-seed.spec.ts"'
+    gmd_hoi_quy: 'bun _acceptance/giai-doan-mac-dinh/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/giai-doan-mac-dinh/rang/khong-xoa-expect.mjs --moc c1067c163 && test -z "$(git diff --name-only c1067c163..HEAD -- packages/db/prisma/schema.prisma packages/db/prisma/migrations)" && bun run test -- "cd apps/api && bun test test/giai-doan.spec.ts" && bun run check-types'
     atk_parse: cd packages/validation && bun test test/deal-list.spec.ts
     atk_agent: 'bun run test -- "cd apps/agent && bun test test/giai-doan-agent.integration.spec.ts -t stage-id"'
     dlt_loi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t "^loi"
@@ -2242,6 +2245,7 @@ executors:
     dsk_mot_thanh_phan: bun _acceptance/danh-sach-keo-chung/rang/mot-thanh-phan.mjs --tu-thu && bun _acceptance/danh-sach-keo-chung/rang/mot-thanh-phan.mjs
     dsk_san_thiet_ke: bun _acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs --tu-thu && bun _acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs
     dva_san_thiet_ke: 'node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target apps/app/components/agent-builder/deal-list-result.tsx --mode static'
+    gmd_duong_tao: bun _acceptance/giai-doan-mac-dinh/rang/duong-tao.mjs --tu-thu && bun _acceptance/giai-doan-mac-dinh/rang/duong-tao.mjs
     nlt_that: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca that
     nlt_chu_telemetry: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca chu-telemetry
     nlt_chu_allowlist: bun _acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs --ca chu-allowlist

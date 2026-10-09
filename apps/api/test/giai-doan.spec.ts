@@ -910,3 +910,48 @@ describe("khoi-phuc", () => {
 		).toBe(true);
 	});
 });
+
+describe("tao-khi-dau-da-cat", () => {
+	it("tao khong chon giai doan khi OPEN dau da luu tru vao OPEN song ke tiep", async () => {
+		const song = await db.dealStage.findMany({
+			where: { kind: "OPEN", archivedAt: null },
+			orderBy: { position: "asc" },
+			select: { id: true },
+		});
+		const dau = song[0]?.id as string;
+		const ke = song[1]?.id as string;
+		expect(song.length, "can it nhat hai OPEN song").toBeGreaterThan(1);
+		const thuTuCu = song.map((g) => g.id);
+		await giaiDoan.archive(userId, { id: dau, moveTo: ke });
+		try {
+			const mong = (
+				await db.dealStage.findFirstOrThrow({
+					where: { kind: "OPEN", archivedAt: null },
+					orderBy: { position: "asc" },
+					select: { id: true },
+				})
+			).id;
+			const ten = `Tạo khi Demo đã cất ${suffix}`;
+			const tao = await deals.create({ name: ten, companyId, ownerId: userId });
+			const stage = (await doc(tao.id)).stage;
+			expect(stage, "tao moi vao giai doan da cat").not.toBe(dau);
+			expect(stage).toBe(mong);
+			const board = await deals.board({
+				q: ten,
+				owner: [],
+				closing: [],
+				fields: {},
+				dir: "asc",
+			} as never);
+			const cot = board.columns.find((c) =>
+				c.cards.some((card) => card.id === tao.id),
+			);
+			expect(cot?.stage ?? null, "thoa thuan khong o cot OPEN song dau").toBe(
+				mong,
+			);
+		} finally {
+			await giaiDoan.restore(userId, { id: dau });
+			await giaiDoan.reorder(userId, { kind: "OPEN", ids: thuTuCu });
+		}
+	});
+});
