@@ -22,6 +22,7 @@ const { loTrinhMessages } = await import("@/lib/messages/lo-trinh");
 const { crmMessages } = await import("@/lib/messages/crm");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
+const { formatDay } = await import("@crm/ui/lib/format");
 
 type DauVao = ReturnType<typeof docTrangLoTrinh>;
 type DuLieu = Extract<DauVao, { kieu: "co-du-lieu" }>["duLieu"];
@@ -36,6 +37,7 @@ if (DV.kieu !== "co-du-lieu") throw new Error(`tep mau hong: ${DV.kieu}`);
 const DL: DuLieu = DV.duLieu;
 const m = loTrinhMessages("vi");
 const dong = crmMessages("vi").sheet.close;
+const CHU_CUNG = new Set(["Chưa mở", "Đã giao", "Đang làm"]);
 const NHAN = {
 	"chua-bat-dau": m.nhom.chuaBatDau,
 	"dang-lam": m.nhom.dangLam,
@@ -44,16 +46,17 @@ const NHAN = {
 } as const;
 
 const VIEC = DL.lo_trinh.flatMap((lo) => {
-	const theoMoc = new Map<string, string>();
+	const theoMoc = new Map<string, { ngay: string; ten: string }>();
 	for (const moc of lo.moc)
-		for (const ma of moc.hang) if (!theoMoc.has(ma)) theoMoc.set(ma, moc.ten);
+		for (const ma of moc.hang) if (!theoMoc.has(ma)) theoMoc.set(ma, moc);
 	return lo.hang.map((h) => {
 		const cungLo = lo.hang;
 		return {
 			...h,
 			khoa: `${lo.tep}#${h.ma}`,
 			loTen: lo.ten ?? lo.tep,
-			tenMoc: theoMoc.get(h.ma) ?? null,
+			tenMoc: theoMoc.get(h.ma)?.ten ?? null,
+			ngayMoc: theoMoc.get(h.ma)?.ngay ?? null,
 			coCanTruoc: h.dung_tren.some((ma) => cungLo.some((x) => x.ma === ma)),
 			coDangCho: cungLo.some((x) => x.dung_tren.includes(h.ma)),
 		};
@@ -122,7 +125,15 @@ describe("khung-chung", () => {
 			expect(gt[0], `o trang thai: ${v.khoa}`).toContain(
 				NHAN[v.nhom_trang_thai],
 			);
-			expect(gt[1], `o moc: ${v.khoa}`).toContain(v.tenMoc ?? m.loc.chuaHenMoc);
+			expect(gt[1], `o moc: ${v.khoa}`).toContain(
+				v.ngayMoc ? formatDay(v.ngayMoc, "vi") : m.loc.chuaHenMoc,
+			);
+			expect(
+				[...(o?.querySelectorAll("dd") ?? [])].every(
+					(d) => d.querySelector("[data-lo-trinh-trang-thai-phu]") === null,
+				),
+				`dai o mot dong: ${v.khoa}`,
+			).toBe(true);
 			expect(gt[2], `o lo trinh: ${v.khoa}`).toBe(v.loTen);
 			expect(gt[3], `o nhom: ${v.khoa}`).toBe(v.nhom || m.loc.khongNhom);
 			expect(
@@ -142,9 +153,19 @@ describe("khung-chung", () => {
 			const muc = [...(ngan?.querySelectorAll("section > div > h3") ?? [])].map(
 				chu,
 			);
+			const phu =
+				v.trang_thai !== NHAN[v.nhom_trang_thai] && !CHU_CUNG.has(v.trang_thai);
 			expect(muc.includes(m.hoSo.chiTiet), `muc Chi tiet: ${v.khoa}`).toBe(
-				Boolean(v.bat_khi || v.vi_sao),
+				Boolean(phu || v.tenMoc || v.bat_khi || v.vi_sao),
 			);
+			const thuocTinh = chu(
+				[...(ngan?.querySelectorAll("section") ?? [])].find(
+					(x) => chu(x.querySelector("h3")) === m.hoSo.chiTiet,
+				),
+			);
+			if (v.tenMoc) expect(thuocTinh, `ten moc: ${v.khoa}`).toContain(v.tenMoc);
+			if (phu)
+				expect(thuocTinh, `ke hoach ghi: ${v.khoa}`).toContain(v.trang_thai);
 			expect(
 				muc.includes(m.hoSo.canXongTruoc),
 				`muc Can xong truoc: ${v.khoa}`,

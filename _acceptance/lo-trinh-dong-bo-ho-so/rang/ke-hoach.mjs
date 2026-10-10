@@ -4,7 +4,9 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { docDuLieu } from "../../../apps/app/lib/lo-trinh/doc-du-lieu.js";
 
-const GOC = process.env.GOC_KHO ?? join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const GOC =
+	process.env.GOC_KHO ??
+	join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const TEP = "docs/plan/lo-trinh-okr.json";
 const dong = [];
 let sai = 0;
@@ -31,7 +33,9 @@ kiem(
 	`trang_thai=${hangKeHoach.trang_thai} pr=${JSON.stringify(hangKeHoach.pr)} buoc_ke=${hangKeHoach.buoc_ke}`,
 );
 
-const { duLieu, loi } = docDuLieu(readFileSync(join(GOC, "LO-TRINH.html"), "utf8"));
+const { duLieu, loi } = docDuLieu(
+	readFileSync(join(GOC, "LO-TRINH.html"), "utf8"),
+);
 if (duLieu === null) {
 	console.log(`KHONG DO DUOC: LO-TRINH.html khong doc duoc khoi: ${loi}`);
 	process.exit(2);
@@ -58,20 +62,28 @@ try {
 		{ cwd: GOC, encoding: "utf8" },
 	).trim();
 } catch (e) {
-	console.log(`KHONG DO DUOC: khong giai duoc goi acceptance-gate: ${e.message}`);
+	console.log(
+		`KHONG DO DUOC: khong giai duoc goi acceptance-gate: ${e.message}`,
+	);
 	process.exit(2);
 }
 let ve = 0;
 try {
-	execFileSync("node", [join(ag, "scripts/product-map.mjs"), "--root", GOC, "--check"], {
-		cwd: GOC,
-		stdio: "pipe",
-	});
+	execFileSync(
+		"node",
+		[join(ag, "scripts/product-map.mjs"), "--root", GOC, "--check"],
+		{
+			cwd: GOC,
+			stdio: "pipe",
+		},
+	);
 } catch (e) {
 	ve = e.status ?? 1;
 }
 kiem("ve-lai-khop", ve === 0, `product-map --check ma ${ve}`);
 
 for (const x of dong) console.log(x);
-console.log(`KET LUAN: ${dong.length - sai} DUNG, ${sai} SAI — ma thoat ${sai ? 1 : 0}`);
+console.log(
+	`KET LUAN: ${dong.length - sai} DUNG, ${sai} SAI — ma thoat ${sai ? 1 : 0}`,
+);
 process.exit(sai ? 1 : 0);

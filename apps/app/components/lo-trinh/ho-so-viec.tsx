@@ -3,6 +3,7 @@
 import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { ItemGroup } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { formatDay } from "@crm/ui/lib/format";
 import {
 	DetailSheet,
 	DetailSheetBody,
@@ -15,8 +16,8 @@ import {
 } from "@/components/detail-sheet";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { DongLienQuan } from "./dong-lien-quan";
-import { OMoc } from "./o-moc";
-import { OTrangThai } from "./o-trang-thai";
+import { ChuConNgay } from "./o-moc";
+import { ChamTrangThai, coTrangThaiPhu } from "./o-trang-thai";
 import type { Viec } from "./viec";
 
 export function HoSoViec({
@@ -30,7 +31,8 @@ export function HoSoViec({
 	moViec: (khoa: string) => void;
 	dong: () => void;
 }) {
-	const m = loTrinhMessages(useLocale());
+	const locale = useLocale();
+	const m = loTrinhMessages(locale);
 	const v = viec.find((x) => x.khoa === khoa);
 	const cungLo = v ? viec.filter((x) => x.loTep === v.loTep) : [];
 	const theoMa = new Map(cungLo.map((x) => [x.ma, x]));
@@ -40,6 +42,7 @@ export function HoSoViec({
 				.filter((x): x is Viec => x !== undefined)
 		: [];
 	const dangCho = v ? cungLo.filter((x) => x.dung_tren.includes(v.ma)) : [];
+	const phu = v ? coTrangThaiPhu(m, v) : false;
 	return (
 		<DetailSheet
 			data-lo-trinh-chi-tiet-viec={v?.ma}
@@ -59,18 +62,15 @@ export function HoSoViec({
 					/>
 					<DetailSheetStats>
 						<DetailSheetStat label={m.hoSo.trangThai}>
-							<OTrangThai v={v} />
+							<ChamTrangThai v={v} />
 						</DetailSheetStat>
 						<DetailSheetStat label={m.hoSo.moc}>
 							{v.moc ? (
-								<span className="flex flex-col gap-0.5">
-									<OMoc v={v} />
-									<span
-										className="font-normal text-muted-foreground text-xs"
-										translate="no"
-									>
-										{v.moc.ten}
+								<span className="flex items-center gap-2">
+									<span className="tabular-nums">
+										{formatDay(v.moc.ngay, locale)}
 									</span>
+									<ChuConNgay v={v} />
 								</span>
 							) : (
 								<span className="font-normal text-muted-foreground">
@@ -103,9 +103,21 @@ export function HoSoViec({
 								) : null}
 							</DetailSheetSection>
 						) : null}
-						{v.bat_khi || v.vi_sao ? (
+						{phu || v.moc || v.bat_khi || v.vi_sao ? (
 							<DetailSheetSection title={m.hoSo.chiTiet}>
 								<DetailSheetProperties columns={1}>
+									{phu ? (
+										<DetailSheetProperty label={m.hoSo.keHoachGhi}>
+											<span data-lo-trinh-trang-thai-phu translate="no">
+												{v.trang_thai}
+											</span>
+										</DetailSheetProperty>
+									) : null}
+									{v.moc ? (
+										<DetailSheetProperty label={m.hoSo.moc}>
+											<span translate="no">{v.moc.ten}</span>
+										</DetailSheetProperty>
+									) : null}
 									{v.bat_khi ? (
 										<DetailSheetProperty label={m.hoSo.thanhCongKhi}>
 											<span translate="no">{v.bat_khi}</span>

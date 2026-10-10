@@ -119,7 +119,7 @@ function cotBang(m: LoTrinhMessages): DataTableColumn<Viec>[] {
 			cell: (v) => <OMoc v={v} />,
 			sortable: true,
 			align: "right",
-			width: "w-28 md:w-[16%]",
+			width: "w-32 md:w-[16%]",
 		},
 	];
 }

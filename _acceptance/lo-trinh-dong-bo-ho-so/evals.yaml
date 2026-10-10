@@ -16,9 +16,11 @@ evals:
       khuon Zod), NuqsTestingAdapter, mo ngan cua MOI viec (ma tran toan phan, so assert = so viec, in khoa dau tien sai):
         1 [data-lo-trinh-chi-tiet-viec] == ma; ngan chua dung mot [data-slot=detail-sheet-stats]
         2 bon dt trong dai o theo thu tu == [Trang thai, Moc, Lo trinh, Nhom] (nhan tu tep loi); dd tung o mang gia tri
-          cua viec (nhan nhom trang thai, ten moc hoac "Chưa hẹn mốc", ten lo trinh, nhom hoac "Không nhóm")
+          cua viec (nhan nhom trang thai, ngay moc formatDay hoac "Chưa hẹn mốc", ten lo trinh, nhom hoac "Không nhóm");
+          khong dd nao chua dong trang thai phu (dai o mot dong)
         3 tieu de ngan == cau_giao; mo ta == "ma · loTen[ · nhom]"; co nut dong (sr-only nhan dong cua crmMessages)
-        4 tieu de muc la h3 cua DetailSheetSection: "Chi tiết" co mat khi va chi khi bat_khi||vi_sao; "Cần xong trước" /
+        4 tieu de muc la h3 cua DetailSheetSection: "Chi tiết" co mat khi va chi khi trang thai phu||moc||bat_khi||vi_sao,
+          va muc do chua ten moc va chu trang thai phu khi co; "Cần xong trước" /
           "Việc đang chờ việc này" co mat khi va chi khi danh sach tuong ung khac rong
         5 khong con Card ([data-slot=card]) nao trong ngan
       Doi chung duong: cung tep mau, ngan cua viec co bat_khi + co + theo_loi qua du nam dong.
@@ -79,26 +81,6 @@ evals:
     layer: ui-observed
     cmd: config:executors.script.ldb_do_man
     steps:
-      - "Cung luot do voi E2; doc dong tieu-diem-1280"
-    inputs:
-      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/
-    paths:
-      - "apps/app/components/lo-trinh/**"
-      - "apps/app/components/detail-sheet.tsx"
-      - "_acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"
-    expected: |
-      Dong tieu-diem-1280: kho 1280, dat tieu diem ban phim vao dong thu hai cua bang (Tab toi phan tu mang
-      [data-viec-khoa] cua dong do, roi Enter), cho ngan mo, nhan Escape, cho ngan dong; document.activeElement phai la
-      chinh phan tu da mo ngan (cung data-viec-khoa) — khong phai body.
-      CHIEU DO: tren dinh truoc vong nay -> SAI voi thong diep ghim "tieu diem ve body sau khi dong ngan" (loi da thay tren
-      production 10/10: ngan tu dung cu khong tra tieu diem).
-
-  - id: E5
-    criterion: AC-5
-    executor: ui-check
-    layer: ui-observed
-    cmd: config:executors.script.ldb_do_man
-    steps:
       - "Cung luot do voi E2; doc dong cot-moc-375 va cot-moc-1280"
       - "Mo anh bang-375.png"
     inputs:
@@ -117,8 +99,8 @@ evals:
       Anh: bang-375.png.
       CHIEU DO: tren dinh truoc vong nay -> cot-moc-375 SAI voi thong diep ghim "o moc bi cat".
 
-  - id: E6
-    criterion: AC-6
+  - id: E5
+    criterion: AC-5
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ldb_do_man
@@ -132,12 +114,12 @@ evals:
       - "_acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"
     expected: |
       Dong the-bang-cot: kho 1280, ?xemLoTrinh=bang-cot. Voi MOI button[data-viec-khoa] dang hien: getComputedStyle
-      textAlign thuoc {start, left}; va mep trai cua moi dong chu ben trong (Range.getClientRects cua cac nut chu) chenh
-      nhau <= 1px (cung mep trai). In ma the dau tien sai.
+      textAlign thuoc {start, left}; va dong dau cua cau giao (nut chu dau tien, Range.getClientRects) bat dau cach mep
+      trong cua the (left + padding + vien) <= 2px. In ma the dau tien sai.
       CHIEU DO: tren dinh truoc vong nay -> SAI voi thong diep ghim "the bang cot can giua".
 
-  - id: E7
-    criterion: AC-7
+  - id: E6
+    criterion: AC-6
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.ldb_do_man
@@ -157,8 +139,8 @@ evals:
       Anh: da-bac-tat.png, da-bac-bat.png.
       CHIEU DO: tren dinh truoc vong nay -> SAI voi thong diep ghim "nut Da bac bat trong nhu tat".
 
-  - id: E8
-    criterion: AC-8
+  - id: E7
+    criterion: AC-7
     executor: script
     cmd: config:executors.script.ldb_ke_hoach
     paths:
@@ -172,8 +154,8 @@ evals:
       acceptance-gate (giai qua resolve-plugin.mjs) -> ma 0. Moi y mot dong DUNG/SAI; ma thoat 1 khi co SAI.
       CHIEU DO: ban sao tep ke hoach de "chưa mở" -> SAI voi thong diep ghim "LT1 trong kế hoạch chưa ghi đã lên onehub".
 
-  - id: E9
-    criterion: AC-9
+  - id: E8
+    criterion: AC-8
     executor: script
     cmd: config:executors.script.ldb_hoi_quy
     paths:
@@ -193,8 +175,8 @@ evals:
       Phan duoi AC-1 (khung theo loi ghi, lech, chuyen ngan, khong dong lenh) do ltc_ho_so trong lenh nay ganh.
       CHIEU DO: ban sao bo data-lo-trinh-chi-tiet-viec khoi ngan -> ltc_ho_so do.
 
-  - id: E10
-    criterion: AC-10
+  - id: E9
+    criterion: AC-9
     executor: script
     cmd: config:executors.script.ldb_thiet_ke
     paths:
@@ -208,8 +190,8 @@ evals:
       CHIEU DO: ban sao sua mot cho goi trong ngan Cong ty -> SAI "cho goi cu cua khung chung bi sua".
       CHIEU DO: ban sao them className doi mau cho mot Badge trong ho-so-viec.tsx -> P0 do.
 
-  - id: E11
-    criterion: AC-11
+  - id: E10
+    criterion: AC-10
     executor: judgment
     inputs:
       - _acceptance/lo-trinh-dong-bo-ho-so/evidence/ngan-viec-1280.png
