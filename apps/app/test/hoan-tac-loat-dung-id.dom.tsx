@@ -286,7 +286,9 @@ const vungToast = () =>
 	document.querySelector("[data-sonner-toaster]")?.textContent ?? "";
 
 const toastKieu = (kieu: string) => [
-	...document.querySelectorAll(`[data-sonner-toast][data-type=${kieu}]`),
+	...document.querySelectorAll(
+		`[data-sonner-toast][data-type=${kieu}]:not([data-removed="true"])`,
+	),
 ];
 
 async function luuTruRoiChoToast(
@@ -313,6 +315,11 @@ async function luuTruRoiChoToast(
 		`${loai} toast luu tru`,
 	);
 }
+
+const xanhKhoiPhuc = (loai: Loai) =>
+	toastKieu("success").filter((t) =>
+		(t.textContent ?? "").includes(chuKhoiPhuc(loai, 1, "vi")),
+	).length;
 
 async function bamHoanTac(locale: Locale): Promise<void> {
 	const nut = nutCo(crmMessages(locale).sheet.hoanTac);
@@ -363,7 +370,6 @@ describe("hoan-tac-loat-dung-id", () => {
 						: kq(2, 1, 0, 1, LOI_THO, ["a"]);
 				});
 				await luuTruRoiChoToast(loai, kq(3, 2, 1, 0, null, ["a", "c"]));
-				const truocXanh = toastKieu("success").length;
 				await bamHoanTac("vi");
 				if (ca === "du") {
 					await cho(
@@ -377,12 +383,12 @@ describe("hoan-tac-loat-dung-id", () => {
 					await cho(
 						() =>
 							vungToast().includes(c.bulk.hoanTacThieu("1")) ||
-							toastKieu("success").length > truocXanh ||
+							xanhKhoiPhuc(loai) > 0 ||
 							vungToast().includes(LOI_THO),
 						`${loai}/thieu`,
 					);
 					await nhip(10);
-					const xanhMoi = toastKieu("success").length - truocXanh;
+					const xanhMoi = xanhKhoiPhuc(loai);
 					const vang = toastKieu("warning").filter((t) =>
 						(t.textContent ?? "").includes(c.bulk.hoanTacThieu("1")),
 					);
@@ -487,5 +493,36 @@ describe("hoan-tac-loat-dung-id", () => {
 		kiem("thieu", c.bulk.hoanTacThieu("1"));
 
 		expect(o.length).toBe(3);
+	});
+	test("htl-so-lech: hoan tac ve 2 thieu 1 va lo hon hop bo qua lan khong con — moi so dung cho cua no", async () => {
+		const c = crmMessages("vi");
+		const o: string[] = [];
+		for (const loai of LOAI) {
+			dat(`${THU_TUC[loai]}.bulkRestore`, () =>
+				kq(3, 2, 0, 1, LOI_THO, ["a", "c"]),
+			);
+			await luuTruRoiChoToast(loai, kq(3, 3, 0, 0, null, ["a", "b", "c"]));
+			await bamHoanTac("vi");
+			await cho(
+				() => vungToast().includes(c.bulk.hoanTacThieu("1")),
+				`${loai} ve thieu`,
+			);
+			const vang = toastKieu("warning")[0]?.textContent ?? "";
+			expect(
+				`${loai}:${vang.includes(chuKhoiPhuc(loai, 2, "vi"))}:${vang.includes(c.bulk.hoanTacThieu("1"))}`,
+			).toBe(`${loai}:true:true`);
+			o.push(`${loai}/thieu`);
+			await don();
+
+			await luuTruRoiChoToast(loai, kq(3, 1, 1, 1, KHONG_CON, ["a"]));
+			await nhip(5);
+			const chu = vungToast();
+			expect(
+				`${loai}:${chu.includes(chuLuuTru(loai, 1, "vi"))}:${chu.includes(c.bulk.boQua("2"))}:${chu.includes("with id")}`,
+			).toBe(`${loai}:true:true:false`);
+			o.push(`${loai}/hon-hop`);
+			await don();
+		}
+		expect(o.length).toBe(6);
 	});
 });
