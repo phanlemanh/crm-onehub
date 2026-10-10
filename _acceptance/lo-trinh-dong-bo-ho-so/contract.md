@@ -5,7 +5,7 @@ slug: lo-trinh-dong-bo-ho-so
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -58,3 +58,8 @@ gọi khác → AC-8, AC-9.
 ## Notes
 
 - Đổi `ho-so-viec.tsx` làm bằng chứng LT1 hoá cũ theo `paths`; vòng này ghim lại LT1 trước khi mở PR.
+- Known limit (Ngoài-2, ký 10/10): việc chưa hẹn mốc hiện «Chưa hẹn mốc» trong dải ô với chữ mảnh hơn ô trống của ngăn Thoả thuận; chỉ lệch độ đậm.
+- Known limit (Ngoài-3, ký 10/10): căn trái thẻ Bảng cột sửa ở thành phần của trang Lộ trình, chưa ở bảng cột dùng chung trong `packages/ui`.
+- Known limit (Ngoài-4, ký 10/10): phép so hai ngăn (E2) bỏ qua nhóm kiểu chữ mà phía ngăn Thoả thuận thiếu phần tử, thay vì báo không đo được.
+- Known limit (Ngoài-5, ký 10/10): phép đo thẻ Bảng cột (E5) chỉ đo dòng đầu của câu giao, chưa đo dòng phụ.
+- Hợp đồng mới (Ngoài-1, ký 10/10): ở khổ máy tính bảng và laptop nhỏ, ô Mốc trong dải ô có thể giấu dòng «còn n ngày» / «Trễ n ngày» — tách thành một việc riêng.

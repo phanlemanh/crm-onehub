@@ -11,8 +11,8 @@ flowchart TD
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
-  GP --> DL["Đang làm<br/>2 việc"] --> GB{"Cổng Bằng chứng"}
-  GB --> DG["Đã giao<br/>136 việc"]
+  GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
+  GB --> DG["Đã giao<br/>137 việc"]
   GB --> CN["Chờ phiên nghiệm thu<br/>82 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
@@ -41,7 +41,6 @@ flowchart TD
 
 ## Đang làm
 
-- «Ngăn chi tiết một việc trên trang Lộ trình trông và dùng y như ngăn chi tiết của Thoả thuận; ba lỗi nhìn thấy trên production được sửa» (`lo-trinh-dong-bo-ho-so`)
 - Thước của lát ③a có răng — mỗi phép đo nghiệm thu của vòng ③a phải đỏ được, và chứng minh lại điều đó mỗi lượt chạy (`thuoc-cua-lat-3a-co-rang`)
 
 ## Đã giao — chờ phiên nghiệm thu
@@ -197,6 +196,7 @@ flowchart TD
 - Hộp «Chuyển việc 30 ngày» làm mới danh mục, bảng cột và phần xem trước qua lối làm mới chung useCrmCache() thay vì liệt query key tại chỗ gọi — hành vi giữ nguyên (`lam-moi-chuyen-viec-qua-loi-chung`)
 - Lệnh chứng không được ăn cache dối — bắt bốn lệnh chứng của cổng nói thật, và bắt khoá cache của bộ vẽ khai đủ file nó đọc ngoài gói (`lenh-chung-khong-an-cache-doi`)
 - Lệnh dựng của kho đang đỏ vì 19 màn đọc dữ liệu lượt truy cập ngoài Suspense — vá 19 màn, và đưa lệnh dựng vào bộ lệnh chứng để lớp lỗi này không còn vô hình với bốn cổng (`lenh-dung-do-khong-ai-thay`)
+- «Ngăn chi tiết một việc trên trang Lộ trình trông và dùng y như ngăn chi tiết của Thoả thuận; ba lỗi nhìn thấy trên production được sửa» (`lo-trinh-dong-bo-ho-so`)
 - Mọi logo Comp AI trong CRM đổi sang logo OneHub — mark dựng lại bằng hình học trùng ảnh gốc từ 98% trở lên và căn đúng tâm, bản kèm chữ OneHub ở trang đăng nhập, bộ favicon và icon cài app sinh từ cùng một nguồn, và PNG đúng cỡ cho Slack, Zalo, Google (`logo-onehub`)
 - Lời mời đã huỷ hoặc từ chối thì thôi cho vào — phép kiểm cho phép theo danh sách trắng, không theo một chuỗi cấm (`loi-moi-da-huy-van-cho-vao`)
 - Lỗi trên đường API → tác tử → Zalo nói đúng nguyên nhân cho người dùng (luuBot, guiThu) và để lại một dòng log có mã và nguyên nhân cho người vận hành, thay cho câu chung «Tác tử chưa nối được» (`loi-tac-tu-zalo-noi-dung-nguyen-nhan`)
