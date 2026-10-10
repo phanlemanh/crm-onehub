@@ -67,11 +67,40 @@ function trangThaiBangChung() {
 		khongDo(
 			`git status cua bang chung ba ho so hong (ma ${r.status}): ${(r.stderr || String(r.error ?? "")).trim()}`,
 		);
-	return new Set(r.stdout.split("\n").filter(Boolean));
+	const dong = new Set(r.stdout.split("\n").filter(Boolean));
+	dong.ban = chupBanTruoc(dong);
+	return dong;
+}
+
+function chupBanTruoc(truoc) {
+	const ban = new Map();
+	for (const d of truoc) {
+		const tep = d.slice(3);
+		const duong = join(GOC, tep);
+		ban.set(tep, existsSync(duong) ? readFileSync(duong) : null);
+	}
+	return ban;
+}
+
+function giongBan(duong, goc) {
+	const co = existsSync(duong);
+	if (goc === null) return !co;
+	return co && Buffer.compare(readFileSync(duong), goc) === 0;
 }
 
 function traBangChung(truoc) {
-	const moi = [...trangThaiBangChung()].filter((d) => !truoc.has(d));
+	const ban = truoc.ban;
+	let traBan = 0;
+	for (const [tep, goc] of ban) {
+		const duong = join(GOC, tep);
+		if (giongBan(duong, goc)) continue;
+		if (goc === null) rmSync(duong, { force: true });
+		else writeFileSync(duong, goc);
+		traBan++;
+	}
+	const moi = [...trangThaiBangChung()].filter(
+		(d) => !truoc.has(d) && !ban.has(d.slice(3)),
+	);
 	const sua = moi.filter((d) => !d.startsWith("??")).map((d) => d.slice(3));
 	const them = moi.filter((d) => d.startsWith("??")).map((d) => d.slice(3));
 	if (sua.length) {
@@ -89,7 +118,22 @@ function traBangChung(truoc) {
 	const con = [...sau].filter((d) => !truoc.has(d));
 	if (con.length)
 		khongDo(`bang chung con lech sau khi tra lai: ${con.join(", ")}`);
-	return sua.length + them.length;
+	const lechBan = [...ban].filter(
+		([tep, goc]) => !giongBan(join(GOC, tep), goc),
+	);
+	if (lechBan.length)
+		khongDo(
+			`tep da ban tu truoc khong ve dung ban truoc lenh: ${lechBan.map(([t]) => t).join(", ")}`,
+		);
+	return sua.length + them.length + traBan;
+}
+
+const iThu = argv.indexOf("--thu-tra");
+if (iThu >= 0) {
+	const truoc = trangThaiBangChung();
+	spawnSync("bash", ["-c", argv[iThu + 1] ?? "true"], { cwd: GOC });
+	console.log(`tra lai ${traBangChung(truoc)} tep bang chung`);
+	process.exit(0);
 }
 
 mkdirSync(RA, { recursive: true });
