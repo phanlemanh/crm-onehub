@@ -445,6 +445,18 @@ const GHIM = {
 	"companies:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
 	"crm:views.remove": ["Xoá 1", "Xoá 12"],
 	"crm:bulkMenu.leftAlone": ["1 A bị bỏ quaB", "12 A bị bỏ quaB"],
+	"crm:bulk.boQua": [
+		"1 bản bị bỏ qua — đã lưu trữ từ trước hoặc không còn.",
+		"12 bản bị bỏ qua — đã lưu trữ từ trước hoặc không còn.",
+	],
+	"crm:bulk.hoanTacThieu": [
+		"1 bản không khôi phục được — xem mục Đã lưu trữ.",
+		"12 bản không khôi phục được — xem mục Đã lưu trữ.",
+	],
+	"crm:bulk.khongDoi": [
+		"Không có gì thay đổi — 1 bản bị bỏ qua: đã lưu trữ từ trước hoặc không còn.",
+		"Không có gì thay đổi — 12 bản bị bỏ qua: đã lưu trữ từ trước hoặc không còn.",
+	],
 	"record-sheet:company.manyDeals": [
 		"Cả 1 thoả thuận của công ty",
 		"Cả 12 thoả thuận của công ty",
