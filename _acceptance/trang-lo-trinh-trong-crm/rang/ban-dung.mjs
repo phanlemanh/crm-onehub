@@ -6,6 +6,7 @@ import {
 	mkdtempSync,
 	readFileSync,
 	rmSync,
+	statSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -89,6 +90,7 @@ const tam = mkdtempSync(path.join(tmpdir(), "lo-trinh-ban-dung-"));
 try {
 	for (const f of tep) {
 		if (!f.startsWith(`${GOC}${path.sep}`) || !existsSync(f)) continue;
+		if (statSync(f).isDirectory()) continue;
 		const dich = path.join(tam, path.relative(GOC, f));
 		mkdirSync(path.dirname(dich), { recursive: true });
 		cpSync(f, dich);
