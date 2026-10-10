@@ -5,6 +5,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	ketQuaTroLy,
 	type LyDoKhongSanSang,
+	laLyDoKhongQuyet,
 	TRO_LY_OKR_TRAN,
 } from "@crm/validation/okr-tro-ly";
 import {
@@ -409,10 +410,13 @@ export function useGopYMucTieu({
 			.then(
 				async (kq) => {
 					if (!kq.ok) {
-						void sanSang.refetch();
+						const cau = laLyDoKhongQuyet(kq.lyDo)
+							? mGopY.loiQuyet[kq.lyDo]
+							: null;
+						if (cau === null) void sanSang.refetch();
 						setLoiDong((cu) => ({
 							...cu,
-							[d.id]: mGopY.loiDong["chua-san-sang"],
+							[d.id]: cau ?? mGopY.loiDong["chua-san-sang"],
 						}));
 						return;
 					}
