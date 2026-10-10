@@ -39,6 +39,7 @@ const RAIL_CHI_OKR: readonly MucRail[] = MUC_RAIL.flatMap((muc) => {
 	if (muc.key === "overview") return [muc];
 	if (muc.key === "okr") return [muc];
 	if (muc.key === "taiLieu") return [muc];
+	if (muc.key === "loTrinh") return [muc];
 	if (muc.key === "settings") {
 		return [{ ...muc, href: CAI_DAT_MAC_DINH_CHI_OKR, related: [GOC_CAI_DAT] }];
 	}
