@@ -1,0 +1,123 @@
+{
+	"ten": "OKR",
+	"tu_vung": {
+		"đã lên onehub": "Đã giao",
+		"xong": "Đã giao",
+		"đang dựng": "Đang làm",
+		"Cổng Phạm vi": "Chờ duyệt phạm vi",
+		"chưa mở": "Chưa mở",
+		"để sau": "Xếp lại sau"
+	},
+	"moc": [
+		{
+			"ten": "Làn R1 vá xong trên production",
+			"ngay": "2026-10-12",
+			"hang": ["R1a", "R1b"]
+		},
+		{
+			"ten": "Hạn cứng: lượt 7 lên production",
+			"ngay": "2026-12-14",
+			"hang": ["4n", "7n", "6"]
+		},
+		{
+			"ten": "Ban lãnh đạo đặt OKR năm 2027 cấp OneHub",
+			"ngay": "2027-01-11",
+			"hang": ["9b", "H"]
+		},
+		{
+			"ten": "Tết Đinh Mùi",
+			"ngay": "2027-02-06",
+			"hang": []
+		}
+	],
+	"hang": [
+		{
+			"ma": "0",
+			"cau_giao": "«Từ, cây và màn đã được duyệt trước khi viết mã»",
+			"hang": "T1",
+			"trang_thai": "xong",
+			"nhom": "okr"
+		},
+		{
+			"ma": "R1a",
+			"cau_giao": "«Khung Mục tiêu gọn: bảng KR có lề, điện thoại đọc được»",
+			"hang": "T2",
+			"trang_thai": "đã lên onehub",
+			"nhom": "okr"
+		},
+		{
+			"ma": "R1b",
+			"cau_giao": "«Trang hiện < 3 cờ khi kế hoạch khớp hồ sơ»",
+			"hang": "T2",
+			"trang_thai": "xong",
+			"nhom": "okr"
+		},
+		{
+			"ma": "4n",
+			"cau_giao": "«Người dùng soạn OKR cùng trợ lý và nộp bản nháp cho trưởng phòng»",
+			"hang": "T2",
+			"trang_thai": "đang dựng",
+			"nhom": "tro-ly",
+			"dung_tren": ["R1a"]
+		},
+		{
+			"ma": "7n",
+			"cau_giao": "«Trưởng phòng ban nhận nhắc cập nhật KR qua Zalo mỗi sáng thứ Hai»",
+			"hang": "T2",
+			"trang_thai": "chưa mở",
+			"nhom": "zalo",
+			"dung_tren": ["4n"],
+			"bat_khi": "Zalo OA của công ty đã được duyệt gửi tin chủ động"
+		},
+		{
+			"ma": "6",
+			"cau_giao": "«Chủ kho đọc số lượt dùng OKR theo phòng ban trong bốn tuần»",
+			"hang": "T2",
+			"trang_thai": "chưa mở",
+			"nhom": "okr"
+		},
+		{
+			"ma": "9b",
+			"cau_giao": "«Trợ lý đề xuất OKR năm từ trang chiến lược của OneHub»",
+			"hang": "T2",
+			"trang_thai": "chưa mở",
+			"nhom": "tro-ly",
+			"vi_sao": "Ban lãnh đạo đặt OKR năm trong tháng 12; đề xuất phải có trước buổi họp."
+		},
+		{
+			"ma": "H",
+			"cau_giao": "«Ban lãnh đạo xem cây OKR năm trên một màn»",
+			"hang": "T2",
+			"trang_thai": "Cổng Phạm vi",
+			"nhom": "okr"
+		},
+		{
+			"ma": "5",
+			"cau_giao": "«Bản đồ chiến lược năm hiện trên trang OKR»",
+			"hang": "T2",
+			"trang_thai": "xong",
+			"nhom": "okr",
+			"slug": "okr-ban-do-chien-luoc"
+		},
+		{
+			"ma": "S",
+			"cau_giao": "«Bật chế độ ẩn cho phòng ban chưa sẵn sàng dùng OKR»",
+			"hang": "T2",
+			"trang_thai": "để sau",
+			"nhom": "crm-chung"
+		},
+		{
+			"ma": "ZT",
+			"cau_giao": "«Nhân viên trả lời tin nhắc Zalo để cập nhật KR»",
+			"hang": "T2",
+			"trang_thai": "tạm dừng",
+			"nhom": "zalo"
+		},
+		{
+			"ma": "V",
+			"cau_giao": "«Dọn mã chết sau khi gộp OKR»",
+			"hang": "T1",
+			"trang_thai": "chưa mở"
+		}
+	]
+}

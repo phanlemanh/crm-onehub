@@ -24,7 +24,7 @@ describe("khung dieu huong", () => {
 	});
 
 	it("tam muc, nhan vi co dau va khac nhan en", () => {
-		expect(MUC_RAIL).toHaveLength(10);
+		expect(MUC_RAIL).toHaveLength(11);
 		for (const m of MUC_RAIL) {
 			const vi = nhanRail(m, "vi");
 			expect(vi).not.toBe(nhanRail(m, "en"));
@@ -65,15 +65,28 @@ describe("khung dieu huong", () => {
 		expect(nhanRail(mucTieu, "en")).toBe("Objectives");
 	});
 
-	it("tai-lieu: sau muc tieu, ngay truoc cai dat, nhan Tai lieu/Documents", () => {
+	it("tai-lieu: sau muc tieu, ngay truoc lo trinh, nhan Tai lieu/Documents", () => {
 		const taiLieu = muc("taiLieu");
 		expect(taiLieu.href).toBe("/tai-lieu");
 		expect(taiLieu.match).toBe("prefix");
 		expect(MUC_RAIL.indexOf(taiLieu)).toBe(
-			MUC_RAIL.indexOf(muc("settings")) - 1,
+			MUC_RAIL.indexOf(muc("loTrinh")) - 1,
 		);
 		expect(nhanRail(taiLieu, "vi")).toBe("Tài liệu");
 		expect(nhanRail(taiLieu, "en")).toBe("Documents");
+	});
+
+	it("lo-trinh: sau tai lieu, ngay truoc cai dat, nhan Lo trinh/Roadmap", () => {
+		const loTrinh = muc("loTrinh");
+		expect(loTrinh.href).toBe("/lo-trinh");
+		expect(loTrinh.match).toBe("prefix");
+		expect(MUC_RAIL.indexOf(loTrinh)).toBe(
+			MUC_RAIL.indexOf(muc("settings")) - 1,
+		);
+		expect(nhanRail(loTrinh, "vi")).toBe("Lộ trình");
+		expect(nhanRail(loTrinh, "en")).toBe("Roadmap");
+		expect(mucDangMo(loTrinh, "/onehub/lo-trinh", wu)).toBe(true);
+		expect(mucDangMo(loTrinh, "/onehub/okr", wu)).toBe(false);
 	});
 
 	it("danh-dau-dang-mo: 30 ngay dau sang o danh muc va ho so, khong o cai dat", () => {

@@ -17,6 +17,7 @@
 			"!**/*.svg",
 			"!**/test/fixtures/**/clipboard-*.html",
 			"!**/test/fixtures/**/gateway-models-*.json",
+			"!apps/app/lib/lo-trinh/doc-du-lieu.js",
 			"!.claude",
 			"!.agents",
 			"!tools/oxlint/anti-slop",

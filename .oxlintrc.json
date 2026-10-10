@@ -18,6 +18,7 @@
 		"apps/api/src/generated/**",
 		"packages/db/src/generated/**",
 		"packages/ui/src/components/**",
+		"apps/app/lib/lo-trinh/doc-du-lieu.js",
 		"tools/oxlint/anti-slop/**",
 		"lib/**",
 		"scripts/**"

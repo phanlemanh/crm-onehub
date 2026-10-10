@@ -11,6 +11,7 @@ const en = {
 		onboarding: "First 30 days",
 		okr: "Objectives",
 		taiLieu: "Documents",
+		loTrinh: "Roadmap",
 		settings: "Settings",
 	},
 	nav: {
@@ -76,6 +77,7 @@ const vi = {
 		onboarding: "30 ngày đầu",
 		okr: "Mục tiêu",
 		taiLieu: "Tài liệu",
+		loTrinh: "Lộ trình",
 		settings: "Cài đặt",
 	},
 	nav: {

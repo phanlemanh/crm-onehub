@@ -386,10 +386,26 @@ const GHIM_OKR_SOAN = {
 	],
 } satisfies Record<string, [string, string]>;
 
+const GHIM_LO_TRINH = {
+	"lo-trinh:meta": [
+		"1 việc · A/B đã giao trong phạm vi lọc",
+		"12 việc · A/B đã giao trong phạm vi lọc",
+	],
+	"lo-trinh:metaTre": [" · 1 trễ mốc", " · 12 trễ mốc"],
+	"lo-trinh:moc.conNgay": ["còn 1 ngày", "còn 12 ngày"],
+	"lo-trinh:moc.tre": ["Trễ 1 ngày", "Trễ 12 ngày"],
+	"lo-trinh:moc.lechKeHoach": ["1 chỗ lệch kế hoạch", "12 chỗ lệch kế hoạch"],
+	"lo-trinh:tre.tieuDe": [
+		"1 việc đã qua mốc mà chưa giao",
+		"12 việc đã qua mốc mà chưa giao",
+	],
+} satisfies Record<string, [string, string]>;
+
 const GHIM = {
 	...GHIM_TRO_LY_OKR,
 	...GHIM_OKR_GOP_Y,
 	...GHIM_OKR_SOAN,
+	...GHIM_LO_TRINH,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
