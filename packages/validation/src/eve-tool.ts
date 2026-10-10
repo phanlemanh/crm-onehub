@@ -30,6 +30,7 @@ export const eveToolOutcome = z
 		applied: flag,
 		written: flag,
 		stored: flag,
+		skipped: flag,
 		sourceUrl: link,
 		profileUrl: link,
 		url: link,
