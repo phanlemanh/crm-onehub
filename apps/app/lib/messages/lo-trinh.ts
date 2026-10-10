@@ -43,6 +43,7 @@ const en = {
 		treMoc: "Past milestone",
 		chuaHenMoc: "No milestone yet",
 		khongNhom: "No group",
+		vongDoi: "Item status",
 	},
 	moc: {
 		conNgay: (n: string) => `${n} days left`,
@@ -149,6 +150,7 @@ const vi: LoTrinhMessages = {
 		treMoc: "Trễ mốc",
 		chuaHenMoc: "Chưa hẹn mốc",
 		khongNhom: "Không nhóm",
+		vongDoi: "Tình trạng việc",
 	},
 	moc: {
 		conNgay: (n: string) => `còn ${n} ngày`,

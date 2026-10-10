@@ -79,6 +79,13 @@ export const SEARCH_PARAM = {
 		tabSoan: "tabSoan",
 		locSoan: "locSoan",
 	},
+	loTrinh: {
+		vongDoi: "vongDoi",
+		xem: "xemLoTrinh",
+		chia: "chiaCot",
+		daBac: "daBac",
+		viec: "viec",
+	},
 	taiLieu: {
 		tab: "tabTaiLieu",
 		loai: "loai",
