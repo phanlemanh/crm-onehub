@@ -5,7 +5,7 @@ slug: eval-model-that-dung-luc
 owner: manh.phan@onemount.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-08T06:19:48Z
 design_doc: _acceptance/eval-model-that-dung-luc/design.md
@@ -72,3 +72,18 @@ Quét bằng `morphological-scan` (preset test-matrix), 08/10.
 - Rủi ro biết trước của C: nhà cung cấp đổi hành vi model mà giữ nguyên id. Hạn 7 ngày giới hạn rủi ro này.
 - Lần chấm đầu tiên của vòng phải đo đầy đủ (tốn token một lần). Bản ghi của lần đó được chép vào bằng chứng của `tro-ly-doc-kho` bằng lệnh của AC-10 và commit, để các lượt ghim lại sau dùng lại được.
 - Dùng lại chỉ có hiệu lực khi người chạy lượt đo mới (phiên thợ sau một lượt ghim lại) chạy lệnh «GHI BAN GHI» rồi commit. Làn ghim lại không tự ghi vào hồ sơ đã ký, vì làn cấm điều đó. Thiếu bước này thì lượt sau đo mới: tốn token, nhưng không sai.
+- Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-10 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 4 (luật 53: mặc định ghi Known limits):
+  - Ngoài-1: Ngưỡng đạt/không đạt của phép đo Kho tài liệu đang ghi ở hai chỗ. Hôm nay hai chỗ giống nhau, nhưng ai sửa một chỗ thì phép đo thật và bài kiểm có thể chấm theo hai ngưỡng khác nhau mà không ai thấy.
+  - Ngoài-2: Nếu tệp kết quả của một lượt đo bị sửa tay hoặc hỏng, một câu lỗi hạ tầng có thể bị tính nhầm thành trả lời sai khi chấm lại. Lượt đo thật bình thường không gặp trường hợp này.
+  - Ngoài-3: Khi bản ghi kết quả đã lưu bị hỏng, hệ thống báo là chưa có bản ghi và lặng lẽ đo lại bằng model thật, tốn tiền mà không ai biết bản ghi đang hỏng.
+  - Ngoài-4: Nếu còn sót một thiết lập cũ trong phiên làm việc, lượt đo có thể ghi ra bản ghi mang dấu vân tay không khớp đầu vào thật, và lượt sau tin nhầm để dùng lại.
+  - Ngoài-5: Nếu cách viết danh sách tệp của phép đo này bị đổi, hệ thống sẽ lặng lẽ bỏ sót nhiều tệp khi xét đầu vào đã đổi chưa, và có thể dùng lại kết quả cũ dù mã đã thay.
+  - Ngoài-8: Nếu có một lượt đo bị ngắt giữa chừng, phép kiểm tra của vòng này báo đỏ cứng thay vì báo là chưa đo được, cho tới khi có một lượt hoàn tất mới hơn.
+  - Ngoài-9: Khi một chỉ số đã rớt hẳn mà chỉ số khác chỉ sát ngưỡng, hệ thống vẫn hỏi lại model thật và tốn tiền dù kết quả cuối đã chắc chắn là không đạt.
+  - Ngoài-10: Một phép thử phá cố ý báo đỏ đúng nhưng bằng chứng nó đưa ra về lý do đỏ không đáng tin, nên người duyệt có thể tin nhầm là bài kiểm bắt đúng lỗi.
+  - Ngoài-11: Bài kiểm cách gán nhãn cho các câu hỏi chưa thử hết các tổ hợp, nên một nhánh hiếm có thể gán nhãn sai mà không bị bắt.
+  - Ngoài-12: Hai tình huống của lượt hỏi lại, gộp vẫn không đạt và lượt hai có câu lỗi, chưa có bài kiểm riêng nên nếu chúng hỏng sẽ không ai biết ngay.
+  - Ngoài-13: Phép kiểm chấm lại chỉ xác nhận các dòng tóm tắt có mặt, không đối chiếu kết luận đạt/không đạt với lượt thật, nên một sai lệch kết luận có thể lọt.
+  - Ngoài-14: Bài kiểm dấu vân tay đầu vào chưa tách riêng được nhóm tệp khai trong phép đo, nên nếu nhóm đó bị bỏ sót thì bài kiểm vẫn xanh.
+  - Ngoài-15: Bài kiểm việc loại câu lỗi khỏi tính toán chỉ thử với nhóm câu đầu, nên nhóm câu chuyển sang Zalo chưa được kiểm tương tự.
+  - Ngoài-17: Phép kiểm lượt thứ hai không gọi model dựa vào việc không thấy một dòng chữ, mà chưa chứng minh dòng chữ đó thật sự xuất hiện khi có gọi model, nên nếu chữ đổi thì phép kiểm vẫn xanh.
