@@ -12,7 +12,6 @@ evals:
       - "packages/ui/src/components/nguon-keo-tha.tsx"
       - "packages/ui/package.json"
       - "packages/ui/src/components/reui/**"
-      - "packages/ui/src/components/examples/**"
       - "_acceptance/nguon-keo-tha-reui/rang/cai-sach.mjs"
     expected: |
       Script suy goc kho tu vi tri cua chinh no. Ma tran viet truoc 7 kiem x vat, moi o in
