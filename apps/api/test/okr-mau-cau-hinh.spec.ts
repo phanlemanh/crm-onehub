@@ -7,6 +7,7 @@ import {
 	type OkrProgramSua,
 } from "@crm/validation/okr-chuong-trinh";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { z } from "zod";
 import { OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 import { xoaBoOkrMau } from "../scripts/okr-mau/nap";
 import { OkrService } from "../src/okr/okr.service";
@@ -123,8 +124,10 @@ async function conMaMau(): Promise<string[]> {
 	);
 }
 
+const hangJson = z.record(z.string(), z.json());
+
 const thayMang = (dong: string, ma: string[]): string => {
-	const o: Record<string, unknown> = JSON.parse(dong);
+	const o = hangJson.parse(JSON.parse(dong));
 	for (const c of MANG_GHIM) o[c] = ma;
 	return JSON.stringify(o);
 };
@@ -259,12 +262,15 @@ describe("omc-gat", () => {
 				["docChamVaTran", () => docChamVaTran(db)],
 				["cauHinhAiLuc", () => cauHinhAiLuc(db)],
 			];
-			for (const [ten, doc] of docs)
-				await doc().catch((loi: unknown) => {
+			for (const [ten, doc] of docs) {
+				try {
+					await doc();
+				} catch (loi) {
 					throw new Error(
 						`omc: cau hinh sau gat khong doc duoc ${ten}: ${loi instanceof Error ? loi.message : String(loi)}`,
 					);
-				});
+				}
+			}
 			const ct = await app.get(OkrService).program();
 			hong(
 				ct.version !== sau.version,

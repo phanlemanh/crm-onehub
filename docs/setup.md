@@ -56,8 +56,17 @@ cùng các đề xuất của nó cũng đi theo `--xoa` và nạp lại. `okrCu
 ngoại nên lệnh tìm cuộc theo tiền tố `mau-okr-` chứ không theo bộ mẫu đang có: cuộc còn
 sót từ một lần xoá trước cũng bị gỡ và được đếm. Hàng chi phí AI (`aiChiPhi`) của các
 cuộc đó ở lại: đó là tiền đã tiêu thật, và trần chi phí AI của tháng đọc chúng — xoá đi
-thì trần mở lại giả. Phiên bản cấu hình chương trình OKR mà người mẫu tạo (vd khi bật
-Soạn OKR) hiện vẫn còn sau `--xoa`.
+thì trần mở lại giả.
+
+Phiên bản cấu hình chương trình OKR (`okrProgramConfig`) mà người mẫu tạo — vd khi
+`le-hai-dang` bật Soạn OKR ở Cài đặt → OKR — cũng đi theo `--xoa` và nạp lại. Lệnh tìm
+chúng theo người tạo: người mẫu đang có, hoặc mã người bắt đầu `mau-okr-`, nên phiên bản
+còn sót từ một lần xoá trước cũng bị gỡ và được đếm. Các phiên bản khác ở lại, chỉ mất mã
+bộ phận hay phòng ban mẫu trong danh sách đơn vị được bật AI (vd «Soạn OKR cho các đơn
+vị»). Mỗi phiên bản là ảnh chụp trọn cấu hình và sản phẩm đọc phiên bản mới nhất, nên
+hệ quả là cấu hình đang dùng lùi về bản cuối trước phiên làm việc với bộ mẫu, hoặc về
+mặc định nếu trước đó chưa có bản nào. Cài đặt do người mẫu bật phải bật lại sau mỗi lần
+nạp lại.
 
 ```sh
 bun run okr:mau                      # nạp, hoặc nạp lại — xoá bộ cũ rồi ghi bộ mới
