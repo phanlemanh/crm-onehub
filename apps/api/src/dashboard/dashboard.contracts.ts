@@ -127,6 +127,7 @@ export const dashboardSummaryOutput = z.object({
 	closingThisMonthTotal: monthlyTotalOutput,
 	biggestOpen: z.array(biggestOpenDealOutput),
 	mySteps: z.array(myStepOutput),
+	quaHan: z.object({ viec: z.number().int(), buoc: z.number().int() }),
 	keHoachCanDeY: z.array(keHoachCanDeYOutput),
 	taiLieuChoDuyet: z.number().int(),
 	overdueTasks: z.array(overdueTaskOutput),

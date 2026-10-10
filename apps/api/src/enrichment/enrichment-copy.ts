@@ -24,6 +24,7 @@ const STEPS = {
 	"okr-kiem-san-sang": "Checking the AI model key",
 	"okr-tom-tat-xep": "Queuing weekly summaries",
 	"ai-doi-soat": "Reconciling AI spend",
+	"onboarding-identify": "Routing an unmatched partner code to the plan lead",
 } satisfies Record<TaskKind, string>;
 
 const STEP_BY_KIND = new Map<string, string>(Object.entries(STEPS));
