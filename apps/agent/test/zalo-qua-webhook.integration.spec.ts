@@ -102,9 +102,9 @@ async function chayNhipDispatch(): Promise<PromiseSettledResult<unknown>[]> {
 	return Promise.allSettled(viec);
 }
 
-async function gieoMa() {
+async function gieoMa(luc: Date = GOC) {
 	const U = await gieoNguoi("Uyen Webhook");
-	const { ma } = await taoMaLienKet(db, U.id, GOC);
+	const { ma } = await taoMaLienKet(db, U.id, luc);
 	return { U, ma };
 }
 
@@ -248,7 +248,11 @@ describe("giao-khi-mo", () => {
 			],
 		});
 		await voiBien({ ZALO_BOT_TOKEN: TOKEN, ZALO_WEBHOOK_SECRET: KHOA }, () =>
-			vongTay({ fetcher: z.fetcher, conTiep: () => z.dongHo() < HET_DONG_HO }),
+			vongTay({
+				fetcher: z.fetcher,
+				now: () => GOC,
+				conTiep: () => z.dongHo() < HET_DONG_HO,
+			}),
 		);
 		expect(
 			(await db.zaloLink.findMany({ where: { crmUserId: U.id } })).map(
@@ -639,7 +643,7 @@ describe("kenh-route", () => {
 			(r) => r.method === "POST" && r.path === DUONG_HUA,
 		);
 		expect(route.length, "route /zalo/webhook duoc mount").toBe(1);
-		const { U, ma } = await gieoMa();
+		const { U, ma } = await gieoMa(new Date());
 		const z = zaloGia();
 		traLai = thayFetch({ zalo: z.fetcher, khac: [] });
 		const goi = (header: string) =>

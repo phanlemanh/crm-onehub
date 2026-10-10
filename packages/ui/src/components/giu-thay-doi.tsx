@@ -12,8 +12,17 @@ export type GiuNguCanh = {
 	hoiLai: () => void;
 	boQuaLanToi: () => void;
 	dong: () => void;
-	khai: (id: string, coChu: boolean) => void;
+	khai: (id: string, coChu: boolean, loiHoi?: LoiHoi) => void;
 };
+
+export type LoiHoi = {
+	tieuDe: string;
+	than: string;
+	nut: string;
+	thoi: string;
+};
+
+type Khai = { coChu: boolean; loiHoi?: LoiHoi };
 
 export type GiuGocVao = {
 	open?: boolean;
@@ -76,7 +85,7 @@ export function useGiuGoc({
 	const [moNoi, datMoNoi] = React.useState(defaultOpen ?? false);
 	const mo = open ?? moNoi;
 	const [tuNhan, datTuNhan] = React.useState(false);
-	const [khaiCon, datKhaiCon] = React.useState<Record<string, boolean>>({});
+	const [khaiCon, datKhaiCon] = React.useState<Record<string, Khai>>({});
 	const [khaiTruoc, datKhaiTruoc] = React.useState(coThayDoi);
 	const [moTruoc, datMoTruoc] = React.useState(mo);
 	const [hoi, datHoi] = React.useState(false);
@@ -96,7 +105,14 @@ export function useGiuGoc({
 	}
 	const bat = giuThayDoi !== false;
 	const nhan = tuNhanThayDoi !== false;
-	const conKhai = Object.values(khaiCon).some(Boolean);
+	const conKhai = Object.values(khaiCon).some((k) => k.coChu);
+	const loiHoi = Object.values(khaiCon).find((k) => k.coChu && k.loiHoi)
+		?.loiHoi ?? {
+		tieuDe: msg.dialog.boThayDoi.tieuDe,
+		than: msg.dialog.boThayDoi.than,
+		nut: msg.dialog.boThayDoi.bo,
+		thoi: msg.dialog.boThayDoi.tiepTuc,
+	};
 	const ban = bat && ((nhan && tuNhan) || coThayDoi === true || conKhai);
 	const dongThat = React.useCallback(() => {
 		datTuNhan(false);
@@ -139,17 +155,21 @@ export function useGiuGoc({
 				boQua.current = false;
 				dongThat();
 			},
-			khai: (id, coChu) =>
-				datKhaiCon((cu) => (cu[id] === coChu ? cu : { ...cu, [id]: coChu })),
+			khai: (id, coChu, loiHoi) =>
+				datKhaiCon((cu) =>
+					cu[id]?.coChu === coChu && cu[id]?.loiHoi === loiHoi
+						? cu
+						: { ...cu, [id]: { coChu, loiHoi } },
+				),
 		}),
 		[ban, bat, nhan, dongThat],
 	);
 	const hopHoi = (
 		<ConfirmDialog
-			tieuDe={msg.dialog.boThayDoi.tieuDe}
-			than={msg.dialog.boThayDoi.than}
-			nut={msg.dialog.boThayDoi.bo}
-			thoi={msg.dialog.boThayDoi.tiepTuc}
+			tieuDe={loiHoi.tieuDe}
+			than={loiHoi.than}
+			nut={loiHoi.nut}
+			thoi={loiHoi.thoi}
 			open={hoi}
 			onOpenChange={datHoi}
 			pending={false}
@@ -177,12 +197,15 @@ export function useGiuNoiDung(): GiuNguCanh | null {
 	return React.useContext(GiuContext);
 }
 
-export function useKhaiThayDoi(): (coChu: boolean) => void {
+export function useKhaiThayDoi(loiHoi?: LoiHoi): (coChu: boolean) => void {
 	const g = React.useContext(GiuContext);
 	const id = React.useId();
 	const khai = g?.khai;
 	useMountEffect(() => () => khai?.(id, false));
-	return React.useCallback((coChu: boolean) => g?.khai(id, coChu), [g, id]);
+	return React.useCallback(
+		(coChu: boolean) => g?.khai(id, coChu, loiHoi),
+		[g, id, loiHoi],
+	);
 }
 
 export function hrefNoiBo(e: MouseEvent): string | null {

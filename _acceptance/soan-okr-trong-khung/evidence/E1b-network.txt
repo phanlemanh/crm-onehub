@@ -1,0 +1,1 @@
+driver: man.mjs (Playwright script), khong co read_network_requests. Console: DUNG console khong loi (0). networkObserved=n-a (driver)

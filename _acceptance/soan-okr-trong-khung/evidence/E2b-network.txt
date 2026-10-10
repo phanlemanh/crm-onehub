@@ -1,0 +1,2 @@
+E2b network: driver la man.mjs (playwright script) khong xuat log request; chi in console loi dem duoc: deals console 0, cua-toi console 0.
+networkObserved = n-a (driver)
