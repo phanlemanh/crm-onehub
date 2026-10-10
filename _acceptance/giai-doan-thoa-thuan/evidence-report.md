@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 99ab35a30335c5f765410f94905e06d237d72c74
+verified_commit: db6a3ca591311840eec8266d417d907054065628
 human_signoff: Phan Le Manh 2026-09-29
 ---
 
@@ -305,3 +305,7 @@ sha: eeeed4a128b93638f9897ac1b9165aff5d5045a1 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 9 — 2026-10-09, do thuoc-khong-tu-het-han sửa paths; hồ sơ hoá cũ do onehub đổi vật
 run_id: repin-20261009T224054Z-34604
 sha: 99ab35a30335c5f765410f94905e06d237d72c74 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 10 — 2026-10-10, do hoá cũ do thuoc-khong-tu-het-han (F10) sửa paths chết; ghim lại ở tip trước khi gộp
+run_id: repin-20261010T061801Z-43374
+sha: db6a3ca591311840eec8266d417d907054065628 · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E15 · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
