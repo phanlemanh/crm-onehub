@@ -17,6 +17,11 @@ phần khách. Thành phần khách dựng danh sách bằng `DataTable` và `Bo
 `_acceptance/trang-lo-trinh-trong-crm/contract.md` (14 AC) · phép đo `evals.yaml` (17 eval) · bản mẫu đã duyệt
 `apps/app/app/proto/_modules/trang-lo-trinh-trong-crm/` (nguồn tham chiếu cho mọi phần giao diện).
 
+Bản mẫu không nằm trên `onehub`: gộp hồ sơ trước khi có mã thì phép kiểm trước-gộp chặn mã bản mẫu, nên nó được
+tách ra và giữ ở thẻ `luu/trang-lo-trinh-ban-mau`. Trước Task 1, lấy lại bằng
+`git checkout luu/trang-lo-trinh-ban-mau -- apps/app/app/proto/_modules/trang-lo-trinh-trong-crm apps/app/app/proto/catalog.ts apps/app/app/proto/registry.ts`
+rồi gộp tay hai tệp `catalog.ts`, `registry.ts` với bản hiện tại (chỉ thêm dòng của LT1).
+
 ## Global Constraints
 
 - Không viết chú thích trong mã — kể cả trong bản chép `docDuLieu` (chép thân hàm; khối chú thích trước `export function` không chép).

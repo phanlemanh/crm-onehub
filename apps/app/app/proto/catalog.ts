@@ -11,38 +11,6 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
-		slug: "trang-lo-trinh-trong-crm",
-		ten: "Trang Lộ trình trong CRM — chỉ đọc",
-		states: [
-			{ id: "ST-lotrinh-day-du", nhan: "Bảng — mặc định «Chưa xong»" },
-			{ id: "ST-lotrinh-tab", nhan: "Bảng — thẻ «Đã giao»" },
-			{ id: "ST-lotrinh-loc", nhan: "Bảng — lọc nhóm okr" },
-			{ id: "ST-lotrinh-tre", nhan: "Hôm nay 20/12 — có việc trễ" },
-			{ id: "ST-lotrinh-bang-cot", nhan: "Bảng cột — chia theo trạng thái" },
-			{
-				id: "ST-lotrinh-chia-moc",
-				nhan: "Xem theo mốc — việc chưa xong",
-			},
-			{ id: "ST-lotrinh-chi-tiet", nhan: "Ngăn hồ sơ một việc (LT2)" },
-			{ id: "ST-lotrinh-da-bac", nhan: "Việc đã bác" },
-			{ id: "ST-lotrinh-dang-tai", nhan: "Đang tải" },
-			{
-				id: "ST-lotrinh-chua-co-khoi",
-				nhan: "Lộ trình chưa được xuất cho trang",
-			},
-			{ id: "ST-lotrinh-khoi-hong", nhan: "Dữ liệu lộ trình hỏng" },
-			{ id: "ST-lotrinh-tep-vang", nhan: "Bản đang chạy không mang lộ trình" },
-			{
-				id: "ST-lotrinh-lo-loi",
-				nhan: "Một lộ trình lỗi, các lộ trình khác vẫn hiện",
-			},
-			{
-				id: "ST-lotrinh-khuon-moi",
-				nhan: "Dữ liệu mới hơn trang — vẫn hiện, có cảnh báo",
-			},
-		],
-	},
-	{
 		slug: "kho-tai-lieu",
 		ten: "Kho tài liệu — lượt 1 viết, duyệt, đọc; các lượt sau",
 		states: [
