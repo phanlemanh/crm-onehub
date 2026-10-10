@@ -1,9 +1,13 @@
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
 	existsSync,
 	mkdirSync,
+	readdirSync,
 	readFileSync,
 	rmSync,
+	statSync,
+	utimesSync,
 	writeFileSync,
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -21,6 +25,8 @@ const BANG_CHUNG = [
 	"_acceptance/khung-okr-truoc-r1/evidence",
 	"_acceptance/okr-to-chuc-va/evidence",
 ];
+const HOP_DONG = join(GOC, "_acceptance/ban-gieo-gop-y-sau-nop/contract.md");
+const DA_THONG_CONG = new Set(["signed-off", "machine-cleared"]);
 const DAU_HIEU = /^gieo-gop-y: xong/m;
 const KET = /^(KET LUAN\b|KHONG DO DUOC\b|so o: \d+).*$/gm;
 
@@ -70,6 +76,44 @@ function trangThaiBangChung() {
 	const dong = new Set(r.stdout.split("\n").filter(Boolean));
 	dong.ban = chupBanTruoc(dong);
 	return dong;
+}
+
+const bamTep = (duong) =>
+	createHash("sha256").update(readFileSync(duong)).digest("hex");
+
+function* tepTrong(thuMuc) {
+	if (!existsSync(thuMuc)) return;
+	for (const muc of readdirSync(thuMuc, { withFileTypes: true })) {
+		const duong = join(thuMuc, muc.name);
+		if (muc.isDirectory()) yield* tepTrong(duong);
+		else yield duong;
+	}
+}
+
+function chupThoiDiem() {
+	const anh = new Map();
+	for (const goc of BANG_CHUNG)
+		for (const duong of tepTrong(join(GOC, goc))) {
+			const st = statSync(duong);
+			anh.set(duong, { bam: bamTep(duong), atime: st.atime, mtime: st.mtime });
+		}
+	return anh;
+}
+
+function traThoiDiem(anh) {
+	const lech = [];
+	for (const [duong, cu] of anh) {
+		if (!existsSync(duong) || bamTep(duong) !== cu.bam) {
+			lech.push(duong.slice(GOC.length + 1));
+			continue;
+		}
+		if (statSync(duong).mtime.getTime() !== cu.mtime.getTime())
+			utimesSync(duong, cu.atime, cu.mtime);
+	}
+	if (lech.length)
+		khongDo(
+			`tep bang chung khong ve dung noi dung truoc lenh: ${lech.join(", ")}`,
+		);
 }
 
 function chupBanTruoc(truoc) {
@@ -131,8 +175,10 @@ function traBangChung(truoc) {
 const iThu = argv.indexOf("--thu-tra");
 if (iThu >= 0) {
 	const truoc = trangThaiBangChung();
+	const thoi = chupThoiDiem();
 	spawnSync("bash", ["-c", argv[iThu + 1] ?? "true"], { cwd: GOC });
 	console.log(`tra lai ${traBangChung(truoc)} tep bang chung`);
+	traThoiDiem(thoi);
 	process.exit(0);
 }
 
@@ -141,6 +187,7 @@ const dong = [];
 const loi = [];
 for (const [k, l] of lenh) {
 	const truoc = trangThaiBangChung();
+	const thoi = chupThoiDiem();
 	const r = spawnSync("bash", ["-c", l], {
 		cwd: GOC,
 		encoding: "utf8",
@@ -149,6 +196,7 @@ for (const [k, l] of lenh) {
 	const ra = `${r.stdout ?? ""}${r.stderr ?? ""}`;
 	writeFileSync(join(RA, `ban-do-${k}.txt`), ra);
 	console.log(`tra lai ${traBangChung(truoc)} tep bang chung`);
+	traThoiDiem(thoi);
 	const { qua, ket } = phanLoai(ra);
 	const d = `${k}: ma ${r.status} · ${ket ?? "(khong co KET LUAN, KHONG DO DUOC hay so o)"}`;
 	dong.push(d);
@@ -156,8 +204,17 @@ for (const [k, l] of lenh) {
 	if (ket === null) loi.push(`thieu ket luan: ${k}`);
 	if (!qua) loi.push(`khong qua buoc gieo: ${k}`);
 }
-mkdirSync(dirname(BANG), { recursive: true });
-writeFileSync(BANG, `${dong.join("\n")}\n`);
+const trangThaiHoSo =
+	/^status:\s*(\S+)/m.exec(readFileSync(HOP_DONG, "utf8"))?.[1] ?? "";
+const noiGhi = DA_THONG_CONG.has(trangThaiHoSo)
+	? join(RA, "ba-ban-do.txt")
+	: BANG;
+if (noiGhi !== BANG)
+	console.log(
+		`ho so ${trangThaiHoSo}: ghi ket luan ra ${noiGhi.slice(GOC.length + 1)}, khong ghi vao bang chung da ky`,
+	);
+mkdirSync(dirname(noiGhi), { recursive: true });
+writeFileSync(noiGhi, `${dong.join("\n")}\n`);
 if (loi.length) {
 	for (const l of loi) console.log(l);
 	process.exit(1);
