@@ -1,0 +1,24 @@
+E15c network/console truth — driver: puppeteer script rang/man.mjs (khong co read_network_requests); console loi duoc kiem trong script moi trang thai, ngoai cac yeu cau bi chan chu dich
+--- run 1 (exit 2: KHONG DO DUOC neo-kr 1440 waitForFunction 120000ms exceeded — chap chon, neo-kr rieng le va lan 2 deu dat)
+KHONG DO DUOC: buoc neo-kr 1440: Waiting failed: 120000ms exceeded
+KET LUAN: 3 DUNG, 0 SAI — ma thoat 2
+--- run 2 (exit 0)
+DUNG co-khung 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG neo-kr 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG loi-dong 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG can-chinh 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG tai-loi 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG hai-kr 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG dang-doc+qua-han 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG nho-loi 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG het-luot 1440: console khong loi ngoai yeu cau bi chan (0)
+DUNG co-khung 390: console khong loi ngoai yeu cau bi chan (0)
+DUNG neo-kr 390: console khong loi ngoai yeu cau bi chan (0)
+DUNG loi-dong 390: console khong loi ngoai yeu cau bi chan (0)
+DUNG can-chinh 390: console khong loi ngoai yeu cau bi chan (0)
+DUNG tai-loi 390: console khong loi ngoai yeu cau bi chan (0)
+DUNG hai-kr 390: console khong loi ngoai yeu cau bi chan (0)
+DUNG dang-doc+qua-han 390: console khong loi ngoai yeu cau bi chan (0)
+DUNG nho-loi 390: console khong loi ngoai yeu cau bi chan (0)
+DUNG het-luot 390: console khong loi ngoai yeu cau bi chan (0)
+KET LUAN: 45 DUNG, 0 SAI — ma thoat 0

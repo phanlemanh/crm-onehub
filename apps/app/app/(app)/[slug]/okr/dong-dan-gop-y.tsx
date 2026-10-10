@@ -11,7 +11,7 @@ import {
 import { KaraMark } from "@crm/ui/components/kara";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SheetClose } from "@crm/ui/components/sheet";
-import { useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { okrGopYMessages } from "@/lib/messages/okr-gop-y";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -21,15 +21,18 @@ export function DongDanGopY({
 	so,
 	moTa,
 	objectiveId,
+	keyResultId,
 }: {
 	so: number;
 	moTa: string;
 	objectiveId: string;
+	keyResultId?: string;
 }) {
 	const m = okrGopYMessages(useLocale());
 	const openRecord = useOpenRecord();
 	const giu = useGiuNoiDung();
 	const [, setNeo] = useQueryState(SEARCH_PARAM.okr.neoGopY, parseAsNeoGopY);
+	const [, setNeoKr] = useQueryState(SEARCH_PARAM.okr.neoGopYKr, parseAsString);
 	if (so <= 0) return null;
 	return (
 		<Item data-dan-sang size="sm" variant="outline">
@@ -43,6 +46,7 @@ export function DongDanGopY({
 						onClick={() => {
 							if (giu?.coThayDoi) return;
 							void setNeo(true);
+							void setNeoKr(keyResultId ?? null);
 							openRecord({ kind: "objective", id: objectiveId });
 						}}
 						size="sm"

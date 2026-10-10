@@ -1,6 +1,8 @@
 slug: soan-okr-trang-rieng
 evals:
   - id: E1
+    status: not-run
+    superseded_by: soan-okr-trong-khung#AC-1
     criterion: AC-1
     executor: test
     cmd: config:executors.test.k2_duong
@@ -9,6 +11,8 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "apps/app/test/soan-okr-trang.dom.tsx", "apps/app/test/khung-soan-okr.tsx"]
 
   - id: E1b
+    status: not-run
+    superseded_by: soan-okr-trong-khung#AC-1
     criterion: AC-1
     executor: ui-check
     layer: ui-observed
@@ -24,6 +28,8 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "apps/app/app/(app)/[slug]/okr/thanh-tab.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
 
   - id: E2
+    status: not-run
+    superseded_by: soan-okr-trong-khung#AC-3
     criterion: AC-2
     executor: ui-check
     layer: ui-observed
@@ -41,6 +47,8 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/resizable.tsx", "_acceptance/soan-okr-trang-rieng/rang/man.mjs"]
 
   - id: E2b
+    status: not-run
+    superseded_by: soan-okr-trong-khung#AC-3
     criterion: AC-2
     executor: test
     cmd: config:executors.test.k2_khung
@@ -49,6 +57,8 @@ evals:
     paths: ["apps/app/app/(app)/[slug]/okr/soan/**", "packages/ui/src/components/resizable.tsx", "apps/app/test/soan-okr-trang.dom.tsx"]
 
   - id: E3
+    status: not-run
+    superseded_by: soan-okr-trong-khung#AC-5
     criterion: AC-3
     executor: test
     cmd: config:executors.test.k2_trang_thai
@@ -259,6 +269,8 @@ evals:
     paths: ["docs/chat-ui.md", "_acceptance/soan-okr-trang-rieng/rang/tai-lieu.mjs"]
 
   - id: E14
+    status: not-run
+    superseded_by: soan-okr-trong-khung#AC-11
     criterion: AC-14
     executor: ui-check
     layer: ui-observed

@@ -164,7 +164,7 @@ const en = {
 		customGroup: "Custom fields",
 		dragNote: "Drag to order",
 		archivedRow: "Archived",
-		archivedNote: "values kept, hidden everywhere",
+		archivedNote: "values kept, removed from every view",
 		newField: "New field",
 		orderNote: "Order here is the order on the sheet",
 		manualOnly: "Manual only",
@@ -185,7 +185,8 @@ const en = {
 		edit: "Edit",
 		restore: "Restore",
 		archiveTitle: (label: string) => `Archive ${label}?`,
-		archiveBody: "Hidden everywhere. Its values are kept.",
+		archiveBody:
+			"Removed from every table, record and filter. Its values are kept and it can be restored.",
 		archiveField: "Archive field",
 		filledOf: (entity: string, a: string, b: string) =>
 			`${entity} · ${a} of ${b} filled`,
@@ -259,6 +260,7 @@ const en = {
 	},
 	bulk: {
 		restore: "Restore",
+		hoanTacLoi: "Could not undo. The records are still under Archived.",
 		deleteForever: "Delete forever",
 		archive: "Archive",
 		reEnrich: "Re-enrich",
@@ -286,7 +288,7 @@ const en = {
 		assignOwner: "Assign owner",
 		nobodyElse: "Nobody else works here yet.",
 		cancel: "Cancel",
-		confirmDelete: "Delete",
+		confirmDelete: "Delete forever",
 		leftAlone: (done: string, n: string, why: string) =>
 			`${done} ${n} left alone${why}`,
 	},
@@ -309,6 +311,7 @@ const en = {
 		fallbackName: (noun: string) => `The ${noun}`,
 		archived: (name: string) => `${name} was archived.`,
 		hoanTac: "Undo",
+		daLuuTruNgay: "Archived on",
 		hoanTacLoi: "Couldn't undo. The record is still under Archived.",
 		restored: (name: string) => `${name} was restored.`,
 		deletedForever: (name: string) => `${name} was deleted forever.`,
@@ -490,7 +493,7 @@ const vi = {
 		customGroup: "Trường tự tạo",
 		dragNote: "Kéo để sắp thứ tự",
 		archivedRow: "Đã lưu trữ",
-		archivedNote: "giữ giá trị, ẩn ở mọi nơi",
+		archivedNote: "giữ giá trị, cất khỏi mọi nơi",
 		newField: "Trường mới",
 		orderNote: "Thứ tự ở đây là thứ tự trên hồ sơ",
 		manualOnly: "Chỉ nhập tay",
@@ -511,7 +514,8 @@ const vi = {
 		edit: "Sửa",
 		restore: "Khôi phục",
 		archiveTitle: (label: string) => `Lưu trữ ${label}?`,
-		archiveBody: "Ẩn ở mọi nơi. Giá trị vẫn được giữ.",
+		archiveBody:
+			"Cất khỏi mọi bảng, ngăn bản ghi và bộ lọc. Giá trị vẫn được giữ, khôi phục được.",
 		archiveField: "Lưu trữ trường",
 		filledOf: (entity: string, a: string, b: string) =>
 			`${entity} · đã điền ${a}/${b}`,
@@ -584,6 +588,7 @@ const vi = {
 	},
 	bulk: {
 		restore: "Khôi phục",
+		hoanTacLoi: "Chưa hoàn tác được. Các bản ghi vẫn ở mục Đã lưu trữ.",
 		deleteForever: "Xoá vĩnh viễn",
 		archive: "Lưu trữ",
 		reEnrich: "Tra cứu lại",
@@ -611,7 +616,7 @@ const vi = {
 		assignOwner: "Giao người phụ trách",
 		nobodyElse: "Chưa có ai khác trong đội.",
 		cancel: "Huỷ",
-		confirmDelete: "Xoá",
+		confirmDelete: "Xoá vĩnh viễn",
 		leftAlone: (done: string, n: string, why: string) =>
 			`${done} ${n} bị bỏ qua${why}`,
 	},
@@ -634,6 +639,7 @@ const vi = {
 		fallbackName: (noun: string) => `${noun} này`,
 		archived: (name: string) => `Đã lưu trữ ${name}.`,
 		hoanTac: "Hoàn tác",
+		daLuuTruNgay: "Đã lưu trữ ngày",
 		hoanTacLoi: "Chưa hoàn tác được. Bản ghi vẫn ở mục Đã lưu trữ.",
 		restored: (name: string) => `Đã khôi phục ${name}.`,
 		deletedForever: (name: string) => `Đã xoá vĩnh viễn ${name}.`,

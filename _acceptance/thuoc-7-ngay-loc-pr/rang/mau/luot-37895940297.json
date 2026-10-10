@@ -1,0 +1,81 @@
+{
+ "run": {
+  "id": 37895940297,
+  "path": ".github/workflows/ci.yml",
+  "event": "pull_request",
+  "head_branch": "feat/khung-loi-ban-ghi-dung-ly-do",
+  "head_sha": "d73f011750eae193ab2ad5cadb515a956efa70be",
+  "run_attempt": 1,
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-10-09T06:53:36Z",
+  "pull_requests": []
+ },
+ "jobs": [
+  {
+   "id": 113707180878,
+   "run_id": 37895940297,
+   "run_attempt": 1,
+   "name": "test (app-ui)",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T06:53:38Z",
+   "completed_at": "2026-10-09T07:01:18Z"
+  },
+  {
+   "id": 113707181031,
+   "run_id": 37895940297,
+   "run_attempt": 1,
+   "name": "test (con-lai)",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T06:53:38Z",
+   "completed_at": "2026-10-09T07:01:34Z"
+  },
+  {
+   "id": 113707181061,
+   "run_id": 37895940297,
+   "run_attempt": 1,
+   "name": "check-types, lint",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T06:53:39Z",
+   "completed_at": "2026-10-09T06:57:29Z"
+  },
+  {
+   "id": 113707181125,
+   "run_id": 37895940297,
+   "run_attempt": 1,
+   "name": "test (api)",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T06:53:38Z",
+   "completed_at": "2026-10-09T07:04:05Z"
+  },
+  {
+   "id": 113710255315,
+   "run_id": 37895940297,
+   "run_attempt": 1,
+   "name": "ci-ok",
+   "status": "completed",
+   "conclusion": "success",
+   "started_at": "2026-10-09T07:04:07Z",
+   "completed_at": "2026-10-09T07:04:11Z"
+  }
+ ],
+ "annotations": {},
+ "pulls": [
+  {
+   "number": 333,
+   "state": "closed",
+   "merged_at": "2026-10-09T07:05:03Z",
+   "head": {
+    "ref": "feat/khung-loi-ban-ghi-dung-ly-do",
+    "sha": "d73f011750eae193ab2ad5cadb515a956efa70be"
+   },
+   "base": {
+    "ref": "onehub"
+   }
+  }
+ ]
+}

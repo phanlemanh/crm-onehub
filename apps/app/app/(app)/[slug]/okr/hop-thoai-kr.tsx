@@ -404,6 +404,7 @@ export function HopThoaiKr({
 						<FieldGroup>
 							{n.krId ? (
 								<DongDanGopY
+									keyResultId={n.krId}
 									moTa={okrGopYMessages(locale).danSang.moTaKr}
 									objectiveId={objectiveId}
 									so={soGopYKr}
