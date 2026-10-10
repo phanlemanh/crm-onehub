@@ -17,7 +17,7 @@ import {
 export type KaraStep = {
 	id: string;
 	label: string;
-	state: "done" | "running" | "error" | "unsaved";
+	state: "done" | "running" | "error" | "unsaved" | "skipped";
 };
 
 export type KaraStepsProps = {
@@ -30,6 +30,7 @@ const TONE = {
 	running: "info",
 	error: "error",
 	unsaved: "warning",
+	skipped: "neutral",
 } as const satisfies Record<KaraStep["state"], StatusTone>;
 
 const DAU = {
@@ -37,6 +38,7 @@ const DAU = {
 	running: "dang-chay",
 	error: "loi",
 	unsaved: "chua-luu",
+	skipped: "bo-qua",
 } as const satisfies Record<KaraStep["state"], string>;
 
 export function KaraSteps({ steps, onRetry }: KaraStepsProps) {
@@ -62,6 +64,7 @@ export function KaraSteps({ steps, onRetry }: KaraStepsProps) {
 		running: msg.karaKhung.buocDangChay,
 		error: msg.karaKhung.buocLoi,
 		unsaved: msg.karaKhung.buocChuaLuu,
+		skipped: msg.karaKhung.buocBoQua,
 	} as const;
 	return (
 		<Task
