@@ -6,7 +6,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 7;
+const SO_CAP_KHAI = 9;
 const TRAN_MS = 600_000;
 const LENH = (t) =>
 	`bun run test -- "cd apps/api && bun test test/okr-mau-cuoc-soan.spec.ts -t ${t}"`;
@@ -71,6 +71,22 @@ const CAP = [
 		"\t\t\t\t{ nguoiMoUserId: { in: ids(nguoi) } },\n",
 		"",
 		"omx: con cuoc ve-nguoi",
+	],
+	[
+		"h bo ve chu ky",
+		LENH("omx-xoa"),
+		NAP,
+		"\t\t\t\t{ cycleId: tien },\n",
+		"",
+		"omx: con cuoc ve-chu-ky",
+	],
+	[
+		"i bo ve bo phan",
+		LENH("omx-xoa"),
+		NAP,
+		"\t\t\t\t{ divisionId: tien },\n",
+		"",
+		"omx: con cuoc ve-bp",
 	],
 ];
 
