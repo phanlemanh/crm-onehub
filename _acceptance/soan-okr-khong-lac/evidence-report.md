@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 38e3e4815280a164ef3a8a6125bcae55f9e03a6b
+verified_commit: bb44877e7221bd581e74fa97aef799edaa76d3b1
 human_signoff: Phan Le Manh 2026-10-08
 ---
 
@@ -203,3 +203,7 @@ Round 1: cả 10 eval máy và 7 lệnh suite đạt ở lần chạy đầu; kh
 ### Re-pin lần 1 — 2026-10-09, do K2c (ly-do-tu-choi-nop-theo-locale) đổi nop-ban-nhap.ts thuộc paths của K2b; ghim lại ở tip sau gộp onehub 59d20767
 run_id: repin-20261009T093838Z-83779
 sha: 38e3e4815280a164ef3a8a6125bcae55f9e03a6b · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-10, do đỉnh nhánh K2d sau chữ ký Cổng 2 và gộp onehub b80172eca
+run_id: repin-20261010T020743Z-54995
+sha: bb44877e7221bd581e74fa97aef799edaa76d3b1 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E10 · diff chạm vật đo ngoài làn máy: E10 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

@@ -1,0 +1,13 @@
+{
+	"globs": [
+		"_acceptance/soan-okr-khong-lac/rang/**",
+		"_acceptance/thuoc-mot-cho-khai-quet-man/**",
+		"_acceptance/config.yaml",
+		"docs/superpowers/specs/2026-10-09-thuoc-mot-cho-khai-quet-man-design.md",
+		"docs/superpowers/plans/2026-10-09-thuoc-mot-cho-khai-quet-man.md",
+		"PRODUCT-MAP.md",
+		"LO-TRINH.html",
+		"_acceptance/soan-okr-khong-lac/evidence-report.md",
+		"_acceptance/soan-okr-khong-lac/run-log.jsonl"
+	]
+}

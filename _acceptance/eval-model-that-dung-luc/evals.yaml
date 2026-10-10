@@ -1,0 +1,106 @@
+schema_version: 1
+feature_slug: eval-model-that-dung-luc
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.emtdl_nhan_loi
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts, _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts]
+    expected: "exit 0; BẢNG VIẾT TRƯỚC cho hàm nhãn của quyet-do.ts (cham-bo-do.ts gọi đúng hàm này, không tự dán nhãn): nhóm câu (co-trang, khong-co, quy-dinh, khong-phai-quy-dinh) × kết cục (không có kết quả eval, hàng trạng thái LOI, TRA_LOI đủ trang, TRA_LOI sai trang, TU_CHOI) — mỗi dòng gõ tay nhãn mong đợi; mọi dòng «không có kết quả» và «LOI» ra `loi`, «TRA_LOI sai trang» ra `sai`, «khong-co × TRA_LOI» ra `sai`. Hàm kết luận: tập kết quả có 2 câu `loi` → {ma: 2, dong: «KHONG DO DUOC: 2 cau loi (<id1>, <id2>)»} và tử/mẫu số của mọi chỉ số không đếm hai câu đó. CHIỀU ĐỎ (rang/dot-bien.mjs cặp a): bản sao trả `sai` cho hàng LOI → bài đỏ với thông điệp ghim «loi bi tinh la sai»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.emtdl_nhat_ky
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
+    expected: "exit 0; trên thư mục tạm: hàm mở thư mục lượt trả hai đường khác nhau cho hai lượt liên tiếp (giờ hoặc pid khác), tệp của lượt 1 còn nguyên sau khi lượt 2 ghi; dựng sẵn 12 thư mục lượt có tên giờ tăng dần, gọi hàm dọn → tập tên còn lại toEqual đúng 10 tên mới nhất viết tay. CHIỀU ĐỎ (cặp b): bản sao bỏ bước dọn → bài đỏ «con 12 thu muc luot, can 10»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.emtdl_bam
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
+    expected: "exit 0; MA TRẬN VIẾT TRƯỚC 6 dòng: 5 lớp đầu vào (một tệp dưới apps/agent/agent, một tệp của paths E15, bun.lock, tệp bộ câu, id model Gateway trả) — đổi riêng lớp đó trên bộ đầu vào gốc → băm khác băm gốc; dòng thứ 6: đổi riêng tệp bản ghi _acceptance/tro-ly-doc-kho/evidence/cham-bo-do.md → băm KHÔNG đổi; bài khẳng định đã chạy đúng 6 dòng; cùng bộ đầu vào gọi hai lần → cùng băm; danh sách tệp của phạm vi băm do chính hàm liệt kê tệp của quyet-do.ts sinh ra trên kho thật (git ls-files), và khẳng định nó chứa apps/agent/agent/agent.ts, bun.lock, _acceptance/tro-ly-doc-kho/bo-do/mam-tam.json. CHIỀU ĐỎ (cặp c): bản sao bỏ bun.lock khỏi CHAM_BO_DO.phamViThem → ca phạm vi trên kho thật đỏ «pham vi thieu bun.lock»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.emtdl_dung_lai
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
+    expected: "exit 0; BẢNG VIẾT TRƯỚC 6 ca cho hàm quyết dùng lại, bản ghi do CHÍNH hàm ghi bản ghi của quyet-do.ts viết (round-trip, không viết tay): (1) cùng băm, dat true, đo 1 ngày trước → dung-lai, dòng «DUNG LAI <băm>, do ngay <ngày>»; (2) băm khác → «DO MOI: bam doi»; (3) đo 8 ngày trước → «DO MOI: qua han 7 ngay»; (4) dat false → «DO MOI: lan truoc khong dat»; (5) không có bản ghi → «DO MOI: chua co ban ghi»; (6) có --do-lai → «DO MOI: --do-lai»; bài khẳng định 6 dòng đã chạy. Hàm đọc nguồn trên một kho git tạm: bản ghi đã commit được đọc; sửa tệp trên cây mà không commit thì hàm vẫn đọc bản ở HEAD. CHIỀU ĐỎ (cặp d): bản sao bỏ điều kiện hạn 7 ngày → ca (3) đỏ «dung lai ban ghi qua han»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.emtdl_doi_dau_vao
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts, _acceptance/eval-model-that-dung-luc/rang/doi-dau-vao.mjs]
+    expected: "exit 0; cần khoá Gateway (vắng → exit 2 «can khoa Gateway»). Trên bản sao cây (git worktree ngoài kho): tính băm thật bằng cham-bo-do.ts --chi-quyet (chỉ dò id model, không chạy eve eval), ghi bản ghi đạt với băm đó bằng hàm ghi bản ghi của quyet-do.ts rồi commit trong bản sao, chạy --chi-quyet → in «DUNG LAI»; sửa một dòng trong apps/agent/agent/agent.ts của bản sao, chạy --chi-quyet → in «DO MOI: bam doi». Thiếu một trong hai dòng → exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.emtdl_vung_xam
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
+    expected: "exit 0; MA TRẬN VIẾT TRƯỚC cho hàm vùng xám, mỗi dòng (k, n, ngưỡng, chiều) và nhãn gõ tay: (16,20,0.8,≥) dat; (15,20,0.8,≥) xam [0,75 ≥ 0,8−0,0894]; (14,20,0.8,≥) khong-dat [0,70 < 0,7106]; (19,24,0.8,≥) xam; (5,6,0.8,≥) dat; (4,6,0.8,≥) xam; (3,6,0.8,≥) khong-dat; (18,20,0.9,≥) dat; (17,20,0.9,≥) xam; (16,20,0.9,≥) khong-dat; (2,20,0.1,≤) dat; (3,20,0.1,≤) xam; (4,20,0.1,≤) khong-dat; bài khẳng định 13 dòng đã chạy. Hàm kế hoạch hỏi lại: lượt 1 có một câu loi → không hỏi lại, kết luận ma 2; lượt 1 không loi và một chỉ số xam → hỏi lại đúng bộ câu của chỉ số đó (so tập id với tập viết tay), đúng một lần. CHIỀU ĐỎ (cặp e): bản sao bỏ điều kiện «không có câu loi» → ca loi đỏ «hoi lai khi luot 1 co loi»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.emtdl_gop
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
+    expected: "exit 0; hàm kết luận gộp: (15/20 lượt 1, 17/20 lượt 2, ngưỡng 0,8) → gộp 32/40 = 0,8 đạt, dòng bằng chứng chứa đủ «luot 1 75.0%», «luot 2 85.0%», «gop 80.0%»; (15/20, 15/20) → gộp 0,75 không đạt, ma 1, và hàm không trả yêu cầu hỏi lần ba; lượt 2 có câu loi → ma 2. CHIỀU ĐỎ (cặp f): bản sao kết luận theo lượt 2 thay vì gộp → ca (15/20, 17/20) vẫn đạt nhưng ca (17/20, 15/20) đổi kết luận, bài đỏ «ket luan khong tren ti le gop»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.emtdl_luot_kep
+    paths: [_acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/eval-model-that-dung-luc/rang/luot-kep.mjs]
+    expected: "exit 0; cần khoá Gateway (vắng → exit 2). Lượt 1: cham-bo-do.ts không cờ — dùng lại từ HEAD nếu được, không thì đo đầy đủ trong phiên đo riêng; lượt 1 không đạt → exit 2 «KHONG DO DUOC: luot 1 khong dat». Lượt 2: cham-bo-do.ts --nguon-thu <bản ghi lượt 1> (cờ chỉ dành cho phép đo; bằng chứng in «nguon thu: <tệp>») → stdout có «DUNG LAI», KHÔNG có dòng «eve eval tro-ly-kho/cham-bo-do», và dòng «SO LOI GOI MODEL: 2» (hai lời dò; bộ đếm nằm trong lớp gọi model của cham-bo-do, đếm cả lời gọi qua eve eval); lượt 1 đo đầy đủ thì «SO LOI GOI MODEL» của nó > 2 (đối chứng dương). In «LUOT 1: <do moi|dung lai>, ma 0», «LUOT 2: DUNG LAI, ma 0, goi 2». E8 khai trong feature_loop.model_evals."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.emtdl_ghi_ban_ghi
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts, _acceptance/eval-model-that-dung-luc/rang/doi-dau-vao.mjs]
+    expected: "exit 0; trên bản sao cây (git worktree ngoài kho), cần khoá Gateway cho lời dò: tạo tệp bằng chứng của một lượt đạt bằng hàm ghi bản ghi của quyet-do.ts với băm thật do --chi-quyet tính; chạy `cham-bo-do.ts --ghi-ban-ghi <tệp>` → _acceptance/tro-ly-doc-kho/evidence/cham-bo-do.md của bản sao mang khối bản ghi đó; commit trong bản sao; --chi-quyet → «DUNG LAI» (băm không đổi vì tệp bản ghi ngoài phạm vi băm). Thêm: một lượt đo mới đạt in đúng một dòng «GHI BAN GHI: bun _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts --ghi-ban-ghi …» — đo bằng hàm in kết thúc lượt của quyet-do.ts trên kết luận đạt (có dòng) và không đạt (không dòng)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E12
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.emtdl_do_model
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts]
+    expected: "exit 0; hàm dò id model của quyet-do.ts nhận hàm gọi model tiêm vào: (1) hai lời gọi trả response.modelId «a/x» và «b/y» → bản ghi model_ids toEqual {kho: «a/x», goc: «b/y»} (đúng hai khoá); (2) lời gọi của model gốc ném «402 budget exceeded» → kết luận {ma: 2, dong: «KHONG DO DUOC: do model goc loi: 402 budget exceeded»} và hàm quyết dùng lại không được gọi (đếm lần gọi = 0); (3) lời gọi trả modelId rỗng → ma 2 «KHONG DO DUOC: do model kho khong co modelId». CHIỀU ĐỎ (cặp g): bản sao chỉ dò model kho → ca (1) đỏ «thieu model_id cua goc»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E13
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.emtdl_cham_lai
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts, _acceptance/eval-model-that-dung-luc/rang/cham-lai.mjs]
+    expected: "exit 0; không gọi model, không cần kho đo. Nguồn: thư mục lượt mới nhất mà một lượt E15 THẬT đã ghi (tệp cham-tung-cau.jsonl do cham-bo-do.ts viết lúc đo, có trạng thái hàng của từng câu); không có lượt thật nào → exit 2 «chua co luot that de cham lai». Trên bản sao của thư mục đó: (1) `cham-bo-do.ts --cham-lai <thư mục>` nguyên vẹn → mã thoát và dòng tổng bằng mã và dòng tổng lượt thật đã in (round-trip); (2) đổi trạng thái một câu thành LOI → exit 2, dòng «KHONG DO DUOC: 1 cau loi (<id>)»; (3) đổi nhãn đủ câu để dung trang rơi vào vùng xám → in «CAN HOI LAI: dungTrang (<n> cau)». CHIỀU ĐỎ (cặp h): bản sao cham-bo-do.ts dán nhãn theo nhánh cũ (không gọi hàm nhãn của quyet-do.ts) → ca (2) đỏ «cham-bo-do khong dung ham nhan»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.emtdl_giu_nguong
+    paths: [_acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts, _acceptance/eval-model-that-dung-luc/rang/giu-nguong.mjs]
+    expected: "exit 0; giu-nguong.mjs đọc khối NGUONG của cham-bo-do.ts ở merge-base với origin/onehub và ở HEAD (parse số, không so chuỗi), khẳng định năm giá trị bằng nhau và bằng bộ viết tay (0.8, 0.8, 0.9, 0.1, 0); khẳng định git diff --name-only từ merge-base không có tệp nào ngoài _acceptance/** và hai tệp máy vẽ PRODUCT-MAP.md, LO-TRINH.html (liệt từng tên). In «NGUONG giu nguyen» và «PHAM VI: <n> tep, 0 ngoai pham vi». Đối chứng dương: danh sách tay chỉ có PRODUCT-MAP.md → xanh; đối chứng âm: danh sách tay có apps/agent/agent/agent.ts → đỏ «ngoai pham vi: apps/agent/agent/agent.ts». Đối chứng âm tự chạy trước: hàm so với bộ (0.75, …) → báo «nguong doi: dungTrang 0.8 -> 0.75»; đối chứng không đỏ → exit 2."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.emtdl_dot_bien
+    paths: [_acceptance/tro-ly-doc-kho/rang/quyet-do.ts, _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts, _acceptance/eval-model-that-dung-luc/rang/dot-bien.mjs]
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (git worktree ngoài kho), SO_CAP_KHAI = 8: mỗi cặp (a)–(h) như ghi ở E1, E2, E3, E4, E6, E7, E12, E13 — xanh trước khi phá, đỏ sau khi phá với đúng thông điệp ghim; in một dòng mỗi cặp; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

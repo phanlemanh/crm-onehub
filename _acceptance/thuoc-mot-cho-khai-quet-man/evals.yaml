@@ -1,0 +1,87 @@
+schema_version: 1
+feature_slug: thuoc-mot-cho-khai-quet-man
+evals:
+- id: E1
+  criterion: AC-1
+  executor: script
+  cmd: config:executors.script.k2d_lanh
+  expected: 'exit 0; _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs lanh chạy lệnh của khoá k2b_mot_nguon trên cây kho và đọc dòng đếm «quet: agent <a> · khu-soan <k> · validation <v>»; với từng gốc so số đó với số tệp .ts/.tsx mà `git ls-files -- :(literal)<gốc>/` liệt (QUAN HỆ bằng nhau, và > 0); dòng «mot-nguon: KET_QUA_NOP 1 cho, agent + app dung chung» có mặt; thoát 0. In «lanh: agent <a>=<a> · khu-soan <k>=<k> · validation <v>=<v>». Chiều đỏ: `do.mjs lanh --tu-thu` dựng cây tạm (như E2) bỏ đúng một tệp .tsx của khu soạn, chạy bản thước mới trên cây đó và so với `git ls-files` của kho → exit 1, in «lanh: khu-soan khong khop (<k-1> / <k>)».'
+  evidence_required:
+  - run_id
+  - exit_code
+  - verifier
+  - verified_at
+  - output
+  paths: &id001
+  - _acceptance/soan-okr-khong-lac/rang/mot-nguon.mjs
+  - _acceptance/soan-okr-khong-lac/rang/chung.mjs
+  - _acceptance/thuoc-mot-cho-khai-quet-man/rang/**
+- id: E2
+  criterion: AC-2
+  executor: script
+  cmd: config:executors.script.k2d_khai_trung
+  expected: 'exit 0; do.mjs khai-trung dựng cây tạm dưới .acceptance-runs/thuoc-mot-cho-khai-quet-man/ (ba cấp dưới gốc kho): chép ba gốc quét và hai tệp thước, nối node_modules thật của apps/agent-okr và packages/validation. Ma trận viết trước ba ca [agent, khu-soan, validation]: mỗi ca thêm `them.ts` khai `["da-ghi", "tu-choi"] as const` dưới gốc của ca, chạy bản thước MỚI → đòi exit 1 + «tap ket qua khai 2 cho:» chứa `<gốc>/them.ts`; số ca = 3. Đối chiếu lỗi gốc: chép mot-nguon.mjs + chung.mjs của `d089cb8d` vào cây; trên cây lành bản cũ phải thoát 0 (đối chứng dương, khác 0 thì exit 2 «KHONG DO DUOC»), trên cây ca khu-soan bản cũ thoát 0 (lỗi tái hiện) còn bản mới thoát 1. sha256 mọi tệp .ts/.tsx thật dưới ba gốc và `git status --porcelain` trước/sau giống hệt; cây tạm xoá trong finally. In «khai-trung: 3/3 lop bi bat; ban cu bo lot khu-soan, ban moi bat; tep that nguyen». Chiều đỏ: `do.mjs khai-trung --tu-thu` chạy ma trận bằng bản thước CŨ thay bản mới → ca khu-soan thoát 0 → exit
+    1, in «khai-trung: khu-soan khong bi bat».'
+  evidence_required:
+  - run_id
+  - exit_code
+  - verifier
+  - verified_at
+  - output
+  paths: *id001
+- id: E3
+  criterion: AC-3
+  executor: script
+  cmd: config:executors.script.k2d_goc_rong
+  expected: 'exit 0; do.mjs goc-rong dựng cây tạm như E2, ma trận viết trước ba ca [agent, khu-soan, validation], mỗi ca làm rỗng đúng gốc đó (thư mục còn, không tệp), chạy bản thước mới → đòi exit 1, dòng «goc quet rong: <tên>» đúng tên ca, KHÔNG có dòng «mot-nguon: KET_QUA_NOP 1 cho» và KHÔNG có «Cannot find module» (gốc kiểm trước khi nạp mô-đun); số ca = 3; sha256 tệp thật và `git status --porcelain` trước/sau giống hệt. In «goc-rong: 3/3 goc rong bi bat; tep that nguyen». Chiều đỏ: `do.mjs goc-rong --tu-thu` chạy ca khu-soan bằng bản thước của `d089cb8d` (đã thoát 0 trên cây lành) → bản cũ không có bước kiểm gốc nên không in «goc quet rong: khu-soan» (đo 09/10: nó thoát 1 vì đọc moc-nop.ts trong gốc rỗng — ENOENT, không phải vì quét) → exit 1, in «goc-rong: khu-soan khong bi bat».'
+  evidence_required:
+  - run_id
+  - exit_code
+  - verifier
+  - verified_at
+  - output
+  paths: *id001
+- id: E4
+  criterion: AC-4
+  executor: script
+  cmd: config:executors.script.k2d_mot_cho
+  expected: 'exit 0; do.mjs mot-cho đọc mọi tệp .mjs dưới _acceptance/soan-okr-khong-lac/rang/ bằng đọc thư mục: chuỗi `apps/app/app/(app)/[slug]/okr/soan` xuất hiện đúng 1 lần tổng cộng và lần đó ở chung.mjs; mot-nguon.mjs không chứa chuỗi `apps/agent-okr/agent`, `packages/validation/src` hay đường khu soạn; không tệp nào khớp `\bglob\s*\(` hay nhập tên `glob` từ `node:fs`/`node:fs/promises` (mọi dạng `import { ... glob ... }`). In «mot-cho: duong khu soan 1 cho (chung.mjs), mot-nguon khong khai goc, khong glob». Chiều đỏ: `do.mjs mot-cho --tu-thu` thêm vào bản đọc trong bộ nhớ (a) tệp giả `gia.mjs` chứa đường khu soạn và `fs.glob(` và (b) dòng `"packages/validation/src/**/*.ts"` vào bản mot-nguon.mjs → exit 1, in «duong khu soan khai 2 cho», «glob o gia.mjs» và «mot-nguon khai goc validation».'
+  evidence_required:
+  - run_id
+  - exit_code
+  - verifier
+  - verified_at
+  - output
+  paths:
+  - _acceptance/soan-okr-khong-lac/rang/**
+  - _acceptance/thuoc-mot-cho-khai-quet-man/rang/**
+- id: E5
+  criterion: AC-5
+  executor: script
+  cmd: config:executors.script.k2d_k2b_giu
+  expected: 'exit 0; do.mjs k2b-giu đọc lệnh của khoá executors.script.k2b_mot_nguon trong _acceptance/config.yaml và chạy NGUYÊN VĂN: lượt lành exit 0 có dòng «mot-nguon: KET_QUA_NOP 1 cho, agent + app dung chung»; lượt kèm `--ban-sao them-tap` exit 1 có «tap ket qua khai 2 cho». In «k2b-giu: E7 cua K2b chay nhu da ky». Chiều đỏ: `do.mjs k2b-giu --tu-thu` đổi dòng kỳ vọng thành chuỗi không có («mot-nguon: KHONG CO») → exit 1, in «k2b-giu: lanh thieu dong».'
+  evidence_required:
+  - run_id
+  - exit_code
+  - verifier
+  - verified_at
+  - output
+  paths:
+  - _acceptance/soan-okr-khong-lac/rang/mot-nguon.mjs
+  - _acceptance/soan-okr-khong-lac/rang/chung.mjs
+  - _acceptance/config.yaml
+  - _acceptance/thuoc-mot-cho-khai-quet-man/rang/**
+- id: E6
+  criterion: AC-6
+  executor: script
+  cmd: config:executors.script.k2d_ranh_gioi
+  expected: 'exit 0; do.mjs ranh-gioi lấy diff: nhánh còn mở thì `git diff --name-only $(git merge-base HEAD origin/onehub) HEAD`; hồ sơ đã lên onehub (merge-base bằng HEAD) thì tìm merge đầu tiên trên onehub có thêm `_acceptance/thuoc-mot-cho-khai-quet-man/contract.md` và lấy diff `<merge>^1..<merge>`. Mọi tệp phải khớp ranh giới hàng hoặc danh sách cham-tep hoặc hai tệp ghi ghim của K2b (liệt trong rang/ranh-gioi.json); `git diff -U0` của _acceptance/config.yaml không có dòng bắt đầu bằng `-` (trừ `---`). In «ranh-gioi: <n> tep trong ranh, config chi them». Chiều đỏ: `do.mjs ranh-gioi --tu-thu` thêm `apps/api/src/okr/okr.router.ts` vào danh sách và một dòng `-    k2b_man: x` vào diff config trong bộ nhớ → exit 1, in «ngoai ranh: apps/api/src/okr/okr.router.ts» và «config bot dong».'
+  evidence_required:
+  - run_id
+  - exit_code
+  - verifier
+  - verified_at
+  - output
+  paths:
+  - _acceptance/thuoc-mot-cho-khai-quet-man/rang/**
+  - _acceptance/config.yaml

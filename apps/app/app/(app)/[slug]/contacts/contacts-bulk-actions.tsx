@@ -123,7 +123,7 @@ export function ContactsBulkActions({
 					result,
 					done: (count) => m.bulk.archived(contacts(count, locale)),
 					locale,
-					onHoanTac: () => hoanTac.mutate({ ids: variables.ids }),
+					onHoanTac: (changedIds) => hoanTac.mutate({ ids: changedIds }),
 				});
 				onDone();
 			},
