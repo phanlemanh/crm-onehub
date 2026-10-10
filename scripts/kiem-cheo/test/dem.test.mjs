@@ -146,4 +146,115 @@ describe("kcs-dem", () => {
 		assert.equal(r.cay, false);
 		kho.don();
 	});
+
+	const LAN_DEM = `import { appendFileSync } from "node:fs";
+const argv = process.argv.slice(2);
+const slugs = argv.flatMap((a, i) => (a === "--slug" ? [argv[i + 1]] : []));
+if (process.env.KCS_ARGV) appendFileSync(process.env.KCS_ARGV, JSON.stringify(slugs) + "\\n");
+const loi = (s) => process.stderr.write(s + "\\n");
+if (process.env.KCS_MA_CUNG) process.exit(Number(process.env.KCS_MA_CUNG));
+const lechCua = new Set((process.env.KCS_LECH ?? "").split(",").filter(Boolean));
+loi("[lane] sha x · 1 suite · " + slugs.length + " hồ sơ");
+loi("[lane] suite 1/1: true → exit 0 (0.1s)");
+const dung = process.env.KCS_DUNG_SAU === undefined ? null : Number(process.env.KCS_DUNG_SAU);
+const lech = {};
+for (const [i, s] of slugs.entries()) {
+  if (dung !== null && i > dung) break;
+  const ma = lechCua.has(s) ? 1 : 0;
+  loi("[lane] " + s + " E1: node kiem.js → exit " + ma + " (0.1s)");
+  if (ma) lech[s] = [{ id: "E1", cmd: "node kiem.js", expected: 0, exit: 1 }];
+}
+if (dung !== null) { loi("[lane] TỔNG KẾT — vuot-tran"); process.exit(4); }
+process.stdout.write(JSON.stringify({ suites: [{ cmd: "true", exit: 0 }], slugs: Object.fromEntries(slugs.map((s) => [s, { lech: lech[s] ?? [] }])) }));
+process.exit(Object.keys(lech).length ? 1 : 0);
+`;
+
+	const SAU = ["a", "b", "c", "d", "e", "f"];
+	function khoSau() {
+		const kho = taoKho();
+		kho.ghi("kiem.js", "const fs = require('node:fs'); process.exit(fs.existsSync('hong.txt') ? 1 : 0);\n");
+		for (const s of SAU) kho.hoSo(s, { paths: [`x-${s}.txt`] });
+		kho.git("add", "-A");
+		kho.git("commit", "-q", "-m", "ho so");
+		kho.git("push", "-q", "origin", "onehub");
+		const T = kho.sha();
+		const D1 = kho.gop({ "hong.txt": "1", ...Object.fromEntries(SAU.map((s) => [`x-${s}.txt`, "1"])) });
+		const lan = join(mkdtempSync(join(os.tmpdir(), "kcs-lan-dem-")), "lan.mjs");
+		writeFileSync(lan, LAN_DEM);
+		const argvTep = join(mkdtempSync(join(os.tmpdir(), "kcs-argv-")), "argv.jsonl");
+		const dem = (env) => {
+			const r = chay(kho, ["--tu", T], { KIEM_CHEO_LAN: lan, KCS_ARGV: argvTep, ...env });
+			const ds = existsSync(argvTep) ? readFileSync(argvTep, "utf8").split("\n").filter(Boolean) : [];
+			return { ...r, argv: ds.length ? JSON.parse(ds.at(-1)) : null };
+		};
+		const tienDo = () => {
+			const t = join(kho.goc, KIEM_CHEO.thuMuc, KIEM_CHEO.tep.tienDo);
+			return existsSync(t) ? JSON.parse(readFileSync(t, "utf8")) : null;
+		};
+		return { kho, T, D1, dem, tienDo, tepTienDo: join(kho.goc, KIEM_CHEO.thuMuc, KIEM_CHEO.tep.tienDo) };
+	}
+
+	test("chay tiep: ba dem, cham tran hai lan, gop do qua cac dem, ket luan sau cung", () => {
+		const k = khoSau();
+		const d1 = k.dem({ KCS_DUNG_SAU: "2", KCS_LECH: "a" });
+		assert.equal(d1.ma, 0, d1.ra);
+		assert.deepEqual(d1.argv, SAU);
+		assert.equal(d1.ket?.ket_qua, "chua-xong", JSON.stringify(d1.ket));
+		assert.equal(d1.ket.xong_dem_nay, "2/6");
+		assert.deepEqual(d1.ket.tap_lan, SAU);
+		assert.deepEqual(k.tienDo()?.xong, ["a", "b"]);
+		assert.equal(k.tienDo()?.den, k.D1);
+		assert.deepEqual(k.tienDo()?.do.map((d) => [d.ho_so, d.loai]), [["a", "do-moi"]]);
+		assert.equal(d1.moc, null, "moc khong tien khi chua xong");
+
+		const D2 = k.kho.gop({ "x-b.txt": "2" });
+		const d2 = k.dem({ KCS_DUNG_SAU: "1" });
+		assert.deepEqual(d2.argv, ["b", "c", "d", "e", "f"], "dem 2 do lai b (bi cham) va phan con lai");
+		assert.equal(d2.ket?.ket_qua, "chua-xong");
+		assert.deepEqual(k.tienDo()?.xong, ["a", "b"]);
+		assert.equal(k.tienDo()?.den, D2);
+		assert.equal(k.tienDo()?.tu, k.T);
+		assert.deepEqual(k.tienDo()?.do.map((d) => [d.ho_so, d.loai]), [["a", "do-moi"]], "do-moi cua dem 1 phai con");
+
+		const d3 = k.dem({});
+		assert.deepEqual(d3.argv, ["c", "d", "e", "f"]);
+		assert.equal(d3.ket?.ket_qua, "do", "do-moi chi co o dem 1 van lat ket_qua thanh do");
+		assert.equal(d3.moc?.sha, D2);
+		assert.equal(k.tienDo(), null, "tien-do bi xoa khi do het");
+		k.kho.don();
+	});
+
+	test("chay tiep: dem cuoi lan thoat 1 vi mot eval lech -> gop do, moc tien, tien-do xoa", () => {
+		const k = khoSau();
+		k.dem({ KCS_DUNG_SAU: "3" });
+		const d2 = k.dem({ KCS_LECH: "f" });
+		assert.deepEqual(d2.argv, ["d", "e", "f"]);
+		assert.equal(d2.ket?.ket_qua, "do", JSON.stringify(d2.ket));
+		assert.deepEqual(d2.ket.do.map((d) => d.ho_so), ["f"]);
+		assert.equal(d2.moc?.sha, k.D1);
+		assert.equal(k.tienDo(), null);
+		k.kho.don();
+	});
+
+	test("chay tiep: lan loi ha tang (thoat 3) giu nguyen tien-do tung byte, moc dung", () => {
+		const k = khoSau();
+		k.dem({ KCS_DUNG_SAU: "2", KCS_LECH: "a" });
+		const truoc = readFileSync(k.tepTienDo, "utf8");
+		const d2 = k.dem({ KCS_MA_CUNG: "3" });
+		assert.equal(d2.ket?.ket_qua, "khong-chay-duoc");
+		assert.equal(readFileSync(k.tepTienDo, "utf8"), truoc);
+		assert.equal(d2.moc, null);
+		k.kho.don();
+	});
+
+	test("chay tiep: tien-do hong -> do du tap va ghi ly do", () => {
+		const k = khoSau();
+		k.dem({ KCS_DUNG_SAU: "2" });
+		writeFileSync(k.tepTienDo, "{hong");
+		const d2 = k.dem({});
+		assert.deepEqual(d2.argv, SAU);
+		assert.match(d2.ket?.ly_do_tien_do ?? "", /tien-do\.json hong/);
+		assert.equal(d2.ket?.ket_qua, "xanh");
+		k.kho.don();
+	});
 });

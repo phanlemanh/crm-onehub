@@ -63,3 +63,14 @@ export function ghiTienDo(tep, tienDo) {
 export function xoaTienDo(tep) {
 	rmSync(tep, { force: true });
 }
+
+const DONG_SUITE = /^\[lane\] suite (\d+\/\d+): (.*) → exit (-?\d+)/;
+
+export function suiteDoTrongNhatKy(text) {
+	const cuoi = new Map();
+	for (const dong of String(text ?? "").split("\n")) {
+		const m = DONG_SUITE.exec(dong);
+		if (m) cuoi.set(m[1], { lenh: m[2], ma: Number(m[3]) });
+	}
+	return [...cuoi].filter(([, v]) => v.ma !== 0).map(([i, v]) => `${i} (${v.lenh}) ma ${v.ma}`);
+}
