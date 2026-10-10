@@ -1,0 +1,73 @@
+{
+	"ten": "Kho tài liệu",
+	"tu_vung": {
+		"xong": "Đã giao",
+		"đang dựng": "Đang làm",
+		"chưa mở": "Chưa mở",
+		"để sau": "Xếp lại sau"
+	},
+	"moc": [
+		{
+			"ten": "Kho cho người",
+			"ngay": "2026-10-01",
+			"hang": ["l1"]
+		},
+		{
+			"ten": "Chạy thật",
+			"ngay": "2026-10-14",
+			"hang": ["l4", "ct"]
+		},
+		{
+			"ten": "Sửa một đợt",
+			"ngay": "2026-11-04",
+			"hang": ["l5"]
+		}
+	],
+	"hang": [
+		{
+			"ma": "l0",
+			"cau_giao": "Nghiên cứu nền, bản mẫu bấm được, trình đọc markdown",
+			"trang_thai": "xong"
+		},
+		{
+			"ma": "l1",
+			"cau_giao": "«Tôi viết được một trang, gửi chủ trang duyệt, cả công ty đọc được bản đang dùng»",
+			"hang": "T3",
+			"trang_thai": "xong"
+		},
+		{
+			"ma": "l2",
+			"cau_giao": "«Phòng ban tải tệp đang có lên, máy soạn thành trang, chủ trang duyệt»",
+			"hang": "T2",
+			"trang_thai": "xong"
+		},
+		{
+			"ma": "l4",
+			"cau_giao": "«Hỏi kho tài liệu trong CRM, câu trả lời trích đúng trang»",
+			"hang": "T2",
+			"trang_thai": "đang dựng",
+			"slug": "kho-tai-lieu-hoi"
+		},
+		{
+			"ma": "ct",
+			"cau_giao": "«Mọi phòng ban tự nạp tài liệu và dùng hai tuần»",
+			"trang_thai": "chưa mở",
+			"dung_tren": ["l4"],
+			"bat_khi": "Mỗi phòng ban có ít nhất năm trang đang dùng"
+		},
+		{
+			"ma": "l5",
+			"cau_giao": "«Góp ý đã gom được sửa trong một lượt»",
+			"hang": "T2",
+			"trang_thai": "chưa mở",
+			"dung_tren": ["ct"]
+		},
+		{
+			"ma": "l6",
+			"cau_giao": "«Thư mục Google Drive của phòng ban tự đồng bộ vào kho»",
+			"hang": "T3",
+			"trang_thai": "để sau",
+			"vi_sao": "Chưa có phòng ban nào xin; quyền Drive phải qua luật sư."
+		}
+	]
+}

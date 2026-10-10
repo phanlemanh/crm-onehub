@@ -1,0 +1,8 @@
+risk_tiers:
+  t1_skip_globs:
+    - "LO-TRINH.html"
+lo_trinh:
+  tep:
+    - docs/plan/lo-trinh-okr.json
+    - docs/plan/lo-trinh-kho-tai-lieu.json
+    - docs/plan/lo-trinh-viec-du-an.json
