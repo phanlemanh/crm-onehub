@@ -5,6 +5,7 @@ import Building from "@carbon/icons-react/es/Building";
 import Bullhorn from "@carbon/icons-react/es/Bullhorn";
 import Close from "@carbon/icons-react/es/Close";
 import Dashboard from "@carbon/icons-react/es/Dashboard";
+import Milestone from "@carbon/icons-react/es/Milestone";
 import Partnership from "@carbon/icons-react/es/Partnership";
 import Roadmap from "@carbon/icons-react/es/Roadmap";
 import Settings from "@carbon/icons-react/es/Settings";
@@ -57,6 +58,7 @@ const ICON = {
 	onboarding: Roadmap,
 	okr: Target,
 	taiLieu: Book,
+	loTrinh: Milestone,
 	settings: Settings,
 } satisfies Record<MucRailKey, CarbonIcon>;
 

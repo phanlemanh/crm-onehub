@@ -9,16 +9,17 @@ import {
 } from "@/lib/pham-vi-man";
 
 describe("pham vi man theo vai", () => {
-	it("rail: okr bon muc gom tai lieu, settings tro thang khoa api; vai khac du muoi muc", () => {
+	it("rail: okr nam muc gom tai lieu va lo trinh, settings tro thang khoa api; vai khac du muc", () => {
 		const okr = mucRailChoVai("okr");
 		expect(okr.map((m) => m.key)).toEqual([
 			"overview",
 			"okr",
 			"taiLieu",
+			"loTrinh",
 			"settings",
 		]);
-		expect(okr[3]?.href).toBe("/settings/api-keys");
-		expect(okr[3]?.related).toContain("/settings");
+		expect(okr[4]?.href).toBe("/settings/api-keys");
+		expect(okr[4]?.related).toContain("/settings");
 		expect(mucRailChoVai("member")).toBe(MUC_RAIL);
 		expect(mucRailChoVai(null)).toBe(MUC_RAIL);
 	});
@@ -68,5 +69,18 @@ describe("pham vi man theo vai", () => {
 		expect(dieuHuongTheoVai("member", "/contacts")).toBe("ok");
 		expect(dieuHuongTheoVai(null, "/contacts")).toBe("ok");
 		expect(dieuHuongTheoVai("khach", "/contacts")).toBe("ok");
+	});
+
+	it("lo-trinh: chi OKR va du quyen deu thay va mo duoc trang Lo trinh", () => {
+		for (const vai of ["okr", "member", "admin", null]) {
+			expect(
+				mucRailChoVai(vai).some((m) => m.key === "loTrinh"),
+				"vai chi OKR khong thay Lo trinh",
+			).toBe(true);
+			expect(dieuHuongTheoVai(vai, "/lo-trinh"), String(vai)).toBe("ok");
+		}
+		expect(dieuHuongTheoVai("okr", "/deals")).toEqual({
+			toi: "/ngoai-pham-vi",
+		});
 	});
 });
