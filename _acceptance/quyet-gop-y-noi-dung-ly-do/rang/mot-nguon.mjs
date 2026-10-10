@@ -13,6 +13,7 @@ const KHOA = "satisfies Record<LyDoKhongQuyet";
 const argv = process.argv.slice(2);
 const banSao = argv[argv.indexOf("--ban-sao") + 1];
 const them = argv.includes("--ban-sao") && banSao === "them-tap";
+const ngoaiBang = argv.includes("--ban-sao") && banSao === "ngoai-bang";
 
 function* tep(goc) {
 	for (const muc of fs.readdirSync(goc, { withFileTypes: true })) {
@@ -35,12 +36,32 @@ for (const g of GOC_QUET) {
 }
 if (them) danhSach.push(path.join(ROOT, "apps/app/lib/__ban-sao-them-tap__.ts"));
 
+function khoiKhoa(noi) {
+	const dong = noi.split("\n");
+	const ra = [];
+	for (let i = 0; i < dong.length; i++) {
+		const vt = dong[i].indexOf(KHOA);
+		if (vt < 0) continue;
+		let sau = 0;
+		let j = i;
+		for (; j >= 0; j--) {
+			const doan = j === i ? dong[j].slice(0, vt) : dong[j];
+			sau += (doan.match(/\}/g) ?? []).length - (doan.match(/\{/g) ?? []).length;
+			if (sau <= 0 && j < i) break;
+		}
+		ra.push([j, i]);
+	}
+	return ra;
+}
+
 const choKhai = new Set();
 for (const p of danhSach) {
 	const rel = path.relative(ROOT, p);
 	const noi = them && rel.endsWith("__ban-sao-them-tap__.ts")
 		? `export const X = ["${LY_DO_KHONG_QUYET[0]}"] as const;`
-		: fs.readFileSync(p, "utf8");
+		: ngoaiBang && rel === MIEN[0]
+			? `${fs.readFileSync(p, "utf8")}\nexport const lech = () => "${LY_DO_KHONG_QUYET.at(-1)}";\n`
+			: fs.readFileSync(p, "utf8");
 	const co = LY_DO_KHONG_QUYET.filter((ma) => noi.includes(`"${ma}"`));
 	if (co.length === 0) continue;
 	if (rel === KHAI) {
@@ -48,7 +69,12 @@ for (const p of danhSach) {
 		continue;
 	}
 	if (MIEN.includes(rel)) {
-		if (!noi.includes(KHOA)) mot(`mien ma khong khoa: ${rel}`);
+		const khoi = khoiKhoa(noi);
+		if (khoi.length === 0) mot(`mien ma khong khoa: ${rel}`);
+		noi.split("\n").forEach((d, i) => {
+			if (!LY_DO_KHONG_QUYET.some((ma) => d.includes(`"${ma}"`))) return;
+			if (!khoi.some(([a, b]) => i >= a && i <= b)) mot(`ma ngoai bang: ${rel}:${i + 1}`);
+		});
 		continue;
 	}
 	mot(`ma khai them: ${rel}`);

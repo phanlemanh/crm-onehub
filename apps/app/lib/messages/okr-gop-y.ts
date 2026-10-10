@@ -280,7 +280,7 @@ const en: OkrGopYMessages = {
 		"can-chinh-khac-chu-ky":
 			"The target is in another cycle, so it can't be aligned to.",
 		"can-chinh-da-gan": "This objective is already aligned to that target.",
-	},
+	} satisfies Record<LyDoKhongQuyet, string>,
 	vet: {
 		theoKara: "suggested by Kara",
 		suaTruong: (truong: string) => `Edited ${truong}`,
