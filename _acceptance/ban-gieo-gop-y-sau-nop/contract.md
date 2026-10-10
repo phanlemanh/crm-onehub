@@ -5,7 +5,7 @@ slug: ban-gieo-gop-y-sau-nop
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: implemented
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -54,3 +54,10 @@ AC-3 đo đúng ngưỡng đó; dòng kết luận từng bàn ghi ở `.accepta
 ## Notes
 
 - Không chạm giao diện: không nghi thức design-pass (entry `descope` «bỏ design-pass» trong sổ quyết định).
+- Known limits (Ngoài-2, Cổng 2): Trong một tình huống hiếm (thư mục bằng chứng có tệp lạ bị lệnh đo xoá), phép đo có thể báo là đo đỏ thay vì báo là không đo được. Người đọc kết quả có thể hiểu nhầm mức độ sự cố, nhưng việc này không làm sai kết quả đo bình thường.
+- Known limits (Ngoài-3, Cổng 2): Nếu sau này có ảnh bằng chứng đặt tên có dấu hoặc dấu cách, ảnh bị phép đo ghi đè có thể không được trả lại nguyên trạng mà không ai biết. Hiện chưa xảy ra vì mọi tên tệp đều không dấu.
+- Known limits (Ngoài-4, Cổng 2): Nếu một lượt đo bị dừng đột ngột giữa chừng, lượt chạy kế tiếp có thể coi ảnh bằng chứng đã bị ghi đè là bình thường và báo xanh. Cách tránh: sau khi ngắt lượt đo, kiểm lại ảnh bằng chứng của ba hồ sơ kia trước khi tin kết quả.
+- Known limits (Ngoài-5, Cổng 2): Khi một trong ba bàn đo màn dừng giữa chừng ở bước đo và in ra một câu báo không đo được theo kiểu riêng, bản tổng hợp sẽ không nhận ra câu đó và báo thiếu kết luận. Người đọc vẫn thấy bàn đó đỏ, nhưng lý do thật của nó bị che trong bản tổng hợp.
+- Known limits (Ngoài-6, Cổng 2): Nếu hai lượt phá thử chạy cùng lúc trên một cây, lượt này có thể xoá bản sao đang dùng của lượt kia. Kết quả là báo «không đo được» hoặc báo nhầm vết lọt. Chạy lại từng lượt một thì hết.
+- Known limits (Ngoài-7, Cổng 2): Một ca thử dùng giá trị kết cục mà hệ thống thật không bao giờ ghi ra. Phép thử vẫn chặn đúng việc đóng sai, nhưng nếu tên kết cục thật đổi thì ca này không báo kịp.
+- Known limits (Ngoài-8, Cổng 2): Nếu bộ phân loại hỏng theo kiểu luôn báo «không qua bước gieo», phép thử phá này vẫn xanh. Lỗi đó chỉ lộ ra ở một phép đo khác chứ không ở chính phép thử này.

@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 65484d3cda61b681e2aae56b9a965c9ff6ba3b71
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-10
 ---
 
 # Evidence Report: ban-gieo-gop-y-sau-nop
