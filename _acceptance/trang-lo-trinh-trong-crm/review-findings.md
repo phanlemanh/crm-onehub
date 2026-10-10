@@ -1,34 +1,14 @@
-# Review findings: trang-lo-trinh-trong-crm (round 2)
+# Review findings — trang-lo-trinh-trong-crm (vòng 3)
 
 ## Trong hợp đồng
 
-- **Milestone view marks the wrong milestones as passed when valid and unreadable dates are mixed**
-  `apps/app/components/lo-trinh/xem-moc.tsx:63`
-  severity: medium
-  source: conventions
-  AC: AC-5
-  detail: This round's fix computes `daQua` from the date checked once at the boundary (`moc.ngayHopLe`). The milestones are still sorted on the raw string (`a[1].moc.ngay.localeCompare(...)`, line 60), and `<Timeline value={daQua}>` colours them by position: `data-completed={step <= activeStep}` in packages/ui timeline.tsx:168. So the passed milestones only get the right colour if they form a prefix of the sorted list.
-
-  An unreadable date such as "" or "2026-10" sorts lexically before every valid date. It is excluded from `daQua`, but it still holds a leading slot. Example, with today = 2026-10-10 and milestones A ngay="" and B ngay="2026-09-01": the sorted order is [A, B] and daQua=1. A, whose date can't be read, is drawn as passed. B, which really is past, is drawn as upcoming.
-
-  The old check `x.moc.ngay < homNay` counted those strings as past, which happened to match the sort order. This change therefore brings in a regression for mixed data. Nothing upstream rules such data out: scripts/lo-trinh.mjs:551 emits `chuoi(m.ngay)` without checking the format.
-
-  The new test in lo-trinh.dom.tsx makes every milestone date invalid, so `daQua` is 0 and the case is never exercised.
-
-  This also goes against the repo's parse-at-the-boundary rule. The boundary now produces a typed `ngayHopLe`, but code downstream still orders by the raw `ngay`, here and in viec.ts:153 `sapViec`. Sorting on `ngayHopLe`, with unreadable dates placed last, would make the prefix assumption hold.
-
-- **Milestone rail marks the wrong steps as passed when a milestone date is unreadable**
-  `apps/app/components/lo-trinh/xem-moc.tsx:62`
-  severity: medium
-  source: bugs
-  AC: AC-5
-  detail: The milestone view still sorts milestones by the raw `moc.ngay` string (line 60), but this round changed `daQua` to count only milestones whose `ngayHopLe` is non-null and before today. `Timeline` in packages/ui/src/components/reui/timeline.tsx:168 marks a step as completed when `step <= activeStep`, so it assumes the passed milestones are the first steps in the list. Before this round that held: the count and the sort used the same string comparison. Now a milestone with an unreadable date that sorts before a valid past date is left out of the count but still takes an early slot. Example with today 2026-12-20 and milestones "" (or "2026-10"), "2026-10-05", "2026-12-30": daQua = 1, so step 1 (the unreadable milestone) shows as passed and the milestone that really passed on 2026-10-05 shows as not passed. The new test in apps/app/test/lo-trinh.dom.tsx only checks the "còn -" text, "NaN", and the data-lo-trinh-con-ngay rows, never data-completed, so it misses this. Fix: mark completion per item (for example pass a completed flag per TimelineItem), or sort so the milestones counted as passed form an exact prefix.
+Không có finding nào trong hợp đồng ở vòng này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Hình dạng 4: ca mới về ngày mốc sai chỉ có khẳng định phủ định, không có đối chứng dương**
+- **Hình dạng 4: ca mới về ngày mốc sai chỉ có khẳng định phủ định, không có đối chứng dương (r2 · tệp đã đổi)**
   Người dùng thấy gì: Phép kiểm tra cho trường hợp ngày mốc sai chỉ xác nhận là không hiện chữ lỗi, chứ không xác nhận danh sách việc vẫn hiện bình thường. Nếu sau này trang bị trống hoặc vỡ ở trường hợp này, phép kiểm tra vẫn báo đạt mà không ai biết.
   file: `apps/app/test/lo-trinh.dom.tsx`
   severity: medium
@@ -111,5 +91,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `apps/app/test/lo-trinh.dom.tsx`
   severity: low
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
