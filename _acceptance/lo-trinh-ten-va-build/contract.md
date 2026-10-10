@@ -5,9 +5,9 @@ slug: lo-trinh-ten-va-build
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-10T10:36:59Z
 ---
 
 # Acceptance Contract: lo-trinh-ten-va-build

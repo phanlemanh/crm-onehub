@@ -3,10 +3,10 @@ schema_version: 1
 slug: lo-trinh-ten-va-build
 feature: «Trang lộ trình đúng tên OneHub Center và không làm vỡ bản dựng»
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:
-decided_by:
-decided_at:
+stage: decided              # discovery | decided | archived
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-10T10:36:59Z
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
