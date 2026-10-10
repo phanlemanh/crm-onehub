@@ -1,0 +1,39 @@
+schema_version: 1
+slug: zalo-bom-gio
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.h5_zalo
+    paths:
+      - "apps/agent/test/zalo-qua-webhook.integration.spec.ts"
+    expected: |
+      bun run test (CSDL thu rieng cua luot) chay zalo-qua-webhook.integration.spec.ts o gio that: "32 pass", "0 fail", ma 0;
+      hai bai «giao-khi-mo: vong tay bat duoc tin den o giay 30» va «kenh-route: kenh mount dung mot route POST /zalo/webhook
+      va route do chay» co dong (pass).
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.h5_hai_moc
+    paths:
+      - "apps/agent/test/zalo-qua-webhook.integration.spec.ts"
+      - "_acceptance/zalo-bom-gio/rang/hai-moc.sh"
+    expected: |
+      rang/hai-moc.sh chep tep kiem ra ban tam trong apps/agent/test, thay dong GOC bang 2020-01-01T02:00:00Z roi
+      2030-01-01T02:00:00Z, chay tung ban: moi moc in "32 pass 0 fail (ma 0)"; dong cuoi "hai-moc: DUNG — 32/32 o ca hai moc",
+      ma 0; ban tam bi xoa.
+      CHIEU DO (cung lenh, --tu-thu): lay ban truoc sua 91fe8d69 -> moc 2020 do dung hai bai «vong tay» va «kenh-route»
+      (30 pass 2 fail), dong cuoi "hai-moc: phu thuoc gio that", ma 1. Da do o S3 (log trong decisions).
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.h5_chi_tep_kiem
+    paths:
+      - "apps/**"
+      - "packages/**"
+    expected: |
+      git diff --name-only 91fe8d69f HEAD, bo _acceptance/, PRODUCT-MAP.md, LO-TRINH.html -> dung mot dong
+      "apps/agent/test/zalo-qua-webhook.integration.spec.ts"; ma 0. Them bat ky tep nao khac -> in ten tep, ma 1.

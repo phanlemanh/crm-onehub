@@ -1,0 +1,115 @@
+schema_version: 1
+slug: giam-phut-acceptance
+
+evals:
+  - id: E1
+    criterion: AC-2, AC-3, AC-4
+    executor: script
+    cmd: config:executors.script.gpa_hinh
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/giam-phut-acceptance/rang/hinh.mjs"
+      - "_acceptance/giam-phut-acceptance/rang/luong.mjs"
+    expected: |
+      bun rang/hinh.mjs (goc kho suy tu import.meta.dirname) doc .github/workflows/acceptance.yml bang Bun.YAML.
+      Ma tran viet truoc, moi o mot dong «dat <o>» hoac «sai <o>: <ly do>»:
+      (a) jobs dung ba khoa luat-kho, build, agent-okr-node24;
+      (b) job luat-kho: name «acceptance gate»; khong if, khong continue-on-error cap job; env co DATABASE_URL;
+          chuoi buoc dung thu tu checkout (fetch-depth 0) -> setup-node (node-version 24) -> setup-bun ->
+          «bun install --frozen-lockfile» -> «node scripts/luat-kho/do-cay.mjs --du-luat» (khong if) -> «bun run
+          test:dieu-phoi» -> buoc chay product-map.mjs -> buoc chay pre-merge-check.sh; ba buoc sau luat kho co
+          if dung «${{ !cancelled() }}»; khoa job la luat-kho (regex cua luat-kho-vong-doi neo o khoa nay);
+      (c) agent-okr-node24: if cap job dung «github.event_name == 'pull_request'»; build: KHONG co if cap job; phan
+          con lai cua hai job bang tung khoa voi ban o merge-base (git show $(git merge-base HEAD
+          origin/onehub):.github/workflows/acceptance.yml, khong chep tay);
+      (d) concurrency: danh gia hai bieu thuc bang luong.mjs (bo danh gia bieu thuc GitHub toi thieu: chi nhan
+          github.event_name, github.event.pull_request.number, github.sha, ||, ==, !cancelled(); bieu thuc la -> ma 2)
+          tren bon ngu canh — PR 7 sha a, PR 7 sha b, push onehub sha a, push onehub sha b: hai PR cung nhom va
+          cancel-in-progress true; hai push khac nhom va cancel-in-progress false; PR va push khac nhom.
+      Ma 0 khi moi o dat. Chieu do cung luot tren ban sao YAML trong .acceptance-runs/giam-phut-acceptance/: them
+      if vao job luat-kho -> ma 1 «sai b: job luat-kho co if»; bo if cua buoc test:dieu-phoi -> «sai b: buoc
+      test:dieu-phoi thieu if !cancelled()»; bo if cua job agent-okr-node24 -> «sai c: agent-okr-node24 thieu if pull_request»; them if vao job build -> «sai c: build co if»; doi group
+      thanh github.ref -> «sai d: hai push cung nhom»; doi name thanh «kiem» -> «sai b: ten job»; script thoat 1 cho
+      tung ca va in «BAT <ca>»; mot ca khong bat -> thuoc hong, ma 1.
+
+  - id: E2
+    criterion: AC-1, AC-2
+    executor: script
+    cmd: config:executors.script.gpa_khong_mat_lenh
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/giam-phut-acceptance/rang/khong-mat-lenh.mjs"
+      - "_acceptance/giam-phut-acceptance/rang/luong.mjs"
+    expected: |
+      bun rang/khong-mat-lenh.mjs: hai lop lenh viet truoc. Lop CHUAN BI = lenh run bat dau «bun install»; lop KIEM =
+      moi lenh run con lai (da trim). Voi moi ngu canh trong {pull_request, push onehub, push release}, rut cac lenh
+      run SE CHAY tu ban o merge-base (git show $(git merge-base HEAD origin/onehub):.github/workflows/acceptance.yml)
+      va tu ban HEAD: job chay khi khoi on: kich hoat ngu canh do VA if cap job danh gia dung (luong.mjs, bieu thuc la
+      -> ma 2); buoc chay khi if cua buoc dung voi gia dinh cac buoc truoc xanh.
+      (a) on: bang tung khoa voi merge-base.
+      (b) pull_request: lop KIEM so DA TAP — moi lenh kiem xuat hien dung so lan nhu merge-base; lop CHUAN BI so TAP.
+      (c) push onehub va push release: lop KIEM cua HEAD bang dung da tap lenh kiem cua cac job o merge-base ma thiet
+          ke giu khi push (acceptance, luat-kho, dieu-phoi, build — doc ten job tu evals, khong tu suy), va khong
+          chua lenh nao co «--filter=agent-okr» hay «db:deploy».
+      Doi chung duong: lop KIEM pull_request cua merge-base khong rong va chua «bun run build»; ban HEAD dung thiet ke
+      (mot buoc bun install trong job gop) -> ma 0. In «dat <ngu canh>: <n> lenh kiem, <m> lenh bo».
+      Chieu do cung luot tren ban sao: xoa buoc test:dieu-phoi -> ma 1 «pull_request mat lenh: bun run
+      test:dieu-phoi»; nhan doi buoc luat kho -> ma 1 «pull_request thua lenh: node scripts/luat-kho/do-cay.mjs
+      --du-luat»; bo if cua job agent-okr-node24 -> ma 1 «push onehub con chay: bun run test -- --filter=agent-okr»;
+      xoa khoa push khoi on: -> ma 1 «sai a: on khac merge-base» va «push onehub thieu lenh»; them buoc «echo moi» ->
+      ma 1 «pull_request thua lenh: echo moi». Moi ca in «BAT <ca>»; mot ca khong bat -> ma 1.
+
+  - id: E3
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.gpa_ho_so_cu
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/giam-phut-acceptance/rang/ho-so-cu.mjs"
+    expected: |
+      bun rang/ho-so-cu.mjs: rut tu _acceptance/*/contract.md (status signed-off hoac machine-cleared, doc bang regex
+      frontmatter) va evals.yaml cua chung moi eval executor script co paths khop .github/workflows/acceptance.yml
+      (Bun.Glob); evals.yaml khong doc duoc ma co nhac .github -> ma 2; giai cmd qua _acceptance/config.yaml. Doi
+      chung: tap rut duoc phai chua lkv_ci, dpvb_cong, ld_ba_noi_deu_chay, kcb_khong_noi_tran — thieu -> ma 1 «bo rut
+      khong thay <khoa>». Khong chay hld_build_heap va ld_ba_noi_deu_chay (in «bo <khoa>: <ly do>»); dieu 5 cua ld do
+      thang tren acceptance.yml HEAD: moi buoc «bun run build» khong if, khong continue-on-error. Moi lenh con lai chay
+      tren cay that; ma 0 -> «dat <khoa> ma 0»; ma khac 0 -> chay cung lenh tren ban git archive HEAD trong
+      .acceptance-runs/giam-phut-acceptance/cay-goc/ voi acceptance.yml cua merge-base: cung ma -> «do san <khoa>» kem
+      duong nhat ky, khac ma -> «sai <khoa>» va ma 1. Chieu do: ban git archive HEAD trong cay-pha/ them «if:
+      github.event_name == 'pull_request'» vao job luat-kho, chay lkv_ci tren ban sao -> ma khac 0 va dau ra co «job co
+      dieu kien if» -> «BAT luat-kho-co-if»; khong bat -> ma 1.
+
+  - id: E4
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.gpa_do_phut
+    paths:
+      - "_acceptance/giam-phut-acceptance/rang/do-phut.mjs"
+    expected: |
+      bun rang/do-phut.mjs --tu 2026-10-02 --ngay 7: doc cac luot workflow Acceptance cua kho qua gh api trong cua so;
+      phut tinh tien cua mot luot = tong ceil((completed_at - started_at)/60s) tren cac job khong skipped; tach theo
+      event push va pull_request; luot conclusion cancelled KHONG vao trung vi nguong — in rieng so luot huy va tong
+      phut cua chung. In so luot, trung vi, p90 moi nhom va dong «nguong: push <= <N> <SONG|CHET|chua du mau>;
+      pull_request <= 10 <...>» voi N doc tu opportunity.md (khong chep tay); < 10 luot mot nhom -> «chua du mau».
+      Tren du lieu that truoc thay doi: trung vi push > 8 — doi chung duong rang thuoc thay duoc muc cu.
+      Chieu do tren du lieu gia (--du-lieu <tep json> trong .acceptance-runs/giam-phut-acceptance/): job 61 giay ->
+      2 phut; job skipped -> 0 phut; 5 luot du 11 phut + 6 luot huy 2 phut -> trung vi nguong 11, dong nguong PR
+      khong la SONG; ban sao ham dung round thay ceil -> ma 1 «lam tron sai: 61s ra 1 phut». Ma 0 khi du lieu that doc
+      duoc va moi chieu do bat.
+
+  - id: E5
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.gpa_nen_gop
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/giam-phut-acceptance/rang/nen-gop.mjs"
+    expected: |
+      bun rang/nen-gop.mjs: doc gh api repos/{owner}/{repo}/rules/branches/onehub va branches/onehub/protection
+      (404 «Branch not protected» = khong co kiem tra bat buoc, khong phai loi; loi khac -> ma 2). Tap context bat
+      buoc phai la tap con cua ten hien thi cac job HEAD chay khi pull_request — thieu -> ma 1 «check bat buoc
+      <ten> khong con job». In tap do (hom nay rong). Them dong thong tin, khong quyet ma: so commit gop vao onehub 7
+      ngay qua co tree khac tree dau PR (git rev-parse <m>^{tree} vs <m>^2^{tree}). Chieu do tren du lieu gia
+      (--rules <tep json>): context bat buoc «luật kho» -> ma 1 goi ten «luật kho»; context «acceptance gate» -> ma 0.
+
