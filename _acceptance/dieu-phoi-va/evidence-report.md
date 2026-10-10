@@ -7,13 +7,13 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 58dd699ec879b039efeb88466c09347ce485c060
+verified_commit: 8e5d75e412c90f390d0935152552d53209f14b19
 human_signoff:
 ---
 
 # Evidence Report: dieu-phoi-va
 
-Vòng 1. Mọi eval của tính năng (E1 đến E11) đều xanh. Verdict là REJECT vì một lệnh suite hồi quy không gắn eval nào đã đỏ: `bun run test -- --filter=app --filter=@crm/ui`. Vì lệnh này không thuộc eval nào nên `failed_evals` để trống. Chi tiết ở khối lệnh suite bên dưới và ở mục Iterations.
+Vòng 2. Mọi eval của tính năng (E1, E1c, E1b, E2, E3, E4, E5, E6b, E6, E7, E7b, E8, E9, E10, E11) đều qua. Verdict là REJECT vì một lệnh suite hồi quy không gắn eval nào đã đỏ: `bun run test -- --filter=app --filter=@crm/ui`. Lệnh đó được ghi ở mục «Lệnh suite (hồi quy)» bên dưới; `failed_evals` để trống vì không eval nào đỏ.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -24,8 +24,8 @@ Vòng 1. Mọi eval của tính năng (E1 đến E11) đều xanh. Verdict là R
 | E3 | AC-3 | test | PASS |
 | E4 | AC-4 | test | PASS |
 | E5 | AC-5 | test | PASS |
-| E6 | AC-6 | test | PASS |
 | E6b | AC-6 | test | PASS |
+| E6 | AC-6 | test | PASS |
 | E7 | AC-7 | test | PASS |
 | E7b | AC-7 | test | PASS |
 | E8 | AC-8 | test | PASS |
@@ -36,212 +36,189 @@ Vòng 1. Mọi eval của tính năng (E1 đến E11) đều xanh. Verdict là R
 ## Evidence
 
 - eval: E1
-  run_id: mv21ex4c182q
+  run_id: mv222g0dde45
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_ma_lech
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t ma-lech"
-    test-run: dropped crm_mv21ex4c182q_test
+    test-run: dropped crm_mv222g0dde45_test
 
 - eval: E1c
-  run_id: mv21eyai7ui7
+  run_id: mv222g653ha2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_mach_lien
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: bun run test -- "cd apps/api && DPV_MACH_LIEN=1 bun test test/dieu-phoi-va.spec.ts -t mach-lien-ghi && cd ../agent && DPV_MACH_LIEN=1 bun test test/dieu-phoi-va.spec.ts -t mach-lien-doc"
-    test-run: dropped crm_mv21eyai7ui7_test
+    test-run: dropped crm_mv222g653ha2_test
 
 - eval: E1b
-  run_id: minted-dieu-phoi-va-E1b-r1
+  run_id: minted-dieu-phoi-va-E1b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_nhan_lo
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t nhan-lo"
-    test-run: dropped crm_mv21exw4nak0_test
+    test-run: dropped crm_mv222gmcolwt_test
 
 - eval: E2
-  run_id: mv21ey45kvzf
+  run_id: mv222feby5bq
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_khong_trung
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t khong-trung"
-    test-run: dropped crm_mv21ey45kvzf_test
+    test-run: dropped crm_mv222feby5bq_test
 
 - eval: E3
-  run_id: mv21ey7hoxfo
+  run_id: mv222g2xkh83
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_dong_som
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t dong-som"
-    test-run: dropped crm_mv21ey7hoxfo_test
+    test-run: dropped crm_mv222g2xkh83_test
 
 - eval: E4
-  run_id: minted-dieu-phoi-va-E4-r1
+  run_id: minted-dieu-phoi-va-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_them_buoc_dom
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t "ke-hoach-rong|bo-phan-khac|loi-bo-phan"
-    Ran 6 tests across 1 file. [1.77s]
+    Ran 6 tests across 1 file. [1167.00ms]
 
 - eval: E5
-  run_id: minted-dieu-phoi-va-E5-r1
+  run_id: minted-dieu-phoi-va-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_them_buoc_dom
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t "ke-hoach-rong|bo-phan-khac|loi-bo-phan"
-    Ran 6 tests across 1 file. [1.77s]
-
-- eval: E6
-  run_id: mv21eycxmwrk
-  exit_code: 0
-  baseline: red
-  verifier: config:executors.test.dpv_bo_phan_hong
-  verified_at: 2026-10-10T06:52:41Z
-  output: |
-    cmd: bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t bo-phan-hong"
-    test-run: dropped crm_mv21eycxmwrk_test
+    Ran 6 tests across 1 file. [1167.00ms]
 
 - eval: E6b
-  run_id: minted-dieu-phoi-va-E6b-r1
+  run_id: minted-dieu-phoi-va-E6b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_them_buoc_dom
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t "ke-hoach-rong|bo-phan-khac|loi-bo-phan"
-    Ran 6 tests across 1 file. [1.77s]
+    Ran 6 tests across 1 file. [1167.00ms]
+
+- eval: E6
+  run_id: mv222fnk3dge
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.dpv_bo_phan_hong
+  verified_at: 2026-10-10T07:10:58Z
+  output: |
+    test-run: dropped crm_mv222fnk3dge_test
 
 - eval: E7
-  run_id: mv21exejlvlr
+  run_id: mv222f1kwcxe
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_dem_qua_han
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t dem-qua-han"
-    test-run: dropped crm_mv21exejlvlr_test
+    test-run: dropped crm_mv222f1kwcxe_test
 
 - eval: E7b
-  run_id: minted-dieu-phoi-va-E7b-r1
+  run_id: minted-dieu-phoi-va-E7b-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_the_qua_han_dom
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t the-qua-han
-    Ran 4 tests across 1 file. [836.00ms]
+    Ran 4 tests across 1 file. [1131.00ms]
 
 - eval: E8
-  run_id: minted-dieu-phoi-va-E8-r1
+  run_id: minted-dieu-phoi-va-E8-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.test.dpv_the_qua_han_dom
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t the-qua-han
-    Ran 4 tests across 1 file. [836.00ms]
+    Ran 4 tests across 1 file. [1131.00ms]
 
 - eval: E9
-  run_id: minted-dieu-phoi-va-E9-r1
+  run_id: minted-dieu-phoi-va-E9-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.dpv_hoi_quy
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    cmd: khong-xoa-expect.mjs --tu-thu, khong-xoa-expect.mjs --moc d0ccad984, bun test api (dieu-phoi-diem-nhan, han-viec), bun test app (ke-hoach-sheet, moi-phia-ke-hoach, han-viec, may-nhac), bun run check-types
-    Tất cả các bước thoát bình thường.
+    khong-xoa-expect --tu-thu và --moc d0ccad984 thoát sạch; các tệp test của kho và check-types chạy lại sau tệp đều thoát sạch.
 
 - eval: E10
-  run_id: minted-dieu-phoi-va-E10-r1
+  run_id: dpv-E10-verify-r2
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dpv_man
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   screenshot: evidence/E10-step1.png
   observed: |
-    Tôi đã mở và đọc từng ảnh trong 8 ảnh (lần chạy 2).
-    - E10-step1 (rỗng, 1440): Sheet Kế hoạch bên phải, tiêu đề «Đo E6 …». Thống kê Bước 0/0. Tab Bước không có số đếm. Khung trống «Kế hoạch chưa có bước nào», dòng «Thêm bước đầu tiên và chọn phòng ban giữ nó.», nút «+ Thêm bước». Khớp expected.
-    - E10-step2 (rỗng, 390): Cùng trạng thái dạng drawer dưới. Nút «+ Thêm bước» nhìn thấy, không tràn ngang. Khớp.
-    - E10-step3 (thêm bộ phận, 1440): Form đã mở với ô chọn «Bộ phận đo B …», ô nhãn «Bước đo … 1440», ô ngày 10/10/2026, nút «Thêm» và «Thôi». Đã chọn bộ phận và gõ tên trước khi Lưu. Khớp.
-    - E10-step4 (thêm bộ phận, 390): Cùng form, nhãn «Bước đo … 390» gõ đủ. Hàng ngày và nút «Thêm» bị huy hiệu N của Next dev che một phần (công cụ dev, không phải ứng dụng). Khớp.
-    - E10-step5 (bộ phận khác, 1440): Kế hoạch có 1 bước, tab «Bước 1», nhóm «BỘ PHẬN ĐO A … · ĐÃ XONG 0/1», dòng «Bước có sẵn …», nút «+ Thêm bước». Form mở với menu chọn bộ phận chỉ liệt kê «Bộ phận đo B …» (không có A, bộ phận đã có bước). Khớp.
-    - E10-step6 (bộ phận khác, 390): Cùng trạng thái. Menu chỉ có «Bộ phận đo B …». Nhãn bước trên dòng bị cắt thành «Bước …» vì ô chọn người và ngày chiếm chỗ. Chỉ để ghi nhận, không phải lỗi theo expected.
-    - E10-step7 (đóng, 1440): Huy hiệu «Đã đóng 10 thg 10, 2026», dòng «Kế hoạch đã đóng — mở lại để sửa.», nhóm bộ phận A với 1 bước, ô chọn người và ngày bị làm mờ. Không có nút «Thêm bước». Khớp.
-    - E10-step8 (đóng, 390): Cùng trạng thái dạng drawer, không có nút thêm, nhãn bước cũng bị cắt thành «Bước …». Khớp.
-    Không có ảnh nào mâu thuẫn với expected.
+    Đã mở từng khung (8 khung: rỗng, thêm bộ phận, bộ phận khác, đóng; mỗi trạng thái hai khổ 1440 và 390). Kế hoạch rỗng hiện «Kế hoạch chưa có bước nào» và nút «+ Thêm bước»; form thêm có ô chọn bộ phận, ô tên, ngày, nút Thêm/Thôi; ở «bộ phận khác» ô chọn chỉ liệt bộ phận chưa có nhóm (A bị loại); kế hoạch đã đóng không có nút thêm bước và các điều khiển bị làm mờ. Không khung nào mâu thuẫn với expected. Ghi chú: bước đọc lại được kiểm bằng đọc CSDL qua Prisma, không phải gọi HTTP API; nhãn bước bị cắt thành «Bước …» ở khổ 390 (thẩm mỹ).
   network_observed: n-a (driver)
-  output: |
-    Ghi chú của người đo: chưa khớp hẳn với Expected. Expected nói «đọc lại bước qua API», nhưng man.mjs đọc lại bằng Prisma (db.onboardingStep.findFirst), không gọi API. Bước hiện lại trên màn sau khi Lưu cho thấy đường đọc của giao diện chạy, nhưng chưa có assertion nào đọc qua API. Mục này được chấp nhận dựa trên dữ liệu đã ghi vào cơ sở dữ liệu; nếu người duyệt muốn đúng chữ «qua API» thì cần thêm một lần đọc bằng API.
 
 - eval: E11
-  run_id: minted-dieu-phoi-va-E11-r1
+  run_id: E11-dieu-phoi-va-2026-10-10
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.dpv_man
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   screenshot: evidence/E11-step1.png
   observed: |
-    I opened all 4 frames with Read.
-    - E11-step1.png (1440, 25 việc + 15 bước seeded): The Tổng quan card "Việc quá hạn" has the description "43 việc quá hạn". It lists 3 pre-existing rows (Book the technical deep dive, Send SOC 2 report, Chase procurement) and then "Việc đo mv21ice4 0/1/2…" in a scroll box. Below the box is the visible line "và 23 việc quá hạn nữa". This matches Expected apart from the total: 43 instead of 40, because the measurement DB already held 3 overdue items for ada@trycomp.ai. 23 = 43 − 20 rows rendered (10 việc + 10 bước).
-    - E11-step2.png (390): The card description is hidden (packages/ui hides CardDescription below 640 px, as the step predicts). The same list is shown, and the line "và 23 việc quá hạn nữa" is visible under the box. This matches Expected.
-    - E11-step3.png (1440, seed cleaned up): The description is "3 việc quá hạn" with 3 rows and no "nữa" line. This matches Expected.
-    - E11-step4.png (390, seed cleaned up): The same 3 rows, and no "và N … nữa" line anywhere. This matches Expected.
+    Đã mở từng khung (4 khung: còn sót và đủ, mỗi trạng thái hai khổ). Ở trạng thái còn sót, thẻ «Việc quá hạn» mô tả «43 việc quá hạn», bảng hiện 20 dòng trong khung cuộn và dưới khung có dòng «và 23 việc quá hạn nữa» (23 = 43 trừ 20). Ở 390 mô tả thẻ bị ẩn đúng quy tắc dưới 640 px, dòng «và 23 … nữa» vẫn hiện. Ở trạng thái đủ chỉ còn 3 dòng và không có dòng «nữa». Tổng 43 thay vì 40 trong lời steps vì kho đo có sẵn 3 việc quá hạn của ada; quan hệ N = tổng trừ số dòng hiện vẫn đúng.
   network_observed: n-a (driver)
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-dieu-phoi-va-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-dieu-phoi-va-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-dieu-phoi-va-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-dieu-phoi-va-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 1
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
   output: |
-    746 pass, 1 fail, 747 tests across 72 files.
-    Bài đỏ duy nhất: test/ (kho chuoi cua vong ③a) > "moi ham ghep bien co khang dinh, va so ham bang so khang dinh".
-    Lệnh này không gắn eval nào của tính năng. Nguyên nhân bài đỏ: chưa rõ (chỉ có tên bài, chưa có thông điệp khẳng định thất bại nguyên văn và chưa có tệp, dòng).
+    app:test: (fail) nhan-dieu-phoi > nhan-dieu-phoi: chu cap duoi la phong ban, bo loc cap tren la Bo phan [1.50ms]
+    app:test:       at <anonymous> (apps/app/test/doi-nhan-phong-ban.dom.tsx:265:27)
+    app:test:  4 pass
+    app:test:  1 fail
+    app:test: chay-dom: test/doi-nhan-phong-ban.dom.tsx đỏ (mã 1) sau 0.8 s
+    Failed:    app#test
+
+  Lệnh này không gắn eval nào. Một ca trong `apps/app/test/doi-nhan-phong-ban.dom.tsx` (dòng 265) đỏ: khẳng định so một danh sách, kết quả nhận thêm 4 phần tử (trong đuôi log nhìn thấy «pickDepartment»). Nguyên nhân gốc chưa rõ: đuôi log chỉ có đoạn trên, chưa có log đầy đủ của ca. Chưa xác định ca này đã đỏ trước tính năng hay do tính năng này gây ra.
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-dieu-phoi-va-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-dieu-phoi-va-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-dieu-phoi-va-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
+  run_id: minted-dieu-phoi-va-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
   exit_code: 0
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-dieu-phoi-va-SUITE-bunx_turbo_run_lint_force-r1
+  run_id: minted-dieu-phoi-va-SUITE-bunx_turbo_run_lint_force-r2
   exit_code: 0
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
 
 - cmd: bun run lint:slop
-  run_id: minted-dieu-phoi-va-SUITE-bun_run_lint_slop-r1
+  run_id: minted-dieu-phoi-va-SUITE-bun_run_lint_slop-r2
   exit_code: 0
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-dieu-phoi-va-SUITE-bunx_turbo_run_build_force-r1
+  run_id: minted-dieu-phoi-va-SUITE-bunx_turbo_run_build_force-r2
   exit_code: 0
-  verified_at: 2026-10-10T06:52:41Z
+  verified_at: 2026-10-10T07:10:58Z
 
 ## Known limits
 
@@ -249,12 +226,19 @@ Vòng 1. Mọi eval của tính năng (E1 đến E11) đều xanh. Verdict là R
 
 ## Analyst
 
-none — mọi eval feature đều red trên baseline (có phân biệt). Hai eval ui-check (E10, E11) không chạy được trên baseline (n-a), nên không xếp vào nhóm không phân biệt.
+carried tu round 1 — baseline khong do lai round nay.
+
+Eval không phân biệt (xanh cả trên code mới lẫn baseline): không có. Lệnh suite xanh cả hai phía là regression-guard bình thường, không liệt kê.
+
+## Judge
+
+Không có eval judgment nào trong vòng này, nên không có panel và không có mục nào chờ `human_override`.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval chạy một lần, kết quả đồng nhất.
 
 ## Iterations
 
-Round 1: không eval nào của tính năng đỏ. Lệnh suite hồi quy `bun run test -- --filter=app --filter=@crm/ui` đỏ ở một bài (kho chuoi cua vong ③a: mỗi hàm ghép biến cố có khẳng định, và số hàm bằng số khẳng định). Bài này không gắn eval nào nên `failed_evals` để trống. Nguyên nhân chưa rõ. Cần xác định bài đỏ là hồi quy do nhánh này gây ra hay đã đỏ sẵn ở diffBase trước khi trả về triển khai. Ghi chú thêm cho người duyệt: E10 nói «đọc lại qua API» nhưng phép đo đọc lại bằng Prisma (xem khối E10).
+Round 1: REJECT — xem review-findings của vòng đó; đã sửa ở S4 r1 (commit 036e94c82) và trả về triển khai.
+Round 2: REJECT — mọi eval của tính năng qua, nhưng lệnh suite hồi quy `bun run test -- --filter=app --filter=@crm/ui` đỏ ở `apps/app/test/doi-nhan-phong-ban.dom.tsx:265`; cần người xem ca đó đỏ do đâu trước khi đi tiếp.
