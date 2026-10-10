@@ -1,0 +1,27 @@
+{
+  "feature_plain": "Sale thấy số điện thoại của từng người ngay trong thoả thuận và trong tab Cá nhân của công ty, không phải mở hồ sơ từng người.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ trả số điện thoại của từng người khi app đọc một thoả thuận, kể cả danh sách người có thể gắn thêm."},
+    {"id": "AC-2", "p": "Sẽ trả số điện thoại của từng người khi app đọc một công ty."},
+    {"id": "AC-3", "p": "Sẽ hiện cột «Điện thoại» ngay sau «Tên» trong bảng người của thoả thuận, dạng 0901 234 567, giữ cột Email; trên điện thoại số hiện đủ một dòng."},
+    {"id": "AC-4", "p": "Sẽ hiện cột «Điện thoại» ngay sau tên trong tab Cá nhân của công ty; các cột khác giữ nguyên."},
+    {"id": "AC-5", "p": "Sẽ hiện «tên · chức danh · số» ở ô chọn người khi bấm «Thêm cá nhân» trong thoả thuận, bỏ vế nào trống."},
+    {"id": "AC-6", "p": "Sẽ hiện tiêu đề cột «Phone» ở cả hai bảng khi giao diện tiếng Anh."}
+  ],
+  "wont_do": [
+    {"id": "AC-7", "p": "Sẽ KHÔNG vẽ tay ô số: hai bảng dùng đúng thành phần hiện số chung đã làm ở DT1, và không vi phạm sàn thiết kế."},
+    {"id": "OOS-1", "p": "Không tạo người mới ngay trong thoả thuận — ô chọn chỉ gắn người đã có."},
+    {"id": "OOS-2", "p": "Không thêm số vào bảng thoả thuận hay bảng Kanban."},
+    {"id": "OOS-3", "p": "Không biến số trong bảng thành liên kết gọi; liên kết gọi vẫn ở ngăn cá nhân (DT1)."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Không chạy quét phủ: ba chỗ hiện (bảng thoả thuận, tab Cá nhân công ty, ô chọn người) và hai đầu ra API đã liệt kê đủ khi tách việc khỏi DT1."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Phép đo ở khổ điện thoại chỉ kiểm số nằm trong ô, chưa bắt số bị cắt hay gãy dòng — đã sửa: AC-3 hứa số hiện đủ một dòng, phép đo kiểm cả bề rộng lẫn chiều cao, có chiều đỏ ép cột hẹp."},
+    {"i": 1, "p": "Tiêu đề tiếng Anh mới đo ở bảng thoả thuận, thiếu bảng công ty — đã sửa: thêm ô đo bảng công ty tiếng Anh, ma trận 6 ô."},
+    {"i": 2, "p": "Bài kiểm API so dữ liệu trước lớp lọc của router, nên lớp lọc bỏ số vẫn xanh — đã sửa: đọc qua đúng schema đầu ra, người R có số thật, chiều đỏ bỏ số khỏi schema."},
+    {"i": 3, "p": "Kiểm «dùng thành phần chung» chỉ đòi tên có mặt, dòng import cũng qua — đã sửa: mỗi tệp phải dùng thật trong giao diện, cấm tự định dạng số, có chiều đỏ."},
+    {"i": 4, "p": "Vài phép đo không khai tệp chúng phụ thuộc, sửa tệp đó không làm bằng chứng cũ đi — đã sửa: thêm các tệp còn thiếu."}
+  ]
+}
