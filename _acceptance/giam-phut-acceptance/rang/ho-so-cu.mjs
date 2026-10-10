@@ -1,5 +1,6 @@
-import { execSync, spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { docBanGoc, docHead, git, GOC, THU_MUC_CHAY } from "./luong.mjs";
 
@@ -55,12 +56,20 @@ function chayLenh(lenh, cwd, log) {
 }
 
 function dungCay(ten, sua) {
-	const thu = join(THU_MUC_CHAY, ten);
+	const thu = mkdtempSync(join(tmpdir(), `gpa-${ten}-`));
 	rmSync(thu, { recursive: true, force: true });
-	mkdirSync(thu, { recursive: true });
-	execSync(`git -C "${GOC}" archive --format=tar HEAD | tar -x -C "${thu}"`, { maxBuffer: BO_DEM });
+	git("worktree", "add", "--detach", "--quiet", thu, "HEAD");
 	sua(join(thu, TEP));
 	return thu;
+}
+
+function goCay(thu) {
+	try {
+		git("worktree", "remove", "--force", thu);
+	} catch {
+		rmSync(thu, { recursive: true, force: true });
+		git("worktree", "prune");
+	}
 }
 
 function dieu5(wf) {
@@ -88,6 +97,7 @@ function chay() {
 	}
 	const goc = docBanGoc();
 	const banGocYaml = git("show", `${goc.sha}:${TEP}`);
+	mkdirSync(THU_MUC_CHAY, { recursive: true });
 	const cayGoc = dungCay("cay-goc", (t) => writeFileSync(t, `${banGocYaml}\n`));
 	const ld = dieu5(docHead());
 	if (ld) hong.push(`dieu 5 cua ld: ${ld}`);
@@ -103,9 +113,9 @@ function chay() {
 			continue;
 		}
 		const g = chayLenh(l, cayGoc, join(THU_MUC_CHAY, `ho-so-${khoa}-goc.log`));
-		if (g.ma === h.ma) console.log(`do san ${khoa}: ma ${h.ma} ca tren ban merge-base — khong do vong nay gay (${join(THU_MUC_CHAY, `ho-so-${khoa}-head.log`)})`);
+		if (g.ma === h.ma) console.log(`do san ${khoa}: ma ${h.ma} tren ca cay HEAD lan cay HEAD voi acceptance.yml cua merge-base ${goc.sha.slice(0, 9)} (worktree rieng) — khong do doi acceptance.yml gay (${join(THU_MUC_CHAY, `ho-so-${khoa}-head.log`)})`);
 		else {
-			console.log(`sai ${khoa} ma ${h.ma}, ban merge-base ma ${g.ma} (${join(THU_MUC_CHAY, `ho-so-${khoa}-head.log`)})`);
+			console.log(`sai ${khoa} ma ${h.ma}, cay HEAD voi acceptance.yml cua merge-base ma ${g.ma} (${join(THU_MUC_CHAY, `ho-so-${khoa}-head.log`)})`);
 			hong.push(`${khoa} do them`);
 		}
 	}
@@ -116,9 +126,9 @@ function chay() {
 		const bat = p.ma !== 0 && p.chu.includes("job co dieu kien if");
 		console.log(bat ? "BAT luat-kho-co-if" : `KHONG BAT luat-kho-co-if (ma ${p.ma})`);
 		if (!bat) hong.push("chieu do luat-kho-co-if khong bat");
-		rmSync(cayPha, { recursive: true, force: true });
+		goCay(cayPha);
 	}
-	rmSync(cayGoc, { recursive: true, force: true });
+	goCay(cayGoc);
 	console.log(`E3: ${hong.length === 0 ? "MA 0" : `MA 1 — ${hong.join("; ")}`}`);
 	process.exit(hong.length === 0 ? 0 : 1);
 }

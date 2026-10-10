@@ -7,6 +7,7 @@ const DOI_CHUNG_PUSH = 8;
 const OPP = join(GOC, "_acceptance", "giam-phut-acceptance", "opportunity.md");
 
 export const phutCuaJob = (ms) => Math.ceil(ms / 60000);
+export const cuaSo = (tu, ngay) => new Date(new Date(tu).getTime() + (ngay - 1) * 86400000).toISOString().slice(0, 10);
 
 function doiSo(ten, macDinh) {
 	const i = process.argv.indexOf(ten);
@@ -41,7 +42,7 @@ const p90 = (ds) => (ds.length === 0 ? null : [...ds].sort((a, b) => a - b)[Math
 export function tongKet(cacLuot, nguong, fn = phutCuaJob) {
 	const ra = {};
 	for (const ev of ["push", "pull_request"]) {
-		const cua = cacLuot.filter((l) => l.event === ev);
+		const cua = cacLuot.filter((l) => l.event === ev && (ev !== "push" || (l.nhanh ?? "onehub") === "onehub"));
 		const huy = cua.filter((l) => l.conclusion === "cancelled");
 		const du = cua.filter((l) => l.conclusion !== "cancelled");
 		const phut = du.map((l) => phutCuaLuot(l, fn));
@@ -68,15 +69,16 @@ async function gh(duong, jq) {
 
 async function docThat(tu, ngay) {
 	const r = repo();
-	const den = new Date(new Date(tu).getTime() + ngay * 86400000).toISOString().slice(0, 10);
-	const luot = (await gh(`repos/${r}/actions/workflows/acceptance.yml/runs?created=${tu}..${den}&per_page=100`, ".workflow_runs[]|{id,event,status,conclusion}")).filter((l) => l.status === "completed");
+	const den = cuaSo(tu, ngay);
+	const luot = (await gh(`repos/${r}/actions/workflows/acceptance.yml/runs?created=${tu}..${den}&per_page=100`, ".workflow_runs[]|{id,event,status,conclusion,head_branch}")).filter((l) => l.status === "completed");
 	const ra = [];
 	for (let i = 0; i < luot.length; i += 8) {
 		const lo = await Promise.all(
 			luot.slice(i, i + 8).map(async (l) => ({
 				event: l.event,
+				nhanh: l.head_branch,
 				conclusion: l.conclusion,
-				jobs: await gh(`repos/${r}/actions/runs/${l.id}/jobs?per_page=100`, ".jobs[]|{conclusion,started_at,completed_at}"),
+				jobs: await gh(`repos/${r}/actions/runs/${l.id}/jobs?per_page=100&filter=all`, ".jobs[]|{conclusion,started_at,completed_at}"),
 			})),
 		);
 		ra.push(...lo);
@@ -115,6 +117,17 @@ async function chay() {
 	console.log(batRound ? "BAT lam-tron: ban sao Math.round ra 61s = 1 phut" : "KHONG BAT lam-tron");
 	if (!batRound) hong.push("chieu do lam tron khong bat");
 
+	const cuaSoDung = cuaSo("2026-10-02", 7) === "2026-10-08";
+	if (!cuaSoDung) hong.push(`cua so 7 ngay tu 2026-10-02 phai het 2026-10-08, duoc ${cuaSo("2026-10-02", 7)}`);
+	const cuaSoCu = (tu, ngay) => new Date(new Date(tu).getTime() + ngay * 86400000).toISOString().slice(0, 10);
+	const batCuaSo = cuaSoCu("2026-10-02", 7) !== "2026-10-08";
+	console.log(batCuaSo && cuaSoDung ? "BAT cua-so: ban sao cong ca 7 ngay ra 2026-10-09 (8 ngay, GitHub tinh ca hai dau)" : "KHONG BAT cua-so");
+	if (!batCuaSo) hong.push("chieu do cua so khong bat");
+	const chiRelease = Array.from({ length: 10 }, () => ({ event: "push", nhanh: "release", conclusion: "success", jobs: [job(1200)] }));
+	const kqRelease = tongKet(chiRelease, nguong);
+	console.log(kqRelease.push.luot === 0 ? "BAT nhanh: 10 luot push release khong vao nhom push onehub" : `sai nhanh: push release vao nhom push (${kqRelease.push.luot} luot)`);
+	if (kqRelease.push.luot !== 0) hong.push("push release lot vao nhom push onehub");
+
 	mkdirSync(THU_MUC_CHAY, { recursive: true });
 	const tepGia = doiSo("--du-lieu", join(THU_MUC_CHAY, "do-phut-gia.json"));
 	if (!process.argv.includes("--du-lieu")) writeFileSync(tepGia, JSON.stringify(duLieuGia()));
@@ -143,7 +156,7 @@ async function chay() {
 			console.error(`MA 2: ${e.message}`);
 			process.exit(2);
 		}
-		inTongKet(`that ${tu}+${ngay}n`, that, nguong);
+		inTongKet(`that ${tu}..${cuaSo(tu, ngay)} (${ngay} ngay, push chi onehub)`, that, nguong);
 		if (tu === "2026-10-02" && !(that.push.trungVi > DOI_CHUNG_PUSH)) hong.push(`doi chung duong: truoc thay doi trung vi push phai > ${DOI_CHUNG_PUSH}, duoc ${that.push.trungVi}`);
 	}
 	console.log(`E4: ${hong.length === 0 ? "MA 0" : `MA 1 — ${hong.join("; ")}`}`);

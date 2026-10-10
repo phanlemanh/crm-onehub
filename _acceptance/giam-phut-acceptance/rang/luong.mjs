@@ -32,8 +32,7 @@ function thanhThat(v) {
 }
 
 function bang(a, b) {
-	if (typeof a === "string" && typeof b === "string") return a.toLowerCase() === b.toLowerCase();
-	return a === b;
+	return String(a).toLowerCase() === String(b).toLowerCase();
 }
 
 export function danhGia(bieuThuc, nc) {
