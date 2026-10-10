@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 5e4ec48961cd3359a644fb33ccc29d70dc86c46e
+verified_commit: 44e89ae6e8cb83603da35fb091fca46e9659f96e
 human_signoff: Manh Phan 2026-10-10
 ---
 
@@ -253,3 +253,7 @@ none — every multi-run eval is uniform (moi eval chay mot lan, khong co eval n
 Round 1: 16/17 eval máy đạt, E14 chờ phán đoán, hai finding trong hợp đồng (AC-4: ngày mốc không đọc được). Đã sửa ở hai commit edb31f1ab và 119c04140, trả về thi công.
 Round 2: cả 17 eval gắn tiêu chí đều đạt; lệnh suite api thất bại với 11 bài chạm trần 5000ms trong 1672 bài, không gắn eval nào. Hai finding mới trong hợp đồng (AC-5, mốc đã qua lệch khi ngày lẫn lộn). Kết luận REJECT.
 Round 3: cả 17 eval gắn tiêu chí đều đạt, cả bảy lệnh suite xanh (lệnh api đạt lại), không có finding trong hợp đồng. Sửa ở commit 5e4ec4896 (một hàm so mốc cho đường mốc và danh sách). Kết luận PASS.
+
+### Re-pin lần 1 — 2026-10-10, do ghim lại sau gộp onehub bb1421c3f (#357) trước khi gộp #329
+run_id: repin-20261010T080151Z-38375
+sha: 44e89ae6e8cb83603da35fb091fca46e9659f96e · suites: 7 lệnh exit 0 · evals: 15/15 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
