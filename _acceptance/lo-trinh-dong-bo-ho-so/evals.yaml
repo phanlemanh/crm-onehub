@@ -168,7 +168,7 @@ evals:
     expected: |
       rang/ke-hoach.mjs (suy goc kho tu vi tri tep): doc docs/plan/lo-trinh-okr.json, hang ma LT1: trang_thai ==
       "đã lên onehub", pr chua 329, buoc_ke chua "nghiệm thu". Doc LO-TRINH.html qua docDuLieu ban chep: hang LT1 co
-      nhom_trang_thai == "da-giao" va trang_thai == trang_thai cua tep ke hoach. Chay product-map.mjs --check cua goi
+      nhom_trang_thai == "da-giao" (chu trang thai cua khoi do bo ve suy tu ho so, khong chep tu tep ke hoach). Chay product-map.mjs --check cua goi
       acceptance-gate (giai qua resolve-plugin.mjs) -> ma 0. Moi y mot dong DUNG/SAI; ma thoat 1 khi co SAI.
       CHIEU DO: ban sao tep ke hoach de "chưa mở" -> SAI voi thong diep ghim "LT1 trong kế hoạch chưa ghi đã lên onehub".
 

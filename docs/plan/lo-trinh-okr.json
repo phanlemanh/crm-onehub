@@ -1556,8 +1556,11 @@
       "cau_giao": "«Trưởng phòng ban mở trang Lộ trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi»",
       "bat_khi": "Bốn tuần sau khi giao, tin hỏi tiến độ của chủ kho còn dưới một nửa nền 23/48; trang khớp từng hàng với LO-TRINH.html cùng lượt vẽ (ngưỡng đề xuất — chốt ở Cổng Đáng)",
       "ghi_chu": "Chủ kho chốt 08/10: đội sản phẩm và trưởng phòng ban không dùng git được XEM lộ trình ngay trong CRM; chỉ đọc, nguồn vẫn là git. Trang đọc tệp dữ liệu lộ trình do bộ kit xuất (hàng X1 trên lộ trình kit, phát hành ở mốc 2.26), không tự tính trạng thái. Nền: 23/48 tin ở phiên điều phối OKR 23–26/09 là hỏi tiến độ (cap-nhat-tuan-okr).",
-      "buoc_ke": "Chờ crm nhận bộ kit có X1",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp 10/10 (#329); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        329
+      ]
     },
     {
       "ma": "LT2",
