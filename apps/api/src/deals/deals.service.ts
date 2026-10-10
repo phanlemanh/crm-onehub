@@ -86,6 +86,7 @@ const CONTACT_SELECT = {
 	firstName: true,
 	lastName: true,
 	email: true,
+	phone: true,
 	title: true,
 	imageUrl: true,
 } as const;
