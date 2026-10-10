@@ -5,7 +5,7 @@ slug: okr-mau-xoa-cuoc-soan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, db]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -60,3 +60,8 @@ Out of scope.
 - Không ui-check: hồ sơ không có mặt người nhìn (`surfaces: [cli, db]`).
 - Hàng chi phí còn lại trỏ `taskId` của một cuộc đã xoá; không bộ đọc nào đi từ chi phí sang cuộc.
 - Known limits: sau `--xoa`, phiên bản `okrProgramConfig` do người mẫu tạo vẫn còn, `createdById` trỏ người đã xoá, và `aiSoanDonVi` có thể còn mã đơn vị mẫu.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-11, luật 53):**
+  - Ngoài-1: spec `okr-mau-cuoc-soan` tự chép đoạn dọn của `donSoan()` thay vì gọi nó; đổi cách dọn ở `donSoan` mà không đổi spec này thì có thể sót hàng cho spec kế.
+  - Ngoài-2: vế người mở chọn theo người mẫu còn tồn tại, không theo tiền tố; một cuộc sót chỉ còn dính bộ mẫu qua người mở (chu kỳ và đơn vị không mẫu) không bị gỡ sau khi người mẫu đã đi.
+  - Ngoài-3: chữ của E6 và AC-6 ghi `chiTieuKhung` trên tháng UTC; spec đo `chiTieuThang` trên tháng giờ Việt Nam, đúng khung mà trần chi phí đọc.
+  - Ngoài-4: đề xuất soạn mới có ca cho trạng thái chờ và đã bác; nhận, sửa, bị loại chưa có ca riêng (đường xoá hiện không lọc theo trạng thái).

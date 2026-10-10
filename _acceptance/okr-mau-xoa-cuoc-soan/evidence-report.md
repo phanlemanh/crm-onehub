@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 4b83af51e4eb230fbc5542ea56594cbdb2dabd90
-human_signoff:
+human_signoff: Mạnh 2026-10-11 — ký Cổng Bằng chứng trên vòng chấm 2 (9/9 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Bốn mục ngoài hợp đồng Ngoài-1 đến Ngoài-4 ghi Known limits (luật 53). Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê toàn bộ.
 ---
 
 # Evidence Report: okr-mau-xoa-cuoc-soan
