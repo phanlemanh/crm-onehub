@@ -23,6 +23,9 @@ feature_loop:
     - tro-ly-doc-kho/E15
     - tro-ly-okr-de-xuat/E4
     - tro-ly-okr-de-xuat/E22
+    - eval-model-that-dung-luc/E5
+    - eval-model-that-dung-luc/E8
+    - eval-model-that-dung-luc/E11
     - tro-ly-okr-de-xuat/E24
     - tro-ly-okr-nen/E9
     - tro-ly-okr-nen/E12
@@ -1434,6 +1437,13 @@ executors:
     ccl_goi_dong_ho: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test --preload ../../_acceptance/ca-chap-chon-con-lai/rang/dong-ho-26.ts test/goi-soan.integration.spec.ts -t goiKiemTu"
     ccl_id_trong_goi: bun run test -- "cd apps/agent-okr && CRM_TELEMETRY_DISABLED=1 bun test test/goi-soan.integration.spec.ts -t id-trong-goi"
     cccl_cho_route: "cd apps/agent-okr && bun test test/khoi-dong-don.spec.ts -t cho-route"
+    emtdl_nhan_loi: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t nhan-loi"
+    emtdl_nhat_ky: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t nhat-ky"
+    emtdl_bam: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t bam"
+    emtdl_dung_lai: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t dung-lai"
+    emtdl_vung_xam: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t vung-xam"
+    emtdl_gop: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t gop"
+    emtdl_do_model: "bun test _acceptance/tro-ly-doc-kho/rang/quyet-do.spec.ts -t do-model"
     kekt_ghi_tron: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t ghi-tron"
     kekt_hai_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t hai-luot"
     kekt_mot_luot: "cd apps/agent-okr && bun test test/khoa-eve-khong-tranh.spec.ts -t mot-luot"
@@ -2288,6 +2298,12 @@ executors:
     cccl_cong_tac: bun _acceptance/ca-chap-chon-cach-ly/rang/cong-tac.mjs
     cccl_pham_vi: bun _acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs
     cccl_du_ca: bun _acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs
+    emtdl_doi_dau_vao: bun _acceptance/eval-model-that-dung-luc/rang/doi-dau-vao.mjs
+    emtdl_ghi_ban_ghi: bun _acceptance/eval-model-that-dung-luc/rang/doi-dau-vao.mjs --ghi-ban-ghi
+    emtdl_luot_kep: bun _acceptance/eval-model-that-dung-luc/rang/luot-kep.mjs
+    emtdl_giu_nguong: bun _acceptance/eval-model-that-dung-luc/rang/giu-nguong.mjs
+    emtdl_dot_bien: bun _acceptance/eval-model-that-dung-luc/rang/dot-bien.mjs
+    emtdl_cham_lai: bun _acceptance/eval-model-that-dung-luc/rang/cham-lai.mjs
     zhok_c33: bun _acceptance/zalo-hoi-okr-khong-chet/rang/c33.mjs
     zhok_pham_vi: bun _acceptance/zalo-hoi-okr-khong-chet/rang/pham-vi.mjs
     zhok_dot_bien: bun _acceptance/zalo-hoi-okr-khong-chet/rang/dot-bien.mjs
