@@ -1,0 +1,109 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bằng chứng · eval-model-that-dung-luc</title>
+<style>
+:root{--bg:#faf9f6;--card:#fff;--bd:#e6e4de;--ink:#1f1f1d;--mut:#6c6a64;--hint:#9a988f}
+*{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.5;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 64px}
+h1{font-size:20px;margin:0 0 2px}h2{font-size:15px;margin:30px 0 10px;letter-spacing:.02em}
+.sub{font-size:13px;color:var(--mut)}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 11px;border-radius:999px;vertical-align:middle}
+.pass{background:#E1F5EE;color:#085041}.pend{background:#FAEEDA;color:#633806}.rej{background:#FAECE7;color:#712B13}.neutral{background:#f1efe8;color:#444441}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--mut);margin-top:6px}
+.meta b{color:var(--ink);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--bd)}th{color:var(--mut);font-weight:600;font-size:12px}
+td a{color:#185FA5;text-decoration:none}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.eval{scroll-margin-top:14px}.eval h3{font-size:14px;margin:0 0 4px}.eval .crit{font-size:13px;color:var(--mut);margin:0 0 8px}
+pre.out{background:#1f1f1d;color:#e8e6df;border-radius:8px;padding:11px 13px;overflow:auto;max-height:280px;font-size:12px;margin:8px 0}
+.kv{font-size:12px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0}.kv b{color:var(--ink)}
+.shot img{display:block;max-width:100%;border:1px solid var(--bd);border-radius:8px}
+.slide{position:relative}.slide .frame{position:absolute;inset:0;opacity:0;transition:opacity .35s}.slide .frame:first-child{position:relative}.slide .frame.on{opacity:1}
+.slidebar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut);margin-top:6px}
+.btn{font-size:12px;padding:4px 11px;border:1px solid var(--bd);border-radius:7px;background:#fff;cursor:pointer}
+.ov{background:#FAEEDA;color:#633806;border-radius:7px;padding:6px 10px;font-size:12px;display:inline-block}
+.ovok{background:#E1F5EE;color:#085041}
+.note{font-size:13px;color:var(--mut)}.flag{font-size:13px;border-radius:8px;padding:8px 11px;margin:6px 0}
+.fred{background:#FAECE7;color:#712B13}.fok{background:#E1F5EE;color:#085041}
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--hint)}
+ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}ul.ck input{margin-right:8px}
+.tl{border-left:2px solid var(--bd);padding-left:14px;margin:0}.tl li{font-size:13px;margin:0 0 6px;list-style:none}
+</style></head><body><div class="wrap">
+<h1>Eval model thật của Kho tài liệu (E15) chỉ gọi model khi đầu vào đổi, tách lỗi hạ tầng khỏi lỗi model, giữ nhật ký theo lượt, và hỏi lại một lần khi sát ngưỡng thay vì đỏ cứng</h1><div class="sub">Trang bằng chứng · <span class="mono">eval-model-that-dung-luc</span> · tier T2</div>
+<div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
+<div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
+<h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E1-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E2-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-3</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E3-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-4</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E4-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E5">E5</a></td><td>AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E5-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E6">E6</a></td><td>AC-6</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E6-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E7">E7</a></td><td>AC-7</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E7-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E8">E8</a></td><td>AC-8</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E8-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E11">E11</a></td><td>AC-10</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">e1d36015ad4bad25</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E12">E12</a></td><td>AC-11</td><td>test</td><td><span class="badge pass">PASS</span></td><td class="mono">&quot;&quot;</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E13">E13</a></td><td>AC-12</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E13-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E9">E9</a></td><td>AC-9</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E9-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+<tr><td><a href="#E10">E10</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-eval-model-that-dung-luc-E10-r4</td><td class="mono">2026-10-10T05:01:00Z</td></tr>
+</tbody></table></div>
+<h2>Chi tiết từng eval</h2>
+<div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · test</h3><p class="crit">AC-1: Given một câu của E15 không có kết quả eval, hoặc hàng `TaiLieuHoi`/`ZaloHoi` của nó ở trạng thái lỗi, When E15 chấm, Then câu đó mang nhãn `loi`, không vào tử số hay mẫu số của chỉ số nào; And có ít nhất một câu `loi` thì E15 thoát mã 2 với dòng «KHONG DO DUOC: &lt;n&gt; cau loi» kèm id các câu đó; And câu model trả lời sai (trích sai trang, trả lời câu phải từ chối) vẫn mang nhãn `sai`.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E1-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.emtdl_nhan_loi</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 5 tests across 1 file. [93.00ms]</pre>
+</div>
+<div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · test</h3><p class="crit">AC-2: Given E15 chạy nhiều lượt, When một lượt bắt đầu, Then nó ghi kế hoạch, kết quả và nhật ký eve vào một thư mục riêng `.acceptance-runs/tro-ly-doc-kho/cham-bo-do/&lt;giờ&gt;-&lt;pid&gt;/`, in đường thư mục đó, và không ghi đè tệp của lượt trước; And khi đã có hơn 10 thư mục lượt thì chỉ giữ 10 thư mục mới nhất.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E2-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.emtdl_nhat_ky</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 2 tests across 1 file. [83.00ms]</pre>
+</div>
+<div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · test</h3><p class="crit">AC-3: Given phạm vi băm gồm nội dung mọi tệp git-theo-dõi dưới `apps/agent/agent/**`, mọi tệp khớp `paths` của E15, `bun.lock`, tệp bộ câu, và id model mà Gateway trả về trong phản hồi của lời gọi dò tới hai model E15 dùng, When tính băm, Then đổi riêng bất kỳ một trong năm lớp đầu vào đó cũng cho băm khác; And cùng đầu vào thì cùng băm.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E3-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.emtdl_bam</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 2 tests across 1 file. [129.00ms]</pre>
+</div>
+<div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · test</h3><p class="crit">AC-4: Given bản ghi E15 đã commit ở `HEAD` (`_acceptance/tro-ly-doc-kho/evidence/cham-bo-do.md`) mang cùng băm, `dat: true` và `do_luc` trong vòng 7 ngày, When E15 chạy, Then nó không chạy `eve eval` cho câu nào, thoát 0, và in cùng ghi vào bằng chứng của lượt dòng «DUNG LAI &lt;băm&gt;, do ngay &lt;ngày&gt;» kèm bảng kết quả đã ký; And khi băm khác, khi quá 7 ngày, khi bản ghi không đạt, khi chưa có bản ghi đã commit, hoặc khi chạy với `--do-lai`, thì E15 đo mới và in đúng một lý do «DO MOI: …».</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E4-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.emtdl_dung_lai</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 3 tests across 1 file. [277.00ms]</pre>
+</div>
+<div class="card eval" id="E5"><h3><span class="badge pass">PASS</span> &nbsp;E5 · script</h3><p class="crit">AC-5: Given một bản ghi đã commit khớp băm hiện tại, When đổi nội dung một tệp trong phạm vi băm (một tệp dưới `apps/agent/agent/`), Then lượt E15 kế tiếp in «DO MOI: bam doi» và không dùng lại.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E5-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.emtdl_doi_dau_vao</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">SAU: DO MOI: bam doi (e1d36015ad4bad25 -&gt; dcd39c7601b173c0)</pre>
+</div>
+<div class="card eval" id="E6"><h3><span class="badge pass">PASS</span> &nbsp;E6 · test</h3><p class="crit">AC-6: Given lượt 1 không có câu `loi` và một chỉ số rơi vào vùng xám (với ngưỡng «≥ t» trên n câu: `t − √(t(1−t)/n) ≤ r &lt; t`; chỉ số «≤ t» đối xứng), When E15 chấm, Then nó hỏi lại đúng một lần trên đủ bộ câu của chỉ số đó và kết luận trên tỉ lệ gộp hai lượt, với ngưỡng 80% / 80% / 90% / 10% / 0 giữ nguyên; And lượt 1 có câu `loi` thì không hỏi lại mà thoát 2 theo AC-1.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E6-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.emtdl_vung_xam</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 7 tests across 1 file. [86.00ms]</pre>
+</div>
+<div class="card eval" id="E7"><h3><span class="badge pass">PASS</span> &nbsp;E7 · test</h3><p class="crit">AC-7: Given một chỉ số đã hỏi lại theo AC-6, When E15 ghi bằng chứng, Then bằng chứng ghi đủ ba tỉ lệ (lượt 1, lượt 2, gộp); And gộp vẫn không đạt thì E15 thoát 1, không hỏi lần ba; And lượt 2 có câu `loi` thì thoát 2.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E7-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.emtdl_gop</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 3 tests across 1 file. [119.00ms]</pre>
+</div>
+<div class="card eval" id="E8"><h3><span class="badge pass">PASS</span> &nbsp;E8 · script</h3><p class="crit">AC-8: Given máy có khoá Gateway, When E15 chạy hai lượt liền và lượt đầu đạt (đo đầy đủ, hoặc dùng lại từ `HEAD`), Then lượt thứ hai in «DUNG LAI», không chạy `eve eval`, và báo số lời gọi model đúng bằng số lời dò (2); And lượt đầu không đạt thì phép đo thoát 2 «KHONG DO DUOC: luot 1 khong dat», không đỏ.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E8-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.emtdl_luot_kep</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">LUOT 2: DUNG LAI, ma 0, goi 2</pre>
+</div>
+<div class="card eval" id="E11"><h3><span class="badge pass">PASS</span> &nbsp;E11 · script</h3><p class="crit">AC-10: Given một lượt E15 đo mới và đạt, When lượt xong, Then nó in đúng một dòng «GHI BAN GHI: bun _acceptance/tro-ly-doc-kho/rang/cham-bo-do.ts --ghi-ban-ghi &lt;tệp bằng chứng của lượt&gt;»; And chạy lệnh đó thì bản ghi được chép vào `_acceptance/tro-ly-doc-kho/evidence/cham-bo-do.md`; And sau khi commit, lượt kế tiếp dùng lại từ `HEAD`; And tệp bản ghi không nằm trong phạm vi băm (commit nó không làm băm đổi).</p>
+<div class="kv"><span>run_id <b>e1d36015ad4bad25</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.emtdl_ghi_ban_ghi</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">KET LUOT: dat in GHI BAN GHI, khong dat khong in</pre>
+</div>
+<div class="card eval" id="E12"><h3><span class="badge pass">PASS</span> &nbsp;E12 · test</h3><p class="crit">AC-11: Given lời gọi dò id model tới một trong hai model của E15 ném lỗi (402, hết ngân sách, mạng, khoá sai), When E15 chạy, Then nó thoát 2 «KHONG DO DUOC: do model &lt;tên&gt; loi: &lt;lý do&gt;», không dùng lại và không đo; And khi dò thành công, bản ghi mang đúng hai id model, mỗi model một id, lấy từ `response.modelId` Gateway trả.</p>
+<div class="kv"><span>run_id <b>&quot;&quot;</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.test.emtdl_do_model</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">Ran 4 tests across 1 file. [83.00ms]</pre>
+</div>
+<div class="card eval" id="E13"><h3><span class="badge pass">PASS</span> &nbsp;E13 · script</h3><p class="crit">AC-12: Given tệp chấm từng câu mà một lượt E15 thật đã ghi trong thư mục lượt (kèm trạng thái hàng `TaiLieuHoi`/`ZaloHoi` của từng câu), When chạy `cham-bo-do.ts --cham-lai &lt;thư mục lượt&gt;` (không gọi model, không cần kho đo), Then nó chấm lại bằng chính hàm nhãn và hàm kết luận của `quyet-do.ts`; And thêm một câu trạng thái lỗi vào tệp đó thì lệnh thoát 2 «KHONG DO DUOC: 1 cau loi (&lt;id&gt;)»; And đẩy một chỉ số vào vùng xám thì lệnh in «CAN HOI LAI: &lt;chỉ số&gt; (&lt;n&gt; cau)».</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E13-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.emtdl_cham_lai</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">(không có dòng in thêm; script kết thúc sạch)</pre>
+</div>
+<div class="card eval" id="E9"><h3><span class="badge pass">PASS</span> &nbsp;E9 · script</h3><p class="crit">AC-9: Given diff của vòng so với merge-base với `onehub`, Then các ngưỡng của E15 (0,8 / 0,8 / 0,9 / 0,1 / 0) không đổi; And không tệp nào đổi ngoài `_acceptance/**` và hai tệp máy vẽ `PRODUCT-MAP.md`, `LO-TRINH.html`.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E9-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.emtdl_giu_nguong</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">PHAM VI: 25 tep, 0 ngoai pham vi</pre>
+</div>
+<div class="card eval" id="E10"><h3><span class="badge pass">PASS</span> &nbsp;E10 · script</h3><p class="crit">AC-1: Given một câu của E15 không có kết quả eval, hoặc hàng `TaiLieuHoi`/`ZaloHoi` của nó ở trạng thái lỗi, When E15 chấm, Then câu đó mang nhãn `loi`, không vào tử số hay mẫu số của chỉ số nào; And có ít nhất một câu `loi` thì E15 thoát mã 2 với dòng «KHONG DO DUOC: &lt;n&gt; cau loi» kèm id các câu đó; And câu model trả lời sai (trích sai trang, trả lời câu phải từ chối) vẫn mang nhãn `sai`.</p>
+<div class="kv"><span>run_id <b>minted-eval-model-that-dung-luc-E10-r4</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.emtdl_dot_bien</b></span><span>verified_at <b>2026-10-10T05:01:00Z</b></span><span>baseline <b>n-a</b></span></div>
+<pre class="out">h cham-lai xanh=0 do=1 ghim=ok</pre>
+</div>
+<h2>Eval không phân biệt (Analyst)</h2><div class="flag fred">Carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi). Khong co eval nao khong-phan-biet duoc liet ke; lenh suite xanh o ca hai phia la regression-guard binh thuong.</div>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: không eval máy nào đỏ; REJECT vì review có ba phát hiện mức high nằm trong hợp đồng — hỏi lại vùng xám bỏ sót câu khi hai chỉ số chồng id (AC-6, hai phát hiện cùng gốc) và hàng ZaloHoi kết thúc ở trạng thái lỗi bị tính là model trả lời sai thay vì `loi` (AC-1). Trả lại cho bước cài đặt.</li><li>Round 2: E8 không đạt — lượt 1 của phép đo kép đo đầy đủ nhưng có một câu lỗi (c33), script dừng với «KHONG DO DUOC: 1 cau loi (c33)» nên lượt 2 (dùng lại, hai lời dò) chưa chạy. Mười hai eval máy còn lại và bảy lệnh suite đạt. Review còn hai phát hiện nằm trong hợp đồng (AC-6, AC-1). Trả lại cho bước cài đặt.</li><li>Round 3: E8 không đạt — lượt 1 đo đầy đủ nhưng có một câu lỗi (c02), script dừng với «KHONG DO DUOC: 1 cau loi (c02)» nên lượt 2 chưa chạy. Mười hai eval máy còn lại và bảy lệnh suite đạt. Review còn ba phát hiện nằm trong hợp đồng: «SO LOI GOI MODEL» là hằng chữ in sẵn ở nhánh dùng lại (AC-8, hai phát hiện cùng gốc) và lượt hỏi lại bỏ qua ngưỡng 0 cho câu trích dẫn không kiểm được (AC-6). Trả lại cho bước cài đặt.</li><li>Round 4: cả mười ba eval máy và bảy lệnh suite đạt, kể cả E8 (lượt 2 dùng lại, hai lời dò). Review không còn phát hiện nằm trong hợp đồng; mười bảy phát hiện ngoài hợp đồng chuyển cho người quyết ở Cổng 2.</li></ul>
+<div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
+<script>
+document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});
+</script>
+</div></body></html>
