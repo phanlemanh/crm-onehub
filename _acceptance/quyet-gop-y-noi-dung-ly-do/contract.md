@@ -5,7 +5,7 @@ slug: quyet-gop-y-noi-dung-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -57,3 +57,5 @@ một lần» — kịch bản nhận một Căn chỉnh tới đích chưa côn
 
 - Không ui-check: dòng lỗi dưới góp ý đã có ảnh từ bàn đo màn của K3 (`loi-dong`); vòng này chỉ đổi chữ của dòng đó (entry `descope` «bỏ ui-observed»).
 - Chạm tệp P1-53: `tro-ly.service.ts`, `okr.contracts.ts`, `okr-tro-ly.ts`, tệp kiểm API mới, `config.yaml`, `docs/api.md`, design doc, kế hoạch, bản đồ.
+- Known limits (Ngoài-1, Cổng 2): Phép kiểm mã chỉ nằm trong bảng hiện chạy đúng nhưng máy chưa tự chứng minh nó biết kêu khi có mã lạc ra ngoài; nếu phép kiểm hỏng âm thầm thì bằng chứng vẫn xanh.
+- Known limits (ngoài thẻ, Cổng 2): Nếu ai gõ nhầm một trong hai câu phụ, KR «giảm xuống» hay «phần trăm» sai kiểu lại hiện câu thử lại mà bộ kiểm không bắt.

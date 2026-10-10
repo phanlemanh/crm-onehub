@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 9e42d42f1f25dac8e1ad376b03640f1ce33bb9ed
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-10
 ---
 
 # Evidence Report: quyet-gop-y-noi-dung-ly-do
