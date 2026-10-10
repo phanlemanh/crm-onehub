@@ -5,7 +5,7 @@ slug: lo-trinh-ten-va-build
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-10T10:36:59Z
 ---
@@ -37,3 +37,10 @@ Source input: giám sát mở H6 2026-10-10, anh chọn «H6 ở đây».
 ## Notes
 
 - Không migration. Không đổi API.
+
+Known limits — anh chọn ở Cổng Bằng chứng 2026-10-10 («Đồng ý A»), từ S4 round 1:
+
+- Trong-AC-3 đếm apps/agent: `rang/dung-build.sh` đếm tệp `apps/agent/` trên đường tương đối của `.nft.json`, nên luôn ra 0; vế này chỉ được chặn bởi trần 2 000 tệp. Đếm tay bằng đường tuyệt đối lúc ký: 331 tệp, 0 tệp `apps/agent`, 1 `LO-TRINH.html` ở gốc kho.
+- Ngoài-1: Bài kiểm ghim chữ «LO-TRINH.html» chỉ chạm nhánh dự phòng `../..` của `duongMacDinh` (chạy với cwd `apps/app`); gõ sai chữ ở nhánh đầu thì vẫn xanh.
+- Ngoài-2: Thứ tự tìm tệp và phép đo `ltc_ban_dung` đi qua nhánh có đối số `duongTheoGoc`; nhánh mặc định trang thật dùng chỉ được kiểm tên tệp.
+- Ngoài-3: Bài kiểm `next.config` chỉ kiểm chữ «LO-TRINH.html» vắng mặt; khai lại glob bằng mẫu khác (vd `../../*.html`) thì không bắt.
