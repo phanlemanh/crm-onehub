@@ -5,7 +5,7 @@ slug: kiem-cheo-chay-quang-lang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-10
 design_doc: _acceptance/kiem-cheo-chay-quang-lang/design.md
@@ -69,3 +69,14 @@ và chạy tiếp từ hồ sơ đang dừng. Vòng này thay `kiem-cheo-sau-gop
 - Hồ sơ đang chạy dở khi làn chạm trần không tính là xong; eval đã chạy của nó bị bỏ và chạy lại đêm sau.
 - Ngưỡng «0 lần kiểm chéo nhận khoá khi còn đơn thợ» chưa có thước máy: bộ phát lịch không ghi hàng chờ lúc cấp lượt.
 - Thẻ thay thế `kiem-cheo-sau-gop/E2` cho bộ kit: hồ sơ này nêu `kiem-cheo-sau-gop/E2`.
+- Known limit (Cổng 2, Ngoài-1): đường mã 4 đọc dòng `[lane]` viết cho người của bộ kit; kit đổi chữ dòng đó thì lượt ra
+  `chua-xong` 0/N mỗi đêm mà không báo lỗi.
+- Known limit (Cổng 2, Ngoài-2): năm tệp sửa ở vòng này chưa qua `biome format`.
+- Known limit (Cổng 2, Ngoài-3, Ngoài-4, Ngoài-5): ca «lan chay het nhung phan loai vuot tran» không kiểm `do-moi` của đêm
+  trước còn sống; `--tran-phut` của làn chỉ so với chính hằng `lanPhut`, không ghim `lanPhut` < `tranPhut`; `suiteDoTrongNhatKy`
+  chỉ thử trên dòng gõ tay.
+- Known limit (Cổng 2, Ngoài-6): mỏ neo đột biến M1b của `dieu-phoi-hai-tang` (`mocCua(hangViec, d.slug), d.luc]`) đã vắng
+  trong `lich.mjs` từ F9; `dieu-phoi-hai-tang/E25` thoát 2 khi lượt kiểm chéo đêm đo nó.
+- Known limit (Cổng 2, Ngoài-7, chấp nhận): `dem.mjs` vẫn tính và ghi `moc` vào đơn kiểm chéo dù lịch không còn đọc.
+- Known limit (Cổng 2, Ngoài-8, Ngoài-9, Ngoài-10): E1 và E3 khai bản sao đột biến mà bài kiểm không chạy; `noi-f9.mjs` tự
+  đưa con trỏ hằng vào `chungThayBoi` thay vì đo đường kiểm lại thật.
