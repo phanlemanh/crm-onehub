@@ -18,7 +18,11 @@ const GOC = path.resolve(
 const APP = path.join(GOC, "apps/app");
 const DIST = ".next-lo-trinh-ban-dung";
 const TEP = path.join(GOC, "LO-TRINH.html");
-const NFT = path.join(APP, DIST, "server/app/[slug]/lo-trinh/page.js.nft.json");
+const NFT = path.join(
+	APP,
+	DIST,
+	"server/app/(app)/[slug]/lo-trinh/page.js.nft.json",
+);
 const dungLai = process.argv.includes("--khong-dung");
 
 let sai = 0;
