@@ -2251,6 +2251,12 @@ executors:
     k2c_dot_bien: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs
     k2c_ranh_gioi: node _acceptance/ly-do-tu-choi-nop-theo-locale/rang/ranh-gioi.mjs
     k2c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/man.mjs"'
+    k2d_lanh: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs lanh
+    k2d_khai_trung: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs khai-trung
+    k2d_goc_rong: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs goc-rong
+    k2d_mot_cho: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs mot-cho
+    k2d_k2b_giu: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs k2b-giu
+    k2d_ranh_gioi: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs ranh-gioi
     dlr_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/datatable-loc-ro/rang/do-man.mjs"'
     dlr_san_thiet_ke: 'for t in packages/ui/src/components/data-table.tsx "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx" "apps/app/app/(app)/[slug]/companies/companies-table.tsx" "apps/app/app/(app)/[slug]/deals/deals-table.tsx" "apps/app/app/(app)/[slug]/settings/members/members-table.tsx" apps/app/components/crm/fields/field-facets.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done && bun _acceptance/datatable-loc-ro/rang/khong-ghi-de.mjs'
     olht_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/okr-loai-hoc-tap/rang/man-hoc-tap.mjs"'
