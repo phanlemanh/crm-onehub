@@ -1,0 +1,16 @@
+{
+  "feature_plain": "Gỡ hai lỗi của trang lộ trình đang chặn bốn PR cuối của đợt: câu chữ còn gọi «CRM» thay vì «OneHub Center», và bản dựng vỡ trên cây có một symlink vòng.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ đổi bốn câu của trang lộ trình từ «CRM» sang «OneHub Center» (tiếng Việt và tiếng Anh), để phép quét tên không còn chỗ sai."},
+    {"id": "AC-2", "p": "Sẽ cho bản dựng xanh ngay cả trên cây có symlink vòng trong thư mục mẫu của agent — bản cũ thì vỡ."},
+    {"id": "AC-3", "p": "Sẽ giữ bản dựng của trang lộ trình gọn: vẫn mang tệp lộ trình, không kéo theo mã của agent hay cả kho."},
+    {"id": "AC-4", "p": "Sẽ giữ cách trang tìm tệp lộ trình như cũ, và các phép đo sẵn có của trang lộ trình vẫn xanh."}
+  ],
+  "wont_do": [
+    {"id": "OOS-1", "p": "Không sửa script đo của hồ sơ Trợ lý OKR — thứ đang để lại symlink vòng; báo giám sát, vì sau bản sửa này symlink không còn làm vỡ bản dựng."},
+    {"id": "OOS-2", "p": "Không đụng trang nào khác."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Không chạy quét phủ: hai lỗi có tên, nguyên nhân đã tái hiện và đo tại chỗ."}
+  ]
+}

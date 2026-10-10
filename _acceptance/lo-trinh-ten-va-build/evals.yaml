@@ -1,0 +1,64 @@
+schema_version: 1
+slug: lo-trinh-ten-va-build
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.dtoc_quet_ten
+    paths:
+      - "apps/app/lib/messages/lo-trinh.ts"
+    expected: |
+      quet-ten.mjs: dong cuoi "KET LUAN <n> DUNG, 0 SAI"; khong dong "SAI con CRM: apps/app/lib/messages/lo-trinh.ts:<so>".
+      Doi chung: tren onehub 7bd69bc8 (truoc sua) cung lenh in 4 dong SAI lo-trinh.ts:6, :87, :112, :192 (do o S3).
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.h6_dung_build
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/lib/lo-trinh/**"
+      - "_acceptance/lo-trinh-ten-va-build/rang/dung-build.sh"
+    expected: |
+      rang/dung-build.sh tao symlink vong apps/agent/test/fixtures/eve-mau/node_modules/@mau/agent -> apps/agent (neu chua co),
+      chay turbo run build --force --filter=app: "build app ma 0", khong dong "infinite loop"; dong cuoi "dung-build: DUNG ...",
+      ma 0; symlink do script tao bi don sau khi do.
+      CHIEU DO (do o S3, ghi trong decisions): tra doc-tep.ts va next.config.ts ve onehub -> "Failed to write app endpoint
+      /(app)/[slug]/lo-trinh/page ... infinite loop", "dung-build: build do khi co symlink vong", ma 1.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.h6_dung_build
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/lib/lo-trinh/**"
+      - "_acceptance/lo-trinh-ten-va-build/rang/dung-build.sh"
+    expected: |
+      Cung lenh E2, dong "nft trang lo trinh: <so> tep, mang LO-TRINH.html 1, tep apps/agent 0 (tran 2000)" voi <so> <= 2000.
+      CHIEU DO (do o S3): duong mac dinh dung hang LO_TRINH.tep thay chu that -> nft 11854 tep, "dung-build: ban dung keo theo ca kho".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.h6_doc_tep
+    paths:
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/next.config.ts"
+      - "apps/app/test/lo-trinh-doc-tep.spec.ts"
+    expected: |
+      apps/app/test/lo-trinh-doc-tep.spec.ts describe "doc-tep" 4/4: ten duong mac dinh bang LO_TRINH.tep; goc app truoc goc kho;
+      vang tep -> null; next.config.ts khong con chu LO-TRINH.html (khong glob). Cung lenh chay lo-trinh.dom.tsx,
+      lo-trinh-ngay.spec.ts, proxy-lo-trinh.spec.ts xanh.
+
+  - id: E4b
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.ltc_ban_dung
+    paths:
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/next.config.ts"
+    expected: |
+      Phep do ban dung cua LT1: "DUNG ban dung mang LO-TRINH.html", "DUNG ham giai duong tu thu muc chay tra dung tep goc kho",
+      "DUNG ban sao chi gom tep cua ban dung doc ra khoi du lieu".
