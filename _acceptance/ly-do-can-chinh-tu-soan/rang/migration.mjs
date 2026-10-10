@@ -30,8 +30,9 @@ export function kiemMigration(chu) {
 		)
 	)
 		return { ma: 1, chu: "cau cam: NOT NULL khong mac dinh" };
-	if (cau.filter((c) => CAU_DIEN.test(c)).length > 1)
-		return { ma: 1, chu: "hai cau UPDATE" };
+	const soDien = cau.filter((c) => CAU_DIEN.test(c)).length;
+	if (soDien > 1) return { ma: 1, chu: "hai cau UPDATE" };
+	if (soDien === 0) return { ma: 1, chu: "thieu cau UPDATE dien lai" };
 	const la = cau.find((c) => !CAU_THEM.test(c) && !CAU_DIEN.test(c));
 	if (la) return { ma: 1, chu: `cau la: ${la.slice(0, 80)}` };
 	return { ma: 0, chu: `MIGRATION: ${cau.length} cau, chi them` };
@@ -50,6 +51,10 @@ const DOI_CHUNG = [
 	{
 		chu: `${THEM}\nUPDATE "okrAlignment" SET "x" = 'a';\nUPDATE "okrAlignment" SET "x" = 'b';`,
 		mong: "hai cau UPDATE",
+	},
+	{
+		chu: THEM,
+		mong: "thieu cau UPDATE dien lai",
 	},
 ];
 
