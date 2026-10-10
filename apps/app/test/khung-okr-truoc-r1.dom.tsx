@@ -747,6 +747,10 @@ describe("lien-ket-cheo", () => {
 					objectiveTitle: "Mục tiêu cha",
 					keyResultTitle: null,
 					unitName: "OneHub",
+					lyDo: null,
+					canCu: null,
+					lyDoTuKara: false,
+					mucTin: "chua-co-ly-do",
 				},
 			],
 		}).alignments;
