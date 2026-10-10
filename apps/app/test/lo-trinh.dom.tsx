@@ -420,10 +420,15 @@ describe("ngay", () => {
 					: n === 0
 						? m.moc.homNay
 						: m.moc.conNgay(String(n));
-				if (h.moc.ngay === D)
+				if (h.moc.ngay === D) {
+					expect(
+						o?.textContent === m.moc.tre(String(Math.abs(n))),
+						"dung ngay moc bi tinh la tre",
+					).toBe(false);
 					expect(o?.textContent, "ngay nguoi xem lech mui gio").toBe(
 						m.moc.homNay,
 					);
+				}
 				expect(o?.textContent, `${h.khoa}: dung ngay moc bi tinh la tre`).toBe(
 					mong,
 				);
@@ -487,19 +492,7 @@ describe("chi-doc", () => {
 		soGoiTrpc = 0;
 		const co = TAT_CA.find((h) => h.dung_tren.length > 0) ?? TAT_CA[0];
 		if (!co) throw new Error("tep mau rong");
-		const cacLuot: Record<string, string>[] = [
-			{ xemLoTrinh: "bang", vongDoi: "tat-ca", viec: co.khoa },
-			{ xemLoTrinh: "bang-cot", vongDoi: "tat-ca", viec: co.khoa },
-			{ xemLoTrinh: "moc", vongDoi: "tat-ca", viec: co.khoa },
-			{ daBac: "true" },
-		];
-		for (const thamSo of cacLuot) {
-			await mo(DV_MAU, tham(thamSo));
-			for (const gap of [
-				...document.body.querySelectorAll('button[aria-expanded="false"]'),
-			])
-				if (!gap.closest("[data-slot=toggle-group]")) await bam(gap);
-			const nhan = JSON.stringify(thamSo);
+		const kiem = (nhan: string) => {
 			expect(
 				document.body.querySelectorAll("input").length,
 				nhan,
@@ -515,7 +508,28 @@ describe("chi-doc", () => {
 			).toBe(0);
 			const la = lechNut().map((b) => b.textContent);
 			expect(la, `nut la tren trang chi doc ${nhan}`).toEqual([]);
+		};
+		for (const xem of ["bang", "bang-cot", "moc"]) {
+			await mo(
+				DV_MAU,
+				tham({ xemLoTrinh: xem, vongDoi: "tat-ca", viec: co.khoa }),
+			);
+			expect(
+				document.body.querySelector("[data-lo-trinh-chi-tiet-viec]"),
+				`ngan ho so chua mo o ${xem}`,
+			).not.toBeNull();
+			kiem(`${xem} + ngan ho so`);
+			await mo(DV_MAU, tham({ xemLoTrinh: xem, vongDoi: "tat-ca" }));
+			for (const gap of [
+				...document.body.querySelectorAll(
+					"[data-lo-trinh-khong-moc] button[aria-expanded=false], [data-lo-trinh-chi-tiet] button[aria-expanded=false]",
+				),
+			])
+				await bam(gap);
+			kiem(`${xem} + muc gap`);
 		}
+		await mo(DV_MAU, tham({ daBac: "true" }));
+		kiem("da bac");
 		expect(goiFetch).toHaveBeenCalledTimes(0);
 		expect(soGoiTrpc).toBe(0);
 		goiFetch.mockRestore();
