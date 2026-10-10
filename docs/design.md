@@ -154,7 +154,9 @@ không theo khu:
 | nháp, chưa bắt đầu | `neutral` |
 | đang chạy | `info` |
 
-Bảng này chưa sống trong mã: hôm nay mỗi khu tự khai ánh xạ của mình
-(`okr-status.tsx`, `kara/steps.tsx`, `attendee-list.tsx`, `okr/tien-do-kr.tsx`,
-`tai-lieu/bang-nguon.tsx`). Khai thêm một bản thứ sáu là sai; dời về một chỗ
-trong `packages/ui` là việc của NM3.
+Bảng sống ở `packages/ui/src/components/status-tone.ts` (`toneTheoNghia`), có
+bài kiểm giữ nó khớp bảng trên. Một khu chỉ khai trạng thái của mình thuộc nghĩa
+nào, không khai `tone`. Năm khu cũ còn tự khai ánh xạ (`okr-status.tsx`,
+`kara/steps.tsx`, `attendee-list.tsx`, `okr/tien-do-kr.tsx`,
+`tai-lieu/bang-nguon.tsx`); dời chúng về bảng là việc của NM3. Khai thêm một bản
+thứ sáu là sai.
