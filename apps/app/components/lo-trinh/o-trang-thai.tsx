@@ -39,11 +39,16 @@ export function ChamTrangThai({ v }: { v: CoTrangThai }) {
 	);
 }
 
+export function coTrangThaiPhu(m: LoTrinhMessages, v: CoTrangThai): boolean {
+	return (
+		v.trang_thai !== nhanNhom(m, v.nhom_trang_thai) &&
+		!CHU_CUNG_NGHIA.has(v.trang_thai)
+	);
+}
+
 export function OTrangThai({ v }: { v: CoTrangThai }) {
 	const m = loTrinhMessages(useLocale());
-	const phu =
-		v.trang_thai !== nhanNhom(m, v.nhom_trang_thai) &&
-		!CHU_CUNG_NGHIA.has(v.trang_thai);
+	const phu = coTrangThaiPhu(m, v);
 	return (
 		<span className="flex flex-col gap-0.5">
 			<ChamTrangThai v={v} />
