@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: bb44877e7221bd581e74fa97aef799edaa76d3b1
+verified_commit: 41450f8d4c95de9c5fd2f5e3cfeffc340c3841cd
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -134,3 +134,7 @@ Round 1: E1, E2, E3, E4, E5, E6 passed; all seven suite commands passed. No eval
 ### Re-pin lần 1 — 2026-10-10, do đỉnh nhánh K2d sau chữ ký Cổng 2 và gộp onehub b80172eca
 run_id: repin-20261010T020743Z-54995
 sha: bb44877e7221bd581e74fa97aef799edaa76d3b1 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-10, do đỉnh nhánh K2d sau gộp onehub fbad5961 (#351)
+run_id: repin-20261010T042119Z-36258
+sha: 41450f8d4c95de9c5fd2f5e3cfeffc340c3841cd · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
