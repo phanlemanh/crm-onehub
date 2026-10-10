@@ -4,11 +4,15 @@ export const TAI_NGUYEN = { s4: 's4', 'ghim-lai': 's4', 'duong-nen': 'duong-nen'
 const MOC_XA = '9999-12-31';
 
 const mocCua = (hangViec, slug) => hangViec?.hang?.find((h) => h.slug === slug)?.moc ?? MOC_XA;
-export const PHIEN_MANG_MOC = new Set(['kiem-cheo']);
-const mocDon = (d, hangViec) => (PHIEN_MANG_MOC.has(d.phien) && d.moc) || mocCua(hangViec, d.slug);
+export const PHIEN_XEP_CUOI = new Set(['kiem-cheo']);
 
 export function xepHang(donXin, hangViec) {
-  const khoa = (d) => [d.loai === 'ghim-lai' && d.mo_merge ? 0 : 1, mocDon(d, hangViec), d.luc];
+  const khoa = (d) => [
+    PHIEN_XEP_CUOI.has(d.phien) ? 1 : 0,
+    d.loai === 'ghim-lai' && d.mo_merge ? 0 : 1,
+    mocCua(hangViec, d.slug),
+    d.luc,
+  ];
   return [...donXin].sort((a, b) => {
     const ka = khoa(a);
     const kb = khoa(b);
