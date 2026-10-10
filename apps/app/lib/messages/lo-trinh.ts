@@ -64,7 +64,7 @@ const en = {
 		loTrinh: "Roadmap",
 		nhom: "Group",
 		theoLoi:
-			"This status comes from a note in the plan; no work record confirms it yet.",
+			"This status comes from a note in the plan; nobody has confirmed the work yet.",
 		lech: "Plan and reality disagree",
 		chiTiet: "Details",
 		thanhCongKhi: "Counts as done when",
@@ -86,8 +86,7 @@ const en = {
 		tepVangMoTa:
 			"The running CRM build does not carry the roadmap. Tell the product team.",
 		chuaCoKhoiTieuDe: "No roadmap here yet",
-		chuaCoKhoiMoTa:
-			"The roadmap has not been exported for this page yet. The product team will turn it on when they update their tools.",
+		chuaCoKhoiMoTa: "This page has no roadmap data yet. Tell the product team.",
 		khoiHongTieuDe: "Could not load the roadmap",
 		khoiHongMoTa:
 			"The roadmap data is damaged, so the page stays empty rather than show something wrong. Tell the product team.",
@@ -170,7 +169,7 @@ const vi: LoTrinhMessages = {
 		loTrinh: "Lộ trình",
 		nhom: "Nhóm",
 		theoLoi:
-			"Trạng thái này lấy từ ghi chú của kế hoạch, chưa có hồ sơ làm việc xác nhận.",
+			"Trạng thái này lấy từ ghi chú trong kế hoạch, chưa có ai xác nhận việc đã làm.",
 		lech: "Kế hoạch và thực tế đang lệch",
 		chiTiet: "Chi tiết",
 		thanhCongKhi: "Coi là thành công khi",
@@ -192,8 +191,7 @@ const vi: LoTrinhMessages = {
 		tepVangMoTa:
 			"Bản CRM đang chạy không mang theo lộ trình. Hãy báo đội sản phẩm.",
 		chuaCoKhoiTieuDe: "Chưa có lộ trình ở đây",
-		chuaCoKhoiMoTa:
-			"Lộ trình chưa được xuất cho trang này. Đội sản phẩm sẽ bật khi cập nhật công cụ.",
+		chuaCoKhoiMoTa: "Trang này chưa có dữ liệu lộ trình. Hãy báo đội sản phẩm.",
 		khoiHongTieuDe: "Không tải được lộ trình",
 		khoiHongMoTa:
 			"Dữ liệu lộ trình bị hỏng nên trang không hiện, để khỏi hiện sai. Hãy báo đội sản phẩm.",
