@@ -70,6 +70,7 @@ const en = {
 			write_workspace_profile: "Wrote up who we are",
 			"zalo-chi-doc": "Kept the Zalo chat read-only",
 			"okr-chi-tro-ly": "Kept the OKR session to the OKR assistant",
+			"tro-ly-okr-ngoai": "Kept OKR figures out of this conversation",
 			research_person: "Researched them on the web",
 			research_company: "Read the company's site",
 			enrich_company: "Looked up the company",
@@ -132,6 +133,16 @@ const en = {
 	},
 	khung: {
 		loiMoTa: "Check your connection and try again.",
+		khongCon: {
+			tieuDe: "This record no longer exists",
+			moTa: "It may have been deleted, or the link is wrong.",
+			dong: "Close",
+		},
+		khongQuyen: {
+			tieuDe: "You don't have access to this record",
+			moTa: "Your account cannot open it here. Ask a workspace admin for access.",
+			dong: "Close",
+		},
 	},
 	traCuu: {
 		nhoKara: "Ask Kara to look up",
@@ -201,6 +212,7 @@ const vi: KaraBanGhiMessages = {
 			write_workspace_profile: "Viết phần giới thiệu về mình",
 			"zalo-chi-doc": "Giữ cuộc trò chuyện Zalo ở chế độ chỉ đọc",
 			"okr-chi-tro-ly": "Giữ phiên OKR cho Kara · OKR",
+			"tro-ly-okr-ngoai": "Không đưa số liệu OKR vào cuộc trò chuyện này",
 			research_person: "Tìm hiểu họ trên web",
 			research_company: "Đọc trang của công ty",
 			enrich_company: "Tra cứu công ty",
@@ -263,6 +275,16 @@ const vi: KaraBanGhiMessages = {
 	},
 	khung: {
 		loiMoTa: "Kiểm tra kết nối rồi thử lại.",
+		khongCon: {
+			tieuDe: "Bản ghi này không còn",
+			moTa: "Có thể bản ghi đã bị xoá, hoặc đường dẫn không đúng.",
+			dong: "Đóng",
+		},
+		khongQuyen: {
+			tieuDe: "Bạn không có quyền xem bản ghi này",
+			moTa: "Tài khoản của bạn không mở được bản ghi này ở đây. Hãy nhờ người quản trị cấp quyền.",
+			dong: "Đóng",
+		},
 	},
 	traCuu: {
 		nhoKara: "Nhờ Kara tra cứu",

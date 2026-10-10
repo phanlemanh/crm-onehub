@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test";
-import { type BanNhap, banNhap } from "@crm/validation/okr-cuoc-soan";
+import {
+	type BanNhap,
+	banNhap,
+	LY_DO_TU_CHOI_NOP,
+} from "@crm/validation/okr-cuoc-soan";
 import { act } from "react";
 import {
 	useRecordSheetView,
@@ -341,7 +345,7 @@ describe("k2b-moc-dom", () => {
 							krv("a3", "Đối tác mới ký"),
 							krv("a4", "Đơn trả chậm"),
 						]),
-						kq("tu-choi", "so moi: 2031"),
+						kq("tu-choi", LY_DO_TU_CHOI_NOP.chuKyKhongLapKeHoach),
 					),
 					tinNop(
 						"n3",
@@ -360,7 +364,9 @@ describe("k2b-moc-dom", () => {
 		expect(he.map((o) => o.getAttribute("data-nop-khong-thanh"))).toEqual([
 			"tu-choi",
 		]);
-		expect(he[0]?.textContent ?? "").toBe(m.moc.nopKhongThanh("so moi: 2031"));
+		expect(he[0]?.textContent ?? "").toBe(
+			m.moc.nopKhongThanh(m.moc.lyDoTuChoi.chuKyKhongLapKeHoach),
+		);
 		expect(moc[1]?.textContent ?? "").toContain(m.moc.themKr("1"));
 	});
 

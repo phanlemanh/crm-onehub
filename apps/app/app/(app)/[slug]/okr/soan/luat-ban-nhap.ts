@@ -1,6 +1,7 @@
 import { docSoOkr } from "@crm/validation/okr-kr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import type {
+	CuocSoan,
 	DemDuaVao,
 	DongKr,
 	DongSoan,
@@ -176,6 +177,15 @@ export function krDuaVao(
 		});
 }
 
+export function donViCua(cuoc: CuocSoan): DonViSoan {
+	return {
+		cycleId: cuoc.cycleId,
+		level: cuoc.level,
+		divisionId: cuoc.divisionId,
+		departmentId: cuoc.departmentId,
+	};
+}
+
 function khoaDonCua(dv: DonViSoan): string {
 	if (dv.level === "bo-phan") return `bp:${dv.divisionId ?? ""}`;
 	if (dv.level === "phong-ban") return `pb:${dv.departmentId ?? ""}`;
@@ -187,6 +197,23 @@ export function duongTheoDonVi(slug: string, dv: DonViSoan): string {
 		[SEARCH_PARAM.okr.ky]: dv.cycleId,
 		[SEARCH_PARAM.okr.don]: khoaDonCua(dv),
 	});
+	return `/${slug}/okr/theo-don-vi?${q.toString()}`;
+}
+
+export function duongMoCuoc(
+	slug: string,
+	cuocSoanId: string,
+	dv: DonViSoan | null,
+): string {
+	const q = new URLSearchParams(
+		dv
+			? {
+					[SEARCH_PARAM.okr.ky]: dv.cycleId,
+					[SEARCH_PARAM.okr.don]: khoaDonCua(dv),
+				}
+			: {},
+	);
+	q.set(SEARCH_PARAM.record.stack, `soan:${cuocSoanId}`);
 	return `/${slug}/okr/theo-don-vi?${q.toString()}`;
 }
 

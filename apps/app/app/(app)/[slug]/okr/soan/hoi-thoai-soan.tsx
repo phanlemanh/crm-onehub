@@ -20,7 +20,13 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
+import { KaraMark } from "@crm/ui/components/kara";
 import { KaraComposer } from "@crm/ui/components/kara/composer";
+import {
+	KaraDockBody,
+	KaraDockFooter,
+	KaraDockHeader,
+} from "@crm/ui/components/kara/dock";
 import { KaraRetry, KaraState } from "@crm/ui/components/kara/state";
 import { type KaraStep, KaraSteps } from "@crm/ui/components/kara/steps";
 import {
@@ -206,7 +212,9 @@ function TinNhan({
 					<span data-nop-khong-thanh={hong.loai}>
 						{hong.loai === "khong-doc"
 							? m.moc.nopKhongDoc
-							: m.moc.nopKhongThanh(hong.lyDo)}
+							: m.moc.nopKhongThanh(
+									hong.lyDo ? m.moc.lyDoTuChoi[hong.lyDo] : null,
+								)}
 					</span>
 				</KaraSystemLine>,
 			);
@@ -385,6 +393,7 @@ export function HoiThoaiSoan({
 	moMoc: (moc: MocNop) => void;
 }) {
 	const m = okrSoanMessages(useLocale());
+	const mui = useMessages();
 	const { slug } = useParams<{ slug: string }>();
 	const tuKara = s.transcript.filter((t) => !t.mine);
 	const cuoiKara = tuKara.at(-1)?.id ?? null;
@@ -396,80 +405,96 @@ export function HoiThoaiSoan({
 	const rong = s.transcript.length === 0 && !s.dangTraLoi;
 	return (
 		<>
-			{thieuBoiCanh ? (
-				<Alert variant="warning" role="note" data-dai="thieu-boi-canh">
-					<AlertTitle>{m.hoiThoai.thieuBoiCanh}</AlertTitle>
-					<AlertDescription>{m.hoiThoai.thieuBoiCanhMoTa}</AlertDescription>
-					{quanTri ? (
-						<AlertAction>
-							<Button asChild size="sm" variant="outline">
-								<Link href={`/${slug}/tai-lieu`}>{m.hoiThoai.toiKho}</Link>
-							</Button>
-						</AlertAction>
-					) : null}
-				</Alert>
-			) : null}
-			{lyDo ? (
-				<Alert variant="warning" role="note" data-dai="ly-do">
-					<AlertTitle>{m.lyDo[lyDo]}</AlertTitle>
-				</Alert>
-			) : null}
-			{s.cuocDong ? (
-				<Alert role="note" data-dai="cuoc-dong">
-					<AlertTitle>{m.hoiThoai.cuocDong}</AlertTitle>
-					<AlertDescription>{m.hoiThoai.cuocDongMoTa}</AlertDescription>
-				</Alert>
-			) : null}
-			<KaraTranscript
-				empty={
-					rong && cuoc.soLuot > 0
-						? {
-								title: m.hoiThoai.khongDocLai,
-								description: m.hoiThoai.khongDocLaiMoTa,
-							}
-						: rong
-							? { description: m.hoiThoai.moDau }
-							: undefined
-				}
-			>
-				{s.transcript.map((tin) => (
-					<TinNhan
-						key={tin.id}
-						tin={tin}
-						mocs={mocs}
-						khongThanh={khongThanh}
-						goiY={tin.id === cuoiKara && !s.khoaSoan}
-						s={s}
-						m={m}
-						moMoc={moMoc}
-					/>
-				))}
+			<KaraDockHeader>
+				<KaraMark
+					scope={
+						<span className="tabular-nums">
+							{m.man.luot(String(cuoc.soLuot), String(cuoc.tranLuot))}
+						</span>
+					}
+				/>
 				{s.dangTraLoi ? (
-					<KaraTurn from="kara">
-						<KaraState
-							kind="working"
-							label={cuoiKara ? m.hoiThoai.dangSoan : m.hoiThoai.moDau}
+					<KaraState kind="working" label={mui.karaKhung.dangSoan} />
+				) : null}
+			</KaraDockHeader>
+			<KaraDockBody scroll={false}>
+				{thieuBoiCanh ? (
+					<Alert variant="warning" role="note" data-dai="thieu-boi-canh">
+						<AlertTitle>{m.hoiThoai.thieuBoiCanh}</AlertTitle>
+						<AlertDescription>{m.hoiThoai.thieuBoiCanhMoTa}</AlertDescription>
+						{quanTri ? (
+							<AlertAction>
+								<Button asChild size="sm" variant="outline">
+									<Link href={`/${slug}/tai-lieu`}>{m.hoiThoai.toiKho}</Link>
+								</Button>
+							</AlertAction>
+						) : null}
+					</Alert>
+				) : null}
+				{lyDo ? (
+					<Alert variant="warning" role="note" data-dai="ly-do">
+						<AlertTitle>{m.lyDo[lyDo]}</AlertTitle>
+					</Alert>
+				) : null}
+				{s.cuocDong ? (
+					<Alert role="note" data-dai="cuoc-dong">
+						<AlertTitle>{m.hoiThoai.cuocDong}</AlertTitle>
+						<AlertDescription>{m.hoiThoai.cuocDongMoTa}</AlertDescription>
+					</Alert>
+				) : null}
+				<KaraTranscript
+					empty={
+						rong && cuoc.soLuot > 0
+							? {
+									title: m.hoiThoai.khongDocLai,
+									description: m.hoiThoai.khongDocLaiMoTa,
+								}
+							: rong
+								? { description: m.hoiThoai.moDau }
+								: undefined
+					}
+				>
+					{s.transcript.map((tin) => (
+						<TinNhan
+							key={tin.id}
+							tin={tin}
+							mocs={mocs}
+							khongThanh={khongThanh}
+							goiY={tin.id === cuoiKara && !s.khoaSoan}
+							s={s}
+							m={m}
+							moMoc={moMoc}
 						/>
-					</KaraTurn>
-				) : null}
-				{s.hong || s.dangThu ? <LuotLoi s={s} m={m} loiMo={loiMo} /> : null}
-				{s.lyDoLuot ? (
-					<div data-tu-choi={s.lyDoLuot}>
-						<KaraState kind="off" reason={m.lyDoLuot[s.lyDoLuot]} />
-					</div>
-				) : null}
-				{s.chuaCauHinh ? (
-					<div data-tu-choi="chua-cau-hinh">
-						<KaraState kind="off" reason={m.nut.chuaCauHinh} />
-					</div>
-				) : null}
-				{s.quyetBang.length > 0 ? (
-					<KaraSystemLine>
-						{m.heThong.seGui(chuQuyet(m, s.quyetBang))}
-					</KaraSystemLine>
-				) : null}
-			</KaraTranscript>
-			<OSoan s={s} cuoc={cuoc} m={m} moCuoc={moCuoc} />
+					))}
+					{s.dangTraLoi ? (
+						<KaraTurn from="kara">
+							<KaraState
+								kind="working"
+								label={cuoiKara ? m.hoiThoai.dangSoan : m.hoiThoai.moDau}
+							/>
+						</KaraTurn>
+					) : null}
+					{s.hong || s.dangThu ? <LuotLoi s={s} m={m} loiMo={loiMo} /> : null}
+					{s.lyDoLuot ? (
+						<div data-tu-choi={s.lyDoLuot}>
+							<KaraState kind="off" reason={m.lyDoLuot[s.lyDoLuot]} />
+						</div>
+					) : null}
+					{s.chuaCauHinh ? (
+						<div data-tu-choi="chua-cau-hinh">
+							<KaraState kind="off" reason={m.nut.chuaCauHinh} />
+						</div>
+					) : null}
+					{s.quyetBang.length > 0 ? (
+						<KaraSystemLine>
+							{m.heThong.seGui(chuQuyet(m, s.quyetBang))}
+						</KaraSystemLine>
+					) : null}
+				</KaraTranscript>
+			</KaraDockBody>
+			<KaraDockFooter>
+				<OSoan s={s} cuoc={cuoc} m={m} moCuoc={moCuoc} />
+			</KaraDockFooter>
 		</>
 	);
 }

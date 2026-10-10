@@ -1029,10 +1029,12 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `xuHuongKr` — đọc thẳng `okr.router.ts` để lấy danh sách hiện hành, dòng này
   không phải nguồn thật. Ba thủ tục người dùng không đi qua cùng một cổng
   quyền. `troLySanSang` (`GET .../objectives/{objectiveId}/assistant`) và
-  `troLyDeXuat` (`POST .../assistant/run`) đòi `assertSuaMucTieu` hoặc
-  `assertSuaKr` trên đúng đích được truyền — toàn hay không, không có tập con:
-  không sửa được đích thì `ForbiddenException` luôn, không có KR nào để lọc
-  xuống. Cả ba thủ tục — `troLySanSang`, `troLyDeXuat` và `troLyDanhSach` —
+  `troLyDeXuat` (`POST .../assistant/run`) kiểm quyền trên đích được truyền
+  (`assertSuaDich`): kèm `keyResultId` thì `assertSuaKr` trên đúng KR đó; cho cả
+  Mục tiêu thì người gọi phải sửa được đơn vị (`suaDuocDonVi`) hoặc là chủ ít nhất
+  một KR của Mục tiêu (lượt `kara-gop-y-luot-2`, Q2) — Kara đọc cả Mục tiêu, còn
+  `troLyDanhSach` lọc góp ý xuống tập KR người đó sửa được. Không thoả thì
+  `ForbiddenException(khongSuaDuocDonVi)`. Cả ba thủ tục — `troLySanSang`, `troLyDeXuat` và `troLyDanhSach` —
   còn đòi nấc của đơn vị (`nacCuaDonVi`) đang là `bat`; không đạt thì trả về
   lý do (`LyDoKhongSanSang`), không phải một lỗi 403. `troLyDanhSach`
   (`GET .../assistant/suggestions`) không cùng cổng quyền với hai thủ tục
@@ -1343,8 +1345,13 @@ stages.
 - **Behaviour follows `kind`, never a stage id.** `OPEN` · `WON` · `LOST` decide
   whether a deal is closed, whether a reason is required, and what the Overview, the
   OKR metric and the agent count. The rules live once, in `@crm/db/giai-doan`.
-  `GIAI_DOAN_GOC` names the seven original ids for the seed and tests only — product
-  code that branches on one of them is caught by the `khong-re-theo-ten` ruler.
+  `GIAI_DOAN_GOC` names the seven original ids for the seed and tests, with one named
+  product exception: `@crm/telemetry/allowlist` (`permittedDealStage`, `DEAL_STAGE_KEYS`)
+  keys the anonymous `deals_by_stage` count on those seven ids so it stays comparable
+  across installs, and folds every stage an admin adds into `other_<kind>`. Any other
+  product code that branches on an original id is caught by the `khong-re-theo-ten`
+  ruler, which scans `packages/telemetry/src` too and allows only the constant's name in
+  `allowlist.ts` — a literal id there is still caught.
 - **Every stage move goes through `DealsService.chuyenGiaiDoanTrongTx`**: one
   `STAGE_CHANGE` activity and one `deal.stage.changed` event per deal, inside the
   caller's transaction. `setStage`, `bulkSetStage` and a delete that moves deals all

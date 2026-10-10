@@ -43,6 +43,7 @@ import {
 	savingValue,
 } from "@/components/crm/inline-field";
 import { OwnerCell } from "@/components/crm/owner-cell";
+import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { ContactSocials } from "@/components/crm/social-links";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { Timeline } from "@/components/crm/timeline/timeline";
@@ -76,8 +77,13 @@ import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { ContactPlans } from "./contact-plans";
-import { RecordActions } from "./record-actions";
-import { DealAmount, MetaLine, RecordSheetFrame } from "./record-parts";
+import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
+import {
+	DealAmount,
+	lyDoLoi,
+	MetaLine,
+	RecordSheetFrame,
+} from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
 
 type Contact = RouterOutputs["contacts"]["byId"];
@@ -164,6 +170,7 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 		<RecordSheetFrame
 			loading={query.isPending}
 			error={query.error?.message ?? null}
+			lyDo={lyDoLoi(query.error)}
 			onRetry={() => void query.refetch()}
 			title={contact ? contactName(contact) : m.contact.fallbackTitle}
 			description={
@@ -245,42 +252,45 @@ export function ContactSheet({ contactId }: { contactId: string }) {
 			}
 			stats={
 				contact ? (
-					<DetailSheetStats>
-						<DetailSheetStat label={m.contact.fields.company}>
-							{contact.company ? (
-								<CompanyStat company={contact.company} />
-							) : (
-								<EmptyCellValue />
-							)}
-						</DetailSheetStat>
-						<DetailSheetStat label={m.contact.fields.email}>
-							{contact.email ? (
-								<a
-									href={`mailto:${contact.email}`}
-									className="underline-offset-2 hover:underline"
-								>
-									{contact.email}
-								</a>
-							) : (
-								<EmptyCellValue />
-							)}
-						</DetailSheetStat>
-						<DetailSheetStat label={m.contact.fields.phone}>
-							{contact.phone ? (
-								<a
-									href={`tel:${contact.phone}`}
-									className="underline-offset-2 hover:underline"
-								>
-									{contact.phone}
-								</a>
-							) : (
-								<EmptyCellValue />
-							)}
-						</DetailSheetStat>
-						<DetailSheetStat label={m.contact.fields.owner}>
-							<OwnerCell owner={contact.owner} />
-						</DetailSheetStat>
-					</DetailSheetStats>
+					<>
+						{contact.archivedAt ? (
+							<DaiLuuTru
+								record={{ kind: "contact", id: contact.id }}
+								archivedAt={contact.archivedAt}
+							/>
+						) : null}
+						<DetailSheetStats>
+							<DetailSheetStat label={m.contact.fields.company}>
+								{contact.company ? (
+									<CompanyStat company={contact.company} />
+								) : (
+									<EmptyCellValue />
+								)}
+							</DetailSheetStat>
+							<DetailSheetStat label={m.contact.fields.email}>
+								{contact.email ? (
+									<a
+										href={`mailto:${contact.email}`}
+										className="underline-offset-2 hover:underline"
+									>
+										{contact.email}
+									</a>
+								) : (
+									<EmptyCellValue />
+								)}
+							</DetailSheetStat>
+							<DetailSheetStat label={m.contact.fields.phone}>
+								{contact.phone ? (
+									<SoDienThoai so={contact.phone} goi />
+								) : (
+									<EmptyCellValue />
+								)}
+							</DetailSheetStat>
+							<DetailSheetStat label={m.contact.fields.owner}>
+								<OwnerCell owner={contact.owner} />
+							</DetailSheetStat>
+						</DetailSheetStats>
+					</>
 				) : null
 			}
 			tabs={tabs}
@@ -381,123 +391,126 @@ function ContactOverview({ contact: banDau }: { contact: Contact }) {
 	const isSaving = savingField(update);
 
 	return (
-		<DetailSheetBody>
-			<DetailSheetSection
-				title={m.contact.details}
-				action={
-					<div className="flex items-center gap-2">
-						<FactGroupLabel facts={deXuatCho} />
-						<FieldsCog kind="contact" />
-					</div>
-				}
-			>
-				<DetailSheetProperties>
-					<InlineField
-						label={m.contact.fields.firstName}
-						value={contact.firstName}
-						saving={isSaving("firstName")}
-						onSave={(firstName) => firstName && save({ firstName })}
-					/>
-					<InlineField
-						label={m.contact.fields.lastName}
-						value={contact.lastName}
-						saving={isSaving("lastName")}
-						onSave={(lastName) => save({ lastName })}
-					/>
-					<InlineField
-						label={m.contact.fields.title}
-						value={contact.title}
-						placeholder={m.contact.fields.titlePlaceholder}
-						saving={isSaving("title")}
-						onSave={(title) => save({ title })}
-						{...agentProps("title")}
-					/>
-					<InlineField
-						label={m.contact.fields.email}
-						value={contact.email}
-						type="email"
-						saving={isSaving("email")}
-						onSave={(email) => save({ email })}
-					/>
-					<InlineField
-						label={m.contact.fields.phone}
-						value={contact.phone}
-						type="tel"
-						saving={isSaving("phone")}
-						onSave={(phone) => save({ phone })}
-					/>
-					<InlineField
-						label={m.contact.fields.linkedin}
-						value={contact.linkedinUrl}
-						type="url"
-						saving={isSaving("linkedinUrl")}
-						onSave={(linkedinUrl) => save({ linkedinUrl })}
-						{...agentProps("linkedinUrl")}
-					/>
-					<InlineField
-						label={m.contact.fields.x}
-						value={contact.twitterUrl}
-						type="url"
-						saving={isSaving("twitterUrl")}
-						onSave={(twitterUrl) => save({ twitterUrl })}
-						{...agentProps("twitterUrl")}
-					/>
-					<InlineField
-						label={m.contact.fields.github}
-						value={contact.githubUrl}
-						type="url"
-						saving={isSaving("githubUrl")}
-						onSave={(githubUrl) => save({ githubUrl })}
-						{...agentProps("githubUrl")}
-					/>
-					<InlineCompanyField
-						value={contact.company?.id ?? NONE}
-						company={contact.company}
-						saving={isSaving("companyId")}
-						none={{ value: NONE, label: m.contact.fields.noCompany }}
-						onSave={(companyId) =>
-							save({ companyId: companyId === NONE ? null : companyId })
-						}
-					/>
-					<InlineSelectField
-						label={m.contact.fields.owner}
-						value={contact.owner?.id ?? NONE}
-						options={[
-							{ value: NONE, label: m.contact.fields.unassigned },
-							...(users.data ?? []).map((user) => ({
-								value: user.id,
-								label: user.name,
-							})),
-						]}
-						onSave={(ownerId) =>
-							save({ ownerId: ownerId === NONE ? null : ownerId })
-						}
-					/>
-					<RecordFields
-						fields={contact.fields}
-						saving={isSavingField}
-						onSave={saveFields}
-					/>
-				</DetailSheetProperties>
-			</DetailSheetSection>
-
-			<ContactPlans contactId={contact.id} />
-
-			{contact.brief ? <Background brief={contact.brief} /> : null}
-
-			<WeKnowThem
-				relationship={contact.relationship}
-				contactName={contactName(contact)}
-			/>
-
-			{hasContactLinks(contact) ? (
-				<DetailSheetSection title={m.section.links}>
-					<ContactSocials contact={contact} />
+		<KhoaLuuTru khoa={contact.archivedAt !== null}>
+			<DetailSheetBody>
+				<DetailSheetSection
+					title={m.contact.details}
+					action={
+						<div className="flex items-center gap-2">
+							<FactGroupLabel facts={deXuatCho} />
+							{contact.archivedAt ? null : <FieldsCog kind="contact" />}
+						</div>
+					}
+				>
+					<DetailSheetProperties>
+						<InlineField
+							label={m.contact.fields.firstName}
+							value={contact.firstName}
+							saving={isSaving("firstName")}
+							onSave={(firstName) => firstName && save({ firstName })}
+						/>
+						<InlineField
+							label={m.contact.fields.lastName}
+							value={contact.lastName}
+							saving={isSaving("lastName")}
+							onSave={(lastName) => save({ lastName })}
+						/>
+						<InlineField
+							label={m.contact.fields.title}
+							value={contact.title}
+							placeholder={m.contact.fields.titlePlaceholder}
+							saving={isSaving("title")}
+							onSave={(title) => save({ title })}
+							{...agentProps("title")}
+						/>
+						<InlineField
+							label={m.contact.fields.email}
+							value={contact.email}
+							type="email"
+							saving={isSaving("email")}
+							onSave={(email) => save({ email })}
+						/>
+						<InlineField
+							label={m.contact.fields.phone}
+							value={contact.phone}
+							type="tel"
+							render={(phone) => <SoDienThoai so={phone} />}
+							saving={isSaving("phone")}
+							onSave={(phone) => save({ phone })}
+						/>
+						<InlineField
+							label={m.contact.fields.linkedin}
+							value={contact.linkedinUrl}
+							type="url"
+							saving={isSaving("linkedinUrl")}
+							onSave={(linkedinUrl) => save({ linkedinUrl })}
+							{...agentProps("linkedinUrl")}
+						/>
+						<InlineField
+							label={m.contact.fields.x}
+							value={contact.twitterUrl}
+							type="url"
+							saving={isSaving("twitterUrl")}
+							onSave={(twitterUrl) => save({ twitterUrl })}
+							{...agentProps("twitterUrl")}
+						/>
+						<InlineField
+							label={m.contact.fields.github}
+							value={contact.githubUrl}
+							type="url"
+							saving={isSaving("githubUrl")}
+							onSave={(githubUrl) => save({ githubUrl })}
+							{...agentProps("githubUrl")}
+						/>
+						<InlineCompanyField
+							value={contact.company?.id ?? NONE}
+							company={contact.company}
+							saving={isSaving("companyId")}
+							none={{ value: NONE, label: m.contact.fields.noCompany }}
+							onSave={(companyId) =>
+								save({ companyId: companyId === NONE ? null : companyId })
+							}
+						/>
+						<InlineSelectField
+							label={m.contact.fields.owner}
+							value={contact.owner?.id ?? NONE}
+							options={[
+								{ value: NONE, label: m.contact.fields.unassigned },
+								...(users.data ?? []).map((user) => ({
+									value: user.id,
+									label: user.name,
+								})),
+							]}
+							onSave={(ownerId) =>
+								save({ ownerId: ownerId === NONE ? null : ownerId })
+							}
+						/>
+						<RecordFields
+							fields={contact.fields}
+							saving={isSavingField}
+							onSave={saveFields}
+						/>
+					</DetailSheetProperties>
 				</DetailSheetSection>
-			) : null}
 
-			<WebsiteActivity contactId={contact.id} />
-		</DetailSheetBody>
+				<ContactPlans contactId={contact.id} />
+
+				{contact.brief ? <Background brief={contact.brief} /> : null}
+
+				<WeKnowThem
+					relationship={contact.relationship}
+					contactName={contactName(contact)}
+				/>
+
+				{hasContactLinks(contact) ? (
+					<DetailSheetSection title={m.section.links}>
+						<ContactSocials contact={contact} />
+					</DetailSheetSection>
+				) : null}
+
+				<WebsiteActivity contactId={contact.id} />
+			</DetailSheetBody>
+		</KhoaLuuTru>
 	);
 }
 

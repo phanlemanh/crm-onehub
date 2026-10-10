@@ -33,6 +33,8 @@ import {
 	BulkActionsMenu,
 	BulkDeleteDialog,
 	BulkOwnerMenu,
+	baoHoanTacLoat,
+	baoLuuTruLoat,
 	reportBulk,
 } from "@/components/crm/bulk-actions";
 import { useGiaiDoan } from "@/lib/giai-doan";
@@ -100,15 +102,30 @@ export function DealsBulkActions({
 		}),
 	);
 
+	const hoanTac = useMutation(
+		trpc.deals.bulkRestore.mutationOptions({
+			onSuccess: async (result) => {
+				await cache.deal();
+				baoHoanTacLoat({
+					result,
+					restored: (count) => m.bulk.restored(deals(count, locale)),
+					locale,
+				});
+			},
+			onError: () => toast.error(c.bulk.hoanTacLoi),
+		}),
+	);
+
 	const archive = useMutation(
 		trpc.deals.bulkArchive.mutationOptions({
 			onSuccess: async (result, variables) => {
 				await cache.removedMany({ kind: "deal", ids: variables.ids });
-				reportBulk(
+				baoLuuTruLoat({
 					result,
-					(count) => m.bulk.archived(deals(count, locale)),
+					done: (count) => m.bulk.archived(deals(count, locale)),
 					locale,
-				);
+					onHoanTac: () => hoanTac.mutate({ ids: variables.ids }),
+				});
 				onDone();
 			},
 			onError,
@@ -175,6 +192,7 @@ export function DealsBulkActions({
 					title={m.bulk.confirmDelete(deals(ids.length, locale))}
 					description={m.bulk.deleteWarning}
 					onConfirm={() => purge.mutate({ ids })}
+					pending={purge.isPending}
 				/>
 			</>
 		);

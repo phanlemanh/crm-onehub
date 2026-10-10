@@ -4,7 +4,11 @@ import {
 	TRANG_THAI_GIU_KHOA,
 	TRO_LY_OKR_KHOA,
 } from "@crm/db/okr-tro-ly-danh-muc";
-import { BAN_NHAP_TRAN, type BuocCat } from "@crm/validation/okr-cuoc-soan";
+import {
+	BAN_NHAP_TRAN,
+	type BuocCat,
+	LY_DO_TU_CHOI_NOP,
+} from "@crm/validation/okr-cuoc-soan";
 import type { MaLoaiBanNhap } from "@crm/validation/okr-kiem-ban-nhap";
 import { OKR_PHIEN_SOAN } from "@crm/validation/okr-phien-soan";
 
@@ -47,15 +51,7 @@ export const TRO_LY_OKR_SOAN = {
 		tenCay: "PHIEN_DO_TEN_CAY",
 	},
 	vaiDuocVao: ["owner", "admin", "member", "okr"],
-	tuChoi: {
-		cuocKhongThuocPhien: "cuoc khong thuoc phien",
-		cuocKhongDang: "cuoc khong con dang",
-		donViChuaBat: "don-vi-chua-bat",
-		saiMucDich: "phien khong phai okr-soan",
-		chuKyKhongLapKeHoach: "chu ky khong o pha lap ke hoach",
-		dongTrungKhoa: "dong trung khoa",
-		phienKhongSong: "phien khong con song",
-	},
+	tuChoi: LY_DO_TU_CHOI_NOP,
 	choGanPhien: { ms: 5 * SECOND_MS, nhipMs: SECOND_MS / 4 },
 	tinhNang: "okr.soan" satisfies TinhNang,
 	trangThaiDaQuyet: TRANG_THAI_DA_NHAN,

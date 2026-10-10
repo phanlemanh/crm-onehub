@@ -1,0 +1,1 @@
+driver: do-man.mjs (playwright qua mot-luot.sh); khong co browser tool network rieng. Dong DUNG them-tab/bang-1440 khong bao request app fail.

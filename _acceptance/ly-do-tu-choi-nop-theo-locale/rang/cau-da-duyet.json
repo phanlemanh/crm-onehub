@@ -1,0 +1,20 @@
+{
+	"vi": {
+		"cuocKhongThuocPhien": "cuộc soạn này thuộc một cuộc trò chuyện khác",
+		"cuocKhongDang": "cuộc soạn đã đóng",
+		"donViChuaBat": "đơn vị chưa bật Kara soạn OKR",
+		"saiMucDich": "cuộc trò chuyện này không dùng để soạn OKR",
+		"chuKyKhongLapKeHoach": "chu kỳ đã rời pha «Lập kế hoạch»",
+		"dongTrungKhoa": "bản nháp có hai dòng trùng nhau",
+		"phienKhongSong": "cuộc trò chuyện đã hết hạn — mở lại trang soạn"
+	},
+	"en": {
+		"cuocKhongThuocPhien": "this drafting session belongs to another conversation",
+		"cuocKhongDang": "the drafting session has closed",
+		"donViChuaBat": "Kara drafting isn't turned on for this unit",
+		"saiMucDich": "this conversation isn't for drafting OKRs",
+		"chuKyKhongLapKeHoach": "the cycle has left Planning",
+		"dongTrungKhoa": "the draft has two duplicate lines",
+		"phienKhongSong": "the conversation has expired — reopen the drafting page"
+	}
+}

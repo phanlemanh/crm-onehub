@@ -11,6 +11,7 @@ import {
 	type BanNhap,
 	KET_QUA_NOP,
 	laChoGiuPhien,
+	lyDoTuChoiGhi,
 } from "@crm/validation/okr-cuoc-soan";
 import {
 	type DongKiemSoan,
@@ -40,7 +41,7 @@ const GIU = TRO_LY_OKR_SOAN.giuNguyen;
 
 export const ketQuaNop = z.object({
 	ketQua: z.enum(KET_QUA_NOP),
-	lyDo: z.string(),
+	lyDo: lyDoTuChoiGhi,
 	soDong: z.number().int(),
 	biLoai: z.array(dongBiLoaiSoan),
 	giuNguyen: z.array(
@@ -71,7 +72,7 @@ type DaQuyet = {
 
 const TU_CHOI = TRO_LY_OKR_SOAN.tuChoi;
 
-const tuChoi = (lyDo: string): KetQuaNop => ({
+const tuChoi = (lyDo: (typeof TU_CHOI)[keyof typeof TU_CHOI]): KetQuaNop => ({
 	ketQua: "tu-choi",
 	lyDo,
 	soDong: 0,

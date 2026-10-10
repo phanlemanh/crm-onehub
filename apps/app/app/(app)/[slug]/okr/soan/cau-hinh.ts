@@ -5,7 +5,6 @@ export const SOAN_UI = {
 	hoiLuongMs: 3_000,
 	khoHep: "(max-width: 1023px)",
 	noiMs: 2_000,
-	ocHoiThoai: { macDinhPx: 380, toiThieuPx: 300, toiDaPhanTram: "50" },
 	khoaSo: "okr-soan-so:",
 	luotMoDau:
 		"Bắt đầu cuộc soạn: nói điều bạn đã biết về đơn vị này và hỏi tôi.",

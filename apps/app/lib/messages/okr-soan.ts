@@ -1,4 +1,5 @@
 import type { Locale } from "@crm/ui/lib/locale";
+import type { LyDoTuChoiNop } from "@crm/validation/okr-cuoc-soan";
 import type { MaLyDoHong } from "@/lib/cua-okr-config";
 import type { RouterOutputs } from "@/lib/trpc/types";
 
@@ -282,11 +283,15 @@ const vi = {
 	},
 	trang: {
 		tieuDe: "Soạn OKR",
-		veTheoDonVi: "Theo đơn vị",
-		thanhKeo: "Đổi cỡ hội thoại và bản nháp",
 		khongMo: "mở cuộc soạn",
 		khongMoMoTa: "Cuộc này không còn, hoặc bạn không xem được nó.",
 		chuaCauHinh: "Quản trị cần nối Kara · OKR trong Cài đặt trước khi soạn.",
+		hoiDong: {
+			tieuDe: "Kara đang soạn. Đóng khung?",
+			than: "Lượt này vẫn chạy khi bạn đóng. Mở lại cuộc soạn để xem bản nháp mới.",
+			nut: "Đóng",
+			thoi: "Ở lại",
+		},
 	},
 	dong: {
 		tieuDe: "Bản nháp",
@@ -328,6 +333,15 @@ const vi = {
 				? `Kara nộp bản nháp chưa được — ${lyDo}`
 				: "Kara nộp bản nháp chưa được",
 		nopKhongDoc: "Kara nộp bản nháp nhưng không đọc được kết quả",
+		lyDoTuChoi: {
+			cuocKhongThuocPhien: "cuộc soạn này thuộc một cuộc trò chuyện khác",
+			cuocKhongDang: "cuộc soạn đã đóng",
+			donViChuaBat: "đơn vị chưa bật Kara soạn OKR",
+			saiMucDich: "cuộc trò chuyện này không dùng để soạn OKR",
+			chuKyKhongLapKeHoach: "chu kỳ đã rời pha «Lập kế hoạch»",
+			dongTrungKhoa: "bản nháp có hai dòng trùng nhau",
+			phienKhongSong: "cuộc trò chuyện đã hết hạn — mở lại trang soạn",
+		} satisfies Record<LyDoTuChoiNop, string>,
 	},
 	buoc: {
 		read_file: "đọc tài liệu của đơn vị",
@@ -629,12 +643,16 @@ const en: OkrSoanMessages = {
 	},
 	trang: {
 		tieuDe: "Draft OKRs",
-		veTheoDonVi: "By unit",
-		thanhKeo: "Resize conversation and draft",
 		khongMo: "open this drafting session",
 		khongMoMoTa: "The session is gone, or you can't see it.",
 		chuaCauHinh:
 			"An admin needs to connect Kara · OKR in Settings before drafting.",
+		hoiDong: {
+			tieuDe: "Kara is drafting. Close the panel?",
+			than: "This turn keeps running when you close. Reopen the session to see the new draft.",
+			nut: "Close",
+			thoi: "Stay",
+		},
 	},
 	dong: {
 		tieuDe: "Draft",
@@ -677,6 +695,16 @@ const en: OkrSoanMessages = {
 				? `Kara could not submit the draft — ${lyDo}`
 				: "Kara could not submit the draft",
 		nopKhongDoc: "Kara submitted the draft but the result could not be read",
+		lyDoTuChoi: {
+			cuocKhongThuocPhien:
+				"this drafting session belongs to another conversation",
+			cuocKhongDang: "the drafting session has closed",
+			donViChuaBat: "Kara drafting isn't turned on for this unit",
+			saiMucDich: "this conversation isn't for drafting OKRs",
+			chuKyKhongLapKeHoach: "the cycle has left Planning",
+			dongTrungKhoa: "the draft has two duplicate lines",
+			phienKhongSong: "the conversation has expired — reopen the drafting page",
+		} satisfies Record<LyDoTuChoiNop, string>,
 	},
 	buoc: {
 		read_file: "read the unit's documents",

@@ -29,6 +29,7 @@ import { NoiZaloChoNguoiMoiMau } from "./_modules/noi-zalo-cho-nguoi-moi";
 import { OkrToChucVaMau } from "./_modules/okr-to-chuc-va";
 import { SoanOkrCungTroLyMau } from "./_modules/soan-okr-cung-tro-ly";
 import { SoanOkrTrangRiengMau } from "./_modules/soan-okr-trang-rieng";
+import { SoanOkrTrongKhungMau } from "./_modules/soan-okr-trong-khung";
 import { SuaAnChuKyOkrMau } from "./_modules/sua-an-chu-ky-okr";
 import { ThanhVienVaoDungMau } from "./_modules/thanh-vien-vao-dung";
 import { ToChucDanhSachChiTietMau } from "./_modules/to-chuc-danh-sach-chi-tiet";
@@ -79,6 +80,7 @@ const BANG_GHEP = {
 	"nhac-qua-zalo": NhacQuaZaloMau,
 	"soan-okr-cung-tro-ly": SoanOkrCungTroLyMau,
 	"soan-okr-trang-rieng": SoanOkrTrangRiengMau,
+	"soan-okr-trong-khung": SoanOkrTrongKhungMau,
 	"noi-zalo-cho-nguoi-moi": NoiZaloChoNguoiMoiMau,
 	"sua-an-chu-ky-okr": SuaAnChuKyOkrMau,
 	"thanh-vien-vao-dung": ThanhVienVaoDungMau,

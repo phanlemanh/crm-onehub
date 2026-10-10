@@ -138,7 +138,7 @@ const vi = {
 	emptyArchived: "Chưa có thoả thuận nào đã lưu trữ.",
 	search: "Tìm thoả thuận theo tên hoặc công ty…",
 	created: (name: string) => `Đã thêm ${name}.`,
-	archivedToggle: "Lưu trữ",
+	archivedToggle: "Đã lưu trữ",
 	meta: {
 		count: (n: string) => `${n} thoả thuận`,
 		openPipeline: "đang mở",

@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+} from "bun:test";
 import { db } from "@crm/db";
 import { DIRECT_KINDS } from "@crm/db/agent-tasks";
 import {
@@ -279,6 +287,44 @@ describe("scheduleTask", () => {
 	});
 });
 
+const AUTOVACUUM_OFF = "autovacuum_enabled=false";
+type RestoredReloptions = { value: string[] | null | undefined };
+
+const restoredReloptions: RestoredReloptions = { value: undefined };
+
+async function reloptions(): Promise<string[] | null> {
+	const [row] = await db.$queryRaw<{ reloptions: string[] | null }[]>`
+		SELECT reloptions FROM pg_class WHERE relname = 'agentTask'
+	`;
+	return row?.reloptions ?? null;
+}
+
+async function autovacuumOff(): Promise<string[] | null> {
+	const before = await reloptions();
+	await db.$executeRawUnsafe(`ALTER TABLE "agentTask" SET (${AUTOVACUUM_OFF})`);
+	return before;
+}
+
+async function autovacuumRestore(before: string[] | null): Promise<void> {
+	const earlier = before?.find((o) => o.startsWith("autovacuum_enabled="));
+	await db.$executeRawUnsafe(
+		earlier
+			? `ALTER TABLE "agentTask" SET (${earlier})`
+			: `ALTER TABLE "agentTask" RESET (autovacuum_enabled)`,
+	);
+}
+
+let reloptionsBefore: string[] | null = null;
+
+async function tatTrongKhoi(): Promise<void> {
+	reloptionsBefore = await autovacuumOff();
+}
+
+async function traSauKhoi(): Promise<void> {
+	await autovacuumRestore(reloptionsBefore);
+	restoredReloptions.value = reloptionsBefore;
+}
+
 describe("a limited lock subquery when the planner re-runs it per row", () => {
 	const limit = 2;
 	const rows = 3;
@@ -303,29 +349,57 @@ describe("a limited lock subquery when the planner re-runs it per row", () => {
 		await insert(0, attempts);
 		await db.$executeRaw`ANALYZE "agentTask"`;
 		for (let index = 1; index < rows; index++) await insert(index, attempts);
+	}
+
+	async function reltuplesNow(): Promise<number> {
 		const [stats] = await db.$queryRaw<{ reltuples: number }[]>`
 			SELECT reltuples::float8 AS reltuples FROM pg_class WHERE relname = 'agentTask'
 		`;
-		if (!stats || stats.reltuples > 1) {
-			throw new Error(`statistics drifted: reltuples=${stats?.reltuples}`);
-		}
+		if (!stats) throw new Error("khong doc duoc reltuples cua agentTask");
+		return stats.reltuples;
 	}
 
-	function probe() {
-		return db.$queryRaw<{ id: string }[]>`
-			UPDATE "agentTask" AS t
-			SET "outcome" = 'probe'
-			FROM (
-				SELECT c.id FROM "agentTask" AS c
-				WHERE c.kind = ${kind} AND c."finishedAt" IS NULL
-				ORDER BY c."dueAt" ASC
-				LIMIT ${limit}
-				FOR UPDATE SKIP LOCKED
-			) AS due
-			WHERE t.id = due.id
-			RETURNING t.id;
+	const PROBE_SQL = `UPDATE "agentTask" AS t SET "outcome" = 'probe' FROM (SELECT c.id FROM "agentTask" AS c WHERE c.kind = '${kind}' AND c."finishedAt" IS NULL ORDER BY c."dueAt" ASC LIMIT ${limit} FOR UPDATE SKIP LOCKED) AS due WHERE t.id = due.id RETURNING t.id`;
+
+	async function planChanged(got: number): Promise<never> {
+		const plan = await db.$queryRawUnsafe<{ "QUERY PLAN": string }[]>(
+			`EXPLAIN ${PROBE_SQL}`,
+		);
+		const [stats] = await db.$queryRaw<
+			{
+				reltuples: number;
+				relpages: number;
+				so_trang: number;
+				n_dead_tup: number;
+				last_analyze: Date | null;
+				last_autoanalyze: Date | null;
+			}[]
+		>`
+			SELECT c.reltuples::float8 AS reltuples, c.relpages::int AS relpages,
+				(pg_relation_size(c.oid) / current_setting('block_size')::int)::int AS so_trang,
+				s.n_dead_tup::int AS n_dead_tup, s.last_analyze, s.last_autoanalyze
+			FROM pg_class AS c JOIN pg_stat_user_tables AS s ON s.relid = c.oid
+			WHERE c.relname = 'agentTask'
 		`;
+		throw new Error(
+			`ke hoach doi: ${got}/${rows} hang; reltuples=${stats?.reltuples} relpages=${stats?.relpages} so_trang=${stats?.so_trang} n_dead_tup=${stats?.n_dead_tup} last_analyze=${stats?.last_analyze?.toISOString() ?? "null"} last_autoanalyze=${stats?.last_autoanalyze?.toISOString() ?? "null"}; plan: ${plan.map((p) => p["QUERY PLAN"].trim()).join(" | ")}`,
+		);
 	}
+
+	async function probe() {
+		const got = await db.$queryRawUnsafe<{ id: string }[]>(PROBE_SQL);
+		if (got.length !== rows || (await reltuplesNow()) > 1)
+			await planChanged(got.length);
+		return got;
+	}
+
+	beforeAll(tatTrongKhoi);
+	afterAll(traSauKhoi);
+
+	it("autovacuum stays off for the whole block", async () => {
+		if (!(await reloptions())?.includes(AUTOVACUUM_OFF))
+			throw new Error("autovacuum van bat trong khoi");
+	});
 
 	it("the fixture bites: a subquery joined in FROM hands out every row", async () => {
 		await staleStatistics(MAX_ATTEMPTS);
@@ -353,5 +427,38 @@ describe("a limited lock subquery when the planner re-runs it per row", () => {
 				where: { kind, leasedUntil: { lt: new Date() } },
 			}),
 		).toBe(rows - limit);
+	});
+});
+
+describe("a limited lock subquery: autovacuum is handed back after the block", () => {
+	it("reloptions match what the block found", async () => {
+		if (restoredReloptions.value === undefined)
+			throw new Error("khoi chua chay truoc ca nay");
+		const now = await reloptions();
+		if (JSON.stringify(now) !== JSON.stringify(restoredReloptions.value))
+			throw new Error(
+				`autovacuum khong duoc tra lai: ${JSON.stringify(now)} khac ${JSON.stringify(restoredReloptions.value)}`,
+			);
+	});
+});
+
+describe("a limited lock subquery: autovacuum already off before the block", () => {
+	it("restoring keeps the earlier off flag", async () => {
+		const original = await reloptions();
+		await db.$executeRawUnsafe(
+			`ALTER TABLE "agentTask" SET (${AUTOVACUUM_OFF})`,
+		);
+		try {
+			const preset = await reloptions();
+			await tatTrongKhoi();
+			await traSauKhoi();
+			const now = await reloptions();
+			if (JSON.stringify(now) !== JSON.stringify(preset))
+				throw new Error(
+					`autovacuum khong duoc tra lai: ${JSON.stringify(now)} khac ${JSON.stringify(preset)}`,
+				);
+		} finally {
+			await autovacuumRestore(original);
+		}
 	});
 });
