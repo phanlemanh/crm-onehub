@@ -1,0 +1,62 @@
+{
+	"ten": "Việc và Dự án",
+	"tu_vung": {
+		"xong": "Đã giao",
+		"chưa mở": "Chưa mở",
+		"để sau": "Xếp lại sau"
+	},
+	"hang": [
+		{
+			"ma": "V0",
+			"cau_giao": "«Biết các nền tảng hàng đầu làm việc, dự án, Kanban, Gantt và quyền xem thế nào»",
+			"hang": "T1",
+			"trang_thai": "xong"
+		},
+		{
+			"ma": "V0a",
+			"cau_giao": "«Người vai chỉ OKR không được giao bước onboard và không nhận tên đối tác qua tin nhắc buổi sáng»",
+			"hang": "T2",
+			"trang_thai": "chưa mở",
+			"vi_sao": "Giao bước hiện chỉ kiểm có là thành viên; gộp việc mà chưa vá là khuếch đại lỗ này.",
+			"bat_khi": "Không bước nào đang mở thuộc người vai «chỉ OKR»"
+		},
+		{
+			"ma": "V1",
+			"cau_giao": "«Một việc có người làm, hạn và trạng thái, gắn được vào bản ghi»",
+			"hang": "T3",
+			"trang_thai": "chưa mở",
+			"dung_tren": ["V0a"]
+		},
+		{
+			"ma": "V2",
+			"cau_giao": "«Tôi xem việc của tôi theo hạn trên một màn»",
+			"hang": "T2",
+			"trang_thai": "chưa mở",
+			"dung_tren": ["V1"]
+		},
+		{
+			"ma": "V3",
+			"cau_giao": "«Bảng Kanban việc theo trạng thái»",
+			"hang": "T2",
+			"trang_thai": "chưa mở",
+			"dung_tren": ["V2"]
+		},
+		{
+			"ma": "V4",
+			"cau_giao": "«Dự án gom việc, có mốc và người chịu trách nhiệm»",
+			"hang": "T3",
+			"trang_thai": "để sau",
+			"vi_sao": "Đợi số đo bốn tuần của việc đơn trước khi dựng dự án."
+		}
+	],
+	"da_bac": [
+		{
+			"ma": "x1",
+			"ly_do": "Nhân bản việc khi giao nhiều người: mất tiến độ chung"
+		},
+		{
+			"ma": "x2",
+			"ly_do": "Tiến độ KR mặc định cộng từ việc xong: đo đầu ra thay cho kết quả"
+		}
+	]
+}

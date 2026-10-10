@@ -39,6 +39,7 @@ const did = z.object({
 	tool: z.string(),
 	errorText: z.string().nullable(),
 	failed: z.boolean(),
+	skipped: z.literal(true).optional(),
 });
 
 export const agentTranscriptItem = z.discriminatedUnion("kind", [

@@ -386,10 +386,26 @@ const GHIM_OKR_SOAN = {
 	],
 } satisfies Record<string, [string, string]>;
 
+const GHIM_LO_TRINH = {
+	"lo-trinh:meta": [
+		"1 việc · A/B đã giao trong phạm vi lọc",
+		"12 việc · A/B đã giao trong phạm vi lọc",
+	],
+	"lo-trinh:metaTre": [" · 1 trễ mốc", " · 12 trễ mốc"],
+	"lo-trinh:moc.conNgay": ["còn 1 ngày", "còn 12 ngày"],
+	"lo-trinh:moc.tre": ["Trễ 1 ngày", "Trễ 12 ngày"],
+	"lo-trinh:moc.lechKeHoach": ["1 chỗ lệch kế hoạch", "12 chỗ lệch kế hoạch"],
+	"lo-trinh:tre.tieuDe": [
+		"1 việc đã qua mốc mà chưa giao",
+		"12 việc đã qua mốc mà chưa giao",
+	],
+} satisfies Record<string, [string, string]>;
+
 const GHIM = {
 	...GHIM_TRO_LY_OKR,
 	...GHIM_OKR_GOP_Y,
 	...GHIM_OKR_SOAN,
+	...GHIM_LO_TRINH,
 	"campaigns:create.segmentSize": ["1 cá nhân", "12 cá nhân"],
 	"crm:views.inUse": ["Đang là phân khúc của 1", "Đang là phân khúc của 12"],
 	"auth:signIn.continueWith": ["Tiếp tục với 1", "Tiếp tục với 12"],
@@ -429,6 +445,18 @@ const GHIM = {
 	"companies:bulk.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
 	"crm:views.remove": ["Xoá 1", "Xoá 12"],
 	"crm:bulkMenu.leftAlone": ["1 A bị bỏ quaB", "12 A bị bỏ quaB"],
+	"crm:bulk.boQua": [
+		"1 bản bị bỏ qua — đã lưu trữ từ trước hoặc không còn.",
+		"12 bản bị bỏ qua — đã lưu trữ từ trước hoặc không còn.",
+	],
+	"crm:bulk.hoanTacThieu": [
+		"1 bản không khôi phục được — xem mục Đã lưu trữ.",
+		"12 bản không khôi phục được — xem mục Đã lưu trữ.",
+	],
+	"crm:bulk.khongDoi": [
+		"Không có gì thay đổi — 1 bản bị bỏ qua: đã lưu trữ từ trước hoặc không còn.",
+		"Không có gì thay đổi — 12 bản bị bỏ qua: đã lưu trữ từ trước hoặc không còn.",
+	],
 	"record-sheet:company.manyDeals": [
 		"Cả 1 thoả thuận của công ty",
 		"Cả 12 thoả thuận của công ty",

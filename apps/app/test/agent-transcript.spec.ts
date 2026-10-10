@@ -968,3 +968,53 @@ describe("ma-loi", () => {
 		).toEqual({ code: "AGENT_FAILED", kind: "unknown" });
 	});
 });
+
+const KET_CUC_BO_QUA = {
+	stored: false,
+	skipped: true,
+	imageUrl: "https://bo-qua.public.blob.vercel-storage.com/contacts/anh.jpg",
+	reason: "They already have a photo.",
+};
+
+describe("bo-qua", () => {
+	const tone = (output: EveToolOutput) =>
+		outcomeTone(tool("fetch_contact_photo", { output } as never) as never);
+
+	it("bo-qua: neutral — ket cuc that cua cong cu anh", () => {
+		expect(`bo-qua: ${tone(KET_CUC_BO_QUA)}`).toBe("bo-qua: neutral");
+	});
+
+	it("bo-qua: neutral — written false kem skipped", () => {
+		expect(tone({ written: false, skipped: true })).toBe("neutral");
+	});
+
+	it("bo-qua: doi chung — stored false khong skipped van la canh bao", () => {
+		expect(tone({ stored: false })).toBe("warning");
+	});
+
+	it("bo-qua: doi chung — written false khong skipped van la canh bao", () => {
+		expect(tone({ written: false })).toBe("warning");
+	});
+
+	it("bo-qua: muc did mang skipped va tone trung tinh", () => {
+		const [hang] = toTranscript([
+			message([
+				tool("fetch_contact_photo", { output: KET_CUC_BO_QUA } as never),
+			]),
+		]);
+		const muc = hang?.items[0];
+		expect(
+			`${muc?.kind} ${muc?.kind === "did" ? `${muc.skipped} ${muc.tone}` : ""}`,
+		).toBe("did true neutral");
+	});
+
+	it("bo-qua: muc khong bo qua vang truong skipped", () => {
+		const [hang] = toTranscript([
+			message([
+				tool("fetch_contact_photo", { output: { stored: true } } as never),
+			]),
+		]);
+		const daLuu = JSON.parse(JSON.stringify(hang?.items[0] ?? {}));
+		expect("skipped" in daLuu).toBe(false);
+	});
+});

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b97e26239fbf6678d39856a17aa09ebdb923ac63
+verified_commit: f3c481595f186f0c490e680338745425642d5765
 human_signoff: Phan Le Manh 2026-10-02
 ---
 
@@ -304,3 +304,7 @@ sha: 7c82865c7637a68e1d61a8959b0545ff64f796d8 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-05, do gộp onehub f2fad732 (#274, #269, #275)
 run_id: repin-20261005T101547Z-69359
 sha: b97e26239fbf6678d39856a17aa09ebdb923ac63 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths)
+
+### Re-pin lần 5 — 2026-10-10, do F12 eval-model-that-dung-luc sửa quyet-do.ts, cham-bo-do.ts của bộ đo E15; lượt 2 sau lượt đỏ repin-20261010T055252Z-81569 (E15 hai câu lỗi model qua-nhieu)
+run_id: repin-20261010T060354Z-53835
+sha: f3c481595f186f0c490e680338745425642d5765 · suites: 7 lệnh exit 0 · evals: 19/19 eval máy đạt kỳ vọng · ngoài làn máy: E7u, E15j (E15j không khai paths), E16j (E16j không khai paths) · diff chạm vật đo ngoài làn máy: E7u — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

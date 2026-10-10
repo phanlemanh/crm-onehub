@@ -10,6 +10,38 @@ import {
 import { createRequire } from "node:module";
 import { dirname, isAbsolute, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+	bamDauVao,
+	type Cau,
+	CHAM_BO_DO,
+	type ChiSo,
+	cauHoiLai,
+	cauLuotMot,
+	chamTungCau,
+	type DongTungCau,
+	demBuocModel,
+	docBanGhi,
+	docBanGhiHead,
+	docTungCau,
+	doModel,
+	dongKetLuot,
+	dongTungCau,
+	donLuotCu,
+	ghiBanGhi,
+	type gop,
+	type KetCucHai,
+	type KetCucMot,
+	keHoachHoiLai,
+	ketCucHai,
+	ketHoiLai,
+	khuonBo,
+	type ModelIds,
+	moThuMucLuot,
+	nhanHaiCau,
+	nhanMotCau,
+	quyetDungLai,
+	tepBam,
+} from "./quyet-do";
 
 const TEP_NAY = fileURLToPath(import.meta.url);
 const HERE = dirname(TEP_NAY);
@@ -30,12 +62,9 @@ const NGUONG = {
 	traLoiKhongQuaKiem: 0,
 } as const;
 const KHO_DO = /\/crm_[a-z0-9_]+_do(\?|$)/;
-const THU_MUC_CHAY = join(
-	GOC,
-	".acceptance-runs",
-	"tro-ly-doc-kho",
-	"cham-bo-do",
-);
+const CHAY_GOC = join(GOC, ".acceptance-runs", "tro-ly-doc-kho", "cham-bo-do");
+const TEP_TUNG_CAU = "cham-tung-cau.jsonl";
+const BIEN_QUYET = "E15_QUYET";
 const EVE = join(AGENT, "node_modules", ".bin", "eve");
 const BAI_EVAL = "tro-ly-kho/cham-bo-do";
 const TRAN_EVE_MS = 100 * 60_000;
@@ -43,25 +72,54 @@ const TEN_ZALO = "Người đo";
 const SONG_SONG = "2";
 
 const doiSo = process.argv.slice(2);
-const viTriBo = doiSo.indexOf("--bo");
-const tepBo =
-	viTriBo >= 0 && doiSo[viTriBo + 1]
-		? resolve(process.cwd(), doiSo[viTriBo + 1] ?? "")
-		: BO_MAC_DINH;
+const coCo = (ten: string) => doiSo.includes(ten);
+const giaTri = (ten: string) => {
+	const i = doiSo.indexOf(ten);
+	const v = i >= 0 ? doiSo[i + 1] : undefined;
+	return v ? resolve(process.cwd(), v) : null;
+};
+const tepBo = giaTri("--bo") ?? BO_MAC_DINH;
 
 function khongDo(cau: string): never {
 	console.log(`KHONG DO DUOC: ${cau}`);
 	process.exit(2);
 }
 
-if (!process.env.PHIEN_DO) {
-	const lenh = `bun ${relative(GOC, TEP_NAY)}${viTriBo >= 0 ? ` --bo ${JSON.stringify(tepBo)}` : ""}`;
-	const ra = spawnSync(
-		"bash",
-		[join(GOC, "_acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh"), lenh],
-		{ cwd: GOC, stdio: "inherit" },
+if (coCo("--ghi-ban-ghi")) {
+	const tep = giaTri("--ghi-ban-ghi");
+	if (!tep || !existsSync(tep))
+		khongDo("--ghi-ban-ghi can tep bang chung cua luot");
+	const md = readFileSync(tep, "utf8");
+	const banGhi = docBanGhi(md);
+	if (!banGhi?.dat) khongDo(`${tep} khong co ban ghi dat`);
+	const dich = join(GOC, CHAM_BO_DO.banGhi);
+	mkdirSync(dirname(dich), { recursive: true });
+	writeFileSync(dich, md);
+	console.log(
+		`da ghi ban ghi ${banGhi.bam} vao ${CHAM_BO_DO.banGhi}; commit de luot sau dung lai`,
 	);
-	process.exit(ra.status ?? 2);
+	process.exit(0);
+}
+
+if (coCo("--cham-lai")) {
+	const thuMuc = giaTri("--cham-lai");
+	const tep = thuMuc ? join(thuMuc, TEP_TUNG_CAU) : "";
+	if (!existsSync(tep)) khongDo(`khong co ${TEP_TUNG_CAU} trong ${thuMuc}`);
+	const { mot, hai, kl } = chamTungCau(
+		docTungCau(readFileSync(tep, "utf8")),
+		NGUONG,
+	);
+	for (const d of kl.dong) console.log(d);
+	const hoiLai = keHoachHoiLai(kl, mot, hai);
+	for (const h of hoiLai)
+		console.log(`CAN HOI LAI: ${h.chiSo} (${h.ids.length} cau)`);
+	if (hoiLai.length > 0) {
+		const chon = cauHoiLai(hoiLai, mot, hai);
+		console.log(
+			`HOI LAI: luot kho ${chon.mot.length} cau, luot zalo ${chon.hai.length} cau`,
+		);
+	}
+	process.exit(kl.ma);
 }
 
 if (
@@ -73,24 +131,75 @@ if (
 	);
 if (!existsSync(tepBo)) khongDo(`khong co bo cau ${tepBo}`);
 
-const yeuCau = createRequire(join(AGENT, "package.json"));
-const { z } = yeuCau("zod") as typeof import("zod");
+type Quyet = { bam: string; modelIds: ModelIds; dong: string; soDo: number };
 
-const khuonCau = z.object({
-	id: z.string().min(1),
-	nhom: z.enum(["co-trang", "khong-co", "khong-dau", "khong-phai-quy-dinh"]),
-	cau: z.string().min(2).max(500),
-	mong: z.array(z.array(z.string().min(1)).min(1)).optional(),
-	kho: z.enum(["nguong-ngoai-le", "hai-trang"]).optional(),
-	bienTheCua: z.string().optional(),
-	tam: z.boolean().optional(),
-});
-const khuonBo = z.object({
-	nhan: z.string().min(1),
-	nguon: z.string().min(1),
-	cau: z.array(khuonCau).min(1),
-});
-type Cau = z.infer<typeof khuonCau>;
+async function quyetTruoc(): Promise<Quyet> {
+	const yeuCauAi = createRequire(join(AGENT, "package.json"));
+	const { generateText } = yeuCauAi("ai") as typeof import("ai");
+	const { createGateway } = yeuCauAi(
+		"@ai-sdk/gateway",
+	) as typeof import("@ai-sdk/gateway");
+	const { modelTaiLieu } = await import(
+		join(AGENT, "agent/lib/tai-lieu-model.ts")
+	);
+	const { DEFAULT_AGENT_MODEL } = await import(
+		join(GOC, "packages/db/src/settings.ts")
+	);
+	let soDo = 0;
+	const doRa = await doModel(async (vai) => {
+		soDo++;
+		const model =
+			vai === "kho"
+				? modelTaiLieu("hoi").model
+				: createGateway()(DEFAULT_AGENT_MODEL.id);
+		const kq = await generateText({ model, prompt: "ok", maxOutputTokens: 1 });
+		return { modelId: kq.response.modelId };
+	});
+	if (doRa.ma === 2) khongDo(doRa.dong.replace(/^KHONG DO DUOC: /, ""));
+	const bam = bamDauVao(tepBam(GOC, relative(GOC, tepBo)), doRa.ids);
+	const nguonThu = giaTri("--nguon-thu");
+	const md = nguonThu
+		? readFileSync(nguonThu, "utf8")
+		: docBanGhiHead(GOC, CHAM_BO_DO.banGhi);
+	const q = quyetDungLai(md ? docBanGhi(md) : null, bam, new Date(), {
+		doLai: coCo("--do-lai"),
+	});
+	console.log(`bam dau vao ${bam}; model ${doRa.ids.kho} · ${doRa.ids.goc}`);
+	if (nguonThu) console.log(`nguon thu: ${nguonThu}`);
+	console.log(q.dong);
+	if (coCo("--chi-quyet")) process.exit(0);
+	if (q.dungLai && md) {
+		const bangChung = join(THU_MUC_BANG_CHUNG, "cham-bo-do.md");
+		mkdirSync(THU_MUC_BANG_CHUNG, { recursive: true });
+		writeFileSync(
+			bangChung,
+			`${q.dong}${nguonThu ? ` (nguon thu: ${nguonThu})` : ""}\n\n${md}`,
+		);
+		console.log(`SO LOI GOI MODEL: ${soDo}`);
+		console.log(`ghi ${relative(GOC, bangChung)}`);
+		process.exit(0);
+	}
+	return { bam, modelIds: doRa.ids, dong: q.dong, soDo };
+}
+
+if (!process.env[BIEN_QUYET]) {
+	const q = await quyetTruoc();
+	if (!process.env.PHIEN_DO) {
+		const lenh = `bun ${relative(GOC, TEP_NAY)}${giaTri("--bo") ? ` --bo ${JSON.stringify(tepBo)}` : ""}`;
+		const ra = spawnSync(
+			"bash",
+			[join(GOC, "_acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh"), lenh],
+			{
+				cwd: GOC,
+				stdio: "inherit",
+				env: { ...process.env, [BIEN_QUYET]: JSON.stringify(q) },
+			},
+		);
+		process.exit(ra.status ?? 2);
+	}
+	process.env[BIEN_QUYET] = JSON.stringify(q);
+}
+const quyet = JSON.parse(process.env[BIEN_QUYET] ?? "{}") as Quyet;
 
 const docBo = khuonBo.safeParse(JSON.parse(readFileSync(tepBo, "utf8")));
 if (!docBo.success)
@@ -130,12 +239,8 @@ const { CHAM_BO_DO_ENV, docKetQua } = await import(
 const { TAI_LIEU_AGENT } = await import(
 	join(AGENT, "agent/lib/tai-lieu-config.ts")
 );
-const { modelTaiLieu, nhanKhoaTaiLieu } = await import(
+const { nhanKhoaTaiLieu } = await import(
 	join(AGENT, "agent/lib/tai-lieu-model.ts")
-);
-const { modelTheoVai } = await import(join(AGENT, "agent/lib/model.ts"));
-const { DEFAULT_AGENT_MODEL } = await import(
-	join(GOC, "packages/db/src/settings.ts")
 );
 
 type KetQua = Awaited<ReturnType<typeof docKetQua>>[number];
@@ -143,17 +248,34 @@ type KetMot = Extract<KetQua, { luot: 1 }>;
 type KetHai = Extract<KetQua, { luot: 2 }>;
 type Luot1 = {
 	cau: Cau;
-	nhan: "dung-trang" | "tu-choi-dung" | "sai";
+	ketCuc: KetCucMot;
+	nhan: string;
 	trangThai: string;
 	chiTiet: string;
 };
 type Luot2 = {
 	cau: Cau;
-	nhan: "chuyen" | "khong-chuyen";
+	ketCuc: KetCucHai;
+	nhan: string;
 	conGoi: string;
 	ketQua: string;
 	traLoi: string;
+	zalo?: { ketQua: string | null; loi: string | null; coHang: boolean };
 };
+
+function dongCua(
+	r: { cau: Cau; ketCuc: KetCucMot | KetCucHai },
+	luot: 1 | 2,
+	khongQuaKiem = false,
+	zalo?: Luot2["zalo"],
+): DongTungCau {
+	return dongTungCau(
+		{ id: r.cau.id, nhom: r.cau.nhom, ketCuc: r.ketCuc },
+		luot,
+		khongQuaKiem,
+		zalo,
+	);
+}
 
 function trichCua(traLoi: ReturnType<typeof parseTraLoi>): Set<string> {
 	return new Set(traLoi.cau.flatMap((c) => c.trich.map((t) => t.slug)));
@@ -213,7 +335,8 @@ async function nhanMot(
 	if (!k)
 		return {
 			cau: c,
-			nhan: "sai",
+			ketCuc: "khong-co-ket-qua",
+			nhan: nhanMotCau(c.nhom, "khong-co-ket-qua"),
 			trangThai: "khong co ket qua eval",
 			chiTiet: "",
 			khongQuaKiem: false,
@@ -238,9 +361,11 @@ async function nhanMot(
 					`${x.chu} [${x.trich.map((t) => `${t.slug}#${t.phienBan}: «${t.doan}»`).join("; ")}]`,
 			)
 			.join(" ");
+		const ketCuc: KetCucMot = du ? "TRA_LOI-du" : "TRA_LOI-sai";
 		return {
 			cau: c,
-			nhan: c.nhom === "khong-co" ? "sai" : du ? "dung-trang" : "sai",
+			ketCuc,
+			nhan: nhanMotCau(c.nhom, ketCuc),
 			trangThai: "TRA_LOI",
 			chiTiet: `trich ${[...daTrich].join(", ")}; bac ${hang.soLanBac}`,
 			khongQuaKiem: !qua,
@@ -251,12 +376,11 @@ async function nhanMot(
 	const trangThai = hang.lyDo
 		? `${hang.trangThai} ${hang.lyDo}`
 		: hang.trangThai;
+	const ketCuc: KetCucMot = hang.trangThai === "TU_CHOI" ? "TU_CHOI" : "LOI";
 	return {
 		cau: c,
-		nhan:
-			c.nhom === "khong-co" && hang.trangThai === "TU_CHOI"
-				? "tu-choi-dung"
-				: "sai",
+		ketCuc,
+		nhan: nhanMotCau(c.nhom, ketCuc),
 		trangThai,
 		chiTiet: `${k.loi ? `eval: ${k.loi}; ` : ""}bac ${hang.soLanBac}`,
 		khongQuaKiem: false,
@@ -270,24 +394,30 @@ async function nhanHai(
 	k: KetHai | undefined,
 	traLoiCua: (messageId: string) => string,
 ): Promise<Luot2> {
-	if (!k?.zaloHoiId)
+	if (!k || k.loi) {
 		return {
 			cau: c,
-			nhan: "khong-chuyen",
+			ketCuc: "loi",
+			nhan: nhanHaiCau("loi"),
 			conGoi: "—",
 			ketQua: k?.loi ?? "khong co ket qua eval",
 			traLoi: "",
 		};
-	const coHang =
-		(await db.taiLieuHoi.count({
-			where: { zaloHoiId: k.zaloHoiId, kenh: "ZALO" },
-		})) > 0;
+	}
+	const coHang = k.zaloHoiId
+		? (await db.taiLieuHoi.count({
+				where: { zaloHoiId: k.zaloHoiId, kenh: "ZALO" },
+			})) > 0
+		: false;
+	const ketCuc = ketCucHai(k, coHang);
 	return {
 		cau: c,
-		nhan: coHang ? "chuyen" : "khong-chuyen",
+		ketCuc,
+		nhan: nhanHaiCau(ketCuc),
 		conGoi: k.conGoi.join(", ") || "—",
-		ketQua: `${k.ketQua ?? "?"}${k.loi ? ` (${k.loi})` : ""}`,
+		ketQua: k.ketQua ?? "?",
 		traLoi: traLoiCua(k.messageId),
+		zalo: { ketQua: k.ketQua, loi: k.loi, coHang },
 	};
 }
 
@@ -312,8 +442,6 @@ async function chayEve(env: Record<string, string>, nhatKy: string) {
 	return { ma, ra };
 }
 
-const tiLe = (tu: number, mau: number) => (mau === 0 ? 0 : tu / mau);
-const phanTram = (x: number) => `${(x * 100).toFixed(1)}%`;
 const o = (x: string) => x.replaceAll("|", "/").replaceAll("\n", " ");
 
 const mayChu = zaloMayChu();
@@ -354,142 +482,144 @@ try {
 		if (!n) khongDo(`cau ${c.id} khong co nguoi hoi`);
 		return n;
 	};
-	const keHoach = {
-		lo: TAI_LIEU_AGENT.hoi.loGui,
-		mot: bo.cau
-			.filter((c) => c.nhom !== "khong-phai-quy-dinh")
-			.map((c) => ({ id: c.id, cau: c.cau, nguoiId: cuaCau(c).id })),
-		hai: bo.cau.map((c) => {
-			const n = cuaCau(c);
-			const messageId = ma("msg");
-			return {
-				id: c.id,
-				cau: c.cau,
-				nguoiId: n.id,
-				messageId,
-				than: JSON.stringify(
-					thanWebhook({
-						messageId,
-						fromId: n.zaloUserId,
-						ten: TEN_ZALO,
-						text: c.cau,
-					}),
-				),
-			};
-		}),
+	const dongMot = (c: Cau) => ({ id: c.id, cau: c.cau, nguoiId: cuaCau(c).id });
+	const dongHai = (c: Cau) => {
+		const n = cuaCau(c);
+		const messageId = ma("msg");
+		return {
+			id: c.id,
+			cau: c.cau,
+			nguoiId: n.id,
+			messageId,
+			than: JSON.stringify(
+				thanWebhook({
+					messageId,
+					fromId: n.zaloUserId,
+					ten: TEN_ZALO,
+					text: c.cau,
+				}),
+			),
+		};
 	};
+	const cauMot = cauLuotMot(bo.cau);
 	console.log(
 		`-- bo ${relative(GOC, tepBo)} (${bo.nhan}): ${bo.cau.length} cau; gieo ${slugCua.size} trang`,
 	);
 
-	mkdirSync(THU_MUC_CHAY, { recursive: true });
-	const tepKeHoach = join(THU_MUC_CHAY, "ke-hoach.json");
-	const tepKetQua = join(THU_MUC_CHAY, "ket-qua.jsonl");
-	const nhatKy = join(THU_MUC_CHAY, "eve.log");
-	writeFileSync(tepKeHoach, JSON.stringify(keHoach));
-	writeFileSync(tepKetQua, "");
-	const zaloToken = randomBytes(16).toString("hex");
-	const tu = new Date();
-	const eve = await chayEve(
-		{
-			AGENT_BRIDGE_SECRET: randomBytes(24).toString("hex"),
-			ZALO_BOT_TOKEN: zaloToken,
-			ZALO_WEBHOOK_SECRET: randomBytes(24).toString("hex"),
-			ZALO_API_URL: mayChu.url,
-			CRM_TELEMETRY_DISABLED: "1",
-			[CHAM_BO_DO_ENV.keHoach]: tepKeHoach,
-			[CHAM_BO_DO_ENV.ketQua]: tepKetQua,
-		},
-		nhatKy,
-	);
-	const den = new Date();
-	const ket = docKetQua(readFileSync(tepKetQua, "utf8"));
-	const ketMot = new Map(
-		ket.flatMap((k) => (k.luot === 1 ? [[k.id, k] as const] : [])),
-	);
-	const ketHai = new Map(
-		ket.flatMap((k) => (k.luot === 2 ? [[k.id, k] as const] : [])),
-	);
-	if (ketMot.size !== keHoach.mot.length || ketHai.size !== keHoach.hai.length)
-		khongDo(
-			`eve eval ma ${eve.ma}: ${ketMot.size}/${keHoach.mot.length} cau luot mot, ${ketHai.size}/${keHoach.hai.length} cau luot hai co ket qua — xem ${relative(GOC, nhatKy)}`,
+	mkdirSync(CHAY_GOC, { recursive: true });
+	donLuotCu(CHAY_GOC, CHAM_BO_DO.giuLuot - 1);
+	const thuMucLuot = moThuMucLuot(CHAY_GOC, new Date(), process.pid);
+	console.log(`thu muc luot: ${relative(GOC, thuMucLuot)}`);
+	if (!Number.isInteger(quyet.soDo))
+		khongDo("quyet truoc thieu so loi do model");
+	let soLoiGoi = quyet.soDo;
+
+	async function chayLuot(
+		ten: string,
+		chonMot: readonly Cau[],
+		chonHai: readonly Cau[],
+	) {
+		const thuMuc = join(thuMucLuot, ten);
+		mkdirSync(thuMuc, { recursive: true });
+		const keHoach = {
+			lo: TAI_LIEU_AGENT.hoi.loGui,
+			mot: chonMot.map(dongMot),
+			hai: chonHai.map(dongHai),
+		};
+		const tepKetQua = join(thuMuc, "ket-qua.jsonl");
+		const nhatKy = join(thuMuc, "eve.log");
+		writeFileSync(join(thuMuc, "ke-hoach.json"), JSON.stringify(keHoach));
+		writeFileSync(tepKetQua, "");
+		mayChu.goi.length = 0;
+		const eve = await chayEve(
+			{
+				AGENT_BRIDGE_SECRET: randomBytes(24).toString("hex"),
+				ZALO_BOT_TOKEN: randomBytes(16).toString("hex"),
+				ZALO_WEBHOOK_SECRET: randomBytes(24).toString("hex"),
+				ZALO_API_URL: mayChu.url,
+				CRM_TELEMETRY_DISABLED: "1",
+				[CHAM_BO_DO_ENV.keHoach]: join(thuMuc, "ke-hoach.json"),
+				[CHAM_BO_DO_ENV.ketQua]: tepKetQua,
+			},
+			nhatKy,
 		);
-
-	const chatCua = new Map(keHoach.hai.map((h) => [h.messageId, h.id]));
-	const traLoiCua = (messageId: string) => {
-		const id = chatCua.get(messageId);
-		const zaloUserId = id ? nguoiCua.get(id)?.zaloUserId : undefined;
-		return mayChu.goi
-			.filter(
-				(g) => g.method === "sendMessage" && g.body.chat_id === zaloUserId,
-			)
-			.map((g) => g.body.text ?? "")
-			.join(" / ");
-	};
-
-	const mot: Awaited<ReturnType<typeof nhanMot>>[] = [];
-	for (const c of bo.cau.filter((x) => x.nhom !== "khong-phai-quy-dinh")) {
-		const r = await nhanMot(c, ketMot.get(c.id), slugCua);
-		mot.push(r);
-		console.log(`${c.id} ${r.nhan}`);
+		soLoiGoi += demBuocModel(readFileSync(nhatKy, "utf8"));
+		const ket = docKetQua(readFileSync(tepKetQua, "utf8"));
+		const ketMot = new Map(
+			ket.flatMap((k) => (k.luot === 1 ? [[k.id, k] as const] : [])),
+		);
+		const ketHai = new Map(
+			ket.flatMap((k) => (k.luot === 2 ? [[k.id, k] as const] : [])),
+		);
+		const chatCua = new Map(keHoach.hai.map((h) => [h.messageId, h.id]));
+		const traLoiCua = (messageId: string) => {
+			const id = chatCua.get(messageId);
+			const zaloUserId = id ? nguoiCua.get(id)?.zaloUserId : undefined;
+			return mayChu.goi
+				.filter(
+					(g) => g.method === "sendMessage" && g.body.chat_id === zaloUserId,
+				)
+				.map((g) => g.body.text ?? "")
+				.join(" / ");
+		};
+		const mot: Awaited<ReturnType<typeof nhanMot>>[] = [];
+		for (const c of chonMot) {
+			const r = await nhanMot(c, ketMot.get(c.id), slugCua);
+			mot.push(r);
+			console.log(`${ten} ${c.id} ${r.nhan}`);
+		}
+		const hai: Luot2[] = [];
+		for (const c of chonHai) {
+			const r = await nhanHai(c, ketHai.get(c.id), traLoiCua);
+			hai.push(r);
+			console.log(`${ten} ${c.id} ${r.nhan}`);
+		}
+		const tungCau = [
+			...mot.map((r) => dongCua(r, 1, r.khongQuaKiem)),
+			...hai.map((r) => dongCua(r, 2, false, r.zalo)),
+		];
+		writeFileSync(
+			join(thuMuc, TEP_TUNG_CAU),
+			`${tungCau.map((d) => JSON.stringify(d)).join("\n")}\n`,
+		);
+		console.log(`eve eval ${BAI_EVAL}: ma thoat ${eve.ma} (${ten})`);
+		return { mot, hai, tungCau, eve };
 	}
-	const hai: Luot2[] = [];
-	for (const c of bo.cau) {
-		const r = await nhanHai(c, ketHai.get(c.id), traLoiCua);
-		hai.push(r);
-		console.log(`${c.id} ${r.nhan}`);
-	}
 
-	const coTrang = mot.filter((r) => r.cau.nhom !== "khong-co");
-	const khongCo = mot.filter((r) => r.cau.nhom === "khong-co");
-	const quyDinh = hai.filter((r) => r.cau.nhom !== "khong-phai-quy-dinh");
-	const khongPhai = hai.filter((r) => r.cau.nhom === "khong-phai-quy-dinh");
-	const so = {
-		dungTrang: tiLe(
-			coTrang.filter((r) => r.nhan === "dung-trang").length,
-			coTrang.length,
-		),
-		tuChoiDung: tiLe(
-			khongCo.filter((r) => r.nhan === "tu-choi-dung").length,
-			khongCo.length,
-		),
-		chuyenQuyDinh: tiLe(
-			quyDinh.filter((r) => r.nhan === "chuyen").length,
-			quyDinh.length,
-		),
-		chuyenNham: tiLe(
-			khongPhai.filter((r) => r.nhan === "chuyen").length,
-			khongPhai.length,
-		),
-		traLoiKhongQuaKiem: mot.filter((r) => r.khongQuaKiem).length,
-	};
-	const dat = {
-		dungTrang: so.dungTrang >= NGUONG.dungTrang,
-		tuChoiDung: so.tuChoiDung >= NGUONG.tuChoiDung,
-		chuyenQuyDinh: so.chuyenQuyDinh >= NGUONG.chuyenQuyDinh,
-		chuyenNham: so.chuyenNham <= NGUONG.chuyenNhamToiDa,
-		traLoiKhongQuaKiem: so.traLoiKhongQuaKiem === NGUONG.traLoiKhongQuaKiem,
-	};
+	const tu = new Date();
+	const l1 = await chayLuot("luot-1", cauMot, bo.cau);
+	const c1 = chamTungCau(l1.tungCau, NGUONG);
+	const tong = [...c1.kl.dong];
+	let maThoat = c1.kl.ma;
+	const hoiLai = keHoachHoiLai(c1.kl, c1.mot, c1.hai);
+	const gopCua = new Map<ChiSo, ReturnType<typeof gop>>();
+	if (hoiLai.length > 0) {
+		const chon = cauHoiLai(hoiLai, cauMot, bo.cau);
+		const l2 = await chayLuot("hoi-lai", chon.mot, chon.hai);
+		const c2 = chamTungCau(l2.tungCau, NGUONG);
+		const k = ketHoiLai(c1.kl, c2.kl, hoiLai, NGUONG);
+		maThoat = k.ma;
+		tong.push(...k.dong);
+		for (const [c, g] of k.gopCua) gopCua.set(c, g);
+	}
+	const den = new Date();
 	const dem = await demHoiKho(db, tu, den);
-	const tong = [
-		`dung trang: ${phanTram(so.dungTrang)} (nguong >= ${phanTram(NGUONG.dungTrang)}) ${dat.dungTrang ? "dat" : "KHONG DAT"}`,
-		`tu choi dung: ${phanTram(so.tuChoiDung)} (nguong >= ${phanTram(NGUONG.tuChoiDung)}) ${dat.tuChoiDung ? "dat" : "KHONG DAT"}`,
-		`Zalo chuyen cau quy dinh: ${phanTram(so.chuyenQuyDinh)} (nguong >= ${phanTram(NGUONG.chuyenQuyDinh)}) ${dat.chuyenQuyDinh ? "dat" : "KHONG DAT"}`,
-		`Zalo chuyen nham cau khong phai quy dinh: ${phanTram(so.chuyenNham)} (nguong <= ${phanTram(NGUONG.chuyenNhamToiDa)}) ${dat.chuyenNham ? "dat" : "KHONG DAT"}`,
-		`tra loi co trich khong qua kiem (dem lai): ${so.traLoiKhongQuaKiem} ${dat.traLoiKhongQuaKiem ? "dat" : "KHONG DAT"}`,
-		`demHoiKho cua cua so chay: traLoi ${dem.traLoi}, tuChoi ${dem.tuChoi}, loi ${dem.loi}, tiLe ${dem.tiLe === null ? "—" : phanTram(dem.tiLe)}`,
-		`eve eval ${BAI_EVAL}: ma thoat ${eve.ma}`,
-	];
+	tong.push(
+		`demHoiKho cua cua so chay: traLoi ${dem.traLoi}, tuChoi ${dem.tuChoi}, loi ${dem.loi}, tiLe ${dem.tiLe === null ? "—" : `${(dem.tiLe * 100).toFixed(1)}%`}`,
+	);
 	for (const d of tong) console.log(d);
+	console.log(`SO LOI GOI MODEL: ${soLoiGoi}`);
 
-	const modelGoc =
-		(await modelTheoVai("tro-ly"))?.model ?? DEFAULT_AGENT_MODEL.id;
+	const mot = l1.mot;
+	const hai = l1.hai;
 	const banHoi = [
 		`# Chấm bộ câu đo — ${new Date().toISOString()}`,
 		"",
+		quyet.dong,
+		"",
 		`Bộ: \`${isAbsolute(tepBo) ? relative(GOC, tepBo) : tepBo}\` (nhãn \`${bo.nhan}\`). ${bo.nguon}`,
 		"",
-		`Cả hai lượt chạy bằng \`eve eval ${BAI_EVAL}\`: máy chủ eve thật của \`apps/agent\`, chỉ dẫn và tool đúng như eve gửi, phiên con thật. Lượt một: mỗi câu là một hàng TaiLieuHoi kênh CRM, \`/internal/crm/dispatch\` mở phiên purpose kho; model \`${modelTaiLieu("hoi").model.modelId}\`, khoá ${nhanKhoaTaiLieu("hoi")}. Lượt hai: mỗi câu là một tin Zalo qua \`/zalo/webhook\` (Zalo giả nhận câu trả lời) của một người đã nối Zalo; model agent gốc \`${modelGoc}\`; «chuyển» = có hàng TaiLieuHoi kênh ZALO gắn với hàng ZaloHoi của tin đó.`,
+		`Cả hai lượt chạy bằng \`eve eval ${BAI_EVAL}\`: máy chủ eve thật của \`apps/agent\`, chỉ dẫn và tool đúng như eve gửi, phiên con thật. Lượt một: mỗi câu là một hàng TaiLieuHoi kênh CRM, \`/internal/crm/dispatch\` mở phiên purpose kho; model \`${quyet.modelIds.kho}\` (Gateway trả), khoá ${nhanKhoaTaiLieu("hoi")}. Lượt hai: mỗi câu là một tin Zalo qua \`/zalo/webhook\` (Zalo giả nhận câu trả lời) của một người đã nối Zalo; model agent gốc \`${quyet.modelIds.goc}\` (Gateway trả); «chuyển» = có hàng TaiLieuHoi kênh ZALO gắn với hàng ZaloHoi của tin đó. Câu không có kết quả, hàng không kết thúc ở TRA_LOI/TU_CHOI, hay câu Zalo có lỗi eval mang nhãn \`loi\` và không vào tử số hay mẫu số. Thư mục lượt: \`${relative(GOC, thuMucLuot)}\`.`,
 		"",
 		"## Tổng",
 		"",
@@ -514,16 +644,30 @@ try {
 		),
 		"",
 	].join("\n");
+	const banGhi =
+		bo.nhan === NHAN_BO_TAM && maThoat !== 2
+			? ghiBanGhi({
+					bam: quyet.bam,
+					doLuc: den,
+					dat: maThoat === 0,
+					modelIds: quyet.modelIds,
+					than: banHoi,
+				})
+			: banHoi;
 	const bangChung = join(
 		THU_MUC_BANG_CHUNG,
 		bo.nhan === NHAN_BO_TAM ? "cham-bo-do.md" : `cham-bo-do-${bo.nhan}.md`,
 	);
 	mkdirSync(THU_MUC_BANG_CHUNG, { recursive: true });
-	writeFileSync(bangChung, banHoi);
+	writeFileSync(bangChung, banGhi);
+	writeFileSync(join(thuMucLuot, "cham-bo-do.md"), banGhi);
 	console.log(`ghi ${relative(GOC, bangChung)}`);
+	if (bo.nhan === NHAN_BO_TAM)
+		for (const d of dongKetLuot(maThoat, join(thuMucLuot, "cham-bo-do.md")))
+			console.log(d);
 	mayChu.dung();
 	await db.$disconnect();
-	process.exit(Object.values(dat).every(Boolean) ? 0 : 1);
+	process.exit(maThoat);
 } catch (e) {
 	mayChu.dung();
 	await db.$disconnect().catch(() => null);

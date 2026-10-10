@@ -1,6 +1,6 @@
 import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
 import { z } from "zod";
-import { bulkIdsInput } from "../crm/bulk";
+import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
 import { currencyCode } from "../currency/currency.contracts";
 import { recordFieldValues } from "../fields/fields.contracts";
 import { listInput } from "../trpc/list-input";
@@ -181,6 +181,7 @@ const dealContactSummaryOutput = z.object({
 	firstName: z.string(),
 	lastName: z.string().nullable(),
 	email: z.string().nullable(),
+	phone: z.string().nullable(),
 	title: z.string().nullable(),
 	imageUrl: z.string().nullable(),
 });
@@ -321,11 +322,6 @@ export const dealContactRoleOutput = z.object({
 
 export type DealContactRoleResult = z.infer<typeof dealContactRoleOutput>;
 
-export const dealBulkResultOutput = z.object({
-	requested: z.number(),
-	succeeded: z.number(),
-	failed: z.number(),
-	message: z.string().nullable(),
-});
+export const dealBulkResultOutput = crmBulkResultOutput;
 
 export type DealBulkResult = z.infer<typeof dealBulkResultOutput>;
