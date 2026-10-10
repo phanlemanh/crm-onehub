@@ -5,7 +5,7 @@ slug: zalo-bom-gio
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-10T02:30:08Z
 ---
@@ -36,3 +36,11 @@ Source input: yeu-cau P6-32/P6-33 (đợt `sau-14-10`), giám sát mở hàng H5
 ## Notes
 
 - Không migration. Không đổi hành vi sản phẩm.
+
+Known limits — anh chọn ở Cổng Bằng chứng 2026-10-10, từ S4 round 1:
+
+- Ngoài-1: E3 (`h5_chi_tep_kiem`) so diff với sha cố định `91fe8d69f`, không theo merge-base; nhánh gộp onehub mới hay hồ sơ được chấm lại sau khi lên onehub thì E3 đỏ oan.
+- Ngoài-2: `rang/hai-moc.sh` ghi bản kiểm tạm vào `apps/agent/test`; một lượt `bun test` của gói agent chạy cùng lúc có thể nhặt phải.
+- Ngoài-3: Cùng gốc với Ngoài-1 (phát hiện lặp từ lane soát khác).
+- Trong-AC-2 chiều đỏ: Lệnh E2 không gọi `--tu-thu`; chiều đỏ (bản 91fe8d69 ở mốc 2020 đỏ đúng hai bài) chỉ đo tay ở S3, và `--tu-thu` không đối chiếu tên hai bài.
+- Trong-AC-3 config chỉ thêm khoá: E3 loại cả `_acceptance/`, nên không đo vế «config.yaml chỉ thêm khoá `h5_*`» hay việc không chạm hồ sơ khác; diff thật của config là ba dòng thêm `h5_*`.
