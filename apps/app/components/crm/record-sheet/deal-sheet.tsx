@@ -39,6 +39,7 @@ import {
 	savingValue,
 } from "@/components/crm/inline-field";
 import { OwnerCell } from "@/components/crm/owner-cell";
+import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { StageStepper } from "@/components/crm/stage-stepper";
 import { Timeline } from "@/components/crm/timeline/timeline";
@@ -116,10 +117,11 @@ function ReportedValue({ deal }: { deal: Deal }) {
 function contactColumns(m: RecordSheetMessages) {
 	const c = m.deal.contactColumns;
 	return [
-		{ id: "name", header: c.name, width: "w-[28%]", className: "pl-5" },
-		{ id: "role", header: c.role, width: "w-[20%]" },
-		{ id: "title", header: c.title, width: "w-[22%]" },
-		{ id: "email", header: c.email, width: "w-[22%]" },
+		{ id: "name", header: c.name, width: "w-[19%]", className: "pl-5" },
+		{ id: "phone", header: c.phone, width: "w-32" },
+		{ id: "role", header: c.role, width: "w-[12%]" },
+		{ id: "title", header: c.title, width: "w-[12%]" },
+		{ id: "email", header: c.email, width: "w-[12%]" },
 		{ id: "remove", srLabel: c.remove, width: "w-10" },
 	];
 }
@@ -543,6 +545,13 @@ function DealContacts({
 								/>
 								<span className="truncate">{contactName(contact)}</span>
 							</span>
+						</TableCell>
+						<TableCell className="px-3 py-2.5">
+							{contact.phone ? (
+								<SoDienThoai so={contact.phone} />
+							) : (
+								<EmptyCellValue />
+							)}
 						</TableCell>
 						<TableCell className="truncate px-1 py-2.5">
 							<InlineTextCell

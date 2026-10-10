@@ -1509,6 +1509,8 @@ executors:
     dt_man_bang: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t cot-bang && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t ngan-chi-tiet'
     dt_man_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t goi-y-moi-gioi'
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
+    dt2_api: 'bun run test -- "cd apps/api && bun test test/dien-thoai-o-deal-cong-ty.spec.ts"'
+    dt2_chon: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-o-deal-cong-ty.dom.tsx -t chon-nguoi'
     kbq_anh: 'bun _acceptance/buoc-kara-bo-qua/rang/bo-qua-dung-cho.mjs && bun run test -- "cd apps/agent && bun test test/portrait-bo-qua.spec.ts"'
     kbq_dong_thoi_gian: 'cd apps/app && bun test ./test/agent-transcript.spec.ts -t bo-qua'
     kbq_ngan: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/buoc-kara-bo-qua.dom.tsx'
@@ -2358,6 +2360,8 @@ executors:
     ldcc_dot_bien: bun _acceptance/ly-do-can-chinh-tu-soan/rang/dot-bien.mjs
     dt_do_man: 'APP_URL=${APP_URL:-http://localhost:3340} API_URL=${API_URL:-http://localhost:3341} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"'
     dt_san_thiet_ke: 'for t in "apps/app/components/crm/record-sheet/quick-add.tsx" "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx" "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx" "apps/app/components/crm/record-sheet/contact-sheet.tsx" "apps/app/app/(app)/[slug]/onboarding/[planId]/them-moi-gioi.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    dt2_do_man: 'APP_URL=${APP_URL:-http://localhost:3350} API_URL=${API_URL:-http://localhost:3351} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"'
+    dt2_san_thiet_ke: 'for t in "apps/app/components/crm/record-sheet/deal-sheet.tsx" "apps/app/components/crm/record-sheet/company-sheet.tsx" "apps/app/components/crm/record-sheet/quick-add.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done && bun _acceptance/dien-thoai-o-deal-cong-ty/rang/dung-so-chung.mjs'
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

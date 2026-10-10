@@ -36,6 +36,7 @@ import {
 	savingValue,
 } from "@/components/crm/inline-field";
 import { OwnerCell } from "@/components/crm/owner-cell";
+import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { CompanySocials } from "@/components/crm/social-links";
 import { DealStageMenu } from "@/components/crm/stage-change";
 import { Timeline } from "@/components/crm/timeline/timeline";
@@ -119,10 +120,11 @@ function contactColumns(m: RecordSheetMessages) {
 	const c = m.company.contactColumns;
 	return [
 		{ id: "primary", srLabel: c.primary, width: "w-10", className: "pl-5" },
-		{ id: "name", header: c.name, width: "w-[28%]" },
-		{ id: "title", header: c.title, width: "w-[24%]" },
-		{ id: "email", header: c.email, width: "w-[26%]" },
-		{ id: "owner", header: c.owner, width: "w-[22%]" },
+		{ id: "name", header: c.name, width: "w-[20%]" },
+		{ id: "phone", header: c.phone, width: "w-32" },
+		{ id: "title", header: c.title, width: "w-[12%]" },
+		{ id: "email", header: c.email, width: "w-[12%]" },
+		{ id: "owner", header: c.owner, width: "w-[11%]" },
 	];
 }
 
@@ -597,6 +599,13 @@ function CompanyContacts({
 											.join(" ")}
 									</span>
 								</span>
+							</TableCell>
+							<TableCell className="px-3 py-2.5">
+								{contact.phone ? (
+									<SoDienThoai so={contact.phone} />
+								) : (
+									<EmptyCellValue />
+								)}
 							</TableCell>
 							<TableCell className="truncate px-3 py-2.5">
 								{contact.title ?? <EmptyCellValue />}

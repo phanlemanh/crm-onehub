@@ -211,6 +211,7 @@ export class CompaniesService {
 						firstName: true,
 						lastName: true,
 						email: true,
+						phone: true,
 						title: true,
 						imageUrl: true,
 						owner: { select: OWNER_SELECT },
