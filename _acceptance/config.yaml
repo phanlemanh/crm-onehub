@@ -1509,6 +1509,7 @@ executors:
     dt_man_bang: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t cot-bang && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t ngan-chi-tiet'
     dt_man_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t goi-y-moi-gioi'
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
+    h6_doc_tep: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-doc-tep.spec.ts ./test/lo-trinh.dom.tsx ./test/lo-trinh-ngay.spec.ts ./test/proxy-lo-trinh.spec.ts'
     dt2_api: 'bun run test -- "cd apps/api && bun test test/dien-thoai-o-deal-cong-ty.spec.ts"'
     dt2_chon: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-o-deal-cong-ty.dom.tsx -t chon-nguoi'
     kbq_anh: 'bun _acceptance/buoc-kara-bo-qua/rang/bo-qua-dung-cho.mjs && bun run test -- "cd apps/agent && bun test test/portrait-bo-qua.spec.ts"'
@@ -1521,6 +1522,7 @@ executors:
     kkc_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx apps/app/test/kara-ban-ghi.dom.tsx && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi'
     kkc_canh_chu: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/messages-guard.spec.ts && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/messages-guard.spec.ts'
   script:
+    h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'
     ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
     ltc_ban_dung: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-dung.mjs
     ltc_mau: node _acceptance/trang-lo-trinh-trong-crm/rang/kiem-mau.mjs
