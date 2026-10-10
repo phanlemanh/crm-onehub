@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 4115cbcf39b81bd30ee7273a45c85efed5289eaa
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-10 — ký Cổng Bằng chứng trên vòng chấm 2 (9/9 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; vòng 1 REJECT chỉ vì bom giờ H5 ở suite agent). Bảy mục ngoài hợp đồng Ngoài-1 đến Ngoài-7 ghi Known limits (luật 53). Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi (Treo-1 đến Treo-6) được phê toàn bộ.
 ---
 
 # Evidence Report: hoan-tac-loat-dung-id

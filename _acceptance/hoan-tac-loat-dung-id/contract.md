@@ -5,7 +5,7 @@ slug: hoan-tac-loat-dung-id
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 design_doc: docs/superpowers/specs/2026-10-10-hoan-tac-loat-dung-id-design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T21:54:51Z
@@ -56,3 +56,11 @@ phần in câu lỗi tiếng Anh thô của máy chủ.
 - Vòng đời (luật 14): (1) Dọn thế nào — không đổi (Lưu trữ → Khôi phục → Xoá vĩnh viễn); (2) «Lịch sử» — không đổi; (3) Danh sách mặc định — không đổi.
 - **Thay một lời hứa đã ký (cần anh duyệt ở Cổng 1):** AC-1 của V2 `vong-doi-mot-cach-cat` hứa «Hoàn tác gọi khôi phục hàng loạt … với đúng danh sách id vừa gửi đi lưu trữ». V2d đổi thành «đúng danh sách id thật sự đã cất» (AC-2 ở đây). Bài kiểm đã ký `apps/app/test/vong-doi-mot-cach-cat.dom.tsx` (E1 của V2) sẽ được sửa fixture cho đúng hình kết quả mới (có `changedIds`) và assert ids theo luật mới; V2 được ghim lại sau khi gộp. Đơn `cham-tep` P2-60.
 - Ranh giới: ba `*.contracts.ts`, `messages/crm.ts` và các tệp kiểm nằm ngoài mục ranh giới của hàng — đơn `cham-tep` P2-60.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-10, luật 53):**
+  - Ngoài-1 — kiểu `BulkResult` phía app viết tay cạnh schema zod của máy chủ (`crmBulkResultOutput`), không suy từ đầu ra router; hai nơi phải sửa song song.
+  - Ngoài-2 — `archiveIfActive`/`restoreIfArchived`/`skippedOrMissing` chép ở ba service, tách khỏi `archive()`/`restore()` đơn lẻ; `docs/api.md` chưa nói tới `changedIds`/`skipped`.
+  - Ngoài-3 — lỗi thật của máy chủ (vd mất kết nối cơ sở dữ liệu) khi lưu trữ hàng loạt được tính vào `failed` và toast báo vàng «bị bỏ qua — đã lưu trữ từ trước hoặc không còn», dù bản đó chưa được cất.
+  - Ngoài-4 — Hoàn tác khi mọi bản đã được người khác khôi phục trước (`succeeded 0, skipped n`) vẫn báo «Chưa hoàn tác được. Các bản ghi vẫn ở mục Đã lưu trữ.».
+  - Ngoài-5 — ô lưu trữ của E1 có `succeeded/skipped/failed` cùng bằng 1 nên không phân biệt được bỏ qua với không còn ở đường lưu trữ.
+  - Ngoài-6 — ô «về thiếu» của E4 có `succeeded = failed = 1`; bài `htl-so-lech` (về 2 thiếu 1) đo quan hệ này trong suite app nhưng không gắn eval.
+  - Ngoài-7 — `runBulk` không ghi log lỗi thật của từng bản; phía vận hành không có dấu vết.
