@@ -94,6 +94,10 @@ async function ve(trail: VetOutput[]): Promise<void> {
 								unitName: "OneHub",
 								objectiveTitle: "Tăng trưởng 2027",
 								keyResultTitle: "Thoả thuận mới cả năm",
+								lyDo: null,
+								canCu: null,
+								lyDoTuKara: false,
+								mucTin: "chua-co-ly-do",
 							},
 						]}
 					/>
