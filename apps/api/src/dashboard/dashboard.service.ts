@@ -1,4 +1,4 @@
-import { ActivityType, type Db } from "@crm/db";
+import { ActivityType, type Db, type Prisma } from "@crm/db";
 import {
 	dauNgayVN,
 	NHAC,
@@ -57,6 +57,12 @@ export class DashboardService {
 		const owned = mine ? { ownerId: actingUserId } : {};
 
 		const now = new Date();
+		const viecQuaHan = {
+			type: ActivityType.TASK,
+			completedAt: null,
+			dueAt: { lt: dauNgayVN(now) },
+			createdById: mine ? actingUserId : undefined,
+		} satisfies Prisma.ActivityWhereInput;
 		const startOfMonth = monthStart(now, 0);
 		const startOfNextMonth = monthStart(now, 1);
 		const startOfPrevMonth = monthStart(now, -1);
@@ -153,12 +159,7 @@ export class DashboardService {
 				},
 			}),
 			this.db.activity.findMany({
-				where: {
-					type: ActivityType.TASK,
-					completedAt: null,
-					dueAt: { lt: dauNgayVN(now) },
-					createdById: mine ? actingUserId : undefined,
-				},
+				where: viecQuaHan,
 				orderBy: [{ dueAt: "asc" }],
 				take: 10,
 				select: {
@@ -298,6 +299,7 @@ export class DashboardService {
 				)
 				.sort((a, b) => (b.baseAmountCents ?? -1) - (a.baseAmountCents ?? -1)),
 			mySteps: await this.buocCuaToi(actingUserId, now),
+			quaHan: await this.demQuaHan(viecQuaHan, actingUserId, now),
 			...(await this.viecTrucTiep(actingUserId, now)),
 			overdueTasks: overdueTasks.map(({ dueAt, ...task }) => ({
 				...task,
@@ -309,6 +311,25 @@ export class DashboardService {
 				meta: activityMeta.parse(meta),
 			})),
 		};
+	}
+
+	private async demQuaHan(
+		viecQuaHan: Prisma.ActivityWhereInput,
+		actingUserId: string,
+		now: Date,
+	) {
+		const [viec, buoc] = await Promise.all([
+			this.db.activity.count({ where: viecQuaHan }),
+			this.db.onboardingStep.count({
+				where: {
+					assigneeId: actingUserId,
+					completedAt: null,
+					plan: { closedAt: null },
+					dueAt: { lt: dauNgayVN(now) },
+				},
+			}),
+		]);
+		return { viec, buoc };
 	}
 
 	private async buocCuaToi(actingUserId: string, now: Date) {

@@ -12,6 +12,7 @@ import {
 	ForbiddenException,
 	NotFoundException,
 } from "@nestjs/common";
+import { TO_CHUC } from "../to-chuc/to-chuc-config";
 import type {
 	PlanOutput,
 	PlanOwnerInput,
@@ -116,6 +117,23 @@ async function thanhVien(
 		);
 	}
 	return nguoi;
+}
+
+async function boPhanDangDung(tx: Tx, departmentId: string): Promise<void> {
+	const boPhan = await tx.department.findUnique({
+		where: { id: departmentId },
+		select: { name: true, archivedAt: true },
+	});
+	if (boPhan === null) {
+		throw new BadRequestException(
+			TO_CHUC.thongDiep.khongCoBoPhan(departmentId),
+		);
+	}
+	if (boPhan.archivedAt !== null) {
+		throw new BadRequestException(
+			ONBOARDING.thongDiep.boPhanDaLuuTru([boPhan.name]),
+		);
+	}
 }
 
 async function tenNguoi(tx: Tx, userId: string): Promise<string> {
@@ -257,6 +275,7 @@ export class OnboardingGhi {
 	addStep(input: StepAddInput, actingUserId: string): Promise<StepOutput> {
 		return this.db.$transaction(async (tx) => {
 			const plan = await keHoachMo(tx, input.planId);
+			await boPhanDangDung(tx, input.departmentId);
 			const nguoi = input.assigneeId
 				? await thanhVien(tx, input.assigneeId)
 				: null;

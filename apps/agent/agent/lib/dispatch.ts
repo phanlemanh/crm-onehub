@@ -8,6 +8,7 @@ import { queueEventAgentRuns } from "./custom-agent-dispatch";
 import { settledWithin } from "./deadline";
 import { DISPATCH } from "./dispatch-config";
 import { markRunning, settle } from "./enrichment";
+import { LOAI_VIEC_MA_LECH, xuLyMaLech } from "./ma-lech";
 import { chayNhac, LOAI_VIEC_NHAC } from "./nhac-ke-hoach";
 import { TRO_LY_OKR } from "./okr/config";
 import { chayKiemSanSang, xepKiemLaiKhoa } from "./okr/kiem-san-sang";
@@ -170,6 +171,11 @@ async function handleDirect(task: LeasedTask): Promise<void> {
 
 	if (task.kind === "ai-doi-soat") {
 		await chayDoiSoat(task);
+		return;
+	}
+
+	if (task.kind === LOAI_VIEC_MA_LECH) {
+		await xuLyMaLech(task);
 		return;
 	}
 
