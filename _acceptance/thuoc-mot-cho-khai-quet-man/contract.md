@@ -5,7 +5,7 @@ slug: thuoc-mot-cho-khai-quet-man
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [script]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-10
 design_doc: docs/superpowers/specs/2026-10-09-thuoc-mot-cho-khai-quet-man-design.md
@@ -77,3 +77,5 @@ Ngưỡng ở `opportunity.md` (đang `[đề xuất]`) đo ngay ở lượt S4 
   `okr-cuoc-soan.ts`, không phải khai gốc).
 - Cây tạm của chiều đỏ nằm dưới `.acceptance-runs/thuoc-mot-cho-khai-quet-man/` (ba cấp dưới gốc kho, kho bỏ qua), xoá
   sau lượt; đã thử 09/10: bản `d089cb8d` thoát 0 trên cây lành, 0 khi khu soạn khai trùng, 1 khi agent khai trùng.
+- Known limits (Ngoài-1, Cổng 2): Nếu sau này ai đó làm hỏng cách thước kiểm tra quét thư mục soạn OKR, bằng chứng đã ký của vòng trước vẫn được coi là còn mới và không bị báo cũ. Chỉ khi mở lại vòng trước và ghim lại thì lỗ hổng này mới được vá.
+- Known limits (Ngoài-2, Cổng 2): Khi máy đo thiếu thứ nó cần (ví dụ chưa cài đủ phụ thuộc hay thiếu lịch sử git), bộ đo có thể báo là thước sai thay vì báo là không đo được. Người duyệt có thể tưởng tính năng hỏng trong khi thật ra chỉ là môi trường chưa sẵn sàng.
