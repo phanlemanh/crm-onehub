@@ -85,7 +85,7 @@ export async function chayLenh(args: string[]): Promise<number> {
 			const dem = await xoaBoOkrMau(db);
 			console.log(
 				dem
-					? `Đã xoá bộ OKR mẫu: ${tomTat(dem)}.`
+					? `Đã xoá bộ OKR mẫu: ${tomTat(dem)}, ${dem.cuocSoan} cuộc soạn OKR với ${dem.deXuatSoan} đề xuất soạn.`
 					: "Kho không có bộ mẫu nào — không có gì để xoá.",
 			);
 			return 0;

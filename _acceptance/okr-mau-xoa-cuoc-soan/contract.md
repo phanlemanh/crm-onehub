@@ -27,7 +27,7 @@ Source input: lời giao trong phiên 2026-10-11 · design doc · `docs/setup.md
 
 ## Criteria
 
-- AC-1 (cross-layer): Given bộ mẫu đã nạp, `le-hai-dang` bật soạn cho đúng phòng `mau-okr-pb-kd-bac` qua thủ tục cấu hình thật, `nguyen-thi-lan` mở một cuộc qua `okr.soanMo` thật trên `mau-okr-chu-ky-nam-ke`, và cuộc có hai đề xuất ghi bằng bộ ghi thật của tác tử (một chờ, một đã bác), cùng ba cuộc ghi bằng bộ mở cuộc thật mà mỗi cuộc chỉ một vế trỏ bộ mẫu — chỉ `departmentId`, chỉ `divisionId`, chỉ `nguoiMoUserId` — mỗi cuộc một đề xuất, When chạy `bun run okr:mau --xoa`, Then lệnh thoát 0; không còn hàng `okrCuocSoan` nào có `cycleId`, `divisionId` hay `departmentId` bắt đầu `mau-okr-` hoặc `nguoiMoUserId` là người mẫu (mỗi vế có ca riêng); không còn `okrDeXuat` nào mang mã của bốn cuộc đó; quét mọi cột `id`/`*Id` của kho tìm mã người, bộ phận, phòng ban, chu kỳ, Mục tiêu và KR mẫu (chụp trước khi xoá; tập này không gồm mã cuộc soạn) ra rỗng; và nạp lại ngay sau đó thoát 0.
+- AC-1 (cross-layer): Given bộ mẫu đã nạp, `le-hai-dang` bật soạn cho đúng phòng `mau-okr-pb-kd-bac` qua thủ tục cấu hình thật, `nguyen-thi-lan` mở một cuộc qua `okr.soanMo` thật trên `mau-okr-chu-ky-nam-ke`, và cuộc có hai đề xuất ghi bằng bộ ghi thật của tác tử (một chờ, một đã bác), cùng ba cuộc ghi bằng bộ mở cuộc thật mà mỗi cuộc chỉ một vế trỏ bộ mẫu — chỉ `departmentId`, chỉ `divisionId`, chỉ `nguoiMoUserId` — mỗi cuộc một đề xuất, When chạy `bun run okr:mau --xoa`, Then lệnh thoát 0; không còn hàng `okrCuocSoan` nào có `cycleId`, `divisionId` hay `departmentId` bắt đầu `mau-okr-` hoặc `nguoiMoUserId` là người mẫu (mỗi vế có ca riêng); không còn `okrDeXuat` nào mang mã của bốn cuộc đó; quét mọi cột `id`/`*Id` của kho tìm mã người, bộ phận, phòng ban, chu kỳ, Mục tiêu và KR mẫu (chụp trước khi xoá; tập này không gồm mã cuộc soạn) ra rỗng, trừ đúng một khoá đã khai giới hạn — `okrProgramConfig.createdById` (xem Out of scope); và nạp lại ngay sau đó thoát 0.
 - AC-2: Given cùng kho của AC-1, When `--xoa` chạy xong, Then dòng in bắt đầu «Đã xoá bộ OKR mẫu:» và chứa đúng «4 cuộc soạn OKR với 5 đề xuất soạn».
 - AC-3: Given kho không còn bộ mẫu nhưng còn một cuộc soạn mồ côi trỏ `mau-okr-chu-ky-nam-ke`, `mau-okr-pb-kd-bac` và `nguyen-thi-lan` (đúng hình hàng sót của ca tái hiện, ghi bằng bộ mở cuộc thật) cùng một đề xuất của nó, When chạy `--xoa`, Then lệnh thoát 0, cuộc và đề xuất không còn, dòng in là «Đã xoá bộ OKR mẫu:» có «1 cuộc soạn OKR với 1 đề xuất soạn» — không phải «không có bộ mẫu».
 - AC-4: Given cùng kho của AC-1 có thêm một cuộc soạn ngoài bộ mẫu (chu kỳ, phòng và người mở không mang mã mẫu) với một đề xuất, When chạy `--xoa`, Then cuộc và đề xuất ngoài bộ mẫu còn nguyên từng cột.
@@ -53,8 +53,10 @@ Out of scope.
 - Phiên eve trong kho phiên của `apps/agent-okr`.
 - Vết `okrTrail` của cuộc soạn: tác tử soạn không ghi vết (bốn bảng nó ghi là `okrDeXuat`, `okrCuocSoan`, `aiChiPhi`, `agentEvent` — `docs/agent.md`); vết `soan-okr:` do «Đưa vào bộ OKR» ghi mang `cycleId`/`objectiveId` của chu kỳ và Mục tiêu mẫu nên đã đi theo đường xoá vết hiện có.
 - Thêm khoá ngoại cho `okrCuocSoan` (đường T3 `packages/db/prisma`).
+- Phiên bản cấu hình chương trình OKR (`okrProgramConfig`) do người mẫu tạo — vd bật Soạn OKR bằng `le-hai-dang` ở bước 2 của ca tái hiện — còn lại sau `--xoa`, trỏ người đã xoá. Xoá nó là lùi cấu hình của cả workspace về bản trước; quyết định riêng, việc riêng (sổ quyết định, dòng `descope` sau seal).
 
 ## Notes
 
 - Không ui-check: hồ sơ không có mặt người nhìn (`surfaces: [cli, db]`).
 - Hàng chi phí còn lại trỏ `taskId` của một cuộc đã xoá; không bộ đọc nào đi từ chi phí sang cuộc.
+- Known limits: sau `--xoa`, phiên bản `okrProgramConfig` do người mẫu tạo vẫn còn, `createdById` trỏ người đã xoá, và `aiSoanDonVi` có thể còn mã đơn vị mẫu.
