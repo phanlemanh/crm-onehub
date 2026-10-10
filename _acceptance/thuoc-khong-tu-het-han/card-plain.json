@@ -1,13 +1,13 @@
 {
- "feature_plain": "Các lượt gộp sau không còn phải ghim lại thừa vì thước của 5 hồ sơ trỏ vào tệp đã dời, và thước Zalo thôi đỏ ở mọi nhánh; 8 hồ sơ có thước đã chết chuyển sang F24.",
+ "feature_plain": "Các lượt gộp sau không còn phải ghim lại thừa vì thước của 3 hồ sơ trỏ vào tệp đã dời, và thước Zalo thôi đỏ ở mọi nhánh; 10 hồ sơ có thước đã chết hoặc còn chết ở phép đo màn hình chuyển sang F24.",
  "will_do": [
   {
    "id": "AC-1",
-   "p": "Sẽ sửa phần «tệp nào thước này đo» của 10 phép đo ở 5 hồ sơ có thước còn sống, đo ở một mốc cố định; đối chứng ở mốc gốc vẫn tìm lại đủ 20 phép đo chết."
+   "p": "Sẽ đo đúng bằng hàm lưới trước-gộp dùng: ở 3 hồ sơ trong phạm vi, lưới bật lại bộ lọc «chỉ ghim lại khi tệp đo đổi»; đối chứng ở mốc gốc tìm lại đủ 13 hồ sơ bị lưới tắt lọc, xét mọi loại phép đo."
   },
   {
    "id": "AC-2",
-   "p": "Sẽ chỉ đổi đúng phần đó ở 6 tệp; lệnh, kỳ vọng và tiêu chí giữ nguyên từng chữ."
+   "p": "Sẽ chỉ đổi phần «tệp nào thước này đo» của 3 phép đo ở 4 tệp, lệnh, kỳ vọng và tiêu chí giữ nguyên từng chữ, và không chạm hai hồ sơ đã chuyển F24."
   },
   {
    "id": "AC-3",
@@ -29,18 +29,22 @@
   },
   {
    "id": "OOS-2",
-   "p": "Không sửa 186 tệp thước còn nhắc mốc trôi — chỉ liệt kê; sửa khi lượt kiểm chéo đêm báo đỏ."
+   "p": "Không sửa Điện thoại cá nhân và Thẻ góp ý OKR ở vòng này: chúng còn chết ở phép đo màn hình, chuyển F24; phần đã sửa ở hai hồ sơ đó được gỡ khỏi nhánh."
   },
   {
    "id": "OOS-3",
-   "p": "Không khai thêm tệp đo cho 20 phép đo đang thiếu."
+   "p": "Không sửa 186 tệp thước còn nhắc mốc trôi — chỉ liệt kê; sửa khi lượt kiểm chéo đêm báo đỏ."
   },
   {
    "id": "OOS-4",
-   "p": "Không viết luật chặn thước mới dùng mốc trôi ở kho này — việc của bộ kit."
+   "p": "Không khai thêm tệp đo cho 20 phép đo đang thiếu."
   },
   {
    "id": "OOS-5",
+   "p": "Không viết luật chặn thước mới dùng mốc trôi ở kho này — việc của bộ kit."
+  },
+  {
+   "id": "OOS-6",
    "p": "Vế «kiểm trước khi gộp» của thước Zalo không ai canh cho tới khi anh cho cài lượt kiểm chéo đêm."
   }
  ],
