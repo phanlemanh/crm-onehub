@@ -51,6 +51,14 @@ giờ trước mốc), nên không `--moc` thì hạn đã qua và màn `/okr/ho
 Sáu bảng hỏi ý mang mã sinh của cơ sở dữ liệu, không mang `mau-okr-`: `--xoa` tìm
 chúng qua chu kỳ và người mẫu.
 
+Cuộc soạn OKR mở trên bộ mẫu — chu kỳ, bộ phận hay phòng ban mẫu, hoặc do người mẫu mở —
+cùng các đề xuất của nó cũng đi theo `--xoa` và nạp lại. `okrCuocSoan` không có khoá
+ngoại nên lệnh tìm cuộc theo tiền tố `mau-okr-` chứ không theo bộ mẫu đang có: cuộc còn
+sót từ một lần xoá trước cũng bị gỡ và được đếm. Hàng chi phí AI (`aiChiPhi`) của các
+cuộc đó ở lại: đó là tiền đã tiêu thật, và trần chi phí AI của tháng đọc chúng — xoá đi
+thì trần mở lại giả. Phiên bản cấu hình chương trình OKR mà người mẫu tạo (vd khi bật
+Soạn OKR) hiện vẫn còn sau `--xoa`.
+
 ```sh
 bun run okr:mau                      # nạp, hoặc nạp lại — xoá bộ cũ rồi ghi bộ mới
 bun run okr:mau --moc 2026-11-12     # ghim ngày: tuần 6 là tuần chứa ngày đó
