@@ -1,22 +1,41 @@
-# Review findings: ban-gieo-gop-y-sau-nop (round 2)
+# Review findings: ban-gieo-gop-y-sau-nop (round 3)
 
 ## Trong hợp đồng
 
-- **E3 leaves already-modified evidence files overwritten without saying so; the check only compares git status lines**
-  file: `_acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs:89`
-  severity: medium
-  AC: AC-3
-  source: bugs
-  detail: traBangChung only compares `git status --porcelain` line sets: `moi`/`con` are lines not present in `truoc`. Take a tracked evidence file that was already modified before the command. Its line is ` M path` before and after, so it is never restored. That part is intended ("tệp đã bẩn từ trước giữ nguyên"). But the post-restore check cannot see that the command changed the file's contents again. gy_man_that runs man-gop-y.mjs with no --do flag, so it calls `screenshot({path})` straight into _acceptance/gop-y-dung-cho/evidence (man-gop-y.mjs:55-61, 154, 329). Concrete case: a previous E3 run exits partway through via khongDo, for example when git checkout fails on command 2, and leaves gop-y-dung-cho/evidence/E23-*.png modified. On the next run those files are in `truoc`. They get overwritten with fresh screenshots and are never restored, yet the script prints 'tra lai 0 tep bang chung' and passes the check. The same happens to a person's uncommitted regenerated screenshots in that folder: they are silently replaced. E3's expected text promises that pre-dirty files are kept and that any file differing from its pre-command state ends in 'KHONG DO DUOC' with a stop code; with this status-line-only comparison neither promise holds. A related edge case: if the command deletes a file that was already modified, the new ` D` line lands in `sua`, and `git checkout --` restores the HEAD version, discarding the pre-existing changes while reporting success. Fix: snapshot the content hash (`git hash-object`) of every file already dirty or untracked in `truoc`, compare after the restore, and call khongDo on any difference.
+Không có.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Exit 2 leaves the previous run's passing lines in evidence/ba-ban-do.txt**
-  Người dùng thấy gì: Nếu lượt đo bị dừng giữa chừng vì không trả lại được ảnh, tệp bằng chứng vẫn giữ dòng kết quả đạt của lần chạy trước. Ai chỉ mở tệp mà không xem kết quả chạy có thể tưởng lượt mới đạt.
+- **Gắn thuộc tính lạ `.ban` lên Set do trangThaiBangChung trả về (sửa đối tượng tại chỗ, kiểu ngầm)**
+  Người dùng thấy gì: Không ảnh hưởng gì đến người dùng hay kết quả đo: chỉ là cách viết mã bên trong công cụ đo hơi vụng và đọc ảnh bằng chứng nhiều lần hơn cần thiết. Sửa tốn công mà không đổi kết quả nào.
   file: `_acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs`
   severity: low
+  Đề xuất: wont-fix
+
+- **Lỗi ghi khi trả tệp đã bẩn văng ra mã 1 thay vì KHONG DO DUOC mã 2**
+  Người dùng thấy gì: Trong một tình huống hiếm (thư mục bằng chứng có tệp lạ bị lệnh đo xoá), phép đo có thể báo là đo đỏ thay vì báo là không đo được. Người đọc kết quả có thể hiểu nhầm mức độ sự cố, nhưng việc này không làm sai kết quả đo bình thường.
+  file: `_acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Đường dẫn bị porcelain đặt trong ngoặc kép làm lớp chụp và trả tệp đã bẩn im lặng không chạy**
+  Người dùng thấy gì: Nếu sau này có ảnh bằng chứng đặt tên có dấu hoặc dấu cách, ảnh bị phép đo ghi đè có thể không được trả lại nguyên trạng mà không ai biết. Hiện chưa xảy ra vì mọi tên tệp đều không dấu.
+  file: `_acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **ba-ban-do.mjs: dirt left by an aborted run is treated as 'already dirty' on the next run, so the evidence guard passes quietly**
+  Người dùng thấy gì: Nếu một lượt đo bị dừng đột ngột giữa chừng, lượt chạy kế tiếp có thể coi ảnh bằng chứng đã bị ghi đè là bình thường và báo xanh. Cách tránh: sau khi ngắt lượt đo, kiểm lại ảnh bằng chứng của ba hồ sơ kia trước khi tin kết quả.
+  file: `_acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình 2 (khuôn viết tay theo ý bên đọc, không lấy từ bên ghi): regex kết luận của E3 không khớp dòng «KHONG DO:» mà r1a_man_chip thật sự in**
+  Người dùng thấy gì: Khi một trong ba bàn đo màn dừng giữa chừng ở bước đo và in ra một câu báo không đo được theo kiểu riêng, bản tổng hợp sẽ không nhận ra câu đó và báo thiếu kết luận. Người đọc vẫn thấy bàn đó đỏ, nhưng lý do thật của nó bị che trong bản tổng hợp.
+  file: `_acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs`
+  severity: medium
   Đề xuất: known-limits
 
 - **dot-bien xoá mọi bản sao .san-gop-y-vet-* lúc khởi động, kể cả bản sao của một lượt dot-bien khác đang chạy (r1)**
@@ -36,5 +55,7 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   file: `_acceptance/ban-gieo-gop-y-sau-nop/rang/dot-bien.mjs`
   severity: low
   Đề xuất: known-limits
+
+## Chưa adversarial-verify (refuter chết)
 
 Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).

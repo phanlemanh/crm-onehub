@@ -82,3 +82,39 @@ wall: 957s
 - **claude-sonnet-5-5**: 6 agent · 22 calls · out 14,372 · in 44 · cache_read 1,618,619 · cache_create 580,969
 - **claude-haiku-5-5**: 10 agent · 20 calls · out 12,171 · in 40 · cache_read 1,210,257 · cache_create 638,395
 
+### S4 round 3 — wf_42452b75-52f (16 agent, 45,038 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:bugs | claude-opus-5-5 | 10 | 11,640 | 20 | 1,036,942 | 139 |
+| review:measurement | claude-opus-5-5 | 8 | 9,222 | 16 | 847,097 | 110 |
+| synthesize:report | claude-sonnet-5-5 | 5 | 6,227 | 10 | 468,052 | 47 |
+| review:conventions | claude-opus-5-5 | 5 | 4,809 | 10 | 400,983 | 61 |
+| triage | claude-sonnet-5-5 | 2 | 2,832 | 4 | 93,124 | 24 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,129 | 4 | 124,535 | 72 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 1,516 | 4 | 124,478 | 44 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,101 | 4 | 124,480 | 8 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 954 | 4 | 124,562 | 249 |
+| machine:bun _acceptance/ban-gieo-gop-y-sau-nop/r | claude-haiku-5-5 | 2 | 877 | 4 | 70,020 | 321 |
+| machine:node _acceptance/ban-gieo-gop-y-sau-nop/ | claude-haiku-5-5 | 2 | 742 | 4 | 124,522 | 6 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 725 | 4 | 124,505 | 225 |
+| machine:bun _acceptance/ban-gieo-gop-y-sau-nop/r | claude-haiku-5-5 | 2 | 677 | 4 | 124,525 | 292 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 640 | 4 | 89,470 | 248 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 533 | 4 | 124,474 | 7 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 414 | 4 | 88,734 | 10 |
+
+
+wall: 934s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 10 | 9,894 | 1,155,571 | 854 | 08:39:03 | 08:53:16 |
+| review | 3 | 25,671 | 2,285,022 | 142 | 08:39:03 | 08:41:24 |
+| triage | 1 | 2,832 | 93,124 | 24 | 08:53:16 | 08:53:41 |
+| capture | 1 | 414 | 88,734 | 10 | 08:53:41 | 08:53:50 |
+| synthesize | 1 | 6,227 | 468,052 | 47 | 08:53:50 | 08:54:37 |
+
+- **claude-opus-5-5**: 3 agent · 23 calls · out 25,671 · in 46 · cache_read 2,285,022 · cache_create 303,671
+- **claude-sonnet-5-5**: 3 agent · 9 calls · out 9,473 · in 18 · cache_read 649,910 · cache_create 317,539
+- **claude-haiku-5-5**: 10 agent · 20 calls · out 9,894 · in 40 · cache_read 1,155,571 · cache_create 692,494
+
