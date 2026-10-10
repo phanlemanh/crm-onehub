@@ -37,10 +37,6 @@ const nextConfig: NextConfig = {
 		],
 	},
 
-	outputFileTracingIncludes: {
-		"/\\[slug\\]/lo-trinh": ["../../LO-TRINH.html"],
-	},
-
 	cacheComponents: true,
 	partialPrefetching: true,
 };
