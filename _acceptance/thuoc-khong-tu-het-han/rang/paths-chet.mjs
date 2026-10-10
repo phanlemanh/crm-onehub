@@ -1,93 +1,93 @@
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { join } from "node:path";
-import { docTai, globChet, hoSoDaKy, LoiNeo, lsTree, MOC_GOC, mocNeo, napGlobToRe, pathsCua } from "./neo.mjs";
+import { docTai, GOC, hoSoDaKy, LoiNeo, lsTree, MOC_GOC, mocNeo } from "./neo.mjs";
 
+const ec = createRequire(import.meta.url)(join(GOC, "lib/evidence-core.cjs"));
 const DANH_SACH = JSON.parse(readFileSync(join(import.meta.dirname, "danh-sach.json"), "utf8"));
-const khoa = (ho, ev) => `${ho}/${ev}`;
+const LY_DO_PATHS = /^(paths-khong-tro-toi-tep|dang-khai-la):/;
 
-export function kiemDanhSach(danhSach, docEvals, tep, globToRe) {
-	const loi = [];
-	for (const { ho_so, eval: ev } of danhSach) {
-		const globs = pathsCua(docEvals(ho_so)).get(ev);
-		if (!globs) {
-			loi.push(`${khoa(ho_so, ev)}: khong con eval may nay`);
-			continue;
-		}
-		const chet = globChet(globs, tep, globToRe);
-		if (chet.length) loi.push(`${khoa(ho_so, ev)}: ${chet.join(", ")}`);
-	}
-	return loi;
+export function locCua(evalsText, cay) {
+	return ec.staleByPaths(["x"], evalsText, { cay });
 }
 
-export function quetToanBo(sha, globToRe) {
-	const tep = lsTree(sha);
-	const ra = new Map();
+export function hoSoTatLocViPaths(sha) {
+	const cay = ec.dungCayPaths(lsTree(sha));
+	const ra = [];
 	for (const ho of hoSoDaKy(sha)) {
-		for (const [ev, globs] of pathsCua(docTai(sha, `_acceptance/${ho}/evals.yaml`))) {
-			const chet = globChet(globs, tep, globToRe);
-			if (chet.length) ra.set(khoa(ho, ev), chet);
-		}
+		const r = locCua(docTai(sha, `_acceptance/${ho}/evals.yaml`), cay);
+		if (!r.apply && LY_DO_PATHS.test(r.reason)) ra.push({ ho_so: ho, ly_do_luoi: r.reason });
 	}
 	return ra;
 }
 
+const themGlob = (text, id, glob) =>
+	text.replace(new RegExp(`(\\n  - id: ${id}\\n(?:(?!\\n  - id: )[\\s\\S])*?\\n    paths:)`), `$1\n      - "${glob}"`);
+
+const doiExecutor = (text, id, loai) =>
+	text.replace(new RegExp(`(\\n  - id: ${id}\\n(?:(?!\\n  - id: )[\\s\\S])*?\\n    executor: )\\S+`), `$1${loai}`);
+
 function main() {
-	return napGlobToRe().then((globToRe) => {
-		const loi = [];
-		const neo = mocNeo();
-		console.log(`moc neo: ${neo.sha.slice(0, 9)} (${neo.loai})`);
-		const tepNeo = lsTree(neo.sha);
-		const docNeo = (ho) => docTai(neo.sha, `_acceptance/${ho}/evals.yaml`);
-		const trong = DANH_SACH.eval.filter((x) => x.trong_pham_vi);
-		const conChet = kiemDanhSach(trong, docNeo, tepNeo, globToRe);
-		for (const l of conChet) loi.push(`(1) glob chet o moc neo — ${l}`);
-		console.log(`(1) ${trong.length} eval trong pham vi o moc neo: ${conChet.length} eval con glob chet (${DANH_SACH.eval.length - trong.length} eval ngoai pham vi khong xet)`);
+	const loi = [];
+	const neo = mocNeo();
+	console.log(`moc neo: ${neo.sha.slice(0, 9)} (${neo.loai})`);
+	const cayNeo = ec.dungCayPaths(lsTree(neo.sha));
+	const trong = [...new Set(DANH_SACH.eval.filter((x) => x.trong_pham_vi).map((x) => x.ho_so))];
+	for (const ho of trong) {
+		const r = locCua(docTai(neo.sha, `_acceptance/${ho}/evals.yaml`), cayNeo);
+		if (!r.apply) loi.push(`(1) ${ho}: luoi tat bo loc o moc neo — ${r.reason}`);
+	}
+	console.log(`(1) ${trong.length} ho so trong pham vi o moc neo: staleByPaths cua luoi bat bo loc o ${trong.length - loi.length}`);
 
-		const goc = quetToanBo(MOC_GOC, globToRe);
-		const mong = new Map(DANH_SACH.eval.map((x) => [khoa(x.ho_so, x.eval), Object.keys(x.doi).sort()]));
-		for (const [k, chet] of goc) {
-			if (!mong.has(k)) loi.push(`(2) quet ${MOC_GOC} thay ${k} chet ma danh sach khong co`);
-			else if (JSON.stringify([...chet].sort()) !== JSON.stringify(mong.get(k))) loi.push(`(2) ${k}: glob chet ${chet.join(", ")} khac danh sach`);
-		}
-		for (const k of mong.keys()) if (!goc.has(k)) loi.push(`(2) danh sach co ${k} ma quet ${MOC_GOC} khong thay chet`);
-		console.log(`(2) quet toan bo ho so da ky o ${MOC_GOC}: ${goc.size} eval chet, danh sach ${mong.size}`);
+	const goc = hoSoTatLocViPaths(MOC_GOC);
+	const khoa = (x) => `${x.ho_so} ${x.ly_do_luoi}`;
+	const thuc = new Set(goc.map(khoa));
+	const mong = new Set(DANH_SACH.loc_tat_vi_paths.map(khoa));
+	for (const k of thuc) if (!mong.has(k)) loi.push(`(2) quet ${MOC_GOC} thay «${k}» ma danh sach khong co`);
+	for (const k of mong) if (!thuc.has(k)) loi.push(`(2) danh sach co «${k}» ma quet ${MOC_GOC} khong thay`);
+	console.log(`(2) moi ho so da ky o ${MOC_GOC}: ${goc.length} ho so luoi tat bo loc vi paths, danh sach ${mong.size}`);
+	for (const ho of trong) if (!goc.some((x) => x.ho_so === ho)) loi.push(`(2) ${ho} trong pham vi ma o ${MOC_GOC} luoi khong tat loc — danh sach sai`);
 
-		const tepGoc = lsTree(MOC_GOC);
-		const O = [
-			["apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx", true],
-			["apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", false],
-			["apps/app/app/(app)/[slug]/settings/giai-doan/", true],
-			["apps/app/app/(app)/[slug]/settings/giai-doan/**", false],
-		];
-		for (const [g, chet] of O) {
-			const thuc = globChet([g], tepGoc, globToRe).length === 1;
-			if (thuc !== chet) loi.push(`(3) bo khop: «${g}» ${thuc ? "chet" : "song"}, mong ${chet ? "chet" : "song"}`);
-		}
-		console.log(`(3) doi chung bo khop: ${O.length} o`);
+	const cayGoc = ec.dungCayPaths(lsTree(MOC_GOC));
+	const O = [
+		["apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx", "paths-khong-tro-toi-tep"],
+		["apps/app/app/(app)/[slug]/contacts/contacts-table.tsx", null],
+		["apps/app/app/(app)/[slug]/settings/giai-doan/", "dang-khai-la"],
+		["apps/app/app/(app)/[slug]/settings/giai-doan/**", null],
+	];
+	for (const [g, ma] of O) {
+		const pl = ec.phanLoaiMucPaths(g, cayGoc);
+		if ((pl.nhan ? null : pl.ma) !== ma) loi.push(`(3) phanLoaiMucPaths «${g}» ra ${pl.nhan ? "nhan" : pl.ma}, mong ${ma ?? "nhan"}`);
+	}
+	console.log(`(3) doi chung bo khop cua luoi: ${O.length} o`);
 
-		const gia = [{ ho_so: "danh-sach-keo-chung", eval: "E6" }];
-		const docGia = (ho) => docNeo(ho).replace(/(\n  - id: E6\n(?:.*\n)*?    paths:\n)/, '$1      - "apps/khong-co/**"\n');
-		const bat = kiemDanhSach(gia, docGia, tepNeo, globToRe);
-		if (!bat.some((l) => l.includes("apps/khong-co/**"))) loi.push("(4) chieu do: them glob apps/khong-co/** ma khong bat");
-		else console.log("(4) chieu do: them glob apps/khong-co/** -> DUNG");
+	const ho = trong[0];
+	const goc0 = docTai(neo.sha, `_acceptance/${ho}/evals.yaml`);
+	const id = /\n  - id: (\S+)\n/.exec(goc0)?.[1];
+	for (const loai of ["script", "ui-check", "judgment"]) {
+		const gia = themGlob(doiExecutor(goc0, id, loai), id, "apps/khong-co/**");
+		const r = locCua(gia, cayNeo);
+		if (r.apply || !r.reason.includes("apps/khong-co/**")) loi.push(`(4) chieu do ${loai}: them glob apps/khong-co/** vao ${ho}/${id} ma luoi van bat loc`);
+	}
+	if (!loi.some((l) => l.startsWith("(4)"))) console.log(`(4) chieu do: glob chet o eval script, ui-check, judgment cua ${ho}/${id} -> luoi tat loc, goi ten glob`);
+	const rDt = locCua(docTai(neo.sha, "_acceptance/dien-thoai-ca-nhan/evals.yaml"), cayNeo);
+	if (rDt.apply || !rDt.reason.includes(":E1:")) loi.push(`(4) chieu do: dien-thoai-ca-nhan dua vao pham vi ma luoi khong tat loc o E1 (${rDt.reason})`);
+	else console.log(`(4) chieu do: dien-thoai-ca-nhan dua vao pham vi -> luoi tat loc, goi ten ${rDt.reason.split(":").slice(0, 2).join(":")}`);
 
-		if (loi.length) {
-			console.error(`paths-chet: DO\n${loi.map((l) => `  - ${l}`).join("\n")}`);
-			return 1;
-		}
-		console.log(`paths-chet: XANH — 0 eval co glob chet trong ${DANH_SACH.eval.filter((x) => x.trong_pham_vi).length} eval trong pham vi`);
-		return 0;
-	});
+	if (loi.length) {
+		console.error(`paths-chet: DO\n${loi.map((l) => `  - ${l}`).join("\n")}`);
+		return 1;
+	}
+	console.log(`paths-chet: XANH — luoi bat bo loc o ca ${trong.length} ho so trong pham vi`);
+	return 0;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-	main()
-		.then((ma) => {
-			process.exitCode = ma;
-		})
-		.catch((e) => {
-			if (!(e instanceof LoiNeo)) throw e;
-			console.error(`paths-chet: KHONG DO DUOC — ${e.message}`);
-			process.exitCode = 2;
-		});
+	try {
+		process.exitCode = main();
+	} catch (e) {
+		if (!(e instanceof LoiNeo)) throw e;
+		console.error(`paths-chet: KHONG DO DUOC — ${e.message}`);
+		process.exitCode = 2;
+	}
 }

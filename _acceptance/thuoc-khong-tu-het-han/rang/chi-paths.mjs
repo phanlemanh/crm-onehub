@@ -1,9 +1,18 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { docTai, LoiNeo, MOC_GOC, mocNeo, pathsCua } from "./neo.mjs";
+import { docTai, git, LoiNeo, MOC_GOC, mocNeo, NHANH, pathsCua } from "./neo.mjs";
 
 const DANH_SACH = JSON.parse(readFileSync(join(import.meta.dirname, "danh-sach.json"), "utf8"));
 const HAI_THUOC = { "ha-tran-thang-hoi-zalo": "E7" };
+const KHONG_CHAM = ["_acceptance/dien-thoai-ca-nhan/", "_acceptance/the-gop-y-okr/"];
+
+export function tepVongNay(neo) {
+	if (neo.loai.startsWith("commit gop")) return git("diff", "--name-only", `${neo.sha}^1`, neo.sha).split("\n").filter(Boolean);
+	const nen = git("merge-base", neo.sha, `origin/${NHANH}`).trim();
+	return git("diff", "--name-only", nen, neo.sha).split("\n").filter(Boolean);
+}
+
+export const chamCam = (tep) => tep.filter((f) => KHONG_CHAM.some((d) => f.startsWith(d)));
 const TRONG = DANH_SACH.eval.filter((x) => x.trong_pham_vi);
 
 function khoiEval(text) {
@@ -77,6 +86,12 @@ function main() {
 		loi.push(`tap eval doi paths (${daDoi.length}) khac danh sach (${mong.length}): thua ${daDoi.filter((x) => !mong.includes(x)).join(", ") || "-"}; thieu ${mong.filter((x) => !daDoi.includes(x)).join(", ") || "-"}`);
 	}
 	console.log(`so ${tep.length} tep evals.yaml, ${daDoi.length} eval doi paths, danh sach ${mong.length}`);
+	const cham = chamCam(tepVongNay(neo));
+	if (cham.length) loi.push(`vong nay cham ho so da chuyen F24: ${cham.join(", ")}`);
+	console.log(`vong nay cham ${cham.length} tep duoi ${KHONG_CHAM.join(", ")}`);
+	const giaCham = chamCam(["apps/x.ts", "_acceptance/the-gop-y-okr/evals.yaml"]);
+	if (giaCham.length !== 1) loi.push("chieu do «cham the-gop-y-okr»: khong bat");
+	else console.log("chieu do «cham the-gop-y-okr» -> DUNG");
 
 	const cu = docTai(MOC_GOC, "_acceptance/danh-sach-keo-chung/evals.yaml");
 	const DS_GIA = DANH_SACH.eval;

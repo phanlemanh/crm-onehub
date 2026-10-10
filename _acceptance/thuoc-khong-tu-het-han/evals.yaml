@@ -10,13 +10,17 @@ evals:
       - "_acceptance/thuoc-khong-tu-het-han/rang/paths-chet.mjs"
       - "_acceptance/thuoc-khong-tu-het-han/rang/danh-sach.json"
       - "_acceptance/thuoc-khong-tu-het-han/rang/neo.mjs"
+      - "lib/evidence-core.cjs"
     expected: |
-      exit 0; rang/paths-chet.mjs nap globToRe tu feature-loop/scripts/carry-plan.mjs (giai qua resolve-plugin.mjs). Moc neo
-      (rang/neo.mjs): commit gop cua vong tren day cha-dau cua origin/onehub neu da co, khong thi HEAD; in moc. (1) eval trong pham vi (trong_pham_vi: true) cua
-      rang/danh-sach.json, doc evals.yaml va git ls-tree O MOC NEO: 0 glob chet. (2) Doi chung duong: quet moi ho so da ky o
-      a9e8bc75a (git show + ls-tree tai sha do) ra DUNG tap 20 cap ho-so/eval cua danh sach, khong thua khong thieu, so tung
-      glob. (3) Doi chung bo khop: «[[]slug]» tren tep co «[slug]» -> chet; «…/giai-doan/» khong ** -> chet. Ban sao danh sach
-      them mot eval co glob «apps/khong-co/**» -> ma 1 goi ten no.
+      exit 0; rang/paths-chet.mjs nap lib/evidence-core.cjs (ham staleByPaths, phanLoaiMucPaths, dungCayPaths cua luoi
+      truoc-gop). Moc neo (rang/neo.mjs): commit gop cua vong tren day cha-dau cua origin/onehub neu da co, khong thi HEAD; in
+      moc. (1) 3 ho so trong pham vi (trong_pham_vi: true) cua rang/danh-sach.json: staleByPaths tren evals.yaml va cay git
+      ls-tree O MOC NEO tra apply true. (2) Doi chung duong: moi ho so da ky o a9e8bc75a, staleByPaths tren cay tai sha do: tap
+      ho so tat loc vi paths-khong-tro-toi-tep hoac dang-khai-la DUNG bang 13 cap ho-so/ly-do cua loc_tat_vi_paths, khong thua
+      khong thieu; ho so trong pham vi deu co trong tap do. (3) Doi chung bo khop: «[[]slug]» -> paths-khong-tro-toi-tep;
+      «…/giai-doan/» -> dang-khai-la; ban dung -> nhan. (4) Chieu do: them glob «apps/khong-co/**» vao mot eval cua ho so trong
+      pham vi, doi executor sang script, ui-check, judgment -> ca ba lan staleByPaths tat loc va goi ten glob; danh sach bat
+      dien-thoai-ca-nhan trong pham vi -> ma 1 goi ten E1.
 
   - id: E2
     criterion: AC-2
@@ -27,12 +31,14 @@ evals:
       - "_acceptance/thuoc-khong-tu-het-han/rang/danh-sach.json"
       - "_acceptance/thuoc-khong-tu-het-han/rang/neo.mjs"
     expected: |
-      exit 0; rang/chi-paths.mjs so 6 tep evals.yaml (5 ho so co eval trong_pham_vi cua rang/danh-sach.json va
+      exit 0; rang/chi-paths.mjs so 4 tep evals.yaml (3 ho so co eval trong_pham_vi cua rang/danh-sach.json va
       ha-tran-thang-hoi-zalo) giua a9e8bc75a va moc neo (git show tai hai sha): tap eval doi paths (doc chu tho cua moi khoi
-      eval, moi loai executor) DUNG bang 10 eval trong pham vi; moi truong khac giong het; cung tap id; o
-      ha-tran-thang-hoi-zalo moi eval khac E7 giong het. Chieu do: ban sao doi mot chu trong expected -> ma 1 «<ho so>/<eval>:
-      expected doi»; ban sao xoa mot eval -> ma 1 «thieu eval»; ban sao bo sua paths cua mot eval trong danh sach -> ma 1
-      «paths khong doi»; eval judgment doi paths -> vao tap doi paths.
+      eval, moi loai executor) DUNG bang 3 eval trong pham vi; moi truong khac giong het; cung tap id; o
+      ha-tran-thang-hoi-zalo moi eval khac E7 giong het. Tep doi cua vong (cap sha gop khi da gop, merge-base voi origin/onehub
+      khi chua) khong co tep nao duoi _acceptance/dien-thoai-ca-nhan/ hay _acceptance/the-gop-y-okr/. Chieu do: ban sao doi mot
+      chu trong expected -> ma 1 «<ho so>/<eval>: expected doi»; ban sao xoa mot eval -> ma 1 «thieu eval»; ban sao bo sua
+      paths cua mot eval trong danh sach -> ma 1 «paths khong doi»; eval judgment doi paths -> vao tap doi paths; tap tep co
+      _acceptance/the-gop-y-okr/evals.yaml -> bat.
   - id: E3
     criterion: AC-3, AC-6
     executor: script

@@ -50,6 +50,16 @@
 - E7 và E10 chạy trên nhánh F10 (nhánh khác nhánh của chúng, có chạm hồ sơ đã ký khác và có commit không tên): thoát 0; chiều đỏ
   tự thân của chúng (`--gia-tep`, `--gia-commit-khong-ten`, phá-thử E7 (a)) vẫn đỏ.
 
+## Lối B (10/10, sau S4 vòng 3)
+
+- Thước cũ của AC-1 tự đọc `paths` và chỉ xét eval `script`/`test`. Lưới trước-gộp (`staleByPaths` của `lib/evidence-core.cjs`)
+  xét MỌI eval, kể cả ui-check, judgment và ô `not-run`; một mục bị từ chối là cả hồ sơ mất bộ lọc hoá cũ. Thước mới gọi thẳng
+  `staleByPaths`, `phanLoaiMucPaths`, `dungCayPaths` của lưới — đo đầu ra bộ lọc, không đo một bản sao của bên đọc.
+- Đo ở `a9e8bc75a`: 13 hồ sơ đã ký bị lưới tắt lọc vì paths (12 `paths-khong-tro-toi-tep`, 1 `dang-khai-la`). Trong 5 hồ sơ
+  phạm vi Lối 1, 3 hồ sơ bật lại bộ lọc ở tip; `dien-thoai-ca-nhan` (4 eval ui-check) và `the-gop-y-okr` (12 eval trỏ tệp đã xoá)
+  còn chết, chuyển F24 và được trả về đúng bản `onehub` để vòng này không chạm chúng.
+- `chi-paths.mjs` thêm vế «không chạm hai hồ sơ đó»: tập tệp đổi của vòng (cặp sha gộp khi đã gộp, merge-base khi còn mở).
+
 ## Đặc tả UX
 
 Không áp: việc trên thước đo, không có màn.

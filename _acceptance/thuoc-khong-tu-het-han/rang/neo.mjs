@@ -1,7 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
 
 export const GOC = resolve(import.meta.dirname, "..", "..", "..");
 export const HO_SO = "thuoc-khong-tu-het-han";
@@ -23,21 +22,6 @@ export function git(...thamSo) {
 	} catch (e) {
 		throw new LoiNeo(`git ${thamSo.join(" ")}: ${String(e.stderr ?? e.message).trim().split("\n")[0]}`);
 	}
-}
-
-export async function napGlobToRe() {
-	let goc;
-	try {
-		goc = execFileSync(
-			"node",
-			[join(GOC, "scripts/resolve-plugin.mjs"), "--plugin", "feature-loop", "--require", "scripts/carry-plan.mjs"],
-			{ encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
-		).trim();
-	} catch {
-		goc = "";
-	}
-	if (!goc) throw new LoiNeo(`khong giai duoc goi feature-loop co scripts/carry-plan.mjs qua scripts/resolve-plugin.mjs`);
-	return (await import(pathToFileURL(join(goc, "scripts/carry-plan.mjs")).href)).globToRe;
 }
 
 export function lsTree(sha) {
@@ -93,11 +77,4 @@ export function pathsCua(evalsText) {
 		ra.set(ev.id, globs);
 	}
 	return ra;
-}
-
-export function globChet(globs, tep, globToRe) {
-	return globs.filter((g) => {
-		const re = globToRe(g);
-		return !tep.some((f) => re.test(f));
-	});
 }
