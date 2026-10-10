@@ -1,0 +1,63 @@
+schema_version: 1
+slug: kiem-cheo-chay-quang-lang
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.kcq_lich
+    paths:
+      - "scripts/dieu-phoi/lich.mjs"
+      - "scripts/dieu-phoi/test/lich.test.mjs"
+    expected: |
+      exit 0; node --test scripts/dieu-phoi/test/lich.test.mjs: ma tran viet truoc (so assert = so o) gom don kiem-cheo co/khong
+      moc x don tho s4/ghim-lai thuong/ghim-lai mo_merge/duong-nen: xepHang dat moi don tho truoc moi don kiem-cheo; capLuot voi
+      mot don tho s4 va mot don kiem-cheo s4 chi cap don tho; chi co don kiem-cheo thi cap don kiem-cheo; tho cho duong-nen cung
+      kiem-cheo cho s4 thi cap ca hai (doi chung duong). Ca cu «kiem-cheo mang moc xep truoc» dao chieu. Ban sao bo phan tu
+      kiem-cheo khoi khoa xep -> o ma tran do ghim ten.
+  - id: E2
+    criterion: AC-2, AC-3, AC-5
+    executor: script
+    cmd: config:executors.script.kcq_tien_do
+    paths:
+      - "scripts/kiem-cheo/tien-do.mjs"
+      - "scripts/kiem-cheo/test/tien-do.test.mjs"
+      - "_acceptance/kiem-cheo-chay-quang-lang/rang/mau/**"
+    expected: |
+      exit 0; node --test scripts/kiem-cheo/test/tien-do.test.mjs: docNhatKyDung tren nhat ky THAT dem 10/10 chep vao
+      _acceptance/kiem-cheo-chay-quang-lang/rang/mau/ (sha256 734211ad57cf ghim) voi 146 ho so cua tep ngay 2026-10-10.json: 21 ho
+      so xong, dang do cron-theo-ban-khai; xao thu tu dong -> so xong doi (doi chung). Them dong mau tay cho ca chay lai / da chay
+      / ngoai danh sach / khong dong nao; ho so dang do khong tinh xong; tapConLai khong do lai ho so xong chua bi cham va do lai
+      ho so bi cham; docTienDo: vang, hong, thieu truong, khac moc deu khong dung tien do va goi ten ly do.
+  - id: E3
+    criterion: AC-2, AC-3, AC-4, AC-5, AC-7
+    executor: script
+    cmd: config:executors.script.kcq_hai_dem
+    paths:
+      - "scripts/kiem-cheo/dem.mjs"
+      - "scripts/kiem-cheo/tien-do.mjs"
+      - "scripts/kiem-cheo/test/dem.test.mjs"
+    expected: |
+      exit 0; node --test scripts/kiem-cheo/test/dem.test.mjs (them ca «chay tiep») tren kho git gia va lan gia in dong [lane]
+      cung khuon dong that:
+      - ba dem tren 6 ho so: dem 1 lan thoat 4 sau ho so thu 3 -> chua-xong 2/6, tien-do xong=[a,b], do co mot do-moi cua a,
+        moc dung; dem 2 co lan gop moi cham b -> lan nhan dung b,c,d,e,f (argv) roi thoat 4 sau ho so thu 2 cua luot ->
+        tien-do xong=[a,b], den=D2, tu khong doi, do van con do-moi cua a; dem 3 lan nhan c..f, thoat 0 -> ket_qua do (do-moi
+        chi co o dem 1), moc tien, tien-do bi xoa. Doi chung: ban sao ghi de tien-do thay vi hop -> ca nay do.
+      - dem cuoi lan thoat 1 vi mot eval lech -> do duoc gop, moc tien, tien-do xoa.
+      - dem 2 lan thoat 3 truoc dong [lane] dau -> tien-do.json giong tung byte truoc luot, moc dung, ket_qua khong-chay-duoc.
+      - tien-do.json hong -> lan nhan du tap, tep ngay ghi ly do «tien-do.json hong».
+      - moi luot co chay lan: tep ngay co tap_lan dung thu tu argv.
+  - id: E4
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.kcq_noi_f9
+    paths:
+      - "_acceptance/kiem-cheo-sau-gop/evals.yaml"
+      - "_acceptance/kiem-cheo-chay-quang-lang/contract.md"
+      - "_acceptance/kiem-cheo-chay-quang-lang/rang/noi-f9.mjs"
+    expected: |
+      exit 0; doc _acceptance/kiem-cheo-sau-gop/evals.yaml bang lib/eval-yaml.cjs: E2 co status not-run va superseded_by
+      kiem-cheo-chay-quang-lang#AC-1; chungThayBoi cua lib/evidence-core.cjs tren cay that: ok khi ho so nay signed-off, truoc chu
+      ky chi tra «ho-so-thay-chua-ky»; tren ban sao tam da ky: ok; con tro #AC-99 -> «ac-thay-vang»; bo the
+      kiem-cheo-sau-gop/E2 -> «thay-khong-nhan».
