@@ -12,6 +12,7 @@ import {
 	NotFoundException,
 } from "@nestjs/common";
 import { z } from "zod";
+import { lyDoTuSoan } from "./can-chinh";
 import type { SoanDuaVaoOutput } from "./okr.contracts";
 import { donViCua, type OkrService } from "./okr.service";
 import { OKR } from "./okr-config";
@@ -261,6 +262,7 @@ export async function duaVaoTrong(
 				{
 					note: note(c),
 					daQuaCong: { nguon: { ...mt, level: cuoc.level }, nc: v.nc },
+					lyDo: lyDoTuSoan(c.dong.viSao),
 				},
 			);
 			await ghiTaoRa(c, g.id);
