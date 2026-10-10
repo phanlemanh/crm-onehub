@@ -38,14 +38,19 @@ export function KaraRetry({ onClick, disabled }: KaraRetryProps) {
 
 export type KaraStateProps =
 	| { kind: "working"; label: string; delayMs?: number }
-	| { kind: "empty"; title: ReactNode; description: ReactNode }
+	| {
+			kind: "empty";
+			title: ReactNode;
+			description: ReactNode;
+			action?: ReactNode;
+	  }
 	| {
 			kind: "error";
 			what: string;
 			description?: ReactNode;
 			onRetry: () => void;
 	  }
-	| { kind: "off"; reason: ReactNode; action?: ReactNode }
+	| { kind: "off"; reason: ReactNode; action?: ReactNode; describedBy?: string }
 	| { kind: "unconfigured"; description: ReactNode };
 
 function DangLam({ label, delayMs }: { label: string; delayMs: number }) {
@@ -98,6 +103,16 @@ export function KaraState(props: KaraStateProps) {
 				<DangLam label={props.label} delayMs={props.delayMs ?? KARA_TRE_MS} />
 			);
 		case "empty":
+			if (props.action)
+				return (
+					<KhungTrong
+						kind="empty"
+						title={props.title}
+						description={props.description}
+					>
+						{props.action}
+					</KhungTrong>
+				);
 			return (
 				<KhungTrong
 					kind="empty"
@@ -124,6 +139,15 @@ export function KaraState(props: KaraStateProps) {
 				/>
 			);
 		case "off":
+			if (props.describedBy)
+				return (
+					<div data-kara-state="off" className="grid gap-2">
+						{props.action}
+						<FieldDescription id={props.describedBy}>
+							{props.reason}
+						</FieldDescription>
+					</div>
+				);
 			return (
 				<div data-kara-state="off" className="grid gap-2">
 					{props.action}

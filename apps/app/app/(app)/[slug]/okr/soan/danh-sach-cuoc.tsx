@@ -32,6 +32,8 @@ import {
 	StatusIndicator,
 	type StatusTone,
 } from "@crm/ui/components/status-indicator";
+import { formatNgayGio } from "@crm/ui/lib/format";
+import type { Locale } from "@crm/ui/lib/locale";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { OKR_CHU_KY } from "@/lib/okr-chu-ky-nhan";
@@ -91,19 +93,16 @@ function DanhSachDong({
 	cuoc: readonly CuocSoan[];
 	mo: (cuocSoanId: string) => void;
 	m: OkrSoanMessages;
-	locale: string;
+	locale: Locale;
 }) {
-	const ngay = new Intl.DateTimeFormat(locale, {
-		day: "2-digit",
-		month: "2-digit",
-		year: "numeric",
-		timeZone: OKR_CHU_KY.muiGio,
-	});
 	const so = new Intl.NumberFormat(locale);
 	return (
 		<ItemGroup aria-label={m.cuoc.nhan} data-ds-cuoc>
 			{cuoc.map((c) => {
-				const moLuc = ngay.format(new Date(c.moLuc));
+				const moLuc = formatNgayGio(c.moLuc, locale, {
+					timeZone: OKR_CHU_KY.muiGio,
+					phan: "ngay",
+				});
 				const viec = c.trangThai === "dang" ? m.cuoc.tiep : m.cuoc.xem;
 				return (
 					<Item

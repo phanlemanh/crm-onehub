@@ -1,20 +1,13 @@
 "use client";
 
-import ArrowLeft from "@carbon/icons-react/es/ArrowLeft";
-import { Button } from "@crm/ui/components/button";
-import { Icon } from "@crm/ui/components/icon";
+import { useKhaiThayDoi } from "@crm/ui/components/giu-thay-doi";
 import { KaraState } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { useMountEffect } from "@crm/ui/hooks/use-mount-effect";
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import {
-	PageShellDescription,
-	PageShellHeader,
-	PageShellHeading,
-	PageShellTitle,
-} from "@/components/page-shell";
+import { useEffect, useMemo } from "react";
+import { useRecordStack } from "@/components/crm/record-sheet/record-stack";
+import { DetailSheetHeader } from "@/components/detail-sheet";
 import type { Thread } from "@/lib/agent-session";
 import { type OkrSoanMessages, okrSoanMessages } from "@/lib/messages/okr-soan";
 import { useTRPC } from "@/lib/trpc/client";
@@ -22,7 +15,6 @@ import { BanNhap } from "./bang-nhap";
 import { SOAN_UI } from "./cau-hinh";
 import { focusOSoan, sauMotNhip } from "./cuon";
 import {
-	donViCua,
 	type NhapCuoc,
 	useCuocSoan,
 	useLuongCuoc,
@@ -30,11 +22,10 @@ import {
 	usePhienCuoc,
 } from "./dung-cuoc-soan";
 import { useKhoHep } from "./dung-kho-hep";
-import { GiuTrangSoan } from "./giu-trang";
 import { HoiThoaiSoan } from "./hoi-thoai-soan";
 import { KhungSoan, useTabSoan } from "./khung-soan";
 import type { CuocSoan, DongSoan } from "./kieu";
-import { demDong, duongTheoDonVi, duongTrangSoan } from "./luat-ban-nhap";
+import { demDong } from "./luat-ban-nhap";
 
 type LyDoSoan = keyof OkrSoanMessages["lyDo"];
 
@@ -54,42 +45,51 @@ function HenGio({ ms, het }: { ms: number; het: () => void }) {
 	return null;
 }
 
-function DauTrangSoan({
+function GiuKhiSoan({
+	dangSoan,
+	m,
+}: {
+	dangSoan: boolean;
+	m: OkrSoanMessages;
+}) {
+	const loiHoi = useMemo(
+		() => ({
+			tieuDe: m.trang.hoiDong.tieuDe,
+			than: m.trang.hoiDong.than,
+			nut: m.trang.hoiDong.nut,
+			thoi: m.trang.hoiDong.thoi,
+		}),
+		[m],
+	);
+	const khai = useKhaiThayDoi(loiHoi);
+	useEffect(() => {
+		khai(dangSoan);
+		if (!dangSoan) return;
+		const hoi = (e: BeforeUnloadEvent) => e.preventDefault();
+		window.addEventListener("beforeunload", hoi);
+		return () => window.removeEventListener("beforeunload", hoi);
+	}, [khai, dangSoan]);
+	return null;
+}
+
+function DauKhungSoan({
 	cuoc,
 	m,
 }: {
 	cuoc: CuocSoan | null;
 	m: OkrSoanMessages;
 }) {
-	const { slug } = useParams<{ slug: string }>();
-	const ve = cuoc
-		? duongTheoDonVi(slug, donViCua(cuoc))
-		: `/${slug}/okr/theo-don-vi`;
 	return (
-		<PageShellHeader
-			breadcrumb={
-				<div>
-					<Button asChild size="sm" variant="ghost">
-						<Link href={ve} data-nut="ve-theo-don-vi">
-							<Icon icon={ArrowLeft} />
-							{m.trang.veTheoDonVi}
-						</Link>
-					</Button>
-				</div>
+		<DetailSheetHeader
+			title={m.trang.tieuDe}
+			description={
+				cuoc ? (
+					<span data-dau-soan>
+						<span translate="no">{cuoc.tenDonVi}</span> · {cuoc.tenChuKy}
+					</span>
+				) : undefined
 			}
-		>
-			<PageShellHeading>
-				<PageShellTitle>{m.trang.tieuDe}</PageShellTitle>
-				{cuoc ? (
-					<PageShellDescription data-dau-soan>
-						<span translate="no">{cuoc.tenDonVi}</span> · {cuoc.tenChuKy} ·{" "}
-						<span className="tabular-nums">
-							{m.man.luot(String(cuoc.soLuot), String(cuoc.tranLuot))}
-						</span>
-					</PageShellDescription>
-				) : null}
-			</PageShellHeading>
-		</PageShellHeader>
+		/>
 	);
 }
 
@@ -119,6 +119,7 @@ function Than({
 	const [, datTab] = useTabSoan();
 	return (
 		<>
+			<GiuKhiSoan dangSoan={s.dangTraLoi} m={m} />
 			{s.dangTraLoi ? <CanhLuot batDau={s.luotBatDau} xong={s.docLai} /> : null}
 			{s.dangTraLoi ? (
 				<HenGio key={s.moc} ms={SOAN_UI.hanKhongSuKienMs} het={s.baoHetGio} />
@@ -127,47 +128,33 @@ function Than({
 				hep={hep}
 				soDong={demDong(s.cay)}
 				hoiThoai={
-					<section
-						aria-label={m.hoiThoai.nhan}
-						className="flex min-h-0 flex-1 flex-col gap-3"
-						data-cot="hoi-thoai"
-					>
-						<HoiThoaiSoan
-							s={s}
-							cuoc={cuoc}
-							thieuBoiCanh={thieuBoiCanh}
-							lyDo={lyDo}
-							quanTri={quanTri}
-							moCuoc={moCuoc}
-							moMoc={(moc) => {
-								void datTab("ban-nhap");
-								s.cuonToiDong(
-									moc.tom.docDuoc ? (moc.tom.dongDoi[0] ?? "") : "",
-								);
-							}}
-						/>
-					</section>
+					<HoiThoaiSoan
+						s={s}
+						cuoc={cuoc}
+						thieuBoiCanh={thieuBoiCanh}
+						lyDo={lyDo}
+						quanTri={quanTri}
+						moCuoc={moCuoc}
+						moMoc={(moc) => {
+							void datTab("ban-nhap");
+							s.cuonToiDong(moc.tom.docDuoc ? (moc.tom.dongDoi[0] ?? "") : "");
+						}}
+					/>
 				}
 				banNhap={
-					<section
-						aria-label={m.man.banNhap}
-						className="flex min-h-0 flex-1 flex-col"
-						data-cot="ban-nhap"
-					>
-						<BanNhap
-							s={s}
-							cuoc={cuoc}
-							hoi={(d) => {
-								s.datHoiVeDong(d);
-								void datTab("tro-chuyen");
-								sauMotNhip(focusOSoan);
-							}}
-							veMoc={() => {
-								void datTab("tro-chuyen");
-								s.cuonToiMocCuoi();
-							}}
-						/>
-					</section>
+					<BanNhap
+						s={s}
+						cuoc={cuoc}
+						hoi={(d) => {
+							s.datHoiVeDong(d);
+							void datTab("tro-chuyen");
+							sauMotNhip(focusOSoan);
+						}}
+						veMoc={() => {
+							void datTab("tro-chuyen");
+							s.cuonToiMocCuoi();
+						}}
+					/>
 				}
 			/>
 		</>
@@ -204,20 +191,7 @@ function ThanCuoc({
 	);
 }
 
-export function DangMoTrangSoan() {
-	const m = okrSoanMessages(useLocale());
-	return (
-		<div
-			className="flex min-h-0 flex-1 flex-col gap-4"
-			data-trang-soan="dang-mo"
-		>
-			<DauTrangSoan cuoc={null} m={m} />
-			<KaraState kind="working" label={m.man.dangMo} delayMs={0} />
-		</div>
-	);
-}
-
-export function TrangSoan({
+export function CuocSoanTrongKhung({
 	cuocSoanId,
 	cauNoi,
 }: {
@@ -230,17 +204,16 @@ export function TrangSoan({
 	const quanTri = access.data?.canManageProgram === true;
 	const danhSach = useLuongCuoc(cuocSoanId);
 	const hep = useKhoHep(SOAN_UI.khoHep);
-	const router = useRouter();
-	const { slug } = useParams<{ slug: string }>();
+	const { thayDinh } = useRecordStack();
 	const du = danhSach.data;
 	const dangMo = danhSach.isPending;
 	return (
-		<GiuTrangSoan>
+		<>
+			<DauKhungSoan cuoc={du?.cuoc ?? null} m={m} />
 			<div
-				className="flex min-h-0 flex-1 flex-col gap-4"
+				className="flex min-h-0 flex-1 flex-col"
 				data-trang-soan={du?.cuoc.trangThai ?? (dangMo ? "dang-mo" : "loi")}
 			>
-				<DauTrangSoan cuoc={du?.cuoc ?? null} m={m} />
 				{dangMo ? (
 					<KaraState kind="working" label={m.man.dangMo} delayMs={0} />
 				) : !cauNoi ? (
@@ -254,7 +227,7 @@ export function TrangSoan({
 						lyDo={du.lyDo}
 						quanTri={quanTri}
 						hep={hep}
-						moCuoc={(id) => router.push(duongTrangSoan(slug, id))}
+						moCuoc={(id) => thayDinh({ kind: "soan", id })}
 					/>
 				) : (
 					<KaraState
@@ -265,6 +238,6 @@ export function TrangSoan({
 					/>
 				)}
 			</div>
-		</GiuTrangSoan>
+		</>
 	);
 }

@@ -95,7 +95,7 @@ const vi = {
 	empty: "Chưa có công ty nào.",
 	emptyArchived: "Chưa có công ty nào đã lưu trữ.",
 	search: "Tìm công ty theo tên hoặc tên miền…",
-	archivedToggle: "Lưu trữ",
+	archivedToggle: "Đã lưu trữ",
 	create: {
 		title: "Công ty mới",
 		newButton: "Công ty mới",

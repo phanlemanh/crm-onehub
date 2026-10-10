@@ -9,7 +9,7 @@ import {
 	FieldType,
 	RateSource,
 } from "../src/generated/prisma/enums";
-import { GIAI_DOAN_GOC } from "../src/giai-doan";
+import type { LoaiGiaiDoan } from "../src/giai-doan";
 import { readReportingCurrency, SETTINGS_ID } from "../src/settings";
 import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 
@@ -277,19 +277,6 @@ const TITLES = [
 	"IT Director",
 	"Head of Platform",
 	"Chief of Staff",
-] as const;
-
-const OPEN_STAGES = [
-	GIAI_DOAN_GOC.DEMO_BOOKED,
-	GIAI_DOAN_GOC.QUALIFIED_TO_BUY,
-	GIAI_DOAN_GOC.DECISION_MAKER_BOUGHT_IN,
-	GIAI_DOAN_GOC.CONTRACT_SENT,
-] as const;
-
-const CLOSED_STAGES = [
-	GIAI_DOAN_GOC.CLOSED_WON,
-	GIAI_DOAN_GOC.CLOSED_LOST,
-	GIAI_DOAN_GOC.UNQUALIFIED_TO_BUY,
 ] as const;
 
 const DEAL_DESCRIPTIONS = [
@@ -747,7 +734,32 @@ type SeededDeal = {
 	companyId: string;
 	ownerId: string;
 	closed: boolean;
+	stage: string;
 };
+
+type GiaiDoanSong = Record<LoaiGiaiDoan, string[]> & { moDau: string };
+
+async function giaiDoanSong(): Promise<GiaiDoanSong> {
+	const rows = await db.dealStage.findMany({
+		where: { archivedAt: null },
+		orderBy: [{ kind: "asc" }, { position: "asc" }],
+		select: { id: true, kind: true },
+	});
+	const theoLoai = {
+		OPEN: [] as string[],
+		WON: [] as string[],
+		LOST: [] as string[],
+	} satisfies Record<LoaiGiaiDoan, string[]>;
+	for (const row of rows) theoLoai[row.kind].push(row.id);
+	for (const kind of ["OPEN", "WON", "LOST"] as const) {
+		if (theoLoai[kind].length === 0) {
+			throw new Error(`seed: khong co giai doan ${kind} con dung`);
+		}
+	}
+	const [moDau] = theoLoai.OPEN;
+	if (!moDau) throw new Error("seed: khong co giai doan OPEN con dung");
+	return { ...theoLoai, moDau };
+}
 
 type SeedRates = Record<string, number>;
 
@@ -836,6 +848,8 @@ async function seedDeals(
 	ownerIds: string[],
 ): Promise<SeededDeal[]> {
 	const deals: SeededDeal[] = [];
+	const song = await giaiDoanSong();
+	const thua = new Set(song.LOST);
 
 	for (const [index, company] of companies.entries()) {
 		const count = index % 2 === 0 ? 2 : 1;
@@ -843,7 +857,9 @@ async function seedDeals(
 		for (let n = 0; n < count; n++) {
 			const id = `seed-deal-${slug(company.name)}-${n}`;
 			const closed = chance(0.35);
-			const stage = closed ? pick(CLOSED_STAGES) : pick(OPEN_STAGES);
+			const stage = closed
+				? pick(chance(0.5) ? song.WON : song.LOST)
+				: pick(song.OPEN);
 			const ownerId = pick(ownerIds);
 			const createdDaysAgo = integer(20, 210);
 			const createdAt = daysFromNow(-createdDaysAgo, 12);
@@ -855,7 +871,7 @@ async function seedDeals(
 				12,
 			);
 
-			await db.deal.upsert({
+			const ghi = await db.deal.upsert({
 				where: { id },
 				create: {
 					id,
@@ -886,11 +902,7 @@ async function seedDeals(
 							: -closedDaysAgo + integer(-4, 9),
 					),
 					closedAt: closed ? stageChangedAt : null,
-					closedReason:
-						stage === GIAI_DOAN_GOC.CLOSED_LOST ||
-						stage === GIAI_DOAN_GOC.UNQUALIFIED_TO_BUY
-							? pick(LOST_REASONS)
-							: null,
+					closedReason: thua.has(stage) ? pick(LOST_REASONS) : null,
 					createdAt,
 				},
 				update: {},
@@ -911,7 +923,13 @@ async function seedDeals(
 				});
 			}
 
-			deals.push({ id, companyId: company.id, ownerId, closed });
+			deals.push({
+				id,
+				companyId: company.id,
+				ownerId,
+				closed,
+				stage: ghi.stage,
+			});
 		}
 	}
 
@@ -925,6 +943,7 @@ async function seedActivities(
 	ownerIds: string[],
 ): Promise<number> {
 	const existing = await db.activity.count();
+	const { moDau } = await giaiDoanSong();
 	if (existing > 0) {
 		console.log(`Activities already seeded (${existing}) — skipping.`);
 		return existing;
@@ -996,10 +1015,8 @@ async function seedActivities(
 			dealId: deal.id,
 			subject: "Stage changed",
 			meta: {
-				from: GIAI_DOAN_GOC.DEMO_BOOKED,
-				to: deal.closed
-					? GIAI_DOAN_GOC.CLOSED_WON
-					: GIAI_DOAN_GOC.QUALIFIED_TO_BUY,
+				from: moDau,
+				to: deal.stage,
 			},
 		});
 	}
