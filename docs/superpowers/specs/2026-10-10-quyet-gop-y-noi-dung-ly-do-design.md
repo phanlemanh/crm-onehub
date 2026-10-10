@@ -18,11 +18,11 @@ Từ K3, `loaiLoiDong` (`apps/app/app/(app)/[slug]/okr/gop-y-kara.ts`) xếp m�
 |---|---|---|
 | `muc-tieu-da-bo` | `T.daBo` | Mục tiêu đã bỏ |
 | `dang-cho-duyet` | `T.dangChoDuyet` | Mục tiêu đang chờ duyệt |
-| `so-sai-kieu` | mọi giá trị của `T.soTheoKieu` | số của KR không khớp kiểu KR |
+| `so-sai-kieu` | mọi giá trị của `T.soTheoKieu` | khởi điểm và đích đang lưu của KR không khớp kiểu đo (góp ý chỉ đổi chữ; máy kiểm lại số khi đổi tên KR) |
 | `can-chinh-gioi-han` | `T.canChinh.gioiHanKhongCanChinh` | một bên bị giới hạn hiển thị |
 | `can-chinh-chinh-no` | `T.canChinh.chinhNo` | đích là chính Mục tiêu này |
 | `can-chinh-cung-cap` | `T.canChinh.cungCap` | đích không ở cấp cao hơn |
-| `can-chinh-chua-cong-bo` | `T.canChinh.chuaCongBo` | đích chưa công bố |
+| `can-chinh-chua-cong-bo` | `T.canChinh.chuaCongBo` | đích chưa công bố, đang chờ duyệt hoặc đã bỏ |
 | `can-chinh-khac-chu-ky` | `T.canChinh.khacChuKy` | đích khác chu kỳ |
 | `can-chinh-da-gan` | `T.canChinh.daGan` | đã gắn vào đích đó rồi |
 
@@ -44,11 +44,11 @@ Mục tiêu hoặc KR.
 |---|---|---|
 | `muc-tieu-da-bo` | Mục tiêu này đã bỏ nên không quyết được góp ý. | This objective was dropped, so the suggestion can't be decided. |
 | `dang-cho-duyet` | Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa. | The objective is awaiting approval, so its content, KRs and alignment are locked. Withdraw it to edit. |
-| `so-sai-kieu` | Số trong góp ý không khớp kiểu đo của KR này. | The number in this suggestion doesn't fit how this KR is measured. |
+| `so-sai-kieu` | Khởi điểm và đích của KR này không khớp kiểu đo — sửa số hoặc kiểu đo của KR trước. | This KR's start and target don't fit its measure type — fix its numbers or type first. |
 | `can-chinh-gioi-han` | Một bên đang ở mức giới hạn nên không căn chỉnh được. | One side is restricted, so they can't be aligned. |
 | `can-chinh-chinh-no` | Đích là chính Mục tiêu này nên không căn chỉnh được. | The target is this objective itself, so it can't be aligned. |
 | `can-chinh-cung-cap` | Đích không ở cấp cao hơn nên không căn chỉnh được. | The target isn't at a higher level, so it can't be aligned to. |
-| `can-chinh-chua-cong-bo` | Đích chưa công bố nên chưa căn chỉnh được. | The target is not published yet, so it can't be aligned to. |
+| `can-chinh-chua-cong-bo` | Đích chưa công bố hoặc đã bỏ nên không căn chỉnh được. | The target is not published or was dropped, so it can't be aligned to. |
 | `can-chinh-khac-chu-ky` | Đích thuộc chu kỳ khác nên không căn chỉnh được. | The target is in another cycle, so it can't be aligned to. |
 | `can-chinh-da-gan` | Mục tiêu này đã căn chỉnh vào đích đó rồi. | This objective is already aligned to that target. |
 

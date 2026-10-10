@@ -9,7 +9,7 @@ status: approved
 approved_by:
 approved_at:
 veto_state: mo
-veto_opened_at: 2026-10-09T23:52:26Z
+veto_opened_at: 2026-10-10T00:07:27Z
 design_doc: docs/superpowers/specs/2026-10-10-quyet-gop-y-noi-dung-ly-do-design.md
 ---
 

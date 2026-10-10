@@ -22,7 +22,7 @@ evals:
     criterion: AC-3
     executor: test
     cmd: config:executors.test.k3c_vi
-    expected: "exit 0; bài DOM apps/app/test/gop-y-dung-cho-k3c.dom.tsx -t k3c-vi trên khung chung khung-gop-y-dung-cho.tsx: mỗi mã của LY_DO_KHONG_QUYET (lấy từ tập, đòi === 9 ca) — okr.troLyQuyet giả trả { ok: false, lyDo: <mã> }, bấm quyết góp ý D_KR1 (hay D_CAN cho mã can-chinh-*); so chuỗi nguyên thuỷ textContent của [data-slot=field-error] dưới đúng góp ý === okrGopYMessages('vi').loiQuyet[<mã>]; câu đó khác loiDong['chua-san-sang']; có ít nhất một ký tự tiếng Việt có dấu; không chứa chuỗi mã. Thêm hai assert trên đầu ra thật: tập các chuỗi textContent đọc được qua 9 ca có kích thước === 9 (lệch in 'cau trung: <mã a> = <mã b>'); textContent của ca can-chinh-chua-cong-bo chứa 'chưa công bố'. Ca lệch in 'cau sai cho <mã>: <textContent thật>'. Chiều đỏ ghim ở E8 (c)."
+    expected: "exit 0; bài DOM apps/app/test/gop-y-dung-cho-k3c.dom.tsx -t k3c-vi trên khung chung khung-gop-y-dung-cho.tsx: mỗi mã của LY_DO_KHONG_QUYET (lấy từ tập, đòi === 9 ca) — okr.troLyQuyet giả trả { ok: false, lyDo: <mã> }, bấm quyết góp ý D_KR1 (hay D_CAN cho mã can-chinh-*); so chuỗi nguyên thuỷ textContent của [data-slot=field-error] dưới đúng góp ý === okrGopYMessages('vi').loiQuyet[<mã>]; câu đó khác loiDong['chua-san-sang']; có ít nhất một ký tự tiếng Việt có dấu; không chứa chuỗi mã. Thêm hai assert trên đầu ra thật: tập các chuỗi textContent đọc được qua 9 ca có kích thước === 9 (lệch in 'cau trung: <mã a> = <mã b>'); textContent của ca can-chinh-chua-cong-bo chứa 'chưa công bố' và 'đã bỏ'; của ca so-sai-kieu chứa 'Khởi điểm'. Ca lệch in 'cau sai cho <mã>: <textContent thật>'. Chiều đỏ ghim ở E8 (c)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/lib/messages/okr-gop-y.ts, packages/validation/src/okr-tro-ly.ts, apps/app/test/gop-y-dung-cho-k3c.dom.tsx]
 
@@ -30,7 +30,7 @@ evals:
     criterion: AC-4
     executor: test
     cmd: config:executors.test.k3c_en
-    expected: "exit 0; cùng tệp, -t k3c-en: cùng ma trận 9 ca ở locale en; dòng lỗi === okrGopYMessages('en').loiQuyet[<mã>]; không có ký tự tiếng Việt có dấu; không chứa chuỗi mã; tập textContent qua 9 ca có kích thước === 9; ca can-chinh-chua-cong-bo chứa 'not published'. Ca lệch in 'cau sai cho <mã>: <textContent thật>'."
+    expected: "exit 0; cùng tệp, -t k3c-en: cùng ma trận 9 ca ở locale en; dòng lỗi === okrGopYMessages('en').loiQuyet[<mã>]; không có ký tự tiếng Việt có dấu; không chứa chuỗi mã; tập textContent qua 9 ca có kích thước === 9; ca can-chinh-chua-cong-bo chứa 'not published' và 'dropped'; ca so-sai-kieu chứa 'start'. Ca lệch in 'cau sai cho <mã>: <textContent thật>'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/gop-y-kara.ts", apps/app/lib/messages/okr-gop-y.ts, apps/app/test/gop-y-dung-cho-k3c.dom.tsx]
 

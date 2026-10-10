@@ -87,7 +87,8 @@ async function maTran(locale: Locale): Promise<Map<LyDoKhongQuyet, string>> {
 function kiemMaTran(
 	locale: Locale,
 	doc: Map<LyDoKhongQuyet, string>,
-	chuaCongBo: string,
+	chuaCongBo: readonly string[],
+	soSaiKieu: string,
 ) {
 	const mL = okrGopYMessages(locale);
 	const lech: string[] = [];
@@ -108,8 +109,11 @@ function kiemMaTran(
 		if (trung) lech.push(`cau trung: ${trung} = ${ma}`);
 		theoCau.set(chu, ma);
 	}
-	if (!(doc.get("can-chinh-chua-cong-bo") ?? "").includes(chuaCongBo))
-		lech.push(`cau sai cho can-chinh-chua-cong-bo: thieu «${chuaCongBo}»`);
+	for (const chu of chuaCongBo)
+		if (!(doc.get("can-chinh-chua-cong-bo") ?? "").includes(chu))
+			lech.push(`cau sai cho can-chinh-chua-cong-bo: thieu «${chu}»`);
+	if (!(doc.get("so-sai-kieu") ?? "").includes(soSaiKieu))
+		lech.push(`cau sai cho so-sai-kieu: thieu «${soSaiKieu}»`);
 	expect(doc.size).toBe(9);
 	expect(theoCau.size, lech.join("\n")).toBe(9);
 	expect(lech, lech.join("\n")).toEqual([]);
@@ -117,11 +121,16 @@ function kiemMaTran(
 
 describe("k3c", () => {
 	test("k3c-vi 9 ma: cau tieng Viet cua tung ma duoi dung gop y", async () => {
-		kiemMaTran("vi", await maTran("vi"), "chưa công bố");
+		kiemMaTran(
+			"vi",
+			await maTran("vi"),
+			["chưa công bố", "đã bỏ"],
+			"Khởi điểm",
+		);
 	}, 120_000);
 
 	test("k3c-en 9 ma: cau tieng Anh cua tung ma, khong chu Viet", async () => {
-		kiemMaTran("en", await maTran("en"), "not published");
+		kiemMaTran("en", await maTran("en"), ["not published", "dropped"], "start");
 	}, 120_000);
 
 	test("k3c-san-sang ba ca: ma cua tap khong doc lai san sang; chua san sang va 5xx giu cau thu lai", async () => {

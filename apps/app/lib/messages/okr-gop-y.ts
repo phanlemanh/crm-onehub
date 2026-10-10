@@ -116,13 +116,15 @@ const vi = {
 		"muc-tieu-da-bo": "Mục tiêu này đã bỏ nên không quyết được góp ý.",
 		"dang-cho-duyet":
 			"Mục tiêu đang chờ duyệt nên nội dung, KR và căn chỉnh đang khoá. Rút lại để sửa.",
-		"so-sai-kieu": "Số trong góp ý không khớp kiểu đo của KR này.",
+		"so-sai-kieu":
+			"Khởi điểm và đích của KR này không khớp kiểu đo — sửa số hoặc kiểu đo của KR trước.",
 		"can-chinh-gioi-han":
 			"Một bên đang ở mức giới hạn nên không căn chỉnh được.",
 		"can-chinh-chinh-no":
 			"Đích là chính Mục tiêu này nên không căn chỉnh được.",
 		"can-chinh-cung-cap": "Đích không ở cấp cao hơn nên không căn chỉnh được.",
-		"can-chinh-chua-cong-bo": "Đích chưa công bố nên chưa căn chỉnh được.",
+		"can-chinh-chua-cong-bo":
+			"Đích chưa công bố hoặc đã bỏ nên không căn chỉnh được.",
 		"can-chinh-khac-chu-ky": "Đích thuộc chu kỳ khác nên không căn chỉnh được.",
 		"can-chinh-da-gan": "Mục tiêu này đã căn chỉnh vào đích đó rồi.",
 	} satisfies Record<LyDoKhongQuyet, string>,
@@ -267,14 +269,14 @@ const en: OkrGopYMessages = {
 		"dang-cho-duyet":
 			"The objective is awaiting approval, so its content, KRs and alignment are locked. Withdraw it to edit.",
 		"so-sai-kieu":
-			"The number in this suggestion doesn't fit how this KR is measured.",
+			"This KR's start and target don't fit its measure type — fix its numbers or type first.",
 		"can-chinh-gioi-han": "One side is restricted, so they can't be aligned.",
 		"can-chinh-chinh-no":
 			"The target is this objective itself, so it can't be aligned.",
 		"can-chinh-cung-cap":
 			"The target isn't at a higher level, so it can't be aligned to.",
 		"can-chinh-chua-cong-bo":
-			"The target is not published yet, so it can't be aligned to.",
+			"The target is not published or was dropped, so it can't be aligned to.",
 		"can-chinh-khac-chu-ky":
 			"The target is in another cycle, so it can't be aligned to.",
 		"can-chinh-da-gan": "This objective is already aligned to that target.",
