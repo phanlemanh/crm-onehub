@@ -730,12 +730,14 @@ describe("khoan-dung", () => {
 			dv: DauVao;
 			trang?: string;
 			coViec: boolean;
+			ghim?: string;
 			kiem?: () => void;
 		}[] = [
 			{
 				ten: "tep vang",
 				dv: docTrangLoTrinh(null),
 				trang: "tep-vang",
+				ghim: "trang vo khi tep vang",
 				coViec: false,
 			},
 			{
@@ -769,6 +771,7 @@ describe("khoan-dung", () => {
 					}),
 				),
 				trang: "khoi-hong",
+				ghim: "sai kieu bi nuot thanh rong",
 				coViec: false,
 				kiem: () =>
 					expect(
@@ -830,7 +833,7 @@ describe("khoan-dung", () => {
 			if (ca.trang)
 				expect(
 					document.body.querySelector(`[data-lo-trinh-trang="${ca.trang}"]`),
-					ca.trang === "tep-vang" ? "trang vo khi tep vang" : ca.ten,
+					ca.ghim ?? ca.ten,
 				).not.toBeNull();
 			expect(khoaDong().length > 0, ca.ten).toBe(ca.coViec);
 			for (const nut of [
