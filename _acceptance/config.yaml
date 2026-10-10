@@ -1371,6 +1371,11 @@ executors:
     k2c_en: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-en
     k2c_ngoai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-ngoai
     k2c_ban_do: cd apps/app && bun test ./test/soan-okr-ly-do-tu-choi.spec.ts -t k2c-ban-do && bun test ./test/messages-guard.spec.ts
+    k3c_api: 'bun run test -- "cd apps/api && bun test test/quyet-gop-y-noi-dung-ly-do.spec.ts -t k3c-ma-tran"'
+    k3c_api_ngoai: 'bun run test -- "cd apps/api && bun test test/quyet-gop-y-noi-dung-ly-do.spec.ts -t k3c-ngoai"'
+    k3c_vi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-k3c.dom.tsx -t k3c-vi
+    k3c_en: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-k3c.dom.tsx -t k3c-en
+    k3c_san_sang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-k3c.dom.tsx -t k3c-san-sang
     kbk_api_nhan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t nhan"'
     kbk_api_bo_qua: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t bo-qua" && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi-de-xuat.dom.tsx -t bo-qua'
     kbk_api_chan: 'bun run test -- "cd apps/api && bun test test/hoan-tac-thong-tin.spec.ts -t chan"'
@@ -2303,6 +2308,9 @@ executors:
     k2c_dot_bien: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs
     k2c_ranh_gioi: node _acceptance/ly-do-tu-choi-nop-theo-locale/rang/ranh-gioi.mjs
     k2c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/man.mjs"'
+    k3c_mot_nguon: bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/mot-nguon.mjs
+    k3c_ranh_gioi: node _acceptance/quyet-gop-y-noi-dung-ly-do/rang/ranh-gioi.mjs
+    k3c_dot_bien: bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/dot-bien.mjs
     k2d_lanh: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs lanh
     k2d_khai_trung: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs khai-trung
     k2d_goc_rong: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs goc-rong

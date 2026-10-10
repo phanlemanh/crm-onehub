@@ -52,6 +52,8 @@ import type {
 import {
 	type DongGopY,
 	dongTuHang,
+	LY_DO_KHONG_QUYET,
+	type LyDoKhongQuyet,
 	maLoaiDeXuat,
 	okrTroLyViec,
 	trangThaiDeXuat,
@@ -101,6 +103,29 @@ type Tx = Prisma.TransactionClient;
 type OkrDeXuat = Prisma.OkrDeXuatModel;
 
 const T = OKR.thongDiep;
+
+export const CAU_CUA_LY_DO_KHONG_QUYET = {
+	"muc-tieu-da-bo": [T.daBo],
+	"dang-cho-duyet": [T.dangChoDuyet],
+	"so-sai-kieu": Object.values(T.soTheoKieu),
+	"can-chinh-gioi-han": [T.canChinh.gioiHanKhongCanChinh],
+	"can-chinh-chinh-no": [T.canChinh.chinhNo],
+	"can-chinh-cung-cap": [T.canChinh.cungCap],
+	"can-chinh-chua-cong-bo": [T.canChinh.chuaCongBo],
+	"can-chinh-khac-chu-ky": [T.canChinh.khacChuKy],
+	"can-chinh-da-gan": [T.canChinh.daGan],
+} satisfies Record<LyDoKhongQuyet, readonly string[]>;
+
+export function lyDoKhongQuyetCua(loi: Error): LyDoKhongQuyet | null {
+	if (
+		!(loi instanceof BadRequestException || loi instanceof ForbiddenException)
+	)
+		return null;
+	const ma = LY_DO_KHONG_QUYET.find((m) =>
+		CAU_CUA_LY_DO_KHONG_QUYET[m].some((cau) => cau === loi.message),
+	);
+	return ma ?? null;
+}
 
 const SAU_SO = 1e6;
 
@@ -550,60 +575,68 @@ export class TroLyOkrService {
 		input: TroLyQuyetInput,
 		now = new Date(),
 	): Promise<TroLyQuyetOutput> {
-		return this.db.$transaction(async (tx) => {
-			const moc = await tx.okrDeXuat.findUnique({
-				where: { id: input.deXuatId },
-				select: { objectiveId: true },
+		return this.db
+			.$transaction(async (tx): Promise<TroLyQuyetOutput> => {
+				const moc = await tx.okrDeXuat.findUnique({
+					where: { id: input.deXuatId },
+					select: { objectiveId: true },
+				});
+				const mt = moc
+					? await tx.okrObjective.findUnique({
+							where: { id: moc.objectiveId },
+							select: { id: true, cycleId: true },
+						})
+					: null;
+				if (mt) {
+					await this.okr.assertKyChuaAn(tx, mt.cycleId);
+					await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${mt.id} FOR UPDATE`;
+				}
+				const hang = await tx.okrDeXuat.findUnique({
+					where: { id: input.deXuatId },
+				});
+				if (
+					hang?.nac !== "bat" ||
+					!(await this.xemDuoc(tx, userId, hang.objectiveId))
+				)
+					throw new NotFoundException(T.troLy.khongCoDeXuat(input.deXuatId));
+				const dong = dongTuHang(hang);
+				await this.assertSuaDong(tx, userId, dong);
+				if (
+					!(CACH_CUA_LOAI[dong.loai] as readonly string[]).includes(input.cach)
+				)
+					throw new BadRequestException(T.troLy.cachKhongHop);
+				if (input.cach === "sua" && !input.giaTri)
+					throw new BadRequestException(T.troLy.canGiaTri);
+				const lyDo = await this.lyDoNac(tx, dong.objectiveId, now);
+				if (lyDo !== null) return { ok: false, lyDo };
+				if (hang.trangThai !== "cho")
+					throw new ConflictException(T.troLy.daQuyet);
+				const ghiOkr = input.cach === "nhan" || input.cach === "sua";
+				if (ghiOkr) await this.assertConHieuLuc(tx, dong);
+				const giaTri =
+					input.cach === "sua"
+						? (input.giaTri ?? null)
+						: input.cach === "nhan" && dong.loai === "viet-lai"
+							? dong.sau
+							: null;
+				const { count } = await tx.okrDeXuat.updateMany({
+					where: { id: hang.id, trangThai: "cho" },
+					data: {
+						trangThai: TRANG_THAI_CUA_CACH[input.cach],
+						giaTriCuoi: giaTri,
+						nguoiQuyet: userId,
+						quyetLuc: now,
+					},
+				});
+				if (count === 0) throw new ConflictException(T.troLy.daQuyet);
+				if (ghiOkr) await this.ghiTheoDong(tx, userId, hang.id, dong, giaTri);
+				return { ok: true };
+			})
+			.catch((loi: Error): TroLyQuyetOutput => {
+				const lyDo = lyDoKhongQuyetCua(loi);
+				if (lyDo === null) throw loi;
+				return { ok: false, lyDo };
 			});
-			const mt = moc
-				? await tx.okrObjective.findUnique({
-						where: { id: moc.objectiveId },
-						select: { id: true, cycleId: true },
-					})
-				: null;
-			if (mt) {
-				await this.okr.assertKyChuaAn(tx, mt.cycleId);
-				await tx.$queryRaw`SELECT id FROM "okrObjective" WHERE id = ${mt.id} FOR UPDATE`;
-			}
-			const hang = await tx.okrDeXuat.findUnique({
-				where: { id: input.deXuatId },
-			});
-			if (
-				hang?.nac !== "bat" ||
-				!(await this.xemDuoc(tx, userId, hang.objectiveId))
-			)
-				throw new NotFoundException(T.troLy.khongCoDeXuat(input.deXuatId));
-			const dong = dongTuHang(hang);
-			await this.assertSuaDong(tx, userId, dong);
-			if (!(CACH_CUA_LOAI[dong.loai] as readonly string[]).includes(input.cach))
-				throw new BadRequestException(T.troLy.cachKhongHop);
-			if (input.cach === "sua" && !input.giaTri)
-				throw new BadRequestException(T.troLy.canGiaTri);
-			const lyDo = await this.lyDoNac(tx, dong.objectiveId, now);
-			if (lyDo !== null) return { ok: false, lyDo };
-			if (hang.trangThai !== "cho")
-				throw new ConflictException(T.troLy.daQuyet);
-			const ghiOkr = input.cach === "nhan" || input.cach === "sua";
-			if (ghiOkr) await this.assertConHieuLuc(tx, dong);
-			const giaTri =
-				input.cach === "sua"
-					? (input.giaTri ?? null)
-					: input.cach === "nhan" && dong.loai === "viet-lai"
-						? dong.sau
-						: null;
-			const { count } = await tx.okrDeXuat.updateMany({
-				where: { id: hang.id, trangThai: "cho" },
-				data: {
-					trangThai: TRANG_THAI_CUA_CACH[input.cach],
-					giaTriCuoi: giaTri,
-					nguoiQuyet: userId,
-					quyetLuc: now,
-				},
-			});
-			if (count === 0) throw new ConflictException(T.troLy.daQuyet);
-			if (ghiOkr) await this.ghiTheoDong(tx, userId, hang.id, dong, giaTri);
-			return { ok: true };
-		});
 	}
 
 	private async luotTu(ds: LuotThang[]): Promise<LuotTroLy[]> {
