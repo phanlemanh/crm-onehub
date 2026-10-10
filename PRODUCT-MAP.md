@@ -13,7 +13,7 @@ flowchart TD
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>136 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>80 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>81 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -86,6 +86,7 @@ flowchart TD
 - «Kara trong hồ sơ bản ghi có một khung chung» — tab Kara của ngăn cá nhân, công ty, thoả thuận nói tiếng Việt với dấu, trạng thái và «Thử lại» của Kara; đề xuất thông tin liên hệ neo tại chỗ, nhận xong có biên nhận và Hoàn tác (thêm lệnh hoàn tác ở API); khung bản ghi tải lỗi có «Thử lại»; nút tra cứu mang dấu Kara; ngăn thêm nhanh hỏi lại khi lỡ đóng (`khung-ban-ghi-kara`)
 - «Khung bản ghi tải lỗi nói đúng lý do: đã xoá, không có quyền, hay mất kết nối» — ngăn cá nhân, công ty, thoả thuận, kế hoạch phân biệt NOT_FOUND, FORBIDDEN và lỗi khác; hai lý do đầu có «Đóng», lỗi mạng có «Thử lại» (`khung-loi-ban-ghi-dung-ly-do`)
 - Khung OKR trước R1 — khung Mục tiêu và thanh Theo đơn vị hết chín lỗi trình bày, liên kết chéo hỏi lại trước khi bỏ thay đổi (`khung-okr-truoc-r1`)
+- Lượt kiểm chéo đêm xếp sau mọi đơn thợ khi xin khoá, và khi làn chạm trần thì lưu hồ sơ đã đo để đêm sau chạy tiếp phần còn lại (`kiem-cheo-chay-quang-lang`)
 - Kiểm «có làm hỏng hồ sơ đã ký khác không» chạy một lần mỗi đêm cho mọi lần gộp vào onehub từ mốc trước, ngoài mọi lượt ghim lại; đỏ thì gọi tên lần gộp gây đỏ (`kiem-cheo-sau-gop`)
 - Luật thứ bảy «vong-doi» của scripts/luat-kho — máy bắt mô hình có hai cột cất, thủ tục list lẫn bản đã cất, và xoá vĩnh viễn không kiểm bản đã lưu trữ — và cả bộ luật kho chạy ở CI Acceptance (`luat-kho-vong-doi`)
 - Lý do Kara viết cho dòng căn chỉnh ở Soạn OKR đi theo căn chỉnh vào OKR thật, căn chỉnh cũ từ Soạn được điền lại, và khuôn trả của mục tiêu nói rõ mức tin của từng căn chỉnh (`ly-do-can-chinh-tu-soan`)
