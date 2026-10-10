@@ -1,0 +1,97 @@
+schema_version: 1
+feature_slug: ly-do-can-chinh-tu-soan
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldcc_dua_vao
+    paths: [apps/api/src/okr/soan-dua-vao.ts, apps/api/src/okr/okr.service.ts, packages/db/prisma/schema.prisma, apps/api/test/okr-ly-do-can-chinh.spec.ts]
+    expected: "exit 0; bài API gieo cuộc soạn và dòng nháp bằng gieoCuoc/gieoDongNhap của apps/api/test/soan-okr-san.ts (cùng bàn thử của soan-okr-dua-vao.spec.ts, không ghi hàng tay), dòng căn chỉnh nháp mang nguyên văn viSao «  Tăng tỷ lệ chốt thêm khoảng 9 tỷ  » (khoảng trắng hai đầu) ghi qua chính bộ ghi nháp (dongCanChinhMoi cắt rồi lưu — nếu bộ ghi cắt trước khi lưu thì bài ghi thêm một dòng cũ có khoảng trắng qua noiDungSoan, nêu rõ lý do); chạy «Đưa vào OKR» THẬT qua cả hai đường DUONG = trpc và rest; mỗi đường đọc lại hàng okrAlignment vừa tạo từ CSDL (theo taoRaId của dòng nháp): lyDo === 'Tăng tỷ lệ chốt thêm khoảng 9 tỷ' (ghim nguyên văn đã cắt), lyDoTuKara === true, canCu === null; số mục tiêu và KR đưa vào khớp như bài cũ. Sai thì ném «dua vao lam roi ly do» (lyDo khác) hoặc «mat dau Kara» (lyDoTuKara khác true). CHIỀU ĐỎ (rang/dot-bien.mjs): cặp (a) bản sao bỏ truyền lyDo ở soan-dua-vao.ts → đỏ «dua vao lam roi ly do»; cặp (b) bản sao không đặt lyDoTuKara → đỏ «mat dau Kara». Bước cắt khoảng trắng trên đường này có hai lớp: dongSoanTuHang đọc dòng bằng dongSoan (viSao .trim()), rồi lyDoTuSoan cắt lần nữa — bỏ lớp sau không đổi gì ở E1, nên cặp (i) là đột biến tương đương trên đường tích hợp này và đo ở E2."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldcc_visao_rong
+    paths: [apps/api/src/okr/soan-dua-vao.ts, apps/api/test/okr-ly-do-can-chinh.spec.ts]
+    expected: "exit 0; khối «visao-rong» của okr-ly-do-can-chinh.spec.ts: ma trận ba chuỗi viết trước (đếm = 3): '', '   ', '\\u00a0\\n\\t' (NBSP, xuống dòng, tab). Với mỗi chuỗi gọi THẲNG lyDoTuSoan của apps/api/src/okr/can-chinh.ts: lyDo === null, canCu === null, lyDoTuKara === false — sai thì ném «ly do rong thanh chuoi rong»; đối chứng cùng dòng: dongSoan.safeParse của @crm/validation/okr-tro-ly với một dòng can-chinh-moi mang đúng chuỗi đó phải thất bại (bộ ghi không sinh ra dữ liệu này) — nhận thì ném «bo ghi nhan viSao rong». CHIỀU ĐỎ: cặp (c) bản sao bỏ bước đổi chuỗi rỗng thành null → đỏ «ly do rong thanh chuoi rong»; cặp (i) bản sao bỏ bước cắt khoảng trắng của lyDoTuSoan → '   ' thành lý do, đỏ «ly do rong thanh chuoi rong»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldcc_gan_tay
+    paths: [apps/api/src/okr/okr.service.ts, apps/api/test/okr-ly-do-can-chinh.spec.ts]
+    expected: "exit 0; gọi okr.addAlignment THẬT qua router tRPC với đầu vào cũ (objectiveId + một đích, không trường lý do) → 200, hàng okrAlignment có lyDo null, canCu null, lyDoTuKara false; phản hồi không chứa chữ «lý do». Sai thì ném «gan tay bi chan vi thieu ly do». CHIỀU ĐỎ: cặp (d) bản sao cho addAlignmentTrong ném BadRequest khi không có lyDo → đỏ «gan tay bi chan vi thieu ly do»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.ldcc_can_chinh_cu
+    paths: [apps/api/src/okr/okr.service.ts, apps/api/test/okr-can-chinh.spec.ts]
+    expected: "exit 0; apps/api/test/okr-can-chinh.spec.ts chạy xanh trên bản này; tệp đó chỉ được thêm đúng bốn trường lyDo, canCu, lyDoTuKara, mucTin vào dữ liệu giả alignments của hàm dựng mục tiêu — E9 đo rằng diff của tệp chỉ có dòng thêm, mỗi dòng thêm là một trong bốn khoá đó, và không dòng nào của ma trận đổi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldcc_muc_tin
+    paths: [apps/api/src/okr/can-chinh.ts, apps/api/src/okr/okr.service.ts, apps/api/src/okr/okr.contracts.ts, apps/api/test/okr-ly-do-can-chinh.spec.ts]
+    expected: "exit 0; ma trận ba dòng viết trước (đếm = 3) gieo ba căn chỉnh của một mục tiêu bằng addAlignment rồi đặt (lyDo, canCu) bằng Prisma: (null,null) → chua-co-ly-do; ('Lý do',null) → dat-cuoc; ('Lý do','Căn cứ') → co-so-lieu. Đọc mục tiêu qua đường đọc OKR thật trả mucTieuOutput (okr.mine của chủ mục tiêu) và PARSE phản hồi bằng mucTieuOutput của okr.contracts.ts; khẳng định từng phần tử alignments (khớp theo alignmentId) có tập khoá chứa đủ lyDo, canCu, lyDoTuKara, mucTin (thiếu thì ném «thieu khoa <tên>»), ba khoá đầu như lưu và mucTin đúng dòng. Sai thì ném «<dòng>: muc tin <thực> khac <mong>». CHIỀU ĐỎ: cặp (e) bản sao cho mucTinCanChinh trả dat-cuoc khi có canCu → dòng 3 đỏ «co-so-lieu: muc tin dat-cuoc khac co-so-lieu»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldcc_dien_lai
+    paths: [packages/db/prisma/migrations/*_ly_do_can_chinh/migration.sql, apps/api/test/okr-ly-do-can-chinh.spec.ts]
+    expected: "exit 0; bài đọc migration.sql của hàng này từ đĩa (tìm thư mục migrations có đuôi _ly_do_can_chinh, đúng một thư mục — khác thì ném «khong thay migration ly do»), rút ĐÚNG câu UPDATE trong tệp (không chép tay câu SQL vào bài), chạy nó bằng db.$executeRawUnsafe trên bốn căn chỉnh A–D gieo như AC-5 (dòng okrDeXuat gieo qua gieoDongNhap rồi ghi taoRaId như soan-dua-vao làm). Khẳng định: A lyDo 'Lý do cũ A' và lyDoTuKara true; B, D lyDo null; C giữ 'Người viết', lyDoTuKara như trước. Sai thì ném «<ca>: dien lai sai». CHIỀU ĐỎ: cặp (f) bản sao bỏ điều kiện lyDo IS NULL trong câu UPDATE → C đỏ «C: dien lai sai»; cặp (g) bản sao bỏ điều kiện cắt khoảng trắng khác rỗng → D đỏ «D: dien lai sai»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldcc_quyen_xem
+    paths: [apps/api/src/okr/okr-hien-thi.service.ts, apps/api/src/okr/okr.service.ts, apps/api/test/okr-ly-do-can-chinh.spec.ts]
+    expected: "exit 0; hai ca: (1) gieo mục tiêu công khai của X có căn chỉnh (addAlignment thật) rồi đặt lyDo 'bi-mat-l1' bằng Prisma; X đổi hiển thị sang gioi-han qua thủ tục đổi hiển thị THẬT của router → 400 với thông điệp đúng bằng OKR.thongDiep.hienThi.conCanChinh(1) (rút từ okr-config, không gõ tay), đọc lại CSDL: mục tiêu vẫn cong-khai, căn chỉnh còn lyDo 'bi-mat-l1' — sai thì ném «doi gioi han khi co ly do bi lot»; (2) một người ngoài workspace (có phiên, không là thành viên) gọi okr.mine qua tRPC và qua REST → cả hai 403 NOT_A_MEMBER, JSON.stringify thân trả về không chứa 'bi-mat-l1' — có thì ném «lo ly do cho nguoi ngoai». Đối chứng dương: X gọi okr.mine thấy 'bi-mat-l1' (không thấy thì ném «doi chung: chu muc tieu khong thay ly do»)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.ldcc_migration
+    paths: [packages/db/prisma/migrations/*_ly_do_can_chinh/migration.sql, _acceptance/ly-do-can-chinh-tu-soan/rang/migration.mjs]
+    expected: "exit 0; rang/migration.mjs đọc migration.sql của hàng này, tách câu theo dấu chấm phẩy, mỗi câu phải thuộc một trong hai dạng: ALTER TABLE \"okrAlignment\" ADD COLUMN ... (cột nullable hoặc có DEFAULT) hay đúng một câu UPDATE \"okrAlignment\"; in «MIGRATION: <n> cau, chi them». Đối chứng cùng hàm kiểm: chuỗi có DROP COLUMN → mã 1 «cau cam: DROP»; chuỗi ADD COLUMN ... NOT NULL không DEFAULT → mã 1 «cau cam: NOT NULL khong mac dinh»; hai câu UPDATE → mã 1 «hai cau UPDATE»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ldcc_pham_vi
+    paths: [_acceptance/ly-do-can-chinh-tu-soan/rang/pham-vi.mjs]
+    expected: "exit 0; rang/pham-vi.mjs lấy danh sách tệp đổi giữa merge-base với origin/onehub và HEAD; mọi tên phải nằm trong danh sách Ranh giới ở ## Notes của contract.md (đọc từ chính contract.md, mẫu <mốc> khớp một thư mục migration); apps/api/test/okr-can-chinh.spec.ts chỉ có dòng thêm, mỗi dòng thêm là một trong bốn khoá lyDo/canCu/lyDoTuKara/mucTin (khác thì «okr-can-chinh.spec.ts: doi ngoai bon truong»); _acceptance/config.yaml chỉ có dòng thêm; in «PHAM VI: <n> tep, 0 ngoai ranh gioi». Đối chứng: danh sách rỗng → mã 2 «diff rong»; có apps/app/app/(app)/[slug]/okr/objective-sheet.tsx → «ngoai ranh gioi: …objective-sheet.tsx»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.ldcc_dot_bien
+    paths: [apps/api/src/okr/soan-dua-vao.ts, apps/api/src/okr/okr.service.ts, apps/api/src/okr/can-chinh.ts, packages/db/prisma/migrations/*_ly_do_can_chinh/migration.sql, apps/api/test/okr-ly-do-can-chinh.spec.ts, _acceptance/ly-do-can-chinh-tu-soan/rang/dot-bien.mjs]
+    expected: "exit 0; rang/dot-bien.mjs trên bản sao cây (ban-sao.mjs của ca-chap-chon-cach-ly), SO_CAP_KHAI = 8: mỗi cặp (a)–(g) và (i) như ghi ở E1–E3, E5, E6 ((i) là đột biến tương đương ở đường tích hợp nên đo ở E2) (cặp (h) bỏ cùng bản thay AC-6) — xanh trước khi phá, đỏ sau khi phá, thông điệp ghim nằm trên dòng «error:» của bun; số cặp đã chạy ≠ SO_CAP_KHAI → exit 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.ldcc_do_nguong
+    paths: [_acceptance/ly-do-can-chinh-tu-soan/rang/do-nguong.sql, apps/api/src/okr/soan-dua-vao.ts, apps/api/test/okr-ly-do-can-chinh.spec.ts]
+    expected: "exit 0; bài đọc rang/do-nguong.sql từ đĩa (không chép câu SQL vào bài) và chạy nó bằng db.$queryRawUnsafe sau khi gieo dữ liệu của E1 (đưa vào có lý do), E2 (viSao rỗng và chỉ khoảng trắng) và E6 (A–D sau câu điền lại); câu đếm trả 0 — khác thì ném «do nguong dem <n>, mong 0». Đối chứng dương cùng bài: một căn chỉnh gieo có dòng nháp viSao 'Lý do' mà lyDo để NULL → câu đếm trả 1 (không thì ném «do nguong khong bat duoc ca thieu»). CHIỀU ĐỎ: cặp (a) của E1 (bỏ truyền lyDo) làm câu đếm trả ≥ 1 trên dữ liệu của E1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
