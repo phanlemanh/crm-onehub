@@ -130,6 +130,9 @@ async function mo(p, url, sel) {
 		await p
 			.waitForSelector(sel, { timeout: CHO_MS })
 			.catch(() => khongDo(`${url}: khong thay ${sel}`));
+	await p
+		.waitForNetworkIdle({ idleTime: 800, timeout: CHO_MS })
+		.catch(() => {});
 }
 
 const cuon = (p) => p.evaluate(() => document.documentElement.scrollWidth);
@@ -139,23 +142,35 @@ async function anh(p, ten) {
 }
 
 async function bamCachXem(p, nhan, sel) {
-	const ok = await p.evaluate((n) => {
-		const nut = [
-			...document.querySelectorAll(
-				"[data-view-switch=nut] [data-slot=toggle-group-item]",
-			),
-		].find((b) => (b.textContent ?? "").trim() === n);
-		nut?.click();
-		return Boolean(nut);
-	}, nhan);
-	if (!ok) return false;
+	const nut = await p.evaluateHandle(
+		(n) =>
+			[
+				...document.querySelectorAll(
+					"[data-view-switch=nut] [data-slot=toggle-group-item]",
+				),
+			].find((b) => (b.textContent ?? "").trim() === n) ?? null,
+		nhan,
+	);
+	const el = nut.asElement();
+	if (!el) return false;
+	await el.click();
 	return p
 		.waitForSelector(sel, { timeout: CHO_MS })
 		.then(() => true)
 		.catch(() => false);
 }
 
-function thuTuCongCu(p) {
+async function thuTuCongCu(p) {
+	let kq = null;
+	for (let lan = 0; lan < 5; lan++) {
+		kq = await docCongCu(p);
+		if (kq.ds) return kq;
+		await new Promise((r) => setTimeout(r, 1000));
+	}
+	return kq;
+}
+
+function docCongCu(p) {
 	return p.evaluate(() => {
 		const tim = [...document.querySelectorAll("[data-slot=input-group]")].find(
 			(e) =>
