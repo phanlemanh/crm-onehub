@@ -139,4 +139,45 @@ describe("kara-trang-thai-ui", () => {
 			VI.karaKhung.buocChuaLuuTieuDe("⟦ghi thong tin⟧"),
 		);
 	});
+
+	for (const ngu of ["vi", "en"] as const) {
+		test(`buoc-bo-qua: cham trung tinh, nhan, khoi tu mo — ${ngu}`, () => {
+			const M = messages(ngu);
+			const o = ve(
+				<KaraSteps
+					steps={[
+						{ id: "1", label: "⟦doc ho so⟧", state: "done" },
+						{ id: "2", label: "⟦tim anh⟧", state: "skipped" },
+						{ id: "3", label: "⟦ghi tom tat⟧", state: "done" },
+					]}
+				/>,
+				ngu,
+			);
+			const goc = o.querySelector("[data-kara-steps]");
+			expect(`buoc-bo-qua: khoi tu mo ${goc?.getAttribute("data-state")}`).toBe(
+				"buoc-bo-qua: khoi tu mo closed",
+			);
+			expect(o.querySelector("button")?.textContent).toContain(
+				M.karaKhung.daLamBuoc("3"),
+			);
+			act(() => {
+				o.querySelector("button")?.click();
+			});
+			const muc = [...o.querySelectorAll("[data-trang-thai]")];
+			const tong = muc.map(
+				(m) =>
+					m
+						.querySelector("[data-slot=indicator-dot]")
+						?.getAttribute("data-tone") ?? null,
+			);
+			expect(muc.map((m) => m.getAttribute("data-trang-thai")).join(",")).toBe(
+				"xong,bo-qua,xong",
+			);
+			expect(tong[1]).toBe("neutral");
+			expect(muc[1]?.textContent?.includes(M.karaKhung.buocBoQua)).toBe(true);
+			expect(muc[1]?.textContent?.includes(M.karaKhung.buocChuaLuu)).toBe(
+				false,
+			);
+		});
+	}
 });
