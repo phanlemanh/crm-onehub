@@ -1,0 +1,199 @@
+# Kiểm kê thước còn nhắc mốc trôi — thuoc-khong-tu-het-han
+
+Sinh bằng `node _acceptance/thuoc-khong-tu-het-han/rang/kiem-ke.mjs --viet`; đo lại bằng cùng lệnh không cờ (E5).
+Danh sách là ứng viên: chuỗi có mặt không chứng minh thước tự hết hạn. Sửa từng tệp khi lượt kiểm chéo đêm gọi tên nó đỏ.
+
+sha: a9e8bc75a
+ho so da ky: 194
+eval script/test: 2264
+eval thieu paths: 20
+tep nhac moc troi: 186
+
+## Tệp nhắc mốc trôi
+
+- `_acceptance/agent-test-khong-nhap-app/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/agent-test-khong-nhap-app/rang/ghim.mjs` — origin/onehub, onehub tran, merge-base
+- `_acceptance/auto-pr-thoi-do-o-ban-re/evals.yaml` — merge-base
+- `_acceptance/bo-chu-lap-keo-tha/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/bo-chu-lap-keo-tha/rang/khong-cham-thuoc.mjs` — origin/onehub, merge-base, git ls-files khong ref
+- `_acceptance/bo-dung-khong-ket/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/bo-dung-khong-ket/rang/tai-lieu.mjs` — origin/onehub, merge-base
+- `_acceptance/bo-xuong-kara/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/bo-xuong-kara/rang/ranh-gioi.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/ca-chap-chon-cach-ly/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/ca-chap-chon-cach-ly/rang/dot-bien.mjs` — merge-base
+- `_acceptance/ca-chap-chon-cach-ly/rang/du-ca.mjs` — origin/onehub, merge-base
+- `_acceptance/ca-chap-chon-cach-ly/rang/pham-vi.mjs` — origin/onehub, merge-base
+- `_acceptance/cai-dat-chung-chi-quan-tri/evals.yaml` — merge-base
+- `_acceptance/canh-kr-okr/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/canh-kr-okr/rang/migration-chi-them.mjs` — origin/onehub, merge-base
+- `_acceptance/canh-kr-okr/rang/soi-ma.mjs` — origin/onehub, onehub tran, merge-base, ..HEAD
+- `_acceptance/canh-kr-okr/rang/ty-le.mjs` — onehub tran
+- `_acceptance/cap-nhat-tuan-okr/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/cap-nhat-tuan-okr/rang/cau-hinh.mjs` — origin/onehub, merge-base
+- `_acceptance/cap-nhat-tuan-okr/rang/ho-so-bi-cham.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/chan-lai-component-ra-man/rang/lai-ra-man.mjs` — git ls-files khong ref
+- `_acceptance/chu-cuoi-cung-tien-de/evals.yaml` — ..HEAD
+- `_acceptance/chu-cuoi-cung-tien-de/rang/chu-la.mjs` — ..HEAD
+- `_acceptance/ci-ma-tran-ba-o/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/ci-ma-tran-ba-o/rang/claude-md.mjs` — origin/onehub, merge-base
+- `_acceptance/ci-ma-tran-ba-o/rang/hinh.mjs` — origin/onehub, merge-base
+- `_acceptance/cua-vao-dang-nhap/evals.yaml` — merge-base, ..HEAD
+- `_acceptance/cua-vao-dang-nhap/rang/thuoc-da-ky.mjs` — origin/onehub, merge-base
+- `_acceptance/cua-vao-va/evals.yaml` — origin/onehub
+- `_acceptance/cua-vao-va/rang/soi-ma-neo.mjs` — origin/onehub, onehub tran
+- `_acceptance/danh-sach-keo-chung/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/danh-sach-keo-chung/rang/san-thiet-ke.mjs` — origin/onehub, merge-base
+- `_acceptance/dat-okr-trong-crm/rang/man-okr.mjs` — onehub tran
+- `_acceptance/datatable-loc-ro/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/datatable-loc-ro/rang/khong-ghi-de.mjs` — origin/onehub, merge-base
+- `_acceptance/deal-va/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/deal-va/rang/khong-xoa-expect.mjs` — origin/onehub, merge-base
+- `_acceptance/dieu-phoi-hai-tang/rang/ranh-gioi.mjs` — onehub tran, git ls-files khong ref
+- `_acceptance/do-man-tren-kho-rieng/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/do-man-tren-kho-rieng/rang/khong-noi-thuoc.mjs` — origin/onehub, merge-base
+- `_acceptance/do-man-tren-kho-rieng/rang/truoc-gop.mjs` — origin/onehub
+- `_acceptance/do-quyen-luot-bang-hanh-vi/rang/chung.mjs` — git ls-files khong ref
+- `_acceptance/doi-ten-onehub-center/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/doi-ten-onehub-center/rang/chuoi-doi.mjs` — origin/onehub, merge-base
+- `_acceptance/doi-ten-onehub-center/rang/quet-ten.mjs` — origin/onehub, merge-base, git ls-files khong ref
+- `_acceptance/doi-ten-onehub-center/rang/soi-ma.mjs` — origin/onehub, merge-base
+- `_acceptance/doi-ten-onehub-center/rang/thuoc-da-ky.mjs` — origin/onehub, merge-base, git ls-files khong ref
+- `_acceptance/don-okr-nhap-sai/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/don-okr-nhap-sai/rang/soi-ma.mjs` — origin/onehub, merge-base, git ls-files khong ref
+- `_acceptance/dot-hoi-y-tuong-okr/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/dot-hoi-y-tuong-okr/rang/man-hoi-y.mjs` — onehub tran
+- `_acceptance/dot-hoi-y-tuong-okr/rang/migration-chi-them.mjs` — origin/onehub, merge-base
+- `_acceptance/dot-hoi-y-tuong-okr/rang/soi-ma.mjs` — origin/onehub, onehub tran, merge-base, ..HEAD
+- `_acceptance/giai-doan-thoa-thuan/evals.yaml` — merge-base
+- `_acceptance/giai-doan-thoa-thuan/rang/khong-re-theo-ten.mjs` — git ls-files khong ref
+- `_acceptance/giai-doan-thoa-thuan/rang/san-thiet-ke.mjs` — origin/onehub, merge-base
+- `_acceptance/gioi-han-duyet-cay-okr/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/gioi-han-duyet-cay-okr/rang/soi-ma.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/ha-tran-thang-hoi-zalo/evals.yaml` — origin/onehub
+- `_acceptance/ha-tran-thang-hoi-zalo/rang/khong-cham-da-ky.mjs` — origin/onehub, git ls-files khong ref
+- `_acceptance/hd-theo-danh-sach/evals.yaml` — ..HEAD
+- `_acceptance/hoi-crm-qua-zalo/evals.yaml` — merge-base
+- `_acceptance/hoi-crm-qua-zalo/rang/tai-lieu.mjs` — onehub tran, merge-base
+- `_acceptance/hop-thoai-giu-cho-dang-nhap/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/hop-thoai-giu-cho-dang-nhap/rang/soi-giu.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/hydrat-thanh-bieu-tuong/evals.yaml` — origin/onehub
+- `_acceptance/kara-trang-thai-toan-crm/rang/chu.mjs` — git ls-files khong ref
+- `_acceptance/khep-ky-okr/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/khep-ky-okr/rang/migration-chi-them.mjs` — origin/onehub, merge-base
+- `_acceptance/khep-ky-okr/rang/soi-ma.mjs` — origin/onehub, merge-base, ..HEAD, git ls-files khong ref
+- `_acceptance/kho-mau-mang-dau-ngay/evals.yaml` — merge-base
+- `_acceptance/kho-nguon-khong-ket/evals.yaml` — merge-base
+- `_acceptance/kho-tai-lieu/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/kho-tai-lieu/rang/migration-chi-them.mjs` — origin/onehub, merge-base
+- `_acceptance/kho-tai-lieu/rang/migration-tren-ban-sao.mjs` — origin/onehub, merge-base
+- `_acceptance/khoa-eve-khong-tranh/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/khoa-eve-khong-tranh/rang/pham-vi.mjs` — origin/onehub, merge-base
+- `_acceptance/khong-cham-thuoc-bat-doi-ten/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/khong-cham-thuoc-bat-doi-ten/rang/doi-ten.mjs` — HEAD~N
+- `_acceptance/khung-tao-okr-nhu-deal/evals.yaml` — merge-base
+- `_acceptance/khung-tao-okr-nhu-deal/rang/payload-cu.mjs` — origin/onehub, merge-base
+- `_acceptance/khung-trang-cai-dat/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/khung-trang-cai-dat/rang/khong-hoi-quy.mjs` — merge-base
+- `_acceptance/khung-trang-cai-dat/rang/san-thiet-ke.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/kiem-cheo-sau-gop/rang/kho-that.mjs` — onehub tran
+- `_acceptance/kiem-cheo-sau-gop/rang/pha-thu.mjs` — onehub tran
+- `_acceptance/kiem-cheo-sau-gop/rang/ranh-gioi.mjs` — git ls-files khong ref
+- `_acceptance/lam-moi-chuyen-viec-qua-loi-chung/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/lam-moi-chuyen-viec-qua-loi-chung/rang/khong-hoi-quy.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/lenh-dung-do-khong-ai-thay/evals.yaml` — ..HEAD
+- `_acceptance/logo-onehub/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/logo-onehub/rang/ranh-gioi.mjs` — origin/onehub, merge-base, git ls-files khong ref
+- `_acceptance/luat-kho-vong-doi/evals.yaml` — merge-base
+- `_acceptance/luat-kho-vong-doi/rang/ci.mjs` — onehub tran
+- `_acceptance/ly-do-tu-choi-nop-theo-locale/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/ly-do-tu-choi-nop-theo-locale/rang/chung.mjs` — origin/onehub, merge-base
+- `_acceptance/ly-do-tu-choi-nop-theo-locale/rang/ranh-gioi.mjs` — origin/onehub, merge-base
+- `_acceptance/may-soan-de-xuat/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/may-soan-de-xuat/rang/man-duyet-may.mjs` — git ls-files khong ref
+- `_acceptance/may-soan-de-xuat/rang/man-tai-nguon.mjs` — git ls-files khong ref
+- `_acceptance/may-soan-de-xuat/rang/migration-tren-ban-sao.mjs` — origin/onehub, merge-base
+- `_acceptance/menu-con-loc-dien-thoai/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/menu-con-loc-dien-thoai/rang/khong-cham-noi-goi.mjs` — origin/onehub, merge-base
+- `_acceptance/mot-duong-ghi-phong-ban/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/mot-duong-ghi-phong-ban/rang/ho-so-da-ghim.mjs` — origin/onehub, merge-base
+- `_acceptance/mot-duong-ghi-phong-ban/rang/mot-cho-ghi.mjs` — git ls-files khong ref
+- `_acceptance/muc-tieu-va-kr/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/muc-tieu-va-kr/rang/ho-so-cham.mjs` — origin/onehub, merge-base
+- `_acceptance/nen-chat-ai-elements/evals.yaml` — merge-base
+- `_acceptance/nen-kara/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/nen-kara/rang/tai-lieu.mjs` — origin/onehub, merge-base
+- `_acceptance/neo-dan-so-khong-cung/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/neo-dan-so-khong-cung/rang/cau-hinh.mjs` — origin/onehub
+- `_acceptance/neo-dan-so-khong-cung/rang/do-neo.mjs` — merge-base, ..HEAD, git ls-files khong ref
+- `_acceptance/ngoai-le-telemetry-giai-doan/rang/thu-thuoc.mjs` — git ls-files khong ref
+- `_acceptance/nguon-keo-tha-reui/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/nguon-keo-tha-reui/rang/cai-sach.mjs` — origin/onehub, merge-base
+- `_acceptance/no-sau-luot-4-okr/evals.yaml` — merge-base
+- `_acceptance/no-sau-luot-5-okr/evals.yaml` — origin/onehub
+- `_acceptance/noi-zalo-cho-nguoi-moi/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/noi-zalo-cho-nguoi-moi/rang/tai-lieu.mjs` — origin/onehub
+- `_acceptance/o-cam-chay-duoc-that/evals.yaml` — ..HEAD
+- `_acceptance/okr-cua-toi-tach-theo-doi/rang/man-theo-doi.mjs` — onehub tran
+- `_acceptance/okr-loai-hoc-tap/rang/man-hoc-tap.mjs` — onehub tran
+- `_acceptance/okr-soat-anh-luot-3/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/okr-soat-anh-luot-3/rang/san-thiet-ke.mjs` — origin/onehub, merge-base
+- `_acceptance/okr-soat-anh-luot-3/rang/soi-ma.mjs` — origin/onehub, merge-base
+- `_acceptance/phien-chet-ve-dang-nhap/evals.yaml` — merge-base
+- `_acceptance/ro-slack-tac-nhan/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/ro-slack-tac-nhan/rang/cho-re.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/ro-slack-tac-nhan/rang/do-truoc-khi-va.mjs` — origin/onehub, merge-base
+- `_acceptance/slack-thieu-quyen-email/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/slack-thieu-quyen-email/rang/khong-sua-tep-hang.mjs` — origin/onehub, ..HEAD
+- `_acceptance/so-moi-khong-chap-chon/evals.yaml` — merge-base
+- `_acceptance/so-okr-tu-chay/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/so-okr-tu-chay/rang/migration-chi-them.mjs` — origin/onehub, merge-base
+- `_acceptance/so-okr-tu-chay/rang/soi-ma.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/soan-okr-cung-tro-ly/rang/ma-tran-quyen.mjs` — onehub tran
+- `_acceptance/soan-okr-cung-tro-ly/rang/so-dich-may-ghi.mjs` — onehub tran
+- `_acceptance/soan-okr-cung-tro-ly/rang/tai-lieu.mjs` — onehub tran
+- `_acceptance/soan-okr-khong-lac/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/soan-okr-khong-lac/rang/chung.mjs` — origin/onehub, merge-base
+- `_acceptance/soan-okr-khong-lac/rang/ranh-gioi.mjs` — merge-base
+- `_acceptance/soan-okr-trang-rieng/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/soan-okr-trang-rieng/rang/ranh-gioi.mjs` — merge-base
+- `_acceptance/sua-an-chu-ky-okr/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/sua-an-chu-ky-okr/rang/migration-chi-them.mjs` — origin/onehub, merge-base
+- `_acceptance/sua-an-chu-ky-okr/rang/soi-ma.mjs` — origin/onehub, merge-base, ..HEAD, git ls-files khong ref
+- `_acceptance/sua-paths-e5-soan-okr/evals.yaml` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/sua-paths-e5-soan-okr/rang/chung.mjs` — origin/onehub, merge-base, git ls-files khong ref
+- `_acceptance/sua-paths-e5-soan-okr/rang/ghim-mot-lan.mjs` — merge-base
+- `_acceptance/sua-paths-e5-soan-okr/rang/pre-merge.mjs` — origin/onehub, onehub tran
+- `_acceptance/tac-nhan-model-rieng/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/tac-nhan-model-rieng/rang/tai-lieu.mjs` — origin/onehub, merge-base
+- `_acceptance/tai-lieu-diff-bo-myers-vo-ich/evals.yaml` — merge-base
+- `_acceptance/tat-preview-agent-okr/rang/pha-thu.mjs` — onehub tran
+- `_acceptance/tat-preview-agent-okr/rang/vercel-production.mjs` — origin/onehub, onehub tran
+- `_acceptance/thanh-vien-vao-dung/evals.yaml` — merge-base
+- `_acceptance/the-gop-y-okr/evals.yaml` — merge-base
+- `_acceptance/thu-lai-sau-45-giay/evals.yaml` — merge-base
+- `_acceptance/thu-lai-sau-45-giay/rang/giu-r1h.mjs` — origin/onehub, merge-base
+- `_acceptance/to-chuc-danh-sach-chi-tiet/rang/khong-hoi-quy.mjs` — origin/onehub, merge-base, ..HEAD
+- `_acceptance/to-chuc-danh-sach-chi-tiet/rang/san-thiet-ke.mjs` — origin/onehub, merge-base, ..HEAD, git ls-files khong ref
+- `_acceptance/toan-canh-okr/evals.yaml` — origin/onehub, ..HEAD
+- `_acceptance/toan-canh-okr/rang/cau-hinh.mjs` — origin/onehub, merge-base
+- `_acceptance/toan-canh-okr/rang/man-toan-canh.mjs` — onehub tran
+- `_acceptance/tra-loi-tin-nhac/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/tro-ly-kho-dung-phien/evals.yaml` — merge-base
+- `_acceptance/tro-ly-okr-de-xuat/evals.yaml` — merge-base
+- `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho-cau-hinh.mjs` — origin/onehub
+- `_acceptance/tro-ly-okr-de-xuat/rang/luat-kho.mjs` — merge-base
+- `_acceptance/tro-ly-okr-de-xuat/rang/tai-lieu.mjs` — origin/onehub
+- `_acceptance/tro-ly-okr-nen/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/tro-ly-okr-nen/rang/migration-chi-them.mjs` — origin/onehub, merge-base
+- `_acceptance/tro-ly-okr-nen/rang/tien-do-da-doi.mjs` — origin/onehub, merge-base
+- `_acceptance/tro-ly-okr-tom-tat/evals.yaml` — merge-base, ..HEAD
+- `_acceptance/tro-ly-okr-tom-tat/rang/ky-vong-khong-doi.mjs` — origin/onehub, merge-base
+- `_acceptance/tro-ly-okr-tom-tat/rang/tai-lieu.mjs` — origin/onehub, merge-base
+- `_acceptance/zalo-goi-thu-hong-hien-dung-bot/evals.yaml` — merge-base
+- `_acceptance/zalo-goi-thu-hong-hien-dung-bot/rang/tai-lieu.mjs` — onehub tran
+- `_acceptance/zalo-gui-hong-ghi-ly-do/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/zalo-gui-hong-ghi-ly-do/rang/pham-vi.mjs` — origin/onehub, merge-base
+- `_acceptance/zalo-qua-webhook/evals.yaml` — merge-base
+- `_acceptance/zalo-webhook-doc-khuon-that/evals.yaml` — origin/onehub, merge-base
+- `_acceptance/zalo-webhook-doc-khuon-that/rang/giu-da-ky.mjs` — origin/onehub, merge-base

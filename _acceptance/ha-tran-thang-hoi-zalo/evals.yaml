@@ -91,9 +91,9 @@ evals:
       - "apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts"
       - "_acceptance/ha-tran-thang-hoi-zalo/rang/khong-cham-da-ky.mjs"
     expected: |
-      exit 0; (a) `git diff --name-only origin/onehub` (gom ca cay lam viec) khong co duong nao duoi
-      _acceptance/hoi-crm-qua-zalo/ va khong co apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts -> "ok: khong cham ho so da ky";
-      (b) `bash scripts/pre-merge-check.sh . --base origin/onehub` — loc bo dong mang "[ha-tran-thang-hoi-zalo]";
-      con dong VIOLATION nao thi exit 1 in nguyen dong; khong con -> "ok: truoc-gop khong vi pham ho so khac".
-      Khong lay ma thoat cua pre-merge (no bao ca verdict cua chinh ho so nay). Chieu do (a): pha-thu them mot dong
-      vao _acceptance/hoi-crm-qua-zalo/contract.md tren cay -> exit 1, stdout ghim "hong: cham ho so da ky _acceptance/hoi-crm-qua-zalo/contract.md".
+      exit 0; neo vao cap sha gop cua chinh PR #168 (9dc1a037c^1..9dc1a037c), khong so voi nhanh dang dung: (a) `git diff
+      --name-only 9dc1a037c^1 9dc1a037c` khong co duong nao duoi _acceptance/hoi-crm-qua-zalo/ va khong co
+      apps/agent/test/hoi-crm-qua-zalo.integration.spec.ts -> "ok: khong cham ho so da ky". Ve (b) cu (kiem truoc-gop khong vi
+      pham ho so khac) bo o thuoc-khong-tu-het-han: cau hoi cua luot gop, sau gop do kiem-cheo-sau-gop tra loi moi dem.
+      Chieu do (a): --gia-tep _acceptance/hoi-crm-qua-zalo/contract.md -> exit 1, stdout ghim "hong: cham ho so da ky
+      _acceptance/hoi-crm-qua-zalo/contract.md".

@@ -190,7 +190,6 @@ evals:
     cmd: config:executors.test.dtoc_nen_luoi
     paths:
       - "apps/app/components/auth-shell.tsx"
-      - "apps/app/components/auth-shader.tsx"
       - "packages/ui/src/components/luoi-cham.tsx"
       - "apps/app/app/(landing)/**/page.tsx"
       - "apps/app/test/onehub-center-nen.dom.tsx"
