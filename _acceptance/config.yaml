@@ -1484,10 +1484,13 @@ executors:
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
     dt2_api: 'bun run test -- "cd apps/api && bun test test/dien-thoai-o-deal-cong-ty.spec.ts"'
     dt2_chon: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-o-deal-cong-ty.dom.tsx -t chon-nguoi'
+    h5_zalo: 'bun run test -- "cd apps/agent && bun test test/zalo-qua-webhook.integration.spec.ts"'
     kkc_chu: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-khong-con.dom.tsx -t kkc-chu'
     kkc_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx apps/app/test/kara-ban-ghi.dom.tsx && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi'
     kkc_canh_chu: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/messages-guard.spec.ts && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/messages-guard.spec.ts'
   script:
+    h5_hai_moc: 'bun run test -- "bash _acceptance/zalo-bom-gio/rang/hai-moc.sh"'
+    h5_chi_tep_kiem: 'git diff --name-only 91fe8d69f HEAD | grep -v -e "^_acceptance/" -e "^PRODUCT-MAP.md$" -e "^LO-TRINH.html$" | tee /dev/stderr | { read -r a; read -r b; [ "$a" = "apps/agent/test/zalo-qua-webhook.integration.spec.ts" ] && [ -z "$b" ]; }'
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
     kbk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-ban-ghi-kara/rang/man.mjs"'
     kts_chu: "bun _acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
