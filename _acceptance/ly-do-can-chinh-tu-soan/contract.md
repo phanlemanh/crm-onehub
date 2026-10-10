@@ -5,7 +5,7 @@ slug: ly-do-can-chinh-tu-soan
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-10T00:03:23Z
 design_doc: docs/superpowers/specs/2026-10-08-ly-do-can-chinh-tu-soan-design.md
@@ -69,3 +69,7 @@ Quét bằng `morphological-scan` (preset entity-feature), 08/10.
 - Mã viết sau K2b của P1 (cùng chạm `soan-dua-vao.ts`): S0–S2 làm trước, S3 chờ K2b gộp.
 - Ranh giới (sẽ xin `cham-tep`): `packages/db/prisma/schema.prisma`, `packages/db/prisma/migrations/<mốc>_ly_do_can_chinh/migration.sql`; `apps/api/src/okr/soan-dua-vao.ts`, `okr.service.ts`, `okr.contracts.ts`, `can-chinh.ts`, `okr-config.ts`; `apps/api/src/generated/server.ts` (nếu `trpc:generate` đổi); bài thử `apps/api/test/okr-ly-do-can-chinh*.spec.ts`; ba tệp kiểm dom dựng `noiGopOutput` giả: `apps/app/test/khung-okr-truoc-r1.dom.tsx`, `apps/app/test/tro-ly-okr-vet.dom.tsx`, `apps/app/test/muc-tieu-va-kr.dom.tsx` (chỉ thêm bốn trường mới vào dữ liệu giả); `apps/api/test/okr-can-chinh.spec.ts` (chỉ thêm bốn trường mới vào dữ liệu giả `alignments`, không đổi ma trận — sửa ở S3 theo AC-3 duyệt lại); `apps/app/test/khung-gop-y-luot-2.tsx` (chỉ thêm bốn trường mới vào dữ liệu giả của `lienKet` — tệp vào `onehub` qua 5e03e71b sau Cổng 1, chủ kho duyệt thêm 09/10).
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/ai-ux.md` (§3 dấu Kara giữ tới khi người sửa → cột `lyDoTuKara`).
+- Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-10 (Phan Le Manh), từ mục ngoài hợp đồng của S4 round 2:
+  - Ngoài-1, Ngoài-2: khối `do-nguong` (E11) chỉ gieo một lượt Đưa vào có lý do và một đối chứng; chưa gieo hàng `viSao` toàn khoảng trắng hay hàng A–D đã điền lại, và chiều đỏ cặp (a) của E11 không có trong `rang/dot-bien.mjs`. Vế loại trừ `btrim(viSao)` của `rang/do-nguong.sql` chưa có phép đo.
+  - Ngoài-3: ca `visao-rong` (E2) chỉ kiểm `dongSoan.safeParse` thất bại, chưa có đối chứng dương cùng dòng và chưa ghim `issue.path` là `viSao`.
+  - Ngoài-4: luật «chỉ thêm bốn trường» khai cho năm tệp dữ liệu giả nhưng `rang/pham-vi.mjs` chỉ kiểm `okr-can-chinh.spec.ts`; `muc-tieu-va-kr.dom.tsx` có một dòng gắn kiểu cho `NOI_GOP`.
