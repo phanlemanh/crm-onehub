@@ -3,7 +3,7 @@ import type { Locale } from "@crm/ui/lib/locale";
 const en = {
 	trang: {
 		tieuDe: "Roadmap",
-		moTa: "What the product team is building for the CRM, where each piece stands and which milestone it is due for. This page is read-only — to change the plan, tell the product team.",
+		moTa: "What the product team is building for OneHub Center, where each piece stands and which milestone it is due for. This page is read-only — to change the plan, tell the product team.",
 	},
 	thanhCongCu: {
 		tim: "Search by description or code…",
@@ -84,7 +84,7 @@ const en = {
 		khongDaBacMoTa: "The plan has not recorded any declined item.",
 		tepVangTieuDe: "Could not load the roadmap",
 		tepVangMoTa:
-			"The running CRM build does not carry the roadmap. Tell the product team.",
+			"This OneHub Center build does not carry the roadmap. Tell the product team.",
 		chuaCoKhoiTieuDe: "No roadmap here yet",
 		chuaCoKhoiMoTa: "This page has no roadmap data yet. Tell the product team.",
 		khoiHongTieuDe: "Could not load the roadmap",
@@ -109,7 +109,7 @@ export type LoTrinhMessages = typeof en;
 const vi: LoTrinhMessages = {
 	trang: {
 		tieuDe: "Lộ trình",
-		moTa: "Việc đội sản phẩm đang làm cho CRM, đang ở đâu và hẹn mốc nào. Trang chỉ để xem — muốn đổi kế hoạch, hãy báo đội sản phẩm.",
+		moTa: "Việc đội sản phẩm đang làm cho OneHub Center, đang ở đâu và hẹn mốc nào. Trang chỉ để xem — muốn đổi kế hoạch, hãy báo đội sản phẩm.",
 	},
 	thanhCongCu: {
 		tim: "Tìm việc theo câu mô tả hoặc mã…",
@@ -189,7 +189,7 @@ const vi: LoTrinhMessages = {
 		khongDaBacMoTa: "Kế hoạch chưa ghi việc nào bị bác.",
 		tepVangTieuDe: "Không tải được lộ trình",
 		tepVangMoTa:
-			"Bản CRM đang chạy không mang theo lộ trình. Hãy báo đội sản phẩm.",
+			"Bản OneHub Center đang chạy không mang theo lộ trình. Hãy báo đội sản phẩm.",
 		chuaCoKhoiTieuDe: "Chưa có lộ trình ở đây",
 		chuaCoKhoiMoTa: "Trang này chưa có dữ liệu lộ trình. Hãy báo đội sản phẩm.",
 		khoiHongTieuDe: "Không tải được lộ trình",
