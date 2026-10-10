@@ -186,6 +186,8 @@ function lenhLan({ goc, tap, cay }) {
 		"--root",
 		cay,
 		...slug,
+		"--tran-phut",
+		KIEM_CHEO.luot.lanPhut,
 		"--reason",
 		"kiem-cheo-sau-gop: luot dem",
 	]
@@ -346,23 +348,58 @@ async function luotTho({ co, goc, ket, now }) {
 				});
 				if (lan.vuot) throw new VuotTran();
 				const kyVong = taoKyVong(git);
+				const phanLoaiEval = async (e) => {
+					if (!e.lenh) {
+						return { ho_so: e.slug, eval: e.id, loai: KQ.khongChayDuoc, ly_do: "lenh trung trong lan, khong doc duoc lenh" };
+					}
+					const chay = async (sha) => {
+						await datCay({ git, cay, sha, chay: may.chay });
+						const r = await may.chay(e.lenh, cay);
+						if (r.vuot) throw new VuotTran();
+						return lech(r.ma, kyVong(sha, e.slug, e.id)) ? 1 : 0;
+					};
+					const kq = await phanLoai({ D, T, lanGop: gop, chay, coO: coOTai(git, e.slug, e.id) });
+					return { ho_so: e.slug, eval: e.id, ...kq, lenh: e.lenh };
+				};
 				const phanLoaiHet = async (lechDs) => {
 					const do_ = [];
-					for (const e of lechDs) {
-						if (!e.lenh) {
-							do_.push({ ho_so: e.slug, eval: e.id, loai: KQ.khongChayDuoc, ly_do: "lenh trung trong lan, khong doc duoc lenh" });
-							continue;
+					const daXet = new Set();
+					for (const slug of new Set(lechDs.map((e) => e.slug))) {
+						const cua = [];
+						try {
+							for (const e of lechDs.filter((x) => x.slug === slug)) cua.push(await phanLoaiEval(e));
+						} catch (e) {
+							if (e instanceof VuotTran || may.vuot()) return { do: do_, daXet, catNgang: slug };
+							throw e;
 						}
-						const chay = async (sha) => {
-							await datCay({ git, cay, sha, chay: may.chay });
-							const r = await may.chay(e.lenh, cay);
-							if (r.vuot) throw new VuotTran();
-							return lech(r.ma, kyVong(sha, e.slug, e.id)) ? 1 : 0;
-						};
-						const kq = await phanLoai({ D, T, lanGop: gop, chay, coO: coOTai(git, e.slug, e.id) });
-						do_.push({ ho_so: e.slug, eval: e.id, ...kq, lenh: e.lenh });
+						do_.push(...cua);
+						daXet.add(slug);
 					}
-					return do_;
+					return { do: do_, daXet, catNgang: null };
+				};
+				const luuTienDo = ({ xongTruocLoc, lechDs, pl, lyDo }) => {
+					const coLech = new Set(lechDs.map((e) => e.slug));
+					const xongDemNay = xongTruocLoc.filter((s) => !coLech.has(s) || pl.daXet.has(s));
+					const xongCu = (tienDoCu?.xong ?? []).filter((s) => !tapLan.includes(s));
+					const tienDoMoi = {
+						tu: T,
+						den: D,
+						xong: [...xongCu, ...xongDemNay],
+						do: gopDo({ cu: doCu, moi: pl.do, doLai: tapLan }),
+					};
+					ghiTienDo(tepTienDo, tienDoMoi);
+					const cat = pl.catNgang ? `; phan loai cat ngang o ${pl.catNgang} vi vuot tran ${KIEM_CHEO.luot.tranPhut} phut` : "";
+					ket({
+						...coSo,
+						...ghiChu,
+						ket_qua: KQ.chuaXong,
+						ho_so,
+						tap_lan: tapLan,
+						xong_dem_nay: `${xongDemNay.length}/${tapLan.length}`,
+						do: tienDoMoi.do,
+						ly_do: `${lyDo} — xong ${xongDemNay.length}/${tapLan.length} ho so dem nay${cat}`,
+					});
+					return KIEM_CHEO.ma.xong;
 				};
 				if (lan.ma === KIEM_CHEO.lan.maTran) {
 					const suiteDo = suiteDoTrongNhatKy(lan.ra);
@@ -373,26 +410,8 @@ async function luotTho({ co, goc, ket, now }) {
 							.filter((e) => lech(e.ma, kyVong(D, slug, e.id)))
 							.map((e) => ({ slug, id: e.id, lenh: e.lenh })),
 					);
-					const do_ = await phanLoaiHet(lechDs);
-					const xongCu = (tienDoCu?.xong ?? []).filter((s) => !tapLan.includes(s));
-					const tienDoMoi = {
-						tu: T,
-						den: D,
-						xong: [...xongCu, ...nk.xong],
-						do: gopDo({ cu: doCu, moi: do_, doLai: tapLan }),
-					};
-					ghiTienDo(tepTienDo, tienDoMoi);
-					ket({
-						...coSo,
-						...ghiChu,
-						ket_qua: KQ.chuaXong,
-						ho_so,
-						tap_lan: tapLan,
-						xong_dem_nay: `${nk.xong.length}/${tapLan.length}`,
-						do: tienDoMoi.do,
-						ly_do: `lan cham tran — xong ${nk.xong.length}/${tapLan.length} ho so dem nay, dang do ${nk.dangDo ?? "-"}`,
-					});
-					return KIEM_CHEO.ma.xong;
+					const pl = await phanLoaiHet(lechDs);
+					return luuTienDo({ xongTruocLoc: nk.xong, lechDs, pl, lyDo: `lan cham tran, dang do ${nk.dangDo ?? "-"}` });
 				}
 				if (!KIEM_CHEO.lan.maHopLe.includes(lan.ma)) {
 					throw new Error(`lan dung som (ma ${lan.ma}, log ${log})`);
@@ -414,8 +433,9 @@ async function luotTho({ co, goc, ket, now }) {
 						`lan thoat ${lan.ma} nhung khong doc duoc eval lech nao (log ${log})`,
 					);
 				}
-				const do_ = await phanLoaiHet(doc.lech);
-				return ketThuc(do_, tapLan);
+				const pl = await phanLoaiHet(doc.lech);
+				if (pl.catNgang) return luuTienDo({ xongTruocLoc: tapLan, lechDs: doc.lech, pl, lyDo: `lan xong (ma ${lan.ma})` });
+				return ketThuc(pl.do, tapLan);
 			} catch (e) {
 				const lyDo =
 					e instanceof VuotTran || may.vuot()

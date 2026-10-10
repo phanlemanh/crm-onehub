@@ -151,6 +151,7 @@ describe("kcs-dem", () => {
 const argv = process.argv.slice(2);
 const slugs = argv.flatMap((a, i) => (a === "--slug" ? [argv[i + 1]] : []));
 if (process.env.KCS_ARGV) appendFileSync(process.env.KCS_ARGV, JSON.stringify(slugs) + "\\n");
+if (process.env.KCS_TRAN) appendFileSync(process.env.KCS_TRAN, String(argv[argv.indexOf("--tran-phut") + 1]) + "\\n");
 const loi = (s) => process.stderr.write(s + "\\n");
 if (process.env.KCS_MA_CUNG) process.exit(Number(process.env.KCS_MA_CUNG));
 const lechCua = new Set((process.env.KCS_LECH ?? "").split(",").filter(Boolean));
@@ -161,18 +162,25 @@ const lech = {};
 for (const [i, s] of slugs.entries()) {
   if (dung !== null && i > dung) break;
   const ma = lechCua.has(s) ? 1 : 0;
-  loi("[lane] " + s + " E1: node kiem.js → exit " + ma + " (0.1s)");
-  if (ma) lech[s] = [{ id: "E1", cmd: "node kiem.js", expected: 0, exit: 1 }];
+  loi("[lane] " + s + " E1: node kiem.js " + s + " → exit " + ma + " (0.1s)");
+  if (ma) lech[s] = [{ id: "E1", cmd: "node kiem.js " + s, expected: 0, exit: 1 }];
 }
 if (dung !== null) { loi("[lane] TỔNG KẾT — vuot-tran"); process.exit(4); }
 process.stdout.write(JSON.stringify({ suites: [{ cmd: "true", exit: 0 }], slugs: Object.fromEntries(slugs.map((s) => [s, { lech: lech[s] ?? [] }])) }));
 process.exit(Object.keys(lech).length ? 1 : 0);
 `;
 
+	const KIEM_JS = `const fs = require("node:fs");
+if (process.argv[2] && process.argv[2] === process.env.KCS_NGU) {
+  const t = Date.now();
+  while (Date.now() - t < 30000) {}
+}
+process.exit(fs.existsSync("hong.txt") ? 1 : 0);
+`;
 	const SAU = ["a", "b", "c", "d", "e", "f"];
 	function khoSau() {
 		const kho = taoKho();
-		kho.ghi("kiem.js", "const fs = require('node:fs'); process.exit(fs.existsSync('hong.txt') ? 1 : 0);\n");
+		kho.ghi("kiem.js", KIEM_JS);
 		for (const s of SAU) kho.hoSo(s, { paths: [`x-${s}.txt`] });
 		kho.git("add", "-A");
 		kho.git("commit", "-q", "-m", "ho so");
@@ -257,4 +265,36 @@ process.exit(Object.keys(lech).length ? 1 : 0);
 		assert.equal(d2.ket?.ket_qua, "xanh");
 		k.kho.don();
 	});
+	test("chay tiep: phan loai vuot tran sau lan cham tran -> ghi tien-do cua ho so da phan loai, ho so cat ngang do lai dem sau", () => {
+		const k = khoSau();
+		const tran = join(mkdtempSync(join(os.tmpdir(), "kcs-tran-")), "tran.txt");
+		const d1 = k.dem({ KCS_DUNG_SAU: "3", KCS_LECH: "a,c", KCS_NGU: "c", KIEM_CHEO_TRAN_PHUT: "0.1", KCS_TRAN: tran });
+		assert.equal(d1.ket?.ket_qua, "chua-xong", JSON.stringify(d1.ket));
+		assert.equal(readFileSync(tran, "utf8").trim(), String(KIEM_CHEO.luot.lanPhut), "lan nhan --tran-phut rieng");
+		assert.deepEqual(k.tienDo()?.xong, ["a", "b"], "c lech chua phan loai xong -> khong tinh xong");
+		assert.deepEqual(k.tienDo()?.do.map((d) => [d.ho_so, d.loai]), [["a", "do-moi"]]);
+		assert.match(d1.ket.ly_do, /cat ngang o c/);
+		assert.equal(d1.moc, null);
+
+		const d2 = k.dem({ KCS_LECH: "c" });
+		assert.deepEqual(d2.argv, ["c", "d", "e", "f"]);
+		assert.equal(d2.ket?.ket_qua, "do");
+		assert.deepEqual(d2.ket.do.map((d) => d.ho_so).sort(), ["a", "c"]);
+		assert.equal(d2.moc?.sha, k.D1);
+		assert.equal(k.tienDo(), null);
+		k.kho.don();
+	});
+
+	test("chay tiep: lan chay het nhung phan loai vuot tran -> chua-xong, khong mat ho so da do", () => {
+		const k = khoSau();
+		const d1 = k.dem({ KCS_LECH: "a,b", KCS_NGU: "b", KIEM_CHEO_TRAN_PHUT: "0.1" });
+		assert.equal(d1.ket?.ket_qua, "chua-xong", JSON.stringify(d1.ket));
+		assert.deepEqual(k.tienDo()?.xong, ["a", "c", "d", "e", "f"]);
+		assert.equal(d1.moc, null);
+		const d2 = k.dem({ KCS_LECH: "b" });
+		assert.deepEqual(d2.argv, ["b"]);
+		assert.equal(d2.ket?.ket_qua, "do");
+		k.kho.don();
+	});
+
 });

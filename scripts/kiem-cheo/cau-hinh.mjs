@@ -21,7 +21,7 @@ export const KIEM_CHEO = {
 		thuMucDot: ".acceptance-runs",
 		tepPid: "phat-lich.pid",
 	},
-	luot: { tranPhut: 90, dungMemMs: 10 * GIAY_MS },
+	luot: { tranPhut: 90, lanPhut: 60, dungMemMs: 10 * GIAY_MS },
 	lan: {
 		plugin: "feature-loop",
 		tep: "scripts/repin-lane.mjs",

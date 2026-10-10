@@ -64,7 +64,7 @@ export function xoaTienDo(tep) {
 	rmSync(tep, { force: true });
 }
 
-const DONG_SUITE = /^\[lane\] suite (\d+\/\d+): (.*) → exit (-?\d+)/;
+const DONG_SUITE = /^\[lane\] suite (\d+\/\d+)(?: \(chạy lại\))?: (.*) → exit (-?\d+)/;
 
 export function suiteDoTrongNhatKy(text) {
 	const cuoi = new Map();

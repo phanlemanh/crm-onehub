@@ -4,7 +4,7 @@ import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import { join, resolve } from "node:path";
 import { describe, test } from "node:test";
-import { docNhatKyDung, docTienDo, gopDo, tapConLai } from "../tien-do.mjs";
+import { docNhatKyDung, docTienDo, gopDo, suiteDoTrongNhatKy, tapConLai } from "../tien-do.mjs";
 
 const NHAT_KY = [
 	"[lane] sha abc · 7 suite · 3 hồ sơ · 6 eval máy",
@@ -128,5 +128,20 @@ describe("docTienDo", () => {
 	test("dung moc -> tra tien do", () => {
 		writeFileSync(tep, JSON.stringify({ tu: "T", den: "D", xong: ["a"], do: [] }));
 		assert.deepEqual(docTienDo(tep, "T"), { co: true, tienDo: { tu: "T", den: "D", xong: ["a"], do: [] } });
+	});
+});
+
+describe("suiteDoTrongNhatKy", () => {
+	const DO = "[lane] suite 1/2: bun run test → exit 1 (190.0s)";
+	test("suite do lan dau, xanh o lan chay lai -> khong tinh do", () => {
+		const nk = [DO, "[lane] suite 1/2 (chạy lại): bun run test → exit 0 (188.0s)", "[lane] suite 2/2: bun run lint → exit 0 (3.0s)"].join("\n");
+		assert.deepEqual(suiteDoTrongNhatKy(nk), []);
+	});
+	test("suite do ca hai lan -> van tinh do, lay ma lan chay lai", () => {
+		const nk = [DO, "[lane] suite 1/2 (chạy lại): bun run test → exit 2 (188.0s)"].join("\n");
+		assert.deepEqual(suiteDoTrongNhatKy(nk), ["1/2 (bun run test) ma 2"]);
+	});
+	test("doi chung: khong co dong chay lai thi suite do van do", () => {
+		assert.deepEqual(suiteDoTrongNhatKy(DO), ["1/2 (bun run test) ma 1"]);
 	});
 });
