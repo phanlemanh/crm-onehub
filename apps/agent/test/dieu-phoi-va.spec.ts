@@ -108,7 +108,7 @@ async function chay(viecId: string) {
 	await runDirect(leased(viec));
 	return db.agentTask.findUniqueOrThrow({
 		where: { id: viecId },
-		select: { finishedAt: true, outcome: true },
+		select: { finishedAt: true, outcome: true, sessionId: true },
 	});
 }
 
@@ -215,6 +215,10 @@ describe("ma-lech", () => {
 		).toBe(ma);
 		expect(xong.finishedAt === null).toBe(false);
 		expect(xong.outcome).toContain("đã giao việc cho người cầm trịch");
+		expect(
+			xong.sessionId,
+			"lan truc tiep mo phien nghien cuu cho onboarding-identify",
+		).toBe(null);
 	});
 });
 

@@ -7,6 +7,7 @@ import { onboardingMessages } from "../../../apps/app/lib/messages/onboarding.ts
 import { tongQuanMessages } from "../../../apps/app/lib/messages/tong-quan.ts";
 import { ActivityType, db } from "../../../packages/db/src/index.ts";
 import { dauNgayVN } from "../../../packages/db/src/onboarding-nhac.ts";
+import { formatCount } from "../../../packages/ui/src/lib/format.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -39,6 +40,10 @@ const MA_TRAN = [
 
 const s = onboardingMessages("vi").sheet;
 const t = tongQuanMessages("vi").tasks;
+
+function quaHanChu(n) {
+	return t.pastDue(formatCount(n, t.taskNoun, "vi"));
+}
 
 const dong = [];
 const daPhat = new Set();
@@ -311,11 +316,18 @@ async function docThe(p, slug) {
 	await p.$eval('[data-khoi="viec-qua-han"]', (e) =>
 		e.scrollIntoView({ block: "start" }),
 	);
-	return p.$eval('[data-khoi="viec-qua-han"]', (e) => ({
-		chu: e.innerText ?? "",
-		conSot:
-			e.querySelector("[data-con-sot]")?.getAttribute("data-con-sot") ?? null,
-	}));
+	return p.$eval('[data-khoi="viec-qua-han"]', (e) => {
+		const chan = e.querySelector("[data-con-sot]");
+		return {
+			moTa:
+				e
+					.querySelector('[data-slot="card-description"]')
+					?.textContent?.trim() ?? "",
+			chan: chan ? (chan.textContent?.trim() ?? "") : null,
+			chanHien: chan ? chan.getBoundingClientRect().height > 0 : false,
+			conSot: chan?.getAttribute("data-con-sot") ?? null,
+		};
+	});
 }
 
 async function doTongQuan(cookie, slug, toi, boPhan) {
@@ -331,12 +343,15 @@ async function doTongQuan(cookie, slug, toi, boPhan) {
 				Math.min(sanCo.viec, TRAN_DONG) + Math.min(sanCo.buoc, TRAN_DONG);
 			const the = await docThe(p, slug);
 			await chup(p, `tong-quan-du-${kho}`);
-			const coDongDu = the.chu.includes("nữa");
+			const coChan = the.chan !== null;
+			const moTaDung =
+				tongDu > 0
+					? the.moTa === quaHanChu(tongDu)
+					: !the.moTa.includes(t.pastDue(""));
 			kiem(
 				`tong-quan-du-${kho}`,
-				`tong ${tongDu}, hien toi da ${hienDu}, dong «nữa»: ${coDongDu}`,
-				coDongDu === tongDu > hienDu &&
-					(kho < 640 || tongDu === 0 || the.chu.includes(String(tongDu))),
+				`tong ${tongDu}, hien toi da ${hienDu}; mo ta «${the.moTa}»; chan thẻ: ${JSON.stringify(the.chan)}`,
+				coChan === tongDu > hienDu && moTaDung,
 			);
 		} finally {
 			await ctx.close();
@@ -374,12 +389,15 @@ async function doTongQuan(cookie, slug, toi, boPhan) {
 			await chup(p, `tong-quan-con-sot-${kho}`);
 			const conSot = Number(the.conSot ?? "-1");
 			const hien = TRAN_DONG + TRAN_DONG;
-			const dongNua = the.chu.includes(t.conSot(String(tong - hien)));
-			const coTong = the.chu.includes(String(tong));
+			const chanMong = t.conSot.replace("{n}", String(tong - hien));
+			const moTaMong = quaHanChu(tong);
 			kiem(
 				`tong-quan-con-sot-${kho}`,
-				`tong ${tong}; mo ta co so tong: ${coTong}${kho < 640 ? " (mo ta the an duoi 640 px, khong doi)" : ""}; data-con-sot ${conSot} (mong ${tong - hien}); dong chu nhin thay: ${dongNua}`,
-				(kho < 640 || coTong) && conSot === tong - hien && dongNua,
+				`tong ${tong}; mo ta «${the.moTa}» (mong «${moTaMong}»${kho < 640 ? ", an duoi 640 px" : ""}); chan the «${the.chan}» (mong «${chanMong}», nhin thay: ${the.chanHien}); data-con-sot ${conSot}`,
+				the.moTa === moTaMong &&
+					the.chan === chanMong &&
+					the.chanHien &&
+					conSot === tong - hien,
 			);
 		} finally {
 			await ctx.close();
@@ -388,6 +406,12 @@ async function doTongQuan(cookie, slug, toi, boPhan) {
 }
 
 async function chay() {
+	if (
+		!/_do$/.test(new URL(process.env.DATABASE_URL ?? "postgres://x/x").pathname)
+	)
+		khongDo(
+			"khong phai kho do rieng — chay qua dpv_man (mot-luot.sh, tien-de.mjs)",
+		);
 	const cay = await canhCay();
 	if (cay.ket !== "dung-cay") khongDo(`canh cay: ${cay.dong.join(" | ")}`);
 	mkdirSync(RA, { recursive: true });

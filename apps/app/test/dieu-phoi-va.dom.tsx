@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import type { RouterOutputs } from "@/lib/trpc/types";
 
 type Json =
 	| string
@@ -114,6 +115,9 @@ const { DashboardSummary } = await import(
 );
 const { PlanSteps } = await import("@/components/crm/record-sheet/plan-steps");
 const { onboardingMessages } = await import("@/lib/messages/onboarding");
+const { tongQuanMessages } = await import("@/lib/messages/tong-quan");
+const { formatCount } = await import("@crm/ui/lib/format");
+const { dien } = await import("@/components/crm/record-sheet/plan-copy");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 
@@ -480,16 +484,19 @@ describe("loi-bo-phan", () => {
 	});
 });
 
+type TongQuan = RouterOutputs["dashboard"]["summary"];
+
 function tongQuan(input: {
 	viec: number;
 	buocQuaHan: number;
 	buocSapHan: number;
 	quaHan: { viec: number; buoc: number };
-}): Json {
+}): TongQuan {
 	const thang = { count: 0, valueCents: 0 };
 	const viec = Array.from({ length: input.viec }, (_, i) => ({
 		id: `viec-${i}`,
 		subject: `Viec ${i}`,
+		createdBy: { id: TOI.id, name: TOI.name },
 		company: null,
 		deal: null,
 		dueAt: "2026-09-18T09:00:00.000Z",
@@ -540,7 +547,7 @@ async function moThe(
 	locale: "vi" | "en" = "vi",
 ): Promise<HTMLElement> {
 	setSystemTime(new Date(2026, 8, 22, 9, 0));
-	dat("dashboard.summary", () => du);
+	dat("dashboard.summary", () => du as unknown as Json);
 	await mo(<DashboardSummary />, locale);
 	await cho(
 		() => document.body.querySelector('[data-khoi="viec-qua-han"]') !== null,
@@ -549,6 +556,22 @@ async function moThe(
 	return document.body.querySelector(
 		'[data-khoi="viec-qua-han"]',
 	) as HTMLElement;
+}
+
+function moTa(the: HTMLElement): string {
+	return (
+		the.querySelector('[data-slot="card-description"]')?.textContent?.trim() ??
+		""
+	);
+}
+
+function conSot(the: HTMLElement): string | null {
+	return the.querySelector("[data-con-sot]")?.textContent?.trim() ?? null;
+}
+
+function quaHanChu(n: number, locale: "vi" | "en" = "vi"): string {
+	const t = tongQuanMessages(locale).tasks;
+	return t.pastDue(formatCount(n, t.taskNoun, locale));
 }
 
 describe("the-qua-han", () => {
@@ -561,11 +584,13 @@ describe("the-qua-han", () => {
 				quaHan: { viec: 25, buoc: 15 },
 			}),
 		);
-		const chu = the.textContent ?? "";
-		expect(chu.includes("40"), "so qua han dem tren danh sach da cat").toBe(
-			true,
+		expect(moTa(the), "so qua han dem tren danh sach da cat").toBe(
+			quaHanChu(40),
 		);
-		expect(chu.includes("và 24 việc quá hạn nữa")).toBe(true);
+		expect(conSot(the)).toBe(
+			dien(tongQuanMessages("vi").tasks.conSot, { n: 24 }),
+		);
+		expect(conSot(the)).toBe("và 24 việc quá hạn nữa");
 	});
 
 	test("the-qua-han: tieng Anh ghi dong con sot", async () => {
@@ -578,7 +603,8 @@ describe("the-qua-han", () => {
 			}),
 			"en",
 		);
-		expect((the.textContent ?? "").includes("and 24 more past due")).toBe(true);
+		expect(moTa(the)).toBe(quaHanChu(40, "en"));
+		expect(conSot(the)).toBe("and 24 more past due");
 	});
 
 	test("the-qua-han: hien du thi khong co dong con sot", async () => {
@@ -590,12 +616,11 @@ describe("the-qua-han", () => {
 				quaHan: { viec: 3, buoc: 1 },
 			}),
 		);
-		const chu = the.textContent ?? "";
-		expect(chu.includes("4")).toBe(true);
-		expect(chu.includes("nữa"), "dong con sot hien khi khong sot").toBe(false);
+		expect(moTa(the)).toBe(quaHanChu(4));
+		expect(conSot(the), "dong con sot hien khi khong sot").toBe(null);
 	});
 
-	test("the-qua-han: khong co gi qua han thi khong co dong con sot", async () => {
+	test("the-qua-han: khong co gi qua han thi the ghi chu rong, khong co dong con sot", async () => {
 		const the = await moThe(
 			tongQuan({
 				viec: 0,
@@ -604,6 +629,9 @@ describe("the-qua-han", () => {
 				quaHan: { viec: 0, buoc: 0 },
 			}),
 		);
-		expect((the.textContent ?? "").includes("nữa")).toBe(false);
+		const t = tongQuanMessages("vi").tasks;
+		expect(moTa(the)).toBe(t.allDone);
+		expect(the.textContent?.includes(t.empty)).toBe(true);
+		expect(conSot(the), "dong con sot hien khi khong sot").toBe(null);
 	});
 });

@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 
 const GOC = path.resolve(import.meta.dirname, "..", "..", "..");
@@ -105,7 +106,7 @@ let tongChoPhep = 0;
 let tongTruoc = 0;
 for (const tep of TEP) {
 	const truoc = git("show", `${moc}:${tep}`);
-	const sau = git("show", `HEAD:${tep}`);
+	const sau = readFileSync(path.join(GOC, tep), "utf8");
 	tongTruoc += cauExpect(truoc).length;
 	const { sai, choPhep } = mat(truoc, sau);
 	tongChoPhep += choPhep;
