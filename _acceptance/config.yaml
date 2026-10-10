@@ -44,6 +44,16 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    ltc_hien: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t hien
+    ltc_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t loc
+    ltc_khoan_dung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t khoan-dung
+    ltc_chi_doc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t chi-doc
+    ltc_vong_doi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t vong-doi
+    ltc_cach_xem: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t cach-xem
+    ltc_ho_so: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t ho-so
+    ltc_da_bac: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t da-bac
+    ltc_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-ngay.spec.ts && TZ=UTC bun test ./test/lo-trinh-ngay.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t ngay
+    ltc_vai: cd apps/app && bun test ./test/pham-vi-man.spec.ts ./test/khung-dieu-huong.spec.ts ./test/proxy-lo-trinh.spec.ts -t lo-trinh
     gtd_qua_gio: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t qua-gio"
     gtd_thoi_luong: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t thoi-luong"
     gtd_do: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t tep-do"
@@ -1496,6 +1506,12 @@ executors:
     kkc_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx apps/app/test/kara-ban-ghi.dom.tsx && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi'
     kkc_canh_chu: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/messages-guard.spec.ts && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/messages-guard.spec.ts'
   script:
+    ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
+    ltc_ban_dung: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-dung.mjs
+    ltc_mau: node _acceptance/trang-lo-trinh-trong-crm/rang/kiem-mau.mjs
+    ltc_loi: node _acceptance/trang-lo-trinh-trong-crm/rang/chu-cung.mjs && cd apps/app && bun test ./test/messages-guard.spec.ts
+    ltc_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
+    ltc_do_man: 'APP_URL=${APP_URL:-http://localhost:3360} API_URL=${API_URL:-http://localhost:3361} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/trang-lo-trinh-trong-crm/rang/do-man.mjs"'
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
     kbk_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/khung-ban-ghi-kara/rang/man.mjs"'
     kts_chu: "bun _acceptance/kara-trang-thai-toan-crm/rang/chu.mjs"
