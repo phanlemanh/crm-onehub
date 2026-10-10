@@ -76,7 +76,12 @@ import { z } from "zod";
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { InjectDatabase } from "../database/database.constants";
 import { khoa } from "../to-chuc/nhap";
-import { dungCayCanChinh } from "./can-chinh";
+import {
+	dungCayCanChinh,
+	LY_DO_TRONG,
+	type LyDoCanChinh,
+	mucTinCanChinh,
+} from "./can-chinh";
 import {
 	anhVetViec,
 	chonHangViec,
@@ -1425,7 +1430,7 @@ export class OkrService {
 		tx: Tx,
 		userId: string,
 		input: AlignmentInput,
-		opts?: GhiTrong & { daQuaCong?: NguonDaQuaCong },
+		opts?: GhiTrong & { daQuaCong?: NguonDaQuaCong; lyDo?: LyDoCanChinh },
 	) {
 		const { nguon, nc } =
 			opts?.daQuaCong ?? (await this.congCanChinh(tx, userId, input));
@@ -1475,7 +1480,9 @@ export class OkrService {
 		};
 		if (await tx.okrAlignment.findFirst({ where: noi }))
 			throw new BadRequestException(T.canChinh.daGan);
-		const g = await tx.okrAlignment.create({ data: noi });
+		const g = await tx.okrAlignment.create({
+			data: { ...noi, ...(opts?.lyDo ?? LY_DO_TRONG) },
+		});
 		await this.vet(
 			tx,
 			userId,
@@ -1752,6 +1759,10 @@ export class OkrService {
 						unitName: tenDonVi(dich),
 						objectiveTitle: dich.title,
 						keyResultTitle: g.targetKeyResult?.title ?? null,
+						lyDo: g.lyDo,
+						canCu: g.canCu,
+						lyDoTuKara: g.lyDoTuKara,
+						mucTin: mucTinCanChinh(g.lyDo, g.canCu),
 					};
 				}),
 				canEdit: this.quyenOkr.suaDuocDonVi(q, viewerId, {
