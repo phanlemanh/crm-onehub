@@ -51,6 +51,8 @@ evals:
     criterion: AC-5
     executor: test
     cmd: config:executors.test.kcs_lich
+    status: not-run
+    superseded_by: kiem-cheo-chay-quang-lang#AC-1
     paths:
       - "scripts/dieu-phoi/lich.mjs"
       - "scripts/dieu-phoi/test/lich.test.mjs"
