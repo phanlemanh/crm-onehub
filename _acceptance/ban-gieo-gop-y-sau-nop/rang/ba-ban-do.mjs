@@ -95,7 +95,11 @@ function chupThoiDiem() {
 	for (const goc of BANG_CHUNG)
 		for (const duong of tepTrong(join(GOC, goc))) {
 			const st = statSync(duong);
-			anh.set(duong, { bam: bamTep(duong), atime: st.atime, mtime: st.mtime });
+			anh.set(duong, {
+				bam: bamTep(duong),
+				atimeMs: st.atimeMs,
+				mtimeMs: st.mtimeMs,
+			});
 		}
 	return anh;
 }
@@ -107,8 +111,8 @@ function traThoiDiem(anh) {
 			lech.push(duong.slice(GOC.length + 1));
 			continue;
 		}
-		if (statSync(duong).mtime.getTime() !== cu.mtime.getTime())
-			utimesSync(duong, cu.atime, cu.mtime);
+		if (statSync(duong).mtimeMs !== cu.mtimeMs)
+			utimesSync(duong, cu.atimeMs / 1000, cu.mtimeMs / 1000);
 	}
 	if (lech.length)
 		khongDo(
