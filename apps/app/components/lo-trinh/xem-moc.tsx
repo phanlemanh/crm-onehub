@@ -59,7 +59,11 @@ export function XemMoc({
 		.filter(([, x]) => x.ds.length > 0)
 		.sort((a, b) => a[1].moc.ngay.localeCompare(b[1].moc.ngay));
 	const daQua =
-		homNay === null ? 0 : mocs.filter(([, x]) => x.moc.ngay < homNay).length;
+		homNay === null
+			? 0
+			: mocs.filter(
+					([, x]) => x.moc.ngayHopLe !== null && x.moc.ngayHopLe < homNay,
+				).length;
 	const khongMoc = viec.filter((v) => !v.moc);
 	if (!mocs.length && !khongMoc.length)
 		return (

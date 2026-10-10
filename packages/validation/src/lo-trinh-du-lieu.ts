@@ -22,12 +22,19 @@ const hangLoTrinh = z.object({
 	vi_sao: z.string(),
 });
 
-const mocLoTrinh = z.object({
+const NGAY_ISO = /^\d{4}-\d{2}-\d{2}$/;
+
+const khuonMoc = z.object({
 	ten: z.string(),
 	ngay: z.string(),
 	hang: z.array(z.string()),
 	con_viec: z.boolean(),
 });
+
+const mocLoTrinh = khuonMoc.transform((moc) => ({
+	...moc,
+	ngayHopLe: NGAY_ISO.test(moc.ngay) ? moc.ngay : null,
+}));
 
 const hangKe = z.object({
 	ma: z.string(),
@@ -80,7 +87,7 @@ export const KHOA_LO_TRINH_DU_LIEU = {
 	can_sua: Object.keys(canSua.shape),
 	tien_do: Object.keys(tienDo.shape),
 	hang: Object.keys(hangLoTrinh.shape),
-	moc: Object.keys(mocLoTrinh.shape),
+	moc: Object.keys(khuonMoc.shape),
 	da_bac: Object.keys(daBac.shape),
 } as const;
 

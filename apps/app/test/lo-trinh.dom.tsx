@@ -93,6 +93,7 @@ const TAT_CA = phang(DL);
 
 type LoTho = {
 	hang?: { ma: string | number }[];
+	moc?: { ngay: string }[];
 	loi: string | null;
 	da_bac: { ma: string; ly_do: string }[];
 };
@@ -466,6 +467,27 @@ describe("ngay", () => {
 			}
 		});
 	}
+
+	test("ngay moc khong doc duoc thi khong hien so ngay am hay NaN", async () => {
+		setSystemTime(new Date(2026, 11, 20, 0, 30));
+		const SAI = ["", "cuối Q4", "2026-10", "2026-10-9"];
+		const dv = docTrangLoTrinh(
+			doiKhoi((o) => {
+				let i = 0;
+				for (const lo of o.lo_trinh)
+					for (const moc of lo.moc ?? [])
+						moc.ngay = SAI[i++ % SAI.length] ?? "";
+			}),
+		);
+		await mo(dv, tham({ vongDoi: "tat-ca" }));
+		const chu = document.body.textContent ?? "";
+		expect(chu.includes("còn -"), "ngay moc sai hien so ngay am").toBe(false);
+		expect(chu.includes("NaN"), "ngay moc sai hien NaN").toBe(false);
+		expect(
+			document.body.querySelectorAll("[data-lo-trinh-con-ngay]").length,
+			"ngay moc sai van hien dong con ngay",
+		).toBe(0);
+	});
 
 	test("ban dung tren may chu khong co chu ngay va khung tre", () => {
 		setSystemTime(new Date(2026, 11, 20, 0, 30));

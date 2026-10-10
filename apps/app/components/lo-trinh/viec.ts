@@ -54,7 +54,10 @@ export function phangViec(
 				loTen: lo.ten ?? lo.tep,
 				moc,
 				tre: tre.has(h.ma),
-				conNgay: homNay !== null && moc ? soNgay(homNay, moc.ngay) : null,
+				conNgay:
+					homNay !== null && moc?.ngayHopLe
+						? soNgay(homNay, moc.ngayHopLe)
+						: null,
 				khoa: `${lo.tep}#${h.ma}`,
 			};
 		});

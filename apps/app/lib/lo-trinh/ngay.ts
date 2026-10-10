@@ -17,9 +17,7 @@ export function soNgay(tu: string, toi: string): number {
 
 export function mocQuaConViec(moc: MocLoTrinh, homNay: string): boolean {
 	return (
-		/^\d{4}-\d{2}-\d{2}$/.test(moc.ngay) &&
-		moc.ngay < homNay &&
-		moc.con_viec === true
+		moc.ngayHopLe !== null && moc.ngayHopLe < homNay && moc.con_viec === true
 	);
 }
 
@@ -27,7 +25,7 @@ export function viecTre(loTrinh: LoTrinh, homNay: string): string[] {
 	const theoMa = new Map(loTrinh.hang.map((h) => [h.ma, h]));
 	const ra: string[] = [];
 	for (const m of loTrinh.moc) {
-		if (!/^\d{4}-\d{2}-\d{2}$/.test(m.ngay) || !(m.ngay < homNay)) continue;
+		if (m.ngayHopLe === null || !(m.ngayHopLe < homNay)) continue;
 		for (const ma of m.hang) {
 			const h = theoMa.get(ma);
 			if (h && h.nhom_trang_thai !== "da-giao" && !ra.includes(ma)) ra.push(ma);
