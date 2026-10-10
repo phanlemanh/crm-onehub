@@ -60,9 +60,9 @@ Dòng kế hoạch: LT1 → `"trang_thai": "đã lên onehub"`, `buoc_ke` «Đã
 (#329); còn phiên nghiệm thu», `pr: [329]`, rồi vẽ lại `LO-TRINH.html`.
 
 Giữ nguyên: trang chỉ đọc; dữ liệu qua bản chép `docDuLieu`; màu trạng thái qua
-`status-tone`. Đóng ngăn trả tiêu điểm về chỗ đã mở là chỗ SỬA, không phải giữ:
-ngăn cũ trả về đầu trang, `DetailSheet` tự lưu và trả lại phần tử đã mở như ngăn
-Thoả thuận.
+`status-tone`. Tiêu điểm sau khi đóng ngăn đi theo `DetailSheet` như ngăn Thoả
+thuận; hàng của bảng dùng chung không nhận tiêu điểm bàn phím ở cả hai trang, nên
+mở từ hàng bảng thì tiêu điểm về đầu trang — việc của bảng dùng chung, ngoài vòng này.
 
 <!-- <<<UX-SPEC-TEMPLATE -->
 ## Đặc tả UX
@@ -92,7 +92,7 @@ Thoả thuận.
 
 ### 4. Hành vi
 
-- Đóng ngăn (Esc, nút đóng, kéo xuống) → tiêu điểm về phần tử đã mở ngăn.
+- Đóng ngăn (Esc, nút đóng, kéo xuống) → tiêu điểm như ngăn Thoả thuận (`DetailSheet`).
 - Dưới `md`: cột Mốc đủ rộng cho ngày và «còn n ngày», không cắt chữ.
 
 ### 5. Xuất xứ component
