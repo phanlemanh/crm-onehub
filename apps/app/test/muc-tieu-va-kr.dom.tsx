@@ -1318,13 +1318,17 @@ describe("chua-co-kr", () => {
 });
 
 const WHY = "Khách doanh nghiệp chiếm 60% doanh thu quý trước.";
-const NOI_GOP = {
+const NOI_GOP: MucTieuOutput["alignments"][number] = {
 	alignmentId: "al-1",
 	targetObjectiveId: "mt-cha",
 	targetKeyResultId: "kr-cha",
 	unitName: "Toàn công ty",
 	objectiveTitle: "Tăng doanh thu năm",
 	keyResultTitle: "Doanh thu đạt 50 tỷ",
+	lyDo: null,
+	canCu: null,
+	lyDoTuKara: false,
+	mucTin: "chua-co-ly-do",
 };
 const mtSheet = (doi: Partial<MucTieuOutput> = {}) =>
 	chiTietTu(
