@@ -1,0 +1,19 @@
+-- tiền đề làn đo: kho "crm" không phải kho dùng-một-lần — chạy trong một phiên đo riêng
+phien-do: chờ phiên khác của cây này (crm_youthful_wing_0c0c8a_do) dọn xong
+phien-do: kho crm_youthful_wing_0c0c8a_do · app http://localhost:4359 · api http://localhost:4728
+-- tiền đề làn đo: đã đặt contextDevApiKey (khoá giả, sẽ dọn)
+-- tiền đề làn đo: đã đặt ảnh đại diện (sẽ dọn)
+-- tiền đề làn đo: workspace đã có tên miền được phép, không đụng
+$ bun scripts/dev-session.ts ada@trycomp.ai
+DUNG ngan-1280: cung khung: rong 870, tieu de 18px/500, muc uppercase
+DUNG ngan-375: ngan keo tu duoi, rong 375 == 375, tay keo co, scrollWidth 375, Esc dong true
+DUNG cot-moc-375: 25 o moc tron (con 2, hom nay 0, tre 0), scrollWidth 375
+DUNG cot-moc-1280: ty le cot Moc 0.160
+DUNG the-bang-cot: 20 the can dau dong
+DUNG da-bac: bat true/rgb(64, 190, 150) ; rgb(0, 0, 0) ; rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.721901 -0.122554 0.0261406 / 0.3) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px ; rgb(237, 237, 237) — tat false/rgba(255, 255, 255, 0.14) ; rgba(0, 0, 0, 0) ; none ; rgb(161, 161, 161); tat lai ve true, danh sach ve true
+ANH _acceptance/lo-trinh-dong-bo-ho-so/evidence
+KET LUAN: 6 DUNG, 0 SAI — ma thoat 0
+-- tiền đề làn đo: đã dọn contextDevApiKey
+-- tiền đề làn đo: đã dọn ảnh đại diện
+phien-do: xong — mã 0
+__EXIT=0

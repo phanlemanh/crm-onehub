@@ -57,6 +57,7 @@ executors:
     ltc_da_bac: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t da-bac
     ltc_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-ngay.spec.ts && TZ=UTC bun test ./test/lo-trinh-ngay.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t ngay
     ltc_vai: cd apps/app && bun test ./test/pham-vi-man.spec.ts ./test/khung-dieu-huong.spec.ts ./test/proxy-lo-trinh.spec.ts -t lo-trinh
+    ldb_khung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-khung.dom.tsx -t khung-chung
     htl_may_chu_luu_tru: 'bun run test -- "cd apps/api && bun test test/hoan-tac-loat-dung-id.spec.ts -t htl-luu-tru"'
     htl_may_chu_hoan_tac: 'bun run test -- "cd apps/api && bun test test/hoan-tac-loat-dung-id.spec.ts -t htl-hoan-tac"'
     htl_hoan_tac_dung_id: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-hoan-tac-dung-id"
@@ -1534,6 +1535,10 @@ executors:
     ltc_loi: node _acceptance/trang-lo-trinh-trong-crm/rang/chu-cung.mjs && cd apps/app && bun test ./test/messages-guard.spec.ts
     ltc_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
     ltc_do_man: 'APP_URL=${APP_URL:-http://localhost:3360} API_URL=${API_URL:-http://localhost:3361} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/trang-lo-trinh-trong-crm/rang/do-man.mjs"'
+    ldb_do_man: 'NGUOI=ada@trycomp.ai bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"'
+    ldb_ke_hoach: node _acceptance/lo-trinh-dong-bo-ho-so/rang/ke-hoach.mjs
+    ldb_hoi_quy: bash _acceptance/lo-trinh-dong-bo-ho-so/rang/hoi-quy.sh
+    ldb_thiet_ke: bash _acceptance/lo-trinh-dong-bo-ho-so/rang/thiet-ke.sh
     htl_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoan-tac-loat-dung-id/rang/man.mjs"'
     h5_hai_moc: 'bun run test -- "bash _acceptance/zalo-bom-gio/rang/hai-moc.sh"'
     h5_chi_tep_kiem: 'git diff --name-only 91fe8d69f HEAD | grep -v -e "^_acceptance/" -e "^PRODUCT-MAP.md$" -e "^LO-TRINH.html$" | tee /dev/stderr | { read -r a; read -r b; [ "$a" = "apps/agent/test/zalo-qua-webhook.integration.spec.ts" ] && [ -z "$b" ]; }'

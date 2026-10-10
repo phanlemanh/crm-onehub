@@ -66,13 +66,14 @@ export function DetailSheet({
 	size = "2xl",
 	className,
 	children,
+	...data
 }: {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	size?: SheetSize;
 	className?: string;
 	children: ReactNode;
-}) {
+} & { [thuocTinh: `data-${string}`]: string | undefined }) {
 	const _m = crmMessages(useLocale());
 	const content = useRef<HTMLDivElement>(null);
 	const moTu = useRef<HTMLElement | null>(null);
@@ -80,6 +81,7 @@ export function DetailSheet({
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange} tuNhanThayDoi={false}>
 			<SheetContent
+				{...data}
 				ref={content}
 				side="right"
 				size={size}
