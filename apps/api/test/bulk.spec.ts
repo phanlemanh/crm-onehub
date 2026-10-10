@@ -111,6 +111,7 @@ describe("assigning an owner to a selection", () => {
 			skipped: 0,
 			failed: 0,
 			message: null,
+			changedIds: [first.id, second.id],
 		});
 
 		expect(
@@ -137,6 +138,7 @@ describe("assigning an owner to a selection", () => {
 			skipped: 0,
 			failed: 0,
 			message: null,
+			changedIds: [only.id],
 		});
 	});
 
@@ -184,6 +186,7 @@ describe("purging a selection", () => {
 			skipped: 0,
 			failed: 0,
 			message: null,
+			changedIds: [first.id, second.id],
 		});
 
 		expect(
@@ -228,6 +231,7 @@ describe("purging a selection", () => {
 			skipped: 0,
 			failed: 0,
 			message: null,
+			changedIds: [doomed.id],
 		});
 
 		expect(await db.deal.findUnique({ where: { id: deal.id } })).toBeNull();
@@ -288,6 +292,7 @@ describe("moving a selection of deals to a stage", () => {
 			skipped: 0,
 			failed: 0,
 			message: null,
+			changedIds: [first.id, second.id],
 		});
 
 		const closed = await db.deal.findMany({

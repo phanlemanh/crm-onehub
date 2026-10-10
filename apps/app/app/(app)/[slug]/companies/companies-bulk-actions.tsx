@@ -103,7 +103,7 @@ export function CompaniesBulkActions({
 					result,
 					done: (count) => m.bulk.archived(companies(count, locale)),
 					locale,
-					onHoanTac: () => hoanTac.mutate({ ids: variables.ids }),
+					onHoanTac: (changedIds) => hoanTac.mutate({ ids: changedIds }),
 				});
 				onDone();
 			},
