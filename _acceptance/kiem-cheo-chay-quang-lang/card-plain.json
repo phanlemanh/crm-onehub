@@ -1,0 +1,48 @@
+{
+ "feature_plain": "Thợ không còn phải đứng chờ khoá vì lượt kiểm chéo đêm, và kiểm chéo đo dần một khoảng gộp qua nhiều đêm thay vì đêm nào cũng làm lại từ đầu rồi bỏ dở.",
+ "will_do": [
+  {
+   "id": "AC-2",
+   "p": "Sẽ ghi lại hồ sơ nào đã đo xong khi làn chạm trần, gộp với các đêm trước, và báo «chưa xong k/N» thay vì «không chạy được»."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho đêm sau chỉ đo phần còn lại, cộng những hồ sơ vừa bị lần gộp mới chạm."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ gộp đủ phát hiện của mọi đêm trước khi kết luận đỏ hay xanh, rồi mới tiến mốc và xoá tiến độ."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ đo lại từ đầu, có báo lý do, khi tệp tiến độ hỏng hay của mốc khác; lỗi hạ tầng không làm mất tiến độ đã có."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ cho phép đo «kiểm chéo được ưu tiên» cũ của F9 nghỉ, trỏ sang luật xếp mới."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ ghi danh sách hồ sơ đưa cho làn mỗi đêm, để đếm được có hồ sơ nào bị đo lại thừa."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-1",
+   "p": "Chặn kiểm chéo giành khoá: đơn kiểm chéo luôn đứng sau mọi đơn của thợ, chỉ được cấp khi không thợ nào chờ cùng khoá."
+  },
+  {
+   "id": "OOS-1",
+   "p": "Không bớt 7 suite (13 phút) khỏi lượt đêm."
+  },
+  {
+   "id": "OOS-2",
+   "p": "Không tự khởi động lại bộ phát lịch đang chạy — giám sát làm sau khi gộp."
+  },
+  {
+   "id": "OOS-3",
+   "p": "Không phân loại 12 hồ sơ đỏ của đêm 10/10 — đó là F25."
+  }
+ ],
+ "scope_plain": "Những thứ cố ý để ngoài vòng này:"
+}
