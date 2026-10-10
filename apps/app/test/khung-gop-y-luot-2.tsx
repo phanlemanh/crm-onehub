@@ -56,6 +56,10 @@ export function lienKet(id: string, targetKeyResultId: string | null): NoiGop {
 		objectiveTitle: "Mục tiêu OneHub",
 		keyResultTitle:
 			targetKeyResultId === null ? null : `KR ${targetKeyResultId}`,
+		lyDo: null,
+		canCu: null,
+		lyDoTuKara: false,
+		mucTin: "chua-co-ly-do",
 	};
 }
 
