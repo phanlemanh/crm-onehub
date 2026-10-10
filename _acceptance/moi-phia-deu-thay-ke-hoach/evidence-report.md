@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 6a097f48c6375365e03375be816aca43768c769c
+verified_commit: b3945503b3e68a2b34b7b99e17a39b90142fc9dd
 human_signoff:
 ---
 
@@ -291,3 +291,7 @@ sha: 708249126b044a702ebb1d9ee2ded8001780da9f · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-10, do gop onehub d5078b8e (K3c cham okr-gop-y.ts) cho PR 360
 run_id: repin-20261010T134228Z-56891
 sha: 6a097f48c6375365e03375be816aca43768c769c · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-10, do gop onehub 5042d0ce (LT1b cham detail-sheet.tsx) cho PR 360
+run_id: repin-20261010T140306Z-53419
+sha: b3945503b3e68a2b34b7b99e17a39b90142fc9dd · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
