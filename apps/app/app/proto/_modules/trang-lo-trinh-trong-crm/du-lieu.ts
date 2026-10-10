@@ -1,68 +1,14 @@
+import { phanTichLoTrinh } from "@crm/validation/lo-trinh-du-lieu";
+import type { DauVaoLoTrinh } from "@/lib/lo-trinh/doc-trang";
 import mau from "./du-lieu-mau.json";
 
-export type NhomTrangThai = "da-giao" | "dang-lam" | "chua-bat-dau" | "khac";
-
-export type Hang = {
-	ma: string;
-	cau_giao: string;
-	hang: string;
-	nhom: string;
-	dung_tren: string[];
-	trang_thai: string;
-	nhom_trang_thai: NhomTrangThai;
-	ho_so: string | null;
-	theo_loi: boolean;
-	co: string[];
-	bat_khi: string;
-	vi_sao: string;
-};
-
-export type Moc = {
-	ten: string;
-	ngay: string;
-	hang: string[];
-	con_viec: boolean;
-};
-
-export type LoTrinh = {
-	tep: string;
-	ten: string | null;
-	loi: string | null;
-	hang_ke: { ma: string; cau_giao: string; lenh: string | null } | null;
-	can_sua: { ma: string | null; chu: string }[];
-	tien_do: {
-		tong: number;
-		da_giao: number;
-		dang_lam: number;
-		chua_bat_dau: number;
-		khac: number;
-	};
-	hang: Hang[];
-	moc: Moc[];
-	da_bac: { ma: string; ly_do: string }[];
-};
-
-export type DuLieu = {
-	khuon: string;
-	phien_ban: number;
-	nguon: string[];
-	lo_trinh: LoTrinh[];
-	ngoai_lo_trinh: string[];
-};
-
-export type DauVao =
-	| { kieu: "dang-tai" }
-	| { kieu: "tep-vang" }
-	| { kieu: "chua-co-khoi"; canhBao: string[] }
-	| { kieu: "khoi-hong"; canhBao: string[] }
-	| { kieu: "co-du-lieu"; duLieu: DuLieu; canhBao: string[] };
-
-export const DU_LIEU_MAU = mau as DuLieu;
+const kq = phanTichLoTrinh(mau);
+if (!kq.ok) throw new Error(`du-lieu-mau.json lech khuon: ${kq.duongKhoa}`);
+const DU_LIEU_MAU = kq.duLieu;
 
 export const STATE = {
 	dayDu: "ST-lotrinh-day-du",
 	loc: "ST-lotrinh-loc",
-	locRong: "ST-lotrinh-loc-rong",
 	tre: "ST-lotrinh-tre",
 	dangTai: "ST-lotrinh-dang-tai",
 	chuaCoKhoi: "ST-lotrinh-chua-co-khoi",
@@ -80,22 +26,31 @@ export const STATE = {
 export const NGAY_MAU = "2026-10-09";
 export const NGAY_TRE = "2026-12-20";
 
-export function dauVaoCuaState(state: string): DauVao {
-	if (state === STATE.dangTai) return { kieu: "dang-tai" };
+const THAM_SO: Record<string, string> = {
+	[STATE.loc]: "nhom=okr",
+	[STATE.tab]: "vongDoi=da-giao",
+	[STATE.bangCot]: "xemLoTrinh=bang-cot",
+	[STATE.chiaMoc]: "xemLoTrinh=moc",
+	[STATE.daBac]: "daBac=true",
+	[STATE.chiTiet]: "viec=docs%2Fplan%2Flo-trinh-okr.json%23LT2",
+};
+
+export function thamSoCuaState(state: string): string {
+	return THAM_SO[state] ?? "";
+}
+
+export function dauVaoCuaState(state: string): DauVaoLoTrinh {
 	if (state === STATE.tepVang) return { kieu: "tep-vang" };
 	if (state === STATE.chuaCoKhoi)
 		return {
 			kieu: "chua-co-khoi",
-			canhBao: [
-				"trang chưa mang dữ liệu lộ trình — vẽ lại bằng bộ kit từ 2.26",
-			],
+			cauMay: "trang chưa mang dữ liệu lộ trình — vẽ lại bằng bộ kit từ 2.27",
 		};
 	if (state === STATE.khoiHong)
 		return {
 			kieu: "khoi-hong",
-			canhBao: [
+			cauMay:
 				"khối dữ liệu lộ trình không phải JSON hợp lệ: Unexpected token 'k', \"{khong\" is not valid JSON",
-			],
 		};
 	if (state === STATE.loLoi)
 		return {
@@ -113,13 +68,6 @@ export function dauVaoCuaState(state: string): DauVao {
 								can_sua: [],
 								da_bac: [],
 								hang_ke: null,
-								tien_do: {
-									tong: 0,
-									da_giao: 0,
-									dang_lam: 0,
-									chua_bat_dau: 0,
-									khac: 0,
-								},
 							}
 						: lo,
 				),

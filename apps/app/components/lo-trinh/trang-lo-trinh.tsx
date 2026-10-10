@@ -60,12 +60,13 @@ import { XemMoc } from "./xem-moc";
 
 const khongDoi = () => () => {};
 
-function useHomNay(): string | null {
-	return useSyncExternalStore(
+function useHomNay(coDinh: string | undefined): string | null {
+	const theoMay = useSyncExternalStore(
 		khongDoi,
 		() => homNayNguoiXem(new Date()),
 		() => null,
 	);
+	return coDinh ?? theoMay;
 }
 
 function cotBang(m: LoTrinhMessages): DataTableColumn<Viec>[] {
@@ -210,13 +211,15 @@ function ChiaCotChon({
 export function TrangLoTrinh({
 	duLieu,
 	canhBao,
+	homNayCoDinh,
 }: {
 	duLieu: LoTrinhDuLieu;
 	canhBao: string[];
+	homNayCoDinh?: string;
 }) {
 	const locale = useLocale();
 	const m = loTrinhMessages(locale);
-	const homNay = useHomNay();
+	const homNay = useHomNay(homNayCoDinh);
 	const { query, input } = useTableQuery(loTrinhListParams);
 	const [lt, setLt] = useQueryStates(loTrinhParsers);
 	const viec = useMemo(() => phangViec(duLieu, homNay), [duLieu, homNay]);

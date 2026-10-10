@@ -6,7 +6,13 @@ import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { KhungTrong } from "./khung-trong";
 import { TrangLoTrinh } from "./trang-lo-trinh";
 
-export function NoiDungLoTrinh({ dauVao }: { dauVao: DauVaoLoTrinh }) {
+export function NoiDungLoTrinh({
+	dauVao,
+	homNayCoDinh,
+}: {
+	dauVao: DauVaoLoTrinh;
+	homNayCoDinh?: string;
+}) {
 	const m = loTrinhMessages(useLocale());
 	if (dauVao.kieu === "tep-vang")
 		return (
@@ -34,5 +40,11 @@ export function NoiDungLoTrinh({ dauVao }: { dauVao: DauVaoLoTrinh }) {
 				tieuDe={m.trong.khoiHongTieuDe}
 			/>
 		);
-	return <TrangLoTrinh canhBao={dauVao.canhBao} duLieu={dauVao.duLieu} />;
+	return (
+		<TrangLoTrinh
+			canhBao={dauVao.canhBao}
+			duLieu={dauVao.duLieu}
+			homNayCoDinh={homNayCoDinh}
+		/>
+	);
 }
