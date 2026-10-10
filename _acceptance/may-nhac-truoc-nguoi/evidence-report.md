@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a22b9eb1cfcb3dfdd762dac4cb2d2d0e3a86b471
+verified_commit: 34ffea77b4165083c59a91377f8600f5bfbd6356
 human_signoff: Phan Le Manh 2026-09-22
 ---
 
@@ -244,3 +244,7 @@ Round 2: Cổng Bằng chứng trả lại đầu vòng 2 — E5 (so tập daGui
 ### Re-pin lần 1 — 2026-09-22, do gộp onehub (#80) và sửa bản giả E27 trước PR lượt 3
 run_id: repin-20260922T132144Z-13202
 sha: a22b9eb1cfcb3dfdd762dac4cb2d2d0e3a86b471 · suites: 4 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E13
+
+### Re-pin lần 2 — 2026-10-10, do E6 dieu-phoi-va them quaHan vao du lieu gia cua ba bai DOM (P3-81) va gop onehub
+run_id: repin-20261010T083254Z-33269
+sha: 34ffea77b4165083c59a91377f8600f5bfbd6356 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E13 · diff chạm vật đo ngoài làn máy: E13 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
