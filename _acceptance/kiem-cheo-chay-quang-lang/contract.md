@@ -5,7 +5,7 @@ slug: kiem-cheo-chay-quang-lang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-10
 design_doc: _acceptance/kiem-cheo-chay-quang-lang/design.md
@@ -72,11 +72,17 @@ và chạy tiếp từ hồ sơ đang dừng. Vòng này thay `kiem-cheo-sau-gop
 - Known limit (Cổng 2, Ngoài-1): đường mã 4 đọc dòng `[lane]` viết cho người của bộ kit; kit đổi chữ dòng đó thì lượt ra
   `chua-xong` 0/N mỗi đêm mà không báo lỗi.
 - Known limit (Cổng 2, Ngoài-2): năm tệp sửa ở vòng này chưa qua `biome format`.
-- Known limit (Cổng 2, Ngoài-3, Ngoài-4, Ngoài-5): ca «lan chay het nhung phan loai vuot tran» không kiểm `do-moi` của đêm
-  trước còn sống; `--tran-phut` của làn chỉ so với chính hằng `lanPhut`, không ghim `lanPhut` < `tranPhut`; `suiteDoTrongNhatKy`
-  chỉ thử trên dòng gõ tay.
+- Known limit (Cổng 2, Ngoài-3, Ngoài-4, Ngoài-5): `--tran-phut` của làn chỉ so với chính hằng `lanPhut`, không ghim
+  `lanPhut` < `tranPhut`; `suiteDoTrongNhatKy` chỉ thử trên dòng gõ tay. (Ca «lan chay het nhung phan loai vuot tran» đã đổi ở
+  vòng 3: nay kiểm `khong-chay-duoc` và tiến độ giữ nguyên từng byte.)
 - Known limit (Cổng 2, Ngoài-6): mỏ neo đột biến M1b của `dieu-phoi-hai-tang` (`mocCua(hangViec, d.slug), d.luc]`) đã vắng
   trong `lich.mjs` từ F9; `dieu-phoi-hai-tang/E25` thoát 2 khi lượt kiểm chéo đêm đo nó.
 - Known limit (Cổng 2, Ngoài-7, chấp nhận): `dem.mjs` vẫn tính và ghi `moc` vào đơn kiểm chéo dù lịch không còn đọc.
 - Known limit (Cổng 2, Ngoài-8, Ngoài-9, Ngoài-10): E1 và E3 khai bản sao đột biến mà bài kiểm không chạy; `noi-f9.mjs` tự
   đưa con trỏ hằng vào `chungThayBoi` thay vì đo đường kiểm lại thật.
+- Phân loại vượt trần ở đường làn chạy hết (mã 0/1) báo `khong-chay-duoc`, `tien-do.json` giữ nguyên — đúng
+  `kiem-cheo-sau-gop` AC-8; chỉ đường mã 4 lưu tiến độ khi phân loại vượt trần (P4-67, 10/10).
+- Known limit (Cổng 2 lần hai, Ngoài-2): lý do vượt trần luôn in hằng `KIEM_CHEO.luot.tranPhut` (90) dù
+  `KIEM_CHEO_TRAN_PHUT` đặt trần khác.
+- Known limit (Cổng 2 lần hai, Ngoài-3): ca (j) của `kiem-cheo-sau-gop/rang/pha-thu.mjs` chỉ kiểm có tệp tiến độ và `tu`;
+  quan hệ `xong`/`den`/k/N của AC-2 đo ở `dem.test.mjs`.

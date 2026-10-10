@@ -33,29 +33,29 @@ ul.ck{list-style:none;padding:0;margin:0}ul.ck li{padding:5px 0;font-size:14px}u
 <div class="card" style="margin-top:12px"><span class="badge pass">PASS</span>
 <div class="meta"><span>Verified by: <b>fresh-context verification subagent</b></span><span>Human signoff: <b>CHƯA ký</b></span><span>enforcement: <b>strict</b></span></div></div>
 <h2>Các eval</h2><div class="card" style="padding:4px 8px"><table><thead><tr><th>Eval</th><th>Tiêu chí</th><th>Loại</th><th>Verdict</th><th>run_id</th><th>verified_at</th></tr></thead><tbody>
-<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-kiem-cheo-chay-quang-lang-E1-r2</td><td class="mono">2026-10-10T04:05:53Z</td></tr>
-<tr><td><a href="#E2">E2</a></td><td>AC-2, AC-3, AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-kiem-cheo-chay-quang-lang-E2-r2</td><td class="mono">2026-10-10T04:05:53Z</td></tr>
-<tr><td><a href="#E3">E3</a></td><td>AC-2, AC-3, AC-4, AC-5, AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-kiem-cheo-chay-quang-lang-E3-r2</td><td class="mono">2026-10-10T04:05:53Z</td></tr>
-<tr><td><a href="#E4">E4</a></td><td>AC-6</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-kiem-cheo-chay-quang-lang-E4-r2</td><td class="mono">2026-10-10T04:05:53Z</td></tr>
+<tr><td><a href="#E1">E1</a></td><td>AC-1</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">&quot;&quot;</td><td class="mono">2026-10-10T05:20:05Z</td></tr>
+<tr><td><a href="#E2">E2</a></td><td>AC-2, AC-3, AC-5</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-kiem-cheo-chay-quang-lang-E2-r3</td><td class="mono">2026-10-10T05:20:05Z</td></tr>
+<tr><td><a href="#E3">E3</a></td><td>AC-2, AC-3, AC-4, AC-5, AC-7</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-kiem-cheo-chay-quang-lang-E3-r3</td><td class="mono">2026-10-10T05:20:05Z</td></tr>
+<tr><td><a href="#E4">E4</a></td><td>AC-6</td><td>script</td><td><span class="badge pass">PASS</span></td><td class="mono">minted-kiem-cheo-chay-quang-lang-E4-r3</td><td class="mono">2026-10-10T05:20:05Z</td></tr>
 </tbody></table></div>
 <h2>Chi tiết từng eval</h2>
 <div class="card eval" id="E1"><h3><span class="badge pass">PASS</span> &nbsp;E1 · script</h3><p class="crit">AC-1: Given hàng chờ có đơn mang `phien: kiem-cheo` (có hay không có `moc`) và đơn của thợ cùng tài nguyên, When bộ phát</p>
-<div class="kv"><span>run_id <b>minted-kiem-cheo-chay-quang-lang-E1-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kcq_lich</b></span><span>verified_at <b>2026-10-10T04:05:53Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="kv"><span>run_id <b>&quot;&quot;</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kcq_lich</b></span><span>verified_at <b>2026-10-10T05:20:05Z</b></span><span>baseline <b>n-a</b></span></div>
 <pre class="out">node --test scripts/dieu-phoi/test/lich.test.mjs
-ℹ duration_ms 59.735875</pre>
+ℹ duration_ms 60.192542</pre>
 </div>
 <div class="card eval" id="E2"><h3><span class="badge pass">PASS</span> &nbsp;E2 · script</h3><p class="crit">AC-2, AC-3, AC-5</p>
-<div class="kv"><span>run_id <b>minted-kiem-cheo-chay-quang-lang-E2-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kcq_tien_do</b></span><span>verified_at <b>2026-10-10T04:05:53Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="kv"><span>run_id <b>minted-kiem-cheo-chay-quang-lang-E2-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kcq_tien_do</b></span><span>verified_at <b>2026-10-10T05:20:05Z</b></span><span>baseline <b>n-a</b></span></div>
 <pre class="out">node --test scripts/kiem-cheo/test/tien-do.test.mjs
-ℹ duration_ms 56.083917</pre>
+ℹ duration_ms 67.401375</pre>
 </div>
 <div class="card eval" id="E3"><h3><span class="badge pass">PASS</span> &nbsp;E3 · script</h3><p class="crit">AC-2, AC-3, AC-4, AC-5, AC-7</p>
-<div class="kv"><span>run_id <b>minted-kiem-cheo-chay-quang-lang-E3-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kcq_hai_dem</b></span><span>verified_at <b>2026-10-10T04:05:53Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="kv"><span>run_id <b>minted-kiem-cheo-chay-quang-lang-E3-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kcq_hai_dem</b></span><span>verified_at <b>2026-10-10T05:20:05Z</b></span><span>baseline <b>n-a</b></span></div>
 <pre class="out">node --test scripts/kiem-cheo/test/dem.test.mjs
-ℹ duration_ms 21144.174042</pre>
+ℹ duration_ms 22874.394416</pre>
 </div>
 <div class="card eval" id="E4"><h3><span class="badge pass">PASS</span> &nbsp;E4 · script</h3><p class="crit">AC-6: Given `_acceptance/kiem-cheo-sau-gop/evals.yaml`, When hồ sơ này đã ký, Then E2 mang `status: not-run` và</p>
-<div class="kv"><span>run_id <b>minted-kiem-cheo-chay-quang-lang-E4-r2</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kcq_noi_f9</b></span><span>verified_at <b>2026-10-10T04:05:53Z</b></span><span>baseline <b>n-a</b></span></div>
+<div class="kv"><span>run_id <b>minted-kiem-cheo-chay-quang-lang-E4-r3</b></span><span>exit_code <b>0</b></span><span>verifier <b class="mono">config:executors.script.kcq_noi_f9</b></span><span>verified_at <b>2026-10-10T05:20:05Z</b></span><span>baseline <b>n-a</b></span></div>
 <pre class="out">node _acceptance/kiem-cheo-chay-quang-lang/rang/noi-f9.mjs
 noi-f9: XANH</pre>
 </div>
@@ -64,7 +64,7 @@ Eval khong-phan-biet (xanh tren ca code moi lan baseline cuoi cua round 1; chung
 - E1 (node --test scripts/dieu-phoi/test/lich.test.mjs)
 - E3 (node --test scripts/kiem-cheo/test/dem.test.mjs)
 Cac lenh suite xanh tren ca hai phia la regression-guard binh thuong, khong liet ke.</div>
-<h2>Vòng verify</h2><ul class="tl"><li>Round 1: E2, E3 REJECT — t4, t5 trong AC-2 (phan loai tung ho so khi lan cham tran, vuot tran van phai luu tien do; tran lan phai nho hon tran luot). Returned to implementation (commit 774922da5: phan loai tung ho so, vuot tran van luu tien do, lan tran 60 phut, doc suite chay lai).</li><li>Round 2: E1, E2, E3, E4 PASS va bay lenh suite xanh tren cay 7bb5ddf7.</li></ul>
+<h2>Vòng verify</h2><ul class="tl"><li>Round 1: E2, E3 REJECT — t4, t5 trong AC-2 (phan loai tung ho so khi lan cham tran, vuot tran van phai luu tien do; tran lan phai nho hon tran luot). Returned to implementation (commit 774922da5: phan loai tung ho so, vuot tran van luu tien do, lan tran 60 phut, doc suite chay lai).</li><li>Round 2: E1, E2, E3, E4 PASS va bay lenh suite xanh tren cay 7bb5ddf7.</li><li>Round 3: E1, E2, E3, E4 PASS va bay lenh suite xanh tren cay db99fd8bb sau ban sua phan loai vuot tran o duong ma 0/1 ve khong-chay-duoc (F9 AC-8); the Cong 2 va trang bang chung can ve lai truoc khi ky lai.</li></ul>
 <div class="foot">Trang trình bày · KHÔNG quyết — <span class="mono">evidence-report.md</span> + hook là nguồn-sự-thật. Sinh từ run đã verify; ảnh/output gắn run_id.</div>
 <script>
 document.querySelectorAll('.slide').forEach(function(s){var fr=s.querySelectorAll('.frame');if(fr.length<2)return;var i=0;fr[0].classList.add('on');var adv=function(){fr[i].classList.remove('on');i=(i+1)%fr.length;fr[i].classList.add('on');};s._t=setInterval(adv,1600);var bar=s.nextElementSibling,b=bar?bar.querySelector('[data-toggle]'):null;if(b)b.addEventListener('click',function(){if(s._t){clearInterval(s._t);s._t=null;b.textContent='▶ Chạy';}else{s._t=setInterval(adv,1600);b.textContent='⏸ Tạm dừng';}});});

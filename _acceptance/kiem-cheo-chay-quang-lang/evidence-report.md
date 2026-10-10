@@ -7,7 +7,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: db99fd8bbadd07a7f133280a3ee59275e5266999
-human_signoff:
+human_signoff: "Phan Le Manh 2026-10-10 — ký lại Cổng 2 trên verdict PASS 4/4 eval + 7 suite (S4 vòng 3, wf_cf3b810e-33c, sau bản sửa P4-67); Ngoài 1–6, 8–10 ghi Known limits, Ngoài 7 chấp nhận không sửa; đồng ý cắt; Treo phê hết"
 ---
 
 # Evidence Report: kiem-cheo-chay-quang-lang
