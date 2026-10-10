@@ -1,0 +1,15 @@
+{
+  "feature_plain": "Gỡ quả bom giờ trong bài kiểm Zalo đang chặn mọi lệnh đẩy của đợt từ 02:15Z hôm nay — chỉ sửa bài kiểm, sản phẩm không đổi.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho tệp kiểm Zalo webhook xanh trọn 32/32 ở giờ thật hôm nay, gồm hai bài đang đỏ."},
+    {"id": "AC-3", "p": "Sẽ chỉ sửa đúng một tệp kiểm, cộng hồ sơ và khoá đo mới — không chạm mã sản phẩm."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG còn phụ thuộc giờ chạy: kéo mốc giờ của bài kiểm về 2020 hay đẩy tới 2030 vẫn 32/32; bản cũ thì đỏ đúng hai bài đó."},
+    {"id": "OOS-1", "p": "Không đổi mã sản phẩm của Zalo (vòng hỏi tin, đường webhook, mã liên kết)."},
+    {"id": "OOS-2", "p": "Không soát các tệp kiểm khác cũng ghim ngày cố định — hôm nay chúng xanh."}
+  ],
+  "coverage_plain": [
+    {"i": 0, "p": "Không chạy quét phủ: một tệp kiểm, hai bài, một nguyên nhân đã đo; phép đo hai mốc giờ chạy trên cả tệp nên bài nào khác còn phụ thuộc giờ thật cũng lộ."}
+  ]
+}
