@@ -386,3 +386,23 @@ export const ketQuaTroLy = z.object({
 });
 
 export type KetQuaTroLy = z.infer<typeof ketQuaTroLy>;
+
+export const LY_DO_KHONG_QUYET = [
+	"muc-tieu-da-bo",
+	"dang-cho-duyet",
+	"so-sai-kieu",
+	"can-chinh-gioi-han",
+	"can-chinh-chinh-no",
+	"can-chinh-cung-cap",
+	"can-chinh-chua-cong-bo",
+	"can-chinh-khac-chu-ky",
+	"can-chinh-da-gan",
+] as const;
+
+export type LyDoKhongQuyet = (typeof LY_DO_KHONG_QUYET)[number];
+
+export const lyDoKhongQuyet = z.enum(LY_DO_KHONG_QUYET);
+
+export function laLyDoKhongQuyet(lyDo: string): lyDo is LyDoKhongQuyet {
+	return lyDoKhongQuyet.safeParse(lyDo).success;
+}
