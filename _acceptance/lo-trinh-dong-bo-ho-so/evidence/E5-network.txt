@@ -1,0 +1,2 @@
+driver: script (puppeteer do-man.mjs), khong co read_network_requests; networkObserved = n-a (driver)
+phien do tu dung app 4359 / api 4728 tren kho crm_youthful_wing_0c0c8a_do, da don khi xong
