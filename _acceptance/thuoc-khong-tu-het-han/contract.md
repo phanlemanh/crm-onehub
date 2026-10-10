@@ -5,7 +5,7 @@ slug: thuoc-khong-tu-het-han
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-10
 design_doc: _acceptance/thuoc-khong-tu-het-han/design.md
@@ -90,3 +90,13 @@ ngoài làn máy (`dien-thoai-ca-nhan`, `the-gop-y-okr`) chuyển F24; phần đ
 - Sửa bất kỳ tệp nào dưới `_acceptance/<hồ sơ đã ký>/` làm lưới trước-gộp xét lại hồ sơ đó; hồ sơ đã cũ từ trước thì phải ghim
   lại trước khi gộp. Sau Lối B vòng này chạm 4 hồ sơ đã ký (3 hồ sơ của AC-1 và `ha-tran-thang-hoi-zalo`); lượt ghim lại
   `repin-20261009T224054Z-34604` đã ghim chúng xanh, ghim lại ở tip trước khi gộp.
+- Known limit (Cổng 2, Ngoài-1): `paths` của E1, E2 không có `lib/eval-yaml.cjs`, bộ đọc mà cả hai thước dùng.
+- Known limit (Cổng 2, Ngoài-2, Ngoài-3): glob chết vừa bỏ ở `nguon-keo-tha-reui/E1` (`packages/ui/src/components/examples/**`)
+  và `doi-ten-onehub-center/E10` (`apps/app/components/auth-shader.tsx`) là đích kiểm «tệp không được tồn tại»; thêm lại đúng
+  tệp đó không làm hai eval chạy lại qua bộ lọc paths.
+- Known limit (Cổng 2, Ngoài-4): chiều đỏ (4) của `paths-chet.mjs` đọc `dien-thoai-ca-nhan` ở mốc neo; khi F24 sửa hồ sơ đó,
+  E1 tự đỏ. F24 sửa cùng lúc: đọc ở `a9e8bc75a`.
+- Known limit (Cổng 2, Ngoài-5, Ngoài-6): mẫu «git diff khong ref» của kiểm kê viết tay theo đúng khuôn regex; vế «không chạm
+  hai hồ sơ F24» không có đối chứng dương trên lịch sử thật.
+- Known limit (Cổng 2, r3-1…r3-4, trình tay): khoá `tkh_e10` còn trong `config.yaml` và `hai-thuoc.mjs` bỏ qua cờ lạ, nên
+  `tkh_e10` chạy thước E7 và in XANH; nhánh E10 chết với sha viết cứng còn trong `hai-thuoc.mjs`.

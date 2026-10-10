@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: e8ee6e2bee80182d3cf50c35c9b7744873c6ed41
-human_signoff:
+human_signoff: "Phan Le Manh 2026-10-10 — ký Cổng 2 trên verdict PASS 4/4 eval + 7 suite (S4 vòng 4, wf_67f2cfd5-37f, phạm vi Lối B); Ngoài 1–6 và r3-1…r3-4 ghi Known limits; đồng ý cắt; Treo phê hết"
 ---
 
 # Evidence Report: thuoc-khong-tu-het-han
