@@ -1,0 +1,52 @@
+---
+schema_version: 1
+feature: «Bước Kara bỏ qua việc vô hại hiện "Đã bỏ qua", không báo "chưa lưu được"»
+slug: buoc-kara-bo-qua
+owner: phanlemanh@gmail.com
+risk_tier: T2
+surfaces: [ui]
+status: signed-off
+approved_by: Phan Le Manh
+approved_at: 2026-10-09T16:35:14Z
+design_doc: docs/superpowers/specs/2026-10-09-buoc-kara-bo-qua-design.md
+---
+
+# Acceptance Contract: buoc-kara-bo-qua
+
+## Context
+
+Khi Kara bỏ qua một việc vô hại (cá nhân đã có ảnh, ảnh không đổi), bước đó hiện «Kara chưa lưu được» và danh sách bước tự mở. Anh chọn lối A (2026-10-09): công cụ ảnh tự khai «bỏ qua», danh sách bước hiện «Đã bỏ qua» trung tính và không tự mở; ca hỏng thật giữ nguyên.
+
+Source input: Ngoài-6 của `kara-trang-thai-toan-crm` (K6b), Cổng 2 2026-10-08T07:13:17Z, anh chọn «mở hợp đồng mới» (luật 26); giám sát chuyển hàng K6d sang làn P6; `_acceptance/buoc-kara-bo-qua/opportunity.md`.
+
+## Criteria
+
+- AC-1: (cross-layer) Given một cá nhân đã có ảnh đã lưu bản sao, When công cụ ảnh của Kara chạy không ép thay (cả hai đường `storePortrait` và `runPortrait`), Then kết cục mang `skipped: true` và `stored: false` với lý do «They already have a photo.», bản ghi không đổi; When nguồn ảnh trùng ảnh đang có, Then kết cục «Unchanged.» cũng mang `skipped: true`.
+- AC-2: (cross-layer) Given kết cục thật của công cụ ảnh ở ca bỏ qua, When đi qua kiểu kết cục dùng chung và dựng dòng thời gian Kara, Then màu kết cục là trung tính (không phải cảnh báo) và mục mang `skipped: true`; mục không bỏ qua thì vắng hẳn trường `skipped` (dữ liệu cũ và tệp mẫu không đổi), và `{stored: false}` hay `{written: false}` không kèm `skipped` vẫn là cảnh báo.
+- AC-3: Given ngăn Kara của bản ghi có một bước bỏ qua và các bước khác xong, When ngăn hiện, Then bước đó hiện «Đã bỏ qua» với chấm trung tính, KHÔNG hiện «Chưa lưu được», danh sách bước KHÔNG tự mở và tiêu đề danh sách bước là «Đã làm N bước».
+- AC-4: Given ca hỏng thật (không lấy được ảnh: `stored: false` không kèm `skipped`; hoặc `written: false`), When như AC-2 và AC-3, Then vẫn là cảnh báo, bước «Chưa lưu được» và danh sách tự mở — không hồi quy.
+- AC-5: Given khung tạo tác nhân hiển thị một bước có kết cục bỏ qua, When khung hiện, Then không hiện dấu cảnh báo cho bước đó.
+- AC-6: Given giao diện tiếng Anh, When như AC-3, Then bước hiện «Skipped».
+- AC-7: Given các bài kiểm sẵn có của dòng thời gian Kara và danh sách bước (`agent-transcript.spec.ts`, `kara-trang-thai-ui.dom.tsx`, `bo-xuong-kara.dom.tsx`), When chạy lại, Then xanh; kỳ vọng cũ không bị sửa (chỉ thêm ca).
+
+## Coverage
+
+- bỏ coverage-scan — một công cụ, một cờ, hai mặt hiển thị đã liệt kê đủ; xem dòng sổ quyết định «bỏ coverage-scan».
+
+## Out of scope
+
+- Các công cụ khác của Kara (chưa có công cụ nào khác trả «không lưu» cho việc vô hại).
+- Đổi chữ «Chưa lưu được» của ca hỏng thật.
+- «No photo on the profile.» (không tìm thấy ảnh) giữ là «Chưa lưu được» — người xem nên biết Kara không tìm được ảnh.
+- Bước của các lượt Kara chạy trước bản này vẫn hiện «Chưa lưu được» — không suy lại từ chữ lý do.
+
+## Notes
+
+- Không migration; trường `skipped` của mục dòng thời gian chỉ có mặt khi bằng `true`.
+- Đã quét ba tệp kiểm cũ: không bài nào so tuyệt đối cả mục `did`; `agent-transcript.spec.ts` có bài so tập trường với tệp mẫu JSON — vì thế `skipped` vắng khi không bỏ qua, tệp mẫu không đổi.
+
+Known limits — anh chọn ở Cổng Bằng chứng 2026-10-10, từ S4 round 1:
+
+- Ngoài-1: Phép quét tĩnh `rang/bo-qua-dung-cho.mjs` không thấy khối `return { stored: false … }` «No picture found» trong `runPortrait` (lý do dùng template literal có ngoặc nhọn), nên gắn nhầm `skipped` vào ca đó vẫn xanh.
+- Ngoài-2: Cùng gốc với Ngoài-1 — phép quét không ghim tổng số khối (đếm 10 trên 11 lần `stored: false`); chỉ chặn khi đếm được 0 khối.
+- Ngoài-3: Bài DOM khung tạo tác nhân (E5) chỉ kiểm vắng dấu cảnh báo ở ca bỏ qua, chưa kiểm có dấu «xong».
