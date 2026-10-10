@@ -11,13 +11,24 @@ export const bulkIdsInput = z.object({
 		.max(MAX_BULK_IDS, "Too many records at once — select a page at a time."),
 });
 
-export type BulkResult = {
-	requested: number;
-	succeeded: number;
-	skipped: number;
-	failed: number;
-	message: string | null;
-};
+export const crmBulkResultOutput = z.object({
+	requested: z.number(),
+	succeeded: z.number(),
+	skipped: z.number(),
+	failed: z.number(),
+	message: z.string().nullable(),
+	changedIds: z.array(z.string()),
+});
+
+export type BulkResult = z.infer<typeof crmBulkResultOutput>;
+
+export function inRequestOrder(
+	ids: string[],
+	rows: { id: string }[],
+): string[] {
+	const changed = new Set(rows.map((row) => row.id));
+	return ids.filter((id) => changed.has(id));
+}
 
 export async function requireOwner(
 	db: Db,
@@ -40,7 +51,7 @@ export async function runBulk(
 	act: (id: string) => Promise<unknown>,
 ): Promise<BulkResult> {
 	const unique = [...new Set(ids)];
-	let succeeded = 0;
+	const changedIds: string[] = [];
 	let skipped = 0;
 	let message: string | null = null;
 
@@ -50,7 +61,7 @@ export async function runBulk(
 			if (outcome === null) {
 				skipped += 1;
 			} else {
-				succeeded += 1;
+				changedIds.push(id);
 			}
 		} catch (error) {
 			message ??=
@@ -60,9 +71,10 @@ export async function runBulk(
 
 	return {
 		requested: unique.length,
-		succeeded,
+		succeeded: changedIds.length,
 		skipped,
-		failed: unique.length - succeeded - skipped,
+		failed: unique.length - changedIds.length - skipped,
 		message,
+		changedIds,
 	};
 }
