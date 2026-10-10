@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: eb2280d03ab034c35a9cc5c03fc2def43ab0f0da
+verified_commit: 082c4fb65ee6c73d463ea7e50b242dba194ff32e
 human_signoff: Phan Le Manh 2026-09-26
 ---
 
@@ -380,3 +380,7 @@ sha: db6a3ca591311840eec8266d417d907054065628 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 6 — 2026-10-10, do hoá cũ do thuoc-khong-tu-het-han (F10) sửa paths chết và gộp onehub eaf0886d5; ghim lại ở tip trước khi gộp
 run_id: repin-20261010T064619Z-39877
 sha: eb2280d03ab034c35a9cc5c03fc2def43ab0f0da · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E7, E8, E11, E15 · AC không có chốt máy: AC-7, AC-8, AC-11, AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 7 — 2026-10-10, do hoá cũ do gộp onehub bb1421c3 (DT2) vào thuoc-khong-tu-het-han; ghim lại ở tip trước khi gộp
+run_id: repin-20261010T080731Z-85241
+sha: 082c4fb65ee6c73d463ea7e50b242dba194ff32e · suites: 7 lệnh exit 0 · evals: 13/13 eval máy đạt kỳ vọng · ngoài làn máy: E7, E8, E11, E15 · AC không có chốt máy: AC-7, AC-8, AC-11, AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
