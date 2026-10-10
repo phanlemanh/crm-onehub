@@ -1,33 +1,5 @@
 {
  "feature_plain": "Lưu trữ hàng loạt rồi bấm «Hoàn tác» chỉ đưa về đúng những bản mình vừa cất, và toast nói thật số bản bị bỏ qua hay không về được, bằng tiếng của người dùng.",
- "will_do": [
-  {"id":"AC-1","p":"Sẽ cho máy chủ trả về đúng danh sách bản vừa được cất (hay vừa được khôi phục) ở cả cá nhân, công ty, thoả thuận. Bản đã cất từ trước tính là bị bỏ qua và giữ ngày cũ. Id không còn tính là lỗi."},
-  {"id":"AC-2","p":"Sẽ cho «Hoàn tác» chỉ khôi phục đúng các bản vừa cất, một lần. Bản người khác đã cất trước vẫn nằm ở «Đã lưu trữ»."},
-  {"id":"AC-4","p":"Sẽ cho toast lưu trữ nói số đã lưu trữ và số bị bỏ qua bằng chữ của sản phẩm. Không cất được bản nào thì không có nút «Hoàn tác»."},
-  {"id":"AC-5","p":"Sẽ hiện các toast mới bằng tiếng Anh khi giao diện là tiếng Anh, không lẫn chữ Việt."},
-  {"id":"AC-6","p":"Sẽ chứng minh trên bản chạy thật ở khổ 1440: ba cá nhân, một bản đã bị người khác cất. Toast nói 2 đã lưu trữ, 1 bị bỏ qua. Sau «Hoàn tác» bảng hiện đúng hai bản đó."}
- ],
- "wont_do": [
-  {"id":"AC-3","p":"Sẽ KHÔNG báo xanh khi «Hoàn tác» có bản không về được. Toast vàng nói số đã khôi phục, số không khôi phục được, và chỉ tới «Đã lưu trữ»."},
-  {"id":"OOS-1","p":"Kanban thoả thuận không có chọn nhiều nên không có «Hoàn tác» hàng loạt."},
-  {"id":"OOS-2","p":"Lưu trữ từng bản từ menu ngăn giữ nguyên (đã hoàn tác đúng bản từ K6b)."},
-  {"id":"OOS-3","p":"Câu báo của xoá vĩnh viễn, đổi người phụ trách, đổi giai đoạn hàng loạt vẫn như cũ, kể cả câu lỗi tiếng Anh thô."},
-  {"id":"OOS-4","p":"Danh sách liên quan trong ngăn lọc bản đã cất là hàng V2a."},
-  {"id":"OOS-5","p":"Đưa dải báo và vùng khoá thành mảnh dùng chung là hàng riêng."}
- ],
- "coverage_plain": [
-  {"i":0,"p":"Bảng quét phủ nằm ở coverage-scan.md, lối quét ma trận kiểm."},
-  {"i":1,"p":"Đủ ba loại bản ghi: AC-1, AC-2 đo cá nhân, công ty và thoả thuận trên máy chủ thật."},
-  {"i":2,"p":"Đủ ba tình trạng của từng bản trong lô (đang dùng, đã cất từ trước, không còn): AC-1, AC-2, AC-4."},
-  {"i":3,"p":"Đủ ba kết cục của «Hoàn tác» (về đủ, về thiếu, lỗi hẳn): AC-3. Chuẩn ngành: thông báo lỗi bằng ngôn ngữ người dùng (NN/g #9)."},
-  {"i":4,"p":"Tiếng Anh ở AC-5, khổ 1440 trên bản chạy thật ở AC-6."}
- ],
- "gap_probe_plain": [
-  {"i":0,"p":"Chưa có phép đo nào đi qua đường gọi thật của công ty và thoả thuận, mà gốc lỗi lại nằm đúng ở đó: trường bị cắt ở biên. Đã sửa: E1 và E2 gọi qua máy chủ thật cho cả ba loại."},
-  {"i":1,"p":"Ca không cất được bản nào mà có câu lỗi thô chưa được kiểm. Đã sửa: E5 thêm ca đó, E6 kiểm thêm bản tiếng Anh."},
-  {"i":2,"p":"Màn thật chỉ đối chiếu cơ sở dữ liệu, chưa đếm bảng sau «Hoàn tác». Đã sửa: E8 đếm đúng 2 dòng quay lại."},
-  {"i":3,"p":"Ca «về thiếu» chưa cấm có thêm một toast xanh đi kèm. Đã sửa: E4 đòi 0 toast xanh và đúng 1 toast vàng."},
-  {"i":4,"p":"Thiết kế nhắc Kanban mà không đo Kanban. Đã tra lại: Kanban không có thao tác hàng loạt. Đã bỏ chữ đó và ghi vào phạm vi bỏ ngoài."}
- ],
+ "decisions": [],
  "decisions_plain": []
 }
