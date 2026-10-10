@@ -5,7 +5,7 @@ slug: dien-thoai-o-deal-cong-ty
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T22:59:27Z
 design_doc: docs/superpowers/specs/2026-10-10-dien-thoai-o-deal-cong-ty-design.md
@@ -42,3 +42,13 @@ Source input: anh báo 09/10 («khi thêm một người ở trong Deal thì thi
 ## Notes
 
 - Không migration; chỉ thêm trường `phone` vào đầu ra API.
+
+Known limits — anh chọn ở Cổng Bằng chứng 2026-10-10, từ S4 round 1:
+
+- Ngoài-1: `rang/dung-so-chung.mjs` neo diff theo merge-base với `origin/onehub` và đòi có dòng thêm `<SoDienThoai`; sau khi gộp, diff rỗng nên E7 đỏ oan dù giao diện đúng.
+- Ngoài-2: E1/E2 ghi chiều đỏ ra «thieu phone» cho cả hai đột biến; khi chỉ bỏ `phone` khỏi select Prisma, schema đầu ra ném ZodError trước, nên câu ghim không hiện.
+- Ngoài-3: `rang/do-man.mjs` ô `chon-nguoi-1440` nuốt lỗi chờ lựa chọn thành chuỗi rỗng, báo SAI (mã 1) thay vì «không đo được» (mã 2).
+- Ngoài-4: Cùng gốc với Ngoài-1 (phát hiện lặp từ lane soát khác).
+- Ngoài-5: `rang/do-man.mjs` nuốt lỗi dọn dữ liệu thử, không in dòng nào khi xoá thất bại.
+- Ngoài-6: Cùng gốc với Ngoài-2 — chiều đỏ bỏ `phone` khỏi `CONTACT_SELECT` và select công ty không tới câu ghim «thieu phone».
+- Ngoài-7: Bài DOM `chon-nguoi` chỉ viết 3 trên 4 ô của ma trận «có/không chức danh × có/không số» (thiếu ô không chức danh, không số).
