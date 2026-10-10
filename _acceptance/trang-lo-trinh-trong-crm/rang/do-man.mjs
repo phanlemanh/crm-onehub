@@ -181,12 +181,17 @@ function docCongCu(p) {
 		while (hang && hang.querySelectorAll("button").length < 2)
 			hang = hang.parentElement;
 		if (!hang) return { loi: "khong thay hang chua o tim" };
+		const chu = (el) => (el.textContent ?? "").trim();
 		const loai = (el) => {
 			if (el.matches("[data-slot=input-group]")) return "tim";
-			if (el.matches("[data-view-switch=nut]")) return "cach-xem";
-			if (el.matches("[data-slot=toggle-group]")) return "loc-nhanh";
-			if (el.querySelector("svg") && el.getAttribute("aria-haspopup"))
-				return "menu";
+			if (el.matches("[data-view-switch=nut], [data-slot=toggle-group]"))
+				return [...el.querySelectorAll("[data-slot=toggle-group-item]")].some(
+					(i) => chu(i) === "Bảng",
+				)
+					? "cach-xem"
+					: "trang-thai";
+			if (el.getAttribute("aria-haspopup"))
+				return /^(Lọc|Sắp xếp|Cột)/.test(chu(el)) ? "loc" : "trang-thai";
 			return "nut";
 		};
 		const ds = [
@@ -201,10 +206,10 @@ function docCongCu(p) {
 				),
 		);
 		return {
-			ds: ds.map((el) => ({
-				loai: loai(el),
-				tren: Math.round(el.getBoundingClientRect().top),
-			})),
+			ds: ds.map((el) => {
+				const r = el.getBoundingClientRect();
+				return { loai: loai(el), giua: Math.round(r.top + r.height / 2) };
+			}),
 		};
 	});
 }
@@ -301,7 +306,8 @@ async function do1280(okr, qt, slug, cauKeHoach) {
 		);
 		const rut = (ds) => ds.map((x) => x.loai).filter((l) => chung.has(l));
 		const gon = (ds) => ds.filter((l, i) => l !== ds[i - 1]);
-		const cungHang = new Set(ltDs.map((x) => x.tren)).size === 1;
+		const giua = ltDs.map((x) => x.giua);
+		const cungHang = Math.max(...giua) - Math.min(...giua) <= 2;
 		kiem(
 			"thanh-cong-cu-1280",
 			`lo-trinh ${gon(rut(ltDs)).join(">")} · deals ${gon(rut(dealDs)).join(">")} · mot hang ${cungHang}`,

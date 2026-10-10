@@ -332,14 +332,14 @@ export function TrangLoTrinh({
 		<div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
 			<ListSearch placeholder={m.thanhCongCu.tim} />
 			{rieng}
-			<DataTableFacetMenu
-				counts={facetCounts}
-				facets={facets}
-				filters={query.filters}
-				onFilterChange={query.setFilter}
-			/>
+			{xem}
 			<div className="flex gap-2 sm:ml-auto">
-				{xem}
+				<DataTableFacetMenu
+					counts={facetCounts}
+					facets={facets}
+					filters={query.filters}
+					onFilterChange={query.setFilter}
+				/>
 				{nutDaBac}
 			</div>
 		</div>
@@ -424,17 +424,17 @@ export function TrangLoTrinh({
 				</div>
 			) : (
 				<DataTable
-					actions={
-						<>
-							{xem}
-							{nutDaBac}
-						</>
-					}
+					actions={nutDaBac}
 					columns={cotBang(m)}
 					facetCounts={facetCounts}
 					facets={facets}
 					getRowId={(v) => v.khoa}
-					leadingActions={vongDoi}
+					leadingActions={
+						<>
+							{vongDoi}
+							{xem}
+						</>
+					}
 					meta={meta}
 					onClearFilters={() => {
 						for (const f of facets) query.setFilter(f.id, []);
