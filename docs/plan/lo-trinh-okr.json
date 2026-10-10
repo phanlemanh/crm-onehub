@@ -1658,6 +1658,25 @@
       ]
     },
     {
+      "ma": "LT1b",
+      "slug": "ngan-ho-so-trong-lo-trinh",
+      "hang": "T2",
+      "khoa": "crm-ngan-ho-so-lo-trinh",
+      "nhom": "crm-chung",
+      "thu_tu": 440,
+      "dung_tren": [
+        "LT1"
+      ],
+      "ten": "Ngăn hồ sơ trong trang Lộ trình",
+      "ten_ngan": "Ngăn hồ sơ",
+      "ngay": "2026-10-10",
+      "cau_giao": "«Tôi bấm một việc đã giao trong trang Lộ trình và đọc trong một phút: vì sao làm, đã lên chưa, sẽ đo gì, còn thiếu gì, ai quyết»",
+      "bat_khi": "Ở phiên nghiệm thu kế, chủ kho và trưởng phòng ban trả lời được năm câu trên cho một việc mà không hỏi ai (ngưỡng đề xuất — chốt ở Cổng Đáng)",
+      "ghi_chu": "Chủ kho đồng ý 10/10. Hai tầng: mọi người thấy câu giao · vì sao · trạng thái và ngày · đã lên production chưa · sẽ đo gì, khi nào · kết quả · chưa làm gì · ai quyết; vai chủ kho thấy thêm tiêu chí/phép đo · lượt chấm · token · quyết định máy/người · PR. Đọc dải tóm tắt do bộ kit xuất (hàng X2 trên lộ trình kit), không đọc thẳng tệp hồ sơ. Chờ thêm số đo bốn tuần của LT1.",
+      "buoc_ke": "Chờ crm nhận bộ kit có X2 và số đo bốn tuần của LT1",
+      "trang_thai": "chưa mở"
+    },
+    {
       "ma": "F8",
       "slug": "neo-thuoc-het-han",
       "hang": "T2",
