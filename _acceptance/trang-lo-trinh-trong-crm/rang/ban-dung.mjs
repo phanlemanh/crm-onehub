@@ -92,9 +92,7 @@ try {
 	const chay = path.join(tam, "apps/app");
 	mkdirSync(chay, { recursive: true });
 	const tuBan = goiDoc(chay);
-	const trongBan =
-		typeof tuBan.duong === "string" &&
-		tuBan.duong.startsWith(`${tam}${path.sep}`);
+	const trongBan = String(tuBan.duong ?? "").startsWith(`${tam}${path.sep}`);
 	dong(
 		trongBan && tuBan.coDuLieu,
 		trongBan && tuBan.coDuLieu

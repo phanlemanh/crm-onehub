@@ -26,17 +26,17 @@ export const STATE = {
 export const NGAY_MAU = "2026-10-09";
 export const NGAY_TRE = "2026-12-20";
 
-const THAM_SO: Record<string, string> = {
-	[STATE.loc]: "nhom=okr",
-	[STATE.tab]: "vongDoi=da-giao",
-	[STATE.bangCot]: "xemLoTrinh=bang-cot",
-	[STATE.chiaMoc]: "xemLoTrinh=moc",
-	[STATE.daBac]: "daBac=true",
-	[STATE.chiTiet]: "viec=docs%2Fplan%2Flo-trinh-okr.json%23LT2",
-};
+const THAM_SO = new Map<string, string>([
+	[STATE.loc, "nhom=okr"],
+	[STATE.tab, "vongDoi=da-giao"],
+	[STATE.bangCot, "xemLoTrinh=bang-cot"],
+	[STATE.chiaMoc, "xemLoTrinh=moc"],
+	[STATE.daBac, "daBac=true"],
+	[STATE.chiTiet, "viec=docs%2Fplan%2Flo-trinh-okr.json%23LT2"],
+]);
 
 export function thamSoCuaState(state: string): string {
-	return THAM_SO[state] ?? "";
+	return THAM_SO.get(state) ?? "";
 }
 
 export function dauVaoCuaState(state: string): DauVaoLoTrinh {

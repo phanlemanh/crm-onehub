@@ -91,10 +91,17 @@ function phang(dl: DuLieu): Hang[] {
 
 const TAT_CA = phang(DL);
 
-function doiKhoi(sua: (o: Record<string, unknown>) => void): string {
+type LoTho = {
+	hang?: { ma: string | number }[];
+	loi: string | null;
+	da_bac: { ma: string; ly_do: string }[];
+};
+type KhoiTho = { khuon: string; phien_ban: number; lo_trinh: LoTho[] };
+
+function doiKhoi(sua: (o: KhoiTho) => void): string {
 	const goc = KHOI.exec(HTML_MAU)?.[1];
 	if (!goc) throw new Error("tep mau khong co khoi");
-	const o = JSON.parse(goc);
+	const o: KhoiTho = JSON.parse(goc);
 	sua(o);
 	const moi = JSON.stringify(o).replace(/</g, "\\u003c");
 	return HTML_MAU.replace(
@@ -302,7 +309,7 @@ describe("loc", () => {
 		setSystemTime(HOM_NAY);
 		const tre = treCua("2026-12-20");
 		expect(tre.size).toBeGreaterThan(0);
-		const chieuGiaTri: Record<string, string[]> = {
+		const chieuGiaTri = {
 			loTrinh: DL.lo_trinh.map((l) => l.tep),
 			nhom: [
 				...new Set(TAT_CA.map((h) => h.nhom).filter(Boolean)),
@@ -721,7 +728,7 @@ describe("da-bac", () => {
 	test("doi chung: khoi khong co da_bac hien khung trong", async () => {
 		const dv = docTrangLoTrinh(
 			doiKhoi((o) => {
-				for (const lo of o.lo_trinh as { da_bac: unknown[] }[]) lo.da_bac = [];
+				for (const lo of o.lo_trinh) lo.da_bac = [];
 			}),
 		);
 		await mo(dv, tham({ daBac: "true" }));
@@ -780,8 +787,8 @@ describe("khoan-dung", () => {
 				ten: "sai kieu",
 				dv: docTrangLoTrinh(
 					doiKhoi((o) => {
-						const lo = (o.lo_trinh as { hang: Record<string, unknown>[] }[])[0];
-						if (lo?.hang[0]) lo.hang[0].ma = 5;
+						const viec = o.lo_trinh[0]?.hang?.[0];
+						if (viec) viec.ma = 5;
 					}),
 				),
 				trang: "khoi-hong",
@@ -810,7 +817,7 @@ describe("khoan-dung", () => {
 				ten: "thieu khoa hang",
 				dv: docTrangLoTrinh(
 					doiKhoi((o) => {
-						delete (o.lo_trinh as Record<string, unknown>[])[0]?.hang;
+						delete o.lo_trinh[0]?.hang;
 					}),
 				),
 				coViec: true,
@@ -826,7 +833,7 @@ describe("khoan-dung", () => {
 				ten: "lo trinh co loi",
 				dv: docTrangLoTrinh(
 					doiKhoi((o) => {
-						const lo = (o.lo_trinh as Record<string, unknown>[])[1];
+						const lo = o.lo_trinh[1];
 						if (lo) lo.loi = "tep ke hoach khong doc duoc";
 					}),
 				),
