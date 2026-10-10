@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 99ab35a30335c5f765410f94905e06d237d72c74
+verified_commit: c6a618f3590f9d509aea22edf67aa7b1af36ccf4
 human_signoff: Phan Le Manh 2026-10-09
 ---
 
@@ -320,7 +320,3 @@ Round 3: sau khi doi luat doc so (so 0 trung ke sau +84, phan quoc noi khong bat
 ### Re-pin lần 1 — 2026-10-09, do hoá cũ do gộp onehub sau chữ ký (#330 kiem-cheo, package.json gốc)
 run_id: repin-20261009T051019Z-68477
 sha: c6a618f3590f9d509aea22edf67aa7b1af36ccf4 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E1, E16, E17, E18, E19, E20 · diff chạm vật đo ngoài làn máy: E1, E16, E17, E20 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
-
-### Re-pin lần 2 — 2026-10-09, do thuoc-khong-tu-het-han sửa paths; hồ sơ hoá cũ do onehub đổi vật
-run_id: repin-20261009T224054Z-34604
-sha: 99ab35a30335c5f765410f94905e06d237d72c74 · suites: 7 lệnh exit 0 · evals: 16/16 eval máy đạt kỳ vọng · ngoài làn máy: E1, E16, E17, E18, E19, E20 · diff chạm vật đo ngoài làn máy: E1, E16, E17, E20 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

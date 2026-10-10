@@ -21,7 +21,7 @@ evals:
     cmd: config:executors.test.tgy_the_ba_tang
     expected: "exit 0; bài DOM của ProposedChange dựng thẻ viết lại chờ bằng chính props mà cot-gop-y.tsx truyền (rút từ một dòng DongGopY mẫu qua hàm chuyển của cột, không viết tay props): thứ tự DOM là nhãn loại + tên ô → <del> câu cũ → <ins> câu mới → lý do → hàng nút; hàng nút là anh em sau khối lý do, không nằm trong cùng hàng flex với chữ; đếm button[data-variant=default] trong thẻ đúng bằng 1 và mang tên «Nhận»; «Sửa» data-variant=outline; «Bác» data-variant=ghost và là nút cuối hàng. Chiều đỏ ghim: một bản thẻ đặt Sửa sang default phải làm bài đỏ với thông điệp 'nut chinh: 2 != 1'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "packages/ui/test/proposed-change.dom.tsx", "apps/app/app/(app)/[slug]/okr/the-gop-y-props.ts"]
+    paths: ["packages/ui/src/components/proposed-change.tsx", "packages/ui/src/components/ai-elements/confirmation.tsx", "packages/ui/test/proposed-change.dom.tsx", "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx"]
 
   - id: E3
     status: not-run

@@ -58,7 +58,7 @@ evals:
     executor: test
     cmd: config:executors.test.dt_man_form
     paths:
-      - "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx"
       - "apps/app/components/crm/record-sheet/quick-add.tsx"
       - "apps/app/lib/messages/contacts.ts"
       - "apps/app/lib/messages/record-sheet.ts"
@@ -100,7 +100,7 @@ evals:
     cmd: config:executors.test.dt_man_so_sai
     paths:
       - "apps/app/components/crm/record-sheet/quick-add.tsx"
-      - "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx"
       - "apps/app/lib/messages/contacts.ts"
       - "apps/app/lib/messages/record-sheet.ts"
       - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
@@ -186,7 +186,7 @@ evals:
     executor: test
     cmd: config:executors.test.dt_man_bang
     paths:
-      - "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx"
       - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
       - "apps/api/src/contacts/contacts.contracts.ts"
       - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
@@ -250,7 +250,7 @@ evals:
     executor: test
     cmd: config:executors.test.dt_man_moi_gioi
     paths:
-      - "apps/app/app/(app)/[slug]/onboarding/[planId]/them-moi-gioi.tsx"
+      - "apps/app/app/(app)/[[]slug]/onboarding/[[]planId]/them-moi-gioi.tsx"
       - "apps/api/src/contacts/contacts.contracts.ts"
       - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
     expected: |
@@ -268,10 +268,10 @@ evals:
     cmd: config:executors.script.dt_san_thiet_ke
     paths:
       - "apps/app/components/crm/record-sheet/quick-add.tsx"
-      - "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx"
-      - "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/contacts-table.tsx"
       - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
-      - "apps/app/app/(app)/[slug]/onboarding/[planId]/them-moi-gioi.tsx"
+      - "apps/app/app/(app)/[[]slug]/onboarding/[[]planId]/them-moi-gioi.tsx"
     expected: |
       design-gate.mjs --mode static cho nam tep tren: khong P0, thoat 0.
       CHIEU DO: ban sao quick-add.tsx them <input> tran (khong qua @crm/ui) -> design-gate do, goi ten tep.
@@ -392,7 +392,7 @@ evals:
     cmd: config:executors.test.dt_man_trung
     paths:
       - "apps/app/components/crm/record-sheet/quick-add.tsx"
-      - "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx"
+      - "apps/app/app/(app)/[[]slug]/contacts/create-contact-sheet.tsx"
       - "apps/app/test/dien-thoai-ca-nhan.dom.tsx"
     expected: |
       dien-thoai-ca-nhan.dom.tsx, describe "trung-giu-chu": trpc gia nem TRPCClientError data.code "CONFLICT", message
