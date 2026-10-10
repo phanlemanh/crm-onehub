@@ -44,6 +44,30 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
+- **conSot mixes the server's VN-day overdue count with the browser's local-day count, so it shows an extra-overdue line for steps that are already on screen (r1)**
+  Người dùng thấy gì: Người mở Tổng quan từ trình duyệt đặt múi giờ khác Việt Nam, trong vài giờ quanh nửa đêm, có thể thấy dòng «và N việc quá hạn nữa» cho những việc thực ra đã hiện trong danh sách, hoặc thấy thiếu một việc. Người dùng ở Việt Nam không gặp.
+  file: `apps/app/app/(app)/[slug]/dashboard-summary.tsx`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (ma trận thiếu phần tử): E2 hứa «mỗi hàng AgentTask đều đóng» nhưng chỉ kiểm hàng thứ hai (r1)**
+  Người dùng thấy gì: Trong ca gửi lại cùng mã, bài kiểm chỉ xác nhận một trong bốn lượt xử lý được đóng sạch. Nếu một nhánh quên đóng việc thì có thể sót mà không ai thấy ngay.
+  file: `apps/agent/test/dieu-phoi-va.spec.ts`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 4 (âm tính không có đối chứng độc lập): claimDue(1) khiến assert âm bị assert dương kéo theo, thông điệp ghim của CHIỀU ĐỎ không bao giờ hiện (r1)**
+  Người dùng thấy gì: Nếu một ngày việc mã lệch bị cho vào nhầm làn nghiên cứu, bài kiểm vẫn báo đỏ nhưng nói nguyên nhân sai, nên người sửa mất thời gian hơn để tìm ra.
+  file: `apps/agent/test/dieu-phoi-va.spec.ts`
+  severity: medium
+  Đề xuất: wont-fix
+
+- **Hình dạng 3 (kiểm thuộc tính thay cho quan hệ): mạch liền chỉ kiểm hai mã khác nhau, không kiểm bằng mã API đã ghi (r1)**
+  Người dùng thấy gì: Bài kiểm chuỗi từ lúc nhận lô tới lúc có việc chỉ xác nhận có hai mã khác nhau, chưa so với đúng mã đã nhận. Một lỗi làm việc mang nhầm mã nhưng vẫn khác nhau sẽ không bị bắt ở bài này.
+  file: `apps/agent/test/dieu-phoi-va.spec.ts`
+  severity: low
+  Đề xuất: known-limits
+
 ## Chưa adversarial-verify (refuter chết)
 
 Không có.
