@@ -480,6 +480,14 @@ describe("ngay", () => {
 			}),
 		);
 		await mo(dv, tham({ vongDoi: "tat-ca" }));
+		expect(dv.kieu, "khoi co ngay sai van phai doc duoc").toBe("co-du-lieu");
+		expect(khoaDong().length, "bang trong khi ngay moc sai").toBe(
+			TAT_CA.length,
+		);
+		expect(
+			document.body.querySelectorAll("[data-lo-trinh-moc-viec]").length,
+			"o moc bien mat khi ngay moc sai",
+		).toBe(TAT_CA.filter((h) => h.moc !== null).length);
 		const chu = document.body.textContent ?? "";
 		expect(chu.includes("còn -"), "ngay moc sai hien so ngay am").toBe(false);
 		expect(chu.includes("NaN"), "ngay moc sai hien NaN").toBe(false);
@@ -487,6 +495,61 @@ describe("ngay", () => {
 			document.body.querySelectorAll("[data-lo-trinh-con-ngay]").length,
 			"ngay moc sai van hien dong con ngay",
 		).toBe(0);
+	});
+
+	test("ngay lan lon: chi moc hop le da qua duoc to da qua, ngay la xep cuoi", async () => {
+		setSystemTime(new Date(2026, 11, 20, 9, 0));
+		const HOM_NAY = "2026-12-20";
+		const LA = ["", "2026-10", "cuối Q4"];
+		let i = 0;
+		const dv = docTrangLoTrinh(
+			doiKhoi((o) => {
+				for (const lo of o.lo_trinh)
+					for (const [k, moc] of (lo.moc ?? []).entries())
+						if (k % 2 === 0) moc.ngay = LA[i++ % LA.length] ?? "";
+			}),
+		);
+		const dl = coDuLieu(dv);
+		expect(i).toBeGreaterThan(0);
+		const hopLe = (ngay: string) => /^\d{4}-\d{2}-\d{2}$/.test(ngay);
+		await mo(dv, tham({ xemLoTrinh: "moc", vongDoi: "tat-ca" }));
+		const muc = [...document.body.querySelectorAll("[data-lo-trinh-moc]")];
+		expect(muc.length).toBeGreaterThan(0);
+		let soLa = 0;
+		let soQua = 0;
+		const thuTu: string[] = [];
+		for (const el of muc) {
+			const khoa = el.getAttribute("data-lo-trinh-moc") ?? "";
+			const ngay = khoa.split("@")[1] ?? "";
+			thuTu.push(ngay);
+			if (!hopLe(ngay)) soLa++;
+			const qua = hopLe(ngay) && ngay < HOM_NAY;
+			if (qua) soQua++;
+			expect(
+				el.hasAttribute("data-completed"),
+				`moc da qua danh dau sai: ${khoa}`,
+			).toBe(qua);
+		}
+		expect(soLa, "khong co moc ngay la nao de do").toBeGreaterThan(0);
+		expect(soQua, "khong co moc da qua nao de do").toBeGreaterThan(0);
+		const dauLa = thuTu.findIndex((n) => !hopLe(n));
+		expect(
+			thuTu.slice(dauLa).every((n) => !hopLe(n)),
+			"moc ngay la khong xep cuoi",
+		).toBe(true);
+
+		await mo(dv, tham({ vongDoi: "tat-ca" }));
+		const ngayDong = khoaDong().map((k) => {
+			const h = phang(dl).find((x) => x.khoa === k);
+			return h?.moc ? (hopLe(h.moc.ngay) ? h.moc.ngay : "la") : "khong";
+		});
+		const nhom = ngayDong.map((n) => (n === "khong" ? 2 : n === "la" ? 1 : 0));
+		expect(
+			nhom.every((g, k) => k === 0 || (nhom[k - 1] ?? 0) <= g),
+			"bang khong xep ngay hop le truoc ngay la",
+		).toBe(true);
+		const hop = ngayDong.filter((n) => n !== "la" && n !== "khong");
+		expect(hop).toEqual([...hop].sort());
 	});
 
 	test("ban dung tren may chu khong co chu ngay va khung tre", () => {

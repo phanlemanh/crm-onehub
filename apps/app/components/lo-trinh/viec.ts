@@ -4,7 +4,7 @@ import type {
 	MocLoTrinh,
 	NhomTrangThai,
 } from "@crm/validation/lo-trinh-du-lieu";
-import { soNgay, viecTre } from "@/lib/lo-trinh/ngay";
+import { soNgay, soSanhMoc, viecTre } from "@/lib/lo-trinh/ngay";
 import type { BoLoc, VongDoi } from "./tham-so";
 
 export const KHONG_NHOM = "__khong-nhom";
@@ -149,7 +149,6 @@ export function sapXep(
 				(THU_TU_NHOM.indexOf(a.nhom_trang_thai) -
 					THU_TU_NHOM.indexOf(b.nhom_trang_thai))
 			);
-		if (!a.moc || !b.moc) return a.moc ? -1 : b.moc ? 1 : 0;
-		return dau * a.moc.ngay.localeCompare(b.moc.ngay);
+		return soSanhMoc(a.moc, b.moc, dau);
 	});
 }

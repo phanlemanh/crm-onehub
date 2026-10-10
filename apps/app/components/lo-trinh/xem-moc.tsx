@@ -25,6 +25,7 @@ import type {
 	LoTrinhDuLieu,
 	MocLoTrinh,
 } from "@crm/validation/lo-trinh-du-lieu";
+import { soSanhMoc } from "@/lib/lo-trinh/ngay";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { DongLienQuan } from "./dong-lien-quan";
 import { KhungTrong } from "./khung-trong";
@@ -57,7 +58,7 @@ export function XemMoc({
 	for (const v of viec) theoKhoa.get(khoaMoc(v))?.ds.push(v);
 	const mocs = [...theoKhoa.entries()]
 		.filter(([, x]) => x.ds.length > 0)
-		.sort((a, b) => a[1].moc.ngay.localeCompare(b[1].moc.ngay));
+		.sort((a, b) => soSanhMoc(a[1].moc, b[1].moc));
 	const daQua =
 		homNay === null
 			? 0

@@ -33,3 +33,20 @@ export function viecTre(loTrinh: LoTrinh, homNay: string): string[] {
 	}
 	return ra;
 }
+
+function hangMoc(moc: MocLoTrinh | null): number {
+	if (moc === null) return 2;
+	return moc.ngayHopLe === null ? 1 : 0;
+}
+
+export function soSanhMoc(
+	a: MocLoTrinh | null,
+	b: MocLoTrinh | null,
+	dau: 1 | -1 = 1,
+): number {
+	const lech = hangMoc(a) - hangMoc(b);
+	if (lech !== 0) return lech;
+	const na = a?.ngayHopLe ?? "";
+	const nb = b?.ngayHopLe ?? "";
+	return dau * na.localeCompare(nb);
+}
