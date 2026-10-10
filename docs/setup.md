@@ -71,7 +71,7 @@ nạp lại.
 ```sh
 bun run okr:mau                      # nạp, hoặc nạp lại — xoá bộ cũ rồi ghi bộ mới
 bun run okr:mau --moc 2026-11-12     # ghim ngày: tuần 6 là tuần chứa ngày đó
-bun run okr:mau --xoa                # gỡ bộ mẫu, không đụng gì khác
+bun run okr:mau --xoa                # gỡ bộ mẫu; cấu hình OKR lùi về bản trước bộ mẫu, mất mã đơn vị mẫu
 bun run okr:mau --tep <tệp.json>     # nạp một bản công ty khác cùng khuôn
 ```
 
