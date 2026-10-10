@@ -5,9 +5,9 @@ slug: ly-do-can-chinh-tu-soan
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api]
-status: verified
+status: approved
 approved_by: Phan Le Manh
-approved_at: 2026-10-09T00:15:44Z
+approved_at: 2026-10-10T00:03:23Z
 design_doc: docs/superpowers/specs/2026-10-08-ly-do-can-chinh-tu-soan-design.md
 ---
 
@@ -67,5 +67,5 @@ Quét bằng `morphological-scan` (preset entity-feature), 08/10.
 
 - Có migration: thêm `lyDo String?`, `canCu String?`, `lyDoTuKara Boolean @default(false)` vào `OkrAlignment`, cùng câu `UPDATE` điền lại. Mốc tên theo giờ thật lúc viết, kiểm `origin/onehub` ngay trước khi đẩy.
 - Mã viết sau K2b của P1 (cùng chạm `soan-dua-vao.ts`): S0–S2 làm trước, S3 chờ K2b gộp.
-- Ranh giới (sẽ xin `cham-tep`): `packages/db/prisma/schema.prisma`, `packages/db/prisma/migrations/<mốc>_ly_do_can_chinh/migration.sql`; `apps/api/src/okr/soan-dua-vao.ts`, `okr.service.ts`, `okr.contracts.ts`, `can-chinh.ts`, `okr-config.ts`; `apps/api/src/generated/server.ts` (nếu `trpc:generate` đổi); bài thử `apps/api/test/okr-ly-do-can-chinh*.spec.ts`; ba tệp kiểm dom dựng `noiGopOutput` giả: `apps/app/test/khung-okr-truoc-r1.dom.tsx`, `apps/app/test/tro-ly-okr-vet.dom.tsx`, `apps/app/test/muc-tieu-va-kr.dom.tsx` (chỉ thêm bốn trường mới vào dữ liệu giả); `apps/api/test/okr-can-chinh.spec.ts` (chỉ thêm bốn trường mới vào dữ liệu giả `alignments`, không đổi ma trận — sửa ở S3 theo AC-3 duyệt lại).
+- Ranh giới (sẽ xin `cham-tep`): `packages/db/prisma/schema.prisma`, `packages/db/prisma/migrations/<mốc>_ly_do_can_chinh/migration.sql`; `apps/api/src/okr/soan-dua-vao.ts`, `okr.service.ts`, `okr.contracts.ts`, `can-chinh.ts`, `okr-config.ts`; `apps/api/src/generated/server.ts` (nếu `trpc:generate` đổi); bài thử `apps/api/test/okr-ly-do-can-chinh*.spec.ts`; ba tệp kiểm dom dựng `noiGopOutput` giả: `apps/app/test/khung-okr-truoc-r1.dom.tsx`, `apps/app/test/tro-ly-okr-vet.dom.tsx`, `apps/app/test/muc-tieu-va-kr.dom.tsx` (chỉ thêm bốn trường mới vào dữ liệu giả); `apps/api/test/okr-can-chinh.spec.ts` (chỉ thêm bốn trường mới vào dữ liệu giả `alignments`, không đổi ma trận — sửa ở S3 theo AC-3 duyệt lại); `apps/app/test/khung-gop-y-luot-2.tsx` (chỉ thêm bốn trường mới vào dữ liệu giả của `lienKet` — tệp vào `onehub` qua 5e03e71b sau Cổng 1, chủ kho duyệt thêm 09/10).
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/ai-ux.md` (§3 dấu Kara giữ tới khi người sửa → cột `lyDoTuKara`).
