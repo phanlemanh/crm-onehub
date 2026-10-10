@@ -2168,6 +2168,9 @@ model OkrAlignment {
   targetObjective   OkrObjective? @relation("OkrAlignmentTargetObjective", fields: [targetObjectiveId], references: [id], onDelete: Cascade)
   targetKeyResultId String?
   targetKeyResult   OkrKeyResult? @relation("OkrAlignmentTargetKeyResult", fields: [targetKeyResultId], references: [id], onDelete: Cascade)
+  lyDo              String?
+  canCu             String?
+  lyDoTuKara        Boolean       @default(false)
   createdAt         DateTime      @default(now())
 
   @@unique([objectiveId, targetObjectiveId, targetKeyResultId])
