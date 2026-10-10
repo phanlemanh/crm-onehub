@@ -5,7 +5,7 @@ import {
 	type NghiaTrangThai,
 	TONE_THEO_NGHIA,
 	toneTheoNghia,
-} from "../src/components/status-tone";
+} from "../src/lib/status-tone";
 
 const NHAN_NGHIA = {
 	xong: "xong",

@@ -24,7 +24,7 @@ Cổng Phạm vi (cửa phủ quyết mở), kế hoạch ở `docs/superpowers/
 PR #320 (bản nháp, không gộp trước khi có mã).
 
 **Bổ sung 10/10**, chủ kho chốt: LT1 làm ngay, không chờ sau 14/10 và không chờ NM3 trọn vẹn. LT1 tự thêm bảng «nghĩa →
-màu» dùng chung `packages/ui/src/components/status-tone.ts` (tệp vẫn thuộc ranh giới NM3) và là nơi dùng đầu tiên; NM3
+màu» dùng chung `packages/ui/src/lib/status-tone.ts` (tệp vẫn thuộc ranh giới NM3) và là nơi dùng đầu tiên; NM3
 giữ việc dời năm khu cũ về bảng đó và nay chờ thêm LT1. LT1 vì thế không còn đứng sau K6a: hai tệp chữ của LT1
 (`lo-trinh.ts` mới, một khoá ở `khung-ung-dung.ts`) và khối ghim sáu câu trong `messages-guard.spec.ts` chỉ thêm dòng,
 theo luật 7.
@@ -92,7 +92,7 @@ cũng để sau: nó sửa schema, mà schema đã có E4 trong đợt này.
 - NM1 đổi tiêu đề trang OKR có thể cần `okr/thanh-tab.tsx` (K2 chỉ-thêm) và màn chờ của Thoả thuận cần
   `deals/page.tsx` (ranh giới V2): xin `cham-tep`, không thêm vào ranh giới NM1.
 - NM2 đổi `deals-table.tsx` (ranh giới E7, cùng dãy P3) để Thoả thuận dùng `ViewSwitch`; chạy sau V2 vì V2 cũng xin tệp đó.
-- NM3 không sửa `status-indicator.tsx` (ranh giới K4) mà thêm `status-tone.ts` mới; đổi ánh xạ trong `kara/steps.tsx`
+- NM3 không sửa `status-indicator.tsx` (ranh giới K4) mà dùng `lib/status-tone.ts` LT1 đã thêm (10/10); đổi ánh xạ trong `kara/steps.tsx`
   (K3 chỉ-thêm) thì xin `cham-tep` sau khi K6a gộp.
 - V2 thêm chữ vào bốn tệp chữ `deals`, `contacts`, `companies`, `crm` (khai ở `chung_chi_them`); đổi chữ lệch ở tệp
   khác thì để K6a làm, vì K6a chạy sau và giữ mọi tệp chữ.

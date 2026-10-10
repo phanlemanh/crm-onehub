@@ -428,7 +428,7 @@
         "LT1"
       ],
       "ranh_gioi": [
-        "packages/ui/src/components/status-tone.ts",
+        "packages/ui/src/lib/status-tone.ts",
         "packages/ui/src/components/okr-status.tsx",
         "packages/ui/src/components/attendee-list.tsx",
         "apps/app/app/(app)/[slug]/okr/tien-do-kr.tsx",

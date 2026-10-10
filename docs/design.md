@@ -154,7 +154,7 @@ không theo khu:
 | nháp, chưa bắt đầu | `neutral` |
 | đang chạy | `info` |
 
-Bảng sống ở `packages/ui/src/components/status-tone.ts` (`toneTheoNghia`), có
+Bảng sống ở `packages/ui/src/lib/status-tone.ts` (`toneTheoNghia`), có
 bài kiểm giữ nó khớp bảng trên. Một khu chỉ khai trạng thái của mình thuộc nghĩa
 nào, không khai `tone`. Năm khu cũ còn tự khai ánh xạ (`okr-status.tsx`,
 `kara/steps.tsx`, `attendee-list.tsx`, `okr/tien-do-kr.tsx`,
