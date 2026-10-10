@@ -2,6 +2,7 @@
 
 import { Board, type BoardColumn } from "@crm/ui/components/board";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { cn } from "@crm/ui/lib/utils";
 import { type ComponentProps, useMemo } from "react";
 import { LO_TRINH } from "@/lib/lo-trinh/cau-hinh";
 import { type LoTrinhMessages, loTrinhMessages } from "@/lib/messages/lo-trinh";
@@ -70,7 +71,7 @@ export function BangCot({
 			function NutThe({ href, children, className }: ComponentProps<"a">) {
 				return (
 					<button
-						className={className}
+						className={cn(className, "text-start")}
 						data-viec-khoa={String(href).slice(1)}
 						onClick={() => moViec(String(href).slice(1))}
 						type="button"

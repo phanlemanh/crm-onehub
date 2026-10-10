@@ -14,6 +14,7 @@ import {
 	DataTableFacetMenu,
 } from "@crm/ui/components/data-table";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { Toggle } from "@crm/ui/components/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { ViewSwitch } from "@crm/ui/components/view-switch";
 import { formatDay } from "@crm/ui/lib/format";
@@ -118,7 +119,7 @@ function cotBang(m: LoTrinhMessages): DataTableColumn<Viec>[] {
 			cell: (v) => <OMoc v={v} />,
 			sortable: true,
 			align: "right",
-			width: "w-[16%]",
+			width: "w-28 md:w-[16%]",
 		},
 	];
 }
@@ -307,15 +308,15 @@ export function TrangLoTrinh({
 		/>
 	);
 	const nutDaBac = (
-		<Button
-			aria-pressed={lt.daBac}
+		<Toggle
 			data-lo-trinh-nut-da-bac
-			onClick={() => setLt({ daBac: !lt.daBac })}
+			onPressedChange={(bat) => setLt({ daBac: bat })}
+			pressed={lt.daBac}
 			size="sm"
 			variant="outline"
 		>
 			{m.thanhCongCu.daBac}
-		</Button>
+		</Toggle>
 	);
 	const vongDoi = (
 		<VongDoiChon
