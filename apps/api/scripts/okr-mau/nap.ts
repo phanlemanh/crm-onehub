@@ -3,6 +3,7 @@ import { WORKSPACE_ID } from "@crm/db/workspace";
 import { kiemGiaTriTheoKieu } from "@crm/validation/okr-cap-nhat";
 import {
 	OKR_PROGRAM_MAC_DINH,
+	type OkrProgram,
 	THANG_CHAM,
 } from "@crm/validation/okr-chuong-trinh";
 import { goiYDiem } from "@crm/validation/okr-khep";
@@ -74,6 +75,17 @@ export async function kiemOkrThat(tx: Tx | Db): Promise<void> {
 		);
 }
 
+type KhoaDonVi = {
+	[K in keyof OkrProgram]: OkrProgram[K] extends string[] ? K : never;
+}[keyof OkrProgram];
+
+const laKhoaDonVi = (k: string): k is KhoaDonVi =>
+	Array.isArray(OKR_PROGRAM_MAC_DINH[k as keyof OkrProgram]);
+
+const MANG_DON_VI = Object.keys(OKR_PROGRAM_MAC_DINH).filter(laKhoaDonVi);
+
+const laMaMau = (ma: string) => ma.startsWith(OKR_MAU.tienTo);
+
 async function tapMau(tx: Tx) {
 	const tien = { startsWith: OKR_MAU.tienTo };
 	const [nguoi, boPhan, phongBan, chuKy, mucTieu, kr, taiLieu] =
@@ -103,9 +115,23 @@ async function tapMau(tx: Tx) {
 		},
 		select: { id: true },
 	});
+	const cauHinh = await tx.okrProgramConfig.findMany({
+		where: {
+			OR: [{ createdById: { in: ids(nguoi) } }, { createdById: tien }],
+		},
+		select: { id: true },
+	});
+	const conLai = await tx.okrProgramConfig.findMany({
+		where: { id: { notIn: ids(cauHinh) } },
+	});
+	const cauHinhGat = conLai.filter((row) =>
+		MANG_DON_VI.some((k) => row[k].some(laMaMau)),
+	);
 	return {
 		nguoi: ids(nguoi),
 		cuocSoan: ids(cuocSoan),
+		cauHinh: ids(cauHinh),
+		cauHinhGat,
 		boPhan: ids(boPhan),
 		phongBan: ids(phongBan),
 		chuKy: ids(chuKy),
@@ -133,13 +159,17 @@ function bangGiu(loi: Prisma.PrismaClientKnownRequestError): string {
 
 export type DemCuocSoan = { cuocSoan: number; deXuatSoan: number };
 
+export type DemCauHinh = { cauHinh: number; cauHinhGat: number };
+
 export async function xoaTrong(
 	tx: Tx,
-): Promise<(DemBoMau & DemCuocSoan) | null> {
+): Promise<(DemBoMau & DemCuocSoan & DemCauHinh) | null> {
 	const t = await tapMau(tx);
-	const { taiLieu: soTaiLieu, ...danhSach } = t;
+	const { taiLieu: soTaiLieu, cauHinhGat, ...danhSach } = t;
 	const tong =
-		soTaiLieu + Object.values(danhSach).reduce((s, ds) => s + ds.length, 0);
+		soTaiLieu +
+		cauHinhGat.length +
+		Object.values(danhSach).reduce((s, ds) => s + ds.length, 0);
 	if (tong === 0) return null;
 	const U = { in: t.nguoi };
 	const C = { in: t.chuKy };
@@ -150,6 +180,16 @@ export async function xoaTrong(
 		where: { cuocSoanId: CS },
 	});
 	const cuocSoan = await tx.okrCuocSoan.deleteMany({ where: { id: CS } });
+	const cauHinh = await tx.okrProgramConfig.deleteMany({
+		where: { id: { in: t.cauHinh } },
+	});
+	for (const row of cauHinhGat)
+		await tx.okrProgramConfig.update({
+			where: { id: row.id },
+			data: Object.fromEntries(
+				MANG_DON_VI.map((k) => [k, row[k].filter((ma) => !laMaMau(ma))]),
+			),
+		});
 	const canhKr = await xoaCanhKr(tx, t);
 	const hoiY = await xoaHoiY(tx, t);
 	const phien = await tx.okrCheckInSession.findMany({
@@ -243,6 +283,8 @@ export async function xoaTrong(
 		vet: vet.count,
 		cuocSoan: cuocSoan.count,
 		deXuatSoan: deXuatSoan.count,
+		cauHinh: cauHinh.count,
+		cauHinhGat: cauHinhGat.length,
 		...canhKr,
 		...hoiY,
 	};
@@ -764,7 +806,7 @@ export async function napBoOkrMau(
 
 export async function xoaBoOkrMau(
 	db: Db,
-): Promise<(DemBoMau & DemCuocSoan) | null> {
+): Promise<(DemBoMau & DemCuocSoan & DemCauHinh) | null> {
 	return trongGiaoDich(db, async (tx) => {
 		await kiemOkrThat(tx);
 		return xoaTrong(tx);

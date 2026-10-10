@@ -8,7 +8,9 @@ import { idMau, xoaBoOkrMau } from "../scripts/okr-mau/nap";
 import type { SoanMoOutput } from "../src/okr/okr.contracts";
 import {
 	chayLenh,
+	cotMangChu,
 	demThamChieu,
+	demThamChieuMang,
 	nguoiMau,
 	tapIdMau,
 	vanTayKho,
@@ -37,7 +39,15 @@ const CHO = 300_000;
 const TRUONG = "nguyen-thi-lan";
 const QUAN_TRI = "le-hai-dang";
 const TIEN = { startsWith: OKR_MAU.tienTo };
-const DU_PHEP = ["okrProgramConfig.createdById"];
+const KHOA_CAU_HINH = "okrProgramConfig.createdById";
+const MANG_CAU_HINH = [
+	"aiDeXuatAnDonVi",
+	"aiDeXuatDonVi",
+	"aiSoanAnDonVi",
+	"aiSoanDonVi",
+	"aiTomTatAnDonVi",
+	"aiTomTatDonVi",
+].map((c) => `okrProgramConfig.${c}`);
 const NGOAI = {
 	chuKy: "ngoai-mau-chu-ky-omx",
 	pb: "ngoai-mau-pb-omx",
@@ -201,9 +211,15 @@ describe("omx-xoa", () => {
 				"okrCuocSoan.departmentId",
 				"okrCuocSoan.divisionId",
 				"okrCuocSoan.nguoiMoUserId",
-				...DU_PHEP,
+				KHOA_CAU_HINH,
 			])
 				expect(Object.keys(truoc), cot).toContain(cot);
+			const mangTruoc = await demThamChieuMang(ids);
+			expect(Object.keys(mangTruoc.dem)).toContain(
+				"okrProgramConfig.aiSoanDonVi",
+			);
+			for (const cot of [...(await cotMangChu()), ...MANG_CAU_HINH])
+				hong(!mangTruoc.cot.includes(cot), `omx: quet mang thieu cot ${cot}`);
 			expect(
 				await db.okrCuocSoan.count({ where: { id: { in: cuocMau } } }),
 			).toBe(4);
@@ -233,14 +249,15 @@ describe("omx-xoa", () => {
 				where: { cuocSoanId: { in: cuocMau } },
 			});
 			hong(conDeXuat > 0, `omx: con de xuat soan (${conDeXuat})`);
-			const sau = Object.fromEntries(
-				Object.entries(await demThamChieu(ids)).filter(
-					([khoa]) => !DU_PHEP.includes(khoa),
-				),
-			);
+			const sau = await demThamChieu(ids);
 			hong(
 				Object.keys(sau).length > 0,
 				`omx: con tham chieu mau ${JSON.stringify(sau)}`,
+			);
+			const mangSau = (await demThamChieuMang(ids)).dem;
+			hong(
+				Object.keys(mangSau).length > 0,
+				`omx: con ma mau trong mang ${JSON.stringify(mangSau)}`,
 			);
 			hong(
 				JSON.stringify(await chupHang("aiChiPhi", idChi)) !==

@@ -13,7 +13,7 @@ khoá `okrProgramConfig.createdById` khỏi phép quét qua danh sách `DU_PHEP`
 
 ## Quyết định của chủ kho (11/10)
 
-Xoá các phiên bản do người mẫu tạo, và gạt mã đơn vị mẫu khỏi 8 mảng `*DonVi` ở các phiên bản còn
+Xoá các phiên bản do người mẫu tạo, và gạt mã đơn vị mẫu khỏi 6 mảng `*DonVi` ở các phiên bản còn
 lại. Cấu hình hiện hành lùi về bản cuối trước phiên mẫu (hoặc về mặc định nếu chưa có bản nào) — đúng
 nghĩa «gỡ bộ mẫu, trả kho về như cũ». Loại: viết lại tác giả sang người thật (ghi sai lịch sử, giữ cài
 đặt demo); để nguyên.
@@ -36,7 +36,7 @@ nghĩa «gỡ bộ mẫu, trả kho về như cũ». Loại: viết lại tác g
    - `cauHinhGat` — các phiên bản còn lại có ít nhất một phần tử bắt đầu `mau-okr-` trong một mảng
      `*DonVi`. Bảng nhỏ; đọc hết các mảng rồi lọc trong mã, vì Prisma không lọc phần tử mảng theo
      tiền tố.
-   Danh sách 8 trường rút từ `OKR_PROGRAM_MAC_DINH` (khoá có giá trị là mảng), không chép tay — một
+   Danh sách 6 trường rút từ `OKR_PROGRAM_MAC_DINH` (khoá có giá trị là mảng), không chép tay — một
    trường `*DonVi` mới tự vào.
 2. Cả hai tập vào `tong`: kho chỉ còn phiên bản mồ côi vẫn được gỡ và đếm.
 3. `xoaTrong`: `okrProgramConfig.deleteMany({ id in cauHinh })`; với mỗi hàng của `cauHinhGat`, ghi

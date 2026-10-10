@@ -21,8 +21,8 @@ at: 2026-10-11
 - **B — vị trí phiên bản trong chuỗi:** trước phiên mẫu | trong phiên mẫu | sau phiên mẫu (mới nhất)
   [thước CE: mọi bộ đọc lấy bản mới nhất — `okr.service.program`, `docChamVaTran`, `docThangCham`,
   `cauHinhAiLuc`]
-- **C — mã trong 8 mảng `*DonVi`:** không có mã | chỉ mã mẫu | mã mẫu lẫn mã ngoài
-  [thước CE: 8 trường mảng của `okrProgram` — packages/validation/src/okr-chuong-trinh.ts]
+- **C — mã trong 6 mảng `*DonVi`:** không có mã | chỉ mã mẫu | mã mẫu lẫn mã ngoài
+  [thước CE: 6 trường mảng của `okrProgram` — packages/validation/src/okr-chuong-trinh.ts]
 - **D — đường gỡ:** `--xoa` | nạp lại | bị chặn mã 5 (dữ liệu ngoài giữ người mẫu)
   [thước CE: ba lời gọi `xoaTrong` trong `nap.ts`; mã thoát ở docs/setup.md]
 
