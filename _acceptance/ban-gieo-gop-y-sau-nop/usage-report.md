@@ -41,3 +41,44 @@ wall: 9299s
 - **claude-sonnet-5-5**: 6 agent · 26 calls · out 17,957 · in 52 · cache_read 1,797,256 · cache_create 785,779
 - **claude-haiku-5-5**: 12 agent · 24 calls · out 11,862 · in 48 · cache_read 1,325,502 · cache_create 878,038
 
+### S4 round 2 — wf_2b06ea11-26a (19 agent, 43,897 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:bugs | claude-opus-5-5 | 8 | 7,906 | 16 | 781,507 | 95 |
+| review:measurement | claude-opus-5-5 | 7 | 7,231 | 14 | 672,209 | 89 |
+| synthesize:report | claude-sonnet-5-5 | 5 | 6,078 | 10 | 451,485 | 46 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 2,730 | 4 | 124,512 | 232 |
+| refute:ba-ban-do.mjs | claude-sonnet-5-5 | 6 | 2,393 | 12 | 479,059 | 30 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,353 | 4 | 124,542 | 72 |
+| review:conventions | claude-opus-5-5 | 4 | 2,217 | 8 | 295,244 | 30 |
+| baseline:diffBase | claude-sonnet-5-5 | 4 | 2,000 | 8 | 283,099 | 27 |
+| refute:ba-ban-do.mjs | claude-sonnet-5-5 | 3 | 1,844 | 6 | 224,503 | 22 |
+| triage | claude-sonnet-5-5 | 2 | 1,560 | 4 | 91,732 | 15 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 1,435 | 4 | 124,485 | 44 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,196 | 4 | 124,487 | 8 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 971 | 4 | 124,682 | 244 |
+| machine:bun _acceptance/ban-gieo-gop-y-sau-nop/r | claude-haiku-5-5 | 2 | 862 | 4 | 124,532 | 260 |
+| machine:node _acceptance/ban-gieo-gop-y-sau-nop/ | claude-haiku-5-5 | 2 | 767 | 4 | 124,529 | 7 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 726 | 4 | 89,477 | 248 |
+| machine:bun _acceptance/ban-gieo-gop-y-sau-nop/r | claude-haiku-5-5 | 2 | 630 | 4 | 124,530 | 19 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 501 | 4 | 124,481 | 7 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 497 | 4 | 88,741 | 9 |
+
+
+wall: 957s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 2,000 | 283,099 | 27 | 00:38:00 | 00:38:27 |
+| machine | 10 | 12,171 | 1,210,257 | 856 | 00:38:00 | 00:52:15 |
+| review | 3 | 17,354 | 1,748,960 | 98 | 00:38:00 | 00:39:37 |
+| triage | 1 | 1,560 | 91,732 | 15 | 00:52:15 | 00:52:30 |
+| refute | 2 | 4,237 | 703,562 | 30 | 00:52:30 | 00:53:00 |
+| capture | 1 | 497 | 88,741 | 9 | 00:53:00 | 00:53:10 |
+| synthesize | 1 | 6,078 | 451,485 | 46 | 00:53:10 | 00:53:56 |
+
+- **claude-opus-5-5**: 3 agent · 19 calls · out 17,354 · in 38 · cache_read 1,748,960 · cache_create 274,674
+- **claude-sonnet-5-5**: 6 agent · 22 calls · out 14,372 · in 44 · cache_read 1,618,619 · cache_create 580,969
+- **claude-haiku-5-5**: 10 agent · 20 calls · out 12,171 · in 40 · cache_read 1,210,257 · cache_create 638,395
+
