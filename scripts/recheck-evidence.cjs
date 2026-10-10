@@ -198,6 +198,7 @@ if (configPath) {
 }
 
 const r = core.evaluateEvidence(payload, { fileDir, configText, configPath });
+for (const n of r.notes || []) process.stderr.write(`recheck-evidence: NOTE ${reportPath} — ${n}\n`);
 if (!r.anyFailure) process.exit(0);
 
 const out = [`recheck-evidence: ${reportPath} — committed PASS report fails the evidence bar:`];
