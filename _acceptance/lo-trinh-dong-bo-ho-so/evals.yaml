@@ -1,0 +1,224 @@
+schema_version: 1
+slug: lo-trinh-dong-bo-ho-so
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.ldb_khung
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/test/lo-trinh-khung.dom.tsx"
+      - "apps/app/test/fixtures/lo-trinh/**"
+    expected: |
+      apps/app/test/lo-trinh-khung.dom.tsx describe "khung-chung": khoi tu tep mau (LO-TRINH.mau.html qua docDuLieu ->
+      khuon Zod), NuqsTestingAdapter, mo ngan cua MOI viec (ma tran toan phan, so assert = so viec, in khoa dau tien sai):
+        1 [data-lo-trinh-chi-tiet-viec] == ma; ngan chua dung mot [data-slot=detail-sheet-stats]
+        2 bon dt trong dai o theo thu tu == [Trang thai, Moc, Lo trinh, Nhom] (nhan tu tep loi); dd tung o mang gia tri
+          cua viec (nhan nhom trang thai, ten moc hoac "Chưa hẹn mốc", ten lo trinh, nhom hoac "Không nhóm")
+        3 tieu de ngan == cau_giao; mo ta == "ma · loTen[ · nhom]"; co nut dong (sr-only nhan dong cua crmMessages)
+        4 tieu de muc la h3 cua DetailSheetSection: "Chi tiết" co mat khi va chi khi bat_khi||vi_sao; "Cần xong trước" /
+          "Việc đang chờ việc này" co mat khi va chi khi danh sach tuong ung khac rong
+        5 khong con Card ([data-slot=card]) nao trong ngan
+      Doi chung duong: cung tep mau, ngan cua viec co bat_khi + co + theo_loi qua du nam dong.
+      CHIEU DO: tren dinh truoc vong nay (ngan tu dung) -> dong 1 do voi thong diep ghim "ngan khong dung khung chi tiet chung".
+
+  - id: E2
+    criterion: AC-2
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldb_do_man
+    steps:
+      - "Chay O TIEN CANH, Bash timeout 600000, voi BANG_CHUNG=_acceptance/lo-trinh-dong-bo-ho-so/evidence dat tuong minh: lenh cua ldb_do_man"
+      - "Doc dong KET LUAN cuoi: ma 0 = moi dong DUNG; ma 2 = khong do duoc; ma 1 = co dong SAI"
+      - "Mo anh ngan-viec-1280.png va ngan-thoa-thuan-1280.png, doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "_acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"
+    expected: |
+      Dong ngan-1280 cua do-man.mjs: kho 1280, cung nguoi xem (quan tri), mo ngan mot viec tren /lo-trinh va ngan mot
+      thoa thuan tren /deals (tao mot thoa thuan tam khi workspace do chua co, don sau khi do).
+      Tien de phia thoa thuan (doi chung duong, kiem TRUOC khi so): ngan thoa thuan co [data-slot=detail-sheet-stats] va
+      it nhat mot h3 tieu de muc trong than; thieu -> ma 2 "ngăn thoả thuận không mang khung chi tiết chung". So getComputedStyle cua
+      hai ngan, MOI cap phai bang nhau (in cap dau tien lech):
+        be rong khung ngan [data-slot=sheet-content]; font-size + font-weight cua tieu de ngan; background-color cua
+        [data-slot=detail-sheet-stats]; font-size + color cua dt dau tien trong dai o; font-size + font-weight +
+        text-transform + color cua h3 tieu de muc dau tien
+      Anh: ngan-viec-1280.png, ngan-thoa-thuan-1280.png.
+      CHIEU DO: tren dinh truoc vong nay -> SAI voi thong diep ghim "ngan viec khong co dai o chung".
+
+  - id: E3
+    criterion: AC-3
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldb_do_man
+    steps:
+      - "Cung luot do voi E2 (mot lenh chay mot lan); doc dong ngan-375"
+      - "Mo anh ngan-viec-375.png"
+    inputs:
+      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "_acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"
+    expected: |
+      Dong ngan-375: kho 375, mo ngan mot viec va ngan mot thoa thuan. Tien de: ngan thoa thuan la [data-slot=drawer-content]
+      co tay keo; khong phai -> ma 2 "ngăn thoả thuận ở 375 không phải ngăn kéo". Ngan viec la ngan keo ([data-slot=drawer-content]
+      chua [data-lo-trinh-chi-tiet-viec]), be rong == be rong ngan keo cua thoa thuan cung kho, co tay keo
+      ([data-slot=drawer-handle] hoac phan tu tay keo cua Drawer), scrollWidth trang <= 375; nhan Esc -> ngan dong.
+      Anh: ngan-viec-375.png.
+      CHIEU DO: tren dinh truoc vong nay -> SAI "ngan viec o 375 khong phai ngan keo".
+
+  - id: E4
+    criterion: AC-4
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldb_do_man
+    steps:
+      - "Cung luot do voi E2; doc dong tieu-diem-1280"
+    inputs:
+      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "_acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"
+    expected: |
+      Dong tieu-diem-1280: kho 1280, dat tieu diem ban phim vao dong thu hai cua bang (Tab toi phan tu mang
+      [data-viec-khoa] cua dong do, roi Enter), cho ngan mo, nhan Escape, cho ngan dong; document.activeElement phai la
+      chinh phan tu da mo ngan (cung data-viec-khoa) — khong phai body.
+      CHIEU DO: tren dinh truoc vong nay -> SAI voi thong diep ghim "tieu diem ve body sau khi dong ngan" (loi da thay tren
+      production 10/10: ngan tu dung cu khong tra tieu diem).
+
+  - id: E5
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldb_do_man
+    steps:
+      - "Cung luot do voi E2; doc dong cot-moc-375 va cot-moc-1280"
+      - "Mo anh bang-375.png"
+    inputs:
+      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "_acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"
+    expected: |
+      Dong cot-moc-375: kho 375, the "Tất cả", voi MOI [data-lo-trinh-moc-viec] dang hien tren trang, va MOI phan tu con
+      chau cua no: mep phai <= mep phai cua td chua no, mep trai >= mep trai cua td, scrollWidth <= clientWidth, va khong
+      phan tu nao co text-overflow ellipsis ma scrollWidth > clientWidth; td cung scrollWidth <= clientWidth;
+      scrollWidth trang <= 375. In ma viec dau tien bi cat. In so o da do theo tung dang dong phu
+      ([data-lo-trinh-con-ngay] = con | hom-nay | tre); doi it nhat 1 o co dong phu, khong co -> ma 2
+      "khong co o moc nao co dong phu de do".
+      Dong cot-moc-1280: ty le be rong td cot Moc / be rong bang trong khoang 0.14..0.18 (giu 16%).
+      Anh: bang-375.png.
+      CHIEU DO: tren dinh truoc vong nay -> cot-moc-375 SAI voi thong diep ghim "o moc bi cat".
+
+  - id: E6
+    criterion: AC-6
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldb_do_man
+    steps:
+      - "Cung luot do voi E2; doc dong the-bang-cot"
+      - "Mo anh bang-cot-1280.png"
+    inputs:
+      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "_acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"
+    expected: |
+      Dong the-bang-cot: kho 1280, ?xemLoTrinh=bang-cot. Voi MOI button[data-viec-khoa] dang hien: getComputedStyle
+      textAlign thuoc {start, left}; va mep trai cua moi dong chu ben trong (Range.getClientRects cua cac nut chu) chenh
+      nhau <= 1px (cung mep trai). In ma the dau tien sai.
+      CHIEU DO: tren dinh truoc vong nay -> SAI voi thong diep ghim "the bang cot can giua".
+
+  - id: E7
+    criterion: AC-7
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.ldb_do_man
+    steps:
+      - "Cung luot do voi E2; doc dong da-bac"
+      - "Mo anh da-bac-tat.png va da-bac-bat.png"
+    inputs:
+      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "_acceptance/lo-trinh-dong-bo-ho-so/rang/do-man.mjs"
+    expected: |
+      Dong da-bac: kho 1280. Doc [data-lo-trinh-nut-da-bac] luc tat: aria-pressed + bo style {border-color, background-color,
+      box-shadow, color}. Bam -> [data-lo-trinh-da-bac-mo] hien; doc lai: aria-pressed == "true" va it nhat MOT trong bon
+      thuoc tinh khac luc tat. Bam lai -> aria-pressed == "false", bon thuoc tinh bang dung luc tat, va tap
+      [data-viec-khoa] cua bang bang tap truoc khi bat.
+      Anh: da-bac-tat.png, da-bac-bat.png.
+      CHIEU DO: tren dinh truoc vong nay -> SAI voi thong diep ghim "nut Da bac bat trong nhu tat".
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ldb_ke_hoach
+    paths:
+      - "docs/plan/lo-trinh-okr.json"
+      - "LO-TRINH.html"
+      - "_acceptance/lo-trinh-dong-bo-ho-so/rang/ke-hoach.mjs"
+    expected: |
+      rang/ke-hoach.mjs (suy goc kho tu vi tri tep): doc docs/plan/lo-trinh-okr.json, hang ma LT1: trang_thai ==
+      "đã lên onehub", pr chua 329, buoc_ke chua "nghiệm thu". Doc LO-TRINH.html qua docDuLieu ban chep: hang LT1 co
+      nhom_trang_thai == "da-giao" va trang_thai == trang_thai cua tep ke hoach. Chay product-map.mjs --check cua goi
+      acceptance-gate (giai qua resolve-plugin.mjs) -> ma 0. Moi y mot dong DUNG/SAI; ma thoat 1 khi co SAI.
+      CHIEU DO: ban sao tep ke hoach de "chưa mở" -> SAI voi thong diep ghim "LT1 trong kế hoạch chưa ghi đã lên onehub".
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.ldb_hoi_quy
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/components/detail-sheet.tsx"
+      - "apps/app/lib/lo-trinh/**"
+      - "apps/app/test/lo-trinh.dom.tsx"
+      - "apps/app/test/lo-trinh-ngay.spec.ts"
+      - "apps/app/test/ngan-ban-ghi-giu.dom.tsx"
+    expected: |
+      Chay lien tiep cac lenh may cua ho so LT1 khong can dung ban: ltc_hien, ltc_loc, ltc_vong_doi, ltc_ngay, ltc_cach_xem,
+      ltc_ho_so, ltc_da_bac, ltc_khoan_dung, ltc_chi_doc, ltc_ban_chep, ltc_mau, ltc_loi; cong bo kiem ngan ban ghi
+      (apps/app/test/ngan-ban-ghi-giu.dom.tsx) cua khung chi tiet chung. Moi lenh ma 0.
+      Them: rang/hoi-quy.sh dung git diff --quiet $(git merge-base HEAD origin/onehub) tren apps/app/test/lo-trinh.dom.tsx
+      va apps/app/test/ngan-ban-ghi-giu.dom.tsx — bai kiem cua LT1 va cua ngan ban ghi KHONG duoc sua trong vong nay
+      (bai ho-so cua LT1 chi bam data-* va chu, khong bam Card hay SectionHeading); sua -> SAI "bai kiem cu bi sua".
+      Phan duoi AC-1 (khung theo loi ghi, lech, chuyen ngan, khong dong lenh) do ltc_ho_so trong lenh nay ganh.
+      CHIEU DO: ban sao bo data-lo-trinh-chi-tiet-viec khoi ngan -> ltc_ho_so do.
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.ldb_thiet_ke
+    paths:
+      - "apps/app/components/lo-trinh/**"
+      - "apps/app/components/detail-sheet.tsx"
+    expected: |
+      rang/thiet-ke.sh: design-gate.mjs --mode static cho tung tep .tsx duoi apps/app/components/lo-trinh va
+      detail-sheet.tsx: khong P0. Roi theo diff voi $(git merge-base HEAD origin/onehub): moi tep ngoai
+      apps/app/components/lo-trinh/** va detail-sheet.tsx co nhap "@/components/detail-sheet" thi khong doi; detail-sheet.tsx
+      chi them dong (git diff --numstat: so dong xoa <= 2, chi o chu ky ham DetailSheet). Moi y mot dong DUNG/SAI.
+      CHIEU DO: ban sao sua mot cho goi trong ngan Cong ty -> SAI "cho goi cu cua khung chung bi sua".
+      CHIEU DO: ban sao them className doi mau cho mot Badge trong ho-so-viec.tsx -> P0 do.
+
+  - id: E11
+    criterion: AC-11
+    executor: judgment
+    inputs:
+      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/ngan-viec-1280.png
+      - _acceptance/lo-trinh-dong-bo-ho-so/evidence/ngan-thoa-thuan-1280.png
+    question: |
+      Hai anh chup cung kho 1280px: anh thu nhat la ngan chi tiet mot viec tren trang Lo trinh, anh thu hai la ngan chi
+      tiet mot thoa thuan. Mot nguoi dung CRM nhin hai anh canh nhau co nhan ra do la cung mot kieu ngan khong — cung dau
+      ngan (tieu de, dong phu, nut dong), cung dai o so lieu ngay duoi dau ngan, cung kieu tieu de muc — chi khac noi
+      dung? Neu khac kieu, chi ra phan nao khac.
+    expected: |
+      PASS khi dau ngan, dai o va kieu tieu de muc cua hai anh cung mot kieu; chenh lech chi nam o noi dung (so o, chu,
+      thẻ cua ngan thoa thuan ma ngan viec khong co).
