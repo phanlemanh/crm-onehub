@@ -2313,6 +2313,11 @@ executors:
     k2c_dot_bien: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs
     k2c_ranh_gioi: node _acceptance/ly-do-tu-choi-nop-theo-locale/rang/ranh-gioi.mjs
     k2c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/man.mjs"'
+    k3b_gieo_thu: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ban-gieo-gop-y-sau-nop/rang/gieo-thu.mjs"'
+    k3b_kiem_nop: bun _acceptance/ban-gieo-gop-y-sau-nop/rang/kiem-nop.mjs
+    k3b_ba_ban_do: bun _acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs
+    k3b_ranh_gioi: node _acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs
+    k3b_dot_bien: bun _acceptance/ban-gieo-gop-y-sau-nop/rang/dot-bien.mjs
     k3c_mot_nguon: bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/mot-nguon.mjs
     k3c_ranh_gioi: node _acceptance/quyet-gop-y-noi-dung-ly-do/rang/ranh-gioi.mjs
     k3c_dot_bien: bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/dot-bien.mjs

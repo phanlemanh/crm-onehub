@@ -1,0 +1,41 @@
+slug: ban-gieo-gop-y-sau-nop
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.k3b_gieo_thu
+    expected: "exit 0; _acceptance/ban-gieo-gop-y-sau-nop/rang/gieo-thu.mjs chạy trong phiên đo riêng (mot-luot.sh; tự thoát 2 «KHONG DO DUOC» nếu DATABASE_URL không phải kho đo), nạp bàn gieo từ BAN_GIEO (mặc định _acceptance/gop-y-dung-cho/rang/san-gop-y.mjs, import, không chép): (1) nạp bộ OKR mẫu, gọi gieoGopY THẬT; đầu ra có đúng một dòng bắt đầu 'gieo-gop-y: xong'; đọc thẳng CSDL đo: okrDeXuat của taskA đúng 3 dòng đều trangThai 'cho', taskB 0 dòng, agentTask của taskA và taskB đều finishedAt khác null và outcome bằng TRO_LY_OKR.ketThuc.daNop đọc từ apps/agent/agent/lib/okr/config.ts; (2) ca từ chối THẬT: gọi lại nopDeXuatVao với ngữ cảnh phiên con của taskA (việc đã đóng) → kq.ketQua 'tu-choi'; đọc hàng agentTask của taskA từ CSDL; kiemNopXong(kq, hàng) phải ném và thông điệp chứa 'tu-choi'. In 'gieo-thu: A 3 dong cho, B rong, 2 viec dong bang da-nop; tu-choi that bi chan'. Chiều đỏ ghim ở E5 (a) 'da dong truoc khi nop xong' và (c) 'vet-c'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/gop-y-dung-cho/rang/san-gop-y.mjs, _acceptance/ban-gieo-gop-y-sau-nop/rang/gieo-thu.mjs, apps/agent/agent/lib/okr/nop-de-xuat.ts, apps/agent/agent/lib/okr/config.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.k3b_kiem_nop
+    expected: "exit 0; _acceptance/ban-gieo-gop-y-sau-nop/rang/kiem-nop.mjs gọi kiemNopXong(kq, viec) xuất từ san-gop-y.mjs, không CSDL, ma trận viết trước bốn ca và đòi số ca === 4: (qua) ketQua 'da-ghi' + finishedAt có + outcome daNop → không ném; (tu-choi) ketQua 'tu-choi', lyDo 'task is not running' → ném, thông điệp chứa 'tu-choi'; (chua-dong) 'da-ghi' + finishedAt null → ném, chứa 'khong dong bang da-nop'; (loi) 'da-ghi' + outcome 'loi' → ném, chứa 'khong dong bang da-nop' và '(loi)'. In 'kiem-nop: 4/4 ca dung'. Ca nào lệch in 'ca <ten>: <khong nem|nem sai: …>' và thoát 1. Chiều đỏ ghim ở E5 (b): 'ca loi: khong nem'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/gop-y-dung-cho/rang/san-gop-y.mjs, _acceptance/ban-gieo-gop-y-sau-nop/rang/kiem-nop.mjs, apps/agent/agent/lib/okr/nop-de-xuat.ts, apps/agent/agent/lib/okr/config.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.k3b_ba_ban_do
+    expected: "exit 0; _acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs chạy lần lượt ba lệnh đọc từ _acceptance/config.yaml (executors.script.gy_man_that, r1a_man_chip, r1d_man_okr — ba lệnh gọi gieoGopY; đọc khoá, không chép lệnh), mỗi lệnh một lần, ghi đầu ra trọn vào .acceptance-runs/ban-gieo-gop-y-sau-nop/ban-do-<khoá>.txt. Bộ phân loại: một lệnh QUA bước gieo khi và chỉ khi đầu ra có ít nhất một dòng bắt đầu 'gieo-gop-y: xong' (dấu hiệu dương do bàn gieo in); thiếu → 'khong qua buoc gieo: <khoá>', bất kể lệnh in gì. Mỗi khoá in ra stdout đúng một dòng '<khoá>: ma <mã thoát> · <dòng kết quả cuối: KET LUAN, KHONG DO DUOC hoặc so o: <n>>'; dòng nào không có kết quả nào → 'thieu ket luan: <khoá>' và thoát 1. Cùng ba dòng ghi vào _acceptance/ban-gieo-gop-y-sau-nop/evidence/ba-ban-do.txt. Trước mỗi lệnh chụp trạng thái git của evidence/ ba hồ sơ gop-y-dung-cho, khung-okr-truoc-r1, okr-to-chuc-va; sau lệnh trả lại mọi tệp đang theo dõi bị sửa và xoá tệp mới mà lệnh sinh ở đó (tệp đã bẩn từ trước giữ nguyên), in 'tra lai <n> tep bang chung'; git status hay git checkout của bước này hỏng, hoặc chạy lại git status sau khi trả vẫn thấy tệp lệch so với lúc trước lệnh → in 'KHONG DO DUOC: …' và thoát 2, không báo đã trả lại. Có khoá không qua bước gieo → thoát 1; đủ ba khoá qua → in 'ba-ban-do: 3/3 lenh qua buoc gieo', thoát 0 — mã thoát đỏ của chính bàn đo ở bước đo KHÔNG làm E3 đỏ (đó là mục cho Cổng 2). '--phan-loai <tệp>' chỉ chạy bộ phân loại trên một tệp đầu ra có sẵn. Chiều đỏ ghim ở E5 (c): 'khong qua buoc gieo'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/gop-y-dung-cho/rang/san-gop-y.mjs, _acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs, _acceptance/gop-y-dung-cho/rang/man-gop-y.mjs, _acceptance/khung-okr-truoc-r1/rang/man-khung.mjs, _acceptance/okr-to-chuc-va/rang/man-okr.mjs, apps/agent/agent/lib/okr/nop-de-xuat.ts, _acceptance/config.yaml]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.k3b_ranh_gioi
+    expected: "exit 0; _acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs tự chọn neo theo khuôn của K3 (_acceptance/kara-gop-y-luot-2/rang/ranh-gioi.mjs): nhánh còn mở → merge-base(HEAD, origin/onehub)..HEAD; hồ sơ đã lên onehub → diff của merge đưa nó lên. Mỗi tệp khớp ranh giới hàng K3b (đọc hang-viec.json của đợt nếu có, không thì hằng chép) hoặc danh sách chạm tệp khai trong tệp (design doc, kế hoạch, PRODUCT-MAP.md, LO-TRINH.html); _acceptance/config.yaml chỉ dòng '+'. In 'ranh-gioi: <n> tep, 0 ngoai (neo <kieu>)'. Chiều đỏ: --them apps/app/lib/x.ts → exit 1 'ngoai-ranh-gioi:apps/app/lib/x.ts'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs, _acceptance/config.yaml]
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.k3b_dot_bien
+    expected: "exit 0; _acceptance/ban-gieo-gop-y-sau-nop/rang/dot-bien.mjs: chiều xanh trước — k3b_gieo_thu và k3b_kiem_nop thoát 0 trên cây lành, không thì thoát 2 'KHONG DO DUOC'. Băm tệp thật _acceptance/gop-y-dung-cho/rang/san-gop-y.mjs trước khi bắt đầu. Ba vết, mỗi vết dựng một bản sao cạnh tệp thật (_acceptance/gop-y-dung-cho/rang/.san-gop-y-vet-<pid>.mjs, xoá trong finally), chuỗi neo của vết phải xuất hiện đúng một lần, rồi chạy phép đo với BAN_GIEO = bản sao: (a) đặt lại lời gọi completeTask bắt buộc sau khi nộp (kèm dòng nhập) → gieo-thu đỏ và đầu ra chứa 'da dong truoc khi nop xong'; (b) bỏ nhánh kiểm outcome trong kiemNopXong → kiem-nop đỏ và đầu ra chứa 'ca loi: khong nem'; (c) kiemNopXong luôn ném Error('vet-c') → gieo-thu đỏ và đầu ra chứa 'vet-c', VÀ ba-ban-do --phan-loai trên chính đầu ra đó in 'khong qua buoc gieo'. Sau ba vết băm tệp thật phải bằng băm ban đầu (lệch → thoát 3 'TEP THAT BI DOI'). In 'dot-bien: 3/3 vet bi bat, tep that nguyen'. Vết không bắt được → 'MU <vết>' và thoát 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/gop-y-dung-cho/rang/san-gop-y.mjs, _acceptance/ban-gieo-gop-y-sau-nop/rang/dot-bien.mjs, _acceptance/ban-gieo-gop-y-sau-nop/rang/gieo-thu.mjs, _acceptance/ban-gieo-gop-y-sau-nop/rang/kiem-nop.mjs, _acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs]

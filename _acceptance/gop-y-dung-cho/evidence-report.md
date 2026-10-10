@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b9cf90a2c50643d6f7da971f0ab4fa1d1dff236a
+verified_commit: 3eedb86d6513ff947845c5a7dac3c59afc47dc37
 human_signoff: Phan Le Manh 2026-10-04
 ---
 
@@ -380,3 +380,7 @@ none — moi eval chay mot lan (runs 1), khong co eval multi-run nao va khong co
 Round 1: E1 đến E25 xanh, E26 UNCERTAIN chờ người chốt; REJECT vì review có 7 phát hiện trong hợp đồng — 1 high (AC-11: trạng thái lỗi do quá hạn có nút «Thử lại» luôn bị khoá), 2 medium (AC-11: đọc lại sau khi quyết hết không có chỉ báo và nuốt lỗi; AC-9: khẳng định «không toast lỗi» của E14 không thể đỏ), 4 low (bộ đo AC-11 tab Vết trên vết rỗng; chữ đỏ ghim E3, E4, E10 không khớp thông điệp bài in ra; AC-14 «scrollWidth == innerWidth» không có răng trong khung; E3 đo một phần ma trận). Trả về khâu cài đặt; 10 mục ngoài hợp đồng dồn sang người quyết ở Cổng 2.
 Round 2: E1 đến E25 xanh — 20 eval chạy lại ở HEAD 58ceec87 (E1, E3 đến E14, E17, E18, E20, E24 và ba ui-check E2, E22, E23), 5 eval (E15, E16, E19, E21, E25) mang sang từ round 1 vì delta không chạm paths của chúng; bảy lệnh suite xanh. E26 còn UNCERTAIN, ba lens cùng đề xuất UNCERTAIN, chờ người chốt. Review: 1 phát hiện trong hợp đồng (medium, AC-12: chip danh sách và dòng dẫn ở hộp Sửa không làm mới sau khi Kara đọc xong trong khung) cùng 6 phát hiện ngoài hợp đồng mới và 3 mục mang sang từ round 1. Trả về khâu cài đặt (commit b9cf90a2).
 Round 3: E1 đến E25 xanh — 16 eval chạy lại ở HEAD b9cf90a2 (14 eval máy E1, E4, E5, E8 đến E14, E17, E18, E20, E24 và hai ui-check E2, E23), 9 eval mang sang vì delta không chạm paths của chúng (E3, E6, E7, E22 từ round 2; E15, E16, E19, E21, E25 từ round 1); bảy lệnh suite xanh. E26 còn UNCERTAIN, ba lens cùng đề xuất UNCERTAIN, chờ người chốt. Review: không còn phát hiện trong hợp đồng; 3 phát hiện ngoài hợp đồng mới (1 về chỗ làm mới chip khi khung đã đóng, 2 về độ nhạy của bài dong-bo mới) và 6 mục mang sang từ round 1 và round 2, xem `review-findings.md`. Verdict PENDING-JUDGMENT là verdict đã tính sẵn của vòng.
+
+### Re-pin lần 1 — 2026-10-10, do K3b sửa rang/san-gop-y.mjs của hồ sơ; E25 neo mốc chấm (P1-61 ngả A); ghim lại ở đỉnh sau gộp onehub 5042d0ce
+run_id: repin-20261010T222919Z-97844
+sha: 3eedb86d6513ff947845c5a7dac3c59afc47dc37 · suites: 7 lệnh exit 0 · evals: 22/22 eval máy đạt kỳ vọng · ngoài làn máy: E2, E22, E23, E26 · diff chạm vật đo ngoài làn máy: E2, E22, E23, E26 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-16 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
