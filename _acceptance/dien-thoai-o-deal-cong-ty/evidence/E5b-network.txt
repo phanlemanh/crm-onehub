@@ -1,0 +1,1 @@
+n-a (driver): do-man.mjs la script chup bang capture.ui, khong co read_network_requests/console; E6-network.txt cua cung luot: network: driver la script do-man (khong doc network)

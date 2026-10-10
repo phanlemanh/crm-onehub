@@ -22,6 +22,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { contactName } from "@/components/crm/contact-name";
+import { SoDienThoai } from "@/components/crm/so-dien-thoai";
 import { crmMessages } from "@/lib/messages/crm";
 import { recordSheetMessages } from "@/lib/messages/record-sheet";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -298,6 +299,12 @@ export function AttachDealContact({
 							<SelectItem key={candidate.id} value={candidate.id}>
 								{contactName(candidate)}
 								{candidate.title ? ` · ${candidate.title}` : ""}
+								{candidate.phone ? (
+									<>
+										{" · "}
+										<SoDienThoai so={candidate.phone} />
+									</>
+								) : null}
 							</SelectItem>
 						))}
 					</SelectContent>
