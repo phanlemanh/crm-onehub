@@ -1,4 +1,4 @@
-import { spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -15,7 +15,40 @@ function moiTruong() {
 	for (const k of Object.keys(env)) if (k.startsWith("GIT_")) delete env[k];
 	return env;
 }
-const chayVo = (lenh) => spawnSync("bash", ["-c", lenh], { cwd: ROOT, encoding: "utf8", maxBuffer: 64 << 20, env: moiTruong() });
+let con = null;
+let dangSua = null;
+function traLai() {
+	if (dangSua === null) return;
+	fs.writeFileSync(dangSua.duong, dangSua.truoc);
+	dangSua = null;
+}
+for (const [tin, ma] of [["SIGINT", 130], ["SIGTERM", 143]])
+	process.on(tin, () => {
+		if (con !== null) {
+			try {
+				process.kill(-con.pid, "SIGTERM");
+			} catch {}
+		}
+		traLai();
+		console.log(`BI NGAT (${tin}): tep tra lai nguyen`);
+		process.exit(ma);
+	});
+const chayVo = (lenh) =>
+	new Promise((xong) => {
+		const p = spawn("bash", ["-c", lenh], { cwd: ROOT, env: moiTruong(), detached: true });
+		con = p;
+		let ra = "";
+		p.stdout.on("data", (c) => {
+			ra += c;
+		});
+		p.stderr.on("data", (c) => {
+			ra += c;
+		});
+		p.on("close", (ma) => {
+			con = null;
+			xong({ status: ma, stdout: ra, stderr: "" });
+		});
+	});
 const bam = (tep) => createHash("sha256").update(fs.readFileSync(path.join(ROOT, tep))).digest("hex");
 function lenh(khoa) {
 	const cfg = Bun.YAML.parse(fs.readFileSync(path.join(ROOT, "_acceptance/config.yaml"), "utf8"));
@@ -23,8 +56,8 @@ function lenh(khoa) {
 	if (!l) throw new Error(`thieu executors.*.${khoa}`);
 	return l;
 }
-const chay = (khoa) => {
-	const r = chayVo(lenh(khoa));
+const chay = async (khoa) => {
+	const r = await chayVo(lenh(khoa));
 	return { ma: r.status, ra: `${r.stdout}${r.stderr}` };
 };
 const thay = (a, b) => (s) => {
@@ -46,7 +79,8 @@ const VET = [
 ];
 
 fs.mkdirSync(RA, { recursive: true });
-const nen = CHAN.map((k) => ({ k, ...chay(k) }));
+const nen = [];
+for (const k of CHAN) nen.push({ k, ...(await chay(k)) });
 const chuaXanh = nen.filter((x) => x.ma !== 0);
 if (chuaXanh.length) {
 	console.log(`KHONG DO DUOC: chua pha gi ma ${chuaXanh.map((x) => `${x.k}(${x.ma})`).join(" · ")} da khong xanh`);
@@ -59,14 +93,15 @@ for (const v of VET) {
 	const bamTruoc = bam(v.tep);
 	const ket = [];
 	try {
+		dangSua = { duong, truoc };
 		fs.writeFileSync(duong, v.cam(truoc));
 		for (const [k, ghim] of v.doi) {
-			const r = chay(k);
+			const r = await chay(k);
 			fs.writeFileSync(path.join(RA, `dot-bien-${v.ten.slice(1, 2)}-${k}.txt`), r.ra);
 			ket.push({ k, do: r.ma !== 0, ghim: r.ra.includes(ghim), thongDiep: ghim });
 		}
 	} finally {
-		fs.writeFileSync(duong, truoc);
+		traLai();
 	}
 	if (bam(v.tep) !== bamTruoc) {
 		console.log(`TEP KHONG TRA LAI: ${v.tep}`);
