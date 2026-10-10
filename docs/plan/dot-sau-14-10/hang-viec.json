@@ -424,7 +424,8 @@
       "uu_tien": 9,
       "sau": [
         "NM2",
-        "K6a"
+        "K6a",
+        "LT1"
       ],
       "ranh_gioi": [
         "packages/ui/src/components/status-tone.ts",
@@ -551,8 +552,7 @@
       "day": "P2",
       "uu_tien": 4,
       "sau": [
-        "E7",
-        "NM3"
+        "E7"
       ],
       "ranh_gioi": [
         "apps/app/app/(app)/[slug]/lo-trinh/**",

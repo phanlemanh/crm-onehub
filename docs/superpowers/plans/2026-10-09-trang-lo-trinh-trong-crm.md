@@ -44,8 +44,8 @@ rồi gộp tay hai tệp `catalog.ts`, `registry.ts` với bản hiện tại (
 | PR crm-onehub#313 đã gộp | `git grep -n '"ma": "LT1"' origin/onehub -- docs/plan/lo-trinh-okr.json` | hàng LT1 có trên nhánh chính |
 | Phiên thống nhất khuôn trang đã gộp | `git log origin/onehub --oneline --grep 'khuôn trang'` hoặc mục mới trong `docs/design.md` | nếp thanh công cụ của Task 6 |
 | E7 `datatable-loc-ro` đã gộp | `git log origin/onehub --oneline --grep 'datatable-loc-ro'` | LT1 dùng `DataTable` mà E7 đang sửa |
-| NM3 `mau-trang-thai-chung` đã gộp | `git ls-tree origin/onehub packages/ui/src/components/status-tone.ts` có kết quả | `docs/design.md` mục «Màu trạng thái» cấm khai ánh xạ `tone` thứ sáu; còn / trễ / đã giao lấy `tone` từ đó |
-| Đã qua 14/10 | ngày hệ thống | ràng buộc chủ kho 08/10 |
+| Bảng «nghĩa → màu» dùng chung có trong `packages/ui` | `ls packages/ui/src/components/status-tone.ts` | `docs/design.md` mục «Màu trạng thái» cấm khai ánh xạ `tone` thứ sáu; chủ kho chốt 10/10 LT1 tự thêm bảng (lõi NM3), NM3 giữ việc dời năm khu cũ |
+| ~~Đã qua 14/10~~ | — | chủ kho gỡ ngày 10/10 («bắt đầu Bước 2 luôn») |
 
 ## Ranh giới tệp (khai cho phiên điều phối)
 
@@ -55,7 +55,7 @@ rồi gộp tay hai tệp `catalog.ts`, `registry.ts` với bản hiện tại (
   "slug": "trang-lo-trinh-trong-crm",
   "day": "P2",
   "uu_tien": 4,
-  "sau": ["E7", "NM3"],
+  "sau": ["E7"],
   "ranh_gioi": [
     "apps/app/app/(app)/[slug]/lo-trinh/**",
     "apps/app/components/lo-trinh/**",

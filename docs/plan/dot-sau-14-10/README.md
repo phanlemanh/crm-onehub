@@ -23,6 +23,12 @@ thêm phần vòng đời, K6a chờ thêm E5 và V2. Chi tiết ở mục 2.
 Cổng Phạm vi (cửa phủ quyết mở), kế hoạch ở `docs/superpowers/plans/2026-10-09-trang-lo-trinh-trong-crm.md` trên
 PR #320 (bản nháp, không gộp trước khi có mã).
 
+**Bổ sung 10/10**, chủ kho chốt: LT1 làm ngay, không chờ sau 14/10 và không chờ NM3 trọn vẹn. LT1 tự thêm bảng «nghĩa →
+màu» dùng chung `packages/ui/src/components/status-tone.ts` (tệp vẫn thuộc ranh giới NM3) và là nơi dùng đầu tiên; NM3
+giữ việc dời năm khu cũ về bảng đó và nay chờ thêm LT1. LT1 vì thế không còn đứng sau K6a: hai tệp chữ của LT1
+(`lo-trinh.ts` mới, một khoá ở `khung-ung-dung.ts`) và khối ghim sáu câu trong `messages-guard.spec.ts` chỉ thêm dòng,
+theo luật 7.
+
 ## 1. Điều kiện trước khi mở
 
 | Việc | Trạng thái 07/10 | Ai |
@@ -51,8 +57,8 @@ trước. Ranh giới tệp lấy từ ba lượt khảo sát chỉ đọc 07/10
 | Dãy | Hàng theo thứ tự | Vì sao gom như vậy |
 |---|---|---|
 | **P1 · Kara OKR** | K2 `soan-okr-trang-rieng` → K3 `kara-gop-y-luot-2` → K6a `kara-mot-ten` | K2 và K6a cùng nặng ở `okr-soan.ts`; K6a là câu chữ, làm cuối (chủ kho chốt 04/10: tính năng trước, chữ sau) và chờ K4, K6b, E5, V2 gộp — cả bốn đều thêm chữ vào tệp chữ mà K6a đổi |
-| **P2 · Kara bản ghi** | K4 `khung-ban-ghi-kara` → K6b `kara-trang-thai-toan-crm` → V2 `vong-doi-mot-cach-cat` → LT1 `trang-lo-trinh-trong-crm` | K4, K6b cùng `contact-sheet`, `company-sheet`, `contact-plans`, `crm.ts`; V2 chạm chính các ngăn bản ghi, `record-actions`, `bulk-actions` và `ArchivedList` của hai hàng đó nên đứng sau chúng, và chờ E7 vì cùng màn thoả thuận. LT1 là trang mới, không chồng tệp với ba hàng trước; đứng cuối vì chờ E7 (dùng `DataTable`) và NM3 (màu trạng thái chung — `docs/design.md` cấm khai ánh xạ thứ sáu) |
-| **P3 · Deal và CRM chung** | E7 `datatable-loc-ro` → E3 `danh-sach-keo-chung` → E1 `deal-va` → E4 `giai-doan-mac-dinh` (T3) → E6 `dieu-phoi-va` → E5 `tac-nhan-va` → NM1 `khung-man-chung` → NM2 `loc-va-kieu-xem-chung` → NM3 `mau-trang-thai-chung` | E7 trước vì `data-table.tsx` là chỗ chồng lớn nhất với Kara; E4 sửa schema nên đứng một mình giữa dãy. Ba hàng NM đưa các màn về mục «Nếp màn trong app» của `docs/design.md`; NM2 chờ V2, NM3 chờ K6a |
+| **P2 · Kara bản ghi** | K4 `khung-ban-ghi-kara` → K6b `kara-trang-thai-toan-crm` → V2 `vong-doi-mot-cach-cat` → LT1 `trang-lo-trinh-trong-crm` | K4, K6b cùng `contact-sheet`, `company-sheet`, `contact-plans`, `crm.ts`; V2 chạm chính các ngăn bản ghi, `record-actions`, `bulk-actions` và `ArchivedList` của hai hàng đó nên đứng sau chúng, và chờ E7 vì cùng màn thoả thuận. LT1 là trang mới, không chồng tệp với ba hàng trước; đứng cuối vì chờ E7 (dùng `DataTable`); bảng màu trạng thái chung LT1 tự thêm (chốt 10/10) |
+| **P3 · Deal và CRM chung** | E7 `datatable-loc-ro` → E3 `danh-sach-keo-chung` → E1 `deal-va` → E4 `giai-doan-mac-dinh` (T3) → E6 `dieu-phoi-va` → E5 `tac-nhan-va` → NM1 `khung-man-chung` → NM2 `loc-va-kieu-xem-chung` → NM3 `mau-trang-thai-chung` | E7 trước vì `data-table.tsx` là chỗ chồng lớn nhất với Kara; E4 sửa schema nên đứng một mình giữa dãy. Ba hàng NM đưa các màn về mục «Nếp màn trong app» của `docs/design.md`; NM2 chờ V2, NM3 chờ K6a và LT1 (LT1 tạo `status-tone.ts`) |
 | **P4 · Sửa nóng** | Lỗi do người dùng thật báo (ưu tiên cao nhất, phiên giám sát thêm hàng khi có) → F13 `so-moi-khong-chap-chon` → F14 `chen-lien-ket-khong-lac` → F9 `kiem-cheo-sau-gop` → V2L `luat-kho-vong-doi` → F10 `thuoc-khong-tu-het-han` → F11 `ca-chap-chon-cach-ly` → F12 `eval-model-that-dung-luc` → F8 `neo-thuoc-het-han` | Mọi hàng P4 chỉ chạm bài kiểm, thước, công cụ và hồ sơ nghiệm thu, không chồng tệp với dãy nào; làm lúc khoá `s4` rảnh. F9 trước vì nó gỡ lượt dài nhất (E11 của `tra-loi-tin-nhac`, ~3 giờ 25 phút mỗi lần ghim lại); F10 trước F8 để F8 ghim lại trên thước đã neo mốc. Tám hàng cho một thợ là dãy dài nhất — phiên giám sát chuyển bớt sang thợ rảnh khi một dãy khác xong sớm |
 
 **Phần vòng đời trong đợt** (chuẩn `docs/vong-doi.md`, lượt 2 của mục «Đợt»). Mọi hàng có nút xoá, lưu trữ hay trạng
@@ -92,7 +98,8 @@ cũng để sau: nó sửa schema, mà schema đã có E4 trong đợt này.
   khác thì để K6a làm, vì K6a chạy sau và giữ mọi tệp chữ.
 - LT1 chỉ **thêm** vào thanh điều hướng, `proxy.ts`, `next.config.ts`, `proto/catalog.ts`, `proto/registry.ts`
   (K2 cũng chỉ-thêm) và `_acceptance/config.yaml` (khai ở `chung_chi_them`). Tệp chữ mới `lo-trinh.ts` và
-  `khung-ung-dung.ts` khớp ranh giới K6a; K6a gộp trước NM3 nên trước LT1.
+  `khung-ung-dung.ts` khớp ranh giới K6a; từ 10/10 LT1 không còn chờ K6a, nên hai tệp đó và `messages-guard.spec.ts`
+  chỉ thêm dòng (luật 7).
 - LT1 còn hai điều kiện mở ngoài đợt, ghi ở mục «Điều kiện mở» của kế hoạch: crm đã nhận kit ≥ 2.26 (có khối dữ liệu lộ trình), và hàng LT1
   có trên `docs/plan/lo-trinh-okr.json` của `onehub` (#313). Thiếu một trong hai thì thợ P2 dừng trước Task 1.
 - Đo chồng tệp lại sau bổ sung 07/10: không hàng nào của hai dãy khác nhau chồng tệp ngoài `bao_ve`; V2 chồng K4 và
