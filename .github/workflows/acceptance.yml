@@ -9,48 +9,13 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: acceptance-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
-  acceptance:
-    name: acceptance gate
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Product map
-        run: node scripts/product-map.mjs --root . --check
-
-      - name: Pre-merge check
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            bash scripts/pre-merge-check.sh . --base "origin/${{ github.base_ref }}"
-          else
-            bash scripts/pre-merge-check.sh . --base "HEAD^" --no-t1-escape
-          fi
-
-  dieu-phoi:
-    name: bộ điều phối
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: package.json
-
-      - run: bun run test:dieu-phoi
-
   luat-kho:
-    name: luật kho
+    name: acceptance gate
     runs-on: ubuntu-24.04
     timeout-minutes: 10
 
@@ -59,6 +24,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -71,6 +38,22 @@ jobs:
       - run: bun install --frozen-lockfile
 
       - run: node scripts/luat-kho/do-cay.mjs --du-luat
+
+      - run: bun run test:dieu-phoi
+        if: ${{ !cancelled() }}
+
+      - name: Product map
+        if: ${{ !cancelled() }}
+        run: node scripts/product-map.mjs --root . --check
+
+      - name: Pre-merge check
+        if: ${{ !cancelled() }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            bash scripts/pre-merge-check.sh . --base "origin/${{ github.base_ref }}"
+          else
+            bash scripts/pre-merge-check.sh . --base "HEAD^" --no-t1-escape
+          fi
 
   build:
     name: lệnh dựng
@@ -106,6 +89,7 @@ jobs:
 
   agent-okr-node24:
     name: tác nhân OKR trên Node 24
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
 
