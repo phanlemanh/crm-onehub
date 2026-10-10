@@ -5,7 +5,9 @@ slug: kiem-cheo-chay-quang-lang
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-10
 design_doc: _acceptance/kiem-cheo-chay-quang-lang/design.md
 ---
 

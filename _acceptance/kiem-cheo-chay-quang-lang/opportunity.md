@@ -34,14 +34,14 @@ Hàng F26 của đợt `sau-14-10` (dãy P4).
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: thợ có còn phải chờ khoá vì kiểm chéo không, và kiểm chéo có đo hết một khoảng gộp sau
+- Câu hỏi phép đo trả lời: thợ có còn phải chờ khoá vì kiểm chéo không, và kiểm chéo có đo hết một khoảng gộp sau
   vài đêm không.
-- [đề xuất] Kết quả nào là SỐNG: trong 7 đêm sau khi gộp, 0 lần kiểm chéo được cấp khoá khi còn đơn thợ chờ; mỗi khoảng gộp
+- Kết quả nào là SỐNG: trong 7 đêm sau khi gộp, 0 lần kiểm chéo được cấp khoá khi còn đơn thợ chờ; mỗi khoảng gộp
   được đo hết sau vài đêm nối nhau, không hồ sơ nào bị đo lại khi không bị chạm.
-- [đề xuất] Kết quả nào là CHẾT: một lần kiểm chéo nhận khoá trước đơn thợ, hoặc hai đêm liền đo lại cùng một hồ sơ không bị chạm.
-- [đề xuất] Timebox: gộp trước 01:00 ngày 11/10 (giờ launchd chạy kiểm chéo).
+- Kết quả nào là CHẾT: một lần kiểm chéo nhận khoá trước đơn thợ, hoặc hai đêm liền đo lại cùng một hồ sơ không bị chạm.
+- Timebox: gộp trước 01:00 ngày 11/10 (giờ launchd chạy kiểm chéo).
 
 ## Quyết định Cổng Đáng
 
 10/10/2026 07:22 (giờ máy), chủ kho đồng ý đề nghị sau kiểm chéo lần 1 và giao P4 hàng F26 (sổ luật đợt `sau-14-10`, dòng 554).
-Ngưỡng giữ tiền tố «đề xuất» tới Cổng Phạm vi (luật 27 của đợt).
+Ngưỡng bỏ tiền tố «đề xuất» khi anh duyệt Cổng Phạm vi ngày 10/10 (luật 27 của đợt).
