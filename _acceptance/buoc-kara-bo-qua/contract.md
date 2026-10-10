@@ -5,7 +5,7 @@ slug: buoc-kara-bo-qua
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T16:35:14Z
 design_doc: docs/superpowers/specs/2026-10-09-buoc-kara-bo-qua-design.md
@@ -44,3 +44,9 @@ Source input: Ngoài-6 của `kara-trang-thai-toan-crm` (K6b), Cổng 2 2026-10-
 
 - Không migration; trường `skipped` của mục dòng thời gian chỉ có mặt khi bằng `true`.
 - Đã quét ba tệp kiểm cũ: không bài nào so tuyệt đối cả mục `did`; `agent-transcript.spec.ts` có bài so tập trường với tệp mẫu JSON — vì thế `skipped` vắng khi không bỏ qua, tệp mẫu không đổi.
+
+Known limits — anh chọn ở Cổng Bằng chứng 2026-10-10, từ S4 round 1:
+
+- Ngoài-1: Phép quét tĩnh `rang/bo-qua-dung-cho.mjs` không thấy khối `return { stored: false … }` «No picture found» trong `runPortrait` (lý do dùng template literal có ngoặc nhọn), nên gắn nhầm `skipped` vào ca đó vẫn xanh.
+- Ngoài-2: Cùng gốc với Ngoài-1 — phép quét không ghim tổng số khối (đếm 10 trên 11 lần `stored: false`); chỉ chặn khi đếm được 0 khối.
+- Ngoài-3: Bài DOM khung tạo tác nhân (E5) chỉ kiểm vắng dấu cảnh báo ở ca bỏ qua, chưa kiểm có dấu «xong».
