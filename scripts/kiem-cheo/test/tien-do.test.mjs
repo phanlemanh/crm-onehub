@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import os from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { describe, test } from "node:test";
 import { docNhatKyDung, docTienDo, gopDo, tapConLai } from "../tien-do.mjs";
 
@@ -51,6 +52,32 @@ describe("docNhatKyDung", () => {
 	test("dong cua ho so ngoai danh sach bi bo qua", () => {
 		const r = docNhatKyDung("[lane] la E1: x → exit 0 (0s)\n[lane] b E1: y → exit 0 (0s)\n", ["a", "b", "c"]);
 		assert.deepEqual(r.xong, ["a"]);
+	});
+});
+
+const MAU = resolve(import.meta.dirname, "../../../_acceptance/kiem-cheo-chay-quang-lang/rang/mau");
+const NHAT_KY_THAT = readFileSync(join(MAU, "lan-2026-10-10.log"), "utf8");
+const HO_SO_THAT = JSON.parse(readFileSync(join(MAU, "ho-so-2026-10-10.json"), "utf8")).ho_so;
+
+describe("docNhatKyDung tren nhat ky that dem 10/10", () => {
+	test("mau dung la nhat ky da do (sha256 ghim) va 146 ho so", () => {
+		assert.equal(createHash("sha256").update(NHAT_KY_THAT).digest("hex").slice(0, 12), "734211ad57cf");
+		assert.equal(HO_SO_THAT.length, 146);
+	});
+	test("21 ho so xong, dang do cron-theo-ban-khai", () => {
+		const r = docNhatKyDung(NHAT_KY_THAT, HO_SO_THAT);
+		assert.equal(r.xong.length, 21);
+		assert.equal(r.dangDo, "cron-theo-ban-khai");
+		assert.deepEqual(r.xong, HO_SO_THAT.slice(0, 21));
+	});
+	test("eval do that cua ho so dang do khong vao ket qua cua ho so xong", () => {
+		const r = docNhatKyDung(NHAT_KY_THAT, HO_SO_THAT);
+		assert.ok(r.ketQua.get("cron-theo-ban-khai").some((e) => e.id === "E8" && e.ma === 2), "ket qua cua ho so dang do van doc duoc");
+		assert.ok(!r.xong.includes("cron-theo-ban-khai"));
+	});
+	test("doi chung: dao thu tu ho so thi so ho so xong doi", () => {
+		const r = docNhatKyDung(NHAT_KY_THAT, [...HO_SO_THAT].reverse());
+		assert.notEqual(r.xong.length, 21);
 	});
 });
 
