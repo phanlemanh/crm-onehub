@@ -42,6 +42,7 @@ import {
 } from "@crm/validation/okr-tro-ly";
 import { HANH_DONG_VET, okrVetSnapshot } from "@crm/validation/okr-vet";
 import { z } from "zod";
+import { MUC_TIN_CAN_CHINH } from "./can-chinh";
 import { OKR } from "./okr-config";
 
 const ma = z.string().trim().min(1).max(120);
@@ -289,6 +290,10 @@ export const noiGopOutput = z.object({
 	unitName: z.string(),
 	objectiveTitle: z.string(),
 	keyResultTitle: z.string().nullable(),
+	lyDo: z.string().nullable(),
+	canCu: z.string().nullable(),
+	lyDoTuKara: z.boolean(),
+	mucTin: z.enum(MUC_TIN_CAN_CHINH),
 });
 export const mucTieuOutput = z.object({
 	id: z.string(),

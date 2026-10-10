@@ -1,0 +1,1 @@
+SELECT count(*)::int AS "thieu" FROM "okrAlignment" AS a JOIN "okrDeXuat" AS d ON d."taoRaId" = a."id" AND d."loai" = 'can-chinh-moi' WHERE a."lyDo" IS NULL AND btrim(COALESCE(d."noiDung"->>'viSao', ''), E' \t\n\r\u00a0') <> '';
