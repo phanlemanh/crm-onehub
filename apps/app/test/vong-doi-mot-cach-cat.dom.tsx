@@ -631,17 +631,40 @@ describe("vong-doi-mot-cach-cat", () => {
 				const t = THU_TUC[loai];
 				dat(`${t}.bulkArchive`, () =>
 					ket === "du"
-						? { requested: 3, succeeded: 3, failed: 0, message: null }
-						: { requested: 3, succeeded: 2, failed: 1, message: null },
-				);
-				dat(`${t}.bulkRestore`, () =>
-					ket === "du"
-						? { requested: 3, succeeded: 3, failed: 0, message: null }
+						? {
+								requested: 3,
+								succeeded: 3,
+								skipped: 0,
+								failed: 0,
+								message: null,
+								changedIds: ["a", "b", "c"],
+							}
 						: {
 								requested: 3,
 								succeeded: 2,
+								skipped: 0,
+								failed: 1,
+								message: null,
+								changedIds: ["a", "c"],
+							},
+				);
+				dat(`${t}.bulkRestore`, () =>
+					ket === "du"
+						? {
+								requested: 3,
+								succeeded: 3,
+								skipped: 0,
+								failed: 0,
+								message: null,
+								changedIds: ["a", "b", "c"],
+							}
+						: {
+								requested: 2,
+								succeeded: 1,
+								skipped: 0,
 								failed: 1,
 								message: "loi-tho-khong-co-id",
+								changedIds: ["a"],
 							},
 				);
 				await mo(
@@ -657,7 +680,7 @@ describe("vong-doi-mot-cach-cat", () => {
 				const mong =
 					ket === "du"
 						? chuLuuTru(loai, 3, "vi")
-						: c.bulkMenu.leftAlone(chuLuuTru(loai, 2, "vi"), "1", ".");
+						: `${chuLuuTru(loai, 2, "vi")} ${c.bulk.boQua("1")}`;
 				await cho(() => vungToast().includes(mong), `${loai}/${ket} toast`);
 				const hoanTac = nutCo(c.sheet.hoanTac);
 				chot(hoanTac !== null, "vdc: luu tru loat khong co hoan tac");
@@ -667,7 +690,7 @@ describe("vong-doi-mot-cach-cat", () => {
 					(hoanTac as HTMLButtonElement).click();
 					(hoanTac as HTMLButtonElement).click();
 				});
-				const soKhoiPhuc = ket === "du" ? 3 : 2;
+				const soKhoiPhuc = ket === "du" ? 3 : 1;
 				await cho(
 					() =>
 						vungToast().includes(chuKhoiPhuc(loai, soKhoiPhuc, "vi")) ||
@@ -687,7 +710,10 @@ describe("vong-doi-mot-cach-cat", () => {
 				const idKhoiPhuc = JSON.stringify(
 					(goiKhoiPhuc[0]?.vao as { ids?: string[] } | undefined)?.ids ?? [],
 				);
-				chot(idKhoiPhuc === '["a","b","c"]', "vdc: hoan tac sai id");
+				chot(
+					idKhoiPhuc === (ket === "du" ? '["a","b","c"]' : '["a","c"]'),
+					"vdc: hoan tac sai id",
+				);
 				chot(goiKhoiPhuc.length === 1, "vdc: hoan tac goi hai lan");
 				await nhip(10);
 				chot(
@@ -721,8 +747,10 @@ describe("vong-doi-mot-cach-cat", () => {
 			dat(`${t}.bulkArchive`, () => ({
 				requested: 3,
 				succeeded: 3,
+				skipped: 0,
 				failed: 0,
 				message: null,
+				changedIds: ["a", "b", "c"],
 			}));
 			dat(`${t}.bulkRestore`, () => {
 				throw new Error("loi-tho-may-chu");
