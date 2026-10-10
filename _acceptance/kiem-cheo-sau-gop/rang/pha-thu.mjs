@@ -294,14 +294,17 @@ o(
 );
 
 o(
-	"(j) lan thoat ma 4 (tu dung o tran cua lan) -> khong-chay-duoc, moc khong tien",
+	"(j) lan thoat ma 4 (tu dung o tran cua lan) -> chua-xong, luu tien-do, moc khong tien (kiem-cheo-chay-quang-lang AC-2)",
 	() => {
 		const { kho, T } = dungKho({ gop: [sanPham("tot2")] });
 		const r = chay({ kho, T, env: { KCS_LAN_MA: "4" } });
-		bang(r.ket?.ket_qua, "khong-chay-duoc", "ket_qua");
-		if (!/lan dung som \(ma 4[,)]/.test(r.ket.ly_do))
+		bang(r.ket?.ket_qua, "chua-xong", "ket_qua");
+		if (!/lan cham tran/.test(r.ket.ly_do))
 			throw new Error(`ly_do: ${r.ket.ly_do}`);
 		bang(r.moc, null, "moc.json");
+		const tep = join(kho.goc, ".acceptance-runs", "kiem-cheo", "tien-do.json");
+		if (!existsSync(tep)) throw new Error("tien-do.json khong duoc ghi");
+		bang(JSON.parse(readFileSync(tep, "utf8")).tu, T, "tien-do.tu");
 		kho.don();
 	},
 );

@@ -285,15 +285,16 @@ process.exit(fs.existsSync("hong.txt") ? 1 : 0);
 		k.kho.don();
 	});
 
-	test("chay tiep: lan chay het nhung phan loai vuot tran -> chua-xong, khong mat ho so da do", () => {
+	test("chay tiep: lan chay het nhung phan loai vuot tran -> khong-chay-duoc (kiem-cheo-sau-gop AC-8), tien-do giu nguyen tung byte", () => {
 		const k = khoSau();
-		const d1 = k.dem({ KCS_LECH: "a,b", KCS_NGU: "b", KIEM_CHEO_TRAN_PHUT: "0.1" });
-		assert.equal(d1.ket?.ket_qua, "chua-xong", JSON.stringify(d1.ket));
-		assert.deepEqual(k.tienDo()?.xong, ["a", "c", "d", "e", "f"]);
-		assert.equal(d1.moc, null);
-		const d2 = k.dem({ KCS_LECH: "b" });
-		assert.deepEqual(d2.argv, ["b"]);
-		assert.equal(d2.ket?.ket_qua, "do");
+		k.dem({ KCS_DUNG_SAU: "2", KCS_LECH: "a" });
+		const truoc = readFileSync(k.tepTienDo, "utf8");
+		const d2 = k.dem({ KCS_LECH: "c,d", KCS_NGU: "d", KIEM_CHEO_TRAN_PHUT: "0.1" });
+		assert.equal(d2.ket?.ket_qua, "khong-chay-duoc", JSON.stringify(d2.ket));
+		assert.match(d2.ket.ly_do, /vuot tran/);
+		assert.deepEqual(d2.ket.do, []);
+		assert.equal(readFileSync(k.tepTienDo, "utf8"), truoc);
+		assert.equal(d2.moc, null);
 		k.kho.don();
 	});
 

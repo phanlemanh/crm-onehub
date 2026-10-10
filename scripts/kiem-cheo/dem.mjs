@@ -434,7 +434,7 @@ async function luotTho({ co, goc, ket, now }) {
 					);
 				}
 				const pl = await phanLoaiHet(doc.lech);
-				if (pl.catNgang) return luuTienDo({ xongTruocLoc: tapLan, lechDs: doc.lech, pl, lyDo: `lan xong (ma ${lan.ma})` });
+				if (pl.catNgang) throw new VuotTran();
 				return ketThuc(pl.do, tapLan);
 			} catch (e) {
 				const lyDo =
