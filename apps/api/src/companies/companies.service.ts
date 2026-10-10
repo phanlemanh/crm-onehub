@@ -20,7 +20,12 @@ import {
 	ActivityStampService,
 	type StampTargets,
 } from "../crm/activity-stamp.service";
-import { type BulkResult, requireOwner, runBulk } from "../crm/bulk";
+import {
+	type BulkResult,
+	inRequestOrder,
+	requireOwner,
+	runBulk,
+} from "../crm/bulk";
 import { blankToNull, toCents } from "../crm/values";
 import { ConversionService } from "../currency/conversion.service";
 import { InjectDatabase } from "../database/database.constants";
@@ -531,10 +536,15 @@ export class CompaniesService {
 		await requireOwner(this.db, ownerId);
 
 		const ids = [...new Set(input.ids)];
-		const { count } = await this.db.company.updateMany({
-			where: { id: { in: ids } },
-			data: { ownerId },
-		});
+		const changedIds = inRequestOrder(
+			ids,
+			await this.db.company.updateManyAndReturn({
+				where: { id: { in: ids } },
+				data: { ownerId },
+				select: { id: true },
+			}),
+		);
+		const count = changedIds.length;
 
 		this.logger.log({
 			message: "Companies reassigned",
@@ -548,6 +558,7 @@ export class CompaniesService {
 			skipped: 0,
 			failed: ids.length - count,
 			message: null,
+			changedIds,
 		};
 	}
 
@@ -556,11 +567,44 @@ export class CompaniesService {
 	}
 
 	async bulkArchive(ids: string[]): Promise<BulkResult> {
-		return runBulk(ids, (id) => this.archive(id));
+		return runBulk(ids, (id) => this.archiveIfActive(id));
 	}
 
 	async bulkRestore(ids: string[]): Promise<BulkResult> {
-		return runBulk(ids, (id) => this.restore(id));
+		return runBulk(ids, (id) => this.restoreIfArchived(id));
+	}
+
+	private async archiveIfActive(id: string): Promise<{ id: string } | null> {
+		const { count } = await this.db.company.updateMany({
+			where: { id, archivedAt: null },
+			data: { archivedAt: new Date() },
+		});
+		if (count > 0) {
+			this.logger.log({ message: "Company archived", companyId: id });
+			return { id };
+		}
+		return this.skippedOrMissing(id);
+	}
+
+	private async restoreIfArchived(id: string): Promise<{ id: string } | null> {
+		const { count } = await this.db.company.updateMany({
+			where: { id, archivedAt: { not: null } },
+			data: { archivedAt: null },
+		});
+		if (count > 0) {
+			this.logger.log({ message: "Company restored", companyId: id });
+			return { id };
+		}
+		return this.skippedOrMissing(id);
+	}
+
+	private async skippedOrMissing(id: string): Promise<null> {
+		const found = await this.db.company.findUnique({
+			where: { id },
+			select: { id: true },
+		});
+		if (!found) throw new NotFoundException(`No company with id ${id}.`);
+		return null;
 	}
 
 	async bulkPurge(ids: string[]): Promise<BulkResult> {

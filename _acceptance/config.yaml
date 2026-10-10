@@ -44,6 +44,13 @@ design_pass:
     dev_flag: "PROTO_ROUTE"
 executors:
   test:
+    htl_may_chu_luu_tru: 'bun run test -- "cd apps/api && bun test test/hoan-tac-loat-dung-id.spec.ts -t htl-luu-tru"'
+    htl_may_chu_hoan_tac: 'bun run test -- "cd apps/api && bun test test/hoan-tac-loat-dung-id.spec.ts -t htl-hoan-tac"'
+    htl_hoan_tac_dung_id: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-hoan-tac-dung-id"
+    htl_hoan_tac_thieu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-hoan-tac-thieu"
+    htl_luu_tru_bo_qua: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-luu-tru-bo-qua"
+    htl_en: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/hoan-tac-loat-dung-id.dom.tsx -t htl-en"
+    htl_cap_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
     gtd_qua_gio: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t qua-gio"
     gtd_thoi_luong: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t thoi-luong"
     gtd_do: "cd packages/ui && bun test ./test/chay-tung-tep-dom.spec.ts -t tep-do"
@@ -1494,6 +1501,7 @@ executors:
     kkc_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx apps/app/test/kara-ban-ghi.dom.tsx && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi'
     kkc_canh_chu: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/messages-guard.spec.ts && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/messages-guard.spec.ts'
   script:
+    htl_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/hoan-tac-loat-dung-id/rang/man.mjs"'
     h5_hai_moc: 'bun run test -- "bash _acceptance/zalo-bom-gio/rang/hai-moc.sh"'
     h5_chi_tep_kiem: 'git diff --name-only 91fe8d69f HEAD | grep -v -e "^_acceptance/" -e "^PRODUCT-MAP.md$" -e "^LO-TRINH.html$" | tee /dev/stderr | { read -r a; read -r b; [ "$a" = "apps/agent/test/zalo-qua-webhook.integration.spec.ts" ] && [ -z "$b" ]; }'
     kbk_chu_cung: "node _acceptance/khung-ban-ghi-kara/rang/chu-cung.mjs"
@@ -2253,6 +2261,12 @@ executors:
     k2c_dot_bien: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs
     k2c_ranh_gioi: node _acceptance/ly-do-tu-choi-nop-theo-locale/rang/ranh-gioi.mjs
     k2c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/man.mjs"'
+    k2d_lanh: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs lanh
+    k2d_khai_trung: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs khai-trung
+    k2d_goc_rong: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs goc-rong
+    k2d_mot_cho: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs mot-cho
+    k2d_k2b_giu: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs k2b-giu
+    k2d_ranh_gioi: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs ranh-gioi
     dlr_do_man: 'APP_URL=${APP_URL:-http://localhost:3330} API_URL=${API_URL:-http://localhost:3331} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/datatable-loc-ro/rang/do-man.mjs"'
     dlr_san_thiet_ke: 'for t in packages/ui/src/components/data-table.tsx "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx" "apps/app/app/(app)/[slug]/companies/companies-table.tsx" "apps/app/app/(app)/[slug]/deals/deals-table.tsx" "apps/app/app/(app)/[slug]/settings/members/members-table.tsx" apps/app/components/crm/fields/field-facets.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done && bun _acceptance/datatable-loc-ro/rang/khong-ghi-de.mjs'
     olht_man: 'EVAL=${EVAL:-} bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/okr-loai-hoc-tap/rang/man-hoc-tap.mjs"'

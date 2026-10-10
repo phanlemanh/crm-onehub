@@ -25,8 +25,10 @@ import { crmMessages } from "@/lib/messages/crm";
 export type BulkResult = {
 	requested: number;
 	succeeded: number;
+	skipped: number;
 	failed: number;
 	message: string | null;
+	changedIds: string[];
 };
 
 export function reportBulk(
@@ -63,8 +65,15 @@ export function baoHoanTacLoat({
 	restored: (count: number) => string;
 	locale: Locale;
 }): void {
+	const m = crmMessages(locale);
 	if (result.succeeded === 0) {
-		toast.error(crmMessages(locale).bulk.hoanTacLoi);
+		toast.error(m.bulk.hoanTacLoi);
+		return;
+	}
+	if (result.failed > 0) {
+		toast.warning(
+			`${restored(result.succeeded)} ${m.bulk.hoanTacThieu(String(result.failed))}`,
+		);
 		return;
 	}
 	toast.success(restored(result.succeeded));
@@ -79,24 +88,21 @@ export function baoLuuTruLoat({
 	result: BulkResult;
 	done: (count: number) => string;
 	locale: Locale;
-	onHoanTac: () => void;
+	onHoanTac: (changedIds: string[]) => void;
 }): void {
-	if (result.succeeded === 0) {
-		reportBulk(result, done, locale);
+	const m = crmMessages(locale);
+	const boQua = result.skipped + result.failed;
+	if (result.changedIds.length === 0) {
+		toast.warning(m.bulk.khongDoi(String(boQua)));
 		return;
 	}
-	const m = crmMessages(locale);
 	baoDaLuuTru({
 		thongDiep:
-			result.failed > 0
-				? m.bulkMenu.leftAlone(
-						done(result.succeeded),
-						String(result.failed),
-						result.message ? ` — ${result.message}` : ".",
-					)
+			boQua > 0
+				? `${done(result.succeeded)} ${m.bulk.boQua(String(boQua))}`
 				: done(result.succeeded),
 		nhanHoanTac: m.sheet.hoanTac,
-		onHoanTac,
+		onHoanTac: () => onHoanTac(result.changedIds),
 	});
 }
 
