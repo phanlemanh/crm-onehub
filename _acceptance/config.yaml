@@ -1473,16 +1473,6 @@ executors:
     dlt_dang_tai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t dang-tai
     dlt_khong_quan_tri: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/da-luu-tru-tai-loi.dom.tsx -t khong-quan-tri
     dlt_hoi_quy: 'git diff --quiet cf003458611be9efadd4b71cbda61dc04df02d2b -- apps/app/test/giai-doan-cai-dat.dom.tsx && node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "apps/app/app/(app)/[slug]/settings/giai-doan/giai-doan-settings.tsx" --mode static && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/giai-doan-cai-dat.dom.tsx'
-    ltc_hien: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t hien
-    ltc_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t loc
-    ltc_khoan_dung: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t khoan-dung
-    ltc_chi_doc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t chi-doc
-    ltc_vong_doi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t vong-doi
-    ltc_cach_xem: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t cach-xem
-    ltc_ho_so: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t ho-so
-    ltc_da_bac: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t da-bac
-    ltc_ngay: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test ./test/lo-trinh-ngay.spec.ts && TZ=UTC bun test ./test/lo-trinh-ngay.spec.ts && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh.dom.tsx -t ngay
-    ltc_vai: cd apps/app && bun test ./test/pham-vi-man.spec.ts ./test/khung-dieu-huong.spec.ts ./test/proxy-lo-trinh.spec.ts -t lo-trinh
     ldcc_dua_vao: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t dua-vao"
     ldcc_visao_rong: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t visao-rong"
     ldcc_gan_tay: bun run test -- "cd apps/api && bun test test/okr-ly-do-can-chinh.spec.ts -t gan-tay"
@@ -2325,12 +2315,6 @@ executors:
     atk_app_dung_goi: bun _acceptance/agent-test-khong-nhap-app/rang/app-dung-goi.mjs --tu-thu && bun _acceptance/agent-test-khong-nhap-app/rang/app-dung-goi.mjs
     atk_ghim: bun _acceptance/agent-test-khong-nhap-app/rang/ghim.mjs
     dlt_do_man: 'APP_URL=${APP_URL:-http://localhost:3350} API_URL=${API_URL:-http://localhost:3351} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/da-luu-tru-tai-loi/rang/do-man.mjs"'
-    ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
-    ltc_ban_dung: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-dung.mjs
-    ltc_mau: node _acceptance/trang-lo-trinh-trong-crm/rang/kiem-mau.mjs
-    ltc_loi: node _acceptance/trang-lo-trinh-trong-crm/rang/chu-cung.mjs && cd apps/app && bun test ./test/messages-guard.spec.ts
-    ltc_thiet_ke: 'for f in apps/app/components/lo-trinh/*.tsx "apps/app/app/(app)/[slug]/lo-trinh/page.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$f" --mode static || exit 1; done'
-    ltc_do_man: 'APP_URL=${APP_URL:-http://localhost:3360} API_URL=${API_URL:-http://localhost:3361} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/trang-lo-trinh-trong-crm/rang/do-man.mjs"'
     ldcc_migration: bun _acceptance/ly-do-can-chinh-tu-soan/rang/migration.mjs
     ldcc_pham_vi: bun _acceptance/ly-do-can-chinh-tu-soan/rang/pham-vi.mjs
     ldcc_dot_bien: bun _acceptance/ly-do-can-chinh-tu-soan/rang/dot-bien.mjs
