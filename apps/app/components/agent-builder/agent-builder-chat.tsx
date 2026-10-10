@@ -640,7 +640,7 @@ function withoutTable(text: string): string {
 	return [before, after].filter(Boolean).join("\n\n").trim();
 }
 
-function AgentToolStep({
+export function AgentToolStep({
 	item,
 }: {
 	item: Extract<TranscriptItem, { kind: "did" }>;

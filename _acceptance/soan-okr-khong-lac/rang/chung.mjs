@@ -54,3 +54,18 @@ export function ketLuan(sai) {
 	console.log(`KET LUAN: ${sai} SAI — ma thoat ${sai ? 1 : 0}`);
 	process.exit(sai ? 1 : 0);
 }
+
+export const GOC_QUET = {
+	agent: "apps/agent-okr/agent",
+	"khu-soan": SOAN,
+	validation: "packages/validation/src",
+};
+
+export function tepQuet(thuMuc) {
+	if (!fs.existsSync(thuMuc)) return [];
+	return fs
+		.readdirSync(thuMuc, { recursive: true, withFileTypes: true })
+		.filter((d) => d.isFile() && /\.tsx?$/.test(d.name))
+		.map((d) => path.join(d.parentPath ?? d.path, d.name))
+		.sort();
+}

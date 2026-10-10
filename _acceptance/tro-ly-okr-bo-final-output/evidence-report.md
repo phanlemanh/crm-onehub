@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent (E6, E7, E11: duong kiem doc lap tuan tu, tac tu cham tuoi rieng)
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 135ec34bb0672a92b4a861d57ccdc28be52ccbac
+verified_commit: c072d499cdd05ce7174ed323f8f03e2734008eeb
 human_signoff: Manh Phan 2026-10-07
 ---
 
@@ -222,3 +222,7 @@ sha: 6d454331d2927e9f38a0251a77555c75fb9a32e2 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 2 — 2026-10-07, do E2, E9 khai paths (dòng sổ d-20261007T071554Z-1823): hồ sơ thôi cũ theo mọi diff của onehub; ghim lại tại HEAD sau gộp #292, #293
 run_id: repin-20261007T071641Z-68540
 sha: 135ec34bb0672a92b4a861d57ccdc28be52ccbac · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E2, E9 · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-10, do nhận kit 2.26.0: khai long_running 45 cho E6/E7 (chỉ khoá vận hành, vật không đổi)
+run_id: repin-20261010T044917Z-68327
+sha: c072d499cdd05ce7174ed323f8f03e2734008eeb · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · ngoài làn máy: E2, E9 · diff chạm vật đo ngoài làn máy: E9 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
