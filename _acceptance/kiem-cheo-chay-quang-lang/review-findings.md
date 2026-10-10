@@ -1,38 +1,38 @@
-# Review findings: kiem-cheo-chay-quang-lang (round 2)
+# Review findings: kiem-cheo-chay-quang-lang (round 3)
 
 ## Trong hợp đồng
 
-(không có)
+Không có finding nào map được vào AC ở vòng này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Đọc nhật ký làn khi chạm trần dựa vào dòng log cho người đọc của kit, lệch khuôn thì im lặng ra 0/N chứ không báo lỗi**
+- **The signed Gate 2 card still says the exit 0/1 path saves progress, which HEAD has removed**
+  Người dùng thấy gì: Thẻ duyệt đã ký còn mô tả rằng lượt kiểm chéo vượt giờ giữa chừng vẫn lưu tiến độ ở cả hai đường, trong khi bản mới không lưu ở đường kết thúc bình thường. Người duyệt đọc thẻ cũ sẽ tưởng hệ thống làm điều nó không còn làm, nên cần vẽ lại thẻ trước khi ký lại.
+  file: `_acceptance/kiem-cheo-chay-quang-lang/card.html`
+  severity: low
+  Đề xuất: known-limits
+
+- **The overrun reason always prints the config ceiling, even when the env var sets a different one**
+  Người dùng thấy gì: Khi trần thời gian được đặt khác mặc định, tệp ngày vẫn ghi con số mặc định là lý do dừng. Người đọc tệp sẽ hiểu sai lượt đã dừng sau bao lâu, dù việc dừng và lưu tiến độ vẫn đúng.
+  file: `scripts/kiem-cheo/dem.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 3: ca (j) trong pha-thu chỉ kiểm có tệp và có chữ, trong khi AC-2 hứa một quan hệ giữa các giá trị**
+  Người dùng thấy gì: Một ca thử trong bộ kiểm tra chỉ xác nhận tiến độ có được ghi, chưa kiểm các giá trị bên trong đúng hay sai. Nếu sau này ai đó ghi sai nội dung tiến độ, ca này vẫn qua, nên phải trông vào ca thử khác để bắt.
+  file: `_acceptance/kiem-cheo-sau-gop/rang/pha-thu.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Đọc nhật ký làn khi chạm trần dựa vào dòng log cho người đọc của kit, lệch khuôn thì im lặng ra 0/N chứ không báo lỗi (r2)**
   Người dùng thấy gì: Nếu bộ kit sau này đổi cách ghi nhật ký, lượt kiểm chéo đêm có thể báo nhầm là chưa xong hồ sơ nào và đêm nào cũng chạy lại từ đầu mà không báo lỗi. Hiện chưa xảy ra, nhưng khi nó xảy ra sẽ khó nhận ra.
   file: `scripts/kiem-cheo/tien-do.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Năm tệp vừa sửa không còn theo định dạng biome của kho; phần còn lại của scripts/kiem-cheo đã đúng định dạng**
-  Người dùng thấy gì: Một số tệp của công cụ kiểm chéo chưa được căn lề theo chuẩn chung của kho. Không ảnh hưởng cách chạy, chỉ khiến lần định dạng tự động sau sinh ra thay đổi lạ.
-  file: `scripts/kiem-cheo/dem.mjs`
-  severity: low
-  Đề xuất: known-limits
-
-- **Hình dạng 3 (chỉ thấy chuỗi có mặt, lời hứa là quan hệ): ca thứ hai «khong mat ho so da do» không kiểm do-moi của a còn sống qua đêm**
-  Người dùng thấy gì: Bài kiểm tự động chưa chắc bắt được trường hợp hồ sơ đã đo xong ở đêm đầu bị rơi mất khỏi kết luận đêm sau. Nếu có lỗi như vậy xuất hiện sau này, bài kiểm vẫn báo xanh.
-  file: `scripts/kiem-cheo/test/dem.test.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 3 (chỉ thấy giá trị có mặt, lời hứa là quan hệ): kiểm --tran-phut của làn bằng hằng của chính cấu hình, không kiểm trần làn < trần lượt**
-  Người dùng thấy gì: Không có gì bảo đảm thời gian tối đa dành cho phần đo luôn ngắn hơn thời gian tối đa của cả lượt. Nếu ai đó chỉnh số này sai, phần phân loại cuối đêm có thể không còn chỗ chạy mà không có cảnh báo.
-  file: `scripts/kiem-cheo/test/dem.test.mjs`
-  severity: medium
-  Đề xuất: known-limits
-
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): suiteDoTrongNhatKy chỉ được thử trên dòng gõ tay, chưa chạy trên nhật ký thật có sẵn trong rang/mau**
+- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): suiteDoTrongNhatKy chỉ được thử trên dòng gõ tay, chưa chạy trên nhật ký thật có sẵn trong rang/mau (r2)**
   Người dùng thấy gì: Phần nhận biết bộ kiểm toàn kho đỏ mới chỉ được thử trên dòng nhật ký gõ tay, chưa thử trên nhật ký thật. Hôm nay hai bên khớp nhau, nhưng nếu lệch thì bài kiểm không báo.
   file: `scripts/kiem-cheo/test/tien-do.test.mjs`
   severity: low
@@ -68,4 +68,4 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
-Cụm ngoài vùng phủ: cluster: n-a (không đo được — không eval nào khai paths, hoặc dưới ngưỡng cụm).
+⚠ Cụm ngoài vùng phủ: 2/3 lỗi rơi vào file không bộ đo nào phủ (_acceptance/kiem-cheo-chay-quang-lang/card.html, _acceptance/kiem-cheo-sau-gop/rang/pha-thu.mjs) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.

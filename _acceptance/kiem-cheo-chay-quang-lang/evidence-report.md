@@ -6,8 +6,8 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7bb5ddf7065198da2c89f69d75dde64c1fc76ebd
-human_signoff: "Phan Le Manh 2026-10-10 — ký Cổng 2 trên verdict PASS 4/4 eval + 7 suite (S4 vòng 2, wf_44b7ab7d-666); Ngoài 1–6, 8–10 ghi Known limits, Ngoài 7 chấp nhận không sửa; đồng ý cắt; Treo phê hết"
+verified_commit: db99fd8bbadd07a7f133280a3ee59275e5266999
+human_signoff:
 ---
 
 # Evidence Report: kiem-cheo-chay-quang-lang
@@ -22,41 +22,41 @@ human_signoff: "Phan Le Manh 2026-10-10 — ký Cổng 2 trên verdict PASS 4/4 
 ## Evidence
 
 - eval: E1
-  run_id: minted-kiem-cheo-chay-quang-lang-E1-r2
+  run_id: ""
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kcq_lich
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
   output: |
     node --test scripts/dieu-phoi/test/lich.test.mjs
-    ℹ duration_ms 59.735875
+    ℹ duration_ms 60.192542
 
 - eval: E2
-  run_id: minted-kiem-cheo-chay-quang-lang-E2-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kcq_tien_do
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
   output: |
     node --test scripts/kiem-cheo/test/tien-do.test.mjs
-    ℹ duration_ms 56.083917
+    ℹ duration_ms 67.401375
 
 - eval: E3
-  run_id: minted-kiem-cheo-chay-quang-lang-E3-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-E3-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kcq_hai_dem
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
   output: |
     node --test scripts/kiem-cheo/test/dem.test.mjs
-    ℹ duration_ms 21144.174042
+    ℹ duration_ms 22874.394416
 
 - eval: E4
-  run_id: minted-kiem-cheo-chay-quang-lang-E4-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-E4-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.kcq_noi_f9
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
   output: |
     node _acceptance/kiem-cheo-chay-quang-lang/rang/noi-f9.mjs
     noi-f9: XANH
@@ -64,39 +64,39 @@ human_signoff: "Phan Le Manh 2026-10-10 — ký Cổng 2 trên verdict PASS 4/4 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
 
 - cmd: bun run lint:slop
-  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_lint_slop-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-kiem-cheo-chay-quang-lang-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-10T04:05:53Z
+  verified_at: 2026-10-10T05:20:05Z
 
 ## Known limits
 
@@ -125,3 +125,4 @@ Khong co eval judgment nao trong hop dong nay (ca bon eval E1 den E4 deu la exec
 
 Round 1: E2, E3 REJECT — t4, t5 trong AC-2 (phan loai tung ho so khi lan cham tran, vuot tran van phai luu tien do; tran lan phai nho hon tran luot). Returned to implementation (commit 774922da5: phan loai tung ho so, vuot tran van luu tien do, lan tran 60 phut, doc suite chay lai).
 Round 2: E1, E2, E3, E4 PASS va bay lenh suite xanh tren cay 7bb5ddf7.
+Round 3: E1, E2, E3, E4 PASS va bay lenh suite xanh tren cay db99fd8bb sau ban sua phan loai vuot tran o duong ma 0/1 ve khong-chay-duoc (F9 AC-8); the Cong 2 va trang bang chung can ve lai truoc khi ky lai.
