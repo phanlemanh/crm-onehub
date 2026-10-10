@@ -5,7 +5,7 @@ slug: trang-lo-trinh-trong-crm
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -81,3 +81,17 @@ Source input: `_acceptance/trang-lo-trinh-trong-crm/opportunity.md` (Cổng Đá
 - Tệp mẫu cho các ca khoan dung được dẫn từ khối thật của bộ vẽ (bỏ khối, làm hỏng JSON, đổi khuôn, tăng phiên bản, bỏ khoá, đổi kiểu) — không dựng khối bằng tay.
 - Chủ kho ràng buộc 08/10: vòng không chen vào trước 14/10, không cài bản kit chưa phát hành vào crm.
 - Thanh ngày bên trái của cách xem «Mốc» là biến thể mới của `Timeline` trong `packages/ui` (design-pass, Nhóm 2), không đặt lớp vị trí ở chỗ gọi.
+- Known limits — anh chọn ở Cổng Bằng chứng 2026-10-10, từ S4 vòng 3:
+  - Ngoài-1: phép kiểm cho ngày mốc sai từng chỉ xác nhận không hiện chữ lỗi, chưa xác nhận danh sách vẫn hiện (vòng 3 đã thêm đối chứng dương; giữ ghi chú cho tới khi người soát gạch).
+  - Ngoài-2: trang phân biệt «chưa có dữ liệu» với «dữ liệu hỏng» bằng một câu cảnh báo của bộ đọc; bộ công cụ đổi lời câu đó thì trang chưa có dữ liệu sẽ bị báo nhầm là hỏng.
+  - Ngoài-4: ở «Bảng cột», dòng đếm «N việc» đếm theo bộ lọc trạng thái mà màn này không hiện, nên có thể lệch với số thẻ đang thấy.
+  - Ngoài-5: ở «Bảng cột», người dùng bàn phím mở rồi đóng hồ sơ một việc thì mất chỗ đang đứng.
+  - Ngoài-6: bài kiểm «không nút sửa» chỉ soi một phần trang; nút sửa thêm vào đầu trang hay danh sách «Đã bác» thì bài không báo.
+  - Ngoài-7: bài kiểm số đếm cạnh lựa chọn lọc có thể xanh dù một lựa chọn thiếu hay không hiện số đếm.
+  - Ngoài-8: bài kiểm chưa chứng «còn n ngày» đúng từng ngày; lệch một hai ngày vẫn có thể xanh.
+  - Ngoài-9: bài kiểm bốn ô của hồ sơ việc chưa bắt được ô bị đổi chỗ hay để trống nếu chữ còn đâu đó trong ngăn.
+  - Ngoài-10: bài kiểm bản dựng máy chủ chỉ chứng «không lộ ngày», chưa chứng danh sách đã thật sự vẽ.
+  - Ngoài-11: phép đo «chữ kế hoạch không bị dịch» có thể đạt khi không tìm thấy câu nào để kiểm.
+  - Ngoài-12: phép đo «cột ẩn ở điện thoại» có thể đạt khi không tìm thấy cột nào để đo.
+  - Ngoài-13: phép đo thứ tự thanh công cụ chỉ so các nút hai trang cùng có; nút thiếu hẳn ở Lộ trình vẫn có thể đạt.
+  - Ngoài-14: bài kiểm «không số ngày âm» chỉ chạy ở hai ngày cố định quanh mốc.

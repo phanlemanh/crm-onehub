@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 5e4ec48961cd3359a644fb33ccc29d70dc86c46e
-human_signoff:
+human_signoff: Manh Phan 2026-10-10
 ---
 
 # Evidence Report: trang-lo-trinh-trong-crm
