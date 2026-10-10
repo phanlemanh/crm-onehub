@@ -157,11 +157,15 @@ async function bamCachXem(p, nhan, sel) {
 
 function thuTuCongCu(p) {
 	return p.evaluate(() => {
-		const tim = document.querySelector("main [data-slot=input-group]");
-		let hang = tim?.parentElement ?? null;
+		const tim = [...document.querySelectorAll("[data-slot=input-group]")].find(
+			(e) =>
+				!e.closest("header, nav, [role=dialog]") && e.offsetParent !== null,
+		);
+		if (!tim) return { loi: "khong thay o tim trong noi dung trang" };
+		let hang = tim.parentElement;
 		while (hang && hang.querySelectorAll("button").length < 2)
 			hang = hang.parentElement;
-		if (!hang) return null;
+		if (!hang) return { loi: "khong thay hang chua o tim" };
 		const loai = (el) => {
 			if (el.matches("[data-slot=input-group]")) return "tim";
 			if (el.matches("[data-view-switch=nut]")) return "cach-xem";
@@ -181,10 +185,12 @@ function thuTuCongCu(p) {
 					"[data-slot=input-group], [data-view-switch=nut], [data-slot=toggle-group]",
 				),
 		);
-		return ds.map((el) => ({
-			loai: loai(el),
-			tren: Math.round(el.getBoundingClientRect().top),
-		}));
+		return {
+			ds: ds.map((el) => ({
+				loai: loai(el),
+				tren: Math.round(el.getBoundingClientRect().top),
+			})),
+		};
 	});
 }
 
@@ -228,6 +234,8 @@ async function do1280(okr, qt, slug, cauKeHoach) {
 			const sai = [];
 			const di = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
 			for (let n = di.nextNode(); n; n = di.nextNode()) {
+				if (n.parentElement?.closest("script, style, noscript, template"))
+					continue;
 				const chu = n.textContent ?? "";
 				if (!cau.some((c) => c && chu.includes(c))) continue;
 				if (!n.parentElement?.closest('[translate="no"]'))
@@ -261,26 +269,29 @@ async function do1280(okr, qt, slug, cauKeHoach) {
 		const q = await trang(qt, 1280);
 		let dealCongCu = null;
 		try {
-			await mo(q.p, `${APP}/${slug}/deals`, "main [data-slot=input-group]");
+			await mo(q.p, `${APP}/${slug}/deals`, "[data-slot=input-group]");
 			dealCongCu = await thuTuCongCu(q.p);
 			await anh(q.p, "thanh-cong-cu-deals-1280");
 		} finally {
 			await q.ctx.close();
 		}
-		if (!ltCongCu || !dealCongCu) khongDo("khong doc duoc thanh cong cu");
+		if (!ltCongCu?.ds || !dealCongCu?.ds)
+			khongDo(
+				`khong doc duoc thanh cong cu: lo-trinh ${ltCongCu?.loi ?? "ok"}, deals ${dealCongCu?.loi ?? "ok"}`,
+			);
+		const ltDs = ltCongCu.ds;
+		const dealDs = dealCongCu.ds;
 		const chung = new Set(
-			ltCongCu
-				.map((x) => x.loai)
-				.filter((l) => dealCongCu.some((y) => y.loai === l)),
+			ltDs.map((x) => x.loai).filter((l) => dealDs.some((y) => y.loai === l)),
 		);
 		const rut = (ds) => ds.map((x) => x.loai).filter((l) => chung.has(l));
 		const gon = (ds) => ds.filter((l, i) => l !== ds[i - 1]);
-		const cungHang = new Set(ltCongCu.map((x) => x.tren)).size === 1;
+		const cungHang = new Set(ltDs.map((x) => x.tren)).size === 1;
 		kiem(
 			"thanh-cong-cu-1280",
-			`lo-trinh ${gon(rut(ltCongCu)).join(">")} · deals ${gon(rut(dealCongCu)).join(">")} · mot hang ${cungHang}`,
-			JSON.stringify(gon(rut(ltCongCu))) ===
-				JSON.stringify(gon(rut(dealCongCu))) && cungHang,
+			`lo-trinh ${gon(rut(ltDs)).join(">")} · deals ${gon(rut(dealDs)).join(">")} · mot hang ${cungHang}`,
+			JSON.stringify(gon(rut(ltDs))) === JSON.stringify(gon(rut(dealDs))) &&
+				cungHang,
 		);
 	} finally {
 		await ctx.close();
