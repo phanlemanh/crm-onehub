@@ -1,0 +1,116 @@
+{
+  "feature_plain": "Mã đối tác lệch trong lô từ nền tảng thành một việc của người cầm trịch kế hoạch thay vì rơi im; kế hoạch rỗng và bộ phận chưa có bước thêm được bước ngay từ bản ghi; thẻ «Việc quá hạn» ở Tổng quan ghi đúng tổng và nói còn bao nhiêu chưa hiện.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ biến mỗi mã đối tác lệch thành một việc hạn hôm nay của người cầm trịch kế hoạch, gắn vào kế hoạch — tác nhân xử lý không gọi mô hình."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ cho kế hoạch không còn bước nào một nút «Thêm bước» có ô chọn bộ phận."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ cho kế hoạch đã có bước thêm bước vào bộ phận chưa có bước, qua nút «Thêm bước ở bộ phận khác»."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ báo lỗi đọc được ngay trong form khi bộ phận vừa bị lưu trữ, giữ chữ đã gõ — không còn lỗi 500 thô."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ ghi đúng tổng số việc và bước quá hạn trên thẻ, kèm dòng «và N việc quá hạn nữa» khi danh sách không hiện hết."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-2",
+      "p": "Sẽ KHÔNG tạo việc trùng khi lô gửi lại cùng mã trong lúc việc cũ chưa xong."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG tạo việc khi mã đã kịp khớp, kế hoạch đã đóng, hay dữ liệu lô hỏng — và đóng ngay hàng chờ của tác nhân với lý do rõ."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ KHÔNG hiện dòng «và … nữa» khi thẻ đã hiện hết."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ KHÔNG nới bài kiểm cũ nào của ba vùng này."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG làm trang xem hết việc quá hạn — dòng «và N việc nữa» không bấm được."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG đổi luật kho cho phần nhận lô, KHÔNG cho tác nhân dùng mô hình đoán cá nhân."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG dọn các hàng chờ cũ đã bị bỏ trên production."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG ép việc mã lệch lên thẻ quá hạn ngay trong ngày — trong ngày nó nằm ở dòng thời gian kế hoạch, sang hôm sau mới lên thẻ nếu chưa xong."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG dựng bản mẫu bấm được trước Cổng 1 — ảnh màn thật có ở bước chấm."
+    }
+  ],
+  "scope_plain": "Năm thứ để ngoài vòng này:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Mã lệch: một mã, nhiều mã, gửi lại, cùng mã ở hai kế hoạch × lúc tác nhân chạy mã còn lệch, đã khớp, kế hoạch đã đóng, dữ liệu hỏng — đủ khi mỗi ô có ca kiểm (AC-1, AC-2, AC-3)."
+    },
+    {
+      "i": 1,
+      "p": "Thêm bước: kế hoạch rỗng hay có bước × bộ phận đã có bước, chưa có, đã lưu trữ, không có thật × kế hoạch mở hay đã đóng (AC-4, AC-5, AC-6)."
+    },
+    {
+      "i": 2,
+      "p": "Đếm quá hạn: không có, dưới trần, trên trần × việc hay bước × «Của tôi» hay «Tất cả» (AC-7, AC-8)."
+    },
+    {
+      "i": 3,
+      "p": "Mỗi lời hứa có một tiêu chí: mã lệch thành việc, không trùng, đóng sớm, kế hoạch rỗng, bộ phận khác, bộ phận hỏng, đếm thật, không dư chữ, không hồi quy."
+    },
+    {
+      "i": 4,
+      "p": "Để sau: trang xem hết việc quá hạn; nhắc buổi sáng nêu việc mã lệch trong ngày."
+    },
+    {
+      "i": 5,
+      "p": "Không bao giờ: phần nhận lô tự đoán cá nhân theo tên hay số điện thoại."
+    },
+    {
+      "i": 6,
+      "p": "Ứng viên từ ngành (HubSpot): hàng việc quá hạn đếm tổng thật, không theo trang — chờ anh gạch."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Chưa có phép đo nào chạy trọn đường «lô vào → tác nhân xử lý» — đã thêm một phép đo nối mạch thật, không tự dựng dữ liệu."
+    },
+    {
+      "i": 1,
+      "p": "Lô nhiều mã lệch chưa được đo — đã thêm ca ba mã: mỗi mã một việc."
+    },
+    {
+      "i": 2,
+      "p": "Ở «Tất cả», số bước chưa rõ nghĩa — đã chốt: luôn là bước của chính người đang xem; vế «workspace khác» bác vì kho chỉ có một tổ chức."
+    },
+    {
+      "i": 3,
+      "p": "Khẳng định «tác nhân không dùng mô hình» có thể xanh rỗng — đã thêm đối chứng: làn nghiên cứu vẫn nhận việc hợp lệ của nó."
+    },
+    {
+      "i": 4,
+      "p": "Lỗi bộ phận chỉ đo ở API — đã thêm ca trên màn: báo trong form, giữ chữ, form không đóng."
+    }
+  ]
+}

@@ -20,6 +20,7 @@ export const TASK_KINDS = [
 	"okr-tom-tat-xep",
 	"ai-doi-soat",
 	"hoi-kho",
+	"onboarding-identify",
 ] as const;
 
 export type TaskKind = (typeof TASK_KINDS)[number];
@@ -36,6 +37,7 @@ export const DIRECT_KINDS = [
 	"okr-kiem-san-sang",
 	"okr-tom-tat-xep",
 	"ai-doi-soat",
+	"onboarding-identify",
 ] as const;
 
 export type DirectKind = (typeof DIRECT_KINDS)[number];
