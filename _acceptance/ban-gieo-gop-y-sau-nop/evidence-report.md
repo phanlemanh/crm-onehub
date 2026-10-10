@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 65484d3cda61b681e2aae56b9a965c9ff6ba3b71
+verified_commit: f54bf4098199babdbceee4e4f4b5d417ee565255
 human_signoff: Phan Le Manh 2026-10-10
 ---
 
@@ -124,3 +124,7 @@ none — every multi-run eval is uniform
 Round 1: E1-E5 và toàn bộ lệnh suite đều qua; verdict PASS.
 Round 2: delta chạy lại E3, E4, E5 và bảy lệnh suite, tất cả qua; E1 và E2 mang sang từ round 1 vì delta không chạm paths của chúng. Verdict PASS.
 Round 3: delta chạy lại E3, E4, E5 và bảy lệnh suite, tất cả qua; E1 và E2 mang sang từ round 1 vì delta không chạm paths của chúng; baseline mang từ round 2, không đo lại. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-10, do ghim lại sau gộp onehub 38f73fa3, trước khi mở PR
+run_id: repin-20261010T101315Z-98374
+sha: f54bf4098199babdbceee4e4f4b5d417ee565255 · suites: 7 lệnh exit 0 · evals: 5/5 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
