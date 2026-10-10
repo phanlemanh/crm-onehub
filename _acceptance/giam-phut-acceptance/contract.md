@@ -5,7 +5,7 @@ slug: giam-phut-acceptance
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-09T21:56:45Z
 design_doc: _acceptance/giam-phut-acceptance/design.md
@@ -78,3 +78,11 @@ mỗi lượt khoảng 12 phút tính tiền. Ngày 09/10 GitHub dừng mọi jo
 
 - Ngưỡng «`onehub` đỏ sau gộp vì lỗi chỉ lượt push cũ bắt được» không có phép đo máy: người đọc các lượt đỏ trên `onehub`
   trong 7 ngày và quyết. Vòng này chấp nhận giới hạn đó (sổ quyết định).
+- Known limit (Cổng 2, Ngoài-1): Nếu bước kiểm lại các hồ sơ cũ bị ngắt giữa chừng, nó có thể để lại thư mục tạm trên máy. Nếu sau này có hồ sơ cũ cần thư viện ngoài, bước kiểm có thể báo đỏ sẵn nhầm thay vì báo không đo được. Hôm nay chưa hồ sơ nào bị ảnh hưởng.
+- Known limit (Cổng 2, Ngoài-2): Nếu sau này cách lấy tên nhánh từ GitHub bị hỏng âm thầm, các lượt push lên nhánh release có thể bị tính chung vào số đo của onehub mà bộ tự kiểm không báo. Hiện dữ liệu thật vẫn đúng.
+- Known limit (Cổng 2, Ngoài-3): Lời mô tả của một phép kiểm vẫn nói cách dựng bản so sánh cũ, nên người đọc hoặc người chấm có thể hiểu sai cách phép kiểm làm việc. Kết quả kiểm không đổi.
+- Known limit (Cổng 2, Ngoài-4): Dòng kết luận đạt hay không đạt ngưỡng phút trong báo cáo đo chưa được bộ tự kiểm thử chặt, nên nếu so ngưỡng bị đảo thì báo cáo vẫn có thể in kết luận sai mà không ai biết. Các con số trung vị vẫn đúng.
+- Known limit (Cổng 2, Ngoài-5): Bộ tự kiểm chưa chứng minh được rằng tên nhánh lấy từ GitHub được đọc đúng. Nếu việc đọc này hỏng, số đo push có thể lẫn lượt của nhánh khác mà không có cảnh báo.
+- Known limit (Cổng 2, Ngoài-7): Thẻ đưa cho người quyết vẫn ghi vòng này giữ xanh mọi hồ sơ đã ký, trong khi lời hứa thật yếu hơn: chỉ cam kết không có lệnh nào đỏ thêm. Người đọc thẻ có thể tưởng bảo đảm mạnh hơn thực tế.
+- Known limit (Cổng 2, Ngoài-8): Nếu sau này chủ kho bắt buộc một kiểm tra thuộc luồng CI khác, phép kiểm trước khi ghim lại sẽ báo nhầm là kiểm tra đó biến mất và chặn lượt ghim. Hôm nay chưa kiểm tra nào bị bắt buộc nên chưa ảnh hưởng.
+- Known limit (Cổng 2, Ngoài-9): Việc một bước kiểm tra đỏ thì các bước sau vẫn chạy chỉ được xác nhận bằng cách đọc cấu hình, chưa được mô phỏng thật. Nếu cấu hình sai theo cách khó thấy thì phép kiểm hiện tại có thể không bắt được.
