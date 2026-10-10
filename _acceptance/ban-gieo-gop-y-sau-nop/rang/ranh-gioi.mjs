@@ -26,7 +26,13 @@ const CHAM_TEP = [
 	"LO-TRINH.html",
 ];
 
-const CHAM_TEP_XIN = [];
+const CHAM_TEP_XIN = [
+	"_acceptance/gop-y-dung-cho/rang/thay-the.mjs",
+	"_acceptance/gop-y-dung-cho/decisions.jsonl",
+	"_acceptance/gop-y-dung-cho/evals.yaml",
+	"_acceptance/gop-y-dung-cho/run-log.jsonl",
+	"_acceptance/gop-y-dung-cho/evidence-report.md",
+];
 
 const CHI_THEM = ["_acceptance/config.yaml"];
 
