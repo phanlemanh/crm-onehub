@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: giam-phut-acceptance
-verdict: REJECT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 077b4ac22b546cc1a69441b7f5d7f6b12b5846ec
+verified_commit: 3af041cda8ffd82c43fc518f61ade848c6c565b0
 human_signoff:
 ---
 
 # Evidence Report: giam-phut-acceptance
 
-Vòng 1. Cả năm eval của tính năng đạt. Verdict tổng là REJECT vì một lệnh suite không gắn eval nào (`bun run lint:slop`) đỏ: hai lỗi `anti-slop(no-runtime-typeof)` ở `_acceptance/giam-phut-acceptance/rang/luong.mjs` dòng 35, tức là tệp thước do chính vòng này thêm. Chi tiết ở phần «Lệnh suite (hồi quy)».
+Vòng 2. Cả năm eval của tính năng (E1 đến E5, đều executor script) và cả bảy lệnh suite đều đạt trên cây ở commit đã ghim. Lệnh `bun run lint:slop` đỏ ở vòng 1 nay xanh. Không có eval judgment nên không có hội đồng chấm và không có mục nào chờ người chốt.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -26,92 +26,88 @@ Vòng 1. Cả năm eval của tính năng đạt. Verdict tổng là REJECT vì 
 ## Evidence
 
 - eval: E1
-  run_id: minted-giam-phut-acceptance-E1-r1
+  run_id: minted-giam-phut-acceptance-E1-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.gpa_hinh
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
   output: |
     E1: merge-base 5a36e1994, MA 0
 
 - eval: E2
-  run_id: minted-giam-phut-acceptance-E2-r1
+  run_id: minted-giam-phut-acceptance-E2-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.gpa_khong_mat_lenh
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
   output: |
     E2: merge-base 5a36e1994, MA 0
 
 - eval: E3
-  run_id: minted-giam-phut-acceptance-E3-r1
+  run_id: minted-giam-phut-acceptance-E3-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.gpa_ho_so_cu
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
   output: |
     E3: MA 0
 
 - eval: E4
-  run_id: minted-giam-phut-acceptance-E4-r1
+  run_id: minted-giam-phut-acceptance-E4-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.gpa_do_phut
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
   output: |
     E4: MA 0
 
 - eval: E5
-  run_id: minted-giam-phut-acceptance-E5-r1
+  run_id: minted-giam-phut-acceptance-E5-r2
   exit_code: 0
-  baseline: red
+  baseline: n-a
   verifier: config:executors.script.gpa_nen_gop
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
   output: |
     E5: MA 0
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-giam-phut-acceptance-SUITE-bun_run_test_filter_api-r1
+  run_id: minted-giam-phut-acceptance-SUITE-bun_run_test_filter_api-r2
   exit_code: 0
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-giam-phut-acceptance-SUITE-bun_run_test_filter_app_filter_crm_ui-r1
+  run_id: minted-giam-phut-acceptance-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
   exit_code: 0
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-giam-phut-acceptance-SUITE-bun_run_test_filter_agent_filter_crm_aut-r1
+  run_id: minted-giam-phut-acceptance-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
   exit_code: 0
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-giam-phut-acceptance-SUITE-bun_run_test_filter_agent_okr_filter_crm-r1
-  exit_code: 0
-  verified_at: 2026-10-10T00:57:32Z
-
-- cmd: bunx turbo run lint --force
-  run_id: minted-giam-phut-acceptance-SUITE-bunx_turbo_run_lint_force-r1
-  exit_code: 0
-  verified_at: 2026-10-10T00:57:32Z
-
-- cmd: bun run lint:slop
-  run_id: minted-giam-phut-acceptance-SUITE-bun_run_lint_slop-r1
-  exit_code: 1
-  verified_at: 2026-10-10T00:57:32Z
-  output: |
-    oxlint: 0 warnings, 2 errors trên 2908 tệp.
-    anti-slop(no-runtime-typeof) tại _acceptance/giam-phut-acceptance/rang/luong.mjs:35:6 và 35:31
-    Dòng 35: if (typeof a === "string" && typeof b === "string") return a.toLowerCase() === b.toLowerCase();
-
-- cmd: bunx turbo run build --force
   run_id: ""
   exit_code: 0
-  verified_at: 2026-10-10T00:57:32Z
+  verified_at: 2026-10-10T01:19:43Z
 
-Ghi chú về lệnh suite đỏ: `bun run lint:slop` không gắn eval nào nên `failed_evals` để trống, nhưng nó là lý do duy nhất của verdict REJECT. Cả hai lỗi nằm trong tệp thước `rang/luong.mjs` do vòng này thêm, không phải mã cũ. Ghi chú về lệnh build: bản đồ mã run_id của workflow trả giá trị rỗng `""` cho `bunx turbo run build --force`, đã chép nguyên văn.
+- cmd: bunx turbo run lint --force
+  run_id: minted-giam-phut-acceptance-SUITE-bunx_turbo_run_lint_force-r2
+  exit_code: 0
+  verified_at: 2026-10-10T01:19:43Z
+
+- cmd: bun run lint:slop
+  run_id: minted-giam-phut-acceptance-SUITE-bun_run_lint_slop-r2
+  exit_code: 0
+  verified_at: 2026-10-10T01:19:43Z
+  output: |
+    Finished in 1.6s on 2908 files with 9 rules using 14 threads.
+
+- cmd: bunx turbo run build --force
+  run_id: minted-giam-phut-acceptance-SUITE-bunx_turbo_run_build_force-r2
+  exit_code: 0
+  verified_at: 2026-10-10T01:19:43Z
 
 ## Known limits
 
@@ -119,12 +115,15 @@ Ghi chú về lệnh suite đỏ: `bun run lint:slop` không gắn eval nào nê
 
 ## Analyst
 
-none — mọi eval feature đều red trên baseline (có phân biệt)
+carried tu round 1 — baseline khong do lai round nay (evals.yaml khong doi tu lan baseline cuoi). Vòng 1 đo baseline cho cả năm eval và không eval nào xanh trên cả hai phía.
+
+none — không có eval không-phân-biệt cần viết lại. Các lệnh suite xanh cả hai phía là regression-guard bình thường, không liệt kê.
 
 ## Variance
 
-none — mọi eval chạy nhiều lần đều đồng nhất
+none — mọi eval chạy một lần và đều deterministic, không có eval nhiều lần chạy
 
 ## Iterations
 
 Round 1: năm eval E1 đến E5 đạt; lệnh suite `bun run lint:slop` đỏ vì hai lỗi `no-runtime-typeof` ở `rang/luong.mjs` dòng 35. Verdict REJECT, trả về implementation để sửa tệp thước rồi chạy lại.
+Round 2: sửa tệp thước và các điểm round 1 nêu (cửa sổ 7 ngày, lượt chạy lại, cây đối chứng của E3 dựng bằng worktree riêng); năm eval và bảy lệnh suite đều đạt trên commit 3af041cda8ffd82c43fc518f61ade848c6c565b0. Verdict PASS.
