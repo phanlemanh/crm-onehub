@@ -401,7 +401,7 @@ function stepLabel(item: DidItem, t: KaraBanGhiMessages, locale: Locale) {
 		: `${viec}${item.label.slice(tach)}`;
 }
 
-function Turns({
+export function Turns({
 	message,
 	skip,
 	t,
@@ -423,9 +423,11 @@ function Turns({
 							? "running"
 							: item.failed
 								? "error"
-								: item.tone === "warning"
-									? "unsaved"
-									: "done",
+								: item.skipped
+									? "skipped"
+									: item.tone === "warning"
+										? "unsaved"
+										: "done",
 					}));
 					const sources = block.items.flatMap((item) => item.sources);
 					return (

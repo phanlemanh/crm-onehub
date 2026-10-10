@@ -261,6 +261,10 @@ const en = {
 	bulk: {
 		restore: "Restore",
 		hoanTacLoi: "Could not undo. The records are still under Archived.",
+		hoanTacThieu: (n: string) => `${n} could not be restored — see Archived.`,
+		boQua: (n: string) => `${n} skipped — already archived or no longer there.`,
+		khongDoi: (n: string) =>
+			`Nothing changed — ${n} skipped: already archived or no longer there.`,
 		deleteForever: "Delete forever",
 		archive: "Archive",
 		reEnrich: "Re-enrich",
@@ -589,6 +593,12 @@ const vi = {
 	bulk: {
 		restore: "Khôi phục",
 		hoanTacLoi: "Chưa hoàn tác được. Các bản ghi vẫn ở mục Đã lưu trữ.",
+		hoanTacThieu: (n: string) =>
+			`${n} bản không khôi phục được — xem mục Đã lưu trữ.`,
+		boQua: (n: string) =>
+			`${n} bản bị bỏ qua — đã lưu trữ từ trước hoặc không còn.`,
+		khongDoi: (n: string) =>
+			`Không có gì thay đổi — ${n} bản bị bỏ qua: đã lưu trữ từ trước hoặc không còn.`,
 		deleteForever: "Xoá vĩnh viễn",
 		archive: "Lưu trữ",
 		reEnrich: "Tra cứu lại",

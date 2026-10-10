@@ -1,7 +1,7 @@
 import { EnrichmentStatus, RecordSource } from "@crm/db";
 import { FIELD_TYPES } from "@crm/db/fields";
 import { z } from "zod";
-import { bulkIdsInput } from "../crm/bulk";
+import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
 import { fieldEntity, recordFieldValues } from "../fields/fields.contracts";
 import { activityFacetInput, listInput } from "../trpc/list-input";
 
@@ -145,6 +145,7 @@ const companyDetailContactOutput = z.object({
 	firstName: z.string(),
 	lastName: z.string().nullable(),
 	email: z.string().nullable(),
+	phone: z.string().nullable(),
 	title: z.string().nullable(),
 	imageUrl: z.string().nullable(),
 	owner: ownerSummaryOutput.nullable(),
@@ -233,12 +234,7 @@ export const companyArchiveResultOutput = z.object({
 	name: z.string(),
 });
 
-export const companyBulkResultOutput = z.object({
-	requested: z.number(),
-	succeeded: z.number(),
-	failed: z.number(),
-	message: z.string().nullable(),
-});
+export const companyBulkResultOutput = crmBulkResultOutput;
 
 export const companyEnrichOutput = z.object({
 	id: z.string(),

@@ -85,12 +85,54 @@ test('chonHangKe: tiếp hàng đang làm; chọn hàng đủ phụ thuộc theo
   assert.deepEqual(chonHangKe(HV, 'P1', td({ a: 'gop', c: 'gop', d: 'ky' })), { hang: null, xong: true });
 });
 
-test('xepHang: đơn kiem-cheo mang moc xếp trước đơn s4 của hàng chưa có mốc', () => {
+test('xepHang: đơn kiem-cheo mang moc vẫn xếp SAU đơn s4 của thợ (F26 thay F9 AC-5)', () => {
   const kq = xepHang([
-    don('P4', 'zz', 's4', '2026-10-08T01:00:00Z'),
+    don('P4', 'zz', 's4', '2026-10-08T03:00:00Z'),
     don('kiem-cheo', 'kiem-cheo-sau-gop', 's4', '2026-10-08T02:00:00Z', { moc: '2026-10-07' }),
   ], HV);
-  assert.deepEqual(kq.map((d) => d.phien), ['kiem-cheo', 'P4']);
+  assert.deepEqual(kq.map((d) => d.phien), ['P4', 'kiem-cheo']);
+});
+
+const MA_TRAN_KIEM_CHEO = [
+  ['s4 thuong', don('P1', 'a', 's4', '2026-10-09T05:00:00Z')],
+  ['s4 khong moc hang', don('P4', 'zz', 's4', '2026-10-09T05:00:00Z')],
+  ['ghim-lai thuong', don('P2', 'b', 'ghim-lai', '2026-10-09T05:00:00Z')],
+  ['ghim-lai mo_merge', don('P3', 'c', 'ghim-lai', '2026-10-09T05:00:00Z', { mo_merge: true })],
+  ['duong-nen', don('P1', 'a', 'duong-nen', '2026-10-09T05:00:00Z')],
+];
+const KIEM_CHEO_DON = [
+  ['kiem-cheo co moc', don('kiem-cheo', 'kiem-cheo-sau-gop', 's4', '2026-10-01T00:00:00Z', { moc: '2026-09-01' })],
+  ['kiem-cheo khong moc', don('kiem-cheo', 'kiem-cheo-sau-gop', 's4', '2026-10-01T00:00:00Z')],
+];
+const O_XEP = MA_TRAN_KIEM_CHEO.flatMap(([tt, t]) => KIEM_CHEO_DON.map(([tk, k]) => [`${tt} x ${tk}`, t, k]));
+for (const [ten, tho, kc] of O_XEP) {
+  test(`xepHang ma tran: ${ten} — tho truoc kiem-cheo`, () => {
+    const kq = xepHang([kc, tho], HV);
+    assert.deepEqual(kq.map((d) => d.phien), [tho.phien, 'kiem-cheo'], `o «${ten}»: kiem-cheo dung truoc tho`);
+  });
+}
+test('xepHang ma tran: so o = 5 loai don tho x 2 loai don kiem-cheo', () => {
+  assert.equal(O_XEP.length, MA_TRAN_KIEM_CHEO.length * KIEM_CHEO_DON.length);
+  assert.equal(O_XEP.length, 10);
+});
+
+test('capLuot: tho s4 va kiem-cheo s4 cung cho -> chi cap tho', () => {
+  const cap = capLuot({
+    donXin: [don('kiem-cheo', 'kiem-cheo-sau-gop', 's4', '2026-10-01T00:00:00Z', { moc: '2026-09-01' }), don('P4', 'zz', 's4', '2026-10-09T05:00:00Z')],
+    dangGiu: {}, giamTai: false, hangViec: HV,
+  });
+  assert.deepEqual(cap.map((c) => c.don.phien), ['P4']);
+});
+test('capLuot: chi co kiem-cheo cho -> cap kiem-cheo (doi chung duong)', () => {
+  const cap = capLuot({ donXin: [don('kiem-cheo', 'kiem-cheo-sau-gop', 's4', '2026-10-01T00:00:00Z')], dangGiu: {}, giamTai: false, hangViec: HV });
+  assert.deepEqual(cap.map((c) => c.don.phien), ['kiem-cheo']);
+});
+test('capLuot: tho cho duong-nen, kiem-cheo cho s4 -> cap ca hai', () => {
+  const cap = capLuot({
+    donXin: [don('kiem-cheo', 'kiem-cheo-sau-gop', 's4', '2026-10-01T00:00:00Z'), don('P1', 'a', 'duong-nen', '2026-10-09T05:00:00Z')],
+    dangGiu: {}, giamTai: false, hangViec: HV,
+  });
+  assert.deepEqual(cap.map((c) => c.don.phien).sort(), ['P1', 'kiem-cheo']);
 });
 
 test('xepHang: đối chứng — đơn kiem-cheo không mang moc thì đơn sớm hơn đứng trước', () => {

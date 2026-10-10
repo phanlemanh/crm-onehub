@@ -8,6 +8,7 @@ export type PortraitResult = {
 	imageUrl: string | null;
 	source?: PortraitSource;
 	reason?: string;
+	skipped?: true;
 };
 
 export async function storePortrait({
@@ -60,6 +61,7 @@ export async function storePortrait({
 	if (!force && isMirrored(contact.imageUrl)) {
 		return {
 			stored: false,
+			skipped: true,
 			imageUrl: contact.imageUrl,
 			reason: "They already have a photo.",
 		};
@@ -76,7 +78,12 @@ export async function storePortrait({
 	}
 
 	if (stored === contact.imageUrl) {
-		return { stored: false, imageUrl: stored, reason: "Unchanged." };
+		return {
+			stored: false,
+			skipped: true,
+			imageUrl: stored,
+			reason: "Unchanged.",
+		};
 	}
 
 	await db.contact.update({
@@ -125,6 +132,7 @@ export async function runPortrait({
 	if (!force && contact.imageUrl) {
 		return {
 			stored: false,
+			skipped: true,
 			imageUrl: contact.imageUrl,
 			reason: "They already have a photo.",
 		};

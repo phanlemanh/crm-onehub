@@ -23,6 +23,7 @@ const en = {
 		contactColumns: {
 			primary: "Primary",
 			name: "Name",
+			phone: "Phone",
 			title: "Title",
 			email: "Email",
 			owner: "Owner",
@@ -135,6 +136,7 @@ const en = {
 		fallbackTitle: "Deal",
 		contactColumns: {
 			name: "Name",
+			phone: "Phone",
 			role: "Role",
 			title: "Title",
 			email: "Email",
@@ -220,6 +222,7 @@ const vi = {
 		contactColumns: {
 			primary: "Đầu mối",
 			name: "Tên",
+			phone: "Điện thoại",
 			title: "Chức danh",
 			email: "Email",
 			owner: "Phụ trách",
@@ -331,6 +334,7 @@ const vi = {
 		fallbackTitle: "Thoả thuận",
 		contactColumns: {
 			name: "Tên",
+			phone: "Điện thoại",
 			role: "Vai trò",
 			title: "Chức danh",
 			email: "Email",

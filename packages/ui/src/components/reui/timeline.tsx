@@ -28,6 +28,7 @@ interface TimelineProps extends HTMLAttributes<HTMLDivElement> {
   value?: number
   onValueChange?: (value: number) => void
   orientation?: "horizontal" | "vertical"
+  rail?: boolean
 }
 
 function Timeline({
@@ -35,6 +36,7 @@ function Timeline({
   value,
   onValueChange,
   orientation = "vertical",
+  rail,
   className,
   children,
   ...props
@@ -63,6 +65,7 @@ function Timeline({
           className
         )}
         data-orientation={orientation}
+        data-rail={rail ? "true" : undefined}
         data-slot="timeline"
         {...props}
       >
@@ -99,7 +102,7 @@ function TimelineDate({
   return (
     <Comp
       className={cn(
-        "text-muted-foreground mb-1 block text-xs font-medium group-data-[orientation=vertical]/timeline:max-sm:h-4",
+        "text-muted-foreground mb-1 block text-xs font-medium group-data-[orientation=vertical]/timeline:max-sm:h-4 group-data-[rail=true]/timeline:tabular-nums sm:group-data-[rail=true]/timeline:absolute sm:group-data-[rail=true]/timeline:-left-36 sm:group-data-[rail=true]/timeline:w-24 sm:group-data-[rail=true]/timeline:text-right",
         className
       )}
       data-slot="timeline-date"
@@ -159,7 +162,7 @@ function TimelineItem({ step, className, ...props }: TimelineItemProps) {
   return (
     <div
       className={cn(
-        "group/timeline-item has-[+[data-completed]]:**:data-[slot=timeline-separator]:bg-muted-foreground relative flex flex-1 flex-col gap-0.5 group-data-[orientation=horizontal]/timeline:mt-8 group-data-[orientation=horizontal]/timeline:not-last:pe-8 group-data-[orientation=vertical]/timeline:ms-8 group-data-[orientation=vertical]/timeline:not-last:pb-6",
+        "group/timeline-item has-[+[data-completed]]:**:data-[slot=timeline-separator]:bg-muted-foreground relative flex flex-1 flex-col gap-0.5 group-data-[orientation=horizontal]/timeline:mt-8 group-data-[orientation=horizontal]/timeline:not-last:pe-8 group-data-[orientation=vertical]/timeline:ms-8 group-data-[orientation=vertical]/timeline:not-last:pb-6 sm:group-data-[rail=true]/timeline:ms-36",
         className
       )}
       data-completed={step <= activeStep || undefined}
@@ -192,7 +195,10 @@ function TimelineTitle({
 }: HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn("text-sm font-medium", className)}
+      className={cn(
+        "text-sm font-medium sm:group-data-[rail=true]/timeline:-mt-0.5",
+        className
+      )}
       data-slot="timeline-title"
       {...props}
     />

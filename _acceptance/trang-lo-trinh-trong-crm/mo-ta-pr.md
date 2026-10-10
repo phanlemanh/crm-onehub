@@ -1,32 +1,50 @@
 ## Tóm tắt
 
-Mở ô cơ hội cho hàng **LT1 · Trang Lộ trình trong CRM** trên lộ trình OKR: «Trưởng phòng ban mở trang Lộ
-trình trong CRM, thấy việc của nhóm mình đang ở đâu mà không phải hỏi». Chủ kho đã ký Cổng Đáng `build`
-ngày 08/10. PR này chỉ có hồ sơ, không có mã: vòng làm chưa bắt đầu.
+Trang **Lộ trình** trong CRM (hàng LT1): trưởng phòng ban mở một trang, thấy mỗi việc của lộ trình đang ở đâu,
+hẹn mốc nào, còn bao lâu hay đã trễ — không phải hỏi ai. Trang chỉ để xem: không ô sửa, không nút ghi, không gọi
+máy chủ. Nguồn vẫn là tệp kế hoạch trong git; trang đọc khối dữ liệu mà bộ kit (≥ 2.26) xuất vào
+`LO-TRINH.html`, và chỉ tự làm một việc: so ngày mốc với hôm nay của người xem.
 
-## Đã chốt ở Cổng Đáng
+## Người dùng thấy gì
 
-- **Ngưỡng nghiệm thu đo ở trưởng phòng ban:** ít nhất 3 người trả lời đúng «việc này đang ở đâu, bao giờ
-  xong» từ trang trong một phút. Ngưỡng của hàng (tin hỏi tiến độ của chủ kho dưới nửa nền 23/48) còn lại
-  làm vế phụ, đếm cùng cách.
-- **«Nhóm» là luồng việc** như tệp kế hoạch đang ghi (chung CRM, OKR, Trợ lý, dọn dẹp, Zalo). Lọc theo phòng
-  ban thật để sau, cần bộ kit thêm một trường riêng.
+- Mục «Lộ trình» trên thanh điều hướng, mọi vai đều thấy — kể cả người chỉ dùng OKR.
+- Danh sách mặc định «Chưa xong», sắp theo mốc; chuyển «Đã giao», «Xếp lại sau», «Tất cả»; lọc theo lộ trình,
+  nhóm, mốc (kể cả «Trễ mốc» và «Chưa hẹn mốc»); tìm theo câu mô tả hoặc mã. Bộ lọc nằm trên đường dẫn — gửi
+  đường dẫn là gửi đúng phạm vi.
+- Ba cách xem: bảng, bảng cột (chia theo trạng thái, nhóm hoặc lộ trình), theo mốc.
+- Khung «n việc đã qua mốc mà chưa giao», một nút mở đúng các việc đó.
+- Ngăn hồ sơ một việc: trạng thái, mốc, lộ trình, nhóm, «coi là thành công khi», «vì sao», việc cần xong trước,
+  việc đang chờ nó; báo khi trạng thái chỉ lấy từ ghi chú hoặc khi kế hoạch lệch thực tế.
+- Danh sách việc đã bác, kèm lý do.
+- Khi không có dữ liệu (bản chạy không mang tệp, tệp chưa có khối, khối hỏng, một lộ trình lỗi, khối mới hơn
+  trang) trang nói rõ và bảo báo đội sản phẩm; câu máy chỉ nằm trong «Chi tiết cho đội sản phẩm».
 
-## Thứ tự gộp
+## Quyết định trong vòng (sổ quyết định của hồ sơ)
 
-Gộp **sau** phanlemanh/crm-onehub#313 — PR đó thêm hàng LT1 vào tệp kế hoạch. Gộp trước thì trang lộ trình
-báo «hồ sơ ghi việc LT1 — kế hoạch không có việc LT1» cho tới khi #313 vào. Gộp xong #313 thì vẽ lại bản đồ
-trên nhánh này trước khi gộp.
+- **Bảng «nghĩa → màu» dùng chung** (`packages/ui/src/lib/status-tone.ts`): chủ kho chốt 10/10 — LT1 thêm lõi
+  của NM3 thay vì chờ, là nơi dùng đầu tiên; NM3 giữ việc dời năm khu cũ về bảng và nay xếp sau LT1.
+  `docs/design.md`, kế hoạch đợt `sau-14-10` và hàng NM3 trên lộ trình sửa theo.
+- **Bản chép bộ đọc của kit giữ nguyên văn**, nên loại khỏi bộ định dạng và bộ soát «slop» bằng một dòng mỗi tệp
+  cấu hình — đổi lại phép đo bản chép so được từng ký tự với hàm gốc.
+- **Ca «sai kiểu» của phép đo khoan dung** dùng mã việc là số, không phải «danh sách việc là chuỗi»: bộ đọc của
+  kit tự đổi danh sách sai kiểu thành rỗng trước khi tới khuôn, nên ca cũ không bao giờ thành «khối hỏng».
+- Bài soát tệp lời chung nhận thêm một khối ghim sáu câu có số (chỉ thêm dòng).
 
-## Vòng chạy khi nào
+## Thang «vẽ tay là bậc cuối» (docs/design.md)
 
-Chưa xếp đợt. Vòng chỉ bắt đầu khi chủ kho xếp nó vào một đợt sau 14/10 và crm đã nhận bộ kit ≥ 2.26 (bản
-mang khối dữ liệu lộ trình, phanlemanh/acceptance-gate-kit#285).
+| Khối | Dừng ở bậc | Đã tra |
+| --- | --- | --- |
+| Danh sách, thanh công cụ, lọc, chuyển cách xem | 1 — `DataTable`, `ToggleGroup`, `ViewSwitch`, `DataTableFacetMenu`, `ListSearch` | khuôn Thoả thuận / Onboarding |
+| Bảng cột | 1 — `Board` (không kéo thả) | — |
+| Xem theo mốc | 1 — `reui/timeline`, thêm biến thể `rail` ngay trong `packages/ui` | bản mẫu đặt lớp tại chỗ gọi; dời vào biến thể |
+| Ngăn hồ sơ | 1 — `Sheet`, `Card`, `Alert`, `Item`, `SectionHeading` | — |
+| Việc đã bác | 1 — `SimpleTable` từ `md`, `Item variant="outline"` dưới `md` | nếp «Danh sách» |
+| Khung trống, chờ tải | 1 — `Empty`, `Skeleton` | — |
+| Bảng nghĩa → màu | 5 — chưa có ở bậc nào; dựng trong `packages/ui/src/lib` | `status-indicator` chỉ có `tone`, không có nghĩa; ReUI không có mục tương ứng |
 
-## Đã đổi
+## Kiểm
 
-- `_acceptance/trang-lo-trinh-trong-crm/opportunity.md` — ô cơ hội, máy dựng từ hàng rồi điền phân tích;
-  mang chữ ký Cổng Đáng.
-- `PRODUCT-MAP.md`, `LO-TRINH.html` — máy vẽ lại.
+Bộ năm lệnh chứng của kho, cộng các phép đo của hồ sơ `_acceptance/trang-lo-trinh-trong-crm/`. Phép đo nào cũng
+đã chạy lượt phá thử: làm hỏng đúng chỗ thì đỏ đúng câu ghim.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

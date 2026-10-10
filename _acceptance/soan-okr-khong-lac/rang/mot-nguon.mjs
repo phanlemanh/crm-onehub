@@ -1,6 +1,5 @@
 import path from "node:path";
-import { glob } from "node:fs/promises";
-import { NOP, ROOT, SOAN, VALIDATION, doiCo, docTep, ketLuan } from "./chung.mjs";
+import { GOC_QUET, NOP, ROOT, SOAN, VALIDATION, doiCo, docTep, ketLuan, tepQuet } from "./chung.mjs";
 
 const co = doiCo(process.argv.slice(2));
 let sai = 0;
@@ -8,6 +7,20 @@ const bao = (dong) => {
 	sai++;
 	console.log(dong);
 };
+
+const nguon = new Map();
+const dem = [];
+for (const [ten, goc] of Object.entries(GOC_QUET)) {
+	const tep = tepQuet(path.join(ROOT, goc));
+	dem.push(`${ten} ${tep.length}`);
+	if (tep.length === 0) bao(`goc quet rong: ${ten}`);
+	for (const t of tep) {
+		const tuongDoi = path.relative(ROOT, t);
+		nguon.set(tuongDoi, docTep(tuongDoi));
+	}
+}
+console.log(`   quet: ${dem.join(" · ")}`);
+if (sai) ketLuan(sai);
 
 const agent = await import(path.join(ROOT, NOP));
 const v = await import(path.join(ROOT, VALIDATION));
@@ -17,9 +30,6 @@ const cungTap =
 if (!cungTap) bao(`tap lech: agent ${JSON.stringify(options)} · validation ${JSON.stringify(v.KET_QUA_NOP)}`);
 
 const KHAI_TAP = /(z\.enum\(\s*\[[^\]]*"da-ghi"[^\]]*\]|\[[^\]]*"da-ghi"[^\]]*\]\s*as\s+const)/g;
-const nguon = new Map();
-for (const mau of ["apps/agent-okr/agent/**/*.ts", `${SOAN}/**/*.ts*`, "packages/validation/src/**/*.ts"])
-	for await (const tep of glob(mau, { cwd: ROOT })) nguon.set(tep, docTep(tep));
 if (co["ban-sao"] === "them-tap") {
 	nguon.set(NOP, nguon.get(NOP).replace("z.enum(KET_QUA_NOP)", 'z.enum(["da-ghi", "tu-choi"])'));
 	console.log("   ban sao them-tap: nop-ban-nhap.ts khai lai tap trong bo nho");
