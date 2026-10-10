@@ -1096,7 +1096,12 @@ organization tree through `ToChucService`; it never keeps its own copy of units.
   `OkrTrail`, giống hệt một lần sửa tay. Dòng đề xuất của chế độ ẩn (`nac` là
   `an`) không quyết được: `troLyQuyet` trả `NotFoundException` (`khongCoDeXuat`)
   cho mọi dòng có `nac` khác `bat`, nên chế độ ẩn không bao giờ ghi vào OKR và
-  không để lại dòng `OkrTrail` nào. Chế độ ẩn không hiện gì cho người dùng: chỉ
+  không để lại dòng `OkrTrail` nào. Lý do cố định — Mục tiêu bỏ hay chờ duyệt, số sai kiểu, sáu luật Căn
+  chỉnh — `troLyQuyet` trả `{ ok: false, lyDo }`
+  với `lyDo` thuộc `LY_DO_KHONG_QUYET` (`@crm/validation/okr-tro-ly`), bắt NGOÀI giao dịch nên
+  góp ý vẫn `cho`. Bảng `CAU_CUA_LY_DO_KHONG_QUYET` nối mỗi mã với hằng `OKR.thongDiep` mà bước
+  ghi ném; lỗi khác giữ mã tRPC như cũ, kể cả chu kỳ ẩn hay khoá (400,
+  luật chung của ghi vào chu kỳ ẩn) và thiếu quyền sửa (403). App dịch mã theo ngôn ngữ trang. Chế độ ẩn không hiện gì cho người dùng: chỉ
   quản trị đọc được lượt và số đo, qua `troLyAn`/`troLySoDo` ở Cài đặt ›
   Chương trình OKR.
 - **Chín thủ tục của `SoanService` cho hạng mục «Soạn OKR cùng Trợ lý».** `soanSanSang`,
