@@ -217,6 +217,34 @@ export async function demThamChieu(
 	return ra;
 }
 
+export async function cotMangChu(): Promise<string[]> {
+	const cot = await db.$queryRaw<{ bang: string; cot: string }[]>`
+		SELECT table_name AS bang, column_name AS cot FROM information_schema.columns
+		WHERE table_schema = 'public' AND udt_name = '_text'
+		ORDER BY table_name, column_name`;
+	return cot.map((c) => `${c.bang}.${c.cot}`);
+}
+
+export async function demThamChieuMang(
+	ids: string[],
+): Promise<{ dem: Record<string, number>; cot: string[] }> {
+	const cot = await db.$queryRaw<{ bang: string; cot: string }[]>`
+		SELECT table_name AS bang, column_name AS cot FROM information_schema.columns
+		WHERE table_schema = 'public' AND data_type = 'ARRAY'
+		AND udt_name IN ('_text', '_varchar')
+		ORDER BY table_name, column_name`;
+	const dem: Record<string, number> = {};
+	for (const { bang, cot: c } of cot) {
+		const rows = await db.$queryRawUnsafe<{ n: bigint }[]>(
+			`SELECT count(*) AS n FROM "${bang}" WHERE "${c}"::text[] && $1::text[]`,
+			ids,
+		);
+		const n = Number(rows[0]?.n ?? 0);
+		if (n > 0) dem[`${bang}.${c}`] = n;
+	}
+	return { dem, cot: cot.map((x) => `${x.bang}.${x.cot}`) };
+}
+
 export async function tapIdMau(): Promise<string[]> {
 	const tien = { startsWith: OKR_MAU.tienTo };
 	const chon = { select: { id: true } } as const;
