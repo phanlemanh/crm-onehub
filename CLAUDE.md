@@ -68,6 +68,23 @@ Lỗi của bộ kit nghiệm thu phát hiện ở đây thì mở chip riêng s
 `~/dev/acceptance-gate-kit`, không sửa tại chỗ — phiên ở kho này chỉ làm tính
 năng của kho này.
 
+## Lộ trình là việc dựng; thiếu dữ liệu thì dùng dữ liệu mẫu
+
+Chủ kho chốt 11/10: `docs/plan/lo-trinh-*.json` chỉ chứa việc dựng tính năng.
+Không hàng nào chờ người — chờ phòng ban gửi dữ liệu, chờ gom câu hỏi thật, chờ
+chạy thật xong. Mốc do người và tổ chức quyết sống ở `docs/plan/lich-van-hanh.md`.
+
+Thiếu dữ liệu để dựng hay đo thì mở rộng dữ liệu mẫu, không đợi:
+
+- OKR: bộ OKR mẫu `bun run okr:mau` (`_acceptance/bo-okr-mau`) — thêm ca vào
+  đó. Dữ liệu chung: `bun run db:seed`.
+- Dữ liệu mẫu vào qua đường ghi thật (service, API), không chèn thẳng bảng. Dịch
+  vụ ngoài giả theo đúng hợp đồng thật của nó, không theo cái dễ giả.
+- Lệnh nạp mẫu từ chối chạy trên production. Dữ liệu mẫu không lên production.
+
+Đo trên dữ liệu thật — chạy ẩn, phiên nghiệm thu, Cổng Giá trị — là việc sau
+khi gộp, lúc bật cho người dùng. Nó không phải cổng của việc dựng.
+
 ## Ngôn ngữ sản phẩm
 
 `CONTEXT.md` là từ điển. Từ chưa có mục ở đó thì hoặc thêm mục trước, hoặc viết

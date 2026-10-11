@@ -51,16 +51,6 @@
       "that": "2026-10-04"
     },
     {
-      "ten": "Chạy thật",
-      "ngay": "2026-10-14",
-      "loai": "su-kien",
-      "hang": [
-        "ct"
-      ],
-      "nghia": "Mọi phòng ban tự nạp tài liệu và dùng hai tuần; đo bốn số",
-      "den": "2026-10-28"
-    },
-    {
       "ten": "Sửa một đợt",
       "ngay": "2026-11-04",
       "loai": "su-kien",
@@ -154,7 +144,7 @@
       "slug": "tro-ly-doc-kho",
       "dong": 4,
       "ten": "Lượt 4",
-      "buoc_ke": "Chạy thật từ 14/10; gom 50 câu hỏi thật",
+      "buoc_ke": "Đo trên bộ câu hỏi mẫu (cb); chạy thật với các phòng ban là việc vận hành (docs/plan/lich-van-hanh.md)",
       "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 04/10 (khảo sát lộ trình): 50 câu thật chạy trong tuần đầu dùng thật, không chặn lượt này (contract.md:117 trên nhánh). Khoá AI riêng KHO_TAI_LIEU_AI_GATEWAY_API_KEY chủ kho đặt trên crm-onehub-agent. 04/10: chủ kho đã đặt khoá AI riêng cho Kho. Đã gộp 04/10 (#231, 9007b331); migration 20261004054354 lên production; ghim lại sau l4b ở #267 (05/10).",
       "pr": [
         231,
@@ -163,40 +153,30 @@
       "ngay": "2026-10-04"
     },
     {
-      "ma": "ct",
-      "cau_giao": "Mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ",
-      "dung_tren": [
-        "l4"
-      ],
-      "trang_thai": "chưa mở",
-      "dong": 3,
-      "ten": "Chạy thật — mọi phòng ban",
-      "buoc_ke": "Mọi phòng ban 14/10, cùng ngày cả công ty vào CRM (chủ kho chốt 04/10)",
-      "ghi_chu": "Bốn số: trang đã duyệt theo đơn vị ≥ 10, câu hỏi có trích ≥ 70%, trung vị đề xuất tới duyệt ≤ 5 ngày làm việc, số lần «báo sai»."
-    },
-    {
       "ma": "cb",
-      "cau_giao": "Việc của chủ kho chạy song song với các lượt",
-      "trang_thai": "đang dựng",
+      "cau_giao": "«Trợ lý kho được đo trên 50 câu hỏi mẫu viết theo tài liệu của kho mẫu — câu trả lời được, câu phải nói không biết, câu hỏi qua Zalo — không chờ người gom câu hỏi thật»",
+      "trang_thai": "chưa mở",
       "dong": 7,
-      "ten": "Chuẩn bị chạy thật",
+      "ten": "Bộ câu hỏi mẫu",
       "ngay": "2026-09-28",
-      "buoc_ke": "Gom 50 câu hỏi thật trong đợt dùng đầu, 09–14/10",
+      "buoc_ke": "Dựng bằng dữ liệu mẫu; câu hỏi thật khi có thì thêm vào bộ, không chặn lượt nào",
       "ghi_chu": "«Quy tắc viết» v0: máy soạn từ ba văn bản mẫu thật (cách C), anh nhận làm quy tắc và sửa dần khi vận hành. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
-      "cho_anh": true
+      "cho_anh": true,
+      "ten_ngan": "Câu hỏi mẫu"
     },
     {
       "ma": "l5",
       "cau_giao": "Danh sách góp ý đã gom được sửa trong một lượt",
       "hang": "T2",
       "dung_tren": [
-        "ct"
+        "l4",
+        "cb"
       ],
       "slug": "sua-sau-chay-that",
       "trang_thai": "chưa mở",
       "dong": 8,
       "ten": "Lượt 5",
-      "buoc_ke": "Chờ chạy thật xong"
+      "buoc_ke": "Sửa theo góp ý gom được tới lúc mở lượt; không chờ chạy thật xong — thiếu góp ý thì dựng và đo trên bộ câu hỏi mẫu"
     },
     {
       "ma": "d9",

@@ -11,32 +11,6 @@
   },
   "moc": [
     {
-      "ten": "Nhân sự gửi danh sách người, phòng ban, bộ phận, trưởng — đã xong trên production",
-      "ngay": "2026-10-07",
-      "loai": "han",
-      "ai": "Nhân sự",
-      "hang": [],
-      "khoa": "m-1007",
-      "that": "2026-10-04"
-    },
-    {
-      "ten": "Ban lãnh đạo gửi OKR quý 4 cấp OneHub (đang làm, 04/10)",
-      "ngay": "2026-10-09",
-      "ai": "Ban lãnh đạo",
-      "den": "2026-10-12",
-      "hang": [],
-      "khoa": "m-1009"
-    },
-    {
-      "ten": "Dựng cây tổ chức, nhập người, đào tạo theo bộ phận, nối kênh nhắc — đã xong trên production",
-      "ngay": "2026-10-09",
-      "ai": "Quản trị chương trình, trưởng bộ phận",
-      "den": "2026-10-13",
-      "hang": [],
-      "khoa": "m-1009b",
-      "that": "2026-10-04"
-    },
-    {
       "ten": "Làn R1 vá xong trên production, trước ngày dùng thật",
       "ngay": "2026-10-12",
       "loai": "phat-hanh",
@@ -66,29 +40,6 @@
         "ZT"
       ],
       "khoa": "m-1014"
-    },
-    {
-      "ten": "Kit phát hành mốc kế: gói dieu-phoi (DP1), tác tử chấm chỉ chấm (A1) — dự kiến theo lộ trình kit",
-      "ngay": "2026-10-18",
-      "khoa": "m-1018k"
-    },
-    {
-      "ten": "Phòng ban công bố OKR quý 4",
-      "ngay": "2026-10-21",
-      "loai": "han",
-      "ai": "Trưởng phòng ban",
-      "hang": [],
-      "khoa": "m-1021"
-    },
-    {
-      "ten": "Kit đóng gói Điều phối – Thợ: mở đợt, nối lại đợt, đổi tài khoản bằng một lệnh — dự kiến theo lộ trình kit",
-      "ngay": "2026-10-25",
-      "khoa": "m-1025k"
-    },
-    {
-      "ten": "Đợt thử thứ nhất trên gói dieu-phoi của kit: gỡ scripts/dieu-phoi/ và bốn khối hook, chạy ở quãng lặng",
-      "ngay": "2026-10-26",
-      "khoa": "m-1026"
     },
     {
       "ten": "Phiên nghiệm thu R1",
@@ -145,35 +96,6 @@
       "loai": "phat-hanh",
       "hang": [],
       "khoa": "m-1218"
-    },
-    {
-      "ten": "Phòng ban đặt và công bố OKR quý 1",
-      "ngay": "2026-12-21",
-      "ai": "Trưởng phòng ban",
-      "den": "2027-01-11",
-      "hang": [],
-      "khoa": "m-1221"
-    },
-    {
-      "ten": "Chấm và nhìn lại quý 4 trong công cụ",
-      "ngay": "2026-12-28",
-      "ai": "Mọi phòng ban",
-      "den": "2027-01-08",
-      "hang": [],
-      "khoa": "m-1228"
-    },
-    {
-      "ten": "Tết Đinh Mùi",
-      "ngay": "2027-02-06",
-      "hang": [],
-      "khoa": "m-0206"
-    },
-    {
-      "ten": "Đo bốn tuần đầu quý 1: Cổng Giá trị R1–R3",
-      "ngay": "2027-02-09",
-      "ai": "Chủ sản phẩm",
-      "hang": [],
-      "khoa": "m-0209"
     }
   ],
   "hang": [
@@ -846,15 +768,18 @@
       "ma": "N1",
       "trang_thai": "chưa mở",
       "khoa": "ai-n1",
-      "ten": "Ca thật từ OKR quý 4",
+      "ten": "Bộ ca mẫu quý 4",
       "ten_ngan": "Ca thật",
       "nhom": "tro-ly",
       "thu_tu": 230,
       "ghi_chu": "Lưu ngoài git; thay tên người và tên đối tác. Từ 28/09 không còn chặn dựng 9b; cùng khuôn với ca mẫu của M.",
-      "buoc_ke": "Gom khoảng 30 ca khi các phòng ban công bố OKR quý 4; dùng để bật 9b và hỏi đáp OKR",
+      "buoc_ke": "Dựng bằng bộ OKR mẫu (okr:mau, hàng M); ca thật chỉ dùng lúc bật 9b trên production, là việc vận hành",
       "chay_khi": "OKR quý 4 đã công bố, trước 02/11",
       "cho_ai": "điều kiện",
-      "cau_giao": "«Góp ý của Kara được đo trên ca thật của quý 4, không chỉ ca mẫu»"
+      "cau_giao": "«Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố»",
+      "dung_tren": [
+        "M"
+      ]
     },
     {
       "ma": "9b",
@@ -933,7 +858,7 @@
         "D"
       ],
       "slug": "hoi-dap-okr",
-      "bat_khi": "Eval hỏi đáp trên OKR thật đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production",
+      "bat_khi": "Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production",
       "trang_thai": "chưa mở",
       "khoa": "ai-c",
       "ten": "Hỏi đáp OKR theo quyền",
