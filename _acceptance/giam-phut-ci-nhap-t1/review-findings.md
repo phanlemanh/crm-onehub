@@ -1,74 +1,80 @@
-# Review findings: giam-phut-ci-nhap-t1 (round 2)
+# Review findings: giam-phut-ci-nhap-t1 (round 3)
 
 ## Trong hợp đồng
 
-(không có)
+Không có finding nào map được vào AC.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **`**/*.md` treated as T1 lets a PR that only edits test inputs or agent prompts skip `test` and still get a green `ci-ok`**
+- **giam-phut-ci-nhap-t1/E7 được khai vào feature_loop.model_evals dù không gọi model: dùng khoá sai nghĩa để lách một chỗ kit còn thiếu**
+  Người dùng thấy gì: Một phép kiểm không dùng AI nhưng bị xếp chung nhóm với các phép kiểm dùng AI để nó chạy tách riêng. Hệ quả là con số «số lần gọi AI» trong tổng kết bị đếm thừa một lần, và nếu phép kiểm này chập chờn ở lượt ghim lại thì nó sẽ đỏ luôn thay vì được chạy lại một lần. Việc tính năng này làm (giảm phút CI cho PR nháp và PR chỉ sửa tài liệu) vẫn đúng; nên ghi thành hạn chế đã biết và mở việc riêng sang bộ kit nghiệm thu để có khoá chạy riêng đúng nghĩa.
+  file: `_acceptance/config.yaml`
+  severity: medium
+  Đề xuất: known-limits
+
+- **`**/*.md` treated as T1 lets a PR that only edits test inputs or agent prompts skip `test` and still get a green `ci-ok` (r2)**
   Người dùng thấy gì: Một thay đổi chỉ sửa tệp chữ nằm trong thư mục của trợ lý AI hoặc tài liệu mà bài kiểm đọc vào có thể được gộp với dấu xanh mà bài kiểm không hề chạy. Nếu bài kiểm đó hỏng thì chỉ phát hiện ra ở lần đẩy không liên quan sau này.
   file: `.github/scripts/phan-loai.mjs`
   severity: high
   Đề xuất: new-contract
 
-- **T1 classification skips every test job for .md files that tests assert on or the agent runs as its prompt; nothing re-checks after merge**
+- **T1 classification skips every test job for .md files that tests assert on or the agent runs as its prompt; nothing re-checks after merge (r2)**
   Người dùng thấy gì: Sửa riêng một bảng trong tài liệu thiết kế hoặc lời dặn của trợ lý AI có thể làm bài kiểm hỏng mà vẫn được báo xanh và gộp, vì bài kiểm không chạy và sau khi gộp cũng không ai kiểm lại.
   file: `.github/scripts/phan-loai.mjs`
   severity: medium
   Đề xuất: new-contract
 
-- **do-phut-ci swallows failed job-log fetches, so the T1 threshold verdict can come out falsely SONG or 'chua co luot'**
+- **do-phut-ci swallows failed job-log fetches, so the T1 threshold verdict can come out falsely SONG or 'chua co luot' (r2)**
   Người dùng thấy gì: Khi không tải được nhật ký của một lượt chạy, công cụ đo thời gian im lặng bỏ lượt đó và có thể kết luận sai là đã đạt ngưỡng ở lượt chỉ sửa tài liệu. Người quyết sẽ đọc một con số tưởng đáng tin mà thật ra thiếu dữ liệu.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/do-phut-ci.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **nen-gop treats any HTTP 404 from gh api as 'no required checks', so E12 passes vacuously**
+- **nen-gop treats any HTTP 404 from gh api as 'no required checks', so E12 passes vacuously (r2)**
   Người dùng thấy gì: Phép kiểm xem có check bắt buộc nào bị kẹt hay không có thể báo đạt khi thật ra không đọc được luật bảo vệ nhánh, ví dụ sai kho hoặc thiếu quyền. Hiện kết quả đúng nhưng chỉ do tình cờ.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/nen-gop.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 5 (class sweep with only a tautological count): the cell-count guard can never fail**
+- **Shape 5 (class sweep with only a tautological count): the cell-count guard can never fail (r2)**
   Người dùng thấy gì: Phép đếm số ô của bảng kiểm luôn tự khớp nên không bắt được trường hợp bảng thiếu hoặc thừa ô. Bảng kiểm có thể thiếu ô mà vẫn báo đủ.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 4 (negative assertion alone): any HTTP 404 becomes an empty required-check set, so «no required check is missing» passes vacuously**
+- **Shape 4 (negative assertion alone): any HTTP 404 becomes an empty required-check set, so «no required check is missing» passes vacuously (r2)**
   Người dùng thấy gì: Phép kiểm check bắt buộc có thể báo đạt mà thật ra chưa đọc được luật nào, nếu gọi sai kho hoặc thiếu quyền. Người đọc báo cáo sẽ tin rằng đã kiểm.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/nen-gop.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Shape 2 (hand-written fixture in the reader's shape): the required-check parser is never round-tripped against a real API response**
+- **Shape 2 (hand-written fixture in the reader's shape): the required-check parser is never round-tripped against a real API response (r2)**
   Người dùng thấy gì: Bộ đọc danh sách check bắt buộc chỉ được thử trên dữ liệu tự dựng vì nhánh thật hiện chưa có check bắt buộc. Khi sau này bật check bắt buộc, cách đọc có thể lệch mà chưa ai biết.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/nen-gop.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Shape 4 (outcome not pinned): the CLI rename case checks only nang=true without pinning ly_do, so an error path also passes**
+- **Shape 4 (outcome not pinned): the CLI rename case checks only nang=true without pinning ly_do, so an error path also passes (r2)**
   Người dùng thấy gì: Phép thử đổi tên tệp mã thành tài liệu chỉ xem kết quả có là nặng hay không chứ không xem vì lý do gì, nên một lỗi khác cũng làm nó qua. Chủ yếu làm lưới kiểm lỏng hơn mức cần.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 4 (negative assertion alone): «check skipped» in a CI draft run passes when the check job is absent**
+- **Shape 4 (negative assertion alone): «check skipped» in a CI draft run passes when the check job is absent (r2)**
   Người dùng thấy gì: Nếu bước kiểm kiểu và lint bị đổi tên hoặc biến mất, phép đo lượt PR nháp vẫn báo là đã bị bỏ qua đúng. Lỗi cấu hình kiểu đó sẽ không bị phát hiện.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/luot-that.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 3 (string presence while the promise is a relation): «Cổng Bằng chứng» and «vẽ bản đồ» are not tied to «gh pr ready»**
+- **Shape 3 (string presence while the promise is a relation): «Cổng Bằng chứng» and «vẽ bản đồ» are not tied to «gh pr ready» (r2)**
   Người dùng thấy gì: Phép kiểm luật PR nháp chỉ xem các cụm từ có xuất hiện không, chưa kiểm câu nói đúng thời điểm chuyển PR sang sẵn sàng. Một đoạn viết lệch ý vẫn có thể qua.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/claude-md.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Shape 3 (per-AC relation replaced by a global presence check): the ac-thay-khong-con-eval exception uses coKhoi.size === 0**
+- **Shape 3 (per-AC relation replaced by a global presence check): the ac-thay-khong-con-eval exception uses coKhoi.size === 0 (r2)**
   Người dùng thấy gì: Phép kiểm việc thay eval cũ xét sự có mặt của khối eval trong cả báo cáo thay vì từng tiêu chí được trỏ tới, nên có thể chấp nhận hoặc từ chối nhầm. Hiện báo cáo đủ nên chưa sai.
   file: `_acceptance/giam-phut-ci-nhap-t1/rang/thay-boi.mjs`
   severity: low
