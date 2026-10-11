@@ -5,7 +5,7 @@ slug: okr-mau-xoa-cau-hinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, db]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -62,4 +62,9 @@ Bỏ — không có `opportunity.md` (việc sửa lỗi kho, không đi từ C�
 
 - Không ui-check: hồ sơ không có mặt người nhìn (`surfaces: [cli, db]`).
 - Danh sách 6 mảng rút từ `OKR_PROGRAM_MAC_DINH`, không chép tay; spec ghim tập cột `text[]` của `okrProgramConfig` để một cột mới làm phép đo đỏ thay vì lặng lẽ không được gỡ.
-- Known limits:
+- Known limits — chấp nhận tại Cổng Bằng chứng 2026-10-11 (Mạnh), từ mục ngoài hợp đồng của S4:
+  - Ngoài-1: phiên bản cấu hình do người thật lưu SAU người mẫu chép trọn cài đặt của bản mẫu (`setProgram` dựng bản mới từ bản mới nhất); `--xoa` giữ bản đó, chỉ bỏ mã đơn vị mẫu, nên cài đặt AI người mẫu đã bật vẫn còn hiệu lực. Câu «cấu hình đang dùng lùi về bản trước bộ mẫu» trong `docs/setup.md` chỉ đúng khi không ai khác lưu cấu hình sau người mẫu.
+  - Ngoài-2: E1 viết danh sách cột mảng đã quét phải BẰNG tập lấy độc lập; spec chỉ kiểm CHỨA (`okr-mau-cuoc-soan.spec.ts`).
+  - Ngoài-3: ca `omc-gat` có hai con số đếm cùng bằng 1, nên in đảo chỗ «số bản đã xoá» và «số bản đã gỡ mã» vẫn xanh; tám cặp đột biến không cặp nào đảo chỗ.
+  - Ngoài-4: phép đối chiếu cột mảng với truy vấn `udt_name = '_text'` là hằng đúng (truy vấn đó hẹp hơn chính phép quét); thứ thật sự canh cột mới chỉ là sáu cột `*DonVi` ghim tay.
+  - Ngoài-5: ca `omc-tra-lai` đo hàm trả lại chạy giữa lượt, không đo trạng thái `afterAll` để lại (xoá hàng mốc, `ketThucMau`); chiều đỏ của E11 chỉ chạy tay ở S3.
