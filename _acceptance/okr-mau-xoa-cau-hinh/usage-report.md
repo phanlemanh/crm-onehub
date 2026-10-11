@@ -49,3 +49,40 @@ wall: 1386s
 - **claude-haiku-5-5**: 17 agent · 33 calls · out 14,648 · in 66 · cache_read 1,704,003 · cache_create 784,849
 - **claude-opus-5-5**: 3 agent · 37 calls · out 4,249 · in 74 · cache_read 3,715,792 · cache_create 303,483
 
+### S4 round 2 — wf_fd70bb6d-6f0 (16 agent, 20,130 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| synthesize:report | claude-sonnet-5-5 | 4 | 5,979 | 8 | 290,954 | 50 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 2,231 | 4 | 103,810 | 10 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 2,214 | 4 | 103,865 | 66 |
+| judge:E8:spec-alignment | claude-sonnet-5-5 | 5 | 1,592 | 10 | 352,008 | 21 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 1,371 | 4 | 103,810 | 279 |
+| triage | claude-sonnet-5-5 | 2 | 1,166 | 4 | 69,761 | 11 |
+| judge:E8:operational-feasibility | claude-sonnet-5-5 | 5 | 1,077 | 10 | 388,204 | 21 |
+| judge:E8:domain-correctness | claude-sonnet-5-5 | 5 | 1,058 | 10 | 309,927 | 18 |
+| review:bugs | claude-opus-5-5 | 8 | 972 | 16 | 600,209 | 49 |
+| review:conventions | claude-opus-5-5 | 4 | 793 | 8 | 217,445 | 18 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 554 | 4 | 103,808 | 19 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 417 | 4 | 103,826 | 251 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 266 | 4 | 103,835 | 239 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 168 | 4 | 103,804 | 5 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 149 | 4 | 67,621 | 6 |
+| review:measurement | claude-opus-5-5 | 4 | 123 | 8 | 253,449 | 12 |
+
+
+wall: 946s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 7 | 7,221 | 726,758 | 876 | 23:56:53 | 00:11:29 |
+| judge | 3 | 3,727 | 1,050,139 | 23 | 23:56:53 | 23:57:15 |
+| review | 3 | 1,888 | 1,071,103 | 50 | 23:56:53 | 23:57:42 |
+| triage | 1 | 1,166 | 69,761 | 11 | 00:11:30 | 00:11:41 |
+| capture | 1 | 149 | 67,621 | 6 | 00:11:42 | 00:11:47 |
+| synthesize | 1 | 5,979 | 290,954 | 50 | 00:11:49 | 00:12:39 |
+
+- **claude-sonnet-5-5**: 6 agent · 23 calls · out 11,021 · in 46 · cache_read 1,478,475 · cache_create 466,087
+- **claude-haiku-5-5**: 7 agent · 14 calls · out 7,221 · in 28 · cache_read 726,758 · cache_create 282,776
+- **claude-opus-5-5**: 3 agent · 16 calls · out 1,888 · in 32 · cache_read 1,071,103 · cache_create 174,888
+

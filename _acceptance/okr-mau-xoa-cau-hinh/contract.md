@@ -5,7 +5,7 @@ slug: okr-mau-xoa-cau-hinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, db]
-status: implemented
+status: verified
 approved_by:
 approved_at:
 veto_state: mo
