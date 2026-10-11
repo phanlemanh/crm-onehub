@@ -1,43 +1,140 @@
 {
   "feature_plain": "Mỗi lần đẩy PR thôi tốn đủ 45 phút GitHub khi PR còn nháp hoặc chỉ sửa tài liệu; PR sẵn sàng và mọi lượt đẩy lên onehub vẫn chạy đủ như hôm nay.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ có một bộ phân loại quyết mỗi lượt PR là «nặng» hay «nhẹ»: nháp và chỉ-sửa-tài-liệu là nhẹ; chạm thư mục .github, có tệp mã, danh sách tệp rỗng hay bộ phân loại hỏng đều là nặng."},
-    {"id": "AC-2", "p": "Sẽ dùng đúng danh sách tệp miễn hồ sơ (T1) mà cổng nghiệm thu đang dùng, cùng một phép khớp — thêm một dòng vào danh sách ấy là đổi phân loại, không có danh sách thứ hai."},
-    {"id": "AC-3", "p": "Sẽ cho kiểm tra kiểu-lint-test của CI chờ bộ phân loại và chỉ chạy khi lượt là nặng; mọi bước kiểm còn lại giữ y như cấu hình đã đo ở #323."},
-    {"id": "AC-4", "p": "Sẽ cho ô tổng «ci-ok» xanh khi kiểm tra chạy và xanh, hoặc khi bị bỏ qua đúng lý do; đỏ ở mọi trường hợp khác — kể cả khi bộ phân loại hỏng."},
-    {"id": "AC-5", "p": "Sẽ cho lệnh dựng và kiểm tra tác nhân OKR của Acceptance chờ cùng bộ phân loại; job «acceptance gate» giữ nguyên và vẫn chạy ở mọi PR."},
-    {"id": "AC-6", "p": "Sẽ chứng bằng mô phỏng tám tình huống (đẩy lên onehub, release, main, PR nháp, PR chỉ T1, PR sẵn sàng, PR chuyển sẵn sàng, bộ phân loại hỏng) rằng lượt đẩy và PR sẵn sàng chạy đủ đúng các lệnh kiểm như trước."},
-    {"id": "AC-7", "p": "Sẽ chạy lại mọi phép đo đã ký đang soi hai tệp CI và chứng không phép nào đỏ thêm (trừ năm phép được thay ở AC-8)."},
-    {"id": "AC-8", "p": "Sẽ khai năm phép đo cũ đã ký vốn chụp cứng hình dạng CI hôm nay là «thay bởi» vòng này, theo đúng luật của bộ công cụ nghiệm thu, để hai hồ sơ cũ ghim lại được xanh."},
-    {"id": "AC-9", "p": "Sẽ có thước đo phút 7 ngày cho cả hai workflow, tính đúng cách CI1 tính, in phút trung bình mỗi nhánh và phút mỗi lần đẩy của PR chỉ T1 cạnh ngưỡng anh duyệt."},
-    {"id": "AC-10", "p": "Sẽ thêm vào CLAUDE.md luật tạm: phiên mở PR dạng nháp và chuyển sẵn sàng đúng lúc trình thẻ Cổng Bằng chứng."},
-    {"id": "AC-11", "p": "Sẽ chứng trên chính PR của vòng này (mở dạng nháp) rằng GitHub thật bỏ qua job nặng, ô «ci-ok» xanh và «acceptance gate» vẫn chạy."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ có một bộ phân loại quyết mỗi lượt PR là «nặng» hay «nhẹ»: nháp và chỉ-sửa-tài-liệu là nhẹ; chạm thư mục .github, có tệp mã, danh sách tệp rỗng hay bộ phân loại hỏng đều là nặng."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ dùng đúng danh sách tệp miễn hồ sơ (T1) mà cổng nghiệm thu đang dùng, cùng một phép khớp — thêm một dòng vào danh sách ấy là đổi phân loại, không có danh sách thứ hai."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ cho kiểm tra kiểu-lint-test của CI chờ bộ phân loại và chỉ chạy khi lượt là nặng; mọi bước kiểm còn lại giữ y như cấu hình đã đo ở #323."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ cho ô tổng «ci-ok» xanh khi kiểm tra chạy và xanh, hoặc khi bị bỏ qua đúng lý do; đỏ ở mọi trường hợp khác — kể cả khi bộ phân loại hỏng."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ cho lệnh dựng và kiểm tra tác nhân OKR của Acceptance chờ cùng bộ phân loại; job «acceptance gate» giữ nguyên và vẫn chạy ở mọi PR."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ chứng bằng mô phỏng tám tình huống (đẩy lên onehub, release, main, PR nháp, PR chỉ T1, PR sẵn sàng, PR chuyển sẵn sàng, bộ phân loại hỏng) rằng lượt đẩy và PR sẵn sàng chạy đủ đúng các lệnh kiểm như trước."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ chạy lại mọi phép đo đã ký đang soi hai tệp CI và chứng không phép nào đỏ thêm (trừ sáu phép được thay ở AC-8)."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ khai sáu phép đo cũ đã ký vốn chụp cứng hình dạng CI hôm nay là «thay bởi» vòng này, theo đúng luật của bộ công cụ nghiệm thu, để hai hồ sơ cũ ghim lại được xanh."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ có thước đo phút 7 ngày cho cả hai workflow, tính đúng cách CI1 tính, in phút trung bình mỗi nhánh và phút mỗi lần đẩy của PR chỉ T1 cạnh ngưỡng anh duyệt."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ thêm vào CLAUDE.md luật tạm: phiên mở PR dạng nháp và chuyển sẵn sàng đúng lúc trình thẻ Cổng Bằng chứng."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ chứng trên chính PR của vòng này (mở dạng nháp) rằng GitHub thật bỏ qua job nặng, ô «ci-ok» xanh và «acceptance gate» vẫn chạy."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ chứng mọi check bắt buộc của onehub (hôm nay chưa có cái nào) vẫn có một job cùng tên chạy ở PR sẵn sàng — đổi CI không làm PR nào kẹt «chờ check»."
+    }
   ],
   "scope_plain": "Những phần dưới đây cố ý để ngoài vòng này:",
   "wont_do": [
-    {"id": "OOS-1", "p": "KHÔNG đổi cache của lượt kiểm trên máy trước khi đẩy (TURBO_FORCE) — nó đụng luật «chạy mới hết» mà hai hồ sơ đã ký đang đo; để vòng riêng."},
-    {"id": "OOS-2", "p": "KHÔNG viết danh sách bỏ-qua-theo-đường-dẫn thứ hai trong cấu hình GitHub."},
-    {"id": "OOS-3", "p": "KHÔNG bỏ job «acceptance gate» ở PR nháp."},
-    {"id": "OOS-4", "p": "KHÔNG đổi bảo vệ nhánh, check bắt buộc hay cài đặt GitHub nào."},
-    {"id": "OOS-5", "p": "KHÔNG đổi lượt chạy khi đẩy thẳng lên nhánh (onehub, release, main)."},
-    {"id": "OOS-6", "p": "KHÔNG sửa các script cổng nghiệm thu chép từ bộ công cụ — vòng này chỉ gọi chúng."}
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG đổi cache của lượt kiểm trên máy trước khi đẩy (TURBO_FORCE) — nó đụng luật «chạy mới hết» mà hai hồ sơ đã ký đang đo; để vòng riêng."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG viết danh sách bỏ-qua-theo-đường-dẫn thứ hai trong cấu hình GitHub."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG bỏ job «acceptance gate» ở PR nháp."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG đổi bảo vệ nhánh, check bắt buộc hay cài đặt GitHub nào."
+    },
+    {
+      "id": "OOS-5",
+      "p": "KHÔNG đổi lượt chạy khi đẩy thẳng lên nhánh (onehub, release, main)."
+    },
+    {
+      "id": "OOS-6",
+      "p": "KHÔNG sửa các script cổng nghiệm thu chép từ bộ công cụ — vòng này chỉ gọi chúng."
+    }
   ],
   "coverage_plain": [
-    {"i": 0, "p": "Đã xét đủ sáu tình huống kích hoạt: đẩy lên onehub, release, main; PR nháp; PR sẵn sàng; PR vừa chuyển sẵn sàng — đối chiếu với khai báo kích hoạt của hai tệp CI hôm nay."},
-    {"i": 1, "p": "Đã xét sáu kiểu tập tệp: chỉ tài liệu, có .github, có mã, rỗng, mã đổi tên thành tài liệu, tài liệu ở gốc kho — đối chiếu danh sách T1 và các lỗi glob gốc kho đã gặp."},
-    {"i": 2, "p": "Đã xét bốn kết cục của bộ phân loại: nặng, nhẹ, hỏng, không chạy (khi đẩy lên nhánh)."},
-    {"i": 3, "p": "Đã xét bốn kết cục của job nặng: xanh, đỏ, bị huỷ, bị bỏ qua — ô «ci-ok» được thử với mọi tổ hợp (AC-4)."},
-    {"i": 4, "p": "Phần chung: hồ sơ đã ký đang soi CI (AC-7, AC-8), thước phút (AC-9), luật cho phiên (AC-10)."},
-    {"i": 5, "p": "Ánh xạ: bộ phân loại → AC-1, AC-2; job nào chạy → AC-3, AC-5, AC-6; ô ci-ok → AC-4; nháp trên GitHub thật → AC-11. Để sau: check bắt buộc. Không bao giờ: danh sách thứ hai, bỏ acceptance gate ở nháp, coi .github là T1."},
-    {"i": 6, "p": "Chuẩn ngành đối chiếu: tài liệu GitHub về job bị bỏ qua và job phụ thuộc; mẫu «một job phân loại riêng» của dorny/paths-filter."},
-    {"i": 7, "p": "Giả định chờ anh gạch: job phân loại tốn thêm khoảng 1 phút mỗi workflow mỗi lượt PR — chấp nhận được."},
-    {"i": 8, "p": "Giả định chờ anh gạch: «acceptance gate» vẫn chạy ở PR nháp (khoảng 2–3 phút)."}
+    {
+      "i": 0,
+      "p": "Đã xét đủ sáu tình huống kích hoạt: đẩy lên onehub, release, main; PR nháp; PR sẵn sàng; PR vừa chuyển sẵn sàng — đối chiếu với khai báo kích hoạt của hai tệp CI hôm nay."
+    },
+    {
+      "i": 1,
+      "p": "Đã xét sáu kiểu tập tệp: chỉ tài liệu, có .github, có mã, rỗng, mã đổi tên thành tài liệu, tài liệu ở gốc kho — đối chiếu danh sách T1 và các lỗi glob gốc kho đã gặp."
+    },
+    {
+      "i": 2,
+      "p": "Đã xét bốn kết cục của bộ phân loại: nặng, nhẹ, hỏng, không chạy (khi đẩy lên nhánh)."
+    },
+    {
+      "i": 3,
+      "p": "Đã xét bốn kết cục của job nặng: xanh, đỏ, bị huỷ, bị bỏ qua — ô «ci-ok» được thử với mọi tổ hợp (AC-4)."
+    },
+    {
+      "i": 4,
+      "p": "Phần chung: hồ sơ đã ký đang soi CI (AC-7, AC-8), check bắt buộc của onehub (AC-12), thước phút (AC-9), luật cho phiên (AC-10)."
+    },
+    {
+      "i": 5,
+      "p": "Ánh xạ: bộ phân loại → AC-1, AC-2; job nào chạy → AC-3, AC-5, AC-6; ô ci-ok → AC-4; nháp trên GitHub thật → AC-11. Để sau: bật check bắt buộc. Không bao giờ: danh sách thứ hai, bỏ acceptance gate ở nháp, coi .github là T1."
+    },
+    {
+      "i": 6,
+      "p": "Chuẩn ngành đối chiếu: tài liệu GitHub về job bị bỏ qua và job phụ thuộc; mẫu «một job phân loại riêng» của dorny/paths-filter."
+    },
+    {
+      "i": 7,
+      "p": "Giả định chờ anh gạch: job phân loại tốn thêm khoảng 1 phút mỗi workflow mỗi lượt PR — chấp nhận được."
+    },
+    {
+      "i": 8,
+      "p": "Giả định chờ anh gạch: «acceptance gate» vẫn chạy ở PR nháp (khoảng 2–3 phút)."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Phép đo «đủ lệnh» từng tính cả bước của ô ci-ok (bước này buộc phải đổi), và phép đo ci-ok từng kỳ vọng 9 ô xanh trong khi đúng là 7 — mã đúng cũng sẽ bị chấm trượt. Đã sửa: ci-ok đo riêng, kỳ vọng 7 ô liệt kê sẵn."},
-    {"i": 1, "p": "Phép đo trên GitHub thật từng đòi thấy ba ô test bị bỏ qua, nhưng GitHub chỉ hiện một ô khi cả ma trận bị bỏ qua. Đã sửa: đòi mọi ô tên test đều bị bỏ qua, kèm đối chứng trên một lượt thật trước vòng."},
-    {"i": 2, "p": "Mô phỏng từng thiếu luật «job phụ thuộc bị bỏ qua thì bị bỏ theo» và thiếu tình huống «chuyển sẵn sàng» — có thể để lọt một PR gộp khi kiểm tra chưa từng chạy. Đã sửa: thêm luật và tình huống thứ tám, có chiều đỏ."},
-    {"i": 3, "p": "Chuỗi «thay bởi» từng chỉ được đo là có mặt, chưa qua chính luật của bộ công cụ. Đã sửa: gọi thẳng luật đó; trước chữ ký lý do duy nhất phải là «hồ sơ thay chưa ký»."},
-    {"i": 4, "p": "Thước phút từng so ngưỡng tổng hai workflow với số của một workflow và không in dòng PR chỉ T1. Đã sửa: dòng ngưỡng tính trên tổng, thêm dòng T1, đối chứng ≈ 58 trên số tuần 02–08/10."}
+    {
+      "i": 0,
+      "p": "Phép đo «đủ lệnh» từng tính cả bước của ô ci-ok (bước này buộc phải đổi), và phép đo ci-ok từng kỳ vọng 9 ô xanh trong khi đúng là 7 — mã đúng cũng sẽ bị chấm trượt. Đã sửa: ci-ok đo riêng, kỳ vọng 7 ô liệt kê sẵn."
+    },
+    {
+      "i": 1,
+      "p": "Phép đo trên GitHub thật từng đòi thấy ba ô test bị bỏ qua, nhưng GitHub chỉ hiện một ô khi cả ma trận bị bỏ qua. Đã sửa: đòi mọi ô tên test đều bị bỏ qua, kèm đối chứng trên một lượt thật trước vòng."
+    },
+    {
+      "i": 2,
+      "p": "Mô phỏng từng thiếu luật «job phụ thuộc bị bỏ qua thì bị bỏ theo» và thiếu tình huống «chuyển sẵn sàng» — có thể để lọt một PR gộp khi kiểm tra chưa từng chạy. Đã sửa: thêm luật và tình huống thứ tám, có chiều đỏ."
+    },
+    {
+      "i": 3,
+      "p": "Chuỗi «thay bởi» từng chỉ được đo là có mặt, chưa qua chính luật của bộ công cụ. Đã sửa: gọi thẳng luật đó; trước chữ ký lý do duy nhất phải là «hồ sơ thay chưa ký»."
+    },
+    {
+      "i": 4,
+      "p": "Thước phút từng so ngưỡng tổng hai workflow với số của một workflow và không in dòng PR chỉ T1. Đã sửa: dòng ngưỡng tính trên tổng, thêm dòng T1, đối chứng ≈ 58 trên số tuần 02–08/10."
+    }
   ]
 }

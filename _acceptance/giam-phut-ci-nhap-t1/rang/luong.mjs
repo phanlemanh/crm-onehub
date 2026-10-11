@@ -24,8 +24,8 @@ function danhGia(bieuThuc, nc) {
 		if (tk[i] !== x) throw new BieuThucLa(chu);
 		i++;
 	};
-	const sangChu = (v) => (typeof v === "boolean" ? String(v) : String(v ?? ""));
-	const dung = (v) => (typeof v === "boolean" ? v : v !== "" && v != null);
+	const sangChu = (v) => String(v ?? "");
+	const dung = (v) => (v === true || v === false ? v : v !== "" && v != null);
 	function nguyenTo() {
 		const t = tk[i++];
 		if (t === undefined) throw new BieuThucLa(chu);
