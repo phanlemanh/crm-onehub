@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 43241dd2535d5ef9ea0423ecb3ee02380f4db12f
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-11 — ký Cổng 2 trên verdict PASS 12/12 eval (S4 vòng 3, wf_c9f0a576-3df); Ngoài 2, 3, 13, 14, 15 mở hợp đồng mới; Ngoài 1, 4, 5, 6, 7, 9, 10, 11, 12, 16, 17, 20, 22 ghi Known limits; Ngoài 8, 18, 19, 21, 23 chấp nhận không sửa; đồng ý phần cắt; phê các dòng treo.
 ---
 
 # Evidence Report: giam-phut-ci-nhap-t1

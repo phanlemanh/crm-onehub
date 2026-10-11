@@ -5,7 +5,7 @@ slug: giam-phut-ci-nhap-t1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-11T04:32:34Z
 design_doc: _acceptance/giam-phut-ci-nhap-t1/design.md
@@ -130,3 +130,16 @@ chạm tệp T1 bỏ job nặng; PR sẵn sàng khác và mọi lượt push ch�
   lại hai hồ sơ cũ ở đỉnh nhánh là nơi nó được chứng.
 - Hai hồ sơ cũ (`giam-phut-acceptance`, `ci-ma-tran-ba-o`) ghim lại ở đỉnh nhánh sau chữ ký Cổng Bằng chứng — luật thay
   bởi của kit đòi hồ sơ thay đã có chữ ký người.
+- Known limit (Cổng 2, Ngoài-1): Một phép kiểm không dùng AI nhưng bị xếp chung nhóm với các phép kiểm dùng AI để nó chạy tách riêng. Hệ quả là con số «số lần gọi AI» trong tổng kết bị đếm thừa một lần, và nếu phép kiểm này chập chờn ở lượt ghim lại thì nó sẽ đỏ luôn thay vì được chạy lại một lần. Việc tính năng này làm (giảm phút CI cho PR nháp và PR chỉ sửa tài liệu) vẫn đúng; nên ghi thành hạn chế đã biết và mở việc riêng sang bộ kit nghiệm thu để có khoá chạy riêng đúng nghĩa.
+- Known limit (Cổng 2, Ngoài-4): Khi không tải được nhật ký của một lượt chạy, công cụ đo thời gian im lặng bỏ lượt đó và có thể kết luận sai là đã đạt ngưỡng ở lượt chỉ sửa tài liệu. Người quyết sẽ đọc một con số tưởng đáng tin mà thật ra thiếu dữ liệu.
+- Known limit (Cổng 2, Ngoài-5): Phép kiểm xem có check bắt buộc nào bị kẹt hay không có thể báo đạt khi thật ra không đọc được luật bảo vệ nhánh, ví dụ sai kho hoặc thiếu quyền. Hiện kết quả đúng nhưng chỉ do tình cờ.
+- Known limit (Cổng 2, Ngoài-6): Phép đếm số ô của bảng kiểm luôn tự khớp nên không bắt được trường hợp bảng thiếu hoặc thừa ô. Bảng kiểm có thể thiếu ô mà vẫn báo đủ.
+- Known limit (Cổng 2, Ngoài-7): Phép kiểm check bắt buộc có thể báo đạt mà thật ra chưa đọc được luật nào, nếu gọi sai kho hoặc thiếu quyền. Người đọc báo cáo sẽ tin rằng đã kiểm.
+- Known limit (Cổng 2, Ngoài-9): Phép thử đổi tên tệp mã thành tài liệu chỉ xem kết quả có là nặng hay không chứ không xem vì lý do gì, nên một lỗi khác cũng làm nó qua. Chủ yếu làm lưới kiểm lỏng hơn mức cần.
+- Known limit (Cổng 2, Ngoài-10): Nếu bước kiểm kiểu và lint bị đổi tên hoặc biến mất, phép đo lượt PR nháp vẫn báo là đã bị bỏ qua đúng. Lỗi cấu hình kiểu đó sẽ không bị phát hiện.
+- Known limit (Cổng 2, Ngoài-11): Phép kiểm luật PR nháp chỉ xem các cụm từ có xuất hiện không, chưa kiểm câu nói đúng thời điểm chuyển PR sang sẵn sàng. Một đoạn viết lệch ý vẫn có thể qua.
+- Known limit (Cổng 2, Ngoài-12): Phép kiểm việc thay eval cũ xét sự có mặt của khối eval trong cả báo cáo thay vì từng tiêu chí được trỏ tới, nên có thể chấp nhận hoặc từ chối nhầm. Hiện báo cáo đủ nên chưa sai.
+- Known limit (Cổng 2, Ngoài-16): Khi công cụ đo 7 ngày không tải được nhật ký của một lượt, nó coi lượt đó không phải lượt chỉ tài liệu và không báo lỗi. Người quyết có thể nhận kết luận lạc quan hoặc thấy chưa có lượt nào.
+- Known limit (Cổng 2, Ngoài-17): Phép so với bản cũ chỉ xem lệnh đỏ hay không đỏ, không xem đỏ nặng hơn bao nhiêu. Một lệnh vốn đỏ sẵn mà vòng này làm đỏ thêm vẫn bị ghi là đỏ sẵn, nên người duyệt phải đọc nhật ký mới thấy.
+- Known limit (Cổng 2, Ngoài-20): Bài kiểm ngưỡng lượt chỉ tài liệu dùng dữ liệu dựng sẵn và chưa từng đi qua bước đọc nhật ký thật. Lỗi ở bước đọc nhật ký sẽ không bị bài kiểm này bắt.
+- Known limit (Cổng 2, Ngoài-22): Khi đọc luật bảo vệ nhánh bị lỗi 404 vì lý do khác (sai kho, thiếu quyền), công cụ coi như không có check bắt buộc nào và báo ổn. Người duyệt có thể tin nhầm là CI mới không làm kẹt PR.
