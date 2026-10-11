@@ -1374,6 +1374,10 @@ executors:
     k2c_ban_do: cd apps/app && bun test ./test/soan-okr-ly-do-tu-choi.spec.ts -t k2c-ban-do && bun test ./test/messages-guard.spec.ts
     k3c_api: 'bun run test -- "cd apps/api && bun test test/quyet-gop-y-noi-dung-ly-do.spec.ts -t k3c-ma-tran"'
     k3c_api_ngoai: 'bun run test -- "cd apps/api && bun test test/quyet-gop-y-noi-dung-ly-do.spec.ts -t k3c-ngoai"'
+    omx_xoa: 'bun run test -- "cd apps/api && bun test test/okr-mau-cuoc-soan.spec.ts -t omx-xoa"'
+    omx_mo_coi: 'bun run test -- "cd apps/api && bun test test/okr-mau-cuoc-soan.spec.ts -t omx-mo-coi"'
+    omx_nap_lai: 'bun run test -- "cd apps/api && bun test test/okr-mau-cuoc-soan.spec.ts -t omx-nap-lai"'
+    omx_dang_giu: 'bun run test -- "cd apps/api && bun test test/okr-mau-cuoc-soan.spec.ts -t omx-dang-giu"'
     k3c_vi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-k3c.dom.tsx -t k3c-vi
     k3c_en: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-k3c.dom.tsx -t k3c-en
     k3c_san_sang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-k3c.dom.tsx -t k3c-san-sang
@@ -2321,6 +2325,7 @@ executors:
     k3c_mot_nguon: bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/mot-nguon.mjs
     k3c_ranh_gioi: node _acceptance/quyet-gop-y-noi-dung-ly-do/rang/ranh-gioi.mjs
     k3c_dot_bien: bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/dot-bien.mjs
+    omx_dot_bien: bun _acceptance/okr-mau-xoa-cuoc-soan/rang/dot-bien.mjs
     k2d_lanh: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs lanh
     k2d_khai_trung: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs khai-trung
     k2d_goc_rong: bun _acceptance/thuoc-mot-cho-khai-quet-man/rang/do.mjs goc-rong

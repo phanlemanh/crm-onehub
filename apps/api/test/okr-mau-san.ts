@@ -28,7 +28,7 @@ export async function laKhoThu(): Promise<void> {
 export async function lamSachOkr(): Promise<void> {
 	await laKhoThu();
 	await db.$executeRawUnsafe(
-		'TRUNCATE "okrCycle", "okrTrail", "okrCheckInSession", "okrDeXuat", "okrTomTat", "okrHoiY", "okrHoiYBanTruoc", "okrY", "okrYDongY", "okrChuDe", "okrHoiYHieu" CASCADE',
+		'TRUNCATE "okrCycle", "okrTrail", "okrCheckInSession", "okrDeXuat", "okrCuocSoan", "okrTomTat", "okrHoiY", "okrHoiYBanTruoc", "okrY", "okrYDongY", "okrChuDe", "okrHoiYHieu" CASCADE',
 	);
 }
 

@@ -92,8 +92,20 @@ async function tapMau(tx: Tx) {
 			tx.taiLieuTrang.count({ where: { chuTrangId: tien } }),
 		]);
 	const ids = (ds: { id: string }[]) => ds.map((x) => x.id);
+	const cuocSoan = await tx.okrCuocSoan.findMany({
+		where: {
+			OR: [
+				{ cycleId: tien },
+				{ divisionId: tien },
+				{ departmentId: tien },
+				{ nguoiMoUserId: { in: ids(nguoi) } },
+			],
+		},
+		select: { id: true },
+	});
 	return {
 		nguoi: ids(nguoi),
+		cuocSoan: ids(cuocSoan),
 		boPhan: ids(boPhan),
 		phongBan: ids(phongBan),
 		chuKy: ids(chuKy),
@@ -119,7 +131,11 @@ function bangGiu(loi: Prisma.PrismaClientKnownRequestError): string {
 	return ten || loi.message.split("\n").at(-1) || "khoá ngoại";
 }
 
-export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
+export type DemCuocSoan = { cuocSoan: number; deXuatSoan: number };
+
+export async function xoaTrong(
+	tx: Tx,
+): Promise<(DemBoMau & DemCuocSoan) | null> {
 	const t = await tapMau(tx);
 	const { taiLieu: soTaiLieu, ...danhSach } = t;
 	const tong =
@@ -129,6 +145,11 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 	const C = { in: t.chuKy };
 	const O = { in: t.mucTieu };
 	const K = { in: t.kr };
+	const CS = { in: t.cuocSoan };
+	const deXuatSoan = await tx.okrDeXuat.deleteMany({
+		where: { cuocSoanId: CS },
+	});
+	const cuocSoan = await tx.okrCuocSoan.deleteMany({ where: { id: CS } });
 	const canhKr = await xoaCanhKr(tx, t);
 	const hoiY = await xoaHoiY(tx, t);
 	const phien = await tx.okrCheckInSession.findMany({
@@ -220,6 +241,8 @@ export async function xoaTrong(tx: Tx): Promise<DemBoMau | null> {
 		taiLieu: taiLieu.count,
 		nguoiXem: nguoiXem.count,
 		vet: vet.count,
+		cuocSoan: cuocSoan.count,
+		deXuatSoan: deXuatSoan.count,
 		...canhKr,
 		...hoiY,
 	};
@@ -739,7 +762,9 @@ export async function napBoOkrMau(
 	}
 }
 
-export async function xoaBoOkrMau(db: Db): Promise<DemBoMau | null> {
+export async function xoaBoOkrMau(
+	db: Db,
+): Promise<(DemBoMau & DemCuocSoan) | null> {
 	return trongGiaoDich(db, async (tx) => {
 		await kiemOkrThat(tx);
 		return xoaTrong(tx);
