@@ -45,3 +45,48 @@ wall: 905s
 - **claude-sonnet-5-5**: 4 agent · 11 calls · out 16,507 · in 22 · cache_read 723,999 · cache_create 435,935
 - **claude-haiku-5-5**: 19 agent · 38 calls · out 24,998 · in 76 · cache_read 2,359,519 · cache_create 1,226,082
 
+### S4 round 2 — wf_04270baa-f23 (25 agent, 91,349 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:bugs | claude-opus-5-5 | 29 | 19,433 | 58 | 4,045,333 | 250 |
+| review:measurement | claude-opus-5-5 | 13 | 17,880 | 26 | 1,757,844 | 199 |
+| review:conventions | claude-opus-5-5 | 19 | 12,796 | 38 | 2,274,761 | 158 |
+| synthesize:report | claude-sonnet-5-5 | 6 | 11,387 | 12 | 659,785 | 83 |
+| triage | claude-sonnet-5-5 | 2 | 4,867 | 4 | 95,892 | 38 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 2,646 | 4 | 90,976 | 218 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 2,130 | 4 | 126,045 | 46 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 1,918 | 4 | 125,986 | 10 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 1,746 | 4 | 126,027 | 235 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,743 | 4 | 126,002 | 251 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 1,566 | 4 | 126,026 | 17 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 1,482 | 4 | 126,023 | 9 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 1,133 | 4 | 126,025 | 23 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 1,129 | 4 | 126,026 | 8 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 1,124 | 4 | 126,026 | 10 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 1,031 | 4 | 126,026 | 16 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 1,019 | 4 | 126,028 | 7 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 960 | 4 | 126,027 | 39 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 947 | 4 | 126,041 | 64 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 946 | 4 | 126,026 | 9 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 863 | 4 | 125,984 | 22 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 841 | 4 | 126,011 | 233 |
+| machine:bun _acceptance/giam-phut-ci-nhap-t1/ran | claude-haiku-5-5 | 2 | 759 | 4 | 126,025 | 8 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 669 | 4 | 125,980 | 7 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 334 | 4 | 89,768 | 7 |
+
+
+wall: 933s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| machine | 19 | 24,652 | 2,359,310 | 805 | 05:17:26 | 05:30:50 |
+| review | 3 | 50,109 | 8,077,938 | 251 | 05:17:35 | 05:21:45 |
+| triage | 1 | 4,867 | 95,892 | 38 | 05:30:51 | 05:31:29 |
+| capture | 1 | 334 | 89,768 | 7 | 05:31:29 | 05:31:36 |
+| synthesize | 1 | 11,387 | 659,785 | 83 | 05:31:36 | 05:32:59 |
+
+- **claude-opus-5-5**: 3 agent · 61 calls · out 50,109 · in 122 · cache_read 8,077,938 · cache_create 438,207
+- **claude-sonnet-5-5**: 3 agent · 10 calls · out 16,588 · in 20 · cache_read 845,445 · cache_create 344,750
+- **claude-haiku-5-5**: 19 agent · 38 calls · out 24,652 · in 76 · cache_read 2,359,310 · cache_create 1,226,422
+
