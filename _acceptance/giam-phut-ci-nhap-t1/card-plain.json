@@ -1,5 +1,5 @@
 {
-  "feature_plain": "Mỗi lần đẩy PR thôi tốn đủ 45 phút GitHub khi PR còn nháp hoặc chỉ sửa tài liệu; PR sẵn sàng và mọi lượt đẩy lên onehub vẫn chạy đủ như hôm nay.",
+  "feature_plain": "PR nháp và PR chỉ sửa tài liệu thôi tốn đủ 45 phút GitHub mỗi lần đẩy (còn khoảng 6 phút); PR sẵn sàng và mọi lượt đẩy lên onehub vẫn chạy đủ như trước.",
   "will_do": [
     {
       "id": "AC-1",
