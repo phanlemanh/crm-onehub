@@ -51,10 +51,27 @@ giờ trước mốc), nên không `--moc` thì hạn đã qua và màn `/okr/ho
 Sáu bảng hỏi ý mang mã sinh của cơ sở dữ liệu, không mang `mau-okr-`: `--xoa` tìm
 chúng qua chu kỳ và người mẫu.
 
+Cuộc soạn OKR mở trên bộ mẫu — chu kỳ, bộ phận hay phòng ban mẫu, hoặc do người mẫu mở —
+cùng các đề xuất của nó cũng đi theo `--xoa` và nạp lại. `okrCuocSoan` không có khoá
+ngoại nên lệnh tìm cuộc theo tiền tố `mau-okr-` chứ không theo bộ mẫu đang có: cuộc còn
+sót từ một lần xoá trước cũng bị gỡ và được đếm. Hàng chi phí AI (`aiChiPhi`) của các
+cuộc đó ở lại: đó là tiền đã tiêu thật, và trần chi phí AI của tháng đọc chúng — xoá đi
+thì trần mở lại giả.
+
+Phiên bản cấu hình chương trình OKR (`okrProgramConfig`) mà người mẫu tạo — vd khi
+`le-hai-dang` bật Soạn OKR ở Cài đặt → OKR — cũng đi theo `--xoa` và nạp lại. Lệnh tìm
+chúng theo người tạo: người mẫu đang có, hoặc mã người bắt đầu `mau-okr-`, nên phiên bản
+còn sót từ một lần xoá trước cũng bị gỡ và được đếm. Các phiên bản khác ở lại, chỉ mất mã
+bộ phận hay phòng ban mẫu trong danh sách đơn vị được bật AI (vd «Soạn OKR cho các đơn
+vị»). Mỗi phiên bản là ảnh chụp trọn cấu hình và sản phẩm đọc phiên bản mới nhất, nên
+hệ quả là cấu hình đang dùng lùi về bản cuối trước phiên làm việc với bộ mẫu, hoặc về
+mặc định nếu trước đó chưa có bản nào. Cài đặt do người mẫu bật phải bật lại sau mỗi lần
+nạp lại.
+
 ```sh
 bun run okr:mau                      # nạp, hoặc nạp lại — xoá bộ cũ rồi ghi bộ mới
 bun run okr:mau --moc 2026-11-12     # ghim ngày: tuần 6 là tuần chứa ngày đó
-bun run okr:mau --xoa                # gỡ bộ mẫu, không đụng gì khác
+bun run okr:mau --xoa                # gỡ bộ mẫu; cấu hình OKR lùi về bản trước bộ mẫu, mất mã đơn vị mẫu
 bun run okr:mau --tep <tệp.json>     # nạp một bản công ty khác cùng khuôn
 ```
 
