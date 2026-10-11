@@ -182,27 +182,23 @@
       "ma": "d9",
       "cau_giao": "Phó, thang leo, nhắc hạn xác minh, phạm vi xem theo trang, bậc 2",
       "hang": "T3",
-      "dung_tren": [
-        "ct"
-      ],
+      "dung_tren": [],
       "slug": "chu-trang-va-pham-vi",
       "trang_thai": "để sau",
       "dong": 9,
       "ten": "Để sau",
-      "buoc_ke": "Mở ngay sau chạy thật nếu trung vị duyệt vượt 5 ngày"
+      "buoc_ke": "Để sau; trung vị duyệt của đợt chạy thật (lịch vận hành) vượt 5 ngày là tín hiệu xếp lên trước, không phải điều kiện mở"
     },
     {
       "ma": "d6",
       "cau_giao": "Soát định kỳ, cờ cũ theo hash nguồn, thẻ căn cứ pháp lý, thẻ mâu thuẫn, đồ thị",
       "hang": "T3",
-      "dung_tren": [
-        "ct"
-      ],
+      "dung_tren": [],
       "slug": "bao-tri-trang-luat",
       "trang_thai": "để sau",
       "dong": 6,
       "ten": "Để sau",
-      "buoc_ke": "Quyết bằng số đo chạy thật"
+      "buoc_ke": "Để sau; số đo của đợt chạy thật (lịch vận hành) là tín hiệu xếp lại, không phải điều kiện mở"
     },
     {
       "ma": "l4a",
