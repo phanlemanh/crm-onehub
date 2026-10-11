@@ -68,12 +68,27 @@
       "khoa": "m-1014"
     },
     {
+      "ten": "Kit phát hành mốc kế: gói dieu-phoi (DP1), tác tử chấm chỉ chấm (A1) — dự kiến theo lộ trình kit",
+      "ngay": "2026-10-18",
+      "khoa": "m-1018k"
+    },
+    {
       "ten": "Phòng ban công bố OKR quý 4",
       "ngay": "2026-10-21",
       "loai": "han",
       "ai": "Trưởng phòng ban",
       "hang": [],
       "khoa": "m-1021"
+    },
+    {
+      "ten": "Kit đóng gói Điều phối – Thợ: mở đợt, nối lại đợt, đổi tài khoản bằng một lệnh — dự kiến theo lộ trình kit",
+      "ngay": "2026-10-25",
+      "khoa": "m-1025k"
+    },
+    {
+      "ten": "Đợt thử thứ nhất trên gói dieu-phoi của kit: gỡ scripts/dieu-phoi/ và bốn khối hook, chạy ở quãng lặng",
+      "ngay": "2026-10-26",
+      "khoa": "m-1026"
     },
     {
       "ten": "Phiên nghiệm thu R1",
@@ -741,7 +756,11 @@
       "ten_ngan": "Lý do căn chỉnh",
       "cau_giao": "«Lý do Kara viết cho dòng căn chỉnh ở Soạn OKR đi theo căn chỉnh vào OKR thật»",
       "ghi_chu": "Đầu dãy L1–L4 «lý do căn chỉnh». Chủ kho ký Cổng Đáng L1–L4 ngày 08/10; lý do không bắt buộc. L2–L4 chưa có hồ sơ nên chưa thành hàng. Làn P5.",
-      "buoc_ke": "09/10: Cổng Phạm vi và Cổng 1.5 đã duyệt, đang dựng trên nhánh feat/ly-do-can-chinh-tu-soan"
+      "buoc_ke": "Đã gộp 10/10 08:23 (#348); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        348
+      ]
     },
     {
       "ma": "N0",
@@ -1138,14 +1157,18 @@
       "ten_ngan": "Soạn trong khung",
       "cau_giao": "«Soạn OKR mở trong khung bản ghi như deal, Kara cố định bên phải, bản nháp mở thêm về bên trái»",
       "ghi_chu": "Phiên «OKR soạn nháp UX thống nhất» vào đợt ngày 09/10 thành làn P7; Cổng Đáng ghi build 09/10.",
-      "buoc_ke": "09/10: Cổng Phạm vi đã duyệt, đang dựng trên nhánh feat/soan-okr-trong-khung"
+      "buoc_ke": "Đã gộp 10/10 01:25 (#344); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        344
+      ]
     },
     {
       "ma": "K3",
       "cau_giao": "«Góp ý của Kara trên KR dùng cùng khung và hết các lỗi đã thấy»",
       "hang": "T2",
       "slug": "kara-gop-y-luot-2",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "khoa": "kara-3",
       "ten": "Kara góp ý lượt 2",
       "ten_ngan": "Góp ý lượt 2",
@@ -1156,8 +1179,11 @@
         "KG"
       ],
       "ghi_chu": "Gom bốn hợp đồng mới từ gop-y-dung-cho (Ngoài-11/13/14/15) và các lỗi vùng Kara khảo sát 04/10. Gom (khảo sát 04/10): số ít/số nhiều (G1), focus từ dòng dẫn (G4), câu dòng dẫn (G5), một khuôn ngày giờ (G6), vùng Kara có khung và bớt dấu AI (G7), căn chỉnh có Hoàn tác, không chờ mãi, lỗi không làm vùng biến mất, Nhờ Kara lỗi có phản hồi, lỗi dòng không in câu thô, người phụ trách nhiều KR, ba Known limits Ngoài-1/4/16.",
-      "buoc_ke": "Sau lượt K2",
-      "ngay": "2026-10-04"
+      "buoc_ke": "Đã gộp 09/10 23:20 (#342); còn phiên nghiệm thu",
+      "ngay": "2026-10-04",
+      "pr": [
+        342
+      ]
     },
     {
       "ma": "K4",
@@ -1278,8 +1304,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo»",
       "ghi_chu": "Chủ kho chốt 04/10: tính năng và UX trước, câu chữ sau. Khoảng 30 chỗ «Trợ lý»/«Tác nhân». Ghim khoá mới ở messages-guard.",
-      "buoc_ke": "Sau K4",
-      "trang_thai": "chưa mở",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); sau K4 (đã gộp)",
+      "trang_thai": "để sau",
       "dung_tren": [
         "K4"
       ]
@@ -1345,7 +1371,11 @@
       "ten_ngan": "Zalo hỏi OKR",
       "cau_giao": "«Zalo hỏi OKR không chết lượt — hỏi về KR thì nhận câu trả lời có nghĩa, không nhận «Tôi chưa trả lời được câu này»»",
       "ghi_chu": "Sửa nóng, chủ kho chọn 08/10. Làn P5.",
-      "buoc_ke": "09/10: S4 PASS; chờ chủ kho ký Cổng Bằng chứng khi làn trước chữ ký xanh lại"
+      "buoc_ke": "Đã gộp 09/10 22:37 (#341); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        341
+      ]
     },
     {
       "ma": "H4",
@@ -1394,9 +1424,13 @@
       "ten_ngan": "Ngoại lệ telemetry",
       "cau_giao": "«Ngoại lệ telemetry của bảy mã giai đoạn gốc được khai trong tài liệu và có thước canh»",
       "ghi_chu": "Ngoài-7 ở Cổng Bằng chứng của E1 (09/10) mở thành hàng này. Làn P3.",
-      "buoc_ke": "09/10: hồ sơ đã ký Cổng Bằng chứng; PR #336 đang mở, chờ gộp",
+      "buoc_ke": "Đã gộp 09/10 18:49 (#336); còn phiên nghiệm thu",
       "dung_tren": [
         "E1"
+      ],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        336
       ]
     },
     {
@@ -1471,8 +1505,11 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Deal mới không rơi vào giai đoạn đã lưu trữ»",
       "ghi_chu": "Khảo sát lộ trình 04/10. giai-doan-thoa-thuan Ngoài-6.",
-      "buoc_ke": "Sau 14/10",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp 10/10 00:18 (#345); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        345
+      ]
     },
     {
       "ma": "E5",
@@ -1486,8 +1523,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Màn tác nhân đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng»",
       "ghi_chu": "Khảo sát lộ trình 04/10. #19, #34, #37 bo-dung-khong-ket.",
-      "buoc_ke": "Sau 14/10",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)",
+      "trang_thai": "để sau"
     },
     {
       "ma": "E6",
@@ -1501,8 +1538,11 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Mã đối tác không khớp vẫn có người xử lý; kế hoạch rỗng thêm được bước; thẻ quá hạn báo còn sót»",
       "ghi_chu": "Khảo sát lộ trình 04/10. #38 #39 #40.",
-      "buoc_ke": "Sau 14/10",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp 11/10 05:42 (#360); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        360
+      ]
     },
     {
       "ma": "E7",
@@ -1593,8 +1633,8 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Màn nào đang tải cũng giữ tiêu đề, lỗi tải ở đâu cũng một hình có nút thử lại, và đầu trang không có nút chính tắt mà không nói vì sao»",
       "ghi_chu": "Khảo sát bảy màn 09/10 khi dựng bản mẫu LT1; đích ở docs/design.md mục «Nếp màn trong app». Phạm vi: vòng quay PageShellLoading (39 tệp) → khung xương; bốn khung lỗi (onboarding/danh-muc-table.tsx:231, okr/toan-canh/toan-canh.tsx:86, tai-lieu/loi-tai.tsx:20, okr/trang-thai-okr.tsx:52) → VungTaiLoi đã có trong packages/ui; tiêu đề Tài liệu và OKR dời vào page.tsx; khung chờ Tài liệu (tai-lieu/page.tsx:30) giấu tiêu đề; reminders/page.tsx:58,67 dùng <h2> thô; đầu trang Tài liệu ba nút lệch và chú thích «Chưa bật lưu tệp nguồn» trôi, ở 375 nút đứng trên câu mô tả; Onboarding «Kế hoạch mới» tắt không lý do cùng nút chính thứ hai trong khung trống. Chỉ chạm apps/app.",
-      "buoc_ke": "Đợt sau 14/10, dãy P3 sau E5",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); dãy P3, sau E5",
+      "trang_thai": "để sau"
     },
     {
       "ma": "NM2",
@@ -1608,8 +1648,8 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc»",
       "ghi_chu": "Khảo sát 09/10. Phạm vi: số đếm trong chip thành prop của packages/ui (hôm nay opacity-60 ở onboarding/danh-muc-cong-cu.tsx, text-muted-foreground ở tai-lieu/danh-sach-trang.tsx:193); lọc Tài liệu sang nuqs (danh-sach-trang.tsx:109,184 tự ghép chuỗi); Thoả thuận và Onboarding dùng ViewSwitch. Hai câu cho Cổng Phạm vi: «thẻ trạng thái» chọn một điều khiển (hôm nay menu thả của DataTable ở Thoả thuận, ToggleGroup ở Onboarding, Tabs gạch chân ở OKR và Tài liệu); bảng DataTable trên điện thoại cuộn ngang (Thoả thuận) hay thành thẻ dọc (Tài liệu). Chạm deals-table.tsx nên đứng sau V2.",
-      "buoc_ke": "Đợt sau 14/10, dãy P3 sau NM1; chờ V2 gộp",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); sau NM1 (V2 đã gộp)",
+      "trang_thai": "để sau"
     },
     {
       "ma": "NM3",
@@ -1623,8 +1663,8 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu»",
       "ghi_chu": "Khảo sát 09/10. Bảng nghĩa → tone đã ghi ở docs/design.md mục «Màu trạng thái»; vòng này dời năm ánh xạ tự khai (okr-status.tsx, kara/steps.tsx, attendee-list.tsx, okr/tien-do-kr.tsx, tai-lieu/bang-nguon.tsx) về một chỗ trong packages/ui. kara/steps.tsx thuộc ranh giới các hàng Kara nên đứng sau K6a. Chủ kho chốt 10/10: LT1 thêm trước bảng nghĩa → màu (packages/ui/src/lib/status-tone.ts); NM3 dời năm khu cũ về bảng đó.",
-      "buoc_ke": "Đợt sau 14/10, dãy P3 sau NM2; chờ K6a và LT1 gộp",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); sau NM2 và K6a (LT1 đã gộp)",
+      "trang_thai": "để sau"
     },
     {
       "ma": "V2",
@@ -1637,7 +1677,11 @@
       "ten_ngan": "Một cách cất",
       "cau_giao": "«Một cách cất, một bộ chữ — lưu trữ ở ba bảng CRM luôn có Hoàn tác, bản ghi đã cất mở ra có dải báo và chỉ đọc, Kanban thoả thuận có «Đã lưu trữ»»",
       "ghi_chu": "Theo chuẩn docs/vong-doi.md. Cổng Đáng ký 07/10 cùng 15 hàng khác của đợt. Hai việc ngoài phạm vi ở Cổng Phạm vi (09/10) thành V2a, V2b, chưa có hồ sơ. Làn P2. Mã V2 này khác V2 kanban-viec của lộ trình Việc và Dự án.",
-      "buoc_ke": "09/10: đã dựng xong, chờ phép kiểm S4 trên nhánh feat/vong-doi-mot-cach-cat"
+      "buoc_ke": "Đã gộp 10/10 01:57 (#346); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        346
+      ]
     },
     {
       "ma": "DT1",
@@ -1688,8 +1732,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Ghim lại các hồ sơ đã ký chạy được»",
       "ghi_chu": "E23/E25 so-okr-tu-chay, E7 cap-nhat-tuan-okr, E5 và Ngoài-3 lam-moi-chuyen-viec. Máy tự duyệt phạm vi (veto).",
-      "buoc_ke": "Làm xen",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); làn nợ thước cùng F23, F24",
+      "trang_thai": "để sau"
     },
     {
       "ma": "F9",
@@ -1721,8 +1765,11 @@
       "ngay": "2026-10-06",
       "cau_giao": "«Thước của hồ sơ đã ký neo mốc cố định, không đỏ khi lượt sau gộp vào»",
       "ghi_chu": "Hạt giống 06/10 (#277). Gom tám PR sửa thước của phiên cloud #263–#266, #270–#273 vào một lượt ghim lại.",
-      "buoc_ke": "Chờ chủ kho ký Cổng Đáng; quyết gộp tám PR cloud",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp 10/10 20:07 (#358); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        358
+      ]
     },
     {
       "ma": "F11",
@@ -1753,7 +1800,11 @@
       "ten_ngan": "Chập chờn còn lại",
       "cau_giao": "«Ba ca chập chờn còn lại của bộ thử chạy tất định»",
       "ghi_chu": "Chủ kho mở hàng 08/10 (luật 22 của đợt). Làn P5.",
-      "buoc_ke": "09/10: S4 PASS; chờ chủ kho ký Cổng Bằng chứng"
+      "buoc_ke": "Đã gộp 09/10 21:48 (#340); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        340
+      ]
     },
     {
       "ma": "F18",
@@ -1766,7 +1817,11 @@
       "ten_ngan": "Khoá eve",
       "cau_giao": "«Khoá eve của bài thử không tranh nhau»",
       "ghi_chu": "Ngoài-6/7 ở Cổng Bằng chứng của F11 (08/10) mở thành hàng này. Làn P5.",
-      "buoc_ke": "09/10: hồ sơ đã ký Cổng Bằng chứng trên nhánh fix/khoa-eve-khong-tranh; chưa mở PR"
+      "buoc_ke": "Đã gộp 09/10 19:48 (#339); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        339
+      ]
     },
     {
       "ma": "F12",
@@ -1780,8 +1835,11 @@
       "ngay": "2026-10-06",
       "cau_giao": "«Eval gọi model thật chỉ chạy khi đầu vào đổi; chấm theo biên, không ngưỡng cứng sát điểm đo»",
       "ghi_chu": "Hạt giống 06/10 (#277). Số dư Gateway 47,84 → 32,51 USD trong 05–06/10, phần lớn do chạy lại eval không đổi đầu vào.",
-      "buoc_ke": "Chờ chủ kho ký Cổng Đáng",
-      "trang_thai": "chưa mở"
+      "buoc_ke": "Đã gộp 10/10 14:03 (#356); còn phiên nghiệm thu",
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        356
+      ]
     },
     {
       "ma": "F13",
@@ -1884,9 +1942,13 @@
       "ten_ngan": "Thước 7 ngày",
       "cau_giao": "«Thước đo 7 ngày của ci-ma-tran-ba-o đọc đúng các lượt CI của PR vào onehub, chạy được bằng đúng lệnh ghi trong hồ sơ, và báo lỗi thay vì đoán»",
       "ghi_chu": "Thêm 09/10 theo đề nghị của làn P4; phải gộp trước ngày đo của F21 (mốc 15/10).",
-      "buoc_ke": "09/10: đã dựng xong, chờ phép kiểm S4 trên nhánh feat/thuoc-7-ngay-loc-pr",
+      "buoc_ke": "Đã gộp 09/10 23:51 (#343); còn phiên nghiệm thu",
       "dung_tren": [
         "F21"
+      ],
+      "trang_thai": "đã lên onehub",
+      "pr": [
+        343
       ]
     },
     {
@@ -1906,7 +1968,236 @@
       "pr": [
         335
       ]
+    },
+    {
+      "ma": "K2f",
+      "slug": "khung-soan-chan-lien-ket",
+      "nhom": "tro-ly",
+      "thu_tu": 292.4,
+      "ngay": "2026-10-09",
+      "ten": "Khung soạn chặn liên kết",
+      "ten_ngan": "Chặn liên kết",
+      "cau_giao": "«Khi Kara đang soạn hoặc người dùng gõ dở trong khung, bấm một liên kết trong khung thì được hỏi trước khi rời, chữ đang gõ không mất»",
+      "ghi_chu": "Ngoài-9 ở Cổng Bằng chứng của K2e (09/10, «mở hợp đồng mới»): khung soạn mất phần chặn liên kết của GiuTrangSoan.",
+      "dung_tren": [
+        "K2e"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "L2",
+      "slug": "duong-ly-do-muc-tieu",
+      "nhom": "okr",
+      "thu_tu": 103.1,
+      "ngay": "2026-10-08",
+      "ten": "Đường lý do trên sheet mục tiêu",
+      "ten_ngan": "Lý do trên sheet",
+      "cau_giao": "«Sheet mục tiêu hiện lý do căn chỉnh của từng đường nối lên mục tiêu cha»",
+      "ghi_chu": "Dãy L1–L4 «lý do căn chỉnh», Cổng Đáng ký build 08/10; đọc cột lý do mà L1 (#348) thêm.",
+      "dung_tren": [
+        "L1",
+        "K3"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "L3",
+      "slug": "cay-can-chinh-co-ly-do",
+      "nhom": "okr",
+      "thu_tu": 103.2,
+      "ngay": "2026-10-08",
+      "ten": "Cây căn chỉnh có lý do",
+      "ten_ngan": "Cây có lý do",
+      "cau_giao": "«Cây căn chỉnh hiện lý do của từng đường nối và lọc được các đường «Chưa có lý do»»",
+      "ghi_chu": "Dãy L1–L4, Cổng Đáng ký build 08/10.",
+      "dung_tren": [
+        "L1"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "L4",
+      "slug": "gan-tay-va-kara-co-ly-do",
+      "nhom": "okr",
+      "thu_tu": 103.3,
+      "ngay": "2026-10-08",
+      "ten": "Gắn tay và Kara có lý do",
+      "ten_ngan": "Gắn có lý do",
+      "cau_giao": "«Căn chỉnh gắn bằng tay và căn chỉnh Kara đề xuất đều mang lý do»",
+      "ghi_chu": "Dãy L1–L4, Cổng Đáng ký build 08/10; chạm hộp thoại căn chỉnh và nhóm Kara.",
+      "dung_tren": [
+        "L3",
+        "K3"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "E4b",
+      "slug": "giai-doan-bo-mac-dinh",
+      "nhom": "crm-chung",
+      "thu_tu": 410.1,
+      "ngay": "2026-10-09",
+      "ten": "Giai đoạn bỏ mặc định",
+      "ten_ngan": "Bỏ mặc định",
+      "cau_giao": "«Không đường tạo thoả thuận nào dựa vào giai đoạn mặc định: cột giai đoạn bỏ mặc định ở cơ sở dữ liệu»",
+      "ghi_chu": "Lối A tách khỏi E4 (#345). Chỉ mở khi tro-ly-okr-nen và bo-okr-mau đã gỡ kẹt; khi đó check-types bắt mọi đường tạo thiếu stage.",
+      "dung_tren": [
+        "E4"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "E6b",
+      "slug": "them-buoc-bao-dung",
+      "nhom": "crm-chung",
+      "thu_tu": 420.1,
+      "ngay": "2026-10-11",
+      "ten": "Thêm bước báo đúng",
+      "ten_ngan": "Thêm bước báo đúng",
+      "cau_giao": "«Thêm bước ở kế hoạch báo đúng: danh sách bộ phận không tải được thì nói lý do; số việc quá hạn đếm theo một ngày; bộ phận không có thật trả cùng một lỗi như mọi chỗ khác»",
+      "ghi_chu": "Ba lỗi hành vi E6 (#360) thấy ở review vòng 1 (_acceptance/dieu-phoi-va/review-findings.md: addStep, ô bộ phận trống, conSot). Ghi khi đóng đợt 11/10.",
+      "dung_tren": [
+        "E6"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "NM4",
+      "slug": "chu-man-tieng-viet-khong-tran",
+      "nhom": "crm-chung",
+      "thu_tu": 450.1,
+      "ngay": "2026-10-11",
+      "ten": "Chữ màn tiếng Việt, không tràn",
+      "ten_ngan": "Chữ màn",
+      "cau_giao": "«Breadcrumb đọc tiếng Việt với trình đọc màn hình; mô tả kiểu trường ở Cài đặt › Trường không tràn ở khổ 360»",
+      "ghi_chu": "Hai dòng tồn đọng loại hành vi từ F25 (#355): aria-label tiếng Anh ở packages/ui breadcrumb, tràn ở /settings/fields khổ 360.",
+      "dung_tren": [],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "V2a",
+      "slug": "lien-quan-loc-ban-da-cat",
+      "nhom": "crm-chung",
+      "thu_tu": 455.1,
+      "ngay": "2026-10-09",
+      "ten": "Liên quan lọc bản đã cất",
+      "ten_ngan": "Lọc bản đã cất",
+      "cau_giao": "«Danh sách liên quan trong ngăn bản ghi không lẫn bản đã lưu trữ, kèm «+n đã lưu trữ» để mở xem»",
+      "ghi_chu": "Ngoài phạm vi OOS-1 của V2 (Cổng Phạm vi 09/10): sửa byId ở ba service của API. Làm sau V2d hoan-tac-loat-dung-id (#354, đã gộp).",
+      "dung_tren": [
+        "V2"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "V2b",
+      "slug": "luu-tru-truong-khong-hoi",
+      "nhom": "crm-chung",
+      "thu_tu": 455.2,
+      "ngay": "2026-10-09",
+      "ten": "Lưu trữ trường không hỏi lại",
+      "ten_ngan": "Lưu trữ trường",
+      "cau_giao": "«Lưu trữ một trường thôi hỏi lại và có «Hoàn tác» như mọi chỗ lưu trữ khác»",
+      "ghi_chu": "Ngoài phạm vi OOS-2 của V2 (Cổng Phạm vi 09/10): field-editor.tsx ngoài ranh V2.",
+      "dung_tren": [
+        "V2"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "V2c",
+      "slug": "bo-cuc-hep-ngan-va-kanban",
+      "nhom": "crm-chung",
+      "thu_tu": 455.3,
+      "ngay": "2026-10-09",
+      "ten": "Bố cục hẹp của ngăn và Kanban",
+      "ten_ngan": "Bố cục hẹp",
+      "cau_giao": "«Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp»",
+      "ghi_chu": "Hai lỗi bố cục có từ trước thấy ở E13 của V2 (ngả A, 09/10). Cổng Đáng chờ chủ kho.",
+      "dung_tren": [
+        "V2",
+        "K2e"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "V2e",
+      "slug": "dai-luu-tru-dung-chung",
+      "nhom": "crm-chung",
+      "thu_tu": 455.5,
+      "ngay": "2026-10-09",
+      "ten": "Dải lưu trữ dùng chung",
+      "ten_ngan": "Dải lưu trữ",
+      "cau_giao": "«Dải báo «Đã lưu trữ» và vùng khoá chỉ đọc là một mảnh dùng chung trong packages/ui, như docs/vong-doi.md dặn»",
+      "ghi_chu": "Ngoài-7 ở Cổng Bằng chứng của V2 (09/10).",
+      "dung_tren": [
+        "V2",
+        "V2a"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "V2f",
+      "slug": "hoan-tac-loat-bao-dung",
+      "nhom": "crm-chung",
+      "thu_tu": 455.6,
+      "ngay": "2026-10-11",
+      "ten": "Lưu trữ và hoàn tác loạt báo đúng",
+      "ten_ngan": "Loạt báo đúng",
+      "cau_giao": "«Lưu trữ và hoàn tác hàng loạt báo đúng: lỗi máy chủ không hiện thành «bị bỏ qua», hoàn tác khi mọi bản đã về không báo «chưa hoàn tác được», lỗi từng bản ghi có dòng log»",
+      "ghi_chu": "Ba dòng tồn đọng loại hành vi từ V2d (#354): Ngoài-3, Ngoài-4, Ngoài-7 (_acceptance/hoan-tac-loat-dung-id/contract.md).",
+      "dung_tren": [
+        "V2"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "F23",
+      "slug": "khong-re-theo-ten-thanh-luat-kho",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.1,
+      "ngay": "2026-10-09",
+      "ten": "Không rẽ theo tên thành luật kho",
+      "ten_ngan": "Luật không rẽ tên",
+      "cau_giao": "«Phép kiểm «không rẽ theo tên» chạy một lần như luật kho, không còn là eval phủ cả app làm mọi PR chạm app thành hồ sơ cũ»",
+      "ghi_chu": "E17 của giai-doan-thoa-thuan có paths phủ apps/api, apps/agent, apps/app và packages/db (09/10). Làn nợ thước.",
+      "dung_tren": [],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+    },
+    {
+      "ma": "F24",
+      "slug": "ba-ho-so-do-san",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.2,
+      "ngay": "2026-10-09",
+      "ten": "Hồ sơ đã ký đỏ sẵn",
+      "ten_ngan": "Hồ sơ đỏ sẵn",
+      "cau_giao": "«Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do»",
+      "ghi_chu": "Gốc: ba hồ sơ đỏ sẵn (P8-4, 09/10); nới thêm khoảng 12 hồ sơ thước chết từ F10 và kiểm chéo. Làn nợ thước có hạn mức.",
+      "dung_tren": [
+        "F10"
+      ],
+      "trang_thai": "để sau",
+      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
     }
   ],
-  "da_bac": []
+  "da_bac": [
+    {
+      "ma": "F20",
+      "ly_do": "Đề xuất tách job CI gửi hãng — chủ kho quyết không gửi hãng 09/10 (luật 47); F21 ci-ma-tran-ba-o làm thay trong kho"
+    }
+  ]
 }
