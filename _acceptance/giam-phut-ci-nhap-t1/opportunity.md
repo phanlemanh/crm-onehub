@@ -3,10 +3,10 @@ schema_version: 1
 slug: giam-phut-ci-nhap-t1
 feature: PR nháp và PR chỉ chạm tệp T1 không chạy job nặng của ci.yml và acceptance.yml; ci-ok xanh khi bỏ qua hợp lệ; push giữ nguyên; luật PR nháp trong CLAUDE.md
 owner: phanlemanh@gmail.com
-stage: proposed
-decision:
-decided_by:
-decided_at:
+stage: decided
+decision: build
+decided_by: Phan Le Manh
+decided_at: 2026-10-11T04:08:27Z
 prototype:
   base_commit: 27d47de04
   disposition: không dựng bản thử — PR của chính vòng này mở dạng nháp là lượt chạy thật đầu tiên
@@ -41,10 +41,10 @@ Kho riêng tư, GitHub tính tiền từng phút và làm tròn lên phút cho m
 
 ## Ngưỡng chết / ngưỡng UAT
 
-- [đề xuất] Câu hỏi phép đo trả lời: phút Actions mỗi PR có giảm rõ mà PR sẵn sàng vẫn chạy đủ mọi lệnh kiểm cũ không.
-- [đề xuất] Kết quả nào là SỐNG: Trong 7 ngày sau khi gộp: phút Actions của sự kiện `pull_request` (ci.yml + Acceptance) trung bình mỗi nhánh ≤ 42 (nền ≈ 58); lượt PR chỉ T1 tốn ≤ 8 phút (nền ≈ 45); mọi lệnh kiểm cũ vẫn chạy ở PR sẵn sàng không T1.
-- [đề xuất] Kết quả nào là CHẾT: phút PR trung bình mỗi nhánh > 50, hoặc `onehub` đỏ sau gộp vì lỗi mà job nặng bị bỏ qua ở PR (nháp hay T1) lẽ ra bắt được, hoặc một PR sẵn sàng không T1 thiếu lệnh kiểm.
-- [đề xuất] Timebox: Làm ngay; đo lần đầu 7 ngày sau ngày gộp bằng `bun _acceptance/giam-phut-ci-nhap-t1/rang/do-phut-ci.mjs --tu <ngày gộp> --ngay 7`. Trong khoảng 42–50: iterate (đo tỉ lệ PR nháp).
+- Câu hỏi phép đo trả lời: phút Actions mỗi PR có giảm rõ mà PR sẵn sàng vẫn chạy đủ mọi lệnh kiểm cũ không.
+- Kết quả nào là SỐNG: Trong 7 ngày sau khi gộp: phút Actions của sự kiện `pull_request` (ci.yml + Acceptance) trung bình mỗi nhánh ≤ 42 (nền ≈ 58); lượt PR chỉ T1 tốn ≤ 8 phút (nền ≈ 45); mọi lệnh kiểm cũ vẫn chạy ở PR sẵn sàng không T1.
+- Kết quả nào là CHẾT: phút PR trung bình mỗi nhánh > 50, hoặc `onehub` đỏ sau gộp vì lỗi mà job nặng bị bỏ qua ở PR (nháp hay T1) lẽ ra bắt được, hoặc một PR sẵn sàng không T1 thiếu lệnh kiểm.
+- Timebox: Làm ngay; đo lần đầu 7 ngày sau ngày gộp bằng `bun _acceptance/giam-phut-ci-nhap-t1/rang/do-phut-ci.mjs --tu <ngày gộp> --ngay 7`. Trong khoảng 42–50: iterate (đo tỉ lệ PR nháp).
 
 ## Hạng mục cùng lớp
 
@@ -55,5 +55,4 @@ mốc 25/10) — luật trong `CLAUDE.md` của vòng này là bản tạm tới
 
 ## Quyết định Cổng Đáng
 
-Chờ anh: điền `decision` (build/iterate/park/kill), `decided_by`, `decided_at`, `stage: decided`, và gỡ tiền tố
-`[đề xuất]` ở bốn dòng ngưỡng (sửa số nếu anh nghĩ khác).
+2026-10-11T04:08:27Z, chủ kho: «build» — giữ bốn ngưỡng như đề xuất.
