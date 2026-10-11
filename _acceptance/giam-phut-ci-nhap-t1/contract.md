@@ -5,7 +5,7 @@ slug: giam-phut-ci-nhap-t1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: approved
+status: implemented
 approved_by: Phan Le Manh
 approved_at: 2026-10-11T04:32:34Z
 design_doc: _acceptance/giam-phut-ci-nhap-t1/design.md
