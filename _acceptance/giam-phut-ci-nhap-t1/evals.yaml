@@ -163,8 +163,8 @@ evals:
       bun rang/khong-do-them.mjs: rut tu _acceptance/*/contract.md (status signed-off hoac machine-cleared) va evals.yaml moi
       eval executor script co paths khop .github/workflows/ci.yml hoac acceptance.yml (Bun.Glob), bo eval status not-run va
       bo slug giam-phut-ci-nhap-t1; giai cmd qua _acceptance/config.yaml; evals.yaml khong doc duoc ma nhac .github -> ma 2.
-      Doi chung: tap phai chua lkv_ci, dpvb_cong, kcb_khong_noi_tran, cmtb_phu_goi, gpa_nen_gop va KHONG chua gpa_hinh,
-      gpa_khong_mat_lenh, gpa_ho_so_cu, cmtb_hinh, cmtb_khop_323 (sau khi AC-8 khai thay boi) — lech -> ma 1 «bo rut <khoa>».
+      Doi chung: tap phai chua lkv_ci, dpvb_cong, kcb_khong_noi_tran, cmtb_phu_goi va KHONG chua gpa_hinh,
+      gpa_khong_mat_lenh, gpa_ho_so_cu, gpa_nen_gop, cmtb_hinh, cmtb_khop_323 (sau khi AC-8 khai thay boi) — lech -> ma 1 «bo rut <khoa>».
       Khong chay hld_build_heap va ld_ba_noi_deu_chay (in «bo <khoa>: <ly do>»); dieu kien cua chung do thang: acceptance.yml
       HEAD job build co dung mot buoc run «bun run build», buoc do khong if, khong continue-on-error, NODE_OPTIONS
       --max-old-space-size bang cua buoc check-types trong ci.yml va > 2048. Moi lenh con lai chay tren cay that; ma 0 ->
@@ -188,14 +188,14 @@ evals:
       - "_acceptance/giam-phut-ci-nhap-t1/rang/thay-boi.mjs"
     expected: |
       bun rang/thay-boi.mjs: bang viet truoc {giam-phut-acceptance/E1 -> AC-5, giam-phut-acceptance/E2 -> AC-6,
-      giam-phut-acceptance/E3 -> AC-7, ci-ma-tran-ba-o/E1 -> AC-4, ci-ma-tran-ba-o/E3 -> AC-3}. Doc hai evals.yaml cu bang
+      giam-phut-acceptance/E3 -> AC-7, giam-phut-acceptance/E5 -> AC-12, ci-ma-tran-ba-o/E1 -> AC-4, ci-ma-tran-ba-o/E3 -> AC-3}. Doc hai evals.yaml cu bang
       lib/eval-yaml.cjs (bo doc cua kit): moi eval trong bang co status not-run va superseded_by
       «giam-phut-ci-nhap-t1#<AC>» dung bang; design.md cua ho so nay chua the «<ho so>/<id>» dung rieng (ranh gioi tu) cho ca
-      nam; moi AC duoc tro co trong Criteria cua contract.md va co >= 1 eval khong khai not-run trong evals.yaml cua ho so
+      sau; moi AC duoc tro co trong Criteria cua contract.md va co >= 1 eval khong khai not-run trong evals.yaml cua ho so
       nay; `git diff 27d47de04725bc04d8d6deff870ac16751f3bf69 -- <hai evals.yaml cu>` chi them dung hai dong
       (status, superseded_by) cho moi eval trong bang, khong xoa dong nao. In «dat <ho so>/<id> -> <AC>».
       Round-trip qua chinh luat cua kit: goi chungThayBoi({root, slug, id, conTro}) export tu lib/evidence-core.cjs.
-      (i) Cay that: contract.md cua ho so nay status signed-off -> ca nam ok; status khac -> ca nam {ok: false, lyDo:
+      (i) Cay that: contract.md cua ho so nay status signed-off -> ca sau ok; status khac -> ca nam {ok: false, lyDo:
       ho-so-thay-chua-ky}, khong ly do nao khac. Doi chung duong: ci-ma-tran-ba-o/E5 -> thuoc-7-ngay-loc-pr#AC-4 ra ok.
       (ii) Ban sao tam trong .acceptance-runs/giam-phut-ci-nhap-t1/thay-thu/ (git archive HEAD cua _acceptance lib scripts),
       dat status cua ho so nay thanh signed-off: moi o ra ok, hoac ac-thay-khong-con-eval CHI KHI evidence-report.md cua ho
@@ -263,3 +263,21 @@ evals:
       Chieu do tren du lieu gia (--du-lieu): luot nhap ma check success -> «BAT nang-chay-o-nhap»; mot job test success ->
       «BAT nang-chay-o-nhap»; ci-ok failure -> «BAT ci-ok-do»; acceptance gate skipped -> «BAT bo-luat-kho»; khong job nao
       ten bat dau «test» -> «BAT khong-thay-test». Khong bat -> ma 1.
+
+  - id: E12
+    criterion: AC-12
+    executor: script
+    cmd: config:executors.script.gpct_nen_gop
+    paths:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/nen-gop.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/luong.mjs"
+    expected: |
+      bun rang/nen-gop.mjs: doc gh api repos/{owner}/{repo}/rules/branches/onehub va branches/onehub/protection (404 «Branch
+      not protected» = tap rong, khong phai loi; loi khac -> ma 2); tap check bat buoc = context cua rule
+      required_status_checks cong contexts/checks cua protection. Ten job chay khi PR = jobChay cua moPhong (luong.mjs, ngu
+      canh «PR synchronize», ca hai workflow HEAD), ten o ma tran bung theo matrix.o.ten. Tap bat buoc phai la tap con —
+      thieu -> ma 1 «check bat buoc <ten> khong con job». Doi chung duong: tap ten chua «acceptance gate», «test (api)»,
+      «ci-ok»; bat buoc gia «acceptance gate» va «test (api)», «test (con-lai)» -> du. Chieu do tren du lieu gia: bat buoc
+      «luật kho» -> thieu dung «luật kho» -> «BAT luat-kho-cu»; khong bat -> ma 1.

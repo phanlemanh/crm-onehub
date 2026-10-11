@@ -5,9 +5,7 @@ slug: giam-phut-ci-nhap-t1
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: approved
-approved_by: Phan Le Manh
-approved_at: 2026-10-11T02:06:10Z
+status: draft
 design_doc: _acceptance/giam-phut-ci-nhap-t1/design.md
 ---
 
@@ -17,7 +15,7 @@ design_doc: _acceptance/giam-phut-ci-nhap-t1/design.md
 
 02–08/10 mỗi lần đẩy PR tốn khoảng 45 phút Actions (`ci.yml` 35′, Acceptance 9–10′), kể cả khi PR chỉ sửa tài liệu
 (27/134 PR gộp) và kể cả các lần đẩy lại trong lúc chuẩn bị trình cổng. Vòng này thêm một bộ phân loại: PR nháp và PR chỉ
-chạm tệp T1 bỏ job nặng; PR sẵn sàng khác và mọi lượt push chạy như cũ. Năm eval đã ký chụp cứng hình dạng CI hôm nay
+chạm tệp T1 bỏ job nặng; PR sẵn sàng khác và mọi lượt push chạy như cũ. Sáu eval đã ký chụp cứng hình dạng CI hôm nay
 được khai thay bởi các AC của vòng này (bảng ở design doc). Sha ghim của vòng: `27d47de04725bc04d8d6deff870ac16751f3bf69`.
 
 ## Criteria
@@ -60,12 +58,12 @@ chạm tệp T1 bỏ job nặng; PR sẵn sàng khác và mọi lượt push ch�
   của sha ghim; lệnh đỏ trên cả hai cây được ghi tên kèm nhật ký. Hai lệnh nặng (`hld_build_heap`, `ld_ba_noi_deu_chay`)
   không chạy lại, mà điều kiện của chúng trên workflow được đo thẳng: `build` có đúng một bước `bun run build` không `if`,
   không `continue-on-error`, heap bằng heap của `check-types`.
-- AC-8: Given năm eval cũ ở bảng «Eval cũ thay bởi vòng này» của design doc, When đọc `evals.yaml` của hai hồ sơ cũ, Then
+- AC-8: Given sáu eval cũ ở bảng «Eval cũ thay bởi vòng này» của design doc, When đọc `evals.yaml` của hai hồ sơ cũ, Then
   mỗi eval khai `status: not-run` và `superseded_by` trỏ đúng AC trong bảng; design doc nêu thẻ `<hồ sơ>/<id>` của từng
   eval; mỗi AC được trỏ có ít nhất một eval sống ở `evals.yaml` của vòng này; mọi dòng khác của hai `evals.yaml` cũ giữ
   nguyên so với sha ghim. Hàm `chungThayBoi` của `lib/evidence-core.cjs` (chính luật mà làn ghim lại và lưới trước-merge
-  dùng) phán năm ô: trên cây thật, khi hồ sơ này chưa `signed-off` thì lý do DUY NHẤT là `ho-so-thay-chua-ky`, khi đã ký thì
-  nhận cả năm; trên bản sao tạm đặt hồ sơ này `signed-off`, mọi điều kiện trước `ac-thay-khong-con-eval` đều qua.
+  dùng) phán sáu ô: trên cây thật, khi hồ sơ này chưa `signed-off` thì lý do DUY NHẤT là `ho-so-thay-chua-ky`, khi đã ký thì
+  nhận cả sáu; trên bản sao tạm đặt hồ sơ này `signed-off`, mọi điều kiện trước `ac-thay-khong-con-eval` đều qua.
 - AC-9: Given hồ sơ, When cần đo ngưỡng 7 ngày của Cổng Đáng, Then có `rang/do-phut-ci.mjs` đọc lượt `pull_request` của cả
   hai workflow trong cửa sổ, tính phút bằng chính hàm của `giam-phut-acceptance/rang/do-phut.mjs` (mỗi job làm tròn lên
   phút, job `skipped` 0 phút), in từng workflow (số lượt, tổng phút, số lượt nhẹ/nặng) và dòng ngưỡng trên TỔNG hai workflow
@@ -79,6 +77,10 @@ chạm tệp T1 bỏ job nặng; PR sẵn sàng khác và mọi lượt push ch�
   ít nhất một lượt mỗi workflow mà job phân loại in `ly_do=nhap`, `check`, mọi job tên bắt đầu `test` (ma trận bị bỏ qua
   hiện thành MỘT job chưa bung tên), `lệnh dựng` và `agent-okr-node24` bị bỏ qua, `ci-ok` xanh, và «acceptance gate» đã
   chạy.
+- AC-12: Given luật bảo vệ nhánh `onehub` (rules và branch protection, đọc qua API GitHub; 404 «Branch not protected» là
+  tập rỗng, không phải lỗi), When đọc tập check bắt buộc, Then mọi check bắt buộc đều còn một job cùng tên (tên ô ma trận
+  đã bung) chạy ở PR sẵn sàng không T1 theo mô phỏng của AC-6 — đổi hình CI không làm kẹt PR nào ở «Expected — Waiting for
+  status».
 
 ## Coverage
 
@@ -89,9 +91,9 @@ chạm tệp T1 bỏ job nặng; PR sẵn sàng khác và mọi lượt push ch�
 - Trục C — kết cục phân loại: nặng | nhẹ | hỏng | bỏ qua (push) [thước CE: `result` của job GitHub: success, failure,
   cancelled, skipped]
 - Trục D — kết cục job nặng: success | failure | cancelled | skipped [thước CE: cùng bảng `result`]
-- Cross-cutting: hồ sơ đã ký đo hai tệp workflow (rút bằng lệnh) → AC-7, AC-8; thước ngưỡng → AC-9; luật phiên → AC-10.
+- Cross-cutting: hồ sơ đã ký đo hai tệp workflow (rút bằng lệnh) → AC-7, AC-8; check bắt buộc của `onehub` → AC-12; thước ngưỡng → AC-9; luật phiên → AC-10.
 - Core → AC: A×B×C (bộ phân loại) → AC-1, AC-2; A×C (job nào chạy) → AC-3, AC-5, AC-6; C×D → AC-4; A «PR nháp» trên GitHub
-  thật → AC-11. Later: check bắt buộc của `onehub` (hôm nay không có; CI1 E5 vẫn đo). Never: danh sách `paths-ignore` (danh
+  thật → AC-11. Later: bật check bắt buộc cho `onehub` (hôm nay không có). Never: danh sách `paths-ignore` (danh
   sách thứ hai); bỏ «acceptance gate» ở nháp; tính `.github/**` là T1.
 - [NGÀNH: GitHub Docs — job bị bỏ qua báo `skipped`, job phụ thuộc bị bỏ qua trừ khi `if` có hàm trạng thái] · [NGÀNH:
   `dorny/paths-filter` — lọc job theo tệp đổi trong một job phân loại riêng, cùng khuôn với vòng này].

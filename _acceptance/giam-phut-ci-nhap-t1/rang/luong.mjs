@@ -4,7 +4,7 @@ const HAM_TRANG_THAI = /\b(always|success|failure|cancelled)\(\)/;
 const LENH_PL = ["node --test .github/scripts/test/phan-loai.test.mjs", "node .github/scripts/phan-loai.mjs"];
 const TYPES_MAC_DINH = ["opened", "synchronize", "reopened"];
 
-class BieuThucLa extends Error {}
+export class BieuThucLa extends Error {}
 
 function tachToken(chu) {
 	const re = /\s*(\(\)|\(|\)|&&|\|\||==|!=|!|'[^']*'|[A-Za-z_][A-Za-z0-9_.-]*)/y;
@@ -94,11 +94,12 @@ function kichHoat(wf, nc) {
 	return (wf.on?.pull_request?.types ?? TYPES_MAC_DINH).includes(nc.hanhDong);
 }
 
-function moPhong(wf, nc) {
+export function moPhong(wf, nc) {
 	const ketQua = {};
 	const lenh = [];
 	let ciOkChay = false;
-	if (!kichHoat(wf, nc)) return { chay: false, kiem: [], chuanBi: [], ciOkChay };
+	const jobChay = [];
+	if (!kichHoat(wf, nc)) return { chay: false, kiem: [], chuanBi: [], ciOkChay, jobChay };
 	const conLai = Object.keys(wf.jobs);
 	while (conLai.length) {
 		const ten = conLai.find((t) => [].concat(wf.jobs[t].needs ?? []).every((n) => n in ketQua));
@@ -112,6 +113,7 @@ function moPhong(wf, nc) {
 			ketQua[ten] = { result: "skipped", outputs: {} };
 			continue;
 		}
+		jobChay.push(job.name ?? ten);
 		ketQua[ten] = ten === "phan-loai" ? { result: nc.phanLoai, outputs: nc.nang === "" ? {} : { nang: nc.nang } } : { result: "success", outputs: {} };
 		if (ten === "ci-ok") {
 			ciOkChay = true;
@@ -127,10 +129,10 @@ function moPhong(wf, nc) {
 				lenh.push(r);
 			}
 	}
-	return { chay: true, kiem: lenh.filter((l) => !l.startsWith("bun install")).sort(), chuanBi: [...new Set(lenh.filter((l) => l.startsWith("bun install")))].sort(), ciOkChay };
+	return { chay: true, kiem: lenh.filter((l) => !l.startsWith("bun install")).sort(), chuanBi: [...new Set(lenh.filter((l) => l.startsWith("bun install")))].sort(), ciOkChay, jobChay };
 }
 
-const NGU_CANH = [
+export const NGU_CANH = [
 	{ ten: "push onehub", suKien: "push", nhanh: "onehub" },
 	{ ten: "push release", suKien: "push", nhanh: "release" },
 	{ ten: "push main", suKien: "push", nhanh: "main" },
@@ -173,44 +175,46 @@ function kiemLuong(head, ghim, ghi) {
 	}
 }
 
-const k = new Ket();
-const head = { [WF_CI]: await yamlHead(WF_CI), [WF_ACC]: await yamlHead(WF_ACC) };
-const ghim = { [WF_CI]: yamlTai(SHA_GHIM, WF_CI), [WF_ACC]: yamlTai(SHA_GHIM, WF_ACC) };
-const prGhim = [WF_CI, WF_ACC].flatMap((t) => moPhong(ghim[t], NGU_CANH[3]).kiem);
-k.kiem(["bun run build", "bun run lint:slop", "bun run test -- --filter=api"].every((l) => prGhim.includes(l)), `doi-chung-duong ban ghim PR: ${prGhim.length} lenh`, "ban ghim PR thieu lenh nen");
-k.kiem([WF_CI, WF_ACC].every((t) => ghim[t].on.pull_request.types.includes("ready_for_review")), "doi-chung-duong ready_for_review o ban ghim", "ban ghim khong khai ready_for_review");
-try {
-	kiemLuong(head, ghim, (ok, nhan, ly) => k.kiem(ok, nhan, ly));
-} catch (e) {
-	if (e instanceof BieuThucLa) {
-		console.log(`bieu thuc la: ${e.message}`);
-		process.exit(2);
+if (import.meta.main) {
+	const k = new Ket();
+	const head = { [WF_CI]: await yamlHead(WF_CI), [WF_ACC]: await yamlHead(WF_ACC) };
+	const ghim = { [WF_CI]: yamlTai(SHA_GHIM, WF_CI), [WF_ACC]: yamlTai(SHA_GHIM, WF_ACC) };
+	const prGhim = [WF_CI, WF_ACC].flatMap((t) => moPhong(ghim[t], NGU_CANH[3]).kiem);
+	k.kiem(["bun run build", "bun run lint:slop", "bun run test -- --filter=api"].every((l) => prGhim.includes(l)), `doi-chung-duong ban ghim PR: ${prGhim.length} lenh`, "ban ghim PR thieu lenh nen");
+	k.kiem([WF_CI, WF_ACC].every((t) => ghim[t].on.pull_request.types.includes("ready_for_review")), "doi-chung-duong ready_for_review o ban ghim", "ban ghim khong khai ready_for_review");
+	try {
+		kiemLuong(head, ghim, (ok, nhan, ly) => k.kiem(ok, nhan, ly));
+	} catch (e) {
+		if (e instanceof BieuThucLa) {
+			console.log(`bieu thuc la: ${e.message}`);
+			process.exit(2);
+		}
+		throw e;
 	}
-	throw e;
-}
 
-const DOT_BIEN = [
-	["build-if-bang-true", WF_ACC, (w) => (w.jobs.build.if = "needs.phan-loai.outputs.nang == 'true'"), "push onehub mat lenh: bun run build"],
-	["build-bo-cancelled", WF_ACC, (w) => (w.jobs.build.if = "${{ needs.phan-loai.outputs.nang != 'false' }}"), "push onehub mat lenh: bun run build"],
-	["bo-ready-for-review", WF_CI, (w) => (w.on.pull_request.types = w.on.pull_request.types.filter((t) => t !== "ready_for_review")), "ready_for_review mat lenh: bun run check-types"],
-	["luat-kho-if-false", WF_ACC, (w) => (w.jobs["luat-kho"].if = "false"), "PR nhap mat lenh: node scripts/luat-kho/do-cay.mjs --du-luat"],
-	["check-thua-lenh", WF_CI, (w) => w.jobs.check.steps.push({ run: "echo la" }), "PR synchronize thua lenh: echo la"],
-];
-for (const [ca, tep, sua, mong] of DOT_BIEN) {
-	const ban = structuredClone(head);
-	sua(ban[tep]);
-	const sai = [];
-	kiemLuong(ban, ghim, (ok, _n, ly) => ok || sai.push(...ly.split("; ")));
-	k.bat(ca, sai.includes(mong), sai.slice(0, 3).join("; "));
+	const DOT_BIEN = [
+		["build-if-bang-true", WF_ACC, (w) => (w.jobs.build.if = "needs.phan-loai.outputs.nang == 'true'"), "push onehub mat lenh: bun run build"],
+		["build-bo-cancelled", WF_ACC, (w) => (w.jobs.build.if = "${{ needs.phan-loai.outputs.nang != 'false' }}"), "push onehub mat lenh: bun run build"],
+		["bo-ready-for-review", WF_CI, (w) => (w.on.pull_request.types = w.on.pull_request.types.filter((t) => t !== "ready_for_review")), "ready_for_review mat lenh: bun run check-types"],
+		["luat-kho-if-false", WF_ACC, (w) => (w.jobs["luat-kho"].if = "false"), "PR nhap mat lenh: node scripts/luat-kho/do-cay.mjs --du-luat"],
+		["check-thua-lenh", WF_CI, (w) => w.jobs.check.steps.push({ run: "echo la" }), "PR synchronize thua lenh: echo la"],
+	];
+	for (const [ca, tep, sua, mong] of DOT_BIEN) {
+		const ban = structuredClone(head);
+		sua(ban[tep]);
+		const sai = [];
+		kiemLuong(ban, ghim, (ok, _n, ly) => ok || sai.push(...ly.split("; ")));
+		k.bat(ca, sai.includes(mong), sai.slice(0, 3).join("; "));
+	}
+	const banLa = structuredClone(head);
+	banLa[WF_CI].jobs.check.if = `\${{ !cancelled() && needs.phan-loai.outputs.nang != 'false' || github.ref }}`;
+	let la = false;
+	try {
+		kiemLuong(banLa, ghim, () => true);
+	} catch (e) {
+		la = e instanceof BieuThucLa;
+	}
+	k.bat("bieu-thuc-la", la, "bo danh gia tu choi github.ref");
+	k.kiem(NEU_THEO === head[WF_CI].jobs.check.if, "if dung hang so chung", "lech hang so");
+	k.xong();
 }
-const banLa = structuredClone(head);
-banLa[WF_CI].jobs.check.if = `\${{ !cancelled() && needs.phan-loai.outputs.nang != 'false' || github.ref }}`;
-let la = false;
-try {
-	kiemLuong(banLa, ghim, () => true);
-} catch (e) {
-	la = e instanceof BieuThucLa;
-}
-k.bat("bieu-thuc-la", la, "bo danh gia tu choi github.ref");
-k.kiem(NEU_THEO === head[WF_CI].jobs.check.if, "if dung hang so chung", "lech hang so");
-k.xong();

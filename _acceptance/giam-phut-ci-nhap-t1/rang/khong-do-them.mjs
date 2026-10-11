@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { CHAY, docTai, git, GOC, Ket, SHA_GHIM, SLUG, WF_ACC, WF_CI, yaml } from "./chung.mjs";
@@ -9,8 +9,8 @@ const BO = {
 	hld_build_heap: "chay next build, de lan ghim lai; dieu kien heap do thang ben duoi",
 	ld_ba_noi_deu_chay: "chay tron pre-push, de lan ghim lai; dieu 5 (buoc build khong if, khong continue-on-error) do thang ben duoi",
 };
-const PHAI_CO = ["lkv_ci", "dpvb_cong", "kcb_khong_noi_tran", "cmtb_phu_goi", "gpa_nen_gop"];
-const PHAI_VANG = ["gpa_hinh", "gpa_khong_mat_lenh", "gpa_ho_so_cu", "cmtb_hinh", "cmtb_khop_323"];
+const PHAI_CO = ["lkv_ci", "dpvb_cong", "kcb_khong_noi_tran", "cmtb_phu_goi"];
+const PHAI_VANG = ["gpa_hinh", "gpa_khong_mat_lenh", "gpa_ho_so_cu", "gpa_nen_gop", "cmtb_hinh", "cmtb_khop_323"];
 const BO_DEM = 4 * 1024 * 1024 * 1024;
 
 const trangThai = (chu) => chu.match(/^---\n([\s\S]*?)\n---/)?.[1]?.match(/^status:\s*(\S+)/m)?.[1];
@@ -51,11 +51,18 @@ function chayLenh(lenh, cwd, log) {
 	return { ma: r.status ?? 128, chu: `${r.stdout ?? ""}${r.stderr ?? ""}` };
 }
 
-function dungCay(ten, sua) {
+function dungCay(ten, sua, { caiGoi = false } = {}) {
 	const thu = mkdtempSync(join(tmpdir(), `gpct-${ten}-`));
 	rmSync(thu, { recursive: true, force: true });
 	git("worktree", "add", "--detach", "--quiet", thu, "HEAD");
 	sua(thu);
+	if (caiGoi) {
+		if (existsSync(join(GOC, ".env"))) symlinkSync(join(GOC, ".env"), join(thu, ".env"));
+		for (const l of ["bun install --frozen-lockfile", "bun run db:generate"]) {
+			const r = chayLenh(l, thu, join(CHAY, `khong-do-them-${ten}-${l.split(" ")[2]}.log`));
+			if (r.ma !== 0) throw new Error(`cay ${ten}: «${l}» ma ${r.ma}`);
+		}
+	}
 	return thu;
 }
 
@@ -101,10 +108,18 @@ const dk = dieuKienNang(acc, ci);
 k.kiem(dk.length === 0, "dieu-kien lenh nang tren workflow", dk.join("; "));
 
 mkdirSync(CHAY, { recursive: true });
-const cayGoc = dungCay("cay-goc", (t) => {
-	for (const f of TEP_WF) writeFileSync(join(t, f), docTai(SHA_GHIM, f));
-	rmSync(join(t, ".github/scripts"), { recursive: true, force: true });
-});
+let cayGocDung = null;
+const cayGocLuoi = () => {
+	cayGocDung ??= dungCay(
+		"cay-goc",
+		(t) => {
+			for (const f of TEP_WF) writeFileSync(join(t, f), docTai(SHA_GHIM, f));
+			rmSync(join(t, ".github/scripts"), { recursive: true, force: true });
+		},
+		{ caiGoi: true },
+	);
+	return cayGocDung;
+};
 try {
 	for (const [kk, { lenh: l }] of lenh) {
 		if (BO[kk]) {
@@ -117,12 +132,12 @@ try {
 			k.dat(kk);
 			continue;
 		}
-		const g = chayLenh(l, cayGoc, join(CHAY, `khong-do-them-${kk}-goc.log`));
+		const g = chayLenh(l, cayGocLuoi(), join(CHAY, `khong-do-them-${kk}-goc.log`));
 		if (g.ma === h.ma) console.log(`do san ${kk}: ma ${h.ma} tren ca hai cay (${logH})`);
 		else k.kiem(false, kk, `ma ${h.ma} tren HEAD, ${g.ma} tren cay mang workflow cua sha ghim (${logH})`);
 	}
 } finally {
-	goCay(cayGoc);
+	if (cayGocDung) goCay(cayGocDung);
 }
 
 const lkv = lenh.get("lkv_ci")?.lenh;

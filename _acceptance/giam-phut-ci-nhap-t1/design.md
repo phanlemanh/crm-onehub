@@ -23,13 +23,15 @@ Ngày 11/10/2026 · T2 · nhánh gốc `onehub` · sha ghim của vòng: `27d47d
    `.github/**` dù glob có khớp — đúng án của kit.
 2. `ci.yml` chỉ chạy khi push `main`/`release`, không chạy khi push `onehub`. «Push lên `onehub` giữ nguyên» nghĩa là:
    `acceptance.yml` khi push vẫn chạy đúng `acceptance gate` và `lệnh dựng`, không thêm phút.
-3. Mọi cách bỏ qua job nặng đều làm đỏ năm eval đã ký vốn chụp cứng hình dạng CI hôm nay:
+3. Mọi cách bỏ qua job nặng đều làm đỏ sáu eval đã ký vốn chụp cứng hình dạng CI hôm nay:
    - `giam-phut-acceptance/E1` đòi đúng ba job, `build` không `if` cấp job, `if` của `agent-okr-node24` đúng nguyên chuỗi.
    - `giam-phut-acceptance/E2` chỉ đánh giá được một ngữ pháp biểu thức tối thiểu (`luong.mjs`); biểu thức mới → mã 2.
    - `giam-phut-acceptance/E3` chạy lại mọi eval đã ký có `paths` chạm `acceptance.yml` — kể cả E1, E2 của chính nó — nên
      đỏ theo hai eval trên.
    - `ci-ma-tran-ba-o/E1` đòi đúng ba job `check`, `test`, `ci-ok`, và `ci-ok` phải ĐỎ khi cả hai job `skipped`.
    - `ci-ma-tran-ba-o/E3` so từng khoá với bản đã đo ở #323 (`needs`, `if` cấp job…).
+   - `giam-phut-acceptance/E5` rút tên job chạy khi PR bằng cùng bộ đánh giá `luong.mjs` của CI1, nên cũng thoát vì
+     biểu thức mới. Tìm thấy ở S3 khi chạy phép đo «không đỏ thêm» (AC-7), sau Cổng Phạm vi lần đầu.
    Đường đúng của kit cho ca này là «eval thay bởi» (`status: not-run` + `superseded_by`) — kho đã dùng một lần
    (`thuoc-7-ngay-loc-pr` thay `ci-ma-tran-ba-o/E5`).
 4. Bỏ `TURBO_FORCE` không chỉ là một dòng: `scripts/verify-gate-shape.mjs` từ chối mọi kết quả không phải `MISS`
@@ -116,7 +118,7 @@ và vẽ bản đồ); nháp chỉ chạy job nhẹ; luật tạm tới đề xu
 
 ## Eval cũ thay bởi vòng này
 
-Năm eval dưới đây chụp cứng hình dạng CI mà vòng này đổi có chủ đích. Mỗi eval được khai `status: not-run` +
+Sáu eval dưới đây chụp cứng hình dạng CI mà vòng này đổi có chủ đích. Mỗi eval được khai `status: not-run` +
 `superseded_by` trỏ AC của vòng này; AC đó đo lại phần lời hứa cũ còn đúng. Hai hồ sơ cũ được ghim lại ở đỉnh nhánh
 sau khi vòng này có chữ ký Cổng Bằng chứng.
 
@@ -125,10 +127,11 @@ sau khi vòng này có chữ ký Cổng Bằng chứng.
 | giam-phut-acceptance/E1 | ba job; `acceptance gate` đúng hình; `build` chạy khi push; `agent-okr` chỉ khi PR; concurrency | AC-5 |
 | giam-phut-acceptance/E2 | PR chạy đủ lệnh cũ; push chạy đúng lệnh đã chọn | AC-6 |
 | giam-phut-acceptance/E3 | hồ sơ đã ký đo `acceptance.yml` không đỏ thêm | AC-7 |
+| giam-phut-acceptance/E5 | mọi check bắt buộc của `onehub` còn một job cùng tên chạy khi PR | AC-12 |
 | ci-ma-tran-ba-o/E1 | `ci-ok` chỉ xanh khi job nặng xanh; ba job đúng hình | AC-4 |
 | ci-ma-tran-ba-o/E3 | `check`/`test` giống bản đã đo ở #323 | AC-3 |
 
-Các eval còn lại của hai hồ sơ (`giam-phut-acceptance` E4, E5; `ci-ma-tran-ba-o` E2, E4) giữ nguyên và vẫn chạy.
+Các eval còn lại của hai hồ sơ (`giam-phut-acceptance` E4; `ci-ma-tran-ba-o` E2, E4) giữ nguyên và vẫn chạy.
 
 ## Không làm ở vòng này
 

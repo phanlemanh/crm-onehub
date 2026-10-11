@@ -108,6 +108,8 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.gpa_nen_gop
+    status: not-run
+    superseded_by: giam-phut-ci-nhap-t1#AC-12
     paths:
       - ".github/workflows/acceptance.yml"
       - "_acceptance/giam-phut-acceptance/rang/nen-gop.mjs"

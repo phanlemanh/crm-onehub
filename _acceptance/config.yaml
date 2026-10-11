@@ -1579,6 +1579,7 @@ executors:
     gpct_do_phut_ci: bun _acceptance/giam-phut-ci-nhap-t1/rang/do-phut-ci.mjs --tu 2026-10-02 --ngay 7
     gpct_claude_md: bun _acceptance/giam-phut-ci-nhap-t1/rang/claude-md.mjs
     gpct_luot_that: bun _acceptance/giam-phut-ci-nhap-t1/rang/luot-that.mjs
+    gpct_nen_gop: bun _acceptance/giam-phut-ci-nhap-t1/rang/nen-gop.mjs
     gpa_nen_gop: bun _acceptance/giam-phut-acceptance/rang/nen-gop.mjs
     kts_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-trang-thai-toan-crm/rang/man.mjs"'
     dtg_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dong-thoi-gian-giu-khi-loi/rang/man.mjs"'
