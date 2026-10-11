@@ -1,0 +1,265 @@
+schema_version: 1
+slug: giam-phut-ci-nhap-t1
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.gpct_phan_loai
+    paths:
+      - ".github/scripts/**"
+      - "scripts/pre-merge-check.sh"
+      - "lib/workspace-record.cjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs"
+    expected: |
+      bun rang/phan-loai.mjs (goc kho suy tu vi tri script). Hai lop, ma tran viet truoc, so assert = so o dem luc chay
+      (lech -> ma 1 «so ca lech»):
+      (1) ham quyet dinh export tu .github/scripts/phan-loai.mjs, moi o mot dong «dat <o>»: push/schedule/workflow_dispatch
+          -> nang khong-phai-pr; PR nhap voi {docs/a.md}, {apps/api/x.ts}, {.github/workflows/ci.yml}, {} -> nhe nhap; PR san
+          sang {docs/a.md, AGENTS.md} -> nhe chi-t1; {.github/workflows/ci.yml} -> nang cham-github; {docs/a.md,
+          .github/scripts/x.sh} -> nang cham-github; {docs/a.md, apps/api/x.ts} -> nang co-tep-nang; {} -> nang
+          khong-co-tep; nhap='' (khong phai true) -> xet nhu san sang.
+      (2) CLI that tren kho git tam do MA SINH trong .acceptance-runs/giam-phut-ci-nhap-t1/ (commit goc, nhanh, merge --no-ff
+          de HEAD^1 la goc; config.yaml tam chep t1_skip_globs that): nhanh chi sua docs/x.md -> GITHUB_OUTPUT co
+          «nang=false» va «ly_do=chi-t1», ma 0; nhanh doi ten apps/api/a.ts thanh docs/a.md -> «nang=true» (ten cu vao danh
+          sach); HEAD mot cha -> «nang=true» va ly_do bat dau «loi:»; config.yaml vang -> «nang=true» «loi:»; PATH khong co
+          bash -> «nang=true» «loi:». Doi chung duong: kho tam that su co HEAD hai cha va git diff ra dung tep da sua.
+      (3) node --test .github/scripts/test/phan-loai.test.mjs ma 0.
+      Chieu do cung luot tren ban sao bo phan loai trong .acceptance-runs/giam-phut-ci-nhap-t1/dot-bien/: bo luat .github
+      -> «BAT cham-github» (ci.yml-only ra nhe); bo --no-renames -> «BAT doi-ten»; doi nhanh loi thanh nang=false ->
+      «BAT loi-mo»; nhap so sanh bang truthy thay vi === 'true' -> «BAT nhap-rong». Moi ca dot bien phai lam lop (1) hoac
+      (2) do; khong do -> ma 1 «thuoc hong: <ca>». Ma 0 khi ban that dat va moi ca dot bien bi bat.
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.gpct_mot_nguon
+    paths:
+      - ".github/scripts/**"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/acceptance.yml"
+      - "scripts/pre-merge-check.sh"
+      - "lib/workspace-record.cjs"
+      - "_acceptance/config.yaml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/mot-nguon.mjs"
+    expected: |
+      bun rang/mot-nguon.mjs:
+      (a) voi moi tep cua `git ls-files` cong ba tep tong hop (AGENTS.md o goc, docs/sau/x.md, .github/workflows/ci.yml),
+          ket luan T1 cua bo phan loai (ham laT1 export) bang ket luan cua `bash -c` chay match_globs rut tu
+          scripts/pre-merge-check.sh voi danh sach configList — in «dat ngu-nghia-pre-merge: <n> tep». Doi chung duong:
+          tap T1 khong rong, chua AGENTS.md va CLAUDE.md, khong chua apps/api/package.json.
+      (b) ban sao config tam them glob «tam-moi/**» -> tep tam-moi/a.ts thanh T1, khong sua tep nao duoi .github/ —
+          «dat glob-moi».
+      (c) Bun.YAML doc hai workflow: khoi on.pull_request va on.push khong co khoa paths hay paths-ignore — «dat khong-ds-2».
+      (d) .github/scripts/phan-loai.mjs khong chua chuoi glob nao cua t1_skip_globs (so tung glob bang includes) va co goi
+          configList va match_globs — «dat khong-chep-glob».
+      Chieu do cung luot: ban sao bo phan loai doi sang khop bang regex tu viet (* khong vuot /) -> (a) ma 1 «lech
+      pre-merge: <tep>»; ban sao acceptance.yml them paths-ignore: [docs/**] -> (c) ma 1 «co danh sach thu hai»; ban
+      sao bo phan loai chep cung «docs/**» -> (d) ma 1 «chep glob». Moi ca in «BAT <ca>»; mot ca khong bat -> ma 1.
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.gpct_hinh_ci
+    paths:
+      - ".github/workflows/ci.yml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/hinh.mjs"
+    expected: |
+      bun rang/hinh.mjs ci: doc .github/workflows/ci.yml o HEAD va o sha ghim 27d47de04725bc04d8d6deff870ac16751f3bf69
+      (git show, khong chep tay) bang Bun.YAML. Ma tran viet truoc, moi o «dat <o>» hoac «sai <o>: <ly do>»: tap job dung
+      {phan-loai, check, test, ci-ok}; check va test: needs = phan-loai, if dung nguyen chuoi «${{ !cancelled() &&
+      needs.phan-loai.outputs.nang != 'false' }}»; moi khoa con lai cua check va test (name, runs-on, timeout-minutes,
+      strategy, services, env, steps) bang tung khoa ban ghim; khoi on, concurrency, permissions, env goc bang ban ghim;
+      phan-loai: if «github.event_name == 'pull_request'», outputs.nang tro steps.pl.outputs.nang, buoc checkout co
+      fetch-depth 2, co buoc node --test .github/scripts/test/phan-loai.test.mjs dung TRUOC buoc id pl, buoc pl chay
+      node .github/scripts/phan-loai.mjs voi env SU_KIEN va NHAP. Ma 0 khi moi o dat.
+      Chieu do cung luot tren ban sao YAML: bo needs cua test -> «sai test.needs»; doi if cua check thanh «needs.phan-loai.
+      outputs.nang == 'true'» -> «sai check.if»; doi bo loc o api -> «sai test.strategy»; them paths vao on.pull_request ->
+      «sai on»; dua buoc node --test ra sau buoc pl -> «sai phan-loai.thu-tu». Moi ca «BAT <ca>»; khong bat -> ma 1.
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.gpct_ci_ok
+    paths:
+      - ".github/workflows/ci.yml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/ci-ok.mjs"
+    expected: |
+      bun rang/ci-ok.mjs: lay chuoi run cua buoc duy nhat cua job ci-ok tu ci.yml HEAD (Bun.YAML); kiem needs dung [phan-loai,
+      check, test] va if always(). Thay ${{ needs.phan-loai.result }}, ${{ needs.phan-loai.outputs.nang }},
+      ${{ needs.check.result }}, ${{ needs.test.result }} bang tung to hop cua {success, failure, cancelled, skipped} x
+      {true, false, rong} x {success, failure, cancelled, skipped}^2 (192 o), chay bang bash. Bang chan ly viet truoc trong
+      script, KHONG goi lai cong thuc cua ci.yml: xanh dung khi phan-loai thuoc {success, skipped} va ((check, test) =
+      (success, success) hoac (phan-loai = success, nang = false, check = skipped, test = skipped)). In «dat 192/192», dem
+      so o xanh: ky vong 7, liet ke san trong script — (success|skipped) x (true|false|rong) x (success, success) la 6 o, cong
+      (success, false, skipped, skipped). Lech mot o -> ma 1 goi ten o.
+      Chieu do cung luot tren ban sao YAML: bo dieu kien phan-loai thuoc {success, skipped} -> o (failure, rong, success,
+      success) xanh -> «BAT pl-hong»; bo dieu kien nang = false -> o (success, true, skipped, skipped) xanh -> «BAT
+      bo-qua-khong-loi»; bo if always() -> «BAT ci-ok-bi-bo-qua»; doi buoc thanh «true» -> «BAT hang-dung». Khong bat ->
+      ma 1.
+
+  - id: E5
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.gpct_hinh_acceptance
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - ".github/workflows/ci.yml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/hinh.mjs"
+    expected: |
+      bun rang/hinh.mjs acceptance: doc acceptance.yml o HEAD va o sha ghim 27d47de04725bc04d8d6deff870ac16751f3bf69 bang
+      Bun.YAML. Moi o «dat <o>» hoac «sai <o>»: tap job dung {luat-kho, phan-loai, build, agent-okr-node24}; luat-kho bang
+      tung khoa ban ghim (gom name «acceptance gate», env mo dau DATABASE_URL, khong if cap job, chuoi buoc va cac if
+      «${{ !cancelled() }}»); phan-loai bang tung khoa job phan-loai cua ci.yml HEAD; build: needs phan-loai, if dung chuoi
+      cua AC-3, moi khoa con lai bang ban ghim; agent-okr-node24: needs phan-loai, if dung «${{ github.event_name ==
+      'pull_request' && !cancelled() && needs.phan-loai.outputs.nang != 'false' }}», con lai bang ban ghim; on, concurrency,
+      permissions bang ban ghim. Ma 0 khi moi o dat.
+      Chieu do cung luot tren ban sao: them if vao luat-kho -> «sai luat-kho»; bo «github.event_name == 'pull_request' &&»
+      khoi agent-okr -> «sai agent-okr-node24.if»; doi concurrency.group thanh github.ref -> «sai concurrency»; them buoc
+      «echo x» vao phan-loai cua acceptance.yml -> «sai phan-loai khac ci.yml». Moi ca «BAT <ca>»; khong bat -> ma 1.
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.gpct_luong
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - ".github/workflows/ci.yml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/luong.mjs"
+    expected: |
+      bun rang/luong.mjs: bo danh gia bieu thuc GitHub toi thieu viet trong rang (nhan: github.event_name,
+      needs.<job>.outputs.<k>, needs.<job>.result, !cancelled(), always(), ==, !=, &&, ||, !, ngoac, chuoi '...'; token la
+      -> ma 2 «bieu thuc la: <chuoi>»). Mo phong ca hai workflow (HEAD va sha ghim 27d47de04725bc04d8d6deff870ac16751f3bf69)
+      cho tam ngu canh: push onehub, push release, push main, PR synchronize san sang co tep khong T1 (phan-loai success,
+      nang true), PR ready_for_review (draft false, phan-loai success, nang true), PR phan-loai hong (failure, nang rong), PR
+      chi T1 (success, false), PR nhap (success, false). Luat GitHub viet trong script: workflow kich hoat khi nhanh khop
+      on.push.branches, hoac khi hanh dong thuoc on.pull_request.types (vang types = opened, synchronize, reopened); if khong
+      chua ham trang thai (always, success, failure, cancelled) duoc ghep ngam «success() &&»; success() sai khi mot job
+      trong needs bi bo qua, do hay huy; job khong if ma co needs coi nhu if success(). Lop lenh: CHUAN BI = run bat dau «bun
+      install»; KIEM = moi run khac (trim), lenh co ${{ matrix... }} trai theo ma tran; buoc cua ci-ok KHONG vao da tap (E4 do
+      no), chi doi ci-ok phai chay o moi ngu canh cua ci.yml. So DA TAP: push (ca ba) HEAD bang ban ghim, khong chua
+      «.github/scripts/phan-loai» hay «--filter=agent-okr» o Acceptance; PR synchronize khong T1, PR ready_for_review va PR
+      phan-loai hong: HEAD = ban ghim (PR) cong dung lenh cua job phan-loai; PR chi T1 va PR nhap: dung lenh cua luat-kho va
+      phan-loai. In «dat <ngu canh>: <n> lenh kiem». Doi chung duong: ban ghim o PR khong rong va chua «bun run build», «bun
+      run lint:slop», «bun run test -- --filter=api»; ban ghim khai ready_for_review o ca hai tep.
+      Chieu do cung luot tren ban sao: if cua build thanh «needs.phan-loai.outputs.nang == 'true'» -> «push onehub mat lenh:
+      bun run build»; bo !cancelled() khoi build (con «needs.phan-loai.outputs.nang != 'false'») -> «push onehub mat lenh:
+      bun run build» (success() ngam sai vi phan-loai bi bo qua); bo ready_for_review khoi types cua ci.yml -> «ready_for_review
+      mat lenh: bun run check-types»; them «if: false» vao luat-kho -> «PR nhap mat lenh: node scripts/luat-kho/do-cay.mjs
+      --du-luat»; them lenh «echo la» vao check -> «PR synchronize thua lenh: echo la»; them «|| github.ref» vao if -> ma 2
+      «bieu thuc la». Moi ca «BAT <ca>»; khong bat -> ma 1.
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.gpct_khong_do_them
+    paths:
+      - ".github/workflows/acceptance.yml"
+      - ".github/workflows/ci.yml"
+      - ".github/scripts/**"
+      - "_acceptance/*/evals.yaml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/khong-do-them.mjs"
+    expected: |
+      bun rang/khong-do-them.mjs: rut tu _acceptance/*/contract.md (status signed-off hoac machine-cleared) va evals.yaml moi
+      eval executor script co paths khop .github/workflows/ci.yml hoac acceptance.yml (Bun.Glob), bo eval status not-run va
+      bo slug giam-phut-ci-nhap-t1; giai cmd qua _acceptance/config.yaml; evals.yaml khong doc duoc ma nhac .github -> ma 2.
+      Doi chung: tap phai chua lkv_ci, dpvb_cong, kcb_khong_noi_tran, cmtb_phu_goi, gpa_nen_gop va KHONG chua gpa_hinh,
+      gpa_khong_mat_lenh, gpa_ho_so_cu, cmtb_hinh, cmtb_khop_323 (sau khi AC-8 khai thay boi) — lech -> ma 1 «bo rut <khoa>».
+      Khong chay hld_build_heap va ld_ba_noi_deu_chay (in «bo <khoa>: <ly do>»); dieu kien cua chung do thang: acceptance.yml
+      HEAD job build co dung mot buoc run «bun run build», buoc do khong if, khong continue-on-error, NODE_OPTIONS
+      --max-old-space-size bang cua buoc check-types trong ci.yml va > 2048. Moi lenh con lai chay tren cay that; ma 0 ->
+      «dat <khoa>»; ma khac 0 -> chay cung lenh tren ban git archive HEAD trong .acceptance-runs/giam-phut-ci-nhap-t1/cay-goc/
+      voi hai tep workflow va .github/scripts cua sha ghim: cung ma -> «do san <khoa>» kem duong nhat ky, khac ma -> «sai
+      <khoa>» va ma 1.
+      Chieu do: ban git archive HEAD trong cay-pha/ them «continue-on-error: true» vao buoc luat kho cua acceptance.yml,
+      chay lkv_ci tren ban sao -> ma khac 0 va dau ra co «job khong chan» -> «BAT luat-kho-khong-chan»; them if vao buoc
+      bun run build -> do thang ra «sai build co if» -> «BAT build-if». Khong bat -> ma 1.
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.gpct_thay_boi
+    paths:
+      - "_acceptance/giam-phut-acceptance/evals.yaml"
+      - "_acceptance/ci-ma-tran-ba-o/evals.yaml"
+      - "_acceptance/giam-phut-ci-nhap-t1/design.md"
+      - "_acceptance/giam-phut-ci-nhap-t1/contract.md"
+      - "_acceptance/giam-phut-ci-nhap-t1/evals.yaml"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/thay-boi.mjs"
+    expected: |
+      bun rang/thay-boi.mjs: bang viet truoc {giam-phut-acceptance/E1 -> AC-5, giam-phut-acceptance/E2 -> AC-6,
+      giam-phut-acceptance/E3 -> AC-7, ci-ma-tran-ba-o/E1 -> AC-4, ci-ma-tran-ba-o/E3 -> AC-3}. Doc hai evals.yaml cu bang
+      lib/eval-yaml.cjs (bo doc cua kit): moi eval trong bang co status not-run va superseded_by
+      «giam-phut-ci-nhap-t1#<AC>» dung bang; design.md cua ho so nay chua the «<ho so>/<id>» dung rieng (ranh gioi tu) cho ca
+      nam; moi AC duoc tro co trong Criteria cua contract.md va co >= 1 eval khong khai not-run trong evals.yaml cua ho so
+      nay; `git diff 27d47de04725bc04d8d6deff870ac16751f3bf69 -- <hai evals.yaml cu>` chi them dung hai dong
+      (status, superseded_by) cho moi eval trong bang, khong xoa dong nao. In «dat <ho so>/<id> -> <AC>».
+      Round-trip qua chinh luat cua kit: goi chungThayBoi({root, slug, id, conTro}) export tu lib/evidence-core.cjs.
+      (i) Cay that: contract.md cua ho so nay status signed-off -> ca nam ok; status khac -> ca nam {ok: false, lyDo:
+      ho-so-thay-chua-ky}, khong ly do nao khac. Doi chung duong: ci-ma-tran-ba-o/E5 -> thuoc-7-ngay-loc-pr#AC-4 ra ok.
+      (ii) Ban sao tam trong .acceptance-runs/giam-phut-ci-nhap-t1/thay-thu/ (git archive HEAD cua _acceptance lib scripts),
+      dat status cua ho so nay thanh signed-off: moi o ra ok, hoac ac-thay-khong-con-eval CHI KHI evidence-report.md cua ho
+      so nay chua co khoi eval cho AC duoc tro — moi ly do khac la sai.
+      Chieu do cung luot tren ban sao (ii): tro E1 sang AC-99 -> «sai giam-phut-acceptance/E1» va chungThayBoi ra
+      ac-thay-vang; xoa the ci-ma-tran-ba-o/E3 khoi design -> chungThayBoi ra thay-khong-nhan; sua expected cua mot eval cu
+      -> «sai doi dong khac». Moi ca «BAT <ca>»; khong bat -> ma 1.
+
+  - id: E9
+    criterion: AC-9
+    executor: script
+    cmd: config:executors.script.gpct_do_phut_ci
+    paths:
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/do-phut-ci.mjs"
+      - "_acceptance/giam-phut-acceptance/rang/do-phut.mjs"
+      - "_acceptance/giam-phut-ci-nhap-t1/opportunity.md"
+    expected: |
+      bun rang/do-phut-ci.mjs --tu 2026-10-02 --ngay 7: doc qua gh api cac luot event pull_request cua workflow CI (ci.yml)
+      va Acceptance (acceptance.yml) trong cua so; phut moi luot = phutCuaLuot import tu
+      _acceptance/giam-phut-acceptance/rang/do-phut.mjs (khong viet cach tinh thu hai). In moi workflow: so luot, tong phut,
+      so luot «nhe» (luot co job phan-loai va moi job nang skipped) va «nang». Dong nguong tinh tren TONG hai workflow gop
+      theo head_branch: «nguong: phut PR moi nhanh <tb> (<= <S> SONG, > <C> CHET) <SONG|CHET|o giua|chua du mau>» voi S, C
+      doc tu opportunity.md (khong chep tay); < 10 nhanh -> «chua du mau». Dong T1: luot nhe co log job phan loai mang
+      «ly_do=chi-t1» (gh run view --log --job), phut moi lan day = tong hai workflow cung head_sha, «nguong T1: <n> lan day,
+      lon nhat <m> phut (<= 8) <SONG|CHET|chua co luot>». Doi chung duong tren du lieu that 02-08/10: dong tong ra 52-64
+      phut moi nhanh (nen ≈ 58 cua opportunity.md, lech <= 10%).
+      Chieu do tren du lieu gia (--du-lieu <tep json> trong .acceptance-runs/giam-phut-ci-nhap-t1/): job 61 giay -> 2 phut;
+      job skipped -> 0; luot phan-loai success + check skipped -> dem «nhe»; 12 nhanh ci 25 + acceptance 20 -> «o giua»
+      (khong duoc SONG); 12 nhanh tong 41 -> SONG; 12 nhanh tong 51 -> CHET; mot lan day T1 9 phut -> «CHET» o dong T1; ban
+      sao ham tinh dung round -> ma 1 «lam tron sai». Ma 0 khi du lieu that doc duoc va moi chieu do bat.
+
+  - id: E10
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.gpct_claude_md
+    paths:
+      - "CLAUDE.md"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/claude-md.mjs"
+    expected: |
+      bun rang/claude-md.mjs: tach CLAUDE.md theo tieu de «## »; co dung mot muc chua ca bon chuoi «gh pr create --draft»,
+      «gh pr ready», «Cổng Bằng chứng», «acceptance-gate-kit#301», va trong cung muc co «ghim lại» dung truoc «gh pr ready»
+      trong cung mot cau hoac cau truoc; doan «`ci.yml` nay do OneHub giữ» (luat 47) con nguyen van nhu sha ghim; chay
+      lenh cua ci-ma-tran-ba-o/E4 (giai qua config) ma 0. Chieu do: ban sao xoa «--draft» -> ma 1 «thieu gh pr create
+      --draft»; ban sao xoa doan luat 47 -> ma 1 «mat doan OneHub giu ci.yml». Moi ca «BAT»; khong bat -> ma 1.
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.gpct_luot_that
+    paths:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/acceptance.yml"
+      - ".github/scripts/**"
+      - "_acceptance/giam-phut-ci-nhap-t1/rang/luot-that.mjs"
+    expected: |
+      bun rang/luot-that.mjs: tim PR mo cua nhanh hien tai (gh pr list --head <nhanh> --state open); khong co -> ma 2. Doc cac
+      luot event pull_request cua hai workflow cho nhanh do (gh api actions/runs?branch=...), voi moi luot doc jobs va log
+      cua job «phân loại PR» (gh run view --log --job). Can >= 1 luot ci.yml va >= 1 luot Acceptance thoa: log phan loai co
+      «ly_do=nhap» va «nang=false»; check va MOI job ten bat dau «test» (ma tran bi bo qua o if cap job hien thanh mot job
+      chua bung ten, khong doi ba o) (ci.yml) / «lệnh dựng» va «tác nhân OKR trên Node 24» (Acceptance) co conclusion
+      skipped, va co >= 1 job ten bat dau «test»; ci-ok conclusion success; «acceptance gate» conclusion khac skipped. In
+      run id va head_sha tung luot dat. Doi chung duong: head_sha cua luot dat la commit thuoc PR (gh pr view --json
+      commits); va cung cach khop ten tren mot luot PR san sang that cua onehub truoc vong nay (luot ci.yml cua PR #366) ra
+      dung ba job ten bat dau «test» da bung ten — chung minh cach khop ten chay duoc.
+      Chieu do tren du lieu gia (--du-lieu): luot nhap ma check success -> «BAT nang-chay-o-nhap»; mot job test success ->
+      «BAT nang-chay-o-nhap»; ci-ok failure -> «BAT ci-ok-do»; acceptance gate skipped -> «BAT bo-luat-kho»; khong job nao
+      ten bat dau «test» -> «BAT khong-thay-test». Khong bat -> ma 1.

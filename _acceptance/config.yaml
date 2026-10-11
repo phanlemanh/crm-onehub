@@ -1568,6 +1568,17 @@ executors:
     gpa_khong_mat_lenh: bun _acceptance/giam-phut-acceptance/rang/khong-mat-lenh.mjs
     gpa_ho_so_cu: bun _acceptance/giam-phut-acceptance/rang/ho-so-cu.mjs
     gpa_do_phut: bun _acceptance/giam-phut-acceptance/rang/do-phut.mjs --tu 2026-10-02 --ngay 7
+    gpct_phan_loai: bun _acceptance/giam-phut-ci-nhap-t1/rang/phan-loai.mjs
+    gpct_mot_nguon: bun _acceptance/giam-phut-ci-nhap-t1/rang/mot-nguon.mjs
+    gpct_hinh_ci: bun _acceptance/giam-phut-ci-nhap-t1/rang/hinh.mjs ci
+    gpct_ci_ok: bun _acceptance/giam-phut-ci-nhap-t1/rang/ci-ok.mjs
+    gpct_hinh_acceptance: bun _acceptance/giam-phut-ci-nhap-t1/rang/hinh.mjs acceptance
+    gpct_luong: bun _acceptance/giam-phut-ci-nhap-t1/rang/luong.mjs
+    gpct_khong_do_them: bun _acceptance/giam-phut-ci-nhap-t1/rang/khong-do-them.mjs
+    gpct_thay_boi: bun _acceptance/giam-phut-ci-nhap-t1/rang/thay-boi.mjs
+    gpct_do_phut_ci: bun _acceptance/giam-phut-ci-nhap-t1/rang/do-phut-ci.mjs --tu 2026-10-02 --ngay 7
+    gpct_claude_md: bun _acceptance/giam-phut-ci-nhap-t1/rang/claude-md.mjs
+    gpct_luot_that: bun _acceptance/giam-phut-ci-nhap-t1/rang/luot-that.mjs
     gpa_nen_gop: bun _acceptance/giam-phut-acceptance/rang/nen-gop.mjs
     kts_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kara-trang-thai-toan-crm/rang/man.mjs"'
     dtg_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/dong-thoi-gian-giu-khi-loi/rang/man.mjs"'
