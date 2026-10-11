@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 374fd55e030c089eeaf9bc743e2bd37b9678d840
+verified_commit: b56db0dbc6c0718b641193c42c1936f1a33a777a
 human_signoff: Mạnh 2026-10-11
 ---
 
@@ -200,3 +200,7 @@ none — every multi-run eval is uniform
 
 Round 1: mọi eval xanh; một ghi chú docs/setup.md về `--xoa` cần sửa theo finding t1 (AC-8), đã sửa ở commit 374fd55e0.
 Round 2: chạy lại bảy lệnh suite trên commit 374fd55e030c089eeaf9bc743e2bd37b9678d840, đều xanh; E8 được chấm lại bởi ba judge, đều PASS; các eval còn lại carry-forward từ round 1 vì delta không chạm paths của chúng.
+
+### Re-pin lần 1 — 2026-10-11, do gộp feat/okr-mau-xoa-cuoc-soan và onehub 4e03d1e5a trước khi mở PR
+run_id: repin-20261011T001853Z-54396
+sha: b56db0dbc6c0718b641193c42c1936f1a33a777a · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E8 · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
