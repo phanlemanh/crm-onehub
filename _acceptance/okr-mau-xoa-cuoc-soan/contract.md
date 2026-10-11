@@ -5,7 +5,7 @@ slug: okr-mau-xoa-cuoc-soan
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, db]
-status: implemented
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -27,15 +27,15 @@ Source input: lời giao trong phiên 2026-10-11 · design doc · `docs/setup.md
 
 ## Criteria
 
-- AC-1 (cross-layer): Given bộ mẫu đã nạp, `le-hai-dang` bật soạn cho đúng phòng `mau-okr-pb-kd-bac` qua thủ tục cấu hình thật, `nguyen-thi-lan` mở một cuộc qua `okr.soanMo` thật trên `mau-okr-chu-ky-nam-ke`, và cuộc có hai đề xuất ghi bằng bộ ghi thật của tác tử (một chờ, một đã bác), cùng ba cuộc ghi bằng bộ mở cuộc thật mà mỗi cuộc chỉ một vế trỏ bộ mẫu — chỉ `departmentId`, chỉ `divisionId`, chỉ `nguoiMoUserId` — mỗi cuộc một đề xuất, When chạy `bun run okr:mau --xoa`, Then lệnh thoát 0; không còn hàng `okrCuocSoan` nào có `cycleId`, `divisionId` hay `departmentId` bắt đầu `mau-okr-` hoặc `nguoiMoUserId` là người mẫu (mỗi vế có ca riêng); không còn `okrDeXuat` nào mang mã của bốn cuộc đó; quét mọi cột `id`/`*Id` của kho tìm mã người, bộ phận, phòng ban, chu kỳ, Mục tiêu và KR mẫu (chụp trước khi xoá; tập này không gồm mã cuộc soạn) ra rỗng, trừ đúng một khoá đã khai giới hạn — `okrProgramConfig.createdById` (xem Out of scope); và nạp lại ngay sau đó thoát 0.
-- AC-2: Given cùng kho của AC-1, When `--xoa` chạy xong, Then dòng in bắt đầu «Đã xoá bộ OKR mẫu:» và chứa đúng «4 cuộc soạn OKR với 5 đề xuất soạn».
+- AC-1 (cross-layer): Given bộ mẫu đã nạp, `le-hai-dang` bật soạn cho đúng phòng `mau-okr-pb-kd-bac` qua thủ tục cấu hình thật, `nguyen-thi-lan` mở một cuộc qua `okr.soanMo` thật trên `mau-okr-chu-ky-nam-ke`, và cuộc có hai đề xuất ghi bằng bộ ghi thật của tác tử (một chờ, một đã bác), cùng bốn cuộc ghi bằng bộ mở cuộc thật mà mỗi cuộc chỉ một vế trỏ bộ mẫu — chỉ `departmentId`, chỉ `divisionId`, chỉ `nguoiMoUserId`, chỉ `cycleId` (cuộc cấp OneHub do người ngoài bộ mẫu mở trên chu kỳ mẫu) — mỗi cuộc một đề xuất, When chạy `bun run okr:mau --xoa`, Then lệnh thoát 0; không còn hàng `okrCuocSoan` nào có `cycleId`, `divisionId` hay `departmentId` bắt đầu `mau-okr-` hoặc `nguoiMoUserId` là người mẫu (mỗi vế có ca riêng); không còn `okrDeXuat` nào mang mã của năm cuộc đó; quét mọi cột `id`/`*Id` của kho tìm mã người, bộ phận, phòng ban, chu kỳ, Mục tiêu và KR mẫu (chụp trước khi xoá; tập này không gồm mã cuộc soạn) ra rỗng, trừ đúng một khoá đã khai giới hạn — `okrProgramConfig.createdById` (xem Out of scope); và nạp lại ngay sau đó thoát 0.
+- AC-2: Given cùng kho của AC-1, When `--xoa` chạy xong, Then dòng in bắt đầu «Đã xoá bộ OKR mẫu:» và chứa đúng «5 cuộc soạn OKR với 6 đề xuất soạn».
 - AC-3: Given kho không còn bộ mẫu nhưng còn một cuộc soạn mồ côi trỏ `mau-okr-chu-ky-nam-ke`, `mau-okr-pb-kd-bac` và `nguyen-thi-lan` (đúng hình hàng sót của ca tái hiện, ghi bằng bộ mở cuộc thật) cùng một đề xuất của nó, When chạy `--xoa`, Then lệnh thoát 0, cuộc và đề xuất không còn, dòng in là «Đã xoá bộ OKR mẫu:» có «1 cuộc soạn OKR với 1 đề xuất soạn» — không phải «không có bộ mẫu».
 - AC-4: Given cùng kho của AC-1 có thêm một cuộc soạn ngoài bộ mẫu (chu kỳ, phòng và người mở không mang mã mẫu) với một đề xuất, When chạy `--xoa`, Then cuộc và đề xuất ngoài bộ mẫu còn nguyên từng cột.
 - AC-5: Given bộ mẫu có một cuộc soạn mở qua `okr.soanMo` và đề xuất của nó, When nạp lại (`bun run okr:mau` không cờ), Then lệnh thoát 0, không còn cuộc nào trỏ mã mẫu và không còn đề xuất của cuộc cũ; số hàng các bảng của bộ mẫu bằng lần nạp trước.
 - AC-6: Given cuộc soạn của AC-1 có một hàng chi phí AI (`tinhNang = "okr.soan"`, `taskId` là mã cuộc, `sessionId` là phiên của cuộc) ghi bằng bộ ghi chi phí thật, When chạy `--xoa`, Then hàng chi phí còn nguyên từng cột và tổng chi tiêu AI của tháng (`chiTieuKhung`) bằng đúng trước khi xoá.
 - AC-7: Given bộ mẫu có cuộc soạn và đề xuất, và một thoả thuận ngoài bộ mẫu do người mẫu làm chủ, When chạy `--xoa`, Then lệnh thoát 5 và mọi bảng của kho giống hệt trước, kể cả `okrCuocSoan` và `okrDeXuat`.
 - AC-8 (judgment): Given `docs/setup.md` mục «Bộ OKR mẫu», When người mới đọc, Then họ biết `--xoa` và nạp lại gỡ cuộc soạn trên chu kỳ, đơn vị hay người mẫu cùng đề xuất của chúng (kể cả cuộc sót từ lần xoá trước), và biết hàng chi phí AI của các cuộc đó được giữ vì chúng là tiền đã tiêu và nuôi trần chi phí tháng; và mục không tự đúc từ ghép tiếng Việt cho thuật ngữ kỹ thuật mà `CONTEXT.md` không có.
-- AC-9: Given bảy bản sao phá vật thật — (a) bỏ lệnh xoá `okrCuocSoan`, (b) bỏ lệnh xoá `okrDeXuat` theo mã cuộc, (c) chọn cuộc chỉ theo `cycleId` thuộc danh sách chu kỳ mẫu đang có, bỏ mọi vế tiền tố, (d) thêm lệnh xoá `aiChiPhi` theo mã cuộc, (e) bỏ số cuộc soạn khỏi dòng in, (f) bỏ vế `departmentId`, (g) bỏ vế `nguoiMoUserId` — When chạy phép đo tương ứng trên bản sao, Then mỗi phép đo xanh trước khi phá và đỏ sau khi phá với đúng thông điệp ghim của nó, và tệp thật không đổi.
+- AC-9: Given chín bản sao phá vật thật — (a) bỏ lệnh xoá `okrCuocSoan`, (b) bỏ lệnh xoá `okrDeXuat` theo mã cuộc, (c) chọn cuộc chỉ theo `cycleId` thuộc danh sách chu kỳ mẫu đang có, bỏ mọi vế tiền tố, (d) thêm lệnh xoá `aiChiPhi` theo mã cuộc, (e) bỏ số cuộc soạn khỏi dòng in, (f) bỏ vế `departmentId`, (g) bỏ vế `nguoiMoUserId`, (h) bỏ vế `cycleId`, (i) bỏ vế `divisionId` — When chạy phép đo tương ứng trên bản sao, Then mỗi phép đo xanh trước khi phá và đỏ sau khi phá với đúng thông điệp ghim của nó, và tệp thật không đổi.
 
 ## Coverage
 
@@ -60,3 +60,8 @@ Out of scope.
 - Không ui-check: hồ sơ không có mặt người nhìn (`surfaces: [cli, db]`).
 - Hàng chi phí còn lại trỏ `taskId` của một cuộc đã xoá; không bộ đọc nào đi từ chi phí sang cuộc.
 - Known limits: sau `--xoa`, phiên bản `okrProgramConfig` do người mẫu tạo vẫn còn, `createdById` trỏ người đã xoá, và `aiSoanDonVi` có thể còn mã đơn vị mẫu.
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-11, luật 53):**
+  - Ngoài-1: spec `okr-mau-cuoc-soan` tự chép đoạn dọn của `donSoan()` thay vì gọi nó; đổi cách dọn ở `donSoan` mà không đổi spec này thì có thể sót hàng cho spec kế.
+  - Ngoài-2: vế người mở chọn theo người mẫu còn tồn tại, không theo tiền tố; một cuộc sót chỉ còn dính bộ mẫu qua người mở (chu kỳ và đơn vị không mẫu) không bị gỡ sau khi người mẫu đã đi.
+  - Ngoài-3: chữ của E6 và AC-6 ghi `chiTieuKhung` trên tháng UTC; spec đo `chiTieuThang` trên tháng giờ Việt Nam, đúng khung mà trần chi phí đọc.
+  - Ngoài-4: đề xuất soạn mới có ca cho trạng thái chờ và đã bác; nhận, sửa, bị loại chưa có ca riêng (đường xoá hiện không lọc theo trạng thái).

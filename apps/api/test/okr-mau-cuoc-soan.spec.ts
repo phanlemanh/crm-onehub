@@ -184,6 +184,14 @@ describe("omx-xoa", () => {
 				departmentId: NGOAI.pb,
 				nguoiMoUserId: nguoiMau(TRUONG),
 			});
+			const veChuKy = await cuocTay({
+				nhan: "ve-chu-ky",
+				cycleId: CHU_KY_NAM_KE,
+				level: "onehub",
+				divisionId: null,
+				departmentId: null,
+				nguoiMoUserId: NGOAI.nguoi,
+			});
 			const ngoai = await cuocTay({
 				nhan: "ngoai",
 				cycleId: "ngoai-mau-chu-ky",
@@ -201,7 +209,7 @@ describe("omx-xoa", () => {
 			});
 			const idChi = `${TIEN_TO_TLO}omx-chi`;
 			const thang = thangVN(new Date());
-			const cuocMau = [chinh, vePb, veBp, veNguoi].map((c) => c.id);
+			const cuocMau = [chinh, vePb, veBp, veNguoi, veChuKy].map((c) => c.id);
 
 			const ids = await tapIdMau();
 			const nguoi = ids.filter((id) => id.startsWith(idMau("nguoi", "")));
@@ -222,10 +230,10 @@ describe("omx-xoa", () => {
 				hong(!mangTruoc.cot.includes(cot), `omx: quet mang thieu cot ${cot}`);
 			expect(
 				await db.okrCuocSoan.count({ where: { id: { in: cuocMau } } }),
-			).toBe(4);
+			).toBe(5);
 			expect(
 				await db.okrDeXuat.count({ where: { cuocSoanId: { in: cuocMau } } }),
-			).toBe(5);
+			).toBe(6);
 			const ngoaiTruoc = [
 				...(await chupHang("okrCuocSoan", ngoai.id)),
 				...(await chupDeXuat(ngoai.id)),
@@ -243,6 +251,7 @@ describe("omx-xoa", () => {
 			hong((await conCuoc(vePb.id)) > 0, "omx: con cuoc ve-pb");
 			hong((await conCuoc(veBp.id)) > 0, "omx: con cuoc ve-bp");
 			hong((await conCuoc(veNguoi.id)) > 0, "omx: con cuoc ve-nguoi");
+			hong((await conCuoc(veChuKy.id)) > 0, "omx: con cuoc ve-chu-ky");
 			const conTroMau = await demCuocTroMau(nguoi);
 			hong(conTroMau > 0, `omx: con cuoc soan mau (${conTroMau})`);
 			const conDeXuat = await db.okrDeXuat.count({
@@ -279,7 +288,7 @@ describe("omx-xoa", () => {
 			);
 			hong(
 				!r.ra.startsWith("Đã xoá bộ OKR mẫu:") ||
-					!r.ra.includes("4 cuộc soạn OKR với 5 đề xuất soạn"),
+					!r.ra.includes("5 cuộc soạn OKR với 6 đề xuất soạn"),
 				`omx: dong in thieu dem cuoc soan: ${r.ra}`,
 			);
 

@@ -1,8 +1,6 @@
+import { TRO_LY_OKR } from "../../../apps/agent/agent/lib/okr/config.ts";
 import { nopDeXuatVao } from "../../../apps/agent/agent/lib/okr/nop-de-xuat.ts";
-import {
-	completeTask,
-	noteSession,
-} from "../../../apps/agent/agent/lib/tasks.ts";
+import { noteSession } from "../../../apps/agent/agent/lib/tasks.ts";
 import { VIEC_OKR } from "../../../packages/db/src/agent-tasks.ts";
 import { db } from "../../../packages/db/src/index.ts";
 import { xepViecTroLy } from "../../../packages/db/src/okr-tro-ly.ts";
@@ -41,7 +39,7 @@ export const SAN = {
 	tienToPhien: "gop-y-dung-cho-san-",
 };
 
-function nguCanhCon(phienGoc) {
+export function nguCanhCon(phienGoc) {
 	return {
 		agent: { name: "tro_ly_okr" },
 		channel: {
@@ -53,6 +51,18 @@ function nguCanhCon(phienGoc) {
 			parent: { sessionId: phienGoc, rootSessionId: phienGoc },
 		},
 	};
+}
+
+export function kiemNopXong(kq, viec) {
+	if (kq.ketQua !== "da-ghi") throw new Error(`nop: ${kq.ketQua} — ${kq.lyDo}`);
+	if (
+		!viec ||
+		viec.finishedAt === null ||
+		viec.outcome !== TRO_LY_OKR.ketThuc.daNop
+	)
+		throw new Error(
+			`viec ${viec?.id ?? "?"} khong dong bang ${TRO_LY_OKR.ketThuc.daNop} sau khi nop (${viec?.outcome ?? "chua dong"})`,
+		);
 }
 
 async function nop(objectiveId, nguoiYeuCau, dong) {
@@ -76,8 +86,11 @@ async function nop(objectiveId, nguoiYeuCau, dong) {
 	const phienGoc = `${SAN.tienToPhien}${xep.taskId}`;
 	await noteSession(xep.taskId, phienGoc);
 	const kq = await nopDeXuatVao({ dong }, nguCanhCon(phienGoc));
-	if (!(await completeTask(xep.taskId, "da-nop")))
-		throw new Error(`viec ${xep.taskId} da dong truoc khi nop xong`);
+	const viec = await db.agentTask.findUnique({
+		where: { id: xep.taskId },
+		select: { id: true, finishedAt: true, outcome: true },
+	});
+	kiemNopXong(kq, viec);
 	const hang = await db.okrDeXuat.findMany({
 		where: { taskId: xep.taskId },
 		orderBy: [{ createdAt: "asc" }, { id: "asc" }],
@@ -144,6 +157,9 @@ export async function gieoGopY({ api, quanTri, truong }) {
 	]);
 	const gieoB = await nop(b, truongId, []);
 	const [doiTrong, vietLaiKr1, hoiKr3] = gieoA.ids;
+	console.log(
+		`gieo-gop-y: xong A ${a} (${gieoA.ids.length} dong cho), B ${b} (rong)`,
+	);
 	return {
 		a,
 		b,

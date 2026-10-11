@@ -1525,6 +1525,15 @@ executors:
     dt_man_bang: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t cot-bang && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t ngan-chi-tiet'
     dt_man_moi_gioi: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t goi-y-moi-gioi'
     dt_man_trung: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-ca-nhan.dom.tsx -t trung-giu-chu'
+    dpv_ma_lech: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t ma-lech"'
+    dpv_mach_lien: 'bun run test -- "cd apps/api && DPV_MACH_LIEN=1 bun test test/dieu-phoi-va.spec.ts -t mach-lien-ghi && cd ../agent && DPV_MACH_LIEN=1 bun test test/dieu-phoi-va.spec.ts -t mach-lien-doc"'
+    dpv_nhan_lo: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t nhan-lo"'
+    dpv_khong_trung: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t khong-trung"'
+    dpv_dong_som: 'bun run test -- "cd apps/agent && bun test test/dieu-phoi-va.spec.ts -t dong-som"'
+    dpv_bo_phan_hong: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t bo-phan-hong"'
+    dpv_dem_qua_han: 'bun run test -- "cd apps/api && bun test test/dieu-phoi-va.spec.ts -t dem-qua-han"'
+    dpv_them_buoc_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t "ke-hoach-rong|bo-phan-khac|loi-bo-phan"'
+    dpv_the_qua_han_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dieu-phoi-va.dom.tsx -t the-qua-han'
     h6_doc_tep: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lo-trinh-doc-tep.spec.ts ./test/lo-trinh.dom.tsx ./test/lo-trinh-ngay.spec.ts ./test/proxy-lo-trinh.spec.ts'
     dt2_api: 'bun run test -- "cd apps/api && bun test test/dien-thoai-o-deal-cong-ty.spec.ts"'
     dt2_chon: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/dien-thoai-o-deal-cong-ty.dom.tsx -t chon-nguoi'
@@ -2314,6 +2323,11 @@ executors:
     k2c_dot_bien: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs
     k2c_ranh_gioi: node _acceptance/ly-do-tu-choi-nop-theo-locale/rang/ranh-gioi.mjs
     k2c_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/man.mjs"'
+    k3b_gieo_thu: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/ban-gieo-gop-y-sau-nop/rang/gieo-thu.mjs"'
+    k3b_kiem_nop: bun _acceptance/ban-gieo-gop-y-sau-nop/rang/kiem-nop.mjs
+    k3b_ba_ban_do: bun _acceptance/ban-gieo-gop-y-sau-nop/rang/ba-ban-do.mjs
+    k3b_ranh_gioi: node _acceptance/ban-gieo-gop-y-sau-nop/rang/ranh-gioi.mjs
+    k3b_dot_bien: bun _acceptance/ban-gieo-gop-y-sau-nop/rang/dot-bien.mjs
     k3c_mot_nguon: bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/mot-nguon.mjs
     k3c_ranh_gioi: node _acceptance/quyet-gop-y-noi-dung-ly-do/rang/ranh-gioi.mjs
     k3c_dot_bien: bun _acceptance/quyet-gop-y-noi-dung-ly-do/rang/dot-bien.mjs
@@ -2392,6 +2406,8 @@ executors:
     ldcc_dot_bien: bun _acceptance/ly-do-can-chinh-tu-soan/rang/dot-bien.mjs
     dt_do_man: 'APP_URL=${APP_URL:-http://localhost:3340} API_URL=${API_URL:-http://localhost:3341} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dien-thoai-ca-nhan/rang/do-man.mjs"'
     dt_san_thiet_ke: 'for t in "apps/app/components/crm/record-sheet/quick-add.tsx" "apps/app/app/(app)/[slug]/contacts/create-contact-sheet.tsx" "apps/app/app/(app)/[slug]/contacts/contacts-table.tsx" "apps/app/components/crm/record-sheet/contact-sheet.tsx" "apps/app/app/(app)/[slug]/onboarding/[planId]/them-moi-gioi.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
+    dpv_hoi_quy: 'bun _acceptance/dieu-phoi-va/rang/khong-xoa-expect.mjs --tu-thu && bun _acceptance/dieu-phoi-va/rang/khong-xoa-expect.mjs --moc d0ccad984 && bun run test -- "cd apps/api && bun test test/dieu-phoi-diem-nhan.spec.ts test/han-viec.spec.ts" && cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/ke-hoach-sheet.dom.tsx ./test/moi-phia-ke-hoach.dom.tsx ./test/han-viec.dom.tsx ./test/may-nhac.dom.tsx && cd ../.. && bun run check-types'
+    dpv_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dieu-phoi-va/rang/man.mjs"'
     kcq_lich: "node --test scripts/dieu-phoi/test/lich.test.mjs"
     kcq_tien_do: "node --test scripts/kiem-cheo/test/tien-do.test.mjs"
     kcq_hai_dem: "node --test scripts/kiem-cheo/test/dem.test.mjs"

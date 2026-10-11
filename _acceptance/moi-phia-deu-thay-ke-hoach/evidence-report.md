@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: ef99904ce50e884b7b8a4c26b92d0af993582f38
+verified_commit: b3945503b3e68a2b34b7b99e17a39b90142fc9dd
 human_signoff:
 ---
 
@@ -279,3 +279,19 @@ Round 1: E1–E18 đều PASS ngay lần chạy đầu (baseline red trên diffB
 ### Re-pin lần 1 — 2026-09-22, do gộp onehub (kit 2.18.1) trước PR lượt 2
 run_id: repin-20260922T094919Z-71145
 sha: ef99904ce50e884b7b8a4c26b92d0af993582f38 · suites: 4 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17
+
+### Re-pin lần 2 — 2026-10-10, do E6 dieu-phoi-va them quaHan vao du lieu gia cua ba bai DOM (P3-81) va gop onehub
+run_id: repin-20261010T083254Z-33269
+sha: 34ffea77b4165083c59a91377f8600f5bfbd6356 · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 3 — 2026-10-10, do gop onehub 23f52546 cho PR 360 (E6 dieu-phoi-va)
+run_id: repin-20261010T130910Z-37166
+sha: 708249126b044a702ebb1d9ee2ded8001780da9f · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17 · diff chạm vật đo ngoài làn máy: E17 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-10, do gop onehub d5078b8e (K3c cham okr-gop-y.ts) cho PR 360
+run_id: repin-20261010T134228Z-56891
+sha: 6a097f48c6375365e03375be816aca43768c769c · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 5 — 2026-10-10, do gop onehub 5042d0ce (LT1b cham detail-sheet.tsx) cho PR 360
+run_id: repin-20261010T140306Z-53419
+sha: b3945503b3e68a2b34b7b99e17a39b90142fc9dd · suites: 7 lệnh exit 0 · evals: 17/17 eval máy đạt kỳ vọng · ngoài làn máy: E17 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

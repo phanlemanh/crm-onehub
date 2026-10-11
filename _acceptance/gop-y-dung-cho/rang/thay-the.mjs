@@ -17,6 +17,7 @@ const HO_SO_NAY = "gop-y-dung-cho";
 const DESIGN = "docs/superpowers/specs/2026-10-03-gop-y-dung-cho-design.md";
 const DA_KY = new Set(["signed-off", "machine-cleared", "da-cham-boi-thuc-te"]);
 const MOC_TRUOC = "8d5e174a";
+const MOC_CHAM = "b9cf90a2c50643d6f7da971f0ab4fa1d1dff236a";
 const KHEP_KY =
 	"chạy chung rang/man-khep-ky.mjs với khep-ky-okr/E3 — cảnh báo khi Kara không bật vẫn đúng";
 const MIEN = new Map([
@@ -90,10 +91,29 @@ function doc(rel) {
 	return readFileSync(join(GOC, rel), "utf8");
 }
 
+function docTaiCham(rel) {
+	const kq = spawnSync("git", ["-C", GOC, "show", `${MOC_CHAM}:${rel}`], {
+		encoding: "utf8",
+		maxBuffer: 64 * 1024 * 1024,
+	});
+	return kq.status === 0 ? kq.stdout : null;
+}
+
+function hoSoTaiCham() {
+	const kq = spawnSync(
+		"git",
+		["-C", GOC, "ls-tree", "-d", "--name-only", `${MOC_CHAM}:_acceptance`],
+		{ encoding: "utf8" },
+	);
+	if (kq.status !== 0)
+		throw new Error(`khong doc duoc _acceptance tai moc cham ${MOC_CHAM}`);
+	return kq.stdout.split("\n").filter(Boolean);
+}
+
 function trangThai(hoSo) {
-	const tep = join(GOC, "_acceptance", hoSo, "contract.md");
-	if (!existsSync(tep)) return null;
-	const dau = readFileSync(tep, "utf8").split(/^---$/m)[1] ?? "";
+	const chu = docTaiCham(`_acceptance/${hoSo}/contract.md`);
+	if (chu === null) return null;
+	const dau = chu.split(/^---$/m)[1] ?? "";
 	return /^status:\s*(\S+)/m.exec(dau)?.[1] ?? null;
 }
 
@@ -147,7 +167,7 @@ function donViChay(lenh) {
 				relative(GOC, p),
 			);
 			const rel = ung.find(
-				(p) => existsSync(join(GOC, p)) || docTaiMoc(p) !== null,
+				(p) => docTaiCham(p) !== null || docTaiMoc(p) !== null,
 			);
 			if (rel && LA_TEP_DO.test(rel)) ra.push({ rel, khoi });
 		}
@@ -156,9 +176,7 @@ function donViChay(lenh) {
 }
 
 function mocCuaDonVi({ rel, khoi }) {
-	const nay = existsSync(join(GOC, rel))
-		? readFileSync(join(GOC, rel), "utf8")
-		: null;
+	const nay = docTaiCham(rel);
 	const truoc = docTaiMoc(rel) ?? nay ?? "";
 	const moc = mocTrong(phanKhoi(truoc, khoi));
 	if (nay === null) moc.push(`da xoa ${rel}`);
@@ -186,11 +204,10 @@ function rutHoSo(cauHinh) {
 	const judgment = new Map();
 	const tatCa = new Map();
 	const hong = [];
-	for (const hoSo of readdirSync(join(GOC, "_acceptance"))) {
+	for (const hoSo of hoSoTaiCham()) {
 		if (hoSo === HO_SO_NAY || !DA_KY.has(trangThai(hoSo) ?? "")) continue;
-		const tepEval = join(GOC, "_acceptance", hoSo, "evals.yaml");
-		if (!existsSync(tepEval)) continue;
-		const tho = readFileSync(tepEval, "utf8");
+		const tho = docTaiCham(`_acceptance/${hoSo}/evals.yaml`);
+		if (tho === null) continue;
 		let evals;
 		try {
 			evals = Bun.YAML.parse(tho)?.evals ?? [];
@@ -249,7 +266,13 @@ function soTap(ten, thucTe, bang, chuThieu, chuThua) {
 	return loi;
 }
 
-const cauHinh = Bun.YAML.parse(doc("_acceptance/config.yaml"));
+const cauHinhCham = docTaiCham("_acceptance/config.yaml");
+if (cauHinhCham === null)
+	throw new Error(`khong doc duoc config.yaml tai moc cham ${MOC_CHAM}`);
+const cauHinh = Bun.YAML.parse(cauHinhCham);
+console.log(
+	`quet ho so, status, evals.yaml, config tai moc cham ${MOC_CHAM.slice(0, 9)}`,
+);
 const { lenh, judgment, tatCa, hong } = rutHoSo(cauHinh);
 const bang = rutBang(doiSo("--bo-dong"));
 const acCo = new Set(
