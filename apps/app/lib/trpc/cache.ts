@@ -51,6 +51,7 @@ export type CrmCache = {
 	sso(options?: Options): Promise<void>;
 	apiKeys(options?: Options): Promise<void>;
 	tracking(options?: Options): Promise<void>;
+	tinHieu(options?: Options): Promise<void>;
 	everything(): Promise<void>;
 };
 
@@ -493,6 +494,8 @@ export function useCrmCache(): CrmCache {
 				[trpc.tracking.sources.queryKey()],
 				options,
 			),
+
+		tinHieu: (options) => run([trpc.tinHieu.cuaToi.queryKey()], [], options),
 
 		everything: () => queryClient.invalidateQueries(),
 	};

@@ -23,7 +23,7 @@ import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import { TIN_HIEU } from "@crm/validation/tin-hieu";
 import Link from "next/link";
-import { useId } from "react";
+import { type ComponentProps, useId } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 
@@ -45,10 +45,11 @@ export type HopGuiTinHieuProps = {
 	onGui: () => void;
 };
 
-export function NutGuiDauTrang() {
+export function NutGuiDauTrang(props: ComponentProps<typeof Button>) {
 	const m = tinHieuMessages(useLocale());
 	return (
 		<Button
+			{...props}
 			aria-label={m.nut}
 			data-slot="nut-gui-tin-hieu"
 			size="sm"
@@ -60,10 +61,13 @@ export function NutGuiDauTrang() {
 	);
 }
 
-export function NutGuiTao({ variant }: { variant: "default" | "outline" }) {
+export function NutGuiTao({
+	variant,
+	...props
+}: ComponentProps<typeof Button> & { variant: "default" | "outline" }) {
 	const m = tinHieuMessages(useLocale());
 	return (
-		<Button data-slot="nut-gui-tin-hieu-tao" variant={variant}>
+		<Button {...props} data-slot="nut-gui-tin-hieu-tao" variant={variant}>
 			<SendAlt aria-hidden />
 			{m.nut}
 		</Button>
