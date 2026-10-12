@@ -133,7 +133,7 @@ evals:
     expected: |
       describe "gth-xoa": ma tran viet truoc 4 o:
         1 cua minh, chua keo ve -> xoa thanh cong; hang mat; keoVe sau do khong co id do
-        2 cua minh, da keo ve -> HttpException 409, thong diep chua "đã vào kho", hang con
+        2 cua minh, da keo ve -> HttpException 409, thong diep == TIN_HIEU loi daLayVe (rut tu hang so), hang con
         3 cua nguoi khac, chua keo ve -> 404, hang con
         4 dua: keoVe va xoa chay dong thoi tren cung tin hieu -> hoac xoa thanh cong va keoVe khong tra no, hoac keoVe
           tra no va xoa nhan 409 (khong co ca hai)
@@ -240,7 +240,7 @@ evals:
     expected: |
       Ma tran toan phan viet truoc: moi gia tri cua cho (chua-gom, le, da-phu, nhom-chua-cat, chan-troi, hang-chua-ho-so,
       hang-co-ho-so x moi nhom_trang_thai cua hang) + hai trang thai CRM (chua keo ve, da keo ve chua co trong ban ve)
-      = so assert bang so o; moi o: cau == cau cua kit nguyen van (hoac cau CRM rut tu tep loi), nghia == bang trong thiet ke
+      = so assert bang so o; moi o: nhan == nhan ngan cua tep loi theo bang thiet ke; cau == cau cua kit nguyen van (hoac cau CRM rut tu tep loi), nghia == bang trong thiet ke
       (da-giao/da-phu -> xong, dang-lam -> dangChay, con lai -> nhap). Khoi mau rut tu bo ve kit that (E9), khong viet tay.
       CHIEU DO: ban sao map moi hang-* ve nhap -> o dang-lam do voi thong diep ghim "nghia trang thai lech bang".
 
@@ -254,7 +254,7 @@ evals:
       - "apps/app/test/tin-hieu.dom.tsx"
     expected: |
       describe "trang" ca "dong": 3 dong mock voi trangThai cua ba nghia. Moi dong: dieu da ke, man, gio gui, StatusIndicator
-      voi tone == toneTheoNghia(nghia) va nhan == cau; chu nguoi go mang translate="no".
+      voi tone == toneTheoNghia(nghia) va nhan == nhan ngan; dong phu [data-cau-trang-thai] == cau; chu nguoi go mang translate="no".
       CHIEU DO: ban sao bo translate -> do voi thong diep ghim "chu nguoi go khong danh dau khong dich".
 
   - id: E11
@@ -313,8 +313,8 @@ evals:
           khung nhin
         nut-375: nut chi bieu tuong, co aria-label, trang khong cuon ngang
         hop-1280: bam nut -> hop mo, dong "Gửi từ màn" == duong dan khong slug; go chu, Gui -> bien nhan mang ma crm-<so>
-        trang-1280: bam "Xem tín hiệu đã gửi" -> URL ket thuc /tin-hieu; dong dau co dieu vua ke va "Đã nhận — chờ lượt
-          kéo về kho"
+        trang-1280: bam "Xem tín hiệu đã gửi" -> URL ket thuc /tin-hieu; dong dau co dieu vua ke va cau trangThai.choKeoVe
+          cua tep loi
         trang-375: cung trang o 375px hien danh sach Item, khong cuon ngang
       Anh: nut tren thanh dau trang, hop, bien nhan, trang o hai kho.
 

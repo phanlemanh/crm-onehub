@@ -1106,6 +1106,28 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-them-nhanh-hoi", nhan: "Thêm nhanh — hỏi lại khi lỡ đóng" },
 		],
 	},
+	{
+		slug: "gui-tin-hieu-trong-crm",
+		ten: "Gửi tín hiệu — nút trên thanh đầu trang, hộp kể, trang Tín hiệu đã gửi",
+		states: [
+			{ id: "ST-nut", nhan: "Nút «Gửi tín hiệu» (hộp đóng)" },
+			{ id: "ST-hop-trong", nhan: "Hộp — ô trống, nút Gửi khoá" },
+			{ id: "ST-hop-dang-go", nhan: "Hộp — đã gõ, màn gửi kèm" },
+			{ id: "ST-hop-dang-gui", nhan: "Hộp — đang gửi" },
+			{ id: "ST-hop-da-gui", nhan: "Hộp — biên nhận có mã" },
+			{ id: "ST-hop-qua-tran", nhan: "Hộp — quá trần ngày, chữ giữ" },
+			{ id: "ST-hop-loi", nhan: "Hộp — máy chủ lỗi, gửi lại được" },
+			{ id: "ST-ds-co", nhan: "Trang — đủ các trạng thái" },
+			{ id: "ST-ds-rong", nhan: "Trang — chưa gửi tín hiệu nào" },
+			{ id: "ST-ds-dang-tai", nhan: "Trang — đang tải" },
+			{
+				id: "ST-ds-khong-doc-ban-ve",
+				nhan: "Trang — chưa đọc được trạng thái sau gom",
+			},
+			{ id: "ST-ds-xac-nhan-xoa", nhan: "Trang — hỏi lại trước khi xoá" },
+			{ id: "ST-ds-loi", nhan: "Trang — tải lỗi, có Thử lại" },
+		],
+	},
 ];
 export function timProto(slug: string): ProtoCatalogEntry | undefined {
 	return PROTO_CATALOG.find((muc) => muc.slug === slug);

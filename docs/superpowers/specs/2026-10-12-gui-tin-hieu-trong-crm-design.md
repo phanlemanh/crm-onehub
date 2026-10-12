@@ -67,8 +67,7 @@ còn dùng) · `tieuDe` · `moTa` (tuỳ chọn) · `man` · `guiLuc` · `keoVeL
   giờ Việt Nam; quá trần → 429 kèm câu nói trần và lúc mở lại. `man` chỉ giữ đường dẫn (bỏ `?…` và `#…`), cắt
   200 ký tự. Phòng ban: `orgPlacement.primaryDepartmentId` khi phòng ban đó chưa lưu trữ.
 - `cuaToi()` — tín hiệu của người gọi, mới nhất trước: `{id, so, tieuDe, man, guiLuc, daKeoVe}`.
-- `xoa({id})` — chỉ tín hiệu của người gọi; trong cùng giao dịch kiểm `keoVeLuc` rỗng; đã kéo về → 409 «Tín hiệu
-  đã vào kho, không xoá được nữa». Tín hiệu của người khác → 404 như không có. Ghi vết bằng `Logger` (mã, người
+- `xoa({id})` — chỉ tín hiệu của người gọi; trong cùng giao dịch kiểm `keoVeLuc` rỗng; đã kéo về → 409 «Đội sản phẩm đã lấy tín hiệu này về — không xoá được nữa». Tín hiệu của người khác → 404 như không có. Ghi vết bằng `Logger` (mã, người
   gọi), không ghi nội dung.
 - `keoVe()` — chỉ owner/admin; `POST /rest/tin-hieu/keo-ve`. Trong một giao dịch: đóng dấu `keoVeLuc` cho tín
   hiệu chưa dấu, trả MỌI tín hiệu còn lại xếp theo số: `{tep: tepTinHieu, phongBan: string | null}`.
@@ -97,10 +96,15 @@ khoá thô `tin_hieu`, giữ đúng bản ghi có `id` thuộc tín hiệu của
 
 Câu trạng thái:
 
-| Tình huống | Câu | Nghĩa (`toneTheoNghia`) |
+Mỗi dòng hiện một nhãn ngắn có chấm màu và câu đầy đủ ở dòng phụ (nếp nhãn chính + dòng phụ của trang Lộ trình;
+design-pass Nhóm 1). Nhãn ngắn: chờ lấy về · chờ gom (`chua-gom`) · không thành việc (`le`) · đã có việc (`da-phu`) ·
+đã vào nhóm (`nhom-chua-cat`) · để sau (`chan-troi`) · `hang-*` theo nhóm trạng thái của hàng (chưa bắt đầu · đang
+làm · đã giao · khác).
+
+| Tình huống | Câu (dòng phụ) | Nghĩa (`toneTheoNghia`) |
 |---|---|---|
-| Chưa kéo về | «Đã nhận — chờ lượt kéo về kho» | nháp |
-| Đã kéo về, chưa có trong bản vẽ | «Đã vào kho — chờ lượt gom» | nháp |
+| Chưa kéo về | «Đã nhận — chờ đội sản phẩm lấy về» | nháp |
+| Đã kéo về, chưa có trong bản vẽ | «Đội sản phẩm đã lấy về — chờ gom nhóm» | nháp |
 | Có trong bản vẽ | câu `cau` của kit, nguyên văn | `chua-gom`, `le`, `nhom-chua-cat`, `chan-troi` → nháp; `da-phu` → xong; `hang-*` → theo `nhom_trang_thai` của hàng đó trong cùng khối (`da-giao` → xong, `dang-lam` → đang chạy, còn lại → nháp) |
 
 `banVe` khác `co` → dưới tiêu đề danh sách có một dòng «Trạng thái sau gom chưa đọc được — đang hiện trạng
@@ -109,7 +113,7 @@ thái lúc gửi», các dòng dùng hai câu đầu bảng.
 ### 3.7 Nút và hộp kể
 
 `NutGuiTinHieu` (mã khách) đặt trong cụm nút bên phải của `AppHeader` trước `UserMenu`, kèm chỗ giữ trong
-`AppHeaderFallback`. Mở `Dialog` (máy tính) — trên điện thoại dùng `responsive-sheet` thành ngăn kéo dưới.
+`AppHeaderFallback`. Mở `Dialog` ở mọi khổ (như hộp «Báo sai»); hộp tự hỏi lại khi đóng lúc đã gõ (bộ giữ thay đổi của `Dialog`).
 Menu người dùng thêm mục «Tín hiệu đã gửi». Mọi chữ qua tệp chữ (`lib/messages/tin-hieu.ts`, vi + en).
 
 ## 4. Đặc tả UX
@@ -121,7 +125,7 @@ Menu người dùng thêm mục «Tín hiệu đã gửi». Mọi chữ qua tệ
 
 - Suôn sẻ: bấm «Gửi tín hiệu» trên thanh đầu trang → hộp «Gửi tín hiệu» (ô «Bạn gặp điều gì?», dòng «Gửi từ
   màn: /okr/kr») → «Gửi» → biên nhận trong hộp «Đã nhận tín hiệu crm-12» + liên kết «Xem tín hiệu đã gửi» (điểm
-  ra: trang «Tín hiệu đã gửi», dòng mới nằm đầu, «Đã nhận — chờ lượt kéo về kho»).
+  ra: trang «Tín hiệu đã gửi», dòng mới nằm đầu, «Đã nhận — chờ đội sản phẩm lấy về»).
 - Biên: chưa gửi tín hiệu nào → trang rỗng có nút «Gửi tín hiệu»; bản vẽ lộ trình không đọc được → dòng báo +
   trạng thái lúc gửi; người dùng vai «chỉ OKR» thấy nút như mọi người.
 - Lỗi & quay lại: quá trần ngày → lỗi ngay dưới ô, chữ đã gõ giữ nguyên, nói lúc mở lại; máy chủ lỗi → lỗi dưới ô,
@@ -148,7 +152,7 @@ Menu người dùng thêm mục «Tín hiệu đã gửi». Mọi chữ qua tệ
 | ST-ds-rong | Trang | «Bạn chưa gửi tín hiệu nào» + nút «Gửi tín hiệu» | Gửi |
 | ST-ds-co | Trang | Bảng: điều đã kể · màn · gửi lúc · trạng thái (chấm + câu) · nút Xoá ở dòng chưa kéo về | Đọc, xoá |
 | ST-ds-khong-doc-ban-ve | Trang | Dòng báo «Trạng thái sau gom chưa đọc được…», dòng dùng trạng thái lúc gửi | Đọc |
-| ST-ds-xac-nhan-xoa | Trang | «Xoá tín hiệu crm-12?» — «Tín hiệu chưa vào kho; xoá là mất hẳn» · «Xoá tín hiệu» | Xoá / huỷ |
+| ST-ds-xac-nhan-xoa | Trang | «Xoá tín hiệu crm-12?» — «Đội sản phẩm chưa lấy tín hiệu này về. Xoá là mất hẳn» · «Xoá tín hiệu» | Xoá / huỷ |
 | ST-ds-loi | Trang | `VungTaiLoi`: tiêu đề, một câu, «Thử lại» | Thử lại |
 <!-- UX-STATE-TABLE>>> -->
 
@@ -166,7 +170,6 @@ Menu người dùng thêm mục «Tín hiệu đã gửi». Mọi chữ qua tệ
 | Component | Nấc | Vì sao (1 dòng) |
 |---|---|---|
 | Dialog, Field, FieldLabel, FieldError, FieldDescription, Textarea, Spinner | dùng | khuôn hộp «Báo sai» đang chạy |
-| responsive-sheet | dùng | đã có khuôn hộp → ngăn kéo trên điện thoại |
 | PageShell, SimpleTable, Item, Empty, StatusIndicator, ConfirmDialog, VungTaiLoi | dùng | nếp màn của `docs/design.md` |
 | NutGuiTinHieu | ghép | nút + hộp trong `apps/app/components/tin-hieu/` — một khu, chưa ai khác cần |
 
