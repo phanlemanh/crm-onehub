@@ -1,6 +1,15 @@
 import { spawnSync } from "node:child_process";
 import {
+	lstatSync,
+	mkdirSync,
+	readdirSync,
+	rmSync,
+	symlinkSync,
+} from "node:fs";
+import { join } from "node:path";
+import {
 	dungBanSao,
+	GOC,
 	goBanSao,
 	KhongDo,
 	thayMotLan,
@@ -96,6 +105,20 @@ const CAP = [
 	],
 ];
 
+function goiCuaBanSao(banSao, app) {
+	const nm = join(banSao, "apps", app, "node_modules");
+	if (!lstatSync(nm).isSymbolicLink()) return;
+	rmSync(nm);
+	mkdirSync(join(nm, "@crm"), { recursive: true });
+	const goc = join(GOC, "apps", app, "node_modules");
+	for (const ten of readdirSync(goc)) {
+		if (ten !== "@crm") symlinkSync(join(goc, ten), join(nm, ten));
+	}
+	for (const goi of readdirSync(join(goc, "@crm"))) {
+		symlinkSync(join(banSao, "packages", goi), join(nm, "@crm", goi));
+	}
+}
+
 function lenh(cwd, cmd) {
 	const r = spawnSync("sh", ["-c", cmd], {
 		cwd,
@@ -110,6 +133,7 @@ const coGhim = (ra, ghim) =>
 	ra.split("\n").some((d) => d.startsWith("error:") && d.includes(ghim));
 
 const banSao = dungBanSao("vlr");
+goiCuaBanSao(banSao, "agent");
 const xanh = new Map();
 let daChay = 0;
 const hong = [];
