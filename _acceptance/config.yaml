@@ -2427,6 +2427,16 @@ executors:
     kcq_noi_f9: "node _acceptance/kiem-cheo-chay-quang-lang/rang/noi-f9.mjs"
     dt2_do_man: 'APP_URL=${APP_URL:-http://localhost:3350} API_URL=${API_URL:-http://localhost:3351} NGUOI=ada@trycomp.ai bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/dien-thoai-o-deal-cong-ty/rang/do-man.mjs"'
     dt2_san_thiet_ke: 'for t in "apps/app/components/crm/record-sheet/deal-sheet.tsx" "apps/app/components/crm/record-sheet/company-sheet.tsx" "apps/app/components/crm/record-sheet/quick-add.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done && bun _acceptance/dien-thoai-o-deal-cong-ty/rang/dung-so-chung.mjs'
+    cgdp_kiem_chuyen: bun _acceptance/chuyen-goi-dieu-phoi/rang/kiem-chuyen.mjs
+    cgdp_mo_dun: bun _acceptance/chuyen-goi-dieu-phoi/rang/mo-dun.mjs
+    cgdp_hook: bun _acceptance/chuyen-goi-dieu-phoi/rang/hook.mjs
+    cgdp_cong: bun _acceptance/chuyen-goi-dieu-phoi/rang/cong.mjs
+    cgdp_kiem_cheo: bun _acceptance/chuyen-goi-dieu-phoi/rang/kiem-cheo.mjs
+    cgdp_goi_vang: bun _acceptance/chuyen-goi-dieu-phoi/rang/goi-vang.mjs
+    cgdp_luot_kho: bun _acceptance/chuyen-goi-dieu-phoi/rang/luot-kho.mjs
+    cgdp_goi_dot: bun _acceptance/chuyen-goi-dieu-phoi/rang/goi-dot.mjs
+    cgdp_thay_boi: bun _acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs
+    cgdp_khong_do_them: bun _acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
