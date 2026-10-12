@@ -86,13 +86,11 @@ describe("gth-khuon", () => {
 		expect(doc.luc).toBe("2026-10-15T03:00:00.000Z");
 	});
 
-	test("docPhanHoiKeoVe doc dung vo REST cua trpc tu ham boc", () => {
+	test("docPhanHoiKeoVe doc dung than REST (cau REST tra thang dau ra cua thu tuc) tu ham boc", () => {
 		const ds = [
 			{ id: "crm-1", tep: tepTuBanGhi(BAN_GHI), phongBan: "Kinh doanh" },
 		];
-		const than = JSON.parse(
-			JSON.stringify({ result: { data: bocPhanHoiKeoVe(ds) } }),
-		);
+		const than = JSON.parse(JSON.stringify(bocPhanHoiKeoVe(ds)));
 		expect(docPhanHoiKeoVe(than)).toEqual(ds);
 	});
 
