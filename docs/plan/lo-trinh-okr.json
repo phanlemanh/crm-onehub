@@ -11,6 +11,34 @@
   },
   "moc": [
     {
+      "ten": "Nhân sự gửi danh sách người, phòng ban, bộ phận, trưởng — đã xong trên production",
+      "ngay": "2026-10-07",
+      "ai": "Nhân sự",
+      "khoa": "m-1007",
+      "that": "2026-10-04",
+      "loai": "ngoai",
+      "hang": []
+    },
+    {
+      "ten": "Ban lãnh đạo gửi OKR quý 4 cấp OneHub — đã gửi (chủ kho báo 11/10)",
+      "ngay": "2026-10-09",
+      "ai": "Ban lãnh đạo",
+      "den": "2026-10-12",
+      "khoa": "m-1009",
+      "loai": "ngoai",
+      "hang": []
+    },
+    {
+      "ten": "Dựng cây tổ chức, nhập người, đào tạo theo bộ phận, nối kênh nhắc — đã xong trên production",
+      "ngay": "2026-10-09",
+      "ai": "Chủ kho",
+      "den": "2026-10-13",
+      "khoa": "m-1009b",
+      "that": "2026-10-04",
+      "loai": "ngoai",
+      "hang": []
+    },
+    {
       "ten": "Làn R1 vá xong trên production, trước ngày dùng thật",
       "ngay": "2026-10-12",
       "loai": "phat-hanh",
@@ -42,6 +70,38 @@
       "khoa": "m-1014"
     },
     {
+      "ten": "Kit phát hành mốc kế: gói dieu-phoi và các hàng Điều phối – Thợ (dự kiến theo lộ trình kit)",
+      "ngay": "2026-10-18",
+      "khoa": "m-1018k",
+      "loai": "ngoai",
+      "ai": "Kit",
+      "hang": []
+    },
+    {
+      "ten": "Phòng ban công bố OKR quý 4",
+      "ngay": "2026-10-21",
+      "ai": "Phòng ban",
+      "khoa": "m-1021",
+      "loai": "ngoai",
+      "hang": []
+    },
+    {
+      "ten": "Kit đóng gói Điều phối – Thợ: mở đợt, nối lại đợt, đổi tài khoản bằng một lệnh — dự kiến theo lộ trình kit",
+      "ngay": "2026-10-25",
+      "khoa": "m-1025k",
+      "loai": "ngoai",
+      "ai": "Kit",
+      "hang": []
+    },
+    {
+      "ten": "Giai đoạn hai: crm chạy đợt Điều phối – Thợ từ gói dieu-phoi của kit, gỡ scripts/dieu-phoi/ và bốn khối hook",
+      "ngay": "2026-10-26",
+      "khoa": "m-1026",
+      "loai": "ngoai",
+      "ai": "Chủ kho",
+      "hang": []
+    },
+    {
       "ten": "Phiên nghiệm thu R1",
       "ngay": "2026-11-13",
       "ai": "Chủ sản phẩm, người dùng đại diện",
@@ -56,7 +116,29 @@
       "ten": "R2 lên production",
       "ngay": "2026-11-20",
       "loai": "phat-hanh",
-      "hang": [],
+      "hang": [
+        "N1",
+        "C",
+        "K6a",
+        "K2f",
+        "L2",
+        "L3",
+        "L4",
+        "E4b",
+        "E5",
+        "E6b",
+        "NM1",
+        "NM2",
+        "NM3",
+        "NM4",
+        "V2a",
+        "V2b",
+        "V2c",
+        "V2e",
+        "V2f",
+        "LT1b",
+        "LT2"
+      ],
       "khoa": "m-1120"
     },
     {
@@ -94,8 +176,48 @@
       "ten": "R3 lên production",
       "ngay": "2026-12-18",
       "loai": "phat-hanh",
-      "hang": [],
+      "hang": [
+        "10",
+        "8b",
+        "L",
+        "T",
+        "K5"
+      ],
       "khoa": "m-1218"
+    },
+    {
+      "ten": "Phòng ban đặt và công bố OKR quý 1",
+      "ngay": "2026-12-21",
+      "ai": "Phòng ban",
+      "den": "2027-01-11",
+      "khoa": "m-1221",
+      "loai": "ngoai",
+      "hang": []
+    },
+    {
+      "ten": "Chấm và nhìn lại quý 4 trong công cụ",
+      "ngay": "2026-12-28",
+      "ai": "Phòng ban",
+      "den": "2027-01-08",
+      "khoa": "m-1228",
+      "loai": "ngoai",
+      "hang": []
+    },
+    {
+      "ten": "Tết Đinh Mùi",
+      "ngay": "2027-02-06",
+      "khoa": "m-0206",
+      "loai": "ngoai",
+      "ai": "Công ty",
+      "hang": []
+    },
+    {
+      "ten": "Đo bốn tuần đầu quý 1: Cổng Giá trị R1–R3",
+      "ngay": "2027-02-09",
+      "ai": "Chủ kho",
+      "khoa": "m-0209",
+      "loai": "ngoai",
+      "hang": []
     }
   ],
   "hang": [
@@ -779,7 +901,9 @@
       "cau_giao": "«Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố»",
       "dung_tren": [
         "M"
-      ]
+      ],
+      "slug": "bo-ca-mau-quy-4",
+      "du_lieu": "sinh-gia"
     },
     {
       "ma": "9b",
@@ -855,7 +979,8 @@
       "cau_giao": "«Tôi hỏi về OKR trên web hoặc Zalo và nhận câu trả lời theo quyền của tôi»",
       "hang": "T3",
       "dung_tren": [
-        "D"
+        "D",
+        "N1"
       ],
       "slug": "hoi-dap-okr",
       "bat_khi": "Eval hỏi đáp trên bộ ca mẫu (M, N1) đạt; phép đo «người vai chỉ OKR chỉ hỏi được OKR» xanh trên production",
@@ -866,9 +991,10 @@
       "nhom": "tro-ly",
       "thu_tu": 260,
       "ghi_chu": "AI-07, tách khỏi lượt 10 ngày 28/09 và dựng ngay thay vì sau mùa. Eve app riêng; trên Zalo dùng lại kênh hỏi CRM qua Zalo. 30/09 (Cổng Đáng của D): D dựng app eve riêng cho chat OKR và đường vào cho vai «chỉ OKR», thay phần nền của C.",
-      "buoc_ke": "Nền chat OKR đang dựng trong «Soạn OKR cùng Trợ lý» (D); C còn lại phần hỏi đáp trên nền đó",
+      "buoc_ke": "D đã giao (#232); C là phần hỏi đáp trên nền chat đó, đo trên bộ ca mẫu N1",
       "chay_khi": "D đã gộp (làn A)",
-      "cho_ai": "điều kiện"
+      "cho_ai": "điều kiện",
+      "du_lieu": "gia"
     },
     {
       "ma": "L",
@@ -1229,8 +1355,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo»",
       "ghi_chu": "Chủ kho chốt 04/10: tính năng và UX trước, câu chữ sau. Khoảng 30 chỗ «Trợ lý»/«Tác nhân». Ghim khoá mới ở messages-guard.",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); sau K4 (đã gộp)",
-      "trang_thai": "để sau",
+      "buoc_ke": "R2 — lên production 20/11; sau K4 (đã gộp)",
+      "trang_thai": "chưa mở",
       "dung_tren": [
         "K4"
       ]
@@ -1448,8 +1574,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Màn tác nhân đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng»",
       "ghi_chu": "Khảo sát lộ trình 04/10. #19, #34, #37 bo-dung-khong-ket.",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)",
-      "trang_thai": "để sau"
+      "buoc_ke": "R2 — lên production 20/11",
+      "trang_thai": "chưa mở"
     },
     {
       "ma": "E6",
@@ -1558,8 +1684,8 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Màn nào đang tải cũng giữ tiêu đề, lỗi tải ở đâu cũng một hình có nút thử lại, và đầu trang không có nút chính tắt mà không nói vì sao»",
       "ghi_chu": "Khảo sát bảy màn 09/10 khi dựng bản mẫu LT1; đích ở docs/design.md mục «Nếp màn trong app». Phạm vi: vòng quay PageShellLoading (39 tệp) → khung xương; bốn khung lỗi (onboarding/danh-muc-table.tsx:231, okr/toan-canh/toan-canh.tsx:86, tai-lieu/loi-tai.tsx:20, okr/trang-thai-okr.tsx:52) → VungTaiLoi đã có trong packages/ui; tiêu đề Tài liệu và OKR dời vào page.tsx; khung chờ Tài liệu (tai-lieu/page.tsx:30) giấu tiêu đề; reminders/page.tsx:58,67 dùng <h2> thô; đầu trang Tài liệu ba nút lệch và chú thích «Chưa bật lưu tệp nguồn» trôi, ở 375 nút đứng trên câu mô tả; Onboarding «Kế hoạch mới» tắt không lý do cùng nút chính thứ hai trong khung trống. Chỉ chạm apps/app.",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); dãy P3, sau E5",
-      "trang_thai": "để sau"
+      "buoc_ke": "R2 — lên production 20/11; dãy P3, sau E5",
+      "trang_thai": "chưa mở"
     },
     {
       "ma": "NM2",
@@ -1573,8 +1699,8 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc»",
       "ghi_chu": "Khảo sát 09/10. Phạm vi: số đếm trong chip thành prop của packages/ui (hôm nay opacity-60 ở onboarding/danh-muc-cong-cu.tsx, text-muted-foreground ở tai-lieu/danh-sach-trang.tsx:193); lọc Tài liệu sang nuqs (danh-sach-trang.tsx:109,184 tự ghép chuỗi); Thoả thuận và Onboarding dùng ViewSwitch. Hai câu cho Cổng Phạm vi: «thẻ trạng thái» chọn một điều khiển (hôm nay menu thả của DataTable ở Thoả thuận, ToggleGroup ở Onboarding, Tabs gạch chân ở OKR và Tài liệu); bảng DataTable trên điện thoại cuộn ngang (Thoả thuận) hay thành thẻ dọc (Tài liệu). Chạm deals-table.tsx nên đứng sau V2.",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); sau NM1 (V2 đã gộp)",
-      "trang_thai": "để sau"
+      "buoc_ke": "R2 — lên production 20/11; sau NM1 (V2 đã gộp)",
+      "trang_thai": "chưa mở"
     },
     {
       "ma": "NM3",
@@ -1588,8 +1714,8 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu»",
       "ghi_chu": "Khảo sát 09/10. Bảng nghĩa → tone đã ghi ở docs/design.md mục «Màu trạng thái»; vòng này dời năm ánh xạ tự khai (okr-status.tsx, kara/steps.tsx, attendee-list.tsx, okr/tien-do-kr.tsx, tai-lieu/bang-nguon.tsx) về một chỗ trong packages/ui. kara/steps.tsx thuộc ranh giới các hàng Kara nên đứng sau K6a. Chủ kho chốt 10/10: LT1 thêm trước bảng nghĩa → màu (packages/ui/src/lib/status-tone.ts); NM3 dời năm khu cũ về bảng đó.",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); sau NM2 và K6a (LT1 đã gộp)",
-      "trang_thai": "để sau"
+      "buoc_ke": "R2 — lên production 20/11; sau NM2 và K6a (LT1 đã gộp)",
+      "trang_thai": "chưa mở"
     },
     {
       "ma": "V2",
@@ -1657,8 +1783,8 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Ghim lại các hồ sơ đã ký chạy được»",
       "ghi_chu": "E23/E25 so-okr-tu-chay, E7 cap-nhat-tuan-okr, E5 và Ngoài-3 lam-moi-chuyen-viec. Máy tự duyệt phạm vi (veto).",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53); làn nợ thước cùng F23, F24",
-      "trang_thai": "để sau"
+      "buoc_ke": "Làn vệ sinh có hạn mức, chạy cạnh R2; làn nợ thước cùng F23, F24",
+      "trang_thai": "chưa mở"
     },
     {
       "ma": "F9",
@@ -1907,8 +2033,8 @@
       "dung_tren": [
         "K2e"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "L2",
@@ -1924,8 +2050,8 @@
         "L1",
         "K3"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "L3",
@@ -1940,8 +2066,8 @@
       "dung_tren": [
         "L1"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "L4",
@@ -1957,8 +2083,8 @@
         "L3",
         "K3"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "E4b",
@@ -1973,8 +2099,8 @@
       "dung_tren": [
         "E4"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "E6b",
@@ -1989,8 +2115,8 @@
       "dung_tren": [
         "E6"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "NM4",
@@ -2003,8 +2129,8 @@
       "cau_giao": "«Breadcrumb đọc tiếng Việt với trình đọc màn hình; mô tả kiểu trường ở Cài đặt › Trường không tràn ở khổ 360»",
       "ghi_chu": "Hai dòng tồn đọng loại hành vi từ F25 (#355): aria-label tiếng Anh ở packages/ui breadcrumb, tràn ở /settings/fields khổ 360.",
       "dung_tren": [],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "V2a",
@@ -2019,8 +2145,8 @@
       "dung_tren": [
         "V2"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "V2b",
@@ -2035,8 +2161,8 @@
       "dung_tren": [
         "V2"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "V2c",
@@ -2052,8 +2178,8 @@
         "V2",
         "K2e"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "V2e",
@@ -2069,8 +2195,8 @@
         "V2",
         "V2a"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "V2f",
@@ -2085,8 +2211,8 @@
       "dung_tren": [
         "V2"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "R2 — lên production 20/11"
     },
     {
       "ma": "F23",
@@ -2099,8 +2225,8 @@
       "cau_giao": "«Phép kiểm «không rẽ theo tên» chạy một lần như luật kho, không còn là eval phủ cả app làm mọi PR chạm app thành hồ sơ cũ»",
       "ghi_chu": "E17 của giai-doan-thoa-thuan có paths phủ apps/api, apps/agent, apps/app và packages/db (09/10). Làn nợ thước.",
       "dung_tren": [],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn vệ sinh có hạn mức, chạy cạnh R2"
     },
     {
       "ma": "F24",
@@ -2115,8 +2241,8 @@
       "dung_tren": [
         "F10"
       ],
-      "trang_thai": "để sau",
-      "buoc_ke": "Hoãn sau 21/10 — đợt sau-14-10 đóng 11/10 (luật 53)"
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Làn vệ sinh có hạn mức, chạy cạnh R2"
     }
   ],
   "da_bac": [

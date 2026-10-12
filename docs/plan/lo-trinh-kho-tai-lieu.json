@@ -51,6 +51,13 @@
       "that": "2026-10-04"
     },
     {
+      "ten": "Chạy thật — mọi phòng ban tự nạp 10–20 tệp, dùng hai tuần; góp ý gom một chỗ (chủ kho chốt 04/10)",
+      "ngay": "2026-10-14",
+      "loai": "ngoai",
+      "ai": "Mọi phòng ban",
+      "hang": []
+    },
+    {
       "ten": "Sửa một đợt",
       "ngay": "2026-11-04",
       "loai": "su-kien",
@@ -144,7 +151,7 @@
       "slug": "tro-ly-doc-kho",
       "dong": 4,
       "ten": "Lượt 4",
-      "buoc_ke": "Đo trên bộ câu hỏi mẫu (cb); chạy thật với các phòng ban là việc vận hành (docs/plan/lich-van-hanh.md)",
+      "buoc_ke": "Đo trên bộ câu hỏi mẫu (cb); chạy thật với các phòng ban là mốc ngoài 14/10",
       "ghi_chu": "Evals là script chấm 50 câu hỏi thật cộng 10–15 judgment; dùng khoá AI thứ hai của lượt 2. 04/10 (khảo sát lộ trình): 50 câu thật chạy trong tuần đầu dùng thật, không chặn lượt này (contract.md:117 trên nhánh). Khoá AI riêng KHO_TAI_LIEU_AI_GATEWAY_API_KEY chủ kho đặt trên crm-onehub-agent. 04/10: chủ kho đã đặt khoá AI riêng cho Kho. Đã gộp 04/10 (#231, 9007b331); migration 20261004054354 lên production; ghim lại sau l4b ở #267 (05/10).",
       "pr": [
         231,
@@ -162,7 +169,9 @@
       "buoc_ke": "Dựng bằng dữ liệu mẫu; câu hỏi thật khi có thì thêm vào bộ, không chặn lượt nào",
       "ghi_chu": "«Quy tắc viết» v0: máy soạn từ ba văn bản mẫu thật (cách C), anh nhận làm quy tắc và sửa dần khi vận hành. Kiểm kê và gom tệp Zalo là việc phòng ban làm trong đợt chạy thật.",
       "cho_anh": true,
-      "ten_ngan": "Câu hỏi mẫu"
+      "ten_ngan": "Câu hỏi mẫu",
+      "slug": "bo-cau-hoi-mau",
+      "du_lieu": "sinh-gia"
     },
     {
       "ma": "l5",
@@ -176,7 +185,8 @@
       "trang_thai": "chưa mở",
       "dong": 8,
       "ten": "Lượt 5",
-      "buoc_ke": "Sửa theo góp ý gom được tới lúc mở lượt; không chờ chạy thật xong — thiếu góp ý thì dựng và đo trên bộ câu hỏi mẫu"
+      "buoc_ke": "Sửa theo góp ý gom được tới lúc mở lượt; không chờ chạy thật xong — thiếu góp ý thì dựng và đo trên bộ câu hỏi mẫu",
+      "du_lieu": "gia"
     },
     {
       "ma": "d9",
@@ -187,7 +197,7 @@
       "trang_thai": "để sau",
       "dong": 9,
       "ten": "Để sau",
-      "buoc_ke": "Để sau; trung vị duyệt của đợt chạy thật (lịch vận hành) vượt 5 ngày là tín hiệu xếp lên trước, không phải điều kiện mở"
+      "buoc_ke": "Để sau; trung vị duyệt của mốc ngoài «Chạy thật» vượt 5 ngày là tín hiệu xếp lên trước, không phải điều kiện mở"
     },
     {
       "ma": "d6",
@@ -198,7 +208,7 @@
       "trang_thai": "để sau",
       "dong": 6,
       "ten": "Để sau",
-      "buoc_ke": "Để sau; số đo của đợt chạy thật (lịch vận hành) là tín hiệu xếp lại, không phải điều kiện mở"
+      "buoc_ke": "Để sau; số đo của mốc ngoài «Chạy thật» là tín hiệu xếp lại, không phải điều kiện mở"
     },
     {
       "ma": "l4a",

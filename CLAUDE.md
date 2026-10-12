@@ -81,9 +81,13 @@ năng của kho này.
 
 Chủ kho chốt 11/10: `docs/plan/lo-trinh-*.json` chỉ chứa việc dựng tính năng.
 Không hàng nào chờ người — chờ phòng ban gửi dữ liệu, chờ gom câu hỏi thật, chờ
-chạy thật xong. Mốc do người và tổ chức quyết sống ở `docs/plan/lich-van-hanh.md`.
+chạy thật xong. Việc do người và tổ chức quyết là **mốc ngoài** trong chính lộ
+trình — `moc` có `loai: "ngoai"` và `ai` — theo khuôn S3b của kit; không hàng nào
+được đứng trên mốc ngoài (`dung_tren` chỉ trỏ hàng).
 
-Thiếu dữ liệu để dựng hay đo thì mở rộng dữ liệu mẫu, không đợi:
+Hàng cần dữ liệu thật thì đứng ngay sau một hàng sinh dữ liệu giả có nhãn
+(`du_lieu: "sinh-gia"`), và chính nó mang `du_lieu: "gia"`. Thiếu dữ liệu để dựng
+hay đo thì mở rộng dữ liệu mẫu, không đợi:
 
 - OKR: bộ OKR mẫu `bun run okr:mau` (`_acceptance/bo-okr-mau`) — thêm ca vào
   đó. Dữ liệu chung: `bun run db:seed`.
