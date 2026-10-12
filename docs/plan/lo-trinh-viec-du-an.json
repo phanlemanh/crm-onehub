@@ -25,12 +25,48 @@
       "cau_giao": "«Người vai chỉ OKR không được giao bước onboard và không nhận tên đối tác qua tin nhắc buổi sáng»",
       "vi_sao": "Giao bước hiện chỉ kiểm có là thành viên; bộ gom nhắc không lọc vai và mang tên công ty qua Zalo/Slack. Gộp việc mà chưa vá là khuếch đại lỗ này.",
       "hang": "T2",
-      "trang_thai": "chưa mở",
+      "trang_thai": "đã lên onehub",
       "ten": "Vá lỗ rò vai «chỉ OKR» ở kế hoạch 30 ngày",
       "ten_ngan": "Vá lỗ rò",
       "bat_khi": "Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»",
       "ghi_chu": "Phiên riêng đề xuất 05/10. Kiểm dữ liệu thật trước khi sửa; có dữ liệu đã lộ thì báo chủ kho trước.",
-      "slug": "va-lo-ro-vai-chi-okr"
+      "slug": "va-lo-ro-vai-chi-okr",
+      "pr": [
+        372
+      ],
+      "buoc_ke": "Đã gộp 12/10 17:55 (#372); còn phiên nghiệm thu"
+    },
+    {
+      "ma": "DA0b",
+      "cau_giao": "«Mở lại một kế hoạch đã đóng hay bỏ «xong» một bước không trả việc về người đã sang vai «chỉ OKR»»",
+      "vi_sao": "Ngoài-4 của DA0a, chủ kho tách thành việc riêng ở Cổng Bằng chứng 12/10: hai đường mở lại đi vòng qua chặn vai DA0a vừa thêm — cùng lớp lỗi, nhỏ hơn.",
+      "hang": "T2",
+      "slug": "mo-lai-khong-tra-viec-chi-okr",
+      "dung_tren": [
+        "DA0a"
+      ],
+      "trang_thai": "chưa mở",
+      "ten": "Mở lại không trả việc cho người «chỉ OKR»",
+      "ten_ngan": "Mở lại an toàn",
+      "bat_khi": "Trên bộ dữ liệu mẫu: mở lại kế hoạch hay bỏ «xong» một bước của người vai «chỉ OKR» không tạo việc đang mở nào cho họ",
+      "ghi_chu": "Dựng và đo trên dữ liệu mẫu qua đường ghi thật; DA0a đếm production 12/10 ra 0 dữ liệu lộ. Truy cập production cần chủ kho cho phép riêng.",
+      "buoc_ke": "Đợt r2, dãy P0 — hàng đầu của đợt"
+    },
+    {
+      "ma": "DA0c",
+      "cau_giao": "«Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai»",
+      "vi_sao": "Ngoài-7 của DA0a, chủ kho tách thành việc riêng ở Cổng Bằng chứng 12/10: thước không đỏ được bằng câu ghim thì không chứng được điều nó hứa.",
+      "hang": "T2",
+      "slug": "thuoc-viec-cua-ban-do-duoc",
+      "nhom": "ve-sinh",
+      "dung_tren": [
+        "DA0a"
+      ],
+      "trang_thai": "chưa mở",
+      "ten": "Thước «Việc của bạn» đỏ được",
+      "ten_ngan": "Thước E7b",
+      "ghi_chu": "Nhóm vệ sinh có hạn mức; sửa thước trong hồ sơ va-lo-ro-vai-chi-okr kéo theo ghim lại hồ sơ đó.",
+      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức)"
     },
     {
       "ma": "DA1",

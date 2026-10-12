@@ -2525,6 +2525,11 @@ dev_server:
 capture:
   ui: "bun run ui:capture"
 
+# Nhánh production của kho (kit 2.28.0, X2s): ô production của dải tóm tắt đọc mã đã chấm có nằm trên
+# origin/<nhánh> không. Gộp vào onehub là tự lên production.
+production:
+  nhanh: onehub
+
 # Lộ trình cạnh bản đồ (kit 2.21.0): tệp ý định JSON, người viết và đổi bằng PR; kit chỉ ĐỌC, trạng thái
 # từng hàng suy từ hồ sơ. Viết danh sách có thụt bốn dấu cách — dạng sát lề kit 2.21.0 chưa đọc được.
 lo_trinh:

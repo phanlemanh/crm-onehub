@@ -56,7 +56,24 @@
       "that": "2026-10-06"
     },
     {
-      "ten": "Mọi phòng ban bắt đầu dùng thật hằng ngày — OKR và Kho tài liệu",
+      "ten": "Kit phát hành 2.28.0 — mốc ổn định, có gói dieu-phoi đã vá trước đợt r2 (DP8)",
+      "ngay": "2026-10-13",
+      "that": "2026-10-13",
+      "khoa": "m-1013k",
+      "loai": "ngoai",
+      "ai": "Kit",
+      "hang": []
+    },
+    {
+      "ten": "crm nhận kit 2.28.0 và chuyển sang gói dieu-phoi (#373) — chủ kho dời từ 15/10 ngày 13/10",
+      "ngay": "2026-10-13",
+      "khoa": "m-1013n",
+      "loai": "ngoai",
+      "ai": "Chủ kho",
+      "hang": []
+    },
+    {
+      "ten": "Công bố OKR quý 4 — các phòng ban đã dùng thử OKR và Kho tài liệu từ trước",
       "ngay": "2026-10-14",
       "loai": "han-cung",
       "ai": "Mọi phòng ban",
@@ -70,11 +87,11 @@
       "khoa": "m-1014"
     },
     {
-      "ten": "Kit phát hành mốc kế: gói dieu-phoi và các hàng Điều phối – Thợ (dự kiến theo lộ trình kit)",
-      "ngay": "2026-10-18",
-      "khoa": "m-1018k",
+      "ten": "Mở đợt r2 từ gói dieu-phoi của kit — chủ kho duyệt thẻ khởi tạo một lần",
+      "ngay": "2026-10-14",
+      "khoa": "m-1014d",
       "loai": "ngoai",
-      "ai": "Kit",
+      "ai": "Chủ kho",
       "hang": []
     },
     {
@@ -86,35 +103,8 @@
       "hang": []
     },
     {
-      "ten": "Kit đóng gói Điều phối – Thợ: mở đợt, nối lại đợt, đổi tài khoản bằng một lệnh — dự kiến theo lộ trình kit",
-      "ngay": "2026-10-25",
-      "khoa": "m-1025k",
-      "loai": "ngoai",
-      "ai": "Kit",
-      "hang": []
-    },
-    {
-      "ten": "Giai đoạn hai: crm chạy đợt Điều phối – Thợ từ gói dieu-phoi của kit, gỡ scripts/dieu-phoi/ và bốn khối hook",
-      "ngay": "2026-10-26",
-      "khoa": "m-1026",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
-      "hang": []
-    },
-    {
-      "ten": "Phiên nghiệm thu R1",
-      "ngay": "2026-11-13",
-      "ai": "Chủ sản phẩm, người dùng đại diện",
-      "hang": [
-        "2",
-        "3",
-        "5"
-      ],
-      "khoa": "m-1113"
-    },
-    {
-      "ten": "R2 lên production",
-      "ngay": "2026-11-20",
+      "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
+      "ngay": "2026-10-31",
       "loai": "phat-hanh",
       "hang": [
         "N1",
@@ -139,7 +129,18 @@
         "LT1b",
         "LT2"
       ],
-      "khoa": "m-1120"
+      "khoa": "m-1031"
+    },
+    {
+      "ten": "Phiên nghiệm thu R1",
+      "ngay": "2026-11-13",
+      "ai": "Chủ sản phẩm, người dùng đại diện",
+      "hang": [
+        "2",
+        "3",
+        "5"
+      ],
+      "khoa": "m-1113"
     },
     {
       "ten": "Đọc số lượt 6",
@@ -1355,7 +1356,7 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo»",
       "ghi_chu": "Chủ kho chốt 04/10: tính năng và UX trước, câu chữ sau. Khoảng 30 chỗ «Trợ lý»/«Tác nhân». Ghim khoá mới ở messages-guard.",
-      "buoc_ke": "R2 — lên production 20/11; sau K4 (đã gộp)",
+      "buoc_ke": "R2 — lên production 31/10 (tạm); sau K4 (đã gộp)",
       "trang_thai": "chưa mở",
       "dung_tren": [
         "K4"
@@ -1574,7 +1575,7 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Màn tác nhân đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng»",
       "ghi_chu": "Khảo sát lộ trình 04/10. #19, #34, #37 bo-dung-khong-ket.",
-      "buoc_ke": "R2 — lên production 20/11",
+      "buoc_ke": "R2 — lên production 31/10 (tạm)",
       "trang_thai": "chưa mở"
     },
     {
@@ -1656,7 +1657,7 @@
     {
       "ma": "LT2",
       "slug": "gui-tin-hieu-trong-crm",
-      "hang": "T2",
+      "hang": "T3",
       "khoa": "crm-gui-tin-hieu",
       "nhom": "crm-chung",
       "thu_tu": 435,
@@ -1668,8 +1669,8 @@
       "ngay": "2026-10-08",
       "cau_giao": "«Tôi bấm Gửi tín hiệu ở bất kỳ màn nào, kể điều mình gặp, rồi thấy nó đã vào nhóm nào, thành việc nào, đã giao chưa»",
       "bat_khi": "Một tháng sau khi giao, ít nhất 20 tín hiệu từ ít nhất 3 phòng ban, tín hiệu nào cũng có trạng thái trả về người gửi (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho chốt 08/10: người không dùng git được GỬI TÍN HIỆU (phản hồi, sự cố, ý tưởng, bản phạm vi dạng văn bản). Ghi theo khuôn tín hiệu của bộ kit (hàng L3 trên lộ trình kit); bộ kit gom nhóm, chủ kho chọn nhóm vào bản phạm vi. CRM chỉ ghi tín hiệu, không ghi ý định hay trạng thái.",
-      "buoc_ke": "Chờ crm nhận bộ kit có L3",
+      "ghi_chu": "Chủ kho chốt 08/10: người không dùng git được GỬI TÍN HIỆU (phản hồi, sự cố, ý tưởng, bản phạm vi dạng văn bản). Ghi theo khuôn tín hiệu của bộ kit (hàng L3 trên lộ trình kit); bộ kit gom nhóm, chủ kho chọn nhóm vào bản phạm vi. CRM chỉ ghi tín hiệu, không ghi ý định hay trạng thái. Chủ kho chọn 12/10 ở Cổng Đáng: CRM cất tín hiệu trong hàng chờ (thêm một bảng dữ liệu), lượt gom kéo về git, commit mang tên chủ kho — ứng dụng không giữ khoá ghi git; vì thêm bảng dữ liệu nên vòng hạng T3.",
+      "buoc_ke": "Mở vòng ngay (chủ kho bỏ chờ 12/10): làm trên khuôn tín hiệu của bộ kit trên nhánh chính (L3 đã gộp 12/10); gộp vào onehub khi crm nhận mốc kit có L3 (2.27, từ 15/10)",
       "trang_thai": "chưa mở"
     },
     {
@@ -1684,7 +1685,7 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Màn nào đang tải cũng giữ tiêu đề, lỗi tải ở đâu cũng một hình có nút thử lại, và đầu trang không có nút chính tắt mà không nói vì sao»",
       "ghi_chu": "Khảo sát bảy màn 09/10 khi dựng bản mẫu LT1; đích ở docs/design.md mục «Nếp màn trong app». Phạm vi: vòng quay PageShellLoading (39 tệp) → khung xương; bốn khung lỗi (onboarding/danh-muc-table.tsx:231, okr/toan-canh/toan-canh.tsx:86, tai-lieu/loi-tai.tsx:20, okr/trang-thai-okr.tsx:52) → VungTaiLoi đã có trong packages/ui; tiêu đề Tài liệu và OKR dời vào page.tsx; khung chờ Tài liệu (tai-lieu/page.tsx:30) giấu tiêu đề; reminders/page.tsx:58,67 dùng <h2> thô; đầu trang Tài liệu ba nút lệch và chú thích «Chưa bật lưu tệp nguồn» trôi, ở 375 nút đứng trên câu mô tả; Onboarding «Kế hoạch mới» tắt không lý do cùng nút chính thứ hai trong khung trống. Chỉ chạm apps/app.",
-      "buoc_ke": "R2 — lên production 20/11; dãy P3, sau E5",
+      "buoc_ke": "R2 — lên production 31/10 (tạm); dãy P3, sau E5",
       "trang_thai": "chưa mở"
     },
     {
@@ -1699,7 +1700,7 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc»",
       "ghi_chu": "Khảo sát 09/10. Phạm vi: số đếm trong chip thành prop của packages/ui (hôm nay opacity-60 ở onboarding/danh-muc-cong-cu.tsx, text-muted-foreground ở tai-lieu/danh-sach-trang.tsx:193); lọc Tài liệu sang nuqs (danh-sach-trang.tsx:109,184 tự ghép chuỗi); Thoả thuận và Onboarding dùng ViewSwitch. Hai câu cho Cổng Phạm vi: «thẻ trạng thái» chọn một điều khiển (hôm nay menu thả của DataTable ở Thoả thuận, ToggleGroup ở Onboarding, Tabs gạch chân ở OKR và Tài liệu); bảng DataTable trên điện thoại cuộn ngang (Thoả thuận) hay thành thẻ dọc (Tài liệu). Chạm deals-table.tsx nên đứng sau V2.",
-      "buoc_ke": "R2 — lên production 20/11; sau NM1 (V2 đã gộp)",
+      "buoc_ke": "R2 — lên production 31/10 (tạm); sau NM1 (V2 đã gộp)",
       "trang_thai": "chưa mở"
     },
     {
@@ -1714,7 +1715,7 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu»",
       "ghi_chu": "Khảo sát 09/10. Bảng nghĩa → tone đã ghi ở docs/design.md mục «Màu trạng thái»; vòng này dời năm ánh xạ tự khai (okr-status.tsx, kara/steps.tsx, attendee-list.tsx, okr/tien-do-kr.tsx, tai-lieu/bang-nguon.tsx) về một chỗ trong packages/ui. kara/steps.tsx thuộc ranh giới các hàng Kara nên đứng sau K6a. Chủ kho chốt 10/10: LT1 thêm trước bảng nghĩa → màu (packages/ui/src/lib/status-tone.ts); NM3 dời năm khu cũ về bảng đó.",
-      "buoc_ke": "R2 — lên production 20/11; sau NM2 và K6a (LT1 đã gộp)",
+      "buoc_ke": "R2 — lên production 31/10 (tạm); sau NM2 và K6a (LT1 đã gộp)",
       "trang_thai": "chưa mở"
     },
     {
@@ -1767,8 +1768,8 @@
       "ngay": "2026-10-10",
       "cau_giao": "«Tôi bấm một việc đã giao trong trang Lộ trình và đọc trong một phút: vì sao làm, đã lên chưa, sẽ đo gì, còn thiếu gì, ai quyết»",
       "bat_khi": "Ở phiên nghiệm thu kế, chủ kho và trưởng phòng ban trả lời được năm câu trên cho một việc mà không hỏi ai (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho đồng ý 10/10. Hai tầng: mọi người thấy câu giao · vì sao · trạng thái và ngày · đã lên production chưa · sẽ đo gì, khi nào · kết quả · chưa làm gì · ai quyết; vai chủ kho thấy thêm tiêu chí/phép đo · lượt chấm · token · quyết định máy/người · PR. Đọc dải tóm tắt do bộ kit xuất (hàng X2 trên lộ trình kit), không đọc thẳng tệp hồ sơ. Chờ thêm số đo bốn tuần của LT1.",
-      "buoc_ke": "Chờ crm nhận bộ kit có X2 và số đo bốn tuần của LT1",
+      "ghi_chu": "Chủ kho đồng ý 10/10. Hai tầng: mọi người thấy câu giao · vì sao · trạng thái và ngày · đã lên production chưa · sẽ đo gì, khi nào · kết quả · chưa làm gì · ai quyết; vai chủ kho thấy thêm tiêu chí/phép đo · lượt chấm · token · quyết định máy/người · PR. Đọc dải tóm tắt do bộ kit xuất (hàng X2 trên lộ trình kit), không đọc thẳng tệp hồ sơ. Chủ kho bỏ chờ bốn tuần 12/10 — mức dùng của LT1 đo song song ở Cổng Giá trị của LT1b.",
+      "buoc_ke": "Mở vòng ngay (chủ kho bỏ chờ 12/10): làm trên dải tóm tắt thật máy sinh từ hồ sơ crm bằng bộ kit trên nhánh chính (X2); gộp khi crm nhận mốc kit có X2 (2.27, từ 15/10)",
       "trang_thai": "chưa mở"
     },
     {
@@ -2034,7 +2035,7 @@
         "K2e"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "L2",
@@ -2051,7 +2052,7 @@
         "K3"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "L3",
@@ -2067,7 +2068,7 @@
         "L1"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "L4",
@@ -2084,7 +2085,7 @@
         "K3"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "E4b",
@@ -2100,7 +2101,7 @@
         "E4"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "E6b",
@@ -2116,7 +2117,7 @@
         "E6"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "NM4",
@@ -2130,7 +2131,7 @@
       "ghi_chu": "Hai dòng tồn đọng loại hành vi từ F25 (#355): aria-label tiếng Anh ở packages/ui breadcrumb, tràn ở /settings/fields khổ 360.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2a",
@@ -2146,7 +2147,7 @@
         "V2"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2b",
@@ -2162,7 +2163,7 @@
         "V2"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2c",
@@ -2179,7 +2180,7 @@
         "K2e"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2e",
@@ -2196,7 +2197,7 @@
         "V2a"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2f",
@@ -2212,7 +2213,7 @@
         "V2"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "F23",
@@ -2243,6 +2244,32 @@
       ],
       "trang_thai": "chưa mở",
       "buoc_ke": "Nhóm vệ sinh có hạn mức, chạy cạnh R2"
+    },
+    {
+      "ma": "F26",
+      "slug": "khong-do-them-chay-gh",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.3,
+      "ngay": "2026-10-12",
+      "ten": "Thước hồi quy chạy được lệnh cần gh",
+      "ten_ngan": "Thước cần gh",
+      "cau_giao": "«Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây»",
+      "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mở sau khi #373 gộp"
+    },
+    {
+      "ma": "F27",
+      "slug": "kiem-cheo-bao-con-song",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.4,
+      "ngay": "2026-10-12",
+      "ten": "Kiểm chéo đêm giữ khoá s4 báo còn sống",
+      "ten_ngan": "Nhịp kiểm chéo",
+      "cau_giao": "«Lượt kiểm chéo ban đêm giữ khoá s4 trong một đợt không làm bộ phát lịch báo nhầm «khoa-khong-nhip»»",
+      "ghi_chu": "Gốc: Ngoài-18 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10 (scripts/kiem-cheo/dem.mjs chỉ chạm nhịp, không ghi song/). Kit 2.28.0 (DP8) hứa việc nền giữ khoá s4 ghi nhịp hoặc được miễn.",
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đo lại khi crm nhận kit 2.28.0 (15/10): hết báo nhầm thì chuyển da_bac kèm số đo; còn thì vào dãy P7 của đợt r2"
     }
   ],
   "da_bac": [
