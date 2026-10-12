@@ -141,7 +141,7 @@ export function dungKhoMau(kit, them = {}) {
 	mkdirSync(path.join(r, "_acceptance"), { recursive: true });
 	writeFileSync(
 		path.join(r, "_acceptance", "config.yaml"),
-		`schema_version: 1\nrisk_tiers:\n  t1_skip_globs:\n    - "PRODUCT-MAP.md"\n    - "LO-TRINH.html"\nlo_trinh:\n  tep: docs/lo-trinh.json\n${them.boKhai ? "" : "tin_hieu:\n  nguon: [tin-hieu/crm]\n  gom: tin-hieu/gom\n"}`,
+		`schema_version: 1\nrisk_tiers:\n  t1_skip_globs:\n    - "PRODUCT-MAP.md"\n    - "LO-TRINH.html"\nlo_trinh:\n  tep: docs/lo-trinh.json\n${them.khai ?? "tin_hieu:\n  nguon: [tin-hieu/crm]\n  gom: tin-hieu/gom\n"}`,
 	);
 	mkdirSync(path.join(r, "tin-hieu", "crm"), { recursive: true });
 	mkdirSync(path.join(r, "tin-hieu", "gom"), { recursive: true });
