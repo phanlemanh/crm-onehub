@@ -11,6 +11,18 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "ngan-ho-so-trong-lo-trinh",
+		ten: "Ngăn hồ sơ trong trang Lộ trình — tóm tắt hồ sơ của việc",
+		states: [
+			{ id: "ST-ngan-day-du", nhan: "Việc LT1 — mọi người" },
+			{ id: "ST-ngan-chu-kho", nhan: "Việc LT1 — chủ không gian làm việc" },
+			{ id: "ST-ngan-o-vang", nhan: "Việc 4n — có ô chưa ghi" },
+			{ id: "ST-ngan-chua-co-tom-tat", nhan: "Việc N0 — chưa có hồ sơ" },
+			{ id: "ST-ngan-khuon-cu", nhan: "Trang vẽ bằng khuôn bản 1" },
+			{ id: "ST-ngan-doan-dai", nhan: "Việc R1g — lý do dài" },
+		],
+	},
+	{
 		slug: "trang-lo-trinh-trong-crm",
 		ten: "Trang Lộ trình trong CRM — chỉ đọc",
 		states: [

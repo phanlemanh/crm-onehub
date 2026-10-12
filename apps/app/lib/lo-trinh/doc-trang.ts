@@ -1,5 +1,5 @@
 import {
-	type LoTrinhDuLieu,
+	type DuLieuChoXem,
 	phanTichLoTrinh,
 } from "@crm/validation/lo-trinh-du-lieu";
 import { docDuLieu } from "./doc-du-lieu.js";
@@ -8,7 +8,7 @@ export type DauVaoLoTrinh =
 	| { kieu: "tep-vang" }
 	| { kieu: "chua-co-khoi"; cauMay: string }
 	| { kieu: "khoi-hong"; cauMay: string }
-	| { kieu: "co-du-lieu"; duLieu: LoTrinhDuLieu; canhBao: string[] };
+	| { kieu: "co-du-lieu"; duLieu: DuLieuChoXem; canhBao: string[] };
 
 export function docTrangLoTrinh(html: string | null): DauVaoLoTrinh {
 	if (html === null) return { kieu: "tep-vang" };

@@ -18,6 +18,8 @@ import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { DongLienQuan } from "./dong-lien-quan";
 import { ChuConNgay } from "./o-moc";
 import { ChamTrangThai, coTrangThaiPhu } from "./o-trang-thai";
+import { SoLieuLamViec } from "./so-lieu-lam-viec";
+import { TomTatHoSo } from "./tom-tat-ho-so";
 import type { Viec } from "./viec";
 
 export function HoSoViec({
@@ -103,8 +105,15 @@ export function HoSoViec({
 								) : null}
 							</DetailSheetSection>
 						) : null}
+						<TomTatHoSo moiNguoi={v.tom_tat?.moi_nguoi ?? null} />
+						{v.tom_tat?.chu_kho ? (
+							<SoLieuLamViec chuKho={v.tom_tat.chu_kho} />
+						) : null}
 						{phu || v.moc || v.bat_khi || v.vi_sao ? (
-							<DetailSheetSection title={m.hoSo.chiTiet}>
+							<DetailSheetSection
+								data-lo-trinh-chi-tiet=""
+								title={m.hoSo.chiTiet}
+							>
 								<DetailSheetProperties columns={1}>
 									{phu ? (
 										<DetailSheetProperty label={m.hoSo.keHoachGhi}>

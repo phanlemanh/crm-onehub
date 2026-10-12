@@ -22,7 +22,7 @@ import {
 import { SectionHeading } from "@crm/ui/components/section-heading";
 import { formatDay } from "@crm/ui/lib/format";
 import type {
-	LoTrinhDuLieu,
+	DuLieuChoXem,
 	MocLoTrinh,
 } from "@crm/validation/lo-trinh-du-lieu";
 import { soSanhMoc } from "@/lib/lo-trinh/ngay";
@@ -38,7 +38,7 @@ export function XemMoc({
 	moViec,
 }: {
 	viec: Viec[];
-	duLieu: LoTrinhDuLieu;
+	duLieu: DuLieuChoXem;
 	homNay: string | null;
 	moViec: (khoa: string) => void;
 }) {
