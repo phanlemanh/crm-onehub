@@ -35,6 +35,10 @@ export { NAV_RULES };
 const { BUCKET_OF, chu } = require(path.join(__dirname, 'trang-thai-ho-so.cjs'));
 const NGUONG = require(path.join(__dirname, '..', 'lib', 'nguong-o-co-hoi.cjs'));
 const { khoaTuConfig: khoaLoTrinh } = require(path.join(__dirname, 'lo-trinh-khoa.cjs'));
+// Cửa tín hiệu (hồ sơ cua-tin-hieu-gom-nhom): bộ đọc khoá nạp KHOAN DUNG — kho không khai `tin_hieu`
+// không phải chép thêm tệp nào (luật 26/09); kho khai mà thiếu tệp thì bước bản đồ đỏ to ở dưới.
+let khoaTinHieu = null;
+try { ({ khoaTinHieu } = require(path.join(__dirname, 'tin-hieu-khoa.cjs'))); } catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e; }
 import { khongCanNguoi } from './khong-can-nguoi.mjs';
 const OPP_TPL_MAP = path.join(__dirname, '..', 'skills', 'acceptance', 'references', 'opportunity-template.md');
 let _oppTpl = null;
@@ -401,10 +405,22 @@ if (isMain) {
   // lệnh này thoát khác 0: trang tự nói lý do; chỉ trang vắng hoặc lệch mới làm `--check` đỏ.
   const tepLoTrinh = khoaLoTrinh(readPlain(path.join(root, '_acceptance', 'config.yaml')) || '');
   const pagePath = path.join(root, 'LO-TRINH.html');
-  let trang = null;
+  let trang = null; let LT_ = null;
   if (tepLoTrinh != null) {
-    const LT = await import('./lo-trinh.mjs');
-    trang = LT.veTrang({ root, classify, sections: SECTIONS });
+    const LT = await import('./lo-trinh.mjs'); LT_ = LT;
+    // Cửa tín hiệu (hồ sơ cua-tin-hieu-gom-nhom): mô-đun chỉ được nạp khi kho khai `tin_hieu` — kho không
+    // khai thì trang giữ nguyên từng byte và mã cửa không chạy. Lỗi của mô-đun KHÔNG bị nuốt.
+    let tinHieu = null;
+    const cfgTH = readPlain(path.join(root, '_acceptance', 'config.yaml')) || '';
+    if (khoaTinHieu == null && /^tin_hieu:/m.test(cfgTH)) {
+      console.error('Kho khai tin_hieu nhưng thiếu scripts/tin-hieu-khoa.cjs — chép theo danh sách chép CI (GUIDE §5.3) hoặc gỡ khối tin_hieu.');
+      process.exit(1);
+    }
+    if (khoaTinHieu != null && khoaTinHieu(cfgTH) != null) {
+      const TH = await import('./tin-hieu.mjs');
+      tinHieu = TH.duongDi({ root, classify, sections: SECTIONS });
+    }
+    trang = LT.veTrang({ root, classify, sections: SECTIONS, tinHieu });
   }
   if (!check) {
     writeFileSync(mapPath, rendered);
@@ -436,7 +452,10 @@ if (isMain) {
         console.error('Kho khai lo_trinh.tep nhưng không glob nào trong risk_tiers.t1_skip_globs phủ LO-TRINH.html — thêm `- "LO-TRINH.html"` vào risk_tiers.t1_skip_globs của _acceptance/config.yaml (thiếu miễn trừ thì commit đóng cổng làm bằng chứng cũ đi).');
         code = Math.max(code, 1);
       }
-      if (existsSync(pagePath) && readPlain(pagePath) === trang) console.log('LO-TRINH.html khớp tệp ý định và hồ sơ.');
+      // Phép so do mô-đun lộ trình giữ (`trangKhop`, hàng X2: dải tóm tắt hồ sơ không làm trang «lệch»);
+      // mô-đun đời trước không có hàm → so từng byte như cũ.
+      const khop = (LT_ && typeof LT_.trangKhop === 'function') ? LT_.trangKhop : ((a, b) => a === b);
+      if (existsSync(pagePath) && khop(readPlain(pagePath), trang)) console.log('LO-TRINH.html khớp tệp ý định và hồ sơ.');
       else {
         console.error(`LO-TRINH.html ${existsSync(pagePath) ? 'lệch với' : 'chưa có, trong khi kho khai'} tệp ý định và hồ sơ — chạy: node ${hint} --root .`);
         code = Math.max(code, 1);

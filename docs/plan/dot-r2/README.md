@@ -34,8 +34,9 @@ quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot r2`, không p
 
 Không vào đợt: LT1b, LT2 (máy khác làm), R3 (10, 8b, L, T, K5, 7n), Việc và Dự án sau DA0b; F27 tới khi đo lại dưới kit 2.28.0.
 
-Worktree của dãy để chỗ giữ `/CHUA-CO-WORKTREE/<dãy>` như gói giai đoạn một. Kit chưa có bước để thợ ghi danh worktree
-(đã báo ở bình luận PR kit #301); tới khi có, thợ mở từ chip báo worktree thật cho giám sát điền trước khi nhận dãy.
+Worktree của dãy để chỗ giữ `/CHUA-CO-WORKTREE/<dãy>`. Việc đầu tiên của phiên thợ mở từ chip, trước S1, là
+`node <thư mục đợt>/loi/dieu-phoi.mjs ghi-danh <dãy>` từ worktree của chip (kit 2.28.0, DP8; lời mời chip mang sẵn
+lệnh). Việc nền giữ khoá `s4` — kiểm chéo đêm — ghi nhịp hoặc được miễn, nên cảnh báo «khoa-khong-nhip» là thật.
 
 ## Tên và giao tiếp
 

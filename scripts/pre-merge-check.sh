@@ -3,6 +3,22 @@
 #
 # Usage: pre-merge-check.sh [repo_root] [--slug <slug>]... [--base <ref>] [--no-t1-escape]
 #        pre-merge-check.sh ... [--recheck-all]
+# >>> HANG-PR
+#        pre-merge-check.sh [repo_root] --base <ref> --hang-pr
+#
+# --hang-pr: chế độ CHỈ phân loại PR cho CI của kho (hồ sơ ci-cua-kho-bo-job-nang).
+# In ba dòng khoá=giá-trị ra stdout (và nối vào $GITHUB_OUTPUT khi có), một dòng
+# vào $GITHUB_STEP_SUMMARY khi có, rồi thoát 0 — không chạy luật nào của cổng.
+# Dùng CHÍNH bộ khớp, bộ đọc danh sách và khối «Phân loại diff-chịu-cổng» bên
+# dưới. Không chứng minh được thì `cham_vat=true` (nghi ngờ thì chạy đủ). Mọi
+# dòng của chế độ nằm giữa cặp marker HANG-PR: cắt hết các vùng ấy là được đúng
+# cổng không cờ (ca AC-8 của tests/scripts/hang-pr.test.mjs canh).
+# <<<HANG-PR-KHOA
+# hang: T1 ho-so T2 T3 khong-ro
+# cham_vat: true false
+# ly_do: phan-loai khong-co-pham-vi-diff diff-rong doi-danh-sach-hang cau-hinh-loi khong-phan-loai-duoc
+# HANG-PR-KHOA>>>
+# <<< HANG-PR
 #
 # --recheck-all: re-check the committed evidence of EVERY slug, including those
 # outside the PR diff. Without it the re-check rule is scoped to slugs the PR
@@ -128,6 +144,10 @@ while [ $# -gt 0 ]; do
       # kho theo thước mới — không có nó, "hồ sơ cũ không bao giờ bị đo lại"
       # là mất vĩnh viễn, không phải mất tạm.
       RECHECK_ALL=1; shift ;;
+    # >>> HANG-PR
+    --hang-pr)
+      HANG_PR=1; shift ;;
+    # <<< HANG-PR
     -*)
       # `-*` chứ không phải `--*`: một gạch cũng là lỗi gõ, và bản chỉ bắt hai
       # gạch để lọt `-no-t1-escape` y nguyên. Nuốt cờ lạ vào ROOT là fail-open
@@ -150,6 +170,43 @@ if [ "$PMB_SET_EMPTY" -eq 1 ] && [ -z "$BASE" ]; then
   echo "pre-merge-check: PRE_MERGE_BASE is set but empty — a CI variable expansion failed (unset it to run without a diff scope, or give a real ref via PRE_MERGE_BASE or --base)" >&2
   exit 2
 fi
+# >>> HANG-PR
+# Chế độ --hang-pr: nuốt mọi dòng cổng in ra vào một tệp tạm, in kết quả ra fd 7
+# (stdout thật). Bẫy EXIT bảo đảm MỌI lối dừng sau đây — kể cả lối chưa ai nghĩ
+# tới — vẫn in «chạy đủ» và thoát 0: bước phân loại đỏ thì GitHub BỎ QUA job phụ
+# thuộc (tức bỏ test), nên đỏ ở đây nguy hơn chạy thừa.
+if [ "${HANG_PR:-0}" = 1 ]; then
+  hp_in() { # <hang> <cham_vat> <ly_do> [<cảnh báo>]
+    HP_DA_IN=1
+    printf 'hang=%s\ncham_vat=%s\nly_do=%s\n' "$1" "$2" "$3" >&7
+    if [ -n "${GITHUB_OUTPUT:-}" ]; then
+      printf 'hang=%s\ncham_vat=%s\nly_do=%s\n' "$1" "$2" "$3" >> "$GITHUB_OUTPUT"
+    fi
+    if [ -n "${4:-}" ]; then
+      local m="${4//%/%25}"; m="${m//$'\r'/%0D}"; m="${m//$'\n'/%0A}"
+      printf '::warning title=hang-pr::%s\n' "$m" >&7
+    fi
+    if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+      printf 'Hạng PR: **%s** · chạm vật: %s · `%s`\n' "$1" "$2" "$3" >> "$GITHUB_STEP_SUMMARY"
+    fi
+    return 0
+  }
+  exec 7>&1
+  HP_DA_IN=0
+  if ! HP_TAM="$(mktemp -d "${TMPDIR:-/tmp}/hang-pr.XXXXXX" 2>/dev/null)"; then
+    hp_in khong-ro true khong-phan-loai-duoc "không tạo được thư mục tạm (TMPDIR) — chạy đủ"
+    exit 0
+  fi
+  exec >"$HP_TAM/cong.log" 2>&1
+  hp_bay() {
+    [ "$HP_DA_IN" = 1 ] || hp_in khong-ro true khong-phan-loai-duoc "cổng dừng trước khi phân loại: $(tail -n 1 "$HP_TAM/cong.log" 2>/dev/null)"
+    rm -f "$HP_TAM/cong.log" "$HP_TAM/goc/_acceptance/config.yaml"
+    rmdir "$HP_TAM/goc/_acceptance" "$HP_TAM/goc" "$HP_TAM" 2>/dev/null
+    exit 0
+  }
+  trap hp_bay EXIT
+fi
+# <<< HANG-PR
 
 # ─── Sổ luật-đã-chạy (rules ledger) ─────────────────────────────────────────
 # `clean` phải được CHỨNG MINH, không phải mặc định: mọi khối luật ghi sổ qua
@@ -762,6 +819,48 @@ CHANGED
 fi
 # File chịu cổng ĐẦU TIÊN trong diff — để thông điệp per-slug nêu đích danh.
 DIFF_GATED_FIRST="$(printf '%s%s' "$DIFF_T3_HITS" "$DIFF_NONT1_HITS" | head -1)"
+# >>> HANG-PR
+# Chế độ --hang-pr: thang nghi ngờ (dừng ở bậc đúng đầu tiên) rồi phân loại từ
+# CHÍNH các biến vừa tính — không bộ khớp thứ hai, không danh sách thứ hai.
+if [ "${HANG_PR:-0}" = 1 ]; then
+  if [ ! -f "$ACC/config.yaml" ]; then
+    hp_in khong-ro true cau-hinh-loi "_acceptance/config.yaml vắng — chạy đủ"
+  elif grep -q '^VIOLATION \[config\]' "$HP_TAM/cong.log"; then
+    hp_in khong-ro true cau-hinh-loi "$(grep -m 1 '^VIOLATION \[config\]' "$HP_TAM/cong.log")"
+  elif [ "$DIFF_READY" -eq 0 ]; then
+    if [ -n "$BASE" ]; then
+      hp_in khong-ro true khong-co-pham-vi-diff "$DIFF_SKIP_NOTE"
+    else
+      hp_in khong-ro true khong-co-pham-vi-diff
+    fi
+  elif [ -z "$DIFF_FILES" ]; then
+    hp_in khong-ro true diff-rong "diff \"$BASE\"...HEAD rỗng — không chứng minh được PR không chạm vật"
+  else
+    # PR đổi chính danh sách hạng (t1_skip_globs/t3_paths) thì không phân loại:
+    # đóng lỗ «PR tự nới danh sách để tự bỏ test». Danh sách ở merge-base đọc bằng
+    # CHÍNH config_list, trỏ ACC vào bản config lấy từ git.
+    HP_MB="$(git -C "$ROOT" merge-base "$BASE_SHA" HEAD 2>/dev/null || true)"
+    mkdir -p "$HP_TAM/goc/_acceptance"
+    HP_T1_GOC="<vang>"; HP_T3_GOC="<vang>"
+    if [ -n "$HP_MB" ] && git -C "$ROOT" show "$HP_MB:./_acceptance/config.yaml" > "$HP_TAM/goc/_acceptance/config.yaml" 2>/dev/null; then
+      HP_T1_GOC="$(ACC="$HP_TAM/goc/_acceptance"; config_list t1_skip_globs)"
+      HP_T3_GOC="$(ACC="$HP_TAM/goc/_acceptance"; config_list t3_paths)"
+    fi
+    if [ "$HP_T1_GOC" != "$T1_GLOBS" ] || [ "$HP_T3_GOC" != "$T3_PATHS" ]; then
+      hp_in khong-ro true doi-danh-sach-hang
+    elif [ -n "$DIFF_T3_HITS" ]; then
+      hp_in T3 true phan-loai
+    elif [ -n "$DIFF_NONT1_HITS" ]; then
+      hp_in T2 true phan-loai
+    elif [ "$DIFF_GATE_TOUCHED" -eq 1 ]; then
+      hp_in ho-so false phan-loai
+    else
+      hp_in T1 false phan-loai
+    fi
+  fi
+  exit 0
+fi
+# <<< HANG-PR
 
 # per-slug: hai đường dẫn độc lập về lexical — vòng đếm dưới đây dùng biến
 # _sd, vòng luật thật dùng dir. Tiêm hỏng một vòng thì con số lệch và điểm
