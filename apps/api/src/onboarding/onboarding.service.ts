@@ -1,10 +1,12 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { demOkrTheoDonVi } from "@crm/db/okr-don-vi";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type OnboardingTemplateStep,
 	parseOnboardingTemplateSteps,
 } from "@crm/validation/onboarding-template";
+import { docDuocDoiTac } from "@crm/validation/vai-workspace";
 import {
 	BadRequestException,
 	ConflictException,
@@ -27,6 +29,7 @@ import type {
 	EnrollmentRemoveOutput,
 	EnrollmentStageInput,
 	EnrollmentUpsertInput,
+	NguoiNhanViecOutput,
 	PlanCreateFromTemplateInput,
 	PlanDetailOutput,
 	PlanIdInput,
@@ -224,6 +227,26 @@ export class OnboardingService {
 
 	async access(userId: string): Promise<AccessOutput> {
 		return { canManage: canManageOnboarding(await workspaceRoleOf(userId)) };
+	}
+
+	async nguoiNhanViec(): Promise<NguoiNhanViecOutput> {
+		const hang = await this.db.user.findMany({
+			where: { members: { some: { organizationId: WORKSPACE_ID } } },
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				image: true,
+				members: {
+					where: { organizationId: WORKSPACE_ID },
+					select: { role: true },
+				},
+			},
+			orderBy: [{ name: "asc" }, { email: "asc" }],
+		});
+		return hang
+			.filter((u) => u.members.some((m) => docDuocDoiTac(m.role)))
+			.map(({ id, name, email, image }) => ({ id, name, email, image }));
 	}
 
 	async listDepartments(

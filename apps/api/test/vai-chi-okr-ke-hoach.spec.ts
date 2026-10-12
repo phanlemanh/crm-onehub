@@ -217,3 +217,24 @@ describe("vlr-chuyen", () => {
 		}
 	});
 });
+
+describe("vlr-danh-sach", () => {
+	test("vlr-danh-sach: chỉ owner, admin, member; xếp theo tên rồi email", async () => {
+		const chu = await gieoThanhVien("VLR DS A Chủ", "owner");
+		const qt = await gieoThanhVien("VLR DS B Quản trị", "admin");
+		const tv = await gieoThanhVien("VLR DS C Thành viên", "member");
+		const okr = await gieoThanhVien("VLR DS D OKR", "okr");
+		const ngoai = await gieoNguoiNgoai("VLR DS E Ngoài");
+		const ma = new Set([chu.id, qt.id, tv.id, okr.id, ngoai.id]);
+		const ds = (await dichVu().nguoiNhanViec()).filter((u) => ma.has(u.id));
+		const thay = ds.map((u) => u.id);
+		if (JSON.stringify(thay) !== JSON.stringify([chu.id, qt.id, tv.id])) {
+			throw new Error(
+				`vlr: danh sach nguoi nhan viec sai ${JSON.stringify(thay)}`,
+			);
+		}
+		expect(ds.map((u) => Object.keys(u).sort().join(","))).toEqual(
+			Array(3).fill("email,id,image,name"),
+		);
+	});
+});
