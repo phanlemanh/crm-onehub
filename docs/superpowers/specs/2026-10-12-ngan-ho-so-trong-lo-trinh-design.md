@@ -29,16 +29,15 @@ CRM không đọc hồ sơ, không đọc tệp kế hoạch, không tự tính 
    `tom_tat.chu_kho = null` cho mọi vai khác `owner`. Mã khách không biết vai: thấy `chu_kho` thì vẽ phần
    chủ kho, không thấy thì thôi. Dữ liệu tầng đó vì vậy không có trong trang gửi xuống trình duyệt của vai
    khác. Phần đọc tệp vẫn nằm sau `"use cache"`; phần lọc chạy sau cache, theo từng lượt xem.
-4. **Ngăn: phần «Tóm tắt hồ sơ» đứng đầu thân ngăn**, ngay sau hai cảnh báo LT1 (theo lời, lệch kế
+4. **Ngăn theo nếp Thoả thuận / Doanh nghiệp** (chủ kho yêu cầu 12/10): thanh thẻ con dưới dải số — «Tổng quan» cho mọi người, thêm «Số liệu» cho vai `owner`. Trong «Tổng quan», **phần «Tóm tắt hồ sơ» đứng đầu**, ngay sau hai cảnh báo LT1 (theo lời, lệch kế
    hoạch), trước «Chi tiết» và hai danh sách việc liên quan. Hàng theo đúng thứ tự ô của khối, bỏ ô
    `trang_thai` vì nó trùng chữ trạng thái của việc (đặc tả kit: «đúng bằng hang.trang_thai»; đếm trên bản vẽ
    thật 81/81 trùng), mà ngăn LT1 đã hiện chữ đó: nhãn nhóm ở dải số đầu ngăn, cộng dòng «Kế hoạch ghi» khi chữ
-   khác các chữ cùng nghĩa. Tám hàng: Đã giao gì · Vì sao làm · Hồ sơ cập nhật · Lên production ·
-   Sẽ đo gì, khi nào · Kết quả đo · Còn thiếu gì · Ai quyết.
-5. **Ô vắng hiện «Chưa có»**, chữ phụ, không bỏ hàng — người đọc biết ô đó có nhưng hồ sơ chưa ghi. Việc
+   khác các chữ cùng nghĩa. Tám hàng xếp lưới hai cột như «Nằm ở đâu» của Thoả thuận (Đã giao gì, Vì sao làm, Sẽ đo gì, Ai quyết trải cả hàng): Đã giao gì · Vì sao làm · Hồ sơ cập nhật · Lên production · Sẽ đo gì, khi nào · Kết quả đo · Còn thiếu gì · Ai quyết.
+5. **Ô vắng hiện ô trống chuẩn `EmptyCellValue` («—»)** như mọi ngăn bản ghi, không bỏ hàng — người đọc biết ô đó có nhưng hồ sơ chưa ghi. Việc
    không có dải (chưa có hồ sơ, hoặc khối bản 1) hiện một câu «Chưa có tóm tắt hồ sơ cho việc này.» trong
    phần «Tóm tắt hồ sơ».
-6. **Phần chủ kho «Số liệu làm việc»** đứng ngay sau «Tóm tắt hồ sơ», có một câu «Chỉ chủ không gian làm
+6. **Phần chủ kho «Số liệu làm việc»** nằm ở thẻ con «Số liệu» (thẻ không có với vai khác), có một câu «Chỉ chủ không gian làm
    việc thấy phần này.» Hai cột ở máy tính, một cột ở điện thoại. Commit đã chấm hiện bảy ký tự đầu, nút
    sao chép trọn mã (`CopyValue`), và liên kết «Tìm PR» mở ô tìm PR của GitHub theo mã commit (tab mới):
    `https://github.com/search?q=<mã 40 ký tự>&type=pullrequests`. Mẫu URL nằm trong
@@ -86,7 +85,7 @@ và bản mẫu của chính hồ sơ. Đụng cùng tệp với LT2 thì báo p
 
 - Suôn sẻ: trang Lộ trình → bấm một việc đã giao (Bảng, Bảng cột, Mốc, hay việc liên quan trong ngăn) →
   ngăn mở, «Tóm tắt hồ sơ» ở đầu thân → đọc năm câu (điểm ra: đóng ngăn, về đúng chỗ đứng như LT1).
-- Biên: việc chưa có dải → một câu «Chưa có tóm tắt hồ sơ cho việc này.»; ô vắng → «Chưa có»; vai khác
+- Biên: việc chưa có dải → một câu «Chưa có tóm tắt hồ sơ cho việc này.»; ô vắng → «—»; vai khác
   `owner` → không có phần «Số liệu làm việc»; khối bản 1 → mọi việc «chưa có tóm tắt», không băng.
 - Lỗi & quay lại: dải sai kiểu → cả trang về khung «dữ liệu lộ trình hỏng» của LT1 kèm chỗ hỏng (khung
   LT1, không khung mới); khối mới hơn → băng cảnh báo của LT1, ngăn đọc phần biết.
@@ -103,8 +102,8 @@ và bản mẫu của chính hồ sơ. Đụng cùng tệp với LT2 thì báo p
 | Trạng thái | Màn | Hiển thị gì | Người làm gì tiếp |
 |---|---|---|---|
 | ST-ngan-day-du | Ngăn việc | «Tóm tắt hồ sơ» tám hàng đủ chữ, không có «Số liệu làm việc» | Đọc, đóng ngăn |
-| ST-ngan-chu-kho | Ngăn việc | Như trên + «Số liệu làm việc»: sáu số, commit bảy ký tự, nút sao chép, «Tìm PR» | Sao chép mã, mở PR |
-| ST-ngan-o-vang | Ngăn việc | Hàng có ô vắng hiện «Chưa có» chữ phụ | Đọc phần có |
+| ST-ngan-chu-kho | Ngăn việc | Thanh thẻ «Tổng quan · Số liệu»; thẻ «Số liệu»: sáu số, commit bảy ký tự, nút sao chép, «Tìm PR» | Sao chép mã, mở PR |
+| ST-ngan-o-vang | Ngăn việc | Hàng có ô vắng hiện «—» | Đọc phần có |
 | ST-ngan-chua-co-tom-tat | Ngăn việc | «Chưa có tóm tắt hồ sơ cho việc này.»; phần còn lại như LT1 | Đọc phần kế hoạch |
 | ST-ngan-khuon-cu | Trang + ngăn | Không băng cảnh báo; ngăn «Chưa có tóm tắt hồ sơ cho việc này.» | Như trên |
 | ST-ngan-doan-dai | Ngăn việc (375) | Ô «Vì sao làm» 1.311 ký tự xuống dòng trọn, không tràn ngang | Cuộn ngăn |
@@ -123,6 +122,7 @@ và bản mẫu của chính hồ sơ. Đụng cùng tệp với LT2 thì báo p
 | Component | Nấc (dùng / ghép / mở rộng / tạo) | Vì sao (1 dòng) |
 |---|---|---|
 | `DetailSheetSection`, `DetailSheetProperties`, `DetailSheetProperty`, `DetailSheetProse` | dùng | Họ ngăn của LT1 (`apps/app/components/detail-sheet.tsx`), giữ nếp Thoả thuận |
+| `DetailSheetTabs`, `EmptyCellValue` | dùng | Thanh thẻ con và ô trống chuẩn của ngăn Thoả thuận / Doanh nghiệp |
 | `CopyValue` | dùng | Bảng «Dấu hiệu vẽ tay» cấm `navigator.clipboard` tự viết |
 | `Link` (`@crm/ui/components/link`) | dùng | Liên kết chữ có vòng focus sẵn |
 | `TomTatHoSo` (`apps/app/components/lo-trinh/tom-tat-ho-so.tsx`), `SoLieuLamViec` (`apps/app/components/lo-trinh/so-lieu-lam-viec.tsx`) | ghép | Hai thành phần mới cạnh `ho-so-viec.tsx`, chỉ ghép thành phần có sẵn; mọi nhãn lấy từ tệp lời |

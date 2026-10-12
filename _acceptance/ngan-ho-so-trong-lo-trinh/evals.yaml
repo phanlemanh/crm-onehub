@@ -43,7 +43,7 @@ evals:
       - "apps/app/test/fixtures/lo-trinh/x2/**"
     expected: |
       describe "o-vang": tu tep mau that, chon moi viec co it nhat mot o moi_nguoi null (vd 4n: do_gi null). Voi MOI o null
-      cua MOI viec do: hang [data-o-tom-tat=<o>] co mat, chu == m.hoSo.chuaCo ("Chưa có"), mang [data-o-vang]; so hang van
+      cua MOI viec do: hang [data-o-tom-tat=<o>] co mat, chu == "—" (EmptyCellValue cua packages/ui), mang [data-o-vang]; so hang van
       == 8. Ma tran: so assert = tong so o null tren cac viec do.
       Doi chung duong: o khong null cua cung viec -> chu == gia tri cua o, khong mang [data-o-vang].
       CHIEU DO: ban sao bo hang khi o null -> do voi thong diep ghim "viec <khoa> bo hang o vang <o>"; ban sao dien o null
@@ -61,7 +61,7 @@ evals:
     expected: |
       describe "chua-co": tu tep mau that, MOI viec co tom_tat null (gom 5 viec da giao khong ho so, vd N0):
         1 [data-lo-trinh-tom-tat] chua dung mot cau == m.hoSo.chuaCoTomTat, 0 phan tu [data-o-tom-tat]
-        2 khong co [data-lo-trinh-so-lieu]
+        2 khong co [data-lo-trinh-so-lieu] va khong co the "Số liệu"
         3 dai so dau ngan van co 4 o (Trang thai, Moc, Lo trinh, Nhom) nhu LT1
       Doi chung duong: viec co tom_tat (LT1) -> 8 hang, khong cau chua-co.
       CHIEU DO: ban sao an ca phan tom tat khi tom_tat null -> do voi thong diep ghim "viec <khoa> mat cau chua co tom tat".
@@ -78,9 +78,10 @@ evals:
       - "apps/app/test/fixtures/lo-trinh/x2/**"
     expected: |
       describe "chu-kho": tu tep mau that, du lieu qua choVaiXem(dauVao, "owner"). Voi MOI viec co tom_tat:
-        1 [data-lo-trinh-so-lieu] dung ngay sau [data-lo-trinh-tom-tat]; co cau m.hoSo.chiChuThay
+        1 thanh the con cua ngan == [m.hoSo.tongQuan, m.hoSo.theSoLieu] dung thu tu; bam the thu hai (su kien chuot) ->
+          the do aria-selected va [data-lo-trinh-so-lieu] hien; co cau m.hoSo.chiChuThay
         2 sau o [data-so-lieu=<k>] theo thu tu tieu_chi, phep_do, luot_cham, token, quyet_dinh_may, quyet_dinh_nguoi;
-          so khong null -> chu == Intl.NumberFormat("vi").format(so); null -> m.hoSo.chuaCo
+          so khong null -> chu == Intl.NumberFormat("vi").format(so); null -> "—"
         3 o commit: chu == ma.slice(0,7) mang translate="no"; nut sao chep co nhan doc man hinh; lien ket "Tìm PR" la <a>
           href == chuoi co dinh "https://github.com/search?q=" + ma (40 ky tu) + "&type=pullrequests" (KHONG goi
           LO_TRINH.timPr), target="_blank", rel chua noopener
@@ -133,7 +134,7 @@ evals:
           -> cau chua-co-tom-tat, 0 [data-o-tom-tat]
         2 moi hon: tep mau x2 doi phien_ban = 3 -> [data-lo-trinh-canh-bao] co mat; ngan LT1 van du 8 hang
         3 sai kieu: tep mau x2, tom_tat.moi_nguoi.vi_sao cua viec dau = 5 -> kieu khoi-hong, cau may chua duong khoa
-          "lo_trinh.<i>.hang.<j>.tom_tat.moi_nguoi.vi_sao"; khong hien "Chưa có"
+          "lo_trinh.<i>.hang.<j>.tom_tat.moi_nguoi.vi_sao"; trang khong co [data-o-tom-tat] nao
       Doi chung duong: tep mau x2 nguyen -> khong canh bao, LT1 du 8 hang.
       CHIEU DO: ban sao docTrangLoTrinh giu canhBao cua ban 1 -> ca 1 do voi thong diep ghim "khoi ban 1 hien bang canh bao
       ca trang".
@@ -211,7 +212,8 @@ evals:
       Ban mau /proto/ngan-ho-so-trong-lo-trinh dung NoiDungLoTrinh that tren khoi cua tep mau x2, qua choVaiXem theo state.
       Ma tran viet truoc 8 o, moi o mot dong DUNG/SAI va mot anh evidence/<state>--<kho>--<nen>.png:
         ST-ngan-day-du x {1280, 375} x sang: [data-lo-trinh-tom-tat] dung truoc [data-lo-trinh-chi-tiet]; khong [data-lo-trinh-so-lieu]
-        ST-ngan-chu-kho x {1280, 375} x sang: co [data-lo-trinh-so-lieu] ngay sau tom tat
+        ST-ngan-chu-kho x {1280, 375} x sang: thanh the == "Tổng quan|Số liệu"; bam "Số liệu" bang chuot that -> co
+          [data-lo-trinh-so-lieu]; cac state khac: the dau la "Tổng quan", khong co the "Số liệu"
         ST-ngan-doan-dai (R1g) x 375 x sang: scrollWidth cua trang va cua ngan <= clientWidth
         ST-ngan-o-vang (4n) x 1280 x sang: hang do_gi mang [data-o-vang]
         ST-ngan-day-du x 1280 x toi va ST-ngan-chu-kho x 375 x toi: nhu o sang cung state
@@ -252,9 +254,9 @@ evals:
       rang/chu-viet-thang.mjs (goc kho suy tu vi tri script). Ma tran viet truoc 4 tep: tom-tat-ho-so.tsx,
       so-lieu-lam-viec.tsx, ho-so-viec.tsx, page.tsx cua trang. Voi MOI tep (so dong DUNG/SAI = 4): khong nut chu JSX nao
       co chu cai (ngoai khoang trang va dau cau), khong thuoc tinh title=, aria-label=, label=, description= nao la chuoi
-      viet thang co chu cai. Dong 5: moi khoa cua m.hoSo ma hai thanh phan moi dung co mat o ca en va vi cua
+      viet thang co chu cai. Dong 5: moi khoa cua m.hoSo ma hai thanh phan moi va ho-so-viec.tsx dung co mat o ca en va vi cua
       apps/app/lib/messages/lo-trinh.ts.
       Ma: moi dong DUNG -> 0; co dong SAI -> 1 voi "chu viet thang o <tep>:<dong>".
       Tu chung minh hai chieu (--pha-thu): ban sao tom-tat-ho-so.tsx trong thu muc tam chen title="Tóm tắt hồ sơ" -> SAI
-      voi thong diep ghim "chu viet thang o tom-tat-ho-so.tsx:<dong>"; ban sao tep loi bo khoa vi chuaCo -> dong 5 SAI
-      "thieu khoa vi hoSo.chuaCo". Khong ra dung thong diep -> ma 1.
+      voi thong diep ghim "chu viet thang o tom-tat-ho-so.tsx:<dong>"; ban sao tep loi bo khoa vi chuaCoTomTat -> dong 5 SAI
+      "thieu khoa vi hoSo.chuaCoTomTat". Khong ra dung thong diep -> ma 1.

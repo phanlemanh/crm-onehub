@@ -1,6 +1,7 @@
 "use client";
 
 import { CopyValue } from "@crm/ui/components/copy-value";
+import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { Link } from "@crm/ui/components/link";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -40,12 +41,8 @@ export function SoLieuLamViec({ chuKho }: { chuKho: TomTatChuKho }) {
 					return (
 						<DetailSheetProperty key={k} label={m.hoSo.oSoLieu[k]}>
 							{gt === null ? (
-								<span
-									className="text-muted-foreground"
-									data-o-vang=""
-									data-so-lieu={k}
-								>
-									{m.hoSo.chuaCo}
+								<span data-o-vang="" data-so-lieu={k}>
+									<EmptyCellValue />
 								</span>
 							) : (
 								<span className="tabular-nums" data-so-lieu={k}>
@@ -57,12 +54,8 @@ export function SoLieuLamViec({ chuKho }: { chuKho: TomTatChuKho }) {
 				})}
 				<DetailSheetProperty label={m.hoSo.commit} wide>
 					{chuKho.ma === null ? (
-						<span
-							className="text-muted-foreground"
-							data-o-vang=""
-							data-so-lieu="ma"
-						>
-							{m.hoSo.chuaCo}
+						<span data-o-vang="" data-so-lieu="ma">
+							<EmptyCellValue />
 						</span>
 					) : (
 						<span className="flex items-center gap-2" data-so-lieu="ma">

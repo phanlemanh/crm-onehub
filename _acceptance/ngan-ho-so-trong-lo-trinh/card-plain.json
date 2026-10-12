@@ -3,11 +3,11 @@
  "will_do": [
   {
    "id": "AC-1",
-   "p": "Sẽ mở đầu ngăn việc bằng «Tóm tắt hồ sơ» tám hàng, đúng nguyên chữ và đúng thứ tự bộ công cụ xuất — thử trên cả 81 việc có tóm tắt của dữ liệu thật."
+   "p": "Sẽ mở ngăn việc như ngăn Thoả thuận — thanh thẻ con, thẻ «Tổng quan» mở sẵn, đầu thẻ là «Tóm tắt hồ sơ» tám ô xếp hai cột, đúng nguyên chữ và thứ tự bộ công cụ xuất (thử trên 81 việc thật)."
   },
   {
    "id": "AC-2",
-   "p": "Sẽ giữ hàng khi hồ sơ chưa ghi ô đó và hiện «Chưa có», không tự điền từ chỗ khác."
+   "p": "Sẽ giữ hàng khi hồ sơ chưa ghi ô đó và hiện ô trống chuẩn «—» như mọi ngăn bản ghi, không tự điền từ chỗ khác."
   },
   {
    "id": "AC-3",
@@ -15,7 +15,7 @@
   },
   {
    "id": "AC-4",
-   "p": "Sẽ cho chủ không gian làm việc thấy thêm «Số liệu làm việc»: tiêu chí, phép đo, lượt chấm, token, số quyết định của máy và của người, mã commit kèm nút sao chép và liên kết «Tìm PR»."
+   "p": "Sẽ cho chủ không gian làm việc thêm thẻ con «Số liệu»: tiêu chí, phép đo, lượt chấm, token, máy quyết, người quyết, mã commit kèm nút sao chép và «Tìm PR»."
   },
   {
    "id": "AC-5",

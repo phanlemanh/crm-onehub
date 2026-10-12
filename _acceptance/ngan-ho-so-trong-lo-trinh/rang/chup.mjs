@@ -153,6 +153,13 @@ for (const o of MA_TRAN) {
 			for (const el of document.querySelectorAll(s)) el.remove();
 	});
 	await new Promise((ok) => setTimeout(ok, 500));
+	if (o.state === "ST-ngan-chu-kho") {
+		const the = await trang.$$('[data-lo-trinh-chi-tiet-viec] [role="tab"]');
+		for (const t of the)
+			if ((await t.evaluate((e) => e.textContent?.trim())) === "Số liệu")
+				await t.click();
+		await new Promise((ok) => setTimeout(ok, 400));
+	}
 	const cao = await trang.evaluate(() => {
 		const ngan = document.querySelector("[data-lo-trinh-chi-tiet-viec]");
 		const than = ngan
@@ -173,7 +180,8 @@ for (const o of MA_TRAN) {
 		const tomTat = ngan.querySelector("[data-lo-trinh-tom-tat]");
 		const chiTiet = ngan.querySelector("[data-lo-trinh-chi-tiet]");
 		const soLieu = ngan.querySelector("[data-lo-trinh-so-lieu]");
-		if (!tomTat) loi.push("khong thay phan tom tat ho so");
+		if (!tomTat && state !== "ST-ngan-chu-kho")
+			loi.push("khong thay phan tom tat ho so");
 		else if (
 			chiTiet &&
 			!(
@@ -182,11 +190,18 @@ for (const o of MA_TRAN) {
 			)
 		)
 			loi.push("tom tat khong dung truoc chi tiet");
+		const the = [...ngan.querySelectorAll('[role="tab"]')].map((e) =>
+			e.textContent?.trim(),
+		);
 		if (state === "ST-ngan-chu-kho") {
+			if (the.join("|") !== "Tổng quan|Số liệu")
+				loi.push(`vai owner thanh the sai: ${the.join("|")}`);
 			if (!soLieu) loi.push("vai owner khong thay so lieu lam viec");
-			else if (tomTat && tomTat.nextElementSibling !== soLieu)
-				loi.push("so lieu khong dung ngay sau tom tat");
-		} else if (soLieu) loi.push("vai khac owner thay so lieu lam viec");
+		} else {
+			if (soLieu || the.includes("Số liệu"))
+				loi.push("vai khac owner thay so lieu lam viec");
+			if (the[0] !== "Tổng quan") loi.push("ngan khong co the Tong quan");
+		}
 		if (
 			state === "ST-ngan-o-vang" &&
 			!ngan.querySelector('[data-o-tom-tat="do_gi"][data-o-vang]')

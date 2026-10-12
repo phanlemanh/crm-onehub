@@ -1,18 +1,18 @@
 ---
 slug: ngan-ho-so-trong-lo-trinh
-at: 2026-10-12T01:45:16Z
+at: 2026-10-12T02:34:14Z
 route: http://localhost:<cổng trống>/proto/ngan-ho-so-trong-lo-trinh (rang/chup.mjs tự dựng app của cây với PROTO_ROUTE=1)
 material: real-components
 context: host-embedded
 context_scenes: []
-reaction: nac-1 (anh-gui-kem-the-cong)
+reaction: nac-1 (anh-gui-kem-the-cong; vòng 2 theo phản hồi chủ kho 12/10: «chưa dùng component và ux sẵn có như Deal detail, Doanh nghiệp chi tiết»)
 options:
 divergence: skipped — khuôn có sẵn: ngăn việc của LT1 (họ DetailSheet), chỉ thêm hai phần vào thân ngăn, một hướng hiển nhiên
 ds_skill: web-design-guidelines
 states: [ST-ngan-day-du, ST-ngan-chu-kho, ST-ngan-o-vang, ST-ngan-chua-co-tom-tat, ST-ngan-khuon-cu, ST-ngan-doan-dai]
 breakpoints: [mobile-375, desktop-1280]
 themes: [light, dark]
-patched: 1
+patched: 5
 deferred: 2
 ---
 # design-pass — ngan-ho-so-trong-lo-trinh
@@ -63,6 +63,10 @@ trang và ngăn không cuộn ngang — 24/24 ô đạt.
 
 ### Nhóm 1 — vá-được-trong-từ-vựng-token (đã vá tại chỗ)
 
+- Vòng 2 (chủ kho 12/10, đối chiếu ngăn Thoả thuận `deal-sheet.tsx` và Doanh nghiệp `company-sheet.tsx`): thêm thanh thẻ con `DetailSheetTabs` dưới dải số — «Tổng quan» cho mọi người, «Số liệu» chỉ khi dữ liệu mang tầng chủ kho.
+- Vòng 2: «Tóm tắt hồ sơ» xếp lưới hai cột như «Nằm ở đâu» của Thoả thuận; bốn ô chữ dài (Đã giao gì, Vì sao làm, Sẽ đo gì, Ai quyết) trải cả hàng.
+- Vòng 2: ô vắng dùng ô trống chuẩn `EmptyCellValue` («—») thay chữ «Chưa có» tự viết.
+- Vòng 2: «Số liệu làm việc» chuyển từ mục nối đuôi sang thẻ con riêng, như «Liên hệ», «Agent» của ngăn bản ghi.
 - Nhãn «Quyết định của máy» / «Quyết định của người» bị cắt ở cột nhãn 6,5rem khi hai cột (1280) → đổi chữ thành «Máy quyết» / «Người quyết» (en «Machine calls» / «Human calls»); không đổi độ rộng cột.
 
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)

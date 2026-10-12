@@ -15,7 +15,7 @@ const TEP = [
 	"apps/app/components/lo-trinh/ho-so-viec.tsx",
 	"apps/app/app/(app)/[slug]/lo-trinh/page.tsx",
 ];
-const MOI = TEP.slice(0, 2);
+const MOI = TEP.slice(0, 3);
 const THUOC_TINH = new Set(["title", "aria-label", "label", "description"]);
 const CHU = /\p{L}/u;
 const ts = createRequire(path.join(APP, "package.json"))("typescript");
@@ -118,17 +118,17 @@ if (process.argv.includes("--pha-thu") && ma === 0) {
 		kiem({ ...goc, ma: { ...goc.ma, [t]: chen } }).dong.find((d) => !d.dung)
 			?.nhan ?? "";
 	const viThieu = { ...goc.loi.vi };
-	delete viThieu.chuaCo;
+	delete viThieu.chuaCoTomTat;
 	const b =
 		kiem({ ...goc, loi: { ...goc.loi, vi: viThieu } }).dong.find((d) => !d.dung)
 			?.nhan ?? "";
 	const dungA = a.startsWith("chu viet thang o tom-tat-ho-so.tsx:");
-	const dungB = b === "thieu khoa vi hoSo.chuaCo";
+	const dungB = b === "thieu khoa vi hoSo.chuaCoTomTat";
 	console.log(
 		`${dungA ? "DUNG" : "SAI"} pha-thu: chen title viet thang -> ${a || "khong dong nao do"}`,
 	);
 	console.log(
-		`${dungB ? "DUNG" : "SAI"} pha-thu: bo khoa vi chuaCo -> ${b || "khong dong nao do"}`,
+		`${dungB ? "DUNG" : "SAI"} pha-thu: bo khoa vi chuaCoTomTat -> ${b || "khong dong nao do"}`,
 	);
 	if (!dungA || !dungB) ma = 1;
 }
