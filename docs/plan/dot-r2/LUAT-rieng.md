@@ -43,4 +43,24 @@ Luật mới của giai đoạn hai.
     theo mốc: không mốc là xa nhất). Thêm hàng giữa đợt thì khai `moc` cho hàng đó.
 19. LT1b và LT2 (Lộ trình trong CRM) làm ở máy khác, không mở trong đợt này. Chạm `apps/app/app/(app)/[slug]/lo-trinh/**`
     thì gửi `cham-tep` và chờ giám sát hỏi chủ kho.
-20. V0a (vá rò vai «chỉ OKR») đi đầu: kiểm dữ liệu production trước khi sửa; có dữ liệu đã lộ thì báo chủ kho trước.
+20. DA0a (vá rò vai «chỉ OKR») đi đầu: kiểm dữ liệu production trước khi sửa; có dữ liệu đã lộ thì báo chủ kho trước.
+
+Tên và giao tiếp (chủ kho chốt 12/10, «áp dụng tên và giao tiếp»).
+
+21. **Một cửa.** Chủ kho chỉ nói với phiên giám sát: hỏi trạng thái, đổi ưu tiên, thêm việc, duyệt yêu cầu. Việc mới
+    chủ kho nói với giám sát, không mở phiên tự phát. Hai ngoại lệ, luôn đi kèm thẻ dẫn đường của giám sát (link tới
+    đúng phiên, dòng lệnh soạn sẵn, chừa chữ quyết): **ký cổng** — lệnh ký khoá không cho máy gọi và hồ sơ ở worktree
+    của thợ; **hộp xin quyền** — chỉ bấm được ở chính phiên đó.
+22. Thợ không hỏi chủ kho trực tiếp ngoài hai ngoại lệ trên. Mọi câu khác là `yeu-cau can-nguoi`; giám sát gom, báo chủ
+    kho tối đa một lần mỗi 30′.
+23. **Tên phiên.** Thợ: `r2·P<n> · <mã hàng> · <trạng thái>`; giám sát: `r2 · Giám sát`, ghim. Giám sát đổi tiêu đề
+    mỗi khi dãy đổi hàng hay đổi trạng thái. Trạng thái dùng đúng các chữ: `đang làm` · `chờ lượt S4` ·
+    `chờ anh ký <cổng>` · `chờ anh bấm quyền` · `xong`. Chủ kho chỉ cần mở phiên có chữ «chờ anh».
+24. **Nhánh** `<loại>/<slug>` (`feat` · `fix` · `chore` · `docs`). Phiên mở từ chip đổi nhánh `claude/<ngẫu nhiên>` sang
+    tên này trước commit đầu (`git branch -m`).
+25. **PR**: `<mã> · <loại>(<slug>): <câu giao ngắn>`, mở dạng nháp (luật 17).
+26. **Tin giữa các phiên** mở đầu bằng một dòng `[<nguồn> → <đích>] <loại>` — loại là `yeu-cau` · `tra-loi` · `bao` ·
+    `hoi`. Ví dụ `[r2·P1 → giám sát] bao`.
+27. **Từ vựng** theo `CONTEXT.md` của kit, mục «Điều phối – Thợ»: đợt chạy, dãy, hàng, phiên giám sát, phiên thợ, bộ phát
+    lịch. Không gọi dãy là «làn». Mã hàng duy nhất trong toàn kho: lộ trình Việc và Dự án dùng tiền tố `DA` (đổi 12/10
+    từ `V` vì trùng `V2` của OKR).

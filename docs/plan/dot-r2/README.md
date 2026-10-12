@@ -23,19 +23,25 @@ quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot r2`, không p
 
 | Dãy | Việc | Hàng (theo thứ tự) | Mốc |
 |---|---|---|---|
-| P0 | Việc và Dự án — vá rò quyền | V0a | 14/10 |
+| P0 | Việc và Dự án — vá rò quyền | DA0a | 14/10 |
 | P1 | Kara trên dữ liệu mẫu | N1 → C, K6a, K2f | R2 20/11 |
 | P2 | Lý do căn chỉnh | L2, L3 → L4 | R2 |
 | P3 | Vòng đời bản ghi | V2a → V2e, V2b, V2f | R2 |
 | P4 | Nếp màn chung | NM1 → NM2 → NM3 (sau K6a), NM4, V2c | R2 |
 | P5 | Thoả thuận và onboarding | E6b, E4b, E5 | R2 |
 | P6 | Kho tài liệu | cb → l5, l3b | 04/11, R2 |
-| P7 | Vệ sinh — làn có hạn mức | F24, F8, F23 | 30/11 |
+| P7 | Vệ sinh — có hạn mức | F24, F8, F23 | 30/11 |
 
-Không vào đợt: LT1b, LT2 (máy khác làm), R3 (10, 8b, L, T, K5, 7n), Việc và Dự án sau V0a.
+Không vào đợt: LT1b, LT2 (máy khác làm), R3 (10, 8b, L, T, K5, 7n), Việc và Dự án sau DA0a.
 
 Worktree của dãy để chỗ giữ `/CHUA-CO-WORKTREE/<dãy>` như gói giai đoạn một. Kit chưa có bước để thợ ghi danh worktree
 (đã báo ở bình luận PR kit #301); tới khi có, thợ mở từ chip báo worktree thật cho giám sát điền trước khi nhận dãy.
+
+## Tên và giao tiếp
+
+Chủ kho chỉ nói với `r2 · Giám sát`; vào phiên thợ chỉ khi giám sát gửi thẻ dẫn đường (ký cổng, hộp xin quyền). Tiêu
+đề phiên thợ mang trạng thái — `r2·P1 · K3b · chờ anh ký Cổng 2` — nên thanh bên là bảng việc chờ. Chi tiết ở luật
+21–27 của `LUAT-rieng.md`.
 
 ## Hai chọn lựa có chủ ý
 

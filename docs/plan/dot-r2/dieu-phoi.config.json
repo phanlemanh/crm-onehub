@@ -29,7 +29,7 @@
     "apps/app/lib/messages/*.ts"
   ],
   "nguon_hang": [
-    "docs/plan/lo-trinh-viec-du-an.json:V0a",
+    "docs/plan/lo-trinh-viec-du-an.json:DA0a",
     "docs/plan/lo-trinh-okr.json:N1",
     "docs/plan/lo-trinh-okr.json:C",
     "docs/plan/lo-trinh-okr.json:K6a",

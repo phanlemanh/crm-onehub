@@ -1727,7 +1727,7 @@
       "ten": "Một cách cất, một bộ chữ",
       "ten_ngan": "Một cách cất",
       "cau_giao": "«Một cách cất, một bộ chữ — lưu trữ ở ba bảng CRM luôn có Hoàn tác, bản ghi đã cất mở ra có dải báo và chỉ đọc, Kanban thoả thuận có «Đã lưu trữ»»",
-      "ghi_chu": "Theo chuẩn docs/vong-doi.md. Cổng Đáng ký 07/10 cùng 15 hàng khác của đợt. Hai việc ngoài phạm vi ở Cổng Phạm vi (09/10) thành V2a, V2b, chưa có hồ sơ. Làn P2. Mã V2 này khác V2 kanban-viec của lộ trình Việc và Dự án.",
+      "ghi_chu": "Theo chuẩn docs/vong-doi.md. Cổng Đáng ký 07/10 cùng 15 hàng khác của đợt. Hai việc ngoài phạm vi ở Cổng Phạm vi (09/10) thành V2a, V2b, chưa có hồ sơ. Làn P2. Lộ trình Việc và Dự án dùng mã DA (DA2 là kanban-viec), không trùng V2 này.",
       "buoc_ke": "Đã gộp 10/10 01:57 (#346); còn phiên nghiệm thu",
       "trang_thai": "đã lên onehub",
       "pr": [
@@ -1783,7 +1783,7 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Ghim lại các hồ sơ đã ký chạy được»",
       "ghi_chu": "E23/E25 so-okr-tu-chay, E7 cap-nhat-tuan-okr, E5 và Ngoài-3 lam-moi-chuyen-viec. Máy tự duyệt phạm vi (veto).",
-      "buoc_ke": "Làn vệ sinh có hạn mức, chạy cạnh R2; làn nợ thước cùng F23, F24",
+      "buoc_ke": "Nhóm vệ sinh có hạn mức, chạy cạnh R2; làn nợ thước cùng F23, F24",
       "trang_thai": "chưa mở"
     },
     {
@@ -2226,7 +2226,7 @@
       "ghi_chu": "E17 của giai-doan-thoa-thuan có paths phủ apps/api, apps/agent, apps/app và packages/db (09/10). Làn nợ thước.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Làn vệ sinh có hạn mức, chạy cạnh R2"
+      "buoc_ke": "Nhóm vệ sinh có hạn mức, chạy cạnh R2"
     },
     {
       "ma": "F24",
@@ -2242,7 +2242,7 @@
         "F10"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "Làn vệ sinh có hạn mức, chạy cạnh R2"
+      "buoc_ke": "Nhóm vệ sinh có hạn mức, chạy cạnh R2"
     }
   ],
   "da_bac": [

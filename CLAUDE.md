@@ -98,6 +98,22 @@ hay đo thì mở rộng dữ liệu mẫu, không đợi:
 Đo trên dữ liệu thật — chạy ẩn, phiên nghiệm thu, Cổng Giá trị — là việc sau
 khi gộp, lúc bật cho người dùng. Nó không phải cổng của việc dựng.
 
+## Một việc, một tên
+
+Chủ kho chốt 12/10. Một hàng lộ trình mang đúng một mã và một slug, và hai thứ đó
+đi khắp nơi:
+
+- **Mã hàng duy nhất trong toàn kho**, qua mọi tệp `lo-trinh-*.json`. Lộ trình Việc
+  và Dự án dùng tiền tố `DA` (đổi từ `V` vì trùng `V2` của OKR).
+- **Nhánh** `<loại>/<slug>` (`feat` · `fix` · `chore` · `docs`). Phiên mở từ chip
+  đổi nhánh `claude/<ngẫu nhiên>` sang tên này trước commit đầu (`git branch -m`).
+- **PR** `<mã> · <loại>(<slug>): <câu giao ngắn>`.
+- **Từ của Điều phối – Thợ** theo `CONTEXT.md` của kit: đợt chạy, dãy, hàng, phiên
+  giám sát, phiên thợ, bộ phát lịch. Không gọi dãy là «làn».
+
+Tên phiên và đường giao tiếp của một đợt chạy sống ở `LUAT-rieng.md` của gói đợt
+(`docs/plan/dot-<tên>/`).
+
 ## Ngôn ngữ sản phẩm
 
 `CONTEXT.md` là từ điển. Từ chưa có mục ở đó thì hoặc thêm mục trước, hoặc viết
