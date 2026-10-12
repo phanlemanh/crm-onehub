@@ -5,9 +5,11 @@ slug: chuyen-goi-dieu-phoi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: draft
+status: approved
 approved_by:
 approved_at:
+veto_state: mo
+veto_opened_at: 2026-10-12T04:44:04Z
 design_doc: _acceptance/chuyen-goi-dieu-phoi/design.md
 ---
 
