@@ -55,8 +55,30 @@ jobs:
             bash scripts/pre-merge-check.sh . --base "HEAD^" --no-t1-escape
           fi
 
+  phan-loai:
+    name: phân loại PR
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      nang: ${{ steps.pl.outputs.nang }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - run: node --test .github/scripts/test/phan-loai.test.mjs
+
+      - id: pl
+        run: node .github/scripts/phan-loai.mjs
+        env:
+          SU_KIEN: ${{ github.event_name }}
+          NHAP: ${{ github.event.pull_request.draft }}
+
   build:
     name: lệnh dựng
+    needs: phan-loai
+    if: ${{ !cancelled() && needs.phan-loai.outputs.nang != 'false' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
 
@@ -89,7 +111,8 @@ jobs:
 
   agent-okr-node24:
     name: tác nhân OKR trên Node 24
-    if: github.event_name == 'pull_request'
+    needs: phan-loai
+    if: ${{ github.event_name == 'pull_request' && !cancelled() && needs.phan-loai.outputs.nang != 'false' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
 

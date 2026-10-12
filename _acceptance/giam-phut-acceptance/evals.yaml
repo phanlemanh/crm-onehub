@@ -6,6 +6,8 @@ evals:
     criterion: AC-2, AC-3, AC-4
     executor: script
     cmd: config:executors.script.gpa_hinh
+    status: not-run
+    superseded_by: giam-phut-ci-nhap-t1#AC-5
     paths:
       - ".github/workflows/acceptance.yml"
       - "_acceptance/giam-phut-acceptance/rang/hinh.mjs"
@@ -36,6 +38,8 @@ evals:
     criterion: AC-1, AC-2
     executor: script
     cmd: config:executors.script.gpa_khong_mat_lenh
+    status: not-run
+    superseded_by: giam-phut-ci-nhap-t1#AC-6
     paths:
       - ".github/workflows/acceptance.yml"
       - "_acceptance/giam-phut-acceptance/rang/khong-mat-lenh.mjs"
@@ -63,6 +67,8 @@ evals:
     criterion: AC-5
     executor: script
     cmd: config:executors.script.gpa_ho_so_cu
+    status: not-run
+    superseded_by: giam-phut-ci-nhap-t1#AC-7
     paths:
       - ".github/workflows/acceptance.yml"
       - "_acceptance/*/evals.yaml"
@@ -102,6 +108,8 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.gpa_nen_gop
+    status: not-run
+    superseded_by: giam-phut-ci-nhap-t1#AC-12
     paths:
       - ".github/workflows/acceptance.yml"
       - "_acceptance/giam-phut-acceptance/rang/nen-gop.mjs"
