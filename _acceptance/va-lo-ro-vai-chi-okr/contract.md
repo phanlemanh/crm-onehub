@@ -5,9 +5,9 @@ slug: va-lo-ro-vai-chi-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-12T04:59:24Z
 design_doc: docs/superpowers/specs/2026-10-12-va-lo-ro-vai-chi-okr-design.md
 ---
 
