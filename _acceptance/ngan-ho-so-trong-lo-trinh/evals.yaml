@@ -12,11 +12,12 @@ evals:
       - "apps/app/lib/messages/lo-trinh.ts"
       - "packages/validation/src/lo-trinh-du-lieu.ts"
       - "apps/app/test/ngan-ho-so.dom.tsx"
+      - "apps/app/test/lo-trinh-khoi-tho.ts"
       - "apps/app/test/fixtures/lo-trinh/x2/**"
     expected: |
       ngan-ho-so.dom.tsx describe "tom-tat": doc tep mau apps/app/test/fixtures/lo-trinh/x2/LO-TRINH.html (duong suy tu
-      vi tri tep test). KY VONG rut bang duong doc DOC LAP: JSON.parse thang khoi lo-trinh-du-lieu trong tep, KHONG qua
-      docTrangLoTrinh, KHONG qua khuon Zod. Truoc ma tran, assert so dem viet truoc tren khoi tho: 81 viec co tom_tat,
+      vi tri tep test). KY VONG rut bang duong doc DOC LAP: JSON.parse thang khoi lo-trinh-du-lieu trong tep roi khuon rieng
+      cua bai kiem (apps/app/test/lo-trinh-khoi-tho.ts), KHONG qua docTrangLoTrinh, KHONG qua khuon Zod cua san pham. Truoc ma tran, assert so dem viet truoc tren khoi tho: 81 viec co tom_tat,
       5 viec nhom da-giao khong tom_tat, 12 o do_gi null, 14 o luot_cham null — lech thi do voi thong diep ghim
       "tep mau co <n> viec co dai, doc duoc <m>". Ban render di qua duong that (docTrangLoTrinh -> HoSoViec). Ma tran toan
       phan: 81 viec (so assert = 81, in khoa dau tien sai). Voi MOI viec: render HoSoViec mo dung viec do, so voi khoi tho:
@@ -40,6 +41,7 @@ evals:
       - "apps/app/components/lo-trinh/**"
       - "apps/app/lib/messages/lo-trinh.ts"
       - "apps/app/test/ngan-ho-so.dom.tsx"
+      - "apps/app/test/lo-trinh-khoi-tho.ts"
       - "apps/app/test/fixtures/lo-trinh/x2/**"
     expected: |
       describe "o-vang": tu tep mau that, chon moi viec co it nhat mot o moi_nguoi null (vd 4n: do_gi null). Voi MOI o null
@@ -57,6 +59,7 @@ evals:
       - "apps/app/components/lo-trinh/**"
       - "apps/app/lib/messages/lo-trinh.ts"
       - "apps/app/test/ngan-ho-so.dom.tsx"
+      - "apps/app/test/lo-trinh-khoi-tho.ts"
       - "apps/app/test/fixtures/lo-trinh/x2/**"
     expected: |
       describe "chua-co": tu tep mau that, MOI viec co tom_tat null (gom 5 viec da giao khong ho so, vd N0):
@@ -75,6 +78,7 @@ evals:
       - "apps/app/lib/lo-trinh/**"
       - "apps/app/lib/messages/lo-trinh.ts"
       - "apps/app/test/ngan-ho-so.dom.tsx"
+      - "apps/app/test/lo-trinh-khoi-tho.ts"
       - "apps/app/test/fixtures/lo-trinh/x2/**"
     expected: |
       describe "chu-kho": tu tep mau that, du lieu qua choVaiXem(dauVao, "owner"). Voi MOI viec co tom_tat:
@@ -101,6 +105,7 @@ evals:
       - "apps/app/lib/lo-trinh/**"
       - "apps/app/components/lo-trinh/**"
       - "apps/app/test/ngan-ho-so-vai.dom.tsx"
+      - "apps/app/test/lo-trinh-khoi-tho.ts"
       - "apps/app/test/fixtures/lo-trinh/x2/**"
     expected: |
       ngan-ho-so-vai.dom.tsx describe "vai": mock @/lib/session (requireSession tra nguoi dung), @crm/auth (workspaceRoleOf
@@ -126,6 +131,7 @@ evals:
       - "apps/app/lib/lo-trinh/**"
       - "packages/validation/src/lo-trinh-du-lieu.ts"
       - "apps/app/test/ngan-ho-so.dom.tsx"
+      - "apps/app/test/lo-trinh-khoi-tho.ts"
       - "apps/app/test/fixtures/lo-trinh/**"
     expected: |
       describe "khoan-dung": ba ca, khoi dan tu tep mau that (khong dung khoi bang tay):

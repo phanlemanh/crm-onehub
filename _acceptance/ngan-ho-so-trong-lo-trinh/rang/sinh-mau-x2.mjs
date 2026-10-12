@@ -173,7 +173,7 @@ export function kiem({ kit, nguon, html, proto }) {
 	const coKhoa =
 		HEX40.test(String(nguon.kit_sha)) &&
 		HEX40.test(String(nguon.crm_sha)) &&
-		typeof nguon.lenh === "string" &&
+		/\S/.test(String(nguon.lenh ?? "")) &&
 		/^\d{4}-\d{2}-\d{2}$/.test(String(nguon.ngay)) &&
 		/^[0-9a-f]{64}$/.test(String(nguon.ham_doc_du_lieu_sha256));
 	them(coKhoa, coKhoa ? "nhan nguon du khoa" : "nhan nguon thieu hay sai khoa");

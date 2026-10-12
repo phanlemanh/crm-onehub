@@ -1,32 +1,25 @@
 import { afterAll, describe, expect, mock, test } from "bun:test";
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import type { ReactElement, ReactNode } from "react";
+import { type ComponentProps, isValidElement, type ReactNode } from "react";
+import type { NoiDungLoTrinh as ThanhPhanKhach } from "@/components/lo-trinh/noi-dung";
+import { hangThoCua, propsNoiDung } from "./lo-trinh-khoi-tho";
 
 const HTML_X2 = readFileSync(
 	path.join(import.meta.dir, "fixtures/lo-trinh/x2/LO-TRINH.html"),
 	"utf8",
 );
-const KHOI =
-	/<script type="application\/json" id="lo-trinh-du-lieu">([\s\S]*?)<\/script>/;
 
-type ChuKho = Record<string, number | string | null>;
-type TomTat = { moi_nguoi: Record<string, string | null>; chu_kho: ChuKho };
-type Hang = { ma: string; tom_tat: TomTat | null };
-type Khoi = { lo_trinh: { tep: string; hang: Hang[] }[] };
-
-const THO: Khoi = JSON.parse(KHOI.exec(HTML_X2)?.[1] ?? "null");
-const CO_DAI = THO.lo_trinh.flatMap((lo) =>
-	lo.hang
-		.filter((h) => h.tom_tat !== null)
-		.map((h) => ({ khoa: `${lo.tep}#${h.ma}`, tom_tat: h.tom_tat as TomTat })),
+const CO_DAI = hangThoCua(HTML_X2).flatMap((h) =>
+	h.tom_tat ? [{ khoa: h.khoa, tom_tat: h.tom_tat }] : [],
 );
 const MA = CO_DAI.map((h) => h.tom_tat.chu_kho.ma).filter(
-	(x): x is string => typeof x === "string",
+	(x): x is string => x !== null,
 );
 
 let vaiHienTai: string | null = null;
-let props: Record<string, unknown>[] = [];
+type PropsKhach = ComponentProps<typeof ThanhPhanKhach>;
+let props: PropsKhach[] = [];
 
 mock.module("@/lib/session", () => ({
 	requireSession: async () => ({ user: { id: "nguoi-do" } }),
@@ -43,7 +36,7 @@ mock.module("@/components/page-transition", () => ({
 	PageTransition: ({ children }: { children: ReactNode }) => children,
 }));
 mock.module("@/components/lo-trinh/noi-dung", () => ({
-	NoiDungLoTrinh: (p: Record<string, unknown>) => {
+	NoiDungLoTrinh: (p: PropsKhach) => {
 		props.push(p);
 		return null;
 	},
@@ -58,34 +51,28 @@ const BAN_SAO = path.join(APP, ".next-phien-do-lhs-vai");
 
 afterAll(() => rmSync(BAN_SAO, { recursive: true, force: true }));
 
-type ThanhPhan = (p: Record<string, unknown>) => unknown;
-
 async function giai(nut: ReactNode): Promise<void> {
 	if (Array.isArray(nut)) {
 		for (const x of nut) await giai(x);
 		return;
 	}
-	if (!nut || typeof nut !== "object" || !("type" in nut)) return;
-	const el = nut as ReactElement<Record<string, unknown>>;
-	const loai = el.type as unknown;
-	if (typeof loai === "function" && loai.constructor.name === "AsyncFunction") {
-		await giai((await (loai as ThanhPhan)(el.props)) as ReactNode);
+	if (!isValidElement<{ children?: ReactNode }>(nut)) return;
+	const loai: unknown = nut.type;
+	if (loai instanceof Function && loai.constructor.name === "AsyncFunction") {
+		await giai(await loai(nut.props));
 		return;
 	}
-	if (
-		typeof loai === "function" &&
-		(loai as { name?: string }).name === "NoiDungLoTrinh"
-	) {
-		(loai as ThanhPhan)(el.props);
+	if (loai instanceof Function && loai.name === "NoiDungLoTrinh") {
+		loai(nut.props);
 		return;
 	}
-	await giai(el.props?.children as ReactNode);
+	await giai(nut.props.children);
 }
 
 async function propsCua(
 	trang: () => Promise<ReactNode>,
 	vai: string | null,
-): Promise<Record<string, unknown>> {
+): Promise<PropsKhach> {
 	vaiHienTai = vai;
 	props = [];
 	await giai(await trang());
@@ -95,20 +82,22 @@ async function propsCua(
 	return p;
 }
 
-function kiemProps(p: Record<string, unknown>, vai: string | null): string[] {
+function kiemProps(p: PropsKhach, vai: string | null): string[] {
 	const loi: string[] = [];
-	const khoa = Object.keys(p).sort();
-	if (khoa.join() !== "dauVao")
-		loi.push(`vai ${vai} props mang khoa la: ${khoa.join()}`);
-	const dv = p.dauVao as {
-		kieu: string;
-		duLieu?: Khoi;
-	};
-	if (dv?.kieu !== "co-du-lieu" || !dv.duLieu)
-		return [...loi, `vai ${vai} khong co du lieu`];
-	const theoKhoa = new Map<string, TomTat | null>(
+	const kq = propsNoiDung.safeParse(p);
+	if (!kq.success)
+		return [
+			`vai ${vai} props mang khoa la: ${khoaCua(p)}`,
+			...(vai === "owner"
+				? []
+				: [`vai ${vai} lot chu_kho qua props ${CO_DAI[0]?.khoa}`]),
+		];
+	const dv = kq.data.dauVao;
+	if (dv.kieu !== "co-du-lieu" || !dv.duLieu)
+		return [`vai ${vai} khong co du lieu`];
+	const theoKhoa = new Map(
 		dv.duLieu.lo_trinh.flatMap((lo) =>
-			lo.hang.map((h): [string, TomTat | null] => [
+			lo.hang.map((h): [string, typeof h.tom_tat] => [
 				`${lo.tep}#${h.ma}`,
 				h.tom_tat,
 			]),
@@ -134,6 +123,10 @@ function kiemProps(p: Record<string, unknown>, vai: string | null): string[] {
 		if (lot.length > 0) loi.push(`vai ${vai} lot ma chu kho ${lot[0]}`);
 	}
 	return loi;
+}
+
+function khoaCua(p: PropsKhach): string {
+	return Object.keys(p).sort().join();
 }
 
 const VAI = ["owner", "admin", "member", "okr", null] as const;

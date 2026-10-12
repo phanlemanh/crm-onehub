@@ -25,22 +25,13 @@ const { loTrinhMessages } = await import("@/lib/messages/lo-trinh");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { formatDay } = await import("@crm/ui/lib/format");
+const { doiKhoi, hangThoCua, khoiThoCua, NHOM_THO } = await import(
+	"./lo-trinh-khoi-tho"
+);
 
 type DauVao = ReturnType<typeof docTrangLoTrinh>;
+type HangTho = import("./lo-trinh-khoi-tho").HangTho;
 type DuLieu = Extract<DauVao, { kieu: "co-du-lieu" }>["duLieu"];
-type MoiNguoiTho = Record<string, string | null>;
-type ChuKhoTho = Record<string, number | string | null>;
-type HangTho = {
-	ma: string;
-	trang_thai: string;
-	nhom_trang_thai: string;
-	tom_tat: { moi_nguoi: MoiNguoiTho; chu_kho: ChuKhoTho } | null;
-	khoa: string;
-};
-type KhoiTho = {
-	phien_ban: number;
-	lo_trinh: { tep: string; hang: Omit<HangTho, "khoa">[] }[];
-};
 
 const m = loTrinhMessages("vi");
 const TRONG = "—";
@@ -69,41 +60,19 @@ const SO = [
 	"quyet_dinh_nguoi",
 ] as const;
 const CUNG_NGHIA = new Set(["Chưa mở", "Đã giao", "Đang làm"]);
-const NHAN_NHOM: Record<string, string> = {
+const NHAN_NHOM = {
 	"chua-bat-dau": m.nhom.chuaBatDau,
 	"dang-lam": m.nhom.dangLam,
 	"da-giao": m.nhom.daGiao,
 	khac: m.nhom.khac,
-};
-
-function khoiTho(html: string): KhoiTho {
-	const goc = KHOI.exec(html)?.[1];
-	if (!goc) throw new Error("tep mau khong co khoi");
-	return JSON.parse(goc);
-}
-
-function hangTho(html: string): HangTho[] {
-	return khoiTho(html).lo_trinh.flatMap((lo) =>
-		lo.hang.map((h) => ({ ...h, khoa: `${lo.tep}#${h.ma}` })),
-	);
-}
-
-function doiKhoi(html: string, sua: (o: KhoiTho) => void): string {
-	const o = khoiTho(html);
-	sua(o);
-	const moi = JSON.stringify(o).replace(/</g, "\\u003c");
-	return html.replace(
-		KHOI,
-		`<script type="application/json" id="lo-trinh-du-lieu">${moi}</script>`,
-	);
-}
+} satisfies Record<(typeof NHOM_THO)[number], string>;
 
 function coDuLieu(dv: DauVao): DuLieu {
 	if (dv.kieu !== "co-du-lieu") throw new Error(`tep mau hong: ${dv.kieu}`);
 	return dv.duLieu;
 }
 
-const THO = hangTho(HTML_X2);
+const THO = hangThoCua(HTML_X2);
 const CO_DAI = THO.filter((h) => h.tom_tat !== null);
 const KHONG_DAI = THO.filter((h) => h.tom_tat === null);
 const DV_X2 = docTrangLoTrinh(HTML_X2);
@@ -258,7 +227,7 @@ function kiemTomTat(ngan: Element, h: HangTho): string[] {
 
 describe("tom-tat", () => {
 	test("so dem viet truoc tren khoi tho cua tep mau", () => {
-		expect(khoiTho(HTML_X2).phien_ban).toBe(2);
+		expect(khoiThoCua(HTML_X2).phien_ban).toBe(2);
 		expect(CO_DAI.length).toBe(81);
 		expect(
 			KHONG_DAI.filter((h) => h.nhom_trang_thai === "da-giao").length,
@@ -475,7 +444,7 @@ describe("chu-kho", () => {
 			loi.push(`viec ${h.khoa} so lieu khong o the thu hai`);
 		if (!chuCua(sl).includes(m.hoSo.chiChuThay))
 			loi.push(`viec ${h.khoa} thieu cau chi chu thay`);
-		const ck = h.tom_tat?.chu_kho ?? {};
+		const ck = h.tom_tat?.chu_kho ?? null;
 		const o = [...sl.querySelectorAll("[data-so-lieu]")].map((e) =>
 			e.getAttribute("data-so-lieu"),
 		);
@@ -483,8 +452,8 @@ describe("chu-kho", () => {
 			loi.push(`viec ${h.khoa} sai thu tu so lieu: ${o.join()}`);
 		for (const k of SO) {
 			const el = sl.querySelector(`[data-so-lieu="${k}"]`);
-			const gt = ck[k];
-			const mong = typeof gt === "number" ? so.format(gt) : TRONG;
+			const gt = ck?.[k] ?? null;
+			const mong = gt === null ? TRONG : so.format(gt);
 			if (chuCua(el) !== mong)
 				loi.push(
 					k === "token"
@@ -492,7 +461,7 @@ describe("chu-kho", () => {
 						: `viec ${h.khoa} lech so ${k}`,
 				);
 		}
-		const ma = typeof ck.ma === "string" ? ck.ma : null;
+		const ma = ck?.ma ?? null;
 		const oMa = sl.querySelector('[data-so-lieu="ma"]');
 		if (ma === null) {
 			if (chuCua(oMa) !== TRONG)
@@ -544,11 +513,7 @@ describe("chu-kho", () => {
 	});
 
 	test("chieu do: so chua dinh dang, href thieu ma, mau bo type", async () => {
-		const h = CO_DAI.find(
-			(x) =>
-				typeof x.tom_tat?.chu_kho.token === "number" &&
-				(x.tom_tat?.chu_kho.token as number) >= 1000,
-		);
+		const h = CO_DAI.find((x) => (x.tom_tat?.chu_kho.token ?? 0) >= 1000);
 		if (!h) throw new Error("khong co viec co token lon");
 		const dl = coDuLieu(choVaiXem(DV_X2, "owner"));
 		const ma = String(h.tom_tat?.chu_kho.ma);
@@ -603,13 +568,13 @@ describe("khoan-dung", () => {
 	}
 
 	test("ban 1 that cua bo ve kit 2.26: khong bang canh bao, moi viec chua co tom tat", async () => {
-		expect(khoiTho(HTML_B1).phien_ban).toBe(1);
+		expect(khoiThoCua(HTML_B1).phien_ban).toBe(1);
 		const dv = docTrangLoTrinh(HTML_B1);
 		const body = await trang(dv);
 		const coBang = body.querySelector("[data-lo-trinh-canh-bao]") !== null;
 		expect(kiemBan1(dv, coBang)).toEqual([]);
 		const dl = coDuLieu(dv);
-		for (const h of hangTho(HTML_B1)) {
+		for (const h of hangThoCua(HTML_B1)) {
 			const ngan = await moNgan(dl, h.khoa);
 			expect(
 				chuCua(ngan.querySelector("[data-lo-trinh-tom-tat]")),
@@ -650,7 +615,7 @@ describe("khoan-dung", () => {
 			o.lo_trinh.some((lo, a) =>
 				lo.hang.some((h, b) => {
 					if (!h.tom_tat) return false;
-					(h.tom_tat.moi_nguoi as Record<string, unknown>).vi_sao = 5;
+					Object.assign(h.tom_tat.moi_nguoi, { vi_sao: 5 });
 					i = a;
 					j = b;
 					return true;
