@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: va-lo-ro-vai-chi-okr
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 412fd0077f82361051a534f1f81d6963515174e2
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-12 — ký Cổng Bằng chứng trên vòng chấm 1 (13/13 eval máy đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng; E12 Đạt). Mười mục ngoài hợp đồng định đoạt ở lượt ký này — Ngoài-1, 2, 3, 5, 6, 8, 9, 10 ghi Known limits; Ngoài-4, 7 mở hợp đồng mới. Phạm vi cắt/hoãn đồng ý như đã khai; các quyết định ghi sau Cổng Phạm vi được phê hết.
 ---
 
 # Evidence Report: va-lo-ro-vai-chi-okr
@@ -193,7 +193,7 @@ Round 1 — PENDING-JUDGMENT: toàn bộ 13 eval máy (E1–E11, E7b, E9b) PASS,
     - (lăng kính domain-correctness) Quyết định của chủ kho (ghi ở hồ sơ Cổng Phạm vi hoặc contract.md của vòng này) rằng «bộ gom», «lượt theo dõi», «kế hoạch mở» là chữ thường mô tả chứ không phải thuật ngữ kỹ thuật tự đúc. Nếu có quyết định này, verdict đổi thành PASS.
     - (lăng kính domain-correctness) Hoặc bản sửa tài liệu: docs/api.md:102 đổi «kế hoạch mở» thành «kế hoạch đang chạy» theo CONTEXT.md, docs/api.md:105 đổi «lượt theo dõi» thành «theo dõi», docs/agent.md:376 đổi «bộ gom» thành tên thật `viecCanNhac`. Kiểm bằng: grep -n 'bộ gom\|kế hoạch mở\|lượt theo dõi' docs/api.md docs/agent.md không ra dòng nào ở các đoạn này.
     - (lăng kính domain-correctness) Hoặc mục mới trong CONTEXT.md định nghĩa «bộ gom» (nêu nó là hàm `viecCanNhac` ở apps/agent/agent/lib) và «lượt theo dõi». Kiểm bằng: grep -n 'bộ gom\|lượt theo dõi' CONTEXT.md có kết quả.
-  human_override:  # chỉ người ghi "<tên> <ngày>"
+  human_override: Phan Le Manh 2026-10-12 — Đạt
 
 ### Lệnh suite (hồi quy)
 

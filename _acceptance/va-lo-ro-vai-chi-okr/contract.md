@@ -5,7 +5,7 @@ slug: va-lo-ro-vai-chi-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-12T04:59:24Z
 design_doc: docs/superpowers/specs/2026-10-12-va-lo-ro-vai-chi-okr-design.md
@@ -68,3 +68,20 @@ thật. Dữ liệu cũ trên production: chờ số đo, chủ kho quyết ở 
 
 - Luật 14 của đợt (`docs/vong-doi.md`) không áp: không loại bản ghi mới, không trạng thái kết thúc mới.
 - Không ui-check: phần giao diện chỉ đổi nguồn danh sách của ba ô chọn có sẵn; đo bằng DOM test (entry `descope` «bỏ ui-observed»).
+- **Known limits (chủ kho ghi ở Cổng Bằng chứng 2026-10-12):**
+  - Ngoài-1, Ngoài-5 — đổi vai trên màn Thành viên chỉ làm mới cache của `workspace`, không làm mới
+    `onboarding.nguoiNhanViec`; trong khoảng nửa phút sau đó ô chọn người nhận việc có thể còn mời người vừa sang
+    «chỉ OKR» (máy chủ vẫn từ chối với `vaiChiOkr`) hoặc chưa thấy người vừa trở lại vai thường.
+  - Ngoài-2 — luật «vai đọc được dữ liệu đối tác» có ba bản: `docDuocDoiTac` ở `@crm/validation/vai-workspace`,
+    bản sao cùng tên ở `@crm/db/vai-doi-tac`, và `vaiDocDuocSoDoiTac` ở `@crm/db/okr-goi-soan`; hai bản đầu có bài
+    giữ khớp, bản thứ ba có `okr-goi-soan-khop.spec.ts`. Gom về một bản ở vòng sau.
+  - Ngoài-3 — `demViecDangGiu` (đếm việc đang giữ khi đổi vai) lặp thân `transferPreview`; hai chỗ dùng cùng
+    `dieuKienChuyen` nên hôm nay khớp, sửa một chỗ thì phải sửa chỗ kia.
+  - Ngoài-6, Ngoài-10 — ca «chỉ có việc kế hoạch» của `nhac-vai-chi-okr.integration.spec.ts` nuốt lỗi `chayNhac`;
+    vế «không tạo hàng nhắc» chắc chắn, vế «không tin nào tới Zalo» có thể xanh rỗng nếu bước gửi hỏng.
+  - Ngoài-8 — hàng `nhac-ke-hoach` của E10 dựng tay qua bộ đọc `parseNhacPayload`, không đi qua
+    `lenLichNhac`/`chayNhac`; đổi khuôn sổ nhắc thì phải xem lại thước `ro-vai-chi-okr.mjs`.
+  - Ngoài-9 — vân tay «thước không ghi vào kho» của E10 chỉ chụp hàng của một người trong ca, ở lần chạy đầu;
+    thước tự bảo vệ bằng giao dịch `READ ONLY`.
+- **Tách thành việc riêng (chủ kho quyết ở Cổng Bằng chứng 2026-10-12):** Ngoài-4 (mở lại kế hoạch đã đóng hay
+  bỏ «xong» một bước trả việc về tay người đã sang «chỉ OKR»), Ngoài-7 (phép đo E7b không đỏ được bằng câu ghim).
