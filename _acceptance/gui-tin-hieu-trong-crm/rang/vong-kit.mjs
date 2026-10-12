@@ -194,12 +194,7 @@ try {
 	const bang = Object.fromEntries(
 		(khoiDu.tin_hieu ?? []).map((t) => [t.cho, t.cau]),
 	);
-	const BC = path.join(
-		GOC,
-		"_acceptance",
-		"gui-tin-hieu-trong-crm",
-		"evidence",
-	);
+	const BC = path.join(GOC, ".acceptance-runs", "gui-tin-hieu-trong-crm");
 	mkdirSync(BC, { recursive: true });
 	writeFileSync(
 		path.join(BC, "cau-kit-mau.json"),
