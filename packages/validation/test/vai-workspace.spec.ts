@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
+	docDuocDoiTac,
 	docDuocPhamVi,
 	KHONG_TRONG_PHAM_VI,
 	laVaiChiOkr,
@@ -37,5 +38,21 @@ describe("vai-workspace", () => {
 
 	test("thong diep tu choi la mot hang co ten", () => {
 		expect(KHONG_TRONG_PHAM_VI).toMatch(/role/);
+	});
+});
+
+describe("docDuocDoiTac", () => {
+	test("docDuocDoiTac: ba vai thường đọc được, vai okr không, vai lạ đọc như member", () => {
+		const ket = ["owner", "admin", "member", "okr", "Member", "khach"].map(
+			(vai) => `${vai}=${docDuocDoiTac(vai)}`,
+		);
+		expect(ket).toEqual([
+			"owner=true",
+			"admin=true",
+			"member=true",
+			"okr=false",
+			"Member=true",
+			"khach=true",
+		]);
 	});
 });
