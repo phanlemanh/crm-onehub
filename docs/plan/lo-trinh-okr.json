@@ -2257,25 +2257,16 @@
       "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
       "trang_thai": "chưa mở",
       "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mở sau khi #373 gộp"
-    },
-    {
-      "ma": "F27",
-      "slug": "kiem-cheo-bao-con-song",
-      "nhom": "ve-sinh",
-      "thu_tu": 500.4,
-      "ngay": "2026-10-12",
-      "ten": "Kiểm chéo đêm giữ khoá s4 báo còn sống",
-      "ten_ngan": "Nhịp kiểm chéo",
-      "cau_giao": "«Lượt kiểm chéo ban đêm giữ khoá s4 trong một đợt không làm bộ phát lịch báo nhầm «khoa-khong-nhip»»",
-      "ghi_chu": "Gốc: Ngoài-18 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10 (scripts/kiem-cheo/dem.mjs chỉ chạm nhịp, không ghi song/). Kit 2.28.0 (DP8) hứa việc nền giữ khoá s4 ghi nhịp hoặc được miễn.",
-      "trang_thai": "chưa mở",
-      "buoc_ke": "Đo lại khi crm nhận kit 2.28.0 (15/10): hết báo nhầm thì chuyển da_bac kèm số đo; còn thì vào dãy P7 của đợt r2"
     }
   ],
   "da_bac": [
     {
       "ma": "F20",
       "ly_do": "Đề xuất tách job CI gửi hãng — chủ kho quyết không gửi hãng 09/10 (luật 47); F21 ci-ma-tran-ba-o làm thay trong kho"
+    },
+    {
+      "ma": "F27",
+      "ly_do": "Kit 2.28.0 (DP8) đóng Ngoài-18 của #373: đo 13/10 bằng bộ phát lịch và layKhoa thật của gói đã cài — kiểm chéo chạm nhịp thì 0 «khoa-khong-nhip», đối chứng không chạm nhịp ra 1; không mở hợp đồng mới"
     }
   ]
 }

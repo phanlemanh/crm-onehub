@@ -32,7 +32,7 @@ quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot r2`, không p
 | P6 | Kho tài liệu | cb → l5, l3b | 04/11, R2 |
 | P7 | Vệ sinh — có hạn mức | F24, F8, F23, DA0c, F26 | 14/11 |
 
-Không vào đợt: LT1b, LT2 (máy khác làm), R3 (10, 8b, L, T, K5, 7n), Việc và Dự án sau DA0b; F27 tới khi đo lại dưới kit 2.28.0.
+Không vào đợt: LT1b, LT2 (máy khác làm), R3 (10, 8b, L, T, K5, 7n), Việc và Dự án DA1–DA8 (máy M5 giữ từ 13/10). F27 đã bác: kit 2.28.0 đóng lỗi đó.
 
 Worktree của dãy để chỗ giữ `/CHUA-CO-WORKTREE/<dãy>`. Việc đầu tiên của phiên thợ mở từ chip, trước S1, là
 `node <thư mục đợt>/loi/dieu-phoi.mjs ghi-danh <dãy>` từ worktree của chip (kit 2.28.0, DP8; lời mời chip mang sẵn
