@@ -38,6 +38,7 @@ feature_loop:
     - tro-ly-okr-bo-final-output/E7
     - tro-ly-okr-bo-final-output/E11
     - giam-phut-ci-nhap-t1/E7
+    - chuyen-goi-dieu-phoi/E10
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
