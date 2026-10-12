@@ -17,7 +17,12 @@ const BO = {
 	check_types_khong_cache: "suite key cua moi luot S4",
 	lint_khong_cache: "suite key cua moi luot S4",
 	build_khong_cache: "suite key cua moi luot S4",
+	lint_slop: "suite key cua moi luot S4",
+	api: "bun run test tron bo; cung cac suite key cua moi luot S4",
+	nc_rang_qua_cong: "bun run test tron bo; cung cac suite key cua moi luot S4",
 };
+const HO_PRE_PUSH = /^bash _acceptance\/(hinh-cua-luoi\/rang-hinh|luoi-day-do-that\/rang-hook)\.sh /;
+const LY_DO_PRE_PUSH = "chay pre-push that nhieu luot (>=13 phut/luot); dong vong cua pre-push do thang ben duoi, va luot day nhanh chay chinh pre-push do tren HEAD";
 const MOT_LENH_PHUT = 15;
 const ket = new Ket();
 const goi = giaiGoi();
@@ -105,13 +110,36 @@ function chay(ban, khoa, lenh, nhan) {
 	return { ma: r.status ?? `tin-hieu ${r.signal}`, log };
 }
 
+function dongVong(chu) {
+	return chu.split("\n").find((d) => /^for task in .*; do$/.test(d)) ?? null;
+}
+const ghimHook = /^TAC_VU="([^"]+)"$/m.exec(readFileSync(join(GOC, "_acceptance", "luoi-day-do-that", "rang-hook.sh"), "utf8"))?.[1];
+const ghimHinh = /\^for task in ([^;]+); do\$\//.exec(readFileSync(join(GOC, "_acceptance", "hinh-cua-luoi", "rang-hinh.sh"), "utf8"))?.[1];
+if (!ghimHook || !ghimHinh) khongDoDuoc("khong rut duoc dong vong ma rang-hook.sh, rang-hinh.sh ghim");
+const vongHead = dongVong(readFileSync(join(GOC, ".githooks", "pre-push"), "utf8"));
+const vongMb = dongVong(git(GOC, "show", `${MB}:.githooks/pre-push`));
+ket.kiem(
+	vongHead === `for task in ${ghimHook}; do` && vongHead === `for task in ${ghimHinh}; do`,
+	"dong vong pre-push o HEAD bang dong rang-hook.sh va rang-hinh.sh ghim",
+	`HEAD: ${vongHead}; rang-hook ghim: ${ghimHook}; rang-hinh ghim: ${ghimHinh}`,
+);
+console.log(vongMb === vongHead ? "merge-base: dong vong giong HEAD" : `merge-base: dong vong lech dong ghim (${vongMb})`);
+
 const head = git(GOC, "rev-parse", "HEAD").trim();
 const banHead = dungBan(head, "kdt-head");
 const banMb = dungBan(MB, "kdt-mb");
+const don = () => {
+	banHead.don();
+	banMb.don();
+};
+process.on("SIGTERM", () => {
+	don();
+	process.exit(143);
+});
 try {
 	for (const [k, v] of tap) {
-		if (BO[k]) {
-			console.log(`bo ${k}: ${BO[k]}`);
+		if (BO[k] || HO_PRE_PUSH.test(v.lenh)) {
+			console.log(`bo ${k}: ${BO[k] ?? LY_DO_PRE_PUSH}`);
 			continue;
 		}
 		const h = chay(banHead, k, v.lenh, "head");
@@ -133,7 +161,6 @@ try {
 	if (dot.ma !== 0) console.log(`BAT luoi — sai lkv_ci: ma ${dot.ma} khi acceptance.yml mat buoc luat kho`);
 	else ket.kiem(false, "luoi", "thuoc hong: luoi — lkv_ci van 0 khi mat buoc luat kho");
 } finally {
-	banHead.don();
-	banMb.don();
+	don();
 }
 ket.ket();

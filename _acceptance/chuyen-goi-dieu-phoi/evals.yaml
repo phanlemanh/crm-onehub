@@ -233,9 +233,13 @@ evals:
       scripts/kiem-cheo/; gop lenh trung. Hai ban clone day du (bun install --frozen-lockfile, bun run db:generate, .env chep
       tu goc kho) cua HEAD va merge-base; chay tung lenh o ca hai voi KIEM_CHEO_GOI_DIEU_PHOI = goc goi, nhat ky moi lenh ra
       .acceptance-runs/chuyen-goi-dieu-phoi/khong-do-them/. In moi lenh «xanh», «do san <lenh>: <log>», hay «sai <lenh>: ma
-      <a> tren HEAD, 0 tren merge-base: <log>». Lenh trong danh sach bo khai san (ld_ba_noi_deu_chay, hld_build_heap,
-      check_types_khong_cache, lint_khong_cache, build_khong_cache — cac suite keys hoac pre-push tron, da chay o moi luot
-      S4) in «bo <lenh>: <ly do>». Ma 0 khi khong co dong «sai»; tap lenh rong -> ma 2 «tap rong».
+      <a> tren HEAD, 0 tren merge-base: <log>». Lenh trong danh sach bo khai san in «bo <lenh>: <ly do>»: ld_ba_noi_deu_chay, hld_build_heap,
+      check_types_khong_cache, lint_khong_cache, build_khong_cache, lint_slop, api, nc_rang_qua_cong (suite keys, bun run
+      test tron bo hoac pre-push tron — da chay o moi luot S4), va moi lenh ho pre-push «bash
+      _acceptance/hinh-cua-luoi/rang-hinh.sh …» / «bash _acceptance/luoi-day-do-that/rang-hook.sh …» (chay pre-push that
+      nhieu luot). Thay cho ho pre-push: dong «for task in …; do» cua .githooks/pre-push o HEAD phai bang DUNG dong ma
+      rang-hook.sh (bien TAC_VU) va rang-hinh.sh (mau sed dau tien) ghim («dat dong vong … ghim»); in them dong vong o
+      merge-base lech hay giong. Ma 0 khi khong co dong «sai»; tap lenh rong -> ma 2 «tap rong».
       Doi chung duong: tap lenh rut ra chua kcs_don_vi va lkv_ci. Chieu do: ban clone HEAD bo them buoc «node
       scripts/luat-kho/do-cay.mjs --du-luat» khoi acceptance.yml roi chay lai lkv_ci -> phai ra «sai lkv_ci» — khong ra thi
       ma 1 «thuoc hong: luoi».
