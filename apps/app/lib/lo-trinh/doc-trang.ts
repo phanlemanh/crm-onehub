@@ -22,5 +22,9 @@ export function docTrangLoTrinh(html: string | null): DauVaoLoTrinh {
 	const kq = phanTichLoTrinh(duLieu);
 	if (!kq.ok)
 		return { kieu: "khoi-hong", cauMay: `${kq.duongKhoa}: ${kq.thongDiep}` };
-	return { kieu: "co-du-lieu", duLieu: kq.duLieu, canhBao };
+	return {
+		kieu: "co-du-lieu",
+		duLieu: kq.duLieu,
+		canhBao: kq.duLieu.phien_ban === 1 ? [] : canhBao,
+	};
 }
