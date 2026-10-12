@@ -59,7 +59,13 @@ import {
 	hangCuaBangCot,
 	manDanhMucTuHang,
 } from "./onboarding-danh-muc";
-import { buocRa, CHON_BUOC, keHoachRa, OnboardingGhi } from "./onboarding-ghi";
+import {
+	buocRa,
+	CHON_BUOC,
+	keHoachRa,
+	kiemNguoiNhanViec,
+	OnboardingGhi,
+} from "./onboarding-ghi";
 import { OnboardingTheoDoi } from "./onboarding-theo-doi";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -354,6 +360,7 @@ export class OnboardingService {
 		}
 
 		return this.db.$transaction(async (tx) => {
+			await kiemNguoiNhanViec(tx, input.ownerId);
 			const plan = await tx.onboardingPlan.create({
 				data: {
 					companyId: input.companyId,

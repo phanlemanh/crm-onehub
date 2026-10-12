@@ -1,11 +1,13 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type OnboardingActivityMeta,
 	vet,
 	vetCoCongTy,
 } from "@crm/validation/onboarding-activity";
+import { docDuocDoiTac } from "@crm/validation/vai-workspace";
 import {
 	BadRequestException,
 	ConflictException,
@@ -103,20 +105,30 @@ async function buocCuaKeHoachMo(
 	return { buoc, plan: await keHoachMo(tx, buoc.planId) };
 }
 
-async function thanhVien(
+export async function kiemNguoiNhanViec(
 	tx: Tx,
 	userId: string,
 ): Promise<{ id: string; name: string }> {
 	const nguoi = await tx.user.findFirst({
-		where: { id: userId, members: { some: {} } },
-		select: { id: true, name: true },
+		where: { id: userId, members: { some: { organizationId: WORKSPACE_ID } } },
+		select: {
+			id: true,
+			name: true,
+			members: {
+				where: { organizationId: WORKSPACE_ID },
+				select: { role: true },
+			},
+		},
 	});
 	if (nguoi === null) {
 		throw new BadRequestException(
 			ONBOARDING.thongDiep.khongPhaiThanhVien(userId),
 		);
 	}
-	return nguoi;
+	if (!nguoi.members.some((m) => docDuocDoiTac(m.role))) {
+		throw new BadRequestException(ONBOARDING.thongDiep.vaiChiOkr(nguoi.name));
+	}
+	return { id: nguoi.id, name: nguoi.name };
 }
 
 async function boPhanDangDung(tx: Tx, departmentId: string): Promise<void> {
@@ -172,6 +184,23 @@ function dieuKienChuyen(from: string) {
 	};
 }
 
+export async function demViecDangGiu(
+	tx: Tx,
+	userId: string,
+): Promise<{ keHoach: number; buoc: number }> {
+	const dk = dieuKienChuyen(userId);
+	const [keHoach, buoc] = await Promise.all([
+		tx.onboardingPlan.count({ where: dk.keHoach }),
+		tx.onboardingStep.count({ where: dk.buoc }),
+	]);
+	return { keHoach, buoc };
+}
+
+export async function xoaTheoDoiCua(tx: Tx, userId: string): Promise<number> {
+	const { count } = await tx.onboardingWatch.deleteMany({ where: { userId } });
+	return count;
+}
+
 async function yeuCauQuanTri(userId: string): Promise<void> {
 	if (!canManageOnboarding(await workspaceRoleOf(userId))) {
 		throw new ForbiddenException(ONBOARDING.thongDiep.canQuyenQuanTri);
@@ -198,7 +227,7 @@ export class OnboardingGhi {
 			const den =
 				input.assigneeId === null
 					? null
-					: await thanhVien(tx, input.assigneeId);
+					: await kiemNguoiNhanViec(tx, input.assigneeId);
 			const sau = await tx.onboardingStep.update({
 				where: { id: buoc.id },
 				data: { assigneeId: den?.id ?? null },
@@ -277,7 +306,7 @@ export class OnboardingGhi {
 			const plan = await keHoachMo(tx, input.planId);
 			await boPhanDangDung(tx, input.departmentId);
 			const nguoi = input.assigneeId
-				? await thanhVien(tx, input.assigneeId)
+				? await kiemNguoiNhanViec(tx, input.assigneeId)
 				: null;
 			const cuoi = await tx.onboardingStep.findFirst({
 				where: { planId: plan.id },
@@ -359,7 +388,7 @@ export class OnboardingGhi {
 			const plan = await keHoachMo(tx, input.planId);
 			if (plan.ownerId === input.ownerId) return keHoachRa(plan);
 
-			const moi = await thanhVien(tx, input.ownerId);
+			const moi = await kiemNguoiNhanViec(tx, input.ownerId);
 			const sau = await tx.onboardingPlan.update({
 				where: { id: plan.id },
 				data: { ownerId: moi.id },
@@ -427,7 +456,7 @@ export class OnboardingGhi {
 			throw new BadRequestException(ONBOARDING.thongDiep.chuyenChoChinhMinh);
 		}
 		return this.db.$transaction(async (tx) => {
-			const den = await thanhVien(tx, input.toUserId);
+			const den = await kiemNguoiNhanViec(tx, input.toUserId);
 			const dk = dieuKienChuyen(input.fromUserId);
 			const keHoach = await tx.onboardingPlan.findMany({
 				where: dk.keHoach,
