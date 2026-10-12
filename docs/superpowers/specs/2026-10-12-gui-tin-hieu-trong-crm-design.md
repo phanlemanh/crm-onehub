@@ -57,6 +57,8 @@ còn dùng) · `tieuDe` · `moTa` (tuỳ chọn) · `man` · `guiLuc` · `keoVeL
   khi dài hơn dòng đầu.
 - `tepTinHieu` — khuôn tệp của kit: `{phien, loai: "tin-hieu", hang: null, noi_dung: {tieu_de, man, mo_ta?},
   luc}`; `tepTuBanGhi(row)` dựng tệp với thứ tự khoá cố định; `idTep(so)` = `crm-<so>`.
+- `bocPhanHoiKeoVe(ds)` / `docPhanHoiKeoVe(body)` — một cặp hàm cho vỏ phản hồi REST của thủ tục kéo về; router
+  dùng hàm bọc, lệnh kéo về dùng hàm đọc, phép đo E6 chạy hàm đọc trên thân HTTP thật (chỗ nối API ↔ lệnh).
 - `duongTinHieu` — khuôn một bản ghi đường đi của kit (13 trường `TRUONG_DUONG`), `parseDuongTinHieu(raw)`
   trả `{kieu: "co", banGhi} | {kieu: "khong-co"} | {kieu: "hong", loi}`. Bản ghi sai khuôn là lỗi có tên, không
   nuốt thành mảng rỗng.
@@ -80,7 +82,9 @@ Chạy trên máy chủ kho, đầu mỗi lượt gom. Đọc `CRM_API_URL` + `C
 đọc). Thiếu một trong hai → thoát 2 gọi tên biến, không ghi tệp. Gọi `keoVe`, kiểm từng tệp bằng
 `tepTinHieu`, ghi `tin-hieu/crm/<id>.json` (JSON hai dấu cách + xuống dòng cuối) cho tệp chưa có; tệp đã có
 cùng byte → bỏ qua; khác byte → thoát 1 gọi tên tệp, không ghi đè. In tổng kết: mới · đã có · trong 30 ngày
-<n> tín hiệu từ <k> phòng ban (mỗi phòng ban một dòng số đếm; «chưa có phòng ban» là một dòng riêng). Không
+<n> tín hiệu từ <k> phòng ban (mỗi phòng ban một dòng số đếm; «chưa có phòng ban» là một dòng riêng), và dòng «gửi quá
+7 ngày: n · chưa có chỗ sau gom: m» — mẫu số là mọi tín hiệu máy chủ trả, «có chỗ» đọc từ danh sách tín hiệu của
+`LO-TRINH.html` ở gốc kho (bộ đọc trạng thái của §3.6). Không
 commit hộ — người chạy lượt gom commit cùng bản gom.
 
 ### 3.5 Cửa tín hiệu của kho

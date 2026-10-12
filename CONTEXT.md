@@ -1063,6 +1063,17 @@ _Avoid_: nguồn, tham khảo, footnote
 Vì sao: «nguồn» đã là tệp gốc người tải vào kho; trích dẫn trỏ tới trang đã duyệt, không
 tới tệp gốc.
 
+**Tín hiệu**: một điều người dùng gặp trong OneHub — chỗ hỏng, chỗ thiếu, một ý muốn có —
+kể bằng nút «Gửi tín hiệu» ở đầu mọi màn. CRM chỉ nhận và cất tín hiệu; đội sản phẩm lấy
+tín hiệu về, gom thành nhóm và chọn nhóm nào thành việc. Người gửi xem tín hiệu của mình
+đang ở đâu ở trang «Tín hiệu đã gửi»: chờ lấy về, chờ gom, vào nhóm nào, thành việc nào,
+đã giao chưa. Chỉ người gửi xoá được tín hiệu, và chỉ khi đội sản phẩm chưa lấy về. Chốt
+2026-10-12 tại Cổng Đáng của `gui-tin-hieu-trong-crm`.
+_Avoid_: góp ý, phản hồi, feedback, báo lỗi, yêu cầu
+Vì sao: «góp ý» là việc Kara làm trên một mục tiêu OKR; «báo sai» là đánh dấu một câu trả
+lời của trợ lý tài liệu; «phản hồi» không nói ai nhận và đi đâu; «yêu cầu» gợi một việc đã
+được nhận làm, còn tín hiệu chưa hứa gì.
+
 **Báo sai**: một người đã hỏi đánh dấu câu trả lời của trợ lý AI là sai, kèm ghi chú
 nếu muốn. Mỗi trang được trích nhận một việc trong danh sách «Bị báo sai» của chủ trang;
 chủ trang đóng việc bằng một kết luận: «Trợ lý trả lời sai» hay «Trợ lý trả lời đúng theo

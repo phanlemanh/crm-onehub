@@ -12,14 +12,16 @@ evals:
       - "apps/app/lib/messages/tin-hieu.ts"
       - "apps/app/test/tin-hieu.dom.tsx"
     expected: |
-      tin-hieu.dom.tsx describe "hop": render AppHeader voi mock trpc, ma tran viet truoc gom ba vai (owner, member, okr)
+      tin-hieu.dom.tsx describe "hop" (gom ca "menu"): render AppHeader voi mock trpc, ma tran viet truoc gom ba vai (owner, member, okr)
       x hai kho (desktop matchMedia >= md, mobile < md) = 6 o, moi o mot assert:
         1 nut [data-slot=nut-gui-tin-hieu] co mat; desktop co chu "Gửi tín hiệu"; mobile chi bieu tuong va aria-label
           == chu do (rut tu tep loi, khong viet tay)
         2 bam nut -> hop mo, co nhan "Bạn gặp điều gì?", dong "Gửi từ màn" mang duong dan da bo slug (pathname mock
           "/acme/okr/kr?x=1" -> "/okr/kr")
         3 o rong va o chi co khoang trang -> nut Gui disabled; go chu -> enabled
+        4 ca "menu": mo menu nguoi dung -> co muc "Tín hiệu đã gửi" tro /<slug>/tin-hieu (ca ba vai)
       CHIEU DO: ban sao bo dieu kien trim -> o 3 do voi thong diep ghim "o toan khoang trang van gui duoc";
+      ban sao bo muc menu -> o 4 do voi thong diep ghim "khong co loi vao trang tin hieu tu menu";
       ban sao giu slug trong man -> o 2 do voi thong diep ghim "man con mang ten khong gian lam viec".
 
   - id: E2
@@ -172,7 +174,10 @@ evals:
         2 sau loi goi, moi hang co keoVeLuc; goi lai -> cung tap tep, cung byte JSON; keoVeLuc cua hang cu khong doi
         3 tep khong co khoa nao chua nguoiGuiId, email, ten nguoi, phongBan (quet de quy moi gia tri chuoi cua tep
           so voi tap gia tri danh tinh cua kho thu)
+        4 than phan hoi HTTP that cua REST (nguyen van, khong boc lai) qua docPhanHoiKeoVe (@crm/validation/tin-hieu — CHINH ham
+          lenh keo ve dung) -> parse khong loi va bang dung danh sach tep cua dong 1 (noi giua API va lenh do bang mot ham)
       CHIEU DO: ban sao cho member goi -> dong vai do voi thong diep ghim "khoa thanh vien thuong keo ve duoc";
+      ban sao docPhanHoiKeoVe doc mang tran -> dong 4 do voi thong diep ghim "lenh keo ve lech vo phan hoi REST";
       ban sao ghi email vao noi_dung -> dong 3 do voi thong diep ghim "tep mang danh tinh nguoi gui".
 
   - id: E7
@@ -202,7 +207,8 @@ evals:
       - "scripts/tin-hieu/**"
       - "packages/validation/src/tin-hieu.ts"
     expected: |
-      scripts/tin-hieu/test/keo-ve.test.ts tren kho tam + may chu gia (Bun.serve) tra dau ra tu tepTuBanGhi:
+      scripts/tin-hieu/test/keo-ve.test.ts tren kho tam + may chu gia (Bun.serve). May chu gia boc dau ra tu tepTuBanGhi
+      bang CHINH ham boc phan hoi cua router (vo REST do E6 dong 4 chung), khong dung tay hinh vo:
         1 lan 1 ghi N tep; lan 2: 0 tep moi, moi tep cung byte (so bam truoc/sau)
         2 may chu bo mot ban ghi (da xoa truoc khi keo) -> khong co tep cua ma do
         3 thieu CRM_API_KEY -> ma thoat 2, stderr goi ten "CRM_API_KEY", thu muc nguon khong doi; tuong tu CRM_API_URL
@@ -287,7 +293,10 @@ evals:
       1 cu hon 30 ngay), dong ho gia:
         1 dong tong ket: moi, da co, "trong 30 ngày" == 5... dem doc lap tu du lieu mau; so phong ban == 2
         2 moi phong ban mot dong dung so dem; mot dong "chưa có phòng ban" dung so dem
-      CHIEU DO: ban sao dem ca tin hieu cu hon 30 ngay -> dong 1 do voi thong diep ghim "dem tran khoang 30 ngay".
+        3 kho tam co LO-TRINH.html do bo ve kit (E9) ve, chua 1 trong 3 tin hieu qua 7 ngay voi cho khac chua-gom; 2 tin hieu
+          qua 7 ngay khong co trong khoi (mot chua tung keo ve) -> dong "gửi quá 7 ngày: 3 · chưa có chỗ sau gom: 2"
+      CHIEU DO: ban sao dem ca tin hieu cu hon 30 ngay -> dong 1 do voi thong diep ghim "dem tran khoang 30 ngay";
+      ban sao lay mau so tu khoi thay vi tu may chu -> dong 3 do voi thong diep ghim "tin hieu chua keo ve lot khoi mau so".
 
   - id: E13
     criterion: AC-1
@@ -307,7 +316,7 @@ evals:
       - "apps/app/lib/messages/tin-hieu.ts"
       - "_acceptance/gui-tin-hieu-trong-crm/rang/do-man.mjs"
     expected: |
-      Nguoi do mang vai chi OKR (tien-de tao trong kho do rieng). Ma tran viet truoc 8 o, moi o mot dong DUNG/SAI va mot
+      Nguoi do mang vai chi OKR (tien-de tao trong kho do rieng). Ma tran viet truoc 10 o, moi o mot dong DUNG/SAI va mot
       anh evidence/<canh>.png:
         nut-<man>-1280 voi man thuoc {tong-quan, okr, tai-lieu, lo-trinh}: nut [data-slot=nut-gui-tin-hieu] hien va trong
           khung nhin
@@ -316,6 +325,7 @@ evals:
         trang-1280: bam "Xem tín hiệu đã gửi" -> URL ket thuc /tin-hieu; dong dau co dieu vua ke va cau trangThai.choKeoVe
           cua tep loi
         trang-375: cung trang o 375px hien danh sach Item, khong cuon ngang
+        menu-1280, menu-375: mo menu nguoi dung tu man Tong quan, bam "Tín hiệu đã gửi" -> URL ket thuc /tin-hieu
       Anh: nut tren thanh dau trang, hop, bien nhan, trang o hai kho.
 
   - id: E14
@@ -324,6 +334,7 @@ evals:
     inputs:
       - apps/app/lib/messages/tin-hieu.ts
       - docs/superpowers/specs/2026-10-12-gui-tin-hieu-trong-crm-design.md
+      - _acceptance/gui-tin-hieu-trong-crm/evidence/cau-kit-mau.json
     question: |
       Doc phan tieng Viet (vi) cua tep loi cho nut, hop gui va trang "Tín hiệu đã gửi". Mot nhan vien phong ban khong dung
       git doc moi nhan va cau trong tep do, co hieu (a) nut nay de ke dieu minh gap trong CRM, (b) gui xong thi tin hieu
@@ -331,7 +342,9 @@ evals:
       bo cua bo cong cu (kit, khoi, khuon, git, ho so, run)? Doi chieu voi bang trang thai va "Câu trạng thái" cua tep thiet
       ke. Neu cau nao vi pham, trich nguyen cau.
     expected: |
-      PASS khi ca ba y (a)(b)(c) co cau tuong ung trong tep loi va khong cau nao mang ten tep, ten lenh hay chu noi bo.
+      PASS khi ca ba y (a)(b)(c) co cau tuong ung trong tep loi va khong cau nao CUA TEP LOI mang ten tep, ten lenh hay chu
+      noi bo. Cau cua kit trong cau-kit-mau.json (do vong-kit.mjs ghi o E9, du moi gia tri cho) KHONG tinh vao PASS — trich
+      nguyen van moi cau kit co chu noi bo vao ly do, de nguoi ky thay (gioi han da khai o Cong Pham vi).
 
   - id: E15
     criterion: AC-1
@@ -354,3 +367,21 @@ evals:
     expected: |
       vai-chi-okr.spec.ts: router tinHieu nam trong danh sach ghim pham vi chung; vai okr goi gui va cuaToi -> thanh cong.
       CHIEU DO: ban sao gan PhamViDoiTacMiddleware cho router -> do voi thong diep ghim cua spec ve router ngoai danh sach.
+
+  - id: E17
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.gth_ban_dung
+    paths:
+      - "apps/app/next.config.ts"
+      - "apps/app/app/(app)/[slug]/tin-hieu/**"
+      - "apps/app/lib/tin-hieu/**"
+      - "apps/app/lib/lo-trinh/doc-tep.ts"
+      - "_acceptance/gui-tin-hieu-trong-crm/rang/ban-dung.mjs"
+    expected: |
+      rang/ban-dung.mjs dung apps/app that (next build, distDir rieng), suy goc kho tu vi tri cua chinh no, hai dong DUNG/SAI:
+        1 tep .nft.json cua duong [slug]/tin-hieu liet LO-TRINH.html va duong do giai ve dung LO-TRINH.html o goc kho
+        2 doi chung duong: .nft.json cua duong [slug]/lo-trinh trong CUNG ban dung cung liet tep do
+      Khong dung duoc ban dung -> thoat 2 voi thong diep ghim "khong dung duoc ban dung".
+      CHIEU DO: ban sao trang tin-hieu doc tep bang duong tinh luc chay (khong qua doc-tep.ts) -> dong 1 do voi thong diep
+      ghim "ban dung khong mang LO-TRINH.html cho trang tin hieu".
