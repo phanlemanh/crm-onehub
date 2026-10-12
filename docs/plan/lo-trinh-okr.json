@@ -1565,7 +1565,7 @@
     {
       "ma": "LT2",
       "slug": "gui-tin-hieu-trong-crm",
-      "hang": "T2",
+      "hang": "T3",
       "khoa": "crm-gui-tin-hieu",
       "nhom": "crm-chung",
       "thu_tu": 435,
@@ -1577,7 +1577,7 @@
       "ngay": "2026-10-08",
       "cau_giao": "«Tôi bấm Gửi tín hiệu ở bất kỳ màn nào, kể điều mình gặp, rồi thấy nó đã vào nhóm nào, thành việc nào, đã giao chưa»",
       "bat_khi": "Một tháng sau khi giao, ít nhất 20 tín hiệu từ ít nhất 3 phòng ban, tín hiệu nào cũng có trạng thái trả về người gửi (ngưỡng đề xuất — chốt ở Cổng Đáng)",
-      "ghi_chu": "Chủ kho chốt 08/10: người không dùng git được GỬI TÍN HIỆU (phản hồi, sự cố, ý tưởng, bản phạm vi dạng văn bản). Ghi theo khuôn tín hiệu của bộ kit (hàng L3 trên lộ trình kit); bộ kit gom nhóm, chủ kho chọn nhóm vào bản phạm vi. CRM chỉ ghi tín hiệu, không ghi ý định hay trạng thái.",
+      "ghi_chu": "Chủ kho chốt 08/10: người không dùng git được GỬI TÍN HIỆU (phản hồi, sự cố, ý tưởng, bản phạm vi dạng văn bản). Ghi theo khuôn tín hiệu của bộ kit (hàng L3 trên lộ trình kit); bộ kit gom nhóm, chủ kho chọn nhóm vào bản phạm vi. CRM chỉ ghi tín hiệu, không ghi ý định hay trạng thái. Chủ kho chọn 12/10 ở Cổng Đáng: CRM cất tín hiệu trong hàng chờ (thêm một bảng dữ liệu), lượt gom kéo về git, commit mang tên chủ kho — ứng dụng không giữ khoá ghi git; vì thêm bảng dữ liệu nên vòng hạng T3.",
       "buoc_ke": "Mở vòng ngay (chủ kho bỏ chờ 12/10): làm trên khuôn tín hiệu của bộ kit trên nhánh chính (L3 đã gộp 12/10); gộp vào onehub khi crm nhận mốc kit có L3 (2.27, từ 15/10)",
       "trang_thai": "chưa mở"
     },
