@@ -75,7 +75,8 @@ khai khoá gói đợt. PR ở dạng nháp và chỉ gộp sau khi kit cắt b�
   `ho-so-thay-chua-ky` khi đích là hồ sơ này và hồ sơ này chưa ký.
 - AC-10: Given các eval `test`/`script` sống của hồ sơ `signed-off` hoặc `machine-cleared` khác mà `paths` khớp một tệp vòng
   này đổi ngoài `_acceptance/`, hoặc lệnh đã giải nhắc `scripts/dieu-phoi/`, `test:dieu-phoi` hay `scripts/kiem-cheo/` (rút
-  bằng lệnh, không liệt tay), When chạy lệnh của chúng trên bản clone đầy đủ của `HEAD` và của merge-base với cùng gói đã
+  bằng lệnh, không liệt tay), When chạy lệnh của chúng trên bản clone đầy đủ của `HEAD` và của merge-base, mỗi bản ở trạng thái sau gộp
+  (`onehub` trỏ chính sha của bản), với cùng gói đã
   giải, Then không lệnh nào đỏ trên `HEAD` mà xanh trên merge-base; lệnh đỏ ở cả hai được ghi tên kèm nhật ký; lệnh nặng
   trong danh sách bỏ khai sẵn được nêu tên kèm lý do.
 
@@ -118,5 +119,8 @@ khai khoá gói đợt. PR ở dạng nháp và chỉ gộp sau khi kit cắt b�
   sau khi cài là nơi chứng trên bản phát hành.
 - `diagram-design` đi số phiên bản riêng (đang 2.7.1, ba gói kia 2.26.0): điều kiện «cùng số phiên bản cho cả bốn gói»
   không thoả theo nghĩa đen — giám sát quyết cách đọc.
+- E10 không chạy lại 11 lệnh họ `pre-push` của `hinh-cua-luoi` và `luoi-day-do-that` (mỗi lệnh chạy cổng thật nhiều
+  lượt) cùng ba lệnh trùng suite; thay bằng phép đo dòng vòng. Hai bộ chặn đó ghim dòng vòng `check-types lint lint:slop
+  test build` nên đã lệch từ khi `test:dieu-phoi` vào vòng (07/10); vòng này đưa dòng vòng về đúng dạng ghim.
 - Hành vi của bộ điều phối (xếp lượt, hạn thuê, hook, bảng, CLI) nay do kit đo ở hồ sơ DP1–DP7 của kit; crm chỉ đo chuyển
   đủ (AC-2), hook đủ (AC-3) và chỗ nối (AC-5–AC-7).

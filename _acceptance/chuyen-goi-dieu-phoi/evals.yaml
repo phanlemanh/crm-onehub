@@ -231,7 +231,8 @@ evals:
       machine-cleared khac ho so nay, ma paths (lib/evidence-core.cjs evalPathsOf + pathGlobToRe) khop mot tep cua git diff
       --name-only merge-base..HEAD ngoai _acceptance/, hoac lenh da giai nhac scripts/dieu-phoi/, test:dieu-phoi hay
       scripts/kiem-cheo/; gop lenh trung. Hai ban clone day du (bun install --frozen-lockfile, bun run db:generate, .env chep
-      tu goc kho) cua HEAD va merge-base; chay tung lenh o ca hai voi KIEM_CHEO_GOI_DIEU_PHOI = goc goi, nhat ky moi lenh ra
+      tu goc kho) cua HEAD va merge-base, moi ban dat onehub va origin/onehub = chinh sha cua no (trang thai sau gop: thuoc
+      pham vi cua vong cu, vi du do diff merge-base(onehub)..HEAD, do nhu tren onehub sau khi gop); chay tung lenh o ca hai voi KIEM_CHEO_GOI_DIEU_PHOI = goc goi, nhat ky moi lenh ra
       .acceptance-runs/chuyen-goi-dieu-phoi/khong-do-them/. In moi lenh «xanh», «do san <lenh>: <log>», hay «sai <lenh>: ma
       <a> tren HEAD, 0 tren merge-base: <log>». Lenh trong danh sach bo khai san in «bo <lenh>: <ly do>»: ld_ba_noi_deu_chay, hld_build_heap,
       check_types_khong_cache, lint_khong_cache, build_khong_cache, lint_slop, api, nc_rang_qua_cong (suite keys, bun run

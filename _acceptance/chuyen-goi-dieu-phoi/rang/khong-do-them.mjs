@@ -87,6 +87,8 @@ if (CHI_RUT) ket.ket();
 const nhatKy = thuMucRa("khong-do-them");
 function dungBan(sha, ten) {
 	const b = cloneDocLap(sha, ten);
+	git(b.goc, "update-ref", "refs/remotes/origin/onehub", sha);
+	git(b.goc, "branch", "-f", "onehub", sha);
 	copyFileSync(join(GOC, ".env"), join(b.goc, ".env"));
 	for (const lenh of ["bun install --frozen-lockfile", "bun run db:generate"]) {
 		const r = spawnSync("bash", ["-c", lenh], { cwd: b.goc, encoding: "utf8", env: moiTruongSach(), maxBuffer: 256 * 1024 * 1024 });

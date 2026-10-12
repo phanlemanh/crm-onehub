@@ -205,6 +205,14 @@ còn lại không ai đo lại ở crm; bộ lọc là của kit và kit đo nó
 Ba eval `judgment` (`dieu-phoi-hai-tang/E22`, `dieu-phoi-truoc-mo-dot/E13`, `dieu-phoi-va-bien/E20`) đọc tệp của bộ cũ.
 Làn ghim lại không chạy eval ngoài làn máy; chúng hiện ở khoá `evals_not_machine_touched` của lượt ghim, không khai thêm.
 
+## Họ lệnh pre-push
+
+`_acceptance/hinh-cua-luoi/rang-hinh.sh` (mẫu `sed` của đòn 1, dòng kiểm của đòn 2) và
+`_acceptance/luoi-day-do-that/rang-hook.sh` (biến `TAC_VU`) ghim nguyên văn dòng `for task in check-types lint lint:slop
+test build; do`. Từ 07/10 dòng vòng mang thêm `test:dieu-phoi`, nên ở merge-base đòn 1 của `tan-cong` thoát 2 «không cài
+được» và các chặn của `rang-hook.sh` lệch kỳ vọng. Gỡ `test:dieu-phoi` đưa dòng vòng về đúng dạng ghim. E10 đo thẳng quan hệ
+đó thay cho việc chạy lại 11 lệnh, mỗi lệnh chạy cổng `pre-push` thật nhiều lượt.
+
 ## Ghim lại sau chữ ký
 
 Luật thay bởi đòi hồ sơ thay đã có chữ ký người, nên các hồ sơ cũ ghim lại ở đỉnh nhánh **sau** Cổng Bằng chứng, một lượt
