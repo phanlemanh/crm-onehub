@@ -77,6 +77,43 @@ Lỗi của bộ kit nghiệm thu phát hiện ở đây thì mở chip riêng s
 `~/dev/acceptance-gate-kit`, không sửa tại chỗ — phiên ở kho này chỉ làm tính
 năng của kho này.
 
+## Lộ trình là việc dựng; thiếu dữ liệu thì dùng dữ liệu mẫu
+
+Chủ kho chốt 11/10: `docs/plan/lo-trinh-*.json` chỉ chứa việc dựng tính năng.
+Không hàng nào chờ người — chờ phòng ban gửi dữ liệu, chờ gom câu hỏi thật, chờ
+chạy thật xong. Việc do người và tổ chức quyết là **mốc ngoài** trong chính lộ
+trình — `moc` có `loai: "ngoai"` và `ai` — theo khuôn S3b của kit; không hàng nào
+được đứng trên mốc ngoài (`dung_tren` chỉ trỏ hàng).
+
+Hàng cần dữ liệu thật thì đứng ngay sau một hàng sinh dữ liệu giả có nhãn
+(`du_lieu: "sinh-gia"`), và chính nó mang `du_lieu: "gia"`. Thiếu dữ liệu để dựng
+hay đo thì mở rộng dữ liệu mẫu, không đợi:
+
+- OKR: bộ OKR mẫu `bun run okr:mau` (`_acceptance/bo-okr-mau`) — thêm ca vào
+  đó. Dữ liệu chung: `bun run db:seed`.
+- Dữ liệu mẫu vào qua đường ghi thật (service, API), không chèn thẳng bảng. Dịch
+  vụ ngoài giả theo đúng hợp đồng thật của nó, không theo cái dễ giả.
+- Lệnh nạp mẫu từ chối chạy trên production. Dữ liệu mẫu không lên production.
+
+Đo trên dữ liệu thật — chạy ẩn, phiên nghiệm thu, Cổng Giá trị — là việc sau
+khi gộp, lúc bật cho người dùng. Nó không phải cổng của việc dựng.
+
+## Một việc, một tên
+
+Chủ kho chốt 12/10. Một hàng lộ trình mang đúng một mã và một slug, và hai thứ đó
+đi khắp nơi:
+
+- **Mã hàng duy nhất trong toàn kho**, qua mọi tệp `lo-trinh-*.json`. Lộ trình Việc
+  và Dự án dùng tiền tố `DA` (đổi từ `V` vì trùng `V2` của OKR).
+- **Nhánh** `<loại>/<slug>` (`feat` · `fix` · `chore` · `docs`). Phiên mở từ chip
+  đổi nhánh `claude/<ngẫu nhiên>` sang tên này trước commit đầu (`git branch -m`).
+- **PR** `<mã> · <loại>(<slug>): <câu giao ngắn>`.
+- **Từ của Điều phối – Thợ** theo `CONTEXT.md` của kit: đợt chạy, dãy, hàng, phiên
+  giám sát, phiên thợ, bộ phát lịch. Không gọi dãy là «làn».
+
+Tên phiên và đường giao tiếp của một đợt chạy sống ở `LUAT-rieng.md` của gói đợt
+(`docs/plan/dot-<tên>/`).
+
 ## Ngôn ngữ sản phẩm
 
 `CONTEXT.md` là từ điển. Từ chưa có mục ở đó thì hoặc thêm mục trước, hoặc viết
