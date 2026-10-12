@@ -3,10 +3,10 @@ schema_version: 1
 slug: gui-tin-hieu-trong-crm
 feature: «Tôi bấm Gửi tín hiệu ở bất kỳ màn nào, kể điều mình gặp, rồi thấy nó đã vào nhóm nào, thành việc nào, đã giao chưa»
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-12T01:21:15Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -76,9 +76,9 @@ lối 1 bỏ lệnh kéo về; máy chọn giữa lệnh và tải tay ở S1, �
 ## Ngưỡng chết / ngưỡng UAT
 
 - Câu hỏi phép đo trả lời: người không dùng git có dùng cửa này để kể điều mình gặp, và có thấy tín hiệu của mình đi tới đâu không?
-- Kết quả nào là SỐNG: [đề xuất] trong 30 ngày kể từ ngày lên production: ít nhất 20 tín hiệu, từ ít nhất 3 phòng ban (phòng ban chính của người gửi lúc gửi); và vào ngày đo, mọi tín hiệu gửi trước đó quá 7 ngày đã có chỗ sau gom (một nhóm, lẻ kèm lý do, hay đã có việc) và người gửi thấy chỗ đó trong CRM.
-- Kết quả nào là CHẾT: [đề xuất] hết 30 ngày mà dưới 10 tín hiệu hoặc dưới 2 phòng ban; hoặc có tín hiệu người gửi không thấy trạng thái nào (mất trên đường vào git). Giữa hai ngưỡng → lặp.
-- Timebox: [đề xuất] 30 ngày kể từ ngày lên production. Sớm nhất là 15/10, vì chỉ gộp khi crm đã nhận kit 2.27.
+- Kết quả nào là SỐNG: trong 30 ngày kể từ ngày lên production: ít nhất 20 tín hiệu, từ ít nhất 3 phòng ban (phòng ban chính của người gửi lúc gửi); và vào ngày đo, mọi tín hiệu gửi trước đó quá 7 ngày đã có chỗ sau gom (một nhóm, lẻ kèm lý do, hay đã có việc) và người gửi thấy chỗ đó trong CRM.
+- Kết quả nào là CHẾT: hết 30 ngày mà dưới 10 tín hiệu hoặc dưới 2 phòng ban; hoặc có tín hiệu người gửi không thấy trạng thái nào (mất trên đường vào git). Giữa hai ngưỡng → lặp.
+- Timebox: 30 ngày kể từ ngày lên production. Sớm nhất là 15/10, vì chỉ gộp khi crm đã nhận kit 2.27.
 
 ## Kết quả prototype
 
@@ -95,10 +95,10 @@ Chưa dựng. Vòng chạm màn hình: bản bấm được làm ở nghi thức
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
+- **decision = build** Căn cứ: chủ kho gõ trong phiên 12/10 «Cổng Đáng gui-tin-hieu-trong-crm: Làm ; đường vào git: lối 1 ; ngưỡng: như đề xuất», trên khuyến nghị của máy bên dưới.
 - **disposition = —** Căn cứ: không có bản mẫu dựng trước Cổng Đáng.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
-- **Đường vào git chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** bốn dòng của mục «Ngưỡng chết / ngưỡng UAT» như máy đề xuất, đã gỡ tiền tố đề xuất. Vế «quá 7 ngày đã có chỗ sau gom» nghĩa là chủ kho gom ít nhất mỗi tuần một lần.
+- **Đường vào git chốt cùng lúc ký: Lối 1** — CRM giữ hàng chờ, lượt gom kéo tín hiệu về git, người chạy lượt gom ký commit; ứng dụng không giữ khoá ghi git. Đổi lối là một Cổng Đáng mới.
 
 **Máy khuyến nghị:** `build`, **Lối 1**, một vòng 10–12 tiêu chí, gộp chỉ khi crm đã nhận kit 2.27 (từ 15/10).
 Hạng: hàng ghi T2; lối 1 thêm một bảng dữ liệu nên chạm đường T3 (`packages/db/prisma`) — vòng chạy T3,
