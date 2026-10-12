@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 43241dd2535d5ef9ea0423ecb3ee02380f4db12f
+verified_commit: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4
 human_signoff: Phan Le Manh 2026-10-11 — ký Cổng 2 trên verdict PASS 12/12 eval (S4 vòng 3, wf_c9f0a576-3df); Ngoài 2, 3, 13, 14, 15 mở hợp đồng mới; Ngoài 1, 4, 5, 6, 7, 9, 10, 11, 12, 16, 17, 20, 22 ghi Known limits; Ngoài 8, 18, 19, 21, 23 chấp nhận không sửa; đồng ý phần cắt; phê các dòng treo.
 ---
 
@@ -196,3 +196,7 @@ none — không eval nào chạy nhiều lần (mọi eval có một lượt ch�
 Round 1: REJECT — cả 12 eval máy đạt; lệnh suite `bun run test -- --filter=api` đỏ (33 ca đỏ trên 1672 test), không gắn eval nào. Quay lại triển khai.
 Round 2: BLOCKED — 11 eval đạt; E9 không ra kết quả vì không kết nối được `api.github.com:443` (lỗi mạng, không phải lỗi mã). Lệnh suite `bun run test -- --filter=api` vẫn đỏ (27 ca đỏ trên 1680 test), nguyên nhân chưa rõ.
 Round 3: PASS — cả 12 eval máy đạt, E9 đo được qua mạng; cả bảy lệnh suite đạt, gồm cả suite api.
+
+### Re-pin lần 1 — 2026-10-12, do chuyen-goi-dieu-phoi: ghim lại sau khi gỡ scripts/dieu-phoi và nhận kit 2.28.0
+run_id: repin-20261012T222532Z-81286
+sha: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4 · suites: 7 lệnh exit 0 · evals: 8/8 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E5, E6, E7, E8 · thay bởi hồ sơ đã ký: E5→chuyen-goi-dieu-phoi#AC-4, E6→chuyen-goi-dieu-phoi#AC-4, E7→chuyen-goi-dieu-phoi#AC-10, E8→chuyen-goi-dieu-phoi#AC-9 · AC không có chốt máy: AC-5, AC-6, AC-7, AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
