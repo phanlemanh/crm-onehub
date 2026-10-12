@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: d70655a18e24ee4403a383d3716ce0ca4e74f020
+verified_commit: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4
 human_signoff: Phan Le Manh 2026-10-07
 ---
 
@@ -288,3 +288,7 @@ none — every multi-run eval is uniform
 Round 1: mọi eval máy xanh (E1–E19, E21) và các lệnh suite xanh; E20 (judgment) chờ người quyết ở Cổng 2. Verdict PENDING-JUDGMENT.
 Round 2: chạy lại bảy lệnh suite, tất cả xanh; hai mươi eval máy mang từ round 1 vì delta không chạm paths của chúng; panel E20 chấm ba phiếu cùng PASS. Verdict PASS.
 Round 3: hợp đồng mở lại với AC-15; E22 mới xanh (đỏ trên baseline), E8, E9, E19 chạy lại xanh, bảy lệnh suite xanh; mười bảy eval máy mang từ round 1, panel E20 mang từ round 2. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-12, do chuyen-goi-dieu-phoi: ghim lại sau khi gỡ scripts/dieu-phoi và nhận kit 2.28.0
+run_id: repin-20261012T222532Z-81286
+sha: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4 · suites: 7 lệnh exit 0 · evals: 0/0 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E21, E22 · thay bởi hồ sơ đã ký: E1→chuyen-goi-dieu-phoi#AC-3, E2→chuyen-goi-dieu-phoi#AC-3, E3→chuyen-goi-dieu-phoi#AC-2, E4→chuyen-goi-dieu-phoi#AC-2, E5→chuyen-goi-dieu-phoi#AC-2, E6→chuyen-goi-dieu-phoi#AC-3, E7→chuyen-goi-dieu-phoi#AC-3, E8→chuyen-goi-dieu-phoi#AC-4, E9→chuyen-goi-dieu-phoi#AC-4, E10→chuyen-goi-dieu-phoi#AC-2, E11→chuyen-goi-dieu-phoi#AC-2, E12→chuyen-goi-dieu-phoi#AC-3, E13→chuyen-goi-dieu-phoi#AC-2, E14→chuyen-goi-dieu-phoi#AC-2, E15→chuyen-goi-dieu-phoi#AC-2, E16→chuyen-goi-dieu-phoi#AC-2, E17→chuyen-goi-dieu-phoi#AC-2, E18→chuyen-goi-dieu-phoi#AC-2, E19→chuyen-goi-dieu-phoi#AC-2, E21→chuyen-goi-dieu-phoi#AC-3, E22→chuyen-goi-dieu-phoi#AC-4 · ngoài làn máy: E20 · diff chạm vật đo ngoài làn máy: E20 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3, AC-4, AC-5, AC-6, AC-7, AC-8, AC-9, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

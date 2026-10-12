@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 659199342932de838cb0b5ae7a78b5ea0804ddf5
+verified_commit: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4
 human_signoff: Phan Le Manh 2026-10-07
 ---
 
@@ -569,3 +569,7 @@ Round 1: không có chi tiết trong dữ liệu của lượt này; xem run-log
 Round 2: REJECT, 4 finding trong hợp đồng. Trả về implementation (sửa ở e3e11575e).
 Round 3: REJECT, chạm trần 3 round; người chọn lối 2 và tiếp tục. Sửa ở 659199342: viec-phu chỉ gộp vào yêu cầu cũ hơn.
 Round 4: PASS tại 659199342932de838cb0b5ae7a78b5ea0804ddf5. Toàn bộ eval máy xanh, lệnh suite xanh, E22 giữ phiếu từ round 2.
+
+### Re-pin lần 1 — 2026-10-12, do chuyen-goi-dieu-phoi: ghim lại sau khi gỡ scripts/dieu-phoi và nhận kit 2.28.0
+run_id: repin-20261012T222532Z-81286
+sha: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4 · suites: 7 lệnh exit 0 · evals: 0/0 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E20, E21, E23, E24, E25, E26, E27, E28, E29, E30, E31, E32, E33, E34, E35, E36, E37, E38, E39, E40, E41, E42, E43, E44, E45 · thay bởi hồ sơ đã ký: E1→chuyen-goi-dieu-phoi#AC-2, E2→chuyen-goi-dieu-phoi#AC-2, E3→chuyen-goi-dieu-phoi#AC-2, E4→chuyen-goi-dieu-phoi#AC-2, E5→chuyen-goi-dieu-phoi#AC-2, E6→chuyen-goi-dieu-phoi#AC-2, E7→chuyen-goi-dieu-phoi#AC-2, E8→chuyen-goi-dieu-phoi#AC-2, E9→chuyen-goi-dieu-phoi#AC-3, E10→chuyen-goi-dieu-phoi#AC-3, E11→chuyen-goi-dieu-phoi#AC-3, E12→chuyen-goi-dieu-phoi#AC-3, E13→chuyen-goi-dieu-phoi#AC-2, E14→chuyen-goi-dieu-phoi#AC-2, E15→chuyen-goi-dieu-phoi#AC-2, E16→chuyen-goi-dieu-phoi#AC-2, E17→chuyen-goi-dieu-phoi#AC-2, E18→chuyen-goi-dieu-phoi#AC-2, E19→chuyen-goi-dieu-phoi#AC-2, E20→chuyen-goi-dieu-phoi#AC-2, E21→chuyen-goi-dieu-phoi#AC-7, E23→chuyen-goi-dieu-phoi#AC-2, E24→chuyen-goi-dieu-phoi#AC-2, E25→chuyen-goi-dieu-phoi#AC-2, E26→chuyen-goi-dieu-phoi#AC-2, E27→chuyen-goi-dieu-phoi#AC-2, E28→chuyen-goi-dieu-phoi#AC-2, E29→chuyen-goi-dieu-phoi#AC-2, E30→chuyen-goi-dieu-phoi#AC-2, E31→chuyen-goi-dieu-phoi#AC-2, E32→chuyen-goi-dieu-phoi#AC-2, E33→chuyen-goi-dieu-phoi#AC-2, E34→chuyen-goi-dieu-phoi#AC-2, E35→chuyen-goi-dieu-phoi#AC-2, E36→chuyen-goi-dieu-phoi#AC-2, E37→chuyen-goi-dieu-phoi#AC-2, E38→chuyen-goi-dieu-phoi#AC-3, E39→chuyen-goi-dieu-phoi#AC-7, E40→chuyen-goi-dieu-phoi#AC-2, E41→chuyen-goi-dieu-phoi#AC-2, E42→chuyen-goi-dieu-phoi#AC-2, E43→chuyen-goi-dieu-phoi#AC-2, E44→chuyen-goi-dieu-phoi#AC-2, E45→chuyen-goi-dieu-phoi#AC-2 · ngoài làn máy: E22 · diff chạm vật đo ngoài làn máy: E22 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-1, AC-2, AC-3, AC-4, AC-5, AC-6, AC-7, AC-8, AC-9, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-16, AC-17, AC-18 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

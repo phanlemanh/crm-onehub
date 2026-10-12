@@ -11,10 +11,11 @@ import fs, {
 import os from "node:os";
 import { join } from "node:path";
 import { after, describe, test } from "node:test";
-import { kiemDon } from "../../dieu-phoi/hinh-dang.mjs";
 import { KIEM_CHEO } from "../cau-hinh.mjs";
+import { napGoiDieuPhoi } from "../goi-dieu-phoi.mjs";
 import { layKhoa, voiKhoa } from "../khoa.mjs";
 
+const { kiemDon } = await napGoiDieuPhoi();
 const tam = mkdtempSync(join(os.tmpdir(), "kcs-khoa-"));
 after(() => rmSync(tam, { recursive: true, force: true }));
 
@@ -62,7 +63,6 @@ describe("kcs-khoa", () => {
 		const khoa = await layKhoa({
 			goc: tam,
 			cay: CAY,
-			moc: "2026-10-07",
 			timDot: () => d,
 			fs: fsGian,
 			cho: async () => {
@@ -75,7 +75,6 @@ describe("kcs-khoa", () => {
 		assert.deepEqual(Object.keys(don).sort(), [
 			"loai",
 			"luc",
-			"moc",
 			"phien",
 			"slug",
 			"uoc_phut",
@@ -85,7 +84,7 @@ describe("kcs-khoa", () => {
 		assert.equal(don.slug, "kiem-cheo-sau-gop");
 		assert.equal(don.loai, "s4");
 		assert.equal(don.worktree, CAY);
-		assert.equal(don.moc, "2026-10-07");
+		assert.ok(!("moc" in don), "don kiem-cheo khong bao gio khai moc");
 		assert.equal(khoa.loai, "dot");
 		assert.doesNotThrow(
 			() => kiemDon(don),
@@ -95,30 +94,12 @@ describe("kcs-khoa", () => {
 		assert.ok(!existsSync(join(d, "khoa", "s4")), "tra khoa phai xoa khoa/s4");
 	});
 
-	test("(f) khong moc thi don khong co khoa moc", async () => {
-		const d = dotGia("dot-song-2", process.pid);
-		let don;
-		const khoa = await layKhoa({
-			goc: tam,
-			cay: CAY,
-			moc: null,
-			timDot: () => d,
-			cho: async () => {
-				don ??= JSON.parse(readFileSync(join(d, "xin", DON), "utf8"));
-				await capCho(d, KIEM_CHEO.khoa.phien)();
-			},
-		});
-		assert.ok(!("moc" in don), "duoi 20 gio don khong mang moc");
-		khoa.tra();
-	});
-
 	test("(f) khoa o P3 tron thoi gian cho -> bo-luot-khoa-ban goi ten P3, don duoc rut", async () => {
 		const d = dotGia("dot-ban", process.pid);
 		let t = Date.parse("2026-10-09T01:00:00Z");
 		const kq = await layKhoa({
 			goc: tam,
 			cay: CAY,
-			moc: null,
 			timDot: () => d,
 			cho: async () => {
 				await capCho(d, "P3")();
@@ -135,7 +116,6 @@ describe("kcs-khoa", () => {
 		const khoa = await layKhoa({
 			goc: tam,
 			cay: CAY,
-			moc: null,
 			timDot: () => d,
 			cho: capCho(d, KIEM_CHEO.khoa.phien),
 		});
@@ -153,7 +133,6 @@ describe("kcs-khoa", () => {
 		const khoa = await layKhoa({
 			goc: tam,
 			cay: CAY,
-			moc: null,
 			timDot: () => d,
 		});
 		assert.equal(khoa.loai, "tay");
@@ -177,7 +156,6 @@ describe("kcs-khoa", () => {
 		const kq = await layKhoa({
 			goc: tam,
 			cay: CAY,
-			moc: null,
 			timDot: () => d,
 		});
 		assert.deepEqual(kq, { ban: true, chu: "P2" });

@@ -52,7 +52,7 @@ evals:
     executor: test
     cmd: config:executors.test.kcs_lich
     status: not-run
-    superseded_by: kiem-cheo-chay-quang-lang#AC-1
+    superseded_by: chuyen-goi-dieu-phoi#AC-5
     paths:
       - "scripts/dieu-phoi/lich.mjs"
       - "scripts/dieu-phoi/test/lich.test.mjs"
@@ -113,6 +113,8 @@ evals:
     criterion: AC-12, AC-1
     executor: script
     cmd: config:executors.script.kcs_kho_that
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-7
     paths:
       - "scripts/kiem-cheo/**"
       - "lib/evidence-core.cjs"
