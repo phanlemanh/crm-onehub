@@ -1,10 +1,15 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
+import { KHONG_TRONG_PHAM_VI } from "@crm/auth";
 import { db } from "@crm/db";
+import type { NestExpressApplication } from "@nestjs/platform-express";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { BackfillService } from "../src/backfill/backfill.service";
+import { createApp } from "../src/create-app";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
 import { OnboardingGhi } from "../src/onboarding/onboarding-ghi";
 import { WorkspaceService } from "../src/workspace/workspace.service";
 import { WORKSPACE_CONFIG } from "../src/workspace/workspace-config";
+import { dangNhap, datMatKhau, goiTrpc } from "./ma-tran-thu";
 import {
 	dichVu,
 	doiVai,
@@ -404,5 +409,113 @@ describe("vlr-doi-vai", () => {
 		);
 		expect(loiLa).toBe("That person is not in this workspace.");
 		expect(await db.onboardingWatch.count()).toBe(tongTheoDoi);
+	});
+});
+
+const LOAI_KE_HOACH: readonly string[] = [
+	"buoc-qua-han",
+	"buoc-sap-han",
+	"ke-hoach-im",
+	"moc-ngay",
+];
+
+describe("vlr-viec-cua-toi", () => {
+	let app: NestExpressApplication;
+
+	beforeAll(async () => {
+		app = await createApp();
+		spyOn(app.get(BackfillService), "auto").mockResolvedValue({
+			started: false,
+		});
+	});
+
+	afterAll(async () => {
+		await app.close();
+	});
+
+	async function cookieCua(userId: string): Promise<string> {
+		await db.user.update({
+			where: { id: userId },
+			data: { emailVerified: true },
+		});
+		return dangNhap(await datMatKhau(userId));
+	}
+
+	test("vlr-viec-cua-toi: vai okr không thấy việc kế hoạch ở Việc của bạn, bị chặn ở Tổng quan; member thấy bước", async () => {
+		const qt = await gieoThanhVien("QT VCT VLR", "admin");
+		const okr = await gieoThanhVien("vlr-vct-okr", "member");
+		const thuong = await gieoThanhVien("vlr-vct-member", "member");
+		const bp = await gieoBoPhan();
+		const han = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);
+		const { plan: keHoachOkr } = await gieoKeHoach({
+			camTrich: qt.id,
+			buoc: [{ nhan: "B okr", boPhanId: bp.id, han }],
+		});
+		const { plan: keHoachThuong } = await gieoKeHoach({
+			camTrich: qt.id,
+			buoc: [{ nhan: "B member", boPhanId: bp.id, han }],
+		});
+		const buocOkr = await db.onboardingStep.findFirstOrThrow({
+			where: { planId: keHoachOkr.id },
+		});
+		const buocThuong = await db.onboardingStep.findFirstOrThrow({
+			where: { planId: keHoachThuong.id },
+		});
+		await ghi().assignStep({ stepId: buocOkr.id, assigneeId: okr.id }, qt.id);
+		await ghi().assignStep(
+			{ stepId: buocThuong.id, assigneeId: thuong.id },
+			qt.id,
+		);
+		await doiVai(okr.id, "okr");
+		const tenCongTyOkr = (
+			await db.company.findUniqueOrThrow({
+				where: { id: keHoachOkr.companyId },
+			})
+		).name;
+		const cookieOkr = await cookieCua(okr.id);
+		const cookieThuong = await cookieCua(thuong.id);
+
+		const viec = await goiTrpc(app, "okr.viecCuaToi", "query", undefined, {
+			cookie: cookieOkr,
+		});
+		expect(viec.status, JSON.stringify(viec.body)).toBe(200);
+		const ds: { loai: string }[] = viec.body?.result?.data?.viec ?? [];
+		if (ds.some((m) => LOAI_KE_HOACH.includes(m.loai))) {
+			throw new Error("vlr: viec cua toi co ke hoach cho vai okr");
+		}
+		if (JSON.stringify(viec.body).includes(tenCongTyOkr)) {
+			throw new Error("vlr: viec cua toi mang ten doi tac");
+		}
+
+		const tq = await goiTrpc(
+			app,
+			"dashboard.summary",
+			"query",
+			{},
+			{
+				cookie: cookieOkr,
+			},
+		);
+		const thanTq = JSON.stringify(tq.body);
+		if (tq.status !== 403 || !thanTq.includes(KHONG_TRONG_PHAM_VI)) {
+			throw new Error(`vlr: tong quan mo cho vai okr ${tq.status}`);
+		}
+
+		const tqThuong = await goiTrpc(
+			app,
+			"dashboard.summary",
+			"query",
+			{},
+			{
+				cookie: cookieThuong,
+			},
+		);
+		const buoc: { stepId: string }[] =
+			tqThuong.body?.result?.data?.mySteps ?? [];
+		if (!buoc.some((b) => b.stepId === buocThuong.id)) {
+			throw new Error(
+				`vlr: doi chung tong quan thieu buoc ${tqThuong.status} ${JSON.stringify(tqThuong.body).slice(0, 400)}`,
+			);
+		}
 	});
 });
