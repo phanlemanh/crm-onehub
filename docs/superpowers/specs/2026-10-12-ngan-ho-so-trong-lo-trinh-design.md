@@ -31,8 +31,9 @@ CRM không đọc hồ sơ, không đọc tệp kế hoạch, không tự tính 
    khác. Phần đọc tệp vẫn nằm sau `"use cache"`; phần lọc chạy sau cache, theo từng lượt xem.
 4. **Ngăn: phần «Tóm tắt hồ sơ» đứng đầu thân ngăn**, ngay sau hai cảnh báo LT1 (theo lời, lệch kế
    hoạch), trước «Chi tiết» và hai danh sách việc liên quan. Hàng theo đúng thứ tự ô của khối, bỏ ô
-   `trang_thai` vì nó trùng chữ trạng thái ở dải số đầu ngăn (đặc tả kit: «đúng bằng hang.trang_thai»;
-   đếm trên bản vẽ thật 81/81 trùng). Tám hàng: Đã giao gì · Vì sao làm · Hồ sơ cập nhật · Lên production ·
+   `trang_thai` vì nó trùng chữ trạng thái của việc (đặc tả kit: «đúng bằng hang.trang_thai»; đếm trên bản vẽ
+   thật 81/81 trùng), mà ngăn LT1 đã hiện chữ đó: nhãn nhóm ở dải số đầu ngăn, cộng dòng «Kế hoạch ghi» khi chữ
+   khác các chữ cùng nghĩa. Tám hàng: Đã giao gì · Vì sao làm · Hồ sơ cập nhật · Lên production ·
    Sẽ đo gì, khi nào · Kết quả đo · Còn thiếu gì · Ai quyết.
 5. **Ô vắng hiện «Chưa có»**, chữ phụ, không bỏ hàng — người đọc biết ô đó có nhưng hồ sơ chưa ghi. Việc
    không có dải (chưa có hồ sơ, hoặc khối bản 1) hiện một câu «Chưa có tóm tắt hồ sơ cho việc này.» trong

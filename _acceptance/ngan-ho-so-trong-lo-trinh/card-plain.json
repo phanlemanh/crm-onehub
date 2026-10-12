@@ -1,0 +1,136 @@
+{
+ "feature_plain": "Người bấm một việc đã giao trên trang Lộ trình thấy ngay vì sao làm, đã lên chưa, sẽ đo gì, còn thiếu gì và ai quyết — chủ không gian làm việc thấy thêm số liệu của vòng làm.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ mở đầu ngăn việc bằng «Tóm tắt hồ sơ» tám hàng, đúng nguyên chữ và đúng thứ tự bộ công cụ xuất — thử trên cả 81 việc có tóm tắt của dữ liệu thật."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ giữ hàng khi hồ sơ chưa ghi ô đó và hiện «Chưa có», không tự điền từ chỗ khác."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ nói «Chưa có tóm tắt hồ sơ cho việc này.» khi việc chưa có hồ sơ; phần còn lại của ngăn như hiện nay."
+  },
+  {
+   "id": "AC-4",
+   "p": "Sẽ cho chủ không gian làm việc thấy thêm «Số liệu làm việc»: tiêu chí, phép đo, lượt chấm, token, số quyết định của máy và của người, mã commit kèm nút sao chép và liên kết «Tìm PR»."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ gỡ phần số liệu đó ngay ở máy chủ cho mọi vai khác, nên trình duyệt của họ không nhận được con số hay mã commit nào."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ không hiện băng cảnh báo khi trang lộ trình còn vẽ bằng bộ công cụ cũ — chỉ mỗi việc nói «chưa có tóm tắt»; dữ liệu hỏng vẫn báo hỏng như nay."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ đọc dữ liệu bằng bản chép nguyên hàm đọc của bộ công cụ, và khi kho đã nhận bản 2.27 thì đo luôn trên chính trang lộ trình thật."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ thử trên trang lộ trình do bộ công cụ thật vẽ, có ghi nguồn hai mã commit, vẽ lại ra đúng từng byte — không dữ liệu viết tay."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ hiện gọn ở máy tính và điện thoại, sáng và tối: đoạn lý do dài xuống dòng, không cuộn ngang, chữ của hồ sơ không bị trình duyệt tự dịch."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ để một trưởng phòng ban đọc nhãn và trả lời được năm câu trong một phút; mọi nhãn có bản Việt và Anh."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "OOS-1",
+   "p": "Sẽ KHÔNG sửa hay tự tính chữ trong tóm tắt — ô «Lên production», «Còn thiếu gì», «Vì sao» sai hay cụt thì sửa ở bộ công cụ (đã mở việc riêng)."
+  },
+  {
+   "id": "OOS-2",
+   "p": "Sẽ KHÔNG tự suy «đã lên production» từ chữ trạng thái."
+  },
+  {
+   "id": "OOS-3",
+   "p": "Sẽ KHÔNG hiện số PR — dữ liệu không mang; chủ kho tìm PR theo mã commit."
+  },
+  {
+   "id": "OOS-4",
+   "p": "Sẽ KHÔNG thu gọn đoạn dài ở lượt này — chờ số đo phiên nghiệm thu."
+  },
+  {
+   "id": "OOS-5",
+   "p": "Sẽ KHÔNG cho vai quản trị thấy số liệu làm việc."
+  },
+  {
+   "id": "OOS-6",
+   "p": "Sẽ KHÔNG làm nút «Gửi tín hiệu» — đó là việc LT2 ở phiên khác."
+  },
+  {
+   "id": "OOS-7",
+   "p": "Sẽ KHÔNG ghi gì từ CRM vào lộ trình hay hồ sơ."
+  },
+  {
+   "id": "OOS-8",
+   "p": "Sẽ KHÔNG đưa trang lộ trình của bộ công cụ bản chưa phát hành vào kho, và không gộp lên production trước khi kho nhận bản 2.27."
+  },
+  {
+   "id": "OOS-9",
+   "p": "Sẽ KHÔNG sửa ô Mốc ở khổ máy tính bảng — việc riêng chưa mở."
+  }
+ ],
+ "scope_plain": "Phần cắt hay để sau, mỗi dòng một mục:",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Đủ sáu tình huống dữ liệu — đủ, thiếu ô, chưa có hồ sơ, trang cũ, trang mới hơn, dữ liệu hỏng — thước là bảng đọc khoan dung của bộ công cụ và số đếm trên dữ liệu thật (AC-1, AC-2, AC-3, AC-6, AC-8)."
+  },
+  {
+   "i": 1,
+   "p": "Đủ năm kiểu người xem — chủ, quản trị, thành viên, chỉ OKR, không vai (AC-4 số liệu chủ kho, AC-5 lọc ở máy chủ)."
+  },
+  {
+   "i": 2,
+   "p": "Đủ các câu người xem hỏi — năm câu của câu giao và các câu của chủ kho (AC-1, AC-4, AC-10)."
+  },
+  {
+   "i": 3,
+   "p": "Phủ ngang: hai khổ màn, sáng tối, hai ngôn ngữ nhãn, chữ hồ sơ không dịch, mọi đường mở ngăn, bộ đọc chép nguyên (AC-7, AC-9, AC-10)."
+  },
+  {
+   "i": 4,
+   "p": "Bảng quét đầy đủ (làm ngay / để sau / không làm) nằm trong hồ sơ."
+  },
+  {
+   "i": 5,
+   "p": "Giả định chờ anh gạch: «chủ kho» trong CRM là vai owner của không gian làm việc."
+  },
+  {
+   "i": 6,
+   "p": "Giả định chờ anh gạch: tìm PR bằng ô tìm của GitHub theo mã commit là đủ, không cần số PR."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Phép đo «vai khác không thấy số liệu» chỉ đếm mã trong trang đã vẽ — mã giấu ở trình duyệt vẫn qua. Đã sửa: đo đúng dữ liệu máy chủ trao cho trình duyệt, năm vai × 81 việc."
+  },
+  {
+   "i": 1,
+   "p": "Các phép đo ngăn lấy kỳ vọng từ chính bộ đọc đang đo — bộ đọc cắt chữ thì vẫn xanh. Đã sửa: kỳ vọng đọc thẳng từ dữ liệu thô, ghim trước các số đếm 81/5/12/14."
+  },
+  {
+   "i": 2,
+   "p": "Không phép đo nào đọc trang lộ trình thật mà trang sẽ dùng. Đã sửa: khi kho có bản 2.27, đo bộ đọc trên chính trang đó."
+  },
+  {
+   "i": 3,
+   "p": "Phép chấm nhãn không thấy tệp ngăn chính, có thể lọt chữ viết thẳng. Đã sửa: thêm phép quét chữ viết thẳng trên bốn tệp, và cho người chấm đọc cả tệp ngăn."
+  },
+  {
+   "i": 4,
+   "p": "Phép đo liên kết «Tìm PR» so với chính mẫu đang đo. Đã sửa: so với đường dẫn cố định có lọc PR."
+  }
+ ]
+}

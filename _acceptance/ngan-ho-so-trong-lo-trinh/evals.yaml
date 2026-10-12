@@ -24,7 +24,9 @@ evals:
           [data-lo-trinh-dang-cho]; chi [data-lo-trinh-theo-loi] va [data-lo-trinh-lech] duoc dung truoc no
         2 dung 8 hang [data-o-tom-tat] theo thu tu da_giao, vi_sao, ngay, production, do_gi, ket_qua, chua_lam, ai_quyet
         3 chu cua tung hang == o tuong ung cua tom_tat.moi_nguoi (ngay == formatDay(ngay, "vi"))
-        4 chu trang thai o dai so dau ngan == tom_tat.moi_nguoi.trang_thai
+        4 tren khoi tho: tom_tat.moi_nguoi.trang_thai == hang.trang_thai; trong ngan: [data-nhom-trang-thai] cua dai so ==
+          hang.nhom_trang_thai, va [data-lo-trinh-trang-thai-phu] == hang.trang_thai khi chu khong thuoc tap cung nghia
+          (vang khi thuoc) — chu trang thai cua dai van hien du trong ngan du khong lap thanh hang rieng
       Doi chung duong: tep mau that (81 viec co dai o lan ve kit 7f65e5a0 tren crm 27d47de04) -> moi viec xanh.
       CHIEU DO (cung tep mau): ban sao duong doc cat vi_sao o 400 ky tu truoc khi render -> do voi thong diep ghim
       "viec <khoa> lech o tom tat vi_sao" o dung 31 viec; bo hang do_gi khoi ban render -> "viec <khoa> thieu hang do_gi";
