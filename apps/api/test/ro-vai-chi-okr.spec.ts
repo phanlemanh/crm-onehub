@@ -160,8 +160,13 @@ describe("vlr-thuoc", () => {
 			throw new Error("vlr: doi chung nguoi khac khong con mo");
 		}
 
+		const {
+			DATABASE_URL: _boDb,
+			TEST_DATABASE_URL: _boThu,
+			...khongBien
+		} = process.env;
 		const thieu = spawnSync("node", [THUOC], {
-			env: { PATH: process.env.PATH ?? "" },
+			env: khongBien,
 			encoding: "utf8",
 		});
 		if (thieu.status !== 2) {
