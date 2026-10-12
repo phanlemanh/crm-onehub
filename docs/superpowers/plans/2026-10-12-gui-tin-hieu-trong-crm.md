@@ -8,6 +8,8 @@
 
 **Tech Stack:** Prisma 7 (Postgres), NestJS + nestjs-trpc, Next.js (app router, cacheComponents), Zod, Bun test, `@crm/ui`.
 
+**Duyệt kế hoạch (Gate 1.5):** Manh Phan, 2026-10-12T03:08:18Z — chủ kho gõ «Duyệt kế hoạch gui-tin-hieu-trong-crm: duyệt».
+
 **Spec:** `docs/superpowers/specs/2026-10-12-gui-tin-hieu-trong-crm-design.md` · hợp đồng `_acceptance/gui-tin-hieu-trong-crm/contract.md` · phép đo `_acceptance/gui-tin-hieu-trong-crm/evals.yaml`.
 
 ## Global Constraints
