@@ -104,6 +104,21 @@ export const keoVeOutput = z.object({
 });
 export type KeoVeOutput = z.infer<typeof keoVeOutput>;
 
+const voKeoVe = z.object({ result: z.object({ data: keoVeOutput }) });
+
+export function bocPhanHoiKeoVe(tep: KeoVeOutput["tep"]): KeoVeOutput {
+	return { tep };
+}
+
+export function docPhanHoiKeoVe(body: unknown): KeoVeOutput["tep"] {
+	const kq = voKeoVe.safeParse(body);
+	if (!kq.success)
+		throw new Error(
+			`lệnh kéo về lệch vỏ phản hồi REST: ${kq.error.issues[0]?.message ?? "sai vỏ"}`,
+		);
+	return kq.data.result.data.tep;
+}
+
 export const CHO_TIN_HIEU = [
 	"chua-gom",
 	"le",
