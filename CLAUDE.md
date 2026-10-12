@@ -18,6 +18,15 @@ gương của hãng — không sửa. `upstream` chỉ đọc. Kéo bản mới 
 Phí bản rẽ là chi phí dài hạn lớn nhất ở đây. Sửa được ở hãng thì gửi lên hãng,
 đừng vá riêng.
 
+## PR mở ở dạng nháp
+
+Phiên làm tính năng mở PR bằng `gh pr create --draft`. Sau ghim lại và vẽ bản đồ, đúng lúc trình thẻ Cổng Bằng
+chứng, chuyển sẵn sàng bằng `gh pr ready`. PR nháp chỉ chạy job nhẹ (phân loại PR, acceptance gate, `ci-ok`);
+chuyển sẵn sàng thì `ci.yml` và Acceptance chạy đủ một lượt. PR chỉ chạm tệp T1 (`risk_tiers.t1_skip_globs`, trừ
+mọi tệp dưới `.github/`) cũng bỏ job nặng. Bộ phân loại ở `.github/scripts/phan-loai.mjs`, hồ sơ
+`_acceptance/giam-phut-ci-nhap-t1/`. Đây là luật tạm: kit có đề xuất «PR nháp tới lúc trình Cổng 2»
+(phanlemanh/acceptance-gate-kit#301, dự kiến 25/10) thì theo kit.
+
 ## AGENTS.md của hãng: giữ luật kỹ thuật, bỏ luật hành vi
 
 @AGENTS.md
