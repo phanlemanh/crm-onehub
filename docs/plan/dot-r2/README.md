@@ -17,20 +17,20 @@ quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot r2`, không p
    «thay bởi» cho eval của các hồ sơ đã ký trỏ vào `scripts/dieu-phoi/`; thêm khoá `dieu_phoi.goi_dot:
    docs/plan/dot-{ten}` vào `_acceptance/config.yaml`.
 3. Không đợt nào đang chạy: `chan-doan --mo r2` chỉ còn thiếu mục `co-dot`.
-4. Ngoài 14/10 và ở quãng lặng. crm đã nhận kit 2.28.0 (15/10); đợt thử thứ nhất mở ~16/10.
+4. Ngoài 14/10 và ở quãng lặng. crm đã nhận kit 2.28.0 (13/10); đợt thử thứ nhất mở 14/10.
 
 ## Dãy
 
 | Dãy | Việc | Hàng (theo thứ tự) | Mốc |
 |---|---|---|---|
-| P0 | Việc và Dự án — vá rò quyền | DA0b (DA0a đã gộp 12/10, #372) | 20/10 |
-| P1 | Kara trên dữ liệu mẫu | N1 → C, K6a, K2f | R2 20/11 |
+| P0 | Việc và Dự án — vá rò quyền | DA0b (DA0a đã gộp 12/10, #372) | 16/10 |
+| P1 | Kara trên dữ liệu mẫu | N1 → C, K6a, K2f | R2 31/10 (tạm) |
 | P2 | Lý do căn chỉnh | L2, L3 → L4 | R2 |
 | P3 | Vòng đời bản ghi | V2a → V2e, V2b, V2f | R2 |
 | P4 | Nếp màn chung | NM1 → NM2 → NM3 (sau K6a), NM4, V2c | R2 |
 | P5 | Thoả thuận và onboarding | E6b, E4b, E5 | R2 |
 | P6 | Kho tài liệu | cb → l5, l3b | 04/11, R2 |
-| P7 | Vệ sinh — có hạn mức | F24, F8, F23, DA0c, F26 | 30/11 |
+| P7 | Vệ sinh — có hạn mức | F24, F8, F23, DA0c, F26 | 14/11 |
 
 Không vào đợt: LT1b, LT2 (máy khác làm), R3 (10, 8b, L, T, K5, 7n), Việc và Dự án sau DA0b; F27 tới khi đo lại dưới kit 2.28.0.
 

@@ -53,7 +53,7 @@
       "ranh_gioi": [
         "_acceptance/mo-lai-khong-tra-viec-chi-okr/**"
       ],
-      "moc": "2026-10-20"
+      "moc": "2026-10-16"
     },
     {
       "ma": "N1",
@@ -65,7 +65,7 @@
       "ranh_gioi": [
         "_acceptance/bo-ca-mau-quy-4/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "C",
@@ -77,7 +77,7 @@
       "ranh_gioi": [
         "_acceptance/hoi-dap-okr/**"
       ],
-      "moc": "2026-11-20",
+      "moc": "2026-10-31",
       "sau": [
         "N1"
       ]
@@ -92,7 +92,7 @@
       "ranh_gioi": [
         "_acceptance/kara-mot-ten/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "K2f",
@@ -104,7 +104,7 @@
       "ranh_gioi": [
         "_acceptance/khung-soan-chan-lien-ket/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "L2",
@@ -116,7 +116,7 @@
       "ranh_gioi": [
         "_acceptance/duong-ly-do-muc-tieu/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "L3",
@@ -128,7 +128,7 @@
       "ranh_gioi": [
         "_acceptance/cay-can-chinh-co-ly-do/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "L4",
@@ -140,7 +140,7 @@
       "ranh_gioi": [
         "_acceptance/gan-tay-va-kara-co-ly-do/**"
       ],
-      "moc": "2026-11-20",
+      "moc": "2026-10-31",
       "sau": [
         "L3"
       ]
@@ -155,7 +155,7 @@
       "ranh_gioi": [
         "_acceptance/lien-quan-loc-ban-da-cat/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "V2e",
@@ -167,7 +167,7 @@
       "ranh_gioi": [
         "_acceptance/dai-luu-tru-dung-chung/**"
       ],
-      "moc": "2026-11-20",
+      "moc": "2026-10-31",
       "sau": [
         "V2a"
       ]
@@ -182,7 +182,7 @@
       "ranh_gioi": [
         "_acceptance/luu-tru-truong-khong-hoi/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "V2f",
@@ -194,7 +194,7 @@
       "ranh_gioi": [
         "_acceptance/hoan-tac-loat-bao-dung/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "NM1",
@@ -206,7 +206,7 @@
       "ranh_gioi": [
         "_acceptance/khung-man-chung/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "NM2",
@@ -218,7 +218,7 @@
       "ranh_gioi": [
         "_acceptance/loc-va-kieu-xem-chung/**"
       ],
-      "moc": "2026-11-20",
+      "moc": "2026-10-31",
       "sau": [
         "NM1"
       ]
@@ -233,7 +233,7 @@
       "ranh_gioi": [
         "_acceptance/mau-trang-thai-chung/**"
       ],
-      "moc": "2026-11-20",
+      "moc": "2026-10-31",
       "sau": [
         "NM2",
         "K6a"
@@ -249,7 +249,7 @@
       "ranh_gioi": [
         "_acceptance/chu-man-tieng-viet-khong-tran/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "V2c",
@@ -261,7 +261,7 @@
       "ranh_gioi": [
         "_acceptance/bo-cuc-hep-ngan-va-kanban/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "E6b",
@@ -273,7 +273,7 @@
       "ranh_gioi": [
         "_acceptance/them-buoc-bao-dung/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "E4b",
@@ -285,7 +285,7 @@
       "ranh_gioi": [
         "_acceptance/giai-doan-bo-mac-dinh/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "E5",
@@ -297,7 +297,7 @@
       "ranh_gioi": [
         "_acceptance/tac-nhan-va/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "cb",
@@ -321,7 +321,7 @@
       "ranh_gioi": [
         "_acceptance/lich-su-va-luu-tru-trang/**"
       ],
-      "moc": "2026-11-20"
+      "moc": "2026-10-31"
     },
     {
       "ma": "l5",
@@ -348,7 +348,7 @@
       "ranh_gioi": [
         "_acceptance/ba-ho-so-do-san/**"
       ],
-      "moc": "2026-11-30"
+      "moc": "2026-11-14"
     },
     {
       "ma": "F8",
@@ -360,7 +360,7 @@
       "ranh_gioi": [
         "_acceptance/neo-thuoc-het-han/**"
       ],
-      "moc": "2026-11-30"
+      "moc": "2026-11-14"
     },
     {
       "ma": "F23",
@@ -372,7 +372,7 @@
       "ranh_gioi": [
         "_acceptance/khong-re-theo-ten-thanh-luat-kho/**"
       ],
-      "moc": "2026-11-30"
+      "moc": "2026-11-14"
     },
     {
       "ma": "DA0c",
@@ -385,7 +385,7 @@
         "_acceptance/thuoc-viec-cua-ban-do-duoc/**",
         "_acceptance/va-lo-ro-vai-chi-okr/**"
       ],
-      "moc": "2026-11-30"
+      "moc": "2026-11-14"
     },
     {
       "ma": "F26",
@@ -397,7 +397,7 @@
       "ranh_gioi": [
         "_acceptance/khong-do-them-chay-gh/**"
       ],
-      "moc": "2026-11-30"
+      "moc": "2026-11-14"
     }
   ],
   "ngoai_hang_merge": []

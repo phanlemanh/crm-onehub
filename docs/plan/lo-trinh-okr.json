@@ -65,7 +65,15 @@
       "hang": []
     },
     {
-      "ten": "Mọi phòng ban bắt đầu dùng thật hằng ngày — OKR và Kho tài liệu",
+      "ten": "crm nhận kit 2.28.0 và chuyển sang gói dieu-phoi (#373) — chủ kho dời từ 15/10 ngày 13/10",
+      "ngay": "2026-10-13",
+      "khoa": "m-1013n",
+      "loai": "ngoai",
+      "ai": "Chủ kho",
+      "hang": []
+    },
+    {
+      "ten": "Công bố OKR quý 4 — các phòng ban đã dùng thử OKR và Kho tài liệu từ trước",
       "ngay": "2026-10-14",
       "loai": "han-cung",
       "ai": "Mọi phòng ban",
@@ -79,17 +87,9 @@
       "khoa": "m-1014"
     },
     {
-      "ten": "crm nhận kit 2.28.0 ở quãng lặng và chuyển sang gói dieu-phoi (#373)",
-      "ngay": "2026-10-15",
-      "khoa": "m-1015k",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
-      "hang": []
-    },
-    {
       "ten": "Mở đợt r2 từ gói dieu-phoi của kit — chủ kho duyệt thẻ khởi tạo một lần",
-      "ngay": "2026-10-16",
-      "khoa": "m-1016",
+      "ngay": "2026-10-14",
+      "khoa": "m-1014d",
       "loai": "ngoai",
       "ai": "Chủ kho",
       "hang": []
@@ -103,19 +103,8 @@
       "hang": []
     },
     {
-      "ten": "Phiên nghiệm thu R1",
-      "ngay": "2026-11-13",
-      "ai": "Chủ sản phẩm, người dùng đại diện",
-      "hang": [
-        "2",
-        "3",
-        "5"
-      ],
-      "khoa": "m-1113"
-    },
-    {
-      "ten": "R2 lên production",
-      "ngay": "2026-11-20",
+      "ten": "R2 lên production (tạm — chốt lại bằng số đo sau ba ngày đầu của đợt r2; trước đó 20/11)",
+      "ngay": "2026-10-31",
       "loai": "phat-hanh",
       "hang": [
         "N1",
@@ -140,7 +129,18 @@
         "LT1b",
         "LT2"
       ],
-      "khoa": "m-1120"
+      "khoa": "m-1031"
+    },
+    {
+      "ten": "Phiên nghiệm thu R1",
+      "ngay": "2026-11-13",
+      "ai": "Chủ sản phẩm, người dùng đại diện",
+      "hang": [
+        "2",
+        "3",
+        "5"
+      ],
+      "khoa": "m-1113"
     },
     {
       "ten": "Đọc số lượt 6",
@@ -1356,7 +1356,7 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, Zalo»",
       "ghi_chu": "Chủ kho chốt 04/10: tính năng và UX trước, câu chữ sau. Khoảng 30 chỗ «Trợ lý»/«Tác nhân». Ghim khoá mới ở messages-guard.",
-      "buoc_ke": "R2 — lên production 20/11; sau K4 (đã gộp)",
+      "buoc_ke": "R2 — lên production 31/10 (tạm); sau K4 (đã gộp)",
       "trang_thai": "chưa mở",
       "dung_tren": [
         "K4"
@@ -1575,7 +1575,7 @@
       "ngay": "2026-10-04",
       "cau_giao": "«Màn tác nhân đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng»",
       "ghi_chu": "Khảo sát lộ trình 04/10. #19, #34, #37 bo-dung-khong-ket.",
-      "buoc_ke": "R2 — lên production 20/11",
+      "buoc_ke": "R2 — lên production 31/10 (tạm)",
       "trang_thai": "chưa mở"
     },
     {
@@ -1685,7 +1685,7 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Màn nào đang tải cũng giữ tiêu đề, lỗi tải ở đâu cũng một hình có nút thử lại, và đầu trang không có nút chính tắt mà không nói vì sao»",
       "ghi_chu": "Khảo sát bảy màn 09/10 khi dựng bản mẫu LT1; đích ở docs/design.md mục «Nếp màn trong app». Phạm vi: vòng quay PageShellLoading (39 tệp) → khung xương; bốn khung lỗi (onboarding/danh-muc-table.tsx:231, okr/toan-canh/toan-canh.tsx:86, tai-lieu/loi-tai.tsx:20, okr/trang-thai-okr.tsx:52) → VungTaiLoi đã có trong packages/ui; tiêu đề Tài liệu và OKR dời vào page.tsx; khung chờ Tài liệu (tai-lieu/page.tsx:30) giấu tiêu đề; reminders/page.tsx:58,67 dùng <h2> thô; đầu trang Tài liệu ba nút lệch và chú thích «Chưa bật lưu tệp nguồn» trôi, ở 375 nút đứng trên câu mô tả; Onboarding «Kế hoạch mới» tắt không lý do cùng nút chính thứ hai trong khung trống. Chỉ chạm apps/app.",
-      "buoc_ke": "R2 — lên production 20/11; dãy P3, sau E5",
+      "buoc_ke": "R2 — lên production 31/10 (tạm); dãy P3, sau E5",
       "trang_thai": "chưa mở"
     },
     {
@@ -1700,7 +1700,7 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc»",
       "ghi_chu": "Khảo sát 09/10. Phạm vi: số đếm trong chip thành prop của packages/ui (hôm nay opacity-60 ở onboarding/danh-muc-cong-cu.tsx, text-muted-foreground ở tai-lieu/danh-sach-trang.tsx:193); lọc Tài liệu sang nuqs (danh-sach-trang.tsx:109,184 tự ghép chuỗi); Thoả thuận và Onboarding dùng ViewSwitch. Hai câu cho Cổng Phạm vi: «thẻ trạng thái» chọn một điều khiển (hôm nay menu thả của DataTable ở Thoả thuận, ToggleGroup ở Onboarding, Tabs gạch chân ở OKR và Tài liệu); bảng DataTable trên điện thoại cuộn ngang (Thoả thuận) hay thành thẻ dọc (Tài liệu). Chạm deals-table.tsx nên đứng sau V2.",
-      "buoc_ke": "R2 — lên production 20/11; sau NM1 (V2 đã gộp)",
+      "buoc_ke": "R2 — lên production 31/10 (tạm); sau NM1 (V2 đã gộp)",
       "trang_thai": "chưa mở"
     },
     {
@@ -1715,7 +1715,7 @@
       "ngay": "2026-10-09",
       "cau_giao": "«Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu»",
       "ghi_chu": "Khảo sát 09/10. Bảng nghĩa → tone đã ghi ở docs/design.md mục «Màu trạng thái»; vòng này dời năm ánh xạ tự khai (okr-status.tsx, kara/steps.tsx, attendee-list.tsx, okr/tien-do-kr.tsx, tai-lieu/bang-nguon.tsx) về một chỗ trong packages/ui. kara/steps.tsx thuộc ranh giới các hàng Kara nên đứng sau K6a. Chủ kho chốt 10/10: LT1 thêm trước bảng nghĩa → màu (packages/ui/src/lib/status-tone.ts); NM3 dời năm khu cũ về bảng đó.",
-      "buoc_ke": "R2 — lên production 20/11; sau NM2 và K6a (LT1 đã gộp)",
+      "buoc_ke": "R2 — lên production 31/10 (tạm); sau NM2 và K6a (LT1 đã gộp)",
       "trang_thai": "chưa mở"
     },
     {
@@ -2035,7 +2035,7 @@
         "K2e"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "L2",
@@ -2052,7 +2052,7 @@
         "K3"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "L3",
@@ -2068,7 +2068,7 @@
         "L1"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "L4",
@@ -2085,7 +2085,7 @@
         "K3"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "E4b",
@@ -2101,7 +2101,7 @@
         "E4"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "E6b",
@@ -2117,7 +2117,7 @@
         "E6"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "NM4",
@@ -2131,7 +2131,7 @@
       "ghi_chu": "Hai dòng tồn đọng loại hành vi từ F25 (#355): aria-label tiếng Anh ở packages/ui breadcrumb, tràn ở /settings/fields khổ 360.",
       "dung_tren": [],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2a",
@@ -2147,7 +2147,7 @@
         "V2"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2b",
@@ -2163,7 +2163,7 @@
         "V2"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2c",
@@ -2180,7 +2180,7 @@
         "K2e"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2e",
@@ -2197,7 +2197,7 @@
         "V2a"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "V2f",
@@ -2213,7 +2213,7 @@
         "V2"
       ],
       "trang_thai": "chưa mở",
-      "buoc_ke": "R2 — lên production 20/11"
+      "buoc_ke": "R2 — lên production 31/10 (tạm)"
     },
     {
       "ma": "F23",
