@@ -64,6 +64,7 @@ phanlemanh/acceptance-gate-kit#307); dữ liệu thật: trang kit nhánh chính
 - Tầng chủ kho cho vai `admin`.
 - Nút «Gửi tín hiệu» và phần hiện tín hiệu — hàng LT2, phiên khác.
 - Ghi gì từ CRM vào lộ trình hay hồ sơ.
+- Đọc thẳng trang bằng chứng (`evidence-page.html`) của hồ sơ — chủ kho chốt 12/10; thông tin thêm đi qua khối dữ liệu của kit (đề nghị đã gửi).
 - Đưa `LO-TRINH.html` do kit nhánh chính vẽ vào gốc kho; gộp vào `onehub` trước khi crm nhận kit 2.27.
 - Ô Mốc ở khổ máy tính bảng (Ngoài-1 của `lo-trinh-dong-bo-ho-so`) — hợp đồng riêng chưa mở.
 

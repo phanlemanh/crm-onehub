@@ -73,10 +73,14 @@
   },
   {
    "id": "OOS-8",
-   "p": "Sẽ KHÔNG đưa trang lộ trình của bộ công cụ bản chưa phát hành vào kho, và không gộp lên production trước khi kho nhận bản 2.27."
+   "p": "Sẽ KHÔNG đọc thẳng trang bằng chứng của hồ sơ — thông tin thêm sẽ đi qua bộ công cụ (đã gửi đề nghị)."
   },
   {
    "id": "OOS-9",
+   "p": "Sẽ KHÔNG đưa trang lộ trình của bộ công cụ bản chưa phát hành vào kho, và không gộp lên production trước khi kho nhận bản 2.27."
+  },
+  {
+   "id": "OOS-10",
    "p": "Sẽ KHÔNG sửa ô Mốc ở khổ máy tính bảng — việc riêng chưa mở."
   }
  ],
