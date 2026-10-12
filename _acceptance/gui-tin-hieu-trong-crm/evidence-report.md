@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: gui-tin-hieu-trong-crm
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 2e97beef3349c543a73dfda45d99fa4213b28903
-human_signoff:
+human_signoff: Manh Phan 2026-10-12
 ---
 
 # Evidence Report: gui-tin-hieu-trong-crm
@@ -267,7 +267,7 @@ Vòng 1. Mọi eval máy đều xanh. Còn một mục judgment (E14) chờ ngư
     - spec-alignment (1) Mẫu câu kit cho hang-co-ho-so, hang-chua-ho-so và da-phu trong _acceptance/gui-tin-hieu-trong-crm/evidence/cau-kit-mau.json không còn "hồ sơ", "viec-h5", "giao-x", "H3", "H5". Lấy bằng cách tạo lại tệp từ kit sau khi kit sửa câu `cau`, hoặc từ một bước đổi câu ở phía trang CRM.
     - spec-alignment (2) Một chụp màn trang /[slug]/tin-hieu (ví dụ hình hang-co-ho-so ở 1280) cho thấy dòng phụ của tín hiệu đã thành việc không chứa mã việc hay chữ "hồ sơ". Chụp từ bản chạy thật theo tệp evidence/trang-1280.png.
     - spec-alignment (3) Đoạn spec §3.6 hoặc §8 ghi rõ chủ kho chấp nhận người dùng thấy mã việc và chữ "hồ sơ" trong câu kit. Lấy từ docs/superpowers/specs/2026-10-12-gui-tin-hieu-trong-crm-design.md, kèm chữ ký Cổng Phạm vi.
-  human_override:  # chi nguoi ghi
+  human_override: Manh Phan 2026-10-12 — Đạt
 
 ### Lệnh suite (hồi quy)
 

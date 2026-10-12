@@ -5,7 +5,7 @@ slug: gui-tin-hieu-trong-crm
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-12T02:53:02Z
 design_doc: docs/superpowers/specs/2026-10-12-gui-tin-hieu-trong-crm-design.md
@@ -84,3 +84,18 @@ Source input: `_acceptance/gui-tin-hieu-trong-crm/opportunity.md` (Cổng Đáng
 - Hằng số (trần mỗi ngày 10, độ dài 1.000 ký tự mỗi ô, tiêu đề 120 ký tự, 30 ngày đếm) sống ở một chỗ
   (`@crm/validation/tin-hieu`), tiêu chí đo theo hằng số chứ không theo con số.
 - Bảng `TinHieu` mới làm vòng chạy hạng T3 (hàng lộ trình ghi T2; máy không sửa hàng).
+- Known limits — anh chọn ở Cổng Bằng chứng 2026-10-12, từ S4 vòng 1:
+  - Ngoài-1: Nếu bản vẽ lộ trình đổi cách ghi các hàng, trang «Tín hiệu đã gửi» vẫn chạy nhưng nhãn trạng thái của mọi tín hiệu rơi về «Khác» và không có dòng nào báo là bản vẽ không đọc được.
+  - Ngoài-2: Người dùng chọn giao diện tiếng Anh, khi gửi quá số tín hiệu cho phép trong ngày, sẽ thấy câu báo lỗi bằng tiếng Việt thay vì tiếng Anh.
+  - Ngoài-4: Nếu phần tín hiệu trong bản vẽ lộ trình bị hỏng, con số «chưa có chỗ sau gom» chủ kho đọc được sẽ phình to như thể mọi tín hiệu cũ đều chưa được xử lý, mà không có cảnh báo nào.
+  - Ngoài-5: Nếu người dùng bấm Xoá đúng lúc đội sản phẩm vừa lấy tín hiệu về, hoặc mạng đứt, hộp hỏi đóng lại và tín hiệu vẫn còn đó mà không có lời giải thích nào.
+  - Ngoài-6: Khi máy chủ CRM không trả lời được lúc chủ kho chạy lệnh kéo tín hiệu về, lệnh báo lỗi theo cách giống hệt lỗi «tệp đã có mà nội dung khác», dễ làm chủ kho tìm sai nguyên nhân.
+  - Ngoài-7: Khi bản vẽ lộ trình không đọc được, dòng tổng kết vẫn in một con số «chưa có chỗ» trông như tồn đọng thật, và chủ kho không có dấu hiệu nào cho biết bản vẽ đã hỏng.
+  - Ngoài-8: Phép kiểm dùng để bảo đảm tên, thư người gửi không lọt vào kho git có thể vẫn xanh ngay cả khi sau này một thay đổi làm lộ thông tin cá nhân của người gửi.
+  - Ngoài-9: Chỉ một phần các tổ hợp nhãn trạng thái được kiểm tự động, nên một nhãn sai ở tổ hợp chưa kiểm có thể tới tay người gửi mà không ai phát hiện.
+  - Ngoài-10: Nếu nút ⋮ của các danh sách khác đổi kiểu, nút ⋮ trên danh sách tín hiệu có thể lệch hẳn mà không có phép kiểm nào báo.
+  - Ngoài-11: Nút «Gửi tín hiệu» có thể lệch kiểu so với các nút cùng hàng nếu cả cụm đổi kiểu, mà bài kiểm vẫn không phản ứng đúng chỗ.
+  - Ngoài-12: Phép kiểm «tín hiệu đã xoá không thành tệp» vẫn xanh kể cả khi lượt kéo về hỏng hoàn toàn và không ghi tệp nào, nên có thể bỏ sót việc mất tín hiệu.
+  - Ngoài-13: Phép kiểm chưa bảo đảm màn đang đứng được ghi đúng khi gửi tín hiệu; một lỗi làm mất hay cắt sai tên màn có thể lọt qua.
+  - Ngoài-15: Một số phần giao diện của trang «Tín hiệu đã gửi» (khung chờ tải, nút gửi, danh sách) không được máy soát lỗi kiểu dáng, nên một chỗ đổi màu sai ở đó có thể lọt qua.
+  - Ngoài-16: Nút «Gửi tín hiệu» ở khổ điện thoại (chỉ biểu tượng có tên đọc được) chưa được kiểm tự động riêng, nên có thể hỏng trên điện thoại mà không ai biết.
