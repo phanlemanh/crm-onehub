@@ -59,8 +59,8 @@ function chayLuot(dem, { bien, home }) {
 		KIEM_CHEO_DUNG_CAY: "true",
 		KIEM_CHEO_THONG_BAO: `printf 'bao\\n' >> '${dauBao}'`,
 		KCS_DAU_LAN: dauLan,
-		...(home ? { HOME: home } : {}),
 	});
+	if (home) env.HOME = home;
 	if (bien === undefined) delete env[BIEN];
 	else env[BIEN] = bien;
 	const r = spawnSync("node", [dem, "--goc", kho.goc], { encoding: "utf8", env });
