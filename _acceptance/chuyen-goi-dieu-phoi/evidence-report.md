@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 95910b71b025b6988e946cfe597905d12e02c014
+verified_commit: 9b8bedcee819f5688b543ffe08f534c50890a186
 human_signoff:
 ---
 
@@ -29,101 +29,101 @@ human_signoff:
 ## Evidence
 
 - eval: E1
-  run_id: minted-chuyen-goi-dieu-phoi-E1-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E1-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_kiem_chuyen
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E2
-  run_id: minted-chuyen-goi-dieu-phoi-E2-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E2-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_mo_dun
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E3
-  run_id: minted-chuyen-goi-dieu-phoi-E3-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E3-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_hook
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E4
-  run_id: minted-chuyen-goi-dieu-phoi-E4-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E4-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_cong
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E5
-  run_id: minted-chuyen-goi-dieu-phoi-E5-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E5-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_kiem_cheo
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E6
-  run_id: minted-chuyen-goi-dieu-phoi-E6-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E6-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_goi_vang
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E7
-  run_id: minted-chuyen-goi-dieu-phoi-E7-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E7-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_luot_kho
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E8
-  run_id: minted-chuyen-goi-dieu-phoi-E8-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E8-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_goi_dot
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E9
-  run_id: minted-chuyen-goi-dieu-phoi-E9-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E9-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_thay_boi
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
 
 - eval: E10
-  run_id: minted-chuyen-goi-dieu-phoi-E10-r2
+  run_id: minted-chuyen-goi-dieu-phoi-E10-r3
   exit_code: 0
   baseline: red
   verifier: config:executors.script.cgdp_khong_do_them
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
   output: |
     KET LUAN: xanh
     __EXIT=0
@@ -131,39 +131,39 @@ human_signoff:
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
 
 - cmd: bun run lint:slop
-  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_lint_slop-r2
+  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-chuyen-goi-dieu-phoi-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-12T06:29:25Z
+  verified_at: 2026-10-12T10:29:14Z
 
 ## Known limits
 
@@ -181,3 +181,4 @@ none — không eval nào chạy nhiều lượt (mọi eval chạy một lượ
 
 Round 1: E1 đến E10 và 7 lệnh suite đều xanh trên cây 1aa6be864f26094e17dfeb569de915e4c188d356. Ba phát hiện trong hợp đồng về độ phủ của thước (E3, E6, E9) được sửa trong thước ở d12a31ceb, không phải ở mã tính năng.
 Round 2: E1 đến E10 và 7 lệnh suite đều xanh trên cây 95910b71b025b6988e946cfe597905d12e02c014, sau khi thước E3, E6, E9 được sửa; mọi eval tính năng đều đỏ trên baseline. Không có eval đỏ, không cần quay lại implementation.
+Round 3: E1 đến E10 và 7 lệnh suite đều xanh trên cây 9b8bedcee819f5688b543ffe08f534c50890a186, sau khi thước được mở rộng phủ đủ 110 dòng eval nhắc bộ cũ và neo merge-base được tính lúc đo (neoVong) thay cho sha cố định; mọi eval tính năng vẫn đỏ trên baseline. Không có eval đỏ, không cần quay lại implementation.
