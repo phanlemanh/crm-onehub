@@ -130,10 +130,22 @@ async function trang(cookie, kho) {
 
 async function mo(p, url, sel) {
 	await p.goto(url, { waitUntil: "domcontentloaded", timeout: CHO_MS });
-	if (sel)
-		await p
+	if (sel) {
+		const thay = await p
 			.waitForSelector(sel, { timeout: CHO_MS })
-			.catch(() => khongDo(`${url}: khong thay ${sel}`));
+			.then(() => true)
+			.catch(() => false);
+		if (!thay) {
+			await p.screenshot({ path: join(RA, "khong-thay.png") }).catch(() => {});
+			const dang = await p.evaluate(() => ({
+				url: location.href,
+				tieuDe: document.title,
+			}));
+			khongDo(
+				`${url}: khong thay ${sel} — trang dang o ${dang.url} «${dang.tieuDe}»`,
+			);
+		}
+	}
 	await p
 		.waitForNetworkIdle({ idleTime: 800, timeout: CHO_MS })
 		.catch(() => {});
