@@ -21,8 +21,10 @@ import {
 	docTrangThai,
 	TRANG_THAI_HUY,
 } from "@crm/validation/invitation-status";
+import { docDuocDoiTac } from "@crm/validation/vai-workspace";
 import {
 	BadRequestException,
+	ConflictException,
 	ForbiddenException,
 	Injectable,
 	Logger,
@@ -32,6 +34,7 @@ import {
 import { AgentTriggerService } from "../agent/agent-trigger.service";
 import { normalizeDomain } from "../companies/domain";
 import { InjectDatabase } from "../database/database.constants";
+import { demViecDangGiu, xoaTheoDoiCua } from "../onboarding/onboarding-ghi";
 import {
 	countsByKey,
 	type ListResult,
@@ -237,7 +240,7 @@ export class WorkspaceService {
 		const updated = await this.db.$transaction(async (tx) => {
 			const target = await tx.member.findFirst({
 				where: { id: input.memberId, organizationId: WORKSPACE_ID },
-				select: { id: true, role: true },
+				select: { id: true, role: true, userId: true },
 			});
 
 			if (!target) {
@@ -258,23 +261,40 @@ export class WorkspaceService {
 				}
 			}
 
-			return tx.member.update({
+			let theoDoiDaXoa = 0;
+			if (!docDuocDoiTac(input.role)) {
+				const viec = await demViecDangGiu(tx, target.userId);
+				if (viec.keHoach > 0 || viec.buoc > 0) {
+					throw new ConflictException(
+						WORKSPACE_CONFIG.messages.conViecKeHoach(viec.keHoach, viec.buoc),
+					);
+				}
+				theoDoiDaXoa = await xoaTheoDoiCua(tx, target.userId);
+			}
+
+			const member = await tx.member.update({
 				where: { id: target.id },
 				data: { role: input.role },
 				select: MEMBER_SELECT,
 			});
+			return { member, theoDoiDaXoa };
 		});
 
 		this.logger.log({
 			message: "Workspace role changed",
 			userId,
-			memberId: updated.id,
+			memberId: updated.member.id,
 			role: input.role,
+			theoDoiDaXoa: updated.theoDoiDaXoa,
 		});
 
-		const vet = await this.vetMoiNhat([updated.user.email]);
+		const vet = await this.vetMoiNhat([updated.member.user.email]);
 
-		return this.toMember(updated, userId, vet.get(updated.user.email));
+		return this.toMember(
+			updated.member,
+			userId,
+			vet.get(updated.member.user.email),
+		);
 	}
 
 	async staffDomains(userId: string): Promise<StaffDomains> {

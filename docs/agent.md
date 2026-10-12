@@ -367,6 +367,15 @@ nó không làm gì; từ đó tới hết ngày nó gọi `viecCanNhac` và ghi
   tự thì ném nêu tên loại, không bỏ im. Khuôn Zalo
   đánh số mọi dòng theo vị trí trong `daGui`, kể cả dòng OKR — `xong` trỏ vào một
   số OKR bị từ chối như dòng «kế hoạch im»/«mốc ngày», không đánh dấu bước nào.
+- **Việc kế hoạch chỉ gom cho người đọc được dữ liệu đối tác.** `viecCanNhac` dựng
+  `tapDoiTac` từ vai của thành viên và chỉ gom bốn loại kế hoạch (`buoc-qua-han`,
+  `buoc-sap-han`, `ke-hoach-im`, `moc-ngay` — mang tên công ty) cho người trong tập đó;
+  mục OKR, Kho tài liệu, Tóm tắt tuần, ngân sách AI vẫn gom cho mọi thành viên. Người vai
+  «chỉ OKR» chỉ có việc kế hoạch thì không có hàng nhắc nào. Lọc ở gói dùng chung nên tin
+  nhắc, thẻ «Việc của bạn» và Tổng quan cùng một luật. Luật là `docDuocDoiTac`:
+  `packages/db` không phụ thuộc được `@crm/validation` (chiều ngược đã có), nên bộ gom
+  dùng một bản sao cùng tên của luật, `@crm/db/vai-doi-tac`; `packages/validation/test/vai-workspace.spec.ts`
+  giữ hai bản khớp cho mọi vai, kể cả vai lạ — cùng nếp với `okr-goi-soan-khop.spec.ts`.
 - **Khuôn mục nhắc OKR là `viecOkr` (Zod, `@crm/db/okr-nhac`), một nguồn.**
   `ViecOkr` suy từ nó; API «Việc của bạn» dùng chính nó; `KHOA_MUC_OKR` khai trường
   mã của từng loại, và nhánh OKR của `mucNhac` cùng `maViec` suy từ bảng đó.

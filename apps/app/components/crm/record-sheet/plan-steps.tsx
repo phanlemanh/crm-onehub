@@ -101,6 +101,16 @@ function useGhiBuoc(planId: string) {
 
 type Ghi = ReturnType<typeof useGhiBuoc>;
 
+type LuaChonNguoi = { value: string; label: string };
+
+function giuNguoiDangGiu(
+	nguoi: LuaChonNguoi[],
+	dangGiu: { id: string; name: string } | null,
+): LuaChonNguoi[] {
+	if (!dangGiu || nguoi.some((n) => n.value === dangGiu.id)) return nguoi;
+	return [...nguoi, { value: dangGiu.id, label: dangGiu.name }];
+}
+
 function DongBuoc({
 	buoc,
 	ids,
@@ -166,7 +176,10 @@ function DongBuoc({
 				options={
 					buoc.assigneeId === null
 						? nguoi
-						: [{ value: BO_GIAO, label: m.unassign }, ...nguoi]
+						: [
+								{ value: BO_GIAO, label: m.unassign },
+								...giuNguoiDangGiu(nguoi, buoc.assignee),
+							]
 				}
 				placeholder={m.unassigned}
 				searchPlaceholder={m.searchPeople}
@@ -387,7 +400,7 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 	const buoc = useQuery(
 		trpc.onboarding.listSteps.queryOptions({ planId: plan.id }),
 	);
-	const users = useQuery(trpc.users.list.queryOptions());
+	const users = useQuery(trpc.onboarding.nguoiNhanViec.queryOptions());
 	const boPhan = useQuery(
 		trpc.onboarding.listDepartments.queryOptions({ archived: false }),
 	);
@@ -432,7 +445,7 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 						<InlineSelectField
 							label={m.fields.owner}
 							onSave={(ownerId) => doiCam.mutate({ planId: plan.id, ownerId })}
-							options={nguoi}
+							options={giuNguoiDangGiu(nguoi, plan.owner)}
 							saving={doiCam.isPending}
 							value={plan.ownerId}
 						/>

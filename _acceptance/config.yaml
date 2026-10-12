@@ -1201,6 +1201,16 @@ executors:
     suite_app_ui: 'bun run test -- --filter=app --filter=@crm/ui'
     suite_agent_db: 'bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db'
     suite_okr_goi: 'bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation'
+    vlr_ghi: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr-ke-hoach.spec.ts -t vlr-ghi"'
+    vlr_khuon: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr-ke-hoach.spec.ts -t vlr-khuon"'
+    vlr_chuyen: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr-ke-hoach.spec.ts -t vlr-chuyen"'
+    vlr_doi_vai: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr-ke-hoach.spec.ts -t vlr-doi-vai"'
+    vlr_danh_sach: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr-ke-hoach.spec.ts -t vlr-danh-sach"'
+    vlr_viec_cua_toi: 'bun run test -- "cd apps/api && bun test test/vai-chi-okr-ke-hoach.spec.ts -t vlr-viec-cua-toi"'
+    vlr_gom: 'bun run test -- "cd apps/agent && bun test test/nhac-vai-chi-okr.integration.spec.ts -t vlr-gom"'
+    vlr_tin: 'bun run test -- "cd apps/agent && bun test test/nhac-vai-chi-okr.integration.spec.ts -t vlr-tin"'
+    vlr_o_chon: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nguoi-nhan-viec.dom.tsx -t vlr-o-chon'
+    vlr_thuoc: 'bun run test -- "cd apps/api && bun test test/ro-vai-chi-okr.spec.ts"'
     sol_nut_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t nut-chua-cau-hinh
     sol_man_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t man-chua-cau-hinh
     sol_loi_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t loi-chua-cau-hinh
@@ -1738,6 +1748,7 @@ executors:
     lgo_ranh_gioi: "node _acceptance/logo-onehub/rang/ranh-gioi.mjs"
     lgo_o_agent: "node _acceptance/logo-onehub/rang/o-agent.mjs"
     build_khong_cache: 'bunx turbo run build --force'
+    vlr_dot_bien: node _acceptance/va-lo-ro-vai-chi-okr/rang/dot-bien.mjs
     cdt_hang_xom_lanh: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh lanh"'
     cdt_hang_xom_pha: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha"'
     cdt_hang_xom_pha_don_bang: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha-don-bang"'

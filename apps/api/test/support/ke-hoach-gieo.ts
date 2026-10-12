@@ -72,7 +72,7 @@ export async function gieoNguoiNgoai(ten?: string) {
 
 export async function gieoThanhVien(
 	ten?: string,
-	vaiTro: "member" | "admin" = "member",
+	vaiTro: "owner" | "admin" | "member" | "okr" = "member",
 ) {
 	const nguoi = await gieoNguoiNgoai(ten);
 	await db.member.create({
@@ -85,6 +85,13 @@ export async function gieoThanhVien(
 		},
 	});
 	return nguoi;
+}
+
+export async function doiVai(userId: string, vai: string): Promise<void> {
+	await db.member.update({
+		where: { organizationId_userId: { organizationId: WORKSPACE_ID, userId } },
+		data: { role: vai },
+	});
 }
 
 export async function gieoBoPhan() {

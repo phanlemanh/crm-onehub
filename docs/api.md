@@ -97,6 +97,14 @@ here, what do we sell.
   disable the UI control, so the button and the 403 cannot disagree.
   `WorkspaceService` adds one invariant: **the last owner cannot be demoted**, with
   `FOR UPDATE` on the owner rows before counting.
+- **Đổi sang vai «chỉ OKR» không để lại việc đối tác.** `setMemberRole` sang một vai mà
+  `docDuocDoiTac` trả `false` — kể cả lưu lại đúng vai đó cho người đã mang nó — đếm
+  kế hoạch mở người đó cầm trịch và bước chưa xong của kế hoạch mở người đó làm
+  (`demViecDangGiu`, cùng điều kiện với chuyển việc 30 ngày): lớn hơn 0 thì 409
+  `WORKSPACE_CONFIG.messages.conViecKeHoach`, nêu hai con số và chỉ sang «Chuyển việc»,
+  vai không đổi; bằng 0 thì xoá mọi lượt theo dõi kế hoạch của họ trong cùng giao
+  dịch, và dòng log «Workspace role changed» ghi `theoDoiDaXoa`. Kiểm owner cuối cùng
+  vẫn đứng trước.
 - **Reads and writes go through tRPC**, not `authClient.organization.*`.
 - **Name and website are required at onboarding and cannot be skipped**, in the form
   *and* in `updateWorkspaceInput`, posting the same `workspace.update` as settings.
@@ -257,6 +265,15 @@ self-hoster's admin cannot redeploy.
   everything unknown still falls back to `member`. `LoggingMiddleware` prints
   `role` and `phamVi` on every `tRPC` line, which is how "reads of partner data by
   an OKR-only user" is counted after release.
+- **Kế hoạch 30 ngày không giao việc cho người không đọc được dữ liệu đối tác.**
+  Giao bước, thêm bước có người làm, đổi người cầm trịch, tạo kế hoạch từ khuôn và
+  chuyển việc 30 ngày đều qua `kiemNguoiNhanViec` (`onboarding-ghi.ts`): không có hàng
+  `member` → 400 `ONBOARDING.thongDiep.khongPhaiThanhVien`; vai không đọc được dữ liệu
+  đối tác (vai «chỉ OKR») → 400 `ONBOARDING.thongDiep.vaiChiOkr`, trước mọi lệnh ghi.
+  Chuyển việc *từ* người vai «chỉ OKR» vẫn chạy — đó là đường dọn. Ba ô chọn người
+  (người làm bước, người cầm trịch, người nhận chuyển việc) đọc `onboarding.nguoiNhanViec`,
+  cùng luật, nên ô chọn và lời từ chối không lệch nhau. Luật là `docDuocDoiTac`
+  (`@crm/validation/vai-workspace`).
 - **Writes in the shared scope are either self-service or admin-only.** API keys
   and the person's own Zalo channel are self-service; every system setting —
   `settings.*` writes included, gated by `canManageSettings` — requires an owner
