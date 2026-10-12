@@ -37,10 +37,7 @@ export function lamSachMan(duong: string): string {
 	return (cat || "/").slice(0, TIN_HIEU.doDaiMan);
 }
 
-export function tachNoiDung(chu: string): {
-	tieuDe: string;
-	moTa: string | null;
-} {
+export function tachNoiDung(chu: string) {
 	const sach = chu.trim();
 	const dongDau =
 		sach
@@ -73,15 +70,13 @@ export function tepTuBanGhi(row: {
 	man: string;
 	guiLuc: Date;
 }): TepTinHieu {
+	const noiDung: TepTinHieu["noi_dung"] = { tieu_de: row.tieuDe, man: row.man };
+	if (row.moTa) noiDung.mo_ta = row.moTa;
 	return {
 		phien: TIN_HIEU.phien,
 		loai: "tin-hieu",
 		hang: null,
-		noi_dung: {
-			tieu_de: row.tieuDe,
-			man: row.man,
-			...(row.moTa ? { mo_ta: row.moTa } : {}),
-		},
+		noi_dung: noiDung,
 		luc: row.guiLuc.toISOString(),
 	};
 }

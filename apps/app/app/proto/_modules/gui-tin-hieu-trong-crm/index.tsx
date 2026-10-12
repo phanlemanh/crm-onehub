@@ -22,15 +22,7 @@ import {
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import { CHU_MAU, dongTheoState, MAN_MAU, STATE } from "./du-lieu";
 
-const HOP: Record<
-	string,
-	{
-		chu: string;
-		giaiDoan: GiaiDoanGui;
-		loi: "tran" | "may-chu" | null;
-		mo: boolean;
-	}
-> = {
+const HOP = {
 	[STATE.nut]: { chu: "", giaiDoan: "soan", loi: null, mo: false },
 	[STATE.hopTrong]: { chu: "", giaiDoan: "soan", loi: null, mo: true },
 	[STATE.hopDangGo]: { chu: CHU_MAU, giaiDoan: "soan", loi: null, mo: true },
@@ -43,7 +35,15 @@ const HOP: Record<
 	[STATE.hopDaGui]: { chu: "", giaiDoan: "da-gui", loi: null, mo: true },
 	[STATE.hopQuaTran]: { chu: CHU_MAU, giaiDoan: "soan", loi: "tran", mo: true },
 	[STATE.hopLoi]: { chu: CHU_MAU, giaiDoan: "soan", loi: "may-chu", mo: true },
-};
+} satisfies Record<
+	string,
+	{
+		chu: string;
+		giaiDoan: GiaiDoanGui;
+		loi: "tran" | "may-chu" | null;
+		mo: boolean;
+	}
+>;
 
 const HOP_DONG = {
 	chu: "",
@@ -54,7 +54,7 @@ const HOP_DONG = {
 
 function HopMau({ state, khung = true }: { state: string; khung?: boolean }) {
 	const m = tinHieuMessages("vi");
-	const dau = HOP[state] ?? HOP_DONG;
+	const dau = state in HOP ? HOP[state as keyof typeof HOP] : HOP_DONG;
 	const [mo, setMo] = useState(dau.mo);
 	const [chu, setChu] = useState(dau.chu);
 	const [giaiDoan, setGiaiDoan] = useState<GiaiDoanGui>(dau.giaiDoan);
