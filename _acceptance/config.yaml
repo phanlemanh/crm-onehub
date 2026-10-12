@@ -1564,6 +1564,7 @@ executors:
     lhs_ban_chep: node _acceptance/ngan-ho-so-trong-lo-trinh/rang/ban-chep.mjs --pha-thu
     lhs_mau: node _acceptance/ngan-ho-so-trong-lo-trinh/rang/sinh-mau-x2.mjs --kiem --pha-thu
     lhs_chup: bun _acceptance/ngan-ho-so-trong-lo-trinh/rang/chup.mjs
+    lhs_chu_thang: node _acceptance/ngan-ho-so-trong-lo-trinh/rang/chu-viet-thang.mjs --pha-thu
     ldb_ke_hoach: node _acceptance/lo-trinh-dong-bo-ho-so/rang/ke-hoach.mjs
     ldb_hoi_quy: bash _acceptance/lo-trinh-dong-bo-ho-so/rang/hoi-quy.sh
     ldb_thiet_ke: bash _acceptance/lo-trinh-dong-bo-ho-so/rang/thiet-ke.sh

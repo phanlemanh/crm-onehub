@@ -39,8 +39,9 @@ CRM không đọc hồ sơ, không đọc tệp kế hoạch, không tự tính 
    phần «Tóm tắt hồ sơ».
 6. **Phần chủ kho «Số liệu làm việc»** đứng ngay sau «Tóm tắt hồ sơ», có một câu «Chỉ chủ không gian làm
    việc thấy phần này.» Hai cột ở máy tính, một cột ở điện thoại. Commit đã chấm hiện bảy ký tự đầu, nút
-   sao chép trọn mã (`CopyValue`), và liên kết «Tìm PR» mở ô tìm PR của GitHub theo mã commit (tab mới).
-   Mẫu URL nằm trong `apps/app/lib/lo-trinh/cau-hinh.ts`.
+   sao chép trọn mã (`CopyValue`), và liên kết «Tìm PR» mở ô tìm PR của GitHub theo mã commit (tab mới):
+   `https://github.com/search?q=<mã 40 ký tự>&type=pullrequests`. Mẫu URL nằm trong
+   `apps/app/lib/lo-trinh/cau-hinh.ts`.
 7. **Không thu gọn đoạn dài** ở lượt này. 31/81 ô «vì sao» quá 400 ký tự; ngăn cuộn được, các hàng có nhãn
    nên người đọc lướt theo nhãn. Đo ở phiên nghiệm thu; chữ cụt và chữ dài là việc của kit (chip đã mở).
 8. **Không số PR.** Khối cố ý không mang (đặc tả kit). Đường tìm theo mã commit thay.
@@ -123,7 +124,7 @@ và bản mẫu của chính hồ sơ. Đụng cùng tệp với LT2 thì báo p
 | `DetailSheetSection`, `DetailSheetProperties`, `DetailSheetProperty`, `DetailSheetProse` | dùng | Họ ngăn của LT1 (`apps/app/components/detail-sheet.tsx`), giữ nếp Thoả thuận |
 | `CopyValue` | dùng | Bảng «Dấu hiệu vẽ tay» cấm `navigator.clipboard` tự viết |
 | `Link` (`@crm/ui/components/link`) | dùng | Liên kết chữ có vòng focus sẵn |
-| Phần «Tóm tắt hồ sơ» và «Số liệu làm việc» | ghép | Hai thành phần mới cạnh `ho-so-viec.tsx`, chỉ ghép thành phần có sẵn |
+| `TomTatHoSo` (`apps/app/components/lo-trinh/tom-tat-ho-so.tsx`), `SoLieuLamViec` (`apps/app/components/lo-trinh/so-lieu-lam-viec.tsx`) | ghép | Hai thành phần mới cạnh `ho-so-viec.tsx`, chỉ ghép thành phần có sẵn; mọi nhãn lấy từ tệp lời |
 
 Bậc «vẽ tay là bậc cuối»: dừng ở bậc 1 (`packages/ui` và họ `DetailSheet` sẵn có); không cần tra ReUI.
 
