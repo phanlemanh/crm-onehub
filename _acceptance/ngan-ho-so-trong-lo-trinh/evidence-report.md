@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 153894d8408f9347c97b11c60dfc1791f0f49ae5
+verified_commit: c4b3f7594349e3d4d80e33782ae52046337b5056
 human_signoff: Manh Phan 2026-10-12
 ---
 
@@ -185,3 +185,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: moi eval may va eval ui-check deu dat, E7 dung ma da khai truoc, hoi dong E10 cho PASS. Khong co vong tra ve cai tien.
+
+### Re-pin lần 1 — 2026-10-12, do gộp onehub 4c440ab17 (#369 CI) sau chữ ký
+run_id: repin-20261012T041057Z-83772
+sha: c4b3f7594349e3d4d80e33782ae52046337b5056 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · đạt-có-giới-hạn: E7=2 · ngoài làn máy: E9, E10 (E10 không khai paths) · AC không có chốt máy: AC-9 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
