@@ -2534,3 +2534,6 @@ lo_trinh:
     - docs/plan/lo-trinh-viec-du-an.json
 dieu_phoi:
   goi_dot: docs/plan/dot-{ten}
+  lich_su:
+    - _acceptance/chuyen-goi-dieu-phoi/**
+    - _acceptance/sua-paths-e5-soan-okr/evals.yaml#E7
