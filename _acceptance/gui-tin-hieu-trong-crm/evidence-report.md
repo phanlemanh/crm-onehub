@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2e97beef3349c543a73dfda45d99fa4213b28903
+verified_commit: fab37fb6231317609e3800f88dc76b6b079fff75
 human_signoff: Manh Phan 2026-10-12
 ---
 
@@ -321,3 +321,7 @@ none — every multi-run eval is uniform (mọi eval chạy một lần, không 
 ## Iterations
 
 Round 1: mọi eval máy đều xanh; E14 (judgment) được cả ba giám khảo đề xuất FAIL vì các câu của kit hiện nguyên văn ở dòng phụ có mã nội bộ và chữ «hồ sơ», «lượt gom» (E14 khai các câu này không tính vào PASS). Verdict PENDING-JUDGMENT, chờ người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-12, do hoá cũ do gộp origin/onehub (ba tệp CI)
+run_id: repin-20261012T071448Z-14481
+sha: fab37fb6231317609e3800f88dc76b6b079fff75 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
