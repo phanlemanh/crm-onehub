@@ -125,7 +125,7 @@ evals:
       tạo kế hoạch từ khuôn, chuyển việc 30 ngày — từ chối người không đọc được dữ liệu đối tác, kể cả vai «chỉ OKR»;
       (2) đổi một người sang vai «chỉ OKR» bị từ chối khi người đó còn cầm trịch kế hoạch mở hay làm bước chưa xong, chỉ
       sang «Chuyển việc», và khi không còn thì xoá mọi lượt theo dõi của họ; (3) bộ gom nhắc chỉ gom việc kế hoạch cho
-      người đọc được dữ liệu đối tác, người vai «chỉ OKR» vẫn nhận việc OKR; (4) ba chỗ trên cùng một luật docDuocDoiTac — bản gốc ở @crm/validation/vai-workspace cho API, bản soi cùng tên
+      người đọc được dữ liệu đối tác, người vai «chỉ OKR» vẫn nhận việc OKR; (4) ba chỗ trên cùng một luật docDuocDoiTac — bản gốc ở @crm/validation/vai-workspace cho API, bản sao cùng tên
       ở @crm/db/vai-doi-tac cho bộ gom (packages/db không phụ thuộc được @crm/validation), và một bài kiểm giữ hai bản khớp
       cho mọi vai. Tài liệu không tự đúc từ ghép tiếng Việt cho thuật ngữ kỹ thuật mà
       CONTEXT.md không có. Trả PASS khi đủ bốn điều, FAIL nêu điều thiếu.
