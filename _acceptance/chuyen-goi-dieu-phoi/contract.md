@@ -36,7 +36,8 @@ khai khoá gói đợt. PR ở dạng nháp và chỉ gộp sau khi kit cắt b�
   cũng export, và tập tên thiếu bằng đúng tập ngoại lệ đã khai `{lich.mjs: PHIEN_XEP_CUOI}` — thiếu thêm hay thôi thiếu đều
   là sai.
 - AC-3: Given `.claude/settings.json` ở merge-base và ở `HEAD`, When đọc cả hai, Then `HEAD` không còn lệnh hook nào gọi tệp
-  dưới `scripts/` của kho, mọi khoá khác ngoài `hooks` giữ nguyên giá trị; và với mỗi bộ (sự kiện, matcher, tên tệp script)
+  dưới `scripts/` của kho, mọi khoá khác ngoài `hooks` giữ nguyên giá trị (riêng `enabledPlugins` được thêm đúng một mục
+  `dieu-phoi@acceptance-gate-kit: true` — bước cài sau phát hành); và với mỗi bộ (sự kiện, matcher, tên tệp script)
   của các khối hook gỡ đi, `hooks/hooks.json` của gói đã giải có một hook cùng sự kiện, cùng matcher, gọi
   `${CLAUDE_PLUGIN_ROOT}/scripts/<cùng tên tệp>`, và tệp đó có trong gói.
 - AC-4: Given merge-base và `HEAD`, When đọc tên script của `package.json`, danh sách task của vòng `for task in …` của

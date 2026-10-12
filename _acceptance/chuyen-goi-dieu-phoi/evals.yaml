@@ -62,7 +62,8 @@ evals:
       bun rang/hook.mjs. Doc .claude/settings.json o merge-base (git show) va o HEAD (tren dia). Khoi go = moi hook o
       merge-base co command nhac scripts/ cua kho; rut bo (su kien, matcher, ten tep) bang cach tach duong trong command —
       phai ra dung 4 bo, khac 4 -> ma 2 «khong do duoc: <n> bo». HEAD: khong command nao nhac "$CLAUDE_PROJECT_DIR/scripts/"
-      («hook goi kho: 0»), moi khoa ngoai hooks deep-equal merge-base («khoa khac: giu»). hooks/hooks.json cua goi: voi moi
+      («hook goi kho: 0»), moi khoa ngoai hooks deep-equal merge-base, rieng enabledPlugins duoc them dung
+      dieu-phoi@acceptance-gate-kit: true («khoa khac: giu»). hooks/hooks.json cua goi: voi moi
       bo co mot hook cung su kien, cung matcher (ca hai vang tinh la cung), command chua
       ${CLAUDE_PLUGIN_ROOT}/scripts/<ten tep>, va tep do co trong goi — in «phu <su kien> <matcher> <ten tep>».
       Chieu do tren ban sao trong thu muc tam: hooks.json bo khoi Notification -> ma 1 «DO thieu Notification»; hooks.json
