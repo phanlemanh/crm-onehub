@@ -5,9 +5,9 @@ slug: gui-tin-hieu-trong-crm
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: Manh Phan
+approved_at: 2026-10-12T02:53:02Z
 design_doc: docs/superpowers/specs/2026-10-12-gui-tin-hieu-trong-crm-design.md
 ---
 
