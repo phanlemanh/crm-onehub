@@ -1,7 +1,7 @@
 import { cpSync, existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { bangTrongDesign, docTai, GOC, Ket, khongDoDuoc, MB, SLUG, thuMucRa } from "./chung.mjs";
+import { bangTrongDesign, docTai, git, GOC, Ket, khongDoDuoc, MB, SLUG, thuMucRa } from "./chung.mjs";
 
 const require = createRequire(import.meta.url);
 const ey = require(join(GOC, "lib", "eval-yaml.cjs"));
@@ -43,7 +43,12 @@ function hieuMultiset(a, b) {
 	return ra;
 }
 
-function kiemCauTruc(bang, docEvals, inRa = false) {
+const SLUG_DOI = git(GOC, "diff", "--name-only", MB, "--", "_acceptance/*/evals.yaml")
+	.split("\n")
+	.map((t) => /^_acceptance\/([^/]+)\/evals\.yaml$/.exec(t)?.[1])
+	.filter((s) => s && s !== SLUG);
+
+function kiemCauTruc(bang, docEvals, inRa = false, slugDoi = SLUG_DOI) {
 	const doDs = [];
 	for (const r of bang) {
 		const e = ey.parseEvals(docEvals(r.slug), ["status", "superseded_by"]).find((x) => x.id === r.id);
@@ -52,7 +57,7 @@ function kiemCauTruc(bang, docEvals, inRa = false) {
 		if (!acCo.has(r.ac)) doDs.push(`DO ${r.ac} khong co trong hop dong`);
 		else if (!acSong(r.ac)) doDs.push(`DO ${r.ac} khong co eval song`);
 	}
-	for (const slug of new Set(bang.map((r) => r.slug))) {
+	for (const slug of new Set([...bang.map((r) => r.slug), ...slugDoi])) {
 		const cu = docTai(MB, `_acceptance/${slug}/evals.yaml`);
 		const moi = docEvals(slug);
 		const themMong = [];
@@ -100,6 +105,7 @@ function quetConTro(root, ds) {
 }
 
 const docThat = (slug) => readFileSync(join(GOC, "_acceptance", slug, "evals.yaml"), "utf8");
+console.log(`evals.yaml doi so voi merge-base (ngoai ho so nay): ${SLUG_DOI.length} tep`);
 const that = kiemCauTruc(bangGoc, docThat, true);
 ket.kiem(that.length === 0, `${bangGoc.length} eval cua bang khai dung, AC co va con eval song`, that.slice(0, 6).join(" | "));
 
@@ -125,6 +131,13 @@ ket.bat(
 	"tro-ac-99",
 	kiemCauTruc(bang99, sua(r0.slug, (t) => t.replace(`superseded_by: ${SLUG}#${r0.ac}\n`, `superseded_by: ${SLUG}#AC-99\n`))),
 	"DO AC-99 khong co",
+);
+const ngoaiBang = "luat-kho-vong-doi";
+if (bangGoc.some((r) => r.slug === ngoaiBang)) khongDoDuoc(`${ngoaiBang} da co trong bang, chon ho so khac cho ca do`);
+ket.bat(
+	"sua-ho-so-ngoai-bang",
+	kiemCauTruc(bangGoc, (s) => (s === ngoaiBang ? docThat(s).replace(/^( {4}expected: )/m, "$1«sua» ") : docThat(s)), false, [...SLUG_DOI, ngoaiBang]),
+	`DO ${ngoaiBang} doi ngoai bang`,
 );
 ket.bat(
 	"doi-ngoai-bang",

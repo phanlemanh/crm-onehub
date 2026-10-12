@@ -61,14 +61,16 @@ evals:
     expected: |
       bun rang/hook.mjs. Doc .claude/settings.json o merge-base (git show) va o HEAD (tren dia). Khoi go = moi hook o
       merge-base co command nhac scripts/ cua kho; rut bo (su kien, matcher, ten tep) bang cach tach duong trong command —
-      phai ra dung 4 bo, khac 4 -> ma 2 «khong do duoc: <n> bo». HEAD: khong command nao nhac "$CLAUDE_PROJECT_DIR/scripts/"
-      («hook goi kho: 0»), moi khoa ngoai hooks deep-equal merge-base, rieng enabledPlugins duoc them dung
+      phai ra dung 4 bo, khac 4 -> ma 2 «khong do duoc: <n> bo». HEAD: khong command nao goi scripts/ cua kho, nhan
+      moi cach viet ($CLAUDE_PROJECT_DIR/…, ${CLAUDE_PROJECT_DIR}/…, "$CLAUDE_PROJECT_DIR"/…, duong tuong doi scripts/…;
+      tru ${CLAUDE_PLUGIN_ROOT}) («hook goi kho: 0»), moi khoa ngoai hooks deep-equal merge-base, rieng enabledPlugins duoc them dung
       dieu-phoi@acceptance-gate-kit: true («khoa khac: giu»). hooks/hooks.json cua goi: voi moi
       bo co mot hook cung su kien, cung matcher (ca hai vang tinh la cung), command chua
       ${CLAUDE_PLUGIN_ROOT}/scripts/<ten tep>, va tep do co trong goi — in «phu <su kien> <matcher> <ten tep>».
       Chieu do tren ban sao trong thu muc tam: hooks.json bo khoi Notification -> ma 1 «DO thieu Notification»; hooks.json
       doi matcher PostToolUse thanh "Bash" -> ma 1 «DO thieu PostToolUse»; settings HEAD giu khoi PreToolUse cu -> ma 1
-      «DO con hook goi kho»; settings HEAD doi enabledPlugins -> ma 1 «DO khoa khac doi enabledPlugins». Ca nao khong do
+      «DO con hook goi kho»; settings HEAD doi enabledPlugins -> ma 1 «DO khoa khac doi enabledPlugins»;
+      settings HEAD them mot hook goi scripts/x.mjs theo tung cach viet tren -> ma 1 «DO con hook goi kho Stop x.mjs». Ca nao khong do
       -> ma 1 «thuoc hong: <ca>».
 
   - id: E4
@@ -132,19 +134,21 @@ evals:
       bun rang/goi-vang.mjs. Kho gia dung bang scripts/kiem-cheo/test/kho-gia.mjs (origin, mot ho so da ky, moc o commit
       goc, mot lan gop cham paths cua ho so). Ba lan chay node scripts/kiem-cheo/dem.mjs --goc <kho gia> voi
       KIEM_CHEO_DUNG_CAY=true, KIEM_CHEO_LAN = lam gia ghi tep dau, KIEM_CHEO_THONG_BAO = lenh ghi tep dau bao:
+      Hai ca goi vang chay tren kho gia co mot dot song (.acceptance-runs/dieu-phoi-hien-tai tro thu muc dot, phat-lich.pid
+      la pid cua mot tien trinh ngu do bo do mo va giet khi xong), de ve «khong ghi don xin» co cho de do:
       (a) KIEM_CHEO_GOI_DIEU_PHOI = thu muc rong; (b) khong bien, HOME = thu muc rong (resolve-plugin.mjs tim ban cai chi qua
       os.homedir(), tuc HOME; bo do kiem dieu nay bang cach doc chinh tep do va in «HOME la bien duy nhat»). Ca hai: tep
       ngay co ket_qua khong-chay-duoc, ly_do chua «dieu-phoi» va «claude plugin install dieu-phoi@acceptance-gate-kit», tep
-      dau bao co, tep dau lan KHONG co, khong co tep xin/ nao, moc.json giu nguyen tung byte (sha256 truoc = sau) — in «dat
+      dau bao co, tep dau lan KHONG co, xin/ cua dot rong, moc.json giu nguyen tung byte (sha256 truoc = sau) — in «dat
       <ca>».
       (c) khong bien, HOME tam co ban cai: bo cuc rut tu duong cai THAT cua feature-loop tren may nay (resolve-plugin.mjs
       --plugin feature-loop -> phan duong sau HOME, thay ten goi va phien ban bang cua goi dieu-phoi), chep goi da giai vao
-      do; khong co dot -> ket_qua xanh, tep dau lan co, moc.json sha = dinh origin/onehub, khong tep xin/ nao («dat
-      da-cai-khong-dot»).
+      do; khong co dot -> ket_qua xanh, tep dau lan co, moc.json sha = dinh origin/onehub («dat da-cai-khong-dot»).
       (d) chi khi resolve-plugin.mjs --plugin dieu-phoi giai duoc tren HOME that: chay nhu (c) voi HOME that -> ket_qua xanh
       («dat ban-cai-that»); khong giai duoc thi in «bo (d): goi chua cai — do o luot ghim lai sau cai».
       Chieu do tren ban sao scripts/kiem-cheo: dem.mjs nuot loi nap goi (catch roi di tiep voi khoa tay) -> ma 1 «DO
-      goi-vang-im»; bo lenh cai khoi ly_do -> ma 1 «DO thieu-lenh-cai»; dem.mjs truyen cho layKhoa mot timDot nem loi -> (c)
+      goi-vang-im»; dem.mjs khi goi vang tu tim dot qua .acceptance-runs/dieu-phoi-hien-tai roi xin khoa (ngat sau 30 giay)
+      -> ma 1 «DO co-don-xin»; bo lenh cai khoi ly_do -> ma 1 «DO thieu-lenh-cai»; dem.mjs truyen cho layKhoa mot timDot nem loi -> (c)
       phai ma 1 «DO khong-dot». Ca nao khong do -> ma 1 «thuoc hong: <ca>».
 
   - id: E7
@@ -202,7 +206,8 @@ evals:
       bun rang/thay-boi.mjs. Bang rut tu design doc (muc «Eval cu thay boi vong nay», cot 1-2), khong chep tay trong script;
       so dong > 0. Voi moi dong: status not-run va superseded_by = chuyen-goi-dieu-phoi#<AC> (doc bang lib/eval-yaml.cjs, bo
       nhay va chu thich duoi); AC co trong hop dong (lib/ac-line.cjs parseACBlock); AC co eval song trong evals.yaml nay.
-      Voi moi tep evals.yaml cu: git diff -U0 merge-base chi gom dong «+    status: not-run»/«+    superseded_by: ...» cho
+      Mien kiem = cac ho so trong bang HOP voi moi ho so co evals.yaml doi theo git diff --name-only merge-base (tru ho so
+      nay). Voi moi tep evals.yaml trong mien: git diff -U0 merge-base chi gom dong «+    status: not-run»/«+    superseded_by: ...» cho
       eval moi khai va cap «-/+    superseded_by:» cho eval khai tu truoc, tat ca thuoc dong cua bang («dat <slug> chi doi
       bang»). Kit: quet MOI dong superseded_by cua _acceptance/*/evals.yaml o HEAD (khong chi dong cua bang; in so con tro),
       goi chungThayBoi cua lib/evidence-core.cjs cho tung con tro -> chap nhan «ok», hoac «ho-so-thay-chua-ky» chi khi dich
@@ -210,7 +215,8 @@ evals:
       duong: tien le ci-ma-tran-ba-o/E5 -> thuoc-7-ngay-loc-pr#AC-4 tra ok.
       Chieu do tren ban sao trong .acceptance-runs/chuyen-goi-dieu-phoi/thay-thu/: mot eval cua bang mat «status: not-run»
       -> ma 1 «DO <slug>/<id> status»; superseded_by tro AC-99 -> ma 1 «DO AC-99 khong co»; them mot dong sua expected
-      vao evals.yaml cu -> ma 1 «DO <slug> doi ngoai bang»; them vao ho so khac mot eval not-run tro
+      vao evals.yaml cu -> ma 1 «DO <slug> doi ngoai bang»; sua expected trong evals.yaml cua luat-kho-vong-doi (ho so
+      ngoai bang, dua vao mien nhu git diff se dua) -> ma 1 «DO luat-kho-vong-doi doi ngoai bang»; them vao ho so khac mot eval not-run tro
       dieu-phoi-hai-tang#AC-1 -> ma 1 «DO con-tro-gay». Ca nao khong do -> ma 1 «thuoc hong: <ca>».
 
   - id: E10
