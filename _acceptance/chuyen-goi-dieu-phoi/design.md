@@ -89,16 +89,14 @@ Một dòng `<tệp>:<số>` là **lịch sử** khi thuộc một trong các l�
 | hồ sơ này | `_acceptance/chuyen-goi-dieu-phoi/**` |
 | eval sống được miễn | dòng của `_acceptance/<slug>/evals.yaml` nằm trong khối eval có id thuộc danh sách miễn dưới đây |
 
-Danh sách miễn (rút 12/10 bằng cách quét mọi khối eval không khai `not-run` mà ngoài bảng thay bởi và còn nhắc đường cũ):
+Danh sách miễn — trống từ round 3. Bốn eval từng nằm ở đây (ba eval `judgment` chấm README và LUAT mẫu của bộ cũ,
+và `sua-paths-e5-soan-okr/E7`) nay khai thay bởi, để mọi 110 dòng `evals.yaml` nhắc đường cũ của sáu hồ sơ đều thuộc
+khối eval chết (yêu cầu của người giữ gói ở crm issue #375):
 
 | Eval | Vì sao còn sống |
 |---|---|
-| dieu-phoi-hai-tang/E22 | `judgment` đọc README cũ; làn ghim lại không chạy eval ngoài làn máy (sổ quyết định, dòng 8) |
-| dieu-phoi-truoc-mo-dot/E13 | `judgment`, cùng lý do |
-| dieu-phoi-va-bien/E20 | `judgment`, cùng lý do |
-| sua-paths-e5-soan-okr/E7 | `script` lấy `scripts/dieu-phoi/giu-nhip.mjs` làm tệp mẫu ngoài-paths rồi ghi thêm vào nó; ghi vào tệp vắng thì tạo tệp, nên phép đo vẫn có nghĩa. AC-10 chạy nó ở hai cây: đỏ thêm thì nó vào bảng thay bởi và rời danh sách này |
 
-E1 so tập id của các khối sống mà `kiemChuyen` trả dòng với danh sách miễn: thừa hay thiếu đều đỏ.
+E1 so tập id của các khối sống mà `kiemChuyen` trả dòng với danh sách miễn: thừa hay thiếu đều đỏ — nay tập phải rỗng.
 
 Tệp `rang/` của hồ sơ khác là lịch sử theo lớp đầu: phép đo nào còn sống mà hỏng vì vòng này thì AC-10 bắt.
 
@@ -188,6 +186,10 @@ Tệp `rang/` của hồ sơ khác là lịch sử theo lớp đầu: phép đo 
 | kiem-cheo-sau-gop/E2 | AC-5 | đổi con trỏ: AC-1 của `kiem-cheo-chay-quang-lang` mất eval sống |
 | kiem-cheo-sau-gop/E5 | AC-7 | lượt thật trên bản sao kho |
 | sua-paths-e5-soan-okr/E2 | AC-1 | tệp mẫu ngoài-paths `scripts/dieu-phoi/giu-nhip.mjs` bị gỡ |
+| sua-paths-e5-soan-okr/E7 | AC-1 | ghi thêm vào chính tệp mẫu đã gỡ rồi chạy lưới trước-gộp |
+| dieu-phoi-hai-tang/E22 | AC-2 | judgment chấm README của bộ cũ — README nay đi cùng gói |
+| dieu-phoi-truoc-mo-dot/E13 | AC-2 | judgment chấm mục «Trong đợt» của README cũ |
+| dieu-phoi-va-bien/E20 | AC-2 | judgment chấm LUAT mẫu và README cũ — cả hai nay đi cùng gói |
 | giam-phut-ci-nhap-t1/E5 | AC-4 | job `luat-kho` khác bản ghim vì mất bước `test:dieu-phoi` |
 | giam-phut-ci-nhap-t1/E6 | AC-4 | «không mất lệnh CI nào» — mất đúng `bun run test:dieu-phoi` |
 | giam-phut-ci-nhap-t1/E7 | AC-10 | tập lệnh rút ra phải có `dpvb_cong` |
@@ -202,8 +204,8 @@ export của bộ cũ đều có trong gói (chuyển, không mất), chỉ tr�
 `sua-paths-e5-soan-okr/E2` đo bộ lọc `paths` của kit (`staleByPaths`) trên bốn tệp, một trong số đó là tệp bị gỡ. Ba tệp
 còn lại không ai đo lại ở crm; bộ lọc là của kit và kit đo nó. Ghi ở sổ quyết định.
 
-Ba eval `judgment` (`dieu-phoi-hai-tang/E22`, `dieu-phoi-truoc-mo-dot/E13`, `dieu-phoi-va-bien/E20`) đọc tệp của bộ cũ.
-Làn ghim lại không chạy eval ngoài làn máy; chúng hiện ở khoá `evals_not_machine_touched` của lượt ghim, không khai thêm.
+Ba eval `judgment` (`dieu-phoi-hai-tang/E22`, `dieu-phoi-truoc-mo-dot/E13`, `dieu-phoi-va-bien/E20`) chấm README và LUAT
+mẫu của bộ cũ. Hai tài liệu đó nay đi cùng gói (`README.md`, `scripts/mau/LUAT.md` của gói); E2 đo chúng có mặt trong gói.
 
 ## Họ lệnh pre-push
 

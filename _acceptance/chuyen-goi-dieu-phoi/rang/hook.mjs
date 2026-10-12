@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { isDeepStrictEqual } from "node:util";
 import { basename, join } from "node:path";
-import { docTai, GOC, Ket, khongDoDuoc, MB } from "./chung.mjs";
+import { docSau, docTai, Ket, khongDoDuoc, NEO } from "./chung.mjs";
 import { giaiGoi } from "./goi.mjs";
 
 const TEP = ".claude/settings.json";
@@ -52,8 +52,9 @@ function do_(cu, moi, hooksGoi, gocGoi, inRa = false) {
 	return doDs;
 }
 
-const cu = JSON.parse(docTai(MB, TEP));
-const moi = JSON.parse(readFileSync(join(GOC, TEP), "utf8"));
+console.log(`neo: ${NEO.nhan}`);
+const cu = JSON.parse(docTai(NEO.truoc, TEP));
+const moi = JSON.parse(docSau(TEP));
 const hooksGoi = JSON.parse(readFileSync(join(goi.goc, "hooks", "hooks.json"), "utf8"));
 const that = do_(cu, moi, hooksGoi, goi.goc, true);
 console.log(`hook goi kho: ${boHook(moi, duongKho).length}`);

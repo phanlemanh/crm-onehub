@@ -193,6 +193,8 @@ evals:
   - id: E22
     criterion: AC-14
     executor: judgment
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     question: >-
       README này có đủ bốn phần mở đợt, trong đợt, đóng đợt, đường lùi, và mỗi phần có chở đúng
       các bước mà mục 4 của design doc liệt kê không — lệnh mo/chay/xem/dong, Monitor tail -n0 -F

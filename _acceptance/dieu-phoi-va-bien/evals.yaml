@@ -175,6 +175,8 @@ evals:
   - id: E20
     criterion: AC-14
     executor: judgment
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     inputs: [scripts/dieu-phoi/mau/LUAT.md, scripts/dieu-phoi/README.md]
     question: Đọc hai tệp như một phiên thợ (LUAT.md) và một phiên giám sát (README.md) chưa từng thấy mã. (1) Thợ có biết rằng khi đang giữ khoá mà chạy một việc nền dài thì phải chạy qua lệnh bọc giu-nhip, kèm một lệnh mẫu chép được, và biết vì sao (không thì khoá bị thu giữa chừng)? (2) Thợ có biết xin gia hạn bằng yêu cầu gia-han với noi_dung.uoc_phut, và noi_dung.tai_nguyen khi giữ nhiều khoá? (3) Giám sát có biết hai tệp dieu-phoi.config.json, hang-viec.json được kiểm hình dạng ở mỗi nhịp, sai thì có sự kiện loi-nhip nêu trường và máy không cấp/duyệt gì cho tới khi sửa? (4) Giám sát có biết ghi tra-loi duyệt cho gia-han là đủ để hạn được kéo dài, có thể kèm uoc_phut riêng? Trả PASS chỉ khi cả bốn có mặt và đúng nghĩa.
     paths: [scripts/dieu-phoi/mau/LUAT.md, scripts/dieu-phoi/README.md]

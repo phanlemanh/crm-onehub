@@ -110,6 +110,8 @@ evals:
   - id: E13
     criterion: AC-7
     executor: judgment
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-2
     inputs: [scripts/dieu-phoi/README.md]
     question: "Đọc mục «Trong đợt» của README như một phiên giám sát chưa thấy mã. (1) Phiên có biết rằng tệp trả lời tra-loi/<id>.json hỏng cú pháp hoặc sai hình dạng sẽ bị chuyển vào tra-loi/hong/ kèm sự kiện tra-loi-hong? (2) Có biết yêu cầu đó khi ấy coi như chưa trả lời? (3) Có biết cách sửa là ghi lại tệp trả lời đúng hình dạng? PASS chỉ khi cả ba có mặt và đúng nghĩa. (Danh sách khoá đúng hay sai không thuộc câu hỏi này — E14 đo bằng máy.)"
     paths: [scripts/dieu-phoi/README.md]

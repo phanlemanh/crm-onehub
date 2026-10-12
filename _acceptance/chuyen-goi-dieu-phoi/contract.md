@@ -5,7 +5,7 @@ slug: chuyen-goi-dieu-phoi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
@@ -20,8 +20,9 @@ design_doc: _acceptance/chuyen-goi-dieu-phoi/design.md
 Đợt `r2` chạy Điều phối – Thợ từ gói `dieu-phoi` của kit. Trước khi mở đợt, crm phải bỏ bản tự viết của giai đoạn một
 (`scripts/dieu-phoi/`, bốn hook trong `.claude/settings.json`, `test:dieu-phoi` ở `package.json`, `pre-push`,
 `gate-shape.json`, `acceptance.yml`), nối lượt kiểm chéo đêm sang gói kit, khai «thay bởi» cho các eval đã ký đo bản cũ, và
-khai khoá gói đợt. PR ở dạng nháp và chỉ gộp sau khi kit cắt bản mang gói và crm cài đúng tag đó. Merge-base của vòng:
-`b9a3b1609b47f175d44b9a9236b26b7cabec84af`. Trước khi kit phát hành, mọi phép đo cần gói dùng `dieu-phoi/` của kit
+khai khoá gói đợt. PR ở dạng nháp và chỉ gộp sau khi kit cắt bản mang gói và crm cài đúng tag đó. «Merge-base» trong
+các tiêu chí là neo của vòng tính lúc đo: nhánh còn mở thì `merge-base(HEAD, origin/onehub)`; hồ sơ đã lên `onehub` thì
+cặp sha của commit gộp (`merge-base(M^1, M^2)` và `M^2`). Lúc viết hợp đồng nó là `b9a3b1609b47`. Trước khi kit phát hành, mọi phép đo cần gói dùng `dieu-phoi/` của kit
 `origin/main` qua tệp trỏ tạm (design doc, mục «Đo trước khi kit phát hành»).
 
 ## Criteria
@@ -34,7 +35,8 @@ khai khoá gói đợt. PR ở dạng nháp và chỉ gộp sau khi kit cắt b�
 - AC-2: Given các tệp `.mjs` ở thư mục gốc `scripts/dieu-phoi/` tại merge-base (đọc bằng git, không chép tay), When so với
   `scripts/` của gói đã giải, Then mỗi tệp có tệp cùng tên trong gói, mỗi tên mà mô-đun cũ export thì mô-đun gói cùng tên
   cũng export, và tập tên thiếu bằng đúng tập ngoại lệ đã khai `{lich.mjs: PHIEN_XEP_CUOI}` — thiếu thêm hay thôi thiếu đều
-  là sai.
+  là sai; hai tài liệu vận hành của bộ cũ (`README.md`, `mau/LUAT.md`) có bản không rỗng trong gói (`README.md`,
+  `scripts/mau/LUAT.md`).
 - AC-3: Given `.claude/settings.json` ở merge-base và ở `HEAD`, When đọc cả hai, Then `HEAD` không còn lệnh hook nào gọi tệp
   dưới `scripts/` của kho, mọi khoá khác ngoài `hooks` giữ nguyên giá trị (riêng `enabledPlugins` được thêm đúng một mục
   `dieu-phoi@acceptance-gate-kit: true` — bước cài sau phát hành); và với mỗi bộ (sự kiện, matcher, tên tệp script)

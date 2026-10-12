@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { cloneDocLap, git, GOC, Ket, MB, moiTruongSach, thuMucTam } from "./chung.mjs";
+import { cloneDocLap, diffVong, git, GOC, Ket, moiTruongSach, NEO, thuMucTam } from "./chung.mjs";
 import { giaiGoi, napGoi } from "./goi.mjs";
 
 const KHOA = "docs/plan/dot-{ten}";
@@ -12,7 +12,8 @@ const { MUC } = await napGoi(goi, "scripts/chan-doan.mjs");
 
 ket.kiem(docKhoaGoiDot(GOC) === KHOA, `khoa ${KHOA}`, `docKhoaGoiDot tra ${JSON.stringify(docKhoaGoiDot(GOC))}`);
 
-const diff = git(GOC, "diff", "-U0", MB, "--", "_acceptance/config.yaml").split("\n");
+console.log(`neo: ${NEO.nhan}`);
+const diff = diffVong(["-U0"], ["_acceptance/config.yaml"]).split("\n");
 const tru = diff.filter((d) => d.startsWith("-") && !d.startsWith("---"));
 const cong = diff.filter((d) => d.startsWith("+") && !d.startsWith("+++"));
 ket.kiem(tru.length === 0 && cong.length > 0, `chi-them config.yaml (+${cong.length})`, `${tru.length} dong bi xoa hay sua: ${tru.slice(0, 3).join(" | ")}`);

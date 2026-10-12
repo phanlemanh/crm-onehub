@@ -1,7 +1,7 @@
 import { cpSync, existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { bangTrongDesign, docTai, git, GOC, Ket, khongDoDuoc, MB, SLUG, thuMucRa } from "./chung.mjs";
+import { bangTrongDesign, cloneDocLap, docSau, docTai, git, GOC, Ket, khongDoDuoc, NEO, SLUG, thuMucRa } from "./chung.mjs";
 
 const require = createRequire(import.meta.url);
 const ey = require(join(GOC, "lib", "eval-yaml.cjs"));
@@ -43,10 +43,12 @@ function hieuMultiset(a, b) {
 	return ra;
 }
 
-const SLUG_DOI = git(GOC, "diff", "--name-only", MB, "--", "_acceptance/*/evals.yaml")
-	.split("\n")
-	.map((t) => /^_acceptance\/([^/]+)\/evals\.yaml$/.exec(t)?.[1])
-	.filter((s) => s && s !== SLUG);
+const slugDoiTai = (goc) =>
+	git(goc, "diff", "--name-only", "--diff-filter=M", NEO.truoc, ...(goc === GOC && NEO.sau ? [NEO.sau] : []), "--", "_acceptance/*/evals.yaml")
+		.split("\n")
+		.map((t) => /^_acceptance\/([^/]+)\/evals\.yaml$/.exec(t)?.[1])
+		.filter((s) => s && s !== SLUG);
+const SLUG_DOI = slugDoiTai(GOC);
 
 function kiemCauTruc(bang, docEvals, inRa = false, slugDoi = SLUG_DOI) {
 	const doDs = [];
@@ -58,7 +60,7 @@ function kiemCauTruc(bang, docEvals, inRa = false, slugDoi = SLUG_DOI) {
 		else if (!acSong(r.ac)) doDs.push(`DO ${r.ac} khong co eval song`);
 	}
 	for (const slug of new Set([...bang.map((r) => r.slug), ...slugDoi])) {
-		const cu = docTai(MB, `_acceptance/${slug}/evals.yaml`);
+		const cu = docTai(NEO.truoc, `_acceptance/${slug}/evals.yaml`);
 		const moi = docEvals(slug);
 		const themMong = [];
 		const boMong = [];
@@ -104,8 +106,12 @@ function quetConTro(root, ds) {
 	return { doDs, dem };
 }
 
-const docThat = (slug) => readFileSync(join(GOC, "_acceptance", slug, "evals.yaml"), "utf8");
+const docThat = (slug) => docSau(`_acceptance/${slug}/evals.yaml`);
+const kiemMien = (bang, slugDoi) => [...new Set(bang.map((r) => r.slug))].filter((s) => !slugDoi.includes(s)).map((s) => `DO mien-git-diff thieu ${s}`);
+console.log(`neo: ${NEO.nhan}`);
 console.log(`evals.yaml doi so voi merge-base (ngoai ho so nay): ${SLUG_DOI.length} tep`);
+const mien = kiemMien(bangGoc, SLUG_DOI);
+ket.kiem(mien.length === 0, `mien git diff phu moi ho so cua bang (${new Set(bangGoc.map((r) => r.slug)).size})`, mien.join(" | "));
 const that = kiemCauTruc(bangGoc, docThat, true);
 ket.kiem(that.length === 0, `${bangGoc.length} eval cua bang khai dung, AC co va con eval song`, that.slice(0, 6).join(" | "));
 
@@ -134,11 +140,16 @@ ket.bat(
 );
 const ngoaiBang = "luat-kho-vong-doi";
 if (bangGoc.some((r) => r.slug === ngoaiBang)) khongDoDuoc(`${ngoaiBang} da co trong bang, chon ho so khac cho ca do`);
-ket.bat(
-	"sua-ho-so-ngoai-bang",
-	kiemCauTruc(bangGoc, (s) => (s === ngoaiBang ? docThat(s).replace(/^( {4}expected: )/m, "$1«sua» ") : docThat(s)), false, [...SLUG_DOI, ngoaiBang]),
-	`DO ${ngoaiBang} doi ngoai bang`,
-);
+ket.bat("mien-git-diff-rong", kiemMien(bangGoc, []), "DO mien-git-diff thieu");
+const banClone = cloneDocLap(git(GOC, "rev-parse", "HEAD").trim(), "thay-boi");
+try {
+	const pNgoai = join(banClone.goc, "_acceptance", ngoaiBang, "evals.yaml");
+	writeFileSync(pNgoai, readFileSync(pNgoai, "utf8").replace(/^( {4}expected: )/m, "$1«sua» "));
+	const docClone = (s) => readFileSync(join(banClone.goc, "_acceptance", s, "evals.yaml"), "utf8");
+	ket.bat("sua-ho-so-ngoai-bang", kiemCauTruc(bangGoc, docClone, false, slugDoiTai(banClone.goc)), `DO ${ngoaiBang} doi ngoai bang`);
+} finally {
+	banClone.don();
+}
 ket.bat(
 	"doi-ngoai-bang",
 	kiemCauTruc(bangGoc, sua(r0.slug, (t) => t.replace(/^( {4}expected: )/m, "$1«sua» "))),

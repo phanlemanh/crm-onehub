@@ -2,10 +2,14 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-import { git, GOC, Ket, khongDoDuoc, MB, thuMucTam } from "./chung.mjs";
+import { git, GOC, Ket, khongDoDuoc, NEO, thuMucTam } from "./chung.mjs";
 import { giaiGoi } from "./goi.mjs";
 
 const NGOAI_LE = { "lich.mjs": ["PHIEN_XEP_CUOI"] };
+const TAI_LIEU = [
+	["README.md", "README.md"],
+	["mau/LUAT.md", "scripts/mau/LUAT.md"],
+];
 const ket = new Ket();
 const goi = giaiGoi();
 
@@ -22,12 +26,12 @@ function tenExport(tep) {
 
 const tam = thuMucTam("mo-dun");
 try {
-	const ds = git(GOC, "ls-tree", "--name-only", MB, "scripts/dieu-phoi/")
+	const ds = git(GOC, "ls-tree", "--name-only", NEO.truoc, "scripts/dieu-phoi/")
 		.split("\n")
 		.filter((t) => /^scripts\/dieu-phoi\/[^/]+\.mjs$/.test(t))
 		.map((t) => t.slice("scripts/dieu-phoi/".length));
 	if (ds.length === 0) khongDoDuoc("merge-base khong co mo-dun nao duoi scripts/dieu-phoi");
-	const tar = execFileSync("git", ["-C", GOC, "archive", MB, "scripts/dieu-phoi"], { maxBuffer: 64 * 1024 * 1024 });
+	const tar = execFileSync("git", ["-C", GOC, "archive", NEO.truoc, "scripts/dieu-phoi"], { maxBuffer: 64 * 1024 * 1024 });
 	execFileSync("tar", ["-x", "-C", tam], { input: tar });
 	const cu = new Map(ds.map((t) => [t, tenExport(join(tam, "scripts/dieu-phoi", t))]));
 	for (const [t, r] of cu) if (r.loi) khongDoDuoc(`khong nap duoc mo-dun cu ${t}: ${r.loi}`);
@@ -54,6 +58,11 @@ try {
 			(t) => JSON.stringify(thieu[t] ?? []) !== JSON.stringify(NGOAI_LE[t] ?? []),
 		);
 		for (const t of tepLech) doDs.push(`DO ngoai-le-lech ${t}: thieu ${JSON.stringify(thieu[t] ?? [])}, khai ${JSON.stringify(NGOAI_LE[t] ?? [])}`);
+		for (const [cuTep, goiTep] of TAI_LIEU) {
+			if (!existsSync(join(tam, "scripts/dieu-phoi", cuTep))) khongDoDuoc(`bo cu khong co ${cuTep} o merge-base`);
+			const p = join(gocGoi, goiTep);
+			if (!existsSync(p) || readFileSync(p, "utf8").trim() === "") doDs.push(`DO vang tai-lieu ${goiTep}`);
+		}
 		return { doDs, thieu };
 	};
 
@@ -62,7 +71,8 @@ try {
 		const mat = that.thieu[t];
 		console.log(mat ? `thieu ${t}: ${mat.join(",")}` : `dat ${t}: ${cu.get(t).ten.length} ten`);
 	}
-	ket.kiem(that.doDs.length === 0, `${ds.length} mo-dun cu co trong goi, ngoai le dung ${JSON.stringify(NGOAI_LE)}`, that.doDs.join(" | "));
+	console.log(`neo: ${NEO.nhan}`);
+	ket.kiem(that.doDs.length === 0, `${ds.length} mo-dun cu co trong goi, ngoai le dung ${JSON.stringify(NGOAI_LE)}, tai lieu ${TAI_LIEU.map(([, g]) => g).join(", ")} co trong goi`, that.doDs.join(" | "));
 
 	const banSao = (ten, sua) => {
 		const d = join(thuMucTam(`mo-dun-${ten}`), "goi");
@@ -90,6 +100,7 @@ try {
 		}),
 		"DO ngoai-le-lech lich.mjs",
 	);
+	ket.bat("xoa-readme", banSao("readme", (d) => rmSync(join(d, "README.md"))), "DO vang tai-lieu README.md");
 	ket.bat(
 		"xoa-suc-khoe",
 		banSao("suc-khoe", (d) => rmSync(join(d, "scripts", "suc-khoe.mjs"))),

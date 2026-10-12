@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join, normalize } from "node:path";
-import { bangTrongDesign, cloneDocLap, GOC, git, Ket, MB, SLUG } from "./chung.mjs";
+import { bangTrongDesign, cloneDocLap, GOC, git, Ket, NEO, SLUG } from "./chung.mjs";
 import { giaiGoi, napGoi } from "./goi.mjs";
 
 const require = createRequire(import.meta.url);
@@ -21,10 +21,6 @@ const { kiemChuyen } = await napGoi(goi, "scripts/dieu-phoi.mjs");
 const mien = new Set(
 	bangTrongDesign("Danh sách miễn").map((o) => o[0]).filter((x) => /^[a-z0-9-]+\/E\d+$/.test(x)),
 );
-if (mien.size === 0) {
-	console.log("KHONG DO DUOC: danh sach mien rong");
-	process.exit(2);
-}
 
 function khoiCua(dong, so) {
 	for (let i = so - 1; i >= 0; i--) {
@@ -160,7 +156,7 @@ try {
 	console.log(`import vao ban cu: ${r.imp.length}`);
 	ket.kiem(r.doDs.length === 0, "cay HEAD", r.doDs.slice(0, 8).join(" | "));
 
-	const nen = cloneDocLap(MB, "kiem-chuyen-mb");
+	const nen = cloneDocLap(NEO.truoc, "kiem-chuyen-mb");
 	try {
 		const n = do_(nen.goc);
 		const tepImp = [...new Set(n.imp.map((v) => v.split(" -> ")[0]))].sort();

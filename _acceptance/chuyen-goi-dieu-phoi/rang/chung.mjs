@@ -5,7 +5,6 @@ import { join, resolve } from "node:path";
 
 export const GOC = resolve(import.meta.dirname, "..", "..", "..");
 export const SLUG = "chuyen-goi-dieu-phoi";
-export const MB = "b9a3b1609b47f175d44b9a9236b26b7cabec84af";
 export const RA = join(GOC, ".acceptance-runs", SLUG);
 export const DESIGN = join(GOC, "_acceptance", SLUG, "design.md");
 const BO_DEM = 512 * 1024 * 1024;
@@ -28,6 +27,34 @@ export function git(cwd, ...a) {
 }
 
 export const docTai = (sha, tep) => git(GOC, "show", `${sha}:${tep}`);
+
+function laToTien(sha, ref) {
+	try {
+		git(GOC, "merge-base", "--is-ancestor", sha, ref);
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+export function neoVong() {
+	const dau = git(GOC, "log", "--diff-filter=A", "--format=%H", "--", `_acceptance/${SLUG}/contract.md`).split("\n").filter(Boolean).at(-1);
+	if (!dau) khongDoDuoc("khong tim thay commit dau cua ho so");
+	if (!laToTien(dau, "origin/onehub")) {
+		const truoc = git(GOC, "merge-base", "HEAD", "origin/onehub").trim();
+		return { truoc, sau: null, nhan: `nhanh mo, merge-base ${truoc.slice(0, 12)}` };
+	}
+	const chuoiChinh = new Set(git(GOC, "rev-list", "--first-parent", "origin/onehub").split("\n").filter(Boolean));
+	const gop = git(GOC, "rev-list", "--ancestry-path", `${dau}..origin/onehub`).split("\n").filter((c) => chuoiChinh.has(c)).at(-1);
+	if (!gop) khongDoDuoc("ho so da len onehub nhung khong tim thay commit gop");
+	const [cha1, cha2] = [git(GOC, "rev-parse", `${gop}^1`).trim(), git(GOC, "rev-parse", `${gop}^2`).trim()];
+	const truoc = git(GOC, "merge-base", cha1, cha2).trim();
+	return { truoc, sau: cha2, nhan: `da gop ${gop.slice(0, 12)}, ${truoc.slice(0, 12)}..${cha2.slice(0, 12)}` };
+}
+
+export const NEO = neoVong();
+export const docSau = (tep) => (NEO.sau ? docTai(NEO.sau, tep) : readFileSync(join(GOC, tep), "utf8"));
+export const diffVong = (tuyChon, duong = []) => git(GOC, "diff", ...tuyChon, NEO.truoc, ...(NEO.sau ? [NEO.sau] : []), "--", ...duong);
 
 export function thuMucTam(ten) {
 	return mkdtempSync(join(realpathSync(tmpdir()), `cgdp-${ten}-`));

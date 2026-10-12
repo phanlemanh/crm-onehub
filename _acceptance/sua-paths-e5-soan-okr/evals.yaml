@@ -54,6 +54,8 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.f19_luoi_that
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-1
     expected: "exit 0; rang/luoi-that.mjs dựng git worktree tạm ở .acceptance-runs/sua-paths-e5-soan-okr/sao-luoi/ từ HEAD (dọn trong finally, kể cả khi lỗi), commit trên nhánh tạm: một byte thêm vào cuối scripts/dieu-phoi/giu-nhip.mjs (dòng trống) + tệp mới _acceptance/soan-okr-cung-tro-ly/.cham-f19; chạy bash scripts/pre-merge-check.sh . --base <HEAD gốc> trên bản sao (không --slug), đòi không dòng 'VIOLATION [soan-okr-cung-tro-ly]'; in 'luoi-that xanh: ho so khong cu vi giu-nhip.mjs'. Chiều đỏ, cùng lệnh, cùng bản sao: --doc-tu b633a7e3 thêm vào commit đó evals.yaml của b633a7e3 → đòi có dòng 'VIOLATION [soan-okr-cung-tro-ly]: evidence is stale' chứa 'scripts/dieu-phoi/giu-nhip.mjs', exit 1, in 'luoi-that do: ho so cu vi giu-nhip.mjs'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/soan-okr-cung-tro-ly/evals.yaml, _acceptance/sua-paths-e5-soan-okr/rang/luoi-that.mjs, scripts/pre-merge-check.sh, lib/evidence-core.cjs]

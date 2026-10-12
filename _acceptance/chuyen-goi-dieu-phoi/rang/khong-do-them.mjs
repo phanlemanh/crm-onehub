@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { cloneDocLap, git, GOC, Ket, khongDoDuoc, MB, moiTruongSach, SLUG, thuMucRa } from "./chung.mjs";
+import { cloneDocLap, diffVong, docSau, git, GOC, Ket, khongDoDuoc, moiTruongSach, NEO, SLUG, thuMucRa } from "./chung.mjs";
 import { BIEN, giaiGoi } from "./goi.mjs";
 
 const require = createRequire(import.meta.url);
@@ -49,7 +49,7 @@ function docExecutor() {
 
 function rutTap() {
 	const exe = docExecutor();
-	const tepDoi = git(GOC, "diff", "--name-only", MB, "HEAD").split("\n").filter((t) => t && !t.startsWith("_acceptance/"));
+	const tepDoi = diffVong(["--name-only"]).split("\n").filter((t) => t && !t.startsWith("_acceptance/"));
 	const tap = new Map();
 	for (const slug of readdirSync(join(GOC, "_acceptance"))) {
 		if (slug === SLUG) continue;
@@ -118,8 +118,8 @@ function dongVong(chu) {
 const ghimHook = /^TAC_VU="([^"]+)"$/m.exec(readFileSync(join(GOC, "_acceptance", "luoi-day-do-that", "rang-hook.sh"), "utf8"))?.[1];
 const ghimHinh = /\^for task in ([^;]+); do\$\//.exec(readFileSync(join(GOC, "_acceptance", "hinh-cua-luoi", "rang-hinh.sh"), "utf8"))?.[1];
 if (!ghimHook || !ghimHinh) khongDoDuoc("khong rut duoc dong vong ma rang-hook.sh, rang-hinh.sh ghim");
-const vongHead = dongVong(readFileSync(join(GOC, ".githooks", "pre-push"), "utf8"));
-const vongMb = dongVong(git(GOC, "show", `${MB}:.githooks/pre-push`));
+const vongHead = dongVong(docSau(".githooks/pre-push"));
+const vongMb = dongVong(git(GOC, "show", `${NEO.truoc}:.githooks/pre-push`));
 ket.kiem(
 	vongHead === `for task in ${ghimHook}; do` && vongHead === `for task in ${ghimHinh}; do`,
 	"dong vong pre-push o HEAD bang dong rang-hook.sh va rang-hinh.sh ghim",
@@ -127,9 +127,10 @@ ket.kiem(
 );
 console.log(vongMb === vongHead ? "merge-base: dong vong giong HEAD" : `merge-base: dong vong lech dong ghim (${vongMb})`);
 
-const head = git(GOC, "rev-parse", "HEAD").trim();
+console.log(`neo: ${NEO.nhan}`);
+const head = NEO.sau ?? git(GOC, "rev-parse", "HEAD").trim();
 const banHead = dungBan(head, "kdt-head");
-const banMb = dungBan(MB, "kdt-mb");
+const banMb = dungBan(NEO.truoc, "kdt-mb");
 const don = () => {
 	banHead.don();
 	banMb.don();

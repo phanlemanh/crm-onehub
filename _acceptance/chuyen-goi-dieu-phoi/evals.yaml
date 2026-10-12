@@ -23,7 +23,8 @@ evals:
       goi kiemChuyen THAT cua goi da giai tren ban clone, roi xep moi dong <tep>:<so> vao bang phan lop cua design doc
       (rut bang ma: ho so khac ngoai evals.yaml; dong evals.yaml trong khoi eval khai not-run, doc bang lib/eval-yaml.cjs;
       dong executor config.yaml khong eval song nao dung; docs/superpowers/**; docs/plan/dot-sau-14-10/**; ho so nay; khoi
-      eval song co id thuoc danh sach mien — danh sach rut tu bang «Danh sach mien» cua design doc, khong chep tay).
+      eval song co id thuoc danh sach mien — danh sach rut tu bang «Danh sach mien» cua design doc, khong chep tay; tu round
+      3 danh sach trong, nen moi khoi song nhac duong cu deu la sai).
       In «ngoai lop: 0» va so dong moi lop. Tap id khoi song co dong tra ve phai BANG danh sach mien: thieu hay thua -> ma 1
       «DO mien-lech thua=<id,...> thieu=<id,...>». Them: git ls-files scripts/dieu-phoi rong («scripts/dieu-phoi: 0 tep»); quet moi
       tep .mjs/.js/.cjs/.ts/.tsx duoc theo doi ngoai _acceptance/ va docs/, giai tung import/require tuong doi theo thu muc
@@ -46,10 +47,13 @@ evals:
       bun rang/mo-dun.mjs. Doc danh sach tep .mjs o goc scripts/dieu-phoi/ tai merge-base bang git ls-tree (khong chep tay),
       trich ra thu muc tam bang git archive; voi moi tep, nap module cu va module cung ten cua goi trong tien trinh con rieng
       (Object.keys cua namespace), so tap ten. In moi tep «dat <tep>: <n> ten» hoac «thieu <tep>: <ten,...>». Ma 0 khi so tep
-      cu > 0, moi tep cu co tep cung ten trong goi, va tap ten thieu bang DUNG {lich.mjs: [PHIEN_XEP_CUOI]}.
+      cu > 0, moi tep cu co tep cung ten trong goi, tap ten thieu bang DUNG {lich.mjs: [PHIEN_XEP_CUOI]}, va README.md,
+      scripts/mau/LUAT.md cua goi co mat va khong rong (README.md, mau/LUAT.md cua bo cu co o merge-base). Merge-base la neo
+      tinh luc do (rang/chung.mjs neoVong: nhanh mo -> merge-base voi origin/onehub; da gop -> cap sha cua commit gop).
       Chieu do tren ban sao cua goi trong thu muc tam: xoa export dau tien cua bang.mjs -> ma 1 «DO ngoai-le-lech bang.mjs»;
       them export PHIEN_XEP_CUOI vao lich.mjs -> ma 1 «DO ngoai-le-lech lich.mjs» (ngoai le da khai khong con — cung la
-      sai); xoa tep suc-khoe.mjs -> ma 1 «DO vang suc-khoe.mjs». Ca nao khong do -> ma 1 «thuoc hong: <ca>».
+      sai); xoa tep suc-khoe.mjs -> ma 1 «DO vang suc-khoe.mjs»; xoa README.md cua ban sao goi -> ma 1 «DO vang tai-lieu
+      README.md». Ca nao khong do -> ma 1 «thuoc hong: <ca>».
 
   - id: E3
     criterion: AC-3
@@ -206,8 +210,8 @@ evals:
       bun rang/thay-boi.mjs. Bang rut tu design doc (muc «Eval cu thay boi vong nay», cot 1-2), khong chep tay trong script;
       so dong > 0. Voi moi dong: status not-run va superseded_by = chuyen-goi-dieu-phoi#<AC> (doc bang lib/eval-yaml.cjs, bo
       nhay va chu thich duoi); AC co trong hop dong (lib/ac-line.cjs parseACBlock); AC co eval song trong evals.yaml nay.
-      Mien kiem = cac ho so trong bang HOP voi moi ho so co evals.yaml doi theo git diff --name-only merge-base (tru ho so
-      nay). Voi moi tep evals.yaml trong mien: git diff -U0 merge-base chi gom dong «+    status: not-run»/«+    superseded_by: ...» cho
+      Mien kiem = cac ho so trong bang HOP voi moi ho so co evals.yaml doi theo git diff --name-only --diff-filter=M <neo>
+      (tru ho so nay); moi ho so cua bang phai co trong mien rut tu git diff («dat mien git diff phu moi ho so cua bang»). Voi moi tep evals.yaml trong mien: git diff -U0 merge-base chi gom dong «+    status: not-run»/«+    superseded_by: ...» cho
       eval moi khai va cap «-/+    superseded_by:» cho eval khai tu truoc, tat ca thuoc dong cua bang («dat <slug> chi doi
       bang»). Kit: quet MOI dong superseded_by cua _acceptance/*/evals.yaml o HEAD (khong chi dong cua bang; in so con tro),
       goi chungThayBoi cua lib/evidence-core.cjs cho tung con tro -> chap nhan «ok», hoac «ho-so-thay-chua-ky» chi khi dich
@@ -216,7 +220,8 @@ evals:
       Chieu do tren ban sao trong .acceptance-runs/chuyen-goi-dieu-phoi/thay-thu/: mot eval cua bang mat «status: not-run»
       -> ma 1 «DO <slug>/<id> status»; superseded_by tro AC-99 -> ma 1 «DO AC-99 khong co»; them mot dong sua expected
       vao evals.yaml cu -> ma 1 «DO <slug> doi ngoai bang»; sua expected trong evals.yaml cua luat-kho-vong-doi (ho so
-      ngoai bang, dua vao mien nhu git diff se dua) -> ma 1 «DO luat-kho-vong-doi doi ngoai bang»; them vao ho so khac mot eval not-run tro
+      ngoai bang) tren mot ban clone cua HEAD, mien rut bang chinh buoc git diff tren ban clone do -> ma 1 «DO luat-kho-vong-doi
+      doi ngoai bang»; buoc git diff tra rong -> ma 1 «DO mien-git-diff thieu»; them vao ho so khac mot eval not-run tro
       dieu-phoi-hai-tang#AC-1 -> ma 1 «DO con-tro-gay». Ca nao khong do -> ma 1 «thuoc hong: <ca>».
 
   - id: E10

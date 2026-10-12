@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { isDeepStrictEqual } from "node:util";
-import { docTai, GOC, Ket, MB } from "./chung.mjs";
+import { docSau, docTai, Ket, NEO } from "./chung.mjs";
 
 const MAT = "test:dieu-phoi";
 const LENH_MAT = "bun run test:dieu-phoi";
@@ -71,8 +71,9 @@ function do_(cu, moi, inRa = false) {
 	return doDs;
 }
 
-const cu = Object.fromEntries(Object.entries(TEP).map(([k, t]) => [k, docTai(MB, t)]));
-const moi = Object.fromEntries(Object.entries(TEP).map(([k, t]) => [k, readFileSync(join(GOC, t), "utf8")]));
+console.log(`neo: ${NEO.nhan}`);
+const cu = Object.fromEntries(Object.entries(TEP).map(([k, t]) => [k, docTai(NEO.truoc, t)]));
+const moi = Object.fromEntries(Object.entries(TEP).map(([k, t]) => [k, docSau(t)]));
 const that = do_(cu, moi, true);
 ket.kiem(that.length === 0, "bon noi mat dung test:dieu-phoi, khong doi gi khac", that.join(" | "));
 
