@@ -1,0 +1,379 @@
+{
+  "dot": "r2",
+  "day": [
+    {
+      "id": "P0",
+      "worktree": "/CHUA-CO-WORKTREE/P0",
+      "link": ""
+    },
+    {
+      "id": "P1",
+      "worktree": "/CHUA-CO-WORKTREE/P1",
+      "link": ""
+    },
+    {
+      "id": "P2",
+      "worktree": "/CHUA-CO-WORKTREE/P2",
+      "link": ""
+    },
+    {
+      "id": "P3",
+      "worktree": "/CHUA-CO-WORKTREE/P3",
+      "link": ""
+    },
+    {
+      "id": "P4",
+      "worktree": "/CHUA-CO-WORKTREE/P4",
+      "link": ""
+    },
+    {
+      "id": "P5",
+      "worktree": "/CHUA-CO-WORKTREE/P5",
+      "link": ""
+    },
+    {
+      "id": "P6",
+      "worktree": "/CHUA-CO-WORKTREE/P6",
+      "link": ""
+    },
+    {
+      "id": "P7",
+      "worktree": "/CHUA-CO-WORKTREE/P7",
+      "link": ""
+    }
+  ],
+  "hang": [
+    {
+      "ma": "V0a",
+      "tep": "docs/plan/lo-trinh-viec-du-an.json",
+      "slug": "va-lo-ro-vai-chi-okr",
+      "day": "P0",
+      "uu_tien": 0,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/va-lo-ro-vai-chi-okr/**"
+      ],
+      "moc": "2026-10-14"
+    },
+    {
+      "ma": "N1",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "bo-ca-mau-quy-4",
+      "day": "P1",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/bo-ca-mau-quy-4/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "C",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "hoi-dap-okr",
+      "day": "P1",
+      "uu_tien": 2,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/hoi-dap-okr/**"
+      ],
+      "moc": "2026-11-20",
+      "sau": [
+        "N1"
+      ]
+    },
+    {
+      "ma": "K6a",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "kara-mot-ten",
+      "day": "P1",
+      "uu_tien": 3,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/kara-mot-ten/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "K2f",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "khung-soan-chan-lien-ket",
+      "day": "P1",
+      "uu_tien": 4,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/khung-soan-chan-lien-ket/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "L2",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "duong-ly-do-muc-tieu",
+      "day": "P2",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/duong-ly-do-muc-tieu/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "L3",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "cay-can-chinh-co-ly-do",
+      "day": "P2",
+      "uu_tien": 2,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/cay-can-chinh-co-ly-do/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "L4",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "gan-tay-va-kara-co-ly-do",
+      "day": "P2",
+      "uu_tien": 3,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/gan-tay-va-kara-co-ly-do/**"
+      ],
+      "moc": "2026-11-20",
+      "sau": [
+        "L3"
+      ]
+    },
+    {
+      "ma": "V2a",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "lien-quan-loc-ban-da-cat",
+      "day": "P3",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/lien-quan-loc-ban-da-cat/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "V2e",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "dai-luu-tru-dung-chung",
+      "day": "P3",
+      "uu_tien": 2,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/dai-luu-tru-dung-chung/**"
+      ],
+      "moc": "2026-11-20",
+      "sau": [
+        "V2a"
+      ]
+    },
+    {
+      "ma": "V2b",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "luu-tru-truong-khong-hoi",
+      "day": "P3",
+      "uu_tien": 3,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/luu-tru-truong-khong-hoi/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "V2f",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "hoan-tac-loat-bao-dung",
+      "day": "P3",
+      "uu_tien": 4,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/hoan-tac-loat-bao-dung/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "NM1",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "khung-man-chung",
+      "day": "P4",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/khung-man-chung/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "NM2",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "loc-va-kieu-xem-chung",
+      "day": "P4",
+      "uu_tien": 2,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/loc-va-kieu-xem-chung/**"
+      ],
+      "moc": "2026-11-20",
+      "sau": [
+        "NM1"
+      ]
+    },
+    {
+      "ma": "NM3",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "mau-trang-thai-chung",
+      "day": "P4",
+      "uu_tien": 3,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/mau-trang-thai-chung/**"
+      ],
+      "moc": "2026-11-20",
+      "sau": [
+        "NM2",
+        "K6a"
+      ]
+    },
+    {
+      "ma": "NM4",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "chu-man-tieng-viet-khong-tran",
+      "day": "P4",
+      "uu_tien": 4,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/chu-man-tieng-viet-khong-tran/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "V2c",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "bo-cuc-hep-ngan-va-kanban",
+      "day": "P4",
+      "uu_tien": 5,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/bo-cuc-hep-ngan-va-kanban/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "E6b",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "them-buoc-bao-dung",
+      "day": "P5",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/them-buoc-bao-dung/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "E4b",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "giai-doan-bo-mac-dinh",
+      "day": "P5",
+      "uu_tien": 2,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/giai-doan-bo-mac-dinh/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "E5",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "tac-nhan-va",
+      "day": "P5",
+      "uu_tien": 3,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/tac-nhan-va/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "cb",
+      "tep": "docs/plan/lo-trinh-kho-tai-lieu.json",
+      "slug": "bo-cau-hoi-mau",
+      "day": "P6",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/bo-cau-hoi-mau/**"
+      ],
+      "moc": "2026-11-04"
+    },
+    {
+      "ma": "l3b",
+      "tep": "docs/plan/lo-trinh-kho-tai-lieu.json",
+      "slug": "lich-su-va-luu-tru-trang",
+      "day": "P6",
+      "uu_tien": 2,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/lich-su-va-luu-tru-trang/**"
+      ],
+      "moc": "2026-11-20"
+    },
+    {
+      "ma": "l5",
+      "tep": "docs/plan/lo-trinh-kho-tai-lieu.json",
+      "slug": "sua-sau-chay-that",
+      "day": "P6",
+      "uu_tien": 3,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/sua-sau-chay-that/**"
+      ],
+      "moc": "2026-11-04",
+      "sau": [
+        "cb"
+      ]
+    },
+    {
+      "ma": "F24",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "ba-ho-so-do-san",
+      "day": "P7",
+      "uu_tien": 1,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/ba-ho-so-do-san/**"
+      ],
+      "moc": "2026-11-30"
+    },
+    {
+      "ma": "F8",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "neo-thuoc-het-han",
+      "day": "P7",
+      "uu_tien": 2,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/neo-thuoc-het-han/**"
+      ],
+      "moc": "2026-11-30"
+    },
+    {
+      "ma": "F23",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "khong-re-theo-ten-thanh-luat-kho",
+      "day": "P7",
+      "uu_tien": 3,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/khong-re-theo-ten-thanh-luat-kho/**"
+      ],
+      "moc": "2026-11-30"
+    }
+  ],
+  "ngoai_hang_merge": []
+}

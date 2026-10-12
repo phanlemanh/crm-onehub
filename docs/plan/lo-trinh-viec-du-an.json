@@ -29,7 +29,8 @@
       "ten": "Vá lỗ rò vai «chỉ OKR» ở kế hoạch 30 ngày",
       "ten_ngan": "Vá lỗ rò",
       "bat_khi": "Truy vấn production: không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»",
-      "ghi_chu": "Phiên riêng đề xuất 05/10. Kiểm dữ liệu thật trước khi sửa; có dữ liệu đã lộ thì báo chủ kho trước."
+      "ghi_chu": "Phiên riêng đề xuất 05/10. Kiểm dữ liệu thật trước khi sửa; có dữ liệu đã lộ thì báo chủ kho trước.",
+      "slug": "va-lo-ro-vai-chi-okr"
     },
     {
       "ma": "V1",
@@ -37,7 +38,9 @@
       "vi_sao": "Ba thứ giống việc sống tách nhau; việc cần làm trên dòng thời gian không có người làm và ai cũng đánh dấu xong được.",
       "hang": "T3",
       "slug": "viec-chung",
-      "dung_tren": ["V0a"],
+      "dung_tren": [
+        "V0a"
+      ],
       "trang_thai": "chưa mở",
       "ten": "Việc chung",
       "ten_ngan": "Việc chung",
@@ -51,7 +54,9 @@
       "vi_sao": "Kanban là cách xem phổ biến nhất của việc; việc con trả lời luôn lượt «bước có việc con» đang chờ của kế hoạch 30 ngày.",
       "hang": "T3",
       "slug": "kanban-viec",
-      "dung_tren": ["V1"],
+      "dung_tren": [
+        "V1"
+      ],
       "trang_thai": "chưa mở",
       "ten": "Kanban việc",
       "ten_ngan": "Kanban",
@@ -64,7 +69,9 @@
       "vi_sao": "Odoo, Salesforce, Pipedrive đều để kế hoạch mẫu sinh việc thường; bước 30 ngày là loại việc thứ hai cần gỡ.",
       "hang": "T3",
       "slug": "ke-hoach-sinh-viec",
-      "dung_tren": ["V1"],
+      "dung_tren": [
+        "V1"
+      ],
       "trang_thai": "chưa mở",
       "ten": "Kế hoạch sinh việc",
       "ten_ngan": "Kế hoạch sinh việc",
@@ -77,7 +84,10 @@
       "vi_sao": "Dự án là chỗ chứa việc; Gantt mức đủ là ngày bắt đầu và hạn, phụ thuộc xong-rồi-mới-bắt-đầu, tự dời, mốc, bỏ ngày nghỉ.",
       "hang": "T3",
       "slug": "du-an-gantt",
-      "dung_tren": ["V2", "V3"],
+      "dung_tren": [
+        "V2",
+        "V3"
+      ],
       "trang_thai": "chưa mở",
       "ten": "Dự án và Gantt",
       "ten_ngan": "Dự án, Gantt",
@@ -89,7 +99,9 @@
       "vi_sao": "Mục tiêu trỏ tới việc, không sở hữu việc; bỏ loại việc riêng của KR.",
       "hang": "T3",
       "slug": "okr-tro-viec",
-      "dung_tren": ["V1"],
+      "dung_tren": [
+        "V1"
+      ],
       "trang_thai": "chưa mở",
       "ten": "KR nối việc chung",
       "ten_ngan": "Nối OKR",
@@ -103,7 +115,9 @@
       "trang_thai": "để sau",
       "ten": "Gantt nâng cao",
       "ten_ngan": "Gantt nâng cao",
-      "dung_tren": ["V4"],
+      "dung_tren": [
+        "V4"
+      ],
       "ghi_chu": "Mọi hãng xếp ở gói cao nhất. Mở khi có người dùng thật hỏi."
     },
     {
@@ -113,7 +127,9 @@
       "trang_thai": "để sau",
       "ten": "Cấp trên thấy việc cấp dưới",
       "ten_ngan": "Cấp trên thấy",
-      "dung_tren": ["V1"],
+      "dung_tren": [
+        "V1"
+      ],
       "ghi_chu": "Dataverse, Bitrix24, Getfly, Base đều có. Quyết định sản phẩm; luật P3 không phụ thuộc vào nó."
     },
     {
@@ -123,14 +139,28 @@
       "trang_thai": "để sau",
       "ten": "AI đề xuất việc",
       "ten_ngan": "AI đề xuất việc",
-      "dung_tren": ["V1"],
+      "dung_tren": [
+        "V1"
+      ],
       "ghi_chu": "Thuộc tác tử, đi qua bước duyệt như create_crm_activity."
     }
   ],
   "da_bac": [
-    { "ma": "x1", "ly_do": "Nhân bản việc khi giao nhiều người: mất tiến độ chung (Salesforce, Base, Getfly)" },
-    { "ma": "x2", "ly_do": "Một loại việc riêng cho dự án hay cho KR: quay lại đúng chỗ đang gỡ" },
-    { "ma": "x3", "ly_do": "Tiến độ KR mặc định cộng từ việc xong: đo đầu ra thay cho kết quả" },
-    { "ma": "x4", "ly_do": "Tự đóng hay xoá việc khi đóng hoặc xoá bản ghi cha: hỏi người dùng thay vì tự làm" }
+    {
+      "ma": "x1",
+      "ly_do": "Nhân bản việc khi giao nhiều người: mất tiến độ chung (Salesforce, Base, Getfly)"
+    },
+    {
+      "ma": "x2",
+      "ly_do": "Một loại việc riêng cho dự án hay cho KR: quay lại đúng chỗ đang gỡ"
+    },
+    {
+      "ma": "x3",
+      "ly_do": "Tiến độ KR mặc định cộng từ việc xong: đo đầu ra thay cho kết quả"
+    },
+    {
+      "ma": "x4",
+      "ly_do": "Tự đóng hay xoá việc khi đóng hoặc xoá bản ghi cha: hỏi người dùng thay vì tự làm"
+    }
   ]
 }
