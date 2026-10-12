@@ -66,7 +66,7 @@ export function TaoKeHoach({
 		enabled: dangMo || dauTrang,
 	});
 	const dsNguoi = useQuery({
-		...trpc.users.list.queryOptions(),
+		...trpc.onboarding.nguoiNhanViec.queryOptions(),
 		enabled: dangMo,
 	});
 	const toi = useQuery({ ...trpc.users.me.queryOptions(), enabled: dangMo });
