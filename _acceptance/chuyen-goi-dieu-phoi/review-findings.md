@@ -2,71 +2,97 @@
 
 ## Trong hợp đồng
 
-- **Hình dạng 4 (âm tính một mình): E6 kiểm «không có tệp xin/» ở thư mục không đường mã nào ghi tới**
-  AC: AC-6
-  file: `_acceptance/chuyen-goi-dieu-phoi/rang/goi-vang.mjs:70`
-  severity: medium
-  detail: Dòng 70 đọc `join(thuMuc, "xin")` với `thuMuc = <kho giả>/.acceptance-runs/kiem-cheo`, rồi dòng 82 (`DO co-don-xin` ở ca vắng gói) và dòng 94 (ca da-cai-khong-dot) khẳng định nó rỗng. Đơn xin chỉ được ghi ở `quaBoPhatLich`, đường là `join(dot, "xin", TEN_DON)` (scripts/kiem-cheo/khoa.mjs:47). Đường đó chỉ tới khi có đợt sống, mà `dungKho()` không dựng `.acceptance-runs/dieu-phoi-hien-tai`. Vậy thư mục được kiểm không bao giờ có tệp, dù mã có ghi đơn hay không. Không ca đột biến nào ra «DO co-don-xin», nên vế «lượt không ghi đơn xin khoá» của AC-6 không đỏ được. Vế «lượt lấy khoá tay» ở ca (c) cũng không có phép đo nào: làn giả không đọc `khoa/s4/chu.json`.
-  lý do vào hợp đồng: AC-6 đòi lượt không ghi đơn xin khoá khi gói vắng, đây là chỗ nối do crm sở hữu, và phép đo đọc một thư mục mà không đường mã nào ghi tới nên không thể đỏ dù mã có ghi đơn.
-  source: measurement
-
-- **Hình dạng 5 (tuyên quét lớp, chỉ có điểm-case): E9 chỉ xét «không đổi ngoài bảng» trên các slug lấy từ chính bảng**
-  AC: AC-9
-  file: `_acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs:55`
-  severity: low
-  detail: Vòng `for (const slug of new Set(bang.map((r) => r.slug)))` ở dòng 55 lấy miền «mỗi tệp evals.yaml cũ chỉ đổi đúng các dòng đó» (AC-9; design mục 5: «Không sửa dòng nào khác của hồ sơ đã ký») từ chính bảng thay bởi, không rút từ `git diff --name-only <merge-base> -- '_acceptance/*/evals.yaml'`. Một sửa đổi vào evals.yaml của một hồ sơ đã ký nằm ngoài bảng sẽ không được tệp nào so với merge-base, và E9 vẫn ra mã 0. Phép đo tự xác nhận vòng tròn: bảng vừa là thứ được kiểm, vừa là miền kiểm. Hiện các tệp đổi đều có trong bảng, nên đây là lỗ hổng ẩn của thước, chưa có tệp nào lọt.
-  lý do vào hợp đồng: AC-9 đòi mỗi tệp evals.yaml cũ chỉ đổi đúng các dòng của bảng, mà phép đo lấy miền kiểm từ chính bảng nên một tệp hồ sơ cũ bị sửa ngoài bảng vẫn qua.
-  source: measurement
-
-- **Hình dạng 5 (tuyên quét lớp, chỉ có điểm-case): E3 khẳng định «không lệnh hook nào gọi scripts/ của kho» bằng đúng một cách viết đường**
-  AC: AC-3
-  file: `_acceptance/chuyen-goi-dieu-phoi/rang/hook.mjs:9`
-  severity: low
-  detail: `DUONG_KHO = /\$CLAUDE_PROJECT_DIR\/scripts\/([^"\s;]+)/` là thước duy nhất cho vế «HEAD không còn lệnh hook nào gọi tệp dưới scripts/ của kho» (AC-3; dòng 30-31 `boHook(moi, DUONG_KHO)`). Ba cách viết sau đều gọi scripts/ của kho mà lọt qua với «hook goi kho: 0»: `${CLAUDE_PROJECT_DIR}/scripts/x.mjs`, `"$CLAUDE_PROJECT_DIR"/scripts/x.mjs`, và lệnh tương đối `node scripts/x.mjs`. Ca đột biến «settings-giu-pretooluse» chép lại đúng khối cũ có cùng cách viết với regex, nên chỉ xác nhận lại chính regex, không phủ cả lớp. Contract đã báo trước rằng bước cài gói sẽ đổi `.claude/settings.json` và kéo theo một lượt ghim lại.
-  lý do vào hợp đồng: AC-3 đòi HEAD không còn lệnh hook nào gọi tệp dưới scripts/ của kho (khẳng định cả lớp), mà phép đo chỉ bắt một cách viết đường nên ba cách viết khác lọt qua.
-  source: measurement
+Không có phát hiện nào trong hợp đồng ở round 2.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
 
-- **Package exports are not checked when the dieu-phoi package loads, so a missing export fails silently or with the wrong result**
+- **E9 now builds its check list from a git diff against a fixed sha, so it breaks once onehub moves**
+  Người dùng thấy gì: Sau khi PR này gộp và nhánh chính có thêm hồ sơ mới, phép kiểm xác nhận các hồ sơ cũ chỉ bị sửa đúng chỗ có thể sập kèm thông báo khó hiểu hoặc báo lệch giả, thay vì nói rõ không đo được. Lượt kiểm chéo đêm có thể đỏ giả cho tới khi ai đó ghim lại thước đo.
+  file: `_acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **E9 mutation case passes its check list in by hand, so a broken git-diff step stays green**
+  Người dùng thấy gì: Phép kiểm xác nhận các hồ sơ cũ chỉ bị sửa đúng chỗ có một ca thử lỗi tự đưa danh sách vào bằng tay, nên nếu bước tự tìm hồ sơ bị sửa hỏng âm thầm thì phép kiểm vẫn báo xanh. Lỗ hổng chỉ lộ khi có người sửa nhầm một hồ sơ cũ ngoài bảng đã khai.
+  file: `_acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Fake live batch hardcodes the pid file name instead of using KIEM_CHEO.khoa.tepPid**
+  Người dùng thấy gì: Bộ giả lập lượt chạy dùng để đo kiểm chéo ghi cứng một tên tệp thay vì lấy từ cấu hình chung. Nếu sau này tên đó đổi, phép đo báo hỏng ngay và rõ ràng, chỉ thêm một chỗ phải sửa; không ảnh hưởng người dùng sản phẩm.
+  file: `_acceptance/chuyen-goi-dieu-phoi/rang/goi-vang.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **E9: không có ca đỏ nào cho miền kiểm rút từ git diff (bản sửa round 1); SLUG_DOI rỗng thì E9 vẫn xanh**
+  Người dùng thấy gì: Nếu bước tự tìm các hồ sơ cũ vừa bị sửa trả về rỗng, phép kiểm vẫn báo xanh mà không ai thấy. Khi đó một hồ sơ cũ bị sửa ngoài danh sách đã khai có thể lọt qua mà không bị bắt.
+  file: `_acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **goi-vang: khongDoDuoc gọi process.exit trong khối try nên finally không chạy; tiến trình ngủ và kho giả bị bỏ lại**
+  Người dùng thấy gì: Khi máy không có gói điều phối, lần đo dừng giữa chừng có thể để lại vài tiến trình ngủ và thư mục tạm. Chúng tự hết sau khoảng mười phút hoặc khi hệ điều hành dọn, và không ảnh hưởng người dùng sản phẩm.
+  file: `_acceptance/chuyen-goi-dieu-phoi/rang/goi-vang.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **thay-boi: SLUG_DOI gồm cả evals.yaml mới thêm hoặc đã xoá; docTai(MB) hoặc docEvals ném lỗi không bắt thay vì in DO hay khongDoDuoc**
+  Người dùng thấy gì: Nếu sau này có hồ sơ cũ được thêm mới hoặc bị xoá tệp tiêu chí, phép kiểm sẽ sập kèm thông báo khó hiểu thay vì nói rõ hồ sơ nào lệch. Không ảnh hưởng người dùng sản phẩm, chỉ làm người bảo trì mất thời gian tìm nguyên nhân.
+  file: `_acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc, không round-trip): chiều đỏ sua-ho-so-ngoai-bang nhét miền kiểm bằng tay, bỏ qua bước rút miền từ git diff**
+  Người dùng thấy gì: Ca thử lỗi của phép kiểm hồ sơ cũ tự đưa sẵn danh sách hồ sơ cần soi vào, không đi qua bước tự tìm danh sách đó. Vì vậy bước tự tìm có thể hỏng hẳn mà phép kiểm vẫn xanh, và một hồ sơ cũ bị sửa nhầm ngoài bảng sẽ không được phát hiện.
+  file: `_acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs`
+  severity: medium
+  Đề xuất: known-limits
+
+- **Hình dạng 5 (tuyên quét lớp nhưng chỉ có điểm-case): ô loại trừ ${CLAUDE_PLUGIN_ROOT} không có ca đo, và nó miễn cả lệnh**
+  Người dùng thấy gì: Phép kiểm không còn lệnh tự chạy nào gọi mã của kho cũ sẽ bỏ qua cả dòng lệnh nếu nó có nhắc tới thư mục của gói. Nếu sau này ai thêm lệnh kiểu không có gói thì lùi về mã của kho, phép kiểm vẫn xanh dù kho vẫn bị gọi.
+  file: `_acceptance/chuyen-goi-dieu-phoi/rang/hook.mjs`
+  severity: low
+  Đề xuất: known-limits
+
+- **Package exports are not checked when the dieu-phoi package loads, so a missing export fails silently or with the wrong result (r1)**
   Người dùng thấy gì: Nếu một bản gói điều phối sau này đổi tên hoặc bỏ một chức năng, lượt kiểm chéo ban đêm sẽ không báo rõ là thiếu gói mà có thể chạy tiếp hoặc dừng với một lỗi khó hiểu. Với bản gói đang dùng thì chưa xảy ra.
   file: `scripts/kiem-cheo/goi-dieu-phoi.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Two plugin lookups in kiem-cheo use the same config key giaiBang with different bases**
+- **Two plugin lookups in kiem-cheo use the same config key giaiBang with different bases (r1)**
   Người dùng thấy gì: Hai chỗ trong cấu hình kiểm chéo dùng cùng một tên cho hai việc khác nhau, nên người sửa sau dễ chỉnh nhầm và làm lượt kiểm chéo ban đêm không chạy được. Hiện tại chưa gây lỗi nào.
   file: `scripts/kiem-cheo/cau-hinh.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Kiểm chéo giữ khoá s4 trong đợt của kit chỉ chạm `nhip`, không ghi `song/`, nên bộ phát lịch của gói báo nhầm «khoa-khong-nhip» mỗi đêm**
+- **Kiểm chéo giữ khoá s4 trong đợt của kit chỉ chạm `nhip`, không ghi `song/`, nên bộ phát lịch của gói báo nhầm «khoa-khong-nhip» mỗi đêm (r1)**
   Người dùng thấy gì: Khi một đợt điều phối đang chạy, lượt kiểm chéo ban đêm giữ chỗ nhưng không báo «còn sống» theo cách bộ điều phối cần, nên sau khoảng 10 phút giám sát có thể nhận cảnh báo nhầm rằng người giữ chỗ đã chết. Làm theo cảnh báo đó sẽ cắt ngang lượt kiểm chéo đang chạy bình thường, và việc này lặp lại mỗi đêm.
   file: `scripts/kiem-cheo/dem.mjs`
   severity: medium
   Đề xuất: new-contract
 
-- **`napGoiDieuPhoi` không kiểm hàm của gói có tồn tại; thiếu `chamNhip` thì `catch {}` nuốt lỗi và khoá s4 mất nhịp mà không ai biết**
+- **`napGoiDieuPhoi` không kiểm hàm của gói có tồn tại; thiếu `chamNhip` thì `catch {}` nuốt lỗi và khoá s4 mất nhịp mà không ai biết (r1)**
   Người dùng thấy gì: Nếu bản gói điều phối mới bỏ mất chức năng báo «còn sống», lượt kiểm chéo ban đêm vẫn chạy mà không ai hay, rồi có thể bị bộ điều phối thu hồi chỗ giữa chừng. Với bản gói đang dùng thì chưa xảy ra.
   file: `scripts/kiem-cheo/goi-dieu-phoi.mjs`
   severity: low
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình): E7 kiểm «khoá máy s4 đã nhả» nhưng fixture không bao giờ lấy khoá máy**
+- **Hình dạng 4 (âm tính một mình): E7 kiểm «khoá máy s4 đã nhả» nhưng fixture không bao giờ lấy khoá máy (r1)**
   Người dùng thấy gì: Phép kiểm «khoá máy đã được nhả sau khi đóng đợt» luôn ra xanh vì lúc kiểm khoá máy chưa từng được lấy, nên nếu khâu nhả khoá hỏng thì phép kiểm cũng không đỏ lên. Hành vi này do bộ điều phối của hãng giữ và hãng có phép đo riêng.
   file: `_acceptance/chuyen-goi-dieu-phoi/rang/luot-kho.mjs`
   severity: medium
   Đề xuất: known-limits
 
-- **Hình dạng 4 (âm tính một mình): E7 kiểm «chu.json không có moc» trên tệp mà bộ phát lịch ghép từ danh sách khoá cố định**
+- **Hình dạng 4 (âm tính một mình): E7 kiểm «chu.json không có moc» trên tệp mà bộ phát lịch ghép từ danh sách khoá cố định (r1)**
   Người dùng thấy gì: Phép kiểm «tệp chủ khoá không mang mốc» luôn xanh vì bộ điều phối của hãng không bao giờ ghi mốc vào đó, nên kết quả đúng nhưng không chứng minh thêm điều gì. Phần đơn xin khoá, nơi mốc thật sự có thể lọt vào, đã được kiểm ở phép đo khác.
   file: `_acceptance/chuyen-goi-dieu-phoi/rang/luot-kho.mjs`
   severity: low
   Đề xuất: wont-fix
 
-- **Hình dạng 4 (âm tính một mình): bài «goi dieu-phoi khong giai duoc» khẳng định khoá và cây vắng sau lượt, nhưng mọi đường đều dọn cả hai**
+- **Hình dạng 4 (âm tính một mình): bài «goi dieu-phoi khong giai duoc» khẳng định khoá và cây vắng sau lượt, nhưng mọi đường đều dọn cả hai (r1)**
   Người dùng thấy gì: Một bài kiểm có hai câu khẳng định «không lấy khoá, không dựng cây làm việc» mà dù có lấy rồi dọn thì vẫn đúng. Câu khẳng định thật sự phân biệt được nằm ở lý do dừng và đã có, nên chỉ là bài kiểm trông chắc hơn thực tế.
   file: `scripts/kiem-cheo/test/dem.test.mjs`
   severity: low

@@ -48,3 +48,48 @@ wall: 2269s
 - **claude-sonnet-5-5**: 8 agent · 63 calls · out 89,880 · in 126 · cache_read 6,705,968 · cache_create 882,525
 - **claude-haiku-5-5**: 17 agent · 49 calls · out 46,472 · in 98 · cache_read 3,751,514 · cache_create 1,146,099
 
+### S4 round 2 — wf_0254c092-706 (24 agent, 160,710 out-tok)
+
+| label | model | calls | out | in | cache_read | s |
+|---|---|--:|--:|--:|--:|--:|
+| review:conventions | claude-opus-5-5 | 36 | 35,978 | 72 | 5,398,485 | 443 |
+| review:bugs | claude-opus-5-5 | 16 | 33,780 | 32 | 2,192,124 | 390 |
+| review:measurement | claude-opus-5-5 | 15 | 23,148 | 30 | 1,898,471 | 249 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 19 | 15,938 | 38 | 1,957,640 | 1142 |
+| triage | claude-sonnet-5-5 | 2 | 11,314 | 4 | 97,482 | 83 |
+| synthesize:report | claude-sonnet-5-5 | 4 | 10,617 | 8 | 377,370 | 71 |
+| machine:bunx turbo run lint --force | claude-haiku-5-5 | 2 | 4,919 | 4 | 127,019 | 21 |
+| baseline:diffBase | claude-sonnet-5-5 | 5 | 4,183 | 10 | 401,489 | 42 |
+| machine:bun run test -- --filter=agent-okr --fil | claude-haiku-5-5 | 2 | 3,117 | 4 | 127,074 | 72 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 1,883 | 4 | 127,059 | 12 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 1,847 | 4 | 127,056 | 11 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 1,643 | 4 | 127,062 | 33 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 1,604 | 4 | 127,059 | 45 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 1,463 | 4 | 127,059 | 15 |
+| machine:bun run test -- --filter=app --filter=@c | claude-haiku-5-5 | 2 | 1,376 | 4 | 127,035 | 249 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 1,371 | 4 | 127,061 | 34 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 1,289 | 4 | 127,056 | 10 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 1,088 | 4 | 127,059 | 10 |
+| machine:bun _acceptance/chuyen-goi-dieu-phoi/ran | claude-haiku-5-5 | 2 | 948 | 4 | 127,059 | 71 |
+| machine:bun run test -- --filter=agent --filter= | claude-haiku-5-5 | 2 | 909 | 4 | 127,044 | 230 |
+| machine:bunx turbo run build --force | claude-haiku-5-5 | 2 | 879 | 4 | 127,017 | 22 |
+| machine:bun run lint:slop | claude-haiku-5-5 | 2 | 682 | 4 | 127,013 | 7 |
+| capture:provenance | claude-sonnet-5-5 | 2 | 505 | 4 | 90,802 | 10 |
+| machine:bun run test -- --filter=api | claude-haiku-5-5 | 2 | 229 | 4 | 92,009 | 208 |
+
+
+wall: 2115s
+
+| vai tro | agents | out | cache_read | wall s | bat dau | ket thuc |
+|---|--:|--:|--:|--:|---|---|
+| baseline | 1 | 4,183 | 401,489 | 42 | 06:29:52 | 06:30:34 |
+| machine | 17 | 41,185 | 3,955,381 | 1951 | 06:29:52 | 07:02:23 |
+| review | 3 | 92,906 | 9,489,080 | 443 | 06:29:52 | 06:37:15 |
+| triage | 1 | 11,314 | 97,482 | 83 | 07:02:23 | 07:03:46 |
+| capture | 1 | 505 | 90,802 | 10 | 07:03:46 | 07:03:56 |
+| synthesize | 1 | 10,617 | 377,370 | 71 | 07:03:56 | 07:05:08 |
+
+- **claude-opus-5-5**: 3 agent · 67 calls · out 92,906 · in 134 · cache_read 9,489,080 · cache_create 473,789
+- **claude-haiku-5-5**: 17 agent · 51 calls · out 41,185 · in 102 · cache_read 3,955,381 · cache_create 1,144,383
+- **claude-sonnet-5-5**: 4 agent · 13 calls · out 26,619 · in 26 · cache_read 967,143 · cache_create 454,362
+
