@@ -148,5 +148,12 @@
       "i": 4,
       "p": "Câu trạng thái của bộ kit mang mã việc và tên hồ sơ kỹ thuật, người phòng ban đọc khó. Phép đo chữ nay chỉ chấm câu của CRM; câu của kit là việc chủ kho quyết ở cổng này."
     }
+  ],
+  "decisions": [
+    {
+      "id": "E14",
+      "q": "Chữ của CRM đọc được với người phòng ban — chấp nhận câu kit còn mã?",
+      "why": "Ba giám khảo xác nhận mọi chữ CRM viết (nút, hộp, biên nhận, trang, hai câu chờ) sạch chữ nội bộ; họ chỉ chê câu trạng thái do bộ kit viết, thứ anh đã nhận làm giới hạn ở Cổng Phạm vi và máy đã báo phiên điều phối để kit đổi."
+    }
   ]
 }
