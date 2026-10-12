@@ -21,7 +21,7 @@ const TEP_TRO = join(RA, "goi-tam.json");
 
 function giaiBang(them) {
 	return spawnSync(
-		process.execPath,
+		"node",
 		[
 			join(GOC, "scripts/resolve-plugin.mjs"),
 			"--plugin",

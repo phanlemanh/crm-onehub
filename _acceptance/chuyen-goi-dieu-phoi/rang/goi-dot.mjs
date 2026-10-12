@@ -19,7 +19,7 @@ ket.kiem(tru.length === 0 && cong.length > 0, `chi-them config.yaml (+${cong.len
 
 const home = thuMucTam("goi-dot-home");
 function chanDoan(goc) {
-	const r = spawnSync(process.execPath, [join(goi.goc, "scripts", "dieu-phoi.mjs"), "chan-doan", "--mo", "r2", "--json"], {
+	const r = spawnSync("node", [join(goi.goc, "scripts", "dieu-phoi.mjs"), "chan-doan", "--mo", "r2", "--json"], {
 		cwd: goc,
 		encoding: "utf8",
 		env: moiTruongSach({ HOME: home }),

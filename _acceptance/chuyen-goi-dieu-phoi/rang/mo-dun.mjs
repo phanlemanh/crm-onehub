@@ -11,7 +11,7 @@ const goi = giaiGoi();
 
 function tenExport(tep) {
 	const ma = `const m = await import(${JSON.stringify(pathToFileURL(tep).href)}); process.stdout.write(JSON.stringify(Object.keys(m).sort()));`;
-	const r = spawnSync(process.execPath, ["--input-type=module", "-e", ma], {
+	const r = spawnSync("node", ["--input-type=module", "-e", ma], {
 		encoding: "utf8",
 		timeout: 30_000,
 		stdio: ["ignore", "pipe", "pipe"],
