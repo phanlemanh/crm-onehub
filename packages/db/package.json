@@ -64,7 +64,8 @@
 		"./workspace": "./src/workspace.ts",
 		"./zalo-getme": "./src/zalo-getme.ts",
 		"./zalo-lien-ket": "./src/zalo-lien-ket.ts",
-		"./test/*": "./test/*.ts"
+		"./test/*": "./test/*.ts",
+		"./vai-doi-tac": "./src/vai-doi-tac.ts"
 	},
 	"scripts": {
 		"build": "prisma generate",

@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test";
+import { docDuocDoiTac as docDuocDoiTacDb } from "@crm/db/vai-doi-tac";
 import {
 	docDuocDoiTac,
 	docDuocPhamVi,
@@ -54,5 +55,16 @@ describe("docDuocDoiTac", () => {
 			"Member=true",
 			"khach=true",
 		]);
+	});
+});
+
+describe("docDuocDoiTac khớp bản soi của db", () => {
+	test("docDuocDoiTac của @crm/db/vai-doi-tac khớp luật validation cho mọi vai, kể cả vai lạ", () => {
+		const lech = [...WORKSPACE_ROLES, "Member", "khach", ""].filter(
+			(vai) => docDuocDoiTacDb(vai) !== docDuocDoiTac(vai),
+		);
+		if (lech.length > 0) {
+			throw new Error(`vlr: ban soi db lech luat validation ${lech.join(",")}`);
+		}
 	});
 });
