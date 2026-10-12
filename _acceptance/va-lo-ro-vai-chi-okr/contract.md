@@ -4,7 +4,7 @@ feature: "Người vai «chỉ OKR» không được giao bước onboard, khôn
 slug: va-lo-ro-vai-chi-okr
 owner: phanlemanh@gmail.com
 risk_tier: T3
-surfaces: [api, agent, ui, db]
+surfaces: [api, ui, docs]
 status: draft
 approved_by:
 approved_at:
@@ -54,10 +54,8 @@ thật. Dữ liệu cũ trên production: chờ số đo, chủ kho quyết ở 
 
 ## Đường đo
 
-| Thước của ngưỡng | Số từ đâu | AC bảo đảm |
-| --- | --- | --- |
-| Không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR» | `rang/ro-vai-chi-okr.mjs` chạy chỉ đọc trên production: `buocMo.tong + keHoachMo.tong + theoDoiMo.tong = 0`, thoát 0 | AC-10 (thước đếm đúng), AC-1…AC-6 (không sinh thêm) |
-| Không tin nhắc nào mang tên đối tác tới người vai «chỉ OKR» | cùng thước, `nhacDaMangKeHoach.tin` chỉ tăng ở các ngày trước khi gộp | AC-7, AC-8 |
+- Không bước, kế hoạch hay lượt theo dõi đang mở nào thuộc người vai «chỉ OKR»: số từ `rang/ro-vai-chi-okr.mjs` chạy chỉ đọc trên production — `buocMo.tong + keHoachMo.tong + theoDoiMo.tong = 0`, thoát 0 · AC-10 bảo đảm thước đếm đúng, AC-1…AC-6 bảo đảm không sinh thêm.
+- Không tin nhắc nào mang tên đối tác tới người vai «chỉ OKR»: cùng thước, `nhacDaMangKeHoach.tin` chỉ tăng ở các ngày trước khi gộp · AC-7, AC-8 bảo đảm.
 
 ## Out of scope
 
