@@ -4,9 +4,12 @@ const en = {
 	nut: "Send a signal",
 	hop: {
 		tieuDe: "Send a signal",
-		moTa: "Tell us what you ran into in OneHub — something broken, something missing, an idea. The product team groups signals into work and you can follow yours.",
-		nhan: "What did you run into?",
-		goiY: "e.g. The KR update screen doesn't show last week's number…",
+		moTa: "Tell the product team what you were trying to do and what got in the way. They group signals into work, and you can follow yours.",
+		muonLam: "What were you trying to do?",
+		goiYMuonLam: "e.g. Update this week's number for my KR…",
+		daXayRa: "What happened, or what's missing?",
+		goiYDaXayRa:
+			"e.g. The update screen doesn't show last week's number, so I have to open another tab…",
 		man: "Sent from screen: {man}",
 		conLai: "{so} characters left",
 		gui: "Send",
@@ -29,6 +32,7 @@ const en = {
 			man: "Screen",
 			guiLuc: "Sent",
 			trangThai: "Status",
+			thaoTac: "Actions",
 		},
 		rongTieuDe: "You haven't sent any signals",
 		rongMoTa:
@@ -37,6 +41,8 @@ const en = {
 			"Status after grouping can't be read right now — showing the status at sending time.",
 		taiLoiTieuDe: "Couldn't load your signals",
 		taiLoiMoTa: "The list didn't load. Try again in a moment.",
+		muonLam: "Wanted to: {muonLam}",
+		thaoTac: "Actions for signal {ma}",
 		xoa: "Delete",
 		xoaTieuDe: "Delete signal {ma}?",
 		xoaThan:
@@ -69,9 +75,12 @@ const vi: TinHieuMessages = {
 	nut: "Gửi tín hiệu",
 	hop: {
 		tieuDe: "Gửi tín hiệu",
-		moTa: "Kể điều bạn gặp trong OneHub — chỗ hỏng, chỗ thiếu, một ý muốn có. Đội sản phẩm gom tín hiệu thành việc, và bạn theo dõi được tín hiệu của mình.",
-		nhan: "Bạn gặp điều gì?",
-		goiY: "Ví dụ: Mở cập nhật KR không thấy số tuần trước…",
+		moTa: "Kể với đội sản phẩm bạn đang muốn làm gì và điều gì cản bạn. Đội sản phẩm gom tín hiệu thành việc, và bạn theo dõi được tín hiệu của mình.",
+		muonLam: "Bạn đang muốn làm gì?",
+		goiYMuonLam: "Ví dụ: Cập nhật số tuần này cho KR của tôi…",
+		daXayRa: "Điều gì xảy ra, hoặc còn thiếu gì?",
+		goiYDaXayRa:
+			"Ví dụ: Màn cập nhật không hiện số tuần trước, phải mở tab khác để xem…",
 		man: "Gửi từ màn: {man}",
 		conLai: "Còn {so} ký tự",
 		gui: "Gửi",
@@ -94,6 +103,7 @@ const vi: TinHieuMessages = {
 			man: "Màn",
 			guiLuc: "Gửi lúc",
 			trangThai: "Trạng thái",
+			thaoTac: "Thao tác",
 		},
 		rongTieuDe: "Bạn chưa gửi tín hiệu nào",
 		rongMoTa:
@@ -102,6 +112,8 @@ const vi: TinHieuMessages = {
 			"Trạng thái sau gom chưa đọc được — đang hiện trạng thái lúc gửi.",
 		taiLoiTieuDe: "Chưa tải được tín hiệu của bạn",
 		taiLoiMoTa: "Danh sách chưa tải xong. Thử lại sau một lát.",
+		muonLam: "Muốn: {muonLam}",
+		thaoTac: "Thao tác với tín hiệu {ma}",
 		xoa: "Xoá",
 		xoaTieuDe: "Xoá tín hiệu {ma}?",
 		xoaThan: "Đội sản phẩm chưa lấy tín hiệu này về. Xoá là mất hẳn.",

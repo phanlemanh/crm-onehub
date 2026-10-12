@@ -35,6 +35,7 @@
 - Đính ảnh chụp màn hình [NGÀNH: Sentry User Feedback widget] — cần chỗ cất tệp và luật riêng tư.
 - Quản trị xem, gỡ tín hiệu rác trước khi kéo về — lượt gom đã xếp rác vào «lẻ»; mở khi rác thật nhiều.
 - Lượt kéo về tự chạy theo lịch — lối 1 chốt lệnh chạy tay đầu lượt gom.
+- Trợ lý AI hỏi lại người gửi trước khi ghi (chủ kho nêu 12/10) — vòng này dùng hai câu hỏi cố định; mở khi lượt gom đầu tiên có từ 1/5 tín hiệu lẻ vì không rõ ý.
 
 ## Never
 

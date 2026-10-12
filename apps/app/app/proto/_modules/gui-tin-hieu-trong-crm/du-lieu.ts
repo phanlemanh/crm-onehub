@@ -18,12 +18,15 @@ export const STATE = {
 
 export const MAN_MAU = "/okr/kr";
 
-export const CHU_MAU =
+export const MUON_LAM_MAU = "Cập nhật số tuần này cho KR của tôi";
+
+export const DA_XAY_RA_MAU =
 	"Mở cập nhật KR không thấy số tuần trước\nPhải mở tab khác để xem tuần trước mình nhập bao nhiêu rồi mới điền được số tuần này.";
 
 export const DONG_MAU: DongTinHieu[] = [
 	{
 		id: "t41",
+		muonLam: "Cập nhật số tuần này cho KR của tôi",
 		ma: "crm-41",
 		tieuDe: "Mở cập nhật KR không thấy số tuần trước",
 		man: "/okr/kr",
@@ -37,6 +40,7 @@ export const DONG_MAU: DongTinHieu[] = [
 	},
 	{
 		id: "t38",
+		muonLam: "Tìm quy trình tuyển dụng để gửi cho ứng viên",
 		ma: "crm-38",
 		tieuDe: "Tài liệu quy trình tuyển dụng tìm không ra khi gõ «tuyển»",
 		man: "/tai-lieu",
@@ -50,6 +54,7 @@ export const DONG_MAU: DongTinHieu[] = [
 	},
 	{
 		id: "t35",
+		muonLam: "Căn chỉnh OKR phòng tôi với phòng Kinh doanh",
 		ma: "crm-35",
 		tieuDe: "Muốn thấy OKR của phòng khác để căn chỉnh",
 		man: "/okr",
@@ -63,6 +68,7 @@ export const DONG_MAU: DongTinHieu[] = [
 	},
 	{
 		id: "t30",
+		muonLam: "Nhận nhắc việc lúc 7 giờ sáng",
 		ma: "crm-30",
 		tieuDe: "Nhắc buổi sáng qua Zalo đến muộn hơn giờ đã chọn",
 		man: "/reminders",
@@ -76,6 +82,7 @@ export const DONG_MAU: DongTinHieu[] = [
 	},
 	{
 		id: "t22",
+		muonLam: "Biết việc của phòng mình đang tới đâu",
 		ma: "crm-22",
 		tieuDe: "Không biết bấm vào đâu để xem lộ trình việc của phòng mình",
 		man: "/",
@@ -89,6 +96,7 @@ export const DONG_MAU: DongTinHieu[] = [
 	},
 	{
 		id: "t19",
+		muonLam: "Nói với đội sản phẩm là màn OKR mới tốt",
 		ma: "crm-19",
 		tieuDe: "Cảm ơn, màn OKR mới dễ dùng hơn nhiều",
 		man: "/okr",

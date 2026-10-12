@@ -5,14 +5,14 @@ route: http://localhost:3380/proto/gui-tin-hieu-trong-crm
 material: real-components
 context: standalone
 context_scenes: []
-reaction: nac-1 (gui-kem-the-cong — ảnh đính kèm lời mời Cổng Phạm vi, chủ kho phản ứng cùng lượt duyệt)
+reaction: nac-1 (thao-luan — chủ kho phản ứng 12/10 bằng hai ý: đồng nhất hệ nút và tín hiệu rõ hơn; ảnh chụp lại đính kèm lời mời Cổng Phạm vi)
 options:
 divergence: skipped — hộp gửi theo khuôn hộp «Báo sai» đang chạy, danh sách theo nếp màn «Tài liệu»; câu hỏi «danh sách trong hộp hay trang riêng» đã quyết trong sổ quyết định
 ds_skill: web-design-guidelines
 states: [ST-ds-co, ST-ds-dang-tai, ST-ds-khong-doc-ban-ve, ST-ds-loi, ST-ds-rong, ST-ds-xac-nhan-xoa, ST-hop-da-gui, ST-hop-dang-go, ST-hop-dang-gui, ST-hop-loi, ST-hop-qua-tran, ST-hop-trong, ST-nut]
 breakpoints: [mobile-375, desktop-1280]
 themes: [light, dark]
-patched: 3
+patched: 6
 deferred: 2
 ---
 # design-pass — gui-tin-hieu-trong-crm
@@ -67,6 +67,10 @@ dựng theo khuôn câu `CAU` của kit (`scripts/tin-hieu.mjs`), không phải 
 - Cột trạng thái cắt mất câu dài của kit → nhãn ngắn có chấm màu theo nghĩa, câu đầy đủ xuống dòng phụ (nếp nhãn chính + dòng phụ của trang Lộ trình).
 - Cột Xoá rơi khỏi khung ở 1280 vì trang để khổ hẹp → trang về khổ mặc định của màn danh sách (`docs/design.md`, «Bề rộng»).
 - Câu trạng thái của CRM dùng chữ «kéo về kho» — người không dùng git đọc thành kho hàng → «chờ đội sản phẩm lấy về», «đội sản phẩm đã lấy về — chờ gom nhóm».
+
+- Chủ kho 12/10 — đồng nhất hệ nút: nút thanh đầu trang đổi sang viền cỡ nhỏ như cụm nút sẵn có; trang thêm đúng một nút chính «Gửi tín hiệu» ở đầu; xoá chuyển vào menu ⋮ của dòng như các danh sách khác.
+- Chủ kho 12/10 — tín hiệu rõ hơn: hộp hỏi hai câu «Bạn đang muốn làm gì?» và «Điều gì xảy ra, hoặc còn thiếu gì?»; danh sách hiện thêm dòng «Muốn: …».
+- Đếm ký tự theo từng ô.
 
 ### Nhóm 2 — đòi-đổi-DS/component (chờ Gate 1)
 

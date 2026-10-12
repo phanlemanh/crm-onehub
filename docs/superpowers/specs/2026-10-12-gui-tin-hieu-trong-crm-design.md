@@ -46,17 +46,17 @@ Lệnh kéo về (máy chủ kho) ─ x-api-key ─► tinHieu.keoVe (quản tr�
 
 Bảng `TinHieu`: `id` (cuid) · `so` (số tăng dần, duy nhất) · `nguoiGuiId` (User, `SetNull`) · `phongBanId`
 (Department, `SetNull` — phòng ban chính của người gửi LÚC GỬI, vắng nếu người đó chưa có phòng ban chính
-còn dùng) · `tieuDe` · `moTa` (tuỳ chọn) · `man` · `guiLuc` · `keoVeLuc` (tuỳ chọn). Chỉ mục
+còn dùng) · `muonLam` · `daXayRa` · `tieuDe` (suy từ `daXayRa`) · `man` · `guiLuc` · `keoVeLuc` (tuỳ chọn). Chỉ mục
 `(nguoiGuiId, guiLuc)`. Không cột cất: tín hiệu không lưu trữ.
 
 ### 3.2 Khuôn và hằng số (`packages/validation/src/tin-hieu.ts`, nhập bằng `@crm/validation/tin-hieu`)
 
-- `TIN_HIEU` — hằng số một chỗ: trần mỗi người mỗi ngày giờ Việt Nam (10), trần độ dài (2.000 ký tự), độ dài
+- `TIN_HIEU` — hằng số một chỗ: trần mỗi người mỗi ngày giờ Việt Nam (10), trần độ dài mỗi ô (1.000 ký tự), độ dài
   tiêu đề (120), số ngày của phép đếm (30), thư mục nguồn (`tin-hieu/crm`), phiên (`crm`).
-- `tachNoiDung(chu)` — dòng đầu khác rỗng thành `tieu_de` (cắt 120, thêm «…» khi cắt); cả đoạn thành `mo_ta`
-  khi dài hơn dòng đầu.
-- `tepTinHieu` — khuôn tệp của kit: `{phien, loai: "tin-hieu", hang: null, noi_dung: {tieu_de, man, mo_ta?},
-  luc}`; `tepTuBanGhi(row)` dựng tệp với thứ tự khoá cố định; `idTep(so)` = `crm-<so>`.
+- `dungNoiDung({muonLam, daXayRa})` — giữ nguyên văn hai câu trả lời; dòng đầu khác rỗng của `daXayRa` thành
+  `tieu_de` (cắt 120, thêm «…» khi cắt).
+- `tepTinHieu` — khuôn tệp của kit: `{phien, loai: "tin-hieu", hang: null, noi_dung: {tieu_de, muon_lam, da_xay_ra,
+  man}, luc}` — `noi_dung` là ô mở của khuôn kit (kit chỉ đòi `tieu_de`), nên hai trường thêm không đổi khuôn; `tepTuBanGhi(row)` dựng tệp với thứ tự khoá cố định; `idTep(so)` = `crm-<so>`.
 - `bocPhanHoiKeoVe(ds)` / `docPhanHoiKeoVe(body)` — một cặp hàm cho vỏ phản hồi REST của thủ tục kéo về; router
   dùng hàm bọc, lệnh kéo về dùng hàm đọc, phép đo E6 chạy hàm đọc trên thân HTTP thật (chỗ nối API ↔ lệnh).
 - `duongTinHieu` — khuôn một bản ghi đường đi của kit (13 trường `TRUONG_DUONG`), `parseDuongTinHieu(raw)`
@@ -65,7 +65,7 @@ còn dùng) · `tieuDe` · `moTa` (tuỳ chọn) · `man` · `guiLuc` · `keoVeL
 
 ### 3.3 API (`apps/api/src/tin-hieu/`, router `tinHieu`, `PhamViChungMiddleware`)
 
-- `gui({chu, man})` — tự phục vụ. Khoá theo người (`lockIdempotencyKey`), đếm tín hiệu của người đó trong ngày
+- `gui({muonLam, daXayRa, man})` — tự phục vụ. Khoá theo người (`lockIdempotencyKey`), đếm tín hiệu của người đó trong ngày
   giờ Việt Nam; quá trần → 429 kèm câu nói trần và lúc mở lại. `man` chỉ giữ đường dẫn (bỏ `?…` và `#…`), cắt
   200 ký tự. Phòng ban: `orgPlacement.primaryDepartmentId` khi phòng ban đó chưa lưu trữ.
 - `cuaToi()` — tín hiệu của người gọi, mới nhất trước: `{id, so, tieuDe, man, guiLuc, daKeoVe}`.
@@ -116,8 +116,10 @@ thái lúc gửi», các dòng dùng hai câu đầu bảng.
 
 ### 3.7 Nút và hộp kể
 
-`NutGuiTinHieu` (mã khách) đặt trong cụm nút bên phải của `AppHeader` trước `UserMenu`, kèm chỗ giữ trong
-`AppHeaderFallback`. Mở `Dialog` ở mọi khổ (như hộp «Báo sai»); hộp tự hỏi lại khi đóng lúc đã gõ (bộ giữ thay đổi của `Dialog`).
+`NutGuiDauTrang` (viền, cỡ nhỏ — cùng kiểu nút «làm giàu» của cụm) đặt trong cụm nút bên phải của `AppHeader`
+trước `UserMenu`, kèm chỗ giữ trong `AppHeaderFallback`. Trang «Tín hiệu đã gửi» có đúng một nút chính «Gửi tín
+hiệu» ở `PageShellActions` (nút «tạo» của màn danh sách); câu rỗng dùng nút viền. Xoá nằm trong menu thao tác dòng
+(nút ⋮ `ghost` `icon-xs`, như danh sách khuôn onboarding và các danh sách Cài đặt). Mở `Dialog` ở mọi khổ (như hộp «Báo sai»); hộp tự hỏi lại khi đóng lúc đã gõ (bộ giữ thay đổi của `Dialog`).
 Menu người dùng thêm mục «Tín hiệu đã gửi». Mọi chữ qua tệp chữ (`lib/messages/tin-hieu.ts`, vi + en).
 
 ## 4. Đặc tả UX
@@ -127,8 +129,8 @@ Menu người dùng thêm mục «Tín hiệu đã gửi». Mọi chữ qua tệ
 
 ### 1. Luồng
 
-- Suôn sẻ: bấm «Gửi tín hiệu» trên thanh đầu trang → hộp «Gửi tín hiệu» (ô «Bạn gặp điều gì?», dòng «Gửi từ
-  màn: /okr/kr») → «Gửi» → biên nhận trong hộp «Đã nhận tín hiệu crm-12» + liên kết «Xem tín hiệu đã gửi» (điểm
+- Suôn sẻ: bấm «Gửi tín hiệu» trên thanh đầu trang → hộp «Gửi tín hiệu» (hai ô «Bạn đang muốn làm gì?» và «Điều
+  gì xảy ra, hoặc còn thiếu gì?», dòng «Gửi từ màn: /okr/kr») → «Gửi» → biên nhận trong hộp «Đã nhận tín hiệu crm-12» + liên kết «Xem tín hiệu đã gửi» (điểm
   ra: trang «Tín hiệu đã gửi», dòng mới nằm đầu, «Đã nhận — chờ đội sản phẩm lấy về»).
 - Biên: chưa gửi tín hiệu nào → trang rỗng có nút «Gửi tín hiệu»; bản vẽ lộ trình không đọc được → dòng báo +
   trạng thái lúc gửi; người dùng vai «chỉ OKR» thấy nút như mọi người.
@@ -154,7 +156,7 @@ Menu người dùng thêm mục «Tín hiệu đã gửi». Mọi chữ qua tệ
 | ST-hop-loi | Hộp gửi | Lỗi dưới ô: «Chưa gửi được — thử lại», chữ giữ | Gửi lại |
 | ST-ds-dang-tai | Trang | Khung xương ba dòng, tiêu đề trang giữ | Chờ |
 | ST-ds-rong | Trang | «Bạn chưa gửi tín hiệu nào» + nút «Gửi tín hiệu» | Gửi |
-| ST-ds-co | Trang | Bảng: điều đã kể · màn · gửi lúc · trạng thái (chấm + câu) · nút Xoá ở dòng chưa kéo về | Đọc, xoá |
+| ST-ds-co | Trang | Nút chính «Gửi tín hiệu» đầu trang; bảng: điều đã kể (+ «Muốn: …») · màn · gửi lúc · trạng thái (nhãn + câu) · menu ⋮ ở dòng chưa lấy về | Đọc, xoá, gửi thêm |
 | ST-ds-khong-doc-ban-ve | Trang | Dòng báo «Trạng thái sau gom chưa đọc được…», dòng dùng trạng thái lúc gửi | Đọc |
 | ST-ds-xac-nhan-xoa | Trang | «Xoá tín hiệu crm-12?» — «Đội sản phẩm chưa lấy tín hiệu này về. Xoá là mất hẳn» · «Xoá tín hiệu» | Xoá / huỷ |
 | ST-ds-loi | Trang | `VungTaiLoi`: tiêu đề, một câu, «Thử lại» | Thử lại |
@@ -162,7 +164,9 @@ Menu người dùng thêm mục «Tín hiệu đã gửi». Mọi chữ qua tệ
 
 ### 4. Hành vi
 
-- Ô chữ tối đa 2.000 ký tự, đếm hiện khi còn dưới 200; rỗng hay toàn khoảng trắng thì «Gửi» khoá.
+- Mỗi ô tối đa 1.000 ký tự, đếm hiện khi còn dưới 200; một ô rỗng hay toàn khoảng trắng thì «Gửi» khoá.
+- Hai câu hỏi theo đúng trục gom của kit (một vai muốn làm được điều gì): «muốn làm gì» là điều muốn làm được,
+  «điều gì xảy ra» là điều cản; vai do CRM biết (phòng ban), không hỏi.
 - Mở hộp thì con trỏ vào ô (máy tính); ⌘/Ctrl+Enter gửi; Esc đóng (hỏi lại khi đã gõ).
 - Nút trên thanh đầu trang: máy tính có chữ «Gửi tín hiệu»; dưới `md` chỉ biểu tượng, có `aria-label`.
 - Biên nhận và lỗi đọc bằng `aria-live="polite"`. Chữ người gõ đánh dấu `translate="no"`.

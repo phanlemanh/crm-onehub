@@ -18,10 +18,14 @@ evals:
           == chu do (rut tu tep loi, khong viet tay)
         2 bam nut -> hop mo, co nhan "Bạn gặp điều gì?", dong "Gửi từ màn" mang duong dan da bo slug (pathname mock
           "/acme/okr/kr?x=1" -> "/okr/kr")
-        3 o rong va o chi co khoang trang -> nut Gui disabled; go chu -> enabled
+        3 ma tran hai o (muon lam, da xay ra) x {rong, chi khoang trang, co chu} = 9 to hop viet truoc: Gui chi enabled khi
+          ca hai o co chu
+        5 nut tren thanh dau trang co data-variant va data-size bang dung cac nut khac trong cung cum (doc tu DOM cua cum,
+          khong viet tay "outline")
         4 ca "menu": mo menu nguoi dung -> co muc "Tín hiệu đã gửi" tro /<slug>/tin-hieu (ca ba vai)
       CHIEU DO: ban sao bo dieu kien trim -> o 3 do voi thong diep ghim "o toan khoang trang van gui duoc";
       ban sao bo muc menu -> o 4 do voi thong diep ghim "khong co loi vao trang tin hieu tu menu";
+      ban sao doi nut sang ghost -> dong 5 do voi thong diep ghim "nut gui tin hieu lech kieu cum nut dau trang";
       ban sao giu slug trong man -> o 2 do voi thong diep ghim "man con mang ten khong gian lam viec".
 
   - id: E2
@@ -41,8 +45,8 @@ evals:
         nhung man co "?q=1#x". Voi MOI nguoi: goi tinHieu.gui -> doc lai hang TinHieu bang Prisma:
         1 dung mot hang moi, nguoiGuiId == nguoi goi
         2 phongBanId == ky vong (a: id; b, c: null; d: id)
-        3 man khong chua "?" hay "#"; tieuDe == dong dau khac rong (cat 120 + "…" khi dai hon); moTa co khi chu dai hon
-          dong dau, vang khi bang
+        3 man khong chua "?" hay "#"; muonLam va daXayRa == nguyen van da trim cua hai o; tieuDe == dong dau khac rong cua
+          daXayRa (cat 120 + "…" khi dai hon)
         4 so tang dan, idTep(so) == "crm-" + so; ket qua tra ve mang ma do
       Tieu de dai 300 ky tu mot dong -> cat dung TIN_HIEU.doDaiTieuDe.
       CHIEU DO: ban sao lay phong ban khong loc archivedAt -> o b do voi thong diep ghim "phong ban da luu tru van gan";
@@ -76,7 +80,7 @@ evals:
         1 gui TIN_HIEU.tranMoiNgay lan -> deu thanh cong; lan ke -> HttpException 429, so hang khong doi,
           thong diep chua so tran (rut tu hang so, khong viet tay)
         2 dong ho sang 00:00 gio Viet Nam ngay sau (16:59Z -> 17:00Z) -> gui duoc lai; 16:59Z van bi chan
-        3 chu dai TIN_HIEU.doDaiToiDa + 1 -> bi tu choi o khuon dau vao, khong cat
+        3 moi o dai TIN_HIEU.doDaiMoiO + 1 (tung o mot) -> bi tu choi o khuon dau vao, khong cat
         4 hai loi goi dong thoi o so tran - 1 -> dung mot thanh cong (khoa theo nguoi)
       CHIEU DO: ban sao dem theo ngay UTC -> dong 2 do voi thong diep ghim "tran tinh theo ngay UTC";
       ban sao bo khoa theo nguoi -> dong 4 do voi thong diep ghim "hai loi goi cung vuot tran".
@@ -93,7 +97,7 @@ evals:
       describe "hop" ca "loi": mock mutation tra loi 429 voi thong diep may chu, roi loi 500.
         1 429 -> loi duoi o hien dung thong diep may chu; o van giu nguyen chu da go; nut Gui bam lai duoc
         2 500 -> loi duoi o la cau chung cua tep loi (khong lo thong diep may chu); chu giu nguyen
-        3 o co maxLength == TIN_HIEU.doDaiToiDa; dem ky tu hien khi con duoi TIN_HIEU.nguongDem
+        3 moi o co maxLength == TIN_HIEU.doDaiMoiO; dem ky tu hien khi con duoi TIN_HIEU.nguongDem
       CHIEU DO: ban sao xoa chu khi loi -> dong 1 do voi thong diep ghim "loi lam mat chu da go".
 
   - id: E4
@@ -151,10 +155,13 @@ evals:
       - "apps/app/test/tin-hieu.dom.tsx"
     expected: |
       describe "trang" ca "xoa": danh sach mock 2 dong (daKeoVe false, true).
-        1 dong chua keo ve co nut Xoa; dong da keo ve khong co
-        2 bam Xoa -> ConfirmDialog voi tieu de mang ma tin hieu va nut "Xoá tín hiệu"; huy -> khong goi mutation
+        1 dong chua keo ve co nut thao tac (⋮) voi data-variant/data-size bang nut thao tac dong cua danh sach khuon onboarding
+          (doc tu component do khi render, khong viet tay); dong da keo ve khong co
+        2 mo menu, chon Xoa -> ConfirmDialog voi tieu de mang ma tin hieu va nut "Xoá tín hiệu"; huy -> khong goi mutation
+        4 dau trang co dung mot nut variant default (nut chinh) va do la "Gửi tín hiệu"; o rong thi nut trong Empty la outline
         3 xac nhan -> goi tinHieu.xoa voi dung id, invalidate cuaToi
-      CHIEU DO: ban sao hien Xoa moi dong -> dong 1 do voi thong diep ghim "dong da vao kho van co nut Xoa".
+      CHIEU DO: ban sao hien thao tac moi dong -> dong 1 do voi thong diep ghim "dong da lay ve van xoa duoc";
+      ban sao them nut chinh thu hai -> dong 4 do voi thong diep ghim "dau trang co hon mot nut chinh".
 
   - id: E6
     criterion: AC-6
@@ -193,7 +200,7 @@ evals:
       vong-kit.mjs phan "doc": dung may chu gia tra dung dau ra cua ham dung tep that (tepTuBanGhi tren ban ghi mau co
       danh tinh, khong viet tay JSON), chay lenh keo ve vao kho tam, roi lay bo doc cua kit main (git archive
       origin/main cua kho kit — in sha da dung) goi docTinHieu tren thu muc nguon:
-        1 so tep == so ban ghi; loi == []; moi tin hieu loai "tin-hieu" co tieu_de
+        1 so tep == so ban ghi; loi == []; moi tin hieu loai "tin-hieu" co tieu_de, muon_lam, da_xay_ra khac rong
         2 khong tep nao chua chuoi danh tinh cua ban ghi mau (ten, email, id nguoi, ten phong ban)
       Khong tim thay kho kit -> thoat 2 voi thong diep ghim "khong co bo doc tin hieu cua kit".
       CHIEU DO: ban sao lenh keo ve bo "tieu_de" -> do voi thong diep ghim "bo doc kit tu choi tep";

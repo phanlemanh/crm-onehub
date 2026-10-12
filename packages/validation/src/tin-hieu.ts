@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const TIN_HIEU = {
 	tranMoiNgay: 10,
-	doDaiToiDa: 2000,
+	doDaiMoiO: 1000,
 	nguongDem: 200,
 	doDaiTieuDe: 120,
 	doDaiMan: 200,
@@ -17,11 +17,14 @@ export const TIN_HIEU = {
 	},
 } as const;
 
+const oChu = z
+	.string()
+	.max(TIN_HIEU.doDaiMoiO)
+	.refine((chu) => chu.trim().length > 0);
+
 export const guiTinHieuInput = z.object({
-	chu: z
-		.string()
-		.max(TIN_HIEU.doDaiToiDa)
-		.refine((chu) => chu.trim().length > 0),
+	muonLam: oChu,
+	daXayRa: oChu,
 	man: z.string(),
 });
 export type GuiTinHieuInput = z.infer<typeof guiTinHieuInput>;
@@ -37,10 +40,10 @@ export function lamSachMan(duong: string): string {
 	return (cat || "/").slice(0, TIN_HIEU.doDaiMan);
 }
 
-export function tachNoiDung(chu: string) {
-	const sach = chu.trim();
+export function dungNoiDung(input: { muonLam: string; daXayRa: string }) {
+	const daXayRa = input.daXayRa.trim();
 	const dongDau =
-		sach
+		daXayRa
 			.split("\n")
 			.map((d) => d.trim())
 			.find((d) => d.length > 0) ?? "";
@@ -48,7 +51,7 @@ export function tachNoiDung(chu: string) {
 		dongDau.length > TIN_HIEU.doDaiTieuDe
 			? `${dongDau.slice(0, TIN_HIEU.doDaiTieuDe)}…`
 			: dongDau;
-	return { tieuDe, moTa: sach === dongDau ? null : sach };
+	return { tieuDe, muonLam: input.muonLam.trim(), daXayRa };
 }
 
 export const tepTinHieu = z.object({
@@ -57,8 +60,9 @@ export const tepTinHieu = z.object({
 	hang: z.null(),
 	noi_dung: z.object({
 		tieu_de: z.string().min(1),
+		muon_lam: z.string().min(1),
+		da_xay_ra: z.string().min(1),
 		man: z.string(),
-		mo_ta: z.string().optional(),
 	}),
 	luc: z.string().datetime(),
 });
@@ -66,17 +70,21 @@ export type TepTinHieu = z.infer<typeof tepTinHieu>;
 
 export function tepTuBanGhi(row: {
 	tieuDe: string;
-	moTa: string | null;
+	muonLam: string;
+	daXayRa: string;
 	man: string;
 	guiLuc: Date;
 }): TepTinHieu {
-	const noiDung: TepTinHieu["noi_dung"] = { tieu_de: row.tieuDe, man: row.man };
-	if (row.moTa) noiDung.mo_ta = row.moTa;
 	return {
 		phien: TIN_HIEU.phien,
 		loai: "tin-hieu",
 		hang: null,
-		noi_dung: noiDung,
+		noi_dung: {
+			tieu_de: row.tieuDe,
+			muon_lam: row.muonLam,
+			da_xay_ra: row.daXayRa,
+			man: row.man,
+		},
 		luc: row.guiLuc.toISOString(),
 	};
 }

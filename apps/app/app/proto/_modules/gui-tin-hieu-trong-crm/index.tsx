@@ -8,6 +8,7 @@ import { useState } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import {
 	PageShell,
+	PageShellActions,
 	PageShellContent,
 	PageShellDescription,
 	PageShellHeader,
@@ -18,23 +19,46 @@ import { DanhSachTinHieu } from "@/components/tin-hieu/danh-sach-tin-hieu";
 import {
 	type GiaiDoanGui,
 	HopGuiTinHieu,
+	NutGuiDauTrang,
+	NutGuiTao,
 } from "@/components/tin-hieu/hop-gui-tin-hieu";
 import { tinHieuMessages } from "@/lib/messages/tin-hieu";
-import { CHU_MAU, dongTheoState, MAN_MAU, STATE } from "./du-lieu";
+import {
+	DA_XAY_RA_MAU,
+	dongTheoState,
+	MAN_MAU,
+	MUON_LAM_MAU,
+	STATE,
+} from "./du-lieu";
 
 const HOP = {
 	[STATE.nut]: { chu: "", giaiDoan: "soan", loi: null, mo: false },
 	[STATE.hopTrong]: { chu: "", giaiDoan: "soan", loi: null, mo: true },
-	[STATE.hopDangGo]: { chu: CHU_MAU, giaiDoan: "soan", loi: null, mo: true },
+	[STATE.hopDangGo]: {
+		chu: DA_XAY_RA_MAU,
+		giaiDoan: "soan",
+		loi: null,
+		mo: true,
+	},
 	[STATE.hopDangGui]: {
-		chu: CHU_MAU,
+		chu: DA_XAY_RA_MAU,
 		giaiDoan: "dang-gui",
 		loi: null,
 		mo: true,
 	},
 	[STATE.hopDaGui]: { chu: "", giaiDoan: "da-gui", loi: null, mo: true },
-	[STATE.hopQuaTran]: { chu: CHU_MAU, giaiDoan: "soan", loi: "tran", mo: true },
-	[STATE.hopLoi]: { chu: CHU_MAU, giaiDoan: "soan", loi: "may-chu", mo: true },
+	[STATE.hopQuaTran]: {
+		chu: DA_XAY_RA_MAU,
+		giaiDoan: "soan",
+		loi: "tran",
+		mo: true,
+	},
+	[STATE.hopLoi]: {
+		chu: DA_XAY_RA_MAU,
+		giaiDoan: "soan",
+		loi: "may-chu",
+		mo: true,
+	},
 } satisfies Record<
 	string,
 	{
@@ -52,11 +76,20 @@ const HOP_DONG = {
 	mo: false,
 };
 
-function HopMau({ state, khung = true }: { state: string; khung?: boolean }) {
+function HopMau({
+	nut,
+	state,
+	khung = true,
+}: {
+	nut?: React.ReactNode;
+	state: string;
+	khung?: boolean;
+}) {
 	const m = tinHieuMessages("vi");
 	const dau = state in HOP ? HOP[state as keyof typeof HOP] : HOP_DONG;
 	const [mo, setMo] = useState(dau.mo);
-	const [chu, setChu] = useState(dau.chu);
+	const [muonLam, setMuonLam] = useState(dau.chu ? MUON_LAM_MAU : "");
+	const [daXayRa, setDaXayRa] = useState(dau.chu);
 	const [giaiDoan, setGiaiDoan] = useState<GiaiDoanGui>(dau.giaiDoan);
 	const loi =
 		dau.loi === "tran"
@@ -66,13 +99,16 @@ function HopMau({ state, khung = true }: { state: string; khung?: boolean }) {
 				: null;
 	const hop = (
 		<HopGuiTinHieu
-			chu={chu}
+			daXayRa={daXayRa}
 			giaiDoan={giaiDoan}
 			hrefDaGui="/proto/gui-tin-hieu-trong-crm?state=ST-ds-co"
 			loi={loi}
 			ma="crm-42"
 			man={MAN_MAU}
-			onChuChange={setChu}
+			muonLam={muonLam}
+			nut={nut ?? <NutGuiDauTrang />}
+			onDaXayRaChange={setDaXayRa}
+			onMuonLamChange={setMuonLam}
 			onGui={() => setGiaiDoan("da-gui")}
 			onOpenChange={setMo}
 			open={mo}
@@ -114,7 +150,13 @@ function TrangMau({ state }: { state: string }) {
 				dangXoa={null}
 				dong={dong}
 				hoiXoaBanDau={state === STATE.dsXacNhanXoa ? "t41" : undefined}
-				nutGui={<HopMau khung={false} state={STATE.nut} />}
+				nutGui={
+					<HopMau
+						khung={false}
+						nut={<NutGuiTao variant="outline" />}
+						state={STATE.nut}
+					/>
+				}
 				onXoa={() => {}}
 			/>
 		);
@@ -126,6 +168,15 @@ function TrangMau({ state }: { state: string }) {
 					<PageShellTitle>{m.tieuDe}</PageShellTitle>
 					<PageShellDescription>{m.moTa}</PageShellDescription>
 				</PageShellHeading>
+				{state === STATE.dsRong ? null : (
+					<PageShellActions>
+						<HopMau
+							khung={false}
+							nut={<NutGuiTao variant="default" />}
+							state={STATE.nut}
+						/>
+					</PageShellActions>
+				)}
 			</PageShellHeader>
 			<PageShellContent>{than}</PageShellContent>
 		</PageShell>

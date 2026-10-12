@@ -30,10 +30,13 @@ import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 export type GiaiDoanGui = "soan" | "dang-gui" | "da-gui";
 
 export type HopGuiTinHieuProps = {
+	nut: React.ReactNode;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	chu: string;
-	onChuChange: (chu: string) => void;
+	muonLam: string;
+	onMuonLamChange: (chu: string) => void;
+	daXayRa: string;
+	onDaXayRaChange: (chu: string) => void;
 	man: string;
 	giaiDoan: GiaiDoanGui;
 	loi: string | null;
@@ -42,11 +45,39 @@ export type HopGuiTinHieuProps = {
 	onGui: () => void;
 };
 
+export function NutGuiDauTrang() {
+	const m = tinHieuMessages(useLocale());
+	return (
+		<Button
+			aria-label={m.nut}
+			data-slot="nut-gui-tin-hieu"
+			size="sm"
+			variant="outline"
+		>
+			<SendAlt aria-hidden />
+			<span className="sr-only md:not-sr-only">{m.nut}</span>
+		</Button>
+	);
+}
+
+export function NutGuiTao({ variant }: { variant: "default" | "outline" }) {
+	const m = tinHieuMessages(useLocale());
+	return (
+		<Button data-slot="nut-gui-tin-hieu-tao" variant={variant}>
+			<SendAlt aria-hidden />
+			{m.nut}
+		</Button>
+	);
+}
+
 export function HopGuiTinHieu({
+	nut,
 	open,
 	onOpenChange,
-	chu,
-	onChuChange,
+	muonLam,
+	onMuonLamChange,
+	daXayRa,
+	onDaXayRaChange,
 	man,
 	giaiDoan,
 	loi,
@@ -55,24 +86,18 @@ export function HopGuiTinHieu({
 	onGui,
 }: HopGuiTinHieuProps) {
 	const m = tinHieuMessages(useLocale());
-	const idO = useId();
+	const idMuonLam = useId();
+	const idDaXayRa = useId();
 	const dangGui = giaiDoan === "dang-gui";
-	const conLai = TIN_HIEU.doDaiToiDa - chu.length;
-	const coChu = chu.trim().length > 0;
+	const coChu = muonLam.trim().length > 0 && daXayRa.trim().length > 0;
+	const guiPhim = (e: React.KeyboardEvent) => {
+		if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && coChu) onGui();
+	};
+	const conLai = (chu: string) => TIN_HIEU.doDaiMoiO - chu.length;
 
 	return (
 		<Dialog onOpenChange={onOpenChange} open={open}>
-			<DialogTrigger asChild>
-				<Button
-					aria-label={m.nut}
-					data-slot="nut-gui-tin-hieu"
-					size="sm"
-					variant="ghost"
-				>
-					<SendAlt aria-hidden />
-					<span className="sr-only md:not-sr-only">{m.nut}</span>
-				</Button>
-			</DialogTrigger>
+			<DialogTrigger asChild>{nut}</DialogTrigger>
 			<DialogContent data-hop-tin-hieu={giaiDoan}>
 				{giaiDoan === "da-gui" && ma ? (
 					<>
@@ -99,28 +124,46 @@ export function HopGuiTinHieu({
 							<DialogTitle>{m.hop.tieuDe}</DialogTitle>
 							<DialogDescription>{m.hop.moTa}</DialogDescription>
 						</DialogHeader>
-						<Field data-invalid={loi ? true : undefined}>
-							<FieldLabel htmlFor={idO}>{m.hop.nhan}</FieldLabel>
+						<Field>
+							<FieldLabel htmlFor={idMuonLam}>{m.hop.muonLam}</FieldLabel>
 							<Textarea
 								autoComplete="off"
 								disabled={dangGui}
-								id={idO}
-								maxLength={TIN_HIEU.doDaiToiDa}
-								name="tin-hieu"
-								onChange={(e) => onChuChange(e.target.value)}
-								onKeyDown={(e) => {
-									if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && coChu)
-										onGui();
-								}}
-								placeholder={m.hop.goiY}
+								id={idMuonLam}
+								maxLength={TIN_HIEU.doDaiMoiO}
+								name="muon-lam"
+								onChange={(e) => onMuonLamChange(e.target.value)}
+								onKeyDown={guiPhim}
+								placeholder={m.hop.goiYMuonLam}
+								rows={2}
 								translate="no"
-								value={chu}
+								value={muonLam}
+							/>
+							{conLai(muonLam) < TIN_HIEU.nguongDem ? (
+								<FieldDescription className="tabular-nums">
+									{dien(m.hop.conLai, { so: String(conLai(muonLam)) })}
+								</FieldDescription>
+							) : null}
+						</Field>
+						<Field data-invalid={loi ? true : undefined}>
+							<FieldLabel htmlFor={idDaXayRa}>{m.hop.daXayRa}</FieldLabel>
+							<Textarea
+								autoComplete="off"
+								disabled={dangGui}
+								id={idDaXayRa}
+								maxLength={TIN_HIEU.doDaiMoiO}
+								name="da-xay-ra"
+								onChange={(e) => onDaXayRaChange(e.target.value)}
+								onKeyDown={guiPhim}
+								placeholder={m.hop.goiYDaXayRa}
+								translate="no"
+								value={daXayRa}
 							/>
 							<FieldDescription>
 								<span translate="no">{dien(m.hop.man, { man })}</span>
-								{conLai < TIN_HIEU.nguongDem ? (
+								{conLai(daXayRa) < TIN_HIEU.nguongDem ? (
 									<span className="ms-2 tabular-nums">
-										{dien(m.hop.conLai, { so: String(conLai) })}
+										{dien(m.hop.conLai, { so: String(conLai(daXayRa)) })}
 									</span>
 								) : null}
 							</FieldDescription>

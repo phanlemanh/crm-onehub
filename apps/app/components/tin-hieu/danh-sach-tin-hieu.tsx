@@ -1,7 +1,14 @@
 "use client";
 
+import OverflowMenuVertical from "@carbon/icons-react/es/OverflowMenuVertical";
 import { Button } from "@crm/ui/components/button";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@crm/ui/components/dropdown-menu";
 import {
 	Empty,
 	EmptyContent,
@@ -9,6 +16,7 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@crm/ui/components/empty";
+import { Icon } from "@crm/ui/components/icon";
 import {
 	Item,
 	ItemActions,
@@ -35,6 +43,7 @@ export type DongTinHieu = {
 	id: string;
 	ma: string;
 	tieuDe: string;
+	muonLam: string;
 	man: string;
 	guiLuc: string;
 	coTheXoa: boolean;
@@ -102,16 +111,25 @@ export function DanhSachTinHieu({
 		);
 	}
 
-	const nutXoa = (d: DongTinHieu) =>
+	const thaoTac = (d: DongTinHieu) =>
 		d.coTheXoa ? (
-			<Button
-				data-xoa-tin-hieu={d.ma}
-				onClick={() => setHoiXoa(d)}
-				size="sm"
-				variant="ghost"
-			>
-				{m.xoa}
-			</Button>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button data-thao-tac-tin-hieu={d.ma} size="icon-xs" variant="ghost">
+						<Icon icon={OverflowMenuVertical} />
+						<span className="sr-only">{dien(m.thaoTac, { ma: d.ma })}</span>
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent align="end">
+					<DropdownMenuItem
+						data-xoa-tin-hieu={d.ma}
+						onSelect={() => setHoiXoa(d)}
+						variant="destructive"
+					>
+						{m.xoa}
+					</DropdownMenuItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
 		) : null;
 
 	return (
@@ -128,20 +146,29 @@ export function DanhSachTinHieu({
 						{ id: "man", header: m.cot.man, width: "w-32" },
 						{ id: "luc", header: m.cot.guiLuc, width: "w-32" },
 						{ id: "trang-thai", header: m.cot.trangThai, width: "w-[36%]" },
-						{ id: "xoa", srLabel: m.xoa, width: "w-20" },
+						{ id: "thao-tac", srLabel: m.cot.thaoTac, width: "w-12" },
 					]}
 					surface="page"
 				>
 					{dong.map((d) => (
 						<SimpleTableRow data-tin-hieu={d.ma} key={d.id}>
 							<SimpleTableCell className="whitespace-normal">
-								<span
-									className="line-clamp-2 break-words"
-									title={d.tieuDe}
-									translate="no"
-								>
-									{d.tieuDe}
-								</span>
+								<div className="flex min-w-0 flex-col gap-0.5">
+									<span
+										className="line-clamp-2 break-words"
+										title={d.tieuDe}
+										translate="no"
+									>
+										{d.tieuDe}
+									</span>
+									<SimpleTableNote
+										className="line-clamp-1 break-words"
+										data-muon-lam=""
+										translate="no"
+									>
+										{dien(m.muonLam, { muonLam: d.muonLam })}
+									</SimpleTableNote>
+								</div>
 							</SimpleTableCell>
 							<SimpleTableCell>
 								<span className="truncate text-muted-foreground" translate="no">
@@ -154,7 +181,7 @@ export function DanhSachTinHieu({
 							<SimpleTableCell className="whitespace-normal">
 								<TrangThai dong={d} />
 							</SimpleTableCell>
-							<SimpleTableCell align="right">{nutXoa(d)}</SimpleTableCell>
+							<SimpleTableCell align="right">{thaoTac(d)}</SimpleTableCell>
 						</SimpleTableRow>
 					))}
 				</SimpleTable>
@@ -166,13 +193,16 @@ export function DanhSachTinHieu({
 							<ItemTitle className="line-clamp-2 break-words" translate="no">
 								{d.tieuDe}
 							</ItemTitle>
+							<ItemDescription data-muon-lam="" translate="no">
+								{dien(m.muonLam, { muonLam: d.muonLam })}
+							</ItemDescription>
 							<ItemDescription>
 								<span translate="no">{d.man}</span> ·{" "}
 								{GIO.format(new Date(d.guiLuc))}
 							</ItemDescription>
 							<TrangThai dong={d} />
 						</ItemContent>
-						<ItemActions>{nutXoa(d)}</ItemActions>
+						<ItemActions>{thaoTac(d)}</ItemActions>
 					</Item>
 				))}
 			</ItemGroup>
