@@ -8,6 +8,8 @@
 
 **Tech Stack:** NestJS + nestjs-trpc, Prisma (Postgres), eve agent, Next.js app, bun test.
 
+**Cổng 1.5:** Phan Le Manh duyệt kế hoạch lúc 2026-10-12T07:04:58Z («duyệt kế hoạch», phiên `r2·P0 · DA0a`).
+
 **Spec:** `docs/superpowers/specs/2026-10-12-va-lo-ro-vai-chi-okr-design.md` · hợp đồng `_acceptance/va-lo-ro-vai-chi-okr/contract.md` · evals `_acceptance/va-lo-ro-vai-chi-okr/evals.yaml`.
 
 ## Global Constraints
