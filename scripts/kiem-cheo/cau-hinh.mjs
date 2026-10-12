@@ -10,7 +10,14 @@ export const KIEM_CHEO = {
 	remote: "origin",
 	thuMuc: ".acceptance-runs/kiem-cheo",
 	tep: { moc: "moc.json", cay: "cay", log: "launchd.log", tienDo: "tien-do.json" },
-	moc: { sauGio: 20 },
+	goiDieuPhoi: {
+		plugin: "dieu-phoi",
+		can: ["scripts/dot.mjs", "scripts/hook-nhip.mjs", "scripts/hinh-dang.mjs"],
+		bien: "KIEM_CHEO_GOI_DIEU_PHOI",
+		giaiBang: "resolve-plugin.mjs",
+		lenhCai:
+			"claude plugin install dieu-phoi@acceptance-gate-kit --scope project",
+	},
 	khoa: {
 		phien: "kiem-cheo",
 		slug: "kiem-cheo-sau-gop",

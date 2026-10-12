@@ -7,18 +7,17 @@ import nodeFs, {
 	writeFileSync,
 } from "node:fs";
 import { join, resolve } from "node:path";
-import { timThuMucDot } from "../dieu-phoi/dot.mjs";
-import { chamNhip } from "../dieu-phoi/hook-nhip.mjs";
 import { bao, ngayLuot } from "./bao.mjs";
 import { KIEM_CHEO } from "./cau-hinh.mjs";
 import { duongLan } from "./doc-lan.mjs";
+import { napGoiDieuPhoi } from "./goi-dieu-phoi.mjs";
 import { layKhoa, pidSong, voiKhoa } from "./khoa.mjs";
-import { canMoc, docMoc, ghiMoc, lanGop, tepDoi } from "./moc.mjs";
+import { docMoc, ghiMoc, lanGop, tepDoi } from "./moc.mjs";
 import { docKetLan, lech } from "./phan-xu.mjs";
-import { docNhatKyDung, docTienDo, ghiTienDo, gopDo, suiteDoTrongNhatKy, tapConLai, xoaTienDo } from "./tien-do.mjs";
 import { maKyVong, tapCham } from "./tap-cham.mjs";
 import { laTepChinh } from "./tep-chinh.mjs";
 import { phanLoai } from "./thu-pham.mjs";
+import { docNhatKyDung, docTienDo, ghiTienDo, gopDo, suiteDoTrongNhatKy, tapConLai, xoaTienDo } from "./tien-do.mjs";
 
 const KQ = KIEM_CHEO.ketQua;
 const DUNG_CAY_MAC_DINH =
@@ -212,9 +211,17 @@ export async function luot(argv, { now = Date.now } = {}) {
 				encoding: "utf8",
 			}).trim(),
 	);
+	let goi = null;
+	let loiGoi = null;
+	try {
+		goi = await napGoiDieuPhoi();
+	} catch (e) {
+		loiGoi = e;
+	}
 	const dot = (() => {
+		if (!goi) return null;
 		try {
-			const d = timThuMucDot(goc);
+			const d = goi.timThuMucDot(goc);
 			return d && pidSong(nodeFs, d) ? d : null;
 		} catch {
 			return null;
@@ -222,8 +229,12 @@ export async function luot(argv, { now = Date.now } = {}) {
 	})();
 	const ket = (ketQua) =>
 		bao({ goc, ketQua, dot, thongBao: thongBaoTheoMoiTruong(), now });
+	if (loiGoi) {
+		ket({ ket_qua: KQ.khongChayDuoc, ly_do: loiGoi.message });
+		return KIEM_CHEO.ma.loi;
+	}
 	try {
-		return await luotTho({ co, goc, dot, ket, now });
+		return await luotTho({ co, goc, ket, now, goi });
 	} catch (e) {
 		ket({
 			ket_qua: KQ.loi,
@@ -233,7 +244,7 @@ export async function luot(argv, { now = Date.now } = {}) {
 	}
 }
 
-async function luotTho({ co, goc, ket, now }) {
+async function luotTho({ co, goc, ket, now, goi }) {
 	const git = (...a) =>
 		execFileSync("git", ["-C", goc, ...a], {
 			encoding: "utf8",
@@ -253,7 +264,6 @@ async function luotTho({ co, goc, ket, now }) {
 		});
 		return KIEM_CHEO.ma.loi;
 	}
-	let lucTruoc = null;
 	if (co.tu) {
 		T = git("rev-parse", co.tu);
 	} else {
@@ -267,7 +277,6 @@ async function luotTho({ co, goc, ket, now }) {
 			return KIEM_CHEO.ma.mocVang;
 		}
 		T = moc.sha;
-		lucTruoc = moc.luc;
 	}
 	const gop = lanGop(git, T, D);
 	const coSo = { tu: T, den: D, lan_gop: gop };
@@ -309,15 +318,7 @@ async function luotTho({ co, goc, ket, now }) {
 	if (tap.length === 0 || tapDo.length === 0) return ketThuc([], []);
 	const tapLan = tapDo.map((h) => h.slug);
 	const cay = join(goc, KIEM_CHEO.thuMuc, KIEM_CHEO.tep.cay);
-	const moc = lucTruoc
-		? canMoc({
-				lucTruoc,
-				now: now(),
-				lanGop: gop,
-				ngayCua: (s) => git("show", "-s", "--format=%cs", s),
-			})
-		: null;
-	const khoa = await layKhoa({ goc, cay, moc });
+	const khoa = await layKhoa({ goc, cay, timDot: goi.timThuMucDot });
 	if (khoa.ban) {
 		ket({
 			...coSo,
@@ -335,7 +336,7 @@ async function luotTho({ co, goc, ket, now }) {
 	const may = taoChay({ tranMs });
 	const nhip = setInterval(() => {
 		try {
-			chamNhip({ cwd: cay });
+			goi.chamNhip({ cwd: cay });
 		} catch {}
 	}, KIEM_CHEO.khoa.nghiMs);
 	try {

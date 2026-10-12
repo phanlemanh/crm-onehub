@@ -1,7 +1,6 @@
 import nodeFs from "node:fs";
 import { join } from "node:path";
 import { setTimeout as ngu } from "node:timers/promises";
-import { timThuMucDot } from "../dieu-phoi/dot.mjs";
 import { KIEM_CHEO } from "./cau-hinh.mjs";
 
 const { phien, slug, loai, tepPid, uocPhut } = KIEM_CHEO.khoa;
@@ -44,7 +43,7 @@ function ghiNguyenTu(f, dich, noiDung) {
 	f.renameSync(tam, dich);
 }
 
-async function quaBoPhatLich({ f, thuMuc, cay, moc, now, cho, choToiDaMs }) {
+async function quaBoPhatLich({ f, thuMuc, cay, now, cho, choToiDaMs }) {
 	const don = join(thuMuc, "xin", TEN_DON);
 	const chuTep = join(thuMuc, "khoa", loai, "chu.json");
 	f.mkdirSync(join(thuMuc, "xin"), { recursive: true });
@@ -59,7 +58,6 @@ async function quaBoPhatLich({ f, thuMuc, cay, moc, now, cho, choToiDaMs }) {
 			luc: new Date(now()).toISOString(),
 			worktree: cay,
 			uoc_phut: uocPhut,
-			...(moc ? { moc } : {}),
 		}),
 	);
 	const het = now() + choToiDaMs;
@@ -114,16 +112,18 @@ function khoaTay({ f, thuMuc, cay, now }) {
 export async function layKhoa({
 	goc,
 	cay,
-	moc,
-	timDot = timThuMucDot,
+	timDot,
 	fs: f = nodeFs,
 	now = Date.now,
 	cho = () => ngu(KIEM_CHEO.khoa.nghiMs),
 	choToiDaMs = KIEM_CHEO.khoa.choToiDaMs,
 }) {
+	if (typeof timDot !== "function") {
+		throw new Error("layKhoa: thieu timDot cua goi dieu-phoi");
+	}
 	const dot = timDot(goc);
 	if (dot && pidSong(f, dot)) {
-		return quaBoPhatLich({ f, thuMuc: dot, cay, moc, now, cho, choToiDaMs });
+		return quaBoPhatLich({ f, thuMuc: dot, cay, now, cho, choToiDaMs });
 	}
 	const thuMuc = dot ?? join(goc, KIEM_CHEO.thuMuc);
 	return khoaTay({ f, thuMuc, cay, now });
