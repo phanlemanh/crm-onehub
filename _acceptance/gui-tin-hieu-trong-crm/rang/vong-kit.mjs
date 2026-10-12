@@ -125,7 +125,10 @@ try {
 	);
 
 	const ids = ds.map((t) => t.id);
-	const cfgKho = readFileSync(path.join(GOC, "_acceptance", "config.yaml"), "utf8");
+	const cfgKho = readFileSync(
+		path.join(GOC, "_acceptance", "config.yaml"),
+		"utf8",
+	);
 	const khaiKho = cfgKho.match(/^tin_hieu:\n(?: {2}.*\n)*/m)?.[0] ?? "";
 	const kho = dungKhoMau(kit, { tins: ds, khai: khaiKho });
 	tam.push(kho);
