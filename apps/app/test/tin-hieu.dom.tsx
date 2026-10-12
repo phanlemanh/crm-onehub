@@ -426,9 +426,7 @@ describe("trang", () => {
 				<DanhSachTinHieuTrang banVeDocDuoc trangThai={TT} />
 			</>,
 		);
-		const chinh = o.querySelectorAll(
-			"button[data-variant=default]",
-		);
+		const chinh = o.querySelectorAll("button[data-variant=default]");
 		expect(chinh.length, "dau trang co hon mot nut chinh").toBe(1);
 		expect(chinh[0]?.textContent).toContain(m.nut);
 	});

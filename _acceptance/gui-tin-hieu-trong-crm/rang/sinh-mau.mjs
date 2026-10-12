@@ -229,7 +229,7 @@ if (import.meta.main) {
 		);
 		writeFileSync(
 			path.join(MAU_RA, "nguon.json"),
-			`${JSON.stringify({ kit_origin_main: sha }, null, 2)}\n`,
+			`${JSON.stringify({ kit_origin_main: sha }, null, "\t")}\n`,
 		);
 		rmSync(r, { recursive: true, force: true });
 		console.log(`sinh-mau: LO-TRINH.mau.html tu kit ${sha.slice(0, 9)}`);
