@@ -84,7 +84,8 @@ Một dòng `<tệp>:<số>` là **lịch sử** khi thuộc một trong các l�
 | eval chết | dòng của `_acceptance/<slug>/evals.yaml` nằm trong khối eval khai `status: not-run` |
 | executor chết | dòng `    <khoá>: …` của `_acceptance/config.yaml` mà không eval sống nào có `cmd: config:executors.<nhóm>.<khoá>` |
 | kế hoạch cũ | `docs/superpowers/**` |
-| đợt đã đóng | `docs/plan/dot-sau-14-10/**` |
+| đợt đã đóng | `docs/plan/dot-sau-14-10/**`, `docs/plan/phan-loai-do-kiem-cheo.md` (báo cáo hàng F25 của đợt `sau-14-10`) |
+| tên việc trong lộ trình | `docs/plan/lo-trinh-*.json` và `LO-TRINH.html` (máy vẽ từ các tệp đó): tên mốc mô tả chính việc gỡ, không gọi bản cũ |
 | hồ sơ này | `_acceptance/chuyen-goi-dieu-phoi/**` |
 | eval sống được miễn | dòng của `_acceptance/<slug>/evals.yaml` nằm trong khối eval có id thuộc danh sách miễn dưới đây |
 

@@ -2520,3 +2520,5 @@ lo_trinh:
     - docs/plan/lo-trinh-okr.json
     - docs/plan/lo-trinh-kho-tai-lieu.json
     - docs/plan/lo-trinh-viec-du-an.json
+dieu_phoi:
+  goi_dot: docs/plan/dot-{ten}

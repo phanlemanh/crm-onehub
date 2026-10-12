@@ -1,6 +1,6 @@
 ## Luật riêng của kho crm (chép vào LUAT.md của đợt r2)
 
-Đợt r2 là giai đoạn hai: chạy từ gói `dieu-phoi` của kit, không còn `scripts/dieu-phoi/` của crm. Luật 1–8, 10, 12,
+Đợt r2 là giai đoạn hai: chạy từ gói `dieu-phoi` của kit, không còn bộ điều phối tự viết của crm. Luật 1–8, 10, 12,
 14, 15 mang sang từ giai đoạn một (`docs/plan/dot-sau-14-10/LUAT-rieng.md`); mỗi luật đến từ một ca đã xảy ra. Luật
 13 cũ bỏ: kit 2.26 đã vá lỗi thẻ Cổng 2 làm rơi mục mang sang.
 

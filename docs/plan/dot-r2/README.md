@@ -1,6 +1,6 @@
 # Gói đợt r2 — giai đoạn hai của Điều phối – Thợ
 
-Giai đoạn một (đợt `sau-14-10`, 07–11/10) chạy bằng bộ điều phối crm tự viết trong `scripts/dieu-phoi/`. Kết quả và
+Giai đoạn một (đợt `sau-14-10`, 07–11/10) chạy bằng bộ điều phối crm tự viết, nay đã gỡ khỏi kho. Kết quả và
 bài học đã chuyển sang kit thành gói `dieu-phoi` (DP1–DP7). Giai đoạn hai chạy đợt `r2` từ gói của kit trên crm, và
 cũng là lần đo «chạy được mà không sửa lõi».
 
@@ -12,10 +12,10 @@ quyền tự merge ở thẻ khởi tạo của `/dieu-phoi:mo-dot r2`, không p
 
 1. Kit đã cắt bản mang gói `dieu-phoi`, và crm đã cài đúng tag của bản đó cho cả bốn gói (`acceptance-gate`,
    `feature-loop`, `diagram-design`, `dieu-phoi --scope project`), cùng số phiên bản.
-2. PR chuyển đổi đã gộp: gỡ `scripts/dieu-phoi/`, bốn khối hook trong `.claude/settings.json`, `test:dieu-phoi` ở
-   `package.json`, `pre-push`, `gate-shape.json` và `acceptance.yml`; nối lại `scripts/kiem-cheo/` sang gói kit; khai
-   «thay bởi» cho eval của các hồ sơ đã ký trỏ vào `scripts/dieu-phoi/`; thêm khoá `dieu_phoi.goi_dot:
-   docs/plan/dot-{ten}` vào `_acceptance/config.yaml`.
+2. PR chuyển đổi (hồ sơ `chuyen-goi-dieu-phoi`) đã gộp: gỡ bộ điều phối tự viết, bốn khối hook trong
+   `.claude/settings.json` và bước kiểm của nó ở `package.json`, `pre-push`, `gate-shape.json`, `acceptance.yml`; nối
+   lại `scripts/kiem-cheo/` sang gói kit; khai «thay bởi» cho eval của các hồ sơ đã ký đo bộ cũ; thêm khoá
+   `dieu_phoi.goi_dot: docs/plan/dot-{ten}` vào `_acceptance/config.yaml`.
 3. Không đợt nào đang chạy: `chan-doan --mo r2` chỉ còn thiếu mục `co-dot`.
 4. Ngoài 14/10 và ở quãng lặng (lộ trình kit: đợt thử thứ nhất 26/10).
 
