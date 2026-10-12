@@ -256,15 +256,19 @@ async function do375(okr, slug) {
 		await mo(p, `${APP}/${slug}/okr`, NUT);
 		const nut = await p.evaluate((sel) => {
 			const b = document.querySelector(sel);
-			return {
-				nhan: b?.getAttribute("aria-label") ?? "",
-				chu: (b?.innerText ?? "").trim(),
-			};
+			const chuHien = [...(b?.querySelectorAll("span") ?? [])]
+				.filter(
+					(e) =>
+						(e.textContent ?? "").trim() && e.getBoundingClientRect().width > 1,
+				)
+				.map((e) => (e.textContent ?? "").trim());
+			return { nhan: b?.getAttribute("aria-label") ?? "", chuHien };
 		}, NUT);
+		const rong = await cuon(p);
 		kiem(
 			"nut-375",
-			"nut chi bieu tuong, co ten doc duoc, khong cuon ngang",
-			nut.nhan === m.nut && nut.chu === "" && (await cuon(p)) <= 375,
+			`nut chi bieu tuong (chu hien: ${JSON.stringify(nut.chuHien)}), ten doc duoc «${nut.nhan}», rong trang ${rong}`,
+			nut.nhan === m.nut && nut.chuHien.length === 0 && rong <= 375,
 		);
 		await anh(p, "nut-375");
 		await mo(p, `${APP}/${slug}/tin-hieu`, "[data-slot=item][data-tin-hieu]");
