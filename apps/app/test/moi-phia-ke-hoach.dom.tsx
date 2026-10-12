@@ -793,6 +793,14 @@ function datThanhVien(
 			image: null,
 		})),
 	);
+	dat("onboarding.nguoiNhanViec", () =>
+		THANH_VIEN.map((n) => ({
+			id: n.userId,
+			name: n.name,
+			email: `${n.userId}@thu.test`,
+			image: null,
+		})),
+	);
 }
 
 async function moMenuCua(ten: string): Promise<void> {

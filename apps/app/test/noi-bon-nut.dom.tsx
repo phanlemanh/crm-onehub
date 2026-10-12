@@ -212,6 +212,7 @@ mock.module("@/lib/trpc/client", () => ({
 		org: orgMock(),
 		onboarding: {
 			access: thuTuc("access", () => ({ canManage: true })),
+			nguoiNhanViec: thuTuc("nguoiNhanViec", () => NGUOI),
 			listDepartments: thuTuc(
 				"listDepartments",
 				(v?: { archived?: boolean }) => (v?.archived === true ? [] : boPhan),

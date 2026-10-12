@@ -7,6 +7,7 @@ import {
 	type ViecTaiLieu,
 	viecTaiLieuCanNhac,
 } from "./tai-lieu-nhac";
+import { docDuocDoiTac } from "./vai-doi-tac";
 import { WORKSPACE_ID } from "./workspace";
 
 export const LOAI_NHAC = [
@@ -377,7 +378,7 @@ export async function viecCanNhac(
 				organizationId: WORKSPACE_ID,
 				userId: chon.userId,
 			},
-			select: { userId: true },
+			select: { userId: true, role: true },
 		}),
 		viecOkrCanNhac(db, chon),
 		viecTaiLieuCanNhac(db, chon),
@@ -391,8 +392,11 @@ export async function viecCanNhac(
 		viecAiCanNhac(db, chon),
 	]);
 	const tap = new Set(thanhVien.map((m) => m.userId));
+	const tapDoiTac = new Set(
+		thanhVien.filter((m) => docDuocDoiTac(m.role)).map((m) => m.userId),
+	);
 	return gop(
-		gom(keHoach.flatMap((k) => guiCua(k, tap, chon.now))),
+		gom(keHoach.flatMap((k) => guiCua(k, tapDoiTac, chon.now))),
 		okr,
 		taiLieu,
 		tomTat,
