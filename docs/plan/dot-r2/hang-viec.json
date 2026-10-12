@@ -44,16 +44,16 @@
   ],
   "hang": [
     {
-      "ma": "DA0a",
+      "ma": "DA0b",
       "tep": "docs/plan/lo-trinh-viec-du-an.json",
-      "slug": "va-lo-ro-vai-chi-okr",
+      "slug": "mo-lai-khong-tra-viec-chi-okr",
       "day": "P0",
       "uu_tien": 0,
       "s4": "local",
       "ranh_gioi": [
-        "_acceptance/va-lo-ro-vai-chi-okr/**"
+        "_acceptance/mo-lai-khong-tra-viec-chi-okr/**"
       ],
-      "moc": "2026-10-14"
+      "moc": "2026-10-20"
     },
     {
       "ma": "N1",
@@ -371,6 +371,31 @@
       "s4": "local",
       "ranh_gioi": [
         "_acceptance/khong-re-theo-ten-thanh-luat-kho/**"
+      ],
+      "moc": "2026-11-30"
+    },
+    {
+      "ma": "DA0c",
+      "tep": "docs/plan/lo-trinh-viec-du-an.json",
+      "slug": "thuoc-viec-cua-ban-do-duoc",
+      "day": "P7",
+      "uu_tien": 4,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/thuoc-viec-cua-ban-do-duoc/**",
+        "_acceptance/va-lo-ro-vai-chi-okr/**"
+      ],
+      "moc": "2026-11-30"
+    },
+    {
+      "ma": "F26",
+      "tep": "docs/plan/lo-trinh-okr.json",
+      "slug": "khong-do-them-chay-gh",
+      "day": "P7",
+      "uu_tien": 5,
+      "s4": "local",
+      "ranh_gioi": [
+        "_acceptance/khong-do-them-chay-gh/**"
       ],
       "moc": "2026-11-30"
     }

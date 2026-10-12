@@ -43,7 +43,8 @@ Luật mới của giai đoạn hai.
     theo mốc: không mốc là xa nhất). Thêm hàng giữa đợt thì khai `moc` cho hàng đó.
 19. LT1b và LT2 (Lộ trình trong CRM) làm ở máy khác, không mở trong đợt này. Chạm `apps/app/app/(app)/[slug]/lo-trinh/**`
     thì gửi `cham-tep` và chờ giám sát hỏi chủ kho.
-20. DA0a (vá rò vai «chỉ OKR») đi đầu: kiểm dữ liệu production trước khi sửa; có dữ liệu đã lộ thì báo chủ kho trước.
+20. DA0b (mở lại không trả việc cho người «chỉ OKR») đi đầu. DA0a đã đếm production 12/10 ra 0 dữ liệu lộ; DA0b dựng và
+    đo trên dữ liệu mẫu. Truy cập production cần chủ kho cho phép riêng.
 
 Tên và giao tiếp (chủ kho chốt 12/10, «áp dụng tên và giao tiếp»).
 

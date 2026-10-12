@@ -56,6 +56,15 @@
       "that": "2026-10-06"
     },
     {
+      "ten": "Kit phát hành 2.28.0 — mốc ổn định, có gói dieu-phoi đã vá trước đợt r2 (DP8)",
+      "ngay": "2026-10-13",
+      "that": "2026-10-13",
+      "khoa": "m-1013k",
+      "loai": "ngoai",
+      "ai": "Kit",
+      "hang": []
+    },
+    {
       "ten": "Mọi phòng ban bắt đầu dùng thật hằng ngày — OKR và Kho tài liệu",
       "ngay": "2026-10-14",
       "loai": "han-cung",
@@ -70,11 +79,19 @@
       "khoa": "m-1014"
     },
     {
-      "ten": "Kit phát hành mốc kế: gói dieu-phoi và các hàng Điều phối – Thợ (dự kiến theo lộ trình kit)",
-      "ngay": "2026-10-18",
-      "khoa": "m-1018k",
+      "ten": "crm nhận kit 2.28.0 ở quãng lặng và chuyển sang gói dieu-phoi (#373)",
+      "ngay": "2026-10-15",
+      "khoa": "m-1015k",
       "loai": "ngoai",
-      "ai": "Kit",
+      "ai": "Chủ kho",
+      "hang": []
+    },
+    {
+      "ten": "Mở đợt r2 từ gói dieu-phoi của kit — chủ kho duyệt thẻ khởi tạo một lần",
+      "ngay": "2026-10-16",
+      "khoa": "m-1016",
+      "loai": "ngoai",
+      "ai": "Chủ kho",
       "hang": []
     },
     {
@@ -83,22 +100,6 @@
       "ai": "Phòng ban",
       "khoa": "m-1021",
       "loai": "ngoai",
-      "hang": []
-    },
-    {
-      "ten": "Kit đóng gói Điều phối – Thợ: mở đợt, nối lại đợt, đổi tài khoản bằng một lệnh — dự kiến theo lộ trình kit",
-      "ngay": "2026-10-25",
-      "khoa": "m-1025k",
-      "loai": "ngoai",
-      "ai": "Kit",
-      "hang": []
-    },
-    {
-      "ten": "Giai đoạn hai: crm chạy đợt Điều phối – Thợ từ gói dieu-phoi của kit, gỡ scripts/dieu-phoi/ và bốn khối hook",
-      "ngay": "2026-10-26",
-      "khoa": "m-1026",
-      "loai": "ngoai",
-      "ai": "Chủ kho",
       "hang": []
     },
     {
@@ -2243,6 +2244,32 @@
       ],
       "trang_thai": "chưa mở",
       "buoc_ke": "Nhóm vệ sinh có hạn mức, chạy cạnh R2"
+    },
+    {
+      "ma": "F26",
+      "slug": "khong-do-them-chay-gh",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.3,
+      "ngay": "2026-10-12",
+      "ten": "Thước hồi quy chạy được lệnh cần gh",
+      "ten_ngan": "Thước cần gh",
+      "cau_giao": "«Hai phép kiểm luồng tự động của kho (gpct_luot_that, gpct_nen_gop) chạy thật trong bàn đo, không bị tính «đỏ sẵn» ở cả hai cây»",
+      "ghi_chu": "Gốc: Ngoài-3 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10. Bản clone của rang/khong-do-them.mjs giữ origin là đường cục bộ nên lệnh cần gh thoát 2 ở cả hai cây; phép đo hồi quy vẫn báo xanh dù luồng đó hỏng.",
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đợt r2, dãy P7 (vệ sinh có hạn mức); mở sau khi #373 gộp"
+    },
+    {
+      "ma": "F27",
+      "slug": "kiem-cheo-bao-con-song",
+      "nhom": "ve-sinh",
+      "thu_tu": 500.4,
+      "ngay": "2026-10-12",
+      "ten": "Kiểm chéo đêm giữ khoá s4 báo còn sống",
+      "ten_ngan": "Nhịp kiểm chéo",
+      "cau_giao": "«Lượt kiểm chéo ban đêm giữ khoá s4 trong một đợt không làm bộ phát lịch báo nhầm «khoa-khong-nhip»»",
+      "ghi_chu": "Gốc: Ngoài-18 của hồ sơ chuyen-goi-dieu-phoi (#373), chủ kho chọn «mở hợp đồng mới» ở Cổng Bằng chứng 12/10 (scripts/kiem-cheo/dem.mjs chỉ chạm nhịp, không ghi song/). Kit 2.28.0 (DP8) hứa việc nền giữ khoá s4 ghi nhịp hoặc được miễn.",
+      "trang_thai": "chưa mở",
+      "buoc_ke": "Đo lại khi crm nhận kit 2.28.0 (15/10): hết báo nhầm thì chuyển da_bac kèm số đo; còn thì vào dãy P7 của đợt r2"
     }
   ],
   "da_bac": [
