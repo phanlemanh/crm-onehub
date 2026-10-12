@@ -3,10 +3,10 @@ schema_version: 1
 slug: ngan-ho-so-trong-lo-trinh
 feature: "«Tôi bấm một việc đã giao trong trang Lộ trình và đọc trong một phút: vì sao làm, đã lên chưa, sẽ đo gì, còn thiếu gì, ai quyết»"
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build         # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: Manh Phan
+decided_at: 2026-10-12T01:20:07Z     # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -67,10 +67,10 @@ Mọi số dưới đây đếm trên bản vẽ thật nói ở trên (81 việ
 > trang Lộ trình (ngưỡng của LT1), vì chủ kho bỏ vế chờ bốn tuần ngày 12/10 và giao Cổng Giá trị của LT1b
 > đọc luôn số đó.
 
-- Câu hỏi phép đo trả lời: [đề xuất] người đọc ngăn hồ sơ của một việc đã giao có tự trả lời được năm câu — vì sao làm · đã lên chưa · sẽ đo gì, khi nào · còn thiếu gì · ai quyết — trong một phút mà không hỏi ai, và trang Lộ trình có thay được tin hỏi tiến độ gửi chủ kho không?
-- Kết quả nào là SỐNG: [đề xuất] ở phiên nghiệm thu kế, chủ kho và ít nhất 2 trưởng phòng ban, mỗi người một việc đã giao do máy chọn ngẫu nhiên trong các việc có dải tóm tắt, trả lời đúng cả năm câu từ ngăn trong một phút, không hỏi lại; và tin hỏi tiến độ của chủ kho, đếm cùng cách với nền 23/48, dưới một nửa nền (dưới 24%). Năm câu đạt mà mức dùng chưa đạt là kết quả giữa — lặp lại, không bỏ
-- Kết quả nào là CHẾT: [đề xuất] dưới một nửa số người dự trả lời đủ năm câu; hoặc ngăn hiện một chữ khác dải tóm tắt của `LO-TRINH.html` cùng lượt vẽ
-- Timebox: [đề xuất] phiên nghiệm thu đầu tiên sau khi ngăn lên production (sớm nhất 15/10); mức dùng đếm trên bốn tuần kể từ ngày trang Lộ trình lên production (10/10), hạn 07/11/2026
+- Câu hỏi phép đo trả lời: người đọc ngăn hồ sơ của một việc đã giao có tự trả lời được năm câu — vì sao làm · đã lên chưa · sẽ đo gì, khi nào · còn thiếu gì · ai quyết — trong một phút mà không hỏi ai, và trang Lộ trình có thay được tin hỏi tiến độ gửi chủ kho không?
+- Kết quả nào là SỐNG: ở phiên nghiệm thu kế, chủ kho và ít nhất 2 trưởng phòng ban, mỗi người một việc đã giao do máy chọn ngẫu nhiên trong các việc có dải tóm tắt, trả lời đúng cả năm câu từ ngăn trong một phút, không hỏi lại; và tin hỏi tiến độ của chủ kho, đếm cùng cách với nền 23/48, dưới một nửa nền (dưới 24%). Năm câu đạt mà mức dùng chưa đạt là kết quả giữa — lặp lại, không bỏ
+- Kết quả nào là CHẾT: dưới một nửa số người dự trả lời đủ năm câu; hoặc ngăn hiện một chữ khác dải tóm tắt của `LO-TRINH.html` cùng lượt vẽ
+- Timebox: phiên nghiệm thu đầu tiên sau khi ngăn lên production (sớm nhất 15/10); mức dùng đếm trên bốn tuần kể từ ngày trang Lộ trình lên production (10/10), hạn 07/11/2026
 
 Bản máy dựng từ hàng, giữ làm sử liệu:
 
@@ -91,9 +91,9 @@ vẽ kit nhánh chính, trước Cổng Phạm vi.
 
 ## Cổng 0
 
-- **decision = …** Căn cứ: …
+- **decision = build** Căn cứ: chủ kho ký «build — ngưỡng như đề xuất» 2026-10-12T01:20:07Z trên bản trình gồm số đo thật của dải tóm tắt (81/86 việc đã giao có dải) và hai lỗ dữ liệu ở kit (ô production 81/81 «chưa ghi», ô chưa làm của LT1 thiếu 13 giới hạn) — lỗ sửa ở kit bằng chip riêng, CRM hiện nguyên chữ. Gộp vào `onehub` khi crm nhận kit 2.27 (từ 15/10).
 - **disposition = —** Căn cứ: không có bản mẫu dựng trước Cổng Đáng.
-- **Ngưỡng UAT chốt cùng lúc ký:** …
+- **Ngưỡng UAT chốt cùng lúc ký:** như mục «Ngưỡng chết / ngưỡng UAT» ở trên, đã gỡ tiền tố đề xuất.
 
 ## Thước đo thành công → ứng viên criterion
 
