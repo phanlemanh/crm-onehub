@@ -12,6 +12,8 @@ evals:
     criterion: AC-2
     executor: script
     cmd: config:executors.script.f19_loc_chon
+    status: not-run
+    superseded_by: chuyen-goi-dieu-phoi#AC-1
     expected: "exit 0; rang/loc-paths.mjs --phan chon, ma trận viết trước. (a) Theo từng eval, bằng evalPathsOf + pathGlobToRe: settings/organization/to-chuc.tsx khớp ≥1 mục của E5, lib/messages/tro-ly-okr.ts khớp ≥1 mục của E17 — in 'dat to-chuc.tsx khop E5', 'dat tro-ly-okr.ts khop E17'. (b) staleByPaths với 4 tệp trên cây HEAD: to-chuc.tsx và tro-ly-okr.ts → kept; .github/workflows/acceptance.yml và scripts/dieu-phoi/giu-nhip.mjs → skipped; so tập kept/skipped bằng nhau từng phần tử, in 4 dòng 'dat <tệp> <kept|skipped>'. Chiều đỏ: --ban-sao e5-lech dựng bản sao evals.yaml (trong .acceptance-runs/sua-paths-e5-soan-okr/) với E5 trỏ settings/okr/** → exit 1, in 'sai to-chuc.tsx: khong khop E5'; --ban-sao e5-cu với E5 trả về settings/to-chuc/** → exit 1, in 'sai giu-nhip.mjs: mong skipped, thay kept'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/soan-okr-cung-tro-ly/evals.yaml, _acceptance/sua-paths-e5-soan-okr/rang/loc-paths.mjs, lib/evidence-core.cjs, "apps/app/app/(app)/[slug]/settings/organization/to-chuc.tsx", apps/app/lib/messages/tro-ly-okr.ts]
