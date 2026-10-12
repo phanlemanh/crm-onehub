@@ -39,6 +39,9 @@ mock.module("@/lib/lo-trinh/doc-tep", () => ({
 	duongTepLoTrinh: () => "LO-TRINH.html",
 }));
 mock.module("@/lib/locale/server", () => ({ getLocale: async () => "vi" }));
+mock.module("@/components/page-transition", () => ({
+	PageTransition: ({ children }: { children: ReactNode }) => children,
+}));
 mock.module("@/components/lo-trinh/noi-dung", () => ({
 	NoiDungLoTrinh: (p: Record<string, unknown>) => {
 		props.push(p);
