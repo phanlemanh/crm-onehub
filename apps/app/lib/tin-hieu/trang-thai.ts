@@ -1,5 +1,9 @@
 import type { NghiaTrangThai } from "@crm/ui/lib/status-tone";
-import { type DuongTinHieu, parseDuongTinHieu } from "@crm/validation/tin-hieu";
+import {
+	type DuongTinHieu,
+	docNhomHang,
+	parseDuongTinHieu,
+} from "@crm/validation/tin-hieu";
 import { docDuLieu } from "@/lib/lo-trinh/doc-du-lieu";
 import type { TinHieuMessages } from "@/lib/messages/tin-hieu";
 
@@ -10,18 +14,10 @@ export type TrangThaiTinHieu = {
 	nghia: NghiaTrangThai;
 };
 export type CuaToiTom = { ma: string; daKeoVe: boolean };
-
-type HangThuong = { ma?: unknown; nhom_trang_thai?: unknown };
-
-function nhomCuaHang(duLieu: Record<string, unknown>): Map<string, string> {
-	const ra = new Map<string, string>();
-	const ds = Array.isArray(duLieu.lo_trinh) ? duLieu.lo_trinh : [];
-	for (const lo of ds as { hang?: HangThuong[] }[])
-		for (const h of lo?.hang ?? [])
-			if (typeof h.ma === "string" && typeof h.nhom_trang_thai === "string")
-				ra.set(h.ma, h.nhom_trang_thai);
-	return ra;
-}
+export type KetQuaTrangThai = {
+	banVe: BanVe;
+	trangThai: Record<string, TrangThaiTinHieu>;
+};
 
 function theoKit(
 	b: DuongTinHieu,
@@ -64,8 +60,8 @@ export function docTrangThaiTinHieu(
 	html: string | null,
 	cuaToi: CuaToiTom[],
 	m: TinHieuMessages,
-): { banVe: BanVe; trangThai: Record<string, TrangThaiTinHieu> } {
-	const traCrm = (banVe: BanVe) => ({
+): KetQuaTrangThai {
+	const traCrm = (banVe: BanVe): KetQuaTrangThai => ({
 		banVe,
 		trangThai: Object.fromEntries(
 			cuaToi.map((t) => [t.ma, theoCrm(t.daKeoVe, m)]),
@@ -83,8 +79,8 @@ export function docTrangThaiTinHieu(
 	if (kq.kieu === "khong-co") return traCrm("khong-co-danh-sach");
 	if (kq.kieu === "hong") return traCrm("hong");
 	const theoMa = new Map(kq.banGhi.map((b) => [b.id, b]));
-	const nhom = nhomCuaHang(duLieu);
-	return {
+	const nhom = docNhomHang(duLieu);
+	const ra: KetQuaTrangThai = {
 		banVe: "co",
 		trangThai: Object.fromEntries(
 			cuaToi.map((t) => {
@@ -93,4 +89,5 @@ export function docTrangThaiTinHieu(
 			}),
 		),
 	};
+	return ra;
 }

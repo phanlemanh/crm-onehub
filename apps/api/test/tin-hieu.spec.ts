@@ -49,7 +49,7 @@ async function trpc(
 	n: Nguoi,
 	thuTuc: string,
 	kieu: "query" | "mutation",
-	vao?: unknown,
+	vao?: Readonly<Record<string, string>>,
 ): Promise<Tra> {
 	const r =
 		kieu === "query"

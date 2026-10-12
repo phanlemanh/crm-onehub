@@ -162,3 +162,21 @@ export function parseDuongTinHieu(raw: unknown): KetQuaDuong {
 	}
 	return { kieu: "co", banGhi: kq.data };
 }
+
+const nhomHangKhoi = z.object({
+	lo_trinh: z.array(
+		z.object({
+			hang: z.array(z.object({ ma: z.string(), nhom_trang_thai: z.string() })),
+		}),
+	),
+});
+
+export function docNhomHang(duLieu: unknown): Map<string, string> {
+	const kq = nhomHangKhoi.safeParse(duLieu);
+	if (!kq.success) return new Map();
+	return new Map(
+		kq.data.lo_trinh.flatMap((lo) =>
+			lo.hang.map((h) => [h.ma, h.nhom_trang_thai] as const),
+		),
+	);
+}

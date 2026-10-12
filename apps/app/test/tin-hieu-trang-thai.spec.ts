@@ -21,9 +21,11 @@ function khoi(html: string) {
 	};
 }
 
-function doiKhoi(sua: (o: Record<string, unknown>) => void): string {
+type KhoiSua = { tin_hieu?: { cau?: string }[] };
+
+function doiKhoi(sua: (o: KhoiSua) => void): string {
 	return MAU.replace(KHOI, (_t, a: string, j: string, c: string) => {
-		const o = JSON.parse(j) as Record<string, unknown>;
+		const o: KhoiSua = JSON.parse(j);
 		sua(o);
 		return a + JSON.stringify(o).replace(/</g, "\\u003c") + c;
 	});
@@ -95,8 +97,7 @@ describe("tin-hieu-trang-thai", () => {
 			"khong-khoa": [doiKhoi((o) => delete o.tin_hieu), "khong-co-danh-sach"],
 			"ban-ghi-hong": [
 				doiKhoi((o) => {
-					const ds = o.tin_hieu as Record<string, unknown>[];
-					delete ds[0]?.cau;
+					delete o.tin_hieu?.[0]?.cau;
 				}),
 				"hong",
 			],
