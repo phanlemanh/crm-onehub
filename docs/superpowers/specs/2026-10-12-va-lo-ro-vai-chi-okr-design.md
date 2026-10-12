@@ -39,13 +39,13 @@ export function docDuocDoiTac(role: string): boolean {
 
 ## Năm thay đổi
 
-**T1 — Đường ghi của kế hoạch.** `thanhVien(tx, userId)` đổi thành `nguoiNhanViec(tx, userId)`: đọc
+**T1 — Đường ghi của kế hoạch.** `thanhVien(tx, userId)` đổi thành `kiemNguoiNhanViec(tx, userId)`: đọc
 hàng `member` của `WORKSPACE_ID`, không có → lời cũ `khongPhaiThanhVien`; có mà `!docDuocDoiTac(role)`
 → `BadRequestException` lời mới `ONBOARDING.thongDiep.vaiChiOkr(ten)`. Áp cho `assignStep`, `addStep`,
 `setPlanOwner`, `transferWork` (đích). Từ chối trước mọi lệnh ghi, nên không bước, không vết nào được ghi.
 `transferWork` **từ** người vai `okr` vẫn chạy — đó là đường dọn.
 
-**T2 — Tạo từ khuôn.** `createFromTemplate` gọi `nguoiNhanViec` cho `ownerId` trong giao dịch, trước khi
+**T2 — Tạo từ khuôn.** `createFromTemplate` gọi `kiemNguoiNhanViec` cho `ownerId` trong giao dịch, trước khi
 tạo kế hoạch. Đóng luôn lỗ «người cầm trịch không phải thành viên».
 
 **T3 — Đổi vai.** Trong giao dịch của `setMemberRole`, khi vai mới `!docDuocDoiTac` — kể cả khi vai cũ
