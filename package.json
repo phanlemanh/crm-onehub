@@ -29,7 +29,8 @@
 		"test:dieu-phoi": "node --test \"scripts/dieu-phoi/test/*.test.mjs\"",
 		"kiem-cheo:cai": "node scripts/kiem-cheo/cai.mjs cai",
 		"kiem-cheo:go": "node scripts/kiem-cheo/cai.mjs go",
-		"kiem-cheo:chay": "node scripts/kiem-cheo/dem.mjs"
+		"kiem-cheo:chay": "node scripts/kiem-cheo/dem.mjs",
+		"tin-hieu:keo-ve": "bun scripts/tin-hieu/keo-ve.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.10",
