@@ -45,7 +45,10 @@ export function ChuyenViecDialog({
 		}),
 		enabled: mo,
 	});
-	const dsNguoi = useQuery({ ...trpc.users.list.queryOptions(), enabled: mo });
+	const dsNguoi = useQuery({
+		...trpc.onboarding.nguoiNhanViec.queryOptions(),
+		enabled: mo,
+	});
 
 	const dong = () => {
 		setNhan("");

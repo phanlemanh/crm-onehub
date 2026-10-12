@@ -1,0 +1,103 @@
+{
+  "feature_plain": "Người chỉ dùng CRM để làm OKR sẽ không bị giao việc của kế hoạch 30 ngày với đối tác, và tin nhắc buổi sáng của họ không còn mang tên công ty đối tác.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ từ chối giao một bước cho người vai «chỉ OKR», nói rõ tên người và lý do; bước giữ nguyên, không để lại vết."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ từ chối tạo kế hoạch từ khuôn khi người cầm trịch là vai «chỉ OKR» hoặc không phải thành viên."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ từ chối chuyển việc 30 ngày sang người vai «chỉ OKR»; chuyển việc ra khỏi họ thì vẫn chạy — đó là đường dọn."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ từ chối đổi một người sang «chỉ OKR» khi họ còn cầm trịch kế hoạch hay làm bước đang mở, nêu đúng số việc và chỉ sang «Chuyển việc»."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ gửi tin nhắc buổi sáng (Zalo, Slack) cho người vai «chỉ OKR» chỉ với việc OKR của họ, không tên công ty; ai chỉ có việc kế hoạch thì không nhận tin."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ chỉ liệt kê người nhận được việc đối tác ở ba ô chọn người (người làm bước, người cầm trịch, người nhận chuyển việc); người đang giữ từ trước vẫn hiện tên."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ có một phép đếm chỉ đọc trả lời câu «production còn việc mở nào của người vai «chỉ OKR» không», không ghi gì vào kho."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ chứng mỗi phép đo thật sự bắt lỗi: phá từng chỗ vá trên bản sao thì phép đo tương ứng đỏ đúng câu đã ghim."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-2",
+      "p": "Chặn thêm bước có người làm là vai «chỉ OKR», và chặn đổi người cầm trịch sang họ."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ KHÔNG để lại lượt theo dõi nào khi đổi một người không còn giữ việc sang «chỉ OKR» (kể cả lưu lại vai cho người đã mang vai đó); đổi ngược về vai thường thì giữ nguyên."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ KHÔNG gom việc kế hoạch (kèm tên công ty) cho người vai «chỉ OKR» — ở tin nhắc, thẻ «Việc của bạn» lẫn Tổng quan; việc OKR của họ vẫn tới."
+    },
+    {
+      "id": "OOS-1",
+      "p": "KHÔNG vá ở vòng này: chủ sở hữu deal, công ty, liên hệ vẫn chọn được người vai «chỉ OKR» — cùng lớp lỗi, để một hàng sau."
+    },
+    {
+      "id": "OOS-2",
+      "p": "KHÔNG sửa danh sách người dùng chung (vẫn liệt kê cả người đã rời) — ngoài hàng này."
+    },
+    {
+      "id": "OOS-3",
+      "p": "KHÔNG thu hồi được tin nhắc đã gửi trước đây."
+    },
+    {
+      "id": "OOS-4",
+      "p": "KHÔNG tự dọn dữ liệu cũ trên production bằng migration — chờ số đếm, anh quyết."
+    }
+  ],
+  "scope_plain": "Bốn việc bỏ ngoài vòng này, mỗi việc một lý do:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đã quét đủ mọi cách một người vai «chỉ OKR» có thể đi tới chỗ giữ việc đối tác (giao, thêm bước, cầm trịch, tạo từ khuôn, chuyển việc, đổi vai, dữ liệu cũ) × ba thứ họ có thể giữ (bước, kế hoạch, lượt theo dõi) × sáu chỗ tên công ty có thể lộ; «đủ» nghĩa là mọi chỗ ghi người làm/cầm trịch/theo dõi trong mã đều có tiêu chí (AC-1…AC-9), đối chiếu chuẩn kiểm quyền OWASP và NIST về đổi vai."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Phép đo tin nhắc chỉ kiểm «không có tên công ty» nên có thể xanh dù không tin nào được gửi — đã sửa: giờ đòi đúng một tin có việc OKR trên mỗi kênh, kênh Slack dùng người riêng, có người đối chứng vai thường."
+    },
+    {
+      "i": 1,
+      "p": "Phép đếm production chưa chứng nó bỏ qua việc đã xong hay kế hoạch đã đóng, nên có thể báo «còn rò» mãi — đã sửa: thêm bốn việc đã khép làm nhiễu và đo được cả nhánh «sạch»."
+    },
+    {
+      "i": 2,
+      "p": "Đường dọn «lưu lại vai «chỉ OKR» để xoá lượt theo dõi» chưa có tiêu chí — đã sửa: thêm vào AC-6; ô chọn vai ở màn có thể không cho chọn lại đúng vai cũ, anh quyết đường dọn ở cổng này."
+    },
+    {
+      "i": 3,
+      "p": "Thẻ «Việc của bạn» và Tổng quan chưa được đo — đã sửa: AC-7 gọi hai chỗ đó bằng phiên của người vai «chỉ OKR»."
+    },
+    {
+      "i": 4,
+      "p": "Lời từ chối đổi vai chỉ được kiểm có chữ số, không kiểm số nào là kế hoạch, số nào là bước — đã sửa: so nguyên văn, thêm ca 2 kế hoạch, 3 bước."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "E12",
+      "q": "Tài liệu mới đủ để người mới hiểu luật vai «chỉ OKR» chưa?",
+      "why": "Hai giám khảo nói đủ; một giám khảo chưa chắc chỉ vì ba chữ thường («bộ gom», «kế hoạch mở», «lượt theo dõi») chưa có trong từ điển — máy khuyên Đạt, vì đó là chữ mô tả, không phải thuật ngữ đặt mới."
+    }
+  ]
+}

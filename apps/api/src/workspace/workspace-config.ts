@@ -14,5 +14,7 @@ export const WORKSPACE_CONFIG = {
 			`${entry} is not a domain. Enter one like onehub.vn.`,
 		staffDomainPublic: (entry: string) =>
 			`${entry} is a public mail domain, not one of ours. Remove it and save again.`,
+		conViecKeHoach: (keHoach: number, buoc: number) =>
+			`Người này còn cầm trịch ${keHoach} kế hoạch và làm ${buoc} bước đang mở. Chuyển việc ở màn Thành viên trước, rồi mới đổi sang vai «chỉ OKR».`,
 	},
 } as const;

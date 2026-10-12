@@ -19,6 +19,8 @@ export const ONBOARDING = {
 		keHoachDaDong: "Kế hoạch đã đóng — mở lại trước khi sửa.",
 		khongPhaiThanhVien: (id: string) =>
 			`Người ${id} không phải thành viên đang hoạt động.`,
+		vaiChiOkr: (ten: string) =>
+			`${ten} mang vai «chỉ OKR» — không nhận được việc của kế hoạch đối tác.`,
 		sapLaiSaiTap:
 			"Danh sách sắp lại phải gồm đúng mọi bước của kế hoạch, mỗi bước một lần.",
 		khongCoBuoc: (id: string) => `Không có bước nào mang mã ${id}.`,

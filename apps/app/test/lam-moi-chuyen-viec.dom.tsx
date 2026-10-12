@@ -118,6 +118,7 @@ async function mo(): Promise<void> {
 		queryClient.setQueryData(khoa, { gieo: true });
 	}
 	traLoi.set("users.list", () => NGUOI);
+	traLoi.set("onboarding.nguoiNhanViec", () => NGUOI);
 	traLoi.set("onboarding.transferPreview", () => ({ keHoach: 2, buoc: 3 }));
 	const o = document.createElement("div");
 	document.body.appendChild(o);

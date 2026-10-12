@@ -156,6 +156,7 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		onboarding: {
 			access: thuTuc("access", () => ({ canManage: true })),
+			nguoiNhanViec: thuTuc("nguoiNhanViec", () => NGUOI),
 			listDepartments: thuTuc("listDepartments", () => BO_PHAN),
 			listTemplates: thuTuc("listTemplates", () => {
 				soLanDocKhuon += 1;
