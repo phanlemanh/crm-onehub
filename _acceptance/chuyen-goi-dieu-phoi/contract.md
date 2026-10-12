@@ -5,7 +5,7 @@ slug: chuyen-goi-dieu-phoi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: []
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -126,3 +126,15 @@ cặp sha của commit gộp (`merge-base(M^1, M^2)` và `M^2`). Lúc viết h�
   test build` nên đã lệch từ khi `test:dieu-phoi` vào vòng (07/10); vòng này đưa dòng vòng về đúng dạng ghim.
 - Hành vi của bộ điều phối (xếp lượt, hạn thuê, hook, bảng, CLI) nay do kit đo ở hồ sơ DP1–DP7 của kit; crm chỉ đo chuyển
   đủ (AC-2), hook đủ (AC-3) và chỗ nối (AC-5–AC-7).
+- Known limit (Cổng 2, Ngoài-2, Ngoài-5): E9 chỉ xét `evals.yaml` bị sửa (`--diff-filter=M`); một tệp của hồ sơ đã ký bị
+  xoá hay đổi tên lọt qua mà E9 vẫn xanh. Cây lúc ký không có tệp nào như vậy.
+- Known limit (Cổng 2, Ngoài-4): thiếu `origin/onehub` trên máy đo thì cả mười phép đo thoát 1 (đỏ) thay vì 2 («không đo
+  được»). `git fetch origin onehub` trước khi đo.
+- Known limit (Cổng 2, Ngoài-7): nhánh «đã gộp» của neo vòng (cặp sha của commit gộp) chưa phép đo nào chạy qua; lần đo
+  đầu tiên sau khi PR gộp là lần đầu nó được dùng.
+- Known limit (Cổng 2, Ngoài-15): E3 miễn cả dòng lệnh hook có nhắc `${CLAUDE_PLUGIN_ROOT}`, và ô miễn đó không có ca đo;
+  một lệnh vừa gọi gói vừa lùi về mã của kho sẽ không bị bắt.
+- Known limit (Cổng 2, Ngoài-16, Ngoài-19): `napGoiDieuPhoi` không kiểm ba hàm của gói có mặt; bản gói sau đổi tên hay bỏ
+  `timThuMucDot`, `chamNhip`, `kiemDon` thì lượt kiểm chéo đêm hỏng với lỗi khó đọc, hoặc mất nhịp mà không báo.
+- Known limit (Cổng 2, Ngoài-20): E7 kiểm «khoá máy s4 đã nhả sau khi đóng đợt» trên một đợt chưa từng lấy khoá máy, nên
+  chiều đó luôn xanh; hành vi nhả khoá do kit đo.

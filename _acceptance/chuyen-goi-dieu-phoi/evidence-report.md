@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 9b8bedcee819f5688b543ffe08f534c50890a186
-human_signoff:
+human_signoff: "Phan Le Manh 2026-10-12 — ký Cổng Bằng chứng trên vòng chấm 3 (10/10 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Ngoài-2, 4, 5, 7, 15, 16, 19, 20 ghi Known limits; Ngoài-3, 18 mở hợp đồng mới; Ngoài-1, 6, 8–14, 17, 21, 22 chấp nhận, không sửa; đồng ý cắt; Treo phê hết"
 ---
 
 # Evidence Report: chuyen-goi-dieu-phoi
