@@ -5,7 +5,7 @@ slug: ngan-ho-so-trong-lo-trinh
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Manh Phan
 approved_at: 2026-10-12T02:40:25Z
 design_doc: docs/superpowers/specs/2026-10-12-ngan-ho-so-trong-lo-trinh-design.md
@@ -73,3 +73,9 @@ phanlemanh/acceptance-gate-kit#307); dữ liệu thật: trang kit nhánh chính
 - Phụ thuộc: crm nhận kit 2.27 (bộ vẽ mang khối bản 2). Trước đó phép đo bản chép của LT1 (`trang-lo-trinh-trong-crm`, `rang/ban-chep.mjs`) đỏ vì so với bộ kit 2.26 đang cài, và E7 của hồ sơ này trả mã đã khai 2. Gộp: gộp `onehub` có kit 2.27 vào nhánh, ghim lại LT1 và LT1b một làn, rồi chủ kho bấm gộp.
 - Tệp mẫu `apps/app/test/fixtures/lo-trinh/x2/LO-TRINH.html` do `rang/sinh-mau-x2.mjs` sinh; không viết tay khối dữ liệu nào.
 - Chip sang kho kit (12/10): ô production 81/81 «chưa ghi quan sát production», ô chưa làm của LT1 thiếu 13 giới hạn, 11/81 ô vì sao cụt.
+- Known limits — anh chọn ở Cổng Bằng chứng 2026-10-12, từ S4 vòng 1:
+  - Ngoài-1: hai thành phần ngăn tự khai kiểu dữ liệu thay vì lấy từ khuôn dùng chung; bộ kit thêm con số mới cho chủ kho thì thẻ «Số liệu» có thể không hiện mà không ai được báo.
+  - Ngoài-2: bài kiểm ca «ô của dải sai kiểu» không mở ngăn, nên vế «không nuốt thành ô trống» không thể đỏ.
+  - Ngoài-3: chiều đỏ của ca «trang bản 1 không băng cảnh báo» chỉ đưa sẵn giá trị vào hàm kiểm, chưa phá vật thật; vế «không câu cảnh báo» của bộ đọc chưa được kiểm riêng.
+  - Ngoài-5: phép đếm ô trống của E2 tự so với chính nó, không có số viết trước; mất bớt hàng «—» có thể vẫn xanh.
+  - Ngoài-6: phép quét chữ viết thẳng (E11) bỏ sót chuỗi viết trong ngoặc nhọn và chuỗi mẫu.
