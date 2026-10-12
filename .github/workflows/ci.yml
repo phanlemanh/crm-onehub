@@ -18,8 +18,30 @@ env:
   DO_NOT_TRACK: 1
 
 jobs:
+  phan-loai:
+    name: phân loại PR
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      nang: ${{ steps.pl.outputs.nang }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - run: node --test .github/scripts/test/phan-loai.test.mjs
+
+      - id: pl
+        run: node .github/scripts/phan-loai.mjs
+        env:
+          SU_KIEN: ${{ github.event_name }}
+          NHAP: ${{ github.event.pull_request.draft }}
+
   check:
     name: check-types, lint
+    needs: phan-loai
+    if: ${{ !cancelled() && needs.phan-loai.outputs.nang != 'false' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
 
@@ -52,6 +74,8 @@ jobs:
 
   test:
     name: test (${{ matrix.o.ten }})
+    needs: phan-loai
+    if: ${{ !cancelled() && needs.phan-loai.outputs.nang != 'false' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
@@ -107,8 +131,17 @@ jobs:
   ci-ok:
     name: ci-ok
     if: always()
-    needs: [check, test]
+    needs: [phan-loai, check, test]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - run: test "${{ needs.check.result }}" = success && test "${{ needs.test.result }}" = success
+      - run: |
+          pl="${{ needs.phan-loai.result }}"
+          nang="${{ needs.phan-loai.outputs.nang }}"
+          check="${{ needs.check.result }}"
+          kiem="${{ needs.test.result }}"
+          echo "phân loại: $pl · nang: $nang · check: $check · test: $kiem"
+          case "$pl" in success|skipped) ;; *) exit 1 ;; esac
+          if [ "$check" = success ] && [ "$kiem" = success ]; then exit 0; fi
+          if [ "$pl" = success ] && [ "$nang" = false ] && [ "$check" = skipped ] && [ "$kiem" = skipped ]; then exit 0; fi
+          exit 1
