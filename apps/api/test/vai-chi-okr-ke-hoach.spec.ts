@@ -1,7 +1,10 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db } from "@crm/db";
+import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
 import { ONBOARDING } from "../src/onboarding/onboarding-config";
 import { OnboardingGhi } from "../src/onboarding/onboarding-ghi";
+import { WorkspaceService } from "../src/workspace/workspace.service";
+import { WORKSPACE_CONFIG } from "../src/workspace/workspace-config";
 import {
 	dichVu,
 	doiVai,
@@ -236,5 +239,170 @@ describe("vlr-danh-sach", () => {
 		expect(ds.map((u) => Object.keys(u).sort().join(","))).toEqual(
 			Array(3).fill("email,id,image,name"),
 		);
+	});
+});
+
+const workspace = () =>
+	new WorkspaceService(db, {
+		workspaceChanged: async () => undefined,
+	} as unknown as AgentTriggerService);
+
+async function maMember(userId: string): Promise<string> {
+	return (await db.member.findFirstOrThrow({ where: { userId } })).id;
+}
+
+async function vaiCua(userId: string): Promise<string> {
+	return (await db.member.findFirstOrThrow({ where: { userId } })).role;
+}
+
+const demTheoDoi = (userId: string) =>
+	db.onboardingWatch.count({ where: { userId } });
+
+describe("vlr-doi-vai", () => {
+	test.each([
+		["chi-ke-hoach", 1, 0],
+		["chi-buoc", 0, 1],
+		["hai-ba", 2, 3],
+	] as const)(
+		"vlr-doi-vai: còn việc %s → 409 nguyên văn, vai và theo dõi giữ nguyên",
+		async (bien, soKeHoach, soBuoc) => {
+			const qt = await gieoThanhVien("QT VLR", "admin");
+			const a = await gieoThanhVien(`A VLR ${bien}`, "member");
+			const khac = await gieoThanhVien("Khác VLR", "member");
+			const bp = await gieoBoPhan();
+			for (let i = 0; i < soKeHoach; i += 1) {
+				await gieoKeHoach({ camTrich: a.id, buoc: [] });
+			}
+			await gieoKeHoach({
+				camTrich: khac.id,
+				buoc: [
+					...Array.from({ length: soBuoc }, () => ({
+						nhan: "B",
+						boPhanId: bp.id,
+						giao: a.id,
+					})),
+					{ nhan: "Xong", boPhanId: bp.id, giao: a.id, xong: true },
+				],
+			});
+			await gieoKeHoach({
+				camTrich: a.id,
+				buoc: [{ nhan: "D", boPhanId: bp.id, giao: a.id }],
+				dong: true,
+			});
+			const { plan: theo } = await gieoKeHoach({ camTrich: khac.id, buoc: [] });
+			await db.onboardingWatch.create({
+				data: { planId: theo.id, userId: a.id },
+			});
+			const theoTruoc = await demTheoDoi(a.id);
+			const ma = await maMember(a.id);
+			let loi = "";
+			try {
+				await workspace().setMemberRole(qt.id, { memberId: ma, role: "okr" });
+			} catch (e) {
+				loi = e instanceof Error ? e.message : String(e);
+			}
+			if (loi === "") {
+				throw new Error(`vlr: doi vai khi con viec khong bi chan ${bien}`);
+			}
+			if (loi !== WORKSPACE_CONFIG.messages.conViecKeHoach(soKeHoach, soBuoc)) {
+				throw new Error(`vlr: loi doi vai sai ${loi}`);
+			}
+			if (!loi.includes("Chuyển việc")) {
+				throw new Error("vlr: loi doi vai khong chi chuyen viec");
+			}
+			if ((await vaiCua(a.id)) !== "member") {
+				throw new Error("vlr: vai da doi khi bi chan");
+			}
+			if ((await demTheoDoi(a.id)) !== theoTruoc) {
+				throw new Error("vlr: theo doi bi xoa khi bi chan");
+			}
+		},
+	);
+
+	test("vlr-doi-vai: chỉ theo dõi → đổi được, xoá hết; về member giữ; lưu lại okr dọn theo dõi", async () => {
+		const qt = await gieoThanhVien("QT2 VLR", "admin");
+		const a = await gieoThanhVien("A2 VLR", "member");
+		const khac = await gieoThanhVien("Khác2 VLR", "member");
+		const { plan: mo } = await gieoKeHoach({ camTrich: khac.id, buoc: [] });
+		const { plan: dong } = await gieoKeHoach({
+			camTrich: khac.id,
+			buoc: [],
+			dong: true,
+		});
+		await db.onboardingWatch.createMany({
+			data: [
+				{ planId: mo.id, userId: a.id },
+				{ planId: dong.id, userId: a.id },
+			],
+		});
+		expect(await demTheoDoi(a.id)).toBe(2);
+		await workspace().setMemberRole(qt.id, {
+			memberId: await maMember(a.id),
+			role: "okr",
+		});
+		if ((await vaiCua(a.id)) !== "okr") {
+			throw new Error("vlr: doi vai khong xong");
+		}
+		const con = await demTheoDoi(a.id);
+		if (con !== 0) throw new Error(`vlr: con theo doi sau doi vai ${con}`);
+
+		const c = await gieoThanhVien("C VLR", "okr");
+		await db.onboardingWatch.create({ data: { planId: mo.id, userId: c.id } });
+		await workspace().setMemberRole(qt.id, {
+			memberId: await maMember(c.id),
+			role: "member",
+		});
+		if ((await demTheoDoi(c.id)) !== 1) {
+			throw new Error("vlr: xoa theo doi khi doi sang vai doc doi tac");
+		}
+
+		const d = await gieoThanhVien("D VLR", "okr");
+		await db.onboardingWatch.create({ data: { planId: mo.id, userId: d.id } });
+		await workspace().setMemberRole(qt.id, {
+			memberId: await maMember(d.id),
+			role: "okr",
+		});
+		if ((await demTheoDoi(d.id)) !== 0) {
+			throw new Error("vlr: luu lai vai okr khong don theo doi");
+		}
+		const bp = await gieoBoPhan();
+		await gieoKeHoach({
+			camTrich: khac.id,
+			buoc: [{ nhan: "B", boPhanId: bp.id, giao: d.id }],
+		});
+		let loi = "";
+		try {
+			await workspace().setMemberRole(qt.id, {
+				memberId: await maMember(d.id),
+				role: "okr",
+			});
+		} catch (e) {
+			loi = e instanceof Error ? e.message : String(e);
+		}
+		if (loi !== WORKSPACE_CONFIG.messages.conViecKeHoach(0, 1)) {
+			throw new Error(`vlr: luu lai vai okr khi con viec khong bi chan ${loi}`);
+		}
+	});
+
+	test("vlr-doi-vai: quản trị tự đổi mình khi còn việc → 409; memberId lạ → 404, không xoá theo dõi", async () => {
+		const qt = await gieoThanhVien("QT3 VLR", "admin");
+		await gieoKeHoach({ camTrich: qt.id, buoc: [] });
+		const ma = await maMember(qt.id);
+		const loiTu = await nem(
+			() => workspace().setMemberRole(qt.id, { memberId: ma, role: "okr" }),
+			"vlr: tu doi vai khi con viec khong bi chan",
+		);
+		expect(loiTu).toBe(WORKSPACE_CONFIG.messages.conViecKeHoach(1, 0));
+		const tongTheoDoi = await db.onboardingWatch.count();
+		const loiLa = await nem(
+			() =>
+				workspace().setMemberRole(qt.id, {
+					memberId: "vlr-khong-co",
+					role: "okr",
+				}),
+			"vlr: member la khong bi chan",
+		);
+		expect(loiLa).toBe("That person is not in this workspace.");
+		expect(await db.onboardingWatch.count()).toBe(tongTheoDoi);
 	});
 });
