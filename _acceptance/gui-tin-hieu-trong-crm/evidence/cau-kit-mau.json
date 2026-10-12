@@ -1,0 +1,12 @@
+{
+  "kit_origin_main": "7b92596757e42a5760d9ec4b463921e64aa74620",
+  "cau_theo_cho": {
+    "chua-gom": "chưa gom — tín hiệu tới sau lượt gom gần nhất",
+    "le": "lẻ — lời cảm ơn, không đòi thay đổi gì",
+    "da-phu": "đã có việc đã giao: giao-x (Đã giao)",
+    "nhom-chua-cat": "vào nhóm Trưởng phòng ban thấy số tuần trước — nhóm chưa thành việc",
+    "chan-troi": "vào nhóm Nhân viên căn chỉnh OKR với phòng khác — để sau: chờ chu kỳ quý I",
+    "hang-chua-ho-so": "vào nhóm Nhân viên tìm được quy trình → việc H3: Chưa mở",
+    "hang-co-ho-so": "vào nhóm Trưởng phòng ban biết việc của phòng mình → việc H5 → hồ sơ viec-h5: Đã giao"
+  }
+}
