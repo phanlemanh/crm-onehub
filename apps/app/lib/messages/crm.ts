@@ -20,8 +20,6 @@ const en = {
 			notes: "Notes",
 			emails: "Emails",
 			meetings: "Meetings",
-			upcoming: "Upcoming",
-			done: "Done",
 		},
 		showOlder: "Show older",
 		xemCuLoi: "Couldn't load older activity.",
@@ -30,12 +28,9 @@ const en = {
 		messages: (n: string) => `${n} messages`,
 		viaGmail: "via Gmail",
 		viaCalendar: "via Calendar",
-		markNotDone: "Mark as not done",
-		markDone: "Mark as done",
 		due: "Due",
 		today: "Today",
 		yesterday: "Yesterday",
-		outstanding: "Outstanding",
 		type: {
 			note: "Note",
 			call: "Call",
@@ -59,11 +54,6 @@ const en = {
 			meetingsTitle: "No meetings",
 			meetingsBody:
 				"Calendar events with someone from this record on them show up here, past and upcoming.",
-			upcomingTitle: "Nothing outstanding",
-			upcomingBody:
-				"Tasks you have not finished appear here, and at the top of the All tab until they are done.",
-			doneTitle: "Nothing finished yet",
-			doneBody: "Tasks move here once you tick them off.",
 		},
 	},
 	enrichment: {
@@ -350,8 +340,6 @@ const vi = {
 			notes: "Ghi chú",
 			emails: "Email",
 			meetings: "Cuộc họp",
-			upcoming: "Sắp tới",
-			done: "Đã xong",
 		},
 		showOlder: "Xem cũ hơn",
 		xemCuLoi: "Không tải được hoạt động cũ hơn.",
@@ -360,12 +348,9 @@ const vi = {
 		messages: (n: string) => `${n} thư`,
 		viaGmail: "qua Gmail",
 		viaCalendar: "qua Lịch",
-		markNotDone: "Đánh dấu chưa xong",
-		markDone: "Đánh dấu đã xong",
 		due: "Hạn",
 		today: "Hôm nay",
 		yesterday: "Hôm qua",
-		outstanding: "Chưa xong",
 		type: {
 			note: "Ghi chú",
 			call: "Cuộc gọi",
@@ -389,11 +374,6 @@ const vi = {
 			meetingsTitle: "Chưa có cuộc họp",
 			meetingsBody:
 				"Sự kiện trên Lịch có người của hồ sơ này tham dự sẽ hiện ở đây, cả đã qua lẫn sắp tới.",
-			upcomingTitle: "Không còn việc nào",
-			upcomingBody:
-				"Việc bạn chưa làm xong hiện ở đây, và nằm trên đầu mục Tất cả cho tới khi xong.",
-			doneTitle: "Chưa xong việc nào",
-			doneBody: "Việc chuyển về đây khi bạn đánh dấu đã xong.",
 		},
 	},
 	enrichment: {
