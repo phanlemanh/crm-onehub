@@ -1,0 +1,1252 @@
+[
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/auth.ts",
+  "khoa": "onboarding.description",
+  "cu": {
+   "vi": "Hai việc, làm một lần. Tên là cách OneHub Center gọi bạn; website là cách tác nhân biết bạn bán gì.",
+   "en": "Two things, once. The name is what OneHub Center calls you; the website is how the agent learns what you sell."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/auth.ts",
+  "khoa": "research.description",
+  "cu": {
+   "vi": "Cắm Context cho tác nhân nghiên cứu, để nó tra mọi công ty được thêm vào OneHub Center.",
+   "en": "Power your research agent with Context to research every company added to OneHub Center."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/companies.ts",
+  "khoa": "create.description",
+  "cu": {
+   "vi": "Chỉ cần tên và tên miền. Tác nhân sẽ tự điền logo, mô tả, ngành, địa chỉ và mạng xã hội.",
+   "en": "Give it a name and a domain. The agent fills in the logo, description, industry, address and socials."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/crm.ts",
+  "khoa": "enrichment.agentResearching",
+  "cu": {
+   "vi": "Tác nhân đang tra cứu",
+   "en": "Agent is researching"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/crm.ts",
+  "khoa": "fields.agentLabel",
+  "cu": {
+   "vi": "Để tác nhân điền giúp",
+   "en": "Let your agents fill this"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/crm.ts",
+  "khoa": "fields.agentsPickUp",
+  "cu": {
+   "vi": "Tác nhân của bạn sẽ dùng trường này.",
+   "en": "Your agents will pick this up."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/crm.ts",
+  "khoa": "fields.createHint",
+  "cu": {
+   "vi": "Tạo trường động để tác nhân tra cứu và điền sẵn.",
+   "en": "Create dynamic fields that your agents can research and pre-fill."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/crm.ts",
+  "khoa": "fields.keyHint",
+  "cu": {
+   "vi": "Tên mà API và tác nhân gọi. Sinh từ nhãn, cố định sau khi lưu — đổi nhãn về sau không làm hỏng chỗ gọi nào.",
+   "en": "What the API and your agents call it. Set from the label, fixed once saved — renaming the label later never breaks a caller."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/crm.ts",
+  "khoa": "fields.agentHint",
+  "cu": {
+   "vi": "Tác nhân đề xuất giá trị kèm nguồn, và không bao giờ ghi đè giá trị của bạn."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/crm.ts",
+  "khoa": "fields.emptyHint",
+  "cu": {
+   "vi": "Để trống thì tác nhân chỉ dựa vào nhãn và kiểu.",
+   "en": "Leave it empty and your agents work from the label and type alone."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/kara-ban-ghi.ts",
+  "khoa": "tab.buoc.okr-chi-tro-ly",
+  "cu": {
+   "en": "Kept the OKR session to the OKR assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/khung-ung-dung.ts",
+  "khoa": "enrichment.emptyBody",
+  "cu": {
+   "vi": "Công ty và cá nhân mới hiện ở đây trong lúc tác nhân tra cứu về họ.",
+   "en": "New companies and contacts show up here while your agents look them up."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/khung-ung-dung.ts",
+  "khoa": "nav.mobileChat",
+  "cu": {
+   "en": "Navigation and agent chats"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/app/lib/messages/nhac-qua-zalo.ts",
+  "khoa": "troLy.tieuDe",
+  "cu": {
+   "vi": "Trợ lý OKR",
+   "en": "OKR assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/app/lib/messages/nhac-qua-zalo.ts",
+  "khoa": "troLy.dongTomTat",
+  "cu": {
+   "vi": "Dòng Tóm tắt tuần của Trợ lý OKR",
+   "en": "The OKR assistant's weekly summary line"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/app/lib/messages/nhac-qua-zalo.ts",
+  "khoa": "ketNoi.imMoTa",
+  "cu": {
+   "en": "The agent may be stopped. People waiting to connect get no confirmation, and tomorrow's reminder may not go out."
+  },
+  "hanh_dong": "giu",
+  "ly_do": "ha-tang: «agent» là máy chủ tác tử"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/app/lib/messages/nhac-qua-zalo.ts",
+  "khoa": "ketNoi.canHttpsMoTa",
+  "cu": {
+   "en": "The agent has no https address, so Zalo cannot deliver messages. When testing on your machine, run"
+  },
+  "hanh_dong": "giu",
+  "ly_do": "ha-tang: «agent» là máy chủ tác tử nhận webhook"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "nut.soan",
+  "cu": {
+   "vi": "Soạn OKR cùng Trợ lý",
+   "en": "Draft OKRs with the Assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "nut.tamNghi",
+  "cu": {
+   "vi": "Trợ lý OKR tạm nghỉ tới X",
+   "en": "The OKR Assistant is paused until X"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.nhan",
+  "cu": {
+   "vi": "Trò chuyện với Trợ lý OKR",
+   "en": "Conversation with the OKR Assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.moDau",
+  "cu": {
+   "vi": "Trợ lý OKR đang đọc bối cảnh của đơn vị…",
+   "en": "The OKR Assistant is reading the unit's context…"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.dangSoan",
+  "cu": {
+   "vi": "Trợ lý OKR đang soạn…",
+   "en": "The OKR Assistant is drafting…"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.khoaKhiSoan",
+  "cu": {
+   "vi": "Ô soạn mở lại khi Trợ lý trả lời xong.",
+   "en": "The box reopens when the Assistant finishes."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.loi",
+  "cu": {
+   "vi": "Trợ lý OKR chưa trả lời được",
+   "en": "The OKR Assistant did not answer"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.lyDoHong.khong-noi-duoc",
+  "cu": {
+   "vi": "Không nối được tới Trợ lý OKR.",
+   "en": "Could not reach the OKR Assistant."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.lyDoHong.qua-han",
+  "cu": {
+   "vi": "Trợ lý OKR không trả lời kịp.",
+   "en": "The OKR Assistant did not respond in time."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.lyDoHong.tro-ly-tu-choi",
+  "cu": {
+   "vi": "Trợ lý OKR từ chối lượt này.",
+   "en": "The OKR Assistant refused this turn."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.lyDoHong.tro-ly-loi",
+  "cu": {
+   "vi": "Trợ lý OKR đang gặp lỗi.",
+   "en": "The OKR Assistant ran into an error."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.thieuBoiCanh",
+  "cu": {
+   "vi": "Chưa có Hồ sơ công ty và Chiến lược năm — Trợ lý soạn với ít bối cảnh hơn",
+   "en": "No company profile or annual strategy yet — the Assistant drafts with less context"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "hoiThoai.thieuBoiCanhMoTa",
+  "cu": {
+   "vi": "Viết hai trang loại «Chiến lược» trong Kho tài liệu rồi duyệt; cuộc sau Trợ lý sẽ đọc."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "banNhap.rongMoTa",
+  "cu": {
+   "vi": "Trả lời Trợ lý trong khung trò chuyện; bản nháp sẽ hiện ở đây để bạn nhận, sửa hay bác từng dòng.",
+   "en": "Answer the Assistant in the conversation; the draft appears here so you can accept, edit or reject each line."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "cuoc.tieuDe",
+  "cu": {
+   "vi": "Cuộc soạn cùng Trợ lý · X",
+   "en": "Drafting sessions with the Assistant · X"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "soDo.tieuDe",
+  "cu": {
+   "vi": "Soạn OKR cùng Trợ lý",
+   "en": "Drafting OKRs with the Assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "soDo.maLoai.dich-khong-trong",
+  "cu": {
+   "vi": "Máy ghi số đích"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "buoc.agent",
+  "cu": {
+   "vi": "nhờ một trợ lý phụ"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "lyDo.het-tran-thang",
+  "cu": {
+   "vi": "Trợ lý OKR tạm nghỉ tới đầu tháng sau",
+   "en": "The OKR Assistant is paused until next month"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/okr-soan.ts",
+  "khoa": "lyDoLuot.het-tran-thang",
+  "cu": {
+   "vi": "Trợ lý OKR tạm nghỉ tới đầu tháng sau",
+   "en": "The OKR Assistant is paused until next month"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "tomTat.tieuDe",
+  "cu": {
+   "vi": "Tóm tắt tuần của Trợ lý OKR",
+   "en": "OKR assistant's weekly summary"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "tomTat.dongNguon",
+  "cu": {
+   "vi": "Trợ lý OKR tóm tắt từ X lần cập nhật · tuần Y",
+   "en": "The OKR assistant summarised X updates · week of Y"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/app/lib/messages/okr-toan-canh.ts",
+  "khoa": "tomTat.chuaCapNhatMoTa",
+  "cu": {
+   "vi": "Trợ lý OKR tóm tắt sáng hôm sau ngày cập nhật, khi phòng có ít nhất một lần Cập nhật tuần.",
+   "en": "The OKR assistant summarises the morning after the update day, once the department has at least one weekly update."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/record-sheet.ts",
+  "khoa": "contact.deleteWarning",
+  "cu": {
+   "vi": "Ghi chú, hội thoại với tác nhân và mọi thứ tác nhân tìm được đều mất theo; email và cuộc họp vẫn gắn với công ty.",
+   "en": "Their notes, agent conversations and everything the agent found go too; emails and meetings stay filed against the company."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/lib/messages/record-sheet.ts",
+  "khoa": "deal.deleteWarning",
+  "cu": {
+   "vi": "Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. X và Y trong đó vẫn ở lại OneHub Center.",
+   "en": "Its stage history, notes and agent conversations go too. X and the Y on it stay in OneHub Center."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings-khoa-api.ts",
+  "khoa": "tao.tenGoiY",
+  "cu": {
+   "vi": "Máy chạy CI"
+  },
+  "hanh_dong": "giu",
+  "ly_do": "khong-phai-ai: tên gợi ý cho khoá của máy chạy CI"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings.ts",
+  "khoa": "chung.moTa",
+  "cu": {
+   "vi": "OneHub là ai, và tác nhân nghiên cứu nghĩ bằng model nào.",
+   "en": "Who you are, and the model the research agent thinks with."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings.ts",
+  "khoa": "model.tieuDe",
+  "cu": {
+   "vi": "Tác nhân nghiên cứu",
+   "en": "Research agent"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings.ts",
+  "khoa": "model.moTa",
+  "cu": {
+   "vi": "Model tác nhân dùng để nghĩ, đi qua Vercel AI Gateway.",
+   "en": "The model the agent thinks with, routed through the Vercel AI Gateway."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings.ts",
+  "khoa": "model.khongVoiToi",
+  "cu": {
+   "vi": "Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy X.",
+   "en": "Could not reach the AI Gateway to list models. The agent is still running X."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings.ts",
+  "khoa": "model.daLuu",
+  "cu": {
+   "vi": "Tác nhân sẽ dùng model này từ lượt chạy sau.",
+   "en": "The agent will use this model from its next session."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings.ts",
+  "khoa": "model.biGo",
+  "cu": {
+   "vi": "Model đã chọn không còn trên AI Gateway — tác nhân đang chạy model mặc định. Chọn model khác.",
+   "en": "The model you chose is no longer on the AI Gateway — the agent is running the default model. Pick another model."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings.ts",
+  "khoa": "nghienCuu.moTa",
+  "cu": {
+   "vi": "Nhập khoá API Context để tác nhân nghiên cứu được mọi công ty trong OneHub Center.",
+   "en": "Enter your Context API key so our agents can research every company in OneHub Center."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/settings.ts",
+  "khoa": "model.khongDuQuyen",
+  "cu": {
+   "en": "Only an owner or an admin can change the agent's model."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "sucKhoe.ketLuan.moTa",
+  "cu": {
+   "vi": "Trợ lý trả lời sai, hay trả lời đúng theo trang?",
+   "en": "Did the assistant answer wrong, or did it follow the page?"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "sucKhoe.ketLuan.sai",
+  "cu": {
+   "vi": "Trợ lý trả lời sai",
+   "en": "The assistant answered wrong"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "sucKhoe.ketLuan.dung",
+  "cu": {
+   "vi": "Trợ lý trả lời đúng theo trang",
+   "en": "The assistant answered right per the page"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "doc.xacMinh.moTa",
+  "cu": {
+   "vi": "Qua ngày này, trợ lý AI nhắc người đọc hỏi lại chủ trang.",
+   "en": "After this date the AI assistant warns readers to check with the page owner."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "soan.loaiMoTa.chien-luoc",
+  "cu": {
+   "vi": "Trợ lý OKR đọc bản đang dùng của loại này",
+   "en": "The OKR assistant reads the version in use of this type"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "duyet.chienLuoc.canhBao",
+  "cu": {
+   "vi": "Có chữ về {tu} — Trợ lý OKR không được nhắc tới những thứ này",
+   "en": "Mentions {tu} — the OKR assistant must not bring these up"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "duyetMay.buoc2",
+  "cu": {
+   "vi": "Bước 2 · Đối chiếu với bản máy soạn"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "duyetMay.daDoc",
+  "cu": {
+   "vi": "Đã đọc nguồn, xem bản máy soạn"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "duyetMay.khongSoMoi",
+  "cu": {
+   "vi": "Bản máy soạn không thêm con số hay ngày nào mới."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "duyetMay.banMay",
+  "cu": {
+   "vi": "Bản máy soạn"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "nguon.hop.moTa",
+  "cu": {
+   "vi": "Máy soạn đọc tệp và soạn một bản đề xuất cho một trang. Không trang nào đổi cho tới khi chủ trang duyệt.",
+   "en": "The composer reads the file and drafts a proposal for one page. No page changes until its page owner approves."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "nguon.bang.rongThan",
+  "cu": {
+   "vi": "Tải một tệp Word hay PDF lên, máy soạn sẽ soạn bản đề xuất từ nó.",
+   "en": "Upload a Word or PDF file and the composer drafts a proposal from it."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "hoi.gioiThieu",
+  "cu": {
+   "vi": "Trợ lý AI chỉ trả lời từ bản đang dùng của các trang đã duyệt.",
+   "en": "The AI assistant answers only from the version in use of approved pages."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "hoi.nhanTraLoi",
+  "cu": {
+   "vi": "Trợ lý AI · theo bản đang dùng",
+   "en": "AI assistant · from the version in use"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "hoi.dangDoc",
+  "cu": {
+   "vi": "Trợ lý AI đang đọc kho…",
+   "en": "The AI assistant is reading the documents…"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "sucKhoe.chuaTraLoi",
+  "cu": {
+   "en": "Questions the AI assistant couldn't answer"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "doc.cho.may-soan.tieuDe",
+  "cu": {
+   "en": "The composer is drafting the first version."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "doc.cho.go-tay.than",
+  "cu": {
+   "en": "The source is a scan the composer can't read. Type the content to send it to {ten} for review."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "doc.cho.loi.tieuDe",
+  "cu": {
+   "en": "The composer couldn't draft this page."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "nguon.bang.trangThai.CHO_DOC",
+  "cu": {
+   "en": "Composer is drafting"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "nguon.bang.trangThai.CHO_SOAN",
+  "cu": {
+   "en": "Composer is drafting"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "nguon.bang.trangThai.DANG_SOAN",
+  "cu": {
+   "en": "Composer is drafting"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/app/lib/messages/tai-lieu.ts",
+  "khoa": "nguon.bang.trangThai.CAN_GO_TAY",
+  "cu": {
+   "en": "Needs typing by hand — the file is a scan, the composer cannot read its text"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/app/lib/messages/to-chuc.ts",
+  "khoa": "donVi.moTaGoiY",
+  "cu": {
+   "vi": "Trợ lý OKR đọc mô tả này khi soạn",
+   "en": "The OKR assistant reads this when drafting"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.tieuDe",
+  "cu": {
+   "vi": "Trợ lý OKR",
+   "en": "OKR assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.daLuu",
+  "cu": {
+   "vi": "Đã lưu Trợ lý OKR.",
+   "en": "OKR assistant saved."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.bat",
+  "cu": {
+   "vi": "Bật Trợ lý OKR",
+   "en": "Turn on the OKR assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.viec.de-xuat.moTa",
+  "cu": {
+   "vi": "Người sửa được một Mục tiêu nhờ Trợ lý OKR góp ý tên, «vì sao lúc này» và KR.",
+   "en": "Anyone who can edit an objective can ask the OKR assistant for feedback on its title, “why now” and KRs."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.viec.de-xuat.moTaAn",
+  "cu": {
+   "vi": "Máy góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.viec.tom-tat-tuan.moTaAn",
+  "cu": {
+   "vi": "Máy tóm tắt sau ngày cập nhật; chỉ quản trị thấy kết quả."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.viec.soan.moTa",
+  "cu": {
+   "vi": "Trưởng đơn vị mở «Soạn OKR cùng Trợ lý» cho đơn vị và chu kỳ đang lập kế hoạch; bản nháp do người nhận, sửa, bác.",
+   "en": "A unit head opens “Draft OKRs with the assistant” for a unit and a cycle in planning; people accept, edit or reject every line."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.hop.moTa",
+  "cu": {
+   "vi": "Trợ lý OKR chỉ chạy cho Mục tiêu thuộc các đơn vị đã chọn.",
+   "en": "The OKR assistant runs only for objectives in the chosen units."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.hop.moTaAn",
+  "cu": {
+   "vi": "Máy chạy ở chế độ ẩn cho Mục tiêu thuộc các đơn vị đã chọn. Đơn vị đã bật không có trong danh sách."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.tranMoTa",
+  "cu": {
+   "vi": "Chạm trần thì Trợ lý OKR tạm nghỉ tới đầu tháng sau. Quản trị được báo ở 80% và 100%.",
+   "en": "At the cap the OKR assistant pauses until next month. Admins are told at 80% and 100%."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.sanSang.sanSangNguon.khoa-rieng",
+  "cu": {
+   "vi": "Sẵn sàng · khoá riêng của Trợ lý OKR",
+   "en": "Ready · Trợ lý OKR's own key"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "so.troLyOkr",
+  "cu": {
+   "vi": "Trợ lý OKR",
+   "en": "OKR assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "so.thanh",
+  "cu": {
+   "vi": "Trợ lý OKR đã dùng trên trần tháng",
+   "en": "OKR assistant spend against the monthly cap"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "so.nhom.tro-ly-ai",
+  "cu": {
+   "vi": "Trợ lý AI",
+   "en": "AI assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "so.nhom.tac-nhan",
+  "cu": {
+   "vi": "Tác nhân",
+   "en": "Agents"
+  },
+  "hanh_dong": "giu",
+  "ly_do": "vat: nhóm sổ chi phí của tác nhân đội dựng"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "so.nhom.tro-ly-okr",
+  "cu": {
+   "vi": "Trợ lý OKR",
+   "en": "OKR assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "so.rongMoTa",
+  "cu": {
+   "vi": "Trần của Trợ lý OKR: X.",
+   "en": "OKR assistant cap: X."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "soDo.tieuDe",
+  "cu": {
+   "vi": "Góp ý của Trợ lý OKR — tháng này",
+   "en": "OKR assistant feedback — this month"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.sanSang.sanSangNguon.khoa-chung",
+  "cu": {
+   "en": "Ready · the agent's shared key"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.sanSang.thieuKhoaMoTa",
+  "cu": {
+   "en": "Set X (or Y) on the agent project, or turn on that project's OIDC on Vercel. The agent checks again within about Z minutes."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "troLy.sanSang.lyDo.chua-noi-tac-tu",
+  "cu": {
+   "en": "Agent not connected"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "cai-dat",
+  "tep": "apps/app/lib/messages/tro-ly-okr.ts",
+  "khoa": "so.doiSoat.khongCoKhoaRieng",
+  "cu": {
+   "en": "the agent has no AI Gateway key of its own to filter by"
+  },
+  "hanh_dong": "giu",
+  "ly_do": "ha-tang: «agent» là dịch vụ tác tử, vi ghi «tác tử»"
+ },
+ {
+  "be_mat": "dung-chung",
+  "tep": "packages/ui/src/lib/messages.ts",
+  "khoa": "chatMessage.roleAssistant",
+  "cu": {
+   "vi": "Trợ lý",
+   "en": "Assistant"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/agent/agent/lib/tin-nhac.ts",
+  "khoa": "TIEU_DE.okr-tom-tat",
+  "cu": {
+   "vi": "Trợ lý OKR"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/agent/agent/lib/tin-nhac.ts",
+  "khoa": "noiDungAi.tran100",
+  "cu": {
+   "vi": "Trợ lý OKR đã chạm trần tháng ("
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tom-tat",
+  "tep": "apps/agent/agent/lib/tin-nhac.ts",
+  "khoa": "noiDungAi.tran80",
+  "cu": {
+   "vi": "Trợ lý OKR đã dùng 80% trần tháng ("
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/api/src/okr/okr-config.ts",
+  "khoa": "dongCu",
+  "cu": {
+   "vi": "Dòng này thuộc bản nháp cũ — Trợ lý đã nộp bản mới hơn."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/api/src/okr/okr-config.ts",
+  "khoa": "chuaCoKhoaMoHinh",
+  "cu": {
+   "vi": "Chưa có khoá model cho Trợ lý OKR."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "soan",
+  "tep": "apps/api/src/okr/okr-config.ts",
+  "khoa": "daCu",
+  "cu": {
+   "vi": "Ô này đã đổi từ lúc Trợ lý OKR đề xuất — tải lại danh sách góp ý."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "packages/validation/src/tai-lieu-hoi.ts",
+  "khoa": "hetTran",
+  "cu": {
+   "vi": "Trợ lý AI tạm dừng vì hết hạn mức tháng."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "packages/validation/src/tai-lieu-nguon.ts",
+  "khoa": "dangSoan",
+  "cu": {
+   "vi": "Máy đang soạn nguồn này. Chờ xong rồi mới soạn lại được."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "packages/validation/src/tai-lieu-nguon.ts",
+  "khoa": "trangThai.CHO_DOC",
+  "cu": {
+   "vi": "Máy đang soạn"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "packages/validation/src/tai-lieu-nguon.ts",
+  "khoa": "trangThai.CHO_SOAN",
+  "cu": {
+   "vi": "Máy đang soạn"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "packages/validation/src/tai-lieu-nguon.ts",
+  "khoa": "trangThai.DANG_SOAN",
+  "cu": {
+   "vi": "Máy đang soạn"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "packages/validation/src/tai-lieu-nguon.ts",
+  "khoa": "trangThai.CAN_GO_TAY",
+  "cu": {
+   "vi": "Cần gõ tay — tệp là bản quét, máy không đọc được chữ"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/api/src/tai-lieu/tai-lieu-config.ts",
+  "khoa": "baoSaiChiTraLoi",
+  "cu": {
+   "vi": "Chỉ báo sai được câu trợ lý AI đã trả lời."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "quaDai",
+  "cu": {
+   "vi": "Chưa soạn được — nguồn quá dài để máy soạn một lần."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "loiModel",
+  "cu": {
+   "vi": "Chưa soạn được — máy soạn báo lỗi: "
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "loiGui",
+  "cu": {
+   "vi": "Chưa soạn được — không mở được phiên máy soạn."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "hetGio",
+  "cu": {
+   "vi": "Chưa soạn được — máy soạn chạy quá thời gian cho phép."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "khongNop",
+  "cu": {
+   "vi": "Chưa soạn được — máy soạn dừng mà không nộp bản nào."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "choSoan",
+  "cu": {
+   "vi": "Đã đọc chữ, chờ máy soạn."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "moCoi",
+  "cu": {
+   "vi": "Máy soạn dừng giữa chừng — bấm Soạn lại để thử lần nữa."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-hoi-phien.ts",
+  "khoa": "title",
+  "cu": {
+   "vi": "Trợ lý AI đọc kho"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-hoi-phien.ts",
+  "khoa": "dongViec.moDuoc",
+  "cu": {
+   "vi": "Đã mở phiên trợ lý kho."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-hoi-phien.ts",
+  "khoa": "dongViec.khongMo",
+  "cu": {
+   "vi": "Không mở được phiên trợ lý kho."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-phien.ts",
+  "khoa": "title",
+  "cu": {
+   "vi": "Máy soạn bản đề xuất"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/components/landing/product-shot/company-sheet.tsx",
+  "khoa": "tab.agent",
+  "cu": {
+   "vi": "Agent"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "ban-ghi",
+  "tep": "apps/app/components/landing/product-shot/product-shot.tsx",
+  "khoa": "aria-label",
+  "cu": {
+   "vi": "The companies list with an account open on its Agent tab"
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "khac",
+  "tep": "apps/agent/agent/lib/tai-lieu-loi-dan.ts",
+  "khoa": "loiDan",
+  "cu": {
+   "vi": "Bạn là máy soạn của Kho tài liệu OneHub."
+  },
+  "hanh_dong": "mien",
+  "ly_do": "hoi-1: lời cho mô hình, không hiện cho người dùng"
+ },
+ {
+  "be_mat": "khac",
+  "tep": "apps/agent/agent/subagents/tro_ly_okr/agent.ts",
+  "khoa": "description",
+  "cu": {
+   "vi": "Trợ lý OKR. Reads one OKR task"
+  },
+  "hanh_dong": "mien",
+  "ly_do": "hoi-1: lời cho mô hình, không hiện cho người dùng"
+ },
+ {
+  "be_mat": "khac",
+  "tep": "apps/agent/agent/subagents/tro_ly_okr/tools/nop_de_xuat.ts",
+  "khoa": "description",
+  "cu": {
+   "vi": "Submit the proposals for this Trợ lý OKR task."
+  },
+  "hanh_dong": "mien",
+  "ly_do": "hoi-1: lời cho mô hình, không hiện cho người dùng"
+ },
+ {
+  "be_mat": "khac",
+  "tep": "apps/agent/agent/subagents/tro_ly_okr/tools/nop_tom_tat.ts",
+  "khoa": "description",
+  "cu": {
+   "vi": "Submit the weekly summary for this Trợ lý OKR task."
+  },
+  "hanh_dong": "mien",
+  "ly_do": "hoi-1: lời cho mô hình, không hiện cho người dùng"
+ },
+ {
+  "be_mat": "khac",
+  "tep": "apps/agent/agent/lib/okr/config.ts",
+  "khoa": "brief",
+  "cu": {
+   "vi": "Run one Trợ lý OKR task."
+  },
+  "hanh_dong": "mien",
+  "ly_do": "hoi-1: lời cho mô hình, không hiện cho người dùng"
+ },
+ {
+  "be_mat": "khac",
+  "tep": "apps/agent/agent/lib/capabilities.ts",
+  "khoa": "modelKey",
+  "cu": {
+   "vi": "including Trợ lý OKR."
+  },
+  "hanh_dong": "mien",
+  "ly_do": "van-hanh: nhật ký cho người vận hành, không hiện trên màn"
+ }
+]

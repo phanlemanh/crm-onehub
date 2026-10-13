@@ -1561,7 +1561,23 @@ executors:
     kkc_chu: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-khong-con.dom.tsx -t kkc-chu'
     kkc_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx apps/app/test/kara-ban-ghi.dom.tsx && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi'
     kkc_canh_chu: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/messages-guard.spec.ts && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/messages-guard.spec.ts'
+    kmt_ban_ghi: cd apps/app && bun test ./test/messages-guard.spec.ts -t kmt-ban-ghi
+    kmt_tom_tat: cd apps/app && bun test ./test/messages-guard.spec.ts -t kmt-tom-tat
+    kmt_soan: cd apps/app && bun test ./test/messages-guard.spec.ts -t kmt-soan
+    kmt_cai_dat: cd apps/app && bun test ./test/messages-guard.spec.ts -t kmt-cai-dat
+    kmt_tai_lieu: cd apps/app && bun test ./test/messages-guard.spec.ts -t kmt-tai-lieu
+    kmt_dung_chung: cd apps/app && bun test ./test/messages-guard.spec.ts -t kmt-dung-chung
+    kmt_luat: cd apps/app && bun test ./test/kara-mot-ten.spec.ts -t kmt-luat
+    kmt_giu: cd apps/app && bun test ./test/kara-mot-ten.spec.ts -t kmt-giu
+    kmt_bai_cu_app: node _acceptance/kara-mot-ten/rang/bai-cu.mjs --app
+    kmt_bai_cu_may: node _acceptance/kara-mot-ten/rang/bai-cu.mjs --may
+    kmt_tin_nhac: 'bun run test -- "cd apps/agent && bun test test/kara-mot-ten.spec.ts -t kmt-tin-nhac"'
   script:
+    kmt_dot_bien: node _acceptance/kara-mot-ten/rang/dot-bien.mjs
+    kmt_khong_go_bai: node _acceptance/kara-mot-ten/rang/khong-go-bai.mjs
+    kmt_chup: bun run do:man --chay "bun _acceptance/kara-mot-ten/rang/chup.mjs"
+    kmt_kiem_ke: node _acceptance/kara-mot-ten/rang/kiem-ke.mjs
+    kmt_bang_chu: node _acceptance/kara-mot-ten/rang/bang-chu.mjs
     h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'
     ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
     ltc_ban_dung: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-dung.mjs
