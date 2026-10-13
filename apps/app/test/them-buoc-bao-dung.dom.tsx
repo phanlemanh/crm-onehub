@@ -449,7 +449,7 @@ describe("phong-ban-loi", () => {
 		await cho(() => nutThuLai() !== null, "vung loi co nut thu lai");
 		expect(soLanDocPhongBan()).toBe(1);
 		await bam(nutThuLai() as HTMLButtonElement);
-		await cho(() => soLanDocPhongBan() === 2, "doc lai danh sach");
+		await doi(() => soLanDocPhongBan() === 2);
 		expect(
 			soLanDocPhongBan(),
 			"thu lai khong tai lai danh sach phong ban",
