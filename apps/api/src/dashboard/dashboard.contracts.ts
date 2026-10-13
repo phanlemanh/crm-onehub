@@ -73,6 +73,21 @@ const overdueTaskOutput = z.object({
 	createdBy: linkedRecordOutput,
 });
 
+const viecQuaHanOutput = z.object({
+	loai: z.literal("viec"),
+	id: z.string(),
+	tieuDe: z.string(),
+	hanNgay: z.string(),
+	nguoiThucHien: linkedRecordOutput,
+	banGhi: z
+		.object({
+			loai: z.enum(["company", "contact", "deal", "plan"]),
+			id: z.string(),
+			ten: z.string(),
+		})
+		.nullable(),
+});
+
 const myStepOutput = z.object({
 	stepId: z.string(),
 	nhan: z.string(),
@@ -130,6 +145,7 @@ export const dashboardSummaryOutput = z.object({
 	quaHan: z.object({ viec: z.number().int(), buoc: z.number().int() }),
 	keHoachCanDeY: z.array(keHoachCanDeYOutput),
 	taiLieuChoDuyet: z.number().int(),
+	viecQuaHan: z.array(viecQuaHanOutput),
 	overdueTasks: z.array(overdueTaskOutput),
 	recentActivity: z.array(recentActivityOutput),
 });

@@ -1,5 +1,6 @@
 import { KHOA_MUC_OKR, viecOkr } from "@crm/db/okr-nhac";
 import { LOAI_NHAC } from "@crm/db/onboarding-nhac";
+import { LOAI_NHAC_VIEC } from "@crm/db/viec";
 import { z } from "zod";
 
 export {
@@ -28,6 +29,7 @@ const [
 ] = viecOkr.options;
 
 export const mucNhac = z.union([
+	z.object({ loai: z.enum(LOAI_NHAC_VIEC), viecId: ma }).strict(),
 	z
 		.object({ loai: z.enum(LOAI_NHAC), planId: ma, stepId: ma.optional() })
 		.strict(),

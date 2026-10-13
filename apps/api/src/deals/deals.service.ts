@@ -7,6 +7,7 @@ import {
 import { normalizeCurrency } from "@crm/db/currency";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
 import { type LoaiGiaiDoan, laDaDong, laThua } from "@crm/db/giai-doan";
+import { ghiGoDoXoa } from "@crm/db/viec-ghi";
 import {
 	BadRequestException,
 	Injectable,
@@ -552,6 +553,8 @@ export class DealsService {
 
 				const targets = await this.stamp.targetsOf({ dealId: id }, tx);
 				await tx.agentTask.deleteMany({ where: { dealId: id } });
+
+				await ghiGoDoXoa(tx, { dealId: id }, new Date());
 
 				const deal = await tx.deal.delete({
 					where: { id },

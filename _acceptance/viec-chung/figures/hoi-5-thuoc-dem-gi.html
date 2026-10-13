@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thước đếm gì</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --font-sans:    'Geist', system-ui, sans-serif;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <svg viewBox="0 0 1000 684" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hỏi-5: thước đo ngưỡng đếm những việc nào, hai vế">
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="32" y="36" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.18em">HỎI-5 · THƯỚC ĐỌC NGƯỠNG ĐẾM GÌ</text>
+      <text x="32" y="66" fill="#171717" font-size="20" font-family="'Lora', serif">Ở hai chỗ ngưỡng chưa nói, thước đo đếm những việc nào?</text>
+      <text x="32" y="90" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Ngưỡng đã chốt: ít nhất 80% việc giao cho người khác được người thực hiện chuyển khỏi «Chưa làm» đúng hạn · 0 việc gắn đối tác tới vai «chỉ OKR».</text>
+
+      <text x="32" y="128" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">VẾ TỈ LỆ · PHẢI ĐẠT ÍT NHẤT 80%</text>
+
+      <polygon points="32,140 320,140 304,196 48,196" fill="#f2f2f2" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="176" y="172" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mọi việc tạo trong cửa sổ</text>
+      <line x1="316" y1="168" x2="340" y2="168" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="352" y="164" fill="#171717" font-size="12" font-family="'Geist', sans-serif">mọi việc tạo trong 14 ngày đầu dùng thật</text>
+      <text x="352" y="182" fill="#575757" font-size="11" font-family="'Geist', sans-serif">cửa sổ đo đặt bằng ngày đầu và ngày cuối</text>
+
+      <polygon points="48,200 304,200 288,256 64,256" fill="#f2f2f2" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="176" y="232" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Giao cho người khác</text>
+      <line x1="300" y1="228" x2="340" y2="228" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="352" y="224" fill="#171717" font-size="12" font-family="'Geist', sans-serif">bỏ việc tự giao</text>
+      <text x="352" y="242" fill="#575757" font-size="11" font-family="'Geist', sans-serif">người tạo cũng là người thực hiện</text>
+
+      <polygon points="64,260 288,260 272,316 80,316" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="176" y="292" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Mẫu số</text>
+      <line x1="284" y1="288" x2="340" y2="288" stroke="#006B4F" stroke-width="0.8"/>
+      <rect x="352" y="268" width="80" height="18" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="392" y="281" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.1em">MÁY KHUYÊN</text>
+      <text x="444" y="282" fill="#171717" font-size="12" font-family="'Geist', sans-serif">bỏ việc người giao Huỷ khi người thực hiện chưa kịp chuyển</text>
+      <rect x="352" y="292" width="68" height="18" rx="2" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="386" y="305" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.1em">LỐI KHÁC</text>
+      <text x="444" y="306" fill="#575757" font-size="12" font-family="'Geist', sans-serif">giữ lại — người giao rút việc kéo tỉ lệ của người thực hiện xuống</text>
+
+      <polygon points="80,320 272,320 256,376 96,376" fill="#f2f2f2" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="176" y="352" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Tử số</text>
+      <line x1="268" y1="348" x2="340" y2="348" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="352" y="344" fill="#171717" font-size="12" font-family="'Geist', sans-serif">chỉ việc chính người thực hiện chuyển khỏi «Chưa làm» trước hoặc trong ngày hạn</text>
+      <text x="352" y="362" fill="#575757" font-size="11" font-family="'Geist', sans-serif">người giao tự bấm «Bắt đầu» hay Huỷ thì không tính</text>
+
+      <text x="176" y="400" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">tỉ lệ = tử số ÷ mẫu số</text>
+
+      <line x1="32" y1="420" x2="968" y2="420" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="440" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">VẾ AN TOÀN · PHẢI ĐÚNG BẰNG 0</text>
+
+      <polygon points="32,452 320,452 304,508 48,508" fill="#f2f2f2" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="176" y="484" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Việc gắn đối tác</text>
+      <line x1="316" y1="480" x2="340" y2="480" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="352" y="476" fill="#171717" font-size="12" font-family="'Geist', sans-serif">việc gắn thoả thuận, công ty, cá nhân hay kế hoạch 30 ngày</text>
+      <text x="352" y="494" fill="#575757" font-size="11" font-family="'Geist', sans-serif">việc riêng không gắn gì không thuộc vế này</text>
+
+      <polygon points="48,512 304,512 288,568 64,568" fill="#f2f2f2" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="176" y="544" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Có người vai «chỉ OKR»</text>
+      <line x1="300" y1="540" x2="340" y2="540" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="352" y="536" fill="#171717" font-size="12" font-family="'Geist', sans-serif">người thực hiện hay người theo dõi mang vai «chỉ OKR»</text>
+      <text x="352" y="554" fill="#575757" font-size="11" font-family="'Geist', sans-serif">kể cả khi được ghi thẳng vào dữ liệu, không qua màn</text>
+
+      <polygon points="64,572 288,572 272,628 80,628" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="176" y="604" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Số được đếm</text>
+      <line x1="284" y1="600" x2="340" y2="600" stroke="#006B4F" stroke-width="0.8"/>
+      <rect x="352" y="580" width="80" height="18" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="392" y="593" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.1em">MÁY KHUYÊN</text>
+      <text x="444" y="594" fill="#171717" font-size="12" font-family="'Geist', sans-serif">chỉ việc đang mở — việc đã khép là lịch sử, họ không đọc, không mở lại được</text>
+      <rect x="352" y="604" width="68" height="18" rx="2" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="386" y="617" fill="#575757" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.1em">LỐI KHÁC</text>
+      <text x="444" y="618" fill="#575757" font-size="12" font-family="'Geist', sans-serif">cả việc đã Xong hay Huỷ — đổi vai một người có lịch sử việc là vế này đỏ</text>
+
+      <line x1="32" y1="648" x2="968" y2="648" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="32" y="672" fill="#575757" font-size="9" font-weight="500" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+      <polygon points="128,662 160,662 156,674 132,674" fill="#f2f2f2" stroke="rgba(23,23,23,0.24)" stroke-width="0.8"/>
+      <text x="168" y="672" fill="#575757" font-size="10" font-family="'Geist', sans-serif">một bước lọc — độ rộng không theo số đếm</text>
+      <polygon points="424,662 456,662 452,674 428,674" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="464" y="672" fill="#575757" font-size="10" font-family="'Geist', sans-serif">bước cần người chọn</text>
+      <rect x="600" y="664" width="24" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.2"/>
+      <text x="632" y="672" fill="#575757" font-size="10" font-family="'Geist', sans-serif">máy khuyên</text>
+      <rect x="720" y="664" width="24" height="12" rx="2" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="752" y="672" fill="#575757" font-size="10" font-family="'Geist', sans-serif">lối khác</text>
+    </svg>
+  </div>
+</body>
+</html>

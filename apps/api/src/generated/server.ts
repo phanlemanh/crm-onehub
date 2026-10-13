@@ -54,6 +54,7 @@ import { taiLieuNguonTrangThaiOutput, taiLieuNguonXinChoInput, taiLieuNguonXinCh
 import { taiLieuOkOutput, taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuSlugInput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposeOutput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput } from "../tai-lieu/tai-lieu.contracts";
 import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgKhoiPhucOutput, orgDepartmentCreateInput, orgLuuTruXemTruocOutput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
+import { viecCuaToiInput, viecCuaToiNhomOutput, viecIdInput, viecChiTietOutput, viecVetOutput, viecBanGhiInput, viecCuaBanGhiOutput, viecCreateInput, viecTaoOutput, viecDoiTrangThaiInput, viecSuaInput, viecDoiNguoiInput, viecGanInput, viecTheoDoiInput } from "../viec/viec.contracts";
 import { workspaceOutput, memberListInput, memberListOutput, updateWorkspaceInput, setMemberRoleInput, workspaceMemberOutput, staffDomainsOutput, setStaffDomainsInput, allowanceListOutput, allowEmailInput, allowanceOutput, issuePasswordLinkInput, passwordLinkOutput, revokeAllowanceInput, removeMemberInput, removeMemberOutput } from "../workspace/workspace.contracts";
 import { zaloTaoMaOutput, zaloGoOutput, zaloLuuUuTienInput, zaloLuuUuTienOutput, zaloLuuDongTroLyOkrInput, zaloLuuDongTroLyOkrOutput, zaloLuuBotInput, zaloLuuBotOutput, zaloGuiThuOutput, zaloCuaToiOutput, zaloXuongOutput } from "../zalo/zalo.contracts";
 import type { UsersRouter } from "../users/users.router";
@@ -1632,6 +1633,60 @@ const appRouter = t.router({
 	}),
 ))
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+    }),
+  viec: t.router({
+    cuaToi: publicProcedure
+      .input(viecCuaToiInput)
+      .output(viecCuaToiNhomOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    get: publicProcedure
+      .input(viecIdInput)
+      .output(viecChiTietOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    lichSu: publicProcedure
+      .input(viecIdInput)
+      .output(viecVetOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    cuaBanGhi: publicProcedure
+      .input(viecBanGhiInput)
+      .output(viecCuaBanGhiOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    create: publicProcedure
+      .input(viecCreateInput)
+      .output(viecTaoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    doiTrangThai: publicProcedure
+      .input(viecDoiTrangThaiInput)
+      .output(viecChiTietOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    sua: publicProcedure
+      .input(viecSuaInput)
+      .output(viecChiTietOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    doiNguoiThucHien: publicProcedure
+      .input(viecDoiNguoiInput)
+      .output(viecChiTietOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    gan: publicProcedure
+      .input(viecGanInput)
+      .output(viecChiTietOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    go: publicProcedure
+      .input(viecGanInput)
+      .output(viecChiTietOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    theoDoi: publicProcedure
+      .input(viecTheoDoiInput)
+      .output(viecChiTietOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    boTheoDoi: publicProcedure
+      .input(viecTheoDoiInput)
+      .output(viecTaoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    xoa: publicProcedure
+      .input(viecIdInput)
+      .output(viecTaoOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   workspace: t.router({
     get: publicProcedure
