@@ -1,13 +1,11 @@
 import type { Db } from "./client";
 import { TrangThaiViec } from "./generated/prisma/enums";
 import { laKhoCucBo, loiKhoXa } from "./kho-cuc-bo";
-import { ngayVN } from "./onboarding-nhac";
+import { DAY_MS, ngayVN } from "./onboarding-nhac";
 import { docDuocDoiTac } from "./vai-doi-tac";
 import type { BanGhiGan } from "./viec";
 import { doiTrangThai, taoViec } from "./viec-ghi";
 import { WORKSPACE_ID } from "./workspace";
-
-const NGAY_MS = 24 * 60 * 60 * 1000;
 
 type Mau = {
 	tieuDe: string;
@@ -66,7 +64,7 @@ export const TIEU_DE_MAU: readonly string[] = MAU.map((m) => m.tieuDe);
 function hanTu(now: Date, sauNgay: number | null): Date | null {
 	if (sauNgay === null) return null;
 	const homNay = Date.parse(`${ngayVN(now)}T00:00:00.000Z`);
-	return new Date(homNay + sauNgay * NGAY_MS);
+	return new Date(homNay + sauNgay * DAY_MS);
 }
 
 export async function gieoViecMau(

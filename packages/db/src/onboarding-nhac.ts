@@ -72,7 +72,7 @@ const PHUT_MOI_GIO = 60;
 
 const PHUT_MS = 60 * 1000;
 
-const DAY_MS = 24 * PHUT_MOI_GIO * PHUT_MS;
+export const DAY_MS = 24 * PHUT_MOI_GIO * PHUT_MS;
 
 const dinhNgay = new Intl.DateTimeFormat("en-CA", {
 	timeZone: NHAC.muiGio,
