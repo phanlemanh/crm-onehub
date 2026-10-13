@@ -57,13 +57,23 @@ for (const thuMuc of NHOM[CHE_DO]) {
 	const goi = thuMuc.split("/").slice(0, 2).join("/");
 	const tep = ds.map((t) => `./${relative(goi, t)}`);
 	dem += ds.length;
+	const dom = tep.filter((t) => t.endsWith(".tsx"));
+	const thuong = tep.filter((t) => !t.endsWith(".tsx"));
+	for (const t of dom) {
+		const ma = chay(
+			`TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ${t}`,
+			join(GOC, goi),
+		);
+		if (ma !== 0) {
+			hong += 1;
+			process.stderr.write(`bai-cu: do ${goi}/${t}\n`);
+		}
+	}
+	if (thuong.length === 0) continue;
 	if (CHE_DO === "--app") {
-		for (const t of tep) {
-			const preload = t.endsWith(".tsx")
-				? "--preload ../../packages/ui/test/setup-dom.ts "
-				: "";
+		for (const t of thuong) {
 			const ma = chay(
-				`TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 ${preload}${t}`,
+				`TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 ${t}`,
 				join(GOC, goi),
 			);
 			if (ma !== 0) {
@@ -73,7 +83,7 @@ for (const thuMuc of NHOM[CHE_DO]) {
 		}
 	} else {
 		const ma = chay(
-			`bun run test -- "cd ${goi} && bun test ${tep.join(" ")}"`,
+			`bun run test -- "cd ${goi} && bun test ${thuong.join(" ")}"`,
 			GOC,
 		);
 		if (ma !== 0) {
