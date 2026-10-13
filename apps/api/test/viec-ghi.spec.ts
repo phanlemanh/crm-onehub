@@ -1,18 +1,22 @@
-import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
 import { db, TrangThaiViec } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
 	type DoThiViec,
 	hanhDong,
 	parseVetViec,
+	tenKeHoach,
 	type VetViec,
 	VIEC,
 } from "@crm/db/viec";
+import { Logger } from "@nestjs/common";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { z } from "zod";
 import { viecCuaBanGhiOutput, viecVetOutput } from "../src/viec/viec.contracts";
-import { donDep, moXuong } from "./support/ke-hoach-gieo";
+import { donDep, moXuong, token } from "./support/ke-hoach-gieo";
 import {
 	batApp,
+	congTyRieng,
 	demVet,
 	doiThu,
 	donViec,
@@ -22,6 +26,8 @@ import {
 	taoThu,
 	thoaThuan,
 } from "./support/viec-gieo";
+
+const logXoa = z.object({ message: z.literal("viec.xoa"), viecId: z.string() });
 
 const NGAY_MS = 24 * 60 * 60 * 1000;
 const MA_TEST_MS = 120_000;
@@ -550,6 +556,149 @@ describe("vc-sua", () => {
 			const r = await goi(app, "viec.lichSu", "query", { id: v.id }, a.id);
 			expect(r.status).toBe(500);
 			expect(r.message).toContain(`Vết việc ${hong.id} không đọc được`);
+		},
+		MA_TEST_MS,
+	);
+});
+
+describe("vc-vong-doi", () => {
+	test(
+		"vc-vong-doi: xoá việc mới có log; có lịch sử thì 409; huỷ rồi mở lại về Chưa làm",
+		async () => {
+			const a = await nguoi("vc-vd-a", "member");
+			const moi = await taoThu({ nguoiId: a.id, tieuDe: "vc-vd moi", gan: [] });
+			const ls = await goi(app, "viec.get", "query", { id: moi.id }, a.id);
+			if ((ls.data as { coLichSu: boolean }).coLichSu !== false) {
+				throw new Error("vc: xoa viec moi hong");
+			}
+			const nghe = spyOn(Logger.prototype, "log");
+			const xoa = await goi(app, "viec.xoa", "mutation", { id: moi.id }, a.id);
+			const suKien = nghe.mock.calls.filter(([m]) => {
+				const ghi = logXoa.safeParse(m);
+				return ghi.success && ghi.data.viecId === moi.id;
+			});
+			nghe.mockRestore();
+			if (
+				xoa.status !== 200 ||
+				(await db.viec.count({ where: { id: moi.id } })) !== 0
+			) {
+				throw new Error("vc: xoa viec moi hong");
+			}
+			if (suKien.length !== 1) throw new Error("vc: xoa khong log");
+			const cu = await taoThu({ nguoiId: a.id, tieuDe: "vc-vd cu", gan: [] });
+			await doiThu(cu.id, a.id, "DANG_LAM");
+			const r = await goi(app, "viec.xoa", "mutation", { id: cu.id }, a.id);
+			if (
+				r.code !== "CONFLICT" ||
+				(await db.viec.count({ where: { id: cu.id } })) !== 1
+			) {
+				throw new Error("vc: xoa viec co lich su");
+			}
+			const huy = await taoThu({
+				nguoiId: a.id,
+				tieuDe: "vc-vd huy",
+				gan: [],
+			});
+			await goi(
+				app,
+				"viec.doiTrangThai",
+				"mutation",
+				{ id: huy.id, den: "HUY" },
+				a.id,
+			);
+			await goi(
+				app,
+				"viec.doiTrangThai",
+				"mutation",
+				{ id: huy.id, den: "CHUA_LAM" },
+				a.id,
+			);
+			const sau = await db.viec.findUniqueOrThrow({ where: { id: huy.id } });
+			if (
+				sau.trangThai !== "CHUA_LAM" ||
+				(await demVet(huy.id, "doi-trang-thai")) !== 2
+			) {
+				throw new Error("vc: huy mo lai sai");
+			}
+		},
+		MA_TEST_MS,
+	);
+
+	test(
+		"vc-vong-doi: xoá vĩnh viễn D, K, P theo đường thật — việc còn, mỗi lần một vết go-do-ban-ghi-xoa; xoá C thì thành việc riêng",
+		async () => {
+			const a = await nguoi("vc-vd2-a", "member");
+			const b = await nguoi("vc-vd2-b", "member");
+			const x = await nguoi("vc-vd2-x", "member");
+			const { congTyId, dealId } = await thoaThuan(app, a.id);
+			const k = await goi(
+				app,
+				"contacts.create",
+				"mutation",
+				{ firstName: `${token()} K`, companyId: congTyId },
+				a.id,
+			);
+			const kId = (k.data as { id: string }).id;
+			const cp = await congTyRieng();
+			const plan = await keHoachCua(cp.id, a.id);
+			const v = await taoThu({
+				nguoiId: a.id,
+				tieuDe: "vc-vd2",
+				nguoiThucHienId: b.id,
+				gan: [
+					{ loai: "company", id: congTyId },
+					{ loai: "contact", id: kId },
+					{ loai: "plan", id: plan.id },
+					{ loai: "deal", id: dealId },
+				],
+			});
+			const tenK = await db.contact.findUniqueOrThrow({ where: { id: kId } });
+			const buoc: [string, string, string, string][] = [
+				[
+					"deal",
+					"deals",
+					dealId,
+					(await db.deal.findUniqueOrThrow({ where: { id: dealId } })).name,
+				],
+				[
+					"contact",
+					"contacts",
+					kId,
+					[tenK.firstName, tenK.lastName].filter(Boolean).join(" "),
+				],
+				["plan", "companies", cp.id, tenKeHoach(cp.name)],
+			];
+			for (const [loai, router, id, ten] of buoc) {
+				const ganTruoc = await db.viecGan.count({ where: { viecId: v.id } });
+				await goi(app, `${router}.archive`, "mutation", { id }, a.id);
+				const xoa = await goi(app, `${router}.purge`, "mutation", { id }, a.id);
+				expect(xoa.status, `${loai} ${JSON.stringify(xoa)}`).toBe(200);
+				if (
+					(await db.viec.count({ where: { id: v.id } })) !== 1 ||
+					(await db.viecGan.count({ where: { viecId: v.id } })) !== ganTruoc - 1
+				) {
+					throw new Error(`vc: xoa ${loai} mat viec`);
+				}
+				const vet = await db.viecVet.findMany({
+					where: { viecId: v.id, loai: "go-do-ban-ghi-xoa" },
+				});
+				if (
+					!vet.some((h) => JSON.stringify(h.sau) === JSON.stringify({ ten }))
+				) {
+					throw new Error(`vc: thieu vet go do xoa ${loai}`);
+				}
+			}
+			await goi(app, "companies.archive", "mutation", { id: congTyId }, a.id);
+			await goi(app, "companies.purge", "mutation", { id: congTyId }, a.id);
+			const ngoai = await goi(app, "viec.get", "query", { id: v.id }, x.id);
+			const trong = await goi(app, "viec.get", "query", { id: v.id }, b.id);
+			if (
+				(await db.viecGan.count({ where: { viecId: v.id } })) !== 0 ||
+				ngoai.code !== "NOT_FOUND" ||
+				trong.status !== 200
+			) {
+				throw new Error("vc: viec mo coi khong thanh rieng");
+			}
 		},
 		MA_TEST_MS,
 	);
