@@ -77,7 +77,11 @@
       "dung_tren": [
         "DA0a"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đang dựng",
+      "pr": [
+        386
+      ],
+      "buoc_ke": "Đã ký Cổng Bằng chứng 13/10 (Mạnh); PR #386 chờ Điều phối M5 gộp vào onehub",
       "ten": "Việc chung",
       "ten_ngan": "Việc chung",
       "bat_khi": "Đề xuất, chốt ở Cổng Đáng: hai tuần dùng thật, ít nhất 80% việc mới có người thực hiện; không việc gắn đối tác nào tới người vai «chỉ OKR»",
