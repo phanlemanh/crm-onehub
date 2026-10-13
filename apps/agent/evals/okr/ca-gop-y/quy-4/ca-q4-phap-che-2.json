@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-phap-che-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Pháp chế"
+	},
+	"mucTieu": {
+		"title": "Kinh doanh tự trả lời được câu hỏi pháp lý thường gặp",
+		"whyNow": "Nửa số câu hỏi gửi pháp chế lặp lại.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Ra bộ câu hỏi thường gặp cho kinh doanh",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		},
+		{
+			"title": "Câu hỏi lặp lại gửi pháp chế giảm từ 40 xuống 15 mỗi tháng",
+			"kind": "giam-xuong",
+			"startValue": 40,
+			"targetValue": 15,
+			"unit": "câu hỏi"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: mốc bộ câu hỏi và giảm câu hỏi lặp."
+}

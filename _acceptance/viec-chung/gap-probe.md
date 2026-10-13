@@ -1,0 +1,18 @@
+---
+slug: viec-chung
+at: 2026-10-13T00:21:53Z
+verdict: findings
+p0: 1
+p1: 3
+p2: 1
+---
+
+## Findings
+
+| Sev | Artifact | Thiếu gì | Kịch bản fail | Thước đo | Xử lý |
+|---|---|---|---|---|---|
+| P0 | contract | AC-5 bỏ sót đường mở lại: «Làm lại» (Xong hay Chờ đánh giá → Đang làm) và «Mở lại» (Huỷ → Chưa làm) không qua kiểm vai, trong khi đổi vai chỉ bị chặn khi người đó còn việc mở; thước chỉ đếm việc đang mở, hẹp hơn câu đã ký mà sổ không ghi chỗ thu hẹp. | B làm xong việc gắn thoả thuận, quản trị đổi B sang vai «chỉ OKR» (B không còn việc mở), A bấm «Làm lại» — việc mở lại, gắn đối tác, người thực hiện mang vai «chỉ OKR»; thước in 1, CHẾT theo ô cơ hội, mọi eval vẫn xanh. | AC-5 thêm hai đường mở lại; E5 thêm (5)–(7) với đối chứng dương; E16 thêm cặp bỏ kiểm vai ở nhánh mở lại; một dòng sổ chốt phạm vi «việc mở» của thước. | fixed: design thêm bước 4 của thứ tự kiểm (ba cặp mở lại gọi lại kiemNguoiNhanViec), AC-5, E5 (5)–(7), E16 (m); phạm vi «việc mở» của thước → human-gate1 (Hỏi-5) |
+| P1 | design | roiChuaLamLuc ghi khi bất kỳ ai làm việc rời Chưa làm, kể cả người giao và kể cả sang Huỷ; ngưỡng đã ký nói «được người thực hiện chuyển». | A giao B 10 việc, B không mở việc nào; A huỷ 5 và tự bấm «Bắt đầu» 4 — thước in 0.9, SỐNG, trong khi người thực hiện xử lý 0/10. | Cột chỉ ghi khi người đổi là người thực hiện và đích thuộc Đang làm, Chờ đánh giá, Xong; E3 và E14 thêm ca người giao tự chuyển và ca Huỷ; E16 thêm cặp. | fixed: design mục «Cột đo roiChuaLamLuc», AC-3, E3 ba assert, E14 thêm hai việc (tổng 7, đúng hạn 4, tỉ lệ 0.5714), E16 (l); việc bị Huỷ ra khỏi mẫu số → human-gate1 (Hỏi-5) |
+| P1 | contract | AC-3, AC-4 không nói việc gắn bản ghi nào trong khi AC-6 làm việc riêng chỉ người trong cuộc thấy; tự theo dõi thành cửa vòng qua P3; lệnh ghi lên việc không thấy chưa định nghĩa; E6 chỉ đo bốn đường đọc. | Thợ dựng fixture E3/E4 bằng việc không gắn — X, Q nhận NOT_FOUND, S4 REJECT dù mã đúng [giam-phut-acceptance#F1]; hoặc thợ cho tự theo dõi mọi việc — quản trị đọc trọn việc riêng, E6 vẫn xanh. | AC-3, AC-4 ghi rõ gắn thoả thuận D; AC-6 thêm lệnh ghi và tự theo dõi trả lời NOT_FOUND của mã lạ; E6 thành 70 ô. | fixed: design thứ tự kiểm bước 1 (dieuKienXemViec là bước đầu của mọi lệnh ghi) và ghi chú bảng thao tác; AC-3, AC-4, AC-6; E6 70 ô gồm lichSu, Tổng quan «mọi người», tự theo dõi |
+| P1 | evals | Bảng quyền khai theo đích, không khai nguồn — đồ thị chuyển chưa định nghĩa; E3 chỉ lấy 8 cặp, bỏ Chờ đánh giá → Xong; lời từ chối kiểm bằng chuỗi có mặt nên không biết lời có nêu đúng người. | Thợ sót chặn người theo dõi ở Chờ đánh giá → Xong, hay để người thực hiện đi Huỷ → Xong — E3 vẫn 40/40, đột biến (c) không chạm. | Design thêm bảng nguồn × đích; E3 thành 5 × 20 = 100 ô; cặp không hợp lệ trả lời ghim; ô không quyền so nguyên văn; E16 thêm cặp. | fixed: design bảng «Đồ thị trạng thái» 20 cặp (13 hợp lệ, 7 không) và lời ghim theo ô; AC-3; E3 100 ô so nguyên văn VIEC.thongDiep; E16 (k) |
+| P2 | evals | Ba vế Then không có eval: log xoá, nút Xoá theo lịch sử, hộp Chuyển việc nêu số việc; AC-4, AC-7, AC-11, AC-12 thiếu tag cross-layer; vết go-do-ban-ghi-xoa hứa cho bốn loại mà chỉ đo hai; design không nạp docs/settings.md. | Thợ quên in số việc vào hộp Chuyển việc hay để nút Xoá hiện với mọi việc — mọi eval vẫn xanh; xoá vĩnh viễn cá nhân hay kế hoạch không ghi vết, E12 vẫn xanh. | E4b thêm hai ca nút Xoá; test dom cho hộp Chuyển việc; E12 spy logger và thêm purge cá nhân, kế hoạch; tag cross-layer; thêm docs/settings.md. | fixed: E4b ca coLichSu false/true; E11b mới (viec-chuyen-hop.dom.tsx); E12 spy 'viec.xoa' và purge D, K, P, C; AC-4, AC-7, AC-11, AC-12 mang (cross-layer); design nạp docs/settings.md |

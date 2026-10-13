@@ -6,6 +6,7 @@ import {
 	type RecordSource,
 } from "@crm/db";
 import type { FieldDefinitionWithOptions } from "@crm/db/fields";
+import { ghiGoDoXoa } from "@crm/db/viec-ghi";
 import {
 	BadRequestException,
 	ConflictException,
@@ -492,6 +493,18 @@ export class CompaniesService {
 						],
 					},
 				});
+
+				await ghiGoDoXoa(
+					tx,
+					{
+						OR: [
+							{ companyId: id },
+							{ deal: { companyId: id } },
+							{ plan: { companyId: id } },
+						],
+					},
+					new Date(),
+				);
 
 				const company = await tx.company.delete({
 					where: { id },

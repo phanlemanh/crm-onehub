@@ -42,10 +42,34 @@ const LOAI = [/^_acceptance\//, /^docs\//, /(^|\/)test\//, /^PRODUCT-MAP\.md$/, 
 export const tepMa = (tepDoi) => tepDoi.filter((t) => !LOAI.some((r) => r.test(t)));
 const coDaiDien = (p) => /[*?[{]/.test(p);
 
+const truong = (khoi, ten) => khoi.match(new RegExp(`^ {4}${ten}: *(.*)$`, "m"))?.[1]?.trim() ?? null;
+
+export function docTheoDong(tho) {
+	const khoi = tho.split(/^ {2}- id: */m).slice(1);
+	return khoi.map((k) => {
+		const id = k.split("\n")[0].trim();
+		const cmd = truong(k, "cmd");
+		const executor = truong(k, "executor");
+		if (!id || !executor || (executor === "test" && !cmd))
+			throw new Error(`khoi eval thieu id/executor/cmd: ${id}`);
+		const dongPaths = truong(k, "paths");
+		const paths = dongPaths
+			? dongPaths
+					.replace(/^\[|\]$/g, "")
+					.split(",")
+					.map((x) => x.trim().replace(/^"|"$/g, ""))
+					.filter(Boolean)
+			: [];
+		const ky = truong(k, "expected_exit");
+		return { id, executor, cmd, status: truong(k, "status"), expected_exit: ky === null ? undefined : Number(ky), paths };
+	});
+}
+
 export function tapEval(tepDoi) {
 	const ma = new Set(tepMa(tepDoi));
 	const ra = [];
 	const khongDoc = [];
+	const docDong = [];
 	for (const hoSo of readdirSync(join(GOC, "_acceptance")).sort()) {
 		if (hoSo === SLUG || !DA_KY.has(trangThai(hoSo) ?? "")) continue;
 		const tep = join(GOC, "_acceptance", hoSo, "evals.yaml");
@@ -55,8 +79,13 @@ export function tapEval(tepDoi) {
 		try {
 			ds = Bun.YAML.parse(tho)?.evals ?? [];
 		} catch {
-			if ([...ma].some((t) => tho.includes(t))) khongDoc.push(hoSo);
-			continue;
+			try {
+				ds = docTheoDong(tho);
+				docDong.push(hoSo);
+			} catch {
+				if ([...ma].some((t) => tho.includes(t))) khongDoc.push(hoSo);
+				continue;
+			}
 		}
 		for (const e of ds) {
 			if (!MAY.has(e.executor) || e.status === "not-run") continue;
@@ -65,7 +94,7 @@ export function tapEval(tepDoi) {
 				ra.push({ hoSo, id: e.id, cmd: String(e.cmd), ky: e.expected_exit ?? 0 });
 		}
 	}
-	return { ra, khongDoc };
+	return { ra, khongDoc, docDong };
 }
 
 function doiChung() {
@@ -92,7 +121,8 @@ const { n, loi } = tepCo();
 for (const l of loi) console.error(l);
 if (loi.length > 0) process.exit(1);
 const tepDoi = git("diff", "--name-only", n.tu, n.den).split("\n").filter(Boolean);
-const { ra: tap, khongDoc } = tapEval(tepDoi);
+const { ra: tap, khongDoc, docDong } = tapEval(tepDoi);
+for (const h of docDong) console.log(`doc theo dong (yaml hong): ${h}`);
 for (const h of khongDoc) console.error(`evals khong doc duoc: ${h}`);
 if (khongDoc.length > 0) process.exit(1);
 console.log(`tep ma san pham doi: ${tepMa(tepDoi).join(", ")}`);

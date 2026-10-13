@@ -1,0 +1,45 @@
+{
+	"id": "ca-q4-kho-van-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kho vận"
+	},
+	"mucTieu": {
+		"title": "Kho sẵn sàng gấp đôi sản lượng Tết",
+		"whyNow": "Tết năm ngoái kho quá tải từ ngày 20 tháng Chạp.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Giữ lệch tồn kho dưới 0,5%",
+			"kind": "giu-duoi",
+			"startValue": 0.6,
+			"targetValue": 0.5,
+			"unit": "%"
+		},
+		{
+			"title": "Thời gian xuất kho giảm từ 36 xuống 25 phút",
+			"kind": "giam-xuong",
+			"startValue": 36,
+			"targetValue": 25,
+			"unit": "phút"
+		},
+		{
+			"title": "Mở thêm 2.000 m² kho tạm",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: lệch tồn kho, thời gian xuất kho và mốc mở kho tạm."
+}
