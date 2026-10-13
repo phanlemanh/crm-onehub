@@ -5,9 +5,11 @@ slug: dai-luu-tru-dung-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
 approved_by:
 approved_at:
+veto_state: mo
+veto_opened_at: 2026-10-13T17:04:31Z
 design_doc: docs/superpowers/specs/2026-10-13-dai-luu-tru-dung-chung-design.md
 ---
 
