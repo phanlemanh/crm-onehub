@@ -7,7 +7,7 @@ import { defineEval } from "eve/evals";
 import { equals, satisfies } from "eve/evals/expect";
 import { nguonKhoaMoHinh } from "../../agent/lib/mo-hinh-khoa";
 import { TRO_LY_OKR } from "../../agent/lib/okr/config";
-import { docBoCaGopY, THU_MUC_CA_MAU } from "./ca-gop-y";
+import { docBoCaGopY, THU_MUC_CA_MAU, thuMucBoCa } from "./ca-gop-y";
 import {
 	COT_DONG_TONG_KET,
 	dongTongKet,
@@ -53,7 +53,12 @@ function thuMucCaMau(): string {
 
 function boCa(): CaGopY[] {
 	const them = process.env[GOP_Y_EVAL.env.thuMucThem]?.trim();
-	return [...docBoCaGopY(thuMucCaMau()), ...(them ? docBoCaGopY(them) : [])];
+	return [
+		...docBoCaGopY(
+			thuMucBoCa(process.env, GOP_Y_EVAL.env.thuMucCa, thuMucCaMau),
+		),
+		...(them ? docBoCaGopY(them) : []),
+	];
 }
 
 function tranUsd(): number {

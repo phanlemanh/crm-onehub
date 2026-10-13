@@ -256,12 +256,14 @@ export function InlineTextCell({
 	onSave,
 	saving = false,
 	placeholder,
+	maxLength,
 }: {
 	label: string;
 	value: string | null;
 	onSave: (next: string) => void;
 	saving?: boolean;
 	placeholder?: string;
+	maxLength?: number;
 }) {
 	const [editing, setEditing] = useState(false);
 	const [draft, setDraft] = useState(value ?? "");
@@ -278,6 +280,7 @@ export function InlineTextCell({
 				autoFocus
 				value={draft}
 				placeholder={placeholder}
+				maxLength={maxLength}
 				onClick={(event) => event.stopPropagation()}
 				onChange={(event) => setDraft(event.target.value)}
 				onBlur={commit}
@@ -328,12 +331,14 @@ export function InlineTextArea({
 	onSave,
 	saving = false,
 	placeholder,
+	maxLength,
 }: {
 	label: string;
 	value: string | null;
 	onSave: (next: string) => void;
 	saving?: boolean;
 	placeholder?: string;
+	maxLength?: number;
 }) {
 	const [editing, setEditing] = useState(false);
 	const [draft, setDraft] = useState(value ?? "");
@@ -350,6 +355,7 @@ export function InlineTextArea({
 				autoFocus
 				value={draft}
 				placeholder={placeholder}
+				maxLength={maxLength}
 				onChange={(event) => setDraft(event.target.value)}
 				onBlur={commit}
 				onKeyDown={(event) => {

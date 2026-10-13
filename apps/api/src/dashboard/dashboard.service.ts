@@ -6,6 +6,14 @@ import {
 	type ViecNhac,
 	viecCanNhac,
 } from "@crm/db/onboarding-nhac";
+import {
+	banGhiCua,
+	CHON_VIEC,
+	dieuKienXemViec,
+	ngayHan,
+	TRANG_THAI_MO,
+	VIEC,
+} from "@crm/db/viec";
 import { activityMeta } from "@crm/validation/activity-meta";
 import { Injectable } from "@nestjs/common";
 import { toCents } from "../crm/values";
@@ -57,7 +65,7 @@ export class DashboardService {
 		const owned = mine ? { ownerId: actingUserId } : {};
 
 		const now = new Date();
-		const viecQuaHan = {
+		const viecCanLamQuaHan = {
 			type: ActivityType.TASK,
 			completedAt: null,
 			dueAt: { lt: dauNgayVN(now) },
@@ -159,7 +167,7 @@ export class DashboardService {
 				},
 			}),
 			this.db.activity.findMany({
-				where: viecQuaHan,
+				where: viecCanLamQuaHan,
 				orderBy: [{ dueAt: "asc" }],
 				take: 10,
 				select: {
@@ -299,8 +307,9 @@ export class DashboardService {
 				)
 				.sort((a, b) => (b.baseAmountCents ?? -1) - (a.baseAmountCents ?? -1)),
 			mySteps: await this.buocCuaToi(actingUserId, now),
-			quaHan: await this.demQuaHan(viecQuaHan, actingUserId, now),
+			quaHan: await this.demQuaHan(viecCanLamQuaHan, actingUserId, mine, now),
 			...(await this.viecTrucTiep(actingUserId, now)),
+			viecQuaHan: await this.viecQuaHan(actingUserId, mine, now),
 			overdueTasks: overdueTasks.map(({ dueAt, ...task }) => ({
 				...task,
 				dueAt: dueAt?.toISOString() ?? null,
@@ -314,12 +323,13 @@ export class DashboardService {
 	}
 
 	private async demQuaHan(
-		viecQuaHan: Prisma.ActivityWhereInput,
+		viecCanLam: Prisma.ActivityWhereInput,
 		actingUserId: string,
+		mine: boolean,
 		now: Date,
 	) {
-		const [viec, buoc] = await Promise.all([
-			this.db.activity.count({ where: viecQuaHan }),
+		const [viec, buoc, viecChung] = await Promise.all([
+			this.db.activity.count({ where: viecCanLam }),
 			this.db.onboardingStep.count({
 				where: {
 					assigneeId: actingUserId,
@@ -328,8 +338,46 @@ export class DashboardService {
 					dueAt: { lt: dauNgayVN(now) },
 				},
 			}),
+			this.db.viec.count({
+				where: this.dieuKienViecQuaHan(actingUserId, mine, now),
+			}),
 		]);
-		return { viec, buoc };
+		return { viec: viec + viecChung, buoc };
+	}
+
+	private dieuKienViecQuaHan(
+		actingUserId: string,
+		mine: boolean,
+		now: Date,
+	): Prisma.ViecWhereInput {
+		return {
+			AND: [
+				{
+					trangThai: { in: [...TRANG_THAI_MO] },
+					hanNgay: { lt: dauNgayVN(now) },
+				},
+				mine
+					? { nguoiThucHienId: actingUserId }
+					: dieuKienXemViec(actingUserId),
+			],
+		};
+	}
+
+	private async viecQuaHan(actingUserId: string, mine: boolean, now: Date) {
+		const hang = await this.db.viec.findMany({
+			where: this.dieuKienViecQuaHan(actingUserId, mine, now),
+			orderBy: [{ hanNgay: "asc" }, { id: "asc" }],
+			take: VIEC.tranTongQuan,
+			select: CHON_VIEC,
+		});
+		return hang.map((h) => ({
+			loai: "viec" as const,
+			id: h.id,
+			tieuDe: h.tieuDe,
+			hanNgay: h.hanNgay ? ngayHan(h.hanNgay) : "",
+			nguoiThucHien: { id: h.nguoiThucHien.id, name: h.nguoiThucHien.name },
+			banGhi: h.gan[0] ? banGhiCua(h.gan[0]) : null,
+		}));
 	}
 
 	private async buocCuaToi(actingUserId: string, now: Date) {

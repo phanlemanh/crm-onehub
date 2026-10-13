@@ -6,7 +6,9 @@ import { OKR_TOM_TAT } from "@crm/db/okr-tro-ly-danh-muc";
 import {
 	gioVN,
 	laBuoiSang,
+	laNhacViec,
 	NHAC,
+	type NhacViec,
 	ngayVN,
 	THU_TU_NHAC,
 	type ViecKeHoach,
@@ -21,6 +23,9 @@ export const TIEU_DE = {
 	"buoc-sap-han": "Sắp hạn",
 	"ke-hoach-im": "Kế hoạch im",
 	"moc-ngay": "Mốc ngày",
+	"viec-qua-han": "Việc quá hạn",
+	"viec-sap-han": "Việc sắp hạn",
+	"viec-cho-danh-gia": "Việc chờ bạn đánh giá",
 	"okr-cap-nhat": "Cập nhật tuần",
 	"okr-cho-duyet": "Chờ bạn duyệt",
 	"okr-tra-lai": "Bị trả lại",
@@ -77,6 +82,21 @@ function dongKeHoach(
 	}
 	const mo = url ? ` — <${url}|mở kế hoạch>` : "";
 	return `• ${thoat(v.companyName)} · ${phanDau(v)}${thoat(v.goiY)}${han}${mo}`;
+}
+
+function dongViec(
+	v: NhacViec,
+	so: number,
+	url: string | null,
+	khuon: KhuonTin,
+): string {
+	const han = v.han ? ` · hạn ${ngayThang(v.han)}` : "";
+	if (khuon === "tron") {
+		const banGhi = v.banGhi ? ` · ${v.banGhi}` : "";
+		return `${so}. ${v.tieuDe}${han}${banGhi}${url ? ` — ${url}` : ""}`;
+	}
+	const banGhi = v.banGhi ? ` · ${thoat(v.banGhi)}` : "";
+	return `• ${thoat(v.tieuDe)}${han}${banGhi}${url ? ` — <${url}|mở việc>` : ""}`;
 }
 
 function noiDungOkr(v: ViecOkr, chu: (s: string) => string): string {
@@ -220,6 +240,7 @@ export function truKrIm(ds: ViecNhac[]): ViecNhac[] {
 
 function dong(v: ViecNhac, so: number, lienKet: LienKet, khuon: KhuonTin) {
 	const url = lienKet(v);
+	if (laNhacViec(v)) return dongViec(v, so, url, khuon);
 	if ("planId" in v) return dongKeHoach(v, so, url, khuon);
 	if (v.loai === "tai-lieu-cho-duyet") return dongTaiLieu(v, so, url, khuon);
 	if (v.loai === "okr-tom-tat") return dongTomTat(v, so, url, khuon);

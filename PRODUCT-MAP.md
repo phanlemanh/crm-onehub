@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>27 việc"]
+  GD --> B["Sắp mở vòng<br/>25 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>140 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>90 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>93 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -38,7 +38,6 @@ flowchart TD
 ## Sắp mở vòng
 
 - Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do (`ba-ho-so-do-san`)
-- Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố (`bo-ca-mau-quy-4`)
 - Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp (`bo-cuc-hep-ngan-va-kanban`)
 - Cây căn chỉnh hiện lý do của từng đường nối và lọc được các đường «Chưa có lý do» (`cay-can-chinh-co-ly-do`)
 - Breadcrumb đọc tiếng Việt với trình đọc màn hình; mô tả kiểu trường ở Cài đặt › Trường không tràn ở khổ 360 (`chu-man-tieng-viet-khong-tran`)
@@ -58,7 +57,6 @@ flowchart TD
 - Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc (`loc-va-kieu-xem-chung`)
 - Lưu trữ một trường thôi hỏi lại và có «Hoàn tác» như mọi chỗ lưu trữ khác (`luu-tru-truong-khong-hoi`)
 - Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu (`mau-trang-thai-chung`)
-- Mở lại một kế hoạch đã đóng hay bỏ «xong» một bước không trả việc về người đã sang vai «chỉ OKR» (`mo-lai-khong-tra-viec-chi-okr`)
 - Ghim lại các hồ sơ đã ký chạy được (`neo-thuoc-het-han`)
 - Danh sách góp ý đã gom được sửa trong một lượt (`sua-sau-chay-that`)
 - Màn tác nhân đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng (`tac-nhan-va`)
@@ -73,6 +71,7 @@ flowchart TD
 
 - «Test của agent không nhập mã của app; danh sách thoả thuận Kara trả có một schema dùng chung» (`agent-test-khong-nhap-app`)
 - Bàn gieo góp ý dùng chung chạy lại được sau khi công cụ nộp của Trợ lý OKR tự đóng việc, để ba bàn đo màn OKR đo được lại (`ban-gieo-gop-y-sau-nop`)
+- Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố (`bo-ca-mau-quy-4`)
 - Bộ 50 câu hỏi mẫu viết theo tám trang mẫu của kho đo — câu trả lời được, câu phải nói không biết, câu gõ như tin Zalo — kèm lệnh kiểm bộ và lệnh đo trợ lý kho trên bộ bằng script chấm sẵn có (`bo-cau-hoi-mau`)
 - Bộ xương Kara trong packages/ui — sáu khối KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact, một nút «Thử lại», và ba điểm cắm cho K2: co giãn trong thanh kéo, khoá đề xuất khi Kara đang soạn, nhận theo nhóm (`bo-xuong-kara`)
 - Ca kiểm chập chờn theo máy thôi làm đỏ lượt dài — dọn eve mồ côi của lượt bị ngắt, chờ route thật có trần, trần hook dựng Nest có tên, công tắc bỏ ca tới được test (`ca-chap-chon-cach-ly`)
@@ -125,6 +124,7 @@ flowchart TD
 - Máy nhắc thay người canh — mỗi sáng một tin Slack riêng gom bước quá hạn, bước sắp hạn, kế hoạch im và mốc ngày 7 · 14 · 30; thẻ Tasks hiện cùng danh sách; ai cũng tự theo dõi được một kế hoạch (`may-nhac-truoc-nguoi`)
 - Máy soạn bản đề xuất — tải tệp quy định đang có (Word, PDF có chữ) lên kho tài liệu, máy soạn thành bản đề xuất có trích đoạn nguồn, chủ trang đọc nguồn cạnh nhau rồi duyệt (`may-soan-de-xuat`)
 - «Menu con của bộ lọc mở được trên điện thoại — không còn nằm ngoài màn ở khổ 375» (`menu-con-loc-dien-thoai`)
+- Mở lại một kế hoạch đã đóng hay bỏ «xong» một bước không trả việc về người đã sang vai «chỉ OKR» (`mo-lai-khong-tra-viec-chi-okr`)
 - Kế hoạch hiện ra ở mọi chỗ người đã đứng — tab 30 ngày đầu ở sheet Công ty, mục 30 ngày đầu ở sheet Cá nhân, bước giao cho tôi trong thẻ Tasks, lọc và chia cột theo người được giao, chuyển việc 30 ngày khi một người nghỉ (`moi-phia-deu-thay-ke-hoach`)
 - Nền giao diện của Kara trong packages/ui — dấu tia sáng, nhãn Kara có ô «vì sao», ProposedChange hai độ dày (inline không viền, card), dòng biên nhận có Hoàn tác, phản hồi chung — để mọi màn AI sau đó dựng trên một bộ (`nen-kara`)
 - «Ngoại lệ telemetry của bảy mã giai đoạn gốc được khai trong tài liệu và có thước canh» (`ngoai-le-telemetry-giai-doan`)
@@ -156,6 +156,7 @@ flowchart TD
 - Người vai «chỉ OKR» không được giao bước onboard, không cầm trịch hay theo dõi kế hoạch đối tác, và không nhận tên đối tác qua tin nhắc buổi sáng (`va-lo-ro-vai-chi-okr`)
 - Vai «chỉ OKR» — người mang vai này đăng nhập được, thấy khu OKR và hồ sơ của chính mình, nhưng không đọc được danh bạ, công ty, thoả thuận, chiến dịch, kế hoạch 30 ngày qua màn, tRPC, cầu REST, khoá API hay trợ lý AI (`vai-chi-okr`)
 - Vào được CRM từ mạng đang chặn Google — đăng nhập bằng email và mật khẩu (`vao-bang-email-va-mat-khau`)
+- Tôi giao một việc gắn với deal hay kế hoạch onboard; người nhận thấy nó trong Việc của tôi và được nhắc buổi sáng (`viec-chung`)
 - «Một cách cất, một bộ chữ» — lưu trữ hàng loạt ở ba bảng CRM có Hoàn tác, bản ghi đã cất mở ra có dải báo «Đã lưu trữ ngày … · Khôi phục» và chỉ đọc, Kanban thoả thuận có nút «Đã lưu trữ», chữ nút xem và hộp xoá vĩnh viễn đúng bộ chữ (`vong-doi-mot-cach-cat`)
 - «Bài kiểm Zalo webhook không còn đỏ theo giờ thật» (`zalo-bom-gio`)
 - Zalo gửi hỏng thì nhật ký nói lý do của Zalo; đổi bot thì hỏi trước rồi gỡ liên kết cũ để mọi người nối lại; tin vào bị bỏ qua thì nhật ký nói vì sao (`zalo-gui-hong-ghi-ly-do`)
