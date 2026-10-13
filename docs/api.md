@@ -277,7 +277,19 @@ self-hoster's admin cannot redeploy.
   cùng luật, nên ô chọn và lời từ chối không lệch nhau. Luật là `docDuocDoiTac`
   (`@crm/validation/vai-workspace`). Việc có bản riêng cùng tên ở `@crm/db/viec-ghi`, cùng
   luật `docDuocDoiTac`, cho mọi đường đặt người vào việc (người thực hiện, người theo dõi,
-  mở lại việc gắn đối tác).
+  mở lại việc, gắn bản ghi đối tác).
+- **Mở lại không trả việc về người không nhận được việc.** Mở lại một kế hoạch đã
+  đóng (`datDong` với `dong = false`) và bỏ «xong» một bước (`setStepDone` với
+  `done = false`) xét lại mọi thứ chúng trao lại bằng cùng điều kiện nhận việc với
+  giao bước — là thành viên và `docDuocDoiTac(role)` (`docNguoiNhan`, `onboarding-ghi.ts`).
+  Khi mở lại kế hoạch: người cầm trịch không nhận được việc bị thay bằng người bấm mở
+  lại (người bấm qua `kiemNguoiNhanViec`; trượt thì 400, cả giao dịch lùi, kế hoạch vẫn
+  đóng); mỗi bước chưa xong của người không nhận được việc thành chưa giao; lượt theo
+  dõi kế hoạch của họ bị gỡ; bước đã xong giữ nguyên người làm. Khi bỏ «xong» một bước
+  của người không nhận được việc, bước mở lại ở dạng chưa giao. Mỗi lần đổi người ghi
+  một vết (`keHoach.doiCamTrich`, `buoc.giao`) trong cùng giao dịch. Người thường thì
+  không đổi gì. `datBuocXong` (`@crm/db/onboarding-buoc`) không đổi: tin Zalo «xong n»
+  chỉ đánh dấu xong.
 - **Writes in the shared scope are either self-service or admin-only.** API keys
   and the person's own Zalo channel are self-service; every system setting —
   `settings.*` writes included, gated by `canManageSettings` — requires an owner
