@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: fab37fb6231317609e3800f88dc76b6b079fff75
+verified_commit: db44d78799ec78259b0a8ec8b644439e1b00711d
 human_signoff: Manh Phan 2026-10-12
 ---
 
@@ -325,3 +325,7 @@ Round 1: mọi eval máy đều xanh; E14 (judgment) được cả ba giám kh�
 ### Re-pin lần 1 — 2026-10-12, do hoá cũ do gộp origin/onehub (ba tệp CI)
 run_id: repin-20261012T071448Z-14481
 sha: fab37fb6231317609e3800f88dc76b6b079fff75 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 2 — 2026-10-13, do gộp onehub 206096fc2 — crm nhận kit 2.28.0; đọc cau_nguoi_gui; dời mốc migration
+run_id: repin-20261013T133753Z-38026
+sha: db44d78799ec78259b0a8ec8b644439e1b00711d · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
