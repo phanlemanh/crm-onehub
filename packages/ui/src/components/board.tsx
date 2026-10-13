@@ -2,7 +2,7 @@
 
 import Draggable from "@carbon/icons-react/es/Draggable";
 import type { Announcements } from "@dnd-kit/core";
-import type { ElementType, ReactNode } from "react";
+import { type ElementType, type ReactNode, useState } from "react";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 import { useMessages } from "./locale-provider";
@@ -34,7 +34,20 @@ export type BoardColumn = {
 	summary?: ReactNode;
 };
 
-export type BoardMove = { cardId: string; from: string; to: string };
+export type BoardMove = {
+	cardId: string;
+	from: string;
+	to: string;
+	order?: string[];
+};
+
+export type BoardDrop = {
+	cardId: string;
+	from: string;
+	to: string;
+	fromIndex: number;
+	toIndex: number;
+};
 
 export type BoardProps = {
 	columns: BoardColumn[];
@@ -45,10 +58,38 @@ export type BoardProps = {
 	pendingIds?: readonly string[];
 	renderCard?: (card: BoardCard, column: BoardColumn) => ReactNode;
 	announcements?: Announcements;
+	canDrop?: (cardId: string, columnId: string) => boolean;
+	reorder?: boolean;
+	emptyLabel?: string;
 };
 
+export function boardDrop(
+	drop: BoardDrop,
+	columns: BoardColumn[],
+	options: {
+		canDrop?: (cardId: string, columnId: string) => boolean;
+		reorder?: boolean;
+	},
+): BoardMove | null {
+	if (options.canDrop && !options.canDrop(drop.cardId, drop.to)) return null;
+	const same = drop.from === drop.to;
+	if (same && !options.reorder) return null;
+	if (!options.reorder) {
+		return { cardId: drop.cardId, from: drop.from, to: drop.to };
+	}
+	const ids = (columns.find((c) => c.id === drop.to)?.cards ?? []).map(
+		(c) => c.id,
+	);
+	const rest = ids.filter((id) => id !== drop.cardId);
+	const at =
+		drop.toIndex < 0 || drop.toIndex > rest.length ? rest.length : drop.toIndex;
+	if (same && ids.indexOf(drop.cardId) === at) return null;
+	const order = [...rest.slice(0, at), drop.cardId, ...rest.slice(at)];
+	return { cardId: drop.cardId, from: drop.from, to: drop.to, order };
+}
+
 const COLUMN_CLASS =
-	"flex w-64 shrink-0 flex-col gap-2 rounded-md bg-muted p-2";
+	"flex w-64 shrink-0 flex-col gap-2 rounded-md bg-muted p-2 transition-opacity data-[khong-nhan=true]:opacity-50";
 
 const CARD_CLASS =
 	"flex flex-col gap-0.5 rounded-md border bg-background p-2 text-sm outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring";
@@ -117,8 +158,13 @@ export function Board({
 	pendingIds,
 	renderCard,
 	announcements,
+	canDrop,
+	reorder,
+	emptyLabel,
 }: BoardProps) {
 	const msg = useMessages();
+	const [dragging, setDragging] = useState<string | null>(null);
+	const empty = emptyLabel ?? msg.board.empty;
 
 	if (onMove) {
 		const value = Object.fromEntries(
@@ -129,12 +175,18 @@ export function Board({
 		);
 		const pending = new Set(pendingIds);
 		const handleMove = (event: KanbanMoveEvent) => {
-			if (event.activeContainer === event.overContainer) return;
-			onMove({
-				cardId: String(event.event.active.id),
-				from: event.activeContainer,
-				to: event.overContainer,
-			});
+			const move = boardDrop(
+				{
+					cardId: String(event.event.active.id),
+					from: event.activeContainer,
+					to: event.overContainer,
+					fromIndex: event.activeIndex,
+					toIndex: event.overIndex,
+				},
+				columns,
+				{ canDrop, reorder },
+			);
+			if (move) onMove(move);
 		};
 
 		return (
@@ -150,6 +202,9 @@ export function Board({
 					onValueChange={() => undefined}
 					getItemValue={(card: BoardCard) => card.id}
 					onMove={handleMove}
+					onDragStart={(event) => setDragging(String(event.active.id))}
+					onDragEnd={() => setDragging(null)}
+					onDragCancel={() => setDragging(null)}
 					accessibility={announcements ? { announcements } : undefined}
 				>
 					<KanbanBoard asChild className="flex w-max gap-3 p-3 select-none">
@@ -160,6 +215,13 @@ export function Board({
 									<KanbanColumn key={column.id} value={column.id} asChild>
 										<li
 											data-board-column={column.id}
+											data-khong-nhan={
+												dragging !== null &&
+												canDrop !== undefined &&
+												!canDrop(dragging, column.id)
+													? "true"
+													: undefined
+											}
 											className={cn(
 												COLUMN_CLASS,
 												"ring-ring data-[over=true]:ring-2",
@@ -170,7 +232,7 @@ export function Board({
 												<ul className="flex min-h-16 flex-col gap-2">
 													{column.cards.length === 0 ? (
 														<li className="px-1 py-2 text-xs text-muted-foreground">
-															{msg.board.empty}
+															{empty}
 														</li>
 													) : null}
 													{column.cards.map((card) => (
@@ -248,7 +310,7 @@ export function Board({
 							<ColumnHeader column={column} />
 							{column.count === 0 ? (
 								<p className="px-1 py-2 text-xs text-muted-foreground">
-									{msg.board.empty}
+									{empty}
 								</p>
 							) : (
 								<ul className="flex flex-col gap-2">
