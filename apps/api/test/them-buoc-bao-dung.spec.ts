@@ -13,13 +13,15 @@ function maMoi(tien: string): string {
 	return `${tien}-${Date.now()}-${dem}`;
 }
 
-async function loiCua(chay: Promise<unknown>): Promise<HttpException> {
+async function loiCua(
+	chay: Promise<unknown>,
+): Promise<HttpException | undefined> {
 	try {
 		await chay;
 	} catch (loi) {
 		return loi as HttpException;
 	}
-	throw new Error("mong doi mot loi, nhung lenh chay tron ven");
+	return undefined;
 }
 
 function buocKhuon(departmentId: string, position = 0) {
@@ -56,8 +58,8 @@ describe("phong-ban-khong-co", () => {
 		const thamChieu = await loiCua(
 			new ToChucService(db).luuTruXemTruoc({ id: maLa }),
 		);
-		expect(thamChieu.getStatus(), "cot tham chieu org.* rong").toBe(404);
-		expect(thamChieu.message).toContain(maLa);
+		expect(thamChieu?.getStatus(), "cot tham chieu org.* rong").toBe(404);
+		expect(thamChieu?.message).toContain(maLa);
 
 		const duong = {
 			addStep: await loiCua(
@@ -84,13 +86,13 @@ describe("phong-ban-khong-co", () => {
 		};
 		for (const [ten, loi] of Object.entries(duong)) {
 			expect(
-				loi.getStatus(),
+				loi?.getStatus(),
 				`${ten} tra loi khac org.* cho phong ban khong co`,
-			).toBe(thamChieu.getStatus());
+			).toBe(thamChieu?.getStatus());
 			expect(
-				loi.message,
+				loi?.message,
 				`${ten} tra cau khac org.* cho phong ban khong co`,
-			).toBe(thamChieu.message);
+			).toBe(thamChieu?.message);
 		}
 		expect(await db.onboardingStep.count({ where: { planId: plan.id } })).toBe(
 			soBuoc,
@@ -140,14 +142,14 @@ describe("phong-ban-luu-tru", () => {
 		const c = await loiCua(
 			service.updateTemplate({ id: khuon.id, steps: [buocKhuon(cat.id)] }),
 		);
-		expect(a.getStatus(), "addStep ghi buoc vao phong ban da luu tru").toBe(
+		expect(a?.getStatus(), "addStep ghi buoc vao phong ban da luu tru").toBe(
 			400,
 		);
-		expect(a.message).toContain(cat.name);
-		expect(b.getStatus()).toBe(400);
-		expect(b.message).toBe(a.message);
-		expect(c.getStatus()).toBe(400);
-		expect(c.message).toBe(a.message);
+		expect(a?.message).toContain(cat.name);
+		expect(b?.getStatus()).toBe(400);
+		expect(b?.message).toBe(a?.message);
+		expect(c?.getStatus()).toBe(400);
+		expect(c?.message).toBe(a?.message);
 		expect(await db.onboardingStep.count({ where: { planId: plan.id } })).toBe(
 			soBuoc,
 		);
