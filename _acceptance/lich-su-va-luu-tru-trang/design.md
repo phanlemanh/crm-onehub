@@ -39,9 +39,9 @@ Chữ đánh dấu «[chờ P6-5]», «[chờ P6-6]» là lựa chọn đang ch�
 - `taiLieu.quayLai({slug, so})` — tạo đề xuất `NOI_DUNG` mang tên và nội dung phiên bản `so`, gốc là bản đang dùng,
   `tuPhienBanSo = so`; đi `taoDeXuatTaiLieu`. Bản `so` đang dùng hay chữ trùng bản đang dùng → từ chối `chuaDoi`.
 - `taiLieu.deXuatLuuTru({slug, lyDo})` và `taiLieu.deXuatKhoiPhuc({slug, lyDo})` — đề xuất `LUU_TRU` (chỉ trang đang dùng,
-  chưa lưu trữ, không có đề xuất lưu trữ đang chờ) và `KHOI_PHUC` (chỉ trang đã lưu trữ).
+  chưa lưu trữ, không có đề xuất lưu trữ đang chờ) và `KHOI_PHUC` (chỉ trang đã lưu trữ, không có đề xuất khôi phục đang chờ).
 - `approve` rẽ theo `loai`: `LUU_TRU` đặt `archivedAt` (đã có thì giữ ngày đầu), đánh `CU` các đề xuất nội dung đang
-  chờ, ghi sự kiện `LUU_TRU`, không tạo phiên bản; `KHOI_PHUC` xoá `archivedAt`, ghi `KHOI_PHUC`. `reject` như cũ. Quyền
+  chờ với một sự kiện `CU` mỗi đề xuất như luật có sẵn [chờ P6-8], ghi sự kiện `LUU_TRU`, không tạo phiên bản; `KHOI_PHUC` xoá `archivedAt`, ghi `KHOI_PHUC`. `reject` như cũ. Quyền
   duyệt như cũ (`duyetDuocTrang`). `propose` từ chối trang đã lưu trữ.
 - Lọc một chỗ: `dieuKienDangDung()` ở `packages/db/src/tai-lieu-tim.ts` (`banDangDungId` khác null và `archivedAt`
   null) dùng ở `timTrangDangDung`, `docBanDangDung`, `docNhieuBanDangDung`, `dangDung`, `sucKhoe`, `nhacToi`, `boLoc`;
@@ -103,6 +103,7 @@ Chữ đánh dấu «[chờ P6-5]», «[chờ P6-6]» là lựa chọn đang ch�
 | ST-doc-hop-luu-tru | Màn đọc | hộp «Đề xuất lưu trữ trang» với ô lý do, nút «Gửi đề xuất» | gửi / huỷ |
 | ST-doc-cho-luu-tru | Màn đọc | huy hiệu «Có đề xuất lưu trữ chờ duyệt», mục trình đơn khoá | xem đề xuất |
 | ST-doc-da-luu-tru | Màn đọc | dải «Trang đã lưu trữ ngày …» + «Đề xuất khôi phục», nội dung đọc được, không «Sửa trang» | đề xuất khôi phục |
+| ST-doc-cho-khoi-phuc | Màn đọc | dải đã lưu trữ với huy hiệu «Có đề xuất khôi phục chờ duyệt» thay nút | xem đề xuất |
 | ST-duyet-luu-tru | Màn duyệt | «Đề xuất lưu trữ trang» + lý do + người đề xuất, nút «Duyệt lưu trữ» / «Trả lại» | duyệt / trả lại |
 | ST-duyet-khoi-phuc | Màn duyệt | «Đề xuất khôi phục trang» + lý do, nút «Duyệt khôi phục» / «Trả lại» | duyệt / trả lại |
 | ST-duyet-quay-lai | Màn duyệt | diff như mọi đề xuất + nhãn «Quay lại phiên bản N» | duyệt / trả lại |

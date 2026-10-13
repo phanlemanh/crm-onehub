@@ -1,18 +1,15 @@
 ---
 slug: lich-su-va-luu-tru-trang
-at: 2026-10-13T12:13:37.460Z
-sha: cf1263e917101eac8c25829ab605033ee7ab4573
+at: 2026-10-13T12:33:28.711Z
+sha: 459b3f4c5f692d9971adf126de0fc85f5b518109
 nen: do
 cong_cu: xanh
-suite: do
-luoi: xanh
+suite: xanh
+luoi: do
 engine: xanh
 ---
 
 ## Dòng đỏ
 
-- nen suite: CAY BAN SAU SUITE _acceptance/lich-su-va-luu-tru-trang/contract.md
-- nen suite: CAY BAN SAU SUITE _acceptance/lich-su-va-luu-tru-trang/coverage-scan.md
-- nen suite: CAY BAN SAU SUITE _acceptance/lich-su-va-luu-tru-trang/decisions.jsonl
-- nen suite: CAY BAN SAU SUITE _acceptance/lich-su-va-luu-tru-trang/design.md
-- nen suite: CAY BAN SAU SUITE _acceptance/lich-su-va-luu-tru-trang/evals.yaml
+- nen luoi: 1 vi pham co san
+- VIOLATION [lich-su-va-luu-tru-trang]: hồ sơ có bằng chứng nhưng status chưa arm cổng — status=draft; PR đổi code chịu cổng (apps/app/app/proto/_modules/lich-su-va-luu-tru-trang/du-lieu.ts…) mà hồ sơ trong PR chưa arm. Cổng chỉ chấm hồ sơ ở implemented/verified/signed-off, hồ sơ này đang tàng hình. Đặt status: implemented để cổng chấm, hoặc gỡ evidence-report.md / tách hồ sơ khỏi PR nếu bằng chứng thuộc phạm vi đã bỏ.

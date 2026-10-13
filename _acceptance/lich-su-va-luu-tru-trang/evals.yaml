@@ -43,7 +43,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.lslt_duyet_luu_tru
     paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, apps/api/test/tai-lieu-luu-tru.spec.ts]
-    expected: "exit 0. Bài 'duyet-luu-tru': P có đề xuất LUU_TRU chờ và đề xuất NOI_DUNG chờ; ma trận người VIẾT TRƯỚC năm dòng {chủ trang, owner, admin, thành viên khác, vai okr} × duyệt — ba dòng đầu (mỗi dòng trên một bản gieo riêng) → archivedAt khác null, banDangDungId không đổi, số TaiLieuPhienBan không đổi, đề xuất NOI_DUNG thành CU, đúng một sự kiện LUU_TRU mang aiId người duyệt; hai dòng cuối → FORBIDDEN, hàng trang và hai đề xuất không đổi. Bài 'giu-ngay-dau': gọi hàm duyệt lưu trữ của service trực tiếp trên trang đã lưu trữ với đồng hồ giả lệch 3 ngày → archivedAt bằng ngày đầu. CHIỀU ĐỎ: bản sao hàm ghi archivedAt luôn = now (dựng trong bài bằng cùng đầu vào) cho ngày khác — khẳng định ghim 'giữ ngày lưu trữ đầu' phân biệt được hai cách."
+    expected: "exit 0. Bài 'duyet-luu-tru': P có đề xuất LUU_TRU chờ và đề xuất NOI_DUNG chờ; ma trận người VIẾT TRƯỚC năm dòng {chủ trang, owner, admin, thành viên khác, vai okr} × duyệt — ba dòng đầu (mỗi dòng trên một bản gieo riêng) → archivedAt khác null, banDangDungId không đổi, số TaiLieuPhienBan không đổi, đề xuất NOI_DUNG thành CU, sự kiện thêm toEqual {LUU_TRU:1, CU:1} (một CU cho một đề xuất nội dung đang chờ), LUU_TRU mang aiId người duyệt; hai dòng cuối → FORBIDDEN, hàng trang và hai đề xuất không đổi. Bài 'giu-ngay-dau': gọi hàm duyệt lưu trữ của service trực tiếp trên trang đã lưu trữ với đồng hồ giả lệch 3 ngày → archivedAt bằng ngày đầu. CHIỀU ĐỎ: bản sao hàm ghi archivedAt luôn = now (dựng trong bài bằng cùng đầu vào) cho ngày khác — khẳng định ghim 'giữ ngày lưu trữ đầu' phân biệt được hai cách."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E6
@@ -52,7 +52,7 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.lslt_khoi_phuc
     paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, apps/api/test/tai-lieu-luu-tru.spec.ts]
-    expected: "exit 0. Bài 'khoi-phuc': trang B đã lưu trữ; deXuatKhoiPhuc(B,'cần lại') → đề xuất loai KHOI_PHUC; C duyệt → archivedAt null, đúng một sự kiện KHOI_PHUC; sau đó tim theo từ khoá của B ra B và dangDung có B (quan hệ với AC-7, không chỉ cột). deXuatKhoiPhuc trên trang chưa lưu trữ → BAD_REQUEST, 0 hàng; propose(B, nội dung mới) khi B đã lưu trữ → BAD_REQUEST chuỗi daLuuTru, 0 hàng TaiLieuDeXuat mới."
+    expected: "exit 0. Bài 'khoi-phuc': trang B đã lưu trữ; deXuatKhoiPhuc(B,'cần lại') → đề xuất loai KHOI_PHUC; C duyệt → archivedAt null, đúng một sự kiện KHOI_PHUC; sau đó tim theo từ khoá của B ra B và dangDung có B (quan hệ với AC-7, không chỉ cột). ma trận từ chối VIẾT TRƯỚC hai dòng, mỗi dòng 0 hàng ghi và ghim chuỗi lỗi: deXuatKhoiPhuc trên trang chưa lưu trữ · deXuatKhoiPhuc khi B đã có một đề xuất KHOI_PHUC chờ; propose(B, nội dung mới) khi B đã lưu trữ → BAD_REQUEST chuỗi daLuuTru, 0 hàng TaiLieuDeXuat mới."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E7
@@ -85,10 +85,21 @@ evals:
   - id: E8m
     criterion: AC-8
     executor: test
-    cmd: config:executors.test.lslt_man_da_xu_ly
-    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/tai-lieu-cho-duyet.dom.tsx]
+    cmd: config:executors.test.lslt_dom_da_xu_ly
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/tai-lieu-da-xu-ly.dom.tsx]
     expected: "exit 0; bài dom (jsdom, queryClient giả theo cache.ts): nhóm «Đã xử lý» với ba dòng DA_DUYET, TRA_LAI, CU hiện ba nhãn «Đã duyệt», «Đã trả lại», «Cũ» (chữ rút từ taiLieuMessages('vi'), không chép tay) theo đúng thứ tự dòng. CHIỀU ĐỎ: dòng mang trạng thái lạ → bài khẳng định không có nhãn rỗng (mọi trạng thái của khuôn có nhãn — duyệt qua danh sách trạng thái của khuôn validation)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8u
+    criterion: AC-8
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.lslt_man_da_luu_tru
+    steps:
+      - "Cung lan chay E12, buoc 5: chu trang mo tab Chờ duyệt -> 'Đã xử lý' -> dong de xuat da duyet mang nhan 'Đã duyệt' -> anh lslt-da-xu-ly-1440.png"
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", _acceptance/lich-su-va-luu-tru-trang/rang/**]
+    expected: "exit 0; man.mjs --phan da-luu-tru in 'buoc 5: dat'; tap id tren nhom Đã xử lý toEqual taiLieu.proposals({nhom:'da-xu-ly'}) cung phien."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
   - id: E9
     criterion: AC-9
@@ -96,15 +107,15 @@ evals:
     layer: backend-effect
     cmd: config:executors.test.lslt_chi_ghi_them
     paths: [apps/api/src/**, packages/db/src/**, apps/agent/agent/**, apps/api/test/tai-lieu-chi-ghi-them.spec.ts]
-    expected: "exit 0. Hai vế. (a) Quét tĩnh mọi tệp .ts dưới apps/api/src, packages/db/src, apps/agent/agent: không lời gọi Prisma nào dạng taiLieuPhienBan.(update|updateMany|delete|deleteMany|upsert) hay taiLieuSuKien.(update|updateMany|delete|deleteMany|upsert), cũng không SQL thô UPDATE/DELETE trên hai bảng (regex trên mã, đối chứng dương: chuỗi mẫu 'tx.taiLieuPhienBan.update(' trong bài bị regex bắt). (b) Chạy trọn các luồng E3, E5, E6 trên một trang: chụp mọi hàng TaiLieuPhienBan và TaiLieuSuKien trước mỗi luồng; sau luồng mọi hàng cũ toEqual bản chụp (chỉ có hàng thêm); số sự kiện thêm toEqual bảng VIẾT TRƯỚC {quayLai:1 DE_XUAT, duyệt quay lại:1 DUYET, deXuatLuuTru:1 DE_XUAT, duyệt lưu trữ:1 LUU_TRU (+CU cho đề xuất bị cũ), deXuatKhoiPhuc:1 DE_XUAT, duyệt khôi phục:1 KHOI_PHUC, trả lại:1 TRA_LAI}, mỗi sự kiện có aiId và luc."
+    expected: "exit 0. Hai vế. (a) Quét tĩnh mọi tệp .ts dưới apps/api/src, packages/db/src, apps/agent/agent: không lời gọi Prisma nào dạng taiLieuPhienBan.(update|updateMany|delete|deleteMany|upsert) hay taiLieuSuKien.(update|updateMany|delete|deleteMany|upsert), cũng không SQL thô UPDATE/DELETE trên hai bảng (regex trên mã, đối chứng dương: chuỗi mẫu 'tx.taiLieuPhienBan.update(' trong bài bị regex bắt). (b) Chạy trọn các luồng E3, E5, E6 trên một trang: chụp mọi hàng TaiLieuPhienBan và TaiLieuSuKien trước mỗi luồng; sau luồng mọi hàng cũ toEqual bản chụp (chỉ có hàng thêm); số sự kiện thêm toEqual bảng VIẾT TRƯỚC {quayLai:1 DE_XUAT, duyệt quay lại:1 DUYET, deXuatLuuTru:1 DE_XUAT, duyệt lưu trữ (trang có đúng một đề xuất nội dung chờ): LUU_TRU 1 và CU 1, deXuatKhoiPhuc:1 DE_XUAT, duyệt khôi phục:1 KHOI_PHUC, trả lại:1 TRA_LAI}, mỗi sự kiện có aiId và luc."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10m
     criterion: AC-10
     executor: test
-    cmd: config:executors.test.lslt_man_lich_su
+    cmd: config:executors.test.lslt_dom_lich_su
     paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/tai-lieu-lich-su.dom.tsx]
-    expected: "exit 0; bài dom cho bảng trạng thái ST-lich-su-*, ST-ban-cu-*: một phiên bản → một dòng 'Đang dùng' và câu một-phiên-bản; ba phiên bản → ba dòng mới nhất trước, nhãn 'Đang dùng' đúng ở dòng có dangDung; lỗi tải → VungTaiLoi với nút Thử lại gọi lại truy vấn (đếm lần gọi = 2); phiên bản cũ: ToggleGroup chuyển giữa diff (có data-them, data-bo) và toàn văn; phiên bản là bản đang dùng → không có nút quay lại và có câu bản-đang-dùng. Chữ rút từ taiLieuMessages. CHIỀU ĐỎ: dữ liệu ba phiên bản xáo thứ tự đầu vào → bảng vẫn mới nhất trước (bài xếp theo số, không tin thứ tự mảng)."
+    expected: "exit 0; bài dom cho bảng trạng thái ST-lich-su-*, ST-ban-cu-*: một phiên bản → một dòng 'Đang dùng' và câu một-phiên-bản; ba phiên bản → ba dòng mới nhất trước, nhãn 'Đang dùng' đúng ở dòng có dangDung; lỗi tải → VungTaiLoi với nút Thử lại gọi lại truy vấn (đếm lần gọi = 2); phiên bản cũ: ToggleGroup chuyển giữa diff (có data-them, data-bo) và toàn văn; phiên bản là bản đang dùng → không có nút quay lại và có câu bản-đang-dùng. Chữ rút từ taiLieuMessages. Mọi nút chứa tên trang, tên người và nội dung phiên bản có tổ tiên mang translate="no" (duyệt bằng closest('[translate=no]') trên từng nút chữ khớp dữ liệu gieo); chiều đỏ của vế này: bản sao render bỏ thuộc tính trên ô tên → bài đỏ ghim tên nút. CHIỀU ĐỎ: dữ liệu ba phiên bản xáo thứ tự đầu vào → bảng vẫn mới nhất trước (bài xếp theo số, không tin thứ tự mảng)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E10
@@ -126,9 +137,9 @@ evals:
   - id: E11m
     criterion: AC-11
     executor: test
-    cmd: config:executors.test.lslt_man_luu_tru
+    cmd: config:executors.test.lslt_dom_luu_tru
     paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/tai-lieu-luu-tru.dom.tsx]
-    expected: "exit 0; bài dom cho ST-doc-*, ST-duyet-luu-tru, ST-duyet-khoi-phuc: hộp đề xuất lưu trữ — nút gửi disabled khi lý do rỗng hay chỉ khoảng trắng, enabled khi có chữ, 501 ký tự hiện lỗi; Huỷ bọc DialogClose; gửi lỗi mạng giữ chữ và hiện Thử lại; trang có đề xuất lưu trữ chờ → mục trình đơn disabled kèm câu vì sao; trang đã lưu trữ → Alert có ngày (định dạng ngayTaiLieu) và nút Đề xuất khôi phục, không có link Sửa trang; màn duyệt LUU_TRU và KHOI_PHUC hiện tên việc, lý do, nút Duyệt lưu trữ/Duyệt khôi phục, không có DiffTrang. CHIỀU ĐỎ: cùng dữ liệu trang đang dùng → không có Alert đã lưu trữ (đối chứng dương cho khẳng định âm)."
+    expected: "exit 0; bài dom cho ST-doc-*, ST-duyet-luu-tru, ST-duyet-khoi-phuc: hộp đề xuất lưu trữ — nút gửi disabled khi lý do rỗng hay chỉ khoảng trắng, enabled khi có chữ, 501 ký tự hiện lỗi; Huỷ bọc DialogClose; gửi lỗi mạng giữ chữ và hiện Thử lại; trang có đề xuất lưu trữ chờ → mục trình đơn disabled kèm câu vì sao; trang đã lưu trữ → Alert có ngày (định dạng ngayTaiLieu) và nút Đề xuất khôi phục, không có link Sửa trang; màn duyệt LUU_TRU và KHOI_PHUC hiện tên việc, lý do, nút Duyệt lưu trữ/Duyệt khôi phục, không có DiffTrang; trang đã lưu trữ có đề xuất khôi phục chờ → huy hiệu 'Có đề xuất khôi phục chờ duyệt', không có nút Đề xuất khôi phục; lý do và tên trang nằm trong vùng translate="no" (closest), chiều đỏ như E10m. CHIỀU ĐỎ: cùng dữ liệu trang đang dùng → không có Alert đã lưu trữ (đối chứng dương cho khẳng định âm)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E11
@@ -143,8 +154,11 @@ evals:
       - "Buoc 3 (1440): dev:session C -> tab Chờ duyệt -> mo de xuat -> 'Đề xuất lưu trữ trang' + ly do + 'Duyệt lưu trữ' -> anh lslt-duyet-luu-tru-1440.png -> duyet"
       - "Buoc 4 (1440): mo thang duong dan trang -> dai 'Trang đã lưu trữ ngày …' + 'Đề xuất khôi phục', khong co 'Sửa trang' -> anh lslt-da-luu-tru-1440.png"
       - "Buoc 5 (390): man doc da luu tru khong cuon ngang -> anh lslt-da-luu-tru-390.png"
+      - "Buoc 6 (1440): dev:session M -> 'Đề xuất khôi phục' -> go ly do -> gui -> huy hieu 'Có đề xuất khôi phục chờ duyệt' -> anh lslt-hop-khoi-phuc-1440.png"
+      - "Buoc 7 (1440): dev:session C -> mo de xuat -> 'Đề xuất khôi phục trang' + 'Duyệt khôi phục' -> anh lslt-duyet-khoi-phuc-1440.png -> duyet"
+      - "Buoc 8 (1440): danh sach trang mac dinh co lai trang -> anh lslt-sau-khoi-phuc-1440.png"
     paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", packages/ui/src/components/**, _acceptance/lich-su-va-luu-tru-trang/rang/**]
-    expected: "exit 0; man.mjs --phan luu-tru in 'buoc N: dat' cho 5 buoc; sau buoc 3, doc lai qua API (taiLieu.get) thay daLuuTru khac null — quan he man <-> DB. CHIEU DO: --chieu-do tren ban sao bo Alert da luu tru -> 'buoc 4: khong thay dai da luu tru', ma 1."
+    expected: "exit 0; man.mjs --phan luu-tru in 'buoc N: dat' cho 8 buoc; sau buoc 8 tap slug tren bang toEqual taiLieu.list mac dinh goi cung phien va chua trang; sau buoc 3, doc lai qua API (taiLieu.get) thay daLuuTru khac null — quan he man <-> DB. CHIEU DO: --chieu-do tren ban sao bo Alert da luu tru -> 'buoc 4: khong thay dai da luu tru', ma 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
   - id: E12
@@ -158,8 +172,9 @@ evals:
       - "Buoc 2 (1440): tai lai trang -> van dung bang do (URL giu tham so)"
       - "Buoc 3 (1440): tat 'Đã lưu trữ' -> danh sach thuong, khong co trang da luu tru"
       - "Buoc 4 (1440): W2 -> bam 'Đã lưu trữ' -> 'Chưa có trang nào đã lưu trữ' -> anh lslt-ds-da-luu-tru-rong-1440.png"
+      - "Buoc 5 (1440): dev:session chu trang W1 -> tab Chờ duyệt -> 'Đã xử lý' -> co dong 'Đã duyệt' -> anh lslt-da-xu-ly-1440.png"
     paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", packages/ui/src/components/**, _acceptance/lich-su-va-luu-tru-trang/rang/**]
-    expected: "exit 0; man.mjs --phan da-luu-tru in 'buoc N: dat' cho 4 buoc; tap slug tren bang buoc 1 toEqual tap slug cua taiLieu.list({archived:true}) goi cung phien (quan he man <-> API). CHIEU DO: --chieu-do tren ban sao bo tham so archived khoi URL -> 'buoc 2: tai lai mat bo loc', ma 1."
+    expected: "exit 0; man.mjs --phan da-luu-tru in 'buoc N: dat' cho 5 buoc; tap slug tren bang buoc 1 toEqual tap slug cua taiLieu.list({archived:true}) goi cung phien (quan he man <-> API). CHIEU DO: --chieu-do tren ban sao bo tham so archived khoi URL -> 'buoc 2: tai lai mat bo loc', ma 1."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
 
   - id: E13j
@@ -177,3 +192,8 @@ evals:
       - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-duyet-luu-tru-1440.png"
       - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-da-luu-tru-1440.png"
       - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-ds-da-luu-tru-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-ds-da-luu-tru-rong-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-duyet-quay-lai-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-hop-khoi-phuc-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-duyet-khoi-phuc-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-da-xu-ly-1440.png"
