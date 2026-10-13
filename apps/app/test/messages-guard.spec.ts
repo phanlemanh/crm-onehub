@@ -462,6 +462,7 @@ const GHIM = {
 		"Cả 12 thoả thuận của công ty",
 	],
 	"record-sheet:company.manyPeople": ["1 người", "12 người"],
+	"record-sheet:archivedRows.toggle": ["+1 đã lưu trữ", "+12 đã lưu trữ"],
 	"crm:sheet.confirmDelete": ["Xoá vĩnh viễn 1?", "Xoá vĩnh viễn 12?"],
 	"contacts:created": ["Đã thêm 1.", "Đã thêm 12."],
 	"contacts:bulk.reassigned": [

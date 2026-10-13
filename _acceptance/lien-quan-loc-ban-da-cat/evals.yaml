@@ -119,8 +119,8 @@ evals:
       thuan dang mo dang dung (gia tri 1.000 USD, chot 2026-12-01) trong deals, 1 thoa thuan dang mo da cat (gia tri
       9.000 USD, chot 2026-11-01) trong archivedDeals, 1 ca nhan dang dung trong contacts va 1 ca nhan trong
       archivedContacts. Ma tran viet truoc 7 phep kiem: (1) so tab Thoa thuan = 1; (2) so tab Ca nhan = 1; (3) gia tri
-      dang mo hien 1.000 USD (khong 10.000); (4) so thoa thuan dang mo = 1; (5) ngay chot gan nhat 01/12/2026 (khong
-      01/11/2026); DealSheet voi 1 ca nhan dang dung trong contacts va 1 trong archivedContacts: (6) muc «Người tham
+      dang mo hien 1.000 USD (khong 10.000); (4) so thoa thuan dang mo = 1; (5) ngay chot gan nhat bang dung chu LocalDay
+      cua app cho 2026-12-01 (khac chu cua 2026-11-01); DealSheet voi 1 ca nhan dang dung trong contacts va 1 trong archivedContacts: (6) muc «Người tham
       gia» (m.section.onIt) chi co ten nguoi dang dung, khong co ten nguoi da cat; (7) so tab Ca nhan = 1.
       expect(o.length).toBe(7).
       CHIEU DO ghim: ban sao cong archivedDeals vao gia tri dang mo -> do "lqc: so lieu dau ngan tinh ban da cat"; ban sao
