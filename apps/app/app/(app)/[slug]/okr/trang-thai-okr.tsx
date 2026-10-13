@@ -1,6 +1,5 @@
 "use client";
 
-import Renew from "@carbon/icons-react/es/Renew";
 import Target from "@carbon/icons-react/es/Target";
 import WarningAlt from "@carbon/icons-react/es/WarningAlt";
 import { Button } from "@crm/ui/components/button";
@@ -16,6 +15,7 @@ import {
 import { Icon } from "@crm/ui/components/icon";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import Link from "next/link";
 import { okrMessages } from "@/lib/messages/okr";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -49,21 +49,12 @@ export function DangTai() {
 export function Loi({ thuLai }: { thuLai: () => void }) {
 	const m = okrMessages(useLocale());
 	return (
-		<Empty data-trang-thai="ST-donvi-loi">
-			<EmptyHeader>
-				<EmptyMedia variant="icon">
-					<Icon icon={WarningAlt} />
-				</EmptyMedia>
-				<EmptyTitle>{m.loi.title}</EmptyTitle>
-				<EmptyDescription>{m.loi.body}</EmptyDescription>
-			</EmptyHeader>
-			<EmptyContent>
-				<Button variant="outline" onClick={thuLai}>
-					<Icon icon={Renew} data-icon="inline-start" />
-					{m.loi.action}
-				</Button>
-			</EmptyContent>
-		</Empty>
+		<VungTaiLoi
+			data-trang-thai="ST-donvi-loi"
+			moTa={m.loi.body}
+			onThuLai={thuLai}
+			tieuDe={m.loi.title}
+		/>
 	);
 }
 

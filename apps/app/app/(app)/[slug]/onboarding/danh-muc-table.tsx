@@ -17,6 +17,7 @@ import {
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useQueryStates } from "nuqs";
@@ -221,24 +222,20 @@ export function DanhMucTable() {
 					<EmptyDescription>{m.empty.noPlan.body}</EmptyDescription>
 				</EmptyHeader>
 				<EmptyContent>
-					<TaoKeHoach nhanNut={m.empty.noPlan.action} bienThe="default" />
+					<TaoKeHoach nhanNut={m.empty.noPlan.action} bienThe="outline" />
 				</EmptyContent>
 			</Empty>
 		);
 	}
 
 	const loiView = coLoi ? (
-		<Empty data-trang-thai="ST-danhmuc-loi">
-			<EmptyHeader>
-				<EmptyTitle>{m.error.title}</EmptyTitle>
-				<EmptyDescription>{m.error.body}</EmptyDescription>
-			</EmptyHeader>
-			<EmptyContent>
-				<Button onClick={() => danhMuc.refetch()} variant="outline">
-					{m.error.action}
-				</Button>
-			</EmptyContent>
-		</Empty>
+		<VungTaiLoi
+			dangTai={danhMuc.isFetching}
+			data-trang-thai="ST-danhmuc-loi"
+			moTa={m.error.body}
+			onThuLai={() => danhMuc.refetch()}
+			tieuDe={m.error.title}
+		/>
 	) : null;
 	const dangTaiDau = danhMuc.isPending ? (
 		<span aria-live="polite">{m.loading}</span>
@@ -353,17 +350,13 @@ export function DanhMucTable() {
 			) : khongKhop ? (
 				khongKhopView
 			) : bangCot.isError ? (
-				<Empty data-trang-thai="ST-bangcot-loi">
-					<EmptyHeader>
-						<EmptyTitle>{m.boardError.title}</EmptyTitle>
-						<EmptyDescription>{m.boardError.body}</EmptyDescription>
-					</EmptyHeader>
-					<EmptyContent>
-						<Button onClick={() => bangCot.refetch()} variant="outline">
-							{m.error.action}
-						</Button>
-					</EmptyContent>
-				</Empty>
+				<VungTaiLoi
+					dangTai={bangCot.isFetching}
+					data-trang-thai="ST-bangcot-loi"
+					moTa={m.boardError.body}
+					onThuLai={() => bangCot.refetch()}
+					tieuDe={m.boardError.title}
+				/>
 			) : bangCot.data ? (
 				<div
 					aria-busy={bangCot.isPlaceholderData}

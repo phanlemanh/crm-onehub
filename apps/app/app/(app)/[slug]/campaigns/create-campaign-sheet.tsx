@@ -35,6 +35,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@crm/ui/components/sheet";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { Textarea } from "@crm/ui/components/textarea";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -121,7 +122,7 @@ function SegmentField({
 
 export function CreateCampaignSheet() {
 	return (
-		<Suspense fallback={<AddButton disabled />}>
+		<Suspense fallback={<Skeleton className="h-8 w-28 rounded-md" />}>
 			<CreateCampaignForm />
 		</Suspense>
 	);

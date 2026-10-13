@@ -6,6 +6,8 @@ const vi = {
 		canChinh: "Cây căn chỉnh toàn công ty",
 		chuaCanChinh: "Chưa căn chỉnh vào đâu",
 		cungHien: "cũng hiện ở chỗ góp kia",
+		locTatCa: "Tất cả",
+		locRong: "Không có mục tiêu nào ở mức này trong chu kỳ.",
 	},
 	loc: {
 		phuTrach: "Người phụ trách",
@@ -195,6 +197,7 @@ const vi = {
 		loiNguoi: "Không tải được KR của người này.",
 	},
 	thuLai: "Thử lại",
+	loiTieuDe: "Không tải được phần này",
 	tienDoLeRa: (ten: string, p: string, k: string) =>
 		`Tiến độ ${ten}: ${p}%, lẽ ra đã tới ${k}%`,
 };
@@ -207,6 +210,8 @@ const en: OkrToanCanhMessages = {
 		canChinh: "Company-wide alignment tree",
 		chuaCanChinh: "Not aligned anywhere",
 		cungHien: "also shown where it contributes",
+		locTatCa: "All",
+		locRong: "No objectives at this level in the cycle.",
 	},
 	loc: {
 		phuTrach: "Owner",
@@ -397,6 +402,7 @@ const en: OkrToanCanhMessages = {
 		loiNguoi: "Couldn't load this person's KRs.",
 	},
 	thuLai: "Try again",
+	loiTieuDe: "Couldn’t load this",
 	tienDoLeRa: (ten: string, p: string, k: string) =>
 		`Progress of ${ten}: ${p}%, expected ${k}% by now`,
 };

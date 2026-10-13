@@ -66,7 +66,6 @@ const en = {
 	error: {
 		title: "Could not load the list",
 		body: "The server did not answer. Try again; if it keeps failing, tell the engineers what time you saw this.",
-		action: "Try again",
 	},
 	loading: "Loading…",
 	cells: { silentDays: "{n}d" },
@@ -106,6 +105,7 @@ const en = {
 		keHoach: {
 			title: "New plan from a template",
 			toolbar: "New plan",
+			khoaLyDo: "No plan template yet, so a plan can’t be started.",
 			created: "Plan created.",
 			company: "Partner company",
 			template: "Template",
@@ -160,6 +160,7 @@ const en = {
 	},
 	settings: {
 		title: "Onboarding",
+		moTa: "Templates hold the steps for each kind of partner; a 30-day plan starts from one.",
 		templates: "Plan templates",
 		departments: "Departments",
 		newTemplate: "New template",
@@ -308,7 +309,7 @@ type OnboardingMessages = {
 		{ title: string; body: string; action: string }
 	>;
 	boardError: { title: string; body: string };
-	error: { title: string; body: string; action: string };
+	error: { title: string; body: string };
 	loading: string;
 	cells: { silentDays: string };
 	hoSo: {
@@ -346,6 +347,7 @@ type OnboardingMessages = {
 		keHoach: Record<
 			| "title"
 			| "toolbar"
+			| "khoaLyDo"
 			| "company"
 			| "template"
 			| "startedAt"
@@ -398,6 +400,7 @@ type OnboardingMessages = {
 	>;
 	settings: {
 		title: string;
+		moTa: string;
 		templates: string;
 		departments: string;
 		newTemplate: string;
@@ -569,7 +572,6 @@ const vi = {
 	error: {
 		title: "Không tải được danh mục",
 		body: "Máy chủ không trả lời. Thử tải lại; còn lỗi thì báo đội kỹ thuật kèm giờ anh thấy màn này.",
-		action: "Tải lại",
 	},
 	loading: "Đang tải…",
 	cells: { silentDays: "{n} ngày" },
@@ -610,6 +612,7 @@ const vi = {
 		keHoach: {
 			title: "Tạo kế hoạch từ khuôn",
 			toolbar: "Kế hoạch mới",
+			khoaLyDo: "Chưa có khuôn kế hoạch nào nên chưa tạo được kế hoạch.",
 			created: "Đã tạo kế hoạch.",
 			company: "Công ty đối tác",
 			template: "Khuôn",
@@ -664,6 +667,7 @@ const vi = {
 	},
 	settings: {
 		title: "Điều phối 30 ngày",
+		moTa: "Khuôn giữ các bước cho từng loại đối tác; kế hoạch 30 ngày bắt đầu từ một khuôn.",
 		templates: "Khuôn kế hoạch",
 		departments: "Phòng ban",
 		newTemplate: "Soạn khuôn",

@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: e3b979ae92631d509c9868e6f8b03c345cbd4fac
+verified_commit: 481547ec21a1762a3ee5dd2723b990f5496bd1e0
 human_signoff: Phan Le Manh 2026-09-28
 ---
 
@@ -369,3 +369,7 @@ sha: df01345e0af096a5310ed5f99d5a3b580ae3d234 · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 4 — 2026-10-06, do sửa thước đỏ lô 2-4 (g2c)
 run_id: repin-20261006T110836Z-56430
 sha: e3b979ae92631d509c9868e6f8b03c345cbd4fac · suites: 7 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E2t, E15a · ngoài làn máy: E2u, E11u, E15j · AC không có chốt máy: AC-15
+
+### Re-pin lần 5 — 2026-10-13, do bài kiểm chỉnh theo hình mới của khung-man-chung (#388, 481547ec2)
+run_id: repin-20261013T205017Z-88075
+sha: 481547ec21a1762a3ee5dd2723b990f5496bd1e0 · suites: 7 lệnh exit 0 · evals: 24/24 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E2t, E15a · ngoài làn máy: E2u, E11u, E15j · diff chạm vật đo ngoài làn máy: E2u, E11u — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-15 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

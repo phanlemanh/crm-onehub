@@ -14,6 +14,7 @@ export type VungTaiLoiProps = {
 	moTa: string;
 	onThuLai: () => void;
 	dangTai?: boolean;
+	"data-trang-thai"?: string;
 };
 
 export function VungTaiLoi({
@@ -21,9 +22,15 @@ export function VungTaiLoi({
 	moTa,
 	onThuLai,
 	dangTai = false,
+	"data-trang-thai": trangThai,
 }: VungTaiLoiProps) {
 	return (
-		<Empty border="solid" size="compact" data-vung-tai-loi="">
+		<Empty
+			border="solid"
+			size="compact"
+			data-vung-tai-loi=""
+			data-trang-thai={trangThai}
+		>
 			<EmptyHeader>
 				<EmptyTitle>{tieuDe}</EmptyTitle>
 				<EmptyDescription>{moTa}</EmptyDescription>
