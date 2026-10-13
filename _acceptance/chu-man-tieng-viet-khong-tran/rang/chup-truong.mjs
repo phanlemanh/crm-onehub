@@ -58,7 +58,7 @@ const CAY_DO = {
 					'<span className="w-full whitespace-nowrap font-medium text-foreground text-xs">',
 				),
 		dauVet: '"flex flex-1 flex-col gap-px text-left"',
-		ghim: /cmt-man: truong vi 360 trang cuon ngang/,
+		ghim: /cmt-man: truong vi 360 nhan kieu ra ngoai hang/,
 	},
 };
 
@@ -166,7 +166,7 @@ function soTruong(kq, ngonNgu, rong) {
 		if (o.rong < NGUONG.oToiThieu - NGUONG.lech) {
 			loi.push(`${ma}: o ${o.kieu} hep ${o.rong.toFixed(1)} px`);
 		}
-		if (!o.trongHang) loi.push(`${ma}: o ${o.kieu} ra ngoai hang`);
+		if (!o.trongHang) loi.push(`cmt-man: ${ma} nhan kieu ra ngoai hang (${o.kieu})`);
 	}
 	if (kq.o.length > 0) {
 		const phai = kq.o.map((o) => o.phai);
