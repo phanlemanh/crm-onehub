@@ -65,7 +65,10 @@
 		"./zalo-getme": "./src/zalo-getme.ts",
 		"./zalo-lien-ket": "./src/zalo-lien-ket.ts",
 		"./test/*": "./test/*.ts",
-		"./vai-doi-tac": "./src/vai-doi-tac.ts"
+		"./vai-doi-tac": "./src/vai-doi-tac.ts",
+		"./viec": "./src/viec.ts",
+		"./viec-ghi": "./src/viec-ghi.ts",
+		"./viec-gieo": "./src/viec-gieo.ts"
 	},
 	"scripts": {
 		"build": "prisma generate",
