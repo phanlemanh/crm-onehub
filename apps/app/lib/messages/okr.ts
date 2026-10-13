@@ -131,7 +131,6 @@ const vi = {
 	sheet: {
 		tabKr: "KR",
 		khuViSao: "Vì sao lúc này",
-		khuGopVao: "Góp vào",
 		quaKr: "qua KR «{ten}»",
 		khuDuongLyDo: "Đường lý do",
 		canCu: "Căn cứ: {cau}",
@@ -821,7 +820,6 @@ const en: OkrMessages = {
 	sheet: {
 		tabKr: "KR",
 		khuViSao: "Why now",
-		khuGopVao: "Contributes to",
 		quaKr: "through KR “{ten}”",
 		khuDuongLyDo: "Path of reasons",
 		canCu: "Evidence: {cau}",
