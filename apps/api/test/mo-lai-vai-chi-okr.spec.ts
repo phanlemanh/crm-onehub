@@ -88,12 +88,6 @@ function loai(ds: OnboardingActivityMeta[]): string {
 	return JSON.stringify(ds.map((m) => m.kind).sort());
 }
 
-function dem(ds: OnboardingActivityMeta[]): Record<string, number> {
-	const kq: Record<string, number> = {};
-	for (const m of ds) kq[m.kind] = (kq[m.kind] ?? 0) + 1;
-	return kq;
-}
-
 async function buoc(id: string) {
 	return db.onboardingStep.findUniqueOrThrow({ where: { id } });
 }
@@ -528,17 +522,17 @@ describe("mlk-bo-xong", () => {
 					(await keHoach(k.plan.id)).ownerId !== n.m.id;
 				kiem(!doi, `mlk: vong tron doi nguoi ${i}`);
 			}
-			const moi = dem(await vetMoi(k.plan.id, truoc));
-			const mong = {
-				"buoc.boXong": 1,
-				"buoc.xong": 2,
-				"keHoach.dong": 1,
-				"keHoach.moLai": 1,
-			};
+			const moi = await vetMoi(k.plan.id, truoc);
 			kiem(
-				JSON.stringify(Object.fromEntries(Object.entries(moi).sort())) ===
-					JSON.stringify(mong),
-				`mlk: vong tron vet sai ${JSON.stringify(moi)}`,
+				loai(moi) ===
+					JSON.stringify([
+						"buoc.boXong",
+						"buoc.xong",
+						"buoc.xong",
+						"keHoach.dong",
+						"keHoach.moLai",
+					]),
+				`mlk: vong tron vet sai ${loai(moi)}`,
 			);
 		},
 		TRAN_MS,
