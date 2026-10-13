@@ -4,6 +4,7 @@ import { join, resolve } from "node:path";
 
 const GOC = resolve(import.meta.dirname, "..", "..", "..");
 const HO_SO = join(GOC, "_acceptance", "kara-mot-ten");
+const RA = join(GOC, ".acceptance-runs", "kara-mot-ten");
 const MOC = "4abc05e07";
 const KHO = (t) =>
 	t.startsWith("apps/app/lib/messages/") ||
@@ -80,9 +81,9 @@ if (dong.length !== can) {
 	process.stderr.write(`bang-chu: ${dong.length} dong khac ${can}\n`);
 	process.exit(1);
 }
-mkdirSync(join(HO_SO, "evidence"), { recursive: true });
+mkdirSync(RA, { recursive: true });
 writeFileSync(
-	join(HO_SO, "evidence", "bang-chu.md"),
+	join(RA, "bang-chu.md"),
 	[
 		"# Bảng chữ trước và sau — kara-mot-ten",
 		"",

@@ -3,7 +3,7 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const GOC = resolve(import.meta.dirname, "..", "..", "..");
-const HO_SO = join(GOC, "_acceptance", "kara-mot-ten");
+const RA = join(GOC, ".acceptance-runs", "kara-mot-ten");
 const BAI = /\.(spec\.ts|spec\.tsx|dom\.tsx|test\.ts)$/;
 const CAM_THEM = /\.(skip|only|todo)\(|test\.if\(\s*false/g;
 const GOI = /\b(test|it)\(/g;
@@ -74,9 +74,9 @@ const bang = sua.map((tep) => {
 	});
 	return `| ${tep} | ${co.join(", ") || "—"} |`;
 });
-mkdirSync(join(HO_SO, "evidence"), { recursive: true });
+mkdirSync(RA, { recursive: true });
 writeFileSync(
-	join(HO_SO, "evidence", "ho-so-bai-doi.md"),
+	join(RA, "ho-so-bai-doi.md"),
 	[
 		"# Tệp bài đã đổi và hồ sơ đã ký chạy nó",
 		"",

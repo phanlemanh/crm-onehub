@@ -111,7 +111,7 @@ evals:
     criterion: AC-9
     executor: script
     cmd: config:executors.script.kmt_khong_go_bai
-    expected: "exit 0; rang/khong-go-bai.mjs so cây với merge-base origin/onehub: không tệp *.spec.ts, *.dom.tsx, *.test.ts nào bị xoá; số lời gọi test( và it( của mỗi tệp bài đã đổi không giảm; không thêm .skip, .todo, .only, test.if(false). Vi phạm thì thoát 1 in '<tệp>: <loại>'. In 'khong-go-bai: <n> tep doi, 0 vi pham'. Ghi _acceptance/kara-mot-ten/evidence/ho-so-bai-doi.md: mỗi tệp bài đã đổi cùng các hồ sơ đã ký có eval chạy tệp đó (để ghim lại ở đuôi vòng)."
+    expected: "exit 0; rang/khong-go-bai.mjs so cây với merge-base origin/onehub: không tệp *.spec.ts, *.dom.tsx, *.test.ts nào bị xoá; số lời gọi test( và it( của mỗi tệp bài đã đổi không giảm; không thêm .skip, .todo, .only, test.if(false). Vi phạm thì thoát 1 in '<tệp>: <loại>'. In 'khong-go-bai: <n> tep doi, 0 vi pham'. Ghi .acceptance-runs/kara-mot-ten/ho-so-bai-doi.md (bản chụp lúc ký ở _acceptance/kara-mot-ten/evidence/ho-so-bai-doi.md): mỗi tệp bài đã đổi cùng các hồ sơ đã ký có eval chạy tệp đó (để ghim lại ở đuôi vòng)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/kara-mot-ten/rang/khong-go-bai.mjs, apps/app/test/**, apps/agent/test/**, apps/api/test/**, packages/validation/test/**, packages/ui/test/**]
 
@@ -127,7 +127,7 @@ evals:
     criterion: AC-1
     executor: script
     cmd: config:executors.script.kmt_bang_chu
-    expected: "exit 0; rang/bang-chu.mjs ghi _acceptance/kara-mot-ten/evidence/bang-chu.md: mỗi mục của kiem-ke.json một dòng — be_mat, tệp#khoá, ngôn ngữ, chữ cũ (git show 4abc05e0) và chữ hiện tại. Số dòng khác số mục × số ngôn ngữ của mục thì thoát 1. In 'bang-chu: <n> dong'."
+    expected: "exit 0; rang/bang-chu.mjs ghi .acceptance-runs/kara-mot-ten/bang-chu.md (bản chụp E13 chấm nằm ở _acceptance/kara-mot-ten/evidence/bang-chu.md): mỗi mục của kiem-ke.json một dòng — be_mat, tệp#khoá, ngôn ngữ, chữ cũ (git show 4abc05e0) và chữ hiện tại. Số dòng khác số mục × số ngôn ngữ của mục thì thoát 1. In 'bang-chu: <n> dong'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/kara-mot-ten/rang/bang-chu.mjs, _acceptance/kara-mot-ten/kiem-ke.json, apps/app/lib/messages/**, packages/ui/src/lib/messages.ts, packages/validation/src/**, apps/api/src/okr/okr-config.ts, apps/api/src/tai-lieu/tai-lieu-config.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/agent/lib/tai-lieu-config.ts]
 
