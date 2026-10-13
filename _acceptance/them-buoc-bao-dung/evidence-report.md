@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 2b65a3d5aa9673375c4c14c9f4cf9cc8ad749e11
+verified_commit: a282a8780c250a074a931b6fc49fe7817bf854a5
 human_signoff: Phan Le Manh 2026-10-13
 ---
 
@@ -207,3 +207,7 @@ none — every multi-run eval is uniform
 
 Round 4: 11 eval va 7 lenh suite deu xanh tren 2b65a3d5aa9673375c4c14c9f4cf9cc8ad749e11; verdict PASS.
 Round 1-3: dau vet tung round nam trong run-log.jsonl cung thu muc; round nay thay toan bo noi dung report.
+
+### Re-pin lần 1 — 2026-10-13, do gộp onehub #383 và #371 sau chữ ký lại
+run_id: repin-20261013T135401Z-39606
+sha: a282a8780c250a074a931b6fc49fe7817bf854a5 · suites: 7 lệnh exit 0 · evals: 9/9 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
