@@ -40,8 +40,7 @@ function theoKit(
 		case "hang-chua-ho-so":
 		case "hang-co-ho-so": {
 			const n = b.hang ? nhom.get(b.hang) : undefined;
-			if (n === "da-giao")
-				return { nhan: nhan.daGiao, cau, nghia: "xong" };
+			if (n === "da-giao") return { nhan: nhan.daGiao, cau, nghia: "xong" };
 			if (n === "dang-lam")
 				return { nhan: nhan.dangLam, cau, nghia: "dangChay" };
 			if (n === "chua-bat-dau")

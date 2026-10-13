@@ -176,7 +176,7 @@ try {
 		m2,
 	);
 	const lech = (khoi?.tin_hieu ?? [])
-		.filter((t) => tt.trangThai[t.id]?.cau !== t.cau)
+		.filter((t) => tt.trangThai[t.id]?.cau !== (t.cau_nguoi_gui ?? t.cau))
 		.map((t) => t.id);
 	dong(
 		tt.banVe === "co" && lech.length === 0,
