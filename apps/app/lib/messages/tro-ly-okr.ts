@@ -3,11 +3,11 @@ import type { MaLoaiDeXuat, TruongVietLai } from "@crm/validation/okr-tro-ly";
 
 const vi = {
 	troLy: {
-		tieuDe: "Trợ lý OKR",
+		tieuDe: "Kara · OKR",
 		luu: "Lưu",
-		daLuu: "Đã lưu Trợ lý OKR.",
+		daLuu: "Đã lưu Kara · OKR.",
 		loiLuu: "Chưa lưu được. Thử lại — phần đã nhập vẫn còn.",
-		bat: "Bật Trợ lý OKR",
+		bat: "Bật Kara",
 		batMoTa:
 			"Nội dung OKR chỉ gửi tới nhà cung cấp mô hình cam kết không lưu dữ liệu. Người dùng chưa thấy nút nào cho tới khi góp ý mở.",
 		phamVi: {
@@ -22,18 +22,18 @@ const vi = {
 		viec: {
 			"de-xuat": {
 				nhan: "Góp ý khi bấm",
-				moTa: "Người sửa được một Mục tiêu nhờ Trợ lý OKR góp ý tên, «vì sao lúc này» và KR.",
+				moTa: "Người sửa được một Mục tiêu nhờ Kara góp ý tên, «vì sao lúc này» và KR.",
 				moTaAn:
-					"Máy góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới.",
+					"Kara góp ý khi Mục tiêu được lưu; chỉ quản trị thấy kết quả, ở thẻ bên dưới.",
 			},
 			"tom-tat-tuan": {
 				nhan: "Tóm tắt tuần",
 				moTa: "Mỗi phòng ban nhận một Tóm tắt tuần ở đầu Họp tuần.",
-				moTaAn: "Máy tóm tắt sau ngày cập nhật; chỉ quản trị thấy kết quả.",
+				moTaAn: "Kara tóm tắt sau ngày cập nhật; chỉ quản trị thấy kết quả.",
 			},
 			soan: {
 				nhan: "Soạn OKR",
-				moTa: "Trưởng đơn vị mở «Soạn OKR cùng Trợ lý» cho đơn vị và chu kỳ đang lập kế hoạch; bản nháp do người nhận, sửa, bác.",
+				moTa: "Trưởng đơn vị mở «Soạn OKR cùng Kara» cho đơn vị và chu kỳ đang lập kế hoạch; bản nháp do người nhận, sửa, bác.",
 				moTaAn:
 					"Chỉ quản trị mở được cuộc soạn trên đơn vị; số đo tách cột Ẩn.",
 			},
@@ -47,9 +47,9 @@ const vi = {
 		hop: {
 			tieuDe: (nac: string, viec: string) =>
 				`Đơn vị ${nac.toLowerCase()} «${viec}»`,
-			moTa: "Trợ lý OKR chỉ chạy cho Mục tiêu thuộc các đơn vị đã chọn.",
+			moTa: "Kara chỉ chạy cho Mục tiêu thuộc các đơn vị đã chọn.",
 			moTaAn:
-				"Máy chạy ở chế độ ẩn cho Mục tiêu thuộc các đơn vị đã chọn. Đơn vị đã bật không có trong danh sách.",
+				"Kara chạy ở chế độ ẩn cho Mục tiêu thuộc các đơn vị đã chọn. Đơn vị đã bật không có trong danh sách.",
 			tim: "Tìm đơn vị",
 			xacNhan: (n: number) => `Chọn ${n} đơn vị`,
 			huy: "Huỷ",
@@ -62,7 +62,7 @@ const vi = {
 		},
 		tran: "Trần tháng (USD)",
 		tranMoTa:
-			"Chạm trần thì Trợ lý OKR tạm nghỉ tới đầu tháng sau. Quản trị được báo ở 80% và 100%.",
+			"Chạm trần thì Kara tạm nghỉ tới đầu tháng sau. Quản trị được báo ở 80% và 100%.",
 		tranHong: "Trần là một số từ 0, tối đa hai chữ số sau dấu phẩy.",
 		tranDatOkr: "Trần tháng đặt OKR (USD)",
 		tranDatOkrMoTa:
@@ -73,7 +73,7 @@ const vi = {
 			dangTat: "Đang tắt",
 			sanSang: "Sẵn sàng",
 			sanSangNguon: {
-				"khoa-rieng": "Sẵn sàng · khoá riêng của Trợ lý OKR",
+				"khoa-rieng": "Sẵn sàng · khoá riêng của Kara · OKR",
 				"khoa-chung": "Sẵn sàng · khoá chung của tác tử",
 				oidc: "Sẵn sàng · qua Vercel",
 			},
@@ -100,20 +100,20 @@ const vi = {
 		cotViec: "Việc",
 		cotTien: "Tiền",
 		tong: "Tổng",
-		troLyOkr: "Trợ lý OKR",
-		thanh: "Trợ lý OKR đã dùng trên trần tháng",
+		troLyOkr: "Kara · OKR",
+		thanh: "Kara · OKR đã dùng trên trần tháng",
 		muc80: "Đã dùng 80% trần",
 		muc100: "Đã chạm trần",
 		nhom: {
 			"nghien-cuu-danh-ba": "Nghiên cứu danh bạ",
-			"tro-ly-ai": "Trợ lý AI",
+			"tro-ly-ai": "Kara · hồ sơ",
 			"hoi-crm-zalo": "Hỏi qua Zalo",
 			"tac-nhan": "Tác nhân",
-			"tro-ly-okr": "Trợ lý OKR",
+			"tro-ly-okr": "Kara · OKR",
 			"chua-gan": "Chưa gán việc",
 		},
 		rong: "Tháng này chưa có lượt AI nào",
-		rongMoTa: (tran: string) => `Trần của Trợ lý OKR: ${tran}.`,
+		rongMoTa: (tran: string) => `Trần của Kara · OKR: ${tran}.`,
 		loi: "Không tải được sổ chi phí",
 		thuLai: "Thử lại",
 		doiSoat: {
@@ -130,7 +130,7 @@ const vi = {
 		},
 	},
 	soDo: {
-		tieuDe: "Góp ý của Trợ lý OKR — tháng này",
+		tieuDe: "Góp ý của Kara — tháng này",
 		moTa: "Số đo của nấc bật và chế độ ẩn; bấm một lượt để xem từng dòng.",
 		cotSo: "Số đo",
 		nacTen: {
@@ -202,11 +202,11 @@ export type TroLyOkrMessages = typeof vi;
 
 const en: TroLyOkrMessages = {
 	troLy: {
-		tieuDe: "OKR assistant",
+		tieuDe: "Kara · OKR",
 		luu: "Save",
-		daLuu: "OKR assistant saved.",
+		daLuu: "Kara · OKR saved.",
 		loiLuu: "Couldn't save. Try again — what you entered is kept.",
-		bat: "Turn on the OKR assistant",
+		bat: "Turn on Kara",
 		batMoTa:
 			"OKR content goes only to model providers that commit to keeping no data. Nobody sees a button until feedback opens.",
 		phamVi: {
@@ -221,7 +221,7 @@ const en: TroLyOkrMessages = {
 		viec: {
 			"de-xuat": {
 				nhan: "Feedback on request",
-				moTa: "Anyone who can edit an objective can ask the OKR assistant for feedback on its title, “why now” and KRs.",
+				moTa: "Anyone who can edit an objective can ask Kara for feedback on its title, “why now” and KRs.",
 				moTaAn:
 					"Feedback runs when an objective is saved; only admins see the results, in the card below.",
 			},
@@ -232,7 +232,7 @@ const en: TroLyOkrMessages = {
 			},
 			soan: {
 				nhan: "Draft OKRs",
-				moTa: "A unit head opens “Draft OKRs with the assistant” for a unit and a cycle in planning; people accept, edit or reject every line.",
+				moTa: "A unit head opens “Draft OKRs with Kara” for a unit and a cycle in planning; people accept, edit or reject every line.",
 				moTaAn:
 					"Only admins can open a drafting session on the unit; metrics go to the Hidden column.",
 			},
@@ -246,7 +246,7 @@ const en: TroLyOkrMessages = {
 		hop: {
 			tieuDe: (nac: string, viec: string) =>
 				`Units ${nac.toLowerCase()} “${viec}”`,
-			moTa: "The OKR assistant runs only for objectives in the chosen units.",
+			moTa: "Kara runs only for objectives in the chosen units.",
 			moTaAn:
 				"Hidden mode runs for objectives in the chosen units. Units that are on are not listed.",
 			tim: "Search units",
@@ -261,7 +261,7 @@ const en: TroLyOkrMessages = {
 		},
 		tran: "Monthly cap (USD)",
 		tranMoTa:
-			"At the cap the OKR assistant pauses until next month. Admins are told at 80% and 100%.",
+			"At the cap Kara pauses until next month. Admins are told at 80% and 100%.",
 		tranHong: "The cap is a number from 0, with at most two decimals.",
 		tranDatOkr: "Monthly cap in OKR-setting months (USD)",
 		tranDatOkrMoTa:
@@ -272,7 +272,7 @@ const en: TroLyOkrMessages = {
 			dangTat: "Off",
 			sanSang: "Ready",
 			sanSangNguon: {
-				"khoa-rieng": "Ready · Trợ lý OKR's own key",
+				"khoa-rieng": "Ready · own key for Kara · OKR",
 				"khoa-chung": "Ready · the agent's shared key",
 				oidc: "Ready · through Vercel",
 			},
@@ -299,20 +299,20 @@ const en: TroLyOkrMessages = {
 		cotViec: "Task",
 		cotTien: "Cost",
 		tong: "Total",
-		troLyOkr: "OKR assistant",
-		thanh: "OKR assistant spend against the monthly cap",
+		troLyOkr: "Kara · OKR",
+		thanh: "Kara · OKR spend against the monthly cap",
 		muc80: "80% of the cap used",
 		muc100: "Cap reached",
 		nhom: {
 			"nghien-cuu-danh-ba": "Contact research",
-			"tro-ly-ai": "AI assistant",
+			"tro-ly-ai": "Kara · records",
 			"hoi-crm-zalo": "Questions on Zalo",
 			"tac-nhan": "Agents",
-			"tro-ly-okr": "OKR assistant",
+			"tro-ly-okr": "Kara · OKR",
 			"chua-gan": "Not assigned",
 		},
 		rong: "No AI use this month yet",
-		rongMoTa: (tran: string) => `OKR assistant cap: ${tran}.`,
+		rongMoTa: (tran: string) => `Kara · OKR cap: ${tran}.`,
 		loi: "Couldn't load AI spend",
 		thuLai: "Try again",
 		doiSoat: {
@@ -330,7 +330,7 @@ const en: TroLyOkrMessages = {
 		},
 	},
 	soDo: {
-		tieuDe: "OKR assistant feedback — this month",
+		tieuDe: "Kara feedback — this month",
 		moTa: "Numbers for on and hidden mode; open a run to see each line.",
 		cotSo: "Measure",
 		nacTen: {
