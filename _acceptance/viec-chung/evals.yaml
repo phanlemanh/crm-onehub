@@ -161,6 +161,12 @@ evals:
     executor: ui-check
     layer: ui-observed
     cmd: config:executors.script.vc_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000: `BANG_CHUNG=_acceptance/viec-chung/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/viec-chung/rang/man.mjs\"` (chinh lenh vc_man; phien do tu dung kho crm_<cay>_do, API va app cua cay tren hai cong tu do, don khi xong)"
+      - "Doc dong cuoi: ma 0 kem 'viec-chung man: dat' = dat; ma 2 = khong do duoc (canh cay hay phien do hong); ma 1 = co thong diep 'vc man: ...' goi ten buoc sai"
+      - "Mo nam anh vc-viec-cua-toi-1280.png, vc-khung-viec-1280.png, vc-o-soan-1280.png, vc-o-soan-da-giao-1280.png, vc-viec-cua-toi-375.png trong _acceptance/viec-chung/evidence/ va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/viec-chung/evidence/
     paths: ["apps/app/app/(app)/[slug]/viec/**", apps/app/components/viec/**, apps/app/components/crm/timeline/**, apps/app/lib/khung-dieu-huong.ts, apps/app/components/app-icon-rail.tsx, apps/app/lib/messages/viec.ts, _acceptance/viec-chung/rang/man.mjs]
     expected: |
       exit 0 va "viec-chung man: dat"; chay qua phien do (tien-de.mjs --chay). Buoc 1 (1280): gieo qua viec-ghi
