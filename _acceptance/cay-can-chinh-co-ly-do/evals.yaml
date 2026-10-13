@@ -14,7 +14,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.l3_quyen
-    expected: "exit 0; cùng tệp, -t l3-quyen: quản trị và một người bộ mẫu mà máy CHỌN bằng phép tính (người đầu tiên theo thứ tự mã mà tập id cây của họ thiếu ít nhất một mục tiêu có alignment) gọi okr.cayCanChinh. Đòi: với người hẹp, mọi canh.tu và canh.den ∈ tập id nút cây của chính họ (đếm vi phạm === 0, in 'canh lo ra ngoai cay: <tu>-><den>'); tập canh của họ ⊆ tập của quản trị; tập 'vắng' = cạnh của quản trị có tu không có trong cây người hẹp, và không cạnh nào trong tập vắng xuất hiện ở người hẹp. Đối chứng: tập vắng khác rỗng (không thì exit 1 'khong co ca an trong bo mau'); và với quản trị mọi cạnh của tập vắng đều có mặt. Chiều đỏ ghim ở E11 (b): service dựng canh từ mọi alignment trong CSDL thay vì từ tập mts của cây → 'canh lo ra ngoai cay'."
+    expected: "exit 0; cùng tệp, -t l3-quyen: (1) bài thuần canhCuaCay (xuất từ okr-xem.service.ts) với tập viết trước — Y góp vào X (X không có trong tập), Z góp vào KR W1 của W (có trong tập), V góp vào W (có trong tập) — đòi đúng tập cạnh {Z->W1, V->W}, in 'canh lo ra ngoai cay: Y->X' nếu Y->X có mặt; đối chứng dương: thêm X vào tập thì Y->X có mặt. (2) Trên bộ mẫu, với từng người dùng của cong-ty.json (đếm số người chạy === số người trong bộ mẫu), mọi canh.tu và canh.den ∈ tập id nút cây của chính họ (đếm vi phạm === 0). Chiều đỏ ghim ở E11 (b): bỏ lọc đích có mặt → 'canh lo ra ngoai cay'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/src/okr/okr-xem.service.ts, apps/api/test/okr-cay-ly-do.spec.ts]
 
@@ -91,7 +91,7 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.l3_dot_bien
-    expected: "exit 0; _acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs: chiều xanh trước (E1–E8 xanh trên cây lành; không thì exit 2 'KHONG DO DUOC'); rồi sáu vết, mỗi vết sửa tạm một tệp, trả lại trong finally, đòi lệnh của eval đó đỏ VÀ đầu ra chứa thông điệp ghim riêng của assert (không trùng tên bài): (a) chỉ dựng cạnh đích KR → l3-canh 'canh thieu:'; (b) canh từ mọi alignment trong CSDL → l3-quyen 'canh lo ra ngoai cay'; (c) đọc cạnh theo gốc thay vì cha → l3-nut 'ly do sai cha'; (d) bảng mức tin thứ hai → l3-ba-muc 'bang muc tin thu hai'; (e) bỏ giữ tổ tiên → l3-loc 'thieu: K2, P3'; (f) chip Tất cả đếm mọi nút → l3-dem 'so tren chip sai'. Sau cùng git diff --quiet trên các tệp đã chạm."
+    expected: "exit 0; _acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs: chiều xanh trước (E1–E8 xanh trên cây lành; không thì exit 2 'KHONG DO DUOC'); rồi sáu vết, mỗi vết sửa tạm một tệp, trả lại trong finally, đòi lệnh của eval đó đỏ VÀ đầu ra chứa thông điệp ghim riêng của assert (không trùng tên bài): (a) chỉ dựng cạnh đích KR → l3-canh 'canh thieu:'; (b) bỏ lọc đích có mặt trong canhCuaCay → l3-quyen 'canh lo ra ngoai cay'; (c) đọc cạnh theo gốc thay vì cha → l3-nut 'ly do sai cha'; (d) bảng mức tin thứ hai → l3-ba-muc 'bang muc tin thu hai'; (e) bỏ giữ tổ tiên → l3-loc 'thieu: K2, P3'; (f) chip Tất cả đếm mọi nút → l3-dem 'so tren chip sai'. Sau cùng git diff --quiet trên các tệp đã chạm."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs, "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", apps/api/src/okr/okr-xem.service.ts]
 

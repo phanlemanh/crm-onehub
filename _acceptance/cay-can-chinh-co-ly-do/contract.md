@@ -27,7 +27,7 @@ Source input: `opportunity.md`, design doc ở frontmatter, hợp đồng L1 (`_
 ## Criteria
 
 - AC-1 (cross-layer): Given chu kỳ có các căn chỉnh mang ba mức tin, When gọi `okr.cayCanChinh` qua tRPC, Then đầu ra có `canh` gồm đúng một phần tử cho mỗi chỗ nối của mục tiêu có mặt trong cây — `tu` = id mục tiêu con, `den` = id KR hoặc mục tiêu đích — với `lyDo`, `canCu`, `lyDoTuKara`, `mucTin` bằng giá trị `okr.objective` trả cho căn chỉnh đó; `roots` và `chuaCanChinh` giữ nguyên như trước vòng.
-- AC-2: Given bộ OKR mẫu và hai người dùng — quản trị viên (thấy mọi mục tiêu) và một người dùng thấy hẹp hơn có ít nhất một mục tiêu mang căn chỉnh mà người đó không thấy —, When mỗi người dùng gọi `okr.cayCanChinh`, Then với người dùng thấy hẹp mọi phần tử `canh` có `tu` và `den` đều là id có mặt trong cây trả cho chính người đó, tập `canh` của người đó là tập con của tập của quản trị viên, và mọi cạnh có `tu` là mục tiêu người đó không thấy đều vắng; And đối chứng: tập vắng đó khác rỗng (ca có thật trong bộ mẫu).
+- AC-2: Given tập mục tiêu mà một người dùng thấy (đầu vào của cây), When dựng `canh`, Then chỉ có cạnh mà cả `tu` lẫn `den` nằm trong tập đó — cạnh trỏ tới mục tiêu hay KR ngoài tập bị bỏ; And trên bộ OKR mẫu, với mọi người dùng, mọi phần tử `canh` họ nhận có hai đầu là id có mặt trong cây trả cho chính họ.
 - AC-3: Given cây có nút mục tiêu P góp vào KR K với cạnh `co-so-lieu` do Kara viết, When mở Cây căn chỉnh, Then nút P dưới K hiện nhãn «Có số liệu» với `tone` của nghĩa `xong`, một dòng lý do bằng đúng `lyDo`, và đúng một dấu Kara; nút gốc và nút KR không có dòng lý do.
 - AC-4: Given ba nút con mang ba mức tin, When mở Cây căn chỉnh, Then nhãn và `tone` của từng nút đúng bảng mức tin → nghĩa của L2 (`NGHIA_MUC_TIN`, không khai bảng thứ hai); nút `chua-co-ly-do` chỉ mang nhãn «Chưa có lý do» — không dòng lý do, không dấu Kara.
 - AC-5: Given mục tiêu P góp vào hai chỗ (nút hiện hai lần, lần hai `lapLai`) với hai lý do khác nhau, When mở Cây căn chỉnh, Then mỗi lần P hiện mang đúng lý do của chỗ nối dưới cha của lần đó.
@@ -48,7 +48,7 @@ Quét bằng `morphological-scan` (preset entity-feature), 13/10. Chân sản ph
 - **Trục B — vị trí nút:** gốc | KR | mục tiêu con | mục tiêu con hiện lại (`lapLai`) | nhóm chưa căn chỉnh.
   - Thước CE: `dungCayCanChinh` [SUY-TỪ-REPO: apps/api/src/okr/can-chinh.ts].
 - **Trục C — bộ lọc:** tất cả | chưa có lý do | đặt cược | lọc rỗng | giá trị lạ.
-- **Trục D — người xem:** thấy mọi mục tiêu (quản trị) | thấy hẹp hơn.
+- **Trục D — tập mục tiêu người dùng thấy:** đủ cả hai đầu | thiếu một đầu (luật quyền chỉ giấu mục tiêu giới hạn, mà mục tiêu giới hạn không căn chỉnh được — ca thiếu đầu chỉ dựng được ở bài thuần).
   - Thước CE: `mucTieuCuaCay` lọc quyền [SUY-TỪ-REPO: apps/api/src/okr/okr.service.ts].
 - **Cross-cutting:** khổ 1440 | 390; `vi` | `en`; `translate="no"`; dấu Kara (`docs/ai-ux.md` §3).
 - **Ô Core:** cạnh trong đầu ra (AC-1) · quyền (AC-2) · nút con có số liệu (AC-3) · ba mức (AC-4) · `lapLai` (AC-5) · lọc (AC-6) · số đếm, rỗng, giá trị lạ (AC-7) · chữ (AC-8) · màn thật (AC-9) · giữ hồ sơ đã ký (AC-10) · ranh giới (AC-11).
