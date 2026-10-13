@@ -105,6 +105,7 @@ export const taiLieuListOutput = z.object({
 	),
 	total: z.number().int(),
 	facetCounts: z.record(loaiTrang, z.number().int()),
+	soDaLuuTru: z.number().int(),
 });
 
 export const taiLieuDangDungOutput = z.object({

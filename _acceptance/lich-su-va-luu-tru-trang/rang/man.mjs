@@ -361,6 +361,11 @@ async function phanDaLuuTru() {
 	await d.batTrinhDuyet(m.cookie);
 	const daCo = await d.hoi(m.cookie, "taiLieu.list", { page: 1, archived: true });
 	const rongTruoc = daCo.total === 0;
+	const dangDung = await d.taoTrangDangDung(chu, {
+		ten: "Chính sách thưởng quý hiện hành",
+		loai: "chinh-sach",
+		noiDung: BAN[1],
+	});
 
 	if (chay(4))
 		await d.chayBuoc(4, async () => {
@@ -381,11 +386,6 @@ async function phanDaLuuTru() {
 		ten: "Chính sách thưởng quý cũ",
 		loai: "chinh-sach",
 		noiDung: BAN[0],
-	});
-	const dangDung = await d.taoTrangDangDung(chu, {
-		ten: "Chính sách thưởng quý hiện hành",
-		loai: "chinh-sach",
-		noiDung: BAN[1],
 	});
 	const idLuu = await deXuatTrang(m, "taiLieu.deXuatLuuTru", daLuu, LY_DO_LUU);
 	await duyetBang(chu, idLuu);

@@ -149,7 +149,7 @@ export class TaiLieuService {
 			? { AND: [thay, { loai: input.loai }] }
 			: thay;
 		const coTrang = TAI_LIEU.danhSach.coTrang;
-		const [trang, total, nhom] = await Promise.all([
+		const [trang, total, nhom, soDaLuuTru] = await Promise.all([
 			this.db.taiLieuTrang.findMany({
 				where,
 				orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
@@ -173,6 +173,9 @@ export class TaiLieuService {
 				where: thay,
 				_count: { _all: true },
 			}),
+			this.db.taiLieuTrang.count({
+				where: { AND: [dieuKienThay(nguoi), archivedFilter(true)] },
+			}),
 		]);
 		const facetCounts = Object.fromEntries(
 			LOAI_TRANG.map((l) => [l, 0]),
@@ -194,6 +197,7 @@ export class TaiLieuService {
 			})),
 			total,
 			facetCounts,
+			soDaLuuTru,
 		};
 	}
 

@@ -165,6 +165,11 @@ describe("lslt-bo-loc", () => {
 		for (const cho of BANG)
 			expect(`${cho}: ${sau[cho]}`).toBe(`${cho}: ${san.a}`);
 		expect(await boLoc()).toEqual({ donVi: 1, chuTrang: 1 });
+		const macDinh = ok<{ soDaLuuTru: number }>(
+			await hoi("taiLieu.list", { donViId: san.donVi }, "khac"),
+			"list so da luu tru",
+		);
+		expect(macDinh.soDaLuuTru).toBeGreaterThanOrEqual(1);
 		const daLuu = ok<DanhSach>(
 			await hoi("taiLieu.list", { donViId: san.donVi, archived: true }, "khac"),
 			"list archived",
