@@ -18,7 +18,10 @@ function giaTriCo(args: string[], co: string): string | undefined {
 	return i === -1 ? undefined : args[i + 1];
 }
 
-function docThamSo(args: string[]) {
+const NGAN_CO = "--";
+
+function docThamSo(tho: string[]) {
+	const args = tho.filter((a) => a !== NGAN_CO);
 	const hopLe = Object.values(Q.co) as string[];
 	const la = args.filter(
 		(a, i) =>

@@ -26,6 +26,7 @@ const TEP_BO = join(DIR, Q.tepCongTy);
 const TEP_NHAN = join(DIR, Q.tepNhan);
 const LENH = join(import.meta.dir, "..", "scripts", "okr-ca-quy-4.ts");
 const THU_MUC_CAY = join(import.meta.dir, "..", "..", ...Q.thuMucRa);
+const GOC_KHO = join(import.meta.dir, "..", "..", "..");
 
 type DongNhan = {
 	ma: string;
@@ -296,6 +297,28 @@ describe("bcq4-dong-bo", () => {
 		expect(r.status).toBe(0);
 		expect(readdirSync(ra)).not.toContain("ca-cu.json");
 		expect(soThuMuc(ra, THU_MUC_CAY)).toEqual([]);
+	});
+
+	test("đúng dạng lệnh của tài liệu, chạy từ gốc kho, sinh ra cùng bộ ca", () => {
+		const ra = join(tam("goc-kho"), "ra");
+		mkdirSync(ra);
+		const r = spawnSync("bun", ["run", Q.tenLenh, "--", Q.co.ra, ra], {
+			cwd: GOC_KHO,
+			encoding: "utf8",
+		});
+		expect(r.status, r.stderr).toBe(0);
+		expect(soThuMuc(ra, THU_MUC_CAY)).toEqual([]);
+	});
+
+	test("chiều đỏ: cờ lạ sau -- vẫn bị từ chối mã 4", () => {
+		const ra = join(tam("co-la"), "ra");
+		mkdirSync(ra);
+		const r = spawnSync("bun", [LENH, "--", "--khong-co", ra], {
+			encoding: "utf8",
+		});
+		expect(r.status).toBe(OKR_MAU.ma.sai);
+		expect(r.stderr).toContain("--khong-co");
+		expect(readdirSync(ra)).toEqual([]);
 	});
 
 	test("chiều đỏ: sửa một chữ trong ca-n2.json thì hàm so gọi tên tệp", () => {

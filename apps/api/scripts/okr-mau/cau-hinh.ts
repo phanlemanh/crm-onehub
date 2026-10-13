@@ -39,6 +39,7 @@ export const OKR_MAU = {
 		tepNhan: "nhan-ca-quy-4.json",
 		tepCongTy: "cong-ty.json",
 		lenh: "bun run okr:ca-quy-4",
+		tenLenh: "okr:ca-quy-4",
 	},
 } as const;
 

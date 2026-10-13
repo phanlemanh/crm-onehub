@@ -125,6 +125,9 @@ chép KR của cấp trên và không nhận xét về người. Ca nằm ở `a
 máy sinh; phần viết tay duy nhất là tệp nhãn `apps/api/scripts/okr-mau/nhan-ca-quy-4.json`
 (điều Kara nên và không nên đề xuất cho từng mục tiêu).
 
+Chạy từ gốc kho (lệnh gốc chuyển tiếp sang `apps/api`; đường dẫn tương đối của `--nhan`,
+`--ra` tính từ `apps/api`):
+
 ```
 bun run okr:ca-quy-4                         # sinh lại vào ca-gop-y/quy-4/
 bun run okr:ca-quy-4 -- --nhan <tệp> --ra <thư mục>
@@ -155,11 +158,12 @@ cạnh con số đó, ghi bảng từng ca rồi xoá kho. Với bộ quý 4, b�
 `_acceptance/bo-ca-mau-quy-4/evidence/do-gop-y-quy-4.md`; với bộ khác (`--thu-muc`), bảng ghi
 vào `.acceptance-runs/bo-ca-mau-quy-4/do/ket-qua.md`, thư mục git bỏ qua, để tên đơn vị và nội
 dung OKR thật không vào lịch sử git. Mỗi lượt đo có thêm một ca kiểm chứng cố ý gán sai («Gọi
-50 cuộc» được gán là câu đã tốt): cách chấm phải đánh trượt ca này, nếu không thì phép đo không
-đáng tin. Cần khoá mô hình; tiền
+50 cuộc» được gán là câu đã tốt): luật «câu đã tốt thì không viết lại» phải đánh trượt ca này
+— Kara có đề xuất viết lại nó — nếu không thì phép đo không đáng tin. Cần khoá mô hình; tiền
 theo khoá local, trần `--tran-usd` (mặc định 2 USD). Mã thoát: 0 đo xong (số ca đạt là
 kết quả, không phải mã thoát), 1 tự kiểm luật chấm lệch, 2 không đo được (thiếu khoá, eve
-sập, ca thiếu bản ghi — thường vì chạm trần tiền), 3 ca kiểm chứng không bị đánh trượt.
+sập, ca thiếu bản ghi — thường vì chạm trần tiền — kể cả ca kiểm chứng), 3 ca kiểm chứng không
+bị luật «câu đã tốt» đánh trượt (trượt vì luật khác, như việc chưa đóng, cũng tính là 3).
 
 **Ca thật lúc bật góp ý:** đặt tệp cùng khuôn `@crm/validation/okr-ca-gop-y` vào
 `apps/agent/evals/okr/ca-gop-y/that/` rồi đo bằng `--thu-muc` như trên. Thư mục đó bị git

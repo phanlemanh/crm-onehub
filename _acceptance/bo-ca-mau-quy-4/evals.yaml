@@ -30,7 +30,7 @@ evals:
     executor: test
     cmd: config:executors.test.bcq4_dong_bo
     paths: [apps/api/scripts/okr-mau/**, apps/api/scripts/okr-ca-quy-4.ts, apps/agent/evals/okr/ca-gop-y/quy-4/**, apps/api/test/okr-ca-quy-4.spec.ts]
-    expected: "exit 0; bài chạy lệnh thật --ra <thư mục tạm>, rồi so tập tên tệp và nội dung từng byte của thư mục tạm với apps/agent/evals/okr/ca-gop-y/quy-4 trong cây — toEqual; một thư mục tạm có sẵn tệp ca-cu.json sau lệnh không còn tệp đó. CHIỀU ĐỎ cùng fixture: bài chép bộ ca của cây vào thư mục tạm khác, sửa một chữ trong ca-n2.json, chạy cùng hàm so → đỏ ghim «ca-n2.json»."
+    expected: "exit 0; bài chạy lệnh thật --ra <thư mục tạm>, rồi so tập tên tệp và nội dung từng byte của thư mục tạm với apps/agent/evals/okr/ca-gop-y/quy-4 trong cây — toEqual; một thư mục tạm có sẵn tệp ca-cu.json sau lệnh không còn tệp đó. Thêm: chạy đúng dạng lệnh của docs/setup.md từ gốc kho (bun run okr:ca-quy-4 -- --ra <tạm>) thoát 0 và cho cùng bộ ca; cờ lạ sau -- vẫn thoát 4 nêu tên cờ, thư mục đích rỗng. CHIỀU ĐỎ cùng fixture: bài chép bộ ca của cây vào thư mục tạm khác, sửa một chữ trong ca-n2.json, chạy cùng hàm so → đỏ ghim «ca-n2.json»."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E5
@@ -55,13 +55,13 @@ evals:
     cmd: config:executors.script.bcq4_do_gop_y
     long_running: 90
     paths: [_acceptance/bo-ca-mau-quy-4/rang/**, apps/agent/evals/okr/**, apps/agent/agent/subagents/tro_ly_okr/**, apps/agent/agent/lib/okr/**, apps/api/scripts/okr-mau/**]
-    expected: "exit 0; rang tạo kho đo dùng-một-lần (taoKho của rang 9b), nạp bộ OKR mẫu, chạy eve eval okr/gop-y okr/ng với TDX_THU_MUC_CA trỏ bản chép bộ quý 4 cộng ca đối chứng, judge zai/glm-5.2-fast ZDR; chấm từng ca bằng luật chốt mã của E22 (da-nop; 0 dòng số mới theo so-moi-lot.mjs của 9b; khongGopY 0 dòng viết lại; mỗi vanDe có dòng đúng trường hay maVanDe trừ mã luật lớp 7 đã hỏi; NG không mã cấm, không chép KR cấp trên, không tên người, không từ cấm); in mỗi ca DUNG/SAI kèm lý do và dòng 'ma: x/n · judge: y (k cap, nguong 0.7) · ca mau 9b: 30/30 · 0.95'; ghi evidence/do-gop-y-quy-4.md có một hàng mỗi ca; in và ghi tổng USD đã tiêu cạnh trần; xoá kho đo. Số ca đạt KHÔNG quyết mã thoát. Thiếu khoá mô hình → mã 2, không xanh. CHIỀU ĐỎ ghim: ca đối chứng 'Gọi 50 cuộc' gán khongGopY true — nếu ca đó chấm DUNG thì rang in 'ca doi chung khong bat duoc' và thoát 3; ca quý 4 không có bản ghi tổng kết → thoát 2 kèm mã ca."
+    expected: "exit 0; rang tạo kho đo dùng-một-lần (taoKho của rang 9b), nạp bộ OKR mẫu, chạy eve eval okr/gop-y okr/ng với TDX_THU_MUC_CA trỏ bản chép bộ quý 4 cộng ca đối chứng, judge zai/glm-5.2-fast ZDR; chấm từng ca bằng luật chốt mã của E22 (da-nop; 0 dòng số mới theo so-moi-lot.mjs của 9b; khongGopY 0 dòng viết lại; mỗi vanDe có dòng đúng trường hay maVanDe trừ mã luật lớp 7 đã hỏi; NG không mã cấm, không chép KR cấp trên, không tên người, không từ cấm); in mỗi ca DUNG/SAI kèm lý do và dòng 'ma: x/n · judge: y (k cap, nguong 0.7) · ca mau 9b: 30/30 · 0.95'; ghi evidence/do-gop-y-quy-4.md có một hàng mỗi ca; in và ghi tổng USD đã tiêu cạnh trần; xoá kho đo. Số ca đạt KHÔNG quyết mã thoát. Thiếu khoá mô hình → mã 2, không xanh. CHIỀU ĐỎ ghim: ca đối chứng 'Gọi 50 cuộc' gán khongGopY true — nếu luật khongGopY không đánh trượt nó (chấm DUNG, hay chỉ trượt vì luật khác) thì rang in 'ca doi chung khong bat duoc' và thoát 3; ca đối chứng không có bản ghi tổng kết → thoát 2 với 'ca doi chung khong co ban ghi tong ket'; ca quý 4 không có bản ghi tổng kết → thoát 2 kèm mã ca."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 
   - id: E8
     criterion: AC-8
     executor: judgment
-    inputs: [docs/setup.md, CONTEXT.md, apps/api/scripts/okr-ca-quy-4.ts, _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs, apps/agent/evals/okr/ca-gop-y.ts, apps/api/scripts/okr-mau/cau-hinh.ts, apps/agent/agent/lib/okr/config.ts, apps/api/package.json, .gitignore]
+    inputs: [docs/setup.md, CONTEXT.md, apps/api/scripts/okr-ca-quy-4.ts, _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs, apps/agent/evals/okr/ca-gop-y.ts, apps/api/scripts/okr-mau/cau-hinh.ts, apps/agent/agent/lib/okr/config.ts, apps/api/package.json, package.json, .gitignore]
     question: "Một phiên lượt sau chỉ đọc docs/setup.md có tự sinh lại được bộ ca quý 4, đo Kara trên nó, và đưa ca thật vào ca-gop-y/that/ rồi đo bằng --thu-muc không? Tên lệnh, cờ (--ra, --nhan, --thu-muc, --tran-usd) và mã thoát trong tài liệu có khớp với hai tệp lệnh đính kèm không? Tài liệu có nói vì sao ca thật không vào git, và có chữ tự đúc nào chưa có mục trong CONTEXT.md không?"
     evidence_required: [run_id, verdict, judges, verified_at]
     paths:
@@ -73,6 +73,7 @@ evals:
       - "apps/api/scripts/okr-mau/cau-hinh.ts"
       - "apps/agent/agent/lib/okr/config.ts"
       - "apps/api/package.json"
+      - "package.json"
       - ".gitignore"
 
   - id: E9
