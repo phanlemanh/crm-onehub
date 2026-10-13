@@ -1,6 +1,8 @@
 import { ActivityType, db } from "@crm/db";
 import { lockIdempotencyKey } from "@crm/db/idempotency";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
+import { TRANG_THAI_MO, VIEC } from "@crm/db/viec";
+import { LoiViec, taoViec } from "@crm/db/viec-ghi";
 import {
 	LOAI_VIEC_MA_LECH,
 	MA_NEN_TANG_KEY,
@@ -16,6 +18,7 @@ export type KetQuaMaLech =
 	| "ma-da-khop"
 	| "ke-hoach-dong"
 	| "da-co-viec-mo"
+	| "nguoi-cam-trich-khong-nhan"
 	| "payload-hong";
 
 export const LY_DO_MA_LECH = {
@@ -23,6 +26,8 @@ export const LY_DO_MA_LECH = {
 	"ma-da-khop": "mã đã khớp một cá nhân, không cần giao việc",
 	"ke-hoach-dong": "kế hoạch đã đóng hoặc không còn, không giao việc",
 	"da-co-viec-mo": "đã có việc mở cho mã này trong kế hoạch, không giao trùng",
+	"nguoi-cam-trich-khong-nhan":
+		"người cầm trịch kế hoạch không nhận được việc gắn dữ liệu đối tác, không giao",
 	"payload-hong": "payload onboarding-identify hỏng",
 } as const satisfies Record<KetQuaMaLech, string>;
 
@@ -58,36 +63,48 @@ async function giaoViec(
 
 		const keHoach = await tx.onboardingPlan.findUnique({
 			where: { id: payload.planId },
-			select: { ownerId: true, companyId: true, closedAt: true },
+			select: { ownerId: true, closedAt: true },
 		});
 		if (keHoach === null || keHoach.closedAt !== null) return "ke-hoach-dong";
 
-		const dangMo = await tx.activity.findFirst({
+		const khoa = VIEC.khoaMaLech(payload.platformBrokerId);
+		const viecMo = await tx.viec.findFirst({
+			where: {
+				khoaNguon: khoa,
+				trangThai: { in: [...TRANG_THAI_MO] },
+				gan: { some: { planId: payload.planId } },
+			},
+			select: { id: true },
+		});
+		const cuChuaChep = await tx.activity.findFirst({
 			where: {
 				type: ActivityType.TASK,
 				completedAt: null,
 				planId: payload.planId,
+				viecChep: { is: null },
 				meta: { path: ["platformBrokerId"], equals: payload.platformBrokerId },
 			},
 			select: { id: true },
 		});
-		if (dangMo !== null) return "da-co-viec-mo";
+		if (viecMo !== null || cuChuaChep !== null) return "da-co-viec-mo";
 
-		await tx.activity.create({
-			data: {
-				type: ActivityType.TASK,
-				subject: tieuDe(payload.platformBrokerId),
-				body: noiDung(payload.platformBrokerId),
-				dueAt: dauNgayVN(now),
-				planId: payload.planId,
-				companyId: keHoach.companyId,
-				createdById: keHoach.ownerId,
-				meta: {
-					agent: LOAI_VIEC_MA_LECH,
-					platformBrokerId: payload.platformBrokerId,
-				},
-			},
-		});
+		try {
+			await taoViec(tx, {
+				nguoiId: keHoach.ownerId,
+				tieuDe: tieuDe(payload.platformBrokerId),
+				moTa: noiDung(payload.platformBrokerId),
+				hanNgay: dauNgayVN(now),
+				gan: [{ loai: "plan", id: payload.planId }],
+				nguon: "tac-nhan",
+				khoaNguon: khoa,
+				now,
+			});
+		} catch (loi) {
+			if (loi instanceof LoiViec && loi.ma === "nguoi-nhan") {
+				return "nguoi-cam-trich-khong-nhan";
+			}
+			throw loi;
+		}
 		return "da-giao";
 	});
 }

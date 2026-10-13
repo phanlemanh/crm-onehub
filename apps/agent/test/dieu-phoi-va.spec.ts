@@ -1,11 +1,13 @@
 import { afterAll, describe, expect, it } from "bun:test";
-import { ActivityType, db, type Prisma } from "@crm/db";
+import { db, type Prisma, TrangThaiViec } from "@crm/db";
 import {
 	DIRECT_KINDS,
 	KHONG_VAO_LAN_NGHIEN_CUU,
 	TASK_KINDS,
 } from "@crm/db/agent-tasks";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
+import { VIEC } from "@crm/db/viec";
+import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	LOAI_VIEC_MA_LECH,
 	MA_NEN_TANG_KEY,
@@ -38,6 +40,25 @@ async function gieoKeHoach(dong = false) {
 			id: duy("u"),
 			name: "Nguoi cam trich",
 			email: `${duy("e")}@thu.test`,
+		},
+	});
+	await db.organization.upsert({
+		where: { id: WORKSPACE_ID },
+		update: {},
+		create: {
+			id: WORKSPACE_ID,
+			name: "CRM",
+			slug: "crm",
+			createdAt: new Date(),
+		},
+	});
+	await db.member.create({
+		data: {
+			id: duy("m"),
+			organizationId: WORKSPACE_ID,
+			userId: nguoi.id,
+			role: "member",
+			createdAt: new Date(0),
 		},
 	});
 	const congTy = await db.company.create({ data: { name: duy("Cong ty") } });
@@ -113,15 +134,18 @@ async function chay(viecId: string) {
 }
 
 async function viecMo(planId: string) {
-	return db.activity.findMany({
-		where: { planId, type: ActivityType.TASK, completedAt: null },
+	return db.viec.findMany({
+		where: {
+			gan: { some: { planId } },
+			trangThai: { notIn: [TrangThaiViec.XONG, TrangThaiViec.HUY] },
+		},
 		select: {
 			id: true,
-			createdById: true,
-			companyId: true,
-			dueAt: true,
-			subject: true,
-			meta: true,
+			nguoiGiaoId: true,
+			nguoiThucHienId: true,
+			hanNgay: true,
+			tieuDe: true,
+			khoaNguon: true,
 		},
 	});
 }
@@ -147,7 +171,8 @@ async function truongMa(): Promise<string> {
 }
 
 afterAll(async () => {
-	await db.activity.deleteMany({ where: { planId: { in: da.keHoach } } });
+	await db.viec.deleteMany({ where: { taoBoiId: { in: da.nguoi } } });
+	await db.member.deleteMany({ where: { userId: { in: da.nguoi } } });
 	await db.agentTask.deleteMany({ where: { id: { in: da.viec } } });
 	await db.onboardingPlan.deleteMany({ where: { id: { in: da.keHoach } } });
 	await db.company.deleteMany({ where: { id: { in: da.congTy } } });
@@ -202,17 +227,15 @@ describe("ma-lech", () => {
 		const mo = await viecMo(keHoach.id);
 		expect(mo.length).toBe(1);
 		const [mot] = mo;
-		expect(mot?.createdById).toBe(keHoach.ownerId);
-		expect(mot?.companyId).toBe(keHoach.companyId);
+		expect(mot?.nguoiGiaoId).toBe(keHoach.ownerId);
+		expect(mot?.nguoiThucHienId).toBe(keHoach.ownerId);
 		const hanDung = [
 			dauNgayVN(new Date(truoc)).getTime(),
 			dauNgayVN(new Date(sau)).getTime(),
 		];
-		expect(hanDung).toContain(mot?.dueAt?.getTime() ?? -1);
-		expect(mot?.subject?.includes(ma)).toBe(true);
-		expect(
-			(mot?.meta as { platformBrokerId?: string } | null)?.platformBrokerId,
-		).toBe(ma);
+		expect(hanDung).toContain(mot?.hanNgay?.getTime() ?? -1);
+		expect(mot?.tieuDe.includes(ma)).toBe(true);
+		expect(mot?.khoaNguon).toBe(VIEC.khoaMaLech(ma));
 		expect(xong.finishedAt === null).toBe(false);
 		expect(xong.outcome).toContain("đã giao việc cho người cầm trịch");
 		expect(
@@ -234,14 +257,14 @@ describe("khong-trung", () => {
 		expect(lan2.outcome).toContain("không giao trùng");
 		expect(lan2.finishedAt === null).toBe(false);
 
-		await db.activity.updateMany({
-			where: { planId: keHoach.id, type: ActivityType.TASK },
-			data: { completedAt: new Date() },
+		await db.viec.updateMany({
+			where: { gan: { some: { planId: keHoach.id } } },
+			data: { trangThai: TrangThaiViec.XONG, khepLuc: new Date() },
 		});
 		await chay((await gieoViec(hopLe(keHoach.id, ma))).id);
 		expect(
-			await db.activity.count({
-				where: { planId: keHoach.id, type: ActivityType.TASK },
+			await db.viec.count({
+				where: { gan: { some: { planId: keHoach.id } } },
 			}),
 		).toBe(2);
 		expect((await viecMo(keHoach.id)).length).toBe(1);
@@ -327,9 +350,7 @@ describe.skipIf(process.env.DPV_MACH_LIEN !== "1")("mach-lien-doc", () => {
 
 		const mo = await viecMo(planId);
 		expect(mo.length).toBe(2);
-		const ma = mo
-			.map((v) => (v.meta as { platformBrokerId: string }).platformBrokerId)
-			.sort();
+		const ma = mo.map((v) => v.khoaNguon).sort();
 		expect(new Set(ma).size).toBe(2);
 		const dong = await db.agentTask.count({
 			where: { id: { in: hang.map((h) => h.id) }, finishedAt: { not: null } },
@@ -340,13 +361,14 @@ describe.skipIf(process.env.DPV_MACH_LIEN !== "1")("mach-lien-doc", () => {
 			where: { id: planId },
 			select: { companyId: true, ownerId: true },
 		});
-		await db.activity.deleteMany({ where: { planId } });
+		await db.viec.deleteMany({ where: { gan: { some: { planId } } } });
 		await db.agentTask.deleteMany({
 			where: { id: { in: hang.map((h) => h.id) } },
 		});
 		await db.onboardingPlan.deleteMany({ where: { id: planId } });
 		if (keHoach) {
 			await db.company.deleteMany({ where: { id: keHoach.companyId } });
+			await db.member.deleteMany({ where: { userId: keHoach.ownerId } });
 			await db.user.deleteMany({ where: { id: keHoach.ownerId } });
 		}
 	});
