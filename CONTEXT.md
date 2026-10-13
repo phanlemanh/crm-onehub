@@ -182,7 +182,8 @@ _Avoid_: owner, chủ việc
 Vì sao: «chủ» lẫn với người phụ trách thoả thuận.
 
 **Người thực hiện (việc)**: người duy nhất phải làm một việc; mặc định là người giao khi không chọn ai.
-Chỉ người thực hiện rời «Chưa làm» mới tính vào ngưỡng đo nhịp nhận việc. Đặt 2026-10-13.
+Chỉ người thực hiện rời «Chưa làm» mới tính vào ngưỡng của Cổng Đáng: tỉ lệ việc giao cho người khác
+được chuyển khỏi «Chưa làm» trước hoặc trong ngày hạn. Đặt 2026-10-13.
 _Avoid_: assignee, người được giao
 Vì sao: «Người được giao» đã là chữ của bước kế hoạch 30 ngày.
 
@@ -226,8 +227,8 @@ dùng "phụ trách" cho bước là trùng chữ với người sở hữu tho�
 
 **Chuyển việc 30 ngày**: thao tác của quản trị ở màn Thành viên, chuyển mọi kế hoạch đang chạy mà một
 người cầm trịch, mọi bước chưa xong đang giao cho họ, và mọi việc đang mở họ thực hiện hay giao, sang một
-người khác — một lần, một giao dịch, mỗi dòng đổi để lại một vết. Việc đã Xong hay Huỷ giữ tên người cũ. Số
-việc hộp xem trước nêu bằng đúng số mà lời từ chối đổi sang vai «chỉ OKR» nêu. Chốt 2026-09-22, thêm Việc
+người khác — một lần, một giao dịch, mỗi dòng đổi để lại một vết. Việc đã Xong hay Huỷ giữ tên người cũ. Hộp
+xem trước và lời từ chối đổi sang vai «chỉ OKR» nêu cùng một con số việc. Chốt 2026-09-22, thêm Việc
 2026-10-13.
 _Avoid_: transfer, bàn giao tài khoản
 Vì sao: thao tác không đụng công ty, cá nhân hay thoả thuận của người đó — gọi

@@ -102,8 +102,8 @@ here, what do we sell.
   hoạch mở người đó cầm trịch, bước chưa xong của kế hoạch mở người đó làm, và việc đang mở
   (Chưa làm, Đang làm, Chờ đánh giá) người đó thực hiện hay giao (`demViecDangGiu`; phần việc
   là `demViecMoCua` của `@crm/db/viec`, cùng hàm hộp «Chuyển việc 30 ngày» dùng): lớn hơn 0
-  thì 409 `WORKSPACE_CONFIG.messages.conViec`, nêu các con số và chỉ sang «Chuyển việc 30
-  ngày», vai không đổi; bằng 0 thì xoá mọi lượt theo dõi kế hoạch và việc (mở lẫn đã khép)
+  thì 409 `WORKSPACE_CONFIG.messages.conViec`, nêu các con số và chỉ sang «Chuyển việc» ở
+  màn Thành viên, vai không đổi; bằng 0 thì xoá mọi lượt theo dõi kế hoạch và việc (mở lẫn đã khép)
   trong cùng giao dịch, mỗi lượt theo dõi việc để một vết `bo-theo-doi`, và dòng log
   «Workspace role changed» ghi `theoDoiDaXoa`. Kiểm owner cuối cùng vẫn đứng trước.
 - **Reads and writes go through tRPC**, not `authClient.organization.*`.
@@ -479,13 +479,13 @@ Below is `purge`'s contract — everything that used to be `delete`'s:
 ## Việc
 
 Router `viec` (`apps/api/src/viec`), `PhamViDoiTacMiddleware`: người vai «chỉ OKR» bị chặn ở cửa,
-kể cả việc riêng. Luật ở `@crm/db/viec`, mọi lệnh ghi ở `@crm/db/viec-ghi` — API, Tác nhân («xong n»)
-và việc mẫu (`gieoViecMau`, `@crm/db/viec-gieo`) cùng gọi một hàm. Mỗi hàm ghi nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném
-`LoiViec` có `ma`; service đổi `ma` sang `NotFoundException` (`khong-thay`), `ForbiddenException`
-(`khong-quyen`), `ConflictException` (`co-lich-su`) và `BadRequestException` (`khong-hop-le`,
-`nguoi-nhan`, `ban-ghi`).
+kể cả việc riêng. Luật ở `@crm/db/viec`, mọi lệnh ghi ở `@crm/db/viec-ghi` — API, `apps/agent`
+(«xong n» qua Bot Zalo) và việc mẫu (`gieoViecMau`, `@crm/db/viec-gieo`) cùng gọi một hàm. Mỗi hàm
+nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiViec` có `ma`; service đổi `ma` sang
+`NotFoundException` (`khong-thay`), `ForbiddenException` (`khong-quyen`), `ConflictException`
+(`co-lich-su`) và `BadRequestException` (`khong-hop-le`, `nguoi-nhan`, `ban-ghi`).
 
-- **Ai thấy (P3 thu hẹp).** `dieuKienXemViec(userId)` đứng ở mọi lời đọc (một việc, lịch sử, Việc của
+- **Ai thấy một việc.** `dieuKienXemViec(userId)` đứng ở mọi câu đọc (một việc, lịch sử, Việc của
   tôi, khối của bản ghi, Tổng quan cả hai phạm vi) và là bước đầu của mọi lệnh ghi. Việc gắn ít nhất một
   bản ghi đối tác thì ai qua được cửa router cũng thấy; việc không gắn gì chỉ người giao, người thực hiện,
   người theo dõi thấy — quản trị không thấy. Mã không thấy và mã không có trả cùng 404
