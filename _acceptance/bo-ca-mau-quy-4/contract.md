@@ -5,7 +5,7 @@ slug: bo-ca-mau-quy-4
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli, agent-eval]
-status: implemented
+status: verified
 veto_state: mo
 veto_opened_at: 2026-10-13T00:48:04Z
 design_doc: docs/superpowers/specs/2026-10-13-bo-ca-mau-quy-4-design.md

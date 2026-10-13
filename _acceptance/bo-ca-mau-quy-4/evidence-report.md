@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: bo-ca-mau-quy-4
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: aeb3fb351ddf48414a5bc7b64a091bbae64e5992
+verified_commit: faea4c5622510945fe69aacac6481d5725b8e708
 human_signoff:
 ---
 
@@ -22,73 +22,83 @@ human_signoff:
 | E5 | AC-5 | test | PASS |
 | E6 | AC-6 | test | PASS |
 | E7 | AC-7 | script | PASS |
-| E8 | AC-8 | judgment | UNCERTAIN |
+| E8 | AC-8 | judgment | PASS |
 | E9 | AC-7 | script | PASS |
 
 ## Evidence
 
 - eval: E1
-  run_id: mv5zb2o9qt8y
-  carried_from_round: 1
+  run_id: mv6751tu358a
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.bcq4_sinh
-  verified_at: 2026-10-13T01:02:49Z
+  verified_at: 2026-10-13T04:41:21Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mv6751tu358a_test
+
+    __EXIT=0
 
 - eval: E2
-  run_id: mv5zb2aamj0n
-  carried_from_round: 1
+  run_id: mv67520bfk9l
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.bcq4_ng
-  verified_at: 2026-10-13T01:02:49Z
+  verified_at: 2026-10-13T04:41:21Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mv67520bfk9l_test
+
+    __EXIT=0
 
 - eval: E3
-  run_id: mv5zb2s7so9y
-  carried_from_round: 1
+  run_id: mv6751dxrte4
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.bcq4_nhan_hong
-  verified_at: 2026-10-13T01:02:49Z
+  verified_at: 2026-10-13T04:41:21Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    __EXIT=0
 
 - eval: E4
-  run_id: mv5zb28vps42
-  carried_from_round: 1
+  run_id: mv6751t1h2yb
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.bcq4_dong_bo
-  verified_at: 2026-10-13T01:02:49Z
+  verified_at: 2026-10-13T04:41:21Z
   output: |
-    carry-forward tu round 1 — delta khong cham paths cua eval
+    test-run: dropped crm_mv6751t1h2yb_test
+
+    __EXIT=0
 
 - eval: E5
   run_id: mv5zb2f5xo5c
-  carried_from_round: 1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.bcq4_thanh_phan
   verified_at: 2026-10-13T01:02:49Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
   run_id: mv5zb3c9z5b0
-  carried_from_round: 1
   exit_code: 0
+  baseline: n-a
   verifier: config:executors.test.bcq4_chon_bo
   verified_at: 2026-10-13T01:02:49Z
+  carried_from_round: 1
   output: |
     carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E7
-  run_id: minted-bo-ca-mau-quy-4-E7-r2
+  run_id: minted-bo-ca-mau-quy-4-E7-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.script.bcq4_do_gop_y
-  verified_at: 2026-10-13T02:53:16Z
+  verified_at: 2026-10-13T04:41:21Z
   output: |
     DOI CHUNG doi-chung-goi-50-cuoc: bat duoc — khongGopY nhung co 1 dong viet lai
+
+    __EXIT=0
 
 - eval: E9
   run_id: minted-bo-ca-mau-quy-4-E9-r2
@@ -96,62 +106,58 @@ human_signoff:
   baseline: n-a
   verifier: config:executors.script.bcq4_tu_kiem_cham
   verified_at: 2026-10-13T02:53:16Z
+  carried_from_round: 2
   output: |
-    tu kiem doi chung: 4/4
+    carry-forward tu round 2 — delta khong cham paths cua eval
+
+### Judgment
 
 - eval: E8
-  judged_by: judge-subagent (fresh context), hội đồng đề xuất ba góc nhìn
-  verdict: UNCERTAIN
-  rationale: Ba góc nhìn cùng không chốt được một điểm: ví dụ lệnh trong docs/setup.md dòng 130 có `--` đứng riêng (`bun run okr:ca-quy-4 -- --nhan <tệp> --ra <thư mục>`), mà `docThamSo` trong apps/api/scripts/okr-ca-quy-4.ts coi mọi token bắt đầu bằng `--` không nằm trong cờ hợp lệ là cờ lạ và thoát 4. Chưa có bằng chứng bun có bỏ token đó trước khi đưa vào argv hay không; phần còn lại của tài liệu (cờ, trần 2 USD, mã thoát của lệnh đo, .gitignore, vì sao ca thật không vào git) đều khớp mã.
+  judged_by: judge-subagent (fresh context)
+  verdict: PASS
+  panel_proposal: PASS
   votes:
-    - domain-correctness: UNCERTAIN — Gần như mọi thứ khớp. Lệnh, cờ `--nhan/--ra/--thu-muc/--tran-usd/--tu-kiem`, mặc định trần 2 USD, mã thoát 0/1/2/3 của lệnh đo và 0/4 của lệnh sinh đều khớp mã. Đường ghi bảng bằng chứng cho bộ quý 4 và cho `--thu-muc` khớp. `that/` và `.acceptance-runs/` đều có trong .gitignore, tài liệu nói rõ vì sao ca thật không vào git, và CONTEXT.md có mục «Ca góp ý» phủ ba bộ `mau/`, `quy-4/`, `that/`. Nhưng dòng 130 của setup.md ghi `bun run okr:ca-quy-4 -- --nhan <tệp> --ra <thư mục>`. `docThamSo` trong okr-ca-quy-4.ts coi mọi token bắt đầu bằng `--` mà không nằm trong cờ hợp lệ là cờ lạ và thoát 4. Nếu bun chuyển nguyên `--` vào argv thì chính ví dụ trong tài liệu sẽ lỗi. Với các tệp được giao tôi không xác định được bun có nuốt `--` hay không, nên chưa thể kết luận PASS.
-    - operational-feasibility: UNCERTAIN — Tên lệnh, các cờ `--tu-kiem`/`--thu-muc`/`--tran-usd`, trần mặc định 2 USD và mã thoát 0/1/2/3 của lệnh đo khớp `do-gop-y-quy-4.mjs`. Cờ `--nhan`/`--ra` và mã thoát 0/4 của `okr-ca-quy-4.ts` cũng khớp, và `.gitignore` bỏ qua `that/` và `.acceptance-runs/`; tài liệu cũng nói rõ vì sao ca thật không vào git. Còn hai chỗ chưa chốt được từ các tệp được giao. Một là dòng `bun run okr:ca-quy-4 -- --nhan <tệp> --ra <thư mục>` có `--` đứng riêng. Script liệt `--` vào "Cờ không nhận ra" (thoát 4) nếu bun chuyển nó vào `argv`, và không đọc được `package.json` gốc để biết lệnh gọi từ gốc kho có chuyển tiếp không. Hai là «ca kiểm chứng», «tệp nhãn» và «bộ ca» chưa có mục riêng trong `CONTEXT.md`; mục «Ca góp ý» chỉ nêu `mau/`, `quy-4/`, `that/`.
-    - spec-alignment: UNCERTAIN — Phần lớn khớp. Cờ và mã thoát của `do-gop-y-quy-4.mjs` (--tu-kiem, --thu-muc, --tran-usd; thoát 0/1/2/3; mặc định 2 USD; đường ghi bảng kết quả; ca «Gọi 50 cuộc») và cờ của `okr-ca-quy-4.ts` (--nhan, --ra) đều đúng. Tài liệu nói rõ vì sao `that/` không vào git, `.gitignore` có dòng tương ứng, và mọi thuật ngữ đều có mục trong CONTEXT.md. Tôi không khẳng định được lệnh sinh lại chạy đúng như tài liệu ghi. Tài liệu ghi `bun run okr:ca-quy-4 -- --nhan … --ra …`, nhưng `docThamSo` coi mọi chuỗi bắt đầu bằng `--` mà không phải cờ hợp lệ là lỗi (thoát 4). Nếu bun chuyển cả dấu `--` vào script thì đúng lệnh mẫu sẽ thoát 4. Ngoài ra tài liệu không nói lệnh chạy từ thư mục nào, mà script chỉ khai trong `apps/api/package.json` (không có chứng cứ ở gốc kho).
-  required_evidence:
-    - Bằng chứng bun có bỏ token `--` trước khi đưa vào `process.argv` khi chạy script `okr:ca-quy-4`. Cách có: đầu ra thoát 0 của `cd apps/api && bun run okr:ca-quy-4 -- --nhan apps/api/scripts/okr-mau/nhan-ca-quy-4.json --ra <thư mục tạm>`, hoặc một bài kiểm (ví dụ `apps/api/test/okr-ca-quy-4.spec.ts`) gọi đúng dạng lệnh này.
-    - Cách khác: sửa dòng 130 của docs/setup.md thành `bun run okr:ca-quy-4 --nhan <tệp> --ra <thư mục>` như kiểu `bun run okr:mau --moc …` ở dòng 72-75. Hoặc cho `docThamSo` trong apps/api/scripts/okr-ca-quy-4.ts bỏ qua token `--` trần.
-    - Đầu ra thật của `bun run okr:ca-quy-4 -- --nhan apps/api/scripts/okr-mau/nhan-ca-quy-4.json --ra <thư mục tạm>` chạy từ đúng thư mục mà `docs/setup.md` ngầm định. Thoát 0 kèm dòng `okr:ca-quy-4: N ca → ...` thì chỗ này PASS; thoát 4 kèm «Cờ không nhận ra: --» thì chuyển sang không đạt. Nguồn: terminal ở gốc kho, và `cd apps/api` nếu cần.
-    - Nội dung `/Users/manh-macmini/dev/crm/.claude/worktrees/nice-payne-f3b589/package.json` (mục scripts) cho thấy `okr:ca-quy-4` và `okr:mau` có ở gốc kho. Nếu thiếu thì tài liệu phải ghi `cd apps/api`, như dòng `dev:session`.
-    - Một trong hai cách: thêm vào `CONTEXT.md` mục (hoặc câu trong mục «Ca góp ý») cho «ca kiểm chứng/đối chứng», «tệp nhãn» và «bộ ca»; hoặc một ghi chú của chủ kho rằng những chữ này là chữ thường ai cũng hiểu, theo luật «Ngôn ngữ sản phẩm» trong `CLAUDE.md`.
-    - Kết quả chạy đúng lệnh mẫu trong docs/setup.md từ thư mục mà tài liệu ngụ ý (gốc kho), lấy bằng cách chạy lệnh rồi `echo $?`; và bước kiểm các cờ của `okr-ca-quy-4.ts` khớp với `apps/api/test/okr-ca-quy-4.spec.ts` hoặc `okr-mau/ca-quy-4.ts` (hai tệp này nằm ngoài danh sách input của eval nên cần đưa vào input rồi chấm lại).
+    - domain-correctness: PASS — Tên lệnh, cờ và mã thoát trong docs/setup.md khớp hai tệp lệnh. `okr:ca-quy-4` có ở cả hai package.json, với `--nhan`, `--ra`, thoát 0 hoặc 4. Lệnh đo có `--thu-muc`, `--tran-usd` (mặc định 2 theo `tranUsdMacDinh`), `--tu-kiem` và thoát 0/1/2/3. Tài liệu giải thích ca thật không vào git vì là OKR thật, đã vào lịch sử thì khó xoá. `.gitignore` bỏ qua `that/`, `.acceptance-runs/` và `.eve`, và CONTEXT.md có mục «Ca góp ý» nêu cả ba bộ `mau/`, `quy-4/`, `that/`. Có hai thiếu sót nhỏ không đổi kết luận: tài liệu không nhắc mã 2 khi dọn kho hỏng ("DON HONG"), và "ca kiểm chứng" chưa có mục riêng trong CONTEXT.md, nhưng tài liệu giải thích nó ngay trong câu.
+    - operational-feasibility: PASS — docs/setup.md nêu đủ các bước, từ docker compose, `bun run okr:ca-quy-4` (qua `okr:ca-quy-4` ở package.json gốc và apps/api) đến `do-gop-y-quy-4.mjs` với `--thu-muc` trỏ vào `ca-gop-y/that`. Các cờ `--nhan`, `--ra`, `--thu-muc`, `--tran-usd`, `--tu-kiem` và mã thoát (0 và 4 với lệnh sinh; 0, 1, 2, 3 với lệnh đo) khớp với hai tệp lệnh. Tài liệu giải thích `that/` nằm ngoài git vì là OKR thật, đã vào lịch sử thì khó xoá, và `.gitignore` có `ca-gop-y/that/` cùng `.acceptance-runs/`. Thuật ngữ «Ca góp ý» và ba bộ `mau/`, `quy-4/`, `that/` đã có mục trong CONTEXT.md; các chữ còn lại («ca kiểm chứng», «tệp nhãn») là chữ thường, không phải từ ghép tự đúc cho thuật ngữ kỹ thuật.
+    - spec-alignment: PASS — Tên lệnh, cờ và mã thoát trong docs/setup.md khớp với hai tệp lệnh. `okr:ca-quy-4` chuyển tiếp từ package.json gốc sang `apps/api`. Cờ `--nhan` và `--ra` trùng `OKR_MAU.caQuy4.co`. Thư mục `--ra` mặc định là `ca-gop-y/quy-4`. Mã 0 và 4 khớp. Với `do-gop-y-quy-4.mjs`: `--thu-muc`, `--tran-usd` (mặc định 2 USD) và `--tu-kiem` khớp; mã 0, 1, 2, 3 khớp; đường bảng kết quả khớp; biến `TDX_THU_MUC_CA` khớp config. Tài liệu đủ lệnh để sinh lại bộ quý 4, đo Kara và đo `that/` bằng `--thu-muc`, và nói rõ `that/` là OKR thật nên bị git bỏ qua (`.gitignore` có dòng đó). Thuật ngữ «Ca góp ý» với ba bộ `mau/`, `quy-4/`, `that/` đã có mục trong CONTEXT.md. «Ca kiểm chứng» và «tự kiểm» chưa có mục, nhưng là chữ thường dễ hiểu, không phải từ tự đúc.
   human_override:  # chi nguoi ghi
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-13T02:53:16Z
+  verified_at: 2026-10-13T04:41:21Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-13T02:53:16Z
+  verified_at: 2026-10-13T04:41:21Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-13T02:53:16Z
+  verified_at: 2026-10-13T04:41:21Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-13T02:53:16Z
+  verified_at: 2026-10-13T04:41:21Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-bo-ca-mau-quy-4-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-bo-ca-mau-quy-4-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-13T02:53:16Z
+  verified_at: 2026-10-13T04:41:21Z
 
 - cmd: bun run lint:slop
-  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_lint_slop-r2
+  run_id: minted-bo-ca-mau-quy-4-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-13T02:53:16Z
+  verified_at: 2026-10-13T04:41:21Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-bo-ca-mau-quy-4-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-bo-ca-mau-quy-4-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-13T02:53:16Z
+  verified_at: 2026-10-13T04:41:21Z
 
 ## Known limits
 
@@ -159,12 +165,14 @@ human_signoff:
 
 ## Analyst
 
-none — moi eval feature deu red tren baseline (co phan biet), ngoai hai eval n-a liet ke ngay duoi day.
+none — khong eval nao duoc do la green-tren-ca-hai-phia; cac eval feature khong co baseline de so (xem «Baseline khong do» ben duoi), nen khong the ket luan red hay green.
 
-### Baseline khong do
-
+Baseline khong do:
+- bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-sinh": bo qua baseline: tep apps/api/test/okr-ca-quy-4.spec.ts co o cay dang kiem nhung chua co o merge-base a972dc9c4977b676eb872be42f0d5794847fd329 — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-ng": bo qua baseline: tep apps/api/test/okr-ca-quy-4.spec.ts co o cay dang kiem nhung chua co o merge-base a972dc9c4977b676eb872be42f0d5794847fd329 — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-nhan-hong": bo qua baseline: tep apps/api/test/okr-ca-quy-4.spec.ts co o cay dang kiem nhung chua co o merge-base a972dc9c4977b676eb872be42f0d5794847fd329 — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-dong-bo": bo qua baseline: tep apps/api/test/okr-ca-quy-4.spec.ts co o cay dang kiem nhung chua co o merge-base a972dc9c4977b676eb872be42f0d5794847fd329 — eval moi, chay tren code cu khong phan biet gi
 - bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs: bo qua baseline: tep _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs co o cay dang kiem nhung chua co o merge-base a972dc9c4977b676eb872be42f0d5794847fd329 — eval moi, chay tren code cu khong phan biet gi
-- bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs --tu-kiem: bo qua baseline: tep _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs co o cay dang kiem nhung chua co o merge-base a972dc9c4977b676eb872be42f0d5794847fd329 — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
@@ -172,5 +180,6 @@ none — every multi-run eval is uniform
 
 ## Iterations
 
-Round 1: REJECT — E7 không đo được ở vòng đó (thoát 2) và có lỗi trong hợp đồng AC-7: ca đối chứng thiếu bản ghi vẫn bị tính là «bắt được». Returned to implementation.
-Round 2: E1-E6 mang sang từ round 1 (delta không chạm paths của eval); E7 và E9 chạy lại, đều đạt; E8 chưa chốt (cả ba góc nhìn chưa xác nhận được ví dụ lệnh có `--` đứng riêng trong docs/setup.md) nên verdict PENDING-JUDGMENT, chờ người quyết ở Cổng 2. Giờ verified_at của E7, E9 và lệnh suite vòng 2 do bộ soạn điền theo ngày vòng 2 vì payload máy không trả giờ.
+Round 1: E7 failed — rang do va ca doi chung chua dung: ca doi chung thieu ban ghi van tinh la «bat duoc» (finding AC-7 muc cao). Returned to implementation.
+Round 2: all machine evals passed, verdict PENDING-JUDGMENT — finding AC-8 muc trung binh: ma 3 cua rang do lech tai lieu va hop dong E7. Returned to implementation (faea4c562 sua nghia ma 3 trong tai lieu va E7).
+Round 3: E1-E4 va E7 chay lai tren faea4c562, E5-E6 carry-forward tu round 1, E9 carry-forward tu round 2, bay lenh suite xanh, E8 hoi dong de xuat PASS — verdict PASS.
