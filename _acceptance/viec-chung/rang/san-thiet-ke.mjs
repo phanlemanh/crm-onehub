@@ -1,5 +1,9 @@
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const GOC = fileURLToPath(new URL("../../../", import.meta.url));
 
 const MAU = [
 	"apps/app/app/(app)/[[]slug]/viec/*.tsx",
@@ -7,6 +11,7 @@ const MAU = [
 	"apps/app/components/viec/*.tsx",
 	"apps/app/components/crm/timeline/activity-composer.tsx",
 	"apps/app/components/crm/timeline/timeline.tsx",
+	"packages/ui/src/components/combobox-multi.tsx",
 ];
 const LOP_TU_DAT =
 	/\b(?:rounded(?:-[trblse]{1,2})?|bg|text|border(?:-[trblxy])?|ring|outline|fill|stroke|shadow|p[trblxy]?|m[trblxy]?|gap(?:-[xy])?|space-[xy]|w|h|size|min-w|max-w|min-h|max-h|top|left|right|bottom|inset(?:-[xy])?|leading|tracking)-\[[^\]\s]+\]/g;
@@ -26,7 +31,7 @@ function goc() {
 			"--require",
 			"scripts/design-scan.js",
 		],
-		{ encoding: "utf8" },
+		{ encoding: "utf8", cwd: GOC },
 	);
 	if (r.status !== 0) {
 		console.error(`vc san: khong tim thay acceptance-gate\n${r.stderr}`);
@@ -36,10 +41,11 @@ function goc() {
 }
 
 const tep = [
-	...spawnSync("git", ["ls-files", ...MAU], { encoding: "utf8" })
+	...spawnSync("git", ["ls-files", ...MAU], { encoding: "utf8", cwd: GOC })
 		.stdout.split("\n")
-		.filter(Boolean),
-	...process.argv.slice(2),
+		.filter(Boolean)
+		.map((t) => resolve(GOC, t)),
+	...process.argv.slice(2).map((t) => resolve(t)),
 ];
 if (tep.length === 0) {
 	console.error("vc san: khong co tep nao");
