@@ -140,4 +140,10 @@ Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm v
   severity: low
   Đề xuất: known-limits
 
+- **Ghim lại khung-khong-con-dung-chu trên nhánh này sẽ đỏ theo thiết kế: kkc_canh_chu đòi apps/app/test/messages-guard.spec.ts không đổi so với merge-base (phiên chính ghi thêm)**
+  Người dùng thấy gì: Không gì trên màn. Hồ sơ cũ «khung không còn dùng chữ» có một phép đo đòi tệp bài chung messages-guard không đổi; hàng này phải sửa tệp đó để ghim chữ Kara, nên ghim lại hồ sơ đó trên nhánh này sẽ đỏ. Lưới trước-merge KHÔNG chặn vì PR không chạm thư mục hồ sơ đó (đo 13/10: pre-merge-check chỉ gọi tên kara-mot-ten và kho-nguon-khong-ket). Hai lối: (a) không ghim lại nó trong PR này, ghim ngay sau khi gộp — merge-base dời lên đỉnh mới, phép đo tự xanh, không đợi F8; (b) mở lại hồ sơ đó trong PR này và đổi luật đo sang neo cặp sha của vòng đó (đúng việc của hàng F8 neo-thuoc-het-han, dãy P7) — phải đợi hoặc làm thay F8. Máy khuyên (a).
+  file: `_acceptance/khung-khong-con-dung-chu/evals.yaml`
+  severity: medium
+  Đề xuất: known-limits
+
 ⚠ Cụm ngoài vùng phủ: 3/9 lỗi rơi vào file không bộ đo nào phủ (_acceptance/kara-mot-ten/evals.yaml, _acceptance/kho-nguon-khong-ket/rang/dem-ket.ts, _acceptance/kho-nguon-khong-ket/rang/dem-ket.spec.ts) — dừng và quyết: mở rộng hợp đồng hay rút phạm vi.
