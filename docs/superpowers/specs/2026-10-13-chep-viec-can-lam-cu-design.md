@@ -190,6 +190,18 @@ Huỷ thì lần sau giao lại, như hôm nay. Người cầm trịch không nh
   `vai-chi-okr.spec.ts`) đổi theo.
 - Việc chép hiện ở khối «Việc» của bản ghi, Việc của tôi, Tổng quan, nhắc buổi sáng như mọi Việc — không mã mới.
 
+## Eval cũ thay bởi hồ sơ này
+
+`activities.myTasks` bỏ ở vòng này (AC-6), nên eval đo nó ở hồ sơ đã ký mất vật đo. Hồ sơ này nhận việc
+thay, theo luật «eval thay bởi» của kit (2.24):
+
+| Eval cũ | Đo gì | AC mới |
+| --- | --- | --- |
+| han-viec-theo-ngay/E4 | hai khung `overdue`, `upcoming` của `activities.myTasks` | AC-6 (thủ tục không còn; việc quá hạn đọc ở Việc và Tổng quan) |
+
+Răng `khong-xoa-expect` của `dieu-phoi-va` cho phép đúng hai câu `expect` của ca `viec-cua-toi` trong
+`apps/api/test/han-viec.spec.ts` (khoá `khung("overdue")` và `T3:co(g.T3.id)` trong `CHO_PHEP`).
+
 ## Đặc tả UX
 
 <!-- <<<UX-SPEC-TEMPLATE -->
