@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quá hạn một ngày</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:  #fafafa;
+      --color-ink:    #171717;
+      --color-muted:  #575757;
+      --color-rule:   rgba(23,23,23,0.12);
+      --color-accent: #006B4F;
+      --font-sans:    'Geist', system-ui, sans-serif;
+      --font-serif:   'Lora', Georgia, serif;
+      --font-mono:    'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1240px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--color-muted);
+      max-width: 68ch;
+      margin-bottom: 1.5rem;
+    }
+    svg { width: 100%; min-width: 960px; display: block; }
+    footer {
+      margin-top: 1.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-rule);
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">d-5 · Hai dòng thời gian · them-buoc-bao-dung</p>
+    <h1>Quá hạn một ngày: trình duyệt so theo ngày nào</h1>
+    <p class="sub">Cùng hai khoảnh khắc quanh nửa đêm Việt Nam, đọc ở ba múi giờ. Một bước hạn ngày 12: máy chủ đếm theo ngày VN, trình duyệt cũ theo ngày địa phương — hai bên nói khác nhau.</p>
+
+    <svg viewBox="0 0 1040 624" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#fafafa"/>
+<text x="40" y="40" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">D-5 · BƯỚC HẠN NGÀY 12 · AC-6 · AC-7 · AC-9</text>
+<text x="580" y="76" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.1em">NỬA ĐÊM VN</text>
+
+<text x="40" y="110" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Việt Nam</text>
+<text x="40" y="124" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">UTC+7</text>
+<rect x="280" y="92" width="300" height="40" fill="#ffffff" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<rect x="580" y="92" width="300" height="40" fill="#ececec" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<text x="292" y="116" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ngày 12</text>
+<text x="592" y="116" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ngày 13</text>
+
+<text x="40" y="174" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Los Angeles</text>
+<text x="40" y="188" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">PDT · UTC−7</text>
+<rect x="280" y="156" width="600" height="40" fill="#ffffff" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<text x="292" y="180" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ngày 12</text>
+
+<text x="40" y="238" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Kiritimati</text>
+<text x="40" y="252" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">UTC+14</text>
+<rect x="280" y="220" width="600" height="40" fill="#ececec" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<text x="292" y="244" fill="#171717" font-size="11" font-family="'Geist', sans-serif">ngày 13</text>
+
+<line x1="580" y1="84" x2="580" y2="268" stroke="#171717" stroke-width="1" stroke-dasharray="4,3"/>
+<line x1="480" y1="84" x2="480" y2="328" stroke="#575757" stroke-width="1"/>
+<line x1="680" y1="84" x2="680" y2="328" stroke="#575757" stroke-width="1"/>
+
+<rect x="456" y="104" width="48" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="480" y="116" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">23:55</text>
+<rect x="656" y="104" width="48" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="680" y="116" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">00:05</text>
+<rect x="456" y="168" width="48" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="480" y="180" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">09:55</text>
+<rect x="656" y="168" width="48" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="680" y="180" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">10:05</text>
+<rect x="456" y="232" width="48" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="480" y="244" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">06:55</text>
+<rect x="656" y="232" width="48" height="16" rx="2" fill="#fafafa" stroke="rgba(23,23,23,0.3)" stroke-width="0.8"/>
+<text x="680" y="244" fill="#171717" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">07:05</text>
+
+<text x="40" y="348" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Trước sửa</text>
+<text x="40" y="362" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">bước hạn ngày 12</text>
+
+<rect x="280" y="328" width="288" height="136" rx="6" fill="#fafafa"/>
+<rect x="280" y="328" width="288" height="136" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="296" y="348" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.08em">LÚC 23:55 VN</text>
+<text x="296" y="372" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Máy chủ</text>
+<text x="296" y="386" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ngày VN 12</text>
+<text x="552" y="376" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">chưa</text>
+<text x="296" y="410" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Trình duyệt cũ ở Kiritimati</text>
+<text x="296" y="424" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ngày địa phương 13</text>
+<text x="552" y="414" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">quá hạn</text>
+<line x1="296" y1="436" x2="552" y2="436" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="296" y="454" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">→ thiếu dòng «nữa»</text>
+
+<rect x="592" y="328" width="288" height="136" rx="6" fill="#fafafa"/>
+<rect x="592" y="328" width="288" height="136" rx="6" fill="#ffffff" stroke="#575757" stroke-width="0.8"/>
+<text x="608" y="348" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.08em">LÚC 00:05 VN</text>
+<text x="608" y="372" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Máy chủ</text>
+<text x="608" y="386" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ngày VN 13</text>
+<text x="864" y="376" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">quá hạn</text>
+<text x="608" y="410" fill="#171717" font-size="11" font-family="'Geist', sans-serif">Trình duyệt cũ ở Los Angeles</text>
+<text x="608" y="424" fill="#575757" font-size="9" font-family="'Geist Mono', monospace">ngày địa phương 12</text>
+<text x="864" y="414" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">chưa</text>
+<line x1="608" y1="436" x2="864" y2="436" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="608" y="454" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">→ dòng «và 1 … nữa» thừa</text>
+
+<text x="40" y="512" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Sau sửa</text>
+<rect x="280" y="488" width="600" height="56" rx="6" fill="#fafafa"/>
+<rect x="280" y="488" width="600" height="56" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+<text x="296" y="512" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif">Cả hai phía so với ngày VN</text>
+<text x="296" y="530" fill="#006B4F" font-size="10" font-weight="500" font-family="'Geist', sans-serif">máy chủ và trình duyệt nói cùng một chữ ở cả hai lúc</text>
+
+<line x1="40" y1="576" x2="1000" y2="576" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+<text x="40" y="600" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+<rect x="140" y="591" width="20" height="12" fill="#ffffff" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<text x="168" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">ngày 12</text>
+<rect x="228" y="591" width="20" height="12" fill="#ececec" stroke="rgba(23,23,23,0.2)" stroke-width="0.8"/>
+<text x="256" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">ngày 13</text>
+<line x1="320" y1="588" x2="320" y2="604" stroke="#171717" stroke-width="1" stroke-dasharray="4,3"/>
+<text x="332" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nửa đêm VN</text>
+<line x1="420" y1="588" x2="420" y2="604" stroke="#575757" stroke-width="1"/>
+<text x="432" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">cùng một khoảnh khắc, giờ địa phương trên nhãn</text>
+<rect x="680" y="591" width="20" height="12" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+<text x="708" y="600" fill="#575757" font-size="9" font-family="'Geist', sans-serif">sau sửa</text>
+    </svg>
+
+    <footer>d-5 · them-buoc-bao-dung · Cổng Phạm vi · AC-6, AC-7, AC-9 · 2026-10-13</footer>
+  </div>
+</body>
+</html>

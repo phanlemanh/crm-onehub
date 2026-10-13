@@ -254,19 +254,27 @@ async function goTheoDoiKhongNhan(tx: Tx, planId: string): Promise<void> {
 	});
 }
 
-async function boPhanDangDung(tx: Tx, departmentId: string): Promise<void> {
-	const boPhan = await tx.department.findUnique({
-		where: { id: departmentId },
-		select: { name: true, archivedAt: true },
+export async function kiemPhongBanDangDung(
+	db: Pick<Tx, "department">,
+	ids: readonly string[],
+): Promise<void> {
+	const ma = [...new Set(ids)];
+	const phongBan = await db.department.findMany({
+		where: { id: { in: ma } },
+		select: { id: true, name: true, archivedAt: true },
 	});
-	if (boPhan === null) {
-		throw new BadRequestException(
-			TO_CHUC.thongDiep.khongCoBoPhan(departmentId),
+	const thieu = ma.filter((id) => !phongBan.some((pb) => pb.id === id));
+	if (thieu.length > 0) {
+		throw new NotFoundException(
+			TO_CHUC.thongDiep.khongCoPhongBan(thieu.join(", ")),
 		);
 	}
-	if (boPhan.archivedAt !== null) {
+	const daLuuTru = phongBan
+		.filter((pb) => pb.archivedAt !== null)
+		.map((pb) => pb.name);
+	if (daLuuTru.length > 0) {
 		throw new BadRequestException(
-			ONBOARDING.thongDiep.boPhanDaLuuTru([boPhan.name]),
+			ONBOARDING.thongDiep.boPhanDaLuuTru(daLuuTru),
 		);
 	}
 }
@@ -435,7 +443,7 @@ export class OnboardingGhi {
 	addStep(input: StepAddInput, actingUserId: string): Promise<StepOutput> {
 		return this.db.$transaction(async (tx) => {
 			const plan = await keHoachMo(tx, input.planId);
-			await boPhanDangDung(tx, input.departmentId);
+			await kiemPhongBanDangDung(tx, [input.departmentId]);
 			const nguoi = input.assigneeId
 				? await kiemNguoiNhanViec(tx, input.assigneeId)
 				: null;
