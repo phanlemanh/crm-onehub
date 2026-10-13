@@ -41,6 +41,10 @@ Xoá hẳn loại `TASK` và hàng gốc là hàng lộ trình sau, khi vế 14 
 
 ## Dữ liệu
 
+**Quy ước hạn (nâng phạm vi sau S4 lượt 1, manh).** Cột `viec.hanNgay` lưu ngày lịch ở nửa đêm UTC, như
+`ngayLich` của API và `hanTu` của bộ gieo. Mọi đường mới ghi hạn qua `hanTheoNgayVN(d)` (`packages/db/src/viec.ts`):
+lấy ngày lịch giờ VN của `d`, trả nửa đêm UTC của ngày đó.
+
 Migration `<UTC>_chep_viec_can_lam` (chỉ thêm, không sửa bảng cũ):
 
 - `viec."activityGocId" TEXT NULL UNIQUE`, khoá ngoại tới `activity(id)` `ON DELETE SET NULL`. Prisma: quan hệ
@@ -63,7 +67,7 @@ ghi Việc vẫn một chỗ. Một giao dịch mỗi việc.
 | --- | --- |
 | `tieuDe` | `subject`; trống thì dòng đầu của `body` cắt 200 ký tự; cả hai trống thì «Việc cần làm» |
 | `moTa` | `body` khi `subject` có chữ; trống thì null |
-| `hanNgay` | `dueAt` nguyên giá trị |
+| `hanNgay` | ngày lịch giờ VN của `dueAt`, lưu ở nửa đêm UTC (`hanTheoNgayVN`) — ô soạn cũ và ma-lech cũ lưu `dueAt` ở nửa đêm giờ VN (17:00Z hôm trước), chép nguyên sẽ lệch sớm một ngày |
 | `trangThai` | `completedAt` null → Chưa làm; có → Xong, `khepLuc = completedAt` |
 | người giao, người thực hiện, người tạo | `createdById` — trừ ca ở mục dưới |
 | `taoLuc` | `createdAt` |
@@ -160,7 +164,7 @@ này từ DA1.
   Nghĩa của nó từ nay: «được giao Việc trên bản ghi».
 - `createRunActivity` với `TASK`: trong cùng giao dịch đã giữ chỗ hành động, gọi `taoViec` với `nguoiId =
   run.initiatedById ?? agent.createdById` (đúng người hôm nay đứng tên `createdById`), người thực hiện là chính
-  người đó, gắn bản ghi đích, `hanNgay = dueAt`, `nguon: "tac-nhan"`. Hành động ghi `externalId = viec.id`.
+  người đó, gắn bản ghi đích, `hanNgay = hanTheoNgayVN(dueAt)`, `nguon: "tac-nhan"`. Hành động ghi `externalId = viec.id`.
   Không hàng `activity` nào được tạo. `NOTE` không đổi.
 - Người đó không nhận được việc (vai «chỉ OKR») → `LoiViec` thành lỗi có tên của hành động, không ghi gì.
 - Công cụ không có ô người thực hiện; thêm ô là năng lực mới, ngoài câu giao (Later).
@@ -169,7 +173,7 @@ này từ DA1.
 ### ma-lech
 
 `giaoViec` gọi `taoViec`: `nguoiId = plan.ownerId` (người cầm trịch, như hôm nay), gắn kế hoạch, `hanNgay =
-dauNgayVN(now)`, tiêu đề và mô tả như hôm nay, `nguon: "tac-nhan"`, `khoaNguon = ma-lech:<mã>`. Chặn trùng
+hanTheoNgayVN(now)`, tiêu đề và mô tả như hôm nay, `nguon: "tac-nhan"`, `khoaNguon = ma-lech:<mã>`. Chặn trùng
 (`da-co-viec-mo`) khi có MỘT trong hai: Việc đang mở gắn kế hoạch đó mang cùng `khoaNguon`, hoặc việc cần
 làm cũ đang mở **chưa chép** cùng kế hoạch và mã (khoảng giữa lúc bản mới lên và lúc chép). Việc đã Xong hay
 Huỷ thì lần sau giao lại, như hôm nay. Người cầm trịch không nhận được việc → kết quả có tên, không ghi.
