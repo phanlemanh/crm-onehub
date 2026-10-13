@@ -23,6 +23,7 @@ import {
 	VIEC,
 	vaiCua,
 } from "./viec";
+import { khoaGiua, khoaLienTiep } from "./viec-thu-tu";
 import { WORKSPACE_ID } from "./workspace";
 import type { DbGhi } from "./zalo-lien-ket";
 
@@ -570,4 +571,70 @@ export async function ghiGoDoXoa(
 		);
 	}
 	return hang.length;
+}
+
+export type KeoViecInput = DauGhi & { den: TrangThaiViec; thuTu: string[] };
+
+async function ghiThuTu(
+	tx: DbGhi,
+	userId: string,
+	viecId: string,
+	thuTu: string[],
+): Promise<void> {
+	const thay = await tx.viec.findMany({
+		where: { AND: [{ id: { in: thuTu } }, dieuKienXemViec(userId)] },
+		select: { id: true },
+	});
+	const duocThay = new Set(thay.map((v) => v.id));
+	const ds = thuTu.filter((id) => duocThay.has(id));
+	const viTri = ds.indexOf(viecId);
+	if (viTri === -1) return;
+	const cu = await tx.viecThuTu.findMany({
+		where: { userId, viecId: { in: ds } },
+		select: { viecId: true, khoa: true },
+	});
+	const khoaCu = new Map(cu.map((k) => [k.viecId, k.khoa]));
+	const ben = ds.filter((id) => id !== viecId);
+	const khoaBen = ben.map((id) => khoaCu.get(id));
+	const tangDan = khoaBen.every((k, i) => {
+		if (k === undefined) return false;
+		const truoc = i === 0 ? null : khoaBen[i - 1];
+		return truoc === null || (truoc !== undefined && truoc < k);
+	});
+	const khoaMoi = new Map<string, string>();
+	if (tangDan) {
+		const truoc =
+			viTri === 0 ? null : (khoaCu.get(ds[viTri - 1] ?? "") ?? null);
+		const sau =
+			viTri === ds.length - 1
+				? null
+				: (khoaCu.get(ds[viTri + 1] ?? "") ?? null);
+		khoaMoi.set(viecId, khoaGiua(truoc, sau));
+	} else {
+		const moi = khoaLienTiep(ds.length);
+		ds.forEach((id, i) => {
+			khoaMoi.set(id, moi[i] ?? "");
+		});
+	}
+	for (const [ma, khoa] of khoaMoi) {
+		await tx.viecThuTu.upsert({
+			where: { userId_viecId: { userId, viecId: ma } },
+			create: { userId, viecId: ma, khoa },
+			update: { khoa },
+		});
+	}
+}
+
+export async function keoViec(tx: DbGhi, input: KeoViecInput): Promise<void> {
+	const hienTai = await tx.viec.findFirst({
+		where: { AND: [{ id: input.viecId }, dieuKienXemViec(input.nguoiId)] },
+		select: { trangThai: true },
+	});
+	if (hienTai === null) {
+		throw new LoiViec("khong-thay", VIEC.thongDiep.khongCoViec(input.viecId));
+	}
+	if (hienTai.trangThai !== input.den) {
+		await doiTrangThai(tx, input);
+	}
+	await ghiThuTu(tx, input.nguoiId, input.viecId, input.thuTu);
 }

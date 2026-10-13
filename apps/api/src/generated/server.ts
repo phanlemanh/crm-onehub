@@ -54,7 +54,7 @@ import { taiLieuNguonTrangThaiOutput, taiLieuNguonXinChoInput, taiLieuNguonXinCh
 import { taiLieuOkOutput, taiLieuTimInput, taiLieuTimOutput, taiLieuSucKhoeOutput, taiLieuBoLocOutput, taiLieuSlugInput, taiLieuNhacToiOutput, taiLieuListInput, taiLieuListOutput, taiLieuDangDungOutput, taiLieuGetOutput, taiLieuCreateInput, taiLieuCreateOutput, taiLieuProposeInput, taiLieuProposeOutput, taiLieuProposalsInput, taiLieuProposalsOutput, taiLieuIdInput, taiLieuProposalOutput, taiLieuApproveInput, taiLieuApproveOutput, taiLieuRejectInput } from "../tai-lieu/tai-lieu.contracts";
 import { orgAccessOutput, orgTreeOutput, orgDivisionCreateInput, orgOkOutput, orgRenameInput, orgReorderInput, orgIdInput, orgKhoiPhucOutput, orgDepartmentCreateInput, orgLuuTruXemTruocOutput, orgDepartmentArchiveOutput, orgDepartmentMoveInput, orgAttachInput, orgAddPeopleInput, orgHeadInput, orgPlacementInput, orgImportInput, orgImportPreviewOutput, orgImportApplyInput, orgImportApplyOutput } from "../to-chuc/to-chuc.contracts";
 import { trackingSettingsOutput, trackingFlagInput, cookieLifetimeInput, addDomainInput, trackedDomainOutput, removeDomainInput, rotateSiteIdOutput, verifyInput, verifyOutput, sourcesOutput, companyActivityInput, websiteActivityOutput, contactActivityInput } from "../tracking/tracking.contracts";
-import { viecCuaToiInput, viecCuaToiNhomOutput, viecIdInput, viecChiTietOutput, viecVetOutput, viecBanGhiInput, viecCuaBanGhiOutput, viecCreateInput, viecTaoOutput, viecDoiTrangThaiInput, viecSuaInput, viecDoiNguoiInput, viecGanInput, viecTheoDoiInput } from "../viec/viec.contracts";
+import { viecBangInput, viecBangOutput, viecKeoInput, viecOkOutput, viecCuaToiInput, viecCuaToiNhomOutput, viecIdInput, viecChiTietOutput, viecVetOutput, viecBanGhiInput, viecCuaBanGhiOutput, viecCreateInput, viecTaoOutput, viecDoiTrangThaiInput, viecSuaInput, viecDoiNguoiInput, viecGanInput, viecTheoDoiInput } from "../viec/viec.contracts";
 import { workspaceOutput, memberListInput, memberListOutput, updateWorkspaceInput, setMemberRoleInput, workspaceMemberOutput, staffDomainsOutput, setStaffDomainsInput, allowanceListOutput, allowEmailInput, allowanceOutput, issuePasswordLinkInput, passwordLinkOutput, revokeAllowanceInput, removeMemberInput, removeMemberOutput } from "../workspace/workspace.contracts";
 import { zaloTaoMaOutput, zaloGoOutput, zaloLuuUuTienInput, zaloLuuUuTienOutput, zaloLuuDongTroLyOkrInput, zaloLuuDongTroLyOkrOutput, zaloLuuBotInput, zaloLuuBotOutput, zaloGuiThuOutput, zaloCuaToiOutput, zaloXuongOutput } from "../zalo/zalo.contracts";
 import type { UsersRouter } from "../users/users.router";
@@ -1635,6 +1635,14 @@ const appRouter = t.router({
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     }),
   viec: t.router({
+    bang: publicProcedure
+      .input(viecBangInput)
+      .output(viecBangOutput)
+      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+    keo: publicProcedure
+      .input(viecKeoInput)
+      .output(viecOkOutput)
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
     cuaToi: publicProcedure
       .input(viecCuaToiInput)
       .output(viecCuaToiNhomOutput)

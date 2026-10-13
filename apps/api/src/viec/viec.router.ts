@@ -13,6 +13,8 @@ import { PhamViDoiTacMiddleware } from "../trpc/middlewares/pham-vi-du-lieu.midd
 import { restMeta } from "../trpc/openapi";
 import {
 	viecBanGhiInput,
+	viecBangInput,
+	viecBangOutput,
 	viecChiTietOutput,
 	viecCreateInput,
 	viecCuaBanGhiOutput,
@@ -22,19 +24,49 @@ import {
 	viecDoiTrangThaiInput,
 	viecGanInput,
 	viecIdInput,
+	viecKeoInput,
+	viecOkOutput,
 	viecSuaInput,
 	viecTaoOutput,
 	viecTheoDoiInput,
 	viecVetOutput,
 } from "./viec.contracts";
 import { ViecService } from "./viec.service";
+import { ViecBangService } from "./viec-bang.service";
 
 const TAG = ["Viec"];
 
 @Router({ alias: "viec" })
 @UseMiddlewares(PhamViDoiTacMiddleware)
 export class ViecRouter {
-	constructor(@Inject(ViecService) private readonly viec: ViecService) {}
+	constructor(
+		@Inject(ViecService) private readonly viec: ViecService,
+		@Inject(ViecBangService) private readonly bangSv: ViecBangService,
+	) {}
+
+	@Query({
+		input: viecBangInput,
+		output: viecBangOutput,
+		meta: restMeta("GET", "/viec/bang", TAG),
+	})
+	bang(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof viecBangInput>,
+	) {
+		return this.bangSv.bang(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: viecKeoInput,
+		output: viecOkOutput,
+		meta: restMeta("POST", "/viec/{id}/keo", TAG),
+	})
+	keo(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof viecKeoInput>,
+	) {
+		return this.bangSv.keo(input, ctx.user.id);
+	}
 
 	@Query({
 		input: viecCuaToiInput,
