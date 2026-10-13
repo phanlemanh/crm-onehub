@@ -53,6 +53,7 @@ evals:
     criterion: AC-7
     executor: script
     cmd: config:executors.script.bcq4_do_gop_y
+    long_running: 90
     paths: [_acceptance/bo-ca-mau-quy-4/rang/**, apps/agent/evals/okr/**, apps/agent/agent/subagents/tro_ly_okr/**, apps/agent/agent/lib/okr/**, apps/api/scripts/okr-mau/**]
     expected: "exit 0; rang tạo kho đo dùng-một-lần (taoKho của rang 9b), nạp bộ OKR mẫu, chạy eve eval okr/gop-y okr/ng với TDX_THU_MUC_CA trỏ bản chép bộ quý 4 cộng ca đối chứng, judge zai/glm-5.2-fast ZDR; chấm từng ca bằng luật chốt mã của E22 (da-nop; 0 dòng số mới theo so-moi-lot.mjs của 9b; khongGopY 0 dòng viết lại; mỗi vanDe có dòng đúng trường hay maVanDe trừ mã luật lớp 7 đã hỏi; NG không mã cấm, không chép KR cấp trên, không tên người, không từ cấm); in mỗi ca DUNG/SAI kèm lý do và dòng 'ma: x/n · judge: y (k cap, nguong 0.7) · ca mau 9b: 30/30 · 0.95'; ghi evidence/do-gop-y-quy-4.md có một hàng mỗi ca; in và ghi tổng USD đã tiêu cạnh trần; xoá kho đo. Số ca đạt KHÔNG quyết mã thoát. Thiếu khoá mô hình → mã 2, không xanh. CHIỀU ĐỎ ghim: ca đối chứng 'Gọi 50 cuộc' gán khongGopY true — nếu ca đó chấm DUNG thì rang in 'ca doi chung khong bat duoc' và thoát 3; ca quý 4 không có bản ghi tổng kết → thoát 2 kèm mã ca."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
