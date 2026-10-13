@@ -1,7 +1,8 @@
 import { NHAC } from "@crm/db/onboarding-nhac";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageShellLoading } from "@/components/page-shell";
+
 import { getLocale } from "@/lib/locale/server";
 import { nhacQuaZaloMessages } from "@/lib/messages/nhac-qua-zalo";
 import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
@@ -31,7 +32,7 @@ export default async function ZaloConnectionPage(
 			laTenRieng
 			moTa={nhacQuaZaloMessages(locale).ketNoi.moTa}
 		>
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="the" />}>
 				<ZaloConnectionPageContent {...props} />
 			</Suspense>
 		</KhungKetNoi>

@@ -19,6 +19,7 @@ export type KhungTaoProps = {
 	nhanNut?: string;
 	bieuTuong?: ReactNode;
 	khoaNut?: boolean;
+	moTaKhoa?: string;
 	bienThe?: "default" | "outline";
 	tieuDe: string;
 	moTa?: string;
@@ -37,6 +38,7 @@ export function KhungTao({
 	nhanNut,
 	bieuTuong,
 	khoaNut = false,
+	moTaKhoa,
 	bienThe = "outline",
 	tieuDe,
 	moTa,
@@ -67,7 +69,11 @@ export function KhungTao({
 		<Sheet open={dangMo} onOpenChange={doiMo}>
 			{nhanNut === undefined ? null : (
 				<SheetTrigger asChild>
-					<Button variant={bienThe} disabled={khoaNut}>
+					<Button
+						variant={bienThe}
+						disabled={khoaNut}
+						aria-describedby={khoaNut ? moTaKhoa : undefined}
+					>
 						{bieuTuong}
 						{nhanNut}
 					</Button>

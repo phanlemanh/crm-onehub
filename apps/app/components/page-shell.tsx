@@ -2,7 +2,7 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { cn } from "@crm/ui/lib/utils";
 import type * as React from "react";
 import { PageLoadingStatus } from "./page-loading-status";
-import { PageShellLoading } from "./page-shell-loading";
+import { PageShellNote } from "./page-shell-note";
 import { PageTransition } from "./page-transition";
 
 const BE_RONG = {
@@ -63,9 +63,11 @@ function PageShellHeader({
 			{...props}
 		>
 			{breadcrumb}
-			<div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-				{children}
-			</div>
+			{children ? (
+				<div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+					{children}
+				</div>
+			) : null}
 		</header>
 	);
 }
@@ -104,7 +106,7 @@ function PageShellDescription({
 		<p
 			data-slot="page-shell-description"
 			className={cn(
-				"order-last basis-full text-balance text-muted-foreground text-sm",
+				"order-1 basis-full text-balance text-muted-foreground text-sm md:order-last",
 				className,
 			)}
 			{...props}
@@ -119,7 +121,10 @@ function PageShellActions({
 	return (
 		<div
 			data-slot="page-shell-actions"
-			className={cn("flex flex-wrap items-center gap-2", className)}
+			className={cn(
+				"order-2 flex flex-wrap items-center gap-2 md:order-none",
+				className,
+			)}
 			{...props}
 		/>
 	);
@@ -173,6 +178,6 @@ export {
 	PageShellFallback,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
+	PageShellNote,
 	PageShellTitle,
 };

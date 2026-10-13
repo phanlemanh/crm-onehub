@@ -25,6 +25,7 @@ const en = {
 	},
 	them: {
 		nut: "Add provider",
+		khoaLyDo: "Only an owner or an admin can change how people sign in.",
 		tieuDe: "Add an identity provider",
 		moTa: "Configure an OpenID Connect provider.",
 		ten: "Name",
@@ -73,6 +74,7 @@ const vi = {
 	},
 	them: {
 		nut: "Thêm nhà cung cấp",
+		khoaLyDo: "Chỉ chủ sở hữu hoặc quản trị đổi được cách đăng nhập.",
 		tieuDe: "Thêm một nhà cung cấp danh tính",
 		moTa: "Khai một nhà cung cấp theo chuẩn OpenID Connect.",
 		ten: "Tên",

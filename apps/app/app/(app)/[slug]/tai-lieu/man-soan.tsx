@@ -31,12 +31,7 @@ import {
 	useState,
 } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
-import {
-	PageShellContent,
-	PageShellHeader,
-	PageShellHeading,
-	PageShellTitle,
-} from "@/components/page-shell";
+import { PageShellContent } from "@/components/page-shell";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { duongDanhSach, duongTrang } from "@/lib/tai-lieu-man";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -217,120 +212,109 @@ function FormSoan({
 	};
 
 	return (
-		<>
-			<PageShellHeader>
-				<PageShellHeading>
-					<PageShellTitle>{sua ? m.tieuDeSua : m.tieuDeMoi}</PageShellTitle>
-				</PageShellHeading>
-			</PageShellHeader>
-			<PageShellContent>
-				<div
-					className="flex min-w-0 max-w-3xl flex-col gap-5"
-					data-soan={vao.kieu}
-				>
-					<Field data-invalid={loiTen ? true : undefined}>
-						<FieldLabel htmlFor={id.ten}>{m.ten}</FieldLabel>
-						<Input
-							aria-describedby={loiTen ? id.loiTen : undefined}
-							aria-invalid={loiTen ? true : undefined}
-							autoComplete="off"
-							id={id.ten}
-							name="ten"
-							onChange={(e) => {
-								setTen(e.target.value);
-								if (loiTen) setLoiTen(null);
-							}}
-							ref={oTen}
-							translate="no"
-							value={ten}
-						/>
-						{loiTen ? <FieldError id={id.loiTen}>{loiTen}</FieldError> : null}
-					</Field>
-					{vao.kieu === "moi" ? (
-						<TruongTrangMoi
-							chuTrang={vao.chuTrang}
-							donVi={vao.donVi}
-							giaTri={trangMoi}
-							onDoi={setTrangMoi}
-							toiId={vao.toiId}
-						/>
+		<PageShellContent>
+			<div
+				className="flex min-w-0 max-w-3xl flex-col gap-5"
+				data-soan={vao.kieu}
+			>
+				<Field data-invalid={loiTen ? true : undefined}>
+					<FieldLabel htmlFor={id.ten}>{m.ten}</FieldLabel>
+					<Input
+						aria-describedby={loiTen ? id.loiTen : undefined}
+						aria-invalid={loiTen ? true : undefined}
+						autoComplete="off"
+						id={id.ten}
+						name="ten"
+						onChange={(e) => {
+							setTen(e.target.value);
+							if (loiTen) setLoiTen(null);
+						}}
+						ref={oTen}
+						translate="no"
+						value={ten}
+					/>
+					{loiTen ? <FieldError id={id.loiTen}>{loiTen}</FieldError> : null}
+				</Field>
+				{vao.kieu === "moi" ? (
+					<TruongTrangMoi
+						chuTrang={vao.chuTrang}
+						donVi={vao.donVi}
+						giaTri={trangMoi}
+						onDoi={setTrangMoi}
+						toiId={vao.toiId}
+					/>
+				) : null}
+				<Field>
+					<FieldTitle>{m.noiDung}</FieldTitle>
+					<FieldDescription id={id.goiY}>{m.goiY}</FieldDescription>
+					<TrinhSoan
+						aria-describedby={id.goiY}
+						giaTri={noiDung}
+						goiY={m.goiY}
+						id={id.noiDung}
+						nhan={m.noiDungNhan}
+						nhanLienKetTrang={{
+							nut: m.lienKetTrang.nut,
+							tim: m.lienKetTrang.tim,
+							goThem: m.lienKetTrang.goThem,
+							khongCo: m.lienKetTrang.khongCo,
+							loiTim: m.lienKetTrang.loiTim,
+						}}
+						timTrang={timTrang}
+						nhanNut={{
+							tieuDe2: m.nut.tieuDe2,
+							tieuDe3: m.nut.tieuDe3,
+							dam: m.nut.dam,
+							nghieng: m.nut.nghieng,
+							danhSachSo: m.nut.danhSachSo,
+							danhSachCham: m.nut.danhSachCham,
+							bang: m.nut.bang,
+							lienKet: m.nut.lienKet,
+							hoanTac: m.nut.hoanTac,
+							lamLai: m.nut.lamLai,
+						}}
+						onDoi={setNoiDung}
+					/>
+				</Field>
+				<FieldDescription>{m.sauDuyet}</FieldDescription>
+				<div aria-live="polite">
+					{loiGui ? (
+						<Alert data-loi-gui="" variant="destructive">
+							<AlertDescription>{loiGui}</AlertDescription>
+						</Alert>
 					) : null}
-					<Field>
-						<FieldTitle>{m.noiDung}</FieldTitle>
-						<FieldDescription id={id.goiY}>{m.goiY}</FieldDescription>
-						<TrinhSoan
-							aria-describedby={id.goiY}
-							giaTri={noiDung}
-							goiY={m.goiY}
-							id={id.noiDung}
-							nhan={m.noiDungNhan}
-							nhanLienKetTrang={{
-								nut: m.lienKetTrang.nut,
-								tim: m.lienKetTrang.tim,
-								goThem: m.lienKetTrang.goThem,
-								khongCo: m.lienKetTrang.khongCo,
-								loiTim: m.lienKetTrang.loiTim,
-							}}
-							timTrang={timTrang}
-							nhanNut={{
-								tieuDe2: m.nut.tieuDe2,
-								tieuDe3: m.nut.tieuDe3,
-								dam: m.nut.dam,
-								nghieng: m.nut.nghieng,
-								danhSachSo: m.nut.danhSachSo,
-								danhSachCham: m.nut.danhSachCham,
-								bang: m.nut.bang,
-								lienKet: m.nut.lienKet,
-								hoanTac: m.nut.hoanTac,
-								lamLai: m.nut.lamLai,
-							}}
-							onDoi={setNoiDung}
-						/>
-					</Field>
-					<FieldDescription>{m.sauDuyet}</FieldDescription>
-					<div aria-live="polite">
-						{loiGui ? (
-							<Alert data-loi-gui="" variant="destructive">
-								<AlertDescription>{loiGui}</AlertDescription>
-							</Alert>
-						) : null}
-					</div>
-					<div className="flex flex-wrap items-center gap-2">
-						<Button
-							data-gui-duyet=""
-							disabled={dangGui || khoaGui}
-							onClick={gui}
-						>
-							{dangGui ? m.dangGui : m.guiDuyet}
-						</Button>
-						<Button
-							disabled={dangGui}
-							onClick={() =>
-								roi(
-									url(
-										vao.kieu === "sua" ? duongTrang(vao.slug) : duongDanhSach(),
-									),
-								)
-							}
-							variant="outline"
-						>
-							{m.huy}
-						</Button>
-						{chuaDoi ? (
-							<span className="text-muted-foreground text-xs" data-chua-doi="">
-								{m.chuaDoi}
-							</span>
-						) : chuaCoNoiDung ? (
-							<span
-								className="text-muted-foreground text-xs"
-								data-chua-co-noi-dung=""
-							>
-								{m.chuaCoNoiDung}
-							</span>
-						) : null}
-					</div>
 				</div>
-			</PageShellContent>
-		</>
+				<div className="flex flex-wrap items-center gap-2">
+					<Button data-gui-duyet="" disabled={dangGui || khoaGui} onClick={gui}>
+						{dangGui ? m.dangGui : m.guiDuyet}
+					</Button>
+					<Button
+						disabled={dangGui}
+						onClick={() =>
+							roi(
+								url(
+									vao.kieu === "sua" ? duongTrang(vao.slug) : duongDanhSach(),
+								),
+							)
+						}
+						variant="outline"
+					>
+						{m.huy}
+					</Button>
+					{chuaDoi ? (
+						<span className="text-muted-foreground text-xs" data-chua-doi="">
+							{m.chuaDoi}
+						</span>
+					) : chuaCoNoiDung ? (
+						<span
+							className="text-muted-foreground text-xs"
+							data-chua-co-noi-dung=""
+						>
+							{m.chuaCoNoiDung}
+						</span>
+					) : null}
+				</div>
+			</div>
+		</PageShellContent>
 	);
 }

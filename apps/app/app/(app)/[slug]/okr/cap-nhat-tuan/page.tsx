@@ -12,6 +12,7 @@ import {
 	getServerTrpc,
 	getServerTrpcClient,
 } from "@/lib/trpc/server";
+import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { loadOkrSearchParams } from "../okr-search-params";
 import { CapNhatTuan, DangTaiCapNhat } from "./cap-nhat-tuan";
 
@@ -27,11 +28,14 @@ export default function CapNhatTuanPage({
 	searchParams: SearchParams;
 }) {
 	return (
-		<PageShellContent>
-			<Suspense fallback={<DangTaiCapNhat />}>
-				<NoiDung searchParams={searchParams} />
-			</Suspense>
-		</PageShellContent>
+		<>
+			<DauTrangOkrTrang tab="cap-nhat-tuan" />
+			<PageShellContent>
+				<Suspense fallback={<DangTaiCapNhat />}>
+					<NoiDung searchParams={searchParams} />
+				</Suspense>
+			</PageShellContent>
+		</>
 	);
 }
 

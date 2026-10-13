@@ -1,7 +1,8 @@
 import { Button } from "@crm/ui/components/button";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import Link from "next/link";
 import { Suspense } from "react";
-import { PageShellLoading } from "@/components/page-shell";
+
 import { getLocale } from "@/lib/locale/server";
 import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 import { requireSession } from "@/lib/session";
@@ -22,7 +23,7 @@ export default async function IntakeConnectionPage(
 			laTenRieng={false}
 			moTa={t.tiepNhan.moTa}
 		>
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="the" />}>
 				<IntakeConnectionPageContent {...props} />
 			</Suspense>
 		</KhungKetNoi>

@@ -1,3 +1,4 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
@@ -7,7 +8,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -16,7 +16,7 @@ import { ssoMessages } from "@/lib/messages/settings-sso";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
-import { AddSsoProviderSheet } from "./add-sso-provider-sheet";
+import { AddSsoProviderSheet, DongKhoaSso } from "./add-sso-provider-sheet";
 import { ssoSearchParams } from "./sso-search-params";
 import { SsoTable } from "./sso-table";
 
@@ -38,6 +38,7 @@ export default async function SsoSettingsPage({
 						<span translate="no">{settingsMessages(locale).thanhBen.sso}</span>
 					</PageShellTitle>
 					<PageShellDescription>{t.trang.moTa}</PageShellDescription>
+					<DongKhoaSso />
 				</PageShellHeading>
 
 				<PageShellActions>
@@ -46,7 +47,7 @@ export default async function SsoSettingsPage({
 			</PageShellHeader>
 
 			<PageShellContent className="min-h-0">
-				<Suspense fallback={<PageShellLoading />}>
+				<Suspense fallback={<KhungXuong hinh="bang" />}>
 					<Providers searchParams={searchParams} />
 				</Suspense>
 			</PageShellContent>

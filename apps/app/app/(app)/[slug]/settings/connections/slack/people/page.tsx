@@ -1,6 +1,7 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { PageShellLoading } from "@/components/page-shell";
+
 import { getLocale } from "@/lib/locale/server";
 import { ketNoiMessages } from "@/lib/messages/settings-ket-noi";
 import { requireSession } from "@/lib/session";
@@ -25,7 +26,7 @@ export default async function SlackPeoplePage(props: SlackPeoplePageProps) {
 			laTenRieng={false}
 			moTa={t.nguoi.moTa}
 		>
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="danh-sach" />}>
 				<SlackPeoplePageContent {...props} />
 			</Suspense>
 		</KhungKetNoi>

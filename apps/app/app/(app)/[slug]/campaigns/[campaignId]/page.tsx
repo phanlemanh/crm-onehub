@@ -1,11 +1,14 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { PageShell, PageShellLoading } from "@/components/page-shell";
+import { type ReactNode, Suspense } from "react";
+import { CaiDatBreadcrumb } from "@/components/cai-dat-breadcrumb";
+import { PageShell, PageShellHeader } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { campaignMessages } from "@/lib/messages/campaigns";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { workspaceUrl } from "@/lib/workspace-url";
 import { CampaignDetail } from "./campaign-detail";
 import {
 	loadUncalled,
@@ -22,10 +25,33 @@ export default async function CampaignPage({
 	params,
 	searchParams,
 }: PageProps<"/[slug]/campaigns/[campaignId]">) {
+	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+	const duongDan = (
+		<CaiDatBreadcrumb
+			cap={[
+				{
+					nhan: campaignMessages(locale).title,
+					href: workspaceUrl(slug, "/campaigns"),
+				},
+			]}
+		/>
+	);
 	return (
 		<PageShell className="min-h-0">
-			<Suspense fallback={<PageShellLoading />}>
-				<Campaign params={params} searchParams={searchParams} />
+			<Suspense
+				fallback={
+					<PageShellHeader breadcrumb={duongDan}>
+						<div className="basis-full">
+							<KhungXuong coTieuDe hinh="tong-quan" />
+						</div>
+					</PageShellHeader>
+				}
+			>
+				<Campaign
+					duongDan={duongDan}
+					params={params}
+					searchParams={searchParams}
+				/>
 			</Suspense>
 		</PageShell>
 	);
@@ -34,10 +60,11 @@ export default async function CampaignPage({
 async function Campaign({
 	params,
 	searchParams,
+	duongDan,
 }: Pick<
 	PageProps<"/[slug]/campaigns/[campaignId]">,
 	"params" | "searchParams"
->) {
+> & { duongDan: ReactNode }) {
 	const [, { campaignId }, values, flags] = await Promise.all([
 		requireSession(),
 		params,
@@ -64,7 +91,7 @@ async function Campaign({
 
 	return (
 		<HydrateClient>
-			<CampaignDetail id={campaignId} />
+			<CampaignDetail duongDan={duongDan} id={campaignId} />
 		</HydrateClient>
 	);
 }
