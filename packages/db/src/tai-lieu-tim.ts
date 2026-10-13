@@ -1,5 +1,10 @@
 import type { Db } from "./client";
 
+export const DIEU_KIEN_DANG_DUNG = {
+	banDangDungId: { not: null },
+	archivedAt: null,
+} as const;
+
 export type HangTimKho = {
 	slug: string;
 	ten: string;
@@ -22,7 +27,7 @@ export function timTrangDangDung(
 		JOIN "taiLieuPhienBan" p ON p.id = t."banDangDungId"
 		JOIN "user" u ON u.id = t."chuTrangId",
 			to_tsquery('simple', unaccent(${tsquery})) q
-		WHERE t."timKiem" @@ q
+		WHERE t."timKiem" @@ q AND t."archivedAt" IS NULL
 		ORDER BY (to_tsvector('simple', unaccent(t.ten)) @@ q) DESC,
 			ts_rank_cd(t."timKiem", q) DESC, t.ten ASC
 		LIMIT ${gioiHan}
@@ -73,7 +78,7 @@ export async function docBanDangDung(
 	slug: string,
 ): Promise<BanDangDungDb | null> {
 	const h = await db.taiLieuTrang.findFirst({
-		where: { slug, banDangDungId: { not: null } },
+		where: { slug, ...DIEU_KIEN_DANG_DUNG },
 		select: CHON,
 	});
 	return h ? veBan(h) : null;
@@ -85,7 +90,7 @@ export async function docNhieuBanDangDung(
 ): Promise<BanDangDungDb[]> {
 	if (slugs.length === 0) return [];
 	const hang = await db.taiLieuTrang.findMany({
-		where: { slug: { in: [...new Set(slugs)] }, banDangDungId: { not: null } },
+		where: { slug: { in: [...new Set(slugs)] }, ...DIEU_KIEN_DANG_DUNG },
 		select: CHON,
 	});
 	return hang.map(veBan).filter((b): b is BanDangDungDb => b !== null);
