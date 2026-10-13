@@ -21,7 +21,9 @@ function khoi(html: string) {
 	};
 }
 
-type KhoiSua = { tin_hieu?: { cau?: string }[] };
+type KhoiSua = {
+	tin_hieu?: { id?: string; cau?: string; cau_nguoi_gui?: string }[];
+};
 
 function doiKhoi(sua: (o: KhoiSua) => void): string {
 	return MAU.replace(KHOI, (_t, a: string, j: string, c: string) => {
@@ -87,6 +89,24 @@ describe("tin-hieu-trang-thai", () => {
 			"trang dua tin hieu nguoi khac xuong trinh duyet",
 		).toEqual(["crm-1", "crm-3"]);
 		expect(JSON.stringify(kq)).not.toContain(CAU["crm-7"] ?? "x");
+	});
+
+	test("cau-nguoi-gui: ban ve co cau_nguoi_gui thi nguoi gui doc cau do, vang thi roi ve cau", () => {
+		const html = doiKhoi((o) => {
+			for (const t of o.tin_hieu ?? [])
+				if (t.id === "crm-3") t.cau_nguoi_gui = "Câu viết cho người gửi";
+		});
+		const kq = docTrangThaiTinHieu(
+			html,
+			[
+				{ ma: "crm-1", daKeoVe: true },
+				{ ma: "crm-3", daKeoVe: true },
+			],
+			m,
+		);
+		expect(kq.banVe).toBe("co");
+		expect(kq.trangThai["crm-3"]?.cau).toBe("Câu viết cho người gửi");
+		expect(kq.trangThai["crm-1"]?.cau).toBe(CAU["crm-1"] ?? "");
 	});
 
 	test("khoan-dung: nam ca ban ve ra trang thai luc gui, phan biet hong voi khong co", () => {

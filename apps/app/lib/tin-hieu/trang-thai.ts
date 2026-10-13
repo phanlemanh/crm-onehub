@@ -25,27 +25,28 @@ function theoKit(
 	m: TinHieuMessages,
 ): TrangThaiTinHieu {
 	const nhan = m.nhan;
+	const cau = b.cau_nguoi_gui ?? b.cau;
 	switch (b.cho) {
 		case "chua-gom":
-			return { nhan: nhan.choGom, cau: b.cau, nghia: "nhap" };
+			return { nhan: nhan.choGom, cau, nghia: "nhap" };
 		case "le":
-			return { nhan: nhan.le, cau: b.cau, nghia: "nhap" };
+			return { nhan: nhan.le, cau, nghia: "nhap" };
 		case "da-phu":
-			return { nhan: nhan.daCoViec, cau: b.cau, nghia: "xong" };
+			return { nhan: nhan.daCoViec, cau, nghia: "xong" };
 		case "nhom-chua-cat":
-			return { nhan: nhan.daVaoNhom, cau: b.cau, nghia: "nhap" };
+			return { nhan: nhan.daVaoNhom, cau, nghia: "nhap" };
 		case "chan-troi":
-			return { nhan: nhan.deSau, cau: b.cau, nghia: "nhap" };
+			return { nhan: nhan.deSau, cau, nghia: "nhap" };
 		case "hang-chua-ho-so":
 		case "hang-co-ho-so": {
 			const n = b.hang ? nhom.get(b.hang) : undefined;
 			if (n === "da-giao")
-				return { nhan: nhan.daGiao, cau: b.cau, nghia: "xong" };
+				return { nhan: nhan.daGiao, cau, nghia: "xong" };
 			if (n === "dang-lam")
-				return { nhan: nhan.dangLam, cau: b.cau, nghia: "dangChay" };
+				return { nhan: nhan.dangLam, cau, nghia: "dangChay" };
 			if (n === "chua-bat-dau")
-				return { nhan: nhan.chuaBatDau, cau: b.cau, nghia: "nhap" };
-			return { nhan: nhan.khac, cau: b.cau, nghia: "nhap" };
+				return { nhan: nhan.chuaBatDau, cau, nghia: "nhap" };
+			return { nhan: nhan.khac, cau, nghia: "nhap" };
 		}
 	}
 }

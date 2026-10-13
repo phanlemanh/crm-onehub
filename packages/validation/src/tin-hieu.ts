@@ -143,6 +143,7 @@ export const duongTinHieu = z.object({
 	ho_so: z.string().nullable(),
 	trang_thai: z.string().nullable(),
 	cau: z.string().min(1),
+	cau_nguoi_gui: z.string().min(1).optional(),
 });
 export type DuongTinHieu = z.infer<typeof duongTinHieu>;
 
