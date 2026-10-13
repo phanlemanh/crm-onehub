@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 3bb94b7375e734a17d79e4a00a837e56001fc7d6
+verified_commit: 12b7d6f1eb31486ff8b90f320411936b9a62fd4e
 human_signoff: Phan Le Manh 2026-10-14
 ---
 
@@ -219,3 +219,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: tất cả eval máy (E1-E9, E11, E12) và bảy lệnh suite đều đạt; E10 do hội đồng đề xuất PASS, chờ người xác nhận ở Cổng 2. Không có eval nào hỏng.
+
+### Re-pin lần 1 — 2026-10-13, do gộp onehub 60fc1b02d sau chữ ký V2e
+run_id: repin-20261013T234438Z-58303
+sha: 12b7d6f1eb31486ff8b90f320411936b9a62fd4e · suites: 7 lệnh exit 0 · evals: 10/10 eval máy đạt kỳ vọng · ngoài làn máy: E9, E10 (E10 không khai paths) · AC không có chốt máy: AC-7 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
