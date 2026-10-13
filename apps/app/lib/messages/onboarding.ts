@@ -66,7 +66,6 @@ const en = {
 	error: {
 		title: "Could not load the list",
 		body: "The server did not answer. Try again; if it keeps failing, tell the engineers what time you saw this.",
-		action: "Try again",
 	},
 	loading: "Loading…",
 	cells: { silentDays: "{n}d" },
@@ -309,7 +308,7 @@ type OnboardingMessages = {
 		{ title: string; body: string; action: string }
 	>;
 	boardError: { title: string; body: string };
-	error: { title: string; body: string; action: string };
+	error: { title: string; body: string };
 	loading: string;
 	cells: { silentDays: string };
 	hoSo: {
@@ -571,7 +570,6 @@ const vi = {
 	error: {
 		title: "Không tải được danh mục",
 		body: "Máy chủ không trả lời. Thử tải lại; còn lỗi thì báo đội kỹ thuật kèm giờ anh thấy màn này.",
-		action: "Tải lại",
 	},
 	loading: "Đang tải…",
 	cells: { silentDays: "{n} ngày" },

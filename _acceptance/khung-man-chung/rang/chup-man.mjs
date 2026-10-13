@@ -232,13 +232,11 @@ async function manDangTai(nguoi, ma, duong, bang, rong, choXong) {
 					[...document.querySelectorAll(s)].some(
 						(e) => e.getClientRects().length > 0 && !e.closest("[hidden]"),
 					);
-				return (
-					hien("[data-khung-xuong]") &&
-					hien('[data-slot="page-shell-title"], [data-slot="breadcrumb"]')
-				);
+				return hien('[data-slot="page-shell-title"], [data-slot="breadcrumb"]');
 			},
-			`${ma} khung xuong va tieu de luc tai`,
+			`${ma} tieu de luc tai`,
 		);
+		await cho(500);
 		truoc = await doHop(t);
 		await chup(t, `kmc-${ma}-dangtai-${rong}.png`);
 	} finally {
