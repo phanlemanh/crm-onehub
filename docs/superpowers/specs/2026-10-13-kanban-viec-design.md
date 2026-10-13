@@ -142,8 +142,8 @@ ghi thật, không chèn thẳng bảng; `db:seed` đã gọi nó.
 
 ## Rủi ro
 
-- **DA1b chạy song song** sửa `viec-ghi.ts`, `viec.ts` và có thể có migration. DA2 chỉ thêm hàm và hằng, không
-  sửa thân hàm cũ ngoài một tham số `nguon`; trước khi đẩy kiểm `origin/onehub` và mốc migration, báo M5 xếp
+- **DA1b chạy song song** sửa `viec-ghi.ts`, `viec.ts` và có thể có migration. DA2 chỉ thêm hàm và giá trị mới, không
+  sửa thân hàm cũ nào (`doiTrangThai` đã nhận `nguon` qua `DauGhi`); M5 chốt 13/10: vòng ký Cổng 2 trước gộp trước; trước khi đẩy kiểm `origin/onehub` và mốc migration, báo M5 xếp
   thứ tự gộp.
 - **`Board` là thành phần dùng chung** (bảng thoả thuận, danh mục 30 ngày, trang Lộ trình). Hai lựa chọn mới không
   bắt buộc; bài kiểm của `Board` hiện có phải còn xanh. Báo #375 qua M5 vì chạm `packages/ui`.
