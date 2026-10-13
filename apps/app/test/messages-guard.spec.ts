@@ -146,6 +146,9 @@ const KHONG_DAU = new Set([
 	"moc.themKr",
 	"loai.kr",
 	"tabs.agent",
+	"troLy.tieuDe",
+	"so.troLyOkr",
+	"nhom.tro-ly-okr",
 ]);
 
 function mienDau(khoa: string): boolean {
@@ -212,8 +215,8 @@ const GHIM_TRO_LY_OKR = {
 		"AI Gateway trả lỗi 12",
 	],
 	"tro-ly-okr:so.rongMoTa": [
-		"Trần của Trợ lý OKR: 1.",
-		"Trần của Trợ lý OKR: 12.",
+		"Trần của Kara · OKR: 1.",
+		"Trần của Kara · OKR: 12.",
 	],
 	"tro-ly-okr:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
 	"tro-ly-okr:soDo.dongBiLoai": ["(+1 bị loại)", "(+12 bị loại)"],
@@ -301,10 +304,7 @@ const GHIM_OKR_SOAN = {
 		"Đã dùng hết 1 cuộc soạn kỳ này",
 		"Đã dùng hết 12 cuộc soạn kỳ này",
 	],
-	"okr-soan:nut.tamNghi": [
-		"Trợ lý OKR tạm nghỉ tới 1",
-		"Trợ lý OKR tạm nghỉ tới 12",
-	],
+	"okr-soan:nut.tamNghi": ["Kara tạm nghỉ tới 1", "Kara tạm nghỉ tới 12"],
 	"okr-soan:nut.dsCuoc": ["1/A cuộc", "12/A cuộc"],
 	"okr-soan:man.luot": ["lượt 1/A", "lượt 12/A"],
 	"okr-soan:man.tabBanNhap": ["Bản nháp (1)", "Bản nháp (12)"],
@@ -346,8 +346,8 @@ const GHIM_OKR_SOAN = {
 		"12 KR đi kèm; đích bạn đã điền được giữ. Công bố như mọi OKR ở Theo đơn vị.",
 	],
 	"okr-soan:cuoc.tieuDe": [
-		"Cuộc soạn cùng Trợ lý · 1",
-		"Cuộc soạn cùng Trợ lý · 12",
+		"Cuộc soạn cùng Kara · 1",
+		"Cuộc soạn cùng Kara · 12",
 	],
 	"okr-soan:cuoc.dem": ["1/A cuộc", "12/A cuộc"],
 	"okr-soan:cuoc.nutCuoc": ["1 cuộc A", "12 cuộc A"],
@@ -568,8 +568,8 @@ const GHIM = {
 	],
 	"record-sheet:deal.created": ["Đã tạo 1.", "Đã tạo 12."],
 	"record-sheet:deal.deleteWarning": [
-		"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 1 và A trong đó vẫn ở lại OneHub Center.",
-		"Lịch sử giai đoạn, ghi chú và hội thoại với tác nhân đều mất theo. 12 và A trong đó vẫn ở lại OneHub Center.",
+		"Lịch sử giai đoạn, ghi chú và hội thoại với Kara đều mất theo. 1 và A trong đó vẫn ở lại OneHub Center.",
+		"Lịch sử giai đoạn, ghi chú và hội thoại với Kara đều mất theo. 12 và A trong đó vẫn ở lại OneHub Center.",
 	],
 	"crm:timeline.composer.log": ["Ghi 1", "Ghi 12"],
 	"crm:timeline.messages": ["1 thư", "12 thư"],
@@ -626,8 +626,8 @@ const GHIM = {
 		"ngữ cảnh 12 nghìn token",
 	],
 	"settings:model.khongVoiToi": [
-		"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 1.",
-		"Không với tới AI Gateway để lấy danh sách model. Tác nhân vẫn đang chạy 12.",
+		"Không với tới AI Gateway để lấy danh sách model. Kara vẫn đang chạy 1.",
+		"Không với tới AI Gateway để lấy danh sách model. Kara vẫn đang chạy 12.",
 	],
 	"settings:tienTe.daDoi": [
 		"Từ giờ mọi tổng báo cáo bằng 1.",
@@ -1001,8 +1001,8 @@ const GHIM = {
 	],
 	"okr-toan-canh:khoiCuaToi.conNua": ["và 1 KR khác", "và 12 KR khác"],
 	"okr-toan-canh:tomTat.dongNguon": [
-		"Trợ lý OKR tóm tắt từ 1 lần cập nhật · tuần A",
-		"Trợ lý OKR tóm tắt từ 12 lần cập nhật · tuần A",
+		"Kara tóm tắt từ 1 lần cập nhật · tuần A",
+		"Kara tóm tắt từ 12 lần cập nhật · tuần A",
 	],
 	"okr-toan-canh:tomTat.nhanTrichDan": ["Cập nhật 1", "Cập nhật 12"],
 	"okr-toan-canh:tomTat.nhanTrichDanThem": ["Cập nhật 1 +A", "Cập nhật 12 +A"],
