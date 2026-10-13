@@ -5,7 +5,7 @@ slug: them-buoc-bao-dung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -69,3 +69,10 @@ Quét hình thái preset test-matrix, đầy đủ ở design doc mục «Độ 
   Cổng Đáng của vòng này ký 12/10). Vế đã lưu trữ của AC-6 đó giữ nguyên và chính là AC-2 ở đây.
 - Hồ sơ `dieu-phoi-va` cũ theo `paths` (`onboarding-ghi.ts`, `plan-steps.tsx`, `dashboard-summary.tsx`) — ghim lại ở bước
   ghim lại của vòng.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-2: Ảnh Tổng quan đưa người ký không còn chụp tới dòng bước đang đo; dấu quá hạn của dòng đó chỉ được thước kiểm trong trang.
+  - Ngoài-3: Quy tắc «hôm nay là ngày nào theo giờ Việt Nam» viết ở hai nơi; sửa một nơi mà quên nơi kia thì số quá hạn trên màn và ở máy chủ lệch nhau.
+  - Ngoài-5: Danh sách phòng ban đã tải mà lần làm mới ngầm lỗi thì nút «Thêm» vẫn bấm được và lưu vào phòng ban không còn hiện trên form.
+  - Ngoài-6: Phép đo màn sau khi bấm thử lại không dùng việc tràn ngang và việc bị chặn để quyết đạt hay không.
+  - Ngoài-7: Bài kiểm Tổng quan không phát hiện được mô tả thẻ ghi sai số việc quá hạn.
+  - Ngoài-8: Trạng thái sau khi thử lại thành công không được kiểm tràn ngang trên khổ điện thoại.
