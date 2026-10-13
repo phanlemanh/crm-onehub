@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b2f235174fce86854aae1f97c1ebf2d9757ffa0d
+verified_commit: 4079a62873b87d170de0d09f09d880a5ce1bd1e9
 human_signoff: Manh Phan 2026-10-12
 ---
 
@@ -333,3 +333,7 @@ sha: db44d78799ec78259b0a8ec8b644439e1b00711d · suites: 7 lệnh exit 0 · eval
 ### Re-pin lần 3 — 2026-10-13, do chép bốn tệp cửa tín hiệu từ kit v2.28.0; miễn dieu-phoi/scripts khỏi lint:slop
 run_id: repin-20261013T143828Z-50924
 sha: b2f235174fce86854aae1f97c1ebf2d9757ffa0d · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
+
+### Re-pin lần 4 — 2026-10-13, do gộp onehub 0d22687b8 (lô 16:00Z sau #382, #392)
+run_id: repin-20261013T163745Z-89679
+sha: 4079a62873b87d170de0d09f09d880a5ce1bd1e9 · suites: 7 lệnh exit 0 · evals: 20/20 eval máy đạt kỳ vọng · ngoài làn máy: E13, E14 (E14 không khai paths) · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
