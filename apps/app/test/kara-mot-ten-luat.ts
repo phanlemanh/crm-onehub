@@ -1,8 +1,8 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
-import { messages as khoChuUi } from "@crm/ui/lib/messages";
 import { z } from "zod";
+import { messages as khoChuUi } from "../../../packages/ui/src/lib/messages";
 
 export const GOC_KHO = join(import.meta.dir, "..", "..", "..");
 
