@@ -215,7 +215,7 @@ evals:
     cmd: config:executors.script.kmc_man
     steps:
       - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs, kho crm_<cay>_do), gieo db:seed; dang nhap dev:session quan tri; Playwright route giu hoac tra 500 cho dung thu tuc tRPC cua tung buoc"
-      - "Buoc 1 (1280, 375): Lien he, Ket noi, Cai dat › Chung, OKR › Toan canh, chi tiet chien dich, danh sach Tai lieu — moi man: truy van chinh bi giu -> anh kmc-<man>-dangtai-<kho>.png, doc hop bao hang tieu de/breadcrumb va vung noi dung; tha -> anh kmc-<man>-xong-<kho>.png, doc lai hop bao"
+      - "Buoc 1 (1280, 375): Lien he, Cai dat › Truong, Cai dat › Dieu phoi 30 ngay, OKR › Toan canh, chi tiet chien dich, danh sach Tai lieu — moi man: truy van chinh bi giu -> anh kmc-<man>-dangtai-<kho>.png, doc hop bao hang tieu de/breadcrumb va vung noi dung; tha -> anh kmc-<man>-xong-<kho>.png, doc lai hop bao"
       - "Buoc 2 (1280, 375): chi tiet chien dich voi campaign.get tra 500 -> kmc-chiendich-loi-<kho>.png; Onboarding voi danh muc tra 500 -> kmc-onboarding-loi-<kho>.png"
       - "Buoc 3 (1280, 375): Onboarding khi khuon rong -> kmc-onboarding-khoa-<kho>.png"
       - "Buoc 4 (1280, 375): Tai lieu voi luu tep tat -> kmc-tailieu-dautrang-<kho>.png"
@@ -233,8 +233,8 @@ evals:
     inputs:
       - "_acceptance/khung-man-chung/evidence/kmc-lienhe-dangtai-1280.png"
       - "_acceptance/khung-man-chung/evidence/kmc-lienhe-xong-1280.png"
-      - "_acceptance/khung-man-chung/evidence/kmc-ketnoi-dangtai-1280.png"
-      - "_acceptance/khung-man-chung/evidence/kmc-ketnoi-xong-1280.png"
+      - "_acceptance/khung-man-chung/evidence/kmc-truong-dangtai-1280.png"
+      - "_acceptance/khung-man-chung/evidence/kmc-truong-xong-1280.png"
       - "_acceptance/khung-man-chung/evidence/kmc-caidat-dangtai-1280.png"
       - "_acceptance/khung-man-chung/evidence/kmc-caidat-xong-1280.png"
       - "_acceptance/khung-man-chung/evidence/kmc-toancanh-dangtai-1280.png"
@@ -246,7 +246,7 @@ evals:
       - "_acceptance/khung-man-chung/evidence/kmc-onboarding-khoa-375.png"
       - "_acceptance/khung-man-chung/evidence/kmc-tailieu-dautrang-375.png"
       - "docs/superpowers/specs/2026-10-13-khung-man-chung-design.md"
-    question: "Trên các ảnh này: (1) mỗi ảnh đang tải có chữ cho biết đang ở màn nào (tiêu đề, hoặc breadcrumb ở chi tiết chiến dịch) không; (2) với năm cặp đang tải/tải xong (Liên hệ, Kết nối, Cài đặt, Toàn cảnh, chiến dịch), khung xương có cùng hình với nội dung khi xong (bảng ra bảng, dòng ra dòng, thẻ ra thẻ, ô số ra ô số, đoạn ra đoạn) không; (3) hai ảnh lỗi có cùng một hình (tiêu đề, một câu, nút Thử lại) không; (4) ảnh Onboarding khoá có dòng lý do ngay dưới tiêu đề và gần nút tắt không; (5) ở hai ảnh 375 (Onboarding khoá, Tài liệu), câu mô tả có đứng trên các nút không? Trả PASS chỉ khi cả năm đều có, đối chiếu bảng trạng thái và mục «Hành vi» của design doc."
+    question: "Trên các ảnh này: (1) mỗi ảnh đang tải có chữ cho biết đang ở màn nào (tiêu đề, hoặc breadcrumb ở chi tiết chiến dịch) không; (2) với năm cặp đang tải/tải xong (Liên hệ, Cài đặt › Trường, Cài đặt › Điều phối 30 ngày, Toàn cảnh, chiến dịch), khung xương có cùng hình với nội dung khi xong (bảng ra bảng, dòng ra dòng, thẻ ra thẻ, ô số ra ô số, đoạn ra đoạn) không; (3) hai ảnh lỗi có cùng một hình (tiêu đề, một câu, nút Thử lại) không; (4) ảnh Onboarding khoá có dòng lý do ngay dưới tiêu đề và gần nút tắt không; (5) ở hai ảnh 375 (Onboarding khoá, Tài liệu), câu mô tả có đứng trên các nút không? Trả PASS chỉ khi cả năm đều có, đối chiếu bảng trạng thái và mục «Hành vi» của design doc."
 
   - id: E13
     criterion: AC-13

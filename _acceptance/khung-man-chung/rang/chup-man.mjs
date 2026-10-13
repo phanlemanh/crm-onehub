@@ -104,9 +104,16 @@ async function giuKhoa(bang) {
 			return e;
 		});
 	await daKhoa;
+	const loiSom = await Promise.race([xong, cho(50).then(() => null)]);
+	if (loiSom instanceof Error) {
+		throw new Error(`khong khoa duoc bang ${bang}: ${String(loiSom).slice(0, 200)}`);
+	}
 	return async () => {
 		nha();
-		await xong;
+		const ket = await xong;
+		if (ket instanceof Error) {
+			throw new Error(`giao dich khoa ${bang} loi: ${String(ket).slice(0, 200)}`);
+		}
 	};
 }
 
@@ -216,10 +223,16 @@ async function manDangTai(nguoi, ma, duong, bang, rong, choXong) {
 	try {
 		await choDieu(
 			t,
-			() =>
-				document.querySelector("[data-khung-xuong]") !== null &&
-				document.querySelector('[data-slot="page-shell-title"], [data-slot="breadcrumb"]') !==
-					null,
+			() => {
+				const hien = (s) =>
+					[...document.querySelectorAll(s)].some(
+						(e) => e.getClientRects().length > 0 && !e.closest("[hidden]"),
+					);
+				return (
+					hien("[data-khung-xuong]") &&
+					hien('[data-slot="page-shell-title"], [data-slot="breadcrumb"]')
+				);
+			},
 			`${ma} khung xuong va tieu de luc tai`,
 		);
 		truoc = await doHop(t);
@@ -255,13 +268,37 @@ function soCap(ma, rong, { truoc, sau }) {
 	return [...loi, ...kiemQuanHe(sau ?? {}, rong, ma)];
 }
 
+let daGieo = false;
+
+async function gieoKeHoach(nguoi) {
+	if (daGieo) return;
+	daGieo = true;
+	const khuon = await d.hoi(nguoi.cookie, "onboarding.listTemplates");
+	if (khuon.length > 0) return;
+	const phong = await d.hoi(nguoi.cookie, "onboarding.listDepartments", { archived: false });
+	if (phong.length === 0) throw new Error("kho do khong co phong ban de gieo khuon");
+	const moi = await d.lam(nguoi.cookie, "onboarding.createTemplate", {
+		name: "Khuôn mẫu kmc",
+		partnerType: null,
+		steps: [{ label: "Gọi chào", departmentId: phong[0].id, position: 0, offsetDays: 0 }],
+	});
+	const congTy = await d.db.company.findFirst({ select: { id: true }, orderBy: { createdAt: "asc" } });
+	if (!congTy) throw new Error("kho do khong co cong ty de gieo ke hoach");
+	await d.lam(nguoi.cookie, "onboarding.createFromTemplate", {
+		companyId: congTy.id,
+		templateId: moi.id,
+		startedAt: new Date().toISOString().slice(0, 10),
+		ownerId: nguoi.id,
+	});
+}
+
 const MAN = [
-	{ ma: "lienhe", duong: "/contacts", bang: "Contact", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="table-container"], [data-slot="empty"]') !== null },
-	{ ma: "ketnoi", duong: "/settings/connections", bang: "slackInstallation", xong: () => document.querySelector("[data-khung-xuong]") === null },
-	{ ma: "caidat", duong: "/settings/onboarding", bang: "OnboardingTemplate", xong: () => document.querySelector("[data-khung-xuong]") === null },
-	{ ma: "toancanh", duong: "/okr/toan-canh", bang: "OkrCycle", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="tabs-list"]') !== null },
-	{ ma: "chiendich", duong: null, bang: "Campaign", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="page-shell-title"]') !== null },
-	{ ma: "tailieu", duong: "/tai-lieu", bang: "TaiLieuTrang", xong: () => document.querySelector("[data-khung-xuong]") === null },
+	{ ma: "lienhe", duong: "/contacts", bang: "contact", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="table-container"], [data-slot="empty"]') !== null },
+	{ ma: "truong", duong: "/settings/fields", bang: "fieldDefinition", xong: () => document.querySelector("[data-khung-xuong]") === null },
+	{ ma: "caidat", duong: "/settings/onboarding", bang: "onboardingTemplate", xong: () => document.querySelector("[data-khung-xuong]") === null },
+	{ ma: "toancanh", duong: "/okr/toan-canh", bang: "okrCycle", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="tabs-list"]') !== null },
+	{ ma: "chiendich", duong: null, bang: "campaign", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="page-shell-title"]') !== null },
+	{ ma: "tailieu", duong: "/tai-lieu", bang: "taiLieuTrang", xong: () => document.querySelector("[data-khung-xuong]") === null },
 ];
 
 try {
@@ -324,6 +361,7 @@ try {
 				await chup(t, `kmc-chiendich-loi-${rong}.png`);
 				await t.close();
 
+				await gieoKeHoach(quanTri);
 				const t2 = await trangMoi(quanTri, rong);
 				await t2.setRequestInterception(true);
 				let chan = false;
@@ -337,11 +375,23 @@ try {
 				await t2.goto(`${d.APP}/${d.slug()}/onboarding`, { waitUntil: "load", timeout: 120_000 });
 				await t2.waitForNetworkIdle({ idleTime: 500, timeout: CHO_MS }).catch(() => null);
 				chan = true;
-				await t2.evaluate(() => {
-					const nut = [...document.querySelectorAll('[data-slot="toggle-group-item"], [role="radio"], button')].find((b) => /Đã đóng/.test(b.innerText));
+				const chip = await t2.evaluate(() => {
+					const ds = [...document.querySelectorAll("button")].filter((b) => b.getClientRects().length > 0);
+					const nut = ds.find((b) => /Đã đóng/.test(b.innerText));
 					nut?.click();
+					return { bam: nut ? nut.innerText : null, so: ds.length };
 				});
-				await choDieu(t2, () => document.querySelector('[data-vung-tai-loi][data-trang-thai="ST-danhmuc-loi"]') !== null, "khung loi danh muc");
+				console.log(`  onboarding ${rong}: chip ${JSON.stringify(chip)}`);
+				if (!chip.bam) {
+					const o = await t2.$('[data-slot="page-shell-content"] input');
+					if (o) await o.type("kmc", { delay: 30 });
+				}
+				try {
+					await choDieu(t2, () => document.querySelector('[data-vung-tai-loi][data-trang-thai="ST-danhmuc-loi"]') !== null, "khung loi danh muc");
+				} catch (e) {
+					await t2.screenshot({ path: join(BANG, `kmc-loi-onboarding-${rong}.png` ) }).catch(() => null);
+					throw e;
+				}
 				const coNut2 = await t2.evaluate(() => [...document.querySelectorAll("[data-vung-tai-loi] button")].some((b) => b.innerText.trim() === "Thử lại"));
 				if (!coNut2) loi.push(`onboarding loi ${rong}: thieu nut Thử lại`);
 				await chup(t2, `kmc-onboarding-loi-${rong}.png`);
