@@ -115,9 +115,6 @@ const { DashboardSummary } = await import(
 );
 const { PlanSteps } = await import("@/components/crm/record-sheet/plan-steps");
 const { onboardingMessages } = await import("@/lib/messages/onboarding");
-const { tongQuanMessages } = await import("@/lib/messages/tong-quan");
-const { formatCount } = await import("@crm/ui/lib/format");
-const { dien } = await import("@/components/crm/record-sheet/plan-copy");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 
