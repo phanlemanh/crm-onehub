@@ -5,7 +5,9 @@ slug: ba-ho-so-do-san
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [tooling]
-status: draft
+status: approved
+veto_state: mo
+veto_opened_at: 2026-10-13T00:50:54Z
 design_doc: docs/superpowers/specs/2026-10-13-ba-ho-so-do-san-design.md
 approved_by:
 approved_at:
@@ -45,7 +47,7 @@ Quét bằng skill `morphological-scan` (preset test-matrix), 13/10.
 - Trục C · xử lý: `tro-duong-moi` · `bo-paths` · `khai-not-run` · `sua-rang` · `tu-het` `[thước CE: mọi ô của A×B có ít nhất một xử lý hợp lệ; bảng ở design doc]`
 - Trục D · lớp đo của vòng: tĩnh (AC-1) · khai (AC-2, AC-3, AC-7) · hành vi (AC-4, AC-6, AC-8) · phán xét (AC-5)
 - Core: A×B×C trên 19 hồ sơ trong danh sách đóng. Later: các hồ sơ kiểm chéo gọi tên ngoài danh sách (AC-7 ghi lại, hàng mới). Never: khai bổ sung `paths` cho ô thiếu khai (35 hồ sơ) — thiếu khai không phải thước chết, bộ lọc giữ luật cũ an toàn.
-- `[GIẢ ĐỊNH]` chờ người gạch: tập «đỏ sẵn» chỉ gồm hai loại ở mục Context (paths chết · eval P8-4), không gồm eval đỏ mà kiểm chéo mới thấy (Hỏi-1).
+- Đã gạch ở Cổng Phạm vi (chủ kho, 13/10, P7-1): tập «đỏ sẵn» của vòng chỉ gồm hai loại ở mục Context (paths chết · eval P8-4); eval đỏ mà kiểm chéo mới thấy ra hàng mới.
 
 ## Đường đo
 
