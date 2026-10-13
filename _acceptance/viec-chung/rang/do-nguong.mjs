@@ -95,7 +95,7 @@ async function main() {
 			luuY: "tong bo viec nguoi giao Huy khi roiChuaLamLuc con trong; vai doc o thoi diem chay",
 		};
 		console.log(JSON.stringify(ket, null, 2));
-		process.exit(ket.viecDoiTacTaiVaiChiOkr === 0 ? 0 : MA_VAI_OKR);
+		process.exitCode = ket.viecDoiTacTaiVaiChiOkr === 0 ? 0 : MA_VAI_OKR;
 	} finally {
 		await client.end();
 	}
