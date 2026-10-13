@@ -602,6 +602,19 @@ describe("vc-sua", () => {
 			const r = await goi(app, "viec.lichSu", "query", { id: v.id }, a.id);
 			expect(r.status).toBe(500);
 			expect(r.message).toContain(`Vết việc ${hong.id} không đọc được`);
+			await db.viecVet.delete({ where: { id: hong.id } });
+			const laNguon = await db.viecVet.create({
+				data: {
+					viecId: v.id,
+					loai: "doi-han",
+					truoc: { hanNgay: null },
+					sau: { hanNgay: "2026-11-05" },
+					nguon: "may-la",
+				},
+			});
+			const r2 = await goi(app, "viec.lichSu", "query", { id: v.id }, a.id);
+			expect(r2.status).toBe(500);
+			expect(r2.message).toContain(`Vết việc ${laNguon.id} không đọc được`);
 		},
 		MA_TEST_MS,
 	);

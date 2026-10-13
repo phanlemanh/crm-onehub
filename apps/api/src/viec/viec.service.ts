@@ -11,7 +11,7 @@ import {
 	type HangViec,
 	NHOM_VIEC,
 	ngayHan,
-	parseVetViec,
+	parseHangVet,
 	TRANG_THAI_MO,
 	theoHan,
 	VIEC,
@@ -177,11 +177,11 @@ export class ViecService {
 			},
 		});
 		return hang.map((h) => {
-			const vet = parseVetViec(h);
+			const { nguon, vet } = parseHangVet(h);
 			return {
 				id: h.id,
 				luc: h.luc.toISOString(),
-				nguon: nguonCua(h.nguon, h.id),
+				nguon,
 				loai: vet.loai,
 				nguoi: h.nguoi,
 				vet,
@@ -392,19 +392,4 @@ export class ViecService {
 		this.logger.log({ message: "viec.xoa", viecId: ket.id, userId });
 		return ket;
 	}
-}
-
-function nguonCua(
-	nguon: string,
-	vetId: string,
-): ViecVetOutput[number]["nguon"] {
-	if (
-		nguon === "web" ||
-		nguon === "zalo" ||
-		nguon === "api" ||
-		nguon === "chuyen-viec"
-	) {
-		return nguon;
-	}
-	throw new Error(VIEC.thongDiep.vetHong(vetId, `nguon ${nguon}`));
 }

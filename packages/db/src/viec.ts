@@ -352,6 +352,22 @@ export function parseVetViec(hang: {
 	return ket.data;
 }
 
+export const nguonViec = z.enum(NGUON_VIEC);
+
+export function parseHangVet(hang: {
+	id: string;
+	nguon: string;
+	loai: string;
+	truoc: unknown;
+	sau: unknown;
+}): { nguon: NguonViec; vet: VetViec } {
+	const nguon = nguonViec.safeParse(hang.nguon);
+	if (!nguon.success) {
+		throw new Error(VIEC.thongDiep.vetHong(hang.id, `nguon ${hang.nguon}`));
+	}
+	return { nguon: nguon.data, vet: parseVetViec(hang) };
+}
+
 export const CHON_GAN = {
 	id: true,
 	viecId: true,

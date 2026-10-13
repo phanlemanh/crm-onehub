@@ -3,6 +3,7 @@ import {
 	DO_THI,
 	dichDuoc,
 	hanhDong,
+	parseHangVet,
 	parseVetViec,
 	quyenDoi,
 	TRANG_THAI_VIEC,
@@ -76,5 +77,18 @@ describe("viec thuan", () => {
 		expect(() =>
 			parseVetViec({ id: "v2", loai: "doi-han", truoc: 3, sau: null }),
 		).toThrow("Vết việc v2 không đọc được");
+	});
+
+	it("parseHangVet: nguon ngoai NGUON_VIEC thi nem co ma vet", () => {
+		const hang = {
+			id: "v3",
+			loai: "doi-han",
+			truoc: { hanNgay: null },
+			sau: { hanNgay: "2026-11-05" },
+		};
+		expect(parseHangVet({ ...hang, nguon: "zalo" }).nguon).toBe("zalo");
+		expect(() => parseHangVet({ ...hang, nguon: "may-la" })).toThrow(
+			"Vết việc v3 không đọc được",
+		);
 	});
 });
