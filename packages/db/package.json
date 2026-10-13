@@ -72,6 +72,7 @@
 		"./viec-gieo": "./src/viec-gieo.ts"
 	},
 	"scripts": {
+		"viec:chep-cu": "bun scripts/chep-viec-can-lam.ts",
 		"build": "prisma generate",
 		"check-types": "tsc --noEmit",
 		"db:deploy": "prisma migrate deploy",

@@ -4,6 +4,7 @@
 	"license": "MIT",
 	"version": "1.15.3",
 	"scripts": {
+		"viec:chep-cu": "bun packages/db/scripts/chep-viec-can-lam.ts",
 		"prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
 		"build": "turbo run build",
 		"dev": "turbo run dev",

@@ -16,7 +16,7 @@ export type SoDemViecCanLam = {
 	banChep: number;
 	banChepDaDoi: number;
 	nguoiTaoKhongNhan: number;
-	taskTaoSau?: number;
+	taskTaoSau: number | null;
 };
 
 export type ChepMot = typeof chepViecCanLam;
@@ -61,10 +61,6 @@ class DungChayThu extends Error {
 	}
 }
 
-function loiChu(loi: unknown): string {
-	return loi instanceof Error ? loi.message : String(loi);
-}
-
 async function demNguoiTaoKhongNhan(tx: DbGhi): Promise<number> {
 	const nhom = await tx.activity.groupBy({
 		by: ["createdById"],
@@ -105,7 +101,7 @@ async function demTrong(
 		? await tx.activity.count({
 				where: { ...VIEC_CAN_LAM, createdAt: { gte: input.tu } },
 			})
-		: undefined;
+		: null;
 	return {
 		taskTong,
 		taskMo,
@@ -115,7 +111,7 @@ async function demTrong(
 		banChep,
 		banChepDaDoi,
 		nguoiTaoKhongNhan,
-		...(taskTaoSau === undefined ? {} : { taskTaoSau }),
+		taskTaoSau,
 	};
 }
 
@@ -185,7 +181,10 @@ export async function chepTatCa(
 							await tx.$executeRawUnsafe("RELEASE SAVEPOINT chep_thu");
 						} catch (e) {
 							await tx.$executeRawUnsafe("ROLLBACK TO SAVEPOINT chep_thu");
-							loi.push({ id, lyDo: loiChu(e) });
+							loi.push({
+								id,
+								lyDo: e instanceof Error ? e.message : String(e),
+							});
 						}
 					}
 					const sau = await demTrong(tx, {});
@@ -208,7 +207,7 @@ export async function chepTatCa(
 			);
 			if (ket) chep += 1;
 		} catch (e) {
-			loi.push({ id, lyDo: loiChu(e) });
+			loi.push({ id, lyDo: e instanceof Error ? e.message : String(e) });
 		}
 	}
 	const sau = await demViecCanLam(db);

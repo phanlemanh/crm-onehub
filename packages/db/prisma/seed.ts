@@ -312,15 +312,6 @@ const CALL_SUBJECTS = [
 	"Security review",
 ] as const;
 
-const TASK_SUBJECTS = [
-	"Send the security questionnaire",
-	"Share pricing proposal",
-	"Book the technical deep dive",
-	"Chase procurement",
-	"Send SOC 2 report",
-	"Introduce the implementation team",
-] as const;
-
 const MEETING_SUBJECTS = [
 	"Product demo",
 	"Onboarding walkthrough",
@@ -1020,28 +1011,6 @@ async function seedActivities(
 				to: deal.stage,
 			},
 		});
-	}
-
-	for (const deal of deals) {
-		if (deal.closed) continue;
-
-		for (let n = 0; n < integer(1, 3); n++) {
-			const roll = random();
-			const overdue = roll < 0.3;
-			const done = roll >= 0.3 && roll < 0.6;
-			const dueAt = overdue
-				? daysFromNow(-integer(1, 14), 6)
-				: daysFromNow(integer(1, 21), 6);
-
-			rows.push({
-				...base(deal.companyId, deal.ownerId, daysFromNow(-integer(1, 30), 12)),
-				type: ActivityType.TASK,
-				dealId: deal.id,
-				subject: pick(TASK_SUBJECTS),
-				dueAt: done ? daysFromNow(-integer(1, 20), 6) : dueAt,
-				completedAt: done ? daysFromNow(-integer(1, 10), 6) : null,
-			});
-		}
 	}
 
 	for (const company of companies) {
