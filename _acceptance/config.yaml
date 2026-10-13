@@ -1391,6 +1391,15 @@ executors:
     l2_chu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/duong-ly-do.dom.tsx -t l2-chu && bun test ./test/messages-guard.spec.ts
     l2_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau-ly-do.spec.ts -t ly-do-mau"'
     l2_man_doc_lai: 'bun run test -- "cd apps/api && bun test test/okr-mau-ly-do.spec.ts -t man-doc-lai"'
+    l3_canh: 'bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-canh"'
+    l3_quyen: 'bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-quyen"'
+    l3_man_doc_lai: 'bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-man-doc-lai"'
+    l3_nut: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cay-can-chinh-ly-do.dom.tsx -t l3-nut
+    l3_ba_muc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cay-can-chinh-ly-do.dom.tsx -t l3-ba-muc
+    l3_lap_lai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cay-can-chinh-ly-do.dom.tsx -t l3-lap-lai
+    l3_loc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cay-can-chinh-ly-do.dom.tsx -t l3-loc
+    l3_dem: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cay-can-chinh-ly-do.dom.tsx -t l3-dem
+    l3_chu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 20000 --preload ../../packages/ui/test/setup-dom.ts ./test/cay-can-chinh-ly-do.dom.tsx -t l3-chu && bun test ./test/messages-guard.spec.ts
     k2c_vi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-vi
     k2c_en: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-en
     k2c_ngoai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-ngoai
@@ -2359,6 +2368,10 @@ executors:
     l2_dot_bien: bun _acceptance/duong-ly-do-muc-tieu/rang/dot-bien.mjs
     l2_ranh_gioi: node _acceptance/duong-ly-do-muc-tieu/rang/ranh-gioi.mjs
     l2_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/duong-ly-do-muc-tieu/rang/man.mjs"'
+    l3_dot_bien: bun _acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs
+    l3_giu_ho_so: bun _acceptance/cay-can-chinh-co-ly-do/rang/giu-ho-so.mjs
+    l3_ranh_gioi: node _acceptance/cay-can-chinh-co-ly-do/rang/ranh-gioi.mjs
+    l3_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/cay-can-chinh-co-ly-do/rang/man.mjs"'
     k2c_mot_nguon: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/mot-nguon.mjs
     k2c_gia_tri: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/gia-tri.mjs
     k2c_dot_bien: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs
