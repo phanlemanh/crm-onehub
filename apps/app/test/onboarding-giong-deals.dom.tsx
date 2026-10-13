@@ -637,11 +637,11 @@ describe("loi-giu-thanh-cong-cu", () => {
 		);
 		const khung = khungBang(san);
 		expect(
-			`loi: o tim=${oTim(san) !== null} loi trong bang=${(khung?.textContent ?? "").includes(m.error.title)} nut trong bang=${khung ? cacNut(khung, m.error.action).length : 0}`,
+			`loi: o tim=${oTim(san) !== null} loi trong bang=${(khung?.textContent ?? "").includes(m.error.title)} nut trong bang=${khung ? cacNut(khung, uiMessages("vi").karaKhung.thuLai).length : 0}`,
 		).toBe("loi: o tim=true loi trong bang=true nut trong bang=1");
 
 		const truoc = daGoi.filter((g) => g.ten === "manDanhMuc").length;
-		await bam(nut(m.error.action, khung ?? san.o));
+		await bam(nut(uiMessages("vi").karaKhung.thuLai, khung ?? san.o));
 		await cho(
 			() => daGoi.filter((g) => g.ten === "manDanhMuc").length === truoc + 1,
 			"thu lai goi lai",
@@ -674,7 +674,7 @@ describe("loi-giu-thanh-cong-cu", () => {
 		}
 		const khung = khungBang(san);
 		expect(
-			`tai lai hong: loi trong bang=${(khung?.textContent ?? "").includes(m.error.title)} nut=${khung ? cacNut(khung, m.error.action).length : 0} o tim=${oTim(san) !== null}`,
+			`tai lai hong: loi trong bang=${(khung?.textContent ?? "").includes(m.error.title)} nut=${khung ? cacNut(khung, uiMessages("vi").karaKhung.thuLai).length : 0} o tim=${oTim(san) !== null}`,
 		).toBe("tai lai hong: loi trong bang=true nut=1 o tim=true");
 	});
 });

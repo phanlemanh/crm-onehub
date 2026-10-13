@@ -98,6 +98,7 @@ model User {
   taiLieuHoiXuLy    TaiLieuHoi[]      @relation("TaiLieuHoiXuLyBoi")
   taiLieuBaoSai     TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiNguoiBao")
   taiLieuBaoSaiXuLy TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiXuLyBoi")
+  tinHieu           TinHieu[]         @relation("TinHieuNguoiGui")
   viecGiao          Viec[]            @relation("ViecNguoiGiao")
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
   viecTao           Viec[]            @relation("ViecTaoBoi")
@@ -1775,6 +1776,7 @@ model Department {
   secondaryMembers OrgSecondaryDepartment[]
   okrObjectives    OkrObjective[]
   taiLieuTrang     TaiLieuTrang[]
+  tinHieu          TinHieu[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -2924,6 +2926,24 @@ model OkrHoiYHieu {
 
   @@id([hoiYId, userId])
   @@map("okrHoiYHieu")
+}
+
+model TinHieu {
+  id         String      @id @default(cuid())
+  so         Int         @unique @default(autoincrement())
+  nguoiGuiId String?
+  nguoiGui   User?       @relation("TinHieuNguoiGui", fields: [nguoiGuiId], references: [id], onDelete: SetNull)
+  phongBanId String?
+  phongBan   Department? @relation(fields: [phongBanId], references: [id], onDelete: SetNull)
+  muonLam    String
+  daXayRa    String
+  tieuDe     String
+  man        String
+  guiLuc     DateTime    @default(now())
+  keoVeLuc   DateTime?
+
+  @@index([nguoiGuiId, guiLuc])
+  @@map("tinHieu")
 }
 
 enum TrangThaiViec {

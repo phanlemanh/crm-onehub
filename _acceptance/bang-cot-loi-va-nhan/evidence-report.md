@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 7e257e1c8b490c81c226b1dd69e0df6619d0265c
+verified_commit: 481547ec21a1762a3ee5dd2723b990f5496bd1e0
 human_signoff: Phan Le Manh 2026-09-21
 ---
 
@@ -126,3 +126,7 @@ none — không có eval nào chạy nhiều lần (runs > 1) ở vòng này.
 ## Iterations
 
 Round 1: E1–E6 (AC-1 đến AC-6) và bộ lệnh hồi quy (bun run test, turbo lint, lint:slop, turbo build) đều pass ngay từ vòng đầu — không có vòng sửa lại.
+
+### Re-pin lần 1 — 2026-10-13, do bài kiểm chỉnh theo hình mới của khung-man-chung (#388, 481547ec2)
+run_id: repin-20261013T205017Z-88075
+sha: 481547ec21a1762a3ee5dd2723b990f5496bd1e0 · suites: 7 lệnh exit 0 · evals: 6/6 eval máy đạt kỳ vọng · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

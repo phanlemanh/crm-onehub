@@ -1,3 +1,4 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { unstable_rethrow } from "next/navigation";
 import type * as React from "react";
@@ -8,7 +9,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -59,7 +59,7 @@ export default async function CaiDatChuongTrinhOkrPage() {
 				fallback={
 					<>
 						<DauTrang tieuDe={m.tieuDe} moTa={m.moTa} />
-						<PageShellLoading />
+						<KhungXuong hinh="the" />
 					</>
 				}
 			>

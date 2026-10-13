@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đầu trang trước và sau · khung-man-chung</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #fafafa;
+      --color-ink:     #171717;
+      --color-muted:   #575757;
+      --color-accent:  #006B4F;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Lora', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: var(--color-ink);
+      margin-bottom: 0.5rem;
+    }
+    .sub { color: var(--color-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 900px; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">So sánh · khung-man-chung · AC-7 · AC-8 · AC-9 · AC-10</p>
+    <h1>Đầu trang trước và sau, ở 1280 và 375</h1>
+    <p class="sub">Dưới 768 px: tiêu đề → mô tả → dòng lý do → nút, căn trái. Từ 768 px: tiêu đề và nút cùng hàng, mô tả và dòng lý do bên dưới.</p>
+
+    <svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <line x1="500" y1="40" x2="500" y2="460" stroke="rgba(23,23,23,0.12)" stroke-width="1"/>
+
+      <text x="40" y="60" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">TRƯỚC</text>
+      <text x="104" y="60" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">onehub 3a2783409</text>
+      <text x="520" y="60" fill="#171717" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" letter-spacing="0.18em">SAU</text>
+      <text x="564" y="60" fill="#666666" font-size="9" font-family="'Geist Mono', monospace">vòng này</text>
+
+      <text x="40" y="100" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">1280 PX</text>
+      <text x="520" y="100" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">1280 PX</text>
+      <text x="40" y="296" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">375 PX</text>
+      <text x="520" y="296" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.12em">375 PX</text>
+
+      <rect x="40" y="112" width="440" height="120" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="64" y="148" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Tiêu đề</text>
+      <text x="64" y="184" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Mô tả — một câu</text>
+      <rect x="264" y="128" width="56" height="28" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="292" y="146" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Phụ</text>
+      <rect x="328" y="128" width="56" height="28" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="356" y="146" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Phụ</text>
+      <rect x="392" y="128" width="64" height="28" rx="4" fill="rgba(23,23,23,0.12)"/>
+      <text x="424" y="146" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Chính</text>
+
+      <path d="M 424 244 V 164" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="424" cy="162" r="2" fill="#666666"/>
+      <text x="412" y="264" fill="#666666" font-size="14" font-style="italic" font-family="'Lora', serif" text-anchor="end">nút chính tắt, không nói vì sao</text>
+
+      <rect x="520" y="112" width="440" height="120" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <path d="M 904 156 V 192 Q 904 200 896 200 H 716" fill="none" stroke="#575757" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+      <text x="544" y="148" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Tiêu đề</text>
+      <text x="544" y="184" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Mô tả — một câu</text>
+      <text x="544" y="204" fill="#006B4F" font-size="12" font-weight="500" font-family="'Geist', sans-serif">Dòng lý do · vì sao nút tắt</text>
+      <rect x="744" y="128" width="56" height="28" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="772" y="146" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Phụ</text>
+      <rect x="808" y="128" width="56" height="28" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="836" y="146" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Phụ</text>
+      <rect x="872" y="128" width="64" height="28" rx="4" fill="rgba(23,23,23,0.12)"/>
+      <text x="904" y="146" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Chính</text>
+
+      <rect x="40" y="308" width="200" height="144" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="56" y="340" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Tiêu đề</text>
+      <rect x="56" y="356" width="44" height="28" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="78" y="374" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Phụ</text>
+      <rect x="108" y="356" width="44" height="28" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="130" y="374" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Phụ</text>
+      <rect x="160" y="356" width="64" height="28" rx="4" fill="rgba(23,23,23,0.12)"/>
+      <text x="192" y="374" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Chính</text>
+      <text x="56" y="412" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Mô tả — một câu</text>
+
+      <path d="M 256 370 H 232" fill="none" stroke="rgba(23,23,23,0.30)" stroke-width="1" stroke-dasharray="4,3"/>
+      <circle cx="230" cy="370" r="2" fill="#666666"/>
+      <text x="264" y="366" fill="#666666" font-size="14" font-style="italic" font-family="'Lora', serif">nút đứng trên</text>
+      <text x="264" y="386" fill="#666666" font-size="14" font-style="italic" font-family="'Lora', serif">câu mô tả</text>
+
+      <rect x="520" y="308" width="200" height="144" rx="6" fill="#ffffff" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="536" y="340" fill="#171717" font-size="16" font-weight="600" font-family="'Geist', sans-serif">Tiêu đề</text>
+      <text x="536" y="364" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Mô tả — một câu</text>
+      <text x="536" y="384" fill="#006B4F" font-size="12" font-weight="500" font-family="'Geist', sans-serif">Dòng lý do · vì sao nút tắt</text>
+      <rect x="536" y="400" width="44" height="28" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="558" y="418" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Phụ</text>
+      <rect x="588" y="400" width="44" height="28" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="610" y="418" fill="#171717" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Phụ</text>
+      <rect x="640" y="400" width="64" height="28" rx="4" fill="rgba(23,23,23,0.12)"/>
+      <text x="672" y="418" fill="#575757" font-size="12" font-family="'Geist', sans-serif" text-anchor="middle">Chính</text>
+
+      <line x1="40" y1="476" x2="960" y2="476" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="500" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.18em">CHÚ GIẢI</text>
+
+      <rect x="132" y="488" width="24" height="16" rx="4" fill="#ffffff" stroke="rgba(23,23,23,0.40)" stroke-width="1"/>
+      <text x="164" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nút outline</text>
+
+      <rect x="248" y="488" width="24" height="16" rx="4" fill="rgba(23,23,23,0.12)"/>
+      <text x="280" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nút chính đang tắt</text>
+
+      <text x="400" y="500" fill="#006B4F" font-size="9" font-weight="500" font-family="'Geist', sans-serif">Dòng lý do</text>
+      <text x="448" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">— chữ mới của vòng này</text>
+
+      <line x1="600" y1="496" x2="632" y2="496" stroke="#575757" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+      <text x="640" y="500" fill="#575757" font-size="9" font-family="'Geist', sans-serif">Nút tắt trỏ tới dòng lý do (aria-describedby)</text>
+    </svg>
+  </div>
+</body>
+</html>

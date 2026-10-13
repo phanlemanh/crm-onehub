@@ -6,6 +6,7 @@ import Language from "@carbon/icons-react/es/Language";
 import Light from "@carbon/icons-react/es/Light";
 import Logout from "@carbon/icons-react/es/Logout";
 import Menu from "@carbon/icons-react/es/Menu";
+import SendAlt from "@carbon/icons-react/es/SendAlt";
 import UserAvatar from "@carbon/icons-react/es/UserAvatar";
 import { Avatar, AvatarFallback, AvatarImage } from "@crm/ui/components/avatar";
 import { Button } from "@crm/ui/components/button";
@@ -28,6 +29,8 @@ import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { EnrichmentQueue } from "@/components/enrichment-queue";
 import { useMobileNav } from "@/components/mobile-nav";
+import { NutGuiDauTrang } from "@/components/tin-hieu/hop-gui-tin-hieu";
+import { NutGuiTinHieu } from "@/components/tin-hieu/nut-gui-tin-hieu";
 import {
 	COOKIE_MAX_AGE,
 	COOKIE_PATH,
@@ -36,6 +39,7 @@ import {
 	type Locale,
 } from "@/lib/locale/locale";
 import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
+import { tinHieuMessages } from "@/lib/messages/tin-hieu";
 import { mucRailChoVai } from "@/lib/pham-vi-man";
 import { signOutAndRedirect } from "@/lib/sign-out";
 import { useTRPC } from "@/lib/trpc/client";
@@ -82,6 +86,7 @@ export function AppHeader({ user }: { user: User }) {
 
 			<div className="ml-auto flex shrink-0 items-center gap-1.5">
 				{coHangLamGiau ? <EnrichmentQueue /> : null}
+				<NutGuiTinHieu nut={<NutGuiDauTrang />} />
 				<UserMenu
 					user={user}
 					onSignOut={() => {
@@ -111,6 +116,7 @@ export function AppHeaderFallback() {
 			</div>
 
 			<div className="ml-auto flex shrink-0 items-center gap-1.5">
+				<Skeleton className="h-8 w-8 md:w-32" />
 				<Avatar className="size-7">
 					<AvatarFallback />
 				</Avatar>
@@ -190,6 +196,12 @@ export function UserMenu({
 				>
 					<Language />
 					{t.header.otherLocale}
+				</DropdownMenuItem>
+				<DropdownMenuItem asChild>
+					<Link href={workspaceUrl("/tin-hieu")}>
+						<SendAlt />
+						{tinHieuMessages(locale).menu}
+					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem onClick={onSignOut}>
