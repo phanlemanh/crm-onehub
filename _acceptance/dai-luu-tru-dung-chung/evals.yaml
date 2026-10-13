@@ -174,8 +174,7 @@ evals:
       - "_acceptance/vong-doi-mot-cach-cat/evidence/vdc-ngan-da-cat-390.png"
       - "_acceptance/dai-luu-tru-dung-chung/rang/v2-nguyen.mjs"
     expected: |
-      exit 0 va "dai-luu-tru-dung-chung v2-nguyen: dat"; moc = git merge-base HEAD origin/onehub (nhanh da gop thi cap sha
-      truoc gop qua bien MOC); 4 tep apps/app/test/vong-doi-mot-cach-cat.dom.tsx, _acceptance/vong-doi-mot-cach-cat/rang/
+      exit 0 va "dai-luu-tru-dung-chung v2-nguyen: dat"; moc = git merge-base HEAD origin/onehub; 4 tep apps/app/test/vong-doi-mot-cach-cat.dom.tsx, _acceptance/vong-doi-mot-cach-cat/rang/
       man.mjs, _acceptance/vong-doi-mot-cach-cat/evidence/vdc-ngan-da-cat-1440.png, ...-390.png: git diff --quiet <moc>
       -- <tep> cho tung tep (ma tran 4 phep, dem = 4); va so lan xuat hien ".skip(", ".only(", ".todo(" trong tep kiem V2
       bang dung so do o <moc> (khong tang). Doi chung: ca 4 tep ton tai.
