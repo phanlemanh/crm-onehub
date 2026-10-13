@@ -418,7 +418,11 @@ async function dungBoXong() {
 	const k = await dungKeHoach({
 		camTrich: n.m.id,
 		quanTri: n.qt.id,
-		buoc: [{ giao: n.a.id, xong: true }, { giao: n.m.id, xong: true }, { xong: true }],
+		buoc: [
+			{ giao: n.a.id, xong: true },
+			{ giao: n.m.id, xong: true },
+			{ xong: true },
+		],
 	});
 	const [bA, bM, bTrong] = k.buoc as [string, string, string];
 	kiem((await buoc(bA)).assigneeId === n.a.id, "mlk: dung sai buocA");
