@@ -195,6 +195,7 @@ const vi = {
 		loiNguoi: "Không tải được KR của người này.",
 	},
 	thuLai: "Thử lại",
+	loiTieuDe: "Không tải được phần này",
 	tienDoLeRa: (ten: string, p: string, k: string) =>
 		`Tiến độ ${ten}: ${p}%, lẽ ra đã tới ${k}%`,
 };
@@ -397,6 +398,7 @@ const en: OkrToanCanhMessages = {
 		loiNguoi: "Couldn't load this person's KRs.",
 	},
 	thuLai: "Try again",
+	loiTieuDe: "Couldn’t load this",
 	tienDoLeRa: (ten: string, p: string, k: string) =>
 		`Progress of ${ten}: ${p}%, expected ${k}% by now`,
 };

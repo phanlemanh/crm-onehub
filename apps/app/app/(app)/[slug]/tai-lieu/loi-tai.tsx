@@ -1,12 +1,6 @@
 "use client";
 
-import { Button } from "@crm/ui/components/button";
-import {
-	Empty,
-	EmptyContent,
-	EmptyHeader,
-	EmptyTitle,
-} from "@crm/ui/components/empty";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import type { TaiLieuMessages } from "@/lib/messages/tai-lieu";
 
 export function LoiTai({
@@ -17,15 +11,11 @@ export function LoiTai({
 	thuLai: () => void;
 }) {
 	return (
-		<Empty data-loi-tai="">
-			<EmptyHeader>
-				<EmptyTitle>{m.loiTai.tieuDe}</EmptyTitle>
-			</EmptyHeader>
-			<EmptyContent>
-				<Button onClick={thuLai} variant="outline">
-					{m.loiTai.thuLai}
-				</Button>
-			</EmptyContent>
-		</Empty>
+		<VungTaiLoi
+			data-trang-thai="ST-tailieu-loi"
+			moTa={m.loiTai.moTa}
+			onThuLai={thuLai}
+			tieuDe={m.loiTai.tieuDe}
+		/>
 	);
 }

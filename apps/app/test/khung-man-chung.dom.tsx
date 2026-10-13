@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
 	act,
 	createElement as h,
@@ -12,7 +13,30 @@ type CheDo = "co" | "loi" | "treo";
 
 const canh = {
 	nguon: "bat" as "bat" | "tat" | "loi",
+	danhMuc: "loi" as CheDo,
+	bangCot: "loi" as CheDo,
+	chienDich: "treo" as CheDo,
 	goi: {} as Record<string, number>,
+};
+
+const CHIEN_DICH = {
+	id: "cd-1",
+	name: "Gọi lại tháng 10",
+	segmentName: "Đối tác mới",
+	savedViewId: "sv-1",
+	startedAt: null,
+	finishedAt: null,
+	status: "DRAFT",
+	stats: {
+		members: 0,
+		called: 0,
+		answered: 0,
+		answerRate: 0,
+		meetings: 0,
+		meetingRate: 0,
+		noRate: 0,
+	},
+	control: null,
 };
 
 function dem(khoa: string) {
@@ -36,8 +60,19 @@ function truyVan<R>(khoa: string, queryFn: () => Promise<R>) {
 			queryKey: v === undefined ? [khoa] : [khoa, v],
 			queryFn,
 		}),
+		mutationOptions: (tuy: Record<string, unknown> = {}) => ({
+			...tuy,
+			mutationKey: [khoa],
+			mutationFn: async () => undefined,
+		}),
 	};
 }
+
+const co = <R,>(khoa: string, tra: () => R) =>
+	truyVan(
+		khoa,
+		theoCheDo(khoa, () => "co", tra),
+	);
 
 mock.module("@/components/page-transition", () => ({
 	PageTransition: ({ children }: { children: ReactNode }) => children,
@@ -69,11 +104,60 @@ mock.module("next/link", () => ({
 }));
 
 mock.module("@/lib/trpc/cache", () => ({
-	useCrmCache: () => ({ taiLieu: async () => {} }),
+	useCrmCache: () =>
+		new Proxy({}, { get: () => async () => {} }) as Record<
+			string,
+			() => Promise<void>
+		>,
 }));
 
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
+		onboarding: {
+			manDanhMuc: truyVan(
+				"onboarding.manDanhMuc",
+				theoCheDo(
+					"onboarding.manDanhMuc",
+					() => canh.danhMuc,
+					() => null,
+				),
+			),
+			bangCot: truyVan(
+				"onboarding.bangCot",
+				theoCheDo(
+					"onboarding.bangCot",
+					() => canh.bangCot,
+					() => null,
+				),
+			),
+			listDepartments: co("onboarding.listDepartments", () => []),
+		},
+		users: { list: co("users.list", () => []) },
+		campaigns: {
+			byId: truyVan(
+				"campaigns.byId",
+				theoCheDo(
+					"campaigns.byId",
+					() => canh.chienDich,
+					() => CHIEN_DICH,
+				),
+			),
+			members: truyVan(
+				"campaigns.members",
+				theoCheDo(
+					"campaigns.members",
+					() => "treo",
+					() => null,
+				),
+			),
+			start: co("campaigns.start", () => null),
+			finish: co("campaigns.finish", () => null),
+			repoint: co("campaigns.repoint", () => null),
+			touch: co("campaigns.touch", () => null),
+		},
+		savedViews: {
+			list: co("savedViews.list", () => [{ id: "sv-1", name: "Đối tác mới" }]),
+		},
 		taiLieuNguon: {
 			trangThai: truyVan(
 				"taiLieuNguon.trangThai",
@@ -100,6 +184,20 @@ const { DongNguonTat, HanhDongTaiLieu } = await import(
 	"@/app/(app)/[slug]/tai-lieu/dau-trang-tai-lieu"
 );
 const { taiLieuMessages } = await import("@/lib/messages/tai-lieu");
+const { LoiXem } = await import("@/app/(app)/[slug]/okr/toan-canh/toan-canh");
+const { LoiTai } = await import("@/app/(app)/[slug]/tai-lieu/loi-tai");
+const { Loi } = await import("@/app/(app)/[slug]/okr/trang-thai-okr");
+const { DanhMucTable } = await import(
+	"@/app/(app)/[slug]/onboarding/danh-muc-table"
+);
+const { CampaignDetail } = await import(
+	"@/app/(app)/[slug]/campaigns/[campaignId]/campaign-detail"
+);
+const { messages: uiMessages } = await import("@crm/ui/lib/messages");
+const { campaignMessages } = await import("@/lib/messages/campaigns");
+
+const THU_LAI = uiMessages("vi").karaKhung.thuLai;
+const CD = campaignMessages("vi");
 
 const TL = taiLieuMessages("vi");
 
@@ -112,7 +210,7 @@ afterEach(() => {
 	canh.goi = {};
 });
 
-function ve(cay: ReactElement): HTMLElement {
+function ve(cay: ReactElement, thamSo = ""): HTMLElement {
 	const o = document.createElement("div");
 	document.body.appendChild(o);
 	root = createRoot(o);
@@ -121,9 +219,11 @@ function ve(cay: ReactElement): HTMLElement {
 	});
 	act(() =>
 		root?.render(
-			<QueryClientProvider client={client}>
-				<LocaleProvider locale="vi">{cay}</LocaleProvider>
-			</QueryClientProvider>,
+			<NuqsTestingAdapter hasMemory searchParams={thamSo}>
+				<QueryClientProvider client={client}>
+					<LocaleProvider locale="vi">{cay}</LocaleProvider>
+				</QueryClientProvider>
+			</NuqsTestingAdapter>,
 		),
 	);
 	return o;
@@ -280,13 +380,168 @@ describe("tai-lieu", () => {
 
 	test("doi chung: da bat thi nut bat, khong dong nao", async () => {
 		const o = await moVoi("bat");
-		await cho(
-			() => nutTen(o, TL.nguon.nutTai)?.disabled === false,
-			"nut bat",
-		);
+		await cho(() => nutTen(o, TL.nguon.nutTai)?.disabled === false, "nut bat");
 		expect(o.querySelector('[data-slot="page-shell-note"]')).toBeNull();
 		expect(
 			nutTen(o, TL.nguon.nutTai)?.getAttribute("aria-describedby"),
 		).toBeNull();
+	});
+});
+
+function kiemKhungLoi(o: HTMLElement, ma: string) {
+	const khung = o.querySelector(`[data-vung-tai-loi][data-trang-thai="${ma}"]`);
+	phai(khung !== null, `kmc-loi: ${ma} mat data-trang-thai`);
+	phai(
+		(khung?.querySelector('[data-slot="empty-title"]')?.textContent ?? "") !==
+			"",
+		`kmc-loi: ${ma} thieu tieu de`,
+	);
+	phai(
+		(khung?.querySelector('[data-slot="empty-description"]')?.textContent ??
+			"") !== "",
+		`kmc-loi: ${ma} thieu cau mo ta`,
+	);
+	const nut = khung ? nutTen(khung, THU_LAI) : null;
+	phai(nut !== null, `kmc-loi: ${ma} thieu nut Thử lại`);
+	return nut as HTMLButtonElement;
+}
+
+describe("loi", () => {
+	test("ba khung truyen thang: ma giu nguyen, tieu de, cau, Thử lại goi mot lan", async () => {
+		const ca: [ReactElement, string, () => number][] = [];
+		let goiXem = 0;
+		let goiTai = 0;
+		let goiOkr = 0;
+		ca.push([
+			<LoiXem
+				cau="Không đọc được toàn cảnh."
+				key="x"
+				thuLai={() => {
+					goiXem += 1;
+				}}
+				trangThai="ST-toancanh-loi"
+			/>,
+			"ST-toancanh-loi",
+			() => goiXem,
+		]);
+		ca.push([
+			<LoiTai
+				key="t"
+				m={TL}
+				thuLai={() => {
+					goiTai += 1;
+				}}
+			/>,
+			"ST-tailieu-loi",
+			() => goiTai,
+		]);
+		ca.push([
+			<Loi
+				key="o"
+				thuLai={() => {
+					goiOkr += 1;
+				}}
+			/>,
+			"ST-donvi-loi",
+			() => goiOkr,
+		]);
+		for (const [cay, ma, dem] of ca) {
+			const o = ve(cay);
+			const nut = kiemKhungLoi(o, ma);
+			await act(async () => nut.click());
+			expect(`${ma}:${dem()}`).toBe(`${ma}:1`);
+			act(() => root?.unmount());
+			root = null;
+		}
+		expect(ca.length).toBe(3);
+	});
+
+	test("danh muc Onboarding loi: VungTaiLoi, Thử lại goi lai truy van", async () => {
+		canh.danhMuc = "loi";
+		const o = ve(<DanhMucTable />);
+		await cho(
+			() => o.querySelector('[data-trang-thai="ST-danhmuc-loi"]') !== null,
+			"khung loi danh muc",
+		);
+		const truocBam = canh.goi["onboarding.manDanhMuc"] ?? 0;
+		const nut = kiemKhungLoi(o, "ST-danhmuc-loi");
+		await act(async () => nut.click());
+		await cho(
+			() => (canh.goi["onboarding.manDanhMuc"] ?? 0) === truocBam + 1,
+			"goi lai danh muc",
+		);
+	});
+
+	test("bang cot Onboarding loi: VungTaiLoi, Thử lại goi lai truy van", async () => {
+		canh.danhMuc = "treo";
+		canh.bangCot = "loi";
+		const o = ve(<DanhMucTable />, "cachXem=bang-cot");
+		await cho(
+			() => o.querySelector('[data-trang-thai="ST-bangcot-loi"]') !== null,
+			"khung loi bang cot",
+		);
+		const truocBam = canh.goi["onboarding.bangCot"] ?? 0;
+		const nut = kiemKhungLoi(o, "ST-bangcot-loi");
+		await act(async () => nut.click());
+		await cho(
+			() => (canh.goi["onboarding.bangCot"] ?? 0) === truocBam + 1,
+			"goi lai bang cot",
+		);
+		canh.danhMuc = "loi";
+	});
+
+	test("chieu do: khung thieu ma thi bai kiem bat", () => {
+		const o = ve(<div data-vung-tai-loi="" />);
+		expect(() => kiemKhungLoi(o, "ST-danhmuc-loi")).toThrow(
+			"kmc-loi: ST-danhmuc-loi mat data-trang-thai",
+		);
+	});
+});
+
+describe("chi-tiet", () => {
+	test("dang tai: khung chi-tiet co hang tieu de, khong vong quay", async () => {
+		canh.chienDich = "treo";
+		const o = ve(<CampaignDetail id="cd-1" />);
+		await cho(() => (canh.goi["campaigns.byId"] ?? 0) > 0, "doc chien dich");
+		phai(
+			o.querySelector(
+				'[data-khung-xuong="chi-tiet"] [data-khung-hang="tieu-de"]',
+			) !== null,
+			"kmc-chi-tiet: dang tai khong co khung chi-tiet",
+		);
+		expect(o.querySelector('[data-slot="spinner"]')).toBeNull();
+	});
+
+	test("co du lieu: tieu de la ten chien dich", async () => {
+		canh.chienDich = "co";
+		const o = ve(<CampaignDetail id="cd-1" />);
+		await cho(
+			() => o.querySelector('[data-slot="page-shell-title"]') !== null,
+			"tieu de chien dich",
+		);
+		expect(o.querySelector('[data-slot="page-shell-title"]')?.textContent).toBe(
+			CHIEN_DICH.name,
+		);
+	});
+
+	test("loi: VungTaiLoi thay vong quay mai, Thử lại goi lai", async () => {
+		canh.chienDich = "loi";
+		const o = ve(<CampaignDetail id="cd-1" />);
+		await cho(
+			() => o.querySelector("[data-vung-tai-loi]") !== null,
+			"khung loi chien dich",
+		);
+		phai(
+			o.querySelector("[data-khung-xuong]") === null,
+			"kmc-chi-tiet: loi van hien khung xuong",
+		);
+		const nut = kiemKhungLoi(o, "ST-chiendich-loi");
+		expect(o.textContent).toContain(CD.detail.loadErrorTitle);
+		const truocBam = canh.goi["campaigns.byId"] ?? 0;
+		await act(async () => nut.click());
+		await cho(
+			() => (canh.goi["campaigns.byId"] ?? 0) === truocBam + 1,
+			"goi lai chien dich",
+		);
 	});
 });

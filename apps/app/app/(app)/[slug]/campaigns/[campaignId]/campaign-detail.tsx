@@ -18,6 +18,7 @@ import {
 } from "@crm/ui/components/select";
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatCard } from "@crm/ui/components/stat-card";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { formatPercent } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
@@ -378,6 +379,16 @@ export function CampaignDetail({ id }: { id: string }) {
 		}),
 	);
 
+	if (campaign.isError)
+		return (
+			<VungTaiLoi
+				dangTai={campaign.isFetching}
+				data-trang-thai="ST-chiendich-loi"
+				moTa={m.detail.loadErrorBody}
+				onThuLai={() => campaign.refetch()}
+				tieuDe={m.detail.loadErrorTitle}
+			/>
+		);
 	if (!campaign.data) return <KhungXuong hinh="chi-tiet" />;
 
 	const row = campaign.data;

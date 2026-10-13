@@ -63,6 +63,7 @@ const en = {
 	},
 	loiTai: {
 		tieuDe: "Could not load the pages.",
+		moTa: "The server didn’t respond. Try again in a moment.",
 		thuLai: "Try again",
 	},
 	rongLoc: {
@@ -452,6 +453,7 @@ const vi: TaiLieuMessages = {
 	},
 	loiTai: {
 		tieuDe: "Không tải được danh sách trang.",
+		moTa: "Máy chủ không trả lời. Thử lại sau giây lát.",
 		thuLai: "Thử lại",
 	},
 	rongLoc: {
