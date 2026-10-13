@@ -12,6 +12,7 @@ import { DuongProtoMau } from "./_modules/duong-proto";
 import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
+import { GuiTinHieuMau } from "./_modules/gui-tin-hieu-trong-crm";
 import { KanbanViecMau } from "./_modules/kanban-viec";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
@@ -25,6 +26,7 @@ import { MayNhacTruocNguoiMau } from "./_modules/may-nhac-truoc-nguoi";
 import { MoiPhiaDeuThayKeHoachMau } from "./_modules/moi-phia-deu-thay-ke-hoach";
 import { MucTieuVaKrMau } from "./_modules/muc-tieu-va-kr";
 import { NenKaraMau } from "./_modules/nen-kara";
+import { NganHoSoMau } from "./_modules/ngan-ho-so-trong-lo-trinh";
 import { NhacQuaZaloMau } from "./_modules/nhac-qua-zalo";
 import { NoiZaloChoNguoiMoiMau } from "./_modules/noi-zalo-cho-nguoi-moi";
 import { OkrToChucVaMau } from "./_modules/okr-to-chuc-va";
@@ -69,6 +71,7 @@ const BANG_GHEP = {
 	"tro-ly-doc-kho": KhoTaiLieuMau,
 	"to-chuc-danh-sach-chi-tiet": ToChucDanhSachChiTietMau,
 	"toan-canh-okr": ToanCanhOkrMau,
+	"ngan-ho-so-trong-lo-trinh": NganHoSoMau,
 	"trang-lo-trinh-trong-crm": TrangLoTrinhMau,
 	"khung-okr-truoc-r1": KhungOkrTruocR1Mau,
 	"okr-to-chuc-va": OkrToChucVaMau,
@@ -89,6 +92,7 @@ const BANG_GHEP = {
 	"cua-vao-va": CuaVaoVaMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 	"khung-ban-ghi-kara": KhungBanGhiKaraMau,
+	"gui-tin-hieu-trong-crm": GuiTinHieuMau,
 	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
 } satisfies Record<string, ProtoComponent>;

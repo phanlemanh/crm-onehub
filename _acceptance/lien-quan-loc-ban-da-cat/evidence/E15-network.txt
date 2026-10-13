@@ -1,0 +1,1 @@
+n-a (driver): man.mjs chay trong tien-de.mjs, khong co browser tool doc network cua verifier

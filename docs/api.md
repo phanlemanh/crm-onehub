@@ -437,6 +437,13 @@ row is still there, just filtered out of every list.
   where.** A list call defaults to `archived: false`; the Archived view is the same
   procedure with `archived: true`. There is no third "everything" mode — mixing
   active and archived rows in one table is exactly what this feature removes.
+- **A record's related lists are active rows only.** `companies.byId`,
+  `contacts.byId` and `deals.byId` return `contacts`/`deals` without archived rows
+  and carry the archived ones as `archivedContacts`/`archivedDeals` — `id`, name,
+  `archivedAt`, newest first (`crm/da-luu-tru.ts`) — over tRPC and the `/rest`
+  bridge an API key reads alike. `deals.contactOptions` and a contact's
+  `relationship.colleagues` drop archived contacts outright. The one count that
+  adds both back is a purge warning, because it is about what goes, not what shows.
 - **`archive`/`restore` touch `archivedAt` and nothing else.** They do not touch
   `AgentTask`, `SuppressedContact`, or `lastActivityAt` — the record is unchanged, only
   hidden. `archive` writes only while `archivedAt` is null (`updateMany` with
@@ -1545,6 +1552,26 @@ AI đọc kho»).
 - **`taiLieu.datXacMinh`** sets or clears a page's `xacMinhDen` for its chủ trang and
   `owner`/`admin`, stores noon VN time of the chosen day, and writes a `XAC_MINH` event.
   `taiLieu.get` returns `xacMinhDen`, `quaHanXacMinh` and `coQuyenXacMinh`.
+
+## Tín hiệu: CRM giữ hàng chờ, lượt gom lấy về git
+
+Người dùng gửi tín hiệu (`tinHieu.gui`, tự phục vụ, phạm vi chung — cả vai chỉ OKR) và xem tín
+hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn sự thật sau đó là git của kho
+(`tin-hieu/crm/<mã>.json`, khuôn tín hiệu của bộ kit).
+
+- Trần mỗi người mỗi ngày giờ Việt Nam và độ dài mỗi ô sống ở `TIN_HIEU` (`@crm/validation/tin-hieu`);
+  đếm và ghi trong một giao dịch có khoá theo người, quá trần trả 429.
+- `tinHieu.xoa` chỉ xoá tín hiệu của chính người gọi, và chỉ khi chưa được lấy về (`keoVeLuc` rỗng).
+  Xoá xin khoá bảng `ROW EXCLUSIVE` trước rồi mới đọc — cùng thứ tự khoá với lượt lấy về, nên hai
+  việc chạy đua không khoá chéo nhau.
+- `tinHieu.keoVe` chỉ owner/admin. Máy chủ kho gọi `POST /rest/tin-hieu/keo-ve` với `x-api-key`
+  (khoá của chủ kho) đầu mỗi lượt gom. Thủ tục khoá bảng `SHARE ROW EXCLUSIVE`, đóng dấu tín hiệu
+  chưa dấu, trả mọi tín hiệu theo số. Cầu REST trả thẳng đầu ra `{tep: [...]}`, không bọc vỏ tRPC;
+  lệnh kéo về đọc bằng `docPhanHoiKeoVe`.
+- Tệp git không mang tên, thư, id người dùng hay phòng ban; phòng ban chỉ đi kèm trong phản hồi để
+  lệnh kéo về đếm cho ngưỡng.
+- Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
+  phán nào ở API.
 
 ## Money
 

@@ -181,10 +181,9 @@ const en = {
 		canQuyen: "You need admin rights to change the team's fields.",
 		edit: "Edit",
 		restore: "Restore",
-		archiveTitle: (label: string) => `Archive ${label}?`,
-		archiveBody:
-			"Removed from every table, record and filter. Its values are kept and it can be restored.",
-		archiveField: "Archive field",
+		archived: (label: string) => `${label} was archived.`,
+		restored: (label: string) => `${label} was restored.`,
+		hoanTacLoi: "Couldn't undo. The field is still under Archived.",
 		filledOf: (entity: string, a: string, b: string) =>
 			`${entity} · ${a} of ${b} filled`,
 		removeOption: (label: string) => `Remove ${label}`,
@@ -511,10 +510,9 @@ const vi = {
 		canQuyen: "Cần quyền quản trị để đổi trường của cả đội.",
 		edit: "Sửa",
 		restore: "Khôi phục",
-		archiveTitle: (label: string) => `Lưu trữ ${label}?`,
-		archiveBody:
-			"Cất khỏi mọi bảng, ngăn bản ghi và bộ lọc. Giá trị vẫn được giữ, khôi phục được.",
-		archiveField: "Lưu trữ trường",
+		archived: (label: string) => `Đã lưu trữ ${label}.`,
+		restored: (label: string) => `Đã khôi phục ${label}.`,
+		hoanTacLoi: "Chưa hoàn tác được. Trường vẫn ở mục Đã lưu trữ.",
 		filledOf: (entity: string, a: string, b: string) =>
 			`${entity} · đã điền ${a}/${b}`,
 		removeOption: (label: string) => `Bỏ ${label}`,
