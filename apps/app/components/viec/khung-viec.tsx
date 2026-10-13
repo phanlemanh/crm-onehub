@@ -138,7 +138,9 @@ export function KhungViec({ viecId }: { viecId: string }) {
 					<DetailSheetProperty label={m.khung.han}>
 						{suaDuoc ? (
 							<DatePicker
-								onChange={(han) => sua.mutate({ id: v.id, hanNgay: han })}
+								onChange={(han) =>
+									sua.mutate({ id: v.id, hanNgay: han === "" ? null : han })
+								}
 								placeholder={m.oSoan.chonHan}
 								value={v.hanNgay}
 							/>
@@ -230,7 +232,9 @@ export function KhungViec({ viecId }: { viecId: string }) {
 			{nut.length === 0 && !daKhep ? (
 				<DetailSheetSection>
 					<p className="text-muted-foreground text-sm" data-chi-xem="">
-						{m.khung.chiXem}
+						{v.trangThai === "CHO_DANH_GIA" && v.quyen.sua
+							? m.khung.choNguoiGiao
+							: m.khung.chiXem}
 					</p>
 				</DetailSheetSection>
 			) : null}
@@ -260,7 +264,14 @@ export function KhungViec({ viecId }: { viecId: string }) {
 								disabled={theo.isPending || boTheo.isPending}
 								onClick={() =>
 									v.quyen.dangTheoDoi
-										? boTheo.mutate({ id: v.id })
+										? boTheo.mutate(
+												{ id: v.id },
+												{
+													onSuccess: () => {
+														if (v.banGhi.length === 0 && !v.quyen.sua) close();
+													},
+												},
+											)
 										: theo.mutate({ id: v.id })
 								}
 								size="sm"

@@ -363,6 +363,40 @@ describe("vc-man-khung", () => {
 		}
 	});
 
+	test("vc-man-khung: người theo dõi bỏ theo dõi việc riêng thì khung đóng, việc có bản ghi gắn thì khung ở lại", async () => {
+		traLoi.set("viec.boTheoDoi", () => ({ id: "v1" }));
+		const goc = chiTiet("DANG_LAM", [], false, true);
+		const rieng = {
+			...goc,
+			banGhi: [],
+			quyen: { ...goc.quyen, dangTheoDoi: true },
+		};
+		await moKhung(rieng);
+		await bam(nutChu(V.khung.boTheoDoi));
+		await cho(() => daGoi.some((g) => g.path === "viec.boTheoDoi"), "goi bo");
+		await cho(
+			() =>
+				!(document.body.textContent ?? "").includes(
+					"Gọi xác nhận lịch đào tạo",
+				),
+			"khung dong",
+		);
+		await act(async () => {
+			san?.root.unmount();
+		});
+		san?.o.remove();
+		san = null;
+		document.body.innerHTML = "";
+		daGoi.length = 0;
+		await moKhung({ ...goc, quyen: { ...goc.quyen, dangTheoDoi: true } });
+		await bam(nutChu(V.khung.boTheoDoi));
+		await cho(() => daGoi.some((g) => g.path === "viec.boTheoDoi"), "goi bo 2");
+		for (let i = 0; i < 5; i += 1) await nhip();
+		expect(document.body.textContent ?? "").toContain(
+			"Gọi xác nhận lịch đào tạo",
+		);
+	});
+
 	test("vc-man-khung: việc đã có lịch sử thì không có nút Xoá", async () => {
 		await moKhung(
 			chiTiet("DANG_LAM", ["CHO_DANH_GIA", "XONG", "HUY"], false, true),
@@ -420,6 +454,53 @@ describe("vc-khung-sua-tai-cho", () => {
 			`textarea[aria-label="${V.khung.moTa}"]`,
 		);
 		expect(moTa?.maxLength).toBe(VIEC.moTaToiDa);
+	});
+
+	test("vc-khung-sua-tai-cho: bấm «Xoá ngày» ở ô hạn thì viec.sua nhận hanNgay null, không phải chuỗi rỗng", async () => {
+		const du = chiTiet(
+			"DANG_LAM",
+			["CHUA_LAM", "CHO_DANH_GIA", "XONG"],
+			false,
+			true,
+		);
+		traLoi.set("viec.sua", () => du);
+		await moKhung(du);
+		await bam(document.querySelector('[data-slot="date-picker-trigger"]'));
+		await cho(
+			() =>
+				[...document.querySelectorAll("button")].some(
+					(b) => (b.textContent ?? "").trim() === "Xoá ngày",
+				),
+			"nut xoa ngay",
+		);
+		await bam(
+			[...document.querySelectorAll("button")].find(
+				(b) => (b.textContent ?? "").trim() === "Xoá ngày",
+			) ?? null,
+		);
+		await cho(() => daGoi.some((g) => g.path === "viec.sua"), "goi sua");
+		const goi = daGoi.filter((g) => g.path === "viec.sua");
+		expect(goi).toHaveLength(1);
+		expect(goi[0]?.input).toEqual({ id: "v1", hanNgay: null });
+	});
+
+	test("vc-khung-sua-tai-cho: người thực hiện ở Chờ đánh giá thấy lời chờ người giao, người theo dõi vẫn thấy lời cũ", async () => {
+		const goc = chiTiet("CHO_DANH_GIA", [], false, true);
+		const lamViec = { ...goc, quyen: { ...goc.quyen, sua: true } };
+		await moKhung(lamViec);
+		expect(document.querySelector("[data-chi-xem]")?.textContent ?? "").toBe(
+			V.khung.choNguoiGiao,
+		);
+		await act(async () => {
+			san?.root.unmount();
+		});
+		san?.o.remove();
+		san = null;
+		document.body.innerHTML = "";
+		await moKhung(goc);
+		expect(document.querySelector("[data-chi-xem]")?.textContent ?? "").toBe(
+			V.khung.chiXem,
+		);
 	});
 
 	test("vc-khung-sua-tai-cho: người theo dõi không có ô sửa tiêu đề và mô tả", async () => {

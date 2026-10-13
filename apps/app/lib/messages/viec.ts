@@ -52,6 +52,8 @@ const en = {
 		ganVoi: "Linked to",
 		rieng: "Private — only the people on it can see it",
 		chiXem: "Only the assigner and the assignee can change the status",
+		choNguoiGiao:
+			"Waiting for the assigner to review. Only the assigner can change the status now",
 		daXong: "Done",
 		daHuy: "Cancelled",
 		tuTheoDoi: "Follow",
@@ -173,6 +175,8 @@ const vi: ViecMessages = {
 		ganVoi: "Gắn với",
 		rieng: "Việc riêng — chỉ người trong cuộc thấy",
 		chiXem: "Chỉ người giao và người thực hiện đổi được trạng thái",
+		choNguoiGiao:
+			"Đang chờ người giao đánh giá. Bây giờ chỉ người giao đổi được trạng thái",
 		daXong: "Đã xong",
 		daHuy: "Đã huỷ",
 		tuTheoDoi: "Theo dõi",

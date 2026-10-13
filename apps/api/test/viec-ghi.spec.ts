@@ -541,6 +541,50 @@ describe("vc-sua", () => {
 	);
 
 	test(
+		"vc-sua: xoá hạn bằng null — hạn về null, một vết doi-han sau null; chuỗi rỗng bị 400",
+		async () => {
+			const a = await nguoi("vc-xh-a", "member");
+			const v = await taoThu({
+				nguoiId: a.id,
+				tieuDe: "vc-xh",
+				hanNgay: new Date("2026-11-05T00:00:00.000Z"),
+				gan: [],
+			});
+			const truoc = await demVet(v.id);
+			const rong = await goi(
+				app,
+				"viec.sua",
+				"mutation",
+				{ id: v.id, hanNgay: "" },
+				a.id,
+			);
+			expect(rong.status).toBe(400);
+			expect(await demVet(v.id)).toBe(truoc);
+			const xoa = await goi(
+				app,
+				"viec.sua",
+				"mutation",
+				{ id: v.id, hanNgay: null },
+				a.id,
+			);
+			expect(xoa.status).toBe(200);
+			expect(
+				(await db.viec.findUniqueOrThrow({ where: { id: v.id } })).hanNgay,
+			).toBeNull();
+			expect(await demVet(v.id, "doi-han")).toBe(1);
+			const vet = await db.viecVet.findFirstOrThrow({
+				where: { viecId: v.id, loai: "doi-han" },
+			});
+			expect(parseVetViec(vet)).toEqual({
+				loai: "doi-han",
+				truoc: { hanNgay: "2026-11-05" },
+				sau: { hanNgay: null },
+			});
+		},
+		MA_TEST_MS,
+	);
+
+	test(
 		"vc-sua: vet hong — một dòng vết sai khuôn làm lichSu báo lỗi có lời, không trả rỗng",
 		async () => {
 			const a = await nguoi("vc-hong-a", "member");
