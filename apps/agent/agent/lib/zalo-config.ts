@@ -131,10 +131,27 @@ export const ZALO = {
 			`Tin nhắc sáng nay chỉ có mục 1–${tran}, không có mục ${sai}.`,
 		khongPhaiBuoc: (so: number, loai: string, url: string | null) =>
 			`Mục ${so} là «${loai}», không đánh dấu xong được${url ? ` — mở kế hoạch: ${url}` : ""}.`,
-		buocDoi: (so: number, lyDo: "khong-co-buoc" | "ke-hoach-dong") =>
-			lyDo === "khong-co-buoc"
-				? `Mục ${so} không còn bước đó trong kế hoạch.`
-				: `Mục ${so} thuộc kế hoạch đã đóng.`,
+		buocDoi: (
+			so: number,
+			lyDo:
+				| "khong-co-buoc"
+				| "ke-hoach-dong"
+				| "khong-co-viec"
+				| "viec-doi-trang-thai",
+		) =>
+			lyDo === "khong-co-viec"
+				? `Mục ${so} không còn việc đó.`
+				: lyDo === "viec-doi-trang-thai"
+					? `Mục ${so} vừa đổi trạng thái nên chưa đóng được.`
+					: lyDo === "khong-co-buoc"
+						? `Mục ${so} không còn bước đó trong kế hoạch.`
+						: `Mục ${so} thuộc kế hoạch đã đóng.`,
+		viecKhongCuaBan: (so: string) =>
+			`Mục ${so} là việc của người khác trong tin này, không đánh dấu xong từ đây được.`,
+		viecChoDanhGia: (so: number) =>
+			`Mục ${so} đang chờ người giao đánh giá, bây giờ chỉ người giao đóng được.`,
+		viecDaHuy: (so: number) =>
+			`Mục ${so} là việc đã huỷ, không đánh dấu xong được.`,
 		daXong: "Đã đánh dấu xong: ",
 		khongGiMoi: "Không có mục nào mới",
 		mocDaXongTruoc: " — đã xong từ trước: ",

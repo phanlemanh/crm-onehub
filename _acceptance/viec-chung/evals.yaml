@@ -1,0 +1,224 @@
+slug: viec-chung
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_tao
+    expected: "exit 0; -t vc-tao của apps/api/test/viec-ghi.spec.ts. Dựng qua đường ghi thật: công ty 'VC Cty' và thoả thuận D của nó, người 'vc-a', 'vc-b', 'vc-w' vai member (gieoThanhVien). Gọi viec.create qua caller tRPC thật với phiên vc-a: {tieuDe, dealId: D, nguoiThucHienId: vc-b, hanNgay: ngày mai VN, nguoiTheoDoiIds: [vc-w]}. Đếm hàng viec có tieuDe đó khác 1 thì ném 'vc: tao viec khong ra dung mot hang <n>'; trangThai khác CHUA_LAM, nguoiGiaoId khác vc-a, nguoiThucHienId khác vc-b thì ném 'vc: tao viec sai truong <truong>'; ViecTheoDoi không có vc-w thì ném 'vc: thieu nguoi theo doi'; ViecGan không phải đúng một hàng dealId D thì ném 'vc: gan sai'; ViecVet không phải đúng một dòng loai 'tao', nguoiId vc-a, nguon 'web' thì ném 'vc: vet tao sai'. viec.cuaBanGhi({dealId: D}) và viec.cuaBanGhi({companyId: cty}) phải chứa mã việc, không thì ném 'vc: khoi viec <ban-ghi> thieu viec'. Ca 'không chọn người': tạo không có nguoiThucHienId → nguoiThucHienId bằng vc-a, không thì ném 'vc: nguoi thuc hien mac dinh sai'. Đối chứng âm cùng fixture: thoả thuận khác D2 của công ty khác — viec.cuaBanGhi({dealId: D2}) chứa mã việc thì ném 'vc: viec lot sang ban ghi khac'. Chiều đỏ ở E16 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/src/viec.ts, packages/db/src/viec-ghi.ts, apps/api/src/viec/**, apps/api/test/viec-ghi.spec.ts]
+
+  - id: E1b
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.vc_man_o_soan
+    expected: "exit 0; apps/app/test/viec-o-soan.dom.tsx, mock tRPC theo khuôn ke-hoach-sheet.dom.tsx. Ca -t vc-o-soan-giao: mount <Timeline anchor={{ dealId }}/>: ô soạn có loại «Việc» và không còn loại «Việc cần làm», không thì ném 'vc: o soan con viec can lam'; chọn «Việc», gõ tiêu đề, chọn người thực hiện từ ô chọn đọc onboarding.nguoiNhanViec, chọn hạn, bấm «Giao việc» — mutation viec.create được gọi đúng một lần với dealId của mốc, tieuDe, nguoiThucHienId đã chọn, không thì ném 'vc: o soan goi sai <json>'. Ô người thực hiện mặc định hiện «Tôi», không thì ném 'vc: mac dinh khong phai toi'. Mock viec.cuaBanGhi trả một việc: khối «Việc» đầu thẻ hiện tiêu đề việc trước dòng sự kiện đầu tiên, không thì ném 'vc: khoi viec khong dung dau the'. Đối chứng: viec.cuaBanGhi trả rỗng (kể cả không việc đã khép) thì khối không hiện, không thì ném 'vc: khoi rong van hien'. Ca -t vc-o-soan-loi: viec.create trả lỗi — lời lỗi hiện dưới nút, ô tiêu đề còn chữ đã gõ, không thì ném 'vc: o soan mat chu khi loi'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/timeline/**, apps/app/components/viec/**, apps/app/lib/messages/viec.ts, apps/app/lib/messages/crm.ts, apps/app/test/viec-o-soan.dom.tsx]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_gan
+    expected: "exit 0; -t vc-gan của apps/api/test/viec-ghi.spec.ts trên fixture của E1, thêm kế hoạch 30 ngày P của cùng công ty (createFromTemplate thật). vc-a gọi viec.gan({id, planId: P}): đếm hàng viec của việc khác 1 thì ném 'vc: gan them nhan ban viec'; viec.cuaBanGhi({planId: P}) không chứa việc thì ném 'vc: ke hoach khong thay viec'; viec.cuaBanGhi({companyId: cty}) chứa mã việc khác đúng 1 lần thì ném 'vc: cong ty hien viec <n> lan'; không có vết loai 'gan' thì ném 'vc: thieu vet gan'. vc-a gọi viec.go({id, dealId: D}): viec.cuaBanGhi({dealId: D}) còn việc thì ném 'vc: go xong van hien'; viec.cuaBanGhi({companyId}) mất việc thì ném 'vc: cong ty mat viec khi con gan ke hoach'; không có vết 'go' thì ném 'vc: thieu vet go'. Chiều đỏ ở E16 (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/viec.ts, apps/api/src/viec/**, apps/api/test/viec-ghi.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_trang_thai
+    expected: "exit 0; -t vc-trang-thai của apps/api/test/viec-ghi.spec.ts. Ma trận viết trước trong spec, chép từ bảng «Đồ thị trạng thái» của design doc: 5 người (giao vc-a, thực hiện vc-b, theo dõi vc-w, thành viên khác vc-x, quản trị vc-q) × 20 cặp nguồn khác đích của năm trạng thái = 100 ô, mỗi ô một việc mới gắn thoả thuận D dựng qua viec-ghi thật rồi đưa tới trạng thái nguồn bằng chuỗi chuyển hợp lệ của vc-a. Số ô đã chạy khác 100 thì ném 'vc: ma tran trang thai thieu o <n>'. Ô hợp lệ có quyền: viec.doiTrangThai thành công, trangThai bằng đích, đúng một vết 'doi-trang-thai' với truoc/sau, không thì ném 'vc: o duoc hong <nguoi> <nguon>-<dich>'. Cặp ✗: TRPCError BAD_REQUEST message bằng nguyên văn VIEC.thongDiep.khongChuyenDuoc(nguon, dich) với mọi người, không thì ném 'vc: cap khong hop le lot <nguoi> <nguon>-<dich>'. Ô không quyền: FORBIDDEN, message bằng nguyên văn lời ghim của ô (VIEC.thongDiep.chiNguoiGiao(viec) với ô chỉ G, VIEC.thongDiep.chiGiaoVaThucHien(viec) với ô G · T), trangThai không đổi, không vết mới, không thì ném 'vc: o khong lot <nguoi> <nguon>-<dich>' (thành công) hay 'vc: loi tu choi sai o <nguoi> <nguon>-<dich>' (lời khác). roiChuaLamLuc: sau ô vc-b CHUA_LAM→DANG_LAM khác null, không thì ném 'vc: roiChuaLamLuc khong ghi'; sau ô vc-a CHUA_LAM→DANG_LAM và ô vc-a CHUA_LAM→HUY vẫn null, không thì ném 'vc: roiChuaLamLuc ghi boi nguoi giao'; một việc vc-b CHUA_LAM→DANG_LAM rồi vc-b DANG_LAM→CHUA_LAM rồi vc-b CHUA_LAM→DANG_LAM giữ giá trị lần đầu, không thì ném 'vc: roiChuaLamLuc ghi lai'. Chiều đỏ ở E16 (c), (k), (l)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/viec.ts, apps/api/src/viec/**, apps/api/test/viec-ghi.spec.ts]
+
+  - id: E16
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.vc_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly như DA0a: với mỗi cặp chạy phép đo trên bản sao lành phải xanh, rồi thay một lần chuỗi vật thật và chạy lại phải đỏ với đúng thông điệp ghim — (a) bỏ hàng ViecGan khi tạo → E1 'vc: gan sai'; (b) bỏ lọc trùng việc ở khối của công ty → E2 'vc: cong ty hien viec'; (c) bỏ kiểm quyền đổi trạng thái của người theo dõi → E3 'vc: o khong lot'; (d) bỏ vế vai ở kiemNguoiNhanViec của viec-ghi → E5 'vc: giao cho vai okr khong bi chan'; (e) bỏ điều kiện việc riêng trong dieuKienXemViec → E6 'vc: viec rieng lo'; (f) bỏ cổng vai của nguồn việc trong bộ gom → E8 'vc: bo gom co viec doi tac cho vai okr'; (g) bỏ kiểm người nhắn ở nhánh xong n của việc → E10 'vc: xong n nguoi la lot'; (h) bỏ lệnh chuyển người giao ở chuyển việc → E11 'vc: chuyen viec bo sot nguoi giao'; (i) bỏ kiểm «chưa có lịch sử» khi xoá → E12 'vc: xoa viec co lich su'; (j) đổi so sánh hạn của thước sang ngày hôm sau → E14 'vc: thuoc dem sai dung han'; (k) bỏ chặn người theo dõi ở cặp CHO_DANH_GIA→XONG → E3 'vc: o khong lot'; (l) bỏ vế «người đổi là người thực hiện» ở chỗ ghi roiChuaLamLuc → E3 'vc: roiChuaLamLuc ghi boi nguoi giao' và E14 'vc: thuoc dem sai dung han'; (m) bỏ lời gọi kiemNguoiNhanViec ở nhánh mở lại → E5 'vc: giao cho vai okr khong bi chan'. Thiếu cặp nào hay bản sao lành đỏ thì thoát khác 0 nêu cặp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/viec-chung/rang/dot-bien.mjs, packages/db/src/viec-ghi.ts, packages/db/src/viec.ts, packages/db/src/onboarding-nhac.ts, apps/agent/agent/lib/tra-loi-nhac.ts, apps/api/src/onboarding/onboarding-ghi.ts, _acceptance/viec-chung/rang/do-nguong.mjs]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_sua
+    expected: "exit 0; -t vc-sua của apps/api/test/viec-ghi.spec.ts, việc giao vc-a, thực hiện vc-b, theo dõi vc-w, thêm vc-c và vc-x vai member, quản trị vc-q. Chuỗi được, mỗi bước đếm vết tăng đúng 1 với loai đúng và truoc/sau đúng, không thì ném 'vc: sua <buoc> vet sai': vc-a doiNguoiThucHien→vc-c ('doi-nguoi-thuc-hien'), vc-a sửa tiêu đề ('doi-noi-dung'), vc-a sửa hạn ('doi-han'), vc-a theoDoi thêm vc-x ('theo-doi'), vc-c (nay là người thực hiện) sửa hạn ('doi-han'), vc-w boTheoDoi chính mình ('bo-theo-doi'), vc-q tự theo dõi ('theo-doi'). Chuỗi không được: vc-b (đã không còn là người thực hiện) sửa hạn, vc-c doiNguoiThucHien, vc-x sửa tiêu đề, vc-w thêm vc-b làm người theo dõi — mỗi lệnh TRPCError FORBIDDEN, việc không đổi, không vết mới, không thì ném 'vc: sua lot <nguoi> <thao tac>'. viec.lichSu(id) trả mọi vết mới nhất trước, mỗi dòng có nguoi.name, loai, luc, nguon, không thì ném 'vc: lich su sai thu tu'. Chiều đỏ ở E16 (c)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, apps/api/src/viec/**, apps/api/test/viec-ghi.spec.ts]
+
+  - id: E4b
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.vc_man_khung
+    expected: "exit 0; apps/app/test/viec-khung.dom.tsx, mock tRPC: viec.get trả một việc, viec.lichSu trả ba vết (tao web, doi-trang-thai web, doi-trang-thai zalo) thứ tự mới nhất trước. Mở khung qua useRecordSheet ?record=viec:<id>: thẻ «Lịch sử» liệt kê ba dòng đúng thứ tự, dòng zalo ghi «qua Zalo», không thì ném 'vc: khung lich su sai'. Ba ca người xem (mock phiên): người thực hiện ở DANG_LAM thấy đúng hai nút «Gửi đánh giá» và «Xong»; người giao ở CHO_DANH_GIA thấy đúng «Xong», «Làm lại», «Huỷ»; người theo dõi không thấy nút trạng thái nào và thấy dòng «Chỉ người giao và người thực hiện đổi được trạng thái» — sai ca nào thì ném 'vc: nut trang thai sai <ca>'. Bấm «Xong» gọi viec.doiTrangThai một lần với den XONG; mutation trả lỗi FORBIDDEN thì nhãn trạng thái quay về cũ và toast có lời của máy chủ, không thì ném 'vc: khung khong lui khi bi tu choi'. Nút Xoá: viec.get trả coLichSu false và người xem là người giao — nút «Xoá» hiện, bấm mở ConfirmDialog, xác nhận gọi viec.xoa đúng một lần, không thì ném 'vc: xoa khong qua hoi lai'; coLichSu true — không có nút «Xoá», không thì ném 'vc: nut xoa hien khi co lich su'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/viec/**, apps/app/components/crm/record-sheet/**, apps/app/lib/record-href.ts, apps/app/lib/messages/viec.ts, apps/app/test/viec-khung.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_vai_okr
+    expected: "exit 0; -t vc-vai-okr của apps/api/test/viec-quyen.spec.ts. Người 'vc-okr' tên 'Người OKR VC' vai okr, vc-a, vc-b vai member, quản trị vc-q, thoả thuận D. Bảy đường, mỗi đường đếm viec, viecTheoDoi, viecVet và trangThai trước và sau: (1) viec.create nguoiThucHienId vc-okr, (2) doiNguoiThucHien sang vc-okr, (3) theoDoi thêm vc-okr, (4) onboarding.transferWork từ vc-a sang vc-okr khi vc-a thực hiện một việc mở, (5) — (7) việc gắn D người giao vc-a, người thực hiện vc-m vai member đã đưa tới XONG, CHO_DANH_GIA, HUY rồi đổi member.role của vc-m sang 'okr' trực tiếp: vc-a «Làm lại» XONG→DANG_LAM, «Làm lại» CHO_DANH_GIA→DANG_LAM, «Mở lại» HUY→CHUA_LAM — mỗi đường phải BadRequest có message chứa tên người vai okr và 'chỉ OKR' và các số đếm không đổi, không thì ném 'vc: giao cho vai okr khong bi chan <duong>'. Đối chứng dương cùng fixture cho (5): khi vc-m còn vai member, «Làm lại» thành công. Router: phiên vc-okr gọi viec.cuaToi, viec.get, viec.create phải TRPCError FORBIDDEN message KHONG_TRONG_PHAM_VI, không thì ném 'vc: router viec mo cho vai okr <thu tuc>'. onboarding.nguoiNhanViec không chứa vc-okr, không thì ném 'vc: o chon co vai okr'. Đổi vai: vc-b thực hiện một việc mở → workspace.setMemberRole(vc-b, okr) ConflictException message bằng nguyên văn WORKSPACE_CONFIG.messages.conViec(…) có số việc 1 và chữ 'Chuyển việc', vai vẫn member, không thì ném 'vc: doi vai khi con viec khong bi chan'; biến thể vc-b chỉ là người giao của một việc mở — cũng 409. vc-c theo dõi một việc mở và một việc XONG → đổi vai thành công và số ViecTheoDoi của vc-c bằng 0, không thì ném 'vc: con theo doi viec sau doi vai'. Đối chứng dương: viec.create với vc-b thành công. Chiều đỏ ở E16 (d), (m)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/vai-doi-tac.ts, apps/api/src/viec/**, apps/api/src/workspace/workspace.service.ts, apps/api/src/workspace/workspace-config.ts, apps/api/src/onboarding/onboarding-ghi.ts, apps/api/test/viec-quyen.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_xem
+    expected: "exit 0; -t vc-xem của apps/api/test/viec-quyen.spec.ts. Ma trận viết trước: 2 việc (G gắn thoả thuận, R không gắn) × 5 người (giao, thực hiện, theo dõi, thành viên khác, quản trị) × 7 đường (viec.get và viec.lichSu qua caller tRPC, viec.cuaToi nhóm phù hợp, viec.cuaBanGhi của thoả thuận, dashboard.summary phạm vi everyone với việc quá hạn, GET REST /viec/{id} qua app Nest thật với khoá phiên, viec.theoDoi tự mình) = 70 ô; số ô đã chạy khác 70 thì ném 'vc: ma tran xem thieu o <n>'. Kỳ vọng viết trước: G thấy ở mọi ô có nghĩa và tự theo dõi được; R chỉ ba người trong cuộc thấy. Ô «không thấy» của viec.get, viec.lichSu, REST và viec.theoDoi phải NOT_FOUND với message bằng nguyên văn lời khi gọi một mã ngẫu nhiên ('Không có việc nào mang mã <id>.'), và viec.theoDoi không tạo hàng ViecTheoDoi, không thì ném 'vc: viec rieng lo <nguoi> <duong>' (thấy hay ghi được) hoặc 'vc: loi khong thay khac ma la <duong>' (lời khác); ô của viec.cuaToi, viec.cuaBanGhi, dashboard không chứa mã R, không thì ném 'vc: viec rieng lo <nguoi> <duong>'. Đối chứng dương: người thực hiện của R thấy R ở mọi đường đọc, thành viên khác tự theo dõi G thành công. Chiều đỏ ở E16 (e)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec.ts, apps/api/src/viec/**, apps/api/test/viec-quyen.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_cua_toi
+    expected: "exit 0; apps/api/test/viec-cua-toi.spec.ts, đồng hồ cố định giữa ngày VN. vc-b thực hiện sáu việc: quá hạn 2 ngày, hạn hôm nay, hạn tuần sau, không hạn, một XONG, một HUY; vc-b giao một việc cho vc-a; vc-b theo dõi một việc của vc-c. viec.cuaToi({nhom:'giao-cho-toi'}) trả mo đúng thứ tự [quá hạn, hôm nay, tuần sau, không hạn] và daXong 1, daHuy 1, không thì ném 'vc: viec cua toi sai thu tu <json>'; nhom 'toi-giao' và 'dang-theo-doi' mỗi nhóm đúng một việc mở, không thì ném 'vc: nhom <nhom> sai'; demNhom bằng {giao-cho-toi:4, toi-giao:1, dang-theo-doi:1}, không thì ném 'vc: dem nhom dem ca viec khep'. dashboard.summary({scope:'me'}) phiên vc-b: overdue có việc quá hạn của vc-b (dòng loai 'viec') cạnh bước quá hạn của vc-b, quaHan.viec cộng thêm 1, không thì ném 'vc: tong quan thieu viec qua han'; phiên vc-a scope 'me' không có việc đó, không thì ném 'vc: tong quan lan viec nguoi khac'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec.ts, apps/api/src/viec/**, apps/api/src/dashboard/dashboard.service.ts, apps/api/test/viec-cua-toi.spec.ts]
+
+  - id: E7b
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.vc_man_cua_toi
+    expected: "exit 0; -t vc-man-co-viec của apps/app/test/viec-cua-toi.dom.tsx, mock viec.cuaToi theo dữ liệu E7. Trang hiện ba chip «Giao cho tôi», «Tôi giao», «Đang theo dõi» với số 4, 1, 1, không thì ném 'vc: chip nhom sai'; bấm «Tôi giao» đổi ?nhom=toi-giao trên đường dẫn (NuqsTestingAdapter onUrlUpdate), không thì ném 'vc: nhom khong len duong dan'; bốn dòng mở đúng thứ tự, dòng quá hạn có StatusIndicator tone error, không thì ném 'vc: dong qua han khong do'; hai dòng gập «Đã xong (1)» và «Đã huỷ (1)» đóng sẵn, không thì ném 'vc: dong gap sai'. Đối chứng: chưa có việc quá hạn thì không dòng nào mang tone error."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/viec/**", apps/app/components/viec/**, apps/app/lib/messages/viec.ts, apps/app/test/viec-cua-toi.dom.tsx]
+
+  - id: E7c
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.vc_man_trang_thai
+    expected: "exit 0; -t vc-man-trang-thai của apps/app/test/viec-cua-toi.dom.tsx. Ba ca, mỗi ca giữ tiêu đề «Việc của tôi» và câu mô tả trang, không thì ném 'vc: mat tieu de khi <ca>': chờ tải (query treo) — khung xương, không vòng quay toàn trang, không thì ném 'vc: cho tai sai'; lỗi (query lỗi) — VungTaiLoi có nút «Thử lại», bấm gọi lại query, không thì ném 'vc: loi tai sai'; rỗng — Empty có lời «Chưa có việc nào giao cho bạn» và nút «Giao việc», không thì ném 'vc: rong sai'. Đối chứng: query có việc thì không ca nào trong ba ca hiện."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/viec/**", apps/app/components/viec/**, apps/app/lib/messages/viec.ts, apps/app/test/viec-cua-toi.dom.tsx]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_nhac_vai_okr
+    expected: "exit 0; -t vc-nhac-vai-okr của apps/agent/test/nhac-viec.integration.spec.ts, now = 09:00 giờ VN. Dựng qua viec-ghi thật khi hai người còn vai member: 'vc-nhac-okr' (tên 'Người OKR Nhắc') và 'vc-nhac-member', mỗi người: thực hiện một việc quá hạn và một việc hạn sau 2 ngày gắn thoả thuận mang tên riêng của người đó, là người giao của một việc CHO_DANH_GIA gắn thoả thuận, và là chủ một KR cần cập nhật tuần; rồi đổi member.role của vc-nhac-okr sang 'okr' trực tiếp (dữ liệu cũ). viecCanNhac với cuaSo 'buoi-sang' rồi 'truc-tiep': danh sách của vc-nhac-okr có loai bắt đầu 'viec-' thì ném 'vc: bo gom co viec doi tac cho vai okr <cuaSo>'; không có mục okr-cap-nhat thì ném 'vc: bo gom mat viec okr <cuaSo>'. lenLichNhac + chayNhac, vc-nhac-okr có ZaloLink, zaloFetcher giả theo hợp đồng sendMessage thật: đúng một tin tới họ, thân tin không chứa tên thoả thuận hay tên công ty nào của ba việc đó (đọc lại từ chính các hàng ViecGan), payload.daGui không có loai bắt đầu 'viec-', không thì ném 'vc: tin zalo mang ten doi tac' hay 'vc: daGui co dong viec'; cùng khuôn với Slack giả cho người thứ ba 'vc-nhac-okr-slack', thông điệp chữ 'slack' thay 'zalo'. Đối chứng dương cùng fixture: danh sách và tin của vc-nhac-member có đủ viec-qua-han, viec-sap-han, viec-cho-danh-gia và tên thoả thuận của họ, không thì ném 'vc: doi chung thieu <loai>'. Nguồn việc của bộ gom lọc bằng docDuocDoiTac của @crm/db/vai-doi-tac (cùng luật DA0a): grep tệp nguồn nhắc việc phải gọi hàm đó, không so chuỗi 'okr', không thì ném 'vc: nhac viec khong dung luat vai cua DA0a'. Chiều đỏ ở E16 (f)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/onboarding-nhac.ts, packages/db/src/viec.ts, packages/db/src/vai-doi-tac.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/test/nhac-viec.integration.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_nhac
+    expected: "exit 0; -t vc-nhac của apps/agent/test/nhac-viec.integration.spec.ts, now = 09:00 giờ VN. Dựng qua viec-ghi thật: vc-nhac-b thực hiện việc quá hạn 1 ngày và việc hạn sau 2 ngày, gắn thoả thuận 'VC Nhac Deal'; vc-nhac-a là người giao một việc CHO_DANH_GIA; vc-nhac-d có cùng hai loại việc nhưng đã XONG. viecCanNhac(buoi-sang): của vc-nhac-b có viec-qua-han và viec-sap-han, của vc-nhac-a có viec-cho-danh-gia, của vc-nhac-d không có loai bắt đầu 'viec-', không thì ném 'vc: bo gom sai <nguoi> <loai>'. lenLichNhac + chayNhac với zaloFetcher giả (hợp đồng sendMessage thật) cho vc-nhac-b: đúng một tin, thân có hai tiêu đề việc và 'VC Nhac Deal', không thì ném 'vc: tin zalo thieu dong viec'; Slack giả cho vc-nhac-a: tin có tiêu đề việc chờ đánh giá, không thì ném 'vc: tin slack thieu viec cho danh gia'. Ca cách ly: cài một mục loai lạ vào bộ gom của vc-nhac-a bằng mock — hàng nhắc của vc-nhac-b vẫn được tạo, không thì ném 'vc: mot loai hong lam do ca lo'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/onboarding-nhac.ts, packages/db/src/viec.ts, packages/validation/src/nhac-ke-hoach.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/agent/lib/tin-nhac.ts, apps/agent/test/nhac-viec.integration.spec.ts]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_xong_n
+    expected: "exit 0; -t vc-xong-n của apps/agent/test/nhac-viec.integration.spec.ts, sau tin Zalo của E9. xongTheoTinNhac(vc-nhac-b, n = vị trí dòng viec-qua-han trong payload.daGui): trangThai của việc thành XONG, có vết loai 'doi-trang-thai' nguon 'zalo' nguoiId vc-nhac-b, lời trả có tiêu đề việc, không thì ném 'vc: xong n khong dong viec'. vc-nhac-a trả n của dòng viec-cho-danh-gia: việc thành XONG, không thì ném 'vc: xong n nguoi giao hong'. Ca người lạ: chép daGui của vc-nhac-b vào hàng nhắc của vc-nhac-x (tin chuyển tiếp) rồi vc-nhac-x trả n — việc không đổi, không vết mới, lời trả khác lời xác nhận, không thì ném 'vc: xong n nguoi la lot'. Ca đã khép: trả lại n lần hai — không vết mới, lời trả có 'đã xong', không thì ném 'vc: xong n ghi hai lan'. Đối chứng: một dòng bước của cùng tin vẫn xong như cũ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/tra-loi-nhac.ts, packages/db/src/viec-ghi.ts, apps/agent/test/nhac-viec.integration.spec.ts]
+
+  - id: E11
+    criterion: AC-11
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_chuyen
+    expected: "exit 0; apps/api/test/viec-chuyen.spec.ts. vc-ra thực hiện hai việc mở và một việc XONG, giao một việc mở cho vc-b, đồng thời cầm trịch một kế hoạch mở. onboarding.transferPreview(vc-ra) trả {keHoach:1, buoc:0, viec:3}, không thì ném 'vc: xem truoc thieu viec <json>'; workspace.setMemberRole(vc-ra, okr) ném 409 có số việc bằng đúng viec của transferPreview, không thì ném 'vc: hai cho dem viec lech' (một hàm đếm cho cả hai chỗ). transferWork(vc-ra → vc-c) bởi quản trị: hai việc mở có nguoiThucHienId vc-c, việc giao có nguoiGiaoId vc-c, việc XONG giữ vc-ra, kế hoạch sang vc-c, không thì ném 'vc: chuyen viec bo sot nguoi giao' hay 'vc: chuyen viec doi viec da khep'; mỗi việc đổi đúng một vết 'chuyen-viec', không thì ném 'vc: vet chuyen viec sai'. Ca nguyên tử: làm việc thứ ba hỏng bằng ràng buộc (mock tx ném ở lần cập nhật thứ ba) — không kế hoạch, không việc nào đổi, không thì ném 'vc: chuyen viec khong nguyen tu'. Đích vai okr → BadRequest 'chỉ OKR' (đo ở E5). Chiều đỏ ở E16 (h)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, apps/api/src/onboarding/onboarding.contracts.ts, packages/db/src/viec-ghi.ts, apps/api/test/viec-chuyen.spec.ts]
+
+  - id: E11b
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.vc_man_chuyen
+    expected: "exit 0; apps/app/test/viec-chuyen-hop.dom.tsx, mock tRPC theo khuôn nguoi-nhan-viec.dom.tsx: onboarding.transferPreview trả {keHoach: 1, buoc: 0, viec: 3}. Mở ChuyenViecDialog thật của màn Thành viên: hộp hiện số việc «3 việc» cạnh số kế hoạch, không thì ném 'vc: hop chuyen viec thieu so viec'. Đối chứng: preview viec 0 thì hộp không in dòng việc, không thì ném 'vc: hop chuyen viec in dong rong'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx", apps/app/lib/messages/viec.ts, apps/app/test/viec-chuyen-hop.dom.tsx]
+
+  - id: E12
+    criterion: AC-12
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_vong_doi
+    expected: "exit 0; -t vc-vong-doi của apps/api/test/viec-ghi.spec.ts. Việc mới: viec.coLichSu false; vc-a viec.xoa thành công, hàng việc mất, logger (spy) nhận đúng một sự kiện 'viec.xoa' mang mã việc, không thì ném 'vc: xoa viec moi hong' hay 'vc: xoa khong log'. Việc khác đổi trạng thái một lần: coLichSu true, viec.xoa phải ConflictException (409), việc còn, không thì ném 'vc: xoa viec co lich su'. vc-a Huỷ rồi mở lại: trangThai CHUA_LAM và hai vết doi-trang-thai, không thì ném 'vc: huy mo lai sai'. Việc gắn công ty C, cá nhân K, kế hoạch P và thoả thuận D: xoá vĩnh viễn D, K, P lần lượt theo đường xoá thật của từng loại (lưu trữ trước nếu loại đó đòi) — sau mỗi lần việc còn, ViecGan bớt đúng hàng đó, có đúng một vết 'go-do-ban-ghi-xoa' với sau.ten bằng tên bản ghi đã mất, không thì ném 'vc: xoa <loai> mat viec' hay 'vc: thieu vet go do xoa <loai>'; xoá vĩnh viễn C — việc còn, không còn ViecGan, viec.get bởi thành viên ngoài cuộc NOT_FOUND, bởi người thực hiện thấy, không thì ném 'vc: viec mo coi khong thanh rieng'. Chiều đỏ ở E16 (i)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/prisma/schema.prisma, apps/api/src/viec/**, apps/api/src/deals/**, apps/api/src/companies/**, apps/api/src/contacts/**, apps/api/src/onboarding/**, apps/api/test/viec-ghi.spec.ts]
+
+  - id: E13
+    criterion: AC-13
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.vc_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000: `BANG_CHUNG=_acceptance/viec-chung/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/viec-chung/rang/man.mjs\"` (chinh lenh vc_man; phien do tu dung kho crm_<cay>_do, API va app cua cay tren hai cong tu do, don khi xong)"
+      - "Doc dong cuoi: ma 0 kem 'viec-chung man: dat' = dat; ma 2 = khong do duoc (canh cay hay phien do hong); ma 1 = co thong diep 'vc man: ...' goi ten buoc sai"
+      - "Mo nam anh vc-viec-cua-toi-1280.png, vc-khung-viec-1280.png, vc-o-soan-1280.png, vc-o-soan-da-giao-1280.png, vc-viec-cua-toi-375.png trong _acceptance/viec-chung/evidence/ va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/viec-chung/evidence/
+    paths: ["apps/app/app/(app)/[slug]/viec/**", apps/app/components/viec/**, apps/app/components/crm/timeline/**, apps/app/lib/khung-dieu-huong.ts, apps/app/components/app-icon-rail.tsx, apps/app/lib/messages/viec.ts, _acceptance/viec-chung/rang/man.mjs]
+    expected: |
+      exit 0 va "viec-chung man: dat"; chay qua phien do (tien-de.mjs --chay). Buoc 1 (1280): gieo qua viec-ghi
+      that mot viec qua han, mot viec hom nay cho nguoi dang nhap; mo /<slug>/viec -> ba chip co so, dong qua han co
+      [data-tone=error]; chup vc-viec-cua-toi-1280.png. Buoc 2: bam dong dau -> khung viec mo (?record=viec:),
+      bam «Bắt đầu» -> nhan trang thai «Đang làm»; mo the «Lịch sử» -> co dong doi trang thai; chup
+      vc-khung-viec-1280.png. Buoc 3: mo khung mot thoa thuan, the Hoat dong, o soan chon «Việc», giao cho nguoi
+      khac -> khoi «Việc» dau the co tieu de vua giao; chup vc-o-soan-1280.png. Buoc 4 (375): lap buoc 1 ->
+      scrollWidth <= clientWidth, danh sach la cac the dong [data-slot=item]; chup vc-viec-cua-toi-375.png.
+      Chieu do (--chieu-do): an the «Lịch sử» bang CSS trong ban sao -> buoc 2 do voi 'vc man: thieu lich su'.
+    evidence_required: [run_id, exit_code, screenshot, observed, verified_at]
+
+  - id: E13b
+    criterion: AC-13
+    executor: script
+    cmd: config:executors.script.vc_san_thiet_ke
+    expected: "exit 0; design-gate.mjs --mode static chạy trên mọi tệp .tsx mới hay sửa của màn Việc của tôi, khung việc, khối việc và ô soạn (danh sách lấy bằng git ls-files theo glob trong lệnh); một tệp vi phạm sàn thiết kế (bán kính, màu, khoảng cách tự đặt) thì thoát khác 0 nêu tệp. Chiều đỏ: một tệp thử có className='rounded-[7px]' trong bản sao làm lệnh thoát khác 0."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/viec/**", apps/app/components/viec/**, apps/app/components/crm/timeline/**]
+
+  - id: E14
+    criterion: AC-14
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_thuoc
+    expected: "exit 0; apps/api/test/viec-do-nguong.spec.ts chạy rang/do-nguong.mjs bằng spawnSync với DATABASE_URL của kho thử. Kho có đáp án viết trước trong spec, dựng qua viec-ghi thật trong cửa sổ [tu, den]: 5 việc giao cho người khác được người thực hiện chuyển — 2 trước hạn, 1 đúng ngày hạn lúc 23:00 giờ VN, 1 sau hạn, 1 chưa chuyển; 1 việc giao cho người khác không hạn, người thực hiện chuyển trong cửa sổ (tính đúng hạn); 1 việc người giao tự bấm «Bắt đầu» trước hạn, người thực hiện chưa chuyển (tính vào tổng, không tính đúng hạn); 1 việc người giao Huỷ trước hạn khi người thực hiện chưa chuyển (không tính vào tổng); 2 việc tự giao (không tính); 1 việc tạo ngoài cửa sổ (không tính). Kỳ vọng: viecGiaoNguoiKhac.tong 7, roiChuaLamDungHan 4, tiLe 0.5714 (4 chữ số), không thì ném 'vc: thuoc dem sai dung han <json>'. Ca an toàn: thêm người theo dõi vai okr cài trực tiếp vào một việc gắn đối tác đang mở — viecDoiTacTaiVaiChiOkr 1 và mã thoát 2, không thì ném 'vc: thuoc khong thay vai okr'; đối chứng trước khi cài: 0 và mã thoát 0; cài cùng người vào một việc gắn đối tác đã XONG thì số vẫn 0 (Hỏi-5), không thì ném 'vc: thuoc dem viec da khep'. Thước chạy trong giao dịch READ ONLY: vân tay (đếm hàng viec, viecVet) trước và sau bằng nhau, không thì ném 'vc: thuoc ghi vao kho'. Đường dẫn của thước suy từ import.meta.url, không ghi cứng gốc kho. Chiều đỏ ở E16 (j), (l)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/viec-chung/rang/do-nguong.mjs, apps/api/test/viec-do-nguong.spec.ts]
+
+  - id: E14b
+    criterion: AC-14
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vc_gieo
+    expected: "exit 0; packages/db/test/viec-gieo.spec.ts: hàm gieo việc mẫu của db:seed chạy trên kho thử — mọi việc mẫu có ít nhất một dòng vết 'tao' (dấu đi qua viec-ghi, không chèn thẳng bảng), không thì ném 'vc: gieo khong qua duong ghi'; có ít nhất một việc mỗi trạng thái và một việc quá hạn, không thì ném 'vc: gieo thieu ca <ca>'. Gọi hàm gieo với DATABASE_URL mang dấu production (khuôn require-local-db.ts) phải ném lời từ chối của require-local-db và không ghi hàng nào, không thì ném 'vc: gieo chay tren production'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/seed.ts, packages/db/src/viec-gieo.ts, packages/db/scripts/require-local-db.ts, packages/db/test/viec-gieo.spec.ts]
+
+  - id: E15
+    criterion: AC-15
+    executor: judgment
+    question: >-
+      Đọc CONTEXT.md (mục «Việc» và các mục mới hay sửa quanh nó), docs/api.md (mục về router viec và phạm vi dữ
+      liệu) và docs/agent.md (mục «Nhắc buổi sáng») như một người mới vào kho. Tài liệu có nói rõ sáu điều không:
+      (1) Việc là gì — năm trạng thái cố định, người giao, một người thực hiện, người theo dõi, gắn được nhiều bản
+      ghi mà vẫn là một việc, và mục «Việc» đã bỏ dòng «nghĩa chốt tại Cổng Phạm vi»; (2) ai đổi được trạng thái
+      và ai không (người theo dõi, thành viên khác, quản trị không đổi); (3) ai thấy một việc — gắn đối tác thì
+      mọi người đọc được dữ liệu đối tác, không gắn gì thì chỉ người trong cuộc — và người vai «chỉ OKR» chưa dùng
+      Việc ở lượt này; (4) Việc vào tin nhắc buổi sáng (quá hạn, sắp hạn cho người thực hiện; chờ đánh giá cho
+      người giao) và «xong n» đóng được việc; (5) «Chuyển việc» ở màn Thành viên chuyển cả việc đang mở, và mục từ
+      điển cũ «Chuyển việc 30 ngày» đã đổi theo; (6) ba câu vòng đời: Xoá khi chưa có lịch sử, Xong hay Huỷ là
+      kết cục mở lại được, xoá vĩnh viễn bản ghi gắn chỉ gỡ liên kết. Tài liệu không tự đúc từ ghép tiếng Việt cho
+      thuật ngữ kỹ thuật mà CONTEXT.md không có. Trả PASS khi đủ sáu điều, FAIL nêu điều thiếu.
+    inputs: [CONTEXT.md, docs/api.md, docs/agent.md]
+    evidence_required: [verdict, rationale, verified_at]
