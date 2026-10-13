@@ -1,30 +1,24 @@
-# Review findings: them-buoc-bao-dung (round 2)
+# Review findings: them-buoc-bao-dung (round 3)
 
 ## Trong hợp đồng
 
-- **In the tiến branch (AC-7), the screen check never observes the «và 1 việc quá hạn nữa» line, and the zero clamp hides an over-count regression**
-  AC: AC-7
-  file: `_acceptance/them-buoc-bao-dung/rang/man.mjs:366`
-  severity: medium
-  source: bugs
-  detail: The fix in e175546b7 adds conSotMong(), which computes the expected value as mong = max(0, tong - idViec.length - buocHienQuaHan) from the rows already on screen. It does not check what AC-7 promises.
-
-  AC-7 (contract.md:36) needs an overdue task that falls *outside* the list, and requires the card to read «và 1 việc quá hạn nữa». doQuaHan instead seeds one task `Việc đo E6b` with dueAt = 2 days before today VN (line 421). overdueTasks takes 10 rows ordered by dueAt asc (dashboard.service.ts:162), so this task is inside the list. The round-1 evidence confirms it: 'Việc đo E6b' is one of the 5 rows shown. So in the Pacific/Kiritimati branch tong equals the number of rows shown, mong = 0, and the eval accepts the line being absent. The «và 1 … nữa» line that AC-7 requires is never asserted.
-
-  This also creates a blind spot. Take an app that wrongly counts today's step as overdue in dangHienQuaHan (local time zone ahead of VN). Its conSot = max(0, tong - (shown+1)) = 0, the same as mong = 0, so the check still prints 'dat'. The Math.max(0, …) clamp exists in both the app and the expected value, so the error is invisible. The only guard left is the tone of the step row. The eval's step text ('dòng «nữa» có hay vắng đúng như … AC-7 (tiến)') is therefore not met: the expected value mirrors the app's own formula on the same data instead of requiring N = 1.
-
-  Fix: in the tiến branch, seed the extra overdue task so it falls outside overdueTasks (e.g. enough older overdue tasks to fill take 10, or a dueAt that sorts after the 10th row). Then assert conSot === 1 explicitly, as AC-7 states, and keep the computed value only for the lùi branch.
-
-- **Hình dạng 4 (âm tính một mình): khẳng định con-sot mới của E11 chỉ đo được trường hợp «không có dòng nữa», chưa lần nào đo trường hợp dòng đó phải hiện**
-  AC: AC-7
-  file: `_acceptance/them-buoc-bao-dung/rang/man.mjs:477`
-  severity: medium
-  source: measurement
-  detail: Bản sửa vòng 1 thêm `const conSot = Number(doc.conSot ?? 0)` và điều kiện `conSot === sot.mong` (dòng 477–481), với `sot.mong = max(0, tong - idViec.length - buocHienQuaHan)` (dòng 388–391). Có hai chỗ hỏng. (1) `?? 0` gộp hai thứ khác nhau làm một: chân thẻ `[data-con-sot]` không có mặt, và chân thẻ ghi 0. (2) Dữ liệu gieo không bao giờ cho `mong` lớn hơn 0. Việc «Việc đo E6b» (hạn 2 ngày trước, dòng 421–428) nằm trong overdueTasks đang hiện, vì dashboard.service.ts lấy tới `take: 10`, mà bộ mẫu của ada chỉ có 3 việc quá hạn. Bước gieo thì nằm trong mySteps đang hiện. Vậy `tong` luôn bằng số dòng đang hiện, và `mong = 0` ở cả nhánh lùi (Pago_Pago) lẫn nhánh tiến (Kiritimati). Ảnh trong evidence-report khớp điều này: «5 việc quá hạn», 5 dòng, không có dòng «nữa». Hệ quả: nếu CardFooter `data-con-sot` của dashboard-summary.tsx bị xoá hẳn hay không bao giờ hiện, ô `qua-han-con-sot-*` vẫn ra DUNG. Như vậy phép đo không có đối chứng dương cho vế AC-7 mà evals.yaml E11 hứa («VN từ 17:00 → Kiritimati … một việc quá hạn khác … dòng «và N việc quá hạn nữa» có … đúng như AC-7»). Script cũng không có chốt nào đòi `sot.mong > 0` ở nhánh tiến, hay đòi `doc.conSot !== null` khi trường hợp đó xảy ra. Đây là đúng điều vòng 1 đã nêu («ca tiến không sinh được dòng «nữa» như AC-7 tả»). Bản sửa chỉ đưa con-sot vào phán quyết, chứ không dựng được trạng thái mà ở đó dòng «nữa» bắt buộc phải hiện.
+(không có finding nào)
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
+
+- **TRAN_DONG = 10 in the screen check copies the API's inline `take: 10` instead of sharing one constant**
+  Người dùng thấy gì: Phép đo tự động trên màn Tổng quan giữ riêng một con số giới hạn dòng, trùng với con số trong máy chủ. Nếu sau này máy chủ đổi giới hạn mà phép đo không đổi theo thì phép đo sẽ báo đỏ nhầm, người dùng thật không bị ảnh hưởng.
+  file: `_acceptance/them-buoc-bao-dung/rang/man.mjs`
+  severity: low
+  Đề xuất: wont-fix
+
+- **Ảnh E11 sau r2 không còn chụp được dòng bước đang đo: việc gieo thêm đẩy dòng «Bước đo ngày VN» ra khỏi phần nhìn thấy của khung thẻ**
+  Người dùng thấy gì: Ảnh chụp màn Tổng quan đưa cho người ký duyệt không còn thấy dòng bước có dấu quá hạn, vì dòng đó nằm ngoài phần hiện ra của thẻ. Tính năng vẫn chạy đúng và phép đo tự động vẫn xác nhận được, nhưng người ký không tự nhìn thấy điều đó trên ảnh.
+  file: `_acceptance/them-buoc-bao-dung/rang/man.mjs`
+  severity: medium
+  Đề xuất: known-limits
 
 - **A second copy of the Vietnam-day rule, separate from the one the server counts with (r1)**
   Người dùng thấy gì: Quy tắc 'hôm nay là ngày nào theo giờ Việt Nam' đang được viết ở hai nơi. Hiện hai nơi cho cùng kết quả, nhưng sau này nếu ai sửa một nơi mà quên nơi kia thì số việc quá hạn trên màn hình và ở máy chủ có thể lệch nhau.
