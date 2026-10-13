@@ -154,11 +154,12 @@ const doHop = (t) =>
 		const noiDung =
 			hop('[data-slot="page-shell-content"]') ??
 			hop('[data-khung-xuong] [data-khung-hang="doan"]') ??
+			hop("[data-khung-xuong]") ??
 			hop('[data-slot="page-shell"] > :not([data-slot="page-shell-header"])');
 		return {
 			tieuDe:
 				hop('[data-slot="page-shell-title"]') ??
-				hop('[data-khung-xuong] [data-khung-hang="tieu-de"]'),
+				hop('[data-khung-xuong] [data-khung-hang="tieu-de"] > :first-child'),
 			breadcrumb: hop('[data-slot="breadcrumb"]'),
 			moTa: hop('[data-slot="page-shell-description"]'),
 			nut: hop(

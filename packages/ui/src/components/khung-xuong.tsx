@@ -111,6 +111,7 @@ function ChiTiet() {
 			<div data-khung-hang="tieu-de" className="flex flex-col gap-3">
 				<Skeleton className="h-8 w-64 max-w-full" />
 				<Skeleton className="h-4 w-96 max-w-full" />
+				<Skeleton className="h-8 w-48 max-w-full md:hidden" />
 			</div>
 			{day(KHUNG_XUONG.chiTiet.doan, "doan").map((k) => (
 				<div data-khung-hang="doan" key={k} className="flex flex-col gap-2">
