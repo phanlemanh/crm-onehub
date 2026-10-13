@@ -5,7 +5,7 @@ slug: cay-can-chinh-co-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -74,3 +74,8 @@ Quét bằng `morphological-scan` (preset entity-feature), 13/10. Chân sản ph
 - Nhánh chồng lên L2 (`feat/duong-ly-do-muc-tieu`, đã ký, chờ CI để gộp): dùng lại `NGHIA_MUC_TIN` của
   `apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx` và ba ca bộ mẫu của L2. Không sửa tệp nào của L2.
 - Đọc trước khi chạm (bảng chỉ mục của `AGENTS.md`): `docs/api.md`, `docs/design.md`, `docs/ai-ux.md`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-1: Phép kiểm tự động xem màn hình có bị cuộn ngang ở khổ rộng 1440 chưa chứng minh được là nó bắt được lỗi tràn sinh ra từ bên trong cây căn chỉnh.
+  - Ngoài-2: Cách hiện lý do và mức tin trên cây được viết thành một bản riêng, không dùng chung với màn chi tiết mục tiêu.
+  - Ngoài-6: Bài kiểm tự động của màn cây dùng dữ liệu giả hơi khác dữ liệu thật ở các nút KR, nên một lỗi đọc nhầm cạnh dưới KR có thể lọt qua mà bài kiểm vẫn xanh.
+  - Ngoài-7: Bài kiểm quyền xem cạnh có thể vẫn xanh kể cả khi máy chủ không trả cạnh nào cho ai.
