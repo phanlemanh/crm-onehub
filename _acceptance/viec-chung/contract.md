@@ -5,7 +5,7 @@ slug: viec-chung
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: approved
+status: implemented
 approved_by: Mạnh
 approved_at: 2026-10-13T00:51:25Z
 design_doc: docs/superpowers/specs/2026-10-13-viec-chung-design.md
