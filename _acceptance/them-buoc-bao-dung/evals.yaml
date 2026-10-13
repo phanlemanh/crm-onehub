@@ -104,8 +104,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/dong-buoc.tsx"
       - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
-      - "apps/app/lib/qua-han.ts"
-      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "packages/validation/src/ngay-vn.ts"
       - "apps/app/test/them-buoc-bao-dung.dom.tsx"
     expected: |
       Lenh chay voi TZ=America/Los_Angeles va loc -t qua-han-lui (chi describe nay chay). them-buoc-bao-dung.dom.tsx describe "qua-han-lui": khang dinh dau tien
@@ -125,8 +124,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/dong-buoc.tsx"
       - "apps/app/app/(app)/[slug]/dashboard-summary.tsx"
-      - "apps/app/lib/qua-han.ts"
-      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "packages/validation/src/ngay-vn.ts"
       - "apps/app/test/them-buoc-bao-dung.dom.tsx"
     expected: |
       Lenh chay voi TZ=Pacific/Kiritimati va loc -t qua-han-tien (chi describe nay chay). them-buoc-bao-dung.dom.tsx describe "qua-han-tien": khang dinh dau tien
@@ -169,8 +167,7 @@ evals:
     cmd: config:executors.test.tbd_khu_hoi
     paths:
       - "apps/api/src/dashboard/dashboard.service.ts"
-      - "apps/app/lib/qua-han.ts"
-      - "apps/app/lib/okr-chu-ky-nhan.ts"
+      - "packages/validation/src/ngay-vn.ts"
       - "apps/api/test/them-buoc-bao-dung.spec.ts"
     expected: |
       Lenh chay hai lan cung tep: TZ=America/Los_Angeles roi TZ=Pacific/Kiritimati, TBD_KHU_HOI=1, loc -t qua-han-khu-hoi.
@@ -178,11 +175,11 @@ evals:
       va bang bien TZ cua lenh (ghim "khu hoi chay o mui gio VN"). Gieo qua Prisma mot nguoi A, mot ke hoach mo, hai
       OnboardingStep giao A: han = dauNgayVN(dongHo) - 1 ngay va han = dauNgayVN(dongHo) + 1 gio. Hai dong ho ghim viet
       truoc: 2026-10-12T17:05:00Z (VN 00:05 ngay 13) va 2026-10-12T16:55:00Z (VN 23:55 ngay 12). Moi dong ho: goi that
-      DashboardService.summary cua A, roi dua dung mang mySteps tra ve vao ham cua app buocQuaHanVN(dueAt, dongHo)
-      (apps/app/lib/qua-han.ts — cung ham dong-buoc.tsx goi). Khang dinh quan he: so buoc ham app coi la qua han ===
+      DashboardService.summary cua A, roi dua dung mang mySteps tra ve vao ham quaHanTheoNgayVN(dueAt, dongHo)
+      (@crm/validation/ngay-vn — cung ham buocQuaHan cua dong-buoc.tsx goi). Khang dinh quan he: so buoc ham app coi la qua han ===
       quaHan.buoc cua cung lan goi (ma tran 2 dong ho x 2 mui gio = 4 khang dinh, moi khang dinh mang ten dong ho va
       mui gio). Doi chung duong: quaHan.buoc === 1 o ca hai dong ho (cot may chu khong rong).
-      CHIEU DO: ban sao buocQuaHanVN so theo ngay dia phuong (toDay) -> khang dinh o Los_Angeles 00:05 do voi thong diep
+      CHIEU DO: ban sao quaHanTheoNgayVN so theo ngay dia phuong (toDay) -> khang dinh o Los_Angeles 00:05 do voi thong diep
       ghim "app va may chu dem qua han theo hai ngay khac nhau".
 
   - id: E10
@@ -207,4 +204,4 @@ evals:
       - "Chọn múi giờ trang theo giờ VN lúc đo: VN trước 18:00 → Pacific/Pago_Pago (ngày địa phương lùi), bước hạn hôm qua giờ VN (quá hạn theo máy chủ); VN từ 17:00 → Pacific/Kiritimati (ngày địa phương tiến), bước hạn hôm nay giờ VN và một việc quá hạn khác. Ở 1440 và 390: page.emulateTimezone rồi mở Tổng quan (ST-qua-han-con-sot): dòng bước mang dấu quá hạn đúng theo ngày VN, dòng «và N việc quá hạn nữa» có hay vắng đúng như AC-6 (lùi) hoặc AC-7 (tiến); chụp ảnh"
     expected: "exit 0; 2 ảnh trong _acceptance/them-buoc-bao-dung/evidence/; in múi giờ đã chọn và 'dat'; dấu quá hạn của dòng bước và dòng «nữa» khớp ngày VN."
     evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
-    paths: ["apps/app/app/(app)/[slug]/dashboard-summary.tsx", "apps/app/app/(app)/[slug]/dong-buoc.tsx", "apps/app/lib/qua-han.ts", "_acceptance/them-buoc-bao-dung/rang/man.mjs"]
+    paths: ["apps/app/app/(app)/[slug]/dashboard-summary.tsx", "apps/app/app/(app)/[slug]/dong-buoc.tsx", "packages/validation/src/ngay-vn.ts", "_acceptance/them-buoc-bao-dung/rang/man.mjs"]

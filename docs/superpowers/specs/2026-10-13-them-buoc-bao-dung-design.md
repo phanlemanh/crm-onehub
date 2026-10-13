@@ -44,11 +44,12 @@ danh sách phòng ban», mô tả dùng chung `crm.vungCon.loiMoTa` «Kiểm tra
 (không suy «hết phòng ban» từ một mảng rỗng do lỗi). Form trong nhóm phòng ban có sẵn không cần danh sách nên
 không đổi. Thử lại thành công → ô chọn hiện đủ phòng ban, vùng lỗi biến mất.
 
-**(3) Quá hạn của bước đếm theo ngày Việt Nam ở cả hai phía.** `apps/app/lib/qua-han.ts` thêm
-`buocQuaHanVN(dueAt, now)`: so chuỗi ngày `dueAt` (máy chủ đã gửi `ngayVN(dueAt)`) với ngày Việt Nam của `now`
-(`homNayVn` có sẵn ở `apps/app/lib/okr-chu-ky-nhan.ts`), không dựng `Date` địa phương nữa. `buocQuaHan(buoc, now)`
-của `dong-buoc.tsx` gọi nó; hàm nằm ở `lib/` để bài kiểm khứ hồi phía API gọi đúng hàm này trên đầu ra thật của
-`dashboard.summary` (AC-9). Cả dòng «và N … nữa» lẫn màu quá hạn
+**(3) Quá hạn của bước đếm theo ngày Việt Nam ở cả hai phía.** Mô-đun mới `@crm/validation/ngay-vn`
+(`packages/validation/src/ngay-vn.ts`, chỉ dùng `Intl`, không nhập gói nào) xuất `homNayVN(now)` và
+`quaHanTheoNgayVN(hanNgay, now)`: so chuỗi ngày `dueAt` (máy chủ đã gửi `ngayVN(dueAt)`) với ngày Việt Nam của
+`now`, không dựng `Date` địa phương nữa. `buocQuaHan(buoc, now)` của `dong-buoc.tsx` gọi nó; hàm nằm ở gói chung
+mà cả `apps/app` lẫn `apps/api` đã phụ thuộc, để bài kiểm khứ hồi phía API gọi đúng hàm này trên đầu ra thật của
+`dashboard.summary` (AC-9) mà không kéo mã giao diện vào `tsc` của API. Cả dòng «và N … nữa» lẫn màu quá hạn
 của từng dòng bước đọc cùng hàm, nên cùng một ngày với số máy chủ đếm. Hợp đồng `dashboard.summary` không
 đổi. Lối khác — máy chủ gửi cờ `quaHan` cho từng bước — đúng hơn về nguồn nhưng đổi kiểu `mySteps`, kéo theo
 bộ dữ liệu thử của bốn bài kiểm DOM thuộc các hồ sơ đã ký; giá đó không mua thêm gì khi cả hai phía đã cùng
