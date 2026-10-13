@@ -1,34 +1,19 @@
-import { afterEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { act, createElement as h } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import type { BoardColumn, BoardMove } from "../src/components/board";
-import type { KanbanMoveEvent } from "../src/components/reui/kanban";
+import {
+	Board,
+	type BoardColumn,
+	type BoardMove,
+	boardDrop,
+} from "../src/components/board";
+import { LocaleProvider } from "../src/components/locale-provider";
+import { datHinhHocKeo, keoBangPhim } from "./hinh-hoc-keo";
 
-type KanbanProps = { onMove?: (e: KanbanMoveEvent) => void };
-let kanbanProps: KanbanProps = {};
-const kanbanGoc = { ...(await import("../src/components/reui/kanban")) };
-const KanbanThat = kanbanGoc.Kanban;
-mock.module("../src/components/reui/kanban", () => ({
-	...kanbanGoc,
-	Kanban: (props: Parameters<typeof KanbanThat>[0]) => {
-		kanbanProps = props;
-		return h(KanbanThat, props);
-	},
-}));
-const { Board, boardDrop } = await import("../src/components/board");
-const { LocaleProvider } = await import("../src/components/locale-provider");
-
-function thaThat(cardId: string, from: string, to: string, toIndex: number) {
-	act(() => {
-		kanbanProps.onMove?.({
-			event: { active: { id: cardId } } as KanbanMoveEvent["event"],
-			activeContainer: from,
-			activeIndex: 0,
-			overContainer: to,
-			overIndex: toIndex,
-		});
-	});
-}
+let traHinhHoc: (() => void) | null = null;
+beforeEach(() => {
+	traHinhHoc = datHinhHocKeo();
+});
 
 const COT: BoardColumn[] = [
 	{
@@ -102,6 +87,8 @@ async function tha(tay: HTMLElement) {
 }
 
 afterEach(() => {
+	traHinhHoc?.();
+	traHinhHoc = null;
 	act(() => root?.unmount());
 	khung?.remove();
 	root = null;
@@ -117,19 +104,21 @@ const keo = (from: string, to: string, fromIndex: number, toIndex: number) => ({
 });
 
 describe("board-can-drop", () => {
-	test("board-can-drop: thả thật qua đường kéo của Board — cột cấm không gọi onMove, cột nhận thì gọi", () => {
+	test("board-can-drop: kéo bằng phím thật qua dnd-kit — cột cấm không gọi onMove, cột nhận thì gọi", async () => {
 		const da: BoardMove[] = [];
-		dung({
+		const k = dung({
 			onMove: (m) => da.push(m),
 			canDrop: (_id, cot) => cot !== "b",
 		});
-		thaThat("c1", "a", "b", 0);
+		await keoBangPhim(k, "c1", ["ArrowRight"]);
 		if (da.length !== 0)
 			throw new Error("board: tha vao cot cam van goi onMove");
-		thaThat("c1", "a", "c", 1);
+		await keoBangPhim(k, "c1", ["ArrowRight", "ArrowRight"]);
 		if (
-			JSON.stringify(da) !==
-			JSON.stringify([{ cardId: "c1", from: "a", to: "c" }])
+			da.length !== 1 ||
+			da[0]?.cardId !== "c1" ||
+			da[0]?.from !== "a" ||
+			da[0]?.to !== "c"
 		) {
 			throw new Error(`board: tha vao cot nhan sai ${JSON.stringify(da)}`);
 		}
@@ -185,6 +174,27 @@ describe("board-reorder", () => {
 		const cuoi = boardDrop(keo("a", "b", 0, 0), COT, { reorder: true });
 		expect(cuoi?.order).toEqual(["c1"]);
 		expect(boardDrop(keo("a", "a", 1, 1), COT, { reorder: true })).toBeNull();
+	});
+
+	test("board-reorder: kéo bằng phím thật — thẻ thứ ba lên đầu cột báo thứ tự mới", async () => {
+		const da: BoardMove[] = [];
+		const k = dung({ onMove: (m) => da.push(m), reorder: true });
+		await keoBangPhim(k, "c3", ["ArrowUp", "ArrowUp"]);
+		if (
+			JSON.stringify(da) !==
+			JSON.stringify([
+				{ cardId: "c3", from: "a", to: "a", order: ["c3", "c1", "c2"] },
+			])
+		) {
+			throw new Error(`board: reorder sai ${JSON.stringify(da)}`);
+		}
+	});
+
+	test("board-reorder: tắt reorder thì kéo bằng phím trong cùng cột không báo", async () => {
+		const da: BoardMove[] = [];
+		const k = dung({ onMove: (m) => da.push(m) });
+		await keoBangPhim(k, "c3", ["ArrowUp", "ArrowUp"]);
+		if (da.length !== 0) throw new Error("board: reorder tat van bao");
 	});
 
 	test("board-reorder: tắt reorder thì thả trong cùng cột không báo", () => {

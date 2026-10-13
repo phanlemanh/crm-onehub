@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, mock, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, TRPCClientError, type TRPCLink } from "@trpc/client";
 import { observable } from "@trpc/server/observable";
@@ -7,6 +7,10 @@ import type { AppRouter } from "api/app-router";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, createElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import {
+	datHinhHocKeo,
+	keoBangPhim,
+} from "../../../packages/ui/test/hinh-hoc-keo";
 
 type Json =
 	| string
@@ -79,25 +83,6 @@ type BoardProps = {
 	pendingIds?: readonly string[];
 };
 let boardProps: BoardProps = {};
-type KanbanProps = {
-	onMove?: (e: {
-		event: { active: { id: string } };
-		activeContainer: string;
-		activeIndex: number;
-		overContainer: string;
-		overIndex: number;
-	}) => void;
-};
-let kanbanProps: KanbanProps = {};
-const kanbanGoc = { ...(await import("@crm/ui/components/reui/kanban")) };
-const KanbanThat = kanbanGoc.Kanban;
-mock.module("@crm/ui/components/reui/kanban", () => ({
-	...kanbanGoc,
-	Kanban: (props: Parameters<typeof KanbanThat>[0]) => {
-		kanbanProps = props as KanbanProps;
-		return createElement(KanbanThat, props);
-	},
-}));
 const goc = await import("@crm/ui/components/board");
 const BoardThat = goc.Board;
 const boardDropThat = goc.boardDrop;
@@ -225,24 +210,6 @@ async function cho(ms = 20): Promise<void> {
 	});
 }
 
-async function thaThat(
-	cardId: string,
-	from: string,
-	to: string,
-	toIndex = 0,
-): Promise<void> {
-	await act(async () => {
-		kanbanProps.onMove?.({
-			event: { active: { id: cardId } },
-			activeContainer: from,
-			activeIndex: 0,
-			overContainer: to,
-			overIndex: toIndex,
-		});
-	});
-	await cho();
-}
-
 function k(): HTMLElement {
 	if (!san) throw new Error("kv: chua mo trang");
 	return san.o;
@@ -274,7 +241,14 @@ function the_trong(cot: string, id: string): boolean {
 	);
 }
 
+let traHinhHoc: (() => void) | null = null;
+beforeEach(() => {
+	traHinhHoc = datHinhHocKeo();
+});
+
 afterEach(async () => {
+	traHinhHoc?.();
+	traHinhHoc = null;
 	if (san) {
 		const { o, root } = san;
 		await act(async () => root.unmount());
@@ -416,7 +390,7 @@ describe("kv-man-keo", () => {
 		}
 		await cho(50);
 		daGoi.length = 0;
-		await thaThat("d", "DANG_LAM", "CHO_DANH_GIA");
+		await keoBangPhim(k(), "w", ["ArrowRight"]);
 		await cho();
 		const keoGoi = daGoi.filter((g) => g.path === "viec.keo");
 		const vao1 = keoGoi[0]?.input as
@@ -424,7 +398,7 @@ describe("kv-man-keo", () => {
 			| undefined;
 		if (
 			keoGoi.length !== 1 ||
-			vao1?.den !== "CHO_DANH_GIA" ||
+			vao1?.den !== "DANG_LAM" ||
 			vao1.nguon !== "bang-keo"
 		) {
 			throw new Error("kv: keo phim sai");
@@ -469,18 +443,20 @@ describe("kv-man-keo", () => {
 			await new Promise((r) => setTimeout(r, 10));
 		});
 		const truocTha = daGoi.filter((g) => g.path === "viec.keo").length;
-		await thaThat("v", "CHO_DANH_GIA", "XONG");
+		await keoBangPhim(k(), "v", ["ArrowRight"]);
+		await cho();
 		if (daGoi.filter((g) => g.path === "viec.keo").length !== truocTha)
 			throw new Error("kv: canDrop khong noi");
-		await thaThat("w", "CHUA_LAM", "DANG_LAM");
+		await keoBangPhim(k(), "d", ["ArrowRight"]);
+		await cho();
 		const sauTha = daGoi.filter((g) => g.path === "viec.keo");
 		const vaoW = sauTha[sauTha.length - 1]?.input as
 			| { id?: string; den?: string; nguon?: string }
 			| undefined;
 		if (
 			sauTha.length !== truocTha + 1 ||
-			vaoW?.id !== "w" ||
-			vaoW.den !== "DANG_LAM" ||
+			vaoW?.id !== "d" ||
+			vaoW.den !== "CHO_DANH_GIA" ||
 			vaoW.nguon !== "bang-keo"
 		)
 			throw new Error("kv: doi chung canDrop hong");
@@ -491,7 +467,8 @@ describe("kv-man-keo", () => {
 		traLoi.set("viec.bang", () => bangTu(DS_CO()));
 		traLoi.set("viec.keo", () => new Promise<Json>(() => {}));
 		await moTrang("?xemViec=bang");
-		await thaThat("w", "CHUA_LAM", "DANG_LAM");
+		await keoBangPhim(k(), "w", ["ArrowRight"]);
+		await cho();
 		await cho();
 		if (!boardProps.pendingIds?.includes("w") || !the_trong("DANG_LAM", "w")) {
 			throw new Error("kv: the cho khong khoa");
@@ -541,7 +518,8 @@ describe("kv-man-tra-ve", () => {
 		});
 		await moTrang("?xemViec=bang");
 		const bangTruoc = daGoi.filter((g) => g.path === "viec.bang").length;
-		await thaThat("w", "CHUA_LAM", "DANG_LAM");
+		await keoBangPhim(k(), "w", ["ArrowRight"]);
+		await cho();
 		await cho(60);
 		if (!the_trong("CHUA_LAM", "w")) throw new Error("kv: the khong ve cho cu");
 		if (toastLoi[0]?.msg !== LOI)
@@ -558,7 +536,8 @@ describe("kv-man-tra-ve", () => {
 			throw new TypeError("fetch failed");
 		});
 		await moTrang("?xemViec=bang");
-		await thaThat("w", "CHUA_LAM", "DANG_LAM");
+		await keoBangPhim(k(), "w", ["ArrowRight"]);
+		await cho();
 		await cho(60);
 		if (toastLoi[0]?.action?.label !== V.bang.thuLai)
 			throw new Error("kv: thieu thu lai");
@@ -575,7 +554,8 @@ describe("kv-man-tra-ve", () => {
 			return { ok: true };
 		});
 		await moTrang("?xemViec=bang");
-		await thaThat("w", "CHUA_LAM", "DANG_LAM");
+		await keoBangPhim(k(), "w", ["ArrowRight"]);
+		await cho();
 		await cho(60);
 		if (!the_trong("DANG_LAM", "w") || toastLoi.length !== 0) {
 			throw new Error("kv: doi chung tra ve hong");

@@ -1,12 +1,16 @@
-import { afterEach, describe, mock, test } from "bun:test";
+import { afterEach, beforeEach, describe, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, TRPCClientError, type TRPCLink } from "@trpc/client";
 import { observable } from "@trpc/server/observable";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import type { AppRouter } from "api/app-router";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
-import { act, createElement, type ReactElement, type ReactNode } from "react";
+import { act, type ReactElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import {
+	datHinhHocKeo,
+	keoBangPhim,
+} from "../../../packages/ui/test/hinh-hoc-keo";
 
 type Json =
 	| string
@@ -61,26 +65,6 @@ mock.module("@/components/page-transition", () => ({
 	PageTransition: ({ children }: { children: ReactNode }) => children,
 }));
 mock.module("@/lib/locale/server", () => ({ getLocale: async () => "vi" }));
-
-type BoardProps = {
-	onMove?: (m: {
-		cardId: string;
-		from: string;
-		to: string;
-		order?: string[];
-	}) => void;
-};
-let boardProps: BoardProps = {};
-const goc = await import("@crm/ui/components/board");
-const BoardThat = goc.Board;
-const boardDropThat = goc.boardDrop;
-mock.module("@crm/ui/components/board", () => ({
-	boardDrop: boardDropThat,
-	Board: (props: Parameters<typeof BoardThat>[0]) => {
-		boardProps = props;
-		return createElement(BoardThat, props);
-	},
-}));
 
 const { default: ViecPage } = await import("@/app/(app)/[slug]/viec/page");
 const { RecordSheetHost } = await import(
@@ -269,11 +253,17 @@ async function moBang(): Promise<void> {
 	await mo(man, "?xemViec=bang");
 }
 
+let traHinhHoc: (() => void) | null = null;
+beforeEach(() => {
+	traHinhHoc = datHinhHocKeo();
+});
+
 afterEach(async () => {
+	traHinhHoc?.();
+	traHinhHoc = null;
 	await dong();
 	traLoi.clear();
 	daGoi.length = 0;
-	boardProps = {};
 });
 
 describe("kv-man-con", () => {
@@ -383,14 +373,11 @@ describe("kv-man-hoi-cha", () => {
 			throw new Error("kv: the cha sai dem");
 		}
 		const hoi = dien(V.con.hoiXong, { n: 1 });
-		await act(async () => {
-			boardProps.onMove?.({
-				cardId: "p",
-				from: "CHUA_LAM",
-				to: "XONG",
-				order: ["p"],
-			});
-		});
+		await keoBangPhim(document.body, "p", [
+			"ArrowRight",
+			"ArrowRight",
+			"ArrowRight",
+		]);
 		await cho();
 		if (!document.body.textContent?.includes(hoi) || dem("viec.keo") !== 0) {
 			throw new Error("kv: khong hoi lai dong cha");
@@ -399,14 +386,11 @@ describe("kv-man-hoi-cha", () => {
 		if (dem("viec.keo") !== 0 || document.body.textContent?.includes(hoi)) {
 			throw new Error("kv: thoi van ghi");
 		}
-		await act(async () => {
-			boardProps.onMove?.({
-				cardId: "p",
-				from: "CHUA_LAM",
-				to: "XONG",
-				order: ["p"],
-			});
-		});
+		await keoBangPhim(document.body, "p", [
+			"ArrowRight",
+			"ArrowRight",
+			"ArrowRight",
+		]);
 		await cho();
 		await bam(nutChu(V.con.dongYXong));
 		const goi = daGoi.filter((g) => g.path === "viec.keo");
@@ -423,14 +407,11 @@ describe("kv-man-hoi-cha", () => {
 			throw new Error("kv: menu dong cha khong hoi");
 		}
 		await bam(nutChu(V.con.thoi));
-		await act(async () => {
-			boardProps.onMove?.({
-				cardId: "q",
-				from: "CHUA_LAM",
-				to: "XONG",
-				order: ["q"],
-			});
-		});
+		await keoBangPhim(document.body, "q", [
+			"ArrowRight",
+			"ArrowRight",
+			"ArrowRight",
+		]);
 		await cho();
 		await bam(document.querySelector('[data-the-viec="q"] [data-chuyen-sang]'));
 		await bam(document.querySelector('[data-dich="XONG"]'));
