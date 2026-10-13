@@ -1,12 +1,14 @@
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageShell } from "@/components/page-shell";
+import { CaiDatBreadcrumb } from "@/components/cai-dat-breadcrumb";
+import { PageShell, PageShellHeader } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { campaignMessages } from "@/lib/messages/campaigns";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { workspaceUrl } from "@/lib/workspace-url";
 import { CampaignDetail } from "./campaign-detail";
 import {
 	loadUncalled,
@@ -23,8 +25,21 @@ export default async function CampaignPage({
 	params,
 	searchParams,
 }: PageProps<"/[slug]/campaigns/[campaignId]">) {
+	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
 	return (
 		<PageShell className="min-h-0">
+			<PageShellHeader
+				breadcrumb={
+					<CaiDatBreadcrumb
+						cap={[
+							{
+								nhan: campaignMessages(locale).title,
+								href: workspaceUrl(slug, "/campaigns"),
+							},
+						]}
+					/>
+				}
+			/>
 			<Suspense fallback={<KhungXuong hinh="chi-tiet" />}>
 				<Campaign params={params} searchParams={searchParams} />
 			</Suspense>

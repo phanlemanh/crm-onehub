@@ -3,7 +3,7 @@ import { soSanh, suKienDoi } from "@crm/validation/tai-lieu-diff";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { PageShell } from "@/components/page-shell";
+import { PageShell, PageShellHeader } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { requireSession } from "@/lib/session";
@@ -11,6 +11,7 @@ import { doanTrongNguon, dongSoMay } from "@/lib/tai-lieu-ban-may";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { nullIfMissing } from "../../../(agent-builder)/missing-record";
+import { DuongDanTaiLieu } from "../../duong-dan-tai-lieu";
 import type { BanMay } from "./ban-may";
 import { ManDuyet } from "./man-duyet";
 
@@ -20,9 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: taiLieuMessages(await getLocale()).metadata.duyet };
 }
 
-export default function DeXuatPage({ params }: { params: Params }) {
+export default async function DeXuatPage({ params }: { params: Params }) {
+	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
 	return (
 		<PageShell>
+			<PageShellHeader
+				breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+			/>
 			<Suspense fallback={<KhungXuong hinh="chi-tiet" />}>
 				<NoiDung params={params} />
 			</Suspense>

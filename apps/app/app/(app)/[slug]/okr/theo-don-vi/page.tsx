@@ -9,6 +9,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams, locOkr } from "../okr-search-params";
 import { TheoDonVi } from "./theo-don-vi";
 
@@ -24,11 +25,14 @@ export default function TheoDonViPage({
 	searchParams: SearchParams;
 }) {
 	return (
-		<PageShellContent>
-			<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
-				<NoiDung searchParams={searchParams} />
-			</Suspense>
-		</PageShellContent>
+		<>
+			<DauTrangOkrTrang tab="theo-don-vi" />
+			<PageShellContent>
+				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
+					<NoiDung searchParams={searchParams} />
+				</Suspense>
+			</PageShellContent>
+		</>
 	);
 }
 

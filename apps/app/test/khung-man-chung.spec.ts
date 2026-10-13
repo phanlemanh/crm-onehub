@@ -163,12 +163,19 @@ function laThanhPhan(
 ): CoTrongCay {
 	const nguon = doc(tep);
 	if (nguon === null) return () => false;
-	const nhap = nhapCucBo(phanTich(tep, nguon), tep);
+	const sf = phanTich(tep, nguon);
+	const nhap = nhapCucBo(sf, tep);
 	return (ten) => {
 		if (ten === dich) return true;
 		if (sau <= 0) return false;
 		const tepCon = nhap.get(ten);
-		if (!tepCon) return false;
+		if (!tepCon) {
+			const hamCungTep = /^[A-Z]/.test(ten) ? hamTen(sf, ten) : null;
+			return (
+				hamCungTep !== null &&
+				coKhiTai(hamCungTep, laThanhPhan(doc, tep, dich, sau - 1))
+			);
+		}
 		const nguonCon = doc(tepCon);
 		if (nguonCon === null) return false;
 		const ham = hamTen(phanTich(tepCon, nguonCon), ten);
@@ -294,7 +301,7 @@ function docThay(
 const DOC = docTuDia();
 const TEP = tepAppTsx();
 const TEP_TIEU_DE = BANG_HINH.map((d) => d.tep).filter(
-	(t) => t.endsWith("page.tsx") && !TIEU_DE_THEO_DU_LIEU.includes(t),
+	(t) => t.endsWith("/page.tsx") && !TIEU_DE_THEO_DU_LIEU.includes(t),
 );
 const LIEN_HE = `${TIEN_SLUG}contacts/page.tsx`;
 
@@ -364,7 +371,7 @@ describe("hinh-theo-man", () => {
 
 describe("tieu-de-ngoai-suspense", () => {
 	test("man tieu de tinh dung tieu de va mo ta luc tai", () => {
-		expect(TEP_TIEU_DE.length).toBe(29);
+		expect(TEP_TIEU_DE.length).toBe(31);
 		expect(quetTieuDeKhiTai(DOC, TEP_TIEU_DE)).toEqual([]);
 	});
 

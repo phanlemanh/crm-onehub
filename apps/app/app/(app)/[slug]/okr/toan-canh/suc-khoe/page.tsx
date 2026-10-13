@@ -8,6 +8,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { DauTrangOkrTrang } from "../../dau-trang-okr";
 import { giaiKy, loadOkrSearchParams } from "../../okr-search-params";
 import { SucKhoe } from "./suc-khoe";
 
@@ -23,11 +24,14 @@ export default function SucKhoePage({
 	searchParams: SearchParams;
 }) {
 	return (
-		<PageShellContent>
-			<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
-				<NoiDung searchParams={searchParams} />
-			</Suspense>
-		</PageShellContent>
+		<>
+			<DauTrangOkrTrang tab="toan-canh" />
+			<PageShellContent>
+				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
+					<NoiDung searchParams={searchParams} />
+				</Suspense>
+			</PageShellContent>
+		</>
 	);
 }
 

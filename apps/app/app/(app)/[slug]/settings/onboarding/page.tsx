@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import {
 	PageShell,
 	PageShellContent,
+	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
 	PageShellTitle,
@@ -27,6 +28,7 @@ export default async function CaiDatOnboardingPage() {
 			<PageShellHeader>
 				<PageShellHeading>
 					<PageShellTitle>{m.settings.title}</PageShellTitle>
+					<PageShellDescription>{m.settings.moTa}</PageShellDescription>
 				</PageShellHeading>
 			</PageShellHeader>
 

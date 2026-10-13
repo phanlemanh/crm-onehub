@@ -8,6 +8,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
+import { DauTrangOkrTrang } from "../dau-trang-okr";
 import { giaiKyHoiY, loadOkrSearchParams } from "../okr-search-params";
 import { HoiYMan } from "./hoi-y";
 
@@ -23,11 +24,14 @@ export default function HoiYPage({
 	searchParams: SearchParams;
 }) {
 	return (
-		<PageShellContent>
-			<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
-				<NoiDung searchParams={searchParams} />
-			</Suspense>
-		</PageShellContent>
+		<>
+			<DauTrangOkrTrang tab="hoi-y" />
+			<PageShellContent>
+				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
+					<NoiDung searchParams={searchParams} />
+				</Suspense>
+			</PageShellContent>
+		</>
 	);
 }
 

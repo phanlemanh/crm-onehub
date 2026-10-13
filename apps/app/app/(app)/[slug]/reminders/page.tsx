@@ -1,4 +1,5 @@
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
+import { SectionHeading } from "@crm/ui/components/section-heading";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
@@ -55,18 +56,18 @@ async function ThongBao() {
 		<HydrateClient>
 			<div className="flex flex-col gap-6">
 				<section aria-labelledby="khoi-zalo" className="flex flex-col gap-3">
-					<h2 id="khoi-zalo" className="font-medium text-sm">
+					<SectionHeading id="khoi-zalo" level={2}>
 						{t.khoiZalo.ten}
-					</h2>
+					</SectionHeading>
 					<KhoiZalo />
 				</section>
 				<section
 					aria-labelledby="khoi-kenh"
 					className="flex flex-col gap-3 border-t pt-5"
 				>
-					<h2 id="khoi-kenh" className="font-medium text-sm">
+					<SectionHeading id="khoi-kenh" level={2}>
 						{t.kenh.tieuDe}
-					</h2>
+					</SectionHeading>
 					<KhoiKenh />
 				</section>
 				<KhoiDongTroLyOkr />

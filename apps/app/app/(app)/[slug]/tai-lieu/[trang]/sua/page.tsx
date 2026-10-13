@@ -2,7 +2,13 @@ import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
-import { PageShell } from "@/components/page-shell";
+import {
+	PageShell,
+	PageShellDescription,
+	PageShellHeader,
+	PageShellHeading,
+	PageShellTitle,
+} from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -12,6 +18,7 @@ import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { workspaceUrl } from "@/lib/workspace-url";
 import { nullIfMissing } from "../../../(agent-builder)/missing-record";
+import { DuongDanTaiLieu } from "../../duong-dan-tai-lieu";
 import { ManSoan } from "../../man-soan";
 import { loadSuaSearchParams } from "./sua-search-params";
 
@@ -22,15 +29,25 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: taiLieuMessages(await getLocale()).metadata.sua };
 }
 
-export default function SuaTrangPage({
+export default async function SuaTrangPage({
 	params,
 	searchParams,
 }: {
 	params: Params;
 	searchParams: SearchParams;
 }) {
+	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+	const m = taiLieuMessages(locale).soan;
 	return (
 		<PageShell>
+			<PageShellHeader
+				breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+			>
+				<PageShellHeading>
+					<PageShellTitle>{m.tieuDeSua}</PageShellTitle>
+					<PageShellDescription>{m.moTaSua}</PageShellDescription>
+				</PageShellHeading>
+			</PageShellHeader>
 			<Suspense fallback={<KhungXuong hinh="chi-tiet" />}>
 				<NoiDung params={params} searchParams={searchParams} />
 			</Suspense>

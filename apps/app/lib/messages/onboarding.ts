@@ -160,6 +160,7 @@ const en = {
 	},
 	settings: {
 		title: "Onboarding",
+		moTa: "Templates hold the steps for each kind of partner; a 30-day plan starts from one.",
 		templates: "Plan templates",
 		departments: "Departments",
 		newTemplate: "New template",
@@ -397,6 +398,7 @@ type OnboardingMessages = {
 	>;
 	settings: {
 		title: string;
+		moTa: string;
 		templates: string;
 		departments: string;
 		newTemplate: string;
@@ -662,6 +664,7 @@ const vi = {
 	},
 	settings: {
 		title: "Điều phối 30 ngày",
+		moTa: "Khuôn giữ các bước cho từng loại đối tác; kế hoạch 30 ngày bắt đầu từ một khuôn.",
 		templates: "Khuôn kế hoạch",
 		departments: "Phòng ban",
 		newTemplate: "Soạn khuôn",

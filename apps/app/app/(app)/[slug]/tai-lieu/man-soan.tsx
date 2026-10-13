@@ -31,12 +31,7 @@ import {
 	useState,
 } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
-import {
-	PageShellContent,
-	PageShellHeader,
-	PageShellHeading,
-	PageShellTitle,
-} from "@/components/page-shell";
+import { PageShellContent } from "@/components/page-shell";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { duongDanhSach, duongTrang } from "@/lib/tai-lieu-man";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -218,11 +213,6 @@ function FormSoan({
 
 	return (
 		<>
-			<PageShellHeader>
-				<PageShellHeading>
-					<PageShellTitle>{sua ? m.tieuDeSua : m.tieuDeMoi}</PageShellTitle>
-				</PageShellHeading>
-			</PageShellHeader>
 			<PageShellContent>
 				<div
 					className="flex min-w-0 max-w-3xl flex-col gap-5"

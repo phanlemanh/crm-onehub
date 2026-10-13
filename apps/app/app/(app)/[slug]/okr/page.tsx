@@ -9,6 +9,7 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { CuaToi } from "./cua-toi";
+import { DauTrangOkrTrang } from "./dau-trang-okr";
 import { giaiKy, loadOkrSearchParams } from "./okr-search-params";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
@@ -23,11 +24,14 @@ export default function CuaToiPage({
 	searchParams: SearchParams;
 }) {
 	return (
-		<PageShellContent>
-			<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
-				<NoiDung searchParams={searchParams} />
-			</Suspense>
-		</PageShellContent>
+		<>
+			<DauTrangOkrTrang tab="cua-toi" />
+			<PageShellContent>
+				<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
+					<NoiDung searchParams={searchParams} />
+				</Suspense>
+			</PageShellContent>
+		</>
 	);
 }
 

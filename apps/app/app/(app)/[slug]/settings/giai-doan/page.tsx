@@ -25,33 +25,45 @@ export default async function GiaiDoanSettingsPage() {
 
 	return (
 		<PageShell width="page">
-			<Suspense fallback={<KhungXuong hinh="danh-sach" />}>
-				<GiaiDoan tieuDe={t.giaiDoan.tieuDe} moTa={t.giaiDoan.moTa} />
-			</Suspense>
+			<PageShellHeader>
+				<PageShellHeading>
+					<PageShellTitle>{t.giaiDoan.tieuDe}</PageShellTitle>
+					<PageShellDescription>{t.giaiDoan.moTa}</PageShellDescription>
+					<Suspense fallback={null}>
+						<LyDo />
+					</Suspense>
+				</PageShellHeading>
+			</PageShellHeader>
+			<PageShellContent>
+				<Suspense fallback={<KhungXuong hinh="danh-sach" />}>
+					<GiaiDoan />
+				</Suspense>
+			</PageShellContent>
 		</PageShell>
 	);
 }
 
-async function GiaiDoan({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
+async function napGiaiDoan() {
 	await requireSession();
+	await getServerQueryClient().prefetchQuery(
+		getServerTrpc().giaiDoan.list.queryOptions(),
+	);
+}
 
-	const trpc = getServerTrpc();
-	const queryClient = getServerQueryClient();
-
-	await queryClient.prefetchQuery(trpc.giaiDoan.list.queryOptions());
-
+async function LyDo() {
+	await napGiaiDoan();
 	return (
 		<HydrateClient>
-			<PageShellHeader>
-				<PageShellHeading>
-					<PageShellTitle>{tieuDe}</PageShellTitle>
-					<PageShellDescription>{moTa}</PageShellDescription>
-					<LyDoGiaiDoan />
-				</PageShellHeading>
-			</PageShellHeader>
-			<PageShellContent>
-				<GiaiDoanSettings />
-			</PageShellContent>
+			<LyDoGiaiDoan />
+		</HydrateClient>
+	);
+}
+
+async function GiaiDoan() {
+	await napGiaiDoan();
+	return (
+		<HydrateClient>
+			<GiaiDoanSettings />
 		</HydrateClient>
 	);
 }

@@ -1,6 +1,15 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageShell } from "@/components/page-shell";
+import {
+	PageShell,
+	PageShellActions,
+	PageShellDescription,
+	PageShellHeader,
+	PageShellHeading,
+	PageShellTitle,
+} from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -8,8 +17,8 @@ import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { coHoiCuaVai } from "./co-hoi";
-import { DangTaiDanhSach } from "./dang-tai";
 import { DanhSach } from "./danh-sach";
+import { DongNguonTat, HanhDongTaiLieu } from "./dau-trang-tai-lieu";
 import type { LuaChonTai } from "./hop-tai-nguon";
 import { chuTrangVaDonVi, trangDangDung } from "./lua-chon-trang";
 import { loadTaiLieuSearchParams } from "./tai-lieu-search-params";
@@ -20,37 +29,93 @@ export async function generateMetadata(): Promise<Metadata> {
 	return { title: taiLieuMessages(await getLocale()).metadata.danhSach };
 }
 
-export default function TaiLieuPage({
+export default async function TaiLieuPage({
 	searchParams,
 }: {
 	searchParams: SearchParams;
 }) {
+	const m = taiLieuMessages(await getLocale());
+
 	return (
 		<PageShell>
-			<Suspense fallback={<DangTaiDanhSach />}>
+			<PageShellHeader>
+				<PageShellHeading>
+					<PageShellTitle>{m.tieuDe}</PageShellTitle>
+					<PageShellDescription>{m.moTa}</PageShellDescription>
+					<Suspense fallback={null}>
+						<DongNguon />
+					</Suspense>
+				</PageShellHeading>
+				<PageShellActions>
+					<Suspense
+						fallback={<Skeleton className="h-8 w-80 max-w-full rounded-md" />}
+					>
+						<HanhDong searchParams={searchParams} />
+					</Suspense>
+				</PageShellActions>
+			</PageShellHeader>
+			<Suspense fallback={<KhungXuong hinh="bang" />}>
 				<NoiDung searchParams={searchParams} />
 			</Suspense>
 		</PageShell>
 	);
 }
 
-async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
-	const session = await requireSession();
-
+async function thamSoTaiLieu(searchParams: SearchParams) {
 	const thamSo = await loadTaiLieuSearchParams(searchParams);
-	const tab = thamSo[SEARCH_PARAM.taiLieu.tab];
-	const loai = thamSo[SEARCH_PARAM.taiLieu.loai];
-	const donVi = thamSo[SEARCH_PARAM.taiLieu.donVi];
-	const chu = thamSo[SEARCH_PARAM.taiLieu.chu];
-	const nhom = thamSo[SEARCH_PARAM.taiLieu.nhom];
-	const page = Math.max(1, thamSo[SEARCH_PARAM.list.page]);
-	const trpc = getServerTrpc();
+	return {
+		tab: thamSo[SEARCH_PARAM.taiLieu.tab],
+		loai: thamSo[SEARCH_PARAM.taiLieu.loai],
+		donVi: thamSo[SEARCH_PARAM.taiLieu.donVi],
+		chu: thamSo[SEARCH_PARAM.taiLieu.chu],
+		nhom: thamSo[SEARCH_PARAM.taiLieu.nhom],
+		page: Math.max(1, thamSo[SEARCH_PARAM.list.page]),
+	};
+}
+
+async function DongNguon() {
+	await requireSession();
 	const queryClient = getServerQueryClient();
-	const [trangThai, chonNguoi, workspace] = await Promise.all([
+	await queryClient.prefetchQuery(
+		getServerTrpc().taiLieuNguon.trangThai.queryOptions(),
+	);
+	return (
+		<HydrateClient>
+			<DongNguonTat />
+		</HydrateClient>
+	);
+}
+
+async function HanhDong({ searchParams }: { searchParams: SearchParams }) {
+	const session = await requireSession();
+	const loc = await thamSoTaiLieu(searchParams);
+	const queryClient = getServerQueryClient();
+	const [trangThai, chonNguoi] = await Promise.all([
 		queryClient
-			.fetchQuery(trpc.taiLieuNguon.trangThai.queryOptions())
+			.fetchQuery(getServerTrpc().taiLieuNguon.trangThai.queryOptions())
 			.catch(() => null),
 		chuTrangVaDonVi(session.user),
+	]);
+	const luaChon: LuaChonTai = {
+		toiId: session.user.id,
+		...chonNguoi,
+		trangDangDung: trangThai?.bat ? await trangDangDung() : [],
+	};
+	return (
+		<HydrateClient>
+			<HanhDongTaiLieu {...loc} luaChon={luaChon} />
+		</HydrateClient>
+	);
+}
+
+async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
+	await requireSession();
+
+	const { tab, loai, donVi, chu, nhom, page } =
+		await thamSoTaiLieu(searchParams);
+	const trpc = getServerTrpc();
+	const queryClient = getServerQueryClient();
+	const [workspace] = await Promise.all([
 		queryClient.fetchQuery(trpc.workspace.get.queryOptions()).catch(() => null),
 		queryClient.prefetchQuery(
 			trpc.taiLieu.list.queryOptions({
@@ -77,11 +142,6 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 			: null,
 	]);
 	const coHoi = coHoiCuaVai(workspace?.viewerRole);
-	const luaChon: LuaChonTai = {
-		toiId: session.user.id,
-		...chonNguoi,
-		trangDangDung: trangThai?.bat ? await trangDangDung() : [],
-	};
 
 	return (
 		<HydrateClient>
@@ -90,7 +150,6 @@ async function NoiDung({ searchParams }: { searchParams: SearchParams }) {
 				coHoi={coHoi}
 				donVi={donVi}
 				loai={loai}
-				luaChon={luaChon}
 				nhom={nhom}
 				page={page}
 				tab={tab}
