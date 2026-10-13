@@ -73,12 +73,15 @@ import { QuickAddContact, QuickAddDeal } from "./quick-add";
 import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
 import {
 	AddRow,
+	BangDaLuuTru,
 	CompanyAbout,
 	DealAmount,
 	DomainLink,
+	DongDaLuuTru,
 	lyDoLoi,
 	MetaLine,
 	RecordSheetFrame,
+	tenCaNhan,
 } from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
 
@@ -97,8 +100,8 @@ function pendingFields(company: Company, locale: Locale): string[] {
 }
 
 function companyConsequence(company: Company, m: RecordSheetMessages): string {
-	const deals = company.deals.length;
-	const contacts = company.contacts.length;
+	const deals = company.deals.length + company.archivedDeals.length;
+	const contacts = company.contacts.length + company.archivedContacts.length;
 	const c = m.company;
 
 	const gone =
@@ -519,6 +522,12 @@ function CompanyContacts({
 		/>
 	) : null;
 
+	const daCat = company.archivedContacts.map((contact) => ({
+		id: contact.id,
+		name: tenCaNhan(contact),
+		archivedAt: contact.archivedAt,
+	}));
+
 	if (company.contacts.length === 0) {
 		return (
 			<>
@@ -536,6 +545,11 @@ function CompanyContacts({
 						}
 					/>
 				)}
+				<BangDaLuuTru
+					items={daCat}
+					columns={contactColumns(m)}
+					kind="contact"
+				/>
 			</>
 		);
 	}
@@ -625,6 +639,11 @@ function CompanyContacts({
 					columns={contactColumns(m).length}
 					onClick={onAdd}
 				/>
+				<DongDaLuuTru
+					items={daCat}
+					columns={contactColumns(m).length}
+					kind="contact"
+				/>
 			</SimpleTable>
 		</>
 	);
@@ -670,6 +689,11 @@ function CompanyDeals({
 						}
 					/>
 				)}
+				<BangDaLuuTru
+					items={company.archivedDeals}
+					columns={dealColumns(m)}
+					kind="deal"
+				/>
 			</>
 		);
 	}
@@ -713,6 +737,11 @@ function CompanyDeals({
 					label={m.company.newDeal}
 					columns={dealColumns(m).length}
 					onClick={onAdd}
+				/>
+				<DongDaLuuTru
+					items={company.archivedDeals}
+					columns={dealColumns(m).length}
+					kind="deal"
 				/>
 			</SimpleTable>
 		</>

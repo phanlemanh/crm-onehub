@@ -391,6 +391,7 @@ const caNhanGia = () => ({
 	},
 	isPrimaryContact: false,
 	deals: [],
+	archivedDeals: [],
 });
 
 const congTyGia = () => ({
@@ -434,6 +435,8 @@ const congTyGia = () => ({
 	soKeHoach: 0,
 	xuongCoKhuon: false,
 	deals: [],
+	archivedContacts: [],
+	archivedDeals: [],
 });
 
 const thoaThuanGia = () => ({
@@ -462,6 +465,7 @@ const thoaThuanGia = () => ({
 	createdAt: "2026-09-01T00:00:00.000Z",
 	archivedAt: null as string | null,
 	contacts: [],
+	archivedContacts: [],
 });
 
 const RS = recordSheetMessages("vi");
@@ -998,8 +1002,8 @@ describe("vong-doi-mot-cach-cat", () => {
 			expect(`${ten}:${chu("vi").archivedToggle}`).toBe(`${ten}:Đã lưu trữ`);
 			expect(`${ten}:${chu("en").archivedToggle}`).toBe(`${ten}:Archived`);
 		}
-		const truongVi = `${VI.fields.archivedNote} ${VI.fields.archiveBody}`;
-		const truongEn = `${crmMessages("en").fields.archivedNote} ${crmMessages("en").fields.archiveBody}`;
+		const truongVi = VI.fields.archivedNote;
+		const truongEn = crmMessages("en").fields.archivedNote;
 		expect(/ẩn/iu.test(truongVi)).toBe(false);
 		expect(/hidden/i.test(truongEn)).toBe(false);
 		expect(VI.fields.archivedNote).toBe("giữ giá trị, cất khỏi mọi nơi");

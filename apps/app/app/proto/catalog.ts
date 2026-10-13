@@ -11,6 +11,18 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "ngan-ho-so-trong-lo-trinh",
+		ten: "Ngăn hồ sơ trong trang Lộ trình — tóm tắt hồ sơ của việc",
+		states: [
+			{ id: "ST-ngan-day-du", nhan: "Việc LT1 — mọi người" },
+			{ id: "ST-ngan-chu-kho", nhan: "Việc LT1 — chủ không gian làm việc" },
+			{ id: "ST-ngan-o-vang", nhan: "Việc 4n — có ô chưa ghi" },
+			{ id: "ST-ngan-chua-co-tom-tat", nhan: "Việc N0 — chưa có hồ sơ" },
+			{ id: "ST-ngan-khuon-cu", nhan: "Trang vẽ bằng khuôn bản 1" },
+			{ id: "ST-ngan-doan-dai", nhan: "Việc R1g — lý do dài" },
+		],
+	},
+	{
 		slug: "trang-lo-trinh-trong-crm",
 		ten: "Trang Lộ trình trong CRM — chỉ đọc",
 		states: [
@@ -1104,6 +1116,28 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			{ id: "ST-khung-loi", nhan: "Khung bản ghi — tải lỗi, có Thử lại" },
 			{ id: "ST-tra-cuu-dang-chay", nhan: "Hàng nút — Kara đang tra cứu" },
 			{ id: "ST-them-nhanh-hoi", nhan: "Thêm nhanh — hỏi lại khi lỡ đóng" },
+		],
+	},
+	{
+		slug: "gui-tin-hieu-trong-crm",
+		ten: "Gửi tín hiệu — nút trên thanh đầu trang, hộp kể, trang Tín hiệu đã gửi",
+		states: [
+			{ id: "ST-nut", nhan: "Nút «Gửi tín hiệu» (hộp đóng)" },
+			{ id: "ST-hop-trong", nhan: "Hộp — ô trống, nút Gửi khoá" },
+			{ id: "ST-hop-dang-go", nhan: "Hộp — đã gõ, màn gửi kèm" },
+			{ id: "ST-hop-dang-gui", nhan: "Hộp — đang gửi" },
+			{ id: "ST-hop-da-gui", nhan: "Hộp — biên nhận có mã" },
+			{ id: "ST-hop-qua-tran", nhan: "Hộp — quá trần ngày, chữ giữ" },
+			{ id: "ST-hop-loi", nhan: "Hộp — máy chủ lỗi, gửi lại được" },
+			{ id: "ST-ds-co", nhan: "Trang — đủ các trạng thái" },
+			{ id: "ST-ds-rong", nhan: "Trang — chưa gửi tín hiệu nào" },
+			{ id: "ST-ds-dang-tai", nhan: "Trang — đang tải" },
+			{
+				id: "ST-ds-khong-doc-ban-ve",
+				nhan: "Trang — chưa đọc được trạng thái sau gom",
+			},
+			{ id: "ST-ds-xac-nhan-xoa", nhan: "Trang — hỏi lại trước khi xoá" },
+			{ id: "ST-ds-loi", nhan: "Trang — tải lỗi, có Thử lại" },
 		],
 	},
 	{
