@@ -87,8 +87,30 @@ function doTrongTrang(chon) {
 		doiChung = cat(ban);
 		ban.remove();
 	}
-	const vung = document.querySelector(chon.vungCuon) ?? document.scrollingElement;
+	const vungGoc = document.querySelector("[data-khu=gop-vao]");
+	const hopTren = (el) => {
+		const ds = [];
+		for (let x = el?.parentElement ?? null; x; x = x.parentElement) {
+			if (x.clientWidth > 0) ds.push(x);
+			if (x.matches(chon.dinh)) break;
+		}
+		return ds;
+	};
+	const tran = (el) => hopTren(el).filter((x) => x.scrollWidth > x.clientWidth + 1).length;
+	const hop = hopTren(vungGoc);
+	const tranThat = vungGoc ? tran(vungGoc) : null;
+	let doiChungTran = null;
+	if (vungGoc) {
+		const rong = document.createElement("div");
+		rong.style.width = "4000px";
+		rong.style.height = "1px";
+		vungGoc.appendChild(rong);
+		doiChungTran = tran(vungGoc) > 0;
+		rong.remove();
+	}
 	return {
+		soHop: hop.length,
+		coHopCuon: hop.some((x) => x.matches(chon.cuon)),
 		coVung: document.querySelector("[data-khu=gop-vao]") !== null,
 		nhan: dongNoi?.querySelector("[data-muc-tin]")?.textContent ?? null,
 		coCau: dongNoi?.querySelector("[data-ly-do-cau]") !== null,
@@ -97,7 +119,8 @@ function doTrongTrang(chon) {
 		catCau: cat(cauEl),
 		catCanCu: cat(canCuEl),
 		soDongCau: soDong(cauEl),
-		tranNgang: vung ? vung.scrollWidth > vung.clientWidth + 1 : null,
+		tranNgang: tranThat === null ? null : tranThat > 0,
+		doiChungTran,
 		doiChung,
 	};
 }
@@ -133,14 +156,16 @@ async function doKho(tenKho) {
 				for (const s of ["nextjs-portal", ".tsqd-parent-container", ".tsqd-open-btn-container"])
 					for (const el of document.querySelectorAll(s)) el.remove();
 			});
-			const o = await p.evaluate(doTrongTrang, { vungCuon: `[data-okr-sheet="${id}"] [data-slot=detail-sheet-body], [data-okr-sheet="${id}"]` });
+			const o = await p.evaluate(doTrongTrang, { dinh: "[data-slot=sheet-content]", cuon: "[data-slot=sheet-body], .overflow-y-auto" });
 			const ten = `${ca.mucTin} ${tenKho}`;
+			if (o.soHop === 0 || !o.coHopCuon) throw new Error(`khong co hop cuon co kich thuoc tu vung Duong ly do toi sheet-content (${o.soHop} hop)`);
 			kiem(`${ten}: nhan «${o.nhan}» === «${m.mucTin[ca.mucTin]}»`, o.nhan === m.mucTin[ca.mucTin]);
 			kiem(`${ten}: cau ly do ${o.coCau ? "co" : "khong"}`, o.coCau === (ca.mucTin !== "chua-co-ly-do"));
 			kiem(`${ten}: dong can cu ${o.coCanCu ? "co" : "khong"}`, o.coCanCu === (ca.mucTin === "co-so-lieu"));
 			kiem(`${ten}: dau Kara ${o.kara}`, o.kara === (ca.kara ? 1 : 0));
 			kiem(`${ten}: khong cat chu (cau ${o.catCau}, can cu ${o.catCanCu})`, o.catCau !== true && o.catCanCu !== true);
-			kiem(`${ten}: khong tran ngang (${o.tranNgang})`, o.tranNgang === false);
+			kiem(`${ten}: khong tran ngang tren ${o.soHop} hop tu vung toi sheet (${o.tranNgang})`, o.tranNgang === false);
+			kiem(`${ten}: doi chung do — chen khoi rong 4000px thi bao tran ngang`, o.doiChungTran === true);
 			if (o.coCau) kiem(`${ten}: doi chung do — ban sao kep 1 dong bi bao cat chu`, o.doiChung === true);
 			if (ca.dai && tenKho === "390") kiem(`${ten}: cau dai xuong ${o.soDongCau} dong (>= 2)`, o.soDongCau >= 2);
 			const tep = join(ANH, `${ca.mucTin}-${tenKho}.png`);
