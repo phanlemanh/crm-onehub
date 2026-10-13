@@ -1587,6 +1587,18 @@ executors:
     vc_man_khung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-khung.dom.tsx"
     vc_man_o_soan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-o-soan.dom.tsx -t 'vc-o-soan-giao|vc-o-soan-loi'"
     vc_man_chuyen: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-chuyen-hop.dom.tsx"
+    cvc_chep: 'bun run test -- "cd packages/db && bun test test/viec-chep.spec.ts -t cvc-chep-du"'
+    cvc_chep_lai: 'bun run test -- "cd packages/db && bun test test/viec-chep.spec.ts -t cvc-chep-lai"'
+    cvc_nguoi_tao: 'bun run test -- "cd packages/db && bun test test/viec-chep.spec.ts -t cvc-nguoi-tao"'
+    cvc_dao: 'bun run test -- "cd packages/db && bun test test/viec-chep.spec.ts -t cvc-dao"'
+    cvc_dong_thoi_gian: 'bun run test -- "cd apps/api && bun test test/viec-can-lam-cu.spec.ts -t cvc-dong-thoi-gian"'
+    cvc_api: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-can-lam-cu.spec.ts -t cvc-api"'
+    cvc_hien: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-can-lam-cu.spec.ts -t cvc-hien"'
+    cvc_tac_nhan: 'bun run test -- "cd apps/agent && bun test test/tac-nhan-giao-viec.integration.spec.ts -t cvc-tac-nhan"'
+    cvc_nhac: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/tac-nhan-giao-viec.integration.spec.ts -t cvc-nhac"'
+    cvc_ma_lech: 'bun run test -- "cd apps/agent && TZ=Asia/Ho_Chi_Minh bun test test/ma-lech-viec.integration.spec.ts"'
+    cvc_lenh: 'bun run test -- "cd packages/db && bun test test/viec-chep-lenh.spec.ts"'
+    cvc_man_dong_thoi_gian: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/dong-thoi-gian-viec-cu.dom.tsx"
   script:
     h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'
     ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
@@ -2484,6 +2496,9 @@ executors:
     vc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-chung/rang/man.mjs"'
     vc_san_thiet_ke: node _acceptance/viec-chung/rang/san-thiet-ke.mjs
     vc_dot_bien: node _acceptance/viec-chung/rang/dot-bien.mjs
+    cvc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/chep-viec-can-lam-cu/rang/man.mjs"'
+    cvc_dot_bien: node _acceptance/chep-viec-can-lam-cu/rang/dot-bien.mjs
+    cvc_quet_task: node _acceptance/chep-viec-can-lam-cu/rang/quet-task.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

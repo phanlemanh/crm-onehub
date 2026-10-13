@@ -1,0 +1,162 @@
+slug: chep-viec-can-lam-cu
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_chep
+    expected: "exit 0; -t cvc-chep-du của packages/db/test/viec-chep.spec.ts trên kho thử. Bảy việc cần làm cũ dựng bằng tx.activity.create theo đúng khuôn mà ba đường ghi cũ để lại (khuôn rút từ activities.service.ts, run-runtime.ts, ma-lech.ts ở sha trước vòng, ghi trong spec): (1) mở có hạn gắn thoả thuận D và công ty C, (2) đã xong gắn cá nhân K, (3) mở gắn kế hoạch P, (4) subject null body 'Gọi lại\\nchi tiết', (5) subject và body null, (6) meta {source:'agent', runId}, (7) meta {platformBrokerId:'MB-1'} gắn P. Chạy chepTatCa qua đúng hàm mà lệnh --chay gọi, với người chạy là quản trị Q. Mỗi việc: số Việc có activityGocId = id khác 1 thì ném 'cvc: chep khong ra dung mot viec <ca>'; sai tieuDe ((4) 'Gọi lại', (5) 'Việc cần làm'), moTa, hanNgay, trangThai ((2) XONG, khepLuc = completedAt; còn lại CHUA_LAM, khepLuc null), nguoiGiaoId = nguoiThucHienId = taoBoiId = createdById, taoLuc = createdAt thì ném 'cvc: chep sai truong <truong> <ca>'; tập hàng ViecGan khác tập cột khác null của activity ((1) đúng hai hàng D và C) thì ném 'cvc: chep sai gan <ca>'; khoaNguon khác 'ma-lech:MB-1' ở (7) hay khác null ở việc khác thì ném 'cvc: chep sai khoa nguon <ca>'; ViecVet không phải đúng một dòng loai 'tao', nguon 'chep-cu', luc = createdAt, sau.activityGocId = id thì ném 'cvc: chep sai vet <ca>'. Bản gốc: JSON của từng hàng activity trước và sau bằng nhau, không thì ném 'cvc: ban goc bi doi <ca>'. Đối chứng âm cùng fixture: một ghi chú NOTE và một hàng CALL không sinh Việc, tổng Việc tăng đúng 7, không thì ném 'cvc: chep ca hoat dong khong phai viec can lam'. Chiều đỏ ở E13 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/src/viec.ts, packages/db/src/viec-ghi.ts, packages/db/src/viec-chep.ts, packages/db/test/viec-chep.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_chep_lai
+    expected: "exit 0; -t cvc-chep-lai của packages/db/test/viec-chep.spec.ts trên fixture của E1 sau một lần chép. Chạy chepTatCa lần hai: số Việc không đổi và kết quả báo chep = 0, không thì ném 'cvc: chep lai nhan ban <n>'. Ca hỏng giữa chừng: thêm ba việc cần làm mới; chepTatCa nhận hàm chép một việc bọc chepViecCanLam thật và ném Error('cvc-loi-cay') đúng ở id việc giữa (chỗ cấy của design doc); chạy chepTatCa: hai việc kia có Việc, việc giữa không có Việc nào, kết quả có mục lỗi mang id việc giữa và lý do, không thì ném 'cvc: hong giua chung lam mat viec khac' hay 'cvc: viec hong khong duoc bao'; gọi lại chepTatCa với hàm chép mặc định: việc giữa được chép, tổng bằng số việc cần làm, không thì ném 'cvc: chay lai khong chep viec da hong'. Ca chạy song song: hai lời chepTatCa cùng lúc (Promise.all) trên một việc cần làm mới — đúng một Việc, không thì ném 'cvc: chay song song nhan ban'. Ca chạy thử: chepTatCa({thu: true}) với hàm cấy lỗi của ca trên trên ba việc mới — kết quả liệt đúng id việc giữa ở loi, vân tay (đếm viec, viecVet, viecGan) trước và sau bằng nhau, không thì ném 'cvc: chay thu ghi vao kho' hay 'cvc: chay thu khong bao loi'. Chiều đỏ ở E13 (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/prisma/schema.prisma, packages/db/src/viec-ghi.ts, packages/db/src/viec-chep.ts, packages/db/test/viec-chep.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_nguoi_tao
+    expected: "exit 0; -t cvc-nguoi-tao của packages/db/test/viec-chep.spec.ts. Thành viên dựng qua gieoThanhVien: 'cvc-okr' vai okr, 'cvc-roi' đã gỡ khỏi tổ chức (đường gỡ thật của workspace), quản trị 'cvc-q', thành viên thường 'cvc-m'. Ma trận viết trước trong spec: {mở, xong} × {gắn thoả thuận, chỉ gắn kế hoạch, không gắn gì} × {cvc-m, cvc-okr, cvc-roi} = 18 việc cần làm, khuôn E1; số ô đã chạy khác 18 thì ném 'cvc: ma tran nguoi tao thieu o <n>'. chepTatCa với nguoi cvc-q: ô nào không có đúng một Việc thì ném 'cvc: o khong chep duoc <ca>'; 4 ô (mở × {okr, rời} × {thoả thuận, kế hoạch}) cộng 2 ô (mở × {okr, rời} × không gắn) có nguoiGiaoId = nguoiThucHienId = cvc-q, taoBoiId = người tạo cũ và vết 'tao' có sau.nguoiTaoGoc.id bằng người tạo cũ, không thì ném 'cvc: nguoi tao khong nhan van giu <ca>'; 12 ô còn lại giữ người tạo cũ ở cả ba cột, không thì ném 'cvc: viec doi nguoi sai <ca>'. Lệnh từ chối: chepTatCa không có người chạy, hay người chạy là cvc-m, ném lời có 'quản trị' trước khi đọc việc nào và số hàng viec trước và sau bằng nhau, không thì ném 'cvc: chay khong co quan tri van ghi'. Chiều đỏ ở E13 (c)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/viec-chep.ts, packages/db/src/vai-doi-tac.ts, packages/db/test/viec-chep.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_dao
+    expected: "exit 0; -t cvc-dao của packages/db/test/viec-chep.spec.ts. Hai việc cần làm mở gắn thoả thuận, chép; bản chép thứ hai được người thực hiện chuyển sang DANG_LAM qua doiTrangThai thật. daoTatCa không cờ: bản thứ nhất mất cùng mọi hàng ViecGan và ViecVet của nó, không thì ném 'cvc: dao khong xoa ban chua doi'; bản thứ hai còn và kết quả liệt nó ở giuLai, không thì ném 'cvc: dao xoa ban da doi'. daoTatCa với caBanDaDoi: bản thứ hai mất, không thì ném 'cvc: dao ca ban da doi khong xoa'. Sau đảo: JSON hai hàng activity gốc bằng lúc trước khi chép, không thì ném 'cvc: dao doi ban goc'; activities.timeline (caller tRPC thật, phiên thành viên) của thoả thuận có lại hai việc cần làm, không thì ném 'cvc: dao xong viec cu khong hien lai'. Đối chứng âm: một Việc tạo qua taoViec nguồn web cùng thoả thuận không bị đảo xoá, không thì ném 'cvc: dao xoa viec khong phai ban chep'. Chiều đỏ ở E13 (d)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/viec-ghi.ts, packages/db/src/viec-chep.ts, apps/api/src/activities/**, packages/db/test/viec-chep.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_dong_thoi_gian
+    expected: "exit 0; -t cvc-dong-thoi-gian của apps/api/test/viec-can-lam-cu.spec.ts. Thoả thuận D có một ghi chú (activities.create thật), việc cần làm A đã chép (chepViecCanLam thật) và B chưa chép (khuôn của E1). activities.timeline({dealId: D, filter: 'all'}): chứa ghi chú và B, không chứa A, không thì ném 'cvc: viec da chep con tren dong thoi gian' hay 'cvc: viec chua chep bien mat'; activities.timelineCounts({dealId: D}) có all = 2 và không có khoá upcoming, done, không thì ném 'cvc: dem the sai <json>'. Lời gọi filter 'upcoming' hay 'done' trả BAD_REQUEST của Zod, không thì ném 'cvc: con the sap toi da xong'. viec.cuaBanGhi({dealId: D}) chứa Việc chép của A, không thì ném 'cvc: khoi viec thieu ban chep'. Chiều đỏ ở E13 (e)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/activities/**, packages/db/src/viec-chep.ts, apps/api/test/viec-can-lam-cu.spec.ts]
+
+  - id: E5b
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.cvc_man_dong_thoi_gian
+    expected: "exit 0; apps/app/test/dong-thoi-gian-viec-cu.dom.tsx, mock tRPC theo khuôn viec-o-soan.dom.tsx. Mount <Timeline anchor={{ dealId }}/> với activities.timeline trả một ghi chú và một hàng TASK chưa chép có dueAt quá hạn: thanh thẻ có đúng 'Tất cả', 'Ghi chú', 'Email', 'Cuộc họp' theo thứ tự, không thì ném 'cvc: the con sap toi da xong <ds>'; dòng TASK hiện tiêu đề và hạn, không có role=checkbox nào trong dòng, không thì ném 'cvc: dong viec cu con o tich'; không có khối ghim việc mở (data-khoi=viec-can-lam-ghim), không thì ném 'cvc: con khoi ghim'. Đường dẫn ban đầu ?tab=upcoming: thẻ đang chọn là 'Tất cả', không thì ném 'cvc: tab cu khong ve tat ca'. Đối chứng dương cùng fixture: dòng ghi chú hiện nội dung. Tổng quan: mount DashboardSummary với overdueTasks một dòng — dòng không có role=checkbox, không thì ném 'cvc: tong quan con o tich'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/timeline/**, "apps/app/app/(app)/[slug]/dashboard-summary.tsx", apps/app/lib/messages/crm.ts, apps/app/lib/trpc/cache.ts, apps/app/test/dong-thoi-gian-viec-cu.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_api
+    expected: "exit 0; -t cvc-api của apps/api/test/viec-can-lam-cu.spec.ts. Phiên thành viên: activities.create({type:'TASK', dealId, subject:'x'}) trả TRPCError BAD_REQUEST và số hàng activity không đổi, không thì ném 'cvc: api van nhan TASK'; đối chứng dương: type 'NOTE' thành công. Router: appRouter._def.procedures không có 'activities.complete' và 'activities.myTasks', không thì ném 'cvc: con thu tuc <ten>'. Tổng quan phạm vi 'me' của người A có: Việc quá hạn V (taoViec thật), việc cần làm quá hạn chưa chép U, việc cần làm quá hạn đã chép W — overdueTasks chứa U không chứa W, viecQuaHan chứa V và bản chép của W, không thì ném 'cvc: tong quan hien viec da chep' hay 'cvc: tong quan mat viec cu chua chep'; quaHan.viec bằng 3, không thì ném 'cvc: dem qua han sai <n>'. Chiều đỏ ở E13 (f), (j)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/activities/**, apps/api/src/dashboard/**, apps/api/src/generated/server.ts, apps/api/test/viec-can-lam-cu.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_tac_nhan
+    expected: "exit 0; apps/agent/test/tac-nhan-giao-viec.integration.spec.ts trên kho thử, dựng Tác nhân và lượt chạy theo khuôn durable-agent-runtime.integration.spec.ts (bản khai có crm.activity.create activityTypes ['NOTE','TASK'], lượt duyệt). Người khởi chạy U vai member. createRunActivity(runId, 'call-1', {type:'TASK', targetKind:'deal', targetId: D, subject:'Gửi báo giá', dueAt}): đúng một Việc tieuDe 'Gửi báo giá', nguoiGiaoId = nguoiThucHienId = U, một hàng ViecGan dealId D, hanNgay = dueAt, vết 'tao' nguồn 'tac-nhan', không thì ném 'cvc: tac nhan giao viec sai <truong>'; AgentAction của lời gọi có status SUCCEEDED và externalId = id Việc, không thì ném 'cvc: so hanh dong sai'; số hàng activity type TASK bằng 0, không thì ném 'cvc: tac nhan con ghi TASK'. Gọi lại cùng 'call-1': vẫn một Việc, không thì ném 'cvc: goi lai nhan ban'. Đổi member.role của U sang 'okr' rồi gọi 'call-2': ném lời chứa 'chỉ OKR', số Việc và AgentAction SUCCEEDED không đổi, không thì ném 'cvc: tac nhan giao cho vai okr'. parseAgentManifest của bản khai đã lưu (JSON chép nguyên văn khuôn đời trước, activityTypes ['NOTE','TASK']) không ném, không thì ném 'cvc: ban khai cu khong doc duoc'. Đối chứng dương: 'call-3' loại NOTE ghi đúng một hàng activity NOTE như cũ. Chiều đỏ ở E13 (g)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/run-runtime.ts, apps/agent/agent/subagents/agent_runner/**, packages/validation/src/agent-manifest.ts, packages/db/src/viec-ghi.ts, apps/agent/test/tac-nhan-giao-viec.integration.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_ma_lech
+    expected: "exit 0; apps/agent/test/ma-lech-viec.integration.spec.ts trên kho thử, kế hoạch 30 ngày P (createFromTemplate qua đường ghi thật) người cầm trịch O vai member, việc onboarding-identify chạy qua xuLyMaLech thật với mã 'MB-9' chưa ai mang. Lần 1: đúng một Việc người giao = người thực hiện = O, một hàng ViecGan planId P, hanNgay = đầu ngày giờ VN, khoaNguon 'ma-lech:MB-9', vết 'tao' nguồn 'tac-nhan', số activity TASK = 0, không thì ném 'cvc: ma lech giao viec sai <truong>'. Lần 2 cùng mã khi Việc còn mở: kết quả 'không giao trùng', số Việc vẫn 1, không thì ném 'cvc: ma lech giao trung'. Ca việc cũ: kế hoạch P2 có việc cần làm cũ mở chưa chép meta {platformBrokerId:'MB-8'} (khuôn E1) — chạy mã MB-8: không Việc nào, kết quả 'không giao trùng', không thì ném 'cvc: ma lech giao trung khi con viec cu'; đối chứng: sau khi chép nó, chạy lại vẫn không giao (Việc chép mang khoaNguon), không thì ném 'cvc: ma lech khong thay ban chep'. Việc lần 1 sang XONG (doiTrangThai thật) rồi chạy lại: số Việc 2, không thì ném 'cvc: ma lech khong giao lai sau xong'. Chiều đỏ ở E13 (h)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/agent/agent/lib/ma-lech.ts, packages/db/src/viec-ghi.ts, packages/db/src/viec-chep.ts, apps/agent/test/ma-lech-viec.integration.spec.ts, apps/agent/test/dieu-phoi-va.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_hien
+    expected: "exit 0; -t cvc-hien của apps/api/test/viec-can-lam-cu.spec.ts. Người A tạo việc cần làm cũ quá hạn gắn thoả thuận D (khuôn E1), chép bằng chepViecCanLam thật. Phiên A: viec.cuaToi({nhom:'giao-cho-toi'}) chứa bản chép đúng một lần, viec.cuaBanGhi({dealId: D}) chứa nó đúng một lần, dashboard.summary phạm vi 'me' có nó trong viecQuaHan đúng một lần và overdueTasks không có hàng gốc, không thì ném 'cvc: ban chep hien sai <cho> <n>'. Đối chứng dương cùng fixture: trước khi chép, overdueTasks có hàng gốc."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/viec/**, apps/api/src/dashboard/**, packages/db/src/viec-chep.ts, apps/api/test/viec-can-lam-cu.spec.ts]
+
+  - id: E9b
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_nhac
+    expected: "exit 0; -t cvc-nhac của apps/agent/test/tac-nhan-giao-viec.integration.spec.ts. Việc cần làm cũ quá hạn của A gắn thoả thuận D, chép bằng chepViecCanLam thật. Nhịp nhắc chạy sau 08:30 giờ VN (lenLichNhac rồi chayNhac, Zalo giả theo hợp đồng gửi tin thật như nhac-viec.integration.spec.ts): bộ gom của A có đúng một dòng viec-qua-han mang id bản chép và tin gửi A có tiêu đề nó cùng tên D, không thì ném 'cvc: nhac thieu ban chep'. Đối chứng âm: một việc cần làm chưa chép quá hạn của A không vào bộ gom, không thì ném 'cvc: nhac lay viec cu'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/onboarding-nhac.ts, packages/db/src/viec-chep.ts, apps/agent/test/tac-nhan-giao-viec.integration.spec.ts]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.cvc_lenh
+    expected: "exit 0; packages/db/test/viec-chep-lenh.spec.ts chạy packages/db/scripts/chep-viec-can-lam.ts bằng spawnSync với DATABASE_URL của kho thử, đường dẫn lệnh suy từ import.meta.url. Kho có đáp án viết trước: 5 việc cần làm (3 mở, 2 xong), 2 đã chép, 1 bản chép đã đổi, 1 việc mở gắn đối tác của người vai okr, 2 việc cần làm có createdAt sau mốc M. Lệnh không cờ (chạy trước mọi ca ghi): JSON in taskTong 5, taskMo 3, taskXong 2, daChep 2, chuaChep 3, banChep 2, banChepDaDoi 1, nguoiTaoKhongNhan 1, không thì ném 'cvc: dem sai <json>'; vân tay (đếm activity, viec, viecVet, viecGan) trước và sau bằng nhau, không thì ném 'cvc: lenh dem ghi vao kho'. --tu M: taskTaoSau 2, không thì ném 'cvc: dem tao sau sai'. Kho xa: DATABASE_URL đổi host sang 'db.example.com' (không kết nối) — --chay và --dao thoát khác 0 với lời của require-local-db trước khi mở kết nối, không thì ném 'cvc: lenh ghi chay tren kho xa'; lệnh không cờ không bị chặn bởi lời đó. Ghi qua CLI trên cùng kho: '--chay --nguoi' email một thành viên thường, rồi không có --nguoi — mỗi lần thoát khác 0, stderr có 'quản trị', vân tay không đổi, không thì ném 'cvc: lenh chay khong co quan tri'; '--chay --thu --nguoi' email quản trị — JSON có thu true, loi rỗng, vân tay không đổi, không thì ném 'cvc: chay thu ghi vao kho'; '--chay --nguoi' email quản trị — JSON có truoc.taskTong 5, chep 3, loi rỗng, sau.banChep 5, sau.chuaChep 0, sau.taskTong 5, không thì ném 'cvc: ban in chay sai <json>'; '--dao' — xoa 4, giuLai 1; rồi '--dao --ca-ban-da-doi' — xoa 1, giuLai 0, sau.banChep 0, không thì ném 'cvc: ban in dao sai <json>'. Đối chứng dương của bộ chặn: host 'db.example.com' kèm ALLOW_REMOTE_DB=1 — '--chay' thoát khác 0 với lỗi kết nối, stderr không có lời của require-local-db, không thì ném 'cvc: bo chan chan ca khi da cho phep'. Gieo: chạy hàm seedActivities của seed.ts trên kho rỗng — số activity TASK bằng 0, không thì ném 'cvc: gieo con viec can lam'. Chiều đỏ ở E13 (i)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/scripts/chep-viec-can-lam.ts, packages/db/src/viec-chep.ts, packages/db/src/kho-cuc-bo.ts, packages/db/prisma/seed.ts, packages/db/package.json, package.json, packages/db/test/viec-chep-lenh.spec.ts]
+
+  - id: E11
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.cvc_man
+    steps:
+      - "Chay O TIEN CANH tu goc kho, Bash timeout 600000: `BANG_CHUNG=_acceptance/chep-viec-can-lam-cu/evidence bun scripts/lan-do/tien-de.mjs --chay \"bun _acceptance/chep-viec-can-lam-cu/rang/man.mjs\"` (chinh lenh cvc_man; phien do tu dung kho rieng, API va app cua cay tren hai cong tu do)"
+      - "Doc dong cuoi: ma 0 kem 'chep-viec-can-lam-cu man: dat' = dat; ma 2 = khong do duoc; ma 1 = co thong diep 'cvc man: ...' goi ten buoc sai"
+      - "Mo hai anh cvc-thoa-thuan-1280.png va cvc-thoa-thuan-375.png trong _acceptance/chep-viec-can-lam-cu/evidence/ va doi chieu bang mat voi Expected"
+    inputs:
+      - _acceptance/chep-viec-can-lam-cu/evidence/
+    paths: [apps/app/components/crm/timeline/**, apps/app/components/viec/**, apps/app/lib/messages/crm.ts, _acceptance/chep-viec-can-lam-cu/rang/man.mjs]
+    expected: |
+      exit 0 va "chep-viec-can-lam-cu man: dat"; chay qua phien do. Buoc 1: gieo mot viec can lam cu qua han gan mot
+      thoa thuan (khuon E1) roi chay chepTatCa that; mo khung thoa thuan (?record=deal:<id>) o 1280, the Hoat dong
+      -> thanh the khong co chu «Sắp tới», «Đã xong»; khong co [role=checkbox] trong dong thoi gian; khoi «Việc» dau
+      the co tieu de viec da chep; chup cvc-thoa-thuan-1280.png. Buoc 2 (375): lap buoc 1 -> scrollWidth <=
+      clientWidth; chup cvc-thoa-thuan-375.png. Chieu do (--chieu-do): bo loc «da chep» o loi doc dong thoi gian
+      trong ban sao -> buoc 1 do voi 'cvc man: viec da chep con tren dong thoi gian'.
+    evidence_required: [run_id, exit_code, screenshot, observed, verified_at]
+
+  - id: E12
+    criterion: AC-12
+    executor: judgment
+    question: >-
+      Đọc CONTEXT.md (mục «Việc» và mọi mục nhắc «việc cần làm»), docs/api.md (mục «Việc» và chỗ nói về
+      activities), docs/agent.md (mục «Team-agent builder and runner» và chỗ nói về việc onboarding-identify) và
+      docs/production.md như một người mới vào kho. Tài liệu có nói rõ sáu điều không: (1) việc cần làm cũ trên dòng
+      thời gian đã được chép thành Việc, bản gốc còn trong bảng activity để đảo, và việc chưa chép hiện chỉ đọc;
+      (2) cách chạy lệnh viec:chep-cu trên production — đếm, chạy, đếm lại, cờ ALLOW_REMOTE_DB, người chạy phải là
+      quản trị — và cách đảo, kể cả bản chép đã đổi; (3) cách đọc hai vế ngưỡng (lệch 0 khi chép; 0 việc cần làm
+      mới trong 14 ngày bằng --tu); (4) activities.create không nhận TASK, activities.complete và activities.myTasks
+      đã bỏ; (5) Tác nhân tự dựng có quyền crm.activity.create loại TASK nay giao một Việc cho người khởi chạy, và
+      việc mã môi giới lệch giao Việc cho người cầm trịch kế hoạch; (6) thứ tự lên — đợi deployment của api chạy xong migration rồi mới chép — và thứ tự lùi — chạy đảo TRƯỚC khi lùi mã, vì lùi mã khi bản chép còn làm một việc hiện hai lần và ma-lech cũ giao trùng. Tài liệu không tự đúc từ ghép tiếng Việt cho
+      thuật ngữ kỹ thuật mà CONTEXT.md không có. Trả PASS khi đủ sáu điều, FAIL nêu điều thiếu.
+    inputs: [CONTEXT.md, docs/api.md, docs/agent.md, docs/production.md]
+    evidence_required: [verdict, rationale, verified_at]
+
+  - id: E13
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.cvc_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly như DA1: với mỗi cặp chạy phép đo trên bản sao lành phải xanh, rồi thay một lần chuỗi vật thật và chạy lại phải đỏ với đúng thông điệp ghim — (a) bỏ ánh xạ completedAt → XONG khi chép → E1 'cvc: chep sai truong trangThai'; (b) bỏ điều kiện «chưa chép» khi chọn việc cần chép → E2 'cvc: chep lai nhan ban'; (c) bỏ nhánh người chạy lệnh nhận việc → E3 'cvc: nguoi tao khong nhan van giu'; (d) bỏ giữ bản đã đổi khi đảo → E4 'cvc: dao xoa ban da doi'; (e) bỏ lọc «đã chép» ở lời đọc dòng thời gian → E5 'cvc: viec da chep con tren dong thoi gian'; (f) trả TASK vào COMPOSABLE_TYPES → E6 'cvc: api van nhan TASK'; (g) đổi nhánh TASK của createRunActivity về ghi activity → E7 'cvc: tac nhan con ghi TASK'; (h) bỏ vế việc cần làm cũ chưa chép ở chặn trùng ma-lech → E8 'cvc: ma lech giao trung khi con viec cu'; (i) bỏ bộ chặn kho xa ở --chay → E10 'cvc: lenh ghi chay tren kho xa'; (j) bỏ lọc «đã chép» ở Tổng quan → E6 'cvc: tong quan hien viec da chep'; (k) cấy một lời tx.activity.create({data:{type: ActivityType.TASK,…}}) vào ma-lech.ts → E14 'cvc: con duong ghi TASK'. Thiếu cặp nào hay bản sao lành đỏ thì thoát khác 0 nêu cặp."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/chep-viec-can-lam-cu/rang/dot-bien.mjs, packages/db/src/viec-ghi.ts, packages/db/src/viec-chep.ts, packages/db/scripts/chep-viec-can-lam.ts, apps/api/src/activities/**, apps/api/src/dashboard/**, apps/agent/agent/lib/run-runtime.ts, apps/agent/agent/lib/ma-lech.ts]
+
+  - id: E14
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.cvc_quet_task
+    expected: "exit 0; rang/quet-task.mjs (đường dẫn suy từ import.meta.url) chạy git grep -n trên apps/ packages/ (trừ **/test/**, **/*.spec.ts, **/*.dom.tsx, **/generated/**) tìm ActivityType.TASK và chuỗi \"TASK\" của loại hoạt động. Ma trận viết sẵn trong tệp, chép bảng «Mọi chỗ còn nói TASK sau vòng này» của design doc: tệp → vai (doc · khai · so-quyen · nhan). Một chỗ ghi — dòng có TASK nằm trong khối lời gọi activity.create, activity.createMany, activity.upsert hay activity.update (tìm trong 12 dòng trước) — ở bất kỳ tệp nào thì ném 'cvc: con duong ghi TASK <tep>:<dong>'; một tệp có TASK mà không có trong ma trận thì ném 'cvc: cho nhac TASK ngoai ma tran <tep>'; một tệp trong ma trận không còn nhắc TASK thì ném 'cvc: ma tran cu <tep>'. Đối chứng dương: trên cây lành in số chỗ theo từng vai và thoát 0. Chiều đỏ ở E13 (k)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/**, packages/**, _acceptance/chep-viec-can-lam-cu/rang/quet-task.mjs]
