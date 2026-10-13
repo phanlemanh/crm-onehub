@@ -1,0 +1,75 @@
+{
+	"id": "ca-ng-q4-kd-nam-1",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Nam"
+	},
+	"mucTieu": {
+		"title": "Hàng lạnh Đông Nam Bộ thành mảng chủ lực",
+		"whyNow": "Kho lạnh Bình Dương đã chạy thử xong quý 3.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Đối tác hàng lạnh mới đạt 10",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 10,
+			"unit": "đối tác"
+		},
+		{
+			"title": "Thoả thuận mới hàng lạnh đạt 25",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 25,
+			"unit": "thoả thuận"
+		},
+		{
+			"title": "Giữ công suất kho lạnh trên 70%",
+			"kind": "giu-tren",
+			"startValue": 55,
+			"targetValue": 70,
+			"unit": "%"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Trở thành đối tác logistics được chọn đầu tiên ở hai miền",
+			"whyNow": "Hai đối thủ lớn vừa rút khỏi phân khúc hàng lạnh; ai ký trước năm nay giữ đối tác nhiều năm.",
+			"kind": "tham-vong"
+		},
+		"krs": [
+			{
+				"title": "Doanh thu hợp đồng mới đạt 48 tỷ đồng",
+				"kind": "tang-toi",
+				"startValue": 0,
+				"targetValue": 48,
+				"unit": "tỷ đồng"
+			},
+			{
+				"title": "Giữ tỷ lệ đối tác gia hạn trên 85%",
+				"kind": "giu-tren",
+				"startValue": 82,
+				"targetValue": 85,
+				"unit": "%"
+			},
+			{
+				"title": "Số đối tác hàng lạnh đang chạy tăng từ 12 lên 30",
+				"kind": "tang-toi",
+				"startValue": 12,
+				"targetValue": 30,
+				"unit": "đối tác"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
+		"soSai": false
+	},
+	"ghiChu": "Căn chỉnh vào KR đối tác hàng lạnh 12 lên 30 của OneHub; không chép KR cấp trên, không nói về người."
+}

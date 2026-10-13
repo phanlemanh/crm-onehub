@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-cham-soc-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Chăm sóc đối tác"
+	},
+	"mucTieu": {
+		"title": "Khiếu nại được xử lý trong ngày",
+		"whyNow": "Khiếu nại qua đêm là nguồn giận dữ lớn nhất.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Giữ khiếu nại tồn qua đêm dưới 5",
+			"kind": "giu-duoi",
+			"startValue": 12,
+			"targetValue": 5,
+			"unit": "khiếu nại"
+		},
+		{
+			"title": "Ra quy trình xử lý khiếu nại trong ngày",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: giữ khiếu nại tồn và một mốc quy trình."
+}

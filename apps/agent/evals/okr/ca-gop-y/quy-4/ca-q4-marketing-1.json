@@ -1,0 +1,45 @@
+{
+	"id": "ca-q4-marketing-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Marketing"
+	},
+	"mucTieu": {
+		"title": "Kênh tự đến thành nguồn khách thứ hai",
+		"whyNow": "Bài viết theo tuyến mang về khách tốt nhất trong quý 3.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Khách tiềm năng từ web đạt 500",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 500,
+			"unit": "khách"
+		},
+		{
+			"title": "Tỷ lệ khách tiềm năng thành cuộc hẹn",
+			"kind": "phan-tram",
+			"startValue": 14,
+			"targetValue": 25,
+			"unit": "%"
+		},
+		{
+			"title": "Thư chào gửi ra đạt 2.000",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 2000,
+			"unit": "thư"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["kr-la-viec"],
+		"vietLai": ["kr.title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "«Thư chào gửi ra đạt 2.000» đếm thư đã gửi, không đo kết quả."
+}

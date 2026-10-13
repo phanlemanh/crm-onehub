@@ -6,6 +6,7 @@ import {
 	nhanRail,
 } from "@/lib/khung-dieu-huong";
 import { onboardingMessages } from "@/lib/messages/onboarding";
+import { dieuHuongTheoVai, mucRailChoVai } from "@/lib/pham-vi-man";
 
 const DAU =
 	/[ăâđêôơưàảãáạằẳẵắặầẩẫấậèẻẽéẹềểễếệìỉĩíịòỏõóọồổỗốộờởỡớợùủũúụừửữứựỳỷỹýỵ]/i;
@@ -24,7 +25,7 @@ describe("khung dieu huong", () => {
 	});
 
 	it("tam muc, nhan vi co dau va khac nhan en", () => {
-		expect(MUC_RAIL).toHaveLength(11);
+		expect(MUC_RAIL).toHaveLength(12);
 		for (const m of MUC_RAIL) {
 			const vi = nhanRail(m, "vi");
 			expect(vi).not.toBe(nhanRail(m, "en"));
@@ -110,5 +111,17 @@ describe("khung dieu huong", () => {
 		}
 		expect(nhanRail(dieuPhoi, "vi")).toBe("30 ngày đầu");
 		expect(nhanRail(dieuPhoi, "en")).toBe("First 30 days");
+	});
+
+	it("viec-cua-toi: muc thu hai, ngay sau Tong quan, nhan Viec cua toi/My work, khong co trong thanh trai cua vai okr", () => {
+		const viec = muc("viec");
+		expect(viec.href).toBe("/viec");
+		expect(MUC_RAIL.indexOf(viec)).toBe(1);
+		expect(nhanRail(viec, "vi")).toBe("Việc của tôi");
+		expect(nhanRail(viec, "en")).toBe("My work");
+		expect(mucRailChoVai("okr").some((m) => m.key === "viec")).toBe(false);
+		expect(dieuHuongTheoVai("okr", "/viec")).toEqual({
+			toi: "/ngoai-pham-vi",
+		});
 	});
 });

@@ -264,11 +264,13 @@ export class WorkspaceService {
 			let theoDoiDaXoa = 0;
 			if (!docDuocDoiTac(input.role)) {
 				const viec = await demViecDangGiu(tx, target.userId);
+				const conViec = new ConflictException(
+					WORKSPACE_CONFIG.messages.conViec(viec.keHoach, viec.buoc, viec.viec),
+				);
 				if (viec.keHoach > 0 || viec.buoc > 0) {
-					throw new ConflictException(
-						WORKSPACE_CONFIG.messages.conViecKeHoach(viec.keHoach, viec.buoc),
-					);
+					throw conViec;
 				}
+				if (viec.viec > 0) throw conViec;
 				theoDoiDaXoa = await xoaTheoDoiCua(tx, target.userId);
 			}
 

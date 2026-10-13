@@ -1,0 +1,45 @@
+{
+	"id": "ca-n1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "onehub",
+		"ten": "Hải Đăng Logistics"
+	},
+	"mucTieu": {
+		"title": "Trở thành đối tác logistics được chọn đầu tiên ở hai miền",
+		"whyNow": "Hai đối thủ lớn vừa rút khỏi phân khúc hàng lạnh; ai ký trước năm nay giữ đối tác nhiều năm.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Doanh thu hợp đồng mới đạt 48 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 48,
+			"unit": "tỷ đồng"
+		},
+		{
+			"title": "Giữ tỷ lệ đối tác gia hạn trên 85%",
+			"kind": "giu-tren",
+			"startValue": 82,
+			"targetValue": 85,
+			"unit": "%"
+		},
+		{
+			"title": "Số đối tác hàng lạnh đang chạy tăng từ 12 lên 30",
+			"kind": "tang-toi",
+			"startValue": 12,
+			"targetValue": 30,
+			"unit": "đối tác"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên là nơi đến, KR có doanh thu, giữ chân và tăng tệp hàng lạnh — câu đã tốt."
+}
