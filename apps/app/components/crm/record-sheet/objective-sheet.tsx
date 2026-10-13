@@ -97,6 +97,7 @@ import {
 } from "./objective-duyet";
 import { HopMucHienThi } from "./objective-hien-thi";
 import { TabTraoDoi } from "./objective-trao-doi";
+import { LyDoNoiGop } from "./ly-do-noi-gop";
 import { dien } from "./plan-copy";
 import { RecordSheetFrame } from "./record-parts";
 import { useRecordSheetView, useRecordStack } from "./record-stack";
@@ -504,7 +505,7 @@ function KhuGopVao({ mt }: { mt: ChiTiet }) {
 	if (mt.alignments.length === 0) return null;
 	return (
 		<div data-khu="gop-vao">
-			<DetailSheetSection title={m.khuGopVao}>
+			<DetailSheetSection title={m.khuDuongLyDo}>
 				<ItemGroup>
 					{mt.alignments.map((g) => (
 						<Item
@@ -526,6 +527,7 @@ function KhuGopVao({ mt }: { mt: ChiTiet }) {
 										</>
 									) : null}
 								</ItemDescription>
+								<LyDoNoiGop g={g} />
 							</ItemContent>
 						</Item>
 					))}
