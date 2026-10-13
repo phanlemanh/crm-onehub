@@ -544,3 +544,135 @@ describe("phong-ban-loi", () => {
 		expect(nutCo(m.addStepOtherDepartment)).toBeUndefined();
 	});
 });
+
+type TongQuan = RouterOutputs["dashboard"]["summary"];
+
+function tongQuanMot(input: {
+	hanBuoc: string;
+	quaHan: { viec: number; buoc: number };
+}): TongQuan {
+	const thang = { count: 0, valueCents: 0 };
+	return {
+		scope: "me",
+		reportingCurrency: "VND",
+		unconverted: { count: 0, currencies: [] },
+		pipeline: { stages: [], totalCents: 0, totalDeals: 0 },
+		wonThisMonth: thang,
+		wonPrevMonth: thang,
+		performance: {
+			windowDays: 90,
+			wins: 0,
+			losses: 0,
+			winRate: null,
+			avgDealCents: null,
+			avgCycleDays: null,
+		},
+		trend: [],
+		closingThisMonthTotal: thang,
+		biggestOpen: [],
+		overdueTasks: [],
+		recentActivity: [],
+		mySteps: [
+			{
+				stepId: "B1",
+				nhan: "Buoc han D",
+				dueAt: input.hanBuoc,
+				planId: "P-1",
+				company: { id: "ct-1", name: "Cong ty 1" },
+			},
+		],
+		quaHan: input.quaHan,
+		keHoachCanDeY: [],
+		taiLieuChoDuyet: 0,
+	};
+}
+
+async function moTongQuan(luc: string, du: TongQuan): Promise<HTMLElement> {
+	setSystemTime(new Date(luc));
+	dat("dashboard.summary", () => du as unknown as Json);
+	await mo(<DashboardSummary />);
+	await cho(
+		() => document.body.querySelector('[data-khoi="viec-qua-han"]') !== null,
+		"the viec qua han da ve",
+	);
+	return document.body.querySelector(
+		'[data-khoi="viec-qua-han"]',
+	) as HTMLElement;
+}
+
+function toneBuoc(): string | null {
+	return (
+		document.body
+			.querySelector('[data-buoc="B1"] [data-slot="status-indicator"]')
+			?.getAttribute("data-tone") ?? null
+	);
+}
+
+function conSotCua(the: HTMLElement): string | null {
+	return (
+		the.querySelector("[data-con-sot]")?.getAttribute("data-con-sot") ?? null
+	);
+}
+
+describe("qua-han-lui", () => {
+	const LUC = "2026-10-12T17:30:00Z";
+
+	test("qua-han-lui: buoc han D quá hạn theo ngày VN, không có dòng còn sót", async () => {
+		expect(
+			Intl.DateTimeFormat().resolvedOptions().timeZone,
+			"lenh khong chay o mui gio lui",
+		).toBe("America/Los_Angeles");
+		const the = await moTongQuan(
+			LUC,
+			tongQuanMot({ hanBuoc: "2026-10-12", quaHan: { viec: 0, buoc: 1 } }),
+		);
+		expect(
+			conSotCua(the),
+			"buoc qua han theo ngay VN bi dem them vao con sot",
+		).toBeNull();
+		expect(toneBuoc()).toBe("error");
+		expect(the.textContent?.includes("nữa")).toBe(false);
+		expect(
+			the.querySelector('[data-slot="card-description"]')?.textContent,
+		).toContain("1");
+	});
+
+	test("qua-han-lui: doi chung — mot viec qua han ngoai danh sach thi con sot 1", async () => {
+		const the = await moTongQuan(
+			LUC,
+			tongQuanMot({ hanBuoc: "2026-10-12", quaHan: { viec: 1, buoc: 1 } }),
+		);
+		expect(conSotCua(the)).toBe("1");
+	});
+});
+
+describe("qua-han-tien", () => {
+	const LUC = "2026-10-12T12:00:00Z";
+
+	test("qua-han-tien: buoc han D chưa quá hạn theo ngày VN, việc ngoài danh sách vẫn được báo", async () => {
+		expect(
+			Intl.DateTimeFormat().resolvedOptions().timeZone,
+			"lenh khong chay o mui gio tien",
+		).toBe("Pacific/Kiritimati");
+		const the = await moTongQuan(
+			LUC,
+			tongQuanMot({ hanBuoc: "2026-10-12", quaHan: { viec: 1, buoc: 0 } }),
+		);
+		expect(
+			conSotCua(the),
+			"buoc chua qua han theo ngay VN bi tru khoi con sot",
+		).toBe("1");
+		expect(toneBuoc()).toBe("neutral");
+		expect(the.querySelector("[data-con-sot]")?.textContent?.trim()).toBe(
+			"và 1 việc quá hạn nữa",
+		);
+	});
+
+	test("qua-han-tien: doi chung — buoc han hom truoc thi mang dau qua han", async () => {
+		await moTongQuan(
+			LUC,
+			tongQuanMot({ hanBuoc: "2026-10-11", quaHan: { viec: 0, buoc: 1 } }),
+		);
+		expect(toneBuoc()).toBe("error");
+	});
+});

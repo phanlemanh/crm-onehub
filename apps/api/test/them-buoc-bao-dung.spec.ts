@@ -1,9 +1,17 @@
-import { afterAll, describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, setSystemTime, test } from "bun:test";
 import { db } from "@crm/db";
+import { dauNgayVN } from "@crm/db/onboarding-nhac";
+import { quaHanTheoNgayVN } from "@crm/validation/ngay-vn";
 import type { HttpException } from "@nestjs/common";
+import { ConversionService } from "../src/currency/conversion.service";
+import { DashboardService } from "../src/dashboard/dashboard.service";
 import { OnboardingService } from "../src/onboarding/onboarding.service";
 import { ToChucService } from "../src/to-chuc/to-chuc.service";
-import { donGieo, gieoBoPhan, gieoKeHoach } from "./dieu-phoi-gieo";
+import { donGieo, gieoBoPhan, gieoKeHoach, gieoNguoi } from "./dieu-phoi-gieo";
+
+const DAY_MS = 86_400_000;
+const GIO_MS = 3_600_000;
+const DONG_HO = ["2026-10-12T17:05:00Z", "2026-10-12T16:55:00Z"];
 
 let dem = 0;
 const khuonDaTao: string[] = [];
@@ -164,5 +172,50 @@ describe("phong-ban-luu-tru", () => {
 			soBuoc + 1,
 		);
 		expect(await db.onboardingTemplate.count()).toBe(soKhuon + 1);
+	});
+});
+
+describe.if(process.env.TBD_KHU_HOI === "1")("qua-han-khu-hoi", () => {
+	test("app va may chu dem qua han theo mot ngay tren dau ra that", async () => {
+		const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		expect(
+			tz !== "Asia/Ho_Chi_Minh" && tz === process.env.TZ,
+			`khu hoi chay o mui gio VN (${tz})`,
+		).toBe(true);
+		const tongQuan = new DashboardService(db, new ConversionService(db));
+		try {
+			for (const luc of DONG_HO) {
+				const dongHo = new Date(luc);
+				setSystemTime(dongHo);
+				const nguoi = await gieoNguoi();
+				const plan = await gieoKeHoach();
+				const pb = await gieoBoPhan();
+				const dau = dauNgayVN(dongHo).getTime();
+				await db.onboardingStep.createMany({
+					data: [
+						{ han: dau - DAY_MS, nhan: "hom qua" },
+						{ han: dau + GIO_MS, nhan: "hom nay" },
+					].map((b, i) => ({
+						planId: plan.id,
+						departmentId: pb.id,
+						label: b.nhan,
+						dueAt: new Date(b.han),
+						position: i,
+						assigneeId: nguoi.id,
+					})),
+				});
+				const kq = await tongQuan.summary(nguoi.id, { scope: "me" });
+				expect(kq.quaHan.buoc, `doi chung ${luc} ${tz}`).toBe(1);
+				const app = kq.mySteps.filter((b) =>
+					quaHanTheoNgayVN(b.dueAt, dongHo),
+				).length;
+				expect(
+					app,
+					`app va may chu dem qua han theo hai ngay khac nhau — ${luc} ${tz}`,
+				).toBe(kq.quaHan.buoc);
+			}
+		} finally {
+			setSystemTime();
+		}
 	});
 });
