@@ -614,6 +614,12 @@ bản xem trước. Chốt 2026-09-28.
 _Avoid_: dữ liệu demo, seed OKR, dữ liệu giả lập
 Vì sao: «demo» gợi thứ để trình diễn cho khách; bộ này là thước đo chung của đội.
 
+**Ca góp ý**: một OKR cố định — mục tiêu, KR, có khi kèm mục tiêu cấp trên — cùng điều
+Kara nên và không nên đề xuất cho nó, dùng để đo góp ý của Kara. Ba bộ: `mau/` dựng tay
+để thử từng lỗi, `quy-4/` rút từ OKR quý 4 của bộ OKR mẫu, `that/` là OKR thật đã thay
+tên, nằm ngoài git. Chốt 2026-10-13.
+_Avoid_: golden case, test case
+
 **Sức khoẻ chương trình**: màn của quản trị cho biết OKR đang chạy tốt tới đâu theo
 đơn vị — KR cập nhật đúng tuần, KR im, KR chưa có khởi điểm, người chưa nối kênh nhắc.
 Để biết nên kèm đơn vị nào, không để chấm người. Chốt 2026-09-26.

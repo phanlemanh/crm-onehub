@@ -1,0 +1,68 @@
+{
+	"id": "ca-ng-q4-nhan-su-1",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Nhân sự"
+	},
+	"mucTieu": {
+		"title": "Đủ người cho mùa cao điểm",
+		"whyNow": "Thiếu người kho là nguyên nhân trễ đơn Tết năm ngoái.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Tuyển đủ 25 người thời vụ",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 25,
+			"unit": "người"
+		},
+		{
+			"title": "Người mới tự nhận ca trong 10 ngày",
+			"kind": "giu-duoi",
+			"startValue": 15,
+			"targetValue": 10,
+			"unit": "ngày"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Đội ngũ đủ người, đủ sức cho mùa cao điểm",
+			"whyNow": "Mùa Tết năm ngoái thiếu 30% nhân lực kho, trễ hơn 400 đơn.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Tuyển đủ 25 người cho mùa cao điểm",
+				"kind": "tang-toi",
+				"startValue": 0,
+				"targetValue": 25,
+				"unit": "người"
+			},
+			{
+				"title": "Ra mắt ứng dụng theo dõi đơn cho đối tác",
+				"kind": "moc",
+				"startValue": 0,
+				"targetValue": 1,
+				"unit": ""
+			},
+			{
+				"title": "Giữ tỷ lệ nghỉ việc dưới 3% mỗi quý",
+				"kind": "giu-duoi",
+				"startValue": 4,
+				"targetValue": 3,
+				"unit": "%"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
+		"soSai": false
+	},
+	"ghiChu": "«Tuyển đủ 25 người thời vụ» gần chép KR «Tuyển đủ 25 người» của OneHub; không chép, không nói về người."
+}

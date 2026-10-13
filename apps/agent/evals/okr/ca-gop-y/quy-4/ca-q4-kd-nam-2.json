@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-kd-nam-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Nam"
+	},
+	"mucTieu": {
+		"title": "Chiếm lĩnh hàng lạnh ở Đông Nam Bộ",
+		"whyNow": "Đối thủ lớn nhất vừa đóng kho lạnh ở Bình Dương.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Ký 8 đối tác hàng lạnh mới",
+			"kind": "tang-toi",
+			"startValue": 5,
+			"targetValue": 8,
+			"unit": "đối tác"
+		},
+		{
+			"title": "Doanh thu hàng lạnh đạt 6 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 3.6,
+			"targetValue": 6,
+			"unit": "tỷ đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["kr-la-viec", "thieu-doi-trong"],
+		"vietLai": ["kr.title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "«Ký 8 đối tác hàng lạnh mới» mở bằng động từ; hai KR cùng đẩy tăng."
+}

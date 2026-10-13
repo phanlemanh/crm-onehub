@@ -25,6 +25,22 @@ export const OKR_MAU = {
 	co: { moc: "--moc", xoa: "--xoa", tep: "--tep" },
 	ma: { chan: 2, okrThat: 3, sai: 4, dangGiu: 5 },
 	lenh: "bun run okr:mau",
+	caQuy4: {
+		tienTo: "ca-",
+		tienToNg: "ca-ng-",
+		chuKyQuy: "quy4",
+		chuKyNam: "nam",
+		capQuy: ["bo-phan", "phong-ban"],
+		capNam: "onehub",
+		congBo: "cong-bo",
+		ngonNgu: "vi",
+		co: { nhan: "--nhan", ra: "--ra" },
+		thuMucRa: ["agent", "evals", "okr", "ca-gop-y", "quy-4"],
+		tepNhan: "nhan-ca-quy-4.json",
+		tepCongTy: "cong-ty.json",
+		lenh: "bun run okr:ca-quy-4",
+		tenLenh: "okr:ca-quy-4",
+	},
 } as const;
 
 export function idMau(loai: string, ma: string): string {
