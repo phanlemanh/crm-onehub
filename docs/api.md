@@ -505,9 +505,11 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
 
 - **Thứ tự kiểm khi đổi trạng thái.** (1) không thấy → 404; (2) cặp không có trong `DO_THI` → 400
   «Không chuyển được việc từ «…» sang «…».» cho mọi người; (3) không quyền → 403 «Chỉ người giao được …»
-  hay «Chỉ người giao và người thực hiện được …»; (4) việc gắn ít nhất một bản ghi mà đi theo ba cặp mở lại
+  hay «Chỉ người giao và người thực hiện được …»; (4) ba cặp mở lại
   (Chờ đánh giá → Đang làm, Xong → Đang làm, Huỷ → Chưa làm) gọi lại `kiemNguoiNhanViec` cho người thực
-  hiện hiện tại — người đó đã sang vai «chỉ OKR» thì 400 `VIEC.thongDiep.vaiChiOkr`.
+  hiện hiện tại, việc riêng cũng vậy — người đó đã sang vai «chỉ OKR» thì 400 `VIEC.thongDiep.vaiChiOkr`.
+  Gắn bản ghi (`ganBanGhi`) cũng gọi nó cho người thực hiện và từng người theo dõi trước khi thêm hàng gắn,
+  nên không có đường nào đặt bản ghi đối tác vào việc có người vai «chỉ OKR».
   Người theo dõi, thành viên khác, quản trị không đổi trạng thái — đường của quản trị là «Chuyển việc 30
   ngày».
 - **Cột đo `roiChuaLamLuc`** ghi một lần, khi chính người thực hiện (người bấm trùng `nguoiThucHienId`) đưa

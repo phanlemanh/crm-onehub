@@ -285,7 +285,7 @@ export async function doiTrangThai(
 				: VIEC.thongDiep.chiGiaoVaThucHien(lam),
 		);
 	}
-	if (laMoLai(viec.trangThai, input.den) && viec._count.gan > 0) {
+	if (laMoLai(viec.trangThai, input.den)) {
 		await kiemNguoiNhanViec(tx, viec.nguoiThucHienId);
 	}
 	const roiChuaLam =
@@ -372,6 +372,10 @@ export async function doiNguoiThucHien(
 	});
 }
 
+function nguoiTrongViec(viec: ViecGhi): string[] {
+	return [viec.nguoiThucHienId, ...viec.theoDoi.map((t) => t.userId)];
+}
+
 function canGiaoHayLam(viec: ViecGhi, nguoiId: string, lam: string): void {
 	const vai = vaiCua(viec, nguoiId);
 	if (!vai.giao && !vai.thucHien) {
@@ -390,6 +394,9 @@ export async function ganBanGhi(
 		where: { viecId: viec.id, ...cotGan(input.banGhi) },
 	});
 	if (co) return;
+	for (const ma of nguoiTrongViec(viec)) {
+		await kiemNguoiNhanViec(tx, ma);
+	}
 	await tx.viecGan.create({
 		data: { viecId: viec.id, ...cotGan(input.banGhi) },
 	});

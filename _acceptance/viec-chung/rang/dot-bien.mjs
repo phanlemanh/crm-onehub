@@ -15,7 +15,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 13;
+const SO_CAP_KHAI = 14;
 const TRAN_MS = 900_000;
 const API = (tep, t) =>
 	`bun run test -- "cd apps/api && bun test test/${tep}${t ? ` -t ${t}` : ""}"`;
@@ -133,6 +133,13 @@ const CAP = [
 		"await kiemNguoiNhanViec(tx, viec.nguoiThucHienId);",
 		"",
 		[[VC.vaiOkr, "vc: giao cho vai okr khong bi chan"]],
+	],
+	[
+		"n bo kiem vai khi gan ban ghi",
+		GHI,
+		"for (const ma of nguoiTrongViec(viec)) {",
+		"for (const ma of []) {",
+		[[VC.vaiOkr, "vc: gan doi tac cho vai okr khong bi chan"]],
 	],
 ];
 

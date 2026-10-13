@@ -188,6 +188,98 @@ describe("vc-vai-okr", () => {
 	);
 
 	test(
+		"vc-vai-okr: việc riêng mở lại về người đã sang vai okr bị 400; gắn bản ghi đối tác vào việc có người vai okr (thực hiện hay theo dõi) bị 400, không ghi gì; đối chứng gắn được khi mọi người đều đọc được dữ liệu đối tác",
+		async () => {
+			const a = await nguoi("vc-okr2-a", "member");
+			const { dealId } = await thoaThuan(app, a.id);
+			for (const [den, nguon] of [
+				["(a1)", "XONG"],
+				["(a2)", "CHO_DANH_GIA"],
+				["(a3)", "HUY"],
+			] as const) {
+				const m = await nguoi(`vc-okr2-m ${den}`, "member");
+				const rieng = await taoThu({
+					nguoiId: a.id,
+					tieuDe: `vc-okr2 rieng ${den}`,
+					nguoiThucHienId: m.id,
+					gan: [],
+				});
+				await doiThu(rieng.id, a.id, nguon);
+				await doiVai(m.id, "okr");
+				const truoc = await soDem();
+				const r = await goi(
+					app,
+					"viec.doiTrangThai",
+					"mutation",
+					{ id: rieng.id, den: nguon === "HUY" ? "CHUA_LAM" : "DANG_LAM" },
+					a.id,
+				);
+				if (
+					r.status !== 400 ||
+					!r.message.includes(`vc-okr2-m ${den}`) ||
+					!r.message.includes("chỉ OKR") ||
+					JSON.stringify(truoc) !== JSON.stringify(await soDem())
+				) {
+					throw new Error(
+						`vc: giao cho vai okr khong bi chan viec rieng ${den}`,
+					);
+				}
+			}
+			const lam = await nguoi("vc-okr2-lam", "member");
+			const theo = await nguoi("vc-okr2-theo", "member");
+			for (const [den, doiAi] of [
+				["thuc hien", "lam"],
+				["theo doi", "theo"],
+			] as const) {
+				const v = await taoThu({
+					nguoiId: a.id,
+					tieuDe: `vc-okr2 gan ${den}`,
+					nguoiThucHienId: lam.id,
+					nguoiTheoDoiIds: [theo.id],
+					gan: [],
+				});
+				const ten = doiAi === "lam" ? lam : theo;
+				await doiVai(ten.id, "okr");
+				const truoc = await soDem();
+				const r = await goi(
+					app,
+					"viec.gan",
+					"mutation",
+					{ id: v.id, dealId },
+					a.id,
+				);
+				if (
+					r.status !== 400 ||
+					!r.message.includes("vc-okr2-") ||
+					!r.message.includes("chỉ OKR") ||
+					(await db.viecGan.count({ where: { viecId: v.id } })) !== 0 ||
+					JSON.stringify(truoc) !== JSON.stringify(await soDem())
+				) {
+					throw new Error(`vc: gan doi tac cho vai okr khong bi chan ${den}`);
+				}
+				await doiVai(ten.id, "member");
+			}
+			const ok = await taoThu({
+				nguoiId: a.id,
+				tieuDe: "vc-okr2 doi chung",
+				nguoiThucHienId: lam.id,
+				nguoiTheoDoiIds: [theo.id],
+				gan: [],
+			});
+			const gan = await goi(
+				app,
+				"viec.gan",
+				"mutation",
+				{ id: ok.id, dealId },
+				a.id,
+			);
+			expect(gan.status, "doi chung gan").toBe(200);
+			expect(await db.viecGan.count({ where: { viecId: ok.id } })).toBe(1);
+		},
+		MA_TEST_MS,
+	);
+
+	test(
 		"vc-vai-okr: router viec đóng cho vai okr, ô chọn không có họ, đổi vai bị 409 khi còn việc, chỉ theo dõi thì gỡ hết",
 		async () => {
 			const okr = await nguoi("vc-okr-cua", "okr");
