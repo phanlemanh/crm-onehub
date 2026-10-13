@@ -12,7 +12,7 @@ nối và nối chắc tới đâu. Lý do Kara viết ở Soạn OKR nay đã �
 
 ## Thiết kế
 
-Mỗi dòng «Góp vào» trên tab KR của sheet mục tiêu thêm phần lý do ngay dưới chỗ nối:
+Khối «Góp vào» trên tab KR của sheet mục tiêu đổi tiêu đề thành «Đường lý do» (khoá chữ mới `khuDuongLyDo`, chỉ thêm), các dòng nối thành một đường dọc; mỗi dòng thêm phần lý do ngay dưới chỗ nối:
 
 - **Có lý do**: câu lý do (dữ liệu người nhập, `translate="no"`), dòng «Căn cứ: …» khi có căn cứ, nhãn mức tin
   («Có số liệu» khi có căn cứ, «Đặt cược» khi không), và dấu Kara nhỏ (`KaraTrace`) cạnh câu khi `lyDoTuKara`.
@@ -38,13 +38,13 @@ căn chỉnh của dữ liệu mẫu — nhận thêm ba trường tuỳ chọn 
 `mucTinCanChinh`). Bộ mẫu ghi căn chỉnh bằng `createMany` từ trước (khối `okrAlignment` của `nap.ts`); ba trường đi
 cùng hàng đó, không thêm đường ghi thứ hai — đường ghi qua service cho căn cứ là việc của L4.
 
-### Hai câu chỉ người trả lời (gửi giám sát P2-2, P2-3)
+### Chủ kho đã chọn (13/10, lượt 1 qua giám sát — «theo khuyến nghị tất cả»)
 
-- **Hỏi-1 — bố cục.** Bản vẽ trước/sau mục 03 (`.acceptance-runs/dieu-phoi-sau-14-10/tai-lieu/ly-do-can-chinh/`,
-  ngoài kho) dời «Vì sao lúc này» xuống cuối một «Đường lý do». Khuyến nghị: giữ thứ tự cũ, chỉ thêm lý do lên
-  chỗ nối — không hồ sơ đã ký nào đỏ. Lối khác: đúng bản vẽ, phải sửa hợp đồng đã ký `muc-tieu-va-kr` và chỉnh ba
-  hồ sơ ký khác (~1 ngày, một lượt ghim lại).
-- **Hỏi-2 — màu mức tin.** Khuyến nghị: Chưa có lý do = chờ (vàng). Lối khác: = nháp (xám) như Đặt cược.
+- **Bố cục:** giữ thứ tự «Vì sao lúc này» → «Đường lý do» → bảng KR; không dời «Vì sao lúc này» xuống cuối đường như
+  bản vẽ mục 03 (`.acceptance-runs/dieu-phoi-sau-14-10/tai-lieu/ly-do-can-chinh/`, ngoài kho), nên không hồ sơ đã
+  ký nào phải sửa. Hình so sánh: `_acceptance/duong-ly-do-muc-tieu/figures/hoi-1-bo-cuc.png`.
+- **Màu mức tin:** Có số liệu = xong · Đặt cược = nháp · Chưa có lý do = chờ.
+- **Còn chờ:** bỏ design-pass (yêu cầu P2-5).
 
 ## Đặc tả UX
 

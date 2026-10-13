@@ -4,7 +4,7 @@ evals:
     criterion: AC-1
     executor: test
     cmd: config:executors.test.l2_co_so_lieu
-    expected: "exit 0; apps/app/test/duong-ly-do.dom.tsx -t l2-co-so-lieu dựng ObjectiveSheet thật với tRPC giả trả okr.objective parse bằng objectiveOutput thật (okr.contracts.ts); một căn chỉnh qua KR, lyDo/canCu như AC-1, lyDoTuKara true, mucTin co-so-lieu. So giá trị nguyên thuỷ trong [data-gop-vao=<id>]: textContent của [data-ly-do-cau] === lyDo; textContent của [data-ly-do-can-cu] === dien(m.sheet.canCu, {cau: canCu}); textContent nhãn mức tin === m.sheet.mucTin['co-so-lieu']; số [data-slot=kara-trace] === 1; item-title và item-description bằng đúng chuỗi trước vòng ('<objectiveTitle>' và '<unitName> · qua KR «<KR>»'). Chiều đỏ ghim ở E11 (a)."
+    expected: "exit 0; apps/app/test/duong-ly-do.dom.tsx -t l2-co-so-lieu dựng ObjectiveSheet thật với tRPC giả trả okr.objective parse bằng objectiveOutput thật (okr.contracts.ts); một căn chỉnh qua KR, lyDo/canCu như AC-1, lyDoTuKara true, mucTin co-so-lieu. Tiêu đề của [data-khu=gop-vao] === m.sheet.khuDuongLyDo và thứ tự DOM [data-khu=vi-sao] → [data-khu=gop-vao] → bảng KR giữ nguyên. So giá trị nguyên thuỷ trong [data-gop-vao=<id>]: textContent của [data-ly-do-cau] === lyDo; textContent của [data-ly-do-can-cu] === dien(m.sheet.canCu, {cau: canCu}); textContent nhãn mức tin === m.sheet.mucTin['co-so-lieu']; số [data-slot=kara-trace] === 1; item-title và item-description bằng đúng chuỗi trước vòng ('<objectiveTitle>' và '<unitName> · qua KR «<KR>»'). Chiều đỏ ghim ở E11 (a)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/lib/messages/okr.ts, apps/app/test/duong-ly-do.dom.tsx]
 
@@ -44,7 +44,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.l2_chu
-    expected: "exit 0; cùng tệp, -t l2-chu: [data-ly-do-cau] và [data-ly-do-can-cu] > phần tử chứa canCu mang translate='no'; với từng khoá mới (canCu, mucTin['chua-co-ly-do'], mucTin['dat-cuoc'], mucTin['co-so-lieu']) okrMessages('vi') và okrMessages('en') đều có chuỗi khác rỗng và khác nhau, đòi số khoá kiểm === 4; dựng lại sheet với locale en → nhãn mức tin === bản en. Và apps/app/test/messages-guard.spec.ts xanh (lệnh chạy cả tệp đó)."
+    expected: "exit 0; cùng tệp, -t l2-chu: [data-ly-do-cau] và [data-ly-do-can-cu] > phần tử chứa canCu mang translate='no'; với từng khoá mới (khuDuongLyDo, canCu, mucTin['chua-co-ly-do'], mucTin['dat-cuoc'], mucTin['co-so-lieu']) okrMessages('vi') và okrMessages('en') đều có chuỗi khác rỗng và khác nhau, đòi số khoá kiểm === 5; dựng lại sheet với locale en → nhãn mức tin === bản en. Và apps/app/test/messages-guard.spec.ts xanh (lệnh chạy cả tệp đó)."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/app/lib/messages/okr.ts, apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/test/duong-ly-do.dom.tsx, apps/app/test/messages-guard.spec.ts]
 
