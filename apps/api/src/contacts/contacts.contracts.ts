@@ -3,6 +3,7 @@ import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
 import { docSoDienThoai } from "@crm/validation/so-dien-thoai";
 import { z } from "zod";
 import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
+import { thoaThuanDaLuuTruOutput } from "../crm/da-luu-tru";
 import { recordFieldValues } from "../fields/fields.contracts";
 import { activityFacetInput, listInput } from "../trpc/list-input";
 
@@ -270,6 +271,7 @@ export const contactByIdOutput = z.object({
 	relationship: contactRelationshipOutput,
 	isPrimaryContact: z.boolean(),
 	deals: z.array(contactDealOutput),
+	archivedDeals: z.array(thoaThuanDaLuuTruOutput),
 });
 
 export const contactBasicOutput = z.object({

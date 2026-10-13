@@ -68,7 +68,14 @@ import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
 import { AttachDealContact } from "./quick-add";
 import { DaiLuuTru, KhoaLuuTru, RecordActions } from "./record-actions";
-import { AddRow, lyDoLoi, RecordSheetFrame } from "./record-parts";
+import {
+	AddRow,
+	BangDaLuuTru,
+	DongDaLuuTru,
+	lyDoLoi,
+	RecordSheetFrame,
+	tenCaNhan,
+} from "./record-parts";
 import { useOpenRecord, useRecordSheetView } from "./record-stack";
 
 type Deal = RouterOutputs["deals"]["byId"];
@@ -229,7 +236,9 @@ export function DealSheet({ dealId }: { dealId: string }) {
 							name={deal.name}
 							consequence={m.deal.deleteWarning(
 								deal.company.name,
-								deal.contacts.length === 1 ? m.deal.person : m.deal.people,
+								deal.contacts.length + deal.archivedContacts.length === 1
+									? m.deal.person
+									: m.deal.people,
 							)}
 							archivedAt={deal.archivedAt}
 						/>
@@ -504,6 +513,12 @@ function DealContacts({
 		/>
 	) : null;
 
+	const daCat = deal.archivedContacts.map((contact) => ({
+		id: contact.id,
+		name: tenCaNhan(contact),
+		archivedAt: contact.archivedAt,
+	}));
+
 	if (deal.contacts.length === 0) {
 		return (
 			<>
@@ -521,6 +536,11 @@ function DealContacts({
 						}
 					/>
 				)}
+				<BangDaLuuTru
+					items={daCat}
+					columns={contactColumns(m)}
+					kind="contact"
+				/>
 			</>
 		);
 	}
@@ -608,6 +628,11 @@ function DealContacts({
 					label={m.deal.addContact}
 					columns={contactColumns(m).length}
 					onClick={onAdd}
+				/>
+				<DongDaLuuTru
+					items={daCat}
+					columns={contactColumns(m).length}
+					kind="contact"
 				/>
 			</SimpleTable>
 		</>
