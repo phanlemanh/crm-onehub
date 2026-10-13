@@ -17,9 +17,11 @@ const ENTITY_FOR = {
 	deal: "DEAL",
 } as const satisfies Record<RecordKind, string>;
 
-type RemovedRecord = { kind: RecordKind; id: string };
+type RemovedKind = RecordKind | "viec";
 
-type RemovedRecords = { kind: RecordKind; ids: string[] };
+type RemovedRecord = { kind: RemovedKind; id: string };
+
+type RemovedRecords = { kind: RemovedKind; ids: string[] };
 
 export type CrmCache = {
 	company(id?: string, options?: Options): Promise<void>;
@@ -90,19 +92,24 @@ export function useCrmCache(): CrmCache {
 		trpc.search.quick.queryKey(),
 	];
 
-	const removeRecords = (kind: RecordKind, ids: string[]): Promise<void> => {
+	const removeRecords = (kind: RemovedKind, ids: string[]): Promise<void> => {
 		const byId = {
-			company: trpc.companies.byId,
-			contact: trpc.contacts.byId,
-			deal: trpc.deals.byId,
+			company: [trpc.companies.byId],
+			contact: [trpc.contacts.byId],
+			deal: [trpc.deals.byId],
+			viec: [trpc.viec.get, trpc.viec.lichSu],
 		}[kind];
-		const goneKeys = ids.map((id) => byId.queryKey({ id }));
+		const goneKeys = ids.flatMap((id) =>
+			byId.map((record) => record.queryKey({ id })),
+		);
 		const gone = new Set(goneKeys.map((key) => JSON.stringify(key)));
 
 		for (const record of [
 			trpc.companies.byId,
 			trpc.contacts.byId,
 			trpc.deals.byId,
+			trpc.viec.get,
+			trpc.viec.lichSu,
 		]) {
 			void queryClient.invalidateQueries({
 				queryKey: record.queryKey(),
@@ -119,7 +126,13 @@ export function useCrmCache(): CrmCache {
 		}
 
 		return run(
-			[...listKeys(), ...activityKeys(), trpc.dashboard.summary.queryKey()],
+			[
+				...listKeys(),
+				...activityKeys(),
+				trpc.viec.cuaToi.queryKey(),
+				trpc.viec.cuaBanGhi.queryKey(),
+				trpc.dashboard.summary.queryKey(),
+			],
 			[],
 		);
 	};

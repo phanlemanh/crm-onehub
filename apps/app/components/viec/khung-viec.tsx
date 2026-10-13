@@ -101,7 +101,7 @@ export function KhungViec({ viecId }: { viecId: string }) {
 			onSuccess: async () => {
 				setHoiXoa(false);
 				close();
-				await cache.viec();
+				await cache.removed({ kind: "viec", id: viecId });
 			},
 			onError: (e) => toast.error(e.message),
 		}),
