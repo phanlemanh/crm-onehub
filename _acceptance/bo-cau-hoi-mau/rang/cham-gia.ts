@@ -26,7 +26,12 @@ const mot = bo.cau
 			{
 				id: c.id,
 				nhom: c.nhom,
-				ketCuc: c.nhom === "khong-co" ? "TU_CHOI" : "TRA_LOI-du",
+				ketCuc:
+					CA === "loi" && c.id === "m06"
+						? "LOI"
+						: c.nhom === "khong-co"
+							? "TU_CHOI"
+							: "TRA_LOI-du",
 			},
 			1,
 		),
@@ -71,4 +76,4 @@ writeFileSync(
 	].join("\n"),
 );
 console.log(`thu muc luot: ${THU_MUC}`);
-process.exit(CA === "1" ? 1 : 0);
+process.exit(CA === "1" ? 1 : CA === "loi" ? 2 : 0);

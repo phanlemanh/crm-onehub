@@ -125,9 +125,12 @@ async function do_(): Promise<number> {
 	const dongLuot = [...ra.matchAll(/^thu muc luot: (.+)$/gm)]
 		.at(-1)?.[1]
 		?.trim();
-	if (ma !== 0 && ma !== 1) khongDo(`cham-bo-do thoat ${ma ?? "do tin hieu"}`);
+	if (ma !== 0 && ma !== 1 && ma !== 2)
+		khongDo(`cham-bo-do thoat ${ma ?? "do tin hieu"}`);
 	if (!dongLuot)
-		khongDo("khong thay dong 'thu muc luot' trong dau ra cua cham-bo-do");
+		khongDo(
+			`cham-bo-do thoat ${ma}, khong thay dong 'thu muc luot' trong dau ra`,
+		);
 	const luotCham = resolve(GOC, dongLuot);
 	const jsonl = docNeuCo(join(luotCham, "luot-1", tungCau));
 	if (jsonl === null) khongDo(`khong co ${join(luotCham, "luot-1", tungCau)}`);

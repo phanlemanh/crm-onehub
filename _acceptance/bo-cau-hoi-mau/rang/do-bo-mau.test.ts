@@ -290,7 +290,13 @@ describe("ma-thoat", () => {
 	const ca: [string, string, number, string[]][] = [
 		["gia thoat 0 du ma", "0", 0, ["ma thoat cham-bo-do: 0"]],
 		["gia thoat 1 du ma", "1", 0, ["ma thoat cham-bo-do: 1"]],
-		["gia thoat 2", "2", 2, ["KHONG DO DUOC"]],
+		[
+			"gia thoat 2 du ma, m06 loi",
+			"loi",
+			0,
+			["ma thoat cham-bo-do: 2", "m06 (luot 1: loi)"],
+		],
+		["gia thoat 2 khong de lai thu muc luot", "2", 2, ["KHONG DO DUOC"]],
 		[
 			"luot mot thieu m01 lap m02",
 			"thieu",
