@@ -2,100 +2,6 @@
 
 Máy sinh bằng `rang/bang.mjs` từ `danh-sach.json`, mốc nền `3a2783409894908bc8dd1ee3893b88f990d1aebe`. Mỗi mục là một eval mà vòng này khai không chạy hoặc sửa răng.
 
-## khoa-con-bat-xa-tran:E4 — khai-not-run
-
-Lý do: kcb: tro-ly-okr-nen S4-r1 gan tran 60 giay cho 5 ca do quyen cua go-la-cat-quyen.spec.ts (go-la-cat-quyen het tran 5 giay duoi tai S4); loi hua AC-4 «khong ca nao mang tran rieng» bi quyet dinh da ky sau thay — chu kho chon (b) o Cong Pham vi F24 13/10 (P7-2)
-
-Căn cứ: `_acceptance/tro-ly-okr-nen/decisions.jsonl:28`
-
-Mục paths trong dòng: `apps/api/bunfig.toml`, `bunfig.toml`, `-`
-
-Trước (mốc nền):
-```
-  - id: E4
-    criterion: AC-4
-    executor: script
-    cmd: config:executors.script.kcb_khong_noi_tran
-    paths:
-      - "apps/api/test/go-la-cat-quyen.spec.ts"
-      - "apps/api/test/setup.ts"
-      - "apps/api/package.json"
-      - "apps/api/bunfig.toml"
-      - "bunfig.toml"
-      - ".github/workflows/ci.yml"
-      - ".github/workflows/acceptance.yml"
-      - "_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs"
-      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
-    expected: |
-      Doc tep (vang = khong cau hinh, in ra la vang). Ma tran viet truoc:
-      - tep spec: dung 18 loi goi test( (quet ngoac can bang); moi loi goi dung hai doi so
-        — 18 khang dinh, thong diep ghim ten ca;
-      - tep spec + moi tep preload rut tu `--preload` cua script test (hien: apps/api/test/setup.ts):
-        khong goi setDefaultTimeout; khong co --preload nao -> do (khong soat duoc);
-      - apps/api/bunfig.toml, bunfig.toml: khong co khoa `timeout`;
-      - moi script cua apps/api/package.json co `bun test`: khong `--timeout`;
-      - MOI dong cua ci.yml va acceptance.yml (khong chi dong co `run:`): khong `--timeout`;
-        ci.yml phai co >= 1 dong chay test (doi chung: bo soat nhin thay lenh CI); in so dong da doc.
-      Tu kiem hai chieu, moi nhanh mot lan, tren cung ham soat, dot bien dung MOT tep:
-      spec them `, 15_000` vao khoa-con-bat -> "test khoa-con-bat co tran rieng";
-      script test them `--timeout 15000` -> "apps/api/package.json script test co --timeout";
-      bunfig them `[test] timeout = 15000` -> "apps/api/bunfig.toml co khoa timeout";
-      ci.yml them buoc `run: |` nhieu dong chua `bun test --timeout 15000` -> ".github/workflows/ci.yml co --timeout";
-      setup.ts them setDefaultTimeout -> "apps/api/test/setup.ts goi setDefaultTimeout".
-      Mot lan tu kiem khong bat -> script do, thuoc hong.
-```
-
-Sau (HEAD):
-```
-  - id: E4
-    criterion: AC-4
-    executor: script
-    cmd: config:executors.script.kcb_khong_noi_tran
-    paths:
-      - "apps/api/test/go-la-cat-quyen.spec.ts"
-      - "apps/api/test/setup.ts"
-      - "apps/api/package.json"
-      - "apps/api/bunfig.toml"
-      - "bunfig.toml"
-      - ".github/workflows/ci.yml"
-      - ".github/workflows/acceptance.yml"
-      - "_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs"
-      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
-    expected: |
-      Doc tep (vang = khong cau hinh, in ra la vang). Ma tran viet truoc:
-      - tep spec: dung 18 loi goi test( (quet ngoac can bang); moi loi goi dung hai doi so
-        — 18 khang dinh, thong diep ghim ten ca;
-      - tep spec + moi tep preload rut tu `--preload` cua script test (hien: apps/api/test/setup.ts):
-        khong goi setDefaultTimeout; khong co --preload nao -> do (khong soat duoc);
-      - apps/api/bunfig.toml, bunfig.toml: khong co khoa `timeout`;
-      - moi script cua apps/api/package.json co `bun test`: khong `--timeout`;
-      - MOI dong cua ci.yml va acceptance.yml (khong chi dong co `run:`): khong `--timeout`;
-        ci.yml phai co >= 1 dong chay test (doi chung: bo soat nhin thay lenh CI); in so dong da doc.
-      Tu kiem hai chieu, moi nhanh mot lan, tren cung ham soat, dot bien dung MOT tep:
-      spec them `, 15_000` vao khoa-con-bat -> "test khoa-con-bat co tran rieng";
-      script test them `--timeout 15000` -> "apps/api/package.json script test co --timeout";
-      bunfig them `[test] timeout = 15000` -> "apps/api/bunfig.toml co khoa timeout";
-      ci.yml them buoc `run: |` nhieu dong chua `bun test --timeout 15000` -> ".github/workflows/ci.yml co --timeout";
-      setup.ts them setDefaultTimeout -> "apps/api/test/setup.ts goi setDefaultTimeout".
-      Mot lan tu kiem khong bat -> script do, thuoc hong.
-```
-
-Căn cứ `_acceptance/tro-ly-okr-nen/decisions.jsonl:28`: ```
-{"id":"d-20260927T112853Z-28","type":"fix","stage":"S4-r1","at":"2026-09-27T11:28:53Z","decision":"Vòng 1 REJECT vì bun run test đỏ (go-la-cat-quyen hết trần 5 giây dưới tải S4) và một phát hiện trong hợp đồng ở AC-1. Sửa: E1 viết lại thành bảng kỳ vọng viết tay 10 ô có nghĩa cộng bảng NGOAI có lý do cho 65 ô, mọi tổ hợp phải nằm trong một bảng; năm bài dò ma trận thủ tục trong go-la-cat-quyen mang trần 60 giây. 22 phát hiện ngoài hợp đồng không sửa ở vòng này, chờ Cổng Bằng chứng.","impact":"Thước AC-1 không còn tự suy kỳ vọng từ chính logic sản phẩm; đổi lại bảng phải được sửa tay khi thêm mục đích phiên hay phiên con."}
-```
-
-Vật của mục `apps/api/bunfig.toml` ở HEAD: VẮNG
-
-Căn cứ `_acceptance/tro-ly-okr-nen/decisions.jsonl:28`: ```
-{"id":"d-20260927T112853Z-28","type":"fix","stage":"S4-r1","at":"2026-09-27T11:28:53Z","decision":"Vòng 1 REJECT vì bun run test đỏ (go-la-cat-quyen hết trần 5 giây dưới tải S4) và một phát hiện trong hợp đồng ở AC-1. Sửa: E1 viết lại thành bảng kỳ vọng viết tay 10 ô có nghĩa cộng bảng NGOAI có lý do cho 65 ô, mọi tổ hợp phải nằm trong một bảng; năm bài dò ma trận thủ tục trong go-la-cat-quyen mang trần 60 giây. 22 phát hiện ngoài hợp đồng không sửa ở vòng này, chờ Cổng Bằng chứng.","impact":"Thước AC-1 không còn tự suy kỳ vọng từ chính logic sản phẩm; đổi lại bảng phải được sửa tay khi thêm mục đích phiên hay phiên con."}
-```
-
-Vật của mục `bunfig.toml` ở HEAD: VẮNG
-
-Căn cứ `_acceptance/tro-ly-okr-nen/decisions.jsonl:28`: ```
-{"id":"d-20260927T112853Z-28","type":"fix","stage":"S4-r1","at":"2026-09-27T11:28:53Z","decision":"Vòng 1 REJECT vì bun run test đỏ (go-la-cat-quyen hết trần 5 giây dưới tải S4) và một phát hiện trong hợp đồng ở AC-1. Sửa: E1 viết lại thành bảng kỳ vọng viết tay 10 ô có nghĩa cộng bảng NGOAI có lý do cho 65 ô, mọi tổ hợp phải nằm trong một bảng; năm bài dò ma trận thủ tục trong go-la-cat-quyen mang trần 60 giây. 22 phát hiện ngoài hợp đồng không sửa ở vòng này, chờ Cổng Bằng chứng.","impact":"Thước AC-1 không còn tự suy kỳ vọng từ chính logic sản phẩm; đổi lại bảng phải được sửa tay khi thêm mục đích phiên hay phiên con."}
-```
-
 ## khung-tao-okr-nhu-deal:E6 — khai-not-run
 
 Lý do: expected do chinh cot gop y trong ngan (cot >= 360 px, cot cung hang form); cot gop y da go khi gop y Kara neo tai cho
@@ -450,9 +356,208 @@ Commit căn cứ: ```
 
 Vật của mục `apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx` ở HEAD: VẮNG
 
+## khoa-con-bat-xa-tran:E4 — sua-rang
+
+Lý do: d-20260927T112853Z-28 cua tro-ly-okr-nen gan tran 60 giay cho 5 ca do quyen (het tran 5 giay duoi tai S4) — loi hua AC-4 «khong ca nao mang tran rieng» cua khoa-con-bat-xa-tran va quyet dinh da ky sau mau thuan; chu kho chon (c) 13/10 (F24 P7-6): rang cho phep tran rieng CHI khi la hang co ten trong bang TRAN_CO_LY_DO kem ly do va khai trong tep spec; tran so tran hay hang ngoai bang van do. Khai not-run (lua chon b cu) bi luat hai ve 2.12.0 chan
+
+Căn cứ: `_acceptance/tro-ly-okr-nen/decisions.jsonl:28`
+
+Trước (mốc nền):
+```
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.kcb_khong_noi_tran
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "apps/api/test/setup.ts"
+      - "apps/api/package.json"
+      - "apps/api/bunfig.toml"
+      - "bunfig.toml"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+    expected: |
+      Doc tep (vang = khong cau hinh, in ra la vang). Ma tran viet truoc:
+      - tep spec: dung 18 loi goi test( (quet ngoac can bang); moi loi goi dung hai doi so
+        — 18 khang dinh, thong diep ghim ten ca;
+      - tep spec + moi tep preload rut tu `--preload` cua script test (hien: apps/api/test/setup.ts):
+        khong goi setDefaultTimeout; khong co --preload nao -> do (khong soat duoc);
+      - apps/api/bunfig.toml, bunfig.toml: khong co khoa `timeout`;
+      - moi script cua apps/api/package.json co `bun test`: khong `--timeout`;
+      - MOI dong cua ci.yml va acceptance.yml (khong chi dong co `run:`): khong `--timeout`;
+        ci.yml phai co >= 1 dong chay test (doi chung: bo soat nhin thay lenh CI); in so dong da doc.
+      Tu kiem hai chieu, moi nhanh mot lan, tren cung ham soat, dot bien dung MOT tep:
+      spec them `, 15_000` vao khoa-con-bat -> "test khoa-con-bat co tran rieng";
+      script test them `--timeout 15000` -> "apps/api/package.json script test co --timeout";
+      bunfig them `[test] timeout = 15000` -> "apps/api/bunfig.toml co khoa timeout";
+      ci.yml them buoc `run: |` nhieu dong chua `bun test --timeout 15000` -> ".github/workflows/ci.yml co --timeout";
+      setup.ts them setDefaultTimeout -> "apps/api/test/setup.ts goi setDefaultTimeout".
+      Mot lan tu kiem khong bat -> script do, thuoc hong.
+```
+
+Sau (HEAD):
+```
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.kcb_khong_noi_tran
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "apps/api/test/setup.ts"
+      - "apps/api/package.json"
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/acceptance.yml"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+    expected: |
+      Doc tep (vang = khong cau hinh, in ra la vang). Ma tran viet truoc:
+      - tep spec: dung 18 loi goi test( (quet ngoac can bang); moi loi goi dung hai doi so, hoac ba doi so khi doi so thu ba la mot hang co ten nam trong
+        bang TRAN_CO_LY_DO cua rang/tran-co-ly-do.mjs VA khai `const <TEN> = <so>;` trong tep spec (F24 P7-6, chu kho chon 13/10)
+        — 18 khang dinh, thong diep ghim ten ca;
+      - tep spec + moi tep preload rut tu `--preload` cua script test (hien: apps/api/test/setup.ts):
+        khong goi setDefaultTimeout; khong co --preload nao -> do (khong soat duoc);
+      - apps/api/bunfig.toml, bunfig.toml: khong co khoa `timeout`;
+      - moi script cua apps/api/package.json co `bun test`: khong `--timeout`;
+      - MOI dong cua ci.yml va acceptance.yml (khong chi dong co `run:`): khong `--timeout`;
+        ci.yml phai co >= 1 dong chay test (doi chung: bo soat nhin thay lenh CI); in so dong da doc.
+      Tu kiem hai chieu, moi nhanh mot lan, tren cung ham soat, dot bien dung MOT tep:
+      spec them `, 15_000` vao khoa-con-bat -> "test khoa-con-bat co tran rieng";
+      spec doi tran hang thanh `60_000` -> "tran 60_000 khong nam trong bang tran co ly do";
+      spec doi tran thanh hang ngoai bang `TRAN_KHAC` -> "tran TRAN_KHAC khong nam trong bang tran co ly do";
+      script test them `--timeout 15000` -> "apps/api/package.json script test co --timeout";
+      bunfig them `[test] timeout = 15000` -> "apps/api/bunfig.toml co khoa timeout";
+      ci.yml them buoc `run: |` nhieu dong chua `bun test --timeout 15000` -> ".github/workflows/ci.yml co --timeout";
+      setup.ts them setDefaultTimeout -> "apps/api/test/setup.ts goi setDefaultTimeout".
+      Mot lan tu kiem khong bat -> script do, thuoc hong.
+```
+
+Diff `_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs`:
+```
+diff --git a/_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs b/_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs
+index ec2c778d6..084e1d45f 100644
+--- a/_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs
++++ b/_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs
+@@ -1,6 +1,7 @@
+ import { existsSync, readFileSync } from "node:fs";
+ import { join } from "node:path";
+ import { API, GOC, hong, loiGoiTest, quetLoiGoi, SPEC } from "./chung.mjs";
++import { xetTran } from "./tran-co-ly-do.mjs";
+ 
+ const SO_CA = 18;
+ const CHO_GOI_MA_TRAN = [
+@@ -52,8 +53,9 @@ function soiTran(vat) {
+ 		loi.push(`tep co ${cacCa.length} loi goi test(, ky vong ${SO_CA}`);
+ 	else dat.push(`tep co dung ${SO_CA} loi goi test(`);
+ 	for (const ca of cacCa) {
+-		if (ca.doiSo.length !== 2)
+-			loi.push(`test ${ca.ten} co tran rieng (${ca.doiSo.length} doi so)`);
++		const x = xetTran(spec, ca);
++		if (!x.dat) loi.push(`test ${ca.ten} co tran rieng (${ca.doiSo.length} doi so): ${x.chu}`);
++		else if (x.ten) dat.push(`test ${ca.ten}: tran ${x.ten} co ly do — ${x.lyDo}`);
+ 		else dat.push(`test ${ca.ten}: 2 doi so`);
+ 	}
+ 	const preload = tepPreload(vat[GOI_TUONG_DOI]);
+@@ -191,6 +193,18 @@ if (nhom === "khong-noi-tran") {
+ 		(nd) => themVaoCuoiCa(nd, "khoa-con-bat", ", 15_000"),
+ 		"test khoa-con-bat co tran rieng",
+ 	);
++	tuKiemTran(
++		"tran so tran",
++		SPEC_TUONG_DOI,
++		(nd) => nd.replace("\t\tTRAN_MA_TRAN_MS,\n\t);", "\t\t60_000,\n\t);"),
++		"co tran rieng (3 doi so): tran 60_000 khong nam trong bang tran co ly do",
++	);
++	tuKiemTran(
++		"tran hang ngoai bang",
++		SPEC_TUONG_DOI,
++		(nd) => nd.replace("\t\tTRAN_MA_TRAN_MS,\n\t);", "\t\tTRAN_KHAC,\n\t);").replace("const TRAN_MA_TRAN_MS = 60_000;", "const TRAN_MA_TRAN_MS = 60_000;\nconst TRAN_KHAC = 90_000;"),
++		"co tran rieng (3 doi so): tran TRAN_KHAC khong nam trong bang tran co ly do",
++	);
+ 	tuKiemTran(
+ 		"package.json",
+ 		GOI_TUONG_DOI,
+```
+
+Diff `_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs`:
+```
+diff --git a/_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs b/_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs
+new file mode 100644
+index 000000000..8b90cc86a
+--- /dev/null
++++ b/_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs
+@@ -0,0 +1,27 @@
++import { loiGoiTest } from "./chung.mjs";
++
++export const TRAN_CO_LY_DO = {
++	TRAN_MA_TRAN_MS:
++		"d-20260927T112853Z-28 (tro-ly-okr-nen S4-r1): go-la-cat-quyen het tran 5 giay duoi tai S4; chu kho chon giu tran co ly do 13/10 (F24, P7-6)",
++};
++
++export function xetTran(spec, ca) {
++	if (ca.doiSo.length === 2) return { dat: true, ten: null };
++	if (ca.doiSo.length !== 3)
++		return { dat: false, chu: `${ca.doiSo.length} doi so` };
++	const ten = ca.doiSo[2];
++	const lyDo = Object.hasOwn(TRAN_CO_LY_DO, ten) ? TRAN_CO_LY_DO[ten] : null;
++	if (!lyDo)
++		return { dat: false, ten, chu: `tran ${ten} khong nam trong bang tran co ly do` };
++	if (!new RegExp(`^const ${ten} = [0-9_]+;$`, "m").test(spec))
++		return { dat: false, ten, chu: `hang ${ten} khong khai trong tep spec` };
++	return { dat: true, ten, lyDo };
++}
++
++export function soTranRieng(spec) {
++	const hong = loiGoiTest(spec)
++		.map((ca) => ({ ca, x: xetTran(spec, ca) }))
++		.filter(({ x }) => !x.dat)
++		.map(({ ca, x }) => `test ${ca.ten} co tran rieng: ${x.chu}`);
++	return { dat: hong.length === 0, chu: hong.join("; ") || "moi tran rieng deu co ly do" };
++}
+```
+
+Đột biến khai:
+```
+[
+  {
+    "ten": "tran-so-tran",
+    "kieu": "ham",
+    "mo_dun": "_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs",
+    "ham": "soTranRieng",
+    "tep": "apps/api/test/go-la-cat-quyen.spec.ts",
+    "thay": [
+      "\t\tTRAN_MA_TRAN_MS,\n\t);",
+      "\t\t60_000,\n\t);"
+    ],
+    "thong_diep": "tran so tran 60_000 bi bat",
+    "thong_diep_may": "khong nam trong bang tran co ly do"
+  },
+  {
+    "ten": "hang-ngoai-bang",
+    "kieu": "ham",
+    "mo_dun": "_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs",
+    "ham": "soTranRieng",
+    "tep": "apps/api/test/go-la-cat-quyen.spec.ts",
+    "thay": [
+      "\t\tTRAN_MA_TRAN_MS,\n\t);",
+      "\t\tTRAN_KHAC,\n\t);"
+    ],
+    "thong_diep": "hang TRAN_KHAC ngoai bang bi bat",
+    "thong_diep_may": "TRAN_KHAC khong nam trong bang tran co ly do"
+  }
+]
+```
+
+Đầu ra chieu-do.mjs cho dòng này:
+```
+khoa-con-bat-xa-tran:E4 tran-so-tran: that dat, dot bien bat — tran so tran 60_000 bi bat
+khoa-con-bat-xa-tran:E4 hang-ngoai-bang: that dat, dot bien bat — hang TRAN_KHAC ngoai bang bi bat
+```
+
 ## lenh-dung-do-khong-ai-thay:E5 — sua-rang
 
-Lý do: dieu 2 so ci.yml tung ky tu voi ban cua hang o sha 3c97e759, tien de bi luat 47 (09/10) lat — thay bang kiem cau truc buoc bun run build; spawnSync khai maxBuffer (dau ra pre-push > 1 MiB lam status null). Chu kho chon o Cong Pham vi F24 13/10 (P7-4)
+Lý do: dieu 2 so ci.yml tung ky tu voi ban cua hang o sha 3c97e759; tien de «ci.yml cua hang khong doi» bi luat 47 (09/10) lat — chu kho chon bo han dieu 2 13/10 (F24 P7-7); ba noi chay build (suite_keys, pre-push, acceptance.yml) van do dieu 1, 3-4, 5 canh. spawnSync khai maxBuffer (dau ra pre-push > 1 MiB lam status null). Dieu 3 tach thanh ham dung chung dieu-prepush.mjs de do chieu do
 
 Căn cứ: `CLAUDE.md:14`
 
@@ -499,12 +604,12 @@ Sau (HEAD):
       - ".github/workflows/**"
       - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
     expected: |
-      NAM dieu. Hai dieu dau doc ban khai; ba dieu sau do HANH VI — vi cau mo dau
+      BON dieu. Dieu 1 doc ban khai; ba dieu sau do HANH VI — vi cau mo dau
       cua vong nay la "mot lenh khong ai chay thi khong phai bang chung", va mot
       ban khai khong ai chay cung the.
       1. `_acceptance/config.yaml` co mot o cam chay `build`, VA `feature_loop.suite_keys`
          goi ten dung o cam ay.
-      2. `.github/workflows/ci.yml` KHONG doi mot ky tu so voi sha ghim.
+      2. (bo 13/10, F24 P7-7: tien de «ci.yml cua hang khong doi» bi luat 47 lat; ci.yml nay do OneHub giu.)
       3. `.githooks/pre-push` co `build` trong danh sach task — doc bang cach TACH
          danh sach that (bien vong `for task in ...`), khong grep chuoi "build".
       4. HANH VI cua pre-push: tren BAN SAO da cay lai loi cu (mot loi goi getLocale
@@ -513,7 +618,7 @@ Sau (HEAD):
       5. `.github/workflows/acceptance.yml`: buoc chay lenh dung KHONG mang
          `continue-on-error: true`, va KHONG nam duoi mot `if:` khong bao gio dung —
          doc bang trinh phan tich YAML, khong bang tim chuoi.
-      Thieu mot trong nam -> ma 1, neu dieu nao.
+      Thieu mot trong bon -> ma 1, neu dieu nao.
       Chieu do: go `build` khoi suite_keys trong ban sao -> ma 1 neu dung dieu 1;
       them `continue-on-error: true` vao buoc ay -> ma 1 neu dung dieu 5.
 ```
@@ -521,10 +626,59 @@ Sau (HEAD):
 Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs`:
 ```
 diff --git a/_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs b/_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs
-index 261684c24..6b568df5e 100644
+index 261684c24..cce2e83b7 100644
 --- a/_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs
 +++ b/_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs
-@@ -66,6 +66,7 @@ const chayPrePush = () => {
+@@ -2,9 +2,9 @@ import { execFileSync, spawnSync } from "node:child_process";
+ import { readFileSync, writeFileSync } from "node:fs";
+ import { dirname, join, resolve } from "node:path";
+ import { fileURLToPath } from "node:url";
++import { buildTrongPrePush } from "./dieu-prepush.mjs";
+ 
+ const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+-const SHA = "3c97e759a6c87bc8b6f0621d3854cb486728b442";
+ const O_CAM = "build_khong_cache";
+ const VAT_CAY = "apps/app/app/layout.tsx";
+ 
+@@ -28,33 +28,12 @@ ghi(
+ 	`suite_keys goi ten o cam ay (${khoaSuite.length} khoa)`,
+ );
+ 
+-let ciDoi = true;
+-try {
+-	const cu = execFileSync("git", ["show", `${SHA}:.github/workflows/ci.yml`], {
+-		cwd: GOC,
+-		encoding: "utf8",
+-	});
+-	ciDoi = cu !== doc(".github/workflows/ci.yml");
+-} catch (e) {
+-	console.error(`MA 2: khong doc duoc ci.yml tai sha ghim — ${e.message}`);
+-	process.exit(2);
+-}
+-ghi(!ciDoi, "dieu 2", "ci.yml cua hang khong doi mot ky tu");
+-
+-const prePush = doc(".githooks/pre-push");
+-const khopVong = prePush.match(/for task in ([^;]+); do/);
+-if (!khopVong) {
+-	console.error(
+-		"MA 2: khong thay vong `for task in ...` trong .githooks/pre-push",
+-	);
++const dieu3 = buildTrongPrePush(doc(".githooks/pre-push"));
++if (!dieu3.doc) {
++	console.error(`MA 2: ${dieu3.chu}`);
+ 	process.exit(2);
+ }
+-const danhSachTask = khopVong[1].trim().split(/\s+/);
+-ghi(
+-	danhSachTask.includes("build"),
+-	"dieu 3",
+-	`danh sach task cua pre-push: ${danhSachTask.join(" ")}`,
+-);
++ghi(dieu3.dat, "dieu 3", dieu3.chu);
+ 
+ const shaHEAD = execFileSync("git", ["rev-parse", "HEAD"], {
+ 	cwd: GOC,
+@@ -66,6 +45,7 @@ const chayPrePush = () => {
  	const r = spawnSync("bash", [join(GOC, ".githooks", "pre-push")], {
  		cwd: GOC,
  		encoding: "utf8",
@@ -532,37 +686,56 @@ index 261684c24..6b568df5e 100644
  		input: dongRef,
  		env: { ...process.env, TURBO_TELEMETRY_DISABLED: "1" },
  	});
+@@ -143,5 +123,5 @@ if (hong.length > 0) {
+ 	process.exit(1);
+ }
+ console.log(
+-	"XANH: ca nam dieu deu dat — hai dieu doc ban khai, ba dieu do hanh vi.",
++	"XANH: ca bon dieu deu dat — dieu 1 doc ban khai, ba dieu do hanh vi.",
+ );
 ```
 
-Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-ci.mjs`:
+Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs`:
 ```
-(khong doi)
+diff --git a/_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs b/_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs
+new file mode 100644
+index 000000000..49e143113
+--- /dev/null
++++ b/_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs
+@@ -0,0 +1,11 @@
++export function buildTrongPrePush(prePush) {
++	const khopVong = prePush.match(/for task in ([^;]+); do/);
++	if (!khopVong)
++		return { doc: false, dat: false, chu: "khong thay vong `for task in ...` trong .githooks/pre-push" };
++	const danhSachTask = khopVong[1].trim().split(/\s+/);
++	return {
++		doc: true,
++		dat: danhSachTask.includes("build"),
++		chu: `danh sach task cua pre-push: ${danhSachTask.join(" ")}`,
++	};
++}
 ```
 
 Đột biến khai:
 ```
 [
   {
-    "ten": "bo-buoc-build",
-    "tep": ".github/workflows/ci.yml",
+    "ten": "bo-build-khoi-pre-push",
+    "kieu": "ham",
+    "mo_dun": "_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs",
+    "ham": "buildTrongPrePush",
+    "tep": ".githooks/pre-push",
     "thay": [
-      "bun run build",
-      "bun run khong-build"
+      "lint:slop test build; do",
+      "lint:slop test; do"
     ],
-    "thong_diep": "ci.yml khong con buoc nao chay bun run build"
-  },
-  {
-    "ten": "if-tren-buoc-build",
-    "tep": ".github/workflows/ci.yml",
-    "chen_if": true,
-    "thong_diep": "buoc chay bun run build mang if hoac continue-on-error"
+    "thong_diep": "go build khoi danh sach task cua pre-push thi dieu 3 do"
   }
 ]
 ```
 
 Đầu ra chieu-do.mjs cho dòng này:
 ```
-HONG DOT_BIEN_LECH lenh-dung-do-khong-ai-thay:E5 bo-buoc-build
-HONG DOT_BIEN_LECH lenh-dung-do-khong-ai-thay:E5 if-tren-buoc-build
+lenh-dung-do-khong-ai-thay:E5 bo-build-khoi-pre-push: that dat, dot bien bat — go build khoi danh sach task cua pre-push thi dieu 3 do
 ```
 
