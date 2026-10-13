@@ -1542,6 +1542,26 @@ AI đọc kho»).
   `owner`/`admin`, stores noon VN time of the chosen day, and writes a `XAC_MINH` event.
   `taiLieu.get` returns `xacMinhDen`, `quaHanXacMinh` and `coQuyenXacMinh`.
 
+## Tín hiệu: CRM giữ hàng chờ, lượt gom lấy về git
+
+Người dùng gửi tín hiệu (`tinHieu.gui`, tự phục vụ, phạm vi chung — cả vai chỉ OKR) và xem tín
+hiệu của mình (`tinHieu.cuaToi`). Bảng `tinHieu` là hàng chờ; nguồn sự thật sau đó là git của kho
+(`tin-hieu/crm/<mã>.json`, khuôn tín hiệu của bộ kit).
+
+- Trần mỗi người mỗi ngày giờ Việt Nam và độ dài mỗi ô sống ở `TIN_HIEU` (`@crm/validation/tin-hieu`);
+  đếm và ghi trong một giao dịch có khoá theo người, quá trần trả 429.
+- `tinHieu.xoa` chỉ xoá tín hiệu của chính người gọi, và chỉ khi chưa được lấy về (`keoVeLuc` rỗng).
+  Xoá xin khoá bảng `ROW EXCLUSIVE` trước rồi mới đọc — cùng thứ tự khoá với lượt lấy về, nên hai
+  việc chạy đua không khoá chéo nhau.
+- `tinHieu.keoVe` chỉ owner/admin. Máy chủ kho gọi `POST /rest/tin-hieu/keo-ve` với `x-api-key`
+  (khoá của chủ kho) đầu mỗi lượt gom. Thủ tục khoá bảng `SHARE ROW EXCLUSIVE`, đóng dấu tín hiệu
+  chưa dấu, trả mọi tín hiệu theo số. Cầu REST trả thẳng đầu ra `{tep: [...]}`, không bọc vỏ tRPC;
+  lệnh kéo về đọc bằng `docPhanHoiKeoVe`.
+- Tệp git không mang tên, thư, id người dùng hay phòng ban; phòng ban chỉ đi kèm trong phản hồi để
+  lệnh kéo về đếm cho ngưỡng.
+- Nhật ký chỉ ghi mã và người gọi, không ghi nội dung tín hiệu. Không `AgentTask`: không có việc
+  phán nào ở API.
+
 ## Money
 
 A deal is sold in one currency and reported in another, and **only `baseAmount` may
