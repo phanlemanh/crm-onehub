@@ -113,13 +113,13 @@ sang dòng gập, không cần thêm khoá.
 
 | Component | Nấc (dùng / ghép / mở rộng / tạo) | Vì sao (1 dòng) |
 |---|---|---|
-| `Collapsible`, `SimpleTableRow sub`, `SimpleTableCell`, `Button` | dùng | mở-gập, dòng mờ thụt và nút đã có trong `packages/ui` |
+| `SimpleTableRow sub`, `TableCell`, `Button` | dùng | dòng mờ thụt và nút đã có trong `packages/ui`; mở-gập là một nút `aria-expanded` vì `Collapsible` sinh `div`, không nằm được trong `tbody` |
 | `DongDaLuuTru` (`record-sheet/record-parts.tsx`) | ghép | cạnh `AddRow`, cùng hình một dòng nút cuối bảng; một chỗ cho bốn bảng, chỉ khu record-sheet dùng |
 | `LocalDay` | dùng | ngày cất theo múi giờ người xem, như dải báo |
 
 Bậc đã tra (`docs/design.md` «Vẽ tay là bậc cuối»): bậc 1 có `ArchivedList` (mục gập «Đã lưu trữ (n)» có Khôi phục,
 Xoá vĩnh viễn) nhưng nó là danh sách `ul` cho Cài đặt, không ngồi trong `SimpleTable`, và kèm nút khôi phục mà thiết
-kế này để ở dải báo — nên ghép từ `Collapsible` và `SimpleTableRow` cùng bậc 1, dừng ở bậc 1.
+kế này để ở dải báo — nên ghép từ `SimpleTableRow` và `Button` cùng bậc 1, dừng ở bậc 1.
 
 ### 6. Khuôn IA đã chọn + căn cứ
 
