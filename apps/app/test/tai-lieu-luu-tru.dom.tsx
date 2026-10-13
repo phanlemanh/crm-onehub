@@ -13,6 +13,10 @@ import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { taiLieuLichSuMessages } from "@/lib/messages/tai-lieu-lich-su";
 import { ngayTaiLieu } from "@/lib/tai-lieu-man";
 
+type ChonMutation = {
+	onSuccess?: (ket: never) => unknown;
+	onError?: (loi: never) => unknown;
+};
 const L = taiLieuLichSuMessages("vi").luuTru;
 const D = taiLieuMessages("vi");
 
@@ -25,7 +29,7 @@ const canh = {
 };
 
 const thuTucGui = (ten: string) => ({
-	mutationOptions: (chon: object) => ({
+	mutationOptions: (chon: ChonMutation) => ({
 		...chon,
 		mutationFn: async (vao: { slug: string; lyDo: string }) => {
 			canh.gui.push({ thuTuc: ten, ...vao });
@@ -47,7 +51,7 @@ mock.module("@/lib/trpc/client", () => ({
 			deXuatLuuTru: thuTucGui("deXuatLuuTru"),
 			deXuatKhoiPhuc: thuTucGui("deXuatKhoiPhuc"),
 			approve: {
-				mutationOptions: (chon: object) => ({
+				mutationOptions: (chon: ChonMutation) => ({
 					...chon,
 					mutationFn: async (vao: { id: string }) => {
 						canh.duyet.push({ id: vao.id });
@@ -56,7 +60,7 @@ mock.module("@/lib/trpc/client", () => ({
 				}),
 			},
 			reject: {
-				mutationOptions: (chon: object) => ({
+				mutationOptions: (chon: ChonMutation) => ({
 					...chon,
 					mutationFn: async () => ({ ok: true }),
 				}),
@@ -309,9 +313,9 @@ describe("tai-lieu-luu-tru", () => {
 		expect(dai?.textContent).toContain(
 			L.dai.tieuDe.replace("{ngay}", ngayTaiLieu(NGAY_LUU, "vi")),
 		);
-		expect(dai?.querySelector("[data-nut-de-xuat-khoi-phuc]")?.textContent).toBe(
-			L.dai.deXuatKhoiPhuc,
-		);
+		expect(
+			dai?.querySelector("[data-nut-de-xuat-khoi-phuc]")?.textContent,
+		).toBe(L.dai.deXuatKhoiPhuc);
 		expect(
 			[...goc.querySelectorAll("a")].some(
 				(a) => a.textContent === D.doc.suaTrang,
@@ -349,9 +353,9 @@ describe("tai-lieu-luu-tru", () => {
 	test("duyet: LUU_TRU va KHOI_PHUC hien ten viec, ly do, nut rieng, khong DiffTrang; duyet goi dung id", async () => {
 		for (const loai of ["LUU_TRU", "KHOI_PHUC"] as const) {
 			const goc = await mo(<ManDuyetViecTrang deXuat={deXuat(loai)} />);
-			expect(goc.querySelector(`[data-viec-trang="${loai}"]`)?.textContent).toContain(
-				L.duyet[loai].tieuDe,
-			);
+			expect(
+				goc.querySelector(`[data-viec-trang="${loai}"]`)?.textContent,
+			).toContain(L.duyet[loai].tieuDe);
 			expect(goc.textContent).toContain(LY_DO);
 			expect(goc.querySelector("[data-diff-trang]")).toBeNull();
 			const nut = goc.querySelector<HTMLElement>("[data-nut-duyet]");

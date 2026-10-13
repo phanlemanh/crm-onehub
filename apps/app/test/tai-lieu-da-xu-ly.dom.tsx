@@ -44,7 +44,14 @@ mock.module("next/navigation", () => ({
 	useParams: () => ({ slug: "ws" }),
 }));
 mock.module("next/link", () => ({
-	default: ({ children, href, ...props }: { children: ReactNode; href: string }) => (
+	default: ({
+		children,
+		href,
+		...props
+	}: {
+		children: ReactNode;
+		href: string;
+	}) => (
 		<a href={href} {...props}>
 			{children}
 		</a>

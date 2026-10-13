@@ -12,6 +12,10 @@ import {
 import { createRoot, type Root } from "react-dom/client";
 import { taiLieuLichSuMessages } from "@/lib/messages/tai-lieu-lich-su";
 
+type ChonMutation = {
+	onSuccess?: (ket: never) => unknown;
+	onError?: (loi: never) => unknown;
+};
 const M = taiLieuLichSuMessages("vi");
 
 const NGUOI = {
@@ -69,7 +73,7 @@ mock.module("@/lib/trpc/client", () => ({
 				}),
 			},
 			quayLai: {
-				mutationOptions: (chon: object) => ({
+				mutationOptions: (chon: ChonMutation) => ({
 					...chon,
 					mutationFn: async (vao: { slug: string; so: number }) => {
 						canh.quayLai.push(vao);
@@ -173,15 +177,17 @@ async function mo(nut: ReactElement): Promise<HTMLElement> {
 }
 
 function nutChuaChu(goc: HTMLElement, chu: string): Element[] {
-	return [...goc.querySelectorAll("*")].filter(
-		(e) =>
-			[...e.childNodes].some(
-				(n) => n.nodeType === 3 && (n.textContent ?? "").includes(chu),
-			),
+	return [...goc.querySelectorAll("*")].filter((e) =>
+		[...e.childNodes].some(
+			(n) => n.nodeType === 3 && (n.textContent ?? "").includes(chu),
+		),
 	);
 }
 
-function ngoaiVungKhongDich(goc: HTMLElement, chu: readonly string[]): string[] {
+function ngoaiVungKhongDich(
+	goc: HTMLElement,
+	chu: readonly string[],
+): string[] {
 	return chu.flatMap((c) => {
 		const nut = nutChuaChu(goc, c);
 		if (nut.length === 0) return [`khong thay: ${c}`];
@@ -249,9 +255,7 @@ describe("tai-lieu-lich-su", () => {
 		const DU_LIEU = ["Quy định hoa hồng", NGUOI.ha.name, NGUOI.quan.name];
 		expect(ngoaiVungKhongDich(goc, DU_LIEU)).toEqual([]);
 		goc.querySelector("h1")?.removeAttribute("translate");
-		expect(ngoaiVungKhongDich(goc, DU_LIEU)).toEqual([
-			"h1: Quy định hoa hồng",
-		]);
+		expect(ngoaiVungKhongDich(goc, DU_LIEU)).toEqual(["h1: Quy định hoa hồng"]);
 	});
 
 	test("ban-cu: chuyen giua so sanh (co them va bo) va toan van; nut quay lai goi dung so", async () => {

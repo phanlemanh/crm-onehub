@@ -43,7 +43,7 @@ import { duongPhienBan, duongTrang, ngayTaiLieu } from "@/lib/tai-lieu-man";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
-const SO_DONG_CHO = 3;
+const DONG_CHO = ["mot", "hai", "ba"] as const;
 
 export type DongLichSu = {
 	so: number;
@@ -157,8 +157,8 @@ export function BangLichSu({
 function DangTaiLichSu() {
 	return (
 		<div aria-hidden className="flex flex-col gap-2" data-lich-su-dang-tai="">
-			{Array.from({ length: SO_DONG_CHO }, (_, i) => (
-				<Skeleton className="h-12 w-full" key={`${i}`} />
+			{DONG_CHO.map((k) => (
+				<Skeleton className="h-12 w-full" key={k} />
 			))}
 		</div>
 	);
