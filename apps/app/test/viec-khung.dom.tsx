@@ -1,4 +1,4 @@
-import { afterEach, describe, mock, test } from "bun:test";
+import { afterEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createTRPCClient, type TRPCLink } from "@trpc/client";
 import { observable } from "@trpc/server/observable";
@@ -76,6 +76,7 @@ const { RecordSheetHost } = await import(
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { viecMessages } = await import("@/lib/messages/viec");
+const { VIEC } = await import("@crm/validation/viec");
 
 const V = viecMessages("vi");
 
@@ -398,6 +399,27 @@ describe("vc-khung-sua-tai-cho", () => {
 		) {
 			throw new Error("vc: khung khong sua tai cho");
 		}
+	});
+
+	test("vc-khung-sua-tai-cho: ô sửa tiêu đề và mô tả mang giới hạn độ dài của việc", async () => {
+		const du = chiTiet(
+			"DANG_LAM",
+			["CHUA_LAM", "CHO_DANH_GIA", "XONG"],
+			false,
+			true,
+		);
+		await moKhung(du);
+		await bam(document.querySelector(`button[aria-label="${V.khung.tieuDe}"]`));
+		const tieuDe = document.querySelector<HTMLInputElement>(
+			`input[aria-label="${V.khung.tieuDe}"]`,
+		);
+		expect(tieuDe?.maxLength).toBe(VIEC.tieuDeToiDa);
+		await roi(tieuDe);
+		await bam(document.querySelector(`button[aria-label="${V.khung.moTa}"]`));
+		const moTa = document.querySelector<HTMLTextAreaElement>(
+			`textarea[aria-label="${V.khung.moTa}"]`,
+		);
+		expect(moTa?.maxLength).toBe(VIEC.moTaToiDa);
 	});
 
 	test("vc-khung-sua-tai-cho: người theo dõi không có ô sửa tiêu đề và mô tả", async () => {

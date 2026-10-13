@@ -6,6 +6,7 @@ import { Combobox } from "@crm/ui/components/combobox";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import { useLocale } from "@crm/ui/components/locale-provider";
+import { VIEC } from "@crm/validation/viec";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -120,6 +121,7 @@ export function KhungViec({ viecId }: { viecId: string }) {
 						<DetailSheetProperty label={m.khung.tieuDe} wide>
 							<InlineTextCell
 								label={m.khung.tieuDe}
+								maxLength={VIEC.tieuDeToiDa}
 								onSave={(chu) => {
 									if (chu !== "") sua.mutate({ id: v.id, tieuDe: chu });
 								}}
@@ -211,6 +213,7 @@ export function KhungViec({ viecId }: { viecId: string }) {
 				{suaDuoc ? (
 					<InlineTextArea
 						label={m.khung.moTa}
+						maxLength={VIEC.moTaToiDa}
 						onSave={(chu) =>
 							sua.mutate({ id: v.id, moTa: chu === "" ? null : chu })
 						}
