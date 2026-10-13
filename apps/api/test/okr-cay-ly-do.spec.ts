@@ -5,7 +5,7 @@ import type { NestExpressApplication } from "@nestjs/platform-express";
 import { z } from "zod";
 import { idMau } from "../scripts/okr-mau/nap";
 import { MUC_TIN_CAN_CHINH } from "../src/okr/can-chinh";
-import { mucTieuOutput } from "../src/okr/okr.contracts";
+import { alignmentTreeOutput, mucTieuOutput } from "../src/okr/okr.contracts";
 import { cayCanChinhOutput } from "../src/okr/okr-xem.contracts";
 import { canhCuaCay, type MucTieuCoCanh } from "../src/okr/okr-xem.service";
 import { congTy } from "./okr-mau-san";
@@ -150,23 +150,18 @@ describe("l3-canh", () => {
 					muc: a.mucTin,
 				});
 			}
-			const cu = z
-				.object({
-					roots: z.array(z.unknown()),
-					chuaCanChinh: z.array(z.unknown()),
-				})
-				.parse(
-					ok(
-						await goi(
-							app,
-							"okr.alignmentTree",
-							"query",
-							{ cycleId: CHU_KY_Q4 },
-							await cookie(QUAN_TRI),
-						),
-						"alignmentTree",
+			const cu = alignmentTreeOutput.parse(
+				ok(
+					await goi(
+						app,
+						"okr.alignmentTree",
+						"query",
+						{ cycleId: CHU_KY_Q4 },
+						await cookie(QUAN_TRI),
 					),
-				);
+					"alignmentTree",
+				),
+			);
 			const boKyVong = (n: Nut): NutKhongKyVong => {
 				const { expected: _bo, children, ...con } = n;
 				return { ...con, children: children.map(boKyVong) };
