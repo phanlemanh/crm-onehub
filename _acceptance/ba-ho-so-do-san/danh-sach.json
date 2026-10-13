@@ -1456,16 +1456,6 @@
 			"can_cu": "7875d145eec958d927d9a42a1f774b736cefd21b"
 		},
 		{
-			"ho_so": "tro-ly-okr-nen",
-			"eval": "E21",
-			"muc": "packages/db/src/okr-can-chinh.ts",
-			"ma": "paths-khong-tro-toi-tep",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": null,
-			"ly_do": "muc go sai tu luc viet (tep chua tung co); alignmentTargets nam trong apps/api/src/okr/** da co trong paths"
-		},
-		{
 			"ho_so": "khoa-con-bat-xa-tran",
 			"eval": "E4",
 			"muc": null,
@@ -2039,6 +2029,25 @@
 					"E24",
 					"E25"
 				]
+			},
+			{
+				"ho_so": "tro-ly-okr-nen",
+				"muc_chet": [
+					{
+						"eval": "E21",
+						"muc": "packages/db/src/okr-can-chinh.ts",
+						"ma": "paths-khong-tro-toi-tep"
+					}
+				],
+				"eval_do": [
+					"E4",
+					"E17",
+					"E22",
+					"E23",
+					"E25"
+				],
+				"luot_do": "repin-20261013T145607Z-38505",
+				"yeu_cau": "P7-13"
 			}
 		]
 	}
