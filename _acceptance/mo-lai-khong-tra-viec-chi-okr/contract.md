@@ -5,7 +5,7 @@ slug: mo-lai-khong-tra-viec-chi-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: implemented
+status: verified
 approved_by: Phan Le Manh
 approved_at: 2026-10-13T01:07:29Z
 design_doc: docs/superpowers/specs/2026-10-13-mo-lai-khong-tra-viec-chi-okr-design.md
