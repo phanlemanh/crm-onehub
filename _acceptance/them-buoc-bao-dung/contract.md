@@ -5,7 +5,7 @@ slug: them-buoc-bao-dung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -70,9 +70,10 @@ Quét hình thái preset test-matrix, đầy đủ ở design doc mục «Độ 
 - Hồ sơ `dieu-phoi-va` cũ theo `paths` (`onboarding-ghi.ts`, `plan-steps.tsx`, `dashboard-summary.tsx`) — ghim lại ở bước
   ghim lại của vòng.
 - Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
-  - Ngoài-2: Ảnh Tổng quan đưa người ký không còn chụp tới dòng bước đang đo; dấu quá hạn của dòng đó chỉ được thước kiểm trong trang.
-  - Ngoài-3: Quy tắc «hôm nay là ngày nào theo giờ Việt Nam» viết ở hai nơi; sửa một nơi mà quên nơi kia thì số quá hạn trên màn và ở máy chủ lệch nhau.
-  - Ngoài-5: Danh sách phòng ban đã tải mà lần làm mới ngầm lỗi thì nút «Thêm» vẫn bấm được và lưu vào phòng ban không còn hiện trên form.
-  - Ngoài-6: Phép đo màn sau khi bấm thử lại không dùng việc tràn ngang và việc bị chặn để quyết đạt hay không.
-  - Ngoài-7: Bài kiểm Tổng quan không phát hiện được mô tả thẻ ghi sai số việc quá hạn.
-  - Ngoài-8: Trạng thái sau khi thử lại thành công không được kiểm tràn ngang trên khổ điện thoại.
+  - Ngoài-1: Danh sách phòng ban đã tải mà lần làm mới ngầm lỗi thì form ẩn ô chọn nhưng nút «Thêm» vẫn bấm được.
+  - Ngoài-3: Ảnh Tổng quan đưa người ký không còn chụp tới dòng bước đang đo; dấu quá hạn của dòng đó chỉ được thước kiểm trong trang.
+  - Ngoài-4: Quy tắc «hôm nay là ngày nào theo giờ Việt Nam» viết ở hai nơi; sửa một nơi mà quên nơi kia thì số quá hạn trên màn và ở máy chủ lệch nhau.
+  - Ngoài-6: Cùng gốc với Ngoài-1 — bước có thể được lưu vào phòng ban không còn hiện trên form.
+  - Ngoài-7: Phép đo màn sau khi bấm thử lại không dùng việc tràn ngang và việc bị chặn để quyết đạt hay không.
+  - Ngoài-8: Bài kiểm Tổng quan không phát hiện được mô tả thẻ ghi sai số việc quá hạn.
+  - Ngoài-9: Trạng thái sau khi thử lại thành công không được kiểm tràn ngang trên khổ điện thoại.
