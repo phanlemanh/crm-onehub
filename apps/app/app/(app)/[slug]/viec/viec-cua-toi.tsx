@@ -15,6 +15,7 @@ import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { NHOM_VIEC, VIEC } from "@crm/validation/viec";
 import { useQuery } from "@tanstack/react-query";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { useState } from "react";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { BangViec } from "@/components/viec/bang-viec";
 import { useMoGiaoViec } from "@/components/viec/giao-viec";
@@ -37,6 +38,12 @@ export function ViecCuaToi() {
 		placeholderData: (truoc) => truoc,
 	});
 
+	const [nhomDaTai, setNhomDaTai] = useState(nhom);
+	if (q.data && !q.isPlaceholderData && nhomDaTai !== nhom) {
+		setNhomDaTai(nhom);
+	}
+	const nhomHienThi = q.isPlaceholderData ? nhomDaTai : nhom;
+
 	if (q.isPending) {
 		return (
 			<div
@@ -51,45 +58,53 @@ export function ViecCuaToi() {
 			</div>
 		);
 	}
-	if (q.isError) {
-		return (
-			<VungTaiLoi
-				dangTai={q.isFetching}
-				moTa={m.loi.moTa}
-				onThuLai={() => void q.refetch()}
-				tieuDe={m.loi.tieuDe}
-			/>
-		);
-	}
 	const du = q.data;
-	const rong = du.mo.length + du.soXong + du.soHuy === 0;
-	return (
-		<div className="flex flex-col gap-4">
-			<div className="max-w-full overflow-x-auto">
-				<ToggleGroup
-					onValueChange={(v) => {
-						const chon = NHOM_VIEC.find((n) => n === v);
-						if (chon) void setNhom(chon);
-					}}
-					size="sm"
-					type="single"
-					value={nhom}
-					variant="outline"
-				>
-					{NHOM_VIEC.map((n) => (
-						<ToggleGroupItem data-nhom={n} key={n} value={n}>
-							{m.nhom[n]}
+	const chip = (
+		<div className="max-w-full overflow-x-auto">
+			<ToggleGroup
+				onValueChange={(v) => {
+					const chon = NHOM_VIEC.find((n) => n === v);
+					if (chon) void setNhom(chon);
+				}}
+				size="sm"
+				type="single"
+				value={nhom}
+				variant="outline"
+			>
+				{NHOM_VIEC.map((n) => (
+					<ToggleGroupItem data-nhom={n} key={n} value={n}>
+						{m.nhom[n]}
+						{du ? (
 							<span className="text-muted-foreground tabular-nums" data-dem="">
 								{du.demNhom[n]}
 							</span>
-						</ToggleGroupItem>
-					))}
-				</ToggleGroup>
+						) : null}
+					</ToggleGroupItem>
+				))}
+			</ToggleGroup>
+		</div>
+	);
+	if (!du) {
+		return (
+			<div className="flex flex-col gap-4">
+				{chip}
+				<VungTaiLoi
+					dangTai={q.isFetching}
+					moTa={m.loi.moTa}
+					onThuLai={() => void q.refetch()}
+					tieuDe={m.loi.tieuDe}
+				/>
 			</div>
+		);
+	}
+	const rong = du.mo.length + du.soXong + du.soHuy === 0;
+	return (
+		<div aria-busy={q.isPlaceholderData} className="flex flex-col gap-4">
+			{chip}
 			{rong ? (
 				<Empty border="solid">
 					<EmptyHeader>
-						<EmptyTitle>{m.rong[nhom]}</EmptyTitle>
+						<EmptyTitle>{m.rong[nhomHienThi]}</EmptyTitle>
 						<EmptyDescription>{m.rong.moTa}</EmptyDescription>
 					</EmptyHeader>
 					<EmptyContent>
@@ -100,7 +115,7 @@ export function ViecCuaToi() {
 				</Empty>
 			) : (
 				<>
-					<BangViec ds={du.mo} nhom={nhom} />
+					<BangViec ds={du.mo} nhom={nhomHienThi} />
 					<div className="flex flex-wrap gap-2">
 						<DongGapViec
 							ds={du.daXong}

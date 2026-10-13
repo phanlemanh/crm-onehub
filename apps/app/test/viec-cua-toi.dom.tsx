@@ -284,6 +284,76 @@ describe("vc-man-co-viec", () => {
 		);
 	});
 
+	test("vc-man-co-viec: đổi nhóm khi dữ liệu nhóm mới chưa về — nhãn cột và dòng cùng thuộc nhóm cũ, về rồi mới đổi cùng lúc", async () => {
+		let xong: (() => void) | null = null;
+		const treo = new Promise<void>((r) => {
+			xong = r;
+		});
+		traLoi.set("viec.cuaToi", async (vao) => {
+			if ((vao as { nhom?: string } | null)?.nhom === "toi-giao") {
+				await treo;
+				return { ...DU_E7, mo: [viec("tg", null, false)] };
+			}
+			return DU_E7;
+		});
+		await moTrang();
+		await cho(
+			() => document.querySelectorAll("tr[data-viec]").length === 4,
+			"bon dong nhom cu",
+		);
+		const nhanCot = () =>
+			[...document.querySelectorAll("thead th")].map((h) =>
+				(h.textContent ?? "").trim(),
+			);
+		expect(nhanCot()).toContain(V.cot.nguoiGiao);
+		await bam(document.querySelector('[data-nhom="toi-giao"]'));
+		await cho(
+			() =>
+				daGoi.some(
+					(g) => (g.input as { nhom?: string } | null)?.nhom === "toi-giao",
+				),
+			"goi nhom moi",
+		);
+		await nhip();
+		expect(document.querySelectorAll("tr[data-viec]").length).toBe(4);
+		expect(nhanCot()).toContain(V.cot.nguoiGiao);
+		expect(nhanCot()).not.toContain(V.cot.nguoiThucHien);
+		await act(async () => {
+			xong?.();
+		});
+		await cho(
+			() => document.querySelector('tr[data-viec="tg"]') !== null,
+			"du lieu nhom moi",
+		);
+		expect(nhanCot()).toContain(V.cot.nguoiThucHien);
+		expect(nhanCot()).not.toContain(V.cot.nguoiGiao);
+	});
+
+	test("vc-man-co-viec: đổi nhóm gặp lỗi tải — hàng chip còn nguyên để đổi lại, VungTaiLoi hiện bên dưới", async () => {
+		traLoi.set("viec.cuaToi", (vao) => {
+			if ((vao as { nhom?: string } | null)?.nhom === "toi-giao") {
+				throw new Error("hong");
+			}
+			return DU_E7;
+		});
+		await moTrang();
+		await cho(
+			() => document.querySelectorAll("tr[data-viec]").length === 4,
+			"bon dong nhom cu",
+		);
+		await bam(document.querySelector('[data-nhom="toi-giao"]'));
+		await cho(
+			() => document.querySelector("[data-vung-tai-loi]") !== null,
+			"vung loi",
+		);
+		expect(document.querySelectorAll("[data-nhom]").length).toBe(3);
+		await bam(document.querySelector('[data-nhom="giao-cho-toi"]'));
+		await cho(
+			() => document.querySelectorAll("tr[data-viec]").length === 4,
+			"ve nhom cu",
+		);
+	});
+
 	test("vc-man-co-viec: đối chứng — không có việc quá hạn thì không dòng nào đỏ", async () => {
 		traLoi.set("viec.cuaToi", () => ({
 			...DU_E7,
