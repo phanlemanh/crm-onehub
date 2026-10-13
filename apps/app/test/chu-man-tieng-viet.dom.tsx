@@ -7,8 +7,20 @@ import { createRoot, type Root } from "react-dom/client";
 import { fieldListOutput } from "../../api/src/fields/fields.contracts";
 
 type Locale = "vi" | "en";
+type Json =
+	| string
+	| number
+	| boolean
+	| null
+	| Json[]
+	| { [khoa: string]: Json };
+type DauVao = Json | undefined;
+type TuyChonGhi = {
+	onSuccess?: (kq: Json, vao: DauVao) => unknown;
+	onError?: (e: Error) => unknown;
+};
 
-const NGAN: Record<Locale, Record<FieldTypeName, string>> = {
+const NGAN = {
 	vi: {
 		TEXT: "Chữ",
 		LONG_TEXT: "Chữ dài",
@@ -33,7 +45,7 @@ const NGAN: Record<Locale, Record<FieldTypeName, string>> = {
 		PHONE: "Phone",
 		USER: "User",
 	},
-};
+} satisfies Record<Locale, Record<FieldTypeName, string>>;
 
 let daGoi: string[] = [];
 
@@ -64,18 +76,18 @@ function dsTruong() {
 }
 
 function thuTuc(ten: string, doc: () => unknown) {
-	const khoa = (vao?: unknown) => (vao === undefined ? [ten] : [ten, vao]);
+	const khoa = (vao?: DauVao) => (vao === undefined ? [ten] : [ten, vao]);
 	return {
 		queryKey: khoa,
 		pathKey: () => [ten],
-		queryOptions: (vao?: unknown) => ({
+		queryOptions: (vao?: DauVao) => ({
 			queryKey: khoa(vao),
 			queryFn: async () => {
 				daGoi.push(ten);
 				return doc();
 			},
 		}),
-		mutationOptions: (chon?: object) => ({
+		mutationOptions: (chon?: TuyChonGhi) => ({
 			...chon,
 			mutationKey: [ten],
 			mutationFn: async () => doc(),
