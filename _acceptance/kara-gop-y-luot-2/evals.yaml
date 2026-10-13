@@ -112,7 +112,7 @@ evals:
     cmd: config:executors.test.k3_neo_kr
     expected: "exit 0; cùng tệp, -t k3-neo-kr: Mục tiêu có góp ý dưới KR1 và KR2; mở hộp Sửa KR2, bấm dòng dẫn → khung Mục tiêu mở, document.activeElement nằm trong [data-kara-proposal-kr=<id KR2>] đầu tiên (so id), phần tử đó có data-highlighted === 'true'; activeElement !== body. Đối chứng: từ KR1 thì focus vào góp ý của KR1. Chiều đỏ ghim ở E15 (g): chỉ cuộn tới vùng → 'focus roi ve body'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
-    paths: ["apps/app/app/(app)/[slug]/okr/dong-dan-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx, "apps/app/app/(app)/[slug]/okr/okr-search-params.ts", apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
+    paths: ["apps/app/app/(app)/[slug]/okr/dong-dan-gop-y.tsx", "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx", apps/app/components/crm/record-sheet/objective-sheet.tsx, apps/app/lib/okr-search-params.ts, apps/app/test/gop-y-dung-cho-luot-2.dom.tsx]
 
   - id: E14
     criterion: AC-14

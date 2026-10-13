@@ -221,7 +221,12 @@ if (import.meta.main) {
 			if (!dauCuoi.has(t)) dauCuoi.set(t, { dau: sha, cuoi: sha });
 			else dauCuoi.get(t).cuoi = sha;
 		}
-	const tepDoi = [...dauCuoi.keys()].filter((t) => !t.startsWith(`_acceptance/${SLUG}/`) && t !== "_acceptance/config.yaml" && !t.startsWith("docs/"));
+	const hoanLai = new Set((danhSach.hoan_lai?.ho_so ?? []).map((h) => h.ho_so));
+	const loiHoanLai = [];
+	const laHoanLai = (t) => hoanLai.has(/^_acceptance\/([^/]+)\//.exec(t)?.[1]);
+	for (const [t, { dau, cuoi }] of dauCuoi)
+		if (laHoanLai(t) && docTai(`${dau}^`, t) !== docTai(cuoi, t)) loiHoanLai.push(`HOAN_LAI_CON_DOI ${t}`);
+	const tepDoi = [...dauCuoi.keys()].filter((t) => !t.startsWith(`_acceptance/${SLUG}/`) && t !== "_acceptance/config.yaml" && !t.startsWith("docs/") && !laHoanLai(t));
 	const evalsCap = new Map();
 	for (const t of tepDoi) {
 		const m = /^_acceptance\/([^/]+)\/evals\.yaml$/.exec(t);
@@ -238,10 +243,10 @@ if (import.meta.main) {
 	}
 	const dauVao = { tepDoi, evalsCap, danhSach, configCu: {}, configMoi: {}, kiemCanCu: canCuSong };
 	const { loi: loiKhai, soEval } = kiemKhai(dauVao);
-	const loi = [...loiKhai, ...loiConfig];
+	const loi = [...loiKhai, ...loiConfig, ...loiHoanLai];
 	const tk = tuKiem({ ...dauVao, configCu: configMoi, configMoi: structuredClone(configMoi) });
 	for (const l of loi) console.log(`HONG ${l}`);
 	for (const t of tk) console.log(t);
-	console.log(`khai-du: ${cvong.length} commit cua vong, ${tepDoi.length} tep doi ngoai ho so nay, ${soEval} eval doi, ${loi.length ? `${loi.length} loi` : "moi thay doi co dong danh sach"}`);
+	console.log(`khai-du: ${cvong.length} commit cua vong, ${hoanLai.size} ho so hoan lai nguyen, ${tepDoi.length} tep doi ngoai ho so nay, ${soEval} eval doi, ${loi.length ? `${loi.length} loi` : "moi thay doi co dong danh sach"}`);
 	process.exit(loi.length || tk.some((t) => t.startsWith("HONG")) ? 1 : 0);
 }

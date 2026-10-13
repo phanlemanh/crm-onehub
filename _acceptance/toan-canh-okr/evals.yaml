@@ -221,7 +221,7 @@ evals:
       - "Cùng lần chạy với E2; gieo dữ liệu E20"
       - "Quản trị bấm «Sức khoẻ chương trình» trên Toàn cảnh → {APP_URL}/<slug>/okr/suc-khoe ở 1440/vi → breadcrumb «Toàn cảnh › Sức khoẻ chương trình», bốn StatCard, bảng hàng đúng số E20 (đọc textContent), tiêu đề cột và thẻ số đọc «KR của mục tiêu chưa công bố», trang không có chữ «thiếu khởi điểm» → ảnh buoc-suc-khoe-1; 390 → ảnh buoc-suc-khoe-2"
       - "Thành viên thường mở thẳng URL → «Chỉ quản trị xem được sức khoẻ chương trình» → ảnh buoc-suc-khoe-3"
-    paths: ["apps/app/app/(app)/[[]slug]/okr/toan-canh/suc-khoe/**", _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
+    paths: ["apps/app/app/(app)/[slug]/okr/suc-khoe/**", _acceptance/toan-canh-okr/rang/man-toan-canh.mjs]
     expected: "exit 0; khẳng định DOM. CHIỀU ĐỎ: bản sao trang không kiểm quyền → thành viên thấy bảng, script in bước 3 đỏ."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

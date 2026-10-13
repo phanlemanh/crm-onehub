@@ -159,7 +159,7 @@ evals:
     paths:
       - "apps/app/app/(app)/[slug]/*.tsx"
       - "apps/app/components/app-header.tsx"
-      - "apps/app/lib/giai-doan.ts"
+      - "apps/app/lib/deal-stage.ts"
       - "_acceptance/tong-quan-va-khung-noi-tieng-viet/rang/**"
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
 

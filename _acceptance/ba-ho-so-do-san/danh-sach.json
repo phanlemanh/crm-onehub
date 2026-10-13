@@ -2,51 +2,6 @@
 	"moc_nen": "3a2783409894908bc8dd1ee3893b88f990d1aebe",
 	"dong": [
 		{
-			"ho_so": "danh-sach-keo-chung",
-			"eval": "E6",
-			"muc": "apps/app/app/(app)/[slug]/settings/giai-doan/",
-			"ma": "dang-khai-la",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "apps/app/app/(app)/[slug]/settings/giai-doan"
-		},
-		{
-			"ho_so": "danh-sach-keo-chung",
-			"eval": "E6",
-			"muc": "apps/app/app/(app)/[slug]/settings/organization/",
-			"ma": "dang-khai-la",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "apps/app/app/(app)/[slug]/settings/organization"
-		},
-		{
-			"ho_so": "danh-sach-keo-chung",
-			"eval": "E12",
-			"muc": "apps/app/app/(app)/[slug]/settings/organization/",
-			"ma": "dang-khai-la",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "apps/app/app/(app)/[slug]/settings/organization"
-		},
-		{
-			"ho_so": "danh-sach-keo-chung",
-			"eval": "E13",
-			"muc": "apps/app/app/(app)/[slug]/settings/giai-doan/",
-			"ma": "dang-khai-la",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "apps/app/app/(app)/[slug]/settings/giai-doan"
-		},
-		{
-			"ho_so": "danh-sach-keo-chung",
-			"eval": "E13",
-			"muc": "apps/app/app/(app)/[slug]/settings/organization/",
-			"ma": "dang-khai-la",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "apps/app/app/(app)/[slug]/settings/organization"
-		},
-		{
 			"ho_so": "dieu-phoi-hai-tang",
 			"eval": "E1",
 			"muc": "scripts/dieu-phoi/**",
@@ -1107,16 +1062,6 @@
 			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
 		},
 		{
-			"ho_so": "kara-gop-y-luot-2",
-			"eval": "E13",
-			"muc": "apps/app/lib/okr-search-params.ts",
-			"ma": "paths-khong-tro-toi-tep",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "apps/app/app/(app)/[slug]/okr/okr-search-params.ts",
-			"ly_do": "muc go sai tu luc viet (tep chua tung co); tep that nam trong thu muc okr cua route"
-		},
-		{
 			"ho_so": "khoa-con-bat-xa-tran",
 			"eval": "E4",
 			"muc": "apps/api/bunfig.toml",
@@ -1418,38 +1363,6 @@
 			"xu_ly": "bo-paths",
 			"ly_do": "o da not-run; vat cua muc da go khoi kho",
 			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
-		},
-		{
-			"ho_so": "to-chuc-danh-sach-chi-tiet",
-			"eval": "E19",
-			"muc": "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx",
-			"ma": "paths-khong-tro-toi-tep",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "packages/ui/src/components/confirm-dialog.tsx",
-			"ly_do": "ConfirmDialog doi vao packages/ui",
-			"can_cu": "e265f24da"
-		},
-		{
-			"ho_so": "toan-canh-okr",
-			"eval": "E21",
-			"muc": "apps/app/app/(app)/[slug]/okr/suc-khoe/**",
-			"ma": "paths-khong-tro-toi-tep",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "apps/app/app/(app)/[[]slug]/okr/toan-canh/suc-khoe/**",
-			"ly_do": "muc go sai tu luc viet (thieu doan toan-canh); man suc khoe nam duoi okr/toan-canh"
-		},
-		{
-			"ho_so": "tong-quan-va-khung-noi-tieng-viet",
-			"eval": "E7",
-			"muc": "apps/app/lib/deal-stage.ts",
-			"ma": "paths-khong-tro-toi-tep",
-			"nguon": "paths",
-			"xu_ly": "tro-duong-moi",
-			"moi": "apps/app/lib/giai-doan.ts",
-			"ly_do": "deal-stage.ts thay boi giai-doan.ts khi app doc giai doan dong",
-			"can_cu": "ecb9448b4"
 		},
 		{
 			"ho_so": "tro-ly-doc-kho",
@@ -1869,6 +1782,117 @@
 						"eval": "E7",
 						"loai": "do-san"
 					}
+				]
+			}
+		]
+	},
+	"hoan_lai": {
+		"ly_do": "chu kho chon (A) 13/10 (P7-10): luot ghim lai 18 ho so vuot tran 80 phut va lo eval do san ngoai thuoc paths o nam ho so nay; phan sua paths hoan lai ve ban onehub, chuyen sang F28",
+		"yeu_cau": "P7-10",
+		"hang": "F28",
+		"luot_do": "repin-20261013T052045Z-82824",
+		"ho_so": [
+			{
+				"ho_so": "danh-sach-keo-chung",
+				"muc_chet": [
+					{
+						"eval": "E6",
+						"muc": "apps/app/app/(app)/[slug]/settings/giai-doan/",
+						"ma": "dang-khai-la"
+					},
+					{
+						"eval": "E6",
+						"muc": "apps/app/app/(app)/[slug]/settings/organization/",
+						"ma": "dang-khai-la"
+					},
+					{
+						"eval": "E12",
+						"muc": "apps/app/app/(app)/[slug]/settings/organization/",
+						"ma": "dang-khai-la"
+					},
+					{
+						"eval": "E13",
+						"muc": "apps/app/app/(app)/[slug]/settings/giai-doan/",
+						"ma": "dang-khai-la"
+					},
+					{
+						"eval": "E13",
+						"muc": "apps/app/app/(app)/[slug]/settings/organization/",
+						"ma": "dang-khai-la"
+					}
+				],
+				"eval_do": [
+					"E13"
+				]
+			},
+			{
+				"ho_so": "kara-gop-y-luot-2",
+				"muc_chet": [
+					{
+						"eval": "E13",
+						"muc": "apps/app/lib/okr-search-params.ts",
+						"ma": "paths-khong-tro-toi-tep"
+					}
+				],
+				"eval_do": [
+					"E15b"
+				]
+			},
+			{
+				"ho_so": "to-chuc-danh-sach-chi-tiet",
+				"muc_chet": [
+					{
+						"eval": "E19",
+						"muc": "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx",
+						"ma": "paths-khong-tro-toi-tep"
+					}
+				],
+				"eval_do": [
+					"E21"
+				]
+			},
+			{
+				"ho_so": "toan-canh-okr",
+				"muc_chet": [
+					{
+						"eval": "E21",
+						"muc": "apps/app/app/(app)/[slug]/okr/suc-khoe/**",
+						"ma": "paths-khong-tro-toi-tep"
+					}
+				],
+				"eval_do": [
+					"E3",
+					"E28",
+					"E29"
+				]
+			},
+			{
+				"ho_so": "tong-quan-va-khung-noi-tieng-viet",
+				"muc_chet": [
+					{
+						"eval": "E7",
+						"muc": "apps/app/lib/deal-stage.ts",
+						"ma": "paths-khong-tro-toi-tep"
+					}
+				],
+				"eval_do": [
+					"E1",
+					"E2",
+					"E3",
+					"E4",
+					"E7",
+					"E8",
+					"E10",
+					"E11",
+					"E12",
+					"E13",
+					"E14",
+					"E15",
+					"E21",
+					"E22",
+					"E23",
+					"E24",
+					"E25"
 				]
 			}
 		]

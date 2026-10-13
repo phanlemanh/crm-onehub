@@ -18,6 +18,8 @@ export function tapNen() {
 	];
 }
 
+const hoanLaiCua = (d) => new Set((d.hoan_lai?.ho_so ?? []).map((h) => h.ho_so));
+
 export function docKiemCheo(ngay) {
 	const ra = new Map();
 	for (const n of ngay) {
@@ -41,11 +43,23 @@ export function kiemDanhSach(d, nen, kiemCheo) {
 		coSan.set(k, x);
 		if (!XU_LY.includes(x.xu_ly)) loi.push(`XU_LY_LA ${k}: ${x.xu_ly}`);
 	}
-	const tapN = new Set(nen);
+	const hl = hoanLaiCua(d);
+	const tapN = new Set(nen.filter((k) => !hl.has(k.split(":")[0])));
 	for (const k of tapN) if (!coSan.has(k)) loi.push(`THIEU ${k}`);
 	for (const k of coSan.keys()) if (!tapN.has(k)) loi.push(`THUA ${k}`);
 	if (d.moc_nen !== MOC_NEN) loi.push(`MOC_NEN_LECH ${d.moc_nen}`);
-	if (loi.length === 0) dat.push(`danh-sach: ${coSan.size} dong, khop tap quet o moc nen ${MOC_NEN}`);
+	for (const k of coSan.keys()) if (hl.has(k.split(":")[0])) loi.push(`HOAN_LAI_CON_DONG ${k}`);
+	if (d.hoan_lai) {
+		if (!/^P7-\d+$/.test(String(d.hoan_lai.yeu_cau ?? "")) || !String(d.hoan_lai.hang ?? "").trim()) loi.push("HOAN_LAI_KHONG_MA");
+		for (const h of d.hoan_lai.ho_so ?? []) {
+			const khai = new Set((h.muc_chet ?? []).map((m) => `${h.ho_so}:${m.eval}:${m.muc}`));
+			const quet = nen.filter((k) => k.startsWith(`${h.ho_so}:`) && !k.endsWith(":-"));
+			for (const k of quet) if (!khai.has(k)) loi.push(`HOAN_LAI_THIEU ${k}`);
+			for (const k of khai) if (!quet.includes(k)) loi.push(`HOAN_LAI_THUA ${k}`);
+			if (!Array.isArray(h.eval_do) || h.eval_do.length === 0) loi.push(`HOAN_LAI_KHONG_EVAL_DO ${h.ho_so}`);
+		}
+	}
+	if (loi.length === 0) dat.push(`danh-sach: ${coSan.size} dong tren ${new Set(d.dong.map((x) => x.ho_so)).size} ho so, khop tap quet o moc nen ${MOC_NEN}; hoan lai ${hl.size} ho so sang ${d.hoan_lai?.hang ?? "-"}`);
 
 	const nv = d.ngoai_vong;
 	if (!nv || !Array.isArray(nv.ngay) || nv.ngay.length === 0) {
@@ -53,7 +67,7 @@ export function kiemDanhSach(d, nen, kiemCheo) {
 		return { loi, dat };
 	}
 	if (!/^P7-\d+$/.test(String(nv.yeu_cau ?? ""))) loi.push("NGOAI_VONG_KHONG_MA");
-	const trong = new Set(d.dong.map((x) => x.ho_so));
+	const trong = new Set([...d.dong.map((x) => x.ho_so), ...hoanLaiCua(d)]);
 	const daGhi = new Map((nv.ho_so ?? []).map((h) => [h.ho_so, h]));
 	for (const [hoSo, evals] of kiemCheo) {
 		if (trong.has(hoSo)) continue;
@@ -93,6 +107,14 @@ function tuKiem(d, nen, kiemCheo) {
 	if (dauNV) {
 		const boNV = { ...d, ngoai_vong: { ...d.ngoai_vong, ho_so: d.ngoai_vong.ho_so.slice(1) } };
 		bat("bo ngoai vong", boNV, `NGOAI_VONG_THIEU ${dauNV}`);
+	}
+	const dauHL = d.hoan_lai?.ho_so?.[0];
+	if (dauHL?.muc_chet?.length) {
+		const thieuHL = { ...d, hoan_lai: { ...d.hoan_lai, ho_so: [{ ...dauHL, muc_chet: dauHL.muc_chet.slice(1) }, ...d.hoan_lai.ho_so.slice(1)] } };
+		const m = dauHL.muc_chet[0];
+		bat("hoan lai thieu muc chet", thieuHL, `HOAN_LAI_THIEU ${dauHL.ho_so}:${m.eval}:${m.muc}`);
+		const conDong = { ...d, dong: [...d.dong, { ho_so: dauHL.ho_so, eval: m.eval, muc: m.muc, xu_ly: "bo-paths" }] };
+		bat("hoan lai van con dong", conDong, `HOAN_LAI_CON_DONG ${dauHL.ho_so}`);
 	}
 	const khongMa = { ...d, ngoai_vong: { ...d.ngoai_vong, yeu_cau: null } };
 	bat("ngoai vong khong ma", khongMa, "NGOAI_VONG_KHONG_MA");
