@@ -14,6 +14,7 @@ import { FieldEditor } from "./field-editor";
 import { entityTabs, fieldsCopy, subtitleFor } from "./fields-copy";
 import { entityOf } from "./fields-entity";
 import { FieldsList } from "./fields-list";
+import { useLuuTruTruong } from "./use-luu-tru-truong";
 
 function FieldsSheetBody({
 	kind,
@@ -36,6 +37,7 @@ function FieldsSheetBody({
 	);
 	const quyen = useQuery(trpc.fields.access.queryOptions());
 	const khoa = quyen.data?.canManage !== true;
+	const luuTru = useLuuTruTruong(entity);
 
 	const editingKey = field && field !== "new" ? field : null;
 	const editing = editingKey
@@ -78,6 +80,7 @@ function FieldsSheetBody({
 						entity={entity}
 						field={editing}
 						onDone={() => onEdit(null)}
+						onArchive={luuTru}
 					/>
 				)}
 			</>
@@ -109,6 +112,7 @@ function FieldsSheetBody({
 				khoa={khoa}
 				onEdit={(key) => onEdit(key)}
 				onNew={() => onEdit("new")}
+				onArchive={luuTru}
 			/>
 		</>
 	);
