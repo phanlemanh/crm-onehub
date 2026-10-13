@@ -5,12 +5,13 @@ import {
 	describe,
 	expect,
 	setSystemTime,
+	spyOn,
 	test,
 } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { db, type TrangThaiViec } from "@crm/db";
-import { viecCanNhac } from "@crm/db/onboarding-nhac";
+import * as nhacDb from "@crm/db/onboarding-nhac";
 import { doiTrangThai, taoViec } from "@crm/db/viec-ghi";
 import { parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
 import {
@@ -45,6 +46,8 @@ import {
 } from "./support/okr-gieo";
 import { APP_URL, voiToken } from "./support/tra-loi-gieo";
 import { zaloGia } from "./support/zalo-gia";
+
+const viecCanNhac = nhacDb.viecCanNhac;
 
 const NOW = new Date("2026-10-14T09:00:00+07:00");
 const TUAN_TRUOC = new Date("2026-10-05T10:00:00+07:00");
@@ -269,6 +272,33 @@ describe("vc-nhac-vai-okr", () => {
 			throw new Error("vc: doi chung thieu ten thoa thuan");
 	});
 
+	test("vc-nhac-vai-okr: đối chứng — tin Slack của member có tên thoả thuận của họ", async () => {
+		const thuong = await dungNguoi(
+			"vc-nhac-member-slack",
+			"vc-nhac-member-slack",
+		);
+		const s = slackGia();
+		await noiSlack(thuong.nguoi.id);
+		await khopSlack(thuong.nguoi.id, `S-${thuong.nguoi.id}`);
+		await db.notificationPreference.create({
+			data: { userId: thuong.nguoi.id, channel: "SLACK" },
+		});
+		await lenLichNhac(NOW);
+		const hang = await hangCua(thuong.nguoi.id);
+		await voiToken(() =>
+			chayNhac(hang, { fetcher: s.fetcher, appUrl: APP_URL }),
+		);
+		const tin = s.goi
+			.filter((g) => g.url.endsWith("chat.postMessage"))
+			.map((g) => g.body.text ?? "");
+		if (
+			tin.length !== 1 ||
+			!thuong.tenDoiTac.some((t) => (tin[0] ?? "").includes(t))
+		) {
+			throw new Error("vc: doi chung slack thieu ten thoa thuan");
+		}
+	});
+
 	test("vc-nhac-vai-okr: nguồn việc của bộ gom lọc bằng docDuocDoiTac của @crm/db/vai-doi-tac, không so chuỗi okr", () => {
 		const nguon = readFileSync(
 			join(
@@ -285,6 +315,9 @@ describe("vc-nhac-vai-okr", () => {
 		);
 		const dung =
 			nguon.includes('import { docDuocDoiTac } from "./vai-doi-tac";') &&
+			/const tapDoiTac\s*=\s*new Set\([^;]*?\.filter\(\s*\(\s*(\w+)\s*\)\s*=>\s*docDuocDoiTac\(\s*\1\.role\s*\)\s*\)/.test(
+				nguon,
+			) &&
 			nguon.includes("guiViec(v, tapDoiTac, chon.now)") &&
 			!/["']okr["']\s*[!=]==|[!=]==\s*["']okr["']/.test(nguon);
 		if (!dung) throw new Error("vc: nhac viec khong dung luat vai cua DA0a");
@@ -629,5 +662,68 @@ describe("vc-xong-n", () => {
 			(await db.viec.findUniqueOrThrow({ where: { id } })).trangThai;
 		expect(await trangThai(f.quaHan.id)).toBe("CHUA_LAM");
 		expect(await trangThai(f.sapHan.id)).toBe("HUY");
+	});
+
+	test("vc-xong-n: một mục mã hoá hỏng giữa danh sách bị bỏ khỏi cả tin lẫn daGui, «xong n» ở mục sau nó đóng đúng việc", async () => {
+		const f = await dungE9();
+		const z = zaloGia();
+		await noiZalo(f.b.id, `Z-${f.b.id}`);
+		await batBot();
+		await lenLichNhac(NOW);
+		const h = await hangCua(f.b.id);
+		const gomThat = nhacDb.viecCanNhac;
+		const gomHong = spyOn(nhacDb, "viecCanNhac").mockImplementation(
+			async (dbx, chon) => {
+				const kq = await gomThat(dbx, chon);
+				for (const [id, ds] of kq) {
+					kq.set(
+						id,
+						ds.map((v) =>
+							v.loai === "viec-qua-han" ? { ...v, viecId: "" } : v,
+						),
+					);
+				}
+				return kq;
+			},
+		);
+		const loi = spyOn(console, "error").mockImplementation(() => {});
+		try {
+			await voiToken(() =>
+				chayNhac(h, { zaloFetcher: z.fetcher, appUrl: APP_URL }),
+			);
+		} finally {
+			gomHong.mockRestore();
+			loi.mockRestore();
+		}
+		const than = z.guiToi(`Z-${f.b.id}`).map((g) => g.body.text ?? "")[0] ?? "";
+		const daGui = parseNhacPayload((await hangCua(f.b.id)).payload).daGui ?? [];
+		const dongTheoSo = new Map(
+			than.split("\n").flatMap((dong) => {
+				const khop = /^(\d+)\. (.*)$/.exec(dong);
+				return khop?.[1] ? [[Number(khop[1]), khop[2] ?? ""] as const] : [];
+			}),
+		);
+		const soSapHan = daGui.findIndex((m) => m.loai === "viec-sap-han") + 1;
+		if (
+			soSapHan === 0 ||
+			than.includes("VC việc quá hạn") ||
+			!(dongTheoSo.get(soSapHan) ?? "").includes("VC việc sắp hạn") ||
+			dongTheoSo.size !== daGui.length
+		) {
+			throw new Error("vc: daGui lech so tin");
+		}
+		const r = await db.$transaction((tx) =>
+			xongTheoTinNhac(tx, {
+				userId: f.b.id,
+				so: [soSapHan],
+				now: NOW,
+				lienKet: () => null,
+			}),
+		);
+		const trangThai = async (id: string) =>
+			(await db.viec.findUniqueOrThrow({ where: { id } })).trangThai;
+		expect(r.loai).toBe("xong");
+		expect(await trangThai(f.sapHan.id)).toBe("XONG");
+		expect(await trangThai(f.quaHan.id)).toBe("CHUA_LAM");
 	});
 });
