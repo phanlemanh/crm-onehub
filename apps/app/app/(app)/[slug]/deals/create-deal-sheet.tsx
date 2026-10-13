@@ -31,6 +31,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@crm/ui/components/sheet";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { parseMoneyInput } from "@crm/ui/lib/money-input";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -59,7 +60,7 @@ function AddButton(props: ComponentProps<typeof Button>) {
 
 export function CreateDealSheet({ companyId }: { companyId?: string }) {
 	return (
-		<Suspense fallback={<AddButton disabled />}>
+		<Suspense fallback={<Skeleton className="h-8 w-28 rounded-md" />}>
 			<CreateDealForm companyId={companyId} />
 		</Suspense>
 	);

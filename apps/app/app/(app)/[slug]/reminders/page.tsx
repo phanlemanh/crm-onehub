@@ -1,3 +1,4 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
@@ -6,7 +7,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -37,7 +37,7 @@ export default async function NhacBuoiSangPage() {
 			</PageShellHeader>
 
 			<PageShellContent>
-				<Suspense fallback={<PageShellLoading />}>
+				<Suspense fallback={<KhungXuong hinh="the" />}>
 					<ThongBao />
 				</Suspense>
 			</PageShellContent>

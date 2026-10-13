@@ -2,7 +2,6 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { cn } from "@crm/ui/lib/utils";
 import type * as React from "react";
 import { PageLoadingStatus } from "./page-loading-status";
-import { PageShellLoading } from "./page-shell-loading";
 import { PageTransition } from "./page-transition";
 
 const BE_RONG = {
@@ -104,7 +103,25 @@ function PageShellDescription({
 		<p
 			data-slot="page-shell-description"
 			className={cn(
-				"order-last basis-full text-balance text-muted-foreground text-sm",
+				"order-1 basis-full text-balance text-muted-foreground text-sm md:order-last",
+				className,
+			)}
+			{...props}
+		/>
+	);
+}
+
+function PageShellNote({
+	className,
+	id,
+	...props
+}: React.ComponentProps<"p"> & { id: string }) {
+	return (
+		<p
+			id={id}
+			data-slot="page-shell-note"
+			className={cn(
+				"order-1 basis-full text-balance text-muted-foreground text-sm md:order-last",
 				className,
 			)}
 			{...props}
@@ -119,7 +136,10 @@ function PageShellActions({
 	return (
 		<div
 			data-slot="page-shell-actions"
-			className={cn("flex flex-wrap items-center gap-2", className)}
+			className={cn(
+				"order-2 flex flex-wrap items-center gap-2 md:order-none",
+				className,
+			)}
 			{...props}
 		/>
 	);
@@ -173,6 +193,6 @@ export {
 	PageShellFallback,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
+	PageShellNote,
 	PageShellTitle,
 };

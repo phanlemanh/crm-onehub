@@ -1,6 +1,7 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageShellContent, PageShellLoading } from "@/components/page-shell";
+import { PageShellContent } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -23,7 +24,7 @@ export default function ToanCanhPage({
 }) {
 	return (
 		<PageShellContent>
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
 				<NoiDung searchParams={searchParams} />
 			</Suspense>
 		</PageShellContent>

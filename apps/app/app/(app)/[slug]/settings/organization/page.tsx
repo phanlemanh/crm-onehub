@@ -1,3 +1,4 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import type * as React from "react";
 import { Suspense } from "react";
@@ -8,7 +9,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -52,7 +52,7 @@ export default async function CaiDatToChucPage() {
 				fallback={
 					<>
 						<DauTrang tieuDe={m.title} moTa={m.moTa} />
-						<PageShellLoading />
+						<KhungXuong hinh="the" />
 					</>
 				}
 			>

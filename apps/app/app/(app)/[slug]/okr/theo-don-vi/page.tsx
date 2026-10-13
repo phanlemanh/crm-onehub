@@ -1,6 +1,7 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageShellContent, PageShellLoading } from "@/components/page-shell";
+import { PageShellContent } from "@/components/page-shell";
 import { okrBridgeConfigured } from "@/lib/agent-bridge";
 import { getLocale } from "@/lib/locale/server";
 import { okrMessages } from "@/lib/messages/okr";
@@ -24,7 +25,7 @@ export default function TheoDonViPage({
 }) {
 	return (
 		<PageShellContent>
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="tong-quan" />}>
 				<NoiDung searchParams={searchParams} />
 			</Suspense>
 		</PageShellContent>

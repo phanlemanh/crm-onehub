@@ -6,6 +6,7 @@ import { ButtonGroup } from "@crm/ui/components/button-group";
 import { StatGroup } from "@crm/ui/components/dashboard";
 import { DataTable, type DataTableColumn } from "@crm/ui/components/data-table";
 import { EmptyCellValue } from "@crm/ui/components/empty-cell";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { Link } from "@crm/ui/components/link";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
@@ -33,7 +34,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import {
@@ -378,7 +378,7 @@ export function CampaignDetail({ id }: { id: string }) {
 		}),
 	);
 
-	if (!campaign.data) return <PageShellLoading />;
+	if (!campaign.data) return <KhungXuong hinh="chi-tiet" />;
 
 	const row = campaign.data;
 

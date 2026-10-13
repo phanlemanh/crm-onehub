@@ -1,7 +1,8 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
-import { PageShell, PageShellLoading } from "@/components/page-shell";
+import { PageShell } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
@@ -30,7 +31,7 @@ export default function SuaTrangPage({
 }) {
 	return (
 		<PageShell>
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="chi-tiet" />}>
 				<NoiDung params={params} searchParams={searchParams} />
 			</Suspense>
 		</PageShell>

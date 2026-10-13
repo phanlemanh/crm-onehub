@@ -1,6 +1,7 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageShell, PageShellLoading } from "@/components/page-shell";
+import { PageShell } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
 import { campaignMessages } from "@/lib/messages/campaigns";
 import { requireSession } from "@/lib/session";
@@ -24,7 +25,7 @@ export default async function CampaignPage({
 }: PageProps<"/[slug]/campaigns/[campaignId]">) {
 	return (
 		<PageShell className="min-h-0">
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="chi-tiet" />}>
 				<Campaign params={params} searchParams={searchParams} />
 			</Suspense>
 		</PageShell>

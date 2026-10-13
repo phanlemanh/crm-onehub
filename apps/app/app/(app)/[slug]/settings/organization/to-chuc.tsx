@@ -15,6 +15,7 @@ import {
 	EmptyTitle,
 } from "@crm/ui/components/empty";
 import { Icon } from "@crm/ui/components/icon";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import {
 	Sheet,
@@ -28,7 +29,6 @@ import { useQueryStates } from "nuqs";
 import { useState, useSyncExternalStore } from "react";
 import { searchParsers } from "@/components/data-table/list-search-params";
 import { HopChuyenOkr } from "@/components/okr/hop-chuyen-okr";
-import { PageShellLoading } from "@/components/page-shell-loading";
 import { toChucMessages } from "@/lib/messages/to-chuc";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -101,7 +101,7 @@ export function ToChuc({ tenGoc }: { tenGoc?: string }) {
 				<p className="text-muted-foreground text-sm" role="status">
 					{t.loading}
 				</p>
-				<PageShellLoading />
+				<KhungXuong hinh="the" />
 			</div>
 		);
 	}

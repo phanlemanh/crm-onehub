@@ -319,7 +319,7 @@ async function mo(dau = "", choTai = true): Promise<San> {
 	dangMo.push(san);
 	if (choTai)
 		await cho(
-			() => o.querySelector("[data-slot='page-shell-loading']") === null,
+			() => o.querySelector("[data-khung-xuong]") === null,
 			"tai xong",
 		);
 	return san;
@@ -749,7 +749,7 @@ describe("trang-thai", () => {
 		await mo("", false);
 		await cho(() => soLanDocCay > 0, "bat dau doc cay");
 		expect(
-			document.body.querySelector("[data-slot='page-shell-loading']") !== null,
+			document.body.querySelector("[data-khung-xuong]") !== null,
 		).toBe(true);
 	});
 

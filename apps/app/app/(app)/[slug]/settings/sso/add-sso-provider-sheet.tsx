@@ -27,6 +27,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@crm/ui/components/sheet";
+import { Skeleton } from "@crm/ui/components/skeleton";
 import { Spinner } from "@crm/ui/components/spinner";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseAsBoolean, useQueryState } from "nuqs";
@@ -60,7 +61,7 @@ function AddButton(props: ComponentProps<typeof Button>) {
 
 export function AddSsoProviderSheet() {
 	return (
-		<Suspense fallback={<AddButton disabled />}>
+		<Suspense fallback={<Skeleton className="h-8 w-28 rounded-md" />}>
 			<AddSsoProviderForm />
 		</Suspense>
 	);

@@ -1,3 +1,4 @@
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
@@ -6,7 +7,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -25,7 +25,7 @@ export default async function GiaiDoanSettingsPage() {
 
 	return (
 		<PageShell width="page">
-			<Suspense fallback={<PageShellLoading />}>
+			<Suspense fallback={<KhungXuong hinh="danh-sach" />}>
 				<GiaiDoan tieuDe={t.giaiDoan.tieuDe} moTa={t.giaiDoan.moTa} />
 			</Suspense>
 		</PageShell>
