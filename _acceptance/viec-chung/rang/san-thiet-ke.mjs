@@ -1,6 +1,7 @@
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const GOC = fileURLToPath(new URL("../../../", import.meta.url));
@@ -40,6 +41,28 @@ function goc() {
 	return r.stdout.trim();
 }
 
+function quet(dsTep, cong) {
+	const loi = [];
+	for (const t of dsTep) {
+		const g = spawnSync("node", [cong, "--target", t, "--mode", "static"], {
+			encoding: "utf8",
+		});
+		if (g.status !== 0)
+			loi.push(`${t}: design-gate thoat ${g.status}\n${g.stdout}`);
+		const dong = readFileSync(t, "utf8").split("\n");
+		dong.forEach((d, i) => {
+			const thay = [
+				...(d.match(LOP_TU_DAT) ?? []),
+				...(d.match(MA_MAU) ?? []),
+				...(d.match(KIEU_TAI_CHO) ?? []),
+			];
+			if (thay.length > 0)
+				loi.push(`${t}:${i + 1}: gia tri tu dat ${thay.join(" ")}`);
+		});
+	}
+	return loi;
+}
+
 const tep = [
 	...spawnSync("git", ["ls-files", ...MAU], { encoding: "utf8", cwd: GOC })
 		.stdout.split("\n")
@@ -53,24 +76,23 @@ if (tep.length === 0) {
 }
 
 const cong = `${goc()}/scripts/design-gate.mjs`;
-const loi = [];
-for (const t of tep) {
-	const g = spawnSync("node", [cong, "--target", t, "--mode", "static"], {
-		encoding: "utf8",
-	});
-	if (g.status !== 0)
-		loi.push(`${t}: design-gate thoat ${g.status}\n${g.stdout}`);
-	const dong = readFileSync(t, "utf8").split("\n");
-	dong.forEach((d, i) => {
-		const thay = [
-			...(d.match(LOP_TU_DAT) ?? []),
-			...(d.match(MA_MAU) ?? []),
-			...(d.match(KIEU_TAI_CHO) ?? []),
-		];
-		if (thay.length > 0)
-			loi.push(`${t}:${i + 1}: gia tri tu dat ${thay.join(" ")}`);
-	});
+
+const thu = mkdtempSync(join(tmpdir(), "vc-san-"));
+try {
+	const tepThu = join(thu, "vi-pham.tsx");
+	writeFileSync(
+		tepThu,
+		'export const Thu = () => <div className="rounded-[7px]" />;\n',
+	);
+	if (quet([tepThu], cong).length === 0) {
+		console.error("vc san: thuoc khong bat duoc vi pham");
+		process.exit(2);
+	}
+} finally {
+	rmSync(thu, { recursive: true, force: true });
 }
+
+const loi = quet(tep, cong);
 for (const l of loi) console.error(l);
 console.log(`vc san: ${tep.length} tep, ${loi.length} vi pham`);
 process.exit(loi.length === 0 ? 0 : 1);

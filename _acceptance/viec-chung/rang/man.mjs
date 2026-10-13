@@ -127,11 +127,12 @@ try {
 		},
 	});
 	const gan = [{ loai: "deal", id: deal.id }];
+	const maViecDaGieo = [];
 	for (const [tieuDe, soNgay] of [
 		[`Gửi bảng phí ${lib.MA}`, -2],
 		[`Gọi xác nhận ${lib.MA}`, 0],
 	]) {
-		await d.db.$transaction((tx) =>
+		const moi = await d.db.$transaction((tx) =>
 			taoViec(tx, {
 				nguoiId: giao.id,
 				tieuDe,
@@ -142,6 +143,7 @@ try {
 				now: new Date(),
 			}),
 		);
+		maViecDaGieo.push(moi.id);
 	}
 
 	if (lib.chay(1))
@@ -168,11 +170,17 @@ try {
 				loi.push("vc man: thieu dong bang o 1280");
 			if ((await dem(t, '[data-slot="item"][data-viec]')) !== 0)
 				loi.push("vc man: the dong hien o 1280");
-			const doDo = await t.evaluate(
-				() =>
-					document.querySelector('tr[data-viec] [data-tone="error"]') !== null,
-			);
-			if (!doDo) loi.push("dong qua han khong co data-tone=error");
+			const [maQuaHan] = maViecDaGieo;
+			const doDo = await t.evaluate((ma) => {
+				const dong = [...document.querySelectorAll("tr[data-viec]")];
+				const doCa = dong.filter((r) => r.querySelector('[data-tone="error"]'));
+				return {
+					quaHanDo: doCa.some((r) => r.getAttribute("data-viec") === ma),
+					soDo: doCa.length,
+				};
+			}, maQuaHan);
+			if (!doDo.quaHanDo) loi.push("dong qua han khong co data-tone=error");
+			if (doDo.soDo !== 1) loi.push(`vc man: ${doDo.soDo} dong do, mong 1`);
 			await d.chup(t, "vc-viec-cua-toi-1280.png");
 			await t.close();
 			d.dat(1, loi.length === 0, loi.join(" · "));
