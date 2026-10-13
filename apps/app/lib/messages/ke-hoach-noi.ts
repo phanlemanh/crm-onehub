@@ -44,6 +44,8 @@ const en = {
 		xacNhan: "Hand over",
 		huy: "Cancel",
 		xong: "Handed {keHoach} plans and {buoc} steps to {ten}.",
+		soViec: "{n} open work items",
+		xongViec: "Plus {n} open work items.",
 	},
 	danhMuc: {
 		nguoiGiao: "Assignee",
@@ -98,6 +100,8 @@ const vi: KeHoachNoiMessages = {
 		xacNhan: "Chuyển",
 		huy: "Huỷ",
 		xong: "Đã chuyển {keHoach} kế hoạch và {buoc} bước cho {ten}.",
+		soViec: "{n} việc đang mở",
+		xongViec: "Kèm {n} việc đang mở.",
 	},
 	danhMuc: {
 		nguoiGiao: "Người được giao",

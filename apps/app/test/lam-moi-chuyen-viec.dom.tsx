@@ -232,6 +232,9 @@ function baKhoa(): QueryKey[] {
 		t.onboarding.manDanhMuc.queryKey(),
 		t.onboarding.bangCot.queryKey(),
 		t.onboarding.transferPreview.queryKey(),
+		t.viec.cuaToi.queryKey(),
+		t.viec.cuaBanGhi.queryKey(),
+		t.viec.get.queryKey(),
 	];
 }
 
@@ -287,7 +290,9 @@ describe("dong-sau-lam-moi", () => {
 		});
 		await chonTuanRoiBam();
 		await cho(
-			() => soLan("onboarding.transferWork") === 1 && daLamMoi.length === 3,
+			() =>
+				soLan("onboarding.transferWork") === 1 &&
+				daLamMoi.length === baKhoa().length,
 			"chuyen va ba loi goi lam moi",
 		);
 		for (let i = 0; i < 20; i += 1) await nhip();

@@ -245,6 +245,9 @@ export function useCrmCache(): CrmCache {
 		workTransferred: (options) =>
 			run(
 				[
+					trpc.viec.cuaToi.queryKey(),
+					trpc.viec.cuaBanGhi.queryKey(),
+					trpc.viec.get.queryKey(),
 					trpc.onboarding.manDanhMuc.queryKey(),
 					trpc.onboarding.bangCot.queryKey(),
 					trpc.onboarding.transferPreview.queryKey(),

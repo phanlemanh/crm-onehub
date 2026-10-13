@@ -2,7 +2,7 @@ import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
 import { demViecMoCua } from "@crm/db/viec";
-import { goTheoDoiCuaNguoi } from "@crm/db/viec-ghi";
+import { chuyenViecTrongGiaoDich, goTheoDoiCuaNguoi } from "@crm/db/viec-ghi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type OnboardingActivityMeta,
@@ -442,12 +442,7 @@ export class OnboardingGhi {
 		actingUserId: string,
 	): Promise<TransferOutput> {
 		await yeuCauQuanTri(actingUserId);
-		const dk = dieuKienChuyen(input.fromUserId);
-		const [keHoach, buoc] = await Promise.all([
-			this.db.onboardingPlan.count({ where: dk.keHoach }),
-			this.db.onboardingStep.count({ where: dk.buoc }),
-		]);
-		return { keHoach, buoc };
+		return demViecDangGiu(this.db, input.fromUserId);
 	}
 
 	async transferWork(
@@ -470,9 +465,6 @@ export class OnboardingGhi {
 				select: { ...CHON_BUOC, plan: { select: { companyId: true } } },
 				orderBy: { id: "asc" },
 			});
-			if (keHoach.length === 0 && buoc.length === 0) {
-				return { keHoach: 0, buoc: 0 };
-			}
 
 			const tuTen = await tenNguoi(tx, input.fromUserId);
 			for (const plan of keHoach) {
@@ -511,7 +503,13 @@ export class OnboardingGhi {
 					actingUserId,
 				);
 			}
-			return { keHoach: keHoach.length, buoc: buoc.length };
+			const viec = await chuyenViecTrongGiaoDich(tx, {
+				tuId: input.fromUserId,
+				den: { id: den.id, ten: den.name },
+				nguoiId: actingUserId,
+				now: new Date(),
+			});
+			return { keHoach: keHoach.length, buoc: buoc.length, viec };
 		});
 	}
 }
