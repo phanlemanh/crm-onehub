@@ -61,7 +61,7 @@ evals:
   - id: E8
     criterion: AC-8
     executor: judgment
-    inputs: [docs/setup.md, CONTEXT.md, apps/api/scripts/okr-ca-quy-4.ts, _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs, apps/agent/evals/okr/ca-gop-y.ts]
+    inputs: [docs/setup.md, CONTEXT.md, apps/api/scripts/okr-ca-quy-4.ts, _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs, apps/agent/evals/okr/ca-gop-y.ts, apps/api/scripts/okr-mau/cau-hinh.ts, apps/agent/agent/lib/okr/config.ts, apps/api/package.json, .gitignore]
     question: "Một phiên lượt sau chỉ đọc docs/setup.md có tự sinh lại được bộ ca quý 4, đo Kara trên nó, và đưa ca thật vào ca-gop-y/that/ rồi đo bằng --thu-muc không? Tên lệnh, cờ (--ra, --nhan, --thu-muc, --tran-usd) và mã thoát trong tài liệu có khớp với hai tệp lệnh đính kèm không? Tài liệu có nói vì sao ca thật không vào git, và có chữ tự đúc nào chưa có mục trong CONTEXT.md không?"
     evidence_required: [run_id, verdict, judges, verified_at]
     paths:
@@ -70,6 +70,10 @@ evals:
       - "apps/api/scripts/okr-ca-quy-4.ts"
       - "_acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs"
       - "apps/agent/evals/okr/ca-gop-y.ts"
+      - "apps/api/scripts/okr-mau/cau-hinh.ts"
+      - "apps/agent/agent/lib/okr/config.ts"
+      - "apps/api/package.json"
+      - ".gitignore"
 
   - id: E9
     criterion: AC-7
