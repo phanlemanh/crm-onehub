@@ -5,7 +5,7 @@ slug: khung-man-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-13T06:22:25Z
 design_doc: docs/superpowers/specs/2026-10-13-khung-man-chung-design.md
@@ -72,3 +72,13 @@ là Later (NM1b), có thước đếm AC-14.
 
 - Đường đo: ô cơ hội không khai ngưỡng (hàng dựng); đo trên người dùng thật là việc sau khi gộp — xem sổ quyết định.
 - Đổi khung chung (`page-shell.tsx`, `VungTaiLoi`, các khung lỗi có mã `ST-…`) chạm mã mà bài đo của nhiều hồ sơ đã ký đọc; những hồ sơ đó cần ghim lại sau S4.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-1: Vạch giữ chỗ của nút «Thêm…» lúc đang tải bo góc khác mặc định của bộ giao diện chung, kiểu dáng chép ở mười chỗ.
+  - Ngoài-2: Khung chờ của chi tiết chiến dịch nằm chung với đầu trang nên có thể chuyển cảnh theo đầu trang.
+  - Ngoài-3: Dòng lý do dưới tiêu đề chép kiểu dáng của câu mô tả; đổi một nơi có thể lệch nơi kia.
+  - Ngoài-4: Mở chiến dịch đã xoá hoặc gõ sai đường dẫn hiện «Máy chủ không trả lời», Thử lại không giúp được.
+  - Ngoài-5: Trang Tổ chức không đọc được quyền thì hai nút Nhập và Thêm đơn vị bị khoá mà không có lời giải thích.
+  - Ngoài-6: Bài kiểm tự động chưa bắt được việc đổi thứ tự mô tả và nút ở đầu trang trên điện thoại; bàn đo màn thật vẫn kiểm.
+  - Ngoài-7: Bài kiểm tự động chưa chắc bắt được lỗi nếu cách chiến dịch xử lý lỗi tải bị sửa nhầm.
+  - Ngoài-8: Bài kiểm tự động chưa đảm bảo mọi vạch của khung chờ đều ẩn khỏi trình đọc màn hình khi có người sửa.
+  - Ngoài-9: Bài kiểm tự động chưa bắt được việc hai mục của Nhắc buổi sáng mất liên kết với tiêu đề.

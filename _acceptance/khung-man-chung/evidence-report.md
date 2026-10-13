@@ -7,8 +7,8 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 04fcfd255d0aa9d803152db2db8f32f3e2785447
-human_signoff:
+verified_commit: c6c9659e6499f624fba2e2ee5ab31002d3c0567d
+human_signoff: Phan Le Manh 2026-10-13
 ---
 
 # Evidence Report: khung-man-chung
@@ -315,3 +315,7 @@ none — every multi-run eval is uniform (moi eval chay mot lan, khong co eval n
 Round 1: 18 eval trả về, tổng kết PENDING-JUDGMENT; trả về triển khai (thêm AC-15…AC-18, chỉnh AC-2, 3, 5, 9, 12).
 Round 2: mọi eval máy xanh, 7 lệnh suite xanh; E12j bị cả ba góc nhìn chấm không đạt ở cặp Cài đặt › Điều phối 30 ngày (khung xương hai thẻ xếp dọc, nội dung xong hai cột) — REJECT, trả về triển khai.
 Round 3: Điều phối 30 ngày khung xương hai cột, bàn đo đo Tài liệu ở trạng thái lưu tệp tắt; mọi eval máy đạt, 7 lệnh suite đạt, E12j được ba góc nhìn chấm PASS — PASS.
+
+### Re-pin lần 1 — 2026-10-13, do gộp onehub 206096fc2 sau verify, làn trước chữ ký
+run_id: repin-20261013T141643Z-16434
+sha: c6c9659e6499f624fba2e2ee5ab31002d3c0567d · suites: 7 lệnh exit 0 · evals: 18/18 eval máy đạt kỳ vọng · ngoài làn máy: E12, E12j (E12j không khai paths) · diff chạm vật đo ngoài làn máy: E12 — chưa chứng lại, đi vòng S4 delta · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
