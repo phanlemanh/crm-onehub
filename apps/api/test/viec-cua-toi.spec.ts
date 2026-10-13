@@ -192,26 +192,26 @@ describe("vc-cua-toi", () => {
 			setSystemTime(luc);
 			const a = await nguoi("vc-kh-a", "member");
 			const tong = VIEC.tranKhep + 1;
-			await db.viec.createMany({
-				data: Array.from({ length: tong }, (_, i) => ({
-					tieuDe: `vc-kh xong ${i}`,
-					trangThai: "XONG" as const,
-					nguoiGiaoId: a.id,
+			const dongViec = async (
+				tieuDe: string,
+				den: "XONG" | "HUY",
+				i: number,
+			) => {
+				const v = await taoThu({
+					nguoiId: a.id,
+					tieuDe,
 					nguoiThucHienId: a.id,
-					taoBoiId: a.id,
-					khepLuc: new Date(luc.getTime() + i * 60_000),
-				})),
-			});
-			await db.viec.createMany({
-				data: [0, 1].map((i) => ({
-					tieuDe: `vc-kh huy ${i}`,
-					trangThai: "HUY" as const,
-					nguoiGiaoId: a.id,
-					nguoiThucHienId: a.id,
-					taoBoiId: a.id,
-					khepLuc: luc,
-				})),
-			});
+					gan: [],
+					now: luc,
+				});
+				await doiThu(v.id, a.id, den, new Date(luc.getTime() + i * 60_000));
+			};
+			for (let i = 0; i < tong; i += 1) {
+				await dongViec(`vc-kh xong ${i}`, "XONG", i);
+			}
+			for (const i of [0, 1]) {
+				await dongViec(`vc-kh huy ${i}`, "HUY", i);
+			}
 			const ra = viecCuaToiNhomOutput.parse(
 				(await goi(app, "viec.cuaToi", "query", { nhom: "giao-cho-toi" }, a.id))
 					.data,
