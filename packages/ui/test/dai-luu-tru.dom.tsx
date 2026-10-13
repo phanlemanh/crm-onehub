@@ -164,12 +164,12 @@ function ban(o: HTMLElement, cho: Cho, su: SuKien) {
 	});
 }
 
-const THONG_DIEP: Record<SuKien, string> = {
+const THONG_DIEP = {
 	pointerdown: "dlt: khoa de lot pointerdown",
 	mousedown: "dlt: khoa de lot mousedown",
 	click: "dlt: khoa de lot click",
 	keydown: "dlt: khoa de lot phim",
-};
+} satisfies Record<SuKien, string>;
 
 describe("dlt-khoa", () => {
 	test("ma trận 2 chỗ × 4 sự kiện × 2 trạng thái", () => {
