@@ -5,7 +5,7 @@ slug: mo-lai-khong-tra-viec-chi-okr
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, docs]
-status: verified
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-13T01:07:29Z
 design_doc: docs/superpowers/specs/2026-10-13-mo-lai-khong-tra-viec-chi-okr-design.md
@@ -70,3 +70,6 @@ AC-7 là đường đo; AC-8 giữ phép đo thật.
   Đóng, không đổi; (2) «lịch sử» không đổi; (3) danh sách mặc định không đổi. Phần áp vào vòng này là vế «mở lại
   không được lách bước duyệt».
 - Không ui-check, không design-pass: không màn nào đổi (sổ, `descope`).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-1: Luật «ai nhận được việc» nằm ở hai hàm cùng tệp (`kiemNguoiNhanViec`, `docNguoiNhan`); sửa một chỗ mà quên chỗ kia thì mở lại kế hoạch và giao bước có thể cho phép hay từ chối khác nhau.
+  - Ngoài-2: Phép phá-thử E8 hứa xác nhận tệp thật không đổi nhưng chưa chạy bước `git diff --quiet`; hôm nay vô hại vì nó chỉ phá trên bản sao.
