@@ -26,6 +26,7 @@ import {
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { DetailSheetEmpty, SECTION_TITLE } from "@/components/detail-sheet";
+import { KhoiViec } from "@/components/viec/khoi-viec";
 import { type CrmMessages, crmMessages } from "@/lib/messages/crm";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -358,6 +359,9 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 			) : entries.length === 0 && pinnedEntries.length === 0 ? (
 				<div className="flex min-h-0 flex-1 flex-col">
 					{thongBaoLamMoi ? <div className="px-5">{thongBaoLamMoi}</div> : null}
+					<div className="px-5">
+						<KhoiViec anchor={anchor} />
+					</div>
 					<DetailSheetEmpty
 						icon={EMPTY_ICONS[tab]}
 						title={emptyStates(m)[tab].title}
@@ -367,6 +371,7 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 			) : (
 				<div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-4">
 					{thongBaoLamMoi}
+					<KhoiViec anchor={anchor} />
 					{pinnedEntries.length > 0 ? (
 						<TimelineDay
 							label={m.timeline.outstanding}

@@ -28,6 +28,7 @@ export type CrmCache = {
 	plan(id?: string, options?: Options): Promise<void>;
 	workTransferred(options?: Options): Promise<void>;
 	okr(id?: string, options?: Options): Promise<void>;
+	viec(options?: Options): Promise<void>;
 	hoiY(options?: Options): Promise<void>;
 	tomTat(options?: Options): Promise<void>;
 	taiLieu(slug?: string, options?: Options): Promise<void>;
@@ -306,6 +307,18 @@ export function useCrmCache(): CrmCache {
 					trpc.okr.soanSoDo.queryKey(),
 					trpc.okr.soanAn.queryKey(),
 				],
+				options,
+			),
+
+		viec: (options) =>
+			run(
+				[
+					trpc.viec.cuaToi.queryKey(),
+					trpc.viec.cuaBanGhi.queryKey(),
+					trpc.viec.get.queryKey(),
+					trpc.viec.lichSu.queryKey(),
+				],
+				[trpc.dashboard.summary.queryKey()],
 				options,
 			),
 
