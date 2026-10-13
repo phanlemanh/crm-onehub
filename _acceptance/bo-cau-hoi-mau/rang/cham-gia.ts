@@ -1,10 +1,11 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { dongTungCau } from "../../tro-ly-doc-kho/rang/quyet-do";
+import { BO_MAU } from "./bo-mau-config";
 import { khuonBoMau } from "./khuon";
 
-const CA = process.env.CHAM_GIA_CA ?? "0";
-const THU_MUC = process.env.CHAM_GIA_DIR;
+const CA = process.env[BO_MAU.bien.chamGiaCa] ?? "0";
+const THU_MUC = process.env[BO_MAU.bien.chamGiaDir];
 const i = process.argv.indexOf("--bo");
 const tepBo = i >= 0 ? process.argv[i + 1] : undefined;
 if (!THU_MUC || !tepBo) {
@@ -22,7 +23,11 @@ const mot = bo.cau
 	.filter((c) => !ngoai(c.nhom))
 	.map((c) =>
 		dongTungCau(
-			{ id: c.id, nhom: c.nhom, ketCuc: c.nhom === "khong-co" ? "TU_CHOI" : "TRA_LOI-du" },
+			{
+				id: c.id,
+				nhom: c.nhom,
+				ketCuc: c.nhom === "khong-co" ? "TU_CHOI" : "TRA_LOI-du",
+			},
 			1,
 		),
 	);
@@ -30,7 +35,11 @@ const hai = bo.cau
 	.filter((c) => !(CA === "thieu-zalo" && c.id === "m50"))
 	.map((c) =>
 		dongTungCau(
-			{ id: c.id, nhom: c.nhom, ketCuc: ngoai(c.nhom) ? "khong-hang" : "co-hang" },
+			{
+				id: c.id,
+				nhom: c.nhom,
+				ketCuc: ngoai(c.nhom) ? "khong-hang" : "co-hang",
+			},
 			2,
 			false,
 			{ ketQua: "da-tra-loi", loi: null, coHang: !ngoai(c.nhom) },
@@ -49,7 +58,17 @@ writeFileSync(
 );
 writeFileSync(
 	join(THU_MUC, "cham-bo-do.md"),
-	["# Chấm bộ câu đo — giả", "", "## Tổng", "", "- dungTrang gia", "- chuyenQuyDinh gia", "", "## Lượt một", ""].join("\n"),
+	[
+		"# Chấm bộ câu đo — giả",
+		"",
+		"## Tổng",
+		"",
+		"- dungTrang gia",
+		"- chuyenQuyDinh gia",
+		"",
+		"## Lượt một",
+		"",
+	].join("\n"),
 );
 console.log(`thu muc luot: ${THU_MUC}`);
 process.exit(CA === "1" ? 1 : 0);

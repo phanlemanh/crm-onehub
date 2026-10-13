@@ -60,5 +60,7 @@ export const BO_MAU = {
 		evidence: "BCM_EVIDENCE",
 		bo: "BCM_BO",
 		chay: "BCM_CHAY",
+		chamGiaCa: "CHAM_GIA_CA",
+		chamGiaDir: "CHAM_GIA_DIR",
 	},
 } as const;

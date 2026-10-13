@@ -5,10 +5,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { khuonBo } from "../../tro-ly-doc-kho/rang/quyet-do";
 import { BO_MAU } from "./bo-mau-config";
-import { khuonBoMau } from "./khuon";
+import { type CauMau, khuonBoMau } from "./khuon";
 import { demThanhPhan, docTrangMau, kiemBo, type ViPham } from "./kiem-bo";
 
-type CauTho = Record<string, unknown> & { id: string };
+type CauTho = Partial<CauMau> & { id: string; xyz?: number };
 type BoTho = { nhan: string; nguon?: string; cau: CauTho[] };
 
 const tho = (): BoTho => JSON.parse(readFileSync(BO_MAU.duong.bo, "utf8"));
@@ -25,7 +25,7 @@ const gon = (ds: ViPham[]) => ds.map(({ luat, ma }) => ({ luat, ma }));
 function moiCa(phaHong: (bo: BoTho) => void): ViPham[] {
 	const bo = tho();
 	phaHong(bo);
-	return kiemBo(bo, trang);
+	return kiemBo(JSON.stringify(bo), trang);
 }
 
 describe("khuon", () => {
@@ -33,7 +33,7 @@ describe("khuon", () => {
 		const bo = tho();
 		expect(khuonBo.safeParse(bo).success).toBe(true);
 		expect(khuonBoMau.safeParse(bo).success).toBe(true);
-		expect(cua(kiemBo(bo, trang), "khuon")).toEqual([]);
+		expect(cua(kiemBo(JSON.stringify(bo), trang), "khuon")).toEqual([]);
 	});
 
 	const ca: [string, (bo: BoTho) => void, string][] = [
@@ -64,7 +64,7 @@ describe("khuon", () => {
 describe("thanh-phan", () => {
 	test("bang dem bang dung THANH_PHAN, tong 50, nhom va kho khop tang", () => {
 		const bo = khuonBoMau.parse(tho());
-		const dem = demThanhPhan(bo);
+		const dem = Object.fromEntries(demThanhPhan(bo));
 		expect(dem).toEqual({ ...BO_MAU.thanhPhan, ganTrangS6: BO_MAU.ganTrangS6 });
 		expect(Object.values(BO_MAU.thanhPhan).reduce((a, b) => a + b, 0)).toBe(50);
 		const anh = {
@@ -80,7 +80,7 @@ describe("thanh-phan", () => {
 				id: c.id,
 				...anh[c.tang],
 			});
-		expect(cua(kiemBo(tho(), trang), "thanh-phan")).toEqual([]);
+		expect(cua(kiemBo(JSON.stringify(tho()), trang), "thanh-phan")).toEqual([]);
 	});
 
 	test("do: m40 doi kieu chu viet-tat sang khong-dau", () => {
@@ -103,7 +103,7 @@ describe("thanh-phan", () => {
 describe("trang-mong", () => {
 	test("tap trang doc tu thu muc that, bo that 0 vi pham", () => {
 		expect(trang.size).toBe(8);
-		expect(cua(kiemBo(tho(), trang), "trang-mong")).toEqual([]);
+		expect(cua(kiemBo(JSON.stringify(tho()), trang), "trang-mong")).toEqual([]);
 	});
 
 	const ca: [string, (bo: BoTho) => void, string][] = [
@@ -143,13 +143,15 @@ describe("trang-mong", () => {
 
 describe("y-trong-yeu", () => {
 	test("moi y la chuoi con NFC cua trang mong doi, bo that 0 vi pham", () => {
-		expect(cua(kiemBo(tho(), trang), "y-trong-yeu")).toEqual([]);
+		expect(cua(kiemBo(JSON.stringify(tho()), trang), "y-trong-yeu")).toEqual(
+			[],
+		);
 	});
 
 	test("doi chung duong: y viet dang NFD van khop", () => {
 		const ds = moiCa((bo) => {
 			const c = cauCua(bo, "m03");
-			Object.assign(c, { y: (c.y as string[]).map((y) => y.normalize("NFD")) });
+			Object.assign(c, { y: (c.y ?? []).map((y) => y.normalize("NFD")) });
 		});
 		expect(cua(ds, "y-trong-yeu")).toEqual([]);
 	});
@@ -160,7 +162,7 @@ describe("y-trong-yeu", () => {
 			(bo) => {
 				const c = cauCua(bo, "m01");
 				Object.assign(c, {
-					y: (c.y as string[]).map((y) => y.replace("1,2%", "1,5%")),
+					y: (c.y ?? []).map((y) => y.replace("1,2%", "1,5%")),
 				});
 			},
 			"m01",
@@ -190,7 +192,7 @@ describe("y-trong-yeu", () => {
 
 describe("rieng-tu", () => {
 	test("bo that 0 vi pham", () => {
-		expect(cua(kiemBo(tho(), trang), "rieng-tu")).toEqual([]);
+		expect(cua(kiemBo(JSON.stringify(tho()), trang), "rieng-tu")).toEqual([]);
 	});
 
 	test("doi chung duong: so trong cau hoi thuong khong bi bat", () => {

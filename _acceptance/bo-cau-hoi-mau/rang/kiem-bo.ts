@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { khuonBo } from "../../tro-ly-doc-kho/rang/quyet-do";
 import { BO_MAU } from "./bo-mau-config";
-import { type BoMau, type CauMau, khuonBoMau } from "./khuon";
+import { type BoMau, type CauMau, khuonBoMau, khuonMaCau } from "./khuon";
 
 export const LUAT = [
 	"khuon",
@@ -30,31 +30,41 @@ export function docTrangMau(thuMuc: string): Map<string, string> {
 
 type DuongLoi = readonly PropertyKey[];
 
-function maTaiDuong(tho: unknown, duong: DuongLoi): string {
-	if (duong[0] !== "cau" || typeof duong[1] !== "number") return BO_MAU.maCauBo;
-	const ds = (tho as { cau?: unknown }).cau;
-	const cau = Array.isArray(ds) ? ds[duong[1]] : undefined;
-	const id = (cau as { id?: unknown } | undefined)?.id;
-	return typeof id === "string" ? id : `#${duong[1]}`;
+function maTaiDuong(ma: readonly string[], duong: DuongLoi): string {
+	const i = Number(duong[1]);
+	if (duong[0] !== "cau" || !Number.isInteger(i)) return BO_MAU.maCauBo;
+	return ma[i] || `#${i}`;
 }
 
-function kiemKhuon(tho: unknown): ViPham[] {
+function kiemKhuon(chu: string): ViPham[] {
 	const loi = (ma: string, cau: string): ViPham => ({ luat: "khuon", ma, cau });
+	let tho: unknown;
+	try {
+		tho = JSON.parse(chu);
+	} catch (e) {
+		return [
+			loi(
+				BO_MAU.maCauBo,
+				`bo khong phai JSON: ${e instanceof Error ? e.message : String(e)}`,
+			),
+		];
+	}
+	const ma = khuonMaCau.parse(tho).cau.map((c) => c.id);
 	const cham = khuonBo.safeParse(tho);
 	if (!cham.success)
 		return cham.error.issues.map((i) =>
 			loi(
-				maTaiDuong(tho, i.path),
+				maTaiDuong(ma, i.path),
 				`script cham khong doc duoc ${i.path.join(".")}: ${i.message}`,
 			),
 		);
 	const chat = khuonBoMau.safeParse(tho);
 	if (!chat.success)
 		return chat.error.issues.map((i) => {
-			const ma = maTaiDuong(tho, i.path);
+			const m = maTaiDuong(ma, i.path);
 			return loi(
-				ma,
-				`${ma} sai khuon bo mau o ${i.path.join(".")}: ${i.message}`,
+				m,
+				`${m} sai khuon bo mau o ${i.path.join(".")}: ${i.message}`,
 			);
 		});
 	const bo = chat.data;
@@ -86,13 +96,14 @@ function kiemKhuon(tho: unknown): ViPham[] {
 
 const oCua = (c: CauMau) => `${c.tang}/${c.kieuChu}`;
 
-export function demThanhPhan(bo: BoMau): Record<string, number> {
-	const dem: Record<string, number> = {};
-	for (const c of bo.cau) dem[oCua(c)] = (dem[oCua(c)] ?? 0) + 1;
-	return {
-		...dem,
-		ganTrangS6: bo.cau.filter((c) => c.tang === "S6" && c.ganTrang).length,
-	};
+export function demThanhPhan(bo: BoMau): Map<string, number> {
+	const dem = new Map<string, number>();
+	for (const c of bo.cau) dem.set(oCua(c), (dem.get(oCua(c)) ?? 0) + 1);
+	dem.set(
+		"ganTrangS6",
+		bo.cau.filter((c) => c.tang === "S6" && c.ganTrang).length,
+	);
+	return dem;
 }
 
 function kiemThanhPhan(bo: BoMau): ViPham[] {
@@ -102,16 +113,13 @@ function kiemThanhPhan(bo: BoMau): ViPham[] {
 		cau,
 	});
 	const dem = demThanhPhan(bo);
-	const mong: Record<string, number> = {
-		...BO_MAU.thanhPhan,
-		ganTrangS6: BO_MAU.ganTrangS6,
-	};
+	const mong = new Map(
+		Object.entries({ ...BO_MAU.thanhPhan, ganTrangS6: BO_MAU.ganTrangS6 }),
+	);
 	const ds: ViPham[] = [];
-	for (const o of [
-		...new Set([...Object.keys(mong), ...Object.keys(dem)]),
-	].sort()) {
-		const co = dem[o] ?? 0;
-		const can = mong[o] ?? 0;
+	for (const o of [...new Set([...mong.keys(), ...dem.keys()])].sort()) {
+		const co = dem.get(o) ?? 0;
+		const can = mong.get(o) ?? 0;
 		if (co !== can)
 			ds.push(loi(o, `o ${o} co ${co} cau, bang viet truoc ${can}`));
 	}
@@ -254,12 +262,12 @@ function kiemRiengTu(bo: BoMau): ViPham[] {
 }
 
 export function kiemBo(
-	tho: unknown,
+	chu: string,
 	trang: ReadonlyMap<string, string>,
 ): ViPham[] {
-	const khuon = kiemKhuon(tho);
+	const khuon = kiemKhuon(chu);
 	if (khuon.length > 0) return khuon;
-	const bo = khuonBoMau.parse(tho);
+	const bo = khuonBoMau.parse(JSON.parse(chu));
 	return [
 		...kiemThanhPhan(bo),
 		...kiemTrangMong(bo, trang),
@@ -275,19 +283,22 @@ if (import.meta.main) {
 		i >= 0 && doiSo[i + 1]
 			? resolve(process.cwd(), doiSo[i + 1] as string)
 			: BO_MAU.duong.bo;
-	let tho: unknown;
+	let chu: string;
 	try {
-		tho = JSON.parse(readFileSync(tep, "utf8"));
+		chu = readFileSync(tep, "utf8");
 	} catch (e) {
 		console.log(
 			`khong doc duoc ${tep}: ${e instanceof Error ? e.message : String(e)}`,
 		);
 		process.exit(1);
 	}
-	const ds = kiemBo(tho, docTrangMau(BO_MAU.duong.trangMau));
-	const soCau = Array.isArray((tho as { cau?: unknown }).cau)
-		? (tho as { cau: unknown[] }).cau.length
-		: 0;
+	const ds = kiemBo(chu, docTrangMau(BO_MAU.duong.trangMau));
+	let soCau = 0;
+	try {
+		soCau = khuonMaCau.parse(JSON.parse(chu)).cau.length;
+	} catch {
+		soCau = 0;
+	}
 	console.log(`bo-mau: ${soCau} cau, ${ds.length} vi pham`);
 	for (const l of LUAT)
 		console.log(`luat ${l}: ${ds.filter((v) => v.luat === l).length}`);

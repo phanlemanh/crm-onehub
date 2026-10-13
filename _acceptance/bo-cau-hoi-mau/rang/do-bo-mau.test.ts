@@ -1,10 +1,26 @@
 import { describe, expect, test } from "bun:test";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+	mkdtempSync,
+	readdirSync,
+	readFileSync,
+	rmSync,
+	writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { type DongTungCau, dongTungCau } from "../../tro-ly-doc-kho/rang/quyet-do";
-import { bam, type Bang, docBaoCao, ghiBaoCao, kiemBangChung, tinhBang } from "./bang-do";
+import {
+	type DongTungCau,
+	dongTungCau,
+} from "../../tro-ly-doc-kho/rang/quyet-do";
+import {
+	type Bang,
+	bam,
+	docBaoCao,
+	ghiBaoCao,
+	kiemBangChung,
+	tinhBang,
+} from "./bang-do";
 import { BO_MAU } from "./bo-mau-config";
 import { khuonBoMau } from "./khuon";
 
@@ -13,17 +29,17 @@ const BO = khuonBoMau.parse(JSON.parse(BO_THO));
 const LENH = join(BO_MAU.duong.hoSo, "rang", "do-bo-mau.ts");
 const CHAM_GIA = join(BO_MAU.duong.hoSo, "rang", "cham-gia.ts");
 
-const MOT_KHAC: Record<string, "TRA_LOI-sai" | "LOI" | "TU_CHOI"> = {
-	m02: "TRA_LOI-sai",
-	m05: "LOI",
-	m29: "TRA_LOI-sai",
-	m37: "TRA_LOI-sai",
-};
-const HAI_KHAC: Record<string, "khong-hang" | "co-hang" | "loi"> = {
-	m07: "khong-hang",
-	m47: "co-hang",
-	m48: "loi",
-};
+const MOT_KHAC = new Map<string, "TRA_LOI-sai" | "LOI" | "TU_CHOI">([
+	["m02", "TRA_LOI-sai"],
+	["m05", "LOI"],
+	["m29", "TRA_LOI-sai"],
+	["m37", "TRA_LOI-sai"],
+]);
+const HAI_KHAC = new Map<string, "khong-hang" | "co-hang" | "loi">([
+	["m07", "khong-hang"],
+	["m47", "co-hang"],
+	["m48", "loi"],
+]);
 
 function fixture(): DongTungCau[] {
 	const ngoai = (n: string) => n === "khong-phai-quy-dinh";
@@ -31,12 +47,18 @@ function fixture(): DongTungCau[] {
 		.filter((c) => !ngoai(c.nhom))
 		.map((c) =>
 			dongTungCau(
-				{ id: c.id, nhom: c.nhom, ketCuc: MOT_KHAC[c.id] ?? (c.nhom === "khong-co" ? "TU_CHOI" : "TRA_LOI-du") },
+				{
+					id: c.id,
+					nhom: c.nhom,
+					ketCuc:
+						MOT_KHAC.get(c.id) ??
+						(c.nhom === "khong-co" ? "TU_CHOI" : "TRA_LOI-du"),
+				},
 				1,
 			),
 		);
 	const hai = BO.cau.map((c) => {
-		const kc = HAI_KHAC[c.id] ?? (ngoai(c.nhom) ? "khong-hang" : "co-hang");
+		const kc = HAI_KHAC.get(c.id) ?? (ngoai(c.nhom) ? "khong-hang" : "co-hang");
 		return dongTungCau({ id: c.id, nhom: c.nhom, ketCuc: kc }, 2, false, {
 			ketQua: kc === "loi" ? null : "da-tra-loi",
 			loi: kc === "loi" ? "het-cho" : null,
@@ -83,7 +105,8 @@ const BANG_VIET_TRUOC: Bang = {
 	],
 };
 
-const jsonlCua = (ds: DongTungCau[]) => `${ds.map((d) => JSON.stringify(d)).join("\n")}\n`;
+const jsonlCua = (ds: DongTungCau[]) =>
+	`${ds.map((d) => JSON.stringify(d)).join("\n")}\n`;
 const baoCaoCua = (ds: DongTungCau[], boTho = BO_THO) =>
 	ghiBaoCao({
 		bam: bam(boTho),
@@ -105,7 +128,11 @@ describe("bang-do", () => {
 
 	test("ghiBaoCao roi docBaoCao khu hoi", () => {
 		const md = baoCaoCua(fixture());
-		expect(docBaoCao(md)).toEqual({ bam: bam(BO_THO), maCham: 1, bang: BANG_VIET_TRUOC });
+		expect(docBaoCao(md)).toEqual({
+			bam: bam(BO_THO),
+			maCham: 1,
+			bang: BANG_VIET_TRUOC,
+		});
 	});
 
 	test("kiemBangChung lanh thi ok", () => {
@@ -115,23 +142,55 @@ describe("bang-do", () => {
 	});
 
 	const ca: [string, () => [string, string | null, string | null], string][] = [
-		["sua mot o k", () => {
-			const ds = fixture();
-			return [BO_THO, baoCaoCua(ds).replace('"k": 13', '"k": 12'), jsonlCua(ds)];
-		}, "tang.S1.k"],
-		["jsonl thieu mot ma", () => {
-			const ds = fixture();
-			return [BO_THO, baoCaoCua(ds), jsonlCua(ds.filter((d) => !(d.luot === 1 && d.id === "m03")))];
-		}, "thieu m03"],
-		["bam khac", () => {
-			const ds = fixture();
-			return [BO_THO, baoCaoCua(ds, `${BO_THO} `), jsonlCua(ds)];
-		}, "bam lech"],
-		["thieu tep jsonl", () => [BO_THO, baoCaoCua(fixture()), null], BO_MAU.bangChung.tungCau],
-		["bang chu bi sua tay", () => {
-			const ds = fixture();
-			return [BO_THO, baoCaoCua(ds).replace("| S2 | 5 | 5 |", "| S2 | 4 | 5 |"), jsonlCua(ds)];
-		}, "bang chu"],
+		[
+			"sua mot o k",
+			() => {
+				const ds = fixture();
+				return [
+					BO_THO,
+					baoCaoCua(ds).replace('"k": 13', '"k": 12'),
+					jsonlCua(ds),
+				];
+			},
+			"tang.S1.k",
+		],
+		[
+			"jsonl thieu mot ma",
+			() => {
+				const ds = fixture();
+				return [
+					BO_THO,
+					baoCaoCua(ds),
+					jsonlCua(ds.filter((d) => !(d.luot === 1 && d.id === "m03"))),
+				];
+			},
+			"thieu m03",
+		],
+		[
+			"bam khac",
+			() => {
+				const ds = fixture();
+				return [BO_THO, baoCaoCua(ds, `${BO_THO} `), jsonlCua(ds)];
+			},
+			"bam lech",
+		],
+		[
+			"thieu tep jsonl",
+			() => [BO_THO, baoCaoCua(fixture()), null],
+			BO_MAU.bangChung.tungCau,
+		],
+		[
+			"bang chu bi sua tay",
+			() => {
+				const ds = fixture();
+				return [
+					BO_THO,
+					baoCaoCua(ds).replace("| S2 | 5 | 5 |", "| S2 | 4 | 5 |"),
+					jsonlCua(ds),
+				];
+			},
+			"bang chu",
+		],
 	];
 	for (const [ten, dung, ghim] of ca)
 		test(`do: ${ten}`, () => {
@@ -151,7 +210,10 @@ describe("bang-do", () => {
 			const t = mkdtempSync(join(tmpdir(), "bcm-ev-"));
 			try {
 				const ds = fixture();
-				writeFileSync(join(t, BO_MAU.bangChung.baoCao), baoCaoCua(ds).replace('"k": 13', '"k": 12'));
+				writeFileSync(
+					join(t, BO_MAU.bangChung.baoCao),
+					baoCaoCua(ds).replace('"k": 13', '"k": 12'),
+				);
 				writeFileSync(join(t, BO_MAU.bangChung.tungCau), jsonlCua(ds));
 				const r = chay(t);
 				expect(r.status).toBe(1);
@@ -182,7 +244,18 @@ describe("bang-do", () => {
 
 describe("ma-thoat", () => {
 	const trangThaiTroLy = () =>
-		spawnSync("git", ["-C", BO_MAU.duong.goc, "status", "--porcelain", "--", "_acceptance/tro-ly-doc-kho"], { encoding: "utf8" }).stdout;
+		spawnSync(
+			"git",
+			[
+				"-C",
+				BO_MAU.duong.goc,
+				"status",
+				"--porcelain",
+				"--",
+				"_acceptance/tro-ly-doc-kho",
+			],
+			{ encoding: "utf8" },
+		).stdout;
 
 	function chayGia(ca: string) {
 		const goc = mkdtempSync(join(tmpdir(), "bcm-gia-"));
@@ -193,14 +266,19 @@ describe("ma-thoat", () => {
 				...process.env,
 				[BO_MAU.bien.lenhCham]: `bun ${JSON.stringify(CHAM_GIA)}`,
 				[BO_MAU.bien.chay]: chay,
-				CHAM_GIA_CA: ca,
-				CHAM_GIA_DIR: join(goc, "luot"),
+				[BO_MAU.bien.chamGiaCa]: ca,
+				[BO_MAU.bien.chamGiaDir]: join(goc, "luot"),
 			},
 		});
 		const ra = (() => {
 			try {
 				const d = readdirSync(chay).filter((x) => x !== "luot");
-				return d.length ? readFileSync(join(chay, d[0] as string, BO_MAU.bangChung.baoCao), "utf8") : "";
+				return d.length
+					? readFileSync(
+							join(chay, d[0] as string, BO_MAU.bangChung.baoCao),
+							"utf8",
+						)
+					: "";
 			} catch {
 				return "";
 			}
@@ -213,7 +291,12 @@ describe("ma-thoat", () => {
 		["gia thoat 0 du ma", "0", 0, ["ma thoat cham-bo-do: 0"]],
 		["gia thoat 1 du ma", "1", 0, ["ma thoat cham-bo-do: 1"]],
 		["gia thoat 2", "2", 2, ["KHONG DO DUOC"]],
-		["luot mot thieu m01 lap m02", "thieu", 2, ["KHONG DO DUOC", "thieu m01", "trung m02"]],
+		[
+			"luot mot thieu m01 lap m02",
+			"thieu",
+			2,
+			["KHONG DO DUOC", "thieu m01", "trung m02"],
+		],
 		["luot hai thieu m50", "thieu-zalo", 2, ["KHONG DO DUOC", "thieu m50"]],
 	];
 	for (const [ten, maGia, maLenh, ghim] of ca)

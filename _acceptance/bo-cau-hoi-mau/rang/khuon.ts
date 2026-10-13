@@ -38,5 +38,19 @@ export const khuonBoMau = z
 	})
 	.strict();
 
-export type CauMau = z.infer<typeof khuonCauMau>;
-export type BoMau = z.infer<typeof khuonBoMau>;
+export const khuonMaCau = z
+	.object({
+		cau: z
+			.array(
+				z
+					.object({ id: z.string().catch("") })
+					.loose()
+					.catch({ id: "" }),
+			)
+			.catch([]),
+	})
+	.loose()
+	.catch({ cau: [] });
+
+export type CauMau = ReturnType<typeof khuonCauMau.parse>;
+export type BoMau = ReturnType<typeof khuonBoMau.parse>;
