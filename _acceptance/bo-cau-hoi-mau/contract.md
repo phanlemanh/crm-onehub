@@ -5,8 +5,10 @@ slug: bo-cau-hoi-mau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: draft
+status: approved
 design_doc: _acceptance/bo-cau-hoi-mau/design.md
+approved_by: Phan Le Manh
+approved_at: 2026-10-13
 ---
 
 # Acceptance Contract: bo-cau-hoi-mau
