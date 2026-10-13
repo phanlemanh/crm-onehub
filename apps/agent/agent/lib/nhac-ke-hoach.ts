@@ -5,6 +5,7 @@ import { kenhSeDungCua } from "@crm/db/kenh-thong-bao";
 import { KHOA_MUC_OKR, laViecOkr } from "@crm/db/okr-nhac";
 import {
 	daToiGioNhac,
+	laNhacViec,
 	ngayVN,
 	type ViecNhac,
 	viecCanNhac,
@@ -77,6 +78,9 @@ function maViec(v: ViecNhac): MucNhac {
 			soKrDangBan: v.soKrDangBan,
 		});
 	}
+	if (laNhacViec(v)) {
+		return mucNhac.parse({ loai: v.loai, viecId: v.viecId });
+	}
 	if (!laViecOkr(v)) {
 		return mucNhac.parse({ loai: v.loai, planId: v.planId, stepId: v.stepId });
 	}
@@ -86,23 +90,50 @@ function maViec(v: ViecNhac): MucNhac {
 	);
 }
 
-function maCua(ds: ViecNhac[]): MucNhac[] {
-	return ds.map(maViec);
+function maCuaAnToan(userId: string, ds: ViecNhac[]): MucNhac[] {
+	return ds.flatMap((v) => {
+		try {
+			return [maViec(v)];
+		} catch (loi) {
+			console.error(
+				`[nhac] bo muc loai=${v.loai} nguoi=${userId}: ${loi instanceof Error ? loi.message : String(loi)}`,
+			);
+			return [];
+		}
+	});
 }
 
-export async function lenLichNhac(now = new Date()): Promise<{ ghi: number }> {
+function conMaDuoc(userId: string, ds: ViecNhac[]): ViecNhac[] {
+	const sauTru = truKrIm(ds);
+	return ds.filter(
+		(v, i) => maCuaAnToan(userId, [sauTru[i] ?? v]).length === 1,
+	);
+}
+
+export async function lenLichNhac(
+	now = new Date(),
+	gom: typeof viecCanNhac = viecCanNhac,
+): Promise<{ ghi: number }> {
 	if (!daToiGioNhac(now)) return { ghi: 0 };
-	const viec = await viecCanNhac(db, { now, cuaSo: "buoi-sang" });
-	if (viec.size === 0) return { ghi: 0 };
+	const viec = await gom(db, { now, cuaSo: "buoi-sang" });
+	const hang = [...viec].flatMap(([userId, ds]) => {
+		const muc = maCuaAnToan(userId, truKrIm(ds));
+		return muc.length === 0
+			? []
+			: [
+					{
+						kind: LOAI_VIEC_NHAC,
+						reason: LY_DO,
+						subject: chuDeNhac(userId, now),
+						dueAt: now,
+						priority: PRIORITY.nhac,
+						payload: { muc },
+					},
+				];
+	});
+	if (hang.length === 0) return { ghi: 0 };
 	const { count } = await db.agentTask.createMany({
-		data: [...viec].map(([userId, ds]) => ({
-			kind: LOAI_VIEC_NHAC,
-			reason: LY_DO,
-			subject: chuDeNhac(userId, now),
-			dueAt: now,
-			priority: PRIORITY.nhac,
-			payload: { muc: maCua(truKrIm(ds)) },
-		})),
+		data: hang,
 		skipDuplicates: true,
 	});
 	return { ghi: count };
@@ -130,6 +161,9 @@ async function duongMo(appUrl: string | null): Promise<LienKet> {
 	const ctx = await xuongSlug(appUrl);
 	if (!ctx) return () => null;
 	return (v) => {
+		if (laNhacViec(v)) {
+			return `${ctx.appUrl}/${ctx.slug}/viec?record=viec:${v.viecId}`;
+		}
 		if ("planId" in v)
 			return `${ctx.appUrl}/${ctx.slug}?record=plan:${v.planId}`;
 		if (laViecAi(v)) return `${ctx.appUrl}/${ctx.slug}/settings/okr`;
@@ -182,10 +216,12 @@ export async function chayNhac(
 	});
 	const userId = nguoiCua(hang.subject);
 	const payload = parseNhacPayload(hang.payload);
-	const viec =
+	const viec = conMaDuoc(
+		userId,
 		(
 			await viecCanNhac(db, { now: new Date(), userId, cuaSo: "buoi-sang" })
-		).get(userId) ?? [];
+		).get(userId) ?? [],
+	);
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
 	const token = await zaloToken();
@@ -211,7 +247,7 @@ export async function chayNhac(
 		data: {
 			payload: {
 				...payload,
-				daGui: maCua(daGui),
+				daGui: daGui.map(maViec),
 				kenh: kenh.kenh,
 				lechKenh: kenh.lech,
 			},

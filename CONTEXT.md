@@ -157,17 +157,51 @@ _Avoid_: task, việc cần làm, nhiệm vụ
 Vì sao: "việc cần làm" là một loại hoạt động khác đã có trên dòng thời gian —
 hai chữ cho hai thứ khác nhau thì người đọc nhầm ngay.
 
-**Việc**: một đầu việc có người giao, một người thực hiện, người theo dõi và hạn;
-gắn được vào một hay nhiều bản ghi — thoả thuận, công ty, cá nhân, kế hoạch 30
-ngày, KR, dự án — và hiện trên dòng thời gian của từng bản ghi đó. Trạng thái
-thuộc một trong năm nhóm cố định: Chưa làm · Đang làm · Chờ đánh giá · Xong · Huỷ.
-Quyền xem đi theo bản ghi gắn kèm; người mang vai «chỉ OKR» không thấy việc gắn
-dữ liệu đối tác. Thay dần «việc cần làm» trên dòng thời gian (lượt V1) và Việc
-(KR) (lượt V5) của lộ trình Việc và Dự án; bước của kế hoạch 30 ngày vẫn là bước.
-Chủ kho mở mục 2026-10-07; nghĩa chốt tại Cổng Phạm vi lượt V1.
+**Việc**: một đầu việc có **người giao**, đúng một **người thực hiện**, không hay nhiều **người theo
+dõi**, có thể có hạn; gắn được vào một hay nhiều bản ghi — thoả thuận, công ty, cá nhân, kế hoạch 30
+ngày — mà vẫn là một việc (không nhân bản), và hiện ở khối «Việc» đầu thẻ Hoạt động của từng bản ghi đó.
+Trạng thái là một trong năm: Chưa làm · Đang làm · Chờ đánh giá · Xong · Huỷ. Người giao và người thực
+hiện đổi trạng thái theo bảng của `docs/api.md` mục «Việc»; người theo dõi, thành viên khác, quản trị
+không đổi. Việc gắn ít nhất một bản ghi đối tác thì ai đọc được dữ liệu đối tác cũng thấy; việc không gắn
+gì là việc riêng, chỉ ba vai người trong cuộc thấy. Lượt này người vai «chỉ OKR» chưa dùng Việc (kể cả
+việc riêng). Thay dần «việc cần làm» trên dòng thời gian (hàng DA1b) và Việc (KR) (lượt V5); bước của kế
+hoạch 30 ngày vẫn là bước. Chủ kho mở mục 2026-10-07; chốt 2026-10-13 (hàng DA1).
 _Avoid_: task, nhiệm vụ, đầu việc
 Vì sao: khảo sát 05/10 thấy mọi hãng tách hai loại việc đều phải vá — «việc của
 tôi» nằm hai chỗ, quyền theo hai luật. Một chữ cho một loại việc chung cả CRM.
+
+**Việc của tôi**: màn liệt kê việc của một người theo ba nhóm — Giao cho tôi (tôi là người thực hiện),
+Tôi giao (tôi giao cho người khác), Đang theo dõi — mặc định chỉ việc đang mở, xếp theo hạn; Xong và Huỷ ở
+hai dòng gập cuối danh sách. Mục thứ hai của thanh trái. Đặt 2026-10-13 (hàng DA1).
+_Avoid_: hộp việc, my tasks
+Vì sao: «Việc của bạn» đã là thẻ của OKR; màn này là của chính người đang đứng ở đó.
+
+**Người giao (việc)**: người tạo ra và chịu trách nhiệm đóng một việc — duy nhất được huỷ, mở lại, trả
+lại việc đang chờ đánh giá, đổi người thực hiện và xoá việc chưa có lịch sử. Đặt 2026-10-13.
+_Avoid_: owner, chủ việc
+Vì sao: «chủ» lẫn với người phụ trách thoả thuận.
+
+**Người thực hiện (việc)**: người duy nhất phải làm một việc; mặc định là người giao khi không chọn ai.
+Chỉ người thực hiện rời «Chưa làm» mới tính vào ngưỡng của Cổng Đáng: tỉ lệ việc giao cho người khác
+được chuyển khỏi «Chưa làm» trước hoặc trong ngày hạn. Đặt 2026-10-13.
+_Avoid_: assignee, người được giao
+Vì sao: «Người được giao» đã là chữ của bước kế hoạch 30 ngày.
+
+**Người theo dõi (việc)**: người được thêm vào một việc để nắm tình hình; không đổi được trạng thái, tự bỏ
+theo dõi được. Lượt này không nhận nhắc buổi sáng. Đặt 2026-10-13.
+_Avoid_: watcher, người quan sát
+Vì sao: cùng chữ với Theo dõi (kế hoạch), cùng nghĩa «nắm tin, không làm».
+
+**Chờ đánh giá**: trạng thái người thực hiện chọn khi muốn người giao xem lại trước khi xong; việc ở đây
+chỉ người giao đóng (Xong), trả lại (Làm lại) hay huỷ. Người thực hiện vẫn được bấm Xong thẳng từ Chưa làm
+hay Đang làm. Đặt 2026-10-13.
+_Avoid_: chờ duyệt, review
+Vì sao: «chờ duyệt» là chữ của mục tiêu OKR, có bước duyệt bắt buộc; ở Việc đây là lựa chọn.
+
+**Làm lại**: thao tác của người giao đưa việc đang Chờ đánh giá hay đã Xong về Đang làm. Việc gắn đối tác
+mà người thực hiện đã sang vai «chỉ OKR» thì không làm lại được. Đặt 2026-10-13.
+_Avoid_: mở lại (dành cho việc đã Huỷ), reopen
+Vì sao: «Mở lại» đưa việc đã Huỷ về Chưa làm; hai nút khác nhau thì hai chữ khác nhau.
 
 **Dự án**: chỗ chứa các việc của một đợt triển khai có đầu có cuối; xem dạng danh
 sách, Kanban hay Gantt, có mốc, việc trong dự án có ngày bắt đầu, hạn và phụ
@@ -191,9 +225,11 @@ _Avoid_: assignee, người phụ trách bước
 Vì sao: một kế hoạch có nhiều người được giao nhưng chỉ một người cầm trịch;
 dùng "phụ trách" cho bước là trùng chữ với người sở hữu thoả thuận.
 
-**Chuyển việc 30 ngày**: thao tác của quản trị ở màn Thành viên, chuyển mọi kế
-hoạch đang chạy mà một người cầm trịch và mọi bước chưa xong đang giao cho họ
-sang một người khác, mỗi dòng đổi để lại một vết. Chốt 2026-09-22.
+**Chuyển việc 30 ngày**: thao tác của quản trị ở màn Thành viên, chuyển mọi kế hoạch đang chạy mà
+một người cầm trịch, mọi bước chưa xong đang giao cho họ, và mọi việc đang mở họ thực hiện hay giao,
+sang một người khác — một lần, một giao dịch, mỗi dòng đổi để lại một vết. Việc đã Xong hay Huỷ giữ
+tên người cũ. Hộp xem trước và lời từ chối đổi sang vai «chỉ OKR» nêu cùng một con số việc. Chốt
+2026-09-22, thêm Việc 2026-10-13.
 _Avoid_: transfer, bàn giao tài khoản
 Vì sao: thao tác không đụng công ty, cá nhân hay thoả thuận của người đó — gọi
 là "bàn giao tài khoản" thì người dùng tưởng nó chuyển hết.
@@ -249,17 +285,18 @@ _Avoid_: follow, đăng ký
 Vì sao: "đăng ký" nghe như ghi danh vào phễu; theo dõi không đổi ai làm gì.
 
 **Nhắc buổi sáng**: một tin riêng qua Zalo hoặc Slack, theo lựa chọn của người
-đó, mỗi sáng lúc giờ đã khai, gom mọi bước quá hạn, bước sắp hạn, kế hoạch im và
-mốc ngày của một người; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm
-kênh Zalo 2026-09-23.
+đó, mỗi sáng lúc giờ đã khai, gom mọi bước quá hạn, bước sắp hạn, kế hoạch im, mốc
+ngày, việc quá hạn và việc sắp hạn người đó thực hiện, việc đang chờ người đó đánh
+giá; ngày không có gì thì không gửi. Chốt 2026-09-22, thêm kênh Zalo 2026-09-23,
+thêm Việc 2026-10-13.
 _Avoid_: thông báo, notification
 Vì sao: kho không có bảng thông báo; gọi là thông báo thì người dùng đi tìm
 chuông trong app.
 
 **Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
 sáng, trả lời mã nối, nhận ra người đã nối, gửi tin thử khi người bấm «Gửi thử
-nhắc ngay», và đánh dấu bước xong khi người trả lời `xong` kèm số mục của tin nhắc
-hôm nay, và trả lời câu hỏi về CRM bằng trợ lý AI cho người đã nối, theo quyền của
+nhắc ngay», và đánh dấu bước hay việc xong khi người trả lời `xong` kèm số mục của tin
+nhắc hôm nay, và trả lời câu hỏi về CRM bằng trợ lý AI cho người đã nối, theo quyền của
 người hỏi, chỉ đọc, có trần số câu. Quản trị viên bật nó bằng cách dán Bot Token ở
 Kết nối › Zalo. Khác **Tác nhân**: bot Zalo không tự làm việc gì — nó chỉ làm đúng
 lệnh hay trả lời đúng câu người gõ. Chốt 2026-09-23, mở rộng 2026-09-24, 2026-09-25

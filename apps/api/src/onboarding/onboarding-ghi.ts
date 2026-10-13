@@ -1,6 +1,8 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
+import { demViecMoCua } from "@crm/db/viec";
+import { chuyenViecTrongGiaoDich, goTheoDoiCuaNguoi } from "@crm/db/viec-ghi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type OnboardingActivityMeta,
@@ -308,18 +310,19 @@ function dieuKienChuyen(from: string) {
 export async function demViecDangGiu(
 	tx: Tx,
 	userId: string,
-): Promise<{ keHoach: number; buoc: number }> {
+): Promise<{ keHoach: number; buoc: number; viec: number }> {
 	const dk = dieuKienChuyen(userId);
-	const [keHoach, buoc] = await Promise.all([
+	const [keHoach, buoc, viec] = await Promise.all([
 		tx.onboardingPlan.count({ where: dk.keHoach }),
 		tx.onboardingStep.count({ where: dk.buoc }),
+		demViecMoCua(tx, userId),
 	]);
-	return { keHoach, buoc };
+	return { keHoach, buoc, viec };
 }
 
 export async function xoaTheoDoiCua(tx: Tx, userId: string): Promise<number> {
 	const { count } = await tx.onboardingWatch.deleteMany({ where: { userId } });
-	return count;
+	return count + (await goTheoDoiCuaNguoi(tx, userId, new Date()));
 }
 
 async function yeuCauQuanTri(userId: string): Promise<void> {
@@ -576,12 +579,7 @@ export class OnboardingGhi {
 		actingUserId: string,
 	): Promise<TransferOutput> {
 		await yeuCauQuanTri(actingUserId);
-		const dk = dieuKienChuyen(input.fromUserId);
-		const [keHoach, buoc] = await Promise.all([
-			this.db.onboardingPlan.count({ where: dk.keHoach }),
-			this.db.onboardingStep.count({ where: dk.buoc }),
-		]);
-		return { keHoach, buoc };
+		return demViecDangGiu(this.db, input.fromUserId);
 	}
 
 	async transferWork(
@@ -604,9 +602,6 @@ export class OnboardingGhi {
 				select: { ...CHON_BUOC, plan: { select: { companyId: true } } },
 				orderBy: { id: "asc" },
 			});
-			if (keHoach.length === 0 && buoc.length === 0) {
-				return { keHoach: 0, buoc: 0 };
-			}
 
 			const tuTen = await tenNguoi(tx, input.fromUserId);
 			for (const plan of keHoach) {
@@ -645,7 +640,13 @@ export class OnboardingGhi {
 					actingUserId,
 				);
 			}
-			return { keHoach: keHoach.length, buoc: buoc.length };
+			const viec = await chuyenViecTrongGiaoDich(tx, {
+				tuId: input.fromUserId,
+				den: { id: den.id, ten: den.name },
+				nguoiId: actingUserId,
+				now: new Date(),
+			});
+			return { keHoach: keHoach.length, buoc: buoc.length, viec };
 		});
 	}
 }

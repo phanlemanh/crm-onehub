@@ -148,7 +148,7 @@ function datThanhVien(
 		facetCounts: { role: { member: 3 } },
 	}));
 	dat("onboarding.access", () => ({ canManage }));
-	dat("onboarding.transferPreview", () => ({ keHoach: 0, buoc: 0 }));
+	dat("onboarding.transferPreview", () => ({ keHoach: 0, buoc: 0, viec: 0 }));
 	dat("okr.transferPreview", () => xemTruoc);
 	dat("okr.thanhVien", () =>
 		THANH_VIEN.map((n) => ({
