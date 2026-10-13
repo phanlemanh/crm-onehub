@@ -107,7 +107,7 @@ evals:
       - "packages/validation/src/ngay-vn.ts"
       - "apps/app/test/them-buoc-bao-dung.dom.tsx"
     expected: |
-      Lenh chay voi TZ=America/Los_Angeles va loc -t qua-han-lui (chi describe nay chay). them-buoc-bao-dung.dom.tsx describe "qua-han-lui": khang dinh dau tien
+      Lenh chay voi TBD_MUI_GIO=lui TZ=America/Los_Angeles va loc -t qua-han-lui (describe chi chay khi TBD_MUI_GIO=lui, nen suite chung o gio VN bo qua no). them-buoc-bao-dung.dom.tsx describe "qua-han-lui": khang dinh dau tien
       Intl.DateTimeFormat().resolvedOptions().timeZone === "America/Los_Angeles" (thong diep ghim "lenh khong chay o mui
       gio lui") — chan thuoc chay sai mui gio ma van xanh. Dong ho ghim 2026-10-12T17:30:00Z (VN 2026-10-13 00:30; LA
       2026-10-12 10:30). Render DashboardSummary voi du lieu dung khuon dashboard.summary: overdueTasks [], mySteps
@@ -127,7 +127,7 @@ evals:
       - "packages/validation/src/ngay-vn.ts"
       - "apps/app/test/them-buoc-bao-dung.dom.tsx"
     expected: |
-      Lenh chay voi TZ=Pacific/Kiritimati va loc -t qua-han-tien (chi describe nay chay). them-buoc-bao-dung.dom.tsx describe "qua-han-tien": khang dinh dau tien
+      Lenh chay voi TBD_MUI_GIO=tien TZ=Pacific/Kiritimati va loc -t qua-han-tien (describe chi chay khi TBD_MUI_GIO=tien). them-buoc-bao-dung.dom.tsx describe "qua-han-tien": khang dinh dau tien
       timeZone === "Pacific/Kiritimati" (thong diep ghim "lenh khong chay o mui gio tien"). Dong ho ghim
       2026-10-12T12:00:00Z (VN 2026-10-12 19:00; Kiritimati 2026-10-13 02:00). Du lieu: overdueTasks [], mySteps [buoc
       hanD dueAt "2026-10-12"], quaHan { viec: 1, buoc: 0 }. Ma tran viet truoc: (1) dong buoc hanD KHONG mang dau qua han;

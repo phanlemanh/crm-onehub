@@ -1560,8 +1560,8 @@ executors:
     kkc_canh_chu: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/messages-guard.spec.ts && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/messages-guard.spec.ts'
     tbd_phong_ban: 'bun run test -- "cd apps/api && bun test test/them-buoc-bao-dung.spec.ts"'
     tbd_form_dom: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t phong-ban-loi'
-    tbd_qua_han_lui: 'cd apps/app && TZ=America/Los_Angeles bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-lui'
-    tbd_qua_han_tien: 'cd apps/app && TZ=Pacific/Kiritimati bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-tien'
+    tbd_qua_han_lui: 'cd apps/app && TBD_MUI_GIO=lui TZ=America/Los_Angeles bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-lui'
+    tbd_qua_han_tien: 'cd apps/app && TBD_MUI_GIO=tien TZ=Pacific/Kiritimati bun test --preload ../../packages/ui/test/setup-dom.ts ./test/them-buoc-bao-dung.dom.tsx -t qua-han-tien'
     tbd_khu_hoi: 'bun run test -- "cd apps/api && TBD_KHU_HOI=1 TZ=America/Los_Angeles bun test test/them-buoc-bao-dung.spec.ts -t qua-han-khu-hoi && TBD_KHU_HOI=1 TZ=Pacific/Kiritimati bun test test/them-buoc-bao-dung.spec.ts -t qua-han-khu-hoi"'
   script:
     h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'

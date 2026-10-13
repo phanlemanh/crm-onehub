@@ -614,7 +614,7 @@ function conSotCua(the: HTMLElement): string | null {
 	);
 }
 
-describe("qua-han-lui", () => {
+describe.if(process.env.TBD_MUI_GIO === "lui")("qua-han-lui", () => {
 	const LUC = "2026-10-12T17:30:00Z";
 
 	test("qua-han-lui: buoc han D quá hạn theo ngày VN, không có dòng còn sót", async () => {
@@ -646,7 +646,7 @@ describe("qua-han-lui", () => {
 	});
 });
 
-describe("qua-han-tien", () => {
+describe.if(process.env.TBD_MUI_GIO === "tien")("qua-han-tien", () => {
 	const LUC = "2026-10-12T12:00:00Z";
 
 	test("qua-han-tien: buoc han D chưa quá hạn theo ngày VN, việc ngoài danh sách vẫn được báo", async () => {
