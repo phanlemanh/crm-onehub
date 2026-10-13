@@ -1273,7 +1273,7 @@
 			"ma": "paths-khong-tro-toi-tep",
 			"nguon": "paths",
 			"xu_ly": "sua-rang",
-			"ly_do": "lenh sol_san_thiet_ke chay design-gate nham man-soan.tsx, tep da go khi soan OKR thanh trang rieng — o do do sach sau moi lan chay (design-gate thoat 1 vi tep vang). Tro lenh sang khoa moi sol_san_thiet_ke_trang do cung loi hua tren cac tep ke nhiem (trang-soan, khung-soan) cung nut-soan, hoi-thoai-soan; paths doi theo. Khai not-run bi luat hai ve 2.12.0 chan vi bao cao da ky co ma thoat cho E12",
+			"ly_do": "lenh sol_san_thiet_ke chay design-gate nham man-soan.tsx, tep da go khi soan OKR thanh trang rieng — o do do sach sau moi lan chay (design-gate thoat 1 vi tep vang). Tro lenh sang khoa moi sol_san_thiet_ke_trang do cung loi hua tren cac tep ke nhiem (trang-soan, khung-soan) cung nut-soan, hoi-thoai-soan; paths doi theo. Khai not-run bi luat hai ve 2.12.0 chan vi bao cao da ky co ma thoat cho E12. Gioi han do 13/10: design-gate --mode static voi nguong mac dinh P0 tren tep .tsx khong chan duoc luat P0 nao (tuong phan, anh hong can che do DOM); chieu do duy nhat cua o la tep dich vang — dung ca da lam E12 do; bao viec phu cho 74 dong lenh cung kieu",
 			"can_cu": "574292047",
 			"moi": null,
 			"tep": [
@@ -1281,11 +1281,11 @@
 			],
 			"dot_bien": [
 				{
-					"ten": "ban-kinh-tu-che",
+					"ten": "tep-dich-vang",
 					"kieu": "design-gate",
 					"tep": "apps/app/app/(app)/[slug]/okr/soan/trang-soan.tsx",
-					"chen": "<div className=\"rounded-[7px] bg-[#123456] p-[13px]\" />",
-					"thong_diep": "design-gate bat vi pham trong ban sao trang-soan.tsx"
+					"xoa_tep": true,
+					"thong_diep": "design-gate do khi tep dich vang (ca da lam E12 do sau 574292047)"
 				}
 			]
 		},
