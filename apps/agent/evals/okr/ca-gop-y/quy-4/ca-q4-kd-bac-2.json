@@ -1,0 +1,31 @@
+{
+	"id": "ca-q4-kd-bac-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Bắc"
+	},
+	"mucTieu": {
+		"title": "Mở rộng tệp đối tác bán lẻ miền Bắc",
+		"whyNow": "Bán lẻ miền Bắc tăng trưởng nhanh nhất quý 2.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Ký 15 hợp đồng bán lẻ mới",
+			"kind": "tang-toi",
+			"startValue": 11,
+			"targetValue": 15,
+			"unit": "hợp đồng"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["kr-la-viec"],
+		"vietLai": ["kr.title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "«Ký 15 hợp đồng bán lẻ mới» mở bằng động từ việc làm."
+}

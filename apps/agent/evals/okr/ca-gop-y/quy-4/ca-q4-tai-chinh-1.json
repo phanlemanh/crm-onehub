@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-tai-chinh-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Tài chính"
+	},
+	"mucTieu": {
+		"title": "Dòng tiền đủ cho mùa Tết",
+		"whyNow": "Tháng Chạp phải ứng lương, thưởng và tiền thuê kho tạm cùng lúc.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Công nợ quá hạn giảm từ 12 xuống 8%",
+			"kind": "giam-xuong",
+			"startValue": 12,
+			"targetValue": 8,
+			"unit": "%"
+		},
+		{
+			"title": "Giữ số ngày chốt sổ tháng dưới 5",
+			"kind": "giu-duoi",
+			"startValue": 6,
+			"targetValue": 5,
+			"unit": "ngày"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: công nợ quá hạn và số ngày chốt sổ."
+}

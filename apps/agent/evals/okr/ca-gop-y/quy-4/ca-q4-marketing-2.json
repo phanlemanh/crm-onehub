@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-marketing-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Marketing"
+	},
+	"mucTieu": {
+		"title": "Ra mắt bộ nhận diện hàng lạnh",
+		"whyNow": "Kinh doanh miền Nam cần tài liệu bán hàng riêng cho hàng lạnh.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Ra bộ tài liệu bán hàng hàng lạnh",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		},
+		{
+			"title": "Case study đối tác hàng lạnh đạt 4",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 4,
+			"unit": "bài"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": ["title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên mục tiêu «Ra mắt bộ nhận diện hàng lạnh» nói việc làm."
+}

@@ -1,0 +1,75 @@
+{
+	"id": "ca-ng-q4-kd-bac-1",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Bắc"
+	},
+	"mucTieu": {
+		"title": "Giữ đà tăng trưởng bán lẻ miền Bắc",
+		"whyNow": "Quý 3 ký được 11 hợp đồng; mùa mua sắm cuối năm là lúc đối tác cần kho nhất.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 6,
+			"unit": "tỷ đồng"
+		},
+		{
+			"title": "Số cuộc hẹn gặp đối tác mới đạt 60",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 60,
+			"unit": "cuộc hẹn"
+		},
+		{
+			"title": "Tỷ lệ báo giá thành hợp đồng",
+			"kind": "phan-tram",
+			"startValue": 20,
+			"targetValue": 35,
+			"unit": "%"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Trở thành đối tác logistics được chọn đầu tiên ở hai miền",
+			"whyNow": "Hai đối thủ lớn vừa rút khỏi phân khúc hàng lạnh; ai ký trước năm nay giữ đối tác nhiều năm.",
+			"kind": "tham-vong"
+		},
+		"krs": [
+			{
+				"title": "Doanh thu hợp đồng mới đạt 48 tỷ đồng",
+				"kind": "tang-toi",
+				"startValue": 0,
+				"targetValue": 48,
+				"unit": "tỷ đồng"
+			},
+			{
+				"title": "Giữ tỷ lệ đối tác gia hạn trên 85%",
+				"kind": "giu-tren",
+				"startValue": 82,
+				"targetValue": 85,
+				"unit": "%"
+			},
+			{
+				"title": "Số đối tác hàng lạnh đang chạy tăng từ 12 lên 30",
+				"kind": "tang-toi",
+				"startValue": 12,
+				"targetValue": 30,
+				"unit": "đối tác"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
+		"soSai": false
+	},
+	"ghiChu": "Căn chỉnh vào KR doanh thu 48 tỷ của OneHub; không được chép KR cấp trên làm tên, không nói về người."
+}
