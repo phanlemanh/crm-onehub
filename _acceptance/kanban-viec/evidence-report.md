@@ -1,18 +1,16 @@
 ---
 schema_version: 2
 feature_slug: kanban-viec
-verdict: REJECT
+verdict: PENDING-JUDGMENT
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: a8e56a4af4bea67cd6a4c5a25427004f26a5c410
+verified_commit: 83c2a95ecc9d37bc3233e8b3ca4c5fffc6dc7787
 human_signoff:
 ---
 
 # Evidence Report: kanban-viec
-
-Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện context sạch xác nhận hai chỗ yếu của phép đo thuộc AC-4 (chi tiết ở `review-findings.md`, mục «Trong hợp đồng»), nên kết luận chung là REJECT và trả về khâu làm.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -33,59 +31,30 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
 | E10 | AC-10 | test | PASS |
 | E11 | AC-11 | ui-check | PASS |
 | E11b | AC-11 | script | PASS |
-| E12 | AC-12 | judgment | PASS |
+| E12 | AC-12 | judgment | PASS (đề xuất của hội đồng, chờ người chốt) |
 | E15 | AC-3 | script | PASS |
+
+Vòng 3 chạy lại bảy eval E1, E1b, E4, E4b, E6b, E7b, E9b (khối bên dưới mang run_id hậu tố r3). Mười một eval còn lại giữ nguyên từ vòng 1 vì delta không chạm paths của chúng; mỗi khối đó có dòng carried_from_round.
 
 ## Evidence
 
-### Eval chạy lại ở vòng 2
-
 - eval: E1
-  run_id: minted-kanban-viec-E1-r2
+  run_id: minted-kanban-viec-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kv_bang
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
   output: |
-    test-run: dropped crm_mv6z15tw90rd_test
+    test-run: dropped crm_mv6zx0y9s5b0_test
 
 - eval: E1b
-  run_id: minted-kanban-viec-E1b-r2
+  run_id: minted-kanban-viec-E1b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kv_man_bang
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
   output: |
-    Ran 4 tests across 1 file. [942.00ms]
-
-- eval: E4
-  run_id: minted-kanban-viec-E4-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.kv_board
-  verified_at: 2026-10-13T17:44:24Z
-  output: |
-    Ran 7 tests across 1 file. [595.00ms]
-
-- eval: E4b
-  run_id: minted-kanban-viec-E4b-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.kv_man_keo
-  verified_at: 2026-10-13T17:44:24Z
-  output: |
-    Ran 3 tests across 1 file. [1181.00ms]
-
-- eval: E6b
-  run_id: minted-kanban-viec-E6b-r2
-  exit_code: 0
-  baseline: n-a
-  verifier: config:executors.test.kv_man_tra_ve
-  verified_at: 2026-10-13T17:44:24Z
-  output: |
-    Ran 3 tests across 1 file. [1173.00ms]
-
-### Eval mang từ vòng 1 (carry-forward)
+    Ran 4 tests across 1 file. [1048.00ms]
 
 - eval: E2
   run_id: minted-kanban-viec-E2-r1
@@ -94,7 +63,7 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.test.kv_keo
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E3
   run_id: minted-kanban-viec-E3-r1
@@ -103,7 +72,25 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.test.kv_ma_tran
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
+
+- eval: E4
+  run_id: minted-kanban-viec-E4-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.kv_board
+  verified_at: 2026-10-13T18:09:07Z
+  output: |
+    Ran 9 tests across 1 file. [1229.00ms]
+
+- eval: E4b
+  run_id: minted-kanban-viec-E4b-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.kv_man_keo
+  verified_at: 2026-10-13T18:09:07Z
+  output: |
+    Ran 3 tests across 1 file. [1.63s]
 
 - eval: E5
   run_id: minted-kanban-viec-E5-r1
@@ -112,7 +99,7 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.test.kv_thu_tu
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E6
   run_id: minted-kanban-viec-E6-r1
@@ -121,7 +108,16 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.test.kv_tranh_chap
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
+
+- eval: E6b
+  run_id: minted-kanban-viec-E6b-r3
+  exit_code: 0
+  baseline: n-a
+  verifier: config:executors.test.kv_man_tra_ve
+  verified_at: 2026-10-13T18:09:07Z
+  output: |
+    Ran 3 tests across 1 file. [1468.00ms]
 
 - eval: E7
   run_id: minted-kanban-viec-E7-r1
@@ -130,16 +126,16 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.test.kv_con
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E7b
-  run_id: minted-kanban-viec-E7b-r1
+  run_id: minted-kanban-viec-E7b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kv_man_con
-  verified_at: 2026-10-13T17:12:46Z
-  carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  verified_at: 2026-10-13T18:09:07Z
+  output: |
+    Ran 3 tests across 1 file. [1479.00ms]
 
 - eval: E8
   run_id: minted-kanban-viec-E8-r1
@@ -148,7 +144,7 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.test.kv_con_quyen
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E9
   run_id: minted-kanban-viec-E9-r1
@@ -157,16 +153,16 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.test.kv_dong_cha
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E9b
-  run_id: minted-kanban-viec-E9b-r1
+  run_id: minted-kanban-viec-E9b-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.kv_man_hoi_cha
-  verified_at: 2026-10-13T17:12:46Z
-  carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  verified_at: 2026-10-13T18:09:07Z
+  output: |
+    Ran 2 tests across 1 file. [2.24s]
 
 - eval: E10
   run_id: minted-kanban-viec-E10-r1
@@ -175,7 +171,7 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.test.kv_thuoc
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E11
   run_id: minted-kanban-viec-E11-r1
@@ -184,7 +180,7 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.script.kv_man
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval (khung của lượt gốc, cùng run_id)
+  # carry-forward tu round 1 — delta khong cham paths cua eval (khung của lượt gốc, ảnh còn trên đĩa)
   screenshot: evidence/kv-bang-1280.png
   observed: |
     kv-bang-1280.png: tiêu đề "Việc của tôi", thẻ "Giao cho tôi 6", nút Danh sách/Bảng (Bảng đang chọn). Bốn cột có số đếm: Chưa làm 4, Đang làm 1, Chờ đánh giá 1, Đã xong 1 (nhãn cột 4 là "Đã xong", Expected viết "Xong"). Thẻ cha "Triển khai đại lý An Phát" có nhãn "1/2 việc con xong". Thẻ con "Đặt lịch đào tạo môi giới" có dòng "Thuộc: Triển khai đại lý An Phát". Mỗi thẻ có nút "Chuyển sang…". Thẻ "Chờ đánh giá" có nút mờ kèm dòng "Chỉ người giao xử lý việc đang chờ đánh giá." Ảnh bị cắt ở đáy, thấy lấp ló dòng gập bên dưới bảng; chữ "Đã huỷ (1)" xác nhận bằng grep trong kv-bang-1280.html.
@@ -203,7 +199,7 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.script.kv_san_thiet_ke
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 - eval: E15
   run_id: minted-kanban-viec-E15-r1
@@ -212,58 +208,56 @@ Vòng 2. Mọi lệnh eval và lệnh suite đều xanh, nhưng phản biện co
   verifier: config:executors.script.kv_dot_bien
   verified_at: 2026-10-13T17:12:46Z
   carried_from_round: 1
-  note: carry-forward tu round 1 — delta khong cham paths cua eval
-
-### Judgment
-
-Panel đề xuất: PASS. Ba góc chấm, mỗi phiếu nêu đủ bên dưới. `human_override` để trống cho người quyết ở Cổng 2.
-
-- eval: E12
-  judged_by: judge-subagent (fresh context), panel ba góc: domain-correctness, operational-feasibility, spec-alignment
-  verdict: PASS
-  rationale: CONTEXT.md mục «Việc con» (dòng 173-181) nói đủ bốn điều: một tầng, mang bản ghi gắn của cha lúc tạo, người giao và người thực hiện của cha thành người theo dõi, đóng hay huỷ cha không tự đóng con. Mục «Việc của tôi» có câu về kiểu xem Bảng bốn cột. docs/api.md mục «Việc» nêu viec.bang, viec.keo, viec.taoCon, thứ tự trong cột riêng từng người và không ghi vết, cùng hai nguồn bang-keo và bang-menu.
-  votes:
-    - domain-correctness: PASS — CONTEXT.md mục «Việc con» (dòng 173-181) nói đủ bốn điều: một tầng, mang bản ghi gắn của cha lúc tạo, người giao và người thực hiện của cha thành người theo dõi, đóng hay huỷ cha không tự đóng con. Mục «Việc của tôi» (dòng 183-188) có câu về kiểu xem Bảng bốn cột. Mục «Việc» của docs/api.md (dòng 499, 547-557) nêu viec.bang, viec.keo, viec.taoCon, thứ tự trong cột riêng từng người và không ghi vết, cùng hai nguồn bang-keo và bang-menu.
-    - operational-feasibility: PASS — CONTEXT.md mục «Việc con» (dòng 173-178) nêu đủ bốn điều: một tầng, mang gắn của cha lúc tạo, người giao và người thực hiện của cha thành người theo dõi, đóng hay huỷ cha không tự đóng con. Mục «Việc của tôi» (dòng 185-188) có câu về kiểu xem Bảng bốn cột. docs/api.md mục «Việc» (dòng 499, đoạn 547-557) nêu viec.bang, viec.keo, viec.taoCon, thứ tự riêng từng người không ghi vết, và hai nguồn bang-keo và bang-menu.
-    - spec-alignment: PASS — CONTEXT.md mục «Việc con» (dòng 173-178) nói đủ bốn điều: một tầng, mang bản ghi gắn của cha lúc tạo, người giao và người thực hiện của cha thành người theo dõi, đóng hay huỷ cha không tự đóng con. Mục «Việc của tôi» (dòng 183-188) có câu về kiểu xem Bảng bốn cột Chưa làm · Đang làm · Chờ đánh giá · Xong. docs/api.md (dòng 547-557) nêu viec.bang, viec.keo, viec.taoCon, thứ tự trong cột là riêng từng người và sắp thứ tự không ghi vết, cùng hai nguồn bang-keo và bang-menu.
-  human_override:  # chi nguoi ghi
+  # carry-forward tu round 1 — delta khong cham paths cua eval
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-kanban-viec-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-kanban-viec-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-kanban-viec-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-kanban-viec-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-kanban-viec-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-kanban-viec-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-kanban-viec-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-kanban-viec-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-kanban-viec-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-kanban-viec-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
 
 - cmd: bun run lint:slop
-  run_id: minted-kanban-viec-SUITE-bun_run_lint_slop-r2
+  run_id: minted-kanban-viec-SUITE-bun_run_lint_slop-r3
   exit_code: 0
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-kanban-viec-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-kanban-viec-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-13T17:44:24Z
+  verified_at: 2026-10-13T18:09:07Z
+
+### Phán đoán (judgment)
+
+- eval: E12
+  judged_by: hội đồng ba lăng kính (fresh context), panel giữ nguyên từ round 2 — inputs không đổi, không chấm lại; rationale xem round 2
+  verdict: PASS
+  votes:
+    - domain-correctness: PASS (r2)
+    - operational-feasibility: PASS (r2)
+    - spec-alignment: PASS (r2)
+  rationale: đề xuất PASS của hội đồng, mang từ round 2; chỉ là ý kiến tư vấn, người chốt ở Cổng 2.
+  human_override:  # chi nguoi ghi
 
 ## Known limits
 
@@ -271,15 +265,14 @@ Panel đề xuất: PASS. Ba góc chấm, mỗi phiếu nêu đủ bên dưới.
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay
-
-none — baseline không đo ở vòng này nên không có eval nào được xếp là không-phân-biệt; lệnh suite xanh cả hai phía là regression-guard bình thường.
+carried tu round 1 — baseline khong do lai round nay. Mọi field baseline ở trên ghi n-a vì round này không đo lại (evals.yaml không đổi từ lần baseline cuối, round 1). Không có eval nào được liệt kê là không-phân-biệt; các lệnh suite xanh cả hai phía là regression-guard bình thường.
 
 ## Variance
 
-none — every multi-run eval is uniform
+none — mọi eval chạy một lần, kết quả đồng nhất.
 
 ## Iterations
 
-Round 1: bằng chứng S4 vòng 1 bị REJECT vì bốn chỗ yếu của phép đo DOM (mười chín eval và bảy suite xanh); đã sửa ở commit e979f5449 (thước kéo thả đi qua đường thả thật của Board, ca rỗng đòi đủ bốn cột, dòng Xong cũ so con số và đích tới, nhóm theo dõi chứng có thẻ). Returned to implementation.
-Round 2: E1, E1b, E4, E4b, E6b chạy lại, các eval còn lại mang từ vòng 1; tất cả xanh, nhưng phản biện xác nhận hai chỗ yếu thuộc AC-4: lần thả trong board.dom.tsx và viec-bang.dom.tsx là KanbanMoveEvent tự ráp, không đi qua dnd-kit nên vế kéo bằng phím chưa được chứng. Returned to implementation. Ghi chú: giờ chạy chính xác của vòng 2 nằm ở trường ts trong run-log.jsonl; verified_at của vòng 2 ở trên chỉ chính xác đến ngày.
+Round 1: trả về sửa — thước kéo thả đi qua đường thả thật của Board; ca rỗng đòi đủ bốn cột; dòng Xong cũ so con số và đích tới (commit e979f5449).
+Round 2: bị REJECT vì lần thả trong thước DOM tự ráp sự kiện; sửa bằng cách cho thước đi qua kéo phím thật của dnd-kit (commit b225c47ce).
+Round 3: chạy lại E1, E1b, E4, E4b, E6b, E7b, E9b cùng bảy lệnh suite, tất cả xanh; mười một eval còn lại carry từ round 1; E12 giữ panel round 2. Verdict PENDING-JUDGMENT vì E12 chờ người chốt. Lưu ý: verified_at của khối r3 ghi theo ngày chạy (2026-10-14), máy không cấp dấu giờ.

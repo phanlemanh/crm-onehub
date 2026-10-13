@@ -1,24 +1,18 @@
+# Review findings: kanban-viec (round 3)
+
 ## Trong hợp đồng
 
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): 'thả thật' trong board.dom.tsx là KanbanMoveEvent tự ráp, không do Kanban sinh ra**
-  file: `packages/ui/test/board.dom.tsx:21`
-  severity: high
-  AC: AC-4
-  source: measurement
-  detail: thaThat() bắt prop onMove của Kanban qua mock.module rồi tự gọi kanbanProps.onMove({ event: { active: { id: cardId } } as KanbanMoveEvent["event"], activeContainer: from, activeIndex: 0, overContainer: to, overIndex: toIndex }). Tên cột nguồn, cột đích và overIndex đều do test đưa vào, activeIndex luôn là 0, và `event` được ép kiểu (cast). Bên sinh thật của sự kiện này là handleDragEnd trong packages/ui/src/components/reui/kanban.tsx (khoảng dòng 419-437): hàm đó tự suy activeContainer/overContainer bằng findContainer, và đặt overIndex = độ dài cột khi `over` là một cột. Đoạn code đó không chạy ở ca nào. Ca mới 'board-can-drop: thả thật qua đường kéo của Board' vì thế chỉ đo boardDrop với đầu vào đúng khuôn mà Board.handleMove đọc. Nếu findContainer trả sai cột hoặc overIndex sai khi thả vào cột rỗng, ca này vẫn xanh. evals.yaml (E-board, dòng 42) hứa 'mô phỏng kéo bằng KeyboardSensor (Space, ArrowRight, Space)', nhưng nửa 'thả' chưa bao giờ đi qua dnd-kit. Bài nhấc thẻ bằng phím (nhac/tha) chỉ bấm Space rồi Escape, nên không sinh lần thả nào.
-  rationale: AC-4 đòi kéo bằng bàn phím (Tab, Space, mũi tên phải, Space) đưa việc sang Đang làm; ca thả này không đi qua dnd-kit nên không chứng được vế đó.
-
-- **Hình dạng 2 (fixture viết tay đúng khuôn bên đọc): mọi lần 'kéo' trong viec-bang.dom.tsx đi qua KanbanMoveEvent tự ráp; ca 'kv: keo phim sai' không có phím nào**
-  file: `apps/app/test/viec-bang.dom.tsx:228`
-  severity: high
-  AC: AC-4
-  source: measurement
-  detail: thaThat(cardId, from, to, toIndex = 0) gọi thẳng kanbanProps.onMove({ event: { active: { id } }, activeContainer: from, activeIndex: 0, overContainer: to, overIndex }). Cột nguồn và cột đích do test tự khai, không do Kanban suy từ vị trí thẻ. Hàm này được dùng cho assert 'kv: keo phim sai' (thaThat("d","DANG_LAM","CHO_DANH_GIA")), cho hai assert 'kv: canDrop khong noi' / 'kv: doi chung canDrop hong' (thaThat("v",...,"XONG") và thaThat("w",...,"DANG_LAM")), cho ca thẻ chờ khoá tay kéo, và cho cả ba ca kv-man-tra-ve. evals.yaml E4b (dòng 50) hứa 'Kéo W bằng phím (Space, ArrowRight, Space) gọi viec.keo với trangThai DANG_LAM và nguon bang-keo'. Thực tế test không gửi phím nào trong lần kéo đó: đoạn handleDragEnd của kanban.tsx (findContainer, overIndex) bị bỏ qua hoàn toàn. Vì vậy một hồi quy khiến kéo bằng phím hay chuột trên màn thật không tới được viec.keo vẫn để E4b xanh. Phím Space chỉ xuất hiện ở bước nhấc thẻ để đọc data-khong-nhan, rồi Escape, nên không có lần thả nào đi qua dnd-kit.
-  rationale: AC-4 nêu rõ lối phím Space, mũi tên, Space ghi vết nguồn bang-keo; test không gửi phím nào ở lần thả nên vế này chưa được chứng.
+Không có finding nào map được vào AC ở round này.
 
 ## Ngoài hợp đồng — người quyết ở Gate 2
 
 Các lỗi dưới đây nằm ngoài phạm vi đã duyệt ở Cổng Phạm vi và CHƯA qua bác bỏ đối kháng — người quyết, máy không sửa và không chấm thứ máy không được sửa.
+
+- **Hình dạng 1 — đo chỉ dẫn thay vì đầu ra: «thẻ đang chờ máy chủ khoá tay kéo» chỉ đọc prop pendingIds truyền cho Board**
+  Người dùng thấy gì: Bài kiểm tự động chưa chứng minh được rằng một thẻ đang chờ máy chủ xác nhận thì không kéo tiếp được. Nếu ai đó vô tình gỡ cơ chế khoá này, bài kiểm vẫn báo xanh, và người dùng có thể kéo một thẻ hai lần liên tiếp khi mạng chậm.
+  file: `apps/app/test/viec-bang.dom.tsx`
+  severity: medium
+  Đề xuất: known-limits
 
 - **viec.bang và viec.con đọc tiêu đề việc cha mà không qua dieuKienXemViec, nên lộ tiêu đề của việc riêng (r1)**
   Người dùng thấy gì: Sau khi người giao gỡ việc cha khỏi thoả thuận, người được giao việc con vẫn thấy tiêu đề của việc cha dù đó đã thành việc riêng họ không được xem. Bấm vào tiêu đề đó thì báo không tìm thấy.
