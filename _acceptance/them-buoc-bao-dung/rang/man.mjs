@@ -362,6 +362,35 @@ async function doThemBuoc(cookie, slug, toi, boPhan) {
 	}
 }
 
+async function conSotMong(toiId, idViec, idBuoc) {
+	const dau = dauNgayVN(new Date());
+	const [viec, buoc, buocHienQuaHan] = await Promise.all([
+		db.activity.count({
+			where: {
+				type: ActivityType.TASK,
+				completedAt: null,
+				dueAt: { lt: dau },
+				createdById: toiId,
+			},
+		}),
+		db.onboardingStep.count({
+			where: {
+				assigneeId: toiId,
+				completedAt: null,
+				plan: { closedAt: null },
+				dueAt: { lt: dau },
+			},
+		}),
+		db.onboardingStep.count({
+			where: { id: { in: idBuoc }, dueAt: { lt: dau } },
+		}),
+	]);
+	return {
+		tong: viec + buoc,
+		mong: Math.max(0, viec + buoc - idViec.length - buocHienQuaHan),
+	};
+}
+
 function chonMuiGio(now) {
 	const gio = Number(
 		new Intl.DateTimeFormat("en-GB", {
@@ -425,6 +454,12 @@ async function doQuaHan(cookie, slug, toi, boPhan) {
 								?.querySelector('[data-slot="status-indicator"]')
 								?.getAttribute("data-tone") ?? null,
 						conSot: chan?.getAttribute("data-con-sot") ?? null,
+						idViec: [...e.querySelectorAll("[data-viec]")].map((r) =>
+							r.getAttribute("data-viec"),
+						),
+						idBuoc: [...e.querySelectorAll("[data-buoc]")].map((r) =>
+							r.getAttribute("data-buoc"),
+						),
 						tzTrang: Intl.DateTimeFormat().resolvedOptions().timeZone,
 					};
 				},
@@ -438,10 +473,12 @@ async function doQuaHan(cookie, slug, toi, boPhan) {
 				);
 			await chup(p, `qua-han-con-sot-${kho}`);
 			const mong = chon.quaHan ? "error" : "neutral";
+			const sot = await conSotMong(toi.id, doc.idViec, doc.idBuoc);
+			const conSot = Number(doc.conSot ?? 0);
 			kiem(
 				`qua-han-con-sot-${kho}`,
-				`mui gio ${chon.tz}, hom nay VN ${homNay}, han buoc ${han.toISOString()}; dau cua dong ${doc.tone} (mong ${mong}); data-con-sot ${doc.conSot}`,
-				doc.tone === mong,
+				`mui gio ${chon.tz}, hom nay VN ${homNay}, han buoc ${han.toISOString()}; dau cua dong ${doc.tone} (mong ${mong}); data-con-sot ${conSot} (mong ${sot.mong} = tong ${sot.tong} - ${doc.idViec.length} dong viec - dong buoc qua han theo ngay VN)`,
+				doc.tone === mong && conSot === sot.mong,
 			);
 		} finally {
 			await ctx.close();
