@@ -4,7 +4,7 @@ feature: "Mọi chỗ AI nói đều mang tên Kara: tab bản ghi, tóm tắt t
 slug: kara-mot-ten
 owner: phanlemanh@gmail.com
 risk_tier: T2
-surfaces: [ui, api, agent]
+surfaces: [ui, api]
 status: draft
 design_doc: docs/superpowers/specs/2026-10-13-kara-mot-ten-design.md
 ---

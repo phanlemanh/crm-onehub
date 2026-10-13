@@ -1,0 +1,34 @@
+{
+ "feature_plain": "Mọi chữ trên màn, trên Zalo và trong tin nhắc gọi AI đúng một tên: Kara — 119 chỗ đang gọi nó là «Trợ lý OKR», «máy soạn», «tác nhân» hay «Assistant» đổi hết, và một luật máy chặn tên cũ quay lại.",
+ "will_do": [
+  {"id": "AC-2", "p": "Sẽ đổi tóm tắt tuần và tin nhắc buổi sáng: tiêu đề nhóm thành «Kara · OKR», câu báo trần tháng mở đầu bằng «Kara»."},
+  {"id": "AC-3", "p": "Sẽ đổi Soạn OKR: nút, hội thoại, lý do hỏng, cuộc soạn và câu lỗi máy chủ trả về đều gọi «Kara»."},
+  {"id": "AC-4", "p": "Sẽ đổi Cài đặt: trang mang tên «Kara · OKR», sổ chi phí có nhóm «Kara · OKR» và «Kara · hồ sơ», nhóm «Tác nhân» giữ nguyên."},
+  {"id": "AC-5", "p": "Sẽ đổi Kho tài liệu: «Trợ lý AI», «máy soạn», «Máy đang soạn», «the composer» thành Kara — kể cả câu hết hạn mức người hỏi qua Zalo thấy."},
+  {"id": "AC-6", "p": "Sẽ đổi nhãn người nói khi tải hội thoại về thành «Kara» ở cả tiếng Việt và tiếng Anh."},
+  {"id": "AC-7", "p": "Sẽ có một luật máy quét mọi kho chữ và chữ viết cứng: còn tên cũ ở đâu thì bài đỏ, gọi tên tệp và chỗ; danh sách 119 chỗ phải đổi được ghim trước khi sửa chữ đầu tiên."},
+  {"id": "AC-8", "p": "Sẽ giữ nguyên chữ không phải tên AI: «Tác nhân» đội dựng, «bot» Zalo, «máy chủ», «Máy đếm» của số đo OKR, «tác tử» chỉ dịch vụ, «Máy chạy CI»."},
+  {"id": "AC-9", "p": "Sẽ sửa các bài kiểm đang ghim chữ cũ cho khẳng định chữ mới — không gỡ, không bỏ qua bài nào; hồ sơ đã ký có bài phải sửa được ghim lại ở cuối vòng."}
+ ],
+ "wont_do": [
+  {"id": "AC-1", "p": "Chặn tab bản ghi, trường tuỳ chỉnh, onboarding và ảnh trang giới thiệu gọi AI là «tác nhân» hay «Agent» — mọi chỗ đó gọi Kara."},
+  {"id": "OOS-1", "p": "KHÔNG đổi lời dặn để mô hình tự xưng (Kara trên Zalo có thể vẫn tự gọi «Trợ lý OKR») — chờ anh trả lời Hỏi-1."},
+  {"id": "OOS-2", "p": "KHÔNG đổi tên khoá, tên tệp, tên thư mục trong mã — người dùng không thấy chúng."},
+  {"id": "OOS-3", "p": "KHÔNG sửa các trang bản mẫu dưới /proto — không ai dùng thật."},
+  {"id": "OOS-4", "p": "KHÔNG đổi bố cục, thành phần hay dấu tia sáng — đã làm ở các hàng Kara trước."}
+ ],
+ "coverage_plain": [
+  {"i": 0, "p": "Sáu bề mặt câu giao — tab bản ghi, tóm tắt tuần, Soạn OKR, Cài đặt, Tài liệu, phần dùng chung — mỗi bề mặt một tiêu chí (AC-1…AC-6); Zalo phủ qua câu Kho tài liệu mà người hỏi qua Zalo thấy."},
+  {"i": 1, "p": "Mọi nơi chữ sống — kho chữ của ứng dụng, kho chữ dùng chung, câu máy chủ trả về, tin agent gửi, chữ viết cứng — đều có trong kiểm kê và trong luật quét (AC-1…AC-7)."},
+  {"i": 2, "p": "Phân biệt nghĩa: chữ gọi AI thì đổi, chữ chỉ vật đội dựng, cửa vào Zalo, công thức số đo, dịch vụ hạ tầng thì giữ (AC-7 luật quét, AC-8 bảng giữ)."},
+  {"i": 3, "p": "Giữ lâu: luật máy chặn tên cũ quay lại ở tệp chữ mới, bài cũ đổi theo mà không mất bài nào (AC-7, AC-9)."},
+  {"i": 4, "p": "Giả định chờ anh gạch: «Zalo» trong câu giao được phủ bằng câu Kho tài liệu; lời mô hình tự xưng trên Zalo là Hỏi-1."}
+ ],
+ "gap_probe_plain": [
+  {"i": 0, "p": "Hai lựa chọn của máy trích căn cứ không đúng chỗ quyết (đặt luật ở đâu, khi nào dùng «Kara · OKR») — đã sửa: trích đúng câu của luật Kara, và ghim chữ mới nằm trong bài ghim chung như lộ trình ghi."},
+  {"i": 1, "p": "Danh sách cụm cấm hẹp hơn bảng thay chữ, không nói so hoa thường — đã sửa: 16 cụm, mỗi cụm có một ca thử phải đỏ."},
+  {"i": 2, "p": "Bài tự khai danh sách chỗ phải đổi nên cắt bớt mà vẫn xanh — đã sửa: kiểm kê 119 chỗ dựng bằng máy trên bản hiện tại, ghim vào hồ sơ trước khi sửa, bài đếm theo nó."},
+  {"i": 3, "p": "Người chấm câu chữ không có chữ cũ để so — đã sửa: một lệnh in bảng cũ/mới thành tệp, người chấm đọc tệp đó."},
+  {"i": 4, "p": "Chữ viết cứng ngoài kiểm kê và tin nhắc dựng thật chưa được đo — đã sửa: luật quét cả mã nguồn, gọi thật hàm dựng tin nhắc, chụp thêm Soạn OKR, tab bản ghi và Tài liệu."}
+ ]
+}
