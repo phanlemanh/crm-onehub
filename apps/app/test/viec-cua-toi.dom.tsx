@@ -7,6 +7,7 @@ import type { AppRouter } from "api/app-router";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { SEARCH_PARAM } from "@/lib/search-param-keys";
 
 type Json =
 	| string
@@ -224,8 +225,13 @@ describe("vc-man-co-viec", () => {
 			throw new Error("vc: dong gap sai");
 		}
 		await bam(document.querySelector('[data-nhom="toi-giao"]'));
-		await cho(() => urls.some((u) => u.includes("nhom=toi-giao")), "duong dan");
-		if (!urls.some((u) => u.includes("nhom=toi-giao"))) {
+		const nhomTrenDuong = () =>
+			urls.some(
+				(u) =>
+					new URLSearchParams(u).get(SEARCH_PARAM.viec.nhom) === "toi-giao",
+			);
+		await cho(nhomTrenDuong, "duong dan");
+		if (!nhomTrenDuong()) {
 			throw new Error("vc: nhom khong len duong dan");
 		}
 	});

@@ -52,7 +52,7 @@ export const SEARCH_PARAM = {
 		cachXem: "cachXem",
 		cachChia: "cachChia",
 	},
-	viec: { nhom: "nhom" },
+	viec: { nhom: "nhomViec" },
 	okr: {
 		ky: THAM_SO_OKR.ky,
 		don: THAM_SO_OKR.don,
