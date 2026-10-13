@@ -149,6 +149,9 @@ evals:
       "man: hoan tac dong ngan".
       Ho so da signed-off/machine-cleared thi khong chep anh vao ho so.
       CHIEU DO ghim: --chieu-do khong luu tru -> do "man: khong thay toast luu tru".
+      O ca ba buoc: sau «Lưu trữ» truong KHONG con nut «…» cua dong dang dung VA nam trong nhom «Đã lưu trữ» (dong co nut
+      «Khôi phục»); sau «Hoàn tác» nguoc lai. CHIEU DO ghim them: ban sao bo lam moi danh sach sau luu tru -> do
+      "man: truong khong sang nhom Da luu tru".
     steps:
       - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
       - "Buoc 1 (1440): menu dong, toast, Hoan tac -> ltk-toast-1440.png, ltk-hoan-tac-1440.png"
