@@ -5,7 +5,7 @@ slug: luu-tru-truong-khong-hoi
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: verified
+status: signed-off
 approved_by:
 approved_at:
 veto_state: mo
@@ -53,3 +53,12 @@ lưu trữ một trường từ menu dòng không có «Hoàn tác», từ trìn
 - Vòng đời (luật 14): (1) Dọn thế nào — không đổi: trường đi Lưu trữ → Khôi phục; vòng này chỉ bỏ hỏi lại và thêm «Hoàn tác». (2) «Lịch sử» — không đổi. (3) Danh sách mặc định — không đổi: trường đã cất ở nhóm «Đã lưu trữ» cuối danh sách.
 - Máy chủ không đổi: `fields.archive` và `fields.restore` đã có.
 - Ranh giới: `apps/app/components/crm/fields/**`, `apps/app/app/(app)/[slug]/settings/fields/fields-settings.tsx` (gắn hook ở trang chủ), `apps/app/lib/messages/crm.ts` (chỉ thêm khoá `fields.*` và bỏ ba khoá chết của hộp hỏi lại — luật 7: gửi `cham-tep` nếu cần), `apps/app/test/messages-guard.spec.ts`, `apps/app/test/vong-doi-mot-cach-cat.dom.tsx` (bỏ một tham chiếu `archiveBody`), tệp kiểm mới, `_acceptance/luu-tru-truong-khong-hoi/**`, thêm khoá vào `_acceptance/config.yaml`.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-1: Phép đo màn chờ cứng 1,2 giây rồi mới kiểm trường đã sang nhóm «Đã lưu trữ», nên lúc máy bận có thể báo đỏ giả; tính năng vẫn chạy đúng.
+  - Ngoài-2: Lượt đo màn đỏ giữa chừng vẫn có thể để lại trong hồ sơ ảnh của lượt hỏng hoặc ảnh cũ.
+  - Ngoài-3: Bài kiểm không chứng minh rằng trước khi bấm «Lưu trữ» chưa có thông báo nào trên màn.
+  - Ngoài-4: Lưu trữ từ trình sửa đóng trình sửa trước khi biết kết quả; nếu lưu trữ lỗi thì các chỉnh sửa chưa lưu bị mất, chỉ còn thông báo lỗi.
+  - Ngoài-5: Bài kiểm nhanh chỉ xác nhận có lệnh làm mới danh sách trường, chưa xác nhận danh sách thật được tải lại.
+  - Ngoài-6: Phép đo màn không đếm đủ ba bước × hai trạng thái, nên chạy thiếu bước vẫn có thể báo đạt.
+  - Ngoài-7: Bài kiểm của trình sửa không có đối chứng «chưa có thông báo nào trước khi bấm», nên một thông báo có sẵn có thể làm bài xanh nhầm.
+  - Ngoài-8: Chiều đỏ của phần thông báo trong phép đo màn in sẵn lời báo lỗi, không chứng minh bộ dò thông báo thật sự biết báo đỏ.
