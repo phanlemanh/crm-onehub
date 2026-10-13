@@ -53,19 +53,43 @@ async function choThay(t, ham, arg, moTa) {
 	}
 }
 
-const NGAN = "[data-slot='sheet-content'],[data-slot='drawer-content']";
+const NGAN = "[data-slot='sheet-content']";
+const CHIP_KY_VONG = { "giao-cho-toi": 2, "toi-giao": 0, "dang-theo-doi": 0 };
 
 async function yen(t) {
 	let truoc = null;
 	for (let lan = 0; lan < 40; lan += 1) {
 		const x = await t.evaluate((sel) => {
 			const r = document.querySelector(sel)?.getBoundingClientRect();
-			return r ? `${Math.round(r.x)}:${Math.round(r.y)}` : "khong-ngan";
+			if (!r || Math.round(r.right) !== window.innerWidth) return null;
+			return `${Math.round(r.x)}:${Math.round(r.y)}:${Math.round(r.width)}`;
 		}, NGAN);
-		if (x === truoc) return;
+		if (x !== null && x === truoc) return;
 		truoc = x;
 		await lib.cho(250);
 	}
+	throw new Error("vc man: ngan khong yen");
+}
+
+async function foto(t, ten) {
+	await yen(t);
+	await t.evaluate(() => {
+		for (const e of document.querySelectorAll(
+			"nextjs-portal, [data-nextjs-toast]",
+		))
+			e.remove();
+	});
+	await t.screenshot({ path: join(process.env.BANG_CHUNG, ten) });
+	console.log(`  anh ${ten}`);
+}
+
+function dem(t, sel) {
+	return t.evaluate(
+		(s) =>
+			[...document.querySelectorAll(s)].filter((e) => e.checkVisibility())
+				.length,
+		sel,
+	);
 }
 
 async function bamChu(t, chu, goc = "body") {
@@ -130,6 +154,20 @@ try {
 				null,
 				"ba chip co so",
 			);
+			const chip = await t.evaluate(() =>
+				Object.fromEntries(
+					[...document.querySelectorAll("[data-nhom]")].map((e) => [
+						e.getAttribute("data-nhom"),
+						Number(e.querySelector("[data-dem]")?.textContent ?? Number.NaN),
+					]),
+				),
+			);
+			if (JSON.stringify(chip) !== JSON.stringify(CHIP_KY_VONG))
+				loi.push(`vc man: so chip ${JSON.stringify(chip)}`);
+			if ((await dem(t, "tr[data-viec]")) !== 2)
+				loi.push("vc man: thieu dong bang o 1280");
+			if ((await dem(t, '[data-slot="item"][data-viec]')) !== 0)
+				loi.push("vc man: the dong hien o 1280");
 			const doDo = await t.evaluate(
 				() =>
 					document.querySelector('tr[data-viec] [data-tone="error"]') !== null,
@@ -163,7 +201,8 @@ try {
 				null,
 				"nut trang thai",
 			);
-			if (!(await bamChu(t, V.nut.batDau))) loi.push("khong co nut Bat dau");
+			if (!(await bamChu(t, V.nut.batDau, NGAN)))
+				loi.push("khong co nut Bat dau");
 			await choThay(
 				t,
 				(c) =>
@@ -173,7 +212,7 @@ try {
 				V.trangThai.DANG_LAM,
 				"nhan Dang lam",
 			);
-			if (!(await bamChu(t, V.khung.tabLichSu))) {
+			if (!(await bamChu(t, V.khung.tabLichSu, `${NGAN} [role="tablist"]`))) {
 				loi.push("vc man: thieu lich su");
 			} else {
 				await choThay(
@@ -186,8 +225,7 @@ try {
 					"dong doi trang thai",
 				);
 			}
-			await yen(t);
-			await d.chup(t, "vc-khung-viec-1280.png");
+			await foto(t, "vc-khung-viec-1280.png");
 			await t.close();
 			d.dat(2, loi.length === 0, loi.join(" · "));
 		});
@@ -219,6 +257,29 @@ try {
 			await lib.cho(300);
 			if (!(await bamChu(t, giao.ten)))
 				loi.push("khong chon duoc nguoi thuc hien");
+			const dauKhoi = await t.evaluate(() => {
+				const k = document.querySelector("[data-khoi-viec]");
+				const cha = k?.parentElement;
+				if (!k || !cha) return false;
+				return (
+					cha.firstElementChild === k ||
+					cha.parentElement?.firstElementChild === cha
+				);
+			});
+			if (!dauKhoi) loi.push("vc man: khoi Viec khong o dau the Hoat dong");
+			const hang = await t.evaluate(
+				(nhan) =>
+					nhan.map((a) =>
+						Boolean(
+							document
+								.querySelector(`[data-o-soan-viec] [aria-label="${a}"]`)
+								?.checkVisibility(),
+						),
+					),
+				[V.oSoan.nguoiThucHien, V.oSoan.nguoiTheoDoi],
+			);
+			if (hang.includes(false)) loi.push("vc man: hang o soan thieu o chon");
+			await foto(t, "vc-o-soan-1280.png");
 			if (!(await bamChu(t, V.oSoan.giao))) loi.push("khong co nut Giao viec");
 			await choThay(
 				t,
@@ -229,8 +290,7 @@ try {
 				tieuDe,
 				"khoi Viec co viec vua giao",
 			);
-			await yen(t);
-			await d.chup(t, "vc-o-soan-1280.png");
+			await foto(t, "vc-o-soan-da-giao-1280.png");
 			await t.close();
 			d.dat(3, loi.length === 0, loi.join(" · "));
 		});
@@ -242,17 +302,16 @@ try {
 			await choThay(
 				t,
 				() =>
-					document.querySelectorAll('[data-slot="item"][data-viec]').length >=
-					2,
+					[
+						...document.querySelectorAll('[data-slot="item"][data-viec]'),
+					].filter((e) => e.checkVisibility()).length >= 2,
 				null,
-				"the dong",
+				"the dong hien o 375",
 			);
-			const tran = await t.evaluate(
-				() =>
-					document.documentElement.scrollWidth -
-					document.documentElement.clientWidth,
-			);
-			if (tran > 0) loi.push(`cuon ngang ${tran}px`);
+			if ((await dem(t, "tr[data-viec]")) !== 0)
+				loi.push("vc man: bang hien o 375");
+			const tran = await d.cuonNgang(t);
+			if (tran.length > 0) loi.push(`cuon ngang ${tran.join(", ")}`);
 			await d.chup(t, "vc-viec-cua-toi-375.png");
 			await t.close();
 			d.dat(4, loi.length === 0, loi.join(" · "));
