@@ -5,9 +5,9 @@ slug: kanban-viec
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: draft
-approved_by:
-approved_at:
+status: approved
+approved_by: manh
+approved_at: 2026-10-13T09:08:06Z
 design_doc: docs/superpowers/specs/2026-10-13-kanban-viec-design.md
 ---
 
