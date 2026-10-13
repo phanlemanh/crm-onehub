@@ -106,6 +106,7 @@ export const VIEC = {
 	tieuDeViecCanLam: "Việc cần làm",
 	chepThuTranMs: 10 * PHUT_MS,
 	khoaMaLech: (ma: string) => `ma-lech:${ma}`,
+	vaiChepDuoc: ["owner", "admin"] as readonly string[],
 	moTaToiDa: 4000,
 	theoDoiToiDa: 20,
 	tranKhep: 50,
