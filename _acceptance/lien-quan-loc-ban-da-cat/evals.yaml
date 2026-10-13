@@ -1,0 +1,286 @@
+feature_slug: lien-quan-loc-ban-da-cat
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lqc_byid_cong_ty
+    paths:
+      - "apps/api/src/companies/**"
+      - "apps/api/src/crm/**"
+      - "apps/api/test/lien-quan-loc-ban-da-cat.spec.ts"
+    expected: |
+      exit 0; tren co so du lieu that cua luot test, gieo qua service that (create roi archive) mot cong ty co 2 ca nhan
+      dang dung, 1 ca nhan da cat, 2 thoa thuan dang dung, 2 thoa thuan da cat voi archivedAt khac nhau (dat bang
+      setSystemTime hoac hai lan archive cach nhau). Goi companies.byId QUA tRPC caller cua router (khong goi thang
+      service) de .output(companyDetailOutput) chay that. Ma tran viet truoc 4 mang: contacts (2 id dang dung),
+      deals (2 id dang dung), archivedContacts (1 id), archivedDeals (2 id, xep archivedAt giam dan); so sanh tap id
+      chinh xac, moi muc mang archivedAt la chuoi ISO. Doi chung: cong ty khong co ban da cat -> archivedContacts va
+      archivedDeals la mang rong (khong undefined). expect(o.length).toBe(4).
+      CHIEU DO ghim: ban sao bo archivedDeals khoi companyDetailOutput -> do "lqc: mang da cat roi o hop dong cong ty";
+      ban sao khong loc deals -> do "lqc: cong ty lan thoa thuan da cat".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lqc_byid_ca_nhan
+    paths:
+      - "apps/api/src/contacts/**"
+      - "apps/api/src/crm/**"
+      - "apps/api/test/lien-quan-loc-ban-da-cat.spec.ts"
+    expected: |
+      exit 0; gieo qua service that mot ca nhan gan voi 1 thoa thuan dang dung (role "Nguoi quyet") va 1 thoa thuan da
+      cat. Goi contacts.byId qua tRPC caller cua router (.output(contactByIdOutput) chay that): deals co dung id dang
+      dung va role "Nguoi quyet"; archivedDeals co dung id da cat voi archivedAt ISO. expect(o.length).toBe(2).
+      CHIEU DO ghim: ban sao bo archivedDeals khoi contactByIdOutput -> do "lqc: mang da cat roi o hop dong ca nhan".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lqc_byid_thoa_thuan
+    paths:
+      - "apps/api/src/deals/**"
+      - "apps/api/src/crm/**"
+      - "apps/api/test/lien-quan-loc-ban-da-cat.spec.ts"
+    expected: |
+      exit 0; gieo qua service that mot thoa thuan gan 1 ca nhan dang dung (role "Ky thuat") va 1 ca nhan da cat
+      (attachContact roi archive ca nhan). Goi deals.byId qua tRPC caller (.output(dealDetailOutput) chay that):
+      contacts co dung id dang dung va role "Ky thuat"; archivedContacts co dung id da cat voi archivedAt ISO.
+      expect(o.length).toBe(2).
+      CHIEU DO ghim: ban sao khong loc contacts -> do "lqc: thoa thuan lan ca nhan da cat".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lqc_chon_dong_nghiep
+    paths:
+      - "apps/api/src/contacts/**"
+      - "apps/api/src/deals/**"
+      - "apps/api/test/lien-quan-loc-ban-da-cat.spec.ts"
+    expected: |
+      exit 0; gieo qua service that cong ty C co ca nhan A (dang dung), B (da cat), D (dang dung, la nguoi xem) va thoa
+      thuan T cua C khong gan ai. deals.contactOptions({id: T}) -> co A va D, khong co B; contacts.byId(D)
+      .relationship.colleagues -> co A, khong co B. Doi chung duong: truoc khi archive B thi B co o ca hai.
+      expect(o.length).toBe(2).
+      CHIEU DO ghim: ban sao bo loc archivedAt o contactOptions -> do "lqc: bo chon goi y nguoi da cat"; ban sao bo loc o
+      colleagues -> do "lqc: dong nghiep lan nguoi da cat".
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: logic
+    cmd: config:executors.test.lqc_dong_gap
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/test/lien-quan-loc-ban-da-cat.dom.tsx"
+    expected: |
+      exit 0; ma tran viet truoc 4 bang (CompanySheet tab Ca nhan, CompanySheet tab Thoa thuan, ContactSheet tab Thoa
+      thuan, DealSheet tab Ca nhan; ngan that, tRPC gia tra byId co 2 ban dang dung va 2 ban da cat): trong
+      [role=tabpanel] dang mo, so dong mang ten ban dang dung = 2 va KHONG co ten ban da cat; co dung mot nut co chu
+      recordSheetMessages("vi") cua dong gap voi n = 2, aria-expanded="false"; bam bang userEvent -> aria-expanded
+      "true", hien 2 dong co ten ban da cat va chu "Đã lưu trữ ngày" + ngay dd/mm/yyyy cua archivedAt; trong 2 dong do
+      khong co menu giai doan, nut sao, o vai tro, nut go (dem phan tu tuong tac ngoai nut ten = 0); bam lai -> 2 dong
+      mat. Doi chung: byId co archivedContacts/archivedDeals rong -> khong co nut gap. expect(o.length).toBe(4).
+      Du lieu gia cua moi bai DOM trong tep nay mang kieu RouterOutputs cua companies.byId, contacts.byId, deals.byId
+      (khong ep kieu bang as/unknown), nen bun run check-types do no khop hop dong dau ra that; archivedAt la chuoi ISO
+      nhu router tra.
+      CHIEU DO ghim: ban sao DealSheet bo dong gap -> do "lqc: bang thoa thuan khong co dong gap"; ban sao hien san cac
+      dong da cat khi dong -> do "lqc: dong gap mo san"; ban sao giu menu giai doan tren dong da cat -> do "lqc: dong da
+      cat con thao tac".
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.lqc_mo_ngan
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/lien-quan-loc-ban-da-cat.dom.tsx"
+    expected: |
+      exit 0; 4 bang cua E5, dong gap mo: bam ten mot ban da cat -> bo mo ngan (record-stack that hoac openRecord quan
+      sat duoc) nhan dung {kind, id} cua ban do; ngan duoc mo voi byId tra archivedAt khac null co dung mot
+      [data-dai-luu-tru]. expect(o.length).toBe(4).
+      CHIEU DO ghim: ban sao bam ten mo ban ghi cha -> do "lqc: mo sai ngan".
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: logic
+    cmd: config:executors.test.lqc_so_dem
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/lien-quan-loc-ban-da-cat.dom.tsx"
+    expected: |
+      exit 0; dong ho ghim setSystemTime("2026-10-15T03:00:00Z") truoc khi render. CompanySheet voi byId co 1 thoa
+      thuan dang mo dang dung (gia tri 1.000 USD, chot 2026-12-01) trong deals, 1 thoa thuan dang mo da cat (gia tri
+      9.000 USD, chot 2026-11-01) trong archivedDeals, 1 ca nhan dang dung trong contacts va 1 ca nhan trong
+      archivedContacts. Ma tran viet truoc 7 phep kiem: (1) so tab Thoa thuan = 1; (2) so tab Ca nhan = 1; (3) gia tri
+      dang mo hien 1.000 USD (khong 10.000); (4) so thoa thuan dang mo = 1; (5) ngay chot gan nhat bang dung chu LocalDay
+      cua app cho 2026-12-01 (khac chu cua 2026-11-01); DealSheet voi 1 ca nhan dang dung trong contacts va 1 trong archivedContacts: (6) muc «Người tham
+      gia» (m.section.onIt) chi co ten nguoi dang dung, khong co ten nguoi da cat; (7) so tab Ca nhan = 1.
+      expect(o.length).toBe(7).
+      CHIEU DO ghim: ban sao cong archivedDeals vao gia tri dang mo -> do "lqc: so lieu dau ngan tinh ban da cat"; ban sao
+      dem contacts + archivedContacts o tab Ca nhan cua cong ty -> do "lqc: so tab ca nhan dem ban da cat".
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: logic
+    cmd: config:executors.test.lqc_chi_cat
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/lien-quan-loc-ban-da-cat.dom.tsx"
+    expected: |
+      exit 0; 4 bang cua E5 voi mang dang dung rong va mang da cat 1 phan tu: chu o trong cu cua tab van co (cung chu
+      voi khi ca hai mang rong), nut gap «+1 đã lưu trữ» nam sau o trong; bam -> 1 dong da cat. expect(o.length).toBe(4).
+      CHIEU DO ghim: ban sao an dong gap khi bang rong -> do "lqc: bang rong giau ban da cat".
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: logic
+    cmd: config:executors.test.lqc_xoa_vinh_vien
+    paths:
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/record-actions.tsx"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/test/lien-quan-loc-ban-da-cat.dom.tsx"
+    expected: |
+      exit 0; (a) CompanySheet that, byId archivedAt khac null, deals 1, archivedDeals 1, contacts 1, archivedContacts
+      1: mo menu ngan -> «Xoá vĩnh viễn …» -> hop hoi lai chua dung chu recordSheetMessages("vi").company.deleteDeals voi
+      manyDeals("2") va deleteContacts voi manyPeople("2"). Doi chung: deals 1, archivedDeals 0, archivedContacts 0 ->
+      chu oneDeal va onePerson. (b) DealSheet that ban en, archivedAt khac null, contacts 1, archivedContacts 1: hop hoi
+      lai chua recordSheetMessages("en").deal.deleteWarning(ten cong ty, "people"); doi chung contacts 1,
+      archivedContacts 0 -> chua deleteWarning(ten cong ty, "person"). expect(o.length).toBe(4).
+      CHIEU DO ghim: ban sao chi dem deals -> do "lqc: hop xoa vinh vien dem thieu"; ban sao DealSheet chi dem contacts ->
+      do "lqc: loi bao xoa thoa thuan dem thieu".
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: logic
+    cmd: config:executors.test.lqc_chu
+    paths:
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/lien-quan-loc-ban-da-cat.dom.tsx"
+    expected: |
+      exit 0; recordSheetMessages("vi") khoa dong gap voi n=3 === "+3 đã lưu trữ", ban en === "+3 archived"; chu ngay
+      vi bat dau "Đã lưu trữ ngày", en bat dau "Archived on"; ban en khong khop /[À-ỹ]/. Render CompanySheet ban en: nut
+      gap va dong da cat dung chu en.
+      CHIEU DO ghim: ban sao en "+3 đã lưu trữ" -> do "lqc: chu en co dau Viet".
+
+  - id: E11
+    criterion: AC-10
+    executor: test
+    layer: logic
+    cmd: config:executors.test.lqc_cap_chu
+    paths:
+      - "apps/app/lib/messages/*.ts"
+      - "apps/app/test/messages-guard.spec.ts"
+    expected: |
+      exit 0; messages-guard cua kho chay lai khong sua: moi khoa chu moi co du cap en/vi, khoa en khong co chu Viet.
+
+  - id: E12
+    criterion: AC-11
+    executor: test
+    layer: logic
+    cmd: config:executors.test.lqc_ban_phim
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/lien-quan-loc-ban-da-cat.dom.tsx"
+    expected: |
+      exit 0; CompanySheet tab Thoa thuan voi 2 ban da cat: nut gap la phan tu <button> (tagName BUTTON) co
+      aria-expanded; focus nut roi userEvent.keyboard("{Enter}") -> aria-expanded "true"; userEvent.tab() toi ten ban da
+      cat dau tien (document.activeElement la <button> mang ten do); {Enter} -> bo mo ngan nhan dung {kind:"deal", id}.
+      Bieu tuong chevron co aria-hidden.
+      CHIEU DO ghim: ban sao ten dong da cat la <span onClick> -> do "lqc: ten dong da cat khong toi duoc bang ban phim".
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    layer: logic
+    cmd: config:executors.script.lqc_san_thiet_ke
+    paths:
+      - "apps/app/components/crm/record-sheet/record-parts.tsx"
+      - "apps/app/components/crm/record-sheet/company-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/contact-sheet.tsx"
+      - "apps/app/components/crm/record-sheet/deal-sheet.tsx"
+    expected: |
+      exit 0; design-gate.mjs --mode static cua kit chay tren 4 tep record-parts.tsx, company-sheet.tsx,
+      contact-sheet.tsx, deal-sheet.tsx — ca 4 qua (moc goc 13/10 da xanh ca 4).
+
+  - id: E14
+    criterion: AC-6
+    executor: test
+    layer: logic
+    cmd: config:executors.test.vdc_dai_bao
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/test/vong-doi-mot-cach-cat.dom.tsx"
+    expected: |
+      exit 0; bai vdc-dai-bao cua ho so da ky vong-doi-mot-cach-cat chay lai khong sua: dai bao va Khoi phuc cua 3 ngan
+      con nguyen sau khi byId mang them hai mang da cat.
+
+  - id: E15
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.lqc_man
+    paths:
+      - "apps/app/components/crm/record-sheet/**"
+      - "apps/app/lib/messages/record-sheet.ts"
+      - "apps/api/src/companies/**"
+      - "apps/api/src/contacts/**"
+      - "apps/api/src/deals/**"
+      - "apps/api/src/crm/**"
+      - "_acceptance/lien-quan-loc-ban-da-cat/rang/man.mjs"
+    expected: |
+      exit 0 va "lien-quan-loc-ban-da-cat man: dat"; buoc 1 (1440) gieo qua API that mot cong ty co 1 thoa thuan dang
+      dung, 2 thoa thuan da cat, 1 ca nhan da cat -> mo /companies?record=company:<id>, tab Thoa thuan -> chi 1 dong
+      dang dung, nut «+2 đã lưu trữ»; chup lqc-gap-1440.png; bam -> 2 dong mo co «Đã lưu trữ ngày»; chup
+      lqc-mo-1440.png; bam ten thoa thuan da cat dau -> URL co deal:<id>, [data-dai-luu-tru] hien; chup
+      lqc-ngan-cat-1440.png. Buoc 2 dong ngan thoa thuan, mo thoa thuan dang dung, «Lưu trữ» tu menu ngan, quay lai ngan
+      cong ty -> tab Thoa thuan khong con dong dang dung, nut «+3 đã lưu trữ». Buoc 3 (390) lap buoc 1:
+      nut gap va moi dong [data-da-luu-tru] (ca phan tu con) co getBoundingClientRect().right <= mep phai cua ngan va
+      cua khung nhin; tran cua ca ngan (scrollWidth > clientWidth) chi in mot dong «khung co san» — gioi han da biet
+      chuyen NM1b, khong lam do; chup lqc-gap-390.png, lqc-mo-390.png.
+      Ho so da signed-off/machine-cleared thi khong chep anh vao ho so.
+      CHIEU DO ghim: --chieu-do mo cong ty khong co ban da cat -> do "man: khong thay dong gap".
+    steps:
+      - "Chay nguyen van dong lenh khai trong cmd (tien-de.mjs --chay), KHONG goi thang man.mjs"
+      - "Buoc 1 (1440): ngan cong ty, dong gap dong/mo, mo ngan thoa thuan da cat"
+      - "Buoc 2 (1440): luu tru thoa thuan dang dung, quay lai ngan cong ty"
+      - "Buoc 3 (390): lap buoc 1, do tran ngang"
+    evidence_required:
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-gap-1440.png"
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-mo-1440.png"
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-ngan-cat-1440.png"
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-gap-390.png"
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-mo-390.png"
+
+  - id: E16
+    criterion: AC-13
+    executor: judgment
+    inputs:
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-gap-1440.png"
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-mo-1440.png"
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-ngan-cat-1440.png"
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-gap-390.png"
+      - "_acceptance/lien-quan-loc-ban-da-cat/evidence/lqc-mo-390.png"
+      - "docs/vong-doi.md"
+    question: |
+      Ghi chú cho người chấm: ảnh lqc-gap chụp tab Thoả thuận của ngăn một công ty khi dòng «+n đã lưu trữ» đang đóng;
+      ảnh lqc-mo chụp cùng chỗ khi đã mở; ảnh lqc-ngan-cat chụp ngăn một thoả thuận đã cất mở ra từ dòng đó. Đuôi -1440
+      và -390 là bề rộng màn.
+      Nhìn năm ảnh: (1) người đọc có hiểu ngay bảng chỉ có thoả thuận đang dùng không? (2) «+n đã lưu trữ» có đọc như chỗ
+      xem bản đã cất, không như một nút cất? (3) các dòng mở ra có trông khác dòng đang dùng (mờ, có ngày cất) và có trông
+      bấm được để mở không? (4) chữ có đúng bộ chữ của `docs/vong-doi.md` — «Đã lưu trữ», «Khôi phục» — không có «ẩn»?
+      (5) ở 390 dòng «+n đã lưu trữ» hay các dòng đã cất có chữ hay nút nào bị cắt hoặc tràn ngang không? Nêu từng
+      điểm kèm ảnh.
+      Ngoài phạm vi (chủ kho chọn 2026-10-13, giới hạn đã biết, chuyển NM1b): thanh tab đầu ngăn và cột cuối của bảng
+      liên quan bị cắt ở 390 do khung ngăn dùng chung. Đừng chấm trượt vì điều này.
