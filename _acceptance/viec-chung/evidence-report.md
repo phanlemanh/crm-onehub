@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: viec-chung
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: bc07055a94e7cbddc8269b9f184eb11e935a02c1
-human_signoff:
+human_signoff: Mạnh 2026-10-13 — ký Cổng 2 trên S4 lượt 2 (23/23 eval máy PASS, 4 mang từ lượt 1; E15 Đạt). Ngoài-3, 4, 5, 7, 11, 14 ghi Known limits; 13 mục còn lại chấp nhận, không sửa (11 mục lượt 1 đã sửa); đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: viec-chung
@@ -294,7 +294,7 @@ human_signoff:
   required_evidence:
     - Mục AC-15 trong contract.md hoặc quyết định trong sổ quyết định, nêu rõ «từ ghép tiếng Việt cho thuật ngữ kỹ thuật» có gồm lời chú cho tên định danh trong mã (DO_THI, roiChuaLamLuc, bảng hàng gắn) hay không. Nếu có gồm thì các từ «Đồ thị trạng thái», «Cột đo», «hàng gắn», «bộ gom» (docs/api.md dòng 506, 527, 535; docs/agent.md dòng 376) phải có mục trong CONTEXT.md hoặc phải đổi sang tên thật (tên mã, hoặc «bảng trạng thái»), thì verdict mới thành PASS.
     - Nếu hợp đồng nói lời chú cho tên trong mã được miễn, thì chỉ cần dòng xác nhận đó trong contract.md, và verdict đổi thành PASS.
-  human_override:  # chi nguoi ghi
+  human_override: Mạnh 2026-10-13 — Đạt
 
 #### Judge panel đề xuất cho E15 (đề xuất của máy, người quyết ở Cổng 2)
 

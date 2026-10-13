@@ -5,7 +5,7 @@ slug: viec-chung
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: implemented
+status: signed-off
 approved_by: Mạnh
 approved_at: 2026-10-13T00:51:25Z
 design_doc: docs/superpowers/specs/2026-10-13-viec-chung-design.md
@@ -77,3 +77,10 @@ Tác nhân và việc cần làm cũ: hàng DA1b (Hỏi-4, sổ quyết định)
 - Câu chỉ người có (Hỏi-1…Hỏi-5) nằm ở sổ quyết định; hợp đồng này soạn theo khuyến nghị của máy.
 - Cách thước đọc ngưỡng (Hỏi-5, khuyến nghị): vế an toàn đếm việc đang mở; việc người giao Huỷ trước khi người
   thực hiện chuyển không vào mẫu số; chỉ lượt chuyển của chính người thực hiện mới tính.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-3: Phép kiểm giao diện chứng minh được bộ quét giá trị tự đặt bắt lỗi bán kính, nhưng chưa chứng minh công cụ kiểu dáng chuẩn của kit còn bắt được lỗi, và chưa có ca màu hay kiểu tại chỗ.
+  - Ngoài-4: Danh sách «Đã xong» giữ 50 việc mới nhất, nhưng bài kiểm chưa tách được «mới nhất theo lúc đóng» với «mới nhất theo lúc tạo».
+  - Ngoài-5: Bài kiểm khung việc dùng bảng quyền chép tay khớp máy chủ hôm nay; máy chủ đổi luật chuyển trạng thái thì bài kiểm màn vẫn xanh.
+  - Ngoài-7: Sau «Chuyển việc 30 ngày», màn Việc của tôi, khối Việc và Tổng quan của người nhận còn hiện số cũ khoảng nửa phút; tải lại là đúng. Hạt giống: `docs/plan/2026-10-13-hat-giong-chuyen-viec-lam-moi-viec.md`.
+  - Ngoài-11: Cùng gốc Ngoài-7 — chuyển việc ở màn Thành viên không làm mới bộ nhớ của Việc và Tổng quan.
+  - Ngoài-14: Năm ô của ma trận 70 ô quyền xem (khối của bản ghi × việc riêng) không thể đỏ; quyền xem thật đã được 65 ô còn lại và cặp đột biến (e) đo.
