@@ -212,15 +212,14 @@ const en = {
 		shapesCompany: "This shapes every company in OneHub Center.",
 		shapesContact: "This shapes every contact in OneHub Center.",
 		shapesDeal: "This shapes every deal in OneHub Center.",
-		createHint:
-			"Create dynamic fields that Kara can research and pre-fill.",
+		createHint: "Create dynamic fields that Kara can research and pre-fill.",
 		retry:
 			"Your fields are still there. Try again in a moment, before you create anything new.",
 		keyHint:
 			"What the API and Kara call it. Set from the label, fixed once saved — renaming the label later never breaks a caller.",
-		agentHint: "Kara proposes a value with a source, and never overwrites yours.",
-		emptyHint:
-			"Leave it empty and Kara works from the label and type alone.",
+		agentHint:
+			"Kara proposes a value with a source, and never overwrites yours.",
+		emptyHint: "Leave it empty and Kara works from the label and type alone.",
 		showCompany: "Show on the company sheet",
 		showContact: "Show on the contact sheet",
 		showDeal: "Show on the deal sheet",

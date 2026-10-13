@@ -350,16 +350,14 @@ const en = {
 			xemDeXuat: "View the proposal",
 			loiSoanLai: "Not sent: {loi}",
 			rongTieuDe: "No sources yet",
-			rongThan:
-				"Upload a Word or PDF file and Kara drafts a proposal from it.",
+			rongThan: "Upload a Word or PDF file and Kara drafts a proposal from it.",
 			loiTai: "Could not load the sources.",
 		},
 	},
 	hoi: {
 		nhan: "Ask the documents",
 		moDau: "Ask about OneHub's rules, policies, processes or forms.",
-		gioiThieu:
-			"Kara answers only from the version in use of approved pages.",
+		gioiThieu: "Kara answers only from the version in use of approved pages.",
 		nhanTraLoi: "Kara · from the version in use",
 		goiY: [
 			"Do staff on probation earn commission?",
@@ -721,8 +719,7 @@ const vi: TaiLieuMessages = {
 			xemDeXuat: "Xem bản đề xuất",
 			loiSoanLai: "Chưa gửi được: {loi}",
 			rongTieuDe: "Chưa có nguồn nào",
-			rongThan:
-				"Tải một tệp Word hay PDF lên, Kara sẽ soạn bản đề xuất từ nó.",
+			rongThan: "Tải một tệp Word hay PDF lên, Kara sẽ soạn bản đề xuất từ nó.",
 			loiTai: "Không tải được danh sách nguồn.",
 		},
 	},

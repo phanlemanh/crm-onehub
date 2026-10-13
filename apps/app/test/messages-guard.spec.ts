@@ -1288,14 +1288,14 @@ const conChu = (nguon: string, cu: string): boolean =>
 		"u",
 	).test(nguon);
 
-const SO_MUC_BE_MAT: Readonly<Record<Exclude<BeMat, "khac">, number>> = {
+const SO_MUC_BE_MAT = {
 	"ban-ghi": 17,
 	"tom-tat": 8,
 	soan: 24,
 	"cai-dat": 25,
 	"tai-lieu": 43,
 	"dung-chung": 1,
-};
+} as const satisfies Readonly<Record<Exclude<BeMat, "khac">, number>>;
 
 const GHIM_KARA: readonly (readonly [BeMat, string, string, string])[] = [
 	[
