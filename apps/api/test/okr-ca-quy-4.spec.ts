@@ -12,7 +12,11 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { CaGopY } from "@crm/validation/okr-ca-gop-y";
-import { sinhCaQuy4 } from "../scripts/okr-mau/ca-quy-4";
+import {
+	type DongNhan as DongNhanSinh,
+	docNhan,
+	sinhCaQuy4,
+} from "../scripts/okr-mau/ca-quy-4";
 import { OKR_MAU } from "../scripts/okr-mau/cau-hinh";
 import { type BoOkrMau, docBoOkrMau } from "../scripts/okr-mau/khuon";
 
@@ -33,6 +37,8 @@ type TepNhan = { ca: DongNhan[] };
 
 const bo = (): BoOkrMau => docBoOkrMau(readFileSync(TEP_BO, "utf8"));
 const nhan = (): TepNhan => JSON.parse(readFileSync(TEP_NHAN, "utf8"));
+const dongNhan = (): DongNhanSinh[] =>
+	docNhan(readFileSync(TEP_NHAN, "utf8"), TEP_NHAN);
 const tam = (ten: string) => mkdtempSync(join(tmpdir(), `bcq4-${ten}-`));
 
 function maKyVong(b: BoOkrMau): string[] {
@@ -59,7 +65,11 @@ function lechVoiNguon(b: BoOkrMau, ca: CaGopY): string[] {
 	const m = b.mucTieu.find((x) => x.ma === ma);
 	if (!m) return [`${ca.id} không có nguồn`];
 	const lech: string[] = [];
-	const so = (truong: string, a: unknown, c: unknown) => {
+	const so = (
+		truong: string,
+		a: string | number | undefined,
+		c: string | number | undefined,
+	) => {
 		if (a !== c) lech.push(`${ca.id} ${truong}`);
 	};
 	so("donVi.cap", ca.donVi.cap, m.cap);
@@ -118,7 +128,7 @@ function soThuMuc(a: string, b: string): string[] {
 describe("bcq4-sinh", () => {
 	test("một ca viết lại cho mỗi mục tiêu được chọn, chép đúng nguồn", () => {
 		const b = bo();
-		const ca = sinhCaQuy4(b, nhan());
+		const ca = sinhCaQuy4(b, dongNhan());
 		const vietLai = ca.filter((c) => c.bo === "viet-lai");
 		expect(vietLai.map((c) => c.id).sort()).toEqual(
 			maKyVong(b).map((m) => `ca-${m}`),
@@ -131,7 +141,9 @@ describe("bcq4-sinh", () => {
 
 	test("chiều đỏ: ca của bộ gốc lệch với bộ đã đổi tên KR", () => {
 		const goc = bo();
-		const ca = sinhCaQuy4(goc, nhan()).find((c) => c.id === "ca-q4-kho-van-2");
+		const ca = sinhCaQuy4(goc, dongNhan()).find(
+			(c) => c.id === "ca-q4-kho-van-2",
+		);
 		if (!ca) throw new Error("thiếu ca-q4-kho-van-2");
 		const doi = structuredClone(goc);
 		const m = doi.mucTieu.find((x) => x.ma === "q4-kho-van-2");
@@ -145,16 +157,17 @@ describe("bcq4-sinh", () => {
 describe("bcq4-ng", () => {
 	test("ca NG mang đúng mục tiêu OneHub được căn chỉnh vào", () => {
 		const b = bo();
-		const ca = sinhCaQuy4(b, nhan());
+		const ca = sinhCaQuy4(b, dongNhan());
 		const dongNg = nhan().ca.filter((d) => d.bo === "ng");
 		expect(dongNg.length).toBeGreaterThanOrEqual(4);
 		for (const d of dongNg) {
 			const c = ca.find((x) => x.id === `ca-ng-${d.ma}`);
 			const dich = dichCanChinh(b, d.ma);
 			expect(c?.capTren?.mucTieu.title, d.ma).toBe(dich?.ten);
-			expect(c?.capTren?.krs.map((k) => k.title), d.ma).toEqual(
-				dich?.krs.map((k) => k.ten),
-			);
+			expect(
+				c?.capTren?.krs.map((k) => k.title),
+				d.ma,
+			).toEqual(dich?.krs.map((k) => k.ten));
 			expect(c?.kyVong.khongDuoc, d.ma).toEqual(
 				expect.arrayContaining(["chep-kr-cap-tren", "noi-ve-nguoi"]),
 			);
@@ -171,7 +184,7 @@ describe("bcq4-ng", () => {
 		const m = doi.mucTieu.find((x) => x.ma === "q4-nhan-su-1");
 		if (!m) throw new Error("thiếu q4-nhan-su-1");
 		m.canChinh = { kr: "n1-k1" };
-		const ca = sinhCaQuy4(doi, nhan()).find(
+		const ca = sinhCaQuy4(doi, dongNhan()).find(
 			(x) => x.id === "ca-ng-q4-nhan-su-1",
 		);
 		const n1 = doi.mucTieu.find((x) => x.ma === "n1");
@@ -193,7 +206,9 @@ const CA_HONG: {
 	},
 	{
 		ten: "khong-co",
-		sua: (n) => ({ ca: [...n.ca, { ...(n.ca[0] as DongNhan), ma: "q4-khong-co" }] }),
+		sua: (n) => ({
+			ca: [...n.ca, { ...(n.ca[0] as DongNhan), ma: "q4-khong-co" }],
+		}),
 		co: ["q4-khong-co", "không có"],
 	},
 	{
@@ -233,10 +248,10 @@ const CA_HONG: {
 		sua: (n) => ({
 			ca: n.ca.map((d) =>
 				d.ma === "q4-vh" && d.bo === "viet-lai"
-					? {
+					? ({
 							...d,
 							kyVong: { ...d.kyVong, vanDe: ["la"] },
-						} as unknown as DongNhan
+						} as unknown as DongNhan)
 					: d,
 			),
 		}),

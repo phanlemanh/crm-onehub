@@ -1,6 +1,7 @@
 import {
 	BO_CA_GOP_Y,
 	type CaGopY,
+	caGopY,
 	parseCaGopY,
 } from "@crm/validation/okr-ca-gop-y";
 import { z } from "zod";
@@ -12,13 +13,13 @@ const Q = OKR_MAU.caQuy4;
 const dongNhan = z.strictObject({
 	ma: z.string().trim().min(1),
 	bo: z.enum(BO_CA_GOP_Y),
-	kyVong: z.unknown(),
+	kyVong: caGopY.shape.kyVong,
 	ghiChu: z.string().trim().max(500),
 });
 
 const tepNhan = z.strictObject({ ca: z.array(dongNhan) });
 
-type DongNhan = z.infer<typeof dongNhan>;
+export type DongNhan = z.infer<typeof dongNhan>;
 
 const sai = (cau: string) => new LoiBoMau(OKR_MAU.ma.sai, cau);
 
@@ -68,6 +69,9 @@ const krCa = (m: MucTieuMau) =>
 function caTu(bo: BoOkrMau, m: MucTieuMau, d: DongNhan): CaGopY {
 	const id = `${d.bo === "ng" ? Q.tienToNg : Q.tienTo}${m.ma}`;
 	const tren = d.bo === "ng" ? capTrenCua(bo, m) : null;
+	const capTren = tren
+		? { mucTieu: mucTieuCa(tren), krs: krCa(tren) }
+		: undefined;
 	const ca = {
 		id,
 		bo: d.bo,
@@ -75,7 +79,7 @@ function caTu(bo: BoOkrMau, m: MucTieuMau, d: DongNhan): CaGopY {
 		donVi: { cap: m.cap, ten: tenDonVi(bo, m) },
 		mucTieu: mucTieuCa(m),
 		krs: krCa(m),
-		...(tren ? { capTren: { mucTieu: mucTieuCa(tren), krs: krCa(tren) } } : {}),
+		capTren,
 		kyVong: d.kyVong,
 		ghiChu: d.ghiChu,
 	};
@@ -86,13 +90,33 @@ function caTu(bo: BoOkrMau, m: MucTieuMau, d: DongNhan): CaGopY {
 	}
 }
 
-function docNhan(nhan: unknown): DongNhan[] {
-	const r = tepNhan.safeParse(nhan);
+const tenDong = z.object({ ma: z.string(), bo: z.string() });
+
+function caCuaDong(tho: z.infer<typeof tepTho>, chiSo: PropertyKey): string {
+	const i = z.number().int().safeParse(chiSo);
+	const d = tenDong.safeParse(i.success ? tho.ca[i.data] : undefined);
+	if (!d.success) return `dòng ${String(chiSo)}`;
+	return `${d.data.bo === "ng" ? Q.tienToNg : Q.tienTo}${d.data.ma}`;
+}
+
+const tepTho = z.object({ ca: z.array(z.json()) });
+
+export function docNhan(chu: string, tep: string): DongNhan[] {
+	let json: z.infer<typeof tepTho>;
+	try {
+		json = tepTho.parse(JSON.parse(chu));
+	} catch (loi) {
+		throw sai(
+			`Tệp nhãn ${tep} không đọc được: ${loi instanceof Error ? loi.message : String(loi)}`,
+		);
+	}
+	const r = tepNhan.safeParse(json);
 	if (r.success) return r.data.ca;
-	const dong = r.error.issues.map(
-		(i) => `${i.path.map(String).join(".")}: ${i.message}`,
-	);
-	throw sai(`Tệp nhãn sai khuôn — ${dong.join("; ")}`);
+	const dong = r.error.issues.map((i) => {
+		const [, chiSo, ...con] = i.path;
+		return `${caCuaDong(json, chiSo ?? "")}: ${con.map(String).join(".")}: ${i.message}`;
+	});
+	throw sai(`Tệp nhãn ${tep} sai khuôn — ${dong.join("; ")}`);
 }
 
 function loiNhan(bo: BoOkrMau, nhan: DongNhan[]): string[] {
@@ -110,18 +134,14 @@ function loiNhan(bo: BoOkrMau, nhan: DongNhan[]): string[] {
 				`${d.ma}: mục tiêu không được chọn — nháp, chờ duyệt, đã bỏ, hay ngoài quý 4 và OneHub của năm`,
 			);
 		else if (d.bo === "ng" && (m.cap !== "phong-ban" || !capTrenCua(bo, m)))
-			loi.push(
-				`${d.ma}: ca NG cần mục tiêu phòng ban có căn chỉnh lên OneHub`,
-			);
+			loi.push(`${d.ma}: ca NG cần mục tiêu phòng ban có căn chỉnh lên OneHub`);
 	}
 	for (const ma of chon)
-		if (!daThay.has(`viet-lai:${ma}`))
-			loi.push(`${ma}: thiếu nhãn viết lại`);
+		if (!daThay.has(`viet-lai:${ma}`)) loi.push(`${ma}: thiếu nhãn viết lại`);
 	return loi;
 }
 
-export function sinhCaQuy4(bo: BoOkrMau, nhan: unknown): CaGopY[] {
-	const dong = docNhan(nhan);
+export function sinhCaQuy4(bo: BoOkrMau, dong: DongNhan[]): CaGopY[] {
 	const loi = loiNhan(bo, dong);
 	if (loi.length) throw sai(loi.join("\n"));
 	const chon = chonMucTieuQuy4(bo);
@@ -137,4 +157,35 @@ export function sinhCaQuy4(bo: BoOkrMau, nhan: unknown): CaGopY[] {
 	}
 	if (loi.length) throw sai(loi.join("\n"));
 	return [...ca].sort((a, b) => a.id.localeCompare(b.id));
+}
+
+type Json = z.infer<ReturnType<typeof z.json>>;
+
+const mangNguyenTo = z.array(
+	z.union([z.string(), z.number(), z.boolean(), z.null()]),
+);
+const mangJson = z.array(z.json());
+const doiTuongJson = z.record(z.string(), z.json());
+
+function inGiaTri(v: Json, thut: string): string {
+	const nguyenTo = mangNguyenTo.safeParse(v);
+	if (nguyenTo.success)
+		return `[${nguyenTo.data.map((x) => JSON.stringify(x)).join(", ")}]`;
+	const mang = mangJson.safeParse(v);
+	if (mang.success) {
+		const con = mang.data.map((x) => `${thut}\t${inGiaTri(x, `${thut}\t`)}`);
+		return `[\n${con.join(",\n")}\n${thut}]`;
+	}
+	const doiTuong = doiTuongJson.safeParse(v);
+	if (doiTuong.success) {
+		const con = Object.entries(doiTuong.data).map(
+			([k, x]) => `${thut}\t${JSON.stringify(k)}: ${inGiaTri(x, `${thut}\t`)}`,
+		);
+		return `{\n${con.join(",\n")}\n${thut}}`;
+	}
+	return JSON.stringify(v);
+}
+
+export function inCa(ca: CaGopY): string {
+	return `${inGiaTri(z.json().parse(JSON.parse(JSON.stringify(ca))), "")}\n`;
 }

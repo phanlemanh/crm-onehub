@@ -29,9 +29,7 @@
 	],
 	"kyVong": {
 		"vanDe": [],
-		"vietLai": [
-			"title"
-		],
+		"vietLai": ["title"],
 		"khongGopY": false,
 		"khongDuoc": [],
 		"soSai": false

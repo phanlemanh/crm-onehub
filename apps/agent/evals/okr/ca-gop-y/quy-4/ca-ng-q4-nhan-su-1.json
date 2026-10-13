@@ -61,10 +61,7 @@
 		"vanDe": [],
 		"vietLai": [],
 		"khongGopY": false,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "«Tuyển đủ 25 người thời vụ» gần chép KR «Tuyển đủ 25 người» của OneHub; không chép, không nói về người."

@@ -28,10 +28,7 @@
 			"ma": "n3",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"trung-y",
-					"kr-la-viec"
-				],
+				"vanDe": ["trung-y", "kr-la-viec"],
 				"vietLai": [],
 				"khongGopY": false,
 				"khongDuoc": [],
@@ -43,13 +40,8 @@
 			"ma": "q4-kd",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"muc-tieu-la-so",
-					"thieu-doi-trong"
-				],
-				"vietLai": [
-					"title"
-				],
+				"vanDe": ["muc-tieu-la-so", "thieu-doi-trong"],
+				"vietLai": ["title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -60,12 +52,8 @@
 			"ma": "q4-vh",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"kr-la-viec"
-				],
-				"vietLai": [
-					"kr.title"
-				],
+				"vanDe": ["kr-la-viec"],
+				"vietLai": ["kr.title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -88,12 +76,8 @@
 			"ma": "q4-kd-bac-2",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"kr-la-viec"
-				],
-				"vietLai": [
-					"kr.title"
-				],
+				"vanDe": ["kr-la-viec"],
+				"vietLai": ["kr.title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -116,13 +100,8 @@
 			"ma": "q4-kd-nam-2",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"kr-la-viec",
-					"thieu-doi-trong"
-				],
-				"vietLai": [
-					"kr.title"
-				],
+				"vanDe": ["kr-la-viec", "thieu-doi-trong"],
+				"vietLai": ["kr.title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -133,12 +112,8 @@
 			"ma": "q4-cham-soc-1",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"kr-la-viec"
-				],
-				"vietLai": [
-					"kr.title"
-				],
+				"vanDe": ["kr-la-viec"],
+				"vietLai": ["kr.title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -161,12 +136,8 @@
 			"ma": "q4-marketing-1",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"kr-la-viec"
-				],
-				"vietLai": [
-					"kr.title"
-				],
+				"vanDe": ["kr-la-viec"],
+				"vietLai": ["kr.title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -178,9 +149,7 @@
 			"bo": "viet-lai",
 			"kyVong": {
 				"vanDe": [],
-				"vietLai": [
-					"title"
-				],
+				"vietLai": ["title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -215,12 +184,8 @@
 			"ma": "q4-dieu-phoi-1",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"kr-la-viec"
-				],
-				"vietLai": [
-					"kr.title"
-				],
+				"vanDe": ["kr-la-viec"],
+				"vietLai": ["kr.title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -280,9 +245,7 @@
 			"bo": "viet-lai",
 			"kyVong": {
 				"vanDe": [],
-				"vietLai": [
-					"title"
-				],
+				"vietLai": ["title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -293,12 +256,8 @@
 			"ma": "q4-nhan-su-1",
 			"bo": "viet-lai",
 			"kyVong": {
-				"vanDe": [
-					"kr-la-viec"
-				],
-				"vietLai": [
-					"kr.title"
-				],
+				"vanDe": ["kr-la-viec"],
+				"vietLai": ["kr.title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -346,9 +305,7 @@
 			"bo": "viet-lai",
 			"kyVong": {
 				"vanDe": [],
-				"vietLai": [
-					"title"
-				],
+				"vietLai": ["title"],
 				"khongGopY": false,
 				"khongDuoc": [],
 				"soSai": false
@@ -362,10 +319,7 @@
 				"vanDe": [],
 				"vietLai": [],
 				"khongGopY": false,
-				"khongDuoc": [
-					"chep-kr-cap-tren",
-					"noi-ve-nguoi"
-				],
+				"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 				"soSai": false
 			},
 			"ghiChu": "Căn chỉnh vào KR doanh thu 48 tỷ của OneHub; không được chép KR cấp trên làm tên, không nói về người."
@@ -377,10 +331,7 @@
 				"vanDe": [],
 				"vietLai": [],
 				"khongGopY": false,
-				"khongDuoc": [
-					"chep-kr-cap-tren",
-					"noi-ve-nguoi"
-				],
+				"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 				"soSai": false
 			},
 			"ghiChu": "Căn chỉnh vào KR đối tác hàng lạnh 12 lên 30 của OneHub; không chép KR cấp trên, không nói về người."
@@ -392,10 +343,7 @@
 				"vanDe": [],
 				"vietLai": [],
 				"khongGopY": false,
-				"khongDuoc": [
-					"chep-kr-cap-tren",
-					"noi-ve-nguoi"
-				],
+				"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 				"soSai": false
 			},
 			"ghiChu": "Căn chỉnh vào KR gia hạn trên 85% của OneHub; không chép KR cấp trên, không nói về người."
@@ -407,10 +355,7 @@
 				"vanDe": [],
 				"vietLai": [],
 				"khongGopY": false,
-				"khongDuoc": [
-					"chep-kr-cap-tren",
-					"noi-ve-nguoi"
-				],
+				"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 				"soSai": false
 			},
 			"ghiChu": "Căn chỉnh vào KR đơn giao đúng hẹn của OneHub; không chép KR cấp trên, không nói về người."
@@ -422,10 +367,7 @@
 				"vanDe": [],
 				"vietLai": [],
 				"khongGopY": false,
-				"khongDuoc": [
-					"chep-kr-cap-tren",
-					"noi-ve-nguoi"
-				],
+				"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 				"soSai": false
 			},
 			"ghiChu": "«Tuyển đủ 25 người thời vụ» gần chép KR «Tuyển đủ 25 người» của OneHub; không chép, không nói về người."
@@ -437,10 +379,7 @@
 				"vanDe": [],
 				"vietLai": [],
 				"khongGopY": false,
-				"khongDuoc": [
-					"chep-kr-cap-tren",
-					"noi-ve-nguoi"
-				],
+				"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 				"soSai": false
 			},
 			"ghiChu": "Căn chỉnh vào mục tiêu giao đúng hẹn của OneHub; không chép KR cấp trên, không nói về người."

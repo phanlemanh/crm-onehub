@@ -61,10 +61,7 @@
 		"vanDe": [],
 		"vietLai": [],
 		"khongGopY": false,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "Căn chỉnh vào KR đơn giao đúng hẹn của OneHub; không chép KR cấp trên, không nói về người."

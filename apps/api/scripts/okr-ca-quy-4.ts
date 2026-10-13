@@ -6,7 +6,7 @@ import {
 	writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
-import { sinhCaQuy4 } from "./okr-mau/ca-quy-4";
+import { docNhan, inCa, sinhCaQuy4 } from "./okr-mau/ca-quy-4";
 import { LoiBoMau, OKR_MAU } from "./okr-mau/cau-hinh";
 import { docBoOkrMau } from "./okr-mau/khuon";
 
@@ -53,18 +53,6 @@ function docJson(tep: string, ten: string): string {
 	}
 }
 
-function docNhanTho(tep: string): unknown {
-	const chu = docJson(tep, "tệp nhãn");
-	try {
-		return JSON.parse(chu);
-	} catch (loi) {
-		throw new LoiBoMau(
-			OKR_MAU.ma.sai,
-			`Tệp nhãn ${tep} không phải JSON: ${loi instanceof Error ? loi.message : String(loi)}`,
-		);
-	}
-}
-
 function chay(args: string[]): number {
 	const ts = docThamSo(args);
 	const tepBo = join(DIR, Q.tepCongTy);
@@ -78,16 +66,12 @@ function chay(args: string[]): number {
 			`Tệp bộ mẫu ${tepBo} sai:\n${loi instanceof Error ? loi.message : String(loi)}`,
 		);
 	}
-	const ca = sinhCaQuy4(bo, docNhanTho(ts.nhan));
+	const ca = sinhCaQuy4(bo, docNhan(docJson(ts.nhan, "tệp nhãn"), ts.nhan));
 	mkdirSync(ts.ra, { recursive: true });
 	const moi = new Set(ca.map((c) => `${c.id}.json`));
 	for (const tep of readdirSync(ts.ra))
 		if (tep.endsWith(".json") && !moi.has(tep)) rmSync(join(ts.ra, tep));
-	for (const c of ca)
-		writeFileSync(
-			join(ts.ra, `${c.id}.json`),
-			`${JSON.stringify(c, null, "\t")}\n`,
-		);
+	for (const c of ca) writeFileSync(join(ts.ra, `${c.id}.json`), inCa(c));
 	console.log(`okr:ca-quy-4: ${ca.length} ca → ${ts.ra}`);
 	return 0;
 }
@@ -99,6 +83,8 @@ try {
 		console.error(loi.message);
 		process.exit(loi.ma);
 	}
-	console.error(loi instanceof Error ? (loi.stack ?? loi.message) : String(loi));
+	console.error(
+		loi instanceof Error ? (loi.stack ?? loi.message) : String(loi),
+	);
 	process.exit(1);
 }

@@ -8,8 +8,8 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
 import type { CaGopY } from "@crm/validation/okr-ca-gop-y";
+import { kiemSoTheoKieu, krInput } from "@crm/validation/okr-kr";
 import {
 	docBoCaGopY,
 	THU_MUC_CA_MAU,
@@ -37,7 +37,7 @@ const NG = ["chep-kr-cap-tren", "noi-ve-nguoi"];
 const TOT: Nhan = { vanDe: [], khongGopY: true };
 const TRONG: Nhan = { vanDe: [] };
 
-const BANG_NHAN: Record<string, Nhan> = {
+const BANG_NHAN = {
 	"ca-n1": TOT,
 	"ca-n2": TOT,
 	"ca-n3": { vanDe: ["trung-y", "kr-la-viec"] },
@@ -73,7 +73,10 @@ const BANG_NHAN: Record<string, Nhan> = {
 	"ca-ng-q4-kho-van-2": { vanDe: [], khongDuoc: NG },
 	"ca-ng-q4-nhan-su-1": { vanDe: [], khongDuoc: NG },
 	"ca-ng-q4-tai-chinh-1": { vanDe: [], khongDuoc: NG },
-};
+} satisfies Record<string, Nhan>;
+
+const nhanMong = (id: string): Nhan | undefined =>
+	Object.entries(BANG_NHAN).find(([k]) => k === id)?.[1];
 
 const nhanCua = (c: CaGopY): Nhan => ({
 	vanDe: c.kyVong.vanDe,
@@ -95,7 +98,7 @@ function lechNhan(ca: CaGopY[]): string[] {
 	for (const id of Object.keys(BANG_NHAN))
 		if (!ids.has(id)) lech.push(`${id} thiếu`);
 	for (const c of ca) {
-		const mong = BANG_NHAN[c.id];
+		const mong = nhanMong(c.id);
 		if (!mong) lech.push(`${c.id} ngoài bảng`);
 		else if (JSON.stringify(nhanCua(c)) !== JSON.stringify(nhanDu(mong)))
 			lech.push(`${c.id} kyVong`);
@@ -189,9 +192,7 @@ describe("bcq4-thanh-phan", () => {
 		const vh = JSON.parse(readFileSync(tep, "utf8"));
 		vh.kyVong.vanDe = [];
 		writeFileSync(tep, JSON.stringify(vh));
-		const lech = lechNhan(
-			docBoCaGopY(ban).filter((c) => c.id !== "gy-01"),
-		);
+		const lech = lechNhan(docBoCaGopY(ban).filter((c) => c.id !== "gy-01"));
 		expect(lech).toEqual(["ca-q4-vh kyVong"]);
 		expect(readdirSync(ban).length).toBe(ca.length + 1);
 	});
@@ -199,7 +200,9 @@ describe("bcq4-thanh-phan", () => {
 
 describe("bcq4-chon-bo", () => {
 	test("biến chọn bộ, vắng hay rỗng thì bộ mẫu, thư mục lạ thì ném", () => {
-		expect(thuMucBoCa({ [BIEN]: THU_MUC_CA_QUY_4 }, BIEN)).toBe(THU_MUC_CA_QUY_4);
+		expect(thuMucBoCa({ [BIEN]: THU_MUC_CA_QUY_4 }, BIEN)).toBe(
+			THU_MUC_CA_QUY_4,
+		);
 		expect(thuMucBoCa({}, BIEN)).toBe(THU_MUC_CA_MAU);
 		expect(thuMucBoCa({ [BIEN]: "" }, BIEN)).toBe(THU_MUC_CA_MAU);
 		expect(thuMucBoCa({ [BIEN]: "  " }, BIEN)).toBe(THU_MUC_CA_MAU);
@@ -213,13 +216,9 @@ describe("bcq4-chon-bo", () => {
 			nguon.indexOf("function boCa()"),
 			nguon.indexOf("function tranUsd()"),
 		);
-		expect(than).toContain(
-			"thuMucBoCa(process.env, GOP_Y_EVAL.env.thuMucCa",
-		);
+		expect(than).toContain("thuMucBoCa(process.env, GOP_Y_EVAL.env.thuMucCa");
 		expect(than).not.toContain("THU_MUC_CA_MAU");
 		expect(nguon).toContain("env: TRO_LY_OKR.danhGia.env");
-		expect(readFileSync(TEP_CAU_HINH, "utf8")).toContain(
-			`thuMucCa: "${BIEN}"`,
-		);
+		expect(readFileSync(TEP_CAU_HINH, "utf8")).toContain(`thuMucCa: "${BIEN}"`);
 	});
 });

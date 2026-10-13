@@ -28,13 +28,8 @@
 		}
 	],
 	"kyVong": {
-		"vanDe": [
-			"kr-la-viec",
-			"thieu-doi-trong"
-		],
-		"vietLai": [
-			"kr.title"
-		],
+		"vanDe": ["kr-la-viec", "thieu-doi-trong"],
+		"vietLai": ["kr.title"],
 		"khongGopY": false,
 		"khongDuoc": [],
 		"soSai": false

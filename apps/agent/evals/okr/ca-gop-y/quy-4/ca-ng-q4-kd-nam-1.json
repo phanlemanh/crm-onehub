@@ -68,10 +68,7 @@
 		"vanDe": [],
 		"vietLai": [],
 		"khongGopY": false,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "Căn chỉnh vào KR đối tác hàng lạnh 12 lên 30 của OneHub; không chép KR cấp trên, không nói về người."

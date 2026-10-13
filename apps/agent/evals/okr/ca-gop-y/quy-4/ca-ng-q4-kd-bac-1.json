@@ -68,10 +68,7 @@
 		"vanDe": [],
 		"vietLai": [],
 		"khongGopY": false,
-		"khongDuoc": [
-			"chep-kr-cap-tren",
-			"noi-ve-nguoi"
-		],
+		"khongDuoc": ["chep-kr-cap-tren", "noi-ve-nguoi"],
 		"soSai": false
 	},
 	"ghiChu": "Căn chỉnh vào KR doanh thu 48 tỷ của OneHub; không được chép KR cấp trên làm tên, không nói về người."

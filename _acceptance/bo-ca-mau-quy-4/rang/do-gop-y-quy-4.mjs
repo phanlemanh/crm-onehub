@@ -47,7 +47,10 @@ const DO = {
 	caMau9b: { ma: "30/30", judge: 0.95 },
 	co: { tuKiem: "--tu-kiem", thuMuc: "--thu-muc", tranUsd: "--tran-usd" },
 	ra: join(GOC, ".acceptance-runs/bo-ca-mau-quy-4/do"),
-	bangChung: join(GOC, "_acceptance/bo-ca-mau-quy-4/evidence/do-gop-y-quy-4.md"),
+	bangChung: join(
+		GOC,
+		"_acceptance/bo-ca-mau-quy-4/evidence/do-gop-y-quy-4.md",
+	),
 	soMoiLot: join(GOC, "_acceptance/tro-ly-okr-de-xuat/rang/so-moi-lot.mjs"),
 	eve: join(AGENT, "node_modules/.bin/eve"),
 	caDoiChung: {
@@ -152,7 +155,9 @@ const MA_TRAN = [
 	},
 	{
 		ten: "so-moi",
-		dong: [{ loai: "viet-lai", truong: "kr.title", sau: "Xuất kho trong 20 phút" }],
+		dong: [
+			{ loai: "viet-lai", truong: "kr.title", sau: "Xuất kho trong 20 phút" },
+		],
 		lot: true,
 		phai: CHAM.luat.soMoi,
 	},
@@ -383,14 +388,14 @@ async function chiDaTieu(url) {
 }
 
 function diemJudge(ca, ghi, diem) {
-	const boViet = new Set(
-		ca.filter((c) => c.bo === DO.boViet).map((c) => c.id),
-	);
+	const boViet = new Set(ca.filter((c) => c.bo === DO.boViet).map((c) => c.id));
 	const so = [...ghi.values()]
 		.filter((g) => boViet.has(g.ca))
 		.flatMap((g) =>
 			g.dong
-				.filter((d) => d.loai === "viet-lai" && d.trangThai === CHAM.trangThaiCho)
+				.filter(
+					(d) => d.loai === "viet-lai" && d.trangThai === CHAM.trangThaiCho,
+				)
 				.map((d) => diem.get(`${g.ca} ${d.id}`) ?? null),
 		)
 		.filter((d) => d !== null);
@@ -488,10 +493,14 @@ async function main() {
 	if (process.argv.includes(DO.co.tuKiem)) return 0;
 	const tran = tranUsd();
 	if (tran === null)
-		return khongDo(`${DO.co.tranUsd} can mot so duong, nhan «${giaTriCo(DO.co.tranUsd) ?? ""}»`);
+		return khongDo(
+			`${DO.co.tranUsd} can mot so duong, nhan «${giaTriCo(DO.co.tranUsd) ?? ""}»`,
+		);
 	const nguon = thuMucNguon();
 	if (nguon === null)
-		return khongDo(`${DO.co.thuMuc} can mot thu muc co that, nhan «${giaTriCo(DO.co.thuMuc) ?? ""}»`);
+		return khongDo(
+			`${DO.co.thuMuc} can mot thu muc co that, nhan «${giaTriCo(DO.co.thuMuc) ?? ""}»`,
+		);
 	if (!coKhoaMoHinh()) return khongDo(cauThieuKhoa());
 	mkdirSync(DO.ra, { recursive: true });
 	let url;
