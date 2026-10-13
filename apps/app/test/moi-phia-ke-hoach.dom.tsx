@@ -181,6 +181,8 @@ function congTy(soKeHoach: number, xuongCoKhuon: boolean) {
 		soKeHoach,
 		xuongCoKhuon,
 		deals: [],
+		archivedContacts: [],
+		archivedDeals: [],
 	};
 }
 
@@ -449,6 +451,7 @@ function caNhan() {
 		},
 		isPrimaryContact: false,
 		deals: [],
+		archivedDeals: [],
 	};
 }
 

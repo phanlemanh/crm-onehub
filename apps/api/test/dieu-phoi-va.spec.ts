@@ -222,7 +222,7 @@ describe("bo-phan-hong", () => {
 				plan.ownerId,
 			),
 		);
-		expect(khongCo.getStatus()).toBe(400);
+		expect(khongCo.getStatus()).toBe(404);
 		expect(khongCo.message).toContain(maLa);
 
 		const cat = await loiCua(

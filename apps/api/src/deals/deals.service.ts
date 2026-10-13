@@ -29,6 +29,7 @@ import {
 	requireOwner,
 	runBulk,
 } from "../crm/bulk";
+import { caNhanDaLuuTru, tachDaLuuTru } from "../crm/da-luu-tru";
 import {
 	blankToNull,
 	decimalFromCents,
@@ -322,7 +323,10 @@ export class DealsService {
 				company: { select: { ...COMPANY_SELECT, industry: true } },
 				owner: { select: OWNER_SELECT },
 				contacts: {
-					select: { role: true, contact: { select: CONTACT_SELECT } },
+					select: {
+						role: true,
+						contact: { select: { ...CONTACT_SELECT, archivedAt: true } },
+					},
 					orderBy: { contact: { firstName: "asc" } },
 				},
 			},
@@ -341,6 +345,9 @@ export class DealsService {
 			archivedAt,
 			...rest
 		} = deal;
+		const nguoi = tachDaLuuTru(
+			contacts.map(({ role, contact }) => ({ ...contact, role })),
+		);
 
 		return {
 			...rest,
@@ -355,7 +362,11 @@ export class DealsService {
 			closedAt: deal.closedAt?.toISOString() ?? null,
 			createdAt: deal.createdAt.toISOString(),
 			archivedAt: archivedAt?.toISOString() ?? null,
-			contacts: contacts.map(({ role, contact }) => ({ ...contact, role })),
+			contacts: nguoi.dangDung.map((contact) => ({
+				...contact,
+				archivedAt: undefined,
+			})),
+			archivedContacts: nguoi.daLuuTru.map(caNhanDaLuuTru),
 		};
 	}
 
@@ -753,6 +764,7 @@ export class DealsService {
 			where: {
 				companyId: deal.companyId,
 				id: { notIn: deal.contacts.map((row) => row.contactId) },
+				archivedAt: null,
 			},
 			select: CONTACT_SELECT,
 			orderBy: [{ firstName: "asc" }, { lastName: "asc" }],
