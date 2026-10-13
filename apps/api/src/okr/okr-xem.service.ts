@@ -44,6 +44,7 @@ import {
 import { OKR } from "./okr-config";
 import { OKR_XEM } from "./okr-xem.config";
 import type {
+	CanhCanChinh,
 	CayCanChinhOutput,
 	DanhSachInput,
 	DanhSachOutput,
@@ -116,6 +117,29 @@ function donViCuaChon(unit: DonViChon): DonViCuaMucTieu {
 		case "nguoi":
 			return { ...rong, level: "ca-nhan", personUserId: unit.id };
 	}
+}
+
+export type MucTieuCoCanh = Pick<MucTieuOutput, "id" | "alignments"> & {
+	keyResults: readonly { id: string }[];
+};
+
+export function canhCuaCay(mts: readonly MucTieuCoCanh[]): CanhCanChinh[] {
+	const coMat = new Set(
+		mts.flatMap((m) => [m.id, ...m.keyResults.map((k) => k.id)]),
+	);
+	return mts.flatMap((m) =>
+		m.alignments
+			.map((a) => ({ a, den: a.targetKeyResultId ?? a.targetObjectiveId }))
+			.filter(({ den }) => coMat.has(den))
+			.map(({ a, den }) => ({
+				tu: m.id,
+				den,
+				lyDo: a.lyDo,
+				canCu: a.canCu,
+				lyDoTuKara: a.lyDoTuKara,
+				mucTin: a.mucTin,
+			})),
+	);
 }
 
 @Injectable()
@@ -464,6 +488,7 @@ export class OkrXemService {
 		return {
 			roots: cay.roots.map(gan),
 			chuaCanChinh: cay.chuaCanChinh.map(gan),
+			canh: canhCuaCay(mts),
 		};
 	}
 
