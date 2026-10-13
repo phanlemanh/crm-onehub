@@ -302,12 +302,16 @@ async function doThemBuoc(cookie, slug, toi, boPhan) {
 
 			chan.bat = false;
 			const truoc = chan.dem;
-			await p.click("[data-them-buoc] [data-slot='kara-retry']");
-			await p
-				.waitForSelector("[data-them-buoc] [role=combobox]", {
-					timeout: CHO_MS,
-				})
-				.catch(() => {});
+			const coNutThuLai =
+				(await p.$("[data-them-buoc] [data-slot='kara-retry']")) !== null;
+			if (coNutThuLai) {
+				await p.click("[data-them-buoc] [data-slot='kara-retry']");
+				await p
+					.waitForSelector("[data-them-buoc] [role=combobox]", {
+						timeout: CHO_MS,
+					})
+					.catch(() => {});
+			}
 			const v2 = await docVungLoi(p);
 			let luaChon = [];
 			if (v2.oChon) {
@@ -321,8 +325,8 @@ async function doThemBuoc(cookie, slug, toi, boPhan) {
 			await p.keyboard.press("Escape");
 			kiem(
 				`them-buoc-thu-lai-xong-${kho}`,
-				`vung loi con: ${v2.co}; o chon: ${v2.oChon}; co ${boPhan[1].name}: ${luaChon.includes(boPhan[1].name)}; khong chan them: ${chan.dem === truoc}`,
-				!v2.co && v2.oChon && luaChon.includes(boPhan[1].name),
+				`nut thu lai: ${coNutThuLai}; vung loi con: ${v2.co}; o chon: ${v2.oChon}; co ${boPhan[1].name}: ${luaChon.includes(boPhan[1].name)}; khong chan them: ${chan.dem === truoc}`,
+				coNutThuLai && !v2.co && v2.oChon && luaChon.includes(boPhan[1].name),
 			);
 
 			chan.bat = true;
