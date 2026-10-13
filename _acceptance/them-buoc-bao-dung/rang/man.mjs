@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { crmMessages } from "../../../apps/app/lib/messages/crm.ts";
 import { onboardingMessages } from "../../../apps/app/lib/messages/onboarding.ts";
+import { tongQuanMessages } from "../../../apps/app/lib/messages/tong-quan.ts";
 import { ActivityType, db } from "../../../packages/db/src/index.ts";
 import { dauNgayVN } from "../../../packages/db/src/onboarding-nhac.ts";
 import { homNayVN } from "../../../packages/validation/src/ngay-vn.ts";
@@ -21,6 +22,7 @@ const NGUOI = process.env.NGUOI ?? "ada@trycomp.ai";
 const CHO_MS = 90_000;
 const DAY_MS = 86_400_000;
 const GIO_MS = 3_600_000;
+const TRAN_DONG = 10;
 const KHO = [1440, 390];
 const GIO_LUI_TOI = 18;
 const GIO_TIEN_TU = 17;
@@ -37,6 +39,7 @@ const MA_TRAN = KHO.flatMap((k) => [
 
 const s = onboardingMessages("vi").sheet;
 const loiMoTa = crmMessages("vi").vungCon.loiMoTa;
+const chuConSot = tongQuanMessages("vi").tasks.conSot;
 
 const dong = [];
 const daPhat = new Set();
@@ -418,15 +421,26 @@ async function doQuaHan(cookie, slug, toi, boPhan) {
 		dueAt: han,
 		assigneeId: toi.id,
 	});
-	const v = await db.activity.create({
-		data: {
+	const viecSan = await db.activity.count({
+		where: {
 			type: ActivityType.TASK,
-			subject: `Việc đo E6b ${MA}`,
-			dueAt: new Date(dauNgayVN(now).getTime() - 2 * DAY_MS),
+			completedAt: null,
+			dueAt: { lt: dauNgayVN(now) },
 			createdById: toi.id,
 		},
 	});
-	daTao.viec.push(v.id);
+	const soGieo = Math.max(1, TRAN_DONG + 1 - viecSan);
+	for (let i = 0; i < soGieo; i += 1) {
+		const v = await db.activity.create({
+			data: {
+				type: ActivityType.TASK,
+				subject: `Việc đo E6b ${MA} ${i}`,
+				dueAt: new Date(dauNgayVN(now).getTime() - 2 * DAY_MS),
+				createdById: toi.id,
+			},
+		});
+		daTao.viec.push(v.id);
+	}
 	const homNay = homNayVN(now);
 	for (const kho of KHO) {
 		const { ctx, p } = await trang(kho, cookie, null);
@@ -454,6 +468,7 @@ async function doQuaHan(cookie, slug, toi, boPhan) {
 								?.querySelector('[data-slot="status-indicator"]')
 								?.getAttribute("data-tone") ?? null,
 						conSot: chan?.getAttribute("data-con-sot") ?? null,
+						chuChan: chan?.textContent?.trim() ?? null,
 						idViec: [...e.querySelectorAll("[data-viec]")].map((r) =>
 							r.getAttribute("data-viec"),
 						),
@@ -474,11 +489,15 @@ async function doQuaHan(cookie, slug, toi, boPhan) {
 			await chup(p, `qua-han-con-sot-${kho}`);
 			const mong = chon.quaHan ? "error" : "neutral";
 			const sot = await conSotMong(toi.id, doc.idViec, doc.idBuoc);
-			const conSot = Number(doc.conSot ?? 0);
+			const conSot = doc.conSot === null ? null : Number(doc.conSot);
+			const chuMong = chuConSot.replace("{n}", String(sot.mong));
 			kiem(
 				`qua-han-con-sot-${kho}`,
-				`mui gio ${chon.tz}, hom nay VN ${homNay}, han buoc ${han.toISOString()}; dau cua dong ${doc.tone} (mong ${mong}); data-con-sot ${conSot} (mong ${sot.mong} = tong ${sot.tong} - ${doc.idViec.length} dong viec - dong buoc qua han theo ngay VN)`,
-				doc.tone === mong && conSot === sot.mong,
+				`mui gio ${chon.tz}, hom nay VN ${homNay}, han buoc ${han.toISOString()}; dau cua dong ${doc.tone} (mong ${mong}); viec san ${viecSan}, gieo them ${soGieo}; data-con-sot ${conSot} (mong ${sot.mong} >= 1 = tong ${sot.tong} - ${doc.idViec.length} dong viec - dong buoc qua han theo ngay VN); chan the «${doc.chuChan}» (mong «${chuMong}»)`,
+				doc.tone === mong &&
+					sot.mong >= 1 &&
+					conSot === sot.mong &&
+					doc.chuChan === chuMong,
 			);
 		} finally {
 			await ctx.close();
