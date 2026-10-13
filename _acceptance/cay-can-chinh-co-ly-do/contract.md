@@ -5,7 +5,11 @@ slug: cay-can-chinh-co-ly-do
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
+approved_by:
+approved_at:
+veto_state: mo
+veto_opened_at: 2026-10-13T08:21:19Z
 design_doc: docs/superpowers/specs/2026-10-13-cay-can-chinh-co-ly-do-design.md
 ---
 
@@ -23,16 +27,16 @@ Source input: `opportunity.md`, design doc ở frontmatter, hợp đồng L1 (`_
 ## Criteria
 
 - AC-1 (cross-layer): Given chu kỳ có các căn chỉnh mang ba mức tin, When gọi `okr.cayCanChinh` qua tRPC, Then đầu ra có `canh` gồm đúng một phần tử cho mỗi chỗ nối của mục tiêu có mặt trong cây — `tu` = id mục tiêu con, `den` = id KR hoặc mục tiêu đích — với `lyDo`, `canCu`, `lyDoTuKara`, `mucTin` bằng giá trị `okr.objective` trả cho căn chỉnh đó; `roots` và `chuaCanChinh` giữ nguyên như trước vòng.
-- AC-2: Given bộ OKR mẫu và hai người xem — quản trị (thấy mọi mục tiêu) và một người xem hẹp hơn có ít nhất một mục tiêu mang căn chỉnh mà người đó không thấy —, When mỗi người gọi `okr.cayCanChinh`, Then với người xem hẹp mọi phần tử `canh` có `tu` và `den` đều là id có mặt trong cây trả cho chính người đó, tập `canh` của người đó là tập con của tập của quản trị, và mọi cạnh có `tu` là mục tiêu người đó không thấy đều vắng; And đối chứng: tập vắng đó khác rỗng (ca có thật trong bộ mẫu).
+- AC-2: Given bộ OKR mẫu và hai người dùng — quản trị viên (thấy mọi mục tiêu) và một người dùng thấy hẹp hơn có ít nhất một mục tiêu mang căn chỉnh mà người đó không thấy —, When mỗi người dùng gọi `okr.cayCanChinh`, Then với người dùng thấy hẹp mọi phần tử `canh` có `tu` và `den` đều là id có mặt trong cây trả cho chính người đó, tập `canh` của người đó là tập con của tập của quản trị viên, và mọi cạnh có `tu` là mục tiêu người đó không thấy đều vắng; And đối chứng: tập vắng đó khác rỗng (ca có thật trong bộ mẫu).
 - AC-3: Given cây có nút mục tiêu P góp vào KR K với cạnh `co-so-lieu` do Kara viết, When mở Cây căn chỉnh, Then nút P dưới K hiện nhãn «Có số liệu» với `tone` của nghĩa `xong`, một dòng lý do bằng đúng `lyDo`, và đúng một dấu Kara; nút gốc và nút KR không có dòng lý do.
 - AC-4: Given ba nút con mang ba mức tin, When mở Cây căn chỉnh, Then nhãn và `tone` của từng nút đúng bảng mức tin → nghĩa của L2 (`NGHIA_MUC_TIN`, không khai bảng thứ hai); nút `chua-co-ly-do` chỉ mang nhãn «Chưa có lý do» — không dòng lý do, không dấu Kara.
 - AC-5: Given mục tiêu P góp vào hai chỗ (nút hiện hai lần, lần hai `lapLai`) với hai lý do khác nhau, When mở Cây căn chỉnh, Then mỗi lần P hiện mang đúng lý do của chỗ nối dưới cha của lần đó.
-- AC-6: Given cây có cạnh ở cả ba mức, When bấm chip «Chưa có lý do», Then chỉ còn nút mục tiêu có cạnh `chua-co-ly-do`, cùng mọi tổ tiên của chúng; nút không khớp mà không có hậu duệ khớp bị ẩn; nhóm «Chưa căn chỉnh» bị ẩn; đường dẫn mang giá trị lọc qua `nuqs`; And «Đặt cược» lọc tương tự; And «Tất cả» trả cây đầy đủ.
-- AC-7: Given chip lọc, Then mỗi chip mang số cạnh của mức đó trong cây (chip «Tất cả» mang tổng số cạnh); chip có số 0 vẫn bấm được; lọc một mức không có cạnh nào → trạng thái rỗng của cây với câu riêng, không phải cây trống câm; giá trị lọc lạ trên đường dẫn đọc như «Tất cả».
+- AC-6: Given cây có cạnh ở cả ba mức, When bấm chip «Chưa có lý do», Then chỉ còn nút mục tiêu có cạnh `chua-co-ly-do`, cùng mọi tổ tiên của chúng; nút không khớp mà không có hậu duệ khớp không hiện; mục «Chưa căn chỉnh» không hiện; đường dẫn mang giá trị lọc qua `nuqs`; And «Đặt cược» lọc tương tự; And «Tất cả» trả cây đầy đủ.
+- AC-7: Given chip lọc, Then mỗi chip mang số cạnh của mức đó trong cây (chip «Tất cả» mang tổng số cạnh); chip có số 0 vẫn bấm được; lọc một mức không có cạnh nào → màn rỗng của cây với câu riêng, không phải cây trống câm; giá trị lọc lạ trên đường dẫn đọc như «Tất cả».
 - AC-8: Given dữ liệu người nhập (lý do), Then phần tử chứa nó mang `translate="no"`; chip «Chưa có lý do» và «Đặt cược» mang đúng nhãn mức tin của L2 (`okr.ts`, `sheet.mucTin`); chữ khung mới (chip «Tất cả», câu rỗng của bộ lọc) đến từ `apps/app/lib/messages/okr-toan-canh.ts` và có đủ `vi`, `en` khác nhau.
-- AC-9 (cross-layer): Given bộ OKR mẫu đã nạp (ba ca mức tin của L2), When mở Theo đơn vị → Cây căn chỉnh ở 1440 và 390 px, Then ba nhánh mẫu (một nối lên KR, một nối thẳng lên mục tiêu) hiện đúng nhãn mức tin đã gieo, dòng lý do không bị cắt, trang không cuộn ngang; bấm chip «Chưa có lý do» thì nhánh `q4-kd-nam-2` còn, hai nhánh kia ẩn; bấm «Đặt cược» thì chỉ `q4-kd-bac-2` còn trong ba; có ảnh khung nhìn từng trạng thái.
+- AC-9 (cross-layer): Given bộ OKR mẫu đã nạp (ba ca mức tin của L2), When mở Theo đơn vị → Cây căn chỉnh ở 1440 và 390 px, Then ba dòng mục tiêu mẫu (một nối lên KR, một nối thẳng lên mục tiêu) hiện đúng nhãn mức tin đã gieo, dòng lý do không bị cắt, trang không cuộn ngang; bấm chip «Chưa có lý do» thì dòng `q4-kd-nam-2` còn, hai dòng mục tiêu kia không hiện; bấm «Đặt cược» thì chỉ `q4-kd-bac-2` còn trong ba; có ảnh khung nhìn từng bộ lọc.
 - AC-10: Given các hồ sơ đã ký có eval `test` không khai `status: not-run` mà `paths` ghi đích danh một tệp mã sản phẩm vòng này sửa, When chạy lại đúng lệnh của từng eval, Then mọi lệnh thoát đúng mã kỳ vọng; And `apps/api/test/okr-can-chinh.spec.ts` không đổi dòng nào và `apps/api/src/okr/can-chinh.ts` không đổi.
-- AC-11: Given diff của vòng so với điểm rẽ khỏi nhánh L2 (`feat/duong-ly-do-muc-tieu`, hoặc `onehub` khi L2 đã gộp), Then chỉ các tệp khai ở `## Notes` (mục Ranh giới), `_acceptance/cay-can-chinh-co-ly-do/**`, `docs/**`, `PRODUCT-MAP.md`, `LO-TRINH.html` đổi; các tệp chỉ-thêm chỉ có dòng THÊM.
+- AC-11: Given diff của vòng so với chỗ tách khỏi `feat/duong-ly-do-muc-tieu` (hoặc `onehub` khi L2 đã gộp), Then chỉ các tệp khai ở `## Notes` (mục Ranh giới), `_acceptance/cay-can-chinh-co-ly-do/**`, `docs/**`, `PRODUCT-MAP.md`, `LO-TRINH.html` đổi; các tệp chỉ-thêm chỉ có dòng THÊM.
 
 ## Coverage
 
