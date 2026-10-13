@@ -104,5 +104,12 @@
    "i": 4,
    "p": "Hỏi lại khi đóng việc cha mới đo hai trong bốn đường (thiếu menu và nút Xong trong khung). Đã thêm hai đường vào tiêu chí và phép đo."
   }
+ ],
+ "decisions": [
+  {
+   "id": "E12",
+   "q": "Từ điển sản phẩm và tài liệu API đã ghi đủ việc con và kiểu Bảng chưa?",
+   "why": "Hội đồng máy đọc hai tài liệu và đề xuất Đạt; tài liệu viết đúng hay chưa là việc người chốt, máy không tự chấm được."
+  }
  ]
 }
