@@ -36,10 +36,11 @@ export function DanhSach({
 	chu = null,
 	nhom = "cho",
 	page,
+	archived = false,
 	luaChon,
 	coHoi = false,
 }: Pick<Loc, "tab" | "loai" | "page"> &
-	Partial<Pick<Loc, "donVi" | "chu" | "nhom">> & {
+	Partial<Pick<Loc, "donVi" | "chu" | "nhom" | "archived">> & {
 		luaChon: LuaChonTai;
 		coHoi?: boolean;
 	}) {
@@ -50,7 +51,7 @@ export function DanhSach({
 	const cho = useQuery(trpc.taiLieu.proposals.queryOptions());
 	const soCho = cho.data?.choToiDuyet ?? 0;
 	const toi = (sua: Partial<Loc>) =>
-		`${url(duongDanhSach())}${thamSo({ tab, loai, donVi, chu, nhom, page, ...sua })}`;
+		`${url(duongDanhSach())}${thamSo({ tab, loai, donVi, chu, nhom, page, archived, ...sua })}`;
 	const lienKetTim = moTimNhanh(toi({}));
 
 	return (
@@ -89,7 +90,12 @@ export function DanhSach({
 					<TabsTrigger asChild value="trang">
 						<Link
 							aria-current={tab === "trang" ? "page" : undefined}
-							href={toi({ tab: "trang", nhom: "cho", page: 1 })}
+							href={toi({
+								tab: "trang",
+								nhom: "cho",
+								page: 1,
+								archived: false,
+							})}
 						>
 							{m.tab.trang}
 						</Link>
@@ -150,6 +156,7 @@ export function DanhSach({
 					<HoiKho />
 				) : (
 					<DanhSachTrang
+						archived={archived}
 						chu={chu}
 						donVi={donVi}
 						loai={loai}

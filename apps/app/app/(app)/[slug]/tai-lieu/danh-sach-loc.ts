@@ -9,6 +9,7 @@ export type Loc = {
 	chu: string | null;
 	nhom: NhomDeXuat;
 	page: number;
+	archived?: boolean;
 };
 
 export type ToiLoc = (sua: Partial<Loc>) => string;
@@ -21,6 +22,7 @@ export function thamSo(loc: Loc): string {
 	if (loc.chu) q.set(SEARCH_PARAM.taiLieu.chu, loc.chu);
 	if (loc.nhom !== "cho") q.set(SEARCH_PARAM.taiLieu.nhom, loc.nhom);
 	if (loc.page > 1) q.set(SEARCH_PARAM.list.page, String(loc.page));
+	if (loc.archived) q.set(SEARCH_PARAM.list.archived, "true");
 	const s = q.toString();
 	return s ? `?${s}` : "";
 }
@@ -37,4 +39,5 @@ export const BO_LOC_TRONG = {
 	donVi: null,
 	chu: null,
 	page: 1,
+	archived: false,
 } as const satisfies Partial<Loc>;

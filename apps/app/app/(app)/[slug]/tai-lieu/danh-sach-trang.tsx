@@ -1,5 +1,6 @@
 "use client";
 
+import Archive from "@carbon/icons-react/es/Archive";
 import Book from "@carbon/icons-react/es/Book";
 import { Alert, AlertAction, AlertDescription } from "@crm/ui/components/alert";
 import { Badge } from "@crm/ui/components/badge";
@@ -26,12 +27,14 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
+import { Toggle } from "@crm/ui/components/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { LOAI_TRANG, type LoaiTrang, TAI_LIEU } from "@crm/validation/tai-lieu";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type TaiLieuMessages, taiLieuMessages } from "@/lib/messages/tai-lieu";
+import { taiLieuLichSuMessages } from "@/lib/messages/tai-lieu-lich-su";
 import { duongTrang, duongTrangMoi, ngayTaiLieu } from "@/lib/tai-lieu-man";
 import { useTRPC } from "@/lib/trpc/client";
 import { useWorkspaceUrl } from "@/lib/use-workspace-url";
@@ -138,16 +141,19 @@ export function DanhSachTrang({
 	donVi,
 	chu,
 	page,
+	archived = false,
 	toi,
 }: {
 	loai: LoaiTrang | null;
 	donVi: string | null;
 	chu: string | null;
 	page: number;
+	archived?: boolean;
 	toi: ToiLoc;
 }) {
 	const locale = useLocale();
 	const m = taiLieuMessages(locale);
+	const lt = taiLieuLichSuMessages(locale).luuTru.danhSach;
 	const trpc = useTRPC();
 	const router = useRouter();
 	const url = useWorkspaceUrl();
@@ -157,6 +163,7 @@ export function DanhSachTrang({
 			donViId: donVi ?? undefined,
 			chuTrangId: chu ?? undefined,
 			page,
+			archived,
 		}),
 	);
 
@@ -168,8 +175,10 @@ export function DanhSachTrang({
 	const tatCa = LOAI_TRANG.reduce((n, l) => n + facetCounts[l], 0);
 	const coLoc = loai !== null || donVi !== null || chu !== null;
 
-	if (tatCa === 0 && donVi === null && chu === null)
+	if (tatCa === 0 && donVi === null && chu === null && !archived)
 		return <KhoRong m={m} url={url(duongTrangMoi())} />;
+	const ngayCot = (t: { capNhat: string; luuTruLuc: string | null }) =>
+		ngayTaiLieu(archived ? (t.luuTruLuc ?? t.capNhat) : t.capNhat, locale);
 
 	const soTrang = Math.max(1, Math.ceil(total / TAI_LIEU.danhSach.coTrang));
 
@@ -205,15 +214,37 @@ export function DanhSachTrang({
 					</ToggleGroup>
 				</div>
 				<BoLoc chu={chu} donVi={donVi} toi={toi} />
+				<Toggle
+					data-nut-da-luu-tru=""
+					onPressedChange={(bat) =>
+						router.push(toi({ archived: bat, loai: null, page: 1 }))
+					}
+					pressed={archived}
+					size="sm"
+					variant="outline"
+				>
+					<Icon icon={Archive} />
+					{lt.nut}
+				</Toggle>
 				{coLoc ? (
 					<Button asChild size="sm" variant="ghost">
-						<Link data-bo-loc-xoa="" href={toi(BO_LOC_TRONG)}>
+						<Link data-bo-loc-xoa="" href={toi({ ...BO_LOC_TRONG, archived })}>
 							{m.loc.boLoc}
 						</Link>
 					</Button>
 				) : null}
 			</div>
-			{rows.length === 0 ? (
+			{rows.length === 0 && archived && !coLoc ? (
+				<Empty data-da-luu-tru-rong="">
+					<EmptyHeader>
+						<EmptyMedia variant="icon">
+							<Icon icon={Archive} />
+						</EmptyMedia>
+						<EmptyTitle>{lt.rong.tieuDe}</EmptyTitle>
+						<EmptyDescription>{lt.rong.than}</EmptyDescription>
+					</EmptyHeader>
+				</Empty>
+			) : rows.length === 0 ? (
 				<Empty data-loc-rong="">
 					<EmptyHeader>
 						<EmptyTitle>{m.rongLoc.tieuDe}</EmptyTitle>
@@ -221,7 +252,9 @@ export function DanhSachTrang({
 					</EmptyHeader>
 					<EmptyContent>
 						<Button asChild variant="outline">
-							<Link href={toi(BO_LOC_TRONG)}>{m.rongLoc.nut}</Link>
+							<Link href={toi({ ...BO_LOC_TRONG, archived })}>
+								{m.rongLoc.nut}
+							</Link>
 						</Button>
 					</EmptyContent>
 				</Empty>
@@ -234,7 +267,11 @@ export function DanhSachTrang({
 								{ id: "loai", header: m.cot.loai },
 								{ id: "chu", header: m.cot.chuTrang },
 								{ id: "don-vi", header: m.cot.donVi },
-								{ id: "cap-nhat", header: m.cot.capNhat, align: "right" },
+								{
+									id: "cap-nhat",
+									header: archived ? lt.cot : m.cot.capNhat,
+									align: "right",
+								},
 							]}
 							surface="page"
 						>
@@ -266,7 +303,7 @@ export function DanhSachTrang({
 										{t.donVi?.name ?? <EmptyCellValue />}
 									</TableCell>
 									<TableCell className="text-right text-muted-foreground tabular-nums">
-										{ngayTaiLieu(t.capNhat, locale)}
+										{ngayCot(t)}
 									</TableCell>
 								</SimpleTableRow>
 							))}
@@ -282,7 +319,7 @@ export function DanhSachTrang({
 											<ItemDescription>
 												{m.loai[t.loai]} ·{" "}
 												<span translate="no">{t.chuTrang.name}</span> ·{" "}
-												{ngayTaiLieu(t.capNhat, locale)}
+												{ngayCot(t)}
 											</ItemDescription>
 										</ItemContent>
 										{t.coBanCho ? (
