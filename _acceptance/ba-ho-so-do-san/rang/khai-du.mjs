@@ -121,22 +121,6 @@ export function kiemKhai({ tepDoi, evalsCap, danhSach, configCu, configMoi, kiem
 	return { loi, soEval };
 }
 
-function tepRangNgoai(danhSach, configMoi) {
-	const ra = new Set();
-	const slugs = new Set(danhSach.dong.map((r) => r.ho_so));
-	for (const slug of slugs) {
-		const text = docTai(null, `_acceptance/${slug}/evals.yaml`);
-		for (const e of evalsTheoId(text).values()) {
-			if (typeof e.cmd !== "string" || !e.cmd.startsWith("config:")) continue;
-			let v = configMoi;
-			for (const p of e.cmd.slice(7).split(".")) v = v?.[p];
-			for (const m of String(v ?? "").matchAll(/((?:scripts|apps|packages|\.github|\.githooks)\/[\w./()[\]-]+\.(?:mjs|cjs|js|ts|tsx|sh|yml))/g))
-				ra.add(m[1]);
-		}
-	}
-	return [...ra];
-}
-
 function tuKiem(dauVao) {
 	const ra = [];
 	const bat = (ten, sua, can) => {
@@ -213,31 +197,50 @@ function tuKiem(dauVao) {
 	return ra;
 }
 
-if (import.meta.main) {
-	const danhSach = docDanhSach();
-	const configCu = Bun.YAML.parse(docTai(MOC_NEN, "_acceptance/config.yaml") ?? "");
-	const configMoi = Bun.YAML.parse(docTai(null, "_acceptance/config.yaml") ?? "");
-	const tepAcc = git("diff", "--name-only", MOC_NEN, "HEAD", "--", "_acceptance")
+export function commitVong() {
+	return git("log", "--no-merges", "--format=%H", `--grep=(${SLUG})`, `${MOC_NEN}..HEAD`)
 		.split("\n")
 		.filter(Boolean)
-		.filter((t) => !t.startsWith(`_acceptance/${SLUG}/`) && t !== "_acceptance/config.yaml");
-	const ngoai = tepRangNgoai(danhSach, configMoi).filter((t) => git("diff", "--name-only", MOC_NEN, "HEAD", "--", t).trim());
-	const tepDoi = [...tepAcc, ...ngoai];
+		.reverse();
+}
+
+function tepCua(sha) {
+	return git("show", "--name-only", "--format=", sha).split("\n").filter(Boolean);
+}
+
+if (import.meta.main) {
+	const danhSach = docDanhSach();
+	const cvong = commitVong();
+	if (!cvong.length) hong(2, `MA 2: khong co commit nao cua vong (${SLUG}) tu moc nen`);
+	const dauCuoi = new Map();
+	const configCap = [];
+	for (const sha of cvong)
+		for (const t of tepCua(sha)) {
+			if (t === "_acceptance/config.yaml") configCap.push(sha);
+			if (!dauCuoi.has(t)) dauCuoi.set(t, { dau: sha, cuoi: sha });
+			else dauCuoi.get(t).cuoi = sha;
+		}
+	const tepDoi = [...dauCuoi.keys()].filter((t) => !t.startsWith(`_acceptance/${SLUG}/`) && t !== "_acceptance/config.yaml" && !t.startsWith("docs/"));
 	const evalsCap = new Map();
-	for (const t of tepAcc) {
+	for (const t of tepDoi) {
 		const m = /^_acceptance\/([^/]+)\/evals\.yaml$/.exec(t);
-		if (m)
-			evalsCap.set(m[1], {
-				cu: evalsTheoId(docTai(MOC_NEN, t)),
-				moi: evalsTheoId(docTai("HEAD", t)),
-			});
+		if (!m) continue;
+		const { dau, cuoi } = dauCuoi.get(t);
+		evalsCap.set(m[1], { cu: evalsTheoId(docTai(`${dau}^`, t)), moi: evalsTheoId(docTai(cuoi, t)) });
 	}
-	const dauVao = { tepDoi, evalsCap, danhSach, configCu, configMoi, kiemCanCu: canCuSong };
-	const { loi, soEval } = kiemKhai(dauVao);
-	const tk = tuKiem(dauVao);
+	const configMoi = Bun.YAML.parse(docTai(null, "_acceptance/config.yaml") ?? "");
+	const loiConfig = [];
+	for (const sha of configCap) {
+		const cu = phang(Bun.YAML.parse(docTai(`${sha}^`, "_acceptance/config.yaml") ?? ""));
+		const moi = phang(Bun.YAML.parse(docTai(sha, "_acceptance/config.yaml") ?? ""));
+		for (const [k, v] of cu) if (!moi.has(k) || !bang(moi.get(k), v)) loiConfig.push(`CONFIG_DOI_GIA_TRI ${k} (${sha.slice(0, 9)})`);
+	}
+	const dauVao = { tepDoi, evalsCap, danhSach, configCu: {}, configMoi: {}, kiemCanCu: canCuSong };
+	const { loi: loiKhai, soEval } = kiemKhai(dauVao);
+	const loi = [...loiKhai, ...loiConfig];
+	const tk = tuKiem({ ...dauVao, configCu: configMoi, configMoi: structuredClone(configMoi) });
 	for (const l of loi) console.log(`HONG ${l}`);
 	for (const t of tk) console.log(t);
-	if (!tepDoi.length) hong(2, "MA 2: khong tep nao doi tu moc nen — chay sau khi da ap danh sach");
-	console.log(`khai-du: ${tepDoi.length} tep doi ngoai ho so nay, ${soEval} eval doi, ${loi.length ? `${loi.length} loi` : "moi thay doi co dong danh sach"}`);
+	console.log(`khai-du: ${cvong.length} commit cua vong, ${tepDoi.length} tep doi ngoai ho so nay, ${soEval} eval doi, ${loi.length ? `${loi.length} loi` : "moi thay doi co dong danh sach"}`);
 	process.exit(loi.length || tk.some((t) => t.startsWith("HONG")) ? 1 : 0);
 }
