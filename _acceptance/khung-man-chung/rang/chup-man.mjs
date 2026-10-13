@@ -277,11 +277,11 @@ try {
 			noiDung: `## Mục ${i + 1}\n\nNội dung mẫu của ${ten}.\n`,
 		});
 	}
-	const cacView = await d.hoi(quanTri.cookie, "savedViews.list", { entity: "contact" });
+	const cacView = await d.hoi(quanTri.cookie, "savedViews.list", { entity: "CONTACT" });
 	const view =
 		cacView[0] ??
 		(await d.lam(quanTri.cookie, "savedViews.create", {
-			entity: "contact",
+			entity: "CONTACT",
 			name: "Liên hệ mẫu kmc",
 			shared: true,
 			filters: { q: "", sort: "", dir: "asc", archived: false, filters: {} },
