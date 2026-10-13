@@ -2593,6 +2593,12 @@ risk_tiers:
     - "scripts/tin-hieu-khoa.cjs"
     - "scripts/tin-hieu.mjs"
     - "scripts/cat-luot.mjs"
+    # Bốn tệp cuối của INIT-CI-COPY-LIST 2.28.0, «chỉ khi khai tin_hieu»: kho khai cửa tín hiệu từ LT2
+    # (gui-tin-hieu-trong-crm) nên bước bản đồ nạp tin-hieu.mjs, và thiếu chúng là ERR_MODULE_NOT_FOUND.
+    - "dieu-phoi/scripts/hinh-dang.mjs"
+    - "dieu-phoi/scripts/cau-hinh.mjs"
+    - "dieu-phoi/scripts/dot.mjs"
+    - "skills/acceptance/references/tin-hieu-template.md"
     # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
     # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
     # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và
