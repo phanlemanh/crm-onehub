@@ -615,10 +615,10 @@ function ganCu(goc: {
 	planId: string | null;
 }): BanGhiGan[] {
 	const gan: BanGhiGan[] = [];
-	if (goc.companyId) gan.push({ loai: "company", id: goc.companyId });
-	if (goc.contactId) gan.push({ loai: "contact", id: goc.contactId });
 	if (goc.dealId) gan.push({ loai: "deal", id: goc.dealId });
 	if (goc.planId) gan.push({ loai: "plan", id: goc.planId });
+	if (goc.contactId) gan.push({ loai: "contact", id: goc.contactId });
+	if (goc.companyId) gan.push({ loai: "company", id: goc.companyId });
 	return gan;
 }
 
