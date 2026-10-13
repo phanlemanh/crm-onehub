@@ -3,10 +3,10 @@ schema_version: 1
 slug: kanban-viec
 feature: Tôi kéo việc giữa các cột Chưa làm, Đang làm, Chờ đánh giá, Xong, và tách một việc to thành việc con
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided                # discovery | decided | archived
+decision: build   # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-13T08:28:58Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -40,3 +40,10 @@ Hàng DA2 không khai «bật khi»; ngưỡng trên là đề xuất của máy
 
 1. **Mở lại «không làm: kéo thả bảng cột».** Máy khuyên: mở **chỉ cho bảng cột của Việc**; giữ nguyên «không làm» cho bảng cột của kế hoạch onboard 30 ngày (bước onboard không phải Việc cho tới DA3). Lối khác: mở cả hai — giá là thêm một màn kéo thả cho bước onboard, ngoài câu giao của DA2.
 2. **Checklist.** Bảng lượt (`docs/plan/lo-trinh-viec-du-an.md`) ghi bàn giao DA2 gồm «checklist», câu giao thì không. Máy khuyên để checklist ngoài DA2 (việc con một tầng đã phủ nhu cầu tách việc; hợp đồng giữ 8–12 tiêu chí); chốt ở Cổng Phạm vi.
+
+## Nguồn quyết định Cổng Đáng
+
+Chủ kho gõ ở phiên thợ DA2 (máy M5) ngày 13/10/2026: «Cổng Đáng kanban-viec: build · mở lại chỉ bảng cột của
+Việc». `decided_at` là giờ phiên thợ ghi lại lời đó. Ô ngưỡng chủ kho không sửa nên giữ đề xuất của máy ở mục
+«Ngưỡng chết / ngưỡng UAT»; Cổng Phạm vi trình lại để đổi nếu cần. Dòng «không làm: kéo thả bảng cột» của lộ trình
+30 ngày giữ nguyên cho bảng cột của kế hoạch onboard.
