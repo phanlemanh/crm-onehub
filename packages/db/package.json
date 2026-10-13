@@ -56,6 +56,7 @@
 		"./tai-lieu-nhac": "./src/tai-lieu-nhac.ts",
 		"./tai-lieu-nguon-mo-coi": "./src/tai-lieu-nguon-mo-coi.ts",
 		"./tai-lieu-hoi": "./src/tai-lieu-hoi.ts",
+		"./tin-hieu": "./src/tin-hieu.ts",
 		"./tai-lieu-quyen": "./src/tai-lieu-quyen.ts",
 		"./tai-lieu-tim": "./src/tai-lieu-tim.ts",
 		"./so-dien-thoai": "./src/so-dien-thoai.ts",
