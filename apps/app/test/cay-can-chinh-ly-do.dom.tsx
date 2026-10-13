@@ -301,6 +301,15 @@ describe("l3-loc", () => {
 			if (c.loc !== "tat-ca") {
 				await act(async () => chip.click());
 				expect(san.url().get(THAM_SO)).toBe(c.loc);
+			} else {
+				const truoc = qs(
+					'[data-loc-muc-tin="chua-co-ly-do"]',
+				) as HTMLElement | null;
+				await act(async () => truoc?.click());
+				if (idHien().has("Q"))
+					throw new Error("l3-loc tat-ca: chua loc truoc khi bam Tat ca");
+				await act(async () => chip.click());
+				expect(san.url().get(THAM_SO)).toBeNull();
 			}
 			const hien = idHien();
 			const thieu = c.mong.filter((id) => !hien.has(id));

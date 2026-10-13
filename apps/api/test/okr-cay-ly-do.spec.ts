@@ -147,6 +147,31 @@ describe("l3-canh", () => {
 					muc: a.mucTin,
 				});
 			}
+			const cu = z
+				.object({
+					roots: z.array(z.unknown()),
+					chuaCanChinh: z.array(z.unknown()),
+				})
+				.parse(
+					ok(
+						await goi(
+							app,
+							"okr.alignmentTree",
+							"query",
+							{ cycleId: CHU_KY_Q4 },
+							await cookie(QUAN_TRI),
+						),
+						"alignmentTree",
+					),
+				);
+			const boKyVong = (n: Nut): unknown => {
+				const { expected: _bo, children, ...con } = n;
+				return { ...con, children: children.map(boKyVong) };
+			};
+			expect({
+				roots: c.roots.map(boKyVong),
+				chuaCanChinh: c.chuaCanChinh.map(boKyVong),
+			}).toEqual({ roots: cu.roots, chuaCanChinh: cu.chuaCanChinh });
 			const laKr = new Set(
 				moiNut(c)
 					.filter((n) => n.loai === "kr")
