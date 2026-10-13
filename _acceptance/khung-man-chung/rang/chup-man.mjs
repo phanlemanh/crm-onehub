@@ -490,6 +490,21 @@ try {
 				const t = await trangMoi(quanTri, rong);
 				await t.goto(`${d.APP}/${d.slug()}/tai-lieu`, { waitUntil: "load", timeout: 120_000 });
 				await choDieu(t, () => document.querySelector('[data-slot="page-shell-actions"] a, [data-slot="page-shell-actions"] button') !== null, "nut dau trang tai lieu");
+				await t.waitForNetworkIdle({ idleTime: 500, timeout: CHO_MS }).catch(() => null);
+				const tat = await t.evaluate(() => {
+					const dong = [...document.querySelectorAll('[data-slot="page-shell-header"] [data-slot="page-shell-note"]')].find((e) => e.getClientRects().length > 0);
+					const nut = [...document.querySelectorAll('[data-slot="page-shell-actions"] button')].find((b) => b.innerText.trim() === "Tải nguồn lên");
+					return {
+						dong: dong ? dong.innerText.trim() : null,
+						ngoaiNut: dong ? dong.closest('[data-slot="page-shell-actions"]') === null : false,
+						nutTat: nut?.disabled === true,
+						tro: !!dong && nut?.getAttribute("aria-describedby") === dong.id,
+					};
+				});
+				console.log(`  tailieu ${rong}: ${JSON.stringify(tat)}`);
+				if (!tat.dong || !tat.ngoaiNut || !tat.nutTat || !tat.tro) {
+					loi.push(`tailieu ${rong}: khong o trang thai luu tep tat ${JSON.stringify(tat)}`);
+				}
 				loi.push(...kiemQuanHe(await doHop(t), rong, "tailieu", { nut: true }));
 				await chup(t, `kmc-tailieu-dautrang-${rong}.png`);
 				await t.close();

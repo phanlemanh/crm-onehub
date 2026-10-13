@@ -49,6 +49,7 @@ const NUT_GIU_CHO = [
 	"settings/api-keys/create-api-key-sheet.tsx",
 	"settings/sso/add-sso-provider-sheet.tsx",
 ].map((t) => `${TIEN_SLUG}${t}`);
+const HAI_COT = [`${TIEN_SLUG}settings/onboarding/page.tsx`];
 const TRANG_NHAC = `${TIEN_SLUG}reminders/page.tsx`;
 const LAYOUT_OKR = `${TIEN_SLUG}okr/layout.tsx`;
 
@@ -151,6 +152,15 @@ export function quetHinhTheoMan(
 			const thuc = giaTriChuoi(thuocTinh(k, "hinh"));
 			if (thuc !== hinh) {
 				loi.push(`kmc-quet: ${ngan} dung hinh ${thuc}, bang ghi ${hinh}`);
+			}
+			const cot = thuocTinh(k, "cot")?.initializer?.getText() ?? null;
+			if (HAI_COT.includes(tep) && cot !== "{2}") {
+				loi.push(`kmc-quet: ${ngan} thieu cot={2}`);
+			}
+			if (!HAI_COT.includes(tep) && cot !== null) {
+				loi.push(
+					`kmc-quet: ${ngan} dung cot ma khong nam trong danh sach hai cot`,
+				);
 			}
 		}
 	}
@@ -432,6 +442,12 @@ describe("hinh-theo-man", () => {
 		);
 		expect(quetHinhTheoMan(saiHinh, BANG_HINH, goc, [])).toContain(
 			"kmc-quet: contacts/page.tsx dung hinh the, bang ghi bang",
+		);
+		const motCot = docThay(DOC, HAI_COT[0] ?? "", (s) =>
+			s.replace(" cot={2}", ""),
+		);
+		expect(quetHinhTheoMan(motCot, BANG_HINH, goc, [])).toContain(
+			"kmc-quet: settings/onboarding/page.tsx thieu cot={2}",
 		);
 		const ngoai = `${TIEN_SLUG}okr/soan/khung-trang-okr.tsx`;
 		const lac = docThay(

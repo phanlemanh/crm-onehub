@@ -33,7 +33,7 @@ export default async function CaiDatOnboardingPage() {
 			</PageShellHeader>
 
 			<PageShellContent className="min-h-0">
-				<Suspense fallback={<KhungXuong hinh="the" />}>
+				<Suspense fallback={<KhungXuong cot={2} hinh="the" />}>
 					<CaiDat />
 				</Suspense>
 			</PageShellContent>
