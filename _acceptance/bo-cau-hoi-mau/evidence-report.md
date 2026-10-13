@@ -8,7 +8,7 @@ verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: f2afaf7578cf8de5b4f76ef02601153d5e384cb8
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-13 — ký Cổng 2 trên S4 lượt 1 (10/10 eval PASS; E9j Đạt). Ngoài-1, 3, 4, 5, 6 ghi Known limits; Ngoài-2 chấp nhận, không sửa; đồng ý phần cắt/hoãn; phê hết các quyết định Treo.
 ---
 
 # Evidence Report: bo-cau-hoi-mau
@@ -124,7 +124,7 @@ human_signoff:
   judged_by: hội đồng judge (fresh context) — ba lens: domain-correctness, operational-feasibility, spec-alignment
   verdict: PASS
   rationale: Đề xuất của hội đồng là PASS; hai lens PASS, một lens còn dè dặt (xem phiếu bên dưới). Phiếu bầu đầy đủ, không bỏ ý kiến trái.
-  human_override:  # chi nguoi ghi
+  human_override: Phan Le Manh 2026-10-13 — Đạt
 
   Phiếu của từng lens:
   - domain-correctness: UNCERTAIN — Hầu hết các câu khớp trang mẫu. Các ý của S1, S2, S3 và S7 đúng nguyên văn trang. m29, m30, m31 đúng là trang không nói. m33 đến m36 và m47 đến m50 không trang nào trả lời được. m45 và m46 giống người gõ thật. Ba câu còn hai nghĩa: m32 (suy ra được mức tối đa 7 ngày từ luật chuyển Giám đốc vận hành), m43 ("full-time" không đồng nghĩa "chính thức") và m23 (250 km chỉ suy ra từ phần trang không nói). Có chấm sai trợ lý làm đúng hay không còn tuỳ cách chấm, mà cách chấm nằm ngoài danh sách input.

@@ -5,7 +5,7 @@ slug: bo-cau-hoi-mau
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [cli]
-status: verified
+status: signed-off
 design_doc: _acceptance/bo-cau-hoi-mau/design.md
 approved_by: Phan Le Manh
 approved_at: 2026-10-13
@@ -68,3 +68,9 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 - Đo gọi model thật qua AI Gateway: khoảng 96 lượt hỏi, ước $2–4 theo giá đo ở `hoi-crm-qua-zalo`
   ($0,016–0,039 một câu).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-1: Báo cáo đo đã lưu mà bị sửa tay sai khuôn thì lệnh kiểm chết kèm lỗi khó đọc thay vì báo rõ chỗ lệch; báo cáo sai vẫn không lọt qua.
+  - Ngoài-3: Script chấm hỏng ở bước cuối thì lượt đo vẫn ghi là xong với phần tổng để trống; người xem mở báo cáo xem phần tổng có số trước khi tin kết quả.
+  - Ngoài-4: Tệp kết quả của lượt đo bị cắt ngang thì lệnh đo báo lỗi kỹ thuật thay vì «không đo được»; lượt đo vẫn không được tính là thành công.
+  - Ngoài-5: Bài kiểm chỉ xác nhận dấu vân tay mã trợ lý có dạng hợp lệ, chưa đối chiếu với mã thật.
+  - Ngoài-6: Bài kiểm «lượt đo không đụng hồ sơ đã ký» chạy trên script chấm giả nên khó đỏ; việc không đụng hiện dựa vào cách lệnh đo đặt nơi ghi.
