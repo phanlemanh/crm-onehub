@@ -1,13 +1,13 @@
 ---
 schema_version: 2
 feature_slug: kanban-viec
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: 83c2a95ecc9d37bc3233e8b3ca4c5fffc6dc7787
-human_signoff:
+human_signoff: manh 2026-10-14
 ---
 
 # Evidence Report: kanban-viec
@@ -257,7 +257,7 @@ Vòng 3 chạy lại bảy eval E1, E1b, E4, E4b, E6b, E7b, E9b (khối bên dư
     - operational-feasibility: PASS (r2)
     - spec-alignment: PASS (r2)
   rationale: đề xuất PASS của hội đồng, mang từ round 2; chỉ là ý kiến tư vấn, người chốt ở Cổng 2.
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — manh 2026-10-14
 
 ## Known limits
 

@@ -5,7 +5,7 @@ slug: kanban-viec
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [api, ui, docs]
-status: verified
+status: signed-off
 approved_by: manh
 approved_at: 2026-10-13T09:08:06Z
 design_doc: docs/superpowers/specs/2026-10-13-kanban-viec-design.md
@@ -80,3 +80,11 @@ Thước `rang/do-nguong.mjs`, chạy chỉ đọc trên khoảng 14 ngày đầ
 - Năm câu chờ chủ kho ở Cổng Phạm vi (Hỏi-1…Hỏi-5, sổ quyết định): thứ tự riêng từng người · cột Xong 7 ngày ·
   checklist ngoài lượt · ngưỡng chỉ đếm kéo hay cả menu · việc con mang gắn và người của cha. AC-7, AC-8, E7, E8
   ghim theo lối máy khuyên ở Hỏi-5; chủ kho chọn lối khác thì sửa đúng các vế đó trước khi duyệt.
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-14:
+  - Ngoài-1: Chưa có bài kiểm chứng rằng thẻ đang chờ máy chủ xác nhận thì không kéo tiếp được; gỡ nhầm cơ chế khoá thì bài kiểm vẫn xanh.
+  - Ngoài-3: Số việc con trên thẻ bảng có thể nhiều hơn số việc con người xem thấy, và để lộ rằng có việc riêng của người khác.
+  - Ngoài-6: Bấm Xong hay Huỷ việc cha đúng lúc danh sách việc con chưa tải xong hay tải lỗi thì việc cha đóng luôn, không hỏi lại.
+  - Ngoài-7: Mạng hỏng lúc mở khung việc thì mục Việc con và nút Thêm việc con biến mất, không báo lỗi.
+  - Ngoài-8: Kéo thẻ vào cột có trên 200 việc thì lỗi, thẻ bật về chỗ cũ với thông báo khó hiểu.
+  - Ngoài-9: Bài kiểm kiểu xem mặc định chỉ chứng không ra bảng, chưa chứng danh sách hiện ra.
+  - Ngoài-10: Bài kiểm 100 tổ hợp người và trạng thái tính đáp án bằng chính luật của sản phẩm, nên chưa độc lập.
