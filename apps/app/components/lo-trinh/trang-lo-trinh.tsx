@@ -18,7 +18,7 @@ import { Toggle } from "@crm/ui/components/toggle";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { ViewSwitch } from "@crm/ui/components/view-switch";
 import { formatDay } from "@crm/ui/lib/format";
-import type { LoTrinhDuLieu } from "@crm/validation/lo-trinh-du-lieu";
+import type { DuLieuChoXem } from "@crm/validation/lo-trinh-du-lieu";
 import { useQueryStates } from "nuqs";
 import { type ReactNode, useMemo, useSyncExternalStore } from "react";
 import { ListSearch } from "@/components/data-table/list-search";
@@ -214,7 +214,7 @@ export function TrangLoTrinh({
 	canhBao,
 	homNayCoDinh,
 }: {
-	duLieu: LoTrinhDuLieu;
+	duLieu: DuLieuChoXem;
 	canhBao: string[];
 	homNayCoDinh?: string;
 }) {

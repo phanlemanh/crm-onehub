@@ -1,3 +1,4 @@
+import { workspaceRoleOf } from "@crm/auth";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { KhungCho } from "@/components/lo-trinh/khung-cho";
@@ -10,6 +11,7 @@ import {
 	PageShellHeading,
 	PageShellTitle,
 } from "@/components/page-shell";
+import { choVaiXem } from "@/lib/lo-trinh/cho-vai";
 import { docTepLoTrinh } from "@/lib/lo-trinh/doc-tep";
 import { type DauVaoLoTrinh, docTrangLoTrinh } from "@/lib/lo-trinh/doc-trang";
 import { getLocale } from "@/lib/locale/server";
@@ -26,8 +28,9 @@ async function docDauVao(): Promise<DauVaoLoTrinh> {
 }
 
 async function NoiDung() {
-	await requireSession();
-	return <NoiDungLoTrinh dauVao={await docDauVao()} />;
+	const session = await requireSession();
+	const vai = await workspaceRoleOf(session.user.id);
+	return <NoiDungLoTrinh dauVao={choVaiXem(await docDauVao(), vai)} />;
 }
 
 export default async function LoTrinhPage() {

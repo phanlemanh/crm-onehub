@@ -4,6 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "@crm/ui/components/alert";
 import { ItemGroup } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { formatDay } from "@crm/ui/lib/format";
+import { useState } from "react";
 import {
 	DetailSheet,
 	DetailSheetBody,
@@ -13,12 +14,19 @@ import {
 	DetailSheetSection,
 	DetailSheetStat,
 	DetailSheetStats,
+	type DetailSheetTab,
+	DetailSheetTabs,
 } from "@/components/detail-sheet";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { DongLienQuan } from "./dong-lien-quan";
 import { ChuConNgay } from "./o-moc";
 import { ChamTrangThai, coTrangThaiPhu } from "./o-trang-thai";
+import { SoLieuLamViec } from "./so-lieu-lam-viec";
+import { TomTatHoSo } from "./tom-tat-ho-so";
 import type { Viec } from "./viec";
+
+const THE_TONG_QUAN = "tong-quan";
+const THE_SO_LIEU = "so-lieu";
 
 export function HoSoViec({
 	viec,
@@ -43,6 +51,15 @@ export function HoSoViec({
 		: [];
 	const dangCho = v ? cungLo.filter((x) => x.dung_tren.includes(v.ma)) : [];
 	const phu = v ? coTrangThaiPhu(m, v) : false;
+	const [chon, setChon] = useState<{ khoa: string | null; the: string }>({
+		khoa: null,
+		the: THE_TONG_QUAN,
+	});
+	const chuKho = v?.tom_tat?.chu_kho ?? null;
+	const the =
+		chon.khoa === khoa && (chon.the !== THE_SO_LIEU || chuKho)
+			? chon.the
+			: THE_TONG_QUAN;
 	return (
 		<DetailSheet
 			data-lo-trinh-chi-tiet-viec={v?.ma}
@@ -85,71 +102,102 @@ export function HoSoViec({
 							<span translate="no">{v.nhom || m.loc.khongNhom}</span>
 						</DetailSheetStat>
 					</DetailSheetStats>
-					<DetailSheetBody>
-						{v.theo_loi || v.co.length ? (
-							<DetailSheetSection>
-								{v.theo_loi ? (
-									<Alert data-lo-trinh-theo-loi>
-										<AlertDescription>{m.hoSo.theoLoi}</AlertDescription>
-									</Alert>
-								) : null}
-								{v.co.length ? (
-									<Alert data-lo-trinh-lech variant="warning">
-										<AlertTitle>{m.hoSo.lech}</AlertTitle>
-										<AlertDescription translate="no">
-											{v.co.join(" · ")}
-										</AlertDescription>
-									</Alert>
-								) : null}
-							</DetailSheetSection>
-						) : null}
-						{phu || v.moc || v.bat_khi || v.vi_sao ? (
-							<DetailSheetSection title={m.hoSo.chiTiet}>
-								<DetailSheetProperties columns={1}>
-									{phu ? (
-										<DetailSheetProperty label={m.hoSo.keHoachGhi}>
-											<span data-lo-trinh-trang-thai-phu translate="no">
-												{v.trang_thai}
-											</span>
-										</DetailSheetProperty>
-									) : null}
-									{v.moc ? (
-										<DetailSheetProperty label={m.hoSo.moc}>
-											<span translate="no">{v.moc.ten}</span>
-										</DetailSheetProperty>
-									) : null}
-									{v.bat_khi ? (
-										<DetailSheetProperty label={m.hoSo.thanhCongKhi}>
-											<span translate="no">{v.bat_khi}</span>
-										</DetailSheetProperty>
-									) : null}
-									{v.vi_sao ? (
-										<DetailSheetProperty label={m.hoSo.viSao}>
-											<span translate="no">{v.vi_sao}</span>
-										</DetailSheetProperty>
-									) : null}
-								</DetailSheetProperties>
-							</DetailSheetSection>
-						) : null}
-						{canTruoc.length ? (
-							<DetailSheetSection title={m.hoSo.canXongTruoc}>
-								<ItemGroup data-lo-trinh-can-truoc>
-									{canTruoc.map((x) => (
-										<DongLienQuan key={x.khoa} moViec={moViec} x={x} />
-									))}
-								</ItemGroup>
-							</DetailSheetSection>
-						) : null}
-						{dangCho.length ? (
-							<DetailSheetSection title={m.hoSo.dangCho}>
-								<ItemGroup data-lo-trinh-dang-cho>
-									{dangCho.map((x) => (
-										<DongLienQuan key={x.khoa} moViec={moViec} x={x} />
-									))}
-								</ItemGroup>
-							</DetailSheetSection>
-						) : null}
-					</DetailSheetBody>
+					<DetailSheetTabs
+						onValueChange={(moi) => setChon({ khoa, the: moi })}
+						tabs={[
+							{
+								value: THE_TONG_QUAN,
+								label: m.hoSo.tongQuan,
+								content: (
+									<DetailSheetBody>
+										{v.theo_loi || v.co.length ? (
+											<DetailSheetSection>
+												{v.theo_loi ? (
+													<Alert data-lo-trinh-theo-loi>
+														<AlertDescription>
+															{m.hoSo.theoLoi}
+														</AlertDescription>
+													</Alert>
+												) : null}
+												{v.co.length ? (
+													<Alert data-lo-trinh-lech variant="warning">
+														<AlertTitle>{m.hoSo.lech}</AlertTitle>
+														<AlertDescription translate="no">
+															{v.co.join(" · ")}
+														</AlertDescription>
+													</Alert>
+												) : null}
+											</DetailSheetSection>
+										) : null}
+										<TomTatHoSo moiNguoi={v.tom_tat?.moi_nguoi ?? null} />
+										{phu || v.moc || v.bat_khi || v.vi_sao ? (
+											<DetailSheetSection
+												data-lo-trinh-chi-tiet=""
+												title={m.hoSo.chiTiet}
+											>
+												<DetailSheetProperties columns={1}>
+													{phu ? (
+														<DetailSheetProperty label={m.hoSo.keHoachGhi}>
+															<span data-lo-trinh-trang-thai-phu translate="no">
+																{v.trang_thai}
+															</span>
+														</DetailSheetProperty>
+													) : null}
+													{v.moc ? (
+														<DetailSheetProperty label={m.hoSo.moc}>
+															<span translate="no">{v.moc.ten}</span>
+														</DetailSheetProperty>
+													) : null}
+													{v.bat_khi ? (
+														<DetailSheetProperty label={m.hoSo.thanhCongKhi}>
+															<span translate="no">{v.bat_khi}</span>
+														</DetailSheetProperty>
+													) : null}
+													{v.vi_sao ? (
+														<DetailSheetProperty label={m.hoSo.viSao}>
+															<span translate="no">{v.vi_sao}</span>
+														</DetailSheetProperty>
+													) : null}
+												</DetailSheetProperties>
+											</DetailSheetSection>
+										) : null}
+										{canTruoc.length ? (
+											<DetailSheetSection title={m.hoSo.canXongTruoc}>
+												<ItemGroup data-lo-trinh-can-truoc>
+													{canTruoc.map((x) => (
+														<DongLienQuan key={x.khoa} moViec={moViec} x={x} />
+													))}
+												</ItemGroup>
+											</DetailSheetSection>
+										) : null}
+										{dangCho.length ? (
+											<DetailSheetSection title={m.hoSo.dangCho}>
+												<ItemGroup data-lo-trinh-dang-cho>
+													{dangCho.map((x) => (
+														<DongLienQuan key={x.khoa} moViec={moViec} x={x} />
+													))}
+												</ItemGroup>
+											</DetailSheetSection>
+										) : null}
+									</DetailSheetBody>
+								),
+							},
+							...(chuKho
+								? [
+										{
+											value: THE_SO_LIEU,
+											label: m.hoSo.theSoLieu,
+											content: (
+												<DetailSheetBody>
+													<SoLieuLamViec chuKho={chuKho} />
+												</DetailSheetBody>
+											),
+										} satisfies DetailSheetTab,
+									]
+								: []),
+						]}
+						value={the}
+					/>
 				</>
 			) : null}
 		</DetailSheet>
