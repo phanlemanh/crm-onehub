@@ -594,6 +594,33 @@ describe("the-qua-han", () => {
 		expect(conSot(the)).toBe("và 24 việc quá hạn nữa");
 	});
 
+	test("the-qua-han: dong Viec chung ve trong the va tinh vao so dang hien", async () => {
+		const viecChung = ["vc1", "vc2"].map((id) => ({
+			loai: "viec",
+			id,
+			tieuDe: `Viec chung ${id}`,
+			hanNgay: "2026-09-20",
+			nguoiThucHien: { id: "u-b", name: "Pham Thu Ha" },
+			banGhi: { loai: "deal", id: "d1", ten: "Thoa thuan An Phat" },
+		}));
+		const the = await moThe({
+			...tongQuan({
+				viec: 0,
+				buocQuaHan: 0,
+				buocSapHan: 0,
+				quaHan: { viec: 5, buoc: 0 },
+			}),
+			viecQuaHan: viecChung,
+		});
+		expect(
+			the.querySelectorAll("[data-viec-chung]").length,
+			"dong viec chung khong ve",
+		).toBe(2);
+		expect(conSot(the), "so con sot khong tru dong viec chung").toBe(
+			"và 3 việc quá hạn nữa",
+		);
+	});
+
 	test("the-qua-han: tieng Anh ghi dong con sot", async () => {
 		const the = await moThe(
 			tongQuan({

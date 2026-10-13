@@ -38,6 +38,7 @@ import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { LocalRelativeTime } from "@/components/local-date-time";
+import { DongViecTongQuan } from "@/components/viec/dong-viec-tong-quan";
 import { activityLabel } from "@/lib/activity-presentation";
 import { useGiaiDoan } from "@/lib/giai-doan";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
@@ -163,6 +164,7 @@ export function DashboardSummary() {
 		mySteps,
 		keHoachCanDeY,
 		taiLieuChoDuyet,
+		viecQuaHan,
 	} = summary;
 	const now = new Date();
 	const theoHan = [
@@ -171,6 +173,12 @@ export function DashboardSummary() {
 			id: viec.id,
 			han:
 				viec.dueAt === null ? Number.POSITIVE_INFINITY : Date.parse(viec.dueAt),
+			viec,
+		})),
+		...viecQuaHan.map((viec) => ({
+			loai: "viecChung" as const,
+			id: viec.id,
+			han: Date.parse(`${viec.hanNgay}T00:00:00`),
 			viec,
 		})),
 		...mySteps.map((buoc) => ({
@@ -200,7 +208,9 @@ export function DashboardSummary() {
 			: [];
 	const dong = [...taiLieu, ...theoHan, ...keHoach];
 	const dangHienQuaHan =
-		overdueTasks.length + mySteps.filter((b) => buocQuaHan(b, now)).length;
+		overdueTasks.length +
+		viecQuaHan.length +
+		mySteps.filter((b) => buocQuaHan(b, now)).length;
 	const soQuaHan = summary.quaHan.viec + summary.quaHan.buoc;
 	const conSot = Math.max(0, soQuaHan - dangHienQuaHan);
 	const soIm = keHoachCanDeY.filter((k) => k.loai === "ke-hoach-im").length;
@@ -300,6 +310,8 @@ export function DashboardSummary() {
 										<DongTaiLieu key={d.id} so={d.so} />
 									) : d.loai === "keHoach" ? (
 										<DongKeHoach key={d.id} dong={d.keHoach} />
+									) : d.loai === "viecChung" ? (
+										<DongViecTongQuan key={d.id} viec={d.viec} />
 									) : d.loai === "buoc" ? (
 										<DongBuoc
 											key={d.id}
