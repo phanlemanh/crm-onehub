@@ -1,0 +1,179 @@
+schema_version: 1
+feature_slug: lich-su-va-luu-tru-trang
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_lich_su
+    paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, packages/validation/src/tai-lieu.ts, apps/api/test/tai-lieu-lich-su.spec.ts, apps/api/test/tai-lieu-san.ts]
+    expected: "exit 0; Postgres _test thật, gieo qua đường ghi thật (create, propose, approve qua tRPC): trang P ba phiên bản — v1 do người A đề xuất, v2 do B, v3 do A, chủ trang C duyệt cả ba; trang Q chưa từng duyệt. Bài 'lich-su': taiLieu.lichSu(P) bởi thành viên M toEqual bảng VIẾT TRƯỚC ba dòng [{so:3,…,nguoiDeXuat:A,nguoiDuyet:C,dangDung:true},{so:2,…,B,C,false},{so:1,…,A,C,false}] (tên lấy từ hàng User đã gieo, không chép tay chuỗi khác); lichSu(Q) bởi C toEqual []; lichSu(Q) bởi M (không thấy Q theo dieuKienThay) ném NOT_FOUND giống get(Q) — so mã lỗi của hai lời gọi. CHIỀU ĐỎ: bài khẳng định số dòng có dangDung:true đúng bằng 1 trên mọi trang gieo — bản sao trong bài đặt banDangDungId của P về v2 rồi gọi lại → dòng v2 mang dangDung:true, v3 false (thước đọc banDangDungId thật, không suy từ số lớn nhất)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_phien_ban
+    paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, apps/api/test/tai-lieu-lich-su.spec.ts]
+    expected: "exit 0; cùng gieo E1. Bài 'phien-ban': phienBan(P,1) trả ten, noiDung, duyetLuc bằng đúng hàng TaiLieuPhienBan so 1 đọc từ DB và dangDung.noiDung bằng hàng của banDangDungId; phienBan(P,3) trả laBanDangDung:true; phienBan(P,9) và phienBan(Q,1) ném NOT_FOUND; M gọi trên trang không thấy ném NOT_FOUND. Đối chứng dương: so v1 với v3 bằng soSanh của @crm/validation/tai-lieu-diff trên chữ trả về cho ít nhất một khối thêm và một khối bớt (gieo v1, v3 khác nhau có chủ ý). CHIỀU ĐỎ: gọi với so âm và so không nguyên → khuôn nhập từ chối BAD_REQUEST trước khi chạm DB (đếm truy vấn bằng spy Prisma = 0)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_quay_lai
+    paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, packages/validation/src/tai-lieu.ts, apps/api/test/tai-lieu-lich-su.spec.ts]
+    expected: "exit 0; cùng gieo E1. Bài 'quay-lai': chụp băm sha256 của (so, ten, noiDung, duyetLuc) mọi hàng TaiLieuPhienBan của P trước; quayLai(P,1) bởi A → đúng một hàng TaiLieuDeXuat mới: loai NOI_DUNG, ten và noiDung === bản 1 (NFC cả hai phía), banGocId === banDangDungId, tuPhienBanSo 1, trangThai CHO_DUYET; đúng một TaiLieuSuKien DE_XUAT mới. C duyệt (approve với diffHash tính bằng hàm thật) → phiên bản so 4 noiDung === bản 1; băm ba hàng cũ không đổi. Ma trận từ chối VIẾT TRƯỚC, mỗi ca đếm hàng TaiLieuDeXuat và TaiLieuSuKien trước/sau bằng nhau và ghim mã lỗi: quayLai(P,4) (bản đang dùng) → CONFLICT chuaDoi · trang R có v2 trùng chữ v1 thì quayLai(R,1) → chuaDoi · trang đã lưu trữ S → BAD_REQUEST daLuuTru · so không có → NOT_FOUND. Số ca = 4, đúng bằng số dòng bảng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_de_xuat_luu_tru
+    paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, packages/validation/src/tai-lieu.ts, apps/api/test/tai-lieu-luu-tru.spec.ts]
+    expected: "exit 0; Postgres _test thật. Bài 'de-xuat-luu-tru': deXuatLuuTru(P,'không còn dùng') bởi M → đúng một đề xuất loai LUU_TRU, lyDoDeXuat nguyên văn, trangThai CHO_DUYET, một sự kiện DE_XUAT; hàng TaiLieuTrang của P không đổi (so toàn hàng trước/sau). Ma trận từ chối VIẾT TRƯỚC, mỗi ca 0 hàng ghi và ghim chuỗi lỗi: trang chưa từng duyệt · trang đã lưu trữ · đã có đề xuất LUU_TRU chờ · lyDo '   ' · lyDo 501 ký tự. Đối chứng dương ranh giới: lyDo đúng 500 ký tự và lyDo 1 ký tự được nhận."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_duyet_luu_tru
+    paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, apps/api/test/tai-lieu-luu-tru.spec.ts]
+    expected: "exit 0. Bài 'duyet-luu-tru': P có đề xuất LUU_TRU chờ và đề xuất NOI_DUNG chờ; ma trận người VIẾT TRƯỚC năm dòng {chủ trang, owner, admin, thành viên khác, vai okr} × duyệt — ba dòng đầu (mỗi dòng trên một bản gieo riêng) → archivedAt khác null, banDangDungId không đổi, số TaiLieuPhienBan không đổi, đề xuất NOI_DUNG thành CU, đúng một sự kiện LUU_TRU mang aiId người duyệt; hai dòng cuối → FORBIDDEN, hàng trang và hai đề xuất không đổi. Bài 'giu-ngay-dau': gọi hàm duyệt lưu trữ của service trực tiếp trên trang đã lưu trữ với đồng hồ giả lệch 3 ngày → archivedAt bằng ngày đầu. CHIỀU ĐỎ: bản sao hàm ghi archivedAt luôn = now (dựng trong bài bằng cùng đầu vào) cho ngày khác — khẳng định ghim 'giữ ngày lưu trữ đầu' phân biệt được hai cách."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_khoi_phuc
+    paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, apps/api/test/tai-lieu-luu-tru.spec.ts]
+    expected: "exit 0. Bài 'khoi-phuc': trang B đã lưu trữ; deXuatKhoiPhuc(B,'cần lại') → đề xuất loai KHOI_PHUC; C duyệt → archivedAt null, đúng một sự kiện KHOI_PHUC; sau đó tim theo từ khoá của B ra B và dangDung có B (quan hệ với AC-7, không chỉ cột). deXuatKhoiPhuc trên trang chưa lưu trữ → BAD_REQUEST, 0 hàng; propose(B, nội dung mới) khi B đã lưu trữ → BAD_REQUEST chuỗi daLuuTru, 0 hàng TaiLieuDeXuat mới."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_loc
+    paths: [apps/api/src/tai-lieu/**, packages/db/src/tai-lieu-*.ts, apps/api/test/tai-lieu-luu-tru-loc.spec.ts]
+    expected: "exit 0. Ma trận VIẾT TRƯỚC: A (đang dùng) và B (đã lưu trữ qua đường duyệt thật) cùng chứa từ 'tulaplưutrữ', cùng xacMinhDen hôm qua, cùng đơn vị D và chủ trang C, cùng được trang C2 nhắc tới bằng [[…]]. Bảng chỗ đọc mười dòng, mỗi dòng một khẳng định tập slug toEqual {A}: tim · dangDung · list mặc định · boLoc (đếm đơn vị D = 1, chủ trang C = 1 — trước khi lưu trữ B là 2, đo cả hai mốc) · sucKhoe.quaHan · nhacToi(C2) · timTrangDangDung (packages/db) · docBanDangDung(B) === null · docNhieuBanDangDung([A,B]) chỉ A · list({archived:true}) toEqual {B} kèm archivedAt. get(B) trả daLuuTru.luc. Số khẳng định = số dòng bảng. CHIỀU ĐỎ: khôi phục B (E6) rồi chạy lại cùng bảng → mọi dòng ra {A,B} — thước đọc cột thật, không hằng đúng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7a
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_tro_ly
+    paths: [apps/agent/agent/subagents/tro_ly_kho/**, packages/db/src/tai-lieu-tim.ts, apps/agent/test/tro-ly-kho-luu-tru.spec.ts]
+    expected: "exit 0; Postgres _test thật. Gọi execute của hai tool search_pages và read_page của tro_ly_kho (đúng hàm tool đăng ký, trong ngữ cảnh phiên con hợp lệ như bài tool sẵn có) trên A và B ở E7: search_pages(từ khoá) chỉ trả A; read_page(B) trả đúng kết quả 'không có' như slug không tồn tại (so bằng nhau với read_page('khong-ton-tai')). CHIỀU ĐỎ: khôi phục B rồi gọi lại → search_pages trả cả B, read_page(B) trả chữ trang."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_da_xu_ly
+    paths: [apps/api/src/tai-lieu/**, apps/api/test/tai-lieu-luu-tru.spec.ts]
+    expected: "exit 0. Bài 'da-xu-ly': gieo một đề xuất DA_DUYET, một TRA_LAI, một CU, một CHO_DUYET; proposals({nhom:'da-xu-ly'}) trả tập id toEqual ba cái đầu, mỗi dòng mang trangThai đúng; proposals({nhom:'cho'}) toEqual {CHO_DUYET} như trước (đối chứng không đổi); total khớp số dòng."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8m
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.lslt_man_da_xu_ly
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/tai-lieu-cho-duyet.dom.tsx]
+    expected: "exit 0; bài dom (jsdom, queryClient giả theo cache.ts): nhóm «Đã xử lý» với ba dòng DA_DUYET, TRA_LAI, CU hiện ba nhãn «Đã duyệt», «Đã trả lại», «Cũ» (chữ rút từ taiLieuMessages('vi'), không chép tay) theo đúng thứ tự dòng. CHIỀU ĐỎ: dòng mang trạng thái lạ → bài khẳng định không có nhãn rỗng (mọi trạng thái của khuôn có nhãn — duyệt qua danh sách trạng thái của khuôn validation)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.lslt_chi_ghi_them
+    paths: [apps/api/src/**, packages/db/src/**, apps/agent/agent/**, apps/api/test/tai-lieu-chi-ghi-them.spec.ts]
+    expected: "exit 0. Hai vế. (a) Quét tĩnh mọi tệp .ts dưới apps/api/src, packages/db/src, apps/agent/agent: không lời gọi Prisma nào dạng taiLieuPhienBan.(update|updateMany|delete|deleteMany|upsert) hay taiLieuSuKien.(update|updateMany|delete|deleteMany|upsert), cũng không SQL thô UPDATE/DELETE trên hai bảng (regex trên mã, đối chứng dương: chuỗi mẫu 'tx.taiLieuPhienBan.update(' trong bài bị regex bắt). (b) Chạy trọn các luồng E3, E5, E6 trên một trang: chụp mọi hàng TaiLieuPhienBan và TaiLieuSuKien trước mỗi luồng; sau luồng mọi hàng cũ toEqual bản chụp (chỉ có hàng thêm); số sự kiện thêm toEqual bảng VIẾT TRƯỚC {quayLai:1 DE_XUAT, duyệt quay lại:1 DUYET, deXuatLuuTru:1 DE_XUAT, duyệt lưu trữ:1 LUU_TRU (+CU cho đề xuất bị cũ), deXuatKhoiPhuc:1 DE_XUAT, duyệt khôi phục:1 KHOI_PHUC, trả lại:1 TRA_LAI}, mỗi sự kiện có aiId và luc."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10m
+    criterion: AC-10
+    executor: test
+    cmd: config:executors.test.lslt_man_lich_su
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/tai-lieu-lich-su.dom.tsx]
+    expected: "exit 0; bài dom cho bảng trạng thái ST-lich-su-*, ST-ban-cu-*: một phiên bản → một dòng 'Đang dùng' và câu một-phiên-bản; ba phiên bản → ba dòng mới nhất trước, nhãn 'Đang dùng' đúng ở dòng có dangDung; lỗi tải → VungTaiLoi với nút Thử lại gọi lại truy vấn (đếm lần gọi = 2); phiên bản cũ: ToggleGroup chuyển giữa diff (có data-them, data-bo) và toàn văn; phiên bản là bản đang dùng → không có nút quay lại và có câu bản-đang-dùng. Chữ rút từ taiLieuMessages. CHIỀU ĐỎ: dữ liệu ba phiên bản xáo thứ tự đầu vào → bảng vẫn mới nhất trước (bài xếp theo số, không tin thứ tự mảng)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-10
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.lslt_man_lich_su
+    steps:
+      - "Canh cay truoc man dau tien; phien do rieng (tien-de.mjs qua mot-luot.sh); gieo qua duong ghi that trang ba phien ban (chu khac nhau co chu y); dang nhap dev:session mot member"
+      - "Buoc 1 (1440): man doc -> bam 'Lịch sử' -> bang ba phien ban, nhan 'Đang dùng' o dong dau -> anh lslt-lich-su-1440.png"
+      - "Buoc 2 (1440): bam phien ban 1 -> diff voi ban dang dung, co cho to them/bot -> anh lslt-ban-cu-so-sanh-1440.png"
+      - "Buoc 3 (1440): chuyen 'Toàn văn' -> doc toan van ban 1 -> anh lslt-ban-cu-toan-van-1440.png"
+      - "Buoc 4 (1440): bam nut quay lai phien ban 1 -> URL la /<ws>/tai-lieu/de-xuat/<id>, nhan 'Quay lại phiên bản 1' tren man duyet -> anh lslt-duyet-quay-lai-1440.png"
+      - "Buoc 5 (390): lich su la danh sach, scrollWidth <= clientWidth -> anh lslt-lich-su-390.png"
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", packages/ui/src/components/**, _acceptance/lich-su-va-luu-tru-trang/rang/**]
+    expected: "exit 0; man.mjs --phan lich-su in 'buoc N: dat' cho 5 buoc; chu doc tu DOM bang innerText; anh o .acceptance-runs/lich-su-va-luu-tru-trang/evidence/, vong S4 chep sang _acceptance/lich-su-va-luu-tru-trang/evidence/ cho E13j. CHIEU DO: --chieu-do tren ban sao an nut 'Lịch sử' -> 'buoc 1: khong thay nut Lịch sử', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E11m
+    criterion: AC-11
+    executor: test
+    cmd: config:executors.test.lslt_man_luu_tru
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", apps/app/lib/messages/tai-lieu.ts, apps/app/test/tai-lieu-luu-tru.dom.tsx]
+    expected: "exit 0; bài dom cho ST-doc-*, ST-duyet-luu-tru, ST-duyet-khoi-phuc: hộp đề xuất lưu trữ — nút gửi disabled khi lý do rỗng hay chỉ khoảng trắng, enabled khi có chữ, 501 ký tự hiện lỗi; Huỷ bọc DialogClose; gửi lỗi mạng giữ chữ và hiện Thử lại; trang có đề xuất lưu trữ chờ → mục trình đơn disabled kèm câu vì sao; trang đã lưu trữ → Alert có ngày (định dạng ngayTaiLieu) và nút Đề xuất khôi phục, không có link Sửa trang; màn duyệt LUU_TRU và KHOI_PHUC hiện tên việc, lý do, nút Duyệt lưu trữ/Duyệt khôi phục, không có DiffTrang. CHIỀU ĐỎ: cùng dữ liệu trang đang dùng → không có Alert đã lưu trữ (đối chứng dương cho khẳng định âm)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E11
+    criterion: AC-11
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.lslt_man_luu_tru
+    steps:
+      - "Canh cay; phien do rieng; gieo trang dang dung, chu trang C, member M; dev:session M"
+      - "Buoc 1 (1440): man doc -> '…' -> 'Đề xuất lưu trữ' -> hop, nut gui khoa -> go ly do -> anh lslt-hop-luu-tru-1440.png -> gui"
+      - "Buoc 2 (1440): man doc hien 'Có đề xuất lưu trữ chờ duyệt', muc trinh don khoa kem cau vi sao -> anh lslt-cho-luu-tru-1440.png"
+      - "Buoc 3 (1440): dev:session C -> tab Chờ duyệt -> mo de xuat -> 'Đề xuất lưu trữ trang' + ly do + 'Duyệt lưu trữ' -> anh lslt-duyet-luu-tru-1440.png -> duyet"
+      - "Buoc 4 (1440): mo thang duong dan trang -> dai 'Trang đã lưu trữ ngày …' + 'Đề xuất khôi phục', khong co 'Sửa trang' -> anh lslt-da-luu-tru-1440.png"
+      - "Buoc 5 (390): man doc da luu tru khong cuon ngang -> anh lslt-da-luu-tru-390.png"
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", packages/ui/src/components/**, _acceptance/lich-su-va-luu-tru-trang/rang/**]
+    expected: "exit 0; man.mjs --phan luu-tru in 'buoc N: dat' cho 5 buoc; sau buoc 3, doc lai qua API (taiLieu.get) thay daLuuTru khac null — quan he man <-> DB. CHIEU DO: --chieu-do tren ban sao bo Alert da luu tru -> 'buoc 4: khong thay dai da luu tru', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E12
+    criterion: AC-12
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.lslt_man_da_luu_tru
+    steps:
+      - "Canh cay; phien do rieng; workspace W1 co trang da luu tru (qua duong duyet that) va trang dang dung; workspace W2 khong co trang luu tru nao; dev:session member"
+      - "Buoc 1 (1440): W1 danh sach trang -> bam 'Đã lưu trữ' -> bang chi trang da luu tru, cot ngay luu tru, URL co archived -> anh lslt-ds-da-luu-tru-1440.png"
+      - "Buoc 2 (1440): tai lai trang -> van dung bang do (URL giu tham so)"
+      - "Buoc 3 (1440): tat 'Đã lưu trữ' -> danh sach thuong, khong co trang da luu tru"
+      - "Buoc 4 (1440): W2 -> bam 'Đã lưu trữ' -> 'Chưa có trang nào đã lưu trữ' -> anh lslt-ds-da-luu-tru-rong-1440.png"
+    paths: ["apps/app/app/(app)/[slug]/tai-lieu/**", packages/ui/src/components/**, _acceptance/lich-su-va-luu-tru-trang/rang/**]
+    expected: "exit 0; man.mjs --phan da-luu-tru in 'buoc N: dat' cho 4 buoc; tap slug tren bang buoc 1 toEqual tap slug cua taiLieu.list({archived:true}) goi cung phien (quan he man <-> API). CHIEU DO: --chieu-do tren ban sao bo tham so archived khoi URL -> 'buoc 2: tai lai mat bo loc', ma 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshot]
+
+  - id: E13j
+    criterion: AC-13
+    executor: judgment
+    question: "Đọc các ảnh màn Lịch sử, phiên bản cũ, hộp đề xuất lưu trữ, màn duyệt lưu trữ, dải trang đã lưu trữ và danh sách Đã lưu trữ, cùng mục từ điển và bộ chữ được đưa kèm. (1) Mỗi hành động có đúng một chữ theo bộ chữ «Lưu trữ», «Khôi phục», «Đã lưu trữ» không, có chỗ nào dùng «ẩn», «archive», «xoá» cho việc thật ra là lưu trữ không? (2) Trên cùng một màn có chữ nào mang hai nghĩa không (vd «Khôi phục» vừa cho trang vừa cho phiên bản)? (3) Một nhân viên văn phòng nhìn dải trang đã lưu trữ có hiểu trang đã thôi dùng, từ ngày nào, và mình làm gì để lấy lại không? (4) Chữ mới trên màn có mục trong từ điển được đưa kèm không? Nêu tên ảnh cho mỗi điểm."
+    evidence_required: [judged_by, verdict, rationale]
+    inputs:
+      - "CONTEXT.md"
+      - "docs/vong-doi.md"
+      - "apps/app/lib/messages/tai-lieu.ts"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-lich-su-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-ban-cu-so-sanh-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-hop-luu-tru-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-duyet-luu-tru-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-da-luu-tru-1440.png"
+      - "_acceptance/lich-su-va-luu-tru-trang/evidence/lslt-ds-da-luu-tru-1440.png"
