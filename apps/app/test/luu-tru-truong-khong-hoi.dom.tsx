@@ -408,13 +408,16 @@ describe("ltk-hoan-tac-loi", () => {
 				.setup({ document, pointerEventsCheck: 0 })
 				.click(nutHoanTac(locale) as HTMLButtonElement);
 			await cho(
-				() => vungToast().includes(m.fields.hoanTacLoi),
+				() =>
+					vungToast().includes(m.fields.hoanTacLoi) ||
+					vungToast().includes("loi-tho-may-chu"),
 				`${locale}: toast loi`,
 			);
 			chot(
 				!vungToast().includes("loi-tho-may-chu"),
 				"ltk: hoan tac loi in loi tho",
 			);
+			expect(vungToast().includes(m.fields.hoanTacLoi)).toBe(true);
 			for (const s of dangMo) {
 				await act(async () => s.root.unmount());
 				s.o.remove();
