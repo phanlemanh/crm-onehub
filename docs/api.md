@@ -437,6 +437,13 @@ row is still there, just filtered out of every list.
   where.** A list call defaults to `archived: false`; the Archived view is the same
   procedure with `archived: true`. There is no third "everything" mode — mixing
   active and archived rows in one table is exactly what this feature removes.
+- **A record's related lists are active rows only.** `companies.byId`,
+  `contacts.byId` and `deals.byId` return `contacts`/`deals` without archived rows
+  and carry the archived ones as `archivedContacts`/`archivedDeals` — `id`, name,
+  `archivedAt`, newest first (`crm/da-luu-tru.ts`) — over tRPC and the `/rest`
+  bridge an API key reads alike. `deals.contactOptions` and a contact's
+  `relationship.colleagues` drop archived contacts outright. The one count that
+  adds both back is a purge warning, because it is about what goes, not what shows.
 - **`archive`/`restore` touch `archivedAt` and nothing else.** They do not touch
   `AgentTask`, `SuppressedContact`, or `lastActivityAt` — the record is unchanged, only
   hidden. `archive` writes only while `archivedAt` is null (`updateMany` with

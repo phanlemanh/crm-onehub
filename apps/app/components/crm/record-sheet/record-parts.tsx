@@ -1,6 +1,8 @@
 "use client";
 
 import Add from "@carbon/icons-react/es/Add";
+import ChevronDown from "@carbon/icons-react/es/ChevronDown";
+import ChevronRight from "@carbon/icons-react/es/ChevronRight";
 import { Button } from "@crm/ui/components/button";
 import {
 	Empty,
@@ -14,13 +16,17 @@ import { ForeignText } from "@crm/ui/components/foreign-text";
 import { Icon } from "@crm/ui/components/icon";
 import { KaraRetry } from "@crm/ui/components/kara/state";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { SimpleTableRow } from "@crm/ui/components/simple-table";
+import {
+	SimpleTable,
+	type SimpleTableColumn,
+	SimpleTableRow,
+} from "@crm/ui/components/simple-table";
 import { Spinner } from "@crm/ui/components/spinner";
 import { TableCell } from "@crm/ui/components/table";
 import { useKhoMan } from "@crm/ui/hooks/use-kho-man";
 import { formatMoney } from "@crm/ui/lib/format";
 import type { Locale } from "@crm/ui/lib/locale";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import {
 	CuonCaKhungContext,
 	DetailSheetHeader,
@@ -29,9 +35,12 @@ import {
 	type DetailSheetTab,
 	DetailSheetTabs,
 } from "@/components/detail-sheet";
+import { LocalDateTime } from "@/components/local-date-time";
 import { crmMessages } from "@/lib/messages/crm";
 import { karaBanGhiMessages } from "@/lib/messages/kara-ban-ghi";
-import { useRecordStack } from "./record-stack";
+import { recordSheetMessages } from "@/lib/messages/record-sheet";
+import { NGAY_LUU_TRU } from "./record-actions";
+import { useOpenRecord, useRecordStack } from "./record-stack";
 
 export type LyDoLoi = "khong-con" | "khong-quyen" | "mat-ket-noi";
 
@@ -208,6 +217,95 @@ export function AddRow({
 			</TableCell>
 		</SimpleTableRow>
 	);
+}
+
+export type BanDaLuuTru = { id: string; name: string; archivedAt: string };
+
+export function DongDaLuuTru({
+	items,
+	columns,
+	kind,
+}: {
+	items: BanDaLuuTru[];
+	columns: number;
+	kind: "contact" | "deal";
+}) {
+	const m = recordSheetMessages(useLocale());
+	const openRecord = useOpenRecord();
+	const [mo, setMo] = useState(false);
+
+	if (items.length === 0) return null;
+
+	return (
+		<>
+			<SimpleTableRow>
+				<TableCell colSpan={columns} className="p-0">
+					<Button
+						variant="ghost"
+						size="sm"
+						aria-expanded={mo}
+						onClick={() => setMo((dangMo) => !dangMo)}
+						className="h-9 w-full justify-start px-5 font-normal text-muted-foreground"
+					>
+						<Icon
+							icon={mo ? ChevronDown : ChevronRight}
+							data-icon="inline-start"
+						/>
+						{m.archivedRows.toggle(String(items.length))}
+					</Button>
+				</TableCell>
+			</SimpleTableRow>
+			{mo
+				? items.map((item) => (
+						<SimpleTableRow key={item.id} sub data-da-luu-tru={item.id}>
+							<TableCell colSpan={columns} className="py-2.5 pr-3 pl-5">
+								<span className="flex min-w-0 items-center gap-2">
+									<button
+										type="button"
+										translate="no"
+										onClick={() => openRecord({ kind, id: item.id })}
+										className="min-w-0 truncate underline-offset-2 hover:underline"
+									>
+										{item.name}
+									</button>
+									<span className="shrink-0">
+										{m.archivedRows.on}{" "}
+										<LocalDateTime
+											date={item.archivedAt}
+											options={NGAY_LUU_TRU}
+										/>
+									</span>
+								</span>
+							</TableCell>
+						</SimpleTableRow>
+					))
+				: null}
+		</>
+	);
+}
+
+export function BangDaLuuTru({
+	items,
+	columns,
+	kind,
+}: {
+	items: BanDaLuuTru[];
+	columns: SimpleTableColumn[];
+	kind: "contact" | "deal";
+}) {
+	if (items.length === 0) return null;
+	return (
+		<SimpleTable variant="panel" header="sr-only" columns={columns}>
+			<DongDaLuuTru items={items} columns={columns.length} kind={kind} />
+		</SimpleTable>
+	);
+}
+
+export function tenCaNhan(person: {
+	firstName: string;
+	lastName: string | null;
+}): string {
+	return [person.firstName, person.lastName].filter(Boolean).join(" ");
 }
 
 export function DealAmount({

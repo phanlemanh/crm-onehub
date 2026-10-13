@@ -1576,6 +1576,18 @@ executors:
     kkc_chu: 'cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-khong-con.dom.tsx -t kkc-chu'
     kkc_hoi_quy: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/khung-loi-ban-ghi-dung-ly-do.dom.tsx apps/app/test/kara-ban-ghi.dom.tsx && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/khung-loi-ban-ghi-dung-ly-do.dom.tsx && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/kara-ban-ghi.dom.tsx -t khung-loi'
     kkc_canh_chu: 'git diff --quiet $(git merge-base HEAD origin/onehub) -- apps/app/test/messages-guard.spec.ts && cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/messages-guard.spec.ts'
+    lqc_byid_cong_ty: 'bun run test -- "cd apps/api && bun test test/lien-quan-loc-ban-da-cat.spec.ts -t lqc-byid-cong-ty"'
+    lqc_byid_ca_nhan: 'bun run test -- "cd apps/api && bun test test/lien-quan-loc-ban-da-cat.spec.ts -t lqc-byid-ca-nhan"'
+    lqc_byid_thoa_thuan: 'bun run test -- "cd apps/api && bun test test/lien-quan-loc-ban-da-cat.spec.ts -t lqc-byid-thoa-thuan"'
+    lqc_chon_dong_nghiep: 'bun run test -- "cd apps/api && bun test test/lien-quan-loc-ban-da-cat.spec.ts -t lqc-chon-dong-nghiep"'
+    lqc_dong_gap: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-dong-gap"
+    lqc_mo_ngan: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-mo-ngan"
+    lqc_so_dem: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-so-dem"
+    lqc_chi_cat: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-chi-cat"
+    lqc_xoa_vinh_vien: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-xoa-vinh-vien"
+    lqc_chu: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-chu"
+    lqc_ban_phim: "cd apps/app && bun test --preload ../../packages/ui/test/setup-dom.ts ./test/lien-quan-loc-ban-da-cat.dom.tsx -t lqc-ban-phim"
+    lqc_cap_chu: "cd apps/app && bun test test/messages-guard.spec.ts"
     vc_tao: 'bun run test -- "cd apps/api && bun test test/viec-ghi.spec.ts -t vc-tao"'
     vc_gan: 'bun run test -- "cd apps/api && bun test test/viec-ghi.spec.ts -t vc-gan"'
     vc_trang_thai: 'bun run test -- "cd apps/api && bun test test/viec-ghi.spec.ts -t vc-trang-thai"'
@@ -1596,6 +1608,8 @@ executors:
     vc_man_o_soan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-o-soan.dom.tsx -t 'vc-o-soan-giao|vc-o-soan-loi'"
     vc_man_chuyen: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-chuyen-hop.dom.tsx"
   script:
+    lqc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/lien-quan-loc-ban-da-cat/rang/man.mjs"'
+    lqc_san_thiet_ke: 'for t in apps/app/components/crm/record-sheet/record-parts.tsx apps/app/components/crm/record-sheet/company-sheet.tsx apps/app/components/crm/record-sheet/contact-sheet.tsx apps/app/components/crm/record-sheet/deal-sheet.tsx; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'
     ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
     ltc_ban_dung: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-dung.mjs
