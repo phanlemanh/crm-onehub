@@ -1,0 +1,42 @@
+{
+	"id": "ca-q4-vh",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "bo-phan",
+		"ten": "Khối Vận hành"
+	},
+	"mucTieu": {
+		"title": "Vận hành sẵn sàng cho mùa Tết",
+		"whyNow": "Tết Đinh Mùi rơi vào đầu tháng 2, đơn dồn từ giữa tháng 12.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Kịch bản cao điểm được diễn tập đủ ba kho",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		},
+		{
+			"title": "Bước kế hoạch xong đúng hạn đạt 90",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 90,
+			"unit": "bước"
+		}
+	],
+	"kyVong": {
+		"vanDe": [
+			"kr-la-viec"
+		],
+		"vietLai": [
+			"kr.title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "«Bước kế hoạch xong đúng hạn đạt 90» đếm việc đã làm, không đo kết quả."
+}

@@ -1,0 +1,71 @@
+{
+	"id": "ca-ng-q4-tai-chinh-1",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Tài chính"
+	},
+	"mucTieu": {
+		"title": "Dòng tiền đủ cho mùa Tết",
+		"whyNow": "Tháng Chạp phải ứng lương, thưởng và tiền thuê kho tạm cùng lúc.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Công nợ quá hạn giảm từ 12 xuống 8%",
+			"kind": "giam-xuong",
+			"startValue": 12,
+			"targetValue": 8,
+			"unit": "%"
+		},
+		{
+			"title": "Giữ số ngày chốt sổ tháng dưới 5",
+			"kind": "giu-duoi",
+			"startValue": 6,
+			"targetValue": 5,
+			"unit": "ngày"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Giao đúng hẹn ở mọi tuyến",
+			"whyNow": "Giao trễ là lý do số một đối tác bỏ đi trong các cuộc phỏng vấn quý 2.",
+			"kind": "cam-ket"
+		},
+		"krs": [
+			{
+				"title": "Tỷ lệ đơn giao đúng hẹn",
+				"kind": "phan-tram",
+				"startValue": 88,
+				"targetValue": 97,
+				"unit": "%"
+			},
+			{
+				"title": "Chi phí vận tải trên mỗi đơn giảm từ 42 xuống 36 nghìn đồng",
+				"kind": "giam-xuong",
+				"startValue": 42,
+				"targetValue": 36,
+				"unit": "nghìn đồng"
+			},
+			{
+				"title": "Giữ số khiếu nại mỗi tháng dưới 20",
+				"kind": "giu-duoi",
+				"startValue": 26,
+				"targetValue": 20,
+				"unit": "khiếu nại"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [
+			"chep-kr-cap-tren",
+			"noi-ve-nguoi"
+		],
+		"soSai": false
+	},
+	"ghiChu": "Căn chỉnh vào mục tiêu giao đúng hẹn của OneHub; không chép KR cấp trên, không nói về người."
+}

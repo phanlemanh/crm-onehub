@@ -1,0 +1,449 @@
+{
+	"ca": [
+		{
+			"ma": "n1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": true,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên là nơi đến, KR có doanh thu, giữ chân và tăng tệp hàng lạnh — câu đã tốt."
+		},
+		{
+			"ma": "n2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": true,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên là trạng thái muốn đạt, KR có đúng hẹn, chi phí và khiếu nại giữ hai chiều — câu đã tốt."
+		},
+		{
+			"ma": "n3",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"trung-y",
+					"kr-la-viec"
+				],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "«Ra mắt ứng dụng theo dõi đơn» không đo «đủ người, đủ sức»; «Tuyển đủ 25 người» mở bằng động từ việc làm."
+		},
+		{
+			"ma": "q4-kd",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"muc-tieu-la-so",
+					"thieu-doi-trong"
+				],
+				"vietLai": [
+					"title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên là chỉ số doanh thu có hướng; hai KR cùng đẩy tăng, không KR nào giữ chất lượng."
+		},
+		{
+			"ma": "q4-vh",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"kr-la-viec"
+				],
+				"vietLai": [
+					"kr.title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "«Bước kế hoạch xong đúng hạn đạt 90» đếm việc đã làm, không đo kết quả."
+		},
+		{
+			"ma": "q4-kd-bac-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: doanh thu, cuộc hẹn và tỷ lệ chốt."
+		},
+		{
+			"ma": "q4-kd-bac-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"kr-la-viec"
+				],
+				"vietLai": [
+					"kr.title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "«Ký 15 hợp đồng bán lẻ mới» mở bằng động từ việc làm."
+		},
+		{
+			"ma": "q4-kd-nam-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": true,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên là nơi đến, KR có đối tác, thoả thuận và giữ công suất kho — câu đã tốt."
+		},
+		{
+			"ma": "q4-kd-nam-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"kr-la-viec",
+					"thieu-doi-trong"
+				],
+				"vietLai": [
+					"kr.title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "«Ký 8 đối tác hàng lạnh mới» mở bằng động từ; hai KR cùng đẩy tăng."
+		},
+		{
+			"ma": "q4-cham-soc-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"kr-la-viec"
+				],
+				"vietLai": [
+					"kr.title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "«Gọi hẹn lại được với đối tác đạt 120 cuộc» đếm cuộc gọi đã làm."
+		},
+		{
+			"ma": "q4-cham-soc-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: giữ khiếu nại tồn và một mốc quy trình."
+		},
+		{
+			"ma": "q4-marketing-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"kr-la-viec"
+				],
+				"vietLai": [
+					"kr.title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "«Thư chào gửi ra đạt 2.000» đếm thư đã gửi, không đo kết quả."
+		},
+		{
+			"ma": "q4-marketing-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [
+					"title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên mục tiêu «Ra mắt bộ nhận diện hàng lạnh» nói việc làm."
+		},
+		{
+			"ma": "q4-kho-van-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: lệch tồn kho, thời gian xuất kho và mốc mở kho tạm."
+		},
+		{
+			"ma": "q4-kho-van-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": true,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên là nơi đến, KR giữ tốc độ và giảm xuất sai — câu đã tốt."
+		},
+		{
+			"ma": "q4-dieu-phoi-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"kr-la-viec"
+				],
+				"vietLai": [
+					"kr.title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "«Bước điều phối xong đúng hạn đạt 150» đếm việc đã làm."
+		},
+		{
+			"ma": "q4-dieu-phoi-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: giữ chuyến trễ và mốc lập đội dự phòng."
+		},
+		{
+			"ma": "q4-san-pham-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: tỷ lệ trạng thái đúng và mốc bản thử."
+		},
+		{
+			"ma": "q4-san-pham-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": true,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên là nơi đến, mốc bản thử đi kèm giảm cuộc gọi hỏi đơn — câu đã tốt."
+		},
+		{
+			"ma": "q4-tai-chinh-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: công nợ quá hạn và số ngày chốt sổ."
+		},
+		{
+			"ma": "q4-tai-chinh-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [
+					"title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên mục tiêu «Báo cáo lãi lỗ theo tuyến mỗi tuần» là sản phẩm việc làm, không là nơi đến."
+		},
+		{
+			"ma": "q4-nhan-su-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [
+					"kr-la-viec"
+				],
+				"vietLai": [
+					"kr.title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "«Tuyển đủ 25 người thời vụ» mở bằng động từ việc làm."
+		},
+		{
+			"ma": "q4-nhan-su-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: tỷ lệ người mới có người kèm và nghỉ việc 60 ngày đầu."
+		},
+		{
+			"ma": "q4-phap-che-1",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: thời gian duyệt và tỷ lệ dùng mẫu chuẩn."
+		},
+		{
+			"ma": "q4-phap-che-2",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Không dấu hiệu rõ: mốc bộ câu hỏi và giảm câu hỏi lặp."
+		},
+		{
+			"ma": "q4-phap-che-3",
+			"bo": "viet-lai",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [
+					"title"
+				],
+				"khongGopY": false,
+				"khongDuoc": [],
+				"soSai": false
+			},
+			"ghiChu": "Tên mục tiêu «Xử lý dứt điểm…» mở bằng động từ việc làm; mục tiêu hiển thị giới hạn."
+		},
+		{
+			"ma": "q4-kd-bac-1",
+			"bo": "ng",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [
+					"chep-kr-cap-tren",
+					"noi-ve-nguoi"
+				],
+				"soSai": false
+			},
+			"ghiChu": "Căn chỉnh vào KR doanh thu 48 tỷ của OneHub; không được chép KR cấp trên làm tên, không nói về người."
+		},
+		{
+			"ma": "q4-kd-nam-1",
+			"bo": "ng",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [
+					"chep-kr-cap-tren",
+					"noi-ve-nguoi"
+				],
+				"soSai": false
+			},
+			"ghiChu": "Căn chỉnh vào KR đối tác hàng lạnh 12 lên 30 của OneHub; không chép KR cấp trên, không nói về người."
+		},
+		{
+			"ma": "q4-cham-soc-1",
+			"bo": "ng",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [
+					"chep-kr-cap-tren",
+					"noi-ve-nguoi"
+				],
+				"soSai": false
+			},
+			"ghiChu": "Căn chỉnh vào KR gia hạn trên 85% của OneHub; không chép KR cấp trên, không nói về người."
+		},
+		{
+			"ma": "q4-kho-van-2",
+			"bo": "ng",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [
+					"chep-kr-cap-tren",
+					"noi-ve-nguoi"
+				],
+				"soSai": false
+			},
+			"ghiChu": "Căn chỉnh vào KR đơn giao đúng hẹn của OneHub; không chép KR cấp trên, không nói về người."
+		},
+		{
+			"ma": "q4-nhan-su-1",
+			"bo": "ng",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [
+					"chep-kr-cap-tren",
+					"noi-ve-nguoi"
+				],
+				"soSai": false
+			},
+			"ghiChu": "«Tuyển đủ 25 người thời vụ» gần chép KR «Tuyển đủ 25 người» của OneHub; không chép, không nói về người."
+		},
+		{
+			"ma": "q4-tai-chinh-1",
+			"bo": "ng",
+			"kyVong": {
+				"vanDe": [],
+				"vietLai": [],
+				"khongGopY": false,
+				"khongDuoc": [
+					"chep-kr-cap-tren",
+					"noi-ve-nguoi"
+				],
+				"soSai": false
+			},
+			"ghiChu": "Căn chỉnh vào mục tiêu giao đúng hẹn của OneHub; không chép KR cấp trên, không nói về người."
+		}
+	]
+}

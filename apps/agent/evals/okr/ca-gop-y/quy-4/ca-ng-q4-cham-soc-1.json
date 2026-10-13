@@ -1,0 +1,78 @@
+{
+	"id": "ca-ng-q4-cham-soc-1",
+	"bo": "ng",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Chăm sóc đối tác"
+	},
+	"mucTieu": {
+		"title": "Đối tác chỉ kể vấn đề một lần",
+		"whyNow": "Quý 3 cho thấy điểm hài lòng tụt khi đối tác phải kể lại vấn đề.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Giữ điểm hài lòng trên 4,5",
+			"kind": "giu-tren",
+			"startValue": 4.4,
+			"targetValue": 4.5,
+			"unit": "điểm"
+		},
+		{
+			"title": "Ca chuyển người xử lý giảm từ 30 xuống 10%",
+			"kind": "giam-xuong",
+			"startValue": 30,
+			"targetValue": 10,
+			"unit": "%"
+		},
+		{
+			"title": "Gọi hẹn lại được với đối tác đạt 120 cuộc",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 120,
+			"unit": "cuộc gọi"
+		}
+	],
+	"capTren": {
+		"mucTieu": {
+			"title": "Trở thành đối tác logistics được chọn đầu tiên ở hai miền",
+			"whyNow": "Hai đối thủ lớn vừa rút khỏi phân khúc hàng lạnh; ai ký trước năm nay giữ đối tác nhiều năm.",
+			"kind": "tham-vong"
+		},
+		"krs": [
+			{
+				"title": "Doanh thu hợp đồng mới đạt 48 tỷ đồng",
+				"kind": "tang-toi",
+				"startValue": 0,
+				"targetValue": 48,
+				"unit": "tỷ đồng"
+			},
+			{
+				"title": "Giữ tỷ lệ đối tác gia hạn trên 85%",
+				"kind": "giu-tren",
+				"startValue": 82,
+				"targetValue": 85,
+				"unit": "%"
+			},
+			{
+				"title": "Số đối tác hàng lạnh đang chạy tăng từ 12 lên 30",
+				"kind": "tang-toi",
+				"startValue": 12,
+				"targetValue": 30,
+				"unit": "đối tác"
+			}
+		]
+	},
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [
+			"chep-kr-cap-tren",
+			"noi-ve-nguoi"
+		],
+		"soSai": false
+	},
+	"ghiChu": "Căn chỉnh vào KR gia hạn trên 85% của OneHub; không chép KR cấp trên, không nói về người."
+}

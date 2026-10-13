@@ -1,0 +1,33 @@
+{
+	"id": "ca-q4-phap-che-3",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Pháp chế"
+	},
+	"mucTieu": {
+		"title": "Xử lý dứt điểm các tranh chấp hợp đồng đang mở",
+		"whyNow": "Nội dung còn nhạy cảm, chỉ người có tên được xem.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Tranh chấp hợp đồng đang mở giảm từ 5 xuống 1",
+			"kind": "giam-xuong",
+			"startValue": 5,
+			"targetValue": 1,
+			"unit": "vụ"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên mục tiêu «Xử lý dứt điểm…» mở bằng động từ việc làm; mục tiêu hiển thị giới hạn."
+}

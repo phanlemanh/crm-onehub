@@ -1,0 +1,40 @@
+{
+	"id": "ca-q4-tai-chinh-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Tài chính"
+	},
+	"mucTieu": {
+		"title": "Báo cáo lãi lỗ theo tuyến mỗi tuần",
+		"whyNow": "Chưa biết tuyến nào lỗ cho tới cuối quý.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Tuyến có báo cáo lãi lỗ hằng tuần",
+			"kind": "phan-tram",
+			"startValue": 0,
+			"targetValue": 100,
+			"unit": "%"
+		},
+		{
+			"title": "Ra mẫu báo cáo lãi lỗ theo tuyến",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [
+			"title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên mục tiêu «Báo cáo lãi lỗ theo tuyến mỗi tuần» là sản phẩm việc làm, không là nơi đến."
+}

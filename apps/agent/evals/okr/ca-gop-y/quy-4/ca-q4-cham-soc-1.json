@@ -1,0 +1,49 @@
+{
+	"id": "ca-q4-cham-soc-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Chăm sóc đối tác"
+	},
+	"mucTieu": {
+		"title": "Đối tác chỉ kể vấn đề một lần",
+		"whyNow": "Quý 3 cho thấy điểm hài lòng tụt khi đối tác phải kể lại vấn đề.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Giữ điểm hài lòng trên 4,5",
+			"kind": "giu-tren",
+			"startValue": 4.4,
+			"targetValue": 4.5,
+			"unit": "điểm"
+		},
+		{
+			"title": "Ca chuyển người xử lý giảm từ 30 xuống 10%",
+			"kind": "giam-xuong",
+			"startValue": 30,
+			"targetValue": 10,
+			"unit": "%"
+		},
+		{
+			"title": "Gọi hẹn lại được với đối tác đạt 120 cuộc",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 120,
+			"unit": "cuộc gọi"
+		}
+	],
+	"kyVong": {
+		"vanDe": [
+			"kr-la-viec"
+		],
+		"vietLai": [
+			"kr.title"
+		],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "«Gọi hẹn lại được với đối tác đạt 120 cuộc» đếm cuộc gọi đã làm."
+}
