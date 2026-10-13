@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: b2a45e3ae85d36c6d7d53bdd46f9333c119b43eb
+verified_commit: 0ffe10f074033319fe0587005ca34b45995b3597
 human_signoff:
 ---
 
@@ -235,3 +235,7 @@ none — every multi-run eval is uniform
 Round 1: PASS kèm hai phát hiện trong hợp đồng; nhát sửa S4 round 1 (c2030188f: đo cây giữ nguyên so alignmentTree; ca Tất cả bấm thật sau khi lọc).
 Round 2: E10 không đạt — kiểm đối chứng «chèn khối rộng thì báo tràn ngang» ở khổ 1440 không báo vì chỉ đo được 1 hộp từ cây tới body; kèm lint:slop đỏ ở apps/api/test/okr-cay-ly-do.spec.ts:169. Returned to implementation (nhát sửa 6dea43813: E10 đo cuộn ngang cấp trang, đối chứng chèn vào body).
 Round 3: cả 13 eval và bảy lệnh suite đạt; E10 có đủ 6 ảnh (3 trạng thái × 2 khổ), mọi kiểm in DUNG, console không lỗi. Một phát hiện ngoài hợp đồng về độ tin cậy của đối chứng tràn ngang được ghi ở review-findings.md để người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-13, do sửa kiểu bài l3-canh sau verify và gộp onehub 6791dc049
+run_id: repin-20261013T130715Z-53425
+sha: 0ffe10f074033319fe0587005ca34b45995b3597 · suites: 7 lệnh exit 0 · evals: 12/12 eval máy đạt kỳ vọng · ngoài làn máy: E10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
