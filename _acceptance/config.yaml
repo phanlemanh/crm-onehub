@@ -2495,6 +2495,12 @@ risk_tiers:
     - "lib/out-of-contract.cjs"
     - "scripts/lo-trinh-khoa.cjs"
     - "scripts/lo-trinh.mjs"
+    # Kit 2.27–2.28 nâng danh sách lên 25 tệp: tóm tắt hồ sơ, và ba tệp cửa tín hiệu (chỉ chạy khi kho khai
+    # tin_hieu, nhưng đường nền của feature-loop 2.28 vẫn so chúng nên kho chép đủ).
+    - "scripts/ho-so-tom-tat.cjs"
+    - "scripts/tin-hieu-khoa.cjs"
+    - "scripts/tin-hieu.mjs"
+    - "scripts/cat-luot.mjs"
     # Cấu hình trình soạn: .claude/launch.json chỉ khai lệnh chạy dev server và
     # số cổng cho phiên máy. Không file nào import nó, không bản dựng nào đọc
     # nó, và không phép đo nào lấy giá trị từ nó — các thước tự đặt APP_URL và
