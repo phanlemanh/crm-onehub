@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import {
 	CAM_EN,
 	CAM_VI,
@@ -141,6 +141,20 @@ describe("kmt-giu", () => {
 	});
 
 	it("ban ghim cua giu dung voi goc", () => {
+		const coGoc = spawnSync("git", [
+			"-C",
+			GOC_KHO,
+			"rev-parse",
+			"--verify",
+			"--quiet",
+			`${MOC_GOC}^{commit}`,
+		]);
+		if (coGoc.status !== 0) {
+			console.warn(
+				`kmt-giu: khong co commit ${MOC_GOC} (checkout nong) — bo qua phan so goc`,
+			);
+			return;
+		}
 		const sai = GIU.filter(
 			(g) =>
 				!execFileSync("git", ["-C", GOC_KHO, "show", `${MOC_GOC}:${g.tep}`], {

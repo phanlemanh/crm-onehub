@@ -23,7 +23,7 @@ Chữ cũ: 4abc05e07 (origin/onehub lúc kiểm kê). Chữ mới: cây đang x�
 | ban-ghi | apps/app/lib/messages/crm.ts#fields.agentHint | vi | Tác nhân đề xuất giá trị kèm nguồn, và không bao giờ ghi đè giá trị của bạn. | Kara đề xuất giá trị kèm nguồn, và không bao giờ ghi đè giá trị của bạn. |
 | ban-ghi | apps/app/lib/messages/crm.ts#fields.emptyHint | vi | Để trống thì tác nhân chỉ dựa vào nhãn và kiểu. | Để trống thì Kara chỉ dựa vào nhãn và kiểu. |
 | ban-ghi | apps/app/lib/messages/crm.ts#fields.emptyHint | en | Leave it empty and your agents work from the label and type alone. | Leave it empty and Kara works from the label and type alone. |
-| ban-ghi | apps/app/lib/messages/kara-ban-ghi.ts#tab.buoc.okr-chi-tro-ly | en | Kept the OKR session to the OKR assistant | Kept the OKR session to Kara · OKR |
+| ban-ghi | apps/app/lib/messages/kara-ban-ghi.ts#tab.buoc.okr-chi-tro-ly | en | Kept the OKR session to the OKR assistant | Kept the OKR session to Kara |
 | ban-ghi | apps/app/lib/messages/khung-ung-dung.ts#enrichment.emptyBody | vi | Công ty và cá nhân mới hiện ở đây trong lúc tác nhân tra cứu về họ. | Công ty và cá nhân mới hiện ở đây trong lúc Kara tra cứu về họ. |
 | ban-ghi | apps/app/lib/messages/khung-ung-dung.ts#enrichment.emptyBody | en | New companies and contacts show up here while your agents look them up. | New companies and contacts show up here while Kara looks them up. |
 | ban-ghi | apps/app/lib/messages/khung-ung-dung.ts#nav.mobileChat | en | Navigation and agent chats | Navigation and Kara chats |
@@ -131,8 +131,8 @@ Chữ cũ: 4abc05e07 (origin/onehub lúc kiểm kê). Chữ mới: cây đang x�
 | soan | apps/app/lib/messages/to-chuc.ts#donVi.moTaGoiY | en | The OKR assistant reads this when drafting | Kara reads this when drafting |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.tieuDe | vi | Trợ lý OKR | Kara · OKR |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.tieuDe | en | OKR assistant | Kara · OKR |
-| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.daLuu | vi | Đã lưu Trợ lý OKR. | Đã lưu Kara · OKR. |
-| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.daLuu | en | OKR assistant saved. | Kara · OKR saved. |
+| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.daLuu | vi | Đã lưu Trợ lý OKR. | Đã lưu cài đặt Kara. |
+| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.daLuu | en | OKR assistant saved. | Kara settings saved. |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.bat | vi | Bật Trợ lý OKR | Bật Kara |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.bat | en | Turn on the OKR assistant | Turn on Kara |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.viec.de-xuat.moTa | vi | Người sửa được một Mục tiêu nhờ Trợ lý OKR góp ý tên, «vì sao lúc này» và KR. | Người sửa được một Mục tiêu nhờ Kara góp ý tên, «vì sao lúc này» và KR. |
@@ -146,18 +146,18 @@ Chữ cũ: 4abc05e07 (origin/onehub lúc kiểm kê). Chữ mới: cây đang x�
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.hop.moTaAn | vi | Máy chạy ở chế độ ẩn cho Mục tiêu thuộc các đơn vị đã chọn. Đơn vị đã bật không có trong danh sách. | Kara chạy ở chế độ ẩn cho Mục tiêu thuộc các đơn vị đã chọn. Đơn vị đã bật không có trong danh sách. |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.tranMoTa | vi | Chạm trần thì Trợ lý OKR tạm nghỉ tới đầu tháng sau. Quản trị được báo ở 80% và 100%. | Chạm trần thì Kara tạm nghỉ tới đầu tháng sau. Quản trị được báo ở 80% và 100%. |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.tranMoTa | en | At the cap the OKR assistant pauses until next month. Admins are told at 80% and 100%. | At the cap Kara pauses until next month. Admins are told at 80% and 100%. |
-| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.sanSang.sanSangNguon.khoa-rieng | vi | Sẵn sàng · khoá riêng của Trợ lý OKR | Sẵn sàng · khoá riêng của Kara · OKR |
-| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.sanSang.sanSangNguon.khoa-rieng | en | Ready · Trợ lý OKR's own key | Ready · own key for Kara · OKR |
+| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.sanSang.sanSangNguon.khoa-rieng | vi | Sẵn sàng · khoá riêng của Trợ lý OKR | Sẵn sàng · khoá riêng của Kara |
+| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#troLy.sanSang.sanSangNguon.khoa-rieng | en | Ready · Trợ lý OKR's own key | Ready · Kara's own key |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.troLyOkr | vi | Trợ lý OKR | Kara · OKR |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.troLyOkr | en | OKR assistant | Kara · OKR |
-| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.thanh | vi | Trợ lý OKR đã dùng trên trần tháng | Kara · OKR đã dùng trên trần tháng |
-| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.thanh | en | OKR assistant spend against the monthly cap | Kara · OKR spend against the monthly cap |
+| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.thanh | vi | Trợ lý OKR đã dùng trên trần tháng | Kara đã dùng trên trần tháng |
+| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.thanh | en | OKR assistant spend against the monthly cap | Kara's spend against the monthly cap |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.nhom.tro-ly-ai | vi | Trợ lý AI | Kara · hồ sơ |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.nhom.tro-ly-ai | en | AI assistant | Kara · records |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.nhom.tro-ly-okr | vi | Trợ lý OKR | Kara · OKR |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.nhom.tro-ly-okr | en | OKR assistant | Kara · OKR |
-| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.rongMoTa | vi | Trần của Trợ lý OKR: X. | Trần của Kara · OKR: X. |
-| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.rongMoTa | en | OKR assistant cap: X. | Kara · OKR cap: X. |
+| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.rongMoTa | vi | Trần của Trợ lý OKR: X. | Trần của Kara: X. |
+| cai-dat | apps/app/lib/messages/tro-ly-okr.ts#so.rongMoTa | en | OKR assistant cap: X. | Kara's cap: X. |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#soDo.tieuDe | vi | Góp ý của Trợ lý OKR — tháng này | Góp ý của Kara — tháng này |
 | cai-dat | apps/app/lib/messages/tro-ly-okr.ts#soDo.tieuDe | en | OKR assistant feedback — this month | Kara feedback — this month |
 | dung-chung | packages/ui/src/lib/messages.ts#chatMessage.roleAssistant | vi | Trợ lý | Kara |
@@ -166,7 +166,7 @@ Chữ cũ: 4abc05e07 (origin/onehub lúc kiểm kê). Chữ mới: cây đang x�
 | tom-tat | apps/agent/agent/lib/tin-nhac.ts#noiDungAi.tran100 | vi | Trợ lý OKR đã chạm trần tháng ( | ? `Kara đã chạm trần tháng (${so}) — tạm nghỉ tới ${thangSauDau(v.thang)}` |
 | tom-tat | apps/agent/agent/lib/tin-nhac.ts#noiDungAi.tran80 | vi | Trợ lý OKR đã dùng 80% trần tháng ( | : `Kara đã dùng 80% trần tháng (${so})`; |
 | soan | apps/api/src/okr/okr-config.ts#dongCu | vi | Dòng này thuộc bản nháp cũ — Trợ lý đã nộp bản mới hơn. | dongCu: "Dòng này thuộc bản nháp cũ — Kara đã nộp bản mới hơn.", |
-| soan | apps/api/src/okr/okr-config.ts#chuaCoKhoaMoHinh | vi | Chưa có khoá model cho Trợ lý OKR. | chuaCoKhoaMoHinh: "Chưa có khoá model cho Kara · OKR.", |
+| soan | apps/api/src/okr/okr-config.ts#chuaCoKhoaMoHinh | vi | Chưa có khoá model cho Trợ lý OKR. | chuaCoKhoaMoHinh: "Chưa có khoá model cho Kara.", |
 | soan | apps/api/src/okr/okr-config.ts#daCu | vi | Ô này đã đổi từ lúc Trợ lý OKR đề xuất — tải lại danh sách góp ý. | daCu: "Ô này đã đổi từ lúc Kara đề xuất — tải lại danh sách góp ý.", |
 | tai-lieu | packages/validation/src/tai-lieu-hoi.ts#hetTran | vi | Trợ lý AI tạm dừng vì hết hạn mức tháng. | hetTran: "Kara tạm dừng vì hết hạn mức tháng.", |
 | tai-lieu | packages/validation/src/tai-lieu-nguon.ts#dangSoan | vi | Máy đang soạn nguồn này. Chờ xong rồi mới soạn lại được. | dangSoan: "Kara đang soạn nguồn này. Chờ xong rồi mới soạn lại được.", |

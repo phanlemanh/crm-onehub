@@ -5,7 +5,7 @@ const vi = {
 	troLy: {
 		tieuDe: "Kara · OKR",
 		luu: "Lưu",
-		daLuu: "Đã lưu Kara · OKR.",
+		daLuu: "Đã lưu cài đặt Kara.",
 		loiLuu: "Chưa lưu được. Thử lại — phần đã nhập vẫn còn.",
 		bat: "Bật Kara",
 		batMoTa:
@@ -73,7 +73,7 @@ const vi = {
 			dangTat: "Đang tắt",
 			sanSang: "Sẵn sàng",
 			sanSangNguon: {
-				"khoa-rieng": "Sẵn sàng · khoá riêng của Kara · OKR",
+				"khoa-rieng": "Sẵn sàng · khoá riêng của Kara",
 				"khoa-chung": "Sẵn sàng · khoá chung của tác tử",
 				oidc: "Sẵn sàng · qua Vercel",
 			},
@@ -101,7 +101,7 @@ const vi = {
 		cotTien: "Tiền",
 		tong: "Tổng",
 		troLyOkr: "Kara · OKR",
-		thanh: "Kara · OKR đã dùng trên trần tháng",
+		thanh: "Kara đã dùng trên trần tháng",
 		muc80: "Đã dùng 80% trần",
 		muc100: "Đã chạm trần",
 		nhom: {
@@ -113,7 +113,7 @@ const vi = {
 			"chua-gan": "Chưa gán việc",
 		},
 		rong: "Tháng này chưa có lượt AI nào",
-		rongMoTa: (tran: string) => `Trần của Kara · OKR: ${tran}.`,
+		rongMoTa: (tran: string) => `Trần của Kara: ${tran}.`,
 		loi: "Không tải được sổ chi phí",
 		thuLai: "Thử lại",
 		doiSoat: {
@@ -204,7 +204,7 @@ const en: TroLyOkrMessages = {
 	troLy: {
 		tieuDe: "Kara · OKR",
 		luu: "Save",
-		daLuu: "Kara · OKR saved.",
+		daLuu: "Kara settings saved.",
 		loiLuu: "Couldn't save. Try again — what you entered is kept.",
 		bat: "Turn on Kara",
 		batMoTa:
@@ -272,7 +272,7 @@ const en: TroLyOkrMessages = {
 			dangTat: "Off",
 			sanSang: "Ready",
 			sanSangNguon: {
-				"khoa-rieng": "Ready · own key for Kara · OKR",
+				"khoa-rieng": "Ready · Kara's own key",
 				"khoa-chung": "Ready · the agent's shared key",
 				oidc: "Ready · through Vercel",
 			},
@@ -300,7 +300,7 @@ const en: TroLyOkrMessages = {
 		cotTien: "Cost",
 		tong: "Total",
 		troLyOkr: "Kara · OKR",
-		thanh: "Kara · OKR spend against the monthly cap",
+		thanh: "Kara's spend against the monthly cap",
 		muc80: "80% of the cap used",
 		muc100: "Cap reached",
 		nhom: {
@@ -312,7 +312,7 @@ const en: TroLyOkrMessages = {
 			"chua-gan": "Not assigned",
 		},
 		rong: "No AI use this month yet",
-		rongMoTa: (tran: string) => `Kara · OKR cap: ${tran}.`,
+		rongMoTa: (tran: string) => `Kara's cap: ${tran}.`,
 		loi: "Couldn't load AI spend",
 		thuLai: "Try again",
 		doiSoat: {

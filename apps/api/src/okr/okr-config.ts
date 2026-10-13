@@ -191,7 +191,7 @@ export const OKR = {
 				`Vượt trần ${tran} Mục tiêu mỗi đơn vị.`,
 			duaVaoHaiLan: "Cuộc này đã được đưa vào bộ OKR.",
 			donViThieuId: "Bộ phận cần divisionId, phòng ban cần departmentId.",
-			chuaCoKhoaMoHinh: "Chưa có khoá model cho Kara · OKR.",
+			chuaCoKhoaMoHinh: "Chưa có khoá model cho Kara.",
 		},
 		chuyen: {
 			canQuanTri: "Cần quyền quản trị để chuyển OKR của một thành viên.",

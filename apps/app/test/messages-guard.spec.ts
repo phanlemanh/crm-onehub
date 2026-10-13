@@ -214,10 +214,7 @@ const GHIM_TRO_LY_OKR = {
 		"AI Gateway trả lỗi 1",
 		"AI Gateway trả lỗi 12",
 	],
-	"tro-ly-okr:so.rongMoTa": [
-		"Trần của Kara · OKR: 1.",
-		"Trần của Kara · OKR: 12.",
-	],
+	"tro-ly-okr:so.rongMoTa": ["Trần của Kara: 1.", "Trần của Kara: 12."],
 	"tro-ly-okr:soDo.biLoaiMa": ["Bị loại · 1", "Bị loại · 12"],
 	"tro-ly-okr:soDo.dongBiLoai": ["(+1 bị loại)", "(+12 bị loại)"],
 	"tro-ly-okr:soDo.hang.hoanTac": [

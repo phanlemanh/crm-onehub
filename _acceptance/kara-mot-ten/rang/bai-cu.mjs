@@ -15,6 +15,7 @@ const NHOM = {
 		"apps/api/test",
 		"packages/validation/test",
 		"packages/ui/test",
+		"_acceptance",
 	],
 };
 
@@ -54,7 +55,8 @@ for (const thuMuc of NHOM[CHE_DO]) {
 	)
 		ds.push("apps/app/test/messages-guard.spec.ts");
 	if (ds.length === 0) continue;
-	const goi = thuMuc.split("/").slice(0, 2).join("/");
+	const goi =
+		thuMuc === "_acceptance" ? "." : thuMuc.split("/").slice(0, 2).join("/");
 	const tep = ds.map((t) => `./${relative(goi, t)}`);
 	dem += ds.length;
 	const dom = tep.filter((t) => t.endsWith(".tsx"));
