@@ -1,0 +1,1834 @@
+{
+	"moc_nen": "3a2783409894908bc8dd1ee3893b88f990d1aebe",
+	"dong": [
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "E6",
+			"muc": "apps/app/app/(app)/[slug]/settings/giai-doan/",
+			"ma": "dang-khai-la",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "apps/app/app/(app)/[slug]/settings/giai-doan"
+		},
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "E6",
+			"muc": "apps/app/app/(app)/[slug]/settings/organization/",
+			"ma": "dang-khai-la",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "apps/app/app/(app)/[slug]/settings/organization"
+		},
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "E12",
+			"muc": "apps/app/app/(app)/[slug]/settings/organization/",
+			"ma": "dang-khai-la",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "apps/app/app/(app)/[slug]/settings/organization"
+		},
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "E13",
+			"muc": "apps/app/app/(app)/[slug]/settings/giai-doan/",
+			"ma": "dang-khai-la",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "apps/app/app/(app)/[slug]/settings/giai-doan"
+		},
+		{
+			"ho_so": "danh-sach-keo-chung",
+			"eval": "E13",
+			"muc": "apps/app/app/(app)/[slug]/settings/organization/",
+			"ma": "dang-khai-la",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "apps/app/app/(app)/[slug]/settings/organization"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E1",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E2",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E3",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E4",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E5",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E6",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E7",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E8",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E9",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E10",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E11",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E12",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E13",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E14",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E15",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E16",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E17",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E18",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E19",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E20",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E21",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E22",
+			"muc": "scripts/dieu-phoi/README.md",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E23",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E24",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E25",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E26",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E27",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E28",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E29",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E30",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E31",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E32",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E33",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E34",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E35",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E36",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E37",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E38",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E39",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E40",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E41",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E42",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E43",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E44",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-hai-tang",
+			"eval": "E45",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E1",
+			"muc": "scripts/dieu-phoi/phat-lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E1",
+			"muc": "scripts/dieu-phoi/hinh-dang.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E1",
+			"muc": "scripts/dieu-phoi/test/tra-loi.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E2",
+			"muc": "scripts/dieu-phoi/phat-lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E2",
+			"muc": "scripts/dieu-phoi/hinh-dang.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E2",
+			"muc": "scripts/dieu-phoi/test/tra-loi.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E3",
+			"muc": "scripts/dieu-phoi/phat-lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E3",
+			"muc": "scripts/dieu-phoi/test/tra-loi.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E4",
+			"muc": "scripts/dieu-phoi/hook-chan-s4.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E4",
+			"muc": "scripts/dieu-phoi/giu-nhip.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E4",
+			"muc": "scripts/dieu-phoi/test/hook-chan-s4.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E6",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E7",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E8",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E11",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E12",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E13",
+			"muc": "scripts/dieu-phoi/README.md",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E14",
+			"muc": "scripts/dieu-phoi/README.md",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-truoc-mo-dot",
+			"eval": "E14",
+			"muc": "scripts/dieu-phoi/hinh-dang.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E1",
+			"muc": "scripts/dieu-phoi/hook-chan-s4.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E1",
+			"muc": "scripts/dieu-phoi/test/hook-chan-s4.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E2",
+			"muc": "scripts/dieu-phoi/hook-chan-s4.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E2",
+			"muc": "scripts/dieu-phoi/test/hook-chan-s4.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E3",
+			"muc": "scripts/dieu-phoi/hinh-dang.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E3",
+			"muc": "scripts/dieu-phoi/cau-hinh.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E3",
+			"muc": "scripts/dieu-phoi/mau/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E3",
+			"muc": "scripts/dieu-phoi/test/hinh-dang.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E4",
+			"muc": "scripts/dieu-phoi/hinh-dang.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E4",
+			"muc": "scripts/dieu-phoi/mau/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E4",
+			"muc": "scripts/dieu-phoi/test/hinh-dang.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E5",
+			"muc": "scripts/dieu-phoi/phat-lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E5",
+			"muc": "scripts/dieu-phoi/hinh-dang.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E5",
+			"muc": "scripts/dieu-phoi/test/hinh-dang.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E6",
+			"muc": "scripts/dieu-phoi/hook-chan-s4.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E6",
+			"muc": "scripts/dieu-phoi/test/hook-chan-s4.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E7",
+			"muc": "scripts/dieu-phoi/hook-cho-nguoi.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E7",
+			"muc": "scripts/dieu-phoi/test/hook-nhip-cho-nguoi.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E10",
+			"muc": "scripts/dieu-phoi/giu-nhip.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E10",
+			"muc": "scripts/dieu-phoi/hook-nhip.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E10",
+			"muc": "scripts/dieu-phoi/test/giu-nhip.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E11",
+			"muc": "scripts/dieu-phoi/giu-nhip.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E11",
+			"muc": "scripts/dieu-phoi/test/giu-nhip.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E12",
+			"muc": "scripts/dieu-phoi/hook-chan-s4.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E12",
+			"muc": "scripts/dieu-phoi/test/hook-chan-s4.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E13",
+			"muc": "scripts/dieu-phoi/phat-lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E13",
+			"muc": "scripts/dieu-phoi/lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E13",
+			"muc": "scripts/dieu-phoi/yeu-cau.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E13",
+			"muc": "scripts/dieu-phoi/test/gia-han.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E14",
+			"muc": "scripts/dieu-phoi/yeu-cau.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E14",
+			"muc": "scripts/dieu-phoi/test/gia-han.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E14",
+			"muc": "scripts/dieu-phoi/test/yeu-cau.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E15",
+			"muc": "scripts/dieu-phoi/phat-lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E15",
+			"muc": "scripts/dieu-phoi/lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E15",
+			"muc": "scripts/dieu-phoi/test/gia-han.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E16",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E17",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E18",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E19",
+			"muc": "scripts/dieu-phoi/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E20",
+			"muc": "scripts/dieu-phoi/mau/LUAT.md",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E20",
+			"muc": "scripts/dieu-phoi/README.md",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "dieu-phoi-va-bien",
+			"eval": "E21",
+			"muc": "scripts/dieu-phoi/hook-chan-s4.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "kara-gop-y-luot-2",
+			"eval": "E13",
+			"muc": "apps/app/lib/okr-search-params.ts",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "apps/app/app/(app)/[slug]/okr/okr-search-params.ts",
+			"ly_do": "muc go sai tu luc viet (tep chua tung co); tep that nam trong thu muc okr cua route"
+		},
+		{
+			"ho_so": "khoa-con-bat-xa-tran",
+			"eval": "E4",
+			"muc": "apps/api/bunfig.toml",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "khai-not-run",
+			"ly_do": "kcb: tro-ly-okr-nen S4-r1 gan tran 60 giay cho 5 ca do quyen cua go-la-cat-quyen.spec.ts (go-la-cat-quyen het tran 5 giay duoi tai S4); loi hua AC-4 «khong ca nao mang tran rieng» bi quyet dinh da ky sau thay — chu kho chon (b) o Cong Pham vi F24 13/10 (P7-2)",
+			"can_cu": "_acceptance/tro-ly-okr-nen/decisions.jsonl:28"
+		},
+		{
+			"ho_so": "khoa-con-bat-xa-tran",
+			"eval": "E4",
+			"muc": "bunfig.toml",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "khai-not-run",
+			"ly_do": "kcb: tro-ly-okr-nen S4-r1 gan tran 60 giay cho 5 ca do quyen cua go-la-cat-quyen.spec.ts (go-la-cat-quyen het tran 5 giay duoi tai S4); loi hua AC-4 «khong ca nao mang tran rieng» bi quyet dinh da ky sau thay — chu kho chon (b) o Cong Pham vi F24 13/10 (P7-2)",
+			"can_cu": "_acceptance/tro-ly-okr-nen/decisions.jsonl:28"
+		},
+		{
+			"ho_so": "khung-tao-okr-nhu-deal",
+			"eval": "E3",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": null,
+			"ly_do": "o do nam ngan tao/sua (khong do cot gop y); cac muc con lai phu vat lenh do"
+		},
+		{
+			"ho_so": "khung-tao-okr-nhu-deal",
+			"eval": "E6",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "khai-not-run",
+			"ly_do": "expected do chinh cot gop y trong ngan (cot >= 360 px, cot cung hang form); cot gop y da go khi gop y Kara neo tai cho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "khung-tao-okr-nhu-deal",
+			"eval": "E7",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "khung-tao-okr-nhu-deal",
+			"eval": "E9",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "khung-tao-okr-nhu-deal",
+			"eval": "E10",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "khung-tao-okr-nhu-deal",
+			"eval": "E11",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "khung-tao-okr-nhu-deal",
+			"eval": "E12",
+			"muc": "apps/app/test/tro-ly-okr-gop-y.dom.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "khung-tao-okr-nhu-deal",
+			"eval": "E24",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "khai-not-run",
+			"ly_do": "expected do tieu de cot va dau X dong cot cua cot gop y; cot da go",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "kiem-cheo-chay-quang-lang",
+			"eval": "E1",
+			"muc": "scripts/dieu-phoi/lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "kiem-cheo-chay-quang-lang",
+			"eval": "E1",
+			"muc": "scripts/dieu-phoi/test/lich.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "kiem-cheo-sau-gop",
+			"eval": "E2",
+			"muc": "scripts/dieu-phoi/lich.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "kiem-cheo-sau-gop",
+			"eval": "E2",
+			"muc": "scripts/dieu-phoi/test/lich.test.mjs",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "063891179a9dbf3304ce0c7d9251164617c3ea8f"
+		},
+		{
+			"ho_so": "soan-okr-song-lai",
+			"eval": "E3",
+			"muc": "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": null,
+			"ly_do": "man-soan.tsx thay boi trang rieng (trang-soan, khung-soan); bai DOM cua o van chay, cac muc con lai phu vat"
+		},
+		{
+			"ho_so": "soan-okr-song-lai",
+			"eval": "E12",
+			"muc": "apps/app/app/(app)/[slug]/okr/soan/man-soan.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "khai-not-run",
+			"ly_do": "lenh sol_san_thiet_ke chay design-gate nham thang man-soan.tsx, tep da go khi soan OKR thanh trang rieng — o do sach thiet ke cua mot tep khong con; sua gia tri lenh trong config bi luat 7 cam",
+			"can_cu": "574292047"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E1",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "khai-not-run",
+			"ly_do": "expected do cot gop y trong hop Sua muc tieu/Sua KR (cot >= 360 px); cot da go",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E2",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": null,
+			"ly_do": "bai DOM do the ba tang proposed-change van song; cac muc con lai phu vat"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E3",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E4",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E5",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E6",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E7",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E8",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E9",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E11",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "khai-not-run",
+			"ly_do": "expected do cot gop y o 390/1024/1440 (cot duoi form, cung hang); cot da go",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E14",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": null,
+			"ly_do": "cau hoi xet nut chinh cua the, khong goi ten cot; muc proposed-change con lai phu vat"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E15",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "the-gop-y-okr",
+			"eval": "E16",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "to-chuc-danh-sach-chi-tiet",
+			"eval": "E19",
+			"muc": "apps/app/app/(app)/[slug]/settings/members/confirm-dialog.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "packages/ui/src/components/confirm-dialog.tsx",
+			"ly_do": "ConfirmDialog doi vao packages/ui",
+			"can_cu": "e265f24da"
+		},
+		{
+			"ho_so": "toan-canh-okr",
+			"eval": "E21",
+			"muc": "apps/app/app/(app)/[slug]/okr/suc-khoe/**",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "apps/app/app/(app)/[[]slug]/okr/toan-canh/suc-khoe/**",
+			"ly_do": "muc go sai tu luc viet (thieu doan toan-canh); man suc khoe nam duoi okr/toan-canh"
+		},
+		{
+			"ho_so": "tong-quan-va-khung-noi-tieng-viet",
+			"eval": "E7",
+			"muc": "apps/app/lib/deal-stage.ts",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": "apps/app/lib/giai-doan.ts",
+			"ly_do": "deal-stage.ts thay boi giai-doan.ts khi app doc giai doan dong",
+			"can_cu": "ecb9448b4"
+		},
+		{
+			"ho_so": "tro-ly-doc-kho",
+			"eval": "E5",
+			"muc": "packages/db/src/tai-lieu-suc-khoe*.ts",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": null,
+			"ly_do": "muc go sai tu luc viet (khong tep nao khop); cac muc con lai phu vat lenh do"
+		},
+		{
+			"ho_so": "tro-ly-okr-de-xuat",
+			"eval": "E2",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "tro-ly-okr-de-xuat",
+			"eval": "E2",
+			"muc": "apps/app/test/tro-ly-okr-gop-y.dom.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "tro-ly-okr-de-xuat",
+			"eval": "E3",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "tro-ly-okr-de-xuat",
+			"eval": "E3",
+			"muc": "packages/ui/src/components/suggestion.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "7875d145eec958d927d9a42a1f774b736cefd21b"
+		},
+		{
+			"ho_so": "tro-ly-okr-de-xuat",
+			"eval": "E3",
+			"muc": "apps/app/test/tro-ly-okr-gop-y.dom.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "tro-ly-okr-de-xuat",
+			"eval": "E4",
+			"muc": "packages/ui/src/components/suggestion.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": null,
+			"ly_do": "Suggestion cu da go; okr/** va tro-ly.service con lai phu vat",
+			"can_cu": "7875d145e"
+		},
+		{
+			"ho_so": "tro-ly-okr-de-xuat",
+			"eval": "E29",
+			"muc": "apps/app/app/(app)/[slug]/okr/cot-gop-y.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "081c9b7927a2b15d75f688e775713e737b4d94d3"
+		},
+		{
+			"ho_so": "tro-ly-okr-de-xuat",
+			"eval": "E29",
+			"muc": "packages/ui/src/components/suggestion.tsx",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "bo-paths",
+			"ly_do": "o da not-run; vat cua muc da go khoi kho",
+			"can_cu": "7875d145eec958d927d9a42a1f774b736cefd21b"
+		},
+		{
+			"ho_so": "tro-ly-okr-nen",
+			"eval": "E21",
+			"muc": "packages/db/src/okr-can-chinh.ts",
+			"ma": "paths-khong-tro-toi-tep",
+			"nguon": "paths",
+			"xu_ly": "tro-duong-moi",
+			"moi": null,
+			"ly_do": "muc go sai tu luc viet (tep chua tung co); alignmentTargets nam trong apps/api/src/okr/** da co trong paths"
+		},
+		{
+			"ho_so": "khoa-con-bat-xa-tran",
+			"eval": "E4",
+			"muc": null,
+			"ma": null,
+			"nguon": "p8-4",
+			"xu_ly": "khai-not-run",
+			"ly_do": "kcb: tro-ly-okr-nen S4-r1 gan tran 60 giay cho 5 ca do quyen cua go-la-cat-quyen.spec.ts (go-la-cat-quyen het tran 5 giay duoi tai S4); loi hua AC-4 «khong ca nao mang tran rieng» bi quyet dinh da ky sau thay — chu kho chon (b) o Cong Pham vi F24 13/10 (P7-2)",
+			"can_cu": "_acceptance/tro-ly-okr-nen/decisions.jsonl:28"
+		},
+		{
+			"ho_so": "lenh-dung-do-khong-ai-thay",
+			"eval": "E5",
+			"muc": null,
+			"ma": null,
+			"nguon": "p8-4",
+			"xu_ly": "sua-rang",
+			"ly_do": "dieu 2 so ci.yml tung ky tu voi ban cua hang o sha 3c97e759, tien de bi luat 47 (09/10) lat — thay bang kiem cau truc buoc bun run build; spawnSync khai maxBuffer (dau ra pre-push > 1 MiB lam status null). Chu kho chon o Cong Pham vi F24 13/10 (P7-4)",
+			"can_cu": "CLAUDE.md:14",
+			"tep": [
+				"_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs",
+				"_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-ci.mjs"
+			],
+			"dot_bien": [
+				{
+					"ten": "bo-buoc-build",
+					"tep": ".github/workflows/ci.yml",
+					"thay": [
+						"bun run build",
+						"bun run khong-build"
+					],
+					"thong_diep": "ci.yml khong con buoc nao chay bun run build"
+				},
+				{
+					"ten": "if-tren-buoc-build",
+					"tep": ".github/workflows/ci.yml",
+					"chen_if": true,
+					"thong_diep": "buoc chay bun run build mang if hoac continue-on-error"
+				}
+			]
+		},
+		{
+			"ho_so": "do-man-tren-kho-rieng",
+			"eval": "E11",
+			"muc": null,
+			"ma": null,
+			"nguon": "p8-4",
+			"xu_ly": "tu-het",
+			"ly_do": "dmk_khong_noi_thuoc chay 13/10 o moc nen: «khong-noi-thuoc: sach», exit 0"
+		}
+	],
+	"ngoai_vong": {
+		"ngay": [
+			"2026-10-11",
+			"2026-10-12",
+			"2026-10-13"
+		],
+		"yeu_cau": "P7-5",
+		"ho_so": [
+			{
+				"ho_so": "ban-gieo-gop-y-sau-nop",
+				"eval": [
+					{
+						"eval": "E4",
+						"loai": "do-moi"
+					}
+				]
+			},
+			{
+				"ho_so": "bang-thanh-vien-giu-hang",
+				"eval": [
+					{
+						"eval": "E1",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E2",
+						"loai": "khong-chay-duoc"
+					},
+					{
+						"eval": "E3",
+						"loai": "khong-chay-duoc"
+					},
+					{
+						"eval": "E4",
+						"loai": "khong-chay-duoc"
+					},
+					{
+						"eval": "E5",
+						"loai": "khong-chay-duoc"
+					},
+					{
+						"eval": "E6",
+						"loai": "khong-chay-duoc"
+					},
+					{
+						"eval": "E7",
+						"loai": "khong-chay-duoc"
+					}
+				]
+			},
+			{
+				"ho_so": "bo-dung-chung-nhan-chuoi",
+				"eval": [
+					{
+						"eval": "E4",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "bo-dung-khong-ket",
+				"eval": [
+					{
+						"eval": "E9",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "bo-xuong-kara",
+				"eval": [
+					{
+						"eval": "E10",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "ca-chap-chon-cach-ly",
+				"eval": [
+					{
+						"eval": "E5",
+						"loai": "do-moi"
+					},
+					{
+						"eval": "E7",
+						"loai": "do-moi"
+					}
+				]
+			},
+			{
+				"ho_so": "ca-chap-chon-con-lai",
+				"eval": [
+					{
+						"eval": "E6",
+						"loai": "do-moi"
+					}
+				]
+			},
+			{
+				"ho_so": "cai-dat-chung-chi-quan-tri",
+				"eval": [
+					{
+						"eval": "E8",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "cai-dat-con-lai-noi-tieng-viet",
+				"eval": [
+					{
+						"eval": "E1",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E3",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E6",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E8",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E10",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E11",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E12",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E13",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E14",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E15",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E17",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "cap-nhat-tuan-okr",
+				"eval": [
+					{
+						"eval": "E7",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E14",
+						"loai": "khong-chay-duoc"
+					},
+					{
+						"eval": "E19",
+						"loai": "khong-chay-duoc"
+					}
+				]
+			},
+			{
+				"ho_so": "chan-lai-component-ra-man",
+				"eval": [
+					{
+						"eval": "E1",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E2",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E7",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "chan-trung-khoa-ban-nhap",
+				"eval": [
+					{
+						"eval": "E3",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E4",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "chu-cuoi-cung-tien-de",
+				"eval": [
+					{
+						"eval": "E5",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "chu-mac-dinh-thu-vien-ngoai",
+				"eval": [
+					{
+						"eval": "E3",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E4",
+						"loai": "do-san"
+					}
+				]
+			},
+			{
+				"ho_so": "cron-theo-ban-khai",
+				"eval": [
+					{
+						"eval": "E8",
+						"loai": "do-san"
+					},
+					{
+						"eval": "E7",
+						"loai": "do-san"
+					}
+				]
+			}
+		]
+	}
+}
