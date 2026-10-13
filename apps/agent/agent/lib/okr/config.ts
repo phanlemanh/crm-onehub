@@ -40,6 +40,7 @@ export const TRO_LY_OKR = {
 			tongKet: "TDX_TONG_KET",
 			tranUsd: "TDX_TRAN_USD",
 			thuMucThem: "TDX_THU_MUC_THEM",
+			thuMucCa: "TDX_THU_MUC_CA",
 		},
 	},
 	cuaSoNguCanh: 1_048_576,

@@ -181,6 +181,8 @@ function congTy(soKeHoach: number, xuongCoKhuon: boolean) {
 		soKeHoach,
 		xuongCoKhuon,
 		deals: [],
+		archivedContacts: [],
+		archivedDeals: [],
 	};
 }
 
@@ -449,6 +451,7 @@ function caNhan() {
 		},
 		isPrimaryContact: false,
 		deals: [],
+		archivedDeals: [],
 	};
 }
 
@@ -547,6 +550,7 @@ function tongQuanGia() {
 		trend: [],
 		closingThisMonthTotal: thang,
 		biggestOpen: [],
+		viecQuaHan: [],
 		overdueTasks: [
 			{
 				id: "viec-1",
@@ -757,7 +761,7 @@ const THANH_VIEN = [
 
 function datThanhVien(
 	canManage: boolean,
-	xemTruoc: { keHoach: number; buoc: number },
+	xemTruoc: { keHoach: number; buoc: number; viec: number },
 ) {
 	dat("workspace.get", () => ({
 		id: "ws",
@@ -786,6 +790,14 @@ function datThanhVien(
 	dat("onboarding.access", () => ({ canManage }));
 	dat("onboarding.transferPreview", () => xemTruoc);
 	dat("users.list", () =>
+		THANH_VIEN.map((n) => ({
+			id: n.userId,
+			name: n.name,
+			email: `${n.userId}@thu.test`,
+			image: null,
+		})),
+	);
+	dat("onboarding.nguoiNhanViec", () =>
 		THANH_VIEN.map((n) => ({
 			id: n.userId,
 			name: n.name,
@@ -823,7 +835,7 @@ const thayMa = (gia: string) =>
 
 describe("chuyen-giao-man", () => {
 	test("chuyen-giao-man: xem truoc dung nguoi, chon T, gui dung payload chuyen giao", async () => {
-		datThanhVien(true, { keHoach: 2, buoc: 3 });
+		datThanhVien(true, { keHoach: 2, buoc: 3, viec: 0 });
 		await mo(<MembersTable />);
 		await moMenuCua("Huong Le");
 		const muc = mucChuyen();
@@ -887,7 +899,7 @@ describe("chuyen-giao-man", () => {
 	});
 
 	test("chuyen-giao-man: xem truoc bang 0 thi nut chuyen khoa", async () => {
-		datThanhVien(true, { keHoach: 0, buoc: 0 });
+		datThanhVien(true, { keHoach: 0, buoc: 0, viec: 0 });
 		await mo(<MembersTable />);
 		await moMenuCua("Huong Le");
 		const muc = mucChuyen();
@@ -906,7 +918,7 @@ describe("chuyen-giao-man", () => {
 	});
 
 	test("chuyen-giao-man: doi chung am — khong co quyen thi khong co muc chuyen viec", async () => {
-		datThanhVien(false, { keHoach: 2, buoc: 3 });
+		datThanhVien(false, { keHoach: 2, buoc: 3, viec: 0 });
 		await mo(<MembersTable />);
 		await moMenuCua("Huong Le");
 		await nghi(5);

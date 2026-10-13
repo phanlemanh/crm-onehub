@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: db99fd8bbadd07a7f133280a3ee59275e5266999
+verified_commit: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4
 human_signoff: "Phan Le Manh 2026-10-10 — ký lại Cổng 2 trên verdict PASS 4/4 eval + 7 suite (S4 vòng 3, wf_cf3b810e-33c, sau bản sửa P4-67); Ngoài 1–6, 8–10 ghi Known limits, Ngoài 7 chấp nhận không sửa; đồng ý cắt; Treo phê hết"
 ---
 
@@ -126,3 +126,7 @@ Khong co eval judgment nao trong hop dong nay (ca bon eval E1 den E4 deu la exec
 Round 1: E2, E3 REJECT — t4, t5 trong AC-2 (phan loai tung ho so khi lan cham tran, vuot tran van phai luu tien do; tran lan phai nho hon tran luot). Returned to implementation (commit 774922da5: phan loai tung ho so, vuot tran van luu tien do, lan tran 60 phut, doc suite chay lai).
 Round 2: E1, E2, E3, E4 PASS va bay lenh suite xanh tren cay 7bb5ddf7.
 Round 3: E1, E2, E3, E4 PASS va bay lenh suite xanh tren cay db99fd8bb sau ban sua phan loai vuot tran o duong ma 0/1 ve khong-chay-duoc (F9 AC-8); the Cong 2 va trang bang chung can ve lai truoc khi ky lai.
+
+### Re-pin lần 1 — 2026-10-12, do chuyen-goi-dieu-phoi: ghim lại sau khi gỡ scripts/dieu-phoi và nhận kit 2.28.0
+run_id: repin-20261012T222532Z-81286
+sha: efb35a7d57ca6e75c530fb7af99a3a97f6be7aa4 · suites: 7 lệnh exit 0 · evals: 2/2 eval máy đạt kỳ vọng · không chạy theo hồ sơ: E1, E4 · thay bởi hồ sơ đã ký: E1→chuyen-goi-dieu-phoi#AC-5, E4→chuyen-goi-dieu-phoi#AC-9 · AC không có chốt máy: AC-1, AC-6 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)

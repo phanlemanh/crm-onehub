@@ -3,6 +3,7 @@ import { khungUngDungMessages } from "@/lib/messages/khung-ung-dung";
 
 export type MucRailKey =
 	| "overview"
+	| "viec"
 	| "chat"
 	| "companies"
 	| "contacts"
@@ -23,6 +24,7 @@ export type MucRail = {
 
 export const MUC_RAIL: readonly MucRail[] = [
 	{ key: "overview", href: "/", match: "exact" },
+	{ key: "viec", href: "/viec", match: "prefix" },
 	{ key: "chat", href: "/chat", match: "prefix", related: ["/agents"] },
 	{ key: "companies", href: "/companies", match: "prefix" },
 	{ key: "contacts", href: "/contacts", match: "prefix" },

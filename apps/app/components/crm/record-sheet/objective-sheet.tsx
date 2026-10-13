@@ -87,6 +87,7 @@ import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useCrmCache } from "@/lib/trpc/cache";
 import { useTRPC } from "@/lib/trpc/client";
 import type { RouterOutputs } from "@/lib/trpc/types";
+import { LyDoNoiGop } from "./ly-do-noi-gop";
 import { TabDienBien } from "./objective-dien-bien";
 import {
 	coDaiDuyet,
@@ -504,7 +505,7 @@ function KhuGopVao({ mt }: { mt: ChiTiet }) {
 	if (mt.alignments.length === 0) return null;
 	return (
 		<div data-khu="gop-vao">
-			<DetailSheetSection title={m.khuGopVao}>
+			<DetailSheetSection title={m.khuDuongLyDo}>
 				<ItemGroup>
 					{mt.alignments.map((g) => (
 						<Item
@@ -526,6 +527,7 @@ function KhuGopVao({ mt }: { mt: ChiTiet }) {
 										</>
 									) : null}
 								</ItemDescription>
+								<LyDoNoiGop g={g} />
 							</ItemContent>
 						</Item>
 					))}

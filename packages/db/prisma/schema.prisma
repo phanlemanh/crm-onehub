@@ -99,6 +99,11 @@ model User {
   taiLieuBaoSai     TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiNguoiBao")
   taiLieuBaoSaiXuLy TaiLieuBaoSai[]   @relation("TaiLieuBaoSaiXuLyBoi")
   tinHieu           TinHieu[]         @relation("TinHieuNguoiGui")
+  viecGiao          Viec[]            @relation("ViecNguoiGiao")
+  viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
+  viecTao           Viec[]            @relation("ViecTaoBoi")
+  viecTheoDoi       ViecTheoDoi[]
+  viecVet           ViecVet[]         @relation("ViecVetNguoi")
 
   @@unique([email])
   @@map("user")
@@ -409,6 +414,7 @@ model Company {
   updatedAt      DateTime            @updatedAt
 
   onboardingPlans OnboardingPlan[]
+  viecGan         ViecGan[]
 
   @@unique([domain], map: "company_domain_active_key", where: { archivedAt: null })
   @@index([ownerId])
@@ -476,6 +482,7 @@ model Contact {
   updatedAt       DateTime           @updatedAt
 
   onboardingEnrollments OnboardingEnrollment[]
+  viecGan               ViecGan[]
 
   @@unique([email], map: "contact_email_active_key", where: { archivedAt: null })
   @@index([companyId])
@@ -1040,6 +1047,7 @@ model Deal {
   contacts    DealContact[]
   activities  Activity[]
   fieldValues FieldValue[]
+  viecGan     ViecGan[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -1862,6 +1870,7 @@ model OnboardingPlan {
   activities  Activity[]
   watches     OnboardingWatch[]
   okrViecKr   OkrViecKr[]
+  viecGan     ViecGan[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -2935,4 +2944,93 @@ model TinHieu {
 
   @@index([nguoiGuiId, guiLuc])
   @@map("tinHieu")
+}
+
+enum TrangThaiViec {
+  CHUA_LAM
+  DANG_LAM
+  CHO_DANH_GIA
+  XONG
+  HUY
+}
+
+model Viec {
+  id              String        @id @default(cuid())
+  tieuDe          String
+  moTa            String?
+  trangThai       TrangThaiViec @default(CHUA_LAM)
+  hanNgay         DateTime?
+  nguoiGiaoId     String
+  nguoiGiao       User          @relation("ViecNguoiGiao", fields: [nguoiGiaoId], references: [id], onDelete: Restrict)
+  nguoiThucHienId String
+  nguoiThucHien   User          @relation("ViecNguoiThucHien", fields: [nguoiThucHienId], references: [id], onDelete: Restrict)
+  taoBoiId        String
+  taoBoi          User          @relation("ViecTaoBoi", fields: [taoBoiId], references: [id], onDelete: Restrict)
+  taoLuc          DateTime      @default(now())
+  doiLuc          DateTime      @updatedAt
+  roiChuaLamLuc   DateTime?
+  khepLuc         DateTime?
+  gan             ViecGan[]
+  theoDoi         ViecTheoDoi[]
+  vet             ViecVet[]
+
+  @@index([nguoiThucHienId, trangThai, hanNgay])
+  @@index([nguoiGiaoId, trangThai])
+  @@index([taoLuc])
+  @@map("viec")
+}
+
+model ViecGan {
+  id        String          @id @default(cuid())
+  viecId    String
+  viec      Viec            @relation(fields: [viecId], references: [id], onDelete: Cascade)
+  companyId String?
+  company   Company?        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId String?
+  contact   Contact?        @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  dealId    String?
+  deal      Deal?           @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  planId    String?
+  plan      OnboardingPlan? @relation(fields: [planId], references: [id], onDelete: Cascade)
+  taoLuc    DateTime        @default(now())
+
+  @@unique([viecId, companyId])
+  @@unique([viecId, contactId])
+  @@unique([viecId, dealId])
+  @@unique([viecId, planId])
+  @@index([companyId])
+  @@index([contactId])
+  @@index([dealId])
+  @@index([planId])
+  @@map("viecGan")
+}
+
+model ViecTheoDoi {
+  id     String   @id @default(cuid())
+  viecId String
+  viec   Viec     @relation(fields: [viecId], references: [id], onDelete: Cascade)
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taoLuc DateTime @default(now())
+
+  @@unique([viecId, userId])
+  @@index([userId])
+  @@map("viecTheoDoi")
+}
+
+model ViecVet {
+  id      String   @id @default(cuid())
+  viecId  String
+  viec    Viec     @relation(fields: [viecId], references: [id], onDelete: Cascade)
+  luc     DateTime @default(now())
+  nguoiId String?
+  nguoi   User?    @relation("ViecVetNguoi", fields: [nguoiId], references: [id], onDelete: SetNull)
+  loai    String
+  truoc   Json?
+  sau     Json?
+  nguon   String
+
+  @@index([viecId, luc])
+  @@index([loai])
+  @@map("viecVet")
 }

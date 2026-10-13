@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-san-pham-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Sản phẩm số"
+	},
+	"mucTieu": {
+		"title": "Dữ liệu trạng thái đơn sạch trước khi ra ứng dụng",
+		"whyNow": "Quý 3 học được: làm ứng dụng trước dữ liệu sạch là làm ngược.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Tỷ lệ đơn có trạng thái đúng thời gian thực",
+			"kind": "phan-tram",
+			"startValue": 60,
+			"targetValue": 95,
+			"unit": "%"
+		},
+		{
+			"title": "Ra bản thử ứng dụng cho 5 đối tác",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: tỷ lệ trạng thái đúng và mốc bản thử."
+}

@@ -95,6 +95,7 @@ const caNhanGia = () => ({
 	},
 	isPrimaryContact: false,
 	deals: [],
+	archivedDeals: [],
 });
 
 const congTyGia = () => ({
@@ -138,6 +139,8 @@ const congTyGia = () => ({
 	soKeHoach: 0,
 	xuongCoKhuon: false,
 	deals: [],
+	archivedContacts: [],
+	archivedDeals: [],
 });
 
 const thoaThuanGia = () => ({
@@ -166,6 +169,7 @@ const thoaThuanGia = () => ({
 	createdAt: "2026-09-01T00:00:00.000Z",
 	archivedAt: null,
 	contacts: [],
+	archivedContacts: [],
 });
 
 const keHoachGia = () => ({

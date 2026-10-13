@@ -28,10 +28,6 @@ export function tepDoi(git, tu, den) {
 	return ra ? ra.split("\n").filter(Boolean) : [];
 }
 
-export function ngayCua(git, sha) {
-	return git("show", "-s", "--format=%cs", sha);
-}
-
 function trenFirstParent(git, sha, ref) {
 	const ds = git("rev-list", "--first-parent", ref);
 	return ds.split("\n").includes(sha);
@@ -66,11 +62,4 @@ export function ghiMoc(goc, moc) {
 	const tam = `${tep}.tam-${process.pid}`;
 	writeFileSync(tam, `${JSON.stringify(moc)}\n`);
 	renameSync(tam, tep);
-}
-
-export function canMoc({ lucTruoc, now, lanGop: ds, ngayCua: ngay }) {
-	if (ds.length === 0) return null;
-	const qua =
-		now - Date.parse(lucTruoc) > KIEM_CHEO.moc.sauGio * KIEM_CHEO.donVi.gioMs;
-	return qua ? ngay(ds[0]) : null;
 }

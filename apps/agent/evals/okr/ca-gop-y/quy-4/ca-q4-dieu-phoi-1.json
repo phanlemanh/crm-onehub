@@ -1,0 +1,45 @@
+{
+	"id": "ca-q4-dieu-phoi-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Điều phối vận tải"
+	},
+	"mucTieu": {
+		"title": "Xe chạy đầy cả hai chiều",
+		"whyNow": "Ghép chuyến chiều về đã chứng minh được ở tuyến Bắc – Nam.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Tỷ lệ lấp đầy xe tăng từ 74 lên 85%",
+			"kind": "tang-toi",
+			"startValue": 74,
+			"targetValue": 85,
+			"unit": "%"
+		},
+		{
+			"title": "Chuyến rỗng chiều về giảm từ 31 xuống 20%",
+			"kind": "giam-xuong",
+			"startValue": 31,
+			"targetValue": 20,
+			"unit": "%"
+		},
+		{
+			"title": "Bước điều phối xong đúng hạn đạt 150",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 150,
+			"unit": "bước"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["kr-la-viec"],
+		"vietLai": ["kr.title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "«Bước điều phối xong đúng hạn đạt 150» đếm việc đã làm."
+}

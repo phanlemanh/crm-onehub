@@ -29,6 +29,17 @@ export type ArchivedInput = z.infer<typeof archivedInput>;
 export type DeletedOutput = z.infer<typeof deletedOutput>;
 export type AccessOutput = z.infer<typeof accessOutput>;
 
+export const nguoiNhanViecOutput = z.array(
+	z.object({
+		id: z.string(),
+		name: z.string(),
+		email: z.string(),
+		image: z.string().nullable(),
+	}),
+);
+
+export type NguoiNhanViecOutput = z.infer<typeof nguoiNhanViecOutput>;
+
 export const templateStepInput = z.object({
 	label: z.string().trim().min(1).max(200),
 	departmentId: z.string().trim().min(1).max(120),
@@ -180,6 +191,7 @@ export const transferWorkInput = z.object({
 export const transferOutput = z.object({
 	keHoach: z.number().int().nonnegative(),
 	buoc: z.number().int().nonnegative(),
+	viec: z.number().int().nonnegative(),
 });
 
 export const stepRemovedOutput = z.object({ id: z.string() });

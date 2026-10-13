@@ -41,3 +41,7 @@ export function docDuocPhamVi(
 export function laQuanTriWorkspace(role: WorkspaceRole | null): boolean {
 	return role === "owner" || role === "admin";
 }
+
+export function docDuocDoiTac(role: string): boolean {
+	return docDuocPhamVi(toWorkspaceRole(role), "doi-tac");
+}

@@ -11,6 +11,18 @@ export type ProtoCatalogEntry = {
 
 export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 	{
+		slug: "ngan-ho-so-trong-lo-trinh",
+		ten: "Ngăn hồ sơ trong trang Lộ trình — tóm tắt hồ sơ của việc",
+		states: [
+			{ id: "ST-ngan-day-du", nhan: "Việc LT1 — mọi người" },
+			{ id: "ST-ngan-chu-kho", nhan: "Việc LT1 — chủ không gian làm việc" },
+			{ id: "ST-ngan-o-vang", nhan: "Việc 4n — có ô chưa ghi" },
+			{ id: "ST-ngan-chua-co-tom-tat", nhan: "Việc N0 — chưa có hồ sơ" },
+			{ id: "ST-ngan-khuon-cu", nhan: "Trang vẽ bằng khuôn bản 1" },
+			{ id: "ST-ngan-doan-dai", nhan: "Việc R1g — lý do dài" },
+		],
+	},
+	{
 		slug: "trang-lo-trinh-trong-crm",
 		ten: "Trang Lộ trình trong CRM — chỉ đọc",
 		states: [
@@ -1126,6 +1138,41 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 			},
 			{ id: "ST-ds-xac-nhan-xoa", nhan: "Trang — hỏi lại trước khi xoá" },
 			{ id: "ST-ds-loi", nhan: "Trang — tải lỗi, có Thử lại" },
+		],
+	},
+	{
+		slug: "viec-chung",
+		ten: "Việc chung — Việc của tôi, khung việc, khối Việc trên thẻ Hoạt động",
+		states: [
+			{ id: "ST-viec-cua-toi-co-viec", nhan: "Việc của tôi — có việc" },
+			{ id: "ST-viec-cua-toi-cho-tai", nhan: "Việc của tôi — đang tải" },
+			{ id: "ST-viec-cua-toi-rong", nhan: "Việc của tôi — chưa có việc" },
+			{ id: "ST-viec-cua-toi-loi", nhan: "Việc của tôi — tải hỏng" },
+			{
+				id: "ST-khung-viec-nguoi-thuc-hien",
+				nhan: "Khung việc — người thực hiện",
+			},
+			{
+				id: "ST-khung-viec-nguoi-giao-cho-danh-gia",
+				nhan: "Khung việc — người giao, việc chờ đánh giá",
+			},
+			{ id: "ST-khung-viec-chi-xem", nhan: "Khung việc — người theo dõi" },
+			{ id: "ST-khung-viec-lich-su", nhan: "Khung việc — thẻ Lịch sử" },
+			{ id: "ST-khung-viec-da-khep", nhan: "Khung việc — đã xong" },
+			{ id: "ST-o-soan-viec", nhan: "Ô soạn — giao việc từ thoả thuận" },
+			{ id: "ST-o-soan-viec-loi", nhan: "Ô soạn — giao hỏng" },
+			{
+				id: "ST-khoi-viec-ban-ghi",
+				nhan: "Thẻ Hoạt động — khối Việc ghim đầu thẻ (máy khuyên)",
+			},
+			{
+				id: "ST-khoi-viec-ban-ghi-rong",
+				nhan: "Thẻ Hoạt động — bản ghi chưa có việc",
+			},
+			{
+				id: "ST-khoi-viec-phuong-an-tron",
+				nhan: "Thẻ Hoạt động — lối khác: trộn việc vào dòng sự kiện",
+			},
 		],
 	},
 ];

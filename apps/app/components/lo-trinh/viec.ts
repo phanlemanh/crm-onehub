@@ -1,6 +1,6 @@
 import type {
-	HangLoTrinh,
-	LoTrinhDuLieu,
+	DuLieuChoXem,
+	HangChoXem,
 	MocLoTrinh,
 	NhomTrangThai,
 } from "@crm/validation/lo-trinh-du-lieu";
@@ -24,7 +24,7 @@ export const CHU_CUNG_NGHIA: ReadonlySet<string> = new Set([
 	"Đang làm",
 ]);
 
-export type Viec = HangLoTrinh & {
+export type Viec = HangChoXem & {
 	loTep: string;
 	loTen: string;
 	moc: MocLoTrinh | null;
@@ -37,10 +37,7 @@ export type BoLocChon = Record<BoLoc, string[]>;
 
 export type TuyChonLoc = Record<BoLoc, string[]>;
 
-export function phangViec(
-	duLieu: LoTrinhDuLieu,
-	homNay: string | null,
-): Viec[] {
+export function phangViec(duLieu: DuLieuChoXem, homNay: string | null): Viec[] {
 	return duLieu.lo_trinh.flatMap((lo) => {
 		const theoMoc = new Map<string, MocLoTrinh>();
 		for (const m of lo.moc)
@@ -104,7 +101,7 @@ export function thuocVongDoi(v: Viec, vongDoi: VongDoi): boolean {
 	return v.nhom_trang_thai === vongDoi;
 }
 
-export function tuyChonLoc(duLieu: LoTrinhDuLieu, viec: Viec[]): TuyChonLoc {
+export function tuyChonLoc(duLieu: DuLieuChoXem, viec: Viec[]): TuyChonLoc {
 	const nhom = [...new Set(viec.map((v) => v.nhom))].filter(Boolean);
 	const moc = duLieu.lo_trinh.flatMap((lo) =>
 		lo.moc.filter((m) => m.hang.length > 0).map((m) => khoaMocCua(lo.tep, m)),

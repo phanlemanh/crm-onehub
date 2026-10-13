@@ -1,6 +1,7 @@
 import { FIELD_ENTITIES, FIELD_TYPES } from "@crm/db/fields";
 import { z } from "zod";
 import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
+import { caNhanDaLuuTruOutput } from "../crm/da-luu-tru";
 import { currencyCode } from "../currency/currency.contracts";
 import { recordFieldValues } from "../fields/fields.contracts";
 import { listInput } from "../trpc/list-input";
@@ -276,6 +277,7 @@ export const dealDetailOutput = z.object({
 	createdAt: z.string(),
 	archivedAt: z.string().nullable(),
 	contacts: z.array(dealContactOutput),
+	archivedContacts: z.array(caNhanDaLuuTruOutput),
 });
 
 export type DealDetail = z.infer<typeof dealDetailOutput>;

@@ -1,0 +1,93 @@
+schema_version: 1
+feature_slug: bo-cau-hoi-mau
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.bcm_khuon
+    paths: [_acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/rang/**, _acceptance/tro-ly-doc-kho/rang/quyet-do.ts]
+    expected: "exit 0; bài 'khuon' gọi kiemBo (hàm của kiem-bo.ts, cùng hàm CLI gọi) trên bo-mau.json thật: 0 vi phạm luật khuon, và khuonBo.safeParse của quyet-do.ts (import, không chép) thành công. Bảng ca VIẾT TRƯỚC trên bản sao của chính bo-mau.json, mỗi ca phá một chỗ: thêm khoá lạ 'xyz' vào m01 · nhan 'tam' · m02 đổi mã thành m01 · m03 xoá mau · cắt còn 49 câu · xoá nguon · nguon đổi thành 'Bộ câu do máy soạn' (không mở đầu «Bộ mẫu giả») → mỗi ca đúng một vi phạm, toEqual {luat:'khuon', ma:<mã câu hoặc '*bo*'>} và câu ghim chứa mã câu. Số ca = số dòng bảng. CHIỀU ĐỎ chính là bảng này trên cùng fixture với ca lành."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.bcm_thanh_phan
+    paths: [_acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/rang/**]
+    expected: "exit 0; bài 'thanh-phan' so bảng đếm (tang × kieuChu, cộng số S6 có ganTrang) của bo-mau.json toEqual THANH_PHAN của bo-mau-config.ts — ma trận toàn phần, mọi ô kể cả ô 0, không đếm rời; THANH_PHAN tổng bằng 50 (khẳng định riêng). Mỗi câu: nhom và kho khớp ánh xạ tầng VIẾT TRƯỚC trong bài (S1→co-trang không kho, S2→co-trang/hai-trang, S3→co-trang/nguong-ngoai-le, S6→khong-co, S7→khong-dau, ngoai-kho→khong-phai-quy-dinh). CHIỀU ĐỎ trên bản sao: đổi kieuChu một câu S7 từ viet-tat sang khong-dau → vi phạm ghim ô 'S7/viet-tat' và 'S7/khong-dau'; xoá kho của một câu S3 → vi phạm ghim mã câu đó, luật thanh-phan."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.bcm_trang_mong
+    paths: [_acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/rang/**, _acceptance/tro-ly-doc-kho/bo-do/trang-mau/**]
+    expected: "exit 0; tập trang đọc từ thư mục trang-mau thật (readdirSync, không chép tên); bài 'trang-mong' trên bo-mau.json: 0 vi phạm. CHIỀU ĐỎ trên bản sao, mỗi ca đúng một vi phạm luật trang-mong ghim mã câu: mong của một câu S1 trỏ 'phu-cap-xang' · một câu S2 còn một nhóm trang · bienTheCua của một câu S7 trỏ câu S1 khác trang · ganTrang của một câu S6 trỏ trang không có · một câu S6 có mong."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.bcm_y_trong_yeu
+    paths: [_acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/rang/**, _acceptance/tro-ly-doc-kho/bo-do/trang-mau/**]
+    expected: "exit 0; bài 'y-trong-yeu' trên bo-mau.json: 0 vi phạm — mỗi ý của câu S1/S2/S3/S7 là chuỗi con (sau normalize NFC cả hai phía) của nội dung một trang trong mong của chính câu đó, đọc từ đĩa; ý của câu S7 toEqual ý câu gốc. CHIỀU ĐỎ trên bản sao, mỗi ca đúng một vi phạm ghim mã câu: ý của câu có trang hoa-hong đổi '1,2%' thành '1,5%' · ý của một câu nghi-phep thay bằng câu nguyên văn của trang cong-tac-phi (có trong kho nhưng không thuộc mong) · một câu S6 có ý · một câu S1 không có ý. Ca NFD: ý viết dạng NFD của câu nguyên văn đúng → KHÔNG vi phạm (đối chứng dương cho chuẩn hoá)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.bcm_rieng_tu
+    paths: [_acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/rang/**]
+    expected: "exit 0; bài 'rieng-tu' trên bo-mau.json: 0 vi phạm. Bảng ca VIẾT TRƯỚC chèn vào chữ của m01 trên bản sao: '0912345678' · '+84 912 345 678' · 'lan.nguyen@congty.vn' · 'HĐ số 2026/123' → mỗi ca đúng một vi phạm luật rieng-tu, ghim mã m01 và loại (dien-thoai, dien-thoai, email, so-hop-dong). Đối chứng dương: chữ '300.000 đồng', '24 giờ', 'tầng 2', '31 tháng 3' (số trong câu hỏi thật của bộ) KHÔNG vi phạm."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-1
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.bcm_kiem
+    paths: [_acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/rang/**, _acceptance/tro-ly-doc-kho/bo-do/trang-mau/**]
+    expected: "exit 0; CLI kiem-bo.ts trên bo-mau.json mặc định in một dòng 'bo-mau: 50 cau, 0 vi pham' và năm dòng 'luat <tên>: 0'. CHIỀU ĐỎ: cùng CLI với --bo <bản sao có một câu trỏ trang không có> thoát 1 và in dòng chứa 'trang-mong' và mã câu (bài kiem-bo.test.ts ca 'cli' chạy lệnh này qua spawnSync)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    layer: backend-effect
+    cmd: config:executors.script.bcm_kiem_do
+    paths: [_acceptance/bo-cau-hoi-mau/bo-mau.json, _acceptance/bo-cau-hoi-mau/rang/**, _acceptance/bo-cau-hoi-mau/evidence/do-bo-mau.md, _acceptance/bo-cau-hoi-mau/evidence/cham-tung-cau.jsonl]
+    expected: "exit 0; lệnh đo không cờ trên cây đã commit: git ls-files thấy evidence/do-bo-mau.md và evidence/cham-tung-cau.jsonl; stdout có 'khop', dòng 'bam bo-mau: <sha256>' bằng sha256 của bo-mau.json ở HEAD, 'luot 1: 46 ma' và 'luot 2: 50 ma' (tập mã bằng tập rút từ bo-mau.json, không đếm dòng), dòng 'ma thoat cham-bo-do: 0', ': 1' hoặc ': 2' (2 khi lượt có câu lỗi gọi model, các câu đó mang nhãn loi trong danh sách 'khong dat' và cột lỗi), bảng theo tầng và theo kiểu chữ, danh sách 'khong dat'; không dòng nào gọi model ('thu muc luot' vắng); git status --porcelain trống sau lệnh (không ghi tệp). Đỏ: thiếu tệp, băm lệch, ô lệch → exit 1 (chiều đỏ đo ở E8)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.bcm_bang_do
+    paths: [_acceptance/bo-cau-hoi-mau/rang/**, _acceptance/tro-ly-doc-kho/rang/quyet-do.ts]
+    expected: "exit 0; fixture jsonl SINH bằng dongTungCau của quyet-do.ts (writer thật của script chấm, import) cho đủ 46 mã lượt một và 50 mã lượt hai của bo-mau.json với kết cục viết trước; tinhBang trên fixture toEqual bảng VIẾT TRƯỚC trong bài (từng ô k/n theo tầng và kiểu chữ); ghiBaoCao → docBaoCao khứ hồi toEqual. kiemBangChung trên md+jsonl lành, băm khớp → ok. CHIỀU ĐỎ cùng fixture, mỗi ca đúng một lỗi ghim: sửa một ô k trong md → ghim tên ô · jsonl thiếu một mã → ghim mã · băm trong md khác sha256 bo → ghim 'bam' · thiếu tệp jsonl → ghim tên tệp. Ca cli: do-bo-mau.ts không cờ với BCM_EVIDENCE trỏ thư mục tạm có md lệch ô → exit 1, stdout chứa tên ô; md lành → exit 0, stdout 'khop', danh sách tệp thư mục tạm trước và sau bằng nhau."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E10
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.bcm_ma_thoat
+    paths: [_acceptance/bo-cau-hoi-mau/rang/**, _acceptance/tro-ly-doc-kho/rang/quyet-do.ts]
+    expected: "exit 0; bài 'ma-thoat' chạy do-bo-mau.ts --do với BCM_LENH_CHAM trỏ script chấm GIẢ trong thư mục tạm; script giả ghi luot-1/cham-tung-cau.jsonl bằng dongTungCau thật, in 'thu muc luot: <dir>' như script thật, rồi thoát theo ca. Bảng ca VIẾT TRƯỚC (đủ sáu dòng): giả thoát 0 đủ mã → lệnh 0 · giả thoát 1 đủ mã → lệnh 0 và báo cáo ghi 'ma thoat cham-bo-do: 1' · giả thoát 2 đủ mã, lượt một có m06 kết cục LOI → lệnh 0, báo cáo ghi 'ma thoat cham-bo-do: 2' và 'm06 (luot 1: loi)' · giả thoát 2 không in 'thu muc luot' → lệnh 2, stdout 'KHONG DO DUOC' · giả thoát 0 nhưng lượt một thiếu m01 và lặp m02 (vẫn 46 dòng) → lệnh 2, stdout ghim 'thieu m01' và 'trung m02' · giả thoát 0, lượt hai thiếu m50 → lệnh 2 ghim 'thieu m50'. Ca đủ mã: báo cáo có 'bam bo-mau' bằng sha256 tệp bộ và dòng 'bam tro-ly'. Mọi ca: git status --porcelain -- _acceptance/tro-ly-doc-kho không đổi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E9j
+    criterion: AC-8
+    executor: judgment
+    question: "Đọc từng câu trong bo-mau.json cạnh tám trang mẫu. (1) Câu tang S1/S2/S3/S7: trang trong mong có trả lời được đúng câu đó không, ý trong y có đúng là ý trả lời không? (2) Câu S6 có ganTrang: trang đó có thật không nói điều câu hỏi không — hay một người đọc kỹ vẫn suy ra được câu trả lời từ trang? (3) Câu S6 không ganTrang và ngoài kho: có trang nào trả lời được không? (4) Câu S7 và câu kieuChu tin-zalo đọc có giống người thật gõ không, kiểu chữ có đúng nhãn kieuChu không? (5) Có câu nào hai nghĩa tới mức một trợ lý làm đúng vẫn có thể bị chấm sai không? Nêu mã câu cho mỗi điểm."
+    evidence_required: [judged_by, verdict, rationale]
+    inputs:
+      - "_acceptance/bo-cau-hoi-mau/bo-mau.json"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/bao-mat.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/cong-tac-phi.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/doi-soat.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/hoa-hong.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/khieu-nai.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/nghi-phep.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/tam-ung.md"
+      - "_acceptance/tro-ly-doc-kho/bo-do/trang-mau/thu-viec.md"

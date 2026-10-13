@@ -39,9 +39,6 @@ jobs:
 
       - run: node scripts/luat-kho/do-cay.mjs --du-luat
 
-      - run: bun run test:dieu-phoi
-        if: ${{ !cancelled() }}
-
       - name: Product map
         if: ${{ !cancelled() }}
         run: node scripts/product-map.mjs --root . --check

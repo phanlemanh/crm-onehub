@@ -7,7 +7,7 @@ evals:
     executor: script
     cmd: config:executors.script.gpa_hinh
     status: not-run
-    superseded_by: giam-phut-ci-nhap-t1#AC-5
+    superseded_by: chuyen-goi-dieu-phoi#AC-4
     paths:
       - ".github/workflows/acceptance.yml"
       - "_acceptance/giam-phut-acceptance/rang/hinh.mjs"
@@ -39,7 +39,7 @@ evals:
     executor: script
     cmd: config:executors.script.gpa_khong_mat_lenh
     status: not-run
-    superseded_by: giam-phut-ci-nhap-t1#AC-6
+    superseded_by: chuyen-goi-dieu-phoi#AC-4
     paths:
       - ".github/workflows/acceptance.yml"
       - "_acceptance/giam-phut-acceptance/rang/khong-mat-lenh.mjs"
@@ -68,7 +68,7 @@ evals:
     executor: script
     cmd: config:executors.script.gpa_ho_so_cu
     status: not-run
-    superseded_by: giam-phut-ci-nhap-t1#AC-7
+    superseded_by: chuyen-goi-dieu-phoi#AC-10
     paths:
       - ".github/workflows/acceptance.yml"
       - "_acceptance/*/evals.yaml"

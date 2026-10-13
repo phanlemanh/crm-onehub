@@ -158,6 +158,7 @@ function thuTuc<T>(duong: string, doc: (v: DauVao) => T = () => null as T) {
 mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () => ({
 		onboarding: {
+			nguoiNhanViec: thuTuc("nguoiNhanViec", () => [TOI, NGUOI_A]),
 			planById: thuTuc("onboarding.planById", () => KE_HOACH_CHI_TIET),
 			listSteps: thuTuc("onboarding.listSteps", () => ({
 				rows: BUOC,

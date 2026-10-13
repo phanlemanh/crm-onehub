@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Làm mới số đo</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:  #fafafa;
+    --ink:    #171717;
+    --muted:  #575757;
+    --soft:   #666666;
+    --rule:   rgba(23,23,23,0.12);
+    --accent: #006B4F;
+    --sans:   'Geist', system-ui, sans-serif;
+    --serif:  'Lora', Georgia, serif;
+    --mono:   'Geist Mono', ui-monospace, monospace;
+  }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+  }
+  .frame { max-width: 1280px; width: 100%; }
+  .card { overflow-x: auto; }
+  svg { width: 100%; min-width: 1100px; display: block; }
+  footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="card">
+  <svg viewBox="0 0 1280 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng trái sang phải: --do đo bằng model thật khoảng 3 đô la, --ghi chép vào evidence, commit, rồi lượt ghim lại hay eval chạy lệnh không cờ. Ở bước cuối rẽ hai nhánh. Nhánh A, khuyến nghị: kiểm theo băm bộ, không gọi model, sửa trợ lý không làm đỏ, l5 chạy --do lại. Nhánh B: kiểm theo băm bộ cộng mã trợ lý, ai sửa apps/agent/agent thì lượt ghim gọi model hoặc đỏ.">
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#575757"/>
+      </marker>
+      <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#006B4F"/>
+      </marker>
+      <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+        <polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/>
+      </marker>
+    </defs>
+    <rect width="100%" height="100%" fill="#fafafa"/>
+
+    <text x="32" y="32" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.16em">CỔNG PHẠM VI · HÌNH 2/2 · HỎI-2 · SỐ ĐO LÀM MỚI KHI NÀO · AC-6 · AC-7</text>
+    <text x="32" y="64" fill="#171717" font-size="24" font-family="'Lora', Georgia, serif">Đo một lần bằng model thật, sau đó chỉ kiểm: kiểm theo cái gì</text>
+    <text x="32" y="88" fill="#575757" font-size="12" font-family="'Geist', sans-serif">Ba bước đầu chạy một lần trong vòng này. Bước cuối chạy mỗi lượt ghim lại; chỗ rẽ là nó so số đo với những gì.</text>
+
+    <line x1="32" y1="176" x2="608" y2="176" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+    <line x1="32" y1="172" x2="32" y2="180" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+    <line x1="608" y1="172" x2="608" y2="180" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+    <rect x="248" y="164" width="144" height="16" fill="#fafafa"/>
+    <text x="320" y="176" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">VÒNG NÀY, TRONG S3</text>
+    <line x1="656" y1="176" x2="816" y2="176" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+    <line x1="656" y1="172" x2="656" y2="180" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+    <line x1="816" y1="172" x2="816" y2="180" stroke="rgba(23,23,23,0.25)" stroke-width="0.8"/>
+    <rect x="676" y="164" width="120" height="16" fill="#fafafa"/>
+    <text x="736" y="176" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">EVAL S4 · GHIM LẠI</text>
+
+    <line x1="192" y1="240" x2="238" y2="240" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="400" y1="240" x2="446" y2="240" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <line x1="608" y1="240" x2="654" y2="240" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <path d="M816,224 H840 Q848,224 848,216 V172 Q848,164 856,164 H894" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <path d="M816,256 H856 Q864,256 864,264 V308 Q864,316 872,316 H894" fill="none" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <rect x="32" y="196" width="160" height="88" rx="6" fill="#fafafa"/>
+    <rect x="32" y="196" width="160" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="40" y="202" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="56" y="211" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-6</text>
+    <text x="112" y="236" fill="#171717" font-size="13" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">--do</text>
+    <text x="112" y="254" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">đo bằng model thật</text>
+    <text x="112" y="270" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">~$3</text>
+
+    <rect x="240" y="196" width="160" height="88" rx="6" fill="#fafafa"/>
+    <rect x="240" y="196" width="160" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="248" y="202" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="264" y="211" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-7</text>
+    <text x="320" y="236" fill="#171717" font-size="13" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">--ghi</text>
+    <text x="320" y="254" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chép vào <tspan font-family="'Geist Mono', monospace" font-size="9">evidence/</tspan></text>
+
+    <rect x="448" y="196" width="160" height="88" rx="6" fill="#fafafa"/>
+    <rect x="448" y="196" width="160" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="456" y="202" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="472" y="211" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-7</text>
+    <text x="528" y="236" fill="#171717" font-size="13" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle">commit</text>
+    <text x="528" y="254" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">bằng chứng đo</text>
+
+    <rect x="656" y="196" width="160" height="88" rx="6" fill="#fafafa"/>
+    <rect x="656" y="196" width="160" height="88" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1.4"/>
+    <rect x="664" y="202" width="32" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="680" y="211" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">AC-7</text>
+    <text x="736" y="236" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Lượt ghim lại / eval</text>
+    <text x="736" y="254" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chạy lệnh không cờ</text>
+    <text x="736" y="270" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chỉ kiểm</text>
+
+    <rect x="896" y="112" width="352" height="104" rx="6" fill="#fafafa"/>
+    <rect x="896" y="112" width="352" height="104" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+    <rect x="904" y="118" width="128" height="12" rx="2" fill="transparent" stroke="rgba(0,107,79,0.50)" stroke-width="0.8"/>
+    <text x="968" y="127" fill="#006B4F" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NHÁNH A · KHUYẾN NGHỊ</text>
+    <text x="912" y="152" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Kiểm theo băm bộ</text>
+    <text x="912" y="172" fill="#575757" font-size="10" font-family="'Geist', sans-serif">không gọi model</text>
+    <text x="912" y="188" fill="#575757" font-size="10" font-family="'Geist', sans-serif">sửa trợ lý không làm đỏ</text>
+    <text x="912" y="204" fill="#575757" font-size="10" font-family="'Geist', sans-serif"><tspan font-family="'Geist Mono', monospace" font-size="9">l5</tspan> chạy <tspan font-family="'Geist Mono', monospace" font-size="9">--do</tspan> lại</text>
+
+    <rect x="896" y="264" width="352" height="104" rx="6" fill="#fafafa"/>
+    <rect x="896" y="264" width="352" height="104" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <rect x="904" y="270" width="56" height="12" rx="2" fill="transparent" stroke="rgba(23,23,23,0.40)" stroke-width="0.8"/>
+    <text x="932" y="279" fill="#575757" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">NHÁNH B</text>
+    <text x="912" y="304" fill="#171717" font-size="13" font-weight="600" font-family="'Geist', sans-serif">Kiểm theo băm bộ + mã trợ lý</text>
+    <text x="912" y="324" fill="#575757" font-size="10" font-family="'Geist', sans-serif">ai sửa <tspan font-family="'Geist Mono', monospace" font-size="9">apps/agent/agent</tspan> thì lượt ghim</text>
+    <text x="912" y="340" fill="#575757" font-size="10" font-family="'Geist', sans-serif">gọi model hoặc đỏ</text>
+
+    <text x="32" y="412" fill="#171717" font-size="13" font-style="italic" font-family="'Lora', Georgia, serif">Ở nhánh A, băm mã trợ lý vẫn được ghi lúc đo để người đọc thấy số đã cũ so với trợ lý hay chưa, nhưng không vào khoá kiểm.</text>
+
+    <line x1="32" y1="432" x2="1248" y2="432" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+    <text x="32" y="456" fill="#575757" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+    <rect x="112" y="446" width="28" height="14" rx="3" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+    <text x="148" y="457" fill="#575757" font-size="9" font-family="'Geist', sans-serif">bước</text>
+    <line x1="204" y1="453" x2="236" y2="453" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+    <text x="248" y="457" fill="#575757" font-size="9" font-family="'Geist', sans-serif">nhánh khuyến nghị</text>
+    <line x1="364" y1="453" x2="396" y2="453" stroke="#575757" stroke-width="1" marker-end="url(#arrow)"/>
+    <text x="408" y="457" fill="#575757" font-size="9" font-family="'Geist', sans-serif">luồng và nhánh còn lại</text>
+    <text x="1248" y="457" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="end">AC-6, AC-7: tiêu chí trong contract.md</text>
+  </svg>
+  </div>
+
+  <footer>Hình 2 / 2 · điểm quyết định Hỏi-2 tại Cổng Phạm vi · hồ sơ bo-cau-hoi-mau · nguồn: figures/index.md đề bài lam-moi-so-do; design.md mục Làm gì, bước 3 do-bo-mau.ts; contract.md AC-6, AC-7</footer>
+</div>
+</body>
+</html>

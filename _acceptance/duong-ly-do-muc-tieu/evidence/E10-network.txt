@@ -1,0 +1,2 @@
+E10 network: driver la man.mjs chay qua mot-luot.sh (khong co read_network_requests). Chi co phep dem console loi trong script: 0 loi o ca 6 ca (dong "console khong loi (0)").
+networkObserved=n-a (driver)

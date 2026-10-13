@@ -1,0 +1,133 @@
+slug: va-lo-ro-vai-chi-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_ghi
+    expected: "exit 0; -t vlr-ghi của apps/api/test/vai-chi-okr-ke-hoach.spec.ts, ca 'giao bước'. Dựng qua đường ghi thật: người vai okr 'vlr-okr' (tên 'Người OKR VLR'), người vai member 'vlr-member', quản trị 'vlr-quan-tri'; công ty, khuôn một bước, kế hoạch qua OnboardingService.createFromTemplate với ownerId vlr-member. Đếm activity của kế hoạch trước. OnboardingGhi.assignStep({stepId, assigneeId: vlr-okr}, vlr-quan-tri) phải ném BadRequestException có message chứa 'Người OKR VLR' và 'chỉ OKR', không thì ném 'vlr: giao buoc cho vai okr khong bi chan'; sau đó assigneeId của bước khác null thì ném 'vlr: buoc da doi nguoi'; số activity khác trước thì ném 'vlr: co vet khi bi chan'. Đối chứng dương cùng fixture: assignStep sang vlr-member trả assigneeId vlr-member, không thì ném 'vlr: giao cho member hong'. Chiều đỏ ở E11 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, apps/api/src/onboarding/onboarding-config.ts, packages/validation/src/vai-workspace.ts, apps/api/test/vai-chi-okr-ke-hoach.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_ghi
+    expected: "exit 0; cùng -t vlr-ghi, ca 'thêm bước và cầm trịch' trên fixture của E1. addStep({planId, label, departmentId, dueAt, assigneeId: vlr-okr}) phải ném BadRequestException chứa 'chỉ OKR' và số onboardingStep của kế hoạch không đổi, không thì ném 'vlr: them buoc cho vai okr khong bi chan'. setPlanOwner({planId, ownerId: vlr-okr}) phải ném BadRequestException chứa 'chỉ OKR' và ownerId vẫn vlr-member, không thì ném 'vlr: cam trich cho vai okr khong bi chan'. Đối chứng dương: addStep với assigneeId vlr-member tạo được bước. Chiều đỏ ở E11 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, apps/api/test/vai-chi-okr-ke-hoach.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_khuon
+    expected: "exit 0; -t vlr-khuon: đếm onboardingPlan của công ty trước. createFromTemplate với ownerId vlr-okr phải ném BadRequestException chứa 'chỉ OKR' và số kế hoạch không đổi, không thì ném 'vlr: tao tu khuon cho vai okr khong bi chan'; với ownerId 'vlr-ngoai' (user có thật, không hàng member) phải ném BadRequestException mang đúng lời ONBOARDING.thongDiep.khongPhaiThanhVien('vlr-ngoai') và số kế hoạch không đổi, không thì ném 'vlr: tao tu khuon cho nguoi ngoai khong bi chan'. Đối chứng dương: ownerId vlr-member tạo đúng một kế hoạch. Chiều đỏ ở E11 (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding.service.ts, apps/api/src/onboarding/onboarding-ghi.ts, apps/api/test/vai-chi-okr-ke-hoach.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_chuyen
+    expected: "exit 0; -t vlr-chuyen, hai ca. Ca 'đích vai okr': vlr-member cầm trịch kế hoạch mở và làm một bước chưa xong; transferWork({fromUserId: vlr-member, toUserId: vlr-okr}, vlr-quan-tri) phải ném BadRequestException chứa 'chỉ OKR', và ownerId kế hoạch cùng assigneeId bước vẫn vlr-member, không thì ném 'vlr: chuyen viec sang vai okr khong bi chan'. Ca 'dọn từ vai okr': dựng dữ liệu cũ bằng cách giao khi người đó còn vai member rồi đổi member.role sang 'okr' trực tiếp (trạng thái production trước bản vá); transferWork từ người đó sang vlr-member trả {keHoach: 1, buoc: 1} và cả hai sang vlr-member, không thì ném 'vlr: khong chuyen duoc tu vai okr'. Chiều đỏ ở E11 (a)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, apps/api/test/vai-chi-okr-ke-hoach.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_doi_vai
+    expected: "exit 0; -t vlr-doi-vai, ca 'còn việc', ba biến thể cùng khuôn: (i) A chỉ cầm trịch một kế hoạch mở, (ii) A chỉ làm một bước chưa xong của kế hoạch mở do người khác cầm trịch, (iii) A cầm trịch 2 kế hoạch mở và làm 3 bước chưa xong; mọi biến thể A còn một bước đã xong và cầm trịch một kế hoạch đã đóng (không được tính), và theo dõi thêm một kế hoạch. WorkspaceService.setMemberRole(vlr-quan-tri, {memberId: A, role: 'okr'}) phải ném ConflictException (409) có message bằng NGUYÊN VĂN WORKSPACE_CONFIG.messages.conViecKeHoach(soKeHoach, soBuoc) với cặp (1,0), (0,1), (2,3) của biến thể, không thì ném 'vlr: doi vai khi con viec khong bi chan <biến thể>' (chưa ném) hay 'vlr: loi doi vai sai <message>' (ném sai lời); message phải chứa 'Chuyển việc', không thì ném 'vlr: loi doi vai khong chi chuyen viec'; sau đó member.role của A khác 'member' thì ném 'vlr: vai da doi khi bi chan'; số onboardingWatch của A khác trước thì ném 'vlr: theo doi bi xoa khi bi chan'. Chiều đỏ ở E11 (c)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/workspace/workspace.service.ts, apps/api/src/workspace/workspace-config.ts, packages/validation/src/vai-workspace.ts, apps/api/test/vai-chi-okr-ke-hoach.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_doi_vai
+    expected: "exit 0; cùng -t vlr-doi-vai, ca 'chỉ theo dõi': A vai member không giữ kế hoạch hay bước mở, theo dõi (OnboardingTheoDoi.bat) một kế hoạch mở và một kế hoạch rồi đóng nó (datDong). Đối chứng: A có 2 lượt theo dõi. setMemberRole sang 'okr' thành công; member.role của A khác 'okr' thì ném 'vlr: doi vai khong xong'; số onboardingWatch của A khác 0 thì ném 'vlr: con theo doi sau doi vai <n>'. Ca 'đổi về member': C vai okr (đặt trực tiếp) có 1 lượt theo dõi; setMemberRole sang 'member' thành công và số lượt theo dõi của C vẫn 1, không thì ném 'vlr: xoa theo doi khi doi sang vai doc doi tac'. Ca 'lưu lại vai okr': D vai okr đặt trực tiếp (dữ liệu cũ) theo dõi một kế hoạch mở, không giữ việc; setMemberRole(D, 'okr') thành công và số lượt theo dõi của D khác 0 thì ném 'vlr: luu lai vai okr khong don theo doi'; rồi giao trực tiếp cho D một bước mở và lưu lại 'okr' lần nữa phải ném ConflictException như E5, không thì ném 'vlr: luu lai vai okr khi con viec khong bi chan'. Chiều đỏ ở E11 (d), (h)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/workspace/workspace.service.ts, apps/api/test/vai-chi-okr-ke-hoach.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_gom
+    expected: "exit 0; -t vlr-gom của apps/agent/test/nhac-vai-chi-okr.integration.spec.ts. Dựng qua bộ ghi thật cho hai người, 'vlr-gom-okr' và 'vlr-gom-member', mỗi người: làm một bước hạn sau 2 ngày VN (buoc-sap-han), cầm trịch một kế hoạch có bước cập nhật lần cuối 8 ngày trước (ke-hoach-im), theo dõi một kế hoạch bắt đầu đúng 6 ngày trước để hôm nay là ngày 7 (moc-ngay); vlr-gom-okr còn có một KR mình làm chủ cần cập nhật tuần (okr-cap-nhat). Vai của vlr-gom-okr đặt 'okr' sau khi dựng (dữ liệu cũ). Với cuaSo 'buoi-sang' rồi 'truc-tiep', now giữa ngày VN: danh sách của vlr-gom-okr có mục loai thuộc ['buoc-qua-han','buoc-sap-han','ke-hoach-im','moc-ngay'] thì ném 'vlr: bo gom con viec ke hoach cho vai okr <loai> <cuaSo>'; không có mục okr-cap-nhat thì ném 'vlr: bo gom mat viec okr <cuaSo>'. Đối chứng dương cùng fixture: danh sách của vlr-gom-member có đủ ba loại buoc-sap-han, ke-hoach-im, moc-ngay, không thì ném 'vlr: doi chung thieu <loai> <cuaSo>'. Chiều đỏ ở E11 (e)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/onboarding-nhac.ts, packages/db/src/vai-doi-tac.ts, packages/validation/src/vai-workspace.ts, packages/validation/test/vai-workspace.spec.ts, apps/agent/test/nhac-vai-chi-okr.integration.spec.ts]
+
+  - id: E7b
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_viec_cua_toi
+    expected: "exit 0; -t vlr-viec-cua-toi của apps/api/test/vai-chi-okr-ke-hoach.spec.ts: dựng qua bộ ghi thật người 'vlr-vct-okr' làm một bước sắp hạn và là chủ một KR cần cập nhật tuần, rồi đặt vai 'okr'; người 'vlr-vct-member' làm một bước sắp hạn. Gọi okr.viecCuaToi qua caller tRPC thật với phiên của vlr-vct-okr: viec có mục loai thuộc bốn loại kế hoạch thì ném 'vlr: viec cua toi co ke hoach cho vai okr'; JSON kết quả chứa tên công ty của bước thì ném 'vlr: viec cua toi mang ten doi tac'. Gọi dashboard.get qua caller thật với phiên vlr-vct-okr phải ném TRPCError FORBIDDEN có message KHONG_TRONG_PHAM_VI, không thì ném 'vlr: tong quan mo cho vai okr'. Đối chứng dương: dashboard.get với phiên vlr-vct-member có mySteps chứa bước của họ, không thì ném 'vlr: doi chung tong quan thieu buoc'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/onboarding-nhac.ts, apps/api/src/okr/okr-trao-doi.service.ts, apps/api/src/dashboard/dashboard.service.ts, apps/api/test/vai-chi-okr-ke-hoach.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_tin
+    expected: "exit 0; -t vlr-tin, khuôn E7; tên công ty đọc lại từ chính các kế hoạch của người đó. Ca 'Zalo': người 'vlr-tin-zalo' vai okr (khuôn E7) có ZaloLink và ưu tiên ZALO; zaloFetcher giả ghi lại thân sendMessage theo hợp đồng Zalo thật (trả {ok:true,result:{message_id}}). lenLichNhac(now sau 08:30 VN) rồi chayNhac(hàng của người đó): fetcher giả nhận khác đúng 1 lần cho chat_id của họ thì ném 'vlr: zalo khong gui dung mot tin <n>'; thân tin không chứa dòng việc OKR của họ 'KR chờ cập nhật tuần này' (dòng «Cập nhật tuần» chỉ in số KR, không in tên KR — tin-nhac.ts) thì ném 'vlr: tin zalo thieu viec okr'; thân tin chứa tên công ty của bất kỳ kế hoạch nào của họ thì ném 'vlr: tin zalo mang ten doi tac'; payload.daGui có mục loai kế hoạch thì ném 'vlr: daGui co viec ke hoach'. Ca 'Slack': người khác 'vlr-tin-slack' cùng khuôn, ưu tiên SLACK với SlackMemberMatch và fetcher giả của chat.postMessage; cùng bốn thông điệp với chữ 'slack' thay 'zalo'. Ca 'chỉ có việc kế hoạch': người 'vlr-chi-ke-hoach' vai okr có ZaloLink, chỉ giữ một bước sắp hạn; người 'vlr-chi-ke-hoach-member' vai member cùng khuôn. Sau lenLichNhac, tìm agentTask kind 'nhac-ke-hoach' theo tiền tố subject 'user:vlr-chi-ke-hoach-member:' — không có thì ném 'vlr: doi chung chi ke hoach khong co hang'; có hàng theo tiền tố 'user:vlr-chi-ke-hoach:' (dấu hai chấm ngay sau mã) thì ném 'vlr: ghi hang nhac cho vai okr chi co ke hoach'; zaloFetcher được gọi cho chat_id của vlr-chi-ke-hoach thì ném 'vlr: gui tin cho vai okr chi co ke hoach'. Đối chứng dương: tin của vlr-gom-member chứa tên công ty của bước của chính họ. Chiều đỏ ở E11 (e2)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [packages/db/src/onboarding-nhac.ts, apps/agent/agent/lib/nhac-ke-hoach.ts, apps/agent/test/nhac-vai-chi-okr.integration.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_danh_sach
+    expected: "exit 0; -t vlr-danh-sach của apps/api/test/vai-chi-okr-ke-hoach.spec.ts: người vai owner, admin, member, okr và user 'vlr-ngoai' không hàng member; OnboardingService.nguoiNhanViec() lọc về mã của năm người đó phải bằng đúng tập {owner, admin, member}, không thì ném 'vlr: danh sach nguoi nhan viec sai <json>'; mỗi phần tử có đúng khoá id, name, email, image. Chiều đỏ ở E11 (f)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding.service.ts, apps/api/src/onboarding/onboarding.router.ts, apps/api/src/onboarding/onboarding.contracts.ts, apps/api/test/vai-chi-okr-ke-hoach.spec.ts]
+
+  - id: E9b
+    criterion: AC-9
+    executor: test
+    cmd: config:executors.test.vlr_o_chon
+    expected: "exit 0; -t vlr-o-chon của apps/app/test/nguoi-nhan-viec.dom.tsx: mock tRPC trả onboarding.nguoiNhanViec = [Chủ, Quản trị, Thành viên] và users.list = năm người kể cả 'Người OKR' và 'Người Ngoài'. Ba ca, mỗi ca mở đúng ô chọn thật: ô người làm của PlanSteps, ô người cầm trịch của TaoKeHoach, ô người nhận của ChuyenViecDialog. Tên trong danh sách mở ra phải bằng đúng tập ba tên, không thì ném 'vlr: o chon <ô> liet ke sai <tên>'. Ca 'đang giữ': bước có assignee {id: okr, name: 'Người OKR'} — nút của ô người làm hiện 'Người OKR', không thì ném 'vlr: o chon mat ten nguoi dang giu'. Chiều đỏ: trỏ ô về users.list làm ca đỏ với 'vlr: o chon <ô> liet ke sai Người OKR' (chạy tay ở S3, ghi trong sổ)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/components/crm/record-sheet/plan-steps.tsx, "apps/app/app/(app)/[slug]/onboarding/tao-ke-hoach.tsx", "apps/app/app/(app)/[slug]/settings/members/chuyen-viec-dialog.tsx", apps/app/test/nguoi-nhan-viec.dom.tsx]
+
+  - id: E10
+    criterion: AC-10
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.vlr_thuoc
+    expected: "exit 0; apps/api/test/ro-vai-chi-okr.spec.ts chạy rang/ro-vai-chi-okr.mjs bằng spawnSync với DATABASE_URL của kho thử. Ca 'có rò': người 'vlr-thuoc-okr' — giao khi còn member qua OnboardingGhi thật rồi đổi member.role sang 'okr' trực tiếp — giữ một bước mở, một kế hoạch mở, một lượt theo dõi kế hoạch mở, và một agentTask 'nhac-ke-hoach' (subject user:vlr-thuoc-okr:<ngày VN>, outcome 'da-gui:1', payload {muc, daGui:[{loai:'buoc-sap-han',planId,stepId}], kenh:'zalo'}); cùng người còn bốn vật đã khép: một bước đã xong của kế hoạch mở, một bước chưa xong của một kế hoạch đã đóng, chính kế hoạch đã đóng đó do họ cầm trịch, một lượt theo dõi kế hoạch đã đóng. Chụp vân tay md5 các hàng của người trong ca (member, onboardingStep theo assigneeId, onboardingPlan theo ownerId, onboardingWatch theo userId, agentTask theo tiền tố subject). Chạy không cờ: mã thoát khác 1 thì ném 'vlr: thuoc khong do <mã>'; theoNguoi['vlr-thuoc-okr'] ở buocMo, keHoachMo, theoDoiMo, nhacDaMangKeHoach khác đúng 1 thì ném 'vlr: thuoc dem sai <khoá> <số>'; vân tay sau khác trước thì ném 'vlr: thuoc ghi vao kho'. Ca 'sạch': transferWork từ vlr-thuoc-okr sang một người vai member và xoá lượt theo dõi kế hoạch mở của họ; chạy với cờ --trong vlr-thuoc-okr: mã thoát khác 0 thì ném 'vlr: thuoc khong ve 0 khi sach <mã>'; chạy --trong vlr-thuoc-okr khi còn rò (trước bước dọn) mã khác 1 thì ném 'vlr: co --trong khong do'. Ca 'thiếu biến': chạy không DATABASE_URL, mã khác 2 thì ném 'vlr: thuoc khong tu choi khi thieu bien'. Chiều đỏ ở E11 (g)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/va-lo-ro-vai-chi-okr/rang/ro-vai-chi-okr.mjs, apps/api/test/ro-vai-chi-okr.spec.ts]
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.vlr_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly: với mỗi cặp, chạy phép đo trên bản sao lành phải xanh, rồi thayMotLan chuỗi vật thật và chạy lại phải đỏ với đúng thông điệp ghim: (a) bỏ vế vai trong hàm nhận việc của onboarding-ghi.ts → E1 đỏ 'vlr: giao buoc cho vai okr khong bi chan'; (b) bỏ lời gọi nhận việc ở createFromTemplate → E3 đỏ 'vlr: tao tu khuon cho vai okr khong bi chan'; (c) bỏ nhánh ném 409 ở setMemberRole → E5 đỏ 'vlr: doi vai khi con viec khong bi chan'; (d) bỏ lệnh xoá onboardingWatch ở setMemberRole → E6 đỏ 'vlr: con theo doi sau doi vai'; (e) cho bộ gom dùng tập mọi thành viên thay tapDoiTac → E7 đỏ 'vlr: bo gom con viec ke hoach cho vai okr'; (e2) cùng phá như (e) → E8 đỏ 'vlr: tin zalo mang ten doi tac'; (f) bỏ lọc docDuocDoiTac ở nguoiNhanViec → E9 đỏ 'vlr: danh sach nguoi nhan viec sai'; (g) bỏ điều kiện closedAt/completedAt IS NULL ở câu đếm bước của thước → E10 đỏ 'vlr: thuoc dem sai'; (h) cho setMemberRole bỏ qua kiểm khi vai không đổi → E6 đỏ 'vlr: luu lai vai okr khong don theo doi'. Thiếu chuỗi vật ở tệp thật thì ném KhongDo gọi tên cặp. In 'dot-bien: 9/9 cap dat'; số cặp khác SO_CAP_KHAI = 9 thì thoát 1. Tệp thật không đổi (git diff --quiet trên các tệp vật sau lượt)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/va-lo-ro-vai-chi-okr/rang/dot-bien.mjs, _acceptance/va-lo-ro-vai-chi-okr/rang/ro-vai-chi-okr.mjs, apps/api/src/onboarding/onboarding-ghi.ts, apps/api/src/onboarding/onboarding.service.ts, apps/api/src/workspace/workspace.service.ts, packages/db/src/onboarding-nhac.ts]
+
+  - id: E12
+    criterion: AC-12
+    executor: judgment
+    question: >-
+      Đọc docs/api.md (mục «tRPC is the data surface», mục onboarding/kế hoạch 30 ngày nếu có, mục về đổi vai
+      trong «One organization») và docs/agent.md (mục «Nhắc buổi sáng») như một người mới vào kho. Tài liệu có nói
+      rõ bốn điều không: (1) đường ghi của kế hoạch 30 ngày — giao bước, thêm bước có người làm, đổi người cầm trịch,
+      tạo kế hoạch từ khuôn, chuyển việc 30 ngày — từ chối người không đọc được dữ liệu đối tác, kể cả vai «chỉ OKR»;
+      (2) đổi một người sang vai «chỉ OKR» bị từ chối khi người đó còn cầm trịch kế hoạch mở hay làm bước chưa xong, chỉ
+      sang «Chuyển việc», và khi không còn thì xoá mọi lượt theo dõi của họ; (3) bộ gom nhắc chỉ gom việc kế hoạch cho
+      người đọc được dữ liệu đối tác, người vai «chỉ OKR» vẫn nhận việc OKR; (4) ba chỗ trên cùng một luật docDuocDoiTac — bản gốc ở @crm/validation/vai-workspace cho API, bản sao cùng tên
+      ở @crm/db/vai-doi-tac cho bộ gom (packages/db không phụ thuộc được @crm/validation), và một bài kiểm giữ hai bản khớp
+      cho mọi vai. Tài liệu không tự đúc từ ghép tiếng Việt cho thuật ngữ kỹ thuật mà
+      CONTEXT.md không có. Trả PASS khi đủ bốn điều, FAIL nêu điều thiếu.
+    inputs: [docs/api.md, docs/agent.md, CONTEXT.md]
+    evidence_required: [verdict, rationale, verified_at]

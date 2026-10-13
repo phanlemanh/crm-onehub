@@ -27,6 +27,7 @@ import {
 	enrollmentRemoveOutput,
 	enrollmentStageInput,
 	enrollmentUpsertInput,
+	nguoiNhanViecOutput,
 	planCreateFromTemplateInput,
 	planDetailOutput,
 	planIdInput,
@@ -81,6 +82,14 @@ export class OnboardingRouter {
 	})
 	access(@Ctx() ctx: AuthedTrpcContext) {
 		return this.onboarding.access(ctx.user.id);
+	}
+
+	@Query({
+		output: nguoiNhanViecOutput,
+		meta: restMeta("GET", "/onboarding/nguoi-nhan-viec", TAG),
+	})
+	nguoiNhanViec() {
+		return this.onboarding.nguoiNhanViec();
 	}
 
 	@Query({
