@@ -318,6 +318,43 @@ function tenTrongDong(dong: Element | null, ten: string): Element | undefined {
 	);
 }
 
+describe("sap-xep-tong-quan", () => {
+	test("sap-xep-tong-quan: việc chung hạn ngày D xếp theo nửa đêm UTC như việc cũ, không theo nửa đêm giờ máy", async () => {
+		const goc = payload.me.overdueTasks[0];
+		if (!goc) throw new Error("fixture thieu viec cu o me");
+		dat("dashboard.summary", () => {
+			const du = tongQuan("me") as Record<string, Json>;
+			return {
+				...du,
+				overdueTasks: [{ ...goc, dueAt: "2026-10-11T20:00:00.000Z" }],
+				viecQuaHan: [
+					{
+						loai: "viec",
+						id: "VC_SX",
+						tieuDe: "Viec chung xep thu tu",
+						hanNgay: "2026-10-12",
+						nguoiThucHien: { id: TOI.id, name: TOI.name },
+						banGhi: null,
+					},
+				],
+			};
+		});
+		await mo(<DashboardSummary />);
+		await cho(
+			() =>
+				document.body.querySelector("[data-viec-chung]") !== null &&
+				dongViec(goc.id) !== null,
+			"hai dong viec",
+		);
+		const dong = [
+			...document.body.querySelectorAll("[data-viec], [data-viec-chung]"),
+		].map(
+			(e) => e.getAttribute("data-viec") ?? e.getAttribute("data-viec-chung"),
+		);
+		expect(dong.indexOf(goc.id)).toBeLessThan(dong.indexOf("VC_SX"));
+	});
+});
+
 describe("the-ca-doi", () => {
 	test("the-ca-doi: che do Cả đội dong U mo dau dong phu bang ten nguoi tao", async () => {
 		if (!VIEC_U) throw new Error("fixture thieu VIEC_U o team");

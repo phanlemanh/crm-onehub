@@ -176,7 +176,7 @@ export function DashboardSummary() {
 		...viecQuaHan.map((viec) => ({
 			loai: "viecChung" as const,
 			id: viec.id,
-			han: Date.parse(`${viec.hanNgay}T00:00:00`),
+			han: Date.parse(`${viec.hanNgay}T00:00:00Z`),
 			viec,
 		})),
 		...mySteps.map((buoc) => ({
