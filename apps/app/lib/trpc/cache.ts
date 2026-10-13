@@ -27,6 +27,7 @@ export type CrmCache = {
 	deal(id?: string, options?: Options): Promise<void>;
 	plan(id?: string, options?: Options): Promise<void>;
 	workTransferred(options?: Options): Promise<void>;
+	viecChanged(): Promise<void>;
 	okr(id?: string, options?: Options): Promise<void>;
 	hoiY(options?: Options): Promise<void>;
 	tomTat(options?: Options): Promise<void>;
@@ -245,9 +246,6 @@ export function useCrmCache(): CrmCache {
 		workTransferred: (options) =>
 			run(
 				[
-					trpc.viec.cuaToi.queryKey(),
-					trpc.viec.cuaBanGhi.queryKey(),
-					trpc.viec.get.queryKey(),
 					trpc.onboarding.manDanhMuc.queryKey(),
 					trpc.onboarding.bangCot.queryKey(),
 					trpc.onboarding.transferPreview.queryKey(),
@@ -255,6 +253,14 @@ export function useCrmCache(): CrmCache {
 				[],
 				options,
 			),
+
+		viecChanged: () =>
+			queryClient.invalidateQueries({
+				predicate: (query) => {
+					const [duong] = query.queryKey;
+					return Array.isArray(duong) && duong[0] === "viec";
+				},
+			}),
 
 		okr: (id, options) =>
 			run(

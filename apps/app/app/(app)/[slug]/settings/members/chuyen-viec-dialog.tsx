@@ -71,6 +71,7 @@ export function ChuyenViecDialog({
 						: loiXong,
 				);
 				await cache.workTransferred();
+				await cache.viecChanged();
 				dong();
 			},
 			onError: (error) => setLoi(error.message),
