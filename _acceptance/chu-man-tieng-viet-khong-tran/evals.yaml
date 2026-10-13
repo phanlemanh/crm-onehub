@@ -1,0 +1,114 @@
+schema_version: 1
+slug: chu-man-tieng-viet-khong-tran
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.cmt_breadcrumb
+    paths:
+      - "packages/ui/src/components/breadcrumb.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "packages/ui/test/breadcrumb-nhan.dom.tsx"
+    expected: |
+      jsdom. Ma tran 3 o viet truoc: LocaleProvider vi -> nav[data-slot=breadcrumb] co aria-label
+      "Vị trí trang"; LocaleProvider en -> "Breadcrumb"; vi kem prop aria-label="Đường về" -> "Đường về"
+      (nguoi goi thang). Dem dung 3 o. CHIEU DO (cung ham kiem, thanh phan gia dat nhan cung
+      aria-label="breadcrumb"): ghim "cmt-breadcrumb: vi doc breadcrumb thay vi Vị trí trang".
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.cmt_quet
+    paths:
+      - "packages/ui/src/**/*.tsx"
+      - "apps/app/**/*.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "apps/app/test/chu-man-tieng-viet.spec.ts"
+    expected: |
+      Quet ma doc cay that tu goc kho (suy goc tu vi tri tep test): moi tep .tsx duoi packages/ui/src va
+      apps/app (bo node_modules, .next, test/fixtures) khong chua chuoi aria-label="breadcrumb"; quan he:
+      so tep da quet > 0 va tap tep da quet chua packages/ui/src/components/breadcrumb.tsx va
+      apps/app/components/cai-dat-breadcrumb.tsx; messages.ts co khoa breadcrumb.nhan o ca en va vi; chuoi
+      "Vị trí trang" xuat hien 0 lan o moi tep .tsx da quet (chi song trong messages.ts). CHIEU DO (cung ham
+      quet, ban doc chen loi): breadcrumb.tsx tra lai aria-label="breadcrumb" -> ghim
+      "cmt-quet: con aria-label breadcrumb cung o packages/ui/src/components/breadcrumb.tsx"; breadcrumb.tsx
+      viet aria-label={locale === "vi" ? "Vị trí trang" : "Breadcrumb"} -> ghim
+      "cmt-quet: chu nhan breadcrumb viet cung o packages/ui/src/components/breadcrumb.tsx".
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.cmt_nhan_kieu
+    paths:
+      - "apps/app/components/crm/fields/fields-list.tsx"
+      - "apps/app/components/crm/fields/fields-copy.ts"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/chu-man-tieng-viet.dom.tsx"
+    expected: |
+      jsdom, truy van fields.list gia theo hop dong that (FieldsList that, du muoi kieu FIELD_TYPES). Ma
+      tran viet truoc 10 kieu x 2 ngon ngu = 20 o: nhan kieu cua hang la dung ten ngan cua bang AC-3 va
+      khong chua "—"; dem dung 20 o; cho truy van da tra ve (dem goi > 0) truoc khi khang dinh. CHIEU DO
+      (cung ham kiem, ban gia hang dung cau dai fieldTypeLabel): ghim
+      "cmt-nhan-kieu: vi select doc cau dai thay vi Chọn".
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.cmt_o_chon
+    paths:
+      - "apps/app/components/crm/fields/field-editor.tsx"
+      - "apps/app/components/crm/fields/fields-copy.ts"
+      - "apps/app/lib/messages/crm.ts"
+      - "apps/app/test/chu-man-tieng-viet.dom.tsx"
+    expected: |
+      jsdom. FieldEditor that mo o "Kiểu" (Radix Select, mo bang ban phim/pointer), vi va en: moi lua chon
+      SelectItem doc dung cau dai cua crmMessages(locale).fields.type cho kieu do (doi chieu tung khoa, 10
+      kieu x 2 ngon ngu = 20 o, dem dung 20). CHIEU DO (cung ham kiem, ban gia o chon dung ten ngan): ghim
+      "cmt-o-chon: vi select mat cau dai".
+
+  - id: E5
+    criterion: AC-5
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.cmt_man
+    steps:
+      - "Phien do rieng (tien-de.mjs); dang nhap dev:session quan tri; gieo muoi truong muoi kieu va mot truong ten dai (>= 60 ky tu) cho CONTACT qua fields.create"
+      - "Buoc 1 (360, 1280 x vi, en): /settings/fields the Ca nhan -> anh cmt-truong-<ngon ngu>-<kho>.png; moi [data-nhan-kieu] do scrollWidth <= clientWidth, rong >= 72 px, mep phai bang nhau trong 1 px, nam tron trong hang; trang khong cuon ngang; ten truong dai bi cat ma nhan kieu cung hang tron chu"
+      - "Buoc 2 (vi, en): chi tiet chien dich (gieo qua savedViews + campaigns.create) -> doc aria-label cua nav[data-slot=breadcrumb] dang hien"
+    paths:
+      - "apps/app/components/crm/fields/**"
+      - "apps/app/lib/messages/crm.ts"
+      - "packages/ui/src/components/breadcrumb.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "_acceptance/chu-man-tieng-viet-khong-tran/rang/chup-truong.mjs"
+    expected: "exit 0; chup-truong.mjs in 'buoc N: dat' cho 2 buoc va mot dong so do moi anh (moi nhan: chu, scrollWidth, clientWidth). Dem du 11 nhan moi anh x 4 anh (muoi kieu + hang ten dai). Thieu nhan hay thieu hop -> do. Anh o .acceptance-runs/chu-man-tieng-viet-khong-tran/evidence/, vong S4 chep sang _acceptance/chu-man-tieng-viet-khong-tran/evidence/. CHIEU DO (--chieu-do tren ban sao): (1) fields-list.tsx tra lai w-18 va fieldTypeLabel -> ghim 'cmt-man: truong vi 360 nhan kieu tran', ma 1; (2) nut ten bo min-w-0 va truncate -> ghim 'cmt-man: truong vi 360 trang cuon ngang', ma 1."
+
+  - id: E5m
+    criterion: AC-5
+    executor: script
+    cmd: config:executors.script.cmt_man_do
+    paths:
+      - "apps/app/components/crm/fields/**"
+      - "apps/app/lib/messages/crm.ts"
+      - "packages/ui/src/components/breadcrumb.tsx"
+      - "packages/ui/src/lib/messages.ts"
+      - "_acceptance/chu-man-tieng-viet-khong-tran/rang/chup-truong.mjs"
+    expected: |
+      Cung chup-truong.mjs voi co --chi-do: chay du 2 buoc cua E5 trong phien do rieng, anh tam o
+      .acceptance-runs/chu-man-tieng-viet-khong-tran/do/, thoat 0 khi moi nguong cua E5 dat (40 nhan
+      khong tran, rong >= 72 px, mep phai thang, tron trong hang, trang khong cuon ngang, ten dai bi cat, hai nhan nav dung). Chot may de lan ghim lai chung lai AC-5. CHIEU DO:
+      --chieu-do tren ban sao fields-list.tsx tra lai w-18 va fieldTypeLabel -> ghim
+      'cmt-man: truong vi 360 nhan kieu tran', ma 1.
+
+  - id: E5j
+    criterion: AC-5
+    executor: judgment
+    inputs:
+      - "_acceptance/chu-man-tieng-viet-khong-tran/evidence/cmt-truong-vi-360.png"
+      - "_acceptance/chu-man-tieng-viet-khong-tran/evidence/cmt-truong-en-360.png"
+      - "_acceptance/chu-man-tieng-viet-khong-tran/evidence/cmt-truong-vi-1280.png"
+      - "_acceptance/chu-man-tieng-viet-khong-tran/evidence/cmt-truong-en-1280.png"
+      - "docs/superpowers/specs/2026-10-13-chu-man-tieng-viet-khong-tran-design.md"
+      - "_acceptance/chu-man-tieng-viet-khong-tran/contract.md"
+    question: "Trên bốn ảnh danh sách trường: (1) nhãn kiểu của mọi hàng có nằm trọn trong ô, không bị cắt hay đè lên nút bên phải không; (2) ở 1280 mép phải các ô nhãn kiểu có thẳng một đường không; (3) ở 360 tên trường có bị cắt trước nhãn kiểu (nhãn kiểu trọn chữ) không; (4) tên kiểu ngắn có đủ nghĩa để người dùng nhận ra kiểu trường không, đối chiếu «Bảng tên ngắn» của design doc và bảng ở AC-3 của hợp đồng? Trả PASS chỉ khi cả bốn đều có."
