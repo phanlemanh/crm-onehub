@@ -54,7 +54,9 @@ const CO_SO_LIEU = noiGop("al-1", {
 });
 
 async function moVoi(alignments: NoiGop[], whyNow?: string) {
-	const mt = mtSheet(whyNow === undefined ? { alignments } : { alignments, whyNow });
+	const mt = mtSheet(
+		whyNow === undefined ? { alignments } : { alignments, whyNow },
+	);
 	kho.chiTiet = () => chiTietTu(mt);
 	await dungSheet();
 }
@@ -78,9 +80,11 @@ function docDong(id: string) {
 	};
 }
 
+type GiaTri = string | number | boolean | null | undefined;
+
 function kiem(
-	thucTe: Record<string, unknown>,
-	mong: Record<string, unknown>,
+	thucTe: Readonly<Record<string, GiaTri>>,
+	mong: Readonly<Record<string, GiaTri>>,
 	thongDiep: (truong: string) => string,
 ) {
 	for (const [truong, gt] of Object.entries(mong)) {
@@ -124,7 +128,12 @@ describe("l2-co-so-lieu", () => {
 });
 
 describe("l2-ba-muc", () => {
-	const MA_TRAN: readonly { id: string; muc: MucTin; doi: Partial<NoiGop>; tone: string }[] = [
+	const MA_TRAN: readonly {
+		id: string;
+		muc: MucTin;
+		doi: Partial<NoiGop>;
+		tone: string;
+	}[] = [
 		{ id: "al-chua", muc: "chua-co-ly-do", doi: {}, tone: "warning" },
 		{ id: "al-cuoc", muc: "dat-cuoc", doi: { lyDo: LY_DO }, tone: "neutral" },
 		{
@@ -136,7 +145,11 @@ describe("l2-ba-muc", () => {
 	];
 	test("l2-ba-muc moi muc tin mot nhan va mot tone theo nghia", async () => {
 		await moVoi(MA_TRAN.map((c) => noiGop(c.id, { ...c.doi, mucTin: c.muc })));
-		const nghia = { "chua-co-ly-do": "cho", "dat-cuoc": "nhap", "co-so-lieu": "xong" } as const;
+		const nghia = {
+			"chua-co-ly-do": "cho",
+			"dat-cuoc": "nhap",
+			"co-so-lieu": "xong",
+		} as const;
 		let soCa = 0;
 		for (const c of MA_TRAN) {
 			const d = docDong(c.id);
@@ -167,9 +180,13 @@ describe("l2-vang", () => {
 		let soCa = 0;
 		await moVoi([noiGop("al-chua")]);
 		kiem(
-			{ ...docDong("al-chua"), soNhan: qsa("[data-gop-vao=al-chua] [data-muc-tin]").length },
+			{
+				...docDong("al-chua"),
+				soNhan: qsa("[data-gop-vao=al-chua] [data-muc-tin]").length,
+			},
 			{ cau: null, canCu: null, kara: 0, soNhan: 1 },
-			(t) => (t === "canCu" ? "dong can cu rong" : `l2-vang chua-co-ly-do sai ${t}`),
+			(t) =>
+				t === "canCu" ? "dong can cu rong" : `l2-vang chua-co-ly-do sai ${t}`,
 		);
 		soCa += 1;
 		await thaoHet();
@@ -239,7 +256,9 @@ describe("l2-dau-kara", () => {
 		kiem(
 			{
 				so: ds.length,
-				cua: ds[0]?.closest("[data-gop-vao]")?.getAttribute("data-gop-vao") ?? null,
+				cua:
+					ds[0]?.closest("[data-gop-vao]")?.getAttribute("data-gop-vao") ??
+					null,
 			},
 			{ so: 1, cua: "al-kara" },
 			(t) => `dau kara tren ly do cua nguoi (${t})`,
@@ -253,9 +272,12 @@ describe("l2-chu", () => {
 		const d = dongCua("al-1");
 		kiem(
 			{
-				cau: d?.querySelector("[data-ly-do-cau]")?.getAttribute("translate") ?? null,
+				cau:
+					d?.querySelector("[data-ly-do-cau]")?.getAttribute("translate") ??
+					null,
 				canCu:
-					d?.querySelector("[data-ly-do-can-cu] [translate=no]")?.textContent ?? null,
+					d?.querySelector("[data-ly-do-can-cu] [translate=no]")?.textContent ??
+					null,
 			},
 			{ cau: "no", canCu: CAN_CU },
 			(t) => `l2-chu translate sai ${t}`,
@@ -265,12 +287,17 @@ describe("l2-chu", () => {
 		const KHOA: readonly [string, string, string][] = [
 			["khuDuongLyDo", vi.khuDuongLyDo, en.khuDuongLyDo],
 			["canCu", vi.canCu, en.canCu],
-			["mucTin.chua-co-ly-do", vi.mucTin["chua-co-ly-do"], en.mucTin["chua-co-ly-do"]],
+			[
+				"mucTin.chua-co-ly-do",
+				vi.mucTin["chua-co-ly-do"],
+				en.mucTin["chua-co-ly-do"],
+			],
 			["mucTin.dat-cuoc", vi.mucTin["dat-cuoc"], en.mucTin["dat-cuoc"]],
 			["mucTin.co-so-lieu", vi.mucTin["co-so-lieu"], en.mucTin["co-so-lieu"]],
 		];
 		for (const [ten, a, b] of KHOA) {
-			if (!a || !b || a === b) throw new Error(`l2-chu khoa ${ten} thieu ban vi/en`);
+			if (!a || !b || a === b)
+				throw new Error(`l2-chu khoa ${ten} thieu ban vi/en`);
 		}
 		expect(KHOA.length).toBe(5);
 		await thaoHet();
@@ -283,8 +310,12 @@ describe("l2-chu", () => {
 			`?record=objective:${MT_ID}`,
 			"en",
 		);
-		await cho(() => qs("[data-gop-vao=al-1] [data-muc-tin]") !== null, "sheet en tai xong");
+		await cho(
+			() => qs("[data-gop-vao=al-1] [data-muc-tin]") !== null,
+			"sheet en tai xong",
+		);
 		const nhan = qs("[data-gop-vao=al-1] [data-muc-tin]")?.textContent;
-		if (nhan !== en.mucTin["co-so-lieu"]) throw new Error(`l2-chu nhan en sai: ${nhan}`);
+		if (nhan !== en.mucTin["co-so-lieu"])
+			throw new Error(`l2-chu nhan en sai: ${nhan}`);
 	});
 });

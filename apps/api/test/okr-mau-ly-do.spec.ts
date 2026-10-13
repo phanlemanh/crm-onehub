@@ -61,7 +61,8 @@ describe("ly-do-mau", () => {
 			for (const m of coCanChinh) {
 				const ct = await doc(m.ma);
 				const dau = ct.alignments[0];
-				if (!dau) throw new Error(`ly do mau khong vao csdl: ${m.ma} mat can chinh`);
+				if (!dau)
+					throw new Error(`ly do mau khong vao csdl: ${m.ma} mat can chinh`);
 				gap.add(dau.mucTin);
 				if (dau.lyDoTuKara) soKara += 1;
 				const khai = m.canChinh;

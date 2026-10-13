@@ -2,6 +2,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { z } from "../../../packages/validation/node_modules/zod/index.js";
 import { neo } from "./ranh-gioi.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -26,8 +27,9 @@ function giaiLenh(cmd) {
 		.slice("config:".length)
 		.split(".")
 		.reduce((o, k) => (o == null ? undefined : o[k]), config);
-	if (typeof gt !== "string") throw new Error(`khong giai duoc ${cmd}`);
-	return gt;
+	const r = z.string().safeParse(gt);
+	if (!r.success) throw new Error(`khong giai duoc ${cmd}`);
+	return r.data;
 }
 
 const trangThai = (hoSo) => {
