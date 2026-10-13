@@ -5,7 +5,9 @@ slug: kara-mot-ten
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-13
 design_doc: docs/superpowers/specs/2026-10-13-kara-mot-ten-design.md
 ---
 
