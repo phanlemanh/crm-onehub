@@ -264,6 +264,7 @@ function tongQuanGia(): Json {
 		trend: [],
 		closingThisMonthTotal: thang,
 		biggestOpen: [],
+		viecQuaHan: [],
 		overdueTasks: [
 			{
 				id: "viec-1",

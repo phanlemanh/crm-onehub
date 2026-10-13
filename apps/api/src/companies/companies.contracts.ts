@@ -2,6 +2,10 @@ import { EnrichmentStatus, RecordSource } from "@crm/db";
 import { FIELD_TYPES } from "@crm/db/fields";
 import { z } from "zod";
 import { bulkIdsInput, crmBulkResultOutput } from "../crm/bulk";
+import {
+	caNhanDaLuuTruOutput,
+	thoaThuanDaLuuTruOutput,
+} from "../crm/da-luu-tru";
 import { fieldEntity, recordFieldValues } from "../fields/fields.contracts";
 import { activityFacetInput, listInput } from "../trpc/list-input";
 
@@ -212,6 +216,8 @@ export const companyDetailOutput = z.object({
 	soKeHoach: z.number().int().nonnegative(),
 	xuongCoKhuon: z.boolean(),
 	deals: z.array(companyDetailDealOutput),
+	archivedContacts: z.array(caNhanDaLuuTruOutput),
+	archivedDeals: z.array(thoaThuanDaLuuTruOutput),
 });
 
 export const companyOptionOutput = z.array(

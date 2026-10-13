@@ -1,0 +1,45 @@
+{
+	"id": "ca-q4-kd-nam-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Nam"
+	},
+	"mucTieu": {
+		"title": "Hàng lạnh Đông Nam Bộ thành mảng chủ lực",
+		"whyNow": "Kho lạnh Bình Dương đã chạy thử xong quý 3.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Đối tác hàng lạnh mới đạt 10",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 10,
+			"unit": "đối tác"
+		},
+		{
+			"title": "Thoả thuận mới hàng lạnh đạt 25",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 25,
+			"unit": "thoả thuận"
+		},
+		{
+			"title": "Giữ công suất kho lạnh trên 70%",
+			"kind": "giu-tren",
+			"startValue": 55,
+			"targetValue": 70,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên là nơi đến, KR có đối tác, thoả thuận và giữ công suất kho — câu đã tốt."
+}

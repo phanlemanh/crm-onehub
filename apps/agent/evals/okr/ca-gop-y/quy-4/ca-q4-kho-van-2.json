@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-kho-van-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kho vận"
+	},
+	"mucTieu": {
+		"title": "Xuất kho nhanh như đối thủ tốt nhất",
+		"whyNow": "Đối thủ dẫn đầu xuất kho trong 20 phút; quý 3 mình còn 36.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Giữ tỷ lệ đơn xuất kho trong 30 phút trên 80%",
+			"kind": "giu-tren",
+			"startValue": 62,
+			"targetValue": 80,
+			"unit": "%"
+		},
+		{
+			"title": "Đơn xuất sai hàng giảm từ 25 xuống 8 mỗi tháng",
+			"kind": "giam-xuong",
+			"startValue": 25,
+			"targetValue": 8,
+			"unit": "đơn"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": true,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên là nơi đến, KR giữ tốc độ và giảm xuất sai — câu đã tốt."
+}

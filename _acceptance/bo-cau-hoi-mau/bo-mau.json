@@ -1,0 +1,758 @@
+{
+	"nhan": "mau",
+	"nguon": "Bộ mẫu giả do máy soạn ngày 2026-10-13 từ tám trang mẫu _acceptance/tro-ly-doc-kho/bo-do/trang-mau/*.md cho hàng cb của lộ trình Kho tài liệu. Không phải câu hỏi thật của nhân viên OneHub; ý trọng yếu chép nguyên văn từ trang mẫu.",
+	"cau": [
+		{
+			"id": "m01",
+			"nhom": "co-trang",
+			"cau": "Đối tác tầng 2 được hưởng bao nhiêu phần trăm doanh thu thuần?",
+			"mong": [
+				[
+					"hoa-hong"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"Đối tác tầng 2 hưởng 1,2% doanh thu thuần"
+			],
+			"mau": true
+		},
+		{
+			"id": "m02",
+			"nhom": "co-trang",
+			"cau": "Đối tác tầng 3 được hưởng hoa hồng bao nhiêu?",
+			"mong": [
+				[
+					"hoa-hong"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"Đối tác tầng 3 hưởng 0,5% doanh thu thuần"
+			],
+			"mau": true
+		},
+		{
+			"id": "m03",
+			"nhom": "co-trang",
+			"cau": "Phòng Kế toán đối soát hoa hồng đối tác vào ngày nào trong tháng?",
+			"mong": [
+				[
+					"doi-soat"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"đối soát hoa hồng đối tác vào ngày 5 hằng tháng"
+			],
+			"mau": true
+		},
+		{
+			"id": "m04",
+			"nhom": "co-trang",
+			"cau": "Đối tác có bao lâu để xác nhận bảng đối soát?",
+			"mong": [
+				[
+					"doi-soat"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"Đối tác có 3 ngày làm việc để xác nhận bảng đối soát"
+			],
+			"mau": true
+		},
+		{
+			"id": "m05",
+			"nhom": "co-trang",
+			"cau": "Khi nghi ngờ lộ dữ liệu khách hàng thì phải báo cho bộ phận nào?",
+			"mong": [
+				[
+					"bao-mat"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"báo cho bộ phận An ninh thông tin trong vòng 24 giờ"
+			],
+			"mau": true
+		},
+		{
+			"id": "m06",
+			"nhom": "co-trang",
+			"cau": "Tài liệu giấy có thông tin khách hàng phải cất ở đâu?",
+			"mong": [
+				[
+					"bao-mat"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"phải được cất trong tủ có khoá"
+			],
+			"mau": true
+		},
+		{
+			"id": "m07",
+			"nhom": "co-trang",
+			"cau": "Công tác phí trong nước mỗi ngày được bao nhiêu tiền?",
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"Công tác phí trong nước là 300.000 đồng mỗi ngày"
+			],
+			"mau": true
+		},
+		{
+			"id": "m08",
+			"nhom": "co-trang",
+			"cau": "Đi công tác ở Hà Nội thì được cộng thêm bao nhiêu mỗi ngày?",
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"được cộng thêm 100.000 đồng mỗi ngày"
+			],
+			"mau": true
+		},
+		{
+			"id": "m09",
+			"nhom": "co-trang",
+			"cau": "Hoá đơn công tác phải nộp trong bao lâu sau khi về?",
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"nộp hoá đơn công tác trong vòng 5 ngày làm việc sau khi về"
+			],
+			"mau": true
+		},
+		{
+			"id": "m10",
+			"nhom": "co-trang",
+			"cau": "Nhân viên tiếp nhận khiếu nại phải xác nhận với khách hàng trong bao lâu?",
+			"mong": [
+				[
+					"khieu-nai"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"xác nhận đã nhận khiếu nại với khách hàng trong vòng 1 ngày làm việc"
+			],
+			"mau": true
+		},
+		{
+			"id": "m11",
+			"nhom": "co-trang",
+			"cau": "Khiếu nại thông thường được giải quyết trong bao nhiêu ngày?",
+			"mong": [
+				[
+					"khieu-nai"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"Khiếu nại thông thường được giải quyết trong 7 ngày làm việc"
+			],
+			"mau": true
+		},
+		{
+			"id": "m12",
+			"nhom": "co-trang",
+			"cau": "Nhân viên chính thức được bao nhiêu ngày nghỉ phép một năm?",
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"Nhân viên chính thức có 12 ngày nghỉ phép năm"
+			],
+			"mau": true
+		},
+		{
+			"id": "m13",
+			"nhom": "co-trang",
+			"cau": "Xin nghỉ phép thì phải gửi đơn trước ít nhất mấy ngày?",
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"trước ít nhất 3 ngày làm việc"
+			],
+			"mau": true
+		},
+		{
+			"id": "m14",
+			"nhom": "co-trang",
+			"cau": "Thời gian thử việc của nhân viên kinh doanh là bao lâu?",
+			"mong": [
+				[
+					"thu-viec"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"Thời gian thử việc của nhân viên kinh doanh là 2 tháng"
+			],
+			"mau": true
+		},
+		{
+			"id": "m15",
+			"nhom": "co-trang",
+			"cau": "Biểu mẫu tạm ứng đã ký thì nộp cho phòng nào?",
+			"mong": [
+				[
+					"tam-ung"
+				]
+			],
+			"tang": "S1",
+			"kieuChu": "chuan",
+			"y": [
+				"Biểu mẫu đã ký nộp cho Phòng Kế toán"
+			],
+			"mau": true
+		},
+		{
+			"id": "m16",
+			"nhom": "co-trang",
+			"cau": "Đối tác tầng 1 hưởng bao nhiêu phần trăm, và hoa hồng được chuyển khoản vào ngày nào?",
+			"mong": [
+				[
+					"hoa-hong"
+				],
+				[
+					"doi-soat"
+				]
+			],
+			"kho": "hai-trang",
+			"tang": "S2",
+			"kieuChu": "chuan",
+			"y": [
+				"Đối tác tầng 1 hưởng 2% doanh thu thuần",
+				"Hoa hồng được chuyển khoản vào ngày 15 hằng tháng"
+			],
+			"mau": true
+		},
+		{
+			"id": "m17",
+			"nhom": "co-trang",
+			"cau": "Nhân viên thử việc có được nhận hoa hồng đối tác không, và có ngày nghỉ phép năm không?",
+			"mong": [
+				[
+					"thu-viec",
+					"hoa-hong"
+				],
+				[
+					"nghi-phep"
+				]
+			],
+			"kho": "hai-trang",
+			"tang": "S2",
+			"kieuChu": "chuan",
+			"y": [
+				"không được nhận hoa hồng đối tác",
+				"Nhân viên thử việc không có ngày nghỉ phép năm"
+			],
+			"mau": true
+		},
+		{
+			"id": "m18",
+			"nhom": "co-trang",
+			"cau": "Tạm ứng trên 10 triệu đồng thì cần ai ký, và tiền phòng khách sạn khi công tác được thanh toán tối đa bao nhiêu một đêm?",
+			"mong": [
+				[
+					"tam-ung"
+				],
+				[
+					"cong-tac-phi"
+				]
+			],
+			"kho": "hai-trang",
+			"tang": "S2",
+			"kieuChu": "chuan",
+			"y": [
+				"Đề nghị tạm ứng trên 10 triệu đồng phải có chữ ký của trưởng phòng",
+				"Tiền phòng khách sạn được thanh toán tối đa 800.000 đồng mỗi đêm"
+			],
+			"mau": true
+		},
+		{
+			"id": "m19",
+			"nhom": "co-trang",
+			"cau": "Khách hàng khiếu nại vì nghi bị lộ dữ liệu thì khiếu nại ghi vào đâu, và phải báo bộ phận nào?",
+			"mong": [
+				[
+					"khieu-nai"
+				],
+				[
+					"bao-mat"
+				]
+			],
+			"kho": "hai-trang",
+			"tang": "S2",
+			"kieuChu": "chuan",
+			"y": [
+				"Mọi khiếu nại được ghi vào OneHub Center",
+				"báo cho bộ phận An ninh thông tin"
+			],
+			"mau": true
+		},
+		{
+			"id": "m20",
+			"nhom": "co-trang",
+			"cau": "Hợp đồng gia hạn được tính hoa hồng thế nào, và đối tác có bao lâu để xác nhận bảng đối soát?",
+			"mong": [
+				[
+					"hoa-hong"
+				],
+				[
+					"doi-soat"
+				]
+			],
+			"kho": "hai-trang",
+			"tang": "S2",
+			"kieuChu": "chuan",
+			"y": [
+				"Hợp đồng gia hạn chỉ tính hoa hồng cho năm đầu tiên sau ngày gia hạn",
+				"Đối tác có 3 ngày làm việc để xác nhận bảng đối soát"
+			],
+			"mau": true
+		},
+		{
+			"id": "m21",
+			"nhom": "co-trang",
+			"cau": "Hợp đồng có doanh thu thuần 18 triệu đồng thì đối tác có được hoa hồng không?",
+			"mong": [
+				[
+					"hoa-hong"
+				]
+			],
+			"kho": "nguong-ngoai-le",
+			"tang": "S3",
+			"kieuChu": "chuan",
+			"y": [
+				"Hợp đồng có doanh thu thuần dưới 20 triệu đồng không phát sinh hoa hồng"
+			],
+			"mau": true
+		},
+		{
+			"id": "m22",
+			"nhom": "co-trang",
+			"cau": "Hoa hồng kỳ này của đối tác chỉ 350.000 đồng thì có được chuyển khoản không?",
+			"mong": [
+				[
+					"doi-soat"
+				]
+			],
+			"kho": "nguong-ngoai-le",
+			"tang": "S3",
+			"kieuChu": "chuan",
+			"y": [
+				"Khoản hoa hồng dưới 500.000 đồng được cộng dồn sang kỳ sau"
+			],
+			"mau": true
+		},
+		{
+			"id": "m23",
+			"nhom": "co-trang",
+			"cau": "Chuyến công tác 250 km có được đi máy bay không?",
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"kho": "nguong-ngoai-le",
+			"tang": "S3",
+			"kieuChu": "chuan",
+			"y": [
+				"Chuyến đi trên 300 km được đi máy bay hạng phổ thông"
+			],
+			"mau": true
+		},
+		{
+			"id": "m24",
+			"nhom": "co-trang",
+			"cau": "Hoá đơn công tác nộp sau 40 ngày có được thanh toán không?",
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"kho": "nguong-ngoai-le",
+			"tang": "S3",
+			"kieuChu": "chuan",
+			"y": [
+				"Hoá đơn nộp muộn hơn 30 ngày không được thanh toán"
+			],
+			"mau": true
+		},
+		{
+			"id": "m25",
+			"nhom": "co-trang",
+			"cau": "Ngày phép năm chưa dùng hết có được giữ sang năm sau không?",
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"kho": "nguong-ngoai-le",
+			"tang": "S3",
+			"kieuChu": "chuan",
+			"y": [
+				"Ngày phép chưa dùng được chuyển sang năm sau và phải dùng hết trước ngày 31 tháng 3"
+			],
+			"mau": true
+		},
+		{
+			"id": "m26",
+			"nhom": "co-trang",
+			"cau": "Nghỉ phép liền 6 ngày thì cần ai duyệt?",
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"kho": "nguong-ngoai-le",
+			"tang": "S3",
+			"kieuChu": "chuan",
+			"y": [
+				"Nghỉ từ 5 ngày liên tục trở lên phải được trưởng phòng duyệt"
+			],
+			"mau": true
+		},
+		{
+			"id": "m27",
+			"nhom": "co-trang",
+			"cau": "Còn khoản tạm ứng cũ chưa hoàn thì có đề nghị tạm ứng mới được không?",
+			"mong": [
+				[
+					"tam-ung"
+				]
+			],
+			"kho": "nguong-ngoai-le",
+			"tang": "S3",
+			"kieuChu": "chuan",
+			"y": [
+				"Chưa hoàn ứng khoản cũ thì không được đề nghị tạm ứng khoản mới"
+			],
+			"mau": true
+		},
+		{
+			"id": "m28",
+			"nhom": "co-trang",
+			"cau": "Khiếu nại đã quá 7 ngày làm việc mà chưa giải quyết xong thì chuyển cho ai?",
+			"mong": [
+				[
+					"khieu-nai"
+				]
+			],
+			"kho": "nguong-ngoai-le",
+			"tang": "S3",
+			"kieuChu": "chuan",
+			"y": [
+				"chưa giải quyết được chuyển lên Giám đốc vận hành"
+			],
+			"mau": true
+		},
+		{
+			"id": "m29",
+			"nhom": "khong-co",
+			"cau": "Đối tác tầng 4 được hưởng hoa hồng bao nhiêu phần trăm?",
+			"tang": "S6",
+			"kieuChu": "chuan",
+			"ganTrang": "hoa-hong",
+			"mau": true
+		},
+		{
+			"id": "m30",
+			"nhom": "khong-co",
+			"cau": "Công tác phí khi đi nước ngoài mỗi ngày là bao nhiêu?",
+			"tang": "S6",
+			"kieuChu": "chuan",
+			"ganTrang": "cong-tac-phi",
+			"mau": true
+		},
+		{
+			"id": "m31",
+			"nhom": "khong-co",
+			"cau": "Thời gian thử việc của nhân viên kỹ thuật là bao lâu?",
+			"tang": "S6",
+			"kieuChu": "chuan",
+			"ganTrang": "thu-viec",
+			"mau": true
+		},
+		{
+			"id": "m32",
+			"nhom": "khong-co",
+			"cau": "Khiếu nại của khách hàng doanh nghiệp lớn được ưu tiên giải quyết trong mấy ngày?",
+			"tang": "S6",
+			"kieuChu": "chuan",
+			"ganTrang": "khieu-nai",
+			"mau": true
+		},
+		{
+			"id": "m33",
+			"nhom": "khong-co",
+			"cau": "Công ty có hỗ trợ học phí học tiếng Anh cho nhân viên không?",
+			"tang": "S6",
+			"kieuChu": "chuan",
+			"mau": true
+		},
+		{
+			"id": "m34",
+			"nhom": "khong-co",
+			"cau": "Giờ làm việc buổi sáng bắt đầu lúc mấy giờ?",
+			"tang": "S6",
+			"kieuChu": "chuan",
+			"mau": true
+		},
+		{
+			"id": "m35",
+			"nhom": "khong-co",
+			"cau": "Nhân viên được nghỉ thai sản bao nhiêu tháng?",
+			"tang": "S6",
+			"kieuChu": "chuan",
+			"mau": true
+		},
+		{
+			"id": "m36",
+			"nhom": "khong-co",
+			"cau": "Văn phòng có chỗ gửi xe máy miễn phí cho nhân viên không?",
+			"tang": "S6",
+			"kieuChu": "chuan",
+			"mau": true
+		},
+		{
+			"id": "m37",
+			"nhom": "khong-dau",
+			"cau": "cong tac phi trong nuoc moi ngay duoc bao nhieu tien?",
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"bienTheCua": "m07",
+			"tang": "S7",
+			"kieuChu": "khong-dau",
+			"y": [
+				"Công tác phí trong nước là 300.000 đồng mỗi ngày"
+			],
+			"mau": true
+		},
+		{
+			"id": "m38",
+			"nhom": "khong-dau",
+			"cau": "nhan vien chinh thuc duoc bao nhieu ngay nghi phep mot nam",
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"bienTheCua": "m12",
+			"tang": "S7",
+			"kieuChu": "khong-dau",
+			"y": [
+				"Nhân viên chính thức có 12 ngày nghỉ phép năm"
+			],
+			"mau": true
+		},
+		{
+			"id": "m39",
+			"nhom": "khong-dau",
+			"cau": "Hóa đơn CT nộp trong bn ngày sau khi về?",
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"bienTheCua": "m09",
+			"tang": "S7",
+			"kieuChu": "viet-tat",
+			"y": [
+				"nộp hoá đơn công tác trong vòng 5 ngày làm việc sau khi về"
+			],
+			"mau": true
+		},
+		{
+			"id": "m40",
+			"nhom": "khong-dau",
+			"cau": "NVKD thử việc bao lâu vậy?",
+			"mong": [
+				[
+					"thu-viec"
+				]
+			],
+			"bienTheCua": "m14",
+			"tang": "S7",
+			"kieuChu": "viet-tat",
+			"y": [
+				"Thời gian thử việc của nhân viên kinh doanh là 2 tháng"
+			],
+			"mau": true
+		},
+		{
+			"id": "m41",
+			"nhom": "khong-dau",
+			"cau": "Khiêú nại thông thường giải quyết trong bao nhiu ngày?",
+			"mong": [
+				[
+					"khieu-nai"
+				]
+			],
+			"bienTheCua": "m11",
+			"tang": "S7",
+			"kieuChu": "sai-chinh-ta",
+			"y": [
+				"Khiếu nại thông thường được giải quyết trong 7 ngày làm việc"
+			],
+			"mau": true
+		},
+		{
+			"id": "m42",
+			"nhom": "khong-dau",
+			"cau": "Biễu mẫu tạm ứng kí xong thì nộp cho phòg nào?",
+			"mong": [
+				[
+					"tam-ung"
+				]
+			],
+			"bienTheCua": "m15",
+			"tang": "S7",
+			"kieuChu": "sai-chinh-ta",
+			"y": [
+				"Biểu mẫu đã ký nộp cho Phòng Kế toán"
+			],
+			"mau": true
+		},
+		{
+			"id": "m43",
+			"nhom": "khong-dau",
+			"cau": "Nhân viên full-time có bao nhiêu ngày annual leave một năm?",
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"bienTheCua": "m12",
+			"tang": "S7",
+			"kieuChu": "tron-anh",
+			"y": [
+				"Nhân viên chính thức có 12 ngày nghỉ phép năm"
+			],
+			"mau": true
+		},
+		{
+			"id": "m44",
+			"nhom": "khong-dau",
+			"cau": "Deal có net revenue 18 triệu thì partner có được commission không?",
+			"mong": [
+				[
+					"hoa-hong"
+				]
+			],
+			"bienTheCua": "m21",
+			"tang": "S7",
+			"kieuChu": "tron-anh",
+			"y": [
+				"Hợp đồng có doanh thu thuần dưới 20 triệu đồng không phát sinh hoa hồng"
+			],
+			"mau": true
+		},
+		{
+			"id": "m45",
+			"nhom": "khong-dau",
+			"cau": "ad ơi cho em hỏi công tác phí trong nước 1 ngày được bao nhiêu ạ",
+			"mong": [
+				[
+					"cong-tac-phi"
+				]
+			],
+			"bienTheCua": "m07",
+			"tang": "S7",
+			"kieuChu": "tin-zalo",
+			"y": [
+				"Công tác phí trong nước là 300.000 đồng mỗi ngày"
+			],
+			"mau": true
+		},
+		{
+			"id": "m46",
+			"nhom": "khong-dau",
+			"cau": "chị ơi em muốn nghỉ phép thì phải báo trước mấy hôm ạ 🙏",
+			"mong": [
+				[
+					"nghi-phep"
+				]
+			],
+			"bienTheCua": "m13",
+			"tang": "S7",
+			"kieuChu": "tin-zalo",
+			"y": [
+				"trước ít nhất 3 ngày làm việc"
+			],
+			"mau": true
+		},
+		{
+			"id": "m47",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Thoả thuận nào của em sắp đến hạn chốt trong tuần này?",
+			"tang": "ngoai-kho",
+			"kieuChu": "chuan",
+			"mau": true
+		},
+		{
+			"id": "m48",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "KR doanh số quý này của phòng mình đang đạt bao nhiêu phần trăm?",
+			"tang": "ngoai-kho",
+			"kieuChu": "chuan",
+			"mau": true
+		},
+		{
+			"id": "m49",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Chào bạn, hôm nay bạn khoẻ không?",
+			"tang": "ngoai-kho",
+			"kieuChu": "chuan",
+			"mau": true
+		},
+		{
+			"id": "m50",
+			"nhom": "khong-phai-quy-dinh",
+			"cau": "Nhắc giúp em gọi lại cho khách vào chiều mai nhé.",
+			"tang": "ngoai-kho",
+			"kieuChu": "chuan",
+			"mau": true
+		}
+	]
+}

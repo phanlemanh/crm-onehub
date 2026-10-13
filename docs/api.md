@@ -98,13 +98,15 @@ here, what do we sell.
   `WorkspaceService` adds one invariant: **the last owner cannot be demoted**, with
   `FOR UPDATE` on the owner rows before counting.
 - **Đổi sang vai «chỉ OKR» không để lại việc đối tác.** `setMemberRole` sang một vai mà
-  `docDuocDoiTac` trả `false` — kể cả lưu lại đúng vai đó cho người đã mang nó — đếm
-  kế hoạch mở người đó cầm trịch và bước chưa xong của kế hoạch mở người đó làm
-  (`demViecDangGiu`, cùng điều kiện với chuyển việc 30 ngày): lớn hơn 0 thì 409
-  `WORKSPACE_CONFIG.messages.conViecKeHoach`, nêu hai con số và chỉ sang «Chuyển việc»,
-  vai không đổi; bằng 0 thì xoá mọi lượt theo dõi kế hoạch của họ trong cùng giao
-  dịch, và dòng log «Workspace role changed» ghi `theoDoiDaXoa`. Kiểm owner cuối cùng
-  vẫn đứng trước.
+  `docDuocDoiTac` trả `false` — kể cả lưu lại đúng vai đó cho người đã mang nó — đếm kế
+  hoạch mở người đó cầm trịch, bước chưa xong của kế hoạch mở người đó làm, và việc đang mở
+  (Chưa làm, Đang làm, Chờ đánh giá) người đó thực hiện hay giao (`demViecDangGiu`; phần việc
+  là `demViecMoCua` của `@crm/db/viec`, cùng hàm hộp «Chuyển việc 30 ngày» dùng): lớn hơn 0
+  thì 409 `WORKSPACE_CONFIG.messages.conViec`, nêu các con số và chỉ sang «Chuyển việc 30 ngày» ở
+  màn Thành viên (lời của máy chủ ghi nguyên văn «Chuyển việc ở màn Thành viên trước», như mã), vai
+  không đổi; bằng 0 thì xoá mọi lượt theo dõi kế hoạch và việc (mở lẫn đã khép) trong cùng giao
+  dịch, mỗi lượt theo dõi việc để một vết `bo-theo-doi`, và dòng log
+  «Workspace role changed» ghi `theoDoiDaXoa`. Kiểm owner cuối cùng vẫn đứng trước.
 - **Reads and writes go through tRPC**, not `authClient.organization.*`.
 - **Name and website are required at onboarding and cannot be skipped**, in the form
   *and* in `updateWorkspaceInput`, posting the same `workspace.update` as settings.
@@ -273,7 +275,9 @@ self-hoster's admin cannot redeploy.
   Chuyển việc *từ* người vai «chỉ OKR» vẫn chạy — đó là đường dọn. Ba ô chọn người
   (người làm bước, người cầm trịch, người nhận chuyển việc) đọc `onboarding.nguoiNhanViec`,
   cùng luật, nên ô chọn và lời từ chối không lệch nhau. Luật là `docDuocDoiTac`
-  (`@crm/validation/vai-workspace`).
+  (`@crm/validation/vai-workspace`). Việc có bản riêng cùng tên ở `@crm/db/viec-ghi`, cùng
+  luật `docDuocDoiTac`, cho mọi đường đặt người vào việc (người thực hiện, người theo dõi,
+  mở lại việc, gắn bản ghi đối tác).
 - **Mở lại không trả việc về người không nhận được việc.** Mở lại một kế hoạch đã
   đóng (`datDong` với `dong = false`) và bỏ «xong» một bước (`setStepDone` với
   `done = false`) xét lại mọi thứ chúng trao lại bằng cùng điều kiện nhận việc với
@@ -433,6 +437,13 @@ row is still there, just filtered out of every list.
   where.** A list call defaults to `archived: false`; the Archived view is the same
   procedure with `archived: true`. There is no third "everything" mode — mixing
   active and archived rows in one table is exactly what this feature removes.
+- **A record's related lists are active rows only.** `companies.byId`,
+  `contacts.byId` and `deals.byId` return `contacts`/`deals` without archived rows
+  and carry the archived ones as `archivedContacts`/`archivedDeals` — `id`, name,
+  `archivedAt`, newest first (`crm/da-luu-tru.ts`) — over tRPC and the `/rest`
+  bridge an API key reads alike. `deals.contactOptions` and a contact's
+  `relationship.colleagues` drop archived contacts outright. The one count that
+  adds both back is a purge warning, because it is about what goes, not what shows.
 - **`archive`/`restore` touch `archivedAt` and nothing else.** They do not touch
   `AgentTask`, `SuppressedContact`, or `lastActivityAt` — the record is unchanged, only
   hidden. `archive` writes only while `archivedAt` is null (`updateMany` with
@@ -484,6 +495,57 @@ Below is `purge`'s contract — everything that used to be `delete`'s:
   `recomputeAll()` is for a purge only.
 - **Recompute after commit, logging rather than throwing** — the row is already gone,
   and a raised error makes the browser skip invalidation and retry into a 404.
+
+## Việc
+
+Router `viec` (`apps/api/src/viec`), `PhamViDoiTacMiddleware`: người vai «chỉ OKR» bị chặn ở cửa,
+kể cả việc riêng. Luật ở `@crm/db/viec`, mọi lệnh ghi ở `@crm/db/viec-ghi` — API, `apps/agent`
+(«xong n» qua Bot Zalo) và việc mẫu (`gieoViecMau`, `@crm/db/viec-gieo`) cùng gọi một hàm. Mỗi hàm
+nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiViec` có `ma`; service đổi `ma` sang
+`NotFoundException` (`khong-thay`), `ForbiddenException` (`khong-quyen`), `ConflictException`
+(`co-lich-su`) và `BadRequestException` (`khong-hop-le`, `nguoi-nhan`, `ban-ghi`).
+
+- **Ai thấy một việc.** `dieuKienXemViec(userId)` đứng ở mọi câu đọc (một việc, lịch sử, Việc của
+  tôi, khối của bản ghi, Tổng quan cả hai phạm vi) và là bước đầu của mọi lệnh ghi. Việc gắn ít nhất một
+  bản ghi đối tác thì ai qua được cửa router cũng thấy; việc không gắn gì chỉ người giao, người thực hiện,
+  người theo dõi thấy — quản trị không thấy. Mã không thấy và mã không có trả cùng 404
+  «Không có việc nào mang mã <id>.».
+- **Đồ thị trạng thái** (`DO_THI`): G là chỉ người giao, GT là người giao hoặc người thực hiện.
+
+  | Từ | Sang | Ai |
+  | --- | --- | --- |
+  | Chưa làm | Đang làm · Chờ đánh giá · Xong | GT |
+  | Chưa làm | Huỷ | G |
+  | Đang làm | Chưa làm · Chờ đánh giá · Xong | GT |
+  | Đang làm | Huỷ | G |
+  | Chờ đánh giá | Đang làm (Làm lại) · Xong · Huỷ | G |
+  | Xong | Đang làm (Làm lại) | G |
+  | Huỷ | Chưa làm (Mở lại) | G |
+
+- **Thứ tự kiểm khi đổi trạng thái.** (1) không thấy → 404; (2) cặp không có trong `DO_THI` → 400
+  «Không chuyển được việc từ «…» sang «…».» cho mọi người; (3) không quyền → 403 «Chỉ người giao được …»
+  hay «Chỉ người giao và người thực hiện được …»; (4) ba cặp mở lại
+  (Chờ đánh giá → Đang làm, Xong → Đang làm, Huỷ → Chưa làm) gọi lại `kiemNguoiNhanViec` cho người thực
+  hiện hiện tại, việc riêng cũng vậy — người đó đã sang vai «chỉ OKR» thì 400 `VIEC.thongDiep.vaiChiOkr`.
+  Gắn bản ghi (`ganBanGhi`) cũng gọi nó cho người thực hiện và từng người theo dõi trước khi thêm hàng gắn,
+  nên không có đường nào đặt bản ghi đối tác vào việc có người vai «chỉ OKR».
+  Người theo dõi, thành viên khác, quản trị không đổi trạng thái — đường của quản trị là «Chuyển việc 30
+  ngày».
+- **Cột đo `roiChuaLamLuc`** ghi một lần, khi chính người thực hiện (người bấm trùng `nguoiThucHienId`) đưa
+  việc từ Chưa làm sang Đang làm, Chờ đánh giá hay Xong. Người giao khác người thực hiện bấm, hay Huỷ,
+  không ghi.
+- **Sửa, gắn, theo dõi.** Sửa tiêu đề, mô tả, hạn; gắn, gỡ bản ghi; thêm, bỏ người theo dõi khác: người
+  giao và người thực hiện. Đổi người thực hiện: chỉ người giao. Ai thấy việc cũng tự theo dõi, tự bỏ được.
+- **Vòng đời.** Xoá chỉ khi việc chưa có vết nào ngoài «tạo» (`coLichSu`, kiểm lại trong giao dịch xoá;
+  có lịch sử → 409), và chỉ người giao; dòng log `viec.xoa` ghi lại. Còn lại khép bằng Xong hay Huỷ và mở
+  lại được. Xoá vĩnh viễn một thoả thuận, cá nhân hay công ty (kế hoạch 30 ngày đi theo công ty của nó) ghi
+  `go-do-ban-ghi-xoa` mang tên bản ghi vào mọi việc gắn nó, trong giao dịch `purge`, trước lệnh xoá; hàng
+  gắn (`onDelete: Cascade`) đi theo, việc còn; việc mất hết bản ghi gắn thành việc riêng.
+- **Chuyển việc 30 ngày** (`onboarding.transferPreview`/`transferWork`) chuyển cả việc đang mở người rời
+  thực hiện hay giao, một giao dịch với kế hoạch và bước, mỗi việc một vết `chuyen-viec`; người vừa giao vừa
+  thực hiện cùng một việc thì cả hai cột đổi trong một vết.
+- **Tổng quan**: `viecQuaHan` (việc đang mở hạn trước hôm nay: tôi thực hiện ở «của tôi», tôi thấy ở «mọi
+  người»; tối đa `VIEC.tranTongQuan` dòng); `quaHan.viec` cộng thêm số việc cùng điều kiện, đếm đủ.
 
 ## The organization tree
 

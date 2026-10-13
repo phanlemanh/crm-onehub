@@ -1,0 +1,8 @@
+{
+  "nguoiXem": "le-hai-dang",
+  "ca": [
+    { "ma": "q4-kd-bac-1", "mucTin": "co-so-lieu", "kara": true, "dai": true },
+    { "ma": "q4-kd-bac-2", "mucTin": "dat-cuoc", "kara": false },
+    { "ma": "q4-kd-nam-2", "mucTin": "chua-co-ly-do", "kara": false }
+  ]
+}

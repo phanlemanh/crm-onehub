@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-nhan-su-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Nhân sự"
+	},
+	"mucTieu": {
+		"title": "Mỗi người mới có một người kèm",
+		"whyNow": "Quý 3 cho thấy người mới học nhanh nhất khi có người kèm.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Người mới có người kèm",
+			"kind": "phan-tram",
+			"startValue": 40,
+			"targetValue": 100,
+			"unit": "%"
+		},
+		{
+			"title": "Giữ tỷ lệ nghỉ việc trong 60 ngày đầu dưới 10%",
+			"kind": "giu-duoi",
+			"startValue": 18,
+			"targetValue": 10,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: tỷ lệ người mới có người kèm và nghỉ việc 60 ngày đầu."
+}
