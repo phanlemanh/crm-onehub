@@ -90,10 +90,6 @@ function maViec(v: ViecNhac): MucNhac {
 	);
 }
 
-function maCua(ds: ViecNhac[]): MucNhac[] {
-	return ds.map(maViec);
-}
-
 function maCuaAnToan(userId: string, ds: ViecNhac[]): MucNhac[] {
 	return ds.flatMap((v) => {
 		try {
@@ -242,7 +238,7 @@ export async function chayNhac(
 		data: {
 			payload: {
 				...payload,
-				daGui: maCua(daGui),
+				daGui: maCuaAnToan(userId, daGui),
 				kenh: kenh.kenh,
 				lechKenh: kenh.lech,
 			},
