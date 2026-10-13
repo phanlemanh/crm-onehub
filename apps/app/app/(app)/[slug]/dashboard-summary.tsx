@@ -38,7 +38,7 @@ import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { LocalRelativeTime } from "@/components/local-date-time";
-import { DongViecTongQuan } from "@/components/viec/dong-viec-tong-quan";
+import { CELL, DongViecTongQuan } from "@/components/viec/dong-viec-tong-quan";
 import { activityLabel } from "@/lib/activity-presentation";
 import { useGiaiDoan } from "@/lib/giai-doan";
 import { keHoachNoiMessages } from "@/lib/messages/ke-hoach-noi";
@@ -58,8 +58,6 @@ import { KhoiKrCuaToi } from "./okr/khoi-kr-cua-toi";
 import { ViecOkrCuaToi } from "./okr/viec-cua-toi";
 import { overviewParsers } from "./overview-search-params";
 import { SalesDashboard } from "./sales-dashboard";
-
-const CELL = "px-3 py-2.5 align-middle";
 
 function cot(m: TongQuanMessages) {
 	const open: SimpleTableColumn[] = [

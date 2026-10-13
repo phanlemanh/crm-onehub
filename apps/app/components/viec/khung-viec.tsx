@@ -6,10 +6,10 @@ import { Combobox } from "@crm/ui/components/combobox";
 import { ConfirmDialog } from "@crm/ui/components/confirm-dialog";
 import { DatePicker } from "@crm/ui/components/date-picker";
 import { useLocale } from "@crm/ui/components/locale-provider";
-import { VIEC } from "@crm/validation/viec";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { InlineTextArea, InlineTextCell } from "@/components/crm/inline-field";
 import { RecordLink } from "@/components/crm/record-sheet/record-link";
 import {
 	lyDoLoi,
@@ -34,7 +34,6 @@ import {
 	type TrangThaiViec,
 	TrangThaiViecNhan,
 } from "./trang-thai-viec";
-import { TruongSuaViec } from "./truong-sua-viec";
 
 function ganCua(b: {
 	loai: "company" | "contact" | "deal" | "plan";
@@ -79,23 +78,17 @@ export function KhungViec({ viecId }: { viecId: string }) {
 	const { close } = useRecordStack();
 	const { tab, setTab } = useRecordSheetView("chi-tiet");
 	const [hoiXoa, setHoiXoa] = useState(false);
-	const [lamMoi, setLamMoi] = useState(0);
 	const q = useQuery(trpc.viec.get.queryOptions({ id: viecId }));
 	const dsNguoi = useQuery(trpc.onboarding.nguoiNhanViec.queryOptions());
 	const xong = {
 		onSuccess: () => void cache.viec(),
-		onError: (e: { message: string }) => toast.error(e.message),
+		onError: (e: { message: string }) => {
+			toast.error(e.message);
+			void cache.viec();
+		},
 	};
 	const doi = useMutation(trpc.viec.doiTrangThai.mutationOptions(xong));
-	const sua = useMutation(
-		trpc.viec.sua.mutationOptions({
-			...xong,
-			onError: (e) => {
-				toast.error(e.message);
-				setLamMoi((n) => n + 1);
-			},
-		}),
-	);
+	const sua = useMutation(trpc.viec.sua.mutationOptions(xong));
 	const doiNguoi = useMutation(
 		trpc.viec.doiNguoiThucHien.mutationOptions(xong),
 	);
@@ -125,13 +118,13 @@ export function KhungViec({ viecId }: { viecId: string }) {
 				<DetailSheetProperties>
 					{suaDuoc ? (
 						<DetailSheetProperty label={m.khung.tieuDe} wide>
-							<TruongSuaViec
-								choPhepRong={false}
-								giaTri={v.tieuDe}
-								key={`tieu-de:${v.tieuDe}:${lamMoi}`}
-								nhan={m.khung.tieuDe}
-								onLuu={(chu) => sua.mutate({ id: v.id, tieuDe: chu })}
-								toiDa={VIEC.tieuDeToiDa}
+							<InlineTextCell
+								label={m.khung.tieuDe}
+								onSave={(chu) => {
+									if (chu !== "") sua.mutate({ id: v.id, tieuDe: chu });
+								}}
+								saving={sua.isPending && sua.variables?.tieuDe !== undefined}
+								value={v.tieuDe}
 							/>
 						</DetailSheetProperty>
 					) : null}
@@ -216,17 +209,14 @@ export function KhungViec({ viecId }: { viecId: string }) {
 			</DetailSheetSection>
 			<DetailSheetSection title={m.khung.moTa}>
 				{suaDuoc ? (
-					<TruongSuaViec
-						choPhepRong
-						giaTri={v.moTa ?? ""}
-						key={`mo-ta:${v.moTa ?? ""}:${lamMoi}`}
-						nhan={m.khung.moTa}
-						nhieuDong
-						onLuu={(chu) =>
+					<InlineTextArea
+						label={m.khung.moTa}
+						onSave={(chu) =>
 							sua.mutate({ id: v.id, moTa: chu === "" ? null : chu })
 						}
 						placeholder={m.khung.nhapMoTa}
-						toiDa={VIEC.moTaToiDa}
+						saving={sua.isPending && sua.variables?.moTa !== undefined}
+						value={v.moTa}
 					/>
 				) : (
 					<p className="whitespace-pre-wrap text-sm" translate="no">

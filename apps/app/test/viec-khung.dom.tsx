@@ -47,8 +47,17 @@ mock.module("@/lib/trpc/client", () => ({
 	useTRPC: () =>
 		createTRPCOptionsProxy<AppRouter>({ client: trpcClient, queryClient }),
 }));
+const daLamMoi: string[] = [];
 mock.module("@/lib/trpc/cache", () => ({
-	useCrmCache: () => new Proxy({}, { get: () => async () => {} }),
+	useCrmCache: () =>
+		new Proxy(
+			{},
+			{
+				get: (_, khoa: string) => async () => {
+					daLamMoi.push(khoa);
+				},
+			},
+		),
 }));
 mock.module("next/navigation", () => ({
 	useRouter: () => ({ push: () => {}, replace: () => {}, prefetch: () => {} }),
@@ -103,6 +112,7 @@ afterEach(async () => {
 	traLoi.clear();
 	daGoi.length = 0;
 	toastLoi.length = 0;
+	daLamMoi.length = 0;
 	document.body.innerHTML = "";
 });
 
@@ -326,7 +336,8 @@ describe("vc-man-khung", () => {
 			goi.length !== 1 ||
 			(goi[0]?.input as { den?: string })?.den !== "XONG" ||
 			!nhan.includes(V.trangThai.DANG_LAM) ||
-			toastLoi[0] !== "Chỉ người giao được đánh dấu xong."
+			toastLoi[0] !== "Chỉ người giao được đánh dấu xong." ||
+			!daLamMoi.includes("viec")
 		) {
 			throw new Error("vc: khung khong lui khi bi tu choi");
 		}
@@ -371,6 +382,7 @@ describe("vc-khung-sua-tai-cho", () => {
 		);
 		traLoi.set("viec.sua", () => du);
 		await moKhung(du);
+		await bam(document.querySelector(`button[aria-label="${V.khung.tieuDe}"]`));
 		const o = document.querySelector<HTMLInputElement>(
 			`input[aria-label="${V.khung.tieuDe}"]`,
 		);
@@ -392,9 +404,8 @@ describe("vc-khung-sua-tai-cho", () => {
 		await moKhung(chiTiet("DANG_LAM", [], false, true));
 		await nhip();
 		if (
-			document.querySelector(`input[aria-label="${V.khung.tieuDe}"]`) !==
-				null ||
-			document.querySelector(`textarea[aria-label="${V.khung.moTa}"]`) !== null
+			document.querySelector(`[aria-label="${V.khung.tieuDe}"]`) !== null ||
+			document.querySelector(`[aria-label="${V.khung.moTa}"]`) !== null
 		) {
 			throw new Error("vc: khung cho nguoi theo doi sua");
 		}

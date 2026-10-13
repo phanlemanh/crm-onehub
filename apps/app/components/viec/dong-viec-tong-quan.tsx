@@ -8,7 +8,7 @@ import { HanViec } from "./trang-thai-viec";
 
 type ViecQuaHan = RouterOutputs["dashboard"]["summary"]["viecQuaHan"][number];
 
-const CELL = "px-3 py-2.5 align-middle";
+export const CELL = "px-3 py-2.5 align-middle";
 
 export function DongViecTongQuan({ viec }: { viec: ViecQuaHan }) {
 	return (

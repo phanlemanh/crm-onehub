@@ -87,7 +87,7 @@ export function LichSuViec({ viecId }: { viecId: string }) {
 	return (
 		<DetailSheetBody>
 			<DetailSheetSection>
-				<ItemGroup className="gap-1" data-lich-su-viec="">
+				<ItemGroup data-lich-su-viec="">
 					{q.data.map((d) => (
 						<Item data-vet={d.loai} data-vet-id={d.id} key={d.id} size="sm">
 							<ItemContent>
