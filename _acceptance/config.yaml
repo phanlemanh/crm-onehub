@@ -39,6 +39,7 @@ feature_loop:
     - tro-ly-okr-bo-final-output/E11
     - giam-phut-ci-nhap-t1/E7
     - chuyen-goi-dieu-phoi/E10
+    - bo-ca-mau-quy-4/E7
 design_pass:
   ds_skill: web-design-guidelines
   proto_route: http://localhost:3000/proto/{slug}
@@ -1083,6 +1084,12 @@ executors:
     bom_xoa: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t xoa-mau"'
     bom_okr_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okr-that-mau"'
     bom_bo_hong: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t bo-hong-mau"'
+    bcq4_sinh: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-sinh"'
+    bcq4_ng: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-ng"'
+    bcq4_nhan_hong: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-nhan-hong"'
+    bcq4_dong_bo: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-dong-bo"'
+    bcq4_thanh_phan: 'bun run test -- "cd apps/agent && bun test test/okr-ca-quy-4.spec.ts -t bcq4-thanh-phan"'
+    bcq4_chon_bo: 'bun run test -- "cd apps/agent && bun test test/okr-ca-quy-4.spec.ts -t bcq4-chon-bo"'
     bom_thu_tuc_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t thu-tuc-that-mau"'
     bom_chan_production: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts -t chan-production"
     bom_tai_lieu: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts -t tai-lieu"
@@ -2225,6 +2232,8 @@ executors:
     vtl_man_that: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/va-tro-ly-okr-sau-thu/rang/man-that.mjs"'
     vtl_san_thiet_ke: 'for t in "apps/app/app/(app)/[slug]/okr/hop-thoai-kr.tsx" "apps/app/app/(app)/[slug]/okr/hop-thoai-muc-tieu.tsx" "apps/app/app/(app)/[slug]/settings/okr/the-tro-ly-okr.tsx"; do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; done'
     tdx_eval_gop_y: 'bun _acceptance/tro-ly-okr-de-xuat/rang/eval-gop-y.mjs'
+    bcq4_do_gop_y: 'bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs'
+    bcq4_tu_kiem_cham: 'bun _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs --tu-kiem'
     tdx_do_tre: 'bun _acceptance/tro-ly-okr-de-xuat/rang/do-tre.mjs --lan 20'
     tbf_do_mo_hinh: 'bun _acceptance/tro-ly-okr-bo-final-output/rang/do-mo-hinh.mjs'
     tdx_tai_lieu: 'node _acceptance/tro-ly-okr-de-xuat/rang/tai-lieu.mjs'

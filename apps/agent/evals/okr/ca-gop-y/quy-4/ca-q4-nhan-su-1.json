@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-nhan-su-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Nhân sự"
+	},
+	"mucTieu": {
+		"title": "Đủ người cho mùa cao điểm",
+		"whyNow": "Thiếu người kho là nguyên nhân trễ đơn Tết năm ngoái.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Tuyển đủ 25 người thời vụ",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 25,
+			"unit": "người"
+		},
+		{
+			"title": "Người mới tự nhận ca trong 10 ngày",
+			"kind": "giu-duoi",
+			"startValue": 15,
+			"targetValue": 10,
+			"unit": "ngày"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["kr-la-viec"],
+		"vietLai": ["kr.title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "«Tuyển đủ 25 người thời vụ» mở bằng động từ việc làm."
+}

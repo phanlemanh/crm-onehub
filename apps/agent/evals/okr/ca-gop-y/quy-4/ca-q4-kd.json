@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-kd",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "bo-phan",
+		"ten": "Khối Kinh doanh"
+	},
+	"mucTieu": {
+		"title": "Khối Kinh doanh về đích doanh thu quý 4",
+		"whyNow": "Quý 4 là quý chốt ngân sách năm sau của đối tác.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Giá trị hợp đồng chốt được trong quý đạt 14 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 14,
+			"unit": "tỷ đồng"
+		},
+		{
+			"title": "Giữ số thoả thuận mới mỗi tuần trên 12",
+			"kind": "giu-tren",
+			"startValue": 9,
+			"targetValue": 12,
+			"unit": "thoả thuận"
+		}
+	],
+	"kyVong": {
+		"vanDe": ["muc-tieu-la-so", "thieu-doi-trong"],
+		"vietLai": ["title"],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Tên là chỉ số doanh thu có hướng; hai KR cùng đẩy tăng, không KR nào giữ chất lượng."
+}

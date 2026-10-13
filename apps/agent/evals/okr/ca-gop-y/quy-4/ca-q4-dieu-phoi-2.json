@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-dieu-phoi-2",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Điều phối vận tải"
+	},
+	"mucTieu": {
+		"title": "Không chuyến nào trễ vì thiếu tài xế",
+		"whyNow": "Tháng 9 có 14 chuyến trễ vì tài xế nghỉ đột xuất.",
+		"kind": "tham-vong"
+	},
+	"krs": [
+		{
+			"title": "Giữ chuyến trễ vì thiếu tài xế dưới 3 mỗi tháng",
+			"kind": "giu-duoi",
+			"startValue": 14,
+			"targetValue": 3,
+			"unit": "chuyến"
+		},
+		{
+			"title": "Lập đội tài xế dự phòng",
+			"kind": "moc",
+			"startValue": 0,
+			"targetValue": 1,
+			"unit": ""
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: giữ chuyến trễ và mốc lập đội dự phòng."
+}

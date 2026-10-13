@@ -1,0 +1,38 @@
+{
+	"id": "ca-q4-phap-che-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Pháp chế"
+	},
+	"mucTieu": {
+		"title": "Hợp đồng mùa Tết không kẹt ở pháp chế",
+		"whyNow": "Quý 4 dồn gần gấp đôi số hợp đồng cần duyệt.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Giữ thời gian duyệt hợp đồng dưới 2 ngày",
+			"kind": "giu-duoi",
+			"startValue": 2.5,
+			"targetValue": 2,
+			"unit": "ngày"
+		},
+		{
+			"title": "Tỷ lệ hợp đồng dùng mẫu chuẩn",
+			"kind": "phan-tram",
+			"startValue": 30,
+			"targetValue": 80,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: thời gian duyệt và tỷ lệ dùng mẫu chuẩn."
+}
