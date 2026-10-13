@@ -331,6 +331,32 @@ describe("cvc-chep-lai", () => {
 			`cvc: chep lai nhan ban ${lai.chep}`,
 		);
 
+		const daChep = {
+			id: await khuonApi({
+				createdById: thuong,
+				subject: "Chép lại",
+				dealId: thoaThuan,
+			}),
+		};
+		await chepTatCa(db, { nguoiChayId: quanTri, now: new Date() });
+		const truocLai = await db.viec.count();
+		let chepLai: { id: string } | string | null = "chua-chay";
+		try {
+			chepLai = await db.$transaction((tx) =>
+				chepViecCanLam(tx, {
+					activityId: daChep.id,
+					nguoiChay: { id: quanTri, ten: quanTri },
+					now: new Date(),
+				}),
+			);
+		} catch (e) {
+			chepLai = e instanceof Error ? e.message : String(e);
+		}
+		hong(
+			chepLai === null && (await db.viec.count()) === truocLai,
+			`cvc: chep lai nhan ban ${JSON.stringify(chepLai)}`,
+		);
+
 		const ba = [
 			await khuonApi({
 				createdById: thuong,
