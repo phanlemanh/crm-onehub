@@ -48,13 +48,26 @@ export default async function TaiLieuPage({
 				</PageShellHeading>
 				<PageShellActions>
 					<Suspense
-						fallback={<Skeleton className="h-8 w-80 max-w-full rounded-md" />}
+						fallback={
+							<>
+								<Skeleton className="h-8 w-32 rounded-md" />
+								<Skeleton className="h-8 w-36 rounded-md" />
+								<Skeleton className="h-8 w-24 rounded-md" />
+							</>
+						}
 					>
 						<HanhDong searchParams={searchParams} />
 					</Suspense>
 				</PageShellActions>
 			</PageShellHeader>
-			<Suspense fallback={<KhungXuong hinh="bang" />}>
+			<Suspense
+				fallback={
+					<>
+						<Skeleton className="h-8 w-56 max-w-full" />
+						<KhungXuong hinh="bang" />
+					</>
+				}
+			>
 				<NoiDung searchParams={searchParams} />
 			</Suspense>
 		</PageShell>

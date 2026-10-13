@@ -153,9 +153,12 @@ const doHop = (t) =>
 		const dau = hop('[data-slot="page-shell-header"]');
 		const noiDung =
 			hop('[data-slot="page-shell-content"]') ??
+			hop('[data-khung-xuong] [data-khung-hang="doan"]') ??
 			hop('[data-slot="page-shell"] > :not([data-slot="page-shell-header"])');
 		return {
-			tieuDe: hop('[data-slot="page-shell-title"]'),
+			tieuDe:
+				hop('[data-slot="page-shell-title"]') ??
+				hop('[data-khung-xuong] [data-khung-hang="tieu-de"]'),
 			breadcrumb: hop('[data-slot="breadcrumb"]'),
 			moTa: hop('[data-slot="page-shell-description"]'),
 			nut: hop(
@@ -328,6 +331,34 @@ try {
 		savedViewId: view.id,
 	});
 	MAN[4].duong = `/campaigns/${chienDich.id}`;
+
+	if (process.argv.includes("--tham")) {
+		for (const duong of ["/okr/toan-canh", "/tai-lieu"]) {
+			for (const rong of [KHO.rong, KHO.hep]) {
+				const t = await trangMoi(quanTri, rong);
+				await t.goto(`${d.APP}/${d.slug()}${duong}`, { waitUntil: "load", timeout: 120_000 });
+				await t.waitForNetworkIdle({ idleTime: 500, timeout: CHO_MS }).catch(() => null);
+				const o = await t.evaluate(() => {
+					const h = (s) => {
+						const e = [...document.querySelectorAll(s)].find((x) => x.getClientRects().length > 0);
+						if (!e) return null;
+						const r = e.getBoundingClientRect();
+						return `${Math.round(r.left)},${Math.round(r.top)} ${Math.round(r.width)}x${Math.round(r.height)}`;
+					};
+					return {
+						moTa: h('[data-slot="page-shell-description"]'),
+						tabs: h('[data-slot="tabs-list"]'),
+						khungTab: h("[data-khung-tab]"),
+						chonKy: h('[data-slot="select-trigger"], [data-slot="period-select"] button, [data-slot="popover-trigger"]'),
+						noiDung: h('[data-slot="page-shell-content"]'),
+					};
+				});
+				console.log(`tham ${duong} ${rong}: ${JSON.stringify(o)}`);
+				await t.close();
+			}
+		}
+		await d.ket("chup-man-tham");
+	}
 
 	if (chay(1)) {
 		await d.chayBuoc(1, async () => {

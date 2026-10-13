@@ -40,7 +40,7 @@ function DauTrangOkrCho({ tieuDe, moTa }: { tieuDe: string; moTa: string }) {
 					</PageShellHeading>
 				</PageShellHeader>
 			}
-			chonChuKy={<Skeleton className="h-8 w-40 rounded-md" />}
+			chonChuKy={<Skeleton className="h-8 w-24 rounded-md" />}
 			thanhTab={<Skeleton className="h-9 w-full max-w-xl" />}
 		/>
 	);
