@@ -141,7 +141,13 @@ const mucTieu = z.strictObject({
 	ten: z.string().trim().min(3).max(200),
 	viSao: z.string().trim().max(500).default(""),
 	canChinh: z
-		.strictObject({ mucTieu: ma.optional(), kr: ma.optional() })
+		.strictObject({
+			mucTieu: ma.optional(),
+			kr: ma.optional(),
+			lyDo: z.string().trim().min(1).max(500).optional(),
+			canCu: z.string().trim().min(1).max(500).optional(),
+			lyDoTuKara: z.boolean().optional(),
+		})
 		.optional(),
 	thamGia: z.array(ma).default([]),
 	mangSangTu: ma.optional(),
@@ -368,6 +374,8 @@ export const boOkrMau = boTho.superRefine((bo, ctx) => {
 				);
 			if (dichKr && !krTheoMa.has(dichKr))
 				loi(["mucTieu", i, "canChinh", "kr"], `không có KR ${dichKr}`);
+			if (m.canChinh.canCu !== undefined && m.canChinh.lyDo === undefined)
+				loi(["mucTieu", i, "canChinh", "canCu"], "căn cứ cần đi kèm lý do");
 		}
 		if (m.mangSangTu) {
 			const tu = mtTheoMa.get(m.mangSangTu);
