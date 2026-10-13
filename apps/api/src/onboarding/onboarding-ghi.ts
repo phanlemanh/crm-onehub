@@ -1,6 +1,8 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
+import { demViecMoCua } from "@crm/db/viec";
+import { goTheoDoiCuaNguoi } from "@crm/db/viec-ghi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type OnboardingActivityMeta,
@@ -187,18 +189,19 @@ function dieuKienChuyen(from: string) {
 export async function demViecDangGiu(
 	tx: Tx,
 	userId: string,
-): Promise<{ keHoach: number; buoc: number }> {
+): Promise<{ keHoach: number; buoc: number; viec: number }> {
 	const dk = dieuKienChuyen(userId);
-	const [keHoach, buoc] = await Promise.all([
+	const [keHoach, buoc, viec] = await Promise.all([
 		tx.onboardingPlan.count({ where: dk.keHoach }),
 		tx.onboardingStep.count({ where: dk.buoc }),
+		demViecMoCua(tx, userId),
 	]);
-	return { keHoach, buoc };
+	return { keHoach, buoc, viec };
 }
 
 export async function xoaTheoDoiCua(tx: Tx, userId: string): Promise<number> {
 	const { count } = await tx.onboardingWatch.deleteMany({ where: { userId } });
-	return count;
+	return count + (await goTheoDoiCuaNguoi(tx, userId, new Date()));
 }
 
 async function yeuCauQuanTri(userId: string): Promise<void> {

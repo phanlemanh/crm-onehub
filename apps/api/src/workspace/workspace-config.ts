@@ -16,5 +16,9 @@ export const WORKSPACE_CONFIG = {
 			`${entry} is a public mail domain, not one of ours. Remove it and save again.`,
 		conViecKeHoach: (keHoach: number, buoc: number) =>
 			`Người này còn cầm trịch ${keHoach} kế hoạch và làm ${buoc} bước đang mở. Chuyển việc ở màn Thành viên trước, rồi mới đổi sang vai «chỉ OKR».`,
+		conViec: (keHoach: number, buoc: number, viec: number) =>
+			viec === 0
+				? `Người này còn cầm trịch ${keHoach} kế hoạch và làm ${buoc} bước đang mở. Chuyển việc ở màn Thành viên trước, rồi mới đổi sang vai «chỉ OKR».`
+				: `Người này còn cầm trịch ${keHoach} kế hoạch, làm ${buoc} bước và giữ ${viec} việc đang mở. Chuyển việc ở màn Thành viên trước, rồi mới đổi sang vai «chỉ OKR».`,
 	},
 } as const;
