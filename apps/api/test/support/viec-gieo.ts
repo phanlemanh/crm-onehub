@@ -22,6 +22,12 @@ export type KetGoi = {
 };
 
 const cookie = new Map<string, string>();
+const quaApi = { congTy: [] as string[], lienHe: [] as string[] };
+
+export function ghiLienHeQuaApi(id: string): string {
+	quaApi.lienHe.push(id);
+	return id;
+}
 
 export async function batApp(): Promise<NestExpressApplication> {
 	const app = await createApp();
@@ -81,6 +87,7 @@ export async function thoaThuan(
 		chuId,
 	);
 	const congTyId = (congTy.data as { id: string }).id;
+	quaApi.congTy.push(congTyId);
 	const deal = await goi(
 		app,
 		"deals.create",
@@ -150,5 +157,13 @@ export function demVet(viecId: string, loai?: string): Promise<number> {
 export async function donViec(): Promise<void> {
 	await db.viec.deleteMany({
 		where: { taoBoi: { email: { endsWith: "@thu.test" } } },
+	});
+	await db.agentTask.deleteMany({
+		where: {
+			OR: [
+				{ companyId: { in: quaApi.congTy } },
+				{ contactId: { in: quaApi.lienHe } },
+			],
+		},
 	});
 }

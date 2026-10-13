@@ -21,6 +21,7 @@ import {
 	demVet,
 	doiThu,
 	donViec,
+	ghiLienHeQuaApi,
 	goi,
 	keHoachCua,
 	nguoi,
@@ -683,7 +684,7 @@ describe("vc-vong-doi", () => {
 				{ firstName: `${token()} K`, companyId: congTyId },
 				a.id,
 			);
-			const kId = (k.data as { id: string }).id;
+			const kId = ghiLienHeQuaApi((k.data as { id: string }).id);
 			const cp = await congTyRieng();
 			const plan = await keHoachCua(cp.id, a.id);
 			const v = await taoThu({
