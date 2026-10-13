@@ -1,19 +1,19 @@
 ---
 schema_version: 2
 feature_slug: cay-can-chinh-co-ly-do
-verdict: REJECT
-failed_evals: [E10]
+verdict: PASS
+failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 357158bacd03bc80ebd7b94546a88dc2ac03547e
+verified_commit: b2a45e3ae85d36c6d7d53bdd46f9333c119b43eb
 human_signoff:
 ---
 
 # Evidence Report: cay-can-chinh-co-ly-do
 
-Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn lại xanh. Ngoài eval còn một lệnh suite đỏ không gắn eval nào: `bun run lint:slop`.
+Round 3. Cả 13 eval đạt. Bốn eval chạy lại ở round này (E1, E2, E9, E10) và cả bảy lệnh suite xanh; chín eval còn lại mang sang từ round 2 vì delta không chạm paths của chúng.
 
 | Eval | Criterion | Executor | Verdict |
 |---|---|---|---|
@@ -26,7 +26,7 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
 | E7 | AC-7 | test | PASS |
 | E8 | AC-8 | test | PASS |
 | E9 | AC-9 | test | PASS |
-| E10 | AC-9 | ui-check | FAIL |
+| E10 | AC-9 | ui-check | PASS |
 | E11 | AC-11 | script | PASS |
 | E12 | AC-10 | script | PASS |
 | E13 | AC-11 | script | PASS |
@@ -34,24 +34,24 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
 ## Evidence
 
 - eval: E1
-  run_id: minted-cay-can-chinh-co-ly-do-E1-r2
+  run_id: minted-cay-can-chinh-co-ly-do-E1-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.l3_canh
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
   output: |
     bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-canh"
-    test-run: dropped crm_mv6k4oxsofmy_test
+    test-run: dropped crm_mv6ksrttyt1j_test
 
 - eval: E2
-  run_id: minted-cay-can-chinh-co-ly-do-E2-r2
+  run_id: minted-cay-can-chinh-co-ly-do-E2-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.l3_quyen
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
   output: |
     bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-quyen"
-    test-run: dropped crm_mv6k4om4gika_test
+    test-run: dropped crm_mv6ksscvdhdj_test
 
 - eval: E3
   run_id: minted-cay-can-chinh-co-ly-do-E3-r2
@@ -59,9 +59,9 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.test.l3_nut
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    cay-can-chinh-ly-do.dom.tsx -t l3-nut
-    Ran 1 test across 1 file. [802.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E4
   run_id: minted-cay-can-chinh-co-ly-do-E4-r2
@@ -69,9 +69,9 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.test.l3_ba_muc
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    cay-can-chinh-ly-do.dom.tsx -t l3-ba-muc
-    Ran 1 test across 1 file. [793.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E5
   run_id: minted-cay-can-chinh-co-ly-do-E5-r2
@@ -79,9 +79,9 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.test.l3_lap_lai
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    cay-can-chinh-ly-do.dom.tsx -t l3-lap-lai
-    Ran 1 test across 1 file. [604.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E6
   run_id: minted-cay-can-chinh-co-ly-do-E6-r2
@@ -89,9 +89,9 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.test.l3_loc
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    cay-can-chinh-ly-do.dom.tsx -t l3-loc
-    Ran 1 test across 1 file. [940.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E7
   run_id: minted-cay-can-chinh-co-ly-do-E7-r2
@@ -99,9 +99,9 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.test.l3_dem
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    cay-can-chinh-ly-do.dom.tsx -t l3-dem
-    Ran 1 test across 1 file. [606.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E8
   run_id: minted-cay-can-chinh-co-ly-do-E8-r2
@@ -109,36 +109,41 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.test.l3_chu
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    cay-can-chinh-ly-do.dom.tsx -t l3-chu && bun test ./test/messages-guard.spec.ts
-    Ran 140 tests across 1 file. [1434.00ms]
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E9
-  run_id: minted-cay-can-chinh-co-ly-do-E9-r2
+  run_id: minted-cay-can-chinh-co-ly-do-E9-r3
   exit_code: 0
   baseline: n-a
   verifier: config:executors.test.l3_man_doc_lai
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
   output: |
     bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-man-doc-lai"
-    test-run: dropped crm_mv6k4q3khljf_test
+    test-run: dropped crm_mv6kss09kva4_test
 
 - eval: E10
-  run_id: minted-cay-can-chinh-co-ly-do-E10-r2
-  exit_code: 1
+  run_id: minted-cay-can-chinh-co-ly-do-E10-r3
+  exit_code: 0
   baseline: n-a
   verifier: config:executors.script.l3_man
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
   screenshot: evidence/E10-step1.png
   observed: |
-    Đã mở lại các khung E10-step1, step4, step5, step6 bằng Read. Step1 (Tất cả, 1440): chip «Tất cả 22 / Chưa có lý do 20 / Đặt cược 1»; «Giữ đà tăng trưởng bán lẻ miền Bắc» nhãn «Có số liệu» kèm dòng lý do hai dòng và dấu «đổi theo Kara», không cắt chữ; «Mở rộng tệp đối tác bán lẻ miền Bắc» nhãn «Đặt cược» kèm một dòng lý do; «Đối tác chỉ kể vấn đề một lần» nhãn «Chưa có lý do», không dòng lý do. Step6 (Đặt cược, 390): chỉ còn gốc, KR «Doanh thu hợp đồng mới đạt 48 tỷ đồng» và «Mở rộng tệp...». Step5 (Chưa có lý do, 390): chip «Tất cả» ghi 103 trong khi step1 và step6 ghi 22; tập nút hiện khớp mức lọc nhưng số 103 không có assertion nào khẳng định.
-    Theo chữ của script, các kiểm phía hình (nhãn, dòng lý do, không cắt chữ, không tràn ngang, tap nút, console không lỗi) đều in DÚNG. Còn đúng một kiểm in SAI: «tat-ca 1440: đối chứng đo — chèn khối rộng thì báo tràn ngang». Ở 1440 chỉ đo được 1 hộp từ cây tới body (390 đo 8 hộp), nên đối chứng chèn khối rộng không báo tràn ngang. Expected đòi mọi kiểm in DÚNG nên eval không đạt dù hình khớp.
+    Tôi mở từng ảnh trong số 6 ảnh bằng Read, đều khớp Expected.
+    1) tat-ca-1440.png: trang «OKR theo đơn vị», nền tối. Thẻ con «Theo đơn vị» đang chọn. Chế độ «Cây cân chỉnh» đang bật. Ba chip: «Tất cả 22» (đang chọn), «Chưa có lý do 20», «Đặt cược 1». Cây đầy đủ: mục tiêu gốc «Trở thành đối tác logistics…», các KR, và mục tiêu «Giữ đà tăng trưởng bán lẻ miền Bắc» có nhãn «Có số liệu» (chấm xanh) cùng dòng lý do hai dòng, trọn chữ, không bị cắt. «Mở rộng tệp đối tác bán lẻ miền Bắc» có nhãn «Đặt cược» (chấm xám) và dòng lý do một dòng. «Đối tác chỉ kể vấn đề một lần» có nhãn «Chưa có lý do» (chấm cam), không có dòng lý do. Không có thanh cuộn ngang.
+    2) chua-co-ly-do-1440.png: chip «Chưa có lý do 20» đang chọn. Cây chỉ còn các nút «Chưa có lý do» (Chăm sóc đối tác, Kinh doanh miền Nam, Marketing, Pháp chế…) cùng tổ tiên của chúng. Không có «Giữ đà tăng trưởng bán lẻ miền Bắc» (bac-1) hay «Mở rộng tệp đối tác…» (bac-2). «Đối tác chỉ kể vấn đề một lần» (nam-2) còn.
+    3) dat-cuoc-1440.png: chip «Đặt cược 1» đang chọn. Cây chỉ còn đường từ mục tiêu gốc qua KR «Doanh thu hợp đồng mới đạt 48 tỷ đồng» tới «Mở rộng tệp đối tác bán lẻ miền Bắc» (nhãn «Đặt cược», dòng lý do «Thêm đối tác bán lẻ mới mở đường cho hợp đồng quý 1; chưa có số đo riêng cho phần này.»). Chỉ bac-2 còn.
+    4) tat-ca-390.png (cuộn giữa trang): nút «Mở rộng tệp đối tác bán lẻ miền Bắc» có nhãn «Đặt cược» và dòng lý do xuống dòng trọn chữ, không cắt. «Đối tác chỉ kể vấn đề một lần» có nhãn «Chưa có lý do». Nội dung vừa khung rộng 390, không tràn ngang.
+    5) chua-co-ly-do-390.png: chip «Chưa có lý do 20» đang chọn, chỉ có các nút «Chưa có lý do» và tổ tiên; chữ xuống dòng gọn, không tràn ngang. Phần đầu trang (thanh «Cây cân chỉnh» và «Nhập từ bảng tính», nút «Thêm mục tiêu») hiển thị bình thường.
+    6) dat-cuoc-390.png: chip «Đặt cược 1» đang chọn, chỉ còn đường tới «Mở rộng tệp đối tác bán lẻ miền Bắc» (nhãn «Đặt cược», dòng lý do trọn chữ).
+    Cả 6 ảnh đều trong evidence/, đúng 3 trạng thái × 2 khổ. Không thấy mâu thuẫn với Expected.
   network_observed: n-a (driver)
   output: |
     bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/cay-can-chinh-co-ly-do/rang/man.mjs"
-    KET LUAN: 30 DUNG, 1 SAI — ma thoat 1
-    SAI tat-ca 1440: doi chung do — chen khoi rong thi bao tran ngang
-    du 6 anh (6); console khong loi (0) o ca hai kho
+    Network: driver là script Playwright nằm trong man.mjs, không có công cụ đọc network ngoài. Kiểm console do script tự làm (0 lỗi).
+    Phiên đo tự dọn khi xong. Chỉ có thư mục evidence mới (chưa theo dõi), không sửa tệp đang theo dõi nào.
 
 - eval: E11
   run_id: minted-cay-can-chinh-co-ly-do-E11-r2
@@ -146,9 +151,9 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.script.l3_dot_bien
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    bun _acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs
-    dot-bien: 6/6 vet bi bat, tep tra lai nguyen
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E12
   run_id: cmwdbiuao001oudtyitun2xxh
@@ -156,9 +161,9 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.script.l3_giu_ho_so
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    bun _acceptance/cay-can-chinh-co-ly-do/rang/giu-ho-so.mjs
-    giu ho so dat
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 - eval: E13
   run_id: minted-cay-can-chinh-co-ly-do-E13-r2
@@ -166,48 +171,46 @@ Round 2. Verdict REJECT: eval E10 (ui-check, AC-9) không đạt; 12 eval còn l
   baseline: n-a
   verifier: config:executors.script.l3_ranh_gioi
   verified_at: 2026-10-13T10:47:40Z
+  carried_from_round: 2
   output: |
-    node _acceptance/cay-can-chinh-co-ly-do/rang/ranh-gioi.mjs
-    ranh gioi dat
+    carry-forward tu round 2 — delta khong cham paths cua eval
 
 ### Lệnh suite (hồi quy)
 
 - cmd: bun run test -- --filter=api
-  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_test_filter_api-r2
+  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_test_filter_api-r3
   exit_code: 0
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
 
 - cmd: bun run test -- --filter=app --filter=@crm/ui
-  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_test_filter_app_filter_crm_ui-r2
+  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_test_filter_app_filter_crm_ui-r3
   exit_code: 0
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
 
 - cmd: bun run test -- --filter=agent --filter=@crm/auth --filter=@crm/db
-  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_test_filter_agent_filter_crm_aut-r2
+  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_test_filter_agent_filter_crm_aut-r3
   exit_code: 0
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
 
 - cmd: bun run test -- --filter=agent-okr --filter=@crm/env --filter=@crm/ai-okr --filter=@crm/telemetry --filter=@crm/validation
-  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_test_filter_agent_okr_filter_crm-r2
+  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_test_filter_agent_okr_filter_crm-r3
   exit_code: 0
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
 
 - cmd: bunx turbo run lint --force
-  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bunx_turbo_run_lint_force-r2
+  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bunx_turbo_run_lint_force-r3
   exit_code: 0
-  verified_at: 2026-10-13T10:47:40Z
+  verified_at: 2026-10-13T11:06:12Z
 
 - cmd: bun run lint:slop
-  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_lint_slop-r2
-  exit_code: 1
-  verified_at: 2026-10-13T10:47:40Z
+  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bun_run_lint_slop-r3
+  exit_code: 0
+  verified_at: 2026-10-13T11:06:12Z
 
 - cmd: bunx turbo run build --force
-  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bunx_turbo_run_build_force-r2
+  run_id: minted-cay-can-chinh-co-ly-do-SUITE-bunx_turbo_run_build_force-r3
   exit_code: 0
-  verified_at: 2026-10-13T10:47:40Z
-
-Lệnh suite đỏ không gắn eval: `bun run lint:slop` báo một lỗi anti-slop(no-known-value-widening) ở apps/api/test/okr-cay-ly-do.spec.ts dòng 169 (hàm `boKyVong` trả kiểu `unknown` làm mất kiểu đã biết). `pre-push` chạy lint:slop nên lỗi này chặn đẩy nhánh dù không thuộc AC nào.
+  verified_at: 2026-10-13T11:06:12Z
 
 ## Known limits
 
@@ -215,15 +218,20 @@ Lệnh suite đỏ không gắn eval: `bun run lint:slop` báo một lỗi anti-
 
 ## Analyst
 
-carried tu round 1 — baseline khong do lai round nay
+none — moi eval feature deu red tren baseline (co phan biet)
 
-Không có eval không-phân-biệt nào được liệt kê. Các lệnh suite xanh ở cả hai phía là regression-guard bình thường.
+### Baseline khong do
+
+- bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-canh": bo qua baseline: tep apps/api/test/okr-cay-ly-do.spec.ts co o cay dang kiem nhung chua co o merge-base 2182d80af9729e930a364f825a9d6bdf6d708835 — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-quyen": bo qua baseline: tep apps/api/test/okr-cay-ly-do.spec.ts co o cay dang kiem nhung chua co o merge-base 2182d80af9729e930a364f825a9d6bdf6d708835 — eval moi, chay tren code cu khong phan biet gi
+- bun run test -- "cd apps/api && bun test test/okr-cay-ly-do.spec.ts -t l3-man-doc-lai": bo qua baseline: tep apps/api/test/okr-cay-ly-do.spec.ts co o cay dang kiem nhung chua co o merge-base 2182d80af9729e930a364f825a9d6bdf6d708835 — eval moi, chay tren code cu khong phan biet gi
 
 ## Variance
 
-none — every multi-run eval is uniform (mọi eval chạy một lần, deterministic)
+none — every multi-run eval is uniform
 
 ## Iterations
 
 Round 1: PASS kèm hai phát hiện trong hợp đồng; nhát sửa S4 round 1 (c2030188f: đo cây giữ nguyên so alignmentTree; ca Tất cả bấm thật sau khi lọc).
-Round 2: E10 không đạt — kiểm đối chứng «chèn khối rộng thì báo tràn ngang» ở khổ 1440 không báo vì chỉ đo được 1 hộp từ cây tới body; kèm lint:slop đỏ ở apps/api/test/okr-cay-ly-do.spec.ts:169. Chip «Tất cả» ghi 103 ở khung step5 (390, lọc Chưa có lý do) nhưng 22 ở các khung khác — script không khẳng định số này, người xem nên nhìn lại. Returned to implementation.
+Round 2: E10 không đạt — kiểm đối chứng «chèn khối rộng thì báo tràn ngang» ở khổ 1440 không báo vì chỉ đo được 1 hộp từ cây tới body; kèm lint:slop đỏ ở apps/api/test/okr-cay-ly-do.spec.ts:169. Returned to implementation (nhát sửa 6dea43813: E10 đo cuộn ngang cấp trang, đối chứng chèn vào body).
+Round 3: cả 13 eval và bảy lệnh suite đạt; E10 có đủ 6 ảnh (3 trạng thái × 2 khổ), mọi kiểm in DUNG, console không lỗi. Một phát hiện ngoài hợp đồng về độ tin cậy của đối chứng tràn ngang được ghi ở review-findings.md để người quyết ở Cổng 2.
