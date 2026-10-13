@@ -66,8 +66,8 @@ import {
 	SO_HUY,
 	SO_XONG_TONG,
 	THU_TU_COT,
-	TOI,
 	type TheMau,
+	TOI,
 	VIEC_CHA,
 	VIEC_CON,
 } from "./du-lieu";

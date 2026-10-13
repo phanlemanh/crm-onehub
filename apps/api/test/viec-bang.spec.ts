@@ -27,16 +27,20 @@ type Nguoi = "giao" | "thucHien" | "theoDoi" | "khac" | "quanTri";
 const TT_DS: TT[] = ["CHUA_LAM", "DANG_LAM", "CHO_DANH_GIA", "XONG", "HUY"];
 const NGUOI_DS: Nguoi[] = ["giao", "thucHien", "theoDoi", "khac", "quanTri"];
 
-const DUOC: Record<TT, Partial<Record<TT, "G" | "GT">>> = {
+const DUOC = {
 	CHUA_LAM: { DANG_LAM: "GT", CHO_DANH_GIA: "GT", XONG: "GT", HUY: "G" },
 	DANG_LAM: { CHUA_LAM: "GT", CHO_DANH_GIA: "GT", XONG: "GT", HUY: "G" },
 	CHO_DANH_GIA: { DANG_LAM: "G", XONG: "G", HUY: "G" },
 	XONG: { DANG_LAM: "G" },
 	HUY: { CHUA_LAM: "G" },
-};
+} satisfies Record<TT, Partial<Record<TT, "G" | "GT">>>;
+
+function oCua(hang: Partial<Record<TT, "G" | "GT">>, den: TT) {
+	return hang[den];
+}
 
 function thanhCong(n: Nguoi, tu: TT, den: TT): boolean {
-	const o = DUOC[tu][den];
+	const o = oCua(DUOC[tu], den);
 	if (o === undefined) return false;
 	if (o === "G") return n === "giao";
 	return n === "giao" || n === "thucHien";
@@ -245,13 +249,13 @@ describe("kv-ma-tran", () => {
 			const theoDoi = await nguoi("kv-mt-td", "member");
 			const khac = await nguoi("kv-mt-khac", "member");
 			const quanTri = await nguoi("kv-mt-qt", "admin");
-			const ma: Record<Nguoi, string> = {
+			const ma = {
 				giao: giao.id,
 				thucHien: thucHien.id,
 				theoDoi: theoDoi.id,
 				khac: khac.id,
 				quanTri: quanTri.id,
-			};
+			} satisfies Record<Nguoi, string>;
 			const { dealId } = await thoaThuan(app, giao.id, "KV Ma tran");
 			const gan = [{ loai: "deal" as const, id: dealId }];
 			const moi = async (tt: TT, nhan: string) => {

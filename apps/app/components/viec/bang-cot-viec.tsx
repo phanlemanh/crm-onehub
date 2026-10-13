@@ -12,7 +12,6 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import type { NhomViec } from "@crm/validation/viec";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { TRPCClientError } from "@trpc/client";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -41,10 +40,6 @@ type Keo = {
 };
 
 const THE_CHO = ["a", "b", "c"];
-
-function laLoiMang(e: unknown): boolean {
-	return !(e instanceof TRPCClientError) || e.data == null;
-}
 
 export function BangCotViec({
 	nhom,
@@ -78,9 +73,10 @@ export function BangCotViec({
 			{
 				onError: (e) => {
 					boCho(k.id);
+					const mang = e.data == null;
 					toast.error(
-						laLoiMang(e) ? m.bang.loiMoTa : e.message,
-						laLoiMang(e)
+						mang ? m.bang.loiMoTa : e.message,
+						mang
 							? { action: { label: m.bang.thuLai, onClick: () => gui(k) } }
 							: undefined,
 					);

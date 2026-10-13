@@ -12,6 +12,7 @@ import { DuongProtoMau } from "./_modules/duong-proto";
 import { GiaiDoanThoaThuanProto } from "./_modules/giai-doan-thoa-thuan";
 import { GioiHanDuyetCayOkrMau } from "./_modules/gioi-han-duyet-cay-okr";
 import { GopYDungChoMau } from "./_modules/gop-y-dung-cho";
+import { KanbanViecMau } from "./_modules/kanban-viec";
 import { KeHoachLaMotBanGhiMau } from "./_modules/ke-hoach-la-mot-ban-ghi";
 import { KeoThaThoaThuanMau } from "./_modules/keo-tha-thoa-thuan";
 import { KhepKyOkrMau } from "./_modules/khep-ky-okr";
@@ -39,7 +40,6 @@ import { TroLyOkrDeXuatMau } from "./_modules/tro-ly-okr-de-xuat";
 import { TroLyOkrNenMau } from "./_modules/tro-ly-okr-nen";
 import { TroLyOkrTomTatMau } from "./_modules/tro-ly-okr-tom-tat";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
-import { KanbanViecMau } from "./_modules/kanban-viec";
 import { ViecChungMau } from "./_modules/viec-chung";
 import { PROTO_CATALOG } from "./catalog";
 

@@ -76,9 +76,9 @@ const BoardThat = goc.Board;
 const boardDropThat = goc.boardDrop;
 mock.module("@crm/ui/components/board", () => ({
 	boardDrop: boardDropThat,
-	Board: (props: BoardProps & Record<string, unknown>) => {
+	Board: (props: Parameters<typeof BoardThat>[0]) => {
 		boardProps = props;
-		return createElement(BoardThat as never, props);
+		return createElement(BoardThat, props);
 	},
 }));
 

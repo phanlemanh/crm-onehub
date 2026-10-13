@@ -10,8 +10,8 @@ import {
 	TIEU_DE_CHA_MAU,
 	TIEU_DE_MAU,
 } from "@crm/db/viec-gieo";
-import { donDep, moXuong } from "./support/ke-hoach-gieo";
 import type { NestExpressApplication } from "@nestjs/platform-express";
+import { donDep, moXuong } from "./support/ke-hoach-gieo";
 import { batApp, donViec, nguoi, thoaThuan } from "./support/viec-gieo";
 
 const RANG = join(
