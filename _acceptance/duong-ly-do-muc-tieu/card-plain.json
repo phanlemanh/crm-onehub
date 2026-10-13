@@ -1,44 +1,140 @@
 {
-  "feature_plain": "Mở một mục tiêu, người đọc thấy ngay dưới mỗi chỗ «Góp vào» vì sao mục tiêu này góp vào đó, dựa trên căn cứ gì và chắc tới đâu.",
+  "feature_plain": "Mở một mục tiêu, người đọc thấy ngay trong vùng «Đường lý do» vì sao mục tiêu này góp vào mục tiêu cha, dựa trên căn cứ gì, chắc tới đâu (Có số liệu · Đặt cược · Chưa có lý do), và lý do nào do Kara viết.",
   "will_do": [
-    {"id": "AC-1", "p": "Sẽ hiện câu lý do, dòng «Căn cứ», nhãn «Có số liệu» và dấu Kara ngay dưới chỗ nối, giữ nguyên tên và dòng mô tả của chỗ nối."},
-    {"id": "AC-2", "p": "Sẽ gắn đúng một trong ba nhãn mức tin — Chưa có lý do, Đặt cược, Có số liệu — theo mức máy chủ đã tính, màu theo bảng màu chung."},
-    {"id": "AC-4", "p": "Sẽ hiện lý do như nhau cho căn chỉnh thẳng lên mục tiêu cha, dòng mô tả chỉ còn tên đơn vị như nay."},
-    {"id": "AC-5", "p": "Sẽ chỉ gắn dấu Kara cho lý do Kara viết, không gắn cho lý do người viết."},
-    {"id": "AC-6", "p": "Sẽ giữ lý do và căn cứ không bị trình duyệt tự dịch, và có đủ chữ tiếng Việt lẫn tiếng Anh cho nhãn mới."},
-    {"id": "AC-7", "p": "Sẽ giữ xanh mọi phép đo của các việc đã ký có chạm tới những tệp vòng này sửa (tập tính bằng máy)."},
-    {"id": "AC-8", "p": "Sẽ cho bộ OKR mẫu gieo đủ ba mức tin, có lý do Kara viết, và từ chối căn cứ không kèm lý do."},
-    {"id": "AC-9", "p": "Sẽ chụp màn thật ba mức tin ở máy tính và điện thoại, chữ lý do hiện trọn, không bị cắt."},
-    {"id": "AC-10", "p": "Sẽ chỉ đổi đúng các tệp đã khai trong ranh giới."}
+    {
+      "id": "AC-1",
+      "p": "Sẽ hiện câu lý do, dòng «Căn cứ», nhãn «Có số liệu» và dấu Kara ngay dưới chỗ nối, giữ nguyên tên và dòng mô tả của chỗ nối."
+    },
+    {
+      "id": "AC-2",
+      "p": "Sẽ gắn đúng một trong ba nhãn mức tin — Chưa có lý do, Đặt cược, Có số liệu — theo mức máy chủ đã tính, màu theo bảng màu chung."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ hiện lý do như nhau cho căn chỉnh thẳng lên mục tiêu cha, dòng mô tả chỉ còn tên đơn vị như nay."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ chỉ gắn dấu Kara cho lý do Kara viết, không gắn cho lý do người viết."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ giữ lý do và căn cứ không bị trình duyệt tự dịch, và có đủ chữ tiếng Việt lẫn tiếng Anh cho nhãn mới."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ giữ xanh mọi phép đo của các việc đã ký có chạm tới những tệp vòng này sửa (tập tính bằng máy)."
+    },
+    {
+      "id": "AC-8",
+      "p": "Sẽ cho bộ OKR mẫu gieo đủ ba mức tin, có lý do Kara viết, và từ chối căn cứ không kèm lý do."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ chụp màn thật ba mức tin ở máy tính và điện thoại, chữ lý do hiện trọn, không bị cắt."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ chỉ đổi đúng các tệp đã khai trong ranh giới."
+    }
   ],
   "wont_do": [
-    {"id": "AC-3", "p": "Sẽ KHÔNG vẽ ô lý do rỗng, dòng căn cứ rỗng hay khối «Góp vào» rỗng khi không có gì để hiện."},
-    {"id": "OOS-1", "p": "Không đổi máy chủ hay cơ sở dữ liệu — chỉ đọc cái việc trước (L1) đã trả."},
-    {"id": "OOS-2", "p": "Không hiện số đầu → đích của KR cha, không vẽ chuỗi nhiều bậc lên OneHub (để cho việc cây căn chỉnh L3)."},
-    {"id": "OOS-3", "p": "Không đụng tab Căn chỉnh, hộp gắn căn chỉnh hay đề xuất căn chỉnh của Kara (việc L4)."},
-    {"id": "OOS-4", "p": "Không cho sửa hay xoá lý do (việc L4)."}
+    {
+      "id": "AC-3",
+      "p": "Sẽ KHÔNG vẽ ô lý do rỗng, dòng căn cứ rỗng hay khối «Góp vào» rỗng khi không có gì để hiện."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Không đổi máy chủ hay cơ sở dữ liệu — chỉ đọc cái việc trước (L1) đã trả."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Không hiện số đầu → đích của KR cha, không vẽ chuỗi nhiều bậc lên OneHub (để cho việc cây căn chỉnh L3)."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Không đụng tab Căn chỉnh, hộp gắn căn chỉnh hay đề xuất căn chỉnh của Kara (việc L4)."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Không cho sửa hay xoá lý do (việc L4)."
+    }
   ],
   "scope_plain": "Bốn phần để lại cho các việc sau trong dãy lý do căn chỉnh:",
   "coverage_plain": [
-    {"i": 0, "p": "Ba mức tin đều có tiêu chí riêng (AC-2 ba nhãn, AC-3 hai mức thiếu phần)."},
-    {"i": 1, "p": "Đủ là đủ đúng ba mức máy chủ định nghĩa."},
-    {"i": 2, "p": "Hai kiểu nối — qua KR (AC-1) và thẳng lên mục tiêu (AC-4) — đều có ca."},
-    {"i": 3, "p": "Đủ là đủ hai kiểu máy chủ trả."},
-    {"i": 4, "p": "Không căn chỉnh, một, và nhiều căn chỉnh đều có ca (AC-3, AC-1, AC-5)."},
-    {"i": 5, "p": "Không căn chỉnh thì giữ như nay: không có khối."},
-    {"i": 6, "p": "Lý do Kara viết và lý do người viết đều có ca (AC-5)."},
-    {"i": 7, "p": "Đủ theo luật dấu Kara của kho."},
-    {"i": 8, "p": "Máy tính và điện thoại, tiếng Việt và tiếng Anh, chữ người nhập không bị dịch, quyền xem do máy chủ đã lọc từ việc L1."},
-    {"i": 9, "p": "Mỗi ô cốt lõi khớp một tiêu chí, từ AC-1 tới AC-10."},
-    {"i": 10, "p": "Đối chiếu với Atlassian Goals và Mooncamp/Perdoo: liên kết mục tiêu có ghi chú lý do, không bắt buộc."},
-    {"i": 11, "p": "Để sau: số đầu → đích của KR, dời «Vì sao lúc này» xuống cuối đường nếu anh chọn bản vẽ, chuỗi nhiều bậc (L3), sửa lý do (L4)."},
-    {"i": 12, "p": "Không bao giờ: bắt buộc nhập lý do — anh đã chọn không."}
+    {
+      "i": 0,
+      "p": "Ba mức tin đều có tiêu chí riêng (AC-2 ba nhãn, AC-3 hai mức thiếu phần)."
+    },
+    {
+      "i": 1,
+      "p": "Đủ là đủ đúng ba mức máy chủ định nghĩa."
+    },
+    {
+      "i": 2,
+      "p": "Hai kiểu nối — qua KR (AC-1) và thẳng lên mục tiêu (AC-4) — đều có ca."
+    },
+    {
+      "i": 3,
+      "p": "Đủ là đủ hai kiểu máy chủ trả."
+    },
+    {
+      "i": 4,
+      "p": "Không căn chỉnh, một, và nhiều căn chỉnh đều có ca (AC-3, AC-1, AC-5)."
+    },
+    {
+      "i": 5,
+      "p": "Không căn chỉnh thì giữ như nay: không có khối."
+    },
+    {
+      "i": 6,
+      "p": "Lý do Kara viết và lý do người viết đều có ca (AC-5)."
+    },
+    {
+      "i": 7,
+      "p": "Đủ theo luật dấu Kara của kho."
+    },
+    {
+      "i": 8,
+      "p": "Máy tính và điện thoại, tiếng Việt và tiếng Anh, chữ người nhập không bị dịch, quyền xem do máy chủ đã lọc từ việc L1."
+    },
+    {
+      "i": 9,
+      "p": "Mỗi ô cốt lõi khớp một tiêu chí, từ AC-1 tới AC-10."
+    },
+    {
+      "i": 10,
+      "p": "Đối chiếu với Atlassian Goals và Mooncamp/Perdoo: liên kết mục tiêu có ghi chú lý do, không bắt buộc."
+    },
+    {
+      "i": 11,
+      "p": "Để sau: số đầu → đích của KR, dời «Vì sao lúc này» xuống cuối đường nếu anh chọn bản vẽ, chuỗi nhiều bậc (L3), sửa lý do (L4)."
+    },
+    {
+      "i": 12,
+      "p": "Không bao giờ: bắt buộc nhập lý do — anh đã chọn không."
+    }
   ],
   "gap_probe_plain": [
-    {"i": 0, "p": "Lời hứa «không việc đã ký nào đỏ» lúc đầu chỉ đo vài bài — đã sửa: máy tự tìm mọi phép đo đã ký chạm tệp vòng này sửa và chạy hết."},
-    {"i": 1, "p": "Hỏi bộ mẫu ghi lý do qua đường nào — đã bác: bộ mẫu vốn ghi căn chỉnh thẳng từ trước, ba trường đi cùng chỗ đó; đường ghi thật cho căn cứ là việc L4."},
-    {"i": 2, "p": "Phép đo màn không bắt được chữ lý do bị cắt bằng dấu ba chấm — đã sửa: đo trên từng dòng lý do, có câu dài, có đối chứng đỏ."},
-    {"i": 3, "p": "Ca mục tiêu không có căn chỉnh chưa có tiêu chí — đã sửa: thêm vào AC-3 kèm vết đỏ."},
-    {"i": 4, "p": "Ranh giới thiếu tệp lộ trình — đã sửa: mở cho toàn bộ tài liệu."}
+    {
+      "i": 0,
+      "p": "Lời hứa «không việc đã ký nào đỏ» lúc đầu chỉ đo vài bài — đã sửa: máy tự tìm mọi phép đo đã ký chạm tệp vòng này sửa và chạy hết."
+    },
+    {
+      "i": 1,
+      "p": "Hỏi bộ mẫu ghi lý do qua đường nào — đã bác: bộ mẫu vốn ghi căn chỉnh thẳng từ trước, ba trường đi cùng chỗ đó; đường ghi thật cho căn cứ là việc L4."
+    },
+    {
+      "i": 2,
+      "p": "Phép đo màn không bắt được chữ lý do bị cắt bằng dấu ba chấm — đã sửa: đo trên từng dòng lý do, có câu dài, có đối chứng đỏ."
+    },
+    {
+      "i": 3,
+      "p": "Ca mục tiêu không có căn chỉnh chưa có tiêu chí — đã sửa: thêm vào AC-3 kèm vết đỏ."
+    },
+    {
+      "i": 4,
+      "p": "Ranh giới thiếu tệp lộ trình — đã sửa: mở cho toàn bộ tài liệu."
+    }
   ]
 }
