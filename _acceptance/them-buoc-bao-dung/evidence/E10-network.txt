@@ -1,0 +1,1 @@
+driver: puppeteer-core in man.mjs; network not readable by this verifier (blocked on purpose by script)
