@@ -1081,6 +1081,13 @@ executors:
     bom_moc: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t moc-ghim-mau"'
     bom_nap_lai: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t nap-lai-mau"'
     bom_xoa: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t xoa-mau"'
+    bcm_khuon: 'bun test ./_acceptance/bo-cau-hoi-mau/rang/kiem-bo.test.ts -t khuon'
+    bcm_thanh_phan: 'bun test ./_acceptance/bo-cau-hoi-mau/rang/kiem-bo.test.ts -t thanh-phan'
+    bcm_trang_mong: 'bun test ./_acceptance/bo-cau-hoi-mau/rang/kiem-bo.test.ts -t trang-mong'
+    bcm_y_trong_yeu: 'bun test ./_acceptance/bo-cau-hoi-mau/rang/kiem-bo.test.ts -t y-trong-yeu'
+    bcm_rieng_tu: 'bun test ./_acceptance/bo-cau-hoi-mau/rang/kiem-bo.test.ts -t rieng-tu'
+    bcm_bang_do: 'bun test ./_acceptance/bo-cau-hoi-mau/rang/do-bo-mau.test.ts -t bang-do'
+    bcm_ma_thoat: 'bun test ./_acceptance/bo-cau-hoi-mau/rang/do-bo-mau.test.ts -t ma-thoat'
     bom_okr_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t okr-that-mau"'
     bom_bo_hong: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t bo-hong-mau"'
     bom_thu_tuc_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t thu-tuc-that-mau"'
@@ -1632,6 +1639,8 @@ executors:
     tlk_san_thiet_ke: 'for t in $(git ls-files "apps/app/app/(app)/[[]slug]/tai-lieu/*.tsx" "apps/app/app/(app)/[[]slug]/tai-lieu/**/*.tsx"); do node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs --target "$t" --mode static || exit 1; node _acceptance/tro-ly-doc-kho/rang/ban-kinh-man.mjs "$t" || exit 1; done && bun run test -- "bun _acceptance/nen-chat-ai-elements/rang/mo-coi.mjs"'
     msd_quet_duong_ghi: "node _acceptance/may-soan-de-xuat/rang/quet-duong-ghi.mjs"
     msd_bien_ba_nha: "node _acceptance/may-soan-de-xuat/rang/bien-ba-nha.mjs"
+    bcm_kiem: "bun _acceptance/bo-cau-hoi-mau/rang/kiem-bo.ts"
+    bcm_kiem_do: "bun _acceptance/bo-cau-hoi-mau/rang/do-bo-mau.ts"
     msd_blob_that: 'BLOB_READ_WRITE_TOKEN=vercel_blob_rw_logo_gia_khong_dung bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/blob-that.mjs"'
     knr_bien_cac_nha: "node _acceptance/kho-nguon-khoa-rieng/rang/bien-cac-nha.mjs"
     msd_soan_that: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/may-soan-de-xuat/rang/soan-that.mjs"'

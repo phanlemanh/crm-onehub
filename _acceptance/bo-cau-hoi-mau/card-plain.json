@@ -1,0 +1,32 @@
+{
+  "feature_plain": "Trợ lý kho có một bộ 50 câu hỏi mẫu để đo xem nó trả lời đúng trang, biết nói «không biết», và nhận ra câu gửi qua Zalo — đo được ngay, không chờ nhân viên gom câu hỏi thật.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ có một bộ đúng 50 câu, ghi rõ là bộ giả do máy soạn, chạy được với công cụ chấm trợ lý đang có; bộ ghi sai khuôn bị chặn và chỉ ra câu sai."},
+    {"id": "AC-2", "p": "Sẽ chia bộ theo bảng viết trước: 15 câu một trang, 5 câu hai trang, 8 câu ngưỡng hay ngoại lệ, 8 câu phải nói không biết, 10 câu gõ kiểu người thật, 4 câu không phải hỏi quy định."},
+    {"id": "AC-3", "p": "Sẽ gắn mỗi câu với đúng trang mẫu trả lời nó; câu gõ kiểu người thật trỏ về câu chuẩn cùng nghĩa và cùng trang."},
+    {"id": "AC-4", "p": "Sẽ ghi kèm mỗi câu có trang một ý trả lời chép nguyên văn từ trang đó, để người đọc kết quả biết câu trả lời đúng phải chứa gì."},
+    {"id": "AC-6", "p": "Sẽ có một lệnh đo trợ lý trên cả bộ bằng model thật, ra bảng đúng/sai theo từng loại câu và danh sách câu chưa đạt cho lượt sửa sau; trợ lý dưới ngưỡng vẫn là đã đo."},
+    {"id": "AC-7", "p": "Sẽ lưu kết quả đo vào kho; lần kiểm sau chỉ đối chiếu kết quả đã lưu với bộ hiện tại, không gọi model, và báo lệch ngay khi bộ hay bảng không khớp."}
+  ],
+  "wont_do": [
+    {"id": "AC-5", "p": "Chặn câu có số điện thoại, email hay số hợp đồng trong bộ."},
+    {"id": "OOS-1", "p": "KHÔNG sửa trợ lý cho đạt ngưỡng — đó là việc của lượt sửa sau chạy thật."},
+    {"id": "OOS-2", "p": "KHÔNG đụng công cụ chấm hay hồ sơ đã ký của trợ lý kho."},
+    {"id": "OOS-3", "p": "KHÔNG đưa câu hỏi thật của nhân viên vào kho mã; bộ thật giữ ngoài kho."},
+    {"id": "OOS-4", "p": "KHÔNG có câu về trang bị thay thế hay hiệu lực theo ngày, KHÔNG tự chấm ý trả lời, KHÔNG thêm trang mẫu mới."}
+  ],
+  "scope_plain": "Những việc dưới đây cố ý để ngoài lượt này:",
+  "coverage_plain": [
+    {"i": 0, "p": "Đủ sáu loại câu — một trang, hai trang, ngưỡng, gần trùng mà trang không nói, ngoài hẳn kho, không phải quy định (AC-2 thành phần, AC-3 trang, AC-4 ý, AC-8 người đọc soát); thước là tầng câu của bộ vàng và hai bộ thử ngành Ragas, SQuAD 2.0."},
+    {"i": 1, "p": "Đủ sáu kiểu chữ người gõ — chuẩn, không dấu, viết tắt, sai chính tả, trộn tiếng Anh, tin Zalo (AC-2, AC-3, AC-8); thước là danh sách kiểu chữ trong hướng dẫn gom câu."},
+    {"i": 2, "p": "Bộ đi đủ vòng viết, kiểm, đo (AC-1 đến AC-7); thêm câu thật để sau, đã ghi lý do ở sổ quyết định."},
+    {"i": 3, "p": "Áp mọi câu: ghi rõ là giả (AC-1), không lộ thông tin cá nhân (AC-5), ý trả lời chép từ trang (AC-4), không đụng hồ sơ đã ký (AC-6)."},
+    {"i": 4, "p": "Giả định chờ anh gạch: 4 câu không phải quy định đủ để thấy Zalo chuyển nhầm — một câu nhầm đã là 25%, thô hơn bộ tạm 10 câu."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Lượt sửa trợ lý sau này không đo lại được, vì lệnh đo thấy bộ không đổi là dùng lại số cũ — đã sửa: tách lệnh thành đo mới, chép kết quả, và chỉ kiểm; cách làm mới số đo thành câu hỏi Hỏi-2 cho anh."},
+    {"i": 1, "p": "Không tiêu chí nào đòi kết quả đo phải lưu vào kho, nên phiên sau ở máy khác không có số — đã sửa: AC-7 đòi kết quả đã lưu trước Cổng Bằng chứng."},
+    {"i": 2, "p": "Ba ngả kết thúc của lệnh đo (trợ lý đạt, dưới ngưỡng, không đo được) chưa có bài thử chắc chắn, và đếm câu theo số dòng chứ không theo mã — đã sửa: thêm bài thử E10 dùng công cụ chấm giả, so đúng tập mã."},
+    {"i": 3, "p": "Chưa có bài thử bắt bộ quên ghi là giả — đã sửa: thêm hai ca vào bài thử khuôn."}
+  ]
+}
