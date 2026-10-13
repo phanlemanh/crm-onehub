@@ -105,13 +105,12 @@ export function NutTaiNguon({ luaChon }: { luaChon: LuaChonTai }) {
 	const url = useWorkspaceUrl();
 	const trangThai = useQuery(trpc.taiLieuNguon.trangThai.queryOptions());
 	const [mo, setMo] = useState(false);
-	const idTat = `${useId()}-tat`;
-	const tat = trangThai.data?.bat === false;
+	const coLyDo = trangThai.data?.bat === false || trangThai.isError;
 
 	return (
 		<>
 			<Button
-				aria-describedby={tat ? idTat : undefined}
+				aria-describedby={coLyDo ? TAI_LIEU_MAN.idNguonTat : undefined}
 				data-tai-nguon=""
 				disabled={trangThai.data?.bat !== true}
 				onClick={() => setMo(true)}
@@ -120,13 +119,6 @@ export function NutTaiNguon({ luaChon }: { luaChon: LuaChonTai }) {
 				<Icon icon={Upload} />
 				{m.nutTai}
 			</Button>
-			{tat ? (
-				<div className="order-last flex basis-full justify-end">
-					<FieldDescription data-nguon-tat="" id={idTat}>
-						{m.tat}
-					</FieldDescription>
-				</div>
-			) : null}
 			<Dialog onOpenChange={setMo} open={mo}>
 				<DialogContent data-hop-tai-nguon="" size="wide">
 					<NoiDungHop

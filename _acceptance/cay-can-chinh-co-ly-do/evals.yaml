@@ -1,0 +1,112 @@
+slug: cay-can-chinh-co-ly-do
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l3_canh
+    expected: "exit 0; apps/api/test/okr-cay-ly-do.spec.ts -t l3-canh (CSDL kiểm thật, bộ mẫu nạp bằng batDauMau): quản trị gọi okr.cayCanChinh qua tRPC (goi của tro-ly-okr-san) cho chu kỳ quý 4; đầu ra parse bằng cayCanChinhOutput thật. Tập cạnh mong đợi rút từ writer thật — okr.objective của từng mục tiêu có mặt trong cây, mỗi alignment có đích có mặt trong cây thành một cặp (tu, den) — rồi so: số phần tử canh === số cặp mong đợi; với từng cặp, lyDo/canCu/lyDoTuKara/mucTin bằng đúng giá trị okr.objective trả; ba ca L2 (q4-kd-bac-1 co-so-lieu, q4-kd-bac-2 dat-cuoc, q4-kd-nam-2 chua-co-ly-do) có mặt; đối chứng dương: số cạnh có den là KR ≥ 1 và số cạnh có den là mục tiêu ≥ 1 (không thì exit 1 'thieu loai dich'). roots và chuaCanChinh bằng đúng (toEqual) đầu ra của bản trước vòng: dựng lại bằng dungCayCanChinh + gan như service (không đổi). Chiều đỏ ghim ở E11 (a): service chỉ dựng cạnh có đích là KR → 'canh thieu: <tu>-><den>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr-xem.service.ts, apps/api/src/okr/okr-xem.contracts.ts, apps/api/test/okr-cay-ly-do.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l3_quyen
+    expected: "exit 0; cùng tệp, -t l3-quyen: (1) bài thuần canhCuaCay (xuất từ okr-xem.service.ts) với tập viết trước — Y góp vào X (X không có trong tập), Z góp vào KR W1 của W (có trong tập), V góp vào W (có trong tập) — đòi đúng tập cạnh {Z->W1, V->W}, in 'canh lo ra ngoai cay: Y->X' nếu Y->X có mặt; đối chứng dương: thêm X vào tập thì Y->X có mặt. (2) Trên bộ mẫu, với từng người dùng của cong-ty.json (đếm số người chạy === số người trong bộ mẫu), mọi canh.tu và canh.den ∈ tập id nút cây của chính họ (đếm vi phạm === 0). Chiều đỏ ghim ở E11 (b): bỏ lọc đích có mặt → 'canh lo ra ngoai cay'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr-xem.service.ts, apps/api/test/okr-cay-ly-do.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.l3_nut
+    expected: "exit 0; apps/app/test/cay-can-chinh-ly-do.dom.tsx -t l3-nut: dựng CayCanChinh thật với roots/chuaCanChinh/canh parse bằng cayCanChinhOutput thật: gốc O → KR K → mục tiêu P, cạnh (P, K) co-so-lieu, lyDoTuKara true. Trong [data-nut-can-chinh=P]: textContent nhãn [data-muc-tin] === mo.sheet.mucTin['co-so-lieu'] (bảng chung của L2), data-tone của chấm === toneTheoNghia(NGHIA_MUC_TIN['co-so-lieu']), textContent [data-ly-do-cau] === lyDo, số [data-slot=kara-trace] === 1. Nút O và nút K: số [data-ly-do-canh] === 0. Chiều đỏ ghim ở E11 (c): đọc cạnh theo (P, O) thay vì (P, cha thật) → 'ly do sai cha'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", apps/app/test/cay-can-chinh-ly-do.dom.tsx]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.l3_ba_muc
+    expected: "exit 0; cùng tệp, -t l3-ba-muc: ma trận viết trước ba nút con (chua-co-ly-do, dat-cuoc, co-so-lieu), đòi số ca chạy === 3; mỗi nút: nhãn === mo.sheet.mucTin[mức], data-tone === toneTheoNghia(NGHIA_MUC_TIN[mức]) và bằng chuỗi viết trước warning/neutral/success. Nút chua-co-ly-do: số [data-ly-do-canh] === 0 (đối chứng dương: nút dat-cuoc có đúng 1), số kara-trace === 0 — với một fixture CÓ lyDoTuKara true để vế âm có đối chứng (đối chứng dương: nút co-so-lieu Kara có đúng 1 dấu). Grep tĩnh cay-can-chinh.tsx: không có object literal ánh xạ chua-co-ly-do/dat-cuoc/co-so-lieu sang tone (bảng thứ hai) — đếm === 0, đối chứng dương: ly-do-noi-gop.tsx có đúng 1. Chiều đỏ ghim ở E11 (d): khai bảng thứ hai trong cây → 'bang muc tin thu hai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", apps/app/components/crm/record-sheet/ly-do-noi-gop.tsx, apps/app/test/cay-can-chinh-ly-do.dom.tsx]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.l3_lap_lai
+    expected: "exit 0; cùng tệp, -t l3-lap-lai: P góp vào K (cạnh lý do «lý do K») và vào mục tiêu B (cạnh lý do «lý do B»); cây có P dưới K và P (lapLai) dưới B. Đọc theo data-cay-khoa: lần P dưới K có [data-ly-do-cau] === «lý do K», lần dưới B === «lý do B». Chiều đỏ ghim ở E11 (c) cùng vết: 'ly do sai cha'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", apps/app/test/cay-can-chinh-ly-do.dom.tsx]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.l3_loc
+    expected: "exit 0; cùng tệp, -t l3-loc: cây viết trước có gốc O, KR K1, K2; con P1 (chua-co-ly-do) dưới K1, P2 (dat-cuoc) dưới K1, P3 (co-so-lieu) dưới K2, P4 (chua-co-ly-do) dưới P3; nhóm chưa căn chỉnh có Q. Ma trận ba giá trị lọc × tập id nút hiện, viết trước: chua-co-ly-do → {O, K1, P1, K2, P3, P4} (P3 hiện vì là tổ tiên của P4), không có P2, Q; dat-cuoc → {O, K1, P2}; tat-ca → mọi nút kể cả Q. Đòi số ca === 3; với mỗi ca so tập id [data-nut-can-chinh] hiện ra bằng đúng tập viết trước (in thừa/thiếu). Bấm chip qua ToggleGroup thật; giá trị đường dẫn (NuqsTestingAdapter onUrlUpdate) === khoá SEARCH_PARAM mới với giá trị mức. Chiều đỏ ghim ở E11 (e): bỏ giữ tổ tiên → ca chua-co-ly-do in 'thieu: O, K1'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", "apps/app/app/(app)/[slug]/okr/okr-search-params.ts", apps/app/lib/search-param-keys.ts, apps/app/test/cay-can-chinh-ly-do.dom.tsx]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    cmd: config:executors.test.l3_dem
+    expected: "exit 0; cùng tệp, -t l3-dem: với cây của E6, textContent số trên chip: tat-ca === tổng số cạnh (4), chua-co-ly-do === 2, dat-cuoc === 1 (so bằng giá trị đếm từ fixture canh, không chép số). Cây không có cạnh dat-cuoc, đặt giá trị lọc dat-cuoc qua searchParams của NuqsTestingAdapter (không bấm chip) → chip dat-cuoc vẫn không disabled, có [data-cay-loc-rong] với textContent === m.cay.locRong, số [data-nut-can-chinh] === 0. Đường dẫn mang giá trị lạ 'zzz' → chip tat-ca được chọn (aria-pressed hoặc data-state on) và mọi nút hiện. Chiều đỏ ghim ở E11 (f): chip Tất cả đếm mọi nút kể cả gốc và KR thay vì số cạnh → 'so tren chip sai'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: ["apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", "apps/app/app/(app)/[slug]/okr/okr-search-params.ts", apps/app/lib/messages/okr-toan-canh.ts, apps/app/test/cay-can-chinh-ly-do.dom.tsx]
+
+  - id: E8
+    criterion: AC-8
+    executor: test
+    cmd: config:executors.test.l3_chu
+    expected: "exit 0; cùng tệp, -t l3-chu: [data-ly-do-cau] mang translate='no'; với từng khoá mới của okr-toan-canh (cay.locRong, cay.locTatCa) okrToanCanhMessages('vi') và ('en') đều khác rỗng và khác nhau, đòi số khoá === 2; textContent nhãn chip chua-co-ly-do và dat-cuoc (bỏ số đếm) === okrMessages('vi').sheet.mucTin của mức đó; dựng lại với locale en → nhãn chip chua-co-ly-do === bản en. Và apps/app/test/messages-guard.spec.ts xanh."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/app/lib/messages/okr-toan-canh.ts, "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", apps/app/test/cay-can-chinh-ly-do.dom.tsx, apps/app/test/messages-guard.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.l3_man_doc_lai
+    expected: "exit 0; apps/api/test/okr-cay-ly-do.spec.ts -t l3-man-doc-lai: đọc _acceptance/cay-can-chinh-co-ly-do/rang/ca-man.json (người xem, ba mã mục tiêu, mức tin) — cùng tệp rang/man.mjs đọc — rồi gọi okr.cayCanChinh của người xem đó; với mỗi mã có ĐÚNG một cạnh có tu là mã đó và mucTin === mức khai; đối chứng: trong ba ca có ít nhất một cạnh den là KR và một cạnh den là mục tiêu. Vế dữ liệu cặp với E10."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/okr-xem.service.ts, apps/api/test/okr-cay-ly-do.spec.ts, _acceptance/cay-can-chinh-co-ly-do/rang/ca-man.json]
+
+  - id: E10
+    criterion: AC-9
+    executor: ui-check
+    layer: ui-observed
+    cmd: config:executors.script.l3_man
+    steps:
+      - "Cảnh cây trước màn đầu; phiên đo riêng của cây (mot-luot.sh → tien-de.mjs), bộ mẫu nạp bằng okr:mau; đăng nhập người xem khai trong rang/ca-man.json"
+      - "Ở 1440×1000 và 390×844, mỗi khổ một tiến trình con: mở /<slug>/okr/theo-don-vi?xem=cay, chờ cây; với từng mã trong ca-man.json đọc nhãn mức tin và dòng lý do của nút; đo không cắt chữ trên [data-ly-do-canh] (scroll, textOverflow, webkitLineClamp) kèm đối chứng đỏ chèn line-clamp vào bản sao; đo không tràn ngang trên mọi tổ tiên có hộp từ cây tới body VÀ không cuộn ngang ở cấp trang (scrollingElement), có chốt hộp và đối chứng đỏ chèn khối rộng vào body; chụp ảnh; rồi bấm chip «Chưa có lý do» thật, đọc lại tập nút: q4-kd-nam-2 còn, q4-kd-bac-1 và q4-kd-bac-2 vắng; chụp ảnh; bấm «Đặt cược»: trong ba chỉ q4-kd-bac-2 còn; chụp ảnh"
+    expected: "exit 0; 6 ảnh (3 trạng thái — tất cả, chưa có lý do, đặt cược — × 2 khổ) trong _acceptance/cay-can-chinh-co-ly-do/evidence/; mỗi kiểm in 'DUNG'; console không lỗi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output, screenshots]
+    paths: ["apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", "apps/app/app/(app)/[slug]/okr/theo-don-vi/theo-don-vi.tsx", apps/app/lib/messages/okr-toan-canh.ts, _acceptance/cay-can-chinh-co-ly-do/rang/man.mjs, _acceptance/cay-can-chinh-co-ly-do/rang/ca-man.json]
+
+  - id: E11
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.l3_dot_bien
+    expected: "exit 0; _acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs: chiều xanh trước (E1–E8 xanh trên cây lành; không thì exit 2 'KHONG DO DUOC'); rồi sáu vết, mỗi vết sửa tạm một tệp, trả lại trong finally, đòi lệnh của eval đó đỏ VÀ đầu ra chứa thông điệp ghim riêng của assert (không trùng tên bài): (a) chỉ dựng cạnh đích KR → l3-canh 'canh thieu:'; (b) bỏ lọc đích có mặt trong canhCuaCay → l3-quyen 'canh lo ra ngoai cay'; (c) đọc cạnh theo gốc thay vì cha → l3-nut 'ly do sai cha'; (d) bảng mức tin thứ hai → l3-ba-muc 'bang muc tin thu hai'; (e) bỏ giữ tổ tiên → l3-loc 'thieu: O, K1'; (f) chip Tất cả đếm mọi nút → l3-dem 'so tren chip sai'. Sau cùng git diff --quiet trên các tệp đã chạm."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs, "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", apps/api/src/okr/okr-xem.service.ts]
+
+  - id: E12
+    criterion: AC-10
+    executor: script
+    cmd: config:executors.script.l3_giu_ho_so
+    expected: "exit 0; _acceptance/cay-can-chinh-co-ly-do/rang/giu-ho-so.mjs (cùng khuôn với duong-ly-do-muc-tieu/rang/giu-ho-so.mjs): tập eval test đã ký có paths ghi đích danh tệp mã sản phẩm vòng này sửa, chạy từng lệnh, đòi mã kỳ vọng và số lệnh đã chạy === số lệnh khác nhau; đối chứng hai chiều của bộ lọc (objective cây → tập có ít nhất một hồ sơ; chỉ _acceptance/config.yaml → N === 0); apps/api/test/okr-can-chinh.spec.ts và apps/api/src/okr/can-chinh.ts không đổi so neo (đổi → 'tep ho so da ky bi sua: <tệp>')."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/okr/**, "apps/app/app/(app)/[slug]/okr/**", apps/app/lib/**, _acceptance/cay-can-chinh-co-ly-do/rang/giu-ho-so.mjs]
+
+  - id: E13
+    criterion: AC-11
+    executor: script
+    cmd: config:executors.script.l3_ranh_gioi
+    expected: "exit 0; _acceptance/cay-can-chinh-co-ly-do/rang/ranh-gioi.mjs: neo = điểm rẽ khỏi feat/duong-ly-do-muc-tieu khi nhánh đó chưa vào origin/onehub, không thì merge-base với origin/onehub (đã lên: cặp sha của merge); mỗi tệp đổi khớp Ranh giới đọc từ contract.md, _acceptance/cay-can-chinh-co-ly-do/**, docs/**, PRODUCT-MAP.md, LO-TRINH.html; tệp khai «chỉ thêm» chỉ có dòng '+'. Đối chứng hai chiều: đường giả ngoài ranh giới → 'ngoai ranh gioi: <tệp>'; một dòng '-' giả ở search-param-keys.ts → 'sua dong co san: <tệp>'."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/cay-can-chinh-co-ly-do/rang/ranh-gioi.mjs, _acceptance/cay-can-chinh-co-ly-do/contract.md]

@@ -144,6 +144,9 @@ const en = {
 	skeletonSwap: {
 		loaded: (label: string) => `${label} loaded`,
 	},
+	khungXuong: {
+		dangTai: "Loading…",
+	},
 	reasoning: {
 		thinking: "Thinking…",
 		thoughtBrief: "Thought for a few seconds",
@@ -388,6 +391,9 @@ const vi = {
 	},
 	skeletonSwap: {
 		loaded: (label: string) => `Đã tải xong ${label}`,
+	},
+	khungXuong: {
+		dangTai: "Đang tải…",
 	},
 	reasoning: {
 		thinking: "Đang suy nghĩ…",

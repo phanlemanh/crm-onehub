@@ -16,12 +16,13 @@ import {
 } from "@crm/ui/components/alert";
 import { Button } from "@crm/ui/components/button";
 import { Icon } from "@crm/ui/components/icon";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import { StatusIndicator } from "@crm/ui/components/status-indicator";
 import type { Locale } from "@crm/ui/lib/locale";
 import Link from "next/link";
 import { Suspense } from "react";
 import { NewAgentDialog } from "@/components/agent-builder/new-agent-dialog";
-import { PageShellLoading } from "@/components/page-shell";
+
 import { getLocale } from "@/lib/locale/server";
 import {
 	type KetNoiMessages,
@@ -65,7 +66,7 @@ export default async function SlackConnectionPage(
 					tieuDe={ketNoiMessages(locale).ten.slack}
 					laTenRieng
 				>
-					<PageShellLoading />
+					<KhungXuong hinh="the" />
 				</KhungKetNoi>
 			}
 		>

@@ -403,16 +403,9 @@ describe("tlk-man-hoi", () => {
 	});
 
 	test("tlk-man-hoi: vai okr khong co tab Hoi, vai khac co", async () => {
-		const luaChon = { toiId: "u1", chuTrang: [], donVi: [], trangDangDung: [] };
 		const tab = async (vai: string | null) => {
 			const goc = await mo(
-				<DanhSach
-					coHoi={coHoiCuaVai(vai)}
-					loai={null}
-					luaChon={luaChon}
-					page={1}
-					tab="trang"
-				/>,
+				<DanhSach coHoi={coHoiCuaVai(vai)} loai={null} page={1} tab="trang" />,
 			);
 			const ten = [...goc.querySelectorAll("[role=tablist] a")].map((a) =>
 				a.textContent?.trim(),

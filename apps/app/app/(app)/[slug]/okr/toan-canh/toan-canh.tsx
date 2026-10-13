@@ -2,7 +2,6 @@
 
 import ChartLine from "@carbon/icons-react/es/ChartLine";
 import Download from "@carbon/icons-react/es/Download";
-import Renew from "@carbon/icons-react/es/Renew";
 import { Button } from "@crm/ui/components/button";
 import {
 	Card,
@@ -14,7 +13,6 @@ import {
 import { StatGroup } from "@crm/ui/components/dashboard";
 import {
 	Empty,
-	EmptyContent,
 	EmptyDescription,
 	EmptyHeader,
 	EmptyTitle,
@@ -30,6 +28,7 @@ import {
 import { Spinner } from "@crm/ui/components/spinner";
 import { StatCard } from "@crm/ui/components/stat-card";
 import { TableCell } from "@crm/ui/components/table";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { cn } from "@crm/ui/lib/utils";
 import {
 	skipToken,
@@ -83,17 +82,12 @@ export function LoiXem({
 }) {
 	const mt = okrToanCanhMessages(useLocale());
 	return (
-		<Empty data-trang-thai={trangThai}>
-			<EmptyHeader>
-				<EmptyDescription>{cau}</EmptyDescription>
-			</EmptyHeader>
-			<EmptyContent>
-				<Button onClick={thuLai} size="sm" variant="outline">
-					<Icon icon={Renew} data-icon="inline-start" />
-					{mt.thuLai}
-				</Button>
-			</EmptyContent>
-		</Empty>
+		<VungTaiLoi
+			data-trang-thai={trangThai}
+			moTa={cau}
+			onThuLai={thuLai}
+			tieuDe={mt.loiTieuDe}
+		/>
 	);
 }
 

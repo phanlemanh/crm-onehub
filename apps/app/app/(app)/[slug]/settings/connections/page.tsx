@@ -9,6 +9,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@crm/ui/components/card";
+import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -19,7 +20,6 @@ import {
 	PageShellDescription,
 	PageShellHeader,
 	PageShellHeading,
-	PageShellLoading,
 	PageShellTitle,
 } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -51,7 +51,7 @@ export default async function ConnectionsSettingsPage(
 				</PageShellActions>
 			</PageShellHeader>
 			<PageShellContent>
-				<Suspense fallback={<PageShellLoading />}>
+				<Suspense fallback={<KhungXuong hinh="danh-sach" />}>
 					<ConnectionsSettingsPageContent {...props} />
 				</Suspense>
 			</PageShellContent>

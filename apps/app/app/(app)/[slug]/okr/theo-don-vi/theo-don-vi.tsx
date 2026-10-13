@@ -135,6 +135,7 @@ function XemCay({
 			<CayCanChinh
 				roots={cay.data.roots}
 				chuaCanChinh={cay.data.chuaCanChinh}
+				canh={cay.data.canh}
 			/>
 		</div>
 	);

@@ -1,0 +1,154 @@
+[
+	{
+		"tep": "apps/app/app/(app)/[slug]/(agent-builder)/agents/page.tsx",
+		"hinh": "danh-sach"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/campaigns/[campaignId]/campaign-detail.tsx",
+		"hinh": "tong-quan"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/campaigns/[campaignId]/page.tsx",
+		"hinh": "tong-quan"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/campaigns/page.tsx",
+		"hinh": "bang"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/companies/page.tsx",
+		"hinh": "bang"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/contacts/page.tsx",
+		"hinh": "bang"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/deals/page.tsx",
+		"hinh": "bang"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/hoi-y/page.tsx",
+		"hinh": "tong-quan"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/page.tsx",
+		"hinh": "tong-quan"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/theo-don-vi/page.tsx",
+		"hinh": "tong-quan"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/toan-canh/page.tsx",
+		"hinh": "tong-quan"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/okr/toan-canh/suc-khoe/page.tsx",
+		"hinh": "tong-quan"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/onboarding/page.tsx",
+		"hinh": "bang"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/page.tsx",
+		"hinh": "tong-quan"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/reminders/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/api-keys/page.tsx",
+		"hinh": "bang"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/intake/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/oauth-connection-page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/page.tsx",
+		"hinh": "danh-sach"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/slack/people/page.tsx",
+		"hinh": "danh-sach"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/connections/zalo/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/currencies/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/fields/page.tsx",
+		"hinh": "danh-sach"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/giai-doan/page.tsx",
+		"hinh": "danh-sach"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/members/page.tsx",
+		"hinh": "bang"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/okr/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/onboarding/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/organization/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/organization/to-chuc.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/sso/page.tsx",
+		"hinh": "bang"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/settings/tracking/page.tsx",
+		"hinh": "the"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/[trang]/page.tsx",
+		"hinh": "chi-tiet"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/[trang]/sua/page.tsx",
+		"hinh": "chi-tiet"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/de-xuat/[id]/page.tsx",
+		"hinh": "chi-tiet"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/moi/page.tsx",
+		"hinh": "chi-tiet"
+	},
+	{
+		"tep": "apps/app/app/(app)/[slug]/tai-lieu/page.tsx",
+		"hinh": "bang"
+	}
+]
