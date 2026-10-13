@@ -295,8 +295,8 @@ chuông trong app.
 
 **Bot Zalo**: tài khoản bot của xưởng trên Zalo Bot Platform, chỉ gửi nhắc buổi
 sáng, trả lời mã nối, nhận ra người đã nối, gửi tin thử khi người bấm «Gửi thử
-nhắc ngay», và đánh dấu bước xong khi người trả lời `xong` kèm số mục của tin nhắc
-hôm nay, và trả lời câu hỏi về CRM bằng trợ lý AI cho người đã nối, theo quyền của
+nhắc ngay», và đánh dấu bước hay việc xong khi người trả lời `xong` kèm số mục của tin
+nhắc hôm nay, và trả lời câu hỏi về CRM bằng trợ lý AI cho người đã nối, theo quyền của
 người hỏi, chỉ đọc, có trần số câu. Quản trị viên bật nó bằng cách dán Bot Token ở
 Kết nối › Zalo. Khác **Tác nhân**: bot Zalo không tự làm việc gì — nó chỉ làm đúng
 lệnh hay trả lời đúng câu người gõ. Chốt 2026-09-23, mở rộng 2026-09-24, 2026-09-25

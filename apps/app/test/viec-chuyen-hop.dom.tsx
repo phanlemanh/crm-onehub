@@ -148,6 +148,12 @@ describe("vc-man-chuyen", () => {
 			) {
 				throw new Error("vc: hop chuyen viec thieu so viec");
 			}
+			if (coDong) {
+				const chu = (dong?.textContent ?? "").trim();
+				expect(chu.endsWith(".")).toBe(true);
+				expect(chu[0]).toBe(chu[0]?.toUpperCase());
+				expect(chu.split(" ").length).toBeGreaterThan(3);
+			}
 			if (coDong && !moTa().includes("3 việc")) {
 				throw new Error("vc: hop chuyen viec thieu so viec");
 			}

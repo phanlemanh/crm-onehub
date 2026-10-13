@@ -66,7 +66,7 @@ const en = {
 			web: "in the app",
 			zalo: "replied on Zalo",
 			api: "by the system",
-			"chuyen-viec": "through a handover",
+			"chuyen-viec": "through the 30-day handover",
 		},
 		loai: {
 			tao: "created the work",
@@ -189,7 +189,7 @@ const vi: ViecMessages = {
 			web: "trên màn",
 			zalo: "trả lời qua Zalo",
 			api: "do hệ thống",
-			"chuyen-viec": "qua Chuyển việc",
+			"chuyen-viec": "qua Chuyển việc 30 ngày",
 		},
 		loai: {
 			tao: "tạo việc",
@@ -201,7 +201,7 @@ const vi: ViecMessages = {
 			go: "gỡ {ten}",
 			"theo-doi": "thêm {ten} vào người theo dõi",
 			"bo-theo-doi": "bỏ {ten} khỏi người theo dõi",
-			"chuyen-viec": "chuyển việc từ người nghỉ",
+			"chuyen-viec": "chuyển việc 30 ngày",
 			"go-do-ban-ghi-xoa": "gỡ {ten} vì bản ghi đã bị xoá",
 		},
 	},

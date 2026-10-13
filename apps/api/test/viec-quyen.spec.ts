@@ -279,6 +279,28 @@ describe("vc-vai-okr", () => {
 		MA_TEST_MS,
 	);
 
+	test("vc-vai-okr: lời 409 khi còn việc bỏ phần bằng 0 và giữ nguyên lời DA0a khi không có việc", () => {
+		const { conViec, conViecKeHoach } = WORKSPACE_CONFIG.messages;
+		const chi = conViec(0, 0, 2);
+		expect(chi).toContain("giữ 2 việc đang mở");
+		expect(chi).not.toContain("0 kế hoạch");
+		expect(chi).not.toContain("0 bước");
+		expect(chi).toContain("Chuyển việc");
+		const haiPhan = conViec(0, 3, 2);
+		expect(haiPhan).toContain("làm 3 bước và giữ 2 việc đang mở");
+		expect(haiPhan).not.toContain("0 kế hoạch");
+		expect(conViec(1, 3, 2)).toContain(
+			"cầm trịch 1 kế hoạch, làm 3 bước và giữ 2 việc đang mở",
+		);
+		for (const [k, b] of [
+			[1, 0],
+			[0, 1],
+			[2, 3],
+		] as const) {
+			expect(conViec(k, b, 0)).toBe(conViecKeHoach(k, b));
+		}
+	});
+
 	test(
 		"vc-vai-okr: router viec đóng cho vai okr, ô chọn không có họ, đổi vai bị 409 khi còn việc, chỉ theo dõi thì gỡ hết",
 		async () => {
