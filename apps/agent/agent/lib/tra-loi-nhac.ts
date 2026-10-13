@@ -1,4 +1,13 @@
+import { TrangThaiViec } from "@crm/db";
 import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
+import {
+	banGhiCua,
+	CHON_GAN,
+	quyenDoi,
+	TRANG_THAI_KHEP,
+	vaiCua,
+} from "@crm/db/viec";
+import { doiTrangThai } from "@crm/db/viec-ghi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import type { DbGhi } from "@crm/db/zalo-lien-ket";
 import { type MucNhac, parseNhacPayload } from "@crm/validation/nhac-ke-hoach";
@@ -13,9 +22,9 @@ import { TIEU_DE } from "./tin-nhac";
 import { gioNhac } from "./zalo-bot-xuong";
 import { ZALO } from "./zalo-config";
 
-type LyDoDoi = "khong-co-buoc" | "ke-hoach-dong";
+type LyDoDoi = "khong-co-buoc" | "ke-hoach-dong" | "khong-co-viec";
 
-type MucXong = { so: number; nhan: string; congTy: string };
+type MucXong = { so: number; nhan: string; congTy: string | null };
 
 export type KetTraLoi =
 	| { loai: "khong-quyen" }
@@ -25,6 +34,7 @@ export type KetTraLoi =
 			loai: "khong-phai-buoc";
 			muc: { so: number; loai: MucNhac["loai"]; url: string | null }[];
 	  }
+	| { loai: "viec-khong-cua-ban"; muc: number[] }
 	| { loai: "buoc-doi"; muc: { so: number; lyDo: LyDoDoi }[] }
 	| { loai: "xong"; vua: MucXong[]; truoc: MucXong[] };
 
@@ -75,8 +85,13 @@ export async function xongTheoTinNhac(
 	const sai = input.so.filter((n) => n > muc.length);
 	if (sai.length > 0) return { loai: "ngoai-dai", sai, tran: muc.length };
 	const chon = input.so.map((so) => ({ so, muc: muc[so - 1] }));
+	const laBuoc = (m: MucNhac | undefined) =>
+		Boolean(m && "stepId" in m && m.stepId);
+	const laViec = (
+		m: MucNhac | undefined,
+	): m is Extract<MucNhac, { viecId: string }> => Boolean(m && "viecId" in m);
 	const khongPhaiBuoc = chon.flatMap(({ so, muc: m }) =>
-		m && !("stepId" in m && m.stepId)
+		m && !laBuoc(m) && !laViec(m)
 			? [
 					{
 						so,
@@ -89,9 +104,77 @@ export async function xongTheoTinNhac(
 	if (khongPhaiBuoc.length > 0) {
 		return { loai: "khong-phai-buoc", muc: khongPhaiBuoc };
 	}
+	const dsViec = chon.flatMap(({ so, muc: m }) =>
+		laViec(m) ? [{ so, muc: m }] : [],
+	);
+	const hangViec = await tx.viec.findMany({
+		where: { id: { in: dsViec.map((d) => d.muc.viecId) } },
+		select: {
+			id: true,
+			tieuDe: true,
+			trangThai: true,
+			nguoiGiaoId: true,
+			nguoiThucHienId: true,
+			theoDoi: { select: { userId: true } },
+			gan: { select: CHON_GAN, orderBy: { taoLuc: "asc" }, take: 1 },
+		},
+	});
+	const viecTheoId = new Map(hangViec.map((v) => [v.id, v]));
+	const dungNguoiNhan = (
+		m: Extract<MucNhac, { viecId: string }>,
+		v: { nguoiGiaoId: string; nguoiThucHienId: string },
+		userId: string,
+	) =>
+		m.loai === "viec-cho-danh-gia"
+			? v.nguoiGiaoId === userId
+			: v.nguoiThucHienId === userId;
+	const khongCuaBan: number[] = [];
+	const doi: { so: number; lyDo: LyDoDoi }[] = [];
+	for (const { so, muc: m } of dsViec) {
+		const v = viecTheoId.get(m.viecId);
+		if (!v) {
+			doi.push({ so, lyDo: "khong-co-viec" });
+			continue;
+		}
+		if (!dungNguoiNhan(m, v, input.userId)) {
+			khongCuaBan.push(so);
+			continue;
+		}
+		if (
+			!TRANG_THAI_KHEP.includes(v.trangThai) &&
+			quyenDoi(v.trangThai, TrangThaiViec.XONG, vaiCua(v, input.userId)) !==
+				"duoc"
+		) {
+			khongCuaBan.push(so);
+		}
+	}
+	if (khongCuaBan.length > 0) {
+		return { loai: "viec-khong-cua-ban", muc: khongCuaBan };
+	}
+	if (doi.length > 0) throw new BuocDoi(doi);
 	const vua: MucXong[] = [];
 	const truoc: MucXong[] = [];
-	const doi: { so: number; lyDo: LyDoDoi }[] = [];
+	for (const { so, muc: m } of dsViec) {
+		const v = viecTheoId.get(m.viecId);
+		if (!v) continue;
+		const dong = {
+			so,
+			nhan: v.tieuDe,
+			congTy: v.gan[0] ? banGhiCua(v.gan[0]).ten : null,
+		};
+		if (TRANG_THAI_KHEP.includes(v.trangThai)) {
+			truoc.push(dong);
+			continue;
+		}
+		await doiTrangThai(tx, {
+			viecId: v.id,
+			nguoiId: input.userId,
+			den: TrangThaiViec.XONG,
+			nguon: "zalo",
+			now: input.now,
+		});
+		vua.push(dong);
+	}
 	for (const { so, muc: m } of chon) {
 		if (!(m && "stepId" in m && m.stepId)) continue;
 		const ket = await datBuocXong(
@@ -115,7 +198,11 @@ function motDong(chu: string): string {
 }
 
 function lietKe(ds: MucXong[]): string {
-	return ds.map((m) => `${m.so} · ${m.nhan} (${m.congTy})`).join("; ");
+	return ds
+		.map((m) =>
+			m.congTy ? `${m.so} · ${m.nhan} (${m.congTy})` : `${m.so} · ${m.nhan}`,
+		)
+		.join("; ");
 }
 
 function cauXong(vua: MucXong[], truoc: MucXong[]): string {
@@ -140,6 +227,10 @@ export function cauTraLoi(ket: KetTraLoi): string {
 		case "khong-phai-buoc":
 			return motDong(
 				`${ket.muc.map((m) => ZALO.loi.khongPhaiBuoc(m.so, TIEU_DE[m.loai], m.url)).join(" ")} ${chuaDanhDau}`,
+			);
+		case "viec-khong-cua-ban":
+			return motDong(
+				`${ket.muc.map((so) => ZALO.loi.viecKhongCuaBan(String(so))).join(" ")} ${chuaDanhDau}`,
 			);
 		case "buoc-doi":
 			return motDong(
