@@ -1397,6 +1397,14 @@ executors:
     k3_neo_kr: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/gop-y-dung-cho-luot-2.dom.tsx -t k3-neo-kr
     k3_nhieu_kr: 'bun run test -- "cd apps/api && bun test test/kara-gop-y-luot-2.spec.ts"'
     k3_so_nhieu: cd apps/app && bun test ./test/gop-y-dung-cho-luot-2.spec.ts -t k3-so-nhieu
+    l2_co_so_lieu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/duong-ly-do.dom.tsx -t l2-co-so-lieu
+    l2_ba_muc: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/duong-ly-do.dom.tsx -t l2-ba-muc
+    l2_vang: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/duong-ly-do.dom.tsx -t l2-vang
+    l2_len_muc_tieu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/duong-ly-do.dom.tsx -t l2-len-muc-tieu
+    l2_dau_kara: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/duong-ly-do.dom.tsx -t l2-dau-kara
+    l2_chu: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/duong-ly-do.dom.tsx -t l2-chu && bun test ./test/messages-guard.spec.ts
+    l2_bo_mau: 'bun run test -- "cd apps/api && bun test test/okr-mau-ly-do.spec.ts -t ly-do-mau"'
+    l2_man_doc_lai: 'bun run test -- "cd apps/api && bun test test/okr-mau-ly-do.spec.ts -t man-doc-lai"'
     k2c_vi: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-vi
     k2c_en: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-en
     k2c_ngoai: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-ly-do-tu-choi.dom.tsx -t k2c-ngoai
@@ -2384,6 +2392,10 @@ executors:
     k3_dot_bien: bun _acceptance/kara-gop-y-luot-2/rang/dot-bien.mjs
     k3_ranh_gioi: node _acceptance/kara-gop-y-luot-2/rang/ranh-gioi.mjs
     k3_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/kara-gop-y-luot-2/rang/man.mjs"'
+    l2_giu_ho_so: bun _acceptance/duong-ly-do-muc-tieu/rang/giu-ho-so.mjs
+    l2_dot_bien: bun _acceptance/duong-ly-do-muc-tieu/rang/dot-bien.mjs
+    l2_ranh_gioi: node _acceptance/duong-ly-do-muc-tieu/rang/ranh-gioi.mjs
+    l2_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/duong-ly-do-muc-tieu/rang/man.mjs"'
     k2c_mot_nguon: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/mot-nguon.mjs
     k2c_gia_tri: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/gia-tri.mjs
     k2c_dot_bien: bun _acceptance/ly-do-tu-choi-nop-theo-locale/rang/dot-bien.mjs

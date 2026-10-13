@@ -131,8 +131,14 @@ const vi = {
 	sheet: {
 		tabKr: "KR",
 		khuViSao: "Vì sao lúc này",
-		khuGopVao: "Góp vào",
 		quaKr: "qua KR «{ten}»",
+		khuDuongLyDo: "Đường lý do",
+		canCu: "Căn cứ: {cau}",
+		mucTin: {
+			"chua-co-ly-do": "Chưa có lý do",
+			"dat-cuoc": "Đặt cược",
+			"co-so-lieu": "Có số liệu",
+		},
 		tienDoTu: "Tiến độ mục tiêu {x}% tính từ {n} KR.",
 		tabCanChinh: "Căn chỉnh",
 		tabVet: "Vết",
@@ -814,8 +820,14 @@ const en: OkrMessages = {
 	sheet: {
 		tabKr: "KR",
 		khuViSao: "Why now",
-		khuGopVao: "Contributes to",
 		quaKr: "through KR “{ten}”",
+		khuDuongLyDo: "Path of reasons",
+		canCu: "Evidence: {cau}",
+		mucTin: {
+			"chua-co-ly-do": "No reason yet",
+			"dat-cuoc": "Bet",
+			"co-so-lieu": "Backed by data",
+		},
 		tienDoTu: "Objective progress {x}% from {n} KRs.",
 		tabCanChinh: "Alignment",
 		tabVet: "History",
