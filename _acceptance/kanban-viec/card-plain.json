@@ -1,0 +1,108 @@
+{
+ "feature_plain": "Người dùng chuyển «Việc của tôi» sang kiểu Bảng, kéo việc qua bốn cột Chưa làm, Đang làm, Chờ đánh giá, Xong, và chia một việc to thành các việc con giao cho từng người.",
+ "will_do": [
+  {
+   "id": "AC-1",
+   "p": "Sẽ có kiểu xem «Bảng» bốn cột ở Việc của tôi, nhớ trên đường dẫn; cột Xong chỉ hiện việc xong trong 7 ngày, việc huỷ nằm ở dòng gập dưới bảng; có màn chờ tải, tải hỏng và chưa có việc."
+  },
+  {
+   "id": "AC-2",
+   "p": "Sẽ đổi trạng thái thật khi kéo thẻ sang cột khác hay chọn trong menu «Chuyển sang…», và ghi rõ lần đó làm bằng kéo hay bằng menu."
+  },
+  {
+   "id": "AC-3",
+   "p": "Sẽ cho kéo đúng y như luật đổi trạng thái hiện có: đủ 100 ô (5 người × 20 cặp trạng thái) cho cùng kết quả; lần bị từ chối không để lại dấu gì."
+  },
+  {
+   "id": "AC-5",
+   "p": "Sẽ giữ thứ tự tôi kéo trong một cột sau khi tải lại; bảng của người khác không đổi theo; sắp thứ tự không biến việc thành «có lịch sử»."
+  },
+  {
+   "id": "AC-6",
+   "p": "Sẽ trả thẻ về chỗ cũ và đọc nguyên lời máy chủ khi một lần kéo bị từ chối (vd việc vừa bị huỷ), rồi tải lại bảng; mất mạng thì có nút «Thử lại»."
+  },
+  {
+   "id": "AC-7",
+   "p": "Sẽ cho người giao hay người thực hiện thêm việc con từ khung việc; việc con có người làm và hạn riêng, mang bản ghi gắn của việc cha, và hiện trên bảng của người nhận."
+  },
+  {
+   "id": "AC-8",
+   "p": "Sẽ chặn đúng các ca sai khi thêm việc con: con của con, người không có quyền, người không thấy việc cha, người vai «chỉ OKR», việc cha đã khép — và việc cha đã có con thì không xoá được."
+  },
+  {
+   "id": "AC-9",
+   "p": "Sẽ hỏi lại một lần khi đóng hay huỷ việc cha còn việc con chưa xong, dù đi bằng kéo, menu hay nút trong khung; đồng ý thì chỉ việc cha đổi, việc con giữ nguyên."
+  },
+  {
+   "id": "AC-10",
+   "p": "Sẽ có thước đọc số cho Cổng Giá trị: tỉ lệ đổi trạng thái bằng kéo, bằng menu, số việc có việc con và số người tạo — chỉ đọc, đúng đáp án trên dữ liệu mẫu."
+  },
+  {
+   "id": "AC-11",
+   "p": "Sẽ chụp màn thật ở 1280 và 375 (bảng, menu, hộp hỏi lại, khung việc cha và con) để người ký nhìn bằng mắt."
+  },
+  {
+   "id": "AC-12",
+   "p": "Sẽ cập nhật từ điển sản phẩm (mục «Việc con», kiểu xem Bảng) và tài liệu máy chủ mục «Việc»."
+  }
+ ],
+ "wont_do": [
+  {
+   "id": "AC-4",
+   "p": "Chặn thả vào cột người kéo không được phép (cột mờ, không gửi gì lên máy chủ); người theo dõi không có tay kéo; mọi lối kéo đều có lối bấm và lối bàn phím thay thế, trang không cuộn ngang ở 375."
+  },
+  {
+   "id": "OOS-1",
+   "p": "Sẽ KHÔNG làm checklist trong việc ở lượt này (Hỏi-3)."
+  },
+  {
+   "id": "OOS-2",
+   "p": "Sẽ KHÔNG mở kéo thả cho bảng cột của kế hoạch onboard 30 ngày — anh đã giữ «không làm» ở Cổng Đáng."
+  },
+  {
+   "id": "OOS-3",
+   "p": "Sẽ KHÔNG làm kéo để đổi người thực hiện, cột theo trường khác, làn ngang, giới hạn số việc mỗi cột hay bắt điền trường khi sang cột."
+  },
+  {
+   "id": "OOS-4",
+   "p": "Sẽ KHÔNG làm việc con nhiều tầng, đổi việc cha, gỡ con khỏi cha, hay tự tính tiến độ cha từ con."
+  },
+  {
+   "id": "OOS-5",
+   "p": "Sẽ KHÔNG làm bảng cột trong khối «Việc» của thoả thuận, công ty, cá nhân, bảng của Dự án, hay thao tác hàng loạt trên bảng."
+  },
+  {
+   "id": "OOS-6",
+   "p": "Sẽ KHÔNG đo ngưỡng trên dữ liệu thật trong lượt này — việc đó làm sau khi gộp, ở Cổng Giá trị."
+  }
+ ],
+ "scope_plain": "Những thứ cố ý để ngoài lượt này:",
+ "coverage_plain": [
+  {
+   "i": 0,
+   "p": "Đã quét bốn trục: thao tác trên bảng × người và quyền × thiết bị (chuột, chạm, bàn phím) × tranh chấp và lỗi; thước «đủ» là bảng đổi trạng thái 100 ô của DA1 và khảo sát 29 nền tảng — lõi thành AC-1…AC-9, AC-10 là thước đo, AC-11 là ảnh màn, AC-12 là tài liệu."
+  }
+ ],
+ "gap_probe_plain": [
+  {
+   "i": 0,
+   "p": "Ngưỡng «đổi trạng thái trên bảng» đọc được hai cách (chỉ kéo, hay cả menu) và cho hai kết luận khác nhau trên cùng số liệu — máy đã tự chọn mà lẽ ra anh chọn. Đã chuyển thành Hỏi-4; thước in cả hai con số."
+  },
+  {
+   "i": 1,
+   "p": "Ai thấy việc con và ai tự bị thêm vào theo dõi là chuyện quyền riêng tư, máy đã tự chọn mà lẽ ra anh chọn. Đã chuyển thành Hỏi-5; tiêu chí việc con đang ghim theo lối máy khuyên."
+  },
+  {
+   "i": 2,
+   "p": "Phép đo đòi đọc cột được thả cho cả người không bao giờ thấy việc trên bảng — sẽ đỏ dù mã đúng. Đã sửa thành 12 hàng đọc được."
+  },
+  {
+   "i": 3,
+   "p": "Thiết kế và tiêu chí nói ngược nhau về thẻ không có đích, và không phép đo nào bắt lỗi quên chặn cột cấm ở màn thật. Đã sửa thiết kế, thêm phép đo và cặp phá thử."
+  },
+  {
+   "i": 4,
+   "p": "Hỏi lại khi đóng việc cha mới đo hai trong bốn đường (thiếu menu và nút Xong trong khung). Đã thêm hai đường vào tiêu chí và phép đo."
+  }
+ ]
+}

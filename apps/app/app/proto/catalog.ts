@@ -1107,6 +1107,32 @@ export const PROTO_CATALOG: readonly ProtoCatalogEntry[] = [
 		],
 	},
 	{
+		slug: "kanban-viec",
+		ten: "Kanban việc — bảng bốn cột ở Việc của tôi, việc con trong khung việc",
+		states: [
+			{ id: "ST-bang-viec-co-viec", nhan: "Bảng — có việc, kéo được" },
+			{ id: "ST-bang-viec-menu", nhan: "Bảng — menu «Chuyển sang…» đang mở" },
+			{
+				id: "ST-bang-viec-hoi-dong-cha",
+				nhan: "Bảng — hỏi lại khi đóng việc cha còn con mở",
+			},
+			{ id: "ST-bang-viec-tu-choi", nhan: "Bảng — máy chủ từ chối lần kéo" },
+			{
+				id: "ST-bang-viec-chi-xem",
+				nhan: "Bảng — nhóm Đang theo dõi, không kéo",
+			},
+			{ id: "ST-bang-viec-cho-tai", nhan: "Bảng — đang tải" },
+			{ id: "ST-bang-viec-rong", nhan: "Bảng — chưa có việc" },
+			{ id: "ST-bang-viec-loi", nhan: "Bảng — tải hỏng" },
+			{ id: "ST-khung-viec-con", nhan: "Khung việc cha — mục Việc con" },
+			{
+				id: "ST-khung-viec-con-soan",
+				nhan: "Khung việc cha — đang thêm việc con",
+			},
+			{ id: "ST-khung-viec-la-con", nhan: "Khung việc con — thuộc việc cha" },
+		],
+	},
+	{
 		slug: "viec-chung",
 		ten: "Việc chung — Việc của tôi, khung việc, khối Việc trên thẻ Hoạt động",
 		states: [

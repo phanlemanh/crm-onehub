@@ -39,6 +39,7 @@ import { TroLyOkrDeXuatMau } from "./_modules/tro-ly-okr-de-xuat";
 import { TroLyOkrNenMau } from "./_modules/tro-ly-okr-nen";
 import { TroLyOkrTomTatMau } from "./_modules/tro-ly-okr-tom-tat";
 import { VaoBangMatKhauMau } from "./_modules/vao-bang-mat-khau";
+import { KanbanViecMau } from "./_modules/kanban-viec";
 import { ViecChungMau } from "./_modules/viec-chung";
 import { PROTO_CATALOG } from "./catalog";
 
@@ -88,6 +89,7 @@ const BANG_GHEP = {
 	"cua-vao-va": CuaVaoVaMau,
 	"vao-bang-email-va-mat-khau": VaoBangMatKhauMau,
 	"khung-ban-ghi-kara": KhungBanGhiKaraMau,
+	"kanban-viec": KanbanViecMau,
 	"viec-chung": ViecChungMau,
 } satisfies Record<string, ProtoComponent>;
 

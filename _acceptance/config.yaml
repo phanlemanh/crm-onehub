@@ -1587,6 +1587,21 @@ executors:
     vc_man_khung: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-khung.dom.tsx"
     vc_man_o_soan: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-o-soan.dom.tsx -t 'vc-o-soan-giao|vc-o-soan-loi'"
     vc_man_chuyen: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-chuyen-hop.dom.tsx"
+    kv_bang: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-bang.spec.ts -t kv-bang"'
+    kv_keo: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-bang.spec.ts -t kv-keo"'
+    kv_ma_tran: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-bang.spec.ts -t kv-ma-tran"'
+    kv_thu_tu: 'bun run test -- "cd packages/db && bun test test/viec-thu-tu.spec.ts" && bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-bang.spec.ts -t kv-thu-tu"'
+    kv_tranh_chap: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-bang.spec.ts -t kv-tranh-chap"'
+    kv_con: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-con.spec.ts -t kv-con-tao"'
+    kv_con_quyen: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-con.spec.ts -t kv-con-quyen"'
+    kv_dong_cha: 'bun run test -- "cd apps/api && TZ=Asia/Ho_Chi_Minh bun test test/viec-con.spec.ts -t kv-dong-cha"'
+    kv_thuoc: 'bun run test -- "cd apps/api && bun test test/viec-bang-do-nguong.spec.ts"'
+    kv_board: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/board.dom.tsx -t 'board-can-drop|board-reorder|board-cu'"
+    kv_man_bang: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t kv-man-bang"
+    kv_man_keo: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t kv-man-keo"
+    kv_man_tra_ve: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-bang.dom.tsx -t kv-man-tra-ve"
+    kv_man_con: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-con"
+    kv_man_hoi_cha: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/viec-con.dom.tsx -t kv-man-hoi-cha"
   script:
     h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'
     ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
@@ -2484,6 +2499,9 @@ executors:
     vc_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/viec-chung/rang/man.mjs"'
     vc_san_thiet_ke: node _acceptance/viec-chung/rang/san-thiet-ke.mjs
     vc_dot_bien: node _acceptance/viec-chung/rang/dot-bien.mjs
+    kv_man: 'bun scripts/lan-do/tien-de.mjs --chay "bun _acceptance/kanban-viec/rang/man.mjs"'
+    kv_san_thiet_ke: node _acceptance/kanban-viec/rang/san-thiet-ke.mjs
+    kv_dot_bien: node _acceptance/kanban-viec/rang/dot-bien.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
