@@ -8,6 +8,7 @@ import { onboardingMessages } from "../../../apps/app/lib/messages/onboarding.ts
 import { tongQuanMessages } from "../../../apps/app/lib/messages/tong-quan.ts";
 import { ActivityType, db } from "../../../packages/db/src/index.ts";
 import { dauNgayVN } from "../../../packages/db/src/onboarding-nhac.ts";
+import { TRANG_THAI_MO } from "../../../packages/db/src/viec.ts";
 import { homNayVN } from "../../../packages/validation/src/ngay-vn.ts";
 import { canhCay } from "../../man-cai-dat-noi-tieng-viet/rang/canh-cay.mjs";
 
@@ -365,15 +366,22 @@ async function doThemBuoc(cookie, slug, toi, boPhan) {
 	}
 }
 
-async function conSotMong(toiId, idViec, idBuoc) {
+async function conSotMong(toiId, idViec, idViecChung, idBuoc) {
 	const dau = dauNgayVN(new Date());
-	const [viec, buoc, buocHienQuaHan] = await Promise.all([
+	const [viec, viecChung, buoc, buocHienQuaHan] = await Promise.all([
 		db.activity.count({
 			where: {
 				type: ActivityType.TASK,
 				completedAt: null,
 				dueAt: { lt: dau },
 				createdById: toiId,
+			},
+		}),
+		db.viec.count({
+			where: {
+				trangThai: { in: [...TRANG_THAI_MO] },
+				hanNgay: { lt: dau },
+				nguoiThucHienId: toiId,
 			},
 		}),
 		db.onboardingStep.count({
@@ -388,9 +396,13 @@ async function conSotMong(toiId, idViec, idBuoc) {
 			where: { id: { in: idBuoc }, dueAt: { lt: dau } },
 		}),
 	]);
+	const tong = viec + viecChung + buoc;
 	return {
-		tong: viec + buoc,
-		mong: Math.max(0, viec + buoc - idViec.length - buocHienQuaHan),
+		tong,
+		mong: Math.max(
+			0,
+			tong - idViec.length - idViecChung.length - buocHienQuaHan,
+		),
 	};
 }
 
@@ -472,6 +484,9 @@ async function doQuaHan(cookie, slug, toi, boPhan) {
 						idViec: [...e.querySelectorAll("[data-viec]")].map((r) =>
 							r.getAttribute("data-viec"),
 						),
+						idViecChung: [...e.querySelectorAll("[data-viec-chung]")].map((r) =>
+							r.getAttribute("data-viec-chung"),
+						),
 						idBuoc: [...e.querySelectorAll("[data-buoc]")].map((r) =>
 							r.getAttribute("data-buoc"),
 						),
@@ -488,12 +503,17 @@ async function doQuaHan(cookie, slug, toi, boPhan) {
 				);
 			await chup(p, `qua-han-con-sot-${kho}`);
 			const mong = chon.quaHan ? "error" : "neutral";
-			const sot = await conSotMong(toi.id, doc.idViec, doc.idBuoc);
+			const sot = await conSotMong(
+				toi.id,
+				doc.idViec,
+				doc.idViecChung,
+				doc.idBuoc,
+			);
 			const conSot = doc.conSot === null ? null : Number(doc.conSot);
 			const chuMong = chuConSot.replace("{n}", String(sot.mong));
 			kiem(
 				`qua-han-con-sot-${kho}`,
-				`mui gio ${chon.tz}, hom nay VN ${homNay}, han buoc ${han.toISOString()}; dau cua dong ${doc.tone} (mong ${mong}); viec san ${viecSan}, gieo them ${soGieo}; data-con-sot ${conSot} (mong ${sot.mong} >= 1 = tong ${sot.tong} - ${doc.idViec.length} dong viec - dong buoc qua han theo ngay VN); chan the «${doc.chuChan}» (mong «${chuMong}»)`,
+				`mui gio ${chon.tz}, hom nay VN ${homNay}, han buoc ${han.toISOString()}; dau cua dong ${doc.tone} (mong ${mong}); viec san ${viecSan}, gieo them ${soGieo}; data-con-sot ${conSot} (mong ${sot.mong} >= 1 = tong ${sot.tong} - ${doc.idViec.length} dong viec - ${doc.idViecChung.length} dong viec chung - dong buoc qua han theo ngay VN); chan the «${doc.chuChan}» (mong «${chuMong}»)`,
 				doc.tone === mong &&
 					sot.mong >= 1 &&
 					conSot === sot.mong &&

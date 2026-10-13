@@ -581,6 +581,7 @@ function tongQuanMot(input: {
 		quaHan: input.quaHan,
 		keHoachCanDeY: [],
 		taiLieuChoDuyet: 0,
+		viecQuaHan: [],
 	};
 }
 
