@@ -1,14 +1,14 @@
 ---
 schema_version: 2
 feature_slug: kara-mot-ten
-verdict: PENDING-JUDGMENT
+verdict: PASS
 failed_evals: []
 reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
 verified_commit: ad559db918c53c1437734b99a7b837cda99a0c3d
-human_signoff:
+human_signoff: Phan Le Manh 2026-10-13 — ký Cổng Bằng chứng trên vòng chấm 2 (mọi eval máy đạt, 17/17 gồm E2b và E15 mang từ vòng 1; vòng 1 REJECT đã sửa). E13 (hội đồng câu chữ đề xuất FAIL ở nhãn «Kara · theo bản đang dùng»): Đạt. Ngoài-4 (phép đếm nguồn kẹt dồn sai khi có cả câu cũ lẫn mới) mở hợp đồng mới; Ngoài-2 chấp nhận, không sửa; hai mươi mốt mục còn lại ghi Known limits, gồm Ngoài-23 (ghim lại khung-khong-con-dung-chu sau khi gộp). Đồng ý phần cắt/hoãn đã khai; phê hết các quyết định ghi sau Cổng Phạm vi.
 ---
 
 # Evidence Report: kara-mot-ten
@@ -216,7 +216,7 @@ Round 2. Mọi eval máy đều xanh; còn một mục judgment (E13) do panel �
     - spec-alignment: Sửa tai-lieu.ts#hoi.nhanTraLoi (vi, en) thành câu tự nhiên, ví dụ nhãn «Kara» kèm «theo bản đang dùng» ở dòng riêng. Chạy lại bản in bảng chữ để bang-chu.md ở khoá này không còn dạng «Kara · theo bản đang dùng».
     - spec-alignment: Nếu giữ dạng «Kara · …» ở nhãn câu trả lời, ghi vào bảng «Bảng thay chữ» của docs/superpowers/specs/2026-10-13-kara-mot-ten-design.md rằng nhãn câu trả lời cũng là loại tiêu đề được phép dùng «Kara · <phần>». Khi đó «theo bản đang dùng» phải là tên một phần, không phải mệnh đề.
     - spec-alignment: Cho so.thanh và so.rongMoTa (tro-ly-okr.ts, vi và en) ghi rõ phạm vi OKR, ví dụ «Kara · OKR đã dùng trên trần tháng». Hoặc dẫn chứng từ chụp màn sổ chi phí rằng hai chuỗi này chỉ hiện dưới nhóm «Kara · OKR». Chụp bằng bun scripts/lan-do/tien-de.mjs --chay như eval E14 khai, ảnh nằm ở _acceptance/kara-mot-ten/evidence/.
-  human_override:  # chi nguoi ghi
+  human_override: Đạt — Phan Le Manh 2026-10-13
 
 ### Lệnh suite (hồi quy)
 

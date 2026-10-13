@@ -5,7 +5,7 @@ slug: kara-mot-ten
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: implemented
+status: signed-off
 approved_by: Phan Le Manh
 approved_at: 2026-10-13
 design_doc: docs/superpowers/specs/2026-10-13-kara-mot-ten-design.md
@@ -57,3 +57,25 @@ Quét bằng `morphological-scan`, bản đầy đủ ở `coverage-scan.md`.
 
 - Bảng thay chữ một chiều nằm trong design doc.
 - Hồ sơ đã ký có bài kiểm phải đổi chữ theo hàng này được liệt ở `evidence/ho-so-bai-doi.md` (E12) và ghim lại ở đuôi vòng, theo điều kiện giám sát khi duyệt sửa tệp chữ chung (P1-2).
+- Known limits — chọn ở Cổng Bằng chứng 2026-10-13:
+  - Ngoài-1: Ảnh bằng chứng của màn Soạn OKR chỉ cho thấy thông báo «chưa bật Kara», không cho thấy khung soạn thật. Chữ trong khung soạn đang chạy vì vậy chưa được kiểm bằng ảnh, chỉ được kiểm bằng luật quét chữ.
+  - Ngoài-3: Nếu sau này ai đó sửa chữ ở tab Kara của bản ghi, hệ thống có thể vẫn coi ảnh và kiểm kê cũ là còn hiệu lực. Chữ đổi rồi có thể không bị buộc kiểm lại.
+  - Ngoài-5: Trên máy chạy kiểm tra tự động, phép kiểm bản ghim danh sách chữ cần đổi âm thầm bỏ qua nhưng vẫn báo xanh. Có người sửa danh sách ghim thì vẫn có thể không bị phát hiện ở bước đó.
+  - Ngoài-6: Phép kiểm màn Soạn OKR chỉ đạt khi Kara · OKR chưa được nối, và sẽ đỏ oan ở máy đã nối. Phần chữ trong khung soạn thật chưa được kiểm bằng ảnh.
+  - Ngoài-7: Phép đo sổ chi phí báo đúng cả ba nhóm nhưng thực ra chỉ kiểm hai, và kiểm trên chữ của cả trang. Nhãn «Kara · OKR» của sổ chi phí có thể sai mà phép đo vẫn xanh.
+  - Ngoài-8: Phép kiểm «không còn cụm từ cấm» ở màn Soạn OKR chỉ quét thông báo chưa bật Kara. Chữ trong khung soạn đang chạy chưa được ảnh chứng minh.
+  - Ngoài-9: Phép đếm nguồn kẹt vì «dừng giữa chừng» chưa được thử với dòng ghi theo câu cũ. Nếu nó đếm sai dòng cũ thì cũng không bài kiểm nào báo.
+  - Ngoài-10: Một tệp mẫu của trang Lộ trình bị sửa lẫn vào lượt đổi tên Kara. Người dùng không thấy gì khác, nhưng hai hồ sơ cũ không liên quan sẽ phải xét lại.
+  - Ngoài-11: Ảnh minh chứng cho màn Soạn OKR thực ra là trang báo không tìm thấy, nên chưa ai thấy tận mắt màn đó đã đổi sang tên Kara. Chữ trong sản phẩm không bị ảnh hưởng.
+  - Ngoài-12: Một phép kiểm màn của hồ sơ cũ còn tìm câu báo model bị gỡ theo chữ cũ, nên lần xét lại sau sẽ báo lỗi giả. Người dùng thấy câu mới đúng.
+  - Ngoài-13: Một phép kiểm màn Tài liệu của hồ sơ cũ còn đòi nhãn «Máy đang soạn», nên lần xét lại sau sẽ báo lỗi giả. Người dùng thấy nhãn mới đúng là «Kara đang soạn».
+  - Ngoài-14: Phép chụp màn chưa chứng minh chắc rằng tab Kara và màn Soạn OKR đã đúng chữ, vì nó có thể qua cả khi mở nhầm trang. Chữ thật trong sản phẩm vẫn do luật quét chữ giữ.
+  - Ngoài-15: Nếu ai xoá một câu hoặc thay bằng chữ khác thì máy vẫn báo xanh, dù câu đó đáng lẽ phải nhắc tên Kara. Chữ hiện tại trên màn không sai.
+  - Ngoài-16: Bài giữ nguyên các chữ không phải tên AI chưa phủ hết, nên một số nhãn tiếng Anh có thể bị đổi nhầm thành Kara mà máy không báo.
+  - Ngoài-17: Phép kiểm màn Cài đặt có thể báo đạt dù tiêu đề thẻ cấu hình thiếu, vì tên nhóm ở sổ chi phí trùng chữ. Chữ trên màn không bị chỉ ra là sai.
+  - Ngoài-18: Bài đối chiếu chữ giữ nguyên với bản gốc chỉ tìm chuỗi ở đâu đó trong tệp, nên có thể bỏ sót một nhãn bị đổi giá trị.
+  - Ngoài-19: Danh sách ngoại lệ có thể giữ lại một mục đã lỗi thời mà máy vẫn không báo. Người dùng không thấy khác biệt trên màn.
+  - Ngoài-20: Câu nói về việc Kara nhờ một phần việc phụ có thể bị viết lại làm mất ý «nhờ trợ tác» mà máy vẫn báo xanh.
+  - Ngoài-21: Phép chụp màn quét thiếu hai cụm chữ cũ nên có thể bỏ sót chúng, trong khi luật quét chữ chính vẫn đủ.
+  - Ngoài-22: Phép thử luật chỉ biết đỏ ở đúng tệp chứ không chỉ ra đúng câu, nên khó chắc luật bắt đúng chỗ. Người dùng không thấy khác biệt.
+  - Ngoài-23: Không gì trên màn. Hồ sơ cũ «khung không còn dùng chữ» có một phép đo đòi tệp bài chung messages-guard không đổi; hàng này phải sửa tệp đó để ghim chữ Kara, nên ghim lại hồ sơ đó trên nhánh này sẽ đỏ. Lưới trước-merge KHÔNG chặn vì PR không chạm thư mục hồ sơ đó (đo 13/10: pre-merge-check chỉ gọi tên kara-mot-ten và kho-nguon-khong-ket). Hai lối: (a) không ghim lại nó trong PR này, ghim ngay sau khi gộp — merge-base dời lên đỉnh mới, phép đo tự xanh, không đợi F8; (b) mở lại hồ sơ đó trong PR này và đổi luật đo sang neo cặp sha của vòng đó (đúng việc của hàng F8 neo-thuoc-het-han, dãy P7) — phải đợi hoặc làm thay F8. Máy khuyên (a).
