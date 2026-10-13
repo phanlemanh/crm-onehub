@@ -15,7 +15,7 @@ import {
 	thayMotLan,
 } from "../../ca-chap-chon-cach-ly/rang/ban-sao.mjs";
 
-const SO_CAP_KHAI = 11;
+const SO_CAP_KHAI = 13;
 const TRAN_MS = 900_000;
 const DB = (tep, t) =>
 	`bun run test -- "cd packages/db && bun test test/${tep}${t ? ` -t '${t}'` : ""}"`;
@@ -120,6 +120,20 @@ const CAP = [
 		MA_LECH,
 		"\t\ttry {\n\t\t\tawait taoViec(tx, {",
 		"\t\tawait tx.activity.create({\n\t\t\tdata: {\n\t\t\t\ttype: ActivityType.TASK,\n\t\t\t\tplanId: payload.planId,\n\t\t\t\tcreatedById: keHoach.ownerId,\n\t\t\t},\n\t\t});\n\t\ttry {\n\t\t\tawait taoViec(tx, {",
+		[[CVC.quet, "cvc: con duong ghi TASK"]],
+	],
+	[
+		"l loi doc dong thoi gian an moi viec can lam",
+		DONG,
+		"NOT: { type: ActivityType.TASK, viecChep: { isNot: null } },",
+		"NOT: { type: ActivityType.TASK },",
+		[[CVC.dao, "cvc: dao xong viec cu khong hien lai"]],
+	],
+	[
+		"m dung doi tuong TASK truoc roi ghi o ma-lech",
+		MA_LECH,
+		"\t\ttry {\n\t\t\tawait taoViec(tx, {",
+		"\t\tconst hangCu = {\n\t\t\ttype: ActivityType.TASK,\n\t\t\tplanId: payload.planId,\n\t\t\tcreatedById: keHoach.ownerId,\n\t\t};\n\t\tawait tx.activity.create({ data: hangCu });\n\t\ttry {\n\t\t\tawait taoViec(tx, {",
 		[[CVC.quet, "cvc: con duong ghi TASK"]],
 	],
 ];

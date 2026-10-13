@@ -5,6 +5,44 @@ import { join, resolve } from "node:path";
 const GOC = resolve(import.meta.dirname, "..", "..", "..");
 const CUA_SO = 12;
 const GHI = /\bactivity\.(create|createMany|upsert|update|updateMany)\s*\(/;
+const THUOC_TINH_TASK = /\btype:\s*(ActivityType\.TASK|"TASK")/;
+const MO_LOC = /(where|NOT|AND|OR)\s*:\s*$/;
+const LOC_SAU = /^\s*(\)\s*)?satisfies\s+Prisma\.ActivityWhereInput/;
+
+function khoiChua(nguon, viTri) {
+	let sau = 0;
+	for (let i = viTri; i >= 0; i -= 1) {
+		const c = nguon[i];
+		if (c === "}" || c === "]" || c === ")") sau += 1;
+		else if (c === "{" || c === "[" || c === "(") {
+			if (sau === 0) return i;
+			sau -= 1;
+		}
+	}
+	return -1;
+}
+
+function dongKhoi(nguon, mo) {
+	let sau = 0;
+	for (let i = mo; i < nguon.length; i += 1) {
+		const c = nguon[i];
+		if (c === "{" || c === "[" || c === "(") sau += 1;
+		else if (c === "}" || c === "]" || c === ")") {
+			sau -= 1;
+			if (sau === 0) return i;
+		}
+	}
+	return nguon.length - 1;
+}
+
+function laLoc(nguon, viTri) {
+	const mo = khoiChua(nguon, viTri);
+	if (mo < 0) return false;
+	const truoc = nguon.slice(Math.max(0, mo - 40), mo).replace(/\s+$/, "");
+	if (MO_LOC.test(truoc)) return true;
+	const dong = dongKhoi(nguon, mo);
+	return LOC_SAU.test(nguon.slice(dong + 1, dong + 80));
+}
 
 const MA_TRAN = new Map([
 	["apps/api/src/activities/activities.contracts.ts", "khai"],
@@ -59,9 +97,15 @@ for (const dong of ra.split("\n").filter(Boolean)) {
 	const [, tep, so] = m;
 	const soDong = Number(so);
 	theoTep.set(tep, (theoTep.get(tep) ?? 0) + 1);
-	const nguon = readFileSync(join(GOC, tep), "utf8").split("\n");
+	const van = readFileSync(join(GOC, tep), "utf8");
+	const nguon = van.split("\n");
 	const truoc = nguon.slice(Math.max(0, soDong - 1 - CUA_SO), soDong);
-	if (truoc.some((d) => GHI.test(d))) {
+	const dongNay = nguon[soDong - 1] ?? "";
+	const khop = dongNay.match(THUOC_TINH_TASK);
+	const viTri =
+		nguon.slice(0, soDong - 1).reduce((t, d) => t + d.length + 1, 0) +
+		(khop?.index ?? 0);
+	if (truoc.some((d) => GHI.test(d)) || (khop && !laLoc(van, viTri))) {
 		loi.push(`cvc: con duong ghi TASK ${tep}:${soDong}`);
 	}
 	if (vaiCua(tep) === null) {

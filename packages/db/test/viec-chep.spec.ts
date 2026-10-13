@@ -1,4 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { ActivitiesService } from "../../../apps/api/src/activities/activities.service";
+import { ActivityStampService } from "../../../apps/api/src/crm/activity-stamp.service";
 import { db } from "../src/client";
 import { TrangThaiViec } from "../src/generated/prisma/enums";
 import { parseVetViec } from "../src/viec";
@@ -41,6 +43,12 @@ async function banChepCua(activityId: string) {
 		where: { activityGocId: activityId },
 		include: { gan: true, vet: true },
 	});
+}
+
+async function dongThoiGian(dealId: string): Promise<string[]> {
+	const doc = new ActivitiesService(db, new ActivityStampService(db));
+	const ket = await doc.timeline({ dealId, filter: "all", limit: 100 });
+	return ket.entries.map((e) => e.id);
 }
 
 async function hangGoc(id: string) {
@@ -564,6 +572,10 @@ describe("cvc-dao", () => {
 			}),
 		);
 
+		const truocDao = (await dongThoiGian(thoaThuan)).filter((id) =>
+			[a, b].includes(id),
+		);
+		hong(truocDao.length === 0, "cvc: ban goc hien khi ban chep con");
 		const ket = await daoTatCa(db, { caBanDaDoi: false });
 		hong(
 			(await db.viec.count({ where: { id: banA } })) === 0 &&
@@ -590,9 +602,9 @@ describe("cvc-dao", () => {
 			(await hangGoc(a)) === gocA && (await hangGoc(b)) === gocB,
 			"cvc: dao doi ban goc",
 		);
-		const hien = await db.activity.findMany({
-			where: { id: { in: [a, b] }, type: "TASK", viecChep: { is: null } },
-		});
+		const hien = (await dongThoiGian(thoaThuan)).filter((id) =>
+			[a, b].includes(id),
+		);
 		hong(hien.length === 2, "cvc: dao xong viec cu khong hien lai");
 		hong(
 			(await db.viec.count({ where: { id: web.id } })) === 1,
