@@ -61,7 +61,7 @@ evals:
     executor: test
     layer: backend-effect
     cmd: config:executors.test.l2_bo_mau
-    expected: "exit 0; apps/api/test/okr-mau-ly-do.spec.ts -t ly-do-mau (CSDL kiểm thật, nạp bộ mẫu bằng napMau của okr-mau-san): đọc từng căn chỉnh mẫu qua OkrService (đường đọc của okr.objective) — tập mucTin gặp được === {co-so-lieu, dat-cuoc, chua-co-ly-do}; mỗi ca khai lyDo/canCu trong cong-ty.json đọc lại đúng bằng; có ≥1 căn chỉnh lyDoTuKara true. Chiều đỏ của khuôn trên cùng một bản sao ca: canChinh có canCu mà không lyDo → docBoOkrMau ném LoiBoMau với đường chứa 'canChinh' và 'canCu' (ghim chuỗi đường); bỏ canCu khỏi bản sao đó → đọc được (đối chứng dương). Chiều đỏ của bên ghi ghim ở E11 (f): nap.ts bỏ lyDo → 'ly do mau khong vao csdl'."
+    expected: "exit 0; apps/api/test/okr-mau-ly-do.spec.ts -t ly-do-mau (CSDL kiểm thật, nạp bộ mẫu bằng napMau của okr-mau-san): đọc từng căn chỉnh mẫu qua OkrService (đường đọc của okr.objective) — tập mucTin gặp được === {co-so-lieu, dat-cuoc, chua-co-ly-do}; mỗi ca khai lyDo/canCu trong cong-ty.json đọc lại đúng bằng; có ≥1 căn chỉnh lyDoTuKara true. Chiều đỏ của khuôn trên cùng một bản sao ca: canChinh có canCu mà không lyDo → docBoOkrMau ném lỗi mà thông điệp chứa 'canChinh', 'canCu' và 'căn cứ cần đi kèm lý do' (ghim chuỗi); bỏ canCu khỏi bản sao đó → đọc được (đối chứng dương). Chiều đỏ của bên ghi ghim ở E11 (f): nap.ts bỏ lyDo → 'ly do mau khong vao csdl'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [apps/api/scripts/okr-mau/khuon.ts, apps/api/scripts/okr-mau/nap.ts, apps/api/scripts/okr-mau/cong-ty.json, apps/api/test/okr-mau-ly-do.spec.ts]
 
