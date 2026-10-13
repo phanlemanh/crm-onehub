@@ -137,6 +137,7 @@ for (const { tep, dong } of quet.cung) {
 const dau = git(
 	"log",
 	"--reverse",
+	"--no-merges",
 	"--format=%H",
 	`${git("merge-base", "HEAD", "origin/onehub").trim()}..HEAD`,
 	"--",
