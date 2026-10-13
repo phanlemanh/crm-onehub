@@ -108,6 +108,55 @@ describe("khung-xuong", () => {
 	});
 });
 
+describe("tuy-chon", () => {
+	test("the cot 2: luoi hai cot tu md, van 2 the x 3 hang", () => {
+		const o = ve(<KhungXuong cot={2} hinh="the" />);
+		kiemKhungXuong(o, "the", { the: 2, hang: 6 });
+		const luoi = o.querySelector('[data-khung-hang="the"]')?.parentElement;
+		phai(
+			(luoi?.getAttribute("class") ?? "")
+				.split(/\s+/)
+				.includes("md:grid-cols-2"),
+			"kmc-xuong: the cot 2 khong co luoi hai cot",
+		);
+	});
+
+	function kiemCoTieuDe(o: HTMLElement) {
+		const tieuDe = o.querySelectorAll('[data-khung-hang="tieu-de"]');
+		phai(tieuDe.length === 1, "kmc-xuong: coTieuDe khong co hang tieu de");
+		const sau = o.querySelector(
+			'[data-khung-hang]:not([data-khung-hang="tieu-de"])',
+		);
+		phai(
+			Boolean(
+				tieuDe[0] &&
+					sau &&
+					tieuDe[0].compareDocumentPosition(sau) &
+						Node.DOCUMENT_POSITION_FOLLOWING,
+			),
+			"kmc-xuong: hang tieu de khong dung truoc than",
+		);
+	}
+
+	for (const [hinh] of MA_TRAN) {
+		if (hinh === "chi-tiet") continue;
+		test(`${hinh} coTieuDe them dung mot hang tieu de, khong coTieuDe thi khong co`, () => {
+			kiemCoTieuDe(ve(<KhungXuong coTieuDe hinh={hinh} />));
+			act(() => root?.unmount());
+			root = null;
+			const o = ve(<KhungXuong hinh={hinh} />);
+			expect(o.querySelectorAll('[data-khung-hang="tieu-de"]').length).toBe(0);
+		});
+	}
+
+	test("chieu do: coTieuDe bi bo qua thi bai kiem bat", () => {
+		const o = ve(<KhungXuong hinh="tong-quan" />);
+		expect(() => kiemCoTieuDe(o)).toThrow(
+			"kmc-xuong: coTieuDe khong co hang tieu de",
+		);
+	});
+});
+
 describe("vung-tai-loi-ma", () => {
 	test("chuyen data-trang-thai len khung", () => {
 		const o = ve(

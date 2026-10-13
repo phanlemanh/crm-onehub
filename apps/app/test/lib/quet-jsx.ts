@@ -169,6 +169,36 @@ export function coKhiTai(node: ts.Node, laDich: CoTrongCay): boolean {
 	return thay;
 }
 
+export function coNgoaiSuspense(node: ts.Node, laDich: CoTrongCay): boolean {
+	if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) {
+		const ten = tenThe(node);
+		if (ten === "Suspense") return false;
+		if (laDich(ten, node)) return true;
+		for (const a of moThe(node).attributes.properties) {
+			if (
+				ts.isJsxAttribute(a) &&
+				a.initializer &&
+				ts.isJsxExpression(a.initializer) &&
+				a.initializer.expression &&
+				coNgoaiSuspense(a.initializer.expression, laDich)
+			) {
+				return true;
+			}
+		}
+		if (ts.isJsxElement(node)) {
+			return node.children.some((c) => coNgoaiSuspense(c, laDich));
+		}
+		return false;
+	}
+	let thay = false;
+	ts.forEachChild(node, (c) => {
+		if (!thay && coNgoaiSuspense(c, laDich)) thay = true;
+	});
+	return thay;
+}
+
+export type DuyetCay = (node: ts.Node, laDich: CoTrongCay) => boolean;
+
 export function hamMacDinh(sf: ts.SourceFile): ts.Node | null {
 	for (const cau of sf.statements) {
 		if (

@@ -167,12 +167,14 @@ nguồn của fixture `apps/app/test/fixtures/khung-man-chung-hinh.json`, sinh b
 - Một màn, một đầu trang: ở bốn màn bản ghi, `PageShellHeader` có breadcrumb của `page.tsx` chỉ nằm trong
   fallback `Suspense`; khi tải xong, đầu trang của mã khách thay vào. Chiến dịch nhận breadcrumb từ `page.tsx`
   làm prop để đầu trang tải xong (và đầu trang lúc lỗi) vẫn có «Chiến dịch». Đọc trang và Duyệt đề xuất giữ lối
-  về sẵn có của mình.
+  về sẵn có của mình. Sửa trang dựng cùng một đầu trang ở fallback lẫn ở nội dung máy chủ. Chiến dịch đang tải
+  phía khách (chưa có dữ liệu sau hydrat) cũng dựng đầu trang có breadcrumb trước khung xương.
 - Chiến dịch chỉ dựng `VungTaiLoi` khi chưa có dữ liệu; làm mới nền lỗi thì giữ nội dung.
 - Bài quét chạy được trên bản tải nông của CI: thiếu commit 3a2783409 thì bỏ riêng phép so với `git grep`, in
   một dòng, vẫn kiểm từng dòng bảng hình.
 - Bàn đo màn đỏ khi một hộp cần đo vắng thay vì cho qua.
-- Giai đoạn thoả thuận: dòng «không đủ quyền» dùng `PageShellNote`.
+- Giai đoạn thoả thuận: dòng «không đủ quyền» (và dòng «đạt trần») dùng `PageShellNote` id `giai-doan-ly-do`;
+  nút «Thêm» tắt trỏ tới dòng đó bằng `aria-describedby`.
 
 ## Đo
 

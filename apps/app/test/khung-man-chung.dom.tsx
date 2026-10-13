@@ -1,5 +1,9 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+	QueryClient,
+	QueryClientProvider,
+	useQuery,
+} from "@tanstack/react-query";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import {
 	act,
@@ -20,7 +24,9 @@ const canh = {
 	khuon: [] as { id: string; name: string }[],
 	quyenToChuc: false,
 	quyenSso: false,
+	khuonLoi: false,
 	goi: {} as Record<string, number>,
+	xong: {} as Record<string, number>,
 };
 
 const CHIEN_DICH = {
@@ -53,7 +59,9 @@ function theoCheDo<R>(khoa: string, cheDo: () => CheDo, tra: () => R) {
 		const c = cheDo();
 		if (c === "loi") throw new Error(`${khoa} loi`);
 		if (c === "treo") return new Promise<R>(() => {});
-		return tra();
+		const ra = tra();
+		canh.xong[khoa] = (canh.xong[khoa] ?? 0) + 1;
+		return ra;
 	};
 }
 
@@ -124,7 +132,14 @@ mock.module("@/lib/trpc/client", () => ({
 					() => ({ trangThai: "ST-danhmuc-empty" }),
 				),
 			),
-			listTemplates: co("onboarding.listTemplates", () => canh.khuon),
+			listTemplates: truyVan(
+				"onboarding.listTemplates",
+				theoCheDo(
+					"onboarding.listTemplates",
+					() => (canh.khuonLoi ? "loi" : "co"),
+					() => canh.khuon,
+				),
+			),
 			nguoiNhanViec: co("onboarding.nguoiNhanViec", () => []),
 			createFromTemplate: co("onboarding.createFromTemplate", () => null),
 			bangCot: truyVan(
@@ -173,6 +188,13 @@ mock.module("@/lib/trpc/client", () => ({
 			finish: co("campaigns.finish", () => null),
 			repoint: co("campaigns.repoint", () => null),
 			touch: co("campaigns.touch", () => null),
+		},
+		giaiDoan: {
+			list: co("giaiDoan.list", () => ({
+				stages: [],
+				canManage: false,
+				tran: 50,
+			})),
 		},
 		savedViews: {
 			list: co("savedViews.list", () => [{ id: "sv-1", name: "Đối tác mới" }]),
@@ -225,6 +247,12 @@ const { DongChiDoc, HanhDongToChuc } = await import(
 const { AddSsoProviderSheet, DongKhoaSso } = await import(
 	"@/app/(app)/[slug]/settings/sso/add-sso-provider-sheet"
 );
+const { LyDoGiaiDoan } = await import(
+	"@/app/(app)/[slug]/settings/giai-doan/giai-doan-settings"
+);
+const { CaiDatBreadcrumb } = await import("@/components/cai-dat-breadcrumb");
+const { VungTaiLoi } = await import("@crm/ui/components/vung-tai-loi");
+const { settingsMessages } = await import("@/lib/messages/settings");
 const { onboardingMessages } = await import("@/lib/messages/onboarding");
 const { toChucMessages } = await import("@/lib/messages/to-chuc");
 const { ssoMessages } = await import("@/lib/messages/settings-sso");
@@ -232,16 +260,20 @@ const OB = onboardingMessages("vi");
 const TC = toChucMessages("vi");
 const SSO = ssoMessages("vi");
 const CD = campaignMessages("vi");
+const GD = settingsMessages("vi").giaiDoan;
 
 const TL = taiLieuMessages("vi");
 
 let root: Root | null = null;
+let khach: QueryClient | null = null;
 
 afterEach(() => {
 	act(() => root?.unmount());
 	root = null;
 	document.body.innerHTML = "";
 	canh.goi = {};
+	canh.xong = {};
+	khach = null;
 });
 
 function ve(cay: ReactElement, thamSo = ""): HTMLElement {
@@ -251,6 +283,7 @@ function ve(cay: ReactElement, thamSo = ""): HTMLElement {
 	const client = new QueryClient({
 		defaultOptions: { queries: { retry: false } },
 	});
+	khach = client;
 	act(() =>
 		root?.render(
 			<NuqsTestingAdapter hasMemory searchParams={thamSo}>
@@ -263,8 +296,8 @@ function ve(cay: ReactElement, thamSo = ""): HTMLElement {
 	return o;
 }
 
-async function cho(dieu: () => boolean, moTa: string) {
-	for (let i = 0; i < 150; i += 1) {
+async function cho(dieu: () => boolean, moTa: string, luot = 150) {
+	for (let i = 0; i < luot; i += 1) {
 		if (dieu()) return;
 		await act(async () => {
 			await new Promise((r) => setTimeout(r, 0));
@@ -532,23 +565,37 @@ describe("loi", () => {
 	});
 });
 
+const DUONG_DAN = (
+	<CaiDatBreadcrumb cap={[{ nhan: CD.title, href: "/ws/campaigns" }]} />
+);
+
+function kiemDuongDan(o: HTMLElement) {
+	const dau = o.querySelectorAll('[data-slot="page-shell-header"]');
+	const lienKet = dau[0]?.querySelector('a[href="/ws/campaigns"]');
+	phai(
+		dau.length === 1 && lienKet?.textContent?.trim() === CD.title,
+		"kmc-chi-tiet: dau trang chien dich mat breadcrumb",
+	);
+}
+
 describe("chi-tiet", () => {
-	test("dang tai: khung chi-tiet co hang tieu de, khong vong quay", async () => {
+	test("dang tai: khung tong-quan co hang tieu de, khong vong quay", async () => {
 		canh.chienDich = "treo";
-		const o = ve(<CampaignDetail id="cd-1" />);
+		const o = ve(<CampaignDetail duongDan={DUONG_DAN} id="cd-1" />);
 		await cho(() => (canh.goi["campaigns.byId"] ?? 0) > 0, "doc chien dich");
 		phai(
 			o.querySelector(
-				'[data-khung-xuong="chi-tiet"] [data-khung-hang="tieu-de"]',
+				'[data-khung-xuong="tong-quan"] [data-khung-hang="tieu-de"]',
 			) !== null,
-			"kmc-chi-tiet: dang tai khong co khung chi-tiet",
+			"kmc-chi-tiet: dang tai khong co khung tong-quan co tieu de",
 		);
 		expect(o.querySelector('[data-slot="spinner"]')).toBeNull();
+		kiemDuongDan(o);
 	});
 
-	test("co du lieu: tieu de la ten chien dich", async () => {
+	test("co du lieu: tieu de la ten chien dich, breadcrumb van dung", async () => {
 		canh.chienDich = "co";
-		const o = ve(<CampaignDetail id="cd-1" />);
+		const o = ve(<CampaignDetail duongDan={DUONG_DAN} id="cd-1" />);
 		await cho(
 			() => o.querySelector('[data-slot="page-shell-title"]') !== null,
 			"tieu de chien dich",
@@ -556,11 +603,12 @@ describe("chi-tiet", () => {
 		expect(o.querySelector('[data-slot="page-shell-title"]')?.textContent).toBe(
 			CHIEN_DICH.name,
 		);
+		kiemDuongDan(o);
 	});
 
-	test("loi: VungTaiLoi thay vong quay mai, Thử lại goi lai", async () => {
+	test("loi: VungTaiLoi va breadcrumb, Thử lại goi lai", async () => {
 		canh.chienDich = "loi";
-		const o = ve(<CampaignDetail id="cd-1" />);
+		const o = ve(<CampaignDetail duongDan={DUONG_DAN} id="cd-1" />);
 		await cho(
 			() => o.querySelector("[data-vung-tai-loi]") !== null,
 			"khung loi chien dich",
@@ -569,6 +617,7 @@ describe("chi-tiet", () => {
 			o.querySelector("[data-khung-xuong]") === null,
 			"kmc-chi-tiet: loi van hien khung xuong",
 		);
+		kiemDuongDan(o);
 		const nut = kiemKhungLoi(o, "ST-chiendich-loi");
 		expect(o.textContent).toContain(CD.detail.loadErrorTitle);
 		const truocBam = canh.goi["campaigns.byId"] ?? 0;
@@ -576,6 +625,87 @@ describe("chi-tiet", () => {
 		await cho(
 			() => (canh.goi["campaigns.byId"] ?? 0) === truocBam + 1,
 			"goi lai chien dich",
+		);
+	});
+
+	test("chieu do: khong truyen breadcrumb thi bai kiem bat", async () => {
+		canh.chienDich = "loi";
+		const o = ve(<CampaignDetail id="cd-1" />);
+		await cho(
+			() => o.querySelector("[data-vung-tai-loi]") !== null,
+			"khung loi chien dich",
+		);
+		expect(() => kiemDuongDan(o)).toThrow(
+			"kmc-chi-tiet: dau trang chien dich mat breadcrumb",
+		);
+	});
+});
+
+async function lamMoiLoi(o: HTMLElement) {
+	await cho(
+		() =>
+			o.querySelector('[data-slot="page-shell-title"]')?.textContent ===
+			CHIEN_DICH.name,
+		"tieu de chien dich",
+	);
+	canh.chienDich = "loi";
+	await act(async () => {
+		await khach?.refetchQueries({ queryKey: ["campaigns.byId"] });
+	});
+	await cho(
+		() =>
+			khach?.getQueryCache().findAll({ queryKey: ["campaigns.byId"] })[0]?.state
+				.status === "error",
+		"lam moi loi",
+	);
+	phai(
+		o.querySelector('[data-slot="page-shell-title"]')?.textContent ===
+			CHIEN_DICH.name && o.querySelector("[data-vung-tai-loi]") === null,
+		"kmc-lam-moi: lam moi loi thay trang dang xem bang khung loi",
+	);
+}
+
+function ThayKhiLoi() {
+	const q = useQuery({
+		queryKey: ["campaigns.byId", { id: "cd-1" }],
+		queryFn: theoCheDo(
+			"campaigns.byId",
+			() => canh.chienDich,
+			() => CHIEN_DICH,
+		),
+	});
+	if (q.isError) {
+		return (
+			<VungTaiLoi
+				moTa={CD.detail.loadErrorBody}
+				onThuLai={() => q.refetch()}
+				tieuDe={CD.detail.loadErrorTitle}
+			/>
+		);
+	}
+	if (!q.data) return null;
+	return (
+		<PageShellHeader>
+			<PageShellHeading>
+				<PageShellTitle>{q.data.name}</PageShellTitle>
+			</PageShellHeading>
+		</PageShellHeader>
+	);
+}
+
+describe("lam-moi", () => {
+	test("lam moi nen loi khi da co du lieu: giu trang dang xem", async () => {
+		canh.chienDich = "co";
+		const o = ve(<CampaignDetail duongDan={DUONG_DAN} id="cd-1" />);
+		await lamMoiLoi(o);
+		kiemDuongDan(o);
+	});
+
+	test("chieu do: isError dat truoc nhanh co du lieu thi bai kiem bat", async () => {
+		canh.chienDich = "co";
+		const o = ve(<ThayKhiLoi />);
+		await expect(lamMoiLoi(o)).rejects.toThrow(
+			"kmc-lam-moi: lam moi loi thay trang dang xem bang khung loi",
 		);
 	});
 });
@@ -599,12 +729,32 @@ function DauTrangThu({
 	);
 }
 
+const TRUY_VAN_KHOA = {
+	onboarding: "onboarding.listTemplates",
+	"to-chuc": "org.access",
+	sso: "sso.settings",
+} as const;
+
+async function choTruyVan(man: string) {
+	const khoa = Object.entries(TRUY_VAN_KHOA).find(([m]) => m === man)?.[1];
+	if (!khoa) return;
+	await cho(() => (canh.xong[khoa] ?? 0) > 0, `${man} truy van`, 8).catch(
+		() => {
+			throw new Error(`kmc-khoa: ${man} chua doc xong khuon`);
+		},
+	);
+	await act(async () => {
+		await new Promise((r) => setTimeout(r, 0));
+	});
+}
+
 async function kiemKhoa(
 	o: HTMLElement,
 	tenNut: string,
 	khoa: boolean,
 	man: string,
 ) {
+	await choTruyVan(man);
 	await cho(() => nutTen(o, tenNut) !== null, `nut ${tenNut}`);
 	await cho(
 		() => (nutTen(o, tenNut)?.disabled ?? !khoa) === khoa,
@@ -613,6 +763,7 @@ async function kiemKhoa(
 	await cho(
 		() => !khoa || o.querySelector('[data-slot="page-shell-note"]') !== null,
 		`${man} dong ly do`,
+		20,
 	).catch(() => {});
 	const nut = nutTen(o, tenNut);
 	const dong = o.querySelector('[data-slot="page-shell-note"]');
@@ -629,6 +780,20 @@ async function kiemKhoa(
 		`kmc-khoa: ${man} dong ly do khong nam duoi tieu de`,
 	);
 	phai(moTaCua(nut) === dong, `kmc-khoa: ${man} nut khong tro ly do`);
+}
+
+async function kiemGiaiDoan(o: HTMLElement) {
+	await cho(
+		() => o.textContent?.includes(GD.khongQuyen) ?? false,
+		"giai doan ly do",
+	);
+	const dau = o.querySelector('[data-slot="page-shell-header"]');
+	const ghiChu = dau?.querySelector('[data-slot="page-shell-note"]');
+	phai(
+		dau?.querySelectorAll('[data-slot="page-shell-description"]').length ===
+			1 && ghiChu?.textContent === GD.khongQuyen,
+		"kmc-khoa: giai-doan ly do la mo ta thu hai",
+	);
 }
 
 describe("khoa", () => {
@@ -715,6 +880,41 @@ describe("khoa", () => {
 			);
 		});
 	}
+
+	test("giai doan khong quyen: ly do la dong ghi chu, mot cau mo ta", async () => {
+		const o = ve(<DauTrangThu ghiChu={<LyDoGiaiDoan />} hanhDong={null} />);
+		await kiemGiaiDoan(o);
+	});
+
+	test("chieu do: giai doan dung mo ta thu hai thi bai kiem bat", async () => {
+		const o = ve(
+			<DauTrangThu
+				ghiChu={<PageShellDescription>{GD.khongQuyen}</PageShellDescription>}
+				hanhDong={null}
+			/>,
+		);
+		await expect(kiemGiaiDoan(o)).rejects.toThrow(
+			"kmc-khoa: giai-doan ly do la mo ta thu hai",
+		);
+	});
+
+	test("chieu do: o doi chung voi truy van chua xong thi bai kiem bat", async () => {
+		canh.khuonLoi = true;
+		canh.khuon = [{ id: "k1", name: "Sàn môi giới" }];
+		try {
+			const o = ve(
+				<DauTrangThu
+					ghiChu={<DongKhoaKeHoach />}
+					hanhDong={<DanhMucHanhDong />}
+				/>,
+			);
+			await expect(
+				kiemKhoa(o, OB.tao.keHoach.toolbar, false, "onboarding"),
+			).rejects.toThrow("kmc-khoa: onboarding chua doc xong khuon");
+		} finally {
+			canh.khuonLoi = false;
+		}
+	});
 
 	test("chieu do: nut tat ma khong dong ly do thi bai kiem bat", async () => {
 		const o = ve(

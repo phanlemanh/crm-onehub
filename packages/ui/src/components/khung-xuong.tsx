@@ -64,9 +64,9 @@ function DanhSach() {
 	);
 }
 
-function The() {
+function The({ cot }: { cot: 1 | 2 }) {
 	return (
-		<div className="flex flex-col gap-6">
+		<div className={cot === 2 ? "grid gap-4 md:grid-cols-2" : "flex flex-col gap-6"}>
 			{day(KHUNG_XUONG.the.the, "the").map((k) => (
 				<Card data-khung-hang="the" key={k}>
 					<CardHeader>
@@ -105,14 +105,20 @@ function TongQuan() {
 	);
 }
 
+function TieuDeGiuCho() {
+	return (
+		<div data-khung-hang="tieu-de" className="flex flex-col gap-3">
+			<Skeleton className="h-8 w-64 max-w-full" />
+			<Skeleton className="h-4 w-96 max-w-full" />
+			<Skeleton className="h-8 w-48 max-w-full md:hidden" />
+		</div>
+	);
+}
+
 function ChiTiet() {
 	return (
 		<div className="flex flex-col gap-6">
-			<div data-khung-hang="tieu-de" className="flex flex-col gap-3">
-				<Skeleton className="h-8 w-64 max-w-full" />
-				<Skeleton className="h-4 w-96 max-w-full" />
-				<Skeleton className="h-8 w-48 max-w-full md:hidden" />
-			</div>
+			<TieuDeGiuCho />
 			{day(KHUNG_XUONG.chiTiet.doan, "doan").map((k) => (
 				<div data-khung-hang="doan" key={k} className="flex flex-col gap-2">
 					<Skeleton className="h-4 w-full" />
@@ -124,21 +130,29 @@ function ChiTiet() {
 	);
 }
 
-const HINH = {
-	bang: Bang,
-	"danh-sach": DanhSach,
-	the: The,
-	"tong-quan": TongQuan,
-	"chi-tiet": ChiTiet,
-} as const satisfies Record<HinhKhungXuong, () => React.JSX.Element>;
+function Than({ hinh, cot }: { hinh: HinhKhungXuong; cot: 1 | 2 }) {
+	if (hinh === "bang") return <Bang />;
+	if (hinh === "danh-sach") return <DanhSach />;
+	if (hinh === "the") return <The cot={cot} />;
+	if (hinh === "tong-quan") return <TongQuan />;
+	return <ChiTiet />;
+}
 
-export function KhungXuong({ hinh }: { hinh: HinhKhungXuong }) {
+export function KhungXuong({
+	hinh,
+	cot = 1,
+	coTieuDe = false,
+}: {
+	hinh: HinhKhungXuong;
+	cot?: 1 | 2;
+	coTieuDe?: boolean;
+}) {
 	const msg = useMessages();
-	const Hinh = HINH[hinh];
 	return (
 		<div data-khung-xuong={hinh} aria-busy="true" className="min-w-0">
-			<div aria-hidden="true">
-				<Hinh />
+			<div aria-hidden="true" className="flex flex-col gap-6">
+				{coTieuDe && hinh !== "chi-tiet" ? <TieuDeGiuCho /> : null}
+				<Than cot={cot} hinh={hinh} />
 			</div>
 			<span role="status" aria-live="polite" className="sr-only">
 				{msg.khungXuong.dangTai}

@@ -17,8 +17,8 @@ const HINH_THEO_MAN = [
 	["bang", ["contacts", "deals", "companies", "campaigns", "onboarding", "settings/api-keys", "settings/sso", "settings/members"]],
 	["danh-sach", ["(agent-builder)/agents", "settings/connections", "settings/fields", "settings/connections/slack/people", "settings/giai-doan"]],
 	["the", ["settings", "settings/currencies", "settings/tracking", "settings/onboarding", "settings/okr", "settings/organization", "reminders", "settings/connections/oauth-connection-page", "settings/connections/zalo", "settings/connections/intake", "settings/connections/slack"]],
-	["tong-quan", ["", "okr", "okr/toan-canh", "okr/toan-canh/suc-khoe", "okr/theo-don-vi", "okr/hoi-y"]],
-	["chi-tiet", ["campaigns/[campaignId]", "tai-lieu/[trang]", "tai-lieu/[trang]/sua", "tai-lieu/moi", "tai-lieu/de-xuat/[id]"]],
+	["tong-quan", ["", "okr", "okr/toan-canh", "okr/toan-canh/suc-khoe", "okr/theo-don-vi", "okr/hoi-y", "campaigns/[campaignId]"]],
+	["chi-tiet", ["tai-lieu/[trang]", "tai-lieu/[trang]/sua", "tai-lieu/moi", "tai-lieu/de-xuat/[id]"]],
 	["bang", ["tai-lieu"]],
 ];
 

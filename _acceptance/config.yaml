@@ -1566,6 +1566,8 @@ executors:
     kmc_khoa: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-man-chung.dom.tsx -t khoa"
     kmc_tai_lieu: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-man-chung.dom.tsx -t tai-lieu"
     kmc_muc: "cd packages/ui && bun test --preload ./test/setup-dom.ts ./test/khung-xuong.dom.tsx -t tieu-de-muc && cd ../../apps/app && bun test ./test/khung-man-chung.spec.ts -t muc-nhac"
+    kmc_lam_moi: "cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 15000 --preload ../../packages/ui/test/setup-dom.ts ./test/khung-man-chung.dom.tsx -t lam-moi"
+    kmc_mot_dau_trang: "cd apps/app && bun test ./test/khung-man-chung.spec.ts -t mot-dau-trang"
   script:
     h6_dung_build: 'bash _acceptance/lo-trinh-ten-va-build/rang/dung-build.sh'
     ltc_ban_chep: node _acceptance/trang-lo-trinh-trong-crm/rang/ban-chep.mjs
@@ -2460,6 +2462,7 @@ executors:
     kmc_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-man-chung/rang/chup-man.mjs"'
     kmc_man_do: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/khung-man-chung/rang/chup-man.mjs --chi-do"'
     kmc_dem_loi: "node _acceptance/khung-man-chung/rang/dem-khung-loi.mjs && node _acceptance/khung-man-chung/rang/dem-khung-loi.mjs --tu-kiem"
+    kmc_man_thieu_hop: "bun _acceptance/khung-man-chung/rang/chup-man.mjs --chieu-do=3"
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"

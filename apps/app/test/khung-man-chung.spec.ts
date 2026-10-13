@@ -6,7 +6,9 @@ import ts from "typescript";
 import {
 	type CoTrongCay,
 	coKhiTai,
+	coNgoaiSuspense,
 	type DocTep,
+	type DuyetCay,
 	docTuDia,
 	dongCua,
 	GOC_KHO,
@@ -88,21 +90,23 @@ export function quetKhongVongQuay(doc: DocTep, tep: string[]): string[] {
 	return loi;
 }
 
-function tepGocCoVongQuay(): string[] {
-	const ra = execFileSync(
-		"git",
-		[
-			"-C",
-			GOC_KHO,
-			"grep",
-			"-l",
-			"PageShellLoading",
-			SHA_GOC,
-			"--",
-			"apps/app",
-		],
-		{ encoding: "utf8" },
-	);
+type ChayGit = (thamSo: string[]) => string;
+
+const chayGitThat: ChayGit = (thamSo) =>
+	execFileSync("git", ["-C", GOC_KHO, ...thamSo], {
+		encoding: "utf8",
+		stdio: ["ignore", "pipe", "ignore"],
+	});
+
+const GHI_CHU_NONG = `kmc-quet: checkout nong — bo so voi git grep o ${SHA_GOC}`;
+
+export function tepGocCoVongQuay(git: ChayGit = chayGitThat): string[] | null {
+	try {
+		git(["cat-file", "-e", `${SHA_GOC}^{commit}`]);
+	} catch {
+		return null;
+	}
+	const ra = git(["grep", "-l", "PageShellLoading", SHA_GOC, "--", "apps/app"]);
 	return ra
 		.split("\n")
 		.filter(Boolean)
@@ -113,17 +117,21 @@ function tepGocCoVongQuay(): string[] {
 export function quetHinhTheoMan(
 	doc: DocTep,
 	bang: { tep: string; hinh: string }[],
-	tepGoc: string[],
+	tepGoc: string[] | null,
 	moiTep: string[],
 ): string[] {
 	const loi: string[] = [];
 	const trongBang = new Set(bang.map((d) => d.tep));
-	const canCo = [...tepGoc, `${TIEN_SLUG}tai-lieu/page.tsx`];
-	for (const t of canCo) {
-		if (!trongBang.has(t)) loi.push(`kmc-quet: bang hinh thieu ${t}`);
-	}
-	for (const t of trongBang) {
-		if (!canCo.includes(t)) loi.push(`kmc-quet: bang hinh thua ${t}`);
+	if (tepGoc === null) {
+		loi.push(GHI_CHU_NONG);
+	} else {
+		const canCo = [...tepGoc, `${TIEN_SLUG}tai-lieu/page.tsx`];
+		for (const t of canCo) {
+			if (!trongBang.has(t)) loi.push(`kmc-quet: bang hinh thieu ${t}`);
+		}
+		for (const t of trongBang) {
+			if (!canCo.includes(t)) loi.push(`kmc-quet: bang hinh thua ${t}`);
+		}
 	}
 	for (const { tep, hinh } of bang) {
 		const nguon = doc(tep);
@@ -155,32 +163,39 @@ export function quetHinhTheoMan(
 	return loi;
 }
 
+const laTen =
+	(dich: string): CoTrongCay =>
+	(ten) =>
+		ten === dich;
+
 function laThanhPhan(
 	doc: DocTep,
 	tep: string,
-	dich: string,
+	trung: CoTrongCay,
 	sau: number,
+	duyet: DuyetCay = coKhiTai,
 ): CoTrongCay {
 	const nguon = doc(tep);
 	if (nguon === null) return () => false;
 	const sf = phanTich(tep, nguon);
 	const nhap = nhapCucBo(sf, tep);
-	return (ten) => {
-		if (ten === dich) return true;
+	return (ten, node) => {
+		if (trung(ten, node)) return true;
 		if (sau <= 0) return false;
 		const tepCon = nhap.get(ten);
 		if (!tepCon) {
 			const hamCungTep = /^[A-Z]/.test(ten) ? hamTen(sf, ten) : null;
 			return (
 				hamCungTep !== null &&
-				coKhiTai(hamCungTep, laThanhPhan(doc, tep, dich, sau - 1))
+				duyet(hamCungTep, laThanhPhan(doc, tep, trung, sau - 1, duyet))
 			);
 		}
 		const nguonCon = doc(tepCon);
 		if (nguonCon === null) return false;
 		const ham = hamTen(phanTich(tepCon, nguonCon), ten);
 		return (
-			ham !== null && coKhiTai(ham, laThanhPhan(doc, tepCon, dich, sau - 1))
+			ham !== null &&
+			duyet(ham, laThanhPhan(doc, tepCon, trung, sau - 1, duyet))
 		);
 	};
 }
@@ -195,10 +210,10 @@ export function quetTieuDeKhiTai(doc: DocTep, trang: string[]): string[] {
 			loi.push(`kmc-quet: ${ngan} khong co ham mac dinh`);
 			continue;
 		}
-		if (!coKhiTai(ham, laThanhPhan(doc, t, "PageShellTitle", 3))) {
+		if (!coKhiTai(ham, laThanhPhan(doc, t, laTen("PageShellTitle"), 3))) {
 			loi.push(`kmc-quet: ${ngan} khong dung tieu de luc tai`);
 		}
-		if (!coKhiTai(ham, laThanhPhan(doc, t, "PageShellDescription", 3))) {
+		if (!coKhiTai(ham, laThanhPhan(doc, t, laTen("PageShellDescription"), 3))) {
 			loi.push(`kmc-quet: ${ngan} khong dung mo ta luc tai`);
 		}
 	}
@@ -206,22 +221,72 @@ export function quetTieuDeKhiTai(doc: DocTep, trang: string[]): string[] {
 	const hamLayout = hamMacDinh(layout);
 	if (
 		hamLayout &&
-		coKhiTai(hamLayout, laThanhPhan(doc, LAYOUT_OKR, "PageShellTitle", 3))
+		coKhiTai(
+			hamLayout,
+			laThanhPhan(doc, LAYOUT_OKR, laTen("PageShellTitle"), 3),
+		)
 	) {
 		loi.push("kmc-quet: okr/layout.tsx van dung tieu de");
 	}
 	return loi;
 }
 
+const coBreadcrumb: CoTrongCay = (ten, node) =>
+	ten === "PageShellHeader" && thuocTinh(node, "breadcrumb") !== null;
+const laDauTrang: CoTrongCay = (ten) => ten === "PageShellHeader";
+
 export function quetBreadcrumbChiTiet(doc: DocTep, trang: string[]): string[] {
 	const loi: string[] = [];
 	for (const t of trang) {
-		const ham = hamMacDinh(phanTich(t, docBat(doc, t)));
-		const coBreadcrumb: CoTrongCay = (ten, node) =>
-			ten === "PageShellHeader" && thuocTinh(node, "breadcrumb") !== null;
-		if (!ham || !coKhiTai(ham, coBreadcrumb)) {
+		const ngan = t.replace(TIEN_SLUG, "");
+		const sf = phanTich(t, docBat(doc, t));
+		const ham = hamMacDinh(sf);
+		if (!ham || !coKhiTai(ham, laThanhPhan(doc, t, coBreadcrumb, 2))) {
+			loi.push(`kmc-quet: breadcrumb ${ngan} trong Suspense hoac vang`);
+		}
+		const laChienDich = ngan.startsWith("campaigns/");
+		const khung = moiPhanTu(sf).filter((n) => tenThe(n) === "KhungXuong");
+		const dung = khung.some((k) => {
+			const hinh = giaTriChuoi(thuocTinh(k, "hinh"));
+			const coTieuDe = thuocTinh(k, "coTieuDe") !== null;
+			return laChienDich
+				? hinh === "tong-quan" && coTieuDe
+				: hinh === "chi-tiet";
+		});
+		if (!dung) {
 			loi.push(
-				`kmc-quet: breadcrumb ${t.replace(TIEN_SLUG, "")} trong Suspense hoac vang`,
+				laChienDich
+					? `kmc-quet: ${ngan} thieu coTieuDe`
+					: `kmc-quet: ${ngan} khong dung hinh chi-tiet`,
+			);
+		}
+	}
+	return loi;
+}
+
+export function quetMotDauTrang(doc: DocTep, trang: string[]): string[] {
+	const loi: string[] = [];
+	for (const t of trang) {
+		const ngan = t.replace(TIEN_SLUG, "");
+		const sf = phanTich(t, docBat(doc, t));
+		const ham = hamMacDinh(sf);
+		if (!ham) {
+			loi.push(`kmc-quet: ${ngan} khong co ham mac dinh`);
+			continue;
+		}
+		if (
+			coNgoaiSuspense(ham, laThanhPhan(doc, t, laDauTrang, 2, coNgoaiSuspense))
+		) {
+			loi.push(`kmc-quet: ${ngan} co dau trang ngoai fallback`);
+		}
+		const suspense = moiPhanTu(ham).filter((n) => tenThe(n) === "Suspense");
+		const dauTrangFallback = suspense.filter((n) => {
+			const fb = thuocTinh(n, "fallback");
+			return fb !== null && coKhiTai(fb, laThanhPhan(doc, t, laDauTrang, 2));
+		});
+		if (dauTrangFallback.length !== 1) {
+			loi.push(
+				`kmc-quet: ${ngan} co ${dauTrangFallback.length} fallback mang dau trang`,
 			);
 		}
 	}
@@ -307,10 +372,17 @@ const LIEN_HE = `${TIEN_SLUG}contacts/page.tsx`;
 
 describe("khong-vong-quay", () => {
 	test("khong con PageShellLoading, khong fallback Spinner", () => {
-		const soTrang = TEP.filter(
-			(t) => t.startsWith("apps/app/app/") && t.endsWith("page.tsx"),
-		).length;
-		expect(soTrang).toBeGreaterThan(0);
+		const trangDaQuet = new Set(
+			TEP.filter(
+				(t) => t.startsWith("apps/app/app/") && t.endsWith("page.tsx"),
+			),
+		);
+		const trangBang = BANG_HINH.map((d) => d.tep).filter((t) =>
+			t.endsWith("/page.tsx"),
+		);
+		expect(trangBang.filter((t) => !trangDaQuet.has(t))).toEqual([]);
+		expect(trangDaQuet.size).toBeGreaterThanOrEqual(trangBang.length);
+		process.stdout.write(`kmc-quet: da quet ${trangDaQuet.size} trang\n`);
 		expect(
 			quetKhongVongQuay(DOC, [
 				...TEP,
@@ -340,13 +412,17 @@ describe("khong-vong-quay", () => {
 describe("hinh-theo-man", () => {
 	test("bang hinh bang dung tap tep goc va moi tep dung hinh", () => {
 		const goc = tepGocCoVongQuay();
-		expect(goc.length).toBe(37);
 		expect(BANG_HINH.length).toBe(38);
+		if (goc === null) {
+			expect(quetHinhTheoMan(DOC, BANG_HINH, goc, TEP)).toEqual([GHI_CHU_NONG]);
+			return;
+		}
+		expect(goc.length).toBe(37);
 		expect(quetHinhTheoMan(DOC, BANG_HINH, goc, TEP)).toEqual([]);
 	});
 
 	test("chieu do: thieu dong, sai hinh, KhungXuong ngoai bang", () => {
-		const goc = tepGocCoVongQuay();
+		const goc = tepGocCoVongQuay() ?? BANG_HINH.map((d) => d.tep);
 		const thieu = BANG_HINH.filter((d) => d.tep !== LIEN_HE);
 		expect(quetHinhTheoMan(DOC, thieu, goc, [])).toContain(
 			`kmc-quet: bang hinh thieu ${LIEN_HE}`,
@@ -365,6 +441,44 @@ describe("hinh-theo-man", () => {
 		);
 		expect(quetHinhTheoMan(lac, BANG_HINH, goc, [ngoai])).toContain(
 			`kmc-quet: KhungXuong ngoai bang o ${ngoai}`,
+		);
+	});
+});
+
+describe("checkout-nong", () => {
+	const gitNong: ChayGit = (thamSo) => {
+		if (thamSo[0] === "cat-file") throw new Error("fatal: Not a valid object");
+		throw new Error(`kmc-quet: git nong khong duoc goi ${thamSo[0]}`);
+	};
+
+	test("thieu commit goc: bo phep so, chi mot dong ghi chu", () => {
+		const goc = tepGocCoVongQuay(gitNong);
+		expect(goc).toBeNull();
+		expect(quetHinhTheoMan(DOC, BANG_HINH, goc, TEP)).toEqual([GHI_CHU_NONG]);
+	});
+
+	test("doi chung: van bat sai hinh khi checkout nong", () => {
+		const saiHinh = docThay(DOC, LIEN_HE, (s) =>
+			s.replace('hinh="bang"', 'hinh="the"'),
+		);
+		const loi = quetHinhTheoMan(
+			saiHinh,
+			BANG_HINH,
+			tepGocCoVongQuay(gitNong),
+			[],
+		);
+		expect(loi).toContain(GHI_CHU_NONG);
+		expect(loi).toContain(
+			"kmc-quet: contacts/page.tsx dung hinh the, bang ghi bang",
+		);
+	});
+
+	test("commit co mat: phep so chay va bat bang thieu tep", () => {
+		const goc = tepGocCoVongQuay();
+		if (goc === null) return;
+		const thieu = BANG_HINH.filter((d) => d.tep !== LIEN_HE);
+		expect(quetHinhTheoMan(DOC, thieu, goc, [])).toContain(
+			`kmc-quet: bang hinh thieu ${LIEN_HE}`,
 		);
 	});
 });
@@ -399,22 +513,41 @@ describe("tieu-de-ngoai-suspense", () => {
 });
 
 describe("breadcrumb-chi-tiet", () => {
-	test("bon man ban ghi dung breadcrumb ngoai Suspense", () => {
+	test("bon man ban ghi dung breadcrumb luc tai va dung hinh", () => {
 		expect(quetBreadcrumbChiTiet(DOC, TIEU_DE_THEO_DU_LIEU)).toEqual([]);
 	});
 
-	test("chieu do: breadcrumb vao Suspense", () => {
+	test("chieu do: breadcrumb mat luc tai, chien dich thieu coTieuDe", () => {
 		const cd = TIEU_DE_THEO_DU_LIEU[0] ?? "";
-		const boc = docThay(DOC, cd, (s) =>
-			s
-				.replace(
-					"<PageShellHeader",
-					"<Suspense fallback={null}><PageShellHeader",
-				)
-				.replace("</PageShellHeader>", "</PageShellHeader></Suspense>"),
+		const mat = docThay(DOC, cd, (s) =>
+			s.replace("<PageShellHeader breadcrumb={duongDan}>", "<PageShellHeader>"),
 		);
-		expect(quetBreadcrumbChiTiet(boc, [cd])).toContain(
+		expect(quetBreadcrumbChiTiet(mat, [cd])).toContain(
 			"kmc-quet: breadcrumb campaigns/[campaignId]/page.tsx trong Suspense hoac vang",
+		);
+		const khongTieuDe = docThay(DOC, cd, (s) => s.replaceAll(" coTieuDe", ""));
+		expect(quetBreadcrumbChiTiet(khongTieuDe, [cd])).toContain(
+			"kmc-quet: campaigns/[campaignId]/page.tsx thieu coTieuDe",
+		);
+	});
+});
+
+describe("mot-dau-trang", () => {
+	test("bon man ban ghi chi dung dau trang trong fallback", () => {
+		expect(TIEU_DE_THEO_DU_LIEU.length).toBe(4);
+		expect(quetMotDauTrang(DOC, TIEU_DE_THEO_DU_LIEU)).toEqual([]);
+	});
+
+	test("chieu do: dau trang ngoai Suspense quay lai", () => {
+		const doc = `${TIEN_SLUG}tai-lieu/[trang]/page.tsx`;
+		const thua = docThay(DOC, doc, (s) =>
+			s.replace(
+				"<Suspense",
+				"<PageShellHeader breadcrumb={null} />\n\t\t\t<Suspense",
+			),
+		);
+		expect(quetMotDauTrang(thua, [doc])).toContain(
+			"kmc-quet: tai-lieu/[trang]/page.tsx co dau trang ngoai fallback",
 		);
 	});
 });

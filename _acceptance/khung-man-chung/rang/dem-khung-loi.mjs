@@ -137,6 +137,14 @@ function tuKiem() {
 		const conLai = head.filter((d) => d.startsWith(`${t}:`));
 		if (conLai.length > 0) loi.push(`kmc-dem: HEAD con ${conLai.join(", ")}`);
 	}
+	const gocDaDoi = goc.filter((d) =>
+		DA_DOI.some((t) => d.startsWith(`${t}:`)),
+	).length;
+	if (head.length !== goc.length - gocDaDoi) {
+		loi.push(
+			`kmc-dem: N_HEAD khong bang N_goc tru phan da doi (${head.length} != ${goc.length} - ${gocDaDoi})`,
+		);
+	}
 	const loiTai = "apps/app/app/(app)/[slug]/tai-lieu/loi-tai.tsx";
 	const gocLoiTai = docGoc(loiTai);
 	const pha = demTren(tepHead, (t) => (t === loiTai ? gocLoiTai : docDia(t)));
@@ -146,8 +154,11 @@ function tuKiem() {
 	) {
 		loi.push("kmc-dem: loi-tai.tsx khong duoc dem");
 	}
+	if (pha.length === goc.length - gocDaDoi) {
+		loi.push("kmc-dem: quan he khong bat ban pha thu");
+	}
 	process.stdout.write(
-		`tu-kiem: goc ${goc.length} · HEAD ${head.length} · pha-thu ${pha.length}\n`,
+		`tu-kiem: goc ${goc.length} · da doi ${gocDaDoi} · HEAD ${head.length} · pha-thu ${pha.length}\n`,
 	);
 	for (const l of loi) process.stdout.write(`${l}\n`);
 	return loi.length === 0 ? 0 : 1;

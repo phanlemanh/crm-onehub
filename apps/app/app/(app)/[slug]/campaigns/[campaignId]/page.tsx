@@ -1,6 +1,6 @@
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { type ReactNode, Suspense } from "react";
 import { CaiDatBreadcrumb } from "@/components/cai-dat-breadcrumb";
 import { PageShell, PageShellHeader } from "@/components/page-shell";
 import { getLocale } from "@/lib/locale/server";
@@ -26,22 +26,32 @@ export default async function CampaignPage({
 	searchParams,
 }: PageProps<"/[slug]/campaigns/[campaignId]">) {
 	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+	const duongDan = (
+		<CaiDatBreadcrumb
+			cap={[
+				{
+					nhan: campaignMessages(locale).title,
+					href: workspaceUrl(slug, "/campaigns"),
+				},
+			]}
+		/>
+	);
 	return (
 		<PageShell className="min-h-0">
-			<PageShellHeader
-				breadcrumb={
-					<CaiDatBreadcrumb
-						cap={[
-							{
-								nhan: campaignMessages(locale).title,
-								href: workspaceUrl(slug, "/campaigns"),
-							},
-						]}
-					/>
+			<Suspense
+				fallback={
+					<PageShellHeader breadcrumb={duongDan}>
+						<div className="basis-full">
+							<KhungXuong coTieuDe hinh="tong-quan" />
+						</div>
+					</PageShellHeader>
 				}
-			/>
-			<Suspense fallback={<KhungXuong hinh="chi-tiet" />}>
-				<Campaign params={params} searchParams={searchParams} />
+			>
+				<Campaign
+					duongDan={duongDan}
+					params={params}
+					searchParams={searchParams}
+				/>
 			</Suspense>
 		</PageShell>
 	);
@@ -50,10 +60,11 @@ export default async function CampaignPage({
 async function Campaign({
 	params,
 	searchParams,
+	duongDan,
 }: Pick<
 	PageProps<"/[slug]/campaigns/[campaignId]">,
 	"params" | "searchParams"
->) {
+> & { duongDan: ReactNode }) {
 	const [, { campaignId }, values, flags] = await Promise.all([
 		requireSession(),
 		params,
@@ -80,7 +91,7 @@ async function Campaign({
 
 	return (
 		<HydrateClient>
-			<CampaignDetail id={campaignId} />
+			<CampaignDetail duongDan={duongDan} id={campaignId} />
 		</HydrateClient>
 	);
 }

@@ -5,11 +5,11 @@
 	},
 	{
 		"tep": "apps/app/app/(app)/[slug]/campaigns/[campaignId]/campaign-detail.tsx",
-		"hinh": "chi-tiet"
+		"hinh": "tong-quan"
 	},
 	{
 		"tep": "apps/app/app/(app)/[slug]/campaigns/[campaignId]/page.tsx",
-		"hinh": "chi-tiet"
+		"hinh": "tong-quan"
 	},
 	{
 		"tep": "apps/app/app/(app)/[slug]/campaigns/page.tsx",

@@ -43,6 +43,19 @@ const CAY_DO = {
 		dauVet: '"order-1 text-balance',
 		ghim: /kmc-dau-trang: mo ta chen hang nut o 1280/,
 	},
+	3: {
+		nhan: "ban sao doi ten slot mo ta, hop mo ta vang",
+		tenCay: "kmc-chup-man-chieu-do-3",
+		chiBuoc: "5",
+		tep: "apps/app/components/page-shell.tsx",
+		cam: (s) =>
+			s.replace(
+				'data-slot="page-shell-description"',
+				'data-slot="page-shell-mo-ta"',
+			),
+		dauVet: 'data-slot="page-shell-mo-ta"',
+		ghim: /lienhe 767: thieu hop mo ta/,
+	},
 };
 
 const coChieuDo = process.argv.find(
@@ -153,6 +166,7 @@ const doHop = (t) =>
 		const dau = hop('[data-slot="page-shell-header"]');
 		const noiDung =
 			hop('[data-slot="page-shell-content"]') ??
+			hop('[data-khung-xuong] [data-khung-hang="o-so"]') ??
 			hop('[data-khung-xuong] [data-khung-hang="doan"]') ??
 			hop("[data-khung-xuong]") ??
 			hop('[data-slot="page-shell"] > :not([data-slot="page-shell-header"])');
@@ -166,6 +180,9 @@ const doHop = (t) =>
 				'[data-slot="page-shell-actions"] > :is(button, a, [data-slot="skeleton"], div)',
 			),
 			dau,
+			soDau: [...document.querySelectorAll('[data-slot="page-shell-header"]')].filter(
+				(x) => x.getClientRects().length > 0 && !x.closest("[hidden]"),
+			).length,
 			noiDung,
 			khung: document.querySelector("[data-khung-xuong]:not([hidden] *)") !== null,
 			loi: document.querySelector("[data-vung-tai-loi]") !== null,
@@ -191,8 +208,11 @@ async function chup(t, ten) {
 	console.log(`  anh ${ten}`);
 }
 
-function kiemQuanHe(o, rong, man) {
+function kiemQuanHe(o, rong, man, { nut = false } = {}) {
 	const loi = [];
+	if (!o.tieuDe) loi.push(`${man} ${rong}: thieu hop tieu de`);
+	if (!o.moTa) loi.push(`${man} ${rong}: thieu hop mo ta`);
+	if (nut && !o.nut) loi.push(`${man} ${rong}: thieu hop nut dau`);
 	if (!o.tieuDe || !o.moTa) return loi;
 	if (rong >= KHO.bienTren && o.nut) {
 		if (Math.abs(o.tieuDe.cy - o.nut.cy) > NGUONG.cungHangPx) {
@@ -251,8 +271,11 @@ async function manDangTai(nguoi, ma, duong, bang, rong, choXong) {
 	return { truoc, sau };
 }
 
-function soCap(ma, rong, { truoc, sau }) {
+function soCap(ma, rong, { truoc, sau }, { nut = false, motDau = false } = {}) {
 	const loi = [];
+	if (motDau && (truoc?.soDau !== 1 || sau?.soDau !== 1)) {
+		loi.push(`${ma} ${rong}: ${truoc?.soDau ?? 0} dau trang luc tai, ${sau?.soDau ?? 0} luc xong`);
+	}
 	const coChu = (o) =>
 		(o?.tieuDe?.chu ?? "") !== "" || (o?.breadcrumb?.chu ?? "") !== "";
 	if (!truoc?.khung) loi.push(`${ma} khong thay khung xuong`);
@@ -267,7 +290,7 @@ function soCap(ma, rong, { truoc, sau }) {
 		loi.push(`${ma} ${rong}: vung noi dung lech ${dong(truoc)} -> ${dong(sau)}`);
 	}
 	console.log(`  do ${ma} ${rong}: ${dong(truoc ?? {})} => ${dong(sau ?? {})}`);
-	return [...loi, ...kiemQuanHe(sau ?? {}, rong, ma)];
+	return [...loi, ...kiemQuanHe(sau ?? {}, rong, ma, { nut })];
 }
 
 let daGieo = false;
@@ -295,12 +318,12 @@ async function gieoKeHoach(nguoi) {
 }
 
 const MAN = [
-	{ ma: "lienhe", duong: "/contacts", bang: "contact", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="table-container"], [data-slot="empty"]') !== null },
+	{ ma: "lienhe", nut: true, duong: "/contacts", bang: "contact", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="table-container"], [data-slot="empty"]') !== null },
 	{ ma: "truong", duong: "/settings/fields", bang: "fieldDefinition", xong: () => document.querySelector("[data-khung-xuong]") === null },
 	{ ma: "caidat", duong: "/settings/onboarding", bang: "onboardingTemplate", xong: () => document.querySelector("[data-khung-xuong]") === null },
 	{ ma: "toancanh", duong: "/okr/toan-canh", bang: "okrCycle", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="tabs-list"]') !== null },
-	{ ma: "chiendich", duong: null, bang: "campaign", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="page-shell-title"]') !== null },
-	{ ma: "tailieu", duong: "/tai-lieu", bang: "taiLieuTrang", xong: () => document.querySelector("[data-khung-xuong]") === null },
+	{ ma: "chiendich", nut: true, motDau: true, duong: null, bang: "campaign", xong: () => document.querySelector("[data-khung-xuong]") === null && document.querySelector('[data-slot="page-shell-title"]') !== null },
+	{ ma: "tailieu", nut: true, duong: "/tai-lieu", bang: "taiLieuTrang", xong: () => document.querySelector("[data-khung-xuong]") === null },
 ];
 
 try {
@@ -369,7 +392,7 @@ try {
 						loi.push("buoc 1: lienhe khong thay khung xuong");
 						continue;
 					}
-					loi.push(...soCap(man.ma, rong, cap));
+					loi.push(...soCap(man.ma, rong, cap, man));
 				}
 			}
 			for (const l of loi) console.log(`  ${l}`);
@@ -451,7 +474,7 @@ try {
 					};
 				});
 				if (!o.tat || !o.tro || !o.duoiTieuDe) loi.push(`onboarding khoa ${rong}: ${JSON.stringify(o)}`);
-				loi.push(...kiemQuanHe(await doHop(t), rong, "onboarding"));
+				loi.push(...kiemQuanHe(await doHop(t), rong, "onboarding", { nut: true }));
 				await chup(t, `kmc-onboarding-khoa-${rong}.png`);
 				await t.close();
 			}
@@ -467,7 +490,7 @@ try {
 				const t = await trangMoi(quanTri, rong);
 				await t.goto(`${d.APP}/${d.slug()}/tai-lieu`, { waitUntil: "load", timeout: 120_000 });
 				await choDieu(t, () => document.querySelector('[data-slot="page-shell-actions"] a, [data-slot="page-shell-actions"] button') !== null, "nut dau trang tai lieu");
-				loi.push(...kiemQuanHe(await doHop(t), rong, "tailieu"));
+				loi.push(...kiemQuanHe(await doHop(t), rong, "tailieu", { nut: true }));
 				await chup(t, `kmc-tailieu-dautrang-${rong}.png`);
 				await t.close();
 			}
@@ -483,7 +506,7 @@ try {
 				const t = await trangMoi(quanTri, rong);
 				await t.goto(`${d.APP}/${d.slug()}/contacts`, { waitUntil: "load", timeout: 120_000 });
 				await choDieu(t, () => document.querySelector("[data-khung-xuong]") === null, "lien he tai xong");
-				loi.push(...kiemQuanHe(await doHop(t), rong, "lienhe"));
+				loi.push(...kiemQuanHe(await doHop(t), rong, "lienhe", { nut: true }));
 				if (rong !== KHO.rong) await chup(t, `kmc-lienhe-bien-${rong}.png`);
 				await t.close();
 			}

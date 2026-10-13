@@ -22,10 +22,16 @@ export default async function TrangTaiLieuPage({ params }: { params: Params }) {
 	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
 	return (
 		<PageShell>
-			<PageShellHeader
-				breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
-			/>
-			<Suspense fallback={<KhungXuong hinh="chi-tiet" />}>
+			<Suspense
+				fallback={
+					<>
+						<PageShellHeader
+							breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+						/>
+						<KhungXuong hinh="chi-tiet" />
+					</>
+				}
+			>
 				<NoiDung params={params} />
 			</Suspense>
 		</PageShell>

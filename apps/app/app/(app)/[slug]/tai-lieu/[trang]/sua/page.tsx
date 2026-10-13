@@ -1,7 +1,8 @@
 import { KhungXuong } from "@crm/ui/components/khung-xuong";
+import type { Locale } from "@crm/ui/lib/locale";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { Suspense } from "react";
+import { type ReactNode, Suspense } from "react";
 import {
 	PageShell,
 	PageShellDescription,
@@ -37,30 +38,48 @@ export default async function SuaTrangPage({
 	searchParams: SearchParams;
 }) {
 	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
-	const m = taiLieuMessages(locale).soan;
 	return (
 		<PageShell>
-			<PageShellHeader
-				breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+			<Suspense
+				fallback={
+					<>
+						<DauTrangSua locale={locale} slug={slug} />
+						<KhungXuong hinh="chi-tiet" />
+					</>
+				}
 			>
-				<PageShellHeading>
-					<PageShellTitle>{m.tieuDeSua}</PageShellTitle>
-					<PageShellDescription>{m.moTaSua}</PageShellDescription>
-				</PageShellHeading>
-			</PageShellHeader>
-			<Suspense fallback={<KhungXuong hinh="chi-tiet" />}>
-				<NoiDung params={params} searchParams={searchParams} />
+				<NoiDung
+					dauTrang={<DauTrangSua locale={locale} slug={slug} />}
+					params={params}
+					searchParams={searchParams}
+				/>
 			</Suspense>
 		</PageShell>
+	);
+}
+
+function DauTrangSua({ slug, locale }: { slug: string; locale: Locale }) {
+	const m = taiLieuMessages(locale).soan;
+	return (
+		<PageShellHeader
+			breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+		>
+			<PageShellHeading>
+				<PageShellTitle>{m.tieuDeSua}</PageShellTitle>
+				<PageShellDescription>{m.moTaSua}</PageShellDescription>
+			</PageShellHeading>
+		</PageShellHeader>
 	);
 }
 
 async function NoiDung({
 	params,
 	searchParams,
+	dauTrang,
 }: {
 	params: Params;
 	searchParams: SearchParams;
+	dauTrang: ReactNode;
 }) {
 	await requireSession();
 
@@ -87,6 +106,7 @@ async function NoiDung({
 		if (!banMay || banMay.slug !== trang.slug) notFound();
 		return (
 			<HydrateClient>
+				{dauTrang}
 				<ManSoan
 					key={banMay.id}
 					vao={{
@@ -105,6 +125,7 @@ async function NoiDung({
 
 	return (
 		<HydrateClient>
+			{dauTrang}
 			<ManSoan
 				key={trang.phienBan?.so ?? 0}
 				vao={{

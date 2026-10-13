@@ -23,7 +23,7 @@ import { formatPercent } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { useMemo } from "react";
+import { type ReactNode, useMemo } from "react";
 import { toast } from "sonner";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
 import { ListSearch } from "@/components/data-table/list-search";
@@ -349,7 +349,13 @@ function MembersTable({
 	);
 }
 
-export function CampaignDetail({ id }: { id: string }) {
+export function CampaignDetail({
+	id,
+	duongDan,
+}: {
+	id: string;
+	duongDan?: ReactNode;
+}) {
 	const m = campaignMessages(useLocale());
 	const trpc = useTRPC();
 	const cache = useCrmCache();
@@ -379,23 +385,34 @@ export function CampaignDetail({ id }: { id: string }) {
 		}),
 	);
 
-	if (campaign.isError)
+	if (campaign.isError && !campaign.data)
 		return (
-			<VungTaiLoi
-				dangTai={campaign.isFetching}
-				data-trang-thai="ST-chiendich-loi"
-				moTa={m.detail.loadErrorBody}
-				onThuLai={() => campaign.refetch()}
-				tieuDe={m.detail.loadErrorTitle}
-			/>
+			<>
+				<PageShellHeader breadcrumb={duongDan} />
+				<VungTaiLoi
+					dangTai={campaign.isFetching}
+					data-trang-thai="ST-chiendich-loi"
+					moTa={m.detail.loadErrorBody}
+					onThuLai={() => campaign.refetch()}
+					tieuDe={m.detail.loadErrorTitle}
+				/>
+			</>
 		);
-	if (!campaign.data) return <KhungXuong hinh="chi-tiet" />;
+	if (!campaign.data) {
+		return (
+			<PageShellHeader breadcrumb={duongDan}>
+				<div className="basis-full">
+					<KhungXuong coTieuDe hinh="tong-quan" />
+				</div>
+			</PageShellHeader>
+		);
+	}
 
 	const row = campaign.data;
 
 	return (
 		<>
-			<PageShellHeader>
+			<PageShellHeader breadcrumb={duongDan}>
 				<PageShellHeading>
 					<PageShellTitle translate="no">{row.name}</PageShellTitle>
 					<PageShellDescription>

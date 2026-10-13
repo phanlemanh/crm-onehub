@@ -31,7 +31,7 @@ import { Skeleton } from "@crm/ui/components/skeleton";
 import { SortableSaveList } from "@crm/ui/components/sortable-list";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { PageShellDescription } from "@/components/page-shell";
+import { PageShellNote } from "@/components/page-shell-note";
 import {
 	type GiaiDoanHien,
 	type LoaiGiaiDoanHien,
@@ -43,19 +43,27 @@ import { useTRPC } from "@/lib/trpc/client";
 import { HopThoaiGiaiDoan, useHopThoaiGiaiDoan } from "./hop-thoai-giai-doan";
 
 const LOAI: readonly LoaiGiaiDoanHien[] = ["OPEN", "WON", "LOST"];
+export const ID_LY_DO_GIAI_DOAN = "giai-doan-ly-do";
 
 export function LyDoGiaiDoan() {
 	const t = settingsMessages(useLocale()).giaiDoan;
 	const giaiDoan = useGiaiDoan();
 	if (giaiDoan.dangTai || giaiDoan.loi) return null;
 	if (!giaiDoan.canManage) {
-		return <PageShellDescription>{t.khongQuyen}</PageShellDescription>;
+		return (
+			<PageShellNote
+				data-trang-thai="ST-giaidoan-khongquyen"
+				id={ID_LY_DO_GIAI_DOAN}
+			>
+				{t.khongQuyen}
+			</PageShellNote>
+		);
 	}
 	if (giaiDoan.stages.length >= giaiDoan.tran) {
 		return (
-			<PageShellDescription>
+			<PageShellNote id={ID_LY_DO_GIAI_DOAN}>
 				{t.datTranLuuTru.replace("{so}", String(giaiDoan.tran))}
-			</PageShellDescription>
+			</PageShellNote>
 		);
 	}
 	return null;
@@ -121,6 +129,7 @@ function TheLoai({
 	cua,
 	khoa,
 	datTran,
+	coLyDo,
 	sapXep,
 	luuTru,
 	hop,
@@ -129,6 +138,7 @@ function TheLoai({
 	cua: GiaiDoanHien[];
 	khoa: boolean;
 	datTran: boolean;
+	coLyDo: boolean;
 	sapXep: (kind: LoaiGiaiDoanHien, ids: string[]) => Promise<unknown>;
 	luuTru: (g: GiaiDoanHien) => void;
 	hop: ReturnType<typeof useHopThoaiGiaiDoan>;
@@ -151,6 +161,7 @@ function TheLoai({
 						variant="outline"
 						size="sm"
 						disabled={khoa || datTran}
+						aria-describedby={coLyDo ? ID_LY_DO_GIAI_DOAN : undefined}
 						onClick={() => hop.moThem(kind)}
 					>
 						<Icon icon={Add} data-icon="inline-start" />
@@ -353,6 +364,7 @@ export function GiaiDoanSettings() {
 					cua={giaiDoan.stages.filter((g) => g.kind === kind)}
 					khoa={khoa}
 					datTran={datTran}
+					coLyDo={!giaiDoan.canManage || datTran}
 					sapXep={sapXep}
 					luuTru={luuTru}
 					hop={hop}
