@@ -191,6 +191,7 @@ export const transferWorkInput = z.object({
 export const transferOutput = z.object({
 	keHoach: z.number().int().nonnegative(),
 	buoc: z.number().int().nonnegative(),
+	viec: z.number().int().nonnegative(),
 });
 
 export const stepRemovedOutput = z.object({ id: z.string() });

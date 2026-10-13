@@ -1,14 +1,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseEnv } from "@crm/env";
-
-const LOCAL_HOSTS = new Set([
-	"localhost",
-	"127.0.0.1",
-	"::1",
-	"[::1]",
-	"0.0.0.0",
-]);
+import { hostCua, laKhoCucBo, loiKhoXa } from "../src/kho-cuc-bo";
 
 const command = process.argv[2] ?? "this command";
 const resolved = resolveDatabaseUrl();
@@ -21,39 +14,16 @@ if (!resolved) {
 	process.exit(1);
 }
 
-const host = hostOf(resolved.url);
+const host = hostCua(resolved.url);
 
-if (LOCAL_HOSTS.has(host)) process.exit(0);
+if (laKhoCucBo(resolved.url)) process.exit(0);
 
 if (process.env.ALLOW_REMOTE_DB === "1") {
 	console.warn(`\n  ⚠ ${command} is running against ${host} — not local.\n`);
 	process.exit(0);
 }
 
-console.error(
-	[
-		"",
-		`  Refusing to run ${command} against ${host}.`,
-		"",
-		`  That is not a local database, and ${command} can rewrite or drop`,
-		`  schemas. The value came from ${resolved.from}.`,
-		"",
-		resolved.from.endsWith(".env.local")
-			? [
-					"  `.env.local` overrides `.env`, and `vercel env pull` writes",
-					"  production credentials into it. Either remove DATABASE_URL from",
-					"  that file, or pull Vercel's environment somewhere inert:",
-					"",
-					"    vercel env pull .env.vercel",
-				].join("\n")
-			: "  Check which file is winning:  grep -m1 DATABASE_URL .env .env.local",
-		"",
-		"  To do this deliberately anyway:",
-		"",
-		`    ALLOW_REMOTE_DB=1 bun run ${command}`,
-		"",
-	].join("\n"),
-);
+console.error(loiKhoXa(command, resolved.url, resolved.from));
 
 process.exit(1);
 
@@ -90,13 +60,5 @@ function workspaceRoot(): string | null {
 		const parent = dirname(directory);
 		if (parent === directory) return null;
 		directory = parent;
-	}
-}
-
-function hostOf(value: string): string {
-	try {
-		return new URL(value).hostname;
-	} catch {
-		return value;
 	}
 }

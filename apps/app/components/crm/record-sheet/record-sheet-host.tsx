@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FieldsSheetHost } from "@/components/crm/fields/fields-sheet";
 import { CloseReasonDialog } from "@/components/crm/stage-change";
 import { DetailSheet } from "@/components/detail-sheet";
+import { KhungViec } from "@/components/viec/khung-viec";
 import { CompanySheet } from "./company-sheet";
 import { ContactSheet } from "./contact-sheet";
 import { DealSheet } from "./deal-sheet";
@@ -69,6 +70,10 @@ export function RecordSheetHost({
 						cuocSoanId={shown.id}
 						cauNoi={cauNoiOkr}
 					/>
+				) : null}
+
+				{shown?.kind === "viec" ? (
+					<KhungViec key={recordKey(shown)} viecId={shown.id} />
 				) : null}
 			</DetailSheet>
 

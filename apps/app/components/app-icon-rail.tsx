@@ -10,6 +10,7 @@ import Partnership from "@carbon/icons-react/es/Partnership";
 import Roadmap from "@carbon/icons-react/es/Roadmap";
 import Settings from "@carbon/icons-react/es/Settings";
 import Target from "@carbon/icons-react/es/Target";
+import TaskComplete from "@carbon/icons-react/es/TaskComplete";
 import UserMultiple from "@carbon/icons-react/es/UserMultiple";
 import { Button } from "@crm/ui/components/button";
 import type { CarbonIcon } from "@crm/ui/components/icon";
@@ -50,6 +51,7 @@ import { useWorkspaceUrl } from "@/lib/use-workspace-url";
 
 const ICON = {
 	overview: Dashboard,
+	viec: TaskComplete,
 	chat: Bot,
 	companies: Building,
 	contacts: UserMultiple,

@@ -251,7 +251,11 @@ describe("chuyen-giao-dung-viec", () => {
 		const ids = [g.P1.id, g.P2.id, g.P3.id];
 
 		const truoc = await noi().transferPreview({ fromUserId: g.H.id }, g.Q.id);
-		expect(truoc, "xem truoc mong {2,3}").toEqual({ keHoach: 2, buoc: 3 });
+		expect(truoc, "xem truoc mong {2,3}").toEqual({
+			keHoach: 2,
+			buoc: 3,
+			viec: 0,
+		});
 
 		const ketQua = await noi().transferWork(
 			{ fromUserId: g.H.id, toUserId: g.T.id },
@@ -305,7 +309,7 @@ describe("chuyen-giao-dung-viec", () => {
 		expect(
 			await noi().transferPreview({ fromUserId: g.H.id }, g.Q.id),
 			"xem truoc sau khi chuyen",
-		).toEqual({ keHoach: 0, buoc: 0 });
+		).toEqual({ keHoach: 0, buoc: 0, viec: 0 });
 	});
 });
 
@@ -349,7 +353,7 @@ describe("chuyen-giao-chan", () => {
 		expect(
 			await noi().transferWork({ fromUserId: N.id, toUserId: g.T.id }, g.Q.id),
 			"N khong co viec",
-		).toEqual({ keHoach: 0, buoc: 0 });
+		).toEqual({ keHoach: 0, buoc: 0, viec: 0 });
 		expect(await chup(ids)).toEqual(truoc);
 
 		expect(
@@ -358,7 +362,7 @@ describe("chuyen-giao-chan", () => {
 				g.Q.id,
 			),
 			"doi chung duong",
-		).toEqual({ keHoach: 2, buoc: 3 });
+		).toEqual({ keHoach: 2, buoc: 3, viec: 0 });
 		expect(await chup(ids)).not.toEqual(truoc);
 	});
 });
@@ -377,7 +381,7 @@ describe("chuyen-giao-payload", () => {
 		expect(
 			await noi().transferPreview(xemTruoc, g.Q.id),
 			"transferPreview: id man gui la id that",
-		).toEqual({ keHoach: 2, buoc: 3 });
+		).toEqual({ keHoach: 2, buoc: 3, viec: 0 });
 
 		const chuyen = phanTich(
 			transferWorkInput,
