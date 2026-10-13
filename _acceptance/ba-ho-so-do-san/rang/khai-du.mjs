@@ -8,7 +8,7 @@ const TRUONG_SO = ["status", "cmd", "expected", "paths"];
 const bang = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 function phang(o, tien = "", ra = new Map()) {
-	if (o && typeof o === "object" && !Array.isArray(o)) {
+	if (o instanceof Object && !Array.isArray(o)) {
 		for (const [k, v] of Object.entries(o)) phang(v, tien ? `${tien}.${k}` : k, ra);
 	} else ra.set(tien, o);
 	return ra;
@@ -31,13 +31,14 @@ function evalsTheoId(text) {
 }
 
 export function canCuSong(cc) {
-	if (typeof cc !== "string" || !cc.trim()) return false;
-	const m = /^(.+):(\d+)$/.exec(cc);
+	const chuoi = String(cc ?? "").trim();
+	if (!chuoi) return false;
+	const m = /^(.+):(\d+)$/.exec(chuoi);
 	if (m && existsSync(join(GOC, m[1]))) {
 		const so = readFileSync(join(GOC, m[1]), "utf8").split("\n").length;
 		return Number(m[2]) >= 1 && Number(m[2]) <= so;
 	}
-	return /^[0-9a-f]{7,40}$/.test(cc) && gitThu("cat-file", "-e", `${cc}^{commit}`) !== null;
+	return /^[0-9a-f]{7,40}$/.test(chuoi) && gitThu("cat-file", "-e", `${chuoi}^{commit}`) !== null;
 }
 
 function pathsMoiKy(cu, rows) {
@@ -112,7 +113,7 @@ export function kiemKhai({ tepDoi, evalsCap, danhSach, configCu, configMoi, kiem
 	for (const r of danhSach.dong) {
 		if (!["khai-not-run", "sua-rang"].includes(r.xu_ly)) continue;
 		const k = `${r.ho_so}:${r.eval}:${r.muc ?? "-"}`;
-		if (typeof r.ly_do !== "string" || !r.ly_do.trim()) loi.push(`CAN_CU_HONG ${k} (thieu ly_do)`);
+		if (!String(r.ly_do ?? "").trim()) loi.push(`CAN_CU_HONG ${k} (thieu ly_do)`);
 		else if (!kiemCanCu(r.can_cu)) loi.push(`CAN_CU_HONG ${k} (${r.can_cu})`);
 	}
 	const cu = phang(configCu);

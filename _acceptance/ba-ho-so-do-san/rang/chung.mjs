@@ -168,7 +168,7 @@ export function docDanhSach(duong = DANH_SACH) {
 	} catch (e) {
 		hong(2, `MA 2: ${duong} khong phai JSON — ${e.message}`);
 	}
-	if (!d || !Array.isArray(d.dong) || typeof d.moc_nen !== "string")
+	if (!d || !Array.isArray(d.dong) || !/^[0-9a-f]{40}$/.test(String(d.moc_nen ?? "")))
 		hong(2, `MA 2: ${duong} thieu dong[] hoac moc_nen`);
 	return d;
 }

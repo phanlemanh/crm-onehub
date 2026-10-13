@@ -26,9 +26,9 @@ function apDotBien(that, db) {
 		const [cu, moi] = db.thay;
 		return that.includes(cu) ? that.split(cu).join(moi) : null;
 	}
-	if (typeof db.chen === "string") {
+	if (db.chen !== undefined && db.chen !== null) {
 		const i = that.lastIndexOf("</");
-		return i < 0 ? null : `${that.slice(0, i)}${db.chen}${that.slice(i)}`;
+		return i < 0 ? null : `${that.slice(0, i)}${String(db.chen)}${that.slice(i)}`;
 	}
 	return null;
 }
@@ -54,7 +54,7 @@ async function soiDotBien(db) {
 	if (db.kieu === "ham") {
 		const mod = await import(pathToFileURL(join(GOC, db.mo_dun)).href);
 		const ham = mod[db.ham];
-		if (typeof ham !== "function") return { ma: "HAM_VANG" };
+		if (!(ham instanceof Function)) return { ma: "HAM_VANG" };
 		const t = ham(that);
 		const d = ham(dot);
 		return { thatDat: t.dat, dotDat: d.dat, chuDot: d.chu };
