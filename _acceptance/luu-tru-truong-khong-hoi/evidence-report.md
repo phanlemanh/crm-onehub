@@ -6,7 +6,7 @@ failed_evals: []
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: fd2d128ec192a7787d09f1dcd212f1e4e16d535b
+verified_commit: c2aa280c24de843594eb6edc26a1648bccc556da
 human_signoff: Phan Le Manh 2026-10-13
 ---
 
@@ -202,3 +202,7 @@ none — every multi-run eval is uniform
 
 Round 1: PASS kem 2 phat hien trong hop dong (AC-7) — kich ban do man E9/E10 chua kiem truong nam nhom «Đã lưu trữ» roi ve nhom dang dung. Quay lai sua man.mjs va ghim chieu do nhom.
 Round 2: chay lai E9, E10 va bay lenh suite tren fd2d128ec; E1–E8, E12, E13 carry-forward tu round 1. PASS.
+
+### Re-pin lần 1 — 2026-10-13, do gộp onehub mới vào nhánh V2b trước lô gộp
+run_id: repin-20261013T144913Z-54452
+sha: c2aa280c24de843594eb6edc26a1648bccc556da · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E10, E11 (E11 không khai paths) · AC không có chốt máy: AC-8 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
