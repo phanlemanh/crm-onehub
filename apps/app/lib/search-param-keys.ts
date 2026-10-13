@@ -78,6 +78,7 @@ export const SEARCH_PARAM = {
 		cuocSoanAn: "cuocSoanAn",
 		tabSoan: "tabSoan",
 		locSoan: "locSoan",
+		mucTinCay: "mucTinCay",
 	},
 	loTrinh: {
 		vongDoi: "vongDoi",

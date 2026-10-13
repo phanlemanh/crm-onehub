@@ -75,6 +75,13 @@ export const okrParsers = {
 
 export const parseAsNeoGopY = parseAsBoolean;
 
+export const LOC_MUC_TIN_CAY = ["tat-ca", "chua-co-ly-do", "dat-cuoc"] as const;
+
+export type LocMucTinCay = (typeof LOC_MUC_TIN_CAY)[number];
+
+export const parseAsMucTinCay =
+	parseAsStringLiteral(LOC_MUC_TIN_CAY).withDefault("tat-ca");
+
 export const loadOkrSearchParams = createLoader(okrParsers);
 
 export const parseAsThuMucTieu = parseAsArrayOf(parseAsString).withDefault([]);
