@@ -49,7 +49,8 @@ export function docTheoDong(tho) {
 		const id = k.split("\n")[0].trim();
 		const cmd = truong(k, "cmd");
 		const executor = truong(k, "executor");
-		if (!id || !cmd || !executor) throw new Error(`khoi eval thieu id/cmd/executor: ${id}`);
+		if (!id || !executor || (executor === "test" && !cmd))
+			throw new Error(`khoi eval thieu id/executor/cmd: ${id}`);
 		const dongPaths = truong(k, "paths");
 		const paths = dongPaths
 			? dongPaths
