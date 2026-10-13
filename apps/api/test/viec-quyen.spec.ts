@@ -4,8 +4,8 @@ import { db } from "@crm/db";
 import { VIEC } from "@crm/db/viec";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import request from "supertest";
-import { z } from "zod";
 import type { AgentTriggerService } from "../src/agent/agent-trigger.service";
+import { dashboardSummaryOutput } from "../src/dashboard/dashboard.contracts";
 import { REST_BRIDGE_PATH } from "../src/trpc/openapi";
 import {
 	viecCuaBanGhiOutput,
@@ -289,10 +289,6 @@ describe("vc-vai-okr", () => {
 	);
 });
 
-const tongQuanQuaHan = z.object({
-	viecQuaHan: z.array(z.object({ id: z.string() })),
-});
-
 type Duong =
 	| "get"
 	| "lichSu"
@@ -405,7 +401,7 @@ async function maDanhSach(
 		{ scope: "everyone" },
 		userId,
 	);
-	return tongQuanQuaHan.parse(r.data).viecQuaHan.map((v) => v.id);
+	return dashboardSummaryOutput.parse(r.data).viecQuaHan.map((v) => v.id);
 }
 
 async function kiemODanhSach(

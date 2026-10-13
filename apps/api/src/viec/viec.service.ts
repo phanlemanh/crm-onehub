@@ -1,4 +1,4 @@
-import { type Db, TrangThaiViec } from "@crm/db";
+import { type Db, type Prisma, TrangThaiViec } from "@crm/db";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
 import {
 	type BanGhiGan,
@@ -203,29 +203,45 @@ export class ViecService {
 		userId: string,
 	): Promise<ViecCuaToiNhomOutput> {
 		const now = new Date();
-		const ds = await this.db.viec.findMany({
-			where: {
-				AND: [dieuKienNhom(input.nhom, userId), dieuKienXemViec(userId)],
-			},
-			select: CHON_VIEC,
-		});
-		const dem = await Promise.all(
-			NHOM_VIEC.map((nhom) =>
-				this.db.viec.count({
-					where: {
-						AND: [
-							dieuKienNhom(nhom, userId),
-							{ trangThai: { in: [...TRANG_THAI_MO] } },
-						],
-					},
-				}),
+		const doc = (trangThai: Prisma.ViecWhereInput, take?: number) =>
+			this.db.viec.findMany({
+				where: {
+					AND: [
+						dieuKienNhom(input.nhom, userId),
+						dieuKienXemViec(userId),
+						trangThai,
+					],
+				},
+				orderBy: [
+					{ hanNgay: { sort: "asc", nulls: "last" } },
+					{ taoLuc: "asc" },
+					{ id: "asc" },
+				],
+				take,
+				select: CHON_VIEC,
+			});
+		const [mo, daXong, daHuy, dem] = await Promise.all([
+			doc({ trangThai: { in: [...TRANG_THAI_MO] } }),
+			doc({ trangThai: TrangThaiViec.XONG }, VIEC.tranKhep),
+			doc({ trangThai: TrangThaiViec.HUY }, VIEC.tranKhep),
+			Promise.all(
+				NHOM_VIEC.map((nhom) =>
+					this.db.viec.count({
+						where: {
+							AND: [
+								dieuKienNhom(nhom, userId),
+								dieuKienXemViec(userId),
+								{ trangThai: { in: [...TRANG_THAI_MO] } },
+							],
+						},
+					}),
+				),
 			),
-		);
-		const chia = chiaKhep(ds, now);
+		]);
 		return {
-			mo: chia.mo,
-			daXong: chia.daXong.slice(0, VIEC.tranKhep),
-			daHuy: chia.daHuy.slice(0, VIEC.tranKhep),
+			mo: mo.map((v) => viecRa(v, now)),
+			daXong: daXong.map((v) => viecRa(v, now)),
+			daHuy: daHuy.map((v) => viecRa(v, now)),
 			demNhom: {
 				"giao-cho-toi": dem[0] ?? 0,
 				"toi-giao": dem[1] ?? 0,

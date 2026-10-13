@@ -285,6 +285,7 @@ function tongQuan(cheDo: CheDo): Json {
 		trend: [],
 		closingThisMonthTotal: thang,
 		biggestOpen: [],
+		viecQuaHan: [],
 		overdueTasks: payload[cheDo].overdueTasks.map((v) => ({
 			...v,
 			dueAt: HAN_HOM_QUA,

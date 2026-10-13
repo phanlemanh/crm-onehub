@@ -533,6 +533,7 @@ function tongQuan(input: {
 		trend: [],
 		closingThisMonthTotal: thang,
 		biggestOpen: [],
+		viecQuaHan: [],
 		overdueTasks: viec,
 		recentActivity: [],
 		mySteps: [...buocQua, ...buocSap],
