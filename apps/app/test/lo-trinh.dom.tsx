@@ -567,7 +567,8 @@ describe("chi-doc", () => {
 			if (b.closest("[data-slot=sheet-content]"))
 				return !(
 					b.hasAttribute("data-viec-khoa") ||
-					b.getAttribute("data-slot") === "sheet-close"
+					b.getAttribute("data-slot") === "sheet-close" ||
+					b.getAttribute("role") === "tab"
 				);
 			if (b.closest("tbody")) return true;
 			if (b.closest("[data-lo-trinh-xem-moc], [data-lo-trinh-bang-cot]"))

@@ -56,16 +56,26 @@ describe("lo-trinh-du-lieu", () => {
 		const kq = phanTichLoTrinh({ ...goc, la: 1 });
 		expect(kq.ok).toBe(true);
 	});
-	test("bang khoa du tam cap", () => {
+	test("bang khoa du muoi mot cap cua ban 2", () => {
 		expect(Object.keys(KHOA_LO_TRINH_DU_LIEU).sort()).toEqual([
 			"can_sua",
+			"chu_kho",
 			"da_bac",
 			"goc",
 			"hang",
 			"hang_ke",
 			"lo_trinh",
 			"moc",
+			"moi_nguoi",
 			"tien_do",
+			"tom_tat",
 		]);
+	});
+	test("hang thieu tom_tat doc thanh null", () => {
+		const kq = phanTichLoTrinh(goc);
+		expect(kq.ok).toBe(true);
+		if (kq.ok)
+			for (const lo of kq.duLieu.lo_trinh)
+				for (const h of lo.hang) expect(h.tom_tat).toBeNull();
 	});
 });

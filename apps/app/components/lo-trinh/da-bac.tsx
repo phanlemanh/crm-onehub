@@ -10,11 +10,11 @@ import {
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SimpleTable, SimpleTableRow } from "@crm/ui/components/simple-table";
 import { TableCell } from "@crm/ui/components/table";
-import type { LoTrinhDuLieu } from "@crm/validation/lo-trinh-du-lieu";
+import type { DuLieuChoXem } from "@crm/validation/lo-trinh-du-lieu";
 import { loTrinhMessages } from "@/lib/messages/lo-trinh";
 import { KhungTrong } from "./khung-trong";
 
-export function DaBac({ duLieu }: { duLieu: LoTrinhDuLieu }) {
+export function DaBac({ duLieu }: { duLieu: DuLieuChoXem }) {
 	const m = loTrinhMessages(useLocale());
 	const dong = duLieu.lo_trinh.flatMap((lo) =>
 		lo.da_bac.map((b) => ({ ...b, loTep: lo.tep, loTen: lo.ten ?? lo.tep })),

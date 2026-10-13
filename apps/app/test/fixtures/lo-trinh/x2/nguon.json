@@ -1,0 +1,7 @@
+{
+	"kit_sha": "7f65e5a0277929b32663b44becf51c300dabfac0",
+	"crm_sha": "27d47de04725bc04d8d6deff870ac16751f3bf69",
+	"lenh": "node _acceptance/ngan-ho-so-trong-lo-trinh/rang/sinh-mau-x2.mjs --ghi --kit-sha 7f65e5a0277929b32663b44becf51c300dabfac0 --crm-sha 27d47de04725bc04d8d6deff870ac16751f3bf69",
+	"ngay": "2026-10-12",
+	"ham_doc_du_lieu_sha256": "22731adb548207f7b15bde61d74dc3719204882666b36bf71b59fa9d6fdcac10"
+}
