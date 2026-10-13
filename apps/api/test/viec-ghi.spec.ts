@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, spyOn, test } from "bun:test";
+import { isDeepStrictEqual } from "node:util";
 import { db, TrangThaiViec } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import {
@@ -668,6 +669,7 @@ describe("vc-vong-doi", () => {
 				],
 				["plan", "companies", cp.id, tenKeHoach(cp.name)],
 			];
+			let vetTruoc = 0;
 			for (const [loai, router, id, ten] of buoc) {
 				const ganTruoc = await db.viecGan.count({ where: { viecId: v.id } });
 				await goi(app, `${router}.archive`, "mutation", { id }, a.id);
@@ -682,14 +684,30 @@ describe("vc-vong-doi", () => {
 				const vet = await db.viecVet.findMany({
 					where: { viecId: v.id, loai: "go-do-ban-ghi-xoa" },
 				});
-				if (
-					!vet.some((h) => JSON.stringify(h.sau) === JSON.stringify({ ten }))
-				) {
+				if (vet.length !== vetTruoc + 1) {
+					throw new Error(`vc: ${loai} khong dung mot vet go do xoa`);
+				}
+				if (!vet.some((h) => isDeepStrictEqual(h.sau, { ten }))) {
 					throw new Error(`vc: thieu vet go do xoa ${loai}`);
 				}
+				vetTruoc = vet.length;
 			}
+			const tenCongTy = (
+				await db.company.findUniqueOrThrow({ where: { id: congTyId } })
+			).name;
 			await goi(app, "companies.archive", "mutation", { id: congTyId }, a.id);
 			await goi(app, "companies.purge", "mutation", { id: congTyId }, a.id);
+			const vetCongTy = await db.viecVet.findMany({
+				where: { viecId: v.id, loai: "go-do-ban-ghi-xoa" },
+			});
+			if (vetCongTy.length !== vetTruoc + 1) {
+				throw new Error("vc: cong ty khong dung mot vet go do xoa");
+			}
+			if (
+				!vetCongTy.some((h) => isDeepStrictEqual(h.sau, { ten: tenCongTy }))
+			) {
+				throw new Error("vc: vet go do xoa cong ty thieu ten");
+			}
 			const ngoai = await goi(app, "viec.get", "query", { id: v.id }, x.id);
 			const trong = await goi(app, "viec.get", "query", { id: v.id }, b.id);
 			if (
