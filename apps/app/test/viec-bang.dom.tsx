@@ -79,6 +79,25 @@ type BoardProps = {
 	pendingIds?: readonly string[];
 };
 let boardProps: BoardProps = {};
+type KanbanProps = {
+	onMove?: (e: {
+		event: { active: { id: string } };
+		activeContainer: string;
+		activeIndex: number;
+		overContainer: string;
+		overIndex: number;
+	}) => void;
+};
+let kanbanProps: KanbanProps = {};
+const kanbanGoc = { ...(await import("@crm/ui/components/reui/kanban")) };
+const KanbanThat = kanbanGoc.Kanban;
+mock.module("@crm/ui/components/reui/kanban", () => ({
+	...kanbanGoc,
+	Kanban: (props: Parameters<typeof KanbanThat>[0]) => {
+		kanbanProps = props as KanbanProps;
+		return createElement(KanbanThat, props);
+	},
+}));
 const goc = await import("@crm/ui/components/board");
 const BoardThat = goc.Board;
 const boardDropThat = goc.boardDrop;
@@ -94,6 +113,7 @@ const { default: ViecPage } = await import("@/app/(app)/[slug]/viec/page");
 const { LocaleProvider } = await import("@crm/ui/components/locale-provider");
 const { TooltipProvider } = await import("@crm/ui/components/tooltip");
 const { viecMessages } = await import("@/lib/messages/viec");
+const { dien } = await import("@/components/crm/record-sheet/plan-copy");
 const { messages: uiMessages } = await import("@crm/ui/lib/messages");
 
 const V = viecMessages("vi");
@@ -205,6 +225,24 @@ async function cho(ms = 20): Promise<void> {
 	});
 }
 
+async function thaThat(
+	cardId: string,
+	from: string,
+	to: string,
+	toIndex = 0,
+): Promise<void> {
+	await act(async () => {
+		kanbanProps.onMove?.({
+			event: { active: { id: cardId } },
+			activeContainer: from,
+			activeIndex: 0,
+			overContainer: to,
+			overIndex: toIndex,
+		});
+	});
+	await cho();
+}
+
 function k(): HTMLElement {
 	if (!san) throw new Error("kv: chua mo trang");
 	return san.o;
@@ -296,10 +334,21 @@ describe("kv-man-bang", () => {
 			throw new Error("kv: khong giu kieu xem bang");
 		}
 		const xongCu = k().querySelector("[data-xong-cu]");
-		if (!xongCu?.textContent?.includes("3"))
+		const hienXong = k().querySelectorAll(
+			'[data-board-column="XONG"] [data-board-card]',
+		).length;
+		const canChu = dien(V.bang.xongCu, { n: 4 - hienXong });
+		if (hienXong !== 1 || xongCu?.textContent?.trim() !== canChu)
 			throw new Error("kv: thieu dong xong cu");
 		if (!k().textContent?.includes("Đã huỷ (1)"))
 			throw new Error("kv: thieu dong gap huy");
+		await bam(xongCu);
+		const sauBam = urls[urls.length - 1] ?? "";
+		if (
+			sauBam.includes("xemViec=bang") ||
+			k().querySelector("[data-bang-viec]")
+		)
+			throw new Error("kv: thieu dong xong cu");
 	});
 
 	test("kv-man-bang: chờ tải, lỗi tải, rỗng", async () => {
@@ -325,9 +374,10 @@ describe("kv-man-bang", () => {
 		san = null;
 		traLoi.set("viec.bang", () => bangTu([]));
 		await moTrang("?xemViec=bang");
-		const rong = [...k().querySelectorAll("[data-board-column]")].every((c) =>
-			c.textContent?.includes(V.bang.rongCot),
-		);
+		const cotRong = [...k().querySelectorAll("[data-board-column]")];
+		const rong =
+			cotRong.length === 4 &&
+			cotRong.every((c) => c.textContent?.includes(V.bang.rongCot));
 		if (!rong) throw new Error("kv: rong sai");
 	});
 });
@@ -366,14 +416,7 @@ describe("kv-man-keo", () => {
 		}
 		await cho(50);
 		daGoi.length = 0;
-		await act(async () => {
-			boardProps.onMove?.({
-				cardId: "d",
-				from: "DANG_LAM",
-				to: "CHO_DANH_GIA",
-				order: ["d"],
-			});
-		});
+		await thaThat("d", "DANG_LAM", "CHO_DANH_GIA");
 		await cho();
 		const keoGoi = daGoi.filter((g) => g.path === "viec.keo");
 		const vao1 = keoGoi[0]?.input as
@@ -425,8 +468,22 @@ describe("kv-man-keo", () => {
 			);
 			await new Promise((r) => setTimeout(r, 10));
 		});
-		const truocKeo = daGoi.filter((g) => g.path === "viec.keo").length;
-		if (truocKeo !== 1) throw new Error("kv: doi chung canDrop hong");
+		const truocTha = daGoi.filter((g) => g.path === "viec.keo").length;
+		await thaThat("v", "CHO_DANH_GIA", "XONG");
+		if (daGoi.filter((g) => g.path === "viec.keo").length !== truocTha)
+			throw new Error("kv: canDrop khong noi");
+		await thaThat("w", "CHUA_LAM", "DANG_LAM");
+		const sauTha = daGoi.filter((g) => g.path === "viec.keo");
+		const vaoW = sauTha[sauTha.length - 1]?.input as
+			| { id?: string; den?: string; nguon?: string }
+			| undefined;
+		if (
+			sauTha.length !== truocTha + 1 ||
+			vaoW?.id !== "w" ||
+			vaoW.den !== "DANG_LAM" ||
+			vaoW.nguon !== "bang-keo"
+		)
+			throw new Error("kv: doi chung canDrop hong");
 	});
 
 	test("kv-man-keo: thẻ đang chờ máy chủ khoá tay kéo", async () => {
@@ -434,14 +491,7 @@ describe("kv-man-keo", () => {
 		traLoi.set("viec.bang", () => bangTu(DS_CO()));
 		traLoi.set("viec.keo", () => new Promise<Json>(() => {}));
 		await moTrang("?xemViec=bang");
-		await act(async () => {
-			boardProps.onMove?.({
-				cardId: "w",
-				from: "CHUA_LAM",
-				to: "DANG_LAM",
-				order: ["w"],
-			});
-		});
+		await thaThat("w", "CHUA_LAM", "DANG_LAM");
 		await cho();
 		if (!boardProps.pendingIds?.includes("w") || !the_trong("DANG_LAM", "w")) {
 			throw new Error("kv: the cho khong khoa");
@@ -452,6 +502,8 @@ describe("kv-man-keo", () => {
 		traLoi.set("viec.cuaToi", () => CUA_TOI);
 		traLoi.set("viec.bang", () => bangTu(DS_CO()));
 		await moTrang("?xemViec=bang&nhomViec=dang-theo-doi");
+		if (k().querySelectorAll("[data-board-card]").length !== DS_CO().length)
+			throw new Error("kv: theo doi keo duoc");
 		if (
 			k().querySelectorAll('[data-slot="kanban-item-handle"]').length !== 0 ||
 			k().querySelectorAll("[data-chuyen-sang]").length !== 0
@@ -489,14 +541,7 @@ describe("kv-man-tra-ve", () => {
 		});
 		await moTrang("?xemViec=bang");
 		const bangTruoc = daGoi.filter((g) => g.path === "viec.bang").length;
-		await act(async () => {
-			boardProps.onMove?.({
-				cardId: "w",
-				from: "CHUA_LAM",
-				to: "DANG_LAM",
-				order: ["w"],
-			});
-		});
+		await thaThat("w", "CHUA_LAM", "DANG_LAM");
 		await cho(60);
 		if (!the_trong("CHUA_LAM", "w")) throw new Error("kv: the khong ve cho cu");
 		if (toastLoi[0]?.msg !== LOI)
@@ -513,14 +558,7 @@ describe("kv-man-tra-ve", () => {
 			throw new TypeError("fetch failed");
 		});
 		await moTrang("?xemViec=bang");
-		await act(async () => {
-			boardProps.onMove?.({
-				cardId: "w",
-				from: "CHUA_LAM",
-				to: "DANG_LAM",
-				order: ["w"],
-			});
-		});
+		await thaThat("w", "CHUA_LAM", "DANG_LAM");
 		await cho(60);
 		if (toastLoi[0]?.action?.label !== V.bang.thuLai)
 			throw new Error("kv: thieu thu lai");
@@ -537,14 +575,7 @@ describe("kv-man-tra-ve", () => {
 			return { ok: true };
 		});
 		await moTrang("?xemViec=bang");
-		await act(async () => {
-			boardProps.onMove?.({
-				cardId: "w",
-				from: "CHUA_LAM",
-				to: "DANG_LAM",
-				order: ["w"],
-			});
-		});
+		await thaThat("w", "CHUA_LAM", "DANG_LAM");
 		await cho(60);
 		if (!the_trong("DANG_LAM", "w") || toastLoi.length !== 0) {
 			throw new Error("kv: doi chung tra ve hong");

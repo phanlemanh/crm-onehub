@@ -1,13 +1,34 @@
-import { afterEach, describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, mock, test } from "bun:test";
 import { act, createElement as h } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import {
-	Board,
-	type BoardColumn,
-	type BoardMove,
-	boardDrop,
-} from "../src/components/board";
-import { LocaleProvider } from "../src/components/locale-provider";
+import type { BoardColumn, BoardMove } from "../src/components/board";
+import type { KanbanMoveEvent } from "../src/components/reui/kanban";
+
+type KanbanProps = { onMove?: (e: KanbanMoveEvent) => void };
+let kanbanProps: KanbanProps = {};
+const kanbanGoc = { ...(await import("../src/components/reui/kanban")) };
+const KanbanThat = kanbanGoc.Kanban;
+mock.module("../src/components/reui/kanban", () => ({
+	...kanbanGoc,
+	Kanban: (props: Parameters<typeof KanbanThat>[0]) => {
+		kanbanProps = props;
+		return h(KanbanThat, props);
+	},
+}));
+const { Board, boardDrop } = await import("../src/components/board");
+const { LocaleProvider } = await import("../src/components/locale-provider");
+
+function thaThat(cardId: string, from: string, to: string, toIndex: number) {
+	act(() => {
+		kanbanProps.onMove?.({
+			event: { active: { id: cardId } } as KanbanMoveEvent["event"],
+			activeContainer: from,
+			activeIndex: 0,
+			overContainer: to,
+			overIndex: toIndex,
+		});
+	});
+}
 
 const COT: BoardColumn[] = [
 	{
@@ -96,6 +117,24 @@ const keo = (from: string, to: string, fromIndex: number, toIndex: number) => ({
 });
 
 describe("board-can-drop", () => {
+	test("board-can-drop: thả thật qua đường kéo của Board — cột cấm không gọi onMove, cột nhận thì gọi", () => {
+		const da: BoardMove[] = [];
+		dung({
+			onMove: (m) => da.push(m),
+			canDrop: (_id, cot) => cot !== "b",
+		});
+		thaThat("c1", "a", "b", 0);
+		if (da.length !== 0)
+			throw new Error("board: tha vao cot cam van goi onMove");
+		thaThat("c1", "a", "c", 1);
+		if (
+			JSON.stringify(da) !==
+			JSON.stringify([{ cardId: "c1", from: "a", to: "c" }])
+		) {
+			throw new Error(`board: tha vao cot nhan sai ${JSON.stringify(da)}`);
+		}
+	});
+
 	test("board-can-drop: thả vào cột cấm không gọi onMove", () => {
 		const cam = (_id: string, cot: string) => cot !== "b";
 		const ra = boardDrop(keo("a", "b", 0, 0), COT, { canDrop: cam });
