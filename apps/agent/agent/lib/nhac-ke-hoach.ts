@@ -103,6 +103,13 @@ function maCuaAnToan(userId: string, ds: ViecNhac[]): MucNhac[] {
 	});
 }
 
+function conMaDuoc(userId: string, ds: ViecNhac[]): ViecNhac[] {
+	const sauTru = truKrIm(ds);
+	return ds.filter(
+		(v, i) => maCuaAnToan(userId, [sauTru[i] ?? v]).length === 1,
+	);
+}
+
 export async function lenLichNhac(
 	now = new Date(),
 	gom: typeof viecCanNhac = viecCanNhac,
@@ -209,10 +216,12 @@ export async function chayNhac(
 	});
 	const userId = nguoiCua(hang.subject);
 	const payload = parseNhacPayload(hang.payload);
-	const viec =
+	const viec = conMaDuoc(
+		userId,
 		(
 			await viecCanNhac(db, { now: new Date(), userId, cuaSo: "buoi-sang" })
-		).get(userId) ?? [];
+		).get(userId) ?? [],
+	);
 	if (viec.length === 0) return dong(task.id, "khong-viec");
 
 	const token = await zaloToken();
@@ -238,7 +247,7 @@ export async function chayNhac(
 		data: {
 			payload: {
 				...payload,
-				daGui: maCuaAnToan(userId, daGui),
+				daGui: daGui.map(maViec),
 				kenh: kenh.kenh,
 				lechKenh: kenh.lech,
 			},
