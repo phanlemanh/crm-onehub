@@ -62,7 +62,7 @@ export function ViecCuaToi() {
 		);
 	}
 	const du = q.data;
-	const rong = du.mo.length + du.daXong.length + du.daHuy.length === 0;
+	const rong = du.mo.length + du.soXong + du.soHuy === 0;
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="max-w-full overflow-x-auto">
@@ -104,12 +104,9 @@ export function ViecCuaToi() {
 					<div className="flex flex-wrap gap-2">
 						<DongGapViec
 							ds={du.daXong}
-							nhan={dien(m.daXong, { n: du.daXong.length })}
+							nhan={dien(m.daXong, { n: du.soXong })}
 						/>
-						<DongGapViec
-							ds={du.daHuy}
-							nhan={dien(m.daHuy, { n: du.daHuy.length })}
-						/>
+						<DongGapViec ds={du.daHuy} nhan={dien(m.daHuy, { n: du.soHuy })} />
 					</div>
 				</>
 			)}

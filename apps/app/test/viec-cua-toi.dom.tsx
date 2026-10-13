@@ -103,6 +103,8 @@ const DU_E7 = {
 	],
 	daXong: [viec("x", "2026-10-13", false, "XONG")],
 	daHuy: [viec("h", "2026-10-13", false, "HUY")],
+	soXong: 1,
+	soHuy: 1,
 	demNhom: { "giao-cho-toi": 4, "toi-giao": 1, "dang-theo-doi": 1 },
 };
 
@@ -228,6 +230,19 @@ describe("vc-man-co-viec", () => {
 		}
 	});
 
+	test("vc-man-co-viec: 51 việc xong — dòng gập đọc số đếm, không đếm danh sách đã cắt", async () => {
+		traLoi.set("viec.cuaToi", () => ({ ...DU_E7, soXong: 51, soHuy: 3 }));
+		await moTrang();
+		await cho(
+			() => document.querySelectorAll("[data-dong-gap] button").length === 2,
+			"hai dong gap",
+		);
+		const gap = [...document.querySelectorAll("[data-dong-gap] button")].map(
+			(b) => b.textContent,
+		);
+		expect(gap).toEqual(["Đã xong (51)", "Đã huỷ (3)"]);
+	});
+
 	test("vc-man-co-viec: đổi nhóm khi dữ liệu nhóm mới chưa về — chip vẫn còn, không hiện khung xương", async () => {
 		let xong: (() => void) | null = null;
 		const treo = new Promise<void>((r) => {
@@ -329,6 +344,8 @@ describe("vc-man-trang-thai", () => {
 			mo: [],
 			daXong: [],
 			daHuy: [],
+			soXong: 0,
+			soHuy: 0,
 			demNhom: { "giao-cho-toi": 0, "toi-giao": 0, "dang-theo-doi": 0 },
 		}));
 		await moTrang();

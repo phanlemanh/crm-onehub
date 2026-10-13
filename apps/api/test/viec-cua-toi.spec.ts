@@ -9,6 +9,7 @@ import {
 } from "bun:test";
 import { db } from "@crm/db";
 import { dauNgayVN } from "@crm/db/onboarding-nhac";
+import { VIEC } from "@crm/db/viec";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { dashboardSummaryOutput } from "../src/dashboard/dashboard.contracts";
 import { viecCuaToiNhomOutput } from "../src/viec/viec.contracts";
@@ -181,6 +182,46 @@ describe("vc-cua-toi", () => {
 			);
 			expect(ra.mo.find((v) => v.id === hom.id)?.quaHan).toBe(true);
 			expect(ra.mo.find((v) => v.id === mai.id)?.quaHan).toBe(false);
+		},
+		MA_TEST_MS,
+	);
+	test(
+		"vc-cua-toi: 51 việc xong — soXong đếm đủ 51, danh sách cắt 50 theo việc khép gần nhất",
+		async () => {
+			const luc = new Date("2026-10-14T09:00:00+07:00");
+			setSystemTime(luc);
+			const a = await nguoi("vc-kh-a", "member");
+			const tong = VIEC.tranKhep + 1;
+			await db.viec.createMany({
+				data: Array.from({ length: tong }, (_, i) => ({
+					tieuDe: `vc-kh xong ${i}`,
+					trangThai: "XONG" as const,
+					nguoiGiaoId: a.id,
+					nguoiThucHienId: a.id,
+					taoBoiId: a.id,
+					khepLuc: new Date(luc.getTime() + i * 60_000),
+				})),
+			});
+			await db.viec.createMany({
+				data: [0, 1].map((i) => ({
+					tieuDe: `vc-kh huy ${i}`,
+					trangThai: "HUY" as const,
+					nguoiGiaoId: a.id,
+					nguoiThucHienId: a.id,
+					taoBoiId: a.id,
+					khepLuc: luc,
+				})),
+			});
+			const ra = viecCuaToiNhomOutput.parse(
+				(await goi(app, "viec.cuaToi", "query", { nhom: "giao-cho-toi" }, a.id))
+					.data,
+			);
+			expect(ra.soXong).toBe(tong);
+			expect(ra.daXong.length).toBe(VIEC.tranKhep);
+			expect(ra.soHuy).toBe(2);
+			expect(ra.daHuy.length).toBe(2);
+			expect(ra.daXong[0]?.tieuDe).toBe(`vc-kh xong ${tong - 1}`);
+			expect(ra.daXong.some((v) => v.tieuDe === "vc-kh xong 0")).toBe(false);
 		},
 		MA_TEST_MS,
 	);

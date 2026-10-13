@@ -203,38 +203,45 @@ export class ViecService {
 		userId: string,
 	): Promise<ViecCuaToiNhomOutput> {
 		const now = new Date();
-		const doc = (trangThai: Prisma.ViecWhereInput, take?: number) =>
+		const loc = (
+			nhom: ViecCuaToiInput["nhom"],
+			trangThai: Prisma.ViecWhereInput,
+		) => ({
+			AND: [dieuKienNhom(nhom, userId), dieuKienXemViec(userId), trangThai],
+		});
+		const doc = (
+			trangThai: Prisma.ViecWhereInput,
+			orderBy: Prisma.ViecOrderByWithRelationInput[],
+			take?: number,
+		) =>
 			this.db.viec.findMany({
-				where: {
-					AND: [
-						dieuKienNhom(input.nhom, userId),
-						dieuKienXemViec(userId),
-						trangThai,
-					],
-				},
-				orderBy: [
-					{ hanNgay: { sort: "asc", nulls: "last" } },
-					{ taoLuc: "asc" },
-					{ id: "asc" },
-				],
+				where: loc(input.nhom, trangThai),
+				orderBy,
 				take,
 				select: CHON_VIEC,
 			});
-		const [mo, daXong, daHuy, dem] = await Promise.all([
-			doc({ trangThai: { in: [...TRANG_THAI_MO] } }),
-			doc({ trangThai: TrangThaiViec.XONG }, VIEC.tranKhep),
-			doc({ trangThai: TrangThaiViec.HUY }, VIEC.tranKhep),
+		const theoKhep: Prisma.ViecOrderByWithRelationInput[] = [
+			{ khepLuc: { sort: "desc", nulls: "last" } },
+			{ id: "asc" },
+		];
+		const moDem = { trangThai: { in: [...TRANG_THAI_MO] } };
+		const [mo, daXong, daHuy, soXong, soHuy, dem] = await Promise.all([
+			doc(moDem, [
+				{ hanNgay: { sort: "asc", nulls: "last" } },
+				{ taoLuc: "asc" },
+				{ id: "asc" },
+			]),
+			doc({ trangThai: TrangThaiViec.XONG }, theoKhep, VIEC.tranKhep),
+			doc({ trangThai: TrangThaiViec.HUY }, theoKhep, VIEC.tranKhep),
+			this.db.viec.count({
+				where: loc(input.nhom, { trangThai: TrangThaiViec.XONG }),
+			}),
+			this.db.viec.count({
+				where: loc(input.nhom, { trangThai: TrangThaiViec.HUY }),
+			}),
 			Promise.all(
 				NHOM_VIEC.map((nhom) =>
-					this.db.viec.count({
-						where: {
-							AND: [
-								dieuKienNhom(nhom, userId),
-								dieuKienXemViec(userId),
-								{ trangThai: { in: [...TRANG_THAI_MO] } },
-							],
-						},
-					}),
+					this.db.viec.count({ where: loc(nhom, moDem) }),
 				),
 			),
 		]);
@@ -242,6 +249,8 @@ export class ViecService {
 			mo: mo.map((v) => viecRa(v, now)),
 			daXong: daXong.map((v) => viecRa(v, now)),
 			daHuy: daHuy.map((v) => viecRa(v, now)),
+			soXong,
+			soHuy,
 			demNhom: {
 				"giao-cho-toi": dem[0] ?? 0,
 				"toi-giao": dem[1] ?? 0,

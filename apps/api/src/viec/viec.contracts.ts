@@ -116,6 +116,8 @@ export const viecCuaBanGhiOutput = z.object({
 });
 
 export const viecCuaToiNhomOutput = viecCuaBanGhiOutput.extend({
+	soXong: z.number().int(),
+	soHuy: z.number().int(),
 	demNhom: z.object({
 		"giao-cho-toi": z.number().int(),
 		"toi-giao": z.number().int(),
