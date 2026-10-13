@@ -29,6 +29,7 @@ import {
 import { DotMatrix } from "../src/components/dot-matrix";
 import { Heatmap } from "../src/components/heatmap";
 import { KaraLabel } from "../src/components/kara";
+import { KhungXuong } from "../src/components/khung-xuong";
 import { LocaleProvider } from "../src/components/locale-provider";
 import {
 	MessageScrollerButton,
@@ -381,6 +382,7 @@ const CA: Ca[] = [
 		),
 	},
 	{ ten: "SortableItem", ve: () => <SortableItem id="1" label="Tên cột" /> },
+	{ ten: "KhungXuong", ve: () => <KhungXuong hinh="bang" /> },
 	{
 		ten: "SkeletonSwap",
 		ve: () => (
