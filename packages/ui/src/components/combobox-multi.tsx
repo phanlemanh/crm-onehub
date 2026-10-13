@@ -15,6 +15,7 @@ import {
 	PopoverTrigger,
 } from "@crm/ui/components/popover";
 import { selectTriggerVariants } from "@crm/ui/components/select";
+import { cn } from "@crm/ui/lib/utils";
 import { ChevronDownIcon } from "lucide-react";
 import type * as React from "react";
 import { useState } from "react";
@@ -36,6 +37,7 @@ function ComboboxMulti({
 	max,
 	disabled,
 	translate,
+	className,
 	...props
 }: Omit<React.ComponentProps<"button">, "onChange" | "value" | "disabled"> & {
 	options: ComboboxMultiOption[];
@@ -77,7 +79,7 @@ function ComboboxMulti({
 					data-size="default"
 					data-placeholder={summary === "" ? "" : undefined}
 					translate={translate}
-					className={selectTriggerVariants()}
+					className={cn(selectTriggerVariants(), className)}
 					{...props}
 				>
 					<span data-slot="select-value">

@@ -3,6 +3,7 @@ import { act, useState } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { ComboboxMulti } from "../src/components/combobox-multi";
 import { LocaleProvider } from "../src/components/locale-provider";
+import { selectTriggerVariants } from "../src/components/select";
 
 let root: Root | null = null;
 let khung: HTMLElement | null = null;
@@ -100,5 +101,28 @@ describe("ComboboxMulti", () => {
 			throw new Error("combobox-multi: vuot max van chon duoc");
 		}
 		expect(lua("Alpha")?.getAttribute("aria-disabled")).toBe("false");
+	});
+
+	test("combobox-multi: className của chỗ gọi được ghép vào, không thay lớp nền của nút", () => {
+		khung = document.createElement("div");
+		document.body.appendChild(khung);
+		root = createRoot(khung);
+		act(() =>
+			root?.render(
+				<LocaleProvider locale="vi">
+					<ComboboxMulti
+						className="lop-cua-cho-goi"
+						onValuesChange={() => {}}
+						options={OPTIONS}
+						values={[]}
+					/>
+				</LocaleProvider>,
+			),
+		);
+		const nut = document.querySelector("[role=combobox]") as HTMLButtonElement;
+		expect(nut.classList.contains("lop-cua-cho-goi")).toBe(true);
+		for (const lop of selectTriggerVariants().split(/\s+/)) {
+			if (lop) expect(nut.classList.contains(lop)).toBe(true);
+		}
 	});
 });
