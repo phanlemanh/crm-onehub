@@ -100,6 +100,62 @@ const trongKhung = (t, chu) =>
 			: false;
 	}, chu);
 
+async function nhomCua(t, nhan, goc) {
+	return t.evaluate(
+		async ([n, g, menu, tieuDe, khoiPhuc]) => {
+			const vung = document.querySelector(g) ?? document.body;
+			const dangDung = [...vung.querySelectorAll("button")].some(
+				(b) => b.querySelector(".sr-only")?.textContent?.trim() === menu,
+			);
+			const nutGap = [...vung.querySelectorAll("button")].find((b) =>
+				(b.textContent ?? "").trim().startsWith(tieuDe),
+			);
+			if (nutGap && nutGap.getAttribute("aria-expanded") !== "true") {
+				nutGap.click();
+				await new Promise((r) => setTimeout(r, 400));
+			}
+			const daCat = [...vung.querySelectorAll("li")].some(
+				(li) =>
+					[...li.querySelectorAll("span")].some(
+						(sp) => (sp.textContent ?? "").trim() === n,
+					) &&
+					[...li.querySelectorAll("button")].some(
+						(b) => (b.textContent ?? "").trim() === khoiPhuc,
+					),
+			);
+			return { dangDung, daCat };
+		},
+		[
+			nhan,
+			goc,
+			VI.fields.moreFor(nhan),
+			VI.fields.archivedRow,
+			VI.fields.restore,
+		],
+	);
+}
+
+async function kiemNhomCat(t, nhan, goc, loi, buoc) {
+	await cho(1200);
+	const n = await nhomCua(t, nhan, goc);
+	if (n.dangDung || !n.daCat)
+		loi.push(
+			`man: truong khong sang nhom Da luu tru (${buoc}: dang dung ${n.dangDung}, da luu tru ${n.daCat})`,
+		);
+}
+
+async function kiemNhomVe(t, nhan, goc, loi, buoc) {
+	for (let lan = 0; lan < 20; lan += 1) {
+		const n = await nhomCua(t, nhan, goc);
+		if (n.dangDung && !n.daCat) return;
+		await cho(500);
+	}
+	const n = await nhomCua(t, nhan, goc);
+	loi.push(
+		`man: truong khong ve nhom dang dung (${buoc}: dang dung ${n.dangDung}, da luu tru ${n.daCat})`,
+	);
+}
+
 async function taoTruong(chu, so) {
 	return d.lam(chu.cookie, "fields.create", {
 		entity: "COMPANY",
@@ -178,7 +234,9 @@ try {
 			await choToastCat(t, f.label);
 			if ((await soHopHoi(t)) !== 0) loi.push("menu dong van mo hop hoi lai");
 			await chup(t, "ltk-toast-1440.png");
+			await kiemNhomCat(t, f.label, "main", loi, "buoc 1");
 			await hoanTac(t, chu, f, loi, "buoc 1");
+			await kiemNhomVe(t, f.label, "main", loi, "buoc 1");
 			await choThay(
 				t,
 				(c) =>
@@ -222,7 +280,9 @@ try {
 			if (!(await trongKhung(t, VI.sheet.hoanTac)))
 				loi.push("nut Hoan tac ngoai khung nhin o 390");
 			await chup(t, "ltk-toast-390.png");
+			await kiemNhomCat(t, f.label, "main", loi, "buoc 2");
 			await hoanTac(t, chu, f, loi, "buoc 2");
+			await kiemNhomVe(t, f.label, "main", loi, "buoc 2");
 			await t.close();
 			d.dat(2, loi.length === 0, loi.join(" · "));
 		});
@@ -258,7 +318,10 @@ try {
 				);
 			}
 			await choToastCat(t, f.label);
+			if ((await soHopHoi(t)) !== 0) loi.push("ngan van mo hop hoi lai");
+			await kiemNhomCat(t, f.label, NGAN, loi, "buoc 3");
 			await hoanTac(t, chu, f, loi, "buoc 3");
+			await kiemNhomVe(t, f.label, NGAN, loi, "buoc 3");
 			const conNgan = await t.evaluate(
 				(sel) => document.querySelector(sel) !== null,
 				NGAN,
