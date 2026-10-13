@@ -739,3 +739,617 @@ index 000000000..49e143113
 lenh-dung-do-khong-ai-thay:E5 bo-build-khoi-pre-push: that dat, dot bien bat — go build khoi danh sach task cua pre-push thi dieu 3 do
 ```
 
+## khoa-con-bat-xa-tran:E3 — sua-rang
+
+Lý do: do san lo o luot ghim 13/10: chuoi dich cua dot bien con-thanh-vien ghim hai tab, spec da thut them mot tab sau b703e8bef nen chuoi xuat hien 0 lan; rang nay tu lay thut le tu dong doi chung REST that cua spec, y do khong doi (E3 va E6 chung mot lenh)
+
+Căn cứ: `b703e8bef`
+
+Trước (mốc nền):
+```
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.kcb_con_thanh_vien
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "apps/api/src/trpc/middlewares/**"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+      - ".github/workflows/ci.yml"
+    expected: |
+      Cung khung E2: (a) ban sao nguyen ven -> ma 0; (b) ban sao bo dong
+      `await db.member.delete(...)` trong khoa-con-bat (khoa thuoc nguoi VAN la thanh vien) ->
+      ma khac 0 VA dau ra co DONG LOI "error: tRPC: khoa con bat cua nguoi ngoai van qua duoc".
+      Dong can bo khong tim thay -> ma 2.
+```
+
+Sau (HEAD):
+```
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.kcb_con_thanh_vien
+    paths:
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+      - "apps/api/src/trpc/middlewares/**"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+      - ".github/workflows/ci.yml"
+    expected: |
+      Cung khung E2: (a) ban sao nguyen ven -> ma 0; (b) ban sao bo dong
+      `await db.member.delete(...)` trong khoa-con-bat (khoa thuoc nguoi VAN la thanh vien) ->
+      ma khac 0 VA dau ra co DONG LOI "error: tRPC: khoa con bat cua nguoi ngoai van qua duoc".
+      Dong can bo khong tim thay -> ma 2.
+```
+
+Diff `_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs`:
+```
+diff --git a/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs b/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs
+index 511f261a2..dba8f6357 100644
+--- a/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs
++++ b/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs
+@@ -15,8 +15,10 @@ const DAY_KET_QUA =
+ 	"kq.push(...(await Promise.all(ds.slice(dau, dau + lo).map(fn))));";
+ const GOI_TRPC = "\treturn theoLo(\n\t\tsoThuTuc(),\n";
+ const GOI_REST = "\treturn theoLo(\n\t\tduongRest(),\n";
+-const XOA_MEMBER_KHOA_CON_BAT =
+-	'\t\texpect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);\n\t\tawait db.member.delete({ where: { id: await memberId(bi) } });\n';
++const DOI_CHUNG_REST = 'expect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);';
++const LUI_REST =
++	new RegExp(`^([\\t ]*)${DOI_CHUNG_REST.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m").exec(readFileSync(SPEC, "utf8"))?.[1] ?? "\t\t";
++const XOA_MEMBER_KHOA_CON_BAT = `${LUI_REST}${DOI_CHUNG_REST}\n${LUI_REST}await db.member.delete({ where: { id: await memberId(bi) } });\n`;
+ const LECH_TRPC = "ma tran tRPC song song lech danh sach thu tuc";
+ const LECH_REST = "ma tran REST song song lech danh sach duong";
+ const LOT_TRPC = "tRPC: khoa con bat cua nguoi ngoai van qua duoc";
+@@ -99,7 +101,7 @@ const NHOM = {
+ 			{
+ 				ten: "con-thanh-vien",
+ 				tim: XOA_MEMBER_KHOA_CON_BAT,
+-				thay: '\t\texpect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);\n',
++				thay: `${LUI_REST}${DOI_CHUNG_REST}\n`,
+ 				thongDiep: LOT_TRPC,
+ 				thongDiepLangGieng: LECH_TRPC,
+ 			},
+```
+
+Đột biến khai:
+```
+[
+  {
+    "ten": "dot-bien-con-thanh-vien-bi-bat",
+    "kieu": "lenh-chua",
+    "lenh": [
+      "bun",
+      "run",
+      "test",
+      "--",
+      "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"
+    ],
+    "chua": "OK dot bien con-thanh-vien: ma 1",
+    "thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim"
+  }
+]
+```
+
+Đầu ra chieu-do.mjs cho dòng này:
+```
+khoa-con-bat-xa-tran:E3 dot-bien-con-thanh-vien-bi-bat: that dat, dot bien bat — pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim
+```
+
+## khoa-con-bat-xa-tran:E6 — sua-rang
+
+Lý do: do san lo o luot ghim 13/10: chuoi dich cua dot bien con-thanh-vien ghim hai tab, spec da thut them mot tab sau b703e8bef nen chuoi xuat hien 0 lan; rang nay tu lay thut le tu dong doi chung REST that cua spec, y do khong doi (E3 va E6 chung mot lenh)
+
+Căn cứ: `b703e8bef`
+
+Trước (mốc nền):
+```
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.kcb_con_thanh_vien
+    paths:
+      - "_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+    expected: |
+      Cung lan chay voi E3, tren CUNG dau ra cua ban sao dot bien con-thanh-vien (fixture that,
+      khong dung tay): thong diep cua khang dinh ben canh
+      "ma tran tRPC song song lech danh sach thu tuc" PHAI co mat trong dau ra (bun in no trong
+      khung ma nguon quanh dong do — chung minh ca nay la bay that) VA bo khop dong loi PHAI
+      KHONG nhan no. Thieu ve thu nhat -> do "thong diep lang gieng trong dau ra VANG" (tu kiem
+      khong ket luan duoc); ve thu hai khop -> do "KHOP NHAM". Doi chung duong cung dau ra: bo
+      khop NHAN "tRPC: khoa con bat cua nguoi ngoai van qua duoc" (E3).
+```
+
+Sau (HEAD):
+```
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.kcb_con_thanh_vien
+    paths:
+      - "_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+      - "_acceptance/khoa-con-bat-xa-tran/rang/chung.mjs"
+      - "apps/api/test/go-la-cat-quyen.spec.ts"
+    expected: |
+      Cung lan chay voi E3, tren CUNG dau ra cua ban sao dot bien con-thanh-vien (fixture that,
+      khong dung tay): thong diep cua khang dinh ben canh
+      "ma tran tRPC song song lech danh sach thu tuc" PHAI co mat trong dau ra (bun in no trong
+      khung ma nguon quanh dong do — chung minh ca nay la bay that) VA bo khop dong loi PHAI
+      KHONG nhan no. Thieu ve thu nhat -> do "thong diep lang gieng trong dau ra VANG" (tu kiem
+      khong ket luan duoc); ve thu hai khop -> do "KHOP NHAM". Doi chung duong cung dau ra: bo
+      khop NHAN "tRPC: khoa con bat cua nguoi ngoai van qua duoc" (E3).
+```
+
+Diff `_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs`:
+```
+diff --git a/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs b/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs
+index 511f261a2..dba8f6357 100644
+--- a/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs
++++ b/_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs
+@@ -15,8 +15,10 @@ const DAY_KET_QUA =
+ 	"kq.push(...(await Promise.all(ds.slice(dau, dau + lo).map(fn))));";
+ const GOI_TRPC = "\treturn theoLo(\n\t\tsoThuTuc(),\n";
+ const GOI_REST = "\treturn theoLo(\n\t\tduongRest(),\n";
+-const XOA_MEMBER_KHOA_CON_BAT =
+-	'\t\texpect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);\n\t\tawait db.member.delete({ where: { id: await memberId(bi) } });\n';
++const DOI_CHUNG_REST = 'expect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);';
++const LUI_REST =
++	new RegExp(`^([\\t ]*)${DOI_CHUNG_REST.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m").exec(readFileSync(SPEC, "utf8"))?.[1] ?? "\t\t";
++const XOA_MEMBER_KHOA_CON_BAT = `${LUI_REST}${DOI_CHUNG_REST}\n${LUI_REST}await db.member.delete({ where: { id: await memberId(bi) } });\n`;
+ const LECH_TRPC = "ma tran tRPC song song lech danh sach thu tuc";
+ const LECH_REST = "ma tran REST song song lech danh sach duong";
+ const LOT_TRPC = "tRPC: khoa con bat cua nguoi ngoai van qua duoc";
+@@ -99,7 +101,7 @@ const NHOM = {
+ 			{
+ 				ten: "con-thanh-vien",
+ 				tim: XOA_MEMBER_KHOA_CON_BAT,
+-				thay: '\t\texpect(restTruoc.status, "doi chung REST: khoa doc duoc").toBe(200);\n',
++				thay: `${LUI_REST}${DOI_CHUNG_REST}\n`,
+ 				thongDiep: LOT_TRPC,
+ 				thongDiepLangGieng: LECH_TRPC,
+ 			},
+```
+
+Đột biến khai:
+```
+[
+  {
+    "ten": "dot-bien-con-thanh-vien-bi-bat",
+    "kieu": "lenh-chua",
+    "lenh": [
+      "bun",
+      "run",
+      "test",
+      "--",
+      "bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"
+    ],
+    "chua": "OK dot bien con-thanh-vien: ma 1",
+    "thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim"
+  }
+]
+```
+
+Đầu ra chieu-do.mjs cho dòng này:
+```
+khoa-con-bat-xa-tran:E6 dot-bien-con-thanh-vien-bi-bat: that dat, dot bien bat — pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim
+```
+
+## lenh-dung-do-khong-ai-thay:E2 — sua-rang
+
+Lý do: do san lo o luot ghim 13/10: neo dan so 26 file goi getLocale la anh chup cay cua vong cu, nay 54 — thuoc tu het han. Rang quet tren cay xuat ra tai cap sha gop eeb6ea30 cua vong (luat F10: thuoc «vong nay» neo cap sha gop), neo 26 dung o moc do
+
+Căn cứ: `eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1`
+
+Trước (mốc nền):
+```
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ld_khong_doc_ngoai_suspense
+    paths:
+      - "apps/app/app/**"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+    expected: |
+      Dan so sinh TU DIA: quet `apps/app/app/**` tim moi file goi `getLocale`.
+      So file tim duoc phai bang NEO 25 ghim trong hop dong — lech len hay xuong
+      deu la ma 2. Dan so khong duoc lay bang chinh ket qua cua phep do.
+      Do KHA NANG DI TOI, khong do cho dung tu vung: tu ham xuat mac dinh, bam
+      tham chieu JSX MOT CHANG sang component con trong cung file; MOI duong tu
+      ham xuat mac dinh toi mot loi goi `getLocale()` phai di qua mot ranh
+      `<Suspense>`. Luat "nam trong than ham xuat mac dinh" la SAI cho vong nay:
+      chinh cach sua dua loi goi sang mot ham anh em NGOAI than ay, nen luat tu
+      vung se xanh oan tren dung ca no phai bat.
+      Doc bang AST, khong bang tim chuoi.
+      In ba con so: file co goi getLocale · file dat · neo.
+      Chieu do: cay mot loi goi NGOAI ranh Suspense vao ban sao -> ma 1, neu
+      `file:dong`. Chieu xanh dong thoi phai chung: mot man da sua (loi goi nam
+      trong component con duoc Suspense boc) van DAT — mau duong ghim ten.
+```
+
+Sau (HEAD):
+```
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.ld_khong_doc_ngoai_suspense
+    paths:
+      - "apps/app/app/**"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+    expected: |
+      Dan so sinh TU CAY TAI CAP SHA GOP eeb6ea30 (git archive; F24 13/10 — thuoc «vong nay» neo cap sha gop, khong neo HEAD): quet `apps/app/app/**` tim moi file goi `getLocale`.
+      So file tim duoc phai bang NEO 25 ghim trong hop dong — lech len hay xuong
+      deu la ma 2. Dan so khong duoc lay bang chinh ket qua cua phep do.
+      Do KHA NANG DI TOI, khong do cho dung tu vung: tu ham xuat mac dinh, bam
+      tham chieu JSX MOT CHANG sang component con trong cung file; MOI duong tu
+      ham xuat mac dinh toi mot loi goi `getLocale()` phai di qua mot ranh
+      `<Suspense>`. Luat "nam trong than ham xuat mac dinh" la SAI cho vong nay:
+      chinh cach sua dua loi goi sang mot ham anh em NGOAI than ay, nen luat tu
+      vung se xanh oan tren dung ca no phai bat.
+      Doc bang AST, khong bang tim chuoi.
+      In ba con so: file co goi getLocale · file dat · neo.
+      Chieu do: cay mot loi goi NGOAI ranh Suspense vao ban sao -> ma 1, neu
+      `file:dong`. Chieu xanh dong thoi phai chung: mot man da sua (loi goi nam
+      trong component con duoc Suspense boc) van DAT — mau duong ghim ten.
+```
+
+Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs`:
+```
+diff --git a/_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs b/_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs
+index 722885e02..78077d504 100644
+--- a/_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs
++++ b/_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs
+@@ -1,4 +1,6 @@
+-import { readdirSync, readFileSync, statSync } from "node:fs";
++import { execFileSync } from "node:child_process";
++import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
++import { tmpdir } from "node:os";
+ import { dirname, join, relative, resolve } from "node:path";
+ import { fileURLToPath } from "node:url";
+ import ts from "typescript";
+@@ -8,7 +10,18 @@ const MAC_DINH = resolve(RANG, "..", "..", "..");
+ 
+ const doi = process.argv.slice(2);
+ const iGoc = doi.indexOf("--goc");
+-const GOC = iGoc === -1 ? MAC_DINH : resolve(doi[iGoc + 1]);
++const MOC_GOP = "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1";
++
++function cayTaiMocGop() {
++	const thuMuc = mkdtempSync(join(tmpdir(), "ld-moc-gop-"));
++	process.on("exit", () => rmSync(thuMuc, { recursive: true, force: true }));
++	const tar = join(thuMuc, "cay.tar");
++	execFileSync("git", ["archive", "--output", tar, MOC_GOP, "apps/app/app"], { cwd: MAC_DINH });
++	execFileSync("tar", ["-xf", tar, "-C", thuMuc]);
++	return thuMuc;
++}
++
++const GOC = iGoc === -1 ? cayTaiMocGop() : resolve(doi[iGoc + 1]);
+ const iNeo = doi.indexOf("--neo");
+ const NEO = iNeo === -1 ? 26 : Number(doi[iNeo + 1]);
+ const LAYOUT_GOC = "apps/app/app/layout.tsx";
+```
+
+Đột biến khai:
+```
+[
+  {
+    "ten": "bo-suspense-o-layout",
+    "kieu": "lenh-goc",
+    "rang": "_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs",
+    "sha": "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+    "thu_muc": "apps/app/app",
+    "tep": "apps/app/app/layout.tsx",
+    "thay_cap": [
+      [
+        "<Suspense fallback={null}>",
+        "<>"
+      ],
+      [
+        "</Suspense>",
+        "</>"
+      ]
+    ],
+    "thong_diep": "bo ranh Suspense cua root layout tren cay moc gop thi rang do"
+  }
+]
+```
+
+Đầu ra chieu-do.mjs cho dòng này:
+```
+lenh-dung-do-khong-ai-thay:E2 bo-suspense-o-layout: that dat, dot bien bat — bo ranh Suspense cua root layout tren cay moc gop thi rang do
+```
+
+## lenh-dung-do-khong-ai-thay:E3 — sua-rang
+
+Lý do: do san lo o luot ghim 13/10: rang so diff tu sha ghim toi HEAD nen moi PR sau cham apps/app deu lam no do — thuoc «vong nay» tu het han. Rang so dung cap sha gop eeb6ea30^1..eeb6ea30 (luat F10); o cap do diff chi co layout.tsx
+
+Căn cứ: `eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1`
+
+Trước (mốc nền):
+```
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.ld_man_khong_doi
+    paths:
+      - "apps/app/**"
+    expected: |
+      Dem chinh cai diff: `git diff --name-only <sha ghim> -- apps/app` phai liet
+      DUNG MOT file, va do la `apps/app/app/layout.tsx`.
+      Vi sao phep do nay manh hon phep so 15 man cua ban truoc: ban va nay LA mot
+      file, nen "khong man nao doi mot ky tu" do duoc bang chinh danh sach file doi,
+      khong can suy qua kho chuoi.
+      File nao khac -> ma 1, neu ten file.
+      Khong file nao doi -> ma 2: ban va chua co thi phep do khong con nghia.
+```
+
+Sau (HEAD):
+```
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.ld_man_khong_doi
+    paths:
+      - "apps/app/**"
+    expected: |
+      Dem chinh cai diff: `git diff --name-only eeb6ea30^1 eeb6ea30 -- apps/app` (cap sha gop cua vong; F24 13/10) phai liet
+      DUNG MOT file, va do la `apps/app/app/layout.tsx`.
+      Vi sao phep do nay manh hon phep so 15 man cua ban truoc: ban va nay LA mot
+      file, nen "khong man nao doi mot ky tu" do duoc bang chinh danh sach file doi,
+      khong can suy qua kho chuoi.
+      File nao khac -> ma 1, neu ten file.
+      Khong file nao doi -> ma 2: ban va chua co thi phep do khong con nghia.
+```
+
+Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs`:
+```
+diff --git a/_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs b/_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs
+index 65f2af4d9..e9f03d7e3 100644
+--- a/_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs
++++ b/_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs
+@@ -3,42 +3,41 @@ import { dirname, resolve } from "node:path";
+ import { fileURLToPath } from "node:url";
+ 
+ const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+-const SHA = "3c97e759a6c87bc8b6f0621d3854cb486728b442";
++export const MOC_GOP = "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1";
+ const DUOC_PHEP = "apps/app/app/layout.tsx";
+ 
+-const doi = process.argv.slice(2);
+-const iGoc = doi.indexOf("--goc");
+-const goc = iGoc === -1 ? GOC : resolve(doi[iGoc + 1]);
++export function kiemDoi(danhSach) {
++	const ds = String(danhSach).split("\n").filter(Boolean);
++	const la = ds.filter((d) => d !== DUOC_PHEP);
++	if (la.length > 0)
++		return { ma: 1, dat: false, ds, chu: `${la.length} file ngoai ${DUOC_PHEP} da doi: ${la.join(", ")}` };
++	if (ds.length === 0) return { ma: 2, dat: false, ds, chu: "khong file nao doi — ban va chua co, phep do nay khong con nghia" };
++	return { ma: 0, dat: true, ds, chu: `dung mot file doi, va do la ${DUOC_PHEP}` };
++}
+ 
+-let ra;
+-try {
+-	ra = execFileSync("git", ["diff", "--name-only", SHA, "--", "apps/app"], {
++export function diffCapGop(goc = GOC) {
++	return execFileSync("git", ["diff", "--name-only", `${MOC_GOP}^1`, MOC_GOP, "--", "apps/app"], {
+ 		cwd: goc,
+ 		encoding: "utf8",
+ 	});
+-} catch (e) {
+-	console.error(`MA 2: khong so duoc voi sha ghim — ${e.message}`);
+-	process.exit(2);
+ }
+ 
+-const doi_ = ra.split("\n").filter(Boolean);
+-console.log(`file cua apps/app doi so voi sha ghim: ${doi_.length}`);
+-for (const d of doi_) console.log(`  ${d}`);
+-
+-const la = doi_.filter((d) => d !== DUOC_PHEP);
+-if (la.length > 0) {
+-	console.error(
+-		`DO: ${la.length} file ngoai ${DUOC_PHEP} da doi — man hoac kho chuoi bi dung, nen chu tren man co the doi:`,
+-	);
+-	for (const d of la) console.error(`  ${d}`);
+-	process.exit(1);
++if (import.meta.main) {
++	const doi = process.argv.slice(2);
++	const iGoc = doi.indexOf("--goc");
++	const goc = iGoc === -1 ? GOC : resolve(doi[iGoc + 1]);
++	let ra;
++	try {
++		ra = diffCapGop(goc);
++	} catch (e) {
++		console.error(`MA 2: khong so duoc cap sha gop ${MOC_GOP.slice(0, 9)}^1..${MOC_GOP.slice(0, 9)} — ${e.message}`);
++		process.exit(2);
++	}
++	const kq = kiemDoi(ra);
++	console.log(`file cua apps/app doi trong cap gop ${MOC_GOP.slice(0, 9)}^1..${MOC_GOP.slice(0, 9)}: ${kq.ds.length}`);
++	for (const d of kq.ds) console.log(`  ${d}`);
++	if (kq.ma === 1) console.error(`DO: ${kq.chu} — man hoac kho chuoi bi dung, nen chu tren man co the doi`);
++	else if (kq.ma === 2) console.error(`MA 2: ${kq.chu}`);
++	else console.log(`XANH: ${kq.chu}.`);
++	process.exit(kq.ma);
+ }
+-
+-if (doi_.length === 0) {
+-	console.error(
+-		`MA 2: khong file nao doi — ban va chua co, phep do nay khong con nghia`,
+-	);
+-	process.exit(2);
+-}
+-
+-console.log(`XANH: dung mot file doi, va do la ${DUOC_PHEP}.`);
+```
+
+Đột biến khai:
+```
+[
+  {
+    "ten": "them-mot-man-vao-diff",
+    "kieu": "ham-git",
+    "mo_dun": "_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs",
+    "ham": "kiemDoi",
+    "git": [
+      "diff",
+      "--name-only",
+      "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1^1",
+      "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+      "--",
+      "apps/app"
+    ],
+    "them": "apps/app/app/page.tsx",
+    "thong_diep": "diff co them mot file ngoai layout.tsx thi rang do"
+  }
+]
+```
+
+Đầu ra chieu-do.mjs cho dòng này:
+```
+lenh-dung-do-khong-ai-thay:E3 them-mot-man-vao-diff: that dat, dot bien bat — diff co them mot file ngoai layout.tsx thi rang do
+```
+
+## lenh-dung-do-khong-ai-thay:E8 — sua-rang
+
+Lý do: do san lo o luot ghim 13/10: spawnSync khong khai maxBuffer nen `bun run test` vuot 1 MiB -> ENOBUFS; menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu (nay 20), tu het han — y «vong ay khong doi gi ngoai layout.tsx» da do E3 o cap sha gop. Khai maxBuffer, bo menh de dem canh bao; bon lenh van phai ma 0
+
+Căn cứ: `eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1`
+
+Trước (mốc nền):
+```
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ld_bon_lenh_cu
+    paths:
+      - "apps/app/**"
+      - "packages/**"
+      - "apps/api/**"
+      - "apps/agent/**"
+    expected: |
+      Chay `bun run test`, `check-types`, `lint`, `lint:slop`, in ma thoat tung lenh.
+      Xanh: ca bon ma 0, VA `apps/app` ra dung ba canh bao lint — so ba la con so
+      GHIM cua kho, lech len hay xuong deu la do.
+      Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
+```
+
+Sau (HEAD):
+```
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.ld_bon_lenh_cu
+    paths:
+      - "apps/app/**"
+      - "packages/**"
+      - "apps/api/**"
+      - "apps/agent/**"
+    expected: |
+      Chay `bun run test`, `check-types`, `lint`, `lint:slop`, in ma thoat tung lenh.
+      Xanh: ca bon ma 0. (Menh de «apps/app ra dung ba canh bao lint» bo 13/10, F24: so ghim cua
+      vong cu tu het han khi kho lon; y «vong ay khong doi gi ngoai layout.tsx» do E3 o cap sha gop.)
+      Mot lenh khac 0 -> ma 1, neu ten lenh va ma.
+```
+
+Diff `_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs`:
+```
+diff --git a/_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs b/_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs
+index fd73b2b09..4eb66bf06 100644
+--- a/_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs
++++ b/_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs
+@@ -1,9 +1,8 @@
+ import { spawnSync } from "node:child_process";
+-import { dirname, join, resolve } from "node:path";
++import { dirname, resolve } from "node:path";
+ import { fileURLToPath } from "node:url";
+ 
+ const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+-const CANH_BAO_GHIM = 3;
+ 
+ const LENH = [
+ 	["test", ["bun", ["run", "test"]]],
+@@ -12,37 +11,30 @@ const LENH = [
+ 	["lint:slop", ["bun", ["run", "lint:slop"]]],
+ ];
+ 
+-let hong = 0;
+-for (const [ten, [lenh, doi]] of LENH) {
+-	const ra = spawnSync(lenh, doi, { cwd: GOC, encoding: "utf8" });
+-	if (ra.error) {
+-		console.error(`MA 2: khong chay duoc \`${ten}\` — ${ra.error.message}`);
+-		process.exit(2);
+-	}
+-	console.log(`${ten}: ma ${ra.status}`);
+-	if (ra.status !== 0) hong += 1;
+-}
+-
+-const lint = spawnSync("bun", ["run", "lint"], {
+-	cwd: join(GOC, "apps", "app"),
+-	encoding: "utf8",
+-});
+-const khop = `${lint.stdout}${lint.stderr}`.match(/Found (\d+) warning/);
+-if (!khop) {
+-	console.error("MA 2: khong doc duoc so canh bao lint cua apps/app");
+-	process.exit(2);
++export function danhGia(ketQua) {
++	const ds = JSON.parse(String(ketQua));
++	const hong = ds.filter((k) => k.ma !== 0);
++	if (ds.length !== LENH.length) return { dat: false, chu: `chay ${ds.length} lenh, ky vong ${LENH.length}` };
++	return hong.length
++		? { dat: false, chu: `${hong.length} lenh chung cu khong ma 0: ${hong.map((k) => `${k.ten}=${k.ma}`).join(", ")}` }
++		: { dat: true, chu: "bon lenh chung cu deu ma 0" };
+ }
+-const soCanhBao = Number(khop[1]);
+-console.log(`apps/app canh bao lint: ${soCanhBao} · ghim: ${CANH_BAO_GHIM}`);
+ 
+-if (hong > 0) {
+-	console.error(`DO: ${hong} lenh chung cu khong ma 0.`);
+-	process.exit(1);
+-}
+-if (soCanhBao !== CANH_BAO_GHIM) {
+-	console.error(
+-		`DO: apps/app ra ${soCanhBao} canh bao lint, ghim la ${CANH_BAO_GHIM} — lech len hay xuong deu la do.`,
+-	);
+-	process.exit(1);
++if (import.meta.main) {
++	const ketQua = [];
++	for (const [ten, [lenh, doi]] of LENH) {
++		const ra = spawnSync(lenh, doi, { cwd: GOC, encoding: "utf8", maxBuffer: 512 * 1024 * 1024 });
++		if (ra.error) {
++			console.error(`MA 2: khong chay duoc \`${ten}\` — ${ra.error.message}`);
++			process.exit(2);
++		}
++		console.log(`${ten}: ma ${ra.status}`);
++		ketQua.push({ ten, ma: ra.status });
++	}
++	const kq = danhGia(JSON.stringify(ketQua));
++	if (!kq.dat) {
++		console.error(`DO: ${kq.chu}.`);
++		process.exit(1);
++	}
++	console.log(`XANH: ${kq.chu}.`);
+ }
+-console.log("XANH: bon lenh chung cu deu ma 0, canh bao lint dung ghim.");
+```
+
+Đột biến khai:
+```
+[
+  {
+    "ten": "mot-lenh-cu-do",
+    "kieu": "ham-chuoi",
+    "mo_dun": "_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs",
+    "ham": "danhGia",
+    "vao": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 0}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
+    "vao_dot": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 1}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
+    "thong_diep": "mot trong bon lenh cu khong ma 0 thi rang do"
+  }
+]
+```
+
+Đầu ra chieu-do.mjs cho dòng này:
+```
+lenh-dung-do-khong-ai-thay:E8 mot-lenh-cu-do: that dat, dot bien bat — mot trong bon lenh cu khong ma 0 thi rang do
+```
+
