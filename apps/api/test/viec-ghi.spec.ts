@@ -1,7 +1,13 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { db, TrangThaiViec } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
-import { type DoThiViec, hanhDong, VIEC } from "@crm/db/viec";
+import {
+	type DoThiViec,
+	hanhDong,
+	parseVetViec,
+	type VetViec,
+	VIEC,
+} from "@crm/db/viec";
 import type { NestExpressApplication } from "@nestjs/platform-express";
 import { viecCuaBanGhiOutput, viecVetOutput } from "../src/viec/viec.contracts";
 import { donDep, moXuong } from "./support/ke-hoach-gieo";
@@ -400,28 +406,80 @@ describe("vc-sua", () => {
 				nguoiTheoDoiIds: [w.id, y.id],
 				gan: [{ loai: "deal", id: dealId }],
 			});
+			const ng = (n: { id: string; name: string }) => ({
+				id: n.id,
+				ten: n.name,
+			});
 			const duoc: [
 				string,
 				string,
 				string,
 				Record<string, string | null>,
-				string,
+				VetViec,
 			][] = [
 				[
-					"doiNguoi",
+					"doi-nguoi-thuc-hien",
 					a.id,
 					"viec.doiNguoiThucHien",
 					{ nguoiThucHienId: c.id },
-					"doi-nguoi-thuc-hien",
+					{ loai: "doi-nguoi-thuc-hien", truoc: ng(b), sau: ng(c) },
 				],
-				["tieuDe", a.id, "viec.sua", { tieuDe: "vc-sua moi" }, "doi-noi-dung"],
-				["han A", a.id, "viec.sua", { hanNgay: "2026-11-01" }, "doi-han"],
-				["theo X", a.id, "viec.theoDoi", { userId: x.id }, "theo-doi"],
-				["han C", c.id, "viec.sua", { hanNgay: "2026-11-02" }, "doi-han"],
-				["bo W", w.id, "viec.boTheoDoi", {}, "bo-theo-doi"],
-				["Q tu theo", q.id, "viec.theoDoi", {}, "theo-doi"],
+				[
+					"doi-noi-dung",
+					a.id,
+					"viec.sua",
+					{ tieuDe: "vc-sua moi" },
+					{
+						loai: "doi-noi-dung",
+						truoc: { tieuDe: "vc-sua goc", moTa: null },
+						sau: { tieuDe: "vc-sua moi", moTa: null },
+					},
+				],
+				[
+					"doi-han A",
+					a.id,
+					"viec.sua",
+					{ hanNgay: "2026-11-01" },
+					{
+						loai: "doi-han",
+						truoc: { hanNgay: null },
+						sau: { hanNgay: "2026-11-01" },
+					},
+				],
+				[
+					"theo-doi X",
+					a.id,
+					"viec.theoDoi",
+					{ userId: x.id },
+					{ loai: "theo-doi", truoc: null, sau: ng(x) },
+				],
+				[
+					"doi-han C",
+					c.id,
+					"viec.sua",
+					{ hanNgay: "2026-11-02" },
+					{
+						loai: "doi-han",
+						truoc: { hanNgay: "2026-11-01" },
+						sau: { hanNgay: "2026-11-02" },
+					},
+				],
+				[
+					"bo-theo-doi W",
+					w.id,
+					"viec.boTheoDoi",
+					{},
+					{ loai: "bo-theo-doi", truoc: ng(w), sau: null },
+				],
+				[
+					"theo-doi Q",
+					q.id,
+					"viec.theoDoi",
+					{},
+					{ loai: "theo-doi", truoc: null, sau: ng(q) },
+				],
 			];
-			for (const [buoc, ai, ten, input, loai] of duoc) {
+			for (const [buoc, ai, ten, input, mong] of duoc) {
 				const truoc = await demVet(v.id);
 				const r = await goi(app, ten, "mutation", { id: v.id, ...input }, ai);
 				const vet = await db.viecVet.findFirst({
@@ -431,8 +489,8 @@ describe("vc-sua", () => {
 				if (
 					r.status !== 200 ||
 					(await demVet(v.id)) !== truoc + 1 ||
-					vet?.loai !== loai ||
-					(vet.truoc === null && vet.sau === null)
+					!vet ||
+					!Bun.deepEquals(parseVetViec(vet), mong)
 				) {
 					throw new Error(`vc: sua ${buoc} vet sai`);
 				}
@@ -462,9 +520,11 @@ describe("vc-sua", () => {
 			const lucs = dong.map((d) => Date.parse(d.luc));
 			const giam = lucs.every((l, i) => i === 0 || l <= (lucs[i - 1] ?? l));
 			if (
-				dong.length !== 8 ||
+				JSON.stringify(dong.map((d) => d.loai)) !==
+					JSON.stringify(
+						["tao", ...duoc.map(([, , , , m]) => m.loai)].reverse(),
+					) ||
 				!giam ||
-				dong.at(-1)?.loai !== "tao" ||
 				dong.some((d) => !d.nguoi?.name || !d.nguon)
 			) {
 				throw new Error("vc: lich su sai thu tu");
