@@ -163,18 +163,19 @@ function lenh(cwd, cmd) {
 const coGhim = (ra, ghim) =>
 	ra.split("\n").some((d) => d.startsWith("error:") && d.includes(ghim));
 
-const banSao = dungBanSao("vc");
-for (const [nhom, ten] of [
-	["apps", "api"],
-	["apps", "agent"],
-	["packages", "validation"],
-]) {
-	goiCuaBanSao(banSao, nhom, ten);
-}
+let banSao = null;
 const xanh = new Map();
 let daChay = 0;
 const hong = [];
 try {
+	banSao = dungBanSao("vc");
+	for (const [nhom, ten] of [
+		["apps", "api"],
+		["apps", "agent"],
+		["packages", "validation"],
+	]) {
+		goiCuaBanSao(banSao, nhom, ten);
+	}
 	for (const [ten, tep, cu, moi, kiem] of CAP) {
 		daChay += 1;
 		for (const [cmd] of kiem) {
@@ -203,11 +204,11 @@ try {
 		}
 	}
 } catch (loi) {
-	goBanSao(banSao);
+	if (banSao !== null) goBanSao(banSao);
 	console.log(`KHONG DO DUOC: ${loi.message}`);
 	process.exit(loi instanceof KhongDo ? 2 : 1);
 }
-goBanSao(banSao);
+if (banSao !== null) goBanSao(banSao);
 for (const h of hong)
 	console.error(`${h.ten}\n--- truoc\n${h.truoc}\n--- sau\n${h.sau}`);
 if (daChay !== SO_CAP_KHAI) {
