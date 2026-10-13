@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 185d3de9ccb2da6e3c79b1fd4e10acc5ab6b3059
+verified_commit: 325a941ebc0a2d5558ddb1c1ba66cb49c3174390
 human_signoff: "Phan Le Manh 2026-10-13 — ký Cổng Bằng chứng trên vòng chấm 2 (12/12 eval đạt, 7/7 lệnh suite xanh, 0 phát hiện trong hợp đồng). Ngoài-1, 4, 5, 6, 7 ghi Known limits; Ngoài-2, 3, 8 chấp nhận, không sửa; đồng ý cắt; Treo phê hết"
 ---
 
@@ -201,3 +201,7 @@ none — mọi eval nhiều lượt đều đồng nhất (không eval nào ch�
 
 Round 1: các eval E1–E12 và bảy lệnh suite đều xanh, nhưng phản biện chỉ ra phép đo «không tràn ngang» của E10 đo trên phần tử display:contents nên luôn đạt. Trả về triển khai, nhát sửa S4 round 1 đổi man.mjs sang đo trên hộp thật, có chốt hộp và đối chứng đỏ.
 Round 2: chạy lại E10 qua mot-luot.sh (54 đúng, 0 sai, 6 ảnh đã mở bằng Read) và bảy lệnh suite trên cây 185d3de9c; E1–E9, E11, E12 mang sang từ round 1 vì delta không chạm paths của chúng. Verdict PASS.
+
+### Re-pin lần 1 — 2026-10-13, do gộp onehub 85c0e4cc9 (#386) trước khi gộp PR #384
+run_id: repin-20261013T085359Z-27298
+sha: 325a941ebc0a2d5558ddb1c1ba66cb49c3174390 · suites: 7 lệnh exit 0 · evals: 11/11 eval máy đạt kỳ vọng · ngoài làn máy: E10 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
