@@ -3,10 +3,10 @@ schema_version: 1
 slug: chep-viec-can-lam-cu
 feature: Việc cần làm cũ trên dòng thời gian thành Việc; Tác nhân giao việc bằng Việc
 owner: phanlemanh@gmail.com
-stage: discovery              # discovery | decided | archived
-decision:         # build | iterate | park | kill — người ký Cổng 0 điền
-decided_by: 
-decided_at:     # ISO UTC
+stage: decided              # discovery | decided | archived
+decision: build        # build | iterate | park | kill — người ký Cổng 0 điền
+decided_by: manh
+decided_at: 2026-10-13T08:28:58Z    # ISO UTC
 prototype:
   base_commit:     # điểm cắt nhánh proto khỏi nhánh chính — guard diffBase khi keep
   disposition:     # keep | archive
@@ -36,3 +36,9 @@ Bản ở hàng DA1b của lộ trình không khai ngưỡng (`bat_khi` vắng).
 - Có 30 tệp mã đọc hay ghi Activity loại TASK (API `activities.*`, `dashboard.service.ts`, Tác nhân `run-runtime.ts` · `ma-lech.ts` · `accounts.ts` · `builder-runtime.ts`, manifest `packages/validation/src/agent-manifest.ts`, ô soạn và dòng thời gian của app, `seed.ts`) và nhiều bài kiểm của hồ sơ đã ký (`han-viec`, `viec-cua-toi`, `vai-chi-okr`, `viec-o-soan`, `dieu-phoi-va`, `go-la-cat-quyen`…). Bỏ đường TASK là mở lại các tiêu chí đó — phạm vi chốt ở Cổng Phạm vi.
 - Phiên máy không có đường đọc cơ sở dữ liệu production (`docs/production.md`: chỉ đọc, không kéo biến). Số đếm trước/sau do chủ kho chạy, hoặc qua một lệnh chỉ-đếm do vòng này dựng.
 - #375: M5 đã hỏi Mac Studio dãy r2 nào chạm `run-runtime.ts` / `ma-lech.ts` — tới 13/10 chưa có trả lời.
+
+## Nguồn quyết định Cổng Đáng
+
+Chủ kho gõ ở phiên thợ DA1b (máy M5) ngày 13/10/2026: «Cổng Đáng chep-viec-can-lam-cu: build · ngưỡng: theo đề
+xuất máy». `decided_at` là giờ phiên thợ ghi lại lời đó. Timebox giữ như máy đề xuất (chép ngay sau gộp, vế sau
+đọc 14 ngày từ ngày gộp).
