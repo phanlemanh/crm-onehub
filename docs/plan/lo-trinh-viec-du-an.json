@@ -77,12 +77,31 @@
       "dung_tren": [
         "DA0a"
       ],
-      "trang_thai": "chưa mở",
+      "trang_thai": "đang dựng",
+      "pr": [
+        386
+      ],
+      "buoc_ke": "Đã ký Cổng Bằng chứng 13/10 (Mạnh); PR #386 chờ Điều phối M5 gộp vào onehub",
       "ten": "Việc chung",
       "ten_ngan": "Việc chung",
       "bat_khi": "Đề xuất, chốt ở Cổng Đáng: hai tuần dùng thật, ít nhất 80% việc mới có người thực hiện; không việc gắn đối tác nào tới người vai «chỉ OKR»",
       "chay_khi": "DA0a đã gộp (mục từ điển «Việc» chủ kho mở 07/10)",
       "ghi_chu": "Bảng việc riêng gắn nhiều bản ghi; người giao, một người thực hiện, người theo dõi; nhóm trạng thái Chưa làm · Đang làm · Chờ đánh giá · Xong · Huỷ; quyền P3; Việc của tôi; vào bộ nhắc buổi sáng và hộp chuyển việc khi nghỉ; lịch sử thay đổi. Chuyển việc cần làm cũ sang."
+    },
+    {
+      "ma": "DA1b",
+      "cau_giao": "«Việc cần làm cũ trên dòng thời gian thành Việc; Tác nhân giao việc bằng Việc»",
+      "vi_sao": "Chủ kho tách khỏi DA1 ở Cổng Phạm vi 13/10 (Hỏi-4): chép dữ liệu production cần cổng riêng, và DA1 gộp kịp sau DA0b.",
+      "hang": "T3",
+      "slug": "chep-viec-can-lam-cu",
+      "dung_tren": [
+        "DA1"
+      ],
+      "trang_thai": "chưa mở",
+      "ten": "Chép việc cần làm cũ sang Việc",
+      "ten_ngan": "Chép việc cũ",
+      "chay_khi": "DA1 đã gộp",
+      "ghi_chu": "Chép Activity loại TASK sang Việc, giữ bản gốc để đảo được; đổi run-runtime.ts (create_crm_activity TASK) và ma-lech.ts sang ghi Việc; bỏ «Việc cần làm» khỏi ô soạn và dòng thời gian, cùng activities.complete và activities.myTasks."
     },
     {
       "ma": "DA2",

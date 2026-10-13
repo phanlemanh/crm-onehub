@@ -1,0 +1,119 @@
+{
+  "feature_plain": "Người dùng giao được một việc cho đồng nghiệp ngay trên thoả thuận, công ty, cá nhân hay kế hoạch 30 ngày; người nhận thấy việc ở màn «Việc của tôi», được nhắc mỗi sáng qua Zalo hay Slack, và chỉ người giao với người thực hiện mới đổi được trạng thái.",
+  "will_do": [
+    {
+      "id": "AC-1",
+      "p": "Sẽ cho tạo việc ngay từ thẻ Hoạt động của thoả thuận: chọn người thực hiện (mặc định là mình), hạn và người theo dõi; việc hiện ở thoả thuận đó và ở công ty của nó; tạo hỏng thì chữ đã gõ còn nguyên."
+    },
+    {
+      "id": "AC-3",
+      "p": "Sẽ chỉ cho người giao và người thực hiện đổi trạng thái, theo đúng đồ thị năm trạng thái đã vẽ; người khác bấm thì bị từ chối với lời nói ai được làm, và mỗi lần đổi để lại một dòng lịch sử."
+    },
+    {
+      "id": "AC-4",
+      "p": "Sẽ cho người giao đổi người thực hiện, sửa nội dung và hạn; ai thấy việc cũng tự theo dõi hay bỏ theo dõi được; khung việc có thẻ «Lịch sử» ghi ai làm gì, lúc nào, từ màn hay từ Zalo."
+    },
+    {
+      "id": "AC-5",
+      "p": "Sẽ không bao giờ đặt người vai «chỉ OKR» vào một việc — kể cả khi mở lại một việc đã xong; đổi một người sang vai đó khi họ còn việc đang mở bị chặn và chỉ sang «Chuyển việc»."
+    },
+    {
+      "id": "AC-6",
+      "p": "Sẽ cho mọi người đọc được dữ liệu đối tác thấy việc gắn đối tác; việc không gắn gì thì chỉ người giao, người thực hiện, người theo dõi thấy — người khác nhận đúng lời như với một việc không tồn tại."
+    },
+    {
+      "id": "AC-7",
+      "p": "Sẽ có màn «Việc của tôi» với ba nhóm Giao cho tôi, Tôi giao, Đang theo dõi; việc mở xếp theo hạn, quá hạn lên đầu, việc đã xong hay đã huỷ gập ở cuối; có trạng thái đang tải, tải hỏng, chưa có việc; Tổng quan đếm cả việc quá hạn."
+    },
+    {
+      "id": "AC-9",
+      "p": "Sẽ nhắc mỗi sáng: người thực hiện nhận việc quá hạn và sắp hạn trong 3 ngày, người giao nhận việc đang chờ mình đánh giá; một loại nhắc hỏng không làm hỏng tin của người khác."
+    },
+    {
+      "id": "AC-12",
+      "p": "Sẽ cho người giao xoá việc vừa tạo nhầm (chưa ai đụng tới), có hỏi lại; việc đã có lịch sử thì chỉ khép bằng Xong hay Huỷ và mở lại được; xoá vĩnh viễn một bản ghi chỉ gỡ liên kết, việc vẫn còn."
+    },
+    {
+      "id": "AC-13",
+      "p": "Sẽ được kiểm trên bản chạy thật ở khổ máy tính và điện thoại: màn Việc của tôi, khung việc với thẻ Lịch sử, và giao việc từ thoả thuận."
+    }
+  ],
+  "wont_do": [
+    {
+      "id": "AC-2",
+      "p": "Sẽ KHÔNG nhân bản việc khi gắn nhiều bản ghi: gắn thêm kế hoạch thì việc hiện ở cả hai chỗ mà vẫn là một việc; công ty chỉ hiện nó một lần."
+    },
+    {
+      "id": "AC-8",
+      "p": "Chặn tên đối tác đi qua tin nhắc buổi sáng tới người vai «chỉ OKR», kể cả khi dữ liệu cũ còn đặt họ trong việc gắn đối tác — họ vẫn nhận phần nhắc OKR của mình."
+    },
+    {
+      "id": "AC-10",
+      "p": "Sẽ KHÔNG để người khác đóng việc qua Zalo: trả lời «xong n» chỉ đóng được việc khi người nhắn là người thực hiện (hay người giao với việc chờ đánh giá), và đi qua cùng đường với màn."
+    },
+    {
+      "id": "AC-11",
+      "p": "Sẽ KHÔNG để việc mồ côi khi một người nghỉ: hộp «Chuyển việc» chuyển cả việc họ thực hiện lẫn việc họ giao, trong cùng một lần với kế hoạch và bước; số việc ở hộp khớp số việc ở lời chặn đổi vai."
+    },
+    {
+      "id": "AC-14",
+      "p": "Sẽ KHÔNG đo ngưỡng bằng số đoán: thước đếm hai số của Cổng Đáng được kiểm trên dữ liệu mẫu có đáp án sẵn, chạy chỉ đọc, và dữ liệu mẫu không lên production."
+    },
+    {
+      "id": "OOS-1",
+      "p": "Chép «việc cần làm» cũ sang Việc và đổi hai đường Tác nhân — tách thành hàng DA1b ngay sau (Hỏi-4)."
+    },
+    {
+      "id": "OOS-2",
+      "p": "Việc gắn KR, Kanban và việc con, việc sinh từ khuôn, dự án và Gantt, trưởng phòng thấy việc cấp dưới, AI đề xuất việc — các hàng sau của lộ trình."
+    },
+    {
+      "id": "OOS-3",
+      "p": "Việc cho người vai «chỉ OKR», kể cả việc riêng — mở cùng hàng việc gắn KR (Hỏi-3)."
+    },
+    {
+      "id": "OOS-4",
+      "p": "Trạng thái tự đặt, bình luận và đính kèm, nhắc cho người theo dõi, thao tác hàng loạt, tìm việc ở ô tìm kiếm chung, đẩy việc ra lịch."
+    },
+    {
+      "id": "OOS-5",
+      "p": "Đo ngưỡng trên dữ liệu thật — sau khi gộp, ở Cổng Giá trị."
+    }
+  ],
+  "scope_plain": "Những thứ dưới đây cố ý để ngoài lượt này:",
+  "coverage_plain": [
+    {
+      "i": 0,
+      "p": "Đã quét đủ bốn chiều — việc sống qua những bước nào (tạo, sửa, đổi người, gắn, đổi trạng thái, dọn, chuyển giao), ai đứng ở đâu (người giao, người thực hiện, người theo dõi, người khác, quản trị, vai «chỉ OKR»), việc đi vào và hiện ra ở đâu (ô soạn, Việc của tôi, khung việc, Tổng quan, tin nhắc, «xong n», Chuyển việc), và thời gian (hạn, nhắc, lịch sử, cửa sổ đo). Thước «đủ»: bảng quyền và đồ thị trạng thái của bản thiết kế, bản đồ màn của khảo sát DA0, và cách Odoo, Salesforce, Asana, Bitrix24, 1Office, Base làm. AC-1…AC-13 là phần lõi, AC-14 là đường đo, AC-15 là tài liệu."
+    }
+  ],
+  "gap_probe_plain": [
+    {
+      "i": 0,
+      "p": "Thiếu đường mở lại: người giao bấm «Làm lại» hay «Mở lại» có thể trả việc gắn đối tác về tay một người đã sang vai «chỉ OKR». Đã sửa: ba lối mở lại kiểm vai trước khi chạy (AC-5, phép đo E5 thêm ba đường). Phạm vi «chỉ đếm việc đang mở» của thước chuyển cho anh quyết ở Hỏi-5."
+    },
+    {
+      "i": 1,
+      "p": "Cột đo ngưỡng ghi cả khi người giao tự bấm «Bắt đầu» hay Huỷ — đo sai lời hứa «người thực hiện chuyển». Đã sửa: chỉ lượt của chính người thực hiện mới ghi cột; thước có thêm hai ca có đáp án. Việc bị người giao Huỷ có vào mẫu số không — anh quyết ở Hỏi-5."
+    },
+    {
+      "i": 2,
+      "p": "Việc riêng có thể bị nhìn lén qua đường «tự theo dõi», và các phép đo quyền xem chỉ đo đường đọc. Đã sửa: mọi lệnh ghi lên việc mình không thấy nhận đúng lời «không có việc này»; ma trận đo quyền xem mở thành 70 ô gồm cả lịch sử, Tổng quan và tự theo dõi."
+    },
+    {
+      "i": 3,
+      "p": "Chưa định nghĩa đủ việc được chuyển từ trạng thái nào sang trạng thái nào. Đã sửa: bản thiết kế có đồ thị 20 cặp (13 hợp lệ, 7 không), phép đo thành 100 ô và so đúng nguyên văn lời từ chối từng ô."
+    },
+    {
+      "i": 4,
+      "p": "Ba điều hứa chưa có phép đo: dòng log khi xoá, nút Xoá chỉ hiện khi việc chưa có lịch sử, hộp «Chuyển việc» hiện số việc. Đã thêm phép đo cho cả ba, và đo vết gỡ liên kết cho cả bốn loại bản ghi."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "E15",
+      "q": "Tài liệu đã đủ để người mới hiểu Việc chưa?",
+      "why": "Ba người chấm đọc từ điển và hai tài liệu kỹ thuật, cùng thấy đủ sáu điều đã hứa: Việc là gì, ai đổi trạng thái, ai thấy, nhắc buổi sáng, chuyển việc, xoá và mở lại."
+    }
+  ]
+}

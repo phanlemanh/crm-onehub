@@ -1,6 +1,8 @@
 import { canManageOnboarding, workspaceRoleOf } from "@crm/auth";
 import type { Db, Prisma } from "@crm/db";
 import { datBuocXong, type VetBuocXong } from "@crm/db/onboarding-buoc";
+import { demViecMoCua } from "@crm/db/viec";
+import { chuyenViecTrongGiaoDich, goTheoDoiCuaNguoi } from "@crm/db/viec-ghi";
 import { WORKSPACE_ID } from "@crm/db/workspace";
 import {
 	type OnboardingActivityMeta,
@@ -131,6 +133,127 @@ export async function kiemNguoiNhanViec(
 	return { id: nguoi.id, name: nguoi.name };
 }
 
+type NguoiNhan = { id: string; name: string; nhanDuoc: boolean };
+
+async function docNguoiNhan(
+	tx: Tx,
+	userIds: string[],
+): Promise<Map<string, NguoiNhan>> {
+	const ds = await tx.user.findMany({
+		where: { id: { in: [...new Set(userIds)] } },
+		select: {
+			id: true,
+			name: true,
+			members: {
+				where: { organizationId: WORKSPACE_ID },
+				select: { role: true },
+			},
+		},
+	});
+	return new Map(
+		ds.map((n) => [
+			n.id,
+			{
+				id: n.id,
+				name: n.name,
+				nhanDuoc: n.members.some((m) => docDuocDoiTac(m.role)),
+			},
+		]),
+	);
+}
+
+function nhanDuoc(nguoi: Map<string, NguoiNhan>, id: string): boolean {
+	return nguoi.get(id)?.nhanDuoc === true;
+}
+
+async function traCamTrich(
+	tx: Tx,
+	plan: KeHoachGoc,
+	actingUserId: string,
+): Promise<KeHoachGoc> {
+	const nguoi = await docNguoiNhan(tx, [plan.ownerId]);
+	if (nhanDuoc(nguoi, plan.ownerId)) return plan;
+	const moi = await kiemNguoiNhanViec(tx, actingUserId);
+	const sau = await tx.onboardingPlan.update({
+		where: { id: plan.id },
+		data: { ownerId: moi.id },
+	});
+	await ghiVet(
+		tx,
+		plan,
+		vet.keHoachDoiCamTrich({
+			tu: plan.ownerId,
+			tuTen: nguoi.get(plan.ownerId)?.name ?? plan.ownerId,
+			den: moi.id,
+			denTen: moi.name,
+		}),
+		actingUserId,
+	);
+	return sau;
+}
+
+type BuocGiu = { id: string; label: string; assigneeId: string | null };
+
+async function buocChuaXong(tx: Tx, planId: string): Promise<BuocGiu[]> {
+	return tx.onboardingStep.findMany({
+		where: { planId, completedAt: null },
+		select: { id: true, label: true, assigneeId: true },
+		orderBy: { position: "asc" },
+	});
+}
+
+async function traBuocKhongNhan(
+	tx: Tx,
+	plan: { id: string; companyId: string },
+	buoc: BuocGiu[],
+	actingUserId: string,
+): Promise<void> {
+	const giu = buoc.flatMap((b) =>
+		b.assigneeId === null ? [] : [{ ...b, assigneeId: b.assigneeId }],
+	);
+	if (giu.length === 0) return;
+	const nguoi = await docNguoiNhan(
+		tx,
+		giu.map((b) => b.assigneeId),
+	);
+	for (const b of giu) {
+		if (nhanDuoc(nguoi, b.assigneeId)) continue;
+		await tx.onboardingStep.update({
+			where: { id: b.id },
+			data: { assigneeId: null },
+		});
+		await ghiVet(
+			tx,
+			plan,
+			vet.buocGiao({
+				stepId: b.id,
+				nhan: b.label,
+				tu: b.assigneeId,
+				tuTen: nguoi.get(b.assigneeId)?.name ?? b.assigneeId,
+				den: null,
+				denTen: null,
+			}),
+			actingUserId,
+		);
+	}
+}
+
+async function goTheoDoiKhongNhan(tx: Tx, planId: string): Promise<void> {
+	const ds = await tx.onboardingWatch.findMany({
+		where: { planId },
+		select: { userId: true },
+	});
+	const nguoi = await docNguoiNhan(
+		tx,
+		ds.map((w) => w.userId),
+	);
+	const bo = ds.map((w) => w.userId).filter((id) => !nhanDuoc(nguoi, id));
+	if (bo.length === 0) return;
+	await tx.onboardingWatch.deleteMany({
+		where: { planId, userId: { in: bo } },
+	});
+}
+
 async function boPhanDangDung(tx: Tx, departmentId: string): Promise<void> {
 	const boPhan = await tx.department.findUnique({
 		where: { id: departmentId },
@@ -187,18 +310,19 @@ function dieuKienChuyen(from: string) {
 export async function demViecDangGiu(
 	tx: Tx,
 	userId: string,
-): Promise<{ keHoach: number; buoc: number }> {
+): Promise<{ keHoach: number; buoc: number; viec: number }> {
 	const dk = dieuKienChuyen(userId);
-	const [keHoach, buoc] = await Promise.all([
+	const [keHoach, buoc, viec] = await Promise.all([
 		tx.onboardingPlan.count({ where: dk.keHoach }),
 		tx.onboardingStep.count({ where: dk.buoc }),
+		demViecMoCua(tx, userId),
 	]);
-	return { keHoach, buoc };
+	return { keHoach, buoc, viec };
 }
 
 export async function xoaTheoDoiCua(tx: Tx, userId: string): Promise<number> {
 	const { count } = await tx.onboardingWatch.deleteMany({ where: { userId } });
-	return count;
+	return count + (await goTheoDoiCuaNguoi(tx, userId, new Date()));
 }
 
 async function yeuCauQuanTri(userId: string): Promise<void> {
@@ -264,6 +388,13 @@ export class OnboardingGhi {
 			}
 			if (ket.ket === "ke-hoach-dong") {
 				throw new ConflictException(ONBOARDING.thongDiep.keHoachDaDong);
+			}
+			if (!input.done && ket.ket === "da-doi") {
+				const plan = await tx.onboardingPlan.findUniqueOrThrow({
+					where: { id: ket.buoc.planId },
+					select: { id: true, companyId: true },
+				});
+				await traBuocKhongNhan(tx, plan, [ket.buoc], actingUserId);
 			}
 			const sau = await tx.onboardingStep.findUniqueOrThrow({
 				where: { id: input.stepId },
@@ -430,7 +561,16 @@ export class OnboardingGhi {
 				dong ? vet.keHoachDong() : vet.keHoachMoLai(),
 				actingUserId,
 			);
-			return keHoachRa(sau);
+			if (dong) return keHoachRa(sau);
+			const camTrich = await traCamTrich(tx, sau, actingUserId);
+			await traBuocKhongNhan(
+				tx,
+				sau,
+				await buocChuaXong(tx, sau.id),
+				actingUserId,
+			);
+			await goTheoDoiKhongNhan(tx, sau.id);
+			return keHoachRa(camTrich);
 		});
 	}
 
@@ -439,12 +579,7 @@ export class OnboardingGhi {
 		actingUserId: string,
 	): Promise<TransferOutput> {
 		await yeuCauQuanTri(actingUserId);
-		const dk = dieuKienChuyen(input.fromUserId);
-		const [keHoach, buoc] = await Promise.all([
-			this.db.onboardingPlan.count({ where: dk.keHoach }),
-			this.db.onboardingStep.count({ where: dk.buoc }),
-		]);
-		return { keHoach, buoc };
+		return demViecDangGiu(this.db, input.fromUserId);
 	}
 
 	async transferWork(
@@ -467,9 +602,6 @@ export class OnboardingGhi {
 				select: { ...CHON_BUOC, plan: { select: { companyId: true } } },
 				orderBy: { id: "asc" },
 			});
-			if (keHoach.length === 0 && buoc.length === 0) {
-				return { keHoach: 0, buoc: 0 };
-			}
 
 			const tuTen = await tenNguoi(tx, input.fromUserId);
 			for (const plan of keHoach) {
@@ -508,7 +640,13 @@ export class OnboardingGhi {
 					actingUserId,
 				);
 			}
-			return { keHoach: keHoach.length, buoc: buoc.length };
+			const viec = await chuyenViecTrongGiaoDich(tx, {
+				tuId: input.fromUserId,
+				den: { id: den.id, ten: den.name },
+				nguoiId: actingUserId,
+				now: new Date(),
+			});
+			return { keHoach: keHoach.length, buoc: buoc.length, viec };
 		});
 	}
 }

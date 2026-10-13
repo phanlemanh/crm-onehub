@@ -7,6 +7,30 @@ export const NHOM_TRANG_THAI = [
 	"khac",
 ] as const;
 
+const moiNguoi = z.object({
+	da_giao: z.string().nullable(),
+	vi_sao: z.string().nullable(),
+	trang_thai: z.string().nullable(),
+	ngay: z.string().nullable(),
+	production: z.string().nullable(),
+	do_gi: z.string().nullable(),
+	ket_qua: z.string().nullable(),
+	chua_lam: z.string().nullable(),
+	ai_quyet: z.string().nullable(),
+});
+
+const chuKho = z.object({
+	tieu_chi: z.number().nullable(),
+	phep_do: z.number().nullable(),
+	luot_cham: z.number().nullable(),
+	token: z.number().nullable(),
+	quyet_dinh_may: z.number().nullable(),
+	quyet_dinh_nguoi: z.number().nullable(),
+	ma: z.string().nullable(),
+});
+
+const tomTat = z.object({ moi_nguoi: moiNguoi, chu_kho: chuKho });
+
 const hangLoTrinh = z.object({
 	ma: z.string(),
 	cau_giao: z.string(),
@@ -20,6 +44,7 @@ const hangLoTrinh = z.object({
 	co: z.array(z.string()),
 	bat_khi: z.string(),
 	vi_sao: z.string(),
+	tom_tat: tomTat.nullable().default(null),
 });
 
 const NGAY_ISO = /^\d{4}-\d{2}-\d{2}$/;
@@ -79,6 +104,17 @@ export type LoTrinh = z.infer<typeof loTrinh>;
 export type HangLoTrinh = z.infer<typeof hangLoTrinh>;
 export type MocLoTrinh = z.infer<typeof mocLoTrinh>;
 export type NhomTrangThai = (typeof NHOM_TRANG_THAI)[number];
+export type TomTatHoSo = z.infer<typeof tomTat>;
+export type TomTatChoXem = Omit<TomTatHoSo, "chu_kho"> & {
+	chu_kho: TomTatHoSo["chu_kho"] | null;
+};
+export type HangChoXem = Omit<HangLoTrinh, "tom_tat"> & {
+	tom_tat: TomTatChoXem | null;
+};
+export type LoTrinhChoXem = Omit<LoTrinh, "hang"> & { hang: HangChoXem[] };
+export type DuLieuChoXem = Omit<LoTrinhDuLieu, "lo_trinh"> & {
+	lo_trinh: LoTrinhChoXem[];
+};
 
 export const KHOA_LO_TRINH_DU_LIEU = {
 	goc: Object.keys(loTrinhDuLieu.shape),
@@ -89,6 +125,9 @@ export const KHOA_LO_TRINH_DU_LIEU = {
 	hang: Object.keys(hangLoTrinh.shape),
 	moc: Object.keys(khuonMoc.shape),
 	da_bac: Object.keys(daBac.shape),
+	tom_tat: Object.keys(tomTat.shape),
+	moi_nguoi: Object.keys(moiNguoi.shape),
+	chu_kho: Object.keys(chuKho.shape),
 } as const;
 
 export type KetQuaLoTrinh =

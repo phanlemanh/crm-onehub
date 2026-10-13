@@ -11,6 +11,7 @@ import {
 } from "../src/generated/prisma/enums";
 import type { LoaiGiaiDoan } from "../src/giai-doan";
 import { readReportingCurrency, SETTINGS_ID } from "../src/settings";
+import { gieoViecMau } from "../src/viec-gieo";
 import { markOnboarded, WORKSPACE_ID } from "../src/workspace";
 
 function makeRandom(seed: number): () => number {
@@ -1131,11 +1132,16 @@ async function main() {
 	await seedCompanyFieldValues(companyFields, companies, ownerIds);
 	const domains = await seedTrackedDomains();
 	await seedOnboarded();
+	const viec = await gieoViecMau(db, {
+		databaseUrl: process.env.DATABASE_URL ?? "",
+		nguon: "DATABASE_URL",
+		now: new Date(),
+	});
 
 	console.log(
 		`Seeded ${companies.length} companies, ${contacts.length} contacts, ` +
 			`${deals.length} deals, ${activities} activities, ${rates} exchange rates, ` +
-			`7 company fields, ${domains} tracked domains, workspace đã qua onboarding.`,
+			`7 company fields, ${domains} tracked domains, ${viec.soViec} việc mẫu, workspace đã qua onboarding.`,
 	);
 }
 

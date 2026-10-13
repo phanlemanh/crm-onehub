@@ -610,6 +610,9 @@ export async function napTrong(
 					? idMau("mt", m.canChinh.mucTieu)
 					: null,
 				targetKeyResultId: m.canChinh?.kr ? idMau("kr", m.canChinh.kr) : null,
+				lyDo: m.canChinh?.lyDo ?? null,
+				canCu: m.canChinh?.canCu ?? null,
+				lyDoTuKara: m.canChinh?.lyDoTuKara ?? false,
 			})),
 	});
 

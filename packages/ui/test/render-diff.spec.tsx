@@ -16,6 +16,7 @@ import {
 	CarouselPrevious,
 } from "../src/components/carousel";
 import { Combobox } from "../src/components/combobox";
+import { ComboboxMulti } from "../src/components/combobox-multi";
 import { CommandDialog } from "../src/components/command";
 import { CopyValue } from "../src/components/copy-value";
 import { DataTable } from "../src/components/data-table";
@@ -276,6 +277,12 @@ const CA: Ca[] = [
 	{
 		ten: "Combobox",
 		ve: () => <Combobox options={[]} value="" onValueChange={() => {}} />,
+	},
+	{
+		ten: "ComboboxMulti",
+		ve: () => (
+			<ComboboxMulti options={[]} values={[]} onValuesChange={() => {}} />
+		),
 	},
 	{
 		ten: "Command",
