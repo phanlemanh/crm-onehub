@@ -1251,5 +1251,33 @@
   },
   "hanh_dong": "mien",
   "ly_do": "van-hanh: nhật ký cho người vận hành, không hiện trên màn"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "lyDo.banQuet",
+  "cu": {
+   "vi": "trang là bản quét, máy không đọc được chữ."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "tai-lieu",
+  "tep": "apps/agent/agent/lib/tai-lieu-config.ts",
+  "khoa": "lyDo.chuHong",
+  "cu": {
+   "vi": "Cần gõ tay — lớp chữ của tệp bị lỗi mã, máy không đọc đúng chữ."
+  },
+  "hanh_dong": "doi"
+ },
+ {
+  "be_mat": "khac",
+  "tep": "apps/agent/agent/lib/okr/config.ts",
+  "khoa": "chiDanGoc",
+  "cu": {
+   "vi": "This session runs one Trợ lý OKR task."
+  },
+  "hanh_dong": "mien",
+  "ly_do": "hoi-1: lời cho mô hình, không hiện cho người dùng"
  }
 ]

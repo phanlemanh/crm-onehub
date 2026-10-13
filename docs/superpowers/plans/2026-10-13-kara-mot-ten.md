@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 116 chuỗi người dùng thấy đang gọi AI bằng tên khác đổi thành «Kara», và một luật máy chặn tên cũ quay lại.
+**Goal:** 118 chuỗi người dùng thấy đang gọi AI bằng tên khác đổi thành «Kara», và một luật máy chặn tên cũ quay lại.
 
 **Architecture:** Chỉ đổi giá trị chữ trong kho chữ `apps/app/lib/messages`, `packages/ui`, và các chuỗi trả về ở `packages/validation`, `apps/api`, `apps/agent`. Danh sách phải đổi là `_acceptance/kara-mot-ten/kiem-ke.json` (đã commit trước mọi sửa mã). Luật quét sống ở `apps/app/test/kara-mot-ten-luat.ts` + `kara-mot-ten.spec.ts`; ghim chữ mới theo bề mặt sống ở `messages-guard.spec.ts`.
 
@@ -16,7 +16,7 @@
 - Tệp chữ chung chỉ đổi GIÁ TRỊ, không đổi hay xoá tên khoá (cham-tep P1-2).
 - Dạng «Kara · <phần>» chỉ ở tên trang cài đặt, nhóm sổ chi phí, tiêu đề nhóm tin nhắc; mọi câu khác gọi «Kara».
 - Phạm vi: «Kara · OKR», «Kara · hồ sơ» (en «Kara · records»), «Kara · Tài liệu» (en «Kara · Docs»).
-- Giữ nguyên 8 mục `giu` và 6 mục `mien` của kiem-ke.json; mô-đun `agent-builder-*.ts`, `settings-ket-noi.ts` không đụng.
+- Giữ nguyên 8 mục `giu` và 7 mục `mien` của kiem-ke.json; mô-đun `agent-builder-*.ts`, `settings-ket-noi.ts` không đụng.
 - `kiem-ke.json` không sửa nữa (E15 d).
 - Bài kiểm có sẵn: đổi khẳng định, không xoá, không `.skip`/`.only`/`.todo` (E12).
 - Test apps/app chạy trần `cd apps/app && bun test …`; apps/agent, apps/api qua `bun run test -- "cd apps/x && bun test …"`.
@@ -54,7 +54,7 @@
 **Files:** Modify `apps/app/test/messages-guard.spec.ts` (thêm khối cuối tệp)
 **Evals:** E1–E6 · **independent:** false
 
-- [ ] Step 1: thêm `describe("kmt-ban-ghi" | "kmt-tom-tat" | "kmt-soan" | "kmt-cai-dat" | "kmt-tai-lieu" | "kmt-dung-chung")`, mỗi khối đọc `docKiemKe()` lọc `be_mat` + `hanh_dong === "doi"`, assert số mục (17/8/24/25/41/1), rồi với mỗi mục: kho chữ → giá trị hiện tại chứa «Kara» và không trúng CAM; tệp nguồn → chuỗi cũ không còn trong tệp. Ghim riêng: `troLy.tieuDe` = «Kara · OKR», `so.nhom.tro-ly-ai` = «Kara · hồ sơ», `so.nhom.tro-ly-okr` = «Kara · OKR», `roleAssistant` = «Kara», `buoc.agent` chứa «Kara» và «trợ tác», câu hết hạn mức chứa «Kara».
+- [ ] Step 1: thêm `describe("kmt-ban-ghi" | "kmt-tom-tat" | "kmt-soan" | "kmt-cai-dat" | "kmt-tai-lieu" | "kmt-dung-chung")`, mỗi khối đọc `docKiemKe()` lọc `be_mat` + `hanh_dong === "doi"`, assert số mục (17/8/24/25/43/1), rồi với mỗi mục: kho chữ → giá trị hiện tại chứa «Kara» và không trúng CAM; tệp nguồn → chuỗi cũ không còn trong tệp. Ghim riêng: `troLy.tieuDe` = «Kara · OKR», `so.nhom.tro-ly-ai` = «Kara · hồ sơ», `so.nhom.tro-ly-okr` = «Kara · OKR», `roleAssistant` = «Kara», `buoc.agent` chứa «Kara» và «trợ tác», câu hết hạn mức chứa «Kara».
 - [ ] Step 2: `cd apps/app && bun test ./test/messages-guard.spec.ts -t kmt-` → đỏ ở mọi bề mặt.
 - [ ] Step 3: commit `test(kara-mot-ten): ghim chữ Kara theo bề mặt`.
 
@@ -63,7 +63,7 @@
 **Files:** Create `_acceptance/kara-mot-ten/rang/{kiem-ke,bang-chu,bai-cu,khong-go-bai,dot-bien,chup}.mjs`
 **Evals:** E8, E10, E11, E12, E14, E15, E16 · **independent:** true
 
-- [ ] `kiem-ke.mjs`: (a) đếm 130/116/8/6 theo bề mặt; (b) round-trip `git show 4abc05e07:<tệp>`; (c) chạy `bun test ./test/kara-mot-ten.spec.ts -t kmt-luat` trên `git worktree` tạm ở 4abc05e07 có `kara-mot-ten-luat.ts` chép vào, mọi lỗi (a) phải có mục kiểm kê; (d) `git log --format=%H -- kiem-ke.json` và commit đầu chạm `apps/**|packages/**` trên `merge-base..HEAD`.
+- [ ] `kiem-ke.mjs`: (a) đếm 133/118/8/7 theo bề mặt; (b) round-trip `git show 4abc05e07:<tệp>`; (c) chạy `bun test ./test/kara-mot-ten.spec.ts -t kmt-luat` trên `git worktree` tạm ở 4abc05e07 có `kara-mot-ten-luat.ts` chép vào, mọi lỗi (a) phải có mục kiểm kê; (d) `git log --format=%H -- kiem-ke.json` và commit đầu chạm `apps/**|packages/**` trên `merge-base..HEAD`.
 - [ ] `bang-chu.mjs`: ghi `evidence/bang-chu.md` (bề mặt, tệp#khoá, nn, cũ, mới — mới đọc bằng bun eval kho chữ hoặc dòng nguồn).
 - [ ] `bai-cu.mjs --app|--may`: `git grep -l` CAM/«tác nhân» trên merge-base trong thư mục test, chạy từng nhóm.
 - [ ] `khong-go-bai.mjs`: so số `test(`/`it(`, cấm xoá tệp và `.skip/.only/.todo/test.if(false)`; ghi `evidence/ho-so-bai-doi.md` (tệp bài đổi → hồ sơ đã ký có eval cmd nhắc tệp đó).
@@ -142,7 +142,7 @@ Chữ mới (vi / en):
 - `settings chung.moTa`: «OneHub là ai, và Kara nghĩ bằng model nào.» / «Who you are, and the model Kara thinks with.»; `model.tieuDe`: «Kara · hồ sơ» / «Kara · records»; `model.moTa`: «Model Kara dùng để nghĩ, …» / «The model Kara thinks with, …»; `khongVoiToi`: «… Kara vẫn đang chạy X.» / «… Kara is still running X.»; `daLuu`: «Kara sẽ dùng model này từ lượt chạy sau.» / «Kara will use this model from its next session.»; `biGo`: «… — Kara đang chạy model mặc định. …» / «… — Kara is running the default model. …»; `khongDuQuyen` (en): «Only an owner or an admin can change Kara's model.»; `nghienCuu.moTa`: «Nhập khoá API Context để Kara nghiên cứu được mọi công ty …» / «Enter your Context API key so Kara can research every company …»
 - [ ] đổi → `-t kmt-cai-dat` xanh → commit.
 
-### Task 8: Kho tài liệu (41)
+### Task 8: Kho tài liệu (43)
 
 **Files:** `apps/app/lib/messages/tai-lieu.ts`, `packages/validation/src/{tai-lieu-nguon,tai-lieu-hoi}.ts`, `apps/api/src/tai-lieu/tai-lieu-config.ts`, `apps/agent/agent/lib/{tai-lieu-config,tai-lieu-phien,tai-lieu-hoi-phien}.ts`
 **Evals:** E5 · **independent:** true
