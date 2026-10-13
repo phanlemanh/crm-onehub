@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createTRPCClient, type TRPCLink } from "@trpc/client";
+import { createTRPCClient, TRPCClientError, type TRPCLink } from "@trpc/client";
 import { observable } from "@trpc/server/observable";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import type { AppRouter } from "api/app-router";
@@ -129,7 +129,7 @@ function datMacDinh(khoi: Json) {
 	traLoi.set("users.me", () => TOI);
 }
 
-async function mo(man: ReactElement) {
+async function mo(man: ReactElement, tim = "") {
 	queryClient = new QueryClient({
 		defaultOptions: { queries: { retry: false } },
 	});
@@ -139,7 +139,7 @@ async function mo(man: ReactElement) {
 	san = { o, root };
 	await act(async () => {
 		root.render(
-			<NuqsTestingAdapter hasMemory>
+			<NuqsTestingAdapter hasMemory searchParams={tim}>
 				<QueryClientProvider client={queryClient}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>{man}</TooltipProvider>
@@ -323,6 +323,42 @@ describe("vc-o-soan-giao", () => {
 		mo1({ id: "v" });
 	});
 
+	test("vc-o-soan-giao: khối Việc chỉ hiện ở bộ lọc Tất cả — thẻ Ghi chú không có khối", async () => {
+		datMacDinh({ mo: [VIEC_MO], daXong: [], daHuy: [] });
+		await mo(<Timeline anchor={{ dealId: "d1" }} />, "?timeline=notes");
+		await cho(
+			() => (document.body.textContent ?? "").includes("Ghi chú đầu tiên"),
+			"dong su kien",
+		);
+		for (let i = 0; i < 5; i += 1) await nhip();
+		expect(document.querySelector("[data-khoi-viec]")).toBeNull();
+		expect(daGoi.some((g) => g.path === "viec.cuaBanGhi")).toBe(false);
+	});
+
+	test("vc-o-soan-giao: khối Việc tải lỗi thì hiện VungTaiLoi có Thử lại, không im lặng như chưa có việc", async () => {
+		datMacDinh({ mo: [], daXong: [], daHuy: [] });
+		traLoi.set("viec.cuaBanGhi", () => {
+			throw new Error("hong");
+		});
+		await mo(<Timeline anchor={{ dealId: "d1" }} />);
+		await cho(
+			() =>
+				document.querySelector("[data-khoi-viec] [data-vung-tai-loi]") !== null,
+			"vung loi khoi viec",
+		);
+		const truoc = daGoi.filter((g) => g.path === "viec.cuaBanGhi").length;
+		const nut = [
+			...document.querySelectorAll(
+				"[data-khoi-viec] [data-vung-tai-loi] button",
+			),
+		].find((b) => (b.textContent ?? "").trim() !== "");
+		await bam(nut ?? null);
+		await cho(
+			() => daGoi.filter((g) => g.path === "viec.cuaBanGhi").length > truoc,
+			"goi lai khoi viec",
+		);
+	});
+
 	test("vc-o-soan-giao: đối chứng — bản ghi không có việc nào (kể cả đã khép) thì không hiện khối", async () => {
 		datMacDinh({ mo: [], daXong: [], daHuy: [] });
 		await mo(<Timeline anchor={{ dealId: "d1" }} />);
@@ -340,7 +376,13 @@ describe("vc-o-soan-loi", () => {
 	test("vc-o-soan-loi: tạo hỏng thì lời lỗi dưới nút, chữ đã gõ còn nguyên", async () => {
 		datMacDinh({ mo: [], daXong: [], daHuy: [] });
 		traLoi.set("viec.create", () => {
-			throw new Error("Máy chủ từ chối việc này");
+			throw TRPCClientError.from({
+				error: {
+					message: "Máy chủ từ chối việc này",
+					code: -32600,
+					data: { code: "BAD_REQUEST", httpStatus: 400 },
+				},
+			} as never);
 		});
 		await mo(<Timeline anchor={{ dealId: "d1" }} />);
 		await moOSoanViec();
@@ -368,6 +410,36 @@ describe("vc-o-soan-loi", () => {
 		) {
 			throw new Error("vc: o soan mat chu khi loi");
 		}
+	});
+
+	test("vc-o-soan-loi: lỗi không do máy chủ phân loại thì hiện lời chung, không lộ câu thô; chữ đã gõ còn nguyên", async () => {
+		datMacDinh({ mo: [], daXong: [], daHuy: [] });
+		traLoi.set("viec.create", () => {
+			throw new Error("TypeError: Failed to fetch https://noi-bo");
+		});
+		await mo(<Timeline anchor={{ dealId: "d1" }} />);
+		await moOSoanViec();
+		const oTieuDe = document.querySelector<HTMLInputElement>(
+			"[data-o-soan-viec] input",
+		);
+		if (!oTieuDe) throw new Error("khong co o tieu de");
+		await go(oTieuDe, "Việc gặp lỗi mạng");
+		await bam(nutChu(V.oSoan.giao));
+		await cho(
+			() =>
+				document.querySelector("[data-o-soan-viec] [data-slot=field-error]") !==
+				null,
+			"loi chung",
+		);
+		const loi =
+			document.querySelector("[data-o-soan-viec] [data-slot=field-error]")
+				?.textContent ?? "";
+		expect(loi).toBe(V.oSoan.loi);
+		expect(loi).not.toContain("Failed to fetch");
+		expect(
+			document.querySelector<HTMLInputElement>("[data-o-soan-viec] input")
+				?.value,
+		).toBe("Việc gặp lỗi mạng");
 	});
 });
 

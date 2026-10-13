@@ -359,9 +359,11 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 			) : entries.length === 0 && pinnedEntries.length === 0 ? (
 				<div className="flex min-h-0 flex-1 flex-col">
 					{thongBaoLamMoi ? <div className="px-5">{thongBaoLamMoi}</div> : null}
-					<div className="px-5">
-						<KhoiViec anchor={anchor} />
-					</div>
+					{tab === "all" ? (
+						<div className="px-5">
+							<KhoiViec anchor={anchor} />
+						</div>
+					) : null}
 					<DetailSheetEmpty
 						icon={EMPTY_ICONS[tab]}
 						title={emptyStates(m)[tab].title}
@@ -371,7 +373,7 @@ export function Timeline({ anchor }: { anchor: TimelineAnchor }) {
 			) : (
 				<div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 pb-4">
 					{thongBaoLamMoi}
-					<KhoiViec anchor={anchor} />
+					{tab === "all" ? <KhoiViec anchor={anchor} /> : null}
 					{pinnedEntries.length > 0 ? (
 						<TimelineDay
 							label={m.timeline.outstanding}

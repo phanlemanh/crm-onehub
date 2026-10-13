@@ -63,7 +63,7 @@ export function OSoanViec({
 				await cache.viec();
 				onXong?.();
 			},
-			onError: (e) => setLoi(e.message || m.loi),
+			onError: (e) => setLoi(e.data ? e.message : m.loi),
 			onSettled: () => {
 				dangGui.current = false;
 			},

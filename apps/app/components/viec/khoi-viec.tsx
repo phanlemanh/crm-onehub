@@ -16,6 +16,7 @@ import {
 } from "@crm/ui/components/item";
 import { useLocale } from "@crm/ui/components/locale-provider";
 import { SectionHeading } from "@crm/ui/components/section-heading";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { useQuery } from "@tanstack/react-query";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
 import { useOpenRecord } from "@/components/crm/record-sheet/record-stack";
@@ -73,6 +74,18 @@ export function KhoiViec({ anchor }: { anchor: TimelineAnchor }) {
 	const m = viecMessages(useLocale());
 	const trpc = useTRPC();
 	const q = useQuery(trpc.viec.cuaBanGhi.queryOptions(anchor));
+	if (q.isError) {
+		return (
+			<section className="pt-3" data-khoi-viec="">
+				<VungTaiLoi
+					dangTai={q.isFetching}
+					moTa={m.loi.moTa}
+					onThuLai={() => void q.refetch()}
+					tieuDe={m.loi.tieuDe}
+				/>
+			</section>
+		);
+	}
 	const du = q.data;
 	if (!du || du.mo.length + du.daXong.length + du.daHuy.length === 0) {
 		return null;
