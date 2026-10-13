@@ -1,0 +1,29 @@
+{
+  "feature_plain": "Mở lại một kế hoạch 30 ngày đã đóng, hay bỏ dấu «xong» của một bước, không còn trả việc về tay người đã sang vai «chỉ OKR» hoặc đã rời không gian làm việc.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ cho người bấm Mở lại cầm trịch thay khi người cầm trịch cũ đã sang «chỉ OKR»; bước chưa xong của người đó thành chưa giao, lượt theo dõi của họ bị gỡ, bước đã xong giữ nguyên người làm, mỗi lần đổi người có một dòng trong lịch sử kế hoạch."},
+    {"id": "AC-3", "p": "Sẽ xử người đã rời không gian làm việc y như người «chỉ OKR» khi mở lại kế hoạch."},
+    {"id": "AC-4", "p": "Sẽ từ chối việc mở lại khi chính người bấm cũng không nhận được việc; kế hoạch vẫn đóng và không gì thay đổi."},
+    {"id": "AC-5", "p": "Sẽ mở lại một bước đã xong ở dạng chưa giao khi người làm bước đó đã sang «chỉ OKR» hoặc đã rời; bước của người thường mở lại vẫn ở tay họ."},
+    {"id": "AC-6", "p": "Sẽ giữ nguyên mọi thứ cho người thường: bỏ xong, xong lại, đóng, mở lại cho kết quả và lịch sử y như trước vòng này."},
+    {"id": "AC-7", "p": "Sẽ đo bằng thước đếm của DA0a trên dữ liệu mẫu: sau mỗi lần mở lại, người «chỉ OKR» trong ca có 0 việc đang mở; và thước đó vẫn bắt được việc mở khi mở lại bằng đường cũ không kiểm."},
+    {"id": "AC-8", "p": "Sẽ chứng phép đo là thật: phá từng chỗ sửa trong bản sao thì đúng bài kiểm của chỗ đó đỏ với đúng câu báo, tệp thật không đổi."}
+  ],
+  "wont_do": [
+    {"id": "AC-2", "p": "Sẽ KHÔNG đổi gì khi mọi người của kế hoạch vẫn nhận được việc: mở lại chỉ mở kế hoạch và ghi một dòng «mở lại»; bấm mở lại lần hai không ghi thêm."},
+    {"id": "OOS-1", "p": "Không báo trên màn ai vừa thay ai sau khi mở lại — chỉ có dòng trong lịch sử kế hoạch (Hỏi-2)."},
+    {"id": "OOS-2", "p": "Không thêm hộp thoại chọn người cầm trịch khi mở lại — đó là lối khác của Hỏi-1."},
+    {"id": "OOS-3", "p": "Không đụng trả lời «xong n» qua Zalo — đường đó chỉ đánh dấu xong, không mở lại gì."},
+    {"id": "OOS-4", "p": "Không gom ba bản luật vai về một chỗ — để vòng sau như DA0a đã ghi."}
+  ],
+  "scope_plain": "Vòng này chỉ sửa máy chủ; không màn nào đổi.",
+  "coverage_plain": [
+    {"i": 0, "p": "Đã quét đủ ba chiều: đường biến việc đã khép thành việc mở (mở lại kế hoạch, bỏ «xong» một bước, trả lời Zalo), thứ trao lại (người cầm trịch, bước chưa xong, bước đã xong, lượt theo dõi) và người đang giữ (người thường, «chỉ OKR», đã rời, người bấm cũng không nhận được việc). Bằng chứng «đủ»: tìm khắp mã nguồn chỉ có đúng hai chỗ mở lại; tiêu chí cốt lõi AC-1 đến AC-5, AC-6 là đối chứng, AC-7 là đường đo, AC-8 giữ phép đo thật."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Thiếu ca người cầm trịch vẫn là người thường mà người làm bước hay người theo dõi đã sang «chỉ OKR» — mã sai nhánh vẫn qua hết bài kiểm. Đã thêm ca đó vào AC-1 và một lần phá-thử thứ sáu."},
+    {"i": 1, "p": "Bài kiểm đòi các dòng lịch sử theo đúng thứ tự, trong khi hai dòng ghi cùng lúc có thể trùng giờ — bài kiểm sẽ chập chờn dù mã đúng. Đã đổi sang so như một tập, không theo thứ tự."},
+    {"i": 2, "p": "Bài kiểm chưa kiểm dữ liệu đã dựng đúng trước khi thao tác, và AC-5 chưa nói ai cầm trịch — một phép kiểm có thể đúng sẵn mà không đo gì. Đã thêm bước kiểm lúc dựng và đổi vai qua đường thật."},
+    {"i": 3, "p": "Bài kiểm gọi thước đếm bằng đường dẫn không rõ tính từ đâu — chạy từ thư mục khác sẽ báo đỏ dù mã đúng. Đã khai đường tính từ gốc kho và kiểm tệp thước có thật trước khi chạy."}
+  ]
+}

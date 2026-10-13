@@ -1,0 +1,89 @@
+slug: mo-lai-khong-tra-viec-chi-okr
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mlk_mo_lai
+    expected: "exit 0; -t mlk-mo-lai của apps/api/test/mo-lai-vai-chi-okr.spec.ts, hai ca. Dựng qua đường ghi thật (OnboardingService.createFromTemplate, OnboardingGhi.addStep/assignStep/setStepDone, OnboardingTheoDoi.bat, OnboardingService.closePlan, WorkspaceService.setMemberRole). Ca 'chỉ OKR': A 'mlk-a' vai member cầm trịch, bước 1 chưa xong giao A, bước 2 chưa xong giao M 'mlk-m' vai member, bước 3 giao A rồi đánh dấu xong; M theo dõi; đóng kế hoạch; setMemberRole(quanTri, {memberId của A, role:'okr'}) phải thành công. Chốt dựng trước thao tác: ownerId khác A, bước 1 khác A, bước 2 khác M, hay M không có lượt theo dõi thì ném 'mlk: dung sai <khoá>'. Đếm vết. OnboardingService.reopenPlan({id}, Q) với Q vai member. Sau đó: closedAt khác null thì ném 'mlk: ke hoach khong mo'; ownerId khác Q thì ném 'mlk: cam trich chua doi sang nguoi mo lai <ownerId>'; bước 1 khác null thì ném 'mlk: buoc mo con trong tay vai okr'; bước 2 khác M thì ném 'mlk: buoc cua member bi doi'; bước 3 khác A hoặc completedAt null thì ném 'mlk: buoc da xong bi doi'; mất lượt theo dõi của M thì ném 'mlk: theo doi cua member bi go'; tập kind vết mới (sắp theo chữ) khác đúng ['buoc.giao','keHoach.doiCamTrich','keHoach.moLai'] thì ném 'mlk: vet mo lai sai <json>'; vết keHoach.doiCamTrich phải tu=A, den=Q và vết buoc.giao phải tu=A, den=null, không thì ném 'mlk: vet doi nguoi sai <json>'. Ca 'cầm trịch đọc được' (dữ liệu cũ): M cầm trịch, bước chưa xong giao A, A theo dõi; đóng; doiVai(A,'okr') đặt thẳng vai (trạng thái trước DA0a — đường thật setMemberRole sẽ gỡ lượt theo dõi). Chốt dựng: A không còn lượt theo dõi hay bước không còn của A thì ném 'mlk: dung sai <khoá>'. reopenPlan bởi Q: ownerId khác M thì ném 'mlk: doi cam trich doc duoc'; bước khác null thì ném 'mlk: cam trich doc duoc ma buoc con trong tay vai okr'; A còn lượt theo dõi thì ném 'mlk: cam trich doc duoc ma vai okr con theo doi'; tập kind vết mới khác ['buoc.giao','keHoach.moLai'] thì ném 'mlk: vet cam trich doc duoc sai <json>'. Chiều đỏ ở E8 (a), (b), (c), (e), (f)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, apps/api/src/onboarding/onboarding.service.ts, apps/api/test/mo-lai-vai-chi-okr.spec.ts]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mlk_mo_lai
+    expected: "exit 0; cùng -t mlk-mo-lai, ca 'đối chứng member': cùng khuôn E1 nhưng không doiVai. reopenPlan bởi Q: ownerId khác A, bước 1 khác A, bước 2 khác M, hay A mất lượt theo dõi thì ném 'mlk: mo lai doi nguoi doc duoc doi tac'; vết mới khác đúng ['keHoach.moLai'] thì ném 'mlk: doi chung co vet thua <json>'. Gọi reopenPlan lần nữa: có vết mới thì ném 'mlk: mo lai lan hai co vet'. Ca này xanh cả trước và sau phần sửa (đối chứng dương cho E1)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, apps/api/test/mo-lai-vai-chi-okr.spec.ts]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mlk_mo_lai
+    expected: "exit 0; cùng -t mlk-mo-lai, ca 'đã rời': khuôn E1 với A cầm trịch và giữ bước 1; đóng kế hoạch; gỡ A bằng WorkspaceService.removeMember(quanTri, {memberId: hàng member của A}). Chốt dựng: A còn hàng member, ownerId khác A hay bước 1 khác A thì ném 'mlk: dung sai <khoá>'. reopenPlan bởi Q: ownerId khác Q thì ném 'mlk: cam trich da roi chua doi'; bước 1 khác null thì ném 'mlk: buoc mo con trong tay nguoi da roi'; mỗi đổi người thiếu vết (keHoach.doiCamTrich tu=A den=Q; buoc.giao tu=A den=null) thì ném 'mlk: vet nguoi da roi sai <json>'. Chiều đỏ ở E8 (a), (b)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, apps/api/src/workspace/workspace.service.ts, apps/api/test/mo-lai-vai-chi-okr.spec.ts]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mlk_mo_lai
+    expected: "exit 0; cùng -t mlk-mo-lai, ca 'người bấm không nhận được việc': khuôn E1 đến sau doiVai(A,'okr'). Chụp ownerId, closedAt, assigneeId các bước, lượt theo dõi, số vết. new OnboardingGhi(db).datDong(id, false, X) với X là người vai okr 'mlk-x-okr': phải ném BadRequestException có message bằng ONBOARDING.thongDiep.vaiChiOkr(tên X), không thì ném 'mlk: nguoi bam vai okr khong bi chan' (chưa ném) hay 'mlk: loi nguoi bam sai <message>'; với X là user không có hàng member 'mlk-x-ngoai': message bằng ONBOARDING.thongDiep.khongPhaiThanhVien(mã X), cùng hai thông điệp với chữ 'ngoai'. Sau mỗi lần: bất kỳ giá trị đã chụp khác trước thì ném 'mlk: tu choi ma van ghi <khoá>'. Chiều đỏ: thay kiemNguoiNhanViec(người bấm) bằng giá trị không kiểm làm ca đỏ 'mlk: nguoi bam vai okr khong bi chan' (chạy tay ở S3, ghi trong sổ)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, apps/api/src/onboarding/onboarding-config.ts, apps/api/test/mo-lai-vai-chi-okr.spec.ts]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mlk_bo_xong
+    expected: "exit 0; -t mlk-bo-xong của apps/api/test/mo-lai-vai-chi-okr.spec.ts. Kế hoạch đang chạy do M vai member cầm trịch; bước của A (A vai member lúc giao) và bước của M đều đánh dấu xong qua setStepDone; setMemberRole(quanTri, {memberId của A, role:'okr'}) phải thành công. Chốt dựng: hai bước chưa xong, hay bước A khác A, thì ném 'mlk: dung sai <khoá>'. OnboardingService.setStepDone({stepId: bước A, done:false}, Q): completedAt khác null thì ném 'mlk: buoc khong mo lai'; assigneeId khác null thì ném 'mlk: bo xong tra buoc ve vai okr'; tập kind vết mới (sắp theo chữ) khác đúng ['buoc.boXong','buoc.giao'] thì ném 'mlk: vet bo xong sai <json>'; vết buoc.giao khác tu=A den=null thì ném 'mlk: vet bo xong doi nguoi sai <json>'. Bước của M: assigneeId khác M thì ném 'mlk: bo xong doi nguoi member'; vết mới khác ['buoc.boXong'] thì ném 'mlk: doi chung bo xong co vet thua <json>'. Ca 'đã rời': cùng khuôn, A gỡ bằng WorkspaceService.removeMember thay đổi vai; bỏ xong bước của A: assigneeId khác null thì ném 'mlk: bo xong tra buoc ve nguoi da roi'. Chiều đỏ ở E8 (d), (e)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, packages/db/src/onboarding-buoc.ts, apps/api/test/mo-lai-vai-chi-okr.spec.ts]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mlk_bo_xong
+    expected: "exit 0; cùng -t mlk-bo-xong, ca 'đối chứng vòng tròn': kế hoạch do M vai member cầm trịch, bước giao M; setStepDone done:true rồi done:false rồi done:true; đóng rồi mở lại kế hoạch. Sau mỗi bước assigneeId khác M hay ownerId khác M thì ném 'mlk: vong tron doi nguoi <bước>'; đếm kind của vết mới (đa tập, không theo thứ tự) khác đúng {buoc.xong: 2, buoc.boXong: 1, keHoach.dong: 1, keHoach.moLai: 1} thì ném 'mlk: vong tron vet sai <json>'. Ca xanh trước và sau phần sửa."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [apps/api/src/onboarding/onboarding-ghi.ts, packages/db/src/onboarding-buoc.ts, apps/api/test/mo-lai-vai-chi-okr.spec.ts]
+
+  - id: E7
+    criterion: AC-7
+    executor: test
+    layer: backend-effect
+    cmd: config:executors.test.mlk_thuoc
+    expected: "exit 0; -t mlk-thuoc của apps/api/test/mo-lai-vai-chi-okr.spec.ts chạy _acceptance/va-lo-ro-vai-chi-okr/rang/ro-vai-chi-okr.mjs (thước của DA0a, chỉ đọc, không sửa) bằng spawnSync với DATABASE_URL của kho thử. Đường tới thước tính từ gốc kho suy từ vị trí tệp bài kiểm (import.meta.dir), không theo thư mục làm việc; tệp thước không tồn tại thì ném 'mlk: khong thay thuoc <đường>' trước khi chạy. Ca 'sau mở lại': khuôn ca 'chỉ OKR' của E1 rồi reopenPlan; chạy --trong <A>: mã khác 0 thì ném 'mlk: thuoc con viec mo sau mo lai <mã> <stdout>'. Ca 'sau bỏ xong': khuôn E5 rồi bỏ xong; --trong <A>: mã khác 0 thì ném 'mlk: thuoc con viec mo sau bo xong <mã>'. Ca 'đường cũ': khuôn ca 'chỉ OKR' của E1 rồi db.onboardingPlan.update closedAt=null trực tiếp (không qua dịch vụ); --trong <A>: mã khác 1 thì ném 'mlk: thuoc khong do duoc viec mo <mã>' — thước đỏ được trên đúng vật này. Chiều đỏ của phần sửa ở E8 (a)–(d) qua E1/E5."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/va-lo-ro-vai-chi-okr/rang/ro-vai-chi-okr.mjs, apps/api/test/mo-lai-vai-chi-okr.spec.ts]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.mlk_dot_bien
+    expected: "exit 0; rang/dot-bien.mjs dùng ban-sao.mjs của ca-chap-chon-cach-ly: với mỗi cặp, chạy phép đo trên bản sao lành phải xanh, rồi thayMotLan chuỗi vật thật ở apps/api/src/onboarding/onboarding-ghi.ts và chạy lại phải đỏ với đúng thông điệp ghim: (a) bỏ lệnh đổi người cầm trịch khi mở lại → E1 đỏ 'mlk: cam trich chua doi sang nguoi mo lai'; (b) bỏ lệnh gỡ người được giao bước chưa xong khi mở lại → E1 đỏ 'mlk: buoc mo con trong tay vai okr'; (c) bỏ lệnh gỡ lượt theo dõi khi mở lại → E1 đỏ 'mlk: cam trich doc duoc ma vai okr con theo doi'; (d) bỏ lệnh gỡ người được giao khi bỏ xong → E5 đỏ 'mlk: bo xong tra buoc ve vai okr'; (e) hàm đọc người nhận coi mọi thành viên là nhận được việc → E5 đỏ 'mlk: bo xong tra buoc ve vai okr'; (f) chỉ gỡ người được giao và lượt theo dõi khi có đổi người cầm trịch → E1 đỏ 'mlk: cam trich doc duoc ma buoc con trong tay vai okr'. Thiếu chuỗi vật ở tệp thật thì ném KhongDo gọi tên cặp. In 'dot-bien: 6/6 cap dat'; số cặp khác SO_CAP_KHAI = 6 thì thoát 1. Tệp thật không đổi (git diff --quiet trên tệp vật sau lượt)."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+    paths: [_acceptance/mo-lai-khong-tra-viec-chi-okr/rang/dot-bien.mjs, apps/api/src/onboarding/onboarding-ghi.ts, apps/api/test/mo-lai-vai-chi-okr.spec.ts]
+
+  - id: E9
+    criterion: AC-9
+    executor: judgment
+    question: >-
+      Đọc docs/api.md, mục «Kế hoạch 30 ngày không giao việc cho người không đọc được dữ liệu đối tác» và các dòng
+      quanh nó, như một người mới vào kho. Tài liệu có nói rõ bốn điều không: (1) mở lại kế hoạch đã đóng và bỏ «xong»
+      một bước đi qua cùng điều kiện nhận việc với giao bước (kiemNguoiNhanViec — thành viên và vai docDuocDoiTac);
+      (2) khi mở lại kế hoạch, bước chưa xong của người không nhận được việc thành chưa giao và lượt theo dõi kế hoạch
+      của họ bị gỡ, còn bước đã xong giữ nguyên người làm; bỏ «xong» bước của người không nhận được việc thì bước
+      mở lại ở dạng chưa giao; (3) người cầm trịch không nhận được việc bị thay bằng người bấm mở lại, và mỗi đổi
+      người có vết; (4) người bấm mở lại cũng không nhận được việc thì mở lại bị từ chối, kế hoạch vẫn đóng. Tài liệu
+      không tự đúc từ ghép tiếng Việt cho thuật ngữ kỹ thuật mà CONTEXT.md không có. Trả PASS khi đủ bốn điều, FAIL
+      nêu điều thiếu.
+    inputs: [docs/api.md, CONTEXT.md]
+    evidence_required: [verdict, rationale, verified_at]
+    paths: [docs/api.md]
