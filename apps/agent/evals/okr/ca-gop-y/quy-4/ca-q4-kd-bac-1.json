@@ -1,0 +1,45 @@
+{
+	"id": "ca-q4-kd-bac-1",
+	"bo": "viet-lai",
+	"ngonNgu": "vi",
+	"donVi": {
+		"cap": "phong-ban",
+		"ten": "Kinh doanh miền Bắc"
+	},
+	"mucTieu": {
+		"title": "Giữ đà tăng trưởng bán lẻ miền Bắc",
+		"whyNow": "Quý 3 ký được 11 hợp đồng; mùa mua sắm cuối năm là lúc đối tác cần kho nhất.",
+		"kind": "cam-ket"
+	},
+	"krs": [
+		{
+			"title": "Hợp đồng bán lẻ chốt được đạt 6 tỷ đồng",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 6,
+			"unit": "tỷ đồng"
+		},
+		{
+			"title": "Số cuộc hẹn gặp đối tác mới đạt 60",
+			"kind": "tang-toi",
+			"startValue": 0,
+			"targetValue": 60,
+			"unit": "cuộc hẹn"
+		},
+		{
+			"title": "Tỷ lệ báo giá thành hợp đồng",
+			"kind": "phan-tram",
+			"startValue": 20,
+			"targetValue": 35,
+			"unit": "%"
+		}
+	],
+	"kyVong": {
+		"vanDe": [],
+		"vietLai": [],
+		"khongGopY": false,
+		"khongDuoc": [],
+		"soSai": false
+	},
+	"ghiChu": "Không dấu hiệu rõ: doanh thu, cuộc hẹn và tỷ lệ chốt."
+}

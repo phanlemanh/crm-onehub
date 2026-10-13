@@ -38,7 +38,6 @@ flowchart TD
 ## Sắp mở vòng
 
 - Hồ sơ đã ký không còn đỏ sẵn trên onehub: mỗi thước chết được sửa hoặc ghi lại có lý do (`ba-ho-so-do-san`)
-- Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố (`bo-ca-mau-quy-4`)
 - Trợ lý kho được đo trên 50 câu hỏi mẫu viết theo tài liệu của kho mẫu — câu trả lời được, câu phải nói không biết, câu hỏi qua Zalo — không chờ người gom câu hỏi thật (`bo-cau-hoi-mau`)
 - Ngăn bản ghi và Kanban thoả thuận không vỡ bố cục ở khổ hẹp (`bo-cuc-hep-ngan-va-kanban`)
 - Cây căn chỉnh hiện lý do của từng đường nối và lọc được các đường «Chưa có lý do» (`cay-can-chinh-co-ly-do`)
@@ -72,6 +71,7 @@ flowchart TD
 
 - «Test của agent không nhập mã của app; danh sách thoả thuận Kara trả có một schema dùng chung» (`agent-test-khong-nhap-app`)
 - Bàn gieo góp ý dùng chung chạy lại được sau khi công cụ nộp của Trợ lý OKR tự đóng việc, để ba bàn đo màn OKR đo được lại (`ban-gieo-gop-y-sau-nop`)
+- Góp ý của Kara được đo trên khoảng 30 ca mẫu dựng theo khuôn OKR quý 4 — cấp OneHub và phòng ban — nằm trong bộ OKR mẫu, không chờ phòng ban công bố (`bo-ca-mau-quy-4`)
 - Bộ xương Kara trong packages/ui — sáu khối KaraTranscript, KaraComposer, KaraSteps, KaraState, KaraProposal, KaraArtifact, một nút «Thử lại», và ba điểm cắm cho K2: co giãn trong thanh kéo, khoá đề xuất khi Kara đang soạn, nhận theo nhóm (`bo-xuong-kara`)
 - Ca kiểm chập chờn theo máy thôi làm đỏ lượt dài — dọn eve mồ côi của lượt bị ngắt, chờ route thật có trần, trần hook dựng Nest có tên, công tắc bỏ ca tới được test (`ca-chap-chon-cach-ly`)
 - Ba ca chập chờn còn lại chạy tất định — hai đối chứng «the fixture bites» của tasks.integration giữ thống kê đứng yên và gọi tên khi kế hoạch đổi; ma() của bộ gieo agent-okr không sinh chữ số (`ca-chap-chon-con-lai`)

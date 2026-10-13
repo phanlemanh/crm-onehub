@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Lora:ital,wght@0,400;1,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#575757"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#006B4F"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1f4f7a"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#fafafa"/>
+
+      <text x="40" y="48" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LUỒNG ĐO · HỎI-2 Ở BỘ SINH CA · HỎI-1 Ở RANG ĐO · CỔNG PHẠM VI</text>
+
+      <line x1="200" y1="120" x2="232" y2="120" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="392" y1="120" x2="424" y2="120" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="584" y1="120" x2="616" y2="120" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="776" y1="120" x2="808" y2="120" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="968" y1="120" x2="1000" y2="120" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <line x1="312" y1="160" x2="312" y2="192" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="888" y1="160" x2="888" y2="192" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <path d="M232 224 L184 224 A8 8 0 0 0 176 232 L176 304" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M392 224 L440 224 A8 8 0 0 1 448 232 L448 304" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <path d="M808 224 L760 224 A8 8 0 0 0 752 232 L752 304" fill="none" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <path d="M968 224 L1016 224 A8 8 0 0 1 1024 232 L1024 304" fill="none" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <rect x="200" y="200" width="16" height="16" rx="2" fill="#fafafa"/>
+      <text x="208" y="212" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">A</text>
+      <rect x="408" y="200" width="16" height="16" rx="2" fill="#fafafa"/>
+      <text x="416" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">B</text>
+      <rect x="776" y="200" width="16" height="16" rx="2" fill="#fafafa"/>
+      <text x="784" y="212" fill="#006B4F" font-size="9" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">A</text>
+      <rect x="984" y="200" width="16" height="16" rx="2" fill="#fafafa"/>
+      <text x="992" y="212" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">B</text>
+
+      <rect x="40" y="80" width="160" height="80" rx="40" fill="#fafafa"/>
+      <rect x="40" y="80" width="160" height="80" rx="40" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="120" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ OKR mẫu</text>
+      <text x="120" y="134" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">cong-ty.json</text>
+
+      <rect x="232" y="80" width="160" height="80" rx="6" fill="#fafafa"/>
+      <rect x="232" y="80" width="160" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="312" y="108" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Bộ sinh ca</text>
+      <text x="312" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">+ tệp nhãn</text>
+      <text x="312" y="144" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">bun run okr:ca-quy-4</text>
+
+      <rect x="424" y="80" width="160" height="80" rx="6" fill="#fafafa"/>
+      <rect x="424" y="80" width="160" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="504" y="116" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">32 ca quý 4</text>
+      <text x="504" y="134" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">quy-4/*.json · git</text>
+
+      <rect x="616" y="80" width="160" height="80" rx="6" fill="#fafafa"/>
+      <rect x="616" y="80" width="160" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="696" y="108" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Eval góp ý</text>
+      <text x="696" y="124" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">chọn bộ ca</text>
+      <text x="696" y="144" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">TDX_THU_MUC_CA</text>
+
+      <rect x="808" y="80" width="160" height="80" rx="6" fill="#fafafa"/>
+      <rect x="808" y="80" width="160" height="80" rx="6" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="888" y="108" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Rang đo</text>
+      <text x="888" y="128" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">kho đo · Kara + judge ZDR</text>
+      <text x="888" y="144" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">chấm luật E22</text>
+
+      <rect x="1000" y="80" width="160" height="80" rx="40" fill="#fafafa"/>
+      <rect x="1000" y="80" width="160" height="80" rx="40" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="1080" y="108" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ma x/n · judge y</text>
+      <text x="1080" y="128" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">cạnh ngưỡng ca mẫu</text>
+      <text x="1080" y="144" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">30/30 · 0,95</text>
+
+      <polygon points="312,192 392,224 312,256 232,224" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="312" y="220" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hỏi-2</text>
+      <text x="312" y="234" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ca OneHub lấy gì</text>
+
+      <polygon points="888,192 968,224 888,256 808,224" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="888" y="220" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Hỏi-1</text>
+      <text x="888" y="234" fill="#575757" font-size="9" font-family="'Geist', sans-serif" text-anchor="middle">chi tiền gọi mô hình</text>
+
+      <rect x="88" y="304" width="176" height="80" rx="6" fill="#fafafa"/>
+      <rect x="88" y="304" width="176" height="80" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="96" y="312" width="56" height="16" rx="2" fill="#006B4F"/>
+      <text x="124" y="323.5" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHUYÊN</text>
+      <text x="176" y="352" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">3 mục tiêu OneHub</text>
+      <text x="176" y="368" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">của năm</text>
+
+      <rect x="360" y="304" width="176" height="80" rx="6" fill="#fafafa"/>
+      <rect x="360" y="304" width="176" height="80" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="448" y="352" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">3 ca OneHub quý</text>
+      <text x="448" y="368" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">viết tay trong nhãn</text>
+
+      <rect x="664" y="304" width="176" height="80" rx="6" fill="#fafafa"/>
+      <rect x="664" y="304" width="176" height="80" rx="6" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <rect x="672" y="312" width="56" height="16" rx="2" fill="#006B4F"/>
+      <text x="700" y="323.5" fill="#fafafa" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">KHUYÊN</text>
+      <text x="752" y="352" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đo trong S4</text>
+      <text x="752" y="370" fill="#575757" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">trần 2 USD/lượt · ≤ 3 lượt</text>
+
+      <rect x="936" y="304" width="176" height="80" rx="6" fill="#fafafa"/>
+      <rect x="936" y="304" width="176" height="80" rx="6" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="1024" y="352" fill="#171717" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Đo một lần tay</text>
+      <text x="1024" y="370" fill="#575757" font-size="10" font-family="'Geist', sans-serif" text-anchor="middle">ngoài S4</text>
+
+      <text x="312" y="404" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">d-…-11 · AC-1 · AC-2</text>
+      <text x="888" y="404" fill="#666666" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">d-…-10 · AC-7</text>
+
+      <line x1="40" y1="428" x2="1160" y2="428" stroke="rgba(23,23,23,0.12)" stroke-width="0.8"/>
+      <text x="40" y="456" fill="#575757" font-size="9" font-family="'Geist Mono', monospace" letter-spacing="0.14em">CHÚ GIẢI</text>
+
+      <rect x="128" y="446" width="28" height="14" rx="7" fill="rgba(23,23,23,0.03)" stroke="rgba(23,23,23,0.30)" stroke-width="1"/>
+      <text x="164" y="456" fill="#575757" font-size="11" font-family="'Geist', sans-serif">đầu, cuối</text>
+
+      <rect x="264" y="446" width="28" height="14" rx="2" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="300" y="456" fill="#575757" font-size="11" font-family="'Geist', sans-serif">bước</text>
+
+      <polygon points="384,452 400,445 416,452 400,459" fill="#ffffff" stroke="#171717" stroke-width="1"/>
+      <text x="424" y="456" fill="#575757" font-size="11" font-family="'Geist', sans-serif">điểm rẽ người quyết</text>
+
+      <line x1="584" y1="452" x2="612" y2="452" stroke="#006B4F" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <rect x="620" y="446" width="28" height="14" rx="2" fill="rgba(0,107,79,0.08)" stroke="#006B4F" stroke-width="1.4"/>
+      <text x="656" y="456" fill="#575757" font-size="11" font-family="'Geist', sans-serif">nhánh máy khuyên</text>
+
+      <line x1="808" y1="452" x2="836" y2="452" stroke="#575757" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <rect x="844" y="446" width="28" height="14" rx="2" fill="#ffffff" stroke="#575757" stroke-width="1"/>
+      <text x="880" y="456" fill="#575757" font-size="11" font-family="'Geist', sans-serif">nhánh đem so</text>
+    </svg>
