@@ -7,13 +7,13 @@
 ```mermaid
 flowchart TD
   A["Đang cân nhắc cơ hội<br/>9 việc"] --> GD{"Cổng Đáng"}
-  GD --> B["Sắp mở vòng<br/>23 việc"]
+  GD --> B["Sắp mở vòng<br/>21 việc"]
   GD --> XL["Xếp lại sau<br/>chưa có"]
   GD --> DB["Đã bác từ khám phá<br/>chưa có"]
   B --> CD["Chờ duyệt phạm vi<br/>chưa có"] --> GP{"Cổng Phạm vi"}
   GP --> DL["Đang làm<br/>1 việc"] --> GB{"Cổng Bằng chứng"}
   GB --> DG["Đã giao<br/>140 việc"]
-  GB --> CN["Chờ phiên nghiệm thu<br/>97 việc"] --> GG{"Cổng Giá trị"}
+  GB --> CN["Chờ phiên nghiệm thu<br/>98 việc"] --> GG{"Cổng Giá trị"}
   GG --> NT["Đã nghiệm thu giá trị<br/>1 việc"]
   HS["Hồ sơ hỏng<br/>1 việc"]
 ```
@@ -53,12 +53,10 @@ flowchart TD
 - Khi Kara đang soạn hoặc người dùng gõ dở trong khung, bấm một liên kết trong khung thì được hỏi trước khi rời, chữ đang gõ không mất (`khung-soan-chan-lien-ket`)
 - Tôi xem được các phiên bản cũ của trang, khôi phục một bản cũ qua duyệt, và lưu trữ trang không còn dùng (`lich-su-va-luu-tru-trang`)
 - Lọc và chuyển kiểu xem ở mọi danh sách trông và chạy như nhau, và gửi đường dẫn cho đồng nghiệp là giữ nguyên bộ lọc (`loc-va-kieu-xem-chung`)
-- Lưu trữ một trường thôi hỏi lại và có «Hoàn tác» như mọi chỗ lưu trữ khác (`luu-tru-truong-khong-hoi`)
 - Cùng một nghĩa — xong, chờ, hỏng, nháp, đang chạy — mang cùng một màu ở OKR, Kara, lịch họp và Tài liệu (`mau-trang-thai-chung`)
 - Ghim lại các hồ sơ đã ký chạy được (`neo-thuoc-het-han`)
 - Danh sách góp ý đã gom được sửa trong một lượt (`sua-sau-chay-that`)
 - Màn tác nhân đọc được trên điện thoại, trạng thái tiếng Việt, bộ dựng không treo im lặng (`tac-nhan-va`)
-- Thêm bước ở kế hoạch báo đúng: danh sách bộ phận không tải được thì nói lý do; số việc quá hạn đếm theo một ngày; bộ phận không có thật trả cùng một lỗi như mọi chỗ khác (`them-buoc-bao-dung`)
 - Phép đo thẻ «Việc của bạn» (E7b của DA0a) tự đỏ khi câu ghim sai, không chỉ khi màn sai (`thuoc-viec-cua-ban-do-duoc`)
 
 ## Đang làm
@@ -101,7 +99,6 @@ flowchart TD
 - PR nháp và PR chỉ chạm tệp T1 không chạy job nặng của ci.yml và acceptance.yml; ci-ok xanh khi bỏ qua hợp lệ; push giữ nguyên; luật PR nháp trong CLAUDE.md (`giam-phut-ci-nhap-t1`)
 - Mục tiêu có mức hiển thị giới hạn, có bước duyệt nhẹ tuỳ chọn, và tái cơ cấu giữa kỳ không làm OKR mồ côi — mức công khai hay giới hạn áp trên mọi đường đọc OKR, ô «Công bố cần duyệt» của Chương trình OKR với một người duyệt suy từ cây, cây tổ chức không lưu trữ hay xoá được đơn vị còn OKR, chuyển OKR sang đơn vị khác, danh sách OKR mồ côi (lượt 8c — MT-06, QT-02, TC-06) (`gioi-han-duyet-cay-okr`)
 - Góp ý của Kara ở khu OKR đặt đúng chỗ — «Kara · N góp ý» trên thẻ Mục tiêu, đề xuất neo ngay dưới từng KR ở khung chi tiết với biên nhận có Hoàn tác, hộp Sửa chỉ còn một dòng dẫn sang (`gop-y-dung-cho`)
-- «Tôi bấm Gửi tín hiệu ở bất kỳ màn nào, kể điều mình gặp, rồi thấy nó đã vào nhóm nào, thành việc nào, đã giao chưa» (`gui-tin-hieu-trong-crm`)
 - Job «lệnh dựng» của acceptance.yml nới heap Node cho bước bun run build, để next build không đổ ở trần 2 GB mặc định (`heap-lenh-dung`)
 - «Hoàn tác hàng loạt đúng bản đã cất» — lưu trữ và khôi phục hàng loạt trả danh sách id thật sự đã đổi trạng thái; Hoàn tác chỉ khôi phục những bản đó, báo thật số bản không về được, toast không in câu lỗi máy chủ thô (`hoan-tac-loat-dung-id`)
 - Người đã nối Zalo nhắn một câu hỏi cho bot thì trợ lý AI của CRM trả lời bằng chữ, chỉ đọc, theo đúng cổng vai của người hỏi và trong ranh giới dữ liệu A; có trần theo người và theo xưởng (`hoi-crm-qua-zalo`)
@@ -119,6 +116,7 @@ flowchart TD
 - Danh sách liên quan trong ngăn bản ghi không lẫn bản đã lưu trữ, kèm «+n đã lưu trữ» để mở xem (`lien-quan-loc-ban-da-cat`)
 - «Trang lộ trình đúng tên OneHub Center và không làm vỡ bản dựng» (`lo-trinh-ten-va-build`)
 - Luật thứ bảy «vong-doi» của scripts/luat-kho — máy bắt mô hình có hai cột cất, thủ tục list lẫn bản đã cất, và xoá vĩnh viễn không kiểm bản đã lưu trữ — và cả bộ luật kho chạy ở CI Acceptance (`luat-kho-vong-doi`)
+- Lưu trữ một trường thôi hỏi lại và có «Hoàn tác» như mọi chỗ lưu trữ khác (`luu-tru-truong-khong-hoi`)
 - Lý do Kara viết cho dòng căn chỉnh ở Soạn OKR đi theo căn chỉnh vào OKR thật, căn chỉnh cũ từ Soạn được điền lại, và khuôn trả của mục tiêu nói rõ mức tin của từng căn chỉnh (`ly-do-can-chinh-tu-soan`)
 - Lý do Kara nộp bản nháp bị từ chối hiện thành câu theo ngôn ngữ người dùng, không lộ mã máy (`ly-do-tu-choi-nop-theo-locale`)
 - Màn OKR trước R1 — Hồi ý không bị thanh công bố che, Cập nhật tuần nói «đã xong tuần này», thẻ Toàn cảnh không nói ngược bảng (`man-okr-truoc-r1`)
@@ -142,6 +140,7 @@ flowchart TD
 - Soạn OKR mở trong khung bản ghi như deal (?record=soan:<cuộc>), Kara cố định ở mép phải với bề ngang chuẩn, bản nháp mở thêm về bên trái, hai ô có khung liền, khung cao hết màn, dưới 768 px phủ toàn màn hai tab, đang soạn thì không lỡ tay đóng và đóng không giết lượt (`soan-okr-trong-khung`)
 - Thành viên vào đúng — quản trị đặt được tên miền nội bộ; cho phép một người đã là thành viên không sinh dòng treo; nút «Cho phép một địa chỉ» không mất sau lỗi; dựng lại thành viên theo luật «có dòng còn hiệu lực thì cho» (`thanh-vien-vao-dung`)
 - Thẻ góp ý của Trợ lý OKR — hộp sửa rộng hơn khi cột góp ý mở, mỗi đề xuất là thẻ xếp dọc trải hết bề ngang với hàng nút ở chân và đúng một nút chính, dựng trên Confirmation của AI Elements; gợi ý thông tin ở tab Tổng quan dùng cùng thẻ; chỉ giao diện (`the-gop-y-okr`)
+- Thêm bước ở kế hoạch báo đúng: danh sách bộ phận không tải được thì nói lý do; số việc quá hạn đếm theo một ngày; bộ phận không có thật trả cùng một lỗi như mọi chỗ khác (`them-buoc-bao-dung`)
 - Thước đo 7 ngày của ci-ma-tran-ba-o đọc đúng các lượt CI của PR vào onehub trong cửa sổ 7 ngày, chạy được bằng đúng lệnh ghi trong hồ sơ, và báo lỗi thay vì đoán khi không xếp được một job `cancelled` (`thuoc-7-ngay-loc-pr`)
 - Thước của hồ sơ đã ký không tự hết hạn — sửa paths chết để lưới trước-gộp bật lại bộ lọc hoá cũ ở 3 hồ sơ có thước còn sống, neo thước «vòng này» của ha-tran-thang-hoi-zalo vào cặp sha gộp, và kiểm kê phần còn lại (`thuoc-khong-tu-het-han`)
 - Thước «một chỗ khai» của K2b quét thật khu soạn: ba gốc quét khai một chỗ trong chung.mjs, đọc thư mục thật, gốc nào rỗng thì đỏ gọi tên (`thuoc-mot-cho-khai-quet-man`)

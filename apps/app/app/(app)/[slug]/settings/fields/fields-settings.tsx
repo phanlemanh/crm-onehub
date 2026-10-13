@@ -10,6 +10,7 @@ import { FieldEditor } from "@/components/crm/fields/field-editor";
 import { entityTabs } from "@/components/crm/fields/fields-copy";
 import { entityOf } from "@/components/crm/fields/fields-entity";
 import { FieldsList } from "@/components/crm/fields/fields-list";
+import { useLuuTruTruong } from "@/components/crm/fields/use-luu-tru-truong";
 import type { EntityKind } from "@/components/crm/record-sheet/record-stack";
 import { SEARCH_PARAM } from "@/lib/search-param-keys";
 import { useTRPC } from "@/lib/trpc/client";
@@ -45,6 +46,7 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: EntityKind }) {
 	);
 	const quyen = useQuery(trpc.fields.access.queryOptions());
 	const khoa = quyen.data?.canManage !== true;
+	const luuTru = useLuuTruTruong(entity);
 
 	const editingKey = editingRaw && editingRaw !== "new" ? editingRaw : null;
 	const editing = editingKey
@@ -82,6 +84,7 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: EntityKind }) {
 							entity={entity}
 							field={editing}
 							onDone={() => onEdit(null)}
+							onArchive={luuTru}
 						/>
 					</div>
 				)
@@ -91,6 +94,7 @@ export function FieldsSettings({ kindBanDau }: { kindBanDau: EntityKind }) {
 					khoa={khoa}
 					onEdit={(key) => onEdit(key)}
 					onNew={() => onEdit("new")}
+					onArchive={luuTru}
 				/>
 			)}
 		</div>

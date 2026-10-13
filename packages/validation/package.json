@@ -21,6 +21,7 @@
 		"./listing-ingest": "./src/listing-ingest.ts",
 		"./so-dien-thoai": "./src/so-dien-thoai.ts",
 		"./nhac-ke-hoach": "./src/nhac-ke-hoach.ts",
+		"./ngay-vn": "./src/ngay-vn.ts",
 		"./okr-ca-gop-y": "./src/okr-ca-gop-y.ts",
 		"./okr-cap-nhat": "./src/okr-cap-nhat.ts",
 		"./okr-chi-so": "./src/okr-chi-so.ts",
