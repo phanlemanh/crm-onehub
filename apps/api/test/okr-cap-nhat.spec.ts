@@ -2017,8 +2017,8 @@ describe("chuyen-okr", () => {
 				"onboarding chuyen",
 			),
 		}).toEqual({
-			xemTruoc: { keHoach: 0, buoc: 0 },
-			chuyen: { keHoach: 0, buoc: 0 },
+			xemTruoc: { keHoach: 0, buoc: 0, viec: 0 },
+			chuyen: { keHoach: 0, buoc: 0, viec: 0 },
 		});
 	});
 });
