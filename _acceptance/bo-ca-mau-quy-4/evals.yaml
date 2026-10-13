@@ -1,0 +1,79 @@
+schema_version: 1
+feature_slug: bo-ca-mau-quy-4
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: test
+    cmd: config:executors.test.bcq4_sinh
+    paths: [apps/api/scripts/okr-mau/ca-quy-4.ts, apps/api/scripts/okr-mau/nhan-ca-quy-4.json, apps/api/scripts/okr-mau/cong-ty.json, apps/api/scripts/okr-ca-quy-4.ts, apps/api/test/okr-ca-quy-4.spec.ts]
+    expected: "exit 0; bài đọc cong-ty.json bằng docBoOkrMau, tự rút TẬP MÃ KỲ VỌNG từ dữ liệu đã parse (chuKy quy4 · cap bo-phan|phong-ban · trangThai cong-bo, cộng chuKy nam · cap onehub) — không chép tay danh sách; chạy sinhCaQuy4 rồi so toEqual tập id viet-lai với {ca-<ma>} của tập đó; với từng ca so toEqual {donVi.cap, donVi.ten, mucTieu.title/whyNow/kind, krs[i].title/kind/startValue/targetValue/unit} với mục tiêu nguồn rút từ bộ đã parse (quan hệ từng trường, không đếm). Mục tiêu nháp, chờ duyệt, đã bỏ của bộ mẫu không có ca nào (khẳng định từng mã). CHIỀU ĐỎ cùng fixture: bản sao bộ mẫu trong bài đổi tên một KR của q4-kho-van-2 → so ca với nguồn của bộ GỐC thì đỏ ghim «ca-q4-kho-van-2 krs[0].title»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: test
+    cmd: config:executors.test.bcq4_ng
+    paths: [apps/api/scripts/okr-mau/ca-quy-4.ts, apps/api/scripts/okr-mau/nhan-ca-quy-4.json, apps/api/test/okr-ca-quy-4.spec.ts]
+    expected: "exit 0; với mỗi dòng nhãn bo ng, bài tự giải đích căn chỉnh từ bộ đã parse (canChinh.mucTieu, hoặc mục tiêu chứa KR canChinh.kr) và so toEqual capTren.mucTieu + capTren.krs với mục tiêu OneHub đó; kyVong.khongDuoc chứa chep-kr-cap-tren và noi-ve-nguoi. Ca ca-ng-q4-nhan-su-1 có capTren là n3 (căn chỉnh qua KR n3-k1). CHIỀU ĐỎ: bản sao bộ mẫu đổi canChinh của q4-nhan-su-1 sang KR n1-k1 → capTren sinh ra là n1, bài khẳng định khác n3 ghim «ca-ng-q4-nhan-su-1 capTren»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: test
+    cmd: config:executors.test.bcq4_nhan_hong
+    paths: [apps/api/scripts/okr-mau/ca-quy-4.ts, apps/api/scripts/okr-ca-quy-4.ts, apps/api/test/okr-ca-quy-4.spec.ts]
+    expected: "exit 0; BẢNG VIẾT TRƯỚC sáu ca hỏng, mỗi ca một bản sao nhãn ghi ra thư mục tạm và chạy LỆNH THẬT (tiến trình con bun scripts/okr-ca-quy-4.ts --nhan <bản sao> --ra <thư mục tạm có sẵn một tệp ca>): (1) xoá dòng q4-tai-chinh-1 → stderr chứa «q4-tai-chinh-1» và «thiếu nhãn»; (2) thêm dòng mã q4-khong-co → «q4-khong-co» và «không có»; (3) thêm dòng mã q4-marketing-nhap → «q4-marketing-nhap» và «không được chọn»; (4) lặp dòng q4-kd-bac-2 → «q4-kd-bac-2» và «trùng»; (5) dòng bo ng cho q4-phap-che-3 → «q4-phap-che-3» và «căn chỉnh»; (6) kyVong.vanDe chứa mã la → «ca-q4-vh» và «kyVong». Mỗi ca: mã thoát đúng 4, và băm nội dung thư mục tạm trước = sau. ĐỐI CHỨNG DƯƠNG: nhãn nguyên bản qua cùng lệnh thoát 0 và thư mục tạm đổi."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: test
+    cmd: config:executors.test.bcq4_dong_bo
+    paths: [apps/api/scripts/okr-mau/**, apps/api/scripts/okr-ca-quy-4.ts, apps/agent/evals/okr/ca-gop-y/quy-4/**, apps/api/test/okr-ca-quy-4.spec.ts]
+    expected: "exit 0; bài chạy lệnh thật --ra <thư mục tạm>, rồi so tập tên tệp và nội dung từng byte của thư mục tạm với apps/agent/evals/okr/ca-gop-y/quy-4 trong cây — toEqual; một thư mục tạm có sẵn tệp ca-cu.json sau lệnh không còn tệp đó. CHIỀU ĐỎ cùng fixture: bài chép bộ ca của cây vào thư mục tạm khác, sửa một chữ trong ca-n2.json, chạy cùng hàm so → đỏ ghim «ca-n2.json»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: test
+    cmd: config:executors.test.bcq4_thanh_phan
+    paths: [apps/agent/evals/okr/ca-gop-y/**, apps/agent/evals/okr/ca-gop-y.ts, apps/agent/test/okr-ca-quy-4.spec.ts]
+    expected: "exit 0; docBoCaGopY(THU_MUC_CA_QUY_4): 28 ≤ số ca ≤ 34; tập donVi.ten của ca viet-lai cấp phong-ban = tập tên mười phòng ban mẫu, cấp bo-phan = hai tên bộ phận có mục tiêu quý 4, cấp onehub = ba ca (tập tên rút từ cong-ty.json đọc bằng JSON, không chép tay); ≥ 4 ca bo ng có capTren; ≥ 3 ca khongGopY; mọi KR: krInput.safeParse thành công và kiemSoTheoKieu null; giao tập id với docBoCaGopY(THU_MUC_CA_MAU) rỗng; BẢNG NHÃN VIẾT TRƯỚC trong bài (mã ca → kyVong.vanDe, kyVong.khongGopY, kyVong.vietLai, kyVong.khongDuoc) chép từ bảng «Nhãn» của design doc, so toEqual với từng ca đọc được — 32 dòng, không đếm. CHIỀU ĐỎ: (a) bản sao thư mục trong bài có thêm một tệp mang id gy-01 → khẳng định giao rỗng đỏ ghim «gy-01»; (b) bản sao ca-q4-vh bỏ kr-la-viec khỏi vanDe → so bảng đỏ ghim «ca-q4-vh kyVong»."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E6
+    criterion: AC-6
+    executor: test
+    cmd: config:executors.test.bcq4_chon_bo
+    paths: [apps/agent/evals/okr/ca-gop-y.ts, apps/agent/evals/okr/gop-y.eval.ts, apps/agent/agent/lib/okr/config.ts, apps/agent/test/okr-ca-quy-4.spec.ts]
+    expected: "exit 0; thuMucBoCa({ [TRO_LY_OKR.danhGia.env.thuMucCa]: THU_MUC_CA_QUY_4 }) trả THU_MUC_CA_QUY_4; thuMucBoCa({}) trả thư mục mẫu; thuMucBoCa với thư mục không có ném lỗi chứa đường dẫn đó; bài đọc nguồn gop-y.eval.ts khẳng định boCa() gọi thuMucBoCa(process.env) và không còn tham chiếu THU_MUC_CA_MAU trực tiếp trong boCa (đo nối dây, vì eval cần mô hình nên bài không chạy nó). CHIỀU ĐỎ: thuMucBoCa với biến là chuỗi rỗng trả thư mục mẫu, không ném — ghim để biến rỗng của CI không làm đổi bộ."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bcq4_do_gop_y
+    paths: [_acceptance/bo-ca-mau-quy-4/rang/**, apps/agent/evals/okr/**, apps/agent/agent/subagents/tro_ly_okr/**, apps/agent/agent/lib/okr/**, apps/api/scripts/okr-mau/**]
+    expected: "exit 0; rang tạo kho đo dùng-một-lần (taoKho của rang 9b), nạp bộ OKR mẫu, chạy eve eval okr/gop-y okr/ng với TDX_THU_MUC_CA trỏ bản chép bộ quý 4 cộng ca đối chứng, judge zai/glm-5.2-fast ZDR; chấm từng ca bằng luật chốt mã của E22 (da-nop; 0 dòng số mới theo so-moi-lot.mjs của 9b; khongGopY 0 dòng viết lại; mỗi vanDe có dòng đúng trường hay maVanDe trừ mã luật lớp 7 đã hỏi; NG không mã cấm, không chép KR cấp trên, không tên người, không từ cấm); in mỗi ca DUNG/SAI kèm lý do và dòng 'ma: x/n · judge: y (k cap, nguong 0.7) · ca mau 9b: 30/30 · 0.95'; ghi evidence/do-gop-y-quy-4.md có một hàng mỗi ca; in và ghi tổng USD đã tiêu cạnh trần; xoá kho đo. Số ca đạt KHÔNG quyết mã thoát. Thiếu khoá mô hình → mã 2, không xanh. CHIỀU ĐỎ ghim: ca đối chứng 'Gọi 50 cuộc' gán khongGopY true — nếu ca đó chấm DUNG thì rang in 'ca doi chung khong bat duoc' và thoát 3; ca quý 4 không có bản ghi tổng kết → thoát 2 kèm mã ca."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: judgment
+    inputs: [docs/setup.md, CONTEXT.md, apps/api/scripts/okr-ca-quy-4.ts, _acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs, apps/agent/evals/okr/ca-gop-y.ts]
+    question: "Một phiên lượt sau chỉ đọc docs/setup.md có tự sinh lại được bộ ca quý 4, đo Kara trên nó, và đưa ca thật vào ca-gop-y/that/ rồi đo bằng --thu-muc không? Tên lệnh, cờ (--ra, --nhan, --thu-muc, --tran-usd) và mã thoát trong tài liệu có khớp với hai tệp lệnh đính kèm không? Tài liệu có nói vì sao ca thật không vào git, và có chữ tự đúc nào chưa có mục trong CONTEXT.md không?"
+    evidence_required: [run_id, verdict, judges, verified_at]
+    paths:
+      - "docs/setup.md"
+      - "CONTEXT.md"
+      - "apps/api/scripts/okr-ca-quy-4.ts"
+      - "_acceptance/bo-ca-mau-quy-4/rang/do-gop-y-quy-4.mjs"
+      - "apps/agent/evals/okr/ca-gop-y.ts"
+
+  - id: E9
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bcq4_tu_kiem_cham
+    paths: [_acceptance/bo-ca-mau-quy-4/rang/**, apps/agent/evals/okr/tong-ket-gop-y.ts, packages/validation/src/okr-kiem.ts]
+    expected: "exit 0, không gọi mô hình, không mở cơ sở dữ liệu; rang --tu-kiem chạy MA TRẬN VIẾT TRƯỚC bảy dòng, mỗi dòng một bản ghi tổng kết dựng bằng dongTongKet của tong-ket-gop-y.ts (writer thật của eval, round-trip qua bộ đọc của rang) cho một ca giả: (1) outcome tu-choi → SAI ghim «viec dong bang»; (2) id dòng nằm trong tập số mới → SAI ghim «so moi con lai»; (3) ca khongGopY có dòng viet-lai chờ → SAI ghim «khongGopY»; (4) ca vanDe kr-la-viec không dòng nào → SAI ghim «van de kr-la-viec»; (5) ca NG có dòng title sau = tên KR cấp trên → SAI ghim «chep-cap-tren»; (6) ca NG có dòng nhắc họ tên một thành viên → SAI ghim «noi-ve-nguoi»; (7) ca không có bản ghi → SAI ghim «khong co ban ghi». ĐỐI CHỨNG DƯƠNG: bản ghi hợp lệ cho cùng ca (da-nop, dòng đúng trường) → DUNG; và ca vanDe kr-la-viec mà KR mở bằng «Gọi 50 cuộc» (luật lớp 7 đã hỏi) không dòng nào → DUNG kèm «phu boi luat luot 7». In 'tu kiem cham: 9/9'; dòng nào lệch thì in tên dòng và thoát 1."
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

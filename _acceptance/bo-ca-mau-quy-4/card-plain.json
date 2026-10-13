@@ -1,0 +1,35 @@
+{
+  "feature_plain": "Có sẵn khoảng 30 ca góp ý rút từ OKR quý 4 của công ty mẫu — cấp OneHub, bộ phận, phòng ban — và một lệnh đo Kara góp ý trên chúng bằng đúng thước đã dùng cho ca mẫu, để quyết bật góp ý cho người dùng mà không phải chờ phòng ban công bố OKR thật.",
+  "will_do": [
+    {"id": "AC-1", "p": "Sẽ sinh một ca góp ý cho mỗi mục tiêu đã công bố của OKR quý 4 mẫu và mỗi mục tiêu OneHub của năm, chép đúng chữ và số của mục tiêu gốc; mục tiêu nháp, chờ duyệt, đã bỏ không thành ca."},
+    {"id": "AC-2", "p": "Sẽ có ít nhất bốn ca thử Kara khi góp ý cho phòng ban có mục tiêu cấp trên: ca mang kèm đúng mục tiêu OneHub mà phòng ban đó căn chỉnh vào."},
+    {"id": "AC-3", "p": "Sẽ từ chối sinh bộ ca khi tệp nhãn sai — thiếu nhãn, nhãn trỏ mục tiêu không có, nhãn trùng, ca cấp trên cho mục tiêu không căn chỉnh — và nói rõ mục tiêu nào, không ghi tệp nào."},
+    {"id": "AC-5", "p": "Sẽ giữ bộ ca từ 28 tới 34 ca, đủ mười phòng ban, hai bộ phận, ba mục tiêu OneHub, không trùng mã với bộ ca mẫu cũ, và nhãn của từng ca đúng bảng nhãn trong bản thiết kế."},
+    {"id": "AC-6", "p": "Sẽ cho phép đo góp ý chọn chạy trên bộ ca quý 4 hay bộ ca mẫu cũ; không chọn thì vẫn chạy bộ cũ như hôm nay."},
+    {"id": "AC-7", "p": "Sẽ đo Kara góp ý trên cả bộ ca quý 4 bằng mô hình thật, chấm từng ca đạt hay không kèm lý do, in con số cạnh ngưỡng của ca mẫu (30/30, judge 0,95) và ghi bảng kết quả cùng số tiền đã tiêu; kết quả Kara thấp không làm phép đo đỏ."},
+    {"id": "AC-8", "p": "Sẽ có hướng dẫn trong tài liệu cài đặt: sinh lại bộ ca, đo Kara, và đưa ca thật vào thư mục ngoài git để đo bằng cùng lệnh."}
+  ],
+  "wont_do": [
+    {"id": "AC-4", "p": "Chặn bộ ca lệch khỏi công ty mẫu: đổi OKR mẫu hay tệp nhãn mà quên sinh lại thì bài kiểm đỏ và gọi tên ca lệch."},
+    {"id": "OOS-1", "p": "KHÔNG dựng lệnh rút ca thật từ dữ liệu production và thay tên người, tên đối tác — đó là việc vận hành lúc bật góp ý, cần anh cho phép truy cập production."},
+    {"id": "OOS-2", "p": "KHÔNG sửa công ty mẫu, bộ ca mẫu cũ, hay hồ sơ đã ký của lượt góp ý 9b."},
+    {"id": "OOS-3", "p": "KHÔNG có ca trộn Anh–Việt hay ca KR không đo được trong bộ quý 4 — công ty mẫu không có; bộ ca mẫu cũ đã phủ hai loại này."},
+    {"id": "OOS-4", "p": "KHÔNG quyết bật góp ý và KHÔNG đòi Kara đạt bao nhiêu ca — hàng này cho số, anh quyết."},
+    {"id": "OOS-5", "p": "KHÔNG gom hai bản luật chấm (của 9b và của hàng này) về một chỗ ở lượt này."}
+  ],
+  "scope_plain": "Hàng này giao bộ ca và con số đo; việc dùng ca thật và quyết bật nằm ngoài.",
+  "coverage_plain": [
+    {"i": 0, "p": "Nguồn của ca: OneHub, bộ phận, phòng ban, phòng ban kèm cấp trên, và mục tiêu chưa công bố đều đã xét — đủ vì bám đúng các trường cấp, chu kỳ, trạng thái, căn chỉnh của công ty mẫu (AC-1 sinh ca, AC-2 ca cấp trên, AC-5 thành phần bộ)."},
+    {"i": 1, "p": "Nhãn kỳ vọng: có lỗi, cần viết lại, câu đã tốt, không nhãn riêng, luật cấp trên — đủ vì bám khuôn ca và năm dấu hiệu lỗi trong chỉ dẫn của Kara (AC-3 nhãn sai, AC-5 bảng nhãn, AC-7 chấm)."},
+    {"i": 2, "p": "Vòng đời bộ ca: sinh, quên sinh lại, nhãn hỏng, chọn bộ khi đo, đo thật, đổi sang ca thật — đủ vì bám luật dữ liệu mẫu của kho và quy trình đo của 9b (AC-1, AC-3, AC-4 đồng bộ, AC-6 chọn bộ, AC-7 đo, AC-8 tài liệu)."},
+    {"i": 3, "p": "Giả định chờ anh gạch: ca cấp OneHub lấy ba mục tiêu OneHub của năm, vì công ty mẫu không có mục tiêu OneHub riêng cho quý — chính là Hỏi-2."},
+    {"i": 4, "p": "Giả định chờ anh gạch: nhãn do máy gán theo năm dấu hiệu của Kara, chỉ khi dấu hiệu rõ; ca không có dấu hiệu rõ không mang nhãn riêng để không đẩy con số lên hay xuống."}
+  ],
+  "gap_probe_plain": [
+    {"i": 0, "p": "Chi tiền gọi mô hình bị ghi là máy tự quyết, trong khi chỉ anh quyết được mức tiêu từ quỹ chung — đã chuyển thành câu hỏi Hỏi-1, và phép đo sẽ in số tiền đã tiêu."},
+    {"i": 1, "p": "Lấy mục tiêu OneHub của năm bị ghi là lối duy nhất, trong khi viết tay ca OneHub quý vẫn là một lối sống và đây là nghĩa sản phẩm — đã chuyển thành câu hỏi Hỏi-2."},
+    {"i": 2, "p": "Bảng nhãn quyết con số đạt mà chưa bài kiểm nào giữ nó — đã thêm vế «nhãn từng ca đúng bảng» vào tiêu chí và bài kiểm so từng ca, có chiều đỏ."},
+    {"i": 3, "p": "Chỉ một luật chấm có ca đối chứng, bốn luật kia sai thầm vẫn ra xanh — đã thêm bước tự kiểm bảy bản ghi cố ý phạm từng luật, chạy không cần mô hình."},
+    {"i": 4, "p": "Câu hỏi cho hội đồng chấm tài liệu nhắc từ điển mà không đưa từ điển cho họ đọc — đã đưa từ điển sản phẩm vào tệp hội đồng đọc."}
+  ]
+}
