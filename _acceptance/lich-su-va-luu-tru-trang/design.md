@@ -9,7 +9,7 @@ trữ ẩn khỏi danh sách mặc định») và dòng 10 · `docs/vong-doi.md`
 trữ trang là một đề xuất qua duyệt; đề xuất đã duyệt không hiện ở tab nào) · lộ trình mục 4 «Lượt 4» (trợ lý kho
 «không thấy trang lưu trữ») · `coverage-scan.md`.
 
-Chữ đánh dấu «[chờ P6-5]», «[chờ P6-6]» là lựa chọn đang chờ người chốt; thiết kế viết theo khuyến nghị.
+Các câu hỏi P6-5, P6-6, P6-8 được chủ kho chốt theo khuyến nghị khi duyệt Cổng Phạm vi 2026-10-13.
 
 ## Có gì sẵn
 
@@ -29,7 +29,7 @@ Chữ đánh dấu «[chờ P6-5]», «[chờ P6-6]» là lựa chọn đang ch�
 - `TaiLieuTrang.archivedAt DateTime?` — cùng tên với mọi bản ghi lưu trữ được của kho, để dùng lại `archivedFilter`.
 - `TaiLieuDeXuat.loai String @default("NOI_DUNG")` — `NOI_DUNG` · `LUU_TRU` · `KHOI_PHUC`; `TaiLieuDeXuat.tuPhienBanSo Int?`
   — đề xuất nội dung sinh từ một phiên bản cũ; `TaiLieuDeXuat.lyDoDeXuat String?` — lý do của đề xuất lưu trữ hay khôi
-  phục [chờ P6-6]. Khuôn ở `packages/validation/src/tai-lieu.ts`; sự kiện mới `LUU_TRU`, `KHOI_PHUC` vào `LOAI_SU_KIEN`.
+  phục. Khuôn ở `packages/validation/src/tai-lieu.ts`; sự kiện mới `LUU_TRU`, `KHOI_PHUC` vào `LOAI_SU_KIEN`.
 
 ### Máy chủ
 
@@ -41,7 +41,7 @@ Chữ đánh dấu «[chờ P6-5]», «[chờ P6-6]» là lựa chọn đang ch�
 - `taiLieu.deXuatLuuTru({slug, lyDo})` và `taiLieu.deXuatKhoiPhuc({slug, lyDo})` — đề xuất `LUU_TRU` (chỉ trang đang dùng,
   chưa lưu trữ, không có đề xuất lưu trữ đang chờ) và `KHOI_PHUC` (chỉ trang đã lưu trữ, không có đề xuất khôi phục đang chờ).
 - `approve` rẽ theo `loai`: `LUU_TRU` đặt `archivedAt` (đã có thì giữ ngày đầu), đánh `CU` các đề xuất nội dung đang
-  chờ với một sự kiện `CU` mỗi đề xuất như luật có sẵn [chờ P6-8], ghi sự kiện `LUU_TRU`, không tạo phiên bản; `KHOI_PHUC` xoá `archivedAt`, ghi `KHOI_PHUC`. `reject` như cũ. Quyền
+  chờ với một sự kiện `CU` mỗi đề xuất như luật có sẵn, ghi sự kiện `LUU_TRU`, không tạo phiên bản; `KHOI_PHUC` xoá `archivedAt`, ghi `KHOI_PHUC`. `reject` như cũ. Quyền
   duyệt như cũ (`duyetDuocTrang`). `propose` từ chối trang đã lưu trữ.
 - Lọc một chỗ: `dieuKienDangDung()` ở `packages/db/src/tai-lieu-tim.ts` (`banDangDungId` khác null và `archivedAt`
   null) dùng ở `timTrangDangDung`, `docBanDangDung`, `docNhieuBanDangDung`, `dangDung`, `sucKhoe`, `nhacToi`, `boLoc`;
@@ -53,14 +53,14 @@ Chữ đánh dấu «[chờ P6-5]», «[chờ P6-6]» là lựa chọn đang ch�
 - Màn đọc: nút «Lịch sử» cạnh «Sửa trang»; trình đơn «…» có «Đề xuất lưu trữ» (hộp có ô lý do). Trang đã lưu trữ: dải
   `Alert` «Trang đã lưu trữ ngày … · Đề xuất khôi phục», không có «Sửa trang» và «Đề xuất lưu trữ».
 - `/tai-lieu/[trang]/lich-su`: bảng phiên bản; `/tai-lieu/[trang]/lich-su/[so]`: so phiên bản với bản đang dùng
-  (`DiffTrang`) hoặc đọc toàn văn, nút «Quay lại phiên bản N» [chờ P6-6].
+  (`DiffTrang`) hoặc đọc toàn văn, nút «Quay lại phiên bản N».
 - Màn duyệt: đề xuất `LUU_TRU`/`KHOI_PHUC` hiện tên việc và lý do thay cho diff; đề xuất quay lại mang nhãn «Quay lại
   phiên bản N».
 - Danh sách trang: nút «Đã lưu trữ» trên thanh công cụ (tham số `archived` trên URL).
 
 ## Không làm
 
-- Xoá vĩnh viễn trang [chờ P6-5]; lưu trữ nguồn tài liệu [chờ P6-5]; lưu trữ hàng loạt; so hai bản cũ với nhau.
+- Xoá vĩnh viễn trang; lưu trữ nguồn tài liệu; lưu trữ hàng loạt; so hai bản cũ với nhau.
 - Mảnh dải báo dùng chung trong `packages/ui` — việc của hàng V2e (`dai-luu-tru-dung-chung`); lượt này dùng `Alert`.
 - Sửa hay xoá phiên bản đã duyệt, lưu trữ không qua duyệt.
 
@@ -114,7 +114,7 @@ Chữ đánh dấu «[chờ P6-5]», «[chờ P6-6]» là lựa chọn đang ch�
 
 ### 4. Hành vi
 
-- Lý do: 1–500 ký tự sau khi bỏ khoảng trắng hai đầu; nút gửi khoá khi rỗng [chờ P6-6].
+- Lý do: 1–500 ký tự sau khi bỏ khoảng trắng hai đầu; nút gửi khoá khi rỗng.
 - Hộp đề xuất: nút Huỷ bọc `DialogClose asChild`; Enter trong ô lý do xuống dòng, không gửi.
 - Dưới `md`: bảng lịch sử thành danh sách `Item variant="outline"`; diff giữ một cột.
 - Mọi chữ do người nhập (tên trang, lý do, nội dung) mang `translate="no"`.

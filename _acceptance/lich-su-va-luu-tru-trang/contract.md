@@ -5,8 +5,10 @@ slug: lich-su-va-luu-tru-trang
 owner: phanlemanh@gmail.com
 risk_tier: T3
 surfaces: [ui, api]
-status: draft
+status: approved
 design_doc: _acceptance/lich-su-va-luu-tru-trang/design.md
+approved_by: Phan Le Manh
+approved_at: 2026-10-13
 ---
 
 # Acceptance Contract: lich-su-va-luu-tru-trang
@@ -20,31 +22,31 @@ nên lưu trữ và khôi phục trang đều là đề xuất (`docs/vong-doi.m
 Source input: lộ trình mục 4 «Lượt 1», «Lượt 4» và dòng 10 · `docs/vong-doi.md` · `CONTEXT.md` mục Trang tài liệu, Bản
 đề xuất, Bản đang dùng, Lưu trữ, Đã lưu trữ · `packages/db/prisma/schema.prisma` (`TaiLieu*`) ·
 `apps/api/src/tai-lieu/**` · `packages/db/src/tai-lieu-*.ts` · `apps/app/app/(app)/[slug]/tai-lieu/**` ·
-`coverage-scan.md`. Chữ «[chờ P6-5]», «[chờ P6-6]» đánh dấu lựa chọn đang chờ người chốt (sổ quyết định).
+`coverage-scan.md`. Ba câu hỏi P6-5, P6-6, P6-8 chốt theo khuyến nghị khi duyệt Cổng Phạm vi 2026-10-13.
 
 ## Criteria
 
 - AC-1: Given một trang có ba phiên bản đã duyệt (đề xuất bởi hai người khác nhau, duyệt bởi chủ trang) và một trang chưa từng duyệt, When một thành viên đọc được trang gọi `taiLieu.lichSu`, Then nhận đúng ba dòng, mới nhất trước, mỗi dòng có số, tên, ngày duyệt, tên người duyệt, tên người đề xuất, và đúng một dòng đánh dấu bản đang dùng; And trang chưa từng duyệt trả danh sách rỗng; And người không thấy trang (theo `dieuKienThay`) nhận `NOT_FOUND`, giống `taiLieu.get`.
 - AC-2: Given trang ba phiên bản ở AC-1, When gọi `taiLieu.phienBan` với số 1, với số của bản đang dùng, và với số 9, Then số 1 trả tên, nội dung, ngày duyệt của phiên bản 1 cùng nội dung bản đang dùng để so; số bản đang dùng trả cờ «là bản đang dùng»; số 9 và trang không thấy trả `NOT_FOUND`.
 - AC-3: Given trang ba phiên bản, When người đề xuất được gọi `taiLieu.quayLai` với số 1, Then có đúng một đề xuất mới loại nội dung, tên và nội dung bằng phiên bản 1 (so byte sau NFC), gốc là bản đang dùng, mang số phiên bản nguồn 1, và một sự kiện đề xuất; And khi chủ trang duyệt nó thì có phiên bản 4 với nội dung bằng phiên bản 1, ba phiên bản cũ không đổi byte nào; And `quayLai` với số của bản đang dùng, hay một phiên bản có nội dung trùng bản đang dùng, bị từ chối «chưa đổi» và không ghi hàng nào; And trang đã lưu trữ bị từ chối. (cross-layer)
-- AC-4: Given một trang đang dùng, When người đề xuất được gọi `taiLieu.deXuatLuuTru` kèm lý do, Then có đúng một đề xuất loại lưu trữ mang lý do và một sự kiện đề xuất, trang chưa đổi gì; And trang chưa từng duyệt, trang đã lưu trữ, trang đã có một đề xuất lưu trữ đang chờ, lý do rỗng sau khi bỏ khoảng trắng và lý do quá 500 ký tự đều bị từ chối với câu nêu đúng lý do và không ghi hàng nào. [chờ P6-6 cho lý do bắt buộc]
-- AC-5: Given một đề xuất lưu trữ đang chờ và một đề xuất nội dung đang chờ trên cùng trang, When chủ trang hay `owner`/`admin` duyệt đề xuất lưu trữ, Then trang mang ngày lưu trữ, không có phiên bản mới, bản đang dùng giữ nguyên, đề xuất nội dung đang chờ thành «cũ» với một sự kiện «cũ» cho mỗi đề xuất (luật có sẵn khi một bản khác được duyệt trước) [chờ P6-8], có đúng một sự kiện lưu trữ; And thành viên khác và vai `okr` duyệt thì bị `FORBIDDEN`, không hàng nào đổi; And trang đã lưu trữ được lưu trữ lần nữa (qua một đường ghi trực tiếp vào hàm duyệt) giữ nguyên ngày lưu trữ đầu.
+- AC-4: Given một trang đang dùng, When người đề xuất được gọi `taiLieu.deXuatLuuTru` kèm lý do, Then có đúng một đề xuất loại lưu trữ mang lý do và một sự kiện đề xuất, trang chưa đổi gì; And trang chưa từng duyệt, trang đã lưu trữ, trang đã có một đề xuất lưu trữ đang chờ, lý do rỗng sau khi bỏ khoảng trắng và lý do quá 500 ký tự đều bị từ chối với câu nêu đúng lý do và không ghi hàng nào.
+- AC-5: Given một đề xuất lưu trữ đang chờ và một đề xuất nội dung đang chờ trên cùng trang, When chủ trang hay `owner`/`admin` duyệt đề xuất lưu trữ, Then trang mang ngày lưu trữ, không có phiên bản mới, bản đang dùng giữ nguyên, đề xuất nội dung đang chờ thành «cũ» với một sự kiện «cũ» cho mỗi đề xuất (luật có sẵn khi một bản khác được duyệt trước), có đúng một sự kiện lưu trữ; And thành viên khác và vai `okr` duyệt thì bị `FORBIDDEN`, không hàng nào đổi; And trang đã lưu trữ được lưu trữ lần nữa (qua một đường ghi trực tiếp vào hàm duyệt) giữ nguyên ngày lưu trữ đầu.
 - AC-6: Given một trang đã lưu trữ, When người đề xuất được gọi `taiLieu.deXuatKhoiPhuc` kèm lý do rồi chủ trang duyệt, Then trang thôi mang ngày lưu trữ, có một sự kiện khôi phục, và trang trở lại mọi chỗ ở AC-7; And `deXuatKhoiPhuc` trên trang chưa lưu trữ, hay khi trang đã có một đề xuất khôi phục đang chờ, bị từ chối và không ghi hàng nào; And màn đọc của trang đã lưu trữ có đề xuất khôi phục chờ hiện «Có đề xuất khôi phục chờ duyệt» thay cho nút «Đề xuất khôi phục»; And `taiLieu.propose` (sửa nội dung) trên trang đã lưu trữ bị từ chối với câu «trang đã lưu trữ», không ghi hàng nào.
 - AC-7: Given ma trận viết trước — trang A đang dùng và trang B đã lưu trữ, cùng chứa một từ khoá, cùng quá hạn xác minh, cùng được một trang C nhắc tới, cùng đơn vị và chủ trang — When gọi `taiLieu.tim`, `taiLieu.dangDung`, `taiLieu.list` mặc định, `taiLieu.boLoc`, `taiLieu.sucKhoe`, `taiLieu.nhacToi` của C, và các hàm đọc của trợ lý kho (`docBanDangDung`, `docNhieuBanDangDung`, `timTrangDangDung`), Then mỗi chỗ ra A và không ra B, số đếm của bộ lọc chỉ đếm A; And `taiLieu.list` với `archived` chỉ ra B kèm ngày lưu trữ; And `taiLieu.get` của B trả trang kèm ngày lưu trữ. (cross-layer)
 - AC-8: Given một đề xuất đã duyệt, một đề xuất bị trả lại và một đề xuất cũ, When chủ trang mở nhóm «Đã xử lý» của tab Chờ duyệt, Then thấy cả ba, mỗi dòng mang nhãn trạng thái của nó («Đã duyệt», «Đã trả lại», «Cũ»); And nhóm «Đang chờ» không đổi; ảnh nhóm «Đã xử lý» lưu làm bằng chứng. (cross-layer)
 - AC-9: Given mọi thủ tục mới và mọi loại đề xuất mới, When tìm mọi đường ghi vào bảng phiên bản và bảng sự kiện, Then không đường nào sửa hay xoá một phiên bản hay một sự kiện đã ghi; And mỗi thao tác ghi đúng số sự kiện của bảng viết trước ở E9 (đề xuất 1 «đề xuất»; duyệt lưu trữ 1 «lưu trữ» cộng 1 «cũ» cho mỗi đề xuất nội dung đang chờ; duyệt khôi phục 1 «khôi phục»; trả lại 1 «trả lại»), mỗi sự kiện mang người và thời điểm.
-- AC-10: Given một trang ba phiên bản trong trình duyệt thật của cây đang xét, When thành viên mở màn đọc → «Lịch sử» → phiên bản 1 → «So với bản đang dùng» rồi «Toàn văn» → «Quay lại phiên bản 1», Then thấy bảng ba phiên bản mới nhất trước với nhãn «Đang dùng»; thấy chữ thêm và bớt tô; thấy toàn văn; và tới màn duyệt của đề xuất mới mang nhãn «Quay lại phiên bản 1»; And ở khổ 390 bảng thành danh sách và không cuộn ngang; ảnh lưu làm bằng chứng. [chờ P6-6 cho chữ nút]
+- AC-10: Given một trang ba phiên bản trong trình duyệt thật của cây đang xét, When thành viên mở màn đọc → «Lịch sử» → phiên bản 1 → «So với bản đang dùng» rồi «Toàn văn» → «Quay lại phiên bản 1», Then thấy bảng ba phiên bản mới nhất trước với nhãn «Đang dùng»; thấy chữ thêm và bớt tô; thấy toàn văn; và tới màn duyệt của đề xuất mới mang nhãn «Quay lại phiên bản 1»; And ở khổ 390 bảng thành danh sách và không cuộn ngang; ảnh lưu làm bằng chứng.
 - AC-11: Given một trang đang dùng, When thành viên mở «…» → «Đề xuất lưu trữ», gõ lý do, gửi; chủ trang mở đề xuất ở tab Chờ duyệt và duyệt; rồi ai đó mở thẳng đường dẫn trang, Then hộp có ô lý do và nút gửi khoá khi rỗng; sau khi gửi màn đọc hiện «Có đề xuất lưu trữ chờ duyệt» và mục trình đơn khoá kèm câu vì sao; màn duyệt hiện «Đề xuất lưu trữ trang» với lý do và nút «Duyệt lưu trữ»; sau duyệt màn đọc hiện dải «Trang đã lưu trữ ngày …» với «Đề xuất khôi phục» và không có «Sửa trang»; And thành viên gửi đề xuất khôi phục, chủ trang duyệt «Duyệt khôi phục», trang có lại ở danh sách trang mặc định; And mọi chỗ hiện tên trang, lý do hay nội dung phiên bản trên các màn mới nằm trong vùng `translate="no"`; ảnh lưu làm bằng chứng.
 - AC-12: Given một trang đã lưu trữ và không trang nào khác đã lưu trữ ở workspace thứ hai, When thành viên bấm «Đã lưu trữ» trên thanh công cụ danh sách trang, Then bảng chỉ có trang đã lưu trữ với cột ngày lưu trữ, URL mang tham số `archived`, tải lại giữ nguyên; tắt nút thì về danh sách thường không có trang đó; And ở workspace không có trang lưu trữ nào thấy câu rỗng «Chưa có trang nào đã lưu trữ»; ảnh lưu làm bằng chứng.
 - AC-13: Given các màn, hộp và dải mới, When một người đọc chữ trên ảnh của AC-10, AC-11, AC-12, Then chữ theo bộ chữ của `docs/vong-doi.md` và `CONTEXT.md` («Lưu trữ», «Khôi phục», «Đã lưu trữ», không «ẩn», «archive», «xoá»); một chữ một nghĩa trên cùng màn; chữ mới có mục trong `CONTEXT.md`. (judgment)
 
 ## Vòng đời (ba câu của `docs/vong-doi.md`)
 
-1. Dọn thế nào: Lưu trữ → Khôi phục, cả hai là đề xuất qua duyệt; không có Xoá vĩnh viễn trang ở lượt này. [chờ P6-5]
+1. Dọn thế nào: Lưu trữ → Khôi phục, cả hai là đề xuất qua duyệt; không có Xoá vĩnh viễn trang ở lượt này.
 2. «Lịch sử» nghĩa là: trang đã có ít nhất một bản được duyệt. Trang chưa từng duyệt không lưu trữ được; nó giữ đường trả
-   lại như cũ. [chờ P6-5]
+   lại như cũ.
 3. Danh sách mặc định: chỉ trang chưa lưu trữ, ở mọi chỗ của AC-7; tìm lại ở nút «Đã lưu trữ» trên thanh công cụ danh
-   sách trang; mở thẳng đường dẫn thấy dải «Trang đã lưu trữ». [chờ P6-5]
+   sách trang; mở thẳng đường dẫn thấy dải «Trang đã lưu trữ».
 
 ## Coverage
 
@@ -63,12 +65,12 @@ Quét bằng `morphological-scan` (preset entity-feature), bản đầy đủ �
   lộ trình «Lượt 4» «không thấy trang lưu trữ»]
 - Cross-cutting: nhật ký chỉ ghi thêm (AC-9) · bộ chữ (AC-13) · quyền ở máy chủ (AC-1, AC-5).
 - [GIẢ ĐỊNH] Hộp chèn liên kết và ⌘K dùng `taiLieu.tim`, nên lọc ở `timTrangDangDung` là đủ cho cả hai.
-- [GIẢ ĐỊNH] Liên kết `[[…]]` tới trang đã lưu trữ vẫn mở được trang; mục «gãy» của Sức khoẻ không đổi. [chờ P6-5]
+- [GIẢ ĐỊNH] Liên kết `[[…]]` tới trang đã lưu trữ vẫn mở được trang; mục «gãy» của Sức khoẻ không đổi.
 
 ## Out of scope
 
-- Xoá vĩnh viễn trang đã lưu trữ. [chờ P6-5]
-- Lưu trữ nguồn tài liệu (`TaiLieuNguon`). [chờ P6-5]
+- Xoá vĩnh viễn trang đã lưu trữ.
+- Lưu trữ nguồn tài liệu (`TaiLieuNguon`).
 - Lưu trữ hàng loạt, lưu trữ tự động theo lịch; so hai phiên bản cũ với nhau.
 - Mảnh dải báo bản ghi đã lưu trữ dùng chung trong `packages/ui` — hàng V2e `dai-luu-tru-dung-chung`.
 - Sửa hay xoá một phiên bản đã duyệt; lưu trữ không qua duyệt.
