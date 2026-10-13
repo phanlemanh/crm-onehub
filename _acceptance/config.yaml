@@ -1211,6 +1211,9 @@ executors:
     vlr_tin: 'bun run test -- "cd apps/agent && bun test test/nhac-vai-chi-okr.integration.spec.ts -t vlr-tin"'
     vlr_o_chon: 'cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --timeout 10000 --preload ../../packages/ui/test/setup-dom.ts ./test/nguoi-nhan-viec.dom.tsx -t vlr-o-chon'
     vlr_thuoc: 'bun run test -- "cd apps/api && bun test test/ro-vai-chi-okr.spec.ts"'
+    mlk_mo_lai: 'bun run test -- "cd apps/api && bun test test/mo-lai-vai-chi-okr.spec.ts -t mlk-mo-lai"'
+    mlk_bo_xong: 'bun run test -- "cd apps/api && bun test test/mo-lai-vai-chi-okr.spec.ts -t mlk-bo-xong"'
+    mlk_thuoc: 'bun run test -- "cd apps/api && bun test test/mo-lai-vai-chi-okr.spec.ts -t mlk-thuoc"'
     sol_nut_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t nut-chua-cau-hinh
     sol_man_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t man-chua-cau-hinh
     sol_loi_dom: cd apps/app && TZ=Asia/Ho_Chi_Minh bun test --preload ../../packages/ui/test/setup-dom.ts ./test/soan-okr-song-lai.dom.tsx -t loi-chua-cau-hinh
@@ -1754,6 +1757,7 @@ executors:
     lgo_o_agent: "node _acceptance/logo-onehub/rang/o-agent.mjs"
     build_khong_cache: 'bunx turbo run build --force'
     vlr_dot_bien: node _acceptance/va-lo-ro-vai-chi-okr/rang/dot-bien.mjs
+    mlk_dot_bien: node _acceptance/mo-lai-khong-tra-viec-chi-okr/rang/dot-bien.mjs
     cdt_hang_xom_lanh: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh lanh"'
     cdt_hang_xom_pha: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha"'
     cdt_hang_xom_pha_don_bang: 'bun run test -- "sh _acceptance/claimdue-chi-thay-dong-cua-minh/rang/hang-xom.sh pha-don-bang"'
