@@ -2,9 +2,9 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildTrongPrePush } from "./dieu-prepush.mjs";
 
 const GOC = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const SHA = "3c97e759a6c87bc8b6f0621d3854cb486728b442";
 const O_CAM = "build_khong_cache";
 const VAT_CAY = "apps/app/app/layout.tsx";
 
@@ -28,33 +28,12 @@ ghi(
 	`suite_keys goi ten o cam ay (${khoaSuite.length} khoa)`,
 );
 
-let ciDoi = true;
-try {
-	const cu = execFileSync("git", ["show", `${SHA}:.github/workflows/ci.yml`], {
-		cwd: GOC,
-		encoding: "utf8",
-	});
-	ciDoi = cu !== doc(".github/workflows/ci.yml");
-} catch (e) {
-	console.error(`MA 2: khong doc duoc ci.yml tai sha ghim — ${e.message}`);
+const dieu3 = buildTrongPrePush(doc(".githooks/pre-push"));
+if (!dieu3.doc) {
+	console.error(`MA 2: ${dieu3.chu}`);
 	process.exit(2);
 }
-ghi(!ciDoi, "dieu 2", "ci.yml cua hang khong doi mot ky tu");
-
-const prePush = doc(".githooks/pre-push");
-const khopVong = prePush.match(/for task in ([^;]+); do/);
-if (!khopVong) {
-	console.error(
-		"MA 2: khong thay vong `for task in ...` trong .githooks/pre-push",
-	);
-	process.exit(2);
-}
-const danhSachTask = khopVong[1].trim().split(/\s+/);
-ghi(
-	danhSachTask.includes("build"),
-	"dieu 3",
-	`danh sach task cua pre-push: ${danhSachTask.join(" ")}`,
-);
+ghi(dieu3.dat, "dieu 3", dieu3.chu);
 
 const shaHEAD = execFileSync("git", ["rev-parse", "HEAD"], {
 	cwd: GOC,
@@ -144,5 +123,5 @@ if (hong.length > 0) {
 	process.exit(1);
 }
 console.log(
-	"XANH: ca nam dieu deu dat — hai dieu doc ban khai, ba dieu do hanh vi.",
+	"XANH: ca bon dieu deu dat — dieu 1 doc ban khai, ba dieu do hanh vi.",
 );

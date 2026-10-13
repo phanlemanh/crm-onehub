@@ -1122,9 +1122,9 @@
 			"muc": "apps/api/bunfig.toml",
 			"ma": "paths-khong-tro-toi-tep",
 			"nguon": "paths",
-			"xu_ly": "khai-not-run",
-			"ly_do": "kcb: tro-ly-okr-nen S4-r1 gan tran 60 giay cho 5 ca do quyen cua go-la-cat-quyen.spec.ts (go-la-cat-quyen het tran 5 giay duoi tai S4); loi hua AC-4 «khong ca nao mang tran rieng» bi quyet dinh da ky sau thay — chu kho chon (b) o Cong Pham vi F24 13/10 (P7-2)",
-			"can_cu": "_acceptance/tro-ly-okr-nen/decisions.jsonl:28"
+			"xu_ly": "tro-duong-moi",
+			"ly_do": "muc go sai tu luc viet (tep chua tung co); rang van soat bunfig qua TEP_BUNFIG (vang = dat); cac muc con lai phu vat",
+			"moi": null
 		},
 		{
 			"ho_so": "khoa-con-bat-xa-tran",
@@ -1132,9 +1132,9 @@
 			"muc": "bunfig.toml",
 			"ma": "paths-khong-tro-toi-tep",
 			"nguon": "paths",
-			"xu_ly": "khai-not-run",
-			"ly_do": "kcb: tro-ly-okr-nen S4-r1 gan tran 60 giay cho 5 ca do quyen cua go-la-cat-quyen.spec.ts (go-la-cat-quyen het tran 5 giay duoi tai S4); loi hua AC-4 «khong ca nao mang tran rieng» bi quyet dinh da ky sau thay — chu kho chon (b) o Cong Pham vi F24 13/10 (P7-2)",
-			"can_cu": "_acceptance/tro-ly-okr-nen/decisions.jsonl:28"
+			"xu_ly": "tro-duong-moi",
+			"ly_do": "muc go sai tu luc viet (tep chua tung co); rang van soat bunfig qua TEP_BUNFIG (vang = dat); cac muc con lai phu vat",
+			"moi": null
 		},
 		{
 			"ho_so": "khung-tao-okr-nhu-deal",
@@ -1558,9 +1558,41 @@
 			"muc": null,
 			"ma": null,
 			"nguon": "p8-4",
-			"xu_ly": "khai-not-run",
-			"ly_do": "kcb: tro-ly-okr-nen S4-r1 gan tran 60 giay cho 5 ca do quyen cua go-la-cat-quyen.spec.ts (go-la-cat-quyen het tran 5 giay duoi tai S4); loi hua AC-4 «khong ca nao mang tran rieng» bi quyet dinh da ky sau thay — chu kho chon (b) o Cong Pham vi F24 13/10 (P7-2)",
-			"can_cu": "_acceptance/tro-ly-okr-nen/decisions.jsonl:28"
+			"xu_ly": "sua-rang",
+			"ly_do": "d-20260927T112853Z-28 cua tro-ly-okr-nen gan tran 60 giay cho 5 ca do quyen (het tran 5 giay duoi tai S4) — loi hua AC-4 «khong ca nao mang tran rieng» cua khoa-con-bat-xa-tran va quyet dinh da ky sau mau thuan; chu kho chon (c) 13/10 (F24 P7-6): rang cho phep tran rieng CHI khi la hang co ten trong bang TRAN_CO_LY_DO kem ly do va khai trong tep spec; tran so tran hay hang ngoai bang van do. Khai not-run (lua chon b cu) bi luat hai ve 2.12.0 chan",
+			"can_cu": "_acceptance/tro-ly-okr-nen/decisions.jsonl:28",
+			"tep": [
+				"_acceptance/khoa-con-bat-xa-tran/rang/soi-tep.mjs",
+				"_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs"
+			],
+			"dot_bien": [
+				{
+					"ten": "tran-so-tran",
+					"kieu": "ham",
+					"mo_dun": "_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs",
+					"ham": "soTranRieng",
+					"tep": "apps/api/test/go-la-cat-quyen.spec.ts",
+					"thay": [
+						"\t\tTRAN_MA_TRAN_MS,\n\t);",
+						"\t\t60_000,\n\t);"
+					],
+					"thong_diep": "tran so tran 60_000 bi bat",
+					"thong_diep_may": "khong nam trong bang tran co ly do"
+				},
+				{
+					"ten": "hang-ngoai-bang",
+					"kieu": "ham",
+					"mo_dun": "_acceptance/khoa-con-bat-xa-tran/rang/tran-co-ly-do.mjs",
+					"ham": "soTranRieng",
+					"tep": "apps/api/test/go-la-cat-quyen.spec.ts",
+					"thay": [
+						"\t\tTRAN_MA_TRAN_MS,\n\t);",
+						"\t\tTRAN_KHAC,\n\t);"
+					],
+					"thong_diep": "hang TRAN_KHAC ngoai bang bi bat",
+					"thong_diep_may": "TRAN_KHAC khong nam trong bang tran co ly do"
+				}
+			]
 		},
 		{
 			"ho_so": "lenh-dung-do-khong-ai-thay",
@@ -1569,27 +1601,24 @@
 			"ma": null,
 			"nguon": "p8-4",
 			"xu_ly": "sua-rang",
-			"ly_do": "dieu 2 so ci.yml tung ky tu voi ban cua hang o sha 3c97e759, tien de bi luat 47 (09/10) lat — thay bang kiem cau truc buoc bun run build; spawnSync khai maxBuffer (dau ra pre-push > 1 MiB lam status null). Chu kho chon o Cong Pham vi F24 13/10 (P7-4)",
+			"ly_do": "dieu 2 so ci.yml tung ky tu voi ban cua hang o sha 3c97e759; tien de «ci.yml cua hang khong doi» bi luat 47 (09/10) lat — chu kho chon bo han dieu 2 13/10 (F24 P7-7); ba noi chay build (suite_keys, pre-push, acceptance.yml) van do dieu 1, 3-4, 5 canh. spawnSync khai maxBuffer (dau ra pre-push > 1 MiB lam status null). Dieu 3 tach thanh ham dung chung dieu-prepush.mjs de do chieu do",
 			"can_cu": "CLAUDE.md:14",
 			"tep": [
 				"_acceptance/lenh-dung-do-khong-ai-thay/rang/ba-noi-deu-chay.mjs",
-				"_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-ci.mjs"
+				"_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs"
 			],
 			"dot_bien": [
 				{
-					"ten": "bo-buoc-build",
-					"tep": ".github/workflows/ci.yml",
+					"ten": "bo-build-khoi-pre-push",
+					"kieu": "ham",
+					"mo_dun": "_acceptance/lenh-dung-do-khong-ai-thay/rang/dieu-prepush.mjs",
+					"ham": "buildTrongPrePush",
+					"tep": ".githooks/pre-push",
 					"thay": [
-						"bun run build",
-						"bun run khong-build"
+						"lint:slop test build; do",
+						"lint:slop test; do"
 					],
-					"thong_diep": "ci.yml khong con buoc nao chay bun run build"
-				},
-				{
-					"ten": "if-tren-buoc-build",
-					"tep": ".github/workflows/ci.yml",
-					"chen_if": true,
-					"thong_diep": "buoc chay bun run build mang if hoac continue-on-error"
+					"thong_diep": "go build khoi danh sach task cua pre-push thi dieu 3 do"
 				}
 			]
 		},

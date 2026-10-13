@@ -5,6 +5,8 @@ import { docDanhSach, GOC, hong, khoaDong } from "./chung.mjs";
 const THU = process.argv.includes("--thu");
 const iBo = process.argv.indexOf("--bo-qua");
 const BO_QUA = new Set(iBo >= 0 ? process.argv[iBo + 1].split(",") : []);
+const iChi = process.argv.indexOf("--chi");
+const CHI = iChi >= 0 ? new Set(process.argv[iChi + 1].split(",")) : null;
 
 function khoiEval(dong, id) {
 	const dau = dong.findIndex((l) => l.trim() === `- id: ${id}`);
@@ -90,6 +92,7 @@ const theoTep = new Map();
 for (const x of d.dong) {
 	if (!["tro-duong-moi", "bo-paths", "khai-not-run"].includes(x.xu_ly)) continue;
 	if (BO_QUA.has(`${x.ho_so}:${x.eval}`)) continue;
+	if (CHI && !CHI.has(`${x.ho_so}:${x.eval}`)) continue;
 	if (x.muc === null) continue;
 	if (!theoTep.has(x.ho_so)) theoTep.set(x.ho_so, []);
 	theoTep.get(x.ho_so).push(x);

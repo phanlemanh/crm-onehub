@@ -82,12 +82,12 @@ evals:
       - ".github/workflows/**"
       - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
     expected: |
-      NAM dieu. Hai dieu dau doc ban khai; ba dieu sau do HANH VI — vi cau mo dau
+      BON dieu. Dieu 1 doc ban khai; ba dieu sau do HANH VI — vi cau mo dau
       cua vong nay la "mot lenh khong ai chay thi khong phai bang chung", va mot
       ban khai khong ai chay cung the.
       1. `_acceptance/config.yaml` co mot o cam chay `build`, VA `feature_loop.suite_keys`
          goi ten dung o cam ay.
-      2. `.github/workflows/ci.yml` KHONG doi mot ky tu so voi sha ghim.
+      2. (bo 13/10, F24 P7-7: tien de «ci.yml cua hang khong doi» bi luat 47 lat; ci.yml nay do OneHub giu.)
       3. `.githooks/pre-push` co `build` trong danh sach task — doc bang cach TACH
          danh sach that (bien vong `for task in ...`), khong grep chuoi "build".
       4. HANH VI cua pre-push: tren BAN SAO da cay lai loi cu (mot loi goi getLocale
@@ -96,7 +96,7 @@ evals:
       5. `.github/workflows/acceptance.yml`: buoc chay lenh dung KHONG mang
          `continue-on-error: true`, va KHONG nam duoi mot `if:` khong bao gio dung —
          doc bang trinh phan tich YAML, khong bang tim chuoi.
-      Thieu mot trong nam -> ma 1, neu dieu nao.
+      Thieu mot trong bon -> ma 1, neu dieu nao.
       Chieu do: go `build` khoi suite_keys trong ban sao -> ma 1 neu dung dieu 1;
       them `continue-on-error: true` vao buoc ay -> ma 1 neu dung dieu 5.
 
