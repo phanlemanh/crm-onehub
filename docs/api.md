@@ -539,6 +539,16 @@ nhận `tx`, ghi đúng một dòng `viecVet` mỗi thay đổi và ném `LoiVie
   thực hiện cùng một việc thì cả hai cột đổi trong một vết.
 - **Tổng quan**: `viecQuaHan` (việc đang mở hạn trước hôm nay: tôi thực hiện ở «của tôi», tôi thấy ở «mọi
   người»; tối đa `VIEC.tranTongQuan` dòng); `quaHan.viec` cộng thêm số việc cùng điều kiện, đếm đủ.
+- **Việc cần làm cũ (hàng DA1b).** Hàng `activity` loại `TASK` không còn đường ghi: `activities.create` trả 400
+  với `TASK`; `activities.complete` và `activities.myTasks` đã bỏ. Mỗi việc cần làm cũ chép thành đúng một Việc
+  bằng `chepViecCanLam` (`@crm/db/viec-ghi`), vòng lặp đếm, chép, đảo ở `@crm/db/viec-chep`. Bản chép mang
+  `activityGocId` (unique, khoá ngoại `SET NULL`) và một vết «tao» nguồn `chep-cu` — đảo nhận ra bản chép bằng
+  vết ấy. Hàng gốc không bị xoá hay sửa. Dòng thời gian, «Hoạt động gần đây» và «Việc quá hạn» của Tổng quan
+  lọc `NOT { type: TASK, viecChep: { isNot: null } }`: việc chưa chép vẫn hiện, chỉ đọc; việc đã chép chỉ hiện
+  như Việc. Dòng thời gian còn bốn bộ lọc `all`, `notes`, `email`, `meetings`.
+- **Nguồn vết** (`NGUON_VIEC`): `web`, `zalo`, `api`, `chuyen-viec`, `tac-nhan` (Tác nhân tự dựng và việc mã
+  môi giới lệch), `chep-cu` (bản chép). `Viec.khoaNguon` giữ khoá chặn trùng của đường máy — hôm nay chỉ
+  `ma-lech:<mã>`.
 
 ## The organization tree
 

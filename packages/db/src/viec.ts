@@ -359,7 +359,9 @@ const viecCanLamMeta = z
 
 export type ViecCanLamMeta = { platformBrokerId: string | null };
 
-export function parseViecCanLamMeta(value: unknown): ViecCanLamMeta {
+export function parseViecCanLamMeta(
+	value: Prisma.JsonValue | null,
+): ViecCanLamMeta {
 	const meta = viecCanLamMeta.parse(value ?? null);
 	return { platformBrokerId: meta?.platformBrokerId ?? null };
 }
