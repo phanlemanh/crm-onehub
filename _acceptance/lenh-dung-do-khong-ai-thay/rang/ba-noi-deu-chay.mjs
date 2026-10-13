@@ -66,6 +66,7 @@ const chayPrePush = () => {
 	const r = spawnSync("bash", [join(GOC, ".githooks", "pre-push")], {
 		cwd: GOC,
 		encoding: "utf8",
+		maxBuffer: 256 * 1024 * 1024,
 		input: dongRef,
 		env: { ...process.env, TURBO_TELEMETRY_DISABLED: "1" },
 	});

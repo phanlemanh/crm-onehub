@@ -34,7 +34,12 @@ export function git(...args) {
 
 export function gitThu(...args) {
 	try {
-		return git(...args);
+		return execFileSync("git", args, {
+			cwd: GOC,
+			encoding: "utf8",
+			maxBuffer: 256 * 1024 * 1024,
+			stdio: ["ignore", "pipe", "ignore"],
+		});
 	} catch {
 		return null;
 	}
