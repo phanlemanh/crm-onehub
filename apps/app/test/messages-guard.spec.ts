@@ -4,6 +4,14 @@ import { join } from "node:path";
 import type { Locale } from "@crm/ui/lib/locale";
 import { authMessages } from "@/lib/messages/auth";
 import { docDuongGoi, taoSong } from "./duong-goi";
+import {
+	type BeMat,
+	docKiemKe,
+	GOC_KHO,
+	mucKhoChu,
+	soatMotTen,
+	VAT_DOI_DUNG,
+} from "./kara-mot-ten-luat";
 
 const DAU_TIENG_VIET =
 	/[ăâđêôơưĂÂĐÊÔƠƯáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ]/;
@@ -1272,4 +1280,94 @@ describe("bo doc duong goi", () => {
 		expect(song("fields.company")).toBe(false);
 		expect(song("standard.add")).toBe(false);
 	});
+});
+
+const SO_MUC_BE_MAT: Readonly<Record<Exclude<BeMat, "khac">, number>> = {
+	"ban-ghi": 17,
+	"tom-tat": 8,
+	soan: 24,
+	"cai-dat": 25,
+	"tai-lieu": 43,
+	"dung-chung": 1,
+};
+
+const GHIM_KARA: readonly (readonly [BeMat, string, string, string])[] = [
+	[
+		"cai-dat",
+		"apps/app/lib/messages/tro-ly-okr.ts",
+		"troLy.tieuDe",
+		"Kara · OKR",
+	],
+	[
+		"cai-dat",
+		"apps/app/lib/messages/tro-ly-okr.ts",
+		"so.nhom.tro-ly-okr",
+		"Kara · OKR",
+	],
+	[
+		"cai-dat",
+		"apps/app/lib/messages/tro-ly-okr.ts",
+		"so.nhom.tro-ly-ai",
+		"Kara · hồ sơ",
+	],
+	[
+		"dung-chung",
+		"packages/ui/src/lib/messages.ts",
+		"chatMessage.roleAssistant",
+		"Kara",
+	],
+];
+
+describe("kmt", () => {
+	const kiemKe = docKiemKe();
+	const hienTai = new Map(
+		mucKhoChu().map((m) => [`${m.tep}#${m.khoa}#${m.nn}`, m.giaTri]),
+	);
+
+	for (const [beMat, so] of Object.entries(SO_MUC_BE_MAT) as [
+		Exclude<BeMat, "khac">,
+		number,
+	][]) {
+		it(`kmt-${beMat}: moi muc kiem ke da goi Kara`, () => {
+			const muc = kiemKe.filter(
+				(m) => m.be_mat === beMat && m.hanh_dong === "doi",
+			);
+			expect(`kmt: kiem-ke ${beMat} ${muc.length} khac ${so}`).toBe(
+				`kmt: kiem-ke ${beMat} ${so} khac ${so}`,
+			);
+			const chuaDoi = muc.flatMap((m) =>
+				(["vi", "en"] as const).flatMap((nn) => {
+					const cu = m.cu[nn];
+					if (!cu) return [];
+					const moi = hienTai.get(`${m.tep}#${m.khoa}#${nn}`);
+					if (moi === undefined) {
+						const nguon = readFileSync(join(GOC_KHO, m.tep), "utf8");
+						return nguon.includes(cu) ? [`kmt: ${m.tep} con ${cu}`] : [];
+					}
+					const loi = soatMotTen(
+						[{ tep: m.tep, khoa: m.khoa, nn, giaTri: moi }],
+						VAT_DOI_DUNG,
+					);
+					return !moi.includes("Kara") || loi.length > 0
+						? [`kmt: ${m.tep}#${m.khoa} ${nn} chua doi: ${moi}`]
+						: [];
+				}),
+			);
+			expect(chuaDoi).toEqual([]);
+			const ghim = GHIM_KARA.filter(([b]) => b === beMat).flatMap(
+				([, tep, khoa, giaTri]) =>
+					(["vi", "en"] as const).flatMap((nn) => {
+						const moi = hienTai.get(`${tep}#${khoa}#${nn}`) ?? "";
+						const dung =
+							khoa === "so.nhom.tro-ly-ai" && nn === "en"
+								? "Kara · records"
+								: giaTri;
+						return moi === dung
+							? []
+							: [`kmt: ten pham vi ${khoa} ${nn} ${moi}`];
+					}),
+			);
+			expect(ghim).toEqual([]);
+		});
+	}
 });
