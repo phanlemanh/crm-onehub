@@ -70,6 +70,7 @@ evals:
   - id: E10
     criterion: AC-6
     executor: test
+    layer: backend-effect
     cmd: config:executors.test.bcm_ma_thoat
     paths: [_acceptance/bo-cau-hoi-mau/rang/**, _acceptance/tro-ly-doc-kho/rang/quyet-do.ts]
     expected: "exit 0; bài 'ma-thoat' chạy do-bo-mau.ts --do với BCM_LENH_CHAM trỏ script chấm GIẢ trong thư mục tạm; script giả ghi luot-1/ và luot-2/cham-tung-cau.jsonl bằng dongTungCau thật, in 'thu muc luot: <dir>' như script thật, rồi thoát theo ca. Bảng ca VIẾT TRƯỚC (đủ năm dòng): giả thoát 0 đủ mã → lệnh 0 · giả thoát 1 đủ mã → lệnh 0 và báo cáo ghi 'ma thoat cham-bo-do: 1' · giả thoát 2 → lệnh 2, stdout 'KHONG DO DUOC' · giả thoát 0 nhưng lượt một thiếu m01 và lặp m02 (vẫn 46 dòng) → lệnh 2, stdout ghim 'thieu m01' và 'trung m02' · giả thoát 0, lượt hai thiếu một câu ngoài kho → lệnh 2 ghim mã đó. Ca đủ mã: báo cáo có 'bam bo-mau' bằng sha256 tệp bộ và dòng 'bam tro-ly'. Mọi ca: git status --porcelain -- _acceptance/tro-ly-doc-kho trống."
