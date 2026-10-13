@@ -127,7 +127,7 @@ evals:
       exit 0 va "luu-tru-truong-khong-hoi man: dat"; tren may chu that cua phien do, o ca ba buoc cua E10 (menu dong 1440,
       trinh sua 390, ngan «Quản lý trường»): sau «Lưu trữ» fields.list includeArchived tra ve truong voi archived true;
       sau «Hoàn tác» archived false. Ma tran viet truoc 3 buoc x 2 trang thai = 6 phep.
-      CHIEU DO ghim: --chieu-do bo buoc bam Hoan tac -> do "man: hoan tac khong khoi phuc tren may chu".
+      CHIEU DO ghim: --chieu-do-api bo buoc bam Hoan tac -> do "man: hoan tac khong khoi phuc tren may chu".
 
   - id: E10
     criterion: AC-7
