@@ -10,7 +10,7 @@ import {
 	statSync,
 	writeFileSync,
 } from "node:fs";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { TRO_LY_OKR } from "../../../apps/agent/agent/lib/okr/config.ts";
 import {
 	docBoCaGopY,
@@ -34,7 +34,13 @@ import {
 	truyVan,
 	xoaKho,
 } from "../../tro-ly-okr-de-xuat/rang/phien-tro-ly.mjs";
-import { CHAM, chamCa, docBanGhi, phuBoiLuat7 } from "./cham-ca.mjs";
+import {
+	CHAM,
+	chamCa,
+	docBanGhi,
+	ketQuaDoiChung,
+	phuBoiLuat7,
+} from "./cham-ca.mjs";
 
 const PHUT_MS = 60_000;
 
@@ -82,7 +88,11 @@ const DO = {
 		ghiChu:
 			"Ca đối chứng: Mục tiêu nói việc làm, kỳ vọng khongGopY cố ý sai — phép đo phải bắt được.",
 	},
-	thongDiep: { doiChung: "ca doi chung khong bat duoc" },
+	ketQuaRieng: "ket-qua.md",
+	thongDiep: {
+		doiChung: "ca doi chung khong bat duoc",
+		doiChungThieu: "ca doi chung khong co ban ghi tong ket",
+	},
 	env: TRO_LY_OKR.danhGia.env,
 };
 
@@ -256,7 +266,50 @@ function tuKiem() {
 	}
 	console.log(`tu kiem cham: ${MA_TRAN.length - sai.length}/${MA_TRAN.length}`);
 	for (const s of sai) console.log(`LECH ${s}`);
-	return sai.length === 0;
+	const saiDoiChung = tuKiemDoiChung();
+	return sai.length === 0 && saiDoiChung.length === 0;
+}
+
+const MA_TRAN_DOI_CHUNG = [
+	{ ten: "thieu-ban-ghi", khongGhi: true, phai: "thieu" },
+	{
+		ten: "co-viet-lai",
+		dong: [{ loai: "viet-lai", truong: "title", sau: "Đối tác mới tìm tới" }],
+		phai: "bat",
+	},
+	{ ten: "khong-dong-nao", dong: [], phai: "lot" },
+	{ ten: "viec-dong-sai", outcome: "tu-choi", dong: [], phai: "lot" },
+];
+
+function tuKiemDoiChung() {
+	const sai = [];
+	for (const tk of MA_TRAN_DOI_CHUNG) {
+		const ghi = tk.khongGhi
+			? undefined
+			: docBanGhi(
+					dongTongKet({
+						ca: DO.caDoiChung,
+						objectiveId: DO.caDoiChung.id,
+						krs: [],
+						capTrenKr: [],
+						taskId: DO.caDoiChung.id,
+						outcome: tk.outcome ?? "da-nop",
+						dong: tk.dong.map((m, i) => dongGia(tk.ten, i, m)),
+					}),
+				);
+		const loi = chamCa(DO.caDoiChung, ghi, {
+			...TUY_CHON_CHAM,
+			lotSoMoi: new Set(),
+			ten: [],
+		});
+		const ra = ketQuaDoiChung(ghi, loi);
+		if (ra !== tk.phai) sai.push(`${tk.ten} — phai ${tk.phai}, ra ${ra}`);
+	}
+	console.log(
+		`tu kiem doi chung: ${MA_TRAN_DOI_CHUNG.length - sai.length}/${MA_TRAN_DOI_CHUNG.length}`,
+	);
+	for (const s of sai) console.log(`LECH doi chung ${s}`);
+	return sai;
 }
 
 function tranUsd() {
@@ -405,14 +458,22 @@ function diemJudge(ca, ghi, diem) {
 	};
 }
 
+function tepBangChung(nguon) {
+	return nguon === THU_MUC_CA_QUY_4
+		? DO.bangChung
+		: join(DO.ra, DO.ketQuaRieng);
+}
+
 function ghiBangChung({ ketQua, dat, judge, chi, tran, nguon, runId }) {
+	const tep = tepBangChung(nguon);
+	mkdirSync(dirname(tep), { recursive: true });
 	const dong = ketQua.map(
 		({ ca, loi, phu }) =>
 			`| ${ca.id} | ${ca.bo} | ${ca.donVi.ten} | ${loi.length === 0 ? "đạt" : "không đạt"} | ${loi.length === 0 ? (phu.length ? `phủ bởi luật lớp 7: ${phu.join(", ")}` : "—") : loi.join("; ").replaceAll("|", "/")} |`,
 	);
 	const judgeChu = judge.tb === null ? "—" : judge.tb.toFixed(2);
 	writeFileSync(
-		DO.bangChung,
+		tep,
 		[
 			"# Đo Kara góp ý trên bộ ca quý 4",
 			"",
@@ -429,6 +490,7 @@ function ghiBangChung({ ketQua, dat, judge, chi, tran, nguon, runId }) {
 			"",
 		].join("\n"),
 	);
+	return tep;
 }
 
 async function tongKet(url, eve, nguon, tran, tep) {
@@ -467,13 +529,17 @@ async function tongKet(url, eve, nguon, tran, tep) {
 		return khongDo(
 			`ca thieu ban ghi tong ket: ${thieu.join(", ")}${chi >= tran ? " — da cham tran tien" : ""}`,
 		);
-	ghiBangChung({ ketQua, dat, judge, chi, tran, nguon, runId });
-	const doiChung = chamCa(DO.caDoiChung, ghi.get(DO.caDoiChung.id), tuyChon);
-	if (doiChung.length === 0) {
-		console.log(DO.thongDiep.doiChung);
+	const tepRa = ghiBangChung({ ketQua, dat, judge, chi, tran, nguon, runId });
+	console.log(`bang ket qua: ${tepRa.slice(GOC.length + 1)}`);
+	const ghiDoiChung = ghi.get(DO.caDoiChung.id);
+	const loiDoiChung = chamCa(DO.caDoiChung, ghiDoiChung, tuyChon);
+	const doiChung = ketQuaDoiChung(ghiDoiChung, loiDoiChung);
+	if (doiChung === "thieu") return khongDo(DO.thongDiep.doiChungThieu);
+	if (doiChung === "lot") {
+		console.log(`${DO.thongDiep.doiChung}: [${loiDoiChung.join(" · ")}]`);
 		return 3;
 	}
-	console.log(`DOI CHUNG ${DO.caDoiChung.id}: bat duoc — ${doiChung[0]}`);
+	console.log(`DOI CHUNG ${DO.caDoiChung.id}: bat duoc — ${loiDoiChung[0]}`);
 	return 0;
 }
 

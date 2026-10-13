@@ -166,3 +166,8 @@ export function chamCa(ca, ghi, tuyChon) {
 	if (ca.bo === CHAM.boNg) loi.push(...kiemNg(ca, ghi, cho, tuyChon));
 	return loi;
 }
+
+export function ketQuaDoiChung(ghi, loi) {
+	if (!ghi) return "thieu";
+	return loi.some((l) => l.startsWith(CHAM.luat.khongGopY)) ? "bat" : "lot";
+}
