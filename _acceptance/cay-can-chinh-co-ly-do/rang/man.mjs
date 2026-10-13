@@ -78,7 +78,10 @@ function doTrongTrang(chon) {
 		}
 		return { ds, gap: false };
 	};
-	const tran = (ds) => ds.filter((x) => x.scrollWidth > x.clientWidth + 1).length;
+	const trang = document.scrollingElement ?? document.documentElement;
+	const tran = (ds) =>
+		ds.filter((x) => x.scrollWidth > x.clientWidth + 1).length +
+		(trang.scrollWidth > trang.clientWidth + 1 ? 1 : 0);
 	const cay = document.querySelector("[data-trang-thai=ST-donvi-caycanchinh]");
 	const { ds, gap } = hopTren(cay);
 	let doiChungTran = null;
@@ -86,7 +89,7 @@ function doTrongTrang(chon) {
 		const rong = document.createElement("div");
 		rong.style.width = chon.rongChen;
 		rong.style.height = "1px";
-		cay.appendChild(rong);
+		document.body.appendChild(rong);
 		doiChungTran = tran(hopTren(cay).ds) > 0;
 		rong.remove();
 	}

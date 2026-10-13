@@ -43,6 +43,9 @@ const caMan = z
 
 type Cay = z.infer<typeof cayCanChinhOutput>;
 type Nut = Cay["roots"][number];
+type NutKhongKyVong = Omit<Nut, "expected" | "children"> & {
+	children: NutKhongKyVong[];
+};
 
 let app: NestExpressApplication;
 const phien = new Map<string, string>();
@@ -164,7 +167,7 @@ describe("l3-canh", () => {
 						"alignmentTree",
 					),
 				);
-			const boKyVong = (n: Nut): unknown => {
+			const boKyVong = (n: Nut): NutKhongKyVong => {
 				const { expected: _bo, children, ...con } = n;
 				return { ...con, children: children.map(boKyVong) };
 			};
