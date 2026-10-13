@@ -7,7 +7,7 @@ reason:
 verified_by: fresh-context verification subagent
 enforcement_mode: strict
 bypass_used: false
-verified_commit: 55dc7eb39c6d2872ddbdb1620baac76d55430ec3
+verified_commit: 4d9dd260c8745554b2f3463c5f7faea35223fb24
 human_signoff: Phan Le Manh 2026-10-13
 ---
 
@@ -272,3 +272,7 @@ none — every multi-run eval is uniform
 ## Iterations
 
 Round 1: E1-E15 xanh; E16 (phán đoán AC-13) còn UNCERTAIN ở điểm 3 «dòng đã cất bấm được» — chờ người quyết ở Cổng 2.
+
+### Re-pin lần 1 — 2026-10-13, do gộp onehub 85c0e4cc9 trước khi gộp PR 383
+run_id: repin-20261013T093829Z-22767
+sha: 4d9dd260c8745554b2f3463c5f7faea35223fb24 · suites: 7 lệnh exit 0 · evals: 14/14 eval máy đạt kỳ vọng · ngoài làn máy: E15, E16 (E16 không khai paths) · diff chạm vật đo ngoài làn máy: E15 — chưa chứng lại, đi vòng S4 delta · AC không có chốt máy: AC-12, AC-13 · suite chạy ở môi trường giống CI (biến rỗng: AI_GATEWAY_API_KEY, KHO_TAI_LIEU_AI_GATEWAY_API_KEY, KHO_TAI_LIEU_BLOB_TOKEN, ZALO_BOT_TOKEN)
