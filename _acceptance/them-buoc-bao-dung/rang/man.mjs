@@ -314,7 +314,7 @@ async function doThemBuoc(cookie, slug, toi, boPhan) {
 			}
 			const v2 = await docVungLoi(p);
 			let luaChon = [];
-			if (v2.oChon) {
+			if (coNutThuLai && v2.oChon) {
 				await p.click("[data-them-buoc] [role=combobox]");
 				await p.waitForSelector("[role=option]", { timeout: CHO_MS });
 				luaChon = await p.$$eval("[role=option]", (els) =>
