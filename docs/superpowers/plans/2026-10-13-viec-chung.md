@@ -7591,3 +7591,9 @@ git commit -m "docs(viec-chung): từ điển Việc, luật router viec, nhắc
 15. **Kho chuỗi**: nút «Xong» không dấu cần thêm `"nut.xong"` vào `KHONG_DAU` của `messages-guard.spec.ts`; bỏ «Việc cần làm» khỏi ô soạn buộc xoá ba khoá `composer.task|dueDate|addTask` (luật «khoa chet»).
 16. **Đường REST**: `GET /viec/{id}` (E6 ghim) đụng mọi `GET /viec/<chữ>`, nên «Việc của tôi» là `GET /viec` và khối của bản ghi là `GET /viec-theo-ban-ghi`.
 17. **`VIEC.muiGio` lặp giá trị `NHAC.muiGio`**: app không nhập được `onboarding-nhac` phía trình duyệt; giữ hai chỗ cùng giá trị, cùng nguồn `Asia/Ho_Chi_Minh`.
+
+## Bổ sung sau Gate 1.5 (chủ kho duyệt 13/10)
+
+- **Task 10 thêm:** ô «Người theo dõi» của ô soạn chọn được nhiều người (danh sách từ `onboarding.nguoiNhanViec`, bỏ người thực hiện đang chọn). Bài kiểm thêm ở `apps/app/test/viec-o-soan.dom.tsx`, ca `-t vc-o-soan-giao-nhieu-theo-doi`: chọn hai người → `viec.create` nhận `nguoiTheoDoiIds` đúng hai mã; phá thử: giới hạn còn một người thì ca đỏ với `'vc: o soan mat nguoi theo doi'`.
+- **Task 12 thêm:** khung việc cho người giao và người thực hiện sửa tiêu đề, mô tả tại chỗ (gọi `viec.sua`); người khác thấy chữ chỉ đọc. Bài kiểm thêm ở `apps/app/test/viec-khung.dom.tsx`, ca `-t vc-khung-sua-tai-cho`: người thực hiện sửa tiêu đề → `viec.sua` được gọi một lần với tiêu đề mới; người theo dõi không có ô sửa, không thì ném `'vc: khung cho nguoi theo doi sua'`.
+- **Giới hạn đã biết:** khung việc chưa có ô gắn thêm bản ghi; `viec.gan` vẫn gọi được qua API.
