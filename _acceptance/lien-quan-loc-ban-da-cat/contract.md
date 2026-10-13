@@ -5,7 +5,9 @@ slug: lien-quan-loc-ban-da-cat
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui, api]
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-13T00:48:06Z
 design_doc: docs/superpowers/specs/2026-10-13-lien-quan-loc-ban-da-cat-design.md
 ---
 
@@ -24,7 +26,7 @@ quan hệ không lọc `archivedAt`, nên bản đã cất lẫn vào bảng li�
 - AC-2: Given một cá nhân gắn với 1 thoả thuận đang dùng và 1 thoả thuận đã lưu trữ, When gọi `contacts.byId` qua router, Then `deals` chỉ có thoả thuận đang dùng (vẫn mang vai trò) và `archivedDeals` có thoả thuận đã cất với `archivedAt`, còn nguyên sau `contactByIdOutput`. (cross-layer)
 - AC-3: Given một thoả thuận gắn 1 cá nhân đang dùng và 1 cá nhân đã lưu trữ, When gọi `deals.byId` qua router, Then `contacts` chỉ có cá nhân đang dùng (vẫn mang vai trò) và `archivedContacts` có cá nhân đã cất với `archivedAt`, còn nguyên sau `dealDetailOutput`. (cross-layer)
 - AC-4: Given công ty có một cá nhân đang dùng và một cá nhân đã lưu trữ, cả hai chưa gắn vào một thoả thuận của công ty, When gọi `deals.contactOptions` của thoả thuận đó, hoặc gọi `contacts.byId` của một đồng nghiệp đang dùng cùng công ty, Then cá nhân đã cất không có trong danh sách gợi ý «Thêm người» và không có trong `relationship.colleagues`; cá nhân đang dùng vẫn có ở cả hai.
-- AC-5: Given ngăn công ty (tab Cá nhân, tab Thoả thuận), ngăn cá nhân (tab Thoả thuận) và ngăn thoả thuận (tab Cá nhân) nhận `byId` có cả bản đang dùng lẫn bản đã cất, When mở tab đó, Then bảng chỉ có dòng của bản đang dùng; cuối bảng có một nút «+n đã lưu trữ» (n = số bản đã cất) đang đóng; bấm nút thì hiện n dòng, mỗi dòng có tên bản ghi và «Đã lưu trữ ngày dd/mm/yyyy», không có menu giai đoạn, sao liên hệ chính, ô vai trò hay nút gỡ; bấm lại thì các dòng ẩn; `byId` không có bản đã cất thì không có nút đó.
+- AC-5: Given ngăn công ty (tab Cá nhân, tab Thoả thuận), ngăn cá nhân (tab Thoả thuận) và ngăn thoả thuận (tab Cá nhân) nhận `byId` có cả bản đang dùng lẫn bản đã cất, When mở tab đó, Then bảng chỉ có dòng của bản đang dùng; cuối bảng có một nút «+n đã lưu trữ» (n = số bản đã cất) đang đóng; bấm nút thì hiện n dòng, mỗi dòng có tên bản ghi và «Đã lưu trữ ngày dd/mm/yyyy», không có menu giai đoạn, sao liên hệ chính, ô vai trò hay nút gỡ; bấm lại thì các dòng gập lại; `byId` không có bản đã cất thì không có nút đó.
 - AC-6: Given dòng gập của AC-5 đang mở, When bấm tên một bản đã cất, Then ngăn của đúng bản ghi đó mở chồng lên (đường dẫn có `<loại>:<id>` của nó), và ngăn ấy có dải «Đã lưu trữ ngày … · Khôi phục» của V2.
 - AC-7: Given ngăn công ty có 1 thoả thuận đang mở đang dùng và 1 thoả thuận đang mở đã lưu trữ có giá trị và ngày chốt sớm hơn, và ngăn thoả thuận có 1 cá nhân đang dùng và 1 cá nhân đã cất, When nhìn số trên tab, hàng số liệu đầu ngăn công ty và mục «Người tham gia» của ngăn thoả thuận, Then số trên tab Cá nhân và Thoả thuận đếm bản đang dùng; số thoả thuận đang mở, giá trị đang mở và ngày chốt gần nhất chỉ tính thoả thuận đang dùng; «Người tham gia» chỉ có cá nhân đang dùng.
 - AC-8: Given một bảng liên quan không có bản đang dùng nhưng có bản đã cất, When mở tab đó, Then ô trống của tab vẫn hiện như hôm nay, kèm nút «+n đã lưu trữ» ngay dưới; bấm thì hiện các dòng đã cất như AC-5.
