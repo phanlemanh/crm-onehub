@@ -5,7 +5,7 @@ slug: them-buoc-bao-dung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [api, ui]
-status: signed-off
+status: implemented
 approved_by:
 approved_at:
 veto_state: mo
