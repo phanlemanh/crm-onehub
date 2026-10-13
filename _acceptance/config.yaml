@@ -2351,7 +2351,7 @@ executors:
     k3_dot_bien: bun _acceptance/kara-gop-y-luot-2/rang/dot-bien.mjs
     k3_ranh_gioi: node _acceptance/kara-gop-y-luot-2/rang/ranh-gioi.mjs
     k3_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/kara-gop-y-luot-2/rang/man.mjs"'
-    l2_giu_ho_so: node _acceptance/duong-ly-do-muc-tieu/rang/giu-ho-so.mjs
+    l2_giu_ho_so: bun _acceptance/duong-ly-do-muc-tieu/rang/giu-ho-so.mjs
     l2_dot_bien: bun _acceptance/duong-ly-do-muc-tieu/rang/dot-bien.mjs
     l2_ranh_gioi: node _acceptance/duong-ly-do-muc-tieu/rang/ranh-gioi.mjs
     l2_man: 'bash _acceptance/tieu-de-cot-doc-tron/rang/mot-luot.sh "bun _acceptance/duong-ly-do-muc-tieu/rang/man.mjs"'
