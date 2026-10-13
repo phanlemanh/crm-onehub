@@ -3,7 +3,7 @@ import { db, TrangThaiViec } from "@crm/db";
 import { ngayVN } from "@crm/db/onboarding-nhac";
 import { type DoThiViec, hanhDong, VIEC } from "@crm/db/viec";
 import type { NestExpressApplication } from "@nestjs/platform-express";
-import { viecCuaBanGhiOutput } from "../src/viec/viec.contracts";
+import { viecCuaBanGhiOutput, viecVetOutput } from "../src/viec/viec.contracts";
 import { donDep, moXuong } from "./support/ke-hoach-gieo";
 import {
 	batApp,
@@ -376,6 +376,120 @@ describe("vc-trang-thai", () => {
 			if ((await roi(v4.id))?.getTime() !== dau?.getTime()) {
 				throw new Error("vc: roiChuaLamLuc ghi lai");
 			}
+		},
+		MA_TEST_MS,
+	);
+});
+
+describe("vc-sua", () => {
+	test(
+		"vc-sua: chuỗi được để đúng một vết mỗi bước; chuỗi không được 403 không đổi; lịch sử mới nhất trước",
+		async () => {
+			const a = await nguoi("vc-sua-a", "member");
+			const b = await nguoi("vc-sua-b", "member");
+			const w = await nguoi("vc-sua-w", "member");
+			const c = await nguoi("vc-sua-c", "member");
+			const x = await nguoi("vc-sua-x", "member");
+			const y = await nguoi("vc-sua-y", "member");
+			const q = await nguoi("vc-sua-q", "admin");
+			const { dealId } = await thoaThuan(app, a.id);
+			const v = await taoThu({
+				nguoiId: a.id,
+				tieuDe: "vc-sua goc",
+				nguoiThucHienId: b.id,
+				nguoiTheoDoiIds: [w.id, y.id],
+				gan: [{ loai: "deal", id: dealId }],
+			});
+			const duoc: [
+				string,
+				string,
+				string,
+				Record<string, string | null>,
+				string,
+			][] = [
+				[
+					"doiNguoi",
+					a.id,
+					"viec.doiNguoiThucHien",
+					{ nguoiThucHienId: c.id },
+					"doi-nguoi-thuc-hien",
+				],
+				["tieuDe", a.id, "viec.sua", { tieuDe: "vc-sua moi" }, "doi-noi-dung"],
+				["han A", a.id, "viec.sua", { hanNgay: "2026-11-01" }, "doi-han"],
+				["theo X", a.id, "viec.theoDoi", { userId: x.id }, "theo-doi"],
+				["han C", c.id, "viec.sua", { hanNgay: "2026-11-02" }, "doi-han"],
+				["bo W", w.id, "viec.boTheoDoi", {}, "bo-theo-doi"],
+				["Q tu theo", q.id, "viec.theoDoi", {}, "theo-doi"],
+			];
+			for (const [buoc, ai, ten, input, loai] of duoc) {
+				const truoc = await demVet(v.id);
+				const r = await goi(app, ten, "mutation", { id: v.id, ...input }, ai);
+				const vet = await db.viecVet.findFirst({
+					where: { viecId: v.id },
+					orderBy: [{ luc: "desc" }, { id: "desc" }],
+				});
+				if (
+					r.status !== 200 ||
+					(await demVet(v.id)) !== truoc + 1 ||
+					vet?.loai !== loai ||
+					(vet.truoc === null && vet.sau === null)
+				) {
+					throw new Error(`vc: sua ${buoc} vet sai`);
+				}
+			}
+			const khongDuoc: [string, string, string, Record<string, string>][] = [
+				["B", b.id, "viec.sua", { hanNgay: "2026-11-03" }],
+				["C", c.id, "viec.doiNguoiThucHien", { nguoiThucHienId: b.id }],
+				["X", x.id, "viec.sua", { tieuDe: "X sua" }],
+				["W", w.id, "viec.theoDoi", { userId: b.id }],
+				["Y", y.id, "viec.theoDoi", { userId: b.id }],
+			];
+			for (const [ai, id, ten, input] of khongDuoc) {
+				const truoc = await db.viec.findUniqueOrThrow({ where: { id: v.id } });
+				const vetTruoc = await demVet(v.id);
+				const r = await goi(app, ten, "mutation", { id: v.id, ...input }, id);
+				const sau = await db.viec.findUniqueOrThrow({ where: { id: v.id } });
+				if (
+					r.code !== "FORBIDDEN" ||
+					JSON.stringify(sau) !== JSON.stringify(truoc) ||
+					(await demVet(v.id)) !== vetTruoc
+				) {
+					throw new Error(`vc: sua lot ${ai} ${ten}`);
+				}
+			}
+			const ls = await goi(app, "viec.lichSu", "query", { id: v.id }, a.id);
+			const dong = viecVetOutput.parse(ls.data);
+			const lucs = dong.map((d) => Date.parse(d.luc));
+			const giam = lucs.every((l, i) => i === 0 || l <= (lucs[i - 1] ?? l));
+			if (
+				dong.length !== 8 ||
+				!giam ||
+				dong.at(-1)?.loai !== "tao" ||
+				dong.some((d) => !d.nguoi?.name || !d.nguon)
+			) {
+				throw new Error("vc: lich su sai thu tu");
+			}
+		},
+		MA_TEST_MS,
+	);
+
+	test(
+		"vc-sua: vet hong — một dòng vết sai khuôn làm lichSu báo lỗi có lời, không trả rỗng",
+		async () => {
+			const a = await nguoi("vc-hong-a", "member");
+			const v = await taoThu({ nguoiId: a.id, tieuDe: "vc-hong", gan: [] });
+			const hong = await db.viecVet.create({
+				data: {
+					viecId: v.id,
+					loai: "doi-han",
+					truoc: 3,
+					sau: "x",
+					nguon: "web",
+				},
+			});
+			const r = await goi(app, "viec.lichSu", "query", { id: v.id }, a.id);
+			expect(r.status).toBe(500);
+			expect(r.message).toContain(`Vết việc ${hong.id} không đọc được`);
 		},
 		MA_TEST_MS,
 	);
