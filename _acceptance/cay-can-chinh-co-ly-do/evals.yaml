@@ -46,7 +46,7 @@ evals:
     criterion: AC-6
     executor: test
     cmd: config:executors.test.l3_loc
-    expected: "exit 0; cùng tệp, -t l3-loc: cây viết trước có gốc O, KR K1, K2; con P1 (chua-co-ly-do) dưới K1, P2 (dat-cuoc) dưới K1, P3 (co-so-lieu) dưới K2, P4 (chua-co-ly-do) dưới P3; nhóm chưa căn chỉnh có Q. Ma trận ba giá trị lọc × tập id nút hiện, viết trước: chua-co-ly-do → {O, K1, P1, K2, P3, P4} (P3 hiện vì là tổ tiên của P4), không có P2, Q; dat-cuoc → {O, K1, P2}; tat-ca → mọi nút kể cả Q. Đòi số ca === 3; với mỗi ca so tập id [data-nut-can-chinh] hiện ra bằng đúng tập viết trước (in thừa/thiếu). Bấm chip qua ToggleGroup thật; giá trị đường dẫn (NuqsTestingAdapter onUrlUpdate) === khoá SEARCH_PARAM mới với giá trị mức. Chiều đỏ ghim ở E11 (e): bỏ giữ tổ tiên → ca chua-co-ly-do in 'thieu: K2, P3'."
+    expected: "exit 0; cùng tệp, -t l3-loc: cây viết trước có gốc O, KR K1, K2; con P1 (chua-co-ly-do) dưới K1, P2 (dat-cuoc) dưới K1, P3 (co-so-lieu) dưới K2, P4 (chua-co-ly-do) dưới P3; nhóm chưa căn chỉnh có Q. Ma trận ba giá trị lọc × tập id nút hiện, viết trước: chua-co-ly-do → {O, K1, P1, K2, P3, P4} (P3 hiện vì là tổ tiên của P4), không có P2, Q; dat-cuoc → {O, K1, P2}; tat-ca → mọi nút kể cả Q. Đòi số ca === 3; với mỗi ca so tập id [data-nut-can-chinh] hiện ra bằng đúng tập viết trước (in thừa/thiếu). Bấm chip qua ToggleGroup thật; giá trị đường dẫn (NuqsTestingAdapter onUrlUpdate) === khoá SEARCH_PARAM mới với giá trị mức. Chiều đỏ ghim ở E11 (e): bỏ giữ tổ tiên → ca chua-co-ly-do in 'thieu: O, K1'."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: ["apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", "apps/app/app/(app)/[slug]/okr/okr-search-params.ts", apps/app/lib/search-param-keys.ts, apps/app/test/cay-can-chinh-ly-do.dom.tsx]
 
@@ -91,7 +91,7 @@ evals:
     criterion: AC-11
     executor: script
     cmd: config:executors.script.l3_dot_bien
-    expected: "exit 0; _acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs: chiều xanh trước (E1–E8 xanh trên cây lành; không thì exit 2 'KHONG DO DUOC'); rồi sáu vết, mỗi vết sửa tạm một tệp, trả lại trong finally, đòi lệnh của eval đó đỏ VÀ đầu ra chứa thông điệp ghim riêng của assert (không trùng tên bài): (a) chỉ dựng cạnh đích KR → l3-canh 'canh thieu:'; (b) bỏ lọc đích có mặt trong canhCuaCay → l3-quyen 'canh lo ra ngoai cay'; (c) đọc cạnh theo gốc thay vì cha → l3-nut 'ly do sai cha'; (d) bảng mức tin thứ hai → l3-ba-muc 'bang muc tin thu hai'; (e) bỏ giữ tổ tiên → l3-loc 'thieu: K2, P3'; (f) chip Tất cả đếm mọi nút → l3-dem 'so tren chip sai'. Sau cùng git diff --quiet trên các tệp đã chạm."
+    expected: "exit 0; _acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs: chiều xanh trước (E1–E8 xanh trên cây lành; không thì exit 2 'KHONG DO DUOC'); rồi sáu vết, mỗi vết sửa tạm một tệp, trả lại trong finally, đòi lệnh của eval đó đỏ VÀ đầu ra chứa thông điệp ghim riêng của assert (không trùng tên bài): (a) chỉ dựng cạnh đích KR → l3-canh 'canh thieu:'; (b) bỏ lọc đích có mặt trong canhCuaCay → l3-quyen 'canh lo ra ngoai cay'; (c) đọc cạnh theo gốc thay vì cha → l3-nut 'ly do sai cha'; (d) bảng mức tin thứ hai → l3-ba-muc 'bang muc tin thu hai'; (e) bỏ giữ tổ tiên → l3-loc 'thieu: O, K1'; (f) chip Tất cả đếm mọi nút → l3-dem 'so tren chip sai'. Sau cùng git diff --quiet trên các tệp đã chạm."
     evidence_required: [run_id, exit_code, verifier, verified_at, output]
     paths: [_acceptance/cay-can-chinh-co-ly-do/rang/dot-bien.mjs, "apps/app/app/(app)/[slug]/okr/cay-can-chinh.tsx", apps/api/src/okr/okr-xem.service.ts]
 
