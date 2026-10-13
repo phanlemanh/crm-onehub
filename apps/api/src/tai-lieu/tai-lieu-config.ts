@@ -44,7 +44,7 @@ export const TAI_LIEU_API = {
 		cauHoiNgan: "Câu hỏi cần ít nhất 2 ký tự.",
 		cauHoiDai: (n: number) => `Câu hỏi dài quá ${n} ký tự.`,
 		ghiChuDai: (n: number) => `Ghi chú dài quá ${n} ký tự.`,
-		baoSaiChiTraLoi: "Chỉ báo sai được câu trợ lý AI đã trả lời.",
+		baoSaiChiTraLoi: "Chỉ báo sai được câu Kara đã trả lời.",
 		khongDuocXuLy: "Chỉ chủ trang liên quan hoặc quản trị xử lý được việc này.",
 		khongDuocDatXacMinh:
 			"Chỉ chủ trang hoặc quản trị đặt được hạn xác minh của trang này.",
