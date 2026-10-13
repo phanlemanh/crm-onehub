@@ -32,6 +32,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@crm/ui/components/select";
+import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
 import { formatDay, fromDay, toDay } from "@crm/ui/lib/format";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -44,6 +45,7 @@ import {
 	DetailSheetProperty,
 	DetailSheetSection,
 } from "@/components/detail-sheet";
+import { crmMessages } from "@/lib/messages/crm";
 import { onboardingMessages } from "@/lib/messages/onboarding";
 import { quaHan } from "@/lib/qua-han";
 import { useCrmCache } from "@/lib/trpc/cache";
@@ -285,20 +287,28 @@ function DongBuoc({
 
 type BoPhanChon = { id: string; name: string };
 
+type DanhSachPhongBan = {
+	chon: BoPhanChon[];
+	loi: boolean;
+	dangTai: boolean;
+	thuLai: () => void;
+};
+
 function ThemBuoc({
 	planId,
 	departmentId,
-	boPhan = [],
+	danhSach,
 	nhan,
 	ghi,
 }: {
 	planId: string;
 	departmentId?: string;
-	boPhan?: BoPhanChon[];
+	danhSach?: DanhSachPhongBan;
 	nhan?: string;
 	ghi: Ghi;
 }) {
-	const m = onboardingMessages(useLocale()).sheet;
+	const locale = useLocale();
+	const m = onboardingMessages(locale).sheet;
 	const [mo, setMo] = useState(false);
 	const [ten, setTen] = useState("");
 	const [han, setHan] = useState(toDay(new Date()));
@@ -343,13 +353,20 @@ function ThemBuoc({
 			}}
 		>
 			<div className="flex flex-wrap items-center gap-2">
-				{chonBoPhan ? (
+				{chonBoPhan && danhSach?.loi ? (
+					<VungTaiLoi
+						tieuDe={m.loiPhongBan}
+						moTa={crmMessages(locale).vungCon.loiMoTa}
+						onThuLai={danhSach.thuLai}
+						dangTai={danhSach.dangTai}
+					/>
+				) : chonBoPhan ? (
 					<Select onValueChange={setChon} value={chon}>
 						<SelectTrigger aria-label={m.pickDepartment} autoFocus>
 							<SelectValue placeholder={m.pickDepartment} />
 						</SelectTrigger>
 						<SelectContent>
-							{boPhan.map((b) => (
+							{(danhSach?.chon ?? []).map((b) => (
 								<SelectItem key={b.id} value={b.id}>
 									<span translate="no">{b.name}</span>
 								</SelectItem>
@@ -417,12 +434,17 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 	const hang = buoc.data?.rows ?? [];
 	const ids = hang.map((b) => b.id);
 	const nguoi = (users.data ?? []).map((u) => ({ value: u.id, label: u.name }));
-	const tatCaBoPhan = (boPhan.data ?? []).map((b) => ({
-		id: b.id,
-		name: b.name,
-	}));
+	const danhSach: DanhSachPhongBan = {
+		chon: (boPhan.data ?? []).map((b) => ({ id: b.id, name: b.name })),
+		loi: boPhan.isError,
+		dangTai: boPhan.isFetching,
+		thuLai: () => void boPhan.refetch(),
+	};
 	const coBuoc = new Set(hang.map((b) => b.departmentId));
-	const boPhanKhac = tatCaBoPhan.filter((b) => !coBuoc.has(b.id));
+	const khac: DanhSachPhongBan = {
+		...danhSach,
+		chon: danhSach.chon.filter((b) => !coBuoc.has(b.id)),
+	};
 
 	return (
 		<DetailSheetBody>
@@ -463,7 +485,7 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 				<DetailSheetEmpty
 					action={
 						khoa ? undefined : (
-							<ThemBuoc boPhan={tatCaBoPhan} ghi={ghi} planId={plan.id} />
+							<ThemBuoc danhSach={danhSach} ghi={ghi} planId={plan.id} />
 						)
 					}
 					description={m.noSteps.body}
@@ -502,10 +524,10 @@ export function PlanSteps({ plan }: { plan: PlanDetail }) {
 					</DetailSheetSection>
 				))
 			)}
-			{!khoa && hang.length > 0 && boPhanKhac.length > 0 ? (
+			{!khoa && hang.length > 0 && (khac.loi || khac.chon.length > 0) ? (
 				<DetailSheetSection>
 					<ThemBuoc
-						boPhan={boPhanKhac}
+						danhSach={khac}
 						ghi={ghi}
 						nhan={m.addStepOtherDepartment}
 						planId={plan.id}
