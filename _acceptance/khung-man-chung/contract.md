@@ -5,7 +5,9 @@ slug: khung-man-chung
 owner: phanlemanh@gmail.com
 risk_tier: T2
 surfaces: [ui]
-status: draft
+status: approved
+approved_by: Phan Le Manh
+approved_at: 2026-10-13T01:06:41Z
 design_doc: docs/superpowers/specs/2026-10-13-khung-man-chung-design.md
 ---
 
