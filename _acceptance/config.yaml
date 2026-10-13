@@ -1088,8 +1088,8 @@ executors:
     bcq4_ng: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-ng"'
     bcq4_nhan_hong: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-nhan-hong"'
     bcq4_dong_bo: 'bun run test -- "cd apps/api && bun test test/okr-ca-quy-4.spec.ts -t bcq4-dong-bo"'
-    bcq4_thanh_phan: "cd apps/agent && bun test test/okr-ca-quy-4.spec.ts -t bcq4-thanh-phan"
-    bcq4_chon_bo: "cd apps/agent && bun test test/okr-ca-quy-4.spec.ts -t bcq4-chon-bo"
+    bcq4_thanh_phan: 'bun run test -- "cd apps/agent && bun test test/okr-ca-quy-4.spec.ts -t bcq4-thanh-phan"'
+    bcq4_chon_bo: 'bun run test -- "cd apps/agent && bun test test/okr-ca-quy-4.spec.ts -t bcq4-chon-bo"'
     bom_thu_tuc_that: 'bun run test -- "cd apps/api && bun test test/okr-mau.spec.ts -t thu-tuc-that-mau"'
     bom_chan_production: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts -t chan-production"
     bom_tai_lieu: "cd apps/api && CRM_TELEMETRY_DISABLED=1 bun test test/okr-mau-chan.spec.ts -t tai-lieu"
