@@ -150,10 +150,10 @@ async function doKho(tenKho) {
 			await p.screenshot({ path: tep });
 			dong.push(`ANH ${tep.slice(GOC.length + 1)}`);
 		};
-		const chon = { dinh: "main", rongChen: MAN.rongChen, ca: caId };
+		const chon = { dinh: "body", rongChen: MAN.rongChen, ca: caId };
 		await p.evaluate((id) => document.querySelector(`[data-nut-can-chinh="${id}"]`)?.scrollIntoView({ block: "center" }), caId[0].id);
 		const o = await p.evaluate(doTrongTrang, chon);
-		if (o.soHop === 0 || !o.gap) throw new Error(`khong toi duoc main tu cay (${o.soHop} hop)`);
+		if (o.soHop === 0 || !o.gap) throw new Error(`khong toi duoc body tu cay (${o.soHop} hop)`);
 		for (const c of caId) {
 			const d = o.ca.find((x) => x.id === c.id);
 			kiem(`tat-ca ${tenKho} ${c.ma}: nhan «${d?.nhan}» === «${m.mucTin[c.mucTin]}»`, d?.nhan === m.mucTin[c.mucTin]);
@@ -163,7 +163,7 @@ async function doKho(tenKho) {
 				kiem(`tat-ca ${tenKho} ${c.ma}: doi chung do — ban sao kep 1 dong bi bao cat chu`, d.doiChungCat === true);
 			}
 		}
-		kiem(`tat-ca ${tenKho}: khong tran ngang tren ${o.soHop} hop tu cay toi main (${o.tranNgang})`, o.tranNgang === false);
+		kiem(`tat-ca ${tenKho}: khong tran ngang tren ${o.soHop} hop tu cay toi body (${o.tranNgang})`, o.tranNgang === false);
 		kiem(`tat-ca ${tenKho}: doi chung do — chen khoi rong thi bao tran ngang`, o.doiChungTran === true);
 		await chup("tat-ca");
 		for (const [loc, mong] of [
