@@ -67,6 +67,8 @@ const en = {
 			zalo: "replied on Zalo",
 			api: "by the system",
 			"chuyen-viec": "through the 30-day handover",
+			"tac-nhan": "by an agent",
+			"chep-cu": "copied from an old timeline task",
 		},
 		loai: {
 			tao: "created the work",
@@ -190,6 +192,8 @@ const vi: ViecMessages = {
 			zalo: "trả lời qua Zalo",
 			api: "do hệ thống",
 			"chuyen-viec": "qua Chuyển việc 30 ngày",
+			"tac-nhan": "do Tác nhân giao",
+			"chep-cu": "chép từ việc cần làm cũ",
 		},
 		loai: {
 			tao: "tạo việc",

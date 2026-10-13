@@ -1295,6 +1295,7 @@ model Activity {
   calendarEventId String?        @unique
   calendarEvent   CalendarEvent? @relation(fields: [calendarEventId], references: [id], onDelete: Cascade)
   campaignTouch   CampaignTouch?
+  viecChep        Viec?          @relation("ViecChep")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -2950,6 +2951,9 @@ model Viec {
   doiLuc          DateTime      @updatedAt
   roiChuaLamLuc   DateTime?
   khepLuc         DateTime?
+  activityGocId   String?       @unique
+  activityGoc     Activity?     @relation("ViecChep", fields: [activityGocId], references: [id], onDelete: SetNull)
+  khoaNguon       String?
   gan             ViecGan[]
   theoDoi         ViecTheoDoi[]
   vet             ViecVet[]
@@ -2957,6 +2961,7 @@ model Viec {
   @@index([nguoiThucHienId, trangThai, hanNgay])
   @@index([nguoiGiaoId, trangThai])
   @@index([taoLuc])
+  @@index([khoaNguon])
   @@map("viec")
 }
 
