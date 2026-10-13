@@ -67,6 +67,8 @@ const en = {
 			zalo: "replied on Zalo",
 			api: "by the system",
 			"chuyen-viec": "through the 30-day handover",
+			"bang-keo": "by dragging on the board",
+			"bang-menu": "from the board menu",
 		},
 		loai: {
 			tao: "created the work",
@@ -80,6 +82,7 @@ const en = {
 			"bo-theo-doi": "removed {ten} as a follower",
 			"chuyen-viec": "handed it over",
 			"go-do-ban-ghi-xoa": "unlinked {ten} because the record was deleted",
+			"them-viec-con": "added subtask {ten}",
 		},
 	},
 	xoa: {
@@ -190,6 +193,8 @@ const vi: ViecMessages = {
 			zalo: "trả lời qua Zalo",
 			api: "do hệ thống",
 			"chuyen-viec": "qua Chuyển việc 30 ngày",
+			"bang-keo": "kéo trên bảng",
+			"bang-menu": "chọn trên bảng",
 		},
 		loai: {
 			tao: "tạo việc",
@@ -203,6 +208,7 @@ const vi: ViecMessages = {
 			"bo-theo-doi": "bỏ {ten} khỏi người theo dõi",
 			"chuyen-viec": "chuyển việc 30 ngày",
 			"go-do-ban-ghi-xoa": "gỡ {ten} vì bản ghi đã bị xoá",
+			"them-viec-con": "thêm việc con {ten}",
 		},
 	},
 	xoa: {

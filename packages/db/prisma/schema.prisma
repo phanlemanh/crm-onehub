@@ -102,6 +102,7 @@ model User {
   viecThucHien      Viec[]            @relation("ViecNguoiThucHien")
   viecTao           Viec[]            @relation("ViecTaoBoi")
   viecTheoDoi       ViecTheoDoi[]
+  viecThuTu         ViecThuTu[]
   viecVet           ViecVet[]         @relation("ViecVetNguoi")
 
   @@unique([email])
@@ -2953,7 +2954,12 @@ model Viec {
   gan             ViecGan[]
   theoDoi         ViecTheoDoi[]
   vet             ViecVet[]
+  chaId           String?
+  cha             Viec?         @relation("ViecCon", fields: [chaId], references: [id], onDelete: NoAction)
+  con             Viec[]        @relation("ViecCon")
+  thuTu           ViecThuTu[]
 
+  @@index([chaId])
   @@index([nguoiThucHienId, trangThai, hanNgay])
   @@index([nguoiGiaoId, trangThai])
   @@index([taoLuc])
@@ -3013,4 +3019,18 @@ model ViecVet {
   @@index([viecId, luc])
   @@index([loai])
   @@map("viecVet")
+}
+
+model ViecThuTu {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  viecId String
+  viec   Viec     @relation(fields: [viecId], references: [id], onDelete: Cascade)
+  khoa   String
+  doiLuc DateTime @updatedAt
+
+  @@unique([userId, viecId])
+  @@index([userId])
+  @@map("viecThuTu")
 }
