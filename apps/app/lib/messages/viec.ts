@@ -32,6 +32,8 @@ const en = {
 		tieuDe: "My work",
 		moTa: "Work assigned to you, work you assigned, and work you follow.",
 		giaoViec: "Assign work",
+		giaoMoTa:
+			"Assign work to yourself or a teammate, optionally linked to a record.",
 	},
 	nhom: {
 		"giao-cho-toi": "Assigned to me",
@@ -93,6 +95,7 @@ const vi: ViecMessages = {
 		tieuDe: "Việc của tôi",
 		moTa: "Việc người khác giao cho bạn, việc bạn giao, và việc bạn đang theo dõi.",
 		giaoViec: "Giao việc",
+		giaoMoTa: "Giao việc cho bạn hoặc đồng nghiệp, có thể gắn với một bản ghi.",
 	},
 	nhom: {
 		"giao-cho-toi": "Giao cho tôi",

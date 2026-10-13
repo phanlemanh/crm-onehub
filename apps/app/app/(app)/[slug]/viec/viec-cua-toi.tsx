@@ -12,7 +12,7 @@ import { useLocale } from "@crm/ui/components/locale-provider";
 import { Skeleton } from "@crm/ui/components/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@crm/ui/components/toggle-group";
 import { VungTaiLoi } from "@crm/ui/components/vung-tai-loi";
-import { NHOM_VIEC, type NhomViec, VIEC } from "@crm/validation/viec";
+import { NHOM_VIEC, VIEC } from "@crm/validation/viec";
 import { useQuery } from "@tanstack/react-query";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { dien } from "@/components/crm/record-sheet/plan-copy";
@@ -32,7 +32,10 @@ export function ViecCuaToi() {
 	const trpc = useTRPC();
 	const moGiao = useMoGiaoViec();
 	const [nhom, setNhom] = useQueryState(SEARCH_PARAM.viec.nhom, nhomParser);
-	const q = useQuery(trpc.viec.cuaToi.queryOptions({ nhom }));
+	const q = useQuery({
+		...trpc.viec.cuaToi.queryOptions({ nhom }),
+		placeholderData: (truoc) => truoc,
+	});
 
 	if (q.isPending) {
 		return (
@@ -65,7 +68,8 @@ export function ViecCuaToi() {
 			<div className="max-w-full overflow-x-auto">
 				<ToggleGroup
 					onValueChange={(v) => {
-						if (v) void setNhom(v as NhomViec);
+						const chon = NHOM_VIEC.find((n) => n === v);
+						if (chon) void setNhom(chon);
 					}}
 					size="sm"
 					type="single"

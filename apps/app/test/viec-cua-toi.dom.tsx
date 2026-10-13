@@ -117,7 +117,10 @@ async function moTrang(): Promise<void> {
 	const man = await ViecPage();
 	await act(async () => {
 		root.render(
-			<NuqsTestingAdapter onUrlUpdate={(e) => urls.push(e.queryString)}>
+			<NuqsTestingAdapter
+				hasMemory
+				onUrlUpdate={(e) => urls.push(e.queryString)}
+			>
 				<QueryClientProvider client={queryClient}>
 					<LocaleProvider locale="vi">
 						<TooltipProvider>{man}</TooltipProvider>
@@ -223,6 +226,47 @@ describe("vc-man-co-viec", () => {
 		if (!urls.some((u) => u.includes("nhom=toi-giao"))) {
 			throw new Error("vc: nhom khong len duong dan");
 		}
+	});
+
+	test("vc-man-co-viec: đổi nhóm khi dữ liệu nhóm mới chưa về — chip vẫn còn, không hiện khung xương", async () => {
+		let xong: (() => void) | null = null;
+		const treo = new Promise<void>((r) => {
+			xong = r;
+		});
+		traLoi.set("viec.cuaToi", async (vao) => {
+			if ((vao as { nhom?: string } | null)?.nhom === "toi-giao") {
+				await treo;
+				return { ...DU_E7, mo: [viec("tg", null, false)] };
+			}
+			return DU_E7;
+		});
+		await moTrang();
+		await cho(
+			() => document.querySelectorAll("[data-nhom]").length === 3,
+			"chip",
+		);
+		await bam(document.querySelector('[data-nhom="toi-giao"]'));
+		await cho(
+			() =>
+				daGoi.some(
+					(g) => (g.input as { nhom?: string } | null)?.nhom === "toi-giao",
+				),
+			"goi nhom moi",
+		);
+		await nhip();
+		if (
+			document.querySelectorAll("[data-nhom]").length !== 3 ||
+			document.querySelector("[data-viec-cho-tai]") !== null
+		) {
+			throw new Error("vc: doi nhom mat chip");
+		}
+		await act(async () => {
+			xong?.();
+		});
+		await cho(
+			() => document.querySelector('tr[data-viec="tg"]') !== null,
+			"du lieu nhom moi",
+		);
 	});
 
 	test("vc-man-co-viec: đối chứng — không có việc quá hạn thì không dòng nào đỏ", async () => {

@@ -39,7 +39,7 @@ export function GiaoViec() {
 				<DialogContent>
 					<DialogHeader>
 						<DialogTitle>{m.trang.giaoViec}</DialogTitle>
-						<DialogDescription>{m.rong.moTa}</DialogDescription>
+						<DialogDescription>{m.trang.giaoMoTa}</DialogDescription>
 					</DialogHeader>
 					<OSoanViec anchor={null} onXong={() => void setMo(null)} />
 					<DialogFooter>
