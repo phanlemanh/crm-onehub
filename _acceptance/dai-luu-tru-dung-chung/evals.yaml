@@ -10,8 +10,8 @@ evals:
       - "packages/ui/test/dai-luu-tru.dom.tsx"
     expected: |
       exit 0; DaiLuuTru that cua packages/ui voi tieuDe "Đã lưu trữ ngày 15/09/2026", nhanKhoiPhuc "Khôi phục": dung 1
-      phan tu [data-dai-luu-tru][data-slot="dai-luu-tru"], textContent chua tieu de; bam nut ten «Khôi phục» bang
-      userEvent -> onKhoiPhuc goi dung 1 lan. dangKhoiPhuc true -> nut :disabled, bam -> onKhoiPhuc goi 0 lan.
+      phan tu [data-dai-luu-tru] nam trong khung [data-slot="dai-luu-tru"], textContent chua tieu de; bam nut ten
+      «Khôi phục» (dispatchEvent pointerdown, mousedown, pointerup, click) -> onKhoiPhuc goi dung 1 lan. dangKhoiPhuc true -> nut :disabled, bam -> onKhoiPhuc goi 0 lan.
       Doi chung: dangKhoiPhuc false -> nut khong :disabled.
       CHIEU DO ghim: ban sao bo data-slot -> do "dlt: dai khong mang data-slot"; ban sao nut bo disabled khi dangKhoiPhuc ->
       do "dlt: dang khoi phuc van bam duoc".
@@ -28,8 +28,8 @@ evals:
       exit 0; KhoaLuuTru that boc 4 cho: input, button, div role=combobox tabIndex 0, div contenteditable=true tabIndex 0.
       Moi cho trong {combobox, contenteditable} co 4 bo dem rieng: onPointerDown, onMouseDown, onClick, onKeyDown.
       Ma tran viet truoc {combobox, contenteditable} x {pointerdown, mousedown, click, keydown Enter} x {khoa bat, khoa
-      tat} = 16 phep, expect(o.length).toBe(16): pointerdown/mousedown/click ban bang fireEvent tren chinh phan tu,
-      keydown bang focus() roi userEvent.keyboard("{Enter}"); khoa bat -> bo dem = 0, khoa tat -> bo dem = 1. Them:
+      tat} = 16 phep, expect(o.length).toBe(16): moi su kien ban bang dispatchEvent (bubbles, cancelable)
+      tren chinh phan tu, keydown la KeyboardEvent key Enter; khoa bat -> bo dem = 0, khoa tat -> bo dem = 1. Them:
       khoa bat -> input va button khop :disabled, [data-khoa-luu-tru] co; khoa tat -> khong :disabled, khong co
       [data-khoa-luu-tru].
       CHIEU DO ghim (moi bo chan mot ban sao): bo chan click -> do "dlt: khoa de lot click"; bo chan keydown -> do "dlt:
