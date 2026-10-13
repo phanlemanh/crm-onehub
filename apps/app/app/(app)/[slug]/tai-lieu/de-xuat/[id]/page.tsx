@@ -11,7 +11,7 @@ import { doanTrongNguon, dongSoMay } from "@/lib/tai-lieu-ban-may";
 import { HydrateClient } from "@/lib/trpc/hydrate";
 import { getServerQueryClient, getServerTrpc } from "@/lib/trpc/server";
 import { nullIfMissing } from "../../../(agent-builder)/missing-record";
-import { DuongDanTaiLieu } from "../../duong-dan-tai-lieu";
+import { DuongDanTaiLieuCho } from "../../duong-dan-tai-lieu";
 import type { BanMay } from "./ban-may";
 import { ManDuyet } from "./man-duyet";
 
@@ -22,14 +22,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DeXuatPage({ params }: { params: Params }) {
-	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+	const locale = await getLocale();
 	return (
 		<PageShell>
 			<Suspense
 				fallback={
 					<>
 						<PageShellHeader
-							breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+							breadcrumb={
+								<DuongDanTaiLieuCho locale={locale} params={params} />
+							}
 						/>
 						<KhungXuong hinh="chi-tiet" />
 					</>

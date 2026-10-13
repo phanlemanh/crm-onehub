@@ -12,7 +12,7 @@ import { getLocale } from "@/lib/locale/server";
 import { taiLieuMessages } from "@/lib/messages/tai-lieu";
 import { requireSession } from "@/lib/session";
 import { HydrateClient } from "@/lib/trpc/hydrate";
-import { DuongDanTaiLieu } from "../duong-dan-tai-lieu";
+import { DuongDanTaiLieuCho } from "../duong-dan-tai-lieu";
 import { chuTrangVaDonVi } from "../lua-chon-trang";
 import { ManSoan } from "../man-soan";
 
@@ -25,12 +25,12 @@ export default async function TrangMoiPage({
 }: {
 	params: Promise<{ slug: string }>;
 }) {
-	const [{ slug }, locale] = await Promise.all([params, getLocale()]);
+	const locale = await getLocale();
 	const m = taiLieuMessages(locale).soan;
 	return (
 		<PageShell>
 			<PageShellHeader
-				breadcrumb={<DuongDanTaiLieu locale={locale} slug={slug} />}
+				breadcrumb={<DuongDanTaiLieuCho locale={locale} params={params} />}
 			>
 				<PageShellHeading>
 					<PageShellTitle>{m.tieuDeMoi}</PageShellTitle>
