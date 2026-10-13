@@ -57,14 +57,16 @@ function theoCheDo<R>(khoa: string, cheDo: () => CheDo, tra: () => R) {
 	};
 }
 
-function truyVan<R>(khoa: string, queryFn: () => Promise<R>) {
+type TuyDotBien = { onSuccess?: () => void; onError?: (loi: Error) => void };
+
+function truyVan<R, V = undefined>(khoa: string, queryFn: () => Promise<R>) {
 	return {
-		queryKey: (v?: unknown) => (v === undefined ? [khoa] : [khoa, v]),
-		queryOptions: (v?: unknown) => ({
+		queryKey: (v?: V) => (v === undefined ? [khoa] : [khoa, v]),
+		queryOptions: (v?: V) => ({
 			queryKey: v === undefined ? [khoa] : [khoa, v],
 			queryFn,
 		}),
-		mutationOptions: (tuy: Record<string, unknown> = {}) => ({
+		mutationOptions: (tuy: TuyDotBien = {}) => ({
 			...tuy,
 			mutationKey: [khoa],
 			mutationFn: async () => undefined,
@@ -108,11 +110,7 @@ mock.module("next/link", () => ({
 }));
 
 mock.module("@/lib/trpc/cache", () => ({
-	useCrmCache: () =>
-		new Proxy({}, { get: () => async () => {} }) as Record<
-			string,
-			() => Promise<void>
-		>,
+	useCrmCache: () => new Proxy({}, { get: () => async () => {} }),
 }));
 
 mock.module("@/lib/trpc/client", () => ({

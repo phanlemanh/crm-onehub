@@ -319,10 +319,7 @@ async function mo(dau = "", choTai = true): Promise<San> {
 	const san = { o, root, client };
 	dangMo.push(san);
 	if (choTai)
-		await cho(
-			() => o.querySelector("[data-khung-xuong]") === null,
-			"tai xong",
-		);
+		await cho(() => o.querySelector("[data-khung-xuong]") === null, "tai xong");
 	return san;
 }
 
@@ -749,9 +746,9 @@ describe("trang-thai", () => {
 		treoCay = true;
 		await mo("", false);
 		await cho(() => soLanDocCay > 0, "bat dau doc cay");
-		expect(
-			document.body.querySelector("[data-khung-xuong]") !== null,
-		).toBe(true);
+		expect(document.body.querySelector("[data-khung-xuong]") !== null).toBe(
+			true,
+		);
 	});
 
 	test("trang-thai: loi tai hien Empty co bieu tuong, cau mo ta va nut Thu lai goi lai truy van", async () => {
