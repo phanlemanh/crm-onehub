@@ -1,0 +1,88 @@
+schema_version: 1
+slug: ba-ho-so-do-san
+
+evals:
+  - id: E1
+    criterion: AC-1
+    executor: script
+    cmd: config:executors.script.bhds_paths_song
+    paths:
+      - "_acceptance/ba-ho-so-do-san/rang/**"
+      - "_acceptance/ba-ho-so-do-san/danh-sach.json"
+      - "_acceptance/*/evals.yaml"
+    expected: 'exit 0; in một dòng mỗi hồ sơ trong danh sách «<hồ sơ>: <n> mục sống» và dòng tổng «paths-song: 19 hồ sơ, 0 mục chết». Danh sách hồ sơ đọc từ danh-sach.json, không khai cứng; phân loại bằng phanLoaiMucPaths của bản acceptance-gate do resolve-plugin.mjs trả. Đối chứng hai chiều trên CÙNG cây: lượt tự kiểm chép evals.yaml của một hồ sơ trong danh sách vào thư mục tạm, cấy một mục paths trỏ tệp không có, chạy cùng hàm → phải trả mã paths-khong-tro-toi-tep với thông điệp ghim «<hồ sơ>:<eval>:<mục>»; cấy một thư mục có «/» cuối → dang-khai-la. Lượt tự kiểm không bắt → exit 1 «HONG tu kiem». Vế bộ lọc: với mỗi hồ sơ, gọi staleByPaths([], evals, {cay}) của kit ở HEAD và ở mốc nền (cây git ls-tree + evals.yaml của mốc nền); in «<hồ sơ>: bộ lọc bật» hoặc «<hồ sơ>: bộ lọc tắt — <lý do>»; lý do tắt ở HEAD mà mốc nền không có (mã khác, hoặc cùng mã ở eval khác) → «BO_LOC_TAT_MOI <hồ sơ>: <lý do>», exit 1; hồ sơ đã tắt ở mốc nền vì thiếu khai paths (ngoài phạm vi) mà HEAD tắt vì đúng lý do ấy thì chỉ in, không đỏ. Đối chứng của vế này trên cùng cây: bản sao bỏ paths của một eval máy đang chạy → phải in BO_LOC_TAT_MOI với lý do eval-may-thieu-paths:<eval>. Mốc nền 3a2783409 chạy lệnh này phải đỏ (17 hồ sơ có mục chết) — đó là chiều đỏ trên vật thật.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E2
+    criterion: AC-2
+    executor: script
+    cmd: config:executors.script.bhds_danh_sach
+    paths:
+      - "_acceptance/ba-ho-so-do-san/rang/**"
+      - "_acceptance/ba-ho-so-do-san/danh-sach.json"
+    expected: 'exit 0; in «danh-sach: <n> dòng, khớp tập quét ở mốc nền 3a2783409894908bc8dd1ee3893b88f990d1aebe». Tập quét dựng từ git ls-tree và git show <mốc nền>:_acceptance/<hồ sơ>/evals.yaml, cùng phanLoaiMucPaths của kit, cộng ba ca P8-4 khai cứng (khoa-con-bat-xa-tran:E4, lenh-dung-do-khong-ai-thay:E5, do-man-tren-kho-rieng:<eval của dmk_khong_noi_thuoc>). So BẰNG nhau theo khoá (hồ sơ, eval, mục): thiếu → «THIEU <khoá>», thừa → «THUA <khoá>», exit 1. Mỗi dòng có đúng một xu_ly trong năm giá trị; giá trị lạ → «XU_LY_LA <khoá>». Đối chứng hai chiều trên cùng tệp: lượt tự kiểm bỏ một dòng khỏi bản sao danh sách → phải in THIEU đúng khoá đó; thêm một dòng bịa → THUA.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E3
+    criterion: AC-3
+    executor: script
+    cmd: config:executors.script.bhds_khai_du
+    paths:
+      - "_acceptance/ba-ho-so-do-san/rang/**"
+      - "_acceptance/ba-ho-so-do-san/danh-sach.json"
+      - "_acceptance/**"
+    expected: 'exit 0; in «khai-du: <k> tệp đổi ngoài hồ sơ này, <m> eval đổi, mọi thay đổi có dòng danh sách». Đọc git diff --name-only 3a2783409894908bc8dd1ee3893b88f990d1aebe HEAD -- _acceptance (trừ _acceptance/ba-ho-so-do-san/** và _acceptance/config.yaml); tệp của hồ sơ ngoài danh sách → «NGOAI_DANH_SACH <tệp>». Với mỗi evals.yaml đổi: so từng eval theo id giữa hai bản (parse bằng eval-yaml của kit), đổi status/cmd/expected/paths mà không có dòng (hồ sơ, eval) với xu_ly khớp loại đổi → «KHONG_KHAI <hồ sơ>:<eval>». Dòng khai-not-run/sua-rang thiếu ly_do hay can_cu, hoặc can_cu là sha không có (git cat-file -e) hay tệp:dòng không có ở HEAD → «CAN_CU_HONG <khoá>». Thêm năm luật: dòng bo-paths mà eval ở HEAD không mang status: not-run → «BO_PATHS_O_DANG_CHAY <hồ sơ>:<eval>»; hồ sơ chỉ có dòng tu-het mà có bất kỳ tệp nào đổi → «TU_HET_BI_CHAM <tệp>»; tệp đổi của hồ sơ trong danh sách mà không phải evals.yaml, run-log.jsonl hay evidence-report.md thì phải có dòng sua-rang nêu đúng tệp đó ở trường tep → «TEP_KHONG_KHAI <tệp>»; _acceptance/config.yaml parse ở mốc nền và HEAD, mọi khoá có ở mốc nền giữ nguyên giá trị → «CONFIG_DOI_GIA_TRI <khoá>»; tệp răng ngoài _acceptance mà lệnh executor của một eval trong danh sách trỏ tới cũng vào diff. Đối chứng hai chiều trên cùng cây, mỗi luật một cặp: lượt tự kiểm dựng bản sao evals.yaml đổi một eval sang not-run không có dòng danh sách → phải in KHONG_KHAI đúng <hồ sơ>:<eval>; một dòng có can_cu sha bịa → CAN_CU_HONG; bản sao bỏ paths của eval đang chạy kèm dòng bo-paths → BO_PATHS_O_DANG_CHAY; bản sao config đổi giá trị một khoá cũ → CONFIG_DOI_GIA_TRI đúng khoá; danh sách tệp đổi có thêm một tệp của hồ sơ tu-het → TU_HET_BI_CHAM.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E4
+    criterion: AC-4
+    executor: script
+    cmd: config:executors.script.bhds_ghim_xanh
+    paths:
+      - "_acceptance/ba-ho-so-do-san/rang/**"
+      - "_acceptance/ba-ho-so-do-san/danh-sach.json"
+      - "_acceptance/*/run-log.jsonl"
+      - "_acceptance/*/evidence-report.md"
+    expected: 'exit 0; in một dòng mỗi hồ sơ bị chạm «<hồ sơ>: repin <run_id> sha <7> suites 0 evals đạt» và dòng tổng «ghim-xanh: <n>/<n> hồ sơ». Hồ sơ bị chạm = hồ sơ trong danh sách có ít nhất một dòng khác tu-het (đọc từ danh-sach.json). Với mỗi hồ sơ: dòng kind:repin cuối cùng của run-log.jsonl phải có sha là hậu duệ của mốc nền (git merge-base --is-ancestor), mọi suites_exit = 0, mọi evals_exit bằng expected_exit đã khai (0 khi không khai), sha == verified_commit trong frontmatter evidence-report.md; recheck-evidence.cjs của kit chạy trên hồ sơ không in VIOLATION. Thiếu dòng repin sau mốc nền → «CHUA_GHIM <hồ sơ>»; có mã khác kỳ vọng → «DO <hồ sơ>:<eval>=<mã>»; commit cuối chạm _acceptance/<hồ sơ>/ (trừ run-log.jsonl, evidence-report.md) hoặc tệp răng của nó không là tổ tiên của sha repin → «GHIM_CU <hồ sơ>»; số eval đã đối chiếu của mỗi hồ sơ phải bằng số eval test/script không not-run của evals.yaml ở HEAD và lớn hơn 0 khi số đó lớn hơn 0 → sai thì «DEM_LECH <hồ sơ>». Đối chứng hai chiều trên cùng tệp: bản sao lấy NGUYÊN một dòng repin thật từ run-log.jsonl của một hồ sơ trong danh sách (không dựng tay) rồi đổi đúng một mã evals_exit thành 1 → phải in DO đúng <hồ sơ>:<eval>; bỏ dòng repin sau mốc nền → CHUA_GHIM; đặt sha repin về mốc nền → GHIM_CU.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E5
+    criterion: AC-5
+    executor: judgment
+    question: "Đọc từng dòng có xu_ly khai-not-run hoặc sua-rang trong danh-sach.json, đối chiếu với dòng trước/sau tương ứng trong bang-truoc-sau.md. Mỗi lý do có thuộc đúng một trong ba loại — (1) vật mà ô đo đã gỡ khỏi sản phẩm (căn cứ là commit gỡ), (2) tiền đề của ô bị một quyết định đã ký sau lật (căn cứ trỏ quyết định hay luật đó), (3) lỗi của chính răng — không? Có dòng nào hạ một ô mà bảng cho thấy vật vẫn còn trong sản phẩm và ô đỏ vì sản phẩm hỏng thật không? Với mỗi dòng sua-rang, bảng có cho thấy răng sau khi sửa vẫn còn chiều đỏ (một đột biến hay đối chứng âm vẫn làm nó đỏ) không?"
+    evidence_required: [judged_by, verdict, rationale]
+    inputs:
+      - "_acceptance/ba-ho-so-do-san/danh-sach.json"
+      - "_acceptance/ba-ho-so-do-san/bang-truoc-sau.md"
+
+  - id: E6
+    criterion: AC-6
+    executor: script
+    cmd: config:executors.script.dmk_khong_noi_thuoc
+    paths:
+      - "_acceptance/do-man-tren-kho-rieng/**"
+      - "_acceptance/config.yaml"
+    expected: 'exit 0; dòng cuối «khong-noi-thuoc: sach». Phần «không tệp nào dưới _acceptance/do-man-tren-kho-rieng/ đổi từ mốc nền» do E3 đo (luật TU_HET_BI_CHAM, có đối chứng riêng). Chiều đỏ là của chính răng: hai dòng «doi chung» của nó cấy tệp hồ sơ khác và dòng executor bị xoá rồi phải bắt.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E7
+    criterion: AC-7
+    executor: script
+    cmd: config:executors.script.bhds_danh_sach
+    paths:
+      - "_acceptance/ba-ho-so-do-san/rang/**"
+      - "_acceptance/ba-ho-so-do-san/danh-sach.json"
+    expected: 'exit 0; cùng lệnh với E2 in thêm «ngoai_vong: <n> hồ sơ từ kiem-cheo/<ngày>.json, yêu cầu <mã>». Đọc tệp kiểm chéo đúng ngày ghi trong mục ngoai_vong (đường tuyệt đối dựng từ thư mục chung của kho git, git rev-parse --git-common-dir); mọi hồ sơ tệp đó gọi tên ở mảng do mà không có trong danh sách đóng phải có trong ngoai_vong kèm đúng tập eval và loại → thiếu «NGOAI_VONG_THIEU <hồ sơ>»; mục thiếu mã yêu cầu dạng P7-<số> → «NGOAI_VONG_KHONG_MA». Tệp kiểm chéo vắng trên máy → exit 2 gọi tên đường, không xanh. Đối chứng: lượt tự kiểm bỏ một hồ sơ khỏi bản sao ngoai_vong → phải in NGOAI_VONG_THIEU đúng hồ sơ đó.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]
+
+  - id: E8
+    criterion: AC-8
+    executor: script
+    cmd: config:executors.script.bhds_chieu_do
+    paths:
+      - "_acceptance/ba-ho-so-do-san/rang/**"
+      - "_acceptance/ba-ho-so-do-san/danh-sach.json"
+      - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
+      - ".github/workflows/ci.yml"
+    expected: 'exit 0; mỗi dòng sua-rang của danh sách khai một đột biến có tên (dot_bien: tệp, chuỗi thay, thông điệp ghim). Lệnh nhập hàm kiểm của răng (với ld: mô-đun dieu-ci.mjs mà ba-noi-deu-chay.mjs cũng nhập — một hàm dùng chung, không chép), chạy trên nội dung THẬT của tệp ở HEAD → phải đạt; chạy trên bản sao trong bộ nhớ đã áp đột biến → phải không đạt với đúng thông điệp ghim. In «<hồ sơ>:<eval> <tên đột biến>: thật đạt, đột biến bắt». Đột biến không áp được (chuỗi thay không có trong tệp) → «DOT_BIEN_LECH <tên>», exit 2. Dòng sua-rang không khai dot_bien → «THIEU_DOT_BIEN <khoá>», exit 1. Với ld: đột biến bắt buộc là bỏ bước chạy bun run build khỏi ci.yml, và một đột biến thứ hai gắn if: lên bước đó.'
+    evidence_required: [run_id, exit_code, verifier, verified_at, output]

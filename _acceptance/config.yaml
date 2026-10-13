@@ -2449,6 +2449,11 @@ executors:
     cgdp_goi_dot: bun _acceptance/chuyen-goi-dieu-phoi/rang/goi-dot.mjs
     cgdp_thay_boi: bun _acceptance/chuyen-goi-dieu-phoi/rang/thay-boi.mjs
     cgdp_khong_do_them: bun _acceptance/chuyen-goi-dieu-phoi/rang/khong-do-them.mjs
+    bhds_paths_song: bun _acceptance/ba-ho-so-do-san/rang/paths-song.mjs
+    bhds_danh_sach: bun _acceptance/ba-ho-so-do-san/rang/danh-sach.mjs
+    bhds_khai_du: bun _acceptance/ba-ho-so-do-san/rang/khai-du.mjs
+    bhds_ghim_xanh: bun _acceptance/ba-ho-so-do-san/rang/ghim-xanh.mjs
+    bhds_chieu_do: bun _acceptance/ba-ho-so-do-san/rang/chieu-do.mjs
   design:
     gate: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-gate.mjs"
     ui_check: "node ${CLAUDE_PLUGIN_ROOT:-$(node scripts/resolve-plugin.mjs --plugin acceptance-gate --require scripts/design-gate.mjs --require scripts/design-scan.js)}/scripts/design-scan.js"
