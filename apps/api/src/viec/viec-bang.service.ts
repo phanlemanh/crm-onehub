@@ -8,16 +8,19 @@ import {
 	TRANG_THAI_MO,
 	theoHan,
 	VIEC,
+	vaiCua,
 } from "@crm/db/viec";
-import { keoViec } from "@crm/db/viec-ghi";
+import { keoViec, taoViecCon } from "@crm/db/viec-ghi";
 import type { DbGhi } from "@crm/db/zalo-lien-ket";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectDatabase } from "../database/database.constants";
 import type {
 	TheBangOutput,
 	ViecBangInput,
 	ViecBangOutput,
+	ViecConOutput,
 	ViecKeoInput,
+	ViecTaoConInput,
 } from "./viec.contracts";
 import { dichLoi, viecRa } from "./viec.service";
 
@@ -129,6 +132,56 @@ export class ViecBangService {
 			}),
 		);
 		return { ok: true };
+	}
+
+	taoCon(input: ViecTaoConInput, userId: string): Promise<{ id: string }> {
+		return this.ghi((tx) =>
+			taoViecCon(tx, {
+				chaId: input.chaId,
+				nguoiId: userId,
+				tieuDe: input.tieuDe,
+				nguoiThucHienId: input.nguoiThucHienId,
+				hanNgay: input.hanNgay ?? null,
+				now: new Date(),
+			}),
+		);
+	}
+
+	async con(id: string, userId: string): Promise<ViecConOutput> {
+		const nguoi = { select: { id: true, name: true, image: true } } as const;
+		const h = await this.db.viec.findFirst({
+			where: { AND: [{ id }, dieuKienXemViec(userId)] },
+			select: {
+				id: true,
+				chaId: true,
+				trangThai: true,
+				nguoiGiaoId: true,
+				nguoiThucHienId: true,
+				theoDoi: { select: { userId: true } },
+				cha: { select: { id: true, tieuDe: true } },
+				con: {
+					where: dieuKienXemViec(userId),
+					orderBy: [{ taoLuc: "asc" }, { id: "asc" }],
+					select: {
+						id: true,
+						tieuDe: true,
+						trangThai: true,
+						nguoiThucHien: nguoi,
+					},
+				},
+			},
+		});
+		if (h === null) throw new NotFoundException(VIEC.thongDiep.khongCoViec(id));
+		const vai = vaiCua(h, userId);
+		return {
+			cha: h.cha,
+			con: h.con,
+			conMo: h.con.filter((c) => TRANG_THAI_MO.includes(c.trangThai)).length,
+			themDuoc:
+				(vai.giao || vai.thucHien) &&
+				h.chaId === null &&
+				TRANG_THAI_MO.includes(h.trangThai),
+		};
 	}
 
 	private ghi<T>(lam: (tx: DbGhi) => Promise<T>): Promise<T> {

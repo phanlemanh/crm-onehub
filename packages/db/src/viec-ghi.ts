@@ -18,6 +18,7 @@ import {
 	ngayHan,
 	quyenDoi,
 	TRANG_THAI_KHEP,
+	TRANG_THAI_MO,
 	tenKeHoach,
 	type VetViec,
 	VIEC,
@@ -637,4 +638,76 @@ export async function keoViec(tx: DbGhi, input: KeoViecInput): Promise<void> {
 		await doiTrangThai(tx, input);
 	}
 	await ghiThuTu(tx, input.nguoiId, input.viecId, input.thuTu);
+}
+
+export type TaoViecConInput = {
+	chaId: string;
+	nguoiId: string;
+	tieuDe: string;
+	nguoiThucHienId?: string;
+	hanNgay?: Date | null;
+	now: Date;
+};
+
+export async function taoViecCon(
+	tx: DbGhi,
+	input: TaoViecConInput,
+): Promise<{ id: string }> {
+	await tx.$queryRaw`SELECT id FROM viec WHERE id = ${input.chaId} FOR UPDATE`;
+	const cha = await tx.viec.findFirst({
+		where: { AND: [{ id: input.chaId }, dieuKienXemViec(input.nguoiId)] },
+		select: {
+			id: true,
+			chaId: true,
+			trangThai: true,
+			nguoiGiaoId: true,
+			nguoiThucHienId: true,
+			theoDoi: { select: { userId: true } },
+			gan: { select: CHON_GAN, orderBy: { taoLuc: "asc" } },
+		},
+	});
+	if (cha === null) {
+		throw new LoiViec("khong-thay", VIEC.thongDiep.khongCoViec(input.chaId));
+	}
+	const vai = vaiCua(cha, input.nguoiId);
+	if (!vai.giao && !vai.thucHien) {
+		throw new LoiViec(
+			"khong-quyen",
+			VIEC.thongDiep.chiGiaoVaThucHien(VIEC.lam.themCon),
+		);
+	}
+	if (cha.chaId !== null) {
+		throw new LoiViec("khong-hop-le", VIEC.thongDiep.conKhongCoCon);
+	}
+	if (!TRANG_THAI_MO.includes(cha.trangThai)) {
+		throw new LoiViec("khong-hop-le", VIEC.thongDiep.chiThemConKhiMo);
+	}
+	const nguoiThucHienId = input.nguoiThucHienId ?? input.nguoiId;
+	const theoDoi = [cha.nguoiGiaoId, cha.nguoiThucHienId].filter(
+		(id) => id !== input.nguoiId && id !== nguoiThucHienId,
+	);
+	const con = await taoViec(tx, {
+		nguoiId: input.nguoiId,
+		tieuDe: input.tieuDe,
+		hanNgay: input.hanNgay ?? null,
+		nguoiThucHienId,
+		nguoiTheoDoiIds: [...new Set(theoDoi)],
+		gan: cha.gan.map((g) => {
+			const b = banGhiCua(g);
+			return { loai: b.loai, id: b.id };
+		}),
+		nguon: "web",
+		now: input.now,
+	});
+	await tx.viec.update({ where: { id: con.id }, data: { chaId: cha.id } });
+	await ghiVet(
+		tx,
+		{ viecId: cha.id, nguoiId: input.nguoiId, nguon: "web", luc: input.now },
+		{
+			loai: "them-viec-con",
+			truoc: null,
+			sau: { conId: con.id, tieuDe: input.tieuDe },
+		},
+	);
+	return con;
 }

@@ -16,6 +16,7 @@ import {
 	viecBangInput,
 	viecBangOutput,
 	viecChiTietOutput,
+	viecConOutput,
 	viecCreateInput,
 	viecCuaBanGhiOutput,
 	viecCuaToiInput,
@@ -27,6 +28,7 @@ import {
 	viecKeoInput,
 	viecOkOutput,
 	viecSuaInput,
+	viecTaoConInput,
 	viecTaoOutput,
 	viecTheoDoiInput,
 	viecVetOutput,
@@ -66,6 +68,27 @@ export class ViecRouter {
 		@Input() input: z.infer<typeof viecKeoInput>,
 	) {
 		return this.bangSv.keo(input, ctx.user.id);
+	}
+
+	@Mutation({
+		input: viecTaoConInput,
+		output: viecTaoOutput,
+		meta: restMeta("POST", "/viec/{chaId}/con", TAG),
+	})
+	taoCon(
+		@Ctx() ctx: AuthedTrpcContext,
+		@Input() input: z.infer<typeof viecTaoConInput>,
+	) {
+		return this.bangSv.taoCon(input, ctx.user.id);
+	}
+
+	@Query({
+		input: viecIdInput,
+		output: viecConOutput,
+		meta: restMeta("GET", "/viec/{id}/con", TAG),
+	})
+	con(@Ctx() ctx: AuthedTrpcContext, @Input("id") id: string) {
+		return this.bangSv.con(id, ctx.user.id);
 	}
 
 	@Query({
