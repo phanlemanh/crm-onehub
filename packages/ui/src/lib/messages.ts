@@ -151,7 +151,7 @@ const en = {
 	},
 	chatMessage: {
 		roleUser: "You",
-		roleAssistant: "Assistant",
+		roleAssistant: "Kara",
 		previousBranch: "Previous branch",
 		nextBranch: "Next branch",
 		branchPage: (current: string, total: string) => `${current} of ${total}`,
@@ -396,7 +396,7 @@ const vi = {
 	},
 	chatMessage: {
 		roleUser: "Bạn",
-		roleAssistant: "Trợ lý",
+		roleAssistant: "Kara",
 		previousBranch: "Nhánh trước",
 		nextBranch: "Nhánh sau",
 		branchPage: (current: string, total: string) => `${current} trên ${total}`,

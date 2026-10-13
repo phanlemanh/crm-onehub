@@ -1282,6 +1282,12 @@ describe("bo doc duong goi", () => {
 	});
 });
 
+const conChu = (nguon: string, cu: string): boolean =>
+	new RegExp(
+		`(?<!\\p{L})${cu.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?!\\p{L})`,
+		"u",
+	).test(nguon);
+
 const SO_MUC_BE_MAT: Readonly<Record<Exclude<BeMat, "khac">, number>> = {
 	"ban-ghi": 17,
 	"tom-tat": 8,
@@ -1342,7 +1348,7 @@ describe("kmt", () => {
 					const moi = hienTai.get(`${m.tep}#${m.khoa}#${nn}`);
 					if (moi === undefined) {
 						const nguon = readFileSync(join(GOC_KHO, m.tep), "utf8");
-						return nguon.includes(cu) ? [`kmt: ${m.tep} con ${cu}`] : [];
+						return conChu(nguon, cu) ? [`kmt: ${m.tep} con ${cu}`] : [];
 					}
 					const loi = soatMotTen(
 						[{ tep: m.tep, khoa: m.khoa, nn, giaTri: moi }],
