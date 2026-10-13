@@ -17,6 +17,15 @@ export const P8_4 = [
 	{ ho_so: "do-man-tren-kho-rieng", eval: "E11" },
 ];
 
+export const LUOT_GHIM_DO = "repin-20261013T052045Z-82824";
+export const DO_KHI_GHIM = [
+	{ ho_so: "khoa-con-bat-xa-tran", eval: "E3" },
+	{ ho_so: "khoa-con-bat-xa-tran", eval: "E6" },
+	{ ho_so: "lenh-dung-do-khong-ai-thay", eval: "E2" },
+	{ ho_so: "lenh-dung-do-khong-ai-thay", eval: "E3" },
+	{ ho_so: "lenh-dung-do-khong-ai-thay", eval: "E8" },
+];
+
 const require = createRequire(import.meta.url);
 
 export function hong(ma, chu) {

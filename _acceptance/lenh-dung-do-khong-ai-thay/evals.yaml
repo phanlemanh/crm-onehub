@@ -23,7 +23,7 @@ evals:
       - "apps/app/app/**"
       - "_acceptance/lenh-dung-do-khong-ai-thay/rang/**"
     expected: |
-      Dan so sinh TU DIA: quet `apps/app/app/**` tim moi file goi `getLocale`.
+      Dan so sinh TU CAY TAI CAP SHA GOP eeb6ea30 (git archive; F24 13/10 — thuoc «vong nay» neo cap sha gop, khong neo HEAD): quet `apps/app/app/**` tim moi file goi `getLocale`.
       So file tim duoc phai bang NEO 25 ghim trong hop dong — lech len hay xuong
       deu la ma 2. Dan so khong duoc lay bang chinh ket qua cua phep do.
       Do KHA NANG DI TOI, khong do cho dung tu vung: tu ham xuat mac dinh, bam
@@ -45,7 +45,7 @@ evals:
     paths:
       - "apps/app/**"
     expected: |
-      Dem chinh cai diff: `git diff --name-only <sha ghim> -- apps/app` phai liet
+      Dem chinh cai diff: `git diff --name-only eeb6ea30^1 eeb6ea30 -- apps/app` (cap sha gop cua vong; F24 13/10) phai liet
       DUNG MOT file, va do la `apps/app/app/layout.tsx`.
       Vi sao phep do nay manh hon phep so 15 man cua ban truoc: ban va nay LA mot
       file, nen "khong man nao doi mot ky tu" do duoc bang chinh danh sach file doi,
@@ -167,6 +167,6 @@ evals:
       - "apps/agent/**"
     expected: |
       Chay `bun run test`, `check-types`, `lint`, `lint:slop`, in ma thoat tung lenh.
-      Xanh: ca bon ma 0, VA `apps/app` ra dung ba canh bao lint — so ba la con so
-      GHIM cua kho, lech len hay xuong deu la do.
+      Xanh: ca bon ma 0. (Menh de «apps/app ra dung ba canh bao lint» bo 13/10, F24: so ghim cua
+      vong cu tu het han khi kho lon; y «vong ay khong doi gi ngoai layout.tsx» do E3 o cap sha gop.)
       Mot lenh khac 0 -> ma 1, neu ten lenh va ma.

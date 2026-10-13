@@ -26,6 +26,18 @@ function apDotBien(that, db) {
 		const [cu, moi] = db.thay;
 		return that.includes(cu) ? that.split(cu).join(moi) : null;
 	}
+	if (Array.isArray(db.thay_cap)) {
+		let ra = that;
+		for (const [cu, moi] of db.thay_cap) {
+			if (!ra.includes(cu)) return null;
+			ra = ra.replace(cu, moi);
+		}
+		return ra;
+	}
+	if (Array.isArray(db.thay_mot)) {
+		const [cu, moi] = db.thay_mot;
+		return that.includes(cu) ? that.replace(cu, moi) : null;
+	}
 	if (db.chen !== undefined && db.chen !== null) {
 		const i = that.lastIndexOf("</");
 		return i < 0 ? null : `${that.slice(0, i)}${String(db.chen)}${that.slice(i)}`;
@@ -33,7 +45,54 @@ function apDotBien(that, db) {
 	return null;
 }
 
+function chay(argv) {
+	const r = spawnSync(argv[0], argv.slice(1), { cwd: GOC, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
+	return { ma: r.status, chu: `${r.stdout}${r.stderr}` };
+}
+
+async function hamCua(db) {
+	const mod = await import(pathToFileURL(join(GOC, db.mo_dun)).href);
+	return mod[db.ham] instanceof Function ? mod[db.ham] : null;
+}
+
+async function soiKhongTep(db) {
+	if (db.kieu === "lenh-chua") {
+		const r = chay(db.lenh);
+		return { thatDat: r.ma === 0 && r.chu.includes(db.chua), dotDat: false, chuDot: r.chu };
+	}
+	if (db.kieu === "ham-chuoi" || db.kieu === "ham-git") {
+		const ham = await hamCua(db);
+		if (!ham) return { ma: "HAM_VANG" };
+		const that = db.kieu === "ham-git" ? execFileSync("git", db.git, { cwd: GOC, encoding: "utf8" }) : db.vao;
+		const dot = db.kieu === "ham-git" ? `${that}${db.them}\n` : db.vao_dot;
+		const t = ham(that);
+		const d = ham(dot);
+		return { thatDat: t.dat, dotDat: d.dat, chuDot: d.chu };
+	}
+	if (db.kieu === "lenh-goc") {
+		const thuMuc = mkdtempSync(join(tmpdir(), "chieu-do-goc-"));
+		try {
+			const tar = join(thuMuc, "cay.tar");
+			execFileSync("git", ["archive", "--output", tar, db.sha, db.thu_muc], { cwd: GOC });
+			execFileSync("tar", ["-xf", tar, "-C", thuMuc]);
+			const tep = join(thuMuc, db.tep);
+			const goc = readFileSync(tep, "utf8");
+			const dot = apDotBien(goc, db);
+			if (dot === null || dot === goc) return { ma: "DOT_BIEN_LECH" };
+			writeFileSync(tep, dot);
+			const t = chay(["node", join(GOC, db.rang)]);
+			const d = chay(["node", join(GOC, db.rang), "--goc", thuMuc]);
+			return { thatDat: t.ma === 0, dotDat: d.ma === 0, chuDot: d.chu };
+		} finally {
+			rmSync(thuMuc, { recursive: true, force: true });
+		}
+	}
+	return null;
+}
+
 async function soiDotBien(db) {
+	const khongTep = await soiKhongTep(db);
+	if (khongTep) return khongTep;
 	const duong = join(GOC, db.tep);
 	const that = readFileSync(duong, "utf8");
 	const dot = db.xoa_tep ? "" : apDotBien(that, db);

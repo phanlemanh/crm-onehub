@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
+	DO_KHI_GHIM,
 	docDanhSach,
 	hong,
 	khoaDong,
@@ -15,6 +16,7 @@ export function tapNen() {
 	return [
 		...quetMucChet(MOC_NEN).map((d) => khoaDong(d)),
 		...P8_4.map((p) => khoaDong({ ...p, muc: null })),
+		...DO_KHI_GHIM.map((p) => khoaDong({ ...p, muc: null })),
 	];
 }
 

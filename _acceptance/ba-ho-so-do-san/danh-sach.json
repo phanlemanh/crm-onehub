@@ -1543,6 +1543,151 @@
 			"nguon": "p8-4",
 			"xu_ly": "tu-het",
 			"ly_do": "dmk_khong_noi_thuoc chay 13/10 o moc nen: «khong-noi-thuoc: sach», exit 0"
+		},
+		{
+			"ho_so": "khoa-con-bat-xa-tran",
+			"eval": "E3",
+			"muc": null,
+			"ma": null,
+			"nguon": "ghim-13-10",
+			"xu_ly": "sua-rang",
+			"ly_do": "do san lo o luot ghim 13/10: chuoi dich cua dot bien con-thanh-vien ghim hai tab, spec da thut them mot tab sau b703e8bef nen chuoi xuat hien 0 lan; rang nay tu lay thut le tu dong doi chung REST that cua spec, y do khong doi (E3 va E6 chung mot lenh)",
+			"can_cu": "b703e8bef",
+			"tep": [
+				"_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+			],
+			"dot_bien": [
+				{
+					"ten": "dot-bien-con-thanh-vien-bi-bat",
+					"kieu": "lenh-chua",
+					"lenh": [
+						"bun",
+						"run",
+						"test",
+						"--",
+						"bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"
+					],
+					"chua": "OK dot bien con-thanh-vien: ma 1",
+					"thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim"
+				}
+			]
+		},
+		{
+			"ho_so": "khoa-con-bat-xa-tran",
+			"eval": "E6",
+			"muc": null,
+			"ma": null,
+			"nguon": "ghim-13-10",
+			"xu_ly": "sua-rang",
+			"ly_do": "do san lo o luot ghim 13/10: chuoi dich cua dot bien con-thanh-vien ghim hai tab, spec da thut them mot tab sau b703e8bef nen chuoi xuat hien 0 lan; rang nay tu lay thut le tu dong doi chung REST that cua spec, y do khong doi (E3 va E6 chung mot lenh)",
+			"can_cu": "b703e8bef",
+			"tep": [
+				"_acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs"
+			],
+			"dot_bien": [
+				{
+					"ten": "dot-bien-con-thanh-vien-bi-bat",
+					"kieu": "lenh-chua",
+					"lenh": [
+						"bun",
+						"run",
+						"test",
+						"--",
+						"bun _acceptance/khoa-con-bat-xa-tran/rang/pha-thu.mjs con-thanh-vien"
+					],
+					"chua": "OK dot bien con-thanh-vien: ma 1",
+					"thong_diep": "pha-thu xoa dong member trong ban sao va ca khoa-con-bat do dung thong diep ghim"
+				}
+			]
+		},
+		{
+			"ho_so": "lenh-dung-do-khong-ai-thay",
+			"eval": "E2",
+			"muc": null,
+			"ma": null,
+			"nguon": "ghim-13-10",
+			"xu_ly": "sua-rang",
+			"ly_do": "do san lo o luot ghim 13/10: neo dan so 26 file goi getLocale la anh chup cay cua vong cu, nay 54 — thuoc tu het han. Rang quet tren cay xuat ra tai cap sha gop eeb6ea30 cua vong (luat F10: thuoc «vong nay» neo cap sha gop), neo 26 dung o moc do",
+			"can_cu": "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+			"tep": [
+				"_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs"
+			],
+			"dot_bien": [
+				{
+					"ten": "bo-suspense-o-layout",
+					"kieu": "lenh-goc",
+					"rang": "_acceptance/lenh-dung-do-khong-ai-thay/rang/khong-doc-ngoai-suspense.mjs",
+					"sha": "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+					"thu_muc": "apps/app/app",
+					"tep": "apps/app/app/layout.tsx",
+					"thay_cap": [
+						[
+							"<Suspense fallback={null}>",
+							"<>"
+						],
+						[
+							"</Suspense>",
+							"</>"
+						]
+					],
+					"thong_diep": "bo ranh Suspense cua root layout tren cay moc gop thi rang do"
+				}
+			]
+		},
+		{
+			"ho_so": "lenh-dung-do-khong-ai-thay",
+			"eval": "E3",
+			"muc": null,
+			"ma": null,
+			"nguon": "ghim-13-10",
+			"xu_ly": "sua-rang",
+			"ly_do": "do san lo o luot ghim 13/10: rang so diff tu sha ghim toi HEAD nen moi PR sau cham apps/app deu lam no do — thuoc «vong nay» tu het han. Rang so dung cap sha gop eeb6ea30^1..eeb6ea30 (luat F10); o cap do diff chi co layout.tsx",
+			"can_cu": "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+			"tep": [
+				"_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs"
+			],
+			"dot_bien": [
+				{
+					"ten": "them-mot-man-vao-diff",
+					"kieu": "ham-git",
+					"mo_dun": "_acceptance/lenh-dung-do-khong-ai-thay/rang/man-khong-doi.mjs",
+					"ham": "kiemDoi",
+					"git": [
+						"diff",
+						"--name-only",
+						"eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1^1",
+						"eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+						"--",
+						"apps/app"
+					],
+					"them": "apps/app/app/page.tsx",
+					"thong_diep": "diff co them mot file ngoai layout.tsx thi rang do"
+				}
+			]
+		},
+		{
+			"ho_so": "lenh-dung-do-khong-ai-thay",
+			"eval": "E8",
+			"muc": null,
+			"ma": null,
+			"nguon": "ghim-13-10",
+			"xu_ly": "sua-rang",
+			"ly_do": "do san lo o luot ghim 13/10: spawnSync khong khai maxBuffer nen `bun run test` vuot 1 MiB -> ENOBUFS; menh de «apps/app dung ba canh bao lint» la so ghim cua vong cu (nay 20), tu het han — y «vong ay khong doi gi ngoai layout.tsx» da do E3 o cap sha gop. Khai maxBuffer, bo menh de dem canh bao; bon lenh van phai ma 0",
+			"can_cu": "eeb6ea30ec62369f2892d0a39a66d9a8b49fbcc1",
+			"tep": [
+				"_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs"
+			],
+			"dot_bien": [
+				{
+					"ten": "mot-lenh-cu-do",
+					"kieu": "ham-chuoi",
+					"mo_dun": "_acceptance/lenh-dung-do-khong-ai-thay/rang/bon-lenh-cu.mjs",
+					"ham": "danhGia",
+					"vao": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 0}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
+					"vao_dot": "[{\"ten\": \"test\", \"ma\": 0}, {\"ten\": \"check-types\", \"ma\": 1}, {\"ten\": \"lint\", \"ma\": 0}, {\"ten\": \"lint:slop\", \"ma\": 0}]",
+					"thong_diep": "mot trong bon lenh cu khong ma 0 thi rang do"
+				}
+			]
 		}
 	],
 	"ngoai_vong": {
